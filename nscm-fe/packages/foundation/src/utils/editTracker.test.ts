@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import type { FlexGridColumnConfig } from '@foundation/models';
 
 import { normalizeDynamicColumns } from './columnMapping';
-import { EditTracker } from './editTracker';
+import { clampNegativeCellToZero, clearCellValue, EditTracker } from './editTracker';
 
 // DMF0020 Sales Future Price 의 주차(W_yyyymmdd) 컬럼과 동일 형태 — 숫자 format 만 있고 dataType 미지정.
 const dynColumns = (): FlexGridColumnConfig[] =>
@@ -147,6 +147,137 @@ describe('EditTracker — 수정 후 원래 값으로 되돌리면 CRUD_TYPE 이
     expect(items[0].CRUD_TYPE).toBe('I');
 
     typeInto(grid, 0, 0, '61386');
+    expect(items[0].CRUD_TYPE).toBe('I');
+  });
+});
+
+describe('clampNegativeCellToZero — 음수 입력 시 0 보정 (AS-IS DMF0006 Dsdm_Changed)', () => {
+  // DataGrid 와 같은 순서로 재현: EditTracker 의 cellEditEnded 가 먼저 돌고, 그 뒤 clamp 가 붙는다.
+  const makeTracked = (items: WijmoRowItem[]) => {
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const grid = new FlexGrid(host, {
+      autoGenerateColumns: false,
+      columnGroups: untypedColumns() as never,
+      itemsSource: items,
+    });
+    const tracker = new EditTracker(grid);
+    // clamp 는 EditTracker 뒤에 등록된다(= 등록 순서상 나중에 실행).
+    grid.cellEditEnded.addHandler((_s, e) =>
+      clampNegativeCellToZero(items[e.row], 'W_20260801', tracker)
+    );
+    return { grid, tracker };
+  };
+
+  it('값이 있던 셀에 음수 입력 → 0 으로 보정되고 수정상태(M) 유지', () => {
+    const items: WijmoRowItem[] = [{ W_20260801: 100 }];
+    const { grid } = makeTracked(items);
+
+    typeInto(grid, 0, 0, '-5');
+    expect(items[0].W_20260801).toBe('0');
+    expect(items[0].CRUD_TYPE).toBe('M'); // 100 → 0 은 실제 변경
+  });
+
+  it('원본이 0 인 셀에 음수 입력 → 0 보정 후 수정상태가 풀린다', () => {
+    const items: WijmoRowItem[] = [{ W_20260801: 0 }];
+    const { grid } = makeTracked(items);
+
+    typeInto(grid, 0, 0, '-5');
+    expect(items[0].W_20260801).toBe('0');
+    expect(items[0].CRUD_TYPE).toBeUndefined(); // 0 → 0, 변경 아님
+  });
+
+  it('양수 · 0 · 빈칸 입력은 건드리지 않는다', () => {
+    const items: WijmoRowItem[] = [{ W_20260801: 100 }, { W_20260801: 100 }, { W_20260801: 100 }];
+    const { grid } = makeTracked(items);
+
+    // 첫 행이 number 라 Wijmo 가 입력을 number 로 coerce 한다 — clamp 가 손대지 않았음을 확인.
+    typeInto(grid, 0, 0, '7');
+    expect(items[0].W_20260801).toBe(7);
+
+    typeInto(grid, 1, 0, '0');
+    expect(items[1].W_20260801).toBe(0);
+
+    pressDelete(grid, 2, 0);
+    expect(items[2].W_20260801).toBeNull(); // 빈칸(null)은 clamp 대상 아님 — 음수만 보정
+  });
+
+  it('원래 빈 셀에 음수 입력 → 0 으로 보정된다 (빈→0 은 실제 변경이므로 M)', () => {
+    const items: WijmoRowItem[] = [{ W_20260801: null }, { W_20260801: 100 }];
+    const { grid } = makeTracked(items);
+
+    typeInto(grid, 0, 0, '-5');
+    expect(items[0].W_20260801).toBe('0');
+    // 문자열 '0' 은 사용자가 셀에 명시 입력한 표기 → 원본 빈칸과 구분해 변경으로 본다
+    //   (isSameValue: 빈칸 vs 숫자 0 만 동일, 빈칸 vs '0' 은 상이). AS-IS 도 빈 셀에 -5 입력 =
+    //   SetText("0") = 수정으로 취급한다.
+    expect(items[0].CRUD_TYPE).toBe('M');
+  });
+});
+
+describe('clearCellValue — 상위 변경 시 하위 셀 cascade 비우기 (AS-IS DMF0006 spdMain_ComboSelChange)', () => {
+  // clearCellValue 는 그리드 셀 입력이 아니라 row + tracker 에 직접 작용한다. 상위 셀을 먼저
+  //   EditTracker 로 바꿔 둔 뒤(= 원본 기록이 있는 상태) 하위 셀 cascade 를 재현한다.
+  const makeTracked = (items: WijmoRowItem[]) => {
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const grid = new FlexGrid(host, {
+      autoGenerateColumns: false,
+      columnGroups: [
+        { header: 'Team', binding: 'DEPT_ID', width: 90 },
+        { header: 'End Customer', binding: 'END_CUSTOMER', width: 90 },
+        { header: 'Sales Site', binding: 'SCM_SITE_ID', width: 90 },
+      ] as never,
+      itemsSource: items,
+    });
+    const tracker = new EditTracker(grid);
+    return { grid, tracker };
+  };
+
+  it('값이 있던 하위 셀을 비우면 빈값 + 수정상태(M)', () => {
+    const items: WijmoRowItem[] = [{ DEPT_ID: 'T1', END_CUSTOMER: 'C1', SCM_SITE_ID: 'S1' }];
+    const { tracker } = makeTracked(items);
+
+    clearCellValue(items[0], 'END_CUSTOMER', tracker);
+    clearCellValue(items[0], 'SCM_SITE_ID', tracker);
+
+    expect(items[0].END_CUSTOMER).toBe('');
+    expect(items[0].SCM_SITE_ID).toBe('');
+    expect(items[0].CRUD_TYPE).toBe('M');
+  });
+
+  it('이미 비어 있는 셀은 건드리지 않는다 (거짓 M 방지)', () => {
+    const items: WijmoRowItem[] = [{ DEPT_ID: 'T1', END_CUSTOMER: null, SCM_SITE_ID: '' }];
+    const { tracker } = makeTracked(items);
+
+    clearCellValue(items[0], 'END_CUSTOMER', tracker);
+    clearCellValue(items[0], 'SCM_SITE_ID', tracker);
+
+    expect(items[0].END_CUSTOMER).toBeNull(); // null 그대로 — 손대지 않음
+    expect(items[0].SCM_SITE_ID).toBe('');
+    expect(items[0].CRUD_TYPE).toBeUndefined();
+  });
+
+  it('비웠다가 원래 값으로 되돌리면 수정상태가 풀린다', () => {
+    const items: WijmoRowItem[] = [{ DEPT_ID: 'T1', END_CUSTOMER: 'C1', SCM_SITE_ID: 'S1' }];
+    const { tracker } = makeTracked(items);
+
+    clearCellValue(items[0], 'END_CUSTOMER', tracker);
+    expect(items[0].CRUD_TYPE).toBe('M');
+
+    tracker.storeChange(items[0], 'END_CUSTOMER', '', 'C1');
+    items[0].END_CUSTOMER = 'C1';
+    expect(items[0].CRUD_TYPE).toBeUndefined();
+  });
+
+  it('신규행(I) 의 CRUD_TYPE 은 덮지 않는다', () => {
+    const items: WijmoRowItem[] = [
+      { DEPT_ID: 'T1', END_CUSTOMER: 'C1', SCM_SITE_ID: 'S1', CRUD_TYPE: 'I' },
+    ];
+    const { tracker } = makeTracked(items);
+
+    clearCellValue(items[0], 'END_CUSTOMER', tracker);
+    expect(items[0].END_CUSTOMER).toBe('');
     expect(items[0].CRUD_TYPE).toBe('I');
   });
 });

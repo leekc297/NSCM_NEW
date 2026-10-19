@@ -6,21 +6,30 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
+import {
+  captureGridFilter,
+  captureGridSort,
+  GridAction,
+  restoreGridFilter,
+  restoreGridSort,
+} from '@foundation/utils';
 import { Alert, MainTitle, SubTitle } from '@shared/components';
-import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { useMessageStore, useSessionStore, useUIStore } from '@shared/stores';
 
 import { FcstUploadModal } from '../../components';
 
 import { MetalLinkPriceForm } from './components/MetalLinkPriceForm';
 import { MetalLinkPriceGrid } from './components/MetalLinkPriceGrid';
-import { MetalLinkTemplateModal } from './components/modals/MetalLinkTemplateModal';
+// Excel Form 팝업은 쓰지 않는다 — customButtons 액션이 직접 다운로드한다(handleExcelFormDownload).
+// import { MetalLinkTemplateModal } from './components/modals/MetalLinkTemplateModal';
 import { MetalLinkVersionModal } from './components/modals/MetalLinkVersionModal';
 import {
   MAIN_EXCEL_PREFIX,
   MENU_ID,
   MSG,
   SHEETS,
+  TEMPLATE_EXCEL_PREFIX,
   UPLOAD_FORM_ID,
   UPLOAD_HEADERS_DEFAULT,
   UPLOAD_HEADERS_DIV40,
@@ -62,7 +71,8 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [openPrjByDivisionModal, setOpenPrjByDivisionModal] = useState<boolean>(false);
   const [openModelByDivisionModal, setOpenModelByDivisionModal] = useState<boolean>(false);
   const [openVersionModal, setOpenVersionModal] = useState<boolean>(false);
-  const [openTemplateModal, setOpenTemplateModal] = useState<boolean>(false);
+  // Excel Form 팝업 상태는 더 이상 쓰지 않는다(직다운로드로 대체).
+  // const [openTemplateModal, setOpenTemplateModal] = useState<boolean>(false);
   const [openUploadModal, setOpenUploadModal] = useState<boolean>(false);
 
   // 메인 그리드 SP — PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE (10 IN + 세션 2 + O_RC1/O_RESULT)
@@ -80,6 +90,22 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticColumns();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
+
+  // Division 기본 선택 (DMF0021/DMF0045/DMF0053 정본 통일). 초기 divisionId(세션 div ?? '40')가
+  //   FilterMyDivision 목록에 없으면 목록 첫 행으로 보정한다 (AS-IS 진입 시 콤보 첫 항목 자동선택
+  //   파리티). 콤보 로드 후 1회만 — didFallbackRef 로 사용자 선택·복원값 재보정을 막는다.
+  const [divisionRows] = useTabComboQueries({ filters: ['FilterMyDivision'] });
+  const didFallbackRef = useRef(false);
+  useEffect(() => {
+    if (didFallbackRef.current) return;
+    const codes = (divisionRows ?? []).map(r => String(r.CODE ?? '')).filter(Boolean);
+    if (codes.length === 0) return;
+    didFallbackRef.current = true;
+    if (!codes.includes(searchParams.divisionId)) {
+      setSearchParams({ divisionId: codes[0] });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [divisionRows]);
 
   // Division(조회조건) 변경 시 컬럼 재조회 + 그리드 초기화 — 조회 버튼 없이 즉시 반영 (SalesFuturePrice 선례).
   //   초기 마운트/persist 복원은 제외 — 실제 division '변경' 시에만 동작.
@@ -164,8 +190,19 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const rows = (data as { o_rc1?: MetalLinkPriceRow[] })?.o_rc1 ?? [];
 
-  // 커스텀 버튼 — 'Excel Form'(템플릿 다운로드 모달). Division 미선택 시 진입 차단 (AS-IS MSG00097)
-  const handleOpenTemplate = () => {
+  // Excel Form — 팝업 없이 버튼 클릭 즉시 다운로드한다.
+  // ⭐ [2026-09-14 사용자 확정 — 기존 GSCM 양식 캡처 대조] 양식 = 메인 그리드 Excel Download 와
+  //   똑같은 헤더 구조(메탈 42 = Key/Period(Fr)/Period(To)/Contract Price(/kg)/Change Price(/kg)/
+  //   Metal Index (kg/Biz type) 6그룹 × Ni/Co/Li2CO3/LIOH/Al/Mn/Cu 2단 그룹헤더)에서 데이터만 뺀 것.
+  //   AS-IS DMF0074_MetalLinkPricePopup 도 동일 사유 1:1 — 팝업 그리드가 메인과 동일 카탈로그
+  //   (DM.DMF0000_GET_COMMON_SPREAD_TITLE p_program_id='DMF0074')를 쓰고, Excel 버튼이 곧
+  //   SimplexelService.ExportFpSpread(메인 Excel 버튼과 동일 export 경로)로 저장 = "템플릿 다운로드".
+  //   그래서 정적 UPLOAD_COLUMNS_* 평탄 헤더로 별도 조립하지 않고, 메인 그리드(gridRef)를 그대로
+  //   GridAction.excelDownload 로 내보내되 그 순간만 데이터를 비운다.
+  //   ⚠ 주의(잔존 격차) — SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT(DB 실측)는 여전히 평탄 토큰
+  //   (Key_Ni/PeriodFr_Ni/...)이다. 이 2단 헤더 파일을 그대로 재업로드하면 메탈 42열이 BE 헤더명
+  //   매핑에서 어긋날 수 있다(hook #135 §4) — 실제 재업로드 여부는 별도 검증 필요.
+  const handleExcelFormDownload = () => {
     if (!searchParams.divisionId) {
       void setAlert({
         type: 'alert',
@@ -173,7 +210,35 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       return;
     }
-    setOpenTemplateModal(true);
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    // 그리드 데이터만 순간적으로 비웠다 되돌린다 — excelDownload 내부에서 컬럼을 clear/rebuild 하는
+    //   기존 패턴과 동일 idiom(동기 구간에서 끝나 화면엔 보이지 않는다). 사용자가 걸어둔 정렬/필터는
+    //   itemsSource 교체로 끊기므로 캡처 후 복원한다.
+    const originalItemsSource = grid.itemsSource;
+    const sortSnapshot = captureGridSort(grid);
+    const filterDefinition = captureGridFilter(gridFilterRef.current);
+    grid.itemsSource = [];
+    // 헤더 셀 전 방향 테두리 + 배경 #E7E6E6(Excel "밝은회색 배경2" 표준 테마색) + 비볼드 —
+    //   사용자 확정 2026-09-14, Excel Form 전용(공용 excelDownload 는 기본값 무변화).
+    void GridAction.excelDownload(
+      grid,
+      TEMPLATE_EXCEL_PREFIX,
+      useUIStore.getState().setProgress,
+      { border: true, fillColor: '#E7E6E6', bold: false }
+    )
+      .catch((error: unknown) => {
+        void setAlert({
+          type: 'alert',
+          content: error instanceof Error ? error.message : 'Excel download failed.',
+        });
+      })
+      .finally(() => {
+        grid.itemsSource = originalItemsSource;
+        restoreGridSort(grid, sortSnapshot);
+        restoreGridFilter(grid, gridFilterRef.current, filterDefinition);
+      });
   };
 
   // SubTitle customButtons 표준 — {label, action, ...ButtonProps} (subtitle-button-actions-mandatory)
@@ -184,7 +249,9 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         ? [
             {
               label: t('LBL00762', 'Excel Form'),
-              action: handleOpenTemplate,
+              // 팝업 방식(원본)은 아래처럼 열었다 — 참고용으로 남겨둔다.
+              // setOpenTemplateModal(true);
+              action: handleExcelFormDownload,
               // ⭐ Excel Download 아이콘 leading (FileExcelIcon 은 런타임 미표시 — 사용자 확인 2026-07-10 원복)
               // iconComponent: <FileExceldownloadIcon />,
               iconPosition: 'leading' as const,
@@ -267,15 +334,18 @@ export const MetalLinkPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         open={openVersionModal}
         modalClose={() => setOpenVersionModal(false)}
         defaultDivision={searchParams.divisionId}
+        // 메인 조회조건 기간(YYYYMM)을 팝업 Period 로 물려준다 — 팝업이 1일~말일(YYYYMMDD)로 변환.
+        mainPeriodFrom={searchParams.fromYyyymm}
+        mainPeriodTo={searchParams.toYyyymm}
         onApply={versionIds => setSearchParams({ version: versionIds })}
       />
-      {/* ⭐ AS-IS btnTemplate 'Excel Form' (.cs L704~713) — 전용 MetalLinkPricePopup 1:1
-          (조회 그리드 + Excel export = 템플릿 다운로드) */}
-      <MetalLinkTemplateModal
+      {/* Excel Form 팝업은 쓰지 않는다 — customButtons 의 'Excel Form' 이 handleExcelFormDownload 로
+          즉시 다운로드한다. 컴포넌트는 삭제하지 않고 보존한다. */}
+      {/* <MetalLinkTemplateModal
         open={openTemplateModal}
         modalClose={() => setOpenTemplateModal(false)}
         divisionId={searchParams.divisionId}
-      />
+      /> */}
       {/* AS-IS btnExcelUpload_Click (.cs L715~737) — 공통 ExcelUploadForm 1:1.
           ⭐ 2-Step (사용자 확정 2026-07-10): [Upload]=검증·분류 / [OK]=저장(onSave — P_MODE=1 call-proc).
           전량 게이트 = Error 0 일 때만 OK 활성 (모달 내부 + SP L2649 이중 게이트). 저장 후 refetch. */}

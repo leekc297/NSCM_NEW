@@ -1,0 +1,67 @@
+// AS-IS UserInfo.cs Assign Group View 버튼 — 사용자 소속 그룹명 나열 모달 (SCSS Module, inline 0)
+
+.headerContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerDot {
+  width: 12px;
+  height: 12px;
+  background-color: #1976d2;
+  border-radius: 50%;
+}
+
+.headerTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.listWrapper {
+  position: relative;
+  min-height: 220px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.groupList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.groupItem {
+  padding: 6px 8px;
+  border-bottom: 1px solid #eef1f4;
+  font-size: 13px;
+  color: #2b3a4a;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.empty {
+  padding: 16px 8px;
+  margin: 0;
+  text-align: center;
+  color: #8a929b;
+  font-size: 13px;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}

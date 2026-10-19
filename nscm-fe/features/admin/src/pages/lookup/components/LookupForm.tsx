@@ -65,7 +65,7 @@ export const LookupForm = ({ onSubmit }: LookupFormProps) => {
         <>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00636', 'Lookup Type')}
+              label={t('LBL00057', 'Lookup Type')}
               labelAlign='right'
               render={() => (
                 <InputField

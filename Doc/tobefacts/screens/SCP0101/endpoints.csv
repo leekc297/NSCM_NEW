@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","in_function","kind","callee","menu","sheet","action","url","resolved","args","commented"
+"supply/inventory-trend","SCP0101","features/supply/src/pages/inventory-trend/components/InventoryTrendForm.tsx","44","InventoryTrendForm","hook","useTabComboQueries","SCP0101","","","(useTabComboQueries)","Y","[COMBO.DIVISION, { comboId: COMBO.PLANT, divisionId: divisionParam }]","0"
+"supply/inventory-trend","SCP0101","features/supply/src/pages/inventory-trend/InventoryTrend.tsx","44","InventoryTrend","hook","useTabProcQuery","SCP0101","main","","SCP0101/main//call-proc","Y","filters[SHEETS.MAIN]","0"
+"supply/inventory-trend","SCP0101","features/supply/src/pages/inventory-trend/useInventoryTrendStore.ts","103","fetchStaticColumns","http","apiClient.post","","","","/admin/menu/SCP0101/column","Y","{ sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] }","0"
+"supply/inventory-trend","SCP0101","features/supply/src/pages/inventory-trend/useInventoryTrendStore.ts","127","restoreSearchConditions","http","apiClient.get","","","","/admin/menu/SCP0101/search-conditions","Y","","0"

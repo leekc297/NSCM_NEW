@@ -1,0 +1,27 @@
+// Measure 행 배경색 — AS-IS `Set_MeasureColor`(cs:1523~1575) 의 RGB 4색(03 §3.3 / V-21~V-24).
+//   대상 measure 는 `capa-teep-report.constants.ts#MEASURE_COLOR_BY_CODE` 가 갖는다(코드 기준 판정 —
+//   AS-IS 의 `MEASURE_NAME` 문자열 19종 하드코딩 비교를 이식하면 다국어에서 깨진다).
+//   inline style 금지(convert-core §2.1 #5)라 색값은 여기 SCSS 에만 둔다.
+//   goal D-8 = "4색 유지"(AS-IS 파리티 + 자매 SCP0106 선례). hook #95 의 3색 표준으로 축소하지 않는다.
+
+.measureYellow {
+  // AS-IS (237,248,170) — `Final Production Plan`(SCP_PROD_PLAN)
+  background-color: rgb(237 248 170) !important;
+}
+
+.measureSky {
+  // AS-IS (218,238,243) — `Production Capa.(Daily)`(PROD_CAPA_D) / `Production Operating Rate`(PROD_OP_RT)
+  background-color: rgb(218 238 243) !important;
+}
+
+.measureOrange {
+  // AS-IS (255,239,213) — Loss 계열 15종
+  //   PF_RT/QL_RT/SD_RT/WT_RT/TD_RT/MC_RT/ID_RT/NM_RT/BM_RT/CM_RT/PD_RT/PM_RT/UD_RT/PP_RT/MR_RT
+  background-color: rgb(255 239 213) !important;
+}
+
+.measurePink {
+  // AS-IS (255,192,203) — `Capa. Balancing (LOB)`(ADJ_ULD_RT).
+  //   ELTR 시트에는 이 measure 행 자체가 없다(lookup 미등록 -> INNER JOIN 탈락, 03 §4.3 / V-23).
+  background-color: rgb(255 192 203) !important;
+}

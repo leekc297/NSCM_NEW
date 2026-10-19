@@ -1,0 +1,4 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/bod","SCP0007","features/supply/src/pages/bod/Bod.tsx","79","endpoint","보낸다. 공용 useProcMutation(callMutationProc)은 body 로 `{ data }` 배열 1개만 전송하는"
+"supply/bod","SCP0007","features/supply/src/pages/bod/Bod.tsx","173","code","AS-IS DeleteButton(SCP0007_BOD.cs L361-365) — action(CRUD_TYPE) != 'I' 이면 silent return."
+"supply/bod","SCP0007","features/supply/src/pages/bod/bod.util.ts","67","code","저장 전 행 단위 업무 검증 — AS-IS SaveData_Main(SCP0007_BOD.cs L677-782) 중 필수값(공통 checkRequiredOfSpread 로 이미 커버되는 항목 제외) 이외의 BOD 고유 규칙만 이식한다. 첫 위반 1건만 반환(AS-IS 도 위반 즉시 return). Monday/Sunday 위반 시 AS-IS 처럼 해당 셀 값을 자동 보정(가까운 월/일요일)하고 실패를 반환 — 사용자가 보정된 "

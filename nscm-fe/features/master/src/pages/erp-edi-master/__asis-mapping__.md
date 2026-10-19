@@ -140,7 +140,7 @@ rg -nE "_inputEditType.*'[OIMS]'" {tobe-tsx} | wc -l   # 현재 0 (전체 read-o
 
 ## Cascade DataModel.Changed 매핑 (Phase 7 보완 8 — 2026-06-04)
 
-> 상세: `Doc/_rules_v2/_asis/02_screens/DMF0008/cascade-mapping.md`
+> 상세: `Doc/Doc_lgc_bak/rules/domains/demand/DMF0008/cascade-mapping.md`
 
 | sheet | sheetName | AS-IS handler | AS-IS 위치 (라인) | TO-BE 현재 (read-only) | 향후 편집 가능 전환 시 |
 |---|---|---|---|---|---|
@@ -157,4 +157,4 @@ rg -nE "_inputEditType.*'[OIMS]'" {tobe-tsx} | wc -l   # 현재 0 (전체 read-o
 ## 변경 이력
 
 - 2026-06-02: 신규 작성 (공통 버튼 10대 룰 정비 — DMF0008 UsrConditionPanel 0건 → condition/resetCondition false 명시 의무 충족)
-- 2026-06-04: cascade DataModel.Changed 4 sheet × 5 handler 매핑 부록 추가 (Phase 7 보완 8) — `Doc/_rules_v2/_asis/02_screens/DMF0008/cascade-mapping.md` 신규 작성
+- 2026-06-04: cascade DataModel.Changed 4 sheet × 5 handler 매핑 부록 추가 (Phase 7 보완 8) — `Doc/Doc_lgc_bak/rules/domains/demand/DMF0008/cascade-mapping.md` 신규 작성

@@ -84,8 +84,10 @@ export const INSERT_ROW_DEFAULTS = {
 export const MSG = {
   // 재진입 가드 — "이전 작업이 아직 실행 중입니다." (AS-IS blnWork L1460/1933)
   WORK_IN_PROGRESS: 'MSG00137',
-  // Division 미선택 — "Division 을 선택하세요." (FindData L1513)
-  REQUIRE_DIVISION: 'MSG00097',
+  // Division 권한 없음 — "No authority assigned." (AS-IS FindData L1513 MSG00097 의도 = 권한 Division 0건).
+  //   TO-BE MSG00097 문구는 "Please select Division." 이라 의도와 어긋나 재사용 금지 — supply 계열
+  //   (workbench/capa-speed-plan/capa-line-assign/inventory-trend) 선례와 동일하게 MSG00667 로 매핑.
+  REQUIRE_DIVISION: 'MSG00667',
   // 기간 역전 — "조회 기간이 잘못되었습니다 (시작일 > 종료일)." (FindData L1474)
   PERIOD_INVERTED: 'MSG00108',
   // 기간 3년 초과 — "조회 기간은 3년 이내로 입력해주세요." (FindData L1481 — Value2 자동 보정 후 차단)
@@ -99,7 +101,8 @@ export const MSG = {
   // Catch_Up 음수 — "{0} 이상의 값만 입력 가능합니다." (SaveData L2587 — 40+Catch_Up+음수, {0}=0)
   CATCHUP_MIN_ZERO: 'MSG00085',
   // 라인 변경 없음 — "라인 [{0}] 에 변경된 값이 없습니다." (SaveData L2666 — iDateCount==0)
-  LINE_NO_CHANGE: 'MSG00146',
+  //   AS-IS 는 MSG00146 이나 사내 메시지로 MSG00670 재매핑 (2026-09-10 사용자 요구).
+  LINE_NO_CHANGE: 'MSG00670',
   // Daily 편집 불가 — (EditButton L1103. Weekly/Monthly 만 편집 — MSG_M 본문 등록 대상)
   DAILY_EDIT_BLOCK: 'MSG00361',
   // 저장 성공 — "성공적으로 저장되었습니다." (AS-IS MSG00004 {0}건 저장 용법 → 사내 MSG00002 재매핑)
@@ -111,35 +114,45 @@ export const MSG = {
 } as const;
 
 // ============================================================================
-// ⭐ Grid 내 cascade filter (hook #59 §5-G — DMF0020/DMF0003 표준 이식)
-//   콤보 편집 진입 시 같은 행의 상위 셀 값으로 콤보 후보를 클라 필터(dataMap 스왑, cellEditEnded 원복).
-//   관대 통과(행 값·콤보 키 공란/'ALL' = 통과)라 키 미보유 콤보는 자동 전체 통과 — 값 유실 없음.
-//   AS-IS spdMain_ComboSelChange 행 내 cascade 6키 (L4500~5082) 대응.
+// Grid 셀 콤보 좁힘 — 코드가 아니라 admin 컬럼 메타(UI Category Setup)가 단일 원천이다.
+//   종전에는 이 자리에 GRID_CASCADE_FILTERS / GRID_EDIT_COMBO 표를 두고 SalesPlanGrid 가
+//   편집 진입마다 col.dataMap 을 갈아끼웠다. dataMap 은 셀이 아니라 컬럼 속성이라 그 스왑이
+//   메타(PARAM2/PARAM9/PARAM10)로 만든 맵을 통째로 덮었고, Sales Site 가 End Customer 변경을
+//   반영하지 못했다 (2026-09-01). 그래서 표를 지우고 좁힘을 전부 메타로 넘겼다.
+//
+//   AS-IS spdMain_ComboSelChange 행 내 cascade (L4500~5082) 를 메타로 옮긴 대응표 —
+//   컬럼별로 아래대로 등록한다. PARAM2 왼쪽은 행 컬럼, 오른쪽은 방식에 따라 뜻이 갈린다.
+//     PARAM10 미지정 : 콤보 전량을 받아 행 값으로 필터 — 오른쪽 = 콤보 결과 컬럼명
+//     PARAM10='D'    : 행 값을 콤보 SQL 파라미터로 실어 조합마다 재조회 — 오른쪽 = 바인드명
+//
+//   END_CUSTOMER      PARAM2 `DIVISION_ID:DIVISION_ID,DEPT_ID:DEPT_ID`
+//   END_CUSTOMER40    PARAM2 `DIVISION_ID:DIVISION_ID,DEPT_ID:DEPT_ID`
+//                       (EndCustomerByDivision40 도 DEPT_ID 를 반환한다 — dmf0021/sql/05_DMF0021_combo.sql)
+//   SCM_SITE_ID       PARAM2 `DIVISION_ID:divisionId,END_CUSTOMER:endCustomer,END_CUSTOMER40:endCustomer`
+//                       + PARAM10='D' (SiteByEndCustomer 는 좁힘 기준을 결과로 안 내려줘 재조회가 유일한 수단)
+//                       END_CUSTOMER 두 컬럼을 같은 바인드에 거는 것은 40 이 값을 END_CUSTOMER40 에
+//                       싣기 때문이다 — 공통이 선언 순서대로 보다 처음 채워진 값을 쓴다
+//                       (foundation rowParamValues).
+//   CELL_PROD_SITE_ID PARAM2 `DIVISION_ID:divisionId,ITEM_ID:itemId` + PARAM10='D'
+//                       (AS-IS L4769 Data.Common(CELL_PROD_SITE_ID, division, itemId))
+//   ITEM_ID           메타 콤보 없음(FPText) — 신규행 전용이라 SalesPlanGrid 가 CMBO
+//                       `SalesPlanItemId` 로 직접 건다 (AS-IS L3341~3353 lookup).
+//                       조회 행이 텍스트여야 해서 컬럼 단위 메타로 표현이 안 된다.
+//                       상세 = SalesPlanGrid insertOnlyDataMaps 주석.
+//   CURRENCY          cellCboDataTp `CURRENCY_LIST` (2026-09-04 admin 메타 FPComboBox 전환 —
+//                       파생/캐스케이드 없어 공용 경로로 이관, 구 SalesPlanGrid 하드코딩 제거)
+//   DOM_EXP           cellCboDataTp `CustomsHandbook` (AS-IS L4916)
+//   INCOTERMS         cellCboDataTp `AsIncotermsEdit` (AS-IS L4934)
+//
+//   DEPT_ID(Team) 은 전 Division 신규행에서 콤보 편집 컬럼이다 (사용자 요구 2026-09-08 —
+//   Catch_Up 시만 잠금, insertStaticEditable DEPT_ID 참조). 콤보 후보·표시는 이 컬럼의
+//   admin 메타(cellCboDataTp = TeamByDivision)가 단일 원천이고 공용 DataGrid 가 만든다.
+//   화면이 상위 선택에서 파생하거나 신규행 전용으로 별도 세팅하지 않는다.
+//
+//   화면 코드로 되돌리지 말 것. 행 상태로 후보를 더 좁혀야 하는데 메타로 표현이 안 되는 경우
+//   (MEASURE 신규행 후보 / FCST_TYPE Catch_Up ETC 제외)는 dataMap 을 교체하지 말고 기존 맵의
+//   getDisplayValues 만 덮는다 — SalesPlanGrid installMeasureCandidateFilter 참조.
 // ============================================================================
-export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: string }[]> = {
-  DEPT_ID: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
-  END_CUSTOMER: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'DEPT_ID', comboKey: 'DEPT_ID' },
-  ],
-  // 40 신규행 — EndCustomerByDivision40 콤보도 DEPT_ID 컬럼을 반환한다
-  //   (dmf0021/sql/05_DMF0021_combo.sql). END_CUSTOMER(비40)와 동일하게 DEPT_ID leg 반영 —
-  //   2026-08-05 리포트: Div 는 필터되는데 Team 만 반영 안 됨 (leg 누락).
-  END_CUSTOMER40: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'DEPT_ID', comboKey: 'DEPT_ID' },
-  ],
-  SCM_SITE_ID: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'END_CUSTOMER', comboKey: 'END_CUSTOMER' },
-  ],
-  // CELL_PROD_SITE_ID — ITEM_ID 종속 재바인딩 (AS-IS L4769 Data.Common(CELL_PROD_SITE_ID, division, itemId)).
-  //   CMBO 'CELL_PROD_SITE_ID'(P3 등록) 반환열에 ITEM_ID 미포함 시 관대 통과.
-  CELL_PROD_SITE_ID: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'ITEM_ID', comboKey: 'ITEM_ID' },
-  ],
-};
 
 // Project 셀 모달(ProjectByDivisionModal)이 한 번에 채우는 컬럼 묶음.
 //   필수: 코드만 지우고 파생 표시 컬럼을 남기면 Project 는 빈칸인데 Status/Biz Type/Owner 는
@@ -169,13 +182,10 @@ const TEXT_CLEAR_FIELDS = ['TEXT', 'TEXT4082'] as const;
 //   2026-08-23 (사용자 요구): End Customer 변경 = Sales Site / Project / Model 전부 초기화.
 //   구: END_CUSTOMER 계열에 PROJECT_CODE 가 빠져 있어 Sales Site 는 비는데 그 아래 Project 는
 //   남아, 상위 없는 하위 값이 그대로 저장되는 상태가 됐다.
+//   Team(DEPT_ID/TEAM_NAME)은 이 체인에서 뺀다 (2026-09-08) — Team 은 상위 파생값이 아니라
+//   메타 콤보로 직접 편집하는 독립 컬럼이라 상위 변경이 사용자 입력을 지우면 안 된다.
 export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
-  END_CUSTOMER: [
-    'SCM_SITE_ID',
-    ...PROJECT_CLEAR_FIELDS,
-    ...ITEM_CLEAR_FIELDS,
-    ...TEXT_CLEAR_FIELDS,
-  ],
+  END_CUSTOMER: ['SCM_SITE_ID', ...PROJECT_CLEAR_FIELDS, ...ITEM_CLEAR_FIELDS, ...TEXT_CLEAR_FIELDS],
   END_CUSTOMER40: [
     'SCM_SITE_ID',
     ...PROJECT_CLEAR_FIELDS,
@@ -185,29 +195,31 @@ export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
   SCM_SITE_ID: [...PROJECT_CLEAR_FIELDS, ...ITEM_CLEAR_FIELDS, ...TEXT_CLEAR_FIELDS],
 };
 
+// Team(DEPT_ID) 변경 시 하위 clear — 40 을 제외한 division 한정 (사용자 요구 2026-09-08).
+//   40 이 아닌 division 은 End Customer 가 Team(부서) 종속(EndCustomerByDivisionDept)이라,
+//   Team 이 바뀌면 그 아래 End Customer / Sales Site / Project(그리고 종속 Model/Text)가
+//   모두 어긋난다 — GRID_CASCADE_CLEAR 의 END_CUSTOMER 계열과 같은 하위 묶음을 비운다.
+//   division 조건이 붙어 GRID_CASCADE_CLEAR(binding 단일 키)로는 표현되지 않으므로 별도 상수 —
+//   SalesPlanGrid cellEditEnded 에서 isDiv40 분기로만 적용한다. 40 은 End Customer 가
+//   Team 종속이 아니므로(EndCustomerByDivision40) 대상이 아니다.
+export const DEPT_CASCADE_CLEAR_NON40: readonly string[] = [
+  'END_CUSTOMER',
+  'SCM_SITE_ID',
+  ...PROJECT_CLEAR_FIELDS,
+  ...ITEM_CLEAR_FIELDS,
+  ...TEXT_CLEAR_FIELDS,
+];
+
 // Project 셀 모달을 선택 없이 닫았을 때 비우는 컬럼 (사용자 요구 2026-08-23).
 //   닫기 = Project 미선택 확정으로 본다(기존 값이 있어도 비움). Model 은 Project 종속이라
 //   Project 가 비면 남길 근거가 없어 함께 초기화한다.
 //   TEXT/TEXT4082 는 대상이 아니다 — 팝업이 채우는 값이 아니라 사용자가 직접 친 자유 입력이다.
+//   Team(DEPT_ID/TEAM_NAME)도 대상이 아니다 (2026-09-08) — Team 은 Project 파생값이 아니라
+//   메타 콤보로 직접 편집하는 독립 컬럼이다.
 export const PROJECT_POPUP_CANCEL_CLEAR: readonly string[] = [
   ...PROJECT_CLEAR_FIELDS,
   ...ITEM_CLEAR_FIELDS,
 ];
-
-// ============================================================================
-// ⭐ Grid 편집 전용 콤보 (조회 표시 dataMap 과 별개 — 편집 진입 시 스왑, cellEditEnded 원복. hook #59 §5-G)
-//   - MEASURE : Insert 행 40 전용 — GET_SALES_PLAN_MEASUREINFO(dataMap 은 SP 응답에서 부모가 주입).
-//   - CURRENCY: CMBO 'CurrencyList' (AS-IS dtCurrencyList=Data.Common CURRENCY_LIST 1:1 — DMF0020 선례 등록명).
-//   - FCST_TYPE(Catch_Up): 전체 'FcstType' 콤보에서 ETC 제외 클라 필터 (AS-IS FCST_TYPE(ETC 제외) L4903).
-// ============================================================================
-export const GRID_EDIT_COMBO: Record<string, { comboId: string; divisionParam?: boolean }> = {
-  CURRENCY: { comboId: 'CurrencyList' },
-  // [parity 2026-08-12] Catch_Up 개방 셀 편집 콤보 2종 — AS-IS 1:1 배선 보완:
-  //   DOM_EXP  = dtCustomsHandbook (AS-IS L4916, lookup DM_CUSTOMS_HANDBOOK — DMF0003 등록명 재사용)
-  //   INCOTERMS = GetIncotermsType(division, ...) = AS_INCOTERMS lookup (AS-IS L4934 — 'AsIncotermsEdit')
-  DOM_EXP: { comboId: 'CustomsHandbook' },
-  INCOTERMS: { comboId: 'AsIncotermsEdit', divisionParam: true },
-};
 
 // Catch_Up 전환 시 콤보 개방 3종 (AS-IS spdMain_ComboSelChange Measure 분기 L4865~4877 —
 //   DomExp/Incoterms/FcstType 개방. SalesAmt_LOC 복귀 시 FCST_TYPE='ETC' 고정 + 3종 잠금).

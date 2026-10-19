@@ -37,6 +37,7 @@ const createFakeGrid = (column: FakeColumn) => {
     hitTest: () => ({ col: 0, cellType: CellType.ColumnHeader }),
     select: () => undefined,
     scrollIntoView: () => undefined,
+    invalidate: () => undefined,
   };
 
   return { grid: grid as unknown as FlexGrid<WijmoRowItem>, sortDescriptions, hostElement };
@@ -63,7 +64,7 @@ describe('setSortableColumnHeaderClick', () => {
     expect(sortDescriptions).toHaveLength(0);
   });
 
-  it('F3 로 켠(allowSorting=true) 컬럼은 클릭마다 오름 → 내림 → 해제로 순환한다', () => {
+  it('F3 로 켠(allowSorting=true) 컬럼은 클릭마다 미정렬 → 오름 → 내림 → 미정렬로 순환한다', () => {
     const { grid, sortDescriptions, hostElement } = createFakeGrid({
       binding: 'ITEM_CD',
       allowSorting: true,
@@ -82,9 +83,29 @@ describe('setSortableColumnHeaderClick', () => {
 
     clickHeader(hostElement);
     expect(sortDescriptions).toHaveLength(0);
+
+    clickHeader(hostElement);
+    expect(sortDescriptions).toHaveLength(1);
+    expect(sortDescriptions[0].ascending).toBe(true);
   });
 
-  it('동적(주차/월/일) 컬럼은 allowSorting 이 켜져 있어도 정렬하지 않는다', () => {
+  it('정적 컬럼 정렬도 select(-1,-1)+scrollIntoView(0,0) 뒤에 invalidate 로 재도색한다', () => {
+    let invalidateCalled = false;
+    const { grid, hostElement } = createFakeGrid({
+      binding: 'ITEM_CD',
+      allowSorting: true,
+    });
+    grid.invalidate = () => {
+      invalidateCalled = true;
+    };
+
+    useDataGridUtils().setSortableColumnHeaderClick(grid);
+    clickHeader(hostElement);
+
+    expect(invalidateCalled).toBe(true);
+  });
+
+  it('동적(주차/월/일) 컬럼도 allowSorting 이 켜져 있으면 정렬한다', () => {
     const { grid, sortDescriptions, hostElement } = createFakeGrid({
       binding: 'W202601',
       allowSorting: true,
@@ -94,6 +115,37 @@ describe('setSortableColumnHeaderClick', () => {
     useDataGridUtils().setSortableColumnHeaderClick(grid);
     clickHeader(hostElement);
 
-    expect(sortDescriptions).toHaveLength(0);
+    expect(sortDescriptions).toHaveLength(1);
+    expect(sortDescriptions[0].property).toBe('W202601');
+    expect(sortDescriptions[0].ascending).toBe(true);
+  });
+
+  it('동적(주차/월/일) 컬럼 정렬은 select(-1,-1)+scrollIntoView(0,0) 리셋 대신 invalidate 로 재계산한다 — 드릴다운 dblclick hitTest 보존하면서도 정렬 결과를 화면에 반영', () => {
+    let selectCalled = false;
+    let scrollIntoViewCalled = false;
+    let invalidateCalled = false;
+    const { grid, hostElement } = createFakeGrid({
+      binding: 'W202601',
+      allowSorting: true,
+      _dynamic: true,
+    });
+    grid.select = () => {
+      selectCalled = true;
+      return true;
+    };
+    grid.scrollIntoView = () => {
+      scrollIntoViewCalled = true;
+      return true;
+    };
+    grid.invalidate = () => {
+      invalidateCalled = true;
+    };
+
+    useDataGridUtils().setSortableColumnHeaderClick(grid);
+    clickHeader(hostElement);
+
+    expect(selectCalled).toBe(false);
+    expect(scrollIntoViewCalled).toBe(false);
+    expect(invalidateCalled).toBe(true);
   });
 });

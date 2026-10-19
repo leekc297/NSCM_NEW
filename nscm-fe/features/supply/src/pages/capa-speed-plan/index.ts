@@ -1,0 +1,1 @@
+export { CapaSpeedPlan } from './CapaSpeedPlan';

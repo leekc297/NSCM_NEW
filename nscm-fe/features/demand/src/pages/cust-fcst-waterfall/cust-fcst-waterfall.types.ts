@@ -1,6 +1,6 @@
 /**
  * DMF0053 Customer FCST Waterfall — 조회조건 상태 (#112 카탈로그 17행 — Cascade_Filter_전수.md §1).
- * Version(Date*) 칸은 AS-IS 숨김 + 카탈로그·Figma 부재로 미구현 (versionNo='' 고정 전달).
+ * Version(Date*) 칸은 AS-IS 숨김 + 카탈로그·화면 설계 부재로 미구현 (versionNo='' 고정 전달).
  */
 export interface SearchParams {
   divisionId: string; // Div.* (단일)

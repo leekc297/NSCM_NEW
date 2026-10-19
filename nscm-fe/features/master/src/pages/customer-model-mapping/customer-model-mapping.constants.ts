@@ -1,4 +1,4 @@
-import type { ComboParam, ComboResponse } from '@foundation/models';
+import type { ComboParam } from '@foundation/models';
 
 export const MENU_ID = 'DMF0006' as const;
 export type MENU_ID = typeof MENU_ID;
@@ -21,6 +21,14 @@ export const CONVERT_QTY_BINDINGS = {
   CELL: 'CONVERT_QTY_CELL',
 } as const;
 
+/**
+ * Convert Qty 컬럼 여부 판정 — 음수 입력 시 '0' 보정 대상(AS-IS Dsdm_Changed L1186~1193).
+ * DataGrid negativeCellAsZero prop 에 그대로 넘긴다.
+ */
+const CONVERT_QTY_BINDING_SET: ReadonlySet<string> = new Set(Object.values(CONVERT_QTY_BINDINGS));
+export const isConvertQtyBinding = (binding: string): boolean =>
+  CONVERT_QTY_BINDING_SET.has(binding);
+
 /** Model Type 필드 바인딩 (AS-IS ITEM_CLASS_NAME). */
 export const MODEL_TYPE_BINDING = 'ITEM_CLASS_NAME';
 
@@ -38,6 +46,87 @@ export const DIVISION_BINDING = 'DIVISION_ID';
 
 /** Team 필드 바인딩. 신규행 후보 콤보 배선은 customer-model-mapping.gridCombos.ts 참조. */
 export const TEAM_BINDING = 'DEPT_ID';
+
+/** End Customer 필드 바인딩. */
+export const END_CUSTOMER_BINDING = 'END_CUSTOMER';
+
+/** Sales Site 필드 바인딩. */
+export const SALES_SITE_BINDING = 'SCM_SITE_ID';
+
+/** PJT(Project 명) 필드 바인딩. */
+export const PROJECT_NAME_BINDING = 'PROJECT_NAME';
+
+/** Model(Item) 필드 바인딩. */
+export const ITEM_ID_BINDING = 'ITEM_ID';
+
+/** Model 명 표시 필드 바인딩. */
+export const ITEM_NAME_BINDING = 'ITEM_NAME';
+
+/**
+ * 상위 조회 콤보 변경 시 하위 셀을 비우는 cascade 규칙 (AS-IS spdMain_ComboSelChange L876~997).
+ *
+ * AS-IS 는 상위 콤보가 바뀌면 하위 값이 아직 유효 후보인지와 무관하게 무조건 비운다. 공용 DataGrid
+ * 의 clearStaleComboCellsHandler(findStaleComboCells)는 "드롭다운 후보 밖" 일 때만, 그것도 COMBO
+ * 컬럼만 비우므로 이 동작을 대신하지 못한다 — PJT/Model 은 팝업 셀이라 거기 걸리지 않고, 후보로
+ * 남은 값도 지우지 않는다. 그래서 화면에서 무조건 cascade 를 건다.
+ *
+ *   Team(DEPT_ID) 변경      -> End Customer, Sales Site, PJT Code, PJT, Model, Model Type (L953~964)
+ *   End Customer 변경       -> Sales Site, PJT Code, PJT, Model, Model Type               (L973~982)
+ *   Sales Site(SCM_SITE_ID) -> PJT Code, PJT, Model, Model Type                           (L986~993)
+ *   PJT Code(PROJECT_CODE)  -> PJT, Model, Model Type (타이핑·붙여넣기 경로, TO-BE 추가)
+ *
+ * PJT Code 행은 AS-IS 에 없다. AS-IS 는 PJT Code 셀이 TextCellType 이라 직접 입력이 가능했지만
+ * Model 비우기는 팝업 선택(CellDoubleClick L1009~1013)에만 있어 타이핑·붙여넣기로 바꾸면 이전
+ * Model 이 그대로 남았다. TO-BE 는 팝업 경로(PROJECT_SELECT_CLEAR)와 같게 타이핑·붙여넣기에도
+ * Model 을 비우고, 팝업이 새로 채워 주는 PJT 이름도 stale 로 남지 않게 함께 비운다 (사용자 지시
+ * 2026-10-12). 값이 그대로인 편집 종료에도 비우는 것은 위 Team 등과 같은 규칙이다.
+ *
+ * AS-IS 는 Model 을 비울 때 ITEM_ID + ITEM_CLASS_NAME 만 지우고 ITEM_NAME 은 두지만, TO-BE 는
+ * Model 선택(handleItemSelected)이 ITEM_ID/ITEM_CLASS_NAME/ITEM_NAME 세 값을 짝으로 쓰므로
+ * cascade 도 셋을 함께 비운다 (사용자 지시 2026-10-02 — 표시 모델명이 stale 로 남지 않게).
+ */
+export const CASCADE_CLEAR_MAP: Readonly<Record<string, readonly string[]>> = {
+  [TEAM_BINDING]: [
+    END_CUSTOMER_BINDING,
+    SALES_SITE_BINDING,
+    PROJECT_CODE_BINDING,
+    PROJECT_NAME_BINDING,
+    ITEM_ID_BINDING,
+    MODEL_TYPE_BINDING,
+    ITEM_NAME_BINDING,
+  ],
+  [END_CUSTOMER_BINDING]: [
+    SALES_SITE_BINDING,
+    PROJECT_CODE_BINDING,
+    PROJECT_NAME_BINDING,
+    ITEM_ID_BINDING,
+    MODEL_TYPE_BINDING,
+    ITEM_NAME_BINDING,
+  ],
+  [SALES_SITE_BINDING]: [
+    PROJECT_CODE_BINDING,
+    PROJECT_NAME_BINDING,
+    ITEM_ID_BINDING,
+    MODEL_TYPE_BINDING,
+    ITEM_NAME_BINDING,
+  ],
+  [PROJECT_CODE_BINDING]: [
+    PROJECT_NAME_BINDING,
+    ITEM_ID_BINDING,
+    MODEL_TYPE_BINDING,
+    ITEM_NAME_BINDING,
+  ],
+};
+
+/**
+ * PJT 팝업 선택 시 함께 비우는 Model 관련 하위 필드 (AS-IS CellDoubleClick L1052~1053:
+ *   ITEM_ID / ITEM_CLASS_NAME 를 ""). ITEM_NAME 은 위 cascade 와 같은 이유로 함께 비운다.
+ */
+export const PROJECT_SELECT_CLEAR: readonly string[] = [
+  ITEM_ID_BINDING,
+  MODEL_TYPE_BINDING,
+  ITEM_NAME_BINDING,
+];
 
 /**
  * 컬럼 메타 Param1(SCM_MST_SHEET_COLUMNS.ATTRIBUTE1) 의 허용 Division 목록 판정.
@@ -131,8 +220,10 @@ export const getConvertQtyEditable = (itemClassName?: string): ConvertQtyEditabl
  * group / user 자리는 BE 가 @sesUserId 로 주입하므로 FE 는 싣지 않는다(SQL 로 확인).
  */
 export const SEARCH_COMBO = {
-  division: 'MyDivision',
-  team: 'TeambyDivision',
+  /** 필터. 파라미터 없이 전량을 한 번 받는다. DIVISION_ID 컬럼을 안 내려주므로 좁히지 않는다. */
+  division: 'FilterMyDivision',
+  /** 필터. 파라미터 없이 전량을 한 번 받고 division 좁히기는 화면이 한다. */
+  team: 'FilterTeambyDivision',
   endCustomer40: 'EndCustomerByDivision40',
   endCustomer: 'EndCustomerByDivisionDept',
   salesSite40: 'ScmSitebyEndCustomer40',
@@ -140,36 +231,8 @@ export const SEARCH_COMBO = {
   active: 'YesOrNo',
 } as const;
 
-/**
- * 마지막으로 바뀐 조회조건.
- *
- * AS-IS 는 이벤트 기반이라 나중에 발생한 핸들러가 목록을 덮어쓴다. React 는 상태 기반이므로 그
- * "마지막"을 상태로 들고 같은 규칙을 재현한다 - DMF0004 SalesSiteTrigger 와 같은 장치다.
- *
- * 이게 필요한 이유는 AS-IS 의 40 분기가 Division 변경 경로에만 있기 때문이다.
- *
- *   InitControls L146~165        Team 조회
- *                                End Customer 40 분기 O / Sales Site 는 SiteByEndCustomer 고정
- *   cboDivision 변경 L840~870    Team 재조회 + End Customer 40 분기 O + Sales Site 40 분기 O
- *   clbTeam 변경   L1149~1161    End Customer / Sales Site 를 40 분기 없이 기본 원천으로 재조회
- *   clbEndCustomer 변경 L1126    Sales Site 를 40 분기 없이 기본 원천으로 재조회
- *
- * 즉 40 전용 원천은 "Division 을 방금 바꿨을 때"만 쓰인다. Team 이나 End Customer 를 건드리는
- * 순간 40 이어도 기본 원천으로 넘어가고, 그 상태가 다음 Division 변경까지 유지된다.
- */
-export type SearchComboTrigger = 'division' | 'team' | 'endCustomer';
-
-/**
- * End Customer / Sales Site 콤보 원천을 가르는 술어.
- *
- * 40 전용 콤보를 쓸 Division 은 Project 개념이 없는 Division 과 같은 코드라 DIVISION_NO_PROJECT 를
- * 재사용한다. 두 규칙이 우연히 같은 값을 쓰는 게 아니라 같은 Division(Mobility)을 가리킨다.
- */
+/** 40 전용 원천을 쓰는 Division. Project 개념이 없는 Division 과 같은 값이라 상수를 재사용한다. */
 export const isDivision40 = (divisionId?: string): boolean => divisionId === DIVISION_NO_PROJECT;
-
-/** 40 전용 원천을 쓰는 조건 - Division 40 이면서 방금 바뀐 것이 Division 일 때. */
-const uses40Source = (trigger: SearchComboTrigger, divisionId?: string) =>
-  trigger === 'division' && isDivision40(divisionId);
 
 /**
  * 미선택은 공란으로 넘긴다. AS-IS GetDMInnerTable 진입부가 'ALL' 을 '' 로 바꾸고, 값이 비면 그
@@ -185,32 +248,16 @@ interface SearchComboSource {
 }
 
 /**
- * Team 콤보 1건. 원천이 하나라 트리거를 보지 않는다.
- *
- * AS-IS Data.UserTeamByDivision(group, user, sDivision) = CallBizCommonData('TeambyDivision',
- * divisionID, ...) - InitControls L146 / Division 변경 L840.
- *
- * 등록 SQL 은 @divisionId 이름 토큰을 쓴다. AS-IS 가 division 을 param1 자리로 넘긴다고 해서
- * PARAM1 으로 보내면 안 된다 - 그러면 치환 대상이 없어 조용히 전체 목록이 온다.
- */
-export const buildTeamComboParam = ({
-  divisionId,
-}: Pick<SearchComboSource, 'divisionId'>): ComboParam => ({
-  comboId: SEARCH_COMBO.team,
-  divisionId,
-});
-
-/**
  * End Customer 콤보 1건. 원천만 갈리고 파라미터 구성은 양쪽이 같다.
  *
  *   Division 변경 + 40   Data.Common(EndCustomerByDivision40, false, sDivision, sTeam, ...)  L152/L850
  *   그 외                Data.UserEndCustomerByDivisionDept(group, user, sDivision, sTeam)   L157/L1154
  */
-export const buildEndCustomerComboParam = (
-  trigger: SearchComboTrigger,
-  { divisionId, deptId }: Pick<SearchComboSource, 'divisionId' | 'deptId'>
-): ComboParam => ({
-  comboId: uses40Source(trigger, divisionId) ? SEARCH_COMBO.endCustomer40 : SEARCH_COMBO.endCustomer,
+export const buildEndCustomerComboParam = ({
+  divisionId,
+  deptId,
+}: Pick<SearchComboSource, 'divisionId' | 'deptId'>): ComboParam => ({
+  comboId: isDivision40(divisionId) ? SEARCH_COMBO.endCustomer40 : SEARCH_COMBO.endCustomer,
   divisionId,
   deptId: blank(deptId),
 });
@@ -240,26 +287,33 @@ export const buildEndCustomerComboParam = (
  * Sales Site 는 Team 을 반영하지 않는다 - AS-IS 호출부에 팀 자리가 없다. 다만 Team 을 바꾸면
  * endCustomer 가 'ALL' 로 풀리므로 결과적으로 목록은 다시 만들어진다.
  */
-export const buildSalesSiteComboParam = (
-  trigger: SearchComboTrigger,
-  { divisionId, endCustomer }: Pick<SearchComboSource, 'divisionId' | 'endCustomer'>
-): ComboParam =>
-  uses40Source(trigger, divisionId)
-    ? { comboId: SEARCH_COMBO.salesSite40 }
-    : { comboId: SEARCH_COMBO.salesSite, divisionId, endCustomer: blank(endCustomer) };
-
 /**
- * 콤보 응답을 드롭다운 옵션으로. CODE 중복은 접는다 - AS-IS 도 GroupBy 로 한 번 접는다.
+ * Sales Site 에 넘길 End Customer 값. AS-IS CString.GetCheckedListValue 재현이다.
  *
- * 종전에는 화면이 DIVISION_ID / DEPT_ID 로 응답을 한 번 더 걸렀다. End Customer 와 Sales Site 는
- * 이제 서버가 그 축소를 하므로 클라이언트 필터를 두지 않는다 - 두면 콤보 SQL 이 그 컬럼을 안
- * 내려줄 때 목록이 통째로 빈다.
+ * 미선택('ALL')은 그 시점 End Customer 목록의 전체 CODE 로 펼쳐진다. Team 을 바꾸면 End
+ * Customer 가 팀으로 좁혀지고(clbTeam_SelectedIndexChanged :1154) 그 좁혀진 집합이 Sales Site
+ * 를 좁히므로, 이 펼치기가 곧 Team 을 Sales Site 에 반영하는 경로다.
+ *
+ * 필수: 미선택을 공란으로 떨어뜨리면 안 된다. 그러면 Team 을 골라도 Sales Site 가 그대로다.
+ * 목록이 비었을 때만 공란이 되며, 그때는 AS-IS 도 빈 테이블에서 공란을 돌려준다.
  */
-export const toComboOptions = (rows?: ComboResponse[]) => [
-  ...new Map(
-    (rows ?? [])
-      .map(row => [String(row.CODE ?? ''), String(row.NAME ?? '')] as const)
-      .filter(([code]) => code !== '')
-      .map(([code, name]) => [code, { label: name || code, value: code }] as const)
-  ).values(),
-];
+export const resolveEndCustomerParam = (
+  selected: string,
+  options: readonly { value: string }[]
+): string => {
+  const codes = (selected ?? '')
+    .split(',')
+    .map(v => v.trim())
+    .filter(v => v !== '' && v !== 'ALL');
+  return codes.length > 0 ? codes.join(',') : options.map(option => option.value).join(',');
+};
+
+export const buildSalesSiteComboParam = ({
+  divisionId,
+  endCustomer,
+}: Pick<SearchComboSource, 'divisionId' | 'endCustomer'>): ComboParam =>
+  isDivision40(divisionId)
+    ? // 40 은 Project 자리를 항상 비운다. AS-IS Data.ScmSitebyEndCustomer40(group, user,
+      //   sDivision, "") 의 네 번째 인자가 그 자리다 - End Customer 를 골라도 채우지 않는다.
+      { comboId: SEARCH_COMBO.salesSite40, divisionId, endCustomer: '' }
+    : { comboId: SEARCH_COMBO.salesSite, divisionId, endCustomer: blank(endCustomer) };

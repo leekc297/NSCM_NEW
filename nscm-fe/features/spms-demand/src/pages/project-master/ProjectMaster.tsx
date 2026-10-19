@@ -1,6 +1,7 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { IcGridColumnSetup } from '@foundation/assets';
 import { CRUD_TYPE } from '@foundation/constants';
@@ -129,6 +130,14 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
 
+  // TAB1 은 조회조건 미소비(F-3)라 최초 진입 시 자동조회한다 — TAB1 활성 상태에서
+  // filters[TAB1] 이 비면(mount clearFilters / Division 보정의 clearFilters 포함) 즉시 다시
+  // 채운다 (SDM1010 동일 패턴). TAB2 는 조회조건 검증이 필요해 대상 아님 — Search 버튼만.
+  useEffect(() => {
+    if (activeTab === TAB_INDEX.TAB1 && !filters[SHEETS.TAB1]) setFilter(SHEETS.TAB1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, filters]);
+
   const tab1Rows = useMemo<Tab1Row[]>(() => tab1Data?.data ?? [], [tab1Data]);
   const tab2Rows = useMemo<Tab2Row[]>(() => tab2Data?.data ?? [], [tab2Data]);
 
@@ -211,13 +220,13 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   };
 
-  // TAB1 승인 (E06 — 행 단건 P-09): 6자리 D-PJT Code FE 선검증(P-08/D12) →
+  // TAB1 승인 (E06 — 행 단건 P-09): 9자리 D-PJT Code FE 선검증(P-08/D12) →
   //   공용 필수값 검증 → confirm MSG01008 →
   //   편집값 반영 payload(계약 ① 14키) → CODE '0'+EVENT>0 = toast MSG01009 + 재조회 / 그 외 MSG01010
   const handleConfirmRow = async (row: Tab1Row) => {
     if (!isDpjtCodeValid(row.DPJT_CODE)) {
       // P-08 — 전용 MSG 미채번 (신규 임의 채번 금지 관행상 리터럴 — T-2)
-      setToast({ type: 'default', message: 'D-PJT Code는 6자리로 입력해야 합니다.' });
+      setToast({ type: 'default', message: 'D-PJT Code는 9자리로 입력해야 합니다.' });
       return;
     }
 
@@ -302,13 +311,18 @@ export const ProjectMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     refreshTab2();
   };
 
-  // 권한관리 링크 (E08 — 양 탭 공통. 실전달 키 = 행 DPJT_KEY invisible) → 모달 오픈
-  const handleAuthRegCellClick = (row: Tab1Row | Tab2Row) => {
-    openAuthRegModal({
-      pjtKey: String(row.DPJT_KEY ?? ''),
-      projectName: String(row.DPJT_NAME ?? ''),
-    });
-  };
+  // 권한관리 링크 (E08 — 양 탭 공통. 실전달 키 = 행 DPJT_KEY invisible) → 모달 오픈.
+  //   ⭐ useCallback 참조 고정 — 탭 그리드 핸들러 effect 의존성이라, 매 렌더 새 함수면
+  //   effect 재실행 + invalidate(true) 전체 재그리기(깜빡임)가 난다 (관리자 팝업 열고 닫을 때마다 재현).
+  const handleAuthRegCellClick = useCallback(
+    (row: Tab1Row | Tab2Row) => {
+      openAuthRegModal({
+        pjtKey: String(row.DPJT_KEY ?? ''),
+        projectName: String(row.DPJT_NAME ?? ''),
+      });
+    },
+    [openAuthRegModal]
+  );
 
   // 공통 버튼 — 활성 탭 라우팅 (hook #97). 저장 = TAB2 전용 (TAB1 B31 <해당없음> — E03)
   const hotkeyConfig: HotkeyConfig = {

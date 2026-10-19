@@ -4,13 +4,14 @@ import {
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { GridAction } from '@foundation/utils';
-import { CustomDialog, DataGrid } from '@shared/components';
+import { attachRowNoHeader, GridAction } from '@foundation/utils';
+import { CustomDialog, DataGrid, ResultArea } from '@shared/components';
 import { Button } from '@shared/lges';
 import { ControlConfirmIcon, FileExceldownloadIcon } from '@shared/lges-icons';
 import { useMessageStore, useSessionStore } from '@shared/stores';
@@ -98,6 +99,8 @@ export const SalesPriceRangeModal = ({ open, modalClose, rows, onSaved }: Props)
   const setToast = useMessageStore.getState().setToast;
   const sessionUserId = useSessionStore(s => s.session.userId);
   const gridRef = useRef<FlexGridType<SalesPriceRangeRow> | null>(null);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
   // No.25 — CH_PRICE 수정을 위한 로컬 작업본(부모 rows 는 SAVE 응답을 그대로 보관).
   //   저장에 성공하면 AS-IS 와 동일하게 팝업을 닫으므로 이 작업본은 다음 open 때 새로 채워진다.
   const [localRows, setLocalRows] = useState<SalesPriceRangeRow[]>([]);
@@ -106,6 +109,10 @@ export const SalesPriceRangeModal = ({ open, modalClose, rows, onSaved }: Props)
   useEffect(() => {
     if (open) setLocalRows(rows);
   }, [open, rows]);
+
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, localRows]);
 
   // CH_PRICE 만 편집가능(Yellow) 표시 — 나머지 컬럼은 기본색 유지(형제 PriceBatchInputModal PRICE_ALL 과 동일 규칙).
   useEffect(() => {
@@ -166,8 +173,9 @@ export const SalesPriceRangeModal = ({ open, modalClose, rows, onSaved }: Props)
       acc.divisionId.push(String(r.DIVISION_ID ?? ''));
       acc.projectCode.push(String(r.PROJECT_CODE ?? ''));
       acc.scmSiteId.push(String(r.SCM_SITE_ID ?? ''));
-      // ⭐ PLANT_SITE_ID NOT NULL — 메인 화면 handleSave(pushEntry) 와 동일 placeholder.
-      acc.plantSiteId.push(String(r.PLANT_SITE_ID ?? '') || '-');
+      // PLANT_SITE_ID 는 값 그대로 전송 — 메인 화면 handleSave(pushEntry) 와 동일(AS-IS 는 빈값을
+      //   '-' 로 치환하지 않는다, .cs:1584/1598).
+      acc.plantSiteId.push(String(r.PLANT_SITE_ID ?? ''));
       acc.itemId.push(String(r.ITEM_ID ?? ''));
       acc.yyyymmdd.push(String(r.CH_YYYYMMDD ?? ''));
       acc.currency.push(String(r.CURRENCY ?? ''));
@@ -229,6 +237,10 @@ export const SalesPriceRangeModal = ({ open, modalClose, rows, onSaved }: Props)
       position='basic'
       handleClose={modalClose}
       disableButtonCancel
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -246,13 +258,21 @@ export const SalesPriceRangeModal = ({ open, modalClose, rows, onSaved }: Props)
 
           {/* Grid — SAVE SP O_RC1 초과 리스트. 입력값 Price(CH_PRICE) 만 편집 가능, 나머지는 조회 전용. */}
           <div className={styles.gridWrapper}>
-            <DataGrid
+            <ResultArea
+              title=''
+              count={localRows.length}
               gridRef={gridRef as never}
-              itemsSource={localRows as unknown as WijmoRowItem[]}
-              staticColumns={RANGE_COLUMNS}
-              autoGenerateColumns={false}
-              className={styles.grid}
-            />
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid
+                gridRef={gridRef as never}
+                gridFilterRef={gridFilterRef}
+                itemsSource={localRows as unknown as WijmoRowItem[]}
+                staticColumns={RANGE_COLUMNS}
+                autoGenerateColumns={false}
+                className={styles.grid}
+              />
+            </ResultArea>
           </div>
 
           {/* Action — 표준 buttonWrapper */}

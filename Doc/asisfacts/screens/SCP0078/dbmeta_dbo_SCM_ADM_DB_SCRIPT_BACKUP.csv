@@ -1,0 +1,1798 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_GET_GSCM_VOC","1626540928","1","/* =============================================================================
+프로그램ID	: SCP0078_GET_GSCM_VOC
+업  무  명	: 시스템관리 - 프로그램관리 목록
+프로그램명	: GSCM system VOC
+최초작성일	: 2022.02.09
+최종작성일	: 2022.02.09
+개  발  자	: vadabi3
+입  력  값	: 
+출  력  값	: 
+*===================================================================================================      
+*   Date       In Charge	Description      
+*===================================================================================================      
+* 2022.02.09   vadabi3		Create   
+* 2022,05,23   VADABI3      종결, 기대효과, 공수 항목 추가
+* 2022-08-24   vadabi3      시작일 추가 (CLASSIFY, PRIORITY, DEV)
+* 2022-08-25   vadabi3      RECIPT, REVIEW 단계사용 안함 = 조회조건에 적용 필요
+* 2022-11-29   vadabi3      Query 개선/정리
+* 2023-01-02   vadabi3      당일 조회 이슈 개선
+*===================================================================================================  
+ EXEC SCP0078_GET_GSCM_VOC
+   @p_from_yyyymmdd='20210310'
+ , @p_to_yyyymmdd='20220829'
+ , @p_voc_name='ESS'
+ , @p_csr=''
+ , @p_req_user_id=N'김구민'
+ , @p_voc_type='QW'
+ , @p_voc_step=''
+ , @p_voc_status=''
+ , @p_use_yn='Y'
+ , @p_division_id=''
+ , @p_voc_confirm = ''
+============================================================================= */
+
+-- CREATE PROCEDURE dbo.SCP0078_GET_GSCM_VOC
+CREATE PROCEDURE [dbo].[SCP0078_GET_GSCM_VOC]
+ @p_from_yyyymmdd		 NVARCHAR(MAX) ,      
+ @p_to_yyyymmdd			 NVARCHAR(MAX) ,   
+ @p_voc_name			 NVARCHAR(MAX) , 
+ @p_csr					 NVARCHAR(MAX) , 
+ @p_req_user_id			 NVARCHAR(MAX) ,
+ @p_voc_type			 NVARCHAR(MAX) ,
+ @p_voc_step			 NVARCHAR(MAX) ,
+ @p_voc_status			 NVARCHAR(MAX) ,
+ @p_use_yn			     NVARCHAR(max) = 'Y',
+ @p_division_id			 NVARCHAR(MAX) ,
+ @p_voc_confirm			 NVARCHAR(MAX)
+AS
+BEGIN
+
+
+		  
+/********************************************************************************      
+* 데이타조회, 임시테이블에 저장      
+********************************************************************************/
+SET NOCOUNT ON;	
+			WITH VOC_LIST AS 
+			(
+ 		            SELECT A.VOC_NO	
+ 						  ,A.VOC_TYPE	
+ 						  ,A.VOC_NAME	
+ 						  ,A.VOC_DETAIL
+						  ,'VIEW' AS VOC_DETAIL_BUTTON	
+ 						  ,CONVERT(CHAR(19), REQUEST_DATE, 20) AS  REQUEST_DATE	
+ 						--,REQUEST_USER_ID	
+						  ,A.REQUEST_USER_ID
+ 						  ,D.USER_NAME AS REQUEST_USER_NAME
+ 						  ,CLASSIFY_STATUS	
+ 						  ,CLASSIFY_DATE
+ 						  ,CLASSIFY_USER_ID	
+ 						  ,RECEIPT_STATUS	
+ 						  ,RECEIPT_DATE
+ 						  ,RECEIPT_USER_ID	
+ 						  ,REVIEW_STATUS	
+ 						  ,REVIEW_DATE
+ 						  ,REVIEW_USER_ID	
+ 						  ,PRIORITY_STATUS	
+ 						  ,PRIORITY_DATE
+ 						  ,PRIORITY_USER_ID	
+ 						  ,DEV_STATUS	
+ 						  ,DEV_DATE
+ 						  ,DEV_USER_ID	
+ 						  ,TEST_STATUS	
+ 						  ,TEST_DATE
+ 						  ,TEST_USER_ID	
+ 						  ,FINISH_STATUS	
+ 						  ,FINISH_DATE
+						  ,A.SCM_PI_USER_ID
+						  ,A.SCM_SOLUTION_USER_ID
+ 						  ,E.USER_NAME AS SCM_PI_USER_NAME	
+ 						  ,F.USER_NAME AS SCM_SOLUTION_USER_NAME	
+ 						  ,CSR_NO	
+ 						  ,REMARK	
+ 						  ,A.ATTRIBUTE1	AS DIVISION_ID
+ 						  ,A.ATTRIBUTE2 AS FILE_LIST	
+ 						  ,CASE 
+						   WHEN LEN(A.ATTRIBUTE2) > 0 THEN 'Y'
+						   ELSE null
+						   END AS FILE_UPLOAD
+ 						  ,A.ATTRIBUTE3	AS FILE_LOG
+						  ,A.ATTRIBUTE4 AS FILE_MAPPING
+ 						  ,A.ATTRIBUTE5	
+ 						  ,A.ATTRIBUTE6	
+ 						  ,A.ATTRIBUTE7	
+ 						  ,A.ATTRIBUTE8	
+ 						  ,A.ATTRIBUTE9	
+ 						  ,A.ATTRIBUTE10	
+ 						  ,USE_YN	
+
+						  ,dbo.FN_GET_VOC_DELAY_YN(CLASSIFY_STATUS, CLASSIFY_DATE)	AS DELAY_YN_CLASSIFY
+						  ,dbo.FN_GET_VOC_DELAY_YN(RECEIPT_STATUS, RECEIPT_DATE)	AS DELAY_YN_RECEIPT
+						  ,dbo.FN_GET_VOC_DELAY_YN(REVIEW_STATUS, REVIEW_DATE)		AS DELAY_YN_REVIEW
+						  ,dbo.FN_GET_VOC_DELAY_YN(PRIORITY_STATUS, PRIORITY_DATE)  AS DELAY_YN_PRIORITY
+						  ,dbo.FN_GET_VOC_DELAY_YN(DEV_STATUS, DEV_DATE)			AS DELAY_YN_DEV
+						  ,dbo.FN_GET_VOC_DELAY_YN(TEST_STATUS, TEST_DATE)			AS DELAY_YN_TEST
+						  ,dbo.FN_GET_VOC_DELAY_YN(FINISH_STATUS, "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_GET_GSCM_VOC","1626540928","2","FINISH_DATE)		AS DELAY_YN_FINISH
+
+						  ,dbo.FN_GET_VOC_RUN_YN(CLASSIFY_STATUS)	AS RUN_YN_CLASSIFY
+						  ,dbo.FN_GET_VOC_RUN_YN(RECEIPT_STATUS)	AS RUN_YN_RECEIPT
+						  ,dbo.FN_GET_VOC_RUN_YN(REVIEW_STATUS)		AS RUN_YN_REVIEW
+						  ,dbo.FN_GET_VOC_RUN_YN(PRIORITY_STATUS)   AS RUN_YN_PRIORITY
+						  ,dbo.FN_GET_VOC_RUN_YN(DEV_STATUS)		AS RUN_YN_DEV
+						  ,dbo.FN_GET_VOC_RUN_YN(TEST_STATUS)		AS RUN_YN_TEST
+						  ,dbo.FN_GET_VOC_RUN_YN(FINISH_STATUS)		AS RUN_YN_FINISH
+
+						  ,dbo.FN_GET_VOC_SOON_YN(CLASSIFY_STATUS, CLASSIFY_DATE)	AS SOON_YN_CLASSIFY
+						  ,dbo.FN_GET_VOC_SOON_YN(RECEIPT_STATUS, RECEIPT_DATE)		AS SOON_YN_RECEIPT
+						  ,dbo.FN_GET_VOC_SOON_YN(REVIEW_STATUS, REVIEW_DATE)		AS SOON_YN_REVIEW
+						  ,dbo.FN_GET_VOC_SOON_YN(PRIORITY_STATUS, PRIORITY_DATE)	AS SOON_YN_PRIORITY
+						  ,dbo.FN_GET_VOC_SOON_YN(DEV_STATUS, DEV_DATE)				AS SOON_YN_DEV
+						  ,dbo.FN_GET_VOC_SOON_YN(TEST_STATUS, TEST_DATE)			AS SOON_YN_TEST
+						  ,dbo.FN_GET_VOC_SOON_YN(FINISH_STATUS, FINISH_DATE)		AS SOON_YN_FINISH
+
+						  ,DEPT.DEPT_NAME_KO AS REQUEST_DEPT_NAME
+						  ,A.BENEFIT_QUANTITATIVE 	
+ 						  ,A.BENEFIT_QUALITATIVE 	
+ 						  ,A.CONFIRM_STATUS 			
+ 						  --,A.CONFIRM_DATE 	
+						  ,CONVERT(varchar(10), CONVERT(date, CONVERT(varchar(8), A.CONFIRM_DATE))) AS CONFIRM_DATE
+						  ,A.CONFIRM_USER_ID	
+						  ,X.USER_NAME AS CONFIRM_USER_NAME		
+
+ 						  ,A.CONFIRM_OPINION 		
+ 						  ,A.MAN_MONTH_PLAN  		
+ 						  ,A.MAN_MONTH_REAL  
+						  ,A.CLASSIFY_START_DATE
+						  ,A.PRIORITY_START_DATE
+						  ,A.DEV_START_DATE
+
+ 					  FROM dbo.SCM_ADM_SYS_VOC A WITH(NOLOCK) 	
+ 		   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO D WITH(NOLOCK) ON A.REQUEST_USER_ID      = D.USER_ID	
+ 		   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO E WITH(NOLOCK) ON A.SCM_PI_USER_ID       = E.USER_ID	
+ 		   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO F WITH(NOLOCK) ON A.SCM_SOLUTION_USER_ID = F.USER_ID	
+ 		   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO X WITH(NOLOCK) ON A.CONFIRM_USER_ID      = X.USER_ID	
+ 		   LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO DEPT WITH(NOLOCK) ON D.DEPT_ID = DEPT.DEPT_ID	
+
+		   )
+		   SELECT *
+		   FROM VOC_LIST A
+		   -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+		   -- WHERE
+		   -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 				  WHERE  1=1 
+		
+                    AND A.REQUEST_DATE BETWEEN @p_from_yyyymmdd AND DATEADD(day, 1, @p_to_yyyymmdd) 
+					AND (ISNULL(@p_voc_name   ,	'') = '' OR VOC_NAME		LIKE '%' + @p_voc_name		+ '%' )
+					AND (ISNULL(@p_csr		  , '') = '' OR CSR_NO			LIKE '%' + @p_csr			+ '%' )
+					AND (ISNULL(@p_voc_type	  , '') = '' OR VOC_TYPE		LIKE '%' + @p_voc_type		+ '%' )
+					AND (ISNULL(@p_use_yn	  , '') = '' OR USE_YN			LIKE '%' + @p_use_yn		+ '%' )
+					AND (ISNULL(@p_division_id, '') = '' OR DIVISION_ID		=  @p_division_id )
+				    AND (ISNULL(@p_req_user_id, '') = '' OR REQUEST_USER_ID =  @p_req_user_id  OR REQUEST_USER_NAME	LIKE N'%' + @p_req_user_id	+ '%' )
+					AND (ISNULL(@p_voc_confirm, '') = '' OR ISNULL(CONFIRM_STATUS,'RU')  = @p_voc_confirm )
+				    -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+		            AND (ISNULL(@p_voc_status   ,	'') = '' OR 
+					   CASE 
+						   -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+						   -- DELAY
+						   -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+					        WHEN @p_voc_status = 'DL' AND @p_voc_step = 'CLASSIFY'		THEN DELAY_Y"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_GET_GSCM_VOC","1626540928","3","N_CLASSIFY
+							WHEN @p_voc_status = 'DL' AND @p_voc_step = 'RECEIPT'		THEN DELAY_YN_RECEIPT		
+							WHEN @p_voc_status = 'DL' AND @p_voc_step = 'REVIEW'		THEN DELAY_YN_REVIEW	
+							WHEN @p_voc_status = 'DL' AND @p_voc_step = 'PRIORITY'		THEN DELAY_YN_PRIORITY	
+							WHEN @p_voc_status = 'DL' AND @p_voc_step = 'DEV'			THEN DELAY_YN_DEV			
+							WHEN @p_voc_status = 'DL' AND @p_voc_step = 'TEST'			THEN DELAY_YN_TEST		
+							WHEN @p_voc_status = 'DL' AND @p_voc_step = 'FINISH'		THEN DELAY_YN_FINISH	
+							WHEN @p_voc_status = 'DL' AND isnull(@p_voc_step, '') = ''  THEN 																		   
+																						CASE WHEN CHARINDEX('Y', CONCAT(
+																														 DELAY_YN_CLASSIFY
+																													  --,DELAY_YN_RECEIPT	
+																													  --,DELAY_YN_REVIEW	
+																														,DELAY_YN_PRIORITY	
+																														,DELAY_YN_DEV		
+																														,DELAY_YN_TEST		
+																														,DELAY_YN_FINISH	
+																														)
+																								) > 0 
+																							THEN 'Y'
+																							ELSE ''
+																							END
+						   -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+						   -- RUN
+						   -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+							WHEN @p_voc_status = 'RN' AND @p_voc_step = 'CLASSIFY'		THEN RUN_YN_CLASSIFY
+							WHEN @p_voc_status = 'RN' AND @p_voc_step = 'RECEIPT'		THEN RUN_YN_RECEIPT		
+							WHEN @p_voc_status = 'RN' AND @p_voc_step = 'REVIEW'		THEN RUN_YN_REVIEW	
+							WHEN @p_voc_status = 'RN' AND @p_voc_step = 'PRIORITY'		THEN RUN_YN_PRIORITY	
+							WHEN @p_voc_status = 'RN' AND @p_voc_step = 'DEV'			THEN RUN_YN_DEV			
+							WHEN @p_voc_status = 'RN' AND @p_voc_step = 'TEST'			THEN RUN_YN_TEST		
+							WHEN @p_voc_status = 'RN' AND @p_voc_step = 'FINISH'		THEN RUN_YN_FINISH	
+							WHEN @p_voc_status = 'RN' AND isnull(@p_voc_step, '') = ''	THEN 
+																						CASE WHEN CHARINDEX('Y', CONCAT(
+																																 RUN_YN_CLASSIFY
+																															  --,RUN_YN_RECEIPT
+																															  --,RUN_YN_REVIEW
+																																,RUN_YN_PRIORITY
+																																,RUN_YN_DEV
+																																,RUN_YN_TEST
+																																,RUN_YN_FINISH
+																																)
+																								) > 0 
+																							THEN 'Y'
+																							ELSE ''
+																							END
+						   -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+						   -- SOON
+						   -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+							WHEN @p_voc_status = 'FS' AND @p_voc_step = 'CLASSIFY'		THEN SOON_YN_CLASSIFY
+							WHEN @p_voc_status = 'FS' AND @p_voc_step = 'RECEIPT'		THEN SOON_YN_RECEIPT		
+							WHEN @p_voc_status = 'FS' AND @p_voc_step = 'REVIEW'		THEN SOON_YN_REVIEW	
+							WHEN @p_voc_status = 'FS' AND @p_voc_step = 'PRIORITY'		THEN SOON_YN_PRIORITY	
+							WHEN @p_voc_status = 'FS' AND @p_voc_step = 'DEV'			THEN SOON_YN_DEV			
+							WHEN @p_voc_status = 'FS' AND @p_voc_step = 'TEST'			THEN SOON_YN_TEST		
+							WHEN @p_voc_status = 'FS' AND @p_voc_step = 'FINISH'		THEN SOON_YN_FINISH	
+							WHEN @p_voc_status = 'FS' AND isnull(@p_voc_step, '') = ''	THEN
+																						CASE WHEN CHARINDEX('Y', CONCAT(
+																														 SOON_YN_CLASSIFY
+																													  --,SOON_YN_RECEIPT
+																													  --,SOON_YN_REVIEW
+																										"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_GET_GSCM_VOC","1626540928","4","				,SOON_YN_PRIORITY
+																														,SOON_YN_DEV
+																														,SOON_YN_TEST
+																														,SOON_YN_FINISH
+																														)
+																								) > 0 
+																							THEN 'Y'
+																							ELSE ''
+																							END
+
+						    ELSE  'Y'
+							END = 'Y'
+							)
+					-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+					-- HOLD ,DROP, COMPLETE
+					-----------------------------------------------------------------------------------------------------------------------------------------------------------------						
+		            AND (ISNULL(@p_voc_status   ,	'') = '' OR 
+                                CASE 
+								WHEN  @p_voc_status IN ('HD', 'DR', 'FH') AND @p_voc_step = 'CLASSIFY'		THEN CLASSIFY_STATUS
+								WHEN  @p_voc_status IN ('HD', 'DR', 'FH') AND @p_voc_step = 'RECEIPT'		THEN RECEIPT_STATUS		
+								WHEN  @p_voc_status IN ('HD', 'DR', 'FH') AND @p_voc_step = 'REVIEW'		THEN REVIEW_STATUS	
+								WHEN  @p_voc_status IN ('HD', 'DR', 'FH') AND @p_voc_step = 'PRIORITY'		THEN PRIORITY_STATUS	
+								WHEN  @p_voc_status IN ('HD', 'DR', 'FH') AND @p_voc_step = 'DEV'			THEN DEV_STATUS			
+								WHEN  @p_voc_status IN ('HD', 'DR', 'FH') AND @p_voc_step = 'TEST'			THEN TEST_STATUS		
+								WHEN  @p_voc_status IN ('HD', 'DR', 'FH') AND @p_voc_step = 'FINISH'		THEN FINISH_STATUS	
+								WHEN  @p_voc_status IN ('HD', 'DR', 'FH') AND isnull(@p_voc_step, '') = ''  THEN
+																									   CASE WHEN CHARINDEX(@p_voc_status, CONCAT(
+																																				 CLASSIFY_STATUS
+																																			  --,RECEIPT_STATUS		
+																																			  --,REVIEW_STATUS	
+																																				,'-'+PRIORITY_STATUS	
+																																				,'-'+DEV_STATUS			
+																																				,'-'+TEST_STATUS		
+																																				,'-'+FINISH_STATUS	
+																																				)
+																														) > 0 
+																													THEN @p_voc_status
+																													ELSE ''
+																													END
+	                         else @p_voc_status
+							 end = @p_voc_status
+							 )																									   	          
+		   		 ORDER BY VOC_NO DESC
+	
+/********************************************************************************      
+* LOG    
+********************************************************************************/
+		-- LOG 용 변수 설정
+		DECLARE @v_program_name NVARCHAR(150) = 'SCP0078_GET_GSCM_VOC';
+		DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+		DECLARE @n_log_count    INTEGER = 0;
+		DECLARE @v_log_message  NVARCHAR(1000);
+		DECLARE @v_description  NVARCHAR(max);
+		DECLARE @d_event_date   DATETIME;
+		SET @v_log_type = 'SEARCH';
+		SET @v_log_message = '########## @v_to_mail ##########';
+
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_GET_GSCM_VOC_DATA","1642540985","1","/* =============================================================================
+프로그램ID	: SCP0078_GET_GSCM_VOC_DATA
+업  무  명	: 시스템관리 - 프로그램관리 목록
+프로그램명	: GSCM system VOC
+최초작성일	: 2022.02.09
+최종작성일	: 2022.02.09
+개  발  자	: vadabi3
+입  력  값	: 
+출  력  값	: 
+*===================================================================================================      
+*   Date       In Charge	Description      
+*===================================================================================================      
+* 2022.02.09   vadabi3		Create   
+* 2022,05,23   VADABI3      종결, 기대효과, 공수 항목 추가
+============================================================================= */
+
+ --CREATE PROCEDURE dbo.SCP0078_GET_GSCM_VOC_DATA
+CREATE PROCEDURE [dbo].[SCP0078_GET_GSCM_VOC_DATA]
+   
+ @p_voc_no			 NVARCHAR(MAX) 
+ 	
+AS
+BEGIN
+
+
+		  
+/********************************************************************************      
+* 데이타조회, 임시테이블에 저장      
+********************************************************************************/
+SET NOCOUNT ON;	
+DECLARE @mEXEC NVARCHAR(MAX);
+
+			SELECT VOC_NO
+				  ,VOC_TYPE
+				  ,VOC_NAME
+				  ,VOC_DETAIL
+				  ,CONVERT(CHAR(19), REQUEST_DATE, 20) AS  REQUEST_DATE
+				  --,REQUEST_USER_ID
+				  ,D.USER_NAME AS REQUEST_USER_ID
+				  ,CLASSIFY_STATUS
+				  ,CLASSIFY_DATE
+				  ,CLASSIFY_USER_ID
+				  ,RECEIPT_STATUS
+				  ,RECEIPT_DATE
+				  ,RECEIPT_USER_ID
+				  ,REVIEW_STATUS
+				  ,REVIEW_DATE
+				  ,REVIEW_USER_ID
+				  ,PRIORITY_STATUS
+				  ,PRIORITY_DATE
+				  ,PRIORITY_USER_ID
+				  ,DEV_STATUS
+				  ,DEV_DATE
+				  ,DEV_USER_ID
+				  ,TEST_STATUS
+				  ,TEST_DATE
+				  ,TEST_USER_ID
+				  ,FINISH_STATUS
+				  ,FINISH_DATE
+				  ,E.USER_NAME AS SCM_PI_USER_ID
+				  ,F.USER_NAME AS SCM_SOLUTION_USER_ID
+				  ,CSR_NO
+				  ,REMARK
+				  ,A.ATTRIBUTE1 AS DIVISION_ID
+				  ,A.ATTRIBUTE2 AS FILE_UPLOAD
+				  ,A.ATTRIBUTE3 AS FILE_LOG
+				  ,A.ATTRIBUTE4 AS FILE_MAPPING
+				  ,A.ATTRIBUTE5
+				  ,A.ATTRIBUTE6
+				  ,A.ATTRIBUTE7
+				  ,A.ATTRIBUTE8
+				  ,A.ATTRIBUTE9
+				  ,A.ATTRIBUTE10
+				  ,USE_YN
+				  ,A.BENEFIT_QUANTITATIVE 	
+ 				  ,A.BENEFIT_QUALITATIVE 	
+ 				  ,A.CONFIRM_STATUS 			
+ 				  ,A.CONFIRM_DATE 			
+				  ,A.CONFIRM_USER_ID			
+ 				  ,A.CONFIRM_OPINION 		
+ 				  ,A.MAN_MONTH_PLAN  		
+ 				  ,A.MAN_MONTH_REAL  		
+			  FROM dbo.SCM_ADM_SYS_VOC A WITH(NOLOCK) 
+   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO D WITH(NOLOCK) ON A.REQUEST_USER_ID = D.USER_ID
+   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO E WITH(NOLOCK) ON A.SCM_PI_USER_ID = E.USER_ID
+   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO F WITH(NOLOCK) ON A.SCM_SOLUTION_USER_ID = F.USER_ID
+			 WHERE VOC_NO   =  @p_voc_no
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_GET_GSCM_VOC_MAIL_SEND","1658541042","1","
+/*
+ * Program ID   : SCP0078_GET_GSCM_VOC_MAIL_SEND
+ * Description  : GSCM system VOC 알림 MAIL 발송
+ *                SCM_AUTH_REQ_MAIL_SEND 참조
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2022/02/18   vadabi3	   [C20210310-000519] 최초작성 
+ * 2022/08/24   vadabi3	   단계 제외 (RECEIPT, REVIEW)
+ ----------------------------------------------------------------------------------------------------
+ EXEC SCP0078_GET_GSCM_VOC_MAIL_SEND   'M', @p_voc_no='1000000013' , @p_voc_step ='CLASSIFY'	
+ EXEC SCP0078_GET_GSCM_VOC_MAIL_SEND   'M', @p_voc_no='1000000013' , @p_voc_step ='REVIEW'	
+ */
+--CREATE PROCEDURE [dbo].[SCP0078_GET_GSCM_VOC_MAIL_SEND]
+CREATE PROCEDURE [dbo].[SCP0078_GET_GSCM_VOC_MAIL_SEND]
+	@p_active_flag				nvarchar(MAX) ,
+	@p_voc_no					nvarchar(max) ,
+	@p_voc_step					nvarchar(MAX) 
+AS
+
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON;
+	
+	/********************************************************************************
+	* DECLARE
+	********************************************************************************/
+	-- MAIL 용 변수 설정
+	DECLARE @v_to_mail              NVARCHAR(MAX);
+	DECLARE @v_to_mail_create       NVARCHAR(MAX);
+	DECLARE @v_to_mail_create_cnt   INTEGER = 0;
+	DECLARE @v_server_real           NVARCHAR(MAX);
+	--------------------------------------------------------------------------------
+	SET @v_server_real = 'REAL';
+	SELECT @v_server_real = dbo.FN_GET_LOOKUP_CODE_DESC('VOC_MAILING', 'RUNSERVER' ) 
+
+	DECLARE @v_mail_title			NVARCHAR(MAX);
+	DECLARE @v_body_contents		NVARCHAR(MAX);
+	DECLARE @v_body_text			NVARCHAR(MAX);
+	DECLARE @v_body_title			NVARCHAR(MAX);
+	DECLARE @v_head_cont		    NVARCHAR(MAX);
+	DECLARE @v_a_body_contents		NVARCHAR(MAX);
+	DECLARE @TABLE_BODY				NVARCHAR(MAX);
+	DECLARE @p_html_yn				NVARCHAR(1);
+	--------------------------------------------------------------------------------
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0078_GET_GSCM_VOC_MAIL_SEND';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	--------------------------------------------------------------------------------
+	-- VOC 용 변수 설정
+    DECLARE @v_voc_type					NVARCHAR(MAX);
+	DECLARE @v_division_id				NVARCHAR(MAX);
+	DECLARE @v_voc_name					NVARCHAR(MAX);
+	DECLARE @v_voc_detail				NVARCHAR(MAX);
+	DECLARE @v_request_date				NVARCHAR(MAX);
+	DECLARE @v_classify_status			NVARCHAR(MAX);
+	DECLARE @v_receipt_status			NVARCHAR(MAX);
+	DECLARE @v_review_status			NVARCHAR(MAX);
+	DECLARE @v_priority_status			NVARCHAR(MAX);
+	DECLARE @v_dev_status				NVARCHAR(MAX);
+	DECLARE @v_test_status				NVARCHAR(MAX);
+	DECLARE @v_finish_status			NVARCHAR(MAX);
+	DECLARE @v_request_user_id			NVARCHAR(MAX);
+	DECLARE @v_scm_pi_uesr_id			NVARCHAR(MAX);
+	DECLARE @v_scm_solution_uesr_id		NVARCHAR(MAX);
+	DECLARE @v_csr_no					NVARCHAR(MAX);
+	DECLARE @v_voc_step					NVARCHAR(MAX);
+
+
+
+
+	/********************************************************************************
+	* 시작 LOG
+	********************************************************************************/
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = @p_voc_no;
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+	/********************************************************************************
+	* VOC_DATA
+	********************************************************************************/
+					SELECT @v_voc_type				= A.VO"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_GET_GSCM_VOC_MAIL_SEND","1658541042","2","C_TYPE	
+					      ,@v_division_id			= dbo.FN_GET_LOOKUP_CODE_DESC('VOC_DIVISION', A.ATTRIBUTE1 )  	
+ 						  ,@v_voc_name				= A.VOC_NAME	
+ 						  ,@v_voc_detail			= A.VOC_DETAIL
+ 						  ,@v_request_date			= CONVERT(CHAR(19), REQUEST_DATE, 20)
+
+			              ,@v_classify_status		= dbo.FN_GET_LOOKUP_CODE_DESC('VOC_STATUS', A.CLASSIFY_STATUS ) 
+						  ,@v_receipt_status        = dbo.FN_GET_LOOKUP_CODE_DESC('VOC_STATUS', A.RECEIPT_STATUS  ) 
+						  ,@v_review_status         = dbo.FN_GET_LOOKUP_CODE_DESC('VOC_STATUS', A.REVIEW_STATUS   ) 
+						  ,@v_priority_status       = dbo.FN_GET_LOOKUP_CODE_DESC('VOC_STATUS', A.PRIORITY_STATUS ) 
+						  ,@v_dev_status            = dbo.FN_GET_LOOKUP_CODE_DESC('VOC_STATUS', A.DEV_STATUS      ) 
+						  ,@v_test_status           = dbo.FN_GET_LOOKUP_CODE_DESC('VOC_STATUS', A.TEST_STATUS     ) 
+						  ,@v_finish_status         = dbo.FN_GET_LOOKUP_CODE_DESC('VOC_STATUS', A.FINISH_STATUS   ) 
+
+
+ 						  ,@v_request_user_id		= D.USER_NAME 	
+ 						  ,@v_scm_pi_uesr_id		= E.USER_NAME 
+ 						  ,@v_scm_solution_uesr_id	= F.USER_NAME 
+ 						  ,@v_csr_no				= CSR_NO	
+ 					  FROM dbo.SCM_ADM_SYS_VOC A WITH(NOLOCK) 	
+ 		   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO D WITH(NOLOCK) ON A.REQUEST_USER_ID      = D.USER_ID	
+ 		   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO E WITH(NOLOCK) ON A.SCM_PI_USER_ID       = E.USER_ID	
+ 		   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO F WITH(NOLOCK) ON A.SCM_SOLUTION_USER_ID = F.USER_ID	
+ 					 WHERE VOC_NO = @p_voc_no	
+	;
+
+
+			SELECT @v_voc_step = CASE 
+								 WHEN @p_voc_step = 'CREATE' THEN N'등록' 
+			                     ELSE dbo.FN_GET_LOOKUP_CODE_DESC('VOC_STEP', @p_voc_step ) 
+								 END 
+
+	/********************************************************************************
+	* Mail Cointent
+	********************************************************************************/	
+	SET @v_a_body_contents = ''
+	SET @v_body_text = ''
+	SET @v_head_cont = '';
+	SET @v_head_cont = @v_head_cont+ '<tr>'
+	--SET @v_head_cont = @v_head_cont+ '<th rowspan=2>' + 'NO' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th rowspan=2>' + N'과제 구분' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th rowspan=2>' + N'사업부' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th rowspan=2>' + N'과제명' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th rowspan=2>' + N'요청일' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th colspan=5>' + N'단계' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th colspan=3>' + 'PIC' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th rowspan=2>' + 'CSR NO' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '</tr>'
+
+	SET @v_head_cont = @v_head_cont+ '<tr>'
+	SET @v_head_cont = @v_head_cont+ '<th>' + N'구체화' + '</th>'
+	--SET @v_head_cont = @v_head_cont+ '<th>' + N'과제 접수/협의' + '</th>'
+	--SET @v_head_cont = @v_head_cont+ '<th>' + N'개발 검토' + '</th>'
+	--SET @v_head_cont = @v_head_cont+ '<th>' + N'우선순위<br>완료예정일 검토' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th>' + N'개발 검토' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th>' + N'개발' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th>' + N'Test' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th>' + N'완료' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th>' + N'발의자' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th>' + 'SCM SOLUTION' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '<th>' + 'SCM PI' + '</th>'
+	SET @v_head_cont = @v_head_cont+ '</tr>'
+
+
+
+	--------------------------------------------------------------------------------
+	SET @v_a_body_contents = @v_a_body_contents+ '<tr align=center>'
+	--SET @v_a_body_contents = @v_a_body_contents+ '<td>' + REPLACE(ISNULL(@p_voc_no,'')					, CHAR(10),' ') + '</td>'
+	SET @v_a_body_contents = @v_a_body_contents+ '<td>' + REPLACE(ISNULL(@v_voc_type,'')				, CHAR(10),' ') + '</td>'
+	SET @v_a_body_contents = @v_a_body_contents+ '<td>' + REPLACE(ISNULL(@v_division_id,'')				, CHAR(10),' ') + '</td>'
+	SET @v_a_body_contents = @v_a_body_contents+ '<td align=left>' +"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_GET_GSCM_VOC_MAIL_SEND","1658541042","3"," REPLACE(ISNULL(@v_voc_name,'')		, CHAR(10),' ') + '</td>'
+	SET @v_a_body_contents = @v_a_body_contents+ '<td>' + REPLACE(ISNULL(@v_request_date,'')			, CHAR(10),' ') + '</td>'
+
+	SET @v_a_body_contents = @v_a_body_contents+ '<td witdh=80>' + REPLACE(ISNULL(@v_classify_status,'')	, CHAR(10),' ') + '</td>'
+	--SET @v_a_body_contents = @v_a_body_contents+ '<td witdh=80>' + REPLACE(ISNULL(@v_receipt_status,'')		, CHAR(10),' ') + '</td>'
+	--SET @v_a_body_contents = @v_a_body_contents+ '<td witdh=80>' + REPLACE(ISNULL(@v_review_status,'')		, CHAR(10),' ') + '</td>'
+	SET @v_a_body_contents = @v_a_body_contents+ '<td witdh=100>' + REPLACE(ISNULL(@v_priority_status,'')	, CHAR(10),' ') + '</td>'
+	SET @v_a_body_contents = @v_a_body_contents+ '<td witdh=80>' + REPLACE(ISNULL(@v_dev_status,'')			, CHAR(10),' ') + '</td>'
+	SET @v_a_body_contents = @v_a_body_contents+ '<td witdh=80>' + REPLACE(ISNULL(@v_test_status,'')		, CHAR(10),' ') + '</td>'
+	SET @v_a_body_contents = @v_a_body_contents+ '<td witdh=80>' + REPLACE(ISNULL(@v_finish_status,'')		, CHAR(10),' ') + '</td>'
+
+	SET @v_a_body_contents = @v_a_body_contents+ '<td>' + REPLACE(ISNULL(@v_request_user_id,'')			, CHAR(10),' ') + '</td>'
+	SET @v_a_body_contents = @v_a_body_contents+ '<td>' + REPLACE(ISNULL(@v_scm_solution_uesr_id,'')	, CHAR(10),' ') + '</td>'
+	SET @v_a_body_contents = @v_a_body_contents+ '<td>' + REPLACE(ISNULL(@v_scm_pi_uesr_id,'')			, CHAR(10),' ') + '</td>'
+	SET @v_a_body_contents = @v_a_body_contents+ '<td>' + REPLACE(ISNULL(@v_csr_no,'')					, CHAR(10),' ') + '</td>'	
+	SET @v_a_body_contents = @v_a_body_contents+ '</tr>'
+
+
+	/********************************************************************************
+	* @v_to_mail
+	********************************************************************************/	
+	SELECT @v_to_mail = dbo.FN_GET_LOOKUP_CODE_DESC('VOC_MAILING', 'RECIVER' ) 
+		  ,@v_mail_title = dbo.FN_GET_LOOKUP_CODE_DESC('VOC_MAILING', 'MAIL_TITLE' ) 
+		  ,@v_body_title = dbo.FN_GET_LOOKUP_CODE_DESC('VOC_MAILING', 'MAIL_BODY_TITLE' ) 
+
+    
+
+	---------------------------------------------------------------------------------------
+	-- SCM_ADM_LOOKUP_MASTER_DETAIL > SEGMENT2 100글자 까지만 가능 -> 조치까지 직접 셋팅 => VOC_MAILING_RECIVER 사용
+	---------------------------------------------------------------------------------------
+	--select @v_to_mail = 'vadabi3@lgespartner.com;yongseokyoon@lgensol.com';
+	SELECT @v_to_mail = STUFF((SELECT ';' + SEGMENT2 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'VOC_MAILING_RECIVER' AND VALID_YN = 'Y' FOR XML PATH('')), 1, 1, '')
+
+
+
+	---------------------------------------------------------------------------------------
+		      -- 등록자도 메일링에 추가 한다
+			  -- 사용자아이디로 메일주소 확보방법 없음 => @lgensol.com 붙여서 사용 => 예외여부 확인
+		      SELECT @v_to_mail_create =  D.USER_ID + '@lgensol.com'
+ 		        FROM dbo.SCM_ADM_SYS_VOC A WITH(NOLOCK) 	
+     LEFT OUTER JOIN SCM_MST_SSO_USER_INFO D WITH(NOLOCK) ON A.REQUEST_USER_ID      = D.USER_ID	
+		       WHERE VOC_NO = @p_voc_no	
+			   
+	---------------------------------------------------------------------------------------
+	-- 등록자 메일이 이미 RECIVER 에 포함되어 있는지 체크
+     SELECT @v_to_mail_create_cnt = count(*)
+		   FROM DBO.SCM_ADM_LOOKUP_MASTER_DETAIL C WITH(NOLOCK)
+		  WHERE C.LOOKUP_TYPE   = 'VOC_MAILING_RECIVER'
+		    AND C.VALID_YN = 'Y'
+			AND SEGMENT2 = @v_to_mail_create
+					
+	---------------------------------------------------------------------------------------
+	-- 20220503 개발서버에서는 발의자에 메일 발송 하지 않음
+	IF @v_to_mail_create_cnt = 0 AND @v_server_real != 'DEV'
+		BEGIN
+		SET @v_to_mail = @v_to_mail + ';'+ @v_to_mail_create;
+		END
+
+	-- 20220506 개발서버에서는 Mail Title 에 개발 표시
+	IF @v_server_real = 'DEV'
+		BEGIN
+		SET @v_mail_title = concat(@v_mail_title, N' - [개발서버]');
+		END
+
+
+		
+	---------------------------------------------------------------------------------------  
+		SET @v_log_type = 'RUN';
+		SET @v_log_message = '########## @v_to_mail ##########';
+		SET "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_GET_GSCM_VOC_MAIL_SEND","1658541042","4","@v_description = concat(@v_to_mail , ', v_to_mail_create_cnt = ', @v_to_mail_create_cnt, ', v_server_real = ', @v_server_real) ;
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+
+
+
+	/********************************************************************************
+	* @@v_mail_title
+	********************************************************************************/	
+	SET @v_mail_title = replace(@v_mail_title, '@@p_voc_no'		, @v_voc_name);
+	SET @v_mail_title = replace(@v_mail_title, '@@v_voc_step'	, @v_voc_step);
+	SET @v_body_title = replace(@v_body_title, '@@p_voc_no'		, @v_voc_name);
+	SET @v_body_title = replace(@v_body_title, '@@v_voc_step'	, @v_voc_step);
+
+
+
+
+
+	/********************************************************************************
+	* @@@v_body_title
+	********************************************************************************/
+	--SET @v_body_title = @v_body_text+ N'GSCM SCP VOC - No = ' + @p_voc_no + ', [' + @v_voc_step + N'] 단계 완료 되어 공지 메일 드립니다.'; 
+	--SET @v_body_title = @v_body_text+ N'GSCM SCP VOC - No = ' + @p_voc_no + ', ' + @v_voc_step; 
+	SET @TABLE_BODY		= ''
+	SET @TABLE_BODY		= ' <html>
+								<head>
+								<title>Untitled Document</title>
+								<style>
+									* {margin:0;padding:0;}
+									body {font-family:Malgun Gothic, Arial, Helvetica, sans-serif;font-size:12px;line-height:1.8;color:#333333;}
+									table {border-collapse:collapse;width:100%;}
+									table th {background:#f5f5f5;border-bottom:1px solid #e1e1e1;}
+									table td {background:#fff;border-right:1px solid #e1e1e1;border-left:1px solid #e1e1e1;border-bottom:1px solid #e1e1e1;}
+									table tbody th {border-left:1px solid #e1e1e1;text-align:right;padding:6px 8px;font-size:12px}
+									table tbody td {padding:6px 8px;font-size:12px}
+									table thead th {text-align:center;padding:3px;border-right:1px solid #e1e1e1;border-left:1px solid #e1e1e1; border-bottom:1px solid #d1d1d1;font-size:12px}
+									.hori-table table thead td {text-align:center;padding:3px;}  
+									.hori-table table tbody td {text-align:center;padding:3px;}
+									.vertical-table, .hori-table {margin-bottom:20px;}
+								</style>
+								</head>
+								<body>' +'</br>'+
+										'<b>' + REPLACE(ISNULL(@v_body_title, ''), CHAR(10), '<br>') + '</b>'+
+										'<b>' + REPLACE(ISNULL(@v_body_text, '') , CHAR(10), '<br>') + '</b>' +
+										'<table style=''border-top:2px solid #c8294b; width:1400px;''>
+											<thead>' + ISNULL(@v_head_cont,'') +'</thead>
+											<tbody>' + ISNULL(@v_a_body_contents, '') + '</tbody>
+										</table>
+								</body>
+							</html>'
+
+
+
+	BEGIN TRY
+	/********************************************************************************
+	* 메일 발송
+	********************************************************************************/
+	    --SET @v_to_mail		= 'vadabi3@lgespartner.com;yongseokyoon@lgensol.com';
+	    --SET @v_to_mail		= 'vadabi3@lgespartner.com';
+		--SET @v_mail_title		= N'GSCM SCP VOC 알림 - No = ' + @p_voc_no + ', [' + @v_voc_step + N'] 단계 완료'; 
+		--SET @v_mail_title		= N'GSCM SCP VOC 알림 - No = ' + @p_voc_no; 
+		SET @v_body_contents	= @TABLE_BODY
+		SET @p_html_yn			= 'Y'
+
+		EXEC SCM_ADM_MAIL_SEND
+				 @v_to_mail
+				,@v_mail_title
+				,@v_body_contents
+				,@p_html_yn
+	
+	/********************************************************************************
+	* END LOG
+	********************************************************************************/
+
+		IF LEN(@v_body_contents) > 100
+			BEGIN
+				SET @v_body_contents = SUBSTRING(@v_body_contents,1,100);
+			END
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = @v_body_title;
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_descriptio"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_GET_GSCM_VOC_MAIL_SEND","1658541042","5","n, @d_event_date;
+
+	END TRY
+
+
+	BEGIN CATCH
+		BEGIN
+		/********************************************************************************
+		* CATCH LOG
+		********************************************************************************/
+		INSERT INTO scm_sys_log_batch (program_name
+										,log_type
+										,log_count
+										,log_message
+										,description
+										,event_date
+										,creation_date
+										,created_by
+										,last_update_date
+										,last_updated_by)
+		VALUES (ERROR_PROCEDURE()
+				,'ERROR'
+				,NULL
+				,ERROR_MESSAGE()
+				,NULL
+				,SYSDATETIME()
+				,SYSDATETIME()
+				,ERROR_PROCEDURE()
+				,SYSDATETIME()
+				,ERROR_PROCEDURE());
+
+		IF @@TRANCOUNT > 0
+			COMMIT WORK;
+		END;
+				
+		-- error코드, errror 메시지 반환
+		SELECT 'F' AS result_code;
+		SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC","1674541099","1","/* =============================================================================
+프로그램ID	: SCP0078_SAVE_GSCM_VOC
+업  무  명	: 시스템관리 - 프로그램관리 목록
+프로그램명	: GSCM system VOC
+최초작성일	: 2022.02.09
+최종작성일	: 2022.02.09
+개  발  자	: vadabi3
+입  력  값	: 
+출  력  값	: 
+*===================================================================================================      
+*   Date       In Charge	Description      
+*===================================================================================================      
+* 2022.02.09   vadabi3		Create   
+* 2022,03,18   VADABI3      DIVISION ID 추가
+* 2022,03,18   VADABI3      FILE_UPLOAD 추가
+* 2022,05,23   VADABI3      종결, 기대효과, 공수 항목 추가
+* 2022,08,24   VADABI3      시작일 추가 (CLASSIFY, PRIORITY, DEV)
+============================================================================= */
+
+--CREATE PROCEDURE dbo.SCP0078_SAVE_GSCM_VOC
+CREATE PROCEDURE [dbo].[SCP0078_SAVE_GSCM_VOC]
+ @p_active_flag                NVARCHAR(MAX) , 
+ @p_voc_no              	   NVARCHAR(MAX) ,      
+ @p_voc_type             	   NVARCHAR(MAX) ,   
+ @p_voc_name             	   NVARCHAR(MAX) , 
+ @p_voc_detail           	   NVARCHAR(MAX) , 
+ @p_request_date         	   NVARCHAR(MAX) ,
+ @p_request_user_id      	   NVARCHAR(MAX) ,
+ @p_classify_status      	   NVARCHAR(MAX) ,
+ @p_classify_date        	   NVARCHAR(MAX) ,
+ @p_classify_user_id           NVARCHAR(max) ,	
+ @p_receipt_status      	   NVARCHAR(MAX) ,      
+ @p_receipt_date         	   NVARCHAR(MAX) ,   
+ @p_receipt_user_id      	   NVARCHAR(MAX) , 
+ @p_review_status        	   NVARCHAR(MAX) , 
+ @p_review_date          	   NVARCHAR(MAX) ,
+ @p_review_user_id       	   NVARCHAR(MAX) ,
+ @p_priority_status      	   NVARCHAR(MAX) ,
+ @p_priority_date        	   NVARCHAR(MAX) ,
+ @p_priority_user_id           NVARCHAR(max) ,	
+ @p_dev_status          	   NVARCHAR(MAX) ,      
+ @p_dev_date             	   NVARCHAR(MAX) ,   
+ @p_dev_user_id          	   NVARCHAR(MAX) , 
+ @p_test_status          	   NVARCHAR(MAX) , 
+ @p_test_date            	   NVARCHAR(MAX) ,
+ @p_test_user_id         	   NVARCHAR(MAX) ,
+ @p_finish_status        	   NVARCHAR(MAX) ,
+ @p_finish_date          	   NVARCHAR(MAX) ,
+ @p_finish_user_id             NVARCHAR(max) ,	
+ @p_scm_pi_user_id       	   NVARCHAR(MAX) , 
+ @p_scm_solution_user_id 	   NVARCHAR(MAX) , 
+ @p_csr_no               	   NVARCHAR(MAX) ,
+ @p_remark               	   NVARCHAR(MAX) ,
+ @p_use_yn               	   NVARCHAR(MAX) ,
+ @p_division_id				   NVARCHAR(MAX) ,
+ @p_confirm_status        	   NVARCHAR(MAX) ,
+ @p_confirm_date          	   NVARCHAR(MAX) ,
+ @p_confirm_user_id       	   NVARCHAR(MAX) ,
+ @p_confirm_opinion       	   NVARCHAR(MAX) ,
+ @p_man_month_plan        	   NVARCHAR(MAX) ,
+ @p_man_month_real        	   NVARCHAR(MAX) ,
+ @p_benefit_quantitative	   NVARCHAR(MAX) ,
+ @p_benefit_qualitative		   NVARCHAR(MAX) ,
+
+ @p_classify_start_date		   NVARCHAR(MAX) ,
+ @p_priority_start_date		   NVARCHAR(MAX) ,
+ @p_dev_start_date			   NVARCHAR(MAX) 
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	SET @v_active_flag = NULL;
+
+	DECLARE @v_voc_no              	   	   NVARCHAR(MAX) ;      
+	DECLARE @v_voc_type             	   NVARCHAR(MAX) ;   
+	DECLARE @v_voc_name             	   NVARCHAR(MAX) ; 
+	DECLARE @v_voc_detail           	   NVARCHAR(MAX) ; 
+	DECLARE @v_request_date         	   NVARCHAR(MAX) ;
+	DECLARE @v_request_user_id      	   NVARCHAR(MAX) ;
+	DECLARE @v_classify_status      	   NVARCHAR(MAX) ;
+	DECLARE @v_classify_date        	   NVARCHAR(MAX) ;
+	DECLARE @v_classify_user_id            NVARCHAR(max) ;	
+	DECLARE @v_receipt_status      	       NVARCHAR(MAX) ;      
+	DECLARE @v_receipt_date         	   NVARCHAR(MAX) ;   
+	DECLARE @v_receipt_user_id      	   NVARCHAR(MAX) ; 
+	DECLARE @v_review_status        	   NVARCHAR(MAX) ; 
+	DECLARE @v"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC","1674541099","2","_review_date          	   NVARCHAR(MAX) ;
+	DECLARE @v_review_user_id       	   NVARCHAR(MAX) ;
+	DECLARE @v_priority_status      	   NVARCHAR(MAX) ;
+	DECLARE @v_priority_date        	   NVARCHAR(MAX) ;
+	DECLARE @v_priority_user_id            NVARCHAR(max) ;	
+	DECLARE @v_dev_status          	       NVARCHAR(MAX) ;      
+	DECLARE @v_dev_date             	   NVARCHAR(MAX) ;   
+	DECLARE @v_dev_user_id          	   NVARCHAR(MAX) ; 
+	DECLARE @v_test_status          	   NVARCHAR(MAX) ; 
+	DECLARE @v_test_date            	   NVARCHAR(MAX) ;
+	DECLARE @v_test_user_id         	   NVARCHAR(MAX) ;
+	DECLARE @v_finish_status        	   NVARCHAR(MAX) ;
+	DECLARE @v_finish_date          	   NVARCHAR(MAX) ;
+	DECLARE @v_finish_user_id              NVARCHAR(max) ;	
+	DECLARE @v_scm_pi_user_id       	   NVARCHAR(MAX) ; 
+	DECLARE @v_scm_solution_user_id 	   NVARCHAR(MAX) ; 
+	DECLARE @v_csr_no               	   NVARCHAR(MAX) ;
+	DECLARE @v_remark               	   NVARCHAR(MAX) ;
+	DECLARE @v_use_yn               	   NVARCHAR(MAX) ;
+	DECLARE @v_division_id                 NVARCHAR(MAX) ;
+
+	-- 20220523 종결, 기대효과, 공수 항목 추가
+	DECLARE @v_confirm_status              NVARCHAR(MAX) ;
+	DECLARE @v_confirm_date                NVARCHAR(MAX) ;
+	DECLARE @v_confirm_user_id             NVARCHAR(MAX) ;
+	DECLARE @v_confirm_opinion             NVARCHAR(MAX) ;
+	DECLARE @v_man_month_plan              NVARCHAR(MAX) ;
+	DECLARE @v_man_month_real              NVARCHAR(MAX) ;
+	DECLARE @v_benefit_quantitative        NVARCHAR(MAX) ;
+	DECLARE @v_benefit_qualitative	       NVARCHAR(MAX) ;
+
+	-- 20220824 시작일 추가
+	DECLARE @v_classify_start_date	       NVARCHAR(MAX) ;
+	DECLARE @v_priority_start_date	       NVARCHAR(MAX) ;
+	DECLARE @v_dev_start_date		       NVARCHAR(MAX) ;
+
+
+	SET @v_voc_no              	 = NULL;
+	SET @v_voc_type              = NULL;
+	SET @v_voc_name              = NULL;
+	SET @v_voc_detail            = NULL;
+	SET @v_request_date          = NULL;
+	SET @v_request_user_id       = NULL;
+	SET @v_classify_status       = NULL;
+	SET @v_classify_date         = NULL;
+	SET @v_classify_user_id      = NULL;
+	SET @v_receipt_status      	 = NULL;
+	SET @v_receipt_date          = NULL;
+	SET @v_receipt_user_id       = NULL;
+	SET @v_review_status         = NULL;
+	SET @v_review_date           = NULL;
+	SET @v_review_user_id        = NULL;
+	SET @v_priority_status       = NULL;
+	SET @v_priority_date         = NULL;
+	SET @v_priority_user_id      = NULL;
+	SET @v_dev_status          	 = NULL;
+	SET @v_dev_date              = NULL;
+	SET @v_dev_user_id           = NULL;
+	SET @v_test_status           = NULL;
+	SET @v_test_date             = NULL;
+	SET @v_test_user_id          = NULL;
+	SET @v_finish_status         = NULL;
+	SET @v_finish_date           = NULL;
+	SET @v_finish_user_id        = NULL;
+	SET @v_scm_pi_user_id        = NULL;
+	SET @v_scm_solution_user_id  = NULL;
+	SET @v_csr_no                = NULL;
+	SET @v_remark                = NULL;
+	SET @v_use_yn                = NULL;
+	SET @v_division_id           = NULL;
+	SET @v_confirm_status        = NULL;
+	SET @v_confirm_date          = NULL;
+	SET @v_confirm_user_id       = NULL;
+	SET @v_confirm_opinion       = NULL;
+	SET @v_man_month_plan        = NULL;
+	SET @v_man_month_real        = NULL;
+	SET @v_benefit_quantitative  = NULL;
+	SET @v_benefit_qualitative	 = NULL;
+
+	SET @v_classify_start_date	 = NULL;
+	SET @v_priority_start_date	 = NULL;
+	SET @v_dev_start_date		 = NULL;
+
+
+	--------------------------------------------------------------
+	DECLARE @v_before_classify_status			NVARCHAR(MAX);
+	DECLARE @v_before_receipt_status			NVARCHAR(MAX);
+	DECLARE @v_before_review_status				NVARCHAR(MAX);
+	DECLARE @v_before_priority_status			NVARCHAR(MAX);
+	DECLARE @v_before_dev_status				NVARCHAR(MAX);
+	DECLARE @v_before_test_status				NVARCHAR(MAX);
+	DECLARE @v_before_finish_status				NVARCHAR(MAX);
+
+	SET @v_before_classify_status	  = NULL;
+	SET @v_before_receipt_status	  = NULL;"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC","1674541099","3","
+	SET @v_before_review_status		  = NULL;
+	SET @v_before_priority_status	  = NULL;
+	SET @v_before_dev_status		  = NULL;
+	SET @v_before_test_status		  = NULL;
+	SET @v_before_finish_status		  = NULL;
+
+	--------------------------------------------------------------
+	DECLARE @v_mailsend_classify_status			NVARCHAR(MAX);
+	DECLARE @v_mailsend_receipt_status			NVARCHAR(MAX);
+	DECLARE @v_mailsend_review_status			NVARCHAR(MAX);
+	DECLARE @v_mailsend_priority_status			NVARCHAR(MAX);
+	DECLARE @v_mailsend_dev_status				NVARCHAR(MAX);
+	DECLARE @v_mailsend_test_status				NVARCHAR(MAX);
+	DECLARE @v_mailsend_finish_status			NVARCHAR(MAX);
+
+	SET @v_mailsend_classify_status	  = NULL;
+	SET @v_mailsend_receipt_status	  = NULL;
+	SET @v_mailsend_review_status	  = NULL;
+	SET @v_mailsend_priority_status	  = NULL;
+	SET @v_mailsend_dev_status		  = NULL;
+	SET @v_mailsend_test_status		  = NULL;
+	SET @v_mailsend_finish_status	  = NULL;
+
+	--------------------------------------------------------------
+	DECLARE  @v_mailsend_delay_classify_status 		NVARCHAR(MAX);
+	DECLARE  @v_mailsend_delay_receipt_status		NVARCHAR(MAX);
+	DECLARE  @v_mailsend_delay_review_status		NVARCHAR(MAX);
+	DECLARE  @v_mailsend_delay_priority_status 		NVARCHAR(MAX);
+	DECLARE  @v_mailsend_delay_dev_status			NVARCHAR(MAX);
+	DECLARE  @v_mailsend_delay_test_status	 		NVARCHAR(MAX);
+	DECLARE  @v_mailsend_delay_finish_status	 	NVARCHAR(MAX);
+
+	SET @v_mailsend_delay_classify_status		= NULL;
+	SET @v_mailsend_delay_receipt_status		= NULL;
+	SET @v_mailsend_delay_review_status			= NULL;
+	SET @v_mailsend_delay_priority_status		= NULL;
+	SET @v_mailsend_delay_dev_status			= NULL;
+	SET @v_mailsend_delay_test_status			= NULL;
+	SET @v_mailsend_delay_finish_status			= NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0078_SAVE_GSCM_VOC';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);   
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN   
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;	
+
+
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag					= [dbo].[SCM_ARR_SPL_VAL](@p_active_flag			, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_voc_no              			= [dbo].[SCM_ARR_SPL_VAL](@p_voc_no                 , @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_voc_type             		= [dbo].[SCM_ARR_SPL_VAL](@p_voc_type             	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_voc_name             		= [dbo].[SCM_ARR_SPL_VAL](@p_voc_name             	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_voc_detail           		= [dbo].[SCM_ARR_SPL_VAL](@p_voc_detail           	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_request_date         		= [dbo].[SCM_ARR_SPL_VAL](@p_request_date         	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_request_user_id      		= [dbo].[SCM_ARR_SPL_VAL](@p_request_user_id      	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_classify_status      		= [dbo].[SCM_ARR_SPL_VAL](@p_classify_status      	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_classify_date        		= [dbo].[SCM_ARR_SPL_VAL](@p_classify_date        	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_classify_user_id  "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC","1674541099","4","   		= [dbo].[SCM_ARR_SPL_VAL](@p_classify_user_id     	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_receipt_status      			= [dbo].[SCM_ARR_SPL_VAL](@p_receipt_status      	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_receipt_date         		= [dbo].[SCM_ARR_SPL_VAL](@p_receipt_date         	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_receipt_user_id      		= [dbo].[SCM_ARR_SPL_VAL](@p_receipt_user_id      	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_review_status        		= [dbo].[SCM_ARR_SPL_VAL](@p_review_status        	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_review_date          		= [dbo].[SCM_ARR_SPL_VAL](@p_review_date          	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_review_user_id       		= [dbo].[SCM_ARR_SPL_VAL](@p_review_user_id       	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_priority_status      		= [dbo].[SCM_ARR_SPL_VAL](@p_priority_status      	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_priority_date        		= [dbo].[SCM_ARR_SPL_VAL](@p_priority_date        	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_priority_user_id     		= [dbo].[SCM_ARR_SPL_VAL](@p_priority_user_id     	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_dev_status          			= [dbo].[SCM_ARR_SPL_VAL](@p_dev_status          	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_dev_date             		= [dbo].[SCM_ARR_SPL_VAL](@p_dev_date             	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_dev_user_id          		= [dbo].[SCM_ARR_SPL_VAL](@p_dev_user_id          	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_test_status          		= [dbo].[SCM_ARR_SPL_VAL](@p_test_status          	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_test_date            		= [dbo].[SCM_ARR_SPL_VAL](@p_test_date            	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_test_user_id         		= [dbo].[SCM_ARR_SPL_VAL](@p_test_user_id         	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_finish_status        		= [dbo].[SCM_ARR_SPL_VAL](@p_finish_status        	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_finish_date          		= [dbo].[SCM_ARR_SPL_VAL](@p_finish_date          	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_finish_user_id       		= [dbo].[SCM_ARR_SPL_VAL](@p_finish_user_id       	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_scm_pi_user_id       		= [dbo].[SCM_ARR_SPL_VAL](@p_scm_pi_user_id       	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_scm_solution_user_id 		= [dbo].[SCM_ARR_SPL_VAL](@p_scm_solution_user_id 	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_csr_no               		= [dbo].[SCM_ARR_SPL_VAL](@p_csr_no               	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_remark               		= [dbo].[SCM_ARR_SPL_VAL](@p_remark               	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_use_yn               		= [dbo].[SCM_ARR_SPL_VAL](@p_use_yn               	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_division_id               	= [dbo].[SCM_ARR_SPL_VAL](@p_division_id            , @v_delimiter , @mst_loop_cnt) ; 
+
+				SET @v_confirm_status               = [dbo].[SCM_ARR_SPL_VAL](@p_confirm_status                    , @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_confirm_date                 = [dbo].[SCM_ARR_SPL_VAL](@p_confirm_date                      , @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_confirm_user_id              = [dbo].[SCM_ARR_SPL_VAL](@p_confirm_user_id                   , @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_confirm_opinion              = [dbo].[SCM_ARR_SPL_VAL](@p_confirm_opinion                   , @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_man_month_plan               = [dbo].[SCM_ARR_SPL_VAL](@p_man_month_plan                    , @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_man_month_real               = [dbo].[SCM_ARR_SPL_VAL](@p_man_month_real                    , @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_benefit_quantitative         = [dbo].[SCM_ARR_SPL_VAL](@p_benefit_quantitative              , @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_benefit_qualita"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC","1674541099","5","tive	        = [dbo].[SCM_ARR_SPL_VAL](@p_benefit_qualitative	           , @v_delimiter , @mst_loop_cnt) ; 
+
+				SET @v_classify_start_date	        = [dbo].[SCM_ARR_SPL_VAL](@p_classify_start_date		       , @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_priority_start_date	        = [dbo].[SCM_ARR_SPL_VAL](@p_priority_start_date		       , @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_dev_start_date				= [dbo].[SCM_ARR_SPL_VAL](@p_dev_start_date			           , @v_delimiter , @mst_loop_cnt) ; 
+
+				IF LEN(@v_classify_date) < 8 
+				BEGIN
+				SET @v_classify_date  = NULL;
+				END 
+				
+				IF LEN(@v_receipt_date) < 8 BEGIN SET @v_receipt_date = NULL; END 
+				IF LEN(@v_review_date) < 8 BEGIN SET @v_review_date  = NULL; END 
+				IF LEN(@v_priority_date) < 8 BEGIN SET @v_priority_date  = NULL; END 
+				IF LEN(@v_dev_date) < 8 BEGIN SET @v_dev_date  = NULL; END 
+				IF LEN(@v_test_date ) < 8 BEGIN SET @v_test_date   = NULL; END 
+				IF LEN(@v_finish_date) < 8 BEGIN SET @v_finish_date  = NULL; END 
+
+
+
+					SET @v_before_classify_status	  = NULL;
+					SET @v_before_receipt_status	  = NULL;
+					SET @v_before_review_status		  = NULL;
+					SET @v_before_priority_status	  = NULL;
+					SET @v_before_dev_status		  = NULL;
+					SET @v_before_test_status		  = NULL;
+					SET @v_before_finish_status		  = NULL;
+
+					/********************************************************************************
+					* VOC_BEFORE_DATA
+					********************************************************************************/
+					SELECT @v_before_classify_status		= A.CLASSIFY_STATUS  
+						  ,@v_before_receipt_status			= A.RECEIPT_STATUS   
+						  ,@v_before_review_status		    = A.REVIEW_STATUS    
+						  ,@v_before_priority_status	    = A.PRIORITY_STATUS  
+						  ,@v_before_dev_status				= A.DEV_STATUS       
+						  ,@v_before_test_status		    = A.TEST_STATUS      
+						  ,@v_before_finish_status		    = A.FINISH_STATUS    	
+ 					  FROM dbo.SCM_ADM_SYS_VOC A WITH(NOLOCK) 	
+ 					 WHERE VOC_NO = @v_voc_no	
+
+				
+			END
+
+			--SELECT @v_classify_date;
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+				BEGIN		
+
+					IF( @v_active_flag ='M') 
+						BEGIN
+							/********************************************************************************
+							-- UPDATE
+							********************************************************************************/
+							UPDATE SCM_ADM_SYS_VOC
+							SET VOC_TYPE			=	@v_voc_type,
+							    VOC_NAME			=	@v_voc_name,
+							    VOC_DETAIL			=	@v_voc_detail,
+							    CSR_NO				=	@v_csr_no,
+								REMARK				=	@v_remark,
+								USE_YN				=	@v_use_yn,
+
+								CLASSIFY_STATUS		=	@v_classify_status,	
+								CLASSIFY_DATE		=	@v_classify_date,
+								RECEIPT_STATUS		=	@v_receipt_status,
+								RECEIPT_DATE		=	@v_receipt_date,
+								REVIEW_STATUS		=	@v_review_status,
+								REVIEW_DATE			=	@v_review_date,
+								PRIORITY_STATUS		=	@v_priority_status,
+								PRIORITY_DATE		=	@v_priority_date,
+								DEV_STATUS			=	@v_dev_status,
+								DEV_DATE			=	@v_dev_date,
+								TEST_STATUS			=	@v_test_status,
+								TEST_DATE			=	@v_test_date,
+								FINISH_STATUS		=	@v_finish_status,
+								FINISH_DATE			=	@v_finish_date,
+
+								CLASSIFY_USER_ID	=	@v_classify_user_id,	
+								RECEIPT_USER_ID		=	@v_receipt_user_id,
+								REVIEW_USER_ID		=	@v_review_user_id,
+								PRIORITY_USER_ID	=	@v_priority_user_id,
+								DEV_USER_ID			=	@v_dev_user_id,
+								TEST_USER_ID		=	@v_test_user_id,
+								FINISH_USER_ID		=	@v_finish_user_id,
+
+								REQUEST_USER_ID		=	@v_request_user_id,
+								SCM_PI_USER_ID		=	@v_scm_pi_user_id,
+								SCM_SOLUTION_USER_ID=	@v_scm_solution_user_id,
+								ATTRIBUTE1          =   @v_division_id,
+
+								BENEFIT_QUANTITATIVE    =	@v_benefit_quantitative,
+								BENEFIT_QUALITATIVE 	=	@v_benefit_qualitative,
+								MAN_MONTH_PLAN  		=	@v_man_month_plan,
+								MAN_MONTH_REAL  		=	@v_man_month_real,
+
+								CLASSIFY_S"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC","1674541099","6","TART_DATE  	=	@v_classify_start_date,
+								PRIORITY_START_DATE  	=	@v_priority_start_date,
+								DEV_START_DATE  		=	@v_dev_start_date
+							WHERE VOC_NO = @v_voc_no
+							;
+
+
+
+							
+							/********************************************************************************
+							-- 구체화 부터 solution 개입
+							********************************************************************************/
+							IF LEN(@v_scm_solution_user_id) > 1
+							BEGIN 
+							
+								UPDATE SCM_ADM_SYS_VOC 
+								SET SCM_SOLUTION_USER_ID =	@v_scm_solution_user_id
+								WHERE VOC_NO = @v_voc_no;
+							END 
+
+							
+							/********************************************************************************
+							-- 과제 접수/협의 부터 PI 개입
+							********************************************************************************/
+							IF LEN(@v_scm_pi_user_id) > 1 
+							BEGIN 
+									UPDATE SCM_ADM_SYS_VOC
+									SET SCM_PI_USER_ID		=	@v_scm_pi_user_id
+									WHERE VOC_NO = @v_voc_no;
+							END 
+
+
+							/********************************************************************************
+							-- 20220523 종료 항목 추가
+							********************************************************************************/
+							IF LEN(@v_confirm_status) > 1 
+							BEGIN 
+								UPDATE SCM_ADM_SYS_VOC
+								SET 
+									  CONFIRM_STATUS 		=	@v_confirm_status,
+									  CONFIRM_OPINION 		=	@v_confirm_opinion,
+									  CONFIRM_DATE 			=	@v_confirm_date,
+									  CONFIRM_USER_ID		=	@v_confirm_user_id
+								WHERE VOC_NO = @v_voc_no
+							END 
+
+
+							/**********************************************************************************************************
+							* 메일 발송 : 상태가 달라진 경우 + FH 인경우 + MAIL_SEND_YN = Y 인 경우 + DELAY 여부
+							**********************************************************************************************************/
+							---------------------------------------------------------------------------------
+							-- Mail Send 여부
+							---------------------------------------------------------------------------------
+							select @v_mailsend_classify_status    = SEGMENT3 , @v_mailsend_delay_classify_status  = SEGMENT4  from SCM_ADM_LOOKUP_MASTER_DETAIL where lookup_type = 'VOC_STEP' AND SEGMENT1 = 'CLASSIFY'
+							select @v_mailsend_receipt_status	  = SEGMENT3 , @v_mailsend_delay_receipt_status	  = SEGMENT4  from SCM_ADM_LOOKUP_MASTER_DETAIL where lookup_type = 'VOC_STEP' AND SEGMENT1 = 'RECEIPT'
+							select @v_mailsend_review_status	  = SEGMENT3 , @v_mailsend_delay_review_status	  = SEGMENT4  from SCM_ADM_LOOKUP_MASTER_DETAIL where lookup_type = 'VOC_STEP' AND SEGMENT1 = 'REVIEW'
+							select @v_mailsend_priority_status    = SEGMENT3 , @v_mailsend_delay_priority_status  = SEGMENT4  from SCM_ADM_LOOKUP_MASTER_DETAIL where lookup_type = 'VOC_STEP' AND SEGMENT1 = 'PRIORITY'
+							select @v_mailsend_dev_status		  = SEGMENT3 , @v_mailsend_delay_dev_status		  = SEGMENT4  from SCM_ADM_LOOKUP_MASTER_DETAIL where lookup_type = 'VOC_STEP' AND SEGMENT1 = 'DEV'
+							select @v_mailsend_test_status	      = SEGMENT3 , @v_mailsend_delay_test_status	  = SEGMENT4  from SCM_ADM_LOOKUP_MASTER_DETAIL where lookup_type = 'VOC_STEP' AND SEGMENT1 = 'TEST'
+							select @v_mailsend_finish_status	  = SEGMENT3 , @v_mailsend_delay_finish_status	  = SEGMENT4  from SCM_ADM_LOOKUP_MASTER_DETAIL where lookup_type = 'VOC_STEP' AND SEGMENT1 = 'FINISH'
+
+
+
+							SET @v_log_type = 'RUN';
+							SET @v_log_message = '########## MAIL SEND ##########';
+							SET @v_description = @v_voc_no +','+ @v_before_classify_status +','+ @v_classify_status +','+ @v_mailsend_classify_status +','+ @v_mailsend_delay_classify_status;
+
+							SET @d_event_date = SYSDATETIME();
+							EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+			
+							IF @v_before_classify_status != @v_classify_status AND @v_classify_status = 'FH' AND @v_mailsend_clas"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC","1674541099","7","sify_status = 'Y'
+								BEGIN
+								EXEC SCP0078_GET_GSCM_VOC_MAIL_SEND   @p_active_flag = @v_active_flag,  @p_voc_no=@v_voc_no, @p_voc_step = 'CLASSIFY';
+								END
+
+							IF @v_before_receipt_status != @v_receipt_status AND @v_receipt_status	 = 'FH' AND @v_mailsend_receipt_status = 'Y'
+								BEGIN
+								EXEC SCP0078_GET_GSCM_VOC_MAIL_SEND   @p_active_flag = @v_active_flag,  @p_voc_no=@v_voc_no, @p_voc_step = 'RECEIPT';
+								END
+
+							IF @v_before_review_status != @v_review_status	 AND @v_review_status	 = 'FH' AND @v_mailsend_review_status = 'Y'
+								BEGIN
+								EXEC SCP0078_GET_GSCM_VOC_MAIL_SEND   @p_active_flag = @v_active_flag,  @p_voc_no=@v_voc_no, @p_voc_step = 'REVIEW';
+								END
+
+							IF @v_before_priority_status != @v_priority_status	 AND @v_priority_status	 = 'FH' AND @v_mailsend_priority_status = 'Y'
+								BEGIN
+								EXEC SCP0078_GET_GSCM_VOC_MAIL_SEND   @p_active_flag = @v_active_flag,  @p_voc_no=@v_voc_no, @p_voc_step = 'PRIORITY';
+								END
+
+							IF @v_before_dev_status != @v_dev_status	 AND @v_dev_status	 = 'FH' AND @v_mailsend_dev_status = 'Y'
+								BEGIN
+								EXEC SCP0078_GET_GSCM_VOC_MAIL_SEND   @p_active_flag = @v_active_flag,  @p_voc_no=@v_voc_no, @p_voc_step = 'DEV';
+								END
+
+							IF @v_before_test_status != @v_test_status	 AND @v_test_status	 = 'FH' AND @v_mailsend_test_status = 'Y'
+								BEGIN
+								EXEC SCP0078_GET_GSCM_VOC_MAIL_SEND   @p_active_flag = @v_active_flag,  @p_voc_no=@v_voc_no, @p_voc_step = 'TEST';
+								END
+
+							IF @v_before_finish_status != @v_finish_status	 AND @v_finish_status	 = 'FH' AND @v_mailsend_finish_status = 'Y'
+								BEGIN
+								EXEC SCP0078_GET_GSCM_VOC_MAIL_SEND   @p_active_flag = @v_active_flag,  @p_voc_no=@v_voc_no, @p_voc_step = 'FINISH';
+								END
+
+
+							---------------------------------------------------------------------------------
+							-- 지연 시 Mail Send 여부 (지연은 배치로 처리)
+							---------------------------------------------------------------------------------
+
+
+
+						END
+
+					ELSE IF(@v_active_flag ='I') 
+						BEGIN
+							/********************************************************************************
+							-- INSERT
+							********************************************************************************/
+							SELECT @v_voc_no = NEXT VALUE FOR SEQ_SCM_ADM_SYS_VOC;
+
+							INSERT INTO SCM_ADM_SYS_VOC
+							(	
+								VOC_NO,
+								VOC_NAME,
+								VOC_DETAIL,
+								REQUEST_DATE,
+								REQUEST_USER_ID,
+								USE_YN,
+								ATTRIBUTE1
+							)
+							VALUES
+							(
+								@v_voc_no,
+								@v_voc_name,
+								@p_voc_detail,
+								GETDATE(),
+								@v_request_user_id,
+								'Y',
+								@v_division_id
+							);
+
+
+							/********************************************************************************
+							* 메일 발송
+							********************************************************************************/
+							EXEC SCP0078_GET_GSCM_VOC_MAIL_SEND   @p_active_flag = @v_active_flag,  @p_voc_no=@v_voc_no, @p_voc_step = 'CREATE'; 
+	
+						END
+				END  -- END OF STMT. IF( @mst_loop_cnt > 0 )			
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+
+
+
+
+	END TRY
+
+	BEGIN CATCH 
+
+		  if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME()"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC","1674541099","8",",SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC_DATA","1690541156","1","/* =============================================================================
+프로그램ID	: SCP0078_SAVE_GSCM_VOC_DATA
+업  무  명	: VOC > 상세, 비고 등 특정 컬럼 값 저장
+프로그램명	: GSCM system VOC
+최초작성일	: 2022.02.09
+최종작성일	: 2022.02.09
+개  발  자	: vadabi3
+입  력  값	: 
+출  력  값	: 
+*===================================================================================================      
+*   Date       In Charge	Description      
+*===================================================================================================      
+* 2022.02.09   vadabi3		Create   
+
+============================================================================= */
+
+--CREATE PROCEDURE dbo.SCP0078_SAVE_GSCM_VOC_DATA
+CREATE PROCEDURE [dbo].[SCP0078_SAVE_GSCM_VOC_DATA]
+ @p_active_flag                NVARCHAR(MAX) , 
+ @p_edit_type                  NVARCHAR(MAX) , 
+ @p_voc_no              	   NVARCHAR(MAX) ,      
+ @p_voc_type             	   NVARCHAR(MAX) ,   
+ @p_voc_name             	   NVARCHAR(MAX) , 
+ @p_voc_detail           	   NVARCHAR(MAX) , 
+ @p_request_date         	   NVARCHAR(MAX) ,
+ @p_request_user_id      	   NVARCHAR(MAX) ,
+ @p_scm_pi_user_id       	   NVARCHAR(MAX) , 
+ @p_scm_solution_user_id 	   NVARCHAR(MAX) , 
+ @p_csr_no               	   NVARCHAR(MAX) ,
+ @p_remark               	   NVARCHAR(MAX) ,
+ @p_use_yn               	   NVARCHAR(MAX)  	
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	SET @v_active_flag = NULL;
+
+	DECLARE @v_voc_no              	   	   NVARCHAR(MAX) ;      
+	DECLARE @v_voc_type             	   NVARCHAR(MAX) ;   
+	DECLARE @v_voc_name             	   NVARCHAR(MAX) ; 
+	DECLARE @v_voc_detail           	   NVARCHAR(MAX) ; 
+	DECLARE @v_request_date         	   NVARCHAR(MAX) ;
+	DECLARE @v_request_user_id      	   NVARCHAR(MAX) ;;	
+	DECLARE @v_scm_pi_user_id       	   NVARCHAR(MAX) ; 
+	DECLARE @v_scm_solution_user_id 	   NVARCHAR(MAX) ; 
+	DECLARE @v_csr_no               	   NVARCHAR(MAX) ;
+	DECLARE @v_remark               	   NVARCHAR(MAX) ;
+	DECLARE @v_use_yn               	   NVARCHAR(MAX) ;
+
+	SET @v_voc_no              	 = NULL;
+	SET @v_voc_type              = NULL;
+	SET @v_voc_name              = NULL;
+	SET @v_voc_detail            = NULL;
+	SET @v_request_date          = NULL;
+	SET @v_request_user_id       = NULL;
+	SET @v_scm_pi_user_id        = NULL;
+	SET @v_scm_solution_user_id  = NULL;
+	SET @v_csr_no                = NULL;
+	SET @v_remark                = NULL;
+	SET @v_use_yn                = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0078_SAVE_GSCM_VOC_DATA';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);   
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN   
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;	
+
+
+
+
+				
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag					= [dbo].[SCM_ARR_SPL_VAL](@p_active_flag			, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_voc_no              			= [dbo].[SCM_ARR_SPL_VAL](@p_voc_no                 , @v_delimiter , @mst_loop"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC_DATA","1690541156","2","_cnt) ; 
+				SET @v_voc_type             		= [dbo].[SCM_ARR_SPL_VAL](@p_voc_type             	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_voc_name             		= [dbo].[SCM_ARR_SPL_VAL](@p_voc_name             	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_voc_detail           		= [dbo].[SCM_ARR_SPL_VAL](@p_voc_detail           	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_request_date         		= [dbo].[SCM_ARR_SPL_VAL](@p_request_date         	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_request_user_id      		= [dbo].[SCM_ARR_SPL_VAL](@p_request_user_id      	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_scm_pi_user_id       		= [dbo].[SCM_ARR_SPL_VAL](@p_scm_pi_user_id       	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_scm_solution_user_id 		= [dbo].[SCM_ARR_SPL_VAL](@p_scm_solution_user_id 	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_csr_no               		= [dbo].[SCM_ARR_SPL_VAL](@p_csr_no               	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_remark               		= [dbo].[SCM_ARR_SPL_VAL](@p_remark               	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_use_yn               		= [dbo].[SCM_ARR_SPL_VAL](@p_use_yn               	, @v_delimiter , @mst_loop_cnt) ; 
+
+			END
+
+			--SELECT @v_classify_date;
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+				BEGIN		
+
+					IF( @v_active_flag ='M') 
+						BEGIN
+
+
+							
+							IF LEN(@p_edit_type) > 1 AND @p_edit_type = 'VOC_DETAIL'
+								BEGIN 
+								UPDATE SCM_ADM_SYS_VOC 
+								SET VOC_DETAIL =	@v_voc_detail
+								WHERE VOC_NO = @v_voc_no;
+								END 
+
+							ELSE IF LEN(@p_edit_type) > 1 AND @p_edit_type = 'REMARK'
+								BEGIN 
+								UPDATE SCM_ADM_SYS_VOC 
+								SET REMARK =	@v_remark
+								WHERE VOC_NO = @v_voc_no;
+								END 
+
+							-- 구체화 부터 solution 개입
+							-- UI에서 구현 위해 다음 배포까지 임시 사용
+							ELSE IF LEN(@v_scm_solution_user_id) > 1 AND @p_edit_type = 'SCM_SOLUTION_USER_ID'
+								BEGIN 
+								UPDATE SCM_ADM_SYS_VOC 
+								SET SCM_SOLUTION_USER_ID =	@v_scm_solution_user_id
+								WHERE VOC_NO = @v_voc_no;
+								END 
+
+							-- 과제 접수/협의 부터 PI 개입
+							-- UI에서 구현 위해 다음 배포까지 임시 사용
+							ELSE IF LEN(@v_scm_pi_user_id) > 1 AND @p_edit_type = 'SCM_PI_USER_ID'
+								BEGIN 
+								UPDATE SCM_ADM_SYS_VOC
+								SET SCM_PI_USER_ID		=	@v_scm_pi_user_id
+								WHERE VOC_NO = @v_voc_no;
+								END 
+						END
+
+					ELSE IF(@v_active_flag ='I') 
+						BEGIN
+
+									INSERT INTO SCM_ADM_SYS_VOC
+									(	
+										VOC_NO,
+										VOC_NAME,
+										VOC_DETAIL,
+										REQUEST_DATE,
+										REQUEST_USER_ID,
+										USE_YN
+									)
+									VALUES
+									(
+										NEXT VALUE FOR SEQ_SCM_ADM_SYS_VOC,
+										@v_voc_name,
+										@p_voc_detail,
+										GETDATE(),
+										@v_request_user_id,
+										'Y'
+									);
+	
+						END
+				END  -- END OF STMT. IF( @mst_loop_cnt > 0 )			
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+
+
+
+
+	END TRY
+
+	BEGIN CATCH 
+
+		  if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMB"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC_DATA","1690541156","3","ER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC_FILE","1706541213","1","/* =============================================================================
+프로그램ID	: SCP0078_SAVE_GSCM_VOC_FILE
+업  무  명	: 시스템관리 - 프로그램관리 목록
+프로그램명	: GSCM system VOC
+최초작성일	: 2022.04.06
+최종작성일	: 2022.05.06
+개  발  자	: vadabi3
+입  력  값	: 
+출  력  값	: 
+*===================================================================================================      
+*   Date       In Charge	Description      
+*===================================================================================================      
+* 2022.05.06   vadabi3		Create   
+
+  EXEC SCP0078_SAVE_GSCM_VOC_FILE 
+   @p_active_flag='DELETE'
+ , @p_voc_no='1000000000'
+ , @p_file_seq='HAMMci4LnBTFeiUSCvPcFg'
+ , @p_user_id='vadabi3'
+
+   EXEC SCP0078_SAVE_GSCM_VOC_FILE 
+   @p_active_flag='MAPPING'
+ , @p_voc_no='1000000050'
+ , @p_file_seq='06OtOVXSM78T5aCWde4lA|운영_API 문서(1).xlsx'
+ , @p_user_id='vadabi3'
+============================================================================= */
+
+CREATE PROCEDURE [dbo].[SCP0078_SAVE_GSCM_VOC_FILE]
+--ALTER PROCEDURE [dbo].[SCP0078_SAVE_GSCM_VOC_FILE]
+ @p_active_flag                NVARCHAR(MAX) , 
+ @p_voc_no              	   NVARCHAR(MAX) ,      
+ @p_file_seq				   NVARCHAR(MAX) ,    
+ @p_user_id					   NVARCHAR(MAX) 
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0078_SAVE_GSCM_VOC_FILE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+	DECLARE @v_file_seq   NVARCHAR(MAX);
+	DECLARE @v_action_info   NVARCHAR(MAX);
+    DECLARE @d_event_date   DATETIME;
+	DECLARE @n_search_position   INTEGER = 0;
+
+	SET @v_action_info = concat(@p_active_flag
+								,',', CONVERT(CHAR(23), getdate(), 21)
+								,',', @p_user_id
+								,',', @p_file_seq )
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+		--###################################################################################################################
+		-- 시작 LOG
+		--###################################################################################################################
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		--###################################################################################################################
+		-- Update File List
+		--###################################################################################################################
+		SELECT @v_file_seq = ATTRIBUTE2 FROM SCM_ADM_SYS_VOC WHERE VOC_NO = @p_voc_no;
+
+		IF @p_active_flag = 'ADD'
+		BEGIN
+			IF LEN(@v_file_seq) > 0
+			BEGIN
+			SET @v_file_seq = concat(',',@p_file_seq);
+			END
+			ELSE
+			BEGIN
+			SET @v_file_seq = @p_file_seq
+			END
+
+			UPDATE SCM_ADM_SYS_VOC 
+			SET ATTRIBUTE2 =	concat(ATTRIBUTE2, @v_file_seq)
+			  , ATTRIBUTE3 = @v_action_info
+			WHERE VOC_NO = @p_voc_no;
+		END
+
+		ELSE IF @p_active_flag = 'DELETE'
+		BEGIN
+
+			SET @v_file_seq = REPLACE(@v_file_seq, @p_file_seq, '');
+			-- 중간일 경우 조정
+			SET @v_file_seq = REPLACE(@v_file_seq, ',,', ',') 
+			
+			-- 시작일 경우 조정
+			SELECT @n_search_position = CHARINDEX(',', @v_file_seq);
+			IF @n_search_position = 1
+			BEGIN
+			SELECT @v_file_seq = SUBSTRING(@v_file_seq, 2, 1000);
+			END
+
+			-- 끝일 경우 조정
+			SELECT @n_search_position = LEN(@v_file_seq);
+			SELECT @p_file_seq = SUBSTRING(@v_file_seq,@n_search_position,@n_search_position);
+			IF @p_file_seq = ','
+			BEGIN
+			SELECT @v_file_seq = SUBSTRING(@v_file_seq, 1, @n_search_position-1);
+			END
+
+			UPDATE SCM_ADM_SYS_VOC 
+			SET ATTRIBUTE2 = @v_file_seq
+			  , ATTRIBUTE3 = @v_action_info
+			WHERE VOC_NO = @p_voc_no;
+
+		END
+
+		ELSE IF @p_active_flag = 'LIST'
+		BEGIN
+			"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0078_SAVE_GSCM_VOC_FILE","1706541213","2","UPDATE SCM_ADM_SYS_VOC 
+			SET ATTRIBUTE3 = @v_action_info
+			WHERE VOC_NO = @p_voc_no;
+		END
+
+
+		ELSE IF @p_active_flag = 'MAPPING'
+		BEGIN
+			SELECT @v_file_seq = ATTRIBUTE4 FROM SCM_ADM_SYS_VOC WHERE VOC_NO = @p_voc_no;
+			IF LEN(@v_file_seq) > 0
+			BEGIN
+			SET @v_file_seq = concat(@v_file_seq, ',',@p_file_seq);
+			END
+			ELSE
+			BEGIN
+			SET @v_file_seq = @p_file_seq
+			END
+
+			UPDATE SCM_ADM_SYS_VOC 
+			SET ATTRIBUTE4 =	@v_file_seq
+			WHERE VOC_NO = @p_voc_no;
+
+		END
+
+		ELSE IF @p_active_flag = 'MAPPING_DEL'
+		BEGIN
+			SELECT @v_file_seq = ATTRIBUTE4 FROM SCM_ADM_SYS_VOC WHERE VOC_NO = @p_voc_no;
+			SET @v_file_seq = REPLACE(@v_file_seq, @p_file_seq, '');
+			-- 중간일 경우 조정
+			SET @v_file_seq = REPLACE(@v_file_seq, ',,', ',') 
+			
+			-- 시작일 경우 조정
+			SELECT @n_search_position = CHARINDEX(',', @v_file_seq);
+			IF @n_search_position = 1
+			BEGIN
+			SELECT @v_file_seq = SUBSTRING(@v_file_seq, 2, 1000);
+			END
+
+			-- 끝일 경우 조정
+			SELECT @n_search_position = LEN(@v_file_seq);
+			SELECT @p_file_seq = SUBSTRING(@v_file_seq,@n_search_position,@n_search_position);
+			IF @p_file_seq = ','
+			BEGIN
+			SELECT @v_file_seq = SUBSTRING(@v_file_seq, 1, @n_search_position-1);
+			END
+
+			UPDATE SCM_ADM_SYS_VOC 
+			SET ATTRIBUTE4 =	@v_file_seq
+			WHERE VOC_NO = @p_voc_no;
+
+		END
+
+
+		--###################################################################################################################
+		-- 종료 LOG
+		--###################################################################################################################
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  1 AS result_cnt ;
+
+
+	END TRY
+
+	BEGIN CATCH 
+		--###################################################################################################################
+		-- Error
+		--###################################################################################################################
+		  if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+"

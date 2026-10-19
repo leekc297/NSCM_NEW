@@ -1,0 +1,3037 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2026-03-18 00:00:02.837","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","1","
+/*============================================================================================================================
+ * Program ID  : DMF0007_GET_CUST_FCST_DATA                                                               
+ * Description  :  
+ * Program History  
+ *=============================================================================================================================
+ *   Date		In Charge		Description  
+ *=============================================================================================================================
+ * 2017.10.25	SongDH			Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트   
+ * 2018.05.30	JYE				복수 팀 권한 관련  수정    
+ * 2020.03.11	KHSONG			[C20200103-000586]_권한그룹을 LOOKUP관리  
+ * 2022.10.24	ROSIA27			신규 작성  
+ * 2023.02.28	chano0612		[E20230227-000456]소형사업부 RPA 업로드 시 GSCM Fail 발생 -- EXCEL UPLOAD
+ * 2025.03.27	jssbae			[E20250326-000842]_Customer FCST Master 조회 로직 수정
+ *============================================================================================================================*/
+
+CREATE PROCEDURE [dbo].[DMF0007_GET_CUST_FCST_DATA]  
+	  @p_plan_week			NVARCHAR(6)  
+	, @p_division_id		NVARCHAR(50)  
+	, @p_dept_id			NVARCHAR(MAX)  
+	, @p_end_customer		NVARCHAR(100)  
+	, @p_scm_site_id		NVARCHAR(100)  
+	, @p_bucket_type		NVARCHAR(100)  
+	, @p_valid_yn			NVARCHAR(3)  
+	, @p_created_by			NVARCHAR(50)  
+	, @p_user_group			NVARCHAR(100)  
+AS
+BEGIN  
+    SET NOCOUNT ON;  
+  
+    DECLARE @v_sql_text			NVARCHAR(MAX);  
+    DECLARE @v_iteration		NVARCHAR(MAX);  
+    DECLARE @v_column_text		NVARCHAR(200);  
+    DECLARE @v_column_name		NVARCHAR(20);  
+    DECLARE @v_weekstart_date	NVARCHAR(8);  
+    DECLARE @p_param_list		NVARCHAR(4000);  
+	DECLARE @v_plan_week		NVARCHAR(6);    
+    DECLARE @v_start_week		NVARCHAR(8);    
+    DECLARE @v_end_week			NVARCHAR(8);  
+    DECLARE @v_start_yyyymmdd	NVARCHAR(8);    
+    DECLARE @v_end_yyyymmdd		NVARCHAR(8);  
+    DECLARE @v_bucket_type		NVARCHAR(10);    
+	DECLARE @v_group_id			NVARCHAR(50)='';  
+  
+	---------------------------------------------------------------------------------  
+	-- 20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (BEGIN)  
+	---------------------------------------------------------------------------------  
+	IF ISNULL(( SELECT COUNT(1) FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK)
+				WHERE LOOKUP_TYPE = 'GET_ADMIN_GROUP'
+				AND VALID_YN = 'Y'
+				AND SEGMENT2 = 'ALL'  -- 'ALL'인경우 DM Planner (W/S) 제외 / 주석처리인경우 DM Planner (W/S) 포함
+				AND SEGMENT1 = @p_user_group), 0) > 0  
+	BEGIN  
+		SET @v_group_id = 'ADMIN'  
+	END  
+
+	---------------------------------------------------------------------------------  
+	-- 20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (END)  
+	---------------------------------------------------------------------------------  
+    SET @v_start_week = '';  
+    SET @v_end_week = '';  
+  
+    SET @v_start_week = @p_plan_week;  
+    SET @v_bucket_type = @p_bucket_type;  
+  
+	SELECT @v_plan_week = C.ISO_YYYYWW  
+    FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+    WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112);  
+
+	IF @v_start_week = ''
+	BEGIN  
+		IF @v_bucket_type = 'DAILY'              
+			SELECT @v_start_week		= MIN(C.BASIS_YYYYMMDD)   
+				 , @v_start_yyyymmdd	= MIN(C.BASIS_YYYYMMDD)   
+			FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)   
+			, ( SELECT C.ISO_YYYYWW  
+				FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)   
+				WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)  
+			   ) T  
+			WHERE C.ISO_YYYYWW = T.ISO_YYYYWW;
+
+		ELSE IF @v_bucket_type = 'WEEKLY'  
+			SELECT @v_start_week		= MIN(C.ISO_YYYYWW)  
+				 , @v_start_yyyymmdd	= MIN(C.BASIS_YYYYMMDD)  
+			FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)   
+			, ( SELECT C.ISO_YYYYWW	AS ISO_YYYYWW  
+				FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+				WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)  
+			   ) T  
+			WHERE "
+"2026-03-18 00:00:02.837","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","2","C.ISO_YYYYWW = T.ISO_YYYYWW;
+
+		ELSE IF @v_bucket_type = 'MONTHLY'  
+			SELECT @v_start_week		= T.BASIS_YYYYMM  
+				 , @v_start_yyyymmdd	= T.BASIS_YYYYMMDD  
+			FROM ( SELECT MIN(C.BASIS_YYYYMM)	AS BASIS_YYYYMM  
+						, MIN(C.BASIS_YYYYMMDD)	AS BASIS_YYYYMMDD  
+				   FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+				   WHERE C.BASIS_YYYYMM = CONVERT(CHAR(6), CURRENT_TIMESTAMP, 112)  
+				  ) T;
+	END  
+	ELSE  
+	SET @v_start_week = @p_plan_week;    
+         
+	BEGIN  
+		IF @v_bucket_type = 'DAILY'  
+			SELECT @v_end_week		= C.BASIS_YYYYMMDD  
+				 , @v_end_yyyymmdd	= C.BASIS_YYYYMMDD  
+			FROM  SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+			WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), DATEADD(MM, 12, CURRENT_TIMESTAMP), 112);  
+
+		ELSE IF @v_bucket_type = 'WEEKLY'  
+			SELECT @v_end_week		= T.ISO_YYYYWW  
+				 , @v_end_yyyymmdd	= T.BASIS_YYYYMMDD  
+			FROM  ( SELECT MAX(ISO_YYYYWW)			AS ISO_YYYYWW  
+						 , MAX(C.BASIS_YYYYMMDD)	AS BASIS_YYYYMMDD  
+					FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+					WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), DATEADD(MM, 30, CURRENT_TIMESTAMP), 112)  
+				   ) T;
+
+		ELSE IF @v_bucket_type = 'MONTHLY'  
+			SELECT @v_end_week		= T.BASIS_YYYYMM  
+				 , @v_end_yyyymmdd	= T.BASIS_YYYYMMDD  
+			FROM  ( SELECT MAX(BASIS_YYYYMM)      AS BASIS_YYYYMM  
+						 , MAX(C.BASIS_YYYYMMDD)  AS BASIS_YYYYMMDD  
+					FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+					WHERE C.BASIS_YYYYMM = CONVERT(CHAR(6), DATEADD(MM, 30, CURRENT_TIMESTAMP), 112)  
+				  ) T;
+	END 
+  
+	SET @v_iteration = '';  
+  
+	IF @v_bucket_type = 'DAILY'  
+	BEGIN  
+		DECLARE c_bucket CURSOR FAST_FORWARD FOR  
+
+		SELECT 'D_' + A.BASIS_YYYYMMDD		AS COLUMN_NAME  
+					, A.BASIS_YYYYMMDD		AS BASIS_YYYYMMDD  
+		FROM SCM_SYS_CALENDAR_M A WITH(NOLOCK)  
+		WHERE 1 = 1  
+		AND A.BASIS_YYYYMMDD >=  @v_start_week  
+		AND A.BASIS_YYYYMMDD <= @v_end_week;       
+  
+		OPEN c_bucket;  
+		FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date  
+		WHILE @@FETCH_STATUS = 0     
+		BEGIN    
+			SET @v_column_text = ', MAX(CASE WHEN CF.SUMMARY_BUCKET_VALUE = ''[@v_weekstart_date]'' THEN CASE CF.VALID_YN WHEN ''Y'' THEN CF.VALID_YN ELSE '''' END ELSE '''' END) AS [@v_column_name] ';     
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);  
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);    
+			SET @v_iteration = @v_iteration + @v_column_text;   
+      
+			FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date  
+		END
+  
+		CLOSE c_bucket;    
+		DEALLOCATE c_bucket;  
+	END
+			
+	ELSE IF @v_bucket_type = 'WEEKLY'  
+	BEGIN  
+		DECLARE c_bucket CURSOR FAST_FORWARD FOR  
+
+		SELECT 'D_' + MIN(A.BASIS_START_DATE)	AS COLUMN_NAME  
+					, MIN(A.BASIS_YYYYMMDD)		AS BASIS_YYYYMMDD  
+		FROM  SCM_SYS_CALENDAR_M A WITH(NOLOCK)  
+		WHERE 1 = 1  
+		AND A.ISO_YYYYWW >=  @v_start_week  
+		AND A.ISO_YYYYWW <= @v_end_week       
+		GROUP BY A.ISO_YYYYWW;              
+  
+		OPEN c_bucket;  
+		FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date  
+		WHILE @@FETCH_STATUS = 0     
+		BEGIN   
+			SET @v_column_text = ', MAX(CASE WHEN CF.SUMMARY_BUCKET_VALUE = ''[@v_weekstart_date]'' THEN CASE CF.VALID_YN WHEN ''Y'' THEN CF.VALID_YN ELSE '''' END ELSE '''' END) AS [@v_column_name] ';     
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);  
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);    
+			SET @v_iteration = @v_iteration + @v_column_text;   
+      
+			FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date  
+		END
+  
+		CLOSE c_bucket;    
+		DEALLOCATE c_bucket;  
+	END
+
+	ELSE IF @v_bucket_type = 'MONTHLY'  
+	BEGIN  
+		DECLARE c_bucket CURSOR FAST_FORWARD FOR  
+
+		SELECT 'D_' + MIN(A.BASIS_YYYYMMDD)		AS COLUMN_NAME  
+					, MIN(A.BASIS_YYYYMMDD)		AS BASIS_YYYYMMDD  
+		FROM SCM_SYS_CALENDAR_M A WITH(NOLOCK)  
+		WHERE 1 = 1  "
+"2026-03-18 00:00:02.837","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","3","
+		AND A.BASIS_YYYYMM >= @v_start_week  
+		AND A.BASIS_YYYYMM <= @v_end_week   
+		GROUP BY MONTH_NAME;  
+    
+		OPEN c_bucket;  
+		FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date  
+
+		WHILE @@FETCH_STATUS = 0     
+		BEGIN  
+			SET @v_column_text = ', MAX(CASE WHEN CF.SUMMARY_BUCKET_VALUE = ''[@v_weekstart_date]'' THEN CASE CF.VALID_YN WHEN ''Y'' THEN CF.VALID_YN ELSE '''' END ELSE '''' END) AS [@v_column_name] ';     
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);  
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);    
+			SET @v_iteration = @v_iteration + @v_column_text;   
+      
+			FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date  
+		END
+  
+		CLOSE c_bucket;    
+		DEALLOCATE c_bucket;  
+	END
+			
+	--소형사업부 추가(END CUSTOMER 체크 안함)
+	IF @p_division_id = '40' --[E20230227-000456]소형사업부 RPA 업로드 시 GSCM Fail 발생 -- EXCEL UPLOAD
+	BEGIN
+		SET @v_sql_text = '  
+			WITH MASTER AS   
+					(	SELECT CF.PLAN_WEEK, CF.DIVISION_ID, S.DEPT_ID, CF.CUSTOMER_CODE, CF.SCM_SITE_ID        
+							 , CF.SUMMARY_BUCKET_TYPE, CF.MEASURE_GROUP, CF.MEASURE, CF.EDI_FCST_YN, CF.CUSTOMER_PSI  
+							 , CF.UPLOAD_UOM, CF.UPLOAD_BUCKET_TYPE  
+							 /*--, CF.VALID_YN*/  
+							 , CF.MASTER_VALID_YN, C.BASIS_YYYYMMDD AS SUMMARY_BUCKET_VALUE   
+						FROM (	SELECT T1.PLAN_WEEK, T1.DIVISION_ID, T1.CUSTOMER_CODE, T1.SCM_SITE_ID, T1.SUMMARY_BUCKET_TYPE  
+									 , T1.MEASURE_GROUP, T1.MEASURE, T1.EDI_FCST_YN, T1.CUSTOMER_PSI, T1.UPLOAD_UOM  
+									 , T1.UPLOAD_BUCKET_TYPE, T1.MASTER_VALID_YN, T2.VALID_YN, T2.SUMMARY_BUCKET_VALUE  
+								FROM ( SELECT PLAN_WEEK, DIVISION_ID , CUSTOMER_CODE, SCM_SITE_ID, SUMMARY_BUCKET_TYPE  
+											, MEASURE_GROUP, MEASURE, EDI_FCST_YN, CUSTOMER_PSI, UPLOAD_UOM  
+											, UPLOAD_BUCKET_TYPE, MAX(VALID_YN) AS MASTER_VALID_YN              
+									   FROM DM_MST_CUSTOMER_FCST CF WITH(NOLOCK)    
+									   WHERE 1 = 1  
+									   AND  MEASURE_GROUP = ''CUST_FCST''  
+									   AND  PLAN_WEEK     = ''[@p_plan_week]''   
+									   AND  SUMMARY_BUCKET_VALUE BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]''  
+									   [@p_division_id]    
+									   /*--[@p_end_customer]*/   
+									   [@p_scm_site_id]  
+									   /*--[@p_bucket_type]--[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경*/                     
+									   GROUP BY PLAN_WEEK, DIVISION_ID, CUSTOMER_CODE, SCM_SITE_ID, SUMMARY_BUCKET_TYPE  
+											  , MEASURE_GROUP, MEASURE, EDI_FCST_YN, CUSTOMER_PSI, UPLOAD_UOM  
+											  , UPLOAD_BUCKET_TYPE  
+									 ) T1  
+								LEFT JOIN DM_MST_CUSTOMER_FCST T2 WITH(NOLOCK)      
+									   ON  T1.PLAN_WEEK				= T2.PLAN_WEEK  
+									  AND T1.DIVISION_ID			= T2.DIVISION_ID   
+									  AND T1.CUSTOMER_CODE			= T2.CUSTOMER_CODE     
+									  AND T1.SCM_SITE_ID			= T2.SCM_SITE_ID        
+									  AND T1.SUMMARY_BUCKET_TYPE	= T2.SUMMARY_BUCKET_TYPE  
+									  AND T1.MEASURE_GROUP			= T2.MEASURE_GROUP  
+									  AND T1.MEASURE				= T2.MEASURE  
+									  AND T1.EDI_FCST_YN			= T2.EDI_FCST_YN  
+									  AND T1.CUSTOMER_PSI			= T2.CUSTOMER_PSI  
+									  AND T1.UPLOAD_UOM				= T2.UPLOAD_UOM  
+									  AND T1.UPLOAD_BUCKET_TYPE		= T2.UPLOAD_BUCKET_TYPE  
+									  AND T2.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''         
+								WHERE  1 = 1  
+								) CF    
+						LEFT JOIN SCM_SYS_CALENDAR_M C WITH(NOLOCK)    
+							   ON (C.BASIS_YYYYMMDD = CF.SUMMARY_BUCKET_VALUE    
+							  AND C.BASIS_YYYYMMDD BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]'')       
+						, SCM_MST_SITE S WITH(NOLOCK)  
+						WHERE  1 = 1  
+						AND CF.DIVISION_ID			= S.DIVISION_ID  
+						/*--AND CF.CUSTOMER_CODE	= S.END_CUSTOMER*/  
+						AND CF.SCM_SITE_ID			= S.SCM_SITE_ID  
+						/*--[@p_dept_id]*/     
+						AND CF.UPLOAD_BUCKET_TYPE	= ''[@v_bucket_type]'' /*[E20250326-000842]_Customer FCST Master "
+"2026-03-18 00:00:02.837","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","4","조회 로직 수정*/         
+					)  
+  
+			SELECT M.PLAN_WEEK, M.DIVISION_ID, M.DEPT_ID, M.CUSTOMER_CODE, M.SCM_SITE_ID        
+				 , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+											 WHEN ''WEEKLY'' THEN 2  
+											 WHEN ''MONTHLY'' THEN 3 END AS UPLOAD_ORDER  
+				 , M.SUMMARY_BUCKET_TYPE, M.MEASURE_GROUP, M.MEASURE, M.EDI_FCST_YN, M.CUSTOMER_PSI  
+				 , M.UPLOAD_UOM, M.UPLOAD_BUCKET_TYPE 
+				 /*-- , M.VALID_YN */ 
+				 , M.MASTER_VALID_YN AS VALID_YN  
+				 , CASE WHEN (([dbo].[FN_GET_DEPT_LIST](''[@p_created_by]'', M.DEPT_ID) = ''Y'') OR ''[@v_group_id]'' =''ADMIN'')   
+						THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG  
+				 [@v_iteration]      
+			FROM MASTER M WITH(NOLOCK)  
+			LEFT OUTER JOIN DM_MST_CUSTOMER_FCST CF WITH(NOLOCK)  
+						 ON (M.PLAN_WEEK			= CF.PLAN_WEEK  
+						AND M.DIVISION_ID			= CF.DIVISION_ID  
+						AND M.CUSTOMER_CODE			= CF.CUSTOMER_CODE  
+						AND M.SCM_SITE_ID			= CF.SCM_SITE_ID  
+						AND M.SUMMARY_BUCKET_TYPE	= CF.SUMMARY_BUCKET_TYPE  
+						AND M.MEASURE_GROUP			= CF.MEASURE_GROUP  
+						AND M.MEASURE				= CF.MEASURE  
+						AND M.SUMMARY_BUCKET_VALUE	= CF.SUMMARY_BUCKET_VALUE  
+						AND M.EDI_FCST_YN			= CF.EDI_FCST_YN  
+						AND M.CUSTOMER_PSI			= CF.CUSTOMER_PSI  
+						AND M.UPLOAD_UOM			= CF.UPLOAD_UOM  
+						AND M.UPLOAD_BUCKET_TYPE	= CF.UPLOAD_BUCKET_TYPE  
+						[@p_division_id]          
+						/*--	[@p_end_customer]*/   
+						[@p_scm_site_id]  
+						/*--[@p_bucket_type] --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경*/        
+						/*-- AND CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''*/  
+						)  
+			WHERE  1 = 1  
+			[@p_valid_yn]  
+			/*--AND    CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''*/  
+			GROUP BY M.PLAN_WEEK, M.DIVISION_ID, M.DEPT_ID, M.CUSTOMER_CODE, M.SCM_SITE_ID        
+				   , M.SUMMARY_BUCKET_TYPE, M.MEASURE, M.MEASURE_GROUP, M.EDI_FCST_YN, M.CUSTOMER_PSI  
+				   , M.UPLOAD_UOM, M.UPLOAD_BUCKET_TYPE  
+				   /*-- , M.VALID_YN*/   
+				   , M.MASTER_VALID_YN  
+				   , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+											   WHEN ''WEEKLY'' THEN 2  
+											   WHEN ''MONTHLY'' THEN 3 END  
+			ORDER BY DIVISION_ID, DEPT_ID, CUSTOMER_CODE, SCM_SITE_ID, UPLOAD_ORDER, MEASURE_GROUP, MEASURE  
+			';
+
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]',				@v_iteration);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_plan_week]',				@v_plan_week);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_start_yyyymmdd]',		@v_start_yyyymmdd);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_yyyymmdd]',			@v_end_yyyymmdd);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_division_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.DIVISION_ID'			, 'IN', @p_division_id));  
+		--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_dept_id]',				[dbo].[FN_SCM_GET_WHERE_SQL]('S.DEPT_ID'				, 'IN', @p_dept_id));  
+		--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_end_customer]',		[dbo].[FN_SCM_GET_WHERE_SQL]('CF.CUSTOMER_CODE'			, 'IN', @p_end_customer));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_scm_site_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SCM_SITE_ID'			, 'IN', @p_scm_site_id));  
+		--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_bucket_type]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SUMMARY_BUCKET_TYPE'	, 'EQ', @p_bucket_type));  --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경   
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_valid_yn]',				[dbo].[FN_SCM_GET_WHERE_SQL]('M.MASTER_VALID_YN'		, 'EQ', @p_valid_yn));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_created_by]',			@p_created_by);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_group_id]',				@v_group_id); 
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_bucket_type]',			@v_bucket_type);  /*[E20250326-000842]_Customer FCST Master 조회 로직 수정*/    
+
+	END				
+	ELSE
+	BEGIN
+		SET @v_sql_text = '  
+			WITH MASTER AS   
+					(	SELECT CF.PLAN_WEEK, CF.DIVISION_ID, S.DEPT_ID, CF.CUSTOMER_CODE, CF"
+"2026-03-18 00:00:02.837","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","5",".SCM_SITE_ID        
+							 , CF.SUMMARY_BUCKET_TYPE, CF.MEASURE_GROUP, CF.MEASURE, CF.EDI_FCST_YN, CF.CUSTOMER_PSI  
+							 , CF.UPLOAD_UOM, CF.UPLOAD_BUCKET_TYPE  
+							 /* --, CF.VALID_YN*/  
+							 , CF.MASTER_VALID_YN, C.BASIS_YYYYMMDD AS SUMMARY_BUCKET_VALUE   
+						FROM (	SELECT T1.PLAN_WEEK, T1.DIVISION_ID, T1.CUSTOMER_CODE, T1.SCM_SITE_ID, T1.SUMMARY_BUCKET_TYPE  
+									 , T1.MEASURE_GROUP, T1.MEASURE, T1.EDI_FCST_YN, T1.CUSTOMER_PSI, T1.UPLOAD_UOM  
+									 , T1.UPLOAD_BUCKET_TYPE, T1.MASTER_VALID_YN, T2.VALID_YN, T2.SUMMARY_BUCKET_VALUE  
+								FROM ( SELECT PLAN_WEEK, DIVISION_ID, CUSTOMER_CODE, SCM_SITE_ID, SUMMARY_BUCKET_TYPE  
+											, MEASURE_GROUP, MEASURE, EDI_FCST_YN, CUSTOMER_PSI, UPLOAD_UOM  
+											, UPLOAD_BUCKET_TYPE , MAX(VALID_YN) AS MASTER_VALID_YN              
+									   FROM DM_MST_CUSTOMER_FCST CF WITH(NOLOCK)    
+									   WHERE 1 = 1  
+									   AND MEASURE_GROUP = ''CUST_FCST''  
+									   AND PLAN_WEEK     = ''[@p_plan_week]''   
+									   AND SUMMARY_BUCKET_VALUE BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]''  
+									   [@p_division_id]    
+									   [@p_end_customer]   
+									   [@p_scm_site_id]  
+									   /*--[@p_bucket_type] --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경*/                    
+									   GROUP BY PLAN_WEEK, DIVISION_ID, CUSTOMER_CODE, SCM_SITE_ID, SUMMARY_BUCKET_TYPE  
+											  , MEASURE_GROUP, MEASURE, EDI_FCST_YN, CUSTOMER_PSI , UPLOAD_UOM  
+											  , UPLOAD_BUCKET_TYPE  
+									) T1  
+								LEFT JOIN DM_MST_CUSTOMER_FCST T2 WITH(NOLOCK)      
+									   ON T1.PLAN_WEEK				= T2.PLAN_WEEK  
+									  AND T1.DIVISION_ID			= T2.DIVISION_ID   
+									  AND T1.CUSTOMER_CODE			= T2.CUSTOMER_CODE     
+									  AND T1.SCM_SITE_ID			= T2.SCM_SITE_ID        
+									  AND T1.SUMMARY_BUCKET_TYPE	= T2.SUMMARY_BUCKET_TYPE  
+									  AND T1.MEASURE_GROUP			= T2.MEASURE_GROUP  
+									  AND T1.MEASURE				= T2.MEASURE  
+									  AND T1.EDI_FCST_YN			= T2.EDI_FCST_YN  
+									  AND T1.CUSTOMER_PSI			= T2.CUSTOMER_PSI  
+									  AND T1.UPLOAD_UOM				= T2.UPLOAD_UOM  
+									  AND T1.UPLOAD_BUCKET_TYPE		= T2.UPLOAD_BUCKET_TYPE  
+									  AND T2.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''         
+								WHERE  1 = 1  
+								) CF    
+						LEFT JOIN SCM_SYS_CALENDAR_M C WITH(NOLOCK)    
+							   ON (C.BASIS_YYYYMMDD = CF.SUMMARY_BUCKET_VALUE    
+							  AND C.BASIS_YYYYMMDD BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]'')       
+						, SCM_MST_SITE S WITH(NOLOCK)  
+						WHERE  1 = 1  
+						AND CF.DIVISION_ID   = S.DIVISION_ID  
+						AND CF.CUSTOMER_CODE = S.END_CUSTOMER  
+						AND CF.SCM_SITE_ID   = S.SCM_SITE_ID  
+						[@p_dept_id]                        
+						AND CF.UPLOAD_BUCKET_TYPE  = ''[@v_bucket_type]''/*[E20250326-000842]_Customer FCST Master 조회 로직 수정*/                    
+					)  
+  
+			SELECT M.PLAN_WEEK, M.DIVISION_ID, M.DEPT_ID, M.CUSTOMER_CODE, M.SCM_SITE_ID        
+				 , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+											 WHEN ''WEEKLY'' THEN 2  
+											 WHEN ''MONTHLY'' THEN 3 END AS UPLOAD_ORDER  
+				 , M.SUMMARY_BUCKET_TYPE, M.MEASURE_GROUP, M.MEASURE, M.EDI_FCST_YN, M.CUSTOMER_PSI  
+				 , M.UPLOAD_UOM, M.UPLOAD_BUCKET_TYPE  
+				 /*-- , M.VALID_YN */ 
+				 , M.MASTER_VALID_YN AS VALID_YN  
+				 , CASE WHEN (([dbo].[FN_GET_DEPT_LIST](''[@p_created_by]'', M.DEPT_ID) = ''Y'') OR ''[@v_group_id]'' =''ADMIN'')   
+						THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG  
+				 [@v_iteration]      
+			FROM  MASTER M WITH(NOLOCK)  
+			LEFT OUTER JOIN DM_MST_CUSTOMER_FCST CF WITH(NOLOCK)  
+						 ON (M.PLAN_WEEK			= CF.PLAN_WEEK  
+						AND M.DIVISION_ID			= CF.DIVISION_ID  
+						AND M.CUSTOMER_CODE			= CF.CUSTOMER_CODE  
+						AND M.SCM_SITE_ID			= CF.SCM_SITE_ID  
+						AND M.SUMMARY_BUCKET_TYPE	= CF.SUMMARY_BUCKET_TYPE  
+						AND M.MEASURE_GROUP			= CF.MEASURE_GROUP  
+						AND M.MEA"
+"2026-03-18 00:00:02.837","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","6","SURE				= CF.MEASURE  
+						AND M.SUMMARY_BUCKET_VALUE	= CF.SUMMARY_BUCKET_VALUE  
+						AND M.EDI_FCST_YN			= CF.EDI_FCST_YN  
+						AND M.CUSTOMER_PSI			= CF.CUSTOMER_PSI  
+						AND M.UPLOAD_UOM			= CF.UPLOAD_UOM  
+						AND M.UPLOAD_BUCKET_TYPE	= CF.UPLOAD_BUCKET_TYPE  
+						[@p_division_id]          
+						[@p_end_customer]   
+						[@p_scm_site_id]  
+						/*--[@p_bucket_type] --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경*/    
+						/*-- AND CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]'' */ 
+							)  
+			WHERE  1 = 1  
+			[@p_valid_yn]  
+			/*--AND    CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]'' */ 
+			GROUP BY M.PLAN_WEEK, M.DIVISION_ID, M.DEPT_ID, M.CUSTOMER_CODE, M.SCM_SITE_ID        
+				   , M.SUMMARY_BUCKET_TYPE, M.MEASURE, M.MEASURE_GROUP, M.EDI_FCST_YN, M.CUSTOMER_PSI  
+				   , M.UPLOAD_UOM, M.UPLOAD_BUCKET_TYPE  
+				   /*-- , M.VALID_YN  */
+				   , M.MASTER_VALID_YN  
+				   , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+											   WHEN ''WEEKLY'' THEN 2  
+											   WHEN ''MONTHLY'' THEN 3 END  
+			ORDER BY DIVISION_ID, DEPT_ID, CUSTOMER_CODE, SCM_SITE_ID, UPLOAD_ORDER, MEASURE_GROUP, MEASURE     
+			';
+
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]',				@v_iteration);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_plan_week]',				@v_plan_week);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_start_yyyymmdd]',		@v_start_yyyymmdd);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_yyyymmdd]',			@v_end_yyyymmdd);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_division_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.DIVISION_ID'			, 'IN', @p_division_id));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_dept_id]',				[dbo].[FN_SCM_GET_WHERE_SQL]('S.DEPT_ID'				, 'IN', @p_dept_id));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_end_customer]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.CUSTOMER_CODE'			, 'IN', @p_end_customer));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_scm_site_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SCM_SITE_ID'			, 'IN', @p_scm_site_id));  
+		--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_bucket_type]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SUMMARY_BUCKET_TYPE'	, 'EQ', @p_bucket_type));  --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_valid_yn]',				[dbo].[FN_SCM_GET_WHERE_SQL]('M.MASTER_VALID_YN'		, 'EQ', @p_valid_yn));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_created_by]',			@p_created_by);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_group_id]',				@v_group_id); 
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_bucket_type]',			@v_bucket_type);  /*[E20250326-000842]_Customer FCST Master 조회 로직 수정*/    
+
+	END		 
+  
+  --SET @p_debug = @v_sql_text;  
+  --RETURN @v_sql_text;  
+ --SELECT @v_sql_text;  
+
+--EXEC DMF0007_GET_CUST_FCST_DATA '', '40', '58570391,70000479,50057457,58124984,70021341,70000478,58520274,70021343,58607728,58260040,70090867,58235660,58666055,58099468', 'ALL', 'ALL', 'WEEKLY', 'ALL', 'kdmcc14', 'ADMIN'
+
+  --EXEC(@v_sql_text);  
+  EXEC SP_EXECUTESQL @v_sql_text; --, @p_param_list,   
+                                  --@p_plan_week, @p_division_code, @p_customer_id, @p_fcst_sit_id, @p_measure, @p_edi_fcst_yn, @p_valid_yn;  
+  
+  
+-- xml확인할경우  
+-- SELECT CONVERT(TEXT, @v_sql_text)  
+-- FOR XML PATH('')--,ROOT('x')    
+   
+            
+END
+"
+"2025-03-28 00:00:01.817","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","1","
+/*============================================================================================================================
+ * Program ID  : DMF0007_GET_CUST_FCST_DATA                                                               
+ * Description  :  
+ * Program History  
+ *=============================================================================================================================
+ *   Date		In Charge		Description  
+ *=============================================================================================================================
+ * 2017.10.25	SongDH			Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트   
+ * 2018.05.30	JYE				복수 팀 권한 관련  수정    
+ * 2020.03.11	KHSONG			[C20200103-000586]_권한그룹을 LOOKUP관리  
+ * 2022.10.24	ROSIA27			신규 작성  
+ * 2023.02.28	chano0612		[E20230227-000456]소형사업부 RPA 업로드 시 GSCM Fail 발생 -- EXCEL UPLOAD
+ * 2025.03.27	jssbae			[E20250326-000842]_Customer FCST Master 조회 로직 수정
+ *============================================================================================================================*/
+
+CREATE PROCEDURE [dbo].[DMF0007_GET_CUST_FCST_DATA]  
+	  @p_plan_week			NVARCHAR(6)  
+	, @p_division_id		NVARCHAR(50)  
+	, @p_dept_id			NVARCHAR(MAX)  
+	, @p_end_customer		NVARCHAR(100)  
+	, @p_scm_site_id		NVARCHAR(100)  
+	, @p_bucket_type		NVARCHAR(100)  
+	, @p_valid_yn			NVARCHAR(3)  
+	, @p_created_by			NVARCHAR(50)  
+	, @p_user_group			NVARCHAR(100)  
+AS
+BEGIN  
+    SET NOCOUNT ON;  
+  
+    DECLARE @v_sql_text			NVARCHAR(MAX);  
+    DECLARE @v_iteration		NVARCHAR(MAX);  
+    DECLARE @v_column_text		NVARCHAR(200);  
+    DECLARE @v_column_name		NVARCHAR(20);  
+    DECLARE @v_weekstart_date	NVARCHAR(8);  
+    DECLARE @p_param_list		NVARCHAR(4000);  
+	DECLARE @v_plan_week		NVARCHAR(6);    
+    DECLARE @v_start_week		NVARCHAR(8);    
+    DECLARE @v_end_week			NVARCHAR(8);  
+    DECLARE @v_start_yyyymmdd	NVARCHAR(8);    
+    DECLARE @v_end_yyyymmdd		NVARCHAR(8);  
+    DECLARE @v_bucket_type		NVARCHAR(10);    
+	DECLARE @v_group_id			NVARCHAR(50)='';  
+  
+	---------------------------------------------------------------------------------  
+	-- 20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (BEGIN)  
+	---------------------------------------------------------------------------------  
+	IF ISNULL(( SELECT COUNT(1) FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK)
+				WHERE LOOKUP_TYPE = 'GET_ADMIN_GROUP'
+				AND VALID_YN = 'Y'
+				AND SEGMENT2 = 'ALL'  -- 'ALL'인경우 DM Planner (W/S) 제외 / 주석처리인경우 DM Planner (W/S) 포함
+				AND SEGMENT1 = @p_user_group), 0) > 0  
+	BEGIN  
+		SET @v_group_id = 'ADMIN'  
+	END  
+
+	---------------------------------------------------------------------------------  
+	-- 20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (END)  
+	---------------------------------------------------------------------------------  
+    SET @v_start_week = '';  
+    SET @v_end_week = '';  
+  
+    SET @v_start_week = @p_plan_week;  
+    SET @v_bucket_type = @p_bucket_type;  
+  
+	SELECT @v_plan_week = C.ISO_YYYYWW  
+    FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+    WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112);  
+
+	IF @v_start_week = ''
+	BEGIN  
+		IF @v_bucket_type = 'DAILY'              
+			SELECT @v_start_week		= MIN(C.BASIS_YYYYMMDD)   
+				 , @v_start_yyyymmdd	= MIN(C.BASIS_YYYYMMDD)   
+			FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)   
+			, ( SELECT C.ISO_YYYYWW  
+				FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)   
+				WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)  
+			   ) T  
+			WHERE C.ISO_YYYYWW = T.ISO_YYYYWW;
+
+		ELSE IF @v_bucket_type = 'WEEKLY'  
+			SELECT @v_start_week		= MIN(C.ISO_YYYYWW)  
+				 , @v_start_yyyymmdd	= MIN(C.BASIS_YYYYMMDD)  
+			FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)   
+			, ( SELECT C.ISO_YYYYWW	AS ISO_YYYYWW  
+				FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+				WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)  
+			   ) T  
+			WHERE "
+"2025-03-28 00:00:01.817","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","2","C.ISO_YYYYWW = T.ISO_YYYYWW;
+
+		ELSE IF @v_bucket_type = 'MONTHLY'  
+			SELECT @v_start_week		= T.BASIS_YYYYMM  
+				 , @v_start_yyyymmdd	= T.BASIS_YYYYMMDD  
+			FROM ( SELECT MIN(C.BASIS_YYYYMM)	AS BASIS_YYYYMM  
+						, MIN(C.BASIS_YYYYMMDD)	AS BASIS_YYYYMMDD  
+				   FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+				   WHERE C.BASIS_YYYYMM = CONVERT(CHAR(6), CURRENT_TIMESTAMP, 112)  
+				  ) T;
+	END  
+	ELSE  
+	SET @v_start_week = @p_plan_week;    
+         
+	BEGIN  
+		IF @v_bucket_type = 'DAILY'  
+			SELECT @v_end_week		= C.BASIS_YYYYMMDD  
+				 , @v_end_yyyymmdd	= C.BASIS_YYYYMMDD  
+			FROM  SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+			WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), DATEADD(MM, 12, CURRENT_TIMESTAMP), 112);  
+
+		ELSE IF @v_bucket_type = 'WEEKLY'  
+			SELECT @v_end_week		= T.ISO_YYYYWW  
+				 , @v_end_yyyymmdd	= T.BASIS_YYYYMMDD  
+			FROM  ( SELECT MAX(ISO_YYYYWW)			AS ISO_YYYYWW  
+						 , MAX(C.BASIS_YYYYMMDD)	AS BASIS_YYYYMMDD  
+					FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+					WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), DATEADD(MM, 30, CURRENT_TIMESTAMP), 112)  
+				   ) T;
+
+		ELSE IF @v_bucket_type = 'MONTHLY'  
+			SELECT @v_end_week		= T.BASIS_YYYYMM  
+				 , @v_end_yyyymmdd	= T.BASIS_YYYYMMDD  
+			FROM  ( SELECT MAX(BASIS_YYYYMM)      AS BASIS_YYYYMM  
+						 , MAX(C.BASIS_YYYYMMDD)  AS BASIS_YYYYMMDD  
+					FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+					WHERE C.BASIS_YYYYMM = CONVERT(CHAR(6), DATEADD(MM, 30, CURRENT_TIMESTAMP), 112)  
+				  ) T;
+	END 
+  
+	SET @v_iteration = '';  
+  
+	IF @v_bucket_type = 'DAILY'  
+	BEGIN  
+		DECLARE c_bucket CURSOR FAST_FORWARD FOR  
+
+		SELECT 'D_' + A.BASIS_YYYYMMDD		AS COLUMN_NAME  
+					, A.BASIS_YYYYMMDD		AS BASIS_YYYYMMDD  
+		FROM SCM_SYS_CALENDAR_M A WITH(NOLOCK)  
+		WHERE 1 = 1  
+		AND A.BASIS_YYYYMMDD >=  @v_start_week  
+		AND A.BASIS_YYYYMMDD <= @v_end_week;       
+  
+		OPEN c_bucket;  
+		FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date  
+		WHILE @@FETCH_STATUS = 0     
+		BEGIN    
+			SET @v_column_text = ', MAX(CASE WHEN CF.SUMMARY_BUCKET_VALUE = ''[@v_weekstart_date]'' THEN CASE CF.VALID_YN WHEN ''Y'' THEN CF.VALID_YN ELSE '''' END ELSE '''' END) AS [@v_column_name] ';     
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);  
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);    
+			SET @v_iteration = @v_iteration + @v_column_text;   
+      
+			FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date  
+		END
+  
+		CLOSE c_bucket;    
+		DEALLOCATE c_bucket;  
+	END
+			
+	ELSE IF @v_bucket_type = 'WEEKLY'  
+	BEGIN  
+		DECLARE c_bucket CURSOR FAST_FORWARD FOR  
+
+		SELECT 'D_' + MIN(A.BASIS_START_DATE)	AS COLUMN_NAME  
+					, MIN(A.BASIS_YYYYMMDD)		AS BASIS_YYYYMMDD  
+		FROM  SCM_SYS_CALENDAR_M A WITH(NOLOCK)  
+		WHERE 1 = 1  
+		AND A.ISO_YYYYWW >=  @v_start_week  
+		AND A.ISO_YYYYWW <= @v_end_week       
+		GROUP BY A.ISO_YYYYWW;              
+  
+		OPEN c_bucket;  
+		FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date  
+		WHILE @@FETCH_STATUS = 0     
+		BEGIN   
+			SET @v_column_text = ', MAX(CASE WHEN CF.SUMMARY_BUCKET_VALUE = ''[@v_weekstart_date]'' THEN CASE CF.VALID_YN WHEN ''Y'' THEN CF.VALID_YN ELSE '''' END ELSE '''' END) AS [@v_column_name] ';     
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);  
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);    
+			SET @v_iteration = @v_iteration + @v_column_text;   
+      
+			FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date  
+		END
+  
+		CLOSE c_bucket;    
+		DEALLOCATE c_bucket;  
+	END
+
+	ELSE IF @v_bucket_type = 'MONTHLY'  
+	BEGIN  
+		DECLARE c_bucket CURSOR FAST_FORWARD FOR  
+
+		SELECT 'D_' + MIN(A.BASIS_YYYYMMDD)		AS COLUMN_NAME  
+					, MIN(A.BASIS_YYYYMMDD)		AS BASIS_YYYYMMDD  
+		FROM SCM_SYS_CALENDAR_M A WITH(NOLOCK)  
+		WHERE 1 = 1  "
+"2025-03-28 00:00:01.817","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","3","
+		AND A.BASIS_YYYYMM >= @v_start_week  
+		AND A.BASIS_YYYYMM <= @v_end_week   
+		GROUP BY MONTH_NAME;  
+    
+		OPEN c_bucket;  
+		FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date  
+
+		WHILE @@FETCH_STATUS = 0     
+		BEGIN  
+			SET @v_column_text = ', MAX(CASE WHEN CF.SUMMARY_BUCKET_VALUE = ''[@v_weekstart_date]'' THEN CASE CF.VALID_YN WHEN ''Y'' THEN CF.VALID_YN ELSE '''' END ELSE '''' END) AS [@v_column_name] ';     
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);  
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);    
+			SET @v_iteration = @v_iteration + @v_column_text;   
+      
+			FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date  
+		END
+  
+		CLOSE c_bucket;    
+		DEALLOCATE c_bucket;  
+	END
+			
+	--소형사업부 추가(END CUSTOMER 체크 안함)
+	IF @p_division_id = '40' --[E20230227-000456]소형사업부 RPA 업로드 시 GSCM Fail 발생 -- EXCEL UPLOAD
+	BEGIN
+		SET @v_sql_text = '  
+			WITH MASTER AS   
+					(	SELECT CF.PLAN_WEEK, CF.DIVISION_ID, S.DEPT_ID, CF.CUSTOMER_CODE, CF.SCM_SITE_ID        
+							 , CF.SUMMARY_BUCKET_TYPE, CF.MEASURE_GROUP, CF.MEASURE, CF.EDI_FCST_YN, CF.CUSTOMER_PSI  
+							 , CF.UPLOAD_UOM, CF.UPLOAD_BUCKET_TYPE  
+							 /*--, CF.VALID_YN*/  
+							 , CF.MASTER_VALID_YN, C.BASIS_YYYYMMDD AS SUMMARY_BUCKET_VALUE   
+						FROM (	SELECT T1.PLAN_WEEK, T1.DIVISION_ID, T1.CUSTOMER_CODE, T1.SCM_SITE_ID, T1.SUMMARY_BUCKET_TYPE  
+									 , T1.MEASURE_GROUP, T1.MEASURE, T1.EDI_FCST_YN, T1.CUSTOMER_PSI, T1.UPLOAD_UOM  
+									 , T1.UPLOAD_BUCKET_TYPE, T1.MASTER_VALID_YN, T2.VALID_YN, T2.SUMMARY_BUCKET_VALUE  
+								FROM ( SELECT PLAN_WEEK, DIVISION_ID , CUSTOMER_CODE, SCM_SITE_ID, SUMMARY_BUCKET_TYPE  
+											, MEASURE_GROUP, MEASURE, EDI_FCST_YN, CUSTOMER_PSI, UPLOAD_UOM  
+											, UPLOAD_BUCKET_TYPE, MAX(VALID_YN) AS MASTER_VALID_YN              
+									   FROM DM_MST_CUSTOMER_FCST CF WITH(NOLOCK)    
+									   WHERE 1 = 1  
+									   AND  MEASURE_GROUP = ''CUST_FCST''  
+									   AND  PLAN_WEEK     = ''[@p_plan_week]''   
+									   AND  SUMMARY_BUCKET_VALUE BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]''  
+									   [@p_division_id]    
+									   /*--[@p_end_customer]*/   
+									   [@p_scm_site_id]  
+									   /*--[@p_bucket_type]--[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경*/                     
+									   GROUP BY PLAN_WEEK, DIVISION_ID, CUSTOMER_CODE, SCM_SITE_ID, SUMMARY_BUCKET_TYPE  
+											  , MEASURE_GROUP, MEASURE, EDI_FCST_YN, CUSTOMER_PSI, UPLOAD_UOM  
+											  , UPLOAD_BUCKET_TYPE  
+									 ) T1  
+								LEFT JOIN DM_MST_CUSTOMER_FCST T2 WITH(NOLOCK)      
+									   ON  T1.PLAN_WEEK				= T2.PLAN_WEEK  
+									  AND T1.DIVISION_ID			= T2.DIVISION_ID   
+									  AND T1.CUSTOMER_CODE			= T2.CUSTOMER_CODE     
+									  AND T1.SCM_SITE_ID			= T2.SCM_SITE_ID        
+									  AND T1.SUMMARY_BUCKET_TYPE	= T2.SUMMARY_BUCKET_TYPE  
+									  AND T1.MEASURE_GROUP			= T2.MEASURE_GROUP  
+									  AND T1.MEASURE				= T2.MEASURE  
+									  AND T1.EDI_FCST_YN			= T2.EDI_FCST_YN  
+									  AND T1.CUSTOMER_PSI			= T2.CUSTOMER_PSI  
+									  AND T1.UPLOAD_UOM				= T2.UPLOAD_UOM  
+									  AND T1.UPLOAD_BUCKET_TYPE		= T2.UPLOAD_BUCKET_TYPE  
+									  AND T2.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''         
+								WHERE  1 = 1  
+								) CF    
+						LEFT JOIN SCM_SYS_CALENDAR_M C WITH(NOLOCK)    
+							   ON (C.BASIS_YYYYMMDD = CF.SUMMARY_BUCKET_VALUE    
+							  AND C.BASIS_YYYYMMDD BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]'')       
+						, SCM_MST_SITE S WITH(NOLOCK)  
+						WHERE  1 = 1  
+						AND CF.DIVISION_ID			= S.DIVISION_ID  
+						/*--AND CF.CUSTOMER_CODE	= S.END_CUSTOMER*/  
+						AND CF.SCM_SITE_ID			= S.SCM_SITE_ID  
+						/*--[@p_dept_id]*/     
+						AND CF.UPLOAD_BUCKET_TYPE	= ''[@v_bucket_type]'' /*[E20250326-000842]_Customer FCST Master "
+"2025-03-28 00:00:01.817","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","4","조회 로직 수정*/         
+					)  
+  
+			SELECT M.PLAN_WEEK, M.DIVISION_ID, M.DEPT_ID, M.CUSTOMER_CODE, M.SCM_SITE_ID        
+				 , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+											 WHEN ''WEEKLY'' THEN 2  
+											 WHEN ''MONTHLY'' THEN 3 END AS UPLOAD_ORDER  
+				 , M.SUMMARY_BUCKET_TYPE, M.MEASURE_GROUP, M.MEASURE, M.EDI_FCST_YN, M.CUSTOMER_PSI  
+				 , M.UPLOAD_UOM, M.UPLOAD_BUCKET_TYPE 
+				 /*-- , M.VALID_YN */ 
+				 , M.MASTER_VALID_YN AS VALID_YN  
+				 , CASE WHEN (([dbo].[FN_GET_DEPT_LIST](''[@p_created_by]'', M.DEPT_ID) = ''Y'') OR ''[@v_group_id]'' =''ADMIN'')   
+						THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG  
+				 [@v_iteration]      
+			FROM MASTER M WITH(NOLOCK)  
+			LEFT OUTER JOIN DM_MST_CUSTOMER_FCST CF WITH(NOLOCK)  
+						 ON (M.PLAN_WEEK			= CF.PLAN_WEEK  
+						AND M.DIVISION_ID			= CF.DIVISION_ID  
+						AND M.CUSTOMER_CODE			= CF.CUSTOMER_CODE  
+						AND M.SCM_SITE_ID			= CF.SCM_SITE_ID  
+						AND M.SUMMARY_BUCKET_TYPE	= CF.SUMMARY_BUCKET_TYPE  
+						AND M.MEASURE_GROUP			= CF.MEASURE_GROUP  
+						AND M.MEASURE				= CF.MEASURE  
+						AND M.SUMMARY_BUCKET_VALUE	= CF.SUMMARY_BUCKET_VALUE  
+						AND M.EDI_FCST_YN			= CF.EDI_FCST_YN  
+						AND M.CUSTOMER_PSI			= CF.CUSTOMER_PSI  
+						AND M.UPLOAD_UOM			= CF.UPLOAD_UOM  
+						AND M.UPLOAD_BUCKET_TYPE	= CF.UPLOAD_BUCKET_TYPE  
+						[@p_division_id]          
+						/*--	[@p_end_customer]*/   
+						[@p_scm_site_id]  
+						/*--[@p_bucket_type] --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경*/        
+						/*-- AND CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''*/  
+						)  
+			WHERE  1 = 1  
+			[@p_valid_yn]  
+			/*--AND    CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''*/  
+			GROUP BY M.PLAN_WEEK, M.DIVISION_ID, M.DEPT_ID, M.CUSTOMER_CODE, M.SCM_SITE_ID        
+				   , M.SUMMARY_BUCKET_TYPE, M.MEASURE, M.MEASURE_GROUP, M.EDI_FCST_YN, M.CUSTOMER_PSI  
+				   , M.UPLOAD_UOM, M.UPLOAD_BUCKET_TYPE  
+				   /*-- , M.VALID_YN*/   
+				   , M.MASTER_VALID_YN  
+				   , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+											   WHEN ''WEEKLY'' THEN 2  
+											   WHEN ''MONTHLY'' THEN 3 END  
+			ORDER BY DIVISION_ID, DEPT_ID, CUSTOMER_CODE, SCM_SITE_ID, UPLOAD_ORDER, MEASURE_GROUP, MEASURE  
+			';
+
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]',				@v_iteration);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_plan_week]',				@v_plan_week);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_start_yyyymmdd]',		@v_start_yyyymmdd);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_yyyymmdd]',			@v_end_yyyymmdd);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_division_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.DIVISION_ID'			, 'IN', @p_division_id));  
+		--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_dept_id]',				[dbo].[FN_SCM_GET_WHERE_SQL]('S.DEPT_ID'				, 'IN', @p_dept_id));  
+		--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_end_customer]',		[dbo].[FN_SCM_GET_WHERE_SQL]('CF.CUSTOMER_CODE'			, 'IN', @p_end_customer));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_scm_site_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SCM_SITE_ID'			, 'IN', @p_scm_site_id));  
+		--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_bucket_type]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SUMMARY_BUCKET_TYPE'	, 'EQ', @p_bucket_type));  --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경   
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_valid_yn]',				[dbo].[FN_SCM_GET_WHERE_SQL]('M.MASTER_VALID_YN'		, 'EQ', @p_valid_yn));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_created_by]',			@p_created_by);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_group_id]',				@v_group_id); 
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_bucket_type]',			@v_bucket_type);  /*[E20250326-000842]_Customer FCST Master 조회 로직 수정*/    
+
+	END				
+	ELSE
+	BEGIN
+		SET @v_sql_text = '  
+			WITH MASTER AS   
+					(	SELECT CF.PLAN_WEEK, CF.DIVISION_ID, S.DEPT_ID, CF.CUSTOMER_CODE, CF"
+"2025-03-28 00:00:01.817","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","5",".SCM_SITE_ID        
+							 , CF.SUMMARY_BUCKET_TYPE, CF.MEASURE_GROUP, CF.MEASURE, CF.EDI_FCST_YN, CF.CUSTOMER_PSI  
+							 , CF.UPLOAD_UOM, CF.UPLOAD_BUCKET_TYPE  
+							 /* --, CF.VALID_YN*/  
+							 , CF.MASTER_VALID_YN, C.BASIS_YYYYMMDD AS SUMMARY_BUCKET_VALUE   
+						FROM (	SELECT T1.PLAN_WEEK, T1.DIVISION_ID, T1.CUSTOMER_CODE, T1.SCM_SITE_ID, T1.SUMMARY_BUCKET_TYPE  
+									 , T1.MEASURE_GROUP, T1.MEASURE, T1.EDI_FCST_YN, T1.CUSTOMER_PSI, T1.UPLOAD_UOM  
+									 , T1.UPLOAD_BUCKET_TYPE, T1.MASTER_VALID_YN, T2.VALID_YN, T2.SUMMARY_BUCKET_VALUE  
+								FROM ( SELECT PLAN_WEEK, DIVISION_ID, CUSTOMER_CODE, SCM_SITE_ID, SUMMARY_BUCKET_TYPE  
+											, MEASURE_GROUP, MEASURE, EDI_FCST_YN, CUSTOMER_PSI, UPLOAD_UOM  
+											, UPLOAD_BUCKET_TYPE , MAX(VALID_YN) AS MASTER_VALID_YN              
+									   FROM DM_MST_CUSTOMER_FCST CF WITH(NOLOCK)    
+									   WHERE 1 = 1  
+									   AND MEASURE_GROUP = ''CUST_FCST''  
+									   AND PLAN_WEEK     = ''[@p_plan_week]''   
+									   AND SUMMARY_BUCKET_VALUE BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]''  
+									   [@p_division_id]    
+									   [@p_end_customer]   
+									   [@p_scm_site_id]  
+									   /*--[@p_bucket_type] --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경*/                    
+									   GROUP BY PLAN_WEEK, DIVISION_ID, CUSTOMER_CODE, SCM_SITE_ID, SUMMARY_BUCKET_TYPE  
+											  , MEASURE_GROUP, MEASURE, EDI_FCST_YN, CUSTOMER_PSI , UPLOAD_UOM  
+											  , UPLOAD_BUCKET_TYPE  
+									) T1  
+								LEFT JOIN DM_MST_CUSTOMER_FCST T2 WITH(NOLOCK)      
+									   ON T1.PLAN_WEEK				= T2.PLAN_WEEK  
+									  AND T1.DIVISION_ID			= T2.DIVISION_ID   
+									  AND T1.CUSTOMER_CODE			= T2.CUSTOMER_CODE     
+									  AND T1.SCM_SITE_ID			= T2.SCM_SITE_ID        
+									  AND T1.SUMMARY_BUCKET_TYPE	= T2.SUMMARY_BUCKET_TYPE  
+									  AND T1.MEASURE_GROUP			= T2.MEASURE_GROUP  
+									  AND T1.MEASURE				= T2.MEASURE  
+									  AND T1.EDI_FCST_YN			= T2.EDI_FCST_YN  
+									  AND T1.CUSTOMER_PSI			= T2.CUSTOMER_PSI  
+									  AND T1.UPLOAD_UOM				= T2.UPLOAD_UOM  
+									  AND T1.UPLOAD_BUCKET_TYPE		= T2.UPLOAD_BUCKET_TYPE  
+									  AND T2.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''         
+								WHERE  1 = 1  
+								) CF    
+						LEFT JOIN SCM_SYS_CALENDAR_M C WITH(NOLOCK)    
+							   ON (C.BASIS_YYYYMMDD = CF.SUMMARY_BUCKET_VALUE    
+							  AND C.BASIS_YYYYMMDD BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]'')       
+						, SCM_MST_SITE S WITH(NOLOCK)  
+						WHERE  1 = 1  
+						AND CF.DIVISION_ID   = S.DIVISION_ID  
+						AND CF.CUSTOMER_CODE = S.END_CUSTOMER  
+						AND CF.SCM_SITE_ID   = S.SCM_SITE_ID  
+						[@p_dept_id]                        
+						AND CF.UPLOAD_BUCKET_TYPE  = ''[@v_bucket_type]''/*[E20250326-000842]_Customer FCST Master 조회 로직 수정*/                    
+					)  
+  
+			SELECT M.PLAN_WEEK, M.DIVISION_ID, M.DEPT_ID, M.CUSTOMER_CODE, M.SCM_SITE_ID        
+				 , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+											 WHEN ''WEEKLY'' THEN 2  
+											 WHEN ''MONTHLY'' THEN 3 END AS UPLOAD_ORDER  
+				 , M.SUMMARY_BUCKET_TYPE, M.MEASURE_GROUP, M.MEASURE, M.EDI_FCST_YN, M.CUSTOMER_PSI  
+				 , M.UPLOAD_UOM, M.UPLOAD_BUCKET_TYPE  
+				 /*-- , M.VALID_YN */ 
+				 , M.MASTER_VALID_YN AS VALID_YN  
+				 , CASE WHEN (([dbo].[FN_GET_DEPT_LIST](''[@p_created_by]'', M.DEPT_ID) = ''Y'') OR ''[@v_group_id]'' =''ADMIN'')   
+						THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG  
+				 [@v_iteration]      
+			FROM  MASTER M WITH(NOLOCK)  
+			LEFT OUTER JOIN DM_MST_CUSTOMER_FCST CF WITH(NOLOCK)  
+						 ON (M.PLAN_WEEK			= CF.PLAN_WEEK  
+						AND M.DIVISION_ID			= CF.DIVISION_ID  
+						AND M.CUSTOMER_CODE			= CF.CUSTOMER_CODE  
+						AND M.SCM_SITE_ID			= CF.SCM_SITE_ID  
+						AND M.SUMMARY_BUCKET_TYPE	= CF.SUMMARY_BUCKET_TYPE  
+						AND M.MEASURE_GROUP			= CF.MEASURE_GROUP  
+						AND M.MEA"
+"2026-03-28 00:00:02.400","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","1","
+/*============================================================================================================================
+ * Program ID  : DMF0007_GET_CUST_FCST_DATA                                                               
+ * Description  :  
+ * Program History  
+ *=============================================================================================================================
+ *   Date		In Charge		Description  
+ *=============================================================================================================================
+ * 2017.10.25	SongDH			Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트   
+ * 2018.05.30	JYE				복수 팀 권한 관련  수정    
+ * 2020.03.11	KHSONG			[C20200103-000586]_권한그룹을 LOOKUP관리  
+ * 2022.10.24	ROSIA27			신규 작성  
+ * 2023.02.28	chano0612		[E20230227-000456]소형사업부 RPA 업로드 시 GSCM Fail 발생 -- EXCEL UPLOAD
+ * 2025.03.27	jssbae			[E20250326-000842]_Customer FCST Master 조회 로직 수정
+ *============================================================================================================================*/
+
+CREATE PROCEDURE [dbo].[DMF0007_GET_CUST_FCST_DATA]  
+	  @p_plan_week			NVARCHAR(6)  
+	, @p_division_id		NVARCHAR(50)  
+	, @p_dept_id			NVARCHAR(MAX)  
+	, @p_end_customer		NVARCHAR(100)  
+	, @p_scm_site_id		NVARCHAR(100)  
+	, @p_bucket_type		NVARCHAR(100)  
+	, @p_valid_yn			NVARCHAR(3)  
+	, @p_created_by			NVARCHAR(50)  
+	, @p_user_group			NVARCHAR(100)  
+AS
+BEGIN  
+    SET NOCOUNT ON;  
+  
+    DECLARE @v_sql_text			NVARCHAR(MAX);  
+    DECLARE @v_iteration		NVARCHAR(MAX);  
+    DECLARE @v_column_text		NVARCHAR(200);  
+    DECLARE @v_column_name		NVARCHAR(20);  
+    DECLARE @v_weekstart_date	NVARCHAR(8);  
+    DECLARE @p_param_list		NVARCHAR(4000);  
+	DECLARE @v_plan_week		NVARCHAR(6);    
+    DECLARE @v_start_week		NVARCHAR(8);    
+    DECLARE @v_end_week			NVARCHAR(8);  
+    DECLARE @v_start_yyyymmdd	NVARCHAR(8);    
+    DECLARE @v_end_yyyymmdd		NVARCHAR(8);  
+    DECLARE @v_bucket_type		NVARCHAR(10);    
+	DECLARE @v_group_id			NVARCHAR(50)='';  
+  
+	---------------------------------------------------------------------------------  
+	-- 20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (BEGIN)  
+	---------------------------------------------------------------------------------  
+	IF ISNULL(( SELECT COUNT(1) FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK)
+				WHERE LOOKUP_TYPE = 'GET_ADMIN_GROUP'
+				AND VALID_YN = 'Y'
+				AND SEGMENT2 = 'ALL'  -- 'ALL'인경우 DM Planner (W/S) 제외 / 주석처리인경우 DM Planner (W/S) 포함
+				AND SEGMENT1 = @p_user_group), 0) > 0  
+	BEGIN  
+		SET @v_group_id = 'ADMIN'  
+	END  
+
+	---------------------------------------------------------------------------------  
+	-- 20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (END)  
+	---------------------------------------------------------------------------------  
+    SET @v_start_week = '';  
+    SET @v_end_week = '';  
+  
+    SET @v_start_week = @p_plan_week;  
+    SET @v_bucket_type = @p_bucket_type;  
+  
+	SELECT @v_plan_week = C.ISO_YYYYWW  
+    FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+    WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112);  
+
+	IF @v_start_week = ''
+	BEGIN  
+		IF @v_bucket_type = 'DAILY'              
+			SELECT @v_start_week		= MIN(C.BASIS_YYYYMMDD)   
+				 , @v_start_yyyymmdd	= MIN(C.BASIS_YYYYMMDD)   
+			FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)   
+			, ( SELECT C.ISO_YYYYWW  
+				FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)   
+				WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)  
+			   ) T  
+			WHERE C.ISO_YYYYWW = T.ISO_YYYYWW;
+
+		ELSE IF @v_bucket_type = 'WEEKLY'  
+			SELECT @v_start_week		= MIN(C.ISO_YYYYWW)  
+				 , @v_start_yyyymmdd	= MIN(C.BASIS_YYYYMMDD)  
+			FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)   
+			, ( SELECT C.ISO_YYYYWW	AS ISO_YYYYWW  
+				FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+				WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)  
+			   ) T  
+			WHERE "
+"2026-03-28 00:00:02.400","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","2","C.ISO_YYYYWW = T.ISO_YYYYWW;
+
+		ELSE IF @v_bucket_type = 'MONTHLY'  
+			SELECT @v_start_week		= T.BASIS_YYYYMM  
+				 , @v_start_yyyymmdd	= T.BASIS_YYYYMMDD  
+			FROM ( SELECT MIN(C.BASIS_YYYYMM)	AS BASIS_YYYYMM  
+						, MIN(C.BASIS_YYYYMMDD)	AS BASIS_YYYYMMDD  
+				   FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+				   WHERE C.BASIS_YYYYMM = CONVERT(CHAR(6), CURRENT_TIMESTAMP, 112)  
+				  ) T;
+	END  
+	ELSE  
+	SET @v_start_week = @p_plan_week;    
+         
+	BEGIN  
+		IF @v_bucket_type = 'DAILY'  
+			SELECT @v_end_week		= C.BASIS_YYYYMMDD  
+				 , @v_end_yyyymmdd	= C.BASIS_YYYYMMDD  
+			FROM  SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+			WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), DATEADD(MM, 12, CURRENT_TIMESTAMP), 112);  
+
+		ELSE IF @v_bucket_type = 'WEEKLY'  
+			SELECT @v_end_week		= T.ISO_YYYYWW  
+				 , @v_end_yyyymmdd	= T.BASIS_YYYYMMDD  
+			FROM  ( SELECT MAX(ISO_YYYYWW)			AS ISO_YYYYWW  
+						 , MAX(C.BASIS_YYYYMMDD)	AS BASIS_YYYYMMDD  
+					FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+					WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), DATEADD(MM, 30, CURRENT_TIMESTAMP), 112)  
+				   ) T;
+
+		ELSE IF @v_bucket_type = 'MONTHLY'  
+			SELECT @v_end_week		= T.BASIS_YYYYMM  
+				 , @v_end_yyyymmdd	= T.BASIS_YYYYMMDD  
+			FROM  ( SELECT MAX(BASIS_YYYYMM)      AS BASIS_YYYYMM  
+						 , MAX(C.BASIS_YYYYMMDD)  AS BASIS_YYYYMMDD  
+					FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)  
+					WHERE C.BASIS_YYYYMM = CONVERT(CHAR(6), DATEADD(MM, 30, CURRENT_TIMESTAMP), 112)  
+				  ) T;
+	END 
+  
+	SET @v_iteration = '';  
+  
+	IF @v_bucket_type = 'DAILY'  
+	BEGIN  
+		DECLARE c_bucket CURSOR FAST_FORWARD FOR  
+
+		SELECT 'D_' + A.BASIS_YYYYMMDD		AS COLUMN_NAME  
+					, A.BASIS_YYYYMMDD		AS BASIS_YYYYMMDD  
+		FROM SCM_SYS_CALENDAR_M A WITH(NOLOCK)  
+		WHERE 1 = 1  
+		AND A.BASIS_YYYYMMDD >=  @v_start_week  
+		AND A.BASIS_YYYYMMDD <= @v_end_week;       
+  
+		OPEN c_bucket;  
+		FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date  
+		WHILE @@FETCH_STATUS = 0     
+		BEGIN    
+			SET @v_column_text = ', MAX(CASE WHEN CF.SUMMARY_BUCKET_VALUE = ''[@v_weekstart_date]'' THEN CASE CF.VALID_YN WHEN ''Y'' THEN CF.VALID_YN ELSE '''' END ELSE '''' END) AS [@v_column_name] ';     
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);  
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);    
+			SET @v_iteration = @v_iteration + @v_column_text;   
+      
+			FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date  
+		END
+  
+		CLOSE c_bucket;    
+		DEALLOCATE c_bucket;  
+	END
+			
+	ELSE IF @v_bucket_type = 'WEEKLY'  
+	BEGIN  
+		DECLARE c_bucket CURSOR FAST_FORWARD FOR  
+
+		SELECT 'D_' + MIN(A.BASIS_START_DATE)	AS COLUMN_NAME  
+					, MIN(A.BASIS_YYYYMMDD)		AS BASIS_YYYYMMDD  
+		FROM  SCM_SYS_CALENDAR_M A WITH(NOLOCK)  
+		WHERE 1 = 1  
+		AND A.ISO_YYYYWW >=  @v_start_week  
+		AND A.ISO_YYYYWW <= @v_end_week       
+		GROUP BY A.ISO_YYYYWW;              
+  
+		OPEN c_bucket;  
+		FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date  
+		WHILE @@FETCH_STATUS = 0     
+		BEGIN   
+			SET @v_column_text = ', MAX(CASE WHEN CF.SUMMARY_BUCKET_VALUE = ''[@v_weekstart_date]'' THEN CASE CF.VALID_YN WHEN ''Y'' THEN CF.VALID_YN ELSE '''' END ELSE '''' END) AS [@v_column_name] ';     
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);  
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);    
+			SET @v_iteration = @v_iteration + @v_column_text;   
+      
+			FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date  
+		END
+  
+		CLOSE c_bucket;    
+		DEALLOCATE c_bucket;  
+	END
+
+	ELSE IF @v_bucket_type = 'MONTHLY'  
+	BEGIN  
+		DECLARE c_bucket CURSOR FAST_FORWARD FOR  
+
+		SELECT 'D_' + MIN(A.BASIS_YYYYMMDD)		AS COLUMN_NAME  
+					, MIN(A.BASIS_YYYYMMDD)		AS BASIS_YYYYMMDD  
+		FROM SCM_SYS_CALENDAR_M A WITH(NOLOCK)  
+		WHERE 1 = 1  "
+"2026-03-28 00:00:02.400","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","3","
+		AND A.BASIS_YYYYMM >= @v_start_week  
+		AND A.BASIS_YYYYMM <= @v_end_week   
+		GROUP BY MONTH_NAME;  
+    
+		OPEN c_bucket;  
+		FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date  
+
+		WHILE @@FETCH_STATUS = 0     
+		BEGIN  
+			SET @v_column_text = ', MAX(CASE WHEN CF.SUMMARY_BUCKET_VALUE = ''[@v_weekstart_date]'' THEN CASE CF.VALID_YN WHEN ''Y'' THEN CF.VALID_YN ELSE '''' END ELSE '''' END) AS [@v_column_name] ';     
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);  
+			SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);    
+			SET @v_iteration = @v_iteration + @v_column_text;   
+      
+			FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date  
+		END
+  
+		CLOSE c_bucket;    
+		DEALLOCATE c_bucket;  
+	END
+		
+	--소형사업부 추가(END CUSTOMER 체크 안함)
+	IF @p_division_id = '40' --[E20230227-000456]소형사업부 RPA 업로드 시 GSCM Fail 발생 -- EXCEL UPLOAD
+	BEGIN
+		SET @v_sql_text = '  
+			WITH MASTER AS   
+					(	SELECT CF.PLAN_WEEK, CF.DIVISION_ID, S.DEPT_ID, CF.CUSTOMER_CODE, CF.SCM_SITE_ID        
+							 , CF.SUMMARY_BUCKET_TYPE, CF.MEASURE_GROUP, CF.MEASURE, CF.EDI_FCST_YN, CF.CUSTOMER_PSI  
+							 , CF.UPLOAD_UOM, CF.UPLOAD_BUCKET_TYPE  
+							 /*--, CF.VALID_YN*/  
+							 , CF.MASTER_VALID_YN, C.BASIS_YYYYMMDD AS SUMMARY_BUCKET_VALUE   
+						FROM (	SELECT T1.PLAN_WEEK, T1.DIVISION_ID, T1.CUSTOMER_CODE, T1.SCM_SITE_ID, T1.SUMMARY_BUCKET_TYPE  
+									 , T1.MEASURE_GROUP, T1.MEASURE, T1.EDI_FCST_YN, T1.CUSTOMER_PSI, T1.UPLOAD_UOM  
+									 , T1.UPLOAD_BUCKET_TYPE, T1.MASTER_VALID_YN, T2.VALID_YN, T2.SUMMARY_BUCKET_VALUE  
+								FROM ( SELECT PLAN_WEEK, DIVISION_ID , CUSTOMER_CODE, SCM_SITE_ID, SUMMARY_BUCKET_TYPE  
+											, MEASURE_GROUP, MEASURE, EDI_FCST_YN, CUSTOMER_PSI, UPLOAD_UOM  
+											, UPLOAD_BUCKET_TYPE, MAX(VALID_YN) AS MASTER_VALID_YN              
+									   FROM DM_MST_CUSTOMER_FCST CF WITH(NOLOCK)    
+									   WHERE 1 = 1  
+									   AND  MEASURE_GROUP = ''CUST_FCST''  
+									   AND  PLAN_WEEK     = ''[@p_plan_week]''   
+									   AND  SUMMARY_BUCKET_VALUE BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]''  
+									   [@p_division_id]    
+									   /*--[@p_end_customer]*/   
+									   [@p_scm_site_id]  
+									   /*--[@p_bucket_type]--[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경*/                     
+									   GROUP BY PLAN_WEEK, DIVISION_ID, CUSTOMER_CODE, SCM_SITE_ID, SUMMARY_BUCKET_TYPE  
+											  , MEASURE_GROUP, MEASURE, EDI_FCST_YN, CUSTOMER_PSI, UPLOAD_UOM  
+											  , UPLOAD_BUCKET_TYPE  
+									 ) T1  
+								LEFT JOIN DM_MST_CUSTOMER_FCST T2 WITH(NOLOCK)      
+									   ON  T1.PLAN_WEEK				= T2.PLAN_WEEK  
+									  AND T1.DIVISION_ID			= T2.DIVISION_ID   
+									  AND T1.CUSTOMER_CODE			= T2.CUSTOMER_CODE     
+									  AND T1.SCM_SITE_ID			= T2.SCM_SITE_ID        
+									  AND T1.SUMMARY_BUCKET_TYPE	= T2.SUMMARY_BUCKET_TYPE  
+									  AND T1.MEASURE_GROUP			= T2.MEASURE_GROUP  
+									  AND T1.MEASURE				= T2.MEASURE  
+									  AND T1.EDI_FCST_YN			= T2.EDI_FCST_YN  
+									  AND T1.CUSTOMER_PSI			= T2.CUSTOMER_PSI  
+									  AND T1.UPLOAD_UOM				= T2.UPLOAD_UOM  
+									  AND T1.UPLOAD_BUCKET_TYPE		= T2.UPLOAD_BUCKET_TYPE  
+									  AND T2.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''         
+								WHERE  1 = 1  
+								) CF    
+						LEFT JOIN SCM_SYS_CALENDAR_M C WITH(NOLOCK)    
+							   ON (C.BASIS_YYYYMMDD = CF.SUMMARY_BUCKET_VALUE    
+							  AND C.BASIS_YYYYMMDD BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]'')       
+						, SCM_MST_SITE S WITH(NOLOCK)  
+						WHERE  1 = 1  
+						AND CF.DIVISION_ID			= S.DIVISION_ID  
+						/*--AND CF.CUSTOMER_CODE	= S.END_CUSTOMER*/  
+						AND CF.SCM_SITE_ID			= S.SCM_SITE_ID  
+						/*--[@p_dept_id]*/     
+						AND CF.UPLOAD_BUCKET_TYPE	= ''[@v_bucket_type]'' /*[E20250326-000842]_Customer FCST Master 조"
+"2026-03-28 00:00:02.400","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","4","회 로직 수정*/         
+					)  
+  
+			SELECT M.PLAN_WEEK, M.DIVISION_ID, M.DEPT_ID, M.CUSTOMER_CODE, M.SCM_SITE_ID        
+				 , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+											 WHEN ''WEEKLY'' THEN 2  
+											 WHEN ''MONTHLY'' THEN 3 END AS UPLOAD_ORDER  
+				 , M.SUMMARY_BUCKET_TYPE, M.MEASURE_GROUP, M.MEASURE, M.EDI_FCST_YN, M.CUSTOMER_PSI  
+				 , M.UPLOAD_UOM, M.UPLOAD_BUCKET_TYPE 
+				 /*-- , M.VALID_YN */ 
+				 , M.MASTER_VALID_YN AS VALID_YN  
+				 , CASE WHEN (([dbo].[FN_GET_DEPT_LIST](''[@p_created_by]'', M.DEPT_ID) = ''Y'') OR ''[@v_group_id]'' =''ADMIN'')   
+						THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG  
+				 [@v_iteration]      
+			FROM MASTER M WITH(NOLOCK)  
+			LEFT OUTER JOIN DM_MST_CUSTOMER_FCST CF WITH(NOLOCK)  
+						 ON (M.PLAN_WEEK			= CF.PLAN_WEEK  
+						AND M.DIVISION_ID			= CF.DIVISION_ID  
+						AND M.CUSTOMER_CODE			= CF.CUSTOMER_CODE  
+						AND M.SCM_SITE_ID			= CF.SCM_SITE_ID  
+						AND M.SUMMARY_BUCKET_TYPE	= CF.SUMMARY_BUCKET_TYPE  
+						AND M.MEASURE_GROUP			= CF.MEASURE_GROUP  
+						AND M.MEASURE				= CF.MEASURE  
+						AND M.SUMMARY_BUCKET_VALUE	= CF.SUMMARY_BUCKET_VALUE  
+						AND M.EDI_FCST_YN			= CF.EDI_FCST_YN  
+						AND M.CUSTOMER_PSI			= CF.CUSTOMER_PSI  
+						AND M.UPLOAD_UOM			= CF.UPLOAD_UOM  
+						AND M.UPLOAD_BUCKET_TYPE	= CF.UPLOAD_BUCKET_TYPE  
+						[@p_division_id]          
+						/*--	[@p_end_customer]*/   
+						[@p_scm_site_id]  
+						/*--[@p_bucket_type] --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경*/        
+						/*-- AND CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''*/  
+						)  
+			WHERE  1 = 1  
+			[@p_valid_yn]  
+			/*--AND    CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''*/  
+			GROUP BY M.PLAN_WEEK, M.DIVISION_ID, M.DEPT_ID, M.CUSTOMER_CODE, M.SCM_SITE_ID        
+				   , M.SUMMARY_BUCKET_TYPE, M.MEASURE, M.MEASURE_GROUP, M.EDI_FCST_YN, M.CUSTOMER_PSI  
+				   , M.UPLOAD_UOM, M.UPLOAD_BUCKET_TYPE  
+				   /*-- , M.VALID_YN*/   
+				   , M.MASTER_VALID_YN  
+				   , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+											   WHEN ''WEEKLY'' THEN 2  
+											   WHEN ''MONTHLY'' THEN 3 END  
+			ORDER BY DIVISION_ID, DEPT_ID, CUSTOMER_CODE, SCM_SITE_ID, UPLOAD_ORDER, MEASURE_GROUP, MEASURE  
+			';
+
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]',				@v_iteration);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_plan_week]',				@v_plan_week);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_start_yyyymmdd]',		@v_start_yyyymmdd);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_yyyymmdd]',			@v_end_yyyymmdd);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_division_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.DIVISION_ID'			, 'IN', @p_division_id));  
+		--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_dept_id]',				[dbo].[FN_SCM_GET_WHERE_SQL]('S.DEPT_ID'				, 'IN', @p_dept_id));  
+		--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_end_customer]',		[dbo].[FN_SCM_GET_WHERE_SQL]('CF.CUSTOMER_CODE'			, 'IN', @p_end_customer));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_scm_site_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SCM_SITE_ID'			, 'IN', @p_scm_site_id));  
+		--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_bucket_type]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SUMMARY_BUCKET_TYPE'	, 'EQ', @p_bucket_type));  --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경   
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_valid_yn]',				[dbo].[FN_SCM_GET_WHERE_SQL]('M.MASTER_VALID_YN'		, 'EQ', @p_valid_yn));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_created_by]',			@p_created_by);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_group_id]',				@v_group_id); 
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_bucket_type]',			@v_bucket_type);  /*[E20250326-000842]_Customer FCST Master 조회 로직 수정*/    
+
+	END				
+	ELSE
+	BEGIN
+		SET @v_sql_text = '  
+			WITH MASTER AS   
+					(	SELECT CF.PLAN_WEEK, CF.DIVISION_ID, S.DEPT_ID, CF.CUSTOMER_CODE, CF."
+"2026-03-28 00:00:02.400","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","5","SCM_SITE_ID        
+							 , CF.SUMMARY_BUCKET_TYPE, CF.MEASURE_GROUP, CF.MEASURE, CF.EDI_FCST_YN, CF.CUSTOMER_PSI  
+							 , CF.UPLOAD_UOM, CF.UPLOAD_BUCKET_TYPE  
+							 /* --, CF.VALID_YN*/  
+							 , CF.MASTER_VALID_YN, C.BASIS_YYYYMMDD AS SUMMARY_BUCKET_VALUE   
+						FROM (	SELECT T1.PLAN_WEEK, T1.DIVISION_ID, T1.CUSTOMER_CODE, T1.SCM_SITE_ID, T1.SUMMARY_BUCKET_TYPE  
+									 , T1.MEASURE_GROUP, T1.MEASURE, T1.EDI_FCST_YN, T1.CUSTOMER_PSI, T1.UPLOAD_UOM  
+									 , T1.UPLOAD_BUCKET_TYPE, T1.MASTER_VALID_YN, T2.VALID_YN, T2.SUMMARY_BUCKET_VALUE  
+								FROM ( SELECT PLAN_WEEK, DIVISION_ID, CUSTOMER_CODE, SCM_SITE_ID, SUMMARY_BUCKET_TYPE  
+											, MEASURE_GROUP, MEASURE, EDI_FCST_YN, CUSTOMER_PSI, UPLOAD_UOM  
+											, UPLOAD_BUCKET_TYPE , MAX(VALID_YN) AS MASTER_VALID_YN              
+									   FROM DM_MST_CUSTOMER_FCST CF WITH(NOLOCK)    
+									   WHERE 1 = 1  
+									   AND MEASURE_GROUP = ''CUST_FCST''  
+									   AND PLAN_WEEK     = ''[@p_plan_week]''   
+									   AND SUMMARY_BUCKET_VALUE BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]''  
+									   [@p_division_id]    
+									   [@p_end_customer]   
+									   [@p_scm_site_id]  
+									   /*--[@p_bucket_type] --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경*/                    
+									   GROUP BY PLAN_WEEK, DIVISION_ID, CUSTOMER_CODE, SCM_SITE_ID, SUMMARY_BUCKET_TYPE  
+											  , MEASURE_GROUP, MEASURE, EDI_FCST_YN, CUSTOMER_PSI , UPLOAD_UOM  
+											  , UPLOAD_BUCKET_TYPE  
+									) T1  
+								LEFT JOIN DM_MST_CUSTOMER_FCST T2 WITH(NOLOCK)      
+									   ON T1.PLAN_WEEK				= T2.PLAN_WEEK  
+									  AND T1.DIVISION_ID			= T2.DIVISION_ID   
+									  AND T1.CUSTOMER_CODE			= T2.CUSTOMER_CODE     
+									  AND T1.SCM_SITE_ID			= T2.SCM_SITE_ID        
+									  AND T1.SUMMARY_BUCKET_TYPE	= T2.SUMMARY_BUCKET_TYPE  
+									  AND T1.MEASURE_GROUP			= T2.MEASURE_GROUP  
+									  AND T1.MEASURE				= T2.MEASURE  
+									  AND T1.EDI_FCST_YN			= T2.EDI_FCST_YN  
+									  AND T1.CUSTOMER_PSI			= T2.CUSTOMER_PSI  
+									  AND T1.UPLOAD_UOM				= T2.UPLOAD_UOM  
+									  AND T1.UPLOAD_BUCKET_TYPE		= T2.UPLOAD_BUCKET_TYPE  
+									  AND T2.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''         
+								WHERE  1 = 1  
+								) CF    
+						LEFT JOIN SCM_SYS_CALENDAR_M C WITH(NOLOCK)    
+							   ON (C.BASIS_YYYYMMDD = CF.SUMMARY_BUCKET_VALUE    
+							  AND C.BASIS_YYYYMMDD BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]'')       
+						, SCM_MST_SITE S WITH(NOLOCK)  
+						WHERE  1 = 1  
+						AND CF.DIVISION_ID   = S.DIVISION_ID  
+						AND CF.CUSTOMER_CODE = S.END_CUSTOMER  
+						AND CF.SCM_SITE_ID   = S.SCM_SITE_ID  
+						[@p_dept_id]                        
+						AND CF.UPLOAD_BUCKET_TYPE  = ''[@v_bucket_type]''/*[E20250326-000842]_Customer FCST Master 조회 로직 수정*/                    
+					)  
+  
+			SELECT M.PLAN_WEEK, M.DIVISION_ID, M.DEPT_ID, M.CUSTOMER_CODE, M.SCM_SITE_ID        
+				 , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+											 WHEN ''WEEKLY'' THEN 2  
+											 WHEN ''MONTHLY'' THEN 3 END AS UPLOAD_ORDER  
+				 , M.SUMMARY_BUCKET_TYPE, M.MEASURE_GROUP, M.MEASURE, M.EDI_FCST_YN, M.CUSTOMER_PSI  
+				 , M.UPLOAD_UOM, M.UPLOAD_BUCKET_TYPE  
+				 /*-- , M.VALID_YN */ 
+				 , M.MASTER_VALID_YN AS VALID_YN  
+				 , CASE WHEN (([dbo].[FN_GET_DEPT_LIST](''[@p_created_by]'', M.DEPT_ID) = ''Y'') OR ''[@v_group_id]'' =''ADMIN'')   
+						THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG  
+				 [@v_iteration]      
+			FROM  MASTER M WITH(NOLOCK)  
+			LEFT OUTER JOIN DM_MST_CUSTOMER_FCST CF WITH(NOLOCK)  
+						 ON (M.PLAN_WEEK			= CF.PLAN_WEEK  
+						AND M.DIVISION_ID			= CF.DIVISION_ID  
+						AND M.CUSTOMER_CODE			= CF.CUSTOMER_CODE  
+						AND M.SCM_SITE_ID			= CF.SCM_SITE_ID  
+						AND M.SUMMARY_BUCKET_TYPE	= CF.SUMMARY_BUCKET_TYPE  
+						AND M.MEASURE_GROUP			= CF.MEASURE_GROUP  
+						AND M.MEAS"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","1","/*  
+ * Program ID  : DMF0007_GET_CUST_FCST_DATA                                                               
+ * Description  :  
+ * Program History  
+ *===================================================================================================  
+ *   Date       In Charge      Description  
+ *===================================================================================================  
+ * 2017/10/25  SongDH       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트   
+ * 2018/05/30  JYE   복수 팀 권한 관련  수정    
+ ** 20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리  
+ * 20221024  ROSIA27  신규 작성  
+ * 2023. 02. 28   chano0612 [E20230227-000456]소형사업부 RPA 업로드 시 GSCM Fail 발생 -- EXCEL UPLOAD
+*/  
+CREATE PROCEDURE [dbo].[DMF0007_GET_CUST_FCST_DATA]  
+    @p_plan_week		NVARCHAR(6),  
+    @p_division_id		NVARCHAR(50),  
+    @p_dept_id			NVARCHAR(MAX),  
+    @p_end_customer	NVARCHAR(100),  
+    @p_scm_site_id		NVARCHAR(100),  
+    @p_bucket_type		NVARCHAR(100),  
+    @p_valid_yn			NVARCHAR(3),  
+    @p_created_by		NVARCHAR(50),  
+	@p_user_group		NVARCHAR(100)  
+AS
+BEGIN  
+    SET NOCOUNT ON;  
+  
+    DECLARE @v_sql_text				NVARCHAR(MAX);  
+    DECLARE @v_iteration				NVARCHAR(MAX);  
+    DECLARE @v_column_text			NVARCHAR(200);  
+    DECLARE @v_column_name		NVARCHAR(20);  
+    DECLARE @v_weekstart_date		NVARCHAR(8);  
+    DECLARE @p_param_list			NVARCHAR(4000);  
+	DECLARE @v_plan_week			NVARCHAR(6);    
+    DECLARE @v_start_week			NVARCHAR(8);    
+    DECLARE @v_end_week			NVARCHAR(8);  
+    DECLARE @v_start_yyyymmdd	NVARCHAR(8);    
+    DECLARE @v_end_yyyymmdd	NVARCHAR(8);  
+    DECLARE @v_bucket_type			NVARCHAR(10);  
+  
+	DECLARE @v_group_id				NVARCHAR(50)='';  
+  
+	---------------------------------------------------------------------------------  
+	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (BEGIN)  
+	---------------------------------------------------------------------------------  
+	IF ISNULL((  
+		SELECT COUNT(1) FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK)
+		WHERE LOOKUP_TYPE = 'GET_ADMIN_GROUP'
+		AND VALID_YN = 'Y'
+		AND SEGMENT2 = 'ALL'  -- 'ALL'인경우 DM Planner (W/S) 제외 / 주석처리인경우 DM Planner (W/S) 포함
+		AND SEGMENT1 = @p_user_group  
+				  ), 0) > 0  
+		BEGIN  
+			SET @v_group_id = 'ADMIN'  
+		END  
+	---------------------------------------------------------------------------------  
+	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (END)  
+	---------------------------------------------------------------------------------  
+    SET @v_start_week = '';  
+    SET @v_end_week = '';  
+  
+    SET @v_start_week = @p_plan_week;  
+    SET @v_bucket_type = @p_bucket_type;  
+  
+	SELECT @v_plan_week = C.ISO_YYYYWW  
+    FROM   [dbo].[SCM_SYS_CALENDAR_M] C WITH(NOLOCK)  
+    WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112);  
+	IF @v_start_week = ''
+		BEGIN  
+			IF @v_bucket_type = 'DAILY'              
+				SELECT @v_start_week			= MIN(C.BASIS_YYYYMMDD)   
+						 , @v_start_yyyymmdd	= MIN(C.BASIS_YYYYMMDD)   
+				FROM  [dbo].[SCM_SYS_CALENDAR_M] C  WITH(NOLOCK)   
+						 , (SELECT C.ISO_YYYYWW  
+							FROM  [dbo].[SCM_SYS_CALENDAR_M] C WITH(NOLOCK)   
+							WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)  
+						   ) T  
+				WHERE C.ISO_YYYYWW = T.ISO_YYYYWW;
+
+			ELSE IF @v_bucket_type = 'WEEKLY'  
+				SELECT @v_start_week			= MIN(C.ISO_YYYYWW)  
+						 , @v_start_yyyymmdd	= MIN(C.BASIS_YYYYMMDD)  
+				FROM  [dbo].[SCM_SYS_CALENDAR_M] C  WITH(NOLOCK)   
+						 , (SELECT C.ISO_YYYYWW      AS ISO_YYYYWW  
+							FROM  [dbo].[SCM_SYS_CALENDAR_M] C WITH(NOLOCK)  
+							WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)  
+						   ) T  
+				WHERE C.ISO_YYYYWW = T.ISO_YYYYWW;
+
+			ELSE IF @v_bucket_type = 'MONTHLY'  
+				SELECT @v_start_week     = T.BASIS_YYYYMM  
+						 , @v_start_yyyymmdd = T.BASIS_YYYYMMDD  
+				FROM  (SELECT MIN(C.BASIS_YYYYMM)		AS BASIS_Y"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","2","YYYMM  
+									 , MIN(C.BASIS_YYYYMMDD)	AS BASIS_YYYYMMDD  
+							FROM  [dbo].[SCM_SYS_CALENDAR_M] C WITH(NOLOCK)  
+							WHERE C.BASIS_YYYYMM = CONVERT(CHAR(6), CURRENT_TIMESTAMP, 112)  
+						   ) T;
+		END  
+
+	ELSE  
+		SET @v_start_week = @p_plan_week;    
+         
+		BEGIN  
+			IF @v_bucket_type = 'DAILY'  
+				SELECT @v_end_week			= C.BASIS_YYYYMMDD  
+						 , @v_end_yyyymmdd	= C.BASIS_YYYYMMDD  
+				FROM  [dbo].[SCM_SYS_CALENDAR_M] C WITH(NOLOCK)  
+				WHERE C.BASIS_YYYYMMDD = CONVERT(CHAR(8), DATEADD(MM, 12, CURRENT_TIMESTAMP), 112);  
+
+			ELSE IF @v_bucket_type = 'WEEKLY'  
+				SELECT @v_end_week			= T.ISO_YYYYWW  
+						 , @v_end_yyyymmdd	= T.BASIS_YYYYMMDD  
+				FROM  (SELECT MAX(ISO_YYYYWW)			AS ISO_YYYYWW  
+									 , MAX(C.BASIS_YYYYMMDD) AS BASIS_YYYYMMDD  
+							FROM  [dbo].[SCM_SYS_CALENDAR_M] C WITH(NOLOCK)  
+				WHERE  C.BASIS_YYYYMMDD = CONVERT(CHAR(8), DATEADD(MM, 30, CURRENT_TIMESTAMP), 112)  
+						   ) T;
+
+			ELSE IF @v_bucket_type = 'MONTHLY'  
+				SELECT @v_end_week     = T.BASIS_YYYYMM  
+						 , @v_end_yyyymmdd = T.BASIS_YYYYMMDD  
+				FROM  (SELECT MAX(BASIS_YYYYMM)      AS BASIS_YYYYMM  
+									 , MAX(C.BASIS_YYYYMMDD)  AS BASIS_YYYYMMDD  
+							FROM  [dbo].[SCM_SYS_CALENDAR_M] C  WITH(NOLOCK)  
+							WHERE C.BASIS_YYYYMM = CONVERT(CHAR(6), DATEADD(MM, 30, CURRENT_TIMESTAMP), 112)  
+						   ) T;
+		END 
+  
+		SET @v_iteration = '';  
+  
+		IF @v_bucket_type = 'DAILY'  
+			BEGIN  
+				DECLARE c_bucket CURSOR FAST_FORWARD FOR  
+					SELECT 'D_' + A.BASIS_YYYYMMDD  AS COLUMN_NAME  
+							 , A.BASIS_YYYYMMDD         AS BASIS_YYYYMMDD  
+					FROM  [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)  
+					WHERE 1 = 1  
+					AND A.BASIS_YYYYMMDD >=  @v_start_week  
+					AND A.BASIS_YYYYMMDD <= @v_end_week;       
+  
+				OPEN c_bucket;  
+				FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date  
+				WHILE @@FETCH_STATUS = 0     
+				BEGIN  
+  
+					SET @v_column_text = ', MAX(CASE WHEN CF.SUMMARY_BUCKET_VALUE = ''[@v_weekstart_date]'' THEN CASE CF.VALID_YN WHEN ''Y'' THEN CF.VALID_YN ELSE '''' END ELSE '''' END) AS [@v_column_name] ';  
+   
+					SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);  
+					SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);  
+  
+					SET @v_iteration = @v_iteration + @v_column_text;   
+      
+					FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date  
+				END
+  
+				CLOSE c_bucket;    
+				DEALLOCATE c_bucket;  
+			END
+			
+		ELSE IF @v_bucket_type = 'WEEKLY'  
+			BEGIN  
+				DECLARE c_bucket CURSOR FAST_FORWARD FOR  
+					SELECT 'D_' + MIN(A.BASIS_START_DATE)  AS COLUMN_NAME  
+							 , MIN(A.BASIS_YYYYMMDD)           AS BASIS_YYYYMMDD  
+					FROM  [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)  
+					WHERE 1 = 1  
+					AND A.ISO_YYYYWW >=  @v_start_week  
+					AND A.ISO_YYYYWW <= @v_end_week       
+					GROUP BY A.ISO_YYYYWW;              
+  
+				OPEN c_bucket;  
+				FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date  
+				WHILE @@FETCH_STATUS = 0     
+				BEGIN   
+					SET @v_column_text = ', MAX(CASE WHEN CF.SUMMARY_BUCKET_VALUE = ''[@v_weekstart_date]'' THEN CASE CF.VALID_YN WHEN ''Y'' THEN CF.VALID_YN ELSE '''' END ELSE '''' END) AS [@v_column_name] ';  
+   
+					SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);  
+					SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);    
+					SET @v_iteration = @v_iteration + @v_column_text;   
+      
+					FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date  
+				END
+  
+				CLOSE c_bucket;    
+				DEALLOCATE c_bucket;  
+			END
+
+		ELSE IF @v_bucket_type = 'MONTHLY'  
+			BEGIN  
+				DECLARE c_bucket CURSOR FAST_FORWARD FOR  
+					SELECT 'D_' + MIN(A.BASIS_YYYYMMDD)  AS COLUMN_NAME  
+							 , MIN(A.BASIS_YYYYMMDD)         AS BASIS_YYYYMMDD  
+					FROM  [dbo].[SCM_SYS_CAL"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","3","ENDAR_M] A WITH(NOLOCK)  
+					WHERE 1 = 1  
+					AND A.BASIS_YYYYMM >= @v_start_week  
+					AND A.BASIS_YYYYMM <= @v_end_week   
+					GROUP BY MONTH_NAME;  
+    
+				OPEN c_bucket;  
+				FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date  
+
+				WHILE @@FETCH_STATUS = 0     
+				BEGIN  
+					SET @v_column_text = ', MAX(CASE WHEN CF.SUMMARY_BUCKET_VALUE = ''[@v_weekstart_date]'' THEN CASE CF.VALID_YN WHEN ''Y'' THEN CF.VALID_YN ELSE '''' END ELSE '''' END) AS [@v_column_name] ';  
+   
+					SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);  
+					SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);  
+  
+					SET @v_iteration = @v_iteration + @v_column_text;   
+      
+					FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date  
+				END
+  
+				CLOSE c_bucket;    
+				DEALLOCATE c_bucket;  
+			END
+			
+		--소형사업부 추가(END CUSTOMER 체크 안함)
+		IF @p_division_id = '40' --[E20230227-000456]소형사업부 RPA 업로드 시 GSCM Fail 발생 -- EXCEL UPLOAD
+			BEGIN
+				SET @v_sql_text = '  
+					WITH MASTER AS   
+							(
+							 SELECT CF.PLAN_WEEK  
+									  , CF.DIVISION_ID   
+									  , S.DEPT_ID    
+									  , CF.CUSTOMER_CODE     
+									  , CF.SCM_SITE_ID        
+									  , CF.SUMMARY_BUCKET_TYPE  
+									  , CF.MEASURE_GROUP  
+									  , CF.MEASURE  
+									  , CF.EDI_FCST_YN  
+									  , CF.CUSTOMER_PSI  
+									  , CF.UPLOAD_UOM  
+									  , CF.UPLOAD_BUCKET_TYPE  
+									  --, CF.VALID_YN  
+									  , CF.MASTER_VALID_YN  
+									  , C.BASIS_YYYYMMDD AS SUMMARY_BUCKET_VALUE   
+							 FROM ( SELECT T1.PLAN_WEEK  
+												  , T1.DIVISION_ID   
+												  , T1.CUSTOMER_CODE     
+												  , T1.SCM_SITE_ID        
+												  , T1.SUMMARY_BUCKET_TYPE  
+												  , T1.MEASURE_GROUP  
+												  , T1.MEASURE  
+												  , T1.EDI_FCST_YN  
+												  , T1.CUSTOMER_PSI  
+												  , T1.UPLOAD_UOM  
+												  , T1.UPLOAD_BUCKET_TYPE  
+												  , T1.MASTER_VALID_YN  
+												  , T2.VALID_YN  
+												  , T2.SUMMARY_BUCKET_VALUE  
+										FROM ( SELECT PLAN_WEEK  
+															 , DIVISION_ID   
+															 , CUSTOMER_CODE     
+															 , SCM_SITE_ID        
+															 , SUMMARY_BUCKET_TYPE  
+															 , MEASURE_GROUP  
+															 , MEASURE  
+															 , EDI_FCST_YN  
+															 , CUSTOMER_PSI  
+															 , UPLOAD_UOM  
+															 , UPLOAD_BUCKET_TYPE  
+															 , MAX(VALID_YN) AS MASTER_VALID_YN              
+													FROM [dbo].[DM_MST_CUSTOMER_FCST] AS CF WITH(NOLOCK)    
+													WHERE 1 = 1  
+													AND  MEASURE_GROUP = ''CUST_FCST''  
+													AND  PLAN_WEEK     = ''[@p_plan_week]''   
+													AND  SUMMARY_BUCKET_VALUE BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]''  
+														[@p_division_id]    
+														--[@p_end_customer]   
+														[@p_scm_site_id]  
+														[@p_bucket_type]                 
+													GROUP BY PLAN_WEEK  
+																  , DIVISION_ID   
+																  , CUSTOMER_CODE     
+																  , SCM_SITE_ID        
+																  , SUMMARY_BUCKET_TYPE  
+																  , MEASURE_GROUP  
+																  , MEASURE  
+																  , EDI_FCST_YN  
+																  , CUSTOMER_PSI  
+																  , UPLOAD_UOM  
+																  , UPLOAD_BUCKET_TYPE  
+												  ) T1  
+										LEFT JOIN   [dbo].[DM_MST_CUSTOMER_FCST]     T2  WITH(NOLOCK)      
+											ON   T1.PLAN_WEEK    = T2.PLAN_WEEK  
+												AND T1.DIVISION_ID    = T2.DIVISION_ID   
+												AND T1.CUSTOMER_CODE      = T2.CUSTOMER_CODE     
+												AND T1.SCM_SITE_ID        = T2.SCM_SITE_ID        
+												AND T1.SUMMARY_BUCKET_TYPE  = T2.SUMMARY_BUCKET_TYPE  
+												AND T1.MEASURE_GROUP   = T2.MEASURE_GROUP  
+												AND T1.MEASURE     = T2.MEASURE  
+												AND T1.EDI_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","4","FCST_YN    = T2.EDI_FCST_YN  
+												AND T1.CUSTOMER_PSI    = T2.CUSTOMER_PSI  
+												AND T1.UPLOAD_UOM    = T2.UPLOAD_UOM  
+												AND T1.UPLOAD_BUCKET_TYPE  = T2.UPLOAD_BUCKET_TYPE  
+												AND T2.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''         
+										WHERE  1 = 1  
+									  ) CF    
+							 LEFT JOIN [dbo].[SCM_SYS_CALENDAR_M]    C  WITH(NOLOCK)    
+								ON (C.BASIS_YYYYMMDD = CF.SUMMARY_BUCKET_VALUE    
+									AND C.BASIS_YYYYMMDD BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]'')       
+										  , [dbo].[SCM_MST_SITE]         S   WITH(NOLOCK)  
+							 WHERE  1 = 1  
+							 AND CF.DIVISION_ID   = S.DIVISION_ID  
+							 --AND CF.CUSTOMER_CODE = S.END_CUSTOMER  
+							 AND CF.SCM_SITE_ID   = S.SCM_SITE_ID  
+								--[@p_dept_id]                                            
+							)  
+  
+					SELECT M.PLAN_WEEK  
+							 , M.DIVISION_ID   
+							 , M.DEPT_ID    
+							 , M.CUSTOMER_CODE     
+							 , M.SCM_SITE_ID        
+							 , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+									   WHEN ''WEEKLY'' THEN 2  
+									   WHEN ''MONTHLY'' THEN 3 END AS UPLOAD_ORDER  
+							 , M.SUMMARY_BUCKET_TYPE  
+							 , M.MEASURE_GROUP  
+							 , M.MEASURE  
+							 , M.EDI_FCST_YN  
+							 , M.CUSTOMER_PSI  
+							 , M.UPLOAD_UOM    
+							 , M.UPLOAD_BUCKET_TYPE  
+							 -- , M.VALID_YN  
+							 , M.MASTER_VALID_YN AS VALID_YN  
+							 , CASE WHEN (([dbo].[FN_GET_DEPT_LIST](''[@p_created_by]'', M.DEPT_ID) = ''Y'') OR ''[@v_group_id]'' =''ADMIN'')   
+										THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG  
+							[@v_iteration]      
+					FROM  MASTER M WITH(NOLOCK)  
+					LEFT OUTER JOIN [dbo].[DM_MST_CUSTOMER_FCST] CF  WITH(NOLOCK)  
+						ON (M.PLAN_WEEK     = CF.PLAN_WEEK  
+							AND M.DIVISION_ID          = CF.DIVISION_ID  
+							AND M.CUSTOMER_CODE        = CF.CUSTOMER_CODE  
+							AND M.SCM_SITE_ID          = CF.SCM_SITE_ID  
+							AND M.SUMMARY_BUCKET_TYPE  = CF.SUMMARY_BUCKET_TYPE  
+							AND M.MEASURE_GROUP        = CF.MEASURE_GROUP  
+							AND M.MEASURE              = CF.MEASURE  
+							AND M.SUMMARY_BUCKET_VALUE = CF.SUMMARY_BUCKET_VALUE  
+							AND M.EDI_FCST_YN          = CF.EDI_FCST_YN  
+							AND M.CUSTOMER_PSI         = CF.CUSTOMER_PSI  
+							AND M.UPLOAD_UOM     = CF.UPLOAD_UOM  
+							AND M.UPLOAD_BUCKET_TYPE   = CF.UPLOAD_BUCKET_TYPE  
+								[@p_division_id]          
+							--	[@p_end_customer]   
+								[@p_scm_site_id]  
+								[@p_bucket_type]     
+							-- AND CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''  
+							)  
+					WHERE  1 = 1  
+					[@p_valid_yn]  
+					--AND    CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''  
+					GROUP BY M.PLAN_WEEK  
+								  , M.DIVISION_ID    
+								  , M.DEPT_ID   
+								  , M.CUSTOMER_CODE     
+								  , M.SCM_SITE_ID        
+								  , M.SUMMARY_BUCKET_TYPE  
+								  , M.MEASURE  
+								  , M.MEASURE_GROUP  
+								  , M.EDI_FCST_YN  
+								  , M.CUSTOMER_PSI  
+								  , M.UPLOAD_UOM  
+								  , M.UPLOAD_BUCKET_TYPE  
+								  -- , M.VALID_YN  
+								  , M.MASTER_VALID_YN  
+								  , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+																				WHEN ''WEEKLY'' THEN 2  
+																				WHEN ''MONTHLY'' THEN 3 END  
+					ORDER BY DIVISION_ID  
+								  , DEPT_ID  
+								  , CUSTOMER_CODE  
+								  , SCM_SITE_ID  
+								  , UPLOAD_ORDER  
+								  , MEASURE_GROUP  
+								  , MEASURE  
+       
+  
+					';
+
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]',				@v_iteration);  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_plan_week]',			@v_plan_week);  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@v_start_yyyymmdd]',	@v_start_yyyymmdd);  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_yyyymmdd]',	@v_end_yyyymmdd);  
+				SET @v_sql_text = REPLACE(@v_sql_text,'["
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","5","@p_division_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.DIVISION_ID'			, 'IN', @p_division_id));  
+				--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_dept_id]',				[dbo].[FN_SCM_GET_WHERE_SQL]('S.DEPT_ID'					, 'IN', @p_dept_id));  
+				--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_end_customer]',		[dbo].[FN_SCM_GET_WHERE_SQL]('CF.CUSTOMER_CODE'   , 'IN', @p_end_customer));  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_scm_site_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SCM_SITE_ID'			, 'IN', @p_scm_site_id));  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_bucket_type]',		[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SUMMARY_BUCKET_TYPE', 'EQ', @p_bucket_type));  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_valid_yn]',				[dbo].[FN_SCM_GET_WHERE_SQL]('M.MASTER_VALID_YN'	, 'EQ', @p_valid_yn));  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_created_by]',			@p_created_by);  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@v_group_id]',			@v_group_id); 
+
+			END
+				
+		ELSE
+			BEGIN
+				SET @v_sql_text = '  
+					WITH MASTER AS   
+							(
+							 SELECT CF.PLAN_WEEK  
+									  , CF.DIVISION_ID   
+									  , S.DEPT_ID    
+									  , CF.CUSTOMER_CODE     
+									  , CF.SCM_SITE_ID        
+									  , CF.SUMMARY_BUCKET_TYPE  
+									  , CF.MEASURE_GROUP  
+									  , CF.MEASURE  
+									  , CF.EDI_FCST_YN  
+									  , CF.CUSTOMER_PSI  
+									  , CF.UPLOAD_UOM  
+									  , CF.UPLOAD_BUCKET_TYPE  
+									  --, CF.VALID_YN  
+									  , CF.MASTER_VALID_YN  
+									  , C.BASIS_YYYYMMDD AS SUMMARY_BUCKET_VALUE   
+							 FROM ( SELECT T1.PLAN_WEEK  
+												  , T1.DIVISION_ID   
+												  , T1.CUSTOMER_CODE     
+												  , T1.SCM_SITE_ID        
+												  , T1.SUMMARY_BUCKET_TYPE  
+												  , T1.MEASURE_GROUP  
+												  , T1.MEASURE  
+												  , T1.EDI_FCST_YN  
+												  , T1.CUSTOMER_PSI  
+												  , T1.UPLOAD_UOM  
+												  , T1.UPLOAD_BUCKET_TYPE  
+												  , T1.MASTER_VALID_YN  
+												  , T2.VALID_YN  
+												  , T2.SUMMARY_BUCKET_VALUE  
+										FROM ( SELECT PLAN_WEEK  
+															 , DIVISION_ID   
+															 , CUSTOMER_CODE     
+															 , SCM_SITE_ID        
+															 , SUMMARY_BUCKET_TYPE  
+															 , MEASURE_GROUP  
+															 , MEASURE  
+															 , EDI_FCST_YN  
+															 , CUSTOMER_PSI  
+															 , UPLOAD_UOM  
+															 , UPLOAD_BUCKET_TYPE  
+															 , MAX(VALID_YN) AS MASTER_VALID_YN              
+													FROM [dbo].[DM_MST_CUSTOMER_FCST] AS CF WITH(NOLOCK)    
+													WHERE 1 = 1  
+													AND  MEASURE_GROUP = ''CUST_FCST''  
+													AND  PLAN_WEEK     = ''[@p_plan_week]''   
+													AND  SUMMARY_BUCKET_VALUE BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]''  
+														[@p_division_id]    
+														[@p_end_customer]   
+														[@p_scm_site_id]  
+														[@p_bucket_type]                 
+													GROUP BY PLAN_WEEK  
+																  , DIVISION_ID   
+																  , CUSTOMER_CODE     
+																  , SCM_SITE_ID        
+																  , SUMMARY_BUCKET_TYPE  
+																  , MEASURE_GROUP  
+																  , MEASURE  
+																  , EDI_FCST_YN  
+																  , CUSTOMER_PSI  
+																  , UPLOAD_UOM  
+																  , UPLOAD_BUCKET_TYPE  
+												  ) T1  
+										LEFT JOIN   [dbo].[DM_MST_CUSTOMER_FCST]     T2  WITH(NOLOCK)      
+											ON   T1.PLAN_WEEK    = T2.PLAN_WEEK  
+												AND T1.DIVISION_ID    = T2.DIVISION_ID   
+												AND T1.CUSTOMER_CODE      = T2.CUSTOMER_CODE     
+												AND T1.SCM_SITE_ID        = T2.SCM_SITE_ID        
+												AND T1.SUMMARY_BUCKET_TYPE  = T2.SUMMARY_BUCKET_TYPE  
+												AND T1.MEASURE_GROUP   = T2.MEASURE_GROUP  
+												AND T1.MEASURE     = T2.MEASURE  
+												AND T1.EDI_FCST_YN    = T2.EDI_FCST_YN  
+												AND T1.CUSTOMER_PSI    = "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","6","T2.CUSTOMER_PSI  
+												AND T1.UPLOAD_UOM    = T2.UPLOAD_UOM  
+												AND T1.UPLOAD_BUCKET_TYPE  = T2.UPLOAD_BUCKET_TYPE  
+												AND T2.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''         
+										WHERE  1 = 1  
+									  ) CF    
+							 LEFT JOIN [dbo].[SCM_SYS_CALENDAR_M]    C  WITH(NOLOCK)    
+								ON (C.BASIS_YYYYMMDD = CF.SUMMARY_BUCKET_VALUE    
+									AND C.BASIS_YYYYMMDD BETWEEN ''20000101'' AND ''[@v_end_yyyymmdd]'')       
+										  , [dbo].[SCM_MST_SITE]         S   WITH(NOLOCK)  
+							 WHERE  1 = 1  
+							 AND CF.DIVISION_ID   = S.DIVISION_ID  
+							 AND CF.CUSTOMER_CODE = S.END_CUSTOMER  
+							 AND CF.SCM_SITE_ID   = S.SCM_SITE_ID  
+								[@p_dept_id]                                            
+							)  
+  
+					SELECT M.PLAN_WEEK  
+							 , M.DIVISION_ID   
+							 , M.DEPT_ID    
+							 , M.CUSTOMER_CODE     
+							 , M.SCM_SITE_ID        
+							 , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+									   WHEN ''WEEKLY'' THEN 2  
+									   WHEN ''MONTHLY'' THEN 3 END AS UPLOAD_ORDER  
+							 , M.SUMMARY_BUCKET_TYPE  
+							 , M.MEASURE_GROUP  
+							 , M.MEASURE  
+							 , M.EDI_FCST_YN  
+							 , M.CUSTOMER_PSI  
+							 , M.UPLOAD_UOM    
+							 , M.UPLOAD_BUCKET_TYPE  
+							 -- , M.VALID_YN  
+							 , M.MASTER_VALID_YN AS VALID_YN  
+							 , CASE WHEN (([dbo].[FN_GET_DEPT_LIST](''[@p_created_by]'', M.DEPT_ID) = ''Y'') OR ''[@v_group_id]'' =''ADMIN'')   
+										THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG  
+							[@v_iteration]      
+					FROM  MASTER M WITH(NOLOCK)  
+					LEFT OUTER JOIN [dbo].[DM_MST_CUSTOMER_FCST] CF  WITH(NOLOCK)  
+						ON (M.PLAN_WEEK     = CF.PLAN_WEEK  
+							AND M.DIVISION_ID          = CF.DIVISION_ID  
+							AND M.CUSTOMER_CODE        = CF.CUSTOMER_CODE  
+							AND M.SCM_SITE_ID          = CF.SCM_SITE_ID  
+							AND M.SUMMARY_BUCKET_TYPE  = CF.SUMMARY_BUCKET_TYPE  
+							AND M.MEASURE_GROUP        = CF.MEASURE_GROUP  
+							AND M.MEASURE              = CF.MEASURE  
+							AND M.SUMMARY_BUCKET_VALUE = CF.SUMMARY_BUCKET_VALUE  
+							AND M.EDI_FCST_YN          = CF.EDI_FCST_YN  
+							AND M.CUSTOMER_PSI         = CF.CUSTOMER_PSI  
+							AND M.UPLOAD_UOM     = CF.UPLOAD_UOM  
+							AND M.UPLOAD_BUCKET_TYPE   = CF.UPLOAD_BUCKET_TYPE  
+								[@p_division_id]          
+								[@p_end_customer]   
+								[@p_scm_site_id]  
+								[@p_bucket_type]     
+							-- AND CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''  
+							)  
+					WHERE  1 = 1  
+					[@p_valid_yn]  
+					--AND    CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''  
+					GROUP BY M.PLAN_WEEK  
+								  , M.DIVISION_ID    
+								  , M.DEPT_ID   
+								  , M.CUSTOMER_CODE     
+								  , M.SCM_SITE_ID        
+								  , M.SUMMARY_BUCKET_TYPE  
+								  , M.MEASURE  
+								  , M.MEASURE_GROUP  
+								  , M.EDI_FCST_YN  
+								  , M.CUSTOMER_PSI  
+								  , M.UPLOAD_UOM  
+								  , M.UPLOAD_BUCKET_TYPE  
+								  -- , M.VALID_YN  
+								  , M.MASTER_VALID_YN  
+								  , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+																				WHEN ''WEEKLY'' THEN 2  
+																				WHEN ''MONTHLY'' THEN 3 END  
+					ORDER BY DIVISION_ID  
+								  , DEPT_ID  
+								  , CUSTOMER_CODE  
+								  , SCM_SITE_ID  
+								  , UPLOAD_ORDER  
+								  , MEASURE_GROUP  
+								  , MEASURE  
+       
+  
+					';
+
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]',				@v_iteration);  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_plan_week]',			@v_plan_week);  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@v_start_yyyymmdd]',	@v_start_yyyymmdd);  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_yyyymmdd]',	@v_end_yyyymmdd);  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_division_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.DIVISION_ID'			, 'IN'"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","7",", @p_division_id));  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_dept_id]',				[dbo].[FN_SCM_GET_WHERE_SQL]('S.DEPT_ID'					, 'IN', @p_dept_id));  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_end_customer]',		[dbo].[FN_SCM_GET_WHERE_SQL]('CF.CUSTOMER_CODE'   , 'IN', @p_end_customer));  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_scm_site_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SCM_SITE_ID'			, 'IN', @p_scm_site_id));  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_bucket_type]',		[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SUMMARY_BUCKET_TYPE', 'EQ', @p_bucket_type));  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_valid_yn]',				[dbo].[FN_SCM_GET_WHERE_SQL]('M.MASTER_VALID_YN'	, 'EQ', @p_valid_yn));  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@p_created_by]',			@p_created_by);  
+				SET @v_sql_text = REPLACE(@v_sql_text,'[@v_group_id]',			@v_group_id); 
+
+			END		 
+  
+  --SET @p_debug = @v_sql_text;  
+  --RETURN @v_sql_text;  
+  --SELECT @v_sql_text;  
+
+--EXEC DMF0007_GET_CUST_FCST_DATA '', '40', '58570391,70000479,50057457,58124984,70021341,70000478,58520274,70021343,58607728,58260040,70090867,58235660,58666055,58099468', 'ALL', 'ALL', 'WEEKLY', 'ALL', 'kdmcc14', 'ADMIN'
+
+  EXEC(@v_sql_text);  
+  EXEC SP_EXECUTESQL @v_sql_text; --, @p_param_list,   
+                                  --@p_plan_week, @p_division_code, @p_customer_id, @p_fcst_sit_id, @p_measure, @p_edi_fcst_yn, @p_valid_yn;  
+  
+  
+-- xml확인할경우  
+-- SELECT CONVERT(TEXT, @v_sql_text)  
+-- FOR XML PATH('')--,ROOT('x')    
+   
+            
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_GET_CUST_PSI_DATA","406344562","1","/*
+ * Program ID  : DMF0007_GET_CUST_PSI_DATA                                                             
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/02/23  SongDH       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 
+ * 2018/05/30  JYE			복수 팀 권한 관련  수정  
+** 20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리
+ * 20221026 KDW2819	[C20221024-000507]CUST FCST Upload 오류 수정
+*/
+CREATE PROCEDURE [dbo].[DMF0007_GET_CUST_PSI_DATA]
+    @p_plan_week     NVARCHAR(6),
+    @p_division_id   NVARCHAR(50),
+    @p_dept_id       NVARCHAR(100),
+    @p_end_customer  NVARCHAR(100),
+    @p_scm_site_id   NVARCHAR(100),
+    @p_bucket_type   NVARCHAR(100),
+    @p_valid_yn      NVARCHAR(3),
+    @p_created_by	   NVARCHAR(50), --, @p_debug         NVARCHAR(MAX) OUTPUT
+	@p_user_group		NVARCHAR(100)
+AS  
+  
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @v_sql_text       AS NVARCHAR(MAX);
+    DECLARE @v_iteration      AS NVARCHAR(MAX);
+    DECLARE @v_column_text    AS NVARCHAR(200);
+    --DECLARE @v_iteration      AS NVARCHAR(4000);
+    DECLARE @v_column_name    AS NVARCHAR(20);
+    DECLARE @v_weekstart_date AS NVARCHAR(8);
+    DECLARE @p_param_list     AS NVARCHAR(4000);
+	DECLARE @v_plan_week      AS NVARCHAR(6);  
+    DECLARE @v_start_week     AS NVARCHAR(8);  
+    DECLARE @v_end_week       AS NVARCHAR(8);
+    DECLARE @v_start_yyyymmdd AS NVARCHAR(8);  
+    DECLARE @v_end_yyyymmdd   AS NVARCHAR(8);
+    DECLARE @v_bucket_type    AS NVARCHAR(10);
+
+	DECLARE @v_group_id nvarchar(50)='';
+
+	--IF @p_user_group = 'ADMIN' OR @p_user_group = 'DM ADMIN'
+	--	SET @v_group_id = 'ADMIN'
+
+	---------------------------------------------------------------------------------
+	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (BEGIN)
+	---------------------------------------------------------------------------------
+	IF ISNULL((
+				SELECT COUNT(1) FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+					where LOOKUP_TYPE = 'GET_ADMIN_GROUP' 
+						AND VALID_YN = 'Y'
+						AND SEGMENT2 = 'ALL'  -- 'ALL'인경우 DM Planner (W/S) 제외 / 주석처리인경우 DM Planner (W/S) 포함 
+						AND SEGMENT1 = @p_user_group
+			  ),0) > 0
+		BEGIN
+			SET @v_group_id = 'ADMIN'
+		END
+	---------------------------------------------------------------------------------
+	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (END)
+	---------------------------------------------------------------------------------
+  
+    SET @v_start_week = '';
+    SET @v_end_week = '';
+	SET @v_sql_text = '';
+
+    SET @v_start_week = @p_plan_week;
+    SET @v_bucket_type = @p_bucket_type;
+
+	SELECT @v_plan_week = C.ISO_YYYYWW
+    FROM   [dbo].[SCM_SYS_CALENDAR_M] C  WITH(NOLOCK)
+    WHERE  C.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112);
+  
+    SET @v_sql_text = '
+    SELECT CF.PLAN_WEEK
+         , CF.DIVISION_ID	
+		 , S.DEPT_ID	 
+         , CF.CUSTOMER_CODE   
+		 , CF.SCM_SITE_ID      
+		 , CF.SUMMARY_BUCKET_TYPE
+		 , CF.MEASURE_GROUP
+         , CF.MEASURE
+         , CF.EDI_FCST_YN
+		 , CF.CUSTOMER_PSI
+         , CF.UPLOAD_UOM
+		 , CF.UPLOAD_BUCKET_TYPE
+         , CF.VALID_YN   AS VALID_YN  
+		 , CF.LAST_UPDATED_BY
+		 , CF.LAST_UPDATE_DATE
+		 , CASE WHEN (([dbo].[FN_GET_DEPT_LIST](''[@p_created_by]'', S.DEPT_ID) = ''Y'') OR ''[@v_group_id]'' =''ADMIN'') 
+			THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG
+    FROM   [dbo].[DM_MST_CUSTOMER_FCST] CF  WITH(NOLOCK)
+	     , [dbo].[SCM_MST_SITE]         S   WITH(NOLOCK)
+    WHERE  1 = 1
+	AND    CF.DIVISION_ID   = S.DIVISION_ID
+	AND    CF.CUSTOMER_CODE = S.END_CUSTOMER
+	AND    CF.SCM_SITE_ID   = S.SCM_SITE_ID
+	AND    CF.MEASURE_GROUP = ''PSI''
+	AND    CF.PLAN_WEEK     = ''[@p_plan_week]'' 
+	--AND    CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_GET_CUST_PSI_DATA","406344562","2","start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]''
+	[@p_division_id]  
+	[@p_dept_id]     	
+    [@p_end_customer]	
+    [@p_scm_site_id]
+	[@p_bucket_type]	
+	[@p_valid_yn]    
+/*	GROUP BY CF.PLAN_WEEK
+           , CF.DIVISION_ID		
+		   , S.DEPT_ID 
+           , CF.CUSTOMER_CODE   
+		   , CF.SCM_SITE_ID      
+		   , CF.SUMMARY_BUCKET_TYPE
+           , CF.MEASURE
+		   , CF.MEASURE_GROUP
+           , CF.EDI_FCST_YN
+		   , CF.CUSTOMER_PSI
+           , CF.UPLOAD_UOM
+		   , CF.UPLOAD_BUCKET_TYPE  */
+    ORDER BY CF.DIVISION_ID
+	       , S.DEPT_ID
+           , CF.CUSTOMER_CODE
+           , CF.SCM_SITE_ID
+		   , CF.MEASURE_GROUP
+		   , CF.MEASURE
+  '; 
+  
+  --SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]'     , @v_iteration     );
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_plan_week]'     , @v_plan_week     );
+  --SET @v_sql_text = REPLACE(@v_sql_text,'[@v_start_yyyymmdd]', @v_start_yyyymmdd);
+  --SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_yyyymmdd]'  , @v_end_yyyymmdd  );
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_division_id]'   , [dbo].[FN_SCM_GET_WHERE_SQL]('CF.DIVISION_ID'        , 'IN', @p_division_id ));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_dept_id]'       , [dbo].[FN_SCM_GET_WHERE_SQL]('S.DEPT_ID'             , 'IN', @p_dept_id     ));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_end_customer]'  , [dbo].[FN_SCM_GET_WHERE_SQL]('CF.CUSTOMER_CODE'      , 'IN', @p_end_customer));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_scm_site_id]'   , [dbo].[FN_SCM_GET_WHERE_SQL]('CF.SCM_SITE_ID'        , 'IN', @p_scm_site_id ));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_bucket_type]'   , [dbo].[FN_SCM_GET_WHERE_SQL]('CF.SUMMARY_BUCKET_TYPE', 'EQ', @p_bucket_type ));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_valid_yn]'      , [dbo].[FN_SCM_GET_WHERE_SQL]('CF.VALID_YN'           , 'EQ', @p_valid_yn    ));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_created_by]'    , @p_created_by    );
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@v_group_id]'    , @v_group_id    );
+
+  --SELECT @v_sql_text;
+
+  --SET @p_debug = @v_sql_text;
+  --RETURN @v_sql_text;
+  --SELECT @v_sql_text;
+
+  --EXEC(@v_sql_text);
+  EXEC SP_EXECUTESQL @v_sql_text; --, @p_param_list, 
+                                  --@p_plan_week, @p_division_code, @p_customer_id, @p_fcst_sit_id, @p_measure, @p_edi_fcst_yn, @p_valid_yn;
+
+								  
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_GET_SPREAD_TITLE","422344619","1","
+/*
+ * Program ID   : DMF0007_GET_SPREAD_TITLE     
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/18  SongDH         Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2022/10/26  KDW2819		  [C20221024-000507]CUST FCST Upload 오류 수정
+ *
+ */
+CREATE PROCEDURE [dbo].[DMF0007_GET_SPREAD_TITLE]
+    @p_plan_week    NVARCHAR(6),
+    @p_bucket_type  NVARCHAR(10),
+    @p_created_by	NVARCHAR(30)
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	DECLARE @v_sql_text       AS NVARCHAR(MAX);
+	DECLARE @v_iteration      AS NVARCHAR(MAX);
+    DECLARE @v_start_week     AS NVARCHAR(8);
+    DECLARE @v_end_week       AS NVARCHAR(8);
+    DECLARE @v_bucket_type    AS NVARCHAR(10);
+	DECLARE @v_user_col_cnt   AS INT;
+	DECLARE @v_user_time_zone AS NVARCHAR(10);
+	DECLARE @v_user_time      AS NVARCHAR(8);
+
+	SET @v_sql_text = '';
+	SET @v_iteration = '';
+    SET @v_start_week = '';
+    SET @v_end_week = '';
+    SET @v_bucket_type = '';
+	SET @v_user_col_cnt = 0;
+
+    SET @v_start_week = @p_plan_week;
+    SET @v_bucket_type = @p_bucket_type;
+	SET @v_user_time_zone = '';
+
+	BEGIN
+	    SELECT @v_user_time_zone = U.TIMEZONE
+		FROM   [dbo].[TB_FX_User] U
+		WHERE  U.UserID = @p_created_by;
+	END
+	
+    IF @v_start_week = ''
+	    BEGIN
+		IF @v_bucket_type = 'DAILY'
+			SELECT @v_start_week = MIN(C.BASIS_YYYYMMDD)
+            FROM   [dbo].[SCM_SYS_CALENDAR_M] C  WITH(NOLOCK) 
+                 , (SELECT C.ISO_YYYYWW
+                    FROM   [dbo].[SCM_SYS_CALENDAR_M] C  WITH(NOLOCK) 
+                    WHERE  C.BASIS_YYYYMMDD = CONVERT(CHAR(8), dbo.FN_MULTY_TIME(@v_user_time_zone), 112)
+	               ) T
+            WHERE  C.ISO_YYYYWW = T.ISO_YYYYWW;
+        ELSE IF @v_bucket_type = 'WEEKLY'
+		    SELECT @v_start_week = C.ISO_YYYYWW
+            FROM   [dbo].[SCM_SYS_CALENDAR_M] C  WITH(NOLOCK)
+            WHERE  C.BASIS_YYYYMMDD = CONVERT(CHAR(8), dbo.FN_MULTY_TIME(@v_user_time_zone), 112);
+		ELSE IF @v_bucket_type = 'MONTHLY'
+		    SELECT @v_start_week =C.BASIS_YYYYMM
+            FROM   [dbo].[SCM_SYS_CALENDAR_M] C  WITH(NOLOCK)
+            WHERE  C.BASIS_YYYYMM = CONVERT(CHAR(6), dbo.FN_MULTY_TIME(@v_user_time_zone), 112);
+		END;
+    ELSE
+        SET @v_start_week = @p_plan_week;  
+    
+
+	BEGIN
+		IF @v_bucket_type = 'DAILY'
+            SELECT @v_end_week = C.BASIS_YYYYMMDD
+            FROM   [dbo].[SCM_SYS_CALENDAR_M] C  WITH(NOLOCK)
+            WHERE  C.BASIS_YYYYMMDD = CONVERT(CHAR(8), DATEADD(MM, 12, dbo.FN_MULTY_TIME(@v_user_time_zone)), 112)
+        ELSE IF @v_bucket_type = 'WEEKLY'
+		    SELECT @v_end_week = ISO_YYYYWW
+            FROM   [dbo].[SCM_SYS_CALENDAR_M] C  WITH(NOLOCK)
+            WHERE  C.BASIS_YYYYMMDD = CONVERT(CHAR(8), DATEADD(MM, 30, dbo.FN_MULTY_TIME(@v_user_time_zone)), 112)
+		ELSE IF @v_bucket_type = 'MONTHLY'
+		    SELECT @v_end_week = BASIS_YYYYMM
+            FROM   [dbo].[SCM_SYS_CALENDAR_M] C  WITH(NOLOCK)
+            WHERE  C.BASIS_YYYYMM = CONVERT(CHAR(6), DATEADD(MM, 30, dbo.FN_MULTY_TIME(@v_user_time_zone)), 112)
+	END;
+    
+	/*
+	SELECT @v_user_col_cnt = COUNT(*)
+	FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+	WHERE  1 = 1
+	AND    U.PROGRAM_ID = 'DMF0007'
+    AND    U.SHEET_NAME = 'Customer FCST'
+    AND    U.USER_ID    = @p_created_by;
+			*/
+
+	IF @v_bucket_type = 'DAILY'
+	    BEGIN
+		SET @v_iteration = '
+		    SELECT ''D_'' + A.BASIS_YYYYMMDD  AS COLUMN_NAME
+		         , A.DAYOFWEEK                       AS SMALL_CLASS_LABEL_NAME  
+		         , A.BASIS_YYYYMMDD             AS BASIS_YYYYMMDD
+		    FROM   [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+		    WHERE  1 = 1
+		    AND    A.BASIS_YYYYMMDD >=  [@v_start_week]
+		    AND    A.BASIS_YYYYMMDD <= [@v_end_week]     
+			';		
+		END;
+	ELSE"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_GET_SPREAD_TITLE","422344619","2"," IF @v_bucket_type = 'WEEKLY'
+	    BEGIN
+		SET @v_iteration = '
+		    SELECT ''D_'' + MIN(A.BASIS_START_DATE)  AS COLUMN_NAME
+		     --    , A.WEEK_NAME                       AS SMALL_CLASS_LABEL_NAME  
+			     , A.ISO_YYYYWW                       AS SMALL_CLASS_LABEL_NAME  
+		         , MIN(A.BASIS_YYYYMMDD)             AS BASIS_YYYYMMDD
+		    FROM   [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+		    WHERE  1 = 1
+		    AND    A.ISO_YYYYWW >=  [@v_start_week] 
+		    AND    A.ISO_YYYYWW <= [@v_end_week] 
+		  --  GROUP BY A.WEEK_NAME
+		    GROUP BY A.ISO_YYYYWW
+			';
+		END;
+	ELSE IF @v_bucket_type = 'MONTHLY'
+	    BEGIN
+		SET @v_iteration = '
+		    SELECT ''D_'' + MIN(A.BASIS_YYYYMMDD)  AS COLUMN_NAME
+				 , A.MONTH_NAME                    AS SMALL_CLASS_LABEL_NAME  
+				 , MIN(A.BASIS_YYYYMMDD)           AS BASIS_YYYYMMDD
+			FROM   [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+			WHERE  1 = 1
+			AND    A.BASIS_YYYYMM >= [@v_start_week] 
+			AND    A.BASIS_YYYYMM <= [@v_end_week] 
+			GROUP BY MONTH_NAME
+			';
+		END;
+			
+	IF @v_user_col_cnt > 0
+	    BEGIN
+	    -- User Title 이 존재
+		SET @v_sql_text = '
+		    SELECT C.PROGRAM_ID
+	             , C.SHEET_NAME
+	             , C.COLUMN_NAME
+				 , C.COLUMN_LABEL_NAME
+				 , C.SORT_ORDER_NO
+				 , C.DATA_SORT_METHOD_CODE				 
+				 , C.SMALL_CLASS_LABEL_NAME
+				 , C.LARGE_CLASS_LABEL_NAME
+				 , C.FIXED_FLAG
+				 , C.COLUMN_WIDTH
+				 , C.CELL_CONTROL_OBJECT_TYPE_CODE
+				 , C.CELL_COMBO_DATA_TYPE
+				 , C.DATA_SCALE_NUMBER
+				 , C.DATA_MAX_LENGTH
+				 , C.HORIZONTAL_ALIGN_CODE
+				 , C.UPPERCASE_APPLY_FLAG
+				 , C.VISIBLE_FLAG
+				 , C.VALID_YN
+				 , C.DEFAULT_FLAG
+            FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+            WHERE  1 = 1            
+            AND    C.PROGRAM_ID = ''DMF0007''
+            AND    C.SHEET_NAME = ''Customer FCST''
+            AND    C.VALID_YN   = ''Y''
+
+		    UNION ALL
+
+			SELECT ''DMF0007''         AS PROGRAM_ID
+			     , ''Customer FCST''  AS SHEET_NAME
+			     , T.COLUMN_NAME
+                 , C.DATE_SHORT1_NAME AS COLUMN_LABEL_NAME
+				 , T.BASIS_YYYYMMDD   AS SORT_ORDER_NO
+				 , ''''               AS DATA_SORT_METHOD_CODE
+	             , T.SMALL_CLASS_LABEL_NAME
+				 , ''''               AS LARGE_CLASS_LABEL_NAME
+				 , ''''               AS FIXED_FLAG
+				 , 50                 AS COLUMN_WIDTH
+                 , ''FPComboBox''     AS CELL_CONTROL_OBJECT_TYPE_CODE
+				 , ''YesOrNo''        AS CELL_COMBO_DATA_TYPE
+                 , ''''               AS DATA_SCALE_NUMBER
+                 , ''''               AS DATA_MAX_LENGTH
+                 , ''C''              AS HORIZONTAL_ALIGN_CODE
+                 , ''Y''              AS UPPERCASE_APPLY_FLAG
+                 , ''Y''              AS VISIBLE_FLAG
+				 , ''Y''              AS VALID_YN
+                 , ''''               AS DEFAULT_FLAG
+            FROM   (		 
+	                [@v_iteration]
+                   ) T
+                 , [dbo].[SCM_SYS_CALENDAR_M] C WITH(NOLOCK)
+            WHERE  T.BASIS_YYYYMMDD = C.BASIS_YYYYMMDD  
+            ORDER BY SORT_ORDER_NO 
+	    ';
+		
+		END;
+	ELSE
+	    BEGIN
+	    -- User Title 이 존재
+		SET @v_sql_text = '
+		    SELECT C.PROGRAM_ID
+	             , C.SHEET_NAME
+	             , C.COLUMN_NAME
+				 , C.COLUMN_LABEL_NAME
+				 , C.SORT_ORDER_NO
+				 , C.DATA_SORT_METHOD_CODE				 
+				 , C.SMALL_CLASS_LABEL_NAME
+				 , C.LARGE_CLASS_LABEL_NAME
+				 , C.FIXED_FLAG
+				 , C.COLUMN_WIDTH
+				 , C.CELL_CONTROL_OBJECT_TYPE_CODE
+				 , C.CELL_COMBO_DATA_TYPE
+				 , C.DATA_SCALE_NUMBER
+				 , C.DATA_MAX_LENGTH
+				 , C.HORIZONTAL_ALIGN_CODE
+				 , C.UPPERCASE_APPLY_FLAG
+				 , C.VISIBLE_FLAG
+				 , C.VALID_YN
+				 , C.DEFAULT_FLAG
+            FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+            WHERE  1 = 1
+            AND    C.PROGRAM_ID = ''DMF0007''
+            AND    C.SHEET_NAME = ''Customer FCST''
+			AND    C.VALID_YN   = ''Y''"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_GET_SPREAD_TITLE","422344619","3","
+            		
+		    UNION ALL
+
+			SELECT ''DMF0007''         AS PROGRAM_ID
+			     , ''Customer FCST''  AS SHEET_NAME
+			     , T.COLUMN_NAME
+                 , C.DATE_SHORT1_NAME AS COLUMN_LABEL_NAME
+				 , T.BASIS_YYYYMMDD   AS SORT_ORDER_NO
+				 , ''''               AS DATA_SORT_METHOD_CODE
+	             , T.SMALL_CLASS_LABEL_NAME
+				 , ''''               AS LARGE_CLASS_LABEL_NAME
+				 , ''''               AS FIXED_FLAG
+				 , 50                 AS COLUMN_WIDTH
+                 , ''FPComboBox''     AS CELL_CONTROL_OBJECT_TYPE_CODE
+				 , ''YesOrNo''        AS CELL_COMBO_DATA_TYPE
+                 , ''''               AS DATA_SCALE_NUMBER
+                 , ''''               AS DATA_MAX_LENGTH
+                 , ''C''              AS HORIZONTAL_ALIGN_CODE
+                 , ''Y''              AS UPPERCASE_APPLY_FLAG
+                 , ''Y''              AS VISIBLE_FLAG
+				 , ''Y''              AS VALID_YN
+                 , ''''               AS DEFAULT_FLAG
+            FROM   (		 
+	                [@v_iteration] 
+                   ) T
+                 , [dbo].[SCM_SYS_CALENDAR_M] C WITH(NOLOCK) 
+            WHERE  T.BASIS_YYYYMMDD = C.BASIS_YYYYMMDD  
+            ORDER BY SORT_ORDER_NO 
+	    ';		
+		END;
+
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]' , @v_iteration );
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_start_week]', @v_start_week);
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_week]'  , @v_end_week  );
+	SET @v_sql_text = REPLACE(@v_sql_text,'[@p_created_by]', @p_created_by);
+
+	--SELECT @v_sql_text;
+    --SET @p_debug = @v_sql_text;
+    --RETURN @v_sql_text;
+    --SELECT @v_sql_text;
+
+    --EXEC(@v_sql_text);
+    EXEC SP_EXECUTESQL @v_sql_text; --, @p_param_list, 
+                                  --@p_plan_week, @p_division_code, @p_customer_id, @p_fcst_sit_id, @p_measure, @p_edi_fcst_yn, @p_valid_yn;
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_SAVE_CUST_FCST_DATA","438344676","1","
+/*
+ * Program ID   : DMF0007_SAVE_CUST_FCST_DATA
+ * Description  : DM_MST_CUSTOMER_FCST DATA SAVE
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017. 12. 20    DWOK     Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018. 03. 22    SONGKH Modify
+ * 20180806 KHSONG INVALID LOG 생성로직 추가
+ * 20191210 KHSONG EDI예약어 MEASURE 등록시 '*' 추가
+ * 20221026 KDW2819	[C20221024-000507]CUST FCST Upload 오류 수정
+ */
+
+CREATE PROCEDURE [dbo].[DMF0007_SAVE_CUST_FCST_DATA]
+	@p_active_flag			NVARCHAR(MAX),		
+	@p_division_id			NVARCHAR(MAX),
+	@p_plan_week			NVARCHAR(MAX),
+	@p_customer_code		NVARCHAR(MAX),
+	@p_scm_site_id			NVARCHAR(MAX),
+	@p_measure_group		NVARCHAR(MAX),		
+	@p_measure				NVARCHAR(MAX),
+	@p_valid_yn				NVARCHAR(MAX),
+	@p_customer_psi			NVARCHAR(MAX),
+	@p_upload_uom			NVARCHAR(MAX),
+	@p_upload_bucket_type	NVARCHAR(MAX),
+	@p_summary_bucket_type	NVARCHAR(MAX),
+	@p_summary_bucket_value	NVARCHAR(MAX),
+	@p_summary_bucket_yn	NVARCHAR(MAX),			-- Y: valid_yn값
+	@p_edi_fcst_yn			NVARCHAR(MAX),
+	@p_created_by			NVARCHAR(MAX)
+AS
+
+BEGIN
+
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET NOCOUNT ON; 
+    SET XACT_ABORT ON;
+	
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	-- 멀티처리 변수선언
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_plan_week			NVARCHAR(MAX);
+	DECLARE @v_customer_code		NVARCHAR(MAX);
+	DECLARE @v_scm_site_id			NVARCHAR(MAX);
+	DECLARE @v_measure_group		NVARCHAR(MAX);
+	DECLARE @v_measure				NVARCHAR(MAX);
+	DECLARE @v_valid_yn				NVARCHAR(MAX);
+	DECLARE @v_customer_psi			NVARCHAR(MAX);
+	DECLARE @v_upload_uom			NVARCHAR(MAX);
+	DECLARE @v_upload_bucket_type	NVARCHAR(MAX);
+	DECLARE @v_summary_bucket_type	NVARCHAR(MAX);
+	DECLARE @v_summary_bucket_value	NVARCHAR(MAX);
+	DECLARE @v_summary_bucket_yn	NVARCHAR(MAX);
+	DECLARE @v_edi_fcst_yn			NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+	DECLARE @v_dup_flag			    INTEGER = 0; 
+	DECLARE @n_existence_flag       INTEGER = 0; 
+	DECLARE @n_existence_value      NVARCHAR(MAX);
+
+	-- 초기화
+	SET @v_active_flag			= NULL;
+	SET @v_division_id			= NULL;
+	SET @v_plan_week			= NULL;
+	SET @v_customer_code		= NULL;
+	SET @v_scm_site_id			= NULL;
+	SET @v_measure_group		= NULL;
+	SET @v_measure				= NULL;
+	SET @v_valid_yn				= NULL;
+	SET @v_customer_psi			= NULL;
+	SET @v_upload_uom			= NULL;
+	SET @v_upload_bucket_type	= NULL;
+	SET @v_summary_bucket_type	= NULL;
+	SET @v_summary_bucket_value	= NULL;
+	SET @v_summary_bucket_yn	= NULL;
+	SET @v_edi_fcst_yn			= NULL;
+	SET @v_created_by			= NULL;
+	SET @v_dup_flag  			= 0;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^'
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'DMF0007_SAVE_CUST_FCST_DATA';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	--VALIDATION용 변수 설정
+	DECLARE @SUMMARY_FLAG INT = 0;
+	
+	DECLARE @results TABLE (
+			 n_division_id	        NVARCHAR(MAX)
+			,n_plan_week		    NVARCHAR(MAX)
+			,n_customer_code        NVARCHAR(MAX)
+			,n_scm_site_id	        NVARCHAR(MAX)
+			,n_summary_bucket_value NVARCHAR(MAX)
+			,n_measure_group        NVARCHAR(MAX)
+			,n_measure			    NVARCHAR(MAX)
+			,n_customer_psi	        NVARCHAR(MAX)
+			,n_valid_yn             NVARCHAR(MAX)
+			)
+	DECLARE @FCST_MEASURE TABLE (
+			 n_division_id	        NVARCHAR(MAX)
+			
+			
+			,n_scm_site_id	        NVARCHAR(MAX)
+			
+			
+			
+			
+			)
+
+		-- 시작 L"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_SAVE_CUST_FCST_DATA","438344676","2","OG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC  PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	BEGIN TRANSACTION DMF0007_SAVE_CUST_FCST_DATA;  
+
+		BEGIN TRY
+
+		--------------------------------------------------------------------- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		--------------------------------------------------------------------- WHILE loop START
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		--------------------------------------------------------------------- WHILE loop START
+
+		BEGIN    
+			
+		--------------------------------------------------------------------- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+
+		--------------------------------------------------------------------- 각 컬럼들에 대한 split (start)
+			BEGIN
+				SET @v_active_flag           = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag,         @v_delimiter, @mst_loop_cnt) ;    
+				SET @v_division_id           = [dbo].[SCM_ARR_SPL_VAL](@p_division_id,         @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_plan_week             = [dbo].[SCM_ARR_SPL_VAL](@p_plan_week,           @v_delimiter, @mst_loop_cnt) ; 
+				IF @v_active_flag = 'I'
+					BEGIN
+						SET @v_plan_week = 
+						(	SELECT a.ISO_YYYYWW   
+							FROM   [dbo].[SCM_SYS_CALENDAR_M] a WITH(NOLOCK)	
+							WHERE  a.BASIS_YYYYMMDD = CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)	)
+					END
+				SET @v_customer_code         = [dbo].[SCM_ARR_SPL_VAL](@p_customer_code,       @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_scm_site_id           = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id,         @v_delimiter, @mst_loop_cnt) ;    
+				SET @v_measure_group         = [dbo].[SCM_ARR_SPL_VAL](@p_measure_group,       @v_delimiter, @mst_loop_cnt) ;    
+
+				SET @v_measure               = [dbo].[SCM_ARR_SPL_VAL](@p_measure,             @v_delimiter, @mst_loop_cnt) ;    
+
+				-- 20191210 KHSONG EDI예약어 MEASURE 등록시 '*' 추가
+				SET @v_measure = CASE  
+										WHEN @v_measure = 'Immidiate'				THEN 'Immidiate*' 
+										WHEN @v_measure = 'Planning_Forecast'		THEN 'Planning_Forecast*' 
+										WHEN @v_measure = 'Commercial_Agreement'	THEN 'Commercial_Agreement*' 
+									ELSE @v_measure
+								END
+				SET @v_valid_yn              = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn,            @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_customer_psi          = [dbo].[SCM_ARR_SPL_VAL](@p_customer_psi,        @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_upload_uom            = [dbo].[SCM_ARR_SPL_VAL](@p_upload_uom,          @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_upload_bucket_type    = [dbo].[SCM_ARR_SPL_VAL](@p_upload_bucket_type,  @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_summary_bucket_type   = [dbo].[SCM_ARR_SPL_VAL](@p_summary_bucket_type, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_summary_bucket_value  = [dbo].[SCM_ARR_SPL_VAL](@p_summary_bucket_value,@v_delimiter, @mst_loop_cnt) ; 
+				SET @v_edi_fcst_yn           = [dbo].[SCM_ARR_SPL_VAL](@p_edi_fcst_yn,         @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_summary_bucket_yn     = [dbo].[SCM_ARR_SPL_VAL](@p_summary_bucket_yn,   @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_created_by            = [dbo].[SCM_ARR_SPL_VAL](@p_created_by,          @v_delimiter, @mst_loop_cnt) ; 
+			END
+		--------------------------------------------------------------------- 각 컬럼들에 대한 split (end)
+
+		---------------------------------------------------------------------- input data를 temp table 에 저장하여 비교값으로 사용  songkh modify (start)
+			INSERT INTO @results
+				( n_division_id, n_plan_week, n_customer_code, n_scm_site_id, n_summary_bucket_value
+				, n_measure_group, n_measure, n_customer_psi, n_valid_yn	)
+				VALUES
+				( @v_division_id, @v_plan_week, @v_customer_code, @v_scm_site"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_SAVE_CUST_FCST_DATA","438344676","3","_id, @v_summary_bucket_value
+				, @v_measure_group, @v_measure, @v_customer_psi, @v_summary_bucket_yn	)
+
+			SET  @v_dup_flag = 0
+
+			IF @v_summary_bucket_yn = 'N' --@v_valid_yn = 'N' / @v_summary_bucket_yn
+			  BEGIN
+				set @v_dup_flag = (SELECT count(*)
+				 FROM [dbo].DM_MST_CUSTOMER_FCST WITH(NOLOCK) where 1=1
+				  and DIVISION_ID = @v_division_id
+				  and PLAN_WEEK = @v_plan_week
+				  and SCM_SITE_ID = @v_scm_site_id
+				  and SUMMARY_BUCKET_VALUE = @v_summary_bucket_value
+				  and MEASURE_GROUP = @v_measure_group
+				  and valid_yn    = 'Y'
+				  AND customer_psi = @v_customer_psi
+				  and measure <> @v_measure )
+
+				set @v_dup_flag = @v_dup_flag + (SELECT count(*)
+				 FROM @results where 1=1
+				  and n_DIVISION_ID = @v_division_id
+				  and n_PLAN_WEEK = @v_plan_week
+				  and n_SCM_SITE_ID = @v_scm_site_id
+				  and n_SUMMARY_BUCKET_VALUE = @v_summary_bucket_value
+				  and n_valid_yn    = 'Y'
+				  and n_MEASURE_GROUP = @v_measure_group
+				  AND n_customer_psi = @v_customer_psi
+				  and n_measure <> @v_measure )
+			  END
+
+			  --------------------------------------------------------------하나의 SCM_SITE_ID 당 하나의 SUMMARY BUCKET TYPE 존재 여부 체크
+
+			  
+			  SET @SUMMARY_FLAG = 0;
+
+
+			  SELECT @SUMMARY_FLAG = COUNT(*)
+			  FROM (
+						  SELECT DIVISION_ID,SCM_SITE_ID, COUNT(SUMMARY_BUCKET_TYPE) AS COUNT_BUCKET
+						  FROM (
+								  SELECT DIVISION_ID, SCM_SITE_ID, SUMMARY_BUCKET_TYPE
+								  FROM (
+												SELECT 
+																	division_id				,
+																	plan_week				,
+																	customer_code			,
+																	scm_site_id				,
+																	measure_group			,
+																	measure					,
+																	valid_yn				,
+																	customer_psi			,
+																	upload_uom				,
+																	upload_bucket_type		,
+																	summary_bucket_type		,
+																	summary_bucket_value	,
+																	edi_fcst_yn				,
+																	upload_user_id			,
+																	created_by				,
+																	creation_date			,
+																	last_updated_by			,
+																	last_update_date
+												FROM DM_MST_CUSTOMER_FCST
+												union all
+											   SELECT 
+															@v_division_id					,
+															@v_plan_week					,
+															@v_customer_code				,
+															@v_scm_site_id					,
+															@v_measure_group				,
+															@v_measure						,
+															@v_summary_bucket_yn			,
+															@v_customer_psi					,
+															@v_upload_uom					,
+															@v_upload_bucket_type			,
+															@v_summary_bucket_type 			,
+															@v_summary_bucket_value			,
+															@v_edi_fcst_yn					,
+															@v_created_by					,
+															@v_created_by					,
+															sysdatetime()					,
+															@v_created_by					,
+															sysdatetime()
+										) T1
+									WHERE VALID_YN = 'Y'
+									AND SCM_SITE_ID = @v_scm_site_id
+									AND DIVISION_ID = @v_division_id
+									AND MEASURE_GROUP = @v_measure_group
+									GROUP BY DIVISION_ID, SCM_SITE_ID, SUMMARY_BUCKET_TYPE
+						
+							)T1
+							GROUP BY DIVISION_ID, SCM_SITE_ID
+							HAVING	COUNT(SUMMARY_BUCKET_TYPE)>1
+				) T1
+
+				--SELECT @SUMMARY_FLAG AS '@SUMMARY_FLAG'
+
+				IF @SUMMARY_FLAG >0 
+				BEGIN
+				SELECT 'MSG00166'
+--N'하나의 SITE에는 두가지 이상의 SUMMARY BUCKET TYPE(DAILY, WEEKLY, MONTHLY)이 설정 될 수 없습니다.
+--기존에 입력된 SUMMARY BUCKET TYPE에 대해 각 날짜별 N으로 저장하여 주십시오.'
+				SET @v_log_type = 'INVALID';
+				GOTO ERR_RTN
+				END
+				
+
+		--------------------------------------------------------------------- input data를 temp table 에 저장하여 비교값으로 사용 songkh modify (end)
+
+		--------------------------------------------------------------------- 데이터 기준값 DAY:20000101 , WEEK : 20000102, MONTH: 20000103 설정하여 MASTER 값으로 사용함
+		        SET @n_existence_flag = 0
+				SET @n_existence_value = ''
+
+			    SET @n_existence_value =
+				  CASE
+					 WHEN ("
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_SAVE_CUST_FCST_DATA","438344676","4","@v_summary_bucket_type = 'DAILY')   THEN '20000101'
+					 WHEN (@v_summary_bucket_type = 'WEEKLY')  THEN '20000102'
+					 WHEN (@v_summary_bucket_type = 'MONTHLY') THEN '20000103'
+				  END
+
+				---------------------------------------------------- summary_bucket_type 기준으로 이미 존재하는 데이터를 확인함
+				SET @n_existence_flag = ISNULL((
+				SELECT COUNT(1) FROM dbo.DM_MST_CUSTOMER_FCST
+					WHERE 1=1
+					AND division_id           = @v_division_id
+					AND plan_week             = @v_plan_week
+					AND customer_code         = @v_customer_code
+					AND scm_site_id           = @v_scm_site_id
+					AND summary_bucket_value  = @n_existence_value
+					AND measure_group         = @v_measure_group
+					AND customer_psi          = @v_customer_psi
+					--AND summary_bucket_value  = @v_summary_bucket_value
+					and summary_bucket_type   = @v_summary_bucket_type
+					AND MEASURE					 = @v_measure
+					),0)
+				--select @n_existence_flag as '@n_existence_flag2'
+				--select @n_existence_value as '@n_existence_value2'
+								 
+				---------------------------------------------------- MASTER 값 INSERT
+				IF  @n_existence_flag = 0
+				  BEGIN
+					INSERT INTO  dbo.DM_MST_CUSTOMER_FCST
+					(  division_id, plan_week, customer_code, scm_site_id, measure_group, measure
+					, valid_yn, customer_psi, upload_uom, upload_bucket_type, summary_bucket_type
+					, summary_bucket_value, edi_fcst_yn, upload_user_id, created_by, creation_date, last_updated_by, last_update_date	)
+					VALUES	
+					(	@v_division_id, @v_plan_week, @v_customer_code, @v_scm_site_id, @v_measure_group, @v_measure
+					, 'N', @v_customer_psi, @v_upload_uom, @v_upload_bucket_type, @v_summary_bucket_type, @n_existence_value
+					, @v_edi_fcst_yn, @v_created_by, @v_created_by, sysdatetime(), @v_created_by, sysdatetime()	);
+				  END
+
+				  --select * from DM_MST_CUSTOMER_FCST where PLAN_WEEK = '201814' and scm_site_id = 'Ford_US_RDF' order by LAST_UPDATE_DATE
+				
+		IF @v_dup_flag = 0
+		  BEGIN
+				-- INPUT 데이터 INSERT전 DELETE처리
+				DELETE  FROM  dbo.DM_MST_CUSTOMER_FCST
+					WHERE 1=1
+					AND division_id           = @v_division_id
+					AND plan_week             = @v_plan_week
+					AND customer_code         = @v_customer_code
+					AND scm_site_id           = @v_scm_site_id
+					AND summary_bucket_value  = @v_summary_bucket_value
+					AND measure_group         = @v_measure_group
+					AND customer_psi          = @v_customer_psi
+
+		--------------------------------------------------------------------- INPUT 데이터 INSERT
+				INSERT INTO  dbo.DM_MST_CUSTOMER_FCST
+				(  division_id, plan_week, customer_code, scm_site_id, measure_group, measure
+				, valid_yn, customer_psi, upload_uom, upload_bucket_type, summary_bucket_type
+				, summary_bucket_value, edi_fcst_yn, upload_user_id, created_by, creation_date, last_updated_by, last_update_date	)
+				VALUES	
+				(	@v_division_id, @v_plan_week, @v_customer_code, @v_scm_site_id, @v_measure_group, @v_measure
+				, @v_summary_bucket_yn, @v_customer_psi, @v_upload_uom, @v_upload_bucket_type, @v_summary_bucket_type, @v_summary_bucket_value
+				, @v_edi_fcst_yn, @v_created_by, @v_created_by, sysdatetime(), @v_created_by, sysdatetime()	);
+
+		--------------------------------------------------------------------- history insert
+				EXEC	[dbo].[PR_DM_MST_CUSTOMER_FCST_HIST]	
+						@v_division_id				,
+						@v_plan_week				,
+						@v_customer_code			,
+						@v_scm_site_id				,		
+						@v_summary_bucket_value		,
+						@v_measure_group			,
+						@v_measure					,
+						@v_summary_bucket_yn		,  -- valid_yn
+						@v_customer_psi				,
+						@v_upload_uom				,
+						@v_upload_bucket_type		,
+						@v_summary_bucket_type		,
+						@v_edi_fcst_yn				,
+						@v_created_by				,
+						@v_created_by				,
+						@v_created_by	
+
+		  END
+		  END
+
+		---------------------------------------------------------------------	WHILE loop END
+
+		--@results
+		select *
+		  into  #tmp_site_customer_map
+		  from (
+		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_SAVE_CUST_FCST_DATA","438344676","5","				select a.DIVISION_ID,a.SCM_SITE_ID,a.MEASURE,
+   							   a.SUMMARY_BUCKET_VALUE as start_day
+							  ,case when summary_bucket_type = 'WEEKLY' THEN CONVERT(CHAR(8), DATEADD(DD, 0, dbo.FN_NEXT_DAY( cast( SUMMARY_BUCKET_VALUE as datetime) , 'SUN')), 112) 
+								   else a.SUMMARY_BUCKET_VALUE
+								END  end_day
+						FROM dbo.DM_MST_CUSTOMER_FCST a
+						  inner join 
+						  (select distinct n_division_id,n_scm_site_id
+						  from @results ) rslt
+					  on(
+							a.DIVISION_ID   = rslt.n_division_id
+						and a.SCM_SITE_ID   = rslt.n_scm_site_id
+					   )
+						where 1=1
+						and VALID_YN = 'Y'
+						and a.MEASURE_GROUP = 'CUST_FCST'
+						and a.PLAN_WEEK = 
+								(SELECT MAX(PLAN_WEEK)  
+									FROM DM_MST_CUSTOMER_FCST 
+									)
+						and a.SUMMARY_BUCKET_VALUE >=  CONVERT(CHAR(8), DATEADD(DD, -7*1, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) -- 당주 월요일 이후데이터만 
+						and summary_bucket_type in ('DAILY','WEEKLY')
+
+						UNION
+
+						select a.DIVISION_ID,a.SCM_SITE_ID,a.MEASURE
+   							  , case when  SUMMARY_BUCKET_VALUE = convert(varchar(8),  DATEADD(DAY,1,DATEADD(DAY,-DATEPART(DD,getdate()),getdate())) ,112) THEN  CONVERT(CHAR(8), DATEADD(DD, -7*1, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) 
+									else  SUMMARY_BUCKET_VALUE  end as start_day
+							  , CONVERT(CHAR(8),  dateadd(day,-DATEPART(DD, dateadd(month,1,cast( SUMMARY_BUCKET_VALUE as datetime) )), dateadd(month,1,cast( SUMMARY_BUCKET_VALUE as datetime) ))   , 112)   end_day
+						FROM dbo.DM_MST_CUSTOMER_FCST a
+						  inner join 
+						  (select distinct n_division_id,n_scm_site_id
+						  from @results ) rslt
+					  on(
+							a.DIVISION_ID   = rslt.n_division_id
+						and a.SCM_SITE_ID   = rslt.n_scm_site_id
+					   )
+						where 1=1
+						and VALID_YN = 'Y'
+						and a.MEASURE_GROUP = 'CUST_FCST'
+						and a.PLAN_WEEK = 
+								(SELECT MAX(PLAN_WEEK)  
+									FROM DM_MST_CUSTOMER_FCST 
+									)
+						and a.SUMMARY_BUCKET_VALUE >=  convert(varchar(8),  DATEADD(DAY,1,DATEADD(DAY,-DATEPART(DD,getdate()),getdate())) ,112)
+						and summary_bucket_type in ('MONTHLY')
+		) z
+
+
+			/*현재 고치는 CUSTOMER FCST MASTER의 MEASURE로 입력 MARKETING FCST 값이 있는지 VALIDATION */
+						SELECT		T1.DIVISION_ID,
+									T1.SCM_SITE_ID,
+									T1.PROJECT_CODE,
+									T1.ITEM_ID,
+									T1.DOM_EXP,
+									T1.FCST_TYPE,
+									T1.INCOTERMS,
+									T1.PLANT_SITE_ID
+
+									INTO #DELETE_TARGET
+						FROM (
+									SELECT	T1.DIVISION_ID,
+											T1.SCM_SITE_ID,
+											T1.PROJECT_CODE,
+											T1.ITEM_ID,
+											T1.DOM_EXP,
+											T1.FCST_TYPE,
+											T1.INCOTERMS,
+											T1.MEASURE,
+											T1.PLANT_SITE_ID
+									FROM DM_PLN_MKT_FCST T1
+									INNER JOIN DM_MST_CUSTOMER_FCST T2
+									ON T1.DIVISION_ID = T2.DIVISION_ID
+									AND T1.SCM_SITE_ID = T2.SCM_SITE_ID
+									AND (T1.MEASURE = T2.MEASURE OR T1.MEASURE = 'CUST_FCST')
+									GROUP BY 
+											T1.DIVISION_ID,
+											T1.SCM_SITE_ID,
+											T1.PROJECT_CODE,
+											T1.ITEM_ID,
+											T1.DOM_EXP,
+											T1.FCST_TYPE,
+											T1.INCOTERMS,
+											T1.MEASURE,
+											T1.PLANT_SITE_ID
+						)T1
+						INNER JOIN (SELECT  DISTINCT N_DIVISION_ID, N_SCM_SITE_ID FROM @RESULTS) T2
+						ON			T1.DIVISION_ID = T2.N_DIVISION_ID
+						AND			T1.SCM_SITE_ID = T2.N_SCM_SITE_ID
+						GROUP BY	T1.DIVISION_ID,
+									T1.SCM_SITE_ID,
+									T1.PROJECT_CODE,
+									T1.ITEM_ID,
+									T1.DOM_EXP,
+									T1.FCST_TYPE,
+									T1.INCOTERMS,
+									T1.PLANT_SITE_ID
+
+						HAVING COUNT (MEASURE)>1
+
+					DELETE		T1 
+					FROM		DM_PLN_MKT_FCST T1
+					INNER JOIN	#DELETE_TARGET T2
+					ON			T1.DIVISION_ID		= T2.DIVISION_ID
+					AND			T1.SCM_SITE_ID		= T2.SCM_SITE_ID
+					AND			T1.PROJECT_CODE		= T2.PROJECT_CODE
+					AND			T1.ITEM_ID			= T2.ITEM_ID
+					AND			T1.DOM_EXP			= T2.DOM_EXP
+					AND			T1.FCST_TYPE		= T2.FCST_TYPE
+					AND			T1.INCOTERMS		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0007_SAVE_CUST_FCST_DATA","438344676","6","= T2.INCOTERMS
+					AND			T1.PLANT_SITE_ID	= T2.PLANT_SITE_ID
+					WHERE		T1.MEASURE = 'CUST_FCST'   
+
+
+					insert into DM_PLN_MKT_FCST
+					select   a.DIVISION_ID
+							 ,a.PROJECT_CODE
+							 ,a.SCM_SITE_ID
+							 ,a.ITEM_ID
+							 ,a.DOM_EXP
+							 ,a.FCST_TYPE
+							 ,a.INCOTERMS
+							 ,'CUST_FCST'
+							 ,a.PLANT_SITE_ID
+							 ,a.YYYYMMDD
+							 ,a.QTY
+							 ,a.CREATED_BY
+							 ,a.CREATION_DATE
+							 ,a.LAST_UPDATED_BY
+							 ,a.LAST_UPDATE_DATE
+							 ,a.ATTRIBUTE1
+							 ,a.ATTRIBUTE2
+							 ,a.ATTRIBUTE3
+							 ,a.ATTRIBUTE4
+							 ,a.ATTRIBUTE5
+							 ,a.ATTRIBUTE6
+							 ,a.ATTRIBUTE7
+							 ,a.ATTRIBUTE8
+							 ,a.ATTRIBUTE9
+							 ,a.ATTRIBUTE10
+					  from dbo.DM_PLN_MKT_FCST a WITH(NOLOCK)
+						  inner join 
+						  (select distinct n_division_id,n_scm_site_id
+							  from @results ) rslt
+					  on(
+							a.DIVISION_ID   = rslt.n_division_id
+						and a.SCM_SITE_ID   = rslt.n_scm_site_id
+					   )
+						  inner join 
+						  (select DIVISION_ID,SCM_SITE_ID,MEASURE,start_day,end_day  
+						  from #tmp_site_customer_map group by DIVISION_ID,SCM_SITE_ID,MEASURE,start_day,end_day) map
+
+					  on(
+							a.DIVISION_ID   = map.DIVISION_ID 
+						and a.SCM_SITE_ID   = map.SCM_SITE_ID
+						and a.MEASURE       = map.MEASURE
+					   )
+
+						where 1=1
+						and a.YYYYMMDD between map.start_day and map.end_day
+						and a.YYYYMMDD >=  CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) 
+						;
+			
+	
+		COMMIT WORK;
+
+		END TRY
+			
+	BEGIN CATCH
+
+      ROLLBACK TRANSACTION DMF0007_SAVE_CUST_FCST_DATA;  
+
+      -- ERROR LOG
+      SET @v_log_type = 'ERROR';
+      SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+      SET @v_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+      SET @d_event_date = SYSDATETIME();
+      EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	  
+    END CATCH;
+	
+	-- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure ##########';
+    SET @v_description = '';
+    SET @d_event_date = SYSDATETIME();
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+  END;						
+
+
+  ERR_RTN:
+  IF @v_log_type = 'INVALID'
+		begin
+			ROLLBACK TRANSACTION DMF0007_SAVE_CUST_FCST_DATA; 
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, N'END', @n_log_count, @v_log_message, @v_description, @d_event_date; 
+		end
+
+"
+"2025-03-28 00:00:01.817","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","6","SURE				= CF.MEASURE  
+						AND M.SUMMARY_BUCKET_VALUE	= CF.SUMMARY_BUCKET_VALUE  
+						AND M.EDI_FCST_YN			= CF.EDI_FCST_YN  
+						AND M.CUSTOMER_PSI			= CF.CUSTOMER_PSI  
+						AND M.UPLOAD_UOM			= CF.UPLOAD_UOM  
+						AND M.UPLOAD_BUCKET_TYPE	= CF.UPLOAD_BUCKET_TYPE  
+						[@p_division_id]          
+						[@p_end_customer]   
+						[@p_scm_site_id]  
+						/*--[@p_bucket_type] --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경*/    
+						/*-- AND CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]'' */ 
+							)  
+			WHERE  1 = 1  
+			[@p_valid_yn]  
+			/*--AND    CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]'' */ 
+			GROUP BY M.PLAN_WEEK, M.DIVISION_ID, M.DEPT_ID, M.CUSTOMER_CODE, M.SCM_SITE_ID        
+				   , M.SUMMARY_BUCKET_TYPE, M.MEASURE, M.MEASURE_GROUP, M.EDI_FCST_YN, M.CUSTOMER_PSI  
+				   , M.UPLOAD_UOM, M.UPLOAD_BUCKET_TYPE  
+				   /*-- , M.VALID_YN  */
+				   , M.MASTER_VALID_YN  
+				   , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+											   WHEN ''WEEKLY'' THEN 2  
+											   WHEN ''MONTHLY'' THEN 3 END  
+			ORDER BY DIVISION_ID, DEPT_ID, CUSTOMER_CODE, SCM_SITE_ID, UPLOAD_ORDER, MEASURE_GROUP, MEASURE     
+			';
+
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]',				@v_iteration);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_plan_week]',				@v_plan_week);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_start_yyyymmdd]',		@v_start_yyyymmdd);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_yyyymmdd]',			@v_end_yyyymmdd);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_division_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.DIVISION_ID'			, 'IN', @p_division_id));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_dept_id]',				[dbo].[FN_SCM_GET_WHERE_SQL]('S.DEPT_ID'				, 'IN', @p_dept_id));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_end_customer]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.CUSTOMER_CODE'			, 'IN', @p_end_customer));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_scm_site_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SCM_SITE_ID'			, 'IN', @p_scm_site_id));  
+		--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_bucket_type]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SUMMARY_BUCKET_TYPE'	, 'EQ', @p_bucket_type));  --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_valid_yn]',				[dbo].[FN_SCM_GET_WHERE_SQL]('M.MASTER_VALID_YN'		, 'EQ', @p_valid_yn));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_created_by]',			@p_created_by);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_group_id]',				@v_group_id); 
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_bucket_type]',			@v_bucket_type);  /*[E20250326-000842]_Customer FCST Master 조회 로직 수정*/    
+
+	END		 
+  
+  --SET @p_debug = @v_sql_text;  
+  --RETURN @v_sql_text;  
+ --SELECT @v_sql_text;  
+
+--EXEC DMF0007_GET_CUST_FCST_DATA '', '40', '58570391,70000479,50057457,58124984,70021341,70000478,58520274,70021343,58607728,58260040,70090867,58235660,58666055,58099468', 'ALL', 'ALL', 'WEEKLY', 'ALL', 'kdmcc14', 'ADMIN'
+
+  --EXEC(@v_sql_text);  
+  EXEC SP_EXECUTESQL @v_sql_text; --, @p_param_list,   
+                                  --@p_plan_week, @p_division_code, @p_customer_id, @p_fcst_sit_id, @p_measure, @p_edi_fcst_yn, @p_valid_yn;  
+  
+  
+-- xml확인할경우  
+-- SELECT CONVERT(TEXT, @v_sql_text)  
+-- FOR XML PATH('')--,ROOT('x')    
+   
+            
+END
+"
+"2026-03-28 00:00:02.400","LGCE_SCMDEV","P ","DMF0007_GET_CUST_FCST_DATA","390344505","6","URE				= CF.MEASURE  
+						AND M.SUMMARY_BUCKET_VALUE	= CF.SUMMARY_BUCKET_VALUE  
+						AND M.EDI_FCST_YN			= CF.EDI_FCST_YN  
+						AND M.CUSTOMER_PSI			= CF.CUSTOMER_PSI  
+						AND M.UPLOAD_UOM			= CF.UPLOAD_UOM  
+						AND M.UPLOAD_BUCKET_TYPE	= CF.UPLOAD_BUCKET_TYPE  
+						[@p_division_id]          
+						[@p_end_customer]   
+						[@p_scm_site_id]  
+						/*--[@p_bucket_type] --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경*/    
+						/*-- AND CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]'' */ 
+							)  
+			WHERE  1 = 1  
+			[@p_valid_yn]  
+			/*--AND    CF.SUMMARY_BUCKET_VALUE BETWEEN ''[@v_start_yyyymmdd]'' AND ''[@v_end_yyyymmdd]'' */ 
+			GROUP BY M.PLAN_WEEK, M.DIVISION_ID, M.DEPT_ID, M.CUSTOMER_CODE, M.SCM_SITE_ID        
+				   , M.SUMMARY_BUCKET_TYPE, M.MEASURE, M.MEASURE_GROUP, M.EDI_FCST_YN, M.CUSTOMER_PSI  
+				   , M.UPLOAD_UOM, M.UPLOAD_BUCKET_TYPE  
+				   /*-- , M.VALID_YN  */
+				   , M.MASTER_VALID_YN  
+				   , CASE M.UPLOAD_BUCKET_TYPE WHEN ''DAILY'' THEN 1  
+											   WHEN ''WEEKLY'' THEN 2  
+											   WHEN ''MONTHLY'' THEN 3 END  
+			ORDER BY DIVISION_ID, DEPT_ID, CUSTOMER_CODE, SCM_SITE_ID, UPLOAD_ORDER, MEASURE_GROUP, MEASURE     
+			';
+
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]',				@v_iteration);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_plan_week]',				@v_plan_week);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_start_yyyymmdd]',		@v_start_yyyymmdd);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_yyyymmdd]',			@v_end_yyyymmdd);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_division_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.DIVISION_ID'			, 'IN', @p_division_id));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_dept_id]',				[dbo].[FN_SCM_GET_WHERE_SQL]('S.DEPT_ID'				, 'IN', @p_dept_id));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_end_customer]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.CUSTOMER_CODE'			, 'IN', @p_end_customer));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_scm_site_id]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SCM_SITE_ID'			, 'IN', @p_scm_site_id));  
+		--SET @v_sql_text = REPLACE(@v_sql_text,'[@p_bucket_type]',			[dbo].[FN_SCM_GET_WHERE_SQL]('CF.SUMMARY_BUCKET_TYPE'	, 'EQ', @p_bucket_type));  --[E20250326-000842]_조건은 UPLOAD BUCKET 기준으로 변경
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_valid_yn]',				[dbo].[FN_SCM_GET_WHERE_SQL]('M.MASTER_VALID_YN'		, 'EQ', @p_valid_yn));  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@p_created_by]',			@p_created_by);  
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_group_id]',				@v_group_id); 
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_bucket_type]',			@v_bucket_type);  /*[E20250326-000842]_Customer FCST Master 조회 로직 수정*/    
+
+	END		 
+  
+  --SET @p_debug = @v_sql_text;  
+  --RETURN @v_sql_text;  
+ --SELECT @v_sql_text;  
+
+--EXEC DMF0007_GET_CUST_FCST_DATA '', '40', '58570391,70000479,50057457,58124984,70021341,70000478,58520274,70021343,58607728,58260040,70090867,58235660,58666055,58099468', 'ALL', 'ALL', 'WEEKLY', 'ALL', 'kdmcc14', 'ADMIN'
+
+  --EXEC(@v_sql_text);  
+  EXEC SP_EXECUTESQL @v_sql_text; --, @p_param_list,   
+                                  --@p_plan_week, @p_division_code, @p_customer_id, @p_fcst_sit_id, @p_measure, @p_edi_fcst_yn, @p_valid_yn;  
+  
+  
+-- xml확인할경우  
+-- SELECT CONVERT(TEXT, @v_sql_text)  
+-- FOR XML PATH('')--,ROOT('x')    
+   
+            
+END
+"

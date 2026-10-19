@@ -1,0 +1,30 @@
+[2026-10-19 10:52:27.96] pipeline DMF0052 
+[OK] 1 FE 골격 재생성 + 재적용(작업 흔적 없음 → gen --apply --overwrite) (1s)
+[OK] 2 Oracle 메타 등록 SQL(gen-register-sql) (2s)
+[OK] 3 Oracle PKG 골격(gen-pkg) (1s)
+[EXIT 1] 4 FE 수선 루프(Claude ×3 + 게이트 --final) (180s)
+[EXIT 1] 5 PKG 이식 루프(Claude ×3 + check-pkg) (207s)
+[OK] 6 E2E 스펙 생성(gen-e2e) (1s)
+[OK] 7 대사표 갱신(recon) (11s)
+
+NEEDS_HUMAN → C:\Projects\NSCM\Doc\gen\DMF0052\PIPELINE.md
+[2026-10-19 11:05:49.73] pipeline DMF0052 
+[OK] 1 FE 골격 재생성(Doc/gen 만 — 페이지에 작업 흔적 있어 적용 안 함) (0s)
+[OK] 2 Oracle 메타 등록 SQL(gen-register-sql) (1s)
+[OK] 3 Oracle PKG 골격(gen-pkg) (1s)
+[EXIT 1] 4 FE 수선 루프(Claude ×3 + 게이트 --final) (3111s)
+[OK] 5 PKG 이식 루프(Claude ×3 + check-pkg) (1682s)
+[OK] 6 E2E 스펙 생성(gen-e2e) (0s)
+[OK] 7 대사표 갱신(recon) (6s)
+
+NEEDS_HUMAN → C:\Projects\NSCM\Doc\gen\DMF0052\PIPELINE.md
+[2026-10-19 13:16:12.63] pipeline DMF0052 
+[OK] 1 FE 골격 재생성(Doc/gen 만 — 페이지에 작업 흔적 있어 적용 안 함) (1s)
+[OK] 2 Oracle 메타 등록 SQL(gen-register-sql) (1s)
+[OK] 3 Oracle PKG 골격(gen-pkg) (1s)
+[OK] 4 FE 수선 루프(Claude ×3 + 게이트 --final) (61s)
+[OK] 5 PKG 이식 루프(Claude ×3 + check-pkg) (1980s)
+[OK] 6 E2E 스펙 생성(gen-e2e) (0s)
+[OK] 7 대사표 갱신(recon) (8s)
+
+PASS → C:\Projects\NSCM\Doc\gen\DMF0052\PIPELINE.md

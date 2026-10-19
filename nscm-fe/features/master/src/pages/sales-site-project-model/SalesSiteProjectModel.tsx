@@ -1,27 +1,54 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CRUD_TYPE } from '@foundation/constants';
 import { t } from '@foundation/i18n';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQueryClient } from '@foundation/query-client';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useSaveWithValidation, useTabProcQuery } from '@shared/hooks';
+import { useSaveWithValidation, useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { Panel, PanelGroup } from '@shared/panel';
-import { useMessageStore } from '@shared/stores';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
+import { ModelCodeChangeModal } from './componenets/ModelCodeChangeModal';
 import { SalesSiteProjectModelForm } from './componenets/SalesSiteProjectModelForm';
 import { SalesSiteProjectModelGrid } from './componenets/SalesSiteProjectModelGrid';
 import { SalesSiteProjectModelPurchaseGrid } from './componenets/SalesSiteProjectModelPurchaseGrid';
-import { MENU_ID, SHEET_INDEX, SHEETS } from './sales-site-project-model.constants';
+import {
+  MENU_ID,
+  MODEL_CHANGE_BTN_CD,
+  MODEL_CHANGE_DIVISION,
+  SAVE_STALE_COMBO_IDS,
+  SHEET_INDEX,
+  SHEETS,
+} from './sales-site-project-model.constants';
+import { applyScpEditLock, isScpBlockedUser } from './sales-site-project-model.scpGuard';
 import styles from './SalesSiteProjectModel.module.scss';
 import { useSalesSiteProjectModelSave } from './useSalesSiteProjectModelSave';
 import { useSalesSiteProjectModelStore } from './useSalesSiteProjectModelStore';
 
 export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { saveWithValidation } = useSaveWithValidation();
-  const { setAlert } = useMessageStore.getState();
+  const queryClient = useQueryClient();
+  const { setAlert, setToast } = useMessageStore.getState();
+
+  // 저장 성공 시 이 화면(DMF0005)의 Team 조회조건 콤보만 다시 받는다.
+  //   공통 useInvalidateCombos 는 comboId 만 보고 무효화해서, 같은 FilterTeambyDivision 을 쓰는
+  //   다른 열린 화면(business-plan / mkt-fcst 등, MDI keep-alive)의 콤보까지 전부 재조회한다.
+  //   콤보 키 param 에는 mnuId 가 실려 화면마다 캐시가 갈리므로, mnuId 로 이 화면 것만 고른다.
+  const refetchStaleCombos = () =>
+    void queryClient.invalidateQueries({
+      predicate: query => {
+        if (query.queryKey[0] !== 'combo') return false;
+        const param = query.queryKey[2] as { comboId?: string; mnuId?: string } | undefined;
+        return (
+          param?.mnuId === MENU_ID &&
+          (SAVE_STALE_COMBO_IDS as readonly string[]).includes(param?.comboId ?? '')
+        );
+      },
+    });
 
   const gridRefs = [useRef<FlexGrid>(), useRef<FlexGrid>()];
   const gridFilterRefs = [useRef<FlexGridFilter>(), useRef<FlexGridFilter>()];
@@ -37,6 +64,9 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setOpenSearchArea = useSalesSiteProjectModelStore(state => state.setOpenSearchArea);
 
   const [activeTab, setActiveTab] = useState<SHEET_INDEX>(SHEET_INDEX.PRODUCTION);
+  const [openModelChange, setOpenModelChange] = useState(false);
+
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
   const { data: productionData } = useTabProcQuery<MENU_ID, SHEETS.PRODUCTION>({
     menuId: MENU_ID,
@@ -69,6 +99,31 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
     tabId,
   });
 
+  // itemsSource 참조 안정화 — 조회 전 매 렌더 새 `?? []` 로 신규행이 리렌더에 사라지는 것 방지
+  //   (handleSave 가 그리드 소스에서 신규행을 읽으려면 필요). DMF0006/DMF0007 과 동일.
+  //   단, division 이 바뀌면 새 [] 를 만들어(deps 에 divisionId) 두 그리드를 비운다 — 조회 전
+  //   addRow 한 신규행은 데이터가 계속 undefined 라 참조가 고정돼 남아 있었는데, division 을
+  //   바꾸면 초기화되어야 한다.
+  // SCP Planner 가드 — AS-IS InsertButton(정본 L590)·EditButton(정본 L618) 그룹 검사 재현. 판정 근거와
+  //   겸직 예외는 sales-site-project-model.scpGuard 참조. 세션 보유 그룹(session.groups)으로 판정한다.
+  const sessionGroups = useSessionStore(state => state.session.groups);
+  const scpBlocked = useMemo(() => isScpBlockedUser(sessionGroups), [sessionGroups]);
+
+  // 가드 대상이면 81·82 행을 EDIT_FLAG='N' 사본으로 바꿔 셀 편집·붙여넣기·저장을 한 번에 막는다(40 은
+  //   SP 가 내려준 EDIT_FLAG 그대로). 조회 SP 는 GET_ADMIN_GROUP 룩업에 SCP Planner 가 들어 있어 전
+  //   행을 'Y' 로 내리므로 화면에서 덮어야 한다. 가드 대상이 아니면 참조를 그대로 돌려줘 아래
+  //   itemsSource 안정화와 충돌하지 않는다. AS-IS EditButton 가드는 상·하단 공통이라 둘 다 적용한다.
+  const productionRows = useMemo(
+    () => applyScpEditLock(productionData?.production ?? [], scpBlocked),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [productionData, searchParams.divisionId, scpBlocked]
+  );
+  const purchaseRows = useMemo(
+    () => applyScpEditLock(purchaseData?.purchase ?? [], scpBlocked),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [purchaseData, searchParams.divisionId, scpBlocked]
+  );
+
   const handleSubmit = () => {
     setProductionFilter();
     void fetchStaticColumns();
@@ -78,6 +133,11 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleInsert = () => {
     if (activeTab !== SHEET_INDEX.PRODUCTION) return;
     if (!gridRefs[activeTab].current) return;
+    // AS-IS InsertButton(정본 L590~597): SCP Planner 면 MSG00096(권한이 없습니다) 안내 후 종료.
+    if (scpBlocked) {
+      void setAlert({ type: 'alert', content: t('MSG00096', '_권한이 없습니다.') });
+      return;
+    }
 
     GridAction.addRow(gridRefs[activeTab].current, {
       DIVISION_ID: searchParams.divisionId,
@@ -86,7 +146,22 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   const handleSave = () => {
-    gridRefs[activeTab].current?.finishEditing();
+    const grid = gridRefs[activeTab].current;
+    grid?.finishEditing();
+
+    // 변경/신규 행이 없으면 "수정한 내용이 없습니다" — 저장 훅의 빈배열 가드를 여기(컴포넌트)로
+    //   공통화했다. dirty 행은 그리드 소스(collectionView.sourceCollection)에서 읽는다 — 신규행
+    //   (addRow)은 그 배열에 splice 되고 조회 전엔 쿼리 데이터가 undefined 라 그쪽으로는 안 잡힌다
+    //   (DMF0006/DMF0007 과 동일). 그래야 신규행 저장 시 필수검증이 걸린다.
+    const dirtyRows = (
+      (grid?.collectionView?.sourceCollection ?? []) as { CRUD_TYPE?: string }[]
+    ).filter(row => row.CRUD_TYPE);
+    if (dirtyRows.length === 0) {
+      // 다른 화면(useProcMutation onError)과 동일하게 toast 로 알린다(변경 없음 = toast, 검증 실패 = alert).
+      setToast({ type: 'error', message: t('MSG_NO_CHANGE', '_수정한 내용이 없습니다.') });
+      return;
+    }
+
     if (activeTab === SHEET_INDEX.PRODUCTION) {
       // ⭐ 신규행 PROJECT_CODE 보정 — SCM_MST_SITE_ITEM.PROJECT_CODE 는 NOT NULL 이다.
       //   GridAction.addRow 는 시드한 키만으로 행을 만들어서, 사용자가 안 건드린 컬럼은 저장 JSON 에
@@ -96,7 +171,10 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
       //   방법이 없다 → DMF0042 AS-IS 관례대로 End Customer 를 project 슬롯으로 쓴다
       //   (features/demand/.../business-plan.division.ts L34·L39).
       //   그 외 division 은 Project 팝업으로 직접 고르는 값이라 임의로 채우지 않고 저장을 막는다.
-      const saveData = (productionData?.production ?? [])
+      const src = (grid?.collectionView?.sourceCollection ?? []) as NonNullable<
+        typeof productionData
+      >['production'];
+      const saveData = src
         .filter(item => item.CRUD_TYPE)
         .map(item =>
           item.CRUD_TYPE === CRUD_TYPE.INSERT && !item.PROJECT_CODE && item.DIVISION_ID === '40'
@@ -123,11 +201,24 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
       }
 
       const staticColumn = staticColumns.production;
-      saveWithValidation(saveData, staticColumn, mutateProduction);
+      // 저장 성공 시 Team 조회조건 콤보를 다시 받는다 — 훅 기본 onSuccess(토스트 + 그리드 재조회)
+      //   뒤에 이어서 실행된다.
+      saveWithValidation(saveData, staticColumn, rows =>
+        mutateProduction(rows, {
+          onSuccess: () => refetchStaleCombos(),
+        })
+      );
     } else if (activeTab === SHEET_INDEX.PURCHASE) {
-      const saveData = purchaseData?.purchase?.filter(item => item.CRUD_TYPE) ?? [];
+      const src = (grid?.collectionView?.sourceCollection ?? []) as NonNullable<
+        typeof purchaseData
+      >['purchase'];
+      const saveData = src.filter(item => item.CRUD_TYPE);
       const staticColumn = staticColumns.purchase;
-      saveWithValidation(saveData, staticColumn, mutatePurchase);
+      saveWithValidation(saveData, staticColumn, rows =>
+        mutatePurchase(rows, {
+          onSuccess: () => refetchStaleCombos(),
+        })
+      );
     }
   };
 
@@ -138,17 +229,38 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleDelete = () => {
     if (!gridRefs[activeTab].current) return;
 
-    GridAction.removeRow(gridRefs[activeTab].current);
+    // 이 화면은 삭제 기능이 없다(기존 저장행은 삭제 대상이 아니다). deleteOnlyNew=true 로
+    //   신규행만 그리드에서 제거하고, 기존 행은 삭제 버튼을 눌러도 CRUD_TYPE='D' 로 바뀌지 않는다.
+    GridAction.removeRow(gridRefs[activeTab].current, true);
   };
 
+  // 버튼 노출은 그룹 버튼 권한(SCM_ADM_USER_GR_MNU_BTN_MPG_M)으로 정한다 — 공용 훅 표준 패턴(AUTH-02).
+  //   종전에는 핸들러를 조건 없이 넘겨 SAVE 권한이 없는 DM Viewer 에게도 저장 버튼이 보였고, 누르면
+  //   서버(CustomAuthorizationManager → PR_CHECK_MNU_BTN_AUTH)가 거부해 실패 안내만 뜨고 고친 값이
+  //   사라졌다(2026-10-07 리포트). 서버와 같은 등록을 화면도 읽어 버튼 자체를 숨긴다.
+  //   INSERT/DELETE 는 production 시트 버튼 메타가 함께 등록돼야 보인다 — 배포 SQL
+  //   _artifacts/_deploy_packages/DMF0005_BTN_INSERT_DELETE_20261007/ (SAVE 보유 5그룹에 동일 부여).
   const hotkeyConfig: HotkeyConfig = {
-    insert: handleInsert,
-    save: handleSave,
+    insert: hasButton('INSERT') ? handleInsert : false,
+    save: hasButton('SAVE') ? handleSave : false,
     search: handleSubmit,
-    delete: handleDelete,
+    delete: hasButton('DELETE') ? handleDelete : false,
     manual: false,
     upload: false,
   };
+
+  // Model Code Change — 그룹 권한(MODEL_CHANGE 버튼 코드) AND 현재 선택 Division 40.
+  //   조회 여부와 무관하게 조회조건 Division 만 보므로 화면을 연 직후부터, Division 을 바꿀 때마다 판정된다
+  //   (AS-IS InitControls + clbDivision 변경 이벤트 양쪽에서 같은 조건으로 표시/숨김).
+  const customButtons =
+    hasButton(MODEL_CHANGE_BTN_CD) && searchParams.divisionId === MODEL_CHANGE_DIVISION
+      ? [
+          {
+            label: t('LBL_MODEL_CODE_CHANGE', 'Model Code Change'),
+            action: () => setOpenModelChange(true),
+          },
+        ]
+      : [];
 
   useEffect(() => {
     if (!initialized) void fetchStaticColumns();
@@ -168,12 +280,11 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
         grid={gridRefs[activeTab]}
         gridFilter={gridFilterRefs[activeTab]}
         dataCount={
-          activeTab === SHEET_INDEX.PRODUCTION
-            ? (productionData?.production ?? []).length
-            : (purchaseData?.purchase ?? []).length
+          activeTab === SHEET_INDEX.PRODUCTION ? productionRows.length : purchaseRows.length
         }
         excelFileName='Sales-Site-Project-Model'
         hotkeyConfig={hotkeyConfig}
+        customButtons={customButtons}
         searchParam={searchParams}
       />
       <PanelGroup className={styles.customPanelGroup} orientation='vertical'>
@@ -181,7 +292,7 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
           <SalesSiteProjectModelGrid
             gridRef={gridRefs[SHEET_INDEX.PRODUCTION]}
             gridFilterRef={gridFilterRefs[SHEET_INDEX.PRODUCTION]}
-            data={productionData?.production ?? []}
+            data={productionRows}
             setActiveTab={setActiveTab}
             // 상단 더블클릭 조회가 하단을 갈아끼우므로, 하단 미저장 변경이면 막는다.
             hasPurchaseChanges={hasPurchaseChanges}
@@ -192,12 +303,17 @@ export const SalesSiteProjectModel = ({ tabId, title }: PageProps<MENU_ID>) => {
             <SalesSiteProjectModelPurchaseGrid
               gridRef={gridRefs[SHEET_INDEX.PURCHASE]}
               gridFilterRef={gridFilterRefs[SHEET_INDEX.PURCHASE]}
-              data={purchaseData?.purchase ?? []}
+              data={purchaseRows}
               setActiveTab={setActiveTab}
             />
           </Panel>
         )}
       </PanelGroup>
+      <ModelCodeChangeModal
+        open={openModelChange}
+        modalClose={() => setOpenModelChange(false)}
+        tabId={tabId}
+      />
     </>
   );
 };

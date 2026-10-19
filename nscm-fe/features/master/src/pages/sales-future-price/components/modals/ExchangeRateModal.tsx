@@ -7,18 +7,20 @@ import {
   type GridPanel,
   MergeManager,
 } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, DatePickerCalendar, FormItem } from '@shared/lges';
+import { Button, DatePickerCalendar, FormItem, ProgressIndicator } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
 import { EXCHANGE_RATE_COLUMNS, MENU_ID, SHEETS } from '../../sales-future-price.constants';
+import { enumerateYyyymm } from '../../utils/futurePriceDate';
 
 import styles from './ExchangeRateModal.module.scss';
 import { useExchangeRateModalStore } from './exchangeRateModalStore';
@@ -66,6 +68,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
   const gridRef = useRef<FlexGridType<PivotRow>>(undefined);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
   const [divisionId, setDivisionId] = useState(defaultDivision);
 
   // Division dropdown — 권한 기반 MyDivision combo (grid 와 동일하게 Division_id + Division name 표기).
@@ -113,13 +117,15 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   // ⭐ 자동조회 (2026-07-07 사용자 요구 — Batch Price Input 제외 전 modal 자동조회):
   //   enabled=open → modal open 시 react-query 가 확정 기간으로 자동 fetch. Find 버튼은 재조회용 유지.
   //   (setFilter();refetch() 직접 발사 대신 enabled 구동 → stale-closure NULL 재조회 함정 회피.)
-  const { data, refetch } = useTabProcQuery({
+  const { data, refetch, isLoading, isFetching } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.EXCHANGE,
     tabId: MENU_ID,
     filters,
     enabled: open,
   });
+
+  const loading = isLoading || isFetching;
 
   // ⭐ 성능(2026-07-08, 메인 그리드 동일 사유) — allRows/filteredRows 참조 안정화(useMemo).
   //   CustomDialog 는 open=false 라도 content 를 mount 하므로, 렌더 본문 계산이면 "메인 화면"의 매
@@ -136,10 +142,19 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     });
   }, [data, divisionId]);
 
+  // 조회 기간 전체의 월 목록 — 헤더 기준. 데이터가 있는 월만 모으면 종료월 전에 데이터가
+  //   끊겼을 때 헤더도 거기서 잘린다(사용자 보고 2026-09-01). 확정 기간(queryPeriod)을 기준으로
+  //   전 월을 만들어 두고, 데이터에만 있는 월(기간 밖 YYYY00 형태 등)은 아래 pivot 에서 합집합 처리.
+  const periodYmKeys = useMemo(
+    () => enumerateYyyymm(queryPeriod.start, queryPeriod.end),
+    [queryPeriod.start, queryPeriod.end]
+  );
+
   // ===== long → wide pivot (사용자 요구 2026-06-03: AS-IS 2단 헤더 YYYY/MM) =====
   const { pivotRows, ymKeys } = useMemo(() => {
     const groupMap = new Map<string, PivotRow>();
-    const ymSet = new Set<string>();
+    // 조회 기간의 모든 월을 먼저 담는다 = 값이 없는 월도 빈 컬럼으로 헤더에 남는다.
+    const ymSet = new Set<string>(periodYmKeys);
     for (const r of filteredRows) {
       const div = String(r.DIVISION_ID ?? '');
       const cur = String(r.CURRENCY ?? '');
@@ -163,7 +178,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     });
     const ymSorted = [...ymSet].sort();
     return { pivotRows: list, ymKeys: ymSorted };
-  }, [filteredRows]);
+  }, [filteredRows, periodYmKeys]);
 
   const fixedBindings = useMemo(() => EXCHANGE_RATE_COLUMNS.map(c => c.key), []);
 
@@ -384,6 +399,10 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       size={1200}
       handleClose={modalClose}
       disableButtonCancel
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -399,7 +418,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
               <>
                 <Grid size={6}>
                   <FormItem
-                    label={t('LBL00663', 'Div')}
+                    label={t('LBL00001', 'Div')}
                     labelAlign='right'
                     render={() => (
                       <CustomDropdown
@@ -455,21 +474,35 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
           />
 
           <div className={styles.gridWrapper}>
-            <DataGrid<PivotRow>
-              gridRef={gridRef}
-              className={styles.grid}
-              isReadOnly
-              itemsSource={pivotRows}
-              staticColumns={gridStaticColumns}
-              dynamicColumns={gridDynamicColumns}
-              autoGenerateColumns={false}
-              frozenColumns={fixedBindings.length}
-              allowSorting={false}
-              // ⭐ Div / Currency 세로 셀 머지 (사용자 요구 2026-07-07) — ExchangeMerge(mergeManager)가 데이터셀
-              //   계층 머지를 담당하나, prop 미전달 시 wrapper 가 매 렌더 g.allowMerging 을 기본(ColumnHeaders)으로
-              //   되돌려 셀 머지가 꺼짐. 형제 PriceBatchInputModal 과 동일하게 All 전달로 일관 적용.
-              allowMerging={AllowMerging.All}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea
+              title=''
+              count={pivotRows.length}
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<PivotRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                className={styles.grid}
+                isReadOnly
+                itemsSource={pivotRows}
+                staticColumns={gridStaticColumns}
+                dynamicColumns={gridDynamicColumns}
+                autoGenerateColumns={false}
+                frozenColumns={fixedBindings.length}
+                allowSorting={false}
+                // ⭐ Div / Currency 세로 셀 머지 (사용자 요구 2026-07-07) — ExchangeMerge(mergeManager)가 데이터셀
+                //   계층 머지를 담당하나, prop 미전달 시 wrapper 가 매 렌더 g.allowMerging 을 기본(ColumnHeaders)으로
+                //   되돌려 셀 머지가 꺼짐. 형제 PriceBatchInputModal 과 동일하게 All 전달로 일관 적용.
+                allowMerging={AllowMerging.All}
+              />
+            </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
             <Button

@@ -1,0 +1,1771 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_SAVE_MDF_SIMULTATOR","1382348039","6","	,ITEM_TYPE
+											,MEASURE
+											,UNIT_CURRENCY
+											,YYYYMM
+											,QTY
+											,'MDF_SIMULATOR' AS CREATED_BY
+											,GETDATE()   
+											,'MDF_SIMULATOR' AS LAST_UPDATED_BY
+											,GETDATE()
+											,null,null,null,null,null,null,null,null,null,null
+								 FROM  #results_MST
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                        DM_PLN_MDF_SIMULATOR_DATA_H 테이블 HISTORY INSERT (END)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+
+  	-- 트랜잭션 (COMMIT)
+        COMMIT TRANSACTION DMF0041_SAVE_MDF_SIMULTATOR;
+	--------------------------------------------------------------------------------------------	
+		END TRY
+	--------------------------------------------------------------------------------------------	
+
+	--------------------------------------------------------------	
+    BEGIN CATCH
+	--------------------------------------------------------------	
+		--[C20200909-000203] LOG 표준화 적용
+		-- 트랜잭션 (END)
+		ROLLBACK TRANSACTION DMF0041_SAVE_MDF_SIMULTATOR;
+
+		SET @v_log_type = 'ERROR';
+		SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+		SET @v_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+		SET @d_event_date = SYSDATETIME();
+
+		SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();  /*-- 에러메시지 DISPLAY --*/
+
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	--------------------------------------------------------------	
+    END CATCH;
+	--------------------------------------------------------------	
+
+	-- 수행결과 성공여부 DISPLAY
+   --  IF @v_log_message IS NULL
+	  --SELECT 'success'	;
+
+    -- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure @@@##########';
+    SET @v_description = 'delete_count: '+ Convert(NVARCHAR(10), @n_delete_count)  + ' / insert_count: ' + Convert(NVARCHAR(10), @n_insert_count) ;
+    SET @d_event_date = SYSDATETIME();
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+  END;
+
+  	--------------------------------------------------------------	
+  	err_rtn:
+	IF @v_log_type = 'INVALID'
+		begin
+			ROLLBACK TRANSACTION DMF0041_SAVE_MDF_SIMULTATOR;
+			SET @v_log_message = '########## END of procedure @@@##########';
+			SET @v_description = 'delete_count: '+ Convert(NVARCHAR(10), @n_delete_count)  + ' / insert_count: ' + Convert(NVARCHAR(10), @n_insert_count) ;
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		end
+	--------------------------------------------------------------	
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_APPLICATION_POPUP","1286347697","1","/****************************************************************************************************/
+/* Program ID  : [DMF0041_GET_APPLICATION_POPUP]                                            */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2019/07/22  JYE			Initial Release - Application 팝업 데이터 조회        */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0041_GET_APPLICATION_POPUP]
+	@p_division_id   NVARCHAR(MAX),  
+	@p_app       NVARCHAR(MAX),
+	@p_search       NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+	-- 왼쪽 스프레드 데이터
+	SELECT SEGMENT1 AS APPLICATION,
+			SEGMENT2 AS NAME,
+			ROW_NUMBER() OVER (ORDER BY SEGMENT1) * 100 AS SORT_ORDER_NO
+	FROM SCM_ADM_LOOKUP_MASTER_DETAIL AS DETAIL
+	INNER JOIN ( SELECT '%'+token+'%' tst FROM dbo.String_Split(@p_search,',') ) b
+			ON CASE WHEN @p_search = '' THEN @p_search ELSE DETAIL.SEGMENT2  END LIKE  B.TST
+	WHERE  (LOOKUP_TYPE = 'APPLICATION')
+		AND SEGMENT2 NOT IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_app,',') )
+	ORDER BY  SEGMENT1
+
+	-- 오른쪽 스프레드 데이터
+	SELECT SEGMENT1 AS APPLICATION,
+			SEGMENT2 AS NAME,
+			ROW_NUMBER() OVER (ORDER BY SEGMENT1) * 100 AS SORT_ORDER_NO
+	FROM SCM_ADM_LOOKUP_MASTER_DETAIL AS DETAIL
+	INNER JOIN ( SELECT '%'+token+'%' tst FROM dbo.String_Split(@p_search,',') ) b
+			ON CASE WHEN @p_search = '' THEN @p_search ELSE DETAIL.SEGMENT2  END LIKE  B.TST
+	WHERE  (LOOKUP_TYPE = 'APPLICATION')
+		AND SEGMENT2 IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_app,',') )
+	ORDER BY  SEGMENT1
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_DMS_SAELS_POPUP","1302347754","1","/****************************************************************************************************/
+/* Program ID  : [DMF0041_GET_DMS_SAELS_POPUP]                                            */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2019/02/25  JYE			Initial Release - DMS Sales 팝업 데이터 조회        */
+/*                                      */
+/****************************************************************************************************/
+
+CREATE PROCEDURE [dbo].[DMF0041_GET_DMS_SAELS_POPUP]
+	@p_division_id   NVARCHAR(MAX),  
+	@p_dms_sales       NVARCHAR(MAX),
+	@p_search       NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	-- 왼쪽 스프레드 데이터
+	SELECT DIVISION_ID, DMS_SALES
+		, ROW_NUMBER() OVER (ORDER BY DMS_SALES) * 100 AS SORT_ORDER_NO
+	FROM (
+		SELECT DISTINCT DIVISION_ID, ATTRIBUTE1 AS DMS_SALES
+		FROM SCM_MST_SITE_ITEM AS A WITH(NOLOCK)
+		INNER JOIN ( SELECT '%'+token+'%' tst FROM dbo.String_Split(@p_search,',') ) b
+			ON CASE WHEN @p_search = '' THEN @p_search ELSE A.ATTRIBUTE1  END LIKE  B.TST
+		WHERE
+		DIVISION_ID = @p_division_id
+		AND ATTRIBUTE1 <> ''
+		AND ATTRIBUTE1 NOT IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_dms_sales,',') )
+		UNION
+		SELECT SEGMENT1, SEGMENT2 AS DMS_SALES
+		FROM  [SCM_ADM_LOOKUP_MASTER_DETAIL] AS A WITH(NOLOCK)
+		INNER JOIN ( SELECT '%'+token+'%' tst FROM dbo.String_Split(@p_search,',') ) b
+			ON CASE WHEN @p_search = '' THEN @p_search ELSE A.ATTRIBUTE1  END LIKE  B.TST
+		where  LOOKUP_TYPE = 'END_CUSTOMER'
+		AND SEGMENT2 <> '-'
+		AND SEGMENT1  = CASE WHEN @p_division_id = '' THEN SEGMENT1 ELSE @p_division_id END
+		AND SEGMENT2 NOT IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_dms_sales,',') )
+	) MA
+	ORDER BY DMS_SALES
+
+	-- 오른쪽 스프레드 데이터
+	SELECT DISTINCT DIVISION_ID, ATTRIBUTE1 AS DMS_SALES
+		, (SELECT NR FROM dbo.String_Split(@p_dms_sales,',') WHERE TOKEN = ATTRIBUTE1) AS SORT_ORDER_NO
+	FROM SCM_MST_SITE_ITEM WITH(NOLOCK)
+	WHERE
+	DIVISION_ID = @p_division_id
+	AND ATTRIBUTE1 <> ''
+	AND ATTRIBUTE1 IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_dms_sales,',') )
+	UNION
+	SELECT SEGMENT1, SEGMENT2 AS DMS_SALES
+		, (SELECT NR FROM dbo.String_Split(@p_dms_sales,',') WHERE TOKEN = SEGMENT2) AS SORT_ORDER_NO
+	FROM  [SCM_ADM_LOOKUP_MASTER_DETAIL] WITH(NOLOCK)
+	where  LOOKUP_TYPE = 'END_CUSTOMER'
+	AND SEGMENT2 <> '-'
+	AND SEGMENT1  = CASE WHEN @p_division_id = '' THEN SEGMENT1 ELSE @p_division_id END
+	AND SEGMENT2 IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_dms_sales,',') )
+	ORDER BY ATTRIBUTE1
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_MDF_SIMULTATOR","1318347811","1","/*
+ * Program ID   : DMF0041_GET_MDF_SIMULTATOR
+ * Description  :  MDF Simulator 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019/02/18  JYE             Initial Release 
+ ** 20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리
+ */
+CREATE PROCEDURE [dbo].[DMF0041_GET_MDF_SIMULTATOR]
+	@p_division_id			NVARCHAR(4000),
+	@p_dept_id				NVARCHAR(4000),
+	@p_application			NVARCHAR(4000),
+	@p_model_type			NVARCHAR(4000),
+	@p_mdf_version_no		NVARCHAR(50),
+	@p_sp_version_no		NVARCHAR(50),
+	@p_start_dt				NVARCHAR(08),
+	@p_end_dt				NVARCHAR(08),
+	@p_created_by			NVARCHAR(50),
+	@p_user_group			NVARCHAR(50)
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	DECLARE @PROD			NVARCHAR(MAX)=''
+	DECLARE @SQL			NVARCHAR(MAX)=''
+	DECLARE @v_group_id		nvarchar(50)='';
+	DECLARE @v_team_id		nvarchar(50)='';
+
+	-- 임시 테이블 삭제
+	IF OBJECT_ID (N'tempdb..#temp', N'U') IS NOT NULL 
+		DROP TABLE #temp;
+	IF OBJECT_ID (N'tempdb..#temp2', N'U') IS NOT NULL 
+		DROP TABLE #temp2;
+	IF OBJECT_ID (N'tempdb..#middle_sum', N'U') IS NOT NULL 
+		DROP TABLE #middle_sum;
+	IF OBJECT_ID (N'tempdb..#middle_sum2', N'U') IS NOT NULL 
+		DROP TABLE #middle_sum2;
+	IF OBJECT_ID (N'tempdb..#sales_plan_c', N'U') IS NOT NULL 
+		DROP TABLE #sales_plan_c;
+	IF OBJECT_ID (N'tempdb..#sales_plan_result_c', N'U') IS NOT NULL 
+		DROP TABLE #sales_plan_result_c;
+
+	-- #sales_plan_c TEMP TABLE
+	--CREATE TABLE #sales_plan_c  (
+ --            DIVISION_ID		NVARCHAR(30)   NOT NULL
+	--		,VERSION_NO   		NVARCHAR(50)   NOT NULL
+	--		,CUTOFF_TYPE		NVARCHAR(10)   NOT NULL
+	--		,CUTOFF_YYYYMMDD	NVARCHAR(8)    NOT NULL
+	--		,PROJECT_CODE		NVARCHAR(50)   NOT NULL
+	--		,SCM_SITE_ID		NVARCHAR(30)   NOT NULL
+	--		,ITEM_ID    		NVARCHAR(50)   NOT NULL
+	--		,DOM_EXP			NVARCHAR(3)    NOT NULL
+	--		,FCST_TYPE			NVARCHAR(20)   NOT NULL
+	--		,INCOTERMS			NVARCHAR(10)   NOT NULL
+	--		,MEASURE		    NVARCHAR(50)   NOT NULL
+	--		,PLANT_SITE_ID		NVARCHAR(30)   NOT NULL
+	--		,YYYYMMDD			NVARCHAR(8)    NOT NULL
+	--		,CURRENCY			NVARCHAR(8)    NOT NULL
+	--		,QTY				NUMERIC(20,10) NOT NULL
+ --   )
+
+	---- #sales_result_c TEMP TABLE
+	--CREATE TABLE #sales_result_c  (
+ --            DIVISION_ID		NVARCHAR(30)   NOT NULL
+	--		,VERSION_NO   		NVARCHAR(50)   NOT NULL
+	--		,CUTOFF_TYPE		NVARCHAR(10)   NOT NULL
+	--		,CUTOFF_YYYYMMDD	NVARCHAR(8)    NOT NULL
+	--		,PROJECT_CODE		NVARCHAR(50)   NOT NULL
+	--		,SCM_SITE_ID		NVARCHAR(30)   NOT NULL
+	--		,ITEM_ID    		NVARCHAR(50)   NOT NULL
+	--		,DOM_EXP			NVARCHAR(3)    NOT NULL
+	--		,FCST_TYPE			NVARCHAR(20)   NOT NULL
+	--		,INCOTERMS			NVARCHAR(10)   NOT NULL
+	--		,MEASURE		    NVARCHAR(50)   NOT NULL
+	--		,PLANT_SITE_ID		NVARCHAR(30)   NOT NULL
+	--		,YYYYMMDD			NVARCHAR(8)    NOT NULL
+	--		,CURRENCY			NVARCHAR(8)    NOT NULL
+	--		,QTY				NUMERIC(20,10) NOT NULL
+ --   )
+
+    SELECT DIVISION_ID	
+	     , VERSION_NO   	
+	     , CUTOFF_TYPE	
+	     , CUTOFF_YYYYMMDD
+	     , PROJECT_CODE	
+	     , SCM_SITE_ID	
+	     , ITEM_ID    	
+	     , DOM_EXP		
+	     , FCST_TYPE		
+	     , INCOTERMS		
+	     , MEASURE		
+	     , PLANT_SITE_ID	
+	     , YYYYMMDD		
+	     , CURRENCY		
+	     , QTY	
+      INTO #sales_plan_c
+      FROM [DM_PLN_SALES_PLAN_C] a WITH(NOLOCK)
+     WHERE VERSION_NO = @p_sp_version_no
+    ;
+	
+    SELECT DIVISION_ID	
+	     , VERSION_NO   	
+	     , CUTOFF_TYPE	
+	     , CUTOFF_YYYYMMDD
+	     , PROJECT_CODE	
+	     , SCM_SITE_ID	
+	     , ITEM_ID    	
+	     , DOM_EXP		
+	     , FCST_TYPE		
+	     , INCOTERMS		
+	     , MEASURE		
+	     , PLANT_SITE_ID	
+	     , YYYYMMDD		
+	     , CURRENCY		
+	     , QTY	
+      INTO #sales_plan_result_c
+      FROM DM_PLN_SALES_PLAN_RESULT_C a WITH(NOLOCK)
+     WHERE VERSION_NO = @p_sp_version_no
+    ;
+
+	-- 권한 그룹
+	--IF @p_user_group = 'ADMIN' OR @p"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_MDF_SIMULTATOR","1318347811","2","_user_group = 'DM ADMIN'
+	--	SET @v_group_id = 'ADMIN';
+
+	---------------------------------------------------------------------------------
+	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (BEGIN)
+	---------------------------------------------------------------------------------
+	IF ISNULL((
+				SELECT COUNT(1) FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+					where LOOKUP_TYPE = 'GET_ADMIN_GROUP' 
+						AND VALID_YN = 'Y'
+						AND SEGMENT2 = 'ALL'  -- 'ALL'인경우 DM Planner (W/S) 제외 / 주석처리인경우 DM Planner (W/S) 포함 
+						AND SEGMENT1 = @p_user_group
+			  ),0) > 0
+		BEGIN
+			SET @v_group_id = 'ADMIN'
+		END
+	---------------------------------------------------------------------------------
+	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (END)
+	---------------------------------------------------------------------------------
+
+	-- 팀 권한
+	select @v_team_id = Dept_ID from [dbo].[TB_FX_User] WITH(NOLOCK) where UserID = @p_created_by;
+
+	-- 단계1. 데이터 쿼리 ########################################################
+	WITH MIDDLE_SUMMARY AS 
+	(
+		SELECT DISTINCT
+			MDF.MDF_VERSION_NO
+			, MDF.DIVISION_ID
+			, MDF.DEPARTMENT_ID
+			, MDF.DMS_CUSTOMER
+			, MDF.DMS_SALES
+			, MDF.APPLICATION
+			, MDF.BIZ_TYPE
+			, MDF.ITEM_TYPE
+			, MEASURE
+			, UNIT_CURRENCY
+			, YYYYMM
+			, ISNULL(QTY, 0) AS QTY
+			, @p_sp_version_no AS SPVERSION_NO
+		FROM DM_PLN_MDF_SIMULATOR_DATA MDF WITH(NOLOCK)
+             INNER JOIN (SELECT DISTINCT '%' + TOKEN + '%' AS APP FROM dbo.String_Split(@p_application,',')) C
+                ON APPLICATION LIKE C.APP
+		WHERE MDF_VERSION_NO = @p_mdf_version_no
+			--AND APPLICATION IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_application,','))
+			AND ITEM_TYPE IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_model_type,','))
+			AND DEPARTMENT_ID IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_dept_id,','))
+
+		UNION ALL
+		-- 계획 구간(Current)
+		SELECT 
+			MDF.MDF_VERSION_NO
+			, MDF.DIVISION_ID
+			, MDF.DEPARTMENT_ID
+			, MDF.DMS_CUSTOMER
+			, MDF.DMS_SALES
+			, MDF.APPLICATION
+			, MDF.BIZ_TYPE
+			, MDF.ITEM_TYPE
+			,CASE WHEN A.MEASURE = 'RTF' THEN 'Cell_Qty'
+				WHEN A.MEASURE = 'SalesAmt_USD' THEN 'Amt' END MEASURE
+			,CASE WHEN A.MEASURE = 'RTF' THEN N'천팩' 
+				WHEN A.MEASURE = 'SalesAmt_USD' THEN N'천$' END unit_currency  
+			,SUBSTRING(A.YYYYMMDD,1,6) YYYYMM
+--			,SUM(CASE WHEN A.MEASURE = 'RTF' THEN (  A.QTY * ISNULL(i.FORECAST_INFO_CELL_PACK_COUNT,1) ) /1000
+			,SUM(CASE WHEN A.MEASURE = 'RTF' THEN A.QTY
+				 WHEN A.MEASURE = 'SalesAmt_USD' THEN A.QTY / 1000 END) QTY   
+			, 'Current' AS SPVERSION_NO
+--		FROM [10.34.221.78,7433].[LGCE_SCMDEV].[dbo].[DM_PLN_SALES_PLAN] A WITH(NOLOCK)
+		FROM [dbo].[DM_PLN_SALES_PLAN] A WITH(NOLOCK)
+			,SCM_MST_SITE_ITEM SI  WITH(NOLOCK)
+			,( 
+				-- key 기준 Mapping
+				SELECT 
+					DISTINCT 
+					MDF_VERSION_NO
+					, DIVISION_ID
+					, DEPARTMENT_ID
+					, DMS_SALES
+					, DMS_CUSTOMER
+					, APPLICATION
+					, BIZ_TYPE
+					, ITEM_TYPE 
+					, CASE WHEN ITEM_TYPE = N'원통형'  THEN 'MCC'     
+						WHEN ITEM_TYPE = N'파우치형' THEN 'MCP'
+						WHEN ITEM_TYPE = N'각형' THEN 'MCR' END ITEM_TYPE2
+					, CASE WHEN BIZ_TYPE = 'PACK'  THEN 'MP'     
+						WHEN BIZ_TYPE = 'CELL'  THEN 'MC'END BIZ_TYPE2
+				FROM DM_PLN_MDF_SIMULATOR_DATA WITH(NOLOCK) 
+                     INNER JOIN (SELECT DISTINCT '%' + TOKEN + '%' AS APP FROM dbo.String_Split(@p_application,',')) C
+                        ON APPLICATION LIKE C.APP
+				WHERE MDF_VERSION_NO = @p_mdf_version_no
+					AND DIVISION_ID = @p_division_id
+					--AND APPLICATION IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_application,','))
+					AND ITEM_TYPE IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_model_type,','))
+					AND DEPARTMENT_ID IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_dept_id,','))
+			) MDF
+			,DM_MST_ITEM_SINGLE_V   i WITH(NOLOCK) 
+			,(
+				SELECT 
+					B.USER_ID
+					, B.USER_NAME
+					, B"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_MDF_SIMULTATOR","1318347811","3",".USER_NAME_EN
+					, B.DEPT_ID
+					, C.DEPT_NAME_KO
+					, C.UPPER_DEPT_ID
+				FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+				INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+				ON B.DEPT_ID = C.DEPT_ID
+			) AS TEAM
+		WHERE 1=1
+			AND A.YYYYMMDD >= @p_start_dt -- 당주 월요일
+			AND A.YYYYMMDD < @p_end_dt  -- 조회 끝 기준 
+			AND A.MEASURE in ( 'RTF' ,'SalesAmt_USD' )
+			AND A.DIVISION_ID  = SI.DIVISION_ID
+			AND A.PROJECT_CODE = SI.PROJECT_CODE
+			AND A.SCM_SITE_ID  = SI.SCM_SITE_ID
+			AND A.ITEM_ID      = SI.ITEM_ID
+			AND A.DIVISION_ID  = MDF.DIVISION_ID
+			AND DMS_SALES      LIKE '%' + SI.ATTRIBUTE1 + '%'  -- DMS 판매처
+			AND SI.ATTRIBUTE2  = MDF.DMS_CUSTOMER            -- DMS_고객군
+			AND SI.ATTRIBUTE5  LIKE MDF.ITEM_TYPE2 +'%'      -- CELL 모델 
+			AND SI.ITEM_ID     LIKE MDF.BIZ_TYPE2 +'%'       -- BIZ 적용 모델
+			--AND SI.APPLICATION = MDF.APPLICATION  -- 기기
+			AND MDF.APPLICATION LIKE '%' + SI.APPLICATION + '%'  -- 기기
+			AND SI.DIVISION_ID = I.DIVISION_ID
+			AND SI.ITEM_ID     = I.ITEM_ID
+			AND TEAM.USER_ID   IN (SELECT TOP 1 TOKEN FROM [DBO].[STRING_SPLIT](SI.OWNER, ','))
+			AND TEAM.UPPER_DEPT_ID = MDF.DEPARTMENT_ID
+			AND @p_sp_version_no LIKE '%Current%'
+		GROUP BY 
+			MDF.MDF_VERSION_NO
+			, MDF.DIVISION_ID
+			, MDF.DEPARTMENT_ID
+			, MDF.DMS_CUSTOMER
+			, MDF.DMS_SALES
+			, MDF.APPLICATION
+			, MDF.BIZ_TYPE
+			, MDF.ITEM_TYPE
+			, A.MEASURE
+			, SUBSTRING(A.YYYYMMDD,1,6)
+
+
+		UNION ALL
+		-- 실적 구간(Current)
+		SELECT 
+			MDF.MDF_VERSION_NO
+			, MDF.DIVISION_ID
+			, MDF.DEPARTMENT_ID
+			, MDF.DMS_CUSTOMER
+			, MDF.DMS_SALES
+			, MDF.APPLICATION
+			, MDF.BIZ_TYPE
+			, MDF.ITEM_TYPE
+			,CASE WHEN A.MEASURE = 'RTF' THEN N'Cell_Qty' 
+				WHEN A.MEASURE = 'SalesAmt_LOC' THEN N'Amt' END MEASURE
+			,CASE WHEN A.MEASURE = 'RTF' THEN N'천팩' 
+				WHEN A.MEASURE = 'SalesAmt_LOC' THEN N'천$' END UNIT_CURRENCY  
+			,SUBSTRING(A.YYYYMMDD,1,6) YYYYMM
+--			,SUM(CASE WHEN A.MEASURE = 'RTF' THEN (  A.QTY * ISNULL(i.FORECAST_INFO_CELL_PACK_COUNT,1) ) /1000
+			,SUM(CASE WHEN A.MEASURE = 'RTF' THEN A.QTY
+				WHEN A.MEASURE = 'SalesAmt_LOC' THEN A.QTY / 1000 END) QTY   
+			, 'Current' AS SPVERSION_NO
+--		FROM [10.34.221.78,7433].[LGCE_SCMDEV].[dbo].[DM_PLN_SALES_PLAN_RESULT] A WITH(NOLOCK)
+		FROM [dbo].[DM_PLN_SALES_PLAN_RESULT] A WITH(NOLOCK)
+			,SCM_MST_SITE_ITEM SI  WITH(NOLOCK)
+			,( 
+			  -- key 기준 Mapping
+				SELECT 
+					DISTINCT 
+					MDF_VERSION_NO
+					, DIVISION_ID
+					, DEPARTMENT_ID
+					, DMS_SALES
+					, DMS_CUSTOMER
+					, APPLICATION
+					, BIZ_TYPE
+					, ITEM_TYPE
+					, CASE WHEN ITEM_TYPE = N'원통형'  THEN 'MCC'     
+						WHEN ITEM_TYPE = N'파우치형' THEN 'MCP'
+						WHEN ITEM_TYPE = N'각형' THEN 'MCR' END ITEM_TYPE2
+					, CASE WHEN BIZ_TYPE = 'PACK'  THEN 'MP'     
+						WHEN BIZ_TYPE = 'CELL'  THEN 'MC'END BIZ_TYPE2
+				FROM DM_PLN_MDF_SIMULATOR_DATA WITH(NOLOCK) 
+                     INNER JOIN (SELECT DISTINCT '%' + TOKEN + '%' AS APP FROM dbo.String_Split(@p_application,',')) C
+                        ON APPLICATION LIKE C.APP
+				WHERE MDF_VERSION_NO = @p_mdf_version_no
+					AND DIVISION_ID = @p_division_id
+					--AND APPLICATION IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_application,','))
+					AND ITEM_TYPE IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_model_type,','))
+					AND DEPARTMENT_ID IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_dept_id,','))
+			) MDF
+			, DM_MST_ITEM_SINGLE_V   i WITH(NOLOCK) 
+			,(
+				SELECT 
+				B.USER_ID
+				, B.USER_NAME
+				, B.USER_NAME_EN
+				, B.DEPT_ID
+				, C.DEPT_NAME_KO
+				, C.UPPER_DEPT_ID
+				FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+				INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+				ON B.DEPT_ID = C.DEPT_ID
+			) AS TEAM
+		WHERE 1=1
+			AND A.YYYYMMDD >= @p_start_dt -- 조회 시작 기준 
+			AND A.YYYYMMDD < @p_end_dt -- 당주 월요일
+			AND A.MEASURE in ( 'RTF' ,'SalesAmt_LOC' ) -- 실적은 USD Measure가 없음.. 
+			AND A.DIVISION_ID  = SI.DIVISION_ID
+			AND A.PROJECT_CODE ="
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_MDF_SIMULTATOR","1318347811","4"," SI.PROJECT_CODE
+			AND A.SCM_SITE_ID  = SI.SCM_SITE_ID
+			AND A.ITEM_ID      = SI.ITEM_ID
+			AND A.DIVISION_ID  = MDF.DIVISION_ID
+			AND DMS_SALES      LIKE '%' +SI.ATTRIBUTE1 + '%'  -- DMS 판매처
+			AND SI.ATTRIBUTE2  = MDF.DMS_CUSTOMER            -- DMS_고객군
+			AND SI.ATTRIBUTE5  LIKE MDF.ITEM_TYPE2 +'%'      -- CELL 모델 
+			AND SI.ITEM_ID     LIKE MDF.BIZ_TYPE2 +'%'       -- BIZ 적용 모델
+			--AND SI.APPLICATION = MDF.APPLICATION  -- 기기
+			AND MDF.APPLICATION LIKE '%' + SI.APPLICATION + '%'  -- 기기
+			AND SI.DIVISION_ID = I.DIVISION_ID
+			AND SI.ITEM_ID     = I.ITEM_ID
+			AND TEAM.USER_ID   IN (SELECT TOP 1 TOKEN FROM [DBO].String_Split(SI.OWNER, ','))
+			AND TEAM.UPPER_DEPT_ID = MDF.DEPARTMENT_ID
+			AND @p_sp_version_no LIKE '%Current%'
+		GROUP BY 
+			MDF.MDF_VERSION_NO
+			, MDF.DIVISION_ID
+			, MDF.DEPARTMENT_ID
+			, MDF.DMS_CUSTOMER
+			, MDF.DMS_SALES
+			, MDF.APPLICATION
+			, MDF.BIZ_TYPE
+			, MDF.ITEM_TYPE
+			, A.MEASURE
+			, SUBSTRING(A.YYYYMMDD, 1, 6)
+
+			--select distinct version_no from [10.34.221.78,7433].[LGCE_SCMDEV].[dbo].[DM_PLN_SALES_PLAN_C]
+		UNION ALL
+		-- 계획 구간(버전)
+		SELECT 
+			MDF.MDF_VERSION_NO
+			, MDF.DIVISION_ID
+			, MDF.DEPARTMENT_ID
+			, MDF.DMS_CUSTOMER
+			, MDF.DMS_SALES
+			, MDF.APPLICATION
+			, MDF.BIZ_TYPE
+			, MDF.ITEM_TYPE
+			,CASE WHEN A.MEASURE = 'RTF' THEN N'Cell_Qty' 
+				WHEN A.MEASURE = 'SalesAmt_USD' THEN N'Amt' END MEASURE
+			,CASE WHEN A.MEASURE = 'RTF' THEN N'천팩' 
+				WHEN A.MEASURE = 'SalesAmt_USD' THEN N'천$' END UNIT_CURRENCY  
+			,SUBSTRING(A.YYYYMMDD,1,6) yyyymm
+--			,SUM(CASE WHEN A.MEASURE = 'RTF' THEN (  A.QTY * ISNULL(i.FORECAST_INFO_CELL_PACK_COUNT,1) ) /1000
+			,SUM(CASE WHEN A.MEASURE = 'RTF' THEN A.QTY
+					WHEN A.MEASURE = 'SalesAmt_USD' THEN A.QTY / 1000 END) QTY
+			, A.VERSION_NO AS SPVERSION_NO
+--		FROM [10.34.221.78,7433].[LGCE_SCMDEV].[dbo].[DM_PLN_SALES_PLAN_C] a WITH(NOLOCK)
+		FROM #sales_plan_c a WITH(NOLOCK)
+			, SCM_MST_SITE_ITEM SI  WITH(NOLOCK)
+			, ( 
+				-- key 기준 Mapping
+				SELECT 
+					DISTINCT 
+					MDF_VERSION_NO
+					, DIVISION_ID
+					, DEPARTMENT_ID
+					, DMS_SALES
+					, DMS_CUSTOMER
+					, APPLICATION
+					, BIZ_TYPE
+					, ITEM_TYPE
+					, CASE WHEN ITEM_TYPE = N'원통형'  THEN 'MCC'     
+						WHEN ITEM_TYPE = N'파우치형' THEN 'MCP'
+						WHEN ITEM_TYPE = N'각형' THEN 'MCR' END ITEM_TYPE2
+					, CASE WHEN BIZ_TYPE = 'PACK'  THEN 'MP'     
+						WHEN BIZ_TYPE = 'CELL'  THEN 'MC'END BIZ_TYPE2
+				FROM DM_PLN_MDF_SIMULATOR_DATA WITH(NOLOCK)
+                     INNER JOIN (SELECT DISTINCT '%' + TOKEN + '%' AS APP FROM dbo.String_Split(@p_application,',')) C
+                        ON APPLICATION LIKE C.APP
+				WHERE --MDF_VERSION_NO = @p_mdf_version_no
+					DIVISION_ID = @p_division_id
+					--AND APPLICATION IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_application,','))
+					AND ITEM_TYPE IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_model_type,','))
+					AND DEPARTMENT_ID IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_dept_id,','))
+			) MDF
+			, DM_MST_ITEM_SINGLE_V I WITH(NOLOCK) 
+			, (
+				SELECT 
+					B.USER_ID
+					, B.USER_NAME
+					, B.USER_NAME_EN
+					, B.DEPT_ID
+					, C.DEPT_NAME_KO
+					, C.UPPER_DEPT_ID
+				FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+				INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+				ON B.DEPT_ID = C.DEPT_ID
+			) AS TEAM
+		WHERE 1=1
+			AND A.YYYYMMDD >= @p_start_dt -- 당주 월요일
+			AND A.YYYYMMDD < @p_end_dt  -- 조회 끝 기준 
+			AND A.MEASURE in ( 'RTF' ,'SalesAmt_USD' )
+			AND A.DIVISION_ID  = SI.DIVISION_ID
+			AND A.PROJECT_CODE = SI.PROJECT_CODE
+			AND A.SCM_SITE_ID  = SI.SCM_SITE_ID
+			AND A.ITEM_ID      = SI.ITEM_ID
+			AND A.DIVISION_ID  = MDF.DIVISION_ID
+			AND DMS_SALES      LIKE '%' +SI.ATTRIBUTE1 + '%'  -- DMS 판매처
+			AND SI.ATTRIBUTE2  = MDF.DMS_CUSTOMER            -- DMS_고객군
+			AND SI.ATTRIBUTE5  LIKE MDF.ITEM_TYPE2 +'%'      -- CELL 모델 
+			AND SI.ITEM_ID     LIKE MDF.BIZ_TYPE2 +'%'       -- BIZ 적용 모델
+		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_MDF_SIMULTATOR","1318347811","5","	--AND SI.APPLICATION = MDF.APPLICATION  -- 기기
+			AND MDF.APPLICATION LIKE '%' + SI.APPLICATION + '%'  -- 기기
+			AND SI.DIVISION_ID = I.DIVISION_ID
+			AND SI.ITEM_ID     = I.ITEM_ID
+			AND TEAM.USER_ID   IN (SELECT TOP 1 TOKEN FROM [DBO].String_Split(SI.OWNER, ','))
+			AND TEAM.UPPER_DEPT_ID = MDF.DEPARTMENT_ID
+			--AND a.VERSION_NO = @p_sp_version_no
+		GROUP BY 
+			MDF.MDF_VERSION_NO
+			, A.VERSION_NO
+			, MDF.DIVISION_ID
+			, MDF.DEPARTMENT_ID
+			, MDF.DMS_CUSTOMER
+			, MDF.DMS_SALES
+			, MDF.APPLICATION
+			, MDF.BIZ_TYPE
+			, MDF.ITEM_TYPE
+			, A.MEASURE
+			, SUBSTRING(A.YYYYMMDD,1,6)
+
+
+		UNION ALL
+		-- 실적 구간(버전)
+		SELECT 
+			MDF.MDF_VERSION_NO
+			, MDF.DIVISION_ID
+			, MDF.DEPARTMENT_ID
+			, MDF.DMS_CUSTOMER
+			, MDF.DMS_SALES
+			, MDF.APPLICATION
+			, MDF.BIZ_TYPE
+			, MDF.ITEM_TYPE
+			,CASE WHEN A.MEASURE = 'RTF' THEN N'Cell_Qty' 
+				WHEN A.MEASURE = 'SalesAmt_LOC' THEN N'Amt' END MEASURE
+			,CASE WHEN A.MEASURE = 'RTF' THEN N'천팩' 
+				WHEN A.MEASURE = 'SalesAmt_LOC' THEN N'천$' END UNIT_CURRENCY  
+			,SUBSTRING(A.YYYYMMDD,1,6) YYYYMM
+--			,SUM(CASE WHEN A.MEASURE = 'RTF' THEN (  A.QTY * ISNULL(i.FORECAST_INFO_CELL_PACK_COUNT,1) ) /1000
+			,SUM(CASE WHEN A.MEASURE = 'RTF' THEN A.QTY
+			WHEN A.MEASURE = 'SalesAmt_LOC' THEN A.QTY / 1000 END) QTY   
+			, a.VERSION_NO AS SPVERSION_NO
+--		FROM [10.34.221.78,7433].[LGCE_SCMDEV].[dbo].[DM_PLN_SALES_PLAN_RESULT_C] a WITH(NOLOCK)
+		FROM #sales_plan_result_c a WITH(NOLOCK)
+			,SCM_MST_SITE_ITEM SI  WITH(NOLOCK)
+			,( 
+				-- key 기준 Mapping
+				SELECT 
+					DISTINCT 
+					MDF_VERSION_NO
+					, DIVISION_ID
+					, DEPARTMENT_ID
+					, DMS_SALES
+					, DMS_CUSTOMER
+					, APPLICATION
+					, BIZ_TYPE
+					, ITEM_TYPE
+					, CASE WHEN ITEM_TYPE = N'원통형'  THEN 'MCC'     
+						WHEN ITEM_TYPE = N'파우치형' THEN 'MCP'
+						WHEN ITEM_TYPE = N'각형' THEN 'MCR' END ITEM_TYPE2
+					, CASE WHEN BIZ_TYPE = 'PACK'  THEN 'MP'     
+						WHEN BIZ_TYPE = 'CELL'  THEN 'MC'END BIZ_TYPE2
+				FROM DM_PLN_MDF_SIMULATOR_DATA WITH(NOLOCK) 
+                     INNER JOIN (SELECT DISTINCT '%' + TOKEN + '%' AS APP FROM dbo.String_Split(@p_application,',')) C
+                        ON APPLICATION LIKE C.APP
+				WHERE --MDF_VERSION_NO = @p_mdf_version_no 
+					DIVISION_ID = @p_division_id
+					--AND APPLICATION IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_application,','))
+					AND ITEM_TYPE IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_model_type,','))
+					AND DEPARTMENT_ID IN  (SELECT DISTINCT token FROM dbo.String_Split(@p_dept_id,','))
+			) MDF
+			, DM_MST_ITEM_SINGLE_V I WITH(NOLOCK) 
+			, (
+				SELECT 
+					B.USER_ID
+					, B.USER_NAME
+					, B.USER_NAME_EN
+					, B.DEPT_ID
+					, C.DEPT_NAME_KO
+					, C.UPPER_DEPT_ID
+				FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK) 
+				INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK) 
+				ON B.DEPT_ID = C.DEPT_ID
+			) AS TEAM
+		WHERE 1=1
+			AND A.YYYYMMDD >= @p_start_dt -- 조회 시작 기준 
+			AND A.YYYYMMDD < @p_END_dt -- 당주 월요일
+			AND A.MEASURE in ( 'RTF' ,'SalesAmt_LOC' ) -- 실적은 USD Measure가 없음.. 
+			AND A.DIVISION_ID  = SI.DIVISION_ID
+			AND A.PROJECT_CODE = SI.PROJECT_CODE
+			AND A.SCM_SITE_ID  = SI.SCM_SITE_ID
+			AND A.ITEM_ID      = SI.ITEM_ID
+			AND A.DIVISION_ID  = MDF.DIVISION_ID
+			AND DMS_SALES      LIKE '%' +SI.ATTRIBUTE1 + '%'  -- DMS 판매처
+			AND SI.ATTRIBUTE2  = MDF.DMS_CUSTOMER            -- DMS_고객군
+			AND SI.ATTRIBUTE5  LIKE MDF.ITEM_TYPE2 +'%'      -- CELL 모델 
+			AND SI.ITEM_ID     LIKE MDF.BIZ_TYPE2 +'%'       -- BIZ 적용 모델
+			--AND SI.APPLICATION = MDF.APPLICATION  -- 기기
+			AND MDF.APPLICATION LIKE '%' + SI.APPLICATION + '%'  -- 기기
+			AND SI.DIVISION_ID = I.DIVISION_ID
+			AND SI.ITEM_ID     = I.ITEM_ID
+			AND TEAM.USER_ID   IN (SELECT TOP 1 TOKEN FROM [DBO].String_Split(SI.OWNER, ','))
+			AND TEAM.UPPER_DEPT_ID = MDF.DEPARTMENT_ID
+			--AND a.VERSION_NO = @p_sp_version_no
+		GROUP BY 
+			MDF.MDF_VERSION_NO
+			, A.VERSION_NO
+			, MDF.DIVISION_ID"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_MDF_SIMULTATOR","1318347811","6","
+			, MDF.DEPARTMENT_ID
+			, MDF.DMS_CUSTOMER
+			, MDF.DMS_SALES
+			, MDF.APPLICATION
+			, MDF.BIZ_TYPE
+			, MDF.ITEM_TYPE
+			, A.MEASURE
+			, SUBSTRING(A.YYYYMMDD,1,6)
+	)
+    SELECT *
+      INTO #middle_sum
+      FROM MIDDLE_SUMMARY;
+
+		--SELECT 
+		--	A.MDF_VERSION_NO
+		--	, A.DIVISION_ID
+		--	, A.DEPARTMENT_ID
+		--	, A.DMS_CUSTOMER
+		--	, A.DMS_SALES
+		--	, A.APPLICATION
+		--	, A.BIZ_TYPE
+		--	, A.ITEM_TYPE
+		--	, A.MEASURE
+		--	, A.UNIT_CURRENCY
+		--	, A.YYYYMM
+		--	--, SUM(A.QTY*B.QTY) QTY
+		--	, SUM(A.QTY) QTY
+		--	, A.SPVERSION_NO
+  --      INTO #middle_sum2
+		--FROM #middle_sum A 
+		--	  --,MIDDLE_SUMMARY B
+		--WHERE A.MEASURE = 'Cell_Qty'	--N'금액'
+		--	--AND B.MEASURE = 'Amt'		--N'기본계약조건'
+		--	--AND A.MDF_VERSION_NO  = B.MDF_VERSION_NO
+		--	--AND A.DIVISION_ID     = B.DIVISION_ID
+		--	--AND A.DEPARTMENT_ID   = B.DEPARTMENT_ID
+		--	--AND A.DMS_CUSTOMER    = B.DMS_CUSTOMER
+		--	--AND A.DMS_SALES       = B.DMS_SALES
+		--	--AND A.APPLICATION     = B.APPLICATION
+		--	--AND A.BIZ_TYPE        = B.BIZ_TYPE
+		--	--AND A.ITEM_TYPE       = B.ITEM_TYPE
+		--	--AND A.YYYYMM          = B.YYYYMM
+		--GROUP BY 
+		--	A.MDF_VERSION_NO
+		--	, A.SPVERSION_NO
+		--	, A.DIVISION_ID
+		--	, A.DEPARTMENT_ID
+		--	, A.DMS_CUSTOMER
+		--	, A.DMS_SALES
+		--	, A.APPLICATION
+		--	, A.BIZ_TYPE
+		--	, A.ITEM_TYPE
+		--	, A.MEASURE
+		--	, A.UNIT_CURRENCY
+		--	, A.YYYYMM
+  --      ;
+	-- 없는 measure(Cell_Qty, Amt) 추가.
+	WITH MIDDLE_SUMMARY2 as (
+  --      select *
+  --        from #middle_sum2 m
+		--UNION ALL -- 바로 위 쿼리에서 A.MEASURE = N'Cell_Qty' AND B.MEASURE = N'Amt' 조건이 안 맞을 수 있어 몽땅 넣어 줌.
+		SELECT 
+			MDF_VERSION_NO
+			, DIVISION_ID
+			, DEPARTMENT_ID
+			, DMS_CUSTOMER
+			, DMS_SALES
+			, APPLICATION
+			, BIZ_TYPE
+			, ITEM_TYPE
+			, MEASURE
+			, UNIT_CURRENCY
+			, YYYYMM
+			, 0 AS QTY
+			, SPVERSION_NO
+		FROM (
+		SELECT 
+				MDF_VERSION_NO
+				, DIVISION_ID
+				, DEPARTMENT_ID
+				, DMS_CUSTOMER
+				, DMS_SALES
+				, APPLICATION
+				, BIZ_TYPE
+				, ITEM_TYPE
+				, 'Cell_Qty' MEASURE
+				, N'천팩' UNIT_CURRENCY
+				, YYYYMM
+				, SPVERSION_NO
+			FROM #middle_sum
+			GROUP BY
+				MDF_VERSION_NO
+				, SPVERSION_NO
+				, DIVISION_ID
+				, DEPARTMENT_ID
+				, DMS_CUSTOMER
+				, DMS_SALES
+				, APPLICATION
+				, BIZ_TYPE
+				, ITEM_TYPE
+				, YYYYMM
+		UNION ALL
+		SELECT 
+				MDF_VERSION_NO
+				, DIVISION_ID
+				, DEPARTMENT_ID
+				, DMS_CUSTOMER
+				, DMS_SALES
+				, APPLICATION
+				, BIZ_TYPE
+				, ITEM_TYPE
+				, 'Amt' MEASURE
+				, N'천$' UNIT_CURRENCY
+				, YYYYMM
+				, SPVERSION_NO
+			FROM #middle_sum
+			GROUP BY
+				MDF_VERSION_NO
+				, SPVERSION_NO
+				, DIVISION_ID
+				, DEPARTMENT_ID
+				, DMS_CUSTOMER
+				, DMS_SALES
+				, APPLICATION
+				, BIZ_TYPE
+				, ITEM_TYPE
+				, YYYYMM
+		) SUB
+        where not exists (select 1 
+                            from #middle_sum m
+                           where m.MDF_VERSION_NO = sub.MDF_VERSION_NO
+                             and m.DIVISION_ID = sub.DIVISION_ID
+                             and m.DEPARTMENT_ID = sub.DEPARTMENT_ID
+                             and m.DMS_CUSTOMER = sub.DMS_CUSTOMER
+                             and m.DMS_SALES = sub.DMS_SALES
+                             and m.APPLICATION = sub.APPLICATION
+                             and m.ITEM_TYPE = sub.ITEM_TYPE
+                             and m.BIZ_TYPE = sub.BIZ_TYPE
+                             and m.MEASURE = sub.MEASURE
+                             and m.UNIT_CURRENCY = sub.UNIT_CURRENCY
+                             and m.YYYYMM = sub.YYYYMM
+                             and m.SPVERSION_NO = sub.SPVERSION_NO
+                         )
+	)
+	-- 없는 measure(MDF_Basic) 추가.
+	,MIDDLE_SUMMARY30 as (
+		SELECT 
+			A.MDF_VERSION_NO
+			, A.DIVISION_ID
+			, A.DEPARTMENT_ID
+			, A.DMS_CUSTOMER
+			, A.DMS_SALES
+			, A.APPLICATION
+			, A.BIZ_TYPE
+			, A.ITEM_TYPE
+			, 'MDF_Basic' MEASURE
+			, N'천$' UNIT_CURRENC"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_MDF_SIMULTATOR","1318347811","7","Y
+			, A.YYYYMM
+			, SUM(A.QTY*B.QTY) QTY
+			, A.SPVERSION_NO
+		FROM #middle_sum A
+			  ,#middle_sum B
+		--WHERE A.MEASURE = 'Amt'	--N'금액'
+		WHERE A.MEASURE = 'Cell_Qty'	--N'팩수량'
+			AND B.MEASURE = 'Contract_Term'		--N'기본계약조건'
+			AND A.MDF_VERSION_NO  = B.MDF_VERSION_NO
+			AND A.DIVISION_ID     = B.DIVISION_ID
+			AND A.DEPARTMENT_ID   = B.DEPARTMENT_ID
+			AND A.DMS_CUSTOMER    = B.DMS_CUSTOMER
+			AND A.DMS_SALES       = B.DMS_SALES
+			AND A.APPLICATION     = B.APPLICATION
+			AND A.BIZ_TYPE        = B.BIZ_TYPE
+			AND A.ITEM_TYPE       = B.ITEM_TYPE
+			AND A.YYYYMM          = B.YYYYMM
+		GROUP BY 
+			A.MDF_VERSION_NO
+			, A.SPVERSION_NO
+			, A.DIVISION_ID
+			, A.DEPARTMENT_ID
+			, A.DMS_CUSTOMER
+			, A.DMS_SALES
+			, A.APPLICATION
+			, A.BIZ_TYPE
+			, A.ITEM_TYPE
+			, A.YYYYMM
+    )
+	,MIDDLE_SUMMARY3 as (
+        select * from MIDDLE_SUMMARY30
+		UNION ALL -- 바로 위 쿼리에서 A.MEASURE = N'Amt' AND B.MEASURE = N'Contract_Term' 조건이 안 맞을 수 있어 몽땅 넣어 줌.
+		SELECT 
+			MDF_VERSION_NO
+			, DIVISION_ID
+			, DEPARTMENT_ID
+			, DMS_CUSTOMER
+			, DMS_SALES
+			, APPLICATION
+			, BIZ_TYPE
+			, ITEM_TYPE
+			, MEASURE
+			, UNIT_CURRENCY
+			, YYYYMM
+			, 0 AS QTY
+			, SPVERSION_NO
+		FROM (
+			SELECT 
+				MDF_VERSION_NO
+				, DIVISION_ID
+				, DEPARTMENT_ID
+				, DMS_CUSTOMER
+				, DMS_SALES
+				, APPLICATION
+				, BIZ_TYPE
+				, ITEM_TYPE
+				, 'MDF_Basic' MEASURE		--N'MDF(기본)'
+				, N'천$' UNIT_CURRENCY
+				, YYYYMM
+				, SPVERSION_NO
+			FROM #middle_sum
+			GROUP BY
+				MDF_VERSION_NO
+				, SPVERSION_NO
+				, DIVISION_ID
+				, DEPARTMENT_ID
+				, DMS_CUSTOMER
+				, DMS_SALES
+				, APPLICATION
+				, BIZ_TYPE
+				, ITEM_TYPE
+				, YYYYMM
+		) SUB
+        where not exists (select 1 
+                            from MIDDLE_SUMMARY30 m
+                           where m.MDF_VERSION_NO = sub.MDF_VERSION_NO
+                             and m.DIVISION_ID = sub.DIVISION_ID
+                             and m.DEPARTMENT_ID = sub.DEPARTMENT_ID
+                             and m.DMS_CUSTOMER = sub.DMS_CUSTOMER
+                             and m.DMS_SALES = sub.DMS_SALES
+                             and m.APPLICATION = sub.APPLICATION
+                             and m.ITEM_TYPE = sub.ITEM_TYPE
+                             and m.BIZ_TYPE = sub.BIZ_TYPE
+                             and m.MEASURE = sub.MEASURE
+                             and m.UNIT_CURRENCY = sub.UNIT_CURRENCY
+                             and m.YYYYMM = sub.YYYYMM
+                             and m.SPVERSION_NO = sub.SPVERSION_NO
+                         )
+	)
+	
+	SELECT * 
+	INTO #temp
+	FROM #middle_sum
+
+	UNION ALL
+
+	SELECT * FROM MIDDLE_SUMMARY2
+
+	UNION ALL
+
+	SELECT * FROM MIDDLE_SUMMARY3
+
+	UNION ALL
+	
+	SELECT 
+		A.MDF_VERSION_NO
+		, A.DIVISION_ID
+		, A.DEPARTMENT_ID
+		, A.DMS_CUSTOMER
+		, A.DMS_SALES
+		, A.APPLICATION
+		, A.BIZ_TYPE
+		, A.ITEM_TYPE
+		, N'Total' MEASURE		-- N'Total'
+		, N'천$' UNIT_CURRENCY
+		, A.YYYYMM
+		, SUM(ISNULL(A.QTY,0) + ISNULL(B.QTY,0)) QTY
+		, A.SPVERSION_NO
+	FROM #middle_sum A
+		,MIDDLE_SUMMARY3 B
+	WHERE A.MEASURE = 'MDF_Add'		--N'MDF(추가)'
+		AND B.MEASURE = 'MDF_Basic'		--N'MDF(기본)'
+		AND A.MDF_VERSION_NO  = B.MDF_VERSION_NO
+		AND A.DIVISION_ID     = B.DIVISION_ID
+		AND A.DEPARTMENT_ID   = B.DEPARTMENT_ID
+		AND A.DMS_CUSTOMER    = B.DMS_CUSTOMER
+		AND A.DMS_SALES       = B.DMS_SALES
+		AND A.APPLICATION     = B.APPLICATION
+		AND A.BIZ_TYPE        = B.BIZ_TYPE
+		AND A.ITEM_TYPE       = B.ITEM_TYPE
+		AND A.YYYYMM          = B.YYYYMM
+	GROUP BY
+		A.MDF_VERSION_NO
+		, A.SPVERSION_NO
+		, A.DIVISION_ID
+		, A.DEPARTMENT_ID
+		, A.DMS_CUSTOMER
+		, A.DMS_SALES
+		, A.APPLICATION
+		, A.BIZ_TYPE
+		, A.ITEM_TYPE
+		, A.YYYYMM;
+
+	-- 단계2. 데이터 정리 ########################################################
+	SELECT distinct
+		MDF_VERSION_NO,
+		DIVISION_ID,
+		DEPARTMENT_ID,
+		DMS_CUSTOMER	,
+		DMS_SALES,
+		APPLICATION,
+		BIZ_TYPE,
+		ITEM_TYPE,
+		MEASURE"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_MDF_SIMULTATOR","1318347811","8",",
+		UNIT_CURRENCY,
+		SPVERSION_NO,
+		CASE MEASURE WHEN 'Cell_Qty' THEN 1
+			WHEN 'Amt' THEN 2
+			WHEN 'Contract_Term' THEN 3
+			WHEN 'MDF_Basic' THEN 4 
+			WHEN 'MDF_Add' THEN 5 
+			ELSE 6 END AS ORDERNO,
+		'M_' + YYYYMM AS YYYYMM,
+		ISNULL(QTY, 0) AS QTY,
+		CASE WHEN (MEASURE = 'Contract_Term' OR MEASURE = 'MDF_Add') 
+			AND ((@v_group_id = 'ADMIN') OR (@v_team_id = DEPARTMENT_ID))
+		THEN 'Y' ELSE 'N' 
+		END AS EDIT_FLAG--,
+		--CASE WHEN ((@v_group_id = 'ADMIN') OR (@v_team_id = DEPARTMENT_ID)) THEN 'Y' ELSE 'N' END AS EDIT_FLAG2		-- DMS_Sales 수정 용도
+	INTO #temp2
+	FROM #temp
+	WHERE MDF_VERSION_NO = @p_mdf_version_no
+		AND SPVERSION_NO = @p_sp_version_no
+
+
+
+	--SELECT * from #temp2
+
+	-- 단계3. PIVOT 기간 쿼리 ########################################################
+	SELECT @PROD = @PROD + '[M_' + BASIS_YYYYMM + '],'
+	FROM (
+		SELECT 
+		DISTINCT BASIS_YYYYMM
+		FROM [DBO].[SCM_SYS_CALENDAR_M] WITH(NOLOCK) 
+		WHERE BASIS_YYYYMMDD >= @P_START_DT
+		AND BASIS_YYYYMMDD < @p_end_dt
+		
+	) A				
+	ORDER BY BASIS_YYYYMM
+	IF @PROD <> ''
+	BEGIN
+		SELECT @PROD = LEFT(@PROD, LEN(@PROD)-1)
+	END
+
+	--SELECT  @PROD
+
+	-- 단계4. 실행 쿼리 ########################################################
+	SELECT  @SQL = '
+SELECT  
+	MDF_VERSION_NO,
+	DIVISION_ID,
+	DEPARTMENT_ID,
+	DMS_CUSTOMER	,
+	DMS_SALES,
+	APPLICATION,
+	BIZ_TYPE,
+	ITEM_TYPE,
+	MEASURE,
+	UNIT_CURRENCY,
+	SPVERSION_NO,
+	ORDERNO,	
+	EDIT_FLAG,
+	--EDIT_FLAG2,
+	' + @PROD + '
+From(
+	SELECT 
+		*
+	FROM #temp2
+	) T
+PIVOT (SUM(QTY) FOR YYYYMM IN (' + @PROD + ')
+) AS PVT
+ORDER BY
+	MDF_VERSION_NO,
+	DIVISION_ID,
+	DEPARTMENT_ID,
+	DMS_CUSTOMER	,
+	DMS_SALES,
+	APPLICATION,
+	BIZ_TYPE,
+	ITEM_TYPE,
+	--SPVERSION_NO,
+	ORDERNO';
+
+--SET @SQL = REPLACE(@SQL,'[@v_group_id]', @v_group_id);
+
+--SELECT @SQL 
+execute dbo. SP_executesql @SQL 
+
+-- xml확인할경우
+--SELECT CONVERT(TEXT, @v_sql_text)
+--FOR XML PATH('')--,ROOT('x')
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_MDF_VERSIONPOPUP","1334347868","1","/****************************************************************************************************/
+/* Program ID  : DMF0041_GET_MDF_VERSIONPOPUP                                                             */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2019/02/19  JYE       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/*                                                                                                  */
+/****************************************************************************************************/
+
+CREATE PROCEDURE [dbo].[DMF0041_GET_MDF_VERSIONPOPUP]
+    @p_start_yyyymmdd  NVARCHAR(8),
+    @p_end_yyyymmdd    NVARCHAR(8),
+	@p_created_by	   NVARCHAR(50),
+	@p_division_id	   NVARCHAR(MAX),
+	@p_version_type	   NVARCHAR(MAX),
+	@p_version_no	   NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	   SELECT DIVISION_ID, VERSION_NO, VERSION_DESCRIPTION, VERSION_TYPE, VER_CRE_SEQ, YYYYMMDD, MAX(CREATED_BY) CREATED_BY, MAX(CREATION_DATE) CREATION_DATE
+		 FROM [dbo].[DM_MST_VERSION]  WITH(NOLOCK)
+	   WHERE (YYYYMMDD >= @p_start_yyyymmdd and YYYYMMDD <= @p_end_yyyymmdd)  
+		  AND DIVISION_ID IN (SELECT token FROM dbo.String_Split(@p_division_id	,','))  		
+		  AND VERSION_TYPE IN (SELECT token FROM dbo.String_Split(@p_version_type	,','))    
+		  AND Exists (Select * from dbo.UF_FX_String_Split (@p_version_no,',') as P Where [VERSION_NO] LIKE P.token +'%')
+	   GROUP BY DIVISION_ID, VERSION_NO, VERSION_DESCRIPTION, VERSION_TYPE, VER_CRE_SEQ, YYYYMMDD
+	   ORDER BY VERSION_NO DESC
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_MEASURE_UNIT_CURRENCY","1350347925","1","/****************************************************************************************************/
+/* Program ID  : [DMF0041_GET_MEASURE_UNIT_CURRENCY]                                                             */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2019/02/26  JYE          MDF Simulator Unit Currency */
+/*                                                                                                  */
+/****************************************************************************************************/
+
+CREATE PROCEDURE [dbo].[DMF0041_GET_MEASURE_UNIT_CURRENCY]
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+    
+	SELECT COLUMN_NAME AS CODE, COLUMN_LABEL_NAME AS NAME
+	FROM [DBO].[SCM_MST_SHEET_MEASURE]
+	WHERE PROGRAM_ID = 'DMF0041' and SHEET_NAME = 'MDF_Unit'
+	ORDER BY SORT_ORDER_NO
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_GET_SPREAD_TITLE","1366347982","1","
+/****************************************************************************************************/
+/* Program ID  : DMF0041_GET_SPREAD_TITLE                                                             */
+/* Description :  MDF Simulator 칼럼 해더 데이터                                                             */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2019/02/14  JYE          MDF Simulator  */
+/*                                                                                                  */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0041_GET_SPREAD_TITLE]
+	@p_division_id			NVARCHAR(20),
+	@p_created_by			NVARCHAR(50),
+	@p_start_dt				NVARCHAR(8),
+	@p_end_dt				NVARCHAR(8)
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+    
+	DECLARE @p_program_id	   NVARCHAR(50)
+	DECLARE @p_sheet_name	   NVARCHAR(50)
+
+	SET @p_program_id = 'DMF0041';
+	SET @p_sheet_name = 'MDFSimulator';
+
+	SELECT C.PROGRAM_ID
+		, C.SHEET_NAME
+		, C.COLUMN_NAME
+		, C.COLUMN_LABEL_NAME
+		, C.SORT_ORDER_NO        --CONVERT(NVARCHAR(10), U.SORT_ORDER_NO) AS SORT_ORDER_NO
+		, C.DATA_SORT_METHOD_CODE
+		, C.SMALL_CLASS_LABEL_NAME
+		, C.LARGE_CLASS_LABEL_NAME
+		, '' AS DAY_CODE
+		, C.FIXED_FLAG
+		, C.COLUMN_WIDTH
+		, C.CELL_CONTROL_OBJECT_TYPE_CODE
+		, C.CELL_COMBO_DATA_TYPE
+		, C.DATA_SCALE_NUMBER
+		, C.DATA_MAX_LENGTH
+		, C.HORIZONTAL_ALIGN_CODE
+		, C.UPPERCASE_APPLY_FLAG
+		, C.VISIBLE_FLAG
+		, C.DEFAULT_FLAG
+		, C.USER_SELECTABLE_FLAG
+		, C.VALID_YN
+		, C.DIVISION_ID
+	FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+	WHERE  1 = 1    
+		AND    C.PROGRAM_ID  = @p_program_id
+		AND    C.SHEET_NAME  = @p_sheet_name
+		--AND    C.DEFAULT_FLAG = 'Y'
+		AND    C.VALID_YN     = 'Y'
+		AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )
+		--AND    C.COLUMN_NAME IN ('LAST_UPDATE_DATE', 'LAST_UPDATED_BY')
+	UNION ALL
+
+	SELECT 
+		@p_program_id   AS PROGRAM_ID
+		, @p_sheet_name AS SHEET_NAME
+		, MA.COLUMN_NAME
+		, MA.COLUMN_LABEL_NAME
+		, MA.SORT_ORDER_NO
+		, ''         AS DATA_SORT_METHOD_CODE
+		, MA.SMALL_CLASS_LABEL_NAME
+		, MA.LARGE_CLASS_LABEL_NAME
+		, MA.DAY_CODE
+		, ''         AS FIXED_FLAG
+		, 120         AS COLUMN_WIDTH
+		, MA.CELL_CONTROL_OBJECT_TYPE_CODE   --'FPNumber' AS CELL_CONTROL_OBJECT_TYPE_CODE
+		, ''         AS CELL_COMBO_DATA_TYPE
+		--, '2'         AS DATA_SCALE_NUMBER
+		, '3'         AS DATA_SCALE_NUMBER -- 20181029
+		, '2'         AS DATA_MAX_LENGTH
+		, 'R'        AS HORIZONTAL_ALIGN_CODE
+		, ''        AS UPPERCASE_APPLY_FLAG
+		, 'Y'        AS VISIBLE_FLAG
+		, ''         AS DEFAULT_FLAG
+		, ''         AS USER_SELECTABLE_FLAG
+		, ''         AS VALID_YN
+		, ''			AS DIVISION_ID
+	FROM  (
+		SELECT 
+			DISTINCT
+			'M_' + BASIS_YYYYMM								AS COLUMN_NAME
+			, MONTH_NAME										AS COLUMN_LABEL_NAME 
+			, MONTH_NAME										AS SMALL_CLASS_LABEL_NAME
+			, MONTH_NAME										AS LARGE_CLASS_LABEL_NAME
+			, ''														AS DAY_CODE
+			, BASIS_YYYYMM									AS SORT_ORDER_NO
+			, 'FPNumber'											AS CELL_CONTROL_OBJECT_TYPE_CODE
+		FROM [dbo].[SCM_SYS_CALENDAR_M]
+		WHERE  BASIS_YYYYMMDD >= @p_start_dt
+			AND BASIS_YYYYMMDD <= @p_end_dt
+	
+	) MA
+
+	ORDER BY SORT_ORDER_NO
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_SAVE_MDF_SIMULTATOR","1382348039","1","
+/*
+ *------------------------------------------------------------------------------------------------------------------------------------
+ * Program ID   : DMF0041_SAVE_MDF_SIMULTATOR
+ * Description  : 매출 계획 값을 가지고 MDF 값을 Simulator를 하기 위한 화면(Demand > Demand Plan > MDF Simulator) 의 값 저장 Procedure 
+ * Program History
+ *====================================================================================================================================
+ *   Date       In Charge      Description
+ *====================================================================================================================================
+ * 20190221  KHSONG  Initial Release [PJ20189106] 전지GSCM 고도화 이행
+ * 2020/09/09     P.C.I		[C20200909-000203] LOG 표준화 적용
+ * 
+ * 
+ * 
+ *------------------------------------------------------------------------------------------------------------------------------------
+ */
+
+CREATE PROCEDURE [dbo].[DMF0041_SAVE_MDF_SIMULTATOR]
+
+	-- Add the parameters for the stored procedure here
+     @p_active_flag			NVARCHAR(MAX)
+    ,@p_MDF_VERSION_NO		NVARCHAR(MAX)
+    ,@p_DIVISION_ID			NVARCHAR(MAX)
+    ,@p_DEPARTMENT_ID		NVARCHAR(MAX)
+    ,@p_DMS_CUSTOMER		NVARCHAR(MAX)
+    ,@p_DMS_SALES			NVARCHAR(MAX)
+    ,@p_APPLICATION			NVARCHAR(MAX)
+    ,@p_BIZ_TYPE			NVARCHAR(MAX)
+    ,@p_ITEM_TYPE			NVARCHAR(MAX)
+    ,@p_MEASURE				NVARCHAR(MAX)
+    ,@p_UNIT_CURRENCY		NVARCHAR(MAX)
+    ,@p_YYYYMM				NVARCHAR(MAX)
+    ,@p_QTY					NVARCHAR(MAX)
+
+AS
+
+BEGIN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET NOCOUNT ON; 
+    SET XACT_ABORT ON;
+
+	-- 스플릿관련 변수
+
+    DECLARE  @v_active_flag		NVARCHAR(MAX);
+    DECLARE  @v_MDF_VERSION_NO	NVARCHAR(MAX);
+    DECLARE  @v_DIVISION_ID		NVARCHAR(MAX);
+    DECLARE  @v_DEPARTMENT_ID	NVARCHAR(MAX);
+    DECLARE  @v_DMS_CUSTOMER	NVARCHAR(MAX);
+    DECLARE  @v_DMS_SALES		NVARCHAR(MAX);
+    DECLARE  @v_APPLICATION		NVARCHAR(MAX);
+    DECLARE  @v_BIZ_TYPE		NVARCHAR(MAX);
+    DECLARE  @v_ITEM_TYPE		NVARCHAR(MAX);
+    DECLARE  @v_MEASURE			NVARCHAR(MAX);
+    DECLARE  @v_UNIT_CURRENCY	NVARCHAR(MAX);
+    DECLARE  @v_YYYYMM			NVARCHAR(MAX);
+    DECLARE  @v_QTY				NVARCHAR(MAX);
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^'  -- 데이터 구분자
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name		NVARCHAR(150) = 'DMF0041_SAVE_MDF_SIMULTATOR';
+    DECLARE @v_log_type			NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count		INTEGER = 0;
+    DECLARE @v_log_message		NVARCHAR(1000);
+    DECLARE @v_description		NVARCHAR(500);
+    DECLARE @d_event_date		DATETIME;
+    DECLARE @n_delete_count		INTEGER = 0;
+    DECLARE @n_insert_count     INTEGER = 0;
+    DECLARE @n_logo_count		INTEGER = 0;
+
+
+
+	-- 마지막 데이터 처리를 위한 구분자 추가
+	SET @p_active_flag		= RTRIM(@p_active_flag		) + '^';
+	SET @p_MDF_VERSION_NO	= RTRIM(@p_MDF_VERSION_NO	) + '^';
+	SET @p_DIVISION_ID		= RTRIM(@p_DIVISION_ID		) + '^';
+	SET @p_DEPARTMENT_ID	= RTRIM(@p_DEPARTMENT_ID	) + '^';
+	SET @p_DMS_CUSTOMER		= RTRIM(@p_DMS_CUSTOMER		) + '^';
+	SET @p_DMS_SALES		= RTRIM(@p_DMS_SALES		) + '^';
+	SET @p_APPLICATION		= RTRIM(@p_APPLICATION		) + '^';
+	SET @p_BIZ_TYPE			= RTRIM(@p_BIZ_TYPE			) + '^';
+	SET @p_ITEM_TYPE		= RTRIM(@p_ITEM_TYPE		) + '^';
+	SET @p_MEASURE			= RTRIM(@p_MEASURE			) + '^';
+	SET @p_UNIT_CURRENCY	= RTRIM(@p_UNIT_CURRENCY	) + '^';
+	SET @p_YYYYMM			= RTRIM(@p_YYYYMM			) + '^';
+	SET @p_QTY				= RTRIM(@p_QTY				) + '^';
+
+	-- #results_MST TEMP TABLE
+	CREATE TABLE #results_MST  (
+             active_flag		NVARCHAR(01)   NOT NULL
+			,MDF_VERSION_NO		NVARCHAR(30)   NOT NULL
+			,DIVISION_ID		NVARCHAR(30)   NOT NULL
+			,DEPARTMENT_ID		NVARCHAR(50)   NOT NULL
+			,DMS_CUSTOMER		NVARCHAR(200)  NOT NULL
+			,DMS_SALES			NVARCHAR(200)  NOT NULL
+			,APPLICATION		NVARCHAR(100)  NOT NULL
+			,BIZ_TYPE			NVARCHAR(30)   NOT NULL
+			,ITEM_TYPE			NVARCHAR(20)   NOT NULL
+			,MEASURE			NVARCHAR(50)"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_SAVE_MDF_SIMULTATOR","1382348039","2","   NOT NULL
+			,UNIT_CURRENCY		NVARCHAR(10)   NOT NULL
+			,YYYYMM				NVARCHAR(06)   NOT NULL
+			,QTY				NUMERIC(20,10) NOT NULL
+    )
+	
+	-- 시작 LOG  (START)
+	SET @v_log_type = 'START';
+	SET @v_log_message = '########## Start of procedure @@@##########';
+	SET @v_description = '';
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+	SET @v_log_message = NULL      /*-- <- 변수 재사용을 위하여 초기화해야함 --*/ 
+	-- 시작 LOG  (END)
+
+	-- 트랜잭션 (START)
+	BEGIN TRANSACTION DMF0041_SAVE_MDF_SIMULTATOR;
+
+	--------------------------------------------------------------------------------------------	
+	BEGIN TRY
+	--------------------------------------------------------------------------------------------
+	
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                                     #results_MST 테이블에 split후 insert (BEGIN)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	BEGIN
+		WHILE LEN(@p_DIVISION_ID) > 0
+		BEGIN
+			DECLARE @index_active_flag	    INT
+			DECLARE @index_MDF_VERSION_NO   INT
+			DECLARE @index_DIVISION_ID	    INT
+			DECLARE @index_DEPARTMENT_ID    INT
+			DECLARE @index_DMS_CUSTOMER	    INT
+			DECLARE @index_DMS_SALES	    INT
+			DECLARE @index_APPLICATION	    INT
+			DECLARE @index_BIZ_TYPE		    INT
+			DECLARE @index_ITEM_TYPE	    INT
+			DECLARE @index_MEASURE		    INT
+			DECLARE @index_UNIT_CURRENCY    INT
+			DECLARE @index_YYYYMM		    INT
+			DECLARE @index_QTY			    INT
+
+			SET @index_active_flag	    = PATINDEX('%' + '^' + '%', @p_active_flag	   )
+			SET @index_MDF_VERSION_NO   = PATINDEX('%' + '^' + '%', @p_MDF_VERSION_NO  )
+			SET @index_DIVISION_ID	    = PATINDEX('%' + '^' + '%', @p_DIVISION_ID	   )
+			SET @index_DEPARTMENT_ID    = PATINDEX('%' + '^' + '%', @p_DEPARTMENT_ID   )
+			SET @index_DMS_CUSTOMER	    = PATINDEX('%' + '^' + '%', @p_DMS_CUSTOMER	   )
+			SET @index_DMS_SALES	    = PATINDEX('%' + '^' + '%', @p_DMS_SALES	   )
+			SET @index_APPLICATION	    = PATINDEX('%' + '^' + '%', @p_APPLICATION	   )
+			SET @index_BIZ_TYPE		    = PATINDEX('%' + '^' + '%', @p_BIZ_TYPE		   )
+			SET @index_ITEM_TYPE	    = PATINDEX('%' + '^' + '%', @p_ITEM_TYPE	   )
+			SET @index_MEASURE		    = PATINDEX('%' + '^' + '%', @p_MEASURE		   )
+			SET @index_UNIT_CURRENCY    = PATINDEX('%' + '^' + '%', @p_UNIT_CURRENCY   )
+			SET @index_YYYYMM		    = PATINDEX('%' + '^' + '%', @p_YYYYMM		   )
+			SET @index_QTY			    = PATINDEX('%' + '^' + '%', @p_QTY			   )
+
+			IF @index_DIVISION_ID > 0
+				BEGIN
+					SET @v_active_flag	  = SUBSTRING(@p_active_flag     , 0, @index_active_flag    ) 
+					SET @v_MDF_VERSION_NO = SUBSTRING(@p_MDF_VERSION_NO	 , 0, @index_MDF_VERSION_NO	)
+					SET @v_DIVISION_ID	  = SUBSTRING(@p_DIVISION_ID	 , 0, @index_DIVISION_ID	)
+					SET @v_DEPARTMENT_ID  = SUBSTRING(@p_DEPARTMENT_ID 	 , 0, @index_DEPARTMENT_ID 	)
+					SET @v_DMS_CUSTOMER	  = SUBSTRING(@p_DMS_CUSTOMER	 , 0, @index_DMS_CUSTOMER	)
+					SET @v_DMS_SALES	  = SUBSTRING(@p_DMS_SALES	   	 , 0, @index_DMS_SALES	   	)
+					SET @v_APPLICATION	  = SUBSTRING(@p_APPLICATION	 , 0, @index_APPLICATION	)
+					SET @v_BIZ_TYPE		  = SUBSTRING(@p_BIZ_TYPE		 , 0, @index_BIZ_TYPE		)
+					SET @v_ITEM_TYPE	  = SUBSTRING(@p_ITEM_TYPE	   	 , 0, @index_ITEM_TYPE	   	)
+					SET @v_MEASURE		  = SUBSTRING(@p_MEASURE		 , 0, @index_MEASURE		)
+					SET @v_UNIT_CURRENCY  = SUBSTRING(@p_UNIT_CURRENCY 	 , 0, @index_UNIT_CURRENCY 	)
+					SET @v_YYYYMM		  = SUBSTRING(@p_YYYYMM		   	 , 0, @index_YYYYMM		   	)
+					SET @v_QTY			  = SUBSTRING(@p_QTY			 , 0, @index_QTY			)
+
+					SET @p_active_flag	  = SUBSTRING(@p_active_flag	, LEN(@v_active_flag	 + '^') + 1, LEN(@p_active_flag		))
+					SET @p_MDF_VERSION_NO = SUBSTRING(@p_MDF_VERSION_NO	, LEN(@v_MDF_VERSION_NO	 + '^') + 1, LEN(@p_MDF_VERSION_NO	))
+					SET @p_DIVISION_ID	  = SU"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_SAVE_MDF_SIMULTATOR","1382348039","3","BSTRING(@p_DIVISION_ID	, LEN(@v_DIVISION_ID	 + '^') + 1, LEN(@p_DIVISION_ID		))
+					SET @p_DEPARTMENT_ID  = SUBSTRING(@p_DEPARTMENT_ID	, LEN(@v_DEPARTMENT_ID	 + '^') + 1, LEN(@p_DEPARTMENT_ID	))
+					SET @p_DMS_CUSTOMER	  = SUBSTRING(@p_DMS_CUSTOMER	, LEN(@v_DMS_CUSTOMER	 + '^') + 1, LEN(@p_DMS_CUSTOMER	))
+					SET @p_DMS_SALES	  = SUBSTRING(@p_DMS_SALES		, LEN(@v_DMS_SALES		 + '^') + 1, LEN(@p_DMS_SALES		))
+					SET @p_APPLICATION	  = SUBSTRING(@p_APPLICATION	, LEN(@v_APPLICATION	 + '^') + 1, LEN(@p_APPLICATION		))
+					SET @p_BIZ_TYPE		  = SUBSTRING(@p_BIZ_TYPE		, LEN(@v_BIZ_TYPE		 + '^') + 1, LEN(@p_BIZ_TYPE		))
+					SET @p_ITEM_TYPE	  = SUBSTRING(@p_ITEM_TYPE		, LEN(@v_ITEM_TYPE		 + '^') + 1, LEN(@p_ITEM_TYPE		))
+					SET @p_MEASURE		  = SUBSTRING(@p_MEASURE		, LEN(@v_MEASURE		 + '^') + 1, LEN(@p_MEASURE			))
+					SET @p_UNIT_CURRENCY  = SUBSTRING(@p_UNIT_CURRENCY	, LEN(@v_UNIT_CURRENCY	 + '^') + 1, LEN(@p_UNIT_CURRENCY	))
+					SET @p_YYYYMM		  = SUBSTRING(@p_YYYYMM			, LEN(@v_YYYYMM			 + '^') + 1, LEN(@p_YYYYMM			))
+					SET @p_QTY			  = SUBSTRING(@p_QTY			, LEN(@v_QTY			 + '^') + 1, LEN(@p_QTY				))
+ 
+					-- 공백제거(START)
+					SET @v_active_flag	     	= rtrim(ltrim(@v_active_flag    ))
+					SET @v_MDF_VERSION_NO    	= rtrim(ltrim(@v_MDF_VERSION_NO ))
+					SET @v_DIVISION_ID	     	= rtrim(ltrim(@v_DIVISION_ID	))
+					SET @v_DEPARTMENT_ID     	= rtrim(ltrim(@v_DEPARTMENT_ID	))
+					SET @v_DMS_CUSTOMER	     	= rtrim(ltrim(@v_DMS_CUSTOMER	))
+					SET @v_DMS_SALES	     	= rtrim(ltrim(@v_DMS_SALES		))
+					SET @v_APPLICATION	     	= rtrim(ltrim(@v_APPLICATION	))
+					SET @v_BIZ_TYPE		     	= rtrim(ltrim(@v_BIZ_TYPE		))
+					SET @v_ITEM_TYPE	     	= rtrim(ltrim(@v_ITEM_TYPE		))
+					SET @v_MEASURE		     	= rtrim(ltrim(@v_MEASURE		))
+					SET @v_UNIT_CURRENCY     	= rtrim(ltrim(@v_UNIT_CURRENCY  ))
+					SET @v_YYYYMM		     	= rtrim(ltrim(@v_YYYYMM			))
+					SET @v_QTY			     	= rtrim(ltrim(@v_QTY			))
+					-- 공백제거(END)
+
+					---- 임시확인
+					--select '@v_active_flag   '   , @v_active_flag   
+					--select '@v_MDF_VERSION_NO' 	 , @v_MDF_VERSION_NO
+					--select '@v_DIVISION_ID	 '	 , @v_DIVISION_ID	 
+					--select '@v_DEPARTMENT_ID'	 , @v_DEPARTMENT_ID
+					--select '@v_DMS_CUSTOMER	 '	 , @v_DMS_CUSTOMER	 
+					--select '@v_DMS_SALES	'	 , @v_DMS_SALES	
+					--select '@v_APPLICATION	 '	 , @v_APPLICATION	 
+					--select '@v_BIZ_TYPE		 '	 , @v_BIZ_TYPE		 
+					--select '@v_ITEM_TYPE	'	 , @v_ITEM_TYPE	
+					--select '@v_MEASURE		 '	 , @v_MEASURE		 
+					--select '@v_UNIT_CURRENCY ' 	 , @v_UNIT_CURRENCY 
+					--select '@v_YYYYMM		'	 , @v_YYYYMM		
+					--select '@v_QTY			 '	 , @v_QTY			 
+
+					INSERT INTO #results_MST ( 
+											 active_flag	 
+											,MDF_VERSION_NO
+											,DIVISION_ID	 
+											,DEPARTMENT_ID 
+											,DMS_CUSTOMER	 
+											,DMS_SALES	 
+											,APPLICATION	 
+											,BIZ_TYPE		 
+											,ITEM_TYPE	 
+											,MEASURE		 
+											,UNIT_CURRENCY 
+											,YYYYMM		 
+											,QTY			 
+					) VALUES ( 
+											 @v_active_flag	
+											,@v_MDF_VERSION_NO
+											,@v_DIVISION_ID	
+											,@v_DEPARTMENT_ID 
+											,@v_DMS_CUSTOMER	
+											,@v_DMS_SALES	 
+											,@v_APPLICATION	
+											,@v_BIZ_TYPE		
+											,@v_ITEM_TYPE	 
+											,@v_MEASURE		
+											,@v_UNIT_CURRENCY 
+											,@v_YYYYMM		 
+											,@v_QTY			
+					)
+				END
+			ELSE
+				BEGIN
+					SET @v_DIVISION_ID = @p_DIVISION_ID
+					SET @p_DIVISION_ID = NULL
+ 
+					-- 공백제거(START)
+					SET @v_active_flag	     	= rtrim(ltrim(@v_active_flag    ))
+					SET @v_MDF_VERSION_NO    	= rtrim(ltrim(@v_MDF_VERSION_NO ))
+					SET @v_DIVISION_ID	     	= rtrim(ltrim(@v_DIVISION_ID	))
+					SET @v_DEPARTMENT_ID     	= rtrim(ltrim(@v_DEPARTMENT_ID	))
+					SET @v_DMS_CUSTOMER	     	= rtrim(ltrim(@v_DMS_CUSTOMER	))
+					SET @v_DMS_SALES	     	= rtrim(ltrim(@v_DMS_SALES		))
+					SET @v_APPLICATION	     	= rtrim(ltrim(@v_APPLICAT"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_SAVE_MDF_SIMULTATOR","1382348039","4","ION	))
+					SET @v_BIZ_TYPE		     	= rtrim(ltrim(@v_BIZ_TYPE		))
+					SET @v_ITEM_TYPE	     	= rtrim(ltrim(@v_ITEM_TYPE		))
+					SET @v_MEASURE		     	= rtrim(ltrim(@v_MEASURE		))
+					SET @v_UNIT_CURRENCY     	= rtrim(ltrim(@v_UNIT_CURRENCY  ))
+					SET @v_YYYYMM		     	= rtrim(ltrim(@v_YYYYMM			))
+					SET @v_QTY			     	= rtrim(ltrim(@v_QTY			))
+					-- 공백제거(END)
+
+					INSERT INTO #results_MST ( 
+											 active_flag	 
+											,MDF_VERSION_NO
+											,DIVISION_ID	 
+											,DEPARTMENT_ID 
+											,DMS_CUSTOMER	 
+											,DMS_SALES	 
+											,APPLICATION	 
+											,BIZ_TYPE		 
+											,ITEM_TYPE	 
+											,MEASURE		 
+											,UNIT_CURRENCY 
+											,YYYYMM		 
+											,QTY			 
+					) VALUES ( 
+											 @v_active_flag	
+											,@v_MDF_VERSION_NO
+											,@v_DIVISION_ID	
+											,@v_DEPARTMENT_ID 
+											,@v_DMS_CUSTOMER	
+											,@v_DMS_SALES	 
+											,@v_APPLICATION	
+											,@v_BIZ_TYPE		
+											,@v_ITEM_TYPE	 
+											,@v_MEASURE		
+											,@v_UNIT_CURRENCY 
+											,@v_YYYYMM		 
+											,@v_QTY			
+					)
+				END
+		END
+
+	END
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                                     #results_MST 테이블에 split후 insert (END)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                                  DM_PLN_MDF_SIMULATOR_DATA 테이블 DELETE (START)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	BEGIN
+		
+		-- DELETE COUNT 확인
+		SET @n_delete_count =  (SELECT COUNT(DIVISION_ID)  FROM [dbo].DM_PLN_MDF_SIMULATOR_DATA A
+								WHERE (
+										SELECT count(1) 
+											FROM #results_MST M
+											where M.active_flag		= 'D'
+												and A.MDF_VERSION_NO	= M.MDF_VERSION_NO	
+												and A.DIVISION_ID		= M.DIVISION_ID		    
+												and A.DEPARTMENT_ID		= M.DEPARTMENT_ID     
+												and A.DMS_CUSTOMER		= M.DMS_CUSTOMER	    
+												and A.DMS_SALES			= M.DMS_SALES	     
+												and A.APPLICATION	    = M.APPLICATION	    
+												and A.BIZ_TYPE			= M.BIZ_TYPE		    
+												and A.ITEM_TYPE			= M.ITEM_TYPE	     
+												and A.MEASURE		    = M.MEASURE		    
+												and A.UNIT_CURRENCY		= M.UNIT_CURRENCY     
+												--and A.YYYYMM		    = M.YYYYMM		     
+										) > 0)
+
+		--  select * from #results_MST
+		DELETE 
+		FROM [dbo].DM_PLN_MDF_SIMULATOR_DATA
+		WHERE (
+				SELECT count(1) 
+					FROM #results_MST M
+					where M.active_flag		= 'D'
+						and DM_PLN_MDF_SIMULATOR_DATA.MDF_VERSION_NO	= M.MDF_VERSION_NO	
+						and DM_PLN_MDF_SIMULATOR_DATA.DIVISION_ID		= M.DIVISION_ID		    
+						and DM_PLN_MDF_SIMULATOR_DATA.DEPARTMENT_ID		= M.DEPARTMENT_ID     
+						and DM_PLN_MDF_SIMULATOR_DATA.DMS_CUSTOMER		= M.DMS_CUSTOMER	    
+						and DM_PLN_MDF_SIMULATOR_DATA.DMS_SALES			= M.DMS_SALES	     
+						and DM_PLN_MDF_SIMULATOR_DATA.APPLICATION	    = M.APPLICATION	    
+						and DM_PLN_MDF_SIMULATOR_DATA.BIZ_TYPE			= M.BIZ_TYPE		    
+						and DM_PLN_MDF_SIMULATOR_DATA.ITEM_TYPE			= M.ITEM_TYPE	     
+						and DM_PLN_MDF_SIMULATOR_DATA.MEASURE		    = M.MEASURE		    
+						and DM_PLN_MDF_SIMULATOR_DATA.UNIT_CURRENCY		= M.UNIT_CURRENCY     
+						--and DM_PLN_MDF_SIMULATOR_DATA.YYYYMM		    = M.YYYYMM		     
+				) > 0;
+	END
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                                  DM_PLN_MDF_SIMULATOR_DATA 테이블 DELETE (END)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+
+
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--              "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0041_SAVE_MDF_SIMULTATOR","1382348039","5","                            DM_PLN_MDF_SIMULATOR_DATA 테이블 UPDATE, INSERT (START)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+
+
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                          DM_PLN_MDF_SIMULATOR_DATA 테이블 UPDATE, INSERT (START)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	BEGIN
+		-- INSERT COUNT 확인
+		SET @n_insert_count = ( SELECT count(M.DIVISION_ID) 
+									FROM #results_MST M
+										where M.active_flag      <> 'D' )
+					
+		-- INSERT전 동일대상 delete 수행
+		DELETE 
+		FROM [dbo].DM_PLN_MDF_SIMULATOR_DATA
+		WHERE (
+				SELECT count(1) 
+					FROM #results_MST M
+					where M.active_flag      <> 'D'
+						and DM_PLN_MDF_SIMULATOR_DATA.MDF_VERSION_NO	= M.MDF_VERSION_NO	
+						and DM_PLN_MDF_SIMULATOR_DATA.DIVISION_ID		= M.DIVISION_ID		    
+						and DM_PLN_MDF_SIMULATOR_DATA.DEPARTMENT_ID		= M.DEPARTMENT_ID     
+						and DM_PLN_MDF_SIMULATOR_DATA.DMS_CUSTOMER		= M.DMS_CUSTOMER	    
+						and DM_PLN_MDF_SIMULATOR_DATA.DMS_SALES			= M.DMS_SALES	     
+						and DM_PLN_MDF_SIMULATOR_DATA.APPLICATION	    = M.APPLICATION	    
+						and DM_PLN_MDF_SIMULATOR_DATA.BIZ_TYPE			= M.BIZ_TYPE		    
+						and DM_PLN_MDF_SIMULATOR_DATA.ITEM_TYPE			= M.ITEM_TYPE	     
+						and DM_PLN_MDF_SIMULATOR_DATA.MEASURE		    = M.MEASURE		    
+						and DM_PLN_MDF_SIMULATOR_DATA.UNIT_CURRENCY		= M.UNIT_CURRENCY     
+						and DM_PLN_MDF_SIMULATOR_DATA.YYYYMM		    = M.YYYYMM		     
+				) > 0;
+
+		-- INSERT 수행
+		INSERT INTO [dbo].DM_PLN_MDF_SIMULATOR_DATA
+				(	 MDF_VERSION_NO
+					,DIVISION_ID
+					,DEPARTMENT_ID
+					,DMS_CUSTOMER
+					,DMS_SALES
+					,APPLICATION
+					,BIZ_TYPE
+					,ITEM_TYPE
+					,MEASURE
+					,UNIT_CURRENCY
+					,YYYYMM
+					,QTY
+					,CREATED_BY
+					,CREATION_DATE
+					,LAST_UPDATED_BY
+					,LAST_UPDATE_DATE
+				)
+		SELECT		 MDF_VERSION_NO
+					,DIVISION_ID
+					,DEPARTMENT_ID
+					,DMS_CUSTOMER
+					,DMS_SALES
+					,APPLICATION
+					,BIZ_TYPE
+					,ITEM_TYPE
+					,MEASURE
+					,UNIT_CURRENCY
+					,YYYYMM
+					,QTY
+					,'MDF_SIMULATOR' AS CREATED_BY
+					,GETDATE()   
+					,'MDF_SIMULATOR' AS LAST_UPDATED_BY
+					,GETDATE()   
+			FROM #results_MST M
+				where M.active_flag    <> 'D'
+
+END
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                          DM_PLN_MDF_SIMULATOR_DATA 테이블 UPDATE, INSERT (END)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                        DM_PLN_MDF_SIMULATOR_DATA_H 테이블 HISTORY INSERT (START)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+							INSERT INTO  DM_PLN_MDF_SIMULATOR_DATA_H
+									   ( 
+										 HISTORY_SEQ
+										,ACTIVE_FLAG
+										,MDF_VERSION_NO
+										,DIVISION_ID
+										,DEPARTMENT_ID
+										,DMS_CUSTOMER
+										,DMS_SALES
+										,APPLICATION
+										,BIZ_TYPE
+										,ITEM_TYPE
+										,MEASURE
+										,UNIT_CURRENCY
+										,YYYYMM
+										,QTY
+										,CREATED_BY
+										,CREATION_DATE
+										,LAST_UPDATED_BY
+										,LAST_UPDATE_DATE
+										,ATTRIBUTE1
+										,ATTRIBUTE2
+										,ATTRIBUTE3
+										,ATTRIBUTE4
+										,ATTRIBUTE5
+										,ATTRIBUTE6
+										,ATTRIBUTE7
+										,ATTRIBUTE8
+										,ATTRIBUTE9
+										,ATTRIBUTE10
+									  )
+								SELECT		 NEXT VALUE FOR SEQ1_DM_PLN_MDF_SIMULATOR_DATA_H
+											,active_flag
+											,MDF_VERSION_NO
+											,DIVISION_ID
+											,DEPARTMENT_ID
+											,DMS_CUSTOMER
+											,DMS_SALES
+											,APPLICATION
+											,BIZ_TYPE
+										"

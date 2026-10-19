@@ -10,6 +10,7 @@ import {
   type GridPanel,
   MergeManager,
 } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import {
   ItemByDivisionModal,
   PeriodField,
@@ -21,9 +22,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { apiClient } from '@foundation/apis';
 import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
-import { GridAction } from '@foundation/utils';
+import { attachRowNoHeader, GridAction } from '@foundation/utils';
 import { safeString } from '@foundation/utils';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon, FileExceldownloadIcon, FunctionSearchIcon } from '@shared/lges-icons';
@@ -93,8 +94,11 @@ const FALLBACK_FIXED: RawFlexGridColumnConfig[] = [
   { colNm: 'MEASURE', colLblNm: 'Measure*', colWth: 80, horzAlgnCd: 'L' },
 ].map(c => ({ ...c, fixed: false, visible: true, display: true })) as RawFlexGridColumnConfig[];
 
-// 앞에서부터 계층 머지 대상 (AS-IS SmartColMerge 등가 — DMF0020 PriceBatchInputModal 동일 4열).
-const MERGE_BINDINGS = ['DIVISION_ID', 'DEPT_ID', 'SCM_SITE_ID', 'PROJECT_CODE'];
+// 앞에서부터 계층 머지 대상 (AS-IS SmartColMerge 등가). 컬럼 순서 = Div→Team→End Customer→
+//   Sales Site→Project 이므로 End Customer(END_CUSTOMER40 — 이 팝업의 고정 End Customer 컬럼,
+//   40=프로젝트코드 alias/81·82=PROJECT_CODE 동일값)도 계층에 포함해야 병합된다. 빠지면 이 컬럼만
+//   행마다 끊겨 보이고 하위 Sales Site 병합도 End Customer 경계를 무시한다.
+const MERGE_BINDINGS = ['DIVISION_ID', 'DEPT_ID', 'END_CUSTOMER40', 'SCM_SITE_ID', 'PROJECT_CODE'];
 // 셀 코드→명칭 DataMap 부착/해제 대상 (UI Category 콤보 여부로 gating — 형제 modal 동일).
 const DISPLAY_MAP_BINDINGS = new Set([
   'DIVISION_ID',
@@ -204,6 +208,8 @@ export const SavePricePeriodModal = ({
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
   const gridRef = useRef<FlexGridType<PriceRow> | null>(null);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
   const headerNormalizeRef = useRef<() => void>(() => undefined);
   const gridWrapRef = useRef<HTMLDivElement>(null);
 
@@ -217,6 +223,19 @@ export const SavePricePeriodModal = ({
   const [openProject, setOpenProject] = useState(false);
   const [openItem, setOpenItem] = useState(false);
   const [saving, setSaving] = useState(false); // AS-IS blnWork (연속작업 방지 — MSG00137)
+  // ⭐ 조회(Find) 시점의 조회조건 스냅샷 — SP filters·화면 표시가 live 조회조건이 아니라 이 값을
+  //   쓴다. 조회 후 Project/Model 을 타이핑해도 쿼리 키가 안 바뀌어 그리드가 비워지지 않는다
+  //   (형제 DMF0020 PriceBatchInputModal appliedCond 패턴 1:1). searchTick 은 같은 조건 재조회 강제용.
+  const [applied, setApplied] = useState<{
+    divisionId: string;
+    endCustomers: string[];
+    salesSites: string[];
+    projectCode: string;
+    itemId: string;
+    periodFrom: string;
+    periodTo: string;
+  } | null>(null);
+  const [searchTick, setSearchTick] = useState(0);
 
   // Project 활성 = Division 81*/82 (AS-IS lblProject.Enabled L281/L313 — 40 은 비활성+클리어)
   const projectEnabled = divisionId.startsWith('81') || divisionId === '82';
@@ -244,6 +263,7 @@ export const SavePricePeriodModal = ({
         periodTo: to < from ? from : to,
       });
       setSearched(false);
+      setApplied(null); // 재진입 시 스냅샷 초기화 — Find 전까지 조회 안 함
     }
     // ⭐ 초기화는 **모달 open 전환 시에만** — deps 에 default* 를 넣으면 부모 리렌더(예: Save confirm
     //   alert 표시)마다 새 참조(defaultPeriod={{...}})가 들어와 effect 가 재실행되고 searched=false 로
@@ -267,7 +287,10 @@ export const SavePricePeriodModal = ({
       'Incoterms',
       'CurrencyList',
       { comboId: 'FcstType', divisionId },
-      { comboId: 'CustomsHandbook', divisionId },
+      // [2026-09-16] 'CustomsHandbook'(lookup DM_CUSTOMS_HANDBOOK_40 = 'E' 단독) → 'DOM_EXP'
+      //   (lookup 'DOM/EXP' = D·E 전체, division 무관)로 교체 — 메인 그리드(forecast-price.constants.ts
+      //   GRID_EDIT_COMBO)와 동일 결정: division 40 도 D·E 둘 다 보이도록 큐레이션 무시.
+      'DOM_EXP',
       // ⭐ [CASCADE 2026-08-22] End Customer 조회조건 콤보 = AS-IS 팝업과 동일 등록본.
       //   AS-IS `DMF0082_SaveSalesFuturePrice_Popup.cs:260`
       //     Filter["DIVISION_ID"] = sDivision;
@@ -341,20 +364,20 @@ export const SavePricePeriodModal = ({
 
   const filters = useMemo(
     () =>
-      open
+      open && applied
         ? ({
-            divisionId,
+            divisionId: applied.divisionId,
             deptId: 'ALL',
             // 빈 multi-select = 'ALL' 전송 (SP 토큰필터 UF_FX_String_SplitForIN('')=0행 → 전량배제 회피).
-            endCustomer: endCustomers.length ? joinComma(endCustomers) : 'ALL',
-            scmSiteId: salesSites.length ? joinComma(salesSites) : 'ALL',
+            endCustomer: applied.endCustomers.length ? joinComma(applied.endCustomers) : 'ALL',
+            scmSiteId: applied.salesSites.length ? joinComma(applied.salesSites) : 'ALL',
             plantSiteId: 'ALL',
-            projectCode,
-            itemId,
+            projectCode: applied.projectCode,
+            itemId: applied.itemId,
             customerProjectCode: '',
             customerModel: '',
-            fromYyyymmdd: snapMonday(periodFrom),
-            toYyyymmdd: snapMonday(periodTo),
+            fromYyyymmdd: snapMonday(applied.periodFrom),
+            toYyyymmdd: snapMonday(applied.periodTo),
             biztype: 'ALL',
             sesUserId,
             userGroup,
@@ -363,18 +386,7 @@ export const SavePricePeriodModal = ({
             invalidExec: 'N',
           } satisfies ProcRequest<MENU_ID, SHEETS.SAVE_PRICE_DATA>)
         : undefined,
-    [
-      open,
-      divisionId,
-      endCustomers,
-      salesSites,
-      projectCode,
-      itemId,
-      periodFrom,
-      periodTo,
-      sesUserId,
-      userGroup,
-    ]
+    [open, applied, sesUserId, userGroup]
   );
   const { data, refetch, isFetching } = useTabProcQuery<MENU_ID, SHEETS.SAVE_PRICE_DATA>({
     menuId: MENU_ID,
@@ -386,15 +398,15 @@ export const SavePricePeriodModal = ({
 
   const titleFilters = useMemo(
     () =>
-      open
+      open && applied
         ? ({
-            startYyyymmdd: snapMonday(periodFrom),
-            endYyyymmdd: snapMonday(periodTo),
+            startYyyymmdd: snapMonday(applied.periodFrom),
+            endYyyymmdd: snapMonday(applied.periodTo),
             sesUserId,
-            divisionId,
+            divisionId: applied.divisionId,
           } satisfies ProcRequest<MENU_ID, SHEETS.SAVE_PRICE_TITLE>)
         : undefined,
-    [open, periodFrom, periodTo, sesUserId, divisionId]
+    [open, applied, sesUserId]
   );
   const {
     data: titleData,
@@ -552,10 +564,29 @@ export const SavePricePeriodModal = ({
     if (periodFrom !== fromMon || periodTo !== toMon) {
       setSearchParams({ periodFrom: fromMon, periodTo: toMon });
     }
+    // 조회 버튼을 누른 시점의 조회조건만 스냅샷으로 확정 — SP filters·화면 표시가 모두 이 값을 쓴다.
+    //   refetch 는 스냅샷이 filters 에 반영된 다음 렌더에서 아래 effect 가 호출한다(쿼리 키 정합).
+    setApplied({
+      divisionId,
+      endCustomers,
+      salesSites,
+      projectCode,
+      itemId,
+      periodFrom: fromMon,
+      periodTo: toMon,
+    });
     setSearched(true);
-    void refetchTitle?.();
-    void refetch?.();
+    setSearchTick(n => n + 1);
   };
+
+  // 조회 실행 — 스냅샷(applied)이 filters 에 반영된 다음 렌더에서 refetch (쿼리 키 정합, DMF0020 동일).
+  //   같은 조건으로 다시 Search 해도 tick 이 증가하므로 강제 재조회된다.
+  useEffect(() => {
+    if (searchTick === 0) return;
+    void refetch?.();
+    void refetchTitle?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTick]);
 
   // ===== Save (AS-IS SaveData L1454~2097 — 변경분 × 저장주차 확장, 17 IN '^' bulk) =====
   const handleSave = async () => {
@@ -587,7 +618,7 @@ export const SavePricePeriodModal = ({
     for (const r of changedRows) {
       const qtyRaw = normPrice(r.PRICE_ALL);
       const qty = qtyRaw === '' ? '0' : qtyRaw; // AS-IS L1749 — 빈값 '0'
-      const activeFlag = qty === '0' ? 'D' : 'M'; // AS-IS stempAction L1753~1759 의도 + SP L1394 정합
+      const activeFlag = 'M'; ; // AS-IS stempAction L1753~1759 의도 + SP L1394 정합
       const projectKey = String(r.END_CUSTOMER40 ?? r.PROJECT_CODE ?? '');
       for (const yyyymmdd of saveWeeks) {
         saveRows.push({
@@ -883,6 +914,10 @@ export const SavePricePeriodModal = ({
     if (changed) g.invalidate();
   }, [dataMaps]);
 
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, rows]);
+
   // ⭐ 컨테이너 리사이즈 재측정 (hook wijmo-resize-invalidate — CustomDialog open 애니메이션 후
   //   지연 build 되는 3단 헤더 높이 정규화 보장. 형제 modal ResizeObserver 패턴 1:1)
   useEffect(() => {
@@ -924,6 +959,10 @@ export const SavePricePeriodModal = ({
         height='60vh'
         handleClose={modalClose}
         disableButtonCancel
+        // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+        // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+        // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+        disableEnforceFocus
         customHeaderTitle={
           <div className='headerContainer'>
             <div className='headerDot' />
@@ -941,7 +980,7 @@ export const SavePricePeriodModal = ({
                 <>
                   <Grid size={3}>
                     <FormItem
-                      label={t('LBL00663', 'Div')}
+                      label={t('LBL00001', 'Div')}
                       labelAlign='right'
                       render={() => (
                         <CustomDropdown
@@ -964,7 +1003,7 @@ export const SavePricePeriodModal = ({
                         · 선택 변경 시 하위(Sales Site) clear — cascade 의 필수 짝. */}
                   <Grid size={3}>
                     <FormItem
-                      label={t('LBL00503', 'End Customer')}
+                      label={t('LBL00080', 'End Customer')}
                       labelAlign='right'
                       render={() => (
                         <CustomDropdown
@@ -1022,7 +1061,10 @@ export const SavePricePeriodModal = ({
                     end={periodTo}
                     onChange={(start, end) => {
                       if (start && end && start !== end) {
-                        setSearchParams({ periodFrom: snapMonday(start), periodTo: snapMonday(end) });
+                        setSearchParams({
+                          periodFrom: snapMonday(start),
+                          periodTo: snapMonday(end),
+                        });
                       } else {
                         setSearchParams({ periodFrom: start, periodTo: end });
                       }
@@ -1039,7 +1081,7 @@ export const SavePricePeriodModal = ({
                             fullWidth
                             disabled={!projectEnabled}
                             value={projectCode}
-                            InputProps={{ readOnly: true }}
+                            onChange={e => setSearchParams({ projectCode: e.target.value })}
                             onDoubleClick={() => projectEnabled && setOpenProject(true)}
                           />
                           <Button
@@ -1063,7 +1105,7 @@ export const SavePricePeriodModal = ({
                           <InputField
                             fullWidth
                             value={itemId}
-                            InputProps={{ readOnly: true }}
+                            onChange={e => setSearchParams({ itemId: e.target.value })}
                             onDoubleClick={() => setOpenItem(true)}
                           />
                           <Button
@@ -1092,16 +1134,24 @@ export const SavePricePeriodModal = ({
                 open={loading || saving}
                 placement='parent'
               />
-              <DataGrid
+              <ResultArea
+                title=''
+                count={rows.length}
                 gridRef={gridRef as never}
-                className={styles.grid}
-                itemsSource={rows as unknown as WijmoRowItem[]}
-                staticColumns={fixedColumns}
-                dynamicColumns={dynamicColumns}
-                autoGenerateColumns={false}
-                allowSorting={true}
-                allowMerging={AllowMerging.All}
-              />
+                gridFilterRef={gridFilterRef}
+              >
+                <DataGrid
+                  gridRef={gridRef as never}
+                  gridFilterRef={gridFilterRef}
+                  className={styles.grid}
+                  itemsSource={rows as unknown as WijmoRowItem[]}
+                  staticColumns={fixedColumns}
+                  dynamicColumns={dynamicColumns}
+                  autoGenerateColumns={false}
+                  allowSorting={true}
+                  allowMerging={AllowMerging.All}
+                />
+              </ResultArea>
             </div>
 
             {/* Action — AS-IS btnButtonList: Find(SearchArea)/Edit(불요)/Save/Excel/Close */}

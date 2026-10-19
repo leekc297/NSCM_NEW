@@ -10,6 +10,8 @@
   height: 36px;
   display: flex;
   align-items: center;
+  border-radius: 4px;
+  overflow: hidden;
 
   :global {
     [class*='MuiBox-root'],
@@ -33,6 +35,27 @@
       padding-top: 0 !important;
       padding-bottom: 0 !important;
     }
+
+    // design-system 내부 버그(vendor 패키지, 이 저장소 소스 아님 — vendor/lges-design-system-*.tgz
+    //   라 직접 수정 불가) — 이 DatePicker 는 달력 아이콘을 positionStart 로 커스텀 배치하는데, MUI 가
+    //   남기는 빈 positionEnd adornment(자식 0개, 아이콘 없음)를 design-system 이
+    //   slotProps.inputAdornment.sx 로 숨기려 했으나 `diplay: 'none'` 오타라 적용되지 않는다.
+    //   내용 없는 껍데기라 안전하게 숨긴다.
+    [class*='MuiInputAdornment-positionEnd'] {
+      display: none !important;
+    }
+
+    // 진짜 원인 확정(사용자 DevTools 실측, 2026-09-22): elevation=true + disabled 조합에서
+    //   fieldset(NotchedOutline) 테두리 가운데가 사라지던 것은 서브픽셀도 컴포지팅 레이어도
+    //   아니라 `.MuiInputBase-root.Mui-disabled { background-color: #F1F4F3 }` 때문이었다 —
+    //   이 배경색을 DevTools 에서 끄니 테두리가 바로 정상 렌더링됨을 확인. 같은 요소에 불투명
+    //   background-color 와 (자식 fieldset 의) border 가 같이 있으면 Chromium 이 특정 상황에서
+    //   border 페인트를 배경에 덮인 것으로 오판해 일부 건너뛰는 것으로 추정. 이 배경색은 중복이라
+    //   지워도 무해하다 — 바깥 Box(l1 outer wrapper)가 이미 동일한 회색(inputBgDisabled)을
+    //   깔고 있어(모든 스크린샷에서 아이콘 주변까지 이미 이 회색으로 보였음) 시각적으로 그대로다.
+    [class*='MuiInputBase-root'].Mui-disabled {
+      background-color: transparent !important;
+    }
   }
 }
 
@@ -48,6 +71,9 @@
   // ⭐ Mui DatePicker(TextField)는 기본 고정 너비라, flex 로 늘리면(wrapper 만 커지고
   //   입력창은 안 커져) 오른쪽에 큰 빈 공간이 생김 → 과도한 간격.
   //   각 필드를 '자기 너비(auto)'로 두고 왼쪽에 붙여, gridSize 와 무관하게 간격을 일정하게 유지.
+  // 각 피커를 고정 110px 로 둔다 (flex 로 늘이거나 줄이지 않음). gridSize 가 좁은 화면
+  //   (예: DMF0003 Period = size 3)에서 flex 로 줄이면 YYYY.MM.DD 가 잘려 보인다
+  //   (2026-09-23 5aafd4b8 회귀 원복). 폭이 좁은 모달은 이 값이 넘칠 수 있으니 그쪽은 별도 확인.
   .datePickerFix {
     flex: 0 0 auto;
     width: 110px;

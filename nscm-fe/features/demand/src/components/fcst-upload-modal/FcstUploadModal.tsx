@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
@@ -110,20 +110,29 @@ export const FcstUploadModal = ({
     const m = /^ATTRIBUTE(\d+)$/.exec(k);
     return m ? Number(m[1]) : 999;
   };
-  const errorColumns: RawFlexGridColumnConfig[] =
-    errorRows.length > 0
-      ? Object.keys(errorRows[0])
-          .sort((a, b) => orderOf(a) - orderOf(b))
-          .map(k => ({
-            colNm: k,
-            colLblNm: labelOf(k),
-            colWth: k === 'EXCEL_ROW' ? 60 : 140,
-            horzAlgnCd: 'L',
-            visible: true,
-            display: true,
-            inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
-          }))
-      : [];
+  // 주의: errorRows[0] 하나만 보고 컬럼셋을 정하면 안 된다 — BE 는 ATTRIBUTE1..N 을 항상 고정
+  //   개수로 내려주지만(P_COL_CNT), 값이 NULL 인 속성은 응답 행 객체에서 키 자체가 빠질 수 있다.
+  //   0번째 행(=Error 로 잡힌 첫 업로드 행)에서 하필 비어있던 컬럼은 다른 행에 값이 있어도 그리드에서
+  //   영구히 사라진다(2026-09-22 실사고 — DMF0074 메탈 컬럼 일부가 첫 행 기준으로 누락). attributeHeaders
+  //   로 컬럼 개수를 고정하고, 그 외 BE 전용 키(MESSAGE_TEXT 등)는 전 행 union 으로 보강한다.
+  const errorColumns: RawFlexGridColumnConfig[] = useMemo(() => {
+    if (errorRows.length === 0) return [];
+    const keySet = new Set<string>(['EXCEL_ROW']);
+    attributeHeaders.forEach((_, i) => keySet.add(`ATTRIBUTE${i + 1}`));
+    errorRows.forEach(row => Object.keys(row).forEach(k => keySet.add(k)));
+    return Array.from(keySet)
+      .sort((a, b) => orderOf(a) - orderOf(b))
+      .map(k => ({
+        colNm: k,
+        colLblNm: labelOf(k),
+        colWth: k === 'EXCEL_ROW' ? 60 : 140,
+        horzAlgnCd: 'L',
+        visible: true,
+        display: true,
+        inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
+      }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorRows, attributeHeaders]);
 
   // 결과 카운트 — PR_GET_EXCEL_UPLOAD_RESULT O_CUR_CNT 실측 키 (G6 HTTP 스모크 2026-07-04:
   //   SUCCESS_COUNT / ERROR_COUNT / TOTAL_COUNT + *_TITLE 라벨 컬럼)
@@ -195,10 +204,26 @@ export const FcstUploadModal = ({
     setClassified(false);
   };
 
-  const handleClose = () => {
+  // 확인 없이 즉시 닫기 — 저장 성공 직후 등 내부 경로 전용.
+  const doClose = () => {
     setFiles([]);
     resetResult();
     modalClose();
+  };
+
+  // 사용자 수동 닫기(Cancel 버튼 / 헤더 X / 백드롭) — AS-IS ExcelUploadForm.OnClose_Click 1:1.
+  //   검증 완료(classified)이고 저장 전이면 MSG00684('취소하시겠습니까?') confirm 후에만 닫는다
+  //   (AS-IS 조건 btnOK.Enabled && !UploadSaved — OK 버튼 활성 = classified && Error 0 과 등가).
+  //   저장 성공은 handleSave 가 doClose 로 직접 닫으므로 이 게이트를 타지 않는다.
+  const handleClose = async () => {
+    if (classified && Number(result.error || 0) === 0) {
+      const ok = await setAlert({
+        type: 'confirm',
+        content: t('MSG00684', '_Do you want to cancel?'),
+      });
+      if (!ok) return;
+    }
+    doClose();
   };
 
   // ⭐ 2-Step (사용자 요구 2026-07-10) — 파일 선택 시 자동 검증·분류 (별도 Upload 버튼 없음).
@@ -255,7 +280,7 @@ export const FcstUploadModal = ({
       }
       void setToast({ message: t('MSG00606', '_Saved.'), type: 'success' });
       onUploaded?.();
-      handleClose();
+      doClose();
     } catch (e) {
       const msg =
         e instanceof Error ? e.message : t('MSG00618', '_An error occurred while saving.');
@@ -272,7 +297,7 @@ export const FcstUploadModal = ({
       type='modaless'
       position='basic'
       open={open}
-      handleClose={handleClose}
+      handleClose={() => void handleClose()}
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -300,8 +325,24 @@ export const FcstUploadModal = ({
                   <FileUploader
                     placeholder=''
                     acceptFiles={['.xlsx', '.xls']}
+                    multiple={false}
                     selectedFiles={files}
                     onFileChange={value => {
+                      {/* @lges FileUploader 는 multiple=false 여도 새로 선택/드롭한 파일을 기존 selectedFiles 에 항상 append 한다(내부 onDropHandler: [...selectedFiles, ...신규]).
+                          그 결과 이미 1개가 올라간 상태에서 다시 선택하면 2개가 되어 버린다 — 단일 파일만 허용해야 하므로 2개 이상이면 반려하고 안내 후 기존(또는 최초 1개)만 유지한다.
+                          적용 대상 : customer-fcst-upload/CustomerFcstUpload.tsx  / forecast-price/ForecastPrice.tsx / metal-link-price/MetalLinkPrice.tsx /cust-psi-upload/CustPsiUpload.ts
+                      */}
+                      if (value.length > 1) {
+                        void setAlert({
+                          type: 'alert',
+                          content: t(
+                            'FE_EXCEL_UPLOAD_SINGLE_FILE_ONLY',
+                            '이미 업로드된 파일이 있습니다. 기존 파일을 삭제한 후 다시 업로드해 주세요.'
+                          ),
+                        });
+                        setFiles(files.length > 0 ? files : value.slice(0, 1));
+                        return;
+                      }
                       setFiles(value);
                       // 파일 교체 시 이전 분류 결과 무효화 (재검증 필요 — 2-Step 저장 게이트 초기화)
                       if (twoStep) resetResult();
@@ -335,8 +376,12 @@ export const FcstUploadModal = ({
                   {t('LBL00716', '_OK')}
                 </Button>
               )}
-              <Button priority='normal' appearance='outlined' onClick={handleClose}>
-                {t('LBL00717', '_Cancel')}
+              <Button
+                priority='normal'
+                appearance='outlined'
+                onClick={() => void handleClose()}
+              >
+                {t('LBL00107', '_Cancel')}
               </Button>
             </div>
           </div>

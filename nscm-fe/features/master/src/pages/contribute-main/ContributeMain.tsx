@@ -16,7 +16,7 @@ import { ContributeVersionModal } from '../../components';
 import { ContributeMainGrid } from './components/ContributeMainGrid';
 import { SearchBar } from './components/SearchBar';
 import { MENU_ID, SHEETS, VALIDATION_MSG } from './contribute-main.constants';
-import type { MainRow } from './types';
+import type { MainRow, SpreadTitleRow } from './types';
 import { useContributeMainStore } from './useContributeMainStore';
 import { findDataGuard, formatPeriodLabel, validChk, validChk2 } from './utils/validators';
 
@@ -51,6 +51,22 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters: filters[SHEETS.MAIN],
     enabled: !!filters[SHEETS.MAIN] && !!searchParams.verSeq,
   });
+
+  // 칸 제목 조회 — P_DMF0043_GET_MAIN_SPREAD_TITLE (시트 mainTitle, AS-IS InitSpread 1:1).
+  //   선택 연도의 월 108칸 + 연도 9칸을 데이터 유무와 무관하게 내려주므로 그리드 동적 칸은 이 결과로
+  //   만든다. 데이터 행의 키로 만들면 BE 가 NULL 셀 키를 빼서 값 없는 달·신규 연도 칸이 사라진다.
+  //   filters 는 setFilters 가 메인과 함께 채우므로 Search 때 같이 나가고 Year 변경 시 같이 비워진다.
+  const { data: titleData } = useTabProcQuery<MENU_ID, SHEETS.MAIN_TITLE>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.MAIN_TITLE,
+    tabId,
+    filters: filters[SHEETS.MAIN_TITLE],
+    enabled: !!filters[SHEETS.MAIN_TITLE] && !!searchParams.verSeq,
+  });
+  const titleRows = useMemo(
+    () => (titleData?.o_rc1 ?? []) as SpreadTitleRow[],
+    [titleData]
+  );
 
   // 저장 — DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO.
   //   공용 useProcMutation 을 못 쓴다: mutationFn 이 row 배열을 받아 callMutationProc 으로 보내는데
@@ -126,7 +142,7 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({
         type: 'alert',
         content:
-          t(VALIDATION_MSG.RATIO_OUT_OF_RANGE, '입력 데이터의 합계가 100% 가 아닙니다.') + detail,
+          t(VALIDATION_MSG.RATIO_OUT_OF_RANGE, '_입력한 데이터가 100을 초과하거나 미만입니다.') + detail,
       });
       return;
     }
@@ -134,7 +150,8 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!v2.ok) {
       void setAlert({
         type: 'alert',
-        content: t(VALIDATION_MSG.REQUIRED_DIVISION, '필수값을 입력해주세요.'),
+        // 구분(RBU_0999) 칸 공란 — 종전 fallback '필수값을 입력해주세요.' 는 어느 칸인지 알 수 없어 AS-IS 문구로 맞춤.
+        content: t(VALIDATION_MSG.REQUIRED_DIVISION, '_구분값을 입력해 주세요.'),
       });
       return;
     }
@@ -155,33 +172,30 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
       contributionRatio: '',
       createdBy: '',
     };
+    // 전송 단위 = 수정(M) 행의 "값이 있는 칸" 전부 (AS-IS SaveData .cs L343~393 1:1: 모든 M 행의
+    //   EDIT_FLAG 다음 컬럼부터 끝까지 돌며 sQty != "" 인 칸만, 구분(999) 컬럼 제외, Y/M 은 chkYear 로 택일).
+    //
+    //   2026-10-08 통합테스트 지적으로 되돌림: 2026-08-11 부터 "입력이 있는 달은 8개 법인 전부, 빈 칸은 '0'"
+    //   으로 보내 0 비율 행이 늘어났다. 빈 칸은 보내지 않는다(행 미생성). 편집으로 지운 칸은 그리드가
+    //   '0' 으로 자동 채우므로(ContributeMainGrid emptyCellAsZero, AS-IS spdMain_Changed) 0 으로 저장된다.
+    //
+    //   필수: 손대지 않은 달의 값도 함께 보낸다. 저장 SP(P_DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO L1063~1087)는
+    //   DTL 을 월·법인이 아니라 **키(VER_SEQ + 부서·고객·제품군·BizType) 단위로 전부 DELETE 한 뒤 payload 만 INSERT**
+    //   한다. 편집한 달만 보내면 그 키의 다른 달 비율이 사라진다. AS-IS 가 M 행의 값 있는 칸을 전부 보내던 이유다.
     let count = 0;
     dirty.forEach(row => {
-      // ⭐ 2026-08-11 — 값이 있는 셀만 보내던 것을 "입력한 period 는 8개 RBU 전부" 로 바꾼다.
-      //   AS-IS 스프레드는 빈 셀이 0.00 이라 편집한 달의 RBU 가 통째로 넘어갔고 SP 도 그 전제로
-      //   짜여 있다. TO-BE 는 SP 응답의 NULL 셀이 payload 에서 빠져 1월만 입력하면 셀 1개만
-      //   넘어가고 SQL 이 깨졌다. → 입력이 하나라도 있는 period 안의 빈 셀은 '0' 으로 채운다.
-      //   손대지 않은 달은 그대로 제외 (전 기간을 0 으로 덮어쓰지 않는다).
-      const rbuCodes = new Set<string>();
-      const touchedPeriods = new Set<string>();
-      Object.entries(row).forEach(([key, val]) => {
-        if (!key.startsWith(`${tag}#`)) return;
-        const parts = key.split('#');
-        if (parts.length !== 3) return;
-        const [, period, osCorpCd] = parts;
-        if (osCorpCd.indexOf('999') >= 0) return; // 구분 컬럼은 ratio 대상 아님
-        rbuCodes.add(osCorpCd);
-        if (val != null && val !== '') touchedPeriods.add(period);
-      });
-
-      [...touchedPeriods].sort().forEach(period => {
-        const conTypeKey = `${tag}#${period}#RBU_0999`;
-        const conType = (row as Record<string, string>)[conTypeKey] ?? '';
-
-        [...rbuCodes].sort().forEach(osCorpCd => {
+      Object.keys(row)
+        .filter(key => key.startsWith(`${tag}#`))
+        .sort()
+        .forEach(key => {
+          const parts = key.split('#');
+          if (parts.length !== 3) return;
+          const [, period, osCorpCd] = parts;
+          if (osCorpCd.indexOf('999') >= 0) return; // 구분 컬럼은 ratio 대상 아님
           // MainRow 의 인덱스 시그니처가 WijmoPrimitive 라 별도 캐스팅 없이 안전하게 문자열화된다.
-          const val = row[`${tag}#${period}#${osCorpCd}`];
-          const sQty = val == null || val === '' ? '0' : String(val);
+          const val = row[key];
+          if (val == null || val === '') return; // 빈 칸은 전송 제외 — 행을 만들지 않는다
+          const conType = (row as Record<string, string>)[`${tag}#${period}#RBU_0999`] ?? '';
 
           // SP 로 가는 activeFlag 는 기존과 동일한 'M' 을 유지한다 (마커를 CRUD_TYPE 으로
           // 옮겼을 뿐 전송값을 바꾸지 않는다 — SP 계약 변경 금지).
@@ -196,11 +210,10 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
           buf.yyyymm += '^' + period;
           buf.osCorpCd += '^' + osCorpCd;
           buf.contributionType += '^' + conType;
-          buf.contributionRatio += '^' + sQty;
+          buf.contributionRatio += '^' + String(val);
           buf.createdBy += '^' + sessionUserId;
           count++;
         });
-      });
     });
 
     if (count === 0) {
@@ -277,7 +290,6 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // 화면 mount 시 admin SHEET_COLUMNS (BASE 6 컬럼) 동적 fetch.
   useEffect(() => {
-    console.log('initialized', initialized);
     if (!initialized) void fetchStaticColumns();
   }, [initialized]);
 
@@ -308,6 +320,7 @@ export const ContributeMain = ({ tabId, title }: PageProps<MENU_ID>) => {
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef}
         data={rows}
+        titleRows={titleRows}
       />
       <ContributeVersionModal
         open={versionModalOpen}

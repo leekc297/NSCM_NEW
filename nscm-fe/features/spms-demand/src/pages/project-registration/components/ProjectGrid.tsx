@@ -2,29 +2,37 @@ import {
   CellType,
   type CellEditEndingEventArgs,
   type CellRangeEventArgs,
-  Column,
   type FlexGrid,
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useCallback, useMemo, useRef, useState, type MutableRefObject } from 'react';
+import { useCallback, useRef, useState, type MutableRefObject } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
 import { CRUD_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
-import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { GridUtils, type EditTracker } from '@foundation/utils';
-import { DataGrid } from '@shared/components';
+import { Button } from '@shared/lges';
 import { useMessageStore } from '@shared/stores';
 
 import { AuthManagementPopup } from '../../../components/auth-management-popup';
 import { TagLayer, type TagLayerHandle } from '../../../components/tag-layer';
-import { restoreMultiRangeSelection } from '../../../lib/grid';
+import { attachComboCascadeAutoFill } from '../../../lib/comboCascadeAutoFill';
+import { DataGrid, keepDivisionCodeDisplay, keepServerComboOrder } from '../../../lib/grid';
 import { RESPONSE_SET, SHEET_INDEX } from '../project-registration.constants';
 import { formatSopDate, getProjectComboIdBinding } from '../project-registration.grid-utils';
-import { isDraftRegStatus, type ProjectRow } from '../project-registration.types';
+import {
+  isDraftRegStatus,
+  isPendingRegStatus,
+  type ProjectRow,
+} from '../project-registration.types';
 import gridStyles from '../ProjectRegistration.module.scss';
 import { useProjectRegistrationStore } from '../useProjectRegistrationStore';
+
+// 등록요청/요청취소 행 버튼 컬럼 — SDM5010 REG_COL 과 같은 메타 계약(admin Category Setup 에서
+//   ATTRIBUTE1='ACTION' 으로 등록, SP 커서는 '' 반환). 컬럼명은 하드코딩하지 않고 메타로 판정.
+const REG_ACTION_ATTR = 'ACTION';
 
 interface ProjectGridProps {
   gridRef: MutableRefObject<FlexGrid<ProjectRow> | undefined>;
@@ -32,29 +40,12 @@ interface ProjectGridProps {
   data: ProjectRow[];
   setActiveTab: (tab: SHEET_INDEX) => void;
   onAuthSaved: () => void;
+  onRequest: (row: ProjectRow) => void;
+  onCancelRequest: (row: ProjectRow) => void;
   /** MY_PROJECT(TAB2) 가 활성일 때만 true — PROJECT 는 조회조건을 공유해도 별개(peer) 탭이라
    *  TAB2 조회가 TAB1 의 미저장 편집(insert 등)까지 물어서 dirty confirm 을 띄우면 안 된다. */
   excludeFromDirtyCheck?: boolean;
 }
-
-// sales-site SOLDTO_CUSTOMER 와 같은 이유(관리자 메타에 아직 attribute2 가 없음)로 FE 에서
-// 임시로 얹는 셀 콤보 행 단위 필터 — parseComboFilterBindings 문법 '행컬럼:콤보컬럼'.
-//   실제 콤보가 바인딩된 컬럼은 *_NAME 표시 컬럼이 아니라 코드 컬럼 자체다(09_SDM1010_project_grid_combo_fix.sql
-//   — STACK_METHOD 는 FPComboBox, STACK_METHOD_NAME 은 FPText+숨김으로 등록됨. END_CUSTOMER 도 admin 메타상
-//   콤보 바인딩 컬럼이 END_CUSTOMER_NAME 이 아니라 END_CUSTOMER 자체).
-//   END_CUSTOMER: 콤보 후보를 행의 DIVISION_ID 로 좁힌다(요청 3).
-//   STACK_METHOD: 콤보 후보를 행의 DIVISION_ID·CELL_TYPE 으로 좁힌다(요청 5).
-//   CELL_TYPE: 콤보 후보를 행의 DIVISION_ID 로 좁힌다 — CellTypeByDivision SQL 이 @divisionId
-//     바인드를 받도록 만들어져 있지만, 09_SDM1010_project_grid_combo_fix.sql 의 admin 메타
-//     UPDATE 가 엉뚱하게 DPJT_CLASS_NAME 컬럼을 대상으로 나가 있어(복붙 실수) CELL_TYPE 자체엔
-//     ATTRIBUTE2 가 비어 있었다(2026-08-20 확인·SQL 수정). DB 재실행 전까지의 안전망 겸
-//     STACK_METHOD 와 동일하게 이중 방어(!column.attribute2 가드라 DB 값이 이미 있으면 no-op).
-// 추후 admin UI Category Setup 에 attribute2 가 등록되면 이 patch는 제거한다.
-const COMBO_ROW_FILTER_BY_COLNM: Record<string, string> = {
-  END_CUSTOMER: 'DIVISION_ID:DIVISION_ID',
-  STACK_METHOD_NAME: 'DIVISION_ID:DIVISION_ID,CELL_TYPE:CELL_TYPE',
-  CELL_TYPE_NAME: 'DIVISION_ID:DIVISION_ID',
-};
 
 /* =========================================================
  * ProjectGrid
@@ -66,6 +57,8 @@ export const ProjectGrid = ({
   data,
   setActiveTab,
   onAuthSaved,
+  onRequest,
+  onCancelRequest,
   excludeFromDirtyCheck,
 }: ProjectGridProps) => {
   const { t } = useTranslation();
@@ -86,53 +79,34 @@ export const ProjectGrid = ({
     state => state.staticColumns[RESPONSE_SET.PROJECT]
   );
 
-  /**
-   * No 컬럼 + 서버 컬럼(콤보 행 필터 patch 포함)
-   */
-  const columns = useMemo(
-    () =>
-      staticColumns.map((column: RawFlexGridColumnConfig) =>
-        COMBO_ROW_FILTER_BY_COLNM[column.colNm] && !column.attribute2
-          ? { ...column, attribute2: COMBO_ROW_FILTER_BY_COLNM[column.colNm] }
-          : column
-      ),
-    [staticColumns]
-  );
+  // 핸들러(initialized 시 1회 등록)가 최신 컬럼 메타를 보도록 ref 로 미러
+  //   콤보 행 필터(ATTRIBUTE2)는 admin Column param2 단일 원천 — FE patch 없음
+  const columnsRef = useRef(staticColumns);
+  columnsRef.current = staticColumns;
 
-  const formatRowHeader = useCallback(
-    (grid: FlexGrid<ProjectRow>, event: FormatItemEventArgs) => {
-      const row = GridUtils.getRow(grid, event.row);
-      if (event.panel.cellType === CellType.RowHeader && event.col === 1) {
-        delete event.cell.dataset.status;
-        event.cell.textContent = String(event.row + 1);
-      } else if (event.panel.cellType === CellType.RowHeader && event.col === 2) {
-        delete event.cell.dataset.status;
-        event.cell.textContent = '';
-        if (row?.CRUD_TYPE) event.cell.dataset.status = String(row.CRUD_TYPE);
-      } else if (event.panel.cellType === CellType.TopLeft && event.col === 1) {
-        event.cell.textContent = t('LBL00674', '_No');
-        event.cell.style.textAlign = 'center';
-      }
-    },
-    [t]
-  );
+  // 행 버튼 portal 컨테이너 — DPJT_KEY 별 1개 (SDM5010 ProjectMasterTab1Grid 와 동일 방식)
+  const actionPortalsRef = useRef<Map<string, HTMLDivElement>>(new Map());
+  const [, setPortalTick] = useState(0);
 
-  const handleLoadedRows = useCallback(
+  // ⭐ SDM 공통 — 상위 셀 변경 시 종속 콤보(ATTRIBUTE2) 첫 후보 자동 입력 (CELL_TYPE→STACK_METHOD 등).
+  //   DataGrid 는 initialized 를 내부 핸들러(EditTracker/stale clear) 등록이 끝난 뒤 마지막에
+  //   호출하므로 여기 등록이 항상 공용 정리보다 뒤에 돈다. 그리드 폐기 시 핸들러도 함께 사라져
+  //   별도 detach 는 불필요.
+  const handleGridInitialized = useCallback(
     (grid: FlexGrid<ProjectRow>) => {
-      // loadedRows가 DataGrid initialized 완료 전에 올 수 있어 Selector/상태 컬럼 생성 뒤로 미룬다.
-      globalThis.queueMicrotask(() => {
-        if (!grid.hostElement.isConnected || grid.rowHeaders.columns.length < 2) return;
-        if (grid.rowHeaders.columns.length === 2) {
-          grid.rowHeaders.columns.insert(1, new Column({ align: 'center', width: 40 }));
-        }
-        grid.rowHeaders.columns[1].width = 40;
-        grid.rowHeaders.columns[2].width = 24;
-        grid.formatItem.removeHandler(formatRowHeader);
-        grid.formatItem.addHandler(formatRowHeader);
-        grid.invalidate(true);
+      // 행 필터(ATTRIBUTE2) 콤보는 그 행으로 좁힌 서버 순서로 복원 (사업부 중복 NAME 섞임 방지)
+      keepServerComboOrder(
+        grid,
+        binding => columnsRef.current?.find(c => c.colNm === binding)?.attribute2
+      );
+      keepDivisionCodeDisplay(grid);
+      attachComboCascadeAutoFill({
+        grid,
+        getColumns: () => columnsRef.current,
+        getEditTracker: () => editTrackerRef.current,
       });
     },
-    [formatRowHeader]
+    [editTrackerRef]
   );
 
   /* =====================================================
@@ -234,16 +208,6 @@ export const ProjectGrid = ({
     const row = GridUtils.getRow(grid, event.row);
     const isNewRow = row?.CRUD_TYPE === CRUD_TYPE.INSERT || row?.CRUD_TYPE === CRUD_TYPE.CREATE;
 
-    if (event.panel.cellType === CellType.RowHeader && event.col === 0) {
-      const checkbox = event.cell.querySelector<HTMLInputElement>('input[type="checkbox"]');
-
-      if (isNewRow) grid.rows[event.row].isSelected = false;
-      event.cell.classList.toggle('wj-state-disabled', isNewRow);
-      event.cell.style.pointerEvents = isNewRow ? 'none' : '';
-      if (checkbox) checkbox.disabled = isNewRow;
-      return;
-    }
-
     /**
      * 일반 Data Cell만 처리
      */
@@ -277,18 +241,30 @@ export const ProjectGrid = ({
     }
 
     /* ===================================================
-     * Division
+     * 등록요청/요청취소 행 버튼 (REG_ACTION) — 셀당 portal 컨테이너 1개, 버튼은 아래 JSX 가 렌더
      * =================================================== */
 
-    if ((binding === 'DIVISION_ID' || binding === 'DIVISION_NAME') && !isEditing) {
-      event.cell.textContent = String(row?.DIVISION_ID ?? '');
+    if (row && columnsRef.current.find(c => c.colNm === binding)?.attribute1 === REG_ACTION_ATTR) {
+      const key = String(row.DPJT_KEY ?? '');
+      const existing = actionPortalsRef.current.get(key);
+      if (existing) {
+        if (event.cell.firstElementChild !== existing) event.cell.replaceChildren(existing);
+        return;
+      }
+      const container = globalThis.document.createElement('div');
+      container.className = gridStyles.regButtons;
+      event.cell.replaceChildren(container);
+      actionPortalsRef.current.set(key, container);
+      setPortalTick(tick => tick + 1);
+      return;
     }
 
     /* ===================================================
      * SOP Date
      * =================================================== */
 
-    if (binding === 'SOP_DATE' && !isNewRow && !isEditing) {
+    // 신규 행도 포맷한다 — 붙여넣기로 들어온 "YYYY-MM-DD HH:mm:ss" 문자열이 시분초째 노출되는 문제.
+    if (binding === 'SOP_DATE' && !isEditing) {
       event.cell.textContent = formatSopDate(row?.SOP_DATE);
     }
 
@@ -387,19 +363,53 @@ export const ProjectGrid = ({
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef}
         itemsSource={data}
-        staticColumns={columns}
-        useCheckbox
-        initialized={restoreMultiRangeSelection}
+        staticColumns={staticColumns}
+        initialized={handleGridInitialized}
         excludeFromDirtyCheck={excludeFromDirtyCheck}
         gotFocus={handleFocus}
         click={handleGridClick}
         formatItem={handleFormatItem}
-        loadedRows={handleLoadedRows}
         cellEditEnding={handleSopDateEditEnding}
         cellEditEnded={handleCellEditEnded}
+        // 붙여넣기도 NAME 콤보 → 코드 컬럼(BIZ_TYPE 등) 동기화를 태운다 — 없으면 코드가 빈 채로
+        // 남아 저장 검증에서 필수값 알림이 뜬다 (직접 편집은 cellEditEnded 경로).
+        pastedCell={handleCellEditEnded}
         beginningEdit={preventLockedRowEdit}
         pastingCell={preventLockedRowEdit}
       />
+
+      {/* 행 버튼 — 작성중(신규 행 포함)=등록요청, 승인대기/변경요청=요청취소. 그 외 상태는 빈 셀.
+          미저장 변경 행 포함 저장·필수값 검증은 REQUEST SP 내부 처리 — FE 는 SAVE 파라미터 전달만. */}
+      {[...actionPortalsRef.current.entries()].flatMap(([key, container]) => {
+        const row = data.find(item => String(item.DPJT_KEY ?? '') === key);
+        if (!row) return [];
+        return [
+          createPortal(
+            <>
+              {isDraftRegStatus(row.DPJT_REG_STATUS) && (
+                <Button
+                  appearance='contained'
+                  priority='primary'
+                  size='small'
+                  buttonLabel={t('LBL00865', '_등록요청')}
+                  onClick={() => onRequest(row)}
+                />
+              )}
+              {isPendingRegStatus(row.DPJT_REG_STATUS) && (
+                <Button
+                  appearance='outlined'
+                  priority='primary'
+                  size='small'
+                  buttonLabel={t('LBL00422', '_요청취소')}
+                  onClick={() => onCancelRequest(row)}
+                />
+              )}
+            </>,
+            container,
+            key
+          ),
+        ];
+      })}
 
       <AuthManagementPopup
         open={authPopupOpen}

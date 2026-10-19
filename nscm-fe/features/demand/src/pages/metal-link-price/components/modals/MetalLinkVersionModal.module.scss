@@ -11,6 +11,8 @@
 }
 
 .gridWrapper {
+  display: flex;
+  flex-direction: column;
   position: relative;
   // flex:1(= 1 1 0) — basis 0 으로 남는 높이만 차지한다. basis auto 는 그리드 콘텐츠 높이가
   //   기준 크기가 되어, 조회 결과가 많아지면 초과분이 형제(조회조건)에게 분배되어 눌린다.

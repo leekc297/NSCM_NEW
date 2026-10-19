@@ -1,0 +1,6 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/group-code-management","SCP0080","features/supply/src/pages/group-code-management/components/GroupCodeRtfGubunModal.tsx","57","endpoint","data 뿐 아니라 isPending 도 필요해 useTabComboQueryResults(전체 쿼리 객체) 를 쓴다."
+"supply/group-code-management","SCP0080","features/supply/src/pages/group-code-management/group-code-management.types.ts","42","jsx","본 화면 그리드는 FlexGrid<GroupCodeRow> 제네릭에 직접 대입하므로 원자값 인덱스가 필수)."
+"supply/group-code-management","SCP0080","features/supply/src/pages/group-code-management/GroupCodeManagement.tsx","71","endpoint","ui-dynamic-property-management §3 — Menu Button 권한 동적 fetch (하드코딩 금지)"
+"supply/group-code-management","SCP0080","features/supply/src/pages/group-code-management/GroupCodeManagement.tsx","94","endpoint","진입 시 1회 admin 컬럼 메타 + 저장 조회조건 fetch (초기화 가드)."
+"supply/group-code-management","SCP0080","features/supply/src/pages/group-code-management/GroupCodeManagement.tsx","256","code","INSERT/DELETE 는 AS-IS 무동작(NO-OP) — false·키생략 금지, 명시적 () => undefined."

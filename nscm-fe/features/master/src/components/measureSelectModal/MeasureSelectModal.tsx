@@ -309,7 +309,26 @@ export const MeasureSelectModal = ({
       return;
     }
     const selected = userRows.map(row => row.colNm);
-    onApply(selected.length === rows.length ? null : selected);
+    // 변경 없음이면 onApply(=titleSet 저장·재조회)를 건너뛰고 닫기만 한다 (2026-09-08 요청 —
+    //   무변경 OK 가 각 화면 onApply 의 saveTitleSet·재조회를 돌려 조회 결과를 갱신하던 동작 제거).
+    //   기준값 = 팝업이 열린 시점 상태(buildRows(true) — setRows 초기값과 동일). 비교 축은 표시 measure
+    //   코드의 순서 포함 목록(순서도 저장·그리드에 반영되는 실제 변경이라 순서 민감 비교).
+    const initialSelected = buildRows(true)
+      .filter(row => row.userFlag === 'Y')
+      .sort((a, b) => a.sortOrderNo - b.sortOrderNo)
+      .map(row => row.colNm);
+    const unchanged =
+      initialSelected.length === selected.length &&
+      initialSelected.every((code, i) => code === selected[i]);
+    if (unchanged) {
+      modalClose();
+      return;
+    }
+    // ⚠ 전부 표시 상태(Invisible 0건)에서 순서만 바꾼 경우를 null 로 축약하면, 화면이 codes===null 일 때
+    //   폴백으로 쓰는 "변경 전" 순서가 그대로 재저장되어 드래그 순서가 저장에서 통째로 사라진다
+    //   (사용자 신고 2026-09-17 — DMF0035 실측: 네트워크 payload/DB 모두 옛 순서로 확인).
+    //   항상 실제 순서 배열을 전달한다 — null 은 더 이상 쓰지 않는다.
+    onApply(selected);
     modalClose();
   };
 
@@ -322,7 +341,7 @@ export const MeasureSelectModal = ({
       handleClose={modalClose}
       disableButtonCancel
       disableScale
-      title={t('LBL00712', '_Measure')}
+      title={t('LBL00310', '_Measure')}
       customContentArea={
         <div className={styles.container}>
           <ColumnSelectDualList<MeasureDualRow>

@@ -7,3 +7,4 @@ export * from './useMessageStore';
 export * from './useGloablStore';
 export * from './useDialogStore';
 export * from './useDirtyRegistry';
+export * from './viewActionRegistry';

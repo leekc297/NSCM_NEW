@@ -1,0 +1,699 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0021_GET_LOSS_TIME","1742017337","1","
+/*
+ * Program ID   : SCP0021_GET_LOSS_TIME
+ * Description  : Loss Time
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2018/03/13   byunghunjung	Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/11/12   hwyoon			big data last update date 추가
+ */
+
+CREATE PROCEDURE [dbo].[SCP0021_GET_LOSS_TIME]
+  @p_Division_Id		NVARCHAR(MAX) ,
+  @p_Plant_Site			NVARCHAR(MAX) ,
+  @p_Building			NVARCHAR(MAX) ,
+  @p_Operation			NVARCHAR(MAX) ,
+  @p_Line				NVARCHAR(MAX)
+
+AS
+
+BEGIN
+	SET NOCOUNT ON; 
+
+	SELECT  DISTINCT
+		L.DIVISION_ID
+		,dbo.fn_get_division_name ( l.division_id ) as DIVISION_NAME
+		,S.SCM_SITE_ID  AS PLANT_SITE_ID
+		,dbo.fn_get_scm_site_description ( l.division_id, s.scm_site_id ) as PLANT_SITE_NAME
+		,L.FACTORY_ID
+		,F.FACTORY_NAME
+		,L.OPERATION_ID
+		,O.OPERATION_NAME
+		,L.LINE_ID
+		--,L.LINE_NAME
+		,T.LOSS_TIME_MIN AS LOSS_TIME
+		,B.LOSS_TIME_MIN AS LOSS_TIME_BIG
+		,T.SETUP_LOSS_TIME_MIN AS SETUP_LOSS_TIME
+		,B.SETUP_LOSS_TIME_MIN AS SETUP_LOSS_TIME_BIG
+		, t.CREATED_BY
+		, t.CREATION_DATE
+		, t.LAST_UPDATED_BY
+		, t.LAST_UPDATE_DATE
+		, (CASE WHEN t.LOSS_TIME_MIN IS NULL THEN '1' ELSE '2' END) AS loss_time_order
+		, b.last_update_date big_last_update_date
+	FROM SCM_MST_LINE_SN L 
+	JOIN SCM_MST_SITE S          on l.company_id   = s.company_id 
+		AND l.division_id  = s.division_id 
+		AND l.site_id      = s.site_id 
+		AND l.plant_id     = s.plant_id 
+	JOIN SCM_MST_FACTORY_SN f    on l.company_id   = f.company_id 
+		AND l.division_id  = f.division_id 
+		AND l.site_id      = f.site_id 
+		AND l.plant_id     = f.plant_id 
+		AND l.factory_id   = f.factory_id 
+		AND s.operation_group = f.shop_group_id
+	JOIN SCM_MST_OPERATION_SN o  on l.company_id   = o.company_id 
+		AND l.division_id  = o.division_id 
+		AND l.site_id      = o.site_id 
+		AND l.operation_id = o.operation_id
+	LEFT OUTER JOIN SCP_MST_LOSS_TIME t  on l.division_id   = t.division_id 
+		AND s.SCM_SITE_ID = t.plant_site_id
+		AND l.factory_id    = t.factory_id 
+		AND l.operation_id  = t.operation_id 
+		AND l.line_id       = t.line_id
+	LEFT OUTER JOIN SCP_MST_LOSS_TIME_BIG b  on l.division_id   = b.division_id 
+		AND s.SCM_SITE_ID = b.plant_site_id
+		AND l.factory_id    = b.factory_id 
+		AND l.operation_id  = b.operation_id 
+		AND l.line_id       = b.line_id
+	WHERE 1=1
+	    AND s.valid_yn	 = 'Y'
+		AND l.ACTIVE_FLAG ='Y'
+		AND l.operation_id IN (
+								SELECT DISTINCT b.SEGMENT4
+								FROM   scm_adm_lookup_master_detail b WITH(NOLOCK)
+								WHERE  b.lookup_type = 'LOCATION_GROUP_ROUTE'
+								AND    b.valid_yn = 'Y'
+								AND    b.segment3 = 'Y')
+		AND s.site_type    = 'PLANT'
+		AND l.division_id  = @p_division_id
+		AND (isnull(@p_Plant_Site,   '' ) = '' OR S.SCM_SITE_ID   IN ( SELECT token FROM dbo.String_Split(@p_Plant_Site	 ,',')) )
+		AND (isnull(@p_Building  ,   '' ) = '' OR L.FACTORY_ID   IN ( SELECT token FROM dbo.String_Split(@p_Building	 ,',')) )
+		AND (isnull(@p_Operation,   '' ) = '' OR L.OPERATION_ID   IN ( SELECT token FROM dbo.String_Split(@p_Operation	 ,',')) )
+		AND (isnull(@p_Line,   '' ) = '' OR L.LINE_ID   IN ( SELECT token FROM dbo.String_Split(@p_Line	 ,',')) )
+	ORDER BY loss_time_order, L.DIVISION_ID, S.SCM_SITE_ID , L.FACTORY_ID , L.OPERATION_ID , L.LINE_ID
+   ;
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0021_GET_LOSS_TIME_EXCEPT","1758017394","1","
+
+/*
+ * Program ID   : SCP0021_GET_LOSS_TIME
+ * Description  : Loss Time
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/03/13   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ ex) 
+   EXEC SCP0021_GET_LOSS_TIME_EXCEPT @p_Division_Id='81', @p_Plant_Site='A040-A', @p_Building='A1', @p_Operation='A9000', @p_Line='A1A03'
+
+ */
+
+CREATE PROCEDURE [dbo].[SCP0021_GET_LOSS_TIME_EXCEPT]
+  @p_Division_Id		NVARCHAR(MAX) ,
+  @p_Plant_Site			NVARCHAR(MAX) ,
+  @p_Building			NVARCHAR(MAX) ,
+  @p_Operation			NVARCHAR(MAX) ,
+  @p_Line				NVARCHAR(MAX)
+
+AS
+
+BEGIN
+	SET NOCOUNT ON; 
+
+	SELECT  
+		 l.division_id
+		,dbo.fn_get_division_name ( l.division_id ) AS division_name
+		,s.scm_site_id  AS plant_site_id
+		,dbo.fn_get_scm_site_description ( l.division_id, s.scm_site_id ) AS plant_site_name
+		,l.factory_id
+		,f.factory_name
+		,l.operation_id
+		,o.operation_name
+		,l.line_id
+		--,l.line_name
+		,convert(datetime,t.loss_start_date) as loss_start_date
+		,convert(datetime,t.loss_end_date) as loss_end_date
+		,t.loss_time_min AS loss_time
+		,t.setup_loss_time_min AS setup_loss_time
+		,t.except_comment AS comment 
+		,t.created_by
+		,t.creation_date
+		,t.last_updated_by
+		,t.last_update_date
+		-- 수정시 필요한 pk원본 값 2018-04-09 추가 pjs
+		,t.division_id		as org_division_id
+		,t.plant_site_id	as org_plant_site_id
+		,t.factory_id		as org_factory_id
+		,t.operation_id		as org_operation_id
+		,t.line_id			as org_line_id
+		,t.loss_start_date	as org_loss_start_date
+		,t.loss_end_date	as org_loss_end_date
+	FROM SCM_MST_LINE_SN l 
+	INNER JOIN SCM_MST_SITE S ON l.company_id   = s.company_id 
+							 AND l.division_id  = s.division_id 
+							 AND l.site_id      = s.site_id 
+							 AND l.plant_id     = s.plant_id 
+	INNER JOIN SCM_MST_FACTORY_SN f ON l.company_id   = f.company_id 
+								   AND l.division_id  = f.division_id 
+								   AND l.site_id      = f.site_id 
+								   AND l.plant_id     = f.plant_id 
+								   AND l.factory_id   = f.factory_id 
+								   AND s.operation_group = f.shop_group_id
+	INNER JOIN SCM_MST_OPERATION_SN o  ON l.company_id   = o.company_id 
+									  AND l.division_id  = o.division_id 
+									  AND l.site_id      = o.site_id 
+									  AND l.operation_id = o.operation_id
+	INNER JOIN SCP_MST_LOSS_TIME_EXCEPT t ON l.division_id  = t.division_id 
+									     AND s.SCM_SITE_ID  = t.plant_site_id
+										 AND l.factory_id   = t.factory_id 
+										 AND l.operation_id = t.operation_id 
+										 AND l.line_id      = t.line_id
+	WHERE 1=1
+	AND s.valid_yn	 = 'Y'
+	AND l.ACTIVE_FLAG ='Y'
+		AND ( (@p_division_id IS NULL OR @p_division_id ='') OR T.DIVISION_ID   IN ( SELECT token FROM dbo.String_Split(@p_division_id	 ,',')) )
+		AND ( (@p_Plant_Site  IS NULL OR @p_Plant_Site  ='') OR T.PLANT_SITE_ID IN ( SELECT token FROM dbo.String_Split(@p_Plant_Site	 ,',')) )
+		AND ( (@p_Building    IS NULL OR @p_Building    ='') OR T.FACTORY_ID    IN ( SELECT token FROM dbo.String_Split(@p_Building	 ,',')) )
+		AND ( (@p_Building    IS NULL OR @p_Building    ='') OR T.OPERATION_ID  IN ( SELECT token FROM dbo.String_Split(@p_Operation	 ,',')) )
+		AND ( (@p_Line        IS NULL OR @p_Line        ='') OR T.LINE_ID       IN ( SELECT token FROM dbo.String_Split(@p_Line	 ,',')) )
+	ORDER BY t.division_id , t.plant_site_id , t.factory_id , t.operation_id , t.line_id
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0021_SAVE_LOSS_TIME","1774017451","1","
+/*
+ * Program ID   : [SCP0019_SAVE_WORKING_TIME]
+ * Description  : Working Time 등록, 수정, 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/03/14   pjs   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0021_SAVE_LOSS_TIME]
+	  @p_active_flag 			NVARCHAR(MAX)
+	, @p_division_id			NVARCHAR(MAX)
+	, @p_plant_site_id			NVARCHAR(MAX)
+	, @p_factory_id				NVARCHAR(MAX)
+	, @p_operation_id			NVARCHAR(MAX)
+	, @p_line_id				NVARCHAR(MAX)
+	, @p_loss_time_min			NVARCHAR(MAX)
+	, @p_setup_loss_time_min	NVARCHAR(MAX)
+	, @p_created_by				NVARCHAR(MAX)
+	, @p_last_updated_by		NVARCHAR(MAX)
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag 			NVARCHAR(MAX) = null;
+	DECLARE @v_division_id			NVARCHAR(MAX) = null;
+	DECLARE @v_plant_site_id		NVARCHAR(MAX) = null;
+	DECLARE @v_factory_id			NVARCHAR(MAX) = null;
+	DECLARE @v_operation_id			NVARCHAR(MAX) = null;
+	DECLARE @v_line_id				NVARCHAR(MAX) = null;
+	DECLARE @v_loss_time_min		NVARCHAR(MAX) = null;
+	DECLARE @v_setup_loss_time_min  NVARCHAR(MAX) = null;
+	DECLARE @v_created_by			NVARCHAR(MAX) = null;
+	DECLARE @v_last_updated_by	    NVARCHAR(MAX) = null;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0021_SAVE_LOSS_TIME';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		--PRINT '1';
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				SET @v_active_flag		= dbo.SCM_ARR_SPL_VAL( @p_active_flag	    , @v_delimiter, @mst_loop_cnt );
+				SET @v_division_id      = dbo.SCM_ARR_SPL_VAL( @p_division_id       , @v_delimiter, @mst_loop_cnt );
+				SET @v_plant_site_id    = dbo.SCM_ARR_SPL_VAL( @p_plant_site_id     , @v_delimiter, @mst_loop_cnt );
+				SET @v_factory_id       = dbo.SCM_ARR_SPL_VAL( @p_factory_id        , @v_delimiter, @mst_loop_cnt );
+				SET @v_operation_id     = dbo.SCM_ARR_SPL_VAL( @p_operation_id      , @v_delimiter, @mst_loop_cnt );
+				SET @v_line_id          = dbo.SCM_ARR_SPL_VAL( @p_line_id           , @v_delimiter, @mst_loop_cnt );
+				SET @v_loss_time_min          = dbo.SCM_ARR_SPL_VAL( @p_loss_time_min     , @v_delimiter, @mst_loop_cnt );
+				SET @v_setup_loss_time_min    = dbo.SCM_ARR_SPL_VAL( @p_setup_loss_time_min     , @v_delimiter, @mst_loop_cnt );
+
+				--PRINT '6';
+				--PRINT ' @v_valid_yn ='+ ISNULL(@v_valid_yn,'') ;
+			END;
+
+			declare @p_creation_date datetime =  SYSDATETIME();
+
+		   
+			
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+			BEGIN
+				MERGE INTO SCP_MST_LOSS_TIME A
+				USING (
+						SEL"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0021_SAVE_LOSS_TIME","1774017451","2","ECT 
+								@v_division_id as division_id
+							,@v_plant_site_id as plant_site_id
+							,@v_factory_id as factory_id
+							,@v_operation_id as operation_id
+							,@v_line_id as line_id
+						) B
+				ON(
+						A.division_id = B.division_id
+					AND A.plant_site_id = B.plant_site_id
+					AND A.factory_id = B.factory_id
+					AND A.operation_id = B.operation_id
+					AND A.line_id = B.line_id
+				)
+				WHEN MATCHED THEN
+					UPDATE SET 
+							LOSS_TIME_MIN		= convert(int , @v_loss_time_min)
+						,SETUP_LOSS_TIME_MIN	= convert(int , @v_setup_loss_time_min)
+						,last_updated_by		= @p_last_updated_by
+						,last_update_date		= sysdatetime()
+
+				WHEN NOT MATCHED THEN							                                             
+					INSERT 	   (division_id                    
+						,plant_site_id                  
+						,factory_id                     
+						,operation_id                   
+						,line_id
+						, loss_time_min
+						, setup_loss_time_min
+						,created_by
+						,creation_date                  
+						,last_updated_by                
+						,last_update_date               
+					)                   
+					VALUES                                  
+						(@v_division_id     
+						,@v_plant_site_id   
+						,@v_factory_id      
+						,@v_operation_id    
+						,@v_line_id         
+						,@v_loss_time_min        
+						,@v_setup_loss_time_min    
+						,@p_created_by
+						,sysdatetime()
+						,@p_last_updated_by 
+						,sysdatetime()
+						)  ;
+			END
+
+			--이력저장
+			EXEC [dbo].[PR_SCP_MST_LOSS_TIME_HIST] 
+				@v_division_id, @v_plant_site_id, @v_factory_id, @v_operation_id, @v_line_id,
+				@v_loss_time_min , @v_setup_loss_time_min ,
+				@p_created_by, @p_last_updated_by , @p_creation_date
+			;
+
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		COMMIT TRAN;			
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @mst_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+					  
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				     
+			; 
+		END;
+	END CATCH;
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0021_SAVE_LOSS_TIME_EXCEPT","1790017508","4"," IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				   ,@v_loss_start_date  AS loss_start_date
+				   ,@v_loss_end_date    AS loss_end_date
+			; 
+		END;
+	END CATCH;
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0021_SAVE_LOSS_TIME_EXCEPT","1790017508","1","
+
+/*
+ * Program ID   : [SCP0019_SAVE_WORKING_TIME]
+ * Description  : Working Time 등록, 수정, 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/03/14   pjs				Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/05/28	hwyoon			except 시트 삭제로직 추가
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0021_SAVE_LOSS_TIME_EXCEPT]
+	  @p_active_flag 			NVARCHAR(MAX)
+	, @p_division_id			NVARCHAR(MAX)
+	, @p_plant_site_id			NVARCHAR(MAX)
+	, @p_factory_id				NVARCHAR(MAX)
+	, @p_operation_id			NVARCHAR(MAX)
+	, @p_line_id				NVARCHAR(MAX)
+	, @p_loss_start_date		NVARCHAR(MAX)
+	, @p_loss_end_date			NVARCHAR(MAX)
+	, @p_loss_time_min			NVARCHAR(MAX)
+	, @p_setup_loss_time_min	NVARCHAR(MAX)
+	, @p_comment				NVARCHAR(MAX)
+	, @p_created_by				NVARCHAR(MAX)
+	, @p_last_updated_by		NVARCHAR(MAX)
+
+	-- 수정시 필요한 pk원본 값 2018-04-09 추가 pjs
+	, @p_org_division_id     NVARCHAR(MAX)
+	, @p_org_plant_site_id   NVARCHAR(MAX)
+	, @p_org_factory_id      NVARCHAR(MAX)
+	, @p_org_operation_id    NVARCHAR(MAX)
+	, @p_org_line_id         NVARCHAR(MAX)
+	, @p_org_loss_start_date NVARCHAR(MAX)
+	, @p_org_loss_end_date   NVARCHAR(MAX)
+
+	,@debug_mode          NVARCHAR(1) ='F'
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = @p_active_flag
+
+	declare @v_active_flag			NVARCHAR(MAX) = null;
+	DECLARE @v_division_id			NVARCHAR(MAX) = null;
+	DECLARE @v_plant_site_id		NVARCHAR(MAX) = null;
+	DECLARE @v_factory_id			NVARCHAR(MAX) = null;
+	DECLARE @v_operation_id			NVARCHAR(MAX) = null;
+	DECLARE @v_line_id				NVARCHAR(MAX) = null;
+	DECLARE @v_loss_start_date		NVARCHAR(MAX) = null;
+	DECLARE @v_loss_end_date		NVARCHAR(MAX) = null;
+	DECLARE @v_loss_time_min		NVARCHAR(MAX) = null;
+	DECLARE @v_setup_loss_time_min	NVARCHAR(MAX) = null;
+	DECLARE @v_comment				NVARCHAR(MAX) = null;
+	DECLARE @v_created_by			NVARCHAR(MAX) = null;
+	DECLARE @v_last_updated_by	    NVARCHAR(MAX) = null;
+	
+	-- 수정시 필요한 pk원본 값 2018-04-09 추가 pjs
+	DECLARE @v_org_division_id     NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_plant_site_id   NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_factory_id      NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_operation_id    NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_line_id         NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_loss_start_date NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_loss_end_date   NVARCHAR(MAX) = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0021_SAVE_LOSS_TIME_EXCEPT';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		--PRINT '1';
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag , @v_delimiter);    
+		
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				SET @v_active_flag      = dbo.SCM_ARR_SPL_VAL"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0021_SAVE_LOSS_TIME_EXCEPT","1790017508","2","( @p_active_flag       , @v_delimiter, @mst_loop_cnt );
+				SET @v_division_id      = dbo.SCM_ARR_SPL_VAL( @p_division_id       , @v_delimiter, @mst_loop_cnt );
+				SET @v_division_id      = dbo.SCM_ARR_SPL_VAL( @p_division_id       , @v_delimiter, @mst_loop_cnt );
+				SET @v_plant_site_id    = dbo.SCM_ARR_SPL_VAL( @p_plant_site_id     , @v_delimiter, @mst_loop_cnt );
+				SET @v_factory_id       = dbo.SCM_ARR_SPL_VAL( @p_factory_id        , @v_delimiter, @mst_loop_cnt );
+				SET @v_operation_id     = dbo.SCM_ARR_SPL_VAL( @p_operation_id      , @v_delimiter, @mst_loop_cnt );
+				SET @v_line_id          = dbo.SCM_ARR_SPL_VAL( @p_line_id           , @v_delimiter, @mst_loop_cnt );
+				SET @v_loss_start_date  = dbo.SCM_ARR_SPL_VAL( @p_loss_start_date     , @v_delimiter, @mst_loop_cnt );
+				SET @v_loss_end_date    = dbo.SCM_ARR_SPL_VAL( @p_loss_end_date     , @v_delimiter, @mst_loop_cnt );
+				SET @v_loss_time_min	= dbo.SCM_ARR_SPL_VAL( @p_loss_time_min     , @v_delimiter, @mst_loop_cnt );
+				SET @v_setup_loss_time_min  = dbo.SCM_ARR_SPL_VAL( @p_setup_loss_time_min , @v_delimiter, @mst_loop_cnt );
+				SET @v_comment				= dbo.SCM_ARR_SPL_VAL( @p_comment , @v_delimiter, @mst_loop_cnt );
+
+				SET @v_org_division_id     = dbo.SCM_ARR_SPL_VAL( @p_org_division_id     , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_plant_site_id   = dbo.SCM_ARR_SPL_VAL( @p_org_plant_site_id   , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_factory_id      = dbo.SCM_ARR_SPL_VAL( @p_org_factory_id      , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_operation_id    = dbo.SCM_ARR_SPL_VAL( @p_org_operation_id    , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_line_id         = dbo.SCM_ARR_SPL_VAL( @p_org_line_id         , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_loss_start_date = dbo.SCM_ARR_SPL_VAL( @p_org_loss_start_date , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_loss_end_date   = dbo.SCM_ARR_SPL_VAL( @p_org_loss_end_date   , @v_delimiter, @mst_loop_cnt );
+
+				--PRINT '6';
+				--PRINT ' @v_valid_yn ='+ ISNULL(@v_valid_yn,'') ;
+			END;
+
+						-- LOOP 파라미터 출력 DEBUG용			
+			IF (@debug_mode ='T') 
+			BEGIN		
+				PRINT '=================LOOP VARS==============================';			
+				PRINT ' @v_active_flag         = ''' + @v_active_flag          + '''' ;
+				PRINT ' @v_division_id         = ''' + @v_division_id          + '''' ;
+				PRINT ' @v_division_id         = ''' + @v_division_id          + '''' ;
+				PRINT ' @v_plant_site_id       = ''' + @v_plant_site_id        + '''' ;
+				PRINT ' @v_factory_id          = ''' + @v_factory_id           + '''' ;
+				PRINT ' @v_operation_id        = ''' + @v_operation_id         + '''' ;
+				PRINT ' @v_line_id             = ''' + @v_line_id              + '''' ;
+				PRINT ' @v_loss_start_date     = ''' + @v_loss_start_date      + '''' ;
+				PRINT ' @v_loss_end_date       = ''' + @v_loss_end_date        + '''' ;
+				PRINT ' @v_loss_time_min	   = ''' + @v_loss_time_min		   + '''' ;
+				PRINT ' @v_setup_loss_time_min = ''' + @v_setup_loss_time_min  + '''' ;
+				PRINT ' @v_comment			   = ''' + @v_comment			   + '''' ;
+				PRINT ' @v_org_division_id     = ''' + @v_org_division_id      + '''' ;
+				PRINT ' @v_org_plant_site_id   = ''' + @v_org_plant_site_id    + '''' ;
+				PRINT ' @v_org_factory_id      = ''' + @v_org_factory_id       + '''' ;
+				PRINT ' @v_org_operation_id    = ''' + @v_org_operation_id     + '''' ;
+				PRINT ' @v_org_line_id         = ''' + @v_org_line_id          + '''' ;
+				PRINT ' @v_org_loss_start_date = ''' + @v_org_loss_start_date  + '''' ;
+				PRINT ' @v_org_loss_end_date   = ''' + @v_org_loss_end_date    + '''' ;
+
+			END;
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0
+				IF @v_active_flag != 'D'
+					BEGIN
+						declare @nLoss_Time_Min int = convert(int , @v_loss_time_min);
+						declare @nSetup_Loss_Time_Min int = convert(int , @v_setup_loss_time_min);
+
+						MERGE INTO SCP_MST_LOSS_TIME_EXCEPT a
+						USING (
+								SELECT 
+										"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0021_SAVE_LOSS_TIME_EXCEPT","1790017508","3","	@v_org_division_id		AS division_id
+										,@v_org_plant_site_id	AS plant_site_id
+										,@v_org_factory_id		AS factory_id
+										,@v_org_operation_id	AS operation_id
+										,@v_org_line_id			AS line_id
+										,@v_org_loss_start_date AS loss_start_date
+										,@v_org_loss_end_date	AS loss_end_date
+								) b
+						ON(
+									a.division_id	  = b.division_id
+								AND a.plant_site_id	  = b.plant_site_id
+								AND a.factory_id	  = b.factory_id
+								AND a.operation_id	  = b.operation_id
+								AND a.line_id		  = b.line_id
+								AND a.loss_start_date = b.loss_start_date
+								AND a.loss_end_date	  = b.loss_end_date
+							)
+						WHEN MATCHED THEN
+							UPDATE SET
+									loss_start_date	 = @v_loss_start_date
+								,loss_end_date		 = @v_loss_end_date
+								,loss_time_min		 = @nLoss_Time_Min
+								,setup_loss_time_min = @nSetup_Loss_Time_Min
+								,except_comment      = @v_comment
+								,last_updated_by	 = @p_last_updated_by
+								,last_update_date	 = sysdatetime() 
+						WHEN NOT MATCHED THEN							                                             
+							INSERT 	   ( division_id                    
+										,plant_site_id                  
+										,factory_id                     
+										,operation_id                   
+										,line_id
+										,loss_start_date
+										,loss_end_date
+										,loss_time_min
+										,setup_loss_time_min
+										,except_comment
+										,created_by                     
+										,creation_date                  
+										,last_updated_by
+										,last_update_date               
+										)                   
+							VALUES                                  
+								(@v_division_id     
+								,@v_plant_site_id   
+								,@v_factory_id      
+								,@v_operation_id    
+								,@v_line_id         
+								,@v_loss_start_date
+								,@v_loss_end_date
+								, @nLoss_Time_Min
+								, @nSetup_Loss_Time_Min
+								,@v_comment
+								,@p_created_by
+								,sysdatetime()
+								,@p_last_updated_by 
+								,sysdatetime()
+							)  ;
+					END ;
+
+				ELSE IF @v_active_flag = 'D'
+					BEGIN
+						DELETE FROM SCP_MST_LOSS_TIME_EXCEPT
+							WHERE division_id		= @v_org_division_id
+							  AND plant_site_id		= @v_org_plant_site_id
+							  AND factory_id		= @v_org_factory_id
+							  AND operation_id		= @v_org_operation_id
+							  AND line_id			= @v_org_line_id
+							  AND loss_start_date	= @v_org_loss_start_date
+							  AND loss_end_date		= @v_org_loss_end_date
+					END;
+
+
+			declare @p_creation_date datetime =  SYSDATETIME();
+
+			EXEC [dbo].[PR_SCP_MST_LOSS_TIME_EXCEPT_HIST]
+				@v_division_id , @v_plant_site_id , @v_factory_id , @v_operation_id , @v_line_id ,
+				@v_loss_start_date , @v_loss_end_date , @nLoss_Time_Min , @nSetup_Loss_Time_Min , @v_comment ,
+				@p_created_by , @p_last_updated_by , @p_creation_date
+			;
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT 'COMMIT'
+		COMMIT TRAN;			
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @mst_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (@v_program_name,'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;					  
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code"

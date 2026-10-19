@@ -1,12 +1,16 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import commonStyles from '@foundation/styles/common-styles.module.scss';
+import { attachRowNoHeader } from '@foundation/utils';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
@@ -38,8 +42,20 @@ interface MetalLinkVersionModalProps {
   open: boolean;
   modalClose: () => void;
   defaultDivision: string;
+  // 메인 화면 조회조건 기간(YYYYMM). 팝업 open 시 from=해당월 1일 / to=해당월 말일로 변환해 Period 에 세팅.
+  mainPeriodFrom?: string;
+  mainPeriodTo?: string;
   onApply: (versionIds: string) => void;
 }
+
+// YYYYMM(6) → 해당 월 1일 YYYYMMDD(8). from 용.
+const ymToFirstDay = (ym: string): string =>
+  ym && ym.length >= 6 ? `${ym.slice(0, 6)}01` : '';
+// YYYYMM(6) → 해당 월 말일 YYYYMMDD(8). to 용 (2/윤달 자동 처리).
+const ymToLastDay = (ym: string): string =>
+  ym && ym.length >= 6
+    ? dayjs(`${ym.slice(0, 4)}-${ym.slice(4, 6)}-01`).endOf('month').format('YYYYMMDD')
+    : '';
 
 const VERSION_COLUMNS: RawFlexGridColumnConfig[] = [
   { colNm: 'VERSION_NO', colLblNm: 'Version', colWth: 240 },
@@ -60,11 +76,15 @@ export const MetalLinkVersionModal = ({
   open,
   modalClose,
   defaultDivision,
+  mainPeriodFrom,
+  mainPeriodTo,
   onApply,
 }: MetalLinkVersionModalProps) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore(s => s.setAlert);
   const gridRef = useRef<FlexGridType<VersionPopupRow> | null>(null);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
   const divisionOptions = useMemo<Array<{ value: string; label: string }>>(() => {
@@ -77,19 +97,22 @@ export const MetalLinkVersionModal = ({
     });
   }, [myDivisions]);
 
-  // ⭐ Period 기본값 = AS-IS 오늘-3M ~ 오늘+3M (.cs L676 Form_Load 인자 1:1).
-  //   부모창(메인 조회조건) 날짜를 물려받던 방식은 AS-IS 와 달라 폐기 (사용자 지시 2026-08-10).
-  //   DMF0020 SalesPriceVersionModal 과 동일 — 두 화면 모두 DMF0073 팝업 재사용.
+  // Period 기본값 = 메인 화면 조회조건(fromYyyymm~toYyyymm)을 물려받는다 (사용자 지시 2026-09-16).
+  //   from = 해당 월 1일 / to = 해당 월 말일 (YYYYMMDD). 메인 값이 없으면 AS-IS 기본(오늘±3M)으로 폴백.
+  //   ('오늘±3M 고정 / 부모 날짜 폐기'였던 2026-08-10 규칙을 이 화면 한정으로 되돌림 — DMF0020 과는 이제 다름.)
   const { divisionId, periodFrom, periodTo, description } = useMetalLinkVersionModalStore(
     state => state.searchParams
   );
   const setSearchParams = useMetalLinkVersionModalStore(state => state.setSearchParams);
   const resetSearchParams = useMetalLinkVersionModalStore(state => state.resetSearchParams);
 
-  // popup open 시 default value reset
+  // popup open 시 default value reset — 메인 조회조건 기간을 1일~말일로 변환해 물려준다.
   useEffect(() => {
-    if (open) resetSearchParams(defaultDivision);
-  }, [open, defaultDivision, resetSearchParams]);
+    if (!open) return;
+    const from = ymToFirstDay(mainPeriodFrom ?? '');
+    const to = ymToLastDay(mainPeriodTo ?? '');
+    resetSearchParams(defaultDivision, from && to ? { from, to } : undefined);
+  }, [open, defaultDivision, mainPeriodFrom, mainPeriodTo, resetSearchParams]);
 
   // DMF0073_GET_VERSION_SALESPRICE (9-arg — sesUserId/mnuId BE 자동).
   // ⭐ versionType 'SP_W' 고정 (2026-07-10 실측 정정 — SP 필터는 VERSION_TYPE 정확 토큰 매칭
@@ -155,12 +178,15 @@ export const MetalLinkVersionModal = ({
     const g = gridRef.current;
     if (!g) return;
     g.isReadOnly = true;
-    g.selectionMode = 2; // SelectionMode.ListBox — Ctrl/Shift 다중선택 (최대 2 는 Apply 가드)
     const onDbl = () => handleApply();
     g.hostElement?.addEventListener('dblclick', onDbl);
     return () => g.hostElement?.removeEventListener('dblclick', onDbl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows]);
+
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, rows]);
 
   return (
     <CustomDialog
@@ -169,6 +195,10 @@ export const MetalLinkVersionModal = ({
       type='modal'
       position='basic'
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       disableButtonCancel
       customHeaderTitle={
         <div className='headerContainer'>
@@ -179,12 +209,13 @@ export const MetalLinkVersionModal = ({
       customContentArea={
         <div className={styles.dialogContent}>
           <SearchArea
-            searchButtonLabel={loading ? t('LBL00665', 'Loading...') : t('LBL00664', 'Search')}
+            searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleFind}
             conditions={
               <>
                 <Grid size={3}>
                   <FormItem
+                    className={commonStyles.formItem}
                     label={t('LBL00001', 'Div.')}
                     labelAlign='right'
                     render={() => (
@@ -201,12 +232,11 @@ export const MetalLinkVersionModal = ({
                   gridSize={4}
                   start={periodFrom}
                   end={periodTo}
-                  onChange={(start, end) =>
-                    setSearchParams({ periodFrom: start, periodTo: end })
-                  }
+                  onChange={(start, end) => setSearchParams({ periodFrom: start, periodTo: end })}
                 />
                 <Grid size={3}>
                   <FormItem
+                    className={commonStyles.formItem}
                     label={t('LBL00608', 'Description')}
                     labelAlign='right'
                     render={() => (
@@ -222,13 +252,27 @@ export const MetalLinkVersionModal = ({
             }
           />
           <div className={styles.gridWrapper}>
-            <DataGrid
-              gridRef={gridRef as never}
-              itemsSource={rows as unknown as WijmoRowItem[]}
-              staticColumns={VERSION_COLUMNS}
-              autoGenerateColumns={false}
-              className={styles.grid}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea title='' count={rows.length} gridRef={gridRef} gridFilterRef={gridFilterRef}>
+              <DataGrid
+                gridRef={gridRef as never}
+                gridFilterRef={gridFilterRef}
+                // prop 으로 줘야 한다 - 위 effect 의 g.isReadOnly 는 이미 늦다. DataGrid 는
+                //   초기화 시점에 prop 을 보고 rowHeaders 에 CRUD 상태 컬럼을 넣을지 정하는데,
+                //   그 컬럼이 생기면 코너(TopLeft)가 2칸이 되어 attachRowNoHeader 가 'No' 를
+                //   두 번 찍는다.
+                isReadOnly
+                itemsSource={rows as unknown as WijmoRowItem[]}
+                staticColumns={VERSION_COLUMNS}
+                autoGenerateColumns={false}
+                className={styles.grid}
+              />
+            </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
             <Button

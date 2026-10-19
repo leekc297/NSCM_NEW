@@ -1,0 +1,1 @@
+export { BodItem } from './BodItem';

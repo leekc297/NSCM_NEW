@@ -2,6 +2,7 @@ package com.lgcns.nscm.framework.aspect;
 
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.f4b6a3.ulid.UlidCreator;
 import com.lgcns.nscm.framework.annotation.SystemLog;
 import com.lgcns.nscm.framework.interceptor.LogInterceptor;
+import com.lgcns.nscm.framework.model.BaseResponse;
 import com.lgcns.nscm.framework.utils.NullUtils;
 import com.lgcns.nscm.framework.utils.SecurityUtil;
 import com.lgcns.nscm.framework.utils.StringUtils;
@@ -68,9 +71,8 @@ public class SystemLogAspect {
         Object result = null;
         try {
             result = joinPoint.proceed();
-            String resultJson = toJson(result);
             if(bLog) log.info("END: {}.{}() | Result: {} | Time: {}ms",
-                     className, methodName, resultJson, (System.currentTimeMillis() - startTime));
+                     className, methodName, summarizeResult(result), (System.currentTimeMillis() - startTime));
 
             return result;
         } catch (Throwable throwable) {
@@ -148,9 +150,8 @@ public class SystemLogAspect {
         try {
 
             result = joinPoint.proceed();
-            String resultJson = toJson(result);
             log.info("END: {}.{}() | Result: {} | Time: {}ms",
-                     className, methodName, resultJson, (System.currentTimeMillis() - startTime));
+                     className, methodName, summarizeResult(result), (System.currentTimeMillis() - startTime));
 
             return result;
         } catch (Throwable throwable) {
@@ -184,6 +185,42 @@ public class SystemLogAspect {
 //            log.warn("SystemLogAspect.toJson JSON 변환 실패: {}", e.getMessage());
             return "";
         }
+    }
+
+    /**
+     * [E20261015-LOGRESULT] 결과 로그 요약.
+     * 기존에는 응답 전체를 JSON 으로 한 번 더 직렬화해 INFO 한 줄로 기록했다 — 대량 조회(SCP0030 289,551행 x 37컬럼)는
+     * 응답과 같은 234MB 를 다시 만들고 로그에 써서 BE 시간·메모리를 크게 잡아먹었다.
+     * 이제 구조만 남긴다: 목록은 건수, Map 은 키별 요약, 나머지(작은 값)는 JSON 앞부분 RESULT_LOG_MAX_LEN 자.
+     */
+    private static final int RESULT_LOG_MAX_LEN = 1000;
+
+    private String summarizeResult(Object obj) {
+        if (obj == null) return "";
+        Object target = obj;
+        if (target instanceof ResponseEntity<?> re) target = re.getBody();
+        if (target instanceof BaseResponse<?> br) {
+            return "{code=" + br.getCode() + ", message=" + br.getMessage() + ", result=" + summarizeValue(br.getResult(), 0) + "}";
+        }
+        return summarizeValue(target, 0);
+    }
+
+    private String summarizeValue(Object v, int depth) {
+        if (v == null) return "null";
+        if (v instanceof Collection<?> c) return "[" + c.size() + " rows]";
+        if (v instanceof Map<?, ?> m) {
+            if (depth >= 1) return "{" + m.size() + " keys}";
+            StringBuilder sb = new StringBuilder("{");
+            int i = 0;
+            for (Map.Entry<?, ?> e : m.entrySet()) {
+                if (i++ > 0) sb.append(", ");
+                if (i > 20) { sb.append("..."); break; }
+                sb.append(e.getKey()).append('=').append(summarizeValue(e.getValue(), depth + 1));
+            }
+            return sb.append('}').toString();
+        }
+        String json = toJson(v);
+        return json.length() > RESULT_LOG_MAX_LEN ? json.substring(0, RESULT_LOG_MAX_LEN) + "...(" + json.length() + " chars)" : json;
     }
 
     private String getAnnoType(ProceedingJoinPoint joinPoint) {

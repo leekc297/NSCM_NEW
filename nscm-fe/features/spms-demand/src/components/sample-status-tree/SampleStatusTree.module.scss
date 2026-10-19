@@ -1,0 +1,35 @@
+// SPMS 공통 — 샘플 현황 Tree 좌측 고정 패널 (설계서 Tree 시트. SDM2010 SampleTree 승격분)
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  flex-shrink: 0;
+  height: 100%;
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.title {
+  padding: 8px 12px;
+  font-weight: 600;
+}
+
+.progressSwitch {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin: 0 8px;
+  padding: 6px 8px;
+  border-top: 1px solid var(--border-color, #e0e0e0);
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  font-size: 12px;
+}
+
+.tree {
+  flex: 1;
+  overflow: auto;
+  padding: 8px 4px;
+}

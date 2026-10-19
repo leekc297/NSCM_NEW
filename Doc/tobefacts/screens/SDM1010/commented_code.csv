@@ -1,0 +1,7 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"spms-demand/project-registration","SDM1010","features/spms-demand/src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx","442","jsx","요청 그리드 PROCESS 셀 버튼 — 하단 Close/OK 버튼과 같은 <Button> 컴포넌트를 그대로 써서"
+"spms-demand/project-registration","SDM1010","features/spms-demand/src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx","445","jsx","formatItem 이 만드는 순수 DOM이라 <Button> 을 직접 못 앉히므로, formatItem 이 셀 안에 빈"
+"spms-demand/project-registration","SDM1010","features/spms-demand/src/pages/project-registration/components/authManagementPopup/AuthManagementPopup.tsx","446","jsx","컨테이너 div만 만들어 두고 그 div로 실제 <Button> 들을 createPortal 한다(JSX는 아래 requestPanel"
+"spms-demand/project-registration","SDM1010","features/spms-demand/src/pages/project-registration/ProjectRegistration.tsx","34","code","import { ProjectProcessFlow } from './components/ProjectProcessFlow';"
+"spms-demand/project-registration","SDM1010","features/spms-demand/src/pages/project-registration/ProjectRegistration.tsx","116","endpoint","요청 본문은 useProcMutation(callMutationProc)과 동일한 { data: [...] } 형태를 유지한다."
+"spms-demand/project-registration","SDM1010","features/spms-demand/src/pages/project-registration/useProjectRegistrationStore.ts","111","code","저장된 컬럼 개인화(titleSet) 복원 — fetchStaticColumns 가 await 후 메타에 적용."

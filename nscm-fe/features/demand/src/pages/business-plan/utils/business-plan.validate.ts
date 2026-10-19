@@ -20,6 +20,7 @@ const str = (v: unknown): string =>
 export const useBusinessPlanValidation = () => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
+  const setToast = useMessageStore.getState().setToast;
 
   // ===== 조회 (FindData L684~799 — validation.md #9~12) =====
   const validateFind = (c: SearchCondition): ValidationResult => {
@@ -73,7 +74,8 @@ export const useBusinessPlanValidation = () => {
   //   대상 = 신규(I) + 수정(M) 행 중 입력 measure(Business_Plan/LOC) 행. 첫 결손 필드로 MSG00429 {0}.
   const validateSaveRows = (rows: BusinessPlanRow[], divisionId: string): ValidationResult => {
     if (rows.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
+      // 변경/신규 없음 → toast (DMF0003~0007/0020/0072 과 동일 규약. 필수·중복 검증은 modal alert 유지).
+      setToast({ type: 'error', message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
       return { ok: false, msgId: MSG.NO_CHANGES };
     }
     const required = requiredFieldsFor(divisionId);

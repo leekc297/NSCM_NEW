@@ -21,6 +21,7 @@ import { ContributeVersionModal } from './components/modals/ContributeVersionMod
 import {
   MENU_ID,
   SHEETS,
+  TITLE_MENU_ID,
   TITLESET_COLUMN_TYPE,
   TITLESET_DIVISION,
   TITLESET_SHEET,
@@ -158,7 +159,7 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   }, [dataUpdatedAt]);
 
-  // Figma DMF0043_01 = 조회 전용 화면 (AS-IS .cs L249 InsertRow / L276 SaveData 본문 있으나
+  // 화면 설계(DMF0043_01) = 조회 전용 화면 (AS-IS .cs L249 InsertRow / L276 SaveData 본문 있으나
   // 화면 의도 = 조회 전용 — 운영 결정에 따라 hotkeyConfig.insert/save = false 로 차단).
   // 권한 분기 (useTabBtnPermissions): admin USE_YN='N' 시 자동 무력화 (운영 결정 반영).
   //   F5  = 조회 (handleSearch)
@@ -194,9 +195,12 @@ export const ContributeView = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   return (
     <>
+      {/* 제목·상단 경로·즐겨찾기는 이 화면의 메뉴 등록 ID(DMF0043_01 'Contribution Sales')로 그린다.
+          MENU_ID(DMF0043)로 그리면 부모 메뉴 이름 'Contribution Rate Reg.' 가 경로에 떠 다른 화면으로 오인된다
+          (통합테스트 지적 2026-10-08). 프로시저 호출·버튼 권한은 종전대로 MENU_ID — constants TITLE_MENU_ID 주석 참조. */}
       <MainTitle
         title={title}
-        menuId={MENU_ID}
+        menuId={TITLE_MENU_ID}
         openSearchArea={openSearchArea}
         toggleOpenSearchArea={setOpenSearchArea}
       />

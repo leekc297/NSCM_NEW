@@ -1,0 +1,179 @@
+{
+  "menuId": "DMF0052",
+  "screenName": "EDISummary",
+  "feature": "report",
+  "pageDir": "dmf0052",
+  "routePath": "report/dmf0052",
+  "sheets": [
+    {
+      "sheetName": "EDI Summary GSCM DATA Popup",
+      "rule": "코드 하드코딩 전용(메타 없음)",
+      "columns": 9,
+      "popup": true
+    },
+    {
+      "sheetName": "ERP Data",
+      "rule": "META+코드연결",
+      "columns": 10,
+      "popup": false
+    },
+    {
+      "sheetName": "GSCM Data",
+      "rule": "META+코드연결",
+      "columns": 10,
+      "popup": false
+    },
+    {
+      "sheetName": "Site Popup",
+      "rule": "메타 정의만, 코드 미참조(미사용 가능)",
+      "columns": 9,
+      "popup": true
+    },
+    {
+      "sheetName": "SUMMARY",
+      "rule": "META+코드연결",
+      "columns": 4,
+      "popup": false
+    },
+    {
+      "sheetName": "Summary Pjt",
+      "rule": "META+코드연결",
+      "columns": 8,
+      "popup": false
+    },
+    {
+      "sheetName": "Summary Status",
+      "rule": "META+코드연결",
+      "columns": 4,
+      "popup": false
+    },
+    {
+      "sheetName": "spreadTitle",
+      "rule": "동적 헤더 메타",
+      "columns": 0,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "DM.DMF0052_GET_SUMMARY_DATA",
+      "asis_sp": "DMF0052_GET_SUMMARY_DATA",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton"
+      ],
+      "methods": [
+        "FindData_Main"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0052.P_DMF0052_GET_SUMMARY_DATA",
+      "sheet": "SUMMARY",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0052_GET_PJT_DATA",
+      "asis_sp": "DMF0052_GET_PJT_DATA",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton"
+      ],
+      "methods": [
+        "FindData_Pjt"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0052.P_DMF0052_GET_PJT_DATA",
+      "sheet": "Summary Pjt",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0052_GET_STATUS_DATA",
+      "asis_sp": "DMF0052_GET_STATUS_DATA",
+      "status": "MATCH",
+      "entries": [
+        "button:FindButton"
+      ],
+      "methods": [
+        "FindData_Status"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0052.P_DMF0052_GET_STATUS_DATA",
+      "sheet": "Summary Status",
+      "btn": "SEARCH"
+    },
+    {
+      "asis_endpoint": "DM.DMF0052_GET_DETAIL_DATA",
+      "asis_sp": "DMF0052_GET_DETAIL_DATA",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdSummaryPJT.CellDoubleClick",
+        "event:this.btnRefresh.Click"
+      ],
+      "methods": [
+        "FindData_GSCMData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0052.P_DMF0052_GET_DETAIL_DATA",
+      "sheet": "ERP Data",
+      "btn": "DETAIL_DATA"
+    },
+    {
+      "asis_endpoint": "DM.DMF0052_GET_ERP_DATA",
+      "asis_sp": "DMF0052_GET_ERP_DATA",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdSummaryPJT.CellDoubleClick"
+      ],
+      "methods": [
+        "FindData_ERPData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0052.P_DMF0052_GET_ERP_DATA",
+      "sheet": "ERP Data",
+      "btn": "ERP_DATA"
+    },
+    {
+      "asis_endpoint": "DM.DMF0052_GET_SPREAD_TITLE",
+      "asis_sp": "DMF0052_GET_SPREAD_TITLE",
+      "status": "MATCH",
+      "entries": [
+        "event:this.spdSummaryPJT.CellDoubleClick",
+        "event:this.btnRefresh.Click",
+        "event:this.Load",
+        "button:FindButton"
+      ],
+      "methods": [
+        "GetSpdTitle"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0052.P_DMF0052_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "allowed_gap": "그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+    },
+    {
+      "asis_endpoint": "DM.UP_FX_GetCommonDataList_DM",
+      "asis_sp": "UP_FX_GETCOMMONDATALIST_DM",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load"
+      ],
+      "methods": [
+        "GetEdiSender"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0052.P_UP_FX_GETCOMMONDATALIST_DM",
+      "sheet": "(combo)",
+      "btn": "(콤보ID 등록)",
+      "allowed_gap": "공통 콤보 조회 → useTabComboQueries(콤보ID 등록)"
+    },
+    {
+      "asis_endpoint": "DM.DMF0052_GET_SITE_POPUP",
+      "asis_sp": "DMF0052_GET_SITE_POPUP",
+      "status": "MATCH",
+      "entries": [
+        "event:this.Load",
+        "button:FindButton"
+      ],
+      "methods": [
+        "FindData"
+      ],
+      "tobe_pkg_candidate": "PKG_DMF0052.P_DMF0052_GET_SITE_POPUP",
+      "sheet": "EDI Summary GSCM DATA Popup",
+      "btn": "SEARCH"
+    }
+  ],
+  "note": "PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요"
+}

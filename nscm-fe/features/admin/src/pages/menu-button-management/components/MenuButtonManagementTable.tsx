@@ -1,4 +1,4 @@
-import { CellRange, type CellRangeEventArgs, type FlexGrid } from '@mescius/wijmo.grid';
+import type { CellRangeEventArgs, FlexGrid } from '@mescius/wijmo.grid';
 import { type FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject } from 'react';
 
@@ -36,7 +36,7 @@ export const MenuButtonManagementTable = ({
     const menuId = dataItem.MNU_NM;
     dataItem.MNU_ID = menuId;
 
-    grid.refreshRange(new CellRange(row, 0, row, -1));
+    GridUtils.refreshRow(grid, row);
   };
 
   return (

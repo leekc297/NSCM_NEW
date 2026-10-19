@@ -1,339 +1,58 @@
-# CLAUDE.md — NSCM 작업 시 필수 컨텍스트
+# CLAUDE.md — NSCM (경량 진입점, 2026-10-12 재구성)
 
-> ⭐ **AI 바이브코딩 시 이 파일을 가장 먼저 읽어야 합니다.**
-> 작업 영역에 따라 추가로 읽어야 할 파일이 있습니다.
+> 이 파일은 **매 턴 로드되는 상시 컨텍스트**다. 그래서 짧다. 상세 룰은 아래 라우팅으로 **필요할 때만** 읽는다.
+> 구 전문(20KB)은 `Doc/_archive/CLAUDE_md_full_2026-10-12.md` 에 보존. 내용은 삭제되지 않았고 **계층 이동**만 했다 (§6 매핑표).
 
-## Model Fallback Policy
-- Primary: Opus 4.7 (아키텍처 설계, 다중 모듈 리팩토링)
-- Fallback (529/overload 시): Sonnet 4.6
-- 단순 작업 (CRUD, 단일 파일 수정): Sonnet 4.6 기본 사용
+## 0. 프로젝트
+**LG Energy Solution NSCM** — AS-IS GSCM C#.NET WinForms(358 csproj / 4,162 cs / 2,771 SP) → TO-BE **React 19 + Spring Boot 3.5 + Oracle 19c**.
+도메인 DM / SCM / FP / SCP / SSP / Common. 코드: `nscm-fe/` · `nscm-be/` · 분석 `Doc/_analysis/`, `_analysis/`.
 
-## 1. 프로젝트
+## 1. 절대 원칙 (항상 적용)
+1. ⚠️ **anti-simplification** — 속도·편의를 위한 단순화 절대 금지. "모두/전체/정밀/상세" 요청 = 다중 패턴 + Cross-check. 자동화 1회 통과 채택 금지. 추출 한계는 명시. 전문: `Doc/_rules_v2/anti-simplification.md` (**T01~T21 작업 시 Read**).
+2. **디자인 그대로 구현(1순위)** → **한 사람이 개발한 것처럼**(reference 화면 DMF0004~0007 패턴 100% 동일) → **AS-IS 한 줄도 누락 없음** → **공용으로 끌어올리기**(shared default 변경 금지).
+3. **Layer 의존 방향**: FE foundation ← shared ← features ← web / BE Controller → Service(interface) → ServiceImpl → BaseService → MyBatis.
+4. **Syntax Error 0**: Oracle 19c 컴파일 가능 / FE·BE lint + type-check + build 통과.
+5. **정직 보고**: 검증 미실행·미확인·환경 파손은 PASS 가 아니라 **ERROR** 로 보고 (hook #126). 완료는 스스로 선언하지 않는다 — 게이트 통과 증빙 첨부.
+6. **DB 작업 = 새로고침한 최신 원문 기준** (hook #152, 실행 hook 으로 강제). 운영/사내 DB 적용은 승인된 절차(T18)만.
+7. **파괴적 Git 작업**(force-push / filter-branch / reset --hard) 전 사용자 승인 의무.
+8. **보완 = DB 객체 수정 우선** (사용자 상시 지시 2026-10-15). 가능하면 PKG/SP/메타 등 DB 객체로 해결한다. FE(`nscm-fe`)·BE(`nscm-be`) 수정이 필요하면 **직접 수정하지 않고 가이드만 제공**(파일:라인 · 변경 전/후 · 이유 · 검증법).
 
-**LG Energy Solution NSCM (Next SCM)**
-- AS-IS: GSCM C#.NET WinForms (358 csproj, 4,162 cs, 2,771 SPs)
-- TO-BE: React 19 + Spring Boot 3.5 + Oracle 19c
-- 도메인: DM(Demand) / SCM(Master) / FP(Factory) / SCP(Supply) / SSP(Shipping) / Common(Admin)
-
-## 2. 작업 시작 시 필수 행동 (반드시 순서대로)
-
-### Step 1: 룰셋 로드 (단일 진입 — 4 파일, 모든 작업) ⭐ 2026-06-18 갱신 (진입점 단일화 R-1)
-```
-Read: Doc/_rules_v2/anti-simplification.md          ⚠️ ⭐ 최우선 — 단순화 절대 금지 (불변)
-Read: Doc/_rules_consolidation/RULESET_MASTER.md    ← ⭐ 통합 마스터 (트리거 매트릭스 + hook 카탈로그 + UI 체크리스트)
-Read: Doc/_rules_v2/00_INDEX.md                      ← 상세 카탈로그 (hook 본문 위치)
-(UI 작업 시) RULESET_MASTER §3 UI-MANDATORY 체크리스트를 PRE-WRITE 로 통과
-```
-
-> ⭐ **단일 진입점 정책 (2026-06-18 갱신, R-1)**:
-> **진입점은 이 루트 `CLAUDE.md` 1곳.** 작업별 분기는 `RULESET_MASTER.md` 의 트리거 매트릭스(T01~T20)가 담당하고, hook 본문 위치는 `00_INDEX.md §B.3` 가 가진다. `Doc/_rules_v2/CLAUDE.md` 는 포인터로 축소됨 (직접 진입점 아님).
-> 룰셋 v2 구조: `_asis/00_framework` (7 정밀) + `_asis/01_popups` (인벤토리) + `_tobe/01~13` (13 룰) + `_mapping/asis_to_tobe.md` (10 격차) + `hooks/` (**hook 카탈로그** — 카운트 단일 소스 = `RULESET_MASTER §4` + `00_INDEX §B.3`).
-> ⚠️ **CLAUDE.md 사이즈 정책 (2026-06-20, hook #77 `claude-md-changelog-policy`)**: 본 파일 §15 entry 직접 추가 금지. 변경 이력 = `Doc/_archive/CLAUDE_changelog_YYYY-MM.md` 1-line. 상세 보고서 = `Doc/_archive/work_reports/{YYYY-MM-DD}_{topic}.md`.
->
-> ⭐ **2대 통합 진입 hook (2026-06-11 신설)** — 해당 작업 시 개별 hook 보다 먼저 읽기:
-> - **Oracle SP/DB 작업 전부** → `Doc/_rules_v2/hooks/oracle-db-workflow.md` (작업 타입 8종 분기 + 증상→원인 매핑)
-> - **화면 작업 종료 선언 전** → `Doc/_rules_v2/hooks/screen-completion-gate.md` (8 게이트 의무 + 보고 양식)
-
-> ⚠️ **anti-simplification.md** 는 다른 모든 룰을 압도하는 최우선 룰입니다.
-> 속도/편의를 위한 작업 단순화는 절대 금지. 사용자가 "모두/전체/정밀/상세" 요청하면 다중 패턴 + Cross-check 의무.
-> 위반 = 신뢰성 손상 → 도구 사용 중단.
-
-### Step 1.5: 작성 중/직후 Hook (모든 작업 공통) ⭐ 2026-06-15 갱신
-```
-파일 작성 직전        : Read: Doc/_rules_v2/hooks/pre-write.md
-파일 작성 직후        : Read: Doc/_rules_v2/hooks/post-write.md
-작업 종료 직전        : Read: Doc/_rules_v2/hooks/pre-submit.md
-화면 작업 종료 직전(+) : Read: Doc/_rules_v2/hooks/screen-completion-gate.md ⭐ 8 게이트
-```
-
-⭐ **신규 화면(T01) / 화면 수정(T01M) 시 누락 0** — `RULESET_MASTER §3 UI-MANDATORY 통합 체크리스트` 1장으로 일괄 통과 (2026-06-18, R-6).
-
-그중 절대 누락 금지 3종 (admin 동적 속성관리 master):
-```
-1순위 master : Doc/_rules_v2/hooks/ui-dynamic-property-management.md
-               ↳ 3 구성요소 (Menu Button / Column / Measure) admin UI 기반 동적 fetch + 즉시 반영
-2순위 Button : Doc/_rules_v2/hooks/menu-button-dynamic-fetch.md            (child)
-3순위 Col+Msr: Doc/_rules_v2/hooks/ui-category-setup-column-meta.md         (child)
-```
-
-> 위 3종 누락 = admin 운영 결정이 화면에 무효화 → **신뢰성 손상**. RULESET_MASTER §3 의 PRE-WRITE / POST-WRITE grep / Screen Completion Gate 의무 점검 대상.
-
-> **그 외 트리거별 hook 분기는 `00_INDEX.md §A` 20-트리거 매트릭스 참조** (Popup / SQL / SP 변환 / 사내 DB 적용 / Figma / 메뉴 미표시 등).
-
-> 룰 v1 (`Doc/_dev_rules/`) 24 룰은 `_archive/` 이동 완료. 유지되는 **8 룰**: 02 (브랜치/커밋) / 21 (트러블슈팅) / 22 (이관패키지) / 28 (Git multi-remote) / 29 (CSV 적재) / 30 (백업/원복) / 31 (Figma) / **32 (Claude Code Oracle 직결)** — 룰 v2 와 cross-ref. 단일 출처 = `RULESET_MASTER §5.4` (R-5, 룰 32 정식 등재).
-
-### Step 2: 영역별 추가 룰 — 카탈로그는 00_INDEX 가 단일 진실 source
-
-> 작업 키워드 → 분기는 `RULESET_MASTER §2 트리거 매트릭스 (T01~T20 + T01M 수정 분기)` 가 담당.
-> 카탈로그 (TO-BE 13 룰 / AS-IS Framework 7 / **Hook**) 인벤토리는 `RULESET_MASTER §4` + `00_INDEX.md §B.3` 가 단일 진실 source.
-> 따라서 본 §2 에서는 위치/카운트를 중복 유지하지 않음 (카운트 불일치 사고 방지).
->
-> ⭐ **용어 (R-8)**: "**문서 hook(guide)**" = AI 가 읽고 지키는 가이드 (대부분). "**실행 hook(enforced)**" = `.claude/settings.json` 이 자동 차단하는 5종. 상세 = `RULESET_MASTER §6`.
-
-**룰 v2 빠른 위치 (디렉터리만)**:
-- TO-BE 13 정밀 룰: `Doc/_rules_v2/_tobe/01_file_structure ~ 13_routing_menu.md`
-- AS-IS Framework 7 분석: `Doc/_rules_v2/_asis/00_framework/01~07_*.md`
-- **Hook**: `Doc/_rules_v2/hooks/` (통합 진입 3 = oracle-db-workflow / screen-completion-gate / ui-dynamic-property-management + 공통 3 = pre-write / post-write / pre-submit + 트리거 매트릭스 분기)
-- AS-IS↔TO-BE 격차: `Doc/_rules_v2/_mapping/asis_to_tobe.md` (10 격차)
-
-**유지되는 룰 v1 (`Doc/_dev_rules/`)** — 룰 v2 와 cross-ref:
-
-| 룰 | 내용 |
-|---|---|
-| 02 | 브랜치/커밋/PR/리뷰 |
-| 21 | 트러블슈팅 (Oracle/DBeaver/Wijmo/PowerShell) |
-| 22 | 이관 패키지 (`_artifacts`) |
-| 28 | Git Multi-Remote (NSCM 모노레포 + GitHub + GitLab) |
-| 29 | 로컬 Docker Oracle CSV 적재 |
-| 30 | 로컬 환경 백업/원복 |
-| 31 | Figma → React |
-| 32 | Claude(Code) Oracle 직결 (SQLcl MCP / python-oracledb / docker sqlplus) |
-| `Doc/_analysis/db_migration/01` | DB MSSQL→Oracle 변환 룰 (부록 C 실전 함정 11종) |
-| `Doc/_analysis/db_migration/02` | SP 변환·검증 6-Stage 파이프라인 |
-
-> 룰 v1 나머지 24 룰 (00 / 01 / 03~20 / 23~27) 은 `Doc/_dev_rules/_archive/` 이동 완료. 직접 참조 금지.
-> 구 `Doc/_dev_rules/hooks/` 도 레거시 (유니크 6종 v2 이관 완료, 상세: 해당 폴더 README.md).
-
-### Step 3: 기존 유사 코드 참조
-신규 파일 작성 전 기존 패턴을 반드시 확인:
-- **FE 화면**: `C:\Projects\NSCM\nscm-fe\features\admin\src\pages\user-management\` (표준 패턴)
-- **BE 도메인**: `C:\Projects\NSCM\nscm-be\src\main\java\com\lgcns\nscm\admin\menu\` (표준 패턴)
-
-### Step 3.5: ⭐ 신규 화면 features 폴더 결정 의무 (2026-06-04 추가 — SCM0008 사고 후)
-
-> 메모리 `feedback_new_screen_features_location.md` + 룰 v2 `_tobe/01_file_structure.md` §1.3/§1.4 적용 의무.
-
-신규 화면 작성 시 다음 5 단계 의무 수행:
-
-1. **SCM_ADM_MNU_M 트리 walk-up** — UPPR_MNU_ID 의 최상위 부모 (Lv 0) 식별
-2. **최상위 → features 매핑** — Master/Demand/Report → 동명 폴더 / Admin → features/admin / **Authority → features/authority** (UPPR_MNU_ID=Auth_Mgmt 도 features/authority)
-3. **Router.tsx import 검색** — `@authority/auth-request` 같은 import 있으면 **기존 작성 = cross-check 만**
-4. **features/{layer}/src/pages/ 인벤토리** grep — 자매 화면 표준 패턴 학습
-5. **결과 보고** — 신규 작성 / cross-check 결정 명시
-
-⚠️ 누락 시 SCM0008 사고처럼 admin 으로 잘못 매핑 → 9 파일 중복 작성 위험.
-
-### Step 4: 화면별 분석 자료 참조 (해당 화면 작업 시) — ⭐ FE 신규 화면은 필수
-- DM: `Doc/_analysis/domain_DM/screens/{화면ID}/` 모든 8개 MD (특히 **validation.md** + **expressions.md** 필독)
-- 공통: `Doc/_analysis/domain_Common/screens/{화면ID}/` 동일
-- SCM: `Doc/_analysis/domain_SCM/screens/{화면ID}/` 동일
-- Excel: `_analysis/_screens/{27|28|29}_*_Screens/*_{화면ID}.xlsx` 의 `11_Validation` + `12_Expression` 시트 *(2026-05-20 폴더 이동)*
-- ⭐ **카운트 일치 의무**: 위 두 자료의 행 수가 To-Be 코드 적용 건수와 정확히 일치해야 함 (누락 0건). PR 머지 조건.
-- ⭐ **xlsx 1~10 시트 신뢰 금지** (2026-05-18 추가): 27_DM_Screens 중 14개 파일에서 1~10 시트(`1_화면개요`~`10_ToBe권장`)가 다른 화면 데이터로 잘못 채워진 사고가 있었음. `00_정정안내_READ_ME` 시트가 있거나 `1_화면개요`의 화면 ID가 파일명과 다르면 **MD 폴더를 1차 신뢰**할 것. 상세: `Doc/_dev_rules/09_WIJMO_VALIDATION_EXPRESSION.md §1 원칙 4`.
-
-## 3. 핵심 원칙 (3개)
-
-### 원칙 1: "한 사람이 개발한 것처럼"
-- 신규 코드는 기존 패턴과 완전히 동일한 스타일이어야 함
-- 폴더 구조, import 순서, 명명 규약, 주석 헤더 모두 일치
-- 기존 화면(user-management, menu)이 표준
-
-### 원칙 2: Layer 의존 방향 절대 준수
-- FE: Foundation ← Shared ← Application (역방향 금지)
-- BE: Controller → Service(interface) → ServiceImpl → BaseService → MyBatis
-
-### 원칙 3: Syntax Error 0
-- DB 변환물은 Oracle 19c에서 컴파일 가능해야 함
-- 자동변환 위험 시 보존 + 가이드 추가 (`Doc/_analysis/db_migration/`)
-- FE/BE는 lint + type-check + build 통과 필수
-
-## 4. 절대 금지 (Top 11)
-
-1. ❌ 상대 경로 import (`../../../`) — alias (`@shared`, `@foundation`) 사용
-2. ❌ Feature 간 직접 import (admin → demand 등) — apps/web에서 조합
-3. ❌ `console.log` / `System.out.println` — Logger 사용
-4. ❌ `any` 타입 — 정확한 타입
-5. ❌ inline style — SCSS Module
-6. ❌ Controller에서 SQL 직접 호출 — Service 경유
-7. ❌ `@Autowired` 필드 주입 — `@RequiredArgsConstructor` + final
-8. ❌ Hardcoded SQL ID — `nameSpace + "method"`
-9. ❌ ResponseEntity 직접 — `successResponseEntity(data)`
-10. ❌ MSSQL 키워드 (DATEADD/CHARINDEX/STRING_SPLIT/GETDATE/ISNULL/IIF/N'/WITH (NOLOCK))
-11. ❌ ⭐ As-Is `validation.md` / `expressions.md` 누락 (1건이라도) — 100% 매핑 필수, `__asis-mapping__.md` 미작성
-
-## 5. 명명 규약 (요약)
-
-### Frontend
-- 컴포넌트 파일: `PascalCase.tsx`
-- 폴더: `kebab-case/`
-- 훅/스토어/유틸: `camelCase.ts`
-- 타입/상수: `kebab-case.{types,constants}.ts`
-- Workspace alias: `@foundation`, `@shared`, `@admin`, `@demand`, ...
-
-### Backend
-- 패키지: `com.lgcns.nscm.{domain}.{feature}`
-- 클래스: `{Feature}Controller`, `{Feature}Service`, `{Feature}ServiceImpl`
-- DTO: `{Feature}Request/Response.java` (in `dto/`)
-- MyBatis: `sql/{domain}/{Feature}.xml`, namespace `com.lgcns.nscm.{domain}.{feature}`
-- DB SP: `PKG_{UI_ID}.P_{기능명}`
-
-## 6. 표준 응답 / 표준 호출
-
-### Backend → Frontend 응답
-```
-{ "code": "0", "message": "success", "result": {...} }
-```
-→ Controller는 `successResponseEntity(data)` 사용. 직접 ResponseEntity 작성 금지.
-
-### Frontend API 호출
-```ts
-const { data } = useTabProcQuery<MENU_ID>({ menuId, sheetName, tabId, filters, enabled });
-const { mutate } = useProcMutation<MENU_ID>({ menuId, sheetName, tabId });
-```
-→ 직접 `fetch`/`axios` 호출 금지.
-
-### Backend DB 호출
-```java
-private final String nameSpace = "demand.dmf0099.";
-Map<String, Object> result = selectList(nameSpace + "retrieveMain", params);
-List<Map<String, Object>> data = (List<Map<String, Object>>) result.get(DEFAULT_DATA_RESULT);
-return Dmf0099Response.listOf(data);
-```
-
-## 7. 자기 점검 (코드 작성 직후)
-
-```
-✅ 명명 규약 OK?
-✅ Layer 위반 없음?
-✅ 기존 패턴 참조했나?
-✅ 표준 응답/호출 방식 사용?
-✅ Slf4j / SCSS Module 사용?
-✅ 주석 헤더 포함? (BE 클래스)
-✅ MSSQL 잔존 키워드 0건?
-✅ ⭐ As-Is validation.md + expressions.md 누락 0건? __asis-mapping__.md 작성?
-```
-
-## 8. 도구 빠른 참조
-
-| 작업 | FE | BE |
+## 2. 응답 모드 (속도 ↔ 누락 0 양립의 핵심)
+| 모드 | 판별 | 행동 |
 |---|---|---|
-| 로컬 실행 | `pnpm local` | `./gradlew bootRun` |
-| 빌드 | `pnpm build` | `./gradlew build` |
-| Lint | `pnpm lint:fix` | `./gradlew spotlessApply` |
-| Type | `pnpm type-check` | (컴파일 시) |
-| Test | `pnpm test` | `./gradlew test` |
+| **질의(LITE)** | 파일을 만들거나 고치지 않는 질문·확인·설명 요청 | 룰 전문 로드 없이 **즉답**. 답의 근거가 룰/메타면 그 hook **1개만** Read. 첫 줄에 `[LITE]` 표기 |
+| **작업(FULL)** | 생성·수정·적용·변환·배포·분석서 작성 등 산출물이 생기는 요청 | §3 라우팅 수행. 첫 줄에 `[T# 적용: … / Read: …]` 표기 |
+| 강제 | 프롬프트 앞에 `!full` / `!lite` | 판별을 무시하고 해당 모드 |
 
-## 9. 관련 문서
+질의가 작업으로 바뀌는 순간(“그럼 고쳐줘”) FULL 로 전환한다. LITE 에서 답이 불확실하면 추측하지 말고 **확인할 파일 경로를 제시**한다.
 
-> 2026-06-09 정리: archive 된 룰 v1 (00/01/03~20/23~27) + `_dev_rules/hooks/` 의 룰 v2 흡수분 표에서 제거. 룰 v2 카탈로그 + 7 유지 룰 + 분석 자료 + archive 만 유지.
+## 3. 작업(FULL) 라우팅 — 4단계
+```
+Step 1  Read: Doc/_rules_v2/anti-simplification.md                (최우선·불변)
+Step 2  Read: Doc/_rules_consolidation/TRIGGER_ROUTER.md          (T00~T21 → 필독 룰 + 핵심 Hook)  ← RULESET_MASTER §2/§2.5/§7 추출본
+Step 3  해당 T# 행의 핵심 Hook 을 Doc/_rules_v2/hooks/<name>.md 에서 Read (⭐⭐⭐ 생략 불가)
+Step 4  T01/T01M 이면 Read: Doc/_rules_consolidation/UI_MANDATORY_CHECKLIST.md 를 PRE-WRITE 통과  ← RULESET_MASTER §3 추출본
+```
+- 2대 통합 진입 hook: **Oracle SP/DB 전부** → `hooks/oracle-db-workflow.md` / **화면 종료 선언 전** → `hooks/screen-completion-gate.md` (8 게이트).
+- 공통 hook: 작성 직전 `hooks/pre-write.md` · 직후 `hooks/post-write.md` · 종료 직전 `hooks/pre-submit.md`.
+- 신규/수정 화면 **절대 누락 금지 3종**: `ui-dynamic-property-management`(master) → `menu-button-dynamic-fetch` → `ui-category-setup-column-meta`.
+- 전체 카탈로그(hook 한 줄 요약 153종)·카운트 단일 소스 = `RULESET_MASTER.md §4` + `00_INDEX.md §B.3` — **카탈로그가 필요할 때만** 연다. 매 작업 전문 Read 금지(토큰 150K+).
+- 경로별 상세 규약은 `.claude/rules/*.md` 가 **해당 경로 파일을 만질 때 자동 로드**된다: FE 화면 / BE / DB·SQL / 분석 산출물.
 
-### 룰 v2 (진입점 + 카탈로그)
+## 4. 절대 금지 (Top 11 — 요약)
+①상대경로 import(alias 사용) ②feature 간 직접 import ③`console.log`/`System.out.println` ④`any` ⑤inline style ⑥Controller 에서 SQL 직접 ⑦`@Autowired` 필드 주입 ⑧하드코딩 SQL ID ⑨`ResponseEntity` 직접(→`successResponseEntity`) ⑩MSSQL 키워드 잔존(DATEADD/CHARINDEX/STRING_SPLIT/GETDATE/ISNULL/IIF/N'/NOLOCK) ⑪As-Is `validation.md`/`expressions.md` 1건이라도 누락(`__asis-mapping__.md` 필수).
 
-| 경로 | 내용 |
+## 5. 실행 hook (`.claude/settings.json` — AI 의지와 무관하게 자동 차단)
+`block-dev-commands`(Bash) · `check-rules-read`(Write/Edit 전 — 필수 hook 미열람 시 차단, 2026-10-12 신설) · `check-dbeaver-sql` · `check-notnull-insert` · `check-fe-import` · `check-ui-gates` · `check-meta-sql` · `check-db-fresh-source`(Write/Edit 후) · `attach-context`(프롬프트 키워드 → 룰 자동 첨부, LITE 판별 포함). 상세 `.claude/hooks/README.md`.
+
+## 6. 구 CLAUDE.md 섹션 → 이동 위치
+| 구 섹션 | 지금 위치 |
 |---|---|
-| `Doc/_rules_v2/anti-simplification.md` | ⚠️ ⭐ 최우선 — 단순화 절대 금지 (불변) |
-| `Doc/_rules_consolidation/RULESET_MASTER.md` | ⭐ 통합 마스터 (단일 진입 — 트리거 + hook 카탈로그 + UI 체크리스트) |
-| `Doc/_rules_consolidation/00_DIAGNOSIS_진단보고서.md` | 룰 체계 중복·충돌·누락 진단 (R-1~R-8) |
-| `Doc/_rules_v2/CLAUDE.md` | 포인터 (구 분기 라우터 — 직접 진입점 아님) |
-| `Doc/_rules_v2/00_INDEX.md` | 트리거 매트릭스 + 룰/Hook 카탈로그 |
-| `Doc/_rules_v2/_tobe/` | TO-BE 13 정밀 룰 (01~13) |
-| `Doc/_rules_v2/_asis/00_framework/` | AS-IS Framework 7 정밀 분석 |
-| `Doc/_rules_v2/hooks/` | **Hook 카탈로그** (단일 카운트 = RULESET_MASTER §4 + 00_INDEX §B.3) |
-| `Doc/_rules_v2/_mapping/asis_to_tobe.md` | AS-IS↔TO-BE + 10 격차 사양 |
-| `Doc/_rules_v2/meta-rule-evolution.md` | PoC → 룰 보강 사이클 (4 분류) |
-
-### 유지되는 룰 v1 (`Doc/_dev_rules/`)
-
-| 경로 | 내용 |
-|---|---|
-| `Doc/_dev_rules/02_DEVELOPMENT_RULES.md` | 브랜치/커밋/PR/리뷰 |
-| `Doc/_dev_rules/21_TROUBLESHOOTING.md` | ⭐ 트러블슈팅 (Oracle/DBeaver/Wijmo/PowerShell) |
-| `Doc/_dev_rules/22_PACKAGE_ARTIFACTS.md` | ⭐ 이관 패키지 (`_artifacts`) |
-| `Doc/_dev_rules/28_GIT_MULTI_REMOTE.md` | ⭐ Git Multi-Remote (NSCM + GitHub + GitLab) |
-| `Doc/_dev_rules/29_LOCAL_DB_CSV_IMPORT.md` | ⭐ Docker Oracle CSV 적재 |
-| `Doc/_dev_rules/30_LOCAL_BACKUP_RESTORE.md` | ⭐ 로컬 환경 통합 백업/원복 |
-| `Doc/_dev_rules/31_FIGMA_DESIGN_INTEGRATION.md` | ⭐ Figma → React 매핑 |
-| `Doc/_dev_rules/32_CLAUDE_ORACLE_DIRECT.md` | ⭐ Claude(Code) Oracle 직결 (SQLcl MCP / ora.py / docker sqlplus) — 2026-06-11 신설 |
-
-> archive 된 룰 v1 (00/01/03~20/23~27) 은 `Doc/_dev_rules/_archive/` 이동 완료 — 직접 참조 금지. 룰 v2 안에 흡수.
-
-### 분석 자료
-
-| 경로 | 내용 |
-|---|---|
-| `Doc/_analysis/INDEX.md` | 도메인 분석 자료 진입점 |
-| `Doc/_analysis/db_migration/01_MSSQL_to_Oracle_Conversion_Rules.md` | DB 변환 규칙 (⭐ 부록 C 실전 함정 11종) |
-| `Doc/_analysis/db_migration/02_SP_CONVERSION_PIPELINE.md` | ⭐ SP 변환·검증 6-Stage 파이프라인 (2026-06-11) |
-| `_analysis/_FOLDER_MAP.md` | ⭐ Cowork 분석 산출물 폴더 매핑표 |
-| `_analysis/Screen_POPUP_SP_Tables_Matrix.xlsx` | ⭐ 통합 매트릭스 (3,318행 / 395 화면 / 710 SP / 355 Tables) |
-
-### Archive
-
-| 경로 | 내용 |
-|---|---|
-| `Doc/_archive/CLAUDE_changelog_phase0-4.md` | ⭐ CLAUDE.md §15 변경 이력 archive (2026-05-13 ~ 2026-05-30) |
-| `Doc/_dev_rules/_archive/` | 룰 v1 25개 archive (00/01/03~20/23~27) |
-
-## 10. 참고 — 실제 코드 위치
-
-- FE: `C:\Projects\NSCM\nscm-fe\`
-- BE: `C:\Projects\NSCM\nscm-be\`
-- 분석 산출물: `C:\Projects\NSCM\_phase{1~4}\`, `C:\Projects\NSCM\_analysis/_screens\` *(2026-05-20 root 정리)*
-
-## 11. ⭐ Cowork 분석 산출물 폴더 매핑 (2026-05-20 정리)
-
-Root 폴더에 흩어져 있던 Cowork 분석 산출물(00_~29_)을 Phase별 폴더로 분류했습니다.
-**상세 매핑표는 [`_analysis/_FOLDER_MAP.md`](./_FOLDER_MAP.md) 를 참조하세요.**
-
-| 폴더 | 내용 | 파일 수 |
-|---|---|---:|
-| `_analysis/_phase1/` | Phase 1 개요·인벤토리·아키텍처 (00_INDEX 포함) | 6 |
-| `_analysis/_phase2/` | Phase 2 DB/화면/Endpoint 정밀 인벤토리 + 게이트 보고서 | 17 |
-| `_analysis/_phase3/` | Phase 3 도메인별 상세 분석 (Common/SCM/DM/SCP/SSP/FP) + Master | 21 |
-| `_analysis/_phase4/` | Phase 4 To-Be 상세 스펙 (Screen/Field/Event/IA/BPF/Arch) | 40 |
-| `_analysis/_screens/` | 화면 단위 분석서 (27_DM/28_Common/29_SCM/**30_SCP/31_SSP/32_FP** Screens) | **6 도메인** |
-| **`_analysis/Screen_POPUP_SP_Tables_Matrix.xlsx`** | **⭐ 통합 매트릭스 (2026-05-21 v7.4) — 화면×POPUP×SP×Tables (JSON) 1,577행 / 395 화면 / 710 SP / 355 Tables** | 1 |
-
-**AI 작업 시 빠른 참조:**
-- As-Is 시스템 전체 개요 → `_analysis/_phase1/00_INDEX.md` + `_analysis/_phase1/01_Overview.md`
-- DB 정밀/Oracle 호환성 → `_analysis/_phase2/02_DB_Inventory.xlsx` + `_analysis/_phase2/02_Oracle_Compat.xlsx`
-- 도메인별 분석 → `_analysis/_phase3/{04~09}_*_Analysis.{md|docx|xlsx}`
-- 신규 화면 메타·필드·이벤트 → `_analysis/_phase4/{11~13}_*.xlsx`
-- 화면 13시트 분석서 → `_analysis/_screens/{27_DM|28_Common|29_SCM|30_SCP|31_SSP|32_FP}_Screens/{prefix}{화면ID}.xlsx` ⭐ **2026-05-21 v7.4 — 302 화면 정밀**
-- **⭐ 화면×SP×Tables 통합 매트릭스** → `_analysis/Screen_POPUP_SP_Tables_Matrix.xlsx` (3 시트: 매트릭스 3,318행 / 인벤토리 395 / 통계 (Anti-Simplification 11개 원천))
-
-## 12. ⭐ v7.4 룰 (2026-05-21) — 화면 분석서 정밀 작업 의무
-
-**"메타 자동 생성도 일괄 자동화" 명문화** (룰 19 §16):
-
-| # | 의무 | 위반 시 |
-|---:|---|---|
-| 1 | 화면별 `.cs` 전체 Read (처음~끝, 수백~수천 라인) | xlsx 빈칸 다수 = 즉시 재작업 |
-| 2 | 화면별 `.Designer.cs` 전체 Read | 동일 |
-| 3 | xlsx 13시트 모두 filled cells 30+ | 즉시 재작업 |
-| 4 | Validation: 모든 `MessageHelper.GMessageBox` 추출 (Msg ID + 카테고리) | 누락 위반 |
-| 5 | Expression: 모든 `LockColumn/LockRange` + `SetValue` Auto-Sync 추출 | 누락 위반 |
-| 6 | 호출 POPUP: 모든 `new XxxPopup()` 추출 + 공통 영역 Link 또는 신규 분석서 | 누락 위반 |
-| 7 | SP/Tables: 모든 호출 SP + 의존 테이블 인벤토리 (`_analysis/Screen_POPUP_SP_Tables_Matrix.xlsx` 기준) | 누락 위반 |
-
-## 13. ⭐ 화면 분석서 통합 통계 (2026-05-22 기준)
-
-| 도메인 | xlsx (13시트) | analysis.md | 8 MD 완비 |
-|---|---:|---:|---:|
-| DM | 84 | 83 | 49 (34 화면 보강 필요) |
-| SCP | 66 | 70 | 66 |
-| SSP | 56 | 58 | 56 |
-| FP | 95 | 112 | 95 |
-| Common | 32 | 57 | (별도) |
-| SCM | 16 | 16 | (별도) |
-| **합계** | **349** | **396** | |
-
-**통합 산출물**: `_analysis/Screen_POPUP_SP_Tables_Matrix.xlsx` (3,318행 / 395 화면 / 710 SP / 355 Tables, Anti-Simplification 11개 원천)
-
-## 14. ⭐ Anti-Simplification 룰 — 최우선
-
-> 사용자 요구 (2026-05-22): "단순화 해서 잘못된 결과나 산출물을 도출하면 그건 신뢰성만 손상시키고, 클로드를 사용하지 않게 되는 결과를 이어질거에요."
-
-**상세**: `Doc/_rules_v2/anti-simplification.md` *(2026-06-11 경로 정정 — 구 `_dev_rules/hooks/` 버전은 DEPRECATED)*
-
-핵심: (1) "모두/전체/정밀/상세" 요청 시 다중 패턴 + Cross-check 의무 (2) 자동화 1회 통과 채택 금지 (3) 기존 분석 자료 활용 (4) 추출 한계 명시 (5) 시간/토큰 절약 단독 결정 금지.
-
-## 15. ⭐ 변경 이력 — pointer 만
-
-> ⚠️ **본 §15 에 entry 직접 추가 금지** (룰 #77 claude-md-changelog-policy).
-> 모든 변경은 monthly archive 에 1-line, 상세는 work_reports/ 에 별도 보고서.
-
-- **현재 월** (2026-06): `Doc/_archive/CLAUDE_changelog_2026-06.md`
-- **이전 월** (2026-05): `Doc/_archive/CLAUDE_changelog_phase0-4.md`
-- **상세 보고서**: `Doc/_archive/work_reports/{YYYY-MM-DD}_{topic}.md` (예: `2026-06-20_SYS0011_audit.md`)
-- **작성 정책**: `Doc/_rules_v2/hooks/claude-md-changelog-policy.md` (hook #77, 2026-06-20 신설)
+| Model Fallback / 도구 빠른 참조(§8) | `Doc/_archive/CLAUDE_md_full_2026-10-12.md` §Model, §8 (단순 질의는 `/model` 로 가벼운 모델 권장) |
+| Step 3 기존 코드 참조 / Step 3.5 features 폴더 결정 5단계 / Step 4 화면별 분석자료·카운트 일치·xlsx 1~10시트 불신 | `.claude/rules/00-fe-screen.md` |
+| §5 명명 규약 BE / §6 표준 응답·DB 호출 | `.claude/rules/01-be.md` |
+| 절대 금지 ⑩ MSSQL / DB 변환 룰 / SP 파이프라인 / DBeaver / 사내 적용 | `.claude/rules/02-db-sql.md` |
+| §11 Cowork 산출물 폴더 매핑 / §12 v7.4 화면 분석서 의무 / §13 통계 | `.claude/rules/03-analysis-docs.md` |
+| §2 Step 1~2 룰셋 로드 / §9 관련 문서 표 / 유지 룰 v1 8종 | `TRIGGER_ROUTER.md` + `RULESET_MASTER.md §5` |
+| §7 자기 점검 | `hooks/post-write.md` + `UI_MANDATORY_CHECKLIST.md §3.3` |
+| §15 변경 이력 | `Doc/_archive/CLAUDE_changelog_YYYY-MM.md` 1-line (hook #77 — 본 파일에 직접 추가 금지) |

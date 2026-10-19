@@ -12,7 +12,7 @@ import {
   VOLATILE_QUERY_OPTIONS,
 } from '@foundation/query-client';
 import type { UseQueryOptions } from '@foundation/query-client';
-import { useMessageStore, useSessionStore } from '@shared/stores';
+import { useMenuId, useMessageStore, useSessionStore } from '@shared/stores';
 
 /**
  * combo 캐시 키에 붙일 세션 스코프. 세션이 없으면(로그인 전 / 로그아웃 직후) null.
@@ -33,11 +33,45 @@ const useComboScope = () =>
     state.session?.userId ? `${state.session.userId}:${state.session.langCd ?? ''}` : null
   );
 
-const buildComboQueryKey = (scope: string, param: ComboParam) =>
-  ['combo', scope, { ...param }] as const;
+/**
+ * src 는 요청 출처 표식이다(예: 'grid' — gridComboSrc 참조). 키에 넣지 않으면 같은 콤보를
+ * 검색조건과 그리드가 함께 쓸 때 요청이 하나로 접혀 Network 탭에서 출처를 가릴 수 없다.
+ *
+ * 끝에 붙인다 — useInvalidateCombos 가 queryKey[2] 를 ComboParam 으로 읽으므로 중간에 끼우면
+ * 무효화가 조용히 깨진다. 없을 때도 '' 로 자리를 잡아 키 모양을 하나로 유지한다. 콤보는
+ * 영속 대상이 아니고(shouldPersistQuery) staleTime 0 이라 키가 갈려도 치를 비용이 없다.
+ */
+const buildComboQueryKey = (scope: string, param: ComboParam, src?: string) =>
+  ['combo', scope, { ...param }, src ?? ''] as const;
 
 const toComboParam = (filter: ComboParam | string): ComboParam =>
   typeof filter === 'string' ? { comboId: filter } : filter;
+
+/**
+ * 콤보 파라미터에 화면 mnuId 를 기본 주입한다 — 콤보 SQL 의 @mnuId(PROGRAM_ID = @mnuId 같은 화면 스코프)
+ * 해소용. 세션값 @sesUserId 를 BE 가 기본으로 붙이듯, 화면값 mnuId 는 여기(콤보 요청 훅)서 기본으로 붙인다.
+ * 그 결과 검색조건 콤보(admin/combo)와 그리드 콤보(admin/combo?src=grid)가 동일하게 mnuId 를 싣는다.
+ *
+ * - 값은 raw 로 넣는다 — apiClient.getCombo 의 quoteComboParams 가 홑따옴표를 idempotent 하게 붙인다.
+ * - 호출부가 mnuId 를 이미 지정했으면(화면별 하드코딩 등) 그대로 둔다 — 회귀 0.
+ * - 주입값은 queryKey 에도 반영된다(buildComboQueryKey 가 param 전체를 키로 씀) — 같은 comboId 라도
+ *   화면이 다르면 캐시가 갈려, @mnuId 로 화면마다 결과가 다른 콤보가 서로 섞이지 않는다.
+ */
+const withMenuId = (param: ComboParam, menuId: string | undefined): ComboParam =>
+  menuId && !param.mnuId ? { ...param, mnuId: menuId } : param;
+
+/**
+ * 콤보 파라미터에 그리드 시트명 sheetName 을 기본 주입한다 — 콤보 SQL 의 @sheetName(SHEET_NAME = @sheetName
+ * 같은 시트 스코프) 해소용. 화면 스코프 mnuId 와 짝이지만, 한 화면에 그리드(시트)가 여럿이라 값의 출처는
+ * "그 콤보가 속한 그리드"다 — 그래서 tab 단위 context(useMenuId)로 붙일 수 없고 호출부(DataGrid)가 넘긴다.
+ *
+ * - 값은 raw 로 넣는다 — apiClient.getCombo 의 quoteComboParams 가 홑따옴표를 idempotent 하게 붙인다.
+ *   (mnuId 와 달리 sheetName 은 BE 특례 인용 대상이 아니라 일반 파라미터처럼 FE 에서 인용된다 — BE 무변경.)
+ * - 호출부가 sheetName 을 이미 지정했으면 그대로 둔다 — 회귀 0.
+ * - 주입값은 queryKey 에도 반영된다 — 같은 comboId 라도 시트가 다르면 캐시가 갈린다.
+ */
+const withSheetName = (param: ComboParam, sheetName: string | undefined): ComboParam =>
+  sheetName && !param.sheetName ? { ...param, sheetName } : param;
 
 const buildTabQueryKey = <M extends MenuId, S extends SheetName<M>>(
   tabId: string,
@@ -45,20 +79,6 @@ const buildTabQueryKey = <M extends MenuId, S extends SheetName<M>>(
   procedureAction: BUTTON_TYPE | '',
   filters?: ProcRequest<M, S> | ComboParam | LookupParam
 ) => [tabId, sheetName, procedureAction, { ...filters }] as const;
-
-// react-query 기본 해시(hashKey)와 동일한 방식(객체 key 정렬 후 직렬화)으로 두 쿼리 키가
-// 같은 캐시 엔트리로 해시되는지 판정한다 — 참조는 달라도 값이 같으면 true.
-const stableStringify = (value: unknown): string =>
-  JSON.stringify(value, (_key: string, val: unknown): unknown =>
-    val && typeof val === 'object' && !Array.isArray(val)
-      ? Object.keys(val as Record<string, unknown>)
-          .sort()
-          .reduce<Record<string, unknown>>((acc, k) => {
-            acc[k] = (val as Record<string, unknown>)[k];
-            return acc;
-          }, {})
-      : val
-  );
 
 /**
  * filters 는 매 렌더 새로 만들지 말 것 — 아래 useLayoutEffect 는 filters 참조가 바뀌면
@@ -115,22 +135,27 @@ export const useTabProcQuery = <M extends MenuId, S extends SheetName<M> = Sheet
       tabIdRef.current = tabId;
       return;
     }
+    // filters 가 비워지는 중간 전이(조회조건 리셋 등)는 무시한다 — prevKeyRef 를 건드리면
+    // 그 직전까지의 "실제 조회 조건"을 잃어버려, 이후 같은 조건으로 재조회해도 동일 조건
+    // 판정(위 removeQueries 분기)이 깨져 캐시된 이전 데이터가 로딩 없이 그대로 노출된다.
+    if (!filters) return;
     if (prevKeyRef.current === filters) return;
 
-    const prevQueryKey = buildTabQueryKey(tabId, sheetName, procedureAction, prevKeyRef.current ?? {});
-    const isSameConditions = stableStringify(prevQueryKey) === stableStringify(queryKey);
-
-    if (isSameConditions) {
-      // 동일 조건 재조회 — filters 참조는 매 Search 마다 바뀌지만 값은 같아 queryKey 해시가
-      // 이전과 동일하다. react-query 는 같은 queryKey 재조회 시 이전 data 를 유지한 채
-      // 백그라운드로만 갱신해 옛 rows 가 잠깐 남아있다가 스왑된다. 캐시를 완전히 비워
-      // 조건 변경 재조회(다른 queryKey)와 동일하게 그리드가 비었다가 새로 채워지게 한다.
-      queryClient.removeQueries({ queryKey: prevQueryKey, exact: true });
-    } else {
-      // 조건이 실제로 바뀐 경우 — 더 이상 관측되지 않는 이전 조건 캐시만 정리(기존 동작).
-      //   재방문 시 캐시된 값을 먼저 보여주고 백그라운드로 갱신하는 동작은 그대로 유지한다.
-      void queryClient.invalidateQueries({ queryKey: prevQueryKey, exact: false });
-    }
+    // 조회조건이 바뀔 때마다(같은 값으로 되돌아온 경우 포함) 그리드는 항상 비워졌다가 새로
+    // 채워져야 한다. 새 조건에 예전에 조회했던 캐시가 남아있으면(재방문) 그 캐시부터 지우고,
+    // 더 이상 관측되지 않는 이전 조건 캐시도 함께 지운다. removeQueries 는 그 자체로 fetch 를
+    // 일으키지 않고, 지금 이 queryKey 를 구독 중인 useQuery(이번 렌더에서 이미 생성됨)만 즉시
+    // 빈 상태에서 다시 fetch 하게 만든다 — 이전 조건 쪽은 구독이 끊긴 뒤라 삭제해도 아무
+    // 요청도 나가지 않는다(예전 invalidateQueries(refetchType:'none')이 막던 "옛 조건으로 즉시
+    // 재조회" 사고, DMF0042·DMF0020 도 이 메커니즘상 재발하지 않는다).
+    const prevQueryKey = buildTabQueryKey(
+      tabId,
+      sheetName,
+      procedureAction,
+      prevKeyRef.current ?? {}
+    );
+    queryClient.removeQueries({ queryKey, exact: true });
+    queryClient.removeQueries({ queryKey: prevQueryKey, exact: true });
 
     prevKeyRef.current = filters;
   }, [filters, queryClient]);
@@ -159,13 +184,14 @@ export const useProcMutation = <
 }) => {
   const { t } = useTranslation();
   const { setToast } = useMessageStore.getState();
+  const { setAlert } = useMessageStore.getState();
+  
   const queryKey = buildTabQueryKey(tabId, sheetName, procedureAction);
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: ResponseData<M, S, RS>[]) => {
-      if (!data.length)
-        return Promise.reject(new Error(t('MSG_NO_CHANGE', '_수정한 내용이 없습니다.')));
+      if (!data.length) return Promise.reject(new Error(t('MSG00004', '_수정한 내용이 없습니다.')));
       return apiClient.callMutationProc<M, S, RS>(menuId, sheetName, procedureAction, data);
     },
     mutationKey: queryKey,
@@ -179,14 +205,14 @@ export const useProcMutation = <
     onError:
       onError ??
       (error => {
-        // void setAlert({
-        //   type: 'alert',
-        //   content: error.message ?? t('MSG00003', '_저장에 실패하였습니다.'),
-        // });
-        setToast({
-          type: 'error',
-          message: error.message ?? t('MSG00003', '_저장에 실패하였습니다.'),
+        void setAlert({
+          type: 'alert',
+          content: error.message ?? t('MSG00003', '_저장에 실패하였습니다.'),
         });
+        // setToast({
+        //   type: 'error',
+        //   message: error.message ?? t('MSG00003', '_저장에 실패하였습니다.'),
+        // });
       }),
   });
 };
@@ -198,9 +224,11 @@ export const useProcMutation = <
  * 저장한 그 화면은 리마운트되지 않으므로, 방금 등록한 값이 조회조건 콤보에 나타나지 않는다.
  * (예: DMF0004 Sales Site 신규 저장 → 조회조건 Sales Site 드롭다운은 저장 전 목록 그대로)
  *
- * 콤보 키가 ['combo', scope, param] 이라 comboId 는 prefix 매칭으로 잡히지 않는다 — 세션 스코프가
- * 중간에 끼어 있다. 그래서 predicate 로 고른다. 스코프는 구분하지 않는다: 다른 계정의 잔여 캐시를
- * 같이 버려도 손해가 없고, 실제 재조회는 활성 쿼리(= 지금 세션의 화면)에만 일어난다.
+ * 콤보 키가 ['combo', scope, param, src] 이라 comboId 는 prefix 매칭으로 잡히지 않는다 — 세션
+ * 스코프가 중간에 끼어 있다. 그래서 predicate 로 고른다. 스코프와 src 는 구분하지 않는다: 다른
+ * 계정의 잔여 캐시를 같이 버려도 손해가 없고, 검색조건(src 없음)과 그리드(src='grid')가 같은
+ * 콤보를 볼 때 한쪽만 비우면 두 목록이 어긋난다. 실제 재조회는 활성 쿼리(= 지금 세션의 화면)에만
+ * 일어난다.
  */
 export const useInvalidateCombos = () => {
   const queryClient = useQueryClient();
@@ -233,11 +261,13 @@ export const useTabComboQuery = ({
   queryOptions?: Omit<UseQueryOptions<ComboResponse[]>, 'queryKey' | 'queryFn'>;
 }) => {
   const scope = useComboScope();
-  const queryKey = buildComboQueryKey(scope ?? '', filters);
+  const menuId = useMenuId();
+  const param = withMenuId(filters, menuId);
+  const queryKey = buildComboQueryKey(scope ?? '', param);
 
   return useQuery<ComboResponse[]>({
     queryKey,
-    queryFn: () => apiClient.getCombo(filters),
+    queryFn: () => apiClient.getCombo(param),
     enabled: enabled && scope !== null,
     persister: queryOptions?.persister ?? undefined,
     ...VOLATILE_QUERY_OPTIONS,
@@ -245,28 +275,51 @@ export const useTabComboQuery = ({
   });
 };
 
-export const useTabComboQueries = ({
-  filters,
-  enabled = true,
-  queryOptions,
-}: {
+interface UseTabComboQueriesArgs {
   filters: (ComboParam | string)[];
   enabled?: boolean;
   queryOptions?: Omit<UseQueryOptions<ComboResponse[]>, 'queryKey' | 'queryFn'>;
-}) => {
+  /**
+   * 요청 출처 표식. URL 쿼리(`admin/combo?src=grid`)와 쿼리 키에만 붙고 본문에는 안 실린다 —
+   * 본문 키는 BE makeComboQuery 가 등록 SQL 의 @키 로 치환하는 대상이다. 값은 호출부 상수로
+   * 둘 것(그리드는 gridComboSrc 의 GRID_COMBO_SRC).
+   */
+  src?: string;
+  /**
+   * 그리드 시트명 — 지정 시 각 콤보 파라미터에 sheetName 으로 기본 주입해 @sheetName(SHEET_NAME 스코프)을
+   * 해소한다(withSheetName). 그리드 셀 콤보 전용이라 호출부(DataGrid)가 자기 시트명을 넘긴다.
+   */
+  sheetName?: string;
+}
+
+const useComboQueryResults = ({ filters, enabled = true, queryOptions, src, sheetName }: UseTabComboQueriesArgs) => {
   const scope = useComboScope();
+  const menuId = useMenuId();
 
   return useQueries({
-    queries: filters.map(filter => ({
-      queryKey: buildComboQueryKey(scope ?? '', toComboParam(filter)),
-      queryFn: () => apiClient.getCombo(toComboParam(filter)),
-      enabled: enabled && scope !== null,
-      persister: queryOptions?.persister ?? undefined,
-      ...VOLATILE_QUERY_OPTIONS,
-      ...queryOptions,
-    })),
-  }).map(item => item.data);
+    queries: filters.map(filter => {
+      const param = withSheetName(withMenuId(toComboParam(filter), menuId), sheetName);
+      return {
+        queryKey: buildComboQueryKey(scope ?? '', param, src),
+        queryFn: () => apiClient.getCombo(param, src),
+        enabled: enabled && scope !== null,
+        persister: queryOptions?.persister ?? undefined,
+        ...VOLATILE_QUERY_OPTIONS,
+        ...queryOptions,
+      };
+    }),
+  });
 };
+
+export const useTabComboQueries = (args: UseTabComboQueriesArgs) =>
+  useComboQueryResults(args).map(item => item.data);
+
+/**
+ * `useTabComboQueries` 와 같은 쿼리를 구독하되 `data` 뿐 아니라 `isPending`/`isError` 도 함께
+ * 돌려준다. 콤보 데이터가 아직 안 온 것(로딩 중)과 조회했지만 실패한 것을 구분해야 하는 호출부용
+ * (예: DataGrid 가 로딩 중에는 셀을 비우고, 실패 시엔 비우지 않고 원본 코드로 fallback 하는 경우).
+ */
+export const useTabComboQueryResults = useComboQueryResults;
 
 /**
  * @deprecated

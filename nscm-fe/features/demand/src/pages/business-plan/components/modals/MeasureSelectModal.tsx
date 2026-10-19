@@ -213,7 +213,7 @@ export const MeasureSelectModal = ({
       size={1260}
       handleClose={modalClose}
       disableButtonCancel
-      title={t('LBL00712', '_Measure')}
+      title={t('LBL00310', '_Measure')}
       customContentArea={
         <div className={styles.measureDualContainer}>
           <ColumnSelectDualList<MeasureDualRow>

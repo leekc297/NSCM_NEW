@@ -27,6 +27,12 @@ const isBlank = (value: TrackedValue): boolean =>
  */
 const isSameValue = (a: TrackedValue, b: TrackedValue): boolean => {
   if (a === b) return true;
+  // 빈값(널/undefined/'')과 숫자 0 은 같은 "빈 셀" 로 본다. 수량 그리드의 분배·Delete 로직은
+  //   셀을 되돌릴 때 숫자 0 을 써 넣는데(예: DMF0082 divideBy*/allocateLoc), 원본이 빈칸이면
+  //   `isBlank vs 0` 이 서로 달라 원래 값으로 돌려도 수정(M)이 안 풀렸다(사용자 신고 2026-09-03).
+  //   ※ 문자열 '0' 은 제외 — 사용자가 명시 입력한 표기이므로 빈칸과 구분한다(fillEmptyCellWithZero 규약).
+  if (isBlank(a) && b === 0) return true;
+  if (a === 0 && isBlank(b)) return true;
   if (isBlank(a) || isBlank(b)) return isBlank(a) && isBlank(b);
   if (a instanceof Date && b instanceof Date) return a.getTime() === b.getTime();
   const isCanonicalNumber = (num: number, text: string): boolean => String(num) === text.trim();
@@ -150,4 +156,54 @@ export const fillEmptyCellWithZero = <T extends WijmoRowItem = WijmoRowItem>(
     tracker?.storeChange(row, binding, originals[binding], '0');
   }
   (row as WijmoRowItem)[binding] = '0';
+};
+
+/**
+ * 편집 종료 시 음수가 들어온 수치셀을 '0' 으로 보정한다 (AS-IS Dsdm_Changed L1186~1193 파리티:
+ *   CONVERT_QTY_PACK/MODULE/CELL 에 음수 입력 시 SetText(..., "0")). 입력 자체는 막지 않고
+ *   커밋 시점에 교정하는 것이 AS-IS 동작이다 (positiveOnly 규칙의 '거부' 와 다르다).
+ *
+ * fillEmptyCellWithZero 와 같은 이유로 EditTracker 의 cellEditEnded **뒤에** 실행되며,
+ *   원본 기록 유무로 갈라 수정상태(M) 재판정을 바르게 유지한다.
+ *   - 기록 없음 = 현재 값이 원본. 음수 원본을 '0' 으로 추적하면 거짓 M 이 켜지므로 값만 바꾼다.
+ *   - 기록 있음 = '0' 을 새 값으로 넘겨 재판정한다 (원본이 0 이었으면 해제).
+ *
+ * 값이 음수가 아니면(빈칸·0·양수·숫자 아님) 아무 동작도 하지 않는다.
+ */
+export const clampNegativeCellToZero = <T extends WijmoRowItem = WijmoRowItem>(
+  row: T,
+  binding: string,
+  tracker: EditTracker<T> | undefined
+): void => {
+  const current = (row as WijmoRowItem)[binding];
+  if (isBlank(current as TrackedValue)) return;
+  if (Number(current) >= 0) return; // NaN(숫자 아님) 포함 — 음수일 때만 보정한다
+
+  const originals = tracker?.getOriginalValues().get(row);
+  if (originals && binding in originals) {
+    tracker?.storeChange(row, binding, originals[binding], '0');
+  }
+  (row as WijmoRowItem)[binding] = '0';
+};
+
+/**
+ * 상위 콤보 변경 등으로 하위 셀을 ''(빈값)으로 비우면서 수정상태(M)를 정확히 갱신한다
+ *   (DataGrid clearStaleComboCellsHandler 와 같은 규약 — 화면 cascade 에서 재사용).
+ *
+ * 이미 빈 셀은 건드리지 않는다(불필요한 storeChange 로 거짓 M 이 켜지는 것 방지).
+ *   - 기록 없음 = 현재 값이 원본. '' 를 새 값으로 넘겨 재판정한다(원본이 빈칸이면 가드로 이미 반환).
+ *   - 기록 있음 = 기록된 원본 기준으로 재판정한다(원본이 '' 였으면 M 해제).
+ */
+export const clearCellValue = <T extends WijmoRowItem = WijmoRowItem>(
+  row: T,
+  binding: string,
+  tracker: EditTracker<T> | undefined
+): void => {
+  const current = (row as WijmoRowItem)[binding];
+  if (isBlank(current as TrackedValue)) return; // 이미 비어 있으면 변경 없음
+
+  const originals = tracker?.getOriginalValues().get(row);
+  const originalValue = originals && binding in originals ? originals[binding] : current;
+  tracker?.storeChange(row, binding, originalValue, '');
+  (row as WijmoRowItem)[binding] = '';
 };

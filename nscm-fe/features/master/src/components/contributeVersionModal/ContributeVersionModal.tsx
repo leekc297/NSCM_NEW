@@ -1,5 +1,5 @@
 import type { CollectionView } from '@mescius/wijmo';
-import { type FlexGrid } from '@mescius/wijmo.grid';
+import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
 import { type FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useContext, useEffect, useMemo, useRef } from 'react';
 
@@ -8,9 +8,9 @@ import { CRUD_TYPE } from '@foundation/constants';
 import { useQueryClient } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { GridAction } from '@foundation/utils';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem } from '@shared/lges';
+import { Button, FormItem, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import {
   DialogScopeContext,
@@ -126,13 +126,19 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
   // 새 참조가 생겨 그리드가 깜빡였다 — useMemo 로 참조를 selectedYear 에 고정한다.
   const rateFilters = useMemo(() => ({ yyyy: selectedYear }), [selectedYear]);
 
-  const { data: rateData, refetch } = useTabProcQuery<MODAL_VERSION>({
+  const {
+    data: rateData,
+    refetch,
+    isLoading,
+    isFetching,
+  } = useTabProcQuery<MODAL_VERSION>({
     menuId: MODAL_VERSION,
     sheetName: MODAL_SHEET_DATA,
     tabId: MODAL_VERSION,
     filters: rateFilters,
     enabled: open && !!selectedYear,
   });
+  const loading = isLoading || isFetching;
 
   const itemsSource = useMemo<VersionRow[]>(
     () =>
@@ -175,6 +181,25 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
     });
     grid.invalidate();
   }, [open, staticColumns, itemsSource]);
+
+  // 코너(TopLeft) 'No' 라벨 — rowHeaders 첫 컬럼에만 찍는다.
+  //   공용 attachRowNoHeader 는 TopLeft 전 셀에 라벨을 찍는데, 이 그리드는 편집 그리드(EditTracker
+  //   + CRUD_TYPE + 행추가/삭제)라 rowHeaders 가 2컬럼(번호 + CRUD 상태)이다. 그래서 'No' 가 두 번
+  //   보였다. 상태 컬럼은 편집에 필요해 없앨 수 없으므로 라벨만 col 0 으로 한정한다
+  //   (ForecastPriceGrid 의 #108 처리와 같은 형태).
+  useEffect(() => {
+    const grid = gridRef.current as (FlexGrid<VersionRow> & { __rowNoHdr?: boolean }) | undefined;
+    if (!grid || grid.__rowNoHdr) return;
+    grid.__rowNoHdr = true;
+    const label = t('LBL00674', 'No');
+    grid.formatItem.addHandler((_sender, e) => {
+      if (e.panel.cellType !== CellType.TopLeft) return;
+      const text = e.col === 0 ? label : '';
+      if (e.cell.textContent !== text) e.cell.textContent = text;
+      e.cell.style.fontWeight = 'normal';
+    });
+    grid.invalidate();
+  }, [gridRef, t, itemsSource]);
 
   const handleFind = () => {
     if (!selectedYear) {
@@ -324,6 +349,10 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
       handleClose={modalClose}
       disableButtonCancel
       disableScale
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -335,7 +364,7 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
           {/* 버튼 라벨은 그대로 두고 F8(Insert)/F9(Delete) 키 동작만 추가 — 아래 버튼과 같은 핸들러. */}
           <GridHotkeys onInsert={handleInsert} onDelete={handleDelete} />
           <SearchArea
-            searchButtonLabel={t('LBL00722', '_Search')}
+            searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleFind}
             conditions={
               <FormItem
@@ -361,13 +390,26 @@ export const ContributeVersionModal = ({ open, modalClose }: ContributeVersionMo
             }
           />
           <div className={styles.gridWrapper}>
-            <DataGrid<VersionRow>
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
+            />
+            <ResultArea
+              title=''
+              count={itemsSource.length}
               gridRef={gridRef}
               gridFilterRef={gridFilterRef}
-              editTrackerRef={editTrackerRef}
-              staticColumns={staticColumns}
-              itemsSource={itemsSource}
-            />
+            >
+              <DataGrid<VersionRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                editTrackerRef={editTrackerRef}
+                staticColumns={staticColumns}
+                itemsSource={itemsSource}
+              />
+            </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
             <Button

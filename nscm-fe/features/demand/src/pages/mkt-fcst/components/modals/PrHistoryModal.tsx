@@ -1,7 +1,9 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { DataGrid, CustomDialog, SearchArea } from '@shared/components';
+import { attachRowNoHeader } from '@foundation/utils';
+import { DataGrid, CustomDialog, ResultArea, SearchArea } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { Grid } from '@shared/mui';
@@ -40,6 +42,8 @@ interface PrHistoryModalProps {
 export const PrHistoryModal = ({ open, modalClose, params }: PrHistoryModalProps) => {
   const { t } = useTranslation();
   const gridRef = useRef<FlexGrid<ResponseData<MENU_ID, SHEETS.PR_HISTORY>>>();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
   const setAlert = useMessageStore.getState().setAlert;
 
   // 행 클릭 시 선택행의 PR_HEADER 표시 (AS-IS L275~293 — 초기값 = O_RC2 헤더의 PR_HEADER).
@@ -109,6 +113,10 @@ export const PrHistoryModal = ({ open, modalClose, params }: PrHistoryModalProps
     };
   }, [open, rows.length]);
 
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, rows]);
+
   const headerStr = (k: string) => toCellStr(header?.[k]);
 
   return (
@@ -118,6 +126,10 @@ export const PrHistoryModal = ({ open, modalClose, params }: PrHistoryModalProps
       position='basic'
       open={open}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -148,7 +160,7 @@ export const PrHistoryModal = ({ open, modalClose, params }: PrHistoryModalProps
                 </Grid>
                 <Grid size={3}>
                   <FormItem
-                    label={t('LBL00750', '_Model')}
+                    label={t('LBL00669', '_Model')}
                     labelAlign='right'
                     render={() => <InputField fullWidth disabled value={headerStr('ITEM_ID')} />}
                   />
@@ -177,12 +189,15 @@ export const PrHistoryModal = ({ open, modalClose, params }: PrHistoryModalProps
             }
           />
           <div className={styles.modalGridWrapper}>
-            <DataGrid<ResponseData<MENU_ID, SHEETS.PR_HISTORY>>
-              gridRef={gridRef}
-              isReadOnly
-              staticColumns={PR_HISTORY_COLUMNS}
-              itemsSource={rows}
-            />
+            <ResultArea title='' count={rows.length} gridRef={gridRef} gridFilterRef={gridFilterRef}>
+              <DataGrid<ResponseData<MENU_ID, SHEETS.PR_HISTORY>>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                staticColumns={PR_HISTORY_COLUMNS}
+                itemsSource={rows}
+              />
+            </ResultArea>
           </div>
           <div className={styles.modalButtonWrapper}>
             <Button

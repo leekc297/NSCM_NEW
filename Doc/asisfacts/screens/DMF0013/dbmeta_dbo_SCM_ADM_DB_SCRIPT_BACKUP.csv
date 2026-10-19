@@ -1,0 +1,1937 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","1","/*
+ * Program ID   : DM0F013_CUST_PSI_EXCEL_UPLOAD
+ * Description  : DM0F013_CUST_PSI_EXCEL_UPLOAD
+ * Program History
+ *===========================================================================================================
+ *   Date       In Charge      Description
+ *===========================================================================================================
+ * 2018. 01. 02   SongDH     Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+ CREATE PROCEDURE [dbo].[DMF0013_CUST_PSI_EXCEL_UPLOAD]
+	@p_mode		   INT,
+	@p_created_by  NVARCHAR(150)
+AS
+
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @v_program_id     AS NVARCHAR(40) = 'DMF0013';
+    DECLARE @v_sheet_name     AS NVARCHAR(40) = 'PSI Upload';	
+	DECLARE @v_sql_text       AS NVARCHAR(MAX);
+	DECLARE @v_creation_date  AS NVARCHAR(40);
+	DECLARE @v_count          AS INT;
+	DECLARE @v_start_yyyymmdd AS NVARCHAR(8);
+	DECLARE @v_end_yyyymmdd AS NVARCHAR(8);
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'DMF0013_CUST_PSI_EXCEL_UPLOAD';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	SET @v_log_type = 'START';
+    SET @v_log_message = '########## Start of procedure ##########';
+	SET @v_description = '';
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+	
+
+	SELECT @v_creation_date = CONVERT(NVARCHAR(40), MAX(T.CREATION_DATE), 121)
+	FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T
+	WHERE  T.PROGRAM_ID = @v_program_id
+	AND    T.SHEET_NAME = @v_sheet_name
+	AND    T.CREATED_BY = @p_created_by;
+	--  AND UPPER(METADATA1_VALUE) != 'BASIS YYYYMM';
+		 
+	IF @v_creation_date IS NULL BEGIN
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = 'Data Not Found [' + CONVERT(CHAR(19), @v_creation_date, 121) +']';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+    END;
+
+	-- @p_mode = 0 이면 Validation
+	IF ISNULL(@p_mode, 0) = 0 BEGIN
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'UPLOAD'
+             , MESSAGE_TEXT       = NULL             
+        FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T
+		WHERE  T.PROGRAM_ID    = @v_program_id
+        AND    T.SHEET_NAME    = @v_sheet_name
+        AND    T.CREATED_BY    = @p_created_by
+        AND    CONVERT(NVARCHAR(40), T.CREATION_DATE, 121) = @v_creation_date
+        AND    ISNULL(T.UPLOAD_STATUS_CODE,'X') != 'UPLOAD';
+    	END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('RESET Status = UPLOAD', SQL%ROWCOUNT, 1, TRUE);
+	    SET @v_log_type = '1';
+	    SET @v_log_message = '########## RESET Status = UPLOAD ##########';
+	    SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+
+		BEGIN
+	    UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'SKIP'
+        WHERE  PROGRAM_ID    = @v_program_id
+        AND    SHEET_NAME    = @v_sheet_name
+        AND    CREATED_BY    = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    (   ATTRIBUTE1  IS NULL 
+	            OR UPPER(ATTRIBUTE1) = 'TOTAL') ;
+		END;
+
+	    BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('SKIP EMPTY LINE      ', SQL%ROWCOUNT, 2, TRUE);
+		SET @v_log_type = '2';
+		SET @v_lo"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","2","g_message = '########## SKIP EMPTY LINE ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = '@TITLE'
+        WHERE  PROGRAM_ID    = @v_program_id
+        AND    SHEET_NAME    = @v_sheet_name
+        AND    CREATED_BY    = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPPER(ATTRIBUTE1) = 'DIVISION*';               
+        END;
+     
+		BEGIN
+		------------------------------------------------------------------------
+        --scm2_mgr.xLOG('@TITLE Header Line   ', SQL%ROWCOUNT, 3, TRUE);
+		SET @v_log_type = '3';
+		SET @v_log_message = '########## TITLE Header Line ##########';
+	    SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Duplication Key.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND EXISTS (SELECT 1
+		            FROM  (SELECT X.ATTRIBUTE1 AS COL1
+                                , X.ATTRIBUTE2 AS COL2
+                                , X.ATTRIBUTE3 AS COL3
+                                , X.ATTRIBUTE4 AS COL4
+                                , X.ATTRIBUTE5 AS COL5
+                                , X.ATTRIBUTE6 AS COL6
+                                , X.ATTRIBUTE7 AS COL7
+                                , X.ATTRIBUTE8  AS COL8
+ 	                            , X.ATTRIBUTE9  AS COL9
+			                    , X.ATTRIBUTE10 AS COL10								
+                           FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] X  WITH(NOLOCK)
+                           WHERE  X.PROGRAM_ID    = @v_program_id
+                           AND    X.SHEET_NAME    = @v_sheet_name
+                           AND    X.CREATED_BY    = @p_created_by
+                           AND    CONVERT(NVARCHAR(40), X.CREATION_DATE, 121) = @v_creation_date
+                           AND    X.UPLOAD_STATUS_CODE = 'UPLOAD'
+                           GROUP BY X.ATTRIBUTE1
+                                  , X.ATTRIBUTE2
+                                  , X.ATTRIBUTE3
+                                  , X.ATTRIBUTE4
+                                  , X.ATTRIBUTE5
+                                  , X.ATTRIBUTE6
+                                  , X.ATTRIBUTE7
+                                  , X.ATTRIBUTE8 
+		                          , X.ATTRIBUTE9 
+			                      , X.ATTRIBUTE10								  
+                           HAVING COUNT(*) > 1 ) T
+					WHERE 1 = 1										 
+	 			    AND T.COL1 = ATTRIBUTE1
+                    AND T.COL2 = ATTRIBUTE2
+                    AND T.COL3 = ATTRIBUTE3
+                    AND T.COL4 = ATTRIBUTE4
+                    AND T.COL5 = ATTRIBUTE5
+                    AND T.COL6 = ATTRIBUTE6
+                    AND T.COL7 = ATTRIBUTE7
+                    AND T.COL8 = ATTRIBUTE8
+			        AND T.COL9  =ATTRIBUTE9
+		            AND T.COL10 = ATTRIBUTE10 
+				   );
+		END
+
+		BEGIN
+		------------------------------------------------------------------------
+        --scm2_mgr.xLOG('ERROR Key Duplication ', SQL%ROWCOUNT, 4, TRUE);
+		SET @v_log_type = '4';
+		SET @v_log_message = '########## ERROR Key Duplication ########"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","3","##';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+				
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Division.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[SCM_MST_DIVISION] D  WITH(NOLOCK)
+                        WHERE  D.VALID_YN    = 'Y'
+                        AND    D.DIVISION_ID = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1
+						UNION
+						SELECT 1
+                        FROM   [dbo].[SCM_MST_DIVISION] D  WITH(NOLOCK)
+                        WHERE  D.VALID_YN    = 'Y'
+                        AND    D.DIVISION_NAME = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1
+					   );
+		END;
+
+		BEGIN -- Division Validation은 끝났으니 코드로 정보를 치환해줌.
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    ATTRIBUTE1 = (
+								SELECT D.DIVISION_ID
+								FROM   [dbo].[SCM_MST_DIVISION] D  WITH(NOLOCK)
+								WHERE  D.VALID_YN    = 'Y'
+								AND    D.DIVISION_NAME = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1
+		                     )
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[SCM_MST_DIVISION] D  WITH(NOLOCK)
+                        WHERE  D.VALID_YN    = 'Y'
+                        AND    D.DIVISION_ID = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1
+					   );
+		END;
+
+
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Measure Upload Bucket.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[DM_MST_CUSTOMER_FCST] D  WITH(NOLOCK)
+						      ,[dbo].[SCM_MST_DIVISION]     D2 WITH(NOLOCK)
+                        WHERE  D.VALID_YN    = 'Y'
+                        AND    D.DIVISION_ID = D2.DIVISION_ID
+						and   ( D2.DIVISION_ID = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1 or  D2.DIVISION_NAME = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1  )
+						AND    D.SCM_SITE_ID = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE2
+						AND    D.MEASURE     = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE10
+						AND    D.[UPLOAD_BUCKET_TYPE] IN (
+						                                    SELECT CASE DATEDIFF( DAY, CAST( Z.ATTRIBUTE14 AS DATETIME) , CAST( Z.ATTRIBUTE15 AS DATETIME) )  WHEN 1 THEN 'DAILY' WHEN 7 THEN 'WEEKLY' ELSE 'MONTHLY' END
+															FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] Z  WITH(NOLOCK)
+                                                            WHERE  Z.PROGRAM_ID = @v_program_id
+															AND    Z.SHEET_NAME = @v_sheet_name
+															AND    Z.CREATED_BY = @p_created_by
+															AND    CONVERT(NVARCHAR(40), z.CREATION_DATE, 121) = @v_creation_date
+															AND    Z.UPLOAD_STATUS_CODE = '@TITLE'
+						                                 )   
+						);
+		END;
+		
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Measure Upload U"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","4","OM.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[DM_MST_CUSTOMER_FCST] D  WITH(NOLOCK)
+						      ,[dbo].[SCM_MST_DIVISION]     D2 WITH(NOLOCK)
+                        WHERE  D.VALID_YN    = 'Y'
+                        AND    D.DIVISION_ID = D2.DIVISION_ID
+						and   ( D2.DIVISION_ID = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1 or  D2.DIVISION_NAME = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1  )
+						AND    D.SCM_SITE_ID = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE2
+						AND    D.MEASURE     = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE10
+						AND    D.UPLOAD_UOM =  [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE11  
+						);
+		END;
+
+		BEGIN
+		------------------------------------------------------------------------
+        --scm2_mgr.xLOG('Invalid Division ', SQL%ROWCOUNT, 5, TRUE);
+		SET @v_log_type = '5';
+	    SET @v_log_message = '########## Invalid Division ##########';
+	    SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+				
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Scm Site.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[SCM_MST_SITE] S  WITH(NOLOCK)
+                        WHERE  S.DIVISION_ID = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1
+						AND    S.SCM_SITE_ID = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE2
+                        AND    S.VALID_YN    = 'Y');
+		END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('Invalid Scm Site ', SQL%ROWCOUNT, 8, TRUE);
+		SET @v_log_type = '6';
+	    SET @v_log_message = '########## Invalid Scm Site. ##########';
+	    SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Plant Site.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+		AND    (ATTRIBUTE1 =  '81' or ATTRIBUTE1 = 'Automotive Battery')  -- ess는 제외
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[SCM_MST_SITE] S  WITH(NOLOCK)
+                        WHERE  S.DIVISION_ID = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1
+						AND    S.SCM_SITE_ID = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE3
+                        AND    S.VALID_YN    = 'Y');
+		END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('Invalid Scm Site ', SQL%ROWCOUNT, 8, TRUE);
+		SET @v_log_type = '6';
+	    SET @v_log_message = '########## Invalid Plant Site. ##########';
+	    SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","5",", @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+		/*
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Customer Project.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[DM_MST_CUSTOMER_MODEL] CM  WITH(NOLOCK)
+                        WHERE  CM.DIVISION_ID           = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1
+					    AND    CM.SCM_SITE_ID           = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE2
+					    AND    CM.CUSTOMER_PROJECT_CODE = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE4
+                        AND    CM.VALID_YN              = 'Y');
+		END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('Invalid Customer Project ', SQL%ROWCOUNT, 6, TRUE);
+		SET @v_log_type = '7';
+	    SET @v_log_message = '########## Invalid Customer Project ##########';
+	    SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+		*/
+
+		/*
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Customer Model.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[DM_MST_CUSTOMER_MODEL] CM  WITH(NOLOCK)
+                        WHERE  CM.DIVISION_ID           = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1
+					    AND    CM.SCM_SITE_ID           = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE2
+					    AND    CM.CUSTOMER_PROJECT_CODE = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE4
+						AND    CM.CUSTOMER_MODEL        = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE5
+                        AND    CM.VALID_YN              = 'Y');
+		END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('Invalid Customer Model ', SQL%ROWCOUNT, 7, TRUE);
+		SET @v_log_type = '8';
+	    SET @v_log_message = '########## Invalid Customer Model ##########';
+	    SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+		*/
+				
+		
+				
+		
+		
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Incoterms.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L WITH(NOLOCK)  
+                        WHERE  L.SEGMENT1    = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE6
+						AND    L.LOOKUP_TYPE = 'INCOTERMS'
+						AND    L.VALID_YN    = 'Y');
+		END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --sc"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","6","m2_mgr.xLOG('Invalid Project ', SQL%ROWCOUNT, 9, TRUE);
+		SET @v_log_type = '10';
+		SET @v_log_message = '########## Invalid Incoterms. ##########';
+		SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Sales Type.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L WITH(NOLOCK)
+                        WHERE  L.SEGMENT1    = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE7
+						AND    L.LOOKUP_TYPE = 'SALES_TYPE_CODE'
+						AND    L.VALID_YN    = 'Y'
+						UNION
+						SELECT 1
+                        FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] D  WITH(NOLOCK)
+                        WHERE  D.VALID_YN    = 'Y'
+                        AND    D.SEGMENT2 = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE7
+					   );
+		END;
+
+		BEGIN -- validation이 끝났으니 code로 update
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    ATTRIBUTE7 = (
+							SELECT D.SEGMENT1
+							FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] D  WITH(NOLOCK)
+							WHERE  D.VALID_YN    = 'Y'
+							AND    D.LOOKUP_TYPE = 'SALES_TYPE_CODE'
+							AND    D.SEGMENT2 = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE7
+		                    )
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L WITH(NOLOCK)
+                        WHERE  L.SEGMENT1 = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE7
+						AND    L.LOOKUP_TYPE = 'SALES_TYPE_CODE'
+						AND    L.VALID_YN    = 'Y'
+					   );
+		END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('Invalid Project ', SQL%ROWCOUNT, 9, TRUE);
+		SET @v_log_type = '11';
+		SET @v_log_message = '########## Invalid Sales Type. ##########';
+		SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+
+		/*
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Customs Handbook'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L WITH(NOLOCK)
+                        WHERE  L.SEGMENT1 = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE8
+						AND    L.LOOKUP_TYPE = 'DOM/EXP'
+						AND    L.VALID_YN    = 'Y');
+		END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('Invalid Project ', SQL%ROWCOUNT, 9, TRUE);
+		SET @v_log_type = '12';
+		SET @v_log_message = '########## Invalid DOM/EXP. ##########';
+		SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","7","_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+		*/
+
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Measure Group.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L WITH(NOLOCK)
+                        WHERE  L.SEGMENT1 = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE9
+						AND    L.LOOKUP_TYPE = 'MEASURE_GROUP_CODE'
+						AND    L.SEGMENT1 = 'PSI'
+						AND    L.VALID_YN    = 'Y');
+		END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('Invalid Project ', SQL%ROWCOUNT, 9, TRUE);
+		SET @v_log_type = '13';
+		SET @v_log_message = '########## Invalid Measure Group. ##########';
+		SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Upload UOM.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L WITH(NOLOCK)
+                        WHERE  L.SEGMENT1 = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE11
+						AND    L.LOOKUP_TYPE = 'UPLOAD_UOM_TYPE_CODE'
+						AND    L.VALID_YN    = 'Y');
+		END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('Invalid Project ', SQL%ROWCOUNT, 9, TRUE);
+		SET @v_log_type = '14';
+		SET @v_log_message = '########## Invalid Upload UOM. ##########';
+		SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+
+		-- Upload UOM by Model
+	/*	BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Upload UOM by .'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L WITH(NOLOCK)
+                        WHERE  L.SEGMENT1 = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE11
+						AND    L.LOOKUP_TYPE = 'UPLOAD_UOM_TYPE_CODE'
+						AND    L.VALID_YN    = 'Y');
+		END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('Invalid Project ', SQL%ROWCOUNT, 9, TRUE);
+		SET @v_log_type = '14';
+		SET @v_log_message = '########## Invalid Upload UOM. ##########';
+		SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+   "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","8","     ------------------------------------------------------------------------
+		END;
+		*/
+		/*
+		BEGIN
+	    UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Project.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[DM_MST_CUSTOMER_MODEL] CM  WITH(NOLOCK)
+                        WHERE  CM.DIVISION_ID           = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1
+					    AND    CM.SCM_SITE_ID           = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE2
+					    AND    CM.CUSTOMER_PROJECT_CODE = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE4
+						AND    CM.CUSTOMER_MODEL        = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE5
+						AND    CM.PROJECT_CODE          = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE12
+                        AND    CM.VALID_YN              = 'Y');
+		END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('Invalid Project ', SQL%ROWCOUNT, 9, TRUE);
+		SET @v_log_type = '16';
+		SET @v_log_message = '########## Invalid Project. ##########';
+		SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+		*/
+		/*
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'ERROR'
+             , MESSAGE_TEXT       = 'Invalid Model.'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+        AND NOT EXISTS (SELECT 1
+                        FROM   [dbo].[DM_MST_CUSTOMER_MODEL] CM  WITH(NOLOCK)
+                        WHERE  CM.DIVISION_ID           = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE1
+					    AND    CM.SCM_SITE_ID           = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE2
+					    AND    CM.CUSTOMER_PROJECT_CODE = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE4
+						AND    CM.CUSTOMER_MODEL        = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE5
+						AND    CM.PROJECT_CODE          = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE12
+						AND    CM.ITEM_ID               = [dbo].[SCM_ADM_EXCEL_UPLOAD].ATTRIBUTE13
+                        AND    CM.VALID_YN              = 'Y');
+		END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('Invalid Model ', SQL%ROWCOUNT, 10, TRUE);
+		SET @v_log_type = '17';
+	    SET @v_log_message = '########## Invalid Model. ##########';
+	    SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+		*/
+
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'SUCCESS'
+        WHERE  PROGRAM_ID         = @v_program_id
+        AND    SHEET_NAME         = @v_sheet_name
+        AND    CREATED_BY         = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121)  = @v_creation_date
+        AND    UPLOAD_STATUS_CODE = 'UPLOAD';
+		END;
+
+		BEGIN
+        ----------------------------------------------------------------------------
+        --scm2_mgr.xLOG('SUCCESS              ', SQL%ROWCOUNT, 10, TRUE);
+	    SET @v_log_type = '12';
+	    SET @v_log_message = '########## SUCCESS #######"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","9","###';
+	    SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ----------------------------------------------------------------------------
+		END;
+
+	END;
+
+	BEGIN
+    ----------------------------------------------------------------------------
+    --scm2_mgr.xLOG('SUCCESS              ', SQL%ROWCOUNT, 10, TRUE);
+	SET @v_log_type = '13';
+	SET @v_log_message = '########## INSERT DATA START ##########';
+	SET @v_description = @p_mode; --CONVERT(CHAR(30), @v_creation_date, 121);
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+    ----------------------------------------------------------------------------
+	END;
+
+	--// SCM_UI_EXCEL_UPLOAD_T =>  DMR_CAPA_ALLOC_M
+    --//======================================================================================
+    SELECT @v_count = COUNT(1)
+    FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T
+    WHERE  T.PROGRAM_ID         = @v_program_id
+    AND    T.SHEET_NAME         = @v_sheet_name
+    AND    T.CREATED_BY         = @p_created_by
+    AND    CONVERT(NVARCHAR(40), T.CREATION_DATE, 121) = @v_creation_date
+    AND    T.UPLOAD_STATUS_CODE = 'ERROR' ;
+
+	-- Update Mode and No Errors
+	IF @p_mode > 0 AND @v_count = 0	BEGIN
+		BEGIN
+		SET @v_start_yyyymmdd = '';
+	    SET @v_end_yyyymmdd = '';
+		END;
+		
+		BEGIN
+        ----------------------------------------------------------------------------
+        --scm2_mgr.xLOG('SUCCESS              ', SQL%ROWCOUNT, 10, TRUE);
+		SET @v_log_type = '13';
+		SET @v_log_message = '########## DELETE DATE START ##########';
+		SET @v_description = @p_mode; --CONVERT(CHAR(30), @v_creation_date, 121);
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ----------------------------------------------------------------------------
+		END;
+
+		BEGIN
+		SELECT @v_start_yyyymmdd = D.MIN_YYYYMMDD
+		     , @v_end_yyyymmdd = D.MAX_YYYYMMDD
+		FROM  (				
+		       SELECT MIN(YYYYMMDD) AS MIN_YYYYMMDD
+		            , MAX(YYYYMMDD) AS MAX_YYYYMMDD
+               FROM   (SELECT ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5
+	                 , ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+                     , ATTRIBUTE11, ATTRIBUTE12, ATTRIBUTE13, ATTRIBUTE14, ATTRIBUTE15
+	                 , ATTRIBUTE16, ATTRIBUTE17, ATTRIBUTE18, ATTRIBUTE19, ATTRIBUTE20
+	                 , ATTRIBUTE21, ATTRIBUTE22, ATTRIBUTE23, ATTRIBUTE24, ATTRIBUTE25
+                     , ATTRIBUTE26, ATTRIBUTE27, ATTRIBUTE28, ATTRIBUTE29, ATTRIBUTE30
+		             , ATTRIBUTE31, ATTRIBUTE32, ATTRIBUTE33, ATTRIBUTE34, ATTRIBUTE35
+		             , ATTRIBUTE36, ATTRIBUTE37, ATTRIBUTE38, ATTRIBUTE39, ATTRIBUTE40
+		             , ATTRIBUTE41, ATTRIBUTE42, ATTRIBUTE43, ATTRIBUTE44, ATTRIBUTE45
+		             , ATTRIBUTE46, ATTRIBUTE47, ATTRIBUTE48, ATTRIBUTE49, ATTRIBUTE50
+		             , ATTRIBUTE51, ATTRIBUTE52, ATTRIBUTE53, ATTRIBUTE54, ATTRIBUTE55
+		             , ATTRIBUTE56, ATTRIBUTE57, ATTRIBUTE58, ATTRIBUTE59, ATTRIBUTE60
+		             , ATTRIBUTE61, ATTRIBUTE62, ATTRIBUTE63, ATTRIBUTE64, ATTRIBUTE65
+	                 , ATTRIBUTE66, ATTRIBUTE67, ATTRIBUTE68, ATTRIBUTE69, ATTRIBUTE70
+		             , ATTRIBUTE71, ATTRIBUTE72, ATTRIBUTE73, ATTRIBUTE74, ATTRIBUTE75
+	                 , ATTRIBUTE76, ATTRIBUTE77, ATTRIBUTE78, ATTRIBUTE79, ATTRIBUTE80
+		             , ATTRIBUTE81, ATTRIBUTE82, ATTRIBUTE83, ATTRIBUTE84, ATTRIBUTE85
+	                 , ATTRIBUTE86, ATTRIBUTE87, ATTRIBUTE88, ATTRIBUTE89, ATTRIBUTE90
+		             , ATTRIBUTE91, ATTRIBUTE92, ATTRIBUTE93, ATTRIBUTE94, ATTRIBUTE95
+	                 , ATTRIBUTE96, ATTRIBUTE97, ATTRIBUTE98, ATTRIBUTE99, ATTRIBU"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","10","TE100
+		             , ATTRIBUTE101, ATTRIBUTE102, ATTRIBUTE103, ATTRIBUTE104, ATTRIBUTE105
+	                 , ATTRIBUTE106, ATTRIBUTE107, ATTRIBUTE108, ATTRIBUTE109, ATTRIBUTE110
+                     , ATTRIBUTE111, ATTRIBUTE112, ATTRIBUTE113, ATTRIBUTE114, ATTRIBUTE115
+	                 , ATTRIBUTE116, ATTRIBUTE117, ATTRIBUTE118, ATTRIBUTE119, ATTRIBUTE120
+	                 , ATTRIBUTE121, ATTRIBUTE122, ATTRIBUTE123, ATTRIBUTE124, ATTRIBUTE125
+                     , ATTRIBUTE126, ATTRIBUTE127, ATTRIBUTE128, ATTRIBUTE129, ATTRIBUTE130
+		             , ATTRIBUTE131, ATTRIBUTE132, ATTRIBUTE133, ATTRIBUTE134, ATTRIBUTE135
+		             , ATTRIBUTE136, ATTRIBUTE137, ATTRIBUTE138, ATTRIBUTE139, ATTRIBUTE140
+		             , ATTRIBUTE141, ATTRIBUTE142, ATTRIBUTE143, ATTRIBUTE144, ATTRIBUTE145
+		             , ATTRIBUTE146, ATTRIBUTE147, ATTRIBUTE148, ATTRIBUTE149, ATTRIBUTE150
+		             , ATTRIBUTE151, ATTRIBUTE152, ATTRIBUTE153, ATTRIBUTE154, ATTRIBUTE155
+		             , ATTRIBUTE156, ATTRIBUTE157, ATTRIBUTE158, ATTRIBUTE159, ATTRIBUTE160
+		             , ATTRIBUTE161, ATTRIBUTE162, ATTRIBUTE163, ATTRIBUTE164, ATTRIBUTE165
+	                 , ATTRIBUTE166, ATTRIBUTE167, ATTRIBUTE168, ATTRIBUTE169, ATTRIBUTE170
+		             , ATTRIBUTE171, ATTRIBUTE172, ATTRIBUTE173, ATTRIBUTE174, ATTRIBUTE175
+	                 , ATTRIBUTE176, ATTRIBUTE177, ATTRIBUTE178, ATTRIBUTE179, ATTRIBUTE180
+		             , ATTRIBUTE181, ATTRIBUTE182, ATTRIBUTE183, ATTRIBUTE184, ATTRIBUTE185
+	                 , ATTRIBUTE186, ATTRIBUTE187, ATTRIBUTE188, ATTRIBUTE189, ATTRIBUTE190
+		             , ATTRIBUTE191, ATTRIBUTE192, ATTRIBUTE193, ATTRIBUTE194, ATTRIBUTE195
+	                 , ATTRIBUTE196, ATTRIBUTE197, ATTRIBUTE198, ATTRIBUTE199, ATTRIBUTE200
+                FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD]  WITH(NOLOCK)
+		        WHERE  1 = 1
+		        AND    PROGRAM_ID    = @v_program_id
+	            AND    SHEET_NAME    = @v_sheet_name
+		        AND    CREATED_BY    = @p_created_by
+                AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+		        AND    UPLOAD_STATUS_CODE = '@TITLE'
+               ) T
+       UNPIVOT (    YYYYMMDD
+                FOR COLUMN_NAME
+		        IN   ( ATTRIBUTE12, ATTRIBUTE13, ATTRIBUTE14, ATTRIBUTE15
+			         , ATTRIBUTE16, ATTRIBUTE17, ATTRIBUTE18, ATTRIBUTE19, ATTRIBUTE20
+			         , ATTRIBUTE21, ATTRIBUTE22, ATTRIBUTE23, ATTRIBUTE24, ATTRIBUTE25
+			         , ATTRIBUTE26, ATTRIBUTE27, ATTRIBUTE28, ATTRIBUTE29, ATTRIBUTE30 
+			         , ATTRIBUTE31, ATTRIBUTE32, ATTRIBUTE33, ATTRIBUTE34, ATTRIBUTE35
+			         , ATTRIBUTE36, ATTRIBUTE37, ATTRIBUTE38, ATTRIBUTE39, ATTRIBUTE40
+			         , ATTRIBUTE41, ATTRIBUTE42, ATTRIBUTE43, ATTRIBUTE44, ATTRIBUTE45
+			         , ATTRIBUTE46, ATTRIBUTE47, ATTRIBUTE48, ATTRIBUTE49, ATTRIBUTE50
+			         , ATTRIBUTE51, ATTRIBUTE52, ATTRIBUTE53, ATTRIBUTE54, ATTRIBUTE55
+			         , ATTRIBUTE56, ATTRIBUTE57, ATTRIBUTE58, ATTRIBUTE59, ATTRIBUTE60
+			         , ATTRIBUTE61, ATTRIBUTE62, ATTRIBUTE63, ATTRIBUTE64, ATTRIBUTE65
+	                 , ATTRIBUTE66, ATTRIBUTE67, ATTRIBUTE68, ATTRIBUTE69, ATTRIBUTE70
+			         , ATTRIBUTE71, ATTRIBUTE72, ATTRIBUTE73, ATTRIBUTE74, ATTRIBUTE75
+	                 , ATTRIBUTE76, ATTRIBUTE77, ATTRIBUTE78, ATTRIBUTE79, ATTRIBUTE80
+			         , ATTRIBUTE81, ATTRIBUTE82, ATTRIBUTE83, ATTRIBUTE84, ATTRIBUTE85
+	                 , ATTRIBUTE86, ATTRIBUTE87, ATTRIBUTE88, ATTRIBUTE89, ATTRIBUTE90
+			         , ATTRIBUTE91, ATTRIBUTE92, ATTRIBUTE93, ATTRIBUTE94, ATTRIBUTE95
+	                 , ATTRIBUTE96, ATTRIBUTE97, ATTRIBUTE98, ATTRIBUTE99, ATTRIBUTE100
+				     , ATTRIBUTE101, ATTRIBUTE102, ATTRIBUTE103, ATTRIBUTE104, ATTRIBUTE105
+	                 , ATTRIBUTE106, ATTRIBUTE107, ATTRIBUTE108, ATTRIBUTE109, ATTRIBUTE110
+                     , ATTRIBUTE111, ATTRIBUTE112, ATTRIBUTE113, ATTRIBUTE114, ATTRIBUTE115
+	                 , ATTRIBUTE116, ATTRIBUTE117, ATTRIBUTE118, AT"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","11","TRIBUTE119, ATTRIBUTE120
+	                 , ATTRIBUTE121, ATTRIBUTE122, ATTRIBUTE123, ATTRIBUTE124, ATTRIBUTE125
+                     , ATTRIBUTE126, ATTRIBUTE127, ATTRIBUTE128, ATTRIBUTE129, ATTRIBUTE130
+			         , ATTRIBUTE131, ATTRIBUTE132, ATTRIBUTE133, ATTRIBUTE134, ATTRIBUTE135
+			         , ATTRIBUTE136, ATTRIBUTE137, ATTRIBUTE138, ATTRIBUTE139, ATTRIBUTE140
+			         , ATTRIBUTE141, ATTRIBUTE142, ATTRIBUTE143, ATTRIBUTE144, ATTRIBUTE145
+			         , ATTRIBUTE146, ATTRIBUTE147, ATTRIBUTE148, ATTRIBUTE149, ATTRIBUTE150
+			         , ATTRIBUTE151, ATTRIBUTE152, ATTRIBUTE153, ATTRIBUTE154, ATTRIBUTE155
+			         , ATTRIBUTE156, ATTRIBUTE157, ATTRIBUTE158, ATTRIBUTE159, ATTRIBUTE160
+			         , ATTRIBUTE161, ATTRIBUTE162, ATTRIBUTE163, ATTRIBUTE164, ATTRIBUTE165
+	                 , ATTRIBUTE166, ATTRIBUTE167, ATTRIBUTE168, ATTRIBUTE169, ATTRIBUTE170
+			         , ATTRIBUTE171, ATTRIBUTE172, ATTRIBUTE173, ATTRIBUTE174, ATTRIBUTE175
+	                 , ATTRIBUTE176, ATTRIBUTE177, ATTRIBUTE178, ATTRIBUTE179, ATTRIBUTE180
+			         , ATTRIBUTE181, ATTRIBUTE182, ATTRIBUTE183, ATTRIBUTE184, ATTRIBUTE185
+	                 , ATTRIBUTE186, ATTRIBUTE187, ATTRIBUTE188, ATTRIBUTE189, ATTRIBUTE190
+			         , ATTRIBUTE191, ATTRIBUTE192, ATTRIBUTE193, ATTRIBUTE194, ATTRIBUTE195
+	                 , ATTRIBUTE196, ATTRIBUTE197, ATTRIBUTE198, ATTRIBUTE199, ATTRIBUTE200
+				     )
+		           ) AS X
+		WHERE X.YYYYMMDD != ''	
+		) AS D;			
+        END;
+
+		BEGIN
+        ----------------------------------------------------------------------------
+        --scm2_mgr.xLOG('SUCCESS              ', SQL%ROWCOUNT, 10, TRUE);
+		SET @v_log_type = '14';
+		SET @v_log_message = '########## DELETE DATE END ##########';
+		SET @v_description = @p_mode; --CONVERT(CHAR(30), @v_creation_date, 121);
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ----------------------------------------------------------------------------
+		END;
+
+		BEGIN TRANSACTION;
+		BEGIN TRY
+			BEGIN
+			DELETE [dbo].[DM_PLN_CUSTOMER_PSI]  
+			WHERE  1 = 1
+			AND    MEASURE_GROUP = 'PSI'
+			AND    DIVISION_ID IN (SELECT DISTINCT T.ATTRIBUTE1
+								   FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T  WITH(NOLOCK)
+								   WHERE  T.PROGRAM_ID         = @v_program_id
+								   AND    T.SHEET_NAME         = @v_sheet_name
+								   AND    T.CREATED_BY         = @p_created_by
+								   AND    CONVERT(NVARCHAR(40), T.CREATION_DATE, 121) = @v_creation_date
+								   AND    T.UPLOAD_STATUS_CODE = 'SUCCESS' )
+			AND    SCM_SITE_ID IN (SELECT DISTINCT T.ATTRIBUTE2 
+								   FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T  WITH(NOLOCK)
+								   WHERE  T.PROGRAM_ID         = @v_program_id
+								   AND    T.SHEET_NAME         = @v_sheet_name
+								   AND    T.CREATED_BY         = @p_created_by
+								   AND    CONVERT(NVARCHAR(40), T.CREATION_DATE, 121) = @v_creation_date
+								   AND    T.UPLOAD_STATUS_CODE = 'SUCCESS' )
+			AND    PLANT_SITE_ID IN (SELECT DISTINCT T.ATTRIBUTE3
+								     FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T  WITH(NOLOCK)
+								     WHERE  T.PROGRAM_ID         = @v_program_id
+								     AND    T.SHEET_NAME         = @v_sheet_name
+								     AND    T.CREATED_BY         = @p_created_by
+								     AND    CONVERT(NVARCHAR(40), T.CREATION_DATE, 121) = @v_creation_date
+								     AND    T.UPLOAD_STATUS_CODE = 'SUCCESS' )
+			AND    CUSTOMER_PROJECT_CODE IN (SELECT DISTINCT T.ATTRIBUTE4
+											 FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T  WITH(NOLOCK)
+											 WHERE  T.PROGRAM_ID         = @v_program_id
+											 AND    T.SHEET_NAME         = @v_sheet_name
+											 AND    T.CREATED_BY         = @p_created_by
+											 AND    CONVERT(NVARCHAR(40), T.CREATION_DATE, 121)  = @v_creation_date
+											 AND    T.UPLOAD_STATUS_CODE = 'SUCCESS' )
+			AND    CUSTOMER_MODEL IN (SELECT DISTINCT"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","12"," T.ATTRIBUTE5
+									  FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T  WITH(NOLOCK)
+									  WHERE  T.PROGRAM_ID         = @v_program_id
+									  AND    T.SHEET_NAME         = @v_sheet_name
+									  AND    T.CREATED_BY         = @p_created_by
+									  AND    CONVERT(NVARCHAR(40), T.CREATION_DATE, 121) = @v_creation_date
+									  AND    T.UPLOAD_STATUS_CODE = 'SUCCESS' )        
+			AND    MEASURE IN (SELECT DISTINCT T.ATTRIBUTE10
+							   FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T  WITH(NOLOCK)
+							   WHERE  T.PROGRAM_ID         = @v_program_id
+							   AND    T.SHEET_NAME         = @v_sheet_name
+							   AND    T.CREATED_BY         = @p_created_by
+							   AND    CONVERT(NVARCHAR(40), T.CREATION_DATE, 121) = @v_creation_date
+							   AND    T.UPLOAD_STATUS_CODE = 'SUCCESS' )        
+			AND    YYYYMMDD BETWEEN @v_start_yyyymmdd AND @v_end_yyyymmdd;
+			END;
+			
+			BEGIN
+			INSERT INTO [dbo].[DM_PLN_CUSTOMER_PSI]
+			(
+				DIVISION_ID
+			  , SCM_SITE_ID
+			  , PLANT_SITE_ID
+			  , CUSTOMER_PROJECT_CODE
+			  , CUSTOMER_MODEL
+			  , INCOTERMS
+			  , FCST_TYPE
+			  , DOM_EXP
+			  , MEASURE_GROUP
+			  , MEASURE
+			  , UPLOAD_UOM
+			  , PROJECT_CODE
+			  , ITEM_ID
+			  , YYYYMMDD
+			  , QTY
+			  , CREATED_BY
+			  , CREATION_DATE
+			  , LAST_UPDATED_BY
+			  , LAST_UPDATE_DATE
+			  , BATCH_RESULT
+			)			
+			SELECT V.ATTRIBUTE1, V.ATTRIBUTE2, V.ATTRIBUTE3, V.ATTRIBUTE4, V.ATTRIBUTE5
+				 , V.ATTRIBUTE6, V.ATTRIBUTE7, V.ATTRIBUTE8, V.ATTRIBUTE9, V.ATTRIBUTE10
+				 , V.ATTRIBUTE11, V.ATTRIBUTE12, V.ATTRIBUTE13
+				 , C.YYYYMMDD  , CONVERT(int, V.VALUE), @p_created_by, CONVERT(varchar(19), GETDATE(), 121)
+				 , @p_created_by, CONVERT(varchar(19), GETDATE(), 121), 'UI'
+			FROM  (SELECT ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5
+						, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+						, ATTRIBUTE11, ATTRIBUTE12, ATTRIBUTE13
+						, COLUMN_NAME, YYYYMMDD
+				   FROM   (SELECT ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5
+								, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+								, ATTRIBUTE11, ATTRIBUTE12, ATTRIBUTE13, ATTRIBUTE14, ATTRIBUTE15
+								, ATTRIBUTE16, ATTRIBUTE17, ATTRIBUTE18, ATTRIBUTE19, ATTRIBUTE20
+								, ATTRIBUTE21, ATTRIBUTE22, ATTRIBUTE23, ATTRIBUTE24, ATTRIBUTE25
+								, ATTRIBUTE26, ATTRIBUTE27, ATTRIBUTE28, ATTRIBUTE29, ATTRIBUTE30
+								, ATTRIBUTE31, ATTRIBUTE32, ATTRIBUTE33, ATTRIBUTE34, ATTRIBUTE35
+								, ATTRIBUTE36, ATTRIBUTE37, ATTRIBUTE38, ATTRIBUTE39, ATTRIBUTE40
+								, ATTRIBUTE41, ATTRIBUTE42, ATTRIBUTE43, ATTRIBUTE44, ATTRIBUTE45
+								, ATTRIBUTE46, ATTRIBUTE47, ATTRIBUTE48, ATTRIBUTE49, ATTRIBUTE50
+		               			, ATTRIBUTE51, ATTRIBUTE52, ATTRIBUTE53, ATTRIBUTE54, ATTRIBUTE55
+								, ATTRIBUTE56, ATTRIBUTE57, ATTRIBUTE58, ATTRIBUTE59, ATTRIBUTE60
+		               			, ATTRIBUTE61, ATTRIBUTE62, ATTRIBUTE63, ATTRIBUTE64, ATTRIBUTE65
+								, ATTRIBUTE66, ATTRIBUTE67, ATTRIBUTE68, ATTRIBUTE69, ATTRIBUTE70
+		               			, ATTRIBUTE71, ATTRIBUTE72, ATTRIBUTE73, ATTRIBUTE74, ATTRIBUTE75
+								, ATTRIBUTE76, ATTRIBUTE77, ATTRIBUTE78, ATTRIBUTE79, ATTRIBUTE80
+								, ATTRIBUTE81, ATTRIBUTE82, ATTRIBUTE83, ATTRIBUTE84, ATTRIBUTE85
+								, ATTRIBUTE86, ATTRIBUTE87, ATTRIBUTE88, ATTRIBUTE89, ATTRIBUTE90
+	                  			, ATTRIBUTE91, ATTRIBUTE92, ATTRIBUTE93, ATTRIBUTE94, ATTRIBUTE95
+								, ATTRIBUTE96, ATTRIBUTE97, ATTRIBUTE98, ATTRIBUTE99, ATTRIBUTE100
+								, ATTRIBUTE101, ATTRIBUTE102, ATTRIBUTE103, ATTRIBUTE104, ATTRIBUTE105
+								, ATTRIBUTE106, ATTRIBUTE107, ATTRIBUTE108, ATTRIBUTE109, ATTRIBUTE110
+								, ATTRIBUTE111, ATTRIBUTE112, ATTRIBUTE113, ATTRIBUTE114, ATTRIBUTE115
+								, ATTRIBUTE116, ATTRIBUTE117, ATTRIBUTE118, ATTRIBUTE119, ATTRIBUTE120
+								, ATTRIBUTE121, ATTRIBUTE122, ATTRIBUTE123, ATTRIBUTE124, ATTRIBUTE125
+								, ATTRIBUTE126, ATTRIBUTE127, ATTRIBUTE128, ATTRIBUTE129, ATTRIBUTE130
+							"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","13","	, ATTRIBUTE131, ATTRIBUTE132, ATTRIBUTE133, ATTRIBUTE134, ATTRIBUTE135
+								, ATTRIBUTE136, ATTRIBUTE137, ATTRIBUTE138, ATTRIBUTE139, ATTRIBUTE140
+								, ATTRIBUTE141, ATTRIBUTE142, ATTRIBUTE143, ATTRIBUTE144, ATTRIBUTE145
+								, ATTRIBUTE146, ATTRIBUTE147, ATTRIBUTE148, ATTRIBUTE149, ATTRIBUTE150
+								, ATTRIBUTE151, ATTRIBUTE152, ATTRIBUTE153, ATTRIBUTE154, ATTRIBUTE155
+								, ATTRIBUTE156, ATTRIBUTE157, ATTRIBUTE158, ATTRIBUTE159, ATTRIBUTE160
+								, ATTRIBUTE161, ATTRIBUTE162, ATTRIBUTE163, ATTRIBUTE164, ATTRIBUTE165
+								, ATTRIBUTE166, ATTRIBUTE167, ATTRIBUTE168, ATTRIBUTE169, ATTRIBUTE170
+								, ATTRIBUTE171, ATTRIBUTE172, ATTRIBUTE173, ATTRIBUTE174, ATTRIBUTE175
+								, ATTRIBUTE176, ATTRIBUTE177, ATTRIBUTE178, ATTRIBUTE179, ATTRIBUTE180
+								, ATTRIBUTE181, ATTRIBUTE182, ATTRIBUTE183, ATTRIBUTE184, ATTRIBUTE185
+								, ATTRIBUTE186, ATTRIBUTE187, ATTRIBUTE188, ATTRIBUTE189, ATTRIBUTE190
+								, ATTRIBUTE191, ATTRIBUTE192, ATTRIBUTE193, ATTRIBUTE194, ATTRIBUTE195
+								, ATTRIBUTE196, ATTRIBUTE197, ATTRIBUTE198, ATTRIBUTE199, ATTRIBUTE200
+						   FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD]  WITH(NOLOCK)
+						   WHERE  1 = 1
+						   AND    PROGRAM_ID    = @v_program_id
+						   AND    SHEET_NAME    = @v_sheet_name
+						   AND    CREATED_BY    = @p_created_by
+						   AND    CREATION_DATE = @v_creation_date
+						   AND    UPLOAD_STATUS_CODE = '@TITLE'
+						  ) T
+				  UNPIVOT (    YYYYMMDD
+						   FOR COLUMN_NAME
+						   IN   ( ATTRIBUTE14, ATTRIBUTE15
+								, ATTRIBUTE16, ATTRIBUTE17, ATTRIBUTE18, ATTRIBUTE19, ATTRIBUTE20
+								, ATTRIBUTE21, ATTRIBUTE22, ATTRIBUTE23, ATTRIBUTE24, ATTRIBUTE25
+								, ATTRIBUTE26, ATTRIBUTE27, ATTRIBUTE28, ATTRIBUTE29, ATTRIBUTE30 
+								, ATTRIBUTE31, ATTRIBUTE32, ATTRIBUTE33, ATTRIBUTE34, ATTRIBUTE35
+								, ATTRIBUTE36, ATTRIBUTE37, ATTRIBUTE38, ATTRIBUTE39, ATTRIBUTE40
+								, ATTRIBUTE41, ATTRIBUTE42, ATTRIBUTE43, ATTRIBUTE44, ATTRIBUTE45
+								, ATTRIBUTE46, ATTRIBUTE47, ATTRIBUTE48, ATTRIBUTE49, ATTRIBUTE50
+								, ATTRIBUTE51, ATTRIBUTE52, ATTRIBUTE53, ATTRIBUTE54, ATTRIBUTE55
+								, ATTRIBUTE56, ATTRIBUTE57, ATTRIBUTE58, ATTRIBUTE59, ATTRIBUTE60
+								, ATTRIBUTE61, ATTRIBUTE62, ATTRIBUTE63, ATTRIBUTE64, ATTRIBUTE65
+								, ATTRIBUTE66, ATTRIBUTE67, ATTRIBUTE68, ATTRIBUTE69, ATTRIBUTE70
+								, ATTRIBUTE71, ATTRIBUTE72, ATTRIBUTE73, ATTRIBUTE74, ATTRIBUTE75
+								, ATTRIBUTE76, ATTRIBUTE77, ATTRIBUTE78, ATTRIBUTE79, ATTRIBUTE80
+								, ATTRIBUTE81, ATTRIBUTE82, ATTRIBUTE83, ATTRIBUTE84, ATTRIBUTE85
+								, ATTRIBUTE86, ATTRIBUTE87, ATTRIBUTE88, ATTRIBUTE89, ATTRIBUTE90
+								, ATTRIBUTE91, ATTRIBUTE92, ATTRIBUTE93, ATTRIBUTE94, ATTRIBUTE95
+								, ATTRIBUTE96, ATTRIBUTE97, ATTRIBUTE98, ATTRIBUTE99, ATTRIBUTE100
+								, ATTRIBUTE101, ATTRIBUTE102, ATTRIBUTE103, ATTRIBUTE104, ATTRIBUTE105
+								, ATTRIBUTE106, ATTRIBUTE107, ATTRIBUTE108, ATTRIBUTE109, ATTRIBUTE110
+								, ATTRIBUTE111, ATTRIBUTE112, ATTRIBUTE113, ATTRIBUTE114, ATTRIBUTE115
+								, ATTRIBUTE116, ATTRIBUTE117, ATTRIBUTE118, ATTRIBUTE119, ATTRIBUTE120
+								, ATTRIBUTE121, ATTRIBUTE122, ATTRIBUTE123, ATTRIBUTE124, ATTRIBUTE125
+								, ATTRIBUTE126, ATTRIBUTE127, ATTRIBUTE128, ATTRIBUTE129, ATTRIBUTE130
+								, ATTRIBUTE131, ATTRIBUTE132, ATTRIBUTE133, ATTRIBUTE134, ATTRIBUTE135
+								, ATTRIBUTE136, ATTRIBUTE137, ATTRIBUTE138, ATTRIBUTE139, ATTRIBUTE140
+								, ATTRIBUTE141, ATTRIBUTE142, ATTRIBUTE143, ATTRIBUTE144, ATTRIBUTE145
+								, ATTRIBUTE146, ATTRIBUTE147, ATTRIBUTE148, ATTRIBUTE149, ATTRIBUTE150
+								, ATTRIBUTE151, ATTRIBUTE152, ATTRIBUTE153, ATTRIBUTE154, ATTRIBUTE155
+								, ATTRIBUTE156, ATTRIBUTE157, ATTRIBUTE158, ATTRIBUTE159, ATTRIBUTE160
+								, ATTRIBUTE161, ATTRIBUTE162, ATTRIBUTE163, ATTRIBUTE164, ATTRIBUTE165
+								, ATTRIBUTE166, ATTRIBUTE167, ATTRIBUTE168, ATTRIBUTE169, ATTRIBUTE170
+								, ATTRIBUTE171, ATTRIBUTE172, ATTRIBUTE173, ATTRIBU"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","14","TE174, ATTRIBUTE175
+								, ATTRIBUTE176, ATTRIBUTE177, ATTRIBUTE178, ATTRIBUTE179, ATTRIBUTE180
+								, ATTRIBUTE181, ATTRIBUTE182, ATTRIBUTE183, ATTRIBUTE184, ATTRIBUTE185
+								, ATTRIBUTE186, ATTRIBUTE187, ATTRIBUTE188, ATTRIBUTE189, ATTRIBUTE190
+								, ATTRIBUTE191, ATTRIBUTE192, ATTRIBUTE193, ATTRIBUTE194, ATTRIBUTE195
+								, ATTRIBUTE196, ATTRIBUTE197, ATTRIBUTE198, ATTRIBUTE199, ATTRIBUTE200
+								)
+						  ) AS X
+				  ) C
+				, (SELECT ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5
+						, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+						, ATTRIBUTE11, ATTRIBUTE12, ATTRIBUTE13
+						, COLUMN_NAME, VALUE
+				   FROM   (SELECT ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5
+								, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10
+								, ATTRIBUTE11, ATTRIBUTE12, ATTRIBUTE13, ATTRIBUTE14, ATTRIBUTE15
+								, ATTRIBUTE16, ATTRIBUTE17, ATTRIBUTE18, ATTRIBUTE19, ATTRIBUTE20
+								, ATTRIBUTE21, ATTRIBUTE22, ATTRIBUTE23, ATTRIBUTE24, ATTRIBUTE25
+								, ATTRIBUTE26, ATTRIBUTE27, ATTRIBUTE28, ATTRIBUTE29, ATTRIBUTE30
+								, ATTRIBUTE31, ATTRIBUTE32, ATTRIBUTE33, ATTRIBUTE34, ATTRIBUTE35
+								, ATTRIBUTE36, ATTRIBUTE37, ATTRIBUTE38, ATTRIBUTE39, ATTRIBUTE40
+								, ATTRIBUTE41, ATTRIBUTE42, ATTRIBUTE43, ATTRIBUTE44, ATTRIBUTE45
+								, ATTRIBUTE46, ATTRIBUTE47, ATTRIBUTE48, ATTRIBUTE49, ATTRIBUTE50
+								, ATTRIBUTE51, ATTRIBUTE52, ATTRIBUTE53, ATTRIBUTE54, ATTRIBUTE55
+								, ATTRIBUTE56, ATTRIBUTE57, ATTRIBUTE58, ATTRIBUTE59, ATTRIBUTE60
+								, ATTRIBUTE61, ATTRIBUTE62, ATTRIBUTE63, ATTRIBUTE64, ATTRIBUTE65
+								, ATTRIBUTE66, ATTRIBUTE67, ATTRIBUTE68, ATTRIBUTE69, ATTRIBUTE70
+								, ATTRIBUTE71, ATTRIBUTE72, ATTRIBUTE73, ATTRIBUTE74, ATTRIBUTE75
+								, ATTRIBUTE76, ATTRIBUTE77, ATTRIBUTE78, ATTRIBUTE79, ATTRIBUTE80
+								, ATTRIBUTE81, ATTRIBUTE82, ATTRIBUTE83, ATTRIBUTE84, ATTRIBUTE85
+								, ATTRIBUTE86, ATTRIBUTE87, ATTRIBUTE88, ATTRIBUTE89, ATTRIBUTE90
+								, ATTRIBUTE91, ATTRIBUTE92, ATTRIBUTE93, ATTRIBUTE94, ATTRIBUTE95
+								, ATTRIBUTE96, ATTRIBUTE97, ATTRIBUTE98, ATTRIBUTE99, ATTRIBUTE100
+								, ATTRIBUTE101, ATTRIBUTE102, ATTRIBUTE103, ATTRIBUTE104, ATTRIBUTE105
+								, ATTRIBUTE106, ATTRIBUTE107, ATTRIBUTE108, ATTRIBUTE109, ATTRIBUTE110
+								, ATTRIBUTE111, ATTRIBUTE112, ATTRIBUTE113, ATTRIBUTE114, ATTRIBUTE115
+								, ATTRIBUTE116, ATTRIBUTE117, ATTRIBUTE118, ATTRIBUTE119, ATTRIBUTE120
+								, ATTRIBUTE121, ATTRIBUTE122, ATTRIBUTE123, ATTRIBUTE124, ATTRIBUTE125
+								, ATTRIBUTE126, ATTRIBUTE127, ATTRIBUTE128, ATTRIBUTE129, ATTRIBUTE130
+								, ATTRIBUTE131, ATTRIBUTE132, ATTRIBUTE133, ATTRIBUTE134, ATTRIBUTE135
+								, ATTRIBUTE136, ATTRIBUTE137, ATTRIBUTE138, ATTRIBUTE139, ATTRIBUTE140
+								, ATTRIBUTE141, ATTRIBUTE142, ATTRIBUTE143, ATTRIBUTE144, ATTRIBUTE145
+								, ATTRIBUTE146, ATTRIBUTE147, ATTRIBUTE148, ATTRIBUTE149, ATTRIBUTE150
+								, ATTRIBUTE151, ATTRIBUTE152, ATTRIBUTE153, ATTRIBUTE154, ATTRIBUTE155
+								, ATTRIBUTE156, ATTRIBUTE157, ATTRIBUTE158, ATTRIBUTE159, ATTRIBUTE160
+								, ATTRIBUTE161, ATTRIBUTE162, ATTRIBUTE163, ATTRIBUTE164, ATTRIBUTE165
+								, ATTRIBUTE166, ATTRIBUTE167, ATTRIBUTE168, ATTRIBUTE169, ATTRIBUTE170
+								, ATTRIBUTE171, ATTRIBUTE172, ATTRIBUTE173, ATTRIBUTE174, ATTRIBUTE175
+								, ATTRIBUTE176, ATTRIBUTE177, ATTRIBUTE178, ATTRIBUTE179, ATTRIBUTE180
+								, ATTRIBUTE181, ATTRIBUTE182, ATTRIBUTE183, ATTRIBUTE184, ATTRIBUTE185
+								, ATTRIBUTE186, ATTRIBUTE187, ATTRIBUTE188, ATTRIBUTE189, ATTRIBUTE190
+								, ATTRIBUTE191, ATTRIBUTE192, ATTRIBUTE193, ATTRIBUTE194, ATTRIBUTE195
+								, ATTRIBUTE196, ATTRIBUTE197, ATTRIBUTE198, ATTRIBUTE199, ATTRIBUTE200
+						   FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD]  WITH(NOLOCK)
+						   WHERE  1 = 1
+						   AND    PROGRAM_ID    = @v_program_id
+						   AND    SHEET_NAME    = @v_sheet_name
+						   AND    CREATED_BY    = @p_created"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","15","_by
+						   AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+						   AND    UPLOAD_STATUS_CODE = 'SUCCESS'
+						  ) T
+				  UNPIVOT (    VALUE
+						   FOR COLUMN_NAME
+						   IN   ( ATTRIBUTE14, ATTRIBUTE15
+								, ATTRIBUTE16, ATTRIBUTE17, ATTRIBUTE18, ATTRIBUTE19, ATTRIBUTE20
+								, ATTRIBUTE21, ATTRIBUTE22, ATTRIBUTE23, ATTRIBUTE24, ATTRIBUTE25
+								, ATTRIBUTE26, ATTRIBUTE27, ATTRIBUTE28, ATTRIBUTE29, ATTRIBUTE30 
+								, ATTRIBUTE31, ATTRIBUTE32, ATTRIBUTE33, ATTRIBUTE34, ATTRIBUTE35
+								, ATTRIBUTE36, ATTRIBUTE37, ATTRIBUTE38, ATTRIBUTE39, ATTRIBUTE40
+								, ATTRIBUTE41, ATTRIBUTE42, ATTRIBUTE43, ATTRIBUTE44, ATTRIBUTE45
+								, ATTRIBUTE46, ATTRIBUTE47, ATTRIBUTE48, ATTRIBUTE49, ATTRIBUTE50
+								, ATTRIBUTE51, ATTRIBUTE52, ATTRIBUTE53, ATTRIBUTE54, ATTRIBUTE55
+								, ATTRIBUTE56, ATTRIBUTE57, ATTRIBUTE58, ATTRIBUTE59, ATTRIBUTE60
+								, ATTRIBUTE61, ATTRIBUTE62, ATTRIBUTE63, ATTRIBUTE64, ATTRIBUTE65
+								, ATTRIBUTE66, ATTRIBUTE67, ATTRIBUTE68, ATTRIBUTE69, ATTRIBUTE70
+								, ATTRIBUTE71, ATTRIBUTE72, ATTRIBUTE73, ATTRIBUTE74, ATTRIBUTE75
+								, ATTRIBUTE76, ATTRIBUTE77, ATTRIBUTE78, ATTRIBUTE79, ATTRIBUTE80
+								, ATTRIBUTE81, ATTRIBUTE82, ATTRIBUTE83, ATTRIBUTE84, ATTRIBUTE85
+								, ATTRIBUTE86, ATTRIBUTE87, ATTRIBUTE88, ATTRIBUTE89, ATTRIBUTE90
+								, ATTRIBUTE91, ATTRIBUTE92, ATTRIBUTE93, ATTRIBUTE94, ATTRIBUTE95
+								, ATTRIBUTE96, ATTRIBUTE97, ATTRIBUTE98, ATTRIBUTE99, ATTRIBUTE100
+								, ATTRIBUTE101, ATTRIBUTE102, ATTRIBUTE103, ATTRIBUTE104, ATTRIBUTE105
+								, ATTRIBUTE106, ATTRIBUTE107, ATTRIBUTE108, ATTRIBUTE109, ATTRIBUTE110
+								, ATTRIBUTE111, ATTRIBUTE112, ATTRIBUTE113, ATTRIBUTE114, ATTRIBUTE115
+								, ATTRIBUTE116, ATTRIBUTE117, ATTRIBUTE118, ATTRIBUTE119, ATTRIBUTE120
+								, ATTRIBUTE121, ATTRIBUTE122, ATTRIBUTE123, ATTRIBUTE124, ATTRIBUTE125
+								, ATTRIBUTE126, ATTRIBUTE127, ATTRIBUTE128, ATTRIBUTE129, ATTRIBUTE130
+								, ATTRIBUTE131, ATTRIBUTE132, ATTRIBUTE133, ATTRIBUTE134, ATTRIBUTE135
+								, ATTRIBUTE136, ATTRIBUTE137, ATTRIBUTE138, ATTRIBUTE139, ATTRIBUTE140
+								, ATTRIBUTE141, ATTRIBUTE142, ATTRIBUTE143, ATTRIBUTE144, ATTRIBUTE145
+								, ATTRIBUTE146, ATTRIBUTE147, ATTRIBUTE148, ATTRIBUTE149, ATTRIBUTE150
+								, ATTRIBUTE151, ATTRIBUTE152, ATTRIBUTE153, ATTRIBUTE154, ATTRIBUTE155
+								, ATTRIBUTE156, ATTRIBUTE157, ATTRIBUTE158, ATTRIBUTE159, ATTRIBUTE160
+								, ATTRIBUTE161, ATTRIBUTE162, ATTRIBUTE163, ATTRIBUTE164, ATTRIBUTE165
+								, ATTRIBUTE166, ATTRIBUTE167, ATTRIBUTE168, ATTRIBUTE169, ATTRIBUTE170
+								, ATTRIBUTE171, ATTRIBUTE172, ATTRIBUTE173, ATTRIBUTE174, ATTRIBUTE175
+								, ATTRIBUTE176, ATTRIBUTE177, ATTRIBUTE178, ATTRIBUTE179, ATTRIBUTE180
+								, ATTRIBUTE181, ATTRIBUTE182, ATTRIBUTE183, ATTRIBUTE184, ATTRIBUTE185
+								, ATTRIBUTE186, ATTRIBUTE187, ATTRIBUTE188, ATTRIBUTE189, ATTRIBUTE190
+								, ATTRIBUTE191, ATTRIBUTE192, ATTRIBUTE193, ATTRIBUTE194, ATTRIBUTE195
+								, ATTRIBUTE196, ATTRIBUTE197, ATTRIBUTE198, ATTRIBUTE199, ATTRIBUTE200
+								)
+							) AS X
+				  ) V               
+			WHERE 1 = 1	
+			AND   C.COLUMN_NAME = V.COLUMN_NAME
+			AND   C.YYYYMMDD != ''
+			AND   V.VALUE ! = ''
+			END;
+
+			COMMIT WORK;
+        END TRY
+		BEGIN CATCH
+		    ROLLBACK TRANSACTION;
+		END CATCH
+		   
+		
+		BEGIN
+	    EXEC  [dbo].[PR_DM_PLN_CUST_PSI_TO_MKT_FCST];
+	    END;
+    END;
+
+	BEGIN
+    ----------------------------------------------------------------------------
+    --scm2_mgr.xLOG('SUCCESS              ', SQL%ROWCOUNT, 10, TRUE);
+	SET @v_log_type = 'END';
+	SET @v_log_message = '########## INSERT DATA END ##########';
+	SET @v_description = @p_mode; --CONVERT(CHAR(30), @v_creation_date, 121);
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+    ---------------------------------------"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_CUST_PSI_EXCEL_UPLOAD","550345075","16","-------------------------------------
+	END;
+		  
+END;	
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_GET_CUST_PSI_UPLOAD_DATA","566345132","1","/*
+ * Program ID  : DMF0013_GET_CUST_PSI_UPLOAD_DATA                                                             
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/22   SongDH       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 
+ * 2018/05/30  JYE			복수 팀 권한 관련  수정  
+** 20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리
+*/
+CREATE PROCEDURE [dbo].[DMF0013_GET_CUST_PSI_UPLOAD_DATA]  
+  @p_division_id     NVARCHAR(MAX),
+  @p_dept_id         NVARCHAR(MAX),
+  @p_end_customer    NVARCHAR(MAX),
+  @p_scm_site_id     NVARCHAR(MAX),
+  @p_plant_site_id   NVARCHAR(MAX),
+  @p_project_code    NVARCHAR(MAX),
+  @p_item_id         NVARCHAR(MAX),
+  @p_start_yyyymmdd  NVARCHAR(8),
+  @p_end_yyyymmdd    NVARCHAR(8),
+  @p_bucket_type     NVARCHAR(10),
+  @p_dom_exp         NVARCHAR(10),
+  @p_created_by		 NVARCHAR(50),   --, @p_debug NVARCHAR(MAX) OUTPUT
+  @p_userinfo		NVARCHAR(MAX)
+AS  
+  
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @v_sql_text       AS NVARCHAR(MAX);
+    DECLARE @v_iteration      AS NVARCHAR(MAX);
+    DECLARE @v_column_text    AS NVARCHAR(200);
+    DECLARE @v_column_name    AS NVARCHAR(50);  
+    DECLARE @v_yyyymmdd       AS NVARCHAR(8);  
+	DECLARE @v_start_yyyymmdd AS NVARCHAR(8);  
+
+	DECLARE @v_group_id nvarchar(50)='';
+
+	--IF @p_userinfo = 'ADMIN' OR @p_userinfo = 'DM ADMIN'
+	--	SET @v_group_id = 'ADMIN'
+
+	---------------------------------------------------------------------------------
+	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (BEGIN)
+	---------------------------------------------------------------------------------
+	IF ISNULL((
+				SELECT COUNT(1) FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+					where LOOKUP_TYPE = 'GET_ADMIN_GROUP' 
+						AND VALID_YN = 'Y'
+						AND SEGMENT2 = 'ALL'  -- 'ALL'인경우 DM Planner (W/S) 제외 / 주석처리인경우 DM Planner (W/S) 포함 
+						AND SEGMENT1 = @p_userinfo
+			  ),0) > 0
+		BEGIN
+			SET @v_group_id = 'ADMIN'
+		END
+	---------------------------------------------------------------------------------
+	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (END)
+	---------------------------------------------------------------------------------
+
+	SELECT @v_start_yyyymmdd = A.BASIS_START_DATE
+    FROM   [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+    WHERE  A.BASIS_YYYYMMDD = @p_start_yyyymmdd;
+
+	SELECT @v_iteration = '';
+
+	IF @p_bucket_type = 'DAILY'		   
+	BEGIN
+		DECLARE c_cust_fcst CURSOR FAST_FORWARD FOR    
+	    SELECT 'D_' + BASIS_YYYYMMDD  AS COLUMN_NAME
+              , BASIS_YYYYMMDD        AS YYYYMMDD
+        FROM   [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+        WHERE  A.BASIS_YYYYMMDD >= @p_start_yyyymmdd --CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)
+        AND    A.BASIS_YYYYMMDD <= @p_end_yyyymmdd   --CONVERT(CHAR(8), DATEADD(MM, 6, CURRENT_TIMESTAMP), 112)        
+        ORDER BY COLUMN_NAME ;
+		
+		OPEN c_cust_fcst;
+        FETCH NEXT FROM c_cust_fcst INTO @v_column_name, @v_yyyymmdd
+        
+		WHILE @@FETCH_STATUS = 0   
+        BEGIN
+            SET @v_column_text = ', SUM(CASE WHEN CP.YYYYMMDD = ''[@v_yyyymmdd]'' THEN CP.QTY ELSE NULL END) AS [@v_column_name] ';
+	
+            SET @v_column_text = REPLACE(@v_column_text,'[@v_yyyymmdd]'   , @v_yyyymmdd   );
+            SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);
+
+            SELECT @v_iteration = @v_iteration + @v_column_text;	
+    
+            FETCH NEXT FROM c_cust_fcst INTO @v_column_name, @v_yyyymmdd
+        END;
+
+		CLOSE c_cust_fcst;  
+        DEALLOCATE c_cust_fcst;
+    END;
+	ELSE IF @p_bucket_type = 'WEEKLY'
+	BEGIN
+		DECLARE c_cust_fcst CURSOR FAST_FORWARD FOR    
+		SELECT 'D_' + MIN(A.BASIS_START_DATE)  AS COLUMN_NAME
+             ,"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_GET_CUST_PSI_UPLOAD_DATA","566345132","2"," A.ISO_YYYYWW --MIN(RIGHT('00' + CONVERT(VARCHAR, DATEPART(WEEK, A.BASIS_START_DATE), 23), 2))  AS YYYYMMDD    
+        FROM   [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+        WHERE  A.BASIS_YYYYMMDD >= @v_start_yyyymmdd --CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)
+        AND    A.BASIS_YYYYMMDD <= @p_end_yyyymmdd   --CONVERT(CHAR(8), DATEADD(MM, 6, CURRENT_TIMESTAMP), 112)
+        GROUP BY A.ISO_YYYYWW, A.WEEK_NAME
+        ORDER BY COLUMN_NAME ;
+
+	    OPEN c_cust_fcst;
+        FETCH NEXT FROM c_cust_fcst INTO @v_column_name, @v_yyyymmdd
+        
+		WHILE @@FETCH_STATUS = 0   
+        BEGIN
+            SET @v_column_text = ', SUM(CASE WHEN SUBSTRING(CP.YYYYMMDD, 1, 4) + RIGHT(''00'' + CONVERT(VARCHAR, DATEPART(WEEK, CP.YYYYMMDD), 23), 2) = ''[@v_yyyymmdd]'' THEN CP.QTY ELSE NULL END) AS [@v_column_name] ';
+	
+            SET @v_column_text = REPLACE(@v_column_text,'[@v_yyyymmdd]'   , @v_yyyymmdd   );
+            SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);
+
+            SELECT @v_iteration = @v_iteration + @v_column_text;	
+    
+            FETCH NEXT FROM c_cust_fcst INTO @v_column_name, @v_yyyymmdd
+        END;
+
+		CLOSE c_cust_fcst;  
+        DEALLOCATE c_cust_fcst;
+	END;
+	ELSE IF @p_bucket_type = 'MONTHLY'
+	BEGIN
+		DECLARE c_cust_fcst CURSOR FAST_FORWARD FOR    
+		SELECT 'D_' + MIN(A.BASIS_YYYYMM) + '01' AS COLUMN_NAME
+             , MIN(A.BASIS_YYYYMM)               AS YYYYMMDD  
+        FROM   [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+        WHERE  A.BASIS_YYYYMMDD >= @v_start_yyyymmdd --CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)
+        AND    A.BASIS_YYYYMMDD <= @p_end_yyyymmdd   --CONVERT(CHAR(8), DATEADD(MM, 6, CURRENT_TIMESTAMP), 112)
+        GROUP BY A.MONTH_NAME 
+	    ORDER BY COLUMN_NAME;
+
+		OPEN c_cust_fcst;
+        FETCH NEXT FROM c_cust_fcst INTO @v_column_name, @v_yyyymmdd
+        
+		WHILE @@FETCH_STATUS = 0   
+        BEGIN
+            SET @v_column_text = ', SUM(CASE WHEN SUBSTRING(CP.YYYYMMDD, 1, 6) = ''[@v_yyyymmdd]'' THEN CP.QTY ELSE NULL END) AS [@v_column_name] ';
+	
+            SET @v_column_text = REPLACE(@v_column_text,'[@v_yyyymmdd]'   , @v_yyyymmdd   );
+            SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);
+
+            SELECT @v_iteration = @v_iteration + @v_column_text;	
+    
+            FETCH NEXT FROM c_cust_fcst INTO @v_column_name, @v_yyyymmdd
+        END;
+		CLOSE c_cust_fcst;  
+        DEALLOCATE c_cust_fcst;
+	END;
+		  
+    --SELECT @v_iteration AS xxxx;
+  
+    SET @v_sql_text = '
+	SELECT MA.*
+		, CASE WHEN (([dbo].[FN_GET_DEPT_LIST](''[@p_created_by]'', DEPT_ID) = ''Y'') OR ''[@v_group_id]'' =''ADMIN'') 
+			THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG
+	FROM (
+        SELECT CP.DIVISION_ID
+			 , S.DEPT_ID
+		     , CP.SCM_SITE_ID
+			 , CP.PLANT_SITE_ID
+             , CP.CUSTOMER_PROJECT_CODE
+             , CP.CUSTOMER_MODEL
+             , CP.INCOTERMS             
+             , CP.FCST_TYPE
+			 , CP.DOM_EXP
+			 , CP.MEASURE_GROUP
+             , CP.MEASURE
+			 , CP.UPLOAD_UOM
+             , CP.PROJECT_CODE
+             , CP.ITEM_ID
+             [@v_iteration]
+        FROM   [dbo].[DM_PLN_CUSTOMER_PSI] CP WITH(NOLOCK)
+		     , [dbo].[SCM_MST_SITE]        S  WITH(NOLOCK)
+        WHERE  1 = 1
+		AND    CP.DIVISION_ID   = S.DIVISION_ID
+		AND    CP.SCM_SITE_ID   = S.SCM_SITE_ID
+        AND    CP.MEASURE_GROUP = ''PSI'' 
+        [@p_division_id]  
+		[@p_dept_id]     
+        [@p_scm_site_id]
+		[@p_plant_site_id]
+		[@p_project_code]
+        [@p_item_id]
+	    [@p_dom_exp]	
+		[@p_end_customer]	
+		AND    CP.YYYYMMDD BETWEEN ''[@p_start_yyyymmdd]'' AND ''[@p_end_yyyymmdd]''
+		AND    CP.MEASURE IN (SELECT DISTINCT MEASURE
+		                      FROM   [dbo].[DM_MST_CUSTOMER_FCST] X WITH(NOLOCK)
+							  WHERE  1 = 1
+							  AND    X.DIVISION_ID = CP.DIVISION_ID                                     
+                              AND    X.SCM_SITE_ID"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_GET_CUST_PSI_UPLOAD_DATA","566345132","3"," = CP.SCM_SITE_ID -- 해당 SITE에 연결된 Measure만 구함.
+                              AND    X.UPLOAD_BUCKET_TYPE = ''[@p_bucket_type]''	
+							  AND    X.VALID_YN    = ''Y''
+							)		
+		GROUP BY CP.DIVISION_ID
+			   , S.DEPT_ID
+		       , CP.SCM_SITE_ID
+			   , CP.PLANT_SITE_ID
+               , CP.CUSTOMER_PROJECT_CODE
+               , CP.CUSTOMER_MODEL
+               , CP.INCOTERMS             
+               , CP.FCST_TYPE
+			   , CP.DOM_EXP
+			   , CP.MEASURE_GROUP
+               , CP.MEASURE
+			   , CP.UPLOAD_UOM
+               , CP.PROJECT_CODE
+               , CP.ITEM_ID
+        
+	) MA 
+	ORDER BY DIVISION_ID
+				, SCM_SITE_ID
+				, PLANT_SITE_ID
+				, CUSTOMER_PROJECT_CODE
+				, CUSTOMER_MODEL
+  '; 
+  
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]'     , @v_iteration     );
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_division_id]'   , [dbo].[FN_SCM_GET_WHERE_SQL]('CP.DIVISION_ID'   , 'IN', @p_division_id ));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_dept_id]'       , [dbo].[FN_SCM_GET_WHERE_SQL]('S.DEPT_ID'        , 'IN', @p_dept_id ));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_end_customer]'  , [dbo].[FN_SCM_GET_WHERE_SQL]('S.END_CUSTOMER'   , 'IN', @p_end_customer));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_scm_site_id]'   , [dbo].[FN_SCM_GET_WHERE_SQL]('CP.SCM_SITE_ID'   , 'IN', @p_scm_site_id));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_plant_site_id]' , [dbo].[FN_SCM_GET_WHERE_SQL]('CP.PLANT_SITE_ID' , 'IN', @p_plant_site_id));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_project_code]'  , [dbo].[FN_SCM_GET_WHERE_SQL]('CP.PROJECT_CODE'  , 'IN', @p_project_code));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_item_id]'       , [dbo].[FN_SCM_GET_WHERE_SQL]('CP.ITEM_ID'       , 'IN', @p_item_id));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_dom_exp]'       , [dbo].[FN_SCM_GET_WHERE_SQL]('CP.DOM_EXP'       , 'IN', @p_dom_exp));
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_start_yyyymmdd]', @v_start_yyyymmdd);
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_end_yyyymmdd]'  , @p_end_yyyymmdd  );
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_bucket_type]'   , @p_bucket_type   );
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_created_by]'    , @p_created_by    );
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@v_group_id]'    , @v_group_id    );
+
+  --SET @p_debug = @v_sql_text;
+  --RETURN @p_debug;
+  --SELECT @v_sql_text;
+
+  --EXEC(@v_sql_text);
+  EXEC SP_EXECUTESQL @v_sql_text; --, @p_param_list, 
+                                  --@p_plan_week, @p_division_code, @p_customer_id, @p_fcst_sit_id, @p_measure, @p_edi_fcst_yn, @p_valid_yn;
+								  
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_SAVE_CUST_PSI_UPLOAD_DATA","582345189","1","
+/*
+ * Program ID   : DMF0013_SAVE_CUST_PSI_UPLOAD_DATA
+ * Description  : SAVE CUST FCST UPLOAD DATA
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018. 03. 28    KHSONG     Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[DMF0013_SAVE_CUST_PSI_UPLOAD_DATA]
+	@p_active_flag				NVARCHAR(MAX),		
+	@p_division_id				NVARCHAR(MAX),
+	@p_scm_site_id				NVARCHAR(MAX),
+	@p_customer_project_code	NVARCHAR(MAX),
+	@p_customer_model			NVARCHAR(MAX),
+	@p_incoterms				NVARCHAR(MAX),
+	@p_fcst_type 				NVARCHAR(MAX),
+	@p_dom_exp					NVARCHAR(MAX),		
+	@p_measure_group     		NVARCHAR(MAX),
+	@p_measure					NVARCHAR(MAX),
+	@p_plant_site_id			NVARCHAR(MAX),
+	@p_upload_uom				NVARCHAR(MAX),
+	@p_project_code				NVARCHAR(MAX),
+	@p_item_id					NVARCHAR(MAX),
+	@p_yyyymmdd					NVARCHAR(MAX),
+	@p_qty						NVARCHAR(MAX),
+	@p_created_by				NVARCHAR(MAX)
+
+
+AS
+
+BEGIN
+
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET NOCOUNT ON; 
+    SET XACT_ABORT ON;
+
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	-- 멀티처리 변수선언
+	DECLARE @v_active_flag				NVARCHAR(MAX);		
+	DECLARE @v_division_id				NVARCHAR(MAX);
+	DECLARE @v_scm_site_id				NVARCHAR(MAX);
+	DECLARE @v_customer_project_code	NVARCHAR(MAX);
+	DECLARE @v_customer_model			NVARCHAR(MAX);
+	DECLARE @v_incoterms				NVARCHAR(MAX);
+	DECLARE @v_fcst_type 				NVARCHAR(MAX);
+	DECLARE @v_dom_exp					NVARCHAR(MAX);		
+	DECLARE @v_measure_group			NVARCHAR(MAX);
+	DECLARE @v_measure					NVARCHAR(MAX);
+	DECLARE @v_PLANT_SITE_ID   		    NVARCHAR(MAX);
+	DECLARE @v_upload_uom       		NVARCHAR(MAX);
+	DECLARE @v_project_code				NVARCHAR(MAX);
+	DECLARE @v_item_id					NVARCHAR(MAX);
+	DECLARE @v_yyyymmdd					NVARCHAR(MAX);
+	DECLARE @v_qty						NVARCHAR(MAX);
+	DECLARE @v_created_by				NVARCHAR(MAX);
+
+	-- 초기화
+	SET @v_active_flag				= NULL;		
+	SET @v_division_id				= NULL;
+	SET @v_scm_site_id				= NULL;
+	SET @v_customer_project_code	= NULL;
+	SET @v_customer_model			= NULL;
+	SET @v_incoterms				= NULL;
+	SET @v_fcst_type 				= NULL;
+	SET @v_dom_exp					= NULL;		
+	SET @v_measure_group			= NULL;
+	SET @v_measure					= NULL;
+	SET @v_PLANT_SITE_ID			= NULL;
+	SET @v_upload_uom				= NULL;
+	SET @v_project_code				= NULL;
+	SET @v_item_id					= NULL;
+	SET @v_yyyymmdd					= NULL;
+	SET @v_qty						= NULL;
+	SET @v_created_by				= NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^'
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'DMF0013_SAVE_CUST_PSI_UPLOAD_DATA';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	
+	 -- 마지막 데이터 처리를 위한 구분자 추가
+	 SET @p_active_flag            = RTRIM(@p_active_flag           ) + '^';
+	 SET @p_division_id            = RTRIM(@p_division_id           ) + '^';
+	 SET @p_scm_site_id            = RTRIM(@p_scm_site_id           ) + '^';
+	 SET @p_customer_project_code  = RTRIM(@p_customer_project_code ) + '^';
+	 SET @p_customer_model         = RTRIM(@p_customer_model        ) + '^';
+	 SET @p_incoterms              = RTRIM(@p_incoterms             ) + '^';
+	 SET @p_fcst_type              = RTRIM(@p_fcst_type             ) + '^';
+	 SET @p_dom_exp                = RTRIM(@p_dom_exp               ) + '^';
+	 SET @p_measure_group          = RTRIM(@p_measure_group         ) + '^';
+	 SET @p_measure                = RTRIM(@p_measure               ) + '^';
+	 SET @p_plant_site_id          = RTRIM(@p_plant_site_id         ) + '^';"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_SAVE_CUST_PSI_UPLOAD_DATA","582345189","2","
+	 SET @p_upload_uom             = RTRIM(@p_upload_uom            ) + '^';
+	 SET @p_project_code           = RTRIM(@p_project_code          ) + '^';
+	 SET @p_item_id                = RTRIM(@p_item_id               ) + '^';
+	 SET @p_yyyymmdd               = RTRIM(@p_yyyymmdd              ) + '^';
+	 SET @p_qty                    = RTRIM(@p_qty                   ) + '^';
+	 SET @p_created_by             = RTRIM(@p_created_by            ) + '^';
+
+	-- @results TEMP TABLE
+	DECLARE @results TABLE (
+             v_active_flag             NVARCHAR(MAX)
+			,v_division_id             NVARCHAR(MAX)
+			,v_scm_site_id             NVARCHAR(MAX)
+			,v_customer_project_code   NVARCHAR(MAX)
+			,v_customer_model          NVARCHAR(MAX)
+			,v_incoterms               NVARCHAR(MAX)
+			,v_fcst_type               NVARCHAR(MAX)
+			,v_dom_exp                 NVARCHAR(MAX)
+			,v_measure_group           NVARCHAR(MAX)
+			,v_measure                 NVARCHAR(MAX)
+			,v_plant_site_id           NVARCHAR(MAX)
+			,v_upload_uom              NVARCHAR(MAX)
+			,v_project_code            NVARCHAR(MAX)
+			,v_item_id                 NVARCHAR(MAX)
+			,v_yyyymmdd                NVARCHAR(MAX)
+			,v_qty                     NVARCHAR(MAX)
+			,v_created_by              NVARCHAR(MAX)
+                           )
+
+	-- 시작 LOG
+	SET @v_log_type = 'START';
+	SET @v_log_message = '########## Start of procedure ##########';
+	SET @v_description = '';
+	SET @d_event_date = SYSDATETIME();
+	EXEC  PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+	SET @v_log_message = NULL      /*-- <- 변수 재사용을 위하여 초기화해야함 --*/
+
+	BEGIN TRANSACTION DMF0013_SAVE_CUST_PSI_UPLOAD;  
+
+		BEGIN TRY
+		
+
+--===================================================================================== @results 테이블에 split후 insert start
+	--###############################################  @results 테이블에 split후 insert (START)
+	WHILE LEN(@p_DIVISION_ID) > 0
+	BEGIN
+
+	 DECLARE @index_active_flag              INT
+	 DECLARE @index_division_id              INT
+	 DECLARE @index_scm_site_id              INT
+	 DECLARE @index_customer_project_code    INT
+	 DECLARE @index_customer_model           INT
+	 DECLARE @index_incoterms                INT
+	 DECLARE @index_fcst_type                INT
+	 DECLARE @index_dom_exp                  INT
+	 DECLARE @index_measure_group            INT
+	 DECLARE @index_measure                  INT
+	 DECLARE @index_plant_site_id            INT
+	 DECLARE @index_upload_uom               INT
+	 DECLARE @index_project_code             INT
+	 DECLARE @index_item_id                  INT
+	 DECLARE @index_yyyymmdd                 INT
+	 DECLARE @index_qty                      INT
+	 DECLARE @index_created_by               INT
+
+	 SET @index_active_flag           = PATINDEX('%' + '^' + '%', @p_active_flag           )
+	 SET @index_division_id           = PATINDEX('%' + '^' + '%', @p_division_id           )
+	 SET @index_scm_site_id           = PATINDEX('%' + '^' + '%', @p_scm_site_id           )
+	 SET @index_customer_project_code = PATINDEX('%' + '^' + '%', @p_customer_project_code )
+	 SET @index_customer_model        = PATINDEX('%' + '^' + '%', @p_customer_model        )
+	 SET @index_incoterms             = PATINDEX('%' + '^' + '%', @p_incoterms             )
+	 SET @index_fcst_type             = PATINDEX('%' + '^' + '%', @p_fcst_type             )
+	 SET @index_dom_exp               = PATINDEX('%' + '^' + '%', @p_dom_exp               )
+	 SET @index_measure_group         = PATINDEX('%' + '^' + '%', @p_measure_group         )
+	 SET @index_measure               = PATINDEX('%' + '^' + '%', @p_measure               )
+	 SET @index_plant_site_id         = PATINDEX('%' + '^' + '%', @p_plant_site_id         )
+	 SET @index_upload_uom            = PATINDEX('%' + '^' + '%', @p_upload_uom            )
+	 SET @index_project_code          = PATINDEX('%' + '^' + '%', @p_project_code          )
+	 SET @index_item_i"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_SAVE_CUST_PSI_UPLOAD_DATA","582345189","3","d               = PATINDEX('%' + '^' + '%', @p_item_id               )
+	 SET @index_yyyymmdd              = PATINDEX('%' + '^' + '%', @p_yyyymmdd              )
+	 SET @index_qty                   = PATINDEX('%' + '^' + '%', @p_qty                   )
+	 SET @index_created_by            = PATINDEX('%' + '^' + '%', @p_created_by            )
+
+	 --확인  select @index_DIVISION_ID as '@index_DIVISION_ID';
+		IF @index_DIVISION_ID > 0
+			  BEGIN
+			   SET @v_active_flag           = SUBSTRING(@p_active_flag          , 0, @index_active_flag            )
+			   SET @v_division_id           = SUBSTRING(@p_division_id          , 0, @index_division_id            )
+			   SET @v_scm_site_id           = SUBSTRING(@p_scm_site_id          , 0, @index_scm_site_id            )
+			   SET @v_customer_project_code = SUBSTRING(@p_customer_project_code, 0, @index_customer_project_code  )
+			   SET @v_customer_model        = SUBSTRING(@p_customer_model       , 0, @index_customer_model         )
+			   SET @v_incoterms             = SUBSTRING(@p_incoterms            , 0, @index_incoterms              )
+			   SET @v_fcst_type             = SUBSTRING(@p_fcst_type            , 0, @index_fcst_type              )
+			   SET @v_dom_exp               = SUBSTRING(@p_dom_exp              , 0, @index_dom_exp                )
+			   SET @v_measure_group         = SUBSTRING(@p_measure_group        , 0, @index_measure_group          )
+			   SET @v_measure               = SUBSTRING(@p_measure              , 0, @index_measure                )
+			   SET @v_plant_site_id         = SUBSTRING(@p_plant_site_id        , 0, @index_plant_site_id          )
+			   SET @v_upload_uom            = SUBSTRING(@p_upload_uom           , 0, @index_upload_uom             )
+			   SET @v_project_code          = SUBSTRING(@p_project_code         , 0, @index_project_code           )
+			   SET @v_item_id               = SUBSTRING(@p_item_id              , 0, @index_item_id                )
+			   SET @v_yyyymmdd              = SUBSTRING(@p_yyyymmdd             , 0, @index_yyyymmdd               )
+			   SET @v_qty                   = SUBSTRING(@p_qty                  , 0, @index_qty                    )
+			   SET @v_created_by            = SUBSTRING(@p_created_by           , 0, @index_created_by             )
+
+			   SET @p_active_flag            = SUBSTRING(@p_active_flag           , LEN(@v_active_flag            + '^') + 1, LEN(@p_active_flag           ))
+			   SET @p_division_id            = SUBSTRING(@p_division_id           , LEN(@v_division_id            + '^') + 1, LEN(@p_division_id           ))
+			   SET @p_scm_site_id            = SUBSTRING(@p_scm_site_id           , LEN(@v_scm_site_id            + '^') + 1, LEN(@p_scm_site_id           ))
+			   SET @p_customer_project_code  = SUBSTRING(@p_customer_project_code , LEN(@v_customer_project_code  + '^') + 1, LEN(@p_customer_project_code ))
+			   SET @p_customer_model         = SUBSTRING(@p_customer_model        , LEN(@v_customer_model         + '^') + 1, LEN(@p_customer_model        ))
+			   SET @p_incoterms              = SUBSTRING(@p_incoterms             , LEN(@v_incoterms              + '^') + 1, LEN(@p_incoterms             ))
+			   SET @p_fcst_type              = SUBSTRING(@p_fcst_type             , LEN(@v_fcst_type              + '^') + 1, LEN(@p_fcst_type             ))
+			   SET @p_dom_exp                = SUBSTRING(@p_dom_exp               , LEN(@v_dom_exp                + '^') + 1, LEN(@p_dom_exp               ))
+			   SET @p_measure_group          = SUBSTRING(@p_measure_group         , LEN(@v_measure_group          + '^') + 1, LEN(@p_measure_group         ))
+			   SET @p_measure                = SUBSTRING(@p_measure               , LEN(@v_measure                + '^') + 1, LEN(@p_measure               ))
+			   SET @p_plant_site_id          = SUBSTRING(@p_plant_site_id         , LEN(@v_plant_site_id          + '^') + 1, LEN(@p_plant_site_id         ))
+			   SET @p_upload_uom             = SUBSTRING"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_SAVE_CUST_PSI_UPLOAD_DATA","582345189","4","(@p_upload_uom            , LEN(@v_upload_uom             + '^') + 1, LEN(@p_upload_uom            ))
+			   SET @p_project_code           = SUBSTRING(@p_project_code          , LEN(@v_project_code           + '^') + 1, LEN(@p_project_code          ))
+			   SET @p_item_id                = SUBSTRING(@p_item_id               , LEN(@v_item_id                + '^') + 1, LEN(@p_item_id               ))
+			   SET @p_yyyymmdd               = SUBSTRING(@p_yyyymmdd              , LEN(@v_yyyymmdd               + '^') + 1, LEN(@p_yyyymmdd              ))
+			   SET @p_qty                    = SUBSTRING(@p_qty                   , LEN(@v_qty                    + '^') + 1, LEN(@p_qty                   ))
+			   SET @p_created_by             = SUBSTRING(@p_created_by            , LEN(@v_created_by             + '^') + 1, LEN(@p_created_by            ))
+
+
+ 
+			   INSERT INTO @results ( 
+					  v_active_flag          
+					 ,v_division_id          
+					 ,v_scm_site_id          
+					 ,v_customer_project_code
+					 ,v_customer_model       
+					 ,v_incoterms            
+					 ,v_fcst_type            
+					 ,v_dom_exp              
+					 ,v_measure_group        
+					 ,v_measure              
+					 ,v_plant_site_id        
+					 ,v_upload_uom           
+					 ,v_project_code         
+					 ,v_item_id              
+					 ,v_yyyymmdd             
+					 ,v_qty                  
+					 ,v_created_by           
+			   ) VALUES ( 
+					  @v_active_flag          
+					 ,@v_division_id          
+					 ,@v_scm_site_id          
+					 ,@v_customer_project_code
+					 ,@v_customer_model       
+					 ,@v_incoterms            
+					 ,@v_fcst_type            
+					 ,@v_dom_exp              
+					 ,@v_measure_group        
+					 ,@v_measure              
+					 ,@v_plant_site_id        
+					 ,@v_upload_uom           
+					 ,@v_project_code         
+					 ,@v_item_id              
+					 ,@v_yyyymmdd             
+					 ,@v_qty                  
+					 ,@v_created_by           
+			   )
+			  END
+		ELSE
+			  BEGIN
+			   SET @v_DIVISION_ID = @p_DIVISION_ID
+			   SET @p_DIVISION_ID = NULL
+ 
+			   INSERT INTO @results ( 
+					  v_active_flag          
+					 ,v_division_id          
+					 ,v_scm_site_id          
+					 ,v_customer_project_code
+					 ,v_customer_model       
+					 ,v_incoterms            
+					 ,v_fcst_type            
+					 ,v_dom_exp              
+					 ,v_measure_group        
+					 ,v_measure              
+					 ,v_plant_site_id        
+					 ,v_upload_uom           
+					 ,v_project_code         
+					 ,v_item_id              
+					 ,v_yyyymmdd             
+					 ,v_qty                  
+					 ,v_created_by           
+			   ) VALUES ( 
+					  @v_active_flag          
+					 ,@v_division_id          
+					 ,@v_scm_site_id          
+					 ,@v_customer_project_code
+					 ,@v_customer_model       
+					 ,@v_incoterms            
+					 ,@v_fcst_type            
+					 ,@v_dom_exp              
+					 ,@v_measure_group        
+					 ,@v_measure              
+					 ,@v_plant_site_id        
+					 ,@v_upload_uom           
+					 ,@v_project_code         
+					 ,@v_item_id              
+					 ,@v_yyyymmdd             
+					 ,@v_qty                  
+					 ,@v_created_by           
+			   )
+	  END
+	-- if end
+
+	END
+		--###############################################   @results 테이블에 split후 insert (END)
+
+			   -- Customer Project,Customer Model  잘못들어왔을때 강제 에러발생시킴 start -----------------------------------------------
+			   --IF (select count(1)  from @results where ( select count(1) from dbo.DM_MST_CUSTOMER_MODEL  
+			   --    where DIVISION_ID  = v_DIVISION_ID AND CUSTOMER_PROJECT_CODE = v_CUSTOMER_PROJECT_CODE AND SCM_SITE_ID = v_SCM_SITE_ID ) = 0 ) = 0
+				  -- AND
+				  -- (select count(1)  from @results where ( select count(1) from dbo.SCM_MST_SITE_ITEM  
+			   --    where DIVISION_ID  = v_DIVISION_ID AND PROJECT_CODE = v_PROJECT_CODE AND SCM_SITE_ID = v_SCM_SITE_ID ) "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_SAVE_CUST_PSI_UPLOAD_DATA","582345189","5","= 0 ) > 0
+			   --begin
+				  -- SET @v_log_type = 'INVALID';
+				  -- SELECT '['+ @v_customer_project_code +']'+ N' Invalid Customer Project !';
+				  -- goto err_rtn
+			   --end
+
+			   --IF (select count(1)  from @results where ( select count(1) from dbo.DM_MST_CUSTOMER_MODEL  
+			   --    where DIVISION_ID  = v_DIVISION_ID AND CUSTOMER_PROJECT_CODE = v_CUSTOMER_PROJECT_CODE AND CUSTOMER_MODEL = v_CUSTOMER_MODEL AND SCM_SITE_ID = v_SCM_SITE_ID ) = 0 ) = 0
+				  -- AND
+				  -- (select count(1)  from @results where ( select count(1) from dbo.SCM_MST_SITE_ITEM  
+			   --    where DIVISION_ID  = v_DIVISION_ID AND PROJECT_CODE = v_PROJECT_CODE AND ITEM_ID = v_CUSTOMER_MODEL AND SCM_SITE_ID = v_SCM_SITE_ID ) = 0 ) > 0
+			   --begin
+				  -- SET @v_log_type = 'INVALID';
+				  -- SELECT '['+ @v_customer_project_code +']'+ N' Invalid Customer Model !';
+				  -- goto err_rtn
+			   --end
+
+			   -- Customer Project,Customer Model  잘못들어왔을때 강제 에러발생시킴 end  -----------------------------------------------
+
+--SELECT * FROM @results
+	--===================================================================================== insert 전 delete start
+	BEGIN
+			   -- 확인  select * from @results
+			   DELETE 
+			   FROM dbo.DM_PLN_CUSTOMER_PSI
+			   WHERE (
+						SELECT count(1) 
+						  FROM @results 
+						 where 1=1
+						   and DIVISION_ID            =   v_DIVISION_ID            
+						   AND CUSTOMER_PROJECT_CODE  =   v_CUSTOMER_PROJECT_CODE
+						   AND CUSTOMER_MODEL         =   v_CUSTOMER_MODEL       
+						   AND SCM_SITE_ID            =   v_SCM_SITE_ID          
+						   AND DOM_EXP                =   v_DOM_EXP              
+						   AND FCST_TYPE              =   v_FCST_TYPE            
+						   AND MEASURE_GROUP          =   v_MEASURE_GROUP        
+						   AND MEASURE                =   v_MEASURE              
+						   AND YYYYMMDD               =   v_YYYYMMDD             
+						   AND INCOTERMS              =   v_INCOTERMS            
+						   AND PLANT_SITE_ID          =   v_PLANT_SITE_ID        
+					  ) > 0;
+	END
+
+	--===================================================================================== insert 전 delete end
+
+	--===================================================================================== insert start
+	BEGIN
+		  
+			   INSERT INTO dbo.DM_PLN_CUSTOMER_PSI
+			   SELECT 
+					   v_DIVISION_ID          
+					  ,v_CUSTOMER_PROJECT_CODE
+					  ,v_CUSTOMER_MODEL       
+					  ,v_SCM_SITE_ID          
+					  ,v_DOM_EXP              
+					  ,v_FCST_TYPE            
+					  ,v_MEASURE_GROUP        
+					  ,v_MEASURE              
+					  ,v_YYYYMMDD             
+					  ,v_INCOTERMS            
+					  ,v_PLANT_SITE_ID        
+					  ,v_PROJECT_CODE         
+					  ,v_ITEM_ID              
+					  ,v_QTY                  
+					  ,v_UPLOAD_UOM           
+					  ,v_CREATED_BY           
+					  ,getdate()
+					  ,v_CREATED_BY
+					  ,getdate()
+					  ,'UI' --BATCH_RESULT           
+					  ,null --MST_UPLOAD_UOM         
+					  ,null --MST_UPLOAD_BUCKET_TYPE 
+					  ,null --MST_SUMMARY_BUCKET_TYPE
+					  ,null --MST_CONVERT_QTY        
+					  ,null --PLAN_WEEK              
+					  ,null --SPLIT_RESULT           
+					  ,null,null,null,null,null,null,null,null,null,null
+			  FROM @results 
+
+	END;
+
+	--===================================================================================== insert end
+
+	       -- 시작과 종료일자 사이에 정보를 일괄 update 함. added by ytchoi 180314
+			with update_target as(
+			select 
+				  division_id, 
+				  scm_site_id,
+				  customer_project_code,
+				  customer_model,
+				  incoterms,
+				  fcst_type,
+				  dom_exp,
+				  measure_group,
+				  measure,
+				  PLANT_SITE_ID,
+				  min(yyyymmdd) min_yyyymmdd,
+				  max(yyyymmdd)	max_yyyymmdd	
+			  from dbo.DM_PLN_CUSTOMER_PSI A
+			 where batch_result = 'UI'
+			group by division_id, 
+				  scm_site_id,
+				  customer_project_code,
+				  customer_model,
+				  incoterms,
+		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0013_SAVE_CUST_PSI_UPLOAD_DATA","582345189","6","		  fcst_type,
+				  dom_exp,
+				  measure_group,
+				  measure,
+				  PLANT_SITE_ID
+				  )	
+			update  [dbo].[DM_PLN_CUSTOMER_PSI]
+			   set batch_result = 'UI'
+			 where (
+					 select count(1)
+					   from update_target a
+					  where a.division_id            = [dbo].[DM_PLN_CUSTOMER_PSI].division_id          
+						and a.scm_site_id            = [dbo].[DM_PLN_CUSTOMER_PSI].scm_site_id          
+						and a.customer_project_code  = [dbo].[DM_PLN_CUSTOMER_PSI].customer_project_code
+						and a.customer_model         = [dbo].[DM_PLN_CUSTOMER_PSI].customer_model       
+						and a.incoterms              = [dbo].[DM_PLN_CUSTOMER_PSI].incoterms            
+						and a.fcst_type              = [dbo].[DM_PLN_CUSTOMER_PSI].fcst_type            
+						and a.dom_exp                = [dbo].[DM_PLN_CUSTOMER_PSI].dom_exp              
+						and a.measure_group          = [dbo].[DM_PLN_CUSTOMER_PSI].measure_group        
+						and a.measure                = [dbo].[DM_PLN_CUSTOMER_PSI].measure              
+						and a.PLANT_SITE_ID          = [dbo].[DM_PLN_CUSTOMER_PSI].PLANT_SITE_ID    
+						and [dbo].[DM_PLN_CUSTOMER_PSI].yyyymmdd between a.min_yyyymmdd and a.max_yyyymmdd
+				   ) > 0
+			;
+
+	--===================================================================================== HISTORY INSERT start
+	BEGIN
+		  
+			   INSERT INTO dbo.DM_PLN_CUSTOMER_PSI_H
+			   SELECT 
+					 v_division_id 
+					,NEXT VALUE FOR SEQ1_DM_PLN_CUSTOMER_PSI_H
+					,v_CUSTOMER_PROJECT_CODE		
+					,v_CUSTOMER_MODEL				
+					,v_SCM_SITE_ID					
+					,v_DOM_EXP						
+					,v_FCST_TYPE					
+					,v_MEASURE_GROUP				
+					,v_MEASURE						
+					,v_YYYYMMDD					
+					,v_INCOTERMS					
+					,v_PLANT_SITE_ID				
+					,v_PROJECT_CODE				
+					,v_ITEM_ID						
+					,CONVERT(NUMERIC(20, 10), v_QTY)
+					,v_UPLOAD_UOM					
+					,v_CREATED_BY      
+					,getdate()
+					,v_CREATED_BY 
+					,getdate()
+					,'UI',null,null,null,null,null,null
+					,null,null,null,null,null,null,null,null,null,null
+					FROM @results 
+
+	END
+
+	--===================================================================================== HISTORY INSERT end
+
+
+		BEGIN
+	        EXEC [dbo].[PR_DM_PLN_CUST_PSI_TO_MKT_FCST];
+        END;
+
+		COMMIT WORK;
+
+		END TRY
+		
+	BEGIN CATCH
+      -- ERROR LOG
+      ROLLBACK TRANSACTION DMF0013_SAVE_CUST_PSI_UPLOAD;  
+      SET @v_log_type = 'ERROR';
+      SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+      SET @v_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+      SET @d_event_date = SYSDATETIME();
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+
+      EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+	  
+    END CATCH;
+		
+	-- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure ##########';
+    SET @v_description = '';
+    SET @d_event_date = SYSDATETIME();
+
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+  END;						
+
+	-- 트랜잭션 (END)
+	err_rtn:
+	IF @v_log_type = 'INVALID'
+		begin
+			ROLLBACK TRANSACTION DMF0013_SAVE_CUST_PSI_UPLOAD;
+            EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		end
+
+
+"

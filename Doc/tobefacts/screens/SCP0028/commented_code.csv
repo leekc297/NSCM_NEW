@@ -1,0 +1,4 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"shipping/shipment-lot-size","SCP0028","features/shipping/src/pages/shipment-lot-size/components/modals/ShipmentLotSizeBatchModal.tsx","202","code","AS-IS `if (action_flag==""D"") { if (GMessageBox(""MSG00016"") != Yes) return; }` (cs:362~364)."
+"shipping/shipment-lot-size","SCP0028","features/shipping/src/pages/shipment-lot-size/ShipmentLotSize.tsx","191","jsx","저장검증 3종(design 03 §4.3): LOT<INC / 0값 (클라) → 통과 후 메타 필수검증(saveWithValidation) → SAVE."
+"shipping/shipment-lot-size","SCP0028","features/shipping/src/pages/shipment-lot-size/useShipmentLotSizeStore.ts","21","endpoint","ui-dynamic-property-management — admin SCM_MST_SHEET_COLUMNS 동적 fetch(미등록 시 빈 배열 → constants"

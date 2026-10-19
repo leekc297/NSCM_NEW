@@ -1,0 +1,11 @@
+.gridSection {
+  display: flex;
+  min-height: 220px;
+  flex: 1;
+  flex-direction: column;
+}
+
+.gridWrapper {
+  height: 260px;
+  min-height: 200px;
+}

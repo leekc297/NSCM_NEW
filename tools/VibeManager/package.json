@@ -1,0 +1,366 @@
+{
+  "name": "vibe-manager",
+  "displayName": "Vibe_Manager",
+  "description": "NSCM 전환(As-is C#.NET → To-Be React/Oracle) 6단계 작업을 VS Code 에서 실행·판정하는 관리 패널 — 프로그램 ID 하나로 단계별 작업, 룰·Hook·하네스 관리, 환경설정, 실행 이력",
+  "version": "1.2.1",
+  "publisher": "marisoft",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "NSCM",
+    "Claude Code",
+    "migration",
+    "AsisFacts",
+    "LGES"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "extensionKind": [
+    "workspace"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "vibeManager",
+          "title": "Vibe_Manager",
+          "icon": "media/vibe.svg"
+        }
+      ]
+    },
+    "views": {
+      "vibeManager": [
+        {
+          "id": "vibeManager.steps",
+          "name": "NSCM 전환 단계",
+          "icon": "media/vibe.svg",
+          "contextualTitle": "Vibe_Manager"
+        },
+        {
+          "id": "vibeManager.dod",
+          "name": "완료 정의(DoD) — 현재 화면",
+          "icon": "media/vibe.svg"
+        },
+        {
+          "id": "vibeManager.harness",
+          "name": "룰 · Hook · 하네스",
+          "icon": "media/vibe.svg"
+        },
+        {
+          "id": "vibeManager.env",
+          "name": "환경설정",
+          "icon": "media/vibe.svg"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "vibeManager.steps",
+        "contents": "프로젝트 루트(C:\\Projects\\NSCM)를 찾지 못했습니다.\n[설정 열기](command:vibeManager.openSettings)\n`vibeManager.projectRoot` 에 tools\\AsisFacts 가 들어 있는 폴더를 지정하세요.",
+        "when": "vibeManager.noRoot"
+      }
+    ],
+    "commands": [
+      {
+        "command": "vibeManager.runTask",
+        "title": "작업 실행",
+        "category": "Vibe_Manager",
+        "icon": "$(play)"
+      },
+      {
+        "command": "vibeManager.refresh",
+        "title": "게이트 다시 판정",
+        "category": "Vibe_Manager",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "vibeManager.openDashboard",
+        "title": "전환 흐름 대시보드",
+        "category": "Vibe_Manager",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "vibeManager.gateReport",
+        "title": "Agent 게이트 집계 리포트",
+        "category": "Vibe_Manager",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "vibeManager.openOutputFolder",
+        "title": "산출물 폴더 열기",
+        "category": "Vibe_Manager",
+        "icon": "$(folder-opened)"
+      },
+      {
+        "command": "vibeManager.editSteps",
+        "title": "단계 정의(steps.json) 편집",
+        "category": "Vibe_Manager",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "vibeManager.openSettings",
+        "title": "설정",
+        "category": "Vibe_Manager",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "vibeManager.openTaskLog",
+        "title": "최근 실행 기록",
+        "category": "Vibe_Manager",
+        "icon": "$(history)"
+      },
+      {
+        "command": "vibeManager.quickScreen",
+        "title": "프로그램 ID 로 단계 작업 실행",
+        "category": "Vibe_Manager",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "vibeManager.toggleHook",
+        "title": "Hook 켜기/끄기",
+        "category": "Vibe_Manager",
+        "icon": "$(circle-slash)"
+      },
+      {
+        "command": "vibeManager.openItem",
+        "title": "열기",
+        "category": "Vibe_Manager",
+        "icon": "$(go-to-file)"
+      },
+      {
+        "command": "vibeManager.checkEnv",
+        "title": "환경 점검",
+        "category": "Vibe_Manager",
+        "icon": "$(beaker)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "vibeManager.quickScreen",
+          "when": "view == vibeManager.steps",
+          "group": "navigation@0"
+        },
+        {
+          "command": "vibeManager.openDashboard",
+          "when": "view == vibeManager.steps",
+          "group": "navigation@1"
+        },
+        {
+          "command": "vibeManager.refresh",
+          "when": "view == vibeManager.steps",
+          "group": "navigation@2"
+        },
+        {
+          "command": "vibeManager.gateReport",
+          "when": "view == vibeManager.steps",
+          "group": "navigation@3"
+        },
+        {
+          "command": "vibeManager.openOutputFolder",
+          "when": "view == vibeManager.steps",
+          "group": "1_more@1"
+        },
+        {
+          "command": "vibeManager.editSteps",
+          "when": "view == vibeManager.steps",
+          "group": "1_more@2"
+        },
+        {
+          "command": "vibeManager.openTaskLog",
+          "when": "view == vibeManager.steps",
+          "group": "1_more@3"
+        },
+        {
+          "command": "vibeManager.openSettings",
+          "when": "view == vibeManager.steps",
+          "group": "1_more@4"
+        },
+        {
+          "command": "vibeManager.checkEnv",
+          "when": "view == vibeManager.env",
+          "group": "navigation@1"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "vibeManager.runTask",
+          "when": "view == vibeManager.steps && viewItem == task",
+          "group": "inline"
+        },
+        {
+          "command": "vibeManager.toggleHook",
+          "when": "view == vibeManager.harness && viewItem == hook",
+          "group": "inline"
+        },
+        {
+          "command": "vibeManager.openItem",
+          "when": "view == vibeManager.harness && viewItem =~ /^(rule|hookfile|doc)$/",
+          "group": "inline"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "vibeManager.runTask"
+        }
+      ]
+    },
+    "taskDefinitions": [
+      {
+        "type": "vibeManager",
+        "required": [
+          "task"
+        ],
+        "properties": {
+          "task": {
+            "type": "string",
+            "description": "Vibe_Manager 작업 ID"
+          }
+        }
+      }
+    ],
+    "configuration": {
+      "title": "Vibe_Manager",
+      "properties": {
+        "vibeManager.projectRoot": {
+          "type": "string",
+          "default": "",
+          "description": "NSCM 프로젝트 루트. 비우면 워크스페이스에서 tools/AsisFacts 가 있는 폴더를 찾고, 없으면 C:\\Projects\\NSCM 을 씁니다."
+        },
+        "vibeManager.toolsDir": {
+          "type": "string",
+          "default": "tools/AsisFacts",
+          "description": "As-is 파서(AsisFacts) 폴더. 루트 기준 상대경로 또는 절대경로."
+        },
+        "vibeManager.outDir": {
+          "type": "string",
+          "default": "Doc/asisfacts",
+          "description": "As-is 파서 산출물 폴더."
+        },
+        "vibeManager.tobeDir": {
+          "type": "string",
+          "default": "nscm-fe",
+          "description": "To-Be React 프런트 폴더."
+        },
+        "vibeManager.tobeOutDir": {
+          "type": "string",
+          "default": "Doc/tobefacts",
+          "description": "To-Be 파서 산출물 폴더."
+        },
+        "vibeManager.rulesDir": {
+          "type": "string",
+          "default": "rules",
+          "description": "To-Be 룰·허용 목록(allowed_gaps.csv) 폴더."
+        },
+        "vibeManager.gapDir": {
+          "type": "string",
+          "default": "Doc/gap",
+          "description": "GAP 분석 산출물 폴더."
+        },
+        "vibeManager.powershell": {
+          "type": "string",
+          "default": "powershell",
+          "description": "PowerShell 실행 파일 (powershell 또는 pwsh)."
+        },
+        "vibeManager.claudeCommand": {
+          "type": "string",
+          "default": "claude",
+          "description": "Claude Code CLI 명령 또는 전체 경로."
+        },
+        "vibeManager.claudeModel": {
+          "type": "string",
+          "default": "",
+          "description": "Claude Code 에 넘길 --model (비우면 기본값)."
+        },
+        "vibeManager.claudeStartupDelayMs": {
+          "type": "number",
+          "default": 6000,
+          "description": "대화형 Claude Code 를 띄운 뒤 첫 지시를 보내기까지 대기(ms). 지시가 먼저 찍히면 값을 늘리세요."
+        },
+        "vibeManager.agentDriver": {
+          "type": "string",
+          "default": "claude-cli",
+          "enum": [
+            "claude-cli",
+            "api",
+            "dry"
+          ],
+          "description": "3단계 Agent 드라이버 (agent.ps1 -Driver)."
+        },
+        "vibeManager.agentModel": {
+          "type": "string",
+          "default": "claude-sonnet-4-5",
+          "description": "3단계 Agent 모델 (agent.ps1 -Model)."
+        },
+        "vibeManager.excludeScreenPatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "^DM0\\d+"
+          ],
+          "description": "Agent 배치에서 제외할 화면ID 정규식 (DM0* 는 실화면이 아니므로 기본 제외)."
+        },
+        "vibeManager.harnessDir": {
+          "type": "string",
+          "default": "tools/Harness",
+          "description": "하네스(생성기·검사기·룰 사전) 폴더."
+        },
+        "vibeManager.genDir": {
+          "type": "string",
+          "default": "Doc/gen",
+          "description": "생성 골격·GEN_NOTES 폴더."
+        },
+        "vibeManager.envFiles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".env.asis",
+            "tools/AsisFacts/asisfacts.json",
+            "tools/TobeFacts/tobefacts.json",
+            "tools/Harness/harness.json",
+            ".claude/settings.json",
+            "tools/DbConn/dbconn.json"
+          ],
+          "description": "환경설정 뷰에 보여줄 설정 파일(루트 기준). 비밀번호 값은 표시하지 않음."
+        },
+        "vibeManager.nodeCommand": {
+          "type": "string",
+          "default": "node",
+          "description": "Node 실행 파일."
+        },
+        "vibeManager.dbconnDir": {
+          "type": "string",
+          "default": "tools/DbConn",
+          "description": "DB 접속정보/메타 export/골든 도구 폴더"
+        },
+        "vibeManager.reconDir": {
+          "type": "string",
+          "default": "tools/Recon",
+          "description": "개발대상 대사표 도구 폴더"
+        },
+        "vibeManager.e2eDir": {
+          "type": "string",
+          "default": "tools/E2E",
+          "description": "E2E(Playwright) 도구 폴더"
+        },
+        "vibeManager.pythonCommand": {
+          "type": "string",
+          "default": "python",
+          "description": "Python 실행 명령"
+        }
+      }
+    }
+  }
+}

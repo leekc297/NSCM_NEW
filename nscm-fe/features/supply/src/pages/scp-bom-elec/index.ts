@@ -1,0 +1,1 @@
+export { ScpBomElec } from './ScpBomElec';

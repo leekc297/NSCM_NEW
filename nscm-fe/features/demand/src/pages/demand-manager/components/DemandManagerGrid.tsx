@@ -149,14 +149,14 @@ export const DemandManagerGrid = ({
   }, [monthColumns]);
 
   // 핸들러가 최신 상태를 보도록 ref 미러
-  const ctxRef = useRef({ canEdit, rows, monthByBinding });
-  ctxRef.current = { canEdit, rows, monthByBinding };
+  const ctxRef = useRef({ canEdit, monthByBinding });
+  ctxRef.current = { canEdit, monthByBinding };
 
   useEffect(() => {
     const g = gridRef.current;
     if (!g || !g.columnHeaders || !g.columnHeaders.rows) return;
 
-    if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1; // zebra (#95)
+    if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1;
     for (let i = 0; i < g.columnFooters.rows.length; i++) g.columnFooters.rows[i].visible = false;
     g.mergeManager = new DemandManagerMergeManager();
 
@@ -310,17 +310,17 @@ export const DemandManagerGrid = ({
     };
   }, [gridRef, projectDataMap, monthColumns, fixedColumns]);
 
-  // 필터가 걸린 상태에서 Insert — 값이 빈 신규행은 필터 조건에 걸려 CollectionView 에서 빠진다.
-  //   공용 keepRowVisibleUnderFilter 로 wijmo 예외 집합(grid._newAddedRowsSet)에 등록해 보이게 한다.
-  //   필터 자체의 보존은 공용 DataGrid 가 담당한다(itemsSourceChanged 의 capture -> clear -> restore).
-  //   주의: 등록은 한 번으로 끝나지 않는다. FlexGridFilter.apply() 가 이 Set 을 null 로 비우는데
-  //     DataGrid 의 필터 복원이 곧 apply() 라 Insert 마다 예외가 날아가 신규행이 다시 숨는다.
-  //     따라서 rows 변경 시와 filterApplied 시 양쪽에서 재등록한다 (DMF0042 배선 1:1).
+  // 필터가 걸린 상태에서 신규행이 필터 조건에 걸려 CollectionView 에서 빠지지 않게, 사용자가
+  //   필터 팝업에서 직접 Apply를 누르는 경우(FlexGridFilter.apply()가 grid._newAddedRowsSet을
+  //   무조건 비운다 — Wijmo 자체 동작)에 대비해 재등록한다. Insert 직후 예외 등록은
+  //   GridAction.addRowSet이 이미 처리하므로(keepRowVisibleUnderFilter를 세트 전체에 호출),
+  //   여기서는 filterApplied 이벤트 하나만 대응하면 된다.
   const reapplyInsertRowVisibility = useCallback((): boolean => {
     const g = gridRef.current;
     // 컬럼이 없는 그리드에 refresh 를 걸면 wijmo 가 컬럼 인덱스 -1 로 계산하다 예외를 던진다.
     if (!g || g.columns.length === 0) return false;
-    const insertRows = ctxRef.current.rows.filter(r => r.CRUD_TYPE === 'I');
+    const source = g.collectionView?.sourceCollection ?? [];
+    const insertRows = source.filter(r => r.CRUD_TYPE === 'I');
     if (insertRows.length === 0) return false;
     insertRows.forEach(row => keepRowVisibleUnderFilter(g, row));
     return true;
@@ -352,20 +352,10 @@ export const DemandManagerGrid = ({
     }
   }, [gridRef]);
 
-  useEffect(() => {
-    if (reapplyInsertRowVisibility()) refreshKeepingSelection();
-  }, [rows, reapplyInsertRowVisibility, refreshKeepingSelection]);
-
-  // F4 Filter — 월 컬럼은 필터 대상에서 제외
+  // F4 Filter
   useEffect(() => {
     const g = gridRef.current;
     if (!g || !gridFilterRef) return;
-    const onFilterChanging = (
-      _s: FlexGridFilter,
-      e: { cancel: boolean; getColumn: () => { binding?: string | null } }
-    ) => {
-      if (/^M\d+$/.test(e.getColumn()?.binding ?? '')) e.cancel = true;
-    };
     // 금지: 여기서 새 FlexGridFilter 를 만들지 말 것 (2026-08-22 실측 — "필터 걸고 행추가하면 필터가 풀림").
     //   공용 DataGrid 가 itemsSourceChanged 에 [capture -> FlexGridFilter 생성(=wijmo clear) -> restore]
     //   를 등록 순서로 걸어 필터를 되살린다. 화면이 두 번째 인스턴스를 만들면 그 clear 핸들러가
@@ -391,18 +381,16 @@ export const DemandManagerGrid = ({
         refreshKeepingSelection();
       });
     };
-    f.filterChanging.addHandler(onFilterChanging as never);
     f.filterApplied.addHandler(onFilterApplied);
     return () => {
       window.cancelAnimationFrame(raf);
       try {
-        f?.filterChanging.removeHandler(onFilterChanging as never);
         f?.filterApplied.removeHandler(onFilterApplied);
       } catch {
         /* unmount race */
       }
     };
-  }, [gridRef, gridFilterRef, monthColumns, reapplyInsertRowVisibility, refreshKeepingSelection]);
+  }, [gridRef, gridFilterRef, reapplyInsertRowVisibility, refreshKeepingSelection]);
 
   return (
     // <div className={styles.gridContainer}>
@@ -423,7 +411,9 @@ export const DemandManagerGrid = ({
       //   여기에 false 를 주면 공용 측이 헤더 클릭 핸들러를 아예 달지 않아 F3 자체가 무력해진다
       //   (2026-08-27 사용자 지적 — 정렬이 안 됨). 월 컬럼은 mainDynamicColumns 에서
       //   allowSorting:false 로 만들고 공용 핸들러도 _dynamic 컬럼을 걸러낸다.
-      allowSorting={true}
+      //   true 도 주지 않는다 - grid.allowSorting 이 truthy 면 wijmo _MouseHandler._mousedown 이
+      //   헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다(헤더 클릭 동작 통일, 2026-09-09).
+      //   prop 을 생략하면 sortingEnabled 판정이 undefined 라 true 가 되어 F3 정렬은 그대로다.
       allowMerging={AllowMerging.All}
     />
     // </div>

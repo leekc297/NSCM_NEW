@@ -1,18 +1,27 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { attachRowNoHeader } from '@foundation/utils';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, Checkbox, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid, Stack } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
-import { MENU_ID, MSG, SHEETS, VERSION_AXIS, VERSION_MAX_SELECT } from '../mkt-fcst-comparison.constants';
+import {
+  MENU_ID,
+  MSG,
+  SHEETS,
+  VERSION_AXIS,
+  VERSION_MAX_SELECT,
+} from '../mkt-fcst-comparison.constants';
+import { defaultPeriodEnd } from '../useMktFcstComparisonStore';
 
 import styles from './ComparisonVersionModal.module.scss';
 
@@ -72,6 +81,8 @@ export const ComparisonVersionModal = ({
   const { t } = useTranslation();
   const setAlert = useMessageStore(s => s.setAlert);
   const gridRef = useRef<FlexGridType<VersionPopupRow>>(undefined);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
   const divisionOptions = useMemo<Array<{ value: string; label: string }>>(() => {
@@ -85,7 +96,8 @@ export const ComparisonVersionModal = ({
   }, [myDivisions]);
 
   const defaultFrom = defaultPeriod?.start || dayjs().startOf('month').format('YYYYMMDD');
-  const defaultTo = defaultPeriod?.end || dayjs().add(6, 'month').endOf('month').format('YYYYMMDD');
+  // 폴백은 부모 기본값과 같은 식이어야 한다 - 스토어에서 가져온다 (이번달 1일 ~ +5개월 말일)
+  const defaultTo = defaultPeriod?.end || defaultPeriodEnd();
   const [periodFrom, setPeriodFrom] = useState<string>(defaultFrom);
   const [periodTo, setPeriodTo] = useState<string>(defaultTo);
   const [divisionId, setDivisionId] = useState<string>(defaultDivision);
@@ -167,12 +179,15 @@ export const ComparisonVersionModal = ({
     const g = gridRef.current;
     if (!g) return;
     g.isReadOnly = true;
-    g.selectionMode = 2; // SelectionMode.ListBox — Ctrl/Shift 다중선택 (최대 2 는 OK 시 검증)
     const onDbl = () => handleApply();
     g.hostElement?.addEventListener('dblclick', onDbl);
     return () => g.hostElement?.removeEventListener('dblclick', onDbl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows]);
+
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, rows]);
 
   return (
     <CustomDialog
@@ -181,6 +196,10 @@ export const ComparisonVersionModal = ({
       type='modal'
       position='basic'
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       disableButtonCancel
       customHeaderTitle={
         <div className='headerContainer'>
@@ -192,7 +211,7 @@ export const ComparisonVersionModal = ({
       customContentArea={
         <div className={styles.dialogContent}>
           <SearchArea
-            searchButtonLabel={loading ? t('LBL00665', 'Loading...') : t('LBL00664', 'Search')}
+            searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleFind}
             conditions={
               <>
@@ -257,13 +276,27 @@ export const ComparisonVersionModal = ({
             }
           />
           <div className={styles.gridWrapper}>
-            <DataGrid<VersionPopupRow>
-              gridRef={gridRef}
-              itemsSource={rows}
-              staticColumns={VERSION_COLUMNS}
-              autoGenerateColumns={false}
-              className={styles.grid}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea title='' count={rows.length} gridRef={gridRef} gridFilterRef={gridFilterRef}>
+              <DataGrid<VersionPopupRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                // prop 으로 줘야 한다 - 위 effect 의 g.isReadOnly 는 이미 늦다. DataGrid 는
+                //   초기화 시점에 prop 을 보고 rowHeaders 에 CRUD 상태 컬럼을 넣을지 정하는데,
+                //   그 컬럼이 생기면 코너(TopLeft)가 2칸이 되어 attachRowNoHeader 가 'No' 를
+                //   두 번 찍는다.
+                isReadOnly
+                itemsSource={rows}
+                staticColumns={VERSION_COLUMNS}
+                autoGenerateColumns={false}
+                className={styles.grid}
+              />
+            </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
             <Button

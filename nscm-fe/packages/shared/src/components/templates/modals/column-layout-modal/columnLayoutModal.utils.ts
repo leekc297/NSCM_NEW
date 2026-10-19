@@ -302,19 +302,30 @@ export const buildDefaultRows = (
     supplied: { flag: boolean; order: boolean; width: boolean }
   ): ColumnLayoutRow => {
     const hit = metaByName.get(row.COLUMN_NAME);
-    if (!hit) return row;
-    const { meta, order } = hit;
-    const metaWidth = Number(meta.colWth);
+    const meta = hit?.meta;
+    // 고정 컬럼(USER_SELECTABLE_FLAG='N' — SYS0004 그리드가 '필수'로 표시하는 컬럼)은 DEFAULT_FLAG 와
+    //   무관하게 항상 표시한다. 사용자가 좌측(비표시)으로 옮길 수도 없는 컬럼이 Default 리셋에서
+    //   숨겨진 채로 남으면 안 된다(2026-09-16 사용자 요청 — hideColumns 의 고정 잠금과 동일 기준).
+    const isKey = meta?.personalizable === undefined ? row.isKey : meta.personalizable === false;
+    const userFlag: 'Y' | 'N' = isKey
+      ? 'Y'
+      : supplied.flag
+        ? row.USER_FLAG
+        : meta?.display === false
+          ? 'N'
+          : 'Y';
+    if (!hit) return { ...row, USER_FLAG: userFlag, isKey };
+    const metaWidth = Number(meta?.colWth);
     return {
       ...row,
-      COLUMN_LABEL_NAME: meta.colLblNm ?? row.COLUMN_LABEL_NAME,
-      USER_FLAG: supplied.flag ? row.USER_FLAG : meta.display === false ? 'N' : 'Y',
-      SORT_ORDER_NO: supplied.order ? row.SORT_ORDER_NO : order,
+      COLUMN_LABEL_NAME: meta?.colLblNm ?? row.COLUMN_LABEL_NAME,
+      USER_FLAG: userFlag,
+      SORT_ORDER_NO: supplied.order ? row.SORT_ORDER_NO : hit.order,
       COL_WIDTH:
         supplied.width || !(Number.isFinite(metaWidth) && metaWidth > 0)
           ? row.COL_WIDTH
           : metaWidth,
-      isKey: meta.personalizable === undefined ? row.isKey : meta.personalizable === false,
+      isKey,
     };
   };
 
@@ -361,6 +372,21 @@ export const buildSavePayload = (
     ...invisible.map(r => ({ ...r, SORT_ORDER_NO: 0 })),
   ];
 };
+
+/**
+ * 저장 payload 를 값 기준 문자열로 직렬화 — 저장에 실제로 반영되는 축(표시 여부·순서·폭·색)만 본다.
+ *   라벨/isKey 는 사용자가 못 바꾸는 표시 메타라 제외한다. buildSavePayload 가 순서를 1..n 으로
+ *   정규화하므로, 초기 상태와 현재 상태의 이 문자열이 같으면 "저장할 변경이 없다"는 뜻이다.
+ *   배열 순서에 흔들리지 않도록 COLUMN_NAME 으로 정렬한 뒤 직렬화한다.
+ */
+export const serializeSavePayload = (rows: ColumnLayoutRow[]): string =>
+  [...rows]
+    .sort((a, b) => a.COLUMN_NAME.localeCompare(b.COLUMN_NAME))
+    .map(
+      r =>
+        `${r.COLUMN_NAME}:${r.USER_FLAG}:${r.SORT_ORDER_NO}:${r.COL_WIDTH}:${r.CELL_COLOR}:${r.TEXT_COLOR}`
+    )
+    .join('|');
 
 export const toggleDisplay = (rows: ColumnLayoutRow[], key: string): ColumnLayoutRow[] =>
   rows.map(r =>

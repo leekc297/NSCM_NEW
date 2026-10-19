@@ -1,0 +1,11 @@
+.inputWithButton {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+
+  > :first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}

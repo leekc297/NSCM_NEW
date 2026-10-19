@@ -1,0 +1,2611 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_DM_MST_EXCHANGE_RATE_ALL","1305823764","1","
+/*
+ * Program ID   : DM0020_SAVE_DM_MST_EXCHANGE_RATE_ALL
+ * Description  : DM0020_SalesFuturePricePopUp ('DM_MST_EXCHANGE_RATE' TABLE INSERT/UPDATE/DELETE)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 20180807 KHSONG Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 20180807 KHSONG Split 구조변경
+ */
+
+CREATE PROCEDURE [dbo].[DM0020_SAVE_DM_MST_EXCHANGE_RATE_ALL]
+    @p_active_flag            NVARCHAR(MAX),    
+	@p_division_id            NVARCHAR(MAX),
+    @p_YYYYMMDD               NVARCHAR(MAX),    
+    @p_CURRENCY               NVARCHAR(MAX),    
+    @p_UNIT_CURRENCY          NVARCHAR(MAX),    
+    @p_EXCHANGE_PRICE         NVARCHAR(MAX),    
+    @p_CREATED_BY             NVARCHAR(MAX),    
+    @p_LAST_UPDATED_BY        NVARCHAR(MAX)    
+
+
+AS
+
+BEGIN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET NOCOUNT ON; 
+    SET XACT_ABORT ON;
+
+	-- 스플릿관련 변수
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+    DECLARE  @v_active_flag      NVARCHAR(MAX);
+    DECLARE  @v_division_id      NVARCHAR(MAX);
+    DECLARE  @v_YYYYMMDD         NVARCHAR(MAX);
+    DECLARE  @v_CURRENCY         NVARCHAR(MAX);
+    DECLARE  @v_UNIT_CURRENCY    NVARCHAR(MAX);
+    DECLARE  @v_EXCHANGE_PRICE   NVARCHAR(MAX);
+    DECLARE  @v_CREATED_BY       NVARCHAR(MAX);
+    DECLARE  @v_LAST_UPDATED_BY  NVARCHAR(MAX);
+
+	-- recv init
+    SET  @v_active_flag      =  NULL;
+    SET  @v_division_id      =  NULL;
+    SET  @v_YYYYMMDD         =  NULL;
+    SET  @v_CURRENCY         =  NULL;
+    SET  @v_UNIT_CURRENCY    =  NULL;
+    SET  @v_EXCHANGE_PRICE   =  NULL;
+    SET  @v_CREATED_BY       =  NULL;
+    SET  @v_LAST_UPDATED_BY  =  NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^'  -- 데이터 구분자
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	-- 마지막 데이터 처리를 위한 구분자 추가
+	SET @p_active_flag      = RTRIM(@p_active_flag     ) + '^';
+	SET @p_division_id      = RTRIM(@p_division_id     ) + '^';
+	SET @p_YYYYMMDD         = RTRIM(@p_YYYYMMDD        ) + '^';
+	SET @p_CURRENCY         = RTRIM(@p_CURRENCY        ) + '^';
+	SET @p_UNIT_CURRENCY    = RTRIM(@p_UNIT_CURRENCY   ) + '^';
+	SET @p_EXCHANGE_PRICE   = RTRIM(@p_EXCHANGE_PRICE  ) + '^';
+	SET @p_CREATED_BY       = RTRIM(@p_CREATED_BY      ) + '^';
+	SET @p_LAST_UPDATED_BY  = RTRIM(@p_LAST_UPDATED_BY ) + '^';
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'DM0020_SAVE_DM_MST_EXCHANGE_RATE_ALL';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+    DECLARE @n_delete_count    INTEGER = 0;
+    DECLARE @n_merge_count     INTEGER = 0;
+	
+	-- @results TEMP TABLE
+	DECLARE @results TABLE (
+             active_flag        NVARCHAR(MAX)
+			,division_id        NVARCHAR(MAX)
+			,YYYYMMDD           NVARCHAR(MAX)
+			,CURRENCY           NVARCHAR(MAX)
+			,UNIT_CURRENCY      NVARCHAR(MAX)
+			,EXCHANGE_PRICE     NVARCHAR(MAX)
+			,CREATED_BY         NVARCHAR(MAX)
+			,LAST_UPDATED_BY    NVARCHAR(MAX)
+    )
+
+		-- 시작 LOG  (START)
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		SET @v_log_message = NULL      /*-- <- 변수 재사용을 위하여 초기화해야함 --*/
+		-- 시작 LOG  (END)
+
+		-- 트랜잭션 (START)
+		BEGIN TRANSACTION;
+
+	--------------------------------------------------------------------------------------------	
+		BEG"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_DM_MST_EXCHANGE_RATE_ALL","1305823764","2","IN TRY
+	--------------------------------------------------------------------------------------------	
+
+--###############################################  @results 테이블에 split후 insert (START)
+WHILE LEN(@p_DIVISION_ID) > 0
+BEGIN
+    DECLARE @index_active_flag       INT
+	DECLARE @index_division_id       INT
+	DECLARE @index_YYYYMMDD          INT
+	DECLARE @index_CURRENCY          INT
+	DECLARE @index_UNIT_CURRENCY     INT
+	DECLARE @index_EXCHANGE_PRICE    INT
+	DECLARE @index_CREATED_BY        INT
+	DECLARE @index_LAST_UPDATED_BY   INT
+
+    SET @index_active_flag       = PATINDEX('%' + '^' + '%', @p_active_flag     )
+	SET @index_division_id       = PATINDEX('%' + '^' + '%', @p_division_id     )
+	SET @index_YYYYMMDD          = PATINDEX('%' + '^' + '%', @p_YYYYMMDD        )
+	SET @index_CURRENCY          = PATINDEX('%' + '^' + '%', @p_CURRENCY        )
+	SET @index_UNIT_CURRENCY     = PATINDEX('%' + '^' + '%', @p_UNIT_CURRENCY   )
+	SET @index_EXCHANGE_PRICE    = PATINDEX('%' + '^' + '%', @p_EXCHANGE_PRICE  )
+	SET @index_CREATED_BY        = PATINDEX('%' + '^' + '%', @p_CREATED_BY      )
+	SET @index_LAST_UPDATED_BY   = PATINDEX('%' + '^' + '%', @p_LAST_UPDATED_BY )
+
+	--확인  select @index_DIVISION_ID as '@index_DIVISION_ID';
+    IF @index_DIVISION_ID > 0
+		BEGIN
+			SET @v_active_flag = SUBSTRING(@p_active_flag, 0, @index_active_flag)
+			SET @p_active_flag = SUBSTRING(@p_active_flag, LEN(@v_active_flag + '^') + 1, LEN(@p_active_flag))
+
+			SET @v_DIVISION_ID = SUBSTRING(@p_DIVISION_ID, 0, @index_DIVISION_ID)
+			SET @p_DIVISION_ID = SUBSTRING(@p_DIVISION_ID, LEN(@v_DIVISION_ID + '^') + 1, LEN(@p_DIVISION_ID))
+
+			SET @v_YYYYMMDD = SUBSTRING(@p_YYYYMMDD, 0, @index_YYYYMMDD)
+			SET @p_YYYYMMDD = SUBSTRING(@p_YYYYMMDD, LEN(@v_YYYYMMDD + '^') + 1, LEN(@p_YYYYMMDD))
+
+			SET @v_CURRENCY = SUBSTRING(@p_CURRENCY, 0, @index_CURRENCY)
+			SET @p_CURRENCY = SUBSTRING(@p_CURRENCY, LEN(@v_CURRENCY + '^') + 1, LEN(@p_CURRENCY))
+
+			SET @v_UNIT_CURRENCY = SUBSTRING(@p_UNIT_CURRENCY, 0, @index_UNIT_CURRENCY)
+			SET @p_UNIT_CURRENCY = SUBSTRING(@p_UNIT_CURRENCY, LEN(@v_UNIT_CURRENCY + '^') + 1, LEN(@p_UNIT_CURRENCY))
+
+			SET @v_EXCHANGE_PRICE = SUBSTRING(@p_EXCHANGE_PRICE, 0, @index_EXCHANGE_PRICE)
+			SET @p_EXCHANGE_PRICE = SUBSTRING(@p_EXCHANGE_PRICE, LEN(@v_EXCHANGE_PRICE + '^') + 1, LEN(@p_EXCHANGE_PRICE))
+
+			SET @v_CREATED_BY = SUBSTRING(@p_CREATED_BY, 0, @index_CREATED_BY)
+			SET @p_CREATED_BY = SUBSTRING(@p_CREATED_BY, LEN(@v_CREATED_BY + '^') + 1, LEN(@p_CREATED_BY))
+
+			SET @v_LAST_UPDATED_BY = SUBSTRING(@p_LAST_UPDATED_BY, 0, @index_LAST_UPDATED_BY)
+			SET @p_LAST_UPDATED_BY = SUBSTRING(@p_LAST_UPDATED_BY, LEN(@v_LAST_UPDATED_BY + '^') + 1, LEN(@p_LAST_UPDATED_BY))
+ 
+			INSERT INTO @results ( 
+			                         active_flag    
+									,division_id    
+									,YYYYMMDD       
+									,CURRENCY       
+									,UNIT_CURRENCY  
+									,EXCHANGE_PRICE 
+									,CREATED_BY     
+									,LAST_UPDATED_BY
+			) VALUES ( 
+			                         @v_active_flag    
+									,@v_division_id    
+									,@v_YYYYMMDD       
+									,@v_CURRENCY       
+									,@v_UNIT_CURRENCY  
+									,@v_EXCHANGE_PRICE 
+									,@v_CREATED_BY     
+									,@v_LAST_UPDATED_BY
+			)
+		END
+    ELSE
+		BEGIN
+			SET @v_DIVISION_ID = @p_DIVISION_ID
+			SET @p_DIVISION_ID = NULL
+ 
+			INSERT INTO @results ( 
+			                         active_flag    
+									,division_id    
+									,YYYYMMDD       
+									,CURRENCY       
+									,UNIT_CURRENCY  
+									,EXCHANGE_PRICE 
+									,CREATED_BY     
+									,LAST_UPDATED_BY
+			) VALUES ( 
+			                         @v_active_flag    
+									,@v_division_id    
+									,@v_YYYYMMDD       
+									,@v_CURRENCY       
+									,@v_UNIT_CURRENCY  
+									,@v_EXCHANGE_PRICE 
+									,@v_CREATED_BY     
+									,@v_LAST_UPDATED_BY
+			)
+		END
+			-- 20180806 KHSONG Division_id Null Validation 추가
+			IF NOT EXISTS"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_DM_MST_EXCHANGE_RATE_ALL","1305823764","3"," ( SELECT 1 FROM [dbo].SCM_MST_DIVISION WITH (NOLOCK) WHERE 1=1
+									  AND DIVISION_ID = @v_DIVISION_ID ) 
+				BEGIN 
+					SET @v_log_type = 'INVALID'
+					GOTO ERR_RTN
+				END
+END
+
+	--###############################################   @results 테이블에 split후 insert (END)
+
+--===================================================================================== delete start
+BEGIN
+		   --  select * from @results
+		   DELETE 
+           FROM [dbo].DM_MST_EXCHANGE_RATE
+           WHERE exists(
+                    SELECT DIVISION_ID
+					  FROM @results 
+					 where active_flag      = 'D'
+                       and DM_MST_EXCHANGE_RATE.DIVISION_ID        =   DIVISION_ID         
+                       AND DM_MST_EXCHANGE_RATE.YYYYMMDD           =   YYYYMMDD          
+                       AND DM_MST_EXCHANGE_RATE.CURRENCY           =   CURRENCY     
+                       AND DM_MST_EXCHANGE_RATE.UNIT_CURRENCY      =   UNIT_CURRENCY
+				  );
+END
+--===================================================================================== delete end
+
+--===================================================================================== update, insert start
+BEGIN
+					MERGE INTO [dbo].DM_MST_EXCHANGE_RATE A
+					USING (
+							SELECT 
+								     division_id   
+								    ,YYYYMMDD      
+								    ,CURRENCY      
+								    ,UNIT_CURRENCY 
+								    ,max(EXCHANGE_PRICE)  as EXCHANGE_PRICE
+									,max(CREATED_BY)      as CREATED_BY
+									,max(LAST_UPDATED_BY) as LAST_UPDATED_BY
+                             FROM  @results  WHERE active_flag <> 'D'   -- DELETE값이 아닌경우만
+                          group by   division_id     
+								    ,YYYYMMDD       
+								    ,CURRENCY       	
+								    ,UNIT_CURRENCY   
+						  ) B
+					ON(
+                                A.division_id        =   B.division_id      
+                            AND A.YYYYMMDD           =   B.YYYYMMDD       
+                            AND A.CURRENCY           =   B.CURRENCY      
+                            AND A.UNIT_CURRENCY      =   B.UNIT_CURRENCY 
+					  )
+					WHEN MATCHED THEN
+						 UPDATE SET 
+ 									 division_id         =  b.division_id   
+									,YYYYMMDD            =  b.YYYYMMDD      
+									,CURRENCY            =  b.CURRENCY      
+									,UNIT_CURRENCY       =  b.UNIT_CURRENCY 
+									,EXCHANGE_PRICE      =  b.EXCHANGE_PRICE
+									,CREATED_BY          =  b.CREATED_BY     
+									,CREATION_DATE       =  sysdatetime()	--,CREATION_DATE       =  @v_CREATION_DATE  
+									,LAST_UPDATED_BY     =  b.LAST_UPDATED_BY
+									,LAST_UPDATE_DATE    =  sysdatetime()     
+
+					WHEN NOT MATCHED THEN
+
+					     INSERT 
+								  ( division_id   
+								   ,YYYYMMDD      
+								   ,CURRENCY      
+								   ,UNIT_CURRENCY 
+								   ,EXCHANGE_PRICE
+								   ,CREATED_BY      
+								   ,CREATION_DATE   
+								   ,LAST_UPDATED_BY 
+								   ,LAST_UPDATE_DATE
+								)
+						 VALUES (   
+									b.division_id   
+								   ,b.YYYYMMDD      
+								   ,b.CURRENCY      
+								   ,b.UNIT_CURRENCY 
+								   ,b.EXCHANGE_PRICE
+								   ,b.CREATED_BY     
+								   ,sysdatetime()    
+								   ,b.LAST_UPDATED_BY
+								   ,sysdatetime()     
+								);
+
+
+END
+--===================================================================================== update, insert end
+
+
+     -- IF @@TRANCOUNT > 0 
+
+  	-- 트랜잭션 (COMMIT)
+        COMMIT WORK;
+
+	--------------------------------------------------------------------------------------------	
+		END TRY
+	--------------------------------------------------------------------------------------------	
+
+	--------------------------------------------------------------	
+    BEGIN CATCH
+	--------------------------------------------------------------	
+      -- ROLLBACK
+      -- ERROR LOG VALUE SAVE
+      SET @v_log_type = 'ERROR';
+      SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+    "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_DM_MST_EXCHANGE_RATE_ALL","1305823764","4","  SET @v_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+      SET @d_event_date = SYSDATETIME();
+
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();  /*-- 에러메시지 DISPLAY --*/
+
+	-- 트랜잭션 (END)
+	ROLLBACK TRANSACTION;
+
+	--------------------------------------------------------------	
+    END CATCH;
+	--------------------------------------------------------------	
+
+	-- 수행결과 성공여부 DISPLAY
+     IF @v_log_message IS NULL
+	  SELECT 'success'
+	;
+
+    -- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure ##########';
+    SET @v_description = 'delete_count: '+ Convert(NVARCHAR(10), @n_delete_count)  + ' / merge_count: ' + Convert(NVARCHAR(10), @n_merge_count) ;
+    SET @d_event_date = SYSDATETIME();
+
+	-- ERROR LOG DB INSERT (로직의 TRANSACTION 종료이후수행 : 충돌방지)
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	ERR_RTN:
+	IF @v_log_type = 'INVALID'
+		BEGIN
+			ROLLBACK TRANSACTION;
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			SELECT N'Division 값이 존재하지 않습니다.'
+		END
+
+  END;
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_GET_EXCHANGE_POPUP_SPREAD_TITLE","1209823422","1","/****************************************************************************************************/
+/* Program ID  : DM0035_GET_SPREAD_TITLE                                                             */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2019/04/01  JYE		     Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/*                                                                                                  */
+/****************************************************************************************************/
+create PROCEDURE [dbo].[DM0020_GET_EXCHANGE_POPUP_SPREAD_TITLE]
+    @p_start_yyyymmdd  NVARCHAR(8),
+    @p_end_yyyymmdd    NVARCHAR(8)
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	SELECT   MIN(BASIS_START_DATE) AS BASIS_START_DATE, CALENDAR_YYYY, CALENDAR_MONTH
+	FROM [dbo].[SCM_SYS_CALENDAR_M]
+	WHERE
+	BASIS_YYYYMMDD >= @p_start_yyyymmdd AND BASIS_YYYYMMDD <= @p_end_yyyymmdd
+	GROUP BY CALENDAR_YYYY, CALENDAR_MONTH
+	ORDER BY BASIS_START_DATE
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_GET_SCM_MST_FUTURE_PRICE","1225823479","1","/****************************************************************************************************/
+/* Program ID  : [DMF0006_GET_CUSTOMERMODELMAPPING]                                                           */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2018/03/12  SeungJae.Hwnag       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/* 2018/05/30  JYE			복수 팀 권한 관련  수정  */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DM0020_GET_SCM_MST_FUTURE_PRICE]
+    @p_division_id              NVARCHAR(30),
+	@p_dept_id        NVARCHAR(MAX),	--Department
+    @p_end_customer   NVARCHAR(MAX),	--Endcustomer
+	@p_scm_site_id              NVARCHAR(MAX),
+	@p_plant_site_id              NVARCHAR(MAX),
+    @p_project_code             NVARCHAR(MAX),
+	@p_item_id                  NVARCHAR(MAX),
+	@p_customer_project_code    NVARCHAR(MAX),
+	@p_customer_model           NVARCHAR(MAX),
+	@p_from_yyyymmdd            NVARCHAR(8),
+	@p_to_yyyymmdd             NVARCHAR(8),
+	@p_biztype                 NVARCHAR(MAX),
+	@p_created_by              NVARCHAR(MAX),
+	@p_userinfo                 NVARCHAR(MAX)
+ 
+AS  
+  -- EXEC DM0020_GET_SCM_MST_FUTURE_PRICE @p_division_id='81', @p_dept_id='ALL', @p_end_customer='ALL', @p_scm_site_id='ALL', @p_plant_site_id='ALL', @p_project_code='', @p_item_id='', @p_customer_project_code='', @p_customer_model='', @p_from_yyyymmdd='20180326', @p_to_yyyymmdd='20180926', @p_biztype='ALL', @p_created_by='20140001', @p_userinfo='ADMIN'
+
+BEGIN
+  SET NOCOUNT ON;
+
+    DECLARE @v_dept_id nvarchar(max)='';
+	DECLARE @v_group_id nvarchar(max)='';
+
+	IF @p_userinfo = 'ADMIN' OR @p_userinfo = 'DM ADMIN'
+		SET @v_group_id = 'ADMIN'
+
+  DECLARE @Prod varchar(max);
+  DECLARE @nsql nvarchar(max);
+  SELECT  @Prod = '';
+  
+IF OBJECT_ID (N'tempdb..#tmpData', N'U') IS NOT NULL 
+	DROP TABLE #tmpData
+IF OBJECT_ID (N'tempdb..#tmpOutput', N'U') IS NOT NULL 
+	DROP TABLE #tmpOutput
+	
+SELECT    
+   A.DIVISION_ID,
+   B.DIVISION_NAME,
+   DEPRTMENT.DEPT_ID AS UPPER_DEPT_ID,
+   TEAM.DEPT_ID, 
+   --CASE WHEN isnull(TEAM.DEPT_NAME_KO,'') = '' THEN '' ELSE RIGHT(isnull(TEAM.DEPT_NAME_KO,''), CHARINDEX('.',REVERSE(isnull(TEAM.DEPT_NAME_KO,''))) -1) END AS TEAM_INCHARGE,
+   A.SCM_SITE_ID,
+   A.PLANT_SITE_ID,
+   C.SITE_DESCRIPTION,   
+   isnull(C.END_CUSTOMER,'') AS END_CUSTOMER,
+   A.PROJECT_CODE,
+   PJT.PROJECT_NAME,
+   PJT.BIZ_TYPE as BIZ_TYPE_NAME,
+   --PJT.BIZ_TYPE_NAME,
+   PJT.PROJECT_STATUS,
+   A.ITEM_ID,
+   ITEM.ITEM_CLASS_NAME, 
+   isnull(ITEM.ITEM_NAME,'')AS ITEM_NAME,
+   A.INCOTERMS,
+   --SITE_ITEM.CURRENCY,
+   A.CURRENCY,
+   A.FCST_TYPE,
+   A.DOM_EXP,
+   MEASURE.LOOKUP_CODE AS MEASURE,
+   MEASURE.DISPLAY_SEQ,
+   --CASE WHEN (RTRIM(TEAM.DEPT_ID) = RTRIM(@v_dept_id) OR @v_group_id ='ADMIN') THEN 'Y' ELSE 'N' END AS AUTHORITY_YN
+   CASE WHEN (([dbo].[FN_GET_DEPT_LIST](@p_created_by, TEAM.DEPT_ID) = 'Y') OR @v_group_id ='ADMIN') THEN 'Y' ELSE 'N' END AS AUTHORITY_YN
+   ,A.YYYYMMDD
+   --,A.PRICE
+
+INTO #tmpData
+FROM SCM_MST_FUTURE_PRICE AS A WITH(NOLOCK)
+LEFT JOIN (SELECT * FROM SCM_MST_DIVISION WITH(NOLOCK) WHERE VALID_YN = 'Y') AS B 
+ON A.DIVISION_ID = B.DIVISION_ID
+LEFT JOIN (SELECT * FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y')"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_GET_SCM_MST_FUTURE_PRICE","1225823479","2"," AS C 
+ON A.DIVISION_ID = C.DIVISION_ID AND A.SCM_SITE_ID = C.SCM_SITE_ID AND C.SITE_TYPE = 'SALES'
+LEFT JOIN (SELECT * FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS D
+ON A.DIVISION_ID = D.DIVISION_ID AND A.SCM_SITE_ID = D.SCM_SITE_ID AND C.SITE_TYPE = 'PLANT'
+LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y') AS TEAM			       
+			       ON C.DEPT_ID = TEAM.DEPT_ID
+LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y') AS DEPRTMENT			       
+	ON TEAM.UPPER_DEPT_ID = DEPRTMENT.DEPT_ID
+INNER JOIN   
+(
+--SELECT DISTINCT DIVISION_ID, ITEM_ID, NICK_NAME, ITEM_CLASS, ITEM_CLASS_NAME
+--FROM SCM_MST_ITEM_SN WITH(NOLOCK)
+  SELECT * FROM DM_MST_ITEM_SINGLE_V  WITH(NOLOCK)
+)  AS ITEM 
+ON   A.DIVISION_ID = ITEM.DIVISION_ID AND A.ITEM_ID  = ITEM.ITEM_ID
+LEFT JOIN 
+(
+
+SELECT PJTS.DIVISION_ID, PJTS.PROJECT_CODE, PJTS.PROJECT_NAME, PJTS.PROJECT_VER_SEQ, PJTS.CAPACITY, BIZ_TYPE, BIZ_TYPE_NAME, PROJECT_STATUS
+	FROM SCM_MST_PROJECT PJTS WITH(NOLOCK)
+	INNER JOIN 
+	(
+		SELECT DIVISION_ID, PROJECT_CODE, MAX(PROJECT_VER_SEQ) AS PROJECT_VER_SEQ
+		FROM SCM_MST_PROJECT WITH(NOLOCK)
+		GROUP BY DIVISION_ID, PROJECT_CODE
+	) PJTSG 
+	ON PJTSG.DIVISION_ID = PJTS.DIVISION_ID AND PJTSG.PROJECT_CODE = PJTS.PROJECT_CODE AND PJTSG.PROJECT_VER_SEQ = PJTS.PROJECT_VER_SEQ
+
+
+) AS PJT ON   A.DIVISION_ID = PJT.DIVISION_ID AND A.PROJECT_CODE = PJT.PROJECT_CODE
+LEFT JOIN (SELECT * FROM SCM_MST_SITE_ITEM WITH(NOLOCK) WHERE VALID_YN = 'Y') AS SITE_ITEM
+ON SITE_ITEM.DIVISION_ID = A.DIVISION_ID
+	AND SITE_ITEM.PROJECT_CODE = A.PROJECT_CODE
+	AND SITE_ITEM.SCM_SITE_ID = A.SCM_SITE_ID
+	AND SITE_ITEM.ITEM_ID = A.ITEM_ID
+CROSS JOIN
+(
+SELECT  COLUMN_NAME AS LOOKUP_CODE, 
+		COLUMN_LABEL_NAME AS [DESCRIPTION], 
+		SORT_ORDER_NO AS DISPLAY_SEQ
+FROM     SCM_MST_SHEET_MEASURE WITH(NOLOCK)
+WHERE  (PROGRAM_ID = 'DMF1006' AND SHEET_NAME = 'Sales Price')
+		AND COLUMN_NAME <> 'LOC'
+UNION
+SELECT  COLUMN_NAME AS LOOKUP_CODE, 
+		COLUMN_LABEL_NAME AS [DESCRIPTION], 
+		SORT_ORDER_NO AS DISPLAY_SEQ
+FROM     SCM_MST_SHEET_MEASURE WITH(NOLOCK)
+WHERE  (PROGRAM_ID = 'DMF1006' AND SHEET_NAME = 'Sales Price')
+		AND COLUMN_NAME = 'LOC'
+--ORDER BY SORT_ORDER_NO
+) AS MEASURE
+--WHERE
+--SITE_ITEM.CURRENCY IS NOT NULL
+WHERE   (A.YYYYMMDD >= @p_from_yyyymmdd and A.YYYYMMDD <= @p_to_yyyymmdd)		       
+		AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   		 ELSE A.DIVISION_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+					(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE A.DIVISION_ID END) = P.data
+	               )
+		AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   		 ELSE TEAM.DEPT_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+					(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+	               )
+		AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   		 ELSE isnull(C.END_CUSTOMER,'')			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+					(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+	               )				   
+		AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   		 ELSE A.SCM_SITE_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+					(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE A.SCM_SITE_ID END) = P.data
+	               )
+		AND CASE WHEN @p_plant_site_id = 'ALL' THEN 'ALL'
+		   		 ELSE A.PLANT_SITE_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_plant_site_id,',') as P Where 
+					(CASE WHEN @p_plant_site_id = 'ALL' THEN 'ALL' ELSE A.PLANT_SITE_ID END) = P.data
+	               )
+		AND CASE WHEN @p_project_code = '' THEN ''
+		   		 ELSE A.PROJECT_CODE			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_project_code,',') as P Where 
+					(CASE WHEN @p_proj"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_GET_SCM_MST_FUTURE_PRICE","1225823479","3","ect_code = '' THEN '' ELSE A.PROJECT_CODE END) = P.data
+	               )
+
+		AND CASE WHEN @p_biztype = 'ALL' THEN 'ALL'
+		   		 ELSE PJT.BIZ_TYPE			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_biztype,',') as P Where 
+					(CASE WHEN @p_biztype = 'ALL' THEN 'ALL' ELSE PJT.BIZ_TYPE END) = P.data
+	               )
+-- Muliti Like case.
+	   AND Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where A.ITEM_ID LIKE N'%' + P.token +'%')
+	   --AND Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where A.ITEM_ID LIKE N'%' + P.token +'%')
+
+
+GROUP BY 
+		A.DIVISION_ID,
+		B.DIVISION_NAME,
+		DEPRTMENT.DEPT_ID,
+		TEAM.DEPT_ID, 
+		--CASE WHEN isnull(TEAM.DEPT_NAME_KO,'') = '' THEN '' ELSE RIGHT(isnull(TEAM.DEPT_NAME_KO,''), CHARINDEX('.',REVERSE(isnull(TEAM.DEPT_NAME_KO,''))) -1) END,
+		A.SCM_SITE_ID,
+		A.PLANT_SITE_ID,
+		C.SITE_DESCRIPTION,		
+		isnull(C.END_CUSTOMER,''),
+		A.PROJECT_CODE,
+		PJT.PROJECT_NAME,
+	   PJT.BIZ_TYPE,
+	   --PJT.BIZ_TYPE_NAME,
+	   PJT.PROJECT_STATUS,
+		A.ITEM_ID,
+		ITEM.ITEM_CLASS_NAME, 
+		isnull(ITEM.ITEM_NAME,''),
+		A.INCOTERMS,
+		 A.FCST_TYPE,
+		 A.DOM_EXP,
+		A.CURRENCY,		
+		MEASURE.LOOKUP_CODE,
+		MEASURE.DISPLAY_SEQ,
+		CASE WHEN RTRIM(TEAM.DEPT_ID) = RTRIM(@v_dept_id) THEN 'Y' ELSE 'N' END
+		,A.YYYYMMDD
+		--,A.PRICE
+
+CREATE INDEX IDX_PRICE_KEYS ON #tmpData(DIVISION_ID ASC, PROJECT_CODE ASC, SCM_SITE_ID ASC, PLANT_SITE_ID ASC, ITEM_ID ASC, CURRENCY ASC, MEASURE ASC, DOM_EXP ASC, FCST_TYPE ASC, INCOTERMS ASC, YYYYMMDD ASC);
+
+
+
+-- 1. 실데이타와 조인
+SELECT 
+		A.DIVISION_ID,
+		A.DIVISION_NAME,
+		A.UPPER_DEPT_ID,
+		A.DEPT_ID	,
+		A.SCM_SITE_ID,
+		A.PLANT_SITE_ID,
+		A.SITE_DESCRIPTION,
+		A.END_CUSTOMER,
+		A.PROJECT_CODE,
+		A.PROJECT_NAME,
+		A.BIZ_TYPE_NAME,
+		A.PROJECT_STATUS,
+		A.ITEM_ID,
+		A.ITEM_CLASS_NAME,
+		A.ITEM_NAME,
+		A.INCOTERMS,
+		A.CURRENCY,
+		A.FCST_TYPE,
+		A.DOM_EXP,
+		A.MEASURE,
+		A.DISPLAY_SEQ,
+		A.AUTHORITY_YN,
+		A.YYYYMMDD,
+		ISNULL(B.PRICE,0) AS PRICE
+INTO #tmpOutput
+FROM #tmpData A
+LEFT JOIN (SELECT * FROM SCM_MST_FUTURE_PRICE WITH(NOLOCK) WHERE (YYYYMMDD >= @p_from_yyyymmdd and YYYYMMDD <= @p_to_yyyymmdd)) AS B 
+ON A.DIVISION_ID = B.DIVISION_ID 
+   AND A.PROJECT_CODE = B.PROJECT_CODE
+   AND A.SCM_SITE_ID = B.SCM_SITE_ID 
+   AND A.PLANT_SITE_ID = B.PLANT_SITE_ID 
+   AND A.ITEM_ID = B.ITEM_ID 
+   AND A.CURRENCY = B.CURRENCY
+   AND A.MEASURE = B.MEASURE
+   AND A.DOM_EXP = B.DOM_EXP
+   AND A.FCST_TYPE = B.FCST_TYPE
+   AND A.INCOTERMS = B.INCOTERMS
+   AND A.YYYYMMDD = B.YYYYMMDD
+
+--SELECT * FROM #tmpOutput RETURN;
+--return (0)
+
+/* tmpPlanData 에 대한 처리들  */
+		SELECT @Prod = @Prod + '[' + A.YYYYMMDD + '],'
+		FROM (SELECT DISTINCT YYYYMMDD FROM #tmpOutput) A
+		IF @Prod = '' 
+		BEGIN
+			SET @Prod = 'D_99999999'
+		END
+		ELSE
+		BEGIN
+			Select @Prod = LEFT(@Prod, LEN(@Prod)-1)
+		END
+
+--SELECT DISTINCT YYYYMMDD FROM #tmpOutput
+--SELECT @Prod 
+--SELECT * FROM #tmpOutput
+--return (0)
+
+SELECT  @nsql = '
+SELECT  
+		DIVISION_ID,
+		DIVISION_NAME,
+		UPPER_DEPT_ID,
+		DEPT_ID	,
+		SCM_SITE_ID,
+		PLANT_SITE_ID,
+		SITE_DESCRIPTION,
+		END_CUSTOMER,
+		PROJECT_CODE,
+		PROJECT_NAME,
+		BIZ_TYPE_NAME,
+		PROJECT_STATUS,
+		ITEM_ID,
+		ITEM_CLASS_NAME,
+		ITEM_NAME,
+		INCOTERMS,
+		CURRENCY,
+		FCST_TYPE,
+		DOM_EXP,
+		AUTHORITY_YN,		
+		DISPLAY_SEQ,
+		MEASURE,				
+		' + @Prod + '
+From(
+	SELECT 
+		*
+	FROM #tmpOutput
+	) T
+PIVOT (MAX(PRICE) FOR YYYYMMDD IN (' + @prod + ')
+) AS PVT
+ORDER BY 		
+
+		DIVISION_ID,
+		DEPT_ID,
+		END_CUSTOMER,
+		SCM_SITE_ID,
+		PROJECT_CODE,
+		PROJECT_STATUS,
+		BIZ_TYPE_NAME,
+		ITEM_ID,
+		ITEM_CLASS_NAME,
+		ITEM_NAME,
+		INCOTERMS,
+		FCST_TYPE,
+		DOM_EXP,
+		CURRENCY,
+		PLANT_SITE_ID,
+		DISPLAY_SEQ, 
+		MEASURE		
+' 
+
+--PRINT @NSQL 
+execute dbo. SP_executesql @NSQL 
+
+IF OBJECT_ID (N'tempdb..#tmpData', N'U') IS NOT NULL 
+	DROP TABLE #tmpData
+IF OBJECT_ID (N'tempdb..#tmpOutput', N'U') IS NOT NULL 
+	DROP TABLE #tm"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_GET_SCM_MST_FUTURE_PRICE","1225823479","4","pOutput
+
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_GET_SCM_MST_FUTURE_PRICE_CHECK","1241823536","1","/****************************************************************************************************/
+/* Program ID  : [DMF0006_GET_CUSTOMERMODELMAPPING]                                                           */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2018/03/12  SeungJae.Hwnag       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/*                                                                                                  */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DM0020_GET_SCM_MST_FUTURE_PRICE_CHECK]    
+    @p_division_id              NVARCHAR(30),
+	@p_scm_site_id              NVARCHAR(30),
+	@p_plant_site_id              NVARCHAR(30),
+    @p_project_code             NVARCHAR(50),
+	@p_item_id                  NVARCHAR(50),	
+	@p_currency                  NVARCHAR(MAX),
+	@p_measure                  NVARCHAR(MAX),
+	@p_dom_exp                  NVARCHAR(MAX),
+	@p_fcst_type                 NVARCHAR(MAX),
+	@p_incoterms                  NVARCHAR(MAX),
+	@p_from_yyyymmdd            NVARCHAR(8),
+	@p_to_yyyymmdd             NVARCHAR(8),
+	@p_created_by              NVARCHAR(MAX)
+ 
+AS  
+  -- DM0020_GET_SCM_MST_FUTURE_PRICE '', '', '', '', '', ''
+BEGIN
+  SET NOCOUNT ON;
+  -- DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID, CURRENCY, MEASURE, DOM_EXP, FCST_TYPE, INCOTERMS ;;;YYYYMMDD, 
+SELECT *
+FROM SCM_MST_FUTURE_PRICE AS A WITH(NOLOCK)
+WHERE (YYYYMMDD >= @p_from_yyyymmdd and YYYYMMDD <= @p_to_yyyymmdd)
+		AND DIVISION_ID = @p_division_id
+		AND SCM_SITE_ID = @p_scm_site_id
+		AND PLANT_SITE_ID = @p_plant_site_id
+		AND PROJECT_CODE = @p_project_code
+		AND ITEM_ID = @p_item_id
+		AND CURRENCY = @p_currency
+		AND MEASURE = @p_measure
+		AND DOM_EXP = @p_dom_exp
+		AND FCST_TYPE = @p_fcst_type
+		AND INCOTERMS = @p_incoterms
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_GET_SCM_MST_FUTURE_PRICE_POPUP","1257823593","1","
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/****************************************************************************************************/
+/* Program ID  : [DM0020_GET_SCM_MST_FUTURE_PRICE_POPUP]                                            */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2018/03/12  SeungJae.Hwnag       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/* 2021.05.13	P.C.I		 [PJ20209642R] Chempion 환율 적용(GSCM에서 관리중인 환율만 조회 Currency = 'KRW', Unit_Currency IN ( 'RMB', 'USD', 'EUR', 'JPY', 'AUD' ))*/
+/*                                                                                                  */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DM0020_GET_SCM_MST_FUTURE_PRICE_POPUP]    
+    @p_division_id              NVARCHAR(30),	
+	@p_from_yyyymmdd            NVARCHAR(8),
+	@p_to_yyyymmdd             NVARCHAR(8),
+	@p_created_by              NVARCHAR(MAX)
+ 
+AS  
+  -- DM0020_GET_SCM_MST_FUTURE_PRICE '', '', '', '', '', ''
+BEGIN
+  SET NOCOUNT ON;
+
+  SELECT 
+      DIVISION_ID
+	  ,[CURRENCY]
+      ,[UNIT_CURRENCY]
+	  ,[CURRENCY] + '/' + [UNIT_CURRENCY] AS CURRENCY_UNITCURRENCY
+  FROM [dbo].[DM_MST_EXCHANGE_RATE] (NOLOCK)
+  WHERE 
+  (YYYYMMDD >= @p_from_yyyymmdd and YYYYMMDD <= @p_to_yyyymmdd)
+  AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   		 ELSE DIVISION_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+					(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE DIVISION_ID END) = P.data
+	               )
+	--[PJ20209642R] Chempion 환율 적용(GSCM에서 관리중인 환율만 조회 Currency = 'KRW', Unit_Currency IN ( 'RMB', 'USD', 'EUR', 'JPY', 'AUD' ))
+	AND UNIT_CURRENCY IN ( SELECT SEGMENT1
+							FROM SCM_ADM_LOOKUP_MASTER_DETAIL A
+							WHERE LOOKUP_TYPE = 'DMF0020_CURRENCY'
+								AND VALID_YN = 'Y'
+						)
+	AND CURRENCY = 'KRW'
+  GROUP BY DIVISION_ID,[CURRENCY], [UNIT_CURRENCY]
+  ORDER BY 1,2,3
+END
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA","1273823650","1","
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/****************************************************************************************************/
+/* Program ID  : [DM0020_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA]                                       */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2018/03/12  SeungJae.Hwnag      Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/* 2021.05.13	P.C.I		 [PJ20209642R] Chempion 환율 적용(GSCM에서 관리중인 환율만 조회 Currency = 'KRW', Unit_Currency IN ( 'RMB', 'USD', 'EUR', 'JPY', 'AUD' ))*/
+/*                                                                                                  */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DM0020_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA]    
+    @p_division_id              NVARCHAR(30),	
+	@p_from_yyyymmdd            NVARCHAR(8),
+	@p_to_yyyymmdd             NVARCHAR(8),
+	@p_created_by              NVARCHAR(MAX)
+ 
+AS  
+  -- DM0020_GET_SCM_MST_FUTURE_PRICE '', '', '', '', '', ''
+BEGIN
+  SET NOCOUNT ON;
+
+  SELECT 
+	  DIVISION_ID  
+	  ,[CURRENCY]
+      ,[UNIT_CURRENCY]
+	  ,'D' + [YYYYMMDD] AS [YYYYMMDD]
+      ,[EXCHANGE_PRICE]      
+FROM [dbo].[DM_MST_EXCHANGE_RATE] (NOLOCK)
+WHERE
+	(YYYYMMDD >= @p_from_yyyymmdd and YYYYMMDD <= @p_to_yyyymmdd)
+	AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   		 ELSE DIVISION_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+					(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE DIVISION_ID END) = P.data
+	               )
+	--[PJ20209642R] Chempion 환율 적용(GSCM에서 관리중인 환율만 조회 Currency = 'KRW', Unit_Currency IN ( 'RMB', 'USD', 'EUR', 'JPY', 'AUD' ))
+	AND UNIT_CURRENCY IN ( SELECT SEGMENT1
+							FROM SCM_ADM_LOOKUP_MASTER_DETAIL A
+							WHERE LOOKUP_TYPE = 'DMF0020_CURRENCY'
+								AND VALID_YN = 'Y'
+						) 
+	AND CURRENCY = 'KRW'
+			
+
+END
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_DM_MST_EXCHANGE_RATE","1289823707","1","
+/*
+ * Program ID   : DM0020_SAVE_DM_MST_EXCHANGE_RATE
+ * Description  : DM0020_SalesFuturePricePopUp ('DM_MST_EXCHANGE_RATE' TABLE INSERT/UPDATE/DELETE)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017. 01. 04    DWOK/KHSONG      Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[DM0020_SAVE_DM_MST_EXCHANGE_RATE]
+
+	-- Add the parameters for the stored procedure here
+    @p_active_flag            NVARCHAR(MAX),    
+	@p_division_id              NVARCHAR(30),
+    @p_YYYYMMDD               NVARCHAR(MAX),    
+    @p_CURRENCY               NVARCHAR(MAX),    
+    @p_UNIT_CURRENCY          NVARCHAR(MAX),    
+    @p_EXCHANGE_PRICE         NVARCHAR(MAX),    
+    @p_CREATED_BY             NVARCHAR(MAX),    
+    @p_CREATION_DATE          DATETIME,
+    @p_LAST_UPDATED_BY        NVARCHAR(MAX)    
+
+AS
+
+BEGIN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET NOCOUNT ON; 
+    SET XACT_ABORT ON;
+
+	DECLARE @n_history_seq		INTEGER;
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'DM0020_SAVE_DM_MST_EXCHANGE_RATE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+		-- 시작 LOG  (START)
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		SET @v_log_message = NULL      /*-- <- 변수 재사용을 위하여 초기화해야함 --*/
+		-- 시작 LOG  (END)
+
+		-- 트랜잭션 (START)
+		BEGIN TRANSACTION;
+
+	--------------------------------------------------------------------------------------------	
+		BEGIN TRY
+	--------------------------------------------------------------------------------------------	
+   	    -- (2) 	 
+	    BEGIN
+
+		   ------
+           IF @p_active_flag = 'D'
+		   ------
+			-- (4) 	 
+           /* DELETE */
+		   BEGIN
+           
+		       DELETE 
+                 FROM [dbo].DM_MST_EXCHANGE_RATE
+               WHERE
+						DIVISION_ID        =   @p_division_id    
+                   AND    YYYYMMDD        =   @p_YYYYMMDD          
+                   AND CURRENCY        =   @p_CURRENCY       
+                   AND UNIT_CURRENCY   =   @p_UNIT_CURRENCY       
+		   END
+			-- (4) 	 
+		   ------
+		   ELSE
+		   ------
+			-- (10) 	 
+           /* UPDATE OR INSERT */
+		   BEGIN
+					
+					MERGE INTO [dbo].DM_MST_EXCHANGE_RATE A
+					USING (
+							SELECT 
+								@p_division_id			AS DIVISION_ID,
+								@p_YYYYMMDD	            as YYYYMMDD, 
+								@p_CURRENCY    	        as CURRENCY, 
+								@p_UNIT_CURRENCY		as UNIT_CURRENCY
+						  ) B
+					ON(
+                                A.DIVISION_ID        =   @p_division_id    
+							AND   A.YYYYMMDD        =   @p_YYYYMMDD     
+                            AND A.CURRENCY        =   B.CURRENCY       
+                            AND A.UNIT_CURRENCY   =   B.UNIT_CURRENCY       
+					  )
+					WHEN MATCHED THEN
+						 UPDATE SET 
+								    DIVISION_ID	     = @p_division_id
+								   ,YYYYMMDD	     = @p_YYYYMMDD
+								   ,CURRENCY         = @p_CURRENCY
+								   ,UNIT_CURRENCY	 = @p_UNIT_CURRENCY 
+								   ,EXCHANGE_PRICE   = @p_EXCHANGE_PRICE
+								   ,CREATED_BY       = @p_CREATED_BY
+								   --,CREATION_DATE    = @p_CREATION_DATE
+								   ,LAST_UPDATED_BY	 = @p_LAST_UPDATED_BY
+								   ,LAST_UPDATE_DATE = sysdatetime()
+					                
+					WHEN NOT MATCHED THEN
+
+					     INSERT 
+								  ( DIVISION_ID
+								   ,YYYYMMDD
+		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_DM_MST_EXCHANGE_RATE","1289823707","2","						   ,CURRENCY
+								   ,UNIT_CURRENCY
+								   ,EXCHANGE_PRICE
+								   ,CREATED_BY
+								   ,CREATION_DATE
+								   ,LAST_UPDATED_BY
+								   ,LAST_UPDATE_DATE
+								)
+						 VALUES (  
+						            @p_division_id 
+								   ,@p_YYYYMMDD
+								   ,@p_CURRENCY
+								   ,@p_UNIT_CURRENCY
+								   ,@p_EXCHANGE_PRICE
+								   ,@p_CREATED_BY
+								   ,sysdatetime()  
+								   ,@p_LAST_UPDATED_BY
+								   ,sysdatetime()
+								);
+		   ------
+		   END
+		   ------
+			-- (10) 	 
+
+
+		   END
+		   ------
+		-- (2) 	 
+
+     -- IF @@TRANCOUNT > 0 
+
+  	-- 트랜잭션 (COMMIT)
+        COMMIT WORK;
+
+	--------------------------------------------------------------------------------------------	
+		END TRY
+	--------------------------------------------------------------------------------------------	
+
+	--------------------------------------------------------------	
+    BEGIN CATCH
+	--------------------------------------------------------------	
+      -- ROLLBACK
+      -- ERROR LOG VALUE SAVE
+      SET @v_log_type = 'ERROR';
+      SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+      SET @v_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+      SET @d_event_date = SYSDATETIME();
+
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();  /*-- 에러메시지 DISPLAY --*/
+
+	-- 트랜잭션 (END)
+	ROLLBACK TRANSACTION;
+
+	--------------------------------------------------------------	
+    END CATCH;
+	--------------------------------------------------------------	
+
+	-- 수행결과 성공여부 DISPLAY
+     IF @v_log_message IS NULL
+	  SELECT 'success'
+	;
+
+    -- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure ##########';
+    SET @v_description = '';
+    SET @d_event_date = SYSDATETIME();
+
+	-- ERROR LOG DB INSERT (로직의 TRANSACTION 종료이후수행 : 충돌방지)
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+  END;
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE","1321823821","1","
+/*
+ * Program ID   : DM0020_SAVE_SCM_MST_FUTURE_PRICE
+ * Description  : DM0020_SalesFuturePricePopUp ('SCM_MST_FUTURE_PRICE' TABLE INSERT/UPDATE/DELETE)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017. 01. 04    DWOK/KHSONG      Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2017. 03. 13    JHBAEK			INPUT KEY VALUE(PROJECT_CODE, MODEL) VALIDATION CHECK
+ *                                  : PROJECT_CODE, MODEL(ITEM) 값을 수기로 입력할 수 있기에 INSERT 전에 VALIDATION CHECK를 한다.
+ *
+ */
+
+CREATE PROCEDURE [dbo].[DM0020_SAVE_SCM_MST_FUTURE_PRICE]
+
+	-- Add the parameters for the stored procedure here
+    @p_active_flag             NVARCHAR(MAX),    
+    @p_DIVISION_ID             NVARCHAR(MAX),    
+    @p_PROJECT_CODE            NVARCHAR(MAX),    
+    @p_SCM_SITE_ID             NVARCHAR(MAX), 
+	@p_plant_site_id           NVARCHAR(30),
+    @p_ITEM_ID                 NVARCHAR(MAX),    
+    @p_YYYYMMDD                NVARCHAR(MAX),    
+    @p_CURRENCY                NVARCHAR(MAX), 
+    @p_MEASURE                 NVARCHAR(MAX), 
+    @p_DOM_EXP                 NVARCHAR(MAX), 
+    @p_FCST_TYPE               NVARCHAR(MAX), 
+    @p_INCOTERMS               NVARCHAR(MAX),
+    @p_PRICE                   NVARCHAR(MAX),    
+    @p_CREATED_BY              NVARCHAR(MAX),    
+    @p_CREATION_DATE           datetime,   
+    @p_LAST_UPDATED_BY         NVARCHAR(MAX)    
+
+AS
+
+BEGIN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET NOCOUNT ON; 
+    SET XACT_ABORT ON;
+
+	DECLARE @n_history_seq		INTEGER;
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'DM0020_SAVE_SCM_MST_FUTURE_PRICE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+		-- 시작 LOG  (START)
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## StartEDED of procedure ##########-' + @p_PROJECT_CODE + '-' + @p_ITEM_ID ;
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		SET @v_log_message = NULL      /*-- <- 변수 재사용을 위하여 초기화해야함 --*/
+		-- 시작 LOG  (END)
+
+		-- 트랜잭션 (START)
+		BEGIN TRANSACTION;
+
+	--------------------------------------------------------------------------------------------	
+		BEGIN TRY
+	--------------------------------------------------------------------------------------------	
+
+	       -- PROJECT_CODE 잘못들어왔을때 강제 에러발생시킴 start -----------------------------------------------
+		   IF (select count(1) from dbo.scm_mst_project  where project_code  = @p_PROJECT_CODE ) = 0 
+		   begin
+		       SET @v_log_type = 'INVALID';
+			   SELECT '['+ @p_PROJECT_CODE +']'+ N' Invalid Project Code !';
+			   goto err_rtn
+		   end
+
+		   IF (select count(1) from dbo.SCM_MST_ITEM_SN  where ITEM_ID  = @p_ITEM_ID ) = 0 
+		   begin
+		       SET @v_log_type = 'INVALID';
+			   SELECT '['+ @p_ITEM_ID +']'+ N' Invalid Item ID !';
+			   goto err_rtn
+		   end
+	       -- PROJECT_CODE 잘못들어왔을때 강제 에러발생시킴 end  -----------------------------------------------
+
+		   ------ HISTORY 생성
+		   BEGIN
+			  EXEC [dbo].[PR_DM_ANL_SALES_PRICE_HIST]
+			  						 @p_division_id   
+				  					,@p_project_code  
+	                                ,@p_scm_site_id   
+	                                ,@p_plant_site_id 
+	                                ,@p_item_id       
+	                                ,@p_yyyymmdd      
+	                                ,@p_currency      
+	                                ,@p_measure       
+	                                ,@p_dom_exp       
+	          "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE","1321823821","2","                      ,@p_fcst_type     
+	                                ,@p_incoterms     
+	                                ,@p_price         
+	                                ,@p_created_by    
+	                                ,@p_last_updated_by
+		   END
+
+		   ------
+           IF @p_active_flag = 'D'
+		   ------
+           
+			-- (4) 	 
+           /* DELETE */
+		   BEGIN
+           
+		   DELETE 
+           FROM [dbo].SCM_MST_FUTURE_PRICE
+           WHERE
+                   DIVISION_ID        =   @p_DIVISION_ID         
+               AND PROJECT_CODE       =   @p_PROJECT_CODE      
+               AND SCM_SITE_ID        =   @p_SCM_SITE_ID     
+			   and plant_site_id      =   @p_plant_site_id 
+               AND ITEM_ID            =   @p_ITEM_ID     
+               AND YYYYMMDD           =   @p_YYYYMMDD      
+               AND CURRENCY           =   @p_CURRENCY      
+               AND MEASURE            =   @p_MEASURE      
+               AND DOM_EXP            =   @p_DOM_EXP      
+               AND FCST_TYPE          =   @p_FCST_TYPE      
+               AND INCOTERMS          =   @p_INCOTERMS      
+		   END
+			-- (4) 	 
+
+		   ------
+		   ELSE
+		   ------
+			-- (10) 	 
+           /* UPDATE OR INSERT */
+		   BEGIN
+					MERGE INTO [dbo].SCM_MST_FUTURE_PRICE A
+					USING (
+							SELECT 
+								@p_DIVISION_ID	    as DIVISION_ID, 
+								@p_PROJECT_CODE    	as PROJECT_CODE, 
+								@p_SCM_SITE_ID		as SCM_SITE_ID,
+								@p_plant_SITE_ID	as plant_SITE_ID,
+								@p_ITEM_ID		    as ITEM_ID,
+								@p_YYYYMMDD	   	    as YYYYMMDD,
+								@p_CURRENCY		    as CURRENCY,
+								@p_MEASURE		    as MEASURE,
+								@p_DOM_EXP		    as DOM_EXP,
+								@p_FCST_TYPE	    as FCST_TYPE,
+								@p_INCOTERMS		as INCOTERMS
+						  ) B
+					ON(
+                                A.DIVISION_ID        =   B.DIVISION_ID          
+                            AND A.PROJECT_CODE       =   B.PROJECT_CODE       
+                            AND A.SCM_SITE_ID        =   B.SCM_SITE_ID       
+							AND A.plant_SITE_ID      =   B.plant_SITE_ID       
+                            AND A.ITEM_ID            =   B.ITEM_ID       
+                            AND A.YYYYMMDD           =   B.YYYYMMDD       
+                            AND A.CURRENCY           =   B.CURRENCY       
+                            AND A.MEASURE            =   B.MEASURE       
+                            AND A.DOM_EXP            =   B.DOM_EXP       
+                            AND A.FCST_TYPE          =   B.FCST_TYPE       
+                            AND A.INCOTERMS          =   B.INCOTERMS       
+					  )
+					WHEN MATCHED THEN
+						 UPDATE SET 
+ 									 DIVISION_ID         =  @p_DIVISION_ID    
+									,PROJECT_CODE        =  @p_PROJECT_CODE   
+									,SCM_SITE_ID         =  @p_SCM_SITE_ID    
+									,plant_SITE_ID       =  @p_plant_SITE_ID    
+									,ITEM_ID             =  @p_ITEM_ID        
+									,YYYYMMDD            =  @p_YYYYMMDD       
+									,CURRENCY            =  @p_CURRENCY       
+									,MEASURE             =  @p_MEASURE       
+									,DOM_EXP             =  @p_DOM_EXP
+									,FCST_TYPE           =  @p_FCST_TYPE
+									,INCOTERMS           =  @p_INCOTERMS      
+									,PRICE               =  @p_PRICE          
+									,CREATED_BY          =  @p_CREATED_BY     
+									--,CREATION_DATE       =  @p_CREATION_DATE  
+									,LAST_UPDATED_BY     =  @p_LAST_UPDATED_BY
+									,LAST_UPDATE_DATE    =  sysdatetime()     
+
+					WHEN NOT MATCHED THEN
+
+					     INSERT 
+								  ( DIVISION_ID     
+								   ,PROJECT_CODE    
+								   ,SCM_SITE_ID     
+								   ,plant_SITE_ID   
+								   ,ITEM_ID         
+								   ,YYYYMMDD        
+								   ,CURRENCY        
+								   ,MEASURE        
+								   ,DOM_EXP        
+								   ,FCST_TYPE        
+								   ,INCOTERMS       
+								   ,PRICE           
+								   ,CREATED_BY      
+								   ,C"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE","1321823821","3","REATION_DATE   
+								   ,LAST_UPDATED_BY 
+								   ,LAST_UPDATE_DATE
+								)
+						 VALUES (   
+									  @p_DIVISION_ID    
+								   ,@p_PROJECT_CODE   
+								   ,@p_SCM_SITE_ID    
+								   ,@p_plant_SITE_ID   
+								   ,@p_ITEM_ID        
+								   ,@p_YYYYMMDD       
+								   ,@p_CURRENCY       
+								   ,@p_MEASURE      
+								   ,@p_DOM_EXP      
+								   ,@p_FCST_TYPE      
+								   ,@p_INCOTERMS      
+								   ,@p_PRICE          
+								   ,@p_CREATED_BY     
+								   ,sysdatetime()    
+								   ,@p_LAST_UPDATED_BY
+								   ,sysdatetime()     
+								);
+		   ------
+		   END
+		   ------
+			-- (10) 	 
+
+     -- IF @@TRANCOUNT > 0 
+
+  	-- 트랜잭션 (COMMIT)
+        COMMIT WORK;
+
+	--------------------------------------------------------------------------------------------	
+		END TRY
+	--------------------------------------------------------------------------------------------	
+
+	--------------------------------------------------------------	
+    BEGIN CATCH
+	--------------------------------------------------------------	
+      -- ROLLBACK
+      -- ERROR LOG VALUE SAVE
+      SET @v_log_type = 'ERROR';
+      SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+      SET @v_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+      SET @d_event_date = SYSDATETIME();
+
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();  /*-- 에러메시지 DISPLAY --*/
+
+	-- 트랜잭션 (END)
+	ROLLBACK TRANSACTION;
+
+	--------------------------------------------------------------	
+    END CATCH;
+	--------------------------------------------------------------	
+
+	-- 수행결과 성공여부 DISPLAY
+     IF @v_log_message IS NULL
+	  SELECT 'success'
+	;
+
+    -- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure ##########';
+    SET @v_description = '';
+    SET @d_event_date = SYSDATETIME();
+
+	-- ERROR LOG DB INSERT (로직의 TRANSACTION 종료이후수행 : 충돌방지)
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+  END;
+
+  	--------------------------------------------------------------	
+  	err_rtn:
+	IF @v_log_type = 'INVALID'
+		begin
+			ROLLBACK TRANSACTION;
+		end
+	--------------------------------------------------------------	
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE_ALL","1337823878","7","v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+  END;
+
+  	--------------------------------------------------------------	
+  	err_rtn:
+	IF @v_log_type = 'INVALID'
+		begin
+			ROLLBACK TRANSACTION
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		end
+	--------------------------------------------------------------	
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE_ALL","1337823878","1","
+/*
+ * Program ID   : DM0020_SAVE_SCM_MST_FUTURE_PRICE_ALL
+ * Description  : DM0020_SalesFuturePricePopUp ('SCM_MST_FUTURE_PRICE' TABLE INSERT/UPDATE/DELETE)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017. 02. 12    DWOK/KHSONG      Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2017. 03. 13    JHBAEK			INPUT KEY VALUE(PROJECT_CODE, MODEL) VALIDATION CHECK
+ *                                  : PROJECT_CODE, MODEL(ITEM) 값을 수기로 입력할 수 있기에 INSERT 전에 VALIDATION CHECK를 한다.
+ * 2018. 05. 14    KHSONG           Sales Price 화면에서 저장시 SalesAmt 계산후 dm_pln_sales_plan 테이블 SAVE Procedure 호출하는 로직 추가
+ *
+ */
+
+CREATE PROCEDURE [dbo].[DM0020_SAVE_SCM_MST_FUTURE_PRICE_ALL]
+
+	-- Add the parameters for the stored procedure here
+    @p_active_flag             NVARCHAR(MAX),    
+    @p_DIVISION_ID             NVARCHAR(MAX),    
+    @p_PROJECT_CODE            NVARCHAR(MAX),    
+    @p_SCM_SITE_ID             NVARCHAR(MAX),    
+    @p_PLANT_SITE_ID           NVARCHAR(MAX),    
+    @p_ITEM_ID                 NVARCHAR(MAX),    
+    @p_YYYYMMDD                NVARCHAR(MAX),    
+    @p_CURRENCY                NVARCHAR(MAX), 
+    @p_MEASURE                 NVARCHAR(MAX), 
+    @p_DOM_EXP                 NVARCHAR(MAX), 
+    @p_FCST_TYPE               NVARCHAR(MAX), 
+    @p_INCOTERMS               NVARCHAR(MAX),
+    @p_PRICE                   NVARCHAR(MAX),    
+    @p_CREATED_BY              NVARCHAR(MAX),    
+    @p_CREATION_DATE           NVARCHAR(MAX),    
+    @p_LAST_UPDATED_BY         NVARCHAR(MAX)    
+
+AS
+
+BEGIN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET NOCOUNT ON; 
+    SET XACT_ABORT ON;
+
+	-- 스플릿관련 변수
+
+    DECLARE  @v_active_flag        NVARCHAR(MAX);
+    DECLARE  @v_DIVISION_ID        NVARCHAR(MAX);
+    DECLARE  @v_PROJECT_CODE       NVARCHAR(MAX);
+    DECLARE  @v_SCM_SITE_ID        NVARCHAR(MAX);
+    DECLARE  @v_PLANT_SITE_ID      NVARCHAR(MAX);
+    DECLARE  @v_ITEM_ID            NVARCHAR(MAX);
+    DECLARE  @v_YYYYMMDD           NVARCHAR(MAX);
+    DECLARE  @v_CURRENCY           NVARCHAR(MAX);
+    DECLARE  @v_MEASURE            NVARCHAR(MAX);
+    DECLARE  @v_DOM_EXP            NVARCHAR(MAX);
+    DECLARE  @v_FCST_TYPE          NVARCHAR(MAX);
+    DECLARE  @v_INCOTERMS          NVARCHAR(MAX);
+    DECLARE  @v_PRICE              NVARCHAR(MAX);
+    DECLARE  @v_CREATED_BY         NVARCHAR(MAX);
+    DECLARE  @v_CREATION_DATE      NVARCHAR(MAX);
+    DECLARE  @v_LAST_UPDATED_BY    NVARCHAR(MAX);
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^'  -- 데이터 구분자
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'DM0020_SAVE_SCM_MST_FUTURE_PRICE_ALL';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+    DECLARE @n_delete_count    INTEGER = 0;
+    DECLARE @n_merge_count     INTEGER = 0;
+    DECLARE @n_logo_count      INTEGER = 0;
+
+
+
+	-- 마지막 데이터 처리를 위한 구분자 추가
+	SET @p_active_flag      = RTRIM(@p_active_flag     ) + '^';
+	SET @p_DIVISION_ID      = RTRIM(@p_DIVISION_ID     ) + '^';
+	SET @p_PROJECT_CODE     = RTRIM(@p_PROJECT_CODE    ) + '^';
+	SET @p_SCM_SITE_ID      = RTRIM(@p_SCM_SITE_ID     ) + '^';
+	SET @p_PLANT_SITE_ID    = RTRIM(@p_PLANT_SITE_ID   ) + '^';
+	SET @p_ITEM_ID          = RTRIM(@p_ITEM_ID         ) + '^';
+	SET @p_YYYYMMDD         = RTRIM(@p_YYYYMMDD        ) + '^';
+	SET @p_CURRENCY         = RTRIM(@p_CURRENCY        ) + '^';
+	SET @p_MEASURE          = RTRIM(@p_MEASURE         ) + '^';
+	SET @p_DOM_EXP          = RTRIM(@p_DOM_EXP         ) + '^';
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE_ALL","1337823878","2","	SET @p_FCST_TYPE        = RTRIM(@p_FCST_TYPE       ) + '^';
+	SET @p_INCOTERMS        = RTRIM(@p_INCOTERMS       ) + '^';
+	SET @p_PRICE            = RTRIM(@p_PRICE           ) + '^';
+	SET @p_CREATED_BY       = RTRIM(@p_CREATED_BY      ) + '^';
+	--SET @p_CREATION_DATE    = RTRIM(@p_CREATION_DATE   ) + '^';
+	SET @p_LAST_UPDATED_BY  = RTRIM(@p_LAST_UPDATED_BY ) + '^';
+
+	-- @results TEMP TABLE
+	DECLARE @results TABLE (
+             v_active_flag        NVARCHAR(MAX)
+			,v_DIVISION_ID        NVARCHAR(MAX)
+			,v_PROJECT_CODE       NVARCHAR(MAX)
+			,v_SCM_SITE_ID        NVARCHAR(MAX)
+			,v_PLANT_SITE_ID      NVARCHAR(MAX)
+			,v_ITEM_ID            NVARCHAR(MAX)
+			,v_YYYYMMDD           NVARCHAR(MAX)
+			,v_CURRENCY           NVARCHAR(MAX)
+			,v_MEASURE            NVARCHAR(MAX)
+			,v_DOM_EXP            NVARCHAR(MAX)
+			,v_FCST_TYPE          NVARCHAR(MAX)
+			,v_INCOTERMS          NVARCHAR(MAX)
+			,v_PRICE              NVARCHAR(MAX)
+			,v_CREATED_BY         NVARCHAR(MAX)
+			,v_CREATION_DATE      NVARCHAR(MAX)
+			,v_LAST_UPDATED_BY    NVARCHAR(MAX)
+    )
+
+		-- 시작 LOG  (START)
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure @@@##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		SET @v_log_message = NULL      /*-- <- 변수 재사용을 위하여 초기화해야함 --*/ 
+		-- 시작 LOG  (END)
+
+		-- 트랜잭션 (START)
+		BEGIN TRANSACTION SCM_MST_FUTURE_PRICE_ALL;  -- sss
+
+	--------------------------------------------------------------------------------------------	
+		BEGIN TRY
+	--------------------------------------------------------------------------------------------	 DECIMAL
+
+--===================================================================================== @results 테이블에 split후 insert start
+--###############################################  @results 테이블에 split후 insert (START)
+WHILE LEN(@p_DIVISION_ID) > 0
+BEGIN
+    DECLARE @index_DIVISION_ID     INT
+	DECLARE @index_active_flag     INT
+	DECLARE @index_PROJECT_CODE    INT
+	DECLARE @index_SCM_SITE_ID     INT
+	DECLARE @index_PLANT_SITE_ID   INT
+	DECLARE @index_ITEM_ID         INT
+	DECLARE @index_YYYYMMDD        INT
+	DECLARE @index_CURRENCY        INT
+	DECLARE @index_MEASURE         INT
+	DECLARE @index_DOM_EXP         INT
+	DECLARE @index_FCST_TYPE       INT
+	DECLARE @index_INCOTERMS       INT
+	DECLARE @index_PRICE           INT
+	DECLARE @index_CREATED_BY      INT
+	--DECLARE @index_CREATION_DATE   INT
+	DECLARE @index_LAST_UPDATED_BY INT
+
+    SET @index_DIVISION_ID      = PATINDEX('%' + '^' + '%', @p_DIVISION_ID)
+	SET @index_active_flag      = PATINDEX('%' + '^' + '%', @p_active_flag)
+	SET @index_PROJECT_CODE     = PATINDEX('%' + '^' + '%', @p_PROJECT_CODE)
+	SET @index_SCM_SITE_ID      = PATINDEX('%' + '^' + '%', @p_SCM_SITE_ID    )
+	SET @index_PLANT_SITE_ID    = PATINDEX('%' + '^' + '%', @p_PLANT_SITE_ID  )
+	SET @index_ITEM_ID          = PATINDEX('%' + '^' + '%', @p_ITEM_ID        )
+	SET @index_YYYYMMDD         = PATINDEX('%' + '^' + '%', @p_YYYYMMDD       )
+	SET @index_CURRENCY         = PATINDEX('%' + '^' + '%', @p_CURRENCY       )
+	SET @index_MEASURE          = PATINDEX('%' + '^' + '%', @p_MEASURE        )
+	SET @index_DOM_EXP          = PATINDEX('%' + '^' + '%', @p_DOM_EXP        )
+	SET @index_FCST_TYPE        = PATINDEX('%' + '^' + '%', @p_FCST_TYPE      )
+	SET @index_INCOTERMS        = PATINDEX('%' + '^' + '%', @p_INCOTERMS      )
+	SET @index_PRICE            = PATINDEX('%' + '^' + '%', @p_PRICE          )
+	SET @index_CREATED_BY       = PATINDEX('%' + '^' + '%', @p_CREATED_BY     )
+	--SET @index_CREATION_DATE    = PATINDEX('%' + '^' + '%', @p_CREATION_DATE  )
+	SET @index_LAST_UPDATED_BY  = PATINDEX('%' + '^' + '%', @p_LAST_UPDATED_BY)
+
+	--확인  select @index_DIVISION_ID as '@index_DIVISION_ID';
+    IF @index_DIVISION_ID > 0
+		BEGIN
+			SET @v_active_flag = SUBSTRING("
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE_ALL","1337823878","3","@p_active_flag, 0, @index_active_flag)
+			SET @p_active_flag = SUBSTRING(@p_active_flag, LEN(@v_active_flag + '^') + 1, LEN(@p_active_flag))
+
+			SET @v_DIVISION_ID = SUBSTRING(@p_DIVISION_ID, 0, @index_DIVISION_ID)
+			SET @p_DIVISION_ID = SUBSTRING(@p_DIVISION_ID, LEN(@v_DIVISION_ID + '^') + 1, LEN(@p_DIVISION_ID))
+
+			SET @v_PROJECT_CODE = SUBSTRING(@p_PROJECT_CODE, 0, @index_PROJECT_CODE)
+			SET @p_PROJECT_CODE = SUBSTRING(@p_PROJECT_CODE, LEN(@v_PROJECT_CODE + '^') + 1, LEN(@p_PROJECT_CODE))
+
+			SET @v_SCM_SITE_ID = SUBSTRING(@p_SCM_SITE_ID, 0, @index_SCM_SITE_ID)
+			SET @p_SCM_SITE_ID = SUBSTRING(@p_SCM_SITE_ID, LEN(@v_SCM_SITE_ID + '^') + 1, LEN(@p_SCM_SITE_ID))
+
+			SET @v_PLANT_SITE_ID = SUBSTRING(@p_PLANT_SITE_ID, 0, @index_PLANT_SITE_ID)
+			SET @p_PLANT_SITE_ID = SUBSTRING(@p_PLANT_SITE_ID, LEN(@v_PLANT_SITE_ID + '^') + 1, LEN(@p_PLANT_SITE_ID))
+
+			SET @v_ITEM_ID = SUBSTRING(@p_ITEM_ID, 0, @index_ITEM_ID)
+			SET @p_ITEM_ID = SUBSTRING(@p_ITEM_ID, LEN(@v_ITEM_ID + '^') + 1, LEN(@p_ITEM_ID))
+
+			SET @v_YYYYMMDD = SUBSTRING(@p_YYYYMMDD, 0, @index_YYYYMMDD)
+			SET @p_YYYYMMDD = SUBSTRING(@p_YYYYMMDD, LEN(@v_YYYYMMDD + '^') + 1, LEN(@p_YYYYMMDD))
+
+			SET @v_CURRENCY = SUBSTRING(@p_CURRENCY, 0, @index_CURRENCY)
+			SET @p_CURRENCY = SUBSTRING(@p_CURRENCY, LEN(@v_CURRENCY + '^') + 1, LEN(@p_CURRENCY))
+
+			SET @v_MEASURE = SUBSTRING(@p_MEASURE, 0, @index_MEASURE)
+			SET @p_MEASURE = SUBSTRING(@p_MEASURE, LEN(@v_MEASURE + '^') + 1, LEN(@p_MEASURE))
+
+			SET @v_DOM_EXP = SUBSTRING(@p_DOM_EXP, 0, @index_DOM_EXP)
+			SET @p_DOM_EXP = SUBSTRING(@p_DOM_EXP, LEN(@v_DOM_EXP + '^') + 1, LEN(@p_DOM_EXP))
+
+			SET @v_FCST_TYPE = SUBSTRING(@p_FCST_TYPE, 0, @index_FCST_TYPE)
+			SET @p_FCST_TYPE = SUBSTRING(@p_FCST_TYPE, LEN(@v_FCST_TYPE + '^') + 1, LEN(@p_FCST_TYPE))
+
+			SET @v_INCOTERMS = SUBSTRING(@p_INCOTERMS, 0, @index_INCOTERMS)
+			SET @p_INCOTERMS = SUBSTRING(@p_INCOTERMS, LEN(@v_INCOTERMS + '^') + 1, LEN(@p_INCOTERMS))
+
+			SET @v_PRICE = SUBSTRING(@p_PRICE, 0, @index_PRICE)
+			SET @p_PRICE = SUBSTRING(@p_PRICE, LEN(@v_PRICE + '^') + 1, LEN(@p_PRICE))
+
+			SET @v_CREATED_BY = SUBSTRING(@p_CREATED_BY, 0, @index_CREATED_BY)
+			SET @p_CREATED_BY = SUBSTRING(@p_CREATED_BY, LEN(@v_CREATED_BY + '^') + 1, LEN(@p_CREATED_BY))
+
+			--SET @v_CREATION_DATE = SUBSTRING(@p_CREATION_DATE, 0, @index_CREATION_DATE)
+			--SET @p_CREATION_DATE = SUBSTRING(@p_CREATION_DATE, LEN(@v_CREATION_DATE + '^') + 1, LEN(@p_CREATION_DATE))
+
+			SET @v_LAST_UPDATED_BY = SUBSTRING(@p_LAST_UPDATED_BY, 0, @index_LAST_UPDATED_BY)
+			SET @p_LAST_UPDATED_BY = SUBSTRING(@p_LAST_UPDATED_BY, LEN(@v_LAST_UPDATED_BY + '^') + 1, LEN(@p_LAST_UPDATED_BY))
+ 
+			INSERT INTO @results ( 
+			                         v_active_flag    
+									,v_DIVISION_ID    
+									,v_PROJECT_CODE   
+									,v_SCM_SITE_ID    
+									,v_PLANT_SITE_ID  
+									,v_ITEM_ID        
+									,v_YYYYMMDD       
+									,v_CURRENCY       
+									,v_MEASURE        
+									,v_DOM_EXP        
+									,v_FCST_TYPE      
+									,v_INCOTERMS      
+									,v_PRICE          
+									,v_CREATED_BY     
+									,v_CREATION_DATE  
+									,v_LAST_UPDATED_BY	
+			) VALUES ( 
+			                         @v_active_flag    
+									,@v_DIVISION_ID    
+									,@v_PROJECT_CODE   
+									,@v_SCM_SITE_ID    
+									,@v_PLANT_SITE_ID  
+									,@v_ITEM_ID        
+									,@v_YYYYMMDD       
+									,@v_CURRENCY       
+									,@v_MEASURE        
+									,@v_DOM_EXP        
+									,@v_FCST_TYPE      
+									,@v_INCOTERMS      
+									,@v_PRICE          
+									,@v_CREATED_BY     
+									,GETDATE() -- @v_CREATION_DATE  
+									,@v_LAST_UPDATED_BY			
+			)
+		END
+    ELSE
+		BEGIN
+			SET @v_DIVISION_ID = @p_DIVISION_ID
+			SET @p_DIVISION_ID = NULL
+ 
+			INSERT INTO @results ( 
+			                         v_active_flag    
+									,v_DIVISION_ID    
+									,v_PROJECT_CODE   
+									,v_SCM_SITE_ID   "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE_ALL","1337823878","4"," 
+									,v_PLANT_SITE_ID  
+									,v_ITEM_ID        
+									,v_YYYYMMDD       
+									,v_CURRENCY       
+									,v_MEASURE        
+									,v_DOM_EXP        
+									,v_FCST_TYPE      
+									,v_INCOTERMS      
+									,v_PRICE          
+									,v_CREATED_BY     
+									,v_CREATION_DATE  
+									,v_LAST_UPDATED_BY			
+			) VALUES ( 
+			                         @v_active_flag    
+									,@v_DIVISION_ID    
+									,@v_PROJECT_CODE   
+									,@v_SCM_SITE_ID    
+									,@v_PLANT_SITE_ID  
+									,@v_ITEM_ID        
+									,@v_YYYYMMDD       
+									,@v_CURRENCY       
+									,@v_MEASURE        
+									,@v_DOM_EXP        
+									,@v_FCST_TYPE      
+									,@v_INCOTERMS      
+									,@v_PRICE          
+									,@v_CREATED_BY     
+									,GETDATE() --@v_CREATION_DATE  
+									,@v_LAST_UPDATED_BY			
+			)
+		END
+END
+
+	--###############################################   @results 테이블에 split후 insert (END)
+	       -- PROJECT_CODE 잘못들어왔을때 강제 에러발생시킴 start -----------------------------------------------
+		   BEGIN
+		   IF @v_DIVISION_ID <> '40'
+			   IF (select count(1)  from @results where ( select count(1) from dbo.scm_mst_project WITH(NOLOCK) where project_code  = v_PROJECT_CODE ) = 0 ) > 0
+			   begin
+				   SET @v_log_type = 'INVALID';
+				   SELECT '['+ @v_PROJECT_CODE +']'+ N' Invalid Project Code !';
+				   SET @v_description = '['+ @v_PROJECT_CODE +']'+ N' Invalid Project Code !'
+				   goto err_rtn
+			   end
+
+
+			   IF (select count(1)  from @results where ( select count(1) from dbo.SCM_MST_ITEM_SN WITH(NOLOCK) where ITEM_ID  = v_ITEM_ID ) = 0 ) > 0
+			   begin
+				   SET @v_log_type = 'INVALID';
+				   SELECT '['+ @v_ITEM_ID +']'+ N' Invalid Item ID !';
+				   SET @v_description = '['+ @v_ITEM_ID +']'+ N' Invalid Item ID !'
+				   goto err_rtn
+			   end
+		   END
+	       -- PROJECT_CODE 잘못들어왔을때 강제 에러발생시킴 end  -----------------------------------------------
+
+
+--===================================================================================== @results 테이블에 split후 insert end
+
+--  SELECT * FROM @results;  -- 확인용
+--===================================================================================== delete start
+BEGIN
+		   --  select * from @results
+		   DELETE 
+           FROM [dbo].SCM_MST_FUTURE_PRICE
+           WHERE (
+                    SELECT count(1) 
+					  FROM @results 
+					 where v_active_flag      = 'D'
+                       and DIVISION_ID        =   v_DIVISION_ID         
+                       AND PROJECT_CODE       =   v_PROJECT_CODE      
+                       AND SCM_SITE_ID        =   v_SCM_SITE_ID
+                       AND PLANT_SITE_ID      =   v_PLANT_SITE_ID
+                       AND ITEM_ID            =   v_ITEM_ID     
+                       AND YYYYMMDD           =   v_YYYYMMDD      
+                       AND CURRENCY           =   v_CURRENCY      
+                       AND MEASURE            =   v_MEASURE      
+                       AND DOM_EXP            =   v_DOM_EXP      
+                       AND FCST_TYPE          =   v_FCST_TYPE      
+                       AND INCOTERMS          =   v_INCOTERMS  
+				  ) > 0;
+END
+--===================================================================================== delete end
+
+
+--===================================================================================== update, insert start
+BEGIN
+					MERGE INTO [dbo].SCM_MST_FUTURE_PRICE A
+					USING (
+							SELECT 
+								    v_DIVISION_ID	    as DIVISION_ID, 
+								    v_PROJECT_CODE    	as PROJECT_CODE, 
+								    v_SCM_SITE_ID		as SCM_SITE_ID,
+								    v_PLANT_SITE_ID	    as PLANT_SITE_ID,
+								    v_ITEM_ID		    as ITEM_ID,
+								    v_YYYYMMDD	   	    as YYYYMMDD,
+								    v_CURRENCY		    as CURRENCY,
+								    v_MEASURE		    as MEASURE,
+								    v_DOM_EXP		    as DOM_EXP,
+								    v_FCST_TYPE		    as FCST_TYPE,
+								    v_INCOTER"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE_ALL","1337823878","5","MS		    as INCOTERMS,
+									v_PRICE             AS PRICE ,
+									max(v_CREATED_BY)     as CREATED_BY,
+									max(v_CREATION_DATE)  as CREATION_DATE,
+									max(v_LAST_UPDATED_BY) as LAST_UPDATED_BY
+                             FROM  @results  WHERE v_active_flag <> 'D'   -- DELETE값이 아닌경우만
+                          group by   v_DIVISION_ID	  
+								    ,v_PROJECT_CODE    
+								    ,v_SCM_SITE_ID		
+								    ,v_PLANT_SITE_ID	  
+								    ,v_ITEM_ID		  
+								    ,v_YYYYMMDD	   	  
+								    ,v_CURRENCY		  
+								    ,v_MEASURE		  
+								    ,v_DOM_EXP		  
+								    ,v_FCST_TYPE		  
+								    ,v_INCOTERMS		  
+									,v_PRICE           
+						  ) B
+					ON(
+                                A.DIVISION_ID        =   B.DIVISION_ID          
+                            AND A.PROJECT_CODE       =   B.PROJECT_CODE       
+                            AND A.SCM_SITE_ID        =   B.SCM_SITE_ID     
+                            AND A.PLANT_SITE_ID      =   B.PLANT_SITE_ID     
+                            AND A.ITEM_ID            =   B.ITEM_ID       
+                            AND A.YYYYMMDD           =   B.YYYYMMDD       
+							-- Modifieyd by ytchoi Key 기준으로 currency를 update 해야 함.
+                          --  AND A.CURRENCY           =   B.CURRENCY       
+                            AND A.MEASURE            =   B.MEASURE       
+                            AND A.DOM_EXP            =   B.DOM_EXP       
+                            AND A.FCST_TYPE          =   B.FCST_TYPE       
+                            AND A.INCOTERMS          =   B.INCOTERMS       
+					  )
+					WHEN MATCHED THEN
+						 UPDATE SET 
+ 									 DIVISION_ID         =  b.DIVISION_ID    
+									,PROJECT_CODE        =  b.PROJECT_CODE   
+									,SCM_SITE_ID         =  b.SCM_SITE_ID   
+									,PLANT_SITE_ID       =  b.PLANT_SITE_ID
+									,ITEM_ID             =  b.ITEM_ID        
+									,YYYYMMDD            =  b.YYYYMMDD       
+									,CURRENCY            =  b.CURRENCY       
+									,MEASURE             =  b.MEASURE       
+									,DOM_EXP             =  b.DOM_EXP       
+									,FCST_TYPE           =  b.FCST_TYPE       
+									,INCOTERMS           =  b.INCOTERMS      
+									,PRICE               =  cast(b.PRICE as numeric(20,10))
+									,CREATED_BY          =  b.CREATED_BY     
+									,CREATION_DATE       =  sysdatetime()	--,CREATION_DATE       =  @v_CREATION_DATE  
+									,LAST_UPDATED_BY     =  b.LAST_UPDATED_BY
+									,LAST_UPDATE_DATE    =  sysdatetime()     
+
+					WHEN NOT MATCHED THEN
+
+					     INSERT 
+								  ( DIVISION_ID     
+								   ,PROJECT_CODE    
+								   ,SCM_SITE_ID    
+								   ,PLANT_SITE_ID 
+								   ,ITEM_ID         
+								   ,YYYYMMDD        
+								   ,CURRENCY        
+								   ,MEASURE        
+								   ,DOM_EXP        
+								   ,FCST_TYPE        
+								   ,INCOTERMS       
+								   ,PRICE           
+								   ,CREATED_BY      
+								   ,CREATION_DATE   
+								   ,LAST_UPDATED_BY 
+								   ,LAST_UPDATE_DATE
+								)
+						 VALUES (   
+									b.DIVISION_ID    
+								   ,b.PROJECT_CODE   
+								   ,b.SCM_SITE_ID    
+								   ,b.PLANT_SITE_ID
+								   ,b.ITEM_ID        
+								   ,b.YYYYMMDD       
+								   ,b.CURRENCY       
+								   ,b.MEASURE      
+								   ,b.DOM_EXP      
+								   ,b.FCST_TYPE      
+								   ,b.INCOTERMS      
+								   ,cast(b.PRICE as numeric(20,10))
+								   ,b.CREATED_BY     
+								   ,sysdatetime()    
+								   ,b.LAST_UPDATED_BY
+								   ,sysdatetime()     
+								);
+
+
+							---- HISTORY 생성
+							-- [2018-03-20][수정][기존소스]
+						   ---- HISTORY 생성
+						   --BEGIN
+							  --EXEC [dbo].[PR_DM_ANL_SALES_PRICE_HIST]
+			  				--						 @v_division_id   
+				  			--						,@v_project_code  
+									--				,@v_scm_site_id   
+									--				,@v_plant_site_id 
+									--				,@v_item_id       
+									--				,@v_yyyy"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE_ALL","1337823878","6","mmdd      
+									--				,@v_currency      
+									--				,@v_measure       
+									--				,@v_dom_exp       
+									--				,@v_fcst_type     
+									--				,@v_incoterms     
+									--				,@v_price         
+									--				,@v_created_by    
+									--				,@v_last_updated_by
+						   --END
+
+						   -- [2018-03-20][수정][수정소스]
+							INSERT INTO  SCM_MST_FUTURE_PRICE_H
+										( DIVISION_ID 
+										,HISTORY_SEQ
+										,PROJECT_CODE
+										,SCM_SITE_ID
+										,PLANT_SITE_ID
+										,ITEM_ID
+										,YYYYMMDD
+										,CURRENCY
+										,MEASURE
+										,DOM_EXP
+										,FCST_TYPE
+										,INCOTERMS
+										,PRICE
+										,CREATED_BY
+										,CREATION_DATE
+										,LAST_UPDATED_BY
+										,LAST_UPDATE_DATE
+									  )
+								SELECT 
+										v_DIVISION_ID	    
+										,NEXT VALUE FOR SEQ1_SCM_MST_FUTURE_PRICE_H
+										,v_PROJECT_CODE    
+										,v_SCM_SITE_ID		
+										,v_PLANT_SITE_ID	
+										,v_ITEM_ID		    
+										,v_YYYYMMDD	   	    
+										,v_CURRENCY		    
+										,v_MEASURE		    
+										,v_DOM_EXP		    
+										,v_FCST_TYPE		
+										,v_INCOTERMS		
+										,v_PRICE            
+										,v_CREATED_BY  
+										,GETDATE()  
+										,v_LAST_UPDATED_BY
+										,GETDATE()
+								 FROM  @results  WHERE v_active_flag <> 'D'   -- DELETE값이 아닌경우만
+
+						--------------------------------------------------------------------------------------  20180510 SKH ADD START
+						IF OBJECT_ID (N'tempdb..#results', N'U') IS NOT NULL 
+							DROP TABLE #results
+
+                         SELECT      v_DIVISION_ID	  
+								    ,v_PROJECT_CODE    
+								    ,v_SCM_SITE_ID		
+								    ,v_ITEM_ID		  
+								    ,v_DOM_EXP		  
+								    ,v_FCST_TYPE		  
+								    ,v_INCOTERMS		  
+								    ,v_MEASURE		  
+								    ,v_PLANT_SITE_ID
+									,v_YYYYMMDD
+									,v_CURRENCY
+									,v_PRICE
+									,v_CREATED_BY
+						 INTO #results FROM  @results  WHERE v_active_flag <> 'D'   -- DELETE값이 아닌경우만
+
+						-- Procedure 호출 
+						EXEC dbo.PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_SINGLE  
+						--------------------------------------------------------------------------------------  20180510 SKH ADD END
+
+END
+--===================================================================================== update, insert end
+
+  	-- 트랜잭션 (COMMIT)
+        COMMIT WORK;  -- sss
+	--------------------------------------------------------------------------------------------	
+		END TRY
+	--------------------------------------------------------------------------------------------	
+
+	--------------------------------------------------------------	
+    BEGIN CATCH
+	--------------------------------------------------------------	
+		SET @v_log_type = 'ERROR';
+		SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+		SET @v_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+		SET @d_event_date = SYSDATETIME();
+
+		SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();  /*-- 에러메시지 DISPLAY --*/
+
+		-- 트랜잭션 (END)
+		ROLLBACK TRANSACTION SCM_MST_FUTURE_PRICE_ALL;  -- sss
+
+		-- ERROR LOG DB INSERT (로직의 TRANSACTION 종료이후수행 : 충돌방지)
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	--------------------------------------------------------------	
+    END CATCH;
+	--------------------------------------------------------------	
+
+	-- 수행결과 성공여부 DISPLAY
+     IF @v_log_message IS NULL
+	  SELECT 'success'
+	;
+    -- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure @@@##########';
+    SET @v_description = 'delete_count: '+ Convert(NVARCHAR(10), @n_delete_count)  + ' / merge_count: ' + Convert(NVARCHAR(10), @n_merge_count) ;
+    SET @d_event_date = SYSDATETIME();
+
+	-- ERROR LOG DB INSERT (로직의 TRANSACTION 종료이후수행 : 충돌방지)
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE_CONVERSION","1353823935","1","
+/*
+ * Program ID   : DM0020_SAVE_SCM_MST_FUTURE_PRICE_CONVERSION
+ * Description  : SCM_MST_FUTURE_PRICE Data Conversion 
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017. 02. 22    KHSONG      Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 20180720 KHSONG 주석처리 전체를 다시 계산함
+ * 20190213 KHSONG [CSR ID:3921022] GSCM 판가 소수점 관리 개선 요청의 건 -> 소수점 3번째자리까지 반올림하여 저장
+ * 2020/09/09     P.C.I		[C20200909-000203] LOG 표준화 적용
+ * 2021.05.13	P.C.I		   [PJ20209642R] Chempion 환율 적용
+ */
+-- Weekly Cutoff 시에 이 로직이 수행되어야 함.  
+
+CREATE PROCEDURE [dbo].[DM0020_SAVE_SCM_MST_FUTURE_PRICE_CONVERSION]
+
+	-- Add the parameters for the stored procedure here
+	 @p_division_id            NVARCHAR(30)
+
+AS
+
+BEGIN
+    SET NOCOUNT ON; 
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET XACT_ABORT ON;
+
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	-- cursor 별 로딩할 변수설정
+    DECLARE @v_DIVISION_ID           nvarchar(MAX)    ;
+    DECLARE @v_PROJECT_CODE          nvarchar(MAX)    ;
+    DECLARE @v_SCM_SITE_ID           nvarchar(MAX)    ;
+    DECLARE @v_PLANT_SITE_ID         nvarchar(MAX)    ;
+    DECLARE @v_ITEM_ID               nvarchar(MAX)    ;
+    DECLARE @v_YYYYMMDD              nvarchar(MAX)    ;
+    DECLARE @v_CURRENCY              nvarchar(MAX)    ;
+    DECLARE @v_MEASURE               nvarchar(MAX)    ;
+    DECLARE @v_DOM_EXP               nvarchar(MAX)    ;
+    DECLARE @v_FCST_TYPE             nvarchar(MAX)    ;
+    DECLARE @v_INCOTERMS             nvarchar(MAX)    ;
+    DECLARE @v_PRICE                 numeric(20,10)   ;
+    DECLARE @v_CREATED_BY            nvarchar(MAX)    ;
+    DECLARE @v_CREATION_DATE         DATETIME         ;
+    DECLARE @v_LAST_UPDATED_BY       nvarchar(MAX)    ;
+    DECLARE @v_LAST_UPDATE_DATE      DATETIME         ;
+    DECLARE @v_ROW_COUNT             nvarchar(MAX)    ;
+
+    DECLARE @n1_MEASURE              nvarchar(MAX)    ;
+    DECLARE @n2_MEASURE              nvarchar(MAX)    ;
+    DECLARE @n1_PRICE                numeric(20,10)   ;
+    DECLARE @n2_PRICE                numeric(20,10)   ;
+	
+
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'DM0020_SAVE_SCM_MST_FUTURE_PRICE_CONVERSION';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+		-- 시작 LOG  (START)
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = 'DIVISION_ID : ' + @p_division_id;
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		SET @v_log_message = NULL      /*-- <- 변수 재사용을 위하여 초기화해야함 --*/
+		-- 시작 LOG  (END)
+
+		-- 트랜잭션 (START)
+		BEGIN TRANSACTION SCM_MST_FUTURE_PRICE_CONVERSION;
+
+	--------------------------------------------------------------------------------------------	
+		BEGIN TRY
+	--------------------------------------------------------------------------------------------	
+		
+
+		BEGIN	
+		   
+			IF OBJECT_ID('tempdb..#FUTURE_PRICE_TEMP1') IS NOT NULL
+			BEGIN 
+				DROP TABLE  #FUTURE_PRICE_TEMP1;
+			END 
+
+			IF OBJECT_ID('tempdb..#FUTURE_PRICE_TEMP2') IS NOT NULL
+			BEGIN 
+				DROP TABLE  #FUTURE_PRICE_TEMP2;
+			END 
+ -- PRINT N'CONVERSION2 START =>' + CONVERT(VARCHAR(8), GETDATE(), 108)	
+ PRINT N'1                 =>' + CONVERT(VARCHAR(8), GETDATE(), 108)
+
+			SELECT DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,PLANT_SITE_ID,ITEM_ID,YYYYMMDD,CURRENCY,MEASURE,DOM_EXP,FCST_TYPE,INCOTERMS,PRICE,CREATED_BY 
+			INTO #FUTURE_PRICE_TEMP1
+			FROM dbo.SCM"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE_CONVERSION","1353823935","2","_MST_FUTURE_PRICE WITH(NOLOCK) 
+			WHERE DIVISION_ID = @p_division_id
+				AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) -- 당주 월요일이후 데이터만 대상으로함
+				AND MEASURE = 'LOC';
+			-- GROUP BY DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,PLANT_SITE_ID,ITEM_ID,YYYYMMDD,CURRENCY,DOM_EXP,FCST_TYPE,INCOTERMS;
+
+ PRINT N'2                 =>' + CONVERT(VARCHAR(8), GETDATE(), 108)			
+
+			SELECT 
+				DIVISION_ID
+				,PROJECT_CODE
+				,SCM_SITE_ID
+				,PLANT_SITE_ID
+				,ITEM_ID
+				,YYYYMMDD
+				,CURRENCY
+				,MEASURE
+				,DOM_EXP
+				,FCST_TYPE
+				,INCOTERMS
+				,ROUND(PRICE, 3) AS PRICE
+				,CREATED_BY
+			INTO #FUTURE_PRICE_TEMP2
+			FROM (
+				SELECT A.DIVISION_ID
+				,PROJECT_CODE
+				,SCM_SITE_ID
+				,PLANT_SITE_ID
+				,ITEM_ID
+				,A.YYYYMMDD
+				,A.CURRENCY
+				,CASE	WHEN A.CURRENCY = 'KRW' THEN 'KRW'  
+						WHEN A.CURRENCY = 'USD' THEN 'USD'  
+						ELSE 'KRW' END MEASURE
+				,DOM_EXP
+				,FCST_TYPE
+				,INCOTERMS
+				,CASE	WHEN A.CURRENCY = 'KRW' THEN PRICE 
+						WHEN A.CURRENCY = 'USD' THEN PRICE
+						ELSE PRICE * ISNULL(B.EXCHANGE_PRICE,1)  END PRICE
+				,A.CREATED_BY
+			FROM #FUTURE_PRICE_TEMP1 AS A
+			LEFT OUTER JOIN DM_MST_EXCHANGE_RATE AS B WITH(NOLOCK) 
+								ON A.DIVISION_ID = B.DIVISION_ID
+								AND SUBSTRING(A.YYYYMMDD, 1, 6) + '01' = B.YYYYMMDD
+								AND B.CURRENCY = 'KRW'
+								AND A.CURRENCY = B.UNIT_CURRENCY
+								
+			UNION ALL
+			SELECT A.DIVISION_ID
+				,PROJECT_CODE
+				,SCM_SITE_ID
+				,PLANT_SITE_ID
+				,ITEM_ID
+				,A.YYYYMMDD
+				,A.CURRENCY
+				,CASE	WHEN A.CURRENCY = 'KRW' THEN 'USD'  
+						WHEN A.CURRENCY = 'USD' THEN 'KRW'  
+						ELSE 'USD' END MEASURE
+				,DOM_EXP
+				,FCST_TYPE
+				,INCOTERMS
+				,CASE	WHEN A.CURRENCY = 'KRW' THEN ISNULL(PRICE / ISNULL(B.EXCHANGE_PRICE,1),0)  
+						WHEN A.CURRENCY = 'USD' THEN ISNULL(PRICE * ISNULL(B.EXCHANGE_PRICE,1),0) 
+						ELSE ISNULL((A.PRICE * ISNULL((SELECT DMER.EXCHANGE_PRICE FROM dbo.DM_MST_EXCHANGE_RATE AS DMER WITH(NOLOCK) where DMER.DIVISION_ID = A.DIVISION_ID  
+                                AND DMER.YYYYMMDD = SUBSTRING(A.YYYYMMDD, 1, 6) + '01' AND DMER.UNIT_CURRENCY = A.CURRENCY AND DMER.CURRENCY = 'KRW'),1)) 
+							/ ISNULL(B.EXCHANGE_PRICE,1),0) END PRICE
+				,A.CREATED_BY
+			FROM #FUTURE_PRICE_TEMP1 AS  A
+			LEFT OUTER JOIN DM_MST_EXCHANGE_RATE AS B WITH(NOLOCK) 
+							ON A.DIVISION_ID = B.DIVISION_ID
+							AND SUBSTRING(A.YYYYMMDD, 1, 6) + '01' = B.YYYYMMDD
+							AND B.CURRENCY = 'KRW'
+							AND B.UNIT_CURRENCY  =  'USD' 	
+			) AS C
+			WHERE PRICE > 0;
+ PRINT N'3                 =>' + CONVERT(VARCHAR(8), GETDATE(), 108)	
+
+			--확인 SELECT 'DATA'
+			--확인 SELECT * FROM #FUTURE_PRICE_TEMP3
+			BEGIN
+
+				MERGE INTO SCM_MST_FUTURE_PRICE AS A
+				USING  #FUTURE_PRICE_TEMP2   AS B
+				ON (		A.DIVISION_ID     =  B.DIVISION_ID
+					   and  A.PROJECT_CODE    =  B.PROJECT_CODE                         
+					   and  A.SCM_SITE_ID     =  B.SCM_SITE_ID                         
+					   and  A.PLANT_SITE_ID   =  B.PLANT_SITE_ID                         
+					   and  A.ITEM_ID         =  B.ITEM_ID   
+					   and  A.YYYYMMDD        =  B.YYYYMMDD 
+					   and  A.CURRENCY        =  B.CURRENCY                         
+					   and  A.MEASURE         =  B.MEASURE                         
+					   and  A.DOM_EXP         =  B.DOM_EXP                         
+					   and  A.FCST_TYPE       =  B.FCST_TYPE                         
+					   and  A.INCOTERMS       =  B.INCOTERMS )
+				WHEN MATCHED THEN
+					UPDATE SET	A.PRICE				= B.PRICE
+								,A.CREATION_DATE	= SYSDATETIME()
+								,A.LAST_UPDATED_BY	= 'SYSTEM'
+								,A.LAST_UPDATE_DATE	= SYSDATETIME()
+				WHEN NOT MATCHED THEN
+					INSERT ( DIVISION_ID
+							,PROJECT_CODE
+							,SCM_SITE_ID
+							,PLANT_SITE_ID
+							,ITEM_ID
+							,YYYYMMDD
+							,CURRENCY
+							,MEASURE
+							,DOM_EXP
+							,FCST_TYPE
+							,INCOTERMS
+							,PRICE
+							,CREATED_BY
+		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_SAVE_SCM_MST_FUTURE_PRICE_CONVERSION","1353823935","3","					,CREATION_DATE
+							,LAST_UPDATED_BY
+							,LAST_UPDATE_DATE
+							,ATTRIBUTE1
+							,ATTRIBUTE2
+							,ATTRIBUTE3
+							,ATTRIBUTE4
+							,ATTRIBUTE5
+							,ATTRIBUTE6
+							,ATTRIBUTE7
+							,ATTRIBUTE8
+							,ATTRIBUTE9
+							,ATTRIBUTE10
+					) VALUES(
+							B.DIVISION_ID
+							,B.PROJECT_CODE
+							,B.SCM_SITE_ID
+							,B.PLANT_SITE_ID
+							,B.ITEM_ID
+							,B.YYYYMMDD
+							,B.CURRENCY
+							,B.MEASURE
+							,B.DOM_EXP
+							,B.FCST_TYPE
+							,B.INCOTERMS
+							,B.PRICE
+							,B.CREATED_BY
+							,SYSDATETIME() 
+							,'SYSTEM'
+							,SYSDATETIME()
+							,NULL
+							,NULL
+							,NULL
+							,NULL
+							,NULL
+							,NULL
+							,NULL
+							,NULL
+							,NULL
+							,NULL
+					);
+			END
+
+ PRINT N'4                 =>' + CONVERT(VARCHAR(8), GETDATE(), 108)	
+		END	
+        /*---------------------------------------------------------------*/
+
+     -- IF @@TRANCOUNT > 0 
+  	-- 트랜잭션 (COMMIT)
+        COMMIT WORK;
+
+	--------------------------------------------------------------------------------------------	
+		END TRY
+	--------------------------------------------------------------------------------------------	
+
+	--------------------------------------------------------------	
+    BEGIN CATCH
+	--------------------------------------------------------------	
+	  --[C20200909-000203] LOG 표준화 적용
+	  ROLLBACK TRANSACTION SCM_MST_FUTURE_PRICE_CONVERSION;
+	  SELECT 'ERROR';
+
+      -- ERROR LOG VALUE SAVE
+      SET @v_log_type = 'ERROR';
+      SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+      SET @v_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+      SET @d_event_date = SYSDATETIME();
+	  --[C20200909-000203] LOG 표준화 적용
+	  EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();  /*-- 에러메시지 DISPLAY --*/
+
+	-- 트랜잭션 (END)
+
+	--------------------------------------------------------------	
+    END CATCH;
+	--------------------------------------------------------------	
+
+
+	-- 수행결과 성공여부 DISPLAY
+     IF @v_log_message IS NULL
+	  --SELECT 'success'
+	  SELECT N'Sales Price Recalculation is Complete'
+	;
+
+    -- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure ##########';
+    --SET @v_description = '';
+    SET @d_event_date = SYSDATETIME();
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+  END;
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_GET_SCM_MST_FUTURE_PRICE_20240205","396684611","1","/****************************************************************************************************/
+/* Program ID  : [DMF0006_GET_CUSTOMERMODELMAPPING]                                                           */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2018/03/12  SeungJae.Hwnag       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/* 2018/05/30  JYE			복수 팀 권한 관련  수정  */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DM0020_GET_SCM_MST_FUTURE_PRICE_20240205]
+    @p_division_id              NVARCHAR(30),
+	@p_dept_id        NVARCHAR(MAX),	--Department
+    @p_end_customer   NVARCHAR(MAX),	--Endcustomer
+	@p_scm_site_id              NVARCHAR(MAX),
+	@p_plant_site_id              NVARCHAR(MAX),
+    @p_project_code             NVARCHAR(MAX),
+	@p_item_id                  NVARCHAR(MAX),
+	@p_customer_project_code    NVARCHAR(MAX),
+	@p_customer_model           NVARCHAR(MAX),
+	@p_from_yyyymmdd            NVARCHAR(8),
+	@p_to_yyyymmdd             NVARCHAR(8),
+	@p_biztype                 NVARCHAR(MAX),
+	@p_created_by              NVARCHAR(MAX),
+	@p_userinfo                 NVARCHAR(MAX)
+ 
+AS  
+  -- EXEC DM0020_GET_SCM_MST_FUTURE_PRICE @p_division_id='81', @p_dept_id='ALL', @p_end_customer='ALL', @p_scm_site_id='ALL', @p_plant_site_id='ALL', @p_project_code='', @p_item_id='', @p_customer_project_code='', @p_customer_model='', @p_from_yyyymmdd='20180326', @p_to_yyyymmdd='20180926', @p_biztype='ALL', @p_created_by='20140001', @p_userinfo='ADMIN'
+
+BEGIN
+  SET NOCOUNT ON;
+
+    DECLARE @v_dept_id nvarchar(max)='';
+	DECLARE @v_group_id nvarchar(max)='';
+
+	IF @p_userinfo = 'ADMIN' OR @p_userinfo = 'DM ADMIN'
+		SET @v_group_id = 'ADMIN'
+
+  DECLARE @Prod varchar(max);
+  DECLARE @nsql nvarchar(max);
+  SELECT  @Prod = '';
+  
+IF OBJECT_ID (N'tempdb..#tmpData', N'U') IS NOT NULL 
+	DROP TABLE #tmpData
+IF OBJECT_ID (N'tempdb..#tmpOutput', N'U') IS NOT NULL 
+	DROP TABLE #tmpOutput
+	
+SELECT    
+   A.DIVISION_ID,
+   B.DIVISION_NAME,
+   DEPRTMENT.DEPT_ID AS UPPER_DEPT_ID,
+   TEAM.DEPT_ID, 
+   --CASE WHEN isnull(TEAM.DEPT_NAME_KO,'') = '' THEN '' ELSE RIGHT(isnull(TEAM.DEPT_NAME_KO,''), CHARINDEX('.',REVERSE(isnull(TEAM.DEPT_NAME_KO,''))) -1) END AS TEAM_INCHARGE,
+   A.SCM_SITE_ID,
+   A.PLANT_SITE_ID,
+   C.SITE_DESCRIPTION,   
+   isnull(C.END_CUSTOMER,'') AS END_CUSTOMER,
+   A.PROJECT_CODE,
+   PJT.PROJECT_NAME,
+   PJT.BIZ_TYPE as BIZ_TYPE_NAME,
+   --PJT.BIZ_TYPE_NAME,
+   PJT.PROJECT_STATUS,
+   A.ITEM_ID,
+   ITEM.ITEM_CLASS_NAME, 
+   isnull(ITEM.ITEM_NAME,'')AS ITEM_NAME,
+   A.INCOTERMS,
+   --SITE_ITEM.CURRENCY,
+   A.CURRENCY,
+   A.FCST_TYPE,
+   A.DOM_EXP,
+   MEASURE.LOOKUP_CODE AS MEASURE,
+   MEASURE.DISPLAY_SEQ,
+   --CASE WHEN (RTRIM(TEAM.DEPT_ID) = RTRIM(@v_dept_id) OR @v_group_id ='ADMIN') THEN 'Y' ELSE 'N' END AS AUTHORITY_YN
+   CASE WHEN (([dbo].[FN_GET_DEPT_LIST](@p_created_by, TEAM.DEPT_ID) = 'Y') OR @v_group_id ='ADMIN') THEN 'Y' ELSE 'N' END AS AUTHORITY_YN
+   ,A.YYYYMMDD
+   --,A.PRICE
+
+INTO #tmpData
+FROM SCM_MST_FUTURE_PRICE AS A WITH(NOLOCK)
+LEFT JOIN (SELECT * FROM SCM_MST_DIVISION WITH(NOLOCK) WHERE VALID_YN = 'Y') AS B 
+ON A.DIVISION_ID = B.DIVISION_ID
+LEFT JOIN (SELECT * FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_GET_SCM_MST_FUTURE_PRICE_20240205","396684611","2","YN = 'Y') AS C 
+ON A.DIVISION_ID = C.DIVISION_ID AND A.SCM_SITE_ID = C.SCM_SITE_ID AND C.SITE_TYPE = 'SALES'
+LEFT JOIN (SELECT * FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS D
+ON A.DIVISION_ID = D.DIVISION_ID AND A.SCM_SITE_ID = D.SCM_SITE_ID AND C.SITE_TYPE = 'PLANT'
+LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y') AS TEAM			       
+			       ON C.DEPT_ID = TEAM.DEPT_ID
+LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y') AS DEPRTMENT			       
+	ON TEAM.UPPER_DEPT_ID = DEPRTMENT.DEPT_ID
+INNER JOIN   
+(
+--SELECT DISTINCT DIVISION_ID, ITEM_ID, NICK_NAME, ITEM_CLASS, ITEM_CLASS_NAME
+--FROM SCM_MST_ITEM_SN WITH(NOLOCK)
+  SELECT * FROM DM_MST_ITEM_SINGLE_V  WITH(NOLOCK)
+)  AS ITEM 
+ON   A.DIVISION_ID = ITEM.DIVISION_ID AND A.ITEM_ID  = ITEM.ITEM_ID
+LEFT JOIN 
+(
+
+SELECT PJTS.DIVISION_ID, PJTS.PROJECT_CODE, PJTS.PROJECT_NAME, PJTS.PROJECT_VER_SEQ, PJTS.CAPACITY, BIZ_TYPE, BIZ_TYPE_NAME, PROJECT_STATUS
+	FROM SCM_MST_PROJECT PJTS WITH(NOLOCK)
+	INNER JOIN 
+	(
+		SELECT DIVISION_ID, PROJECT_CODE, MAX(PROJECT_VER_SEQ) AS PROJECT_VER_SEQ
+		FROM SCM_MST_PROJECT WITH(NOLOCK)
+		GROUP BY DIVISION_ID, PROJECT_CODE
+	) PJTSG 
+	ON PJTSG.DIVISION_ID = PJTS.DIVISION_ID AND PJTSG.PROJECT_CODE = PJTS.PROJECT_CODE AND PJTSG.PROJECT_VER_SEQ = PJTS.PROJECT_VER_SEQ
+
+
+) AS PJT ON   A.DIVISION_ID = PJT.DIVISION_ID AND A.PROJECT_CODE = PJT.PROJECT_CODE
+LEFT JOIN (SELECT * FROM SCM_MST_SITE_ITEM WITH(NOLOCK) WHERE VALID_YN = 'Y') AS SITE_ITEM
+ON SITE_ITEM.DIVISION_ID = A.DIVISION_ID
+	AND SITE_ITEM.PROJECT_CODE = A.PROJECT_CODE
+	AND SITE_ITEM.SCM_SITE_ID = A.SCM_SITE_ID
+	AND SITE_ITEM.ITEM_ID = A.ITEM_ID
+CROSS JOIN
+(
+SELECT  COLUMN_NAME AS LOOKUP_CODE, 
+		COLUMN_LABEL_NAME AS [DESCRIPTION], 
+		SORT_ORDER_NO AS DISPLAY_SEQ
+FROM     SCM_MST_SHEET_MEASURE WITH(NOLOCK)
+WHERE  (PROGRAM_ID = 'DMF1006' AND SHEET_NAME = 'Sales Price')
+		AND COLUMN_NAME <> 'LOC'
+UNION
+SELECT  COLUMN_NAME AS LOOKUP_CODE, 
+		COLUMN_LABEL_NAME AS [DESCRIPTION], 
+		SORT_ORDER_NO AS DISPLAY_SEQ
+FROM     SCM_MST_SHEET_MEASURE WITH(NOLOCK)
+WHERE  (PROGRAM_ID = 'DMF1006' AND SHEET_NAME = 'Sales Price')
+		AND COLUMN_NAME = 'LOC'
+--ORDER BY SORT_ORDER_NO
+) AS MEASURE
+--WHERE
+--SITE_ITEM.CURRENCY IS NOT NULL
+WHERE   (A.YYYYMMDD >= @p_from_yyyymmdd and A.YYYYMMDD <= @p_to_yyyymmdd)		       
+		AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   		 ELSE A.DIVISION_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+					(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE A.DIVISION_ID END) = P.data
+	               )
+		AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   		 ELSE TEAM.DEPT_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+					(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+	               )
+		AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   		 ELSE isnull(C.END_CUSTOMER,'')			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+					(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+	               )				   
+		AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   		 ELSE A.SCM_SITE_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+					(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE A.SCM_SITE_ID END) = P.data
+	               )
+		AND CASE WHEN @p_plant_site_id = 'ALL' THEN 'ALL'
+		   		 ELSE A.PLANT_SITE_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_plant_site_id,',') as P Where 
+					(CASE WHEN @p_plant_site_id = 'ALL' THEN 'ALL' ELSE A.PLANT_SITE_ID END) = P.data
+	               )
+		AND CASE WHEN @p_project_code = '' THEN ''
+		   		 ELSE A.PROJECT_CODE			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_project_code,',') as P Where 
+					(CASE WHE"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_GET_SCM_MST_FUTURE_PRICE_20240205","396684611","3","N @p_project_code = '' THEN '' ELSE A.PROJECT_CODE END) = P.data
+	               )
+
+		AND CASE WHEN @p_biztype = 'ALL' THEN 'ALL'
+		   		 ELSE PJT.BIZ_TYPE			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_biztype,',') as P Where 
+					(CASE WHEN @p_biztype = 'ALL' THEN 'ALL' ELSE PJT.BIZ_TYPE END) = P.data
+	               )
+-- Muliti Like case.
+	   AND Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where A.ITEM_ID LIKE N'%' + P.token +'%')
+	   --AND Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where A.ITEM_ID LIKE N'%' + P.token +'%')
+
+
+GROUP BY 
+		A.DIVISION_ID,
+		B.DIVISION_NAME,
+		DEPRTMENT.DEPT_ID,
+		TEAM.DEPT_ID, 
+		--CASE WHEN isnull(TEAM.DEPT_NAME_KO,'') = '' THEN '' ELSE RIGHT(isnull(TEAM.DEPT_NAME_KO,''), CHARINDEX('.',REVERSE(isnull(TEAM.DEPT_NAME_KO,''))) -1) END,
+		A.SCM_SITE_ID,
+		A.PLANT_SITE_ID,
+		C.SITE_DESCRIPTION,		
+		isnull(C.END_CUSTOMER,''),
+		A.PROJECT_CODE,
+		PJT.PROJECT_NAME,
+	   PJT.BIZ_TYPE,
+	   --PJT.BIZ_TYPE_NAME,
+	   PJT.PROJECT_STATUS,
+		A.ITEM_ID,
+		ITEM.ITEM_CLASS_NAME, 
+		isnull(ITEM.ITEM_NAME,''),
+		A.INCOTERMS,
+		 A.FCST_TYPE,
+		 A.DOM_EXP,
+		A.CURRENCY,		
+		MEASURE.LOOKUP_CODE,
+		MEASURE.DISPLAY_SEQ,
+		CASE WHEN RTRIM(TEAM.DEPT_ID) = RTRIM(@v_dept_id) THEN 'Y' ELSE 'N' END
+		,A.YYYYMMDD
+		--,A.PRICE
+
+CREATE INDEX IDX_PRICE_KEYS ON #tmpData(DIVISION_ID ASC, PROJECT_CODE ASC, SCM_SITE_ID ASC, PLANT_SITE_ID ASC, ITEM_ID ASC, CURRENCY ASC, MEASURE ASC, DOM_EXP ASC, FCST_TYPE ASC, INCOTERMS ASC, YYYYMMDD ASC);
+
+
+
+-- 1. 실데이타와 조인
+SELECT 
+		A.DIVISION_ID,
+		A.DIVISION_NAME,
+		A.UPPER_DEPT_ID,
+		A.DEPT_ID	,
+		A.SCM_SITE_ID,
+		A.PLANT_SITE_ID,
+		A.SITE_DESCRIPTION,
+		A.END_CUSTOMER,
+		A.PROJECT_CODE,
+		A.PROJECT_NAME,
+		A.BIZ_TYPE_NAME,
+		A.PROJECT_STATUS,
+		A.ITEM_ID,
+		A.ITEM_CLASS_NAME,
+		A.ITEM_NAME,
+		A.INCOTERMS,
+		A.CURRENCY,
+		A.FCST_TYPE,
+		A.DOM_EXP,
+		A.MEASURE,
+		A.DISPLAY_SEQ,
+		A.AUTHORITY_YN,
+		A.YYYYMMDD,
+		ISNULL(B.PRICE,0) AS PRICE
+INTO #tmpOutput
+FROM #tmpData A
+LEFT JOIN (SELECT * FROM SCM_MST_FUTURE_PRICE WITH(NOLOCK) WHERE (YYYYMMDD >= @p_from_yyyymmdd and YYYYMMDD <= @p_to_yyyymmdd)) AS B 
+ON A.DIVISION_ID = B.DIVISION_ID 
+   AND A.PROJECT_CODE = B.PROJECT_CODE
+   AND A.SCM_SITE_ID = B.SCM_SITE_ID 
+   AND A.PLANT_SITE_ID = B.PLANT_SITE_ID 
+   AND A.ITEM_ID = B.ITEM_ID 
+   AND A.CURRENCY = B.CURRENCY
+   AND A.MEASURE = B.MEASURE
+   AND A.DOM_EXP = B.DOM_EXP
+   AND A.FCST_TYPE = B.FCST_TYPE
+   AND A.INCOTERMS = B.INCOTERMS
+   AND A.YYYYMMDD = B.YYYYMMDD
+
+--SELECT * FROM #tmpOutput RETURN;
+--return (0)
+
+/* tmpPlanData 에 대한 처리들  */
+		SELECT @Prod = @Prod + '[' + A.YYYYMMDD + '],'
+		FROM (SELECT DISTINCT YYYYMMDD FROM #tmpOutput) A
+		IF @Prod = '' 
+		BEGIN
+			SET @Prod = 'D_99999999'
+		END
+		ELSE
+		BEGIN
+			Select @Prod = LEFT(@Prod, LEN(@Prod)-1)
+		END
+
+--SELECT DISTINCT YYYYMMDD FROM #tmpOutput
+--SELECT @Prod 
+--SELECT * FROM #tmpOutput
+--return (0)
+
+SELECT  @nsql = '
+SELECT  
+		DIVISION_ID,
+		DIVISION_NAME,
+		UPPER_DEPT_ID,
+		DEPT_ID	,
+		SCM_SITE_ID,
+		PLANT_SITE_ID,
+		SITE_DESCRIPTION,
+		END_CUSTOMER,
+		PROJECT_CODE,
+		PROJECT_NAME,
+		BIZ_TYPE_NAME,
+		PROJECT_STATUS,
+		ITEM_ID,
+		ITEM_CLASS_NAME,
+		ITEM_NAME,
+		INCOTERMS,
+		CURRENCY,
+		FCST_TYPE,
+		DOM_EXP,
+		AUTHORITY_YN,		
+		DISPLAY_SEQ,
+		MEASURE,				
+		' + @Prod + '
+From(
+	SELECT 
+		*
+	FROM #tmpOutput
+	) T
+PIVOT (MAX(PRICE) FOR YYYYMMDD IN (' + @prod + ')
+) AS PVT
+ORDER BY 		
+
+		DIVISION_ID,
+		DEPT_ID,
+		END_CUSTOMER,
+		SCM_SITE_ID,
+		PROJECT_CODE,
+		PROJECT_STATUS,
+		BIZ_TYPE_NAME,
+		ITEM_ID,
+		ITEM_CLASS_NAME,
+		ITEM_NAME,
+		INCOTERMS,
+		FCST_TYPE,
+		DOM_EXP,
+		CURRENCY,
+		PLANT_SITE_ID,
+		DISPLAY_SEQ, 
+		MEASURE		
+' 
+
+--PRINT @NSQL 
+execute dbo. SP_executesql @NSQL 
+
+IF OBJECT_ID (N'tempdb..#tmpData', N'U') IS NOT NULL 
+	DROP TABLE #tmpData
+IF OBJECT_ID (N'tempdb..#tmpOutput', N'U') IS NOT NULL 
+	DROP "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DM0020_GET_SCM_MST_FUTURE_PRICE_20240205","396684611","4","TABLE #tmpOutput
+
+
+END
+
+"

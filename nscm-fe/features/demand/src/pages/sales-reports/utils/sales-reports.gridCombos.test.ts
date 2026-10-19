@@ -85,7 +85,7 @@ describe('applyDeptIdChange', () => {
     expect(row.PRODUCT_GROUP).toBe('');
   });
 
-  it('팀 != \'MDF\' → MODEL/모델명 = \'기타매출\' 강제 + 3컬럼 clear', () => {
+  it("팀 != 'MDF' → MODEL/모델명 = '기타매출' 강제 + 3컬럼 clear", () => {
     const row = base();
     const changed = applyDeptIdChange(row);
     expect(row.ITEM_ID).toBe(ETC_SALES_ITEM);
@@ -93,7 +93,7 @@ describe('applyDeptIdChange', () => {
     expect(changed).toEqual([...DEPT_CHANGE_CLEAR, 'ITEM_ID', 'NICK_NAME']);
   });
 
-  it('팀 == \'MDF\'(코드) → MODEL/모델명 clear (팝업으로 고르게)', () => {
+  it("팀 == 'MDF'(코드) → MODEL/모델명 clear (팝업으로 고르게)", () => {
     const row = base();
     (row as Record<string, unknown>).DEPT_ID = 'MDF';
     applyDeptIdChange(row);
@@ -101,7 +101,7 @@ describe('applyDeptIdChange', () => {
     expect(row.NICK_NAME).toBe('');
   });
 
-  it('표시명이 \'MDF\' 인 코드도 teamNameOf 로 MDF 판정 (코드 우선)', () => {
+  it("표시명이 'MDF' 인 코드도 teamNameOf 로 MDF 판정 (코드 우선)", () => {
     const row = base();
     (row as Record<string, unknown>).DEPT_ID = 'T9';
     applyDeptIdChange(row, code => (code === 'T9' ? 'MDF' : ''));

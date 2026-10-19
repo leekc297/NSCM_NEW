@@ -5,6 +5,7 @@ import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import { MENU_ID, SHEETS } from './metal-link-price.constants';
 import type { SearchParamProps } from './metal-link-price.types';
+import type { SalesSiteComboTrigger } from './utils/metal-link-price.searchCombos';
 
 // SP filter payload — useTabProcQuery enabled 가드.
 //   MAIN = PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE (PROC_M SORT_ORD 1~12 IN — ALL_ARGUMENTS 실측)
@@ -16,6 +17,11 @@ interface MetalLinkPriceState {
   initialized: boolean;
   isOpenSearchArea: boolean;
   searchParams: SearchParamProps;
+  // Sales Site 콤보를 다시 만든 계기. AS-IS 는 진입에서만 고객 전체선택을 펼쳐 넘기므로
+  //   진입인지 아닌지로 END_CUSTOMER 축이 켜지고 꺼진다 - utils/metal-link-price.searchCombos 참조.
+  //   searchParams 밖에 두는 이유: setFilters 가 조회조건을 프로시저 파라미터로 옮겨 담는데
+  //   여기 섞이면 화면 상태가 조회 파라미터로 새어 나간다.
+  comboTrigger: SalesSiteComboTrigger;
   filters: FiltersBySheet;
   staticColumn: RawFlexGridColumnConfig[];
 }
@@ -24,6 +30,9 @@ interface MetalLinkPriceAction {
   reset: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
+  // setSearchParams 에 인자를 얹지 않는다 - 공용 BaseTabState 가 그 액션을 인자 1개로 선언해
+  //   (createStore.ts :21) 교집합이 되므로, 2번째 인자를 붙이면 타입이 어긋난다.
+  setComboTrigger: (comboTrigger: SalesSiteComboTrigger) => void;
   setFilters: () => void;
   clearFilters: () => void;
   fetchStaticColumns: () => Promise<void>;
@@ -55,6 +64,7 @@ const initMetalLinkPriceState: MetalLinkPriceState = {
     toYyyymm: sixMonthsAhead,
     version: 'Current', // AS-IS txtVersion 기본 "Current" (.cs L222)
   },
+  comboTrigger: 'entry',
   filters: {},
   staticColumn: [],
 };
@@ -73,6 +83,11 @@ export const useMetalLinkPriceStore = createPersistedStoreWithTab<
     setSearchParams: searchParams => {
       set(state => {
         state.searchParams = { ...get().searchParams, ...searchParams };
+      });
+    },
+    setComboTrigger: comboTrigger => {
+      set(state => {
+        state.comboTrigger = comboTrigger;
       });
     },
     setFilters: () => {

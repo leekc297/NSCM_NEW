@@ -1,0 +1,4196 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2026-09-11 00:00:00.287","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","1","
+
+/*
+ * Program ID   : SCP0020_GET_TACT_TIME_OSP
+ * Description  : TACT TIME OSP 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2020/02/03   hwyoon			Initial Release [] 전지 GSCM(SCP) SM 운영 - [C20200116-000114] ESS 외주 Packer Line 계획 수립
+ * 2020/10/28   khj79           PJ20202001 LG화학 전지. 공급 대응력 향상을 위한 SCM 관리 체계 개선 : RACK
+ * 2021/10/05	khj79	       [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - W/S AS UI 변경
+ * 2022/11/07   jahn1501		PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - MKT FCST 조건 변경
+ * 2026/03/23   YMH				E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경	
+ * 2026/08/03	YMH				E20260728-000548 Tact Time(OSP) 등록대상으로 생성하기 위해서있는 제약 확인 및 기능 보완 요청드립니다.
+ * 2026/09/10	ymh				E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다.
+ */
+
+CREATE PROCEDURE [dbo].[SCP0020_GET_TACT_TIME_OSP]
+   @p_division_id		 NVARCHAR(MAX)
+  ,@p_plant_site_id		 NVARCHAR(MAX)
+  ,@p_line_id   		 NVARCHAR(MAX)
+  ,@p_operation_group_id NVARCHAR(MAX)
+  ,@p_item_id            NVARCHAR(MAX)
+  ,@debug_mode			 NVARCHAR(20)  ='F'
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+	declare @v_division_id NVARCHAR(MAX) = null
+	declare @v_item_id NVARCHAR(MAX) = null
+	set @v_division_id = @p_division_id;
+	set @v_item_id = @p_item_id;
+
+    DECLARE @v_cur_monday        NVARCHAR(8) = CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112); -- 당주 월요일 YYYYMMDD
+    DECLARE @v_end_monday        NVARCHAR(8) = NULL;
+    --DECLARE @v_end_monday        NVARCHAR(8) = CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112); -- 월요일 YYYYMMDD
+	
+    SELECT @v_end_monday = MAX(horizon_end_date)
+	FROM   dbo.scm_mst_plan p WITH(NOLOCK)
+	WHERE  p.plan_cycle  = 'WEEKLY'
+	AND    p.plan_name   = @v_cur_monday
+	GROUP BY plan_name
+	                                           
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP
+
+	CREATE TABLE #TblDynamicPivot_SCP0020_TMP (
+			 DIVISION_ID		NVARCHAR(60)	
+			,ITEM_ID			NVARCHAR(100)
+		);
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP1
+	
+	CREATE TABLE #TblDynamicPivot_SCP0020_TMP1 (
+			 DIVISION_ID		NVARCHAR(60)	
+			,ITEM_ID			NVARCHAR(100)
+			-- E20260728-000548 프로직트 코드 추가.
+			,PROJECT_CODE		NVARCHAR(50)
+		);
+
+
+	-- 2021.03.09 PJG
+	-- 실행속도 개선
+
+	--INSERT INTO #TblDynamicPivot_SCP0020_TMP
+	--SELECT distinct aa.division_id, T.ITEM_ID 
+	--FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+	--JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='Y' 
+	--								   and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST') 
+	--								   AND aa.scm_site_id = mse.scm_site_id 
+	--								   AND aa.division_id = mse.division_id
+	--JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+	--JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON b.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+	--WHERE 1=1
+	--AND    aa.yyyymmdd       >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.yyyymmdd       <= CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.qty            >  0
+	--and	   aa.DIVISION_ID = @v_division_id
+	--AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	--group by aa.division_id	, T.ITEM_ID  
+	--;
+
+
+
+	-- 속도 이슈로 수정 함 : SCM_MST_MODEL_FINAL_ITEM_BOM"
+"2026-09-11 00:00:00.287","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","2","_V 를 조회 후 조인으로 변경 함
+	--수정 전
+	--INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+	--SELECT distinct aa.division_id , B.child_item_id --, T.ITEM_ID 
+	--FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+	--JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='Y' 
+	--									--2021/10/05 : W/S AS
+	--								   --and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST') 
+	--								   and aa.measure     = IIF(ISNULL(mse.OPERATION_GROUP, '') = 'W', 'AS_In_Req', IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST'))
+	--								   AND aa.scm_site_id = mse.scm_site_id 
+	--								   AND aa.division_id = mse.division_id
+	--JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+	----JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+	--WHERE 1=1
+	--AND    aa.yyyymmdd       >= @v_cur_monday --CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.yyyymmdd       <= @v_end_monday --CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.qty            >  0
+	--and	   aa.DIVISION_ID = @v_division_id
+	--AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	----group by aa.division_id	, B.child_item_id --, T.ITEM_ID  
+	--;
+
+	
+
+	INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+	-- E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다. 신규로직 시작
+	SELECT 
+		DIVISION_ID, CHILD_ITEM_ID , PROJECT_CODE
+	FROM
+	(
+	-- E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다. 신규로직 끝
+	SELECT DISTINCT A.DIVISION_ID 
+	-- E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다. 기존로직 주석처리 시작
+	-- , B.CHILD_ITEM_ID 
+	-- E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다. 기존로직 주석처리 끝
+	-- E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다. 신규로직 시작
+	, CASE 
+		WHEN B.CHILD_ITEM_ID IS NOT NULL THEN B.CHILD_ITEM_ID
+		WHEN EXISTS 
+			(
+				SELECT
+					  LMD.SEGMENT2	AS DIVISION_ID
+					, LMD.SEGMENT3	AS ITEM_ID 
+					, LMD.SEGMENT5	AS PROJECT_CODE
+				FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL AS LMD WITH(NOLOCK)
+				WHERE LMD.LOOKUP_TYPE = 'SCP_OPT_ENG_CONST_DEMAND_GROUP' 
+				AND LMD.VALID_YN = 'Y'
+				AND LMD.SEGMENT3	= A.ITEM_ID
+				AND LMD.SEGMENT5	= A.PROJECT_CODE
+			) THEN A.ITEM_ID
+		ELSE NULL END AS CHILD_ITEM_ID
+	-- E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다. 신규로직 끝
+	-- E20260728-000548 프로직트 코드 추가.
+	, A.PROJECT_CODE
+	FROM (
+			SELECT distinct  aa.division_id , aa.ITEM_ID 
+			-- E20260728-000548 프로직트 코드 추가.
+			, AA.PROJECT_CODE
+			FROM DM_PLN_MKT_FCST AA WITH (NOLOCK)
+
+			JOIN SCM_MST_SITE mse with(nolock) 
+			   on mse.VALID_YN='Y'
+			  --2022/11/07			   
+			  --and aa.measure     = IIF(ISNULL(mse.OPERATION_GROUP, '') = 'W', 'AS_In_Req', IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST'))
+			  and aa.measure     = CASE WHEN ISNULL(mse.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN mse.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(AA.attribute10, '') = '' THEN 'MKT_FCST' END
+			  AND aa.scm_site_id = mse.scm_site_id 
+			  AND aa.division_id = mse.division_id
+			WHERE 1=1
+			  AND aa.yyyymmdd       >= @v_cur_monday
+			  AND aa.yyyymmdd       <= @v_end_monday
+			  AND aa.qty            >  0
+			  and aa.DIVISION_ID =  @v_division_id
+		) a
+	-- E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경으로 인해 주석처리
+	-- JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON a.DIVISION_ID = b.division_id and a.ITEM_ID=b.MODEL_ID
+
+	-- E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다. 기존로직 주석처리 시작
+	/*
+	-- E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경신규로직 추가 시작
+	JOIN
+	*/
+	-- E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다. 기존로직 주석처리 끝
+	-- E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다. 신규로직 시작 
+	LEFT OUTER JOIN
+	-- E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다. 신규로직 끝
+	(
+		SELECT b.division_id,
+			"
+"2026-09-11 00:00:00.287","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","3","b.model_id,
+			b.child_item_id
+		FROM ( SELECT x.* 
+				--FROM dbo.scm_mst_bom_sn x WITH(NOLOCK)	
+				FROM dbo.scm_mst_bom_sn_V x WITH(NOLOCK)	--2021-03-09	SCP 대치 BOM 적용
+					INNER JOIN dbo.scm_mst_item_sn i WITH(NOLOCK)
+					ON  x.child_division_id = i.division_id
+					AND x.child_item_id     = i.item_id
+					AND x.child_company_id  = i.company_id -- A002 빈강 추가 따른 조건 추가
+					AND x.child_site_id     = i.site_id
+					AND i.active_flag       = 'Y'           
+				WHERE 1=1
+			) b
+			, scm_mst_final_item_v v WITH(NOLOCK)
+			, scm_mst_item_sn mi WITH(NOLOCK)   -- 20210219 C20210219-000229  Company 별로 유효한 Model만 적용
+		WHERE 1=1
+		AND b.division_id   = v.division_id
+		AND b.child_item_id = v.item_id
+
+		-- 20210219 C20210219-000229  Company 별로 유효한 Model만 적용
+		AND b.division_id   = mi.division_id
+		AND b.model_id      = mi.item_id
+		AND b.company_id    = mi.company_id  -- A002 빈강 추가 따른 조건 추가
+		AND b.site_id       = mi.site_id
+		AND mI.active_flag  = 'Y'
+		GROUP BY b.division_id, b.model_id, b.child_item_id
+	) AS B ON A.DIVISION_ID = B.DIVISION_ID AND A.ITEM_ID=B.MODEL_ID
+	-- E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다. 신규로직 시작
+	) AS LIST
+	WHERE CHILD_ITEM_ID IS NOT NULL
+	-- E20260907-000168 TactTime(OSP)에 등록대상으로 보이지 않는 사유 확인부탁드립니다. 신규로직 끝
+	;
+	-- E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경신규로직 추가 끝
+
+
+
+	-- E20260728-000548 Tact Time(OSP) 등록대상으로 생성하기 위해서있는 제약 확인 및 기능 보완 요청드립니다.
+	-- 등록된 코드중 DEMAND GROUP MASTER 룩업과 PROJECT_CODE , ITEM_ID 앞 12자리가 같은 데이터를 추가 매핑한다.
+	-- E20260728-000548 로직 시작
+	INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+	SELECT
+		  SEGMENT2	AS DIVISION_ID
+		, SEGMENT3	AS ITEM_ID 
+		, SEGMENT5	AS PROJECT_CODE
+	FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL AS A WITH(NOLOCK)
+	WHERE LOOKUP_TYPE = 'SCP_OPT_ENG_CONST_DEMAND_GROUP' AND VALID_YN = 'Y'
+	AND EXISTS
+	(
+		select * from #TblDynamicPivot_SCP0020_TMP1 AS B with(nolock)	
+		WHERE A.SEGMENT2		= B.DIVISION_ID
+		AND LEFT(A.SEGMENT3,12) = LEFT(B.ITEM_ID,12)
+		AND A.SEGMENT5			= B.PROJECT_CODE
+		AND A.SEGMENT3			<> B.ITEM_ID
+	)
+	;
+	-- E20260728-000548 로직 끝
+
+	
+	INSERT INTO #TblDynamicPivot_SCP0020_TMP
+	SELECT distinct aa.division_id , aa.ITEM_ID --, T.ITEM_ID 
+	FROM   #TblDynamicPivot_SCP0020_TMP1 aa WITH (NOLOCK)
+	JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and aa.ITEM_ID=t.ITEM_ID
+	WHERE 1=1
+	AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR aa.ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	;
+	
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP1
+	;
+
+
+	SELECT A.DIVISION_ID
+			, A.SITE_DESCRIPTION
+			, A.ITEM_ID
+			, A.NICK_NAME
+			, A.LINE_ID
+			, A.PRIORITY
+			, A.YIELD
+			, A.DAILY_CAPACITY
+			, A.TACT_TIME
+			, A.CREATED_BY
+			, A.CREATION_DATE
+			, A.LAST_UPDATED_BY
+			, A.LAST_UPDATE_DATE
+			, A.OPERATION_ID
+			, A.PLANT_SITE_ID
+			, A.INPUT_STATUS
+			, A.operation_group_id
+			, (CASE WHEN A.line_id IS NULL THEN '1' ELSE '2' END) AS line_order 
+			, A.except_yn
+			, A.OSP_YN
+	FROM 
+	(
+		-- Tact Time OSP Master 조회
+		SELECT A.DIVISION_ID
+				, S.SITE_DESCRIPTION
+				, A.ITEM_ID
+				, (SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-'  WHEN X.NICK_NAME = ''    THEN '-'  ELSE X.NICK_NAME END) 
+				   FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  WHERE  X.ITEM_ID  = A.ITEM_ID) AS NICK_NAME
+				, A.LINE_ID
+				, A.PRIORITY
+				, ROUND(A.YIELD*100,2) AS YIELD
+				, A.DAILY_CAPACITY
+				, A.TACT_TIME
+				, A.CREATED_BY
+				, A.CREATION_DATE
+				, A.LAST_UPDATED_BY
+				, A.LAST_UPDATE_DATE
+				, A.OPERATION_ID
+				, A.PLANT_SITE_ID
+				, 'M' AS INPUT_STATUS
+				,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id
+				,isnull((select top 1 'Y'
+							from SCP_MST_TACT_TIME_EXCEPT_OSP x 
+							where x.division_id=a.division_id 
+							and x.plant_site_id=a.plant_site_id 
+							and x.operation_id=a.operation_id
+							and x.item_id="
+"2026-09-11 00:00:00.287","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","4","a.item_id
+							and x.line_id=a.line_id
+							),'N') as except_yn
+				, S.OSP_YN
+		FROM SCP_MST_TACT_TIME_OSP A WITH(NOLOCK)
+		JOIN SCM_MST_SITE S WITH(NOLOCK) ON S.DIVISION_ID=A.DIVISION_ID AND S.SCM_SITE_ID=A.PLANT_SITE_ID
+		WHERE 1=1 
+		AND a.division_id   =  @p_division_id
+		AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+		AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )		
+		UNION ALL
+		-- Project Route 화면에 등록된 모델중 Tact Time Master에 없는 모델 조회
+		SELECT DISTINCT
+			a.division_id
+			, b.SITE_DESCRIPTION
+			, a.ITEM_ID
+			, (SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-'  WHEN X.NICK_NAME = ''    THEN '-'  ELSE X.NICK_NAME END) 
+				   FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  WHERE  X.ITEM_ID  = A.ITEM_ID) AS NICK_NAME
+			, NULL as LINE_ID
+			, NULL AS PRIORITY
+			, NULL AS YIELD
+			, NULL AS DAILY_CAPACITY
+			, NULL AS TACT_TIME
+			, NULL AS CREATED_BY
+			, NULL AS CREATION_DATE
+			, NULL AS LAST_UPDATED_BY
+			, NULL AS LAST_UPDATE_DATE
+			-- PJ20202001 : RACK 구분 추가
+			, CASE WHEN ISNULL(C.ATTRIBUTE3,'N') = 'Y' THEN B.PLANT_ID + '_R1'
+			       ELSE B.PLANT_ID
+			  END           AS OPERATION_ID
+			, A.PLANT_SITE_ID
+			, 'I' AS INPUT_STATUS
+			,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id
+			, 'N' AS except_yn
+			, B.OSP_YN
+		FROM scm_mst_site_item_priority a (NOLOCK)
+		LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a.division_id = i.division_id 
+												AND a.item_id = i.item_id 
+												AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+		JOIN SCM_MST_SITE b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id
+		LEFT JOIN scp_mst_final_item C (NOLOCK) ON a.division_id = C.division_id and a.item_id = C.item_id --and C.fcst_yn = upper('Y')
+		WHERE 1=1 
+		AND a.valid_yn    = 'Y'
+		AND b.osp_yn      = 'Y' -- 외주 packer
+		and isnull(b.ATTRIBUTE1,'N') ='Y' --라인 대상
+		AND NOT EXISTS ( select 'X' from SCP_MST_TACT_TIME_OSP n (NOLOCK) 
+						where n.division_id = a.division_id 
+						and n.plant_site_id = a.plant_site_id 
+						and n.item_id = a.item_id )
+		-- MKT FCST 존재하는 모델만 조회(전극이 아닐 경우에만) -> 전극도 포함
+		AND EXISTS ( SELECT 'X'
+							FROM #TblDynamicPivot_SCP0020_TMP F WITH(NOLOCK)
+							WHERE F.DIVISION_ID=A.DIVISION_ID
+							AND F.ITEM_ID=A.ITEM_ID
+						)
+		AND a.division_id = @p_division_id
+		AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+		AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )		
+	) A
+	WHERE 1=1
+	AND A.operation_group_id = @p_operation_group_id
+	AND ( ( @p_line_id IS NULL OR  @p_line_id = '' ) OR A.line_id    IN (SELECT token FROM dbo.String_Split(@p_line_id  ,',')) )
+	ORDER BY line_order, A.division_id, A.plant_site_id, A.line_id, A.item_id
+
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP
+
+END
+
+"
+"2026-03-24 00:00:02.373","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","1","
+
+/*
+ * Program ID   : SCP0020_GET_TACT_TIME_OSP
+ * Description  : TACT TIME OSP 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2020/02/03   hwyoon			Initial Release [] 전지 GSCM(SCP) SM 운영 - [C20200116-000114] ESS 외주 Packer Line 계획 수립
+ * 2020/10/28   khj79           PJ20202001 LG화학 전지. 공급 대응력 향상을 위한 SCM 관리 체계 개선 : RACK
+ * 2021/10/05	khj79	       [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - W/S AS UI 변경
+ * 2022/11/07   jahn1501		PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - MKT FCST 조건 변경
+ * 2026/03/23   YMH				E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경	
+ */
+
+CREATE PROCEDURE [dbo].[SCP0020_GET_TACT_TIME_OSP]
+   @p_division_id		 NVARCHAR(MAX)
+  ,@p_plant_site_id		 NVARCHAR(MAX)
+  ,@p_line_id   		 NVARCHAR(MAX)
+  ,@p_operation_group_id NVARCHAR(MAX)
+  ,@p_item_id            NVARCHAR(MAX)
+  ,@debug_mode			 NVARCHAR(20)  ='F'
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+	declare @v_division_id NVARCHAR(MAX) = null
+	declare @v_item_id NVARCHAR(MAX) = null
+	set @v_division_id = @p_division_id;
+	set @v_item_id = @p_item_id;
+
+    DECLARE @v_cur_monday        NVARCHAR(8) = CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112); -- 당주 월요일 YYYYMMDD
+    DECLARE @v_end_monday        NVARCHAR(8) = NULL;
+    --DECLARE @v_end_monday        NVARCHAR(8) = CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112); -- 월요일 YYYYMMDD
+	
+    SELECT @v_end_monday = MAX(horizon_end_date)
+	FROM   dbo.scm_mst_plan p WITH(NOLOCK)
+	WHERE  p.plan_cycle  = 'WEEKLY'
+	AND    p.plan_name   = @v_cur_monday
+	GROUP BY plan_name
+	                                           
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP
+
+	CREATE TABLE #TblDynamicPivot_SCP0020_TMP (
+			 DIVISION_ID		NVARCHAR(60)	
+			,ITEM_ID			NVARCHAR(100)
+		);
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP1
+	
+	CREATE TABLE #TblDynamicPivot_SCP0020_TMP1 (
+			 DIVISION_ID		NVARCHAR(60)	
+			,ITEM_ID			NVARCHAR(100)
+		);
+
+
+	-- 2021.03.09 PJG
+	-- 실행속도 개선
+
+	--INSERT INTO #TblDynamicPivot_SCP0020_TMP
+	--SELECT distinct aa.division_id, T.ITEM_ID 
+	--FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+	--JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='Y' 
+	--								   and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST') 
+	--								   AND aa.scm_site_id = mse.scm_site_id 
+	--								   AND aa.division_id = mse.division_id
+	--JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+	--JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON b.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+	--WHERE 1=1
+	--AND    aa.yyyymmdd       >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.yyyymmdd       <= CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.qty            >  0
+	--and	   aa.DIVISION_ID = @v_division_id
+	--AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	--group by aa.division_id	, T.ITEM_ID  
+	--;
+
+
+
+	-- 속도 이슈로 수정 함 : SCM_MST_MODEL_FINAL_ITEM_BOM_V 를 조회 후 조인으로 변경 함
+	--수정 전
+	--INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+	--SELECT distinct aa.division_id , B.child_item_id --, T.ITEM_ID 
+	--FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+	--JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='"
+"2026-03-24 00:00:02.373","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","2","Y' 
+	--									--2021/10/05 : W/S AS
+	--								   --and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST') 
+	--								   and aa.measure     = IIF(ISNULL(mse.OPERATION_GROUP, '') = 'W', 'AS_In_Req', IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST'))
+	--								   AND aa.scm_site_id = mse.scm_site_id 
+	--								   AND aa.division_id = mse.division_id
+	--JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+	----JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+	--WHERE 1=1
+	--AND    aa.yyyymmdd       >= @v_cur_monday --CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.yyyymmdd       <= @v_end_monday --CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.qty            >  0
+	--and	   aa.DIVISION_ID = @v_division_id
+	--AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	----group by aa.division_id	, B.child_item_id --, T.ITEM_ID  
+	--;
+
+	INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+	SELECT DISTINCT A.DIVISION_ID , B.CHILD_ITEM_ID
+	FROM (SELECT distinct  aa.division_id , aa.ITEM_ID
+			FROM DM_PLN_MKT_FCST AA WITH (NOLOCK)
+
+			JOIN SCM_MST_SITE mse with(nolock) 
+			   on mse.VALID_YN='Y'
+			  --2022/11/07			   
+			  --and aa.measure     = IIF(ISNULL(mse.OPERATION_GROUP, '') = 'W', 'AS_In_Req', IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST'))
+			  and aa.measure     = CASE WHEN ISNULL(mse.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN mse.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(AA.attribute10, '') = '' THEN 'MKT_FCST' END
+			  AND aa.scm_site_id = mse.scm_site_id 
+			  AND aa.division_id = mse.division_id
+			WHERE 1=1
+			  AND aa.yyyymmdd       >= @v_cur_monday
+			  AND aa.yyyymmdd       <= @v_end_monday
+			  AND aa.qty            >  0
+			  and aa.DIVISION_ID =  @v_division_id
+		) a
+	-- E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경으로 인해 주석처리
+	-- JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON a.DIVISION_ID = b.division_id and a.ITEM_ID=b.MODEL_ID
+	-- E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경신규로직 추가 시작
+	JOIN
+	(
+		SELECT b.division_id,
+			b.model_id,
+			b.child_item_id
+		FROM ( SELECT x.* 
+				--FROM dbo.scm_mst_bom_sn x WITH(NOLOCK)	
+				FROM dbo.scm_mst_bom_sn_V x WITH(NOLOCK)	--2021-03-09	SCP 대치 BOM 적용
+					INNER JOIN dbo.scm_mst_item_sn i WITH(NOLOCK)
+					ON  x.child_division_id = i.division_id
+					AND x.child_item_id     = i.item_id
+					AND x.child_company_id  = i.company_id -- A002 빈강 추가 따른 조건 추가
+					AND x.child_site_id     = i.site_id
+					AND i.active_flag       = 'Y'           
+				WHERE 1=1
+			) b
+			, scm_mst_final_item_v v WITH(NOLOCK)
+			, scm_mst_item_sn mi WITH(NOLOCK)   -- 20210219 C20210219-000229  Company 별로 유효한 Model만 적용
+		WHERE 1=1
+		AND b.division_id   = v.division_id
+		AND b.child_item_id = v.item_id
+
+		-- 20210219 C20210219-000229  Company 별로 유효한 Model만 적용
+		AND b.division_id   = mi.division_id
+		AND b.model_id      = mi.item_id
+		AND b.company_id    = mi.company_id  -- A002 빈강 추가 따른 조건 추가
+		AND b.site_id       = mi.site_id
+		AND mI.active_flag  = 'Y'
+		GROUP BY b.division_id, b.model_id, b.child_item_id
+	) AS B ON A.DIVISION_ID = B.DIVISION_ID AND A.ITEM_ID=B.MODEL_ID
+	-- E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경신규로직 추가 끝
+
+
+;
+
+
+
+	;
+
+	
+	INSERT INTO #TblDynamicPivot_SCP0020_TMP
+	SELECT distinct aa.division_id , aa.ITEM_ID --, T.ITEM_ID 
+	FROM   #TblDynamicPivot_SCP0020_TMP1 aa WITH (NOLOCK)
+	JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and aa.ITEM_ID=t.ITEM_ID
+	WHERE 1=1
+	AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR aa.ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	;
+	
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+		DROP TABLE #TblDynamicPivo"
+"2026-03-24 00:00:02.373","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","3","t_SCP0020_TMP1
+	;
+
+
+	SELECT A.DIVISION_ID
+			, A.SITE_DESCRIPTION
+			, A.ITEM_ID
+			, A.NICK_NAME
+			, A.LINE_ID
+			, A.PRIORITY
+			, A.YIELD
+			, A.DAILY_CAPACITY
+			, A.TACT_TIME
+			, A.CREATED_BY
+			, A.CREATION_DATE
+			, A.LAST_UPDATED_BY
+			, A.LAST_UPDATE_DATE
+			, A.OPERATION_ID
+			, A.PLANT_SITE_ID
+			, A.INPUT_STATUS
+			, A.operation_group_id
+			, (CASE WHEN A.line_id IS NULL THEN '1' ELSE '2' END) AS line_order 
+			, A.except_yn
+			, A.OSP_YN
+	FROM 
+	(
+		-- Tact Time OSP Master 조회
+		SELECT A.DIVISION_ID
+				, S.SITE_DESCRIPTION
+				, A.ITEM_ID
+				, (SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-'  WHEN X.NICK_NAME = ''    THEN '-'  ELSE X.NICK_NAME END) 
+				   FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  WHERE  X.ITEM_ID  = A.ITEM_ID) AS NICK_NAME
+				, A.LINE_ID
+				, A.PRIORITY
+				, ROUND(A.YIELD*100,2) AS YIELD
+				, A.DAILY_CAPACITY
+				, A.TACT_TIME
+				, A.CREATED_BY
+				, A.CREATION_DATE
+				, A.LAST_UPDATED_BY
+				, A.LAST_UPDATE_DATE
+				, A.OPERATION_ID
+				, A.PLANT_SITE_ID
+				, 'M' AS INPUT_STATUS
+				,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id
+				,isnull((select top 1 'Y'
+							from SCP_MST_TACT_TIME_EXCEPT_OSP x 
+							where x.division_id=a.division_id 
+							and x.plant_site_id=a.plant_site_id 
+							and x.operation_id=a.operation_id
+							and x.item_id=a.item_id
+							and x.line_id=a.line_id
+							),'N') as except_yn
+				, S.OSP_YN
+		FROM SCP_MST_TACT_TIME_OSP A WITH(NOLOCK)
+		JOIN SCM_MST_SITE S WITH(NOLOCK) ON S.DIVISION_ID=A.DIVISION_ID AND S.SCM_SITE_ID=A.PLANT_SITE_ID
+		WHERE 1=1 
+		AND a.division_id   =  @p_division_id
+		AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+		AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )		
+		UNION ALL
+		-- Project Route 화면에 등록된 모델중 Tact Time Master에 없는 모델 조회
+		SELECT DISTINCT
+			a.division_id
+			, b.SITE_DESCRIPTION
+			, a.ITEM_ID
+			, (SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-'  WHEN X.NICK_NAME = ''    THEN '-'  ELSE X.NICK_NAME END) 
+				   FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  WHERE  X.ITEM_ID  = A.ITEM_ID) AS NICK_NAME
+			, NULL as LINE_ID
+			, NULL AS PRIORITY
+			, NULL AS YIELD
+			, NULL AS DAILY_CAPACITY
+			, NULL AS TACT_TIME
+			, NULL AS CREATED_BY
+			, NULL AS CREATION_DATE
+			, NULL AS LAST_UPDATED_BY
+			, NULL AS LAST_UPDATE_DATE
+			-- PJ20202001 : RACK 구분 추가
+			, CASE WHEN ISNULL(C.ATTRIBUTE3,'N') = 'Y' THEN B.PLANT_ID + '_R1'
+			       ELSE B.PLANT_ID
+			  END           AS OPERATION_ID
+			, A.PLANT_SITE_ID
+			, 'I' AS INPUT_STATUS
+			,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id
+			, 'N' AS except_yn
+			, B.OSP_YN
+		FROM scm_mst_site_item_priority a (NOLOCK)
+		LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a.division_id = i.division_id 
+												AND a.item_id = i.item_id 
+												AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+		JOIN SCM_MST_SITE b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id
+		LEFT JOIN scp_mst_final_item C (NOLOCK) ON a.division_id = C.division_id and a.item_id = C.item_id --and C.fcst_yn = upper('Y')
+		WHERE 1=1 
+		AND a.valid_yn    = 'Y'
+		AND b.osp_yn      = 'Y' -- 외주 packer
+		and isnull(b.ATTRIBUTE1,'N') ='Y' --라인 대상
+		AND NOT EXISTS ( select 'X' from SCP_MST_TACT_TIME_OSP n (NOLOCK) 
+						where n.division_id = a.division_id 
+						and n.plant_site_id = a.plant_site_id 
+						and n.item_id = a.item_id )
+		-- MKT FCST 존재하는 모델만 조회(전극이 아닐 경우에만) -> 전극도 포함
+		AND EXISTS ( SELECT 'X'
+							FROM #TblDynamicPivot_SCP0020_TMP F WITH(NOLOCK)
+							WHERE F.DIVISION_ID=A.DIVISION_ID
+							AND F.ITEM_ID=A.ITEM_ID
+						)
+		A"
+"2026-03-24 00:00:02.373","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","4","ND a.division_id = @p_division_id
+		AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+		AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )		
+	) A
+	WHERE 1=1
+	AND A.operation_group_id = @p_operation_group_id
+	AND ( ( @p_line_id IS NULL OR  @p_line_id = '' ) OR A.line_id    IN (SELECT token FROM dbo.String_Split(@p_line_id  ,',')) )
+	ORDER BY line_order, A.division_id, A.plant_site_id, A.line_id, A.item_id
+
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_EXCEPT","1630016938","1","
+
+/*
+ * Program ID   : SCP0020_GET_TACT_TIME_EXCEPT
+ * Description  : Loss Time
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/05/09   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/05/28   hwyoon		   사용여부(use_yn) 컬럼 조회 추가
+ ex) 
+  EXEC SCP0020_GET_TACT_TIME_EXCEPT @p_division_id='81', @p_plant_site='A040-P', @p_operation_id='P5000', @p_item_id='AMDAU0030B', @p_line_id='P1QP2', @debug_mode='F'
+
+ */
+
+CREATE PROCEDURE [dbo].[SCP0020_GET_TACT_TIME_EXCEPT]
+   @p_division_id		NVARCHAR(MAX) 
+  ,@p_plant_site		NVARCHAR(MAX)
+  ,@p_operation_id		NVARCHAR(MAX) 
+  ,@p_item_id           NVARCHAR(MAX) 
+  ,@p_line_id   		NVARCHAR(MAX)  
+  ,@debug_mode          NVARCHAR(1) ='F' 
+AS
+
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+		SELECT 
+			 a.division_id
+			,a.plant_site_id
+			,dbo.FN_GET_SCM_SITE_DESCRIPTION (a.division_id, a.plant_site_id ) as plant_site_name
+			,a.operation_id
+			,c.segment1 AS operation_name
+			,a.item_id
+			,dbo.FN_GET_ITEM_NICKNAME(a.division_id, a.item_id) AS nick_name
+			,a.line_id
+			,convert(datetime, d.tact_time_start_date) AS tact_time_start_date
+			,convert(datetime, d.tact_time_end_date) AS tact_time_end_date
+			,d.tact_time
+		    ,ROUND(d.yield*100,2) AS yield
+			,d.except_comment
+			,d.use_yn
+		    ,d.created_by
+		    ,d.creation_date
+		    ,d.last_updated_by
+		    ,d.last_update_date
+			-- pk 확인용
+			,d.division_id          AS org_division_id          
+			,d.plant_site_id        AS org_plant_site_id        
+			,d.item_id              AS org_item_id              
+			,d.operation_id         AS org_operation_id         
+			,d.line_id              AS org_line_id              
+			,d.tact_time_start_date AS org_tact_time_start_date 
+			,d.tact_time_end_date   AS org_tact_time_end_date   
+
+		FROM SCP_MST_TACT_TIME a (NOLOCK) 
+		INNER JOIN  (SELECT DISTINCT b.segment4, b.segment1
+						FROM   scm_adm_lookup_master_detail b WITH(NOLOCK)
+						WHERE  b.lookup_type = 'LOCATION_GROUP_ROUTE'
+						AND    b.valid_yn    = 'Y'
+						AND    b.segment3    = 'Y' -- Capa 세부 공정 여부						
+					) c ON a.operation_id = c.segment4 --AND c.operation_group_id = f.segment3 -- operation group id 에 추가된 operation 만보이도록
+		INNER JOIN SCP_MST_TACT_TIME_EXCEPT d ON a.division_id  = d.division_id 
+											AND a.plant_site_id  = d.plant_site_id
+											AND a.operation_id = d.operation_id 
+											AND a.item_id      = d.item_id
+											AND a.line_id      = d.line_id
+		WHERE 1=1		
+		AND a.division_id   = @p_division_id
+		AND a.plant_site_id = @p_plant_site
+		AND a.operation_id  = @p_operation_id
+		AND a.item_id       = @p_item_id	
+	    AND a.line_id       = @p_line_id
+	    
+	ORDER BY division_id, plant_site_id, operation_id,item_id , line_id, tact_time_start_date, tact_time_end_date
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_EXCEPT_OSP","1646016995","1","
+
+
+
+/*
+ * Program ID   : SCP0020_GET_TACT_TIME_EXCEPT_OSP
+ * Description  : Tact Time Except
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2020/02/04   hwyoon			Initial Release [] 전지 GSCM(SCP) 운영 - [C20200116-000114] ESS 외주 Packer Line 계획 수립
+ * 
+ */
+
+CREATE PROCEDURE [dbo].[SCP0020_GET_TACT_TIME_EXCEPT_OSP]
+   @p_division_id		NVARCHAR(MAX) 
+  ,@p_plant_site		NVARCHAR(MAX)
+  ,@p_operation_id		NVARCHAR(MAX) 
+  ,@p_item_id           NVARCHAR(MAX) 
+  ,@p_line_id   		NVARCHAR(MAX)  
+  ,@debug_mode          NVARCHAR(1) ='F' 
+AS
+
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+		SELECT 
+			 a.division_id
+			,a.plant_site_id
+			,dbo.FN_GET_SCM_SITE_DESCRIPTION (a.division_id, a.plant_site_id ) as plant_site_name
+			,a.operation_id
+			,a.operation_id AS operation_name
+			,a.item_id
+			--,dbo.FN_GET_ITEM_NICKNAME(a.division_id, a.item_id) AS nick_name
+			, (SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-'  WHEN X.NICK_NAME = ''    THEN '-'  ELSE X.NICK_NAME END) 
+				   FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  WHERE  X.ITEM_ID  = A.ITEM_ID) AS NICK_NAME
+			,a.line_id
+			,convert(datetime, d.tact_time_start_date) AS tact_time_start_date
+			,convert(datetime, d.tact_time_end_date) AS tact_time_end_date
+			,d.tact_time
+		    ,ROUND(d.yield*100,2) AS yield
+			,d.DAILY_CAPACITY
+			,d.except_comment
+			,d.use_yn
+		    ,d.created_by
+		    ,d.creation_date
+		    ,d.last_updated_by
+		    ,d.last_update_date
+			-- pk 확인용
+			,d.division_id          AS org_division_id          
+			,d.plant_site_id        AS org_plant_site_id        
+			,d.item_id              AS org_item_id              
+			,d.operation_id         AS org_operation_id         
+			,d.line_id              AS org_line_id              
+			,d.tact_time_start_date AS org_tact_time_start_date 
+			,d.tact_time_end_date   AS org_tact_time_end_date   
+		FROM SCP_MST_TACT_TIME_OSP a (NOLOCK) 
+		INNER JOIN SCP_MST_TACT_TIME_EXCEPT_OSP d ON a.division_id  = d.division_id 
+											AND a.plant_site_id  = d.plant_site_id
+											AND a.operation_id = d.operation_id 
+											AND a.item_id      = d.item_id
+											AND a.line_id      = d.line_id
+		WHERE 1=1		
+		AND a.division_id   = @p_division_id
+		AND a.plant_site_id = @p_plant_site
+		AND a.operation_id  = @p_operation_id
+		AND a.item_id       = @p_item_id	
+	    AND a.line_id       = @p_line_id
+	    
+	ORDER BY division_id, plant_site_id, operation_id,item_id , line_id, tact_time_start_date, tact_time_end_date
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","1","
+
+/*
+ * Program ID   : SCP0020_GET_TACT_TIME_OSP
+ * Description  : TACT TIME OSP 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2020/02/03   hwyoon			Initial Release [] 전지 GSCM(SCP) SM 운영 - [C20200116-000114] ESS 외주 Packer Line 계획 수립
+ * 2020/10/28   khj79           PJ20202001 LG화학 전지. 공급 대응력 향상을 위한 SCM 관리 체계 개선 : RACK
+ * 2021/10/05	khj79	       [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - W/S AS UI 변경
+ * 2022/11/07   jahn1501		PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - MKT FCST 조건 변경
+ * 
+ */
+
+CREATE PROCEDURE [dbo].[SCP0020_GET_TACT_TIME_OSP]
+   @p_division_id		 NVARCHAR(MAX)
+  ,@p_plant_site_id		 NVARCHAR(MAX)
+  ,@p_line_id   		 NVARCHAR(MAX)
+  ,@p_operation_group_id NVARCHAR(MAX)
+  ,@p_item_id            NVARCHAR(MAX)
+  ,@debug_mode			 NVARCHAR(20)  ='F'
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+	declare @v_division_id NVARCHAR(MAX) = null
+	declare @v_item_id NVARCHAR(MAX) = null
+	set @v_division_id = @p_division_id;
+	set @v_item_id = @p_item_id;
+
+    DECLARE @v_cur_monday        NVARCHAR(8) = CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112); -- 당주 월요일 YYYYMMDD
+    DECLARE @v_end_monday        NVARCHAR(8) = NULL;
+    --DECLARE @v_end_monday        NVARCHAR(8) = CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112); -- 월요일 YYYYMMDD
+	
+    SELECT @v_end_monday = MAX(horizon_end_date)
+	FROM   dbo.scm_mst_plan p WITH(NOLOCK)
+	WHERE  p.plan_cycle  = 'WEEKLY'
+	AND    p.plan_name   = @v_cur_monday
+	GROUP BY plan_name
+	                                           
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP
+
+	CREATE TABLE #TblDynamicPivot_SCP0020_TMP (
+			 DIVISION_ID		NVARCHAR(60)	
+			,ITEM_ID			NVARCHAR(100)
+		);
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP1
+	
+	CREATE TABLE #TblDynamicPivot_SCP0020_TMP1 (
+			 DIVISION_ID		NVARCHAR(60)	
+			,ITEM_ID			NVARCHAR(100)
+		);
+
+
+	-- 2021.03.09 PJG
+	-- 실행속도 개선
+
+	--INSERT INTO #TblDynamicPivot_SCP0020_TMP
+	--SELECT distinct aa.division_id, T.ITEM_ID 
+	--FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+	--JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='Y' 
+	--								   and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST') 
+	--								   AND aa.scm_site_id = mse.scm_site_id 
+	--								   AND aa.division_id = mse.division_id
+	--JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+	--JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON b.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+	--WHERE 1=1
+	--AND    aa.yyyymmdd       >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.yyyymmdd       <= CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.qty            >  0
+	--and	   aa.DIVISION_ID = @v_division_id
+	--AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	--group by aa.division_id	, T.ITEM_ID  
+	--;
+
+
+
+	-- 속도 이슈로 수정 함 : SCM_MST_MODEL_FINAL_ITEM_BOM_V 를 조회 후 조인으로 변경 함
+	--수정 전
+	--INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+	--SELECT distinct aa.division_id , B.child_item_id --, T.ITEM_ID 
+	--FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+	--JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='Y' 
+	--									--2021/10/05 : W/S AS
+	--								   --and aa.mea"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","2","sure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST') 
+	--								   and aa.measure     = IIF(ISNULL(mse.OPERATION_GROUP, '') = 'W', 'AS_In_Req', IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST'))
+	--								   AND aa.scm_site_id = mse.scm_site_id 
+	--								   AND aa.division_id = mse.division_id
+	--JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+	----JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+	--WHERE 1=1
+	--AND    aa.yyyymmdd       >= @v_cur_monday --CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.yyyymmdd       <= @v_end_monday --CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.qty            >  0
+	--and	   aa.DIVISION_ID = @v_division_id
+	--AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	----group by aa.division_id	, B.child_item_id --, T.ITEM_ID  
+	--;
+
+	INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+	SELECT DISTINCT A.DIVISION_ID , B.CHILD_ITEM_ID
+	FROM (SELECT distinct  aa.division_id , aa.ITEM_ID
+			FROM DM_PLN_MKT_FCST AA WITH (NOLOCK)
+
+			JOIN SCM_MST_SITE mse with(nolock) 
+			   on mse.VALID_YN='Y'
+			  --2022/11/07			   
+			  --and aa.measure     = IIF(ISNULL(mse.OPERATION_GROUP, '') = 'W', 'AS_In_Req', IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST'))
+			  and aa.measure     = CASE WHEN ISNULL(mse.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN mse.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(AA.attribute10, '') = '' THEN 'MKT_FCST' END
+			  AND aa.scm_site_id = mse.scm_site_id 
+			  AND aa.division_id = mse.division_id
+			WHERE 1=1
+			  AND aa.yyyymmdd       >= @v_cur_monday
+			  AND aa.yyyymmdd       <= @v_end_monday
+			  AND aa.qty            >  0
+			  and aa.DIVISION_ID =  @v_division_id
+		) a
+	JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON a.DIVISION_ID = b.division_id and a.ITEM_ID=b.MODEL_ID
+	;
+
+	
+	INSERT INTO #TblDynamicPivot_SCP0020_TMP
+	SELECT distinct aa.division_id , aa.ITEM_ID --, T.ITEM_ID 
+	FROM   #TblDynamicPivot_SCP0020_TMP1 aa WITH (NOLOCK)
+	JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and aa.ITEM_ID=t.ITEM_ID
+	WHERE 1=1
+	AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR aa.ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	;
+	
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP1
+	;
+
+
+	SELECT A.DIVISION_ID
+			, A.SITE_DESCRIPTION
+			, A.ITEM_ID
+			, A.NICK_NAME
+			, A.LINE_ID
+			, A.PRIORITY
+			, A.YIELD
+			, A.DAILY_CAPACITY
+			, A.TACT_TIME
+			, A.CREATED_BY
+			, A.CREATION_DATE
+			, A.LAST_UPDATED_BY
+			, A.LAST_UPDATE_DATE
+			, A.OPERATION_ID
+			, A.PLANT_SITE_ID
+			, A.INPUT_STATUS
+			, A.operation_group_id
+			, (CASE WHEN A.line_id IS NULL THEN '1' ELSE '2' END) AS line_order 
+			, A.except_yn
+			, A.OSP_YN
+	FROM 
+	(
+		-- Tact Time OSP Master 조회
+		SELECT A.DIVISION_ID
+				, S.SITE_DESCRIPTION
+				, A.ITEM_ID
+				, (SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-'  WHEN X.NICK_NAME = ''    THEN '-'  ELSE X.NICK_NAME END) 
+				   FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  WHERE  X.ITEM_ID  = A.ITEM_ID) AS NICK_NAME
+				, A.LINE_ID
+				, A.PRIORITY
+				, ROUND(A.YIELD*100,2) AS YIELD
+				, A.DAILY_CAPACITY
+				, A.TACT_TIME
+				, A.CREATED_BY
+				, A.CREATION_DATE
+				, A.LAST_UPDATED_BY
+				, A.LAST_UPDATE_DATE
+				, A.OPERATION_ID
+				, A.PLANT_SITE_ID
+				, 'M' AS INPUT_STATUS
+				,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id
+				,isnull((select top 1 'Y'
+							from SCP_MST_TACT_TIME_EXCEPT_OSP x 
+							where x.division_id=a.division_id 
+							and x.plant_site_id=a.plant_site_id 
+							and x.operation_id=a.operation_id
+							and x.item_id=a.item_id"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","3","
+							and x.line_id=a.line_id
+							),'N') as except_yn
+				, S.OSP_YN
+		FROM SCP_MST_TACT_TIME_OSP A WITH(NOLOCK)
+		JOIN SCM_MST_SITE S WITH(NOLOCK) ON S.DIVISION_ID=A.DIVISION_ID AND S.SCM_SITE_ID=A.PLANT_SITE_ID
+		WHERE 1=1 
+		AND a.division_id   =  @p_division_id
+		AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+		AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )		
+		UNION ALL
+		-- Project Route 화면에 등록된 모델중 Tact Time Master에 없는 모델 조회
+		SELECT DISTINCT
+			a.division_id
+			, b.SITE_DESCRIPTION
+			, a.ITEM_ID
+			, (SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-'  WHEN X.NICK_NAME = ''    THEN '-'  ELSE X.NICK_NAME END) 
+				   FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  WHERE  X.ITEM_ID  = A.ITEM_ID) AS NICK_NAME
+			, NULL as LINE_ID
+			, NULL AS PRIORITY
+			, NULL AS YIELD
+			, NULL AS DAILY_CAPACITY
+			, NULL AS TACT_TIME
+			, NULL AS CREATED_BY
+			, NULL AS CREATION_DATE
+			, NULL AS LAST_UPDATED_BY
+			, NULL AS LAST_UPDATE_DATE
+			-- PJ20202001 : RACK 구분 추가
+			, CASE WHEN ISNULL(C.ATTRIBUTE3,'N') = 'Y' THEN B.PLANT_ID + '_R1'
+			       ELSE B.PLANT_ID
+			  END           AS OPERATION_ID
+			, A.PLANT_SITE_ID
+			, 'I' AS INPUT_STATUS
+			,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id
+			, 'N' AS except_yn
+			, B.OSP_YN
+		FROM scm_mst_site_item_priority a (NOLOCK)
+		LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a.division_id = i.division_id 
+												AND a.item_id = i.item_id 
+												AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+		JOIN SCM_MST_SITE b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id
+		LEFT JOIN scp_mst_final_item C (NOLOCK) ON a.division_id = C.division_id and a.item_id = C.item_id --and C.fcst_yn = upper('Y')
+		WHERE 1=1 
+		AND a.valid_yn    = 'Y'
+		AND b.osp_yn      = 'Y' -- 외주 packer
+		and isnull(b.ATTRIBUTE1,'N') ='Y' --라인 대상
+		AND NOT EXISTS ( select 'X' from SCP_MST_TACT_TIME_OSP n (NOLOCK) 
+						where n.division_id = a.division_id 
+						and n.plant_site_id = a.plant_site_id 
+						and n.item_id = a.item_id )
+		-- MKT FCST 존재하는 모델만 조회(전극이 아닐 경우에만) -> 전극도 포함
+		AND EXISTS ( SELECT 'X'
+							FROM #TblDynamicPivot_SCP0020_TMP F WITH(NOLOCK)
+							WHERE F.DIVISION_ID=A.DIVISION_ID
+							AND F.ITEM_ID=A.ITEM_ID
+						)
+		AND a.division_id = @p_division_id
+		AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+		AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )		
+	) A
+	WHERE 1=1
+	AND A.operation_group_id = @p_operation_group_id
+	AND ( ( @p_line_id IS NULL OR  @p_line_id = '' ) OR A.line_id    IN (SELECT token FROM dbo.String_Split(@p_line_id  ,',')) )
+	ORDER BY line_order, A.division_id, A.plant_site_id, A.line_id, A.item_id
+
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME","1678017109","1","/*
+ * Program ID   : [SCP0020_SAVE_TACT_TIME]
+ * Description  : Tac Time 등록, 수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/03/27   pjs				Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/05/30	yhw				yield 소수점저장
+ * 2018/09/17	yhw				Tact Time 조회항목 추가(item UOM, UOM Convert)
+ * 2019/12/09	yhw				Tact Time 삭제기능 추가
+ * 2019/12/13	yhw				Lane Qty 항목 추가(입력/수정 가능)
+ * 2020/04/23	yhw				Lane Qty 저장 시 빈 값이면 null 처리
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0020_SAVE_TACT_TIME]
+	 @p_active_flag        NVARCHAR(MAX)
+	,@p_division_id        NVARCHAR(MAX)
+	,@p_plant_site_id      NVARCHAR(MAX)
+	,@p_item_id            NVARCHAR(MAX)
+	,@p_operation_id       NVARCHAR(MAX)
+	,@p_line_id            NVARCHAR(MAX)
+	,@p_priority           NVARCHAR(MAX)
+	,@p_tact_time          NVARCHAR(MAX)
+	,@p_yield              NVARCHAR(MAX)
+	,@p_valid_yn           NVARCHAR(MAX)
+
+	--,@p_key_division_id    NVARCHAR(MAX)
+	--,@p_key_plant_site_id  NVARCHAR(MAX)
+	--,@p_key_item_id        NVARCHAR(MAX)
+	--,@p_key_operation_id   NVARCHAR(MAX)
+	--,@p_key_line_id        NVARCHAR(MAX)
+	,@p_input_status		NVARCHAR(MAX)
+	,@p_item_uom			NVARCHAR(MAX)
+	,@p_uom_convert_value   NVARCHAR(MAX)
+	,@p_lane_qty			NVARCHAR(MAX)
+
+	,@p_user_id            NVARCHAR(MAX)
+	,@debug_mode           NVARCHAR(1) ='F'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	
+	DECLARE @v_working_time     datetime =sysdatetime();     
+	DECLARE @recv_active_flag	NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+
+	DECLARE @v_active_flag        NVARCHAR(MAX);
+	DECLARE @v_division_id        NVARCHAR(MAX);
+	DECLARE @v_plant_site_id      NVARCHAR(MAX);
+	DECLARE @v_item_id            NVARCHAR(MAX);
+	DECLARE @v_operation_id       NVARCHAR(MAX);
+	DECLARE @v_line_id            NVARCHAR(MAX);
+	DECLARE @v_priority           NVARCHAR(MAX);
+	DECLARE @v_tact_time          NVARCHAR(MAX);
+	DECLARE @v_yield              NVARCHAR(MAX);
+	DECLARE @v_valid_yn           NVARCHAR(MAX);
+
+	DECLARE @v_created_by        NVARCHAR(MAX);
+	DECLARE @v_creation_date     datetime	;
+	DECLARE @v_last_updated_by   NVARCHAR(MAX);
+	DECLARE @v_last_update_date  datetime	;
+
+	--DECLARE @v_key_division_id    NVARCHAR(MAX) ;
+	--DECLARE @v_key_plant_site_id  NVARCHAR(MAX) ;
+	--DECLARE @v_key_item_id        NVARCHAR(MAX) ;
+	--DECLARE @v_key_operation_id   NVARCHAR(MAX) ;
+	--DECLARE @v_key_line_id        NVARCHAR(MAX) ;
+	DECLARE @v_input_status			NVARCHAR(MAX) ;
+	DECLARE @v_item_uom				NVARCHAR(MAX) ;
+	DECLARE @v_uom_convert_value    NVARCHAR(MAX) ;
+	DECLARE @v_lane_qty				NVARCHAR(MAX) ;
+
+
+	
+	DECLARE @v_transport_mode    NVARCHAR(100) = ''; --에러반환용
+
+
+	SET @v_created_by       = @p_user_id;
+	SET @v_creation_date    = @v_working_time;
+	SET @v_last_updated_by  = @p_user_id
+	SET @v_last_update_date = @v_working_time
+
+	SET @v_active_flag   = NULL;
+	SET @v_division_id   = NULL;
+	SET @v_plant_site_id = NULL;
+	SET @v_item_id       = NULL;
+	SET @v_operation_id  = NULL;
+	SET @v_line_id       = NULL;
+	SET @v_priority      = NULL;
+	SET @v_tact_time     = NULL;
+	SET @v_yield         = NULL;
+	SET @v_valid_yn      = NULL;
+
+	--SET @v_key_division_id   = NULL;
+	--SET @v_key_plant_site_id = NULL;
+	--SET @v_key_item_id       = NULL;
+	--SET @v_key_operation_id  = NULL;
+	--SET @v_key_line_id       = NULL;
+	SET @v_input_status			= NULL;
+	SET @v_item_uom				= NULL;
+	SET @v_uom_convert_value	= NULL;
+	SET @v_lane_qty	= NULL;
+
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = '[SCP0020_SAVE_TAC_TIME]';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME","1678017109","2","    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	DECLARE @v_data_dup_priority_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		
+		
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag   = dbo.SCM_ARR_SPL_VAL(@p_active_flag  , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_division_id   = dbo.SCM_ARR_SPL_VAL(@p_division_id  , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_plant_site_id = dbo.SCM_ARR_SPL_VAL(@p_plant_site_id, @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_item_id       = dbo.SCM_ARR_SPL_VAL(@p_item_id      , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_operation_id  = dbo.SCM_ARR_SPL_VAL(@p_operation_id , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_line_id       = dbo.SCM_ARR_SPL_VAL(@p_line_id      , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_priority      = dbo.SCM_ARR_SPL_VAL(@p_priority     , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_tact_time     = dbo.SCM_ARR_SPL_VAL(@p_tact_time    , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_yield         = dbo.SCM_ARR_SPL_VAL(@p_yield        , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_valid_yn      = dbo.SCM_ARR_SPL_VAL(@p_valid_yn     , @v_delimiter, @mst_loop_cnt ) ;
+
+				--SET @v_key_division_id   = dbo.SCM_ARR_SPL_VAL(@p_key_division_id  , @v_delimiter, @mst_loop_cnt ) ;
+				--SET @v_key_plant_site_id = dbo.SCM_ARR_SPL_VAL(@p_key_plant_site_id, @v_delimiter, @mst_loop_cnt ) ;
+				--SET @v_key_item_id       = dbo.SCM_ARR_SPL_VAL(@p_key_item_id      , @v_delimiter, @mst_loop_cnt ) ;
+				--SET @v_key_operation_id  = dbo.SCM_ARR_SPL_VAL(@p_key_operation_id , @v_delimiter, @mst_loop_cnt ) ;
+				--SET @v_key_line_id       = dbo.SCM_ARR_SPL_VAL(@p_key_line_id      , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_input_status			= dbo.SCM_ARR_SPL_VAL(@p_input_status		, @v_delimiter, @mst_loop_cnt ) ;
+
+				SET @v_item_uom				= dbo.SCM_ARR_SPL_VAL(@p_item_uom			, @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_uom_convert_value	= dbo.SCM_ARR_SPL_VAL(@p_uom_convert_value	, @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_lane_qty				= dbo.SCM_ARR_SPL_VAL(@p_lane_qty			, @v_delimiter, @mst_loop_cnt ) ;
+
+			END;
+
+			SET @v_yield= (case when  @v_yield ='' or  @v_yield =null then null else convert(float, @v_yield)/100 end) ;        
+			SET @v_uom_convert_value= (case when  @v_uom_convert_value ='' or  @v_uom_convert_value =null then null else @v_uom_convert_value end) ;
+			SET @v_lane_qty = (case when  @v_lane_qty ='' or  @v_lane_qty =null then null else @v_lane_qty end) ;
+
+			-- LOOP 파라미터 출력 DEBUG용			
+			IF (@debug_mode ='T') 
+			BEGIN		
+				PRINT '===============================================';			
+				PRINT '@mst_loop_cnt     = ' + CONVERT(VARCHAR,@mst_loop_cnt)   ;
+				PRINT '@v_active_flag   = ''' + @v_active_flag   + '''' ;
+				PRINT '@v_division_id   = ''' + @v_division_id   + '''' ;
+				PRINT '@v_plant_site_id = ''' + @v_plant_site_id + '''' ;
+				PRINT '@v_item_id       = ''' + @v_item_id       + '''' ;
+				PRINT '@v_operation_id  = ''' + @v_operation_id  + '''' ;
+				PRINT '@v_line_id       = ''' + @v_line_id       + '''' ;
+				PRINT '@v_priority      = ''' + @v_priority      + '''' ;
+				PRINT '@v_tact_time     ="
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME","1678017109","3"," ''' + @v_tact_time     + '''' ;
+				PRINT '@v_yield         = ''' + @v_yield         + '''' ;
+				PRINT '@v_valid_yn      = ''' + @v_valid_yn      + '''' ;
+
+				--PRINT '@@v_key_division_id  = ''' + @v_key_division_id   + '''' ;
+				--PRINT '@v_key_plant_site_id = ''' + @v_key_plant_site_id + '''' ;
+				--PRINT '@v_key_item_id       = ''' + @v_key_item_id       + '''' ;
+				--PRINT '@v_key_operation_id  = ''' + @v_key_operation_id  + '''' ;
+				--PRINT '@v_key_line_id       = ''' + @v_key_line_id       + '''' ;
+				PRINT '@v_input_status			= ''' + @v_input_status      + '''' ;
+				PRINT '@v_item_uom				= ''' + @v_item_uom      + '''' ;
+				PRINT '@v_uom_convert_value		= ''' + @v_uom_convert_value      + '''' ;
+
+			END;
+
+		   --이력저장
+			EXEC [dbo].PR_SCP_MST_TACT_TIME_HIST
+						 @v_division_id  
+						,@v_plant_site_id
+						,@v_item_id      
+						,@v_operation_id 
+						,@v_line_id      
+						,@v_priority     
+						,@v_tact_time    
+						,@v_yield        
+						,@v_item_uom        
+						,@v_uom_convert_value        
+						,@v_valid_yn     
+						,@v_created_by       
+						,@v_creation_date    
+						,@v_last_updated_by  
+						,@v_last_update_date 
+						,@v_lane_qty
+
+
+			SET @v_data_dup_cnt  =0;
+
+			-- trans mode 중복체크
+			IF( @v_active_flag ='I' OR @v_input_status ='I')
+				BEGIN
+					SELECT @v_data_dup_cnt = COUNT(*) 			
+					  FROM SCP_MST_TACT_TIME A
+					 WHERE A.DIVISION_ID   = @v_division_id
+					   AND A.PLANT_SITE_ID = @v_plant_site_id
+					   AND A.ITEM_ID       = @v_item_id
+					   AND A.OPERATION_ID  = @v_operation_id
+					   AND A.LINE_ID       = @v_line_id
+					   ;
+				END;
+			--ELSE IF(@v_input_status ='M')
+			--	BEGIN
+			--	    -- 수정일 경우는 자기 자신을 제외하고 카운트
+			--		SELECT @v_data_dup_cnt = COUNT(*) 			
+			--		  FROM SCP_MST_TACT_TIME A
+			--		 WHERE A.DIVISION_ID   = @v_division_id
+			--		   AND A.PLANT_SITE_ID = @v_plant_site_id
+			--		   AND A.ITEM_ID       = @v_item_id
+			--		   AND A.OPERATION_ID  = @v_operation_id
+			--		   AND A.LINE_ID       = @v_line_id
+			--		   AND A.LINE_ID      != @v_key_line_id
+			--		   ;
+			--	END;
+
+			IF (@debug_mode ='T') 
+				PRINT '@v_data_dup_cnt  = ' + CONVERT(VARCHAR,@v_data_dup_cnt)     ;
+
+
+			IF( @v_data_dup_cnt>0) 
+			BEGIN
+				SET @v_err_code    = 99010 ; 
+				SET @v_err_message = N'이미 존재하는 데이타 입니다.';
+				THROW  @v_err_code, @v_err_message , 1; --예외발생
+			END; 
+
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+				BEGIN		
+					-- 수정, 입력일 경우 상태필드를 @v_active_flag 대신에 @v_input_status를 사용해야 함					
+					IF( @v_input_status ='M' AND @v_active_flag ='M') 
+						BEGIN
+							UPDATE dbo.SCP_MST_TACT_TIME                 
+							   SET PRIORITY         = @v_priority        
+								  ,TACT_TIME        = @v_tact_time       
+								  ,YIELD            = @v_yield           
+								  ,VALID_YN         = @v_valid_yn        
+								  ,LAST_UPDATED_BY  = @v_last_updated_by 
+								  ,LAST_UPDATE_DATE = @v_last_update_date
+								  ,ATTRIBUTE1		= @v_lane_qty
+							 WHERE DIVISION_ID      = @v_division_id     
+							   AND PLANT_SITE_ID    = @v_plant_site_id   
+							   AND ITEM_ID          = @v_item_id         
+							   AND OPERATION_ID     = @v_operation_id    
+							   AND LINE_ID          = @v_line_id
+							  ;
+						END ;
+					ELSE IF( @v_active_flag ='I' OR @v_input_status ='I')
+						BEGIN						
+							INSERT INTO dbo.SCP_MST_TACT_TIME
+									   (DIVISION_ID
+									   ,PLANT_SITE_ID
+									   ,ITEM_ID
+									   ,OPERATION_ID
+									   ,LINE_ID
+									   ,PRIORITY
+									   ,TACT_TIME
+									   ,YIELD
+									   ,VALID_YN
+									   ,CREATED_BY
+									   ,CREATION_DATE
+									   ,LAST_UPDATED_BY
+									   ,LAST_UPDATE_DATE
+									   ,ATTRIBUTE1
+									   )
+								 VALUES
+									   (@v_division_id  
+									   ,@v_plant_site_id
+									   ,@v_item_id      
+									   ,@v_operation_id 
+									   ,@v_line_id      
+									   "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME","1678017109","4",",@v_priority     
+									   ,@v_tact_time    
+									   ,@v_yield        
+									   ,@v_valid_yn     
+									   ,@v_created_by
+									   ,@v_creation_date
+									   ,@v_last_updated_by
+									   ,@v_last_update_date
+									   ,@v_lane_qty
+									  );
+						END;
+					ELSE IF(@v_active_flag ='D' AND @v_input_status ='M')
+						BEGIN
+							
+							-- Except 이력 저장
+							INSERT INTO SCP_MST_TACT_TIME_EXCEPT_H
+								(history_seq
+								,division_id
+								,plant_site_id
+								,item_id
+								,operation_id
+								,line_id
+								,tact_time_start_date
+								,tact_time_end_date
+								,tact_time
+								,yield
+								,except_comment
+								,use_yn
+								,created_by
+								,creation_date
+								,last_updated_by
+								,last_update_date
+								,history_creation_date
+								,ATTRIBUTE1)
+							SELECT (NEXT VALUE FOR SEQ1_SCP_MST_TACT_TIME_EXCEPT_H),
+									division_id, 
+									plant_site_id, 
+									item_id, 
+									operation_id,
+									line_id,
+									tact_time_start_date,
+									tact_time_end_date,
+									tact_time , 
+									yield , 
+									except_comment ,
+									use_yn,
+									@v_created_by , 
+									@d_event_date, 
+									@v_created_by,	
+									SYSDATETIME() ,
+									SYSDATETIME() ,
+									@v_active_flag
+							FROM SCP_MST_TACT_TIME_EXCEPT
+							WHERE DIVISION_ID	= @v_division_id
+							  AND PLANT_SITE_ID = @v_plant_site_id
+							  AND ITEM_ID		= @v_item_id
+							  AND OPERATION_ID	= @v_operation_id
+							  AND LINE_ID		= @v_line_id
+							;
+
+							--Except 삭제
+							DELETE FROM dbo.SCP_MST_TACT_TIME_EXCEPT 
+							 WHERE DIVISION_ID   = @v_division_id
+							   AND PLANT_SITE_ID = @v_plant_site_id
+							   AND ITEM_ID       = @v_item_id
+							   AND OPERATION_ID  = @v_operation_id
+							   AND LINE_ID       = @v_line_id						
+							;  
+
+							DELETE FROM dbo.SCP_MST_TACT_TIME 
+							 WHERE DIVISION_ID   = @v_division_id
+							   AND PLANT_SITE_ID = @v_plant_site_id
+							   AND ITEM_ID       = @v_item_id
+							   AND OPERATION_ID  = @v_operation_id
+							   AND LINE_ID       = @v_line_id						
+							;     
+						END; 	
+				END  -- END OF STMT. IF( @mst_loop_cnt > 0 )			
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		COMMIT TRAN;			
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @mst_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+					  
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+			   						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				   ,@v_division_id   AS DIVISION_ID  
+				   ,@v_plant_site_id AS PLANT_SITE_ID
+				   ,@v_item_id       AS ITEM_ID      
+				   ,@v_operation_id  AS OPERATION_ID 
+				   ,@v_line_id       AS LINE_ID      
+
+			; 
+
+		END;
+	END CATCH;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_EXCEPT","1694017166","1","
+
+
+/*
+ * Program ID   : [SCP0020_SAVE_TACT_TIME_EXCEPT]
+ * Description  : TACT Time Except 등록, 수정, 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/05/10   pjs				Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/05/28   hwyoon			사용여부(use_yn) 컬럼 조회 추가
+ * 2018/05/28	hwyoon			except 시트 삭제로직 추가
+ * 2020/02/12	hwyoon			[C20200116-000114] ESS 외주 Packer Line 계획 수립 - 버그수정
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0020_SAVE_TACT_TIME_EXCEPT]
+	 @p_active_flag          NVARCHAR(MAX)    
+	,@p_division_id          NVARCHAR(MAX)
+	,@p_plant_site_id        NVARCHAR(MAX)
+	,@p_item_id              NVARCHAR(MAX)
+	,@p_operation_id         NVARCHAR(MAX)
+	,@p_line_id              NVARCHAR(MAX)
+	,@p_tact_time_start_date NVARCHAR(MAX)
+	,@p_tact_time_end_date   NVARCHAR(MAX)
+	,@p_tact_time            NVARCHAR(MAX)
+	,@p_yield                NVARCHAR(MAX)
+	,@p_except_comment       NVARCHAR(MAX)
+	,@p_use_yn				 NVARCHAR(MAX)
+	,@p_user_id              NVARCHAR(MAX)
+
+	-- 수정시 필요한 pk원본 값 2018-04-09 추가 pjs
+	,@p_org_division_id          NVARCHAR(MAX)
+	,@p_org_plant_site_id        NVARCHAR(MAX)
+	,@p_org_item_id              NVARCHAR(MAX)
+	,@p_org_operation_id         NVARCHAR(MAX)
+	,@p_org_line_id              NVARCHAR(MAX)
+	,@p_org_tact_time_start_date NVARCHAR(MAX)
+	,@p_org_tact_time_end_date   NVARCHAR(MAX)
+
+	,@debug_mode          NVARCHAR(1) ='F'
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = @p_active_flag
+
+	DECLARE @v_active_flag              NVARCHAR(MAX) = NULL;
+	DECLARE @v_division_id              NVARCHAR(MAX) = NULL;
+	DECLARE @v_plant_site_id            NVARCHAR(MAX) = NULL;
+	DECLARE @v_item_id                  NVARCHAR(MAX) = NULL;
+	DECLARE @v_operation_id             NVARCHAR(MAX) = NULL;
+	DECLARE @v_line_id                  NVARCHAR(MAX) = NULL;
+	DECLARE @v_tact_time_start_date     NVARCHAR(MAX) = NULL;
+	DECLARE @v_tact_time_end_date       NVARCHAR(MAX) = NULL;
+	DECLARE @v_tact_time                NVARCHAR(MAX) = NULL;
+	DECLARE @v_yield                    NVARCHAR(MAX) = NULL;
+	DECLARE @v_except_comment           NVARCHAR(MAX) = NULL;
+	DECLARE @v_use_yn					NVARCHAR(MAX) = NULL;
+	DECLARE @v_created_by               NVARCHAR(MAX) = @p_user_id;
+	DECLARE @v_last_updated_by	        NVARCHAR(MAX) = @p_user_id;
+
+	DECLARE @v_org_division_id          NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_plant_site_id        NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_item_id              NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_operation_id         NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_line_id              NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_tact_time_start_date NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_tact_time_end_date   NVARCHAR(MAX) = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)='^' ;
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0020_SAVE_TACT_TIME_EXCEPT';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+
+
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0020') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0020 
+	;
+
+	CREATE TABLE #TblDynamic_SCP0020 (
+		active_flag	nvarchar(1),
+		division_id	nvarchar(30),
+		plant_site_id	nvarchar(30),
+		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_EXCEPT","1694017166","2","item_id		nvarchar(50),
+		operation_id	nvarchar(30),
+		line_id		nvarchar(50),
+		tact_time_start_date	nvarchar(8),
+		tact_time_end_date	nvarchar(8),
+		tact_time			nvarchar(50),
+		yield				nvarchar(50),
+		except_comment	nvarchar(100),
+		use_yn			nvarchar(1),
+		org_division_id	nvarchar(30),
+		org_plant_site_id	nvarchar(30),
+		org_item_id		nvarchar(50),
+		org_operation_id	nvarchar(30),
+		org_line_id		nvarchar(50),
+		org_tact_time_start_date	nvarchar(8),
+		org_tact_time_end_date	nvarchar(8)
+	);
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		--PRINT '1';
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag , @v_delimiter);    
+		
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag              = dbo.SCM_ARR_SPL_VAL( @p_active_flag             , @v_delimiter, @mst_loop_cnt );
+				SET @v_division_id              = dbo.SCM_ARR_SPL_VAL( @p_division_id             , @v_delimiter, @mst_loop_cnt );
+				SET @v_plant_site_id            = dbo.SCM_ARR_SPL_VAL( @p_plant_site_id           , @v_delimiter, @mst_loop_cnt );
+				SET @v_item_id                  = dbo.SCM_ARR_SPL_VAL( @p_item_id                 , @v_delimiter, @mst_loop_cnt );
+				SET @v_operation_id             = dbo.SCM_ARR_SPL_VAL( @p_operation_id            , @v_delimiter, @mst_loop_cnt );
+				SET @v_line_id                  = dbo.SCM_ARR_SPL_VAL( @p_line_id                 , @v_delimiter, @mst_loop_cnt );
+				SET @v_tact_time_start_date     = dbo.SCM_ARR_SPL_VAL( @p_tact_time_start_date    , @v_delimiter, @mst_loop_cnt );
+				SET @v_tact_time_end_date       = dbo.SCM_ARR_SPL_VAL( @p_tact_time_end_date      , @v_delimiter, @mst_loop_cnt );
+				SET @v_tact_time                = dbo.SCM_ARR_SPL_VAL( @p_tact_time               , @v_delimiter, @mst_loop_cnt );
+				SET @v_yield                    = dbo.SCM_ARR_SPL_VAL( @p_yield                   , @v_delimiter, @mst_loop_cnt );
+				SET @v_except_comment           = dbo.SCM_ARR_SPL_VAL( @p_except_comment          , @v_delimiter, @mst_loop_cnt );
+				SET @v_use_yn					= dbo.SCM_ARR_SPL_VAL( @p_use_yn				  , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_division_id          = dbo.SCM_ARR_SPL_VAL( @p_org_division_id         , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_plant_site_id        = dbo.SCM_ARR_SPL_VAL( @p_org_plant_site_id       , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_item_id              = dbo.SCM_ARR_SPL_VAL( @p_org_item_id             , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_operation_id         = dbo.SCM_ARR_SPL_VAL( @p_org_operation_id        , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_line_id              = dbo.SCM_ARR_SPL_VAL( @p_org_line_id             , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_tact_time_start_date = dbo.SCM_ARR_SPL_VAL( @p_org_tact_time_start_date, @v_delimiter, @mst_loop_cnt );
+				SET @v_org_tact_time_end_date   = dbo.SCM_ARR_SPL_VAL( @p_org_tact_time_end_date  , @v_delimiter, @mst_loop_cnt );
+
+				--PRINT '6';
+				--PRINT ' @v_valid_yn ='+ ISNULL(@v_valid_yn,'') ;
+			END;
+
+						-- LOOP 파라미터 출력 DEBUG용			
+			IF (@debug_mode ='T') 
+			BEGIN		
+				PRINT '=================LOOP VARS==============================';			
+				PRINT ' @mst_loop_cnt               = '''+ @mst_loop_cnt                +'''';
+				PRINT ' @v_active_flag              = '''+ @v_active_flag               +'''';
+				PRINT ' @v_division_id              = '''+ @v_division_id               +'''';
+				PRINT ' @v_plant_site_id            = '''+ @"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_EXCEPT","1694017166","3","v_plant_site_id             +'''';
+				PRINT ' @v_item_id                  = '''+ @v_item_id                   +'''';
+				PRINT ' @v_operation_id             = '''+ @v_operation_id              +'''';
+				PRINT ' @v_line_id                  = '''+ @v_line_id                   +'''';
+				PRINT ' @v_tact_time_start_date     = '''+ @v_tact_time_start_date      +'''';
+				PRINT ' @v_tact_time_end_date       = '''+ @v_tact_time_end_date        +'''';
+				PRINT ' @v_tact_time                = '''+ @v_tact_time                 +'''';
+				PRINT ' @v_yield                    = '''+ @v_yield                     +'''';
+				PRINT ' @v_except_comment           = '''+ @v_except_comment            +'''';
+				PRINT ' @v_use_yn					= '''+ @v_use_yn					+'''';
+				PRINT ' @v_org_division_id          = '''+ @v_org_division_id           +'''';
+				PRINT ' @v_org_plant_site_id        = '''+ @v_org_plant_site_id         +'''';
+				PRINT ' @v_org_item_id              = '''+ @v_org_item_id               +'''';
+				PRINT ' @v_org_operation_id         = '''+ @v_org_operation_id          +'''';
+				PRINT ' @v_org_line_id              = '''+ @v_org_line_id               +'''';
+				PRINT ' @v_org_tact_time_start_date = '''+ @v_org_tact_time_start_date  +'''';
+				PRINT ' @v_org_tact_time_end_date   = '''+ @v_org_tact_time_end_date    +'''';
+			END;
+
+
+			INSERT INTO #TblDynamic_SCP0020
+			SELECT @v_active_flag			AS active_flag
+					, @v_division_id		AS division_id
+					, @v_plant_site_id		AS plant_site_id
+					, @v_item_id			AS item_id
+					, @v_operation_id		AS operation_id
+					, @v_line_id			AS line_id
+					, @v_tact_time_start_date	AS tact_time_start_date
+					, @v_tact_time_end_date		AS tact_time_end_date
+					, @v_tact_time			AS tact_time
+					, @v_yield				AS yield
+					, @v_except_comment		AS except_comment
+					, @v_use_yn				AS use_yn
+					, @v_org_division_id	AS org_division_id
+					, @v_org_plant_site_id	AS org_plant_site_id
+					, @v_org_item_id		AS org_item_id
+					, @v_org_operation_id	AS org_operation_id
+					, @v_org_line_id		AS org_line_id
+					, @v_org_tact_time_start_date	AS org_tact_time_start_date
+					, @v_org_tact_time_end_date		AS org_tact_time_end_date
+			;
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+
+		IF @mst_loop_cnt > 0
+			BEGIN
+
+				-- D 삭제
+				DELETE A
+				FROM SCP_MST_TACT_TIME_EXCEPT A, #TblDynamic_SCP0020 B
+				WHERE A.division_id				= B.org_division_id
+				AND A.plant_site_id				= B.org_plant_site_id
+				AND A.item_id					= B.org_item_id
+				AND A.operation_id				= B.org_operation_id
+				AND A.line_id					= B.org_line_id
+				AND A.tact_time_start_date		= B.org_tact_time_start_date
+				AND A.tact_time_end_date		= B.org_tact_time_end_date
+				AND B.active_flag				= 'D'
+				;
+
+				-- M 수정
+				UPDATE A
+				SET A.tact_time_start_date	= B.tact_time_start_date        
+					,A.tact_time_end_date	= B.tact_time_end_date          
+					,A.tact_time			= convert(float, B.tact_time)
+					,A.yield				= convert(float, B.yield )/100
+					,A.except_comment		= B.except_comment              
+					,A.use_yn				= B.use_yn              
+					,A.last_updated_by		= @p_user_id
+					,A.last_update_date		= @d_event_date
+				FROM SCP_MST_TACT_TIME_EXCEPT A WITH(NOLOCK)
+				JOIN #TblDynamic_SCP0020 B WITH(NOLOCK) ON A.division_id		= B.org_division_id
+														AND A.plant_site_id		= B.org_plant_site_id
+														AND A.item_id			= B.org_item_id
+														AND A.operation_id		= B.org_operation_id
+														AND A.line_id			= B.org_line_id
+														AND A.tact_time_start_date	= B.org_tact_time_start_date
+														AND A.tact_time_end_date	= B.org_tact_time_end_date
+														AND B.active_flag IN ('I','M')
+				;
+
+				-- I 입력
+				INSERT INTO SCP_MST_TACT_TIME_EXCEPT
+				(division_id                       
+				,plant_site_id                     
+				,item_id                           
+				,operat"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_EXCEPT","1694017166","4","ion_id                      
+				,line_id                           
+				,tact_time_start_date              
+				,tact_time_end_date                
+				,tact_time                         
+				,yield                             
+				,except_comment  
+				,use_yn                  
+				,created_by                        
+				,creation_date                     
+				,last_updated_by                   
+				,last_update_date)
+				SELECT 
+					B.division_id                       
+					,B.plant_site_id                     
+					,B.item_id                           
+					,B.operation_id                      
+					,B.line_id                           
+					,B.tact_time_start_date              
+					,B.tact_time_end_date                
+					,convert(float, B.tact_time)                         
+					,convert(float, B.yield)/100                             
+					,B.except_comment
+					,B.use_yn                    
+					,@p_user_id                        
+					,@d_event_date                     
+					,@p_user_id                   
+					,@d_event_date 
+				FROM #TblDynamic_SCP0020 B WITH(NOLOCK)
+				WHERE 1=1
+				AND B.active_flag IN ('I','M')
+				AND NOT EXISTS (SELECT 'X' 
+								FROM SCP_MST_TACT_TIME_EXCEPT A WITH(NOLOCK)
+								WHERE 1=1
+								AND A.division_id		= B.division_id
+								AND A.plant_site_id		= B.plant_site_id
+								AND A.item_id			= B.item_id
+								AND A.operation_id		= B.operation_id
+								AND A.line_id			= B.line_id
+								AND A.tact_time_start_date	= B.tact_time_start_date
+								AND A.tact_time_end_date	= B.tact_time_end_date)
+				;
+
+				-- History
+				INSERT INTO SCP_MST_TACT_TIME_EXCEPT_H
+					(history_seq
+					,division_id
+					,plant_site_id
+					,item_id
+					,operation_id
+					,line_id
+					,tact_time_start_date
+					,tact_time_end_date
+					,tact_time
+					,yield
+					,except_comment
+					,use_yn
+					,created_by
+					,creation_date
+					,last_updated_by
+					,last_update_date
+					,history_creation_date)
+				SELECT (NEXT VALUE FOR SEQ1_SCP_MST_TACT_TIME_EXCEPT_H),
+						B.division_id, 
+						B.plant_site_id, 
+						B.item_id, 
+						B.operation_id,
+						B.line_id,
+						B.tact_time_start_date,
+						B.tact_time_end_date,
+						B.tact_time , 
+						B.yield , 
+						B.except_comment ,
+						B.use_yn,
+						@p_user_id , 
+						@d_event_date, 
+						@p_user_id,	
+						SYSDATETIME() ,
+						SYSDATETIME() 
+				FROM #TblDynamic_SCP0020 B
+				;
+
+			END
+
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT 'COMMIT'
+		COMMIT TRAN;			
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @mst_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (@v_program_name,'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;					  
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				   --,@v_tact_time_start_date AS tact_time_start_date
+				   --,@v_tact_time_end_date   AS tact_time_end_date
+				   ,'' AS tact_time_start_date
+				   ,'' AS tact_time_end_date
+			; 
+		END;
+	END CATCH;
+
+	IF OBJECT_ID('tempdb..#TblDyna"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_EXCEPT","1694017166","5","mic_SCP0020') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0020 
+	;
+
+END
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_EXCEPT_OSP","1710017223","2","		operation_id	nvarchar(30),
+		line_id		nvarchar(50),
+		tact_time_start_date	nvarchar(8),
+		tact_time_end_date	nvarchar(8),
+		tact_time			nvarchar(50),
+		yield				nvarchar(50),
+		except_comment	nvarchar(100),
+		daily_capacity	nvarchar(50),
+		use_yn			nvarchar(1),
+		org_division_id	nvarchar(30),
+		org_plant_site_id	nvarchar(30),
+		org_item_id		nvarchar(50),
+		org_operation_id	nvarchar(30),
+		org_line_id		nvarchar(50),
+		org_tact_time_start_date	nvarchar(8),
+		org_tact_time_end_date	nvarchar(8)
+	);
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		--PRINT '1';
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag , @v_delimiter);    
+		
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag              = dbo.SCM_ARR_SPL_VAL( @p_active_flag             , @v_delimiter, @mst_loop_cnt );
+				SET @v_division_id              = dbo.SCM_ARR_SPL_VAL( @p_division_id             , @v_delimiter, @mst_loop_cnt );
+				SET @v_plant_site_id            = dbo.SCM_ARR_SPL_VAL( @p_plant_site_id           , @v_delimiter, @mst_loop_cnt );
+				SET @v_item_id                  = dbo.SCM_ARR_SPL_VAL( @p_item_id                 , @v_delimiter, @mst_loop_cnt );
+				SET @v_operation_id             = dbo.SCM_ARR_SPL_VAL( @p_operation_id            , @v_delimiter, @mst_loop_cnt );
+				SET @v_line_id                  = dbo.SCM_ARR_SPL_VAL( @p_line_id                 , @v_delimiter, @mst_loop_cnt );
+				SET @v_tact_time_start_date     = dbo.SCM_ARR_SPL_VAL( @p_tact_time_start_date    , @v_delimiter, @mst_loop_cnt );
+				SET @v_tact_time_end_date       = dbo.SCM_ARR_SPL_VAL( @p_tact_time_end_date      , @v_delimiter, @mst_loop_cnt );
+				SET @v_tact_time                = dbo.SCM_ARR_SPL_VAL( @p_tact_time               , @v_delimiter, @mst_loop_cnt );
+				SET @v_yield                    = dbo.SCM_ARR_SPL_VAL( @p_yield                   , @v_delimiter, @mst_loop_cnt );
+				SET @v_except_comment           = dbo.SCM_ARR_SPL_VAL( @p_except_comment          , @v_delimiter, @mst_loop_cnt );
+				SET @v_daily_capacity           = dbo.SCM_ARR_SPL_VAL( @p_daily_capacity          , @v_delimiter, @mst_loop_cnt );
+				SET @v_use_yn					= dbo.SCM_ARR_SPL_VAL( @p_use_yn				  , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_division_id          = dbo.SCM_ARR_SPL_VAL( @p_org_division_id         , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_plant_site_id        = dbo.SCM_ARR_SPL_VAL( @p_org_plant_site_id       , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_item_id              = dbo.SCM_ARR_SPL_VAL( @p_org_item_id             , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_operation_id         = dbo.SCM_ARR_SPL_VAL( @p_org_operation_id        , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_line_id              = dbo.SCM_ARR_SPL_VAL( @p_org_line_id             , @v_delimiter, @mst_loop_cnt );
+				SET @v_org_tact_time_start_date = dbo.SCM_ARR_SPL_VAL( @p_org_tact_time_start_date, @v_delimiter, @mst_loop_cnt );
+				SET @v_org_tact_time_end_date   = dbo.SCM_ARR_SPL_VAL( @p_org_tact_time_end_date  , @v_delimiter, @mst_loop_cnt );
+
+				--PRINT '6';
+				--PRINT ' @v_valid_yn ='+ ISNULL(@v_valid_yn,'') ;
+			END;
+
+						-- LOOP 파라미터 출력 DEBUG용			
+			IF (@debug_mode ='T') 
+			BEGIN		
+				PRINT '=================LOOP VARS==============================';			
+				PRINT ' @mst_loop_cnt               = '''+ @mst_loop_cnt                +'''';
+				PRINT ' @v_active_flag              = '''+ @v_active_flag               +'''';
+				"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_EXCEPT_OSP","1710017223","3","PRINT ' @v_division_id              = '''+ @v_division_id               +'''';
+				PRINT ' @v_plant_site_id            = '''+ @v_plant_site_id             +'''';
+				PRINT ' @v_item_id                  = '''+ @v_item_id                   +'''';
+				PRINT ' @v_operation_id             = '''+ @v_operation_id              +'''';
+				PRINT ' @v_line_id                  = '''+ @v_line_id                   +'''';
+				PRINT ' @v_tact_time_start_date     = '''+ @v_tact_time_start_date      +'''';
+				PRINT ' @v_tact_time_end_date       = '''+ @v_tact_time_end_date        +'''';
+				PRINT ' @v_tact_time                = '''+ @v_tact_time                 +'''';
+				PRINT ' @v_yield                    = '''+ @v_yield                     +'''';
+				PRINT ' @v_except_comment           = '''+ @v_except_comment            +'''';
+				PRINT ' @v_daily_capacity           = '''+ @v_daily_capacity            +'''';
+				PRINT ' @v_use_yn					= '''+ @v_use_yn					+'''';
+				PRINT ' @v_org_division_id          = '''+ @v_org_division_id           +'''';
+				PRINT ' @v_org_plant_site_id        = '''+ @v_org_plant_site_id         +'''';
+				PRINT ' @v_org_item_id              = '''+ @v_org_item_id               +'''';
+				PRINT ' @v_org_operation_id         = '''+ @v_org_operation_id          +'''';
+				PRINT ' @v_org_line_id              = '''+ @v_org_line_id               +'''';
+				PRINT ' @v_org_tact_time_start_date = '''+ @v_org_tact_time_start_date  +'''';
+				PRINT ' @v_org_tact_time_end_date   = '''+ @v_org_tact_time_end_date    +'''';
+			END;
+
+
+			INSERT INTO #TblDynamic_SCP0020
+			SELECT @v_active_flag			AS active_flag
+					, @v_division_id		AS division_id
+					, @v_plant_site_id		AS plant_site_id
+					, @v_item_id			AS item_id
+					, @v_operation_id		AS operation_id
+					, @v_line_id			AS line_id
+					, @v_tact_time_start_date	AS tact_time_start_date
+					, @v_tact_time_end_date		AS tact_time_end_date
+					, @v_tact_time			AS tact_time
+					, @v_yield				AS yield
+					, @v_except_comment		AS except_comment
+					, @v_daily_capacity		AS daily_capacity
+					, @v_use_yn				AS use_yn
+					, @v_org_division_id	AS org_division_id
+					, @v_org_plant_site_id	AS org_plant_site_id
+					, @v_org_item_id		AS org_item_id
+					, @v_org_operation_id	AS org_operation_id
+					, @v_org_line_id		AS org_line_id
+					, @v_org_tact_time_start_date	AS org_tact_time_start_date
+					, @v_org_tact_time_end_date		AS org_tact_time_end_date
+			;
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+
+		IF @mst_loop_cnt > 0
+			BEGIN
+
+				-- D 삭제
+				DELETE A
+				FROM SCP_MST_TACT_TIME_EXCEPT_OSP A, #TblDynamic_SCP0020 B
+				WHERE A.division_id				= B.org_division_id
+				AND A.plant_site_id				= B.org_plant_site_id
+				AND A.item_id					= B.org_item_id
+				AND A.operation_id				= B.org_operation_id
+				AND A.line_id					= B.org_line_id
+				AND A.tact_time_start_date		= B.org_tact_time_start_date
+				AND A.tact_time_end_date		= B.org_tact_time_end_date
+				AND B.active_flag				= 'D'
+				;
+
+				-- M 수정
+				UPDATE A
+				SET A.tact_time_start_date	= B.tact_time_start_date        
+					,A.tact_time_end_date	= B.tact_time_end_date          
+					,A.tact_time			= convert(float, B.tact_time)
+					,A.yield				= convert(float, B.yield )/100
+					,A.except_comment		= B.except_comment              
+					,A.DAILY_CAPACITY		= B.daily_capacity              
+					,A.use_yn				= B.use_yn              
+					,A.last_updated_by		= @p_user_id
+					,A.last_update_date		= @d_event_date
+				FROM SCP_MST_TACT_TIME_EXCEPT_OSP A WITH(NOLOCK)
+				JOIN #TblDynamic_SCP0020 B WITH(NOLOCK) ON A.division_id		= B.org_division_id
+														AND A.plant_site_id		= B.org_plant_site_id
+														AND A.item_id			= B.org_item_id
+														AND A.operation_id		= B.org_operation_id
+														AND A.line_id			= B.org_line_id
+														AND A.tact_time_start_date	= B.org_tact_time_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_EXCEPT_OSP","1710017223","4","start_date
+														AND A.tact_time_end_date	= B.org_tact_time_end_date
+														AND B.active_flag IN ('I','M')
+				;
+
+				-- I 입력
+				INSERT INTO SCP_MST_TACT_TIME_EXCEPT_OSP
+				(division_id                       
+				,plant_site_id                     
+				,item_id                           
+				,operation_id                      
+				,line_id                           
+				,tact_time_start_date              
+				,tact_time_end_date                
+				,tact_time                         
+				,yield                             
+				,except_comment  
+				,DAILY_CAPACITY
+				,use_yn                  
+				,created_by                        
+				,creation_date                     
+				,last_updated_by                   
+				,last_update_date)
+				SELECT 
+					B.division_id                       
+					,B.plant_site_id                     
+					,B.item_id                           
+					,B.operation_id                      
+					,B.line_id                           
+					,B.tact_time_start_date              
+					,B.tact_time_end_date                
+					,convert(float, B.tact_time)                         
+					,convert(float, B.yield)/100                             
+					,B.except_comment
+					,B.daily_capacity
+					,B.use_yn                    
+					,@p_user_id                        
+					,@d_event_date                     
+					,@p_user_id                   
+					,@d_event_date 
+				FROM #TblDynamic_SCP0020 B WITH(NOLOCK)
+				WHERE 1=1
+				AND B.active_flag IN ('I','M')
+				AND NOT EXISTS (SELECT 'X' 
+								FROM SCP_MST_TACT_TIME_EXCEPT_OSP A WITH(NOLOCK)
+								WHERE 1=1
+								AND A.division_id		= B.division_id
+								AND A.plant_site_id		= B.plant_site_id
+								AND A.item_id			= B.item_id
+								AND A.operation_id		= B.operation_id
+								AND A.line_id			= B.line_id
+								AND A.tact_time_start_date	= B.tact_time_start_date
+								AND A.tact_time_end_date	= B.tact_time_end_date)
+				;
+
+				-- History
+				INSERT INTO SCP_MST_TACT_TIME_EXCEPT_OSP_H
+					(history_seq
+					,division_id
+					,plant_site_id
+					,item_id
+					,operation_id
+					,line_id
+					,tact_time_start_date
+					,tact_time_end_date
+					,tact_time
+					,yield
+					,except_comment
+					,DAILY_CAPACITY
+					,use_yn
+					,created_by
+					,creation_date
+					,last_updated_by
+					,last_update_date
+					,history_creation_date
+					,ATTRIBUTE1)
+				SELECT (NEXT VALUE FOR SEQ1_SCP_MST_TACT_TIME_EXCEPT_OSP_H),
+						B.division_id, 
+						B.plant_site_id, 
+						B.item_id, 
+						B.operation_id,
+						B.line_id,
+						B.tact_time_start_date,
+						B.tact_time_end_date,
+						B.tact_time , 
+						B.yield , 
+						B.except_comment ,
+						B.daily_capacity,
+						B.use_yn,
+						@p_user_id , 
+						@d_event_date, 
+						@p_user_id,	
+						SYSDATETIME() ,
+						SYSDATETIME() ,
+						B.active_flag
+				FROM #TblDynamic_SCP0020 B
+				;
+
+			END
+
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT 'COMMIT'
+		COMMIT TRAN;			
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @mst_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (@v_program_name,'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;					  
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMB"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_EXCEPT_OSP","1710017223","5","ER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				   --,@v_tact_time_start_date AS tact_time_start_date
+				   --,@v_tact_time_end_date   AS tact_time_end_date
+				   ,'' AS tact_time_start_date
+				   ,'' AS tact_time_end_date
+			; 
+		END;
+	END CATCH;
+
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0020') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0020 
+	;
+
+END
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_EXCEPT_OSP","1710017223","1","
+
+
+
+
+/*
+ * Program ID   : [SCP0020_SAVE_TACT_TIME_EXCEPT_OSP]
+ * Description  : TACT Time Except OSP 등록, 수정, 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2020/02/05   hwyoon			Initial Release [] 전지 GSCM(SCP) 운영 - [C20200116-000114] ESS 외주 Packer Line 계획 수립
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0020_SAVE_TACT_TIME_EXCEPT_OSP]
+	 @p_active_flag          NVARCHAR(MAX)    
+	,@p_division_id          NVARCHAR(MAX)
+	,@p_plant_site_id        NVARCHAR(MAX)
+	,@p_item_id              NVARCHAR(MAX)
+	,@p_operation_id         NVARCHAR(MAX)
+	,@p_line_id              NVARCHAR(MAX)
+	,@p_tact_time_start_date NVARCHAR(MAX)
+	,@p_tact_time_end_date   NVARCHAR(MAX)
+	,@p_tact_time            NVARCHAR(MAX)
+	,@p_yield                NVARCHAR(MAX)
+	,@p_except_comment       NVARCHAR(MAX)
+	,@p_daily_capacity       NVARCHAR(MAX)
+	,@p_use_yn				 NVARCHAR(MAX)
+	,@p_user_id              NVARCHAR(MAX)
+
+	-- 수정시 필요한 pk원본 값 2018-04-09 추가 pjs
+	,@p_org_division_id          NVARCHAR(MAX)
+	,@p_org_plant_site_id        NVARCHAR(MAX)
+	,@p_org_item_id              NVARCHAR(MAX)
+	,@p_org_operation_id         NVARCHAR(MAX)
+	,@p_org_line_id              NVARCHAR(MAX)
+	,@p_org_tact_time_start_date NVARCHAR(MAX)
+	,@p_org_tact_time_end_date   NVARCHAR(MAX)
+
+	,@debug_mode          NVARCHAR(1) ='F'
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = @p_active_flag
+
+	DECLARE @v_active_flag              NVARCHAR(MAX) = NULL;
+	DECLARE @v_division_id              NVARCHAR(MAX) = NULL;
+	DECLARE @v_plant_site_id            NVARCHAR(MAX) = NULL;
+	DECLARE @v_item_id                  NVARCHAR(MAX) = NULL;
+	DECLARE @v_operation_id             NVARCHAR(MAX) = NULL;
+	DECLARE @v_line_id                  NVARCHAR(MAX) = NULL;
+	DECLARE @v_tact_time_start_date     NVARCHAR(MAX) = NULL;
+	DECLARE @v_tact_time_end_date       NVARCHAR(MAX) = NULL;
+	DECLARE @v_tact_time                NVARCHAR(MAX) = NULL;
+	DECLARE @v_yield                    NVARCHAR(MAX) = NULL;
+	DECLARE @v_except_comment           NVARCHAR(MAX) = NULL;
+	DECLARE @v_daily_capacity           NVARCHAR(MAX) = NULL;
+	DECLARE @v_use_yn					NVARCHAR(MAX) = NULL;
+	DECLARE @v_created_by               NVARCHAR(MAX) = @p_user_id;
+	DECLARE @v_last_updated_by	        NVARCHAR(MAX) = @p_user_id;
+
+	DECLARE @v_org_division_id          NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_plant_site_id        NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_item_id              NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_operation_id         NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_line_id              NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_tact_time_start_date NVARCHAR(MAX) = NULL;
+	DECLARE @v_org_tact_time_end_date   NVARCHAR(MAX) = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)='^' ;
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0020_SAVE_TACT_TIME_EXCEPT_OSP';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+
+
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0020') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0020 
+	;
+
+	CREATE TABLE #TblDynamic_SCP0020 (
+		active_flag	nvarchar(1),
+		division_id	nvarchar(30),
+		plant_site_id	nvarchar(30),
+		item_id		nvarchar(50),
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_OSP","1726017280","1","
+
+/*
+ * Program ID   : SCP0020_SAVE_TACT_TIME_OSP
+ * Description  : Tact Time Packer 등록, 수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2020/02/04   yhw				Initial Release [] 전지 GSCM(SCP) 운영 - [C20200116-000114] ESS 외주 Packer Line 계획 수립
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0020_SAVE_TACT_TIME_OSP]
+	 @p_active_flag        NVARCHAR(MAX)
+	,@p_division_id        NVARCHAR(MAX)
+	,@p_plant_site_id      NVARCHAR(MAX)
+	,@p_item_id            NVARCHAR(MAX)
+	,@p_operation_id       NVARCHAR(MAX)
+	,@p_line_id            NVARCHAR(MAX)
+	,@p_priority           NVARCHAR(MAX)
+	,@p_tact_time          NVARCHAR(MAX)
+	,@p_yield              NVARCHAR(MAX)
+	,@p_valid_yn           NVARCHAR(MAX)
+	,@p_daily_capacity     NVARCHAR(MAX)
+	,@p_user_id            NVARCHAR(MAX)
+	,@debug_mode           NVARCHAR(1) ='F'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	
+	DECLARE @v_working_time     datetime =sysdatetime();     
+	DECLARE @recv_active_flag	NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+
+	DECLARE @v_active_flag        NVARCHAR(MAX);
+	DECLARE @v_division_id        NVARCHAR(MAX);
+	DECLARE @v_plant_site_id      NVARCHAR(MAX);
+	DECLARE @v_item_id            NVARCHAR(MAX);
+	DECLARE @v_operation_id       NVARCHAR(MAX);
+	DECLARE @v_line_id            NVARCHAR(MAX);
+	DECLARE @v_priority           NVARCHAR(MAX);
+	DECLARE @v_tact_time          NVARCHAR(MAX);
+	DECLARE @v_yield              NVARCHAR(MAX);
+	DECLARE @v_valid_yn           NVARCHAR(MAX);
+	DECLARE @v_daily_capacity	  NVARCHAR(MAX);
+
+	DECLARE @v_created_by        NVARCHAR(MAX);
+	DECLARE @v_creation_date     datetime	;
+	DECLARE @v_last_updated_by   NVARCHAR(MAX);
+	DECLARE @v_last_update_date  datetime	;
+
+	--DECLARE @v_input_status			NVARCHAR(MAX) ;
+	--DECLARE @v_item_uom				NVARCHAR(MAX) ;
+	--DECLARE @v_uom_convert_value    NVARCHAR(MAX) ;
+	--DECLARE @v_lane_qty				NVARCHAR(MAX) ;
+	--DECLARE @v_transport_mode    NVARCHAR(100) = ''; --에러반환용
+
+	SET @v_created_by       = @p_user_id;
+	SET @v_creation_date    = @v_working_time;
+	SET @v_last_updated_by  = @p_user_id
+	SET @v_last_update_date = @v_working_time
+
+	SET @v_active_flag   = NULL;
+	SET @v_division_id   = NULL;
+	SET @v_plant_site_id = NULL;
+	SET @v_item_id       = NULL;
+	SET @v_operation_id  = NULL;
+	SET @v_line_id       = NULL;
+	SET @v_priority      = NULL;
+	SET @v_tact_time     = NULL;
+	SET @v_yield         = NULL;
+	SET @v_valid_yn      = NULL;
+	SET @v_daily_capacity = NULL;
+
+
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0020_SAVE_TACT_TIME_OSP';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	DECLARE @v_data_dup_priority_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	-- Validation 체크용
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP
+	;
+	-- 저장용
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_SAVE_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_SAVE_TMP
+	;
+
+	CREATE TABLE #TblDynamicPivot_SCP0020_TMP (
+			 DIVISION_ID		NVARCHAR(30)
+			,PLANT_SITE_ID		NVARCHAR(30)
+			,ITEM_ID			NVARCHAR(50)
+			,OPERATION_ID		NVARCHAR(30)
+			,L"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_OSP","1726017280","2","INE_ID			NVARCHAR(50)
+		);
+
+	CREATE TABLE #TblDynamicPivot_SCP0020_SAVE_TMP (
+			 DIVISION_ID		NVARCHAR(30)
+			,PLANT_SITE_ID		NVARCHAR(30)
+			,ITEM_ID			NVARCHAR(50)
+			,OPERATION_ID		NVARCHAR(30)
+			,LINE_ID			NVARCHAR(50)
+			,PRIORITY			INT
+			,TACT_TIME			NUMERIC(20,10)
+			,YIELD				NUMERIC(20,10)
+			,DAILY_CAPACITY		NUMERIC(20,10)
+			,VALID_YN			NVARCHAR(1)
+			,ATTRIBUTE1			NVARCHAR(150)
+		);
+
+	-- Validation용 전체 데이터 조회
+	INSERT INTO #TblDynamicPivot_SCP0020_TMP
+	SELECT DIVISION_ID, PLANT_SITE_ID, ITEM_ID, OPERATION_ID, LINE_ID
+	FROM SCP_MST_TACT_TIME_OSP WITH(NOLOCK)
+	;
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag    = dbo.SCM_ARR_SPL_VAL(@p_active_flag  , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_division_id    = dbo.SCM_ARR_SPL_VAL(@p_division_id  , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_plant_site_id  = dbo.SCM_ARR_SPL_VAL(@p_plant_site_id, @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_item_id        = dbo.SCM_ARR_SPL_VAL(@p_item_id      , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_operation_id   = dbo.SCM_ARR_SPL_VAL(@p_operation_id , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_line_id        = dbo.SCM_ARR_SPL_VAL(@p_line_id      , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_priority       = dbo.SCM_ARR_SPL_VAL(@p_priority     , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_tact_time      = dbo.SCM_ARR_SPL_VAL(@p_tact_time    , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_yield          = dbo.SCM_ARR_SPL_VAL(@p_yield        , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_valid_yn       = dbo.SCM_ARR_SPL_VAL(@p_valid_yn     , @v_delimiter, @mst_loop_cnt ) ;
+				SET @v_daily_capacity = dbo.SCM_ARR_SPL_VAL(@p_daily_capacity     , @v_delimiter, @mst_loop_cnt ) ;
+			END;
+
+			SET @v_yield= (case when  @v_yield ='' or  @v_yield =null then null else convert(float, @v_yield)/100 end) ;        
+
+			-- LOOP 파라미터 출력 DEBUG용			
+			IF (@debug_mode ='T') 
+			BEGIN		
+				PRINT '===============================================';			
+				PRINT '@mst_loop_cnt     = ' + CONVERT(VARCHAR,@mst_loop_cnt)   ;
+				PRINT '@v_active_flag   = ''' + @v_active_flag   + '''' ;
+				PRINT '@v_division_id   = ''' + @v_division_id   + '''' ;
+				PRINT '@v_plant_site_id = ''' + @v_plant_site_id + '''' ;
+				PRINT '@v_item_id       = ''' + @v_item_id       + '''' ;
+				PRINT '@v_operation_id  = ''' + @v_operation_id  + '''' ;
+				PRINT '@v_line_id       = ''' + @v_line_id       + '''' ;
+				PRINT '@v_priority      = ''' + @v_priority      + '''' ;
+				PRINT '@v_tact_time     = ''' + @v_tact_time     + '''' ;
+				PRINT '@v_yield         = ''' + @v_yield         + '''' ;
+				PRINT '@v_valid_yn      = ''' + @v_valid_yn      + '''' ;
+				PRINT '@v_daily_capacity      = ''' + @v_daily_capacity      + '''' ;
+			END;
+
+			--Validation용
+			/*
+			INSERT INTO #TblDynamicPivot_SCP0020_TMP
+			SELECT @v_division_id, @v_plant_site_id, @v_item_id, @v_operation_id, @v_line_id
+			;
+			*/
+
+			--입력/수정/삭제용
+			INSERT INTO #TblDynamicPivot_SCP0020_SAVE_TMP
+			SELECT @v_division_id, @v_plant_site_id, @v_item_id, @v_operation_id, @v_line_id
+				   , @v_priority, @v_tact_time, @v_yield, @v_daily_capacity, @v_valid_yn
+				   , @v_active_flag
+			;
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+
+		---- 1. 중복체크
+		DELETE A
+		FROM #TblDynamic"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_OSP","1726017280","3","Pivot_SCP0020_TMP A
+		JOIN #TblDynamicPivot_SCP0020_SAVE_TMP B ON A.DIVISION_ID		= B.DIVISION_ID
+												AND A.PLANT_SITE_ID		= B.PLANT_SITE_ID
+												AND A.ITEM_ID			= B.ITEM_ID
+												AND A.OPERATION_ID		= B.OPERATION_ID
+												AND A.LINE_ID			= B.LINE_ID
+												AND B.ATTRIBUTE1 = 'D'
+		;
+
+		INSERT INTO #TblDynamicPivot_SCP0020_TMP
+		SELECT DIVISION_ID, PLANT_SITE_ID, ITEM_ID, OPERATION_ID, LINE_ID
+		FROM #TblDynamicPivot_SCP0020_SAVE_TMP
+		WHERE ATTRIBUTE1 = 'I'
+		;
+
+
+		SELECT @v_data_dup_cnt = COUNT(*)
+		FROM (
+			SELECT A.DIVISION_ID, A.PLANT_SITE_ID, A.ITEM_ID, A.OPERATION_ID, A.LINE_ID
+					, (SELECT COUNT(B.DIVISION_ID) AS CNT  FROM #TblDynamicPivot_SCP0020_TMP B
+														  WHERE B.DIVISION_ID=A.DIVISION_ID
+															AND B.PLANT_SITE_ID=A.PLANT_SITE_ID
+															AND B.ITEM_ID=A.ITEM_ID
+															AND B.OPERATION_ID=A.OPERATION_ID
+															AND B.LINE_ID=A.LINE_ID) AS CNT
+			FROM #TblDynamicPivot_SCP0020_TMP A
+		) A WHERE A.CNT>1
+		;
+
+		IF( @v_data_dup_cnt>0) 
+			BEGIN
+				SET @v_err_code    = 99010 ; 
+				SET @v_err_message = N'이미 존재하는 데이타 입니다.';
+
+				SELECT TOP 1 
+					@v_division_id=A.DIVISION_ID, 
+					@v_plant_site_id=A.PLANT_SITE_ID, 
+					@v_item_id=A.ITEM_ID, 
+					@v_line_id=A.LINE_ID
+				FROM (
+					SELECT A.DIVISION_ID, A.PLANT_SITE_ID, A.ITEM_ID, A.OPERATION_ID, A.LINE_ID
+							, (SELECT COUNT(B.DIVISION_ID) AS CNT  FROM #TblDynamicPivot_SCP0020_TMP B
+																  WHERE B.DIVISION_ID=A.DIVISION_ID
+																	AND B.PLANT_SITE_ID=A.PLANT_SITE_ID
+																	AND B.ITEM_ID=A.ITEM_ID
+																	AND B.OPERATION_ID=A.OPERATION_ID
+																	AND B.LINE_ID=A.LINE_ID) AS CNT
+					FROM #TblDynamicPivot_SCP0020_TMP A
+				) A WHERE A.CNT>1
+				;
+
+				THROW  @v_err_code, @v_err_message , 1; --예외발생
+			END; 
+
+		---- 2. 삭제 행 Except 삭제
+		INSERT INTO SCP_MST_TACT_TIME_EXCEPT_OSP_H
+			(history_seq
+			,division_id
+			,plant_site_id
+			,item_id
+			,operation_id
+			,line_id
+			,tact_time_start_date
+			,tact_time_end_date
+			,tact_time
+			,yield
+			,DAILY_CAPACITY
+			,except_comment
+			,use_yn
+			,created_by
+			,creation_date
+			,last_updated_by
+			,last_update_date
+			,history_creation_date
+			,ATTRIBUTE1)
+		SELECT (NEXT VALUE FOR SEQ1_SCP_MST_TACT_TIME_EXCEPT_OSP_H),
+				A.DIVISION_ID, 
+				A.PLANT_SITE_ID, 
+				A.ITEM_ID, 
+				A.OPERATION_ID,
+				A.LINE_ID,
+				A.tact_time_start_date,
+				A.tact_time_end_date,
+				A.tact_time , 
+				A.yield , 
+				A.DAILY_CAPACITY, 
+				A.except_comment ,
+				A.use_yn,
+				@v_created_by , 
+				@d_event_date, 
+				@v_created_by,	
+				@d_event_date ,
+				@d_event_date ,
+				B.ATTRIBUTE1
+		FROM SCP_MST_TACT_TIME_EXCEPT_OSP A WITH(NOLOCK)
+		JOIN #TblDynamicPivot_SCP0020_SAVE_TMP B ON A.DIVISION_ID=B.DIVISION_ID
+												 AND A.PLANT_SITE_ID=B.PLANT_SITE_ID
+												 AND A.ITEM_ID=B.ITEM_ID
+												 AND A.OPERATION_ID=B.OPERATION_ID
+												 AND A.LINE_ID=B.LINE_ID
+												 AND B.ATTRIBUTE1='D'
+		;
+
+
+		DELETE A
+		FROM SCP_MST_TACT_TIME_EXCEPT_OSP A
+		JOIN #TblDynamicPivot_SCP0020_SAVE_TMP B ON A.DIVISION_ID		= B.DIVISION_ID
+												AND A.PLANT_SITE_ID		= B.PLANT_SITE_ID
+												AND A.ITEM_ID			= B.ITEM_ID
+												AND A.OPERATION_ID		= B.OPERATION_ID
+												AND A.LINE_ID			= B.LINE_ID
+												AND B.ATTRIBUTE1 = 'D'
+		;
+
+		---- 3. Tact Time 히스토리 생성
+		INSERT INTO SCP_MST_TACT_TIME_OSP_H
+			(history_seq
+			,division_id
+			,plant_site_id
+			,item_id
+			,operation_id
+			,line_id
+			,PRIORITY
+			,TACT_TIME
+			,YIELD
+			,DAILY_CAPACITY
+			,VALID_YN
+			,created_by
+			,creation_date
+			,last_updated_by
+			,last_update_date
+			,history_creation_date
+			,ATTRIBUTE1)
+		SELECT (NEXT VALUE FOR SEQ1_SCP_MST_TACT_TIME_OSP_H),
+				A.DIVISION_ID, 
+				A.PLANT_SITE_ID, 
+				A.ITEM_ID, 
+				A.OPERATION_ID,
+				A.LINE_ID,
+				A.PRIORITY,
+				A.TACT_TIME,
+				A.YIELD , "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_SAVE_TACT_TIME_OSP","1726017280","4","
+				A.DAILY_CAPACITY , 
+				A.VALID_YN ,
+				@v_created_by , 
+				@d_event_date, 
+				@v_created_by,	
+				@d_event_date ,
+				@d_event_date ,
+				A.ATTRIBUTE1
+		FROM #TblDynamicPivot_SCP0020_SAVE_TMP A WITH(NOLOCK)
+		;
+
+		---- 4. Tact Time 삭제
+		DELETE A
+		FROM SCP_MST_TACT_TIME_OSP A
+		JOIN #TblDynamicPivot_SCP0020_SAVE_TMP B ON A.DIVISION_ID		= B.DIVISION_ID
+												AND A.PLANT_SITE_ID		= B.PLANT_SITE_ID
+												AND A.ITEM_ID			= B.ITEM_ID
+												AND A.OPERATION_ID		= B.OPERATION_ID
+												AND A.LINE_ID			= B.LINE_ID
+												AND B.ATTRIBUTE1 = 'D'
+		;
+
+		---- 5. Tact Time 입력
+		INSERT INTO SCP_MST_TACT_TIME_OSP
+		(DIVISION_ID,	PLANT_SITE_ID,	ITEM_ID,			OPERATION_ID,	LINE_ID
+		 ,PRIORITY,		TACT_TIME,		YIELD,				DAILY_CAPACITY, VALID_YN
+		 ,CREATED_BY,	CREATION_DATE,	LAST_UPDATED_BY,	LAST_UPDATE_DATE)
+		SELECT 
+			DIVISION_ID,	PLANT_SITE_ID,	ITEM_ID,		OPERATION_ID,	LINE_ID
+			,PRIORITY,		TACT_TIME,		YIELD,			DAILY_CAPACITY, VALID_YN
+			,@v_created_by, @d_event_date,	@v_created_by,	@d_event_date
+		FROM #TblDynamicPivot_SCP0020_SAVE_TMP
+		WHERE ATTRIBUTE1 = 'I'
+		;
+
+		---- 6. Tact Time 수정
+		UPDATE A
+		SET A.PRIORITY = B.PRIORITY
+			, A.TACT_TIME = B.TACT_TIME
+			, A.YIELD	= B.YIELD
+			, A.DAILY_CAPACITY = B.DAILY_CAPACITY
+			, A.LAST_UPDATED_BY = @v_created_by
+			, A.LAST_UPDATE_DATE = @d_event_date
+		FROM SCP_MST_TACT_TIME_OSP A WITH(NOLOCK)
+		JOIN #TblDynamicPivot_SCP0020_SAVE_TMP B WITH(NOLOCK) ON A.DIVISION_ID		= B.DIVISION_ID
+												AND A.PLANT_SITE_ID		= B.PLANT_SITE_ID
+												AND A.ITEM_ID			= B.ITEM_ID
+												AND A.OPERATION_ID		= B.OPERATION_ID
+												AND A.LINE_ID			= B.LINE_ID
+												AND B.ATTRIBUTE1 = 'M'
+		;
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		COMMIT TRAN;			
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @mst_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				BEGIN
+					SET @v_err_message=  ERROR_MESSAGE();
+
+					INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+					VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+				END
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+					  
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				   ,@v_division_id   AS DIVISION_ID  
+				   ,@v_plant_site_id AS PLANT_SITE_ID
+				   ,@v_item_id       AS ITEM_ID      
+				   ,@v_line_id       AS LINE_ID      
+			; 
+
+		END;
+	END CATCH;
+
+	-- Validation 체크용
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP
+	;
+	-- 저장용
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_SAVE_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_SAVE_TMP
+	;
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME","1614016881","5"," 'C' ELSE substring(m.item_id,2,1)  END  --TCO Cell조회불가
+AND m.ACTIVE_CNT>0
+ORDER BY line_order, m.division_id, m.plant_site_id, m.operation_id, m.line_id,m.model_site, m.item_id
+;
+
+/********************************************************************************
+* 임시테이블만들기
+********************************************************************************/
+IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+	DROP TABLE #TblDynamicPivot_SCP0020_TMP
+;
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME","1614016881","1","
+/*
+ * Program ID   : SCP0020_GET_TACT_TIME
+ * Description  : TACT TIME 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2018/03/16   byunghunjung    Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/05/17   byunghunjung    전극 제외
+ * 2018/05/23   pjs			    big tact time 관련내용 추가
+ * 2018/05/23   pjs			    operation_name 추가
+ * 2018/05/24   byunghunjung    model_site 컬럼 추가
+ * 2018/05/24   byunghunjung    operation_group_id 수정
+ * 2018/05/25   byunghunjung    daily_capacity 추가
+ * 2018/05/28   byunghunjung    Mkt Fcst 있는 모델만 조회되도록 수정
+ * 2018/05/30   byunghunjung    Mkt Fcst 이 없어질경우 BOM연결된 하위 모델도 조회되지 않도록 수정
+ * 2018/06/04   byunghunjung    daily_capacity isnull 조건 추가
+ * 2018/07/09   byunghunjung    40, 82 사업부는 SAELS SITE, PROJECT CODE 가 없으므로 - 처리함
+ * 2018/07/17   byunghunjung    Cell계획기준 전극미등록 모델 리스트 추가
+ * 2018/07/23   ygkim		    scp_mst_tact_time 조회 조건 	AND a.valid_yn      = 'Y' 삭제
+ * 2018/08/07   byunghunjung    Cell계획기준 전극미등록 모델 리스트 제거
+ * 2018/08/08   byunghunjung    TCO Cell 조회결과 제외
+ * 2018/09/17	hwyoon			Tact Time 조회항목 추가(item UOM, UOM Convert)
+ * 2018/09/19   ygkim			daily_capacity * a.uom_convert_value 추가
+ * 2018/10/04   ygkim           전극이 아닐 경우에만 MKT FCST 존재하는 모델만 조회
+ * 2018/10/24   hwyoon          operation 공정조회 쿼리 수정
+ * 2018/10/31	hwyoon          Big Data 수정일자 항목 추가
+ * 2018/11/01	hwyoon          전극일 시 BOM수요가 있는 것들만 입력화면에 출력
+ * 2018/11/07	hwyoon			vmi에 따라 MKT measure 조절
+ * 2018/11/12	hwyoon			due date 추가
+ * 2018/12/05	hwyoon			플랜예외 여부(except_yn) 추가
+ * 2018/12/14	hwyoon			라인 활성화 여부 체크
+ * 2018/12/21	hwyoon			T/T 등록필요리스트 조회 시 라인 비활성화 된 T/T 제거후 조회
+ * 2019/01/28	hwyoon			[PS02199094B] [전지 GSCM 대응 및 고도화] Big Data 로직 개선 전 데이터 화면출력 X
+ * 2019/04/09	hwyoon			[CSR ID:3966780] Tact Time 입력 시 Plant, Line 유효성 체크 로직 개선 - 수요아이템 체크 실시간 조회
+ * 2019/12/16	hwyoon			Lane Qty, Jumbo/Min 조회항목 추가
+ * 2021/03/09	PJG 			초기 쿼리문 실행 속도 개선
+ * 2022/11/07   jahn1501		PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - MKT FCST 조건 변경
+ * 
+ * EX)
+     EXEC SCP0020_GET_TACT_TIME @p_division_id='81', @p_plant_site_id='', @p_line_id='', @p_operation_group_id='P', @p_item_id='', @p_valid=NULL, @debug_mode='F'
+ * operation_group_id 화면에서 필수 선택으로 변경 (속도이슈)
+ */
+
+CREATE PROCEDURE [dbo].[SCP0020_GET_TACT_TIME]
+   @p_division_id		 NVARCHAR(MAX)
+  ,@p_plant_site_id		 NVARCHAR(MAX)
+  ,@p_line_id   		 NVARCHAR(MAX)
+  ,@p_operation_group_id NVARCHAR(MAX)
+  ,@p_item_id            NVARCHAR(MAX)
+  ,@p_valid				 NVARCHAR(1)
+  ,@debug_mode			 NVARCHAR(20)  ='F'
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+	declare @v_division_id NVARCHAR(MAX) = null
+	declare @v_item_id NVARCHAR(MAX) = null
+	set @v_division_id = @p_division_id;
+	set @v_item_id = @p_item_id;
+
+/********************************************************************************
+* 임시테이블만들기
+********************************************************************************/
+IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+	DROP TABLE #TblDynamicPivot_SCP0020_TMP
+
+CREATE TABLE #TblDynamicPivot_SCP0020_TMP (
+		 DIVISION_ID		NVARCHAR(60)	
+		,ITEM_ID			NVARCHAR(100)
+	);
+
+IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+	DROP TABLE #TblDynamicPivot_SCP0020_TMP1
+
+CREATE TABLE #TblDynamicPivot_SCP0020_TMP1 (
+		 DIVISION_ID		NVARCHAR(60)	
+		,ITEM_ID			NVARCHAR(100)
+	);
+
+-- FCST ITEM 조회
+/*
+WITH SUB AS
+(
+    SELECT aa.division_id	
+            , aa.item_id 	 
+            , min( aa.yyyymmdd ) as min_yyyymmdd                       
+    FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+            INNER JOIN ( 
+                        SELECT division_id, scm_site_id, vmi_yn 
+                        FROM   scm_mst_site  WITH (NOLOCK)
+   WHERE  1=1
+      "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME","1614016881","2","                  AND    valid_yn    = 'Y'
+                        ) mse
+  ON   aa.division_id = mse.division_id
+			--AND  aa.division_id = @v_division_id
+            AND  aa.scm_site_id = mse.scm_site_id 
+    WHERE  1=1
+	--AND	   aa.division_id = @v_division_id
+    AND    aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST')
+    AND    aa.yyyymmdd       >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+    AND    aa.yyyymmdd       <= CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+    AND    aa.qty            >  0
+    group by aa.division_id	
+            , aa.item_id 
+)
+INSERT INTO #TblDynamicPivot_SCP0020_TMP
+SELECT DISTINCT T.DIVISION_ID, T.ITEM_ID
+FROM 
+    ( SELECT B.DIVISION_ID,B.CHILD_ITEM_ID,MIN(X.MIN_YYYYMMDD) AS MIN_YYYYMMDD
+        FROM SUB X
+            ,DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B
+        WHERE X.DIVISION_ID  = B.DIVISION_ID
+        AND X.ITEM_ID      = B.MODEL_ID
+		AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+        GROUP BY B.DIVISION_ID,B.CHILD_ITEM_ID   
+        ) XX,
+        SCP_MST_FINAL_ITEM T WITH(NOLOCK)
+WHERE 1=1
+AND XX.DIVISION_ID   = T.DIVISION_ID
+AND XX.CHILD_ITEM_ID = T.ITEM_ID
+AND XX.DIVISION_ID=@v_division_id
+;
+*/
+
+
+-- 2021.03.09 PJG
+-- 실행속도 개선
+
+--INSERT INTO #TblDynamicPivot_SCP0020_TMP
+--SELECT distinct aa.division_id, T.ITEM_ID 
+--FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+--JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='Y' 
+--								   and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST') 
+--								   AND aa.scm_site_id = mse.scm_site_id 
+--								   AND aa.division_id = mse.division_id
+--JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+--JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON b.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+--WHERE 1=1
+--AND    aa.yyyymmdd       >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+--AND    aa.yyyymmdd       <= CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+--AND    aa.qty            >  0
+--and	   aa.DIVISION_ID = @v_division_id
+--AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+--group by aa.division_id	, T.ITEM_ID  
+;
+
+INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+SELECT distinct aa.division_id , B.child_item_id --, T.ITEM_ID 
+FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='Y' 
+								   --2022/11/07
+								   --and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST')
+								   and aa.measure         = CASE WHEN ISNULL(mse.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN mse.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(aa.attribute10, '') = '' THEN 'MKT_FCST' END 
+								   AND aa.scm_site_id = mse.scm_site_id 
+								   AND aa.division_id = mse.division_id
+JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+--JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+WHERE 1=1
+AND    aa.yyyymmdd       >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+AND    aa.yyyymmdd       <= CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+AND    aa.qty            >  0
+and	   aa.DIVISION_ID = @v_division_id
+AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+--group by aa.division_id	, B.child_item_id --, T.ITEM_ID  
+;
+
+INSERT INTO #TblDynamicPivot_SCP0020_TMP
+SELECT distinct aa.division_id , aa.ITEM_ID --, T.ITEM_ID 
+FROM   #TblDynamicPivot_SCP0020_TMP1 aa WITH (NOLOCK)
+JOIN SCP_MST_FINAL_ITEM T WITH(N"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME","1614016881","3","OLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and aa.ITEM_ID=t.ITEM_ID
+WHERE 1=1
+AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR aa.ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+;
+
+IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+	DROP TABLE #TblDynamicPivot_SCP0020_TMP1
+;
+
+
+SELECT 
+	   m.division_id
+      ,m.plant_site_id
+      ,dbo.FN_GET_SCM_SITE_DESCRIPTION (m.division_id, m.plant_site_id ) AS plant_site_name
+      ,m.operation_group_id
+      ,m.operation_id
+	  ,m.operation_id as operation_name
+	  ,m.model_site
+      ,m.item_id
+      ,isnull(m.nick_name,'-') as nick_name
+      ,m.line_id
+	  ,m.input_status
+      ,m.priority
+	  ,m.valid_yn
+      ,m.yield AS yield
+	  ,m.daily_capacity
+	  ,m.item_uom
+	  ,m.uom_convert_value
+	  ,m.tact_time
+	  ,n.tact_time AS big_tact_time
+	  ,n.actual_output
+	  ,n.actual_capacity
+	  ,n.from_actual_capacity
+	  ,n.to_actual_capacity
+	  ,n.effective_data_count	  	
+	  ,n.last_update_date big_last_update_date
+	  ,m.BOM_MIN_DUE_DATE
+      ,m.created_by
+      ,m.creation_date
+      ,m.last_updated_by
+      ,m.last_update_date
+      ,(CASE WHEN m.line_id IS NULL THEN '1' ELSE '2' END) AS line_order 
+	  ,m.except_yn
+	  ,(CASE WHEN m.operation_group_id='E' THEN m.LANE_QTY ELSE NULL END) AS LANE_QTY
+	  ,(CASE WHEN m.operation_group_id='E' AND m.tact_time IS NOT NULL AND m.LANE_QTY IS NOT NULL AND m.LANE_QTY<>'' THEN m.tact_time*m.LANE_QTY*60 ELSE NULL END) AS JUMBO_MIN
+FROM(
+			-- Tact Time Master 조회
+			SELECT distinct 
+				   a.division_id
+				  ,a.plant_site_id
+				  ,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id -- item_sn 테이블에 미등록된 site 경우 값을 가져올 수 없어 function을 통해 가져옴
+				  ,a.operation_id
+				  ,i.site_id AS model_site
+				  ,a.item_id
+				  ,i.nick_name
+				  ,a.line_id
+				  ,a.priority
+				  ,a.tact_time
+				  ,ROUND(a.yield*100,2) AS yield
+				  , ((1440 - isnull( d.loss_time_min,0) - isnull( d.setup_loss_time_min,0) ) *60 / a.tact_time ) * isnull(a.uom_convert_value,1) AS daily_capacity
+				  ,a.item_uom
+				  ,a.uom_convert_value
+				  ,a.valid_yn
+				  ,NULL AS BOM_MIN_DUE_DATE
+				  ,a.created_by
+				  ,a.creation_date
+				  ,a.last_updated_by
+				  ,a.last_update_date
+				  , 'M' as input_status
+				  , isnull((select top 1 'Y'
+							from SCP_MST_TACT_TIME_EXCEPT x 
+							INNER JOIN  (SELECT DISTINCT b.segment4, b.segment1
+										FROM   scm_adm_lookup_master_detail b WITH(NOLOCK)
+										WHERE  b.lookup_type = 'LOCATION_GROUP_ROUTE'
+										AND    b.valid_yn    = 'Y'
+										AND    b.segment3    = 'Y' -- Capa 세부 공정 여부						
+									) c ON a.operation_id = c.segment4
+							where x.division_id=a.division_id 
+							and x.plant_site_id=a.plant_site_id 
+							and x.operation_id=a.operation_id
+							and x.item_id=a.item_id
+							and x.line_id=a.line_id
+							--and x.use_yn='Y'
+							),'N') as except_yn
+					,ISNULL((SELECT COUNT(LS.ACTIVE_FLAG) FROM SCM_MST_LINE_SN LS 
+												  WHERE LS.COMPANY_ID=B.COMPANY_ID AND LS.DIVISION_ID=A.DIVISION_ID AND LS.SITE_ID=B.SITE_ID AND LS.PLANT_ID=B.PLANT_ID 
+												    AND LS.OPERATION_ID=A.OPERATION_ID AND LS.LINE_ID=A.LINE_ID AND LS.ACTIVE_FLAG='Y'), 0) ACTIVE_CNT
+					,a.attribute1 as LANE_QTY
+			 FROM scp_mst_tact_time a (NOLOCK) 
+			 LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a.division_id = i.division_id 
+														AND a.item_id = i.item_id 
+														AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+			 JOIN scm_mst_site b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id			 
+			 LEFT OUTER JOIN scp_mst_loss_time d ON a.division_id = d.division_id and a.plant_site_id = d.plant_site_id and a.operation_id = d.operation_id and a.line_id = d.line_id
+			WHERE 1=1 
+			  AND b.osp_yn        = 'N' -- 외주 packer 제외
+			  AND a.o"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME","1614016881","4","peration_id <> 'P5000' -- P5000 공정 제외
+			  AND a.division_id   =  @p_division_id
+			  AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+			  AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )		
+
+			UNION ALL
+			-- Project Route 화면에 등록된 모델중 Tact Time Master에 없는 모델 조회
+			-- scp_mst_tact_time 에 등록되면 리스트에서 제외
+			SELECT DISTINCT
+				   a.division_id
+				  ,a.plant_site_id
+				  ,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id -- item_sn 테이블에 미등록된 site 경우 값을 가져올 수 없어 function을 통해 가져옴
+				  ,(SELECT TOP 1 substring(X.scp_flow_id,1,5) FROM scm_mst_item_sn X WITH (NOLOCK) WHERE X.division_id = A.division_id AND X.item_id=A.item_id) AS operation_id
+				  --,substring(i.scp_flow_id,1,5) AS operation_id
+				  --,i.scp_flow_id AS operation_id
+				  ,i.site_id AS model_site
+				  ,a.item_id
+				  ,i.nick_name
+				  ,null AS line_id
+				  ,null AS priority
+				  ,null AS tact_time
+				  ,null AS yield
+				  ,null AS daily_capacity
+				  ,null AS item_uom
+				  ,null AS uom_convert_value
+				  ,'Y' AS valid_yn
+				  ,CONVERT(CHAR(10), C.MIN_DUE_DATE, 23) AS BOM_MIN_DUE_DATE
+				  ,null AS created_by
+				  ,null AS creation_date
+				  ,null AS last_updated_by
+				  ,null AS last_update_date
+				  , 'I' as input_status
+				  ,null AS except_yn
+				  ,1 AS ACTIVE_CNT
+				  ,null as LANE_QTY
+			FROM scm_mst_site_item_priority a (NOLOCK)
+			LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a.division_id = i.division_id 
+														AND a.item_id = i.item_id 
+														AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+			JOIN SCM_MST_SITE b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id
+			LEFT JOIN scp_mst_final_item C (NOLOCK) ON a.division_id = C.division_id and a.item_id = C.item_id and C.fcst_yn = upper('Y')
+			WHERE 1=1 
+			  AND a.valid_yn    = 'Y'
+			  AND b.osp_yn      = 'N' -- 외주 packer 제외
+			  AND NOT EXISTS ( select 'X' from scp_mst_tact_time n (NOLOCK) 
+								JOIN SCM_MST_LINE_SN LS ON LS.COMPANY_ID=B.COMPANY_ID AND LS.DIVISION_ID=N.DIVISION_ID AND LS.SITE_ID=B.SITE_ID AND LS.PLANT_ID=B.PLANT_ID
+																		AND LS.OPERATION_ID=N.OPERATION_ID AND LS.LINE_ID=N.LINE_ID AND LS.ACTIVE_FLAG='Y'
+								where n.division_id = a.division_id 
+								and n.plant_site_id = a.plant_site_id 
+								and n.item_id = a.item_id )
+			  -- MKT FCST 존재하는 모델만 조회(전극이 아닐 경우에만) -> 전극도 포함
+			  AND EXISTS ( SELECT 'X'
+								   FROM #TblDynamicPivot_SCP0020_TMP F WITH(NOLOCK)
+								  WHERE F.DIVISION_ID=A.DIVISION_ID
+								    AND F.ITEM_ID=A.ITEM_ID
+							   )
+			  AND a.division_id = @p_division_id
+			  AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+			  AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )	
+			 )m
+ LEFT OUTER JOIN scp_mst_tact_time_big n (NOLOCK) ON m.division_id  = n.division_id
+												AND m.plant_site_id = n.plant_site_id
+												AND m.item_id       = n.item_id
+												and m.operation_id  = n.operation_id
+												and m.line_id       = n.line_id
+												and CONVERT(CHAR(8), n.last_update_date, 112)>='20181101' -- Big Data 로직 개선전 제외
+WHERE 1=1
+AND m.division_id = @p_division_id
+AND m.operation_group_id = @p_operation_group_id
+AND ( ( @p_valid   IS NULL OR  @p_valid   = '' ) OR m.valid_yn   IN (SELECT token FROM dbo.String_Split(@p_valid  ,',')) )
+AND ( ( @p_line_id IS NULL OR  @p_line_id = '' ) OR m.line_id    IN (SELECT token FROM dbo.String_Split(@p_line_id  ,',')) )
+AND substring(m.item_id,2,1) = CASE WHEN m.operation_group_id = 'A' Then"
+"2026-05-01 00:00:00.537","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME","1614016881","1","
+/*
+ * Program ID   : SCP0020_GET_TACT_TIME
+ * Description  : TACT TIME 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2018/03/16   byunghunjung    Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/05/17   byunghunjung    전극 제외
+ * 2018/05/23   pjs			    big tact time 관련내용 추가
+ * 2018/05/23   pjs			    operation_name 추가
+ * 2018/05/24   byunghunjung    model_site 컬럼 추가
+ * 2018/05/24   byunghunjung    operation_group_id 수정
+ * 2018/05/25   byunghunjung    daily_capacity 추가
+ * 2018/05/28   byunghunjung    Mkt Fcst 있는 모델만 조회되도록 수정
+ * 2018/05/30   byunghunjung    Mkt Fcst 이 없어질경우 BOM연결된 하위 모델도 조회되지 않도록 수정
+ * 2018/06/04   byunghunjung    daily_capacity isnull 조건 추가
+ * 2018/07/09   byunghunjung    40, 82 사업부는 SAELS SITE, PROJECT CODE 가 없으므로 - 처리함
+ * 2018/07/17   byunghunjung    Cell계획기준 전극미등록 모델 리스트 추가
+ * 2018/07/23   ygkim		    scp_mst_tact_time 조회 조건 	AND a.valid_yn      = 'Y' 삭제
+ * 2018/08/07   byunghunjung    Cell계획기준 전극미등록 모델 리스트 제거
+ * 2018/08/08   byunghunjung    TCO Cell 조회결과 제외
+ * 2018/09/17	hwyoon			Tact Time 조회항목 추가(item UOM, UOM Convert)
+ * 2018/09/19   ygkim			daily_capacity * a.uom_convert_value 추가
+ * 2018/10/04   ygkim           전극이 아닐 경우에만 MKT FCST 존재하는 모델만 조회
+ * 2018/10/24   hwyoon          operation 공정조회 쿼리 수정
+ * 2018/10/31	hwyoon          Big Data 수정일자 항목 추가
+ * 2018/11/01	hwyoon          전극일 시 BOM수요가 있는 것들만 입력화면에 출력
+ * 2018/11/07	hwyoon			vmi에 따라 MKT measure 조절
+ * 2018/11/12	hwyoon			due date 추가
+ * 2018/12/05	hwyoon			플랜예외 여부(except_yn) 추가
+ * 2018/12/14	hwyoon			라인 활성화 여부 체크
+ * 2018/12/21	hwyoon			T/T 등록필요리스트 조회 시 라인 비활성화 된 T/T 제거후 조회
+ * 2019/01/28	hwyoon			[PS02199094B] [전지 GSCM 대응 및 고도화] Big Data 로직 개선 전 데이터 화면출력 X
+ * 2019/04/09	hwyoon			[CSR ID:3966780] Tact Time 입력 시 Plant, Line 유효성 체크 로직 개선 - 수요아이템 체크 실시간 조회
+ * 2019/12/16	hwyoon			Lane Qty, Jumbo/Min 조회항목 추가
+ * 2021/03/09	PJG 			초기 쿼리문 실행 속도 개선
+ * 2022/11/07   jahn1501		PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - MKT FCST 조건 변경
+ * 
+ * EX)
+     EXEC SCP0020_GET_TACT_TIME @p_division_id='81', @p_plant_site_id='', @p_line_id='', @p_operation_group_id='P', @p_item_id='', @p_valid=NULL, @debug_mode='F'
+ * operation_group_id 화면에서 필수 선택으로 변경 (속도이슈)
+ */
+
+CREATE PROCEDURE [dbo].[SCP0020_GET_TACT_TIME]
+   @p_division_id		 NVARCHAR(MAX)
+  ,@p_plant_site_id		 NVARCHAR(MAX)
+  ,@p_line_id   		 NVARCHAR(MAX)
+  ,@p_operation_group_id NVARCHAR(MAX)
+  ,@p_item_id            NVARCHAR(MAX)
+  ,@p_valid				 NVARCHAR(1)
+  ,@debug_mode			 NVARCHAR(20)  ='F'
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+	declare @v_division_id NVARCHAR(MAX) = null
+	declare @v_item_id NVARCHAR(MAX) = null
+	set @v_division_id = @p_division_id;
+	set @v_item_id = @p_item_id;
+
+/********************************************************************************
+* 임시테이블만들기
+********************************************************************************/
+IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+	DROP TABLE #TblDynamicPivot_SCP0020_TMP
+
+CREATE TABLE #TblDynamicPivot_SCP0020_TMP (
+		 DIVISION_ID		NVARCHAR(60)	
+		,ITEM_ID			NVARCHAR(100)
+	);
+
+IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+	DROP TABLE #TblDynamicPivot_SCP0020_TMP1
+
+CREATE TABLE #TblDynamicPivot_SCP0020_TMP1 (
+		 DIVISION_ID		NVARCHAR(60)	
+		,ITEM_ID			NVARCHAR(100)
+	);
+
+-- FCST ITEM 조회
+/*
+WITH SUB AS
+(
+    SELECT aa.division_id	
+            , aa.item_id 	 
+            , min( aa.yyyymmdd ) as min_yyyymmdd                       
+    FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+            INNER JOIN ( 
+                        SELECT division_id, scm_site_id, vmi_yn 
+                        FROM   scm_mst_site  WITH (NOLOCK)
+   WHERE  1=1
+      "
+"2026-05-01 00:00:00.537","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME","1614016881","2","                  AND    valid_yn    = 'Y'
+                        ) mse
+  ON   aa.division_id = mse.division_id
+			--AND  aa.division_id = @v_division_id
+            AND  aa.scm_site_id = mse.scm_site_id 
+    WHERE  1=1
+	--AND	   aa.division_id = @v_division_id
+    AND    aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST')
+    AND    aa.yyyymmdd       >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+    AND    aa.yyyymmdd       <= CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+    AND    aa.qty            >  0
+    group by aa.division_id	
+            , aa.item_id 
+)
+INSERT INTO #TblDynamicPivot_SCP0020_TMP
+SELECT DISTINCT T.DIVISION_ID, T.ITEM_ID
+FROM 
+    ( SELECT B.DIVISION_ID,B.CHILD_ITEM_ID,MIN(X.MIN_YYYYMMDD) AS MIN_YYYYMMDD
+        FROM SUB X
+            ,DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B
+        WHERE X.DIVISION_ID  = B.DIVISION_ID
+        AND X.ITEM_ID      = B.MODEL_ID
+		AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+        GROUP BY B.DIVISION_ID,B.CHILD_ITEM_ID   
+        ) XX,
+        SCP_MST_FINAL_ITEM T WITH(NOLOCK)
+WHERE 1=1
+AND XX.DIVISION_ID   = T.DIVISION_ID
+AND XX.CHILD_ITEM_ID = T.ITEM_ID
+AND XX.DIVISION_ID=@v_division_id
+;
+*/
+
+
+-- 2021.03.09 PJG
+-- 실행속도 개선
+
+--INSERT INTO #TblDynamicPivot_SCP0020_TMP
+--SELECT distinct aa.division_id, T.ITEM_ID 
+--FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+--JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='Y' 
+--								   and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST') 
+--								   AND aa.scm_site_id = mse.scm_site_id 
+--								   AND aa.division_id = mse.division_id
+--JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+--JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON b.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+--WHERE 1=1
+--AND    aa.yyyymmdd       >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+--AND    aa.yyyymmdd       <= CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+--AND    aa.qty            >  0
+--and	   aa.DIVISION_ID = @v_division_id
+--AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+--group by aa.division_id	, T.ITEM_ID  
+;
+
+INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+SELECT distinct aa.division_id , B.child_item_id --, T.ITEM_ID 
+FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='Y' 
+								   --2022/11/07
+								   --and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST')
+								   and aa.measure         = CASE WHEN ISNULL(mse.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN mse.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(aa.attribute10, '') = '' THEN 'MKT_FCST' END 
+								   AND aa.scm_site_id = mse.scm_site_id 
+								   AND aa.division_id = mse.division_id
+JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+--JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+WHERE 1=1
+AND    aa.yyyymmdd       >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+AND    aa.yyyymmdd       <= CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+AND    aa.qty            >  0
+and	   aa.DIVISION_ID = @v_division_id
+AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+--group by aa.division_id	, B.child_item_id --, T.ITEM_ID  
+;
+
+INSERT INTO #TblDynamicPivot_SCP0020_TMP
+SELECT distinct aa.division_id , aa.ITEM_ID --, T.ITEM_ID 
+FROM   #TblDynamicPivot_SCP0020_TMP1 aa WITH (NOLOCK)
+JOIN SCP_MST_FINAL_ITEM T WITH(N"
+"2026-05-01 00:00:00.537","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME","1614016881","3","OLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and aa.ITEM_ID=t.ITEM_ID
+WHERE 1=1
+AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR aa.ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+;
+
+IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+	DROP TABLE #TblDynamicPivot_SCP0020_TMP1
+;
+
+
+SELECT 
+	   m.division_id
+      ,m.plant_site_id
+      ,dbo.FN_GET_SCM_SITE_DESCRIPTION (m.division_id, m.plant_site_id ) AS plant_site_name
+      ,m.operation_group_id
+      ,m.operation_id
+	  ,m.operation_id as operation_name
+	  ,m.model_site
+      ,m.item_id
+      ,isnull(m.nick_name,'-') as nick_name
+      ,m.line_id
+	  ,m.input_status
+      ,m.priority
+	  ,m.valid_yn
+      ,m.yield AS yield
+	  ,m.daily_capacity
+	  ,m.item_uom
+	  ,m.uom_convert_value
+	  ,m.tact_time
+	  ,n.tact_time AS big_tact_time
+	  ,n.actual_output
+	  ,n.actual_capacity
+	  ,n.from_actual_capacity
+	  ,n.to_actual_capacity
+	  ,n.effective_data_count	  	
+	  ,n.last_update_date big_last_update_date
+	  ,m.BOM_MIN_DUE_DATE
+      ,m.created_by
+      ,m.creation_date
+      ,m.last_updated_by
+      ,m.last_update_date
+      ,(CASE WHEN m.line_id IS NULL THEN '1' ELSE '2' END) AS line_order 
+	  ,m.except_yn
+	  ,(CASE WHEN m.operation_group_id='E' THEN m.LANE_QTY ELSE NULL END) AS LANE_QTY
+	  ,(CASE WHEN m.operation_group_id='E' AND m.tact_time IS NOT NULL AND m.LANE_QTY IS NOT NULL AND m.LANE_QTY<>'' THEN m.tact_time*m.LANE_QTY*60 ELSE NULL END) AS JUMBO_MIN
+FROM(
+			-- Tact Time Master 조회
+			SELECT distinct 
+				   a.division_id
+				  ,a.plant_site_id
+				  ,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id -- item_sn 테이블에 미등록된 site 경우 값을 가져올 수 없어 function을 통해 가져옴
+				  ,a.operation_id
+				  ,i.site_id AS model_site
+				  ,a.item_id
+				  ,i.nick_name
+				  ,a.line_id
+				  ,a.priority
+				  ,a.tact_time
+				  ,ROUND(a.yield*100,2) AS yield
+				  , ((1440 - isnull( d.loss_time_min,0) - isnull( d.setup_loss_time_min,0) ) *60 / a.tact_time ) * isnull(a.uom_convert_value,1) AS daily_capacity
+				  ,a.item_uom
+				  ,a.uom_convert_value
+				  ,a.valid_yn
+				  ,NULL AS BOM_MIN_DUE_DATE
+				  ,a.created_by
+				  ,a.creation_date
+				  ,a.last_updated_by
+				  ,a.last_update_date
+				  , 'M' as input_status
+				  , isnull((select top 1 'Y'
+							from SCP_MST_TACT_TIME_EXCEPT x 
+							INNER JOIN  (SELECT DISTINCT b.segment4, b.segment1
+										FROM   scm_adm_lookup_master_detail b WITH(NOLOCK)
+										WHERE  b.lookup_type = 'LOCATION_GROUP_ROUTE'
+										AND    b.valid_yn    = 'Y'
+										AND    b.segment3    = 'Y' -- Capa 세부 공정 여부						
+									) c ON a.operation_id = c.segment4
+							where x.division_id=a.division_id 
+							and x.plant_site_id=a.plant_site_id 
+							and x.operation_id=a.operation_id
+							and x.item_id=a.item_id
+							and x.line_id=a.line_id
+							--and x.use_yn='Y'
+							),'N') as except_yn
+					,ISNULL((SELECT COUNT(LS.ACTIVE_FLAG) FROM SCM_MST_LINE_SN LS 
+												  WHERE LS.COMPANY_ID=B.COMPANY_ID AND LS.DIVISION_ID=A.DIVISION_ID AND LS.SITE_ID=B.SITE_ID AND LS.PLANT_ID=B.PLANT_ID 
+												    AND LS.OPERATION_ID=A.OPERATION_ID AND LS.LINE_ID=A.LINE_ID AND LS.ACTIVE_FLAG='Y'), 0) ACTIVE_CNT
+					,a.attribute1 as LANE_QTY
+			 FROM scp_mst_tact_time a (NOLOCK) 
+			 LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a.division_id = i.division_id 
+														AND a.item_id = i.item_id 
+														AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+			 JOIN scm_mst_site b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id			 
+			 LEFT OUTER JOIN scp_mst_loss_time d ON a.division_id = d.division_id and a.plant_site_id = d.plant_site_id and a.operation_id = d.operation_id and a.line_id = d.line_id
+			WHERE 1=1 
+			  AND b.osp_yn        = 'N' -- 외주 packer 제외
+			  AND a.o"
+"2026-05-01 00:00:00.537","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME","1614016881","4","peration_id <> 'P5000' -- P5000 공정 제외
+			  AND a.division_id   =  @p_division_id
+			  AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+			  AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )		
+
+			UNION ALL
+			-- Project Route 화면에 등록된 모델중 Tact Time Master에 없는 모델 조회
+			-- scp_mst_tact_time 에 등록되면 리스트에서 제외
+			SELECT DISTINCT
+				   a.division_id
+				  ,a.plant_site_id
+				  ,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id -- item_sn 테이블에 미등록된 site 경우 값을 가져올 수 없어 function을 통해 가져옴
+				  ,(SELECT TOP 1 substring(X.scp_flow_id,1,5) FROM scm_mst_item_sn X WITH (NOLOCK) WHERE X.division_id = A.division_id AND X.item_id=A.item_id) AS operation_id
+				  --,substring(i.scp_flow_id,1,5) AS operation_id
+				  --,i.scp_flow_id AS operation_id
+				  ,i.site_id AS model_site
+				  ,a.item_id
+				  ,i.nick_name
+				  ,null AS line_id
+				  ,null AS priority
+				  ,null AS tact_time
+				  ,null AS yield
+				  ,null AS daily_capacity
+				  ,null AS item_uom
+				  ,null AS uom_convert_value
+				  ,'Y' AS valid_yn
+				  ,CONVERT(CHAR(10), C.MIN_DUE_DATE, 23) AS BOM_MIN_DUE_DATE
+				  ,null AS created_by
+				  ,null AS creation_date
+				  ,null AS last_updated_by
+				  ,null AS last_update_date
+				  , 'I' as input_status
+				  ,null AS except_yn
+				  ,1 AS ACTIVE_CNT
+				  ,null as LANE_QTY
+			FROM scm_mst_site_item_priority a (NOLOCK)
+			LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a.division_id = i.division_id 
+														AND a.item_id = i.item_id 
+														AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+			JOIN SCM_MST_SITE b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id
+			LEFT JOIN scp_mst_final_item C (NOLOCK) ON a.division_id = C.division_id and a.item_id = C.item_id and C.fcst_yn = upper('Y')
+			WHERE 1=1 
+			  AND a.valid_yn    = 'Y'
+			  AND b.osp_yn      = 'N' -- 외주 packer 제외
+			  AND NOT EXISTS ( select 'X' from scp_mst_tact_time n (NOLOCK) 
+								JOIN SCM_MST_LINE_SN LS ON LS.COMPANY_ID=B.COMPANY_ID AND LS.DIVISION_ID=N.DIVISION_ID AND LS.SITE_ID=B.SITE_ID AND LS.PLANT_ID=B.PLANT_ID
+																		AND LS.OPERATION_ID=N.OPERATION_ID AND LS.LINE_ID=N.LINE_ID AND LS.ACTIVE_FLAG='Y'
+								where n.division_id = a.division_id 
+								and n.plant_site_id = a.plant_site_id 
+								and n.item_id = a.item_id )
+			  -- MKT FCST 존재하는 모델만 조회(전극이 아닐 경우에만) -> 전극도 포함
+			  AND EXISTS ( SELECT 'X'
+								   FROM #TblDynamicPivot_SCP0020_TMP F WITH(NOLOCK)
+								  WHERE F.DIVISION_ID=A.DIVISION_ID
+								    AND F.ITEM_ID=A.ITEM_ID
+							   )
+			  AND a.division_id = @p_division_id
+			  AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+			  AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )	
+			 )m
+ LEFT OUTER JOIN scp_mst_tact_time_big n (NOLOCK) ON m.division_id  = n.division_id
+												AND m.plant_site_id = n.plant_site_id
+												AND m.item_id       = n.item_id
+												and m.operation_id  = n.operation_id
+												and m.line_id       = n.line_id
+												and CONVERT(CHAR(8), n.last_update_date, 112)>='20181101' -- Big Data 로직 개선전 제외
+WHERE 1=1
+AND m.division_id = @p_division_id
+AND m.operation_group_id = @p_operation_group_id
+AND ( ( @p_valid   IS NULL OR  @p_valid   = '' ) OR m.valid_yn   IN (SELECT token FROM dbo.String_Split(@p_valid  ,',')) )
+AND ( ( @p_line_id IS NULL OR  @p_line_id = '' ) OR m.line_id    IN (SELECT token FROM dbo.String_Split(@p_line_id  ,',')) )
+AND substring(m.item_id,2,1) = CASE WHEN m.operation_group_id = 'A' Then"
+"2026-05-01 00:00:00.537","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME","1614016881","5"," 'C' ELSE substring(m.item_id,2,1)  END  --TCO Cell조회불가
+AND m.ACTIVE_CNT>0
+ORDER BY line_order, m.division_id, m.plant_site_id, m.operation_id, m.line_id,m.model_site, m.item_id
+;
+
+/********************************************************************************
+* 임시테이블만들기
+********************************************************************************/
+IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+	DROP TABLE #TblDynamicPivot_SCP0020_TMP
+;
+
+END
+"
+"2026-05-01 00:00:00.537","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","1","
+
+/*
+ * Program ID   : SCP0020_GET_TACT_TIME_OSP
+ * Description  : TACT TIME OSP 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2020/02/03   hwyoon			Initial Release [] 전지 GSCM(SCP) SM 운영 - [C20200116-000114] ESS 외주 Packer Line 계획 수립
+ * 2020/10/28   khj79           PJ20202001 LG화학 전지. 공급 대응력 향상을 위한 SCM 관리 체계 개선 : RACK
+ * 2021/10/05	khj79	       [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - W/S AS UI 변경
+ * 2022/11/07   jahn1501		PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - MKT FCST 조건 변경
+ * 2026/03/23   YMH				E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경	
+ */
+
+CREATE PROCEDURE [dbo].[SCP0020_GET_TACT_TIME_OSP]
+   @p_division_id		 NVARCHAR(MAX)
+  ,@p_plant_site_id		 NVARCHAR(MAX)
+  ,@p_line_id   		 NVARCHAR(MAX)
+  ,@p_operation_group_id NVARCHAR(MAX)
+  ,@p_item_id            NVARCHAR(MAX)
+  ,@debug_mode			 NVARCHAR(20)  ='F'
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+	declare @v_division_id NVARCHAR(MAX) = null
+	declare @v_item_id NVARCHAR(MAX) = null
+	set @v_division_id = @p_division_id;
+	set @v_item_id = @p_item_id;
+
+    DECLARE @v_cur_monday        NVARCHAR(8) = CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112); -- 당주 월요일 YYYYMMDD
+    DECLARE @v_end_monday        NVARCHAR(8) = NULL;
+    --DECLARE @v_end_monday        NVARCHAR(8) = CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112); -- 월요일 YYYYMMDD
+	
+    SELECT @v_end_monday = MAX(horizon_end_date)
+	FROM   dbo.scm_mst_plan p WITH(NOLOCK)
+	WHERE  p.plan_cycle  = 'WEEKLY'
+	AND    p.plan_name   = @v_cur_monday
+	GROUP BY plan_name
+	                                           
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP
+
+	CREATE TABLE #TblDynamicPivot_SCP0020_TMP (
+			 DIVISION_ID		NVARCHAR(60)	
+			,ITEM_ID			NVARCHAR(100)
+		);
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP1
+	
+	CREATE TABLE #TblDynamicPivot_SCP0020_TMP1 (
+			 DIVISION_ID		NVARCHAR(60)	
+			,ITEM_ID			NVARCHAR(100)
+		);
+
+
+	-- 2021.03.09 PJG
+	-- 실행속도 개선
+
+	--INSERT INTO #TblDynamicPivot_SCP0020_TMP
+	--SELECT distinct aa.division_id, T.ITEM_ID 
+	--FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+	--JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='Y' 
+	--								   and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST') 
+	--								   AND aa.scm_site_id = mse.scm_site_id 
+	--								   AND aa.division_id = mse.division_id
+	--JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+	--JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON b.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+	--WHERE 1=1
+	--AND    aa.yyyymmdd       >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.yyyymmdd       <= CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.qty            >  0
+	--and	   aa.DIVISION_ID = @v_division_id
+	--AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	--group by aa.division_id	, T.ITEM_ID  
+	--;
+
+
+
+	-- 속도 이슈로 수정 함 : SCM_MST_MODEL_FINAL_ITEM_BOM_V 를 조회 후 조인으로 변경 함
+	--수정 전
+	--INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+	--SELECT distinct aa.division_id , B.child_item_id --, T.ITEM_ID 
+	--FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+	--JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='"
+"2026-05-01 00:00:00.537","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","2","Y' 
+	--									--2021/10/05 : W/S AS
+	--								   --and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST') 
+	--								   and aa.measure     = IIF(ISNULL(mse.OPERATION_GROUP, '') = 'W', 'AS_In_Req', IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST'))
+	--								   AND aa.scm_site_id = mse.scm_site_id 
+	--								   AND aa.division_id = mse.division_id
+	--JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+	----JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+	--WHERE 1=1
+	--AND    aa.yyyymmdd       >= @v_cur_monday --CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.yyyymmdd       <= @v_end_monday --CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.qty            >  0
+	--and	   aa.DIVISION_ID = @v_division_id
+	--AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	----group by aa.division_id	, B.child_item_id --, T.ITEM_ID  
+	--;
+
+	INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+	SELECT DISTINCT A.DIVISION_ID , B.CHILD_ITEM_ID
+	FROM (SELECT distinct  aa.division_id , aa.ITEM_ID
+			FROM DM_PLN_MKT_FCST AA WITH (NOLOCK)
+
+			JOIN SCM_MST_SITE mse with(nolock) 
+			   on mse.VALID_YN='Y'
+			  --2022/11/07			   
+			  --and aa.measure     = IIF(ISNULL(mse.OPERATION_GROUP, '') = 'W', 'AS_In_Req', IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST'))
+			  and aa.measure     = CASE WHEN ISNULL(mse.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN mse.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(AA.attribute10, '') = '' THEN 'MKT_FCST' END
+			  AND aa.scm_site_id = mse.scm_site_id 
+			  AND aa.division_id = mse.division_id
+			WHERE 1=1
+			  AND aa.yyyymmdd       >= @v_cur_monday
+			  AND aa.yyyymmdd       <= @v_end_monday
+			  AND aa.qty            >  0
+			  and aa.DIVISION_ID =  @v_division_id
+		) a
+	-- E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경으로 인해 주석처리
+	-- JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON a.DIVISION_ID = b.division_id and a.ITEM_ID=b.MODEL_ID
+	-- E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경신규로직 추가 시작
+	JOIN
+	(
+		SELECT b.division_id,
+			b.model_id,
+			b.child_item_id
+		FROM ( SELECT x.* 
+				--FROM dbo.scm_mst_bom_sn x WITH(NOLOCK)	
+				FROM dbo.scm_mst_bom_sn_V x WITH(NOLOCK)	--2021-03-09	SCP 대치 BOM 적용
+					INNER JOIN dbo.scm_mst_item_sn i WITH(NOLOCK)
+					ON  x.child_division_id = i.division_id
+					AND x.child_item_id     = i.item_id
+					AND x.child_company_id  = i.company_id -- A002 빈강 추가 따른 조건 추가
+					AND x.child_site_id     = i.site_id
+					AND i.active_flag       = 'Y'           
+				WHERE 1=1
+			) b
+			, scm_mst_final_item_v v WITH(NOLOCK)
+			, scm_mst_item_sn mi WITH(NOLOCK)   -- 20210219 C20210219-000229  Company 별로 유효한 Model만 적용
+		WHERE 1=1
+		AND b.division_id   = v.division_id
+		AND b.child_item_id = v.item_id
+
+		-- 20210219 C20210219-000229  Company 별로 유효한 Model만 적용
+		AND b.division_id   = mi.division_id
+		AND b.model_id      = mi.item_id
+		AND b.company_id    = mi.company_id  -- A002 빈강 추가 따른 조건 추가
+		AND b.site_id       = mi.site_id
+		AND mI.active_flag  = 'Y'
+		GROUP BY b.division_id, b.model_id, b.child_item_id
+	) AS B ON A.DIVISION_ID = B.DIVISION_ID AND A.ITEM_ID=B.MODEL_ID
+	-- E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경신규로직 추가 끝
+
+
+;
+
+
+
+	;
+
+	
+	INSERT INTO #TblDynamicPivot_SCP0020_TMP
+	SELECT distinct aa.division_id , aa.ITEM_ID --, T.ITEM_ID 
+	FROM   #TblDynamicPivot_SCP0020_TMP1 aa WITH (NOLOCK)
+	JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and aa.ITEM_ID=t.ITEM_ID
+	WHERE 1=1
+	AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR aa.ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	;
+	
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+		DROP TABLE #TblDynamicPivo"
+"2026-05-01 00:00:00.537","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","3","t_SCP0020_TMP1
+	;
+
+
+	SELECT A.DIVISION_ID
+			, A.SITE_DESCRIPTION
+			, A.ITEM_ID
+			, A.NICK_NAME
+			, A.LINE_ID
+			, A.PRIORITY
+			, A.YIELD
+			, A.DAILY_CAPACITY
+			, A.TACT_TIME
+			, A.CREATED_BY
+			, A.CREATION_DATE
+			, A.LAST_UPDATED_BY
+			, A.LAST_UPDATE_DATE
+			, A.OPERATION_ID
+			, A.PLANT_SITE_ID
+			, A.INPUT_STATUS
+			, A.operation_group_id
+			, (CASE WHEN A.line_id IS NULL THEN '1' ELSE '2' END) AS line_order 
+			, A.except_yn
+			, A.OSP_YN
+	FROM 
+	(
+		-- Tact Time OSP Master 조회
+		SELECT A.DIVISION_ID
+				, S.SITE_DESCRIPTION
+				, A.ITEM_ID
+				, (SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-'  WHEN X.NICK_NAME = ''    THEN '-'  ELSE X.NICK_NAME END) 
+				   FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  WHERE  X.ITEM_ID  = A.ITEM_ID) AS NICK_NAME
+				, A.LINE_ID
+				, A.PRIORITY
+				, ROUND(A.YIELD*100,2) AS YIELD
+				, A.DAILY_CAPACITY
+				, A.TACT_TIME
+				, A.CREATED_BY
+				, A.CREATION_DATE
+				, A.LAST_UPDATED_BY
+				, A.LAST_UPDATE_DATE
+				, A.OPERATION_ID
+				, A.PLANT_SITE_ID
+				, 'M' AS INPUT_STATUS
+				,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id
+				,isnull((select top 1 'Y'
+							from SCP_MST_TACT_TIME_EXCEPT_OSP x 
+							where x.division_id=a.division_id 
+							and x.plant_site_id=a.plant_site_id 
+							and x.operation_id=a.operation_id
+							and x.item_id=a.item_id
+							and x.line_id=a.line_id
+							),'N') as except_yn
+				, S.OSP_YN
+		FROM SCP_MST_TACT_TIME_OSP A WITH(NOLOCK)
+		JOIN SCM_MST_SITE S WITH(NOLOCK) ON S.DIVISION_ID=A.DIVISION_ID AND S.SCM_SITE_ID=A.PLANT_SITE_ID
+		WHERE 1=1 
+		AND a.division_id   =  @p_division_id
+		AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+		AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )		
+		UNION ALL
+		-- Project Route 화면에 등록된 모델중 Tact Time Master에 없는 모델 조회
+		SELECT DISTINCT
+			a.division_id
+			, b.SITE_DESCRIPTION
+			, a.ITEM_ID
+			, (SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-'  WHEN X.NICK_NAME = ''    THEN '-'  ELSE X.NICK_NAME END) 
+				   FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  WHERE  X.ITEM_ID  = A.ITEM_ID) AS NICK_NAME
+			, NULL as LINE_ID
+			, NULL AS PRIORITY
+			, NULL AS YIELD
+			, NULL AS DAILY_CAPACITY
+			, NULL AS TACT_TIME
+			, NULL AS CREATED_BY
+			, NULL AS CREATION_DATE
+			, NULL AS LAST_UPDATED_BY
+			, NULL AS LAST_UPDATE_DATE
+			-- PJ20202001 : RACK 구분 추가
+			, CASE WHEN ISNULL(C.ATTRIBUTE3,'N') = 'Y' THEN B.PLANT_ID + '_R1'
+			       ELSE B.PLANT_ID
+			  END           AS OPERATION_ID
+			, A.PLANT_SITE_ID
+			, 'I' AS INPUT_STATUS
+			,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id
+			, 'N' AS except_yn
+			, B.OSP_YN
+		FROM scm_mst_site_item_priority a (NOLOCK)
+		LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a.division_id = i.division_id 
+												AND a.item_id = i.item_id 
+												AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+		JOIN SCM_MST_SITE b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id
+		LEFT JOIN scp_mst_final_item C (NOLOCK) ON a.division_id = C.division_id and a.item_id = C.item_id --and C.fcst_yn = upper('Y')
+		WHERE 1=1 
+		AND a.valid_yn    = 'Y'
+		AND b.osp_yn      = 'Y' -- 외주 packer
+		and isnull(b.ATTRIBUTE1,'N') ='Y' --라인 대상
+		AND NOT EXISTS ( select 'X' from SCP_MST_TACT_TIME_OSP n (NOLOCK) 
+						where n.division_id = a.division_id 
+						and n.plant_site_id = a.plant_site_id 
+						and n.item_id = a.item_id )
+		-- MKT FCST 존재하는 모델만 조회(전극이 아닐 경우에만) -> 전극도 포함
+		AND EXISTS ( SELECT 'X'
+							FROM #TblDynamicPivot_SCP0020_TMP F WITH(NOLOCK)
+							WHERE F.DIVISION_ID=A.DIVISION_ID
+							AND F.ITEM_ID=A.ITEM_ID
+						)
+		A"
+"2026-05-01 00:00:00.537","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","4","ND a.division_id = @p_division_id
+		AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+		AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )		
+	) A
+	WHERE 1=1
+	AND A.operation_group_id = @p_operation_group_id
+	AND ( ( @p_line_id IS NULL OR  @p_line_id = '' ) OR A.line_id    IN (SELECT token FROM dbo.String_Split(@p_line_id  ,',')) )
+	ORDER BY line_order, A.division_id, A.plant_site_id, A.line_id, A.item_id
+
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP
+
+END
+
+"
+"2026-08-05 00:00:01.597","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","1","
+
+/*
+ * Program ID   : SCP0020_GET_TACT_TIME_OSP
+ * Description  : TACT TIME OSP 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2020/02/03   hwyoon			Initial Release [] 전지 GSCM(SCP) SM 운영 - [C20200116-000114] ESS 외주 Packer Line 계획 수립
+ * 2020/10/28   khj79           PJ20202001 LG화학 전지. 공급 대응력 향상을 위한 SCM 관리 체계 개선 : RACK
+ * 2021/10/05	khj79	       [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - W/S AS UI 변경
+ * 2022/11/07   jahn1501		PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - MKT FCST 조건 변경
+ * 2026/03/23   YMH				E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경	
+ * 2026/08/03	YMH				E20260728-000548 Tact Time(OSP) 등록대상으로 생성하기 위해서있는 제약 확인 및 기능 보완 요청드립니다.
+ */
+
+CREATE PROCEDURE [dbo].[SCP0020_GET_TACT_TIME_OSP]
+   @p_division_id		 NVARCHAR(MAX)
+  ,@p_plant_site_id		 NVARCHAR(MAX)
+  ,@p_line_id   		 NVARCHAR(MAX)
+  ,@p_operation_group_id NVARCHAR(MAX)
+  ,@p_item_id            NVARCHAR(MAX)
+  ,@debug_mode			 NVARCHAR(20)  ='F'
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+	declare @v_division_id NVARCHAR(MAX) = null
+	declare @v_item_id NVARCHAR(MAX) = null
+	set @v_division_id = @p_division_id;
+	set @v_item_id = @p_item_id;
+
+    DECLARE @v_cur_monday        NVARCHAR(8) = CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112); -- 당주 월요일 YYYYMMDD
+    DECLARE @v_end_monday        NVARCHAR(8) = NULL;
+    --DECLARE @v_end_monday        NVARCHAR(8) = CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112); -- 월요일 YYYYMMDD
+	
+    SELECT @v_end_monday = MAX(horizon_end_date)
+	FROM   dbo.scm_mst_plan p WITH(NOLOCK)
+	WHERE  p.plan_cycle  = 'WEEKLY'
+	AND    p.plan_name   = @v_cur_monday
+	GROUP BY plan_name
+	                                           
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP
+
+	CREATE TABLE #TblDynamicPivot_SCP0020_TMP (
+			 DIVISION_ID		NVARCHAR(60)	
+			,ITEM_ID			NVARCHAR(100)
+		);
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP1
+	
+	CREATE TABLE #TblDynamicPivot_SCP0020_TMP1 (
+			 DIVISION_ID		NVARCHAR(60)	
+			,ITEM_ID			NVARCHAR(100)
+			-- E20260728-000548 프로직트 코드 추가.
+			,PROJECT_CODE		NVARCHAR(50)
+		);
+
+
+	-- 2021.03.09 PJG
+	-- 실행속도 개선
+
+	--INSERT INTO #TblDynamicPivot_SCP0020_TMP
+	--SELECT distinct aa.division_id, T.ITEM_ID 
+	--FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+	--JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='Y' 
+	--								   and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST') 
+	--								   AND aa.scm_site_id = mse.scm_site_id 
+	--								   AND aa.division_id = mse.division_id
+	--JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+	--JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON b.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+	--WHERE 1=1
+	--AND    aa.yyyymmdd       >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.yyyymmdd       <= CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.qty            >  0
+	--and	   aa.DIVISION_ID = @v_division_id
+	--AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	--group by aa.division_id	, T.ITEM_ID  
+	--;
+
+
+
+	-- 속도 이슈로 수정 함 : SCM_MST_MODEL_FINAL_ITEM_BOM_V 를 조회 후 조인으로 변경 함
+	--수정 전
+	--INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+	--SE"
+"2026-08-05 00:00:01.597","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","2","LECT distinct aa.division_id , B.child_item_id --, T.ITEM_ID 
+	--FROM   dm_pln_mkt_fcst aa WITH (NOLOCK)
+	--JOIN scm_mst_site mse with(nolock) on mse.VALID_YN='Y' 
+	--									--2021/10/05 : W/S AS
+	--								   --and aa.measure         = IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST') 
+	--								   and aa.measure     = IIF(ISNULL(mse.OPERATION_GROUP, '') = 'W', 'AS_In_Req', IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST'))
+	--								   AND aa.scm_site_id = mse.scm_site_id 
+	--								   AND aa.division_id = mse.division_id
+	--JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON aa.DIVISION_ID = b.division_id and aa.ITEM_ID=b.MODEL_ID
+	----JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and b.CHILD_ITEM_ID=t.ITEM_ID
+	--WHERE 1=1
+	--AND    aa.yyyymmdd       >= @v_cur_monday --CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.yyyymmdd       <= @v_end_monday --CONVERT(CHAR(8), DATEADD(DD, 7*51, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+	--AND    aa.qty            >  0
+	--and	   aa.DIVISION_ID = @v_division_id
+	--AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR B.CHILD_ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	----group by aa.division_id	, B.child_item_id --, T.ITEM_ID  
+	--;
+
+	
+
+	INSERT INTO #TblDynamicPivot_SCP0020_TMP1
+	SELECT DISTINCT A.DIVISION_ID , B.CHILD_ITEM_ID 
+	-- E20260728-000548 프로직트 코드 추가.
+	, A.PROJECT_CODE
+	FROM (
+			SELECT distinct  aa.division_id , aa.ITEM_ID 
+			-- E20260728-000548 프로직트 코드 추가.
+			, AA.PROJECT_CODE
+			FROM DM_PLN_MKT_FCST AA WITH (NOLOCK)
+
+			JOIN SCM_MST_SITE mse with(nolock) 
+			   on mse.VALID_YN='Y'
+			  --2022/11/07			   
+			  --and aa.measure     = IIF(ISNULL(mse.OPERATION_GROUP, '') = 'W', 'AS_In_Req', IIF(mse.vmi_yn = 'Y', 'VMI_In_Req',  'MKT_FCST'))
+			  and aa.measure     = CASE WHEN ISNULL(mse.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN mse.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(AA.attribute10, '') = '' THEN 'MKT_FCST' END
+			  AND aa.scm_site_id = mse.scm_site_id 
+			  AND aa.division_id = mse.division_id
+			WHERE 1=1
+			  AND aa.yyyymmdd       >= @v_cur_monday
+			  AND aa.yyyymmdd       <= @v_end_monday
+			  AND aa.qty            >  0
+			  and aa.DIVISION_ID =  @v_division_id
+		) a
+	-- E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경으로 인해 주석처리
+	-- JOIN DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK) ON a.DIVISION_ID = b.division_id and a.ITEM_ID=b.MODEL_ID
+	-- E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경신규로직 추가 시작
+	JOIN
+	(
+		SELECT b.division_id,
+			b.model_id,
+			b.child_item_id
+		FROM ( SELECT x.* 
+				--FROM dbo.scm_mst_bom_sn x WITH(NOLOCK)	
+				FROM dbo.scm_mst_bom_sn_V x WITH(NOLOCK)	--2021-03-09	SCP 대치 BOM 적용
+					INNER JOIN dbo.scm_mst_item_sn i WITH(NOLOCK)
+					ON  x.child_division_id = i.division_id
+					AND x.child_item_id     = i.item_id
+					AND x.child_company_id  = i.company_id -- A002 빈강 추가 따른 조건 추가
+					AND x.child_site_id     = i.site_id
+					AND i.active_flag       = 'Y'           
+				WHERE 1=1
+			) b
+			, scm_mst_final_item_v v WITH(NOLOCK)
+			, scm_mst_item_sn mi WITH(NOLOCK)   -- 20210219 C20210219-000229  Company 별로 유효한 Model만 적용
+		WHERE 1=1
+		AND b.division_id   = v.division_id
+		AND b.child_item_id = v.item_id
+
+		-- 20210219 C20210219-000229  Company 별로 유효한 Model만 적용
+		AND b.division_id   = mi.division_id
+		AND b.model_id      = mi.item_id
+		AND b.company_id    = mi.company_id  -- A002 빈강 추가 따른 조건 추가
+		AND b.site_id       = mi.site_id
+		AND mI.active_flag  = 'Y'
+		GROUP BY b.division_id, b.model_id, b.child_item_id
+	) AS B ON A.DIVISION_ID = B.DIVISION_ID AND A.ITEM_ID=B.MODEL_ID
+	;
+	-- E20260310-000552 Tact Time(OSP) 기준정보 설정 로직 변경신규로직 추가 끝
+
+
+
+	-- E20260728-000548 Tact Time(OSP) 등록대상으로 생성하기 위해서있는 제약 확인 및 기능 보완 요청드립니다.
+	-- 등록된 코드중 DEMAND GROUP MASTER 룩업과 PROJECT_CODE , ITEM_ID 앞 12자리가 같은 데이터를 추가 매핑한다.
+	-- E20260728-000548 로직 시작
+	INSERT INTO #TblDynamicPivot_SCP0020_TM"
+"2026-08-05 00:00:01.597","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","3","P1
+	SELECT
+		  SEGMENT2	AS DIVISION_ID
+		, SEGMENT3	AS ITEM_ID 
+		, SEGMENT5	AS PROJECT_CODE
+	FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL AS A WITH(NOLOCK)
+	WHERE LOOKUP_TYPE = 'SCP_OPT_ENG_CONST_DEMAND_GROUP' AND VALID_YN = 'Y'
+	AND EXISTS
+	(
+		select * from #TblDynamicPivot_SCP0020_TMP1 AS B with(nolock)	
+		WHERE A.SEGMENT2		= B.DIVISION_ID
+		AND LEFT(A.SEGMENT3,12) = LEFT(B.ITEM_ID,12)
+		AND A.SEGMENT5			= B.PROJECT_CODE
+		AND A.SEGMENT3			<> B.ITEM_ID
+	)
+	;
+	-- E20260728-000548 로직 끝
+
+	
+	INSERT INTO #TblDynamicPivot_SCP0020_TMP
+	SELECT distinct aa.division_id , aa.ITEM_ID --, T.ITEM_ID 
+	FROM   #TblDynamicPivot_SCP0020_TMP1 aa WITH (NOLOCK)
+	JOIN SCP_MST_FINAL_ITEM T WITH(NOLOCK) ON aa.DIVISION_ID=t.DIVISION_ID and aa.ITEM_ID=t.ITEM_ID
+	WHERE 1=1
+	AND ( ( @v_item_id IS NULL OR  @v_item_id = '' ) OR aa.ITEM_ID    IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )	
+	;
+	
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP1') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP1
+	;
+
+
+	SELECT A.DIVISION_ID
+			, A.SITE_DESCRIPTION
+			, A.ITEM_ID
+			, A.NICK_NAME
+			, A.LINE_ID
+			, A.PRIORITY
+			, A.YIELD
+			, A.DAILY_CAPACITY
+			, A.TACT_TIME
+			, A.CREATED_BY
+			, A.CREATION_DATE
+			, A.LAST_UPDATED_BY
+			, A.LAST_UPDATE_DATE
+			, A.OPERATION_ID
+			, A.PLANT_SITE_ID
+			, A.INPUT_STATUS
+			, A.operation_group_id
+			, (CASE WHEN A.line_id IS NULL THEN '1' ELSE '2' END) AS line_order 
+			, A.except_yn
+			, A.OSP_YN
+	FROM 
+	(
+		-- Tact Time OSP Master 조회
+		SELECT A.DIVISION_ID
+				, S.SITE_DESCRIPTION
+				, A.ITEM_ID
+				, (SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-'  WHEN X.NICK_NAME = ''    THEN '-'  ELSE X.NICK_NAME END) 
+				   FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  WHERE  X.ITEM_ID  = A.ITEM_ID) AS NICK_NAME
+				, A.LINE_ID
+				, A.PRIORITY
+				, ROUND(A.YIELD*100,2) AS YIELD
+				, A.DAILY_CAPACITY
+				, A.TACT_TIME
+				, A.CREATED_BY
+				, A.CREATION_DATE
+				, A.LAST_UPDATED_BY
+				, A.LAST_UPDATE_DATE
+				, A.OPERATION_ID
+				, A.PLANT_SITE_ID
+				, 'M' AS INPUT_STATUS
+				,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id
+				,isnull((select top 1 'Y'
+							from SCP_MST_TACT_TIME_EXCEPT_OSP x 
+							where x.division_id=a.division_id 
+							and x.plant_site_id=a.plant_site_id 
+							and x.operation_id=a.operation_id
+							and x.item_id=a.item_id
+							and x.line_id=a.line_id
+							),'N') as except_yn
+				, S.OSP_YN
+		FROM SCP_MST_TACT_TIME_OSP A WITH(NOLOCK)
+		JOIN SCM_MST_SITE S WITH(NOLOCK) ON S.DIVISION_ID=A.DIVISION_ID AND S.SCM_SITE_ID=A.PLANT_SITE_ID
+		WHERE 1=1 
+		AND a.division_id   =  @p_division_id
+		AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+		AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )		
+		UNION ALL
+		-- Project Route 화면에 등록된 모델중 Tact Time Master에 없는 모델 조회
+		SELECT DISTINCT
+			a.division_id
+			, b.SITE_DESCRIPTION
+			, a.ITEM_ID
+			, (SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-'  WHEN X.NICK_NAME = ''    THEN '-'  ELSE X.NICK_NAME END) 
+				   FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  WHERE  X.ITEM_ID  = A.ITEM_ID) AS NICK_NAME
+			, NULL as LINE_ID
+			, NULL AS PRIORITY
+			, NULL AS YIELD
+			, NULL AS DAILY_CAPACITY
+			, NULL AS TACT_TIME
+			, NULL AS CREATED_BY
+			, NULL AS CREATION_DATE
+			, NULL AS LAST_UPDATED_BY
+			, NULL AS LAST_UPDATE_DATE
+			-- PJ20202001 : RACK 구분 추가
+			, CASE WHEN ISNULL(C.ATTRIBUTE3,'N') = 'Y' THEN B.PLANT_ID + '_R1'
+			       ELSE B.PLANT_ID
+			  END           AS OPERATION_ID
+			, A.PLANT_SITE_ID
+			, 'I' AS INPUT_STATUS
+			,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id
+			, 'N' AS except_yn
+			, B.OSP_YN
+		FROM scm_mst_site_item_priority a (NOLOCK)
+		LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a."
+"2026-08-05 00:00:01.597","LGCE_SCMDEV","P ","SCP0020_GET_TACT_TIME_OSP","1662017052","4","division_id = i.division_id 
+												AND a.item_id = i.item_id 
+												AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+		JOIN SCM_MST_SITE b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id
+		LEFT JOIN scp_mst_final_item C (NOLOCK) ON a.division_id = C.division_id and a.item_id = C.item_id --and C.fcst_yn = upper('Y')
+		WHERE 1=1 
+		AND a.valid_yn    = 'Y'
+		AND b.osp_yn      = 'Y' -- 외주 packer
+		and isnull(b.ATTRIBUTE1,'N') ='Y' --라인 대상
+		AND NOT EXISTS ( select 'X' from SCP_MST_TACT_TIME_OSP n (NOLOCK) 
+						where n.division_id = a.division_id 
+						and n.plant_site_id = a.plant_site_id 
+						and n.item_id = a.item_id )
+		-- MKT FCST 존재하는 모델만 조회(전극이 아닐 경우에만) -> 전극도 포함
+		AND EXISTS ( SELECT 'X'
+							FROM #TblDynamicPivot_SCP0020_TMP F WITH(NOLOCK)
+							WHERE F.DIVISION_ID=A.DIVISION_ID
+							AND F.ITEM_ID=A.ITEM_ID
+						)
+		AND a.division_id = @p_division_id
+		AND ( ( @p_plant_site_id IS NULL OR  @p_plant_site_id = '' ) OR a.plant_site_id IN (SELECT token FROM dbo.String_Split(@p_plant_site_id  ,',')) )			
+		AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id  ,',')) )		
+	) A
+	WHERE 1=1
+	AND A.operation_group_id = @p_operation_group_id
+	AND ( ( @p_line_id IS NULL OR  @p_line_id = '' ) OR A.line_id    IN (SELECT token FROM dbo.String_Split(@p_line_id  ,',')) )
+	ORDER BY line_order, A.division_id, A.plant_site_id, A.line_id, A.item_id
+
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0020_TMP') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0020_TMP
+
+END
+
+"

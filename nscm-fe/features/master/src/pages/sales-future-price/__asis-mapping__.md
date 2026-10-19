@@ -14,7 +14,10 @@
 
 **① 이번 보완으로 신규 배선/구현 (FE, BE 무수정):**
 - isCurVersion 게이트 **MSG00448** — `handleInsert`/`handleSave` 에 `versionId==='CURRENT'` 가드 (과거버전 Insert/Save 차단). 종전 `validateEdit` 정의만·미호출 → 배선.
+  - 2026-10-08 통합테스트 지적 보완: 과거 버전 조회에서도 LOC 셀 입력이 되고 Save 에서만 막혀 입력값이 버려졌다 → Grid `beginningEdit`/`pastingCell` 에 `isCurrentVersion` 게이트 추가(AS-IS EditButton `if(!isCurVersion) return` 과 같이 안내 없이 편집기 미진입, 노란 편집가능 표시도 제거). 판정 원천은 입력값(sc.versionId)이 아니라 실제 조회한 `filters[MAIN].versionType`(SalesFuturePrice.tsx `isCurrentVersion`) — Insert/Save 가드도 같은 값으로 통일. 확인: 과거 버전 조회 후 LOC 셀 더블클릭 → 편집기 없음.
 - Currency 빈값 **MSG00447** — Grid `beginningEdit` 동적 LOC 셀에 배선 (통화 미설정 시 가격 편집 차단).
+- 기존 행 Currency 변경 **MSG01429** (AS-IS [E20250113-000150], .cs L1184~1197 / L2780~2901 / L3686~3691, 2026-10-13) — AS-IS 는 MSG00447 문구이나 TO-BE 는 그 코드가 빈값 안내로 먼저 쓰여 MSG01429 로 채번. Grid `beginningEdit` 가 기존 행 CURRENCY 칸만 열고 첫 진입에 범위 안내, `cellEditEnded`(A2)가 묶음 전파 + 현재·미래 칸 KRW·USD 재환산 + LOC 행 CURRENCY 변경 기록. `handleSave` `collectDynKeys` 가 그 기록을 보고 값 있는 현재·미래 칸 전부를 전송.
+- 편집제약 사업부 안내 **MSG01430** (2026-10-08 통합테스트 지적) — AS-IS `EditButton`(.cs L870~876) 이 `DM_UI_EDITABLE_DIVISION` EDIT_YN='N' 사업부(40 등)에서 띄우던 MSG00448 "해당 사업부 편집은 Demand - Demand Plan - FcstPrice MGMT 에서 할 수 있습니다." 를 Grid `beginningEdit` 에 배선. TO-BE 는 Edit/Insert/Save 버튼을 숨기고 셀 편집을 조용히 막기만 해서 안내가 없었다. TO-BE MSG00448 은 "현재 버전이 아닙니다."(위 isCurVersion 게이트)로 뜻이 달라 재사용 불가 → 같은 문구가 등록된 MSG01430 사용(개발 DB 실측, EN/CN 도 한글 문구 — 번역 등록은 서버 담당 요청 대상). 안내 대상 = 편집 가능 사업부였다면 열렸을 셀(LOC 행 현재·미래 가격 셀)만. 확인: 40 사업부 LOC 칸 더블클릭 시 안내 표시.
 - 무변경 **MSG00004** — `validateSaveRows` dirty 0건 시 'No data' → "수정한 내용이 없습니다".
 - over-range 체크 → **조회기간 자동 52주** (`SalesFuturePriceForm` onChange).
 - 기존행('M') LOC 편집 시 **형제 measure 실시간 환율 재계산** (`groupKeyOf` 공용화, 표시 즉시 갱신).
@@ -46,12 +49,10 @@
 | 6 | expressions.md | (위 폴더) | 37 |
 | 7 | tobe_design.md | (위 폴더) | 422 |
 | 8 | web_components.md | (위 폴더) | 321 |
-| 9 | Figma SVG (Main) | `Doc/_figma/_images/DMF0020.svg` | (1920×963) |
-| 10 | Figma SVG (Table) | `Doc/_figma/_images/DMF0020_Table.svg` | (2577×723) |
-| 11 | 5 POPUP 분석서 | `Doc/_analysis/domain_DM/screens/DMF0020_POPUP_{ExchangeRate,Price,Version,Owner,GridColumnSetting}/` | 각 8 MD |
-| 12 | 2 Sub-POPUP 분석서 | `..._SalesFuturePrice_POPUP_{SalesPriceRange,SalesPriceTemplate}/` | 각 8 MD |
-| 13 | 메타 SQL | `To-be_v2_converted/08_Screen_Registration/registrations/03_DMF0020_Registration.sql` | 385 |
-| 14 | PKG body | `To-be_v2_converted/06_Packages/04_Package_PKG_DMF0020.sql` | 4,788 |
+| 9 | 5 POPUP 분석서 | `Doc/_analysis/domain_DM/screens/DMF0020_POPUP_{ExchangeRate,Price,Version,Owner,GridColumnSetting}/` | 각 8 MD |
+| 10 | 2 Sub-POPUP 분석서 | `..._SalesFuturePrice_POPUP_{SalesPriceRange,SalesPriceTemplate}/` | 각 8 MD |
+| 11 | 메타 SQL | `To-be_v2_converted/08_Screen_Registration/registrations/03_DMF0020_Registration.sql` | 385 |
+| 12 | PKG body | `To-be_v2_converted/06_Packages/04_Package_PKG_DMF0020.sql` | 4,788 |
 
 ---
 
@@ -119,7 +120,7 @@
 | 10 | `P_DMF0020_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA` | PriceBatch data | `PriceBatchInputModal` | ⏳ |
 | 11 | `P_DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP` | PriceBatch bulk | `PriceBatchInputModal` save | ⏳ |
 | 12 | `P_DMF0020_GET_SPREAD_TITLE_SAVE_PRICE` | PriceBatch 헤더 | `PriceBatchInputModal` title | ⏳ |
-| 13 | `P_DMF0020_GET_SPREAD_TITLE_DATE` | 동적 W_/M_ 컬럼 | `buildHeaderTree` (SHEETS.SPREAD_TITLE_DATE 후속) | ⏳ |
+| 13 | `P_DMF0020_GET_SPREAD_TITLE_DATE` | 동적 W_/M_ 컬럼 | `SalesFuturePrice.tsx` periodAxis useQuery(main/SPREAD_TITLE_DATE) → `utils/periodAxis.ts` periodBindingsOf → Grid `periodBindings` ∪ 행 키 (2026-10-13, BE NULL 컬럼 누락 보완) | ✅ |
 | 14 | `P_DMF0020_GET_OWNER_DATA` | OwnerByDivision | (공용 `@master/components/ownerByDivisionModal`) | ✅ wiring |
 | 15 | `P_DMF0020_GET_WEEKDATA` | bucketType 변경 | `useSalesFuturePriceExpression` (후속) | ⏳ |
 | 16 | `P_DMF0020_SAVE_DM_MST_EXCHANGE_RATE_ALL` | ExchangeRate 저장 | `ExchangeRateModal` save | ⏳ |
@@ -283,15 +284,23 @@ SCM0001_GET_BIZ_TYPE_BY_DIVISION / SCM0001_GET_SITE_BY_DIVISION / SCM0001_GET_PL
 | DIVISION_ID/INCOTERMS/FCST_TYPE/DOM_EXP/CURRENCY | — | (비대상) | 전역 lookup — AS-IS 동일 |
 | PLANT_SITE_ID | — | (해당 없음) | AS-IS cascade(div+proj+item)는 81 전용 — TO-BE 편집은 82 전용(text) |
 
-## 메커니즘 (hook #59 5단 대사)
-- §2 multi-filter: GRID_CASCADE_FILTERS + 'ALL'/빈값 sentinel 관대 통과 ✅
-- §3 Map dedup: `${DIVISION_ID}|${CODE}` 복합 키 ✅
-- §4 1RT: 기존 useTabComboQueries 전체 fetch 유지 (추가 호출 0) + beginningEdit 시점 클라 필터 dataMap 스왑 ✅
+## 메커니즘 (2026-09-01 개정 — 좁힘 주체를 화면 코드에서 admin 컬럼 메타로 이관)
+- §2 후보 좁힘: 관리자 컬럼 메타 **PARAM2** 단일 원천 ✅
+  - PARAM10='D' → 행 값을 콤보 SQL 파라미터로 실어 조합마다 재조회 (PARAM2 오른쪽 = 바인드명)
+  - PARAM10 미지정 → 콤보 전량 수신 후 행 값으로 필터 (PARAM2 오른쪽 = 콤보 결과 컬럼명)
+  - 위 표의 "필터" 열은 이제 **PARAM2 로 등록해야 할 조건**을 뜻한다 (FE 하드코딩 아님)
+- §3 dedup / 정렬 / 신규행 전용 콤보(PARAM9): 공용 foundation columnMapping 담당 ✅
+- §4 조회: 공용 DataGrid(useTabComboQueries + useRowParamCombos) 담당 — 화면 자체 콤보 조회 없음 ✅
 - §5 modal callback: 기존 setSelectedValue 일괄 세팅 + dblClick 행 값 preSearchParams ✅
 - §1 Form reset: 기구현 (SalesFuturePriceForm L69~82 — 무변경) ✅
-- 스왑 dataMap 은 cellEditEnded 진입 시 전체 dataMap 원복 (타 행 CODE→NAME 표시 보존 — §2.10.5 컬럼 전역 제약 대응)
-- 계단식 clear 는 "값이 실제로 변경된 경우"만 (beginningEdit oldVal 캡처 비교 — AS-IS ComboSelChange 는 선택 시 동작과 등가)
+- 폐기: 화면 상수 GRID_CASCADE_FILTERS + beginningEdit 시점 col.dataMap 스왑/원복.
+  dataMap 은 셀이 아니라 컬럼 속성이라 스왑이 그 컬럼 전 행에 걸리고(2026-08-21 DMF0049 실사고),
+  화면이 dataMap 을 직접 붙이면 PARAM10/PARAM2 결과를 덮어써 admin 설정이 무효가 된다.
+- 계단식 clear(GRID_CASCADE_CLEAR)는 유지 — "값이 실제로 변경된 경우"만 (beginningEdit oldVal 캡처 비교 — AS-IS ComboSelChange 선택 시 동작과 등가)
 
 ## 범위 외 (기재)
 - 빈값 시 sTempRow 복제 (AS-IS L2761~2777) — cascade 아님, 별도 회차
-- 화면 모달(Price Batch 등) 내부 조회 필드 cascade — 사용자 확정 범위 외
+- 화면 모달 내부 조회 필드 cascade — 사용자 확정 범위 외.
+  단 Price Batch Input 의 Sales Site 는 2026-09-01 별건으로 배선함: 재조회 콤보 `SiteByEndCustomer`,
+  목록 구성 조건 = Division + 메인 화면에서 넘긴 End Customer (AS-IS 팝업 :318 · :2173 / 메인 :2377).
+  근거·규약은 `components/modals/priceBatchCombos.ts` 헤더.

@@ -1,0 +1,25 @@
+// Measure 행 배경색 — AS-IS `SetMeasureColor` 의 RGB 3색(03 R-12).
+//   대상 measure 는 `capa-loss-plan.constants.ts#MEASURE_COLOR_BY_CODE` 가 갖는다(코드 기준 판정).
+//   inline style 금지(convert-core §2.1 #5)라 색값은 여기 SCSS 에만 둔다.
+//   AS-IS 4색 전건 구현. 분홍(255,192,203)은 gap-resolve iter-1 에서 AS-IS lookup 실측으로
+//   대응 코드를 확정했다(SCP_CAPA_LOSS_MEASURE.ADJ_ULD_RT.ATTRIBUTE5 = 'Capa. Balancing (LOB)').
+
+.measureYellow {
+  // AS-IS (237,248,170) — `Final Production Plan`(SCP_PROD_PLAN)
+  background-color: rgb(237 248 170) !important;
+}
+
+.measureSky {
+  // AS-IS (218,238,243) — `Production Capa.(Daily)`(PROD_CAPA_D) / `Production Operating Rate`(PROD_OP_RT)
+  background-color: rgb(218 238 243) !important;
+}
+
+.measureOrange {
+  // AS-IS (255,239,213) — PF_RT/QL_RT/ID_RT/NM_RT/BM_RT/CM_RT/PD_RT/PM_RT/UD_RT/PP_RT/MR_RT + SD_RT/WT_RT/TD_RT
+  background-color: rgb(255 239 213) !important;
+}
+
+.measurePink {
+  // AS-IS (255,192,203) — `Capa. Balancing (LOB)`(ADJ_ULD_RT)
+  background-color: rgb(255 192 203) !important;
+}

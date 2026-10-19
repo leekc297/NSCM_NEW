@@ -28,6 +28,7 @@ export const DynamicQueryMainGrid = ({ gridRef, gridFilterRef, data, goViewTab, 
   const setViewParametersFilters = useDynamicQueryStore(s => s.setViewParametersFilters);
   const setSqlText = useDynamicQueryStore(s => s.setSqlText);
   const setResultGridColumns = useDynamicQueryStore(s => s.setResultGridColumns);
+  const clearResultFilter = useDynamicQueryStore(s => s.clearResultFilter);
 
   const staticColumns = useDynamicQueryStore(s => s.staticColumns[SHEETS.MAIN]);
   const [clickedRow, setClickedRow] = useState<
@@ -85,6 +86,8 @@ export const DynamicQueryMainGrid = ({ gridRef, gridFilterRef, data, goViewTab, 
       setSqlText(dataItem.DQ_TEXT);
       // view 탭의 결과 그리드 컬럼 초기회
       setResultGridColumns([]);
+      // 이전 리포트의 실행 결과(Result 건수)가 새 리포트로 넘어와 남아있지 않도록 초기화
+      clearResultFilter();
 
       // 단순 탭 이동
       setTimeout(() => {

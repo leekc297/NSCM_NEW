@@ -153,8 +153,8 @@
 | HANDLER:clbDivisions_SelectedIndexChanged | AS-IS `DMF0074_MetalLinkPrice.cs:501` (라이브 64행) | IT-06 참조 |  | 구현 |
 | HANDLER:clbEndCustomer_SelectedIndexChanged | AS-IS `DMF0074_MetalLinkPrice.cs:626` (라이브 4행) | IT-08 참조 |  | 구현 |
 | HANDLER:clbTeam_SelectedIndexChanged | AS-IS `DMF0074_MetalLinkPrice.cs:606` (라이브 16행) | IT-07 참조 |  | 구현 |
-| HANDLER:txtItemId_KeyDown | AS-IS `DMF0074_MetalLinkPrice.cs:260` (라이브 6행) | — | IT-09 동일 사유. 보완목록 R-1 | 제외 |
-| HANDLER:txtProject_KeyDown | AS-IS `DMF0074_MetalLinkPrice.cs:252` (라이브 6행) | — | Enter→팝업은 미이식(SearchArea Enter=조회와 충돌) — 검색 아이콘 버튼으로 대체. 보완목록 R-1 | 제외 |
+| HANDLER:txtItemId_KeyDown | AS-IS `DMF0074_MetalLinkPrice.cs:260` (라이브 6행) | components/MetalLinkPriceForm.tsx (Model/Nickname InputField onKeyDown → openModalOnEnter → setOpenModelByDivisionModal) | 2026-10-06 이식 — IT-10 참조 | 구현 |
+| HANDLER:txtProject_KeyDown | AS-IS `DMF0074_MetalLinkPrice.cs:252` (라이브 6행) | components/MetalLinkPriceForm.tsx (Project InputField onKeyDown → openModalOnEnter → setOpenPrjByDivisionModal) | 2026-10-06 이식 — IT-09 참조 | 구현 |
 
 
 ## 이벤트·액션 원자 축 (md §1 [1]~[21] 1:1)
@@ -169,8 +169,8 @@
 | IT-06 | [6] clbDivisions SIC — 하위 5종 reset + Project/PlantSite 활성분기 + Version clear + InitSpread | features/demand/src/pages/metal-link-price/components/MetalLinkPriceForm.tsx:69~81 (reset+version clear) + MetalLinkPrice.tsx:88~95 (컬럼 재조회·그리드 초기화) |  | 구현 |
 | IT-07 | [7] clbTeam SIC — EndCustomer/SalesSite reset | features/demand/src/pages/metal-link-price/components/MetalLinkPriceForm.tsx:92~95 |  | 구현 |
 | IT-08 | [8] clbEndCustomer SIC — SalesSite reset | features/demand/src/pages/metal-link-price/components/MetalLinkPriceForm.tsx:120~123 |  | 구현 |
-| IT-09 | [9] txtProject_KeyDown — Enter 시 Project 팝업 | — | TO-BE 는 검색 아이콘 버튼으로 팝업 진입(Form:176~184). SearchArea 안에서 Enter 는 조회 트리거라 AS-IS Enter→팝업과 충돌 — 의도적 미이식(UX 표준 우선). 보완목록 R-1 로 사용자 판단 대기 | 제외 |
-| IT-10 | [10] txtItemId_KeyDown — Enter 시 Item 팝업 | — | IT-09 와 동일 사유(버튼 진입 Form:202~207). 보완목록 R-1 | 제외 |
+| IT-09 | [9] txtProject_KeyDown — Enter 시 Project 팝업 | components/MetalLinkPriceForm.tsx (openModalOnEnter — Project InputField onKeyDown) | 2026-10-06 사용자 지시로 이식(Sales Plan 과 동일 동작). 종전 "SearchArea Enter=조회 충돌" 사유는 실측 결과 성립하지 않음 — SearchArea 전역 단축키는 F5 만 바인딩. Enter 는 preventDefault 후 팝업만 연다. 한글 조합 중 Enter 무시. 검색 아이콘 버튼 진입도 그대로 유지 | 구현 |
+| IT-10 | [10] txtItemId_KeyDown — Enter 시 Item 팝업 | components/MetalLinkPriceForm.tsx (openModalOnEnter — Model/Nickname InputField onKeyDown) | 2026-10-06 이식 — IT-09 와 동일 방식. 검색 아이콘 버튼 진입도 그대로 유지 | 구현 |
 | IT-11 | [11] FindButton override → FindData() — 검증 6 + 조회 + 전체잠금 + SmartColMerge | features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx:98~145 (validateFind+handleSearch) + components/MetalLinkPriceGrid.tsx (isReadOnly + 세로 머지) |  | 구현 |
 | IT-12 | [12] Insert/Delete/Edit/Save override 4종 — 전부 빈 몸체 | features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx:157~164 (hotkeyConfig insert/delete/save=false) | AS-IS 빈 몸체 = 기능 없음 → 버튼 미노출이 1:1 파리티 | 구현 |
 | IT-13 | [13] ExcelButton override — 그리드 Excel 다운로드 | features/demand/src/pages/metal-link-price/MetalLinkPrice.tsx:220 (excelFileName=MAIN_EXCEL_PREFIX — SubTitle 공통 EXCEL, BTN 배선 DMF0074_main_EXCEL) |  | 구현 |

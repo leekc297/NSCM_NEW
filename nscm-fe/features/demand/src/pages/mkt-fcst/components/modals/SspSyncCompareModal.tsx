@@ -1,7 +1,9 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
-import { useMemo, useRef } from 'react';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { useEffect, useMemo, useRef } from 'react';
 
-import { DataGrid, CustomDialog } from '@shared/components';
+import { attachRowNoHeader } from '@foundation/utils';
+import { DataGrid, CustomDialog, ResultArea } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { Button } from '@shared/lges';
 
@@ -34,6 +36,8 @@ interface SspSyncCompareModalProps {
 export const SspSyncCompareModal = ({ open, modalClose, params }: SspSyncCompareModalProps) => {
   const { t } = useTranslation();
   const gridRef = useRef<FlexGrid<ResponseData<MENU_ID, SHEETS.SSP_COMPARE>>>();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   // useTabProcQuery 는 filters 참조가 바뀌면 캐시를 버리고 재조회한다. params 가
   // null 인 동안 fallback 객체를 매 렌더 새로 만들면 값이 그대로여도 참조가 계속
@@ -63,6 +67,10 @@ export const SspSyncCompareModal = ({ open, modalClose, params }: SspSyncCompare
 
   const itemsSource = data?.o_rc1 ?? [];
 
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, itemsSource]);
+
   return (
     <CustomDialog
       size={1000}
@@ -70,6 +78,10 @@ export const SspSyncCompareModal = ({ open, modalClose, params }: SspSyncCompare
       position='basic'
       open={open}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -79,12 +91,20 @@ export const SspSyncCompareModal = ({ open, modalClose, params }: SspSyncCompare
       customContentArea={
         <div className={styles.modalContentWrapper}>
           <div className={styles.modalGridWrapper}>
-            <DataGrid<ResponseData<MENU_ID, SHEETS.SSP_COMPARE>>
+            <ResultArea
+              title=''
+              count={itemsSource.length}
               gridRef={gridRef}
-              isReadOnly
-              staticColumns={SSP_COMPARE_COLUMNS}
-              itemsSource={itemsSource}
-            />
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<ResponseData<MENU_ID, SHEETS.SSP_COMPARE>>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                staticColumns={SSP_COMPARE_COLUMNS}
+                itemsSource={itemsSource}
+              />
+            </ResultArea>
           </div>
           <div className={styles.modalButtonWrapper}>
             <Button

@@ -112,6 +112,14 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
     return false;
   }
 
+  // Insert 행(CRUD_TYPE='I')을 병합에서 제외하는 기본 가드 — allowEmptyCellMerge 와 동일한 확장점.
+  //   기본값 false 라 기존 화면은 전부 지금처럼 Insert 행이 계속 갈라져 보인다(회귀 0).
+  //   화면이 특정 컬럼만 예외로 허용하고 싶으면(예: 항상 같은 값인 Category 컬럼) 서브클래스에서
+  //   재정의한다 — ColumnInsertMergeManager 참고.
+  protected allowInsertRowMerge(_panel: GridPanel, _row: number, _col: number): boolean {
+    return false;
+  }
+
   private _getMergeKey(panel: GridPanel, row: number, col: number): string {
     if (row < 0) return '';
 
@@ -213,7 +221,8 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
     const rng = new CellRange(currentRow, currentCol);
     const item = panel.grid.collectionView.items[currentRow] as WijmoRowItem;
     const rowCrudStat = item?.CRUD_TYPE;
-    if (rowCrudStat === CRUD_TYPE.INSERT) return null;
+    if (rowCrudStat === CRUD_TYPE.INSERT && !this.allowInsertRowMerge(panel, currentRow, currentCol))
+      return null;
 
     let minRow = panel.viewRange.row;
     const maxRow = panel.viewRange.row2;
@@ -229,7 +238,7 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
       if (rng.row <= 0 || this._getMergeKey(panel, r, currentCol) !== currentKey) break;
 
       const nextCrudType = (panel.grid.collectionView.items[r] as WijmoRowItem)?.CRUD_TYPE;
-      if (nextCrudType && nextCrudType === CRUD_TYPE.INSERT) break;
+      if (nextCrudType === CRUD_TYPE.INSERT && !this.allowInsertRowMerge(panel, r, currentCol)) break;
       rng.row--;
     }
 
@@ -237,7 +246,7 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
       const r = rng.row2 + 1;
       if (this._getMergeKey(panel, r, currentCol) !== currentKey) break;
       const nextCrudType = (panel.grid.collectionView.items[r] as WijmoRowItem)?.CRUD_TYPE;
-      if (nextCrudType && nextCrudType === CRUD_TYPE.INSERT) break;
+      if (nextCrudType === CRUD_TYPE.INSERT && !this.allowInsertRowMerge(panel, r, currentCol)) break;
       rng.row2++;
     }
 
@@ -252,10 +261,47 @@ export class CustomMergeManager<T extends WijmoRowItem = WijmoRowItem> extends M
 
     if (cellType === CellType.TopLeft) return getTopLeftMergedRange(panel, currentCol);
     if (mergeType === AllowMerging.None) return null;
+
+    // 유효 범위 밖 좌표 가드 — 스톡 MergeManager 와 동일하게 병합 없음(null)으로 답한다.
+    //   wijmo 는 신규행 편집/레이아웃 도중 currentRow=-1 같은 범위 밖 좌표로도 이 메서드를 부른다.
+    //   가드가 없으면 아래 경로가 panel.getCellData(-1, ...) 를 호출하고, wijmo 가 "Positive number
+    //   expected" 를 던져 셀 렌더가 통째로 중단된다 → 그 셀의 콤보 드롭다운이 열리지 않는다
+    //   (2026-09-03 DMF0006 신규행 콤보 드롭다운 열림 실패).
+    if (
+      currentRow < 0 ||
+      currentCol < 0 ||
+      currentRow >= panel.rows.length ||
+      currentCol >= panel.columns.length
+    )
+      return null;
+
     if (cellType === CellType.ColumnHeader)
       return this._getColumnHeaderMergedRange(panel, currentRow, currentCol);
     else if (cellType === CellType.Cell)
       return this._getCellMergedRange(panel, currentRow, currentCol);
     else return null;
+  }
+}
+
+/**
+ * 지정한 컬럼(binding)만은 Insert 행(CRUD_TYPE='I')도 계속 병합한다.
+ *
+ * SYS0017/SCM0007 메시지 설정 탭처럼 Category 가 항상 같은 조회 컨텍스트로 고정되는 화면에서는
+ * F8 로 새 행을 추가해도 Category 컬럼이 기존 행들과 같은 값이라 계속 하나로 붙어 보여야 한다.
+ * 공용 CustomMergeManager 는 Insert 행을 모든 컬럼에서 무조건 제외하므로(편집 시 병합된 다른 행이
+ * 함께 바뀌는 사고를 막기 위한 기본 가드), 그 화면들만 컬럼 단위로 예외를 두기 위해 별도 클래스로
+ * 분리한다 — 기본 가드 자체를 바꾸면 다른 모든 그리드가 영향을 받는다.
+ */
+export class ColumnInsertMergeManager<T extends WijmoRowItem = WijmoRowItem> extends CustomMergeManager<T> {
+  constructor(
+    grid: FlexGrid<T>,
+    private readonly insertMergeBindings: ReadonlySet<string>
+  ) {
+    super(grid);
+  }
+
+  protected override allowInsertRowMerge(panel: GridPanel, _row: number, col: number): boolean {
+    const binding = panel.columns[col]?.binding;
+    return !!binding && this.insertMergeBindings.has(binding);
   }
 }

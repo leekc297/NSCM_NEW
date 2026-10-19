@@ -1,0 +1,15 @@
+.tableWrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+.splitBar {
+  flex: 0 0 auto;
+}
+
+.lowerGrid {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}

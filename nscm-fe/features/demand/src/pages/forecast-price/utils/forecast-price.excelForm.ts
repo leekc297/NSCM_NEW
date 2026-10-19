@@ -3,82 +3,128 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 /**
  * Excel Form(양식) 컬럼·행 생성 — 순수 함수.
  *
+ * ⭐ [E20260921-XLSFORMASIS] 양식 컬럼은 **admin 메타 주도**다 (사용자 확정 2026-09-21).
+ *   AS-IS `DMF0020_SalesPriceTemplatePopup` 이 `DMF0000_GET_COMMON_SPREAD_TITLE` 로
+ *   `SCM_MST_SHEET_COLUMNS`(PROGRAM_ID, SHEET_NAME='Sales Price Template', DIVISION_ID)를 읽어
+ *   `CreateSheetHeaderColumn` 으로 헤더를 만드는 구조([PJ2024-50611])와 동일하게 맞춘 것이다.
+ *   ⇒ 앞으로 양식 컬럼 변경은 **DB 메타만** 고치면 되고 이 파일은 손대지 않는다.
+ *
  * ⭐ 계약의 핵심은 **엑셀 1행 헤더 문자열**이다. BE(`FileServiceImpl.cvtListUploadRows`)가
  *   `SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT` 토큰명으로 헤더를 **이름 조회**하기 때문에:
- *     · 토큰 10 + M4~M16 은 **원형 그대로**여야 하고 (1바이트라도 다르면 그 열 전량 탈락)
- *     · HEADER_CONTENT 에 없는 정보성 컬럼은 그냥 무시되므로 자유롭게 덧붙일 수 있으며
+ *     · 헤더 문자열은 HEADER_CONTENT 토큰과 **1바이트도 달라선 안 된다** (다르면 그 열 전량 탈락)
+ *     · HEADER_CONTENT 에 없는 컬럼은 그냥 무시된다
  *     · 파일 내 컬럼 순서는 무관하다 (ATTRIBUTE 위치는 HEADER_CONTENT 순서가 결정)
  *   단 **헤더명 중복은 치명적**이다 — `ExcelUtils` 가 헤더를 HashMap 키로 쓰므로 뒤 컬럼이 앞을 덮는다.
+ *   메타의 `COLUMN_LABEL_NAME` 이 곧 토큰이므로, 메타와 HEADER_CONTENT 는 같은 회차에 맞춘다.
  */
 
-/** SP 커서 컬럼 → 업로드 토큰 (HEADER_CONTENT 원형). 이 10개가 업로드 필수 컬럼이다.
- *  [E20260825-XLSPRICECOL] 양식 컬럼 = 단가 테이블(SCM_MST_FUTURE_PRICE) 컬럼 구성 (사용자 지시 2026-08-25).
- *  End Customer(단가 테이블에 없는 컬럼)·Cell Prod Site(81 '-' 고정) 제거,
- *  Project Code(원장 키)·Plant Site(원장 키 — 구 접힘 폐지) 등재. HEADER_CONTENT 동시 배포(24_). */
-export const UPLOAD_TOKEN_BY_COL: Readonly<Record<string, string>> = {
-  DIVISION_ID: 'Div',
-  PROJECT_CODE: 'Project Code',
-  SCM_SITE_ID: 'Sales Site',
-  PLANT_SITE_ID: 'Plant Site',
-  ITEM_ID: 'Model',
-  CURRENCY: 'Currency',
-  MEASURE: 'Measure',
-  DOM_EXP: 'Customs Handbook',
-  FCST_TYPE: 'FCST Type',
-  INCOTERMS: 'Incoterms',
+/** admin UI Category Setup 시트명 — AS-IS DMF0020 원본명 그대로 (룰 #91 SHEET_NAME 불변). */
+export const TEMPLATE_META_SHEET = 'Sales Price Template' as const;
+
+/** 메타 미적재/조회 실패 시 폴백 — AS-IS DMF0020 `Sales Price Template` 19행 실측값(2026-09-21).
+ *  ⚠ 폴백은 "화면이 빈 양식으로 깨지지 않게" 하는 안전망일 뿐 정본이 아니다.
+ *     정본은 `SCM_MST_SHEET_COLUMNS`(DMF0082 / 'Sales Price Template') 19행이다. */
+export const FALLBACK_TEMPLATE_COLUMNS: ReadonlyArray<{ key: string; header: string; width: number }> =
+  [
+    { key: 'DIVISION_ID', header: 'Div', width: 50 },
+    { key: 'DEPT_NAME', header: 'Team', width: 180 },
+    { key: 'END_CUSTOMER', header: 'End Customer', width: 150 },
+    { key: 'PROJECT_CODE', header: 'Project Code', width: 100 },
+    { key: 'CURRENCY', header: 'Currency', width: 80 },
+    { key: 'ITEM_ID', header: 'Model', width: 150 },
+  ];
+
+const pad2 = (n: number): string => String(n).padStart(2, '0');
+
+/** [E20260907-XLSMONTH / E20260921-XLSFORMASIS] 기간 컬럼 = 월 버킷 M0~M12 (13개월) — AS-IS DMF0020 파리티.
+ *  ⭐ 파일 헤더는 반드시 'M0'..'M12' 원형이어야 한다. 업로드 저장(PKG_DMF0082.P_DMF0082_GET_EXCEL_UPLOAD_DATA)이
+ *  SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT('...|M0|..|M12')로 이 토큰을 ATTRIBUTE 슬롯에 위치 매핑하고,
+ *  월 창(당월 ~ 당월+12)의 달에 M0→당월 ... M12→당월+12 를 붙여 원장에 적재한다 (AS-IS DMF0020 규약).
+ *  구 주간(WEEK_LIST 날짜 헤더) 방식은 이 토큰 매핑을 깨 업로드가 NO_TARGET_ROW 로 실패했다(2026-08-20 회귀).
+ *  주의: 배포된 DMF0082 저장 SP 가 M4~M16(당월+4~+16) 세대이면 이 M0~M12 도 매핑이 어긋나므로
+ *        저장 SP·HEADER_CONTENT 를 M0~M12 로 함께 배포해야 한다 (라이브 업로드로 확인). */
+export const MONTH_SLOT_COUNT = 13; // M0 ~ M12
+export const MONTH_TOKENS: readonly string[] = Array.from(
+  { length: MONTH_SLOT_COUNT },
+  (_, i) => `M${i}`
+);
+
+/** 월 토큰('M0'..'M12') → 실제 월 라벨 'YYYY-MM'. 저장 SP 의 창(당월+n)과 동일 규약:
+ *  M{n} = 당월 기준 +n 개월 (M0 = 당월 ... M12 = 당월+12). SYSDATE 와 하루 경계 차이는 무시(AS-IS 동일). */
+export const monthTokenLabel = (token: string, today: Date = new Date()): string => {
+  const m = /^M(\d+)$/.exec(token);
+  if (!m) return token;
+  const off = Number(m[1]);
+  const d = new Date(today.getFullYear(), today.getMonth() + off, 1);
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}`;
 };
 
-/** 정보성 컬럼 (업로드 무시 축) — 프로젝트 명·오너 (일괄입력 팝업 파리티, 2026-08-25 사용자 지시) */
-export const FORM_INFO_COLUMNS: ReadonlyArray<{ key: string; header: string }> = [
-  { key: 'PROJECT_NAME', header: 'Project' },
-  { key: 'PROJECT_OWNER', header: 'Project Owner' },
-];
-
-/** 월 값 컬럼 — 업로드 양식 고정(M4~M16).
- *  [E20260820-XLSFORM2] 기존 LOC 원장 값이 있으면 채워서 내려준다(2026-08-20 사용자 지시 —
- *  구 '값은 비워서(2026-08-13)' 역전. SP 가 M4~M16 컬럼으로 원장 대표값을 내려주고 여기서 그대로 싣는다). */
-/** [E20260820-XLSWEEKLY] 기간 컬럼 = SP WEEK_LIST(주 시작일 CSV) 동적 — 고정 토큰 없음.
- *  파일 헤더 = 주 시작일 YYYYMMDD 원형(BE 1단 날짜헤더 인식 규격), 행 값 키 = SP W01~W26 슬롯. */
-export const weekSlotKey = (idx: number): string => `W${String(idx + 1).padStart(2, '0')}`;
-
 export interface ExcelFormColumn {
-  /** 엑셀 1행 헤더 (= BE 매핑 키). 토큰이면 원형, 아니면 정보성 라벨. */
+  /** 엑셀 1행 헤더 (= BE 매핑 키 = HEADER_CONTENT 토큰 원형 = 메타 COLUMN_LABEL_NAME). */
   header: string;
-  /** 행 객체 접근 키 (= SP 커서 컬럼명 또는 'M4'..'M16') */
+  /** 행 객체 접근 키 (= SP 커서 컬럼명 = 메타 COLUMN_NAME, 또는 'M0'..'M12') */
   key: string;
-  /** 업로드 필수 토큰 여부 */
+  /** 업로드 매핑 대상 여부 (메타에서 온 컬럼 + 월 컬럼 = true) */
   isToken: boolean;
-  /** 월 값 컬럼(입력칸) 여부 */
+  /** 월 값 컬럼(사용자 입력칸) 여부 */
   isMonth: boolean;
+  /** 미리보기 그리드 폭 (메타 colWth). 없으면 기본값 사용. */
+  width?: number;
 }
 
 /**
- * 양식 컬럼 = [단가 테이블 컬럼(토큰 10, SP 커서 순)] + [Project/Owner 정보성] + [주차 슬롯]
+ * 양식 컬럼 = [admin 메타 컬럼(SHEET_NAME='Sales Price Template')] + [월 버킷 M0~M12]
  *
- * [E20260825-XLSPRICECOL] 구 MAIN 그리드 메타(staticColumns) 종속 폐지 — 양식 컬럼은
- * 단가 테이블 축의 고정 계약이다 (사용자 지시 2026-08-25). 토큰 컬럼 헤더 = 토큰 문자열 원형.
+ * [E20260921-XLSFORMASIS] AS-IS DMF0020 파리티 — 양식 컬럼 정의의 **정본은 DB 메타**다.
+ *   AS-IS 팝업이 `CreateSheetHeaderColumn(siMain, 1, GetSpdTitle(...))` 로 메타 헤더를 그리는 것과 동일.
+ *   메타 19행에는 M0~M12 도 포함돼 있으므로, 월 컬럼은 **메타에 있으면 그것을 쓰고**
+ *   없을 때만 `MONTH_TOKENS` 로 보충한다(메타 미적재 환경 방어).
+ *
+ * @param metaColumns admin `/admin/menu/DMF0082/column` (sheetNm='Sales Price Template') 응답.
+ *                    비었으면 `FALLBACK_TEMPLATE_COLUMNS` + `MONTH_TOKENS` 로 폴백한다.
  */
-export const buildExcelFormColumns = (weekList: readonly string[] = []): ExcelFormColumn[] => {
-  const cols: ExcelFormColumn[] = Object.entries(UPLOAD_TOKEN_BY_COL).map(([key, token]) => ({
-    header: token,
-    key,
+const isMonthToken = (name: string): boolean => /^M(?:[0-9]|1[0-2])$/.test(name);
+
+export const buildExcelFormColumns = (
+  metaColumns?: readonly RawFlexGridColumnConfig[] | null
+): ExcelFormColumn[] => {
+  const meta = (metaColumns ?? []).filter(m => (m.colNm ?? '') !== '' && m.visible !== false);
+
+  if (meta.length > 0) {
+    const cols: ExcelFormColumn[] = meta.map(m => {
+      const key = String(m.colNm);
+      // 헤더 = 메타 라벨(= HEADER_CONTENT 토큰). 라벨 미설정 시에만 컬럼명으로 대체한다.
+      const header = String(m.colLblNm ?? '').trim() !== '' ? String(m.colLblNm) : key;
+      return { header, key, isToken: true, isMonth: isMonthToken(key), width: m.colWth };
+    });
+    // 메타에 월 컬럼이 하나도 없으면 보충 (구 메타 세대 방어)
+    if (!cols.some(c => c.isMonth)) {
+      MONTH_TOKENS.forEach(tok =>
+        cols.push({ header: tok, key: tok, isToken: true, isMonth: true, width: 40 })
+      );
+    }
+    return cols;
+  }
+
+  // 폴백 — 메타 미적재/조회 실패
+  const cols: ExcelFormColumn[] = FALLBACK_TEMPLATE_COLUMNS.map(c => ({
+    header: c.header,
+    key: c.key,
     isToken: true,
     isMonth: false,
+    width: c.width,
   }));
-  FORM_INFO_COLUMNS.forEach(c =>
-    cols.push({ header: c.header, key: c.key, isToken: false, isMonth: false })
+  MONTH_TOKENS.forEach(tok =>
+    cols.push({ header: tok, key: tok, isToken: true, isMonth: true, width: 40 })
   );
-  weekList.forEach((wk, i) => {
-    // header = 주 시작일 원형(파일 헤더 그대로 업로드 해석 근거) / key = SP W 슬롯
-    cols.push({ header: wk, key: weekSlotKey(i), isToken: true, isMonth: true });
-  });
   return cols;
 };
 
 /** SP 커서 1행 (BE 는 값이 NULL 인 컬럼을 아예 내려주지 않으므로 키 부재를 전제한다). */
 export type ExcelFormRow = Record<string, string | number | null | undefined>;
 
-/** 엑셀 셀 값 — 월 컬럼 = SP 가 내려준 기존 LOC 원장 값(없으면 빈칸) [E20260820-XLSFORM2], 그 외는 SP 값 문자열. */
+/** 엑셀 셀 값 — [E20260907-XLSMONTH] 월(버킷) 컬럼은 항상 빈칸(사용자 입력용 · AS-IS DMF0020 파리티),
+ *  그 외 토큰·정보성 컬럼은 SP 값 문자열. (구 [E20260820-XLSFORM2] LOC 원장 채움 역전.) */
 export const buildExcelFormRows = (
   rows: readonly ExcelFormRow[],
   columns: readonly ExcelFormColumn[]
@@ -86,7 +132,7 @@ export const buildExcelFormRows = (
   rows.map(row => {
     const out: Record<string, string> = {};
     columns.forEach(col => {
-      out[col.key] = String(row[col.key] ?? ''); // 월 컬럼도 SP 값 사용 (NULL 컬럼은 BE 가 생략 → '')
+      out[col.key] = col.isMonth ? '' : String(row[col.key] ?? '');
     });
     return out;
   });
@@ -103,7 +149,8 @@ export const toPreviewColumns = (
   columns.map(col => ({
     colNm: col.key,
     colLblNm: col.isMonth ? monthLabel(col.header) : col.header,
-    colWth: col.isMonth ? 90 : 120,
+    // [E20260921-XLSFORMASIS] 폭도 admin 메타(colWth) 를 따른다 — 없을 때만 종전 기본값.
+    colWth: col.width ?? (col.isMonth ? 90 : 120),
     horzAlgnCd: col.isMonth ? 'R' : 'L',
     visible: true,
     display: true,
@@ -112,8 +159,12 @@ export const toPreviewColumns = (
 
 /** [E20260825-XLSPRJ] 데이터 미존재 정보성 컬럼 숨김 (사용자 지시 2026-08-25).
  *  전 행이 빈값(null/''/공백)인 컬럼은 그리드·다운로드 모두에서 제외한다 — 단
- *  업로드 계약 컬럼(토큰 10 + 주차)은 값과 무관하게 보존한다(BE 이름 매핑 필수 축).
- *  조회 전(rows 없음)에는 판정 근거가 없으므로 전체 유지(양식 미리보기 헤더 보존). */
+ *  업로드 계약 컬럼은 값과 무관하게 보존한다(BE 이름 매핑 필수 축).
+ *  조회 전(rows 없음)에는 판정 근거가 없으므로 전체 유지(양식 미리보기 헤더 보존).
+ *
+ *  ⚠ [E20260921-XLSFORMASIS] 메타 주도 전환 후 양식 컬럼은 **전부 업로드 계약 컬럼**(isToken=true)이라
+ *     이 함수는 사실상 no-op 이다. AS-IS 파리티상 양식에 정보성 컬럼이 없기 때문이다.
+ *     메타에 정보성 컬럼(HEADER_CONTENT 에 없는 라벨)이 추가되면 그때 다시 유효해진다 — 그래서 남겨 둔다. */
 export const pruneEmptyInfoColumns = (
   columns: readonly ExcelFormColumn[],
   rows: readonly ExcelFormRow[]

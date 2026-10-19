@@ -1,0 +1,161 @@
+==== 2026-10-19 14:16:35.24 run-e2e smoke DMF0052 
+^C==== 2026-10-19 14:21:01.72 run-e2e smoke DMF0052 
+  DMF0052 → DMF0052  smoke/crud(read-only)/auth(12계정)  메타컬럼 Y
+스펙 1화면 × 3 → C:\Projects\NSCM\Doc\e2e\specs  (계정×DIV 매트릭스 26행)
+
+Running 1 test using 1 worker
+
+  x  1 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (1.6s)
+  x  2 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (2.1s)
+
+
+  1) [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: dev-login 실패(401): 사용자 'bpark416' 가 To-Be DB(SCM_ADM_USER_M)에 없음
+
+       at ..\..\..\tools\E2E\lib\nscm.ts:42
+
+      40 |   async loginAs(userId: string) {
+      41 |     const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });
+    > 42 |     if (res && res.status() === 401) throw new Error(`dev-login 실패(401): 사용자 '${userId}' 가 To-Be DB(SCM_ADM_USER_M)에 없음`);
+         |                                            ^
+      43 |     await this.page.waitForURL(u => u.toString().startsWith(FE), { timeout: 30_000 }).catch(() => this.page.goto(FE));
+      44 |     await this.page.waitForLoadState('networkidle').catch(() => undefined);
+      45 |   }
+        at Nscm.loginAs (C:\Projects\NSCM\tools\E2E\lib\nscm.ts:42:44)
+        at Object.nscm (C:\Projects\NSCM\tools\E2E\fixtures\test.ts:7:71)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: dev-login 실패(401): 사용자 'bpark416' 가 To-Be DB(SCM_ADM_USER_M)에 없음
+
+       at ..\..\..\tools\E2E\lib\nscm.ts:42
+
+      40 |   async loginAs(userId: string) {
+      41 |     const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });
+    > 42 |     if (res && res.status() === 401) throw new Error(`dev-login 실패(401): 사용자 '${userId}' 가 To-Be DB(SCM_ADM_USER_M)에 없음`);
+         |                                            ^
+      43 |     await this.page.waitForURL(u => u.toString().startsWith(FE), { timeout: 30_000 }).catch(() => this.page.goto(FE));
+      44 |     await this.page.waitForLoadState('networkidle').catch(() => undefined);
+      45 |   }
+        at Nscm.loginAs (C:\Projects\NSCM\tools\E2E\lib\nscm.ts:42:44)
+        at Object.nscm (C:\Projects\NSCM\tools\E2E\fixtures\test.ts:7:71)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+To open last HTML report run:
+
+  npx playwright show-report ..\..\Doc\e2e\results\html
+
+==== 2026-10-19 14:25:56.43 run-e2e smoke DMF0052 
+FAIL jaehun_cho HTTP 401
+FAIL minyonglee1 HTTP 401
+FAIL bottle HTTP 401
+FAIL bpark416 HTTP 401
+FAIL cmjin HTTP 401
+FAIL coeogus HTTP 401
+FAIL dodae HTTP 401
+FAIL eunah.koo HTTP 401
+FAIL jaehyeok HTTP 401
+FAIL miyeong.lee HTTP 401
+FAIL wcyoon HTTP 401
+FAIL ys_cho HTTP 401
+로그인 가능 0/12 → accounts.json loginOk/loginProbe 갱신
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+  DMF0052 → DMF0052  smoke/crud(read-only)/auth(0계정)  메타컬럼 Y
+스펙 1화면 × 3 → C:\Projects\NSCM\Doc\e2e\specs  (계정×DIV 매트릭스 0행)
+
+Running 1 test using 1 worker
+
+  x  1 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (1.7s)
+  x  2 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (1.6s)
+
+
+  1) [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인
+
+       at ..\..\..\tools\E2E\lib\nscm.ts:42
+
+      40 |   async loginAs(userId: string) {
+      41 |     const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });
+    > 42 |     if (res && res.status() === 401) throw new Error(`dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 '${userId}' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);
+         |                                            ^
+      43 |     await this.page.waitForURL(u => u.toString().startsWith(FE), { timeout: 30_000 }).catch(() => this.page.goto(FE));
+      44 |     await this.page.waitForLoadState('networkidle').catch(() => undefined);
+      45 |   }
+        at Nscm.loginAs (C:\Projects\NSCM\tools\E2E\lib\nscm.ts:42:44)
+        at Object.nscm (C:\Projects\NSCM\tools\E2E\fixtures\test.ts:7:71)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인
+
+       at ..\..\..\tools\E2E\lib\nscm.ts:42
+
+      40 |   async loginAs(userId: string) {
+      41 |     const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });
+    > 42 |     if (res && res.status() === 401) throw new Error(`dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 '${userId}' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);
+         |                                            ^
+      43 |     await this.page.waitForURL(u => u.toString().startsWith(FE), { timeout: 30_000 }).catch(() => this.page.goto(FE));
+      44 |     await this.page.waitForLoadState('networkidle').catch(() => undefined);
+      45 |   }
+        at Nscm.loginAs (C:\Projects\NSCM\tools\E2E\lib\nscm.ts:42:44)
+        at Object.nscm (C:\Projects\NSCM\tools\E2E\fixtures\test.ts:7:71)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+To open last HTML report run:
+
+  npx playwright show-report ..\..\Doc\e2e\results\html
+

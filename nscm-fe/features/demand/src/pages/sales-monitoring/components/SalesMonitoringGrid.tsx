@@ -1,10 +1,11 @@
-import { toggleClass } from '@mescius/wijmo';
+import { Aggregate, Globalize, toggleClass } from '@mescius/wijmo';
 import {
   AllowMerging,
-  type CellRangeEventArgs,
   CellType,
+  type Column,
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
+  GroupRow,
 } from '@mescius/wijmo.grid';
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'react';
@@ -12,9 +13,19 @@ import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'rea
 import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
+import { toGridNumber } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
-import { BUCKET_PREFIX, BUCKET_TYPE, MAIN_COLUMNS, MENU_ID } from '../sales-monitoring.constants';
+import {
+  BUCKET_PREFIX,
+  BUCKET_TYPE,
+  FOOTER_BG_COLOR,
+  FOOTER_FORMAT,
+  FOOTER_LABEL,
+  MAIN_COLUMNS,
+  MENU_ID,
+  SHEETS,
+} from '../sales-monitoring.constants';
 import type {
   CurrentWeekInfo,
   SalesMonitoringRow,
@@ -336,12 +347,25 @@ export const SalesMonitoringGrid = ({
     const g = (gridRef as { current: FlexGridType<SalesMonitoringRow> | null } | null)?.current;
     if (!g || !g.columnHeaders || !g.columnHeaders.rows) return;
 
-    // 홀짝 zebra (#95) — 클래스 없는 셀 White 기본 + .wj-alt
     if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1;
 
     const formatHandler = (_s: FlexGridType<SalesMonitoringRow>, e: FormatItemEventArgs) => {
       const col = e.panel.columns[e.col];
       if (!col) return;
+
+      // 하단 합계 줄 — AS-IS InitSpreadFooterSum(.cs L419~421) 1:1: 기간 컬럼은 {0:#,##0.###} 서식,
+      //   LightGray 배경. 라벨 셀(정적 컬럼)은 배경만 맞춘다. 집계값은 아래 footer effect 의
+      //   col.aggregate=Sum 이 CollectionView 필터 적용 뷰로 계산한 값(숨긴 행 제외)이다.
+      if (e.panel.cellType === CellType.ColumnFooter) {
+        e.cell.style.backgroundColor = FOOTER_BG_COLOR;
+        const footerBinding = col.binding ?? '';
+        if (dynKindOf(footerBinding)) {
+          e.cell.style.textAlign = 'right';
+          const n = toGridNumber(e.panel.getCellData(e.row, e.col, false));
+          e.cell.textContent = Globalize.format(n, FOOTER_FORMAT);
+        }
+        return;
+      }
 
       if (e.panel.cellType === CellType.ColumnHeader) {
         e.cell.style.textAlign = 'center';
@@ -407,7 +431,7 @@ export const SalesMonitoringGrid = ({
         toggleClass(e.cell, 'wj-cell-non-editable', gray);
         return;
       }
-      // 식별 컬럼 — 클래스 없는 White + zebra (#95)
+      // 식별 컬럼 — 클래스 없는 White (#95)
       toggleClass(e.cell, 'wj-cell-non-editable', false);
       toggleClass(e.cell, 'wj-cell-editable', false);
 
@@ -531,11 +555,23 @@ export const SalesMonitoringGrid = ({
     const hiddenSet = new Set(hiddenBindings);
     const dynSet = new Set(dynBindings);
     const applyDynVisibility = () => {
+      // 우클릭 Hide Column 으로 숨긴 컬럼(공용 DataGrid 가 grid 인스턴스에 얹어 준다 — Column
+      //   객체의 커스텀 플래그는 wijmo 생성자가 `_` 로 시작하는 키를 무시해 전달되지 않는다).
+      const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+        ._userHiddenColumns;
       let changed = false;
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];
         const b = col.binding ?? '';
         if (!dynSet.has(b)) continue;
+        // Hide Column 으로 숨긴 컬럼은 sum 재계산 대상에서 제외 — 숨김 유지.
+        if (userHiddenColumns?.has(b)) {
+          if (col.visible !== false) {
+            col.visible = false;
+            changed = true;
+          }
+          continue;
+        }
         const want = summarySet.has(b) ? sumYn : hiddenSet.has(b) ? false : true;
         if (col.visible !== want) {
           col.visible = want;
@@ -555,22 +591,68 @@ export const SalesMonitoringGrid = ({
     };
   }, [sumYn, summaryBindings, hiddenBindings, dynBindings, gridRef]);
 
+  // 하단 합계 줄 — AS-IS InitSpreadFooterSum(.cs L408~425) 1:1. 기간 컬럼(M_/W_/D_)만 Aggregate.Sum,
+  //   좌측 첫 컬럼 라벨 'Sum'. 집계는 Wijmo CollectionView.getAggregate 가 필터 적용 뷰로 계산하므로
+  //   F4 필터로 숨긴 행은 자동 제외(= AS-IS SumIgnoreHidden). 조회 결과가 없으면 footer 를 빼서
+  //   헤더만 남긴다(형제 CustFcstWaterfallGrid 동일 처리). 공용 DataGrid 가 staticColumns/
+  //   dynamicColumns 변경 때 컬럼 객체를 다시 만들어 aggregate 가 사라질 수 있어 updatedLayout 마다
+  //   재적용한다(위 applyDynVisibility 와 같은 가드 패턴, 변경 없으면 invalidate 하지 않는다).
+  useEffect(() => {
+    const g = (gridRef as { current: FlexGridType<SalesMonitoringRow> | null } | null)?.current;
+    if (!g) return;
+    const hasData = rows.length > 0;
+    if (!hasData) {
+      if (g.columnFooters.rows.length > 0) g.columnFooters.rows.clear();
+      return;
+    }
+    // 라벨을 쓴 첫 컬럼 객체 — footer 라벨 값은 Column 객체 단위로 저장되므로 wrapper 가 컬럼을
+    //   다시 만들면 다시 써야 한다. 값 read-back 비교 대신 객체 동일성으로 판정해 재진입 루프를 막는다.
+    let labeledCol: Column | null = null;
+    const applyFooter = () => {
+      let changed = false;
+      if (g.columnFooters.rows.length === 0) {
+        g.columnFooters.rows.push(new GroupRow());
+        changed = true;
+      }
+      for (let i = 0; i < g.columns.length; i++) {
+        const col = g.columns[i];
+        const want = dynKindOf(col.binding ?? '') ? Aggregate.Sum : Aggregate.None;
+        if (col.aggregate !== want) {
+          col.aggregate = want;
+          changed = true;
+        }
+      }
+      // 라벨은 기간 컬럼이 아닌 첫 컬럼에만 쓴다(기간 컬럼이면 집계값이 우선이라 라벨이 안 보인다).
+      const firstCol = g.columns[0] ?? null;
+      if (firstCol && firstCol !== labeledCol && !dynKindOf(firstCol.binding ?? '')) {
+        g.columnFooters.setCellData(0, 0, FOOTER_LABEL, false, false);
+        labeledCol = firstCol;
+        changed = true;
+      }
+      if (changed) g.invalidate(true);
+    };
+    g.updatedLayout.addHandler(applyFooter);
+    applyFooter();
+    return () => {
+      try {
+        g.updatedLayout?.removeHandler(applyFooter);
+      } catch {
+        /* unmount race */
+      }
+    };
+  }, [rows, mainStaticColumns, mainDynamicColumns, gridRef]);
+
   // 현재 주/월 헤더 강조 + Color 토글 — 응답/토글 갱신 시 formatItem 재실행
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<SalesMonitoringRow> | null } | null)?.current;
     g?.invalidate(true);
   }, [currentWeekInfo, colorYn, gridRef]);
 
-  // ⭐ F4 Filter — 피처 소유 FlexGridFilter (동적 컬럼 필터 제외)
+  // ⭐ F4 Filter — 피처 소유 FlexGridFilter
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<SalesMonitoringRow> | null } | null)?.current;
     if (!g || !gridFilterRef) return;
 
-    const isDynamic = (binding: string | null | undefined): boolean =>
-      /^[MWD]_/.test(binding ?? '');
-    const onFilterChanging = (_s: FlexGridFilter, e: CellRangeEventArgs) => {
-      if (isDynamic(e.getColumn()?.binding)) e.cancel = true;
-    };
     const onFilterApplied = () => g.invalidate(true);
 
     let f = gridFilterRef.current;
@@ -579,15 +661,10 @@ export const SalesMonitoringGrid = ({
       f.filterColumns = [''];
       gridFilterRef.current = f;
     }
-    // Filter sanitize — 동적(M_/W_/D_) binding 제거 (머지헤더 충돌 방지)
-    const cleaned = f.filterColumns.filter(b => !/^[MWD]_/.test(b));
-    if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
-    f.filterChanging.addHandler(onFilterChanging);
     f.filterApplied.addHandler(onFilterApplied);
 
     return () => {
       try {
-        f?.filterChanging.removeHandler(onFilterChanging);
         f?.filterApplied.removeHandler(onFilterApplied);
       } catch {
         /* unmount race */
@@ -598,15 +675,18 @@ export const SalesMonitoringGrid = ({
   return (
     // <div className={styles.gridContainer}>
     <DataGrid
-      key={mainStaticColumns.map(c => c.colNm).join(',')}
       className={styles.grid}
       gridRef={gridRef as never}
       staticColumns={mainStaticColumns}
       dynamicColumns={mainDynamicColumns}
       comboParams={COMBO_PARAMS}
+      // 이 그리드의 셀 콤보에 시트 스코프 sheetName 을 함께 실어 @sheetName 을 해소한다(mnuId 와 짝).
+      sheetName={SHEETS.MAIN}
       itemsSource={rows as unknown as WijmoRowItem[]}
       autoGenerateColumns={false}
-      allowSorting={true}
+      // allowSorting prop 은 넘기지 않는다 - grid.allowSorting 이 truthy 면 wijmo
+      //   _MouseHandler._mousedown 이 헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다.
+      //   공용 정렬(F3 스위치 + 헤더 클릭 + 아이콘)은 이 prop 없이도 그대로 동작한다.
       allowMerging={AllowMerging.All}
       isReadOnly={true}
     />

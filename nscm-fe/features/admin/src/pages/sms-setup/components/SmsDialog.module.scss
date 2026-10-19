@@ -1,0 +1,30 @@
+.contentArea {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.textArea {
+  width: 100%;
+  min-height: 260px;
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #d5d9df;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: none;
+
+  &:read-only {
+    background: #f5f6f8;
+  }
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: end;
+  gap: 4px;
+  margin-top: 8px;
+}

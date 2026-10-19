@@ -12,6 +12,8 @@
 }
 
 .gridWrapper {
+  display: flex;
+  flex-direction: column;
   position: relative;
   // flex:1(=1 1 0) — basis 0 으로 잔여 공간만 차지(형제 ExchangeRateModal 정본 동일).
   //   flex:1 1 auto 는 basis=그리드 콘텐츠 높이라, 데이터 많을 때 SearchArea 를 밀어내 조회영역이

@@ -1,8 +1,11 @@
+import { useEffect } from 'react';
+
 import commonStyles from '@foundation/styles/common-styles.module.scss';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Checkbox, FormItem, Label } from '@shared/lges';
 import { Grid } from '@shared/mui';
+import { confirmIfDirtyKey, tabDirtyKey, useSessionStore, useTabid } from '@shared/stores';
 
 import { SHEET_INDEX, hasEndCustomer } from '../sales-site.constants';
 import { useSalesSiteStore } from '../useSalesSiteStore';
@@ -30,11 +33,19 @@ export const SalesSiteForm = ({
   const { t } = useTranslation();
 
   const openSearchArea = useSalesSiteStore(state => state.openSearchArea);
+  const initialized = useSalesSiteStore(state => state.initialized);
   const searchParams = useSalesSiteStore(state => state.searchParams);
   const salesSiteTrigger = useSalesSiteStore(state => state.salesSiteTrigger);
   const setSearchParams = useSalesSiteStore(state => state.setSearchParams);
   const fetchStaticColumns = useSalesSiteStore(state => state.fetchStaticColumns);
   const setSiteFilters = useSalesSiteStore(state => state.setSiteFilters);
+
+  // Division 변경은 상/하단 그리드를 통째로 비운다(SalesSite.tsx siteRows 등 useMemo deps 에
+  //   searchParams.divisionId). 편집중(dirty)이면 MSG00704 confirm 후에만 바꾼다 — 조회 버튼이
+  //   SearchArea 에서 타는 공통 가드 confirmIfDirtyKey(..., 'search')를 콤보 변경에도 동일 적용.
+  //   콤보는 controlled(value=searchParams.divisionId)라 취소 시 이전 선택으로 자동 복귀한다.
+  //   페이지 화면이라 dirtyKey 는 tab 스코프 고정(ShipmentModelPicForm 선례).
+  const tabId = useTabid();
 
   /**
    * 목록 정렬은 CustomDropdown 의 sortBy='label' 로 건다 - 표시명(NAME) 기준 숫자-영문-한글
@@ -45,14 +56,41 @@ export const SalesSiteForm = ({
    * (utils/sales-site.salesSiteCombo 참조) 다른 항목과 한 줄기로 엮이지 않기 때문이다.
    */
   const [divisions, endCustomers, yesOrNo] = useTabComboQueries({
-    filters: ['MyDivision', 'EndCustomerByDivision', 'YesOrNo'],
+    filters: ['FilterMyDivision', 'FilterEndCustomerByDivision', 'YesOrNo'],
   });
+
+  // 권한 목록 밖 Division 보정 (MktFcst / ShipmentModelPic 과 동일 규약).
+  //   스토어 초기값(session.div, 미확립 시 '40')이 FilterMyDivision 목록에 없으면 콤보가
+  //   controlled 라 빈칸으로 뜬다(예: 82 단일권한 계정). 세션 division 이 목록에 있으면 그것,
+  //   없으면 목록 첫 행으로 바꾼다. 스토어 초기화(저장 조회조건 복원) 뒤에만 돌려 복원값과
+  //   경합하지 않고, 목록에 있는 값(사용자 선택·복원값)은 덮지 않는다.
+  //   setSearchParams 는 Division 콤보 onChange 와 같은 payload 로 불러 종속 조건 초기화와
+  //   division 기준 컬럼 메타 재조회를 같은 경로로 태운다.
+  const sessionDiv = useSessionStore(state => state.session.div);
+  useEffect(() => {
+    if (!initialized) return;
+    const codes = (divisions ?? []).map(item => String(item.CODE ?? '')).filter(Boolean);
+    if (codes.length === 0 || codes.includes(searchParams.divisionId)) return;
+    const picked = codes.includes(String(sessionDiv ?? '')) ? String(sessionDiv) : codes[0];
+    setSearchParams(
+      {
+        divisionId: picked,
+        endCustomer: 'ALL',
+        soldToCustomer: 'ALL',
+        salesSite: 'ALL',
+        activeFlag: 'ALL',
+      },
+      'division'
+    );
+  }, [initialized, divisions, searchParams.divisionId, sessionDiv, setSearchParams]);
 
   // Sold-To Customer 는 division 을 실어 보낸다. 파라미터가 react-query 키에 들어가므로
   //   division 이 바뀌면 새 키가 되어 다시 조회된다. 파라미터 이름과 미선택 'ALL' 규약은
   //   카탈로그 SoldToCustomerField 와 같다.
   const [soldToCustomers] = useTabComboQueries({
-    filters: [{ comboId: 'SoldCustomer', PARAM1: searchParams.divisionId || 'ALL' }],
+    filters: [
+      { comboId: 'dmf0004GetSoldtoCustomerData', divisionId: searchParams.divisionId || 'ALL' },
+    ],
   });
 
   /**
@@ -92,17 +130,20 @@ export const SalesSiteForm = ({
                   value={searchParams.divisionId}
                   options={divisions?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
                   onChange={(_, option) => {
-                    setSearchParams(
-                      {
-                        divisionId: option,
-                        endCustomer: 'ALL',
-                        soldToCustomer: 'ALL',
-                        salesSite: 'ALL',
-                        activeFlag: 'ALL',
-                      },
-                      'division'
-                    );
-                    setOpenDetailGrid(true);
+                    void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+                      if (!ok) return;
+                      setSearchParams(
+                        {
+                          divisionId: option,
+                          endCustomer: 'ALL',
+                          soldToCustomer: 'ALL',
+                          salesSite: 'ALL',
+                          activeFlag: 'ALL',
+                        },
+                        'division'
+                      );
+                      setOpenDetailGrid(true);
+                    });
                   }}
                 />
               )}
@@ -185,7 +226,7 @@ export const SalesSiteForm = ({
                   limitTags={1}
                   sortBy='label'
                   value={searchParams.salesSite}
-                  options={buildSalesSiteOptions(salesSites, salesSiteTrigger, searchParams)}
+                  options={buildSalesSiteOptions(salesSites)}
                   onChange={(_, options) => {
                     // 'ALL' 을 빈 값으로 바꾸지 않는다 — CustomDropdown 이 전체선택을 'ALL'
                     //   sentinel 로 내보내고 그 값이 그대로 돌아와야 전체 체크가 유지된다.

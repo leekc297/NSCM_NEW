@@ -1,0 +1,1 @@
+export { MdmClassMaster } from './MdmClassMaster';

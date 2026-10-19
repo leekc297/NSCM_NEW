@@ -1,0 +1,48 @@
+// 자매 SCP0005 `distribution-route/components/modals/ExcelUploadModal.module.scss` 와 동일 레이아웃.
+//   inline style 금지(Top11 #5) — `sx` prop 대신 클래스로 뺀다.
+.contentWrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.inputContainer {
+  min-height: 96px;
+  box-sizing: border-box;
+  background-color: $commonBgDeep;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  border: 1px solid $commonBorderBasic;
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.resultLabel {
+  line-height: 150%;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.statusContainer {
+  background-color: $commonBgDeep;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  border: 1px solid $commonBorderBasic;
+  margin-bottom: 10px;
+}
+
+.statusInput {
+  & > div {
+    border: none !important;
+  }
+}

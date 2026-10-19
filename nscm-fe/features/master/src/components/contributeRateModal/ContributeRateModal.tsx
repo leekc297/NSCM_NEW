@@ -1,8 +1,9 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef } from 'react';
 
-import { GridUtils } from '@foundation/utils';
-import { CustomDialog, DataGrid } from '@shared/components';
+import { attachRowNoHeader, GridUtils } from '@foundation/utils';
+import { CustomDialog, DataGrid, ResultArea } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { Button } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
@@ -43,6 +44,8 @@ export const ContributeRateModal = ({
   const gridRef = useRef<
     FlexGrid<ResponseData<MODAL_RATE, MODAL_SHEET_RATE, 'o_rc1'>> | undefined
   >();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   // useTabProcQuery 는 filters 참조가 바뀌면 캐시를 버리고 재조회한다. yyyy prop 을
   // 인라인 리터럴로 감싸면 값이 그대로여도 매 렌더 새 참조가 생겨 그리드가 깜빡인다 —
@@ -95,6 +98,10 @@ export const ContributeRateModal = ({
     if (!initialized) void fetchStaticColumns();
   }, [open]);
 
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, itemsSource]);
+
   return (
     <CustomDialog
       size={1000}
@@ -102,6 +109,10 @@ export const ContributeRateModal = ({
       position='basic'
       open={open}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -111,13 +122,21 @@ export const ContributeRateModal = ({
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           <div className={styles.gridWrapper}>
-            <DataGrid<ResponseData<MODAL_RATE, MODAL_SHEET_RATE, 'o_rc1'>>
+            <ResultArea
+              title=''
+              count={itemsSource.length}
               gridRef={gridRef}
-              isReadOnly
-              staticColumns={staticColumns}
-              itemsSource={itemsSource}
-              dblClick={handleDblClick}
-            />
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<ResponseData<MODAL_RATE, MODAL_SHEET_RATE, 'o_rc1'>>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                staticColumns={staticColumns}
+                itemsSource={itemsSource}
+                dblClick={handleDblClick}
+              />
+            </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
             <Button

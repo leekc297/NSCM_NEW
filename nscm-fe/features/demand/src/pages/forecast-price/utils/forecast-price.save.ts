@@ -45,33 +45,57 @@ const str = (v: unknown): string => {
       : '';
 };
 
-const keyOf = (item: WijmoRowItem): Omit<SaveRow, 'activeFlag' | 'yyyymmdd' | 'qty'> => ({
-  divisionId: str(item['DIVISION_ID']),
-  projectCode: str(item['PROJECT_CODE'] || item['END_CUSTOMER']), // 40: PROJECT=END_CUSTOMER 코드 (AS-IS L761)
+/**
+ * 저장 키의 Project 코드.
+ *
+ * Division 40 은 Project 개념이 없어 원장(DM_PLN_CFM_MKT_DEMAND_PLAN)과 마스터(SCM_MST_SITE_ITEM) 모두
+ * PROJECT_CODE 슬롯에 End Customer 코드를 넣는다 (AS-IS L761). 2026-10-13 개발 DB 실측: 40 원장
+ * 284,147행 전부 PROJECT_CODE = END_CUSTOMER 로 예외가 없다.
+ *
+ * 40 화면에는 PROJECT_CODE 컬럼이 없다(컬럼 메타 DIVISION_ID 가 81·82 한정). 신규행은 시드 행의 값을
+ * 숨은 채로 물려받고 End Customer 를 바꿔도 그 값이 따라오지 않아, 종전 `PROJECT_CODE || END_CUSTOMER`
+ * 폴백은 시드가 '-' 인 행(INFAC_KR_JCH 등)에서 '-' 를 그대로 보냈다. 저장 SP 에 신규행 SSPM 4키
+ * 검증이 들어오면서(E20261013-DMF0082SSPMNEW) 그 '-' 가 "등록되지 않은 조합" 으로 막혔다
+ * (2026-10-13 11:08 로그: projectCode '-', endCustomer 'acer', acer_CN_CKG, MPPACERX481C).
+ *
+ * 그래서 40 은 Project 를 End Customer 키로 고정한다. 수정·삭제 행도 원장 규칙이 같으므로
+ * MERGE/DELETE 키가 어긋나지 않는다. 비40 은 종전 그대로(Project 팝업 값, 비면 End Customer).
+ */
+const projectCodeOf = (item: WijmoRowItem, endCustomer: string): string =>
+  str(item['DIVISION_ID']).trim() === '40'
+    ? endCustomer
+    : str(item['PROJECT_CODE'] || item['END_CUSTOMER']);
+
+const keyOf = (item: WijmoRowItem): Omit<SaveRow, 'activeFlag' | 'yyyymmdd' | 'qty'> => {
   // ⭐ [ENDCUSTDISP 2026-08-18] 표시/키 분리 — 비40 조회행의 END_CUSTOMER 는 화면 표시용
   //   (사이트 파생, 조회조건 축)으로 교체되고 원장 키는 END_CUSTOMER_KEY 에 보존된다
   //   (ForecastPrice.tsx gridRows 변환). SAVE·중복키는 **반드시 KEY** — 원장 END_CUSTOMER 는
   //   DM_PLN_CFM_* PK 구성 컬럼이라 표시값으로 보내면 DELETE/MERGE 가 어긋나 중복 적재된다.
   //   'in' 검사인 이유: KEY='' (원장 빈값) 도 유효한 키라 || 폴백으로 덮으면 안 된다.
   //   신규행(I)은 KEY 가 없어 사용자가 고른 END_CUSTOMER 가 그대로 키가 된다(새 키 — 충돌 없음).
-  endCustomer:
-    'END_CUSTOMER_KEY' in item ? str(item['END_CUSTOMER_KEY']) : str(item['END_CUSTOMER']),
-  scmSiteId: str(item['SCM_SITE_ID']),
-  itemId: str(item['ITEM_ID']),
-  domExp: str(item['DOM_EXP']),
-  fcstType: str(item['FCST_TYPE']),
-  incoterms: str(item['INCOTERMS']),
-  measure: str(item['MEASURE']),
-  // 각 컬럼이 제 슬롯으로 (2026-08-03 — 그 전에는 p_plant_site_id 하나에 AS_FROM_SITE 를 실었다).
-  //   PLANT_SITE_ID 는 81 계열 신규행의 필수 키 컬럼이고(validate.ts V0-2), 조회 커서에도 BE 가
-  //   함께 추가한다. AS_FROM_SITE 는 기존대로 커서가 내려준다 (procedures.d.ts fcstNPrice).
-  plantSite: str(item['PLANT_SITE_ID']),
-  // 금지: '^' 를 넣지 말 것 — buildSavePayload 가 '^' 로 행을 잇는 bulk 라 값 안의 '^' 는 행 경계를
-  //   깨뜨린다. 이 화면은 단건 그대로 보낸다.
-  asFromSite: str(item['AS_FROM_SITE']),
-  cellProdSiteId: str(item['CELL_PROD_SITE_ID']),
-  currency: str(item['CURRENCY']),
-});
+  const endCustomer =
+    'END_CUSTOMER_KEY' in item ? str(item['END_CUSTOMER_KEY']) : str(item['END_CUSTOMER']);
+  return {
+    divisionId: str(item['DIVISION_ID']),
+    projectCode: projectCodeOf(item, endCustomer),
+    endCustomer,
+    scmSiteId: str(item['SCM_SITE_ID']),
+    itemId: str(item['ITEM_ID']),
+    domExp: str(item['DOM_EXP']),
+    fcstType: str(item['FCST_TYPE']),
+    incoterms: str(item['INCOTERMS']),
+    measure: str(item['MEASURE']),
+    // 각 컬럼이 제 슬롯으로 (2026-08-03 — 그 전에는 p_plant_site_id 하나에 AS_FROM_SITE 를 실었다).
+    //   PLANT_SITE_ID 는 81 계열 신규행의 필수 키 컬럼이고(validate.ts V0-2), 조회 커서에도 BE 가
+    //   함께 추가한다. AS_FROM_SITE 는 기존대로 커서가 내려준다 (procedures.d.ts fcstNPrice).
+    plantSite: str(item['PLANT_SITE_ID']),
+    // 금지: '^' 를 넣지 말 것 — buildSavePayload 가 '^' 로 행을 잇는 bulk 라 값 안의 '^' 는 행 경계를
+    //   깨뜨린다. 이 화면은 단건 그대로 보낸다.
+    asFromSite: str(item['AS_FROM_SITE']),
+    cellProdSiteId: str(item['CELL_PROD_SITE_ID']),
+    currency: str(item['CURRENCY']),
+  };
+};
 
 /**
  * 신규행 중복(MSG00260) 판정 키 — AS-IS 중복검증 컬럼셋 1:1. 유일한 사용처는

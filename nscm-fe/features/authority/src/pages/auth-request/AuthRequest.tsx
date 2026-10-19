@@ -52,6 +52,24 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setAlert = useMessageStore(state => state.setAlert);
   const setToast = useMessageStore(state => state.setToast);
 
+  // 건수는 각 영역 제목 줄에 따로 표시한다 — Authority/Division 조회를 부모로 끌어올려
+  // 영역별 totalCases 를 계산한다 (Lookup.tsx 의 master/detail 건수 분리 패턴과 동일).
+  const { data: authorityData } = useTabProcQuery<MENU_ID, SHEETS.AUTHORITY>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.AUTHORITY,
+    tabId,
+    filters: filters[SHEETS.AUTHORITY],
+    enabled: !!filters[SHEETS.AUTHORITY],
+  });
+
+  const { data: divisionData } = useTabProcQuery<MENU_ID, SHEETS.DIVISION>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.DIVISION,
+    tabId,
+    filters: filters[SHEETS.DIVISION],
+    enabled: !!filters[SHEETS.DIVISION],
+  });
+
   const { data: myAuthData } = useTabProcQuery<MENU_ID, SHEETS.MY_AUTHORITY_LIST>({
     menuId: MENU_ID,
     sheetName: SHEETS.MY_AUTHORITY_LIST,
@@ -264,6 +282,10 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
     upload: false,
   };
 
+  const authorityCount = authorityData?.o_rc?.length ?? 0;
+  const divisionCount = divisionData?.o_rc?.length ?? 0;
+  const myAuthCount = myAuthData?.o_rc?.length ?? 0;
+
   const myAuthListButtons = (
     <>
       <Button
@@ -292,7 +314,10 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
         menuId={MENU_ID}
         grid={myAuthGridRef}
         gridFilter={myAuthGridFilterRef}
-        dataCount={myAuthData?.o_rc?.length ?? 0}
+        dataCount={myAuthCount}
+        // 그리드별 건수를 각 영역 제목 줄에서 표시하므로, 어느 그리드인지 모호한
+        // 상단 툴바 줄의 건수 배지는 숨긴다(툴바 동작 대상은 그대로 myAuthGridRef).
+        hideTotalCases
         excelFileName='Auth Request'
         hotkeyConfig={hotkeyConfig}
         customButtons={customButtons}
@@ -300,12 +325,30 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
       <div className={styles.contents}>
         <div className={styles.row}>
           <div className={styles.module}>
-            <TitleArea isSubTitle title={t('LBL00671', 'Authority')} depth='h4' />
-            <AuthorityGrid gridRef={authorityGridRef} gridFilterRef={authorityGridFilterRef} />
+            <TitleArea
+              isSubTitle
+              title={t('LBL00640', 'Authority')}
+              depth='h4'
+              totalCases={authorityCount === 0 ? undefined : authorityCount}
+            />
+            <AuthorityGrid
+              gridRef={authorityGridRef}
+              gridFilterRef={authorityGridFilterRef}
+              data={authorityData?.o_rc ?? []}
+            />
           </div>
           <div className={styles.module}>
-            <TitleArea isSubTitle title={t('LBL00672', 'Division')} depth='h4' />
-            <DivisionGrid gridRef={divisionGridRef} gridFilterRef={divisionGridFilterRef} />
+            <TitleArea
+              isSubTitle
+              title={t('LBL00641', 'Division')}
+              depth='h4'
+              totalCases={divisionCount === 0 ? undefined : divisionCount}
+            />
+            <DivisionGrid
+              gridRef={divisionGridRef}
+              gridFilterRef={divisionGridFilterRef}
+              data={divisionData?.o_rc ?? []}
+            />
           </div>
         </div>
         <div className={styles.row}>
@@ -318,6 +361,7 @@ export const AuthRequest = ({ tabId, title }: PageProps<MENU_ID>) => {
               isSubTitle
               title={t('LBL00673', 'My Authority List')}
               depth='h4'
+              totalCases={myAuthCount === 0 ? undefined : myAuthCount}
               rightButtons={myAuthListButtons}
             />
             <MyAuthorityListGrid

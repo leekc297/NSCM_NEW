@@ -31,6 +31,15 @@ export const RESPONSE_SET = {
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
 // AS-IS .cs L734/L740
+/**
+ * Repair 제목 줄의 "정비 필요 합계 수량 : N"(CNT 합계) 표시 여부.
+ *
+ * 2026-10-08 에 AS-IS lblRepair_Cnt 파리티로 추가했으나 화면에서 빼 달라는 요청(2026-10-12)으로
+ * 표시만 끈다. 합계 계산(ErpEdiMaster.tsx repairTotalCnt)과 스타일(.repairCount)은 그대로 두어
+ * 다시 보이게 할 때 이 값만 true 로 바꾸면 된다.
+ */
+export const SHOW_REPAIR_TOTAL_CNT = false;
+
 export const VALIDATION_MSG = {
   PERIOD_INVALID: 'MSG00108',
   PERIOD_RANGE: 'MSG00164',

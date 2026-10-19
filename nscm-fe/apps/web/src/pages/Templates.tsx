@@ -3,8 +3,10 @@ import { templateItemsSource, templateStaticColumns } from '@mock/data/template'
 import { ChartType, FlexChart } from '@mescius/wijmo.chart';
 import { PivotEngine } from '@mescius/wijmo.olap';
 import { PivotGrid, PivotPanel } from '@mescius/wijmo.react.olap';
+import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { SupplyPopupGallery } from '@supply/popup-gallery';
 import { apiClient } from '@foundation/apis';
 import { API_CONFIG } from '@foundation/constants';
 import { i18n } from '@foundation/i18n';
@@ -12,14 +14,18 @@ import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { useQuery } from '@foundation/query-client';
 import {
   DataGrid,
+  CascadeDropdown,
   CustomDropdown,
+  PeriodRangePicker,
   TabWrapper,
   TabItem,
   MainTitle,
   SearchArea,
 } from '@shared/components';
+import type { CascadeNode } from '@shared/components';
+import { useTabComboQueries } from '@shared/hooks';
 import type { DropdownOption } from '@shared/lges';
-import { Divider, FormItem, InputField } from '@shared/lges';
+import { Divider, FormItem, InputField, Radio, RadioGroup } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
@@ -54,6 +60,168 @@ const genBulkDropdown = (count: number = 10, txt?: string) => {
     result.push({ label: `${i}_${txt ?? 'lbl'}`, value: `${i}` });
   });
   return result;
+};
+
+// 데모용 정적 트리(지역 > 국가 > 도시 > 구역, 최대 4단계). 실제 화면에서는 이 자리에
+//   조회 콤보 결과를 넣으면 된다 — 데이터 모양만 { value, label, children } 로 맞추면 동작한다.
+const CASCADE_SAMPLE_TREE: CascadeNode[] = [
+  {
+    value: 'asia',
+    label: '아시아',
+    children: [
+      {
+        value: 'kr',
+        label: '대한민국',
+        children: [
+          {
+            value: 'seoul',
+            label: '서울',
+            children: [
+              { value: 'gangnam', label: '강남구' },
+              { value: 'mapo', label: '마포구' },
+            ],
+          },
+          {
+            value: 'busan',
+            label: '부산',
+            children: [
+              { value: 'haeundae', label: '해운대구' },
+              { value: 'suyeong', label: '수영구' },
+            ],
+          },
+        ],
+      },
+      {
+        value: 'jp',
+        label: '일본',
+        children: [
+          {
+            value: 'tokyo',
+            label: '도쿄',
+            children: [
+              { value: 'shinjuku', label: '신주쿠' },
+              { value: 'shibuya', label: '시부야' },
+            ],
+          },
+          {
+            value: 'osaka',
+            label: '오사카',
+            children: [
+              { value: 'kita', label: '기타구' },
+              { value: 'chuo', label: '주오구' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    value: 'europe',
+    label: '유럽',
+    children: [
+      {
+        value: 'de',
+        label: '독일',
+        children: [
+          {
+            value: 'berlin',
+            label: '베를린',
+            children: [
+              { value: 'mitte', label: '미테' },
+              { value: 'pankow', label: '판코' },
+            ],
+          },
+        ],
+      },
+      {
+        value: 'fr',
+        label: '프랑스',
+        children: [
+          {
+            value: 'paris',
+            label: '파리',
+            children: [
+              { value: 'louvre', label: '루브르' },
+              { value: 'marais', label: '마레' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
+// CascadeDropdown · CascadeNode · CascadeLevel 은 공용 컴포넌트로 이동했다(@shared/components).
+//   아래 두 데모는 그 공용 컴포넌트를 쓴다.
+
+// Production Plan Line 의 Plan Date → Plan Type → Seq 세트(종속 콤보)를 위 캐스케이더로 재구성한 예.
+//   콤보는 실제 등록 콤보를 그대로 가져온다 — home 탭이라도 mnuId 를 SCP0013 으로 명시해 그 화면과 같은
+//   스코프로 요청한다(withMenuId 는 param 에 mnuId 가 없을 때만 주입하므로 명시하면 그 값이 쓰인다).
+//   _SCP_ALL 전량 콤보라, 반환 컬럼(PLANDATE/PLANTYPE)으로 상위-하위를 이어 트리를 만든다
+//   (AS-IS CommonAll + DBUtils.Filter 클라 재현과 동치, convert-core §2.6).
+const PLAN_VERSION_MENU_ID = 'SCP0013';
+const PLAN_VERSION_COMBO = {
+  PLAN_DATE: 'DATE_WEEKLY1_SCP_ALL', // CODE=plan_start_yyyymmdd, 반환 DIVISION_ID
+  PLAN_TYPE: 'PlanType1_SCP_ALL', // 반환 DIVISION_ID/PLANDATE
+  PLAN_SEQ: 'PlanSeq1_SCP_ALL', // 반환 DIVISION_ID/PLANDATE/PLANTYPE
+} as const;
+
+const PlanVersionCascade = () => {
+  const [planDates, planTypes, planSeqs] = useTabComboQueries({
+    filters: [
+      { comboId: PLAN_VERSION_COMBO.PLAN_DATE, mnuId: PLAN_VERSION_MENU_ID },
+      { comboId: PLAN_VERSION_COMBO.PLAN_TYPE, mnuId: PLAN_VERSION_MENU_ID },
+      { comboId: PLAN_VERSION_COMBO.PLAN_SEQ, mnuId: PLAN_VERSION_MENU_ID },
+    ],
+  });
+
+  // 반환 컬럼으로 상위-하위를 잇는다 — planType 행은 PLANDATE 로, planSeq 행은 PLANDATE+PLANTYPE 로 묶는다.
+  const tree = useMemo<CascadeNode[]>(() => {
+    // 콤보 셀 값은 문자열/숫자다 — 객체가 '[object Object]' 로 찍히지 않도록 원시값만 문자열화한다.
+    const cell = (row: unknown, key: string): string => {
+      const v = (row as Record<string, unknown>)[key];
+      return typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+    };
+    const toNode = (row: unknown): CascadeNode => ({
+      value: cell(row, 'CODE'),
+      label: cell(row, 'NAME') || cell(row, 'CODE'),
+    });
+    // 같은 value 중복 제거(division 필터가 없어 콤보가 넓게 올 수 있다 — 표시 기준 first-wins).
+    const dedupe = (nodes: CascadeNode[]): CascadeNode[] => {
+      const seen = new Map<string, CascadeNode>();
+      nodes.forEach(node => {
+        if (node.value && !seen.has(node.value)) seen.set(node.value, node);
+      });
+      return [...seen.values()];
+    };
+
+    return dedupe((planDates ?? []).map(toNode)).map(date => ({
+      ...date,
+      children: dedupe(
+        (planTypes ?? []).filter(row => cell(row, 'PLANDATE') === date.value).map(toNode)
+      ).map(type => ({
+        ...type,
+        children: dedupe(
+          (planSeqs ?? [])
+            .filter(
+              row => cell(row, 'PLANDATE') === date.value && cell(row, 'PLANTYPE') === type.value
+            )
+            .map(toNode)
+        ),
+      })),
+    }));
+  }, [planDates, planTypes, planSeqs]);
+
+  return (
+    <CascadeDropdown
+      tree={tree}
+      levels={[
+        { name: 'planDate', label: 'Plan Date' },
+        { name: 'planType', label: 'Plan Type' },
+        { name: 'planSeq', label: 'Seq' },
+      ]}
+    />
+  );
 };
 
 const GanttChartExample = ({
@@ -173,6 +341,7 @@ const ImageUploadExample = () => {
   return (
     <section aria-labelledby='image-upload'>
       <h2 id='image-upload'>이미지 업로드 / 보기</h2>
+      <FilePath paths={['apps/web/src/pages/Templates.tsx (ImageUploadExample)']} />
       <p style={{ color: '#666', fontSize: '13px' }}>
         jpg, jpeg, png, gif, webp / 최대 15MB. 서버가 확장자와 실제 파일 헤더(매직바이트)를 함께
         검사합니다.
@@ -214,6 +383,77 @@ const ImageUploadExample = () => {
   );
 };
 
+/** 섹션이 사용하는 실제 컴포넌트 파일 위치(nscm-fe 루트 기준) — 제목·본문과 떨어뜨려 한 블록으로 표시한다. */
+const FilePath = ({ paths }: { paths: string[] }) => (
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '2px',
+      margin: '4px 0 12px',
+      color: '#aaa',
+      fontSize: '12px',
+      lineHeight: 1.5,
+    }}
+  >
+    {paths.map(path => (
+      <span key={path}>{path}</span>
+    ))}
+  </div>
+);
+
+const RadioGroupExample = () => {
+  const [basic, setBasic] = useState('MONTH');
+  const [withDisabled, setWithDisabled] = useState('A');
+  const [inForm, setInForm] = useState('MONTH');
+
+  return (
+    <section aria-labelledby='radio-group'>
+      <h2 id='radio-group'>라디오 그룹</h2>
+      <FilePath
+        paths={[
+          'packages/shared/src/lib/lges.ts (Radio, RadioGroup)',
+          'apps/web/src/pages/Templates.tsx (RadioGroupExample)',
+        ]}
+      />
+      <p style={{ color: '#666', fontSize: '13px' }}>
+        RadioGroup 안에 Radio(value, labelText)를 나열한다. 선택값은 RadioGroup 의 value /
+        onChange 로 관리한다.
+      </p>
+
+      <h3>가로 배치 (row)</h3>
+      <RadioGroup row value={basic} onChange={(_, v) => setBasic(v)}>
+        <Radio value='MONTH' labelText='월마감 기준' />
+        <Radio value='DAILY' labelText='일별 기준' />
+      </RadioGroup>
+      <div>선택값: {basic}</div>
+
+      <h3>비활성 옵션 포함</h3>
+      <RadioGroup row value={withDisabled} onChange={(_, v) => setWithDisabled(v)}>
+        <Radio value='A' labelText='옵션 A' />
+        <Radio value='B' labelText='옵션 B (disabled)' disabled />
+        <Radio value='C' labelText='옵션 C' />
+      </RadioGroup>
+      <div>선택값: {withDisabled}</div>
+
+      <h3>세로 배치 + FormItem 라벨</h3>
+      <Grid size={4}>
+        <FormItem
+          label='조회 기준'
+          labelAlign='right'
+          render={() => (
+            <RadioGroup value={inForm} onChange={(_, v) => setInForm(v)}>
+              <Radio value='MONTH' labelText='월마감 기준' />
+              <Radio value='DAILY' labelText='일별 기준' />
+            </RadioGroup>
+          )}
+        />
+      </Grid>
+      <div>선택값: {inForm}</div>
+    </section>
+  );
+};
+
 export const Templates = () => {
   const { t } = useTranslation();
 
@@ -223,6 +463,8 @@ export const Templates = () => {
   const [file, setFile] = useState<File>();
   const [drpodown1, setDrpodown1] = useState<string>();
   const [drpodown2, setDrpodown2] = useState<string>();
+  const [periodStart, setPeriodStart] = useState('20260914');
+  const [periodEnd, setPeriodEnd] = useState('20270912');
 
   const { setToast, setAlert } = useMessageStore();
   const { refetch } = useQuery({
@@ -269,8 +511,17 @@ export const Templates = () => {
       <h1>Templates</h1>
       <Divider />
 
+      <SupplyPopupGallery />
+      <Divider />
+
       <section aria-labelledby='file-upload'>
         <h2>파일업로드</h2>
+        <FilePath
+          paths={[
+            'packages/foundation/src/apis/axios.ts (apiClient)',
+            'apps/web/src/pages/Templates.tsx (인라인 구현)',
+          ]}
+        />
         <input type='file' onChange={e => setFile(e.target.files?.[0] || undefined)} />
         <button
           onClick={() => {
@@ -285,6 +536,11 @@ export const Templates = () => {
       <Divider />
       <section aria-labelledby='i18n'>
         <h2>커스텀 드롭다운</h2>
+        <FilePath
+          paths={[
+            'packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx',
+          ]}
+        />
         <br />
         <div style={{ width: '300px' }}>
           단일선택
@@ -318,8 +574,79 @@ export const Templates = () => {
         </div>
       </section>
       <Divider />
+      <section aria-labelledby='cascade-dropdown'>
+        <h2>캐스케이딩 드롭다운 (종속 콤보 + 공유 캐스케이더)</h2>
+        <FilePath
+          paths={[
+            'packages/shared/src/components/molecules/cascadeDropdown/CascadeDropdown.tsx',
+          ]}
+        />
+        <span>
+          1단계~4단계 필드를 항상 보여주되, 어느 필드를 누르든 같은 컬럼 팝업이 열린다. 팝업에서 경로를
+          골라 내려가면 각 단계 필드가 함께 채워지고, 상위를 바꾸면 하위는 초기화된다. 값은 다른
+          검색조건처럼 name 키(level1~level4)로 담긴다.
+        </span>
+        <br />
+        <CascadeDropdown
+          tree={CASCADE_SAMPLE_TREE}
+          levels={[
+            { name: 'level1', label: '1단계' },
+            { name: 'level2', label: '2단계' },
+            { name: 'level3', label: '3단계' },
+            { name: 'level4', label: '4단계' },
+          ]}
+        />
+      </section>
+      <Divider />
+      <section aria-labelledby='plan-version-cascade'>
+        <h2>Plan Date / Plan Type / Seq 세트 (실콤보 — SCP0013)</h2>
+        <FilePath
+          paths={[
+            'apps/web/src/pages/Templates.tsx (PlanVersionCascade)',
+            'packages/shared/src/components/molecules/cascadeDropdown/CascadeDropdown.tsx',
+            'packages/shared/src/hooks/useCustomQueryClient.ts (useTabComboQueries)',
+          ]}
+        />
+        <span>
+          Production Plan Line 의 Plan Date → Plan Type → Seq 종속 세트를 위 캐스케이더 구성으로 가져온
+          것. 콤보는 실제 등록 콤보(_SCP_ALL)를 SCP0013 스코프로 불러와, 반환 컬럼(PLANDATE/PLANTYPE)으로
+          상위-하위를 이어 붙인다.
+        </span>
+        <br />
+        <PlanVersionCascade />
+      </section>
+      <Divider />
+      <section aria-labelledby='period-range-picker'>
+        <h2>Period 컴포넌트 (임시)</h2>
+        <FilePath
+          paths={[
+            'packages/shared/src/components/molecules/periodRangePicker/PeriodRangePicker.tsx',
+          ]}
+        />
+        <span>
+          주차(WEEK) 표시 from/to 달력 프로토타입. kyr/SCP_DM_화면별 조회조건 정리_260731_v0.5
+          To-Do 2번 참고.
+        </span>
+        <div style={{ width: '360px' }}>
+          <PeriodRangePicker
+            start={periodStart}
+            end={periodEnd}
+            onChange={(s, e) => {
+              setPeriodStart(s);
+              setPeriodEnd(e);
+            }}
+            required
+          />
+        </div>
+      </section>
+      <Divider />
       <section aria-labelledby='i18n'>
         <h2>다국어 처리</h2>
+        <FilePath
+          paths={[
+            'packages/foundation/src/lib/i18n.ts',
+          ]}
+        />
         <span>우측 상단 버튼으로도 다국어 제어 가능</span>
         <div>
           <button onClick={() => i18n.changeLanguage('KO')}>KO</button>
@@ -332,6 +659,11 @@ export const Templates = () => {
       <Divider />
       <section aria-labelledby='tab-component'>
         <h2>탭 컴포넌트 예시</h2>
+        <FilePath
+          paths={[
+            'packages/shared/src/components/molecules/tab/Tab.tsx (TabWrapper, TabItem)',
+          ]}
+        />
         <TabWrapper
           onTabClick={e => alert(`탭 클릭!! index:${e}`)}
           onClose={e => alert(`탭 닫기 클릭!! index:${e}`)}
@@ -348,6 +680,15 @@ export const Templates = () => {
       <Divider />
       <section aria-labelledby='spinner'>
         <h2>각종 기능</h2>
+        <FilePath
+          paths={[
+            '스피너: apps/web/src/mdi/MDIContainer.tsx (ProgressIndicator)',
+            'packages/shared/src/components/organisms/toast-message/ToastMessage.tsx (토스트)',
+            'packages/shared/src/components/organisms/alert/Alert.tsx',
+            'packages/shared/src/components/templates/modals/message-modal/MessageModal.tsx (메세지)',
+            'packages/shared/src/stores/useMessageStore.ts',
+          ]}
+        />
         <span>스피너</span>
         <button onClick={() => refetch()}>2초 페이지 스피너 기동</button>
         <br />
@@ -396,6 +737,13 @@ export const Templates = () => {
       <Divider />
       <section aria-labelledby='search-area'>
         <h2>검색조건 영역</h2>
+        <FilePath
+          paths={[
+            'packages/shared/src/components/organisms/search-area/SearchArea.tsx',
+            'features/master/src/components/searchFields/SearchFields.tsx (PeriodField)',
+            'packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx',
+          ]}
+        />
         <SearchArea
           searchButtonLabel='Search'
           myOptions={['MyOption']}
@@ -554,6 +902,15 @@ export const Templates = () => {
                   )}
                 />
               </Grid>
+              <PeriodField
+                gridSize={4}
+                start={periodStart}
+                end={periodEnd}
+                onChange={(s, e) => {
+                  setPeriodStart(s);
+                  setPeriodEnd(e);
+                }}
+              />
             </>
           }
           extraConditions={
@@ -652,6 +1009,11 @@ export const Templates = () => {
       </section>
       <Divider />
       <h2>Pivot Table</h2>
+      <FilePath
+        paths={[
+          '외부 라이브러리 @mescius/wijmo.react.olap (PivotPanel, PivotGrid) 직접 사용',
+        ]}
+      />
       <div style={{ display: 'flex', gap: '12px' }}>
         <div style={{ width: '400px' }}>
           <PivotPanel itemsSource={pivotEngine} />
@@ -662,6 +1024,11 @@ export const Templates = () => {
         </div>
       </div>
       <Divider />
+      <FilePath
+        paths={[
+          'packages/shared/src/components/organisms/main-title/MainTitle.tsx',
+        ]}
+      />
       <MainTitle
         title='Message'
         menuId='SYS0001'
@@ -669,6 +1036,11 @@ export const Templates = () => {
         toggleOpenSearchArea={() => {}}
       />
       <h2>SubTitle Default</h2>
+      <FilePath
+        paths={[
+          'packages/shared/src/components/organisms/sub-title/SubTitle.tsx (현재 주석 처리)',
+        ]}
+      />
       {/* <SubTitle grid={testGrid} gridFilter={testGridFilter} dataCount={10} /> */}
       <h2>SubTitle Custom</h2>
       {/* <SubTitle
@@ -687,6 +1059,11 @@ export const Templates = () => {
       /> */}
       <section aria-labelledby='wijmo-grid'>
         <h2>그리드 랜더링 예시</h2>
+        <FilePath
+          paths={[
+            'packages/shared/src/components/organisms/data-grid/DataGrid.tsx',
+          ]}
+        />
         <DataGrid
           itemsSource={templateItemsSource}
           staticColumns={templateStaticColumns as RawFlexGridColumnConfig[]}
@@ -695,6 +1072,12 @@ export const Templates = () => {
       <Divider />
       <section aria-labelledby='wijmo-gantt-chart'>
         <h2 id='wijmo-gantt-chart'>간트 차트 렌더링 예시</h2>
+        <FilePath
+          paths={[
+            'apps/web/src/pages/Templates.tsx (GanttChartExample)',
+            'apps/web/src/pages/TemplatesGantt.ts',
+          ]}
+        />
         <GanttChartExample
           title='기본 간트 차트'
           description='작업 기간, 진행률, 작업 간 의존성을 함께 표시합니다.'
@@ -712,6 +1095,11 @@ export const Templates = () => {
       <Divider />
       <section aria-labelledby='wijmo-treeview'>
         <h2 id='wijmo-treeview'>트리 메뉴(TreeView) 렌더링 예시</h2>
+        <FilePath
+          paths={[
+            'apps/web/src/pages/TemplatesTreeView.tsx',
+          ]}
+        />
         <span>
           화면 중간의 세로 메뉴 패턴. 좌측 트리에서 노드를 선택하면 우측 상세 영역이 바뀝니다.
         </span>
@@ -719,6 +1107,8 @@ export const Templates = () => {
       </section>
       <Divider />
       <ImageUploadExample />
+      <Divider />
+      <RadioGroupExample />
     </div>
   );
 };

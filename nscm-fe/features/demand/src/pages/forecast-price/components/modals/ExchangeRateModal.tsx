@@ -7,19 +7,26 @@ import {
   type GridPanel,
   MergeManager,
 } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, ProgressIndicator } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { useMessageStore, useUIStore, useSessionStore } from '@shared/stores';
 
-import { EXCHANGE_RATE_COLUMNS, MENU_ID, MSG, SHEETS } from '../../forecast-price.constants';
+import {
+  EXCHANGE_RATE_COLUMNS,
+  EXCHANGE_RATE_TRAILING_COLUMNS,
+  MENU_ID,
+  MSG,
+  SHEETS,
+} from '../../forecast-price.constants';
 
 import styles from './ExchangeRateModal.module.scss';
 import { useExchangeRateModalStore } from './exchangeRateModalStore';
@@ -46,6 +53,9 @@ interface ExchangeRow {
   UNIT_CURRENCY?: string;
   EXCHANGE_PRICE?: number | string;
   EDIT_YN?: string;
+  LAST_UPDATED_BY?: string;
+  // 'YYYY-MM-DD HH24:MI:SS' 문자열 — 사전순 비교가 곧 시간순 비교다
+  LAST_UPDATE_DATE?: string;
 }
 
 interface PivotRow {
@@ -59,6 +69,9 @@ interface PivotRow {
   EDIT_FLAG: string;
   // 'I' = Insert 신규 행 / '' = 기존 행 (AS-IS ActionTextBox FlagI/FlagM 대응 — CRUD_TYPE.INSERT)
   CRUD_TYPE: string;
+  // 행의 월 데이터 중 LAST_UPDATE_DATE 가 가장 늦은 월의 수정자/수정일시 (조회 전용 표시)
+  LAST_UPDATED_BY: string;
+  LAST_UPDATE_DATE: string;
   [yyyymmKey: string]: string | number;
 }
 
@@ -96,6 +109,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   //   그걸 바꾸면 다른 화면의 토스트 동작까지 함께 바뀐다.
   const setToast = useMessageStore.getState().setToast;
   const gridRef = useRef<FlexGridType<PivotRow>>(undefined);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
   const [divisionId, setDivisionId] = useState(defaultDivision);
   const sesUserId = useSessionStore.getState().session.userId ?? '';
 
@@ -166,14 +181,17 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   // ⭐ 자동조회 (2026-07-07 사용자 요구 — Batch Price Input 제외 전 modal 자동조회):
   //   enabled=open → modal open 시 react-query 가 filters(기간)로 자동 fetch. Find 버튼은 재조회용 유지.
   //   (setFilter();refetch() 직접 발사 대신 enabled 구동 → stale-closure NULL 재조회 함정 회피.)
-  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.FUTURE_PRICE_INFO>({
+  const { data, refetch, isLoading, isFetching } = useTabProcQuery<
+    MENU_ID,
+    SHEETS.FUTURE_PRICE_INFO
+  >({
     menuId: MENU_ID,
     sheetName: SHEETS.FUTURE_PRICE_INFO,
     tabId: MENU_ID,
     filters,
     enabled: open,
   });
-
+  const loading = isLoading || isFetching;
   // ⭐ BPS I/F (AS-IS DMF0000_ExchangeRatePopup.btnBPS_Click — ADMIN/DM ADMIN 만, hasButton('IF') 게이트).
   //   PR_SCM_MST_EXCHANGE_RATE_UI(batchYn='N') 래퍼 호출 → BPS 환율 인터페이스 갱신 → 성공/실패 알림 → 재조회.
   //   (공유 배치 proc PR_SCM_MST_EXCHANGE_RATE 는 미변경 — OUT 커서 보유 래퍼 신설로 배치 파손 회피.)
@@ -204,12 +222,12 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       const failure =
         [inner?.RESULT_MSG, detail].filter(Boolean).join('\n') ||
         (res.status >= 400 ? serverErrorText(res.status, res.data) : '') ||
-        t('MSG00455', '_환율 정보 반영에 실패했습니다.');
+        t('MSG00026', '_환율 정보 반영에 실패했습니다.');
       // 완료는 별도 팝업(Alert) 대신 하단 중앙 토스트로 표기 후 사라진다 (2026-08-13 사용자 지시).
       //   실패는 사용자가 원인을 읽고 확인해야 하므로 팝업을 유지한다.
       if (ok) {
         setToast({
-          message: t('MSG00454', '_환율 정보가 정상적으로 반영되었습니다.'),
+          message: t('MSG00027', '_환율 정보가 정상적으로 반영되었습니다.'),
           type: 'success',
         });
         void refetch();
@@ -217,7 +235,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
         await setAlert({ type: 'alert', content: failure });
       }
     } catch {
-      await setAlert({ type: 'alert', content: t('MSG00455', '_환율 정보 반영에 실패했습니다.') });
+      await setAlert({ type: 'alert', content: t('MSG00026', '_환율 정보 반영에 실패했습니다.') });
     } finally {
       setProgress(100); // 완료 — 로딩바 리셋(0)
       setIfRunning(false);
@@ -260,9 +278,16 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
           EDIT_YN: editYn,
           EDIT_FLAG: editYn, // wrapper isEditableCell 표준 키 ('N' = 행 잠금)
           CRUD_TYPE: '',
+          LAST_UPDATED_BY: '',
+          LAST_UPDATE_DATE: '',
         });
       }
       const row = groupMap.get(key)!;
+      const updatedAt = String(r.LAST_UPDATE_DATE ?? '');
+      if (updatedAt > row.LAST_UPDATE_DATE) {
+        row.LAST_UPDATE_DATE = updatedAt;
+        row.LAST_UPDATED_BY = String(r.LAST_UPDATED_BY ?? '');
+      }
       const price =
         typeof r.EXCHANGE_PRICE === 'number' ? r.EXCHANGE_PRICE : Number(r.EXCHANGE_PRICE);
       if (!Number.isNaN(price)) row[`M_${ym}`] = price;
@@ -280,6 +305,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   const displayRows = useMemo(() => [...pivotRows, ...insertedRows], [pivotRows, insertedRows]);
 
   const fixedBindings = useMemo(() => EXCHANGE_RATE_COLUMNS.map(c => c.key), []);
+  const trailingBindings = useMemo(() => EXCHANGE_RATE_TRAILING_COLUMNS.map(c => c.key), []);
 
   // ⭐ 성능(2026-07-08) — grid 컬럼 prop 참조 안정화. JSX inline .map 은 매 렌더 새 배열 →
   //   DataGrid(memo) 무력화 → (open=false mount 포함) 부모 리렌더마다 columnGroups 전체 재적용.
@@ -341,11 +367,23 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
         visible: true,
       });
     }
-    return [...byYear.entries()].map(([y, cols]) => ({
+    const yearGroups: FlexGridColumnConfig[] = [...byYear.entries()].map(([y, cols]) => ({
       header: y, // 1단 = 년도 (AS-IS '2026' — 같은 년도 월들을 수평 span)
       align: 'center',
       columns: cols,
     }));
+    // 수정자/수정일시는 월 컬럼이 다 나온 뒤 맨 오른쪽에 붙인다 (조회 전용).
+    //   헤더 2단 세로 병합은 아래 ExchangeMerge 가 담당한다(커스텀 MergeManager 라 네이티브 span 이 없다).
+    const trailing: FlexGridColumnConfig[] = EXCHANGE_RATE_TRAILING_COLUMNS.map(c => ({
+      binding: c.key,
+      header: c.header,
+      width: c.width,
+      align: 'center',
+      _inputEditType: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
+      allowSorting: false,
+      visible: true,
+    }));
+    return [...yearGroups, ...trailing];
   }, [ymKeys, canEdit, curYm]);
 
   // ⭐ #70 — DataGrid `initialized` prop deprecated(wrapper 미호출) → useEffect + gridRef 로 이동.
@@ -416,6 +454,11 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
         editsRef.current.set(item, ymMap);
       };
       g.cellEditEnded.addHandler(cellEditEndedHandler);
+      // 필수: 붙여넣기(Ctrl+V)는 편집 세션을 거치지 않아 cellEditEnded 가 발생하지 않는다.
+      //   wijmo 는 붙여넣은 셀마다 pastedCell 을 올리므로 같은 핸들러로 editsRef 에 수집한다.
+      //   빠지면 셀은 변경 표시가 되는데 Save 가 "수정한 내용이 없습니다" 로 막힌다.
+      //   (형제 business-plan ExchangeRateModal / ForecastPriceGrid 와 동일 처리)
+      g.pastedCell.addHandler(cellEditEndedHandler);
 
       g.allowMerging = AllowMerging.All;
       for (let i = 0; i < g.columns.length; i++) g.columns[i].allowMerging = true;
@@ -430,8 +473,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
             return new CellRange(0, 0, panel.rows.length - 1, panel.columns.length - 1);
           }
           if (panel.cellType === CellType.ColumnHeader) {
-            // 고정컬럼 = 2단 세로 span (년/월 그룹이 만든 2행 전체 높이 사용)
-            if (fixedBindings.includes(binding)) {
+            // 고정컬럼 + 맨 오른쪽 수정자/수정일시 = 2단 세로 span (년/월 그룹이 만든 2행 전체 높이 사용)
+            if (fixedBindings.includes(binding) || trailingBindings.includes(binding)) {
               return new CellRange(0, c, panel.rows.length - 1, c);
             }
             // ⭐ 동적 1단(년도) 수평 머지 (사용자 요구 2026-07-08) — 커스텀 MergeManager 설치 시
@@ -485,6 +528,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
         try {
           g.formatItem?.removeHandler(formatHandler);
           g.cellEditEnded?.removeHandler(cellEditEndedHandler);
+          g.pastedCell?.removeHandler(cellEditEndedHandler);
         } catch {
           /* unmount race */
         }
@@ -503,7 +547,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       cancelAnimationFrame(raf);
       cleanup?.();
     };
-  }, [open, displayRows, ymKeys, fixedBindings, canEdit, curYm]);
+  }, [open, displayRows, ymKeys, fixedBindings, trailingBindings, canEdit, curYm]);
 
   // ⭐⭐ 헤더 총높이 48px 상시 정규화 (2단=24×2 — "2단 기준으로 줄여서", 사용자 요구 2026-07-08).
   //   1회 설정/updatedLayout 등록만으로는 부족 — CustomDialog open 애니메이션 중 wijmo 가 헤더를
@@ -581,6 +625,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
         EDIT_YN: 'Y',
         EDIT_FLAG: 'Y',
         CRUD_TYPE: 'I',
+        LAST_UPDATED_BY: '',
+        LAST_UPDATE_DATE: '',
       },
     ]);
   };
@@ -746,7 +792,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
               <>
                 <Grid size={6}>
                   <FormItem
-                    label={t('LBL00663', 'Div')}
+                    label={t('LBL00001', 'Div')}
                     labelAlign='right'
                     render={() => (
                       <CustomDropdown
@@ -769,20 +815,34 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
           />
 
           <div className={styles.gridWrapper}>
-            <DataGrid<PivotRow>
-              gridRef={gridRef}
-              className={styles.grid}
-              itemsSource={displayRows}
-              staticColumns={gridStaticColumns}
-              dynamicColumns={gridDynamicColumns}
-              autoGenerateColumns={false}
-              frozenColumns={fixedBindings.length}
-              allowSorting={false}
-              // ⭐ Div / Currency 세로 셀 머지 (사용자 요구 2026-07-07) — ExchangeMerge(mergeManager)가 데이터셀
-              //   계층 머지를 담당하나, prop 미전달 시 wrapper 가 매 렌더 g.allowMerging 을 기본(ColumnHeaders)으로
-              //   되돌려 셀 머지가 꺼짐. 형제 PriceBatchInputModal 과 동일하게 All 전달로 일관 적용.
-              allowMerging={AllowMerging.All}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea
+              title=''
+              count={displayRows.length}
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<PivotRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                className={styles.grid}
+                itemsSource={displayRows}
+                staticColumns={gridStaticColumns}
+                dynamicColumns={gridDynamicColumns}
+                autoGenerateColumns={false}
+                frozenColumns={fixedBindings.length}
+                allowSorting={false}
+                // ⭐ Div / Currency 세로 셀 머지 (사용자 요구 2026-07-07) — ExchangeMerge(mergeManager)가 데이터셀
+                //   계층 머지를 담당하나, prop 미전달 시 wrapper 가 매 렌더 g.allowMerging 을 기본(ColumnHeaders)으로
+                //   되돌려 셀 머지가 꺼짐. 형제 PriceBatchInputModal 과 동일하게 All 전달로 일관 적용.
+                allowMerging={AllowMerging.All}
+              />
+            </ResultArea>
           </div>
           {/* 진행 스피너 — 다른 화면의 조회 로딩(MDIContainer .spinner)과 같은 회색 딤 + 원형 스피너.
               모달 안에 따로 두는 이유: 전역 표시는 앱 셸에 있어 다이얼로그 뒤에 깔려 안 보인다.

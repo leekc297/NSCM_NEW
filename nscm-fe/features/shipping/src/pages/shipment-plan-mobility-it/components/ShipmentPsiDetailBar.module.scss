@@ -1,0 +1,25 @@
+/* 2차 조회조건 (usrLayoutControl3) — Detail 그리드 상단 (design 01 §1) */
+.detailBar {
+  gap: 8px;
+  padding: 4px 8px;
+}
+
+.detailBarFields {
+  flex: 1;
+}
+
+.detailBarButtons {
+  gap: 4px;
+  align-items: center;
+}
+
+/* Model/Nickname(LBL00618) 라벨이 공통 140px 칸을 넘쳐 왼쪽 필드(Shipment Date)로 침범하는 것 방지 —
+   이 필드만 라벨칸을 넓게 보장(commonStyles 의 minmax(70,140) override). */
+.modelNicknameField {
+  grid-template-columns: minmax(110px, 160px) auto !important;
+
+  // 돋보기 버튼이 옆 칸 라벨에 가려 일부만 눌리는 것 방지.
+  button {
+    z-index: 1;
+  }
+}

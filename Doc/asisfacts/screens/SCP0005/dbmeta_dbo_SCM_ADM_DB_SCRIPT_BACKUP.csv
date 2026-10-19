@@ -1,0 +1,1561 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_GET_DISTRIBUTION_ROUTEID","1536112613","1","/*
+ * Program ID   : [SCP0005_GET_DISTRIBUTION_ROUTEID]
+ * Description  : Distribution Route ID 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2023/08/11   vadabi3		Initial Release 
+ * 2023/08/23   vadabi3		개발DB 이슈로 백업본으로 복구
+------------------------------------------------------------------------------------------------------
+  EXEC SCP0005_GET_DISTRIBUTION_ROUTEID '10'
+ */
+CREATE PROCEDURE [dbo].[SCP0005_GET_DISTRIBUTION_ROUTEID]
+ (
+	 @p_route_id  	NVARCHAR(MAX)
+ )
+AS
+BEGIN
+	
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;	
+	SET NOCOUNT ON;		 
+
+	-- Distribution Route확인
+	SELECT route_id,from_country,from_city
+		  ,(SELECT CITY_NAME FROM SCM_MST_CITY WHERE COUNTRY = from_country AND CITY =from_city) AS from_city_name
+		  --,transport_mode as transport_mode_code
+		  ,transport_mode as transport_mode
+		  ,dbo.FN_GET_LOOKUP_CODE_DESC ('TRANSPORT_MODE_CODE' , transport_mode ) AS transport_mode_name 
+		  ,priority,days_mon,days_tue,days_wed,days_thu,days_fri,days_sat,days_sun
+	      ,case when len(days) >3 then left(days,len(days)-1) else days end as days
+		  ,d_country,d_port_code,d_port_name,a_country,a_port_code,a_port_name,shipping_company,to_country,to_city
+		  ,(SELECT CITY_NAME FROM SCM_MST_CITY WHERE COUNTRY = to_country AND CITY =to_city) AS to_city_name
+		  ,ship_doc_preparation_date,lt_departure_inland,lt_wait_shipping,lt_voyage,lt_lay_off_clearance,lt_arrival_inland
+		  ,lt_sum,valid_yn
+		  ,t.created_by
+		  ,t.creation_date
+		  ,t.last_updated_by
+		  ,t.last_update_date
+		  ,t.lt_type
+		  ,t.ATTRIBUTE1 AS One_SEGMENT_COST--
+		  ,t.ATTRIBUTE2 AS Two_SEGMENT_COST--
+		  ,t.ATTRIBUTE3 AS Three_SEGMENT_COST--
+
+	  FROM(
+			SELECT a.route_id
+				 ,a.from_country
+				 ,a.from_city
+				 ,a.transport_mode
+				 ,a.priority
+				 ,a.days_mon
+				 ,a.days_tue
+				 ,a.days_wed
+				 ,a.days_thu
+				 ,a.days_fri
+				 ,a.days_sat
+				 ,a.days_sun
+				 ,(CASE WHEN ISNULL(a.days_mon,'') ='Y' THEN 'Mon, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_tue,'') ='Y' THEN 'Tue, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_wed,'') ='Y' THEN 'Wed, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_thu,'') ='Y' THEN 'Thu, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_fri,'') ='Y' THEN 'Fri, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_sat,'') ='Y' THEN 'Sat, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_sun,'') ='Y' THEN 'Sun, ' ELSE '' END ) AS days		 
+				 ,a.d_country
+				 ,a.d_port_code
+				 ,a.d_port_name
+				 ,a.a_country
+				 ,a.a_port_code
+				 ,a.a_port_name
+				 ,a.shipping_company
+				 ,a.to_country
+				 ,a.to_city
+				 --,a.to_city_name
+				 ,a.ship_doc_preparation_date
+				 ,a.lt_departure_inland
+				 ,a.lt_wait_shipping
+				 ,a.lt_voyage
+				 ,a.lt_lay_off_clearance
+				 ,a.lt_arrival_inland
+				 ,ISNULL(a.lt_departure_inland,0)+ISNULL(a.lt_wait_shipping,0)+ISNULL(a.lt_voyage,0)+ISNULL(a.lt_lay_off_clearance,0)+ISNULL(a.lt_arrival_inland,0) AS lt_sum
+				 , a.valid_yn
+				 ,a.created_by
+				 ,a.creation_date
+				 ,a.last_updated_by
+				 ,a.last_update_date
+				 ,a.lt_type
+				,a.ATTRIBUTE1--
+			    ,a.ATTRIBUTE2--
+		    	,a.ATTRIBUTE3 --
+
+
+
+			FROM   dbo.SCP_MST_DISTRIBUTION_ROUTE a
+			WHERE 1=1
+              AND  a.route_id = @p_route_id
+	  ) T
+	  WHERE 1=1
+	  ORDER BY from_country,from_city, TO_COUNTRY, TO_CITY, PRIORITY
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID","71775413","1","/*
+ * Program ID   : [SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID]
+ * Description  : Distribution Route ID 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2023/09/02   vadabi3		Initial Release 
+------------------------------------------------------------------------------------------------------
+  EXEC SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID '1599'
+ */
+CREATE PROCEDURE [dbo].[SCP0005_GET_DISTRIBUTION_HISTORY_ROUTEID]
+ (
+	 @p_route_id  	NVARCHAR(MAX)
+ )
+AS
+BEGIN
+	
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;	
+	SET NOCOUNT ON;		 
+
+
+	SELECT route_id
+	       ,from_country
+	       ,from_city
+		  ,(SELECT CITY_NAME FROM SCM_MST_CITY WHERE COUNTRY = from_country AND CITY =from_city) AS from_city_name
+		  ,transport_mode as transport_mode
+		  ,dbo.FN_GET_LOOKUP_CODE_DESC ('TRANSPORT_MODE_CODE' , transport_mode ) AS transport_mode_name 
+		  ,priority
+		  ,days_mon
+		  ,days_tue
+		  ,days_wed
+		  ,days_thu
+		  ,days_fri
+		  ,days_sat
+		  ,days_sun
+	      ,case 
+		  when len(days) >3 then left(days,len(days)-1) 
+		  else days 
+		  end as days
+		  ,d_country
+		  ,d_port_code
+		  ,d_port_name
+		  ,a_country
+		  ,a_port_code
+		  ,a_port_name
+		  ,shipping_company
+		  ,to_country,to_city
+		  ,(SELECT CITY_NAME FROM SCM_MST_CITY WHERE COUNTRY = to_country AND CITY =to_city) AS to_city_name
+		  ,ship_doc_preparation_date
+		  ,lt_departure_inland
+		  ,lt_wait_shipping
+		  ,lt_voyage
+		  ,lt_lay_off_clearance
+		  ,lt_arrival_inland
+		  ,lt_sum,valid_yn
+		  ,t.created_by
+		  ,t.creation_date
+		  ,t.last_updated_by
+		  ,t.last_update_date
+		 -- ,t.lt_type
+		  ,t.ATTRIBUTE1 AS One_SEGMENT_COST--
+		  ,t.ATTRIBUTE2 AS Two_SEGMENT_COST--
+		  ,t.ATTRIBUTE3 AS Three_SEGMENT_COST--
+
+	  FROM(
+			
+			SELECT 
+			    HISTORY_SEQ
+				, ROUTE_ID
+				, FROM_COUNTRY
+				, FROM_CITY
+				, TRANSPORT_MODE
+				, PRIORITY
+				, DAYS_MON
+				, DAYS_TUE
+				, DAYS_WED
+				, DAYS_THU
+				, DAYS_FRI
+				, DAYS_SAT
+				, DAYS_SUN
+
+				 ,(CASE WHEN ISNULL(a.days_mon,'') ='Y' THEN 'Mon, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_tue,'') ='Y' THEN 'Tue, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_wed,'') ='Y' THEN 'Wed, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_thu,'') ='Y' THEN 'Thu, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_fri,'') ='Y' THEN 'Fri, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_sat,'') ='Y' THEN 'Sat, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_sun,'') ='Y' THEN 'Sun, ' ELSE '' END ) AS days		
+
+
+				, D_COUNTRY
+				, D_PORT_CODE
+				, D_PORT_NAME
+				, A_COUNTRY
+				, A_PORT_CODE
+				, A_PORT_NAME
+				, SHIPPING_COMPANY
+				, TO_COUNTRY
+				, TO_CITY
+				, SHIP_DOC_PREPARATION_DATE
+				, LT_DEPARTURE_INLAND
+				, LT_WAIT_SHIPPING
+				, LT_VOYAGE
+				, LT_LAY_OFF_CLEARANCE
+				, LT_ARRIVAL_INLAND
+				 ,ISNULL(a.lt_departure_inland,0)+ISNULL(a.lt_wait_shipping,0)+ISNULL(a.lt_voyage,0)+ISNULL(a.lt_lay_off_clearance,0)+ISNULL(a.lt_arrival_inland,0) AS lt_sum
+
+				, VALID_YN
+				, CREATED_BY
+				, CREATION_DATE
+				, LAST_UPDATED_BY
+				, LAST_UPDATE_DATE
+				, ATTRIBUTE1
+				, ATTRIBUTE2
+				, ATTRIBUTE3
+				, ATTRIBUTE4
+				, ATTRIBUTE5
+				, ATTRIBUTE6
+				, ATTRIBUTE7
+				, ATTRIBUTE8
+				, ATTRIBUTE9
+				, ATTRIBUTE10
+				, HISTORY_CREATION_DATE
+
+			FROM   dbo.SCP_MST_DISTRIBUTION_ROUTE_H a
+			WHERE 1=1
+              AND  a.route_id = @p_route_id
+	  ) T
+	  WHERE 1=1
+	  ORDER BY from_country,from_city, TO_COUNTRY, TO_CITY, PRIORITY
+
+
+
+
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_DISTRIBUTION_ROUTE_EXCEL_UPLOAD","526013005","1","
+
+
+/*
+ * Program ID   : SCP0005_DISTRIBUTION_ROUTE_EXCEL_UPLOAD
+ * Description  : SCP0005_DISTRIBUTION_ROUTE_EXCEL_UPLOAD
+ * Program History
+ *===========================================================================================================
+ *   Date       In Charge		Description
+ *===========================================================================================================
+ * 2019.08.01	AYJ				[CSR ID:4030199] SSP Distribution route엑셀 업로드를 통한 신규등록/수정기능 구현
+ *
+ */
+
+  CREATE PROCEDURE [dbo].[SCP0005_DISTRIBUTION_ROUTE_EXCEL_UPLOAD]
+	@p_cnt                          NVARCHAR(MAX),
+	@p_route_id                     NVARCHAR(MAX),
+	@p_lt_type                      NVARCHAR(MAX),
+	@p_from_country                 NVARCHAR(MAX),
+	@p_from_city                    NVARCHAR(MAX),
+	@p_transport_mode               NVARCHAR(MAX),
+	@p_priority                     NVARCHAR(MAX),
+	@p_days_mon                     NVARCHAR(MAX),
+	@p_days_tue                     NVARCHAR(MAX),
+	@p_days_wed                     NVARCHAR(MAX),
+	@p_days_thu                     NVARCHAR(MAX),
+	@p_days_fri                     NVARCHAR(MAX),
+	@p_days_sat                     NVARCHAR(MAX),
+	@p_days_sun                     NVARCHAR(MAX),
+	@p_d_port_name                  NVARCHAR(MAX),
+	@p_d_country                    NVARCHAR(MAX),
+	@p_d_port_code                  NVARCHAR(MAX),
+	@p_a_port_name                  NVARCHAR(MAX),
+	@p_a_country                    NVARCHAR(MAX),
+	@p_a_port_code                  NVARCHAR(MAX),
+	@p_shipping_company             NVARCHAR(MAX),
+	@p_to_country                   NVARCHAR(MAX),
+	@p_to_city                      NVARCHAR(MAX),
+	@p_ship_doc_preparation_date    NVARCHAR(MAX),
+	@p_lt_departure_inland          NVARCHAR(MAX),
+	@p_lt_wait_shipping             NVARCHAR(MAX),
+	@p_lt_voyage                    NVARCHAR(MAX),
+	@p_lt_lay_off_clearance         NVARCHAR(MAX),
+	@p_lt_arrival_inland            NVARCHAR(MAX),
+	@p_OneSegmentCost               NVARCHAR(MAX),
+	@p_TwoSegmentCost               NVARCHAR(MAX),
+	@p_ThreeSegmentCost             NVARCHAR(MAX),
+	@p_valid_yn                     NVARCHAR(MAX),
+	@p_user_id                      NVARCHAR(MAX)	
+
+AS
+
+BEGIN
+    SET NOCOUNT ON;
+	DECLARE @v_program_id			NVARCHAR(40) = 'SCP0005';
+	DECLARE @v_sheet_name			NVARCHAR(40) = 'Distribution Route';
+	DECLARE @v_working_time			datetime =sysdatetime();
+	
+	DECLARE @v_route_id             NVARCHAR(MAX);
+	DECLARE @v_from_city_name       NVARCHAR(MAX);
+	DECLARE @v_to_city_name         NVARCHAR(MAX);
+	DECLARE @v_transport_mode       NVARCHAR(MAX);
+	DECLARE @v_days_mon			    NVARCHAR(MAX);
+	DECLARE @v_days_tue			    NVARCHAR(MAX);
+	DECLARE @v_days_wed			    NVARCHAR(MAX);
+	DECLARE @v_days_thu			    NVARCHAR(MAX);
+	DECLARE @v_days_fri			    NVARCHAR(MAX);
+	DECLARE @v_days_sat			    NVARCHAR(MAX);
+	DECLARE @v_days_sun			    NVARCHAR(MAX);
+
+	DECLARE @v_chk					INT;
+	SET @v_chk = 0;
+	DECLARE @v_cnt					INT;
+	SET @v_cnt = convert(int, @p_cnt);
+
+	DECLARE @Query					NVARCHAR(MAX);
+	DECLARE @Column_Query			NVARCHAR(MAX);
+	DECLARE @v_data_dup				NVARCHAR(MAX);
+	DECLARE @v_data_dup_cnt			INT=0;
+	SET @Query = '';
+	SET @Column_Query = '';
+	SET @v_from_city_name           = NULL;
+	SET @v_to_city_name             = NULL;
+	SET @v_days_mon					= @p_days_mon;
+	SET @v_days_tue					= @p_days_tue;
+	SET @v_days_wed					= @p_days_wed;
+	SET @v_days_thu					= @p_days_thu;
+	SET @v_days_fri					= @p_days_fri;
+	SET @v_days_sat					= @p_days_sat;
+	SET @v_days_sun					= @p_days_sun;
+	SET @v_transport_mode           = @p_transport_mode;
+	SET @v_route_id					= @p_route_id;
+
+	IF (@p_transport_mode = 'FERRY') SET @v_transport_mode = 'FRY'
+	IF (@p_transport_mode = 'TRUCK') SET @v_transport_mode = 'TRK'
+
+	IF (@v_days_mon = 'N') SET @v_days_mon = ''
+	IF (@v_days_tue = 'N') SET @v_days_tue = ''
+	IF (@v_days_wed = 'N') SET @v_days_wed = ''
+	IF (@v_days_thu = 'N') SET @v_days_thu ="
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_DISTRIBUTION_ROUTE_EXCEL_UPLOAD","526013005","2"," ''
+	IF (@v_days_fri = 'N') SET @v_days_fri = ''
+	IF (@v_days_sat = 'N') SET @v_days_sat = ''
+	IF (@v_days_sun = 'N') SET @v_days_sun = ''
+
+	--LOG 변수
+	DECLARE @v_program_name NVARCHAR(150) = 'SCP0005_DISTRIBUTION_ROUTE_EXCEL_UPLOAD';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+
+--	BEGIN TRAN;
+--	BEGIN TRY
+	BEGIN TRY
+	BEGIN TRAN
+	
+
+		--DATA SAVE
+
+		--//LOG START///////////////////////////////////////////////--
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		--//////////////////////////////////////////////////////////--
+
+		BEGIN
+
+			--from_city_name 가져오기
+			SELECT @v_from_city_name = CITY_NAME
+			FROM SCM_MST_CITY WITH(NOLOCK)
+			WHERE  VALID_YN = 'Y'
+			AND	   COUNTRY = @p_from_country
+			AND	   CITY = @p_from_city
+
+			--v_to_city_name 구하기
+			SELECT @v_to_city_name = CITY_NAME
+			FROM SCM_MST_CITY WITH(NOLOCK)
+			WHERE  VALID_YN = 'Y'
+			AND	   COUNTRY = @p_to_country
+			AND	   CITY = @p_to_city
+
+			--이력저장
+			IF (@p_route_id = NULL) SET @v_route_id = 0
+
+			EXEC [PR_SCP_MST_DISTRIBUTION_ROUTE_HIST]   @v_route_id	 
+													,@p_from_country			        
+													,@p_from_city				          
+													,@v_from_city_name		        
+													,@v_transport_mode	        
+													,@p_priority					        
+													,@v_days_mon					        
+													,@v_days_tue					        
+													,@v_days_wed					        
+													,@v_days_thu					        
+													,@v_days_fri					        
+													,@v_days_sat					        
+													,@v_days_sun					        
+													,@p_d_country				          
+													,@p_d_port_code			          
+													,@p_d_port_name			          
+													,@p_a_country				          
+													,@p_a_port_code			          
+													,@p_a_port_name			          
+													,@p_shipping_company	        
+													,@p_to_country				        
+													,@p_to_city					          
+													,@v_to_city_name			        
+													,@p_ship_doc_preparation_date	
+													,@p_lt_departure_inland	      
+													,@p_lt_wait_shipping			    
+													,@p_lt_voyage				          
+													,@p_lt_lay_off_clearance	    
+													,@p_lt_arrival_inland		      
+													,@p_valid_yn					        
+													,@p_user_id				        
+													,@v_working_time		          
+													,@p_user_id
+													,@p_lt_type    
+													,@p_OneSegmentCost
+													,@p_TwoSegmentCost
+													,@p_ThreeSegmentCost
+
+
+			SELECT @v_chk = COUNT(*) 
+			FROM SCP_MST_DISTRIBUTION_ROUTE
+			WHERE 1 = 1
+			  AND ROUTE_ID = @p_route_id;
+
+			IF(@v_chk > 0)
+			BEGIN
+				UPDATE SCP_MST_DISTRIBUTION_ROUTE
+				SET
+					LT_TYPE						= UPPER(@p_lt_type)	
+					,FROM_COUNTRY					= UPPER(@p_from_country)
+					,FROM_CITY						= UPPER(@p_from_city)
+					,TRANSPORT_MODE					= UPPER(@v_transport_mode)
+					,PRIORITY						= @p_priority
+					,DAYS_MON						= UPPER(@v_days_mon)
+					,DAYS_TUE						= UPPER(@v_days_tue)
+					,DAYS_WED						= UPPER(@v_days_wed)
+					,DAYS_THU						= UPPER(@v_days_thu)
+					,DAYS_FRI						= UPPER(@v_days_fri)
+					,DAYS_SAT						= UPPER(@v_days_sat)
+					,DAYS_SUN						= UPPER(@v_days_sun)
+					,D_PORT_NAME					= @p_d_port_name
+					,D_COUNTRY						= @p_d_country					
+					,D_PORT_CODE					= @p_d_port_code
+					,A_PORT_NAME					= @p_a_port_name
+					,A_COUNTRY						= @p_a_country
+					,A_PORT_CODE					= @p_a_por"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_DISTRIBUTION_ROUTE_EXCEL_UPLOAD","526013005","3","t_code
+					,SHIPPING_COMPANY				= @p_shipping_company
+					,TO_COUNTRY						= UPPER(@p_to_country)
+					,TO_CITY						= UPPER(@p_to_city)
+					,SHIP_DOC_PREPARATION_DATE		= @p_ship_doc_preparation_date
+					,LT_DEPARTURE_INLAND			= @p_lt_departure_inland
+					,LT_WAIT_SHIPPING				= @p_lt_wait_shipping
+					,lt_voyage						= @p_lt_voyage
+					,LT_LAY_OFF_CLEARANCE			= @p_lt_lay_off_clearance
+					,LT_ARRIVAL_INLAND				= @p_lt_arrival_inland
+					,VALID_YN						= UPPER(@p_valid_yn)
+					,LAST_UPDATED_BY				= @p_user_id
+					,LAST_UPDATE_DATE				= @v_working_time
+					,ATTRIBUTE1						= @p_OneSegmentCost
+					,ATTRIBUTE2						= @p_TwoSegmentCost
+					,ATTRIBUTE3						= @p_ThreeSegmentCost
+				WHERE 1 = 1
+				  AND ROUTE_ID = @p_route_id;
+			END
+
+			ELSE
+
+			BEGIN
+				SET @v_route_id = NEXT VALUE FOR SEQ1_SCP_MST_DISTRIBUTION_ROUTE;
+
+				INSERT INTO SCP_MST_DISTRIBUTION_ROUTE
+				(
+					ROUTE_ID
+					,LT_TYPE
+					,FROM_COUNTRY
+					,FROM_CITY
+					,TRANSPORT_MODE
+					,PRIORITY
+					,DAYS_MON
+					,DAYS_TUE
+					,DAYS_WED
+					,DAYS_THU
+					,DAYS_FRI
+					,DAYS_SAT
+					,DAYS_SUN
+					,D_PORT_NAME
+					,D_COUNTRY
+					,D_PORT_CODE
+					,A_PORT_NAME
+					,A_COUNTRY
+					,A_PORT_CODE
+					,SHIPPING_COMPANY
+					,TO_COUNTRY
+					,TO_CITY
+					,SHIP_DOC_PREPARATION_DATE
+					,LT_DEPARTURE_INLAND
+					,LT_WAIT_SHIPPING
+					,lt_voyage
+					,LT_LAY_OFF_CLEARANCE
+					,LT_ARRIVAL_INLAND
+					,VALID_YN
+					,CREATED_BY
+					,CREATION_DATE
+					,LAST_UPDATED_BY
+					,LAST_UPDATE_DATE
+					,ATTRIBUTE1
+					,ATTRIBUTE2
+					,ATTRIBUTE3
+				)
+				VALUES
+				(
+					@v_route_id
+					,UPPER(@p_lt_type)
+					,UPPER(@p_from_country)                 
+					,UPPER(@p_from_city)                    
+					,UPPER(@v_transport_mode)               
+                    ,@p_priority                     
+					,UPPER(@v_days_mon)                     
+					,UPPER(@v_days_tue)                    
+					,UPPER(@v_days_wed)                     
+					,UPPER(@v_days_thu)                     
+					,UPPER(@v_days_fri)                     
+					,UPPER(@v_days_sat)                     
+					,UPPER(@v_days_sun)                     
+					,@p_d_port_name                  
+					,@p_d_country                    
+					,@p_d_port_code                  
+					,@p_a_port_name                  
+					,@p_a_country                    
+					,@p_a_port_code                  
+					,@p_shipping_company             
+					,UPPER(@p_to_country)                   
+					,UPPER(@p_to_city)                      
+					,@p_ship_doc_preparation_date    
+					,@p_lt_departure_inland          
+					,@p_lt_wait_shipping             
+					,@p_lt_voyage                    
+					,@p_lt_lay_off_clearance         
+					,@p_lt_arrival_inland            
+					,UPPER(@p_valid_yn) 
+					,@p_user_id
+					,@v_working_time 
+					,@p_user_id
+					,@v_working_time
+					,@p_OneSegmentCost
+					,@p_TwoSegmentCost
+					,@p_ThreeSegmentCost
+				);
+			END
+
+		END;			
+		--COMMIT TRAN;
+
+		IF @v_cnt = 1
+		BEGIN
+			SET @Query = '';
+			SET @Query = @Query + ' INSERT INTO SCM_ADM_EXCEL_UPLOAD ' + CHAR(10);
+			SET @Query = @Query + ' ( ' + CHAR(10);
+			SET @Query = @Query + '		UPLOAD_ID, ' + CHAR(10);
+			SET @Query = @Query + '		PROGRAM_ID,			SHEET_NAME,				UPLOAD_STATUS_CODE, ' + CHAR(10);
+			SET @Query = @Query + '		CREATED_BY,			CREATION_DATE,			LAST_UPDATED_BY,			LAST_UPDATE_DATE,	' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE1,			ATTRIBUTE2,				ATTRIBUTE3,					ATTRIBUTE4,			' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE5,			ATTRIBUTE6,				ATTRIBUTE7,					ATTRIBUTE8,			' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE9,			ATTRIBUTE10,			ATTRIBUTE11,				ATTRIBUTE12,		' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE13,		ATTRIBUTE14,			ATTRIBUTE15,				ATTRIBUTE16,		' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE17,		ATTRIBUTE18,			ATTRIBUTE19,				ATTRIBUTE20,		' + CHAR(10);
+			SET @Que"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_DISTRIBUTION_ROUTE_EXCEL_UPLOAD","526013005","4","ry = @Query + '		ATTRIBUTE21,		ATTRIBUTE22,			ATTRIBUTE23,				ATTRIBUTE24,		' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE25,		ATTRIBUTE26,			ATTRIBUTE27,				ATTRIBUTE28,		' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE29,        ATTRIBUTE30,            ATTRIBUTE31,                ATTRIBUTE32         ' + CHAR(10);
+			SET @Query = @Query + ' ) ' + CHAR(10);
+			SET @Query = @Query + ' VALUES ' + CHAR(10);
+			SET @Query = @Query + ' ( ' + CHAR(10);
+			SET @Query = @Query + '		' + CONVERT(NVARCHAR(100), NEXT VALUE FOR SEQ1_SCM_ADM_EXCEL_UPLOAD) + ', ' + CHAR(10);
+			SET @Query = @Query + '		''' + @v_program_id + ''', ''' + @v_sheet_name + ''', ''@TITLE'', ' + CHAR(10);
+			SET @Query = @Query + '		''' + @p_user_id + ''', ''' + CONVERT(NVARCHAR(50), @v_working_time) + ''', ''' + @p_user_id + ''', ''' + CONVERT(NVARCHAR(50), @v_working_time) + ''',' + CHAR(10);
+			SET @Query = @Query + '		''Route Id'', ''L/T Type'', ''From Country'', ''From City'', ''Trans Mode'', ''Priority'',' + CHAR(10);
+			SET @Query = @Query + '		''MON'', ''TUE'', ''WED'', ''THU'', ''FRI'', ''SAT'', ''SUN'', ''D Port Name'', ''D Port Country'', ''D Port Code'',' + CHAR(10);
+			SET @Query = @Query + '		''A Port Name'', ''A Port Country'', ''A Port Code'', ''Forwarder'', ''To Country'', ''To City'', ''Shipping Document Preparation Date'',' + CHAR(10);
+			SET @Query = @Query + '		''Departure Inland'', ''Waiting For Shipping'', ''Voyage'', ''Lay Off/Customs Clearance'', ''Arrival Inland'', ''Valid'',' + CHAR(10);
+			SET @Query = @Query + '		''Pick Up Cost'', ''Freight Cost'', ''Delivery Cost''' + CHAR(10);
+			SET @Query = @Query + ' ) ' + CHAR(10);
+			EXEC(@Query);
+
+		END
+		
+		SET @Query = '';
+		SET @Query = @Query + ' INSERT INTO SCM_ADM_EXCEL_UPLOAD ' + CHAR(10);
+		SET @Query = @Query + ' ( ' + CHAR(10);
+		SET @Query = @Query + '		UPLOAD_ID, ' + CHAR(10);
+		SET @Query = @Query + '		PROGRAM_ID,			SHEET_NAME,				UPLOAD_STATUS_CODE, ' + CHAR(10);
+		SET @Query = @Query + '		CREATED_BY,			CREATION_DATE,			LAST_UPDATED_BY,			LAST_UPDATE_DATE,	' + CHAR(10);
+		SET @Query = @Query + '		ATTRIBUTE1,			ATTRIBUTE2,				ATTRIBUTE3,					ATTRIBUTE4,			' + CHAR(10);
+		SET @Query = @Query + '		ATTRIBUTE5,			ATTRIBUTE6,				ATTRIBUTE7,					ATTRIBUTE8,			' + CHAR(10);
+		SET @Query = @Query + '		ATTRIBUTE9,			ATTRIBUTE10,			ATTRIBUTE11,				ATTRIBUTE12,		' + CHAR(10);
+		SET @Query = @Query + '		ATTRIBUTE13,		ATTRIBUTE14,			ATTRIBUTE15,				ATTRIBUTE16,		' + CHAR(10);
+		SET @Query = @Query + '		ATTRIBUTE17,		ATTRIBUTE18,			ATTRIBUTE19,				ATTRIBUTE20,		' + CHAR(10);
+		SET @Query = @Query + '		ATTRIBUTE21,		ATTRIBUTE22,			ATTRIBUTE23,				ATTRIBUTE24,		' + CHAR(10);
+		SET @Query = @Query + '		ATTRIBUTE25,		ATTRIBUTE26,			ATTRIBUTE27,				ATTRIBUTE28,		' + CHAR(10);
+		SET @Query = @Query + '		ATTRIBUTE29,        ATTRIBUTE30,            ATTRIBUTE31,                ATTRIBUTE32         ' + CHAR(10);
+		SET @Query = @Query + ' ) ' + CHAR(10);
+		SET @Query = @Query + ' VALUES ' + CHAR(10);
+		SET @Query = @Query + ' ( ' + CHAR(10);
+		SET @Query = @Query + '		' + CONVERT(NVARCHAR(100), NEXT VALUE FOR SEQ1_SCM_ADM_EXCEL_UPLOAD) + ', ' + CHAR(10);
+		SET @Query = @Query + '		''' + @v_program_id + ''', ''' + @v_sheet_name + ''', ''SUCCESS'', ' + CHAR(10);
+		SET @Query = @Query + '		''' + @p_user_id + ''', CONVERT(DATETIME, ''' + CONVERT(NVARCHAR(50), @v_working_time) + '''), ''' + @p_user_id + ''', ''' + CONVERT(NVARCHAR(50), @v_working_time) + ''', ' + CHAR(10);
+		SET @Query = @Query + '		''' + @v_route_id + ''', ''' + @p_lt_type + ''', ''' + @p_from_country + ''', ''' + @p_from_city + ''', ''' + @v_transport_mode + ''',' + CHAR(10);
+		SET @Query = @Query + '		''' + @p_priority + ''', ''' + @v_days_mon + ''', ''' + @v_days_tue + ''', ''' + @v_days_wed + ''', ''' + @v_days_thu + ''',' + CHAR(10);
+		SET @Query = @Query + '		''' + @v_days_fri + ''', ''' + @v_days_sat + ''', ''' + @v_days_sun + ''', ''' + @p_d_port_name + ''', ''' + @p_d_country + ''',' + CHA"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_DISTRIBUTION_ROUTE_EXCEL_UPLOAD","526013005","5","R(10);
+		SET @Query = @Query + '		''' + @p_d_port_code + ''', ''' + @p_a_port_name + ''', ''' + @p_a_country + ''', ''' + @p_a_port_code + ''', ''' + @p_shipping_company + ''',' + CHAR(10);
+		SET @Query = @Query + '		''' + @p_to_country + ''', ''' + @p_to_city + ''', ''' + @p_ship_doc_preparation_date + ''', ''' + @p_lt_departure_inland + ''',' + CHAR(10);
+		SET @Query = @Query + '		''' + @p_lt_wait_shipping + ''', ''' + @p_lt_voyage + ''', ''' + @p_lt_lay_off_clearance + ''', ''' + @p_lt_arrival_inland + ''',' + CHAR(10);
+		SET @Query = @Query + '		''' + @p_valid_yn + ''', ''' + @p_OneSegmentCost + ''', ''' + @p_TwoSegmentCost + ''', ''' + @p_ThreeSegmentCost + '''' + CHAR(10);
+		SET @Query = @Query + ' ) ' + CHAR(10);
+		EXEC(@Query);
+
+		SET @v_data_dup_cnt  =0;
+		-- PRIORITY 중복체크
+		SELECT @v_data_dup_cnt = COUNT(*) 
+			FROM SCP_MST_DISTRIBUTION_ROUTE
+		WHERE FROM_COUNTRY     = UPPER(@p_from_country)
+			AND FROM_CITY        = UPPER(@p_from_city)
+			AND PRIORITY         = @p_priority
+			AND TO_COUNTRY       = UPPER(@p_to_country)
+			AND TO_CITY          = UPPER(@p_to_city)
+		;
+
+		IF( @v_data_dup_cnt>1) 
+			BEGIN
+				SET @v_err_code    = 99010 ; 
+				SET @v_err_message = 'Priority Duplicate';
+				THROW @v_err_code, @v_err_message , 1; --예외발생
+			END;
+
+		--//LOG END///////////////////////////////////////////////--
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;	
+		--/////////////////////////////////////////////////////////--
+
+		COMMIT TRAN;
+
+		SELECT  'S' AS result_code;
+
+	END TRY
+	BEGIN CATCH
+		BEGIN
+			ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+			SET @Query = '';
+			SET @Query = @Query + ' INSERT INTO SCM_ADM_EXCEL_UPLOAD ' + CHAR(10);
+			SET @Query = @Query + ' ( ' + CHAR(10);
+			SET @Query = @Query + '		UPLOAD_ID, ' + CHAR(10);
+			SET @Query = @Query + '		PROGRAM_ID,			SHEET_NAME,				UPLOAD_STATUS_CODE, ' + CHAR(10);
+			SET @Query = @Query + '		CREATED_BY,			CREATION_DATE,			LAST_UPDATED_BY,			LAST_UPDATE_DATE,		' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE1,			ATTRIBUTE2,				ATTRIBUTE3,					ATTRIBUTE4,				' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE5,			ATTRIBUTE6,				ATTRIBUTE7,					ATTRIBUTE8,				' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE9,			ATTRIBUTE10,			ATTRIBUTE11,				ATTRIBUTE12,			' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE13,		ATTRIBUTE14,			ATTRIBUTE15,				ATTRIBUTE16,			' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE17,		ATTRIBUTE18,			ATTRIBUTE19,				ATTRIBUTE20,			' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE21,		ATTRIBUTE22,			ATTRIBUTE23,				ATTRIBUTE24,			' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE25,		ATTRIBUTE26,			ATTRIBUTE27,				ATTRIBUTE28,			' + CHAR(10);
+			SET @Query = @Query + '		ATTRIBUTE29,        ATTRIBUTE30,            ATTRIBUTE31,                ATTRIBUTE32             ' + CHAR(10);
+			SET @Query = @Query + ' ) ' + CHAR(10);
+			SET @Query = @Query + ' VALUES ' + CHAR(10);
+			SET @Query = @Query + ' ( ' + CHAR(10);
+			SET @Query = @Query + '		' + CONVERT(NVARCHAR(100), NEXT VALUE FOR SEQ1_SCM_ADM_EXCEL_UPLOAD) + ', ' + CHAR(10);
+			SET @Query = @Query + '		''' + @v_program_id + ''', ''' + @v_sheet_name + ''', ''ERROR'', ' + CHAR(10);
+			SET @Query = @Query + '		''' + @p_user_id + ''', CONVERT(DATETIME, ''' + CONVERT(NVARCHAR(50), @v_working_time) + '''), ''' + @p_user_id + ''', ''' + CONVERT(NVARCHAR(50), @v_working_time) + ''', ' + CHAR(10);
+			SET @Query = @Query + '		''' + @v_route_id + ''', ''' + @p_lt_type + ''', ''' + @p_from_country + ''', ''' + @p_from_city + ''', ''' + @v_transport_mode + ''',' + CHAR(10);
+			SET @Query = @Query + '		''' + @p_priority + ''', ''' + @v_days_mon + ''', ''' + @v_days_tue + ''', ''' + @v_days_wed + ''', ''' + @v_days_thu + '''"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_DISTRIBUTION_ROUTE_EXCEL_UPLOAD","526013005","6",",' + CHAR(10);
+			SET @Query = @Query + '		''' + @v_days_fri + ''', ''' + @v_days_sat + ''', ''' + @v_days_sun + ''', ''' + @p_d_port_name + ''', ''' + @p_d_country + ''',' + CHAR(10);
+			SET @Query = @Query + '		''' + @p_d_port_code + ''', ''' + @p_a_port_name + ''', ''' + @p_a_country + ''', ''' + @p_a_port_code + ''', ''' + @p_shipping_company + ''',' + CHAR(10);
+			SET @Query = @Query + '		''' + @p_to_country + ''', ''' + @p_to_city + ''', ''' + @p_ship_doc_preparation_date + ''', ''' + @p_lt_departure_inland + ''',' + CHAR(10);
+			SET @Query = @Query + '		''' + @p_lt_wait_shipping + ''', ''' + @p_lt_voyage + ''', ''' + @p_lt_lay_off_clearance + ''', ''' + @p_lt_arrival_inland + ''',' + CHAR(10);
+			SET @Query = @Query + '		''' + @p_valid_yn + ''', ''' + @p_OneSegmentCost + ''', ''' + @p_TwoSegmentCost + ''', ''' + @p_ThreeSegmentCost + '''' + CHAR(10);
+			SET @Query = @Query + ' ) ' + CHAR(10);
+
+			EXEC(@Query);
+
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+			   		
+			-- error코드, errror 메시지 반환
+			SELECT  @v_err_code			AS err_code
+					,@v_err_message		AS err_message
+			; 
+
+		END
+	END CATCH;
+			  
+END;	
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_GET_COUNTRY_CITY","542013062","1","
+
+/*
+ * Program ID   : [SCP0007_GET_COUNTRY_CITY]
+ * Description  : DIVISION, SITE별 국가코드, 도시코드 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/04/05   PJS   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+   ex)
+    exec dbo.[SCP0005_GET_COUNTRY_CITY] @p_country ='KR',@p_city='',@p_city_name='',@debug_mode ='T'
+ */
+ 
+CREATE PROCEDURE [dbo].[SCP0005_GET_COUNTRY_CITY]  
+   @p_country		NVARCHAR(3)
+  ,@p_city			NVARCHAR(5)    
+  ,@p_city_name		NVARCHAR(100)    
+  ,@debug_mode      NVARCHAR(1)='F'
+AS
+
+BEGIN
+
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;	
+	SET NOCOUNT ON;
+	
+	SELECT COUNTRY, CITY, CITY_NAME 
+	 FROM [dbo].[SCM_MST_CITY] A
+	 WHERE VALID_YN ='Y'
+	  AND ( (@p_country   IS NULL OR @p_country   = '') OR A.COUNTRY   LIKE UPPER(@p_country) +'%')
+	  AND ( (@p_city	  IS NULL OR @p_city      = '') OR A.CITY	   LIKE UPPER(@p_city) +'%')
+	  AND ( (@p_city_name IS NULL OR @p_city_name = '') OR A.CITY_NAME LIKE '%'+UPPER(@p_city_name)+'%')
+	ORDER BY COUNTRY, CITY, CITY_NAME   
+   
+END
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_GET_DISTRIBUTION_ROUTE","558013119","2","ken FROM dbo.String_Split(@p_transport_mode,',')) )
+			  AND ( ( @p_valid_yn IS NULL OR @p_valid_yn ='' ) OR a.valid_yn = @p_valid_yn)
+	  ) T
+	  WHERE 1=1
+			  AND ( ( @p_from_country IS NULL OR @p_from_country ='' ) OR T.from_country = UPPER(@p_from_country) )
+			  AND ( ( @p_from_city    IS NULL OR @p_from_city    ='' ) OR T.from_city    LIKE  UPPER(@p_from_city) +'%')
+			  AND ( ( @p_to_country   IS NULL OR @p_to_country   ='' ) OR T.to_country   = UPPER(@p_to_country) )
+			  AND ( ( @p_to_city      IS NULL OR @p_to_city      ='' ) OR T.to_city      LIKE  UPPER(@p_to_city) +'%')
+	  ORDER BY from_country,from_city, TO_COUNTRY, TO_CITY, PRIORITY
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_GET_DISTRIBUTION_ROUTE","558013119","1","/*
+ * Program ID   : [SCP0005_GET_DISTRIBUTION_ROUTE]
+ * Description  : Distribution Route 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/03/07   PJS		Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+   2018/04/05   PJS		소문자 입력시 대문자로 변환하여 조회, 도시코드 LIKE 검색기능 추가
+   2018/06/14   PJS		transport_mode 코드명 조회로 변경
+   2018/06/14   PJS		transport_mode,transport_mode_name  코드, 코드명 조회로 명칭 분리
+   2019/02/12	YHW		[CSR ID:3907873] SSP Distribution route/BOD상 'L/T TYPE'컬럼 추가요청
+
+ * 실행예제)
+  EXEC SCP0005_GET_DISTRIBUTION_ROUTE @p_from_country='',@p_from_city='KR',@p_to_country='', @p_to_city='', @p_transport_mode='',@p_valid_yn=''
+ */
+CREATE PROCEDURE [dbo].[SCP0005_GET_DISTRIBUTION_ROUTE]
+ (
+	 @p_from_country  	NVARCHAR(MAX)
+  	,@p_from_city		NVARCHAR(MAX)  
+	,@p_to_country		NVARCHAR(MAX)
+	,@p_to_city			NVARCHAR(MAX)
+	,@p_transport_mode	NVARCHAR(MAX)		
+	,@p_valid_yn    	NVARCHAR(1)
+ )
+AS
+BEGIN
+	
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;	
+	SET NOCOUNT ON;		 
+
+	-- Distribution Route확인
+	SELECT route_id,from_country,from_city
+		  ,(SELECT CITY_NAME FROM SCM_MST_CITY WHERE COUNTRY = from_country AND CITY =from_city) AS from_city_name
+		  --,transport_mode as transport_mode_code
+		  ,transport_mode as transport_mode
+		  ,dbo.FN_GET_LOOKUP_CODE_DESC ('TRANSPORT_MODE_CODE' , transport_mode ) AS transport_mode_name 
+		  ,priority,days_mon,days_tue,days_wed,days_thu,days_fri,days_sat,days_sun
+	      ,case when len(days) >3 then left(days,len(days)-1) else days end as days
+		  ,d_country,d_port_code,d_port_name,a_country,a_port_code,a_port_name,shipping_company,to_country,to_city
+		  ,(SELECT CITY_NAME FROM SCM_MST_CITY WHERE COUNTRY = to_country AND CITY =to_city) AS to_city_name
+		  ,ship_doc_preparation_date,lt_departure_inland,lt_wait_shipping,lt_voyage,lt_lay_off_clearance,lt_arrival_inland
+		  ,lt_sum,valid_yn
+		  ,t.created_by
+		  ,t.creation_date
+		  ,t.last_updated_by
+		  ,t.last_update_date
+		  ,t.lt_type
+		  ,t.ATTRIBUTE1 AS One_SEGMENT_COST--
+		 ,t.ATTRIBUTE2 AS Two_SEGMENT_COST--
+		  ,t.ATTRIBUTE3 AS Three_SEGMENT_COST--
+	  FROM(
+			SELECT a.route_id
+				 ,a.from_country
+				 ,a.from_city
+				 ,a.transport_mode
+				 ,a.priority
+				 ,a.days_mon
+				 ,a.days_tue
+				 ,a.days_wed
+				 ,a.days_thu
+				 ,a.days_fri
+				 ,a.days_sat
+				 ,a.days_sun
+				 ,(CASE WHEN ISNULL(a.days_mon,'') ='Y' THEN 'Mon, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_tue,'') ='Y' THEN 'Tue, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_wed,'') ='Y' THEN 'Wed, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_thu,'') ='Y' THEN 'Thu, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_fri,'') ='Y' THEN 'Fri, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_sat,'') ='Y' THEN 'Sat, ' ELSE '' END )+
+				  (CASE WHEN ISNULL(a.days_sun,'') ='Y' THEN 'Sun, ' ELSE '' END ) AS days		 
+				 ,a.d_country
+				 ,a.d_port_code
+				 ,a.d_port_name
+				 ,a.a_country
+				 ,a.a_port_code
+				 ,a.a_port_name
+				 ,a.shipping_company
+				 ,a.to_country
+				 ,a.to_city
+				 --,a.to_city_name
+				 ,a.ship_doc_preparation_date
+				 ,a.lt_departure_inland
+				 ,a.lt_wait_shipping
+				 ,a.lt_voyage
+				 ,a.lt_lay_off_clearance
+				 ,a.lt_arrival_inland
+				 ,ISNULL(a.lt_departure_inland,0)+ISNULL(a.lt_wait_shipping,0)+ISNULL(a.lt_voyage,0)+ISNULL(a.lt_lay_off_clearance,0)+ISNULL(a.lt_arrival_inland,0) AS lt_sum
+				 , a.valid_yn
+				 ,a.created_by
+				 ,a.creation_date
+				 ,a.last_updated_by
+				 ,a.last_update_date
+				 ,a.lt_type
+				 ,a.ATTRIBUTE1--
+			     ,a.ATTRIBUTE2--
+		    	 ,a.ATTRIBUTE3 --
+			FROM   dbo.SCP_MST_DISTRIBUTION_ROUTE a
+			WHERE 1=1
+			  AND ( ( @p_transport_mode IS NULL OR @p_transport_mode ='' ) OR a.transport_mode IN (SELECT to"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_SAVE_DISTRIBUTION_ROUTE","574013176","1","/*
+ * Program ID   : SCP0005_SAVE_DISTRIBUTION_ROUTE
+ * Description  : Distribution Route 등록, 수정, 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/03/08   pjs   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/04/05   PJS   소문자 입력시 대문자로 변환하여 저장
+ * 2019/02/12   YHW   [CSR ID:3907873] SSP Distribution route/BOD상 'L/T TYPE'컬럼 추가요청
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0005_SAVE_DISTRIBUTION_ROUTE]
+	 @p_active_flag				   NVARCHAR(MAX)
+	,@p_route_id                   NVARCHAR(MAX)
+	,@p_from_country               NVARCHAR(MAX)
+	,@p_from_city                  NVARCHAR(MAX)
+	,@p_from_city_name             NVARCHAR(MAX)
+	,@p_transport_mode             NVARCHAR(MAX)
+	,@p_priority                   NVARCHAR(MAX)
+	,@p_days_mon                   NVARCHAR(MAX)
+	,@p_days_tue                   NVARCHAR(MAX)
+	,@p_days_wed                   NVARCHAR(MAX)
+	,@p_days_thu                   NVARCHAR(MAX)
+	,@p_days_fri                   NVARCHAR(MAX)
+	,@p_days_sat                   NVARCHAR(MAX)
+	,@p_days_sun                   NVARCHAR(MAX)
+	,@p_d_country                  NVARCHAR(MAX)
+	,@p_d_port_code                NVARCHAR(MAX)
+	,@p_d_port_name                NVARCHAR(MAX)
+	,@p_a_country                  NVARCHAR(MAX)
+	,@p_a_port_code                NVARCHAR(MAX)
+	,@p_a_port_name                NVARCHAR(MAX)
+	,@p_shipping_company           NVARCHAR(MAX)
+	,@p_to_country                 NVARCHAR(MAX)
+	,@p_to_city                    NVARCHAR(MAX)
+	,@p_to_city_name               NVARCHAR(MAX)
+	,@p_ship_doc_preparation_date  NVARCHAR(MAX)
+	,@p_lt_departure_inland        NVARCHAR(MAX)
+	,@p_lt_wait_shipping           NVARCHAR(MAX)
+	,@p_lt_voyage				   NVARCHAR(MAX)
+	,@p_lt_lay_off_clearance       NVARCHAR(MAX)
+	,@p_lt_arrival_inland          NVARCHAR(MAX)
+	,@p_user_id                    NVARCHAR(MAX)
+	,@p_valid_yn                   NVARCHAR(MAX)
+	,@p_lt_type					   NVARCHAR(MAX)
+
+	,@p_OneSegmentCost              NVARCHAR(MAX)--
+	,@p_TwoSegmentCost              NVARCHAR(MAX)--
+	,@p_ThreeSegmentCost            NVARCHAR(MAX)--
+
+	,@debug_mode            	   NVARCHAR(1) ='F'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	
+	--DECLARE @DEBUG_MODE NVARCHAR(20) ='FALSE';
+	--DECLARE @DEBUG_MODE NVARCHAR(20) ='TRUE';
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag		  		  NVARCHAR(MAX);
+	DECLARE @v_route_id                   NVARCHAR(MAX);
+	DECLARE @v_from_country               NVARCHAR(MAX);
+	DECLARE @v_from_city                  NVARCHAR(MAX);
+	DECLARE @v_from_city_name             NVARCHAR(MAX);
+	DECLARE @v_transport_mode             NVARCHAR(MAX);
+	DECLARE @v_priority                   NVARCHAR(MAX);
+	DECLARE @v_days_mon                   NVARCHAR(MAX);
+	DECLARE @v_days_tue                   NVARCHAR(MAX);
+	DECLARE @v_days_wed                   NVARCHAR(MAX);
+	DECLARE @v_days_thu                   NVARCHAR(MAX);
+	DECLARE @v_days_fri                   NVARCHAR(MAX);
+	DECLARE @v_days_sat                   NVARCHAR(MAX);
+	DECLARE @v_days_sun                   NVARCHAR(MAX);
+	DECLARE @v_d_country                  NVARCHAR(MAX);
+	DECLARE @v_d_port_code                NVARCHAR(MAX);
+	DECLARE @v_d_port_name                NVARCHAR(MAX);
+	DECLARE @v_a_country                  NVARCHAR(MAX);
+	DECLARE @v_a_port_code                NVARCHAR(MAX);
+	DECLARE @v_a_port_name                NVARCHAR(MAX);
+	DECLARE @v_shipping_company           NVARCHAR(MAX);
+	DECLARE @v_to_country                 NVARCHAR(MAX);
+	DECLARE @v_to_city                    NVARCHAR(MAX);
+	DECLARE @v_to_city_name               NVARCHAR(MAX);
+	DECLA"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_SAVE_DISTRIBUTION_ROUTE","574013176","2","RE @v_ship_doc_preparation_date  NVARCHAR(MAX);
+	DECLARE @v_lt_departure_inland        NVARCHAR(MAX);
+	DECLARE @v_lt_wait_shipping           NVARCHAR(MAX);
+	DECLARE @v_lt_voyage                  NVARCHAR(MAX);
+	DECLARE @v_lt_lay_off_clearance       NVARCHAR(MAX);
+	DECLARE @v_lt_arrival_inland          NVARCHAR(MAX);
+	DECLARE @v_user_id                    NVARCHAR(MAX);
+	DECLARE @v_valid_yn                   NVARCHAR(MAX);
+	DECLARE @v_lt_type                    NVARCHAR(MAX);
+	DECLARE @v_creation_date              datetime;
+
+	DECLARE @v_OneSegmentCost             NVARCHAR(MAX); ---
+	DECLARE @v_TwoSegmentCost             NVARCHAR(MAX);---
+	DECLARE @v_ThreeSegmentCost           NVARCHAR(MAX);---
+
+	SET @v_active_flag				  = NULL;
+	SET @v_route_id                   = NULL;
+	SET @v_from_country               = NULL;
+	SET @v_from_city                  = NULL;
+	SET @v_from_city_name             = NULL;
+	SET @v_transport_mode             = NULL;
+	SET @v_priority                   = NULL;
+	SET @v_days_mon                   = NULL;
+	SET @v_days_tue                   = NULL;
+	SET @v_days_wed                   = NULL;
+	SET @v_days_thu                   = NULL;
+	SET @v_days_fri                   = NULL;
+	SET @v_days_sat                   = NULL;
+	SET @v_days_sun                   = NULL;
+	SET @v_d_country                  = NULL;
+	SET @v_d_port_code                = NULL;
+	SET @v_d_port_name                = NULL;
+	SET @v_a_country                  = NULL;
+	SET @v_a_port_code                = NULL;
+	SET @v_a_port_name                = NULL;
+	SET @v_shipping_company           = NULL;
+	SET @v_to_country                 = NULL;
+	SET @v_to_city                    = NULL;
+	SET @v_to_city_name               = NULL;
+	SET @v_ship_doc_preparation_date  = NULL;
+	SET @v_lt_departure_inland        = NULL;
+	SET @v_lt_wait_shipping           = NULL;
+	SET @v_lt_voyage                  = NULL;
+	SET @v_lt_lay_off_clearance       = NULL;
+	SET @v_lt_arrival_inland          = NULL;
+	SET @v_user_id                    = NULL;
+	SET @v_valid_yn					  = NULL;
+	SET @v_lt_type					  = NULL;
+	SET @v_creation_date         = SYSDATETIME();
+
+	SET @v_OneSegmentCost             = NULL;  ---
+	SET @v_TwoSegmentCost             = NULL;---
+	SET @v_ThreeSegmentCost           = NULL;---
+	 
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0005_SAVE_DISTRIBUTION_ROUTE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		--PRINT '1';
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		
+		
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag				  = dbo.SCM_ARR_SPL_VAL( @p_active_flag				  , @v_delimiter, @mst_loop_cnt );
+				SET @v_route_id                   = dbo.SCM_ARR_SPL_VAL( @p_route_id                  , @v_delimiter, @mst_loop_cnt );
+				SET @v_from_country               = dbo.SCM_ARR_SPL_VAL( @p_from_country              , @v_delimiter, @mst_loop_cnt );
+				SET @v_from"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_SAVE_DISTRIBUTION_ROUTE","574013176","3","_city                  = dbo.SCM_ARR_SPL_VAL( @p_from_city                 , @v_delimiter, @mst_loop_cnt );
+				SET @v_from_city_name             = dbo.SCM_ARR_SPL_VAL( @p_from_city_name            , @v_delimiter, @mst_loop_cnt );
+				SET @v_transport_mode             = dbo.SCM_ARR_SPL_VAL( @p_transport_mode            , @v_delimiter, @mst_loop_cnt );
+				SET @v_priority                   = dbo.SCM_ARR_SPL_VAL( @p_priority                  , @v_delimiter, @mst_loop_cnt );
+				SET @v_days_mon                   = dbo.SCM_ARR_SPL_VAL( @p_days_mon                  , @v_delimiter, @mst_loop_cnt );
+				SET @v_days_tue                   = dbo.SCM_ARR_SPL_VAL( @p_days_tue                  , @v_delimiter, @mst_loop_cnt );
+				SET @v_days_wed                   = dbo.SCM_ARR_SPL_VAL( @p_days_wed                  , @v_delimiter, @mst_loop_cnt );
+				SET @v_days_thu                   = dbo.SCM_ARR_SPL_VAL( @p_days_thu                  , @v_delimiter, @mst_loop_cnt );
+				SET @v_days_fri                   = dbo.SCM_ARR_SPL_VAL( @p_days_fri                  , @v_delimiter, @mst_loop_cnt );
+				SET @v_days_sat                   = dbo.SCM_ARR_SPL_VAL( @p_days_sat                  , @v_delimiter, @mst_loop_cnt );
+				SET @v_days_sun                   = dbo.SCM_ARR_SPL_VAL( @p_days_sun                  , @v_delimiter, @mst_loop_cnt );
+				SET @v_d_country                  = dbo.SCM_ARR_SPL_VAL( @p_d_country                 , @v_delimiter, @mst_loop_cnt );
+				SET @v_d_port_code                = dbo.SCM_ARR_SPL_VAL( @p_d_port_code               , @v_delimiter, @mst_loop_cnt );
+				SET @v_d_port_name                = dbo.SCM_ARR_SPL_VAL( @p_d_port_name               , @v_delimiter, @mst_loop_cnt );
+				SET @v_a_country                  = dbo.SCM_ARR_SPL_VAL( @p_a_country                 , @v_delimiter, @mst_loop_cnt );
+				SET @v_a_port_code                = dbo.SCM_ARR_SPL_VAL( @p_a_port_code               , @v_delimiter, @mst_loop_cnt );
+				SET @v_a_port_name                = dbo.SCM_ARR_SPL_VAL( @p_a_port_name               , @v_delimiter, @mst_loop_cnt );
+				SET @v_shipping_company           = dbo.SCM_ARR_SPL_VAL( @p_shipping_company          , @v_delimiter, @mst_loop_cnt );
+				SET @v_to_country                 = dbo.SCM_ARR_SPL_VAL( @p_to_country                , @v_delimiter, @mst_loop_cnt );
+				SET @v_to_city                    = dbo.SCM_ARR_SPL_VAL( @p_to_city                   , @v_delimiter, @mst_loop_cnt );
+				SET @v_to_city_name               = dbo.SCM_ARR_SPL_VAL( @p_to_city_name              , @v_delimiter, @mst_loop_cnt );
+				SET @v_ship_doc_preparation_date  = dbo.SCM_ARR_SPL_VAL( @p_ship_doc_preparation_date , @v_delimiter, @mst_loop_cnt );
+				SET @v_lt_departure_inland        = dbo.SCM_ARR_SPL_VAL( @p_lt_departure_inland       , @v_delimiter, @mst_loop_cnt );
+				SET @v_lt_wait_shipping           = dbo.SCM_ARR_SPL_VAL( @p_lt_wait_shipping          , @v_delimiter, @mst_loop_cnt );
+				SET @v_lt_voyage                  = dbo.SCM_ARR_SPL_VAL( @p_lt_voyage                 , @v_delimiter, @mst_loop_cnt );
+				SET @v_lt_lay_off_clearance       = dbo.SCM_ARR_SPL_VAL( @p_lt_lay_off_clearance      , @v_delimiter, @mst_loop_cnt );
+				SET @v_lt_arrival_inland          = dbo.SCM_ARR_SPL_VAL( @p_lt_arrival_inland         , @v_delimiter, @mst_loop_cnt );
+				SET @v_user_id                    = dbo.SCM_ARR_SPL_VAL( @p_user_id                   , @v_delimiter, @mst_loop_cnt );
+				SET @v_valid_yn                   = dbo.SCM_ARR_SPL_VAL( @p_valid_yn                  , @v_delimiter, @mst_loop_cnt );
+				SET @v_lt_type                    = dbo.SCM_ARR_SPL_VAL( @p_lt_type                  , @v_delimiter, @mst_loop_cnt );
+
+				SET @v_OneSegmentCost             = dbo.SCM_ARR_SPL_VAL( @p_OneSegmentCost           , @v_delimiter, @mst_loop_cnt );  ---
+				SET @v_TwoSegmentCost             = dbo.SCM_ARR_SPL_VAL( @p_TwoSegmentCost           , @v_delimiter, @mst_loop_cnt );----
+				SET @v_ThreeSegmentCost           ="
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_SAVE_DISTRIBUTION_ROUTE","574013176","4"," dbo.SCM_ARR_SPL_VAL( @p_ThreeSegmentCost          , @v_delimiter, @mst_loop_cnt );----
+
+
+				--set @v_valid_yn = isnull(@v_valid_yn,'N');
+						--PRINT '6';
+						--PRINT ' @v_valid_yn ='+ ISNULL(@v_valid_yn,'') ;
+			END;
+
+			-- LOOP 파라미터 출력 DEBUG용			
+			IF (@debug_mode ='T') 
+			BEGIN		
+				PRINT '=====================INPUT==========================';			
+				--PRINT '@v_data_dup_cnt = ' +CONVERT(VARCHAR,@v_data_dup_cnt);
+				PRINT '@v_active_flag               = ' + @v_active_flag                ;
+				PRINT '@v_route_id                  = ' + @v_route_id                   ;
+				PRINT '@v_from_country              = ' + @v_from_country               ;
+				PRINT '@v_from_city                 = ' + @v_from_city                  ;
+				PRINT '@v_from_city_name            = ' + @v_from_city_name             ;
+				PRINT '@v_transport_mode            = ' + @v_transport_mode             ;
+				PRINT '@v_priority                  = ' + @v_priority                   ;
+				PRINT '@v_days_mon                  = ' + @v_days_mon                   ;
+				PRINT '@v_days_tue                  = ' + @v_days_tue                   ;
+				PRINT '@v_days_wed                  = ' + @v_days_wed                   ;
+				PRINT '@v_days_thu                  = ' + @v_days_thu                   ;
+				PRINT '@v_days_fri                  = ' + @v_days_fri                   ;
+				PRINT '@v_days_sat                  = ' + @v_days_sat                   ;
+				PRINT '@v_days_sun                  = ' + @v_days_sun                   ;
+				PRINT '@v_d_country                 = ' + @v_d_country                  ;
+				PRINT '@v_d_port_code               = ' + @v_d_port_code                ;
+				PRINT '@v_d_port_name               = ' + @v_d_port_name                ;
+				PRINT '@v_a_country                 = ' + @v_a_country                  ;
+				PRINT '@v_a_port_code               = ' + @v_a_port_code                ;
+				PRINT '@v_a_port_name               = ' + @v_a_port_name                ;
+				PRINT '@v_shipping_company          = ' + @v_shipping_company           ;
+				PRINT '@v_to_country                = ' + @v_to_country                 ;
+				PRINT '@v_to_city                   = ' + @v_to_city                    ;
+				PRINT '@v_to_city_name              = ' + @v_to_city_name               ;
+				PRINT '@v_ship_doc_preparation_date = ' + @v_ship_doc_preparation_date  ;
+				PRINT '@v_lt_departure_inland       = ' + @v_lt_departure_inland        ;
+				PRINT '@v_lt_wait_shipping          = ' + @v_lt_wait_shipping           ;
+				PRINT '@v_lt_voyage                 = ' + @v_lt_voyage           ;
+				PRINT '@v_lt_lay_off_clearance      = ' + @v_lt_lay_off_clearance       ;
+				PRINT '@v_lt_arrival_inland         = ' + @v_lt_arrival_inland          ;
+				PRINT '@v_user_id                   = ' + @v_user_id                    ;
+				PRINT '@v_valid_yn                  = ' + @v_valid_yn                   ;
+				PRINT '@v_lt_type                   = ' + @v_lt_type                    ;
+
+			END;
+
+			--PRINT 'LOC_1';
+		   --이력저장
+			EXEC [PR_SCP_MST_DISTRIBUTION_ROUTE_HIST]   @v_route_id					          
+													,@v_from_country			        
+													,@v_from_city				          
+													,@v_from_city_name		        
+													,@v_transport_mode		        
+													,@v_priority					        
+													,@v_days_mon					        
+													,@v_days_tue					        
+													,@v_days_wed					        
+													,@v_days_thu					        
+													,@v_days_fri					        
+													,@v_days_sat					        
+													,@v_days_sun					        
+													,@v_d_country				          
+													,@v_d_port_code			          
+													,@v_d_port_name			          
+													,@v_a_country				          
+													,@v_a_port_code			          
+													,@v_a_port_name			          
+													,@v_shipping_company	        
+													,@v_to_country				        
+							"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_SAVE_DISTRIBUTION_ROUTE","574013176","5","						,@v_to_city					          
+													,@v_to_city_name			        
+													,@v_ship_doc_preparation_date	
+													,@v_lt_departure_inland	      
+													,@v_lt_wait_shipping			    
+													,@v_lt_voyage				          
+													,@v_lt_lay_off_clearance	    
+													,@v_lt_arrival_inland		      
+													,@v_valid_yn					        
+													,@v_user_id				        
+													,@v_creation_date		          
+													,@v_user_id	        
+													,@v_lt_type
+													,@v_OneSegmentCost--
+													,@v_TwoSegmentCost--
+													,@v_ThreeSegmentCost--
+			--PRINT 'LOC_2';
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+				BEGIN		
+
+					-- 수정
+					IF( @v_active_flag ='M') 
+						BEGIN						
+							
+							UPDATE dbo.scp_mst_distribution_route                            
+							SET    from_country              = UPPER(@v_from_country)               
+								 , from_city                 = UPPER(@v_from_city)                  
+								 --, from_city_name            = @v_from_city_name             
+								 , transport_mode            = @v_transport_mode             
+								 , priority                  = @v_priority                   
+								 , days_mon                  = @v_days_mon                   
+								 , days_tue                  = @v_days_tue                   
+								 , days_wed                  = @v_days_wed                   
+								 , days_thu                  = @v_days_thu                   
+								 , days_fri                  = @v_days_fri                   
+								 , days_sat                  = @v_days_sat                   
+								 , days_sun                  = @v_days_sun                   
+								 , d_country                 = @v_d_country                  
+								 , d_port_code               = @v_d_port_code                
+								 , d_port_name               = @v_d_port_name                
+								 , a_country                 = @v_a_country                  
+								 , a_port_code               = @v_a_port_code                
+								 , a_port_name               = @v_a_port_name                
+								 , shipping_company          = @v_shipping_company           
+								 , to_country                = UPPER(@v_to_country)                 
+								 , to_city                   = UPPER(@v_to_city)                    
+								 --, to_city_name              = @v_to_city_name               
+								 , ship_doc_preparation_date = @v_ship_doc_preparation_date
+								 --, lt_departure_inland       = (case when isnull(@v_lt_departure_inland,'')='' then 0 else  @v_lt_departure_inland end)       
+								 --, lt_wait_shipping          = (case when isnull(@v_lt_wait_shipping,'')='' then 0 else  @v_lt_wait_shipping end)                  
+								 --, lt_voyage				 = (case when isnull(@v_lt_voyage,'')='' then 0 else  @v_lt_voyage end)            
+								 --, lt_lay_off_clearance      = (case when isnull(@v_lt_lay_off_clearance,'')='' then 0 else  @v_lt_lay_off_clearance end)        
+								 --, lt_arrival_inland         = (case when isnull(@v_lt_arrival_inland,'')='' then 0 else  @v_lt_arrival_inland end)           
+								 , lt_departure_inland       = @v_lt_departure_inland        
+								 , lt_wait_shipping          = @v_lt_wait_shipping           
+								 , lt_voyage				 = @v_lt_voyage           
+								 , lt_lay_off_clearance      = @v_lt_lay_off_clearance       
+								 , lt_arrival_inland         = @v_lt_arrival_inland          
+								 , valid_yn                  = @v_valid_yn
+								 , last_updated_by           = @v_user_id                            
+								 , last_update_date          =  sysdatetime()          
+								 , LT_TYPE					 = @v_lt_type           
+								 
+								 ,ATTRIBUTE1 =@v_OneSegmentCost--
+								 ,ATTRIBUTE2 =@v_TwoSegmentCost--
+								 ,ATTRIBUTE3 =@v_ThreeSegmentCost--
+							WHERE route_id =   @v_route_id      
+							;   
+							--PRINT 'LOC_3';       "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_SAVE_DISTRIBUTION_ROUTE","574013176","6","                              							  
+						END;
+					ELSE IF(@v_active_flag ='I') 
+						BEGIN
+                                
+							SET @v_route_id= NEXT VALUE FOR SEQ1_SCP_MST_DISTRIBUTION_ROUTE;
+                            	        
+							INSERT
+							INTO   dbo.SCP_MST_DISTRIBUTION_ROUTE
+								   (
+										 ROUTE_ID
+										,FROM_COUNTRY
+										,FROM_CITY
+										--,FROM_CITY_NAME
+										,TRANSPORT_MODE
+										,PRIORITY
+										,DAYS_MON
+										,DAYS_TUE
+										,DAYS_WED
+										,DAYS_THU
+										,DAYS_FRI
+										,DAYS_SAT
+										,DAYS_SUN
+										,D_COUNTRY
+										,D_PORT_CODE
+										,D_PORT_NAME
+										,A_COUNTRY
+										,A_PORT_CODE
+										,A_PORT_NAME
+										,SHIPPING_COMPANY
+										,TO_COUNTRY
+										,TO_CITY
+										--,TO_CITY_NAME
+										,SHIP_DOC_PREPARATION_DATE
+										,LT_DEPARTURE_INLAND
+										,LT_WAIT_SHIPPING
+										,lt_voyage
+										,LT_LAY_OFF_CLEARANCE
+										,LT_ARRIVAL_INLAND
+										,VALID_YN
+										,CREATED_BY
+										,CREATION_DATE
+										,LAST_UPDATED_BY
+										,LAST_UPDATE_DATE
+										,LT_TYPE
+										,ATTRIBUTE1--
+										,ATTRIBUTE2--
+										,ATTRIBUTE3--
+								   )
+								   VALUES
+								   (     --(select isnull(max(ROUTE_ID),0)+1 from SCP_MST_DISTRIBUTION_ROUTE) --@v_route_id 
+										 @v_route_id
+								        ,UPPER(@v_from_country)
+										,UPPER(@v_from_city  )                 
+										--,@v_from_city_name              
+										,@v_transport_mode              
+										,@v_priority                    
+										,@v_days_mon                    
+										,@v_days_tue                    
+										,@v_days_wed                    
+										,@v_days_thu                    
+										,@v_days_fri                    
+										,@v_days_sat                    
+										,@v_days_sun                    
+										,@v_d_country                   
+										,@v_d_port_code                 
+										,@v_d_port_name                 
+										,@v_a_country                   
+										,@v_a_port_code                 
+										,@v_a_port_name                 
+										,@v_shipping_company            
+										,UPPER(@v_to_country)
+										,UPPER(@v_to_city   )                  
+										--,@v_to_city_name                
+										,@v_ship_doc_preparation_date
+										--,(case when isnull(@v_lt_departure_inland,'')='' then 0 else  @v_lt_departure_inland end)          
+										--,(case when isnull(@v_lt_wait_shipping,'')='' then 0 else  @v_lt_wait_shipping end)            
+										--,(case when isnull(@v_lt_voyage,'')='' then 0 else  @v_lt_voyage end)            
+										--,(case when isnull(@v_lt_lay_off_clearance,'')='' then 0 else  @v_lt_lay_off_clearance end)        
+										--,(case when isnull(@v_lt_arrival_inland,'')='' then 0 else  @v_lt_arrival_inland end)           
+										,@v_lt_departure_inland         
+										,@v_lt_wait_shipping            
+										,@v_lt_voyage            
+										,@v_lt_lay_off_clearance        
+										,@v_lt_arrival_inland           
+										,@v_valid_yn
+										,@v_user_id                            
+								 		, sysdatetime()  										
+										,@v_user_id                            
+								 		, sysdatetime()  	
+										,@v_lt_type			
+										,@v_OneSegmentCost--
+										,@v_TwoSegmentCost--
+										,@v_ThreeSegmentCost--
+
+								   )     
+								;
+								--PRINT 'LOC_4';
+						END;
+					ELSE IF(@v_active_flag ='D')
+						BEGIN
+							DELETE FROM dbo.SCP_MST_DISTRIBUTION_ROUTE
+							WHERE route_id =   @v_route_id      
+							;     
+						END; 	
+				END  -- END OF STMT. IF( @mst_loop_cnt > 0 )			
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+
+		/* 중복체크 */
+		DECLARE @mst_loop_cnt_chk INT=0;
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loo"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_SAVE_DISTRIBUTION_ROUTE","574013176","7","p_cnt_chk < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt_chk = @mst_loop_cnt_chk + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag				  = dbo.SCM_ARR_SPL_VAL( @p_active_flag				  , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_route_id                   = dbo.SCM_ARR_SPL_VAL( @p_route_id                  , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_from_country               = dbo.SCM_ARR_SPL_VAL( @p_from_country              , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_from_city                  = dbo.SCM_ARR_SPL_VAL( @p_from_city                 , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_from_city_name             = dbo.SCM_ARR_SPL_VAL( @p_from_city_name            , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_transport_mode             = dbo.SCM_ARR_SPL_VAL( @p_transport_mode            , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_priority                   = dbo.SCM_ARR_SPL_VAL( @p_priority                  , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_days_mon                   = dbo.SCM_ARR_SPL_VAL( @p_days_mon                  , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_days_tue                   = dbo.SCM_ARR_SPL_VAL( @p_days_tue                  , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_days_wed                   = dbo.SCM_ARR_SPL_VAL( @p_days_wed                  , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_days_thu                   = dbo.SCM_ARR_SPL_VAL( @p_days_thu                  , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_days_fri                   = dbo.SCM_ARR_SPL_VAL( @p_days_fri                  , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_days_sat                   = dbo.SCM_ARR_SPL_VAL( @p_days_sat                  , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_days_sun                   = dbo.SCM_ARR_SPL_VAL( @p_days_sun                  , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_d_country                  = dbo.SCM_ARR_SPL_VAL( @p_d_country                 , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_d_port_code                = dbo.SCM_ARR_SPL_VAL( @p_d_port_code               , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_d_port_name                = dbo.SCM_ARR_SPL_VAL( @p_d_port_name               , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_a_country                  = dbo.SCM_ARR_SPL_VAL( @p_a_country                 , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_a_port_code                = dbo.SCM_ARR_SPL_VAL( @p_a_port_code               , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_a_port_name                = dbo.SCM_ARR_SPL_VAL( @p_a_port_name               , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_shipping_company           = dbo.SCM_ARR_SPL_VAL( @p_shipping_company          , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_to_country                 = dbo.SCM_ARR_SPL_VAL( @p_to_country                , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_to_city                    = dbo.SCM_ARR_SPL_VAL( @p_to_city                   , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_to_city_name               = dbo.SCM_ARR_SPL_VAL( @p_to_city_name              , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_ship_doc_preparation_date  = dbo.SCM_ARR_SPL_VAL( @p_ship_doc_preparation_date , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_lt_departure_inland        = dbo.SCM_ARR_SPL_VAL( @p_lt_departure_inland       , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_lt_wait_shipping           = dbo.SCM_ARR_SPL_VAL( @p_lt_wait_shipping          , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_lt_voyage                  = dbo.SCM_ARR_SPL_VAL( @p_lt_voyage                 , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_lt_lay_off_clearance       = dbo.SCM_ARR_SPL_VAL( @p_lt_lay_off_clearance      , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_lt_arrival_inland          = dbo.SCM_ARR_SPL_VAL( @p_lt_arrival_inland         , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_SAVE_DISTRIBUTION_ROUTE","574013176","8","user_id                    = dbo.SCM_ARR_SPL_VAL( @p_user_id                   , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_valid_yn                   = dbo.SCM_ARR_SPL_VAL( @p_valid_yn                  , @v_delimiter, @mst_loop_cnt_chk );
+				SET @v_lt_type                    = dbo.SCM_ARR_SPL_VAL( @p_lt_type                   , @v_delimiter, @mst_loop_cnt_chk );
+
+				SET @v_OneSegmentCost             = dbo.SCM_ARR_SPL_VAL( @p_OneSegmentCost           , @v_delimiter, @mst_loop_cnt_chk );  ---
+				SET @v_TwoSegmentCost             = dbo.SCM_ARR_SPL_VAL( @p_TwoSegmentCost           , @v_delimiter, @mst_loop_cnt_chk );  ----
+				SET @v_ThreeSegmentCost           = dbo.SCM_ARR_SPL_VAL( @p_ThreeSegmentCost         , @v_delimiter, @mst_loop_cnt_chk );  ----
+
+
+				--set @v_valid_yn = isnull(@v_valid_yn,'N');
+						--PRINT '6';
+						--PRINT ' @v_valid_yn ='+ ISNULL(@v_valid_yn,'') ;
+			END;
+
+			-- LOOP 파라미터 출력 DEBUG용			
+			IF (@debug_mode ='T') 
+			BEGIN		
+				PRINT '=====================DUP CHECK==========================';			
+				--PRINT '@v_data_dup_cnt = ' +CONVERT(VARCHAR,@v_data_dup_cnt);
+				PRINT '@v_active_flag               = ' + @v_active_flag                ;
+				PRINT '@v_route_id                  = ' + @v_route_id                   ;
+				PRINT '@v_from_country              = ' + @v_from_country               ;
+				PRINT '@v_from_city                 = ' + @v_from_city                  ;
+				PRINT '@v_from_city_name            = ' + @v_from_city_name             ;
+				PRINT '@v_transport_mode            = ' + @v_transport_mode             ;
+				PRINT '@v_priority                  = ' + @v_priority                   ;
+				PRINT '@v_days_mon                  = ' + @v_days_mon                   ;
+				PRINT '@v_days_tue                  = ' + @v_days_tue                   ;
+				PRINT '@v_days_wed                  = ' + @v_days_wed                   ;
+				PRINT '@v_days_thu                  = ' + @v_days_thu                   ;
+				PRINT '@v_days_fri                  = ' + @v_days_fri                   ;
+				PRINT '@v_days_sat                  = ' + @v_days_sat                   ;
+				PRINT '@v_days_sun                  = ' + @v_days_sun                   ;
+				PRINT '@v_d_country                 = ' + @v_d_country                  ;
+				PRINT '@v_d_port_code               = ' + @v_d_port_code                ;
+				PRINT '@v_d_port_name               = ' + @v_d_port_name                ;
+				PRINT '@v_a_country                 = ' + @v_a_country                  ;
+				PRINT '@v_a_port_code               = ' + @v_a_port_code                ;
+				PRINT '@v_a_port_name               = ' + @v_a_port_name                ;
+				PRINT '@v_shipping_company          = ' + @v_shipping_company           ;
+				PRINT '@v_to_country                = ' + @v_to_country                 ;
+				PRINT '@v_to_city                   = ' + @v_to_city                    ;
+				PRINT '@v_to_city_name              = ' + @v_to_city_name               ;
+				PRINT '@v_ship_doc_preparation_date = ' + @v_ship_doc_preparation_date  ;
+				PRINT '@v_lt_departure_inland       = ' + @v_lt_departure_inland        ;
+				PRINT '@v_lt_wait_shipping          = ' + @v_lt_wait_shipping           ;
+				PRINT '@v_lt_voyage                 = ' + @v_lt_voyage           ;
+				PRINT '@v_lt_lay_off_clearance      = ' + @v_lt_lay_off_clearance       ;
+				PRINT '@v_lt_arrival_inland         = ' + @v_lt_arrival_inland          ;
+				PRINT '@v_user_id                   = ' + @v_user_id                    ;
+				PRINT '@v_valid_yn                  = ' + @v_valid_yn                   ;
+				PRINT '@v_lt_type                   = ' + @v_lt_type                    ;
+
+			END;
+
+			SET @v_data_dup_cnt  =0;
+			-- PRIORITY 중복체크
+			SELECT @v_data_dup_cnt = COUNT(*) 
+			 FROM SCP_MST_DISTRIBUTION_ROUTE
+			WHERE FROM_COUNTRY     = UPPER(@v_from_country)
+			  AND FROM_CITY        = UPPER(@v_from_city)
+			  AND PRIORITY         = @v_p"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0005_SAVE_DISTRIBUTION_ROUTE","574013176","9","riority
+			  AND TO_COUNTRY       = UPPER(@v_to_country)
+			  AND TO_CITY          = UPPER(@v_to_city)
+			;
+			IF( @v_data_dup_cnt>1) 
+				BEGIN
+					SET @v_err_code    = 99020 ; 
+					SET @v_err_message = 'DUP PRIORITY.';
+					THROW @v_err_code, @v_err_message , 1; --예외발생
+									 
+				END;
+
+			SET @v_data_dup_cnt  =0;
+			-- 데이타 중복체크
+			SELECT @v_data_dup_cnt = COUNT(*) 
+			 FROM SCP_MST_DISTRIBUTION_ROUTE
+			WHERE FROM_COUNTRY     = UPPER(@v_from_country)
+			  AND FROM_CITY        = UPPER(@v_from_city)
+			  AND TRANSPORT_MODE   = @v_transport_mode  
+			  AND D_COUNTRY        = @v_d_country       
+			  AND D_PORT_CODE      = @v_d_port_code     
+			  AND D_PORT_NAME      = @v_d_port_name     
+			  AND A_COUNTRY        = @v_a_country       
+			  AND A_PORT_CODE      = @v_a_port_code     
+			  AND A_PORT_NAME      = @v_a_port_name     
+			  AND SHIPPING_COMPANY = @v_shipping_company
+			  AND TO_COUNTRY       = UPPER(@v_to_country)
+			  AND TO_CITY          = UPPER(@v_to_city)
+			  AND LT_TYPE		   = @v_lt_type
+			;
+									
+			IF( @v_data_dup_cnt>1) 
+				BEGIN
+					SET @v_err_code    = 99010 ; 
+					SET @v_err_message = 'DUP DATA.';
+					THROW @v_err_code, @v_err_message , 1; --예외발생
+									 
+				END;
+
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt_chk < @max_loop_cnt
+
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		COMMIT ;			
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @mst_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			ROLLBACK; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+					  
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				   ,@v_route_id         AS route_id            
+				   ,@v_from_country     AS from_country        
+				   ,@v_from_city        AS from_city           
+				   ,@v_from_city_name   AS from_city_name      
+				   ,@v_transport_mode   AS transport_mode      
+				   ,@v_d_country        AS d_country           
+				   ,@v_d_port_code      AS d_port_code         
+				   ,@v_d_port_name      AS d_port_name         
+				   ,@v_a_country        AS a_country           
+				   ,@v_a_port_code      AS a_port_code         
+				   ,@v_a_port_name      AS a_port_name         
+				   ,@v_shipping_company AS shipping_company    
+				   ,@v_to_country       AS to_country          
+				   ,@v_to_city          AS to_city             
+				   ,@v_to_city_name     AS to_city_name        
+				   ,@v_lt_type			AS lt_type
+				    ,@v_OneSegmentCost    AS OneSegmentCost
+				   ,@v_TwoSegmentCost    AS TwoSegmentCost
+				   ,@v_ThreeSegmentCost  AS ThreeSegmentCost
+		
+		END;
+	END CATCH;
+END
+"

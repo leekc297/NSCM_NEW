@@ -8,7 +8,8 @@
 
 | 환경 | 접속 | 비고 |
 |---|---|---|
-| 사내 Oracle (기본, 2026-06-10 전환 / 2026-06-15 IP 변경 / 2026-06-17 Service Name 전환 / 2026-07-27 IP:PORT 변경) | `100.65.143.121:1521/OCGSCMD_P01`, user `SCM_MGR` | 검증 기준 DB |
+| 사내 Oracle (기본, 2026-06-10 전환 / 2026-06-15 IP / 2026-06-17 Service Name / 2026-07-27 IP:PORT / 2026-09-02 IP:PORT / 2026-09-05 DB 교체 / ⭐ 2026-09-07 DB명 ZIOUI1) | `175.211.29.206:2521/ZIOUI1`, user `SCM_MGR` | 검증 기준 DB (SERVER_HOST=itx · Oracle 26ai). 구 `AJS` 는 **별개 DB로 잔존** — 적용분 자동 승계 안 됨 |
+| ↳ 이전 접속 (보관/DEPRECATED) | `175.211.29.206:3521/OCGSCMD_P01` (~2026-09-05) · `100.65.143.121:1521/OCGSCMD_P01` (~2026-09-02) · `121.162.245.167:2521/OCGSCMD_P01` (~2026-07-27) | 사용 금지 |
 | 로컬 Docker | `localhost:1521/FREEPDB1` (container `nscm-oracle`) | 보조/실험용 |
 
 ⚠️ **비밀번호 하드코딩 금지** — 환경변수 또는 `.env.asis`(gitignore) 사용. 신규 스크립트에 접속 문자열 literal 작성 금지.
@@ -23,7 +24,7 @@ Oracle 공식 SQLcl(25.2+) 에 내장된 MCP 서버. Claude Code 가 자연어 �
 # 1) SQLcl 설치 (Java 17+ 필요) — https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/
 # 2) 저장 접속 생성 (비밀번호는 SQLcl secure store 에 저장됨)
 sql /nolog
-SQL> connect -save nscm_corp -savepwd SCM_MGR@100.65.143.121:1521/OCGSCMD_P01
+SQL> connect -save nscm_corp -savepwd SCM_MGR@175.211.29.206:2521/ZIOUI1
 
 # 3) Claude Code 에 MCP 등록 (프로젝트 루트에서)
 claude mcp add sqlcl -- <SQLcl경로>/bin/sql -mcp
@@ -39,7 +40,7 @@ Windows 에 Oracle Instant Client 가 없어도 동작 (thin 모드). MCP 없이
 
 ```powershell
 pip install oracledb
-$env:NSCM_ORA_USER="SCM_MGR"; $env:NSCM_ORA_PASS="..."; $env:NSCM_ORA_DSN="100.65.143.121:1521/OCGSCMD_P01"
+$env:NSCM_ORA_USER="SCM_MGR"; $env:NSCM_ORA_PASS="..."; $env:NSCM_ORA_DSN="175.211.29.206:2521/ZIOUI1"
 
 python _artifacts/_diagnostics/ora.py invalid                  # INVALID 목록
 python _artifacts/_diagnostics/ora.py compile PKG_DMF0043      # 컴파일 + USER_ERRORS

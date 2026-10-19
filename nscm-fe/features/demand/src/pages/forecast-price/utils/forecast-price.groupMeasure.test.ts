@@ -100,12 +100,12 @@ describe('groupEditMeasures', () => {
     expect(groupEditMeasures(rows, ctx('ADMIN', '40'))).toEqual(['LOC']);
   });
 
-  it('공란·\'-\'·\'ALL\' 축은 제한 없음으로 본다', () => {
+  it("공란·'-'·'ALL' 축은 제한 없음으로 본다", () => {
     const rows = [row('ALL', 'LOC', { SEGMENT2: 'ALL', SEGMENT3: '-' })];
     expect(groupEditMeasures(rows, ctx('DM ADMIN', '81'))).toEqual(['LOC']);
   });
 
-  it('Active \'N\' 행은 제외한다', () => {
+  it("Active 'N' 행은 제외한다", () => {
     const rows = [row('ADMIN', 'LOC', { VALID_YN: 'N' }), row('ADMIN', 'MKT_FCST')];
     expect(groupEditMeasures(rows, ctx('ADMIN'))).toEqual(['MKT_FCST']);
   });

@@ -4,6 +4,7 @@ import { apiClient } from '@foundation/apis';
 import dayjs from '@foundation/dayjs';
 import _ from '@foundation/lodash';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
+import { toColumnLayoutSettings, type ColumnLayoutRow } from '@shared/components';
 import { createPersistedStoreWithTab } from '@shared/stores';
 
 import {
@@ -35,6 +36,12 @@ interface DemandPlanWaterfallState {
   staticMeasures: MeasureMeta[];
   /** [E20260831-MEASURE] GUBUN 별 표시 메저 선택 (null = 전체 — MeasureSelectModal OK 결과) */
   visibleMeasures: Record<Gubun, string[] | null>;
+  /**
+   * ⭐ GUBUN 별 GRID COLUMN SET (ColumnLayoutModal OK 결과 — null = 미설정 = TITLE SP 기본).
+   *   GUBUN 마다 PROGRAM_ID·SHEET_NAME 이 전부 다르므로 절대 공유하지 않는다.
+   *   Division 변경 시에는 해당 GUBUN 만 null 로 되돌린다(SHEET_COLUMNS 가 division 별로 다름).
+   */
+  columnSettings: Record<Gubun, ColumnLayoutRow[] | null>;
   /** F6 저장 조회조건 복원 1회 가드 (탭 오픈당) — MotherStore PRESERVED_ON_CONDITION_RESET 보존 키 */
   initialized: boolean;
 }
@@ -51,15 +58,25 @@ interface DemandPlanWaterfallAction {
     sheetNm: string;
     /** [E20260831-METASHEET] 종속 PROGRAM_ID (SALES=DMF0022 / BIZ=DMF0051) — 미지정 = MENU_ID */
     programId?: string;
+    /** 시드 대상 GUBUN (미지정 = 시드 안 함) */
+    gubun?: Gubun;
+    /** true = 기존 값이 있어도 **덮어쓴다**(화면 진입·division/GUBUN 변경). false/미지정 = 비어 있을 때만 */
+    reseed?: boolean;
   }) => Promise<void>;
   /** [E20260831-MEASURE] SHEET_MEASURE 메타 fetch — 활성 GUBUN 의 종속 PROGRAM/메저 시트명 기준 */
   fetchStaticMeasures: (input: {
     divisionId: string;
     measureSheetNm: string;
     programId: string;
+    /** 시드 대상 GUBUN (미지정 = 시드 안 함) */
+    gubun?: Gubun;
+    /** true = 기존 값이 있어도 **덮어쓴다**(화면 진입·division/GUBUN 변경). false/미지정 = 비어 있을 때만 */
+    reseed?: boolean;
   }) => Promise<void>;
   /** [E20260831-MEASURE] MeasureSelectModal OK — GUBUN 별 표시 메저 적용 (null = 전체) */
   applyVisibleMeasures: (gubun: Gubun, codes: string[] | null) => void;
+  /** ColumnLayoutModal OK — GUBUN 별 컬럼 표시/순서/폭/색 적용 (null = 미설정 복귀) */
+  applyColumnSettings: (gubun: Gubun, rows: ColumnLayoutRow[] | null) => void;
   /** UM-01 (#59 §1.4) — Division 변경 = 조회 결과 비움 (AS-IS cboDivision_SelectedIndexChanged → InitSpread .cs:1397) */
   clearData: () => void;
   /**
@@ -106,7 +123,6 @@ const initSearchParams: SearchParams = {
   usd: '1',
   loc: '1',
   qty: '1',
-  rowTotals: 'GrandTotals', // AS-IS footer SUM 대응 기본값
 };
 
 const initState: DemandPlanWaterfallState = {
@@ -116,6 +132,11 @@ const initState: DemandPlanWaterfallState = {
   staticColumns: [],
   staticMeasures: [],
   visibleMeasures: {
+    [GUBUN.MKT_FCST]: null,
+    [GUBUN.SALES_PLAN]: null,
+    [GUBUN.BIZ_PLAN]: null,
+  },
+  columnSettings: {
     [GUBUN.MKT_FCST]: null,
     [GUBUN.SALES_PLAN]: null,
     [GUBUN.BIZ_PLAN]: null,
@@ -139,7 +160,6 @@ const BOOL_KEYS = new Set<string>(
     .map(([k]) => k)
 );
 const GUBUN_VALUES = new Set<string>(Object.values(GUBUN));
-const ROW_TOTALS_VALUES = new Set<string>(['GrandTotals', 'Subtotals', 'None']);
 
 /**
  * 멀티 필터 → SP 규약: 빈 배열 = 'ALL' (⚠ '' 전달 시 SP 의 <> 'ALL' 분기가 빈 토큰으로
@@ -198,8 +218,6 @@ export const useDemandPlanWaterfallStore = createPersistedStoreWithTab<
         }
         // 열거형 키는 유효값만 채택 (구버전 저장값·오염 방어)
         if (typeof patch.gubun === 'string' && !GUBUN_VALUES.has(patch.gubun)) delete patch.gubun;
-        if (typeof patch.rowTotals === 'string' && !ROW_TOTALS_VALUES.has(patch.rowTotals))
-          delete patch.rowTotals;
         set(state => {
           state.searchParams = { ...state.searchParams, ...(patch as Partial<SearchParams>) };
         });
@@ -304,29 +322,51 @@ export const useDemandPlanWaterfallStore = createPersistedStoreWithTab<
       }),
     // [E20260831-METASHEET] 메타 조회 = AS-IS 시트명 + 종속 PROGRAM_ID 경로 (GUBUN_META — constants 주석 참조).
     //   programId 미지정 시 기존 동작(MENU_ID) 유지.
-    fetchStaticColumns: async ({ divisionId, sheetNm, programId }) => {
+    fetchStaticColumns: async ({ divisionId, sheetNm, programId, gubun, reseed }) => {
       const result = await apiClient.post<RawFlexGridColumnConfig[]>(
         `/admin/menu/${programId ?? MENU_ID}/column`,
         { sheetNm, divisionId }
       );
       set(state => {
         state.staticColumns = result.data.result;
+        // ⭐ [E20260904-METASEED] 모달을 열지 않아도 **사용자·division 별 저장 설정이 첫 조회부터 적용**되게 한다
+        //   (사용자 신고 2026-09-04). 이 응답의 `display` 는 개인화(titleset 'C')가 반영된 값이라
+        //   Column Setting 모달이 보여주는 것과 같은 원천이다 — 그래서 모달 없이도 그리드가 일치한다.
+        //   이미 사용자가 이번 세션에서 지정한 값이 있으면 덮지 않는다(null 일 때만 시드).
+        //   ⚠ `reseed` 가 필요한 이유: 이 스토어는 탭을 닫아도 값이 남는다. 재오픈 시 "비어 있을 때만"
+        //   채우면 **이전 세션의 선택이 서버 저장분을 이긴다**(사용자 신고 2026-09-04 — 모달을 열면 3개인데
+        //   안 열고 조회하면 직전 2개로 조회). 화면 진입·division/GUBUN 변경에서는 항상 서버값으로 되돌린다.
+        if (gubun && (reseed || state.columnSettings[gubun] == null)) {
+          state.columnSettings[gubun] = toColumnLayoutSettings(result.data.result);
+        }
       });
     },
     // [E20260831-MEASURE] SHEET_MEASURE fetch — DMF0003 정본형(/admin/menu/{pgm}/measure). SALES 는 메저 시트명이
     //   컬럼 축과 다름('Sales Plan Waterfall' — GUBUN_META.measureSheetNm 실측 표기).
-    fetchStaticMeasures: async ({ divisionId, measureSheetNm, programId }) => {
+    fetchStaticMeasures: async ({ divisionId, measureSheetNm, programId, gubun, reseed }) => {
       const result = await apiClient.post<MeasureMeta[]>(`/admin/menu/${programId}/measure`, {
         sheetNm: measureSheetNm,
         divisionId,
       });
       set(state => {
-        state.staticMeasures = result.data.result ?? [];
+        const measures = result.data.result ?? [];
+        state.staticMeasures = measures;
+        // ⭐ [E20260904-METASEED] 위와 같은 이유 — `display` 가 곧 Measure 모달의 우측(표시) 집합이다.
+        //   시드하지 않으면 필터가 무효(null)라 SP 가 덧붙인 종속 메저까지 전부 그려져
+        //   "모달 열고 OK 해야 반영된다"로 보인다(실측: div81 저장 2종 + 종속 3종 = 5종 표시).
+        if (gubun && (reseed || state.visibleMeasures[gubun] == null)) {
+          const shown = measures.filter(m => m.display !== false).map(m => m.colNm);
+          if (shown.length > 0) state.visibleMeasures[gubun] = shown;
+        }
       });
     },
     applyVisibleMeasures: (gubun, codes) =>
       set(state => {
         state.visibleMeasures[gubun] = codes;
+      }),
+    applyColumnSettings: (gubun, rows) =>
+      set(state => {
+        state.columnSettings[gubun] = rows;
       }),
     clearData: () =>
       set(state => {

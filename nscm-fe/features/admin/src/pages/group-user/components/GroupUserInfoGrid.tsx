@@ -1,4 +1,4 @@
-import { CellRange, CellType, SelectionMode, type FlexGrid } from '@mescius/wijmo.grid';
+import { CellType, SelectionMode, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useRef, useState, type MutableRefObject } from 'react';
 
@@ -86,7 +86,7 @@ export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data }: Props) => {
     dataItem.USER_ID = userId;
     dataItem.USER_NM = userNm;
 
-    gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
+    GridUtils.refreshRow(gridRef.current, clickedRow);
   };
 
   return (
@@ -109,6 +109,7 @@ export const GroupUserInfoGrid = ({ gridRef, gridFilterRef, data }: Props) => {
         initialUser={
           (GridUtils.getRow(gridRef.current, clickedRow) as { USER_NM?: string })?.USER_NM
         }
+        ssoUserYn='N'
       />
     </>
   );

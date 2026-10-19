@@ -3,6 +3,7 @@ import {
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import dayjs, { type Dayjs } from 'dayjs';
 import { DivisionField, PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -10,7 +11,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { useQuery } from '@foundation/query-client';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabBtnPermissions, useTabLookupQuery, useTabProcQuery } from '@shared/hooks';
 import {
   Button,
@@ -90,6 +91,8 @@ export const VersionModal = ({
   const setAlert = useMessageStore.getState().setAlert;
   const setToast = useMessageStore.getState().setToast;
   const gridRef = useRef<FlexGridType<VersionRow>>(undefined);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
   const sesUserId = useSessionStore.getState().session.userId ?? '';
 
   // 조회조건 (입력 중 값) — 조회는 Find 버튼으로만 확정 (stale closure·인라인 filters 사고 방지)
@@ -195,7 +198,10 @@ export const VersionModal = ({
     }),
     [divisionId, applied, sesUserId, menuId]
   );
-  const { data, refetch } = useTabProcQuery<VersionMenuId, typeof VERSION_SHEET>({
+  const { data, refetch, isLoading, isFetching } = useTabProcQuery<
+    VersionMenuId,
+    typeof VERSION_SHEET
+  >({
     menuId,
     sheetName: VERSION_SHEET,
     tabId: menuId,
@@ -204,6 +210,7 @@ export const VersionModal = ({
     queryOptions: { staleTime: 0 },
   });
   const versionRows = useMemo<VersionRow[]>(() => data?.data ?? [], [data]);
+  const loading = isLoading || isFetching;
 
   const handleSearch = () => {
     if (!YYYYMMDD.test(sdt) || !YYYYMMDD.test(edt)) {
@@ -265,7 +272,12 @@ export const VersionModal = ({
     if (!isAdoptableType(cellStr(row.VERSION_TYPE))) return;
     const versionNo = cellStr(row.VERSION_NO);
     if (versionNo === '') return;
-    onSelect(versionNo, `${versionNo} ${cellStr(row.VERSION_DESCRIPTION)}`.trim());
+    // onSelect(versionNo, `${versionNo} ${cellStr(row.VERSION_DESCRIPTION)}`.trim());
+    // 표시문 = VERSION_NO 만. VERSION_DESCRIPTION 을 붙이지 않는다 (2026-09-03 사용자 확정).
+    //   붙이면 표시문과 조회키가 달라져, 사용자가 칸을 클릭하는 순간 VersionField 가 코드만
+    //   남기도록 되돌리면서 설명이 사라진다(blur 복원 없음 = 비가역). 두 값을 같게 두면
+    //   그 되돌림 자체가 발동하지 않는다.
+    onSelect(versionNo, versionNo);
     modalClose();
   };
 
@@ -415,6 +427,10 @@ export const VersionModal = ({
       size={1180}
       handleClose={modalClose}
       disableButtonCancel
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -435,11 +451,18 @@ export const VersionModal = ({
                  3칸에 들어가고, 나머지 셋은 모두 종전보다 넓어진다. */
               <div className={styles.searchGrid}>
                 {/* V-1 Division = 표준 카탈로그 DivisionField. AS-IS L119~120 `SelectedValue=_sDiv;
-                    Enabled=false` 1:1 — 부모 확정값이라 비활성(값은 부모가 소유). */}
-                <DivisionField value={divisionId} onChange={() => undefined} gridSize={3} />
+                    Enabled=false` 1:1 — 부모 확정값이라 비활성(값은 부모가 소유).
+                    disabled 필수: onChange 를 no-op 으로 둔 것만으로는 목록이 열려 고를 수 있어
+                    바꿀 수 있는 것처럼 보였다(고르면 값이 되돌아온다). 실제로 잠근다. */}
+                <DivisionField
+                  value={divisionId}
+                  onChange={() => undefined}
+                  gridSize={3}
+                  disabled
+                />
                 <Grid size={3}>
                   <FormItem
-                    label={t('LBL00794', '_Type')}
+                    label={t('LBL00052', '_Type')}
                     labelAlign='right'
                     render={() => (
                       <CustomDropdown
@@ -462,7 +485,7 @@ export const VersionModal = ({
                 />
                 <Grid size={3}>
                   <FormItem
-                    label={t('LBL00799', '_Description')}
+                    label={t('LBL00608', '_Description')}
                     labelAlign='right'
                     render={() => (
                       <InputField
@@ -581,14 +604,32 @@ export const VersionModal = ({
               open={running}
               placement='parent'
             />
-            <DataGrid<VersionRow>
-              gridRef={gridRef}
-              itemsSource={versionRows}
-              staticColumns={staticColumns}
-              autoGenerateColumns={false}
-              allowSorting={false}
-              dblClick={handleGridDblClick}
+            {/* 검색조회 로딩 스피너 — 액션(running) 스피너와 별개로 그리드 조회 중에 표시. */}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea
+              title=''
+              count={versionRows.length}
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<VersionRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                // 버전 선택 전용 팝업이라 편집 경로가 없다. prop 으로 주지 않으면 공용 DataGrid 가
+                //   초기화 시 rowHeaders 에 CRUD 상태 컬럼을 추가해 No 옆에 빈 열이 생긴다.
+                isReadOnly
+                itemsSource={versionRows}
+                staticColumns={staticColumns}
+                autoGenerateColumns={false}
+                allowSorting={false}
+                dblClick={handleGridDblClick}
+              />
+            </ResultArea>
           </div>
 
           {/* OK / Close 는 그리드 아래 우측 (기존 VersionModal .modalButtonWrapper 와 동일 배치) */}

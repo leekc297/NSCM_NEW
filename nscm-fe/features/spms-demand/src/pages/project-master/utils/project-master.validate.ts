@@ -48,7 +48,7 @@ export const validateSearch = (sc: SearchCondition, tab: TAB_INDEX): ValidationR
 //      PARENT 유무로 분기 — D3/D4 정정분)
 //   ② 편집값 9종 = 현재 셀 값 그대로 (E05 수정 항목 → 승인 파라미터 반영 — TAB1 저장 버튼 없음)
 //   ③ sopDate = 'YYYY-MM-DD 00:00:00' 변환 / 빈 값 ''
-//   ④ 6자리 D-PJT Code 는 호출부 FE 선검증 (P-08/D12 — editLock.isDpjtCodeValid)
+//   ④ 9자리 D-PJT Code 는 호출부 FE 선검증 (P-08/D12 — editLock.isDpjtCodeValid)
 export const toConfirmPayload = (row: Tab1Row): ConfirmTab1Payload => ({
   dpjtKey: toText(row.DPJT_KEY),
   dpjtCode: toText(row.DPJT_CODE),

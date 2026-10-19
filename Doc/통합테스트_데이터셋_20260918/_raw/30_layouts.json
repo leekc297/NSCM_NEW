@@ -1,0 +1,9170 @@
+{
+ "40|1-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0005",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Production",
+    "col": "DIVISION_ID",
+    "label": "Division*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "CUST_GROUP",
+    "label": "Cust Group*",
+    "div_meta": "40",
+    "sort": 25.0,
+    "ctrl": "FPComboBox",
+    "combo": "CUST_GROUP",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Cust Group*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "END_CUSTOMER40",
+    "label": "End Customer*",
+    "div_meta": "40",
+    "sort": 30.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "USER_ID",
+    "label": "Owner*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 34.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Owner*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "SCM_SITE_ID40",
+    "label": "Sales Site*",
+    "div_meta": "40",
+    "sort": 80.0,
+    "ctrl": "FPComboBox",
+    "combo": "ScmSitebyEndCustomer40",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Model*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "PRODUCTION_PROCESS",
+    "label": "Production Process*",
+    "div_meta": "40",
+    "sort": 172.0,
+    "ctrl": "FPComboBox",
+    "combo": "PRODUCTION_PROCESS",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Production Process*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "APPLICATION",
+    "label": "Application*",
+    "div_meta": "40",
+    "sort": 224.0,
+    "ctrl": "FPComboBox",
+    "combo": "APPLICATION",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Application*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 250.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "VALID_YN",
+    "label": "Active*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 260.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Active*",
+    "large": null
+   },
+   {
+    "sheet": "Purchase",
+    "col": "SALES_COMPANY",
+    "label": "Sales Company*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 105.0,
+    "ctrl": "FPComboBox",
+    "combo": "CompanySalesSite",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": null,
+    "large": null
+   },
+   {
+    "sheet": "Purchase",
+    "col": "SALES_PLANT",
+    "label": "Sales Plant*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 106.0,
+    "ctrl": "FPComboBox",
+    "combo": "SALES_PLANT_DM",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": null,
+    "large": null
+   }
+  ]
+ },
+ "40|10-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0021",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Sales Plan",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Div*",
+    "large": "Div*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "END_CUSTOMER40",
+    "label": "End Customer*",
+    "div_meta": "40",
+    "sort": 35.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivision40",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": "End Customer*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 40.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 90.0,
+    "ctrl": "FPText",
+    "combo": " ",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "CELL_PROD_SITE_ID",
+    "label": "Cell Prod Site*",
+    "div_meta": "40",
+    "sort": 167.0,
+    "ctrl": "FPComboBox",
+    "combo": "CELL_PROD_SITE_ID",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Cell Prod Site*",
+    "large": "Cell Prod Site*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 500.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "40|3-1": {
+  "kind": "if",
+  "args": [
+   "INF_MGR",
+   "XIF_ERP_SALES_RESULT_R"
+  ],
+  "cols": [
+   {
+    "col": "IFSEQNO",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 1
+   },
+   {
+    "col": "COMPANY_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 2
+   },
+   {
+    "col": "DIVISION_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 3
+   },
+   {
+    "col": "RESULT_YYYYMM",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 4
+   },
+   {
+    "col": "RESULT_YYYYMMDD",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 5
+   },
+   {
+    "col": "RESULT_HHMMSS",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 6
+   },
+   {
+    "col": "SALES_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 7
+   },
+   {
+    "col": "SALES_DEPT",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 8
+   },
+   {
+    "col": "SALES_WORK_PLACE",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 9
+   },
+   {
+    "col": "SALES_WORK_PLACE_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 10
+   },
+   {
+    "col": "SALES_GROUP",
+    "type": "VARCHAR2",
+    "len": 12,
+    "nullable": "Y",
+    "pos": 11
+   },
+   {
+    "col": "SALES_GROUP_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 12
+   },
+   {
+    "col": "SALES_POSTING_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 13
+   },
+   {
+    "col": "COST_ITEM",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 14
+   },
+   {
+    "col": "COST_ITEM_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 15
+   },
+   {
+    "col": "SALES_TYPE_2",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 16
+   },
+   {
+    "col": "VALUATION_CLASS",
+    "type": "VARCHAR2",
+    "len": 16,
+    "nullable": "Y",
+    "pos": 17
+   },
+   {
+    "col": "ITEM_TYPE",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 18
+   },
+   {
+    "col": "CUSTOMER_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 19
+   },
+   {
+    "col": "CUSTOMER_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 20
+   },
+   {
+    "col": "CUSTOMER_PROJECT_NAME",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 21
+   },
+   {
+    "col": "CUSTOMER_ITEM_NAME",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 22
+   },
+   {
+    "col": "BIZ_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 23
+   },
+   {
+    "col": "PROJECT_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 24
+   },
+   {
+    "col": "PROJECT_NAME",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 25
+   },
+   {
+    "col": "CELL_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 26
+   },
+   {
+    "col": "CAR_MODEL",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 27
+   },
+   {
+    "col": "QTY_CELL_BY_PACK",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 28
+   },
+   {
+    "col": "Z_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 29
+   },
+   {
+    "col": "Z_CODE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 30
+   },
+   {
+    "col": "SALES_REGION",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 31
+   },
+   {
+    "col": "DISTRIBUTION_CHANNEL",
+    "type": "VARCHAR2",
+    "len": 8,
+    "nullable": "Y",
+    "pos": 32
+   },
+   {
+    "col": "LGS_ROUTE_NAME",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 33
+   },
+   {
+    "col": "CONNECT_NAME",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 34
+   },
+   {
+    "col": "CAR_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 35
+   },
+   {
+    "col": "CELL_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 36
+   },
+   {
+    "col": "SALES_PRICE",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 37
+   },
+   {
+    "col": "CURRENCY",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 38
+   },
+   {
+    "col": "SALES_AMOUNT_FOR",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 39
+   },
+   {
+    "col": "SALES_AMOUNT_SUM",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 40
+   },
+   {
+    "col": "UOM",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 41
+   },
+   {
+    "col": "SALES_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 42
+   },
+   {
+    "col": "SALES_USER",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 43
+   },
+   {
+    "col": "SALES_USER_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 44
+   },
+   {
+    "col": "MAT_GROUP",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 45
+   },
+   {
+    "col": "MAT_GROUP_DESC",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 46
+   },
+   {
+    "col": "ITEM_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 47
+   },
+   {
+    "col": "BIZ_TYPE_2",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 48
+   },
+   {
+    "col": "APP",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 49
+   },
+   {
+    "col": "USAGE",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 50
+   },
+   {
+    "col": "SALES_TEAM",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 51
+   },
+   {
+    "col": "ESS_PM",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 52
+   },
+   {
+    "col": "PLANT_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 53
+   },
+   {
+    "col": "SHIPTO_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 54
+   },
+   {
+    "col": "SHIPTO_DESCRIPTION",
+    "type": "VARCHAR2",
+    "len": 160,
+    "nullable": "Y",
+    "pos": 55
+   },
+   {
+    "col": "COUNTRY",
+    "type": "VARCHAR2",
+    "len": 12,
+    "nullable": "Y",
+    "pos": 56
+   },
+   {
+    "col": "COUNTRY_NAME",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 57
+   },
+   {
+    "col": "SHIPTO_CITY_NAME",
+    "type": "VARCHAR2",
+    "len": 160,
+    "nullable": "Y",
+    "pos": 58
+   },
+   {
+    "col": "SHIPTO_ZONE_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 59
+   },
+   {
+    "col": "SHIPTO_ZONE_NAME",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 60
+   },
+   {
+    "col": "RBU_CUSTOMER",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 61
+   },
+   {
+    "col": "INCOTERMS",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 62
+   },
+   {
+    "col": "PROFIT_CENTER_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 63
+   },
+   {
+    "col": "PROFIT_CENTER_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 64
+   },
+   {
+    "col": "PARTNER_PROFIT_CENTER_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 65
+   },
+   {
+    "col": "PARTNER_PROFIT_CENTER_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 66
+   },
+   {
+    "col": "ITEM_TEXT",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 67
+   },
+   {
+    "col": "AFFILIATE_CODE",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 68
+   },
+   {
+    "col": "SALES_SEQ",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 69
+   },
+   {
+    "col": "SALES_KEY",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 70
+   },
+   {
+    "col": "CUSTOMER_GROUP_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 71
+   },
+   {
+    "col": "CUSTOMER_GROUP_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 72
+   },
+   {
+    "col": "CELL_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 73
+   },
+   {
+    "col": "DELEGATE_MODEL_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 74
+   },
+   {
+    "col": "DELEGATE_MODEL_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 75
+   },
+   {
+    "col": "C_P_MODEL_ID",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 76
+   },
+   {
+    "col": "C_P_MODEL_NAME",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 77
+   },
+   {
+    "col": "LRREGULAR_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 78
+   },
+   {
+    "col": "LRREGULAR_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 79
+   },
+   {
+    "col": "MACHINE_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 80
+   },
+   {
+    "col": "MACHINE_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 81
+   },
+   {
+    "col": "LINE_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 82
+   },
+   {
+    "col": "LINE_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 83
+   },
+   {
+    "col": "TCO",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 84
+   },
+   {
+    "col": "CREATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 85
+   },
+   {
+    "col": "CREATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 86
+   },
+   {
+    "col": "CREATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 87
+   },
+   {
+    "col": "UPDATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 88
+   },
+   {
+    "col": "UPDATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 89
+   },
+   {
+    "col": "UPDATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 90
+   },
+   {
+    "col": "TRANSFER_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 91
+   },
+   {
+    "col": "TRANSFER_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 92
+   },
+   {
+    "col": "TRANSFER_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 93
+   },
+   {
+    "col": "TRANSFER_FLAG",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 94
+   },
+   {
+    "col": "ATTRIBUTE1",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 95
+   },
+   {
+    "col": "ATTRIBUTE2",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 96
+   },
+   {
+    "col": "ATTRIBUTE3",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 97
+   },
+   {
+    "col": "ATTRIBUTE4",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 98
+   },
+   {
+    "col": "ATTRIBUTE5",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 99
+   },
+   {
+    "col": "ATTRIBUTE6",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 100
+   },
+   {
+    "col": "ATTRIBUTE7",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 101
+   },
+   {
+    "col": "ATTRIBUTE8",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 102
+   },
+   {
+    "col": "ATTRIBUTE9",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 103
+   },
+   {
+    "col": "ATTRIBUTE10",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 104
+   },
+   {
+    "col": "ATTRIBUTE11",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 105
+   },
+   {
+    "col": "ATTRIBUTE12",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 106
+   },
+   {
+    "col": "ATTRIBUTE13",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 107
+   },
+   {
+    "col": "ATTRIBUTE14",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 108
+   },
+   {
+    "col": "ATTRIBUTE15",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 109
+   },
+   {
+    "col": "SYSTEM_INPUT_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 110
+   },
+   {
+    "col": "SYSTEM_INPUT_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 111
+   },
+   {
+    "col": "DOC_CURRENCY",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 112
+   },
+   {
+    "col": "DOC_AMT_FOR",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 113
+   },
+   {
+    "col": "DOC_AMT_KRW",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 114
+   },
+   {
+    "col": "FKDAT",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 115
+   },
+   {
+    "col": "SO_NO",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 116
+   },
+   {
+    "col": "POSNN",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 117
+   },
+   {
+    "col": "VGBEL",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 118
+   },
+   {
+    "col": "VGPOS",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 119
+   },
+   {
+    "col": "TKNUM",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 120
+   },
+   {
+    "col": "RBELN",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 121
+   },
+   {
+    "col": "RPOSN",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 122
+   },
+   {
+    "col": "SALES_EXCHRATE_M",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 123
+   },
+   {
+    "col": "SALES_AMOUNT_SUM_M",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 124
+   },
+   {
+    "col": "FROM_COMPANY_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 125
+   },
+   {
+    "col": "FROM_SELL_DOC",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 126
+   },
+   {
+    "col": "FROM_SHIP_NO",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 127
+   }
+  ]
+ },
+ "40|4-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0082",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "FcstNPrice",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": "Div*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "END_CUSTOMER",
+    "label": "End Customer*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 30.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivisionDMF0082",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": "End Customer*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 70.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 80.0,
+    "ctrl": "FPModal",
+    "combo": "ITEM",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 110.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 130.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_ETC",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "CELL_PROD_SITE_ID",
+    "label": "Cell Prod Site*",
+    "div_meta": "40",
+    "sort": 370.0,
+    "ctrl": "FPComboBox",
+    "combo": "CELL_PROD_SITE_ID",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Cell Prod Site*",
+    "large": "Cell Prod Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 380.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VERSION_NO",
+    "label": "Version",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 390.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Version",
+    "large": "Version"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VMI_STD_DIO",
+    "label": "VMI_STD_DIO",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 436.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "N",
+    "small": "VMI_STD_DIO",
+    "large": "VMI_STD_DIO"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 450.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DIVISION_ID",
+    "label": "Division*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": "Division*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "END_CUSTOMER40",
+    "label": "End Customer*",
+    "div_meta": "40",
+    "sort": 40.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivision40",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": "End Customer*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 100.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_FREE",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "CurrencyList",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "CELL_PROD_SITE_ID",
+    "label": "Cell Prod Site*",
+    "div_meta": "40",
+    "sort": 190.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Cell Prod Site*",
+    "large": "Cell Prod Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 240.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "40|6-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0082",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "FcstNPrice",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": "Div*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "END_CUSTOMER",
+    "label": "End Customer*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 30.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivisionDMF0082",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": "End Customer*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 70.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 80.0,
+    "ctrl": "FPModal",
+    "combo": "ITEM",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 110.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 130.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_ETC",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "CELL_PROD_SITE_ID",
+    "label": "Cell Prod Site*",
+    "div_meta": "40",
+    "sort": 370.0,
+    "ctrl": "FPComboBox",
+    "combo": "CELL_PROD_SITE_ID",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Cell Prod Site*",
+    "large": "Cell Prod Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 380.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VERSION_NO",
+    "label": "Version",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 390.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Version",
+    "large": "Version"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VMI_STD_DIO",
+    "label": "VMI_STD_DIO",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 436.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "N",
+    "small": "VMI_STD_DIO",
+    "large": "VMI_STD_DIO"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 450.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DIVISION_ID",
+    "label": "Division*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": "Division*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "END_CUSTOMER40",
+    "label": "End Customer*",
+    "div_meta": "40",
+    "sort": 40.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivision40",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": "End Customer*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 100.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_FREE",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "CurrencyList",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "CELL_PROD_SITE_ID",
+    "label": "Cell Prod Site*",
+    "div_meta": "40",
+    "sort": 190.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Cell Prod Site*",
+    "large": "Cell Prod Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 240.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "40|9-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0082",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "FcstNPrice",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": "Div*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "END_CUSTOMER",
+    "label": "End Customer*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 30.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivisionDMF0082",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": "End Customer*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 70.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 80.0,
+    "ctrl": "FPModal",
+    "combo": "ITEM",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 110.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 130.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_ETC",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "CELL_PROD_SITE_ID",
+    "label": "Cell Prod Site*",
+    "div_meta": "40",
+    "sort": 370.0,
+    "ctrl": "FPComboBox",
+    "combo": "CELL_PROD_SITE_ID",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Cell Prod Site*",
+    "large": "Cell Prod Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 380.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VERSION_NO",
+    "label": "Version",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 390.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Version",
+    "large": "Version"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VMI_STD_DIO",
+    "label": "VMI_STD_DIO",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 436.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "N",
+    "small": "VMI_STD_DIO",
+    "large": "VMI_STD_DIO"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 450.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DIVISION_ID",
+    "label": "Division*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": "Division*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "END_CUSTOMER40",
+    "label": "End Customer*",
+    "div_meta": "40",
+    "sort": 40.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivision40",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": "End Customer*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 100.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_FREE",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "CurrencyList",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "CELL_PROD_SITE_ID",
+    "label": "Cell Prod Site*",
+    "div_meta": "40",
+    "sort": 190.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Cell Prod Site*",
+    "large": "Cell Prod Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 240.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "81|1-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0005",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Production",
+    "col": "DIVISION_ID",
+    "label": "Division*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "USER_ID",
+    "label": "Owner*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 34.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Owner*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 80.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 90.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Project Code*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Model*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "CELL_TYPE_81",
+    "label": "Cell Type*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 174.0,
+    "ctrl": "FPComboBox",
+    "combo": "CELL_TYPE_81",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Cell Type*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "KWH",
+    "label": "KWh/Cell*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 177.0,
+    "ctrl": "FPNumber",
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "KWh/Cell*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 250.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "VALID_YN",
+    "label": "Active*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 260.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Active*",
+    "large": null
+   },
+   {
+    "sheet": "Purchase",
+    "col": "CELL_TYPE_81",
+    "label": "Cell Type*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 91.0,
+    "ctrl": "FPComboBox",
+    "combo": "CELL_TYPE_81",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": null,
+    "large": null
+   },
+   {
+    "sheet": "Purchase",
+    "col": "KWH",
+    "label": "KWh/Cell*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 93.0,
+    "ctrl": "FPNumber",
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": null,
+    "large": null
+   },
+   {
+    "sheet": "Purchase",
+    "col": "SALES_COMPANY",
+    "label": "Sales Company*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 105.0,
+    "ctrl": "FPComboBox",
+    "combo": "CompanySalesSite",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": null,
+    "large": null
+   },
+   {
+    "sheet": "Purchase",
+    "col": "SALES_PLANT",
+    "label": "Sales Plant*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 106.0,
+    "ctrl": "FPComboBox",
+    "combo": "SALES_PLANT_DM",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": null,
+    "large": null
+   },
+   {
+    "sheet": "Purchase",
+    "col": "USER_ID",
+    "label": "Owner*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 125.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": null,
+    "large": null
+   }
+  ]
+ },
+ "81|11-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0082",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "FcstNPrice",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": "Div*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "END_CUSTOMER",
+    "label": "End Customer*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 30.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivisionDMF0082",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": "End Customer*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 70.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 71.0,
+    "ctrl": "FPModal",
+    "combo": "PROJECT",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Project Code",
+    "large": "Project Code"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 80.0,
+    "ctrl": "FPModal",
+    "combo": "ITEM",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 110.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 130.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_ETC",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "PLANT_SITE_ID",
+    "label": "Plant Site*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 141.0,
+    "ctrl": "FPComboBox",
+    "combo": "FromSiteByDivision",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Plant Site*",
+    "large": "Plant Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 380.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VERSION_NO",
+    "label": "Version",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 390.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Version",
+    "large": "Version"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VMI_STD_DIO",
+    "label": "VMI_STD_DIO",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 436.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "N",
+    "small": "VMI_STD_DIO",
+    "large": "VMI_STD_DIO"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 450.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DIVISION_ID",
+    "label": "Division*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": "Division*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 60.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Project Code*",
+    "large": "Project Code*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 100.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_FREE",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "CurrencyList",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "PLANT_SITE_ID",
+    "label": "Plant Site*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 180.0,
+    "ctrl": "FPComboBox",
+    "combo": "FromSiteByDivision",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Plant Site*",
+    "large": "Plant Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 240.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "81|12-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0021",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Sales Plan",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Div*",
+    "large": "Div*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 40.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": "FPText",
+    "combo": " ",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Project Code*",
+    "large": "Project Code*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 90.0,
+    "ctrl": "FPText",
+    "combo": " ",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "TEXT",
+    "label": "Text*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 95.0,
+    "ctrl": " ",
+    "combo": " ",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Text*",
+    "large": "Text*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "FROM_SITE_ID",
+    "label": "From Site Id*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 168.0,
+    "ctrl": "FPComboBox",
+    "combo": "FromSiteByDivision",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "From Site Id*",
+    "large": "From Site Id*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "PLANT_SITE_ID",
+    "label": "Plant Site*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 180.0,
+    "ctrl": "FPComboBox",
+    "combo": "FromSiteByDivision",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Plant Site*",
+    "large": "Plant Site*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 500.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "81|3-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0072",
+   null
+  ],
+  "cols": []
+ },
+ "81|3-2a": {
+  "kind": "if",
+  "args": [
+   "INF_MGR",
+   "XIF_ERP_EDI_CALLOFF_HEAD_R"
+  ],
+  "cols": [
+   {
+    "col": "IFSEQNO",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "N",
+    "pos": 1
+   },
+   {
+    "col": "SOLDTO_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 2
+   },
+   {
+    "col": "COMPANY_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 3
+   },
+   {
+    "col": "MESSAGE_REFERENCE",
+    "type": "VARCHAR2",
+    "len": 56,
+    "nullable": "Y",
+    "pos": 4
+   },
+   {
+    "col": "MESSAGE_TYPE",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 5
+   },
+   {
+    "col": "DOC_IDENTIFINER",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 6
+   },
+   {
+    "col": "EDI_INTERCHANGE_NO",
+    "type": "VARCHAR2",
+    "len": 56,
+    "nullable": "Y",
+    "pos": 7
+   },
+   {
+    "col": "DOC_ISSUE_DATE",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 8
+   },
+   {
+    "col": "RDD_TYPE",
+    "type": "VARCHAR2",
+    "len": 12,
+    "nullable": "Y",
+    "pos": 9
+   },
+   {
+    "col": "COMPANY_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 10
+   },
+   {
+    "col": "SOLDTO_NAME",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 11
+   },
+   {
+    "col": "EDI_IF_SEQ",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 12
+   },
+   {
+    "col": "TRANSACTION_FLAG",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 13
+   },
+   {
+    "col": "CREATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 14
+   },
+   {
+    "col": "CREATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 15
+   },
+   {
+    "col": "CREATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 16
+   },
+   {
+    "col": "UPDATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 17
+   },
+   {
+    "col": "UPDATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 18
+   },
+   {
+    "col": "UPDATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 19
+   },
+   {
+    "col": "TRANSFER_CREATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 20
+   },
+   {
+    "col": "TRANSFER_CREATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 21
+   },
+   {
+    "col": "TRANSFER_CREATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 22
+   },
+   {
+    "col": "TRANSFER_UPDATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 23
+   },
+   {
+    "col": "TRANSFER_UPDATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 24
+   },
+   {
+    "col": "TRANSFER_UPDATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 25
+   },
+   {
+    "col": "TRANSFER_FLAG",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 26
+   },
+   {
+    "col": "SENDER_CODE",
+    "type": "VARCHAR2",
+    "len": 20,
+    "nullable": "Y",
+    "pos": 27
+   },
+   {
+    "col": "SENDER_NAME",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 28
+   },
+   {
+    "col": "ATTRIBUTE1",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 29
+   },
+   {
+    "col": "ATTRIBUTE2",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 30
+   },
+   {
+    "col": "ATTRIBUTE3",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 31
+   },
+   {
+    "col": "ATTRIBUTE4",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 32
+   },
+   {
+    "col": "ATTRIBUTE5",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 33
+   },
+   {
+    "col": "ATTRIBUTE6",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 34
+   },
+   {
+    "col": "ATTRIBUTE7",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 35
+   },
+   {
+    "col": "ATTRIBUTE8",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 36
+   },
+   {
+    "col": "ATTRIBUTE9",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 37
+   },
+   {
+    "col": "ATTRIBUTE10",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 38
+   },
+   {
+    "col": "ATTRIBUTE11",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 39
+   },
+   {
+    "col": "ATTRIBUTE12",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 40
+   },
+   {
+    "col": "ATTRIBUTE13",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 41
+   },
+   {
+    "col": "ATTRIBUTE14",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 42
+   },
+   {
+    "col": "ATTRIBUTE15",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 43
+   },
+   {
+    "col": "DOC_STATUS",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 44
+   },
+   {
+    "col": "STATUS_MSG",
+    "type": "VARCHAR2",
+    "len": 1024,
+    "nullable": "Y",
+    "pos": 45
+   }
+  ]
+ },
+ "81|3-2b": {
+  "kind": "if",
+  "args": [
+   "INF_MGR",
+   "XIF_ERP_EDI_CALLOFF_ITEM_R"
+  ],
+  "cols": [
+   {
+    "col": "IFSEQNO",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "N",
+    "pos": 1
+   },
+   {
+    "col": "SOLDTO_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 2
+   },
+   {
+    "col": "COMPANY_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 3
+   },
+   {
+    "col": "MESSAGE_REFERENCE",
+    "type": "VARCHAR2",
+    "len": 56,
+    "nullable": "Y",
+    "pos": 4
+   },
+   {
+    "col": "MESSAGE_TYPE",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 5
+   },
+   {
+    "col": "DOC_IDENTIFINER",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 6
+   },
+   {
+    "col": "SHIPTO_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 7
+   },
+   {
+    "col": "PARTNER_TYPE",
+    "type": "VARCHAR2",
+    "len": 8,
+    "nullable": "Y",
+    "pos": 8
+   },
+   {
+    "col": "SHIPTO_SEQ",
+    "type": "VARCHAR2",
+    "len": 88,
+    "nullable": "Y",
+    "pos": 9
+   },
+   {
+    "col": "SHIP_TO_ITEM_SEQ",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 10
+   },
+   {
+    "col": "ITEM_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 11
+   },
+   {
+    "col": "CUSTOMER_PLANT",
+    "type": "VARCHAR2",
+    "len": 16,
+    "nullable": "Y",
+    "pos": 12
+   },
+   {
+    "col": "UNLOADING_POINT",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 13
+   },
+   {
+    "col": "SCHEDULING_TYPE",
+    "type": "VARCHAR2",
+    "len": 12,
+    "nullable": "Y",
+    "pos": 14
+   },
+   {
+    "col": "RDD_START",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 15
+   },
+   {
+    "col": "QTY",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 16
+   },
+   {
+    "col": "UOM",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 17
+   },
+   {
+    "col": "RDD_END",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 18
+   },
+   {
+    "col": "CUSTOMER_PO_NO",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 19
+   },
+   {
+    "col": "CUSTOMER_CALL_OFF_NO",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 20
+   },
+   {
+    "col": "CUSTOMER_CALL_OFF_DATE",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 21
+   },
+   {
+    "col": "PREVIOUS_CALL_OFF_NO",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 22
+   },
+   {
+    "col": "PREVIOUS_CALL_OFF_DATE",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 23
+   },
+   {
+    "col": "COMPANY_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 24
+   },
+   {
+    "col": "SHIPTO_NAME1",
+    "type": "VARCHAR2",
+    "len": 160,
+    "nullable": "Y",
+    "pos": 25
+   },
+   {
+    "col": "SHIPTO_NAME2",
+    "type": "VARCHAR2",
+    "len": 160,
+    "nullable": "Y",
+    "pos": 26
+   },
+   {
+    "col": "EDI_IF_SEQ",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 27
+   },
+   {
+    "col": "TRANSACTION_FLAG",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 28
+   },
+   {
+    "col": "ERP_FCST_TYPE",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 29
+   },
+   {
+    "col": "CUST_MATERIAL_CODE",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 30
+   },
+   {
+    "col": "PLANNER_NAME",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 31
+   },
+   {
+    "col": "CREATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 32
+   },
+   {
+    "col": "CREATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 33
+   },
+   {
+    "col": "CREATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 34
+   },
+   {
+    "col": "UPDATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 35
+   },
+   {
+    "col": "UPDATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 36
+   },
+   {
+    "col": "UPDATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 37
+   },
+   {
+    "col": "TRANSFER_CREATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 38
+   },
+   {
+    "col": "TRANSFER_CREATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 39
+   },
+   {
+    "col": "TRANSFER_CREATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 40
+   },
+   {
+    "col": "TRANSFER_UPDATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 41
+   },
+   {
+    "col": "TRANSFER_UPDATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 42
+   },
+   {
+    "col": "TRANSFER_UPDATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 43
+   },
+   {
+    "col": "TRANSFER_FLAG",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 44
+   },
+   {
+    "col": "SENDER_CODE",
+    "type": "VARCHAR2",
+    "len": 20,
+    "nullable": "Y",
+    "pos": 45
+   },
+   {
+    "col": "SENDER_NAME",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 46
+   },
+   {
+    "col": "ATTRIBUTE1",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 47
+   },
+   {
+    "col": "ATTRIBUTE2",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 48
+   },
+   {
+    "col": "ATTRIBUTE3",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 49
+   },
+   {
+    "col": "ATTRIBUTE4",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 50
+   },
+   {
+    "col": "ATTRIBUTE5",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 51
+   },
+   {
+    "col": "ATTRIBUTE6",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 52
+   },
+   {
+    "col": "ATTRIBUTE7",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 53
+   },
+   {
+    "col": "ATTRIBUTE8",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 54
+   },
+   {
+    "col": "ATTRIBUTE9",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 55
+   },
+   {
+    "col": "ATTRIBUTE10",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 56
+   },
+   {
+    "col": "ATTRIBUTE11",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 57
+   },
+   {
+    "col": "ATTRIBUTE12",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 58
+   },
+   {
+    "col": "ATTRIBUTE13",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 59
+   },
+   {
+    "col": "ATTRIBUTE14",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 60
+   },
+   {
+    "col": "ATTRIBUTE15",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 61
+   },
+   {
+    "col": "DOC_STATUS",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 62
+   },
+   {
+    "col": "STATUS_MSG",
+    "type": "VARCHAR2",
+    "len": 1024,
+    "nullable": "Y",
+    "pos": 63
+   }
+  ]
+ },
+ "81|3-2c": {
+  "kind": "if",
+  "args": [
+   "INF_MGR",
+   "XIF_ERP_EDI_CALLOFF_PARTNER_R"
+  ],
+  "cols": [
+   {
+    "col": "IFSEQNO",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "N",
+    "pos": 1
+   },
+   {
+    "col": "SOLDTO_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 2
+   },
+   {
+    "col": "COMPANY_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 3
+   },
+   {
+    "col": "MESSAGE_REFERENCE",
+    "type": "VARCHAR2",
+    "len": 56,
+    "nullable": "Y",
+    "pos": 4
+   },
+   {
+    "col": "MESSAGE_TYPE",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 5
+   },
+   {
+    "col": "DOC_IDENTIFINER",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 6
+   },
+   {
+    "col": "SHIPTO_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 7
+   },
+   {
+    "col": "PARTNER_TYPE",
+    "type": "VARCHAR2",
+    "len": 8,
+    "nullable": "Y",
+    "pos": 8
+   },
+   {
+    "col": "SHIPTO_SEQ",
+    "type": "VARCHAR2",
+    "len": 88,
+    "nullable": "Y",
+    "pos": 9
+   },
+   {
+    "col": "COMPANY_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 10
+   },
+   {
+    "col": "SHIPTO_NAME1",
+    "type": "VARCHAR2",
+    "len": 160,
+    "nullable": "Y",
+    "pos": 11
+   },
+   {
+    "col": "SHIPTO_NAME2",
+    "type": "VARCHAR2",
+    "len": 160,
+    "nullable": "Y",
+    "pos": 12
+   },
+   {
+    "col": "CITY_NAME",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 13
+   },
+   {
+    "col": "POSTAL_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 14
+   },
+   {
+    "col": "COUNTRY",
+    "type": "VARCHAR2",
+    "len": 12,
+    "nullable": "Y",
+    "pos": 15
+   },
+   {
+    "col": "SHIPTO_DUNS_NO",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 16
+   },
+   {
+    "col": "EDI_IF_SEQ",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 17
+   },
+   {
+    "col": "TRANSACTION_FLAG",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 18
+   },
+   {
+    "col": "SHIP_FROM_PLANT",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 19
+   },
+   {
+    "col": "CREATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 20
+   },
+   {
+    "col": "CREATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 21
+   },
+   {
+    "col": "CREATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 22
+   },
+   {
+    "col": "UPDATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 23
+   },
+   {
+    "col": "UPDATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 24
+   },
+   {
+    "col": "UPDATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 25
+   },
+   {
+    "col": "TRANSFER_CREATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 26
+   },
+   {
+    "col": "TRANSFER_CREATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 27
+   },
+   {
+    "col": "TRANSFER_CREATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 28
+   },
+   {
+    "col": "TRANSFER_UPDATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 29
+   },
+   {
+    "col": "TRANSFER_UPDATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 30
+   },
+   {
+    "col": "TRANSFER_UPDATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 31
+   },
+   {
+    "col": "TRANSFER_FLAG",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 32
+   },
+   {
+    "col": "SENDER_CODE",
+    "type": "VARCHAR2",
+    "len": 20,
+    "nullable": "Y",
+    "pos": 33
+   },
+   {
+    "col": "SENDER_NAME",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 34
+   },
+   {
+    "col": "ATTRIBUTE1",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 35
+   },
+   {
+    "col": "ATTRIBUTE2",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 36
+   },
+   {
+    "col": "ATTRIBUTE3",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 37
+   },
+   {
+    "col": "ATTRIBUTE4",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 38
+   },
+   {
+    "col": "ATTRIBUTE5",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 39
+   },
+   {
+    "col": "ATTRIBUTE6",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 40
+   },
+   {
+    "col": "ATTRIBUTE7",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 41
+   },
+   {
+    "col": "ATTRIBUTE8",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 42
+   },
+   {
+    "col": "ATTRIBUTE9",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 43
+   },
+   {
+    "col": "ATTRIBUTE10",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 44
+   },
+   {
+    "col": "ATTRIBUTE11",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 45
+   },
+   {
+    "col": "ATTRIBUTE12",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 46
+   },
+   {
+    "col": "ATTRIBUTE13",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 47
+   },
+   {
+    "col": "ATTRIBUTE14",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 48
+   },
+   {
+    "col": "ATTRIBUTE15",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 49
+   },
+   {
+    "col": "DOC_STATUS",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 50
+   },
+   {
+    "col": "STATUS_MSG",
+    "type": "VARCHAR2",
+    "len": 1024,
+    "nullable": "Y",
+    "pos": 51
+   }
+  ]
+ },
+ "81|3-2d": {
+  "kind": "if",
+  "args": [
+   "INF_MGR",
+   "XIF_CUST_DEMAND_MAPPING_MST_R"
+  ],
+  "cols": [
+   {
+    "col": "IF_SEQ",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 1
+   },
+   {
+    "col": "SEQ",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "N",
+    "pos": 2
+   },
+   {
+    "col": "ERP_SA_ORG_ID",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 3
+   },
+   {
+    "col": "DISTRB_CHNL_CD",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 4
+   },
+   {
+    "col": "DIVISION_ID",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 5
+   },
+   {
+    "col": "SOLDTO_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 6
+   },
+   {
+    "col": "SHIPTO_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 7
+   },
+   {
+    "col": "UNLOADING_POINT",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 8
+   },
+   {
+    "col": "CUSTOMER_PLANT",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 9
+   },
+   {
+    "col": "CUST_MATERIAL_CODE",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 10
+   },
+   {
+    "col": "ITEM_ID",
+    "type": "VARCHAR2",
+    "len": 160,
+    "nullable": "Y",
+    "pos": 11
+   },
+   {
+    "col": "VALID_FROM_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 12
+   },
+   {
+    "col": "VALID_TO_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 13
+   },
+   {
+    "col": "TRANSFER_DATE",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "Y",
+    "pos": 14
+   },
+   {
+    "col": "TRANSFER_FLAG",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 15
+   }
+  ]
+ },
+ "81|4-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0007",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Customer FCST",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": null,
+    "sort": 2.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "CUSTOMER_CODE",
+    "label": "End Customer*",
+    "div_meta": null,
+    "sort": 4.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivisionDept",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": null,
+    "sort": 5.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "SUMMARY_BUCKET_TYPE",
+    "label": "Bucket Type*",
+    "div_meta": null,
+    "sort": 6.0,
+    "ctrl": "FPComboBox",
+    "combo": "BucketType",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Bucket Type*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "MEASURE_GROUP",
+    "label": "Group*",
+    "div_meta": null,
+    "sort": 7.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": null,
+    "sort": 8.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "EDI_FCST_YN",
+    "label": "EDI FCST Y/N*",
+    "div_meta": null,
+    "sort": 9.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "EDI FCST Y/N*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "UPLOAD_UOM",
+    "label": "Upload UOM*",
+    "div_meta": null,
+    "sort": 11.0,
+    "ctrl": "FPComboBox",
+    "combo": "UploadUOM",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Upload UOM*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "UPLOAD_BUCKET_TYPE",
+    "label": "Upload Bucket Type*",
+    "div_meta": null,
+    "sort": 12.0,
+    "ctrl": "FPComboBox",
+    "combo": "BucketType",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Upload Bucket Type*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "VALID_YN",
+    "label": "Active*",
+    "div_meta": null,
+    "sort": 13.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Active*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": null,
+    "sort": 2.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "CUSTOMER_CODE",
+    "label": "End Customer*",
+    "div_meta": null,
+    "sort": 4.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivisionDept",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": null,
+    "sort": 5.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "SUMMARY_BUCKET_TYPE",
+    "label": "Bucket Type*",
+    "div_meta": null,
+    "sort": 6.0,
+    "ctrl": "FPComboBox",
+    "combo": "BucketType",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Bucket Type*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "MEASURE_GROUP",
+    "label": "Group*",
+    "div_meta": null,
+    "sort": 7.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "MEASURE",
+    "label": "Name*",
+    "div_meta": null,
+    "sort": 8.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "EDI_FCST_YN",
+    "label": "EDI FCST Y/N*",
+    "div_meta": null,
+    "sort": 9.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "EDI FCST Y/N*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "CUSTOMER_PSI",
+    "label": "Customer PSI*",
+    "div_meta": null,
+    "sort": 10.0,
+    "ctrl": "FPComboBox",
+    "combo": "CustomerPSI",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Customer PSI*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "UPLOAD_UOM",
+    "label": "Upload UOM*",
+    "div_meta": null,
+    "sort": 11.0,
+    "ctrl": "FPComboBox",
+    "combo": "UploadUOM",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Upload UOM*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "UPLOAD_BUCKET_TYPE",
+    "label": "Upload Bucket Type*",
+    "div_meta": null,
+    "sort": 12.0,
+    "ctrl": "FPComboBox",
+    "combo": "BucketType",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Upload Bucket Type*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "VALID_YN",
+    "label": "Active*",
+    "div_meta": null,
+    "sort": 13.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Active*",
+    "large": null
+   }
+  ]
+ },
+ "81|4-2": {
+  "kind": "ui",
+  "args": [
+   "DMF0007",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Customer FCST",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": null,
+    "sort": 2.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "CUSTOMER_CODE",
+    "label": "End Customer*",
+    "div_meta": null,
+    "sort": 4.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivisionDept",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": null,
+    "sort": 5.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "SUMMARY_BUCKET_TYPE",
+    "label": "Bucket Type*",
+    "div_meta": null,
+    "sort": 6.0,
+    "ctrl": "FPComboBox",
+    "combo": "BucketType",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Bucket Type*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "MEASURE_GROUP",
+    "label": "Group*",
+    "div_meta": null,
+    "sort": 7.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": null,
+    "sort": 8.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "EDI_FCST_YN",
+    "label": "EDI FCST Y/N*",
+    "div_meta": null,
+    "sort": 9.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "EDI FCST Y/N*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "UPLOAD_UOM",
+    "label": "Upload UOM*",
+    "div_meta": null,
+    "sort": 11.0,
+    "ctrl": "FPComboBox",
+    "combo": "UploadUOM",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Upload UOM*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "UPLOAD_BUCKET_TYPE",
+    "label": "Upload Bucket Type*",
+    "div_meta": null,
+    "sort": 12.0,
+    "ctrl": "FPComboBox",
+    "combo": "BucketType",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Upload Bucket Type*",
+    "large": null
+   },
+   {
+    "sheet": "Customer FCST",
+    "col": "VALID_YN",
+    "label": "Active*",
+    "div_meta": null,
+    "sort": 13.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Active*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": null,
+    "sort": 2.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "CUSTOMER_CODE",
+    "label": "End Customer*",
+    "div_meta": null,
+    "sort": 4.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivisionDept",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": null,
+    "sort": 5.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "SUMMARY_BUCKET_TYPE",
+    "label": "Bucket Type*",
+    "div_meta": null,
+    "sort": 6.0,
+    "ctrl": "FPComboBox",
+    "combo": "BucketType",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Bucket Type*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "MEASURE_GROUP",
+    "label": "Group*",
+    "div_meta": null,
+    "sort": 7.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "MEASURE",
+    "label": "Name*",
+    "div_meta": null,
+    "sort": 8.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "EDI_FCST_YN",
+    "label": "EDI FCST Y/N*",
+    "div_meta": null,
+    "sort": 9.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "EDI FCST Y/N*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "CUSTOMER_PSI",
+    "label": "Customer PSI*",
+    "div_meta": null,
+    "sort": 10.0,
+    "ctrl": "FPComboBox",
+    "combo": "CustomerPSI",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Customer PSI*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "UPLOAD_UOM",
+    "label": "Upload UOM*",
+    "div_meta": null,
+    "sort": 11.0,
+    "ctrl": "FPComboBox",
+    "combo": "UploadUOM",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Upload UOM*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "UPLOAD_BUCKET_TYPE",
+    "label": "Upload Bucket Type*",
+    "div_meta": null,
+    "sort": 12.0,
+    "ctrl": "FPComboBox",
+    "combo": "BucketType",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Upload Bucket Type*",
+    "large": null
+   },
+   {
+    "sheet": "Customer PSI",
+    "col": "VALID_YN",
+    "label": "Active*",
+    "div_meta": null,
+    "sort": 13.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Active*",
+    "large": null
+   }
+  ]
+ },
+ "81|4-3": {
+  "kind": "upload",
+  "args": [
+   "DMF0014"
+  ],
+  "cols": [
+   {
+    "sheet": "FCST Upload",
+    "tokens": [
+     "Division*",
+     "Sales Site*",
+     "Plant Site*",
+     "Customer Project*",
+     "Customer Model*",
+     "Incoterms*",
+     "FCST Type*",
+     "Customs Handbook*",
+     "Measure Group*",
+     "Measure*",
+     "Upload UOM*",
+     "Project",
+     "Model",
+     "W27",
+     "W28",
+     "W29",
+     "W30",
+     "W31"
+    ]
+   }
+  ]
+ },
+ "81|5-1": {
+  "kind": "if",
+  "args": [
+   "INF_MGR",
+   "XIF_ERP_SALES_RESULT_R"
+  ],
+  "cols": [
+   {
+    "col": "IFSEQNO",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 1
+   },
+   {
+    "col": "COMPANY_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 2
+   },
+   {
+    "col": "DIVISION_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 3
+   },
+   {
+    "col": "RESULT_YYYYMM",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 4
+   },
+   {
+    "col": "RESULT_YYYYMMDD",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 5
+   },
+   {
+    "col": "RESULT_HHMMSS",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 6
+   },
+   {
+    "col": "SALES_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 7
+   },
+   {
+    "col": "SALES_DEPT",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 8
+   },
+   {
+    "col": "SALES_WORK_PLACE",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 9
+   },
+   {
+    "col": "SALES_WORK_PLACE_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 10
+   },
+   {
+    "col": "SALES_GROUP",
+    "type": "VARCHAR2",
+    "len": 12,
+    "nullable": "Y",
+    "pos": 11
+   },
+   {
+    "col": "SALES_GROUP_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 12
+   },
+   {
+    "col": "SALES_POSTING_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 13
+   },
+   {
+    "col": "COST_ITEM",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 14
+   },
+   {
+    "col": "COST_ITEM_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 15
+   },
+   {
+    "col": "SALES_TYPE_2",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 16
+   },
+   {
+    "col": "VALUATION_CLASS",
+    "type": "VARCHAR2",
+    "len": 16,
+    "nullable": "Y",
+    "pos": 17
+   },
+   {
+    "col": "ITEM_TYPE",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 18
+   },
+   {
+    "col": "CUSTOMER_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 19
+   },
+   {
+    "col": "CUSTOMER_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 20
+   },
+   {
+    "col": "CUSTOMER_PROJECT_NAME",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 21
+   },
+   {
+    "col": "CUSTOMER_ITEM_NAME",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 22
+   },
+   {
+    "col": "BIZ_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 23
+   },
+   {
+    "col": "PROJECT_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 24
+   },
+   {
+    "col": "PROJECT_NAME",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 25
+   },
+   {
+    "col": "CELL_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 26
+   },
+   {
+    "col": "CAR_MODEL",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 27
+   },
+   {
+    "col": "QTY_CELL_BY_PACK",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 28
+   },
+   {
+    "col": "Z_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 29
+   },
+   {
+    "col": "Z_CODE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 30
+   },
+   {
+    "col": "SALES_REGION",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 31
+   },
+   {
+    "col": "DISTRIBUTION_CHANNEL",
+    "type": "VARCHAR2",
+    "len": 8,
+    "nullable": "Y",
+    "pos": 32
+   },
+   {
+    "col": "LGS_ROUTE_NAME",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 33
+   },
+   {
+    "col": "CONNECT_NAME",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 34
+   },
+   {
+    "col": "CAR_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 35
+   },
+   {
+    "col": "CELL_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 36
+   },
+   {
+    "col": "SALES_PRICE",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 37
+   },
+   {
+    "col": "CURRENCY",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 38
+   },
+   {
+    "col": "SALES_AMOUNT_FOR",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 39
+   },
+   {
+    "col": "SALES_AMOUNT_SUM",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 40
+   },
+   {
+    "col": "UOM",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 41
+   },
+   {
+    "col": "SALES_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 42
+   },
+   {
+    "col": "SALES_USER",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 43
+   },
+   {
+    "col": "SALES_USER_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 44
+   },
+   {
+    "col": "MAT_GROUP",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 45
+   },
+   {
+    "col": "MAT_GROUP_DESC",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 46
+   },
+   {
+    "col": "ITEM_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 47
+   },
+   {
+    "col": "BIZ_TYPE_2",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 48
+   },
+   {
+    "col": "APP",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 49
+   },
+   {
+    "col": "USAGE",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 50
+   },
+   {
+    "col": "SALES_TEAM",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 51
+   },
+   {
+    "col": "ESS_PM",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 52
+   },
+   {
+    "col": "PLANT_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 53
+   },
+   {
+    "col": "SHIPTO_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 54
+   },
+   {
+    "col": "SHIPTO_DESCRIPTION",
+    "type": "VARCHAR2",
+    "len": 160,
+    "nullable": "Y",
+    "pos": 55
+   },
+   {
+    "col": "COUNTRY",
+    "type": "VARCHAR2",
+    "len": 12,
+    "nullable": "Y",
+    "pos": 56
+   },
+   {
+    "col": "COUNTRY_NAME",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 57
+   },
+   {
+    "col": "SHIPTO_CITY_NAME",
+    "type": "VARCHAR2",
+    "len": 160,
+    "nullable": "Y",
+    "pos": 58
+   },
+   {
+    "col": "SHIPTO_ZONE_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 59
+   },
+   {
+    "col": "SHIPTO_ZONE_NAME",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 60
+   },
+   {
+    "col": "RBU_CUSTOMER",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 61
+   },
+   {
+    "col": "INCOTERMS",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 62
+   },
+   {
+    "col": "PROFIT_CENTER_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 63
+   },
+   {
+    "col": "PROFIT_CENTER_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 64
+   },
+   {
+    "col": "PARTNER_PROFIT_CENTER_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 65
+   },
+   {
+    "col": "PARTNER_PROFIT_CENTER_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 66
+   },
+   {
+    "col": "ITEM_TEXT",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 67
+   },
+   {
+    "col": "AFFILIATE_CODE",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 68
+   },
+   {
+    "col": "SALES_SEQ",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 69
+   },
+   {
+    "col": "SALES_KEY",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 70
+   },
+   {
+    "col": "CUSTOMER_GROUP_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 71
+   },
+   {
+    "col": "CUSTOMER_GROUP_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 72
+   },
+   {
+    "col": "CELL_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 73
+   },
+   {
+    "col": "DELEGATE_MODEL_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 74
+   },
+   {
+    "col": "DELEGATE_MODEL_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 75
+   },
+   {
+    "col": "C_P_MODEL_ID",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 76
+   },
+   {
+    "col": "C_P_MODEL_NAME",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 77
+   },
+   {
+    "col": "LRREGULAR_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 78
+   },
+   {
+    "col": "LRREGULAR_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 79
+   },
+   {
+    "col": "MACHINE_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 80
+   },
+   {
+    "col": "MACHINE_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 81
+   },
+   {
+    "col": "LINE_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 82
+   },
+   {
+    "col": "LINE_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 83
+   },
+   {
+    "col": "TCO",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 84
+   },
+   {
+    "col": "CREATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 85
+   },
+   {
+    "col": "CREATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 86
+   },
+   {
+    "col": "CREATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 87
+   },
+   {
+    "col": "UPDATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 88
+   },
+   {
+    "col": "UPDATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 89
+   },
+   {
+    "col": "UPDATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 90
+   },
+   {
+    "col": "TRANSFER_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 91
+   },
+   {
+    "col": "TRANSFER_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 92
+   },
+   {
+    "col": "TRANSFER_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 93
+   },
+   {
+    "col": "TRANSFER_FLAG",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 94
+   },
+   {
+    "col": "ATTRIBUTE1",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 95
+   },
+   {
+    "col": "ATTRIBUTE2",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 96
+   },
+   {
+    "col": "ATTRIBUTE3",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 97
+   },
+   {
+    "col": "ATTRIBUTE4",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 98
+   },
+   {
+    "col": "ATTRIBUTE5",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 99
+   },
+   {
+    "col": "ATTRIBUTE6",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 100
+   },
+   {
+    "col": "ATTRIBUTE7",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 101
+   },
+   {
+    "col": "ATTRIBUTE8",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 102
+   },
+   {
+    "col": "ATTRIBUTE9",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 103
+   },
+   {
+    "col": "ATTRIBUTE10",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 104
+   },
+   {
+    "col": "ATTRIBUTE11",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 105
+   },
+   {
+    "col": "ATTRIBUTE12",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 106
+   },
+   {
+    "col": "ATTRIBUTE13",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 107
+   },
+   {
+    "col": "ATTRIBUTE14",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 108
+   },
+   {
+    "col": "ATTRIBUTE15",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 109
+   },
+   {
+    "col": "SYSTEM_INPUT_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 110
+   },
+   {
+    "col": "SYSTEM_INPUT_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 111
+   },
+   {
+    "col": "DOC_CURRENCY",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 112
+   },
+   {
+    "col": "DOC_AMT_FOR",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 113
+   },
+   {
+    "col": "DOC_AMT_KRW",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 114
+   },
+   {
+    "col": "FKDAT",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 115
+   },
+   {
+    "col": "SO_NO",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 116
+   },
+   {
+    "col": "POSNN",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 117
+   },
+   {
+    "col": "VGBEL",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 118
+   },
+   {
+    "col": "VGPOS",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 119
+   },
+   {
+    "col": "TKNUM",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 120
+   },
+   {
+    "col": "RBELN",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 121
+   },
+   {
+    "col": "RPOSN",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 122
+   },
+   {
+    "col": "SALES_EXCHRATE_M",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 123
+   },
+   {
+    "col": "SALES_AMOUNT_SUM_M",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 124
+   },
+   {
+    "col": "FROM_COMPANY_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 125
+   },
+   {
+    "col": "FROM_SELL_DOC",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 126
+   },
+   {
+    "col": "FROM_SHIP_NO",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 127
+   }
+  ]
+ },
+ "81|6-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0082",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "FcstNPrice",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": "Div*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "END_CUSTOMER",
+    "label": "End Customer*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 30.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivisionDMF0082",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": "End Customer*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 70.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 71.0,
+    "ctrl": "FPModal",
+    "combo": "PROJECT",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Project Code",
+    "large": "Project Code"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 80.0,
+    "ctrl": "FPModal",
+    "combo": "ITEM",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 110.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 130.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_ETC",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "PLANT_SITE_ID",
+    "label": "Plant Site*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 141.0,
+    "ctrl": "FPComboBox",
+    "combo": "FromSiteByDivision",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Plant Site*",
+    "large": "Plant Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 380.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VERSION_NO",
+    "label": "Version",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 390.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Version",
+    "large": "Version"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VMI_STD_DIO",
+    "label": "VMI_STD_DIO",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 436.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "N",
+    "small": "VMI_STD_DIO",
+    "large": "VMI_STD_DIO"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 450.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DIVISION_ID",
+    "label": "Division*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": "Division*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 60.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Project Code*",
+    "large": "Project Code*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 100.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_FREE",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "CurrencyList",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "PLANT_SITE_ID",
+    "label": "Plant Site*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 180.0,
+    "ctrl": "FPComboBox",
+    "combo": "FromSiteByDivision",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Plant Site*",
+    "large": "Plant Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 240.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "81|6-2": {
+  "kind": "ui",
+  "args": [
+   "DMF0082",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "FcstNPrice",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": "Div*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "END_CUSTOMER",
+    "label": "End Customer*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 30.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivisionDMF0082",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": "End Customer*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 70.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 71.0,
+    "ctrl": "FPModal",
+    "combo": "PROJECT",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Project Code",
+    "large": "Project Code"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 80.0,
+    "ctrl": "FPModal",
+    "combo": "ITEM",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 110.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 130.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_ETC",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "PLANT_SITE_ID",
+    "label": "Plant Site*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 141.0,
+    "ctrl": "FPComboBox",
+    "combo": "FromSiteByDivision",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Plant Site*",
+    "large": "Plant Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 380.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VERSION_NO",
+    "label": "Version",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 390.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Version",
+    "large": "Version"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VMI_STD_DIO",
+    "label": "VMI_STD_DIO",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 436.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "N",
+    "small": "VMI_STD_DIO",
+    "large": "VMI_STD_DIO"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 450.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DIVISION_ID",
+    "label": "Division*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": "Division*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 60.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Project Code*",
+    "large": "Project Code*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 100.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_FREE",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "CurrencyList",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "PLANT_SITE_ID",
+    "label": "Plant Site*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 180.0,
+    "ctrl": "FPComboBox",
+    "combo": "FromSiteByDivision",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Plant Site*",
+    "large": "Plant Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 240.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "81|8-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0082",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "FcstNPrice",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": "Div*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "END_CUSTOMER",
+    "label": "End Customer*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 30.0,
+    "ctrl": "FPComboBox",
+    "combo": "EndCustomerByDivisionDMF0082",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "End Customer*",
+    "large": "End Customer*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 70.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 71.0,
+    "ctrl": "FPModal",
+    "combo": "PROJECT",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Project Code",
+    "large": "Project Code"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 80.0,
+    "ctrl": "FPModal",
+    "combo": "ITEM",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 110.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 130.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_ETC",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "PLANT_SITE_ID",
+    "label": "Plant Site*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 141.0,
+    "ctrl": "FPComboBox",
+    "combo": "FromSiteByDivision",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Plant Site*",
+    "large": "Plant Site*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 380.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VERSION_NO",
+    "label": "Version",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 390.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Version",
+    "large": "Version"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "VMI_STD_DIO",
+    "label": "VMI_STD_DIO",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 436.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "N",
+    "small": "VMI_STD_DIO",
+    "large": "VMI_STD_DIO"
+   },
+   {
+    "sheet": "FcstNPrice",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 450.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IO",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DIVISION_ID",
+    "label": "Division*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": "Division*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 60.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Project Code*",
+    "large": "Project Code*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 100.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_FREE",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "CurrencyList",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "PLANT_SITE_ID",
+    "label": "Plant Site*",
+    "div_meta": "81,81_UC,81_HM,81_ST,81_HD,81_HG,82",
+    "sort": 180.0,
+    "ctrl": "FPComboBox",
+    "combo": "FromSiteByDivision",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Plant Site*",
+    "large": "Plant Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 240.0,
+    "ctrl": null,
+    "combo": " ",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "82|1-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0005",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Production",
+    "col": "DIVISION_ID",
+    "label": "Division*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "USER_ID_82",
+    "label": "Owner(Sales)*",
+    "div_meta": "82",
+    "sort": 34.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Owner(Sales)*",
+    "large": "Owner(Sales)*"
+   },
+   {
+    "sheet": "Production",
+    "col": "PRJ_OWNR_ID",
+    "label": "Owner(PM)*",
+    "div_meta": "82",
+    "sort": 35.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Owner(PM)*",
+    "large": "Owner(PM)*"
+   },
+   {
+    "sheet": "Production",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 80.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 90.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Project Code*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "SALES_PLAN_ADJUST_YN",
+    "label": "Sales Sync*",
+    "div_meta": "82",
+    "sort": 130.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Sync*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Model*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "CELL_TYPE_82",
+    "label": "Cell Type*",
+    "div_meta": "82",
+    "sort": 175.0,
+    "ctrl": "FPComboBox",
+    "combo": "CELL_TYPE_82",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Cell Type*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 250.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "VALID_YN",
+    "label": "Active*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 260.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Active*",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "CONSENSUS_MKT",
+    "label": "MKT*",
+    "div_meta": "82",
+    "sort": 840.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "CONSENSUS",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "CONSENSUS_ESS",
+    "label": "ESS Subsidiary*",
+    "div_meta": "82",
+    "sort": 850.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "CONSENSUS",
+    "large": null
+   },
+   {
+    "sheet": "Production",
+    "col": "CONSENSUS_SCM",
+    "label": "SCM*",
+    "div_meta": "82",
+    "sort": 860.0,
+    "ctrl": "FPComboBox",
+    "combo": "YesOrNo",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "CONSENSUS",
+    "large": null
+   },
+   {
+    "sheet": "Purchase",
+    "col": "CELL_TYPE_82",
+    "label": "Cell Type*",
+    "div_meta": "82",
+    "sort": 92.0,
+    "ctrl": "FPComboBox",
+    "combo": "CELL_TYPE_82",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": null,
+    "large": null
+   },
+   {
+    "sheet": "Purchase",
+    "col": "SALES_COMPANY",
+    "label": "Sales Company*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 105.0,
+    "ctrl": "FPComboBox",
+    "combo": "CompanySalesSite",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": null,
+    "large": null
+   },
+   {
+    "sheet": "Purchase",
+    "col": "SALES_PLANT",
+    "label": "Sales Plant*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 106.0,
+    "ctrl": "FPComboBox",
+    "combo": "SALES_PLANT_DM",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": null,
+    "large": null
+   },
+   {
+    "sheet": "Purchase",
+    "col": "USER_ID",
+    "label": "Owner*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 125.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": null,
+    "large": null
+   }
+  ]
+ },
+ "82|10-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0021",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Sales Plan",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPComboBox",
+    "combo": "Division",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Div*",
+    "large": "Div*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 40.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": "FPText",
+    "combo": " ",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Project Code*",
+    "large": "Project Code*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 90.0,
+    "ctrl": "FPText",
+    "combo": " ",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 160.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Plan",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 500.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "82|3-1": {
+  "kind": "if",
+  "args": [
+   "FP_MGR",
+   "SCM_STOCK_H"
+  ],
+  "cols": [
+   {
+    "col": "COMPANY_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "N",
+    "pos": 1
+   },
+   {
+    "col": "DIVISION_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "N",
+    "pos": 2
+   },
+   {
+    "col": "SITE_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "N",
+    "pos": 3
+   },
+   {
+    "col": "PLANT_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "N",
+    "pos": 4
+   },
+   {
+    "col": "FACTORY_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "N",
+    "pos": 5
+   },
+   {
+    "col": "STORAGE_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "N",
+    "pos": 6
+   },
+   {
+    "col": "CUTOFF_DATE",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "N",
+    "pos": 7
+   },
+   {
+    "col": "SEQ",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "N",
+    "pos": 8
+   },
+   {
+    "col": "STOCK_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 9
+   },
+   {
+    "col": "ITEM_ID",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 10
+   },
+   {
+    "col": "LANE",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 11
+   },
+   {
+    "col": "PRODUCTION_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 12
+   },
+   {
+    "col": "AVAILABLE_DATE",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "N",
+    "pos": 13
+   },
+   {
+    "col": "REMAIN_LEAD_TIME",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 14
+   },
+   {
+    "col": "HOLDING_DATE",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "Y",
+    "pos": 15
+   },
+   {
+    "col": "QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "N",
+    "pos": 16
+   },
+   {
+    "col": "QTY_UOM",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 17
+   },
+   {
+    "col": "STOCK_STATUS",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 18
+   },
+   {
+    "col": "OPERATION_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 19
+   },
+   {
+    "col": "LINE_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 20
+   },
+   {
+    "col": "OUTSOURCING_FLAG",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 21
+   },
+   {
+    "col": "OUTSOURCING_FACTORY",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 22
+   },
+   {
+    "col": "DESCRIPTION",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 23
+   },
+   {
+    "col": "FP_APPLY_OPERATION_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 24
+   },
+   {
+    "col": "FP_APPLY_ITEM_ID",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 25
+   },
+   {
+    "col": "FP_APPLY_WIPQTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 26
+   },
+   {
+    "col": "WIPHOLD_YN",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 27
+   },
+   {
+    "col": "WIP_TYPE_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 28
+   },
+   {
+    "col": "QTY2",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 29
+   },
+   {
+    "col": "MODIFY_FP_APPLY_WIPQTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 30
+   },
+   {
+    "col": "MODIFY_DESCRIPTION",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 31
+   },
+   {
+    "col": "CAL_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 32
+   },
+   {
+    "col": "FORMATION_REWORK_TYPE",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 33
+   },
+   {
+    "col": "INSERT_ID",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 34
+   },
+   {
+    "col": "INSERT_TIME",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "N",
+    "pos": 35
+   },
+   {
+    "col": "UPDATE_ID",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 36
+   },
+   {
+    "col": "UPDATE_TIME",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "N",
+    "pos": 37
+   },
+   {
+    "col": "LOCATION",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 38
+   },
+   {
+    "col": "RELEASE_DUE_DATE",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "Y",
+    "pos": 39
+   },
+   {
+    "col": "SHIP_AVAILABLE_DATE",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "Y",
+    "pos": 40
+   },
+   {
+    "col": "LONG_TERM_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 41
+   },
+   {
+    "col": "MOVING_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 42
+   },
+   {
+    "col": "CAPA_GRD_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 43
+   },
+   {
+    "col": "VLTG_GRD_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 44
+   },
+   {
+    "col": "RSST_GRD_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 45
+   },
+   {
+    "col": "DEFECT_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 46
+   },
+   {
+    "col": "PACK_MOVE_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 47
+   },
+   {
+    "col": "UNHOLD_EXP_DATE",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "Y",
+    "pos": 48
+   },
+   {
+    "col": "QMS_HOLD_YN",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 49
+   },
+   {
+    "col": "MES_MAP_SLOC",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 50
+   },
+   {
+    "col": "MES_HOLD_YN",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 51
+   },
+   {
+    "col": "MES_UNHOLD_DATE",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "Y",
+    "pos": 52
+   },
+   {
+    "col": "QMS_HOLD_DATE",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "Y",
+    "pos": 53
+   },
+   {
+    "col": "QMS_UNHOLD_EXP_DATE",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "Y",
+    "pos": 54
+   },
+   {
+    "col": "QMS_UNHOLD_DATE",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "Y",
+    "pos": 55
+   },
+   {
+    "col": "SECOND_OCV_TIME",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 56
+   },
+   {
+    "col": "SECOND_OCV_EXP_DATE",
+    "type": "DATE",
+    "len": 7,
+    "nullable": "Y",
+    "pos": 57
+   },
+   {
+    "col": "LONG_TERM_FLAG",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 58
+   },
+   {
+    "col": "QLTY_NO_INSP_FLAG",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 59
+   },
+   {
+    "col": "LOT_PACKING_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 60
+   },
+   {
+    "col": "POSITION_CATEGORY",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 61
+   },
+   {
+    "col": "DETAIL_POSITION",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 62
+   },
+   {
+    "col": "LOT_COUNT",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 63
+   },
+   {
+    "col": "COATING_LINE_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 64
+   },
+   {
+    "col": "PACK_MOVE_FLAG",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 65
+   },
+   {
+    "col": "ELEC_POST_HOLD_YN",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 66
+   },
+   {
+    "col": "FROM_PLANT_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 67
+   },
+   {
+    "col": "WORK_REQUEST_MODEL_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 68
+   },
+   {
+    "col": "VERSION",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 69
+   },
+   {
+    "col": "PROD_SEQ",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 70
+   },
+   {
+    "col": "PLM_EC_NO",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 71
+   },
+   {
+    "col": "RESTRICT_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 72
+   },
+   {
+    "col": "MES_ITEM_ID",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 73
+   },
+   {
+    "col": "MES_OPERATION_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 74
+   },
+   {
+    "col": "FROM_SLOC_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 75
+   },
+   {
+    "col": "CUSTOMER_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 76
+   },
+   {
+    "col": "SPECIAL_STOCK_INDICATOR",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 77
+   },
+   {
+    "col": "QT_ISP_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 78
+   }
+  ]
+ },
+ "82|4-1": {
+  "kind": "if",
+  "args": [
+   "INF_MGR",
+   "XIF_ERP_SALES_RESULT_R"
+  ],
+  "cols": [
+   {
+    "col": "IFSEQNO",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 1
+   },
+   {
+    "col": "COMPANY_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 2
+   },
+   {
+    "col": "DIVISION_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 3
+   },
+   {
+    "col": "RESULT_YYYYMM",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 4
+   },
+   {
+    "col": "RESULT_YYYYMMDD",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 5
+   },
+   {
+    "col": "RESULT_HHMMSS",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 6
+   },
+   {
+    "col": "SALES_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 7
+   },
+   {
+    "col": "SALES_DEPT",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 8
+   },
+   {
+    "col": "SALES_WORK_PLACE",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 9
+   },
+   {
+    "col": "SALES_WORK_PLACE_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 10
+   },
+   {
+    "col": "SALES_GROUP",
+    "type": "VARCHAR2",
+    "len": 12,
+    "nullable": "Y",
+    "pos": 11
+   },
+   {
+    "col": "SALES_GROUP_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 12
+   },
+   {
+    "col": "SALES_POSTING_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 13
+   },
+   {
+    "col": "COST_ITEM",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 14
+   },
+   {
+    "col": "COST_ITEM_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 15
+   },
+   {
+    "col": "SALES_TYPE_2",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 16
+   },
+   {
+    "col": "VALUATION_CLASS",
+    "type": "VARCHAR2",
+    "len": 16,
+    "nullable": "Y",
+    "pos": 17
+   },
+   {
+    "col": "ITEM_TYPE",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 18
+   },
+   {
+    "col": "CUSTOMER_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 19
+   },
+   {
+    "col": "CUSTOMER_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 20
+   },
+   {
+    "col": "CUSTOMER_PROJECT_NAME",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 21
+   },
+   {
+    "col": "CUSTOMER_ITEM_NAME",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 22
+   },
+   {
+    "col": "BIZ_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 23
+   },
+   {
+    "col": "PROJECT_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 24
+   },
+   {
+    "col": "PROJECT_NAME",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 25
+   },
+   {
+    "col": "CELL_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 26
+   },
+   {
+    "col": "CAR_MODEL",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 27
+   },
+   {
+    "col": "QTY_CELL_BY_PACK",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 28
+   },
+   {
+    "col": "Z_TYPE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 29
+   },
+   {
+    "col": "Z_CODE",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 30
+   },
+   {
+    "col": "SALES_REGION",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 31
+   },
+   {
+    "col": "DISTRIBUTION_CHANNEL",
+    "type": "VARCHAR2",
+    "len": 8,
+    "nullable": "Y",
+    "pos": 32
+   },
+   {
+    "col": "LGS_ROUTE_NAME",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 33
+   },
+   {
+    "col": "CONNECT_NAME",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 34
+   },
+   {
+    "col": "CAR_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 35
+   },
+   {
+    "col": "CELL_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 36
+   },
+   {
+    "col": "SALES_PRICE",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 37
+   },
+   {
+    "col": "CURRENCY",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 38
+   },
+   {
+    "col": "SALES_AMOUNT_FOR",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 39
+   },
+   {
+    "col": "SALES_AMOUNT_SUM",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 40
+   },
+   {
+    "col": "UOM",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 41
+   },
+   {
+    "col": "SALES_QTY",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 42
+   },
+   {
+    "col": "SALES_USER",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 43
+   },
+   {
+    "col": "SALES_USER_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 44
+   },
+   {
+    "col": "MAT_GROUP",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 45
+   },
+   {
+    "col": "MAT_GROUP_DESC",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 46
+   },
+   {
+    "col": "ITEM_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 47
+   },
+   {
+    "col": "BIZ_TYPE_2",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 48
+   },
+   {
+    "col": "APP",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 49
+   },
+   {
+    "col": "USAGE",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 50
+   },
+   {
+    "col": "SALES_TEAM",
+    "type": "VARCHAR2",
+    "len": 400,
+    "nullable": "Y",
+    "pos": 51
+   },
+   {
+    "col": "ESS_PM",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 52
+   },
+   {
+    "col": "PLANT_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 53
+   },
+   {
+    "col": "SHIPTO_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 54
+   },
+   {
+    "col": "SHIPTO_DESCRIPTION",
+    "type": "VARCHAR2",
+    "len": 160,
+    "nullable": "Y",
+    "pos": 55
+   },
+   {
+    "col": "COUNTRY",
+    "type": "VARCHAR2",
+    "len": 12,
+    "nullable": "Y",
+    "pos": 56
+   },
+   {
+    "col": "COUNTRY_NAME",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 57
+   },
+   {
+    "col": "SHIPTO_CITY_NAME",
+    "type": "VARCHAR2",
+    "len": 160,
+    "nullable": "Y",
+    "pos": 58
+   },
+   {
+    "col": "SHIPTO_ZONE_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 59
+   },
+   {
+    "col": "SHIPTO_ZONE_NAME",
+    "type": "VARCHAR2",
+    "len": 140,
+    "nullable": "Y",
+    "pos": 60
+   },
+   {
+    "col": "RBU_CUSTOMER",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 61
+   },
+   {
+    "col": "INCOTERMS",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 62
+   },
+   {
+    "col": "PROFIT_CENTER_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 63
+   },
+   {
+    "col": "PROFIT_CENTER_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 64
+   },
+   {
+    "col": "PARTNER_PROFIT_CENTER_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 65
+   },
+   {
+    "col": "PARTNER_PROFIT_CENTER_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 66
+   },
+   {
+    "col": "ITEM_TEXT",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 67
+   },
+   {
+    "col": "AFFILIATE_CODE",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 68
+   },
+   {
+    "col": "SALES_SEQ",
+    "type": "VARCHAR2",
+    "len": 80,
+    "nullable": "Y",
+    "pos": 69
+   },
+   {
+    "col": "SALES_KEY",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 70
+   },
+   {
+    "col": "CUSTOMER_GROUP_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 71
+   },
+   {
+    "col": "CUSTOMER_GROUP_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 72
+   },
+   {
+    "col": "CELL_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 73
+   },
+   {
+    "col": "DELEGATE_MODEL_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 74
+   },
+   {
+    "col": "DELEGATE_MODEL_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 75
+   },
+   {
+    "col": "C_P_MODEL_ID",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 76
+   },
+   {
+    "col": "C_P_MODEL_NAME",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 77
+   },
+   {
+    "col": "LRREGULAR_CODE",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 78
+   },
+   {
+    "col": "LRREGULAR_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 79
+   },
+   {
+    "col": "MACHINE_CODE",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 80
+   },
+   {
+    "col": "MACHINE_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 81
+   },
+   {
+    "col": "LINE_ID",
+    "type": "VARCHAR2",
+    "len": 200,
+    "nullable": "Y",
+    "pos": 82
+   },
+   {
+    "col": "LINE_NAME",
+    "type": "VARCHAR2",
+    "len": 600,
+    "nullable": "Y",
+    "pos": 83
+   },
+   {
+    "col": "TCO",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 84
+   },
+   {
+    "col": "CREATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 85
+   },
+   {
+    "col": "CREATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 86
+   },
+   {
+    "col": "CREATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 87
+   },
+   {
+    "col": "UPDATE_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 88
+   },
+   {
+    "col": "UPDATE_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 89
+   },
+   {
+    "col": "UPDATE_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 90
+   },
+   {
+    "col": "TRANSFER_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 91
+   },
+   {
+    "col": "TRANSFER_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 92
+   },
+   {
+    "col": "TRANSFER_USER_ID",
+    "type": "VARCHAR2",
+    "len": 48,
+    "nullable": "Y",
+    "pos": 93
+   },
+   {
+    "col": "TRANSFER_FLAG",
+    "type": "VARCHAR2",
+    "len": 4,
+    "nullable": "Y",
+    "pos": 94
+   },
+   {
+    "col": "ATTRIBUTE1",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 95
+   },
+   {
+    "col": "ATTRIBUTE2",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 96
+   },
+   {
+    "col": "ATTRIBUTE3",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 97
+   },
+   {
+    "col": "ATTRIBUTE4",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 98
+   },
+   {
+    "col": "ATTRIBUTE5",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 99
+   },
+   {
+    "col": "ATTRIBUTE6",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 100
+   },
+   {
+    "col": "ATTRIBUTE7",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 101
+   },
+   {
+    "col": "ATTRIBUTE8",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 102
+   },
+   {
+    "col": "ATTRIBUTE9",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 103
+   },
+   {
+    "col": "ATTRIBUTE10",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 104
+   },
+   {
+    "col": "ATTRIBUTE11",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 105
+   },
+   {
+    "col": "ATTRIBUTE12",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 106
+   },
+   {
+    "col": "ATTRIBUTE13",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 107
+   },
+   {
+    "col": "ATTRIBUTE14",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 108
+   },
+   {
+    "col": "ATTRIBUTE15",
+    "type": "VARCHAR2",
+    "len": 800,
+    "nullable": "Y",
+    "pos": 109
+   },
+   {
+    "col": "SYSTEM_INPUT_DATE",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 110
+   },
+   {
+    "col": "SYSTEM_INPUT_TIME",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 111
+   },
+   {
+    "col": "DOC_CURRENCY",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 112
+   },
+   {
+    "col": "DOC_AMT_FOR",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 113
+   },
+   {
+    "col": "DOC_AMT_KRW",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 114
+   },
+   {
+    "col": "FKDAT",
+    "type": "VARCHAR2",
+    "len": 32,
+    "nullable": "Y",
+    "pos": 115
+   },
+   {
+    "col": "SO_NO",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 116
+   },
+   {
+    "col": "POSNN",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 117
+   },
+   {
+    "col": "VGBEL",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 118
+   },
+   {
+    "col": "VGPOS",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 119
+   },
+   {
+    "col": "TKNUM",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 120
+   },
+   {
+    "col": "RBELN",
+    "type": "VARCHAR2",
+    "len": 40,
+    "nullable": "Y",
+    "pos": 121
+   },
+   {
+    "col": "RPOSN",
+    "type": "VARCHAR2",
+    "len": 24,
+    "nullable": "Y",
+    "pos": 122
+   },
+   {
+    "col": "SALES_EXCHRATE_M",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 123
+   },
+   {
+    "col": "SALES_AMOUNT_SUM_M",
+    "type": "NUMBER",
+    "len": 22,
+    "nullable": "Y",
+    "pos": 124
+   },
+   {
+    "col": "FROM_COMPANY_ID",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 125
+   },
+   {
+    "col": "FROM_SELL_DOC",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 126
+   },
+   {
+    "col": "FROM_SHIP_NO",
+    "type": "VARCHAR2",
+    "len": 120,
+    "nullable": "Y",
+    "pos": 127
+   }
+  ]
+ },
+ "82|5-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0020",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Sales Price",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPText",
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": "Div*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 40.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": "FPModal",
+    "combo": null,
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Project Code*",
+    "large": "Project Code*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 90.0,
+    "ctrl": "FPModal",
+    "combo": null,
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 120.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 130.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_FREE",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "PRICE_EXIST",
+    "label": "Price Exist*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 490.0,
+    "ctrl": "FPText",
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Price Exist*",
+    "large": "Price Exist*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 500.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DIVISION_ID",
+    "label": "Division*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPText",
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": "Division*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 40.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Project Code*",
+    "large": "Project Code*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 90.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 120.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "O",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 130.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_FREE",
+    "input_tp": "O",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "O",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "O",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 500.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "82|5-2": {
+  "kind": "ui",
+  "args": [
+   "DMF0020",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Sales Price",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPText",
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Div*",
+    "large": "Div*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 40.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": "FPModal",
+    "combo": null,
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Project Code*",
+    "large": "Project Code*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 90.0,
+    "ctrl": "FPModal",
+    "combo": null,
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 120.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 130.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_FREE",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "PRICE_EXIST",
+    "label": "Price Exist*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 490.0,
+    "ctrl": "FPText",
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Price Exist*",
+    "large": "Price Exist*"
+   },
+   {
+    "sheet": "Sales Price",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 500.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DIVISION_ID",
+    "label": "Division*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": "FPText",
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": "Division*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 40.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 50.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Project Code*",
+    "large": "Project Code*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 90.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 120.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "O",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 130.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_NOT_FREE",
+    "input_tp": "O",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "O",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "CURRENCY",
+    "label": "Currency*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 150.0,
+    "ctrl": "FPComboBox",
+    "combo": "CURRENCY_LIST",
+    "input_tp": "O",
+    "visible": "Y",
+    "small": "Currency*",
+    "large": "Currency*"
+   },
+   {
+    "sheet": "Sales Price Save All",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 500.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "82|6-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0003",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Mkt Fcst",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": "Division*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 110.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 120.0,
+    "ctrl": "FPTextModal",
+    "combo": null,
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Project Code",
+    "large": "Project Code"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPTextModal",
+    "combo": null,
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 190.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_DM",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 200.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "FORECAST_INFO_PRODUCT_GROUP",
+    "label": "Product Group",
+    "div_meta": null,
+    "sort": 300.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "N",
+    "small": "Product Group",
+    "large": "Product Group"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "VMI_STD_DIO",
+    "label": "VMI_STD_DIO",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 690.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "N",
+    "small": "VMI_STD_DIO",
+    "large": "VMI_STD_DIO"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 700.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "82|6-2": {
+  "kind": "ui",
+  "args": [
+   "DMF0003",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Mkt Fcst",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": "Division*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 110.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 120.0,
+    "ctrl": "FPTextModal",
+    "combo": null,
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Project Code",
+    "large": "Project Code"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPTextModal",
+    "combo": null,
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 190.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_DM",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 200.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "FORECAST_INFO_PRODUCT_GROUP",
+    "label": "Product Group",
+    "div_meta": null,
+    "sort": 300.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "N",
+    "small": "Product Group",
+    "large": "Product Group"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "VMI_STD_DIO",
+    "label": "VMI_STD_DIO",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 690.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "N",
+    "small": "VMI_STD_DIO",
+    "large": "VMI_STD_DIO"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 700.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ },
+ "82|9-1": {
+  "kind": "ui",
+  "args": [
+   "DMF0003",
+   null
+  ],
+  "cols": [
+   {
+    "sheet": "Mkt Fcst",
+    "col": "DIVISION_ID",
+    "label": "Div*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 10.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "Y",
+    "small": "Division*",
+    "large": "Division*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "SCM_SITE_ID",
+    "label": "Sales Site*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 110.0,
+    "ctrl": "FPComboBox",
+    "combo": "SiteByEndCustomer",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Sales Site*",
+    "large": "Sales Site*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "PROJECT_CODE",
+    "label": "Project Code*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 120.0,
+    "ctrl": "FPTextModal",
+    "combo": null,
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Project Code",
+    "large": "Project Code"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "ITEM_ID",
+    "label": "Model*",
+    "div_meta": "82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 140.0,
+    "ctrl": "FPTextModal",
+    "combo": null,
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Model*",
+    "large": "Model*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "INCOTERMS",
+    "label": "Incoterms*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 170.0,
+    "ctrl": "FPComboBox",
+    "combo": "Incoterms",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Incoterms*",
+    "large": "Incoterms*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "FCST_TYPE",
+    "label": "FCST Type*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 190.0,
+    "ctrl": "FPComboBox",
+    "combo": "FCST_TYPE_DM",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "FCST Type*",
+    "large": "FCST Type*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "DOM_EXP",
+    "label": "Customs Handbook*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 200.0,
+    "ctrl": "FPComboBox",
+    "combo": "DOM_EXP",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Customs Handbook*",
+    "large": "Customs Handbook*"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "FORECAST_INFO_PRODUCT_GROUP",
+    "label": "Product Group",
+    "div_meta": null,
+    "sort": 300.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "N",
+    "small": "Product Group",
+    "large": "Product Group"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "VMI_STD_DIO",
+    "label": "VMI_STD_DIO",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 690.0,
+    "ctrl": null,
+    "combo": null,
+    "input_tp": "S",
+    "visible": "N",
+    "small": "VMI_STD_DIO",
+    "large": "VMI_STD_DIO"
+   },
+   {
+    "sheet": "Mkt Fcst",
+    "col": "MEASURE",
+    "label": "Measure*",
+    "div_meta": "40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG",
+    "sort": 700.0,
+    "ctrl": "FPComboBox",
+    "combo": "Measure",
+    "input_tp": "IM",
+    "visible": "Y",
+    "small": "Measure*",
+    "large": "Measure*"
+   }
+  ]
+ }
+}

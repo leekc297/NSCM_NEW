@@ -60,6 +60,7 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
   const visibleMeasures = useSalesMonitoringStore(s => s.visibleMeasures);
   const applyVisibleMeasures = useSalesMonitoringStore(s => s.applyVisibleMeasures);
   const applyDayRange = useSalesMonitoringStore(s => s.applyDayRange);
+  const restoreSearchConditions = useSalesMonitoringStore(s => s.restoreSearchConditions);
 
   // ui-dynamic-property-management — Menu Button 권한 동적 fetch
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
@@ -84,7 +85,12 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters: filters[SHEETS.SPREAD_TITLE],
     enabled: hasSearched && !!filters[SHEETS.SPREAD_TITLE],
   });
-  const spreadTitleRows = (spreadTitleData as { o_rc1?: SpreadTitleRow[] })?.o_rc1 ?? [];
+  // 참조 안정 필수: 조회 전(spreadTitleData 미도착)에 매 렌더 새 [] 를 만들면 grid spreadTitle prop
+  //   참조가 매번 바뀌어 memo 를 깨고 columnGroups 재생성 → 조회 전 헤더 깜빡임. useMemo 로 고정한다.
+  const spreadTitleRows = useMemo<SpreadTitleRow[]>(
+    () => (spreadTitleData as { o_rc1?: SpreadTitleRow[] })?.o_rc1 ?? [],
+    [spreadTitleData]
+  );
 
   // ⭐ 기본 조회구간 — PR_GET_DAY_RANGE (AS-IS GetDayRange 1:1: p_month=6, Tables[1]=o_rc2 사용,
   //   해당 월 1일 ~ 6개월 마지막 날). ⭐ A-4 — 적용 여부는 store persist (탭 수명 내 1회 —
@@ -98,12 +104,17 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters: dayRangeFilters,
     enabled: !dayRangeApplied,
   });
+  //   Reset Condition(F10) 후 재적용 필수: F10 은 dayRangeApplied 를 false 로 되돌리지만, dayRange
+  //   쿼리는 staleTime=Infinity 캐시라 재활성화해도 dayRangeData 참조가 그대로다. deps 가
+  //   dayRangeData 뿐이면 effect 가 다시 돌지 않아 기간이 클라 기본값에 멈춘다. dayRangeApplied 를
+  //   deps 에 넣어 F10 직후 캐시된 서버 구간을 다시 적용한다(초기 진입·새로고침과 동일 경로).
   useEffect(() => {
+    if (dayRangeApplied) return;
     const range = (dayRangeData as { o_rc2?: { DAY_RANGE?: string }[] })?.o_rc2?.[0]?.DAY_RANGE;
     if (!range) return;
     applyDayRange(range); // 내부에서 dayRangeApplied 가드 + 1회 마킹
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dayRangeData]);
+  }, [dayRangeData, dayRangeApplied]);
 
   // ⭐ 메인 SP o_rc2 — 현재 월/주 정보 (THIS_YYYYMM/THIS_YYYYMMWW). 헤더 초록 강조 + 과거 회색 판정 입력.
   const currentWeekInfo = useMemo<CurrentWeekInfo | null>(() => {
@@ -111,11 +122,26 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
     return Array.isArray(rc2) ? (rc2[0] ?? null) : (rc2 ?? null);
   }, [data]);
 
+  // 아래 division 변경 effect 의 비교 기준. 마운트 복원(프로그램 변경)에서도 갱신하므로
+  //   선언이 그 effect 보다 앞에 있어야 한다.
+  const prevDivisionRef = useRef(sc.divisionId);
+  // 아래 bucket 변경 effect 의 비교 기준. prevDivisionRef 와 같은 이유로 마운트 복원에서도 갱신한다.
+  const prevBucketRef = useRef(sc.bucketType);
+
   // mount 시 1회 admin 메타 fetch + persist 된 이전 filters 무효화 (NULL payload SP 자동호출 방지)
+  //   필수: F6 저장 조회조건 복원을 먼저 await 한다 — 저장된 division 이 세션 기본값과 다를 때
+  //   컬럼/메저 메타를 복원된 division 기준으로 받아야 한다(둘 다 divisionId 를 SP 로 넘긴다).
   useEffect(() => {
     clearFilters();
-    void fetchStaticColumns();
-    void fetchStaticMeasures();
+    void (async () => {
+      // 복원은 사용자 조작이 아니므로 division 변경 effect(컬럼 개인화 초기화 + Grid 비움)를
+      //   태우지 않는다. 기준값을 복원 결과로 맞춰 둔다.
+      const restored = await restoreSearchConditions();
+      prevDivisionRef.current = restored.divisionId;
+      prevBucketRef.current = restored.bucketType;
+      await fetchStaticColumns();
+      await fetchStaticMeasures();
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
 
@@ -143,7 +169,6 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   재조회는 Search 로만 — clearGridOnSettingChange 가 hasSearched 를 내려 자동 발사를 막는다.
   //   Measure 는 즉시 재조회한다 — PR_GET_SHEET_MEASURE_LIST 가 division 별로 세트를 필터하므로,
   //   Search 전에 Measure 팝업을 열어도 새 division 기준 목록이 뜨게 한다.
-  const prevDivisionRef = useRef(sc.divisionId);
   useEffect(() => {
     if (prevDivisionRef.current === sc.divisionId) return;
     prevDivisionRef.current = sc.divisionId;
@@ -152,6 +177,17 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticMeasures();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sc.divisionId, clearUserColumnLayout, fetchStaticMeasures]);
+
+  // Bucket 변경 = Grid 초기화 (사용자 요구 2026-09-30).
+  //   AS-IS cboBucketType_SelectedIndexChanged 는 Weekly/Monthly -> Daily 전환에서만 InitSpread 로
+  //   비우고 나머지는 SetSpreadColumn 으로 표시 축만 바꿨다. 요구에 따라 모든 전환에서 비운다 —
+  //   이전 bucket 으로 조회한 rows 가 새 bucket 헤더 아래 남지 않게 한다. 재조회는 Search 로만.
+  useEffect(() => {
+    if (prevBucketRef.current === sc.bucketType) return;
+    prevBucketRef.current = sc.bucketType;
+    clearGridOnSettingChange();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sc.bucketType]);
 
   // ⭐ A-1 (2026-07-04) — TITLESET 서버 영구 저장 (AS-IS DM0002_TitleSetForm OK → SCM_MST_TITLESET_USER 1:1).
   //   저장 실패를 사용자에게 알리는 공통 처리 — 조용히 삼키면 "저장했는데 재진입 시 원복" 과 구분이 안 된다.
@@ -214,7 +250,6 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   최신 데이터 강제 refetch (filters 미변경이어도 서버 재호출).
   const handleSearch = () => {
     if (!validateFind()) return;
-    // void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
     setHasSearched(true);
     setFilter();
     void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
@@ -249,8 +284,8 @@ export const SalesMonitoring = ({ tabId, title }: PageProps<MENU_ID>) => {
     ...(hasButton('MEASURE_SELECT')
       ? [
           {
-            label: t('LBL00712', '_Measure'),
-            title: t('LBL00712', '_Measure'),
+            label: t('LBL00310', '_Measure'),
+            title: t('LBL00310', '_Measure'),
             action: () => setOpenMeasureSelect(true),
             iconComponent: <IcMeasureSelect />,
             buttonLabel: '',

@@ -1,0 +1,127 @@
+{
+ "names": {
+  "DMF0003": "MKT FCST",
+  "DMF0014": "Customer FCST Upload",
+  "DMF0020": "Sales Price",
+  "DMF0021": "Sales Plan",
+  "DMF0022": "Sales Plan Waterfall",
+  "DMF0035": "Demand Plan Waterfall",
+  "DMF0042": "Business Plan",
+  "DMF0044": "Sales Reports",
+  "DMF0049": "ETC Sales Reports",
+  "DMF0051": "Biz Plan Waterfall",
+  "DMF0082": "Fcst&Price MGMT"
+ },
+ "detail": [
+  {
+   "MNU_ID": "DMF0003",
+   "NAME": "MKT FCST",
+   "SOURCE": "MSG(MNU00182)",
+   "MNU_MSG_ID": "MNU00182",
+   "MNU_DESC": "MKT FCST",
+   "UPPR_MNU_ID": "Demand_Plan",
+   "USE_YN": "Y",
+   "ROUTE_PATH": "demand/demand-plan/mkt-fcst"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "NAME": "Customer FCST Upload",
+   "SOURCE": "MSG(MNU00036)",
+   "MNU_MSG_ID": "MNU00036",
+   "MNU_DESC": "Customer FCST Upload",
+   "UPPR_MNU_ID": "Demand_Plan",
+   "USE_YN": "Y",
+   "ROUTE_PATH": "demand/demand-plan/customer-fcst-upload"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "NAME": "Sales Price",
+   "SOURCE": "MSG(MNU_DMF0020)",
+   "MNU_MSG_ID": "MNU_DMF0020",
+   "MNU_DESC": "Sales Price",
+   "UPPR_MNU_ID": "Demand_Master",
+   "USE_YN": "Y",
+   "ROUTE_PATH": "demand/demand-master/sales-future-price"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "NAME": "Sales Plan",
+   "SOURCE": "MSG(MNU00034)",
+   "MNU_MSG_ID": "MNU00034",
+   "MNU_DESC": "Sales Plan",
+   "UPPR_MNU_ID": "Demand_Plan",
+   "USE_YN": "Y",
+   "ROUTE_PATH": "demand/demand-plan/sales-plan"
+  },
+  {
+   "MNU_ID": "DMF0022",
+   "NAME": "Sales Plan Waterfall",
+   "SOURCE": "MSG(MNU00044)",
+   "MNU_MSG_ID": "MNU00044",
+   "MNU_DESC": "Sales Plan Waterfall",
+   "UPPR_MNU_ID": "Waterfall",
+   "USE_YN": "Y",
+   "ROUTE_PATH": "report/waterfall/sales-plan-waterfall"
+  },
+  {
+   "MNU_ID": "DMF0035",
+   "NAME": "Demand Plan Waterfall",
+   "SOURCE": "MNU_DESC(MSG 미등록)",
+   "MNU_MSG_ID": "MNU00691",
+   "MNU_DESC": "Demand Plan Waterfall",
+   "UPPR_MNU_ID": "Demand_Waterfall",
+   "USE_YN": "Y",
+   "ROUTE_PATH": "report/demand-plan-waterfall"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "NAME": "Business Plan",
+   "SOURCE": "MSG(MNU00014)",
+   "MNU_MSG_ID": "MNU00014",
+   "MNU_DESC": "Business Plan",
+   "UPPR_MNU_ID": "Demand_Plan",
+   "USE_YN": "Y",
+   "ROUTE_PATH": "demand/business-plan"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "NAME": "Sales Reports",
+   "SOURCE": "MSG(MNU00038)",
+   "MNU_MSG_ID": "MNU00038",
+   "MNU_DESC": "Sales Reports",
+   "UPPR_MNU_ID": "Demand_Plan",
+   "USE_YN": "Y",
+   "ROUTE_PATH": "demand/demand-plan/sales-reports"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "NAME": "ETC Sales Reports",
+   "SOURCE": "MSG(MNU00039)",
+   "MNU_MSG_ID": "MNU00039",
+   "MNU_DESC": "ETC Sales Reports",
+   "UPPR_MNU_ID": "Demand_Plan",
+   "USE_YN": "Y",
+   "ROUTE_PATH": "demand/demand-plan/etc-sales-reports"
+  },
+  {
+   "MNU_ID": "DMF0051",
+   "NAME": "Biz Plan Waterfall",
+   "SOURCE": "MSG(MNU00045)",
+   "MNU_MSG_ID": "MNU00045",
+   "MNU_DESC": "Biz Plan Waterfall",
+   "UPPR_MNU_ID": "Waterfall",
+   "USE_YN": "N",
+   "ROUTE_PATH": "report/waterfall/dmf0051"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "NAME": "Fcst&Price MGMT",
+   "SOURCE": "MSG(MNU00042)",
+   "MNU_MSG_ID": "MNU00042",
+   "MNU_DESC": "Fcst MGMT",
+   "UPPR_MNU_ID": "Demand_Plan",
+   "USE_YN": "Y",
+   "ROUTE_PATH": "demand/demand-plan/forecast-price"
+  }
+ ]
+}

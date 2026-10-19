@@ -1,10 +1,11 @@
-import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import { CellType, HeadersVisibility, type FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { GridUtils } from '@foundation/utils';
-import { CustomDropdown, SearchArea, DataGrid, CustomDialog } from '@shared/components';
+import { GridUtils, buildNoColumn, withRowNo } from '@foundation/utils';
+import { CustomDropdown, SearchArea, DataGrid, CustomDialog, ResultArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
@@ -56,6 +57,8 @@ export const ProjectByDivisionModal = ({
 
   const gridRef =
     useRef<FlexGrid<ResponseData<MODAL_PROJECT_BY_DIVISION, MODAL_SHEET_PROJECT_BY_DIVISION>>>();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   const initialized = useProjectByDivisionModalStore(state => state.initialized);
   const staticColumns = useProjectByDivisionModalStore(state => state.staticColumns);
@@ -81,37 +84,39 @@ export const ProjectByDivisionModal = ({
     filters: [{ comboId: 'TeambyDivision', divisionId: `'${searchParam.divisionId ?? ''}'` }],
   });
 
-  const { data: projectData } = useTabProcQuery<MODAL_PROJECT_BY_DIVISION>({
+  const {
+    data: projectData,
+    isLoading,
+    isFetching,
+  } = useTabProcQuery<MODAL_PROJECT_BY_DIVISION>({
     menuId: MODAL_PROJECT_BY_DIVISION,
     sheetName: MODAL_SHEET_PROJECT_BY_DIVISION,
     tabId: 'ProjectByDivisionModal',
     filters: searchParam,
     enabled: open,
   });
+  const loading = isLoading || isFetching;
 
-  const [modalFilters, setModalFilters] = useState<{
-    project: string;
-  }>({ project: '' });
+  // 필터링은 프로시저(projectCode 파라미터, COM0005 가 콤마 다중값을 이미 처리)가 하고,
+  //   그리드는 조회 결과를 그대로 보여준다. useMemo — 매 렌더 새 배열이면 그리드 re-bind 로
+  //   체크박스 선택(row.isSelected)이 풀림.
+  const itemsSource = useMemo(() => projectData?.o_rc1 ?? [], [projectData]);
 
-  // useMemo — 매 렌더 새 배열이면 그리드 re-bind 로 체크박스 선택(row.isSelected)이 풀림.
-  const itemsSource = useMemo(
-    () =>
-      (projectData?.o_rc1 ?? []).filter(
-        project =>
-          (project.PROJECT_CODE ?? '').toLowerCase().includes(modalFilters.project.toLowerCase()) ||
-          (project.PROJECT_NAME ?? '').toLowerCase().includes(modalFilters.project.toLowerCase())
-      ),
-    [projectData, modalFilters]
+  // itemsSource 와 같은 이유로 useMemo — withRowNo 가 매 렌더 새 배열/새 행 객체를 만들면
+  //   위 itemsSource useMemo 가 무의미해져 체크박스 선택이 똑같이 풀린다.
+  const rows = useMemo(() => withRowNo(itemsSource), [itemsSource]);
+
+  const gridStaticColumns = useMemo(
+    () => [buildNoColumn(t('LBL00674', 'No')), ...staticColumns],
+    [staticColumns, t]
   );
 
   // Search 버튼/Enter = 프로시저 재조회 (사용자 요구 2026-08-11).
   //   구: 입력값을 client-side 필터로만 썼다 → 팝업이 열릴 때 받아 온 행 안에서만 찾을 수 있었고,
   //   그 범위 밖의 Project 는 아무리 검색해도 안 나왔다. 이제 조회 파라미터에 실어 다시 조회한다.
-  //   화면 필터도 같은 키워드로 유지 — SP 가 파라미터를 무시하거나 넓게 내려줘도 결과가 좁혀 보인다.
+  //   SP(COM0005)가 콤마로 나눈 여러 키워드를 이미 처리하므로 화면에서 다시 거르지 않는다.
   const handleSearch = () => {
-    const keyword = projectCode ?? '';
-    setSearchParam(prev => ({ ...prev, projectCode: keyword }));
-    setModalFilters({ project: keyword });
+    setSearchParam(prev => ({ ...prev, projectCode: projectCode ?? '' }));
   };
 
   const handleSubmit = () => {
@@ -186,21 +191,27 @@ export const ProjectByDivisionModal = ({
     // ⭐ 2026-07-03 (사용자 요구) — cell 호출도 Form 호출과 동일하게 preSearchParams 를 그대로 사용.
     //   기존 callFromCell 강제 'ALL' 은 그리드 행 값 cascade(hook #59 §5-G — 클릭 행의 상위 셀 값
     //   전달)를 무시하는 문제. cell 호출처는 값 미보유 시 'ALL' 을 명시 전달 (fallback 방어 포함).
+    // 'ALL' sentinel(=projectCode 미선택, orAll 기본값)은 입력창에도 조회조건에도 넣지 않는다.
+    const initProject =
+      (preSearchParams.projectCode ?? '') === 'ALL' ? '' : (preSearchParams.projectCode ?? '');
     setSearchParam({
       divisionId: preSearchParams.divisionId,
       deptId: preSearchParams.deptId ?? 'ALL',
       endCustomer: preSearchParams.endCustomer ?? 'ALL',
-      salesSite: preSearchParams.salesSite ?? 'ALL',
-      projectCode: '',
+      // 빈 문자열도 'ALL' 센티널로 정규화한다. COM0005 SP 는 "전체"를 'ALL' 로만 인식하고
+      //   '' 는 UF_FX_String_SplitForIN('') 가 빈 집합이라 `SCM_SITE_ID IN (빈집합)` 로 전 행
+      //   탈락 → 팝업 0건. 호출부(예 WorkbenchGrid)가 값 없는 행의 scmSite 를 '' 로 넘기는
+      //   경우를 중앙에서 방어한다. ?? 는 null/undefined 만 걸러 '' 를 통과시켰던 것이 원인.
+      salesSite: preSearchParams.salesSite || 'ALL',
+      // 받은 값으로 바로 조회한다 - 열자마자 필터된 목록이 보여야 한다 (사용자 지정 2026-09-07).
+      //   종전에는 빈값으로 조회하고 입력창에만 값을 채워, Search 를 눌러야 좁혀졌다.
+      projectCode: initProject,
       etc: 'N',
     });
-    // 'ALL' sentinel(=projectCode 미선택, orAll 기본값)은 client-side 필터 대상이 아니므로 빈값 처리.
-    //   (그대로 두면 PROJECT_CODE/NAME.includes('all') 로 0건 → div 81 등에서 데이터 미표시 버그)
-    const initProject =
-      (preSearchParams.projectCode ?? '') === 'ALL' ? '' : (preSearchParams.projectCode ?? '');
-    setModalFilters({ project: initProject });
     setProjectCode(initProject);
-    if (!initialized) void fetchStaticColumns();
+    // initialized 가 과거의 빈 조회 결과를 영속(sessionStorage)해 컬럼이 비어버리는 경우가 있어
+    // (예: admin 메타 유실 중 한 번 열림), 컬럼이 비어 있으면 재조회한다.
+    if (!initialized || staticColumns.length === 0) void fetchStaticColumns();
   }, [open]);
 
   return (
@@ -211,6 +222,10 @@ export const ProjectByDivisionModal = ({
       position='basic'
       open={open}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -314,7 +329,7 @@ export const ProjectByDivisionModal = ({
                 </Grid>
                 <Grid size={4}>
                   <FormItem
-                    label={t('LBL00327', '_Project')}
+                    label={t('LBL00012', '_Project')}
                     labelAlign='right'
                     render={() => (
                       <InputField
@@ -330,14 +345,33 @@ export const ProjectByDivisionModal = ({
             }
           />
           <div className={styles.gridWrapper}>
-            <DataGrid<ResponseData<MODAL_PROJECT_BY_DIVISION, MODAL_SHEET_PROJECT_BY_DIVISION>>
-              gridRef={gridRef}
-              isReadOnly
-              useCheckbox={multiCheckbox}
-              staticColumns={staticColumns}
-              itemsSource={itemsSource}
-              dblClick={handleDblClick}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea
+              title=''
+              count={rows.length}
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<ResponseData<MODAL_PROJECT_BY_DIVISION, MODAL_SHEET_PROJECT_BY_DIVISION>>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                useCheckbox={multiCheckbox}
+                // No 는 ROW_NO 데이터 컬럼(buildNoColumn)이 전담한다. rowHeader 를 그대로 두면
+                //   체크박스가 없는 단일선택 모드에서 공통 formatEditableColumns 가 rowHeader col 0
+                //   에도 행번호를 찍어 No 가 두 개로 보인다. 체크박스 모드는 rowHeader 에 wijmo
+                //   Selector 가 살아야 하므로 그때만 rowHeader 를 남긴다.
+                headersVisibility={multiCheckbox ? HeadersVisibility.All : HeadersVisibility.Column}
+                staticColumns={gridStaticColumns}
+                itemsSource={rows}
+                dblClick={handleDblClick}
+              />
+            </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
             <Button

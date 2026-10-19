@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/capa-speed-plan","SCP0105","features/supply/src/pages/capa-speed-plan/hooks/useCapaSpeedPlanConditionEffects.ts","44","endpoint","(1) 진입 — 자동조회 금지. keep-alive 잔여 filters 무효화 + 메타 1회 fetch(nscm-patterns §5-7)."
+"supply/capa-speed-plan","SCP0105","features/supply/src/pages/capa-speed-plan/useCapaSpeedPlanStore.ts","171","jsx","개인화 조회조건 복원 (SubTitle F6 저장분 되불러오기, 1회) — 정본 `scp-bom`/자매 `capa-line-assign`. 저장측은 page 가 `<SubTitle searchParam={sc}>` 로 이미 배선돼 있으나([[f6-save-needs-searchparam-prop]]), 복원측이 없으면 저장은 되는데 **새로고침/재진입 시 조건이 사라진다**(basic-check #3 재발 함정, [[f6-re"
+"supply/capa-speed-plan","SCP0105","features/supply/src/pages/capa-speed-plan/useCapaSpeedPlanStore.ts","349","endpoint","admin 컬럼 메타 fetch(2시트) — mount 1회 + **매 Search 마다** refetch(CLAUDE.md §2 체크3). `divisionId` 인자: division 변경 시 set() 커밋 뒤 새 값을 넘겨 호출한다. producer 안에서 `get()` 으로 읽으면 커밋 전 이전 division 이라 컬럼셋이 한 스텝 밀린다(nscm-patterns §5-5)."
+"supply/capa-speed-plan","SCP0105","features/supply/src/pages/capa-speed-plan/useCapaSpeedPlanStore.ts","385","endpoint","Measure 메타 fetch(PIVOT 화면 의무) — ASSEMBLY 6행 / ELTR 1행. 코드 하드코딩 배열 금지."

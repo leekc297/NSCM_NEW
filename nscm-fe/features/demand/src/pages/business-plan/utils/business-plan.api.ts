@@ -197,20 +197,55 @@ export const callSetPrice = async (divisionId: string): Promise<CallProcResult> 
   }
 };
 
-// Ver. Cutoff — DMF0042_SAVE_DM_PLN_BP_FCST_CUTOFF (verType='BP_M' — AS-IS L2857. createdBy BE주입)
-export const callCutoff = (
+// ── Ver. Cutoff — PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST_CUTOFF ────────────────────────────
+//   SCM_ADM_PROC_M 등록(2026-09-02 실측): IN divisionId / versionDescription / verType / createdBy,
+//   OUT 은 o_result_cursor **1개**뿐이다. 이 커서 하나가 성공·실패를 겸한다.
+//     성공 : PR_DM_PLN_VERSION_CREATE 가 채번한 버전번호 1행 1열
+//            (V_VERSION_SEQ = ver_type || '_' || YYYYMMDD || '_V' || LPAD(seq,3,'0') → 'BP_M_20260901_V001')
+//     실패 : EXCEPTION 분기의 v_err_display = '[' || SQLCODE || ']' || SQLERRM
+//   금지: 공용 callProc 사용. 그 판정은 첫 셀이 'success'/'ok'/숫자가 아니면 전부 오류문으로 보므로
+//     버전번호를 오류로 오분류한다 — 실제로 Cutoff 가 정상 완료됐는데 붉은 오류박스에
+//     'BP_M_20260901_V001' 이 뜨고, 완료 안내(MSG00675)와 목록 재조회가 통째로 건너뛰어졌다
+//     (2026-09-02 실화면). AS-IS 는 같은 첫 셀 값을 성공 payload 로 쓴다 —
+//     VersionCutOffPopUp.BP_Cutoff L563~573: sRMsg += ";" + ds.Tables[j].Rows[0][0] → MSG00151 안내 → FindData().
+/** 버전번호 형태 — '{VER_TYPE}_{YYYYMMDD}_V{NNN}'. 오류문('[ORA-...]...')과 구분하는 유일한 단서다. */
+const VERSION_NO_PATTERN = /^[A-Za-z][A-Za-z0-9_]*_\d{8}_V\d+$/;
+
+/** CUTOFF 커서 해석 — 테스트 대상(순수 함수). */
+export const parseCutoffResult = (result: Record<string, unknown> | undefined): CallProcResult => {
+  const firstVal = firstCell(cursorRows(result, 'o_result_cursor'));
+  // 커서 미오픈/빈 응답 = 성공이되 안내에 붙일 메시지는 없다.
+  if (!firstVal) return { ok: true };
+  if (isSuccessToken(firstVal)) return { ok: true };
+  // 버전번호 = 성공. 완료 안내 MSG00675 의 {1} 로 그대로 넘긴다 (AS-IS MSG00151 {1} 과 동일 자리).
+  if (VERSION_NO_PATTERN.test(firstVal)) return { ok: true, message: firstVal };
+  // 그 밖의 문자열은 SP 오류문 passthrough ('[-1400]ORA-01400: ...').
+  return { ok: false, message: firstVal };
+};
+
+export const callCutoff = async (
   divisionId: string,
   versionDescription: string,
   verType: string,
   auditUserId: string
-): Promise<CallProcResult> =>
-  callProc(SHEETS.MAIN, 'CUTOFF', {
-    divisionId,
-    versionDescription,
-    verType,
-    createdBy: auditUserId,
-    lastUpdatedBy: auditUserId,
-  });
+): Promise<CallProcResult> => {
+  try {
+    const res = await postProc(SHEETS.MAIN, 'CUTOFF', {
+      divisionId,
+      versionDescription,
+      verType,
+      createdBy: auditUserId,
+      lastUpdatedBy: auditUserId,
+    });
+    if (res.failed) return { ok: false, message: res.message };
+    return parseCutoffResult((res.data as { result?: Record<string, unknown> })?.result);
+  } catch (e) {
+    // 공용 responseInterceptor 가 result.O_RESULT_CURSOR[0].CODE 로 throw 하는 경로 방어
+    //   (이 SP 커서에는 CODE 컬럼이 없어 지금은 안 걸리지만, 잡지 않으면 호출부에 try/catch 가 없어
+    //    알럿도 재조회도 없는 무반응이 된다 — callSetPrice 와 동일 방어).
+    return { ok: false, message: e instanceof Error ? e.message : undefined };
+  }
+};
 // Replace by Cutoff — DMF0042_SAVE_DM_PLN_BP_REPLACE_BY_CUTOFF (AS-IS L3465. createdBy BE주입)
 export const callReplaceByCutoff = (params: {
   divisionId: string;

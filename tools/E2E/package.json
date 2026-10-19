@@ -1,0 +1,21 @@
+{
+  "name": "nscm-e2e",
+  "private": true,
+  "version": "1.0.0",
+  "description": "NSCM To-Be 화면 E2E(스모크/CRUD/권한·Division) — Fact Pack 기반 자동 생성 스펙",
+  "scripts": {
+    "gen": "node gen-e2e.js",
+    "test": "playwright test",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:crud": "playwright test --grep @crud",
+    "test:auth": "playwright test --grep @auth",
+    "report": "node report.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.49.1",
+    "typescript": "5.6.3"
+  },
+  "dependencies": {
+    "@types/node": "^20.19.43"
+  }
+}

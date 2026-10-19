@@ -7,6 +7,8 @@ export interface UserSession {
   userEngNm: string;
   userNm: string;
   div: string;
+  /** 소속 회사(SCM_MST_SSO_USER_INFO.COMPANY_ID). 없으면 undefined. SSP0015 My Model 기본체크 등에 사용. */
+  companyId?: string;
   menus: Menu[];
   /**
    * 미등록 게스트 로그인 여부. true면 권한요청 안내(권한 없음 Alert) 대상.

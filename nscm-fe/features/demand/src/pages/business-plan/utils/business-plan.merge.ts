@@ -1,5 +1,7 @@
 import { CellRange, CellType, type GridPanel, MergeManager } from '@mescius/wijmo.grid';
 
+import { isInsertRow } from '@foundation/utils';
+
 // ⭐ DMF0042 — sales-plan/utils/sales-plan.merge.ts 복제 + DynKey 파서 Y_/Q_/M_ 교체 (2026-07-15 플랜 §B 확정
 //   — HierarchicalMergeManager 거의 그대로, 주(W_)/일(D_) 축 → 연(Y_)/분기(Q_) 축).
 //   헤더 3단: 1단=연(Y) / 2단=분기(Q — Y_ 는 'SUM') / 3단=leaf(M_ 월 라벨 · Q_/Y_ 는 'SUM').
@@ -55,10 +57,30 @@ export class HierarchicalMergeManager extends MergeManager {
       if (!cur) return null;
       const fixedIdx = this.fixedBindings.indexOf(binding);
       const leftBindings = this.fixedBindings.slice(0, fixedIdx + 1);
+      // 신규 Insert 행 병합 규칙 (사용자 2026-09-02: "신규행추가한 것은 measure 값만 분기되고
+      //   앞에는 병합되어 있어야 한다"):
+      //   · 신규행 vs 기존행 : 절대 병합 안 함 — 신규행은 앞(키) 컬럼이 전부 빈값이라 '' === '' 로
+      //     바로 위/아래 기존 블록에 들러붙는 것을 막는다.
+      //   · 다른 그룹(INSERT_GROUP_ID)의 신규행끼리 : 병합 안 함 — 행추가를 여러 번 하면 각 그룹이
+      //     별개 블록으로 보여야 한다.
+      //   · 같은 그룹 신규행끼리 : 아래 leftBindings 비교를 그대로 탄다 — 앞(키) 컬럼은 값이 같아
+      //     병합되고, MEASURE 는 leftBindings 에 포함돼 행마다 달라 분기된다(= 원하는 표시).
+      //   (DMF0021 은 신규행을 전부 분리하지만 DMF0042 는 measure 블록을 한 덩어리로 보여야 해 다르다.)
+      // 값 타입을 좁혀서 문자열화한다 — unknown 을 그대로 String() 에 넣으면 객체가 섞였을 때
+      //   '[object Object]' 로 뭉개져 서로 다른 그룹이 같은 값으로 비교된다(@typescript-eslint/
+      //   no-base-to-string 이 잡는 지점). 문자열/숫자가 아니면 빈 그룹으로 본다.
+      const groupId = (row: Record<string, unknown>): string => {
+        const v = row.INSERT_GROUP_ID;
+        return typeof v === 'string' || typeof v === 'number' ? String(v) : '';
+      };
       const sameRow = (a: number, b: number): boolean => {
         const ra = rowItem(a);
         const rb = rowItem(b);
         if (!ra || !rb) return false;
+        const aInsert = isInsertRow(ra);
+        const bInsert = isInsertRow(rb);
+        if (aInsert !== bInsert) return false;
+        if (aInsert && groupId(ra) !== groupId(rb)) return false;
         return leftBindings.every(
           k =>
             ((ra as Record<string, string>)[k] ?? '') === ((rb as Record<string, string>)[k] ?? '')

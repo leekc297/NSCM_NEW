@@ -4,11 +4,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { IcExchangeRate, IcMeasureSelect } from '@foundation/assets';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
-import type { EditTracker } from '@foundation/utils';
+import { GridAction, type EditTracker } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { ProgressIndicator } from '@shared/lges';
-import { useMessageStore } from '@shared/stores';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { SalesReportsForm } from './components/SalesReportsForm';
 import { SalesReportsGrid } from './components/SalesReportsGrid';
@@ -21,10 +21,9 @@ import { isDiv82 } from './utils/sales-reports.division';
 import { toCellStr } from './utils/sales-reports.gridCombos';
 import {
   buildSetKeyMap,
-  findGroupTopIndex,
+  findGroupRowRange,
   type GroupKeyColumn,
   groupKeyBindings,
-  setHeadIndexOf,
 } from './utils/sales-reports.merge';
 import {
   buildBulkPayload,
@@ -64,12 +63,30 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
   const staticColumns = useSalesReportsStore(s => s.staticColumns);
   const fetchStaticColumns = useSalesReportsStore(s => s.fetchStaticColumns);
   const fetchStaticMeasures = useSalesReportsStore(s => s.fetchStaticMeasures);
+  const restoreSearchConditions = useSalesReportsStore(s => s.restoreSearchConditions);
   const thisMonth = useSalesReportsStore(s => s.thisMonth);
 
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
 
+  // Division 기본 선택 (DMF0003/DMF0040/DMF0053 정본 통일). 비어 있을 때만 채움 - 기존 값은 유지.
+  const session = useSessionStore(s => s.session);
+  const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
+  useEffect(() => {
+    if (sc.divisionId) return;
+    const codes = (myDivisions ?? []).map(r => String(r.CODE ?? '')).filter(Boolean);
+    if (codes.length === 0) return;
+    const sessionDiv = String(session.div ?? '');
+    setSearchCondition({ divisionId: codes.includes(sessionDiv) ? sessionDiv : codes[0] });
+  }, [myDivisions, sc.divisionId, session.div, setSearchCondition]);
+
   // 명시 조회 게이트 (Search 클릭 후에만 enable — DMF0003 계보)
   const [hasSearched, setHasSearched] = useState(false);
+
+  // GridAction.addRowSet/removeRow 는 itemsSource 배열을 직접 splice/remove 하고 setState 를
+  //   호출하지 않는다 — React 리렌더가 안 일어나면 이 컴포넌트가 파생하는 값(insertedRows,
+  //   dataCount 등)이 Insert/Delete 이후에도 그 이전 렌더 시점 값에 멈춰 있는다.
+  //   handleInsert/handleDelete 끝에서 이 카운터를 올려 강제로 한 번 리렌더시킨다.
+  const [, forceGridRerender] = useState(0);
 
   // 편집/저장 게이트 기준 = "조회한" 조건 (filters = Search 클릭 시점 스냅샷).
   //   금지: 게이트에 sc(조회조건 폼)를 쓰지 말 것 — ALL 로 조회한 뒤 Data Type 콤보만 바꿔도
@@ -113,26 +130,11 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     [measureData]
   );
 
-  // 신규 세트 (CRUD_TYPE='I' — 2행 Measure 블록 단위, ETC 전용).
-  //   AS-IS InsertRow 는 신규 세트를 맨 위가 아니라 **포커스 행이 속한 세트 바로 위**에 넣는다
-  //   (`.cs:931~933`). 그래서 블록마다 "어느 SP 행 **앞**에 붙는지"(anchor)를 함께 들고,
-  //   화면 행은 SP 결과 + 블록으로 **매번 계산**한다.
-  //   금지: 합쳐진 행 배열을 state 로 들지 말 것 — 재조회가 캐시 히트면 `data` identity 가 그대로라
-  //   동기화 effect 가 돌지 않아 그리드가 빈 채로 남는다.
-  interface InsertBlock {
-    gid: string;
-    anchor: SalesReportRow | null; // null = 맨 위
-    rows: SalesReportRow[];
-  }
-  const [insertBlocks, setInsertBlocks] = useState<InsertBlock[]>([]);
-  // Insert 직후 포커스를 옮길 신규행(블록 첫 행) — rows 재계산 후 effect 가 소비하고 비운다.
-  const focusRowRef = useRef<SalesReportRow | null>(null);
-
   const mainData = data as { data?: SalesReportRow[] } | undefined;
   useEffect(() => {
     if (!mainData) return;
-    // 재조회 = pending insert reset + EditTracker clear (hook #97)
-    setInsertBlocks([]);
+    // 재조회 = EditTracker clear (hook #97). 신규 세트는 grid.collectionView.sourceCollection
+    //   (=spRows) 에 직접 물려 있어 itemsSource 자체가 재조회로 교체되며 함께 사라진다.
     editTrackerRef.current?.clearChanges();
   }, [mainData]);
 
@@ -141,71 +143,31 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   행 `EDIT_FLAG` 는 SP 가 준 값 그대로 두고, 공용 `DataGrid` 가 컬럼 `_inputEditType` 과 묶어
   //   **색(노란색)과 편집 가능 여부를 하나의 기준으로** 결정한다.
   const spRows = useMemo<SalesReportRow[]>(() => mainData?.data ?? [], [mainData]);
-  const insertedRows = useMemo(() => insertBlocks.flatMap(b => b.rows), [insertBlocks]);
-  const rows = useMemo<SalesReportRow[]>(() => {
-    if (insertBlocks.length === 0) return spRows;
-    const spSet = new Set(spRows);
-    const byAnchor = new Map<SalesReportRow | null, SalesReportRow[]>();
-    insertBlocks.forEach(b => {
-      // anchor 가 사라진 블록(재조회 직전 등)은 맨 위로 — 조용히 증발하지 않게 한다
-      const key = b.anchor && spSet.has(b.anchor) ? b.anchor : null;
-      byAnchor.set(key, [...(byAnchor.get(key) ?? []), ...b.rows]);
-    });
-    const out: SalesReportRow[] = [...(byAnchor.get(null) ?? [])];
-    spRows.forEach(r => {
-      const ins = byAnchor.get(r);
-      if (ins) out.push(...ins);
-      out.push(r);
-    });
-    return out;
-  }, [spRows, insertBlocks]);
-
-  // Insert 직후 새 블록 첫 행으로 포커스·스크롤 이동 (DMF0021 SalesPlan 선례 1:1).
-  //   필수: 이 복원이 없으면 itemsSource 배열이 새로 바뀔 때 wijmo 가 CollectionView 를 다시
-  //   만들면서 선택을 초기화한다 = 매 Insert 마다 포커스가 엉뚱한 행으로 튄다. 이 화면은
-  //   `handleInsert` 가 **선택 행**으로 다음 삽입 위치(anchor)를 정하므로, 포커스가 틀어지면
-  //   그 다음 행추가가 들어갈 자리까지 함께 어긋난다.
-  //   필수: 실패 시 다음 프레임에 한 번 더 시도한다 — 이 시점에 grid.rows 가 아직 새 배열을
-  //   반영하지 않았으면 인덱스를 못 찾고 그대로 빠져나간다. 재시도 후에도 못 찾으면 조용히 포기.
-  useEffect(() => {
-    const target = focusRowRef.current;
-    if (!target) return;
-    const grid = gridRef.current;
-    if (!grid) return;
-    const focusTarget = (): boolean => {
-      let rowIndex = -1;
-      for (let i = 0; i < grid.rows.length; i++) {
-        if (grid.rows[i]?.dataItem === target) {
-          rowIndex = i;
-          break;
-        }
-      }
-      if (rowIndex < 0) return false;
-      grid.select(rowIndex, Math.max(0, grid.selection.col));
-      grid.scrollIntoView(rowIndex, -1);
-      return true;
-    };
-    if (focusTarget()) {
-      focusRowRef.current = null;
-      return;
-    }
-    const frame = window.requestAnimationFrame(() => {
-      if (focusTarget()) focusRowRef.current = null;
-    });
-    return () => window.cancelAnimationFrame(frame);
-  }, [rows]);
+  // 신규 세트는 GridAction.addRowSet 이 spRows(=grid.collectionView.sourceCollection)에 직접
+  //   splice 하므로 별도 병합이 필요 없다 — rows 는 spRows 참조 그대로다(handleInsert 참고).
+  const rows: SalesReportRow[] = spRows;
+  // ⚠️ 아래 두 값은 useMemo 로 [rows] 에 의존시키지 않는다 — addRowSet/removeRow 가 rows
+  //   (=spRows) 를 같은 배열 참조에 splice/remove 하므로 배열 identity 가 절대 바뀌지 않고,
+  //   [rows] 의존 메모는 최초 계산값에 영원히 고정된다(Insert/Delete 가 반영 안 됨 —
+  //   2026-09-17 리뷰 발견). 매 렌더 새로 계산한다 — 행 수가 적어 비용 문제 없다.
+  const insertedRows = rows.filter(r => r.CRUD_TYPE === 'I');
 
   // ⭐ 세트키 맵 — **병합(보이는 범위)과 저장(쓰이는 범위)의 단일 원천**.
   //   둘이 갈리면 병합 블록이 2행 세트를 넘어가고, wijmo 가 블록 전 행에 값을 쓰면서
   //   "한 칸 고쳤는데 다른 세트까지 바뀌고 정작 저장은 안 되는" 상태가 된다
   //   (근거·AS-IS 대조는 `utils/sales-reports.merge.ts` 상단 주석).
-  const setKeys = useMemo(() => buildSetKeyMap(rows), [rows]);
+  const setKeys = buildSetKeyMap(rows);
 
   // mount 시 1회 admin 메타 fetch + persist filters 무효화
+  //   필수: F6 저장 조회조건 복원을 먼저 await 한다 — fetchStaticColumns/fetchStaticMeasures 가
+  //   조회조건의 divisionId 를 admin 메타 SP 로 넘기므로, 복원된 division 기준으로 받아야 한다.
   useEffect(() => {
     clearFilters();
-    void fetchStaticColumns();
-    void fetchStaticMeasures();
+    void (async () => {
+      await restoreSearchConditions();
+      await fetchStaticColumns();
+      await fetchStaticMeasures();
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
 
@@ -255,14 +217,6 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     gridRef.current?.invalidate();
   };
 
-  /** 지금 포커스된 행의 dataItem — 병합 셀은 블록 top 이 선택되므로 그 행이 곧 세트 대표다. */
-  const focusedRow = (): SalesReportRow | undefined => {
-    const g = gridRef.current;
-    const r = g?.selection?.row ?? -1;
-    if (!g || r < 0) return undefined;
-    return g.rows[r]?.dataItem as SalesReportRow | undefined;
-  };
-
   /**
    * 포커스 셀이 속한 **머지 블록의 첫 행** — Insert 앵커 (sales-plan / mkt-fcst 와 같은 규칙).
    *
@@ -272,9 +226,7 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
    * 금지: wijmo 컬렉션(`g.columns` / `g.rows`)에 `.map` / `.filter` 를 쓰지 말 것 — Array 파생
    *   클래스라 species 규칙에 따라 새 ObservableArray 가 만들어진다. 인덱스 루프로 복사한다.
    */
-  const groupTopRowOf = (index: number): SalesReportRow | null => {
-    const g = gridRef.current;
-    if (!g || index < 0) return null;
+  const readGridGroupInput = (g: NonNullable<typeof gridRef.current>) => {
     const columns: GroupKeyColumn[] = [];
     for (let i = 0; i < g.columns.length; i++) {
       const column = g.columns[i];
@@ -284,9 +236,24 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     for (let i = 0; i < g.rows.length; i++) {
       gridRowItems.push(g.rows[i]?.dataItem as SalesReportRow | undefined);
     }
+    return { columns, gridRowItems };
+  };
+
+  /**
+   * 클릭한 셀 기준 병합 축 컬럼(keyBindings)으로 groupKey 함수를 만든다 — GridAction.addRowSet
+   * 의 groupKey 옵션에 그대로 넘긴다. 판정 축은 옛 groupTopRowOf 와 동일 규칙
+   * (`groupKeyBindings` 가 클릭 컬럼을 축으로 정적 컬럼 목록을 고른다).
+   */
+  const buildGroupKeyOf = (g: FlexGridType<SalesReportRow>): ((row: SalesReportRow) => string) => {
+    const { columns } = readGridGroupInput(g);
     const keyBindings = groupKeyBindings(columns, g.selection.col);
-    const top = findGroupTopIndex(gridRowItems, index, keyBindings);
-    return (g.rows[top]?.dataItem as SalesReportRow | undefined) ?? null;
+    return (row: SalesReportRow) => {
+      if (keyBindings.length === 0) return '';
+      const rec = row as Record<string, string>;
+      // 값이 전부 빈 문자열이어도 key 가 falsy 로 접히지 않도록 접두사를 붙인다 —
+      //   resolveInsertAnchor 는 groupKey 가 falsy 면 walk 자체를 건너뛴다.
+      return `K:${keyBindings.map(binding => rec[binding] ?? '').join('')}`;
+    };
   };
 
   // F5 Search — Version 필수 (FindData L437 MSG00283)
@@ -296,8 +263,6 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: t(vr.msgId!, '_Version을 선택하고 조회하세요.') });
       return;
     }
-    // void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
-    setInsertBlocks([]);
     setHasSearched(true);
     setFilter();
     void fetchStaticColumns();
@@ -309,7 +274,6 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   clearFilters() 가 filters[MAIN] 을 없애면 useTabProcQuery 가 disabled 되어 rows 가 비고,
   //   편집 게이트도 미조회 = ALL(전면 잠금)로 떨어진다. 다시 보려면 Search 를 눌러야 한다.
   const resetGrid = () => {
-    setInsertBlocks([]);
     editTrackerRef.current?.clearChanges();
     setHasSearched(false);
     clearFilters();
@@ -366,32 +330,33 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
       MEASURE: measure,
       ...INSERT_ROW_DEFAULTS,
     }));
-    // 삽입 후 포커스를 되돌릴 대상 = 새 블록의 첫 행 (아래 rows effect 가 소비).
-    focusRowRef.current = block[0] ?? null;
+    const g = gridRef.current;
+    if (!g) return;
     // 신규 블록은 **포커스 셀이 속한 머지 그룹 최상단** 바로 위에 끼운다 (사용자 지시 2026-08-23 —
-    //   sales-plan / mkt-fcst 와 같은 규칙). 종전에는 AS-IS `.cs:931~933` 파리티
-    //   (SetActiveCell(세트 첫 행) → Insert(2))로 포커스한 2행 세트 바로 위에 넣었는데, 그러면 크게
-    //   묶인 병합 덩어리 한가운데가 갈라져 보인다. 포커스가 없으면 맨 위.
-    const target = focusedRow();
-    if (target?.CRUD_TYPE === 'I') {
-      // 포커스가 신규 블록이면 그 블록과 같은 자리에서 **바로 앞**에 끼운다
-      setInsertBlocks(prev => {
-        const i = prev.findIndex(b => b.rows.includes(target));
-        if (i < 0) return [...prev, { gid, anchor: null, rows: block }];
-        return [
-          ...prev.slice(0, i),
-          { gid, anchor: prev[i].anchor, rows: block },
-          ...prev.slice(i),
-        ];
-      });
-      return;
+    //   sales-plan / mkt-fcst 와 같은 규칙). 포커스가 없으면 맨 위. 포커스가 이미 다른 신규
+    //   블록(미저장)이면 GridAction.addRowSet 이 그 블록의 등록된 앵커까지 자동으로 타고 올라가
+    //   같은 자리에 이어 쌓는다(resolveInsertAnchor 의 pin 체이스 — BusinessPlan.tsx groupTopRowOf
+    //   와 동일 규약).
+    const added = GridAction.addRowSet(
+      g as unknown as FlexGridType<WijmoRowItem>,
+      block as unknown as Partial<WijmoRowItem>[],
+      'above',
+      {
+        groupKey: buildGroupKeyOf(g) as unknown as (row: WijmoRowItem) => string,
+        preserveMergeManager: true,
+      }
+    ) as unknown as SalesReportRow[] | undefined;
+    const target = added?.[0];
+    if (!target) return;
+    for (let i = 0; i < g.rows.length; i++) {
+      if (g.rows[i]?.dataItem !== target) continue;
+      g.select(i, Math.max(0, g.selection.col));
+      g.scrollIntoView(i, -1);
+      break;
     }
-    // 머지 그룹 최상단까지 앵커를 올린 뒤 **세트 첫 행에 맞춰 스냅**한다.
-    //   필수: 스냅을 빼지 말 것 — 세트 경계가 아닌 자리에 블록이 끼면 `buildSetKeyMap` 의
-    //   `P:floor(idx/size)` 짝이 그 아래로 전부 밀려 병합 범위와 저장 범위가 함께 어긋난다.
-    const groupTop = groupTopRowOf(gridRef.current?.selection.row ?? -1) ?? target;
-    const anchor = spRows[setHeadIndexOf(spRows, groupTop, setKeys)] ?? null;
-    setInsertBlocks(prev => [...prev, { gid, anchor, rows: block }]);
+    // addRowSet 이 setState 를 호출하지 않으므로 강제 리렌더 — insertedRows/setKeys 등 이
+    //   렌더에서 파생되는 값을 최신 rows 로 다시 계산시킨다.
+    forceGridRerender(v => v + 1);
   };
 
   // F9 Delete — 선택 행이 속한 **2행 세트 전체**를 그리드에서 지운다 (AS-IS DeleteButton `.cs:254~265`).
@@ -412,11 +377,37 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     //   처리가 **없어서** D 로 마킹해도 'M'(UPDATE)으로 나가 조용히 안 지워진다.
     if (searched.dataType !== DATA_TYPE.ETC) return; // silent (AS-IS 분기 return 파리티)
 
-    // 선택 행을 각자의 **세트 전체**로 넓힌다(드래그는 여러 세트를 걸친다). 세트 판정은
+    // 병합 셀을 누르고 지우면 **그 병합 셀이 덮는 행 전부**가 대상이다 (2026-09-15 사용자 요구).
+    //   선택(selectedItems)에는 병합 블록 중 실제로 누른 한 행만 들어오므로, 종전에는 블록 안
+    //   어느 줄을 눌렀느냐에 따라 D 가 붙는 세트가 달라졌다. 블록 판정은 Insert 앵커
+    //   (groupTopRowOf)와 같은 규칙 — 누른 컬럼까지의 정적 값이 같은 연속 행(groupKeyBindings).
+    //   월 컬럼이나 MEASURE 를 눌렀으면 MEASURE 직전까지의 정적 값이 같은 블록(= 보통 한 세트)으로
+    //   폴백한다(groupKeyBindings 주석 참조).
+    const { columns, gridRowItems } = readGridGroupInput(g);
+    const keyBindings = groupKeyBindings(columns, g.selection.col);
+    const indexOfRow = new Map<SalesReportRow, number>();
+    gridRowItems.forEach((item, i) => {
+      if (item) indexOfRow.set(item, i);
+    });
+    const blockRows = new Set<SalesReportRow>();
+    selected.forEach(r => {
+      const index = indexOfRow.get(r);
+      if (index === undefined) {
+        blockRows.add(r);
+        return;
+      }
+      const { top, bottom } = findGroupRowRange(gridRowItems, index, keyBindings);
+      for (let i = top; i <= bottom; i++) {
+        const item = gridRowItems[i];
+        if (item) blockRows.add(item);
+      }
+    });
+
+    // 대상 행을 각자의 **세트 전체**로 넓힌다(드래그는 여러 세트를 걸친다). 세트 판정은
     //   병합·저장과 같은 `setKeys` 를 쓰므로 보이는 병합 범위와 일치한다.
     const seenKeys = new Set<string>();
     const targets = new Set<SalesReportRow>();
-    selected.forEach(r => {
+    blockRows.forEach(r => {
       const key = setKeys.get(r);
       if (!key) {
         targets.add(r);
@@ -441,17 +432,15 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
       else dropRows.add(r);
     });
 
-    // 신규행 — 행 자체를 없앤다
+    // 신규행 — 행 객체 자체를 grid.collectionView 에서 없앤다(GridAction.removeRow 와 동일 방식).
+    //   dropGids 는 targets 로 안 걸린 같은 세트의 형제 행까지 마저 훑는다(방어적 sweep).
     if (dropGids.size > 0 || dropRows.size > 0) {
-      setInsertBlocks(prev =>
-        prev
-          .map(b =>
-            dropGids.has(b.gid)
-              ? { ...b, rows: [] }
-              : { ...b, rows: b.rows.filter(r => !dropRows.has(r)) }
-          )
-          .filter(b => b.rows.length > 0)
-      );
+      const toRemove = new Set<SalesReportRow>(dropRows);
+      spRows.forEach(r => {
+        if (r.INSERT_GROUP_ID && dropGids.has(r.INSERT_GROUP_ID)) toRemove.add(r);
+      });
+      toRemove.forEach(r => g.editableCollectionView.remove(r));
+      g.editableCollectionView.commitEdit();
     }
     // 조회행 — 공용 규약(`GridAction.removeRow`)대로 **status 'D' 마킹**. 행은 화면에 남고
     //   행 헤더에 D 가 뜨며, 저장 때 `activeFlag='D'` 로 나가 SP 가 원장에서 지운다.
@@ -459,6 +448,9 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
       r.CRUD_TYPE = 'D';
     });
     g.invalidate();
+    // 이 핸들러도 setState 를 호출하지 않으므로 강제 리렌더 — insertedRows/setKeys 등을
+    //   최신 rows 로 다시 계산시킨다.
+    forceGridRerender(v => v + 1);
   };
 
   // F7 Save 본체 — Version(MSG00688) + ALL 차단(MSG00681) → Data Type 이원화 '^' bulk →
@@ -514,7 +506,8 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
         .map(([row, changes]) => ({ row, changes, ...setInfoOf(row) })),
     ];
     if (targets.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
+      // 변경/신규 없음 → toast + 공통 문구 (DMF0003~0007/0020/0072 과 동일 규약).
+      setToast({ type: 'error', message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
       return;
     }
 
@@ -556,7 +549,6 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
       else if (res.ok)
         void setToast({ message: t(MSG.SAVED, '_성공적으로 저장되었습니다.'), type: 'success' });
       if (res.ok) {
-        setInsertBlocks([]);
         editTrackerRef.current?.clearChanges();
         await (refetch?.() ?? Promise.resolve());
         if (savedScroll && gridRef.current) gridRef.current.scrollPosition = savedScroll;
@@ -620,7 +612,11 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     insert: hasButton('INSERT') && searched.dataType === DATA_TYPE.ETC ? handleInsert : false,
-    delete: hasButton('DELETE') ? handleDelete : false,
+    // Data Type 을 Cutoff 로 고르는 즉시 Delete 를 숨긴다 (사용자 지정 2026-09-04).
+    //   판정 원천은 조회 결과(searched)가 아니라 입력 중인 조회조건 sc — 조회를 누르기 전,
+    //   콤보에서 고르는 순간 반응해야 한다(위 insert 는 searched 기준이라 시점이 다르다).
+    //   false = 버튼 미렌더 (아래 save 주석 참조).
+    delete: hasButton('DELETE') && sc.dataType !== DATA_TYPE.CUTOFF ? handleDelete : false,
     // 금지: 저장 중이라고 `false` 를 넘기지 말 것 (2026-08-21 결함 정정).
     //   `HotkeyConfig` 의 `false` 는 "비활성"이 아니라 **버튼 미렌더**다 — 공용
     //   `SubTitle.tsx` 가 `{buttonActions.save === false || (<Button .../>)}` 로 그린다.
@@ -672,8 +668,8 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
     ...(hasButton('MEASURE_SELECT')
       ? [
           {
-            label: t('LBL00712', '_Measure'),
-            title: t('LBL00712', '_Measure'),
+            label: t('LBL00310', '_Measure'),
+            title: t('LBL00310', '_Measure'),
             action: () => setOpenModal('MEASURE'),
             iconComponent: <IcMeasureSelect />,
             buttonLabel: '',
@@ -721,6 +717,7 @@ export const SalesReports = ({ tabId, title }: PageProps<MENU_ID>) => {
         editTrackerRef={editTrackerRef}
         divisionId={searched.divisionId || sc.divisionId}
         dataType={searched.dataType}
+        reportType={searched.mdfType}
         thisMonth={thisMonth}
         staticColumns={staticColumns}
         spreadTitle={spreadTitleRows}

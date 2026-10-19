@@ -1,0 +1,6 @@
+﻿"page_key","menu_id","file","line","in_function","kind","callee","menu","sheet","action","url","resolved","args","commented"
+"supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/components/EndingInventoryForm.tsx","66","EndingInventoryForm","hook","useTabComboQueries","SCP0085","","","(useTabComboQueries)","Y","[ COMBO.DIVISION, { comboId: COMBO.PLANT, divisionId: divisionParam }, COMBO.ITEM_TYPE, ]","0"
+"supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/EndingInventory.tsx","44","EndingInventory","hook","useTabProcQuery","SCP0085","main","","SCP0085/main//call-proc","Y","filters[SHEETS.MAIN]","0"
+"supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/EndingInventory.tsx","51","EndingInventory","hook","useTabProcQuery","SCP0085","daily","","SCP0085/daily//call-proc","Y","filters[SHEETS.DAILY]","0"
+"supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/useEndingInventoryStore.ts","100","restoreSearchParams","http","apiClient.get","","","","/admin/menu/SCP0085/search-conditions","Y","","0"
+"supply/ending-inventory","SCP0085","features/supply/src/pages/ending-inventory/useEndingInventoryStore.ts","153","fetchStaticColumns","http","apiClient.post","","","","/admin/menu/SCP0085/column","Y","{ sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] }","0"

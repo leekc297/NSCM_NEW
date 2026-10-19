@@ -1,0 +1,825 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0075_GET_ALLO_TARGET_SMALL","1482540415","1","
+
+/*      
+ * Program ID   : [SCP0075_GET_ALLO_TARGET_SMALL]  
+ * Description  : Allo Target UI리포트용
+ * Program History      
+ *===================================================================================================      
+ *   Date	    	In Charge	    Description      
+ *===================================================================================================      
+ * 2021/10/18   hongju.lee		Initial Release PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) 
+ * 2021/11/08   hongju.lee		Cutoff기준 현재월의 PLAN, RESULT의 RATE(%) 는 제외함.
+ * 2022/02/11   LWY    		    추가개선 사항 반영 : deptname SCM_MST_SSO_DEPT_INFO 기준 변경
+  * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+
+DECLARE	@return_value int
+		EXEC	@return_value = [dbo].[SCP0075_GET_ALLO_TARGET_SMALL]
+		@P_DIVISION_ID = N'40',
+		@P_CUTOFF_YYYYMMDD    = N'20211129',
+		@P_ITEM_ID = NULL,
+		@P_NICK_NAME = 'MH1',
+		@P_TEAM_ID = NULL
+SELECT	'Return Value' = @return_value
+GO
+
+DECLARE
+ @P_DIVISION_ID		NVARCHAR(2) = '40'
+,@P_CUTOFF_YYYYMMDD	NVARCHAR(8) = '20211220'
+,@P_ITEM_ID         NVARCHAR(200) = '' --MODEL
+,@P_NICK_NAME       NVARCHAR(200) = 'C4'
+,@P_TEAM_ID         NVARCHAR(200) = ''
+,@P_FROM_YYYYMM		NVARCHAR(6) = '202110'
+,@P_TO_YYYYMM		NVARCHAR(6) = '202210'
+
+ */ 
+ 
+CREATE PROCEDURE [dbo].[SCP0075_GET_ALLO_TARGET_SMALL]
+--chaan  , @P_DIVISION_ID            NVARCHAR(2)
+     @P_DIVISION_ID                 NVARCHAR(30)--chaan
+	,@P_CUTOFF_YYYYMMDD			    NVARCHAR(8)
+	,@P_ITEM_ID                     NVARCHAR(200)
+	--,@P_FROM_SITE                 NVARCHAR(100)
+	,@P_NICK_NAME                   NVARCHAR(100)
+	,@P_TEAM_ID                     NVARCHAR(100)
+	,@P_FROM_YYYYMM					NVARCHAR(6)
+	,@P_TO_YYYYMM					NVARCHAR(6)
+
+AS      
+BEGIN      
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	PRINT 'All Start. '+CONVERT(CHAR(23), GETDATE(), 21)
+		
+	DECLARE @V_THIS_YYYYMM     AS NVARCHAR(8)='';  -- CUTOFF기준 올해 YYYYMM
+	DECLARE @V_NEXT_YEAR   		  AS NVARCHAR(8)='';
+
+	DECLARE @MEXEC NVARCHAR(MAX);
+	DECLARE @POS INT =1;
+	DECLARE @LEN INT =LEN(@mEXEC);													
+	DECLARE @debug_mode NVARCHAR(1)= 'T';
+
+	DECLARE @mQry_sub NVARCHAR(MAX); 
+	DECLARE @mQry_bp_sub NVARCHAR(MAX); 
+
+	DECLARE @mQry_sum NVARCHAR(MAX);
+    
+	DECLARE @V_BP_YYYYMM AS NVARCHAR(6); -- 현재일 기준 18개월 뒤
+	DECLARE @V_CUR_YYYYMM AS NVARCHAR(6); -- 현재월
+	DECLARE @V_LAST_YYYYMM AS NVARCHAR(6); -- 지난주 월
+	DECLARE @LAST_CUTOFF_YYYYMMDD  AS NVARCHAR(8); -- 지난주 CUTOFF일자
+	DECLARE @CUTOFF_YYYYMMDD  AS NVARCHAR(8); --현재 CUTOFF일자
+
+	SET @MEXEC = '';
+
+    -- @P_TO_YYYYMMDD 기준 최근 월요일 구하기    -- TYPE = 'PLAN'의  CUTOFF_YYYYMMDD로 사용
+     
+	SELECT @CUTOFF_YYYYMMDD = MAX(C.BASIS_YYYYMMDD)       
+         	 -- , MAX(DATEPART(WEEKDAY, BASIS_YYYYMMDD)) AS DAYIDX
+	FROM SCM_SYS_CALENDAR_M C WITH(NOLOCK)
+	 WHERE 1=1 
+	     AND C.BASIS_YYYYMMDD <= @P_CUTOFF_YYYYMMDD
+	     AND C.BASIS_YYYYMMDD <= CONVERT(VARCHAR, GETDATE(), 112)
+	     AND DATEPART(WEEKDAY, C.BASIS_YYYYMMDD) = 2 --1:SUN, 2:MON	
+		 
+
+     -- 최근(지난주) Cutoff일자 구하기
+     SELECT @LAST_CUTOFF_YYYYMMDD = ISNULL(MAX(CUTOFF_YYYYMMDD), @CUTOFF_YYYYMMDD)
+	    FROM SCP_ANL_ALLO_TARGET WITH(NOLOCK)
+	  WHERE DIVISION_ID = @P_DIVISION_ID
+	      AND CUTOFF_YYYYMMDD < @CUTOFF_YYYYMMDD
+	      AND TYPE = 'RESULT'
+
+
+    -- CUTOFF 일자는 월요일 기준임으로 하루전인 일요일 기준으로 월을 계사함.
+	SELECT @V_BP_YYYYMM     = SUBSTRING(CONVERT(CHAR(8), DATEADD(MM, 18, DATEADD(DAY,0,convert(datetime,@CUTOFF_YYYYMMDD))), 112),1,6), -- 현재월 18개월뒤
+	            @V_CUR_YYYYMM   = SUBSTRING(CONVERT(CHAR(8), DATEADD(MM, 0, DATEADD(DAY,0,convert(datetime,@CUTOFF_YYYYMMDD))), 112),1,6), --Cutoff기준(월) 현재월
+				@V_LAST_YYYYMM  = SUBSTRING(CONVERT(CHAR(8), DATEADD(MM, 0, DATEADD(DAY,0,convert(datetime,@LAST_CUTOFF_YYYYMMDD))), 112),1,6), --Last_Cutoff기준 현재월
+				@V_THIS_YYYYMM = SUBSTRING(@CUTOFF_YYYYMMDD,1,4) + '01',
+				@V_NEXT_YEAR =  SUBSTRING(CONVERT(CHAR(8), DATEADD(MM, 12, DATEADD(DAY,0,convert(datetime,@CUTOFF_YYYYMMDD))),"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0075_GET_ALLO_TARGET_SMALL","1482540415","2"," 112),1,4);
+				--SELECT SUBSTRING(CONVERT(CHAR(8), DATEADD(MM, 0, convert(datetime,'20210425')), 112),1,6)
+			
+	PRINT '-------------RESULT SEARCH'
+	print CONVERT(CHAR(23), getdate(), 21)
+	
+	SET @mQry_sub = '';
+
+	SELECT @mQry_sub = @mQry_sub+','+  A.COLUMN1
+		FROM
+		(     /*  SORTORDER   RESULT, PLAN  TOTAL   
+										MONTH  QUARTER
+			*/
+			-- 과거 RESULT
+			SELECT   
+							SORT_ORDER_NO,
+							CASE WHEN CHARINDEX('M_', YYYYMMDD) =1 THEN '  SUM(CASE WHEN  yyyymm = RIGHT('''+yyyymmdd+''',6) AND  TYPE = ''RESULT'' THEN CONVERT(NUMERIC(20,4), ISNULL(QTY, 0)) END ) AS ' + yyyymmdd  +'_RESULT'    
+							END +''+CHAR(10) 
+							AS COLUMN1
+			FROM (  
+						SELECT TOP 30 'M_'+A.BASIS_YYYYMM  AS YYYYMMDD
+							,MIN(A.BASIS_YYYYMM) + CONVERT(CHAR(2), '00')   AS SORT_ORDER_NO      
+						FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+						WHERE -- A.BASIS_YYYYMM  BETWEEN '202101' AND '202103'
+									A.BASIS_YYYYMM >= @V_THIS_YYYYMM   
+							AND A.BASIS_YYYYMM < @V_CUR_YYYYMM					
+							--AND A.BASIS_YYYYMM NOT IN ( @V_LAST_YYYYMM)
+						GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME        
+					) AS A      
+					UNION 
+					-- 현재월 해당하는 월의 PLAN
+					SELECT  
+									SORT_ORDER_NO,
+									CASE WHEN CHARINDEX('M_', YYYYMMDD) =1 THEN '  SUM(CASE WHEN  yyyymm = RIGHT('''+yyyymmdd+''',6)  AND  TYPE = ''PLAN'' THEN CONVERT(NUMERIC(20,4), ISNULL(QTY, 0)) END ) AS ' + yyyymmdd  +'_PLAN'    
+           									--WHEN CHARINDEX('Q_', YYYYMMDD) =1 THEN '  SUM(CASE WHEN  yyyyqq = RIGHT('''+yyyymmdd+''',6)  AND  TYPE = ''PLAN'' THEN QTY END ) AS ' + yyyymmdd    +'_PLAN'    
+								END +''+CHAR(10) 
+								AS COLUMN1
+					FROM (  
+						SELECT TOP 30 'M_'+A.BASIS_YYYYMM  AS YYYYMMDD
+									,MIN(A.BASIS_YYYYMM) + CONVERT(CHAR(2), '10')   AS SORT_ORDER_NO      
+						FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+						WHERE A.BASIS_YYYYMM IN ( @V_CUR_YYYYMM )
+						GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME
+					) AS B1
+					UNION 
+					-- 현재월 해당하는 월의 RESULT
+					SELECT  
+									SORT_ORDER_NO,
+									CASE WHEN CHARINDEX('M_', YYYYMMDD) =1 THEN '  SUM(CASE WHEN  yyyymm = RIGHT('''+yyyymmdd+''',6)  AND  TYPE = ''RESULT'' THEN CONVERT(NUMERIC(20,4), ISNULL(QTY, 0)) END ) AS ' + yyyymmdd  +'_RESULT'    
+           									--WHEN CHARINDEX('Q_', YYYYMMDD) =1 THEN '  SUM(CASE WHEN  yyyyqq = RIGHT('''+yyyymmdd+''',6)  AND  TYPE = ''RESULT'' THEN QTY END ) AS ' + yyyymmdd    +'_RESULT'    
+								END +''+CHAR(10) 
+								AS COLUMN1
+					FROM (  							
+						SELECT TOP 30 'M_'+A.BASIS_YYYYMM  AS YYYYMMDD
+									,MIN(A.BASIS_YYYYMM) + CONVERT(CHAR(2), '00')   AS SORT_ORDER_NO      
+						FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+						WHERE A.BASIS_YYYYMM IN (  @V_CUR_YYYYMM )
+						GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME        
+					
+					) AS B2       
+						UNION 
+					-- 현재월 해당하는 월의 TOTAL
+					SELECT  
+									SORT_ORDER_NO,
+									CASE WHEN CHARINDEX('M_', YYYYMMDD) =1 THEN '  SUM(CASE WHEN  yyyymm = RIGHT('''+yyyymmdd+''',6)  AND  TYPE = ''NULL'' THEN CONVERT(NUMERIC(20,4), ISNULL(QTY, 0)) END ) AS ' + yyyymmdd  +'_TOTAL'    
+           									--WHEN CHARINDEX('Q_', YYYYMMDD) =1 THEN '  SUM(CASE WHEN  yyyyqq = RIGHT('''+yyyymmdd+''',6)  AND  TYPE = ''NULL'' THEN QTY END ) AS ' + yyyymmdd    +'_TOTAL'    
+								END +''+CHAR(10) 
+								AS COLUMN1
+					FROM (   
+						SELECT TOP 30 'M_'+A.BASIS_YYYYMM  AS YYYYMMDD
+									,MIN(A.BASIS_YYYYMM) + CONVERT(CHAR(2), '30')   AS SORT_ORDER_NO      
+						FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+						WHERE A.BASIS_YYYYMM IN (  @V_CUR_YYYYMM )
+						GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME        
+					) AS B3       
+					UNION 
+					-- 미래 PLAN
+					SELECT 
+									SORT_ORDER_NO,
+									CASE WHEN CHARINDEX('M_', YYYYMMDD) =1 THEN '  SUM(CASE WHEN  yyyymm = RIGHT('''+yyyymmdd+''',6)  AND  TYPE = ''PLAN'' THEN CONVERT(NUMERIC(20,4), ISNULL(QTY, 0)) END ) AS ' + yyyymmdd  +'_PLAN'    
+           									--WHEN CHARINDEX('Q_', YY"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0075_GET_ALLO_TARGET_SMALL","1482540415","3","YYMMDD) =1 THEN '  SUM(CASE WHEN  yyyyqq = RIGHT('''+yyyymmdd+''',6)  AND  TYPE = ''PLAN'' THEN QTY END ) AS ' + yyyymmdd    +'_PLAN'    
+								END +''+CHAR(10) 
+								AS COLUMN1
+					FROM (  
+						SELECT TOP 30 'M_'+A.BASIS_YYYYMM  AS YYYYMMDD
+									,MIN(A.BASIS_YYYYMM)  + CONVERT(CHAR(2), '10') AS SORT_ORDER_NO      
+						FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+						WHERE -- A.BASIS_YYYYMM  BETWEEN '202106' AND '202212' @V_NEXT_YEAR
+										A.BASIS_YYYYMM > @V_CUR_YYYYMM 
+								AND A.BASIS_YYYYMM <= @V_NEXT_YEAR + '12'
+						GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME 
+					) AS C
+					UNION 
+					-- PLAN 분기 추가
+					SELECT  
+									SORT_ORDER_NO,
+									CASE WHEN CHARINDEX('Q_', YYYYMMDD) =1 THEN '  SUM(CASE WHEN  yyyyqq = RIGHT('''+yyyymmdd+''',6)  AND  TYPE = ''PLAN'' THEN CONVERT(NUMERIC(20,4), ISNULL(QTY, 0)) END ) AS ' + yyyymmdd    +'_PLAN'    
+								END +''+CHAR(10) 
+								AS COLUMN1
+						FROM (
+									SELECT TOP 10 'Q_'+A.CALENDAR_YYYYQQ  AS YYYYMMDD  -- PLAN
+												--,MAX(A.BASIS_YYYYMM) + CONVERT(CHAR(2), '51')   AS SORT_ORDER_NO      
+											   ,(SELECT MAX(B.BASIS_YYYYMM)+ CONVERT(CHAR(2), '51') AS SORT
+													FROM [DBO].[SCM_SYS_CALENDAR_M] B       
+												 WHERE B.CALENDAR_YYYYQQ = A.CALENDAR_YYYYQQ
+											    ) AS SORT_ORDER_NO
+										FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+									WHERE A.BASIS_YYYYMM > @V_CUR_YYYYMM 
+										AND A.BASIS_YYYYMM <= @V_NEXT_YEAR + '12'
+									GROUP BY A.CALENDAR_YYYYQQ 
+						) AS D
+						UNION 
+					-- RESULT 분기 추가
+					SELECT  
+									SORT_ORDER_NO,
+									CASE WHEN CHARINDEX('Q_', YYYYMMDD) =1 THEN '  SUM(CASE WHEN  yyyyqq = RIGHT('''+yyyymmdd+''',6)  AND  TYPE = ''RESULT'' THEN CONVERT(NUMERIC(20,4), ISNULL(QTY, 0)) END ) AS ' + yyyymmdd    +'_RESULT'
+								END +''+CHAR(10) 
+								AS COLUMN1
+						FROM (
+						  			SELECT TOP 10 'Q_'+A.CALENDAR_YYYYQQ  AS YYYYMMDD  -- RESULT
+												--,MAX(A.BASIS_YYYYMM) + CONVERT(CHAR(2), '41')   AS SORT_ORDER_NO      
+											   ,(SELECT MAX(B.BASIS_YYYYMM)+ CONVERT(CHAR(2), '41') AS SORT
+													FROM [DBO].[SCM_SYS_CALENDAR_M] B       
+												 WHERE B.CALENDAR_YYYYQQ = A.CALENDAR_YYYYQQ
+											    ) AS SORT_ORDER_NO
+									FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+									WHERE A.BASIS_YYYYMM >= @V_THIS_YYYYMM   
+										AND A.BASIS_YYYYMM <= @V_CUR_YYYYMM	
+									GROUP BY A.CALENDAR_YYYYQQ 
+						) AS E
+		) A
+		ORDER BY A.SORT_ORDER_NO  ;  
+		
+		BEGIN
+			SELECT @mQry_bp_sub  =  REPLACE(REPLACE(@mQry_sub, 'TYPE = ''RESULT''', 'TYPE = ''BP'''),'TYPE = ''PLAN''','TYPE = ''BP''' )
+		END;
+
+		SET @mQry_sum = '';
+
+		IF OBJECT_ID('tempdb..#SUM') IS NOT NULL	
+		DROP TABLE #SUM;
+		
+		SELECT A.* 
+	       INTO #SUM
+	     FROM
+		 (
+			    -- 과거 RESULT
+				SELECT  
+				             SORT_ORDER_NO,
+							 CASE WHEN CHARINDEX('M_', YYYYMMDD) =1 THEN '  ISNULL(SUM('+YYYYMMDD+'_RESULT) ,0) AS ' + YYYYMMDD  +'_RESULT'
+           							  WHEN CHARINDEX('Q_', YYYYMMDD) =1 THEN '  ISNULL(SUM('+YYYYMMDD+'_RESULT) ,0) AS ' + YYYYMMDD  +'_RESULT'
+					         END +''+CHAR(10) 
+							 AS COLUMN1, YYYYMMDD  +'_RESULT' AS COLUMN2
+				FROM (  
+							SELECT TOP 30 'M_'+A.BASIS_YYYYMM  AS YYYYMMDD
+								,MIN(A.BASIS_YYYYMM) + CONVERT(CHAR(2), '01')   AS SORT_ORDER_NO      
+							FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+							WHERE A.BASIS_YYYYMM >= @V_THIS_YYYYMM   
+								AND A.BASIS_YYYYMM < @V_CUR_YYYYMM			
+								--AND A.BASIS_YYYYMM NOT IN ( @V_LAST_YYYYMM)
+							GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME        
+						) AS A      
+					   UNION 
+						-- 현재월의 PLAN
+						SELECT  
+									 SORT_ORDER_NO,
+									 CASE WHEN CHARINDEX('M_', YYYYMMDD) =1 THEN '  ISNULL(SUM('+YYYYMMDD+'_PLAN) ,0) AS '  + YYYYMMDD  +'_PLAN'
+           								      WHEN CHARINDEX('Q_', YYYYMMDD) =1 THEN '  ISNULL(SUM('+YYYYMMDD+'_PLAN) ,0) AS ' + YYYYMMDD  +'_PLAN'
+									END +''+CHAR(10) 
+									A"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0075_GET_ALLO_TARGET_SMALL","1482540415","4","S COLUMN1, YYYYMMDD  +'_PLAN' AS COLUMN2
+						FROM (  
+							SELECT TOP 30 'M_'+A.BASIS_YYYYMM  AS YYYYMMDD
+								      ,MIN(A.BASIS_YYYYMM) + CONVERT(CHAR(2), '10')   AS SORT_ORDER_NO      
+							FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+						  WHERE A.BASIS_YYYYMM IN ( @V_CUR_YYYYMM )
+							GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME        
+						) AS B1
+						UNION ALL
+						-- 현재월의 RESULT
+						SELECT  
+									 SORT_ORDER_NO,
+									 CASE WHEN CHARINDEX('M_', YYYYMMDD) =1 THEN '  ISNULL(SUM('+YYYYMMDD+'_RESULT) ,0) AS ' + YYYYMMDD  +'_RESULT'
+           							          WHEN CHARINDEX('Q_', YYYYMMDD) =1 THEN '  ISNULL(SUM('+YYYYMMDD+'_RESULT) ,0) AS ' + YYYYMMDD  +'_RESULT'
+									END +''+CHAR(10) 
+									AS COLUMN1, YYYYMMDD  +'_RESULT' AS COLUMN2
+						FROM (  
+					  	  SELECT TOP 30 'M_'+A.BASIS_YYYYMM  AS YYYYMMDD
+								      ,MIN(A.BASIS_YYYYMM) + CONVERT(CHAR(2), '00')   AS SORT_ORDER_NO      
+									    -- ,(SELECT MIN(B.BASIS_YYYYMM)+ CONVERT(CHAR(2), '00') AS SORT
+													--FROM [DBO].[SCM_SYS_CALENDAR_M] B       
+												 --WHERE B.CALENDAR_YYYYQQ = A.CALENDAR_YYYYQQ
+										   -- ) AS SORT_ORDER_NO
+							FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+						  WHERE A.BASIS_YYYYMM IN ( @V_CUR_YYYYMM )
+							GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME        
+						) AS B2       
+							UNION 
+						-- 현재월하는 월의 RESULT
+						SELECT  
+									 SORT_ORDER_NO,
+									 CASE WHEN CHARINDEX('M_', YYYYMMDD) =1 THEN '  ISNULL(SUM('+YYYYMMDD+'_TOTAL) ,0) AS ' + YYYYMMDD  +'_TOTAL'
+           							          WHEN CHARINDEX('Q_', YYYYMMDD) =1 THEN '  ISNULL(SUM('+YYYYMMDD+'_TOTAL) ,0) AS ' + YYYYMMDD  +'_TOTAL'
+									END +''+CHAR(10) 
+									AS COLUMN1, YYYYMMDD  +'_TOTAL' AS COLUMN2
+						FROM (  
+				  		  SELECT TOP 30 'M_'+A.BASIS_YYYYMM  AS YYYYMMDD
+								      ,MIN(A.BASIS_YYYYMM) + CONVERT(CHAR(2), '20')   AS SORT_ORDER_NO      
+							FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+						  WHERE A.BASIS_YYYYMM IN ( @V_CUR_YYYYMM )
+							GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME        
+						) AS B3
+						UNION 
+						-- 미래 PLAN
+						SELECT  --@mQry_sub = @mQry_sub+','+ 
+									 SORT_ORDER_NO,
+									 CASE WHEN CHARINDEX('M_', YYYYMMDD) =1 THEN '  ISNULL(SUM('+YYYYMMDD+'_PLAN) ,0) AS ' + YYYYMMDD  +'_PLAN'
+									END +''+CHAR(10) 
+									AS COLUMN1, YYYYMMDD  +'_PLAN' AS COLUMN2
+						FROM (  
+							SELECT TOP 30 'M_'+A.BASIS_YYYYMM  AS YYYYMMDD
+									 ,MIN(A.BASIS_YYYYMM)  + CONVERT(CHAR(2), '10') AS SORT_ORDER_NO      
+							FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+							WHERE  A.BASIS_YYYYMM > @V_CUR_YYYYMM 
+							     AND A.BASIS_YYYYMM <= @V_NEXT_YEAR + '12'
+							GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME        
+						) AS C
+						UNION 
+						-- PLAN 분기 추가
+						SELECT  SORT_ORDER_NO,
+									 CASE WHEN CHARINDEX('Q_', YYYYMMDD) =1 THEN '  ISNULL(SUM('+YYYYMMDD+'_PLAN) ,0)  AS ' + YYYYMMDD  +'_PLAN'
+									END +''+CHAR(10) 
+									AS COLUMN1, YYYYMMDD  +'_PLAN' AS COLUMN2
+						  FROM (
+									  SELECT TOP 10 'Q_'+A.CALENDAR_YYYYQQ  AS YYYYMMDD  -- PLAN
+												  --,MAX(A.BASIS_YYYYMM) + CONVERT(CHAR(2), '51')   AS SORT_ORDER_NO      
+												  ,(SELECT MAX(B.BASIS_YYYYMM)+ CONVERT(CHAR(2), '51') AS SORT
+													FROM [DBO].[SCM_SYS_CALENDAR_M] B       
+												  WHERE B.CALENDAR_YYYYQQ = A.CALENDAR_YYYYQQ
+										          ) AS SORT_ORDER_NO
+										 FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+									   WHERE A.BASIS_YYYYMM > @V_CUR_YYYYMM 
+										   AND A.BASIS_YYYYMM <= @V_NEXT_YEAR + '12'
+										GROUP BY A.CALENDAR_YYYYQQ 
+						  ) AS D
+						  UNION 
+						-- RESULT 분기 추가
+						SELECT  SORT_ORDER_NO,
+									 CASE WHEN CHARINDEX('Q_', YYYYMMDD) =1 THEN '  ISNULL(SUM('+YYYYMMDD+'_RESULT) ,0)  AS ' + YYYYMMDD  +'_RESULT'
+									END +''+CHAR(10) 
+									AS COLUMN1, YYYYMMDD  +'_RESULT'
+						  FROM (
+						  			  SELECT TOP 10 'Q_'+A.CALENDAR_YYYYQQ  AS YYYYMMDD  "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0075_GET_ALLO_TARGET_SMALL","1482540415","5","-- RESULT
+													--,MAX(A.BASIS_YYYYMM) + CONVERT(CHAR(2), '41')   AS SORT_ORDER_NO      
+												,(SELECT MAX(B.BASIS_YYYYMM)+ CONVERT(CHAR(2), '41') AS SORT
+													 FROM [DBO].[SCM_SYS_CALENDAR_M] B       
+												  WHERE B.CALENDAR_YYYYQQ = A.CALENDAR_YYYYQQ
+										          ) AS SORT_ORDER_NO
+										FROM [DBO].[SCM_SYS_CALENDAR_M] A       
+								  	  WHERE A.BASIS_YYYYMM >= @V_THIS_YYYYMM   
+										  AND A.BASIS_YYYYMM <= @V_CUR_YYYYMM	
+									  GROUP BY A.CALENDAR_YYYYQQ 
+						  ) AS E
+		) A
+		ORDER BY A.SORT_ORDER_NO; 
+		
+		
+		--	현재월의 PLAN, RESULT의 RATE(%) 는 제외함.
+		SELECT @mQry_sum = @mQry_sum+','+  A.COLUMN1
+		   FROM 
+		   (
+			 SELECT  A.SORT_ORDER_NO, 
+						  CASE WHEN TYPE = 'PER' THEN SUBSTRING(A.COLUMN1 , 1, LEN(A.COLUMN1)-1)+'_RATE' 
+								   ELSE COLUMN1
+						   END AS COLUMN1
+			  FROM (
+						 SELECT 'PER' AS TYPE 
+									 , A.SORT_ORDER_NO + '2' AS SORT_ORDER_NO 
+									 --, '0 ' + SUBSTRING(A.COLUMN1, CHARINDEX('AS', A.COLUMN1) , LEN(A.COLUMN1))   AS  COLUMN1 
+									 , 'CONVERT(NUMERIC(20,4),  0) ' + SUBSTRING(A.COLUMN1, CHARINDEX('AS', A.COLUMN1) , LEN(A.COLUMN1))   AS  COLUMN1 
+						   FROM  #SUM A
+                          WHERE COLUMN2 NOT IN ( 'M_' + @V_CUR_YYYYMM  +  '_PLAN', 'M_' + @V_CUR_YYYYMM + '_RESULT')
+						  UNION
+						 SELECT 'NOR' AS TYPE, A.SORT_ORDER_NO + '1' AS SORT_ORDER_NO,  COLUMN1     
+						   FROM  #SUM A
+				  ) A
+
+			 WHERE 1 = 1
+			   AND SUBSTRING(A.SORT_ORDER_NO,1,6) BETWEEN @P_FROM_YYYYMM AND @P_TO_YYYYMM
+
+		 ) A
+		   ORDER BY  A.SORT_ORDER_NO  ;  
+     
+	 --SELECT  'M_' + @V_CUR_YYYYMM  +  '_PLAN', 'M_' + @V_CUR_YYYYMM + '_RESULT'
+
+	--BEGIN				
+	--	SET @POS =1;
+	--	SET @LEN =LEN(@mQry_sum);
+	--	WHILE @POS <= @LEN
+	--		BEGIN
+	--			PRINT SUBSTRING(@mQry_sum,@POS,4000);
+	--			SET @POS = @POS+4000;
+	--		END;
+	--END;
+	
+
+	SET @MEXEC = @MEXEC+'  SELECT      A.DIVISION_ID,										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			   A.EXTRA_SPEC,										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			   A.DEPT_ID,												' + CHAR(10);
+	
+	--SET @MEXEC = @MEXEC+'		   	   A.DEPT_NAME,										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		   	   (SELECT DEPT_NAME_KO FROM SCM_MST_SSO_DEPT_INFO WHERE DEPT_ID = A.DEPT_ID) AS DEPT_NAME,		' + CHAR(10);
+
+	SET @MEXEC = @MEXEC+'			   A.MODEL,												' + CHAR(10);
+	SET @MEXEC = @MEXEC+'            A.CUTOFF_YYYYMMDD,							' + CHAR(10);	
+	SET @MEXEC = @MEXEC+'			   A.ITEM_ID,												' + CHAR(10);	
+	SET @MEXEC = @MEXEC+'			   A.SORT_ORDER										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			  ' +@mQry_sum+ '									'+ CHAR(10);
+	SET @MEXEC = @MEXEC+'	FROM (                                                             ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'             SELECT DIVISION_ID,				    	    ' + CHAR(10);
+    SET @MEXEC = @MEXEC+'                         CASE WHEN TYPE = ''BP'' THEN ''BP''  ' + CHAR(10);
+    SET @MEXEC = @MEXEC+'           			             ELSE CUTOFF_YYYYMMDD       ' + CHAR(10);
+    SET @MEXEC = @MEXEC+'           					 END AS CUTOFF_YYYYMMDD,      ' + CHAR(10);
+    SET @MEXEC = @MEXEC+'           					 MAX(CASE WHEN TYPE = ''BP'' THEN ISNULL(EXTRA_SPEC,''ZZZ'') + ITEM_ID   + NICK_NAME + ISNULL(DEPT_ID,''ZZZ'') + ''00''+ CUTOFF_YYYYMMDD + ''1''  ' + CHAR(10);
+    SET @MEXEC = @MEXEC+'           					                  ELSE                              ISNULL(EXTRA_SPEC,''ZZZ'') + ITEM_ID   + NICK_NAME + ISNULL(DEPT_ID,''ZZZ'') + CUTOFF_YYYYMMDD + ''2''            ' + CHAR(10);
+    SET @MEXEC = @MEXEC+'           					 END) AS SORT_ORDER,         ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							YYYY,								           ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							YYYYMM,	    				           ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							ITEM_ID,								   ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							DEPT_ID,                                 ' + CHAR(10);
+	--SET @MEXEC = @MEXEC+'							DEPT_NAME,                            ' + CHAR(10);
+	S"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0075_GET_ALLO_TARGET_SMALL","1482540415","6","ET @MEXEC = @MEXEC+'							(SELECT DEPT_NAME_KO FROM SCM_MST_SSO_DEPT_INFO WHERE DEPT_ID = A.DEPT_ID) AS DEPT_NAME,                            ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							NICK_NAME AS MODEL,            ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							EXTRA_SPEC 					          ' + CHAR(10);
+	SET @mEXEC = @mEXEC + ' 				' + @mQry_sub +'									                                                                    ' + CHAR(10);	
+	SET @MEXEC = @MEXEC+'					FROM SCP_ANL_ALLO_TARGET  A   WITH(NOLOCK)                                                                              ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'					WHERE DIVISION_ID = ''' + @p_division_id + '''                                                          ' +  CHAR(10);
+	SET @MEXEC = @MEXEC+'					  AND ( ( TYPE = ''BP'' AND CUTOFF_YYYYMMDD !=''EMPTY'') OR CUTOFF_YYYYMMDD IN ( ''' + @LAST_CUTOFF_YYYYMMDD + ''',''' +  @CUTOFF_YYYYMMDD + '''    )) '+  CHAR(10);
+	IF @P_ITEM_ID IS NOT NULL SET @mEXEC = @mEXEC+' 	                  AND (( ''' + @P_ITEM_ID + '''   IS NULL OR ''' + @P_ITEM_ID + ''' ='''')   OR ITEM_ID  IN (SELECT TOKEN FROM DBO.STRING_SPLIT('''+@P_ITEM_ID+''' , '',''))) ' + char(10);	
+	--IF @P_FROM_SITE IS NOT NULL SET @mEXEC = @mEXEC+' 	                  AND (( ''' + @P_FROM_SITE + '''   IS NULL OR ''' + @P_FROM_SITE + ''' ='''')   OR SCM_SITE_ID  IN (SELECT TOKEN FROM DBO.STRING_SPLIT('''+@P_FROM_SITE+''' , '',''))) ' + char(10);	
+    IF @P_NICK_NAME IS NOT NULL SET @mEXEC = @mEXEC+' 	                  AND (( ''' + @P_NICK_NAME + '''   IS NULL OR ''' + @P_NICK_NAME + ''' ='''')   OR NICK_NAME  IN (SELECT TOKEN FROM DBO.STRING_SPLIT('''+@P_NICK_NAME+''' , '',''))) ' + char(10);	
+	IF @P_TEAM_ID IS NOT NULL SET @mEXEC = @mEXEC+' 	                  AND (( ''' + @P_TEAM_ID + '''   IS NULL OR ''' + @P_TEAM_ID + ''' ='''')   OR DEPT_ID  IN (SELECT TOKEN FROM DBO.STRING_SPLIT('''+@P_TEAM_ID+''' , '',''))) ' + char(10);	
+	SET @MEXEC = @MEXEC+'					GROUP BY DIVISION_ID, CUTOFF_YYYYMMDD,																						' +  CHAR(10);
+	SET @MEXEC = @MEXEC+'							 CASE WHEN TYPE = ''BP'' THEN ''BP'' ELSE CUTOFF_YYYYMMDD END,					' +  CHAR(10);
+	SET @MEXEC = @MEXEC+'							        CUTOFF_YYYYMMDD, YYYY, YYYYMM,  ITEM_ID, DEPT_ID ,DEPT_NAME, NICK_NAME, EXTRA_SPEC	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			    UNION										        	' + CHAR(10);
+	--BP 추가
+	SET @MEXEC = @MEXEC+'             SELECT DIVISION_ID,				    	    ' + CHAR(10);
+    SET @MEXEC = @MEXEC+'                         CASE WHEN TYPE = ''BP'' THEN ''BP''  ' + CHAR(10);
+    SET @MEXEC = @MEXEC+'           			             ELSE CUTOFF_YYYYMMDD       ' + CHAR(10);
+    SET @MEXEC = @MEXEC+'           					 END AS CUTOFF_YYYYMMDD,      ' + CHAR(10);
+    SET @MEXEC = @MEXEC+'           					 MAX(CASE WHEN TYPE = ''BP'' THEN ISNULL(EXTRA_SPEC,''ZZZ'') + ITEM_ID   + NICK_NAME + ISNULL(DEPT_ID,''ZZZ'') + ''00''+ CUTOFF_YYYYMMDD + ''1''   ' + CHAR(10);
+    SET @MEXEC = @MEXEC+'           					                  ELSE                              ISNULL(EXTRA_SPEC,''ZZZ'') + ITEM_ID   + NICK_NAME + ISNULL(DEPT_ID,''ZZZ'') + CUTOFF_YYYYMMDD + ''2''             ' + CHAR(10);
+    SET @MEXEC = @MEXEC+'           					 END) AS SORT_ORDER,         ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							YYYY,								           ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							YYYYMM,	    				           ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							ITEM_ID,								   ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							DEPT_ID,                                 ' + CHAR(10);
+	--SET @MEXEC = @MEXEC+'							DEPT_NAME,                            ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							(SELECT DEPT_NAME_KO FROM SCM_MST_SSO_DEPT_INFO WHERE DEPT_ID = A.DEPT_ID) AS DEPT_NAME,                            ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							NICK_NAME AS MODEL,            ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'							EXTRA_SPEC 					          ' + CHAR(10);
+	SET @mEXEC = @mEXEC + ' 				' + @mQry_bp_sub +'									                                  "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0075_GET_ALLO_TARGET_SMALL","1482540415","7","                                  ' + CHAR(10);	
+	SET @MEXEC = @MEXEC+'					FROM SCP_ANL_ALLO_TARGET  A    WITH(NOLOCK)                                                                             ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'					WHERE DIVISION_ID = ''' + @p_division_id + '''                                                          ' +  CHAR(10);
+	SET @MEXEC = @MEXEC+'					  AND ( ( TYPE = ''BP'' AND CUTOFF_YYYYMMDD !=''EMPTY'') OR CUTOFF_YYYYMMDD IN ( ''' + @LAST_CUTOFF_YYYYMMDD + ''',''' +  @CUTOFF_YYYYMMDD + '''    )) '+  CHAR(10);
+	IF @P_ITEM_ID IS NOT NULL SET @mEXEC = @mEXEC+' 	                  AND (( ''' + @P_ITEM_ID + '''   IS NULL OR ''' + @P_ITEM_ID + ''' ='''')   OR ITEM_ID  IN (SELECT TOKEN FROM DBO.STRING_SPLIT('''+@P_ITEM_ID+''' , '',''))) ' + char(10);	
+    --IF @P_FROM_SITE IS NOT NULL SET @mEXEC = @mEXEC+' 	                  AND (( ''' + @P_FROM_SITE + '''   IS NULL OR ''' + @P_FROM_SITE + ''' ='''')   OR SCM_SITE_ID  IN (SELECT TOKEN FROM DBO.STRING_SPLIT('''+@P_FROM_SITE+''' , '',''))) ' + char(10);
+	IF @P_NICK_NAME IS NOT NULL SET @mEXEC = @mEXEC+' 	                  AND (( ''' + @P_NICK_NAME + '''   IS NULL OR ''' + @P_NICK_NAME + ''' ='''')   OR NICK_NAME  IN (SELECT TOKEN FROM DBO.STRING_SPLIT('''+@P_NICK_NAME+''' , '',''))) ' + char(10);	
+	IF @P_TEAM_ID IS NOT NULL SET @mEXEC = @mEXEC+' 	                  AND (( ''' + @P_TEAM_ID + '''   IS NULL OR ''' + @P_TEAM_ID + ''' ='''')   OR DEPT_ID  IN (SELECT TOKEN FROM DBO.STRING_SPLIT('''+@P_TEAM_ID+''' , '',''))) ' + char(10);	
+	SET @MEXEC = @MEXEC+'					GROUP BY DIVISION_ID, CUTOFF_YYYYMMDD,																						' +  CHAR(10);
+	SET @MEXEC = @MEXEC+'							 CASE WHEN TYPE = ''BP'' THEN ''BP'' ELSE CUTOFF_YYYYMMDD END,					' +  CHAR(10);
+	SET @MEXEC = @MEXEC+'							        CUTOFF_YYYYMMDD, YYYY, YYYYMM,  ITEM_ID, DEPT_ID ,DEPT_NAME, NICK_NAME, EXTRA_SPEC	' + CHAR(10);
+
+
+
+	SET @MEXEC = @MEXEC+'	        )  A   																																								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		GROUP BY DIVISION_ID, CUTOFF_YYYYMMDD, SORT_ORDER, ITEM_ID, DEPT_ID ,DEPT_NAME, MODEL, EXTRA_SPEC	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'  	ORDER BY SORT_ORDER                                ' + CHAR(10);
+	
+	
+	--IF( @debug_mode ='T')
+	--BEGIN				
+	--	SET @POS =1;
+	--	SET @LEN =LEN(@MEXEC);
+	--	WHILE @POS <= @LEN
+	--		BEGIN
+	--			PRINT SUBSTRING(@MEXEC,@POS,4000);
+	--			SET @POS = @POS+4000;
+	--		END;
+	--END;
+
+	-- xml 로 print
+	--SELECT CAST('<root><![CDATA[' + @MEXEC + ']]></root>' AS XML);
+	
+	EXEC (@MEXEC);
+	
+	
+END 
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0075_SAVE_ALLO_TARGET_SMALL","1498540472","1","/*
+ * Program ID   : SCP0075_SAVE_ALLO_TARGET_SMAL
+ * Description  : Allo Target 저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/11/17   LWY			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - Allo Target 수정 신규
+   2022/03/22   LWY			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - Process 개선
+ *
+ */
+/*
+ DECLARE
+     @P_ACTIVE_FLAG         NVARCHAR(MAX) = 'M^M^M'
+	,@P_DIVISION_ID			NVARCHAR(MAX) = '40^40^40'
+	,@P_EXTRA_SPEC			NVARCHAR(MAX) = '18650^18650^18650'
+	,@P_CUTOFF_YYYYMMDD     NVARCHAR(MAX) = '20220321^20220321^20220321'
+	,@P_DEPT_ID				NVARCHAR(MAX) = '58520274^70000478^70021343'
+	,@P_NICK_NAME           NVARCHAR(MAX) = 'F1L^F1L^F1L'
+	,@P_ITEM_ID             NVARCHAR(MAX) = 'MCCE132502A1^MCCE132502A1^MCCE132502A1'
+	,@P_QTY                 NVARCHAR(MAX) = '1^2^3'
+	,@P_YYYY	 			NVARCHAR(MAX) = '2022^2022^2022'
+	,@P_YYYYMM   			NVARCHAR(MAX) = '202203^202203^202203'
+	,@P_YYYYQQ  			NVARCHAR(MAX) = '2022Q1^2022Q1^2022Q1'
+	,@P_PROGRAM_ID			NVARCHAR(10) = 'SCP0075'
+*/
+
+CREATE PROCEDURE [dbo].[SCP0075_SAVE_ALLO_TARGET_SMALL]
+     @P_ACTIVE_FLAG         NVARCHAR(MAX)
+	,@P_DIVISION_ID			NVARCHAR(MAX)
+	,@P_EXTRA_SPEC			NVARCHAR(MAX)	
+	,@P_CUTOFF_YYYYMMDD     NVARCHAR(MAX)
+	,@P_DEPT_ID				NVARCHAR(MAX)
+	,@P_NICK_NAME           NVARCHAR(MAX)  -- MODEL
+	,@P_ITEM_ID             NVARCHAR(MAX)
+	,@P_QTY                 NVARCHAR(MAX)
+	,@P_YYYY	 			NVARCHAR(MAX)
+	,@P_YYYYMM   			NVARCHAR(MAX)
+	,@P_YYYYQQ  			NVARCHAR(MAX)
+	,@P_PROGRAM_ID			NVARCHAR(10) = 'SCP0075'
+AS
+
+BEGIN
+
+	/********************************************************************************      
+	* 임시테이블만들기
+	********************************************************************************/ 
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0075_Allo_Target') IS NOT NULL
+	DROP TABLE #TblDynamic_SCP0075_Allo_Target;
+	
+	CREATE TABLE #TblDynamic_SCP0075_Allo_Target (
+		 ACTIVE_FLAG			NVARCHAR(1)
+		,DIVISION_ID			NVARCHAR(20)
+		,TYPE                   NVARCHAR(20)
+		,EXTRA_SPEC				NVARCHAR(100)
+		,CUTOFF_YYYYMMDD		NVARCHAR(16)
+		,DEPT_ID				NVARCHAR(100)
+		,NICK_NAME				NVARCHAR(100)
+		,ITEM_ID				NVARCHAR(100)
+		--,QTY					NUMERIC(17,10)
+		,QTY					NVARCHAR(MAX)
+		,YYYY                   NVARCHAR(4)
+		,YYYYMM                 NVARCHAR(6)
+		,YYYYQQ                 NVARCHAR(6)
+	);
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	DECLARE @recv_division_id		NVARCHAR(MAX);
+	SET @recv_division_id = NULL;		
+	SET @recv_division_id = @p_division_id;
+
+	DECLARE @V_ACTIVE_FLAG		NVARCHAR(MAX);
+	DECLARE @V_DIVISION_ID		NVARCHAR(MAX);
+	DECLARE @V_TYPE		        NVARCHAR(MAX);
+	DECLARE @V_EXTRA_SPEC		NVARCHAR(MAX);
+	DECLARE @V_CUTOFF_YYYYMMDD	NVARCHAR(MAX);
+	DECLARE @V_DEPT_ID			NVARCHAR(MAX);
+	DECLARE @V_NICK_NAME		NVARCHAR(MAX);
+	DECLARE @V_ITEM_ID			NVARCHAR(MAX);
+	DECLARE @V_QTY				NVARCHAR(MAX);
+	DECLARE @V_YYYY				NVARCHAR(MAX);
+	DECLARE @V_YYYYMM			NVARCHAR(MAX);
+	DECLARE @V_YYYYQQ			NVARCHAR(MAX);
+
+	SET @V_ACTIVE_FLAG		= NULL;
+	SET @V_DIVISION_ID		= NULL;
+	SET @V_TYPE		        = 'PLAN';
+	SET @V_EXTRA_SPEC		= NULL;
+	SET @V_CUTOFF_YYYYMMDD	= NULL;
+	SET @V_DEPT_ID			= NULL;
+	SET @V_NICK_NAME		= NULL;
+	SET @V_ITEM_ID			= NULL;
+	SET @V_QTY				= NULL;
+	SET @V_YYYY				= NULL;
+	SET @V_YYYYMM			= NULL;
+	SET @V_YYYYQQ			= NULL;
+
+	-- Local 변수
+	DECLARE @V_CREATED_BY NVARCHAR(20) = 'scm_batch';
+
+	-- LOG 용 변수 설정
+	DECLARE @v_program_name NVARCHAR(150) = 'SCP0075_SAVE_ALLO_TARGET_SMALL';
+	DECLARE @v_log_type     NVARCHAR(30);
+	DECLARE @n_log_count    INTEGER = 0;
+	DECLARE @v_log_message  NVARCHAR(1000);
+	DECLARE @v_description  NVARCHAR(500);
+	DECLARE @d_event_date   DATETIME;"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0075_SAVE_ALLO_TARGET_SMALL","1498540472","2","
+
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+
+	BEGIN TRY
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_item_id, @v_delimiter);    
+
+
+		/*** 1. 신규건 MEASURE별 입력데이터 정리   *****/
+		WHILE LEN(@recv_division_id) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				SET @V_ACTIVE_FLAG		= [dbo].[SCM_ARR_SPL_VAL](@P_ACTIVE_FLAG,		@v_delimiter, @mst_loop_cnt);				
+				SET @V_DIVISION_ID		= [dbo].[SCM_ARR_SPL_VAL](@P_DIVISION_ID,		@v_delimiter, @mst_loop_cnt);				
+				SET @V_EXTRA_SPEC		= [dbo].[SCM_ARR_SPL_VAL](@P_EXTRA_SPEC,		@v_delimiter, @mst_loop_cnt);				
+				SET @V_CUTOFF_YYYYMMDD	= [dbo].[SCM_ARR_SPL_VAL](@P_CUTOFF_YYYYMMDD,	@v_delimiter, @mst_loop_cnt);
+				SET @V_DEPT_ID			= [dbo].[SCM_ARR_SPL_VAL](@P_DEPT_ID,			@v_delimiter, @mst_loop_cnt);
+				SET @V_NICK_NAME		= [dbo].[SCM_ARR_SPL_VAL](@P_NICK_NAME,			@v_delimiter, @mst_loop_cnt);
+				SET @V_ITEM_ID			= [dbo].[SCM_ARR_SPL_VAL](@P_ITEM_ID,			@v_delimiter, @mst_loop_cnt);
+				SET @v_qty				= [dbo].[SCM_ARR_SPL_VAL](@P_QTY,				@v_delimiter, @mst_loop_cnt);
+				SET @V_YYYY				= [dbo].[SCM_ARR_SPL_VAL](@P_YYYY,				@v_delimiter, @mst_loop_cnt);
+				SET @V_YYYYMM			= [dbo].[SCM_ARR_SPL_VAL](@P_YYYYMM,			@v_delimiter, @mst_loop_cnt);
+				SET @V_YYYYQQ			= [dbo].[SCM_ARR_SPL_VAL](@P_YYYYQQ,			@v_delimiter, @mst_loop_cnt);
+
+			END
+			;
+
+			INSERT INTO #TblDynamic_SCP0075_Allo_Target
+			SELECT    @V_ACTIVE_FLAG		AS ACTIVE_FLAG
+					, @V_DIVISION_ID		AS DIVISION_ID
+					, @V_TYPE               AS TYPE
+					, @V_EXTRA_SPEC			AS EXTRA_SPEC
+					, @V_CUTOFF_YYYYMMDD	AS CUTOFF_YYYYMMDD
+					, (CASE WHEN @V_DEPT_ID = '' THEN NULL ELSE @V_DEPT_ID END) AS DEPT_ID
+					, @V_NICK_NAME			AS NICK_NAME
+					, @V_ITEM_ID			AS ITEM_ID
+					, @v_qty				AS QTY
+					, @V_YYYY				AS YYYY
+					, @V_YYYYMM				AS YYYYMM
+					, @V_YYYYQQ				AS YYYYQQ
+			;
+
+		END  -- while end
+		
+		
+
+		MERGE INTO SCP_ANL_ALLO_TARGET A
+		USING (
+				SELECT ACTIVE_FLAG, DIVISION_ID, TYPE, EXTRA_SPEC, CUTOFF_YYYYMMDD, DEPT_ID, NICK_NAME, ITEM_ID, QTY, YYYY, YYYYMM, YYYYQQ
+				FROM #TblDynamic_SCP0075_Allo_Target
+              ) AS B
+			
+			ON A.DIVISION_ID		= B.DIVISION_ID
+			AND A.CUTOFF_YYYYMMDD	= B.CUTOFF_YYYYMMDD
+			AND A.YYYY			    = B.YYYY
+			AND A.YYYYMM			= B.YYYYMM
+			AND A.YYYYQQ			= B.YYYYQQ
+			AND A.ITEM_ID			= B.ITEM_ID		
+			AND ISNULL(A.DEPT_ID, '') = ISNULL(B.DEPT_ID, '') 
+			AND A.NICK_NAME		    = B.NICK_NAME
+			AND A.EXTRA_SPEC		= B.EXTRA_SPEC		
+			AND A.TYPE = B.TYPE
+
+		WHEN MATCHED THEN
+	  
+		UPDATE 
+			SET A.QTY = B.QTY
+			   ,LAST_UPDATED_BY  = @V_CREATED_BY
+			   ,LAST_UPDATE_DATE = SYSDATETIME()
+					  
+		WHEN NOT MATCHED THEN
+		INSERT (
+				 DIVISION_ID
+				,TYPE
+				,CUTOFF_YYYYMMDD
+				,YYYY
+				,YYYYQQ
+				,YYYYMM
+				,YYYYMMDD
+				,ITEM_ID
+				,DEPT_ID
+				,DEPT_NAME
+				,QTY
+				,NICK_NAME
+				,EXTRA_SPEC
+				,SCM_SITE_ID
+				,SCM_SITE_NAME
+				,CREATED_BY
+				,CREATION_DATE
+				,LAST_UPDATED_BY
+				,LAST_UPDATE_DATE
+				)
+		VALUES (
+				 B.DIVISION_ID
+				,B.TYPE             -- 'PLAN'
+				,B.CUTOFF_YYYYMMDD
+				,B.YYYY
+				,B.YYYYQQ
+				,B.YYYYMM
+				,NULL              -- YYYYMMDD
+				,B.ITEM_ID
+				,B.DEPT_ID
+				,NULL              -- DEPT_NAME
+				,B.QTY
+				,B.NICK_NAME
+				,B.EXTRA_SPEC
+				,NULL              -- SCM_SITE_ID
+				,NULL              -- SCM_SITE_NAME
+				, @V_CREATED_BY
+				, SYSDATETIME()
+				, @V_CREATED_BY
+				, SYSDATETIME()
+				)
+	 ;
+	  
+
+	  -------------------------------------------------"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0075_SAVE_ALLO_TARGET_SMALL","1498540472","3","----------
+	  -- Merge LOG
+	  -----------------------------------------------------------
+	  SET @n_log_count = @@ROWCOUNT;
+	  SET @v_log_type = 'APPEND';
+	  SET @v_log_message = '1. MERGE INTO SCP_ANL_ALLO_TARGET';
+	  SET @v_description = 'Allo Target Merge ';
+	  SET @d_event_date = SYSDATETIME();
+	  EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- LOG
+		SELECT 'S' AS RESULT_CODE, '' AS MSG
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	END TRY
+
+	BEGIN CATCH
+			BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+											,log_type
+											,log_count
+											,log_message
+											,description
+											,event_date
+											,creation_date
+											,created_by
+											,last_update_date
+											,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+					,'ERROR'
+					,NULL
+					,ERROR_MESSAGE()
+					,NULL
+					,SYSDATETIME()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+				COMMIT WORK;
+			END;
+
+			-- error코드, errror 메시지 반환
+			IF( @v_err_message IS NULL OR @v_err_message ='')
+				SELECT 'F' AS result_code, '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() AS ERR_MESSAGE ;
+			ELSE
+				SELECT 'N' AS result_code, @v_err_message AS ERR_MESSAGE ;
+
+			--SELECT 'F' AS result_code, '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() AS ERR_MESSAGE ;
+			--SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+
+
+
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0075_Allo_Target') IS NOT NULL
+	DROP TABLE #TblDynamic_SCP0075_Allo_Target;
+ 
+END
+
+
+
+
+
+
+
+
+
+
+"

@@ -1,0 +1,16 @@
+{
+  "feUrl": "http://127.0.0.1:5173",
+  "beUrl": "http://localhost:8080",
+  "defaultAccount": "minyonglee1",
+  "forceAccount": "minyonglee1",
+  "defaultDivision": "40",
+  "specsDir": "C:\\Projects\\NSCM\\Doc\\e2e\\specs",
+  "resultsDir": "C:\\Projects\\NSCM\\Doc\\e2e\\results",
+  "genOutDir": "C:\\Projects\\NSCM\\Doc\\gen",
+  "tobeOutDir": "C:\\Projects\\NSCM\\Doc\\tobefacts",
+  "asisOutDir": "C:\\Projects\\NSCM\\Doc\\asisfacts",
+  "testDataXlsx": "C:\\Projects\\NSCM\\Doc\\통합테스트_데이터셋_20260918\\04_TESTDATA_SET.xlsx",
+  "crudMarker": "E2E_",
+  "searchTimeoutMs": 120000,
+  "note": "비밀번호 없음 — BE local/dev 프로파일의 /sso/dev-login?id= 로 세션을 만든다(SsoDevController). qa/prd 에는 없음."
+}

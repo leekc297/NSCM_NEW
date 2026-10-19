@@ -1,0 +1,202 @@
+﻿BEGIN
+        BEGIN TRAN
+          MERGE INTO FP_AMEND_DAILY_PLAN_R A
+          USING (SELECT @INSTANCE_ID AS INSTANCE_ID, @FP_PLAN_ID AS FP_PLAN_ID,
+                        @DIVISION_ID AS DIVISION_ID, @SITE_ID AS SITE_ID,@PLANT_ID AS PLANT_ID, @FACTORY_ID AS FACTORY_ID, 
+                        @LOCATION AS LOCATION, @OPERATION_ID AS OPERATION_ID, @LINE_ID AS LINE_ID, @ELECTRODE_TYPE AS ELECTRODE_TYPE,
+                        @EQUIPMENT_ID AS EQUIPMENT_ID, @PLAN_DATE AS PLAN_DATE,
+                        @ITEM_ID AS TOP_ITEM_ID, @ITEM_ID AS ITEM_ID, 
+                        UPPER(@PRODUCTION_TYPE) AS PRODUCTION_TYPE, @MARKET AS MARKET,
+                        @WORK_REQUEST_MODEL_ID AS WORK_REQUEST_MODEL_ID,
+                        @VERSION AS VERSION,
+                        @PROD_SEQ AS PROD_SEQ,
+                        @PLM_EC_NO AS PLM_EC_NO ) B
+          ON (    A.INSTANCE_ID = B.INSTANCE_ID AND A.FP_PLAN_ID = B.FP_PLAN_ID
+              AND A.FACTORY_ID = B.FACTORY_ID AND A.LOCATION = B.LOCATION
+              AND A.OPERATION_ID = B.OPERATION_ID AND A.LINE_ID = B.LINE_ID AND A.ELECTRODE_TYPE = B.ELECTRODE_TYPE
+              AND A.EQUIPMENT_ID = B.EQUIPMENT_ID AND CONVERT(VARCHAR,A.PLAN_DATE,112) = B.PLAN_DATE
+              AND A.TOP_ITEM_ID = B.TOP_ITEM_ID AND A.ITEM_ID = B.ITEM_ID
+              AND A.PRODUCTION_TYPE = B.PRODUCTION_TYPE AND A.MARKET = B.MARKET
+              AND A.WORK_REQUEST_MODEL_ID = B.WORK_REQUEST_MODEL_ID
+              AND A.VERSION = B.VERSION
+              AND A.PLM_EC_NO = B.PLM_EC_NO )
+          WHEN MATCHED THEN
+            UPDATE SET SEQ = CASE WHEN CONVERT(NUMERIC(25,10),ISNULL(@ADJUST_IN_QTY_BATCH,0)) = 0 THEN 0 ELSE @SEQ END 
+                     , ADJUST_IN_QTY_BATCH  = @ADJUST_IN_QTY_BATCH
+                     , ADJUST_IN_QTY_M      = @ADJUST_IN_QTY_M
+                     , ADJUST_IN_QTY_CELL   = @ADJUST_IN_QTY_CELL
+                     , ADJUST_IN_QTY_JR     = @ADJUST_IN_QTY_JR
+                     , ADJUST_OUT_QTY_BATCH = @ADJUST_OUT_QTY_BATCH
+                     , ADJUST_OUT_QTY_M     = @ADJUST_OUT_QTY_M
+                     , ADJUST_OUT_QTY_CELL  = @ADJUST_OUT_QTY_CELL
+                     , ADJUST_OUT_QTY_JR    = @ADJUST_OUT_QTY_JR
+                     , PRODUCTION_TYPE      = UPPER(@PRODUCTION_TYPE)
+                     , UPDATE_ID = @USER_ID, UPDATE_TIME = dbo.FN_SITE_TIME(@SITE_ID)
+          WHEN NOT MATCHED THEN
+            INSERT (
+               INSTANCE_ID, FP_PLAN_ID
+              ,COMPANY_ID
+              ,DIVISION_ID, SITE_ID, PLANT_ID, FACTORY_ID
+              ,LOCATION, OPERATION_ID, LINE_ID, ELECTRODE_TYPE
+              ,EQUIPMENT_ID, PLAN_DATE
+              ,TOP_ITEM_ID, ITEM_ID
+              ,PRODUCTION_TYPE, MARKET
+              ,SEQ
+              ,PLAN_IN_QTY_BATCH, PLAN_IN_QTY
+              ,PLAN_IN_QTY_M, PLAN_IN_QTY_CELL
+              ,PLAN_OUT_QTY_BATCH, PLAN_OUT_QTY
+              ,PLAN_OUT_QTY_M, PLAN_OUT_QTY_CELL
+              ,ADJUST_IN_QTY_BATCH, ADJUST_IN_QTY
+              ,ADJUST_IN_QTY_M, ADJUST_IN_QTY_CELL
+              ,ADJUST_IN_QTY_JR
+              ,ADJUST_OUT_QTY_BATCH, ADJUST_OUT_QTY
+              ,ADJUST_OUT_QTY_M, ADJUST_OUT_QTY_CELL
+              ,ADJUST_OUT_QTY_JR
+              ,INSERT_ID, INSERT_TIME
+              ,UPDATE_ID, UPDATE_TIME
+              ,WORK_REQUEST_MODEL_ID
+              ,VERSION
+              ,PROD_SEQ
+              ,PLM_EC_NO
+            )
+            VALUES (
+               @INSTANCE_ID, @FP_PLAN_ID
+              ,(SELECT MAX(COMPANY_ID) AS COMPANY_ID FROM SCM_FACTORY_M WHERE FACTORY_ID = @FACTORY_ID AND ACTIVE_FLAG = 'Y' )
+              ,@DIVISION_ID, @SITE_ID, @PLANT_ID, @FACTORY_ID
+              ,@LOCATION, @OPERATION_ID, @LINE_ID, @ELECTRODE_TYPE
+              ,@EQUIPMENT_ID ,CONVERT(DATETIME,@PLAN_DATE)
+              ,@ITEM_ID, @ITEM_ID
+              ,UPPER(@PRODUCTION_TYPE), @MARKET
+              ,CASE WHEN CONVERT(NUMERIC(25,10),ISNULL(@ADJUST_IN_QTY_BATCH,0)) = 0 THEN 0 ELSE @SEQ END
+              ,null, null
+              ,null, null
+              ,null, null
+              ,null, null
+              ,@ADJUST_IN_QTY_BATCH, @ADJUST_IN_QTY
+              ,@ADJUST_IN_QTY_M, @ADJUST_IN_QTY_CELL
+              ,@ADJUST_IN_QTY_JR
+              ,@ADJUST_OUT_QTY_BATCH, @ADJUST_OUT_QTY
+              ,@ADJUST_OUT_QTY_M, @ADJUST_OUT_QTY_CELL
+              ,@ADJUST_OUT_QTY_JR
+              ,@USER_ID, dbo.FN_SITE_TIME(@SITE_ID)
+              ,@USER_ID, dbo.FN_SITE_TIME(@SITE_ID)
+              ,@WORK_REQUEST_MODEL_ID
+              ,@VERSION
+              ,@PROD_SEQ
+              ,@PLM_EC_NO
+            )
+          ;
+        
+        COMMIT;
+        
+        BEGIN TRAN
+            INSERT INTO HIS_AMEND_DAILY_PLAN_R (
+                   INSTANCE_ID, FP_PLAN_ID
+                  ,COMPANY_ID
+                  ,DIVISION_ID
+                  ,SITE_ID
+                  ,PLANT_ID
+                  ,FACTORY_ID
+                  ,LOCATION
+                  ,OPERATION_ID
+                  ,LINE_ID
+                  ,ELECTRODE_TYPE
+                  ,EQUIPMENT_ID
+                  ,PLAN_DATE
+                  ,TOP_ITEM_ID
+                  ,ITEM_ID
+                  ,PRODUCTION_TYPE
+                  ,MARKET
+                  ,SEQ
+                  ,PLAN_IN_QTY_BATCH
+                  ,PLAN_IN_QTY
+                  ,PLAN_IN_QTY_M
+                  ,PLAN_IN_QTY_CELL
+                  ,PLAN_OUT_QTY_BATCH
+                  ,PLAN_OUT_QTY
+                  ,PLAN_OUT_QTY_M
+                  ,PLAN_OUT_QTY_CELL
+                  ,ADJUST_IN_QTY_BATCH
+                  ,ADJUST_IN_QTY
+                  ,ADJUST_IN_QTY_M
+                  ,ADJUST_IN_QTY_CELL
+                  ,ADJUST_IN_QTY_JR
+                  ,ADJUST_OUT_QTY_BATCH
+                  ,ADJUST_OUT_QTY
+                  ,ADJUST_OUT_QTY_M
+                  ,ADJUST_OUT_QTY_CELL
+                  ,ADJUST_OUT_QTY_JR
+                  ,TOTAL_BATCH
+                  ,INSERT_ID, INSERT_TIME
+                  ,UPDATE_ID, UPDATE_TIME
+                  ,JOB_USER_ID, JOB_TIME, JOB_TYPE
+                  ,WORK_REQUEST_MODEL_ID
+                  ,VERSION
+                  ,PROD_SEQ
+                  ,PLM_EC_NO
+            )
+            SELECT INSTANCE_ID, FP_PLAN_ID
+                  ,COMPANY_ID
+                  ,DIVISION_ID
+                  ,SITE_ID
+                  ,PLANT_ID
+                  ,FACTORY_ID
+                  ,LOCATION
+                  ,OPERATION_ID
+                  ,LINE_ID
+                  ,ELECTRODE_TYPE
+                  ,EQUIPMENT_ID
+                  ,PLAN_DATE
+                  ,TOP_ITEM_ID
+                  ,ITEM_ID
+                  ,UPPER(PRODUCTION_TYPE) AS PRODUCTION_TYPE
+                  ,MARKET
+                  ,SEQ
+                  ,PLAN_IN_QTY_BATCH
+                  ,PLAN_IN_QTY
+                  ,PLAN_IN_QTY_M
+                  ,PLAN_IN_QTY_CELL
+                  ,PLAN_OUT_QTY_BATCH
+                  ,PLAN_OUT_QTY
+                  ,PLAN_OUT_QTY_M
+                  ,PLAN_OUT_QTY_CELL
+                  ,ADJUST_IN_QTY_BATCH
+                  ,ADJUST_IN_QTY
+                  ,ADJUST_IN_QTY_M
+                  ,ADJUST_IN_QTY_CELL
+                  ,ADJUST_IN_QTY_JR
+                  ,ADJUST_OUT_QTY_BATCH
+                  ,ADJUST_OUT_QTY
+                  ,ADJUST_OUT_QTY_M
+                  ,ADJUST_OUT_QTY_CELL
+                  ,ADJUST_OUT_QTY_JR
+                  ,TOTAL_BATCH
+                  ,INSERT_ID, INSERT_TIME
+                  ,UPDATE_ID, UPDATE_TIME
+                  ,@USER_ID AS JOB_USER_ID, GETDATE() AS JOB_TIME, 'UPDATE' AS JOB_TYPE
+                  ,WORK_REQUEST_MODEL_ID
+                  ,VERSION
+                  ,PROD_SEQ
+                  ,PLM_EC_NO
+            FROM   FP_AMEND_DAILY_PLAN_R A WITH(NOLOCK)
+            WHERE  A.INSTANCE_ID      = @INSTANCE_ID
+            AND    A.FP_PLAN_ID       = @FP_PLAN_ID
+            AND    A.FACTORY_ID       = @FACTORY_ID
+            AND    A.LOCATION         = @LOCATION
+            AND    A.OPERATION_ID     = @OPERATION_ID
+            AND    A.LINE_ID          = @LINE_ID
+            AND    A.ELECTRODE_TYPE   = @ELECTRODE_TYPE
+            AND    A.EQUIPMENT_ID     = @EQUIPMENT_ID
+            AND    A.PLAN_DATE        = CONVERT(DATETIME,@PLAN_DATE)
+            AND    A.TOP_ITEM_ID      = @ITEM_ID
+            AND    A.ITEM_ID          = @ITEM_ID
+            AND    A.PRODUCTION_TYPE  = UPPER(@PRODUCTION_TYPE)
+            AND    A.MARKET           = @MARKET
+            AND    A.WORK_REQUEST_MODEL_ID = @WORK_REQUEST_MODEL_ID
+            AND    A.VERSION               = @VERSION
+            AND    A.PLM_EC_NO             = @PLM_EC_NO
+            ;
+          
+        COMMIT;
+        
+      END;

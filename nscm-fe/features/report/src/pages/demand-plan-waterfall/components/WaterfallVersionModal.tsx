@@ -1,13 +1,16 @@
-import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import { CellType, SelectionMode, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import { apiClient } from '@foundation/apis';
+import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import type { EditTracker } from '@foundation/utils';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, Checkbox, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid, Stack } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
@@ -28,8 +31,9 @@ import styles from './WaterfallVersionModal.module.scss';
 //   - SALES: DMF0073_VersionBySalesPricePopup("SP")   — SP 접두 (2024-06-18 팝업 교체 실측)
 //   - BIZ  : SCM0002_VersionByWaterfallPopup("BP")    — BP 접두, Month 기본 체크(monthChecked(true))
 //   조회 SP = DMF0073_GET_VERSION_SALESPRICE (정확 토큰 IN 매칭 — FE 가 축→토큰 확장, DMF0082 선례).
-//   AS-IS 대비 결손(문서화): 팝업 확정 시 sPeriod(조회기간 덮어쓰기)는 공유 계약에 버전 기준일
-//   컬럼이 없어 미구현 — __asis-mapping__.md §Version 참조. 다중 선택 CSV 는 AS-IS 그대로(최대수 제한 없음).
+//   OK 확정 시 팝업 Period 를 본 화면 조회기간으로 반영한다 — AS-IS btnVersion_Click 이 popVersion.sPeriod
+//   로 drpPeriod 를 덮어씀(.cs:2142). sPeriod 는 SP 반환 버전기준일이 아니라 사용자가 팝업에 입력한
+//   기간이므로 onApply 로 되돌려 준다. 다중 선택 CSV 는 AS-IS 그대로(최대수 제한 없음).
 
 type VersionPopupRow = {
   CODE: string;
@@ -38,6 +42,11 @@ type VersionPopupRow = {
   VERSION_TYPE: string;
   CREATED_BY: string;
   CREATION_DATE: string;
+  // SALES 전용(DMF0073_GET_VERSION_SALESPRICE) — MONTHLY_ROLLING_FCST 는 'Y'/'N' 원본 그대로
+  // (AS-IS VersionBySalesPricePopup 이 콤보로 편집하는 컬럼 — 체크박스 아님, 스크린샷 확인 2026-09-22).
+  // EDIT_FLAG='N' 이면 이 행은 OPTIONAL/MANDATORY 컬럼이라도 편집 불가(GridUtils.isEditableCell
+  //   행단위 게이트 — 공용 DataGrid 의 setEditableColumns 가 자동으로 참조한다). index 시그니처로
+  //   선택적으로 실린다.
   [key: string]: string | number;
 };
 
@@ -47,10 +56,10 @@ interface WaterfallVersionModalProps {
   gubun: Gubun;
   defaultDivision: string;
   defaultPeriod?: { start: string; end: string };
-  onApply: (versionIds: string) => void;
+  onApply: (versionIds: string, period: { start: string; end: string }) => void;
 }
 
-const VERSION_COLUMNS: RawFlexGridColumnConfig[] = [
+const VERSION_COLUMNS_BASE: RawFlexGridColumnConfig[] = [
   { colNm: 'VERSION_NO', colLblNm: 'Version', colWth: 240 },
   { colNm: 'VERSION_DESCRIPTION', colLblNm: 'Description', colWth: 300 },
   { colNm: 'VERSION_TYPE', colLblNm: 'Type', colWth: 90 },
@@ -63,6 +72,36 @@ const VERSION_COLUMNS: RawFlexGridColumnConfig[] = [
   display: true,
   inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
 })) as RawFlexGridColumnConfig[];
+
+// AS-IS VersionBySalesPricePopup 스크린샷(2026-09-22) 확인 — Monthly Rolling Forecast 는
+//   체크박스가 아니라 Y/N 콤보(값 목록)로 편집한다. TO-BE 'YesOrNo' 콤보(SCM_ADM_CMBO_SQL_M,
+//   파라미터 없음 — CODE/NAME 'Y'/'N', project-route VALID_YN 컬럼과 동일 선례)를 그대로 재사용한다.
+const COMBO_YES_OR_NO = 'YesOrNo';
+
+// SALES 전용 — DB 실측(2026-09-22) DMF0073_GET_VERSION_SALESPRICE 반환 컬럼(DM_MST_VERSION.ATTRIBUTE7).
+//   사용자 편집 가능(Y/N 콤보), 저장은 PKG_DMF0035.P_DMF0035_SAVE_VERSION_MRF(admin 등록 완료).
+//   행별 편집 가능 여부는 rows 매핑에서 EDITABLE(당주)·EDIT_YN(사업부 권한) 을 EDIT_FLAG 로 접는다.
+const MONTHLY_ROLLING_FCST_COLUMN: RawFlexGridColumnConfig = {
+  colNm: 'MONTHLY_ROLLING_FCST',
+  colLblNm: 'Monthly Rolling Forecast',
+  colWth: 170,
+  horzAlgnCd: 'C',
+  fixed: false,
+  visible: true,
+  display: true,
+  inputTpCd: CELL_INPUT_EDIT_TYPE.OPTIONAL,
+  cellCtrlObjTpCd: CELL_CONTROL_TYPE.COMBO,
+  cellCboDataTp: COMBO_YES_OR_NO,
+} as RawFlexGridColumnConfig;
+
+const buildVersionColumns = (isSalesSheet: boolean): RawFlexGridColumnConfig[] =>
+  isSalesSheet
+    ? [
+        ...VERSION_COLUMNS_BASE.slice(0, 3),
+        MONTHLY_ROLLING_FCST_COLUMN,
+        ...VERSION_COLUMNS_BASE.slice(3),
+      ]
+    : VERSION_COLUMNS_BASE;
 
 /**
  * 체크박스(Day/Week/Manual) → VERSION_TYPE 축 문자열.
@@ -84,7 +123,13 @@ export const WaterfallVersionModal = ({
 }: WaterfallVersionModalProps) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore(s => s.setAlert);
+  const setToast = useMessageStore(s => s.setToast);
   const gridRef = useRef<FlexGridType<VersionPopupRow>>(undefined);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
+  // MONTHLY_ROLLING_FCST 콤보 변경 추적(SALES 전용) — Save 시 dirty 행만 payload 로 묶는다.
+  const editTrackerRef = useRef<EditTracker<VersionPopupRow> | undefined>();
+  const savingRef = useRef(false);
 
   const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
   const divisionOptions = useMemo<Array<{ value: string; label: string }>>(() => {
@@ -171,10 +216,19 @@ export const WaterfallVersionModal = ({
   });
   const active = isSalesSheet ? salesQuery : wfQuery;
 
-  const rows = useMemo<VersionPopupRow[]>(
-    () => (active.data?.o_rc1 ?? []) as VersionPopupRow[],
-    [active.data]
-  );
+  const versionColumns = useMemo(() => buildVersionColumns(isSalesSheet), [isSalesSheet]);
+
+  const rows = useMemo<VersionPopupRow[]>(() => {
+    const raw = (active.data?.o_rc1 ?? []) as Array<Record<string, string | number>>;
+    if (!isSalesSheet) return raw as VersionPopupRow[];
+    // MONTHLY_ROLLING_FCST 는 'Y'/'N' 원본 그대로 (Y/N 콤보 바인딩). EDITABLE(당주)·EDIT_YN(사업부
+    //   권한) 둘 다 'Y' 일 때만 편집 가능 — 아니면 EDIT_FLAG='N' 으로 행 자체를 잠근다(SP 서버검증과
+    //   이중 방어).
+    return raw.map(r => ({
+      ...r,
+      ...(String(r.EDITABLE) === 'Y' && String(r.EDIT_YN) === 'Y' ? {} : { EDIT_FLAG: 'N' }),
+    })) as VersionPopupRow[];
+  }, [active.data, isSalesSheet]);
   const loading = active.isLoading || active.isFetching;
 
   const handleFind = () => {
@@ -191,20 +245,79 @@ export const WaterfallVersionModal = ({
       void setAlert({ type: 'alert', content: t('MSG00013', '_Please select Version.') });
       return;
     }
-    onApply(versionNos.join(','));
+    // OK 확정 시 팝업에서 바꾼 기간을 본 화면 조회기간으로 반영 (AS-IS popVersion.sPeriod → drpPeriod).
+    onApply(versionNos.join(','), { start: periodFrom, end: periodTo });
     modalClose();
+  };
+
+  // MONTHLY_ROLLING_FCST 저장 — DB 실측 확인된 PKG_DMF0035.P_DMF0035_SAVE_VERSION_MRF
+  //   (P_DIVISION_ID/P_VERSION_NO/P_MONTHLY_ROLLING_FCST '^' 조인 배치 1콜, AS-IS SaveData 1:1).
+  //   ContributeVersionModal/CapaNewModelPopup 과 같은 저수준 apiClient.post 패턴(useProcMutation 은
+  //   행 단위 배열 계약이라 이 SP 의 '^' 조인 배치 계약과 맞지 않는다).
+  const handleSave = async () => {
+    // 재진입 가드를 dirty 체크보다 먼저 건다 — 한 클릭에서 핸들러가 중복 호출되면(예: HMR 잔여
+    //   리스너) 두 번째 호출이 이미 저장·clearChanges 된 뒤의 빈 Map 을 읽어 "수정 없음" 을 잘못
+    //   띄우면서도 첫 번째 호출은 정상 저장돼버려 "저장은 됐는데 알림은 실패로 뜬다"는 혼란을 낳는다.
+    if (savingRef.current) return;
+    savingRef.current = true;
+    try {
+      const g = gridRef.current;
+      if (!g) return;
+      g.finishEditing();
+
+      const originals = editTrackerRef.current?.getOriginalValues();
+      const dirtyRows = Array.from(originals?.keys() ?? []);
+      if (dirtyRows.length === 0) {
+        void setAlert({ type: 'alert', content: t('MSG00133', '_수정한 내용이 없습니다.') });
+        return;
+      }
+
+      const res = await apiClient.post<{
+        o_result_cursor?: Array<{ CODE?: string; MSG?: string; EVENT?: string }>;
+      }>(`/${MENU_ID}/${SHEETS.VERSION}/SAVE/call-proc`, {
+        divisionId,
+        versionNo: dirtyRows.map(r => String(r.CODE ?? r.VERSION_NO ?? '')).join('^'),
+        monthlyRollingFcst: dirtyRows.map(r => String(r.MONTHLY_ROLLING_FCST ?? 'N')).join('^'),
+      });
+      const result = res.data?.result?.o_result_cursor?.[0];
+      if (result?.CODE === '0') {
+        editTrackerRef.current?.clearChanges();
+        // MSG00004 는 실제 등록 번역이 "수정한 내용이 없습니다."(MSG00133 과 동일 텍스트) 라
+        //   여기 쓰면 성공 토스트에 그 문구가 그대로 새어 나간다(실사고 2026-09-22, KO.json 실측
+        //   확인) — 사용자 지정(2026-09-22)으로 MSG00606("저장되었습니다.") 사용.
+        void setToast({ type: 'success', message: t('MSG00606', '_저장되었습니다.') });
+        void active.refetch?.();
+      } else {
+        void setAlert({
+          type: 'alert',
+          content: result?.MSG ?? t('MSG01288', '_실행중 에러가 발생했습니다.'),
+        });
+      }
+    } catch {
+      void setAlert({ type: 'alert', content: t('MSG01288', '_실행중 에러가 발생했습니다.') });
+    } finally {
+      savingRef.current = false;
+    }
   };
 
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
-    g.isReadOnly = true;
-    g.selectionMode = 2; // SelectionMode.ListBox — Ctrl/Shift 다중선택
-    const onDbl = () => handleApply();
+    g.isReadOnly = !isSalesSheet; // SALES 만 MONTHLY_ROLLING_FCST 콤보 편집 허용
+    g.selectionMode = SelectionMode.ListBox; // Ctrl/Shift 비연속 행 다중선택 (enum 값 5 — 2는 CellRange)
+    // MONTHLY_ROLLING_FCST 셀은 더블클릭이 콤보 편집 진입 트리거라 handleApply(선택확정+팝업닫기)를
+    //   가로채면 안 된다 — 그대로 두면 편집기가 뜨기 전에 팝업이 닫혀 값 변경이 커밋되지 않는다.
+    const onDbl = (e: MouseEvent) => {
+      const ht = g.hitTest(e);
+      if (ht.panel?.cellType === CellType.Cell && g.columns[ht.col]?.binding === 'MONTHLY_ROLLING_FCST') {
+        return;
+      }
+      handleApply();
+    };
     g.hostElement?.addEventListener('dblclick', onDbl);
     return () => g.hostElement?.removeEventListener('dblclick', onDbl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rows]);
+  }, [rows, isSalesSheet]);
 
   return (
     <CustomDialog
@@ -213,6 +326,10 @@ export const WaterfallVersionModal = ({
       type='modal'
       position='basic'
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       disableButtonCancel
       customHeaderTitle={
         <div className='headerContainer'>
@@ -224,7 +341,7 @@ export const WaterfallVersionModal = ({
       customContentArea={
         <div className={styles.dialogContent}>
           <SearchArea
-            searchButtonLabel={loading ? t('LBL00665', 'Loading...') : t('LBL00664', 'Search')}
+            searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleFind}
             conditions={
               <>
@@ -288,13 +405,23 @@ export const WaterfallVersionModal = ({
             }
           />
           <div className={styles.gridWrapper}>
-            <DataGrid<VersionPopupRow>
-              gridRef={gridRef}
-              itemsSource={rows}
-              staticColumns={VERSION_COLUMNS}
-              autoGenerateColumns={false}
-              className={styles.grid}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea title='' count={rows.length} gridRef={gridRef} gridFilterRef={gridFilterRef}>
+              <DataGrid<VersionPopupRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                editTrackerRef={editTrackerRef}
+                itemsSource={rows}
+                staticColumns={versionColumns}
+                autoGenerateColumns={false}
+                className={styles.grid}
+              />
+            </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
             <Button
@@ -304,6 +431,18 @@ export const WaterfallVersionModal = ({
               buttonLabel={t('LBL00627', 'Close')}
               onClick={modalClose}
             />
+            {isSalesSheet && (
+              <Button
+                appearance='contained'
+                priority='primary'
+                size='medium'
+                buttonLabel={t('LBL00111', 'Save')}
+                iconComponent={<ControlConfirmIcon size='small' />}
+                iconPosition='leading'
+                disabled={loading}
+                onClick={() => void handleSave()}
+              />
+            )}
             <Button
               appearance='contained'
               priority='primary'

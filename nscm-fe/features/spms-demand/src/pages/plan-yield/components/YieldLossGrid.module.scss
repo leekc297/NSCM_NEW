@@ -1,0 +1,39 @@
+// SDM2020 [2. 수율/Loss 계획 점검] 그리드 — 화면 고유 스타일만 (SDM2010 관례)
+
+.grid {
+  width: 100%;
+  height: 100%;
+
+  :global {
+    .wj-colheaders .wj-cell {
+      line-height: 14px;
+      padding: 1px 4px;
+      font-size: 11px;
+    }
+  }
+}
+
+// 인자 그룹 헤더행 (IS_GROUP='Y') — 목업 회색 띠. 편집 Yellow 보다 뒤에 선언되지 않도록 잠금행이라 충돌 없음
+.groupRow {
+  background: #e9ebee !important;
+  color: #3b4350;
+  font-weight: 500;
+}
+
+// 조건행의 인자 컬럼 들여쓰기 (목업: 그룹 아래 조건 항목 한 단 들어감)
+.factorIndent {
+  padding-left: 24px !important;
+}
+
+// 선택 체크박스 — 클릭은 셀 핸들러가 처리
+.checkbox {
+  pointer-events: none;
+  margin: 0;
+  width: 14px;
+  height: 14px;
+}
+
+// 룰 #95 — cell coloring (편집 Yellow)
+:global(.wj-cell-editable) {
+  background: #fff8cd !important;
+}

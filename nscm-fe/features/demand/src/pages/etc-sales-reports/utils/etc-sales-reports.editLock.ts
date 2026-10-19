@@ -60,23 +60,34 @@ export const evalEtcReportCell = (params: {
   if (isEditBlockedGroup(userGroup, divisionId)) return { editable: false, isPast };
   if (!row) return { editable: false, isPast };
 
-  const d40 = isDiv40(divisionId);
+  // ⭐ [2026-09-22 AS-IS 파리티 — 사용자 지적 "BIZ TYPE × RESULT 는 AS-IS 에서 동적 컬럼 수정 가능"]
+  //   AS-IS EditButton(L396~460)은 SwitchLock 으로 전체를 푼 뒤 잠글 구간만 LockRange 한다.
+  //   그 잠금은 전부 `GetColumnIndex("M_" + 기준월) > 0` — **그리드에 기준월 컬럼이 있을 때만** 걸린다.
+  //   동적 컬럼 = 조회연도 1~12월(GET_SPREAD_TITLE)이므로 "기준월 컬럼 존재" ⇔ 기준월 연도 = 조회연도.
+  //   → Biz Plan(기준월 201801)을 2018 외 연도로 조회하면 기준월 컬럼이 없어 Result 는 **잠금 0**(전 구간 편집),
+  //     Plan 은 과거년도만 전체 잠금이고 그 외 전 구간 편집. 구 R3("BP Result 전체 잠금 — 보수 확정 D-6")는
+  //     AS-IS 근거가 없는 보수 판정이라 폐기. 같은 규칙으로 Sales Plan 을 당해 외 연도로 조회한 경우도 AS-IS 와 맞춘다.
   const measure = typeof row.MEASURE === 'string' ? row.MEASURE : '';
-  // 시점 창 내 편집 조건 — 40 무관 개방 / 비40 = MEASURE===sEditMeasure (L427~438/L448~459 §3)
-  const measureOpen = d40 || (sEditMeasure !== '' && measure === sEditMeasure);
+  const baseColExists = baseYm.slice(0, 4) === yyyy;
+  // 비40 허용 외 메저 잠금 — 기준월 컬럼이 있을 때만 (L427~438 / L448~459). 81 처럼 sEditMeasure 가 빈값이면 전 메저가 대상.
+  const measureLocked = !isDiv40(divisionId) && baseColExists && measure !== sEditMeasure;
 
   if (isPlan) {
-    // P1 — Plan && 과거년도 → 전 구간 잠금 (L421~424 [C20201223-000448]. BP 포함 — fallthrough 파리티)
-    if (Number(yyyy) < Number(thisMonth.slice(0, 4))) return { editable: false, isPast };
-    // P2 — 과거 구간 잠금 / P3 — 기준월 이후 = measureOpen (L417~420/L427~438)
-    if (ym < baseYm) return { editable: false, isPast };
-    return { editable: measureOpen, isPast };
+    // L417~420 — 기준월 컬럼이 있고 첫 동적 컬럼(1월)이 아니면 기준월 이전 잠금
+    if (baseColExists && baseYm !== `${yyyy}01`) {
+      if (ym < baseYm) return { editable: false, isPast };
+    } else if (Number(yyyy) < Number(thisMonth.slice(0, 4))) {
+      // L421~424 [C20201223-000448] — 위 조건이 아니고 과거년도면 전 구간 잠금
+      return { editable: false, isPast };
+    }
+    // L427~438 — 기준월 이후 구간의 허용 외 메저 잠금
+    if (measureLocked && ym >= baseYm) return { editable: false, isPast };
+    return { editable: true, isPast };
   }
-  // Result — R3: BP 는 전체 잠금 (AS-IS 실질 undefined 지대 — 보수 확정 D-6)
-  if (mdfType === REPORT_TYPE.BP_M) return { editable: false, isPast };
-  // R1 — 미래(기준월 이상) 잠금 / R2 — 과거 = measureOpen (L442~445/L448~459)
-  if (ym >= baseYm) return { editable: false, isPast };
-  return { editable: measureOpen, isPast };
+  // Result — L442~445 기준월 이후 잠금 / L448~459 기준월 이전 구간의 허용 외 메저 잠금 (둘 다 기준월 컬럼이 있을 때만)
+  if (baseColExists && ym >= baseYm) return { editable: false, isPast };
+  if (measureLocked && ym < baseYm) return { editable: false, isPast };
+  return { editable: true, isPast };
 };
 
 // ⭐ 정적 컬럼 편집 판정 — **UI Category Setup(`INPUT_TP_CD`) 단일 원천** (2026-08-11 전환.

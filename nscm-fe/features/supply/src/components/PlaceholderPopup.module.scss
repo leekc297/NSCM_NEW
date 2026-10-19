@@ -1,0 +1,35 @@
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 24px;
+  text-align: center;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.hint {
+  font-size: 13px;
+  color: #888;
+}
+
+.variant {
+  font-size: 12px;
+  color: #4a6cf7;
+}
+
+.params {
+  margin: 4px 0 0;
+  padding: 8px 12px;
+  font-size: 12px;
+  text-align: left;
+  background: #f5f6f8;
+  border: 1px solid #e0e3e8;
+  border-radius: 4px;
+}

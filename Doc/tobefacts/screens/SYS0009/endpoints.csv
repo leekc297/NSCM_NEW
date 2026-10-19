@@ -1,0 +1,6 @@
+﻿"page_key","menu_id","file","line","in_function","kind","callee","menu","sheet","action","url","resolved","args","commented"
+"admin/menu-button-management","SYS0009","features/admin/src/pages/menu-button-management/components/MenuButtonManagementForm.tsx","17","MenuButtonnManagementForm","hook","useTabComboQueries","SYS0009","","","(useTabComboQueries)","Y","['MenuList', 'YesOrNo']","0"
+"admin/menu-button-management","SYS0009","features/admin/src/pages/menu-button-management/MenuButtonManagement.tsx","31","MenuButtonManagement","hook","useTabProcQuery","SYS0009","menuBtnList","","SYS0009/menuBtnList//call-proc","Y","filters","0"
+"admin/menu-button-management","SYS0009","features/admin/src/pages/menu-button-management/MenuButtonManagement.tsx","39","MenuButtonManagement","hook","useProcMutation","SYS0009","menuBtnList","SAVE","SYS0009/menuBtnList/SAVE/call-proc","Y","","0"
+"admin/menu-button-management","SYS0009","features/admin/src/pages/menu-button-management/useMenuButtonManagementStore.ts","67","fetchStaticColumns","http","apiClient.post","","","","/admin/menu/SYS0009/column","Y","{ sheetNm: SHEETS.LIST, }","0"
+"admin/menu-button-management","SYS0009","features/admin/src/pages/menu-button-management/useMenuButtonManagementStore.ts","77","fetchStaticColumns","http","apiClient.get","","","","/admin/menu/SYS0009/search-conditions","Y","","0"

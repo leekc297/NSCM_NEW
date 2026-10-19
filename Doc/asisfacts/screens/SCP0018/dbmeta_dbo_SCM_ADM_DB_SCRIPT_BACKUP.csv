@@ -1,0 +1,340 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL","1566016710","1","/*
+ * Program ID   : SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL
+ * Description  : Shipment Plan Semi Waterfall 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2018/04/24   byunghunjung	Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/05/31	KYH				1년조회시 년도가 다른 같은 월 조회시 sum이 표시되는 문제 ex) 2018.0528 ~ 2019.0527 조회시 2019.5월 (마지막 주)에 2018.5월 sum값 표시
+ * 2018/07/02	KYH				신규 컬럼 추가 조회. (ORIGIN_FROM_DIVISION_ID, ORIGIN_TO_DIVISION_ID, ELECTRODE_TYPE)
+ * 2021/07/07   khj79			PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD 2단계 개발 : FROM,TO 추가 , scp_mst_bod_v=> scp_mst_bod_n_v
+ * 2022.05.13   LSC             PJ20216891 Digital SCM 3 Level 가속화를 위한 개선 : GM JV 추가
+ * 2022.07.17   chaan           PJ20216891 Digital SCM 3 Level 가속화를 위한 개선 : Bucket->ISO_WEEK 추가
+ * 2023.06.23   KJJ				PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 이행 - Like 검색기능
+ ==================================================================================================================================================================
+ ex)   EXEC SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL @p_from_yyyymmdd='20180604', @p_to_yyyymmdd='20180815', @p_division_id='82', @p_operation_group='A', @p_item_id='', @p_version_no='SP_W_20180604', @p_electype='', @p_program_id='SCP0018', @p_sheet_name='CELL', @p_user_id='kaiser99'
+ */
+
+CREATE PROCEDURE [dbo].[SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL]
+	@p_from_yyyymmdd		NVARCHAR(MAX),
+	@p_to_yyyymmdd			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_operation_group		NVARCHAR(MAX),
+	@p_item_id				NVARCHAR(MAX),
+	@p_version_no			NVARCHAR(MAX),
+	@p_electype				NVARCHAR(MAX), 
+	@p_program_id			NVARCHAR(MAX) = 'SCP0018' ,
+	@p_sheet_name			NVARCHAR(MAX),
+	@p_user_id				NVARCHAR(MAX)
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON;
+
+	--DECLARE @p_from_yyyymmdd		NVARCHAR(MAX)   = N'20220704'
+	--DECLARE @p_to_yyyymmdd			NVARCHAR(MAX)   = N'20230702'
+	--DECLARE @p_division_id			NVARCHAR(MAX)   = N'82'
+	--DECLARE @p_operation_group		NVARCHAR(MAX)   = N'A'
+	--DECLARE @p_item_id				NVARCHAR(MAX)   = N''
+	--DECLARE @p_version_no			NVARCHAR(MAX)   = N'SP_W_20220704'
+	--DECLARE @p_electype				NVARCHAR(MAX)   = N''
+	--DECLARE @p_program_id			NVARCHAR(MAX)   = N'SCP0018'
+	--DECLARE @p_sheet_name			NVARCHAR(MAX)   = N'CELL'
+	--DECLARE @p_user_id				NVARCHAR(MAX)   = N'iamarock'
+
+
+	DECLARE @mQry                   NVARCHAR(MAX) = '';
+	DECLARE @v_cnt_usr_measure	    INT =0;
+
+	SET @v_cnt_usr_measure = (
+                                SELECT  COUNT(*)
+                                FROM    scm_mst_titleset_user
+                                WHERE   1=1
+                                    AND PROGRAM_ID  =  @p_program_id
+                                    AND SHEET_NAME  =  @p_sheet_name
+                                    AND USER_ID     =  @p_user_id
+							  )
+
+	-- IN 조건으로 데이터 가져옴
+	DECLARE  @v_version_no          NVARCHAR(MAX)   = [dbo].FN_GET_IN_STR(@p_version_no);
+	DECLARE  @v_item_id             NVARCHAR(MAX)   = [dbo].FN_GET_IN_STR(@p_item_id);
+	DECLARE  @v_electype            NVARCHAR(MAX)   = [dbo].FN_GET_IN_STR(@p_electype);
+
+
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0018') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0018
+
+	CREATE TABLE #TblDynamicPivot_SCP0018
+    (
+          KEY_IDX					NVARCHAR(200)
+		, DIVISION_ID				NVARCHAR(30)
+		, DIVISION_NAME				NVARCHAR(30)
+		, OPERATION_GROUP			NVARCHAR(100)
+		, OPERATION_GROUP_NAME		NVARCHAR(200)
+		, ITEM_ID					NVARCHAR(50)
+		, NICK_NAME					NVARCHAR(200)
+		, ELECTRODE_TYPE			NVAR"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL","1566016710","2","CHAR(50)
+		, ORIGIN_FROM_DIVISION_ID	NVARCHAR(50)
+		, FROM_SITE					NVARCHAR(30)
+		, FROM_SITE_NAME			NVARCHAR(150)
+		, TRANSPORT_MODE			NVARCHAR(50)
+		, LT_DAY					NVARCHAR(300)
+		, PLAN_START_YYYYMMDD		NVARCHAR(8)
+		, PLAN_TYPE					NVARCHAR(50)
+		, SEQ						NVARCHAR(200)
+		, MEASURE					NVARCHAR(50)
+		, MEASURE_LABEL				NVARCHAR(150)
+		, MEASURE_ORDER_NO			INT
+		, ORIGIN_TO_DIVISION_ID		NVARCHAR(50)
+		, TO_SITE					NVARCHAR(30)
+		, TO_SITE_NAME				NVARCHAR(150)
+		, BOD_ID					NVARCHAR(150)
+		, QTY						NUMERIC(20,10)
+		, FROM_YYYYMMDD				NVARCHAR(8)
+		, TO_YYYYMMDD				NVARCHAR(8)
+		, YYYYMMDD					NVARCHAR(10)
+		, VERSION_NO				NVARCHAR(50)
+		, YYYYMM					NVARCHAR(6)
+		, ISO_WEEK					NVARCHAR(6)
+	);
+
+	SET @mQry = @mQry + N'
+            INSERT INTO #TblDynamicPivot_SCP0018
+	            SELECT DISTINCT
+			              (A.DIVISION_ID + A.OPERATION_GROUP + A.ITEM_ID + A.FROM_SITE) AS KEY_IDX
+			            , A.DIVISION_ID
+			            , A.DIVISION_NAME
+			            , A.OPERATION_GROUP
+			            , A.OPERATION_GROUP_NAME
+			            , A.ITEM_ID
+			            , A.NICK_NAME
+			            , ISNULL(NULLIF(A.ELECTRODE_TYPE, '''') , ''-'') AS ELECTRODE_TYPE
+			            , ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID, '''') , ''-'') AS ORIGIN_FROM_DIVISION_ID
+			            , A.FROM_SITE
+			            , A.FROM_SITE_NAME
+			            , C.TRANSPORT_MODE
+			            , C.LT_TOTAL AS LT_DAY
+			            , A.PLAN_START_YYYYMMDD
+			            , A.PLAN_TYPE
+			            , A.SEQ
+		                --, A.BOH
+			            , A.MEASURE
+			            , B.COLUMN_LABEL_NAME AS MEASURE_LABEL
+			            , ISNULL(D.SORT_ORDER_NO, B.SORT_ORDER_NO ) AS MEASURE_ORDER_NO
+			            , ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID, '''') , ''-'') AS ORIGIN_TO_DIVISION_ID
+			            , A.TO_SITE
+			            , A.TO_SITE_NAME
+			            , A.BOD_ID
+			            , A.QTY
+			            , ''' + @p_from_yyyymmdd + ''' AS FROM_YYYYMMDD
+			            , ''' + @p_to_yyyymmdd + ''' AS TO_YYYYMMDD
+			            , ''D_'' + A.YYYYMMDD AS YYYYMMDD
+			            , A.VERSION_NO
+			            , O.BASIS_YYYYMM AS YYYYMM
+			            , RIGHT(O.BASIS_YYYYMM, 4) + O.ISO_WEEK AS ISO_WEEK
+	            FROM	SCP_ANL_SHIPMENT_PLAN_SEMI_C A
+			            JOIN SCM_SYS_CALENDAR_M O ON
+					            A.YYYYMMDD = O.BASIS_YYYYMMDD
+			            JOIN SCM_MST_SHEET_MEASURE B ON
+					            A.MEASURE = B.COLUMN_NAME' + CHAR(10)
+	-- BOD 2단계 개발 : 시작
+	--IF @p_division_id != 'EE'
+	--	SET @mQry = @mQry + '	LEFT JOIN SCP_MST_BOD_V C    ON A.DIVISION_ID = C.DIVISION_ID AND  A.BOD_ID = C.BOD_ID AND A.FROM_SITE = C.FROM_SITE													' + CHAR(10)
+	--ELSE
+	--	SET @mQry = @mQry + '	LEFT JOIN SCP_MST_BOD_V C    ON A.ORIGIN_FROM_DIVISION_ID = C.DIVISION_ID AND  A.BOD_ID = C.BOD_ID AND A.FROM_SITE = C.FROM_SITE										' + CHAR(10)
+	IF @p_division_id NOT IN ('EE','EE_UC')
+		SET @mQry = @mQry + N'
+        	            LEFT JOIN SCP_MST_BOD_N_V C ON
+                                A.DIVISION_ID = C.DIVISION_ID
+                            AND A.BOD_ID = C.BOD_ID
+                            AND A.FROM_SITE = C.FROM_SITE' + CHAR(10)
+	ELSE
+		SET @mQry = @mQry + N'
+                        LEFT JOIN SCP_MST_BOD_N_V C ON
+                                A.ORIGIN_FROM_DIVISION_ID = C.DIVISION_ID
+                            AND A.BOD_ID = C.BOD_ID
+                            AND A.FROM_SITE = C.FROM_SITE' + CHAR(10)
+	-- BOD 2단계 개발 : 끝
+	SET @mQry = @mQry + N'
+                        LEFT OUTER JOIN SCM_MST_TITLESET_USER D ON D.PROGRAM_ID  = B.PROGRAM_ID AND D.SHEET_NAME  = B.SHEET_NAME AND D.COLUMN_NAME = B.COLUMN_NAME AND D.USER_ID = '''+@p_user_id+'''
+                WHERE   1=1
+                    AND B.PROGRAM_ID       =   '''+@p_program_id+'''
+                    AND B.SHEET_NAME       =   '''+@p_sheet_name+'''
+                    AND B.VALID_YN		 =	''Y''
+                    AND "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL","1566016710","3","(' + CONVERT(NVARCHAR(20), @v_cnt_usr_measure ) + ' = 0 OR
+                            EXISTS (
+                                        SELECT  1
+                                        FROM    SCM_MST_TITLESET_USER
+                                        WHERE   PROGRAM_ID  = '''+@p_program_id+'''
+                                            AND SHEET_NAME  = '''+@p_sheet_name+'''
+                                            AND USER_ID     = '''+@p_user_id+'''
+                                            AND COLUMN_NAME = B.COLUMN_NAME
+                                   )
+                        )
+                    AND A.YYYYMMDD >= '''        + @p_from_yyyymmdd + '''
+                    AND A.YYYYMMDD <= '''        + @p_to_yyyymmdd + '''
+                    AND A.DIVISION_ID  = '''     + @p_division_id+'''
+                    AND A.OPERATION_GROUP  = ''' + @p_operation_group + '''' + CHAR(10)
+
+	--------AND ( ( @p_version_no	IS NULL OR  @p_version_no = '' )  OR a.VERSION_NO	 IN (SELECT token FROM dbo.String_Split(@p_version_no ,',')) )
+	--------AND ( ( @p_item_id      IS NULL OR  @p_item_id      ='' ) OR a.item_id      IN (SELECT token FROM dbo.String_Split(@p_item_id,',')) )
+	--------AND ( ( @p_electype		IS NULL OR  @p_electype ='')     OR A.ELECTRODE_TYPE	IN (SELECT token FROM dbo.String_Split(@p_electype, ',')) )
+
+	IF ( @p_version_no IS NOT NULL AND @p_version_no !='')
+        SET @mQry = @mQry + N'
+                    AND  A.VERSION_NO   IN ('+ @v_version_no +')' + CHAR(10)
+
+	IF ( @p_item_id IS NOT NULL AND @p_item_id !='')
+        SET @mQry = @mQry + N'
+                    AND  A.ITEM_ID IN (SELECT * FROM DBO.FN_GET_ITEM_LIKE_CONDITION(''' + @p_item_id + ''', ''''))' + CHAR(10)
+
+	IF ( @p_electype IS NOT NULL AND @p_electype !='')
+        SET @mQry = @mQry + N'
+                    AND  A.ELECTRODE_TYPE   IN ('+ @v_electype +')' + CHAR(10)
+
+
+    --exec debug_log @mQry, 'T';return;
+	EXEC (@mQry);
+
+
+	/********************************************************************************
+	* PIVOIT처리
+	********************************************************************************/
+	BEGIN
+		DECLARE @mQry_sum   NVARCHAR(MAX);
+		DECLARE @mEXEC      NVARCHAR(MAX);
+		DECLARE @mDAY_QTY   NVARCHAR(MAX);
+
+		-- PIVOIT 대상 날짜문자열 생성
+		SET @mQry_sum = '';
+
+			SELECT  @mQry_sum = @mQry_sum + N'
+					, ' +
+                            CASE
+                                WHEN CHARINDEX('M_', YYYYMMDD) = 1 THEN  'SUM(CASE WHEN YYYYMM   = RIGHT(''' + YYYYMMDD + ''', 6) THEN QTY END ) AS ' + YYYYMMDD
+							    WHEN CHARINDEX('W_', YYYYMMDD) = 1 THEN
+                                    CASE
+                                        WHEN RIGHT(YYYYMMDD, 4) <> '_ISO' THEN
+                                            'SUM(CASE WHEN ISO_WEEK = RIGHT(''' + YYYYMMDD + ''', 6) THEN  QTY  END ) AS ' + YYYYMMDD
+                                        ELSE
+                                            'SUM(CASE WHEN ISO_WEEK = SUBSTRING(YYYYMMDD, 3, 6) THEN  QTY  END ) AS ' + YYYYMMDD
+                                    END
+								WHEN CHARINDEX('D_', YYYYMMDD) =1 THEN  'SUM(CASE WHEN YYYYMMDD = ''' + YYYYMMDD + ''' THEN QTY  END ) AS ' + YYYYMMDD
+							END
+		FROM
+                (
+                    SELECT    'M_'+A.BASIS_YYYYMM                               AS YYYYMMDD
+                            , MIN(A.BASIS_START_DATE) + CONVERT(CHAR(2), '01')  AS SORT_ORDER_NO
+                    FROM    [DBO].[SCM_SYS_CALENDAR_M] A
+                    WHERE   A.BASIS_YYYYMMDD BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+                    GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME
+                    UNION ALL
+                    SELECT    'W_'+A.BASIS_YYYYMM + A.ISO_WEEK                  AS YYYYMMDD
+                            , A.BASIS_START_DATE + CONVERT(CHAR(2), 21)         AS SORT_ORDER_NO
+                    FROM    [DBO].[SCM_SYS_CALENDAR_M] A
+                    WHERE   A.BASIS_YYYYMMDD BETWEEN @p_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0018_GET_SHIPMENT_PLAN_SEMI_WATERFALL","1566016710","4","from_yyyymmdd AND @p_to_yyyymmdd
+                    GROUP BY A.BASIS_YYYYMM, A.ISO_WEEK, A.BASIS_START_DATE
+                    UNION ALL
+                    SELECT    'W_' + A.ISO_YYYYMM + A.ISO_WEEK + '_ISO'         AS YYYYMMDD
+                            , MIN(A.BASIS_START_DATE) + CONVERT(CHAR(2), 21)    AS SORT_ORDER_NO
+                    FROM    [DBO].[SCM_SYS_CALENDAR_M] A
+                    WHERE   A.BASIS_YYYYMMDD BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+                    GROUP BY A.ISO_YYYYMM, A.ISO_WEEK
+                    UNION ALL
+                    SELECT    'D_'+A.BASIS_YYYYMMDD                             AS YYYYMMDD
+                            , A.BASIS_YYYYMMDD + CONVERT(CHAR(2), 31)           AS SORT_ORDER_NO
+                    FROM    [DBO].[SCM_SYS_CALENDAR_M] A
+                    WHERE   A.BASIS_YYYYMMDD BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+                    GROUP BY A.BASIS_YYYYMMDD
+                ) AS A
+        ORDER BY SORT_ORDER_NO;
+
+--print '@mQry_sum : ' + @mQry_sum;return;
+
+		SET @mEXEC = N'
+			SELECT	  KEY_IDX
+					, DIVISION_ID
+					, DIVISION_NAME
+					, OPERATION_GROUP
+					, OPERATION_GROUP_NAME
+					, ITEM_ID
+					, NICK_NAME
+					, ORIGIN_FROM_DIVISION_ID
+					, FROM_SITE
+					, FROM_SITE_NAME
+					, ORIGIN_TO_DIVISION_ID
+					, TO_SITE
+					, ISNULL(TO_SITE_NAME , ''-'') AS TO_SITE_NAME
+					, BOD_ID
+					, ISNULL(TRANSPORT_MODE , ''-'') AS TRANSPORT_MODE
+					, ISNULL(LT_DAY , 0) AS LT_DAY
+					, PLAN_START_YYYYMMDD
+					, PLAN_TYPE
+					, SEQ
+					, CAST(ROUND((
+									CASE
+										WHEN OPERATION_GROUP = ''E'' THEN DBO.FN_GET_SCP_ANL_BOH_QTY(DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, FROM_SITE, ITEM_ID, FROM_YYYYMMDD)
+										WHEN OPERATION_GROUP = ''A'' THEN DBO.FN_GET_SCP_ANL_CHAR_BOH_QTY (DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, FROM_SITE, ITEM_ID, FROM_YYYYMMDD)
+									END
+								  ), 1) AS INT) AS BOH
+					, VERSION_NO
+					, ELECTRODE_TYPE
+					, MEASURE
+					, MEASURE_ORDER_NO
+					, MEASURE_LABEL
+					, FROM_YYYYMMDD
+					, TO_YYYYMMDD
+					' + @mQry_sum + '
+			FROM	#TblDynamicPivot_SCP0018 T
+			GROUP BY	  KEY_IDX
+						, DIVISION_ID
+						, DIVISION_NAME
+						, OPERATION_GROUP
+						, OPERATION_GROUP_NAME
+						, ITEM_ID
+						, NICK_NAME
+						, ORIGIN_FROM_DIVISION_ID
+						, FROM_SITE
+						, FROM_SITE_NAME
+						, ORIGIN_TO_DIVISION_ID
+						, TO_SITE
+						, TO_SITE_NAME
+						, BOD_ID
+						, TRANSPORT_MODE
+						, LT_DAY
+						, PLAN_START_YYYYMMDD
+						, PLAN_TYPE
+						, SEQ
+						, VERSION_NO
+						, ELECTRODE_TYPE
+						, MEASURE
+						, MEASURE_ORDER_NO
+						, MEASURE_LABEL
+						, FROM_YYYYMMDD
+						, TO_YYYYMMDD
+			ORDER BY	  DIVISION_ID
+						, OPERATION_GROUP
+						, ITEM_ID
+						, FROM_SITE
+						, TO_SITE DESC
+						, BOD_ID
+						, MEASURE_ORDER_NO
+						, VERSION_NO'
+
+--exec debug_log @mEXEC, 'T';return;
+		EXEC (@mEXEC);
+
+		--임시테이블 삭제
+        IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0018') IS NOT NULL
+    		DROP TABLE #TblDynamicPivot_SCP0018;
+	END
+END
+"

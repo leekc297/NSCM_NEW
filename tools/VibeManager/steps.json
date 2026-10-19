@@ -1,0 +1,984 @@
+{
+  "$schema": "Vibe_Manager steps — 변수: ${root} ${toolsDir} ${harnessDir} ${tobeDir} ${outDir} ${tobeOutDir} ${gapDir} ${genDir} ${agentDriver} ${agentModel} ${input:이름}",
+  "steps": [
+    {
+      "id": "S1",
+      "title": "1. AS-IS 분석 (C# 파서)",
+      "detail": "Roslyn·ScriptDom·MSSQL → Fact Pack. 교차검증 불일치 0 이 완료 기준.",
+      "tasks": [
+        {
+          "id": "S1.run",
+          "title": "파서 전체 실행 (빌드→함정테스트→scan→교차검증→pack)",
+          "kind": "powershell",
+          "script": "${toolsDir}/run.ps1",
+          "confirm": "전체 스캔은 수 분 걸립니다. 실행할까요?",
+          "gate": {
+            "type": "csvRows",
+            "file": "${outDir}/crosscheck_report.csv",
+            "max": 0,
+            "label": "교차검증 불일치"
+          }
+        },
+        {
+          "id": "S1.db",
+          "title": "DB 메타 추출 (읽기 전용)",
+          "kind": "powershell",
+          "script": "${toolsDir}/db.ps1",
+          "confirm": "MSSQL 에 접속해 메타를 추출합니다(읽기 전용). 실행할까요?",
+          "gate": {
+            "type": "csvRows",
+            "file": "${outDir}/db/db_objects.csv",
+            "min": 1,
+            "label": "DB 객체"
+          }
+        },
+        {
+          "id": "S1.grid",
+          "title": "Grid SP 실행(ROLLBACK) → 실제 컬럼",
+          "kind": "powershell",
+          "script": "${toolsDir}/grid.ps1",
+          "confirm": "쓰기 없는 *_SPREAD_TITLE SP 만 트랜잭션 안에서 실행 후 ROLLBACK 합니다. 실행할까요?",
+          "gate": {
+            "type": "csvAll",
+            "file": "${outDir}/db/grid/grid_runs.csv",
+            "column": "status",
+            "equals": "OK",
+            "label": "SP 실행"
+          }
+        },
+        {
+          "id": "S1.pack",
+          "title": "화면 Pack 재생성",
+          "kind": "powershell",
+          "script": "${toolsDir}/pack.ps1",
+          "gate": {
+            "type": "csvRows",
+            "file": "${outDir}/screens/_index.csv",
+            "min": 1,
+            "label": "화면"
+          }
+        },
+        {
+          "id": "S1.screen",
+          "title": "화면 Fact Pack 열기 — 화면ID",
+          "kind": "open",
+          "path": "${outDir}/screens/${input:id}",
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S1.review",
+          "title": "검수 체크포인트 열기",
+          "kind": "open",
+          "path": "${outDir}/_review"
+        },
+        {
+          "id": "S1.recon",
+          "title": "개발대상 대사표 — 누락 재확인 (xlsx→csv → recon.js)",
+          "kind": "node",
+          "script": "${reconDir}/recon.js",
+          "args": [],
+          "gate": {
+            "type": "fileExists",
+            "file": "${reconOutDir}/대사표.md",
+            "label": "대사표"
+          }
+        },
+        {
+          "id": "S1.reconx",
+          "title": "개발대상 xlsx → CSV/map_screen.csv (xlsx_to_csv.py)",
+          "kind": "python",
+          "script": "${reconDir}/xlsx_to_csv.py",
+          "args": []
+        },
+        {
+          "id": "S1.recondash",
+          "title": "대사표 대시보드 열기 (Doc/recon/index.html)",
+          "kind": "browser",
+          "path": "${reconOutDir}/index.html"
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "title": "2. TO-BE 분석 · RULE",
+      "detail": "TobeFacts(FE+BE) 로 같은 스키마의 Fact 를 뽑고, 룰은 CSV 사전으로 관리.",
+      "tasks": [
+        {
+          "id": "S2.probe",
+          "title": "DB 접속 점검 (asis MSSQL / tobe Oracle) — probe.py",
+          "kind": "python",
+          "script": "${dbconnDir}/probe.py",
+          "args": []
+        },
+        {
+          "id": "S2.export",
+          "title": "To-Be Oracle 메타 export → Doc/tobefacts/db (export_tobe_meta.py)",
+          "kind": "python",
+          "script": "${dbconnDir}/export_tobe_meta.py",
+          "args": [],
+          "gate": {
+            "type": "fileExists",
+            "file": "${tobeOutDir}/db/proc_meta.csv",
+            "label": "proc_meta.csv"
+          }
+        },
+        {
+          "id": "S2.run",
+          "title": "To-Be 파서 실행 (추출→교차검증→Pack)",
+          "kind": "powershell",
+          "script": "${root}/tools/TobeFacts/run.ps1",
+          "gate": {
+            "type": "csvRows",
+            "file": "${tobeOutDir}/crosscheck_report.csv",
+            "max": 0,
+            "label": "교차검증 불일치"
+          }
+        },
+        {
+          "id": "S2.rules",
+          "title": "룰 사전 열기 (rules/)",
+          "kind": "open",
+          "path": "${harnessDir}/rules"
+        },
+        {
+          "id": "S2.mine",
+          "title": "사전 채굴 (짝 화면 → *.mined.csv)",
+          "kind": "node",
+          "script": "${harnessDir}/mine.js",
+          "args": [
+            "--tobe",
+            "${tobeOutDir}",
+            "--asis",
+            "${outDir}",
+            "--out",
+            "${harnessDir}/rules"
+          ]
+        },
+        {
+          "id": "S2.dbmeta",
+          "title": "클라우드 메타 CSV 폴더 열기 (Doc/tobefacts/db)",
+          "kind": "open",
+          "path": "${tobeOutDir}/db"
+        },
+        {
+          "id": "S2.dbconn",
+          "title": "DB 접속정보 열기 (dbconn.json — 비밀번호는 .env.asis)",
+          "kind": "open",
+          "path": "${dbconnDir}/dbconn.json"
+        },
+        {
+          "id": "S2.examples",
+          "title": "하우스 스타일 예제 채굴 (mine-examples.js → prompts/examples)",
+          "kind": "node",
+          "script": "${harnessDir}/mine-examples.js",
+          "args": []
+        },
+        {
+          "id": "S2.framework",
+          "title": "To-Be 프레임워크·공통 카탈로그 생성 (framework.js → Doc/tobefacts/framework, rules/tobe_catalog.csv)",
+          "kind": "node",
+          "script": "${root}/tools/TobeFacts/framework.js",
+          "args": []
+        },
+        {
+          "id": "S2.frameworkopen",
+          "title": "카탈로그 열기 (Doc/tobefacts/framework/INDEX.md)",
+          "kind": "open",
+          "path": "${tobeOutDir}/framework/INDEX.md"
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "title": "3. 문서 초안 생성 (Agent)",
+      "detail": "Fact Pack → 분석서 5종 + 업무분석서·화면설계서·단위테스트. 게이트 total PASS.",
+      "tasks": [
+        {
+          "id": "S3.agent",
+          "title": "Agent 실행 — 화면ID",
+          "kind": "powershell",
+          "script": "${toolsDir}/agent.ps1",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "-Driver",
+            "${agentDriver}",
+            "-Model",
+            "${agentModel}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (공백으로 여러 개)",
+              "default": "DMF0052"
+            }
+          ],
+          "gate": {
+            "type": "agentGates",
+            "file": "${outDir}/agent",
+            "label": "Agent 게이트"
+          }
+        },
+        {
+          "id": "S3.docs",
+          "title": "문서 3종만 재생성 — 화면ID (-Phase docs)",
+          "kind": "powershell",
+          "script": "${toolsDir}/agent.ps1",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "-Phase",
+            "docs",
+            "-Driver",
+            "${agentDriver}",
+            "-Model",
+            "${agentModel}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S3.batch",
+          "title": "Agent 전 화면 배치 (도메인 선택)",
+          "kind": "agentBatch",
+          "script": "${toolsDir}/agent.ps1"
+        },
+        {
+          "id": "S3.report",
+          "title": "Agent 게이트 집계 리포트",
+          "kind": "gateReport"
+        },
+        {
+          "id": "S3.open",
+          "title": "Agent 결과 열기 — 화면ID",
+          "kind": "open",
+          "path": "${outDir}/agent/${input:id}",
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "title": "4. GAP 분석",
+      "detail": "As-is Fact ↔ To-Be Fact 대사. COVERED/INTENDED/MISSING/UNMAPPED + 대시보드.",
+      "tasks": [
+        {
+          "id": "S4.run",
+          "title": "GAP 전 화면 실행 → Doc/gap",
+          "kind": "node",
+          "script": "${harnessDir}/gap.js",
+          "gate": {
+            "type": "csvRows",
+            "file": "${gapDir}/_summary.csv",
+            "min": 1,
+            "label": "GAP 요약"
+          }
+        },
+        {
+          "id": "S4.one",
+          "title": "GAP 실행 — 화면ID",
+          "kind": "node",
+          "script": "${harnessDir}/gap.js",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (공백으로 여러 개)",
+              "default": "DMF0045"
+            }
+          ]
+        },
+        {
+          "id": "S4.dash",
+          "title": "GAP 대시보드 열기 (index.html)",
+          "kind": "browser",
+          "path": "${gapDir}/index.html"
+        },
+        {
+          "id": "S4.open",
+          "title": "GAP 결과 CSV — 화면ID",
+          "kind": "open",
+          "path": "${gapDir}/${input:id}_gap.csv",
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0045"
+            }
+          ]
+        },
+        {
+          "id": "S4.goldgen",
+          "title": "골든 케이스 생성 (As-is SP ↔ To-Be PROC 짝) — gen_golden_cases.py",
+          "kind": "python",
+          "script": "${dbconnDir}/gen_golden_cases.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (비우면 전체)",
+              "default": ""
+            }
+          ]
+        },
+        {
+          "id": "S4.golden",
+          "title": "골든 테스트 실행 (양쪽 SP 결과 대조) — golden.py",
+          "kind": "python",
+          "script": "${dbconnDir}/golden.py",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (비우면 전체 GET)",
+              "default": "DMF0003"
+            }
+          ],
+          "gate": {
+            "type": "fileExists",
+            "file": "${goldenDir}/_summary.md",
+            "label": "골든 요약"
+          }
+        },
+        {
+          "id": "S4.goldopen",
+          "title": "골든 결과 열기 (Doc/golden/_summary.md)",
+          "kind": "open",
+          "path": "${goldenDir}/_summary.md"
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "title": "5. 신규 UI 개발 (하네스)",
+      "detail": "프로그램 ID 하나로: 골격 생성 → nscm-fe 적용 → 게이트 → Claude Code 가 TODO 만 채움.",
+      "tasks": [
+        {
+          "id": "S5.pipeline",
+          "title": "★ ID 하나로 끝까지 — 화면ID (pipeline.js: 골격→등록SQL→PKG→FE수선→PKG이식→E2E스펙→대사표)",
+          "kind": "node",
+          "script": "${harnessDir}/pipeline.js",
+          "args": [
+            "${input:id}",
+            "--max",
+            "3"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ],
+          "confirm": "Claude Code 를 FE/PKG 각 최대 3회 호출합니다(수십 분). 진행할까요?",
+          "gate": {
+            "type": "fileExists",
+            "file": "${genDir}/${input:id}/PIPELINE.md",
+            "label": "PIPELINE.md"
+          }
+        },
+        {
+          "id": "S5.pipelinedry",
+          "title": "파이프라인 드라이런 — 화면ID (--no-claude: 생성+게이트만)",
+          "kind": "node",
+          "script": "${harnessDir}/pipeline.js",
+          "args": [
+            "${input:id}",
+            "--no-claude"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S5.pipelineregen",
+          "title": "파이프라인 — PKG 골격 강제 재생성(--regen-pkg, 이식 결과 폐기)",
+          "kind": "node",
+          "script": "${harnessDir}/pipeline.js",
+          "args": [
+            "${input:id}",
+            "--max",
+            "3",
+            "--regen-pkg"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ],
+          "confirm": "Claude 가 이식한 <ID>_PKG.sql 을 버리고 골격부터 다시 만듭니다. 진행할까요?"
+        },
+        {
+          "id": "S5.new",
+          "title": "신규 화면 생성 — 화면ID (new-screen.ps1)",
+          "kind": "powershell",
+          "script": "${harnessDir}/new-screen.ps1",
+          "splitArgs": true,
+          "args": [
+            "${input:id}"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ],
+          "gate": {
+            "type": "fileExists",
+            "file": "${genDir}/${input:id}/GEN_NOTES.md",
+            "label": "GEN_NOTES"
+          }
+        },
+        {
+          "id": "S5.repair",
+          "title": "자동 수선 루프 — 화면ID (gen→Claude→게이트 재시도 3회)",
+          "kind": "node",
+          "script": "${harnessDir}/repair-loop.js",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "--max",
+            "3"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (공백으로 여러 개)",
+              "default": "DMF0052"
+            }
+          ],
+          "confirm": "Claude Code 를 최대 3회 호출합니다. 진행할까요?"
+        },
+        {
+          "id": "S5.claude",
+          "title": "[Claude Code] TODO 이식 — 화면ID",
+          "kind": "claude",
+          "prompt": "new_screen.md",
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S5.check",
+          "title": "게이트 판정 — 화면 폴더 (check.js)",
+          "kind": "node",
+          "script": "${harnessDir}/check.js",
+          "args": [
+            "--page",
+            "${input:dir}"
+          ],
+          "inputs": [
+            {
+              "name": "dir",
+              "prompt": "nscm-fe 페이지 폴더 절대경로",
+              "default": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\edi-summary"
+            }
+          ]
+        },
+        {
+          "id": "S5.final",
+          "title": "최종 게이트 (--final, 미구현 0)",
+          "kind": "node",
+          "script": "${harnessDir}/check.js",
+          "args": [
+            "--page",
+            "${input:dir}",
+            "--final"
+          ],
+          "inputs": [
+            {
+              "name": "dir",
+              "prompt": "nscm-fe 페이지 폴더 절대경로",
+              "default": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\edi-summary"
+            }
+          ]
+        },
+        {
+          "id": "S5.notes",
+          "title": "GEN_NOTES 열기 — 화면ID",
+          "kind": "open",
+          "path": "${genDir}/${input:id}/GEN_NOTES.md",
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S5.diff",
+          "title": "작업 전/후 소스 비교 — 페이지 폴더 (git)",
+          "kind": "diff",
+          "inputs": [
+            {
+              "name": "dir",
+              "prompt": "nscm-fe 페이지 폴더 절대경로",
+              "default": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\edi-summary"
+            }
+          ]
+        },
+        {
+          "id": "S5.repairlog",
+          "title": "수선 기록 열기 — 화면ID (REPAIR.md)",
+          "kind": "open",
+          "path": "${genDir}/${input:id}/REPAIR.md",
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S5.tsc",
+          "title": "컴파일·린트 게이트 — 화면 폴더 (check.js --tsc --lint)",
+          "kind": "node",
+          "script": "${harnessDir}/check.js",
+          "args": [
+            "--page",
+            "${input:dir}",
+            "--tsc",
+            "--lint"
+          ],
+          "inputs": [
+            {
+              "name": "dir",
+              "prompt": "nscm-fe 페이지 폴더 절대경로",
+              "default": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\edi-summary"
+            }
+          ]
+        },
+        {
+          "id": "S5.regsql",
+          "title": "Oracle 메타 등록 SQL 생성 — 화면ID (gen-register-sql.js → Doc/gen/<ID>/<ID>_registration.sql)",
+          "kind": "node",
+          "script": "${harnessDir}/gen-register-sql.js",
+          "args": [
+            "${input:id}"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S5.regopen",
+          "title": "등록 SQL 열기 — 화면ID",
+          "kind": "open",
+          "path": "${genDir}/${input:id}/${input:id}_registration.sql",
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S5.pkg",
+          "title": "Oracle PKG 골격 생성 — 화면ID (gen-pkg.js)",
+          "kind": "node",
+          "script": "${harnessDir}/gen-pkg.js",
+          "args": [
+            "${input:id}"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S5.pkgrepair",
+          "title": "PKG 이식 루프 — 화면ID (Claude ×3 + check-pkg)",
+          "kind": "node",
+          "script": "${harnessDir}/repair-loop.js",
+          "args": [
+            "${input:id}",
+            "--pkg",
+            "--max",
+            "3"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ],
+          "confirm": "Claude Code 를 최대 3회 호출합니다. 진행할까요?"
+        },
+        {
+          "id": "S5.pkgcheck",
+          "title": "PKG 게이트 — 화면ID (check-pkg.js)",
+          "kind": "node",
+          "script": "${harnessDir}/check-pkg.js",
+          "args": [
+            "${input:id}"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S5.pkgdeploy",
+          "title": "PKG 컴파일 배포 — 화면ID (run_sql.py --commit, USER_ERRORS)",
+          "kind": "python",
+          "script": "${dbconnDir}/run_sql.py",
+          "args": [
+            "${genDir}/${input:id}/${input:id}_PKG.sql",
+            "--commit"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ],
+          "confirm": "To-Be Oracle 에 PACKAGE 를 CREATE OR REPLACE 합니다. 진행할까요?"
+        },
+        {
+          "id": "S5.regrun",
+          "title": "등록 SQL 미리보기 실행 — 화면ID (run_sql.py, ROLLBACK)",
+          "kind": "python",
+          "script": "${dbconnDir}/run_sql.py",
+          "args": [
+            "${genDir}/${input:id}/${input:id}_registration.sql"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S5.regcommit",
+          "title": "등록 SQL 확정 — 화면ID (run_sql.py --commit)",
+          "kind": "python",
+          "script": "${dbconnDir}/run_sql.py",
+          "args": [
+            "${genDir}/${input:id}/${input:id}_registration.sql",
+            "--commit"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ],
+          "confirm": "To-Be Oracle 메타(메뉴·PROC·시트컬럼·API·권한)를 COMMIT 합니다. 미리보기 BLOCK 8 결과를 확인했나요?"
+        },
+        {
+          "id": "S5.revert",
+          "title": "등록 되돌리기 미리보기 — 화면ID (<ID>_revert.sql, ROLLBACK)",
+          "kind": "python",
+          "script": "${dbconnDir}/run_sql.py",
+          "args": [
+            "${genDir}/${input:id}/${input:id}_revert.sql"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S5.revertcommit",
+          "title": "등록 되돌리기 커밋 — 화면ID (메타 7영역 삭제 + PKG DROP, 메뉴 행은 USE_YN 원복)",
+          "kind": "python",
+          "script": "${dbconnDir}/run_sql.py",
+          "args": [
+            "${genDir}/${input:id}/${input:id}_revert.sql",
+            "--commit"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ],
+          "confirm": "To-Be Oracle 에서 이 화면의 등록 메타를 삭제하고 PACKAGE 를 DROP 합니다. 진행할까요?"
+        },
+        {
+          "id": "S5.dod",
+          "title": "완료 정의(DoD) 열기 — 화면ID (DOD.md)",
+          "kind": "open",
+          "path": "${genDir}/${input:id}/DOD.md",
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "S6",
+      "title": "6. GAP 확정 · 룰 보완 · 문서 확정",
+      "detail": "GAP 반복 항목을 룰(CSV) 로 흡수해 원천 차단. 문서 3종 확정.",
+      "tasks": [
+        {
+          "id": "S6.suggest",
+          "title": "룰 보완 후보 산출 (suggest-rules.js → rules/_candidates.md)",
+          "kind": "node",
+          "script": "${harnessDir}/suggest-rules.js",
+          "gate": {
+            "type": "fileExists",
+            "file": "${harnessDir}/rules/_candidates.md",
+            "label": "후보 파일"
+          }
+        },
+        {
+          "id": "S6.cand",
+          "title": "후보 열기 (_candidates.md)",
+          "kind": "open",
+          "path": "${harnessDir}/rules/_candidates.md"
+        },
+        {
+          "id": "S6.allowed",
+          "title": "allowed_gaps.csv 편집",
+          "kind": "open",
+          "path": "${harnessDir}/rules/allowed_gaps.csv"
+        },
+        {
+          "id": "S6.regen",
+          "title": "룰 반영 후 GAP 재실행",
+          "kind": "node",
+          "script": "${harnessDir}/gap.js"
+        },
+        {
+          "id": "S6.docs",
+          "title": "문서 3종 확정 — 화면ID (Agent -Phase docs 재실행)",
+          "kind": "powershell",
+          "script": "${toolsDir}/agent.ps1",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}",
+            "-Phase",
+            "docs",
+            "-Driver",
+            "${agentDriver}",
+            "-Model",
+            "${agentModel}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S6.snapshot",
+          "title": "생성기 회귀 스냅샷 비교 (snapshot.js)",
+          "kind": "node",
+          "script": "${harnessDir}/snapshot.js",
+          "args": []
+        },
+        {
+          "id": "S6.snapupd",
+          "title": "생성기 스냅샷 기준선 갱신 (snapshot.js --update)",
+          "kind": "node",
+          "script": "${harnessDir}/snapshot.js",
+          "args": [
+            "--update"
+          ],
+          "confirm": "현재 생성 결과를 기준선으로 저장합니다. 룰 변경이 의도한 것일 때만 실행하세요."
+        }
+      ]
+    },
+    {
+      "id": "S7",
+      "title": "7. 테스트 (E2E · CRUD · 권한/Division)",
+      "tasks": [
+        {
+          "id": "S7.accounts",
+          "title": "테스트계정/권한매트릭스 추출 (gen-accounts.py)",
+          "kind": "python",
+          "script": "${e2eDir}/gen-accounts.py",
+          "args": []
+        },
+        {
+          "id": "S7.probe",
+          "title": "dev-login 가능 계정 확인 (probe-accounts.js) — BE 기동 필요",
+          "kind": "node",
+          "script": "${e2eDir}/probe-accounts.js",
+          "args": []
+        },
+        {
+          "id": "S7.gen",
+          "title": "E2E 스펙 생성 — 화면ID (gen-e2e.js, 비우면 --all)",
+          "kind": "node",
+          "script": "${e2eDir}/gen-e2e.js",
+          "splitArgs": true,
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (비우면 --all)",
+              "default": "--all"
+            }
+          ]
+        },
+        {
+          "id": "S7.smoke",
+          "title": "E2E 스모크 실행 (run-e2e.cmd smoke <ID>) — FE/BE 기동 필요",
+          "kind": "cmd",
+          "script": "${e2eDir}/run-e2e.cmd",
+          "args": [
+            "smoke",
+            "${input:ids}"
+          ],
+          "confirm": "FE(e2e.config.json feUrl)/BE(8080, local 프로파일) 가 떠 있어야 합니다. npm/브라우저 다운로드 없음(로컬 Chrome 사용). 실행할까요?",
+          "gate": {
+            "type": "fileExists",
+            "file": "${e2eOutDir}/results/_summary.md",
+            "label": "E2E 요약"
+          },
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID(공백 구분, 비우면 Doc\\gen 전체)",
+              "default": "DMF0052"
+            }
+          ],
+          "splitArgs": true
+        },
+        {
+          "id": "S7.crud",
+          "title": "E2E CRUD 실행 (run-e2e.cmd crud) — 테스트 데이터 생성/삭제",
+          "kind": "cmd",
+          "script": "${e2eDir}/run-e2e.cmd",
+          "args": [
+            "crud",
+            "${input:ids}"
+          ],
+          "confirm": "To-Be DB 에 E2E_ 마커 행을 생성/삭제합니다. 실행할까요?",
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID(공백 구분)",
+              "default": "DMF0052"
+            }
+          ],
+          "splitArgs": true
+        },
+        {
+          "id": "S7.auth",
+          "title": "E2E 권한·Division 매트릭스 실행 (run-e2e.cmd auth)",
+          "kind": "cmd",
+          "script": "${e2eDir}/run-e2e.cmd",
+          "args": [
+            "auth",
+            "${input:ids}"
+          ],
+          "confirm": "계정 12 × Division 3 로 로그인/조회를 반복합니다. 실행할까요?",
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID(공백 구분)",
+              "default": "DMF0052"
+            }
+          ],
+          "splitArgs": true
+        },
+        {
+          "id": "S7.all",
+          "title": "E2E 전체 — 화면ID (run-e2e.cmd all ID…)",
+          "kind": "cmd",
+          "script": "${e2eDir}/run-e2e.cmd",
+          "splitArgs": true,
+          "args": [
+            "all",
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID (공백으로 여러 개)",
+              "default": "DMF0052"
+            }
+          ]
+        },
+        {
+          "id": "S7.report",
+          "title": "E2E 결과 열기 (Doc/e2e/results/_summary.md)",
+          "kind": "open",
+          "path": "${e2eOutDir}/results/_summary.md"
+        },
+        {
+          "id": "S7.html",
+          "title": "E2E HTML 리포트 열기",
+          "kind": "browser",
+          "path": "${e2eOutDir}/results/html/index.html"
+        },
+        {
+          "id": "S7.matrix",
+          "title": "계정×Division 매트릭스 열기 (_matrix.csv)",
+          "kind": "open",
+          "path": "${e2eOutDir}/specs/_matrix.csv"
+        }
+      ]
+    }
+  ]
+}

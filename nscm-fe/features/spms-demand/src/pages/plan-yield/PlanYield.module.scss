@@ -1,0 +1,53 @@
+// SDM2020 계획수율 — 설계서 레이아웃(MAIN 시트)
+//   [Tree 고정폭] | [ProcessFlow 상단 / (샘플 요청 법인 패널 | 수율/Loss 그리드) 하단]  (SDM2010 골격 승계)
+
+.content {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  margin-top: 8px;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.panels {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+.yieldSection {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+// ⭐ 우측 [2. 수율/Loss] 헤더 — 좌측 [1. 샘플 요청 법인] 헤더와 제목/버튼/그리드 시작 높이를 맞춘다.
+//   SubTitleArea DOM = (제목그룹 | 버튼그룹) 한 줄 + flex-wrap:wrap, 줄간 gap 8px, sx padding '12px 0 4px 0'.
+//   제목그룹을 100% 폭으로 만들어 버튼그룹을 둘째 줄로 내리면 좌측(제목행 / 저장 버튼행)과 같은 2행 구조가 된다.
+//   상단 기본 여백 12px 은 상쇄하고, 하단은 좌측 .container gap(8px)과 같도록 4px 을 더한다.
+.yieldHeader {
+  flex-shrink: 0;
+  margin-top: -12px;
+  padding-bottom: 4px;
+
+  // SubTitleArea 루트 Box > 제목그룹 Box
+  > div > :first-child {
+    flex: 1 0 100%;
+    min-height: 28px; // 좌측 .title 과 동일 — 아래 버튼행 높이를 맞춘다
+  }
+}
+
+.yieldGrid {
+  flex: 1;
+  min-height: 0;
+}

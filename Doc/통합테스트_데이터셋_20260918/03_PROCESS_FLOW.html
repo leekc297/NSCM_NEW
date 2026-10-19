@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<title>통합테스트 PROCESS FLOW</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({startOnLoad:true,theme:'neutral'});</script>
+<style>
+ body{font-family:'Malgun Gothic',system-ui,sans-serif;margin:24px;color:#222;background:#fff}
+ h1{border-bottom:3px solid #1F4E78;padding-bottom:8px;color:#1F4E78}
+ h2{margin-top:34px;color:#1F4E78}
+ .note{background:#F2F7FB;border-left:4px solid #1F4E78;padding:10px 14px;margin:14px 0;font-size:14px}
+ table{border-collapse:collapse;width:100%;font-size:12px;margin:12px 0}
+ th{background:#1F4E78;color:#fff;padding:7px;position:sticky;top:0}
+ td{border:1px solid #D0D7DE;padding:6px;vertical-align:top}
+ tr.inp td{background:#E2EFDA} tr.bat td{background:#FFF2CC} tr.ver td{background:#FCE4D6}
+ code{background:#F3F4F6;padding:1px 4px;border-radius:3px;font-size:11px}
+ pre.mermaid{background:#fff;text-align:center}
+</style></head><body>
+<h1>통합테스트 PROCESS FLOW</h1>
+<div class="note"><b>생성</b> 2026-09-18 09:29 &nbsp;|&nbsp; ZIOUI1 실데이터 기준 · host ol9-db · user SCM_MGR · 조회 2026-09-18 07:56:13<br>
+<b>배치는 수동 실행 전제</b> — ZIOUI1 의 관련 JOB 은 전부 <code>ENABLED=FALSE</code></div>
+<h2>프로세스 도식</h2>
+<h3>전체 개요</h3>
+<pre class='mermaid'>mindmap
+  root((통합테스트 데이터 SET))
+    40 소형
+      DMF0082 · Fcst&amp;Price MGMT
+      DMF0021 · Sales Plan
+      DMF0044 · Sales Reports
+      DMF0049 · ETC Sales Reports
+      DMF0042 · Business Plan
+      DMF0035 · Demand Plan Waterfall
+      배치 Cutoff
+    81 자동차
+      DMF0014 · Customer FCST Upload
+      DMF0082 · Fcst&amp;Price MGMT
+      DMF0021 · Sales Plan
+      DMF0035 · Demand Plan Waterfall
+      배치 Cutoff
+    82 ESS
+      DMF0020 · Sales Price
+      DMF0003 · MKT FCST
+      DMF0021 · Sales Plan
+      DMF0035 · Demand Plan Waterfall
+      배치 Cutoff
+    DMF0035 검증
+      MKT FCST
+      SALES PLAN
+      BIZ PLAN</pre><h3>DIVISION 40 (소형)</h3>
+<pre class='mermaid'>flowchart TD
+  S40_01[&quot;S40-01&lt;br/&gt;DMF0082(Fcst&amp;Price MGMT) / DM Planner&lt;br/&gt;LOC(단가)&quot;]
+  S40_02[&quot;S40-02&lt;br/&gt;DMF0082(Fcst&amp;Price MGMT) / DM Planner&lt;br/&gt;MKT_FCST&quot;]
+  S40_01 --&gt; S40_02
+  S40_03[&quot;S40-03&lt;br/&gt;DMF0082(Fcst&amp;Price MGMT) / SCP Planner&lt;br/&gt;SCM_FCST (MON)&quot;]
+  S40_02 --&gt; S40_03
+  S40_04[[&quot;S40-04&lt;br/&gt;배치 수동실행&lt;br/&gt;PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING&quot;]]
+  S40_03 --&gt; S40_04
+  S40_05[[&quot;S40-05&lt;br/&gt;배치 수동실행&lt;br/&gt;PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING&quot;]]
+  S40_04 --&gt; S40_05
+  S40_06[&quot;S40-06&lt;br/&gt;DMF0021(Sales Plan) / DM Planner&lt;br/&gt;SalesAmt_LOC&quot;]
+  S40_05 --&gt; S40_06
+  S40_07[&quot;S40-07&lt;br/&gt;DMF0021(Sales Plan) / SCP Planner&lt;br/&gt;RTF_SYS_RP&quot;]
+  S40_06 --&gt; S40_07
+  S40_08[[&quot;S40-08&lt;br/&gt;배치 수동실행&lt;br/&gt;PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE&quot;]]
+  S40_07 --&gt; S40_08
+  S40_09[&quot;S40-09&lt;br/&gt;DMF0044(Sales Reports) / DM Planner&lt;br/&gt;관리대상(Report)&quot;]
+  S40_08 --&gt; S40_09
+  S40_10[&quot;S40-10&lt;br/&gt;DMF0049(ETC Sales Reports) / DM ADMIN/ADMIN&lt;br/&gt;관리대상(Etc Report)&quot;]
+  S40_09 --&gt; S40_10
+  S40_11[&quot;S40-11&lt;br/&gt;DMF0042(Business Plan) / DM Planner&lt;br/&gt;BIZ PLAN 관리대상&quot;]
+  S40_10 --&gt; S40_11
+  S40_12{{&quot;S40-12&lt;br/&gt;DMF0035(Demand Plan Waterfall) 검증&lt;br/&gt;MKT FCST / SALES PLAN / BIZ PLAN&quot;}}
+  S40_11 --&gt; S40_12</pre>
+
+<h3>DIVISION 81 (자동차)</h3>
+<pre class='mermaid'>flowchart TD
+  S81_01[&quot;S81-01&lt;br/&gt;- / -&lt;br/&gt;CUST_FCST_EDI&quot;]
+  S81_02[&quot;S81-02&lt;br/&gt;DMF0014(Customer FCST Upload) / DM Planner&lt;br/&gt;CUST_FCST&quot;]
+  S81_01 --&gt; S81_02
+  S81_03[&quot;S81-03&lt;br/&gt;DMF0082(Fcst&amp;Price MGMT) / DM Planner&lt;br/&gt;LOC(단가)&quot;]
+  S81_02 --&gt; S81_03
+  S81_04[&quot;S81-04&lt;br/&gt;DMF0082(Fcst&amp;Price MGMT) / DM Planner&lt;br/&gt;MKT_FCST&quot;]
+  S81_03 --&gt; S81_04
+  S81_05[&quot;S81-05&lt;br/&gt;DMF0082(Fcst&amp;Price MGMT) / DM Planner (W/S)&lt;br/&gt;MKT_FCST&quot;]
+  S81_04 --&gt; S81_05
+  S81_06[&quot;S81-06&lt;br/&gt;DMF0082(Fcst&amp;Price MGMT) / SCP Planner&lt;br/&gt;SCM_FCST (TUE)&quot;]
+  S81_05 --&gt; S81_06
+  S81_07[[&quot;S81-07&lt;br/&gt;배치 수동실행&lt;br/&gt;PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING&quot;]]
+  S81_06 --&gt; S81_07
+  S81_08[&quot;S81-08&lt;br/&gt;DMF0021(Sales Plan) / DM Planner&lt;br/&gt;SalesAmt_LOC&quot;]
+  S81_07 --&gt; S81_08
+  S81_09[&quot;S81-09&lt;br/&gt;DMF0021(Sales Plan) / SCP Planner&lt;br/&gt;RTF_SYS_RP (WED)&quot;]
+  S81_08 --&gt; S81_09
+  S81_10[[&quot;S81-10&lt;br/&gt;배치 수동실행&lt;br/&gt;PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE&quot;]]
+  S81_09 --&gt; S81_10
+  S81_11{{&quot;S81-11&lt;br/&gt;DMF0035(Demand Plan Waterfall) 검증&lt;br/&gt;MKT FCST / SALES PLAN&quot;}}
+  S81_10 --&gt; S81_11</pre>
+
+<h3>DIVISION 82 (ESS)</h3>
+<pre class='mermaid'>flowchart TD
+  S82_01[&quot;S82-01&lt;br/&gt;DMF0020(Sales Price) / DM Planner&lt;br/&gt;LOC/USD/KRW 단가(52주)&quot;]
+  S82_02[&quot;S82-02&lt;br/&gt;DMF0003(MKT FCST) / DM Planner&lt;br/&gt;MKT_FCST&quot;]
+  S82_01 --&gt; S82_02
+  S82_03[&quot;S82-03&lt;br/&gt;DMF0003(MKT FCST) / DM Planner (W/S)&lt;br/&gt;MKT_FCST&quot;]
+  S82_02 --&gt; S82_03
+  S82_04[[&quot;S82-04&lt;br/&gt;배치 수동실행&lt;br/&gt;PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING&quot;]]
+  S82_03 --&gt; S82_04
+  S82_05[&quot;S82-05&lt;br/&gt;DMF0021(Sales Plan) / DM Planner&lt;br/&gt;SalesAmt_LOC&quot;]
+  S82_04 --&gt; S82_05
+  S82_06[[&quot;S82-06&lt;br/&gt;배치 수동실행&lt;br/&gt;PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE&quot;]]
+  S82_05 --&gt; S82_06
+  S82_07{{&quot;S82-07&lt;br/&gt;DMF0035(Demand Plan Waterfall) 검증&lt;br/&gt;MKT FCST / SALES PLAN&quot;}}
+  S82_06 --&gt; S82_07</pre>
+<h2>단계 전체</h2>
+<table><thead><tr><th>단계ID</th><th>DIV</th><th>순서</th><th>구분</th><th>화면</th><th>화면명</th><th>권한그룹</th><th>입력MEASURE</th><th>편집요일</th><th>대상원장</th><th>배치JOB</th><th>수동실행SP</th><th>검증포인트</th><th>대응결함No</th></tr></thead><tbody>
+<tr class='inp'><td>S40-01</td><td>40</td><td>1</td><td>입력</td><td>DMF0082</td><td>Fcst&amp;Price MGMT</td><td>DM Planner</td><td>LOC(단가)</td><td>-</td><td>DM_PLN_CFM_SELLING_PRICE</td><td></td><td></td><td>단가 입력 후 DMF0082 재조회. ⚠ 첫 진입 직후 즉시 조회 금지 — authGroup CMBO 도착 전이면 userGroup=userId 로 나가 measureAuth 미표시 응답이 남는다(ForecastPrice.tsx:287~295 재조회)</td><td>1ST-45(LOC 미입력 저장차단)</td></tr>
+<tr class='inp'><td>S40-02</td><td>40</td><td>2</td><td>입력</td><td>DMF0082</td><td>Fcst&amp;Price MGMT</td><td>DM Planner</td><td>MKT_FCST</td><td>-</td><td>DM_PLN_MKT_FCST</td><td></td><td></td><td>DMF0082 그리드 반영</td><td>1ST-33~49</td></tr>
+<tr class='inp'><td>S40-03</td><td>40</td><td>3</td><td>입력</td><td>DMF0082</td><td>Fcst&amp;Price MGMT</td><td>SCP Planner</td><td>SCM_FCST</td><td>MON</td><td>DM_PLN_MKT_FCST</td><td></td><td></td><td>SCP Planner 계정으로만 편집 가능 확인</td><td>1ST-36/41</td></tr>
+<tr class='bat'><td>S40-04</td><td>40</td><td>4</td><td>배치</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>DM_PLN_CFM_MKT_DEMAND_PLAN_C</td><td>JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_MON_40</td><td>PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING(&#x27;40&#x27;,&#x27;MKT FCST Weekly Cutoff&#x27;,&#x27;MF_W&#x27;,&#x27;Weekly Rolling&#x27;,&#x27;system&#x27;)</td><td>MF_W 신규 버전 생성 확인</td><td></td></tr>
+<tr class='bat'><td>S40-05</td><td>40</td><td>5</td><td>배치</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>DM_PLN_CFM_MKT_DEMAND_PLAN_C</td><td>JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST</td><td>PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING(&#x27;40&#x27;,&#x27;SCM FCST Weekly Cutoff&#x27;,&#x27;SF_W&#x27;,&#x27;Weekly Rolling&#x27;,&#x27;system&#x27;)</td><td>SF_W 신규 버전 생성 확인</td><td></td></tr>
+<tr class='inp'><td>S40-06</td><td>40</td><td>6</td><td>입력</td><td>DMF0021</td><td>Sales Plan</td><td>DM Planner</td><td>SalesAmt_LOC</td><td>-</td><td>DM_PLN_SALES_PLAN</td><td></td><td></td><td>SALES PLAN 저장</td><td>1ST-58~62</td></tr>
+<tr class='inp'><td>S40-07</td><td>40</td><td>7</td><td>입력</td><td>DMF0021</td><td>Sales Plan</td><td>SCP Planner</td><td>RTF_SYS_RP</td><td>-</td><td>DM_PLN_SALES_PLAN</td><td></td><td></td><td>권한별 편집 메저 분리 확인</td><td>1ST-58~62</td></tr>
+<tr class='bat'><td>S40-08</td><td>40</td><td>8</td><td>배치</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>DM_PLN_SALES_PLAN_C</td><td>JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_40</td><td>PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE(P_DIVISION_ID=&gt;&#x27;40&#x27;,P_CUTOFF_YYYYMMDD=&gt;NULL,P_CREATION_TYPE=&gt;NULL)</td><td>SALES PLAN Cutoff 버전 생성</td><td></td></tr>
+<tr class='inp'><td>S40-09</td><td>40</td><td>9</td><td>입력</td><td>DMF0044</td><td>Sales Reports</td><td>DM Planner</td><td>관리대상(Report)</td><td>-</td><td>-</td><td></td><td></td><td>추가 관리대상 반영</td><td>CHAT-20260820-2~13</td></tr>
+<tr class='inp'><td>S40-10</td><td>40</td><td>10</td><td>입력</td><td>DMF0049</td><td>ETC Sales Reports</td><td>DM ADMIN/ADMIN</td><td>관리대상(Etc Report)</td><td>-</td><td>-</td><td></td><td></td><td>⚠ etc-sales-reports.editLock G0: DM Planner 는 82 만 편집 허용 → 40 은 상위권한 필요</td><td>CHAT-20260820-14~19</td></tr>
+<tr class='inp'><td>S40-11</td><td>40</td><td>11</td><td>입력</td><td>DMF0042</td><td>Business Plan</td><td>DM Planner</td><td>BIZ PLAN 관리대상</td><td>-</td><td>DM_PLN_BIZPLAN</td><td></td><td></td><td>BIZ PLAN 저장</td><td>⚠ 원장 0건(공백)</td></tr>
+<tr class='ver'><td>S40-12</td><td>40</td><td>12</td><td>검증</td><td>DMF0035</td><td>Demand Plan Waterfall</td><td>-</td><td>MKT FCST / SALES PLAN / BIZ PLAN</td><td>-</td><td>-</td><td></td><td></td><td>3 TYPE 각각에서 S40-02·06·11 입력값 집계 확인</td><td>UM-01~12</td></tr>
+<tr class='inp'><td>S81-01</td><td>81</td><td>1</td><td>선행/배치</td><td>-</td><td>-</td><td>-</td><td>CUST_FCST_EDI</td><td>-</td><td>DM_PLN_MKT_FCST</td><td>JOB_PR_DM_DNM_EDI_CALLOFF</td><td>PR_DM_PLN_CUST_FCST_RECORD(&#x27;81&#x27;,&#x27;EDI&#x27;)</td><td>EDI 유입분은 MEASURE=CUST_FCST_EDI 로 적재 (원장 DM_MST_CUSTOMER_FCST 경유)</td><td>⚠ 절차 신규정의</td></tr>
+<tr class='inp'><td>S81-02</td><td>81</td><td>2</td><td>선행/입력</td><td>DMF0014</td><td>Customer FCST Upload</td><td>DM Planner</td><td>CUST_FCST</td><td>-</td><td>DM_PLN_MKT_FCST</td><td></td><td></td><td>수기/Excel 유입분은 MEASURE=CUST_FCST — EDI분(CUST_FCST_EDI)과 구분 확인</td><td>2ND-90~92</td></tr>
+<tr class='inp'><td>S81-03</td><td>81</td><td>3</td><td>입력</td><td>DMF0082</td><td>Fcst&amp;Price MGMT</td><td>DM Planner</td><td>LOC(단가)</td><td>-</td><td>SCM_MST_FUTURE_PRICE</td><td></td><td></td><td>⚠ 81 은 DM_PLN_CFM_SELLING_PRICE 0건 — FUTURE_PRICE 축. ⚠ 첫 진입 직후 즉시 조회 금지(authGroup CMBO race)</td><td>1ST-63~67</td></tr>
+<tr class='inp'><td>S81-04</td><td>81</td><td>4</td><td>입력</td><td>DMF0082</td><td>Fcst&amp;Price MGMT</td><td>DM Planner</td><td>MKT_FCST</td><td>-</td><td>DM_PLN_MKT_FCST</td><td></td><td></td><td>DMF0082 그리드 반영</td><td>1ST-63~67</td></tr>
+<tr class='inp'><td>S81-05</td><td>81</td><td>5</td><td>입력</td><td>DMF0082</td><td>Fcst&amp;Price MGMT</td><td>DM Planner (W/S)</td><td>MKT_FCST</td><td>-</td><td>DM_PLN_MKT_FCST</td><td></td><td></td><td>W/S 권한 편집 범위 확인. ⚠ 사전확인 필수 — CMBO MktFcstWsPlannerYn 이 0행이면 wsPlannerYn=false 로 조용히 degrade 되어 AS_In_Req·W/S FCST Type·AS FROM SITE 검증이 오류 없이 전부 꺼진다. 계정은 ADMIN 미겸직(jaehyeok/miyeong.lee)만 사용</td><td>1ST-63(W/S 권한)</td></tr>
+<tr class='inp'><td>S81-06</td><td>81</td><td>6</td><td>입력</td><td>DMF0082</td><td>Fcst&amp;Price MGMT</td><td>SCP Planner</td><td>SCM_FCST</td><td>TUE</td><td>DM_PLN_MKT_FCST</td><td></td><td></td><td>⚠ 81 SCM_FCST 원장 0건 — 신규 입력 시나리오</td><td>1ST-41</td></tr>
+<tr class='bat'><td>S81-07</td><td>81</td><td>7</td><td>배치</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>DM_PLN_CFM_MKT_DEMAND_PLAN_C</td><td>JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_2</td><td>PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING(&#x27;81&#x27;,&#x27;MKT FCST Weekly Cutoff&#x27;,&#x27;MF_W&#x27;,&#x27;Weekly Rolling&#x27;,&#x27;system&#x27;)</td><td>MF_W 신규 버전 생성 확인</td><td></td></tr>
+<tr class='inp'><td>S81-08</td><td>81</td><td>8</td><td>입력</td><td>DMF0021</td><td>Sales Plan</td><td>DM Planner</td><td>SalesAmt_LOC</td><td>-</td><td>DM_PLN_SALES_PLAN</td><td></td><td></td><td>SALES PLAN 저장</td><td>1ST-58~62</td></tr>
+<tr class='inp'><td>S81-09</td><td>81</td><td>9</td><td>입력</td><td>DMF0021</td><td>Sales Plan</td><td>SCP Planner</td><td>RTF_SYS_RP</td><td>WED</td><td>DM_PLN_SALES_PLAN</td><td></td><td></td><td>수요일만 편집 가능 확인</td><td>1ST-58~62</td></tr>
+<tr class='bat'><td>S81-10</td><td>81</td><td>10</td><td>배치</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>DM_PLN_SALES_PLAN_C</td><td>JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81</td><td>PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE(&#x27;81&#x27;,&#x27;&#x27;)</td><td>SALES PLAN Cutoff 버전 생성</td><td></td></tr>
+<tr class='ver'><td>S81-11</td><td>81</td><td>11</td><td>검증</td><td>DMF0035</td><td>Demand Plan Waterfall</td><td>-</td><td>MKT FCST / SALES PLAN</td><td>-</td><td>-</td><td></td><td></td><td>2 TYPE 에서 입력값 집계 확인</td><td>UM-01~12</td></tr>
+<tr class='inp'><td>S82-01</td><td>82</td><td>1</td><td>입력</td><td>DMF0020</td><td>Sales Price</td><td>DM Planner</td><td>LOC/USD/KRW 단가(52주)</td><td>-</td><td>SCM_MST_FUTURE_PRICE</td><td></td><td></td><td>52주 구간 단가 입력. DMF0020 편집가능 division 은 82 뿐(lookup DM_EDITABLE_DIVISION_ALLOW)</td><td>1ST-23~30</td></tr>
+<tr class='inp'><td>S82-02</td><td>82</td><td>2</td><td>입력</td><td>DMF0003</td><td>MKT FCST</td><td>DM Planner</td><td>MKT_FCST</td><td>-</td><td>DM_PLN_MKT_FCST</td><td></td><td></td><td>⚠ DMF0082 는 82 조회전용(V82-00) — DMF0003 사용</td><td>1ST-50~57</td></tr>
+<tr class='inp'><td>S82-03</td><td>82</td><td>3</td><td>입력</td><td>DMF0003</td><td>MKT FCST</td><td>DM Planner (W/S)</td><td>MKT_FCST</td><td>-</td><td>DM_PLN_MKT_FCST</td><td></td><td></td><td>W/S 권한 + AS From Site. ⚠ CMBO MktFcstWsPlannerYn / FcstTypeWs 사전확인 필수 — 미등록 시 무증상 degrade</td><td>1ST-57</td></tr>
+<tr class='bat'><td>S82-04</td><td>82</td><td>4</td><td>배치</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>DM_PLN_CFM_MKT_DEMAND_PLAN_C</td><td>JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_MON_82</td><td>PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING(&#x27;82&#x27;,&#x27;MKT FCST Weekly Cutoff&#x27;,&#x27;MF_W&#x27;,&#x27;Weekly Rolling&#x27;,&#x27;system&#x27;)</td><td>MF_W 신규 버전 생성 확인</td><td></td></tr>
+<tr class='inp'><td>S82-05</td><td>82</td><td>5</td><td>입력</td><td>DMF0021</td><td>Sales Plan</td><td>DM Planner</td><td>SalesAmt_LOC</td><td>-</td><td>DM_PLN_SALES_PLAN</td><td></td><td></td><td>⚠ 82 는 SCP Planner 메저 메타 없음</td><td>1ST-58~62</td></tr>
+<tr class='bat'><td>S82-06</td><td>82</td><td>6</td><td>배치</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>DM_PLN_SALES_PLAN_C</td><td>JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_82</td><td>PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE(&#x27;82&#x27;,&#x27;&#x27;)</td><td>SALES PLAN Cutoff 버전 생성</td><td></td></tr>
+<tr class='ver'><td>S82-07</td><td>82</td><td>7</td><td>검증</td><td>DMF0035</td><td>Demand Plan Waterfall</td><td>-</td><td>MKT FCST / SALES PLAN</td><td>-</td><td>-</td><td></td><td></td><td>2 TYPE 에서 입력값 집계 확인</td><td>UM-01~12</td></tr>
+
+</tbody></table>
+<h2>DMF0035 Waterfall 3 TYPE</h2>
+<table><thead><tr><th>TYPE</th><th>PROGRAM_ID</th><th>화면명</th><th>조회 SP</th><th>집계 원장</th></tr></thead><tbody>
+<tr><td>MKT FCST</td><td>DMF0035</td><td>Demand Plan Waterfall</td><td><code>PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL</code></td><td><code>DM_PLN_CFM_MKT_DEMAND_PLAN_C</code></td></tr><tr><td>SALES PLAN</td><td>DMF0022</td><td>Sales Plan Waterfall</td><td><code>PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL</code></td><td><code>DM_PLN_SALES_PLAN_C</code></td></tr><tr><td>BIZ PLAN</td><td>DMF0051</td><td>Biz Plan Waterfall</td><td><code>PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL</code></td><td><code>DM_PLN_BP_FCST_C</code></td></tr>
+</tbody></table>
+</body></html>

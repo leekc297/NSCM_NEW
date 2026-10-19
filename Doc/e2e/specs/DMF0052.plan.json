@@ -1,0 +1,309 @@
+{
+  "id": "DMF0052",
+  "menuId": "DMF0052",
+  "page": "Dmf0052",
+  "routePath": "report/dmf0052",
+  "asisName": "EDISummary",
+  "fields": [
+    {
+      "key": "today",
+      "label": "Today",
+      "lbl": "",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkToday"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model / Nickname",
+      "lbl": "LBL00618",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "projectCodes",
+      "label": "Project",
+      "lbl": "LBL00617",
+      "kind": "popup",
+      "component": "ProjectField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtProject"
+    },
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "drpPeriod"
+    },
+    {
+      "key": "senderCodes",
+      "label": "EDI Sender",
+      "lbl": "",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "SenderCode",
+      "popup": false,
+      "asis": "clbEDISender"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "refresh",
+      "label": "Refresh",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "btnRefresh"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "ERP Data",
+      "key": "ERP_DATA",
+      "labels": [
+        "Company",
+        "EDI_IF_SEQ",
+        "(ERP) Status",
+        "Status",
+        "Model",
+        "Nickname",
+        "EDI Sender",
+        "Ship to",
+        "Sold to",
+        "Status Detail"
+      ]
+    },
+    {
+      "name": "GSCM Data",
+      "key": "GSCM_DATA",
+      "labels": [
+        "EDI Incoterms(SSPM)",
+        "Sales Site Active",
+        "Sales Site 누락",
+        "SSPM 누락",
+        "SSPM Active",
+        "Model",
+        "Nickname",
+        "Project Code",
+        "EDI Sender Code",
+        "EDI Sender"
+      ]
+    },
+    {
+      "name": "SUMMARY",
+      "key": "SUMMARY",
+      "labels": [
+        "GSCM 수신한 데이터 수",
+        "ERP전송 데이터 수",
+        "Status",
+        "날짜"
+      ]
+    },
+    {
+      "name": "Summary Pjt",
+      "key": "SUMMARY_PJT",
+      "labels": [
+        "ERP Data 확인 필요",
+        "Master Data 정비 필요 건 수 (GSCM)",
+        "정상",
+        "최종 수신일",
+        "수신한 데이터 수",
+        "Project Code",
+        "EDI Sender Code",
+        "EDI Sender"
+      ]
+    },
+    {
+      "name": "Summary Status",
+      "key": "SUMMARY_STATUS",
+      "labels": [
+        "%",
+        "Qty",
+        "Status ERP",
+        "Status GSCM"
+      ]
+    }
+  ],
+  "popupSheets": [
+    "EDI Summary GSCM DATA Popup",
+    "Site Popup"
+  ],
+  "hasSave": false,
+  "hasSpreadTitle": true,
+  "procs": [
+    {
+      "sp": "DMF0052_GET_SUMMARY_DATA",
+      "sheet": "SUMMARY",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0052.P_DMF0052_GET_SUMMARY_DATA",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "DMF0052_GET_PJT_DATA",
+      "sheet": "Summary Pjt",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0052.P_DMF0052_GET_PJT_DATA",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "DMF0052_GET_STATUS_DATA",
+      "sheet": "Summary Status",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0052.P_DMF0052_GET_STATUS_DATA",
+      "entries": [
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "DMF0052_GET_DETAIL_DATA",
+      "sheet": "ERP Data",
+      "btn": "DETAIL_DATA",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0052.P_DMF0052_GET_DETAIL_DATA",
+      "entries": [
+        "event:this.spdSummaryPJT.CellDoubleClick",
+        "event:this.btnRefresh.Click"
+      ]
+    },
+    {
+      "sp": "DMF0052_GET_ERP_DATA",
+      "sheet": "ERP Data",
+      "btn": "ERP_DATA",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0052.P_DMF0052_GET_ERP_DATA",
+      "entries": [
+        "event:this.spdSummaryPJT.CellDoubleClick"
+      ]
+    },
+    {
+      "sp": "DMF0052_GET_SPREAD_TITLE",
+      "sheet": "spreadTitle",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0052.P_DMF0052_GET_SPREAD_TITLE",
+      "entries": [
+        "event:this.spdSummaryPJT.CellDoubleClick",
+        "event:this.btnRefresh.Click",
+        "event:this.Load",
+        "button:FindButton"
+      ]
+    },
+    {
+      "sp": "UP_FX_GETCOMMONDATALIST_DM",
+      "sheet": "(combo)",
+      "btn": "(콤보ID 등록)",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0052.P_UP_FX_GETCOMMONDATALIST_DM",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "DMF0052_GET_SITE_POPUP",
+      "sheet": "EDI Summary GSCM DATA Popup",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_DMF0052.P_DMF0052_GET_SITE_POPUP",
+      "entries": [
+        "event:this.Load",
+        "button:FindButton"
+      ]
+    }
+  ],
+  "expectedCols": {
+    "ERP Data": {
+      "40": [],
+      "81": [
+        "EDI_IF_SEQ",
+        "EDI Sender",
+        "Company",
+        "Model",
+        "Nickname",
+        "Sold to",
+        "Ship to",
+        "(ERP) Status",
+        "Status",
+        "Status Detail"
+      ],
+      "82": []
+    },
+    "GSCM Data": {
+      "40": [],
+      "81": [
+        "EDI Sender",
+        "EDI Sender Code",
+        "Model",
+        "Nickname",
+        "Project Code",
+        "Sales Site 누락",
+        "Sales Site Active",
+        "SSPM 누락",
+        "SSPM Active",
+        "EDI Incoterms(SSPM)"
+      ],
+      "82": []
+    },
+    "SUMMARY": {
+      "40": [],
+      "81": [
+        "날짜",
+        "ERP전송 데이터 수",
+        "GSCM 수신한 데이터 수",
+        "Status"
+      ],
+      "82": []
+    },
+    "Summary Pjt": {
+      "40": [],
+      "81": [
+        "EDI Sender",
+        "EDI Sender Code",
+        "최종 수신일",
+        "Project Code",
+        "수신한 데이터 수",
+        "정상",
+        "Master Data 정비 필요 건 수 (GSCM)",
+        "ERP Data 확인 필요"
+      ],
+      "82": []
+    },
+    "Summary Status": {
+      "40": [],
+      "81": [
+        "Status ERP",
+        "Status GSCM",
+        "Qty",
+        "%"
+      ],
+      "82": []
+    }
+  },
+  "hasMeta": true,
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [],
+  "expectedBtnsByGroup": {},
+  "menuAuth": "menu.csv"
+}

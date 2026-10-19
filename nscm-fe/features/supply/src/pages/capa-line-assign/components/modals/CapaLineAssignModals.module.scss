@@ -1,0 +1,21 @@
+// 팝업 본문 레이아웃 — inline style 금지(Top11 #5).
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 520px;
+}
+
+.gridWrapper {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+// 하단 버튼 — flex-end 정렬이라 DOM 순서상 마지막이 최우측이다.
+//   액션(OK) 먼저, Close 를 마지막에 둔다(nscm-patterns §3.7 / hook #34).
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

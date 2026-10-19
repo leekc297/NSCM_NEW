@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { useQuery } from '@foundation/query-client';
-import { hasRequiredMark } from '@foundation/utils';
 import { Button } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { useMessageStore } from '@shared/stores';
@@ -29,6 +28,7 @@ import {
   overrideRows,
   parseWidth,
   reorderRows,
+  serializeSavePayload,
   toHiddenColumnSet,
   toZeroWidthColumnSet,
   type ColumnSettingFallback,
@@ -44,7 +44,8 @@ import {
 
 // ColumnSelectDualList 의 제네릭 제약은 Record<string, string | number> 다.
 //   ColumnLayoutRow 는 interface + isKey:boolean 이라 그대로 넣을 수 없어 표시용 row 로 투영한다.
-//   (라벨 빨간색 강조는 COLUMN_LABEL_NAME 끝의 '*' 로 판단하므로 별도 필드가 필요 없다 — renderLabel 참조.)
+//   (라벨 빨간색 강조는 USER_SELECTABLE_FLAG='N'(고정 컬럼) 여부로 판단하므로 별도 필드가 필요 없다 —
+//    COLUMN_NAME 으로 keyColumns Set 을 조회한다. renderLabel 참조.)
 type DualRow = {
   COLUMN_NAME: string;
   COLUMN_LABEL_NAME: string;
@@ -369,10 +370,10 @@ export const ColumnLayoutModal = ({
     onDoubleClick: (e: { stopPropagation: () => void }) => e.stopPropagation(),
   };
 
-  // 라벨 빨간색 = 필수표시(라벨 끝 '*') 컬럼. 그리드 헤더의 빨간점(_requiredMark)과 동일 기준이며,
-  //   이동 잠금(isKey / USER_SELECTABLE_FLAG)과는 별개 축이다.
+  // 라벨 빨간색 = 고정 컬럼(USER_SELECTABLE_FLAG='N', keyColumns) — 비표시로 옮길 수 없는 컬럼임을
+  //   색으로 알린다. (2026-09-18 변경 전 기준: 라벨 끝 '*' 표기)
   const renderLabel = (row: DualRow) => (
-    <span className={hasRequiredMark(row.COLUMN_LABEL_NAME) ? styles.keyLabel : undefined}>
+    <span className={keyColumns.has(row.COLUMN_NAME) ? styles.keyLabel : undefined}>
       {row.COLUMN_LABEL_NAME}
     </span>
   );
@@ -461,7 +462,15 @@ export const ColumnLayoutModal = ({
       return;
     }
     // 표시 1..n → 숨김 컬럼 후행 → 비표시 0. 숨김 컬럼은 항상 표시로 저장된다(buildSavePayload 주석).
-    onSave(buildSavePayload(rows, hiddenFromList));
+    const payload = buildSavePayload(rows, hiddenFromList);
+    // 변경 없음이면 저장/재조회를 건너뛰고 닫기만 한다 (2026-09-08 요청 — 무변경 저장이 각 화면
+    //   onSave 의 titleSet 저장·invalidate·그리드 Reset 을 돌려 조회 결과를 비우던 동작 제거).
+    //   비교 축은 저장에 실제로 반영되는 표시/순서/폭/색 — 팝업이 연 시점의 initialRows 를 기준값으로 둔다.
+    if (serializeSavePayload(payload) === serializeSavePayload(buildSavePayload(initialRows, hiddenFromList))) {
+      modalClose();
+      return;
+    }
+    onSave(payload);
     modalClose();
   };
 

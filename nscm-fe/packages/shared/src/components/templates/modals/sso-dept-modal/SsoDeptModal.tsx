@@ -4,8 +4,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { GridUtils } from '@foundation/utils';
 import { SearchArea, DataGrid, CustomDialog } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
-import { FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import type { DialogNavigationSize } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
 import { SHEETS, POPUP_ID } from './sso-dept-modal.constants';
@@ -47,13 +48,14 @@ export const SsoDeptModal = ({
   // 입력 중인 값 — 조회하지 않고 로컬 state 에만 담아둔다.
   const [deptInput, setDeptInput] = useState<string>(initialDept);
 
-  const { data } = useTabProcQuery<POPUP_ID, SHEETS.SSO_DEPT>({
+  const { data, isLoading, isFetching } = useTabProcQuery<POPUP_ID, SHEETS.SSO_DEPT>({
     menuId: POPUP_ID,
     sheetName: SHEETS.SSO_DEPT,
     tabId: POPUP_ID,
     filters: searchParam,
     enabled: true,
   });
+  const loading = isLoading || isFetching;
 
   // 필터링은 프로시저(department 파라미터)가 하고, 그리드는 조회 결과를 그대로 보여준다.
   //   useMemo — 매 렌더 새 배열이면 그리드가 re-bind 되어 스크롤·선택이 초기화된다.
@@ -79,13 +81,23 @@ export const SsoDeptModal = ({
     modalClose();
   };
 
+  const handleSubmit = () => {
+    const selections = gridRef.current?.selectedItems as ResponseData<POPUP_ID, SHEETS.SSO_DEPT>[];
+    if (!selections?.length) return;
+
+    setSelectedValue(selections[0].DEPT_ID, selections[0].DEPT_NM);
+    modalClose();
+  };
+
   useEffect(() => {
     if (!open) return;
     setSearchParam({
       department: initialDept,
     });
     setDeptInput(initialDept);
-    if (!initialized) void fetchStaticColumns();
+    // initialized 가 과거의 빈 조회 결과를 영속(sessionStorage)해 컬럼이 비어버리는 경우가 있어
+    // (예: admin 메타 유실 중 한 번 열림), 컬럼이 비어 있으면 재조회한다.
+    if (!initialized || staticColumns.length === 0) void fetchStaticColumns();
   }, [open]);
 
   return (
@@ -104,7 +116,7 @@ export const SsoDeptModal = ({
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           <SearchArea
-            searchButtonLabel={t('LBL00722', '_Search')}
+            searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleSearch}
             conditions={
               <Grid size={8}>
@@ -125,12 +137,36 @@ export const SsoDeptModal = ({
             }
           />
           <div className={styles.gridWrapper}>
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
+            />
             <DataGrid<ResponseData<POPUP_ID, SHEETS.SSO_DEPT>>
               gridRef={gridRef}
               isReadOnly
               staticColumns={staticColumns}
               itemsSource={itemsSource}
               dblClick={handleDblClick}
+            />
+          </div>
+          <div className={styles.buttonWrapper}>
+            <Button
+              appearance='contained'
+              buttonLabel='OK'
+              iconComponent={<ControlConfirmIcon size='small' />}
+              iconPosition='leading'
+              priority='primary'
+              size='medium'
+              onClick={handleSubmit}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
             />
           </div>
         </div>

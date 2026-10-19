@@ -1,0 +1,7 @@
+// 탭 영역이 남은 세로 공간을 전부 쓰도록 — 그리드 높이 0 방지(inline style 금지).
+.tabArea {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+}

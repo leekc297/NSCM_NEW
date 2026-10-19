@@ -1,0 +1,4 @@
+﻿"menu_id","sheet","request_keys","response_cursors","response_keys","sp_hints","line"
+"SCM0016","batchLog","runStatus","batchLog","batchLog.JOB_ID batchLog.JOB_NAME batchLog.JOB_DESCRIPTION batchLog.STEP_ID batchLog.STEP_NAME batchLog.SCHEDULE_UID batchLog.SCHEDULE_NAME batchLog.RUN_DATE batchLog.RUN_STATUS batchLog.RUN_STATUS_NAME batchLog.RUN_DURATION batchLog.RUN_STATUS_MESSAGE batchLog.NEXT_RUN_DATE","PKG_SCM0016","2313"
+"SCM0016","stepInfo","jobId","stepInfo","stepInfo.JOB_ID stepInfo.JOB_NAME stepInfo.STEP_UID stepInfo.STEP_ID stepInfo.STEP_NAME stepInfo.STEP_TYPE stepInfo.EXEC_COMMAND stepInfo.ON_SUCCESS_ACTION stepInfo.RETRY_ATTEMPTS stepInfo.RETRY_INTERVAL stepInfo.ON_FAILURE_ACTION","PKG_SCM0016","2335"
+"SCM0016","batchLogHist","jobId","batchLogHist","batchLogHist.JOB_ID batchLogHist.RUN_DATE batchLogHist.RUN_STATUS batchLogHist.RUN_STATUS_NAME batchLogHist.RUN_DURATION batchLogHist.RUN_STATUS_MESSAGE","PKG_SCM0016","2355"

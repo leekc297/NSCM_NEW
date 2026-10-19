@@ -35,7 +35,14 @@ interface CustFcstWaterfallAction {
   fetchStaticMeasures: (input: { divisionId: string }) => Promise<void>;
   /** ColumnLayoutModal onSave — 표시/순서/폭/색을 staticColumns 에 즉시 반영 (DMF0040 계보). */
   applyColumnLayout: (
-    settings: { colNm: string; visible: boolean; width?: number; cellColor?: string; textColor?: string; order?: number }[]
+    settings: {
+      colNm: string;
+      visible: boolean;
+      width?: number;
+      cellColor?: string;
+      textColor?: string;
+      order?: number;
+    }[]
   ) => void;
   /** UC-03 / hook #132 §2-2 — 설정 저장 시 기존 조회 데이터 Reset (그리드 비움, Search 로 재조회). */
   clearData: () => void;
@@ -46,12 +53,19 @@ interface CustFcstWaterfallAction {
   resetForBucket: (bucket: string) => void;
 }
 
-/** AS-IS PR_GET_DAY_RANGE — Period p_month=6 / Input Date p_month=1 (.cs GetDayRange L1534~1554) */
+/**
+ * 조회조건 기간 기본값 — AS-IS 실화면 실측 (사용자 확정 2026-09-01).
+ *
+ *   Period*      이번달 1일 ~ +5개월 말일   (2026-09-01 ~ 2027-02-28)
+ *   Input Date*  이번달 1일 ~ 이번달 말일   (2026-09-01 ~ 2026-09-30)
+ *
+ * 금지: Period 에 add(6, 'month') - 2027-03-31 이 되어 한 달 더 나간다.
+ */
 const defaultPeriod = () => ({
   startYyyymmdd: dayjs().startOf('month').format('YYYYMMDD'),
-  endYyyymmdd: dayjs().add(6, 'month').endOf('month').format('YYYYMMDD'),
+  endYyyymmdd: dayjs().add(5, 'month').endOf('month').format('YYYYMMDD'),
   fromCreateYyyymmdd: dayjs().startOf('month').format('YYYYMMDD'),
-  toCreateYyyymmdd: dayjs().add(1, 'month').endOf('month').format('YYYYMMDD'),
+  toCreateYyyymmdd: dayjs().endOf('month').format('YYYYMMDD'),
 });
 
 const initSearchParams: SearchParams = {
@@ -92,6 +106,17 @@ const BOOL_KEYS = new Set<string>(
     .map(([k]) => k)
 );
 
+/**
+ * 저장 조회조건(F6) 복원에서 제외할 키 — 기간은 조회 시점 기준으로 다시 계산한다.
+ *
+ * 저장은 절대 날짜(YYYYMMDD)라 그대로 되살리면 저장한 달의 구간이 그대로 뜬다. 지난달에
+ * 저장해 두면 이번달에도 지난달 기준 기간이 올라와 "기본값을 고쳤는데 화면은 그대로"가 된다
+ * (2026-09-01 실사고 — Period 종료일이 계속 2027-03-31 로 보임).
+ *
+ * defaultPeriod() 의 키를 그대로 쓴다 - 기간 칸이 늘거나 이름이 바뀌어도 따라온다.
+ */
+const PERIOD_KEYS = new Set<string>(Object.keys(defaultPeriod()));
+
 /** 멀티 필터 → SP 규약: 빈 배열 = 'ALL' (빈 토큰 전멸 계보 — DMF0035/DMF0040 orAll 동일) */
 const orAll = (arr: string[]): string => (arr.length > 0 ? arr.join(',') : 'ALL');
 
@@ -123,6 +148,7 @@ export const useCustFcstWaterfallStore = createPersistedStoreWithTab<
         const patch: Record<string, unknown> = {};
         for (const { paramNm, paramCtn } of rows) {
           if (!(paramNm in initSearchParams)) continue;
+          if (PERIOD_KEYS.has(paramNm)) continue; // 기간은 항상 오늘 기준 기본값이 이긴다
           const val = paramCtn ?? '';
           if (ARRAY_KEYS.has(paramNm)) patch[paramNm] = val ? val.split(',').filter(Boolean) : [];
           else if (BOOL_KEYS.has(paramNm)) patch[paramNm] = val === 'true';

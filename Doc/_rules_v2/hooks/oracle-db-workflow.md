@@ -24,6 +24,7 @@
 
 ## §1 SP 작성·변경 공통 의무 (모든 타입)
 
+0. ⭐⭐⭐ **새로고침한 최신 원문 기준 (#152, 2026-09-15 사용자 지시 · 실행 hook `check-db-fresh-source.ps1` 강제)**: 착수 시 DB 원문(`ALL_SOURCE`+`LAST_DDL_TIME`) 새로 조회 = 유일한 기준본 · 로컬 백업/패키지/census/공통소스 SQL/이전 세션 기억 기준 ⛔ · 적용 직전 FRESH-GATE 재조회 불일치 시 중단·재병합 · 패키지 SQL `SOURCE-FRESH` 스탬프(24h) — `db-source-refresh-before-work.md`
 1. **Signature**: GET = `O_RC`(소문자 매핑) + `O_RESULT_CURSOR` dual OUT 의무 / SAVE = 단일 cursor 허용 — `sp-dual-cursor-pattern.md`
 2. **PROC_M**: 행 수 + SORT_ORD = `ALL_ARGUMENTS` positional 정확 일치 (PLS-00306 차단) — `proc-meta-signature-match.md`
 3. **SHEET_COLUMNS**: COLUMN_NAME = SP SELECT alias case-sensitive 일치 — `sheet-columns-binding-match.md`

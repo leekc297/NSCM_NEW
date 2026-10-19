@@ -5,7 +5,7 @@ export type MENU_ID = typeof MENU_ID;
  * DMF0053 Customer FCST Waterfall — 읽기 전용 Waterfall 조회 리포트 (신규 생성 2026-08-27).
  * 정본 분석: Doc/화면분석서/DMF0053_CustFcstWaterfall_{주요이벤트_상세분석,제약매트릭스_상세,Cascade_Filter_전수}.md
  * AS-IS: GSCM.DM.Forms.UIL\Plan\DMF0053_CustFcstWaterfall.cs 1,822행 (Insert/Delete/Save 주석·EditButton=MSG00109).
- * Version(Date*) 조회조건은 AS-IS btnVersion 숨김 + Figma·#112 카탈로그 부재로 미구현 — versionNo='' 고정.
+ * Version(Date*) 조회조건은 AS-IS btnVersion 숨김 + 화면 설계·#112 카탈로그 부재로 미구현 — versionNo='' 고정.
  */
 export enum SHEETS {
   // 메인 조회 — PKG_DMF0053.P_DMF0053_GET_CUST_FCST_WATERFALL (21 IN + O_RC1~3)

@@ -35,7 +35,11 @@ interface CustomerFcstMasterAction {
 
 const initSearchParams: SearchParamProps = {
   planWeek: '',
-  divisionId: '81',
+  // 빈 값 진입 — 화면 자동선택(FilterMyDivision 첫 행/세션 division)이 채운다. 하드코딩('81')이면
+  //   가드(if (searchParams.divisionId) return)에 걸려 자동선택이 발화하지 않고, '81' 권한이 없는
+  //   사용자에게도 '81' 이 세팅된다. 서버 저장 검색조건(/search-conditions)이 있으면 그 값이
+  //   우선 복원되고(fetchStaticColumns), 없을 때만 자동선택이 목록 첫 행/세션 division 을 채운다.
+  divisionId: '',
   endCustomer: 'ALL',
   scmSiteId: 'ALL',
   bucketType: 'WEEKLY',

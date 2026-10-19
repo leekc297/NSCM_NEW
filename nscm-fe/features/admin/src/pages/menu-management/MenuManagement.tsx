@@ -1,4 +1,4 @@
-import { CellRange, type FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 
@@ -172,7 +172,9 @@ export const MenuManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const hotkeyConfig: HotkeyConfig = {
     insert: onInsert,
-    // delete: onDelete,
+    // USE_YN 으로 사용 여부를 관리하는 그리드라 삭제는 신규행 제거 전용(onDelete = removeRow deleteOnlyNew=true).
+    // 미연결 시 SubTitle 기본 F9(removeRow deleteOnlyNew=false)로 떨어져 기존행에 D flag 가 찍히므로 명시 연결한다.
+    delete: onDelete,
     search: () => setFilters(SHEETS.LEVEL_ONE_MENU, filters[SHEETS.LEVEL_ONE_MENU]),
     save: onSave,
     manual: false,
@@ -205,7 +207,7 @@ export const MenuManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
       dataItem.CRUD_TYPE = CRUD_TYPE.MODIFY;
     }
 
-    grid.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
+    GridUtils.refreshRow(grid, clickedRow);
   };
 
   const setMessage = (messageId: string, message: string) => {
@@ -255,11 +257,14 @@ export const MenuManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
         openSearchArea={isOpenSearchArea}
         disableSearchArea
       />
+      {/* dataCount 는 하드코딩 0 이 아니라 툴바 대상(activeTab) 그리드의 실제 건수를 반영한다.
+          3 개 그리드가 항상 동시에 보이는 화면이라, 어느 그리드 건수인지는 포커스(activeTab)
+          기준으로 특정된다(다른 화면의 lastFocus 패턴과 동일). */}
       <SubTitle
         menuId={MENU_ID}
         grid={gridRefs[activeTab]}
         gridFilter={gridFilterRefs[activeTab]}
-        dataCount={0}
+        dataCount={rows[activeTab]?.length ?? 0}
         excelFileName='Menu'
         hotkeyConfig={hotkeyConfig}
       />

@@ -1,4 +1,4 @@
-import { CellRange, CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useRef, useState, type MutableRefObject } from 'react';
 
@@ -57,7 +57,7 @@ export const SalesSiteLocationGrid = ({
     clickedItem.PLANT_ID = plantId;
     clickedItem.LOCATION_CODE = storageId;
     clickedItem.LOCATION_DESCRIPTION = storageDesc;
-    gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
+    GridUtils.refreshRow(gridRef.current, clickedRow);
   };
 
   const handleFocus = () => {

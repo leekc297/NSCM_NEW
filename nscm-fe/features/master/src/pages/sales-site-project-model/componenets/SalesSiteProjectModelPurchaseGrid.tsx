@@ -1,4 +1,4 @@
-import { CellRange, CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useRef, useState, type MutableRefObject } from 'react';
 
@@ -8,8 +8,14 @@ import { DataGrid } from '@shared/components';
 import { OwnerModal } from '../../../components';
 import type { MODAL_OWNER } from '../../../components/ownerModal/owner-modal.constants';
 import type { MENU_ID, RESPONSE_SET } from '../sales-site-project-model.constants';
-import { SHEETS, SHEET_INDEX, SINGLE_OWNER_DIVISIONS } from '../sales-site-project-model.constants';
+import {
+  MAX_OWNER_COUNT,
+  SHEETS,
+  SHEET_INDEX,
+  SINGLE_OWNER_DIVISIONS,
+} from '../sales-site-project-model.constants';
 import { useEditBaseline } from '../sales-site-project-model.editBaseline';
+import { useSalesCompanyGuard } from '../sales-site-project-model.salesCompanyGuard';
 import { useSalesSiteProjectModelStore } from '../useSalesSiteProjectModelStore';
 
 interface SalesSiteProjectModelPurchaseGridProps {
@@ -40,6 +46,15 @@ export const SalesSiteProjectModelPurchaseGrid = ({
   // 조회 원본 기준선으로 수정상태(M)를 재판정 — 사유는 sales-site-project-model.editBaseline 참조.
   const resyncRow = useEditBaseline({ gridRef, editTrackerRef, data });
 
+  // Sales Company / Sales Plant 규칙은 상단 그리드와 같다 — purchase_81 시트도 같은 컬럼 메타다.
+  useSalesCompanyGuard({
+    gridRef,
+    editTrackerRef,
+    resyncRow,
+    staticColumns: staticColumns[SHEETS.PURCHASE],
+    data,
+  });
+
   const handleOwnerSelected = (selectedUsers: ResponseData<MODAL_OWNER, 'owner', 'o_rc1'>[]) => {
     const owners = selectedUsers.map(item => item.USER_ID).join(',');
     const ownersNames = selectedUsers.map(item => item.USER_NAME_EN).join(',');
@@ -54,7 +69,7 @@ export const SalesSiteProjectModelPurchaseGrid = ({
     dataItem.OWNER_NAME = ownersNames;
 
     resyncRow(dataItem);
-    gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
+    GridUtils.refreshRow(gridRef.current, clickedRow);
   };
 
   const handleFocus = () => {
@@ -96,6 +111,8 @@ export const SalesSiteProjectModelPurchaseGrid = ({
           setSelectedValue={handleOwnerSelected}
           divisionId={filters.purchase?.divisionId ?? '40'}
           ownerId={clickedDataItem?.OWNER}
+          // 인원 상한 10명 — 상단 그리드와 같은 규칙. 팝업이 OK 시점에 막고 열어 둔다.
+          maxSelect={MAX_OWNER_COUNT}
           // 신규 행은 DIVISION_ID 가 비어있을 수 있어 조회 조건으로 폴백.
           singleSelect={SINGLE_OWNER_DIVISIONS[SHEETS.PURCHASE].includes(
             clickedDataItem?.DIVISION_ID || filters.purchase?.divisionId || ''

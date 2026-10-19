@@ -1,10 +1,11 @@
-import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import { CellType, HeadersVisibility, type FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { GridUtils } from '@foundation/utils';
-import { CustomDropdown, SearchArea, DataGrid, CustomDialog } from '@shared/components';
+import { GridUtils, buildNoColumn, withRowNo } from '@foundation/utils';
+import { CustomDropdown, SearchArea, DataGrid, CustomDialog, ResultArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
@@ -46,6 +47,8 @@ export const OwnerByDivisionModal = ({
     useRef<
       FlexGrid<ResponseData<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION, 'o_rc1'>>
     >();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   const initialized = useOwnerByDivisionModalStore(state => state.initialized);
   const staticColumns = useOwnerByDivisionModalStore(state => state.staticColumns);
@@ -73,30 +76,36 @@ export const OwnerByDivisionModal = ({
     filters: [{ comboId: 'TeambyDivision', divisionId: `'${searchParam.divisionId ?? ''}'` }],
   });
 
-  const [modalFilters, setModalFilters] = useState<{
-    owner: string;
-  }>({ owner: '' });
   const [ownerKeyword, setOwnerKeyword] = useState('');
 
-  const { data: ownerData } = useTabProcQuery<MODAL_OWNER_BY_DIVISION>({
+  const {
+    data: ownerData,
+    isLoading,
+    isFetching,
+  } = useTabProcQuery<MODAL_OWNER_BY_DIVISION>({
     menuId: MODAL_OWNER_BY_DIVISION,
     sheetName: MODAL_SHEET_OWNER_BY_DIVISION,
     tabId: 'OwnerByDivisionModal',
     filters: searchParam,
     enabled: open,
   });
+  const loading = isLoading || isFetching;
 
   // useMemo — 매 렌더 새 배열이면 그리드 re-bind 로 체크박스 선택(row.isSelected)이 풀림.
-  const itemsSource = useMemo(
-    () =>
-      (ownerData?.o_rc1 ?? []).filter(owner =>
-        (owner.OWNER ?? '').toLowerCase().includes(modalFilters.owner.toLowerCase())
-      ),
-    [ownerData, modalFilters]
+  const itemsSource = useMemo(() => ownerData?.o_rc1 ?? [], [ownerData]);
+
+  // itemsSource 와 같은 이유로 useMemo — withRowNo 가 매 렌더 새 배열/새 행 객체를 만들면
+  //   위 itemsSource useMemo 가 무의미해져 체크박스 선택이 똑같이 풀린다.
+  const rows = useMemo(() => withRowNo(itemsSource), [itemsSource]);
+
+  const gridStaticColumns = useMemo(
+    () => [buildNoColumn(t('LBL00674', 'No')), ...staticColumns],
+    [staticColumns, t]
   );
 
-  // 자동필터 해제 — Search 버튼/Enter 시에만 modalFilters 반영 (입력 중 즉시필터 안 함).
-  const handleSearch = () => setModalFilters({ owner: ownerKeyword });
+  // Search 버튼/Enter — SP(COM0006)의 P_OWNER_ID 는 현재 죽은 파라미터라 결과가 안 좁혀진다.
+  //   추후 SP 연결 시 바로 동작하도록 searchParam.owner 갱신 구조만 살려둔다.
+  const handleSearch = () => setSearchParam(prev => ({ ...prev, owner: ownerKeyword }));
 
   const handleSubmit = () => {
     if (multiCheckbox) {
@@ -154,11 +163,12 @@ export const OwnerByDivisionModal = ({
   useEffect(() => {
     if (!open) return;
     // ownerId 가 undefined 일 때 preSearchParams.owner fallback — DMF0005 가 prop 생략해도
-    // 호출 화면의 owner 검색조건이 modal filter 로 반영됨. feat/dmf0020-sales-future-price
-    // 머지 시 동일 패턴이라 conflict 0 + DMF0005 ownerId prop 주석 사고 사전 차단.
-    setModalFilters({ owner: ownerId ?? preSearchParams.owner ?? '' });
-    setOwnerKeyword(ownerId ?? preSearchParams.owner ?? '');
-    setSearchParam({ ...preSearchParams, owner: '' });
+    // 호출 화면의 owner 검색조건이 입력창 초기값으로 반영됨.
+    const initOwner = ownerId ?? preSearchParams.owner ?? '';
+    setOwnerKeyword(initOwner);
+    // 받은 값으로 바로 조회한다 - 열자마자 필터된 목록이 보여야 한다 (사용자 지정 2026-09-07).
+    //   종전에는 빈값으로 조회하고 입력창에만 값을 채워, Search 를 눌러야 좁혀졌다.
+    setSearchParam({ ...preSearchParams, owner: initOwner });
     if (!initialized) void fetchStaticColumns();
   }, [open]);
 
@@ -171,6 +181,10 @@ export const OwnerByDivisionModal = ({
       position='basic'
       open={open}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -288,14 +302,35 @@ export const OwnerByDivisionModal = ({
             }
           />
           <div className={styles.gridWrapper}>
-            <DataGrid<ResponseData<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION, 'o_rc1'>>
-              gridRef={gridRef}
-              isReadOnly
-              useCheckbox={multiCheckbox}
-              staticColumns={staticColumns}
-              itemsSource={itemsSource}
-              dblClick={handleDblClick}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea
+              title=''
+              count={rows.length}
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<
+                ResponseData<MODAL_OWNER_BY_DIVISION, MODAL_SHEET_OWNER_BY_DIVISION, 'o_rc1'>
+              >
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                useCheckbox={multiCheckbox}
+                // No 는 ROW_NO 데이터 컬럼(buildNoColumn)이 전담한다. rowHeader 를 그대로 두면
+                //   체크박스가 없는 단일선택 모드에서 공통 formatEditableColumns 가 rowHeader col 0
+                //   에도 행번호를 찍어 No 가 두 개로 보인다. 체크박스 모드는 rowHeader 에 wijmo
+                //   Selector 가 살아야 하므로 그때만 rowHeader 를 남긴다.
+                headersVisibility={multiCheckbox ? HeadersVisibility.All : HeadersVisibility.Column}
+                staticColumns={gridStaticColumns}
+                itemsSource={rows}
+                dblClick={handleDblClick}
+              />
+            </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
             <Button

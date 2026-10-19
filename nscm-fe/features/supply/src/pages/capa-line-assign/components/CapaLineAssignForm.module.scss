@@ -1,0 +1,17 @@
+// AS-IS lciItem(270x32) + layoutControlItem10(30x32) — 입력칸 + 팝업 버튼이 한 칸을 나눠 쓴다.
+//   inline style 금지(Top11 #5)라 이 모듈로 분리한다.
+.itemField {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+
+  > :first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+}
+
+.itemPopupButton {
+  flex: 0 0 auto;
+}

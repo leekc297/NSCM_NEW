@@ -1,0 +1,1 @@
+export { ValidationShipmentResult } from './ValidationShipmentResult';

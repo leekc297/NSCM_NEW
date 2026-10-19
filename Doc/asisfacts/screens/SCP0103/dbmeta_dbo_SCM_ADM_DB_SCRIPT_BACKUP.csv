@@ -1,0 +1,2510 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","PR_SCP_ANL_MAT_SUPPLY_BATCH","208159937","36","SCP0103_SCP_TREE;
+		IF OBJECT_ID('tempdb..#TBL_SCP0103_SCP_TREE_KEYS') IS NOT NULL
+			DROP TABLE #TBL_SCP0103_SCP_TREE_KEYS;
+		IF OBJECT_ID('tempdb..#TBL_SCP0103_SCP_TREE_PROD') IS NOT NULL
+			DROP TABLE #TBL_SCP0103_SCP_TREE_PROD;
+		IF OBJECT_ID('tempdb..#TBL_SCP0103_SCP_TREE_PROD_PROD_PLAN_AMEND') IS NOT NULL
+			DROP TABLE #TBL_SCP0103_SCP_TREE_PROD_PROD_PLAN_AMEND;
+		IF OBJECT_ID('tempdb..#TBL_SCP0103_SCP_TREE_PROD_PROD_PLAN_AMEND_TEMP') IS NOT NULL
+			DROP TABLE #TBL_SCP0103_SCP_TREE_PROD_PROD_PLAN_AMEND_TEMP;
+		IF OBJECT_ID('tempdb..#TBL_SCP0103_SCP_TREE_RAW') IS NOT NULL
+			DROP TABLE #TBL_SCP0103_SCP_TREE_RAW;
+		IF OBJECT_ID('tempdb..#TBL_SCP0103_SCP_TREE_RAW_TEMP') IS NOT NULL
+			DROP TABLE #TBL_SCP0103_SCP_TREE_RAW_TEMP;
+		IF OBJECT_ID('tempdb..#TBL_SCP0103_SUPPLIER') IS NOT NULL
+			DROP TABLE #TBL_SCP0103_SUPPLIER;
+		IF OBJECT_ID('tempdb..#TBL_SCP0103_YIELD') IS NOT NULL
+			DROP TABLE #TBL_SCP0103_YIELD;
+	END -- 임시테이블 및 커서 제거
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","5","GORY
+				, SUM(A.QTY)                AS QTY
+				, AVG(A.CELL_CF)            AS CELL_CF
+				, AVG(A.YIELD_RATE)         AS YIELD_RATE
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO -- 중간계 들어간후 소트를 위해 기존 USER_SORT_ORDER_NO * 100
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+                , A.STOCK_TYPE
+		INTO	#TblDynamicPivot_SCP0103_RAW_TEMP
+		FROM	#TblDynamicPivot_SCP0103_RAW_TEMP1 A
+        GROUP BY  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+	            , A.PLANT_ID
+	            , A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+                , A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO -- 중간계 들어간후 소트를 위해 기존 USER_SORT_ORDER_NO * 100
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+                , A.STOCK_TYPE
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP1;return;
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_TEMP - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+
+		--PRINT N'#TblDynamicPivot_SCP0103_RAW - FILTER - DIVISION - BEGIN'
+		--IF (@p_division_id = 'EE')
+		--BEGIN
+		--	DELETE #TblDynamicPivot_SCP0103_RAW_TEMP
+		--	WHERE   ORIGIN_DIVISION_ID  NOT IN ('40','81','82');
+		--END
+		--ELSE IF (@p_division_id = 'EE_UC')
+		--BEGIN
+		--	DELETE #TblDynamicPivot_SCP0103_RAW_TEMP
+		--	WHERE   DIVISION_ID  <> '81_UC';
+		--END
+		--ELSE
+		--BEGIN
+		--	DELETE #TblDynamicPivot_SCP0103_RAW_TEMP
+		--	WHERE   DIVISION_ID  <> @p_division_id;
+		--END
+		--PRINT N'#TblDynamicPivot_SCP0103_RAW - FILTER - DIVISION - END'
+		--PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP;return;
+
+        
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+                , A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+                , A.STOCK_TYPE
+		INTO	#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL
+		FROM	#TblDynamicPivot_SCP0103_RAW_TEMP A
+		WHERE	1=1
+			AND A.MEASURE       = 'BALANCE';
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP;
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL;return;
+
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI;
+        
+        --BOH 반제품 상세 조회시 활용!!!
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MA"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","6","TERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+                , A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+                , A.STOCK_TYPE
+        INTO    #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI
+        FROM    #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL A
+        WHERE   1=1
+            AND STOCK_TYPE = 'SEMI';
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI;return;
+
+
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE;
+        
+        --빈 테이블 생성
+        SELECT  *
+        INTO    #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE
+        FROM    #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL
+        WHERE   1 <> 1;
+        
+        IF @p_operation_id = 'E' -- 반제품 재고 제외
+        BEGIN
+		    INSERT INTO #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE
+		    SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				    , A.MRP_PLAN_START_YYYYMMDD
+				    , A.PSI
+				    , A.MEASURE
+				    , A.COMPANY
+				    , A.DIVISION_ID
+				    , A.DIVISION_NAME
+				    , A.ORIGIN_DIVISION_ID
+				    , A.ORIGIN_DIVISION_NAME
+				    , A.PLANT_ID
+				    , A.PLANT_NAME
+				    , A.MATERIAL
+                    , A.OPERATION_GROUP
+				    , A.OPERATION_ID
+				    , A.ITEM_ID
+				    , A.YYYYMMDD
+				    , A.YYYYMM
+				    , A.WEEK
+				    , A.ISO_WEEK
+				    , A.UOM
+				    , A.NICKNAME
+				    , A.SUPPLIER
+				    , A.SUPPLIER_NAME
+				    , A.ITEM_CATEGORY
+                    , A.QTY
+				    , A.CELL_CF
+				    , A.YIELD_RATE
+				    , A.REMARK
+				    , A.MEASURE_NAME
+				    , A.USER_SORT_ORDER_NO
+				    , A.WEEK_YN
+				    , A.MONTH_YN
+				    , A.VERSION_NO
+                    , A.STOCK_TYPE
+		    FROM	#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL A
+            WHERE   1=1
+                AND (ITEM_ID = '-' OR STOCK_TYPE = 'SEMI');
+        END
+        ELSE  -- 반제품 재고 포함
+        BEGIN
+		    INSERT INTO #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE
+		    SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				    , A.MRP_PLAN_START_YYYYMMDD
+				    , A.PSI
+				    , A.MEASURE
+				    , A.COMPANY
+				    , A.DIVISION_ID
+				    , A.DIVISION_NAME
+				    , A.ORIGIN_DIVISION_ID
+				    , A.ORIGIN_DIVISION_NAME
+				    , A.PLANT_ID
+				    , A.PLANT_NAME
+				    , A.MATERIAL
+                    , A.OPERATION_GROUP
+				    , A.OPERATION_ID
+                    , IIF(A.ITEM_ID = 'SUM', '-', A.ITEM_ID)           AS ITEM_ID -- 반제품 포함의 경우 집계 테이블에 ITEM_ID 가 'SUM' 으로 집계되어 있으므로 아래 연관 로직들을 위해 '-'로 맞춤, 반제품은 ITEM_ID 에 실 모델ID 가 있음
+                    --, A.ITEM_ID
+				    , A.YYYYMMDD
+				    , A.YYYYMM
+				    , A.WEEK
+				    , A.ISO_WEEK
+				    , A.UOM
+				    , A.NICKNAME
+				    , A.SUPPLIER
+				    , A.SUPPLIER_NAME
+				    , A.ITEM_CATEGORY
+                    , A.QTY
+				    , A.CELL_CF
+				    , A.YIELD_RATE
+				    , A.REMARK
+				    , A.MEASURE_NAME
+				    , A.USER_SORT_ORDER_NO
+				    , A.WEEK_YN
+				    , A.MONTH_YN
+				    , A.VERSION_NO
+                    , A.STOCK_TYPE
+		    FROM	#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL A
+            WHERE   1=1
+                AND ITEM_ID <> '-';
+                --AND (ITEM_ID = 'SUM' OR STOCK_TYPE = 'SEMI');
+        END
+      --  IF NOT (LEFT(@p_division_id, 2) = 'EE' AND @p_operation_id = 'A9000') -- 전극사업부 & A9000 이외는 반제품 제외
+      --  BEGIN
+      --      DELETE FROM #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE
+		    --WHERE	1=1
+      --          AND STOCK_TYPE = 'SEMI';
+      --  END
+
+        PRINT N'#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_T"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","7","IMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL;
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE;rollback tran;return;
+
+
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI_ITEM') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI_ITEM;
+        
+        --BOH 반제품 상세 조회시 활용!!!
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, '-'                   AS ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+                , SUM(A.QTY)            AS QTY
+				, AVG(A.CELL_CF)        AS CELL_CF
+				, AVG(A.YIELD_RATE)     AS YIELD_RATE
+        INTO    #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI_ITEM
+        FROM    #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI A
+        GROUP BY  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY;
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI_ITEM;return;
+
+        --반제품 상세내역 - 자재별 합산용 - 최종
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_MRP') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_MRP;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+                , IIF(A.QTY  < 0, 0, A.QTY)      AS QTY --마이너스 BOH 는 0 처리
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+                , A.STOCK_TYPE
+		INTO	#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_MRP
+		FROM	#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL A
+        WHERE   1=1
+            AND A.ITEM_ID = '-' AND STOCK_TYPE <> 'SEMI';
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_MRP;return;
+
+
+      --  IF NOT (LEFT(@p_division_id, 2) = 'EE' AND @p_operation_id = 'A9000') -- 전극사업부 & A9000 이외는 반제품 제외
+      --  BEGIN
+      --      DELETE FROM #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE
+		    --WHERE	1=1
+      --          AND STOCK_TYPE = 'SEMI';
+      --  END
+
+        PRINT N'#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL;
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE;
+        
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				,"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","8"," A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, '00000000'                AS YYYYMMDD
+				, '-'                       AS YYYYMM
+				, '-'                       AS WEEK
+				, '-'                       AS SO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, IIF(A.QTY < 0, 0, A.QTY)  AS QTY  --마이너스 BOH 는 0 처리
+				--, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+		INTO	#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE
+        FROM    (
+		            SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				            , A.MRP_PLAN_START_YYYYMMDD
+				            , A.PSI
+				            , A.MEASURE
+				            , A.COMPANY
+				            , A.DIVISION_ID
+				            , A.DIVISION_NAME
+				            , A.ORIGIN_DIVISION_ID
+            				, A.ORIGIN_DIVISION_NAME
+				            , A.PLANT_ID
+				            , A.PLANT_NAME
+				            , A.MATERIAL
+                            , A.OPERATION_GROUP
+				            , A.OPERATION_ID
+				            , A.ITEM_ID
+				            , A.YYYYMMDD
+				            , A.YYYYMM
+				            , A.WEEK
+				            , A.ISO_WEEK
+				            , A.UOM
+				            , A.NICKNAME
+				            , A.SUPPLIER
+            				, A.SUPPLIER_NAME
+				            , A.ITEM_CATEGORY
+				            , A.QTY
+				            , A.CELL_CF
+				            , A.YIELD_RATE
+				            , A.REMARK
+				            , A.MEASURE_NAME
+				            , A.USER_SORT_ORDER_NO
+				            , A.WEEK_YN
+				            , A.MONTH_YN
+				            , A.VERSION_NO
+				            , ROW_NUMBER() OVER (PARTITION BY 	  A.SCP_PLAN_START_YYYYMMDD
+				                                                , A.MRP_PLAN_START_YYYYMMDD
+				                                                , A.PSI
+				                                                , A.MEASURE
+				                                                , A.COMPANY
+				                                                , A.DIVISION_ID
+				                                                , A.DIVISION_NAME
+				                                                , A.ORIGIN_DIVISION_ID
+				                                                , A.ORIGIN_DIVISION_NAME
+				                                                , A.PLANT_ID
+				                                                , A.PLANT_NAME
+				                                                , A.MATERIAL
+                                                                , A.OPERATION_GROUP
+				                                                , A.OPERATION_ID
+				                                                , A.ITEM_ID
+																, A.SUPPLIER
+																, A.SUPPLIER_NAME
+                                            ORDER BY              A.YYYYMMDD DESC) AS RN
+                    FROM	#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE A
+		            --FROM	#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_MRP A --ㅋㅋㅋ TESTING 반제품 제외
+		            WHERE	1=1
+		                AND A.YYYYMMDD < @p_from_yyyymmdd
+                    ) A
+	    WHERE	1=1
+                AND A.RN = 1; --기간 시작일자전 최근 재고 구한다(기초재고)
+        PRINT N'#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE;
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE;return;
+
+
+        DECLARE @v_min_balnace_yyyymmdd     INT = 0;
+        
+        SELECT @v_min_balnace_yyyymmdd = MIN(A.YYY"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","9","YMMDD)
+        FROM    #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE A;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_YYYYMMDD - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_YYYYMMDD') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_YYYYMMDD;
+
+        SELECT    A.BASIS_YYYYMMDD                          AS YYYYMMDD
+				, A.BASIS_YYYYMM                            AS YYYYMM
+				, RIGHT(A.BASIS_YYYYMM, 6) + A.ISO_WEEK     AS WEEK
+				, RIGHT(A.ISO_YYYYMM, 6) + A.ISO_WEEK       AS ISO_WEEK
+        INTO    #TblDynamicPivot_SCP0103_YYYYMMDD
+        FROM	dbo.SCM_SYS_CALENDAR_M A WITH(NOLOCK)
+        WHERE   1=1
+            AND A.BASIS_YYYYMMDD BETWEEN @v_min_balnace_yyyymmdd AND @p_to_yyyymmdd -- 기간 시작전 최근 재고 포함
+        GROUP BY  A.BASIS_YYYYMMDD
+				, A.BASIS_YYYYMM
+				, RIGHT(A.BASIS_YYYYMM, 6) + A.ISO_WEEK
+				, RIGHT(A.ISO_YYYYMM, 6) + A.ISO_WEEK
+        ORDER BY  A.BASIS_YYYYMMDD
+				, A.BASIS_YYYYMM
+				, RIGHT(A.BASIS_YYYYMM, 6) + A.ISO_WEEK
+				, RIGHT(A.ISO_YYYYMM, 6) + A.ISO_WEEK
+
+        --기초재고용 가상일자 추가
+        INSERT INTO #TblDynamicPivot_SCP0103_YYYYMMDD
+        SELECT    '00000000'                AS YYYYMMDD
+				, '000000'                  AS YYYYMM
+				, '00000000'                AS WEEK
+				, '00000000'                AS SO_WEEK;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE_KEYS - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE_KEYS') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE_KEYS;
+        
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, B.YYYYMMDD
+				, B.YYYYMM
+				, B.WEEK
+				, B.ISO_WEEK
+		INTO	#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE_KEYS
+        FROM      #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE A
+                , #TblDynamicPivot_SCP0103_YYYYMMDD B;
+                                
+        PRINT N'#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE_KEYS - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_YYYYMMDD
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE_KEYS;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_BALANCE - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE;
+        
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, B.UOM
+				, B.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, B.ITEM_CATEGORY
+		        , SUM(B.QTY) OVER (PARTITION BY   A.SCP_PLAN_START_YYYYMMDD
+				                                , A.MRP_PLAN_START_YYYYMMDD
+				                                , A.PSI
+				                                , A.MEASURE
+				                                , A.COMPANY
+				                                , A.DIVISION_ID
+				                                , A.DIVISION_NAME
+				                                , A.ORIGIN_DIVISION_ID
+                                				, A.ORIGIN_DIVISION_NAME
+				                                , A.PLANT_ID
+				                                , A.PLANT_NAME
+				                                , A.MATERIAL
+                                                , A.OPERATION_GROUP"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","10","
+				                                , A.OPERATION_ID
+				                                , A.ITEM_ID
+												, A.SUPPLIER
+												, A.SUPPLIER_NAME
+                                    ORDER BY      A.YYYYMMDD) AS QTY -- 누적
+				, B.CELL_CF
+				, B.YIELD_RATE
+				, B.REMARK
+				, 'Balance'					            AS MEASURE_NAME
+				, '700'						            AS USER_SORT_ORDER_NO
+				, 'N'						            AS WEEK_YN
+				, 'N'						            AS MONTH_YN
+                , 'PP_W_' + A.MRP_PLAN_START_YYYYMMDD   AS VERSION_NO
+		INTO	#TblDynamicPivot_SCP0103_BALANCE
+        FROM    #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE_KEYS A
+                JOIN #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE B ON
+						A.SCP_PLAN_START_YYYYMMDD	= B.SCP_PLAN_START_YYYYMMDD
+					AND A.MRP_PLAN_START_YYYYMMDD	= B.MRP_PLAN_START_YYYYMMDD
+					AND A.PSI						= B.PSI
+					AND A.MEASURE					= B.MEASURE
+					AND A.COMPANY					= B.COMPANY
+					AND A.DIVISION_ID				= B.DIVISION_ID
+					AND A.ORIGIN_DIVISION_ID		= B.ORIGIN_DIVISION_ID
+					AND A.PLANT_ID					= B.PLANT_ID
+					AND A.MATERIAL					= B.MATERIAL
+                    AND A.OPERATION_GROUP			= B.OPERATION_GROUP
+					AND A.OPERATION_ID				= B.OPERATION_ID
+					AND A.ITEM_ID					= B.ITEM_ID
+					AND A.SUPPLIER                  = B.SUPPLIER
+					AND A.SUPPLIER_NAME             = B.SUPPLIER_NAME
+					AND A.YYYYMMDD					= B.YYYYMMDD;
+                                
+        PRINT N'#TblDynamicPivot_SCP0103_BALANCE - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE_KEYS;
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE;
+--select * from #TblDynamicPivot_SCP0103_BALANCE;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_SUPPLY_PLAN - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_SUPPLY_PLAN') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_SUPPLY_PLAN;
+        
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+		INTO	#TblDynamicPivot_SCP0103_SUPPLY_PLAN
+        FROM    #TblDynamicPivot_SCP0103_RAW_TEMP A
+		WHERE	1=1
+			AND MEASURE = 'SUPPLY_PLAN'
+                                
+        PRINT N'#TblDynamicPivot_SCP0103_SUPPLY_PLAN - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_SUPPLY_PLAN;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_PROD_PLAN_AMEND - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_PROD_PLAN_AMEND') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_PROD_PLAN_AMEND;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+				, A.MEASUR"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","11","E_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+		INTO	#TblDynamicPivot_SCP0103_PROD_PLAN_AMEND
+        FROM    #TblDynamicPivot_SCP0103_RAW_TEMP A
+		WHERE	1=1
+			AND MEASURE = 'PROD_PLAN_AMEND';
+
+		PRINT N'#TblDynamicPivot_SCP0103_PROD_PLAN_AMEND - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_PROD_PLAN_AMEND;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_REQUIREMENT - BEGIN'   
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_REQUIREMENT') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_REQUIREMENT;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+		INTO	#TblDynamicPivot_SCP0103_REQUIREMENT
+        FROM    #TblDynamicPivot_SCP0103_RAW_TEMP A
+		WHERE	1=1
+			AND MEASURE = 'REQUIREMENT';
+
+		PRINT N'#TblDynamicPivot_SCP0103_REQUIREMENT - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_REQUIREMENT;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_SUB_PROD_PLAN_AMEND - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_SUB_PROD_PLAN_AMEND') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_SUB_PROD_PLAN_AMEND;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+--ㅋㅋㅋ				, '-'								AS OPERATION_GROUP
+				, '-'								AS OPERATION_ID
+				, '-'								AS ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				-- ZZZ, ''								AS UOM
+				, A.UOM --ZZZZ
+				, '-'								AS NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, SUM(A.QTY)						AS QTY
+				, AVG(A.CELL_CF)					AS CELL_CF
+				, AVG(A.YIELD_RATE)					AS YIELD_RATE
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO + 1			AS USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+		INTO	#TblDynamicPivot_SCP0103_SUB_PROD_PLAN_AMEND
+		FROM	#TblDynamicPivot_SCP0103_PROD_PLAN_AMEND A WITH(NOLOCK)
+		GROUP BY  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+                , A.UOM --ZZZZ
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO;
+
+		PRINT N'#TblDynamicPivot_SCP0103_SUB_PROD_PLAN_AMEND - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_SUB_PROD_PLAN_AMEND;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_SUB_REQUIREMENT "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","12","- BEGIN'   
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_SUB_REQUIREMENT') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_SUB_REQUIREMENT;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+--ㅋㅋㅋ				, '-'								AS OPERATION_GROUP
+				, '-'								AS OPERATION_ID
+				, '-'								AS ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+--ZZ				, ''								AS UOM
+				, A.UOM        					    AS UOM --ZZZ
+				, '-'								AS NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, SUM(A.QTY)						AS QTY
+				, AVG(A.CELL_CF)					AS CELL_CF
+				, AVG(A.YIELD_RATE)					AS YIELD_RATE
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO + 1			AS USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+		INTO	#TblDynamicPivot_SCP0103_SUB_REQUIREMENT
+		FROM	#TblDynamicPivot_SCP0103_REQUIREMENT A WITH(NOLOCK)
+		GROUP BY  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM                         --ZZZ
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO;
+
+		PRINT N'#TblDynamicPivot_SCP0103_SUB_REQUIREMENT - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_REQUIREMENT;
+--select * from #TblDynamicPivot_SCP0103_SUB_REQUIREMENT;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_BALANCE_THIS - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE_THIS') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE_THIS;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, IIF(A.YYYYMMDD = @p_from_yyyymmdd, ISNULL(B.QTY, 0), 0)                                           AS BOH_QTY  -- BOH
+				, ISNULL(C.QTY, 0)                                                                                  AS P_QTY    -- SUPPLY_PLAN
+				, ISNULL(D.QTY, 0)                                                                                  AS S_QTY    -- REQUIREMENT
+			    , ROW_NUMBER() OVER (PARTITION BY 	  A.SCP_PLAN_START_YYYYMMDD
+				                                    , A.MRP_PLAN_START_YYYYMMDD
+				                                    , A.PSI
+				                                    , A.MEASURE
+				                                    , A.COMPANY
+				                                    , A.DIVISION_ID
+				                                    , A.DIVISION_NAME
+				                                    , A.ORIGIN_DIVISION_ID
+                                    				, A.ORIGIN_DIVISION_NAME
+				                                    , A.PLANT_ID
+				                                    , A.PLANT_NAME
+				                                    , A.MATERIAL
+                                                    , A.OPERATION_GROUP
+				                                    , A.OPERATION_ID
+			"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","13","	                                    , A.ITEM_ID
+													, A.SUPPLIER
+													, A.SUPPLIER_NAME
+                                ORDER BY              A.YYYYMMDD) AS RN
+        INTO    #TblDynamicPivot_SCP0103_BALANCE_THIS
+        FROM    #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE_KEYS A
+                LEFT JOIN #TblDynamicPivot_SCP0103_BALANCE B ON
+						A.SCP_PLAN_START_YYYYMMDD	= B.SCP_PLAN_START_YYYYMMDD
+					AND A.MRP_PLAN_START_YYYYMMDD	= B.MRP_PLAN_START_YYYYMMDD
+					AND A.COMPANY					= B.COMPANY
+					AND A.DIVISION_ID				= B.DIVISION_ID
+					AND A.ORIGIN_DIVISION_ID		= B.ORIGIN_DIVISION_ID
+					AND A.PLANT_ID					= B.PLANT_ID
+					AND A.MATERIAL					= B.MATERIAL
+                    AND A.OPERATION_GROUP			= B.OPERATION_GROUP
+					AND A.OPERATION_ID				= B.OPERATION_ID
+					AND A.ITEM_ID					= B.ITEM_ID
+					AND A.SUPPLIER				    = B.SUPPLIER
+					AND A.SUPPLIER_NAME				= B.SUPPLIER_NAME
+					--AND A.YYYYMMDD	                = C.YYYYMMDD
+                LEFT JOIN #TblDynamicPivot_SCP0103_SUPPLY_PLAN C ON
+						A.SCP_PLAN_START_YYYYMMDD	= C.SCP_PLAN_START_YYYYMMDD
+					AND A.MRP_PLAN_START_YYYYMMDD	= C.MRP_PLAN_START_YYYYMMDD
+					AND A.COMPANY					= C.COMPANY
+					AND A.DIVISION_ID				= C.DIVISION_ID
+					AND A.ORIGIN_DIVISION_ID		= C.ORIGIN_DIVISION_ID
+					AND A.PLANT_ID					= C.PLANT_ID
+					AND A.MATERIAL					= C.MATERIAL
+                    AND A.OPERATION_GROUP			= C.OPERATION_GROUP
+					AND A.OPERATION_ID				= C.OPERATION_ID
+					AND A.ITEM_ID					= C.ITEM_ID
+					AND A.SUPPLIER				    = C.SUPPLIER
+					AND A.SUPPLIER_NAME				= C.SUPPLIER_NAME
+					AND A.YYYYMMDD	                = C.YYYYMMDD    --SUPPLY_PLAN 과 REQUIREMENT는 날짜로 조인함
+                LEFT JOIN #TblDynamicPivot_SCP0103_SUB_REQUIREMENT D ON
+						A.SCP_PLAN_START_YYYYMMDD	= D.SCP_PLAN_START_YYYYMMDD
+					AND A.MRP_PLAN_START_YYYYMMDD	= D.MRP_PLAN_START_YYYYMMDD
+					AND A.COMPANY					= D.COMPANY
+					AND A.DIVISION_ID				= D.DIVISION_ID
+					AND A.ORIGIN_DIVISION_ID		= D.ORIGIN_DIVISION_ID
+					AND A.PLANT_ID					= D.PLANT_ID
+					AND A.MATERIAL					= D.MATERIAL
+                    AND A.OPERATION_GROUP			= D.OPERATION_GROUP
+					AND A.OPERATION_ID				= D.OPERATION_ID
+					AND A.ITEM_ID					= D.ITEM_ID
+					AND A.SUPPLIER				    = D.SUPPLIER
+					AND A.SUPPLIER_NAME				= D.SUPPLIER_NAME
+					AND A.YYYYMMDD	                = D.YYYYMMDD    --SUPPLY_PLAN 과 REQUIREMENT는 날짜로 조인함
+        WHERE   1=1
+            AND A.YYYYMMDD >= @p_from_yyyymmdd;
+
+		PRINT N'#TblDynamicPivot_SCP0103_BALANCE_THIS - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE_KEYS;
+--select * from #TblDynamicPivot_SCP0103_BALANCE;
+--select * from #TblDynamicPivot_SCP0103_SUPPLY_PLAN;
+--select * from #TblDynamicPivot_SCP0103_SUB_REQUIREMENT;
+--select * from #TblDynamicPivot_SCP0103_BALANCE_THIS;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_BALANCE_ALL - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE_ALL') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE_ALL;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.P_QTY
+				, A.S_QTY
+                , (ISNULL(A.BOH_QTY, 0) + ISNULL(A.P_QTY, 0) - ISNULL(A.S_QTY, 0))  AS THIS_QTY --(BOH + REQUIREMENT) - SUPPLY_PLAN
+                , A.RN                                                              AS THIS_RN
+                , B.RN                              "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","14","                                AS LAST_RN
+        INTO    #TblDynamicPivot_SCP0103_BALANCE_ALL
+        FROM    #TblDynamicPivot_SCP0103_BALANCE_THIS A
+                LEFT JOIN #TblDynamicPivot_SCP0103_BALANCE_THIS B ON
+						A.SCP_PLAN_START_YYYYMMDD	= B.SCP_PLAN_START_YYYYMMDD
+					AND A.MRP_PLAN_START_YYYYMMDD	= B.MRP_PLAN_START_YYYYMMDD
+					AND A.COMPANY					= B.COMPANY
+					AND A.DIVISION_ID				= B.DIVISION_ID
+					AND A.ORIGIN_DIVISION_ID		= B.ORIGIN_DIVISION_ID
+					AND A.PLANT_ID					= B.PLANT_ID
+					AND A.MATERIAL					= B.MATERIAL
+                    AND A.OPERATION_GROUP			= B.OPERATION_GROUP
+					AND A.OPERATION_ID				= B.OPERATION_ID
+					AND A.ITEM_ID					= B.ITEM_ID
+					AND A.SUPPLIER					= B.SUPPLIER
+					AND A.SUPPLIER_NAME				= B.SUPPLIER_NAME
+					AND A.RN-1  	                = B.RN
+        --WHERE   1=1
+            --AND A.YYYYMMDD >= @p_from_yyyymmdd;
+
+		PRINT N'#TblDynamicPivot_SCP0103_BALANCE_ALL - END'
+--TESGING : OK
+--select * from #TblDynamicPivot_SCP0103_BALANCE_THIS;
+--select * from #TblDynamicPivot_SCP0103_BALANCE_ALL;return;
+
+		PRINT N'#TblDynamicPivot_SCP0103_BALANCE_ACC - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE_ACC') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE_ACC;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+                , A.ORIGIN_DIVISION_NAME
+                , A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.P_QTY
+				, A.S_QTY
+		        , SUM(A.THIS_QTY) OVER (PARTITION BY  A.SCP_PLAN_START_YYYYMMDD
+				                                    , A.MRP_PLAN_START_YYYYMMDD
+				                                    , A.PSI
+				                                    , A.MEASURE
+				                                    , A.COMPANY
+				                                    , A.DIVISION_ID
+				                                    , A.ORIGIN_DIVISION_ID
+                                                    , A.ORIGIN_DIVISION_NAME
+                                                    , A.PLANT_ID
+				                                    , A.MATERIAL
+                                                    , A.OPERATION_GROUP
+				                                    , A.OPERATION_ID
+				                                    , A.ITEM_ID
+				                                    , A.SUPPLIER
+				                                    , A.SUPPLIER_NAME
+                                        ORDER BY A.THIS_RN) AS I_QTY --Group 키내에서 누적
+        INTO    #TblDynamicPivot_SCP0103_BALANCE_ACC
+        FROM    #TblDynamicPivot_SCP0103_BALANCE_ALL A
+
+--TESGING : OK
+--select * from #TblDynamicPivot_SCP0103_BALANCE_ACC;return;
+
+		PRINT N'#TblDynamicPivot_SCP0103_BALANCE_ACC - BEGIN'
+
+		PRINT N'#TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+                , A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, B.UOM
+				, B.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, B.ITEM_CATEGORY
+				, A.I_QTY                                       AS QTY
+				, B.CELL_CF
+				, B.YIELD_RATE
+				, B.REMARK
+				, B.MEASURE_NAME
+				, B.USER_SORT_ORDER_NO
+				, B.WEEK_YN
+				, B.MONTH_YN
+				, B.VERSION"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","15","_NO
+        INTO    #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP
+        FROM    #TblDynamicPivot_SCP0103_BALANCE_ACC A
+                LEFT JOIN #TblDynamicPivot_SCP0103_BALANCE B ON
+						A.SCP_PLAN_START_YYYYMMDD	= B.SCP_PLAN_START_YYYYMMDD
+					AND A.MRP_PLAN_START_YYYYMMDD	= B.MRP_PLAN_START_YYYYMMDD
+					AND A.COMPANY					= B.COMPANY
+					AND A.DIVISION_ID				= B.DIVISION_ID
+					AND A.ORIGIN_DIVISION_ID		= B.ORIGIN_DIVISION_ID
+					AND A.PLANT_ID					= B.PLANT_ID
+					AND A.MATERIAL					= B.MATERIAL
+                    AND A.OPERATION_GROUP			= B.OPERATION_GROUP
+					AND A.OPERATION_ID				= B.OPERATION_ID
+					AND A.ITEM_ID					= B.ITEM_ID
+					AND A.SUPPLIER					= B.SUPPLIER
+					AND A.SUPPLIER_NAME				= B.SUPPLIER_NAME
+
+		PRINT N'#TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP - END'
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_BALANCE_ACC;
+--select * from #TblDynamicPivot_SCP0103_BALANCE;
+--select * from #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP;return;
+
+		PRINT N'#TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP - BOH - BEGIN'
+        INSERT INTO #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP
+		SELECT  *
+        FROM    #TblDynamicPivot_SCP0103_BALANCE;
+		PRINT N'#TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP - BOH - END'
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP;return;
+
+        --반제품 상세내역 - 모델별 합산용 - 최종
+        PRINT N' 반제품 재고만 따로 저장 - BEGIN';
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE_FINAL_SEMI') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE_FINAL_SEMI;
+
+        SELECT    A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+                , A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+        INTO    #TblDynamicPivot_SCP0103_BALANCE_FINAL_SEMI
+        FROM    #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP A
+        WHERE   1=1
+            AND ITEM_ID <> '-'
+            AND YYYYMMDD = '00000000';
+        PRINT N' 반제품 재고만 따로 저장 - END';
+
+--TESTING : OK
+--select  * from #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP;
+--select  * from #TblDynamicPivot_SCP0103_BALANCE_FINAL_SEMI;return;
+
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE_FINAL') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE_FINAL;
+
+      --  IF LEFT(@p_division_id, 2) = 'EE' AND @p_operation_id IN ('A3000', 'A9000') -- 전극사업부 & A9000 이면 반제품 포함
+      --  BEGIN
+      --      UPDATE #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP --반제품은 ITEM_ID에 실제 모델코드가 들어있음로 '-' 바꾸고 SUM하면 반제품도 재고에 포함됨
+      --      SET
+      --          ITEM_ID = '-';
+      --  END
+      --  ELSE
+      --  BEGIN
+      --      DELETE #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP  -- 반제품인 것들만 삭제
+		    --WHERE	1=1
+      --          AND ITEM_ID <> '-';
+      --  END
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+                , A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A."
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","16","WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+        INTO    #TblDynamicPivot_SCP0103_BALANCE_FINAL
+        FROM    #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP A
+        WHERE   1=1
+            AND ITEM_ID     = '-';        -- 반제품재고까지 이미 합산되어 있으므로 목록에서 제외
+
+--TESTING : OK
+--select  * from #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP;
+--select  * from #TblDynamicPivot_SCP0103_BALANCE_FINAL;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_ALL_TEMP') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_ALL_TEMP;
+
+        CREATE TABLE #TblDynamicPivot_SCP0103_RAW_ALL_TEMP
+        (
+	          SCP_PLAN_START_YYYYMMDD	NVARCHAR(8)		NULL
+	        , MRP_PLAN_START_YYYYMMDD	NVARCHAR(8)		NULL
+	        , PSI						CHAR(1)			NULL
+	        , MEASURE					NVARCHAR(100)	NULL
+	        , COMPANY					NVARCHAR(200)	NULL
+	        , DIVISION_ID				NVARCHAR(30)	NULL
+	        , DIVISION_NAME			    NVARCHAR(100)	NULL
+	        , ORIGIN_DIVISION_ID		NVARCHAR(30)	NULL
+	        , ORIGIN_DIVISION_NAME		NVARCHAR(100)	NULL
+	        , PLANT_ID					NVARCHAR(50)	NULL
+	        , PLANT_NAME				NVARCHAR(100)	NULL
+	        , MATERIAL					NVARCHAR(50)	NULL
+	        , OPERATION_GROUP			NVARCHAR(20)	NULL
+	        , OPERATION_ID				NVARCHAR(20)	NULL
+	        , ITEM_ID					NVARCHAR(100)	NULL
+	        , YYYYMMDD					NVARCHAR(10)	NULL
+	        , YYYYMM					NVARCHAR(6)		NULL
+	        , WEEK						NVARCHAR(8)		NULL
+	        , ISO_WEEK					NVARCHAR(8)		NULL
+	        , UOM						NVARCHAR(20)	NULL
+	        , NICKNAME					NVARCHAR(300)	NULL
+	        , SUPPLIER					NVARCHAR(200)	NULL
+	        , SUPPLIER_NAME				NVARCHAR(200)	NULL
+	        , ITEM_CATEGORY				NVARCHAR(200)	NULL
+	        , QTY						NUMERIC(20, 10)	NULL
+	        , CELL_CF					NUMERIC(20, 10)	NULL
+	        , YIELD_RATE				NUMERIC(20, 10)	NULL
+	        , REMARK					NVARCHAR(4000)	NULL
+			, ROW_TYPE  			    NVARCHAR(10)	NULL
+			, MEASURE_NAME			    NVARCHAR(100)	NULL
+	        , USER_SORT_ORDER_NO		INT				NULL
+	        , WEEK_YN					CHAR(1)			NULL
+	        , MONTH_YN				    CHAR(1)			NULL
+	        , VERSION_NO				NVARCHAR(20)	NULL
+        );
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP - BEGIN'
+		INSERT INTO #TblDynamicPivot_SCP0103_RAW_ALL_TEMP
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, 'D_' + A.YYYYMMDD		AS YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+                , 'ROW'                 AS ROW_TYPE
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+		FROM	#TblDynamicPivot_SCP0103_BALANCE_FINAL A;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - #TblDynamicPivot_SCP0103_BALANCE_FINAL - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+
+--TESTING : OK
+---select * from #TblDynamicPivot_SCP0103_BALANCE_FINAL;return;
+--select * from #TblDynamicPivot_SCP0103_BALANCE_FINAL_SEMI;return;
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP;return;
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - #TblDynamicPivot_SCP0103_SUPPLY_PLAN - BEGIN'
+		INSERT INTO #TblDynamicPivot_SCP0103_RAW_ALL_TEMP
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAM"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","17","E
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, 'D_' + A.YYYYMMDD		AS YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+                , 'SUB'                 AS ROW_TYPE
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+		FROM	#TblDynamicPivot_SCP0103_SUPPLY_PLAN A;
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - #TblDynamicPivot_SCP0103_SUPPLY_PLAN - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - #TblDynamicPivot_SCP0103_PROD_PLAN_AMEND - BEGIN'
+		INSERT INTO #TblDynamicPivot_SCP0103_RAW_ALL_TEMP
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, 'D_' + A.YYYYMMDD		AS YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+                , 'ROW'                 AS ROW_TYPE
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+		FROM	#TblDynamicPivot_SCP0103_PROD_PLAN_AMEND A;
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - #TblDynamicPivot_SCP0103_PROD_PLAN_AMEND - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_PROD_PLAN_AMEND;return;
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - #TblDynamicPivot_SCP0103_REQUIREMENT - BEGIN'
+		INSERT INTO #TblDynamicPivot_SCP0103_RAW_ALL_TEMP
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, 'D_' + A.YYYYMMDD		AS YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+                , 'ROW'                 AS ROW_TYPE
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+		FROM	#TblDynamicPivot_SCP0103_REQUIREMENT A;
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - #TblDynamicPivot_SCP0103_REQUIREMENT - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_REQUIREMENT;
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - #TblDynamicPivot_SCP0103_SUB_PROD_PLAN_AMEND - BEGIN'
+		INSERT INTO #TblDynamicPivot_SCP0103_RAW_ALL_TEMP
+		SELECT	  A.SCP_PLAN_START_YYYYMMD"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","18","D
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, 'D_' + A.YYYYMMDD		AS YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+                , 'SUB'                 AS ROW_TYPE
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+		FROM	#TblDynamicPivot_SCP0103_SUB_PROD_PLAN_AMEND A;
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - #TblDynamicPivot_SCP0103_SUB_PROD_PLAN_AMEND - END'
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - #TblDynamicPivot_SCP0103_SUB_REQUIREMENT - BEGIN'
+		INSERT INTO #TblDynamicPivot_SCP0103_RAW_ALL_TEMP
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+				, A.PLANT_ID
+				, A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, 'D_' + A.YYYYMMDD		AS YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+				, A.SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+                , 'SUB'                 AS ROW_TYPE
+				, A.MEASURE_NAME
+				, A.USER_SORT_ORDER_NO
+				, A.WEEK_YN
+				, A.MONTH_YN
+				, A.VERSION_NO
+		FROM	#TblDynamicPivot_SCP0103_SUB_REQUIREMENT A;
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - #TblDynamicPivot_SCP0103_SUB_REQUIREMENT - END'
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+
+--TESTING : NOK
+--select * from #TblDynamicPivot_SCP0103_BALANCE;return;
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P_ITEMS - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P_ITEMS') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P_ITEMS;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.ORIGIN_DIVISION_ID
+				, A.PLANT_ID
+				, A.MATERIAL
+				--, A.OPERATION_ID
+				--, A.ITEM_ID
+        INTO    #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P_ITEMS
+        FROM    #TblDynamicPivot_SCP0103_RAW_ALL_TEMP A
+        WHERE   1=1
+            AND A.PSI = 'P'
+        GROUP BY  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.ORIGIN_DIVISION_ID
+				, A.PLANT_ID
+				, A.MATERIAL
+				--, A.OPERATION_ID
+				--, A.ITEM_ID;
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P_ITEMS - END'
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P_ITEMS;return;
+
+
+  --      --NICKNAME 에 해당하는 MATERIAL 목록
+  --      PRINT N'TblDynamicPivot_SCP0103_RAW_ALL_TEMP_NICKNAME_MATERIAL - BEGIN';
+		--IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_ALL_TEMP_NICKNAME_MATERIAL') IS NOT NULL
+		--	DROP TABLE #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_NICKNAME_MATERIAL;
+
+  --      SELECT  A.MATERIAL
+  --      INTO    #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_NICKNAME_MATERIAL
+  --      FROM    #TblDynamicPivot_SCP0103_RAW_ALL_TEMP A
+  --      WHERE   1=1
+  --          AND NICKNAME IN (SELECT TOKEN FROM dbo.String_Split(@p_nickname, ','))
+  --      GROUP BY A.MATERIAL;
+
+  --      PRINT N'#TblDynamicPivot_SCP0"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","19","103_RAW_ALL_TEMP_NICKNAME_MATERIAL - END';
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_NICKNAME_MATERIAL;--return;
+
+
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P_ITEMS;--return;
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP;--return;
+
+		PRINT N'DELETE NOT EXSITS P ITEMS - BEGIN #################################################################'
+
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P;
+        
+        --빈 테이블
+        SELECT  A.*
+        INTO    #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P
+        FROM    #TblDynamicPivot_SCP0103_RAW_ALL_TEMP A
+        WHERE   1<>1;
+
+        --전극사업부는 P 기준 COMPANY 에 해당하는 것만
+        INSERT INTO #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P
+        SELECT  A.*
+        FROM    #TblDynamicPivot_SCP0103_RAW_ALL_TEMP A
+                JOIN #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P_ITEMS B ON
+                        A.SCP_PLAN_START_YYYYMMDD	= B.SCP_PLAN_START_YYYYMMDD
+				    AND A.MRP_PLAN_START_YYYYMMDD	= B.MRP_PLAN_START_YYYYMMDD
+				    AND A.COMPANY					= B.COMPANY
+				    AND A.MATERIAL					= B.MATERIAL
+        WHERE   1<>1
+            AND LEFT(A.DIVISION_ID, 2) = 'EE';
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P;return;
+
+        --일반사업부는 P 기준 ORIGIN_DIVISION_ID + PLANT 에  해당하는 것만
+        INSERT INTO #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P
+        SELECT  A.*
+        FROM    #TblDynamicPivot_SCP0103_RAW_ALL_TEMP A
+                JOIN #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P_ITEMS B ON
+                        A.SCP_PLAN_START_YYYYMMDD	= B.SCP_PLAN_START_YYYYMMDD
+				    AND A.MRP_PLAN_START_YYYYMMDD	= B.MRP_PLAN_START_YYYYMMDD
+				    AND A.COMPANY					= B.COMPANY
+				    AND A.PLANT_ID					= B.PLANT_ID
+                    AND A.MATERIAL					= B.MATERIAL
+        WHERE   1<>1
+            AND LEFT(A.DIVISION_ID, 2) <> 'EE';
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P;return;
+		PRINT N'DELETE NOT EXSITS P ITEMS - END #################################################################'
+
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_FILTERED_MATERIAL') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_FILTERED_MATERIAL;
+
+            SELECT  MATERIAL
+            INTO    #TblDynamicPivot_SCP0103_FILTERED_MATERIAL
+            FROM    dbo.SCP_ANL_MAT_SUPPLY A WITH(NOLOCK)
+            WHERE   1=1
+    			AND A.SCP_PLAN_START_YYYYMMDD   = @p_scp_plan_start_yyyymmdd
+    			AND A.MRP_PLAN_START_YYYYMMDD   = @p_mrp_plan_start_yyyymmdd
+    			AND A.DIVISION_ID               = @p_division_id
+    			AND ((@p_nickname			IS NULL OR @p_nickname			= '')  OR A.NICKNAME			IN (SELECT TOKEN FROM dbo.String_Split(@p_nickname, ',')))
+    			AND ((@p_item_id			IS NULL OR @p_item_id			= '')  OR A.ITEM_ID			    IN (SELECT TOKEN FROM dbo.String_Split(@p_item_id, ',')))
+            GROUP BY  MATERIAL;
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_FILTERED_MATERIAL;return;
+
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_ALL_FILTERED') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED;
+
+        SELECT    A.SCP_PLAN_START_YYYYMMDD
+	            , A.MRP_PLAN_START_YYYYMMDD
+	            , A.PSI
+	            , A.MEASURE
+	            , A.COMPANY
+	            , A.DIVISION_ID
+	            , A.DIVISION_NAME
+	            , A.ORIGIN_DIVISION_ID
+	            , A.ORIGIN_DIVISION_NAME
+	            , A.PLANT_ID
+	            , A.PLANT_NAME
+	            , A.MATERIAL
+	            , A.OPERATION_GROUP
+	            , A.OPERATION_ID
+	            , A.ITEM_ID
+	            , A.YYYYMMDD
+	            , A.YYYYMM
+	            , A.WEEK
+	            , A.ISO_WEEK
+	            , A.UOM
+	            , A.NICKNAME
+	            , A.SUPPLIER
+	            , A.SUPPLIER_NAME
+	            , A.ITEM_CATEGORY
+	            , A.QTY
+	            , A.CELL_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","20","CF
+	            , A.YIELD_RATE
+	            , A.REMARK
+			    , A.ROW_TYPE
+			    , A.MEASURE_NAME
+	            , A.USER_SORT_ORDER_NO
+	            , A.WEEK_YN
+	            , A.MONTH_YN
+	            , A.VERSION_NO
+        INTO    #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED
+        FROM    #TblDynamicPivot_SCP0103_RAW_ALL_TEMP A
+        WHERE   1=1
+			AND (A.DIVISION_ID = @p_division_id)
+			AND ((@p_plnat_id		    IS NULL OR @p_plnat_id		    = '')  OR A.PLANT_ID			IN (SELECT TOKEN FROM dbo.String_Split(@p_plnat_id,		    ',')))
+			AND ((@p_supplier			IS NULL OR @p_supplier			= '')  OR 
+                            (
+                                SELECT  TOKEN 
+                                FROM    dbo.String_Split(A.SUPPLIER, ',')
+                            )
+                            IN 
+                            (   
+                                SELECT  TOKEN 
+                                FROM    dbo.String_Split(@p_supplier, ',')
+                            )
+                )
+			--AND (
+   --                 (A.PSI = 'S' AND A.OPERATION_GROUP = @p_operation_id) OR
+   --                 (A.PSI = 'S' AND A.OPERATION_GROUP = '-') OR
+   --                 (IIF(A.PSI IN ('P', 'I'), 1, 0) = 1)
+   --             )
+			AND (
+                    (A.PSI IN ('S')         AND (A.OPERATION_GROUP IN (@p_operation_id, '-'))) OR -- S 는 SUB합계(-) 보임
+                    (A.PSI IN ('P', 'I')    AND (A.OPERATION_GROUP IN (@p_operation_id)))
+                )
+			AND ((@p_item_category		IS NULL OR @p_item_category		= '')  OR A.ITEM_CATEGORY       IN (SELECT TOKEN FROM dbo.String_Split(@p_item_category,	',')))
+			--AND ((@p_item_id			IS NULL OR @p_item_id			= '')  OR A.ITEM_ID			    IN (SELECT TOKEN FROM dbo.String_Split(@p_item_id,			',')) OR A.ITEM_ID = '-')
+			--AND ((@p_material			IS NULL OR @p_material			= '')  OR A.MATERIAL			IN (SELECT TOKEN FROM dbo.String_Split(@p_material,			',')))
+            AND (A.MATERIAL			IN (SELECT MATERIAL FROM #TblDynamicPivot_SCP0103_FILTERED_MATERIAL))
+			--AND ((@p_nickname           IS NULL OR @p_nickname          = '')  OR A.NICKNAME LIKE '%' + @p_nickname + '%' OR A.NICKNAME = '-');
+			--AND ((
+   --         IS NULL OR @p_nickname          = '')  OR A.MATERIAL            IN (SELECT MATERIAL FROM #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_NICKNAME_MATERIAL));
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_TEMP;return;
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED;return;
+
+
+	--PJ20244573 LGES SCM SCP 생산모델 기반 공급계획 수립체계 구성 - Measure : Balance 항목의 경우,  해당주/월 마지막 날짜 Balance가 표기 mrchois 2024-08-20 START
+	UPDATE A
+	   SET WEEK_YN = 'Y'
+	  FROM #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED A
+	  JOIN (
+			SELECT ISO_WEEK, PARTIAL_WEEK_NAME, CALENDAR_YYYY, MAX(BASIS_YYYYMMDD) AS YYYYMMDD
+			  FROM SCM_SYS_CALENDAR_M WITH(NOLOCK)
+			 WHERE BASIS_YYYYMMDD >= @p_from_yyyymmdd
+			   AND BASIS_YYYYMMDD <= @p_to_yyyymmdd  
+			  GROUP BY ISO_WEEK, PARTIAL_WEEK_NAME,CALENDAR_YYYY
+			) X
+			ON RIGHT(A.YYYYMMDD,8) = X.YYYYMMDD
+	   WHERE MEASURE IN ( 'BALANCE');
+	;
+
+	UPDATE A
+	   SET MONTH_YN = 'Y'
+	  FROM #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED A
+	  JOIN (
+			SELECT BASIS_YYYYMM, MAX(BASIS_YYYYMMDD) AS YYYYMMDD
+			  FROM SCM_SYS_CALENDAR_M WITH(NOLOCK)
+			 WHERE BASIS_YYYYMMDD >= @p_from_yyyymmdd
+			   AND BASIS_YYYYMMDD <= @p_to_yyyymmdd  
+			  GROUP BY BASIS_YYYYMM
+			) X
+			ON RIGHT(A.YYYYMMDD,8) = X.YYYYMMDD
+	   WHERE MEASURE IN ( 'BALANCE');
+
+	--select * from #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED;return;
+	--PJ20244573 LGES SCM SCP 생산모델 기반 공급계획 수립체계 구성 - Measure : Balance 항목의 경우,  해당주/월 마지막 날짜 Balance가 표기 mrchois 2024-08-20 END
+
+   		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_ALL_FILTERED_REQUIREMENT') IS NOT NULL --CF, YIELD_RATE 조회용
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED_REQUIREMENT;
+
+        SELECT  A.*
+        INTO    #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED_REQUIREMENT
+      "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","21","  FROM    #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED A
+        WHERE   1=1
+			AND A.MEASURE = 'REQUIREMENT';
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED_REQUIREMENT;return;
+            
+        PRINT N'APPLY FILTER - END';
+
+    -- pivot 전 사용자 지정 컬럼별로 합산 begin --------------------------------------------------------------------------------------------------------------
+    BEGIN --컬럼 변수셋팅
+	    DECLARE @v_final_user_cols              NVARCHAR(MAX)   = N'';
+	    DECLARE @v_final_user_cols_order        NVARCHAR(MAX)   = N'';
+
+	    DECLARE @v_final_semi_user_cols         NVARCHAR(MAX)   = N'';
+	    DECLARE @v_final_semi_user_cols_group   NVARCHAR(MAX)   = N'';
+
+	    DECLARE @v_final_mrp_user_cols         NVARCHAR(MAX)   = N'';
+	    DECLARE @v_final_mrp_user_cols_group   NVARCHAR(MAX)   = N'';
+
+        SELECT  @v_final_user_cols = @v_final_user_cols + ', ' + COLUMN_NAME
+        FROM    #TblDynamicPivot_SCP0103_COLUMN;
+
+        PRINT CONCAT('@v_final_user_cols : ', @v_final_user_cols);
+
+        SET @v_final_user_cols          = REPLACE(@v_final_user_cols,     ', BOH', ''); -- BOH 를 SUM 에서 계산
+        
+        SET @v_final_semi_user_cols         = SUBSTRING(@v_final_user_cols, 3, LEN(@v_final_user_cols)-2);
+        SET @v_final_semi_user_cols         = 'A.' + @v_final_semi_user_cols;
+        SET @v_final_semi_user_cols         = REPLACE(@v_final_semi_user_cols, ', ', ', A.');
+        SET @v_final_semi_user_cols         = REPLACE(@v_final_semi_user_cols, 'A.UOM', 'A.UOM AS MATERIAL_UOM, B.UOM');
+        SET @v_final_semi_user_cols_group   = @v_final_semi_user_cols;
+        SET @v_final_semi_user_cols_group   = REPLACE(@v_final_semi_user_cols_group, ' AS MATERIAL_UOM', '');
+
+        SET @v_final_mrp_user_cols          = REPLACE(@v_final_semi_user_cols, 'B.UOM', 'A.UOM AS UOM');
+        SET @v_final_mrp_user_cols_group    = REPLACE(@v_final_semi_user_cols_group, ', B.UOM', '');
+
+        PRINT CONCAT('@v_final_mrp_user_cols : ', @v_final_mrp_user_cols);
+        PRINT CONCAT('@v_final_mrp_user_cols_group : ', @v_final_mrp_user_cols_group);--return;
+
+
+        SET @v_final_user_cols          = SUBSTRING(@v_final_user_cols, 3, LEN(@v_final_user_cols)-2) + ', MEASURE';  --UI에서 MEASURE 필수 컬럼
+        SET @v_final_user_cols          = REPLACE(@v_final_user_cols,     'PSI', 'USER_SORT_ORDER_NO, PSI');
+
+        SET @v_final_user_cols_order    = @v_final_user_cols;
+
+        --PIVOT COLUMNS BEGIN---------------------------------------------------------------------------------------------------------------------------------
+		DECLARE @v_final_sum_cols           NVARCHAR(MAX) = N'';
+		DECLARE @v_day_qty                  NVARCHAR(MAX) = N'';
+
+		SET @v_day_qty='QTY';
+
+
+		SELECT    @v_final_sum_cols       = @v_final_sum_cols + '
+                  , ' +
+                    CASE
+                        --PJ20244573 LGES SCM SCP 생산모델 기반 공급계획 수립체계 구성 - Measure : Balance 항목의 경우,  해당주/월 마지막 날짜 Balance가 표기 mrchois 2024-08-20 START
+						WHEN CHARINDEX('M_', YYYYMMDD) = 1		            THEN
+						--'CONVERT(NUMERIC(23,10), ISNULL(SUM(CASE WHEN YYYYMM   = RIGHT(''' + YYYYMMDD + ''',6) THEN ' + @v_day_qty + ' END), NULL)) AS ' + YYYYMMDD
+							'SUM( CASE WHEN YYYYMM = RIGHT('''+yyyymmdd+''',6) AND MEASURE IN       ( ''BALANCE'') AND MONTH_YN = ''Y''       THEN convert(numeric(23,10),QTY) '
+							+         'WHEN YYYYMM = RIGHT('''+yyyymmdd+''',6) AND MEASURE NOT IN   ( ''BALANCE'') THEN convert(numeric(23,10),QTY) ELSE 0 END   ) AS ' + YYYYMMDD
+						WHEN CHARINDEX('W_', YYYYMMDD) = 1		            THEN 
+						--'CONVERT(NUMERIC(23,10), ISNULL(SUM(CASE WHEN WEEK     = RIGHT(''' + YYYYMMDD + ''',8) THEN ' + @v_day_qty + ' END), NULL)) AS ' + YYYYMMDD
+							'SUM( CASE WHEN WEEK = RIGHT('''+yyyymmdd+''',8) AND MEASURE IN     ( ''BALANCE'') AND WEEK_YN = ''Y''        THEN convert(numeric(23,10),QTY) '
+							+		  'WHEN WEEK = RIGHT('''+yyyymmdd+''',8) AND MEASURE NOT IN ( ''BALA"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","22","NCE'') THEN convert(numeric(23,10),QTY) ELSE 0 END   ) AS ' + YYYYMMDD
+						--PJ20244573 LGES SCM SCP 생산모델 기반 공급계획 수립체계 구성 - Measure : Balance 항목의 경우,  해당주/월 마지막 날짜 Balance가 표기 mrchois 2024-08-20 END
+						WHEN CHARINDEX('D_', YYYYMMDD) = 1		            THEN 
+                            CASE
+                                --WHEN SUBSTRING(YYYYMMDD, 3, 8) = '00000000' THEN 'CONVERT(NUMERIC(23,10), ISNULL(IIF(SUM(CASE WHEN YYYYMMDD = ''' + YYYYMMDD + ''' THEN  '+ @v_day_qty + '  END) < 0, 0, SUM(CASE WHEN YYYYMMDD = ''' + YYYYMMDD + ''' THEN  '+ @v_day_qty + '  END)), NULL)) AS BOH'
+                                WHEN SUBSTRING(YYYYMMDD, 3, 8) = '00000000' THEN 'CONVERT(NUMERIC(23,10), ISNULL(SUM(CASE WHEN YYYYMMDD = ''' + YYYYMMDD + ''' THEN  '+ @v_day_qty + '  END), NULL)) AS BOH'
+                                ELSE                                             'CONVERT(NUMERIC(23,10), ISNULL(SUM(CASE WHEN YYYYMMDD = ''' + YYYYMMDD + ''' THEN  '+ @v_day_qty + '  END), NULL)) AS ' + YYYYMMDD
+                            END
+					END
+		FROM    #TblDynamicPivot_SCP0103_CALENDAR A
+		ORDER BY SORT_ORDER_NO;
+
+    --TESTING : OK
+    --exec debug_log @v_final_sum_cols, 'T';return;
+            --PIVOT COLUMNS END---------------------------------------------------------------------------------------------------------------------------------
+    END --컬럼 변수셋팅
+
+
+	DECLARE @v_final_raw_sql          NVARCHAR(MAX)   = '';
+    
+    SET @v_final_raw_sql    = N'
+            SELECT  ' + @v_final_user_cols + N'
+                    ' + @v_final_sum_cols + '
+            FROM    #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED
+            GROUP BY ' + @v_final_user_cols + N'
+			ORDER BY ' + @v_final_user_cols_order;
+
+        --TESTGING : OK
+        --exec debug_log @v_final_raw_sql, 'T';--return;
+        EXEC(@v_final_raw_sql);
+
+        -- 반제품 상세 재고 조회용 
+	    DECLARE @v_final_semi_raw_sql     NVARCHAR(MAX)   = '';
+
+        SET @v_final_semi_raw_sql    = N'
+            SELECT  ' + @v_final_semi_user_cols + N'
+                    , SUM(A.QTY) / IIF(AVG(A.CELL_CF) = 0 OR AVG(A.CELL_CF) IS NULL, 1, AVG(A.CELL_CF))     AS QTY' + N' -- 이미 환산된 값이므로 역산하여 원래 QTY 구한다
+                    , AVG(A.CELL_CF)                                                                        AS CELL_CF' + N'
+                    , SUM(A.QTY)                                                                            AS STOCK' + N'
+            FROM    #TblDynamicPivot_SCP0103_BALANCE_FINAL_SEMI A
+                    LEFT JOIN  (
+                                    SELECT    ITEM_ID
+                                            , ITEM_UOM  AS UOM
+                                    FROM    SCM_MST_ITEM_SN WITH(NOLOCK)
+                                    WHERE   1=1
+                                        AND ACTIVE_FLAG    = ''Y''
+                                    GROUP BY  ITEM_ID
+                                            , ITEM_UOM
+                                ) B ON
+                            A.ITEM_ID = B.ITEM_ID
+            WHERE   1=1
+                AND A.ITEM_ID <> ''-''
+                AND A.OPERATION_GROUP = ''' + @p_operation_id + '''
+            GROUP BY ' + @v_final_semi_user_cols_group;
+
+        --exec debug_log @v_final_semi_raw_sql, 'T';--return;
+        --EXEC(@v_final_semi_raw_sql);
+
+
+        --반제품 재고 -> MRP 데이터 합산용 
+	    DECLARE @v_final_mrp_raw_sql     NVARCHAR(MAX)   = '';
+
+        SET @v_final_mrp_raw_sql    = N'
+            SELECT  ' + @v_final_mrp_user_cols + N'
+                    , SUM(A.QTY)                AS QTY' + N'
+                    , 1                         AS CELL_CF' + N'
+                    , SUM(A.QTY)                AS STOCK' + N'
+            FROM    #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_MRP A
+            WHERE   1=1
+                AND A.OPERATION_GROUP = ''' + @p_operation_id + '''
+            GROUP BY ' + @v_final_mrp_user_cols_group;
+
+
+--TESTING : OK
+--select * "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","23","from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI;
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_MRP;
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE;return;
+
+        --exec debug_log @v_final_mrp_raw_sql, 'T';--return;
+        EXEC(@v_final_mrp_raw_sql);--return;
+        
+	    DECLARE @v_final_semi_sql     NVARCHAR(MAX)   = '';
+
+        SET @v_final_semi_sql    = @v_final_mrp_raw_sql + N'
+            UNION ALL' + N'
+            ' + @v_final_semi_raw_sql;
+
+        --exec debug_log @v_final_semi_sql, 'T';--return;
+        EXEC(@v_final_semi_sql);
+
+        --CF, YIELD_RATE 조회용
+        SELECT  *
+        FROM    #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED_REQUIREMENT
+        WHERE   1=1
+            AND OPERATION_GROUP = @p_operation_id;
+
+        PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+    END TRY
+    BEGIN CATCH
+	    -- ERROR LOG
+	    SET @v_log_type     = 'ERROR';
+	    SET @v_log_message  = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+	    SET @v_description  = 'ERROR_LINE : '+ CAST(ERROR_LINE() AS nvarchar(10));
+	    SET @d_event_date   = SYSDATETIME();
+
+
+        PRINT @v_log_type;
+        PRINT @v_log_message;
+        PRINT @v_description;
+
+	    PRINT CONCAT('@v_log_type : ', @v_log_type);
+	    PRINT CONCAT('@v_log_message : ', @v_log_message);
+        PRINT CONCAT('@v_description : ', @v_description);
+    END CATCH;
+
+    BEGIN -- 커서 해제 & 임시테이블 삭제------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE_ACC') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE_ACC;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE_ALL') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE_ALL;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE_FINAL') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE_FINAL;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE_FINAL_SEMI') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE_FINAL_SEMI;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE_FINAL_TEMP;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_BALANCE_THIS') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_BALANCE_THIS;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_CALENDAR') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_CALENDAR;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_CELL_TYPE_GROUP') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_CELL_TYPE_GROUP;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_COLUMN') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_COLUMN;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_COLUMN_ALL') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_COLUMN_ALL;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_FILTERED_MATERIAL') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_FILTERED_MATERIAL;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_MEASURE') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_MEASURE;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_PLANT') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_PLANT;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_PROD_PLAN_AMEND') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_PROD_PLAN_AMEND;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_ALL_FILTERED') IS NOT NULL
+			DRO"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","1","
+/*
+ * Program ID   : [SCP0103_GET_MATERIAL_VISIBILITY]
+ * Description  : 자재 제약 가시화 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge                           Description
+ *===================================================================================================
+ * 2023/11/01   chaan					V1.1.1		Initial Release
+ * 2023/11/08   chaan					V1.1.2		PJ20230692  SCM 역량 강화 위한 SCP 개선과제 이행 Phase2     - I(누계) 로직 수정
+ *                                                                                                              - P 없는 MATERIAL 제거
+ * 2023/11/10   chaan					V1.1.3		PJ20230692  SCM 역량 강화 위한 SCP 개선과제 이행 Phase2     - S 누락 수정 및 집계로직 변경
+ * 2023/11/13   chaan					V1.1.4		PJ20230692  SCM 역량 강화 위한 SCP 개선과제 이행 Phase2     - 필터조건 위치 수정(RAW -> PIVOT 바로전)
+ *                                                                                                              - 필터조건 NICKNAME 조건 변경(해당 NICKNAME 에 해당하는 MATERIAL 모두 조회)
+ *                                                                                                              - BOH 음수는 0 처치
+ *                                                                                                              - 전극사업부->A9000 선택시 반제품포함
+ * 2023/12/01   chaan					V1.1.5		PJ20230692  SCM 역량 강화 위한 SCP 개선과제 이행 Phase2     - 반제품 상세내역 조회용 컬럼 추가
+ * 2023/12/07	chaan					V1.1.6		PJ20230692  SCM 역량 강화 위한 SCP 개선과제 이행 Phase2     - Operation Group 추가
+ *                                                                                                              - CF, YIELD_RATE 조회 추가
+ * 2023/12/19	chaan					V1.1.17		PJ20230692  SCM 역량 강화 위한 SCP 개선과제 이행 Phase2     - PROD_PLAN_AMEND, REQUIREMENT 도 Supplier 정보 연결
+ * 2023/01/17	chaan					V1.1.18		PJ20230692  SCM 역량 강화 위한 SCP 개선과제 이행 Phase2     - 사용자정의 컬럼없을때도 디폴트 컬럼으로 출력가능하게 수정
+ * 2024/08/20	mrchois					V1.1.19		PJ20244573 LGES SCM SCP 생산모델 기반 공급계획 수립체계 구성	- Measure : Balance 항목의 경우,  해당주/월 마지막 날짜 Balance가 표기
+----------------------------------------------------------------------------------------------------------------------------------------
+ */
+
+--CREATE PROCEDURE [dbo].[SCP0103_GET_MATERIAL_VISIBILITY]
+CREATE PROCEDURE [dbo].[SCP0103_GET_MATERIAL_VISIBILITY]
+	  @p_division_id				    NVARCHAR(MAX)
+	, @p_plnat_id			    	    NVARCHAR(MAX)
+	, @p_supplier					    NVARCHAR(MAX)
+	, @p_operation_id				    NVARCHAR(MAX)
+	, @p_item_category					NVARCHAR(MAX)
+	, @p_item_id					    NVARCHAR(MAX)
+	, @p_nickname					    NVARCHAR(50)
+	, @p_material					    NVARCHAR(MAX)
+	, @p_scp_plan_start_yyyymmdd	    NVARCHAR(8)
+	, @p_mrp_plan_start_yyyymmdd	    NVARCHAR(8)
+	, @p_from_yyyymmdd					NVARCHAR(8)
+	, @p_to_yyyymmdd				    NVARCHAR(8)
+    , @p_program_id						NVARCHAR(300)
+	, @p_sheet_name						NVARCHAR(150)
+	, @p_user_id					    NVARCHAR(150)
+	, @debug_mode					    NVARCHAR(20)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+
+	--DECLARE @p_division_id				    NVARCHAR(MAX)		= N'81';
+	--DECLARE @p_plnat_id			    	    NVARCHAR(MAX)		= N'';
+	--DECLARE @p_supplier					    NVARCHAR(MAX)		= N'';
+	--DECLARE @p_operation_id				    NVARCHAR(MAX)		= N'A';
+	--DECLARE @p_item_category				NVARCHAR(MAX)		= N'';
+	--DECLARE @p_item_id					    NVARCHAR(MAX)		= N'';
+	--DECLARE @p_nickname					    NVARCHAR(50)		= N'';
+	--DECLARE @p_material					    NVARCHAR(MAX)		= N'';
+	----DECLARE @p_material					    NVARCHAR(MAX)		= N'RAAGP0013A';
+	----DECLARE @p_material					    NVARCHAR(MAX)		= N'MAL00380AA';
+	----DECLARE @p_material					    NVARCHAR(MAX)		= N'RET00649AA';
+	----DECLARE @p_material					    NVARCHAR(MAX)		= N'RAAGP0006A';
+	----DECLARE @p_material					    NVARCHAR(MAX)		= N'HN803L';
+	----DECLARE @p_material					    NVARCHAR(MAX)		= N'BT1001M-K5';
+	----DECLARE @p_material					    NVARCHAR(MAX)		= N'RAAGP0011A';
+	--DECLARE @p_scp_plan_start_yyyymmdd	    NVARCHAR(8)			= N'20240101';
+	--DECLARE @"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","2","p_mrp_plan_start_yyyymmdd	    NVARCHAR(8)			= N'20240108';
+	--DECLARE @p_from_yyyymmdd				NVARCHAR(8)			= N'20240108';
+	--DECLARE @p_to_yyyymmdd				    NVARCHAR(8)			= N'20240422';
+ --   DECLARE @p_program_id					NVARCHAR(300)		= N'SCP0103';
+	--DECLARE @p_sheet_name					NVARCHAR(150)		= N'ALL';
+	--DECLARE @p_user_id					    NVARCHAR(150)		= N'iamarock';
+	--DECLARE @debug_mode					    NVARCHAR(20)		= N'F';
+
+    DECLARE @V_ELAPSED_TIME_BEG     DATETIME                = CURRENT_TIMESTAMP;
+
+
+	PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+
+    DECLARE @v_log_type                     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count                    INT             = 0;
+    DECLARE @v_log_message                  NVARCHAR(1000);
+    DECLARE @v_description                  NVARCHAR(500);
+    DECLARE @d_event_date                   DATETIME;
+
+
+    BEGIN TRY
+		PRINT N'#TblDynamicPivot_SCP0103_COLUMN - BEGIN'
+        IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_COLUMN') IS NOT NULL
+            DROP TABLE #TblDynamicPivot_SCP0103_COLUMN;
+        
+        --빈 테이블 만들기
+	    SELECT  *
+        INTO    #TblDynamicPivot_SCP0103_COLUMN
+	    FROM    dbo.FN_GET_REPORT_USER_COLUMNS(@p_program_id, @p_sheet_name, @p_user_id);
+
+		PRINT N'#TblDynamicPivot_SCP0103_COLUMN - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+
+    --TESTING : OK
+    --select * from #TblDynamicPivot_SCP0103_COLUMN;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_MEASURE - BEGIN'
+        IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_MEASURE') IS NOT NULL
+            DROP TABLE #TblDynamicPivot_SCP0103_MEASURE;
+
+        SELECT DISTINCT
+                  A.COLUMN_NAME	            AS MEASURE
+                , B.COLUMN_LABEL_NAME       AS MEASURE_NAME
+                --, CONVERT(VARCHAR(30), CONVERT(INT, A.SORT_ORDER_NO * 100)) AS MEASURE_SORT_ORDER_NO
+                , A.SORT_ORDER_NO           AS MEASURE_SORT_ORDER_NO
+        INTO    #TblDynamicPivot_SCP0103_MEASURE
+        FROM    (
+                    SELECT  *
+                    FROM    SCM_MST_TITLESET_USER A
+                    WHERE   1=1
+                        AND A.PROGRAM_ID                    = @p_program_id
+                        AND A.SHEET_NAME                    = @p_sheet_name
+	                    AND A.USER_ID                       = @p_user_id
+                        AND A.USER_INQUIRY_COLUMN_TYPE_CODE = 'M'
+                ) A
+                JOIN SCM_MST_SHEET_MEASURE B ON
+				    A.PROGRAM_ID     = B.PROGRAM_ID
+			    AND A.SHEET_NAME     = B.SHEET_NAME
+			    AND A.COLUMN_NAME    = B.COLUMN_NAME
+			    AND B.VALID_YN       = 'Y';
+		PRINT N'#TblDynamicPivot_SCP0103_MEASURE - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+
+    --TESTING : OK
+    --select * from #TblDynamicPivot_SCP0103_MEASURE ORDER BY MEASURE_SORT_ORDER_NO;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_PLANT - BEGIN'
+        IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_PLANT') IS NOT NULL
+            DROP TABLE #TblDynamicPivot_SCP0103_PLANT;
+
+        SELECT  A.*
+        INTO    #TblDynamicPivot_SCP0103_PLANT
+        FROM    (
+                    SELECT    A.*
+                            , ROW_NUMBER() OVER (PARTITION BY A.DIVISION_ID, A.PLANT_ID ORDER BY A.PLANT_NAME) RN
+                    FROM    (
+                                SELECT    DIVISION_ID
+                                        , PLANT_ID
+                                        , SITE_DESCRIPTION                      AS PLANT_NAME
+                                FROM    [dbo].[SCM_MST_SITE] A  WITH(NOLOCK)
+                                WHERE   1=1
+                                    AND A"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","3",".DEPT_ID   = 'PLANT'
+                                    AND A.PLANT_ID IS NOT NULL
+                                    AND A.VALID_YN  = 'Y'
+                                GROUP BY  DIVISION_ID
+                                        , PLANT_ID
+                                        , SITE_DESCRIPTION
+                            ) A
+                ) A
+        WHERE   1=1
+            AND RN = 1;
+
+		PRINT N'#TblDynamicPivot_SCP0103_PLANT - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_PLANT;return;
+
+		PRINT N'#TblDynamicPivot_SCP0103_VENDOR - BEGIN'
+        IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_VENDOR') IS NOT NULL
+            DROP TABLE #TblDynamicPivot_SCP0103_VENDOR;
+
+        SELECT    COMPANY_ID
+                , VENDOR_CODE
+                , VENDOR_NAME
+        INTO    #TblDynamicPivot_SCP0103_VENDOR
+        FROM    SCM_MST_VENDOR  WITH(NOLOCK)
+        WHERE   1=1
+            AND VALID_YN   = 'Y';
+
+		PRINT N'#TblDynamicPivot_SCP0103_VENDOR - END'
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0103_VENDOR;return;
+
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_CALENDAR - BEGIN'
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_CALENDAR') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_CALENDAR;
+
+        SELECT    A.YYYYMMDD
+                , A.SORT_ORDER_NO
+        INTO    #TblDynamicPivot_SCP0103_CALENDAR
+        FROM    (
+					SELECT	  'W_' + A.BASIS_YYYYMM + A.ISO_WEEK				AS YYYYMMDD
+							, A.BASIS_START_DATE + CONVERT(CHAR(2), 21)			AS SORT_ORDER_NO
+					FROM	[dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+					WHERE	A.BASIS_YYYYMMDD BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+					GROUP BY A.BASIS_YYYYMM, A.ISO_WEEK, A.BASIS_START_DATE
+					--UNION ALL
+					--SELECT	  'W_' + A.ISO_YYYYMM + A.ISO_WEEK + '_ISO'			AS YYYYMMDD
+					--		, MIN(A.BASIS_START_DATE) + CONVERT(CHAR(2), 21)	AS SORT_ORDER_NO
+					--FROM	[dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+					--WHERE	A.BASIS_YYYYMMDD BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+					--GROUP BY A.ISO_YYYYMM, A.ISO_WEEK
+					UNION ALL
+					SELECT	  'M_' + A.BASIS_YYYYMM								AS YYYYMMDD
+							, MIN(A.BASIS_START_DATE) + CONVERT(CHAR(2), '01')	AS SORT_ORDER_NO
+					FROM	[dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+					WHERE	A.BASIS_YYYYMMDD BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+					GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME
+					UNION ALL
+					SELECT	  'D_' + A.BASIS_YYYYMMDD							AS YYYYMMDD
+							, A.BASIS_YYYYMMDD + CONVERT(CHAR(2), 31)			AS SORT_ORDER_NO
+					FROM	[dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+					WHERE	A.BASIS_YYYYMMDD  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+					GROUP BY A.BASIS_YYYYMMDD
+                    UNION ALL
+                    SELECT    'D_00000000'  AS YYYYMMDD
+                            , '0000000000'  AS SORT_ORDER_NO
+                ) A;
+
+		PRINT N'#TblDynamicPivot_SCP0103_CALENDAR - END'
+		PRINT CONCAT('ELAPSED_TIME : ', CONVERT(VARCHAR, CURRENT_TIMESTAMP - @V_ELAPSED_TIME_BEG, 114));SET @V_ELAPSED_TIME_BEG = CURRENT_TIMESTAMP;
+
+--TESITNG : OK
+--select * from #TblDynamicPivot_SCP0103_CALENDAR;return;
+
+
+		PRINT N'#TblDynamicPivot_SCP0103_RAW_TEMP - BEGIN'
+        -- EE 사업ㅂ부 plant 합치기전
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP1') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP1;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, dbo.FN_GET_DIVISION_NAME(A.DIVISION_ID)		                                            AS DIVISION_NAME
+                --, A.ORIGIN_DIVISION_ID
+				--, dbo.FN_GET_DIVISION_NAME(A.ORIGIN_DIVISION_ID)	                AS ORIGIN_DIVISION_NAME
+	            , IIF(LEFT(A.DIVISION_ID, 2) = 'EE', '-', A.ORIGIN_DIVISION_ID)		                        AS ORIGI"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","4","N_DIVISION_ID
+				, IIF(LEFT(A.DIVISION_ID, 2) = 'EE', '-', dbo.FN_GET_DIVISION_NAME(A.ORIGIN_DIVISION_ID))	AS ORIGIN_DIVISION_NAME
+				--, A.PLANT_ID
+				--, C.PLANT_NAME
+	            , IIF(LEFT(A.DIVISION_ID, 2) = 'EE', '-', A.PLANT_ID)		                                AS PLANT_ID
+	            , IIF(LEFT(A.DIVISION_ID, 2) = 'EE', '-', C.PLANT_NAME)	                                    AS PLANT_NAME
+				, A.MATERIAL
+				, A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+                , IIF(V1.VENDOR_NAME IS NULL, IIF(V2.VENDOR_NAME IS NULL, A.SUPPLIER, V2.VENDOR_NAME), V1.VENDOR_NAME)  AS SUPPLIER_NAME
+				, A.ITEM_CATEGORY
+				, A.QTY
+				, A.CELL_CF
+				, A.YIELD_RATE
+				, A.REMARK
+				, B.MEASURE_NAME
+				, B.MEASURE_SORT_ORDER_NO * 100					AS USER_SORT_ORDER_NO -- 중간계 들어간후 소트를 위해 기존 USER_SORT_ORDER_NO * 100
+				, 'N'											AS WEEK_YN
+				, 'N'											AS MONTH_YN
+				, 'PP_W_' + A.MRP_PLAN_START_YYYYMMDD			AS VERSION_NO
+                , ISNULL(A.ATTRIBUTE2, '-')                     AS STOCK_TYPE
+		INTO	#TblDynamicPivot_SCP0103_RAW_TEMP1
+		FROM	dbo.SCP_ANL_MAT_SUPPLY A WITH(NOLOCK)
+				JOIN #TblDynamicPivot_SCP0103_MEASURE B ON
+						A.MEASURE               = B.MEASURE
+				LEFT JOIN #TblDynamicPivot_SCP0103_PLANT C ON
+					    A.ORIGIN_DIVISION_ID    = C.DIVISION_ID
+					AND A.PLANT_ID              = C.PLANT_ID
+                LEFT JOIN (
+                            SELECT    VENDOR_CODE
+                                    , VENDOR_NAME
+                            FROM    #TblDynamicPivot_SCP0103_VENDOR
+                            WHERE   1=1
+                                AND COMPANY_ID = 'C100'
+                            GROUP BY  VENDOR_CODE
+                                    , VENDOR_NAME
+                          ) V1 ON --1순위 C100
+                        A.SUPPLIER  = V1.VENDOR_CODE
+                LEFT JOIN (
+                            SELECT    COMPANY_ID
+                                    , VENDOR_CODE
+                                    , VENDOR_NAME
+                            FROM    #TblDynamicPivot_SCP0103_VENDOR
+                          ) V2 ON --2순위 자기COMPANY
+                        A.COMPANY   = V2.COMPANY_ID
+                    AND A.SUPPLIER  = V2.VENDOR_CODE
+		WHERE	1=1
+			AND ((@p_scp_plan_start_yyyymmdd		    IS NULL OR @p_scp_plan_start_yyyymmdd		    = '') OR (A.SCP_PLAN_START_YYYYMMDD	= @p_scp_plan_start_yyyymmdd))
+			AND ((@p_mrp_plan_start_yyyymmdd		    IS NULL OR @p_mrp_plan_start_yyyymmdd		    = '') OR (A.MRP_PLAN_START_YYYYMMDD	= @p_mrp_plan_start_yyyymmdd))
+            --AND ( NOT (     LEFT(A.DIVISION_ID, 2)  = 'EE'
+            --            AND ATTRIBUTE3              = 'A'--OPERATION_GROUP
+            --            AND UPPER(ITEM_CATEGORY) NOT IN ('ANODE ACTIVE MATERIAL', 'CATHODE ACTIVE MATERIAL')
+            --          )--전극사업부 A3000, A9000 은 Anode, Cathode 인 것만 취합
+            --     )
+--BALANCE 기간의 앞 재고를 구해야 하므로 날짜 필터링은 제일 나중에 할 것!!!            AND A.YYYYMMDD BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+			AND A.YYYYMMDD				<= @p_to_yyyymmdd;
+
+--TESITNG : OK
+--select * from #TblDynamicPivot_SCP0103_RAW_TEMP1;return;
+
+        -- EE 사업부 plant 합친후
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP;
+
+		SELECT	  A.SCP_PLAN_START_YYYYMMDD
+				, A.MRP_PLAN_START_YYYYMMDD
+				, A.PSI
+				, A.MEASURE
+				, A.COMPANY
+				, A.DIVISION_ID
+				, A.DIVISION_NAME
+				, A.ORIGIN_DIVISION_ID
+				, A.ORIGIN_DIVISION_NAME
+	            , A.PLANT_ID
+	            , A.PLANT_NAME
+				, A.MATERIAL
+                , A.OPERATION_GROUP
+				, A.OPERATION_ID
+				, A.ITEM_ID
+				, A.YYYYMMDD
+				, A.YYYYMM
+				, A.WEEK
+				, A.ISO_WEEK
+				, A.UOM
+				, A.NICKNAME
+				, A.SUPPLIER
+                , A.SUPPLIER_NAME
+				, A.ITEM_CATE"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0103_GET_MATERIAL_VISIBILITY","398064604","24","P TABLE #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_ALL_FILTERED_REQUIREMENT') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_ALL_FILTERED_REQUIREMENT;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_ALL_TEMP') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_ALL_TEMP;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P_ITEMS') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_ALL_TEMP_P_ITEMS;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP1') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP1;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_ALL;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_MRP') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_MRP;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE_KEYS') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_PRE_KEYS;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI_ITEM') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_RAW_TEMP_BALANCE_SEMI_ITEM;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_REQUIREMENT') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_REQUIREMENT;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_SUB_PROD_PLAN_AMEND') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_SUB_PROD_PLAN_AMEND;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_SUB_REQUIREMENT') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_SUB_REQUIREMENT;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_SUPPLY_PLAN') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_SUPPLY_PLAN;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_VENDOR') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_VENDOR;
+	    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0103_YYYYMMDD') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0103_YYYYMMDD;
+    END -- 임시테이블 삭제------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+END
+
+"

@@ -118,7 +118,7 @@
 | CC-105 | §3.1 [원문 무번호] **cboAS** (AS 체크) / `lciASCheck` (Designer L1371) | AS-IS 전용 개념 | AS-IS(WinForms/BigFilter/TB_FX_) 전용 — TO-BE 는 CMBO·메타 체계로 대체. 이식 대상 아님 | 해당없음 |
 | CD-01 | §4 FCST_TYPE / `FCST_TYPE` — W/S 그룹=`EDIT_MODE`(SALES_TYPE_CODE2∪_ADD 6종) / 그 외=NowGroupI… | features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts:359~373 (GRID_EDIT_COMBO FCST_TYPE=FcstTypeEditMode wsOnly) + MktFcstGrid.tsx:762~767 |  | 구현 |
 | CD-02 | §4 INCOTERMS / `INCOTERMS`(ALL,'Y' — VALID_YN 만) / AS 사이트 행 = `AS_INCOTERMS`(division, si… | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx beginningEdit INCOTERMS 분기 — AS 사이트 행 = AsIncotermsEdit(division) 스왑 | 2026-08-12 보완 (AS-IS AS_INCOTERMS 1:1 — DMF0082 동일 콤보 재사용) | 구현 |
-| CD-03 | §4 AS_FROM_SITE / `AS_FROM_SITE`(division) | admin SHEET_COLUMNS CELL_COMBO_DATA_TYPE + MktFcst.tsx:190 (AS_FROM_SITE 콤보 param1=division) |  | 구현 |
+| CD-03 | §4 AS_FROM_SITE / `AS_FROM_SITE`(division) | admin SHEET_COLUMNS CELL_COMBO_DATA_TYPE + **PARAM10='D' / PARAM2='DIVISION_ID:param1'** → 공용 DataGrid 가 행 Div 로 재조회 (2026-09-03 columnMapping 표준 이관) + MktFcst.tsx:190 (비축향 판정용 AS_FROM_SITE 콤보 param1=division) |  | 구현 |
 | CD-04 | §4 MEASURE / `MktFcstEditMeasure`(division, site, project, userId) — 81*/82 비W/S 는 `AS_In… | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx:768~790 (MktFcstEditMeasure + AS 향/W-S 필터) |  | 구현 |
 | CD-05 | §4 TEAM / `UserTeamByDivisionAuth` |  | Team 컬럼 = E20260311 입력 불가('S') — 편집 콤보 자체가 불필요(AS-IS 최종 상태도 입력 불가) | 해당없음 |
 | CD-06 | §4 END_CUSTOMER(40) / `EndCustomerByDivision40` | features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts (END_CUSTOMER cascade — GRID_CASCADE_FILTERS) |  | 구현 |
@@ -188,7 +188,7 @@
 | CG-04 | §7 Weekly 입력 < SSP 동기화(PaleGreen) 합 — 40 × MKT_FCST_RP × **FCST Type≠RMA**(E20241210) / 값… | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.recalc.ts:110~ (recalcWeeklyToDaily — syncMap 하한·sync 셀 제외·RMA 예외 E20241210) |  | 구현 |
 | CG-05 | §7 I 행 키값 변경 / 수량 전부 클리어 + dtSave 에서 제거 | features/demand/src/pages/mkt-fcst/components/MktFcstGrid.tsx cellEditEnded [CG-05] — I 행 정적 키 변경 시 수량(D_/W_/M_) 전부 클리어 + MktFcst.tsx clearDynQuantities(팝업 경로) | 2026-08-12 보완 (.cs L5319~5379 1:1) | 구현 |
 | CG-06 | §7 I 행 Measure 를 AS_In_Req/BNPIn 외로 변경 / Item 4종 클리어 | features/demand/src/pages/mkt-fcst/mkt-fcst.constants.ts:374~ (MEASURE_MODEL_KEEP/CLEAR_COLS) + MktFcstGrid.tsx:958~972 |  | 구현 |
-| CG-07 | §7 버킷 배분 / 주→일: 요일비트(기본 '0000010'=FRI) 균등+잔여 마지막, 비트 없으면 기본요일 단일, PaleGreen 제외 / 월→일: 기본요… | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.recalc.ts (요일비트·기본요일·잔여 배분 — dispatchRecalc) |  | 구현 |
+| CG-07 | §7 버킷 배분 / 주→일: 요일비트(기본 '0000010'=FRI) 균등+잔여 마지막, 비트 없으면 기본요일 단일, PaleGreen 제외 / 월→일: 기본요… | features/demand/src/pages/mkt-fcst/utils/mkt-fcst.recalc.ts (요일비트·잔여 배분 — dispatchRecalc). 버킷 요일 없음 폴백(bWeekAll/bMonthAll)의 "기본요일" 은 AS-IS sDefaultDay(.cs L1449 Data.Common(DefaultBucketDay, division, bucketType)) 이식 — 마스터 콤보 DefaultBucketDay 를 division×bucketType 으로 조회(MktFcstGrid buildDefaultBucketDayFilter)해 dowIndexOfCode 로 요일 인덱스 변환 후 dispatchRecalc(defaultBucketDow) 로 전달. 과거 월요일 고정을 제거(테스트 mkt-fcst.recalc.test.ts) |  | 구현 |
 | CG-101 | §7.1 [원문 무번호] 키 컬럼 / Customer40·ScmSiteId40·ItemId40 | DB `SCM_MST_SHEET_COLUMNS`(PROGRAM_ID=DMF0003·SHEET_NAME='Mkt Fcst') — `END_CUSTOMER40`/`SCM_SITE_ID40`/`ITEM_ID40` 3행 모두 DIVISION_ID='40' VISIBLE_FLAG='Y' 실측(2026-08-15) |  | 구현 |
 | CG-102 | §7.1 [원문 무번호] Plant Site 필수 / ✗ | 해당없음 | 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 | 해당없음 |
 | CG-103 | §7.1 [원문 무번호] 중복키 Plant 포함 / ✗ | 해당없음 | 표 헤더 행(컬럼명 나열) — 요구사항 행이 아님. `--init` 자동채번 산물 | 해당없음 |
@@ -630,7 +630,7 @@ AS-IS `NowGroupID`(로그인 시 선택한 단일 그룹) ↔ TO-BE 는 그룹 �
 
 | SQL_ID | 필요 토큰 | 서버자동 | FE 전달 지점 | 판정 |
 |---|---|---|---|---|
-| AS_FROM_SITE | param1 | - | `ROW_PARAM_EDIT_COMBO.AS_FROM_SITE.buildParam` — 행 Div | ✅ |
+| AS_FROM_SITE | param1 | - | (편집 드롭다운) 컬럼 메타 PARAM10='D' + PARAM2='DIVISION_ID:param1' → 공용 DataGrid `useRowParamCombos` 가 행 Div 를 실어 재조회 (2026-09-03 이관, 종전 `ROW_PARAM_EDIT_COMBO.AS_FROM_SITE.buildParam`) / (비축향 판정) `buildWsSupportComboFilters` — 화면 division | ✅ |
 | BizType / CustomsHandbook / FcstType / Incoterms / ItemType / SoldCustomer / YesOrNo | (없음) | - | `buildGridComboFilter`(@mnuId 만) | ✅ |
 | EndCustomerByDivision40Team | (없음) | - | `buildGridComboFilter` | ✅ |
 | EndCustomerByDivisionDeptAuth | (없음) | sesUserId | `GRID_EDIT_COMBO.END_CUSTOMER`(sesUserIdParam) + 클라 cascade(Div·Team) | ✅ |

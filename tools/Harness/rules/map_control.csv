@@ -1,0 +1,62 @@
+asis_type,tobe_component,tobe_import,slot,props_template,gen,note
+UsrConditionPanel,SearchArea,@shared/components,form-container,,container,조회조건 영역 컨테이너 — 조회 버튼은 SearchArea 내장(onSearch)
+UsrCombo,CustomDropdown,@shared/components,form-field,"isInput={false} allOption",field,단일 선택 콤보. 콤보 소스는 useTabComboQueries 등록 콤보ID 로 — GEN_NOTES 에 콤보ID 확인 항목
+UsrComboBox,CustomDropdown,@shared/components,form-field,"isInput={false}",field,UsrCombo 와 동일
+ComboBox,CustomDropdown,@shared/components,form-field,"isInput={false}",field,
+UsrCheckedList,CustomDropdown,@shared/components,form-field,"multiple isInput={false}",field,다중 선택 체크리스트 → 다중 드롭다운 (사용자 결정 2026-05)
+UsrCheckedList2,CustomDropdown,@shared/components,form-field,"multiple isInput={false}",field,
+UsrDateRangePicker,PeriodField,@shared/components,form-field,,field,기간. As-is readOnly 속성은 미이식(To-Be 표준 = 편집 가능)
+UsrDateRangePicker3,PeriodField,@shared/components,form-field,,field,
+UsrDateRangePickerWtWeek,PeriodField,@shared/components,form-field,,field,주차 표시는 PeriodField 옵션 — 확인 필요
+UsrMonthRangePicker,PeriodField,@shared/components,form-field,"mode='month'",field,
+UsrMonthPicker,DatePickerCalendar,@shared/components,form-field,"views={['year','month']}",field,
+UsrDatePicker,DatePickerCalendar,@shared/components,form-field,,field,
+DateTimePicker,DatePickerCalendar,@shared/components,form-field,,field,
+UsrMultiLineEditor,InputField,@shared/lges,form-field,fullWidth,field,콤마 다중 입력 텍스트. 팝업 연계(btnXxxId 가 짝이면) ItemField/ProjectField 로 승격 — map_pair 참조
+UsrTextBox,InputField,@shared/lges,form-field,fullWidth,field,
+TextBox,InputField,@shared/lges,form-field,fullWidth,field,
+RichTextBox,TextField,@shared/lges,form-field,"multiline fullWidth",field,
+UsrCheckBox,Checkbox,@shared/lges,form-field,,field,
+CheckBox,Checkbox,@shared/lges,form-field,,field,
+CheckEdit,Checkbox,@shared/lges,form-field,,field,
+UsrRadio,RadioGroup,@shared/lges,form-field,,field,
+RadioGroup,RadioGroup,@shared/lges,form-field,,field,
+RadioButton,Radio,@shared/lges,form-field,,field,
+UsrButton,Button,@shared/lges,subtitle-button,"variant='outlined' size='small'",button,기본은 SubTitle customButtons. 이름 규칙으로 승격: btnColumn→COLUMN_SETUP(ColumnLayoutModal), btnMeasure→MEASURE_SELECT(MeasureSelectModal), btn*Id/btnProject→FunctionSearchIcon+팝업 모달 (map_button.csv)
+UsrButtonList,Button,@shared/lges,subtitle-button,"variant='outlined' size='small'",button,버튼 묶음 — 항목별 Button
+SimpleButton,Button,@shared/lges,subtitle-button,"variant='outlined' size='small'",button,btnSearch/btnFind 는 SearchArea 내장 조회 버튼으로 흡수(생성 안 함)
+Button,Button,@shared/lges,subtitle-button,,button,
+FpSpread,DataGrid,@shared/components,grid,"staticColumns={staticColumns}",grid,Wijmo FlexGrid 래퍼. 메타 컬럼 /admin/menu/{MENU}/column. 스프레드 2개 이상이면 DataGrid 복수 또는 TabWrapper
+SheetView,(none),,n/a,,skip,FpSpread 디자이너 SheetView — DataGrid 에 흡수. 시트 2개 이상은 SHEETS enum + activeSheet 상태
+ChartControl,(chart),,custom,,todo,차트 컴포넌트 — 화면별 결정
+UsrTriStateTreeView,Tree,@shared/components,custom,,todo,
+TabControl,TabWrapper,@shared/components,layout,,container,
+TabPage,TabItem,@shared/components,layout,,container,
+LayoutControlItem,(none),,n/a,,skip,DevExpress 레이아웃 아이템 — FormItem label 로 흡수
+LayoutControlGroup,(none),,n/a,,skip,레이아웃 그룹 — JSX/SCSS
+EmptySpaceItem,(none),,n/a,,skip,여백 — CSS
+UsrLayoutControl,(none),,n/a,,skip,레이아웃 컨테이너 — SearchArea/Grid layout
+SplitContainer,(none),,n/a,,skip,분할 — Panel/PanelGroup 레이아웃
+Splitter,(none),,n/a,,skip,
+Panel,(none),,n/a,,skip,
+TableLayoutPanel,(none),,n/a,,skip,
+FlowLayoutPanel,(none),,n/a,,skip,
+Container,(none),,n/a,,skip,IContainer — 비시각
+ImageList,(none),,n/a,,skip,아이콘 리소스 — SVG 아이콘 직접 사용
+ToolTip,(none),,n/a,,skip,
+Timer,(none),,n/a,,skip,
+BackgroundWorker,(none),,n/a,,skip,비동기 — React Query 로 대체
+ToolStripMenuItem,(none),,n/a,,todo,컨텍스트 메뉴 — 화면별 결정(그리드 우클릭)
+ContextMenuStrip,(none),,n/a,,todo,
+UsrLabel,(none),,n/a,,skip,라벨 — FormItem label
+Label,(none),,n/a,,skip,
+LabelControl,(none),,n/a,,skip,
+SimpleLabelItem,(none),,n/a,,skip,
+ProgressBar,ProgressIndicator,@shared/components,custom,,skip,공용 로딩 인디케이터가 대신함
+SizeF,(none),,n/a,,skip,디자이너 값
+Size,(none),,n/a,,skip,디자이너 값
+Padding,(none),,n/a,,skip,디자이너 값
+CheckedListBoxControl,CustomDropdown,@shared/components,form-field,"multiple isInput={false}",field,DevExpress 체크리스트 → 다중 드롭다운
+TextEdit,InputField,@shared/lges,form-field,fullWidth,field,DevExpress TextEdit
+UsrDateRangePickerWtWeek2,PeriodField,@shared/components,form-field,,field,
+UsrMonthPicker2,DatePickerCalendar,@shared/components,form-field,"views={['year','month']}",field,

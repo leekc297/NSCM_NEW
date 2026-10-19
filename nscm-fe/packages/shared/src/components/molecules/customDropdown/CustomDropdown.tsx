@@ -1,9 +1,9 @@
 import { Chip, DropdownField } from '@lges/design-system';
 import type { DropdownFieldProps, DropdownOption } from '@lges/design-system';
 import type { AutocompleteChangeDetails, AutocompleteChangeReason } from '@mui/material';
-import { autocompleteClasses, createFilterOptions, Popper } from '@mui/material';
+import { autocompleteClasses, Popper } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 // 주의: KeyboardEvent 는 별칭으로 받는다. 같은 이름으로 import type 하면 DOM 전역
 //   KeyboardEvent 가 가려져 handleSearchKeyDown 의 new KeyboardEvent(...) 가 막힌다.
 import type {
@@ -20,6 +20,7 @@ import { CustomListbox, DROPDOWN_SEARCH_ATTR } from './components/CustomListbox'
 import type { CustomListboxProps } from './components/CustomListbox';
 import type { ListboxChild } from './components/CustomListboxRow';
 import styles from './CustomDropdownMui.module.scss';
+import { filterBySearch, listFilter } from './filterBySearch';
 
 const StyledPopper = styled(Popper)({
   [`& .${autocompleteClasses.listbox}`]: {
@@ -71,9 +72,9 @@ const MULTI_CHIP_WIDTH_SX = {
   },
 };
 
-// MUI 기본 목록 필터(대소문자 무시, 부분일치). 아래 두 곳에서 같은 기준을 써야
-// '목록에 보이는 것'과 'SELECT ALL 이 고르는 것'이 어긋나지 않는다.
-const listFilter = createFilterOptions<DropdownOption>();
+// 목록 검색 필터(단일 부분일치 listFilter + 콤마 다중 검색 filterBySearch)는 테스트 가능하도록
+// 별도 모듈로 뺐다 — 이 컴포넌트를 import 하면 @lges/design-system 런타임까지 끌려와 순수 로직
+// 단위 테스트가 안 된다.
 
 /**
  * 팝업 검색칸에서 필드 입력창으로 넘겨줄 키.
@@ -218,6 +219,35 @@ const sortOptionsBy = <T extends { value: string; label?: unknown }>(
     .map(decorated => decorated.opt);
 };
 
+/**
+ * [2026-09-09 사용자 요구] 조회조건 콤보 목록을 펼쳤을 때, 필드 폭은 그대로 두고
+ * 목록만 '가장 긴 항목'에 맞춰 넓힌다.
+ *
+ * 왜 픽셀로 계산하나: 목록은 react-window 로 가상화되어 행이 position:absolute + width:100%
+ * 다(부모 폭을 그대로 따름). 그래서 CSS 의 내용 기반 폭(max-content 등)으로는 절대 넓어지지
+ * 않고 - 보이는 8행만 렌더되므로 - 안 보이는 행까지 포함한 최대 폭을 데이터에서 직접 재야 한다.
+ * 텍스트 폭은 canvas measureText 로 잰다(수천 개 옵션도 DOM 없이 빠르게).
+ *
+ * 어떻게 적용하나: 팝업(MUI Popper)에는 MUI 가 style.width = 필드폭 을 인라인으로 박아 둔다.
+ * 여기서는 style.minWidth 만 얹는다 - CSS 규칙상 min-width 가 width 보다 클 때만 이기므로,
+ * (내용 폭 > 필드 폭)이면 목록이 내용 폭까지 넓어지고, 그렇지 않으면 필드 폭 그대로 남는다.
+ */
+let measureCanvasCtx: CanvasRenderingContext2D | null = null;
+const getMeasureCtx = (): CanvasRenderingContext2D | null => {
+  if (measureCanvasCtx) return measureCanvasCtx;
+  if (typeof document === 'undefined') return null;
+  measureCanvasCtx = document.createElement('canvas').getContext('2d');
+  return measureCanvasCtx;
+};
+
+// 팝업 우측이 화면 밖으로 나가지 않도록 남기는 여백.
+const DROPDOWN_VIEWPORT_MARGIN = 24;
+// 마지막 글자가 아슬아슬하게 잘리지 않도록 두는 여백(스크롤바 폭은 아래에서 실측해 별도로 더한다).
+const DROPDOWN_WIDTH_SAFETY = 8;
+
+const measureLabel = (label: unknown, value: string): string =>
+  typeof label === 'string' && label ? label : value;
+
 export const CustomDropdown = ({
   options: rawOptions,
   value,
@@ -261,10 +291,23 @@ export const CustomDropdown = ({
   // 이 인스턴스를 가리키는 표식. 위 openList 가 '나'인지 판정하는 데만 쓴다.
   const listId = useRef({});
 
+  // 목록 폭을 '가장 긴 항목'에 맞추기 위한 상태(위 measureLabel 주석 참조).
+  //   - popupOpen: 팝업이 떠 있는 동안에만 잰다(렌더된 행에서 실제 폰트를 읽어야 정확하다).
+  //   - popperMinWidth: 계산된 내용 폭. 팝업에 style.minWidth 로만 얹는다(필드 폭이 하한).
+  //   - measureClass: 이 인스턴스의 팝업만 골라내는 표식(팝업은 body 로 portal 되므로 필요).
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popperMinWidth, setPopperMinWidth] = useState<number>();
+  const measureClass = `dd-measure-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
+
   const closeList = useCallback(() => {
     if (openList?.id === listId.current) openList = null;
     setListSearch('');
     setListOpen(false);
+    // popupOpen 도 함께 내린다. 다중 선택은 open 을 listOpen 으로 외부 제어하므로, 바깥 클릭
+    //   (blur)으로 닫힐 때 MUI 의 onClose 가 발화하지 않아 setPopupOpen(false) 가 호출되지 않는다.
+    //   그러면 popupOpen 이 stale true 로 굳어 (1) 닫힘 시 폭 리셋이 안 되고 (2) 재열림 때 dep
+    //   변화가 없어 재측정이 안 돼, division 을 바꿔 목록이 짧아져도 이전의 넓은 폭이 남는다.
+    setPopupOpen(false);
   }, []);
 
   // 열어 둔 채 화면을 떠나면(cascade 로 언마운트 등) 등록만 남아 다음 콤보를 닫지 못한다.
@@ -333,6 +376,65 @@ export const CustomDropdown = ({
   const multipleValue = allEntriesSelected ? optionsWithAll : selectedOptions;
 
   const dropdownValue = props.multiple ? multipleValue : singleValue;
+
+  // 목록 내용 폭 측정 — 팝업이 열려 있고 옵션 라벨이 바뀔 때만. 검색으로 목록이 걸러지는 것은
+  //   optionsWithAll(전체 집합)을 바꾸지 않으므로 폭이 흔들리지 않는다.
+  const labelsSignature = optionsWithAll
+    .map(opt => `${measureLabel(opt.label, opt.value)}`)
+    .join('');
+  useEffect(() => {
+    if (!popupOpen) {
+      setPopperMinWidth(undefined);
+      return;
+    }
+
+    let raf = 0;
+    let attempts = 0;
+    const measure = () => {
+      const popperEl = document.querySelector(`.${measureClass}`);
+      // 렌더된 옵션 행 하나에서 실제 폰트와 '라벨 앞 여백'(좌패딩+체크박스+gap)을 읽는다.
+      const row = popperEl?.querySelector('li');
+      const ctx = getMeasureCtx();
+      // react-window 는 팝업이 열린 다음 프레임에야 행을 그린다. 행이 아직 없으면 다음 프레임에 다시.
+      if (!row || !ctx) {
+        if (attempts++ < 10) raf = requestAnimationFrame(measure);
+        return;
+      }
+
+      // 라벨 span 은 행의 마지막 자식이다(다중 선택이면 체크박스 다음). 없으면 행 자체로.
+      const labelEl = (row.lastElementChild as HTMLElement | null) ?? row;
+      const labelStyle = getComputedStyle(labelEl);
+      ctx.font = `${labelStyle.fontStyle} ${labelStyle.fontWeight} ${labelStyle.fontSize} ${labelStyle.fontFamily}`;
+
+      let maxTextWidth = 0;
+      for (const opt of optionsWithAll) {
+        const width = ctx.measureText(measureLabel(opt.label, opt.value)).width;
+        if (width > maxTextWidth) maxTextWidth = width;
+      }
+
+      const rowStyle = getComputedStyle(row);
+      // offsetLeft(기준: 행) = 좌패딩 + (다중선택 시)체크박스 + gap. 라벨 앞에 붙는 모든 폭.
+      const prefix = labelEl === row ? parseFloat(rowStyle.paddingLeft) || 0 : labelEl.offsetLeft;
+      const paddingRight = parseFloat(rowStyle.paddingRight) || 0;
+
+      // 목록이 8행을 넘으면 세로 스크롤바가 팝업 폭 '안쪽'을 먹어 행의 글자 영역이 그만큼 줄어든다.
+      //   (8행 이하면 스크롤바가 없어 0). 스크롤 컨테이너에서 실측해 그 폭을 더한다
+      //   - 오버레이 스크롤바(맥 등)는 0이라 불필요하게 넓히지 않는다.
+      const scrollEl = popperEl?.querySelector('[role="list"]') as HTMLElement | null;
+      const scrollbar = scrollEl ? Math.max(0, scrollEl.offsetWidth - scrollEl.clientWidth) : 0;
+
+      const contentWidth = Math.ceil(
+        prefix + maxTextWidth + paddingRight + scrollbar + DROPDOWN_WIDTH_SAFETY
+      );
+      const cap = Math.max(0, window.innerWidth - DROPDOWN_VIEWPORT_MARGIN);
+      setPopperMinWidth(Math.min(contentWidth, cap));
+    };
+
+    raf = requestAnimationFrame(measure);
+    return () => cancelAnimationFrame(raf);
+    // labelsSignature 로 옵션 라벨 변화를 추적한다(optionsWithAll 은 매 렌더 새 배열이라 deps 로 못 씀).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [popupOpen, labelsSignature, measureClass]);
 
   const handleOptionsBuilt = useCallback((optionIndexMap: Map<string, number>) => {
     optionIndexMapRef.current = optionIndexMap;
@@ -426,10 +528,7 @@ export const CustomDropdown = ({
       // 검색 중이면 대상은 '그때 목록에 보이던 항목'뿐이다. 검색에 안 걸린 기존 선택은 건드리지 않는다.
       // 아래 filterOptions 와 같은 listFilter 를 써야 보이던 것과 골라지는 것이 일치한다.
       if (searchText) {
-        const visible = listFilter(options, {
-          inputValue: searchText,
-          getOptionLabel: opt => opt.label || '',
-        });
+        const visible = filterBySearch(options, searchText, opt => opt.label || '');
 
         if (reason === 'selectOption')
           return [...selectedOptions, ...visible.filter(opt => !splitValueSet.has(opt.value))];
@@ -512,7 +611,9 @@ export const CustomDropdown = ({
         onChange={
           props.multiple
             ? handleMultipleChange
-            : (event, value: DropdownOption) => onChange?.(event, value.value)
+            : // 단일 선택: clear(지움) 시 MUI 가 value=null 을 넘긴다 — null.value 참조 크래시를
+              //   막고 빈 값('')으로 정규화한다(호출부는 '' 를 미선택으로 처리).
+              (event, value: DropdownOption | null) => onChange?.(event, value?.value ?? '')
         }
         limitTags={limitTags}
         /**
@@ -589,6 +690,15 @@ export const CustomDropdown = ({
         }}
         slotProps={{
           popper: {
+            // 이 인스턴스의 팝업을 골라내는 표식(측정용, 위 measureClass 참조).
+            className: measureClass,
+            // 목록의 '왼쪽 시작선'을 필드의 왼쪽에 맞춘다. 이 팝업은 필드에 가운데 정렬돼 있어,
+            //   위에서 목록을 넓히면 좌우로 벌어져 왼쪽 시작선이 필드와 어긋난다(사용자 지적).
+            //   bottom-start 로 두면 왼쪽 모서리가 필드 왼쪽에 고정되고 오른쪽으로만 넓어진다.
+            placement: 'bottom-start' as const,
+            // 목록을 '가장 긴 항목' 폭까지 넓힌다. MUI 가 style.width=필드폭 을 얹어 두므로
+            //   min-width 만 준다 - 내용이 필드보다 넓을 때만 넓어지고, 필드 폭이 하한이 된다.
+            ...(popperMinWidth ? { style: { minWidth: popperMinWidth } } : {}),
             // 팝업 여백(Paper)을 눌러도 검색칸이 포커스를 잃지 않게 한다.
             //   리스트박스 안쪽은 MUI 가 이미 같은 처리를 하지만 Paper 여백은 비어 있다.
             //   검색칸 자신은 통과시켜야 클릭으로 커서를 옮길 수 있다.
@@ -617,18 +727,21 @@ export const CustomDropdown = ({
         // 주의: 다중 선택 + allOption 일 때만 손댄다. 단일 선택의 'ALL' 항목은 종전대로
         //   검색어에 걸릴 때만 보이는 게 맞다(전체 조회를 뜻하는 평범한 한 개 선택지라서).
         filterOptions={(opts, state) => {
-          // 다중 선택의 검색어는 필드 입력창이 아니라 팝업 안 검색칸(listSearch)에 있다.
-          //   필드의 inputValue 는 '' 로 고정해 두었으므로 state.inputValue 를 그대로 쓰면
-          //   무엇을 쳐도 항상 전체 목록이 나온다.
-          const searchState = isSearchControlled ? { ...state, inputValue: listSearch } : state;
+          // 단일 선택은 종전대로 MUI 기본 필터(필드 입력창 기준). 다중 선택만 검색어의 출처가
+          //   필드가 아니라 팝업 안 검색칸(listSearch)이며, 콤마가 있으면 다중어 OR 필터
+          //   (filterBySearch)를 태운다 — 필드 inputValue 는 '' 로 고정돼 있어 그대로 쓰면
+          //   무엇을 쳐도 전체 목록이 나온다.
+          if (!isSearchControlled) return listFilter(opts, state);
 
-          if (!props.multiple || !allOption) return listFilter(opts, searchState);
+          const getOptionLabel = (opt: DropdownOption) => opt.label || '';
+          if (!allOption) return filterBySearch(opts, listSearch, getOptionLabel);
 
           return [
             SELECT_ALL_OPTION,
-            ...listFilter(
+            ...filterBySearch(
               opts.filter(opt => opt.value !== SELECT_ALL_OPTION.value),
-              searchState
+              listSearch,
+              getOptionLabel
             ),
           ];
         }}
@@ -641,6 +754,8 @@ export const CustomDropdown = ({
         // 필수: props 스프레드 뒤에 둘 것 - 호출부가 넘긴 값에 덮이면 제어가 풀린다.
         {...(isSearchControlled ? { inputValue: '', open: listOpen } : {})}
         onOpen={event => {
+          // 팝업 폭 측정을 위해 열림 상태를 추적한다(단일/다중 모두 여기로 들어온다).
+          setPopupOpen(true);
           if (isSearchControlled) {
             // 먼저 펼쳐져 있던 목록을 닫는다(위 openList 참조).
             if (openList && openList.id !== listId.current) openList.close();
@@ -656,6 +771,7 @@ export const CustomDropdown = ({
         }}
         // 목록을 닫으면 검색어를 버린다 - 다음에 열 때는 전체 목록에서 시작해야 한다.
         onClose={(event, reason) => {
+          setPopupOpen(false);
           if (isSearchControlled) closeList();
           props.onClose?.(event, reason);
         }}

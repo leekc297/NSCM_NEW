@@ -1,0 +1,126 @@
+#!/usr/bin/env node
+'use strict';
+// gen-pkg — 화면의 As-is SP 들을 To-Be 규약의 Oracle PACKAGE 골격(SPEC+BODY)으로 생성한다. SQL 본문 이식은 TODO(Claude Code / 사람) — FE 골격과 같은 방식.
+//   node gen-pkg.js <ID> [--config harness.json]
+//   입력: Doc/gen/<ID>/register.json(procs: asis_sp ↔ tobe_pkg_candidate), Doc/asisfacts/db/modules/dbo.<SP>.sql(As-is 원문), db/db_params.csv(파라미터·타입), db/db_resultsets.csv(첫 결과셋 컬럼)
+//   규약(To-be_v2_converted/06_Packages 실측): IN P_<NAME> (NVARCHAR→VARCHAR2, INT/DECIMAL→NUMBER, DATETIME→DATE, BIT→VARCHAR2(1)), OUT O_RC1.. SYS_REFCURSOR, O_RESULT_CURSOR(CODE/MSG/EVENT),
+//         SAVE 류는 P_DATA IN CLOB(JSON) + P_USER_ID, WHEN OTHERS → ROLLBACK + RAISE_APPLICATION_ERROR(-20001, $$PLSQL_UNIT …), 분할 파라미터는 FN_SPLITSTRING
+//   산출: Doc/gen/<ID>/<ID>_PKG.sql  (As-is 원문은 각 프로시저 끝에 /* ASIS … */ 로 동봉 — 이식 후 삭제)
+const fs = require('fs'); const path = require('path');
+const { readCsv } = require('../TobeFacts/src/util');
+const a = process.argv.slice(2); const opt = (k, d) => { const i = a.indexOf(k); return i >= 0 ? a[i + 1] : d; };
+const ID0 = (a.find(x => !x.startsWith('--') && a[a.indexOf(x) - 1] !== '--config') || '').toUpperCase(); if (!ID0) { console.error('화면ID'); process.exit(2); }
+const cfg = JSON.parse(fs.readFileSync(opt('--config', path.join(__dirname, 'harness.json')), 'utf8').replace(/^﻿/, ''));
+const R = cfg.rulesDir || path.join(__dirname, 'rules'); const rc = p => fs.existsSync(p) ? readCsv(p) : [];
+const mapScreen = rc(path.join(R, 'map_screen.csv')); const mA = mapScreen.find(r => r.asis_id.toUpperCase() === ID0), mT = mapScreen.find(r => r.tobe_id.toUpperCase() === ID0);
+const ID = mA ? mA.tobe_id.toUpperCase() : ID0, AID = mT ? mT.asis_id.toUpperCase() : ID0;
+const genDir = path.join(cfg.genOutDir, ID); const reg = JSON.parse(fs.readFileSync(path.join(genDir, 'register.json'), 'utf8'));
+const params = rc(path.join(cfg.asisOutDir, 'db', 'db_params.csv')); const rsets = rc(path.join(cfg.asisOutDir, 'db', 'db_resultsets.csv'));
+const modDir = path.join(cfg.asisOutDir, 'db', 'modules');
+const PKG = `PKG_${ID}`;
+const oraType = t => { t = (t || '').toLowerCase(); if (/char|text|xml|uniqueidentifier/.test(t)) return 'VARCHAR2'; if (/^bit$/.test(t)) return 'VARCHAR2'; if (/int|decimal|numeric|float|real|money|bigint|smallint|tinyint/.test(t)) return 'NUMBER'; if (/date|time/.test(t)) return 'DATE'; if (/binary|image/.test(t)) return 'BLOB'; return 'VARCHAR2'; };
+// 최상위(괄호 깊이 0) SELECT 중 결과셋을 내는 것만 센다: INSERT…SELECT / SELECT…INTO / 변수 대입(SELECT @x =) 제외
+function topLevelSelects(t) {
+  const txt = t.replace(/'(?:[^']|'')*'/g, "''").replace(/\[|\]/g, '');
+  let depth = 0, n = 0; const toks = txt.split(/(\(|\)|\bSELECT\b|\bINSERT\b|\bINTO\b|\bFROM\b|;|\bUNION\b)/i).filter(x => x !== undefined && x !== '');
+  let prevKw = '', pending = null;
+  for (const tk of toks) {
+    const u = tk.trim().toUpperCase();
+    if (tk === '(') { depth++; continue; } if (tk === ')') { depth = Math.max(0, depth - 1); continue; }
+    if (depth !== 0) continue;
+    if (u === 'SELECT') { if (prevKw === 'INSERT' || prevKw === 'UNION') { prevKw = ''; continue; } pending = { assign: false }; prevKw = 'SELECT'; continue; }
+    if (u === 'INSERT') { prevKw = 'INSERT'; pending = null; continue; }
+    if (u === 'UNION') { prevKw = 'UNION'; continue; }
+    if (u === 'INTO' && pending) { pending = null; prevKw = ''; continue; }     // SELECT … INTO #tmp
+    if (u === 'FROM' && pending) { if (!pending.assign) n++; pending = null; prevKw = ''; continue; }
+    if (u === ';') { if (pending && !pending.assign) n++; pending = null; prevKw = ''; continue; }
+    if (pending && /@\w+\s*=/.test(tk)) pending.assign = true;     // SELECT @v = …
+  }
+  if (pending && !pending.assign) n++;
+  return n;
+}
+const procs = reg.procs.filter(p => p.tobe_pkg_candidate && /^SP\s|^[A-Z]/.test(p.asis_sp || '') && p.sheet !== '(combo)');
+const seen = new Set(); const list = procs.filter(p => { const k = p.tobe_pkg_candidate; if (seen.has(k)) return false; seen.add(k); return true; });
+const spec = [], body = [], notes = [];
+for (const p of list) {
+  const sp = p.asis_sp.replace(/^SP\s+/, '').split('.').pop(); const name = p.tobe_pkg_candidate.split('.').pop();
+  const isSave = /_(SAVE|SET|UPD|UPDATE|INS|INSERT|DEL|DELETE|MERGE|UPLOAD|CONFIRM|COPY|CREATE)_|_(SAVE|DELETE|UPDATE|INSERT)$/i.test(sp);
+  const ps = params.filter(r => r.object_name.toUpperCase() === sp.toUpperCase() && r.type.trim() === 'P').sort((x, y) => Number(x.parameter_id) - Number(y.parameter_id));
+  const ins = ps.filter(r => r.is_output === '0').map(r => ({ asis: r.param_name, name: 'P_' + r.param_name.replace(/^@/, '').replace(/^p_/i, '').toUpperCase(), type: oraType(r.data_type), len: r.max_length }));
+  const outsAsis = ps.filter(r => r.is_output === '1');
+  const srcF = path.join(modDir, `dbo.${sp}.sql`); const src = fs.existsSync(srcF) ? fs.readFileSync(srcF, 'utf8').replace(/^﻿/, '') : '';
+  // 결과셋 수 추정: 본문의 최상위 SELECT(INTO/INSERT/temp 제외) 개수 — 1 미만이면 1
+  const bodyTxt = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/--.*$/gm, '');
+  const rcCount = isSave ? 0 : Math.max(1, Math.min(6, topLevelSelects(bodyTxt))); const rsCols = rsets.filter(r => r.module.toUpperCase() === `DBO.${sp}`.toUpperCase() && r.name).map(r => `${r.name}(${r.system_type_name})`);
+  const tempTables = [...new Set((bodyTxt.match(/#\w+/g) || []))]; const dynSql = /sp_executesql|EXEC\s*\(/i.test(bodyTxt); const cursors = /DECLARE\s+\w+\s+CURSOR/i.test(bodyTxt); const tryCatch = /BEGIN\s+TRY/i.test(bodyTxt); const merges = /\bMERGE\b/i.test(bodyTxt); const execs = [...new Set((bodyTxt.match(/\bEXEC(?:UTE)?\s+(?:dbo\.)?\[?(\w+)\]?/gi) || []).map(s => s.replace(/\bEXEC(?:UTE)?\s+(?:dbo\.)?\[?/i, '').replace(/\]$/, '')))].filter(x => !/^sp_/i.test(x));
+  const sig = (isSave ? [`        P_DATA           IN  CLOB,            -- 그리드 변경행 JSON 배열(FE sendRows) — As-is: ${ins.map(i => i.asis).join(', ') || '(없음)'}`, `        P_USER_ID        IN  VARCHAR2,`] : ins.map(i => `        ${i.name.padEnd(16)} IN  ${i.type}${i.type === 'VARCHAR2' && i.len && Number(i.len) > 0 && Number(i.len) <= 4000 ? '' : ''},  -- As-is ${i.asis} ${ps.find(r => r.param_name === i.asis).data_type}(${i.len})`))
+    .concat(Array.from({ length: rcCount }, (_, i) => `        O_RC${i + 1}            OUT SYS_REFCURSOR,`)).concat([`        O_RESULT_CURSOR  OUT SYS_REFCURSOR`]);
+  spec.push(`    PROCEDURE ${name} (\n${sig.join('\n')}\n    );`);
+  const header = `/*
+ * Program ID   : ${name}
+ * Description  : ${AID} ${reg.screenName} — As-is ${sp} 이식 (${isSave ? 'SAVE' : 'GET'}, 시트 '${p.sheet}' / 버튼 ${p.btn})
+ * Program History
+ *===========================================================================================================
+ *   Date       In Charge      Description
+ *===========================================================================================================
+ * ${new Date().toISOString().slice(0, 10).replace(/-/g, '.')}   harness        [TobeGen] 골격 생성 — SQL 본문 이식 TODO
+ */`;
+  const hints = [];
+  if (tempTables.length) hints.push(`임시테이블 ${tempTables.join(', ')} → GTT(03_GTT) 또는 WITH 절/컬렉션으로`); if (dynSql) hints.push('동적 SQL(sp_executesql) → EXECUTE IMMEDIATE 또는 정적 분기'); if (cursors) hints.push('T-SQL 커서 → FOR r IN (SELECT…) LOOP'); if (tryCatch) hints.push('TRY/CATCH → EXCEPTION WHEN OTHERS(골격 포함)'); if (merges) hints.push('MERGE 구문 Oracle 문법 확인(USING … ON, WHEN MATCHED)'); if (execs.length) hints.push(`하위 SP 호출 ${execs.join(', ')} → 해당 To-Be PKG.PROC 로 (공통이면 PKG_COM0000/PKG_DM0000)`); if (outsAsis.length) hints.push(`As-is OUTPUT 파라미터 ${outsAsis.map(o => o.param_name).join(', ')} → O_RESULT_CURSOR 의 EVENT 또는 별도 OUT`);
+  if (rsCols.length) hints.push(`첫 결과셋 컬럼(As-is 실측 ${rsCols.length}): ${rsCols.slice(0, 20).join(', ')}${rsCols.length > 20 ? ' …' : ''}`); if (!src) hints.push('As-is 원문 없음(db/modules) — DB 추출(db.ps1) 확인');
+  if (hints.length) notes.push(`- ${name}: ${hints.join(' / ')}`);
+  const openRc = Array.from({ length: rcCount }, (_, i) => `    OPEN O_RC${i + 1} FOR\n        SELECT NULL AS TODO_COLUMN FROM DUAL WHERE 1 = 0;   -- TODO 이식: As-is ${sp} 결과셋 ${i + 1}${i === 0 && rsCols.length ? ` (컬럼: ${rsCols.slice(0, 12).map(c => c.replace(/\(.*/, '')).join(', ')}${rsCols.length > 12 ? ' …' : ''})` : ''}`).join('\n\n');
+  const saveBody = `    -- TODO 이식: P_DATA(JSON 배열) → JSON_TABLE 로 행 전개 후 As-is ${sp} 의 INSERT/UPDATE/DELETE 를 MERGE/DML 로
+    -- 예) FOR r IN (SELECT * FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (ROW_STATUS VARCHAR2(10) PATH '$.rowStatus', DIVISION_ID VARCHAR2(20) PATH '$.divisionId' /* … */))) LOOP … END LOOP;
+    V_ROW_CNT := V_ROW_CNT + SQL%ROWCOUNT;
+`;
+  body.push(`${header}
+PROCEDURE ${name} (
+${sig.join('\n')}
+) IS
+    EX_BIZ_EX       EXCEPTION;
+    V_ERR_MSG       VARCHAR2(4000);
+    V_ROW_CNT       NUMBER := 0;
+    V_SQL_CODE      VARCHAR2(100 CHAR);
+    PROCEDURE RAISE_INVALID(P_MSG IN VARCHAR2) IS BEGIN V_ERR_MSG := P_MSG; RAISE EX_BIZ_EX; END;
+BEGIN
+${isSave ? `    IF P_DATA IS NULL OR P_USER_ID IS NULL THEN RAISE_INVALID('Please check required input values.'); END IF;\n\n${saveBody}` : `${ins.length ? `    -- 필수값 검사(As-is 에서 NOT NULL 로 쓰이는 파라미터만 남길 것)\n${ins.slice(0, 1).map(i => `    IF ${i.name} IS NULL THEN RAISE_INVALID('${i.name.replace(/^P_/, '')} IS NULL'); END IF;`).join('\n')}\n\n` : ''}${openRc}
+`}
+    OPEN O_RESULT_CURSOR FOR
+        SELECT '0' AS CODE, 'SUCCESS' AS MSG, TO_CHAR(V_ROW_CNT) AS EVENT FROM DUAL;
+
+EXCEPTION
+    WHEN EX_BIZ_EX THEN
+        ROLLBACK;
+        OPEN O_RESULT_CURSOR FOR SELECT '1' AS CODE, V_ERR_MSG AS MSG, '' AS EVENT FROM DUAL;
+    WHEN OTHERS THEN
+        ROLLBACK;
+        V_SQL_CODE := TO_CHAR(SQLCODE); V_ERR_MSG := SQLERRM;
+        RAISE_APPLICATION_ERROR(-20001, '[' || $$PLSQL_UNIT || '.${name}] SQLCODE=' || V_SQL_CODE || ' / SQLERRM=' || V_ERR_MSG || ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE || ' / PARAMS=' || ${isSave ? "SUBSTR(P_DATA, 1, 200)" : (ins.length ? ins.slice(0, 4).map(i => `'${i.name}='||${i.type === 'DATE' ? `TO_CHAR(${i.name},'YYYYMMDD')` : i.name}`).join("||','||") : "'-'")});
+END ${name};
+
+/* ===== ASIS ${sp} (dbo) — 이식 후 이 블록은 삭제 =====
+${src.replace(/\*\//g, '* /').trim()}
+===== END ASIS ===== */
+`);
+}
+const sql = `-- ${PKG} — 생성: tools/Harness/gen-pkg.js ${new Date().toISOString().slice(0, 10)} · 화면 ${AID}→${ID} ${reg.screenName} · As-is SP ${list.length}개
+-- 이식 규칙: Doc/_dev_rules(DB 변환 규칙) · To-be_v2_converted/06_Packages 선례 · ISNULL→NVL, GETDATE→SYSDATE, TOP n→FETCH FIRST n ROWS ONLY, +(문자열)→||, CONVERT→TO_CHAR/TO_DATE, 임시테이블→GTT/WITH, @@ROWCOUNT→SQL%ROWCOUNT
+-- 배포 후: ${ID}_registration.sql 재실행(PROC_M 이 ALL_ARGUMENTS 로 확정) → FE pnpm gen:procedures
+CREATE OR REPLACE PACKAGE SCM_MGR.${PKG}
+AS
+${spec.join('\n\n')}
+END ${PKG};
+/
+
+CREATE OR REPLACE PACKAGE BODY SCM_MGR.${PKG}
+AS
+${body.join('\n')}
+END ${PKG};
+/
+-- 컴파일 확인: SELECT NAME, TYPE, LINE, TEXT FROM USER_ERRORS WHERE NAME = '${PKG}' ORDER BY TYPE, SEQUENCE;
+`;
+fs.writeFileSync(path.join(genDir, `${ID}_PKG.sql`), sql, 'utf8');
+fs.writeFileSync(path.join(genDir, `${ID}_PKG.sha256`), require('crypto').createHash('sha256').update(sql).digest('hex'), 'utf8'); // 골격 해시 — pipeline 이 '이식 작업 흔적' 판정에 사용
+fs.writeFileSync(path.join(genDir, `${ID}_PKG_NOTES.md`), `# ${PKG} 이식 메모\n\n프로시저 ${list.length}개. 각 프로시저 끝의 /* ASIS … */ 원문을 Oracle 로 옮기고 블록을 지운다. O_RC 수는 As-is 최상위 SELECT 수에서 추정 — FE 플랜(e2e_plan.json procs)과 맞춘다.\n\n${notes.join('\n') || '- 특이사항 없음'}\n`, 'utf8');
+console.log(`${ID}_PKG.sql → ${genDir}  (PROC ${list.length}, 메모 ${notes.length})`);

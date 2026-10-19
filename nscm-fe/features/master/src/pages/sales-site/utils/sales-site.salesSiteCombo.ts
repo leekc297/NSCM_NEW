@@ -3,12 +3,12 @@ import type { ComboParam, ComboResponse } from '@foundation/models';
 import { hasEndCustomer } from '../sales-site.constants';
 
 /**
- * 조회조건 Sales Site 콤보 원천 3종.
+ * 조회조건 Sales Site 콤보 원천 3종. 셋 다 재조회다.
  *
  * AS-IS(DMF0004_SalesSite.cs)는 조건에 따라 목록 원천을 통째로 갈아끼운다. 화면에 보이는
  * 칸은 하나지만 그 뒤의 SQL 은 셋이다.
  *
- *   division 이 81 접두 또는 82  -> UserSiteByEndCustomer  (division + End Customer)
+ *   division 이 81 접두 또는 82  -> UserSiteByEndCustomer  (division + End Customer, Active Y + AS 사이트)
  *   그 외 division (40 등)        -> ScmSitebyEndCustomer40 (division)
  *   Sold-To Customer 변경         -> SiteByEndCustomerSold  (division + Sold-To)
  *
@@ -16,20 +16,26 @@ import { hasEndCustomer } from '../sales-site.constants';
  * clbSoldToCustomer_SelectedIndexChanged 에서 호출한다. 셋째에는 division 분기가 없다 -
  * 40 이든 82 든 Sold-To 를 고르면 무조건 이 원천으로 바뀐다.
  *
- * 주의: 원소스에 남은 기준은 SetChangeControl(BigFilter 메모리 캐시)이 아니라 그 위에 주석으로
- * 처리된 Data.* 호출이다. 속도개선 과정에서 BigFilter 로 갈아끼우며 ScmSitebyEndCustomer40 의
- * division 인자가 빠졌지만, 원소스는 Data.ScmSitebyEndCustomer40(group, user, sDivision, "")
- * 로 division 을 받는다. TO-BE 는 서버 콤보로 되돌아가므로 원소스 인자를 따른다.
+ * ====================================================================================
+ * 앞의 둘을 필터에서 재조회로 되돌린 이유 (2026-08-31 사용자 확정 - DMF0003·DMF0082 와 같은 결정)
+ * ====================================================================================
+ * BIGFILTER_SiteByEndCustomer 의 40 분기는 DEPT_ID 를 LEFT JOIN 두 단계로 만들고
+ * (SITE -> SITE_ITEM -> OWNER->DEPT), 비40 분기는 DEPT_ID 가 아예 NULL 이다. END_CUSTOMER 도
+ * NULL 이 섞인다. 클라이언트 축은 엄격 매칭이라 조회조건을 고르는 순간 목록이 통째로 빈다.
+ * 재조회는 서버가 이미 좁혀 CODE / NAME 만 내려주므로 그 문제가 없다.
+ *
+ * 잃는 것: 40 목록의 표시 문구. ScmSitebyEndCustomer40 은 NAME 이 SITE_DESCRIPTION 인데
+ * 재조회는 사이트 코드를 쓴다.
  *
  * group / user 두 자리는 BE 가 @sesUserId 로 주입하므로(LookupServiceImpl.retrieveCombo)
  * FE 는 싣지 않는다. 값 인용(홑따옴표)도 apiClient.getCombo 의 quoteComboParams 가 일괄 처리하니
  * 여기서 붙이지 않는다.
  */
 export const SALES_SITE_COMBO = {
-  /** 필터. 81 접두 / 82 - division + End Customer 로 좁힌다. */
-  byEndCustomer: 'BIGFILTER_SiteByEndCustomer',
-  /** 필터. 그 외 division - End Customer 칸이 잠겨 division 만 걸린다. */
-  byDivision: 'BIGFILTER_ScmSitebyEndCustomer40',
+  /** 재조회. 81 접두 / 82 - division + End Customer. */
+  byEndCustomer: 'SiteByEndCustomer_DM',
+  /** 재조회. 그 외 division(40 등) - division + Team + End Customer. 이 화면엔 Team 칸이 없다. */
+  byDivision: 'SiteByEndCustomer40_DM',
   /** 재조회. Sold-To 변경 시에만 나간다. */
   bySoldTo: 'SiteByEndCustomerSold',
 } as const;
@@ -68,19 +74,6 @@ interface SalesSiteComboSource {
  */
 const blank = (value?: string) => (!value || value === 'ALL' ? '' : value);
 
-/** 미선택('ALL' / 공란)이면 빈 배열 = 그 단계 미적용. 다중 선택은 콤마로 나눈다. */
-const toFilterList = (value?: string) =>
-  (value ?? '')
-    .split(',')
-    .map(v => v.trim())
-    .filter(v => v !== '' && v !== 'ALL');
-
-// 콤보 통일화 과도기라 컬럼명이 두 벌이다. 둘 다 견딘다.
-const readRowDivision = (row: ComboResponse) =>
-  String(row.DIVISION_ID ?? row.DIVISION_CODE ?? '').trim();
-const readRowEndCustomer = (row: ComboResponse) =>
-  String(row.END_CUSTOMER ?? row.END_CUSTOMER_CODE ?? '').trim();
-
 /** 트리거와 현재 조회조건으로 이번에 부를 콤보 1건을 정한다. */
 export const buildSalesSiteComboParam = (
   trigger: SalesSiteTrigger,
@@ -103,41 +96,49 @@ export const buildSalesSiteComboParam = (
       soldCustomer: blank(soldToCustomer),
     };
   }
-  // endCustomer 는 필터 경로에서 안 쓴다 - 파라미터가 없고, 좁히는 일은 buildSalesSiteOptions 가 한다.
-  // BIGFILTER_ 접두는 필터 방식이다 - 파라미터를 싣지 않고 전량을 받는다. 조회조건으로 좁히는
-  //   일은 buildSalesSiteOptions 가 한다. 파라미터가 없으니 쿼리 키도 고정이라 division 이나
-  //   End Customer 를 바꿔도 서버를 다시 치지 않는다(AS-IS BigFilter 와 같은 동작).
-  return { comboId: hasEndCustomer(divisionId) ? SALES_SITE_COMBO.byEndCustomer : SALES_SITE_COMBO.byDivision };
+  // 재조회다 - 목록 구성 조건을 전부 파라미터로 실으므로 그중 하나라도 바뀌면 react-query 키가
+  //   달라져 SQL 이 다시 나간다(refetch 를 직접 부르지 않는다).
+  if (hasEndCustomer(divisionId)) {
+    // 필수: validYn / asYn 을 함께 싣는다. 공용 SQL(SiteByEndCustomer_DM)은 두 값이 비면
+    //   Active 조건을 끄고(사용 중지 사이트 포함) 운영 그룹 W(AS 사이트) 분기를 아예 타지 않는다.
+    //   AS-IS UserSiteByEndCustomer 는 사용 중(Active Y) 사이트 전체 + AS 사이트였다
+    //   (실측 2026-10-06: 미전송 81 526 / 82 966 -> 전송 81 447 / 82 756).
+    //   SQL 본문은 DMF0003 등과 공용이라 손대지 않고 이 화면의 전달값만 바꾼다.
+    return {
+      comboId: SALES_SITE_COMBO.byEndCustomer,
+      divisionId,
+      endCustomer: blank(endCustomer),
+      validYn: 'Y',
+      asYn: 'Y',
+    };
+  }
+  // 40 등. deptId 는 이 화면에 Team 칸이 없어 늘 공란이다 - 자리를 비워 두면 그 조건이 없다는
+  //   뜻이고, 다른 화면(DMF0003·DMF0082)과 파라미터 모양을 맞춰 둔다.
+  return {
+    comboId: SALES_SITE_COMBO.byDivision,
+    divisionId,
+    deptId: '',
+    endCustomer: blank(endCustomer),
+  };
 };
 
 /**
- * 콤보 응답을 드롭다운 옵션으로. 필터 경로에서는 여기서 조회조건으로 좁힌다.
+ * 콤보 응답을 드롭다운 옵션으로.
  *
- * 트리거별로 좁히는 정도가 다르다. 재조회 경로(soldTo)는 서버가 이미 걸러 내려주므로 다시 거르지
- * 않는다 - 그 응답에는 END_CUSTOMER 컬럼이 없을 수 있어 한 번 더 걸면 목록이 통째로 빈다.
+ * 필수: 조회조건으로 다시 거르지 않는다. 세 원천이 전부 재조회라 서버가 이미 좁혀
+ * CODE / NAME 만 내려준다 - DIVISION_ID / END_CUSTOMER 컬럼이 아예 없을 수 있어 한 번 더 걸면
+ * 엄격 매칭에서 전 행이 잘려 "값은 내려오는데 옵션이 0건" 이 된다.
  *
- * division 은 관대 매칭이다(빈 행 통과). 콤보가 그 컬럼을 안 내려주는 경우가 있어 엄격하게
- * 자르면 전 행이 날아간다. End Customer 는 값이 있을 때만 엄격하게 건다 - 관대하게 두면
- * 고른 고객이 목록을 못 좁혀 필터가 무력해진다. AS-IS BigFilter 의 Count == 0 분기와 같다.
+ * CODE 중복은 접고(첫 행이 이긴다) 코드가 빈 행은 버린다.
  */
-export const buildSalesSiteOptions = (
-  rows: ComboResponse[] | undefined,
-  trigger: SalesSiteTrigger,
-  { divisionId, endCustomer }: Pick<SalesSiteComboSource, 'divisionId' | 'endCustomer'>
-) => {
-  const division = String(divisionId ?? '').trim();
-  const customers = trigger === 'soldTo' ? [] : toFilterList(endCustomer);
-  return [
-    ...new Map(
-      (rows ?? [])
-        .filter(row => {
-          const rowDivision = readRowDivision(row);
-          if (rowDivision !== '' && division !== '' && rowDivision !== division) return false;
-          return customers.length === 0 || customers.includes(readRowEndCustomer(row));
-        })
-        .map(row => [String(row.CODE ?? '').trim(), row] as const)
-        .filter(([code]) => code !== '')
-        .map(([code, row]) => [code, { label: String(row.NAME ?? '').trim() || code, value: code }] as const)
-    ).values(),
-  ];
-};
+export const buildSalesSiteOptions = (rows: ComboResponse[] | undefined) => [
+  ...new Map(
+    (rows ?? [])
+      .map(row => [String(row.CODE ?? '').trim(), row] as const)
+      .filter(([code]) => code !== '')
+      .map(
+        ([code, row]) =>
+          [code, { label: String(row.NAME ?? '').trim() || code, value: code }] as const
+      )
+  ).values(),
+];

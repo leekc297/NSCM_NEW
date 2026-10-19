@@ -49,6 +49,25 @@ describe('editLock — 기간 cutoff (제약매트릭스 §1.3/§4.1)', () => {
     expect(evalCell('W_20260833', row(), '81', BUCKET_TYPE.WEEKLY).editable).toBe(true);
     expect(evalCell('W_20260832', row(), '81', BUCKET_TYPE.WEEKLY).editable).toBe(false);
   });
+  it('W_ 파셜주차: 당주가 뒷달 조각이면 같은 ISO 주 앞달 조각도 함께 개방 + 회색 아님 (해석 B 2026-09-22)', () => {
+    // 당주 = 10월 W40 (W_20261040). 같은 주 40 이 9월(W_20260940)/10월(W_20261040)로 분할된 파셜.
+    const partialCal = { THIS_YYYYMM: '202610', THIS_YYYYMMWW: 'W_20261040' } as never;
+    const partialCutoff = buildCutoff(partialCal);
+    const evalW = (binding: string) =>
+      evalSalesPlanDynCell({
+        binding,
+        row: row(),
+        divisionId: '81',
+        bucketType: BUCKET_TYPE.WEEKLY,
+        cutoff: partialCutoff,
+        auth: AUTH_BOTH,
+      });
+    const sep = evalW('W_20260940'); // 앞달 조각
+    expect(sep.editable).toBe(true); // 같은 주 → 함께 개방
+    expect(sep.isPast).toBe(false); // 과거(Gray) 아님
+    expect(evalW('W_20261040').editable).toBe(true); // 당주 조각
+    expect(evalW('W_20260939').editable).toBe(false); // 진짜 지난주(9월 W39)는 잠금 유지
+  });
   it('Catch_Up = M+3 이후만 (40 전용) — AS-IS L990~1037', () => {
     const cu = row({ MEASURE: 'Catch_Up', FCST_TYPE: 'MPS' });
     expect(addMonths('202608', 3)).toBe('202611');
@@ -97,10 +116,19 @@ describe('insertStaticEditable — No.61-④ Team 전 Div 잠금 (통합테스�
     expect(insertStaticEditable('DEPT_ID', row(), '81')).toBe(false);
     expect(insertStaticEditable('DEPT_ID', row(), '82')).toBe(false);
   });
-  it('MEASURE = 40 만 / PLANT_SITE = 81 만 / 참조컬럼 = 붕괴 규칙 false', () => {
-    expect(insertStaticEditable('MEASURE', row(), '40')).toBe(true);
-    expect(insertStaticEditable('MEASURE', row(), '81')).toBe(false);
-    expect(insertStaticEditable('PLANT_SITE_ID', row(), '81')).toBe(true);
+  it('MEASURE = 40 & 후보 2건+ 만 콤보 / PLANT_SITE = 전 Div 잠금 / 참조컬럼 = 붕괴 규칙 false', () => {
+    // 40 이라도 measureInfo 후보가 1건 이하면 콤보 안 열림 (2026-09-03 — 현재 SalesAmt_LOC 1건).
+    expect(insertStaticEditable('MEASURE', row(), '40', 1)).toBe(false);
+    expect(insertStaticEditable('MEASURE', row(), '40', 0)).toBe(false);
+    // 후보가 2건 이상으로 늘면 다시 콤보 개방 (데이터 종속).
+    expect(insertStaticEditable('MEASURE', row(), '40', 2)).toBe(true);
+    // 81 은 후보 수와 무관하게 항상 고정.
+    expect(insertStaticEditable('MEASURE', row(), '81', 2)).toBe(false);
+    // PLANT_SITE_ID = 표시 전용 — AS-IS InsertRow L3023 무조건 잠금, 81 unlock(L4581)은
+    //   그리드 Division 셀 변경 전용 경로라 신규행에서 도달하지 않는다 (2026-09-01 정정).
+    expect(insertStaticEditable('PLANT_SITE_ID', row(), '81')).toBe(false);
+    expect(insertStaticEditable('PLANT_SITE_ID', row(), '40')).toBe(false);
+    expect(insertStaticEditable('PLANT_SITE_ID', row(), '82')).toBe(false);
     expect(insertStaticEditable('PROJECT_NAME', row(), '81')).toBe(false);
   });
 });

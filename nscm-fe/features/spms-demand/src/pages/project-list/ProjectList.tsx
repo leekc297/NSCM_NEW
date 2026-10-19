@@ -12,7 +12,6 @@ import { useMessageStore } from '@shared/stores';
 
 // ⭐ 권한관리 모달 = SDM1010 공용 승격분 (features/sdm/src/components — 모달 내부 MENU_ID SDM1010 유지)
 import { AuthManagementPopup } from '../../components/auth-management-popup';
-import { runPerRowProc } from '../../lib/call-proc';
 import { collectCheckedRows } from '../../lib/grid';
 
 import { ProjectListForm } from './components/ProjectListForm';
@@ -22,15 +21,16 @@ import type { MainRow, ReqCheckOrigin } from './project-list.types';
 import { useProjectListStore } from './useProjectListStore';
 import { callReqProjectAuth, callReqProjectReg } from './utils/project-list.api';
 import { canOpenAuthMgmt, canReqAuth, hasCheckedReq } from './utils/project-list.editLock';
-import { toReqPayload, validateSearch } from './utils/project-list.validate';
+import { toBulkReqPayload, validateSearch } from './utils/project-list.validate';
 import { toText } from './utils/project-list.value';
 
 // SDM1020 Project List (SDM > SDM_Project — ROUTE_PATH 'sdm/project-list').
 //   ⭐ 표준 = SDM1010 골격 1:1 승계 (hook #134 — SDM 도메인 정본) + 메타 등재 계약
 //     `_artifacts/_apply_corporate/SDM1020_META_20260819/_CONTRACT.md` 단일 원천 배선.
 //   단일 그리드 '프로젝트 조회/변경' — **저장 버튼 없음** (P-25): 셀 편집(MOD_ROW_YN='Y', P-01)은
-//   CRUD_TYPE 'M' 마킹만 하고, [등록요청] 버튼이 Checked+`'M'` 행을 **행별 단건 call-proc** 으로 저장
-//   (D4 — SP 는 P_ACTIVE_FLAG 분기 부재. '^' join 금지 — 확정 결정).
+//   CRUD_TYPE 'M' 마킹만 하고, [등록요청] 버튼이 Checked+`'M'` 행을 **'^' 벌크 1건 call-proc** 으로
+//   저장 (SPMS 표준 lib/bulk-save — SDM1010 저장 표준 승계. 빈 값 ' ' 센티널로 행밀림 방지.
+//   D4 — SP 는 P_ACTIVE_FLAG 분기 부재).
 //   권한요청 = 그리드 내 링크(NONE/READ 행만, P-03) + 입력/조회 체크박스 서버 3상태 (P-04/P-05).
 //   권한관리 = ADMIN 행 링크(P-02) → SDM1010 ProjectAuthRegModal 공용 승격분 오픈.
 //   성공 판정 = CODE '0' + EVENT 건수 (EVENT 0 = 성공 토스트 금지 — 허위성공 방지 계보).
@@ -124,7 +124,7 @@ export const ProjectList = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
     const v = validateSearch(sc);
     if (!v.ok) {
-      void setAlert({ type: 'alert', content: t(v.msgId!, '_조회 조건을 확인하세요.') });
+      void setAlert({ type: 'alert', content: t(v.msgId ?? '', '_조회 조건을 확인하세요.') });
       return;
     }
     editTrackerRef.current?.clearChanges();
@@ -152,10 +152,11 @@ export const ProjectList = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [divisions, sc.divisionId]);
 
-  // 등록요청(REQ) — Checked 0건(P-07 MSG00709) → 'M' 행 0건(P-06 MSG00004) → confirm(P-08 MSG00710)
-  //   → 행별 단건 (변경본 INSERT + 원본 MODIFYING — D3 정정분) → EVENT>0 toast MSG00711 / EVENT 0 안내
+  // 등록요청(REQ) — Checked 0건(P-07 MSG01019) → 'M' 행 0건(P-06 MSG00004) → confirm(P-08 MSG00710)
+  //   → '^' 벌크 1건 호출 (SPMS 표준 — lib/bulk-save. 변경본 INSERT + 원본 MODIFYING — D3 정정분)
+  //   → EVENT>0 toast MSG00711 / EVENT 0 안내
   const handleReq = async () => {
-    const checked = collectCheckedRows(gridRef.current);
+    const checked = collectCheckedRows<MainRow>(gridRef.current);
     if (checked.length === 0) {
       alertMsg(MSG.NO_CHECKED, '_선택한 항목이 존재하지 않습니다.');
       return;
@@ -167,16 +168,16 @@ export const ProjectList = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     if (!(await confirmMsg(MSG.REQ_CONFIRM, '_프로젝트를 등록/변경 하시겠습니까?'))) return;
-    const r = await runPerRowProc(targets.map(row => () => callReqProjectReg(toReqPayload(row))));
+    const r = await callReqProjectReg(toBulkReqPayload(targets));
     if (!r.ok) {
       void setAlert({
         type: 'alert',
         content: r.message || t(MSG.REQ_FAIL, '_등록요청에 실패하였습니다.'),
       });
-      if (r.totalEvent > 0) refreshMain();
+      if (r.event > 0) refreshMain(); // SP 내부 COMMIT — 부분 확정분 정합 재조회
       return;
     }
-    if (r.totalEvent === 0) {
+    if (r.event === 0) {
       // EVENT 0 — 처리된 행 없음 (허위성공 방지: 성공 토스트 금지, pending 유지)
       setToast({ type: 'default', message: '처리된 행이 없습니다.' });
       return;
@@ -271,7 +272,7 @@ export const ProjectList = ({ tabId, title }: PageProps<MENU_ID>) => {
   const customButtons = [
     columnSettingButton,
     ...(hasButton(BTN.REQ)
-      ? [textButton(t('LBL00865', '_Reg Request'), () => void handleReq())]
+      ? [textButton(t('LBL01008', '_Mod Request'), () => void handleReq())]
       : []),
   ];
 

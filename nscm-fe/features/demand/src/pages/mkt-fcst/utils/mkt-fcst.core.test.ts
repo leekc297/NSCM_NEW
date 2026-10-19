@@ -15,7 +15,19 @@ import {
   requiresPlantSite,
   usesProjectKeys,
 } from './mkt-fcst.division';
-import { buildEditCutoff, dynKindOf, thisWeekMondayYmd } from './mkt-fcst.editLock';
+import {
+  buildEditCutoff,
+  dynKindOf,
+  isPartialWeekPartnerOfCurrent,
+  isPastDynColumn,
+  thisWeekMondayYmd,
+} from './mkt-fcst.editLock';
+import {
+  buildVmiLookupParam,
+  isVmiLookupDivision,
+  isVmiLookupRow,
+  parseVmiVal,
+} from './mkt-fcst.gridCombos';
 import { buildSavePayload, buildUnfoldRows } from './mkt-fcst.save';
 import { parseSspSyncMap, sspSyncStateOf } from './mkt-fcst.sspSync';
 
@@ -97,6 +109,32 @@ describe('editLock 축 (CB-101~104 — 버킷×시점)', () => {
     expect(c.today).toBe('20260812');
     expect(c.month).toBe('202608');
     expect(c.div40MonthCutoff).toBe(null);
+  });
+
+  it('isPastDynColumn W_ 파셜주차: 당주가 뒷달 조각이면 같은 ISO 주 앞달 조각도 과거 아님 (DMF0021 해석 B 이식)', () => {
+    // 당주 = 10월 W40(W_20261040). 같은 주 40 이 9월(W_20260940)/10월(W_20261040)로 분할된 파셜.
+    //   SORT_ORDER_NO 동일 → 두 조각 인접(앞달 조각이 당주 index 바로 앞).
+    const weekBindings = ['W_20260939', 'W_20260940', 'W_20261040', 'W_20261041'];
+    const cutoff = buildEditCutoff(
+      null,
+      { THIS_YYYYMM: 'M_202610', THIS_YYYYMMWW: 'W_20261040' },
+      new Date(2026, 9, 5),
+      weekBindings
+    );
+    const past = (binding: string) => isPastDynColumn({ binding, divisionId: '82', cutoff });
+    expect(past('W_20260940')).toBe(false); // 앞달 조각 — 같은 주라 과거 아님
+    expect(past('W_20261040')).toBe(false); // 당주 조각
+    expect(past('W_20260939')).toBe(true); // 진짜 지난주(9월 W39)는 과거 유지
+    expect(past('W_20261041')).toBe(false); // 다음 주 — 과거 아님
+  });
+
+  it('isPartialWeekPartnerOfCurrent: 당주 뒷달 조각의 같은 ISO 주 앞달 조각만 true (초록 레일·헤더 해석 B)', () => {
+    const tw = 'W_20261040'; // 당주 = 10월 W40
+    expect(isPartialWeekPartnerOfCurrent('W_20260940', tw)).toBe(true); // 앞달(9월) 같은 주 조각
+    expect(isPartialWeekPartnerOfCurrent('W_20261040', tw)).toBe(false); // 당주 자신(파셜 "앞달 조각"이 아님)
+    expect(isPartialWeekPartnerOfCurrent('W_20260939', tw)).toBe(false); // 주차 다름
+    expect(isPartialWeekPartnerOfCurrent('W_20261140', tw)).toBe(false); // 뒷달(다음 달) 조각은 대상 아님
+    expect(isPartialWeekPartnerOfCurrent('W_20260940', null)).toBe(false); // 당주 미상
   });
 });
 
@@ -187,5 +225,39 @@ describe('SSP 동기화 축 (CI-01/CG-04 — ATTR1 파싱 .cs L2186~2213)', () =
     const row = { ATTR1: '20260810/A' } as never;
     const m = parseSspSyncMap(row, '81');
     expect(sspSyncStateOf(m, 'D_20260810')).toBe(null);
+  });
+});
+
+describe('VMI 자동 세팅 축 ([C20201103-000114] — .cs L3056~3078)', () => {
+  it('parseVmiVal — "VMI_YN^STD_DIO" split (전체=STD_DIO, 첫 토큰=VMI_YN)', () => {
+    expect(parseVmiVal('Y^7')).toEqual({ vmiYn: 'Y', stdDio: 'Y^7' });
+    expect(parseVmiVal('N^')).toEqual({ vmiYn: 'N', stdDio: 'N^' });
+  });
+
+  it('parseVmiVal — 미조회/빈 응답은 기본값 N/"" (.cs sVmiYn="N" 초기값)', () => {
+    expect(parseVmiVal(undefined)).toEqual({ vmiYn: 'N', stdDio: '' });
+    expect(parseVmiVal('')).toEqual({ vmiYn: 'N', stdDio: '' });
+  });
+
+  it('isVmiLookupDivision — Division 82 만 대상 (.cs clbDivision=="82")', () => {
+    expect(isVmiLookupDivision({ DIVISION_ID: '82' }, '40')).toBe(true);
+    expect(isVmiLookupDivision({ DIVISION_ID: '40' }, '82')).toBe(false);
+    expect(isVmiLookupDivision({ DIVISION_ID: '81' }, '82')).toBe(false);
+    // 행 Div 공란이면 검색 division 으로 폴백
+    expect(isVmiLookupDivision({}, '82')).toBe(true);
+  });
+
+  it('isVmiLookupRow — 82 + Sales Site 채워져야 조회 성립 (.cs sSiteId!="")', () => {
+    expect(isVmiLookupRow({ DIVISION_ID: '82', SCM_SITE_ID: 'SITE1' }, '82')).toBe(true);
+    expect(isVmiLookupRow({ DIVISION_ID: '82', SCM_SITE_ID: '' }, '82')).toBe(false);
+    expect(isVmiLookupRow({ DIVISION_ID: '81', SCM_SITE_ID: 'SITE1' }, '82')).toBe(false);
+  });
+
+  it('buildVmiLookupParam — @PARAM1=Division / @PARAM2=Sales Site (대문자·인용)', () => {
+    expect(buildVmiLookupParam({ DIVISION_ID: '82', SCM_SITE_ID: 'SITE1' }, '82')).toEqual({
+      comboId: 'DM_VMI_YN',
+      PARAM1: '\'82\'',
+      PARAM2: '\'SITE1\'',
+    });
   });
 });

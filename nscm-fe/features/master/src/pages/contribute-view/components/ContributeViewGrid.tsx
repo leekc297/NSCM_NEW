@@ -1,11 +1,5 @@
-import type { FlexGrid, FormatItemEventArgs, GridPanel } from '@mescius/wijmo.grid';
-import { CellRange } from '@mescius/wijmo.grid';
-import {
-  AllowMerging,
-  CellType,
-  MergeManager,
-  type FlexGrid as FlexGridType,
-} from '@mescius/wijmo.grid';
+import type { FlexGrid, FormatItemEventArgs } from '@mescius/wijmo.grid';
+import { AllowMerging, CellType, type FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useMemo, useRef } from 'react';
 
@@ -141,18 +135,7 @@ export const ContributeViewGrid = ({ gridRef, gridFilterRef, data }: Props) => {
 
   const dynamicColumns = useMemo(() => buildDynamicColumns(columnMetas), [columnMetas]);
 
-  // background: #F7F7F8;
-  const fixedBindings = ['YYYYMM', 'DEPARTMENT_NAME', 'DEPT_NAME', 'CUST_REPORT'];
-
   const onFormatItem = (s: FlexGrid, e: FormatItemEventArgs) => {
-    // if (e.panel.cellType === CellType.Cell) {
-    //   const colName = s.columns[e.col].binding;
-
-    //   if (fixedBindings.includes(colName as string)) {
-    //     e.cell.style.backgroundColor = '#F7F7F8';
-    //   }
-    // }
-
     if (e.panel.cellType === CellType.TopLeft) {
       e.panel.setCellData(0, 0, 'No');
       return;
@@ -183,85 +166,6 @@ export const ContributeViewGrid = ({ gridRef, gridFilterRef, data }: Props) => {
     }
   };
 
-  class HierarchicalMergeManager extends MergeManager {
-    getMergedRange(panel: GridPanel, r: number, c: number, _clip = true): CellRange | null {
-      const col = panel.columns[c];
-      if (!col) return null;
-      const binding = col.binding ?? '';
-
-      // 2줄 고정이라 일단 하드코딩으로 세팅
-      if (panel.cellType === CellType.TopLeft) {
-        return new CellRange(0, c, 1, c);
-      }
-
-      if (panel.cellType === CellType.ColumnHeader) {
-        const rg = new CellRange(r, c);
-        // 위쪽 방향으로 헤더 텍스트가 같은 행이 있는지 탐색
-        for (let i = r; i > 0; i--) {
-          if (panel.getCellData(i, c, false) === panel.getCellData(i - 1, c, false)) {
-            rg.row = i - 1;
-          } else {
-            break;
-          }
-        }
-        // 아래쪽 방향으로 헤더 텍스트가 같은 행이 있는지 탐색
-        for (let i = r; i < panel.rows.length - 1; i++) {
-          if (panel.getCellData(i, c, false) === panel.getCellData(i + 1, c, false)) {
-            rg.row2 = i + 1;
-          } else {
-            break;
-          }
-        }
-
-        for (let i = c; i > 0; i--) {
-          if (panel.getCellData(r, i, false) === panel.getCellData(r, i - 1, false)) {
-            rg.col = i - 1;
-          } else {
-            break;
-          }
-        }
-        // 💡 오른쪽 방향으로 헤더 텍스트가 같은 열이 있는지 탐색
-        for (let i = c; i < panel.columns.length - 1; i++) {
-          if (panel.getCellData(r, i, false) === panel.getCellData(r, i + 1, false)) {
-            rg.col2 = i + 1;
-          } else {
-            break;
-          }
-        }
-        return rg;
-      }
-
-      if (panel.cellType === CellType.Cell && fixedBindings.includes(binding)) {
-        const view = panel.rows;
-        const rowItem = (i: number): Record<string, unknown> | undefined =>
-          (view[i] as unknown as { dataItem?: Record<string, unknown> })?.dataItem;
-        const cur = rowItem(r);
-        if (!cur) return null;
-        const fixedIdx = fixedBindings.indexOf(binding);
-        const leftBindings = fixedBindings.slice(0, fixedIdx + 1);
-        const sameRow = (a: number, b: number): boolean => {
-          const ra = rowItem(a);
-          const rb = rowItem(b);
-          if (!ra || !rb) return false;
-          return leftBindings.every(
-            k =>
-              ((ra as Record<string, string>)[k] ?? '') ===
-              ((rb as Record<string, string>)[k] ?? '')
-          );
-        };
-        const minRow = panel.viewRange.row;
-        const maxRow = panel.viewRange.row2;
-        let r1 = r,
-          r2 = r;
-        while (r1 > minRow && sameRow(r1 - 1, r)) r1--;
-        while (r2 < maxRow && sameRow(r2 + 1, r)) r2++;
-        if (r1 === r2) return null;
-        return new CellRange(r1, c, r2, c);
-      }
-      return new CellRange(r, c);
-    }
-  }
-
   return (
     <DataGrid<SalesViewRow>
       gridRef={gridRef}
@@ -277,7 +181,6 @@ export const ContributeViewGrid = ({ gridRef, gridFilterRef, data }: Props) => {
       isReadOnly
       allowMerging={AllowMerging.All}
       formatItem={onFormatItem}
-      mergeManager={new HierarchicalMergeManager()}
     />
   );
 };

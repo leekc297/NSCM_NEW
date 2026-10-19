@@ -26,8 +26,12 @@ export const responseInterceptor = (
   response: AxiosResponse<ApiResponse<DefaultResponse>>
 ): AxiosResponse => {
   // DB status
-  if (Number(response.data.result?.O_RESULT_CURSOR?.[0]?.CODE))
-    throw new Error(response.data.result.O_RESULT_CURSOR?.[0].MSG);
+  if (Number(response.data.result?.O_RESULT_CURSOR?.[0]?.CODE)) {
+    const resultRow = response.data.result.O_RESULT_CURSOR?.[0];
+    // 오류 행 원본을 cause 로 함께 전달 — 화면이 오류코드/위반 행 식별자로 후처리(행 강조 등)를 할 수 있다.
+    // 기존 소비자는 error.message 만 쓰므로 하위호환(추가적 변경).
+    throw new Error(resultRow?.MSG, { cause: resultRow });
+  }
 
   // BE status
   if (Number(response.data.code)) throw new Error(response.data.message);

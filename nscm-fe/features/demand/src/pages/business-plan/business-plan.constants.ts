@@ -143,24 +143,40 @@ export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: st
   ],
   // AS-IS L1577~1595 — DEPT_ID40 변경 시 END_CUSTOMER40 재설정 (EndCustomerByDivision40 원천)
   END_CUSTOMER40: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
-  // AS-IS L1568~1576 — END_CUSTOMER40 변경 시 SCM_SITE_ID40(SiteByEndCustomer) 재조회
-  SCM_SITE_ID40: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'END_CUSTOMER40', comboKey: 'END_CUSTOMER' },
-  ],
+  // SCM_SITE_ID40(Sales Site) 은 이 표에서 다루지 않는다 — 이 컬럼은 admin 메타상 ATTRIBUTE10='D'
+  //   재조회 콤보라 좁힘이 공용 DataGrid(useRowParamCombos)에서 ATTRIBUTE2 바인딩으로 일어난다.
+  //   40 신규행은 Model 선택이 END_CUSTOMER40 을 자동으로 채우고, 그러면 재조회가 그 값을
+  //   @endCustomer 로 실어 Sales Site 후보가 그 End Customer 소속으로 묶여 재선택이 막힌다.
+  //   이 화면에서만 그 바인딩을 떼는 처리는 BusinessPlanGrid.mainStaticColumns 참조
+  //   (2026-09-03 사용자 확정 — division/권한 좁힘은 유지, End Customer/Team 좁힘만 제거).
+  //   Site 변경 시 파생 필드 정리는 GRID_CASCADE_CLEAR.SCM_SITE_ID40 이 담당한다.
   PLANT_SITE_ID: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
 };
 
 // 상위 콤보 값 변경 시 하위 셀 clear 체인 — AS-IS ComboSelChange 는 콤보 재바인딩만 수행(값 clear 없음)
-//   → 재바인딩은 cascade dataMap 스왑이 대체하므로 clear 대상 없음 (빈 정의 유지 = 메커니즘 보존).
-export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {};
+//   → 재바인딩은 cascade dataMap 스왑이 대체하므로 기본은 clear 대상 없음.
+//   예외: 40 SCM_SITE_ID40(Sales Site) — Model(ITEM_ID40)은 buildCellPopupSearch 가 그 행의
+//   SCM_SITE_ID40 값을 검색조건으로 실어(business-plan.division.ts) 고른 결과이고, Team/End
+//   Customer는 그 Model 선택 시 Site-Item에서 파생되고, Energy(WH)는 저장 후 조회 시 Item master에서 파생된다.
+//   Site 를 바꾸면 이 Model 선택 자체가 잘못된 컨텍스트(옛 Site 기준)로 남으므로, Model 과 그
+//   파생 필드 전부를 비워 사용자가 새 Site 기준으로 다시 고르게 한다(2026-09-03 사용자 확정).
+export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
+  SCM_SITE_ID40: [
+    'ITEM_ID40',
+    'ITEM_NAME',
+    'NICK_NAME',
+    'DEPT_ID40',
+    'END_CUSTOMER40',
+    'ENERGE_WH',
+  ],
+};
 
 // ============================================================================
 // ⭐ Grid 편집 전용 콤보 (조회 표시 dataMap 과 별개 — 편집 진입 시 스왑, cellEditEnded 원복. hook #59 §5-G)
-//   CURRENCY = 'CurrencyList' (AS-IS InsertRow CURRENCY_LIST L1184 — SHEET_COLUMNS 메타 콤보 미지정 컬럼)
+//   CURRENCY 는 admin 메타를 FPComboBox + cellCboDataTp=CURRENCY_LIST 로 전환해 공용 경로로
+//   넘겼다 (2026-09-04) — 파생/캐스케이드 로직이 없어 화면 편집전용 콤보가 불필요했다.
 // ============================================================================
 export const GRID_EDIT_COMBO: Record<string, { comboId: string }> = {
-  CURRENCY: { comboId: 'CurrencyList' },
   // ⭐ 2026-07-21 G9 — 40 신규행 CELL_PROD_SITE 편집 = 유효건(VALID_YN='Y')만 콤보
   //   (신정본 InsertRow L1274~1278 GetCellProdSite(...,"Y") [C20220513-000327]).
   //   조회 표시(코드→한글)는 SHEET_COLUMNS 메타 FPComboBox='DMF0042CellProdSite'(ALL) 가 담당

@@ -6,6 +6,8 @@
 //
 // console.group 은 안 쓴다 (그룹 안에 넣으면 브라우저에 따라 펼쳐도 내용이 안 보였다).
 // 리스트는 최상위에서 배열로 찍어 ▶ 로 접었다 펼쳤다 한다. 표로 보고 싶으면 AS_TABLE = true.
+import { parseComboFilterBindings } from '@foundation/utils';
+
 import { filterComboRowsByRow, GRID_CASCADE_FILTERS } from './mkt-fcst.gridCombos';
 import { toCellStr } from './mkt-fcst.prContext';
 
@@ -15,11 +17,18 @@ const ON = false;
 //   확인 끝나면 false 로 되돌리거나 이 파일 + MktFcstForm 의 logSearchSalesSite 호출을 지운다.
 const ON_SEARCH = false;
 
+// 메타 이관 콤보(END_CUSTOMER/END_CUSTOMER40/SCM_SITE_ID/SCM_SITE_ID40) 로그 스위치.
+//   2026-09-03 이관 검증 중이라 기본 true — 컬럼당 4줄, 컬럼 메타가 바뀔 때만 찍혀 양이 적다.
+//   서버에 실제로 등록된 PARAM2/9/10 을 봐야 "좁힘이 안 걸린다 / 재조회가 안 나간다" 를 가를 수
+//   있어서 켜 둔다. 검증이 끝나면 false 로 되돌린다.
+const ON_META = false;
+
 /** true = console.table(표, 항상 펼침) / false = 배열(▶ 로 접었다 펼쳤다) */
 const AS_TABLE = false;
 
 const off = (): boolean => !ON || !import.meta.env.DEV;
 const offSearch = (): boolean => !ON_SEARCH || !import.meta.env.DEV;
+const offMeta = (): boolean => !ON_META || !import.meta.env.DEV;
 
 type Row = Record<string, unknown>;
 
@@ -69,6 +78,115 @@ export const logComboSetup = (
     if (deps.length > 0) list(`division='${division}' 필터 리스트`, byDivision, keys);
   });
   console.log(`${SEP}\n[콤보 ${kind}] 끝 — division='${division}'\n${SEP}`);
+};
+
+// ============================================================================
+// [메타 이관] 공용 DataGrid 가 콤보를 전담하는 컬럼(META_DRIVEN_COMBO_COLUMNS) — 서버에서
+//   실제로 도착한 PARAM2/9/10 을 그대로 찍는다. 값이 비어 있거나 '행컬럼:콤보컬럼' 형식이
+//   아니면 columnMapping 이 그 선언을 통째로 버려 좁힘이 조용히 사라지므로, 이관 검증은
+//   이 로그로 시작한다.
+// ============================================================================
+export const logMetaCombo = (
+  columns: {
+    binding: string;
+    comboId?: string;
+    param2?: string;
+    param9?: string;
+    param10?: string;
+  }[],
+  /** 그리드에 실제로 있는 컬럼 binding 전체. PARAM2 의 행컬럼이 여기 없으면 그 선언은 죽은 선언이다. */
+  gridBindings: string[] = []
+): void => {
+  if (offMeta()) return;
+  const known = new Set(gridBindings);
+  console.log(`${SEP}\n[콤보 메타 이관] ${columns.length}개 컬럼 — 도착한 컬럼 메타\n${SEP}`);
+  columns.forEach(({ binding, comboId, param2, param9, param10 }) => {
+    const bindings = parseComboFilterBindings(param2);
+    const isD = (param10 ?? '').trim().toUpperCase() === 'D';
+    const declared = Object.entries(bindings)
+      .map(([rowCol, key]) => {
+        // 재조회(D)는 오른쪽이 콤보 SQL 바인드명, 필터는 콤보 결과 컬럼명이다.
+        const arrow = isD ? `@${key}` : `콤보.${key}`;
+        // 왼쪽(행 컬럼)이 그리드에 없으면 그 행 값을 실을 수도, 변경을 감지할 수도 없다 —
+        //   재조회형에서는 이게 곧 "상위를 바꿔도 재조회가 안 나간다" 의 원인이다.
+        const miss = known.size > 0 && !known.has(rowCol) ? '  <== 그리드에 없는 컬럼' : '';
+        return `행.${rowCol} → ${arrow}${miss}`;
+      })
+      .join('\n           ');
+    const deadRowCols = Object.keys(bindings).filter(
+      rowCol => known.size > 0 && !known.has(rowCol)
+    );
+    console.log(
+      `[콤보 메타] ${binding} (${comboId ?? '-'}) — ${isD ? '재조회(D)' : '필터'}\n` +
+        `  PARAM2 : ${param2 ?? '(없음)'}${
+          param2 && Object.keys(bindings).length === 0
+            ? '  <== 형식 불일치 → 좁힘 선언 전체 무시됨'
+            : ''
+        }\n` +
+        `  해석   : ${declared || '(좁힘 없음)'}\n` +
+        `  PARAM9 : ${param9 ?? '(없음 — 신규행도 조회 콤보 그대로)'}\n` +
+        `  PARAM10: ${param10 ?? '(없음)'}` +
+        (deadRowCols.length > 0
+          ? `\n  경고   : 행컬럼 [${deadRowCols.join(', ')}] 이 이 그리드에 없다.` +
+            `${isD ? ' 그 컬럼을 바꿔도 재조회가 나가지 않는다.' : ' 그 조건은 항상 통과된다.'}`
+          : '')
+    );
+  });
+  console.log(`${SEP}\n[콤보 메타 이관] 끝\n${SEP}`);
+};
+
+// ============================================================================
+// [메타 이관 - 편집 진입] 드롭다운이 왜 비었는지 조건 단위로 가른다.
+//   columnMapping.filterComboRowsByRowItem 은 조건을 AND 로 걸고, "행 값이 공란" 일 때만 그 조건을
+//   건너뛴다 — 화면 코드 cascade 에 있던 "콤보 쪽 값이 공란/컬럼 없음이면 통과" 가 없다. 그래서
+//   콤보 응답이 좁힘 기준 컬럼을 안 내려주면 후보가 통째로 0건이 된다. 어느 조건이 죽이는지
+//   조건별 생존 수로 바로 보이게 찍는다.
+// ============================================================================
+export const logMetaComboEdit = (opts: {
+  binding: string;
+  comboId?: string;
+  param2?: string;
+  /** 편집 진입한 행. PARAM2 왼쪽 컬럼 값을 여기서 읽는다. */
+  rowItem: Row;
+  /** 컬럼 dataMap 이 들고 있는 콤보 응답 전량 (조회 콤보 + PARAM9 신규행 콤보 합집합). */
+  allRows: Row[];
+  /** 실제로 드롭다운에 뜬 후보 이름. */
+  candidates: string[];
+  /** 신규행인가 — PARAM9 가 있으면 신규행만 그 콤보를 본다. */
+  isInsert: boolean;
+}): void => {
+  if (offMeta()) return;
+  const { binding, comboId, param2, rowItem, allRows, candidates, isInsert } = opts;
+  const bindings = Object.entries(parseComboFilterBindings(param2));
+  const sampleKeys = allRows.length > 0 ? Object.keys(allRows[0]) : [];
+  console.log(
+    `[콤보 메타 편집] ${binding} (${comboId ?? '-'}) — 신규행=${isInsert}\n` +
+      `  콤보 응답 : ${allRows.length}건 / 드롭다운 후보 : ${candidates.length}건\n` +
+      `  응답 컬럼 : ${sampleKeys.join(', ') || '(응답 0건 — 컬럼 확인 불가)'}\n` +
+      `  PARAM2   : ${param2 ?? '(없음)'}`
+  );
+  if (bindings.length === 0) {
+    console.warn('  좁힘 조건 없음 — 응답 전량이 후보다.');
+  }
+  // 조건 하나씩 단독으로 걸어 본다. 어느 줄에서 생존이 0 이 되는지가 곧 원인이다.
+  bindings.forEach(([rowCol, comboCol]) => {
+    const rowVal = toCellStr(rowItem[rowCol]).trim();
+    const hasKey = sampleKeys.includes(comboCol);
+    const survive =
+      rowVal === '' ? allRows.length : allRows.filter(r => rowItem[rowCol] === r[comboCol]).length;
+    const verdict =
+      rowVal === ''
+        ? '행 값 공란 → 이 조건 건너뜀'
+        : !hasKey
+          ? '콤보 응답에 이 컬럼이 없음 → 전건 탈락 (원인)'
+          : survive === 0
+            ? '값이 하나도 안 맞음 → 전건 탈락 (원인)'
+            : '정상';
+    console.warn(
+      `  조건 [행.${rowCol}='${rowVal}' = 콤보.${comboCol}] 단독 생존 ${survive}건 — ${verdict}`
+    );
+  });
+  list('콤보 응답 전량', allRows, [...new Set(bindings.map(([, comboCol]) => comboCol))]);
 };
 
 // ============================================================================

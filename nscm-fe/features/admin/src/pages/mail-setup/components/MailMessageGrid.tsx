@@ -1,7 +1,8 @@
-import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import { AllowMerging, CellType, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import type { MutableRefObject } from 'react';
+import { useEffect, type MutableRefObject } from 'react';
 
+import { ColumnInsertMergeManager } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
 import type { MessageRow } from '../mail-setup.types';
@@ -9,11 +10,17 @@ import { useMailSetupStore } from '../useMailSetupStore';
 
 import styles from './MailTabGrid.module.scss';
 
+// Category(CATEGORY_ID/CATEGORY_DESC) 는 F8 로 새 행을 추가해도 기존 행과 같은 값이라
+// 계속 하나로 병합돼 보여야 한다. 공용 CustomMergeManager 는 Insert 행을 모든 컬럼에서
+// 병합 대상에서 빼므로(ColumnInsertMergeManager 주석 참고), 이 두 컬럼만 예외로 둔다.
+const CATEGORY_INSERT_MERGE_BINDINGS = new Set(['CATEGORY_ID', 'CATEGORY_DESC']);
+
 interface MailMessageGridProps {
   gridRef: MutableRefObject<FlexGrid<MessageRow> | undefined>;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   data: MessageRow[];
   onOpenContent: (row: MessageRow) => void;
+  onFocus?: () => void;
 }
 
 export const MailMessageGrid = ({
@@ -21,6 +28,7 @@ export const MailMessageGrid = ({
   gridFilterRef,
   data,
   onOpenContent,
+  onFocus,
 }: MailMessageGridProps) => {
   const messageColumns = useMailSetupStore(state => state.messageColumns);
 
@@ -39,6 +47,15 @@ export const MailMessageGrid = ({
     onOpenContent(row);
   };
 
+  // Category 컬럼은 F8 로 추가한 신규 행도 병합돼 보여야 한다 — 공용 CustomMergeManager 기본값
+  // (Insert 행은 전 컬럼 병합 제외)을 이 두 컬럼만 예외로 두는 ColumnInsertMergeManager 설치.
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    if (grid.mergeManager instanceof ColumnInsertMergeManager) return;
+    grid.mergeManager = new ColumnInsertMergeManager(grid, CATEGORY_INSERT_MERGE_BINDINGS);
+  }, [gridRef, messageColumns]);
+
   return (
     <div className={styles.gridWrapper}>
       <DataGrid<MessageRow>
@@ -48,6 +65,11 @@ export const MailMessageGrid = ({
         staticColumns={messageColumns}
         useSummaryTooltip={false}
         dblClick={handleDoubleClick}
+        gotFocus={onFocus}
+        // SCM0007 SmsMessageGrid.tsx 와 동일 패턴 — Category 는 항상 한 카테고리만 조회되므로
+        // 화면에 보이는 모든 행이 같은 값이라 세로 병합된 한 칸으로 보인다. 신규 Insert 행까지
+        // 병합하는 예외는 위 ColumnInsertMergeManager 설치 effect 가 담당한다.
+        allowMerging={AllowMerging.Cells}
       />
     </div>
   );

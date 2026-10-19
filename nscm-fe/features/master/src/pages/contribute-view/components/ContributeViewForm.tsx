@@ -161,7 +161,7 @@ export const ContributeViewForm = ({ onSearch, onOpenVersionPopup }: Props) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00653', '_Version')}
+              label={t('LBL00606', '_Version')}
               labelAlign='right'
               className={commonStyles.formItem}
               required

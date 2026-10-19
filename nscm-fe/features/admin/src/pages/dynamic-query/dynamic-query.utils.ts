@@ -16,6 +16,24 @@ const unmask = (s: string, literals: string[]): string =>
 
 const escapeRegExp = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+const YYYYMMDD_RE = /^\d{8}$/;
+
+export const isYyyymmdd = (value: string): boolean => YYYYMMDD_RE.test(value);
+
+// 달력 기준 개월 수 차이(일자 미달분은 내림) — 예: 20260101~20260401 = 3개월, 20260101~20260402 = 3개월, 20260101~20260331 = 2개월.
+export const monthsBetweenYyyymmdd = (fromYyyymmdd: string, toYyyymmdd: string): number => {
+  const fromYear = Number(fromYyyymmdd.slice(0, 4));
+  const fromMonth = Number(fromYyyymmdd.slice(4, 6));
+  const fromDay = Number(fromYyyymmdd.slice(6, 8));
+  const toYear = Number(toYyyymmdd.slice(0, 4));
+  const toMonth = Number(toYyyymmdd.slice(4, 6));
+  const toDay = Number(toYyyymmdd.slice(6, 8));
+
+  let months = (toYear - fromYear) * 12 + (toMonth - fromMonth);
+  if (toDay < fromDay) months -= 1;
+  return months;
+};
+
 export const findParamTokens = (sql: string): string[] => {
   const { masked } = maskStringLiterals(sql);
   const matches = masked.match(/[@:]\w+/g) ?? [];

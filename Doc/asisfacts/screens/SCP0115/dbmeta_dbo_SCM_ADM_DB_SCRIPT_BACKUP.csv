@@ -1,0 +1,2376 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN","957454685","1","/*
+ * Program ID   : [SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN]
+ * Description  : Save data SCP0115 Policy Inv Management
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2024/10/14   TanVQ1			Adding new function for saving data for SCP0115 Policy Inv Management
+ * 2025/01/02	TanVQ1			Table dbo.SCP_ANL_LGTM_PCY_INV_MGMT_PLAN schema changed
+ */
+-- EXEC [SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN] 'INSERT_EXCEL', '', '20250307', 'S', '81', 'WA00', 'ERCA00068AA', 'OCCR_RSN_50', '니치아 정책재고', 'EXHT_TP_03', 'GEM사 판매', '20250415', '253400', '', 'victory25'
+CREATE PROCEDURE [dbo].[SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN] 
+
+	-- Add the parameters for the stored procedure here	
+	@p_active_flag			NVARCHAR(MAX),
+	@p_request_no			NVARCHAR(MAX),
+	@p_plan_start_yyyymmdd	NVARCHAR(MAX),
+	@p_plan_tp_cd			NVARCHAR(MAX),
+	@p_company_id			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_plant_id				NVARCHAR(MAX),
+	@p_item_id				NVARCHAR(MAX),
+	@p_occr_rsn_cd			NVARCHAR(MAX),
+	@p_occr_rsn_ctn			NVARCHAR(MAX),
+	@p_exht_tp_cd			NVARCHAR(MAX),
+	@p_exht_tp_ctn			NVARCHAR(MAX),
+	@p_plan_yyyymmdd		NVARCHAR(MAX),
+	@p_qty					NVARCHAR(MAX),
+	@p_supplier_code		NVARCHAR(MAX),
+	@p_user_id				NVARCHAR(MAX)
+AS
+
+BEGIN
+	SET NOCOUNT ON;
+
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_request_no			NVARCHAR(MAX);
+	DECLARE @v_plan_start_yyyymmdd	NVARCHAR(MAX);
+	DECLARE @v_plan_tp_cd			NVARCHAR(MAX)
+	DECLARE @v_company_id			NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_plant_id				NVARCHAR(MAX);
+	DECLARE @v_item_id				NVARCHAR(MAX);
+	DECLARE @v_occr_rsn_cd			NVARCHAR(MAX);
+	DECLARE @v_occr_rsn_ctn			NVARCHAR(MAX);
+	DECLARE @v_exht_tp_cd			NVARCHAR(MAX);
+	DECLARE @v_exht_tp_ctn			NVARCHAR(MAX);
+	DECLARE @v_plan_yyyymmdd			NVARCHAR(MAX);
+	DECLARE @v_qty					numeric(30,8);
+	DECLARE @v_user_id				NVARCHAR(MAX);
+	DECLARE @v_supplier_code		NVARCHAR(MAX);
+	DECLARE @v_qty_item				NVARCHAR(MAX);
+
+	SET @v_active_flag = NULL;
+	SET @v_request_no = NULL;
+	SET @v_plan_start_yyyymmdd = NULL;
+	SET @v_plan_tp_cd = NULL;
+	SET @v_company_id = NULL;
+	SET @v_division_id = NULL;
+	SET @v_item_id = NULL;
+	SET @v_occr_rsn_cd = NULL;	 
+	SET @v_occr_rsn_ctn = NULL;	
+	SET @v_exht_tp_cd = NULL;	
+	SET @v_exht_tp_ctn = NULL;	
+	SET @v_supplier_code = NULL;
+	SET @v_plan_yyyymmdd = NULL;	 
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '|'
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+
+		BEGIN TRY
+
+	    -- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		--SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@p_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				SET @v_active_flag = [dbo]"
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN","957454685","2",".[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;  
+			
+				SET @v_plan_start_yyyymmdd = [dbo].[SCM_ARR_SPL_VAL](@p_plan_start_yyyymmdd, @v_delimiter , @mst_loop_cnt) ;    
+				
+				SET @v_plan_tp_cd = [dbo].[SCM_ARR_SPL_VAL](@p_plan_tp_cd, @v_delimiter , @mst_loop_cnt) ; 		
+
+				SET @v_company_id = [dbo].[SCM_ARR_SPL_VAL](@p_company_id, @v_delimiter , @mst_loop_cnt) ; 
+				
+				SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 
+
+				SET @v_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_plant_id, @v_delimiter , @mst_loop_cnt) ; 
+				
+				SET @v_item_id = [dbo].[SCM_ARR_SPL_VAL](@p_item_id, @v_delimiter , @mst_loop_cnt) ;    
+				
+				SET @v_occr_rsn_cd = [dbo].[SCM_ARR_SPL_VAL](@p_occr_rsn_cd, @v_delimiter , @mst_loop_cnt);
+				
+				SET @v_occr_rsn_ctn = [dbo].[SCM_ARR_SPL_VAL](@p_occr_rsn_ctn, @v_delimiter , @mst_loop_cnt) ;  
+
+				SET @v_exht_tp_cd = [dbo].[SCM_ARR_SPL_VAL](@p_exht_tp_cd, @v_delimiter , @mst_loop_cnt);
+				
+				SET @v_exht_tp_ctn = [dbo].[SCM_ARR_SPL_VAL](@p_exht_tp_ctn, @v_delimiter, @mst_loop_cnt) ; 
+				
+				SET @v_plan_yyyymmdd = [dbo].[SCM_ARR_SPL_VAL](@p_plan_yyyymmdd, @v_delimiter, @mst_loop_cnt) ; 
+				
+				SET @v_qty_item	 = [dbo].[SCM_ARR_SPL_VAL](@p_qty, @v_delimiter, @mst_loop_cnt)
+				IF  @v_qty_item	<> 'NULL' AND @v_qty_item	<> ''
+					BEGIN
+						SET @v_qty = CAST (@v_qty_item  AS numeric(30,8) ); 						
+					END
+				ELSE
+					BEGIN
+						SET @v_qty = 0						
+					END
+
+				SET @v_supplier_code = [dbo].[SCM_ARR_SPL_VAL](@p_supplier_code, @v_delimiter , @mst_loop_cnt) ; 				 
+
+				SET @v_user_id = [dbo].[SCM_ARR_SPL_VAL](@p_user_id, @v_delimiter, @mst_loop_cnt) ; 
+				
+				SET @v_request_no = [dbo].[SCM_ARR_SPL_VAL](@p_request_no, @v_delimiter , @mst_loop_cnt) ; 
+				
+				SELECT @v_request_no;
+
+				IF @v_request_no = 'NULL' OR @v_request_no = '' OR len(@v_request_no) <= 1 
+					BEGIN
+						SET @v_request_no = @v_plan_start_yyyymmdd+'-'+ CAST( NEXT VALUE FOR SEQ1_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN AS NVARCHAR);	
+					END
+				--
+						
+			END
+
+			IF @mst_loop_cnt > 0 
+				BEGIN 		
+							MERGE INTO [dbo].[SCP_ANL_LGTM_PCY_INV_MGMT_PLAN] A
+							USING (
+									SELECT 
+										@v_request_no				as request_no,
+										@v_plan_start_yyyymmdd		as plan_start_yyyymmdd
+										--@v_plan_tp_cd				as plan_tp_cd,
+										--@v_division_id				as division_id, 
+										--@v_item_id					as item_id, 
+										--@v_plan_yyyymmdd			as plan_yyyymmdd,
+										--@v_plant_id					as plant_id,
+										--@v_occr_rsn_cd 				as occr_rsn_cd,
+										--@v_exht_tp_cd				as exht_tp_cd
+							) B
+							ON(
+										A.request_no				= B.request_no
+									AND	A.plan_start_yyyymmdd		= B.plan_start_yyyymmdd
+									--AND A.plan_tp_cd				= B.plan_tp_cd
+									--AND A.division_id				= B.division_id
+									--AND A.item_id					= B.item_id
+									--AND A.plan_yyyymmdd				= B.plan_yyyymmdd
+									--AND A.plant_id					= B.plant_id
+									--AND A.occr_rsn_cd				= B.occr_rsn_cd
+									--AND A.exht_tp_cd				= B.exht_tp_cd
+							  )			
+							--WHEN MATCHED AND  @v_active_flag = 'D' THEN
+							--		DELETE
+							WHEN MATCHED 
+							--AND  @v_active_flag <> 'D'
+							THEN
+									 UPDATE SET 
+												occr_rsn_ctn		= @v_occr_rsn_ctn
+											   ,exht_tp_ctn			= @v_exht_tp_ctn 
+											   ,qty					= @v_qty
+											   ,last_updated_by		= @v_user_id
+											   ,last_update_date	= sysdatetime()
+											   ,occr_rsn_cd			= @v_occr_rsn_cd
+											   ,exht_tp_cd			= @v_exht_tp_cd		
+											   ,plan_tp_cd			= @v_plan_tp_cd
+											   ,company_id			= @v_company_id
+											   ,division_id			= @v_division_id
+											   ,item_id				= @v_item_id
+											   ,plan_yyyymmdd		= @v_plan_yyyymmdd
+											   ,plant_id			= @v_plant_id
+							WHEN NOT MATCHED THEN
+								 INSERT ( request_no
+										  ,plan_start_yyyymmdd
+										  ,plan_tp_cd"
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN","957454685","3","
+										  ,company_id
+										  ,division_id
+										  ,plant_id
+										  ,item_id
+										  ,occr_rsn_cd
+										  ,occr_rsn_ctn
+										  ,exht_tp_cd
+										  ,exht_tp_ctn
+										  ,plan_yyyymmdd
+										  ,qty
+										  ,supplier_code
+										  ,created_by
+										  ,create_date
+										  ,last_updated_by
+										  ,last_update_date
+										)
+								 VALUES (   @v_request_no --@v_plan_start_yyyymmdd + '-' + CAST(ISNULL( (SELECT MAX(CAST(SUBSTRING(request_no, CHARINDEX('-', request_no) + 1, LEN(request_no)) AS INT))FROM [dbo].[SCP_ANL_LGTM_PCY_INV_MGMT_PLAN]), 0) + 1 AS NVARCHAR)
+										   ,@v_plan_start_yyyymmdd
+										   ,@v_plan_tp_cd
+										   ,@v_division_id 
+										   ,@v_company_id
+										   ,@v_plant_id
+										   ,@v_item_id
+										   ,@v_occr_rsn_cd
+										   ,@v_occr_rsn_ctn
+										   ,@v_exht_tp_cd
+										   ,@v_exht_tp_ctn
+										   ,@v_plan_yyyymmdd
+										   ,@v_qty
+										   ,@v_supplier_code
+										   ,@v_user_id
+										   ,sysdatetime()
+										   ,@v_user_id
+										   ,sysdatetime()
+										);
+					  END
+				
+
+
+
+			ELSE    --단일 ROW 일때
+			 
+				BEGIN      
+				print 1;
+					SET @v_active_flag = @p_active_flag        
+					SET @p_active_flag = NULL 
+
+					SET @v_plan_start_yyyymmdd = @p_plan_start_yyyymmdd        
+					SET @p_plan_start_yyyymmdd = NULL 				 
+
+					SET @v_plan_tp_cd = @p_plan_tp_cd        
+					SET @p_plan_tp_cd = NULL 			
+
+					SET @v_company_id = @p_company_id
+					SET @p_company_id = NULL
+					
+					SET @v_division_id = @p_division_id
+					SET @p_division_id = NULL
+
+					SET @v_division_id = @p_division_id        
+					SET @p_division_id = NULL     
+
+					SET @v_plant_id = @p_plant_id
+					SET @p_plant_id = NULL
+					
+					SET @v_item_id = @p_item_id        
+					SET @p_item_id = NULL    
+
+					SET @v_occr_rsn_cd = @p_occr_rsn_cd		
+					SET @p_occr_rsn_cd = NULL
+
+					SET @v_occr_rsn_ctn = @p_occr_rsn_ctn 
+					SET @p_occr_rsn_ctn = NULL
+
+					SET @v_exht_tp_cd = @p_exht_tp_cd					
+					SET @p_exht_tp_cd = NULL
+
+					SET @v_exht_tp_ctn = @p_exht_tp_ctn 
+					SET @p_exht_tp_ctn = NULL
+
+					SET @v_plan_yyyymmdd = @p_plan_yyyymmdd
+					SET @p_plan_yyyymmdd = NULL
+															
+					IF @p_qty <> 'NULL' AND @p_qty<> ''
+						BEGIN
+							SET @v_qty = CAST (@p_qty  AS numeric(30,8))
+						END
+					ELSE
+						BEGIN
+							SET @v_qty = 0
+						END
+
+					SET @v_supplier_code = @p_supplier_code
+					SET @p_supplier_code = NULL
+
+					SET @v_user_id = @p_user_id 
+					SET @p_user_id = NULL
+
+					SET @v_request_no = @p_request_no     
+					IF @v_request_no = 'NULL' OR @v_request_no = ' ' OR len(@v_request_no) = 0
+						BEGIN
+							SET @v_request_no = @p_plan_start_yyyymmdd+'-'+ CAST( NEXT VALUE FOR SEQ1_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN AS NVARCHAR);							
+						END
+					SET @p_request_no = NULL 
+
+
+							MERGE INTO [dbo].[SCP_ANL_LGTM_PCY_INV_MGMT_PLAN] A
+							USING (
+									SELECT 
+										@v_request_no				as request_no,
+										@v_plan_start_yyyymmdd		as plan_start_yyyymmdd
+										--@v_plan_tp_cd				as plan_tp_cd,
+										--@v_division_id				as division_id, 
+										--@v_item_id					as item_id, 
+										--@v_plan_yyyymmdd			as plan_yyyymmdd,
+										--@v_plant_id					as plant_id,
+										--@v_occr_rsn_cd 				as occr_rsn_cd,
+										--@v_exht_tp_cd				as exht_tp_cd
+							) B
+							ON(
+										A.request_no				= B.request_no
+									AND	A.plan_start_yyyymmdd		= B.plan_start_yyyymmdd
+									--AND A.plan_tp_cd				= B.plan_tp_cd
+									--AND A.division_id				= B.division_id
+									--AND A.item_id					= B.item_id
+									--AND A.plan_yyyymmdd				= B.plan_yyyymmdd
+									--AND A.plant_id					= B.plant_id
+									--AND A.occr_rsn_cd				= B.occr_rsn_cd
+									--AND A.exht_tp_cd				= B.exht_tp_cd
+							  )			
+							--WHEN MATCHED AND  @v_active_flag = '"
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_EXCEL_UPLOAD","274412347","1","
+/*
+ * Program ID   : SCP0115_EXCEL_UPLOAD
+ * Description  : SCP0115_EXCEL_UPLOAD
+ * Program History 
+ *===========================================================================================================
+ *   Date       In Charge      Description
+ *===========================================================================================================
+ /* 2025-03-25   dsiol         긴급 개발 요청...(?) */  
+ --EXEC [SCP0115_EXCEL_UPLOAD] 0, 'dsiol'
+
+ */ 
+
+CREATE PROCEDURE [dbo].[SCP0115_EXCEL_UPLOAD]
+	@p_mode		   INT,
+	@p_created_by  NVARCHAR(150)		
+
+AS
+
+
+BEGIN
+	SET NOCOUNT ON;
+	DECLARE @v_program_id     AS NVARCHAR(40) = 'SCP0115';
+    DECLARE @v_sheet_name     AS NVARCHAR(40) = 'Policy Inv Management';	
+	DECLARE @v_sql_text       AS NVARCHAR(MAX);
+	DECLARE @v_creation_date  AS NVARCHAR(40);
+	DECLARE @v_count          AS INT;
+	DECLARE @v_start_yyyymmdd AS NVARCHAR(8);
+	DECLARE @v_end_yyyymmdd AS NVARCHAR(8);
+	DECLARE @v_division		AS NVARCHAR(10); 
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0115_EXCEL_UPLOAD';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	SET @v_log_type = 'START';
+    SET @v_log_message = '########## Start of procedure ##########';
+	SET @v_description = '';
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+	
+	SELECT @v_creation_date = CONVERT(NVARCHAR(40), MAX(T.CREATION_DATE), 121)
+	FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T WITH(NOLOCK)
+	WHERE  T.PROGRAM_ID = @v_program_id
+	AND    T.SHEET_NAME = @v_sheet_name
+	AND    T.CREATED_BY = @p_created_by;
+	--  AND UPPER(METADATA1_VALUE) != 'BASIS YYYYMM';
+
+	IF @v_creation_date IS NULL BEGIN
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = 'Data Not Found [' + CONVERT(CHAR(19), @v_creation_date, 121) +']';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+	END
+	-- @p_mode = 0 이면 Validation Check (1. UPLOAD_STATUS_CODE 정의)
+	IF ISNULL(@p_mode, 0) = 0 BEGIN	
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		--EXCEL 업로드시 Validation Check 할 동안 임시적으로 UPLOAD로 UPDATE한다.
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'UPLOAD'
+             , MESSAGE_TEXT       = NULL             
+        FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T
+		WHERE  T.PROGRAM_ID    = @v_program_id
+        AND    T.SHEET_NAME    = @v_sheet_name
+        AND    T.CREATED_BY    = @p_created_by
+        AND    CONVERT(NVARCHAR(40), T.CREATION_DATE, 121) = @v_creation_date
+        AND    ISNULL(T.UPLOAD_STATUS_CODE,'X') != 'UPLOAD';
+    	END;
+
+		BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('RESET Status = UPLOAD', SQL%ROWCOUNT, 1, TRUE);
+	    SET @v_log_type = '1';
+	    SET @v_log_message = '########## RESET Status = UPLOAD ##########';
+	    SET @v_description = '';
+	    SET @d_event_date = SYSDATETIME();
+	    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+----------------------------------------------------------------------------------------------------------------------------------------------------"
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_EXCEL_UPLOAD","274412347","2","-------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		--EXCEL에서 값이 입력되지 않은 것은 SKIP 하는건데 기준은 ATTRIBUTE1이 비었으면 실행한다. (TOTAL 일단 무시..)
+		BEGIN
+	    UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+        SET    UPLOAD_STATUS_CODE = 'SKIP'
+        WHERE  PROGRAM_ID    = @v_program_id
+        AND    SHEET_NAME    = @v_sheet_name
+        AND    CREATED_BY    = @p_created_by
+        AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+        AND    ATTRIBUTE2  IS NULL OR ATTRIBUTE2  = '' ;
+	            
+		END;
+
+	    BEGIN
+        ------------------------------------------------------------------------
+        --scm2_mgr.xLOG('SKIP EMPTY LINE      ', SQL%ROWCOUNT, 2, TRUE);
+		SET @v_log_type = '2';
+		SET @v_log_message = '########## SKIP EMPTY LINE ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ------------------------------------------------------------------------
+		END;
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+			UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+				SET    ATTRIBUTE1 = ATTRIBUTE2 +'-'+ CAST( NEXT VALUE FOR SEQ1_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN AS NVARCHAR)
+				WHERE  PROGRAM_ID         = @v_program_id
+				AND    SHEET_NAME         = @v_sheet_name
+				AND    CREATED_BY         = @p_created_by
+				AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121)  = @v_creation_date
+				AND    ATTRIBUTE1 = ''
+				AND    UPLOAD_STATUS_CODE = 'UPLOAD';	
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		--EXCEL에서 첫 행 (HEADER 정보를 가져오기 위함 =UPLOAD_STATUS_CODE 값이 @TITLE 인것)
+
+		BEGIN
+		UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+		SET    UPLOAD_STATUS_CODE = '@TITLE'
+		WHERE  PROGRAM_ID    = @v_program_id
+		AND    SHEET_NAME    = @v_sheet_name
+		AND    CREATED_BY    = @p_created_by
+		AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+		AND    ATTRIBUTE1 = 'Request No.'; -- EXCEL기준 A1 , A2 에 해당하는 값이 Plan Date인 행을 @TITLE로 업데이트 함.  
+		END;
+
+		BEGIN
+		------------------------------------------------------------------------
+		--scm2_mgr.xLOG('@TITLE Header Line   ', SQL%ROWCOUNT, 3, TRUE);
+		SET @v_log_type = '3';
+		SET @v_log_message = '########## TITLE Header Line ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		------------------------------------------------------------------------
+		END;
+	END;
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------프로시저에서 사용되는 공용 임시테이블 - 시작-----------------------------------------------
+
+			--IF OBJECT_ID(N'tempdb..#TEMP_SCM_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION', N'U') IS NOT NULL
+			--	DROP TABLE #TEMP_SCM_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION
+			IF OBJECT_ID(N'tempdb..#TEMP_SCM_LGTM_OCCR_RSN_CD', N'U') IS NOT NULL
+				DROP TABLE #TEMP_SCM_LGTM_OCCR_RSN_CD
+			IF OBJECT_ID(N'tempdb..#TEMP_SCM_LGTM_EXHT_TP_CD', N'U') IS NOT NULL
+				DROP TABLE #TEMP_SCM_LGTM_EXHT_TP_CD
+			IF OBJECT_ID(N'tempdb..#TEMP_SCM_LGTM_PLAN_TP_CD', N'U') IS NOT NULL
+				DROP TABLE #TEMP_SCM_LGTM_PLAN_TP_CD
+
+			-- 임시확인용테이블 중복제거
+			--IF OBJECT_ID(N'dbo.#TEMP_SCM_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION', N'U') IS NOT NULL
+			--	DROP TABLE #TEMP_SCM_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION
+			IF OBJECT_ID(N'dbo.#TEMP_"
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_EXCEL_UPLOAD","274412347","3","SCM_LGTM_OCCR_RSN_CD', N'U') IS NOT NULL
+				DROP TABLE #TEMP_SCM_LGTM_OCCR_RSN_CD
+			IF OBJECT_ID(N'dbo.#TEMP_SCM_LGTM_EXHT_TP_CD', N'U') IS NOT NULL
+				DROP TABLE #TEMP_SCM_LGTM_EXHT_TP_CD
+			IF OBJECT_ID(N'dbo.#TEMP_SCM_LGTM_PLAN_TP_CD', N'U') IS NOT NULL
+				DROP TABLE #TEMP_SCM_LGTM_PLAN_TP_CD
+			-- 2.4 발생사유 / 소진방안을 입력하십시오 : 특정 ITEM_TYPE의 EXHT_TP_CD일 경우 수정을 하면 안되는 것으로 보인다.
+			-- 해당 임시테이블
+			--CREATE TABLE #TEMP_SCM_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION(
+			--	ITEM_TYPE         NVARCHAR(100),
+			--	EXHT_TP_CD		  NVARCHAR(100),
+			--);
+
+			-- 2.5 잘못된 발생사유 유형입니다. : 입력된 발생사유가 등록되지 않은 사유 일 경우
+			-- Lookup에 등록된 발생사유 데이터.
+			CREATE TABLE #TEMP_SCM_LGTM_OCCR_RSN_CD(
+				CODE         NVARCHAR(100),
+				NAME		 NVARCHAR(100),
+			);
+
+			-- 2.6 잘못된 소진방안 유형입니다. : 입력된 소진방안이 등록되지 않은 사유 일 경우
+			-- Lookup에 등록된 소진방안 데이터.
+			CREATE TABLE #TEMP_SCM_LGTM_EXHT_TP_CD(
+				CODE         NVARCHAR(100),
+				NAME	     NVARCHAR(100),
+			);
+
+			CREATE TABLE #TEMP_SCM_LGTM_PLAN_TP_CD(
+				CODE         NVARCHAR(100),
+				NAME		 NVARCHAR(100),
+			);
+
+			--INSERT INTO #TEMP_SCM_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION
+			--EXEC SCP0115_GET_LGTM_ITEM_TYPE_QTY_INPUT_EXCEPTION
+
+			INSERT INTO #TEMP_SCM_LGTM_OCCR_RSN_CD
+			EXEC SCP0115_GET_COMBOBOX_DATA 'SCM_LGTM_PCY_INV_OCCR_RSN_CD','Y'
+
+			INSERT INTO #TEMP_SCM_LGTM_EXHT_TP_CD
+			EXEC SCP0115_GET_COMBOBOX_DATA 'SCM_LGTM_PCY_EXHT_TP_CD','Y'
+
+			INSERT INTO #TEMP_SCM_LGTM_PLAN_TP_CD
+			EXEC SCP0115_GET_COMBOBOX_DATA 'SCM_LGTM_PCY_INV_PLAN_TYPE','Y'
+
+
+-----------------------------------------------프로시저에서 사용되는 공용 임시테이블 - 종료-----------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------Validation Check 시작 ---------------------------------------------
+
+	IF ISNULL(@p_mode, 0) = 0 BEGIN
+		DECLARE @V_VALIDATION_CHECK_RESULT NVARCHAR(200) = '';
+
+
+		-- 1-2. 업로드 Header 의 컬럼 정합성 검증 - 필수 컬럼 입력 했는지 여부
+		-- (ex: 필수컬럼 누락 여부, UI에서 메시지 주고 리턴 필요)
+		SELECT @V_VALIDATION_CHECK_RESULT = (
+
+			--주요 컬럼 (필수 이외 프로시저에서 사용될수있는 컬럼)
+		CASE WHEN ISNULL(X.ATTRIBUTE3,'FAIL') <>  N'구분'           THEN  N'H1 셀은 Data TP CD 으로 입력해주세요.'
+ 			 WHEN ISNULL(X.ATTRIBUTE4,'FAIL') <>  N'발생사유'           THEN  N'I1 셀은 SRCE TP CD 으로 입력해주세요.'
+ 			 WHEN ISNULL(X.ATTRIBUTE6,'FAIL') <>  N'소진방안'            THEN  N'J1 셀은 Item Type 으로 입력해주세요.'
+ 			 WHEN ISNULL(X.ATTRIBUTE8,'FAIL') <>  N'COMPANY ID'           THEN  N'K1 셀은 발생 유형 으로 입력해주세요.'
+ 			 WHEN ISNULL(X.ATTRIBUTE9,'FAIL') <> 'DIV'           THEN  N'L1 셀은 Group Code 으로 입력해주세요.'
+ 			 WHEN ISNULL(X.ATTRIBUTE10,'FAIL') <> N'플랜트코드' THEN  N'M1 셀은 Marketing Department 으로 입력해주세요.'
+ 			 WHEN ISNULL(X.ATTRIBUTE12,'FAIL') <> N'아이템코드' THEN  N'M1 셀은 Marketing Department 으로 입력해주세요.'
+			 WHEN ISNULL(X.ATTRIBUTE16,'FAIL') <> N'수량' THEN  N'M1 셀은 Marketing Department 으로 입력해주세요.'
+			 WHEN ISNULL(X.ATTRIBUTE18,'FAIL') <> N'계획일자' THEN  N'M1 셀은 Marketing Department 으로 입력해주세요.'
+
+			 ELSE 'SUCCESS'
+
+		END )  
+		FROM [SCM_ADM_EXCEL_UPLOAD] X WITH(NOLOCK)
+		WHERE X.PROGRAM_ID = @v_program_id -- 'SCP0115' 
+		AND X.SHEET_NAME = @v_sheet_name   -- 'Long Term Stock Management' 
+		AND X.CREATED_BY = @p_created_by   -- 'dsiol'
+		AND CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date -- '2025-03-25 09:48:37.000' 
+		AND UPLOAD_STATUS_CODE = '@TITLE'		
+
+		IF @V_VALIDATION_CHECK_RESULT <> 'SUCCESS'
+		BEGIN
+			------------------------------------------------------------------------
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = N'Validation Check - UI - ERROR : 필수컬럼 누락 여부.';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			---------------------------------------------------------"
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_EXCEL_UPLOAD","274412347","4","---------------
+			RAISERROR(@V_VALIDATION_CHECK_RESULT, 11, 1); -- UI에 Error Msg 를 보여준다.
+			RETURN -1;									  -- 프로시저를 종료 한다.
+		END
+		BEGIN
+			------------------------------------------------------------------------
+			SET @v_log_type = '5';
+			SET @v_log_message = '########## Validation Check - UI - SUCCESS ##########';
+			SET @v_description = N'필수컬럼 누락 여부. - PASS';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			------------------------------------------------------------------------
+		END
+		-- DB Validation
+		-- 2.1 업로드한 데이터의 Key값 중복여부 검증
+		-- 2.2 업로드한 데이터의 컬럼 최대사이즈 초과여부 검증
+		-- 2.3 업로드한 데이터의 월별 수량 값에 숫자가 아닌 데이터가 존재하는지 검증
+		-- 2.4 발생사유 / 소진방안을 입력하십시오
+		-- 2.5 잘못된 발생사유 유형입니다.
+		-- 2.6 잘못된 소진방안 유형입니다.
+		-- 2.7 월별 수량 입력 불가.
+		-- 2.8 if (qty < 0) Qty must be greater than or equal to 0
+		-- 2.9 월별 입력한 수량의 합계는, Quantity를 초과할 수 없습니다.
+		-- Validation 결과가 전부 Success 인 경우, 적재 테이블에 데이터 반영
+		DECLARE @V_ERR_CNT INT = 0
+		DECLARE @v_err_message NVARCHAR(500) = '';
+
+		-- 2.2 업로드한 데이터의 컬럼 최대사이즈 초과여부 검증
+			--Error Message에 열을 표시하기위한 사전 작업
+			DECLARE @V_HEADER1 NVARCHAR(50) = (SELECT ATTRIBUTE7  FROM [SCM_ADM_EXCEL_UPLOAD] WITH(NOLOCK) WHERE PROGRAM_ID = @v_program_id AND SHEET_NAME = @v_sheet_name AND CREATED_BY = @p_created_by AND CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date AND UPLOAD_STATUS_CODE = '@TITLE')
+			DECLARE @V_HEADER2 NVARCHAR(50) = (SELECT ATTRIBUTE8  FROM [SCM_ADM_EXCEL_UPLOAD] WITH(NOLOCK) WHERE PROGRAM_ID = @v_program_id AND SHEET_NAME = @v_sheet_name AND CREATED_BY = @p_created_by AND CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date AND UPLOAD_STATUS_CODE = '@TITLE')
+			DECLARE @V_HEADER3 NVARCHAR(50) = (SELECT ATTRIBUTE9  FROM [SCM_ADM_EXCEL_UPLOAD] WITH(NOLOCK) WHERE PROGRAM_ID = @v_program_id AND SHEET_NAME = @v_sheet_name AND CREATED_BY = @p_created_by AND CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date AND UPLOAD_STATUS_CODE = '@TITLE')
+			DECLARE @V_HEADER4 NVARCHAR(50) = (SELECT ATTRIBUTE4  FROM [SCM_ADM_EXCEL_UPLOAD] WITH(NOLOCK) WHERE PROGRAM_ID = @v_program_id AND SHEET_NAME = @v_sheet_name AND CREATED_BY = @p_created_by AND CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date AND UPLOAD_STATUS_CODE = '@TITLE')
+			DECLARE @V_HEADER5 NVARCHAR(50) = (SELECT ATTRIBUTE6  FROM [SCM_ADM_EXCEL_UPLOAD] WITH(NOLOCK) WHERE PROGRAM_ID = @v_program_id AND SHEET_NAME = @v_sheet_name AND CREATED_BY = @p_created_by AND CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date AND UPLOAD_STATUS_CODE = '@TITLE')
+			DECLARE @V_HEADER6 NVARCHAR(50) = (SELECT ATTRIBUTE15 FROM [SCM_ADM_EXCEL_UPLOAD] WITH(NOLOCK) WHERE PROGRAM_ID = @v_program_id AND SHEET_NAME = @v_sheet_name AND CREATED_BY = @p_created_by AND CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date AND UPLOAD_STATUS_CODE = '@TITLE')
+			DECLARE @V_HEADER7 NVARCHAR(50) = (SELECT ATTRIBUTE5  FROM [SCM_ADM_EXCEL_UPLOAD] WITH(NOLOCK) WHERE PROGRAM_ID = @v_program_id AND SHEET_NAME = @v_sheet_name AND CREATED_BY = @p_created_by AND CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date AND UPLOAD_STATUS_CODE = '@TITLE')
+
+		-- 테이블중복제거
+			IF OBJECT_ID(N'tempdb..#TEMP_COLUMN_SIZE', N'U') IS NOT NULL
+				DROP TABLE #TEMP_COLUMN_SIZE
+
+			-- 임시확인용테이블 중복제거
+			IF OBJECT_ID(N'dbo.#TEMP_COLUMN_SIZE', N'U') IS NOT NULL
+				DROP TABLE #TEMP_COLUMN_SIZE
+
+				CREATE TABLE #TEMP_COLUMN_SIZE(
+					COLUMN_NAME         NVARCHAR(100),
+					SIZE				INT
+				);
+
+			INSERT INTO #TEMP_COLUMN_SIZE
+			SELECT A.COLUMN_NAME, Character_Maximum_Length  
+			FROM INFORMATION_SCHEMA.ColumnS A WITH(NOLOCK) 
+			WHERE A.Table_Name = 'SCP_ANL_LGTM_PCY_INV_MGMT_PLAN' 
+			  AND Character_Maximum_Length IS NOT NULL
+			  select * from #TEMP_COLUMN_SIZE
+
+			--DECLARE @vPLAN_START_YYYYMMDD AS INT = (SELECT SIZE  FROM #TEMP_COLUMN_SIZE A WITH(NOLOCK) WHERE A.COLUMN_NAME = 'PLAN_START"
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_EXCEL_UPLOAD","274412347","5","_YYYYMMDD')
+			DECLARE @vPLAN_TP_CD          AS INT = (SELECT SIZE  FROM #TEMP_COLUMN_SIZE A WITH(NOLOCK) WHERE A.COLUMN_NAME = 'PLAN_TP_CD')
+			DECLARE @vDATA_TP_CD          AS INT = (SELECT SIZE  FROM #TEMP_COLUMN_SIZE A WITH(NOLOCK) WHERE A.COLUMN_NAME = 'DATA_TP_CD')
+			DECLARE @vSRCE_TP_CD          AS INT = (SELECT SIZE  FROM #TEMP_COLUMN_SIZE A WITH(NOLOCK) WHERE A.COLUMN_NAME = 'SRCE_TP_CD')
+			DECLARE @vDIVISION_ID         AS INT = (SELECT SIZE  FROM #TEMP_COLUMN_SIZE A WITH(NOLOCK) WHERE A.COLUMN_NAME = 'DIVISION_ID')
+			DECLARE @vPLANT_ID            AS INT = (SELECT SIZE  FROM #TEMP_COLUMN_SIZE A WITH(NOLOCK) WHERE A.COLUMN_NAME = 'PLANT_ID')
+			DECLARE @vITEM_ID             AS INT = (SELECT SIZE  FROM #TEMP_COLUMN_SIZE A WITH(NOLOCK) WHERE A.COLUMN_NAME = 'ITEM_ID')
+			--DECLARE @vPLAN_YYYYMM         AS INT = (SELECT SIZE  FROM #TEMP_COLUMN_SIZE A WITH(NOLOCK) WHERE A.COLUMN_NAME = 'PLAN_YYYYMM')
+			DECLARE @vCOMPANY_ID          AS INT = (SELECT SIZE  FROM #TEMP_COLUMN_SIZE A WITH(NOLOCK) WHERE A.COLUMN_NAME = 'COMPANY_ID')
+			DECLARE @V_MSG2 NVARCHAR(100) = N' Over of Column Size'
+			
+			BEGIN
+			UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+			SET    UPLOAD_STATUS_CODE = 'ERROR'
+				 , MESSAGE_TEXT       = CASE WHEN DATALENGTH(ATTRIBUTE3)  > @vPLAN_TP_CD  THEN N'행: ' + ATTRIBUTE100 + N' , 열: ' + @V_HEADER1 + N'▷' + ATTRIBUTE3  + SPACE(1)+CONVERT(NVARCHAR,DATALENGTH(ATTRIBUTE3))  +' > ' + CONVERT(NVARCHAR,@vPLAN_TP_CD)  +  @V_MSG2
+											 WHEN DATALENGTH(ATTRIBUTE4)  > @vDATA_TP_CD  THEN N'행: ' + ATTRIBUTE100 + N' , 열: ' + @V_HEADER2 + N'▷' + ATTRIBUTE4  + SPACE(1)+CONVERT(NVARCHAR,DATALENGTH(ATTRIBUTE4))  +' > ' + CONVERT(NVARCHAR,@vDATA_TP_CD)  +  @V_MSG2
+											 WHEN DATALENGTH(ATTRIBUTE6)  > @vSRCE_TP_CD  THEN N'행: ' + ATTRIBUTE100 + N' , 열: ' + @V_HEADER3 + N'▷' + ATTRIBUTE6  + SPACE(1)+CONVERT(NVARCHAR,DATALENGTH(ATTRIBUTE6))  +' > ' + CONVERT(NVARCHAR,@vSRCE_TP_CD)  +  @V_MSG2
+											 WHEN DATALENGTH(ATTRIBUTE9)  > @vDIVISION_ID THEN N'행: ' + ATTRIBUTE100 + N' , 열: ' + @V_HEADER4 + N'▷' + ATTRIBUTE9  + SPACE(1)+CONVERT(NVARCHAR,DATALENGTH(ATTRIBUTE9))  +' > ' + CONVERT(NVARCHAR,@vDIVISION_ID) +  @V_MSG2
+											 WHEN DATALENGTH(ATTRIBUTE10)  > @vPLANT_ID    THEN N'행: ' + ATTRIBUTE100 + N' , 열: ' + @V_HEADER5 + N'▷' + ATTRIBUTE10  + SPACE(1)+CONVERT(NVARCHAR,DATALENGTH(ATTRIBUTE10))  +' > ' + CONVERT(NVARCHAR,@vPLANT_ID)    +  @V_MSG2
+											 WHEN DATALENGTH(ATTRIBUTE12) > @vITEM_ID     THEN N'행: ' + ATTRIBUTE100 + N' , 열: ' + @V_HEADER6 + N'▷' + ATTRIBUTE12 + SPACE(1)+CONVERT(NVARCHAR,DATALENGTH(ATTRIBUTE12)) +' > ' + CONVERT(NVARCHAR,@vITEM_ID)     +  @V_MSG2
+											 WHEN DATALENGTH(ATTRIBUTE8)  > @vCOMPANY_ID  THEN N'행: ' + ATTRIBUTE100 + N' , 열: ' + @V_HEADER7 + N'▷' + ATTRIBUTE8  + SPACE(1)+CONVERT(NVARCHAR,DATALENGTH(ATTRIBUTE8))  +' > ' + CONVERT(NVARCHAR,@vCOMPANY_ID)  +  @V_MSG2
+										END
+			WHERE  PROGRAM_ID         = @v_program_id
+			AND    SHEET_NAME         = @v_sheet_name
+			AND    CREATED_BY         = @p_created_by
+			AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+			AND    UPLOAD_STATUS_CODE = 'UPLOAD'
+			AND  (DATALENGTH(ATTRIBUTE3)  > @vPLAN_TP_CD
+			  OR  DATALENGTH(ATTRIBUTE4)  > @vDATA_TP_CD
+			  OR  DATALENGTH(ATTRIBUTE6)  > @vSRCE_TP_CD
+			  OR  DATALENGTH(ATTRIBUTE9)  > @vDIVISION_ID
+			  OR  DATALENGTH(ATTRIBUTE10)  > @vPLANT_ID
+			  OR  DATALENGTH(ATTRIBUTE12) > @vITEM_ID
+			  OR  DATALENGTH(ATTRIBUTE8)  > @vCOMPANY_ID
+			     )
+			END
+
+			SELECT @V_ERR_CNT = COUNT(1) FROM [dbo].[SCM_ADM_EXCEL_UPLOAD] WITH(NOLOCK)
+			WHERE  PROGRAM_ID         = @v_program_id
+			AND    SHEET_NAME         = @v_sheet_name
+			AND    CREATED_BY         = @p_created_by
+			AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date
+			AND    UPLOAD_STATUS_CODE = 'ERROR'
+			AND    MESSAGE_TEXT       LIKE '%' + @V_MSG2 + '%'
+
+			IF @V_ERR_CNT > 0
+			BEGIN
+			-----------------------------------------------------------"
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_EXCEL_UPLOAD","274412347","6","-------------
+			--scm2_mgr.xLOG('ERROR Key Duplication ', SQL%ROWCOUNT, 4, TRUE);
+			SET @v_log_type = '7';
+			SET @v_log_message = '########## Validation Check - DB - ERROR ##########';
+			SET @v_description = 'Over of Column Size - ' + CONVERT(NVARCHAR,@V_ERR_CNT) + N'건';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			------------------------------------------------------------------------
+			END;
+			ELSE
+			BEGIN
+			------------------------------------------------------------------------
+			--scm2_mgr.xLOG('ERROR Key Duplication ', SQL%ROWCOUNT, 4, TRUE);
+			SET @v_log_type = '7';
+			SET @v_log_message = '########## Validation Check - DB - SUCCESS ##########';
+			SET @v_description = 'Over of Column Size - PASS';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			------------------------------------------------------------------------
+			END
+
+			IF @V_ERR_CNT > 0
+			BEGIN
+			------------------------------------------------------------------------
+			--scm2_mgr.xLOG('ERROR Key Duplication ', SQL%ROWCOUNT, 4, TRUE);
+			SET @v_log_type = '8';
+			SET @v_log_message = '########## Validation Check - DB - ERROR ##########';
+			SET @v_description = 'The quantity value contains non-numeric data. - ' + CONVERT(NVARCHAR,@V_ERR_CNT) + N'건';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			------------------------------------------------------------------------
+			END;
+			ELSE
+			BEGIN
+			------------------------------------------------------------------------
+			--scm2_mgr.xLOG('ERROR Key Duplication ', SQL%ROWCOUNT, 4, TRUE);
+			SET @v_log_type = '8';
+			SET @v_log_message = '########## Validation Check - DB - SUCCESS ##########';
+			SET @v_description = 'The quantity value contains non-numeric data. - PASS';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			------------------------------------------------------------------------
+			END
+
+
+
+			-- 2.4 발생사유 / 소진방안을 입력하십시오
+			-- 2.5 잘못된 발생사유 유형입니다.
+			-- 2.6 잘못된 소진방안 유형입니다.
+			-- 2.7 월별 수량 입력 불가.
+			--Error Message에 열을 표시하기위한 사전 작업
+			--DECLARE @V_HEADER21  NVARCHAR(50) = (SELECT ATTRIBUTE42 FROM [SCM_ADM_EXCEL_UPLOAD] WITH(NOLOCK) WHERE PROGRAM_ID = @v_program_id AND SHEET_NAME = @v_sheet_name AND CREATED_BY = @p_created_by AND CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date AND UPLOAD_STATUS_CODE = '@TITLE')
+			--DECLARE @V_HEADER22  NVARCHAR(50) = (SELECT ATTRIBUTE44 FROM [SCM_ADM_EXCEL_UPLOAD] WITH(NOLOCK) WHERE PROGRAM_ID = @v_program_id AND SHEET_NAME = @v_sheet_name AND CREATED_BY = @p_created_by AND CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date AND UPLOAD_STATUS_CODE = '@TITLE')
+			--DECLARE @V_HEADER23  NVARCHAR(50) = (SELECT ATTRIBUTE10 FROM [SCM_ADM_EXCEL_UPLOAD] WITH(NOLOCK) WHERE PROGRAM_ID = @v_program_id AND SHEET_NAME = @v_sheet_name AND CREATED_BY = @p_created_by AND CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date AND UPLOAD_STATUS_CODE = '@TITLE')
+
+			--DECLARE @V_MSG4_1 NVARCHAR(100) = N'발생사유를 입력하십시오'     -- OCCR_RSN_CD(ATTRIBUTE42)
+			--DECLARE @V_MSG4_2 NVARCHAR(100) = N'소진방안을 입력하십시오'     -- EXHT_TP_CD(ATTRIBUTE44)
+			--DECLARE @V_MSG5   NVARCHAR(100) = N'잘못된 발생사유 유형입니다.' -- OCCR_RSN_CD(ATTRIBUTE42)
+			--DECLARE @V_MSG6   NVARCHAR(100) = N'잘못된 소진방안 유형입니다.' -- EXHT_TP_CD(ATTRIBUTE44)
+			--DECLARE @V_MSG7   NVARCHAR(100) = N'월별 수량 입력 불가.'        -- ITEM_TYPE(ATTRIBUTE10) / EXHT_TP_CD(ATTRIBUTE44)
+			--Validation Check 결과 ERROR가 있었는지 마지막으로 확인
+			SELECT @v_count = COUNT(1)
+			FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T  WITH(NOLOCK)
+			"
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_EXCEL_UPLOAD","274412347","7","WHERE  T.PROGRAM_ID         = @v_program_id
+			AND    T.SHEET_NAME         = @v_sheet_name
+			AND    T.CREATED_BY         = @p_created_by
+			AND    CONVERT(NVARCHAR(40), T.CREATION_DATE, 121) = @v_creation_date
+			AND    T.UPLOAD_STATUS_CODE = 'ERROR';
+
+			IF @v_count = 0
+			BEGIN
+				-- Validation 결과가 전부 Success 인 경우, 적재 테이블에 데이터 반영
+				-- (※참고 - 모든 데이터가 SUCCESS 일 경우 다음 로직에서 저장을 실행한다.)
+				BEGIN
+				UPDATE [dbo].[SCM_ADM_EXCEL_UPLOAD] 
+				SET    UPLOAD_STATUS_CODE = 'SUCCESS'
+				WHERE  PROGRAM_ID         = @v_program_id
+				AND    SHEET_NAME         = @v_sheet_name
+				AND    CREATED_BY         = @p_created_by
+				AND    CONVERT(NVARCHAR(40), CREATION_DATE, 121)  = @v_creation_date
+				AND    UPLOAD_STATUS_CODE = 'UPLOAD';	
+				END;
+
+				BEGIN
+				----------------------------------------------------------------------------
+				--scm2_mgr.xLOG('SUCCESS              ', SQL%ROWCOUNT, 10, TRUE);
+				SET @v_log_type = '11';
+				SET @v_log_message = '########## SUCCESS ##########';
+				SET @v_description = 'Validation Check - SUCCESS';
+				SET @d_event_date = SYSDATETIME();
+				EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+				----------------------------------------------------------------------------
+				END;
+			END;
+------------------------------------------------------------------Validation Check 종료후 작성 - 종료------------------------------------------------------------------
+	END;
+---------------------------------------------Validation Check 종료 ---------------------------------------------
+
+	--Validation Check 결과 ERROR가 있었는지 마지막으로 확인
+	SELECT @v_count = COUNT(1)
+	FROM   [dbo].[SCM_ADM_EXCEL_UPLOAD] T  WITH(NOLOCK)
+	WHERE  T.PROGRAM_ID         = @v_program_id
+	AND    T.SHEET_NAME         = @v_sheet_name
+	AND    T.CREATED_BY         = @p_created_by
+	AND    CONVERT(NVARCHAR(40), T.CREATION_DATE, 121) = @v_creation_date
+	AND    T.UPLOAD_STATUS_CODE = 'ERROR';
+
+	--ERROR가 있을 경우 로그를 남긴 후 종료 한다.
+	IF @v_count > 0
+	BEGIN
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = N'Validation Check - ERROR: ' + CONVERT(NVARCHAR, @v_count) + N'건';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			RETURN -1;	
+	END
+
+	IF @p_mode > 0 AND @v_count = 0	BEGIN	
+	
+-------------------------------------------------------------임시테이블 생성 시작-------------------------------------------------------------
+		BEGIN
+
+		----------------------------------------------------------------------------
+		SET @v_log_type = '12';
+		SET @v_log_message = '########## SUCCESS ##########';
+		SET @v_description = N'#TEMP_SCP_ANL_LGTM_INV_MGMT_PLAN 임시테이블 생성 시작';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		----------------------------------------------------------------------------
+
+		-- 테이블중복제거
+		IF OBJECT_ID(N'tempdb..#TEMP_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN', N'U') IS NOT NULL
+			DROP TABLE #TEMP_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN
+
+		-- 임시확인용테이블 중복제거
+		IF OBJECT_ID(N'dbo.#TEMP_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN', N'U') IS NOT NULL
+			DROP TABLE #TEMP_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN
+
+			CREATE TABLE #TEMP_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN(
+				[REQUEST_NO] [varchar](300) NOT NULL,
+				[COMPANY_ID] [nvarchar](10) NULL,
+				[PLAN_START_YYYYMMDD] [nvarchar](8) NOT NULL,
+				[PLAN_TP_CD] [nvarchar](20) NOT NULL,
+				[DIVISION_ID] [nvarchar](30) NOT NULL,
+				[PLANT_ID] [nvarchar](30) NOT NULL,
+				[ITEM_ID] [nvarchar](50) NOT NULL,
+				[PLAN_YYYYMMDD] [nvarchar](8) NOT NULL,
+				[OCCR_RSN_CD] [nvarchar](20) NOT NULL,
+				[OCCR_RSN_CTN] [nvarchar](200) NULL,
+				[EXHT_TP_CD] [nvarchar](20) NOT NULL,
+				[EXHT_TP_CTN] [nvarchar](200) NULL,
+				[QTY] [numeric](30, "
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_EXCEL_UPLOAD","274412347","8","8) NULL,
+				[SUPPLIER_CODE] [nvarchar](20) NOT NULL
+			);
+			
+		INSERT INTO #TEMP_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN
+		SELECT * 
+		FROM
+		(
+			SELECT 
+			 A.REQUEST_NO
+			, A.COMPANY_ID
+			, A.PLAN_START_YYYYMMDD 
+			, (SELECT CODE FROM #TEMP_SCM_LGTM_PLAN_TP_CD WHERE NAME = A.PLAN_TP_NM) AS PLAN_TP_CD 
+			, A.DIVISION_ID
+			, A.PLANT_ID
+			, A.ITEM_ID
+			, A.PLAN_YYYYMMDD
+			, (SELECT CODE FROM #TEMP_SCM_LGTM_OCCR_RSN_CD WHERE NAME = A.OCCR_RSN_NM) AS OCCR_RSN_CD
+			, A.OCCR_RSN_CTN
+			, (SELECT CODE FROM #TEMP_SCM_LGTM_EXHT_TP_CD WHERE NAME = A.EXHT_TP_NM) AS EXHT_TP_CD
+			, A.EXHT_TP_CTN
+			, A.QTY
+			, A.SUPPLIER_CODE
+
+			FROM
+			(
+				SELECT ATTRIBUTE1  AS REQUEST_NO
+					 , ATTRIBUTE2  AS PLAN_START_YYYYMMDD
+					 , ATTRIBUTE3  AS PLAN_TP_NM
+					 , ATTRIBUTE4  AS OCCR_RSN_NM
+					 , ATTRIBUTE5  AS OCCR_RSN_CTN
+					 , ATTRIBUTE6  AS EXHT_TP_NM
+					 , ATTRIBUTE7  AS EXHT_TP_CTN
+					 , ATTRIBUTE8  AS COMPANY_ID
+					 , ATTRIBUTE9  AS DIVISION_ID
+					 , ATTRIBUTE10 AS PLANT_ID
+					 , ATTRIBUTE12 AS ITEM_ID
+					 , ATTRIBUTE16 AS QTY
+					 , ATTRIBUTE18 AS PLAN_YYYYMMDD
+					 , ATTRIBUTE19 AS SUPPLIER_CODE
+					 , CREATION_DATE
+				FROM(
+					SELECT X.ATTRIBUTE1,  X.ATTRIBUTE2,  X.ATTRIBUTE3,  X.ATTRIBUTE4,  X.ATTRIBUTE5 
+						 , X.ATTRIBUTE6,  X.ATTRIBUTE7,  X.ATTRIBUTE8,  X.ATTRIBUTE9,  X.ATTRIBUTE10, X.ATTRIBUTE11 
+						 , X.ATTRIBUTE12, X.ATTRIBUTE13, X.ATTRIBUTE14, X.ATTRIBUTE15, X.ATTRIBUTE16, X.ATTRIBUTE17 
+						 , X.ATTRIBUTE18, X.ATTRIBUTE19, X.ATTRIBUTE20, X.ATTRIBUTE21, X.ATTRIBUTE22, X.ATTRIBUTE23 
+						 , X.ATTRIBUTE24, X.ATTRIBUTE25, X.ATTRIBUTE26, X.ATTRIBUTE27, X.ATTRIBUTE28, X.ATTRIBUTE29 
+						 , X.ATTRIBUTE30, X.ATTRIBUTE31, X.ATTRIBUTE32, X.ATTRIBUTE33, X.ATTRIBUTE34, X.ATTRIBUTE35 
+						 , X.ATTRIBUTE36, X.ATTRIBUTE37, X.ATTRIBUTE38, X.ATTRIBUTE39, X.ATTRIBUTE40, X.ATTRIBUTE41 
+						 , X.ATTRIBUTE42, X.ATTRIBUTE43, X.ATTRIBUTE44, X.ATTRIBUTE45, X.ATTRIBUTE46, X.ATTRIBUTE47 
+						 , X.ATTRIBUTE48, X.ATTRIBUTE49, X.ATTRIBUTE50, X.ATTRIBUTE51, X.ATTRIBUTE52, X.ATTRIBUTE53 
+						 , X.ATTRIBUTE54, X.ATTRIBUTE55, X.ATTRIBUTE56, X.ATTRIBUTE57, X.ATTRIBUTE58, X.ATTRIBUTE59 
+						 , X.ATTRIBUTE60, X.ATTRIBUTE61, X.ATTRIBUTE62, X.ATTRIBUTE63, X.ATTRIBUTE64, X.ATTRIBUTE65 
+						 , X.CREATION_DATE 
+					FROM [SCM_ADM_EXCEL_UPLOAD] X WITH(NOLOCK) 
+					WHERE X.PROGRAM_ID = @v_program_id
+					  AND X.SHEET_NAME = @v_sheet_name
+					  AND X.CREATED_BY = @p_created_by
+					  AND CONVERT(NVARCHAR(40), CREATION_DATE, 121) = @v_creation_date 
+					  AND UPLOAD_STATUS_CODE <> '@TITLE'
+				) A
+			) A
+		) A
+		WHERE A.PLAN_START_YYYYMMDD <> ''
+
+		END;
+
+		----------------------------------------------------------------------------
+		SET @v_log_type = '13';
+		SET @v_log_message = '########## SUCCESS ##########';
+		SET @v_description = N'#TEMP_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN 임시테이블 생성 성공';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		BEGIN TRANSACTION SCP0115_EXCEL_UPLOAD;
+		BEGIN TRY
+			BEGIN
+
+        ----------------------------------------------------------------------------
+		SET @v_log_type = '14';
+		SET @v_log_message = '########## START - MERGE - SCP_ANL_LGTM_INV_MGMT_PLAN ##########';
+		SET @v_description = @p_mode; --CONVERT(CHAR(30), @v_creation_date, 121);
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ----------------------------------------------------------------------------		
+
+		MERGE INTO SCP_ANL_LGTM_PCY_INV_MGMT_PLAN AS A
+		USING (SELECT * FROM #TEMP_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN WITH(NOLOCK)) AS B
+		   ON (
+		     	A.REQUEST_NO				= B.REQUEST_NO
+			AND	A.PLAN_START_YYYYMMDD		= B.PLAN_START_YYYYMMDD
+			)
+		 --WHEN MATCHED AND B.QTY <> 0 THEN
+		WHEN MATCHED AND B.QTY >= 0 THEN
+		   "
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_EXCEL_UPLOAD","274412347","9","UPDATE SET 
+			 A.OCCR_RSN_CTN		    = B.OCCR_RSN_CTN
+			,A.EXHT_TP_CTN			= B.EXHT_TP_CTN 
+			,A.QTY					= B.QTY
+			,A.OCCR_RSN_CD			= B.OCCR_RSN_CD
+			,A.EXHT_TP_CD			= B.EXHT_TP_CD		
+			,A.PLAN_TP_CD			= B.PLAN_TP_CD
+			,A.COMPANY_ID			= B.COMPANY_ID
+			,A.DIVISION_ID			= B.DIVISION_ID
+			,A.ITEM_ID				= B.ITEM_ID
+			,A.PLAN_YYYYMMDD		= B.PLAN_YYYYMMDD
+			,A.PLANT_ID				= B.PLANT_ID
+			,A.LAST_UPDATED_BY		= @p_created_by
+			,A.LAST_UPDATE_DATE	    = SYSDATETIME()
+		 --WHEN NOT MATCHED AND B.QTY <> 0 THEN
+		WHEN NOT MATCHED AND B.QTY >= 0 THEN
+		   INSERT           
+				(
+					PLAN_START_YYYYMMDD
+					, PLAN_TP_CD
+					, DIVISION_ID
+					, PLANT_ID
+					, ITEM_ID
+					, PLAN_YYYYMMDD
+					, OCCR_RSN_CD
+					, OCCR_RSN_CTN
+					, EXHT_TP_CD
+					, EXHT_TP_CTN
+					, QTY
+					, SUPPLIER_CODE
+					, CREATE_DATE
+					, CREATED_BY
+					, LAST_UPDATE_DATE
+					, LAST_UPDATED_BY
+					, REQUEST_NO
+					, COMPANY_ID
+
+			   )
+		   VALUES
+	   			(
+					B.PLAN_START_YYYYMMDD
+					, B.PLAN_TP_CD
+					, B.DIVISION_ID
+					, B.PLANT_ID
+					, B.ITEM_ID
+					, B.PLAN_YYYYMMDD
+					, B.OCCR_RSN_CD
+					, B.OCCR_RSN_CTN
+					, B.EXHT_TP_CD
+					, B.EXHT_TP_CTN
+					, B.QTY
+					, B.SUPPLIER_CODE
+					, @v_creation_date
+					, @p_created_by
+					, @v_creation_date
+					, @p_created_by
+					, B.REQUEST_NO
+					, B.COMPANY_ID
+			   );
+
+        ----------------------------------------------------------------------------
+		SET @v_log_type = '15';
+		SET @v_log_message = '########## END - MERGE - SCP_ANL_LGTM_INV_MGMT_PLAN ##########';
+		SET @v_description = @p_mode; --CONVERT(CHAR(30), @v_creation_date, 121);
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        ----------------------------------------------------------------------------
+			END;
+
+		    COMMIT WORK;
+        END TRY
+		BEGIN CATCH
+		    ROLLBACK TRANSACTION SCP0115_EXCEL_UPLOAD;
+		----------------------------------------------------------------------------
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '@p_mode' + @p_mode + ', Error Message : ' + ERROR_MESSAGE(); --CONVERT(CHAR(30), @v_creation_date, 121);
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		----------------------------------------------------------------------------
+		END CATCH
+
+		BEGIN
+		----------------------------------------------------------------------------
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = @p_mode; --CONVERT(CHAR(30), @v_creation_date, 121);
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		----------------------------------------------------------------------------
+		END;	
+	END;
+END
+"
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_GET_COMBOBOX_DATA","1168931436","1","
+/*
+ * Program ID   : SCP0115_GET_COMBOBOX_DATA
+ * Description  : Get data for  발생사유 유형, 소진방안 유형ComboBox
+ * Program History
+ *===================================================================================================
+ * Date         In Charge		Description
+ *===================================================================================================
+ *2024/10/11 	Quoc Tan (tanvq1)	Add new procedure to get Master Data for comboBox
+ */
+
+CREATE PROCEDURE [dbo].[SCP0115_GET_COMBOBOX_DATA]
+	@p_lookup_type			NVARCHAR(100),
+	@p_valid_yn			NVARCHAR(1) = 'Y'
+	
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	IF @p_lookup_type = 'SCM_LGTM_PCY_INV_PLAN_TYPE' 
+			BEGIN
+					select segment1 AS CODE, TRIM(attribute1) AS [NAME]
+					from   SCM_ADM_LOOKUP_MASTER_DETAIL
+					where  lookup_type = @p_lookup_type
+					AND    VALID_YN = @p_valid_yn;
+			END
+	ELSE 
+			BEGIN
+					select Distinct segment2 AS CODE, TRIM(attribute1) AS [NAME]
+					from   SCM_ADM_LOOKUP_MASTER_DETAIL
+					where  lookup_type = @p_lookup_type
+					AND    VALID_YN = @p_valid_yn
+			END
+	
+END"
+"2025-04-01 00:00:00.330","LGCE_SCMDEV","P ","SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN","957454685","4","D' THEN
+							--		DELETE
+							WHEN MATCHED --AND  @v_active_flag <> 'D' 
+							THEN
+									 UPDATE SET 
+												occr_rsn_ctn		= @v_occr_rsn_ctn
+											   ,exht_tp_ctn			= @v_exht_tp_ctn 
+											   ,qty					= @v_qty
+											   ,last_updated_by		= @v_user_id
+											   ,last_update_date	= sysdatetime()
+											   ,occr_rsn_cd			= @v_occr_rsn_cd
+											   ,exht_tp_cd			= @v_exht_tp_cd		
+											   ,plan_tp_cd			= @v_plan_tp_cd
+											   ,company_id			= @v_company_id
+											   ,division_id			= @v_division_id
+											   ,item_id				= @v_item_id
+											   ,plan_yyyymmdd		= @v_plan_yyyymmdd
+											   ,plant_id			= @v_plant_id
+							WHEN NOT MATCHED THEN
+								 INSERT ( request_no
+										  ,plan_start_yyyymmdd
+										  ,plan_tp_cd
+										  ,company_id
+										  ,division_id
+										  ,plant_id
+										  ,item_id
+										  ,occr_rsn_cd
+										  ,occr_rsn_ctn
+										  ,exht_tp_cd
+										  ,exht_tp_ctn
+										  ,plan_yyyymmdd
+										  ,qty
+										  ,supplier_code
+										  ,created_by
+										  ,create_date
+										  ,last_updated_by
+										  ,last_update_date
+										)
+								 VALUES (  --@v_request_no-- 
+											@v_plan_start_yyyymmdd + '-' + CAST(ISNULL( (SELECT MAX(CAST(SUBSTRING(request_no, CHARINDEX('-', request_no) + 1, LEN(request_no)) AS INT))FROM [dbo].[SCP_ANL_LGTM_PCY_INV_MGMT_PLAN]), 0) + 1 AS NVARCHAR)
+										   ,@v_plan_start_yyyymmdd
+										   ,@v_plan_tp_cd
+										   ,@v_company_id
+										   ,@v_division_id 
+										   ,@v_plant_id
+										   ,@v_item_id
+										   ,@v_occr_rsn_cd
+										   ,@v_occr_rsn_ctn
+										   ,@v_exht_tp_cd
+										   ,@v_exht_tp_ctn
+										   ,@v_plan_yyyymmdd
+										   ,@v_qty
+										   ,@v_supplier_code
+										   ,@v_user_id
+										   ,sysdatetime()
+										   ,@v_user_id
+										   ,sysdatetime()
+										);
+					  END
+			END		
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			COMMIT TRAN;
+
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code;
+
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+		END CATCH;
+	END;
+
+
+
+
+
+"
+"2025-03-29 00:00:01.030","LGCE_SCMDEV","P ","SCP0115_GET_POLICY_INV_MGMT_PLAN","477452975","1","
+/*
+ * Program ID   : SCP0115_GET_POLICY_INV_MGMT_PLAN 
+ * Description  : SCP0115 Policy Inv Management Main View
+ * Program History
+ *===================================================================================================
+ * Date         In Charge			Description
+ *===================================================================================================
+ * 2024/10/12   Haru			    Add new procedures to get Main view Data
+ * 2024/12/31	TanVQ1				New Column REQUEST_NO
+ */
+
+CREATE PROCEDURE [dbo].[SCP0115_GET_POLICY_INV_MGMT_PLAN]
+	@p_plan_date			NVARCHAR(8),
+	@p_division_id			NVARCHAR(500),	
+	@p_category_id			NVARCHAR(500),
+	@p_item_id				NVARCHAR(500),
+	@p_plant_id				NVARCHAR(500),
+	@p_from_yyyymmdd		NVARCHAR(8),
+	@p_to_yyyymmdd			NVARCHAR(8)
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	--SELECT  'W' + CAST(DATEPART(WEEK, CONVERT(DATE, CAST(CAST(PLAN_START_YYYYMMDD AS CHAR(8)) AS DATE), 112)) AS VARCHAR) + '-' + FORMAT(CONVERT(DATE, CAST(CAST(PLN.PLAN_START_YYYYMMDD AS CHAR(8)) AS DATE), 112), 'yyyyMMdd') AS PLAN_DATE
+	SELECT	PLN.REQUEST_NO AS REQUEST_NO
+			,PLN.PLAN_START_YYYYMMDD		AS PLAN_DATE
+       		,PLN.PLAN_TP_CD             AS PLAN_TP_CD
+       		,( SELECT ATTRIBUTE1
+           	   FROM   SCM_ADM_LOOKUP_MASTER_DETAIL
+           	   WHERE  LOOKUP_TYPE      = 'SCM_LGTM_PCY_INV_PLAN_TYPE'
+           	   AND    SEGMENT1         = PLN.PLAN_TP_CD
+           	   AND     VALID_YN = 'Y'  
+       		)                       AS PLAN_TP_DESC
+       		,PLN.OCCR_RSN_CD        AS OCCR_RSN_CD
+       		,( SELECT ATTRIBUTE1
+           	   FROM   SCM_ADM_LOOKUP_MASTER_DETAIL
+           	   WHERE  LOOKUP_TYPE      = 'SCM_LGTM_PCY_INV_OCCR_RSN_CD'
+           	   AND    SEGMENT1         = PLN.PLAN_TP_CD
+           	   AND    SEGMENT2         = PLN.OCCR_RSN_CD
+           	   AND     VALID_YN = 'Y'  
+       		)                       AS OCCR_RSN_DESC
+       		,PLN.OCCR_RSN_CTN       AS OCCR_RSN_CTN
+       		,PLN.EXHT_TP_CD         AS EXHT_TP_CD
+       		,( SELECT ATTRIBUTE1
+           	   FROM   SCM_ADM_LOOKUP_MASTER_DETAIL
+           	   WHERE  LOOKUP_TYPE      = 'SCM_LGTM_PCY_EXHT_TP_CD'
+           	   AND    SEGMENT1         = PLN.PLAN_TP_CD
+           	   AND    SEGMENT2         = PLN.EXHT_TP_CD
+           	   AND     VALID_YN = 'Y'  
+       		)                       AS EXHT_TP_DESC
+       		,PLN.EXHT_TP_CTN        AS EXHT_TP_CTN
+			,PLN.COMPANY_ID			AS COMPANY_ID
+			,PLN.DIVISION_ID		AS DIVISION_ID
+       		,PLN.PLANT_ID           AS PLANT_ID
+       		,SMS.PLANT_DESC         AS PLANT_DESC
+       		,PLN.ITEM_ID            AS ITEM_ID
+       		,SIM.ITEM_NAME          AS ITEM_NAME
+       		,STCM.CLASS_ID          AS ITEM_CLASS
+       		,STCM.CLASS_NAME        AS ITEM_CLASS_NAME
+       		,PLN.QTY                AS QTY 
+       		,SIM.ITEM_UOM           AS UOM
+       		,PLN.PLAN_YYYYMMDD      AS ETA
+       		,PLN.SUPPLIER_CODE      AS SUPPLIER_CODE
+       		,''                     AS SUPPLIER_NAME
+       		,PLN.LAST_UPDATED_BY        AS USER_ID
+       		,PLN.LAST_UPDATE_DATE   AS UPDATE_DATE
+	FROM    SCP_ANL_LGTM_PCY_INV_MGMT_PLAN PLN WITH(NOLOCK)
+       		LEFT OUTER JOIN (   SELECT  PLANT_ID, MAX(COMPANY_ID) AS COMPANY_ID, MAX(DIVISION_ID) AS DIVISION_ID, MAX(SM.SITE_DESCRIPTION) PLANT_DESC
+                           		FROM    SCM_MST_SITE SM WITH(NOLOCK)
+                           		WHERE   1=1
+                           		AND     SM.SITE_TYPE   = 'PLANT'  
+                           		GROUP BY PLANT_ID ) SMS  
+               		ON   SMS.DIVISION_ID = PLN.DIVISION_ID
+               		AND  SMS.PLANT_ID    = PLN.PLANT_ID
+       		LEFT OUTER JOIN SCM_ITEM_M_SN SIM WITH(NOLOCK)
+           		ON  SIM.DIVISION_ID = SMS.DIVISION_ID
+           		AND SIM.COMPANY_ID  = SMS.COMPANY_ID
+           		AND SIM.ITEM_ID     = PLN.ITEM_ID
+       		LEFT OUTER JOIN SCM_MST_ITEM_CLASS_M STCM WITH(NOLOCK)
+           		ON  STCM.CLASS_ID "
+"2025-03-29 00:00:01.030","LGCE_SCMDEV","P ","SCP0115_GET_POLICY_INV_MGMT_PLAN","477452975","2","  = SIM.ITEM_CLASS
+	WHERE	PLN.PLAN_START_YYYYMMDD = @p_plan_date
+	AND		(ISNULL(@p_division_id, '') = '' OR PLN.DIVISION_ID IN (SELECT token FROM dbo.String_Split(@p_division_id,',')) )
+	AND		(ISNULL(@p_plant_id, '') = '' OR PLN.PLANT_ID IN (SELECT token FROM dbo.String_Split(@p_plant_id,',')) )
+	AND		(ISNULL(@p_category_id, '') = '' OR PLN.PLAN_TP_CD IN (SELECT token FROM dbo.String_Split(@p_category_id,',')) )
+	AND		(ISNULL(@p_item_id, '') = '' OR PLN.ITEM_ID  IN (SELECT token FROM dbo.String_Split(@p_item_id,',')) )
+	AND		PLN.PLAN_YYYYMMDD >= @p_from_yyyymmdd 
+	AND		PLN.PLAN_YYYYMMDD <= @p_to_yyyymmdd
+	ORDER BY PLN.PLAN_START_YYYYMMDD    			
+       		,PLN.PLAN_TP_CD
+       		,PLAN_TP_DESC
+			,PLN.OCCR_RSN_CD
+       		,OCCR_RSN_DESC
+       		,PLN.OCCR_RSN_CTN 
+       		,PLN.EXHT_TP_CD 
+       		,EXHT_TP_DESC
+       		,PLN.EXHT_TP_CTN  
+			,PLN.COMPANY_ID
+			,PLN.DIVISION_ID
+       		,PLN.PLANT_ID      
+       		,SMS.PLANT_DESC        
+       		,PLN.ITEM_ID       
+       		,SIM.ITEM_NAME     
+       		,STCM.CLASS_ID        
+       		,STCM.CLASS_NAME    
+
+END
+
+"
+"2025-03-13 00:00:01.937","LGCE_SCMDEV","P ","SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN","957454685","1","/*
+ * Program ID   : [SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN]
+ * Description  : Save data SCP0115 Policy Inv Management
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2024/10/14   TanVQ1			Adding new function for saving data for SCP0115 Policy Inv Management
+ * 2025/01/02	TanVQ1			Table dbo.SCP_ANL_LGTM_PCY_INV_MGMT_PLAN schema changed
+ */
+-- EXEC [SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN] 'INSERT_EXCEL', '', '20250307', 'S', '81', 'WA00', 'ERCA00068AA', 'OCCR_RSN_50', '니치아 정책재고', 'EXHT_TP_03', 'GEM사 판매', '20250415', '253400', '', 'victory25'
+CREATE PROCEDURE [dbo].[SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN] 
+
+	-- Add the parameters for the stored procedure here	
+	@p_active_flag			NVARCHAR(MAX),
+	@p_request_no			NVARCHAR(MAX),
+	@p_plan_start_yyyymmdd	NVARCHAR(MAX),
+	@p_plan_tp_cd			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_plant_id				NVARCHAR(MAX),
+	@p_item_id				NVARCHAR(MAX),
+	@p_occr_rsn_cd			NVARCHAR(MAX),
+	@p_occr_rsn_ctn			NVARCHAR(MAX),
+	@p_exht_tp_cd			NVARCHAR(MAX),
+	@p_exht_tp_ctn			NVARCHAR(MAX),
+	@p_plan_yyyymmdd		NVARCHAR(MAX),
+	@p_qty					NVARCHAR(MAX),
+	@p_supplier_code		NVARCHAR(MAX),
+	@p_user_id				NVARCHAR(MAX)
+AS
+
+BEGIN
+	SET NOCOUNT ON;
+
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_request_no			NVARCHAR(MAX);
+	DECLARE @v_plan_start_yyyymmdd	NVARCHAR(MAX);
+	DECLARE @v_plan_tp_cd			NVARCHAR(MAX)
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_plant_id				NVARCHAR(MAX);
+	DECLARE @v_item_id				NVARCHAR(MAX);
+	DECLARE @v_occr_rsn_cd			NVARCHAR(MAX);
+	DECLARE @v_occr_rsn_ctn			NVARCHAR(MAX);
+	DECLARE @v_exht_tp_cd			NVARCHAR(MAX);
+	DECLARE @v_exht_tp_ctn			NVARCHAR(MAX);
+	DECLARE @v_plan_yyyymmdd			NVARCHAR(MAX);
+	DECLARE @v_qty					numeric(30,8);
+	DECLARE @v_user_id				NVARCHAR(MAX);
+	DECLARE @v_supplier_code		NVARCHAR(MAX);
+	DECLARE @v_qty_item				NVARCHAR(MAX);
+
+	SET @v_active_flag = NULL;
+	SET @v_request_no = NULL;
+	SET @v_plan_start_yyyymmdd = NULL;
+	SET @v_plan_tp_cd = NULL;
+	SET @v_division_id = NULL;
+	SET @v_item_id = NULL;
+	SET @v_occr_rsn_cd = NULL;	 
+	SET @v_occr_rsn_ctn = NULL;	
+	SET @v_exht_tp_cd = NULL;	
+	SET @v_exht_tp_ctn = NULL;	
+	SET @v_supplier_code = NULL;
+	SET @v_plan_yyyymmdd = NULL;	 
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '|'
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+
+		BEGIN TRY
+
+	    -- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		--SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@p_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;  
+			
+				SET @v_plan_start_yyyym"
+"2025-03-13 00:00:01.937","LGCE_SCMDEV","P ","SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN","957454685","2","mdd = [dbo].[SCM_ARR_SPL_VAL](@p_plan_start_yyyymmdd, @v_delimiter , @mst_loop_cnt) ;    
+				
+				SET @v_plan_tp_cd = [dbo].[SCM_ARR_SPL_VAL](@p_plan_tp_cd, @v_delimiter , @mst_loop_cnt) ; 				 
+				
+				SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 
+
+				SET @v_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_plant_id, @v_delimiter , @mst_loop_cnt) ; 
+				
+				SET @v_item_id = [dbo].[SCM_ARR_SPL_VAL](@p_item_id, @v_delimiter , @mst_loop_cnt) ;    
+				
+				SET @v_occr_rsn_cd = [dbo].[SCM_ARR_SPL_VAL](@p_occr_rsn_cd, @v_delimiter , @mst_loop_cnt);
+				
+				SET @v_occr_rsn_ctn = [dbo].[SCM_ARR_SPL_VAL](@p_occr_rsn_ctn, @v_delimiter , @mst_loop_cnt) ;  
+
+				SET @v_exht_tp_cd = [dbo].[SCM_ARR_SPL_VAL](@p_exht_tp_cd, @v_delimiter , @mst_loop_cnt);
+				
+				SET @v_exht_tp_ctn = [dbo].[SCM_ARR_SPL_VAL](@p_exht_tp_ctn, @v_delimiter, @mst_loop_cnt) ; 
+				
+				SET @v_plan_yyyymmdd = [dbo].[SCM_ARR_SPL_VAL](@p_plan_yyyymmdd, @v_delimiter, @mst_loop_cnt) ; 
+				
+				SET @v_qty_item	 = [dbo].[SCM_ARR_SPL_VAL](@p_qty, @v_delimiter, @mst_loop_cnt)
+				IF  @v_qty_item	<> 'NULL' AND @v_qty_item	<> ''
+					BEGIN
+						SET @v_qty = CAST (@v_qty_item  AS numeric(30,8) ); 						
+					END
+				ELSE
+					BEGIN
+						SET @v_qty = 0						
+					END
+
+				SET @v_supplier_code = [dbo].[SCM_ARR_SPL_VAL](@p_supplier_code, @v_delimiter , @mst_loop_cnt) ; 				 
+
+				SET @v_user_id = [dbo].[SCM_ARR_SPL_VAL](@p_user_id, @v_delimiter, @mst_loop_cnt) ; 
+				
+				SET @v_request_no = [dbo].[SCM_ARR_SPL_VAL](@p_request_no, @v_delimiter , @mst_loop_cnt) ; 
+				
+				SELECT @v_request_no;
+
+				IF @v_request_no = 'NULL' OR @v_request_no = '' OR len(@v_request_no) <= 1 
+					BEGIN
+						SET @v_request_no = @v_plan_start_yyyymmdd+'-'+ CAST( NEXT VALUE FOR SEQ1_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN AS NVARCHAR);	
+					END
+				--
+						
+			END
+
+			IF @mst_loop_cnt > 0 
+				BEGIN 		
+							MERGE INTO [dbo].[SCP_ANL_LGTM_PCY_INV_MGMT_PLAN] A
+							USING (
+									SELECT 
+										@v_request_no				as request_no,
+										@v_plan_start_yyyymmdd		as plan_start_yyyymmdd
+										--@v_plan_tp_cd				as plan_tp_cd,
+										--@v_division_id				as division_id, 
+										--@v_item_id					as item_id, 
+										--@v_plan_yyyymmdd			as plan_yyyymmdd,
+										--@v_plant_id					as plant_id,
+										--@v_occr_rsn_cd 				as occr_rsn_cd,
+										--@v_exht_tp_cd				as exht_tp_cd
+							) B
+							ON(
+										A.request_no				= B.request_no
+									AND	A.plan_start_yyyymmdd		= B.plan_start_yyyymmdd
+									--AND A.plan_tp_cd				= B.plan_tp_cd
+									--AND A.division_id				= B.division_id
+									--AND A.item_id					= B.item_id
+									--AND A.plan_yyyymmdd				= B.plan_yyyymmdd
+									--AND A.plant_id					= B.plant_id
+									--AND A.occr_rsn_cd				= B.occr_rsn_cd
+									--AND A.exht_tp_cd				= B.exht_tp_cd
+							  )			
+							--WHEN MATCHED AND  @v_active_flag = 'D' THEN
+							--		DELETE
+							WHEN MATCHED 
+							--AND  @v_active_flag <> 'D'
+							THEN
+									 UPDATE SET 
+												occr_rsn_ctn		= @v_occr_rsn_ctn
+											   ,exht_tp_ctn			= @v_exht_tp_ctn 
+											   ,qty					= @v_qty
+											   ,last_updated_by		= @v_user_id
+											   ,last_update_date	= sysdatetime()
+											   ,occr_rsn_cd			= @v_occr_rsn_cd
+											   ,exht_tp_cd			= @v_exht_tp_cd		
+											   ,plan_tp_cd			= @v_plan_tp_cd
+											   ,division_id			= @v_division_id
+											   ,item_id				= @v_item_id
+											   ,plan_yyyymmdd		= @v_plan_yyyymmdd
+											   ,plant_id			= @v_plant_id
+							WHEN NOT MATCHED THEN
+								 INSERT ( request_no
+										  ,plan_start_yyyymmdd
+										  ,plan_tp_cd
+										  ,division_id
+										  ,plant_id
+										  ,item_id
+										  ,occr_rsn_cd
+										  ,occr_rsn_ctn
+										  ,exht_tp_cd
+										  ,exht_tp_ctn
+										  ,plan_yyyymmdd
+										  ,qty
+										  ,supplier"
+"2025-03-13 00:00:01.937","LGCE_SCMDEV","P ","SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN","957454685","3","_code
+										  ,created_by
+										  ,create_date
+										  ,last_updated_by
+										  ,last_update_date
+										)
+								 VALUES (   @v_request_no --@v_plan_start_yyyymmdd + '-' + CAST(ISNULL( (SELECT MAX(CAST(SUBSTRING(request_no, CHARINDEX('-', request_no) + 1, LEN(request_no)) AS INT))FROM [dbo].[SCP_ANL_LGTM_PCY_INV_MGMT_PLAN]), 0) + 1 AS NVARCHAR)
+										   ,@v_plan_start_yyyymmdd
+										   ,@v_plan_tp_cd
+										   ,@v_division_id 
+										   ,@v_plant_id
+										   ,@v_item_id
+										   ,@v_occr_rsn_cd
+										   ,@v_occr_rsn_ctn
+										   ,@v_exht_tp_cd
+										   ,@v_exht_tp_ctn
+										   ,@v_plan_yyyymmdd
+										   ,@v_qty
+										   ,@v_supplier_code
+										   ,@v_user_id
+										   ,sysdatetime()
+										   ,@v_user_id
+										   ,sysdatetime()
+										);
+					  END
+				
+
+
+
+			ELSE    --단일 ROW 일때
+			 
+				BEGIN      
+				print 1;
+					SET @v_active_flag = @p_active_flag        
+					SET @p_active_flag = NULL 
+
+					SET @v_plan_start_yyyymmdd = @p_plan_start_yyyymmdd        
+					SET @p_plan_start_yyyymmdd = NULL 				 
+
+					SET @v_plan_tp_cd = @p_plan_tp_cd        
+					SET @p_plan_tp_cd = NULL 			
+				
+					SET @v_division_id = @p_division_id
+					SET @p_division_id = NULL
+
+					SET @v_division_id = @p_division_id        
+					SET @p_division_id = NULL     
+
+					SET @v_plant_id = @p_plant_id
+					SET @p_plant_id = NULL
+					
+					SET @v_item_id = @p_item_id        
+					SET @p_item_id = NULL    
+
+					SET @v_occr_rsn_cd = @p_occr_rsn_cd		
+					SET @p_occr_rsn_cd = NULL
+
+					SET @v_occr_rsn_ctn = @p_occr_rsn_ctn 
+					SET @p_occr_rsn_ctn = NULL
+
+					SET @v_exht_tp_cd = @p_exht_tp_cd					
+					SET @p_exht_tp_cd = NULL
+
+					SET @v_exht_tp_ctn = @p_exht_tp_ctn 
+					SET @p_exht_tp_ctn = NULL
+
+					SET @v_plan_yyyymmdd = @p_plan_yyyymmdd
+					SET @p_plan_yyyymmdd = NULL
+															
+					IF @p_qty <> 'NULL' AND @p_qty<> ''
+						BEGIN
+							SET @v_qty = CAST (@p_qty  AS numeric(30,8))
+						END
+					ELSE
+						BEGIN
+							SET @v_qty = 0
+						END
+
+					SET @v_supplier_code = @p_supplier_code
+					SET @p_supplier_code = NULL
+
+					SET @v_user_id = @p_user_id 
+					SET @p_user_id = NULL
+
+					SET @v_request_no = @p_request_no     
+					IF @v_request_no = 'NULL' OR @v_request_no = ' ' OR len(@v_request_no) = 0
+						BEGIN
+							SET @v_request_no = @p_plan_start_yyyymmdd+'-'+ CAST( NEXT VALUE FOR SEQ1_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN AS NVARCHAR);							
+						END
+					SET @p_request_no = NULL 
+
+
+							MERGE INTO [dbo].[SCP_ANL_LGTM_PCY_INV_MGMT_PLAN] A
+							USING (
+									SELECT 
+										@v_request_no				as request_no,
+										@v_plan_start_yyyymmdd		as plan_start_yyyymmdd
+										--@v_plan_tp_cd				as plan_tp_cd,
+										--@v_division_id				as division_id, 
+										--@v_item_id					as item_id, 
+										--@v_plan_yyyymmdd			as plan_yyyymmdd,
+										--@v_plant_id					as plant_id,
+										--@v_occr_rsn_cd 				as occr_rsn_cd,
+										--@v_exht_tp_cd				as exht_tp_cd
+							) B
+							ON(
+										A.request_no				= B.request_no
+									AND	A.plan_start_yyyymmdd		= B.plan_start_yyyymmdd
+									--AND A.plan_tp_cd				= B.plan_tp_cd
+									--AND A.division_id				= B.division_id
+									--AND A.item_id					= B.item_id
+									--AND A.plan_yyyymmdd				= B.plan_yyyymmdd
+									--AND A.plant_id					= B.plant_id
+									--AND A.occr_rsn_cd				= B.occr_rsn_cd
+									--AND A.exht_tp_cd				= B.exht_tp_cd
+							  )			
+							--WHEN MATCHED AND  @v_active_flag = 'D' THEN
+							--		DELETE
+							WHEN MATCHED --AND  @v_active_flag <> 'D' 
+							THEN
+									 UPDATE SET 
+												occr_rsn_ctn		= @v_occr_rsn_ctn
+											   ,exht_tp_ctn			= @v_exht_tp_ctn 
+											   ,qty					= @v_qty
+											   ,last_updated_by		= @v_user_id
+											   ,last_update_date	= sysdatetime()
+											   ,occr_rsn_cd			= @v_o"
+"2025-03-13 00:00:01.937","LGCE_SCMDEV","P ","SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN","957454685","4","ccr_rsn_cd
+											   ,exht_tp_cd			= @v_exht_tp_cd		
+											   ,plan_tp_cd			= @v_plan_tp_cd
+											   ,division_id			= @v_division_id
+											   ,item_id				= @v_item_id
+											   ,plan_yyyymmdd		= @v_plan_yyyymmdd
+											   ,plant_id			= @v_plant_id
+							WHEN NOT MATCHED THEN
+								 INSERT ( request_no
+										  ,plan_start_yyyymmdd
+										  ,plan_tp_cd
+										  ,division_id
+										  ,plant_id
+										  ,item_id
+										  ,occr_rsn_cd
+										  ,occr_rsn_ctn
+										  ,exht_tp_cd
+										  ,exht_tp_ctn
+										  ,plan_yyyymmdd
+										  ,qty
+										  ,supplier_code
+										  ,created_by
+										  ,create_date
+										  ,last_updated_by
+										  ,last_update_date
+										)
+								 VALUES (  --@v_request_no-- 
+											@v_plan_start_yyyymmdd + '-' + CAST(ISNULL( (SELECT MAX(CAST(SUBSTRING(request_no, CHARINDEX('-', request_no) + 1, LEN(request_no)) AS INT))FROM [dbo].[SCP_ANL_LGTM_PCY_INV_MGMT_PLAN]), 0) + 1 AS NVARCHAR)
+										   ,@v_plan_start_yyyymmdd
+										   ,@v_plan_tp_cd
+										   ,@v_division_id 
+										   ,@v_plant_id
+										   ,@v_item_id
+										   ,@v_occr_rsn_cd
+										   ,@v_occr_rsn_ctn
+										   ,@v_exht_tp_cd
+										   ,@v_exht_tp_ctn
+										   ,@v_plan_yyyymmdd
+										   ,@v_qty
+										   ,@v_supplier_code
+										   ,@v_user_id
+										   ,sysdatetime()
+										   ,@v_user_id
+										   ,sysdatetime()
+										);
+					  END
+			END		
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			COMMIT TRAN;
+
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code;
+
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+		END CATCH;
+	END;
+
+
+
+
+
+"
+"2025-07-10 00:00:01.263","LGCE_SCMDEV","P ","SCP0115_GET_POLICY_INV_MGMT_PLAN_DATE","1808933716","1","CREATE PROCEDURE [dbo].[SCP0115_GET_POLICY_INV_MGMT_PLAN_DATE]
+
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	SELECT DISTINCT  PLAN_START_YYYYMMDD AS [CODE], 
+	FORMAT(CONVERT(DATE, CAST(CAST(PLAN_START_YYYYMMDD AS CHAR(8)) AS DATE), 112), 'yyyy-MM-dd') + ' (W' + CAST(DATEPART(WEEK, CONVERT(DATE, CAST(CAST(PLAN_START_YYYYMMDD AS CHAR(8)) AS DATE), 112)) AS VARCHAR) + ')' AS [NAME]
+	--FROM  SCP_ANL_LGTM_PCY_INV_MGMT_PLAN
+	FROM   SCP_ANL_LGTM_PCY_INV_MGMT_PLAN WITH(NOLOCK)
+    WHERE  1=1
+	AND   CONVERT(DATETIME, PLAN_START_YYYYMMDD ) >= GETDATE() - 365
+	Order By CODE desc
+	;
+
+END"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0115_GET_POLICY_INV_MGMT_PLAN_DATE","1808933716","1","CREATE PROCEDURE [dbo].[SCP0115_GET_POLICY_INV_MGMT_PLAN_DATE]
+
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	SELECT DISTINCT  PLAN_START_YYYYMMDD AS [CODE], 
+	FORMAT(CONVERT(DATE, CAST(CAST(PLAN_START_YYYYMMDD AS CHAR(8)) AS DATE), 112), 'yyyy-MM-dd') + ' (W' + CAST(DATEPART(WEEK, CONVERT(DATE, CAST(CAST(PLAN_START_YYYYMMDD AS CHAR(8)) AS DATE), 112)) AS VARCHAR) + ')' AS [NAME]
+	--FROM  SCP_ANL_LGTM_PCY_INV_MGMT_PLAN
+	FROM SCM_LGTM_INV_PSI_SUMMARY WITH(NOLOCK)
+    WHERE  1=1
+	AND   CONVERT(DATETIME, PLAN_START_YYYYMMDD ) >= GETDATE() - 365
+	Order By CODE desc
+	;
+
+END"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0115_GET_POLICY_INV_MGMT_PLAN","477452975","1","
+/*
+ * Program ID   : SCP0115_GET_POLICY_INV_MGMT_PLAN 
+ * Description  : SCP0115 Policy Inv Management Main View
+ * Program History
+ *===================================================================================================
+ * Date         In Charge			Description
+ *===================================================================================================
+ * 2024/10/12   Haru			    Add new procedures to get Main view Data
+ * 2024/12/31	TanVQ1				New Column REQUEST_NO
+ */
+
+CREATE PROCEDURE [dbo].[SCP0115_GET_POLICY_INV_MGMT_PLAN]
+	@p_plan_date			NVARCHAR(8),
+	@p_division_id			NVARCHAR(500),	
+	@p_category_id			NVARCHAR(500),
+	@p_item_id				NVARCHAR(500),
+	@p_plant_id				NVARCHAR(500),
+	@p_from_yyyymmdd		NVARCHAR(8),
+	@p_to_yyyymmdd			NVARCHAR(8)
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	--SELECT  'W' + CAST(DATEPART(WEEK, CONVERT(DATE, CAST(CAST(PLAN_START_YYYYMMDD AS CHAR(8)) AS DATE), 112)) AS VARCHAR) + '-' + FORMAT(CONVERT(DATE, CAST(CAST(PLN.PLAN_START_YYYYMMDD AS CHAR(8)) AS DATE), 112), 'yyyyMMdd') AS PLAN_DATE
+	SELECT	PLN.REQUEST_NO AS REQUEST_NO
+			,PLN.PLAN_START_YYYYMMDD		AS PLAN_DATE
+       		,PLN.PLAN_TP_CD             AS PLAN_TP_CD
+       		,( SELECT ATTRIBUTE1
+           	   FROM   SCM_ADM_LOOKUP_MASTER_DETAIL
+           	   WHERE  LOOKUP_TYPE      = 'SCM_LGTM_PCY_INV_PLAN_TYPE'
+           	   AND    SEGMENT1         = PLN.PLAN_TP_CD
+           	   AND     VALID_YN = 'Y'  
+       		)                       AS PLAN_TP_DESC
+       		,PLN.OCCR_RSN_CD        AS OCCR_RSN_CD
+       		,( SELECT ATTRIBUTE1
+           	   FROM   SCM_ADM_LOOKUP_MASTER_DETAIL
+           	   WHERE  LOOKUP_TYPE      = 'SCM_LGTM_PCY_INV_OCCR_RSN_CD'
+           	   AND    SEGMENT1         = PLN.PLAN_TP_CD
+           	   AND    SEGMENT2         = PLN.OCCR_RSN_CD
+           	   AND     VALID_YN = 'Y'  
+       		)                       AS OCCR_RSN_DESC
+       		,PLN.OCCR_RSN_CTN       AS OCCR_RSN_CTN
+       		,PLN.EXHT_TP_CD         AS EXHT_TP_CD
+       		,( SELECT ATTRIBUTE1
+           	   FROM   SCM_ADM_LOOKUP_MASTER_DETAIL
+           	   WHERE  LOOKUP_TYPE      = 'SCM_LGTM_PCY_EXHT_TP_CD'
+           	   AND    SEGMENT1         = PLN.PLAN_TP_CD
+           	   AND    SEGMENT2         = PLN.EXHT_TP_CD
+           	   AND     VALID_YN = 'Y'  
+       		)                       AS EXHT_TP_DESC
+       		,PLN.EXHT_TP_CTN        AS EXHT_TP_CTN
+			,PLN.DIVISION_ID		AS DIVISION_ID
+       		,PLN.PLANT_ID           AS PLANT_ID
+       		,SMS.PLANT_DESC         AS PLANT_DESC
+       		,PLN.ITEM_ID            AS ITEM_ID
+       		,SIM.ITEM_NAME          AS ITEM_NAME
+       		,STCM.CLASS_ID          AS ITEM_CLASS
+       		,STCM.CLASS_NAME        AS ITEM_CLASS_NAME
+       		,PLN.QTY                AS QTY 
+       		,SIM.ITEM_UOM           AS UOM
+       		,PLN.PLAN_YYYYMMDD      AS ETA
+       		,PLN.SUPPLIER_CODE      AS SUPPLIER_CODE
+       		,''                     AS SUPPLIER_NAME
+       		,PLN.LAST_UPDATED_BY        AS USER_ID
+       		,PLN.LAST_UPDATE_DATE   AS UPDATE_DATE
+	FROM    SCP_ANL_LGTM_PCY_INV_MGMT_PLAN PLN WITH(NOLOCK)
+       		LEFT OUTER JOIN (   SELECT  PLANT_ID, MAX(COMPANY_ID) AS COMPANY_ID, MAX(DIVISION_ID) AS DIVISION_ID, MAX(SM.SITE_DESCRIPTION) PLANT_DESC
+                           		FROM    SCM_MST_SITE SM WITH(NOLOCK)
+                           		WHERE   1=1
+                           		AND     SM.SITE_TYPE   = 'PLANT'  
+                           		GROUP BY PLANT_ID ) SMS  
+               		ON   SMS.DIVISION_ID = PLN.DIVISION_ID
+               		AND  SMS.PLANT_ID    = PLN.PLANT_ID
+       		LEFT OUTER JOIN SCM_ITEM_M_SN SIM WITH(NOLOCK)
+           		ON  SIM.DIVISION_ID = SMS.DIVISION_ID
+           		AND SIM.COMPANY_ID  = SMS.COMPANY_ID
+           		AND SIM.ITEM_ID     = PLN.ITEM_ID
+       		LEFT OUTER JOIN SCM_MST_ITEM_CLASS_M STCM WITH(NOLOCK)
+           		ON  STCM.CLASS_ID   = SIM.ITEM_CLASS
+	WHERE	PLN.PLAN_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0115_GET_POLICY_INV_MGMT_PLAN","477452975","2","START_YYYYMMDD = @p_plan_date
+	AND		(ISNULL(@p_division_id, '') = '' OR PLN.DIVISION_ID IN (SELECT token FROM dbo.String_Split(@p_division_id,',')) )
+	AND		(ISNULL(@p_plant_id, '') = '' OR PLN.PLANT_ID IN (SELECT token FROM dbo.String_Split(@p_plant_id,',')) )
+	AND		(ISNULL(@p_category_id, '') = '' OR PLN.PLAN_TP_CD IN (SELECT token FROM dbo.String_Split(@p_category_id,',')) )
+	AND		(ISNULL(@p_item_id, '') = '' OR PLN.ITEM_ID  IN (SELECT token FROM dbo.String_Split(@p_item_id,',')) )
+	AND		PLN.PLAN_YYYYMMDD >= @p_from_yyyymmdd 
+	AND		PLN.PLAN_YYYYMMDD <= @p_to_yyyymmdd
+	ORDER BY PLN.PLAN_START_YYYYMMDD    			
+       		,PLN.PLAN_TP_CD
+       		,PLAN_TP_DESC
+			,PLN.OCCR_RSN_CD
+       		,OCCR_RSN_DESC
+       		,PLN.OCCR_RSN_CTN 
+       		,PLN.EXHT_TP_CD 
+       		,EXHT_TP_DESC
+       		,PLN.EXHT_TP_CTN  
+			,PLN.DIVISION_ID
+       		,PLN.PLANT_ID      
+       		,SMS.PLANT_DESC        
+       		,PLN.ITEM_ID       
+       		,SIM.ITEM_NAME     
+       		,STCM.CLASS_ID        
+       		,STCM.CLASS_NAME    
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN","957454685","1","/*
+ * Program ID   : [SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN]
+ * Description  : Save data SCP0115 Policy Inv Management
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2024/10/14   TanVQ1			Adding new function for saving data for SCP0115 Policy Inv Management
+ * 2025/01/02	TanVQ1			Table dbo.SCP_ANL_LGTM_PCY_INV_MGMT_PLAN schema changed
+ */
+
+CREATE PROCEDURE [dbo].[SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN] 
+
+	-- Add the parameters for the stored procedure here	
+	@p_active_flag			NVARCHAR(MAX),
+	@p_request_no			NVARCHAR(MAX),
+	@p_plan_start_yyyymmdd	NVARCHAR(MAX),
+	@p_plan_tp_cd			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_plant_id				NVARCHAR(MAX),
+	@p_item_id				NVARCHAR(MAX),
+	@p_occr_rsn_cd			NVARCHAR(MAX),
+	@p_occr_rsn_ctn			NVARCHAR(MAX),
+	@p_exht_tp_cd			NVARCHAR(MAX),
+	@p_exht_tp_ctn			NVARCHAR(MAX),
+	@p_plan_yyyymmdd		NVARCHAR(MAX),
+	@p_qty					NVARCHAR(MAX),
+	@p_supplier_code		NVARCHAR(MAX),
+	@p_user_id				NVARCHAR(MAX)
+AS
+
+BEGIN
+	SET NOCOUNT ON;
+
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_request_no			NVARCHAR(MAX);
+	DECLARE @v_plan_start_yyyymmdd	NVARCHAR(MAX);
+	DECLARE @v_plan_tp_cd			NVARCHAR(MAX)
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_plant_id				NVARCHAR(MAX);
+	DECLARE @v_item_id				NVARCHAR(MAX);
+	DECLARE @v_occr_rsn_cd			NVARCHAR(MAX);
+	DECLARE @v_occr_rsn_ctn			NVARCHAR(MAX);
+	DECLARE @v_exht_tp_cd			NVARCHAR(MAX);
+	DECLARE @v_exht_tp_ctn			NVARCHAR(MAX);
+	DECLARE @v_plan_yyyymmdd			NVARCHAR(MAX);
+	DECLARE @v_qty					numeric(30,8);
+	DECLARE @v_user_id				NVARCHAR(MAX);
+	DECLARE @v_supplier_code		NVARCHAR(MAX);
+	DECLARE @v_qty_item				NVARCHAR(MAX);
+
+	SET @v_active_flag = NULL;
+	SET @v_request_no = NULL;
+	SET @v_plan_start_yyyymmdd = NULL;
+	SET @v_plan_tp_cd = NULL;
+	SET @v_division_id = NULL;
+	SET @v_item_id = NULL;
+	SET @v_occr_rsn_cd = NULL;	 
+	SET @v_occr_rsn_ctn = NULL;	
+	SET @v_exht_tp_cd = NULL;	
+	SET @v_exht_tp_ctn = NULL;	
+	SET @v_supplier_code = NULL;
+	SET @v_plan_yyyymmdd = NULL;	 
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '|'
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+
+		BEGIN TRY
+
+	    -- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@p_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;  
+				
+				SET @v_request_no = [dbo].[SCM_ARR_SPL_VAL](@p_request_no, @v_delimiter , @mst_loop_cnt) ; 
+
+				IF @v_request_no = 'NULL' OR @v_request_no = ''
+					BEGIN
+						SET @v_request_no = @v_plan_start_yyyymmdd+'-'+ CAST( NEXT VALUE FOR "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN","957454685","2","SEQ1_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN AS NVARCHAR);	
+					END
+				
+				SET @v_plan_start_yyyymmdd = [dbo].[SCM_ARR_SPL_VAL](@p_plan_start_yyyymmdd, @v_delimiter , @mst_loop_cnt) ;    
+				
+				SET @v_plan_tp_cd = [dbo].[SCM_ARR_SPL_VAL](@p_plan_tp_cd, @v_delimiter , @mst_loop_cnt) ; 				 
+				
+				SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 
+
+				SET @v_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_plant_id, @v_delimiter , @mst_loop_cnt) ; 
+				
+				SET @v_item_id = [dbo].[SCM_ARR_SPL_VAL](@p_item_id, @v_delimiter , @mst_loop_cnt) ;    
+				
+				SET @v_occr_rsn_cd = [dbo].[SCM_ARR_SPL_VAL](@p_occr_rsn_cd, @v_delimiter , @mst_loop_cnt);
+				
+				SET @v_occr_rsn_ctn = [dbo].[SCM_ARR_SPL_VAL](@p_occr_rsn_ctn, @v_delimiter , @mst_loop_cnt) ;  
+
+				SET @v_exht_tp_cd = [dbo].[SCM_ARR_SPL_VAL](@p_exht_tp_cd, @v_delimiter , @mst_loop_cnt);
+				
+				SET @v_exht_tp_ctn = [dbo].[SCM_ARR_SPL_VAL](@p_exht_tp_ctn, @v_delimiter, @mst_loop_cnt) ; 
+				
+				SET @v_plan_yyyymmdd = [dbo].[SCM_ARR_SPL_VAL](@p_plan_yyyymmdd, @v_delimiter, @mst_loop_cnt) ; 
+				
+				SET @v_qty_item	 = [dbo].[SCM_ARR_SPL_VAL](@p_qty, @v_delimiter, @mst_loop_cnt)
+				IF  @v_qty_item	<> 'NULL' AND @v_qty_item	<> ''
+					BEGIN
+						SET @v_qty = CAST (@v_qty_item  AS numeric(30,8) ); 						
+					END
+				ELSE
+					BEGIN
+						SET @v_qty = 0						
+					END
+
+				SET @v_supplier_code = [dbo].[SCM_ARR_SPL_VAL](@p_supplier_code, @v_delimiter , @mst_loop_cnt) ; 				 
+
+				SET @v_user_id = [dbo].[SCM_ARR_SPL_VAL](@p_user_id, @v_delimiter, @mst_loop_cnt) ; 
+				
+						
+			END
+			
+			IF @mst_loop_cnt > 0 
+				BEGIN 		
+							MERGE INTO [dbo].[SCP_ANL_LGTM_PCY_INV_MGMT_PLAN] A
+							USING (
+									SELECT 
+										@v_request_no				as request_no,
+										@v_plan_start_yyyymmdd		as plan_start_yyyymmdd
+										--@v_plan_tp_cd				as plan_tp_cd,
+										--@v_division_id				as division_id, 
+										--@v_item_id					as item_id, 
+										--@v_plan_yyyymmdd			as plan_yyyymmdd,
+										--@v_plant_id					as plant_id,
+										--@v_occr_rsn_cd 				as occr_rsn_cd,
+										--@v_exht_tp_cd				as exht_tp_cd
+							) B
+							ON(
+										A.request_no				= B.request_no
+									AND	A.plan_start_yyyymmdd		= B.plan_start_yyyymmdd
+									--AND A.plan_tp_cd				= B.plan_tp_cd
+									--AND A.division_id				= B.division_id
+									--AND A.item_id					= B.item_id
+									--AND A.plan_yyyymmdd				= B.plan_yyyymmdd
+									--AND A.plant_id					= B.plant_id
+									--AND A.occr_rsn_cd				= B.occr_rsn_cd
+									--AND A.exht_tp_cd				= B.exht_tp_cd
+							  )			
+							WHEN MATCHED AND  @v_active_flag = 'D' THEN
+									DELETE
+							WHEN MATCHED AND  @v_active_flag <> 'D' THEN
+									 UPDATE SET 
+												occr_rsn_ctn		= @v_occr_rsn_ctn
+											   ,exht_tp_ctn			= @v_exht_tp_ctn 
+											   ,qty					= @v_qty
+											   ,last_updated_by		= @v_user_id
+											   ,last_update_date	= sysdatetime()
+											   ,occr_rsn_cd			= @v_occr_rsn_cd
+											   ,exht_tp_cd			= @v_exht_tp_cd		
+											   ,plan_tp_cd			= @v_plan_tp_cd
+											   ,division_id			= @v_division_id
+											   ,item_id				= @v_item_id
+											   ,plan_yyyymmdd		= @v_plan_yyyymmdd
+											   ,plant_id			= @v_plant_id
+							WHEN NOT MATCHED THEN
+								 INSERT ( request_no
+										  ,plan_start_yyyymmdd
+										  ,plan_tp_cd
+										  ,division_id
+										  ,plant_id
+										  ,item_id
+										  ,occr_rsn_cd
+										  ,occr_rsn_ctn
+										  ,exht_tp_cd
+										  ,exht_tp_ctn
+										  ,plan_yyyymmdd
+										  ,qty
+										  ,supplier_code
+										  ,created_by
+										  ,create_date
+										  ,last_updated_by
+										  ,last_update_date
+										)
+								 VALUES (   @v_request_no --@v_plan_start_yyyymmdd + '-' + CAST(ISNULL( (SELECT MAX(CAST(SUBSTRING(request_no, CHARINDEX('-', request_no) + 1, LEN(request_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN","957454685","3","no)) AS INT))FROM [dbo].[SCP_ANL_LGTM_PCY_INV_MGMT_PLAN]), 0) + 1 AS NVARCHAR)
+										   ,@v_plan_start_yyyymmdd
+										   ,@v_plan_tp_cd
+										   ,@v_division_id 
+										   ,@v_plant_id
+										   ,@v_item_id
+										   ,@v_occr_rsn_cd
+										   ,@v_occr_rsn_ctn
+										   ,@v_exht_tp_cd
+										   ,@v_exht_tp_ctn
+										   ,@v_plan_yyyymmdd
+										   ,@v_qty
+										   ,@v_supplier_code
+										   ,@v_user_id
+										   ,sysdatetime()
+										   ,@v_user_id
+										   ,sysdatetime()
+										);
+					  END
+				
+
+
+
+			ELSE    --단일 ROW 일때
+			 
+				BEGIN      
+				print 1;
+					SET @v_active_flag = @p_active_flag        
+					SET @p_active_flag = NULL 
+
+					SET @v_request_no = @p_request_no     
+					IF @v_request_no = 'NULL' OR @v_request_no = ''
+					BEGIN
+						SET @v_request_no = @p_plan_start_yyyymmdd+'-'+ CAST( NEXT VALUE FOR SEQ1_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN AS NVARCHAR);			
+						--SET @v_request_no = NULL; 						
+					END
+					SET @p_request_no = NULL 
+
+					SET @v_plan_start_yyyymmdd = @p_plan_start_yyyymmdd        
+					SET @p_plan_start_yyyymmdd = NULL 				 
+
+					SET @v_plan_tp_cd = @p_plan_tp_cd        
+					SET @p_plan_tp_cd = NULL 			
+				
+					SET @v_division_id = @p_division_id
+					SET @p_division_id = NULL
+
+					SET @v_division_id = @p_division_id        
+					SET @p_division_id = NULL     
+
+					SET @v_plant_id = @p_plant_id
+					SET @p_plant_id = NULL
+					
+					SET @v_item_id = @p_item_id        
+					SET @p_item_id = NULL    
+
+					SET @v_occr_rsn_cd = @p_occr_rsn_cd		
+					SET @p_occr_rsn_cd = NULL
+
+					SET @v_occr_rsn_ctn = @p_occr_rsn_ctn 
+					SET @p_occr_rsn_ctn = NULL
+
+					SET @v_exht_tp_cd = @p_exht_tp_cd					
+					SET @p_exht_tp_cd = NULL
+
+					SET @v_exht_tp_ctn = @p_exht_tp_ctn 
+					SET @p_exht_tp_ctn = NULL
+
+					SET @v_plan_yyyymmdd = @p_plan_yyyymmdd
+					SET @p_plan_yyyymmdd = NULL
+															
+					IF @p_qty <> 'NULL' AND @p_qty<> ''
+						BEGIN
+							SET @v_qty = CAST (@p_qty  AS numeric(30,8))
+						END
+					ELSE
+						BEGIN
+							SET @v_qty = 0
+						END
+
+					SET @v_supplier_code = @p_supplier_code
+					SET @p_supplier_code = NULL
+
+					SET @v_user_id = @p_user_id 
+					SET @p_user_id = NULL
+					
+
+							MERGE INTO [dbo].[SCP_ANL_LGTM_PCY_INV_MGMT_PLAN] A
+							USING (
+									SELECT 
+										@v_request_no				as request_no,
+										@v_plan_start_yyyymmdd		as plan_start_yyyymmdd
+										--@v_plan_tp_cd				as plan_tp_cd,
+										--@v_division_id				as division_id, 
+										--@v_item_id					as item_id, 
+										--@v_plan_yyyymmdd			as plan_yyyymmdd,
+										--@v_plant_id					as plant_id,
+										--@v_occr_rsn_cd 				as occr_rsn_cd,
+										--@v_exht_tp_cd				as exht_tp_cd
+							) B
+							ON(
+										A.request_no				= B.request_no
+									AND	A.plan_start_yyyymmdd		= B.plan_start_yyyymmdd
+									--AND A.plan_tp_cd				= B.plan_tp_cd
+									--AND A.division_id				= B.division_id
+									--AND A.item_id					= B.item_id
+									--AND A.plan_yyyymmdd				= B.plan_yyyymmdd
+									--AND A.plant_id					= B.plant_id
+									--AND A.occr_rsn_cd				= B.occr_rsn_cd
+									--AND A.exht_tp_cd				= B.exht_tp_cd
+							  )			
+							WHEN MATCHED AND  @v_active_flag = 'D' THEN
+									DELETE
+							WHEN MATCHED AND  @v_active_flag <> 'D' THEN
+									 UPDATE SET 
+												occr_rsn_ctn		= @v_occr_rsn_ctn
+											   ,exht_tp_ctn			= @v_exht_tp_ctn 
+											   ,qty					= @v_qty
+											   ,last_updated_by		= @v_user_id
+											   ,last_update_date	= sysdatetime()
+											   ,occr_rsn_cd			= @v_occr_rsn_cd
+											   ,exht_tp_cd			= @v_exht_tp_cd		
+											   ,plan_tp_cd			= @v_plan_tp_cd
+											   ,division_id			= @v_division_id
+											   ,item_id				= @v_item_id
+											   ,plan_yyyymmdd		= @v_plan_yyyymmdd
+											   ,plant_id			= @v_plant_id
+							WHEN NOT"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0115_SAVE_SCP_ANL_LGTM_PCY_INV_MGMT_PLAN","957454685","4"," MATCHED THEN
+								 INSERT ( request_no
+										  ,plan_start_yyyymmdd
+										  ,plan_tp_cd
+										  ,division_id
+										  ,plant_id
+										  ,item_id
+										  ,occr_rsn_cd
+										  ,occr_rsn_ctn
+										  ,exht_tp_cd
+										  ,exht_tp_ctn
+										  ,plan_yyyymmdd
+										  ,qty
+										  ,supplier_code
+										  ,created_by
+										  ,create_date
+										  ,last_updated_by
+										  ,last_update_date
+										)
+								 VALUES (  @v_request_no-- @v_plan_start_yyyymmdd + '-' + CAST(ISNULL( (SELECT MAX(CAST(SUBSTRING(request_no, CHARINDEX('-', request_no) + 1, LEN(request_no)) AS INT))FROM [dbo].[SCP_ANL_LGTM_PCY_INV_MGMT_PLAN]), 0) + 1 AS NVARCHAR)
+										   ,@v_plan_start_yyyymmdd
+										   ,@v_plan_tp_cd
+										   ,@v_division_id 
+										   ,@v_plant_id
+										   ,@v_item_id
+										   ,@v_occr_rsn_cd
+										   ,@v_occr_rsn_ctn
+										   ,@v_exht_tp_cd
+										   ,@v_exht_tp_ctn
+										   ,@v_plan_yyyymmdd
+										   ,@v_qty
+										   ,@v_supplier_code
+										   ,@v_user_id
+										   ,sysdatetime()
+										   ,@v_user_id
+										   ,sysdatetime()
+										);
+					  END
+			END		
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			COMMIT TRAN;
+
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code;
+
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+		END CATCH;
+	END;
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0115_GET_COMBOBOX_DATA","1168931436","1","
+/*
+ * Program ID   : SCP0115_GET_COMBOBOX_DATA
+ * Description  : Get data for  발생사유 유형, 소진방안 유형ComboBox
+ * Program History
+ *===================================================================================================
+ * Date         In Charge		Description
+ *===================================================================================================
+ *2024/10/11 	Quoc Tan (tanvq1)	Add new procedure to get Master Data for comboBox
+ */
+
+CREATE PROCEDURE [dbo].[SCP0115_GET_COMBOBOX_DATA]
+	@p_lookup_type			NVARCHAR(100),
+	@p_valid_yn			NVARCHAR(1) = 'Y'
+	
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	IF @p_lookup_type = 'SCM_LGTM_PCY_INV_PLAN_TYPE' 
+			BEGIN
+					select segment1 AS CODE, attribute1 AS [NAME]
+					from   SCM_ADM_LOOKUP_MASTER_DETAIL
+					where  lookup_type = @p_lookup_type
+					AND    VALID_YN = @p_valid_yn;
+			END
+	ELSE 
+			BEGIN
+					select Distinct segment2 AS CODE, attribute1 AS [NAME]
+					from   SCM_ADM_LOOKUP_MASTER_DETAIL
+					where  lookup_type = @p_lookup_type
+					AND    VALID_YN = @p_valid_yn
+			END
+	
+END"

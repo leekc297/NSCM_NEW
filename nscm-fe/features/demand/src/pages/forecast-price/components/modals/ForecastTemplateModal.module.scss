@@ -17,6 +17,8 @@
 }
 
 .gridWrapper {
+  display: flex;
+  flex-direction: column;
   position: relative;
   // min-height:0 = flex 자식 축소 허용 → wijmo grid bounded viewport → 세로 스크롤바
   flex: 1 1 auto;

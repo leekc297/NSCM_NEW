@@ -11,6 +11,10 @@
 
 .gridWrapper {
   position: relative;
+  // ResultArea(flex:1 1 0)가 채우려면 부모가 flex 컬럼이어야 한다(ProjectModal 등 표준 팝업 패턴).
+  //   블록이면 ResultArea 가 안 늘어나 그리드가 0-height 로 무너져 모달 오픈 시 결과가 안 보인다.
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
   border: 1px solid #e0e4e9;

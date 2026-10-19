@@ -1,0 +1,7 @@
+﻿"page_key","menu_id","file","line","in_function","kind","callee","menu","sheet","action","url","resolved","args","commented"
+"admin/api-management","SYS0006","features/admin/src/pages/api-management/ApiManagement.tsx","48","ApiManagement","hook","useTabProcQuery","SYS0006","apiList","","SYS0006/apiList//call-proc","Y","filters","0"
+"admin/api-management","SYS0006","features/admin/src/pages/api-management/ApiManagement.tsx","56","ApiManagement","hook","useProcMutation","SYS0006","apiList","","SYS0006/apiList//call-proc","Y","","0"
+"admin/api-management","SYS0006","features/admin/src/pages/api-management/components/ApiManagementForm.tsx","40","ApiManagementForm","hook","useTabComboQueries","SYS0006","","","(useTabComboQueries)","Y","['YesOrNo']","0"
+"admin/api-management","SYS0006","features/admin/src/pages/api-management/components/ApiManagementForm.tsx","44","ApiManagementForm","hook","useTabLookupQueries","SYS0006","","","(useTabLookupQueries)","Y","[ { lookupType: 'API_TP_CD', }, ]","0"
+"admin/api-management","SYS0006","features/admin/src/pages/api-management/useApiManagementStore.ts","66","fetchStaticColumns","http","apiClient.post","","","","/admin/menu/SYS0006/column","Y","{ sheetNm: SHEETS.LIST, }","0"
+"admin/api-management","SYS0006","features/admin/src/pages/api-management/useApiManagementStore.ts","77","fetchStaticColumns","http","apiClient.get","","","","/admin/menu/SYS0006/search-conditions","Y","","0"

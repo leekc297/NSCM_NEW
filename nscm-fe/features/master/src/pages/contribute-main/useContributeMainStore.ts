@@ -1,6 +1,6 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab } from '@shared/stores';
+import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import { MENU_ID, SHEETS } from './contribute-main.constants';
 import type { SearchParamProps } from './types';
@@ -82,9 +82,13 @@ export const useContributeMainStore = createPersistedStoreWithTab<
             his: cond.his,
             userGroup: '',
           },
+          // 칸 제목 SP 는 P_CREATED_BY 로 사용자 칸 설정(SCM_MST_TITLESET_USER)을 찾는다.
+          //   BE 가 자동 주입하는 키는 sesUserId/userId 뿐이라 createdBy 는 화면이 실어야
+          //   개인화 분기가 산다(없으면 항상 기본 칸).
           [SHEETS.MAIN_TITLE]: {
             divisionId: '40',
             yyyy: cond.yyyy,
+            createdBy: useSessionStore.getState().session.userId ?? '',
           },
         };
       });

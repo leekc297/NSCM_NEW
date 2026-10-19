@@ -1,0 +1,2968 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-11-28 00:00:00.460","LGCE_SCMDEV","P ","SCP0001_GET_PLANT_SITE","382012492","1","
+/*
+ * Program ID   : SCP0001_GET_PLANT_SITE
+ * Description  : Plant 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/05   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/01/15   younggonkim    site_description 컬럼 scm_site_id -> site_description 으로 수정
+ * 2018/04/30   ygkim			logistic_plant_id 컬럼 추가
+ * 2018/07/02   ygkim			packer_item_id_suffix 컬럼 추가
+ * 2018/09/14   ygkim			hq_vendor_code, hq_vendor_code_name 컬럼 추가
+ * 2020/01/22	hwyoon			[C20200116-000114] ESS 외주 Packer Line 계획 수립 - PACKER_LINE_ACTIVE_YN 추가
+ * 2020/03/26	hwyoon			[C20200324-000459] [긴급] Warranty Plant Ship Frozen 설정 불가
+ * 2022/04/07	lwy			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - GSCM_VENDOR 컬럼추가
+ * 2022/04/25	lwy			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - 사내, 사외 분리적용
+ * 2024/04/29	hsbang20        SSP용 frozen_type,ssp_ship_frozen  컬럼(attribute6,attribute7)생성
+ * 2025/11/07   kimcd           [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선
+ *                              JV ESS 생산에 따른 실제 Link scm site id 값을 ATTRIBUTE9, Site Description 조회 추가
+ */
+
+CREATE PROCEDURE [dbo].[SCP0001_GET_PLANT_SITE]
+  @p_division_id    NVARCHAR(MAX),
+  @p_plant_id		NVARCHAR(MAX),
+  @p_scm_site_id    NVARCHAR(MAX),    
+  @p_osp_yn			NVARCHAR(MAX),
+  @p_valid_yn		NVARCHAR(MAX),
+  @p_new_yn			NVARCHAR(MAX)
+AS
+BEGIN
+	
+	SELECT *
+	FROM(
+			SELECT 
+				 s.division_id
+				,d.division_name
+				,s.osp_yn
+				,s.plant_id
+				--[C20200324-000459] [긴급] Warranty Plant Ship Frozen 설정 불가
+				,(CASE	WHEN s.operation_group = 'W' THEN s.plant_id
+						WHEN P.PLANT_NAME IS NULL THEN V.VENDOR_NAME ELSE P.PLANT_NAME END) plant_name
+				,s.operation_group
+				,s.scm_site_id
+				,s.site_description as site_description
+				,s.hq_vendor_code
+				,(CASE WHEN P2.PLANT_NAME IS NULL THEN V2.VENDOR_NAME ELSE P2.PLANT_NAME END) hq_vendor_code_name
+								
+				 --2022/04/07
+				--, CASE WHEN v.ATTRIBUTE1 IS NULL THEN (CASE	WHEN s.operation_group = 'W' THEN s.plant_id WHEN P.PLANT_NAME IS NULL THEN V.VENDOR_NAME ELSE P.PLANT_NAME END)
+				--  ELSE v.ATTRIBUTE1 END AS SCM_VENDOR_NAME
+							
+                -- 2022/04/25
+				, CASE WHEN s.osp_yn = 'Y' THEN CASE WHEN v.ATTRIBUTE1 IS NULL THEN (CASE	WHEN s.operation_group = 'W' THEN s.plant_id WHEN P.PLANT_NAME IS NULL THEN V.VENDOR_NAME ELSE P.PLANT_NAME END) ELSE v.ATTRIBUTE1 END
+				       WHEN s.osp_yn = 'N' THEN CASE WHEN SN.DESCRIPTION IS NULL THEN (CASE	WHEN s.operation_group = 'W' THEN s.plant_id WHEN P.PLANT_NAME IS NULL THEN V.VENDOR_NAME ELSE P.PLANT_NAME END) ELSE SN.DESCRIPTION END
+				  END AS SCM_VENDOR_NAME
+
+				,s.country
+				,s.CITY
+				,s.ship_frozen
+				,s.prod_frozen
+				,s.fp_plan_period		
+				,s.build_ahead
+				,s.valid_yn
+				,s.new_yn
+				,s.created_by
+				,s.creation_date
+				,s.last_updated_by
+				,s.last_update_date
+				,s.company_id
+				,s.logistic_plant_id
+				,s.packer_item_id_suffix
+				,s.attribute1 AS PACKER_LINE_ACTIVE_YN
+				/*hsbang20, SSP용 frozen_type,ssp_ship_frozen  컬럼(attribute6,attribute7)생성*/
+				,s.attribute6 AS frozen_type
+				,s.attribute7 AS ssp_ship_frozen
+				,S.ATTRIBUTE9 AS LINK_PLANT_SITE_CODE -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 실제 Link scm site id 추가
+				,MS.SITE_DESCRIPTION  AS LINK_PLANT_SITE -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 실제 Link Site Description 추가
+			FROM SCM_MST_SITE S(NOLOCK)
+			JOIN SCM_MST_DIVISION D(NOLOCK) ON  s.division_id = d.division_id	
+			LEFT OUTER JOIN SCM_MST_PLANT_SN P(NOLOCK) ON  S.COMPANY_ID = P.COMPANY_ID AND S.DIVISION_ID = P.DIVISION_ID AND S.PLANT_ID = P.PLANT_ID
+			LEFT OUTER JOIN  SCM_MST_VENDOR V  WITH(NOLOCK) ON V.VENDOR_CODE = S.PLANT_ID AND S.COMPANY_ID = V.COMPANY_ID
+			LEFT"
+"2025-11-28 00:00:00.460","LGCE_SCMDEV","P ","SCP0001_GET_PLANT_SITE","382012492","2"," OUTER JOIN SCM_MST_PLANT_SN P2(NOLOCK) ON  S.COMPANY_ID = P2.COMPANY_ID AND S.DIVISION_ID = P2.DIVISION_ID AND S.hq_vendor_code = P2.PLANT_ID
+			LEFT OUTER JOIN  SCM_MST_VENDOR V2  WITH(NOLOCK) ON V2.VENDOR_CODE = S.hq_vendor_code AND S.COMPANY_ID = V2.COMPANY_ID
+
+			-- 2022/04/25
+			LEFT OUTER JOIN  SCM_PLANT_M_SN SN WITH(NOLOCK) ON S.DIVISION_ID = SN.DIVISION_ID AND S.PLANT_ID =SN.PLANT_ID
+			LEFT OUTER JOIN  SCM_MST_SITE MS WITH(NOLOCK) ON MS.SCM_SITE_ID = S.ATTRIBUTE9 AND MS.OPERATION_GROUP = S.OPERATION_GROUP
+			 -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 실제 Link scm site id 값을 ATTRIBUTE9, Site Description 조회 추가
+			WHERE s.site_type = 'PLANT'
+			AND (@p_division_id IS NULL OR S.DIVISION_ID IN  ( SELECT token FROM dbo.String_Split(@p_division_id,',') ) )
+			AND (@p_osp_yn IS NULL OR S.OSP_YN = @p_osp_yn)
+			AND (@p_valid_yn IS NULL OR S.VALID_YN = @p_valid_yn)
+			AND (@p_new_yn IS NULL OR S.NEW_YN = @p_new_yn)	
+	) A
+	WHERE 1=1
+	  AND ((@p_plant_id IS NULL OR @p_plant_id = '') OR (plant_id like '%' + @p_plant_id + '%' OR plant_name like '%' + @p_plant_id + '%'))
+	  AND ((@p_scm_site_id IS NULL OR @p_scm_site_id = '') OR (scm_site_id like '%' + @p_scm_site_id + '%' OR site_description like '%' + @p_scm_site_id + '%'))
+	ORDER BY A.division_name, A.plant_id, A.scm_site_id
+   ;
+END
+
+"
+"2025-11-28 00:00:00.460","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","1","/*
+ * Program ID   : SCP0001_SAVE_PLANT_SITE
+ * Description  : Plant 등록,수정 (외주Paker만 가능)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/07   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/04/30   ygkim			logistic_plant_id 컬럼 추가
+ * 2018/07/02   ygkim			packer_item_id_suffix 컬럼 추가
+ * 2018/09/14   ygkim			p_hq_vendor_code 추가 
+ * 2020/02/12	hwyoon			[C20200116-000114] ESS 외주 Packer Line 계획 수립 - p_packer_line_active_yn 추가
+ * 2022/04/11	lwy			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - p_scm_vendor_name 추가
+ * 2022/04/25	lwy			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - 사내, 사외 분리적용
+ * 2022/05/02	hsbang			frozen_type 컬럼 추가
+ * 2025/11/07   kimcd           [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선
+ *                              JV ESS 생산에 따른 실제 Link scm site id 값을 ATTRIBUTE9 저장 추가
+ */
+CREATE PROCEDURE [dbo].[SCP0001_SAVE_PLANT_SITE]
+
+	-- Add the parameters for the stored procedure here
+	@p_active_flag			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_plant_id 			NVARCHAR(MAX),
+	@p_scm_site_id 			NVARCHAR(MAX),
+	@p_site_description		NVARCHAR(MAX),
+    @p_country 			    NVARCHAR(MAX),
+	@p_city 			    NVARCHAR(MAX),
+	@p_operation_group 		NVARCHAR(MAX),
+	@p_vmi_yn			    NVARCHAR(MAX),
+	@p_valid_yn			    NVARCHAR(MAX),
+    @p_new_yn			    NVARCHAR(MAX),
+	@p_ship_frozen   		NVARCHAR(MAX),
+	@p_frozen_type   		NVARCHAR(MAX),
+	@p_prod_frozen  		NVARCHAR(MAX),
+	@p_fp_plan_period 		NVARCHAR(MAX),
+	@p_build_ahead			NVARCHAR(MAX),
+	@p_created_by			NVARCHAR(MAX),
+	@p_creation_date		NVARCHAR(MAX),
+	@p_last_updated_by		NVARCHAR(MAX),
+	@p_company_id			NVARCHAR(MAX),
+	@p_logistic_plant_id	NVARCHAR(MAX),
+	@p_packer_item_id_suffix	NVARCHAR(MAX),
+	@p_hq_vendor_code		NVARCHAR(MAX),
+	@p_packer_line_active_yn NVARCHAR(MAX),
+	--@p_site_type			NVARCHAR(MAX),
+	--@p_dept_id			NVARCHAR(MAX),
+	--@p_osp_yn				NVARCHAR(MAX),
+	--@p_city				NVARCHAR(MAX),
+	--@p_site_hrcy_id		NVARCHAR(MAX),
+	--@p_end_customer		NVARCHAR(MAX),
+	--@p_site_id			NVARCHAR(MAX)
+
+	@p_scm_vendor_name      NVARCHAR(MAX),
+	@p_osp_yn_gb			NVARCHAR(MAX),
+	@P_LINK_PLANT_SITE_ID   NVARCHAR(MAX) -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_plant_id			    NVARCHAR(MAX);
+	DECLARE @v_scm_site_id			NVARCHAR(MAX);
+	DECLARE @v_site_description		NVARCHAR(MAX);
+	DECLARE @v_country				NVARCHAR(MAX);
+	DECLARE @v_operation_group		NVARCHAR(MAX);
+	DECLARE @v_vmi_yn			    NVARCHAR(MAX);
+	DECLARE @v_valid_yn				NVARCHAR(MAX);
+	DECLARE @v_new_yn				NVARCHAR(MAX);
+	DECLARE @v_fp_plan_period		NVARCHAR(MAX);
+	DECLARE @v_build_ahead			NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+	DECLARE @v_creation_date		DATETIME;
+	DECLARE @v_last_updated_by		NVARCHAR(MAX);
+	DECLARE @v_company_id			NVARCHAR(MAX);
+	DECLARE @p_site_type			NVARCHAR(MAX);
+	DECLARE @p_dept_id				NVARCHAR(MAX);
+	DECLARE @p_osp_yn				NVARCHAR(MAX);
+	DECLARE @v_city					NVARCHAR(MAX);
+	DECLARE @p_site_hrcy_id			NVARCHAR(MAX);
+	DECLARE @v_frozen_type			NVARCHAR(MAX);
+	DECLARE @v_ship_frozen			NVARCHAR(MAX);
+	DECLARE @v_prod_frozen			NVARCHAR(MAX);
+	DECLARE @p_end_customer			NVARCHAR(MAX);
+	DECLARE @p_site_id				NVARCHAR(MAX);
+	DECLARE @v_logistic_plant_id	NVARCHAR(MAX);
+	DECLARE @v_packer_item_id_suffix	NVARCHAR(MAX);
+	DECLARE @v_hq_vendor_code		NVARCHAR(MAX);
+	DECLARE @v_packer_line_active_yn	NVARCHAR(MAX);
+	DECLARE @v_scm_vend"
+"2025-11-28 00:00:00.460","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","2","or_name		NVARCHAR(MAX);
+	DECLARE @v_osp_yn_gb			NVARCHAR(MAX);
+	DECLARE @V_LINK_PLANT_SITE_ID   NVARCHAR(MAX) -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+		
+	SET @v_active_flag = NULL;
+	SET @v_division_id = NULL;
+	SET @v_plant_id = NULL;
+	SET @v_scm_site_id = NULL;
+	SET @v_site_description = NULL;
+	SET @v_country = NULL;	 
+	SET @v_operation_group = NULL;	 
+	SET @v_vmi_yn = NULL;	 
+	SET @v_valid_yn = NULL;	
+	SET @v_new_yn = NULL;
+	SET @v_fp_plan_period = NULL;	
+	SET @v_build_ahead = NULL;	
+	SET @v_created_by = NULL;	  
+	SET @v_creation_date = NULL;
+	SET @v_last_updated_by = NULL;
+	SET @v_company_id = NULL;
+	SET @v_logistic_plant_id = NULL;
+	SET @v_packer_item_id_suffix = NULL;
+	SET @v_hq_vendor_code = NULL;
+	SET @v_packer_line_active_yn = NULL;
+	SET @v_scm_vendor_name = NULL;
+	SET @v_osp_yn_gb = NULL;
+	SET @V_LINK_PLANT_SITE_ID = NULL; -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+
+	SET @p_site_type = 'PLANT';
+	SET @p_dept_id   = 'PLANT';
+	SET @p_osp_yn = 'Y' ;
+	SET @p_site_hrcy_id = NULL;
+	SET @v_frozen_type = NULL;
+	SET @v_ship_frozen = NULL;
+	SET @v_prod_frozen = NULL;
+	SET @p_end_customer = NULL;
+	SET @p_site_id = NULL;
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0001_SAVE_PLANT_SITE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+		BEGIN TRY
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		--SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 			
+				SET @v_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_plant_id, @v_delimiter , @mst_loop_cnt) ;    				
+				SET @v_scm_site_id = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id, @v_delimiter , @mst_loop_cnt) ;    				
+				SET @v_site_description = [dbo].[SCM_ARR_SPL_VAL](@p_site_description, @v_delimiter , @mst_loop_cnt) ; 				
+				SET @v_country = [dbo].[SCM_ARR_SPL_VAL](@p_country, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_city = [dbo].[SCM_ARR_SPL_VAL](@p_city, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_operation_group = [dbo].[SCM_ARR_SPL_VAL](@p_operation_group, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_vmi_yn = [dbo].[SCM_ARR_SPL_VAL](@p_vmi_yn, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_valid_yn = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn, @v_delimiter, @mst_loop_cnt) ; 	
+				SET @v_new_yn = [dbo].[SCM_ARR_SPL_VAL](@p_new_yn, @v_delimiter, @mst_loop_cnt) ; 				 
+				SET @v_frozen_type = [dbo].[SCM_ARR_SPL_VAL](@p_frozen_type, @v_delimiter, @mst_loop_cnt) ; 				
+				--SET @v_ship_frozen = [dbo].[SCM_ARR_SPL_VAL](@p_ship_frozen, @v_delimiter, @mst_loop_cnt) ; 			
+				SET @v_prod_frozen = [dbo].[SCM_ARR_SPL_VAL](@p_prod_frozen, @v_delimiter, @mst_loop_cnt) ; 			
+
+				SET @v_fp_plan_period = [dbo].[SCM_ARR_SPL_VAL](@p_fp_plan_period, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_"
+"2025-11-28 00:00:00.460","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","3","build_ahead = [dbo].[SCM_ARR_SPL_VAL](@p_build_ahead, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_created_by = [dbo].[SCM_ARR_SPL_VAL](@p_created_by, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_creation_date = CONVERT(DATETIME, [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter, @mst_loop_cnt) , 120);				
+				SET @v_last_updated_by = [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_company_id = [dbo].[SCM_ARR_SPL_VAL](@p_company_id, @v_delimiter, @mst_loop_cnt) ; 
+				SET @p_site_id = (SELECT t.site_id FROM scm_mst_site_sn t where t.company_id = @v_company_id);
+				SET @v_logistic_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_logistic_plant_id, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_packer_item_id_suffix = [dbo].[SCM_ARR_SPL_VAL](@p_packer_item_id_suffix, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_hq_vendor_code = [dbo].[SCM_ARR_SPL_VAL](@p_hq_vendor_code, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_packer_line_active_yn = [dbo].[SCM_ARR_SPL_VAL](@p_packer_line_active_yn, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_scm_vendor_name = [dbo].[SCM_ARR_SPL_VAL](@p_scm_vendor_name, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_osp_yn_gb = [dbo].[SCM_ARR_SPL_VAL](@p_osp_yn_gb, @v_delimiter, @mst_loop_cnt) ;
+				SET @V_LINK_PLANT_SITE_ID = [dbo].[SCM_ARR_SPL_VAL](@P_LINK_PLANT_SITE_ID, @v_delimiter, @mst_loop_cnt) ; -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+					
+			END
+
+			--HISTORY INSERT
+			EXEC [PR_SCM_MST_SITE_HIST]
+								 @v_division_id 
+								,@v_scm_site_id 
+								,@v_site_description
+								,@p_site_type
+								,@v_city
+								,@v_country 
+								,@v_plant_id 
+								,@v_operation_group 
+								,@p_dept_id
+								,@v_vmi_yn
+								,@v_valid_yn
+								,@v_new_yn
+								,@p_site_hrcy_id
+								,@p_osp_yn
+								,@v_frozen_type
+								,@v_ship_frozen
+								,@v_prod_frozen
+								,@p_end_customer
+								,@v_fp_plan_period
+								,@v_build_ahead
+								,@v_created_by
+								,@v_creation_date
+								,@v_last_updated_by
+								,@v_company_id
+								,@p_site_id		
+								,@v_logistic_plant_id												
+								,@v_packer_item_id_suffix		
+								,@v_hq_vendor_code		
+								,@v_packer_line_active_yn				
+								,@V_LINK_PLANT_SITE_ID -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+			 ;
+
+			
+			-- 2022/04/25
+			EXEC [SCP0001_SAVE_SCM_MST_VENDOR]
+								 @v_company_id
+								,@v_division_id								
+								,@v_plant_id 
+								,@v_scm_vendor_name
+								,@v_osp_yn_gb
+			;			
+			
+			IF @mst_loop_cnt > 0 
+
+				BEGIN       
+			 
+					MERGE INTO [SCM_MST_SITE] A
+					USING (
+							SELECT 
+								 @v_division_id as division_id
+								,@v_plant_id as plant_id
+								,@v_scm_site_id as scm_site_id							
+						  ) B
+					ON(
+							    A.division_id  = B.division_id
+							AND A.plant_id = B.plant_id
+							AND A.scm_site_id  = B.scm_site_id
+						
+					  )
+					WHEN MATCHED THEN
+						 UPDATE SET 
+
+								site_description    = @v_site_description
+							   ,country				= @v_country
+							   ,city				= @v_city
+							   ,operation_group		= @v_operation_group
+							   ,vmi_yn				= @v_vmi_yn
+							   ,valid_yn			= @v_valid_yn
+							   --,ship_frozen 		= @v_ship_frozen
+							   ,ship_frozen 		= CASE WHEN ISNULL(@v_frozen_type, '') = '' THEN ship_frozen
+							                                                                    ELSE [dbo].[FN_GET_CALC_SHIP_FROZEN_DAY_CNT](@v_frozen_type)
+													  END
+							   ,prod_frozen 		= @v_prod_frozen
+							   ,fp_plan_period		= @v_fp_plan_period
+							   ,build_ahead			= @v_build_ahead
+							   ,logistic_plant_id	= @v_logistic_plant_id
+							   ,packer_item_id_suffix	= @v_packer_item_id_suffix
+							   ,hq_vendor_code = @v_hq_vendor_code
+							   ,attribute1			= @v_packer_line_active_yn
+							   ,attribute6          = @v_f"
+"2025-11-28 00:00:00.460","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","4","rozen_type
+							   ,last_updated_by		= @v_last_updated_by
+							   ,last_update_date	= sysdatetime()
+							   ,ATTRIBUTE9          = @V_LINK_PLANT_SITE_ID -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+					                
+					WHEN NOT MATCHED THEN
+
+						INSERT	(									   
+								 division_id,scm_site_id,site_description,site_type
+								,city,country,plant_id,operation_group,dept_id
+								,vmi_yn,valid_yn,new_yn,site_hrcy_id,osp_yn
+								,ship_frozen,prod_frozen,end_customer,fp_plan_period,build_ahead
+								,created_by,creation_date,last_updated_by,last_update_date
+								,company_id, site_id, logistic_plant_id, packer_item_id_suffix, hq_vendor_code
+								,attribute1, attribute6
+								,ATTRIBUTE9 -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+								)
+						VALUES  
+								(
+								 @v_division_id ,@v_scm_site_id , @v_site_description, 'PLANT'/*@v_site_type */
+								,@v_city ,@v_country ,@v_plant_id ,@v_operation_group ,'PLANT' /*@v_dept_id */
+								,@v_vmi_yn, @v_valid_yn, @v_new_yn, NULL /*@site_hrcy_id*/, 'Y' /* @osp_yn*/
+								,/*@v_ship_frozen*/ [dbo].[FN_GET_CALC_SHIP_FROZEN_DAY_CNT](@v_frozen_type)
+								, @v_prod_frozen, NULL /*@end_customer*/, @v_fp_plan_period, @v_build_ahead
+								,@v_created_by,SYSDATETIME(),@v_created_by,SYSDATETIME()
+								,@v_company_id, @p_site_id,@v_logistic_plant_id, @v_packer_item_id_suffix, @v_hq_vendor_code
+								,@v_packer_line_active_yn, @v_frozen_type
+								,@V_LINK_PLANT_SITE_ID -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+								);
+
+			
+			  END
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"
+"2025-12-05 00:00:01.063","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","4","     = @v_frozen_type
+							   ,last_updated_by		= @v_last_updated_by
+							   ,last_update_date	= sysdatetime()
+							   ,ATTRIBUTE9          = @V_LINK_PLANT_SITE_ID -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+					                
+					WHEN NOT MATCHED THEN
+
+						INSERT	(									   
+								 division_id,scm_site_id,site_description,site_type
+								,city,country,plant_id,operation_group,dept_id
+								,vmi_yn,valid_yn,new_yn,site_hrcy_id,osp_yn
+								,ship_frozen,prod_frozen,end_customer,fp_plan_period,build_ahead
+								,created_by,creation_date,last_updated_by,last_update_date
+								,company_id, site_id, logistic_plant_id, packer_item_id_suffix, hq_vendor_code
+								,attribute1, attribute6
+								,ATTRIBUTE9 -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+								)
+						VALUES  
+								(
+								 @v_division_id ,@v_scm_site_id , @v_site_description, 'PLANT'/*@v_site_type */
+								,@v_city ,@v_country ,@v_plant_id ,@v_operation_group ,'PLANT' /*@v_dept_id */
+								,@v_vmi_yn, @v_valid_yn, @v_new_yn, NULL /*@site_hrcy_id*/, 'Y' /* @osp_yn*/
+								,/*@v_ship_frozen*/ [dbo].[FN_GET_CALC_SHIP_FROZEN_DAY_CNT](@v_frozen_type)
+								, @v_prod_frozen, NULL /*@end_customer*/, @v_fp_plan_period, @v_build_ahead
+								,@v_created_by,SYSDATETIME(),@v_created_by,SYSDATETIME()
+								,@v_company_id, @p_site_id,@v_logistic_plant_id, @v_packer_item_id_suffix, @v_hq_vendor_code
+								,@v_packer_line_active_yn, @v_frozen_type
+								,@V_LINK_PLANT_SITE_ID -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+								);
+
+			
+			  END
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_GET_LOCATION","350012378","1","
+/*
+ * Program ID   : SCP0001_GET_LOCATION
+ * Description  : Location 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/05   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2022/07/25   leejeongil     ERP 재고표기를 위한 SSP Storage 속성 추가 (SSP_STORAGE_ID) 
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0001_GET_LOCATION]
+  @p_division_id    NVARCHAR(30),
+  @p_scm_site_id    NVARCHAR(30),
+  @p_valid_yn		NVARCHAR(30)      
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	SELECT
+	DISTINCT
+	      l.location_seq
+		 ,l.location_code
+		 ,l.location_code location_code2
+		 ,l.location_description
+		 ,l.factory_id
+		 ,l.factory_id as factory_id2
+		 ,f.factory_name
+		 ,l.operation_id
+		 ,l.operation_id operation_id2
+		 ,o.operation_name
+		 ,l.electrode_type
+		 ,l.storage_id
+		 ,l.attribute2 as SSP_STORAGE_ID
+		 ,l.valid_yn
+		 ,l.created_by
+		 ,l.creation_date
+		 ,l.last_updated_by
+		 ,l.last_update_date
+		 ,LMD.DISPLAY_SEQ
+	FROM SCM_MST_LOCATION L(NOLOCK)
+	LEFT OUTER JOIN SCM_MST_FACTORY_SN F(NOLOCK) ON L.DIVISION_ID = F.DIVISION_ID AND L.PLANT_ID = F.PLANT_ID AND L.FACTORY_ID = F.FACTORY_ID
+	LEFT OUTER JOIN SCM_MST_OPERATION_SN O(NOLOCK) ON L.DIVISION_ID = O.DIVISION_ID AND L.OPERATION_ID = O.OPERATION_ID
+	LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LMD (NOLOCK) ON L.LOCATION_CODE = LMD.SEGMENT1 AND LMD.LOOKUP_TYPE = 'LOCATION_GROUP' AND LMD.VALID_YN = 'Y'
+	WHERE 1=1
+	  AND l.division_id = @p_division_id
+	  AND l.scm_site_id = @p_scm_site_id
+	  AND (@p_valid_yn is null or l.VALID_YN = @p_valid_yn)
+ ORDER BY LMD.DISPLAY_SEQ, l.location_code, l.factory_id, l.operation_id
+	;
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_GET_LOCATION_OSP","366012435","1","
+/*
+ * Program ID   : SCP0001_GET_LOCATION_OSP
+ * Description  : Plant 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/08/10   ygkim			Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ */
+
+CREATE PROCEDURE [dbo].[SCP0001_GET_LOCATION_OSP]
+  @p_division_id    NVARCHAR(100),
+  @p_scm_site_id    NVARCHAR(100), 
+  @p_valid_yn		NVARCHAR(100)
+AS
+BEGIN
+	
+	SELECT 
+		 a.division_id
+		,a.plant_id
+		,a.storage_id
+		,a.scm_site_id
+		,b.site_description as site_description
+		,a.description
+		,a.valid_yn
+		,a.created_by
+		,a.creation_date
+		,a.last_updated_by
+		,a.last_update_date
+		,b.LOGISTIC_PLANT_ID
+	FROM SCM_MST_OSP_SLOC A(NOLOCK)
+	LEFT OUTER JOIN SCM_MST_SITE B(NOLOCK) ON  a.division_id = b.division_id AND a.scm_site_id = b.scm_site_id
+	WHERE A.DIVISION_ID = @p_division_id
+	  AND A.SCM_SITE_ID = @p_scm_site_id
+	  AND (@p_valid_yn IS NULL OR A.VALID_YN = @p_valid_yn)	
+	ORDER BY A.division_id, A.plant_id, A.scm_site_id
+   ;
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_GET_PLANT_SITE","382012492","1","
+/*
+ * Program ID   : SCP0001_GET_PLANT_SITE
+ * Description  : Plant 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/05   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/01/15   younggonkim    site_description 컬럼 scm_site_id -> site_description 으로 수정
+ * 2018/04/30   ygkim			logistic_plant_id 컬럼 추가
+ * 2018/07/02   ygkim			packer_item_id_suffix 컬럼 추가
+ * 2018/09/14   ygkim			hq_vendor_code, hq_vendor_code_name 컬럼 추가
+ * 2020/01/22	hwyoon			[C20200116-000114] ESS 외주 Packer Line 계획 수립 - PACKER_LINE_ACTIVE_YN 추가
+ * 2020/03/26	hwyoon			[C20200324-000459] [긴급] Warranty Plant Ship Frozen 설정 불가
+ * 2022/04/07	lwy			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - GSCM_VENDOR 컬럼추가
+ * 2022/04/25	lwy			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - 사내, 사외 분리적용
+ * 2024/04/29	hsbang20        SSP용 frozen_type,ssp_ship_frozen  컬럼(attribute6,attribute7)생성
+ */
+
+CREATE PROCEDURE [dbo].[SCP0001_GET_PLANT_SITE]
+  @p_division_id    NVARCHAR(MAX),
+  @p_plant_id		NVARCHAR(MAX),
+  @p_scm_site_id    NVARCHAR(MAX),    
+  @p_osp_yn			NVARCHAR(MAX),
+  @p_valid_yn		NVARCHAR(MAX),
+  @p_new_yn			NVARCHAR(MAX)
+AS
+BEGIN
+	
+	SELECT *
+	FROM(
+			SELECT 
+				 s.division_id
+				,d.division_name
+				,s.osp_yn
+				,s.plant_id
+				--[C20200324-000459] [긴급] Warranty Plant Ship Frozen 설정 불가
+				,(CASE	WHEN s.operation_group = 'W' THEN s.plant_id
+						WHEN P.PLANT_NAME IS NULL THEN V.VENDOR_NAME ELSE P.PLANT_NAME END) plant_name
+				,s.operation_group
+				,s.scm_site_id
+				,s.site_description as site_description
+				,s.hq_vendor_code
+				,(CASE WHEN P2.PLANT_NAME IS NULL THEN V2.VENDOR_NAME ELSE P2.PLANT_NAME END) hq_vendor_code_name
+								
+				 --2022/04/07
+				--, CASE WHEN v.ATTRIBUTE1 IS NULL THEN (CASE	WHEN s.operation_group = 'W' THEN s.plant_id WHEN P.PLANT_NAME IS NULL THEN V.VENDOR_NAME ELSE P.PLANT_NAME END)
+				--  ELSE v.ATTRIBUTE1 END AS SCM_VENDOR_NAME
+							
+                -- 2022/04/25
+				, CASE WHEN s.osp_yn = 'Y' THEN CASE WHEN v.ATTRIBUTE1 IS NULL THEN (CASE	WHEN s.operation_group = 'W' THEN s.plant_id WHEN P.PLANT_NAME IS NULL THEN V.VENDOR_NAME ELSE P.PLANT_NAME END) ELSE v.ATTRIBUTE1 END
+				       WHEN s.osp_yn = 'N' THEN CASE WHEN SN.DESCRIPTION IS NULL THEN (CASE	WHEN s.operation_group = 'W' THEN s.plant_id WHEN P.PLANT_NAME IS NULL THEN V.VENDOR_NAME ELSE P.PLANT_NAME END) ELSE SN.DESCRIPTION END
+				  END AS SCM_VENDOR_NAME
+
+				,s.country
+				,s.CITY
+				,s.ship_frozen
+				,s.prod_frozen
+				,s.fp_plan_period		
+				,s.build_ahead
+				,s.valid_yn
+				,s.new_yn
+				,s.created_by
+				,s.creation_date
+				,s.last_updated_by
+				,s.last_update_date
+				,s.company_id
+				,s.logistic_plant_id
+				,s.packer_item_id_suffix
+				,s.attribute1 AS PACKER_LINE_ACTIVE_YN
+				/*hsbang20, SSP용 frozen_type,ssp_ship_frozen  컬럼(attribute6,attribute7)생성*/
+				,s.attribute6 AS frozen_type
+				,s.attribute7 AS ssp_ship_frozen
+			FROM SCM_MST_SITE S(NOLOCK)
+			JOIN SCM_MST_DIVISION D(NOLOCK) ON  s.division_id = d.division_id	
+			LEFT OUTER JOIN SCM_MST_PLANT_SN P(NOLOCK) ON  S.COMPANY_ID = P.COMPANY_ID AND S.DIVISION_ID = P.DIVISION_ID AND S.PLANT_ID = P.PLANT_ID
+			LEFT OUTER JOIN  SCM_MST_VENDOR V  WITH(NOLOCK) ON V.VENDOR_CODE = S.PLANT_ID AND S.COMPANY_ID = V.COMPANY_ID
+			LEFT OUTER JOIN SCM_MST_PLANT_SN P2(NOLOCK) ON  S.COMPANY_ID = P2.COMPANY_ID AND S.DIVISION_ID = P2.DIVISION_ID AND S.hq_vendor_code = P2.PLANT_ID
+			LEFT OUTER JOIN  SCM_MST_VENDOR V2  WITH(NOLOCK) ON V2.VENDOR_CODE = S.hq_vendor_code AND S.COMPANY_ID = V2.COMPANY_ID
+
+			-- 2022/04/25
+			LEFT OUTER JOIN  SCM_PLANT_M_SN SN WITH(NOLOCK) ON S.DIVISION_ID = SN.DIVISION_ID AND S.PLANT_ID =SN.PLANT_ID
+
+			WHERE s.site_type = "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_GET_PLANT_SITE","382012492","2","'PLANT'
+			AND (@p_division_id IS NULL OR S.DIVISION_ID IN  ( SELECT token FROM dbo.String_Split(@p_division_id,',') ) )
+			AND (@p_osp_yn IS NULL OR S.OSP_YN = @p_osp_yn)
+			AND (@p_valid_yn IS NULL OR S.VALID_YN = @p_valid_yn)
+			AND (@p_new_yn IS NULL OR S.NEW_YN = @p_new_yn)	
+	) A
+	WHERE 1=1
+	  AND ((@p_plant_id IS NULL OR @p_plant_id = '') OR (plant_id like '%' + @p_plant_id + '%' OR plant_name like '%' + @p_plant_id + '%'))
+	  AND ((@p_scm_site_id IS NULL OR @p_scm_site_id = '') OR (scm_site_id like '%' + @p_scm_site_id + '%' OR site_description like '%' + @p_scm_site_id + '%'))
+	ORDER BY A.division_name, A.plant_id, A.scm_site_id
+   ;
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_LOCATION","398012549","1","/*
+ * Program ID   : SCP0001_SAVE_LOCATION
+ * Description  : LOCATION 등록,수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/07   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2022/07/25   leejeongil     ERP 재고표기를 위한 SSP Storage 속성 추가 @p_ssp_storage_id 
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0001_SAVE_LOCATION]
+
+	-- Add the parameters for the stored procedure here
+	@p_active_flag			NVARCHAR(MAX),
+	@p_location_seq			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_scm_site_id 			NVARCHAR(MAX),
+	@p_plant_id 			NVARCHAR(MAX),
+	@p_location_code		NVARCHAR(MAX),
+	@p_location_description	NVARCHAR(MAX),
+	@p_factory_id			NVARCHAR(MAX),
+	@p_operation_id			NVARCHAR(MAX),
+	@p_electrode_type		NVARCHAR(MAX),
+	@p_storage_id			NVARCHAR(MAX),
+	@p_ssp_storage_id		NVARCHAR(MAX),
+	@p_valid_yn			    NVARCHAR(MAX),
+	@p_created_by			NVARCHAR(MAX),
+	@p_creation_date		NVARCHAR(MAX),
+	@p_last_updated_by		NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_location_seq			NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_scm_site_id 			NVARCHAR(MAX);
+	DECLARE @v_plant_id 			NVARCHAR(MAX);
+	DECLARE @v_location_code		NVARCHAR(MAX);
+	DECLARE @v_location_description	NVARCHAR(MAX);
+	DECLARE @v_factory_id			NVARCHAR(MAX);
+	DECLARE @v_operation_id			NVARCHAR(MAX);
+	DECLARE @v_electrode_type		NVARCHAR(MAX);
+	DECLARE @v_storage_id			NVARCHAR(MAX);
+	DECLARE @v_ssp_storage_id		NVARCHAR(MAX);
+	DECLARE @v_valid_yn				NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+	DECLARE @v_creation_date		DATETIME;
+	DECLARE @v_last_updated_by		NVARCHAR(MAX);
+
+	SET @v_active_flag = NULL;
+	SET @v_location_seq = NULL;
+	SET @v_division_id = NULL;
+	SET @v_scm_site_id = NULL;
+	SET @v_plant_id = NULL;
+	SET @v_location_code = NULL;
+	SET @v_location_description = NULL;
+	SET @v_factory_id = NULL;	 
+	SET @v_operation_id = NULL;	 
+	SET @v_electrode_type = NULL;	 
+	SET @v_storage_id = NULL;
+	SET @v_ssp_storage_id = NULL;
+	SET @v_valid_yn = NULL;	
+	SET @v_created_by = NULL;	  
+	SET @v_creation_date = NULL;
+	SET @v_last_updated_by = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0001_SAVE_LOCATION';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		--SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+			 
+			 
+
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_sc"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_LOCATION","398012549","2","m_site_id = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_plant_id, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_location_code = [dbo].[SCM_ARR_SPL_VAL](@p_location_code, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_location_description = [dbo].[SCM_ARR_SPL_VAL](@p_location_description, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_factory_id = [dbo].[SCM_ARR_SPL_VAL](@p_factory_id, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_operation_id = [dbo].[SCM_ARR_SPL_VAL](@p_operation_id, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_electrode_type = [dbo].[SCM_ARR_SPL_VAL](@p_electrode_type, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_storage_id = [dbo].[SCM_ARR_SPL_VAL](@p_storage_id, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_ssp_storage_id = [dbo].[SCM_ARR_SPL_VAL](@p_ssp_storage_id, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_valid_yn = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn, @v_delimiter, @mst_loop_cnt) ; 	
+				SET @v_created_by = [dbo].[SCM_ARR_SPL_VAL](@p_created_by, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_creation_date = CONVERT(DATETIME, [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter, @mst_loop_cnt) , 120);
+				SET @v_last_updated_by = [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_location_seq = [dbo].[SCM_ARR_SPL_VAL](@p_location_seq, @v_delimiter , @mst_loop_cnt) ;  
+			END
+
+			IF ( @v_location_seq = null or isnull(@v_location_seq,'') ='' )
+			    SET @v_location_seq = NEXT VALUE FOR SEQ1_SCM_MST_LOCATION;
+		   --HISTORY INSERT
+		   
+			EXEC [PR_SCM_MST_LOCATION_HIST]
+										 @v_location_seq
+										,@v_division_id
+										,@v_location_code
+										,@v_location_description
+										,@v_scm_site_id
+										,@v_plant_id
+										,@v_factory_id
+										,@v_operation_id
+										,@v_storage_id
+										,@v_ssp_storage_id
+										,@v_electrode_type
+										,@v_valid_yn
+										,@v_created_by
+										,@v_creation_date
+										,@v_last_updated_by
+															
+			 ;
+			
+			IF @mst_loop_cnt > 0 
+			
+			BEGIN
+		
+			MERGE INTO [SCM_MST_LOCATION] A
+			USING (
+					SELECT 
+						    @v_location_seq as location_seq		
+					) B
+			ON(
+						A.location_seq = B.location_seq
+				)
+			WHEN MATCHED THEN
+					UPDATE SET 
+					     location_code = @v_location_code
+ 						,location_description = @v_location_description
+						,scm_site_id          = @v_scm_site_id
+						,plant_id             = @v_plant_id
+						,factory_id           = @v_factory_id
+						,operation_id	      = @v_operation_id
+						,storage_id	          = @v_storage_id
+						,attribute2           = @v_ssp_storage_id
+						,valid_yn			  = @v_valid_yn
+						,electrode_type	      = @v_electrode_type
+						,last_updated_by	  = @v_last_updated_by
+						,last_update_date	  = sysdatetime()
+					                
+			WHEN NOT MATCHED THEN
+			INSERT	(		
+						 location_seq, division_id, location_code,
+						 location_description, scm_site_id, plant_id,
+						 factory_id, operation_id, storage_id, electrode_type, valid_yn,
+						 created_by, creation_date, last_updated_by, last_update_date,
+						 attribute2
+					)
+			VALUES  (
+					 	@v_location_seq ,@v_division_id, @v_location_code, 
+						@v_location_description ,@v_scm_site_id ,@v_plant_id,
+						@v_factory_id, @v_operation_id, @v_storage_id, @v_electrode_type, @v_valid_yn,
+					    @v_created_by, SYSDATETIME(), @v_created_by, SYSDATETIME(),
+						@v_ssp_storage_id
+					);
+	
+			END
+			--ELSE -- 단일 row
+			 
+			--BEGIN   
+
+			-- IF ( @v_location_seq = null or @v_location_seq ='' )
+			--    SET @v_location_seq = NEXT VALUE FOR SEQ1_SCM_MST_LOCATION;
+   --          ELSE
+			--    SET @v_location_seq = @p_location_seq;
+			--	SET @p_location_seq = NULL;
+
+			--	SET @v_active_flag = @p_active_flag        
+			--	SET @p_active_flag = NULL       
+			--	SET @v_division_id = @p_division_id        
+			--	SET @p"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_LOCATION","398012549","3","_division_id = NULL      
+			--	SET @v_plant_id = @p_plant_id        
+			--	SET @p_plant_id = NULL    
+			--	SET @v_scm_site_id = @p_scm_site_id        
+			--	SET @p_scm_site_id = NULL  
+			--	SET @v_location_code = @p_location_code        
+			--	SET @p_location_code = NULL  
+			--	SET @v_location_description = @p_location_description        
+			--	SET @p_location_description = NULL  
+			--	SET @v_factory_id = @p_factory_id        
+			--	SET @p_factory_id = NULL  
+			--	SET @v_operation_id = @p_operation_id        
+			--	SET @p_operation_id = NULL  
+			--	SET @v_electrode_type = @p_electrode_type        
+			--	SET @p_electrode_type = NULL  
+			--	SET @v_storage_id = @p_storage_id        
+			--	SET @p_storage_id = NULL  
+			--	SET @v_created_by = @p_created_by
+			--	SET @p_created_by = NULL
+			--	SET @v_creation_date = @p_creation_date
+			--	SET @p_creation_date = NULL					
+			--	SET @v_last_updated_by = @p_last_updated_by
+			--	SET @p_last_updated_by = NULL
+						
+			--	MERGE INTO [SCM_MST_LOCATION] A
+			--	USING (
+			--			SELECT 
+			--				 @v_location_seq as location_seq
+			--				--	@v_location_code as location_code
+			--				--	@v_division_id as division_id					
+			--			) B
+			--	ON(
+			--				 A.location_seq = B.location_seq
+			--			--	A.location_code  = B.location_code
+			--			--AND A.division_id  = B.division_id
+						
+			--		)
+			--	WHEN MATCHED THEN
+			--			UPDATE SET 
+ 		--				 location_description = @v_location_description
+			--			,scm_site_id          = @v_scm_site_id
+			--			,plant_id             = @v_plant_id
+			--			,factory_id           = @v_factory_id
+			--			,operation_id	      = @v_operation_id
+			--			,storage_id	          = @v_storage_id
+			--			,electrode_type	      = @v_electrode_type
+			--			,last_updated_by	  = @v_last_updated_by
+			--			,last_update_date	  = sysdatetime()
+					                
+			--	WHEN NOT MATCHED THEN
+
+			--	INSERT	(		
+			--				 location_seq, division_id, location_code,
+			--				 location_description, scm_site_id, plant_id,
+			--				 factory_id, operation_id, storage_id, electrode_type,
+			--				 created_by, creation_date, last_updated_by, last_update_date
+			--			)
+			--	VALUES  (
+			--		 		@v_location_seq ,@v_division_id, @v_location_code, 
+			--				@v_location_description ,@v_scm_site_id ,@v_plant_id,
+			--				@v_factory_id, @v_operation_id, @v_storage_id, @v_electrode_type
+			--			   ,@v_created_by, SYSDATETIME(), @v_created_by, SYSDATETIME()
+			--			);
+
+			--	END	
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_LOCATION_OSP","414012606","1","/*
+ * Program ID   : SCP0001_SAVE_LOCATION_OSP
+ * Description  : LOCATION OSP 등록,수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/08/10   ygkim          Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0001_SAVE_LOCATION_OSP]
+
+	-- Add the parameters for the stored procedure here
+	@p_active_flag			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_scm_site_id 			NVARCHAR(MAX),
+	@p_plant_id 			NVARCHAR(MAX),
+	@p_description			NVARCHAR(MAX),
+	@p_storage_id			NVARCHAR(MAX),
+	@p_valid_yn			    NVARCHAR(MAX),
+	@p_last_updated_by		NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_scm_site_id 			NVARCHAR(MAX);
+	DECLARE @v_plant_id 			NVARCHAR(MAX);
+	DECLARE @v_osp_description		NVARCHAR(MAX);
+	DECLARE @v_storage_id			NVARCHAR(MAX);
+	DECLARE @v_valid_yn				NVARCHAR(MAX);
+	DECLARE @v_last_updated_by		NVARCHAR(MAX);
+
+	SET @v_active_flag = NULL;
+	SET @v_division_id = NULL;
+	SET @v_scm_site_id = NULL;
+	SET @v_plant_id = NULL;
+	SET @v_osp_description = NULL;	 
+	SET @v_storage_id = NULL;	
+	SET @v_valid_yn = NULL;	
+	SET @v_last_updated_by = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0001_SAVE_LOCATION_OSP';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		--SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+			 
+			 
+
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_scm_site_id = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_plant_id, @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_osp_description = [dbo].[SCM_ARR_SPL_VAL](@p_description, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_storage_id = [dbo].[SCM_ARR_SPL_VAL](@p_storage_id, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_valid_yn = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn, @v_delimiter, @mst_loop_cnt) ; 	
+				SET @v_last_updated_by = [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter, @mst_loop_cnt) ; 
+			END
+
+			EXEC [PR_SCM_MST_LOCATION_OSP_HIST]
+										 @v_division_id
+										,@v_scm_site_id
+										,@v_plant_id
+										,@v_osp_description
+										,@v_storage_id
+										,@v_valid_yn
+										,@v_last_updated_by
+															
+			 ;
+			
+			IF @mst_loop_cnt > 0 
+			
+			BEGIN
+		
+			MERGE INTO [SCM_MST_OSP_SLOC] A
+			USING (
+		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_LOCATION_OSP","414012606","2","			SELECT 
+						    @v_division_id as division_id
+						   ,@v_plant_id as plant_id
+						   ,@v_storage_id as storage_id
+						   ,@v_scm_site_id as scm_site_id		
+					) B
+			ON(
+						a.division_id = b.division_id
+					and a.plant_id = b.plant_id
+					and a.storage_id = b.storage_id
+					and a.scm_site_id = b.scm_site_id
+				)
+			WHEN MATCHED THEN
+					UPDATE SET 
+					     DESCRIPTION = @v_osp_description
+						,valid_yn			  = @v_valid_yn
+						,last_updated_by	  = @v_last_updated_by
+						,last_update_date	  = sysdatetime()
+					                
+			WHEN NOT MATCHED THEN
+			INSERT	(		
+						 DIVISION_ID
+						,PLANT_ID
+						,STORAGE_ID
+						,SCM_SITE_ID
+						,DESCRIPTION
+						,VALID_YN
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+					)
+			VALUES  (
+					 	@v_division_id
+					   ,@v_plant_id
+					   ,@v_storage_id
+					   ,@v_scm_site_id
+					   ,@v_osp_description
+					   ,@v_valid_yn
+					   ,@v_last_updated_by
+					   ,SYSDATETIME()
+					   ,@v_last_updated_by
+					   ,SYSDATETIME()
+					);
+	
+			END
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","4","alid_yn, @v_new_yn, NULL /*@site_hrcy_id*/, 'Y' /* @osp_yn*/
+								,/*@v_ship_frozen*/ [dbo].[FN_GET_CALC_SHIP_FROZEN_DAY_CNT](@v_frozen_type)
+								, @v_prod_frozen, NULL /*@end_customer*/, @v_fp_plan_period, @v_build_ahead
+								,@v_created_by,SYSDATETIME(),@v_created_by,SYSDATETIME()
+								,@v_company_id, @p_site_id,@v_logistic_plant_id, @v_packer_item_id_suffix, @v_hq_vendor_code
+								,@v_packer_line_active_yn, @v_frozen_type
+								);
+
+			
+			  END
+			  
+			END
+			
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","1","/*
+ * Program ID   : SCP0001_SAVE_PLANT_SITE
+ * Description  : Plant 등록,수정 (외주Paker만 가능)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/07   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/04/30   ygkim			logistic_plant_id 컬럼 추가
+ * 2018/07/02   ygkim			packer_item_id_suffix 컬럼 추가
+ * 2018/09/14   ygkim			p_hq_vendor_code 추가 
+ * 2020/02/12	hwyoon			[C20200116-000114] ESS 외주 Packer Line 계획 수립 - p_packer_line_active_yn 추가
+ * 2022/04/11	lwy			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - p_scm_vendor_name 추가
+ * 2022/04/25	lwy			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - 사내, 사외 분리적용
+ * 2022/05/02	hsbang			frozen_type 컬럼 추가
+ */
+CREATE PROCEDURE [dbo].[SCP0001_SAVE_PLANT_SITE]
+
+	-- Add the parameters for the stored procedure here
+	@p_active_flag			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_plant_id 			NVARCHAR(MAX),
+	@p_scm_site_id 			NVARCHAR(MAX),
+	@p_site_description		NVARCHAR(MAX),
+    @p_country 			    NVARCHAR(MAX),
+	@p_city 			    NVARCHAR(MAX),
+	@p_operation_group 		NVARCHAR(MAX),
+	@p_vmi_yn			    NVARCHAR(MAX),
+	@p_valid_yn			    NVARCHAR(MAX),
+    @p_new_yn			    NVARCHAR(MAX),
+	@p_frozen_type   		NVARCHAR(MAX),
+	@p_ship_frozen   		NVARCHAR(MAX),
+	@p_prod_frozen  		NVARCHAR(MAX),
+	@p_fp_plan_period 		NVARCHAR(MAX),
+	@p_build_ahead			NVARCHAR(MAX),
+	@p_created_by			NVARCHAR(MAX),
+	@p_creation_date		NVARCHAR(MAX),
+	@p_last_updated_by		NVARCHAR(MAX),
+	@p_company_id			NVARCHAR(MAX),
+	@p_logistic_plant_id	NVARCHAR(MAX),
+	@p_packer_item_id_suffix	NVARCHAR(MAX),
+	@p_hq_vendor_code		NVARCHAR(MAX),
+	@p_packer_line_active_yn NVARCHAR(MAX),
+	--@p_site_type			NVARCHAR(MAX),
+	--@p_dept_id			NVARCHAR(MAX),
+	--@p_osp_yn				NVARCHAR(MAX),
+	--@p_city				NVARCHAR(MAX),
+	--@p_site_hrcy_id		NVARCHAR(MAX),
+	--@p_end_customer		NVARCHAR(MAX),
+	--@p_site_id			NVARCHAR(MAX)
+
+	@p_scm_vendor_name      NVARCHAR(MAX),
+	@p_osp_yn_gb			NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_plant_id			    NVARCHAR(MAX);
+	DECLARE @v_scm_site_id			NVARCHAR(MAX);
+	DECLARE @v_site_description		NVARCHAR(MAX);
+	DECLARE @v_country				NVARCHAR(MAX);
+	DECLARE @v_operation_group		NVARCHAR(MAX);
+	DECLARE @v_vmi_yn			    NVARCHAR(MAX);
+	DECLARE @v_valid_yn				NVARCHAR(MAX);
+	DECLARE @v_new_yn				NVARCHAR(MAX);
+	DECLARE @v_fp_plan_period		NVARCHAR(MAX);
+	DECLARE @v_build_ahead			NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+	DECLARE @v_creation_date		DATETIME;
+	DECLARE @v_last_updated_by		NVARCHAR(MAX);
+	DECLARE @v_company_id			NVARCHAR(MAX);
+	DECLARE @p_site_type			NVARCHAR(MAX);
+	DECLARE @p_dept_id				NVARCHAR(MAX);
+	DECLARE @p_osp_yn				NVARCHAR(MAX);
+	DECLARE @v_city					NVARCHAR(MAX);
+	DECLARE @p_site_hrcy_id			NVARCHAR(MAX);
+	DECLARE @v_frozen_type			NVARCHAR(MAX);
+	DECLARE @v_ship_frozen			NVARCHAR(MAX);
+	DECLARE @v_prod_frozen			NVARCHAR(MAX);
+	DECLARE @p_end_customer			NVARCHAR(MAX);
+	DECLARE @p_site_id				NVARCHAR(MAX);
+	DECLARE @v_logistic_plant_id	NVARCHAR(MAX);
+	DECLARE @v_packer_item_id_suffix	NVARCHAR(MAX);
+	DECLARE @v_hq_vendor_code		NVARCHAR(MAX);
+	DECLARE @v_packer_line_active_yn	NVARCHAR(MAX);
+	DECLARE @v_scm_vendor_name		NVARCHAR(MAX);
+	DECLARE @v_osp_yn_gb			NVARCHAR(MAX);
+		
+	SET @v_active_flag = NULL;
+	SET @v_division_id = NULL;
+	SET @v_plant_id = NULL;
+	SET @v_scm_site_id = NULL;
+	SET @v_site_description = NULL;
+	SET @v_country = NULL;	 
+	SET @v_operation_group = NULL;	 
+	SET @v_vm"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","2","i_yn = NULL;	 
+	SET @v_valid_yn = NULL;	
+	SET @v_new_yn = NULL;
+	SET @v_fp_plan_period = NULL;	
+	SET @v_build_ahead = NULL;	
+	SET @v_created_by = NULL;	  
+	SET @v_creation_date = NULL;
+	SET @v_last_updated_by = NULL;
+	SET @v_company_id = NULL;
+	SET @v_logistic_plant_id = NULL;
+	SET @v_packer_item_id_suffix = NULL;
+	SET @v_hq_vendor_code = NULL;
+	SET @v_packer_line_active_yn = NULL;
+	SET @v_scm_vendor_name = NULL;
+	SET @v_osp_yn_gb = NULL;
+
+	SET @p_site_type = 'PLANT';
+	SET @p_dept_id   = 'PLANT';
+	SET @p_osp_yn = 'Y' ;
+	SET @p_site_hrcy_id = NULL;
+	SET @v_frozen_type = NULL;
+	SET @v_ship_frozen = NULL;
+	SET @v_prod_frozen = NULL;
+	SET @p_end_customer = NULL;
+	SET @p_site_id = NULL;
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0001_SAVE_PLANT_SITE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+		BEGIN TRY
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		--SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0		
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 			
+				SET @v_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_plant_id, @v_delimiter , @mst_loop_cnt) ;    				
+				SET @v_scm_site_id = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id, @v_delimiter , @mst_loop_cnt) ;    				
+				SET @v_site_description = [dbo].[SCM_ARR_SPL_VAL](@p_site_description, @v_delimiter , @mst_loop_cnt) ; 				
+				SET @v_country = [dbo].[SCM_ARR_SPL_VAL](@p_country, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_city = [dbo].[SCM_ARR_SPL_VAL](@p_city, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_operation_group = [dbo].[SCM_ARR_SPL_VAL](@p_operation_group, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_vmi_yn = [dbo].[SCM_ARR_SPL_VAL](@p_vmi_yn, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_valid_yn = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn, @v_delimiter, @mst_loop_cnt) ; 	
+				SET @v_new_yn = [dbo].[SCM_ARR_SPL_VAL](@p_new_yn, @v_delimiter, @mst_loop_cnt) ; 				 
+				SET @v_frozen_type = [dbo].[SCM_ARR_SPL_VAL](@p_frozen_type, @v_delimiter, @mst_loop_cnt) ; 				
+				--SET @v_ship_frozen = [dbo].[SCM_ARR_SPL_VAL](@p_ship_frozen, @v_delimiter, @mst_loop_cnt) ; 								
+				SET @v_prod_frozen = [dbo].[SCM_ARR_SPL_VAL](@p_prod_frozen, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_fp_plan_period = [dbo].[SCM_ARR_SPL_VAL](@p_fp_plan_period, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_build_ahead = [dbo].[SCM_ARR_SPL_VAL](@p_build_ahead, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_created_by = [dbo].[SCM_ARR_SPL_VAL](@p_created_by, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_creation_date = CONVERT(DATETIME, [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter, @mst_loop_cnt) , 120);				
+				SET @v_last_updated_by = [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_company_id = [dbo].[SCM_ARR_SPL_VAL](@p_company_id, @v_delimiter, @mst_loop_cnt) ; 								
+				SET @p_site_id"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","3"," = (SELECT t.site_id FROM scm_mst_site_sn t where t.company_id = @v_company_id);		
+				SET @v_logistic_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_logistic_plant_id, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_packer_item_id_suffix = [dbo].[SCM_ARR_SPL_VAL](@p_packer_item_id_suffix, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_hq_vendor_code = [dbo].[SCM_ARR_SPL_VAL](@p_hq_vendor_code, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_packer_line_active_yn = [dbo].[SCM_ARR_SPL_VAL](@p_packer_line_active_yn, @v_delimiter, @mst_loop_cnt) ; 								
+				SET @v_scm_vendor_name = [dbo].[SCM_ARR_SPL_VAL](@p_scm_vendor_name, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_osp_yn_gb = [dbo].[SCM_ARR_SPL_VAL](@p_osp_yn_gb, @v_delimiter, @mst_loop_cnt) ;
+					
+			END
+			
+			--HISTORY INSERT
+			EXEC [PR_SCM_MST_SITE_HIST]
+								 @v_division_id 
+								,@v_scm_site_id 
+								,@v_site_description
+								,@p_site_type
+								,@v_city
+								,@v_country 
+								,@v_plant_id 
+								,@v_operation_group 
+								,@p_dept_id
+								,@v_vmi_yn
+								,@v_valid_yn
+								,@v_new_yn
+								,@p_site_hrcy_id
+								,@p_osp_yn
+								,@v_frozen_type
+								,@v_ship_frozen
+								,@v_prod_frozen
+								,@p_end_customer
+								,@v_fp_plan_period
+								,@v_build_ahead
+								,@v_created_by
+								,@v_creation_date
+								,@v_last_updated_by
+								,@v_company_id
+								,@p_site_id		
+								,@v_logistic_plant_id												
+								,@v_packer_item_id_suffix		
+								,@v_hq_vendor_code		
+								,@v_packer_line_active_yn				
+			 ;
+			 
+			
+			-- 2022/04/25
+			EXEC [SCP0001_SAVE_SCM_MST_VENDOR]
+								 @v_company_id
+								,@v_division_id								
+								,@v_plant_id 
+								,@v_scm_vendor_name
+								,@v_osp_yn_gb
+			;			
+			
+			IF @mst_loop_cnt > 0 
+
+				BEGIN       
+			 
+					MERGE INTO [SCM_MST_SITE] A
+					USING (
+							SELECT 
+								 @v_division_id as division_id
+								,@v_plant_id as plant_id
+								,@v_scm_site_id as scm_site_id							
+						  ) B
+					ON(
+							    A.division_id  = B.division_id
+							AND A.plant_id = B.plant_id
+							AND A.scm_site_id  = B.scm_site_id
+						
+					  )
+					  
+					WHEN MATCHED THEN
+						 UPDATE SET 
+
+								site_description    = @v_site_description
+							   ,country				= @v_country
+							   ,city				= @v_city
+							   ,operation_group		= @v_operation_group
+							   ,vmi_yn				= @v_vmi_yn
+							   ,valid_yn			= @v_valid_yn
+							   --,ship_frozen 		= @v_ship_frozen
+							   ,ship_frozen 		= CASE WHEN ISNULL(@v_frozen_type, '') = '' THEN ship_frozen
+							                                                                    ELSE [dbo].[FN_GET_CALC_SHIP_FROZEN_DAY_CNT](@v_frozen_type)
+													  END
+							   ,prod_frozen 		= @v_prod_frozen
+							   ,fp_plan_period		= @v_fp_plan_period
+							   ,build_ahead			= @v_build_ahead
+							   ,logistic_plant_id	= @v_logistic_plant_id
+							   ,packer_item_id_suffix	= @v_packer_item_id_suffix
+							   ,hq_vendor_code = @v_hq_vendor_code
+							   ,attribute1			= @v_packer_line_active_yn
+							   ,attribute6          = @v_frozen_type
+							   ,last_updated_by		= @v_last_updated_by
+							   ,last_update_date	= sysdatetime()
+
+					WHEN NOT MATCHED THEN
+
+						INSERT	(									   
+								 division_id,scm_site_id,site_description,site_type
+								,city,country,plant_id,operation_group,dept_id
+								,vmi_yn,valid_yn,new_yn,site_hrcy_id,osp_yn
+								,ship_frozen,prod_frozen,end_customer,fp_plan_period,build_ahead
+								,created_by,creation_date,last_updated_by,last_update_date
+								,company_id, site_id, logistic_plant_id, packer_item_id_suffix, hq_vendor_code
+								,attribute1, attribute6
+								)
+						VALUES  
+								(
+								 @v_division_id ,@v_scm_site_id , @v_site_description, 'PLANT'/*@v_site_type */
+								,@v_city ,@v_country ,@v_plant_id ,@v_operation_group ,'PLANT' /*@v_dept_id */
+								,@v_vmi_yn, @v_v"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA","446012720","1","/****************************************************************************************************/
+/* Program ID  : [SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA]														*/
+/* Description : SCM_MST_SITE HISTORYT INSERT														*/
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2018/05/02  ygkim	   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/* 2021/01/20  khj79	   [C20210115-000214] (1)Sales Site (Sales Customer) - Active 이력 저장관련 오류사항  */
+/*                                                                                                  */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA]
+	
+	--@p_success_yn			NVARCHAR(1) OUTPUT
+	@p_active_flag			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_scm_site_id			NVARCHAR(MAX),
+	@p_soldto_code			NVARCHAR(MAX),
+	@p_soldto_description	NVARCHAR(MAX),
+	@p_shipto_code			NVARCHAR(MAX),
+	@p_shipto_description	NVARCHAR(MAX),
+	@p_rep_yn				NVARCHAR(MAX),
+	@p_valid_yn				NVARCHAR(MAX),
+	@p_created_by			NVARCHAR(MAX)
+	
+AS
+
+BEGIN
+
+	SET NOCOUNT ON; 
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET XACT_ABORT ON;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_scm_site_id			NVARCHAR(MAX);
+	DECLARE @v_soldto_code			NVARCHAR(MAX);
+	DECLARE @v_soldto_description	NVARCHAR(MAX);
+	DECLARE @v_shipto_code			NVARCHAR(MAX);
+	DECLARE @v_shipto_description	NVARCHAR(MAX);
+	DECLARE @v_rep_yn				NVARCHAR(MAX);
+	DECLARE @v_valid_yn				NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+	--DECLARE	@v_OK_description		NVARCHAR(1200);	-- 자식 프로시저 성공/에러 셋팅
+
+	SET @v_active_flag = NULL;
+	SET @v_division_id = NULL;
+	SET @v_scm_site_id = NULL;
+	SET @v_soldto_code = NULL;
+	SET @v_soldto_description = NULL;	 
+	SET @v_shipto_code = NULL;	 
+	SET @v_shipto_description = NULL;	 
+	SET @v_rep_yn = NULL;	 
+	SET @v_valid_yn = NULL;	
+	SET @v_created_by = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^'
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	-- @results TEMP TABLE(20180418 ADD SKH)
+	DECLARE @results TABLE (
+             division_id      NVARCHAR(MAX)
+			,scm_site_id      NVARCHAR(MAX)
+			,soldto_code      NVARCHAR(MAX)
+			,shipto_code      NVARCHAR(MAX)
+			)
+	DECLARE @v_dup_scm_site_id		NVARCHAR(MAX);
+	SET @v_dup_scm_site_id = '';
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 시작 LOG
+	SET @v_log_type = 'START';
+	SET @v_log_message = '########## Start of procedure ##########';
+	SET @v_description = '';
+	SET @d_event_date = SYSDATETIME();
+	
+	EXEC  PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	-- 시작 LOG  (END)
+	SET @v_log_message = NULL      /*-- <- 변수 재사용을 위하여 초기화해야함 --*/
+
+	BEGIN TRAN;
+
+		BEGIN TRY
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SP"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA","446012720","2","L_CNT](@p_active_flag, @v_delimiter);    
+		--SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+				--SELECT @v_active_flag
+					  
+				SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 
+				--SELECT @v_division_id
+
+				SET @v_scm_site_id = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id, @v_delimiter , @mst_loop_cnt) ;    
+				--SELECT @v_scm_site_id
+
+				SET @v_soldto_code = [dbo].[SCM_ARR_SPL_VAL](@p_soldto_code, @v_delimiter , @mst_loop_cnt) ;    
+				--SELECT @v_soldto_code
+			
+				SET @v_soldto_description = [dbo].[SCM_ARR_SPL_VAL](@p_soldto_description, @v_delimiter , @mst_loop_cnt) ; 
+				--SELECT @v_soldto_description
+
+				SET @v_shipto_code = [dbo].[SCM_ARR_SPL_VAL](@p_shipto_code, @v_delimiter, @mst_loop_cnt) ; 
+				--SELECT @v_shipto_code
+
+				SET @v_shipto_description = [dbo].[SCM_ARR_SPL_VAL](@p_shipto_description, @v_delimiter, @mst_loop_cnt) ; 
+				--SELECT @v_shipto_description
+
+				SET @v_rep_yn = [dbo].[SCM_ARR_SPL_VAL](@p_rep_yn, @v_delimiter, @mst_loop_cnt) ; 
+				--SELECT @v_rep_yn
+
+				SET @v_valid_yn = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn, @v_delimiter, @mst_loop_cnt) ; 
+				--SELECT @v_valid_yn
+
+				SET @v_created_by = [dbo].[SCM_ARR_SPL_VAL](@p_created_by, @v_delimiter, @mst_loop_cnt) ; 
+				--SELECT @v_created_by
+						
+			END
+
+			--HISTORY INSERT
+			EXEC	[dbo].[PR_DM_MST_SITE_CUSTOMER_HIST]	--@return_value = [dbo].[PR_DM_MST_SITE_CUSTOMER_HIST]
+						@v_division_id,
+						@v_scm_site_id,
+						@v_soldto_code,
+						@v_shipto_code,		
+						@v_rep_yn,
+						@v_created_by,
+						@v_valid_yn    -- [C20210115-000214] khj79 추가
+
+						--,@v_OK_description OUTPUT
+						--SELECT @v_OK_description;
+
+			IF @mst_loop_cnt > 0 
+
+				BEGIN       
+				
+				-- 	SCM_MST_SITE_CUSTOMER MASTER SAVE LOGIC
+					
+					IF EXISTS
+					(
+						SELECT 
+							A.division_id,A.scm_site_id,A.soldto_code,A.shipto_code  
+						FROM	
+						[dbo].[SCM_MST_SITE_CUSTOMER] A  WITH(NOLOCK)	,
+						(
+								SELECT 
+									@v_division_id	as division_id, 
+									@v_scm_site_id	as scm_site_id, 
+									@v_soldto_code	as soldto_code, 
+									@v_shipto_code	as shipto_code
+						) B
+						WHERE  1 = 1	
+								AND A.division_id  = B.division_id
+								AND A.scm_site_id  = B.scm_site_id
+								AND A.soldto_code  = B.soldto_code
+								AND A.shipto_code  = B.shipto_code
+					)
+
+						IF @v_rep_yn = 'Y'
+
+							BEGIN
+
+								 UPDATE [dbo].[SCM_MST_SITE_CUSTOMER] 
+								 SET
+										REP_YN = 'N'
+								 WHERE 
+										division_id  = @v_division_id
+									AND scm_site_id  = @v_scm_site_id
+								;	
+						
+								UPDATE [dbo].[SCM_MST_SITE_CUSTOMER] 
+								 SET 
+										 division_id		= @v_division_id
+										,scm_site_id	    = @v_scm_site_id
+										,soldto_code	    = @v_soldto_code
+										,shipto_code		= @v_shipto_code
+										,rep_yn				= @v_rep_yn
+										,valid_yn			= @v_valid_yn
+										,last_updated_by	= @v_created_by
+										,last_update_date	= sysdatetime()
+								WHERE
+										division_id  = @v_division_id
+									AND scm_site_id  = @v_scm_site_id
+									AND soldto_code  = @v_soldto_code
+									AND shipto_code  = @v_shipto_code	
+								;
+
+							END
+
+						ELSE
+
+							BEGIN
+
+								UPDATE [dbo].[SCM_MST_SITE_CUSTOMER] 
+								 SET 
+										 division_id		= @v_division_id
+										,scm_site_id	    = @v_scm_site_id
+										,soldto_code	    = @v_soldto_code
+										,shipto_code		= @v_shipto_code
+										,rep_yn				= @v_rep_yn
+										,valid_yn			= @v_valid_yn
+										,last_updated_b"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA","446012720","3","y	= @v_created_by
+										,last_update_date	= sysdatetime()
+								WHERE
+										division_id  = @v_division_id
+									AND scm_site_id  = @v_scm_site_id
+									AND soldto_code  = @v_soldto_code
+									AND shipto_code  = @v_shipto_code	
+								;
+
+							END
+
+					ELSE
+					
+						INSERT INTO	[dbo].[SCM_MST_SITE_CUSTOMER]
+								(  
+								    division_id		
+								   ,scm_site_id							   
+								   ,soldto_code
+								   ,shipto_code
+								   ,rep_yn
+								   ,valid_yn
+								   ,created_by
+								   ,creation_date
+								   ,last_updated_by
+								   ,last_update_date
+								)
+						 VALUES (   
+									@v_division_id
+								   ,@v_scm_site_id	
+								   ,@v_soldto_code
+								   ,@v_shipto_code
+								   ,@v_rep_yn
+								   ,@v_valid_yn
+								   --,CONVERT(INT,  CAST(@v_qty AS NVARCHAR(10)))
+								   ,@v_created_by
+								   ,sysdatetime()
+								   ,@v_created_by
+								   ,sysdatetime()
+								);
+
+
+				END
+
+			ELSE    --단일 ROW 일때
+			 
+				BEGIN        
+					SET @v_active_flag			= @p_active_flag        
+					SET @p_active_flag			= NULL       
+					SET @v_division_id			= @p_division_id        
+					SET @p_division_id			= NULL      
+					SET @v_soldto_code			= @p_soldto_code        
+					SET @p_soldto_code			= NULL  
+					SET @v_soldto_description	= @p_soldto_description        
+					SET @p_soldto_description	= NULL  
+					SET @v_shipto_code			= @p_shipto_code        
+					SET @p_shipto_code			= NULL  
+					SET @v_shipto_description	= @p_shipto_description     
+					SET @p_shipto_description	= NULL  
+					SET @v_rep_yn				= @p_rep_yn      
+					SET @p_rep_yn				= NULL  
+					SET @v_valid_yn				= @p_valid_yn      
+					SET @p_valid_yn				= NULL  
+					SET @v_created_by = @p_created_by
+					SET @p_created_by = NULL
+			 
+				--HISTORY INSERT
+
+				EXEC	[dbo].[PR_DM_MST_SITE_CUSTOMER_HIST]	--@return_value = [dbo].[PR_DM_MST_SITE_CUSTOMER_HIST]
+						@v_division_id,
+						@v_scm_site_id,
+						@v_soldto_code,
+						@v_shipto_code,		
+						@v_rep_yn,
+						@v_created_by,
+						@v_valid_yn    -- [C20210115-000214] khj79 추가
+
+						--SELECT @v_OK_description;
+						--@v_OK_description OUTPUT
+					
+					IF EXISTS
+					(
+						SELECT 
+							A.division_id,A.scm_site_id,A.soldto_code,A.shipto_code  
+						FROM	
+						[dbo].[SCM_MST_SITE_CUSTOMER] A  WITH(NOLOCK)	,
+						(
+								SELECT 
+									@v_division_id	as division_id, 
+									@v_scm_site_id	as scm_site_id, 
+									@v_soldto_code	as soldto_code, 
+									@v_shipto_code	as shipto_code
+						) B
+						WHERE  1 = 1	
+								AND A.division_id  = B.division_id
+								AND A.scm_site_id  = B.scm_site_id
+								AND A.soldto_code  = B.soldto_code
+								AND A.shipto_code  = B.shipto_code
+					)
+
+						IF @v_rep_yn = 'Y'
+
+							BEGIN
+
+								 UPDATE [dbo].[SCM_MST_SITE_CUSTOMER] 
+								 SET
+										REP_YN = 'N'
+								 WHERE 
+										division_id  = @v_division_id
+									AND scm_site_id  = @v_scm_site_id
+								;	
+						
+								UPDATE [dbo].[SCM_MST_SITE_CUSTOMER] 
+								 SET 
+										 division_id		= @v_division_id
+										,scm_site_id	    = @v_scm_site_id
+										,soldto_code	    = @v_soldto_code
+										,shipto_code		= @v_shipto_code
+										,rep_yn				= @v_rep_yn
+										,valid_yn			= @v_valid_yn
+										,last_updated_by	= @v_created_by
+										,last_update_date	= sysdatetime()
+								WHERE
+										division_id  = @v_division_id
+									AND scm_site_id  = @v_scm_site_id
+									AND soldto_code  = @v_soldto_code
+									AND shipto_code  = @v_shipto_code	
+								;
+							END
+
+						ELSE
+
+							BEGIN
+
+								UPDATE [dbo].[SCM_MST_SITE_CUSTOMER] 
+								 SET 
+										 division_id		= @v_division_id
+										,scm_site_id	    = @v_scm_site_id
+										,soldto_code	    = @v_soldto_code
+										,shipto_code		= @v_shipto_code
+										,rep_yn				= @v_rep_yn
+										,"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA","446012720","4","valid_yn			= @v_valid_yn
+										,last_updated_by	= @v_created_by
+										,last_update_date	= sysdatetime()
+								WHERE
+										division_id  = @v_division_id
+									AND scm_site_id  = @v_scm_site_id
+									AND soldto_code  = @v_soldto_code
+									AND shipto_code  = @v_shipto_code	
+								;
+
+							END
+
+
+					ELSE
+					
+						INSERT INTO	[dbo].[SCM_MST_SITE_CUSTOMER]
+								(  
+								    division_id		
+								   ,scm_site_id							   
+								   ,soldto_code
+								   ,shipto_code
+								   ,rep_yn
+								   ,valid_yn
+								   ,created_by
+								   ,creation_date
+								   ,last_updated_by
+								   ,last_update_date
+								)
+						 VALUES (   
+									@v_division_id
+								   ,@v_scm_site_id	
+								   ,@v_soldto_code
+								   ,@v_shipto_code
+								   ,@v_rep_yn
+								   ,@v_valid_yn
+								   --,CONVERT(INT,  CAST(@v_qty AS NVARCHAR(10)))
+								   ,@v_created_by
+								   ,sysdatetime()
+								   ,@v_created_by
+								   ,sysdatetime()
+								);
+
+				END
+
+			--------------------------------------------------------------------------------------------------------------------------------------- 20180418 ADD SKH (start)
+			   /*
+			   IF isnull((select count(1) from SCM_MST_SITE_CUSTOMER 
+			                where 1=1
+  							  and division_id = @v_division_id
+  							  and shipto_code = @v_shipto_code
+							  and VALID_YN = 'Y'                    -- VALID_YN = 'Y' 것만 중복체크
+			                group by division_id, shipto_code
+							HAVING COUNT(*) > 1                     -- ui에서 input받은 데이터 포함하여 2건이상인것 체크
+				   ),0) > 1
+				   begin  -- 중복 발생인경우의 logic
+					   
+					   set @v_dup_scm_site_id = ''
+					   set @v_dup_scm_site_id = (select top 1 scm_site_id from SCM_MST_SITE_CUSTOMER   -- 정상인경우 2건이상일수 없지만 현재 데이터정비가 되어있지 않아 top 1 으로 한건만 추출
+			                where 1=1
+  							  and division_id = @v_division_id
+  							  and shipto_code = @v_shipto_code
+							  and scm_site_id <> @v_scm_site_id      -- ui에서 input받은 scm_site_id 제외하고 존재하고있는 scm_site_id 를 추출
+							  and VALID_YN = 'Y')
+
+					   SET @v_log_type = 'INVALID';
+					   SELECT N'MSG00179',@v_dup_scm_site_id,@v_shipto_code     -- ui측에 전달하여 중복대상인 scm_site_id와 shipto_code를 pop_up 시킴
+					   --  ' Ford_US_RDF Sales Site 에서 USH000534A Ship-To Code가 이미 사용중입니다.'
+					   --   {0} Sales Site 에서  {1} Ship-To Code가 이미 사용중입니다.
+					   goto err_rtn
+				   end
+				   */
+			--------------------------------------------------------------------------------------------------------------------------------------- 20180418 ADD SKH (end)
+			END
+
+
+			COMMIT TRAN ;	
+
+		END TRY
+
+	BEGIN CATCH
+
+		ROLLBACK TRAN ;	
+
+		  -- ERROR LOG
+		  SET @v_log_type = 'ERROR';
+		  SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+		  SET @v_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+		  SET @d_event_date = SYSDATETIME();
+
+		  --IF @v_OK_description <> 'OK'
+		  --SET @v_log_message = CAST(@v_OK_description AS NVARCHAR(1000));
+		  EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+
+	END CATCH;
+
+	SET NOCOUNT OFF;
+
+
+	-- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure ##########';
+    SET @v_description = '';
+    SET @d_event_date = SYSDATETIME();
+
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	END;
+	
+    --------------------------------------------------------------------------------------------------------------------------------------- 20180418 ADD SKH (start)
+	-- 트랜잭션 (END)
+	err_rtn:
+	IF @v_log_type = 'INVALID'
+		begin
+			ROLLBACK TRAN
+		end
+    --------------------------------------------------------------------------------------------------------------------------------------"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE_CUSTOMER_DATA","446012720","5","- 20180418 ADD SKH (end)
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0001_SAVE_SCM_MST_VENDOR","462012777","1","
+/*
+ * Program ID   : SCP0001_SAVE_SCM_MST_VENDOR
+ * Description  : Shipping Result Check VOC 적용
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2022/04/11   lwy   Initial Release PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - GSCM_VENDOR  적용.
+ * 2022/04/25	lwy	  PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - 사내, 사외 분리적용
+ */
+
+CREATE PROCEDURE [dbo].[SCP0001_SAVE_SCM_MST_VENDOR]
+	 @p_company_id 		nvarchar(60)
+	,@p_division_id		nvarchar(20)
+	,@p_plant_id	    nvarchar(20)
+	,@p_vendor_name		nvarchar(100)
+	,@p_osp_yn_gb       nvarchar(100)
+AS
+BEGIN
+
+	--SET @v_qty = NULL;
+
+	-- LOG 용 변수 설정
+	DECLARE @v_program_name NVARCHAR(150) = 'SCP0001_SAVE_SCM_MST_VENDOR';
+	DECLARE @v_log_type     NVARCHAR(30);
+	DECLARE @n_log_count    INTEGER = 0;
+	DECLARE @v_log_message  NVARCHAR(1000);
+	DECLARE @v_description  NVARCHAR(500);
+	DECLARE @d_event_date   DATETIME;
+
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+
+	BEGIN TRY
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		SET @d_event_date = SYSDATETIME();
+
+		IF @p_osp_yn_gb = 'Y'
+		BEGIN
+			--사외 수정		
+			UPDATE A
+			   SET ATTRIBUTE1 = @p_vendor_name
+			FROM SCM_MST_VENDOR A WITH(NOLOCK)
+			WHERE 1 = 1				
+			  AND A.COMPANY_ID  = @p_company_id
+			  AND A.VENDOR_CODE = @p_plant_id
+			;
+		END
+		ELSE IF @p_osp_yn_gb = 'N'
+		BEGIN
+			--사내 수정		
+			UPDATE A
+			   SET DESCRIPTION = @p_vendor_name
+			FROM SCM_PLANT_M_SN A WITH(NOLOCK)    -- FP
+			WHERE 1 = 1				
+			  --AND A.COMPANY_ID  = @p_company_id			  
+			  --AND A.SITE_ID     = @p_site_id
+			  AND A.DIVISION_ID = @p_division_id
+			  AND A.PLANT_ID    = @p_plant_id
+			;
+
+		END
+
+		
+		
+		
+		
+		
+		SELECT 'S' AS RESULT_CODE, '' AS MSG
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	END TRY
+
+	BEGIN CATCH
+		BEGIN		
+			INSERT INTO scm_sys_log_batch (  program_name
+											,log_type
+											,log_count
+											,log_message
+											,description
+											,event_date
+											,creation_date
+											,created_by
+											,last_update_date
+											,last_updated_by)
+			VALUES ( ERROR_PROCEDURE()
+					,'ERROR'
+					,NULL
+					,ERROR_MESSAGE()
+					,NULL
+					,SYSDATETIME()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+				COMMIT WORK;
+			END;
+
+			-- error코드, errror 메시지 반환
+			IF( @v_err_message IS NULL OR @v_err_message ='')
+				SELECT 'F' AS result_code, '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() AS ERR_MESSAGE ;
+			ELSE
+				SELECT 'N' AS result_code, @v_err_message AS ERR_MESSAGE ;
+	
+	END CATCH;
+
+END
+
+
+
+
+
+
+
+
+
+
+"
+"2025-12-05 00:00:01.063","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","1","/*
+ * Program ID   : SCP0001_SAVE_PLANT_SITE
+ * Description  : Plant 등록,수정 (외주Paker만 가능)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/07   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/04/30   ygkim			logistic_plant_id 컬럼 추가
+ * 2018/07/02   ygkim			packer_item_id_suffix 컬럼 추가
+ * 2018/09/14   ygkim			p_hq_vendor_code 추가 
+ * 2020/02/12	hwyoon			[C20200116-000114] ESS 외주 Packer Line 계획 수립 - p_packer_line_active_yn 추가
+ * 2022/04/11	lwy			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - p_scm_vendor_name 추가
+ * 2022/04/25	lwy			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - 사내, 사외 분리적용
+ * 2022/05/02	hsbang			frozen_type 컬럼 추가
+ * 2025/11/07   kimcd           [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선
+ *                              JV ESS 생산에 따른 실제 Link scm site id 값을 ATTRIBUTE9 저장 추가
+ */
+CREATE PROCEDURE [dbo].[SCP0001_SAVE_PLANT_SITE]
+
+	-- Add the parameters for the stored procedure here
+	@p_active_flag			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_plant_id 			NVARCHAR(MAX),
+	@p_scm_site_id 			NVARCHAR(MAX),
+	@p_site_description		NVARCHAR(MAX),
+    @p_country 			    NVARCHAR(MAX),
+	@p_city 			    NVARCHAR(MAX),
+	@p_operation_group 		NVARCHAR(MAX),
+	@p_vmi_yn			    NVARCHAR(MAX),
+	@p_valid_yn			    NVARCHAR(MAX),
+    @p_new_yn			    NVARCHAR(MAX),
+	@p_ship_frozen   		NVARCHAR(MAX),
+	@p_frozen_type   		NVARCHAR(MAX),
+	@p_prod_frozen  		NVARCHAR(MAX),
+	@p_fp_plan_period 		NVARCHAR(MAX),
+	@p_build_ahead			NVARCHAR(MAX),
+	@p_created_by			NVARCHAR(MAX),
+	@p_creation_date		NVARCHAR(MAX),
+	@p_last_updated_by		NVARCHAR(MAX),
+	@p_company_id			NVARCHAR(MAX),
+	@p_logistic_plant_id	NVARCHAR(MAX),
+	@p_packer_item_id_suffix	NVARCHAR(MAX),
+	@p_hq_vendor_code		NVARCHAR(MAX),
+	@p_packer_line_active_yn NVARCHAR(MAX),
+	--@p_site_type			NVARCHAR(MAX),
+	--@p_dept_id			NVARCHAR(MAX),
+	--@p_osp_yn				NVARCHAR(MAX),
+	--@p_city				NVARCHAR(MAX),
+	--@p_site_hrcy_id		NVARCHAR(MAX),
+	--@p_end_customer		NVARCHAR(MAX),
+	--@p_site_id			NVARCHAR(MAX)
+
+	@p_scm_vendor_name      NVARCHAR(MAX),
+	@p_osp_yn_gb			NVARCHAR(MAX),
+	@P_LINK_PLANT_SITE_ID   NVARCHAR(MAX) -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_plant_id			    NVARCHAR(MAX);
+	DECLARE @v_scm_site_id			NVARCHAR(MAX);
+	DECLARE @v_site_description		NVARCHAR(MAX);
+	DECLARE @v_country				NVARCHAR(MAX);
+	DECLARE @v_operation_group		NVARCHAR(MAX);
+	DECLARE @v_vmi_yn			    NVARCHAR(MAX);
+	DECLARE @v_valid_yn				NVARCHAR(MAX);
+	DECLARE @v_new_yn				NVARCHAR(MAX);
+	DECLARE @v_fp_plan_period		NVARCHAR(MAX);
+	DECLARE @v_build_ahead			NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+	DECLARE @v_creation_date		DATETIME;
+	DECLARE @v_last_updated_by		NVARCHAR(MAX);
+	DECLARE @v_company_id			NVARCHAR(MAX);
+	DECLARE @p_site_type			NVARCHAR(MAX);
+	DECLARE @p_dept_id				NVARCHAR(MAX);
+	DECLARE @p_osp_yn				NVARCHAR(MAX);
+	DECLARE @v_city					NVARCHAR(MAX);
+	DECLARE @p_site_hrcy_id			NVARCHAR(MAX);
+	DECLARE @v_frozen_type			NVARCHAR(MAX);
+	DECLARE @v_ship_frozen			NVARCHAR(MAX);
+	DECLARE @v_prod_frozen			NVARCHAR(MAX);
+	DECLARE @p_end_customer			NVARCHAR(MAX);
+	DECLARE @p_site_id				NVARCHAR(MAX);
+	DECLARE @v_logistic_plant_id	NVARCHAR(MAX);
+	DECLARE @v_packer_item_id_suffix	NVARCHAR(MAX);
+	DECLARE @v_hq_vendor_code		NVARCHAR(MAX);
+	DECLARE @v_packer_line_active_yn	NVARCHAR(MAX);
+	DECLARE @v_scm_vend"
+"2025-12-05 00:00:01.063","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","2","or_name		NVARCHAR(MAX);
+	DECLARE @v_osp_yn_gb			NVARCHAR(MAX);
+	DECLARE @V_LINK_PLANT_SITE_ID   NVARCHAR(MAX) -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+		
+	SET @v_active_flag = NULL;
+	SET @v_division_id = NULL;
+	SET @v_plant_id = NULL;
+	SET @v_scm_site_id = NULL;
+	SET @v_site_description = NULL;
+	SET @v_country = NULL;	 
+	SET @v_operation_group = NULL;	 
+	SET @v_vmi_yn = NULL;	 
+	SET @v_valid_yn = NULL;	
+	SET @v_new_yn = NULL;
+	SET @v_fp_plan_period = NULL;	
+	SET @v_build_ahead = NULL;	
+	SET @v_created_by = NULL;	  
+	SET @v_creation_date = NULL;
+	SET @v_last_updated_by = NULL;
+	SET @v_company_id = NULL;
+	SET @v_logistic_plant_id = NULL;
+	SET @v_packer_item_id_suffix = NULL;
+	SET @v_hq_vendor_code = NULL;
+	SET @v_packer_line_active_yn = NULL;
+	SET @v_scm_vendor_name = NULL;
+	SET @v_osp_yn_gb = NULL;
+	SET @V_LINK_PLANT_SITE_ID = NULL; -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+
+	SET @p_site_type = 'PLANT';
+	SET @p_dept_id   = 'PLANT';
+	SET @p_osp_yn = 'Y' ;
+	SET @p_site_hrcy_id = NULL;
+	SET @v_frozen_type = NULL;
+	SET @v_ship_frozen = NULL;
+	SET @v_prod_frozen = NULL;
+	SET @p_end_customer = NULL;
+	SET @p_site_id = NULL;
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0001_SAVE_PLANT_SITE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+		BEGIN TRY
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		--SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 			
+				SET @v_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_plant_id, @v_delimiter , @mst_loop_cnt) ;    				
+				SET @v_scm_site_id = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id, @v_delimiter , @mst_loop_cnt) ;    				
+				SET @v_site_description = [dbo].[SCM_ARR_SPL_VAL](@p_site_description, @v_delimiter , @mst_loop_cnt) ; 				
+				SET @v_country = [dbo].[SCM_ARR_SPL_VAL](@p_country, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_city = [dbo].[SCM_ARR_SPL_VAL](@p_city, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_operation_group = [dbo].[SCM_ARR_SPL_VAL](@p_operation_group, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_vmi_yn = [dbo].[SCM_ARR_SPL_VAL](@p_vmi_yn, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_valid_yn = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn, @v_delimiter, @mst_loop_cnt) ; 	
+				SET @v_new_yn = [dbo].[SCM_ARR_SPL_VAL](@p_new_yn, @v_delimiter, @mst_loop_cnt) ; 				 
+				SET @v_frozen_type = [dbo].[SCM_ARR_SPL_VAL](@p_frozen_type, @v_delimiter, @mst_loop_cnt) ; 				
+				--SET @v_ship_frozen = [dbo].[SCM_ARR_SPL_VAL](@p_ship_frozen, @v_delimiter, @mst_loop_cnt) ; 			
+				SET @v_prod_frozen = [dbo].[SCM_ARR_SPL_VAL](@p_prod_frozen, @v_delimiter, @mst_loop_cnt) ; 			
+
+				SET @v_fp_plan_period = [dbo].[SCM_ARR_SPL_VAL](@p_fp_plan_period, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_"
+"2025-12-05 00:00:01.063","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","3","build_ahead = [dbo].[SCM_ARR_SPL_VAL](@p_build_ahead, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_created_by = [dbo].[SCM_ARR_SPL_VAL](@p_created_by, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_creation_date = CONVERT(DATETIME, [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter, @mst_loop_cnt) , 120);				
+				SET @v_last_updated_by = [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_company_id = [dbo].[SCM_ARR_SPL_VAL](@p_company_id, @v_delimiter, @mst_loop_cnt) ; 
+				SET @p_site_id = (SELECT t.site_id FROM scm_mst_site_sn t where t.company_id = @v_company_id);
+				SET @v_logistic_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_logistic_plant_id, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_packer_item_id_suffix = [dbo].[SCM_ARR_SPL_VAL](@p_packer_item_id_suffix, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_hq_vendor_code = [dbo].[SCM_ARR_SPL_VAL](@p_hq_vendor_code, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_packer_line_active_yn = [dbo].[SCM_ARR_SPL_VAL](@p_packer_line_active_yn, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_scm_vendor_name = [dbo].[SCM_ARR_SPL_VAL](@p_scm_vendor_name, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_osp_yn_gb = [dbo].[SCM_ARR_SPL_VAL](@p_osp_yn_gb, @v_delimiter, @mst_loop_cnt) ;
+				SET @V_LINK_PLANT_SITE_ID = NULLIF([dbo].[SCM_ARR_SPL_VAL](@P_LINK_PLANT_SITE_ID, @v_delimiter, @mst_loop_cnt),'') ; -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+					
+			END
+
+			--HISTORY INSERT
+			EXEC [PR_SCM_MST_SITE_HIST]
+								 @v_division_id 
+								,@v_scm_site_id 
+								,@v_site_description
+								,@p_site_type
+								,@v_city
+								,@v_country 
+								,@v_plant_id 
+								,@v_operation_group 
+								,@p_dept_id
+								,@v_vmi_yn
+								,@v_valid_yn
+								,@v_new_yn
+								,@p_site_hrcy_id
+								,@p_osp_yn
+								,@v_frozen_type
+								,@v_ship_frozen
+								,@v_prod_frozen
+								,@p_end_customer
+								,@v_fp_plan_period
+								,@v_build_ahead
+								,@v_created_by
+								,@v_creation_date
+								,@v_last_updated_by
+								,@v_company_id
+								,@p_site_id		
+								,@v_logistic_plant_id												
+								,@v_packer_item_id_suffix		
+								,@v_hq_vendor_code		
+								,@v_packer_line_active_yn				
+								,@V_LINK_PLANT_SITE_ID -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+			 ;
+
+			
+			-- 2022/04/25
+			EXEC [SCP0001_SAVE_SCM_MST_VENDOR]
+								 @v_company_id
+								,@v_division_id								
+								,@v_plant_id 
+								,@v_scm_vendor_name
+								,@v_osp_yn_gb
+			;			
+			
+			IF @mst_loop_cnt > 0 
+
+				BEGIN       
+			 
+					MERGE INTO [SCM_MST_SITE] A
+					USING (
+							SELECT 
+								 @v_division_id as division_id
+								,@v_plant_id as plant_id
+								,@v_scm_site_id as scm_site_id							
+						  ) B
+					ON(
+							    A.division_id  = B.division_id
+							AND A.plant_id = B.plant_id
+							AND A.scm_site_id  = B.scm_site_id
+						
+					  )
+					WHEN MATCHED THEN
+						 UPDATE SET 
+
+								site_description    = @v_site_description
+							   ,country				= @v_country
+							   ,city				= @v_city
+							   ,operation_group		= @v_operation_group
+							   ,vmi_yn				= @v_vmi_yn
+							   ,valid_yn			= @v_valid_yn
+							   --,ship_frozen 		= @v_ship_frozen
+							   ,ship_frozen 		= CASE WHEN ISNULL(@v_frozen_type, '') = '' THEN ship_frozen
+							                                                                    ELSE [dbo].[FN_GET_CALC_SHIP_FROZEN_DAY_CNT](@v_frozen_type)
+													  END
+							   ,prod_frozen 		= @v_prod_frozen
+							   ,fp_plan_period		= @v_fp_plan_period
+							   ,build_ahead			= @v_build_ahead
+							   ,logistic_plant_id	= @v_logistic_plant_id
+							   ,packer_item_id_suffix	= @v_packer_item_id_suffix
+							   ,hq_vendor_code = @v_hq_vendor_code
+							   ,attribute1			= @v_packer_line_active_yn
+							   ,attribute6     "
+"2025-12-02 00:00:00.523","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","1","/*
+ * Program ID   : SCP0001_SAVE_PLANT_SITE
+ * Description  : Plant 등록,수정 (외주Paker만 가능)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/07   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/04/30   ygkim			logistic_plant_id 컬럼 추가
+ * 2018/07/02   ygkim			packer_item_id_suffix 컬럼 추가
+ * 2018/09/14   ygkim			p_hq_vendor_code 추가 
+ * 2020/02/12	hwyoon			[C20200116-000114] ESS 외주 Packer Line 계획 수립 - p_packer_line_active_yn 추가
+ * 2022/04/11	lwy			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - p_scm_vendor_name 추가
+ * 2022/04/25	lwy			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - 사내, 사외 분리적용
+ * 2022/05/02	hsbang			frozen_type 컬럼 추가
+ * 2025/11/07   kimcd           [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선
+ *                              JV ESS 생산에 따른 실제 Link scm site id 값을 ATTRIBUTE9 저장 추가
+ */
+CREATE PROCEDURE [dbo].[SCP0001_SAVE_PLANT_SITE]
+
+	-- Add the parameters for the stored procedure here
+	@p_active_flag			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_plant_id 			NVARCHAR(MAX),
+	@p_scm_site_id 			NVARCHAR(MAX),
+	@p_site_description		NVARCHAR(MAX),
+    @p_country 			    NVARCHAR(MAX),
+	@p_city 			    NVARCHAR(MAX),
+	@p_operation_group 		NVARCHAR(MAX),
+	@p_vmi_yn			    NVARCHAR(MAX),
+	@p_valid_yn			    NVARCHAR(MAX),
+    @p_new_yn			    NVARCHAR(MAX),
+	@p_ship_frozen   		NVARCHAR(MAX),
+	@p_frozen_type   		NVARCHAR(MAX),
+	@p_prod_frozen  		NVARCHAR(MAX),
+	@p_fp_plan_period 		NVARCHAR(MAX),
+	@p_build_ahead			NVARCHAR(MAX),
+	@p_created_by			NVARCHAR(MAX),
+	@p_creation_date		NVARCHAR(MAX),
+	@p_last_updated_by		NVARCHAR(MAX),
+	@p_company_id			NVARCHAR(MAX),
+	@p_logistic_plant_id	NVARCHAR(MAX),
+	@p_packer_item_id_suffix	NVARCHAR(MAX),
+	@p_hq_vendor_code		NVARCHAR(MAX),
+	@p_packer_line_active_yn NVARCHAR(MAX),
+	--@p_site_type			NVARCHAR(MAX),
+	--@p_dept_id			NVARCHAR(MAX),
+	--@p_osp_yn				NVARCHAR(MAX),
+	--@p_city				NVARCHAR(MAX),
+	--@p_site_hrcy_id		NVARCHAR(MAX),
+	--@p_end_customer		NVARCHAR(MAX),
+	--@p_site_id			NVARCHAR(MAX)
+
+	@p_scm_vendor_name      NVARCHAR(MAX),
+	@p_osp_yn_gb			NVARCHAR(MAX),
+	@P_LINK_PLANT_SITE_ID   NVARCHAR(MAX) -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_plant_id			    NVARCHAR(MAX);
+	DECLARE @v_scm_site_id			NVARCHAR(MAX);
+	DECLARE @v_site_description		NVARCHAR(MAX);
+	DECLARE @v_country				NVARCHAR(MAX);
+	DECLARE @v_operation_group		NVARCHAR(MAX);
+	DECLARE @v_vmi_yn			    NVARCHAR(MAX);
+	DECLARE @v_valid_yn				NVARCHAR(MAX);
+	DECLARE @v_new_yn				NVARCHAR(MAX);
+	DECLARE @v_fp_plan_period		NVARCHAR(MAX);
+	DECLARE @v_build_ahead			NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+	DECLARE @v_creation_date		DATETIME;
+	DECLARE @v_last_updated_by		NVARCHAR(MAX);
+	DECLARE @v_company_id			NVARCHAR(MAX);
+	DECLARE @p_site_type			NVARCHAR(MAX);
+	DECLARE @p_dept_id				NVARCHAR(MAX);
+	DECLARE @p_osp_yn				NVARCHAR(MAX);
+	DECLARE @v_city					NVARCHAR(MAX);
+	DECLARE @p_site_hrcy_id			NVARCHAR(MAX);
+	DECLARE @v_frozen_type			NVARCHAR(MAX);
+	DECLARE @v_ship_frozen			NVARCHAR(MAX);
+	DECLARE @v_prod_frozen			NVARCHAR(MAX);
+	DECLARE @p_end_customer			NVARCHAR(MAX);
+	DECLARE @p_site_id				NVARCHAR(MAX);
+	DECLARE @v_logistic_plant_id	NVARCHAR(MAX);
+	DECLARE @v_packer_item_id_suffix	NVARCHAR(MAX);
+	DECLARE @v_hq_vendor_code		NVARCHAR(MAX);
+	DECLARE @v_packer_line_active_yn	NVARCHAR(MAX);
+	DECLARE @v_scm_vend"
+"2025-12-02 00:00:00.523","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","4","te1			= @v_packer_line_active_yn
+							   ,attribute6          = @v_frozen_type
+							   ,last_updated_by		= @v_last_updated_by
+							   ,last_update_date	= sysdatetime()
+							   ,ATTRIBUTE9          = @V_LINK_PLANT_SITE_ID -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+					                
+					WHEN NOT MATCHED THEN
+
+						INSERT	(									   
+								 division_id,scm_site_id,site_description,site_type
+								,city,country,plant_id,operation_group,dept_id
+								,vmi_yn,valid_yn,new_yn,site_hrcy_id,osp_yn
+								,ship_frozen,prod_frozen,end_customer,fp_plan_period,build_ahead
+								,created_by,creation_date,last_updated_by,last_update_date
+								,company_id, site_id, logistic_plant_id, packer_item_id_suffix, hq_vendor_code
+								,attribute1, attribute6
+								,ATTRIBUTE9 -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+								)
+						VALUES  
+								(
+								 @v_division_id ,@v_scm_site_id , @v_site_description, 'PLANT'/*@v_site_type */
+								,@v_city ,@v_country ,@v_plant_id ,@v_operation_group ,'PLANT' /*@v_dept_id */
+								,@v_vmi_yn, @v_valid_yn, @v_new_yn, NULL /*@site_hrcy_id*/, 'Y' /* @osp_yn*/
+								,/*@v_ship_frozen*/ [dbo].[FN_GET_CALC_SHIP_FROZEN_DAY_CNT](@v_frozen_type)
+								, @v_prod_frozen, NULL /*@end_customer*/, @v_fp_plan_period, @v_build_ahead
+								,@v_created_by,SYSDATETIME(),@v_created_by,SYSDATETIME()
+								,@v_company_id, @p_site_id,@v_logistic_plant_id, @v_packer_item_id_suffix, @v_hq_vendor_code
+								,@v_packer_line_active_yn, @v_frozen_type
+								,@V_LINK_PLANT_SITE_ID -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+								);
+
+			
+			  END
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"
+"2025-12-02 00:00:00.523","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","2","or_name		NVARCHAR(MAX);
+	DECLARE @v_osp_yn_gb			NVARCHAR(MAX);
+	DECLARE @V_LINK_PLANT_SITE_ID   NVARCHAR(MAX) -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+		
+	SET @v_active_flag = NULL;
+	SET @v_division_id = NULL;
+	SET @v_plant_id = NULL;
+	SET @v_scm_site_id = NULL;
+	SET @v_site_description = NULL;
+	SET @v_country = NULL;	 
+	SET @v_operation_group = NULL;	 
+	SET @v_vmi_yn = NULL;	 
+	SET @v_valid_yn = NULL;	
+	SET @v_new_yn = NULL;
+	SET @v_fp_plan_period = NULL;	
+	SET @v_build_ahead = NULL;	
+	SET @v_created_by = NULL;	  
+	SET @v_creation_date = NULL;
+	SET @v_last_updated_by = NULL;
+	SET @v_company_id = NULL;
+	SET @v_logistic_plant_id = NULL;
+	SET @v_packer_item_id_suffix = NULL;
+	SET @v_hq_vendor_code = NULL;
+	SET @v_packer_line_active_yn = NULL;
+	SET @v_scm_vendor_name = NULL;
+	SET @v_osp_yn_gb = NULL;
+	SET @V_LINK_PLANT_SITE_ID = NULL; -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+
+	SET @p_site_type = 'PLANT';
+	SET @p_dept_id   = 'PLANT';
+	SET @p_osp_yn = 'Y' ;
+	SET @p_site_hrcy_id = NULL;
+	SET @v_frozen_type = NULL;
+	SET @v_ship_frozen = NULL;
+	SET @v_prod_frozen = NULL;
+	SET @p_end_customer = NULL;
+	SET @p_site_id = NULL;
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0001_SAVE_PLANT_SITE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+		BEGIN TRY
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		--SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 			
+				SET @v_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_plant_id, @v_delimiter , @mst_loop_cnt) ;    				
+				SET @v_scm_site_id = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id, @v_delimiter , @mst_loop_cnt) ;    				
+				SET @v_site_description = [dbo].[SCM_ARR_SPL_VAL](@p_site_description, @v_delimiter , @mst_loop_cnt) ; 				
+				SET @v_country = [dbo].[SCM_ARR_SPL_VAL](@p_country, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_city = [dbo].[SCM_ARR_SPL_VAL](@p_city, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_operation_group = [dbo].[SCM_ARR_SPL_VAL](@p_operation_group, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_vmi_yn = [dbo].[SCM_ARR_SPL_VAL](@p_vmi_yn, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_valid_yn = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn, @v_delimiter, @mst_loop_cnt) ; 	
+				SET @v_new_yn = [dbo].[SCM_ARR_SPL_VAL](@p_new_yn, @v_delimiter, @mst_loop_cnt) ; 				 
+				SET @v_frozen_type = [dbo].[SCM_ARR_SPL_VAL](@p_frozen_type, @v_delimiter, @mst_loop_cnt) ; 				
+				--SET @v_ship_frozen = [dbo].[SCM_ARR_SPL_VAL](@p_ship_frozen, @v_delimiter, @mst_loop_cnt) ; 			
+				SET @v_prod_frozen = [dbo].[SCM_ARR_SPL_VAL](@p_prod_frozen, @v_delimiter, @mst_loop_cnt) ; 			
+
+				SET @v_fp_plan_period = [dbo].[SCM_ARR_SPL_VAL](@p_fp_plan_period, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_"
+"2025-12-02 00:00:00.523","LGCE_SCMDEV","P ","SCP0001_SAVE_PLANT_SITE","430012663","3","build_ahead = [dbo].[SCM_ARR_SPL_VAL](@p_build_ahead, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_created_by = [dbo].[SCM_ARR_SPL_VAL](@p_created_by, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_creation_date = CONVERT(DATETIME, [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter, @mst_loop_cnt) , 120);				
+				SET @v_last_updated_by = [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_company_id = [dbo].[SCM_ARR_SPL_VAL](@p_company_id, @v_delimiter, @mst_loop_cnt) ; 
+				SET @p_site_id = (SELECT t.site_id FROM scm_mst_site_sn t where t.company_id = @v_company_id);
+				SET @v_logistic_plant_id = [dbo].[SCM_ARR_SPL_VAL](@p_logistic_plant_id, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_packer_item_id_suffix = [dbo].[SCM_ARR_SPL_VAL](@p_packer_item_id_suffix, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_hq_vendor_code = [dbo].[SCM_ARR_SPL_VAL](@p_hq_vendor_code, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_packer_line_active_yn = [dbo].[SCM_ARR_SPL_VAL](@p_packer_line_active_yn, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_scm_vendor_name = [dbo].[SCM_ARR_SPL_VAL](@p_scm_vendor_name, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_osp_yn_gb = [dbo].[SCM_ARR_SPL_VAL](@p_osp_yn_gb, @v_delimiter, @mst_loop_cnt) ;
+				SET @V_LINK_PLANT_SITE_ID = [dbo].[SCM_ARR_SPL_VAL](@P_LINK_PLANT_SITE_ID, @v_delimiter, @mst_loop_cnt) ; -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+					
+			END
+			if @V_LINK_PLANT_SITE_ID IS null
+				SET @v_link_plant_site_id = ''
+			--HISTORY INSERT
+			EXEC [PR_SCM_MST_SITE_HIST]
+								 @v_division_id 
+								,@v_scm_site_id 
+								,@v_site_description
+								,@p_site_type
+								,@v_city
+								,@v_country 
+								,@v_plant_id 
+								,@v_operation_group 
+								,@p_dept_id
+								,@v_vmi_yn
+								,@v_valid_yn
+								,@v_new_yn
+								,@p_site_hrcy_id
+								,@p_osp_yn
+								,@v_frozen_type
+								,@v_ship_frozen
+								,@v_prod_frozen
+								,@p_end_customer
+								,@v_fp_plan_period
+								,@v_build_ahead
+								,@v_created_by
+								,@v_creation_date
+								,@v_last_updated_by
+								,@v_company_id
+								,@p_site_id		
+								,@v_logistic_plant_id												
+								,@v_packer_item_id_suffix		
+								,@v_hq_vendor_code		
+								,@v_packer_line_active_yn				
+								,@V_LINK_PLANT_SITE_ID -- 2025/11/07 kimcd [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선 Link scm site id 값을 ATTRIBUTE9 저장 추가
+			 ;
+
+			
+			-- 2022/04/25
+			EXEC [SCP0001_SAVE_SCM_MST_VENDOR]
+								 @v_company_id
+								,@v_division_id								
+								,@v_plant_id 
+								,@v_scm_vendor_name
+								,@v_osp_yn_gb
+			;			
+			
+			IF @mst_loop_cnt > 0 
+
+				BEGIN       
+			 
+					MERGE INTO [SCM_MST_SITE] A
+					USING (
+							SELECT 
+								 @v_division_id as division_id
+								,@v_plant_id as plant_id
+								,@v_scm_site_id as scm_site_id							
+						  ) B
+					ON(
+							    A.division_id  = B.division_id
+							AND A.plant_id = B.plant_id
+							AND A.scm_site_id  = B.scm_site_id
+						
+					  )
+					WHEN MATCHED THEN
+						 UPDATE SET 
+
+								site_description    = @v_site_description
+							   ,country				= @v_country
+							   ,city				= @v_city
+							   ,operation_group		= @v_operation_group
+							   ,vmi_yn				= @v_vmi_yn
+							   ,valid_yn			= @v_valid_yn
+							   --,ship_frozen 		= @v_ship_frozen
+							   ,ship_frozen 		= CASE WHEN ISNULL(@v_frozen_type, '') = '' THEN ship_frozen
+							                                                                    ELSE [dbo].[FN_GET_CALC_SHIP_FROZEN_DAY_CNT](@v_frozen_type)
+													  END
+							   ,prod_frozen 		= @v_prod_frozen
+							   ,fp_plan_period		= @v_fp_plan_period
+							   ,build_ahead			= @v_build_ahead
+							   ,logistic_plant_id	= @v_logistic_plant_id
+							   ,packer_item_id_suffix	= @v_packer_item_id_suffix
+							   ,hq_vendor_code = @v_hq_vendor_code
+							   ,attribu"

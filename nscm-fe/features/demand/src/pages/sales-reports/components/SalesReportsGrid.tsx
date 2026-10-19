@@ -6,7 +6,6 @@ import { type MutableRefObject, type Ref, memo, useEffect, useMemo, useRef } fro
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { ComboParam, RawFlexGridColumnConfig } from '@foundation/models';
-import { keepRowVisibleUnderFilter } from '@foundation/utils';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
@@ -21,6 +20,7 @@ import {
 import {
   applyDeptIdChange,
   buildDataMap,
+  buildDeptIdDataMap,
   DEPARTMENT_CHANGE_CLEAR,
   ETC_SALES_ITEM,
   ROW_COMBO_IDS,
@@ -46,6 +46,7 @@ interface Props {
   onItemCellDblClick?: (row: SalesReportRow) => void;
   divisionId?: string;
   dataType?: string;
+  reportType?: string; // Report Type — 편집 게이트 시점경계 축 (BP_M 붕괴, editLock 참조)
   thisMonth?: string; // yyyymm — 조회 시점 고정 (store)
   staticColumns?: RawFlexGridColumnConfig[];
   spreadTitle?: SpreadTitleRow[];
@@ -87,6 +88,7 @@ const SalesReportsGridComponent = ({
   onItemCellDblClick,
   divisionId,
   dataType = 'ALL',
+  reportType = '',
   thisMonth = '',
   staticColumns,
   spreadTitle,
@@ -172,16 +174,35 @@ const SalesReportsGridComponent = ({
   }, [comboSig]);
   // ⭐ 행별 콤보 원천 (2026-08-09 이관) — AS-IS `.cs` 가 SetCellTypeCombo 로 붙이던 분.
   //   메타(SHEET_COLUMNS)에는 AS-IS 도 바인딩이 없어 별도 fetch 가 원천이다.
-  //   ⭐ DEPT_ID(Team) 명칭 바인딩 제거 (사용자 지시 2026-08-28, REQ:CHAT-20260828-05) —
-  //     메타에 콤보 미설정인 컬럼이라 코드 그대로 표시한다(명칭은 인접 DEPT_NAME 컬럼 소관).
-  //     DEPT 계열 3종(DEPT_DEFAULT/DEPT_BY_DEPARTMENT/DEPT_ETC) fetch 도 함께 걷어냈다 —
-  //     소비처가 buildDeptIdDataMap 뿐이었다. 'MDF' cascade 판정은 코드 비교로 동작(원천 실측:
-  //     DMF0044_DEPARTMENT_TEAM2 SEGMENT1='MDF' — 명칭 아님).
-  const rowComboIds = useMemo(
-    () => [ROW_COMBO_IDS.CUST_REPORT, ROW_COMBO_IDS.PRODUCT_GROUP],
+  //   DEPT_ID(Team) 은 사용자 지시 2026-08-31 로 **신규행 전용** 재도입 —
+  //     조회 행은 종전대로 코드 그대로다(REQ:CHAT-20260828-05 유지). AS-IS 실화면과 같다.
+  //     조회 행 표시 되돌리기는 아래 formatItem 의 DEPT_ID 분기가 담당한다.
+  //   DEPT_ID 후보는 원천이 **셋**이다 — AS-IS 가 행의 DEPARTMENT_ID 에 따라 콤보를 통째로
+  //     갈아끼우기 때문이다(공란→TEAM2 / '기타'→ETC_SALE_RESULT_TYPE_40 / 그 외→TEAM).
+  //     분기표와 근거는 `sales-reports.gridCombos.ts` resolveDeptIdRows 주석에 있다.
+  const rowComboIds = useMemo<string[]>(
+    () => [
+      ROW_COMBO_IDS.DEPT_DEFAULT,
+      ROW_COMBO_IDS.DEPT_BY_DEPARTMENT,
+      ROW_COMBO_IDS.DEPT_ETC,
+      ROW_COMBO_IDS.CUST_REPORT,
+      ROW_COMBO_IDS.PRODUCT_GROUP,
+    ],
     []
   );
-  const rowComboResults = useTabComboQueries({ filters: rowComboIds });
+  // DEPT_DEFAULT 만 division 파라미터를 받는다 — 그 콤보 SQL 만 LOOKUP_TYPE 을 division 으로
+  //   분기하기 때문이다('..._TEAM2' + (division='40' ? '' : '_'+division)). 이는 AS-IS 조회 SP
+  //   `DMF0044_GET_SALES_REPORTS_DATA` L487/L605 의 LK2 조인이 행의 R.DIVISION_ID 로 거는 규칙과 같다.
+  //   화면 값 하나로 충분한 근거: 같은 SP 가 L494/L611 에서 `WHERE R.DIVISION_ID = @division_id`
+  //   로 걸어 그리드는 항상 단일 division 이고, 신규행도 `SalesReports.handleInsert` 가
+  //   searched.divisionId 를 심으며, DIVISION_ID 컬럼은 전 division 에서 VISIBLE_FLAG='N' 이라
+  //   편집될 수 없다. 즉 행 division = 조회 division 이 항상 성립한다.
+  //   나머지 둘은 AS-IS 원문도 파라미터가 없다(L1180 은 부서코드 1개, TO-BE 등록본은 superset).
+  const rowComboResults = useTabComboQueries({
+    filters: rowComboIds.map(id =>
+      id === ROW_COMBO_IDS.DEPT_DEFAULT ? { comboId: id, divisionId: q(division) } : id
+    ),
+  });
   const rowComboSig = rowComboIds
     .map((id, i) => `${id}@${division}#${rowComboResults[i]?.length ?? 'x'}`)
     .join(',');
@@ -198,9 +219,17 @@ const SalesReportsGridComponent = ({
   //   금지: 편집 진입 시 `column.dataMap` 을 갈아끼우지 말 것 — dataMap 은 셀이 아니라 **컬럼**
   //   속성이라 그 컬럼 전 행의 표시가 함께 바뀌고, 좁혀진 맵에 없는 코드는 원 코드로 드러난다
   //   (규약 전문 = `.atlas/wiki/wijmo-column-datamap-not-per-cell.md`).
-  //   DEPT_ID 는 여기 없다 — 코드 그대로 표시·입력한다(REQ:CHAT-20260828-05, 위 rowComboIds 주석).
+  //   DEPT_ID 도 여기다 — 세 원천을 한 컬럼 DataMap(superset)에 담고, **후보 목록만**
+  //   `getDisplayValues(rowItem)` 로 행의 DEPARTMENT_ID 에 맞춰 좁힌다(buildDeptIdDataMap).
+  //   AS-IS 의 행별 SetCellTypeCombo 와 결과가 같으면서 컬럼 스왑 금지 규약을 지키는 유일한 경로다.
+  //   신규행 전용 적용은 스왑이 아니라 formatItem 의 표시 되돌리기로 해결한다.
   const rowScopedDataMaps = useMemo<Record<string, DataMap | null>>(
     () => ({
+      DEPT_ID: buildDeptIdDataMap({
+        deptDefault: rowComboRows[ROW_COMBO_IDS.DEPT_DEFAULT] ?? [],
+        deptByDepartment: rowComboRows[ROW_COMBO_IDS.DEPT_BY_DEPARTMENT] ?? [],
+        deptEtc: rowComboRows[ROW_COMBO_IDS.DEPT_ETC] ?? [],
+      }),
       CUST_REPORT: buildDataMap(rowComboRows[ROW_COMBO_IDS.CUST_REPORT] ?? []),
       PRODUCT_GROUP: buildDataMap(rowComboRows[ROW_COMBO_IDS.PRODUCT_GROUP] ?? []),
     }),
@@ -265,8 +294,8 @@ const SalesReportsGridComponent = ({
   dynScaleRef.current = new Map(dynColMetas.map(m => [m.binding, m.scale]));
 
   // editLock 파라미터 ref 미러 (핸들러 공유)
-  const lockCtxRef = useRef({ division, dataType, thisMonth });
-  lockCtxRef.current = { division, dataType, thisMonth };
+  const lockCtxRef = useRef({ division, dataType, reportType, thisMonth });
+  lockCtxRef.current = { division, dataType, reportType, thisMonth };
 
   // 주의: 콜백은 반드시 ref 미러로 받아 아래 대형 effect 의 deps 에서 뺀다.
   //   부모가 인라인 화살표로 넘기면 렌더마다 identity 가 바뀌는데, 그게 deps 에 있으면
@@ -320,7 +349,7 @@ const SalesReportsGridComponent = ({
     const g = (gridRef as { current: FlexGridType<SalesReportRow> | null } | null)?.current;
     if (!g || !g.columnHeaders || !g.columnHeaders.rows) return;
 
-    if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1; // zebra (#95)
+    if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1;
     for (let i = 0; i < g.columnFooters.rows.length; i++) g.columnFooters.rows[i].visible = false;
 
     const evalDyn = (binding: string, row: SalesReportRow | undefined) =>
@@ -329,6 +358,7 @@ const SalesReportsGridComponent = ({
         row,
         divisionId: lockCtxRef.current.division,
         dataType: lockCtxRef.current.dataType,
+        reportType: lockCtxRef.current.reportType,
         thisMonth: lockCtxRef.current.thisMonth,
       });
 
@@ -473,6 +503,21 @@ const SalesReportsGridComponent = ({
         // 색상 판정도 편집 게이트와 **같은 함수**를 쓴다 — 두 곳이 갈리면 노란칸인데 못 고치는 상태가 생긴다
         const editable = staticEditableByMeta(inputTpRef.current.get(binding), rowItem);
         toggleClass(e.cell, 'wj-cell-editable', editable);
+        // DEPT_ID 콤보는 신규행 전용이다 (사용자 지시 2026-08-31, AS-IS 실화면 파리티).
+        //   AS-IS 는 InsertRow 에서만 `SetCellTypeCombo` 로 붙이므로(DMF0044_Sales_Reports.cs:989~991)
+        //   조회 행의 Team 셀은 코드 원문(예: 70090866)이고 명칭은 옆 Team Name 컬럼이 보여준다.
+        //   Wijmo 의 dataMap 은 셀이 아니라 **컬럼** 속성이라 신규행만 골라 붙일 수 없다
+        //   (규약 = `.atlas/wiki/wijmo-column-datamap-not-per-cell.md`). 그래서 컬럼에는 붙여 두어
+        //   신규행 편집기가 드롭다운이 되게 하고, 조회 행은 여기서 표시만 코드로 되돌린다.
+        //   편집 진입 셀은 건드리지 않는다 — 편집기 DOM 을 지우면 입력이 죽는다(위 동적 분기와 동일).
+        // 2026-10-01 KBJ 그리드에서 Team이 코드로 보인다하여 이름으로 변경하기 위해 주석처리
+        // if (
+        //   binding === 'DEPT_ID' &&
+        //   rowItem.CRUD_TYPE !== 'I' &&
+        //   !g.editRange?.contains(e.row, e.col)
+        // ) {
+        //   e.cell.textContent = toCellStr(rowItem.DEPT_ID);
+        // }
       }
     };
     g.formatItem.addHandler(formatHandler);
@@ -526,7 +571,14 @@ const SalesReportsGridComponent = ({
         (row as Record<string, unknown>)[binding] = '0';
       }
       // ⭐ DEPARTMENT_ID 변경 → 하위 컬럼 clear (AS-IS L1187~1191 / L1211~1215 — 양 분기 동일 5컬럼).
-      //   DEPT_ID 는 콤보가 아니므로(REQ:CHAT-20260828-05) clear 만 하면 된다.
+      //   DEPT_ID 도 함께 비운다 (사용자 지시 2026-08-31).
+      //     AS-IS `.cs` 에는 DEPT_ID `SetText("")` 가 없다. 대신 같은 자리에서 콤보를 통째로
+      //     갈아끼우는데(L1181 / L1196), 그 콤보는 `LoadCombo` 가 `EditorValue = ItemData` 로
+      //     만들어(SpreadInfo.cs:6062) **후보(ItemData)에 없는 코드는 선택값으로 성립하지 않는다**.
+      //     즉 이전 부서의 팀 코드는 새 후보 목록에서 빠지므로 AS-IS 도 사실상 리셋된다.
+      //     TO-BE 는 wijmo 규약상 컬럼 DataMap 하나(세 원천 superset)를 쓰기 때문에 값을 그대로 두면
+      //     후보에서 빠진 코드도 superset 으로 **이름이 멀쩡히 렌더된다** — AS-IS 에는 없는
+      //     '유효해 보이는 불일치 값' 이 생기고 그대로 저장까지 간다. 그래서 명시적으로 비운다.
       const clears: string[] = [];
       if (binding === 'DEPARTMENT_ID' && row) {
         const rec = row as Record<string, unknown>;
@@ -692,16 +744,11 @@ const SalesReportsGridComponent = ({
   }, [visibleColumns, dynBindings, fixedBindings]);
 
   // ⭐ hook #93 — 헤더 총 48px. DMF0044 는 **1단**이므로 행 1개가 48 을 그대로 갖는다
-  //   (2단 화면이면 24+24 로 자동 분배 — `48 / headerRows.length`). + combo dataMap 재적용 + Filter sanitize
+  //   (2단 화면이면 24+24 로 자동 분배 — `48 / headerRows.length`). + combo dataMap 재적용
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<SalesReportRow> | null } | null)?.current;
     if (!g) return;
     const applyHeaderHeight = () => {
-      const f = gridFilterRef?.current;
-      if (f) {
-        const cleaned = f.filterColumns.filter(b => !/^M_/.test(b));
-        if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
-      }
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];
         const dm = effectiveDataMaps[col.binding ?? ''];
@@ -728,18 +775,12 @@ const SalesReportsGridComponent = ({
         /* unmount race */
       }
     };
-  }, [dynBindings, visibleColumns, effectiveDataMaps, gridRef, gridFilterRef]);
+  }, [dynBindings, visibleColumns, effectiveDataMaps, gridRef]);
 
-  // F4 Filter — 동적(M_) 컬럼 필터 cancel
+  // F4 Filter
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<SalesReportRow> | null } | null)?.current;
     if (!g || !gridFilterRef) return;
-    const onFilterChanging = (
-      _s: FlexGridFilter,
-      e: { cancel: boolean; getColumn: () => { binding?: string | null } }
-    ) => {
-      if (/^M_/.test(e.getColumn()?.binding ?? '')) e.cancel = true;
-    };
     const onFilterApplied = () => g.invalidate(true);
     let f = gridFilterRef.current;
     if (!f || f.grid !== g) {
@@ -747,42 +788,15 @@ const SalesReportsGridComponent = ({
       f.filterColumns = [''];
       gridFilterRef.current = f;
     }
-    f.filterChanging.addHandler(onFilterChanging as never);
     f.filterApplied.addHandler(onFilterApplied);
     return () => {
       try {
-        f?.filterChanging.removeHandler(onFilterChanging as never);
         f?.filterApplied.removeHandler(onFilterApplied);
       } catch {
         /* unmount race */
       }
     };
-  }, [dynBindings, visibleColumns, gridRef, gridFilterRef]);
-
-  // 공통 UC-01 — 필터가 걸린 상태에서 Insert 해도 필터를 유지한 채 신규행이 보여야 한다.
-  //   Insert 는 rows 를 새 배열로 만들어 itemsSource 를 갈아끼우는데, 그 순간 wijmo 가 두 가지를 한다.
-  //     (1) FlexGridFilter 가 생성자에서 itemsSourceChanged 에 건 clear() 로 필터를 통째로 비운다
-  //         -> 공용 DataGrid 의 capture/restore 가 되돌린다. 필수: gridFilterRef 를 DataGrid 에
-  //            넘겨야 그 장치가 이 화면의 필터를 본다(안 넘기면 화면이 직접 만든 필터라 무동작).
-  //     (2) 값이 빈 신규행은 필터 조건에 걸려 CollectionView 에서 빠진다
-  //         -> keepRowVisibleUnderFilter 로 wijmo 예외집합(excludedRowsSet)에 등록해 통과시킨다.
-  //   순서 의무: 복원의 apply() 가 예외집합을 비우므로 itemsSource 교체가 끝난 뒤(= 이 effect)에
-  //   등록하고 refresh 한다. handleInsert 안에서 동기로 등록하면 뒤이은 복원에 지워진다.
-  //   컬럼 0개 가드: 컬럼이 없는 상태에서 refresh 하면 wijmo 가 인덱스 -1 로 계산하다 예외를 던진다.
-  //   정본 = forecast-price/components/ForecastPriceGrid.tsx.
-  useEffect(() => {
-    const g = (gridRef as { current: FlexGridType<SalesReportRow> | null } | null)?.current;
-    if (!g || g.columns.length === 0) return;
-    const insertRows = rows.filter(r => r.CRUD_TYPE === 'I');
-    if (insertRows.length === 0) return;
-    insertRows.forEach(r =>
-      keepRowVisibleUnderFilter(
-        g as unknown as FlexGridType<WijmoRowItem>,
-        r as unknown as WijmoRowItem
-      )
-    );
-    g.collectionView?.refresh();
-  }, [rows, gridRef]);
+  }, [gridRef, gridFilterRef]);
 
   return (
     <DataGrid
@@ -795,7 +809,9 @@ const SalesReportsGridComponent = ({
       dynamicColumns={mainDynamicColumns}
       itemsSource={rows as unknown as WijmoRowItem[]}
       autoGenerateColumns={false}
-      allowSorting={true}
+      // allowSorting prop 은 넘기지 않는다 - grid.allowSorting 이 truthy 면 wijmo
+      //   _MouseHandler._mousedown 이 헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다.
+      //   공용 정렬(F3 스위치 + 헤더 클릭 + 아이콘)은 이 prop 없이도 그대로 동작한다.
       allowMerging={AllowMerging.All}
     />
   );

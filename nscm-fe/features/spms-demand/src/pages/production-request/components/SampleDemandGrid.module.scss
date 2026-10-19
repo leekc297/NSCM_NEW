@@ -1,0 +1,14 @@
+// SDM2010 샘플 수요 등록 그리드 — 화면 고유 스타일만 (SDM1020 관례)
+
+.grid {
+  width: 100%;
+  height: 100%;
+
+  :global {
+    .wj-colheaders .wj-cell {
+      line-height: 14px;
+      padding: 1px 4px;
+      font-size: 11px;
+    }
+  }
+}

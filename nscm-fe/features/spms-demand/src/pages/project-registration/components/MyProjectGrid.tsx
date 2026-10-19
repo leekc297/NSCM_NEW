@@ -4,11 +4,11 @@ import { useRef, useState, type MutableRefObject } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import { GridUtils } from '@foundation/utils';
-import { DataGrid } from '@shared/components';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { useSessionStore } from '@shared/stores';
 
 import { TagLayer, type TagLayerHandle } from '../../../components/tag-layer';
+import { DataGrid } from '../../../lib/grid';
 import { RESPONSE_SET, SHEET_INDEX } from '../project-registration.constants';
 import { formatSopDate } from '../project-registration.grid-utils';
 import type { MyProjectRow } from '../project-registration.types';

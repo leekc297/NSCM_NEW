@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/shipment-plan-fix","SCP0025","features/supply/src/pages/shipment-plan-fix/ShipmentPlanFix.tsx","85","endpoint","admin 동적 메타(SCM_MST_SHEET_COLUMNS 'Shipment Plan Fix' 20행) — mount 1회 fetch(hook #66). Search 시에도 refetch."
+"supply/shipment-plan-fix","SCP0025","features/supply/src/pages/shipment-plan-fix/ShipmentPlanFix.tsx","168","code","부활 방지를 위해 키를 명시적 무동작으로 둔다(skill §3 규칙: 키 생략·false 금지, 명시적 () => undefined)."
+"supply/shipment-plan-fix","SCP0025","features/supply/src/pages/shipment-plan-fix/useShipmentPlanFixStore.ts","30","endpoint","admin SCM_MST_SHEET_COLUMNS('Shipment Plan Fix') 동적 fetch (ui-dynamic-property-management §2.3). 20행 등록 확인."
+"supply/shipment-plan-fix","SCP0025","features/supply/src/pages/shipment-plan-fix/utils/shipmentPlanFixDerive.ts","83","jsx","(2) 엑셀 내려받기용 — 사유를 Fix Reason 행의 일자(D_<YYYYMMDD>) pivot 바인딩에도 직접 심는다."

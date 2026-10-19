@@ -1,0 +1,21 @@
+/* 2차 조회조건 (usrLayoutControl3) — Detail 그리드 상단 */
+.detailBar {
+  gap: 8px;
+  padding: 4px 8px;
+}
+
+.detailBarFields {
+  flex: 1;
+  min-width: 0;
+}
+
+.detailBarButtons {
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+  // Requestor/Model 팝업 필드는 공용 popupSearchField 규칙상 팝업 버튼이 필드 박스 오른쪽
+  //   밖으로 40px 돌출한다(common-styles .popupSearchField button{right:-40px}). PlanDetail 에선
+  //   Requestor 가 마지막 필드라 그 돌출 버튼이 New 버튼 위로 겹친다 — 버튼 영역을 40px 띄워
+  //   돌출 버튼이 들어설 빈 자리를 확보한다.
+  margin-left: 40px;
+}

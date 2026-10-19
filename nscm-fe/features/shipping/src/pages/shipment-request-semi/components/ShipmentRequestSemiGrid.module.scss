@@ -1,0 +1,57 @@
+// AS-IS InitSpreadDateColumn(cs:361-363, S04/R04) — 3단 일자 헤더 글자색.
+//   `DAY_CODE='SAT'` → Blue / `'SUN'` → Red. W_/M_ 행은 DAY_CODE 가 비어 대상이 아니다.
+//   inline style 금지(convert-core §2.1) — formatItem 이 classList 로 토글한다.
+.satHeader {
+  color: #1565c0;
+}
+
+.sunHeader {
+  color: #d32f2f;
+}
+
+// AS-IS Set_MeasureColor(cs:1071-1076, R15/G10) — `SCP_PLAN` 행에서 모델/공장이 바뀌는 지점의
+//   그룹 상단 경계선(AS-IS BevelBorder). 행 그룹의 시작을 시각적으로 끊어 준다.
+//   AS-IS 범위는 `ITEM_ID ~ 마지막 컬럼`(cs:1073-1075)이라 `DIVISION_ID` 칸은 제외된다 — 판정은 formatItem.
+//   색·굵기는 AS-IS 인자 그대로다: cs:1039
+//   `new BevelBorder(BevelBorderType.Raised, Color.Black, Color.Black, 1, false, true, false, false)`
+//   = 검정 1px, top only. hook #95(grid-cell-backcolor-standard)는 셀 **배경색** 규약이라 경계선은
+//   적용 대상이 아니다 — AS-IS 값을 그대로 재현한다(iter-2 L-03).
+.groupBoundary {
+  border-top: 1px solid #000000;
+}
+
+// 편집 가능 셀 — AS-IS UnLockColor `#FFFF86`(연노랑)의 TO-BE 대응(hook #95 Yellow).
+.editableCell {
+  background-color: #fffde7;
+}
+
+// AS-IS cs:1090 (R15-b) — Frozen 이전(확정) 구간 회색 RGB(242,242,242).
+.frozenPastCell {
+  background-color: #f2f2f2;
+}
+
+// AS-IS cs:912-917 (R13/S37/V-E12) — 저장 시 음수로 판정된 셀. `InvalidColor` 대응.
+.negativeCell {
+  background-color: #ffcdd2;
+}
+
+// AS-IS `SetReNumerCellType` 4-인자 오버로드(`SpreadInfo.cs:11013`)의 `NumberCellType.NegativeRed = true`
+//   대응 — 기간셀 음수는 **입력 즉시** 빨간 글자로 보인다(cs:355·359 가 전 기간칼럼에 이 셀타입을 건다).
+//   저장 시점 배경(`negativeCell`, R13)과는 별개 축이다: 이쪽은 글자색이고 저장 전에도 상시 적용된다.
+//   CommonCheckList "음수 빨간색" 항목의 실제 대응부다(react-gap-audit iter-3 N-04).
+.negativeValue {
+  color: #d32f2f;
+}
+
+// AS-IS cs:189-193 + cs:807-824 (R18/G13) — 신규행 `TR_MODE` 셀의 `edit.png` 우측정렬 배경.
+//   "이 셀을 클릭하면 BOD 팝업이 열린다"는 유일한 시각 단서라 누락하면 진입 경로가 보이지 않는다.
+//   이미지 자산 대신 동일 의미의 유니코드 연필 글리프를 우측에 배치한다(assets 추가 없이 등가 어포던스).
+.trModeEditable {
+  cursor: pointer;
+
+  &::after {
+    content: '\270E';
+    float: right;
+    color: #616161;
+  }
+}

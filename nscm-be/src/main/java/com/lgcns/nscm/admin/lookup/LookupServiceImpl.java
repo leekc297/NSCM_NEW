@@ -77,6 +77,9 @@ public class LookupServiceImpl extends BaseService implements LookupService {
 
 		params.put("sesUserId", "'"+SecurityUtil.getUserSession().getUserId()+"'");
 		params.put("sesLangCd", "'"+SecurityUtil.getUserSession().getLangCd()+"'");
+		// mnuId 는 FE 가 raw 로 보내므로 @sesUserId 처럼 여기서 홑따옴표를 붙인다. 미전달/빈 값은 건드리지
+		//   않아 makeComboQuery 가 '' 로 치환하게 두고, 이미 인용된 값(구 화면 quoteParam)은 그대로 둔다.
+		if (!NullUtils.isNone(params.get("mnuId"))) params.put("mnuId", quoteLiteral(params.get("mnuId")));
 		String query = makeComboQuery(((List<Map<String, Object> >) queryMap.get(DEFAULT_DATA_RESULT)).get(0).get("SQL_DTL_CTN").toString(), params);
 		queryMap.put("sQuery", query);
 		result.put((String) params.get("comboId"), selectList("execStmt", queryMap).get(DEFAULT_DATA_RESULT));
@@ -98,7 +101,10 @@ public class LookupServiceImpl extends BaseService implements LookupService {
 			if(NullUtils.isNone(queryMap)) throw new BusinessException("Query is not exist.");
 
 			params.put("userId", "'"+SecurityUtil.getUserSession().getUserId()+"'");
+			params.put("sesUserId", "'"+SecurityUtil.getUserSession().getUserId()+"'");
 			params.put("langCd", "'"+SecurityUtil.getUserSession().getLangCd()+"'");
+			params.put("sesLangCd", "'"+SecurityUtil.getUserSession().getLangCd()+"'");
+			if (!NullUtils.isNone(params.get("mnuId"))) params.put("mnuId", quoteLiteral(params.get("mnuId")));
 			String query = makeComboQuery(((List<Map<String, Object> >) queryMap.get(DEFAULT_DATA_RESULT))
 										.get(0).get("SQL_DTL_CTN").toString()
 										, params);
@@ -109,5 +115,17 @@ public class LookupServiceImpl extends BaseService implements LookupService {
 	}
 
 
+
+	/**
+	 * makeComboQuery 의 @키 는 bind 가 아니라 raw 문자열 치환이라, 문자열 값은 홑따옴표로 감싸야 SQL
+	 * 리터럴이 된다(@sesUserId 와 동일 규약). 이미 홑따옴표로 감싼 값은 그대로 둔다 — 이중 인용 방지.
+	 * @MethodName : quoteLiteral
+	 * @param      : value 감쌀 값(호출부에서 null/공백 여부는 미리 거른다)
+	 * @return     : String 홑따옴표로 감싼 리터럴
+	 */
+	private String quoteLiteral(Object value) {
+		String v = value.toString().trim();
+		return (v.length() >= 2 && v.startsWith("'") && v.endsWith("'")) ? v : "'" + v + "'";
+	}
 
 }

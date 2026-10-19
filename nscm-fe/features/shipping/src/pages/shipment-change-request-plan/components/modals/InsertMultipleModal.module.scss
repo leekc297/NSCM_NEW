@@ -1,0 +1,22 @@
+// Insert Multiple 팝업 — 건수 입력 1줄 + 우하단 확인/취소.
+//   CustomDialog 는 customContentArea 를 주면 기본 푸터(취소/확인)를 렌더하지 않는다
+//   (CustomDialogContent.tsx:91 분기). 그래서 버튼 영역을 여기서 직접 만든다 —
+//   코드베이스의 모달 101개가 모두 같은 방식이다(SsoUserModal/DivisionModal 등 .buttonWrapper 동형).
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// 건수 입력 가이드 — AS-IS usrLabel1("선택한 계획을 몇 개 추가하시겠습니까? ( 1 ~ 50 )") 등가.
+.question {
+  white-space: pre-line;
+  line-height: 1.5;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: end;
+  gap: 4px;
+  margin-top: 5px;
+}

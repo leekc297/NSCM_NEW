@@ -1,0 +1,1 @@
+export { ShipmentMasterElectrode } from './ShipmentMasterElectrode';

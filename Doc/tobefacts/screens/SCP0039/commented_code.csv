@@ -1,0 +1,4 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/master-validation","SCP0039","features/supply/src/pages/master-validation/MasterValidation.tsx","64","endpoint","마스터 ""Validation Info"" 컬럼 메타는 admin fetch(하드코딩 금지). mount 1회 + F10 리셋 자가복구."
+"supply/master-validation","SCP0039","features/supply/src/pages/master-validation/useMasterValidationStore.ts","9","endpoint","detail(결과) 그리드 컬럼 메타 캐시 — 검증유형별 sheetNm 로 admin fetch(design 03 §5 #03)."
+"supply/master-validation","SCP0039","features/supply/src/pages/master-validation/useMasterValidationStore.ts","87","endpoint","마스터 ""Validation Info"" 메타 fetch(mount 1회). 이미 있으면 재조회 생략(정적 메타)."

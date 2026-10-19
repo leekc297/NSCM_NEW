@@ -208,7 +208,7 @@ export const CustPsiUploadGrid = ({
       if (e.panel.cellType !== CellType.Cell) return;
       if (!binding) return;
 
-      // 편집 가능 셀만 Yellow (D_ 기간 셀 × 편집행 + 신규행 속성 셀), 그 외 White + zebra
+      // 편집 가능 셀만 Yellow (D_ 기간 셀 × 편집행 + 신규행 속성 셀), 그 외 White
       const item = (e.panel.rows[e.row] as { dataItem?: CustPsiUploadRow }).dataItem;
       const editable = isEditableCell(item, binding, dynBindings.has(binding));
       toggleClass(e.cell, 'wj-cell-editable', editable);
@@ -305,14 +305,11 @@ export const CustPsiUploadGrid = ({
     };
   }, [gridRef]);
 
-  // F4 Filter — 피처 소유 FlexGridFilter (동적 D_ 컬럼 필터 제외)
+  // F4 Filter — 피처 소유 FlexGridFilter
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
 
-    const onFilterChanging = (_s: FlexGridFilter, e: CellRangeEventArgs) => {
-      if (/^D_\d{8}$/.test(e.getColumn()?.binding ?? '')) e.cancel = true;
-    };
     const onFilterApplied = () => g.invalidate(true);
 
     let f = gridFilterRef.current;
@@ -321,20 +318,16 @@ export const CustPsiUploadGrid = ({
       f.filterColumns = [''];
       gridFilterRef.current = f;
     }
-    const cleaned = f.filterColumns.filter(b => !/^D_\d{8}$/.test(b));
-    if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
-    f.filterChanging.addHandler(onFilterChanging);
     f.filterApplied.addHandler(onFilterApplied);
 
     return () => {
       try {
-        f?.filterChanging.removeHandler(onFilterChanging);
         f?.filterApplied.removeHandler(onFilterApplied);
       } catch {
         /* unmount race */
       }
     };
-  }, [dynBindings, visibleColumns, gridRef, gridFilterRef]);
+  }, [gridRef, gridFilterRef]);
 
   return (
     <DataGrid<CustPsiUploadRow>
@@ -346,7 +339,9 @@ export const CustPsiUploadGrid = ({
       comboParams={GRID_COMBO_PARAMS}
       itemsSource={data}
       autoGenerateColumns={false}
-      allowSorting={true}
+      // allowSorting prop 은 넘기지 않는다 - grid.allowSorting 이 truthy 면 wijmo
+      //   _MouseHandler._mousedown 이 헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다.
+      //   공용 정렬(F3 스위치 + 헤더 클릭 + 아이콘)은 이 prop 없이도 그대로 동작한다.
     />
   );
 };

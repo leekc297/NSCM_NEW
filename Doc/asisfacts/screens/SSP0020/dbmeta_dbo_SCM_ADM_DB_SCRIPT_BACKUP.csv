@@ -1,0 +1,804 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0020_GET_DELEGATE","2071066514","1","
+
+
+/*
+ * Program ID   : [SSP0020_GET_DELEGATE]
+ * Description  : Delegate 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019/07/09   mcTheJ		   [CSR ID:4044806] Model PIC 담당자 위임 기능 추가	
+ */
+CREATE PROCEDURE [dbo].[SSP0020_GET_DELEGATE]
+	@p_user_id              NVARCHAR(MAX)
+	,@p_language			 NVARCHAR(MAX) = 'KO'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	
+	DECLARE @mDelegateQuery					NVARCHAR(MAX);
+	DECLARE @mDelegatedQuery					NVARCHAR(MAX);
+
+	SET @mDelegateQuery = '';
+	SET @mDelegateQuery = @mDelegateQuery + ' SELECT 																	' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' 	T0.DIVISION_ID,                                                         ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' 	CONVERT(DATE, T0.FROM_DATE) AS FROM_DATE,                                                           ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' 	CONVERT(DATE, T0.TO_DATE) AS TO_DATE,                                                             ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' 	CASE ''' + @p_language + ''' WHEN ''KO'' THEN T1.UserName ELSE T1.UserName_E END  + ''('' + T0.DELEGATEE_ID + '')'' AS DELEGATEE,              ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' 	T0.VALID_YN  AS VALID,                                                            ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' 	CASE ''' + @p_language + ''' WHEN ''KO'' THEN T2.UserName ELSE T2.UserName_E END + ''('' + T0.LAST_UPDATED_BY + '')'' AS LAST_UPDATED_BY,        ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' 	CONVERT(DATETIME, T0.LAST_UPDATE_DATE) AS LAST_UPDATE_DATE,                                                     ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' 	T0.USER_ID, T0.DELEGATEE_ID                                                     ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' FROM SSP_MST_DELEGATE T0  WITH(NOLOCK)                                                 ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' INNER JOIN TB_FX_USER T1  WITH(NOLOCK)                                           ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' 	ON T1.UserID = T0.DELEGATEE_ID                                               ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' INNER JOIN TB_FX_USER T2  WITH(NOLOCK)                                           ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' 	ON T2.UserID = T0.LAST_UPDATED_BY                                       ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' WHERE 1 = 1                                                               ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' AND T0.VALID_YN = ''Y''													' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' AND T0.USER_ID = ''' + @p_user_id + '''                                                  ' + CHAR(10);
+	SET @mDelegateQuery = @mDelegateQuery + ' ORDER BY T0.DELEGATEE_ID, CONVERT(DATE, T0.FROM_DATE), CONVERT(DATE, T0.TO_DATE), T0.DIVISION_ID, T0.LAST_UPDATE_DATE ' + CHAR(10);
+
+
+	SET @mDelegatedQuery = '';
+	SET @mDelegatedQuery = @mDelegatedQuery + ' SELECT 																	' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' 	T0.DIVISION_ID,                                                         ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' 	CONVERT(DATE, T0.FROM_DATE) AS FROM_DATE,                                                           ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' 	CONVERT(DATE, T0.TO_DATE) AS TO_DATE,                                                             ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' 	CASE ''' + @p_language + ''' WHEN ''KO'' THEN T1."
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0020_GET_DELEGATE","2071066514","2","UserName ELSE T1.UserName_E END  + ''('' + T0.USER_ID + '')'' AS DELEGATOR,              ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' 	T0.VALID_YN AS VALID,                                                            ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' 	CASE ''' + @p_language + ''' WHEN ''KO'' THEN T2.UserName ELSE T2.UserName_E END + ''('' + T0.LAST_UPDATED_BY + '')'' AS LAST_UPDATED_BY,        ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' 	CONVERT(DATETIME, T0.LAST_UPDATE_DATE) AS LAST_UPDATE_DATE                                                     ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' FROM SSP_MST_DELEGATE T0  WITH(NOLOCK)                                                 ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' INNER JOIN TB_FX_USER T1  WITH(NOLOCK)                                            ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' 	ON T1.UserID = T0.USER_ID                                               ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' INNER JOIN TB_FX_USER T2  WITH(NOLOCK)                                             ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' 	ON T2.UserID = T0.LAST_UPDATED_BY                                       ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' WHERE 1 = 1                                                               ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' AND T0.VALID_YN = ''Y''													' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' AND T0.DELEGATEE_ID = ''' + @p_user_id + '''                                                  ' + CHAR(10);
+	SET @mDelegatedQuery = @mDelegatedQuery + ' ORDER BY T0.DELEGATEE_ID, CONVERT(DATE, T0.FROM_DATE), CONVERT(DATE, T0.TO_DATE), T0.DIVISION_ID, T0.LAST_UPDATE_DATE ' + CHAR(10);
+
+	exec(@mDelegateQuery);
+	exec(@mDelegatedQuery);
+
+	--exec SSP0020_GET_DELEGATE 'kahonmalu', 'KO';
+END
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0020_SAVE_DELEGATE","2087066571","1","
+
+
+/*
+ * Program ID   : [SSP0020_SAVE_DELEGATE]
+ * Description  : Approval Delegate 수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019/07/09   mcTheJ		   [CSR ID:4044806] Model PIC 담당자 위임 기능 추가	
+ */
+CREATE PROCEDURE [dbo].[SSP0020_SAVE_DELEGATE]
+	 @p_division_id          NVARCHAR(MAX)
+	,@p_delegatee_id         NVARCHAR(MAX)
+	,@p_from_date            NVARCHAR(MAX)
+	,@p_to_date				 NVARCHAR(MAX)
+	,@p_user_id              NVARCHAR(MAX)
+	,@p_language			 NVARCHAR(MAX) = 'KO'
+	,@debug_mode			 NVARCHAR(1) ='F'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	
+	DECLARE @v_division_id          NVARCHAR(MAX);
+	DECLARE @v_delegatee_id         NVARCHAR(MAX);
+
+	SET @v_division_id         = NULL;
+	SET @v_delegatee_id		   = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SSP0020_SAVE_DELEGATE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	--BEGIN TRAN;
+
+	BEGIN TRY
+		
+		SET @d_event_date	= GETDATE();
+
+		--PRINT '1';
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_division_id, @v_delimiter);    
+
+		
+		
+		WHILE LEN(@p_division_id) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN			
+				SET @v_division_id         = dbo.SCM_ARR_SPL_VAL(@p_division_id        , @v_delimiter, @mst_loop_cnt );
+			END;
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+			BEGIN		
+				--Insert
+				Insert Into SSP_MST_DELEGATE
+				(
+					DIVISION_ID,			USER_ID,				DELEGATEE_ID,				FROM_DATE,
+					TO_DATE,				VALID_YN,				CREATED_BY,					CREATION_DATE,
+					LAST_UPDATED_BY,		LAST_UPDATE_DATE
+				)
+				VALUES
+				(
+					@v_division_id,			@p_user_id,				@p_delegatee_id,			@p_from_date,
+					@p_to_date,				'Y',					@p_user_id,					@d_event_date,
+					@p_user_id,				@d_event_date
+				);
+
+			END;
+		END
+
+		--MAIL SEND
+		EXEC PR_SSP_MAIL_SEND_DELEGATE 'S', @p_division_id,  @p_user_id, @p_delegatee_id, @p_from_date, @p_to_date, @p_language, 'Y';
+
+		-- 결과코드 리턴
+		SELECT  'S' AS result_code,  @mst_loop_cnt AS result_cnt ;
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			--if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+					  
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL O"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0020_SAVE_DELEGATE","2087066571","2","R @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				     
+			; 
+		END;
+	END CATCH;
+END
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0020_SAVE_UNSET","2103066628","1","
+
+
+/*
+ * Program ID   : [SSP0020_SAVE_UNSET]
+ * Description  : Delegate 설정해제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019/07/09   mcTheJ		   [CSR ID:4044806] Model PIC 담당자 위임 기능 추가	
+ * 2019/08/14   mcTheJ		   Delegator, Delegatee 변경
+ */
+CREATE PROCEDURE [dbo].[SSP0020_SAVE_UNSET]
+	 @p_division_id          NVARCHAR(MAX)
+	,@p_from_date            NVARCHAR(MAX)
+	,@p_to_date				 NVARCHAR(MAX)
+	,@p_sheet_name	         NVARCHAR(MAX)
+	,@p_delegate	         NVARCHAR(MAX)
+	,@p_last_update_by		 NVARCHAR(MAX)
+	,@p_last_update_date	 NVARCHAR(MAX)
+	,@p_user_id              NVARCHAR(MAX)
+	,@p_language			 NVARCHAR(MAX) = 'KO'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_from_date			NVARCHAR(MAX);
+	DECLARE @v_to_date				NVARCHAR(MAX);
+	DECLARE @v_delegate				NVARCHAR(MAX);
+	DECLARE @v_last_update_by		NVARCHAR(MAX);
+	DECLARE @v_last_update_date		NVARCHAR(MAX);
+
+	SET @v_division_id			= NULL;
+	SET @v_from_date	        = NULL;
+	SET @v_to_date				= NULL;
+	SET @v_delegate				= NULL;
+	SET @v_last_update_by       = NULL;
+	SET @v_last_update_date     = NULL;
+	
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SSP0020_SAVE_UNSET';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	DECLARE @v_mail_divisionid	NVARCHAR(MAX);
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	--BEGIN TRAN;
+
+	BEGIN TRY
+
+		--PRINT '1';
+		SET @d_event_date	= GETDATE();
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_division_id, @v_delimiter);    
+
+		WHILE LEN(@p_division_id) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN			
+				SET @v_division_id			= dbo.SCM_ARR_SPL_VAL(@p_division_id        , @v_delimiter, @mst_loop_cnt );
+				
+			END;
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+				BEGIN		
+					IF @p_sheet_name = 'Delegate'
+					BEGIN
+						UPDATE	SSP_MST_DELEGATE
+						SET VALID_YN = 'N'
+							, LAST_UPDATED_BY = @p_user_id
+							, LAST_UPDATE_DATE = @d_event_date
+						WHERE 1 = 1
+						AND DIVISION_ID = @v_division_id
+						AND FROM_DATE = @p_from_date
+						AND TO_DATE = @p_to_date
+						AND DELEGATEE_ID = @p_delegate
+						AND LAST_UPDATED_BY = @p_last_update_by;
+					END
+					ELSE
+					BEGIN
+						UPDATE	SSP_MST_DELEGATE
+						SET VALID_YN = 'N'
+							, LAST_UPDATED_BY = @p_user_id
+							, LAST_UPDATE_DATE = @d_event_date
+						WHERE 1 = 1
+						AND DIVISION_ID = @v_division_id
+						AND FROM_DATE = @p_from_date
+						AND TO_DATE = @p_to_date
+						AND DELEGATEE_ID = @p_user_id
+						AND LAST_UPDATED_BY = @p_last_update_by;
+					END
+
+				END;
+			
+		END;
+		SET @v_mail_divisionid = replace(@p_division_id, @v_delimiter, ', ');
+		--MAIL SEND
+		EXEC PR_SSP_MAIL_SEND_DELEGATE 'U',  @v_mail_divisionid,  @p_user_id, @p_delegate, @p_from_date, @p_to_date, @p_language, 'Y';
+
+		-- 결과코드 리턴
+		SELECT  'S' AS result_code,  @mst_loop_c"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0020_SAVE_UNSET","2103066628","2","nt AS result_cnt ;
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			--if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+					  
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				     
+			; 
+		END;
+	END CATCH;
+END
+
+
+
+"
+"2025-11-19 00:00:00.850","LGCE_SCMDEV","P ","SSP0020_GET_ITEM_FROM_BOD","1713089539","1","
+CREATE PROCEDURE [dbo].[SSP0020_GET_ITEM_FROM_BOD]  
+  @p_division_id		NVARCHAR(30),
+  @p_from_site_id		NVARCHAR(50),
+  @p_to_site_id			NVARCHAR(30),
+  @p_item_id			NVARCHAR(50),
+  @p_bod_id				NVARCHAR(50),
+  @p_debug              NVARCHAR(1) ='N'
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+DECLARE @n nvarchar(1) = char(10)
+DECLARE @v_SQL nvarchar(MAX) = ''	
+SET @v_SQL = ''
+SET @v_SQL += '' +char(10)
+SET @v_SQL += 'SELECT V.DIVISION_ID ' + @n
+SET @v_SQL += ',      V.BOD_ID ' + @n
+SET @v_SQL += ',      A.ITEM_ID ' + @n
+SET @v_SQL += ',      V.INCOTERMS ' + @n
+SET @v_SQL += ',      V.PRIORITY ' + @n
+SET @v_SQL += ',      V.TRANSPORT_MODE ' + @n
+SET @v_SQL += ',      F.OPERATION_GROUP ' + @n
+
+SET @v_SQL += 'FROM    (' + @n
+SET @v_SQL += '			SELECT  DISTINCT B.DIVISION_ID , B.BOD_ID , B.FROM_SITE, B.TO_SITE , B.INCOTERMS, B.TRANSPORT_MODE, B.PRIORITY' + @n
+SET @v_SQL += '			FROM (' + @n
+SET @v_SQL += '					SELECT DIVISION_ID ' + @n
+SET @v_SQL += '					,      BOD_ID' + @n
+SET @v_SQL += '					,      FROM_SITE' + @n
+SET @v_SQL += '					,      TO_SITE ' + @n
+--SET @v_SQL += '					-- 20201223 INCOTERMS 변경 MODIFY KIMYONGHO' + @n
+SET @v_SQL += '					,      SSP_INCOTERMS		AS INCOTERMS' + @n
+SET @v_SQL += '					,      TRANSPORT_MODE ' + @n
+SET @v_SQL += '					,      LT_TOTAL_ORIGIN       AS LT_TOTAL    ' + @n
+SET @v_SQL += '					,      SHIP_LT_TOTAL_ORIGIN  AS SHIP_LT_TOTAL ' + @n
+SET @v_SQL += '					,      PRIORITY 			' + @n
+SET @v_SQL += '					FROM SCP_MST_BOD_N_V WITH(NOLOCK) ' + @n
+SET @v_SQL += '					WHERE DIVISION_ID = ''' +@p_division_id +'''' + @n
+SET @v_SQL += '                    AND   FROM_SITE   = ''' + @p_from_site_id + '''' + @n
+SET @v_SQL += '					AND   TO_SITE   = ''' + @p_to_site_id + '''' + @n
+SET @v_SQL += '					AND   BOD_VALID_YN =''Y''' + @n
+SET @v_SQL += '					AND   FROM_YYYYMMDD  <= GETDATE()' + @n
+SET @v_SQL += '					AND   TO_YYYYMMDD  >= GETDATE()' + @n
+
+SET @v_SQL += '				)  B ' + @n
+		
+SET @v_SQL += '   )  V' + @n
+
+SET @v_SQL += '    JOIN ( SELECT DISTINCT DIVISION_ID , ITEM_ID , BOD_ID ' + @n
+SET @v_SQL += '	       FROM   SCP_MST_BOD_ITEM WITH(NOLOCK)   ' +@n -- SCP_MST_BOD_ITEM A WITH(NOLOCK) '
+SET @v_SQL += '	       WHERE  DIVISION_ID = ''' + @p_division_id + '''' + @n
+SET @v_SQL += '		   AND     (( '''  +@p_item_id + ''' ='''')   OR ITEM_ID IN (SELECT TOKEN FROM DBO.STRING_SPLIT(''' + @p_item_id+''' , '','')))	' + @n
+SET @v_SQL += '          )   A' + @n
+SET @v_SQL += '	  ON A.DIVISION_ID  = V.DIVISION_ID ' + @n
+SET @v_SQL += '	 AND A.BOD_ID       = V.BOD_ID' + @n
+
+SET @v_SQL += '	LEFT JOIN SCP_MST_FINAL_ITEM F WITH(NOLOCK)' + @n
+SET @v_SQL += '		ON F.DIVISION_ID = V.DIVISION_ID ' + @n
+SET @v_SQL += '		AND F.ITEM_ID =     A.ITEM_ID ' + @n
+SET @v_SQL += '		AND F.OPERATION_GROUP =''E''' + @n
+
+SET @v_SQL += 'WHERE V.DIVISION_ID = ''' +@p_division_id + '''' + @n
+SET @v_SQL += 'AND   V.FROM_SITE   = ''' +@p_from_site_id + '''' + @n
+SET @v_SQL += 'AND   V.TO_SITE     = ''' +@p_to_site_id + '''' + @n
+--SET @v_SQL += 'AND   ISNULL(F.OPERATION_GROUP,'''')   = ''E''' + @n
+ 
+
+SET @v_SQL += 'order by V.PRIORITY' + @n
+print @v_SQL
+EXEC (@v_SQL)
+
+			
+END
+"
+"2026-10-02 00:00:01.607","LGCE_SCMDEV","P ","SSP0020_SAVE_DELEGATE","2087066571","1","
+
+
+/*
+ * Program ID   : [SSP0020_SAVE_DELEGATE]
+ * Description  : Approval Delegate 수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019/07/09   mcTheJ		   [CSR ID:4044806] Model PIC 담당자 위임 기능 추가	
+ */
+CREATE PROCEDURE [dbo].[SSP0020_SAVE_DELEGATE]
+	 @p_division_id          NVARCHAR(MAX)
+	,@p_delegatee_id         NVARCHAR(MAX)
+	,@p_from_date            NVARCHAR(MAX)
+	,@p_to_date				 NVARCHAR(MAX)
+	,@p_user_id              NVARCHAR(MAX)
+	,@p_language			 NVARCHAR(MAX) = 'KO'
+	,@debug_mode			 NVARCHAR(1) ='F'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	
+	DECLARE @v_division_id          NVARCHAR(MAX);
+	DECLARE @v_delegatee_id         NVARCHAR(MAX);
+
+	SET @v_division_id         = NULL;
+	SET @v_delegatee_id		   = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SSP0020_SAVE_DELEGATE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	--BEGIN TRAN;
+
+	BEGIN TRY
+		
+		SET @d_event_date	= GETDATE();
+
+		--PRINT '1';
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_division_id, @v_delimiter);    
+
+		
+		
+		WHILE LEN(@p_division_id) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN			
+				SET @v_division_id         = dbo.SCM_ARR_SPL_VAL(@p_division_id        , @v_delimiter, @mst_loop_cnt );
+			END;
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+			BEGIN		
+				--Insert
+				Insert Into SSP_MST_DELEGATE
+				(
+					DIVISION_ID,			USER_ID,				DELEGATEE_ID,				FROM_DATE,
+					TO_DATE,				VALID_YN,				CREATED_BY,					CREATION_DATE,
+					LAST_UPDATED_BY,		LAST_UPDATE_DATE
+				)
+				VALUES
+				(
+					@v_division_id,			@p_user_id,				@p_delegatee_id,			@p_from_date,
+					@p_to_date,				'Y',					@p_user_id,					@d_event_date,
+					@p_user_id,				@d_event_date
+				);
+
+			END;
+		END
+
+		--MAIL SEND
+		--개발이라서 막아 둠
+		--EXEC PR_SSP_MAIL_SEND_DELEGATE 'S', @p_division_id,  @p_user_id, @p_delegatee_id, @p_from_date, @p_to_date, @p_language, 'Y';
+
+		-- 결과코드 리턴
+		SELECT  'S' AS result_code,  @mst_loop_cnt AS result_cnt ;
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			--if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+					  
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_"
+"2026-10-02 00:00:01.607","LGCE_SCMDEV","P ","SSP0020_SAVE_DELEGATE","2087066571","2","err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				     
+			; 
+		END;
+	END CATCH;
+END
+
+
+
+"
+"2026-10-02 00:00:01.607","LGCE_SCMDEV","P ","SSP0020_SAVE_UNSET","2103066628","1","
+
+
+/*
+ * Program ID   : [SSP0020_SAVE_UNSET]
+ * Description  : Delegate 설정해제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019/07/09   mcTheJ		   [CSR ID:4044806] Model PIC 담당자 위임 기능 추가	
+ * 2019/08/14   mcTheJ		   Delegator, Delegatee 변경
+ */
+CREATE PROCEDURE [dbo].[SSP0020_SAVE_UNSET]
+	 @p_division_id          NVARCHAR(MAX)
+	,@p_from_date            NVARCHAR(MAX)
+	,@p_to_date				 NVARCHAR(MAX)
+	,@p_sheet_name	         NVARCHAR(MAX)
+	,@p_delegate	         NVARCHAR(MAX)
+	,@p_last_update_by		 NVARCHAR(MAX)
+	,@p_last_update_date	 NVARCHAR(MAX)
+	,@p_user_id              NVARCHAR(MAX)
+	,@p_language			 NVARCHAR(MAX) = 'KO'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_from_date			NVARCHAR(MAX);
+	DECLARE @v_to_date				NVARCHAR(MAX);
+	DECLARE @v_delegate				NVARCHAR(MAX);
+	DECLARE @v_last_update_by		NVARCHAR(MAX);
+	DECLARE @v_last_update_date		NVARCHAR(MAX);
+
+	SET @v_division_id			= NULL;
+	SET @v_from_date	        = NULL;
+	SET @v_to_date				= NULL;
+	SET @v_delegate				= NULL;
+	SET @v_last_update_by       = NULL;
+	SET @v_last_update_date     = NULL;
+	
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SSP0020_SAVE_UNSET';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	DECLARE @v_mail_divisionid	NVARCHAR(MAX);
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	--BEGIN TRAN;
+
+	BEGIN TRY
+
+		--PRINT '1';
+		SET @d_event_date	= GETDATE();
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_division_id, @v_delimiter);    
+
+		WHILE LEN(@p_division_id) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN			
+				SET @v_division_id			= dbo.SCM_ARR_SPL_VAL(@p_division_id        , @v_delimiter, @mst_loop_cnt );
+				
+			END;
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+				BEGIN		
+					IF @p_sheet_name = 'Delegate'
+					BEGIN
+						UPDATE	SSP_MST_DELEGATE
+						SET VALID_YN = 'N'
+							, LAST_UPDATED_BY = @p_user_id
+							, LAST_UPDATE_DATE = @d_event_date
+						WHERE 1 = 1
+						AND DIVISION_ID = @v_division_id
+						AND FROM_DATE = @p_from_date
+						AND TO_DATE = @p_to_date
+						AND DELEGATEE_ID = @p_delegate
+						AND LAST_UPDATED_BY = @p_last_update_by;
+					END
+					ELSE
+					BEGIN
+						UPDATE	SSP_MST_DELEGATE
+						SET VALID_YN = 'N'
+							, LAST_UPDATED_BY = @p_user_id
+							, LAST_UPDATE_DATE = @d_event_date
+						WHERE 1 = 1
+						AND DIVISION_ID = @v_division_id
+						AND FROM_DATE = @p_from_date
+						AND TO_DATE = @p_to_date
+						AND DELEGATEE_ID = @p_user_id
+						AND LAST_UPDATED_BY = @p_last_update_by;
+					END
+
+				END;
+			
+		END;
+		SET @v_mail_divisionid = replace(@p_division_id, @v_delimiter, ', ');
+		--MAIL SEND
+		-- 개발이라서 메일전송 소스 막아둠
+		--EXEC PR_SSP_MAIL_SEND_DELEGATE 'U',  @v_mail_divisionid,  @p_user_id, @p_delegate, @p_from_date, @p_to_date, @p_language, 'Y';
+
+		-- 결과코드 리턴
+		SELECT  'S' AS"
+"2026-10-02 00:00:01.607","LGCE_SCMDEV","P ","SSP0020_SAVE_UNSET","2103066628","2"," result_code,  @mst_loop_cnt AS result_cnt ;
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			--if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+					  
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				     
+			; 
+		END;
+	END CATCH;
+END
+
+
+
+"

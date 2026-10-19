@@ -85,11 +85,11 @@ export const SAVE_FIELDS = [
 export const MSG = {
   REQUIRED_FIELD: 'MSG00614', // {0} 값은 필수 입력입니다. (AS-IS MSG00002)
   SAVED_COUNT: 'MSG00672', // {0}개의 데이터가 저장되었습니다. (AS-IS MSG00004)
-  INVALID_DATE: 'MSG00611', // 유효한 날짜 형식이 아닙니다. (AS-IS MSG00049)
+  INVALID_DATE: 'MSG01081', // 유효한 날짜 형식이 아닙니다. {0} (AS-IS MSG00049)
   POSITIVE_INT: 'MSG00699', // 0보다 큰 정수를 입력하십시오. (신규)
   NO_PERMISSION: 'MSG00096', // 권한이 없습니다.
   PERIOD_OVERLAP: 'MSG00700', // 중첩된 기간이 있습니다. (신규)
-  PERIOD_ORDER: 'MSG00108', // 조회 기간이 잘못되었습니다 (시작일 > 종료일).
+  PERIOD_ORDER: 'MSG01135', // 시작일자가 종료일자보다 늦을 수 없습니다.
   REQUIRED_COLUMN: 'MSG00113', // 필수 입력 컬럼이 없습니다. (신규 행 짝 미충족)
   DUPLICATED: 'MSG00260', // 중복된 조합이 존재합니다.
   VERSION_ONE_ONLY: 'MSG00701', // 버전은 1개만 선택해 주세요. (신규)

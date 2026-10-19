@@ -1,7 +1,8 @@
 // ⭐ DMF0044 — SAVE payload 구성 (Data Type 이원화 — AS-IS SaveData L502~968 1:1):
 //   · ETC(2)  : 2행 Measure 세트 루프(i+=2), Red(변경) 셀만 → PKG..._SAVE_SALES_PLAN_REPORT_C
 //               '^' bulk 20키 (21 IN − P_CREATED_BY BE주입). CELL_MODEL_INFO/CELL_MODEL = 세트 파트너 행 값.
-//   · Cutoff(1): 1행 루프 Action=='M' 만, Red 셀만 → ..._C_CF '^' bulk 22키 (23 IN − createdBy).
+//   · Cutoff(1): 1행 루프 Action=='M' 만, Red 셀만 → ..._C_CF '^' bulk 24키
+//               (22키 + cellProdSite/plantSiteId = TO-BE SP 신규 MERGE 키. AS-IS 엔 없음 — 저장 Double 수정).
 //   · 공통: 빈 수량 → '0' (spdMain_Changed L1295~1302 파리티), P_CUTOFF_YYYYMMDD = 행값 그대로
 //     (⭐ 정책① 2026-07-22 — AS-IS 활성 경로에서 항상 '' = 빈값 파리티. 제약매트릭스 V-9 L115).
 //   · Department 공란 → MSG00429 {Department} (AS-IS L572/L778 MSG00002 용법 재매핑).
@@ -45,7 +46,9 @@ export interface EtcSaveRow {
   cellModel: string;
 }
 
-// Cutoff 22키 — 1~15 ETC 동일, 16~22 = currency/qty/scmSiteId/projectCode/companyId/fcstType/incoterms
+// Cutoff 24키 — 1~15 ETC 동일, 16~22 = currency/qty/scmSiteId/projectCode/companyId/fcstType/incoterms,
+//   23~24 = cellProdSite/plantSiteId (TO-BE SAVE SP _C_CF 신규 MERGE 키 — AS-IS 엔 없음).
+//   미전송 시 SP ON 이 기존 행을 못 찾아 UPDATE 대신 중복 INSERT = 저장 Double (2026-09-11 버그 수정).
 export interface CutoffSaveRow {
   activeFlag: string;
   divisionId: string;
@@ -69,6 +72,8 @@ export interface CutoffSaveRow {
   companyId: string;
   fcstType: string;
   incoterms: string;
+  cellProdSite: string; // row.CELL_PROD_SITE_CD — 신규 MERGE 키 (개발자 증빙 2026-09-11)
+  plantSiteId: string; // row.PLANT_SITE_ID — 신규 MERGE 키
 }
 
 export interface SaveBuildResult<T> {
@@ -233,6 +238,8 @@ export const buildCutoffSaveRows = (params: {
         companyId: identity.companyId,
         fcstType: str(row.FCST_TYPE),
         incoterms: str(row.INCOTERMS),
+        cellProdSite: str(row.CELL_PROD_SITE_CD),
+        plantSiteId: str(row.PLANT_SITE_ID),
       });
     }
   }

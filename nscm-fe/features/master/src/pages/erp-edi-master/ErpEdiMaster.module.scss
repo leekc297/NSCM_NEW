@@ -16,7 +16,7 @@
   min-height: 0;
 }
 
-// Figma node 5883-159383 정합 (2026-06-28): Top(527h) = Summary(좌 400w) | Repair(우 1202w)
+// 화면 설계 정합 (2026-06-28): Top(527h) = Summary(좌 400w) | Repair(우 1202w)
 //   2-컬럼 + 하단 Sub 탭(180h). Top:Sub = 527:180. Summary:Repair = 400:1202.
 // 2026-08-11: flex-grow 기반 고정 3단 → PanelGroup 드래그 분할로 교체 (sales-site/lookup 패턴).
 //   크기는 Panel 의 defaultSize(%) 가 관리하므로 여기서는 flex-grow 를 쓰지 않는다.
@@ -83,7 +83,7 @@
   }
 }
 
-// 좌우 드래그 바 — .rowSplitBar 의 축만 바꾼 것. 폭 24px = Figma Top 내부 Spacing 유지.
+// 좌우 드래그 바 — .rowSplitBar 의 축만 바꾼 것. 폭 24px = Top 내부 Spacing 유지.
 .colSplitBar {
   width: 24px;
   cursor: col-resize;
@@ -117,6 +117,16 @@
   border-left: 3px solid #1976d2;
 }
 
+// Summary/Repair 는 항상 동시에 보이는데 각자 건수가 없어 상단 SubTitle 배지(그 중 하나에만
+//   대응)만으로는 다른 쪽 건수를 알 수 없었다 — 영역 제목 옆에 각자 건수를 표시한다.
+.sectionCount {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1976d2;
+}
+
+// Repair 제목 줄의 "정비 필요 합계 수량 : N"(CNT 합계). 행 수 배지(.sectionCount)와 구분되게 적색.
 .repairCount {
   margin-left: 8px;
   font-size: 12px;

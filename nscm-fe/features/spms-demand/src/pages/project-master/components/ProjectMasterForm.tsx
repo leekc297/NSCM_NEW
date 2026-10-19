@@ -26,7 +26,7 @@ interface ProjectMasterFormProps {
 //   Row1: 사업부*(MyDivision Single — 첫 값 기본, LBL00001, CF-01) /
 //         고객(EndCustomerByDivision Multi 검색+ALL — 사업부 종속, LBL00643, CF-02) /
 //         Cell 유형(lookup SPMS_CELL_TYPE Multi, LBL00046, CF-03 — 설계 원문 비종속 F-17) /
-//         Biz Type(DmBizType Multi, LBL00607, CF-04 — 조회조건은 설계서 기재·그리드 셀만 BizTypeByDivision)
+//         Biz Type(DmBizType Multi, LBL00085, CF-04 — 조회조건은 설계서 기재·그리드 셀만 BizTypeByDivision)
 //   Row2: 개발 현황(lookup SPMS_DPJT_DEVELOP_STATUS Multi, LBL00863 신규, CF-05) /
 //         등록 완료일*(From~To — 기본 M-1~Today, LBL00857, CF-06. PeriodField 표준 — yyyymmdd)
 //   멀티 = 빈 배열 = ALL (store setFilter 가 콤마 연결 — UC-06). 계약 ③ LBL 재사용 8 + 신규 1

@@ -1,0 +1,4 @@
+﻿"menu_id","sheet","request_keys","response_cursors","response_keys","sp_hints","line"
+"SCP0015","planMgmt","divisionId planYear planWeek sesUserGrId","","","P_RAISE_NOT_MIGRATED","6068"
+"SCP0015","engineRun","modelingId divisionId revisionNo","o_rc o_rc2","o_rc.MODELING_ID o_rc.PLAN_ID o_rc.PLAN_NAME o_rc.DIVISION_ID o_rc.PLAN_TYPE o_rc.PLAN_SEQ o_rc.STEP_NAME o_rc.STEP_PROCESS1 o_rc.STEP_PROCESS2 o_rc.STEP_PROCESS3 o_rc.STEP_PROCESS4 o_rc.STEP_STATUS o_rc.START_TIME o_rc.END_TIME o_rc2.PLAN_STATUS o_rc2.PLAN_STATUS_NAME","P_RAISE_NOT_MIGRATED","6108"
+"SCP0015","planConfirm","modelingId divisionId revisionNo","o_rc","o_rc.CONFIRM_YN o_rc.CONFIRM_USER o_rc.CONFIRM_TIME","P_RAISE_NOT_MIGRATED","6139"

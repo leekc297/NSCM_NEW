@@ -33,6 +33,8 @@ export const ProcedureManagementForm = () => {
               render={() => (
                 <CustomDropdown
                   multiple
+                  allOption
+                  useClearIcon
                   value={searchParams?.schema}
                   options={
                     schemaTypeData?.map(item => ({

@@ -1,0 +1,23 @@
+﻿SELECT A.PLAN_ID AS CODE, A.PLAN_ID AS NAME
+      FROM   SCM_FP_PLAN_H A WITH(NOLOCK)
+      WHERE  1=1
+      AND    A.INSTANCE_ID = @INSTANCE_ID
+      AND    CONVERT(VARCHAR,A.PLAN_START_TIME,112) = @PLAN_DATE
+      AND    A.PLAN_TYPE = 'PRE'
+      AND    RIGHT(A.PLAN_ID,2) <> '00'
+      -- 인스턴스들의 배포정보중에 가장 최근에 배포된 시점 이후로 만들어진 plan 들만 뽑아옴
+      /*
+      AND    A.INSERT_TIME > (
+        	SELECT MAX(A.RELEASE_TIME) AS RELEASE_TIME
+        	FROM (
+          		SELECT MAX(A.RELEASE_TIME) AS RELEASE_TIME
+          		FROM   HIS_FP_PLAN_DETAIL_H A WITH(NOLOCK)
+          		WHERE  INSTANCE_ID IN ( 'INSTANCE_LT' )
+          		UNION ALL
+          		SELECT MAX(A.RELEASE_TIME) AS RELEASE_TIME
+          		FROM   HIS_FP_PLAN_GROUP_DETAIL_H A WITH(NOLOCK)
+          		WHERE  INSTANCE_ID IN ( 'INSTANCE_LT' )
+        	) A
+      )
+      */
+      ORDER BY A.PLAN_ID DESC

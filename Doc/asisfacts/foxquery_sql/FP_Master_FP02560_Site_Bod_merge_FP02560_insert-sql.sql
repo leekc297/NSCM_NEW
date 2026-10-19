@@ -1,0 +1,80 @@
+﻿BEGIN
+      
+			        MERGE INTO SCM_SHIPMENT_M A
+			        USING (SELECT RTRIM(LTRIM(@COMPANY_ID)) AS COMPANY_ID, RTRIM(LTRIM(@DIVISION_ID)) AS DIVISION_ID, RTRIM(LTRIM(@SITE_ID)) AS SITE_ID
+			                     ,RTRIM(LTRIM(@PLANT_ID)) AS PLANT_ID, RTRIM(LTRIM(@TO_SITE_ID)) AS TO_SITE_ID, RTRIM(LTRIM(@TO_PLANT_ID)) AS TO_PLANT_ID
+			              	     ,RTRIM(LTRIM(@TRANSPORT_MODE)) AS TRANSPORT_MODE) AS B
+			        ON (  A.COMPANY_ID      = B.COMPANY_ID
+			          AND A.DIVISION_ID     = B.DIVISION_ID
+			          AND A.SITE_ID         = B.SITE_ID
+			          AND A.PLANT_ID        = B.PLANT_ID
+			          AND A.TO_SITE_ID      = B.TO_SITE_ID
+			          AND A.TO_PLANT_ID     = B.TO_PLANT_ID
+			          AND A.TRANSPORT_MODE  = B.TRANSPORT_MODE
+			        )
+			        WHEN MATCHED THEN
+			          UPDATE SET
+			              TRANSPORT_PRIORITY  = RTRIM(LTRIM(@TRANSPORT_PRIORITY))
+			            , OUT_BUFFER_DAY      = RTRIM(LTRIM(@OUT_BUFFER_DAY))
+			            , OUTBOUND_DAY        = RTRIM(LTRIM(@OUTBOUND_DAY))
+			            , SHIP_PORT_DAY       = RTRIM(LTRIM(@SHIP_PORT_DAY))
+			            , MON = RTRIM(LTRIM(@MON))
+			            , TUE = RTRIM(LTRIM(@TUE))
+			            , WED = RTRIM(LTRIM(@WED))
+			            , THU = RTRIM(LTRIM(@THU))
+			            , FRI = RTRIM(LTRIM(@FRI))
+			            , SAT = RTRIM(LTRIM(@SAT))
+			            , SUN = RTRIM(LTRIM(@SUN))
+			            , VOYAGE_DAY    = RTRIM(LTRIM(@VOYAGE_DAY))
+			            , INBOUND_DAY   = RTRIM(LTRIM(@INBOUND_DAY))
+			            , IN_BUFFER_DAY = RTRIM(LTRIM(@IN_BUFFER_DAY))
+			            , ACTIVE_FLAG   = RTRIM(LTRIM(@ACTIVE_FLAG))
+			            , DESCRIPTION   = RTRIM(LTRIM(@DESCRIPTION))
+			            , UPDATE_ID     = @USER_ID
+			            , UPDATE_TIME   = dbo.SYSDATE1()
+			        WHEN NOT MATCHED THEN
+			          INSERT (
+			              COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, 
+			              TO_SITE_ID, TO_PLANT_ID, TRANSPORT_MODE, TRANSPORT_PRIORITY, 
+			              OUT_BUFFER_DAY, OUTBOUND_DAY, SHIP_PORT_DAY, 
+			              MON, TUE, WED, THU, FRI, SAT, SUN, 
+			              VOYAGE_DAY, INBOUND_DAY, IN_BUFFER_DAY, ACTIVE_FLAG, 
+			              DESCRIPTION, INSERT_ID, INSERT_TIME, UPDATE_ID, UPDATE_TIME
+			          )
+			          VALUES (
+			              RTRIM(LTRIM(@COMPANY_ID)), RTRIM(LTRIM(@DIVISION_ID)), RTRIM(LTRIM(@SITE_ID)), RTRIM(LTRIM(@PLANT_ID)), 
+			              RTRIM(LTRIM(@TO_SITE_ID)), RTRIM(LTRIM(@TO_PLANT_ID)), RTRIM(LTRIM(@TRANSPORT_MODE)), RTRIM(LTRIM(@TRANSPORT_PRIORITY)), 
+			              RTRIM(LTRIM(@OUT_BUFFER_DAY)), RTRIM(LTRIM(@OUTBOUND_DAY)), RTRIM(LTRIM(@SHIP_PORT_DAY)), 
+			              RTRIM(LTRIM(@MON)), RTRIM(LTRIM(@TUE)), RTRIM(LTRIM(@WED)), RTRIM(LTRIM(@THU)), RTRIM(LTRIM(@FRI)), RTRIM(LTRIM(@SAT)), RTRIM(LTRIM(@SUN)), 
+			              RTRIM(LTRIM(@VOYAGE_DAY)), RTRIM(LTRIM(@INBOUND_DAY)), RTRIM(LTRIM(@IN_BUFFER_DAY)), RTRIM(LTRIM(@ACTIVE_FLAG)), 
+			              RTRIM(LTRIM(@DESCRIPTION)), @USER_ID, dbo.SYSDATE1(), @USER_ID, dbo.SYSDATE1()
+			          )
+			        ;
+			      
+			        INSERT INTO HIS_SHIPMENT_M (
+			              COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, 
+			              TO_SITE_ID, TO_PLANT_ID, TRANSPORT_MODE, TRANSPORT_PRIORITY, 
+			              OUT_BUFFER_DAY, OUTBOUND_DAY, SHIP_PORT_DAY, 
+			              MON, TUE, WED, THU, FRI, SAT, SUN, 
+			              VOYAGE_DAY, INBOUND_DAY, IN_BUFFER_DAY, ACTIVE_FLAG, 
+			              DESCRIPTION, INSERT_ID, INSERT_TIME, UPDATE_ID, UPDATE_TIME, 
+			              JOB_USER_ID, JOB_TIME, JOB_TYPE
+			        )
+			        SELECT COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, 
+			               TO_SITE_ID, TO_PLANT_ID, TRANSPORT_MODE, TRANSPORT_PRIORITY, 
+			               OUT_BUFFER_DAY, OUTBOUND_DAY, SHIP_PORT_DAY, 
+			               MON, TUE, WED, THU, FRI, SAT, SUN, 
+			               VOYAGE_DAY, INBOUND_DAY, IN_BUFFER_DAY, ACTIVE_FLAG, 
+			               DESCRIPTION, INSERT_ID, INSERT_TIME, UPDATE_ID, UPDATE_TIME, 
+			               @USER_ID, dbo.SYSDATE1(), 'EXCEL'
+			        FROM   SCM_SHIPMENT_M A(NOLOCK)
+			        WHERE  COMPANY_ID     = RTRIM(LTRIM(@COMPANY_ID))
+			        AND    DIVISION_ID    = RTRIM(LTRIM(@DIVISION_ID))
+			        AND    SITE_ID        = RTRIM(LTRIM(@SITE_ID))
+			        AND    PLANT_ID       = RTRIM(LTRIM(@PLANT_ID))
+			        AND    TO_SITE_ID     = RTRIM(LTRIM(@TO_SITE_ID))
+			        AND    TO_PLANT_ID    = RTRIM(LTRIM(@TO_PLANT_ID))
+			        AND    TRANSPORT_MODE = RTRIM(LTRIM(@TRANSPORT_MODE))
+			        ;
+			      
+			      END;

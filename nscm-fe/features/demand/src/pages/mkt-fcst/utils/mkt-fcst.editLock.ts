@@ -25,8 +25,53 @@ import type { BucketInfo, CurrentWeekInfo } from '../useMktFcstStore';
 //   (`'W_' || BASIS_YYYYMM || ISO_WEEK`, 08_procedures_01.sql:9411) 으로 생성되므로 일치가 보장된다.
 //   컬럼 순서는 SP SORT_ORDER_NO(=BASIS_START_DATE) 정렬 = 시간순 → 현재 주 index 앞 = 과거.
 //   ⇒ 형식이 바뀌어도 깨지지 않는다(파싱 0). 사용자 지시(2026-07-24): "초록색 체크하는 기준에 맞춰라".
+//   [정정 2026-10-02] 위 'W30' 전제는 현행 실데이터와 불일치한다 — DMF0021/DMF0003 전 테스트
+//     리터럴(W_2026081, W_20260940 등)이 전부 순수 숫자다. 과거 판정의 1차 기준은 여전히 아래
+//     index(초록강조) 비교지만, 월경계 파셜주차 예외(isSamePartialWeek, isPastDynColumn W_ 분기)에
+//     한해 ISO 주차 숫자 파싱을 쓴다. 파셜 두 조각은 index 가 인접하면서 같은 ISO 주라 index 만으로는
+//     앞달 조각을 과거로 오판하기 때문이다.
 const weekIndexOf = (binding: string, weekBindings: readonly string[]): number =>
   weekBindings.indexOf(binding);
+
+// 파셜주차 동일주 판정 — 같은 ISO 주(주차번호 동일)가 월경계로 두 컬럼(W_yyyymm+ISO_WEEK)으로
+//   쪼개진 경우, 앞달 조각을 당주(뒷달) 조각과 "같은 주"로 본다 (DMF0021 1d089bf93 해석 B 이식).
+//   근거: GET_SPREAD_TITLE 커서 W_ = 'W_'||BASIS_YYYYMM||ISO_WEEK, GROUP BY BASIS_YYYYMM,ISO_WEEK
+//   (PKG_DMF0003 body L1674~1693). 파셜 두 조각(PARTIAL_WEEK_NAME A/B)은 ISO_WEEK 가 같고
+//   BASIS_YYYYMM 만 직전/직후 월로 다르며 SORT_ORDER_NO 가 동일해 항상 인접한다.
+//   ISO_WEEK 는 숫자 실데이터(테스트 리터럴 W_2026081 등 전부 숫자) → yyyymm+주차번호로 파싱한다.
+//   한정: 주차번호 동일 + a 의 yyyymm 이 b 의 직전 월일 때만(다음 해 같은 주차 오판정 방지).
+interface WeekTag {
+  ym: string; // yyyymm
+  wk: number; // ISO week
+}
+const parseWeekTag = (binding: string): WeekTag | null => {
+  const t = binding.replace(/^W_/, '').trim();
+  if (!/^\d{7,10}$/.test(t)) return null;
+  return { ym: t.slice(0, 6), wk: Number(t.slice(6)) };
+};
+const prevMonth = (yyyymm: string): string => {
+  if (!/^\d{6}$/.test(yyyymm)) return yyyymm;
+  const total = Number(yyyymm.slice(0, 4)) * 12 + (Number(yyyymm.slice(4, 6)) - 1) - 1;
+  const y = Math.floor(total / 12);
+  const m = (total % 12) + 1;
+  return `${y}${String(m).padStart(2, '0')}`;
+};
+// a(앞달 조각)가 b(당주)의 같은 ISO 주 직전 월 조각인가.
+const isSamePartialWeek = (a: WeekTag, b: WeekTag): boolean =>
+  a.wk === b.wk && a.ym !== b.ym && a.ym === prevMonth(b.ym);
+
+// 주어진 W_ binding 이 당주(thisWeekBinding) 의 월경계 파셜 앞달 조각인지 판정 (해석 B).
+//   당주 강조(초록 레일·헤더 Bold)가 뒷달 조각만 가리킬 때, 같은 ISO 주 앞달 조각도 "당주"로
+//   보아 함께 강조하기 위한 공개 헬퍼. isPastDynColumn 의 파셜 예외와 동일 기준을 재사용한다.
+export const isPartialWeekPartnerOfCurrent = (
+  binding: string,
+  thisWeekBinding: string | null | undefined
+): boolean => {
+  if (!binding || !thisWeekBinding) return false;
+  const w = parseWeekTag(binding);
+  const tw = parseWeekTag(thisWeekBinding);
+  return !!w && !!tw && isSamePartialWeek(w, tw);
+};
 
 // 이번 주 월요일 — AS-IS L857 (Sunday=0 → -6, 그 외 -(d-1)). JS getDay(Sun=0) ≡ .NET DayOfWeek.
 export const thisWeekMondayYmd = (today = new Date()): string => {
@@ -37,7 +82,7 @@ export const thisWeekMondayYmd = (today = new Date()): string => {
   return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
 };
 
-// 오늘(당일) yyyymmdd — Daily 잠금 기준(당일 포함 이후만 편집, 2026-07-23 사용자 지시).
+// 오늘(당일) yyyymmdd — cutoff.month(당월) 산출용. (Daily 잠금은 cutoff.week=이번 주 월요일 기준.)
 const todayYmd = (today = new Date()): string => {
   const d = new Date(today);
   return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
@@ -61,8 +106,8 @@ export const dynKindOf = (binding: string): DynKind => {
 //                      Monthly 는 cutoff.month(yyyymm) 로 과거월 판정, Weekly 는 M_ 자체가 비활성이므로
 //                      본 binding 을 읽지 않는다. O_RC3 계약 보존을 위해 struct field 는 유지.
 export interface EditCutoff {
-  today: string; // yyyymmdd (오늘/당일 — Daily 잠금 기준)
-  week: string; // yyyymmdd (이번 주 월요일 — 파생 계산용 보관)
+  today: string; // yyyymmdd (오늘/당일 — month 산출용 보관)
+  week: string; // yyyymmdd (이번 주 월요일 — Daily 과거 잠금 기준)
   month: string; // yyyymm (이번 달)
   div40MonthCutoff: string | null; // yyyymm (O_RC2)
   thisMonthBinding: string | null; // 'M_yyyymm' (O_RC3)
@@ -129,10 +174,18 @@ export const isPastDynColumn = (params: {
   if (!kind) return false;
   const tag = tagOf(binding);
 
-  if (kind === 'D') return tag < cutoff.today;
+  // Daily 과거 잠금 = 이번 주 월요일 이전 일자 (AS-IS L857/L870 sYYYYMMDD = 이번 주 월요일 기준).
+  //   월요일 포함 이후만 편집. (2026-07-23 '당일 기준' 으로 바꿨던 것을 AS-IS 정합으로 되돌림.)
+  if (kind === 'D') return tag < cutoff.week;
 
   if (kind === 'W') {
     if (cutoff.thisWeekIndex < 0) return false;
+    // 파셜주차 예외(DMF0021 해석 B) — 당주가 월경계 파셜이면 앞달 조각(예: 당주 W_20261040 의
+    //   W_20260940)도 당주와 같은 ISO 주이므로 과거가 아니다. index 비교(앞달 조각은 당주 index
+    //   바로 앞이라 과거로 잠김)보다 먼저 가려낸다. thisWeekBinding 과 ISO 주차를 대조한다.
+    const w = parseWeekTag(binding);
+    const tw = cutoff.thisWeekBinding ? parseWeekTag(cutoff.thisWeekBinding) : null;
+    if (w && tw && isSamePartialWeek(w, tw)) return false;
     const idx = weekIndexOf(binding, cutoff.weekBindings);
     // 목록에 없는 W_ 컬럼(-1)은 판정 불가 -> 실적 아님(안전측 개방).
     return idx >= 0 && idx < cutoff.thisWeekIndex;
@@ -195,8 +248,7 @@ export const evalDynCell = (params: {
   //     Monthly : 현재월 M_ 활성 / D_·W_ 비활성.
   if (bucketType === BUCKET_TYPE.DAILY) {
     if (kind !== 'D') return { editable: false, isPast: false };
-    // ⭐ 과거일 잠금 = 오늘(당일) 이전 일자 (2026-07-23 사용자 지시 — 당일 포함 이후만 편집).
-    //   기존 '이번 주 월요일' 기준은 이번 주 월~어제까지도 편집 허용 → 요구(오늘부터)와 불일치하여 today 로 교정.
+    // 과거일 잠금 = 이번 주 월요일 이전 일자 (AS-IS L857/L870 정합). 판정은 isPastDynColumn 단일 출처.
     const isPast = isPastDynColumn({ binding, divisionId, cutoff });
     return { editable: !isPast, isPast };
   }

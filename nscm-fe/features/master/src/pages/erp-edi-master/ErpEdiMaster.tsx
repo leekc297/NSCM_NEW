@@ -15,7 +15,7 @@ import { ErpEdiMasterRepairGrid } from './components/ErpEdiMasterRepairGrid';
 import { ErpEdiMasterSalesSiteGrid } from './components/ErpEdiMasterSalesSiteGrid';
 import { ErpEdiMasterSspmGrid } from './components/ErpEdiMasterSspmGrid';
 import { ErpEdiMasterSummaryGrid } from './components/ErpEdiMasterSummaryGrid';
-import { MENU_ID, SHEETS, SHEET_INDEX } from './erp-edi-master.constants';
+import { MENU_ID, SHEETS, SHEET_INDEX, SHOW_REPAIR_TOTAL_CNT } from './erp-edi-master.constants';
 import { EMPTY_SALES_SITE_ROW, EMPTY_SSPM_ROW } from './erp-edi-master.empty-rows';
 import { checkSalesSiteSaveResult, checkSspmSaveResult } from './erp-edi-master.utils';
 import styles from './ErpEdiMaster.module.scss';
@@ -238,7 +238,6 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   조회 직후(Summary 더블클릭 전)에는 filters[REPAIR] 가 없어 파라미터 없이 SP 가 나간다.
   const handleStatusUpdate = async () => {
     try {
-      void setToast({ type: 'default', message: t('LBL00665', 'Loading...'), duration: 3000 });
       await apiClient.post(`/${MENU_ID}/main/STATUS_UPDATE/call-proc`, {});
       void setToast({ type: 'success', message: 'Status Update 완료. 재조회합니다.' });
       await Promise.all([
@@ -324,7 +323,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   };
 
-  // Delete (F9, Figma 디자인 — AS-IS DeleteButton 빈 함수) — 활성 sub 그리드에서 신규 추가행만 제거(FE only).
+  // Delete (F9, 화면 설계 — AS-IS DeleteButton 빈 함수) — 활성 sub 그리드에서 신규 추가행만 제거(FE only).
   //   사용자 결정 2026-06-28: 기존 저장행은 미삭제(delete SP 없음). GridAction.removeRow(grid, true)=deleteOnlyNew.
   const handleDelete = () => {
     const grid =
@@ -340,6 +339,14 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
   // (no-use-before-define: handleSave 보다 먼저 선언)
   const summaryRows = !filters[SHEETS.SUMMARY] ? [] : (summaryData?.o_rc1 ?? []);
   const repairRows = !filters[SHEETS.REPAIR] ? [] : (repairData?.o_rc1 ?? []);
+  // 정비 필요 합계 수량 = Repair 행 CNT(EDI 건수) 합계. AS-IS lblRepair_Cnt.Text (.cs L1019/L1132,
+  //   "정비 필요 합계 수량 : " + SUM(CNT)). 행 수(총 N건)만으로는 정비 대상 규모를 알 수 없어 함께 표시한다.
+  //   CNT 는 SP(P_DMF0008_GET_EDI_MST_REPAIR) O_RC1 의 그룹별 COUNT(1) 로, 컬럼 메타에는 없어 그리드에
+  //   보이지 않지만 응답 행에는 실려 온다. 문자열로 오므로 Number 로 바꿔 더한다(비정상 값은 0).
+  //   repairRows 가 조건식이라 useMemo 의존성이 매 렌더 바뀔 수 있어(react-hooks/exhaustive-deps)
+  //   memo 없이 바로 더한다 - 행 수만큼의 덧셈이라 비용이 없다.
+  //   표시는 SHOW_REPAIR_TOTAL_CNT(erp-edi-master.constants) 로 끈 상태다(2026-10-12 요청). 계산은 남긴다.
+  const repairTotalCnt = repairRows.reduce((sum, row) => sum + (Number(row.CNT) || 0), 0);
   // #1 (2026-06-28): salesSite GET OUT 커서명 = O_RESULT_CURSOR (DMF0008_GET_SALES_SITE) — `.o_rc1` 아님.
   //   sspm 은 o_rc1(OPEN O_RC1 FOR SELECT). casing 무관 fallback.
   // ⚠️ TEMP MASK (2026-07-02, 저장테스트용): salesSite/sspm 조회행 EDIT_FLAG 를 'Y' 로 강제.
@@ -446,7 +453,6 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (isSS) payload['deptId'] = '-';
 
     try {
-      void setToast({ type: 'default', message: t('LBL00665', 'Loading...'), duration: 3000 });
       const route = isSS ? SHEETS.SALES_SITE : SHEETS.SSPM;
       const res = await apiClient.post<Record<string, unknown>>(
         `/${MENU_ID}/${route}/SAVE/call-proc`,
@@ -516,7 +522,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
     // Save(F7) 버튼 미노출 — 하단 활성 탭(Sales Site / SSPM) 변경행 저장 경로. 되살리려면 아래 주석 복원.
     save: false, //hasButton('SAVE') ? handleSave : false,
     insert: false, //hasButton('INSERT') ? handleInsert : false,
-    delete: hasButton('DELETE') ? handleDelete : false, // Delete(F9) — Figma 디자인 + 권한 메타(DELETE) 등록
+    delete: hasButton('DELETE') ? handleDelete : false, // Delete(F9) — 화면 설계 + 권한 메타(DELETE) 등록
     manual: false,
     upload: false,
   };
@@ -564,6 +570,9 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
         grid={focusedGridRef as never}
         gridFilter={focusedGridFilterRef}
         dataCount={repairRows.length}
+        // 그리드별 건수를 각 영역 제목 줄에서 표시하므로, 어느 그리드인지 모호한
+        // 상단 툴바 줄의 건수 배지는 숨긴다(툴바 동작 대상은 그대로 focusedGridRef).
+        hideTotalCases
         excelFileName='ErpEdiMaster'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
@@ -573,14 +582,19 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
 
       <PanelGroup className={styles.bodyPanelGroup} orientation='vertical'>
         <Panel defaultSize={60} minSize={20}>
-          {/* Figma Top (527h) — Summary(좌 400) | Repair(우 1202) 2-컬럼 (2026-06-28) */}
+          {/* Top (527h) — Summary(좌 400) | Repair(우 1202) 2-컬럼 (2026-06-28) */}
           <PanelGroup className={styles.topRow} orientation='horizontal'>
             <Panel defaultSize={21.5} minSize={10}>
               <div
                 className={styles.summaryCol}
                 onClickCapture={() => setFocusedSheet(SHEETS.SUMMARY)}
               >
-                <div className={styles.sectionTitle}>Summary</div>
+                <div className={styles.sectionTitle}>
+                  Summary
+                  {summaryRows.length > 0 && (
+                    <span className={styles.sectionCount}>총 {summaryRows.length}건</span>
+                  )}
+                </div>
                 <ErpEdiMasterSummaryGrid
                   gridRef={summaryGridRef}
                   gridFilterRef={summaryFilterRef}
@@ -599,6 +613,16 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
               >
                 <div className={styles.sectionTitle}>
                   List of SCM Master Data Requiring Maintenance
+                  {repairRows.length > 0 && (
+                    <>
+                      <span className={styles.sectionCount}>총 {repairRows.length}건</span>
+                      {SHOW_REPAIR_TOTAL_CNT && (
+                        <span className={styles.repairCount}>
+                          정비 필요 합계 수량 : {repairTotalCnt.toLocaleString()}
+                        </span>
+                      )}
+                    </>
+                  )}
                 </div>
                 <ErpEdiMasterRepairGrid
                   gridRef={repairGridRef}
@@ -613,7 +637,7 @@ const ErpEdiMaster = ({ tabId, title }: PageProps<MENU_ID>) => {
 
         <PanelSeparator className={styles.rowSplitBar} />
 
-        {/* Figma 하단 Module (180h): Sales Site / SSPM 탭 */}
+        {/* 하단 Module (180h): Sales Site / SSPM 탭 */}
         <Panel defaultSize={40} minSize={10}>
           <div
             className={styles.subSection}

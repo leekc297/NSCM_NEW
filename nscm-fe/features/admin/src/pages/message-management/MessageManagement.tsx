@@ -59,9 +59,12 @@ export const MessageManagement = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
+  // USE_YN 으로 사용 여부를 관리하는 그리드라 삭제는 신규행 제거 전용으로만 쓴다.
+  // removeRow 두 번째 인자 deleteOnlyNew=true 로 기존행에 D flag 를 찍지 않는다
+  //   (기존 메시지 비활성은 USE_YN='N' 으로 처리).
   const onDelete = () => {
     if (!gridRef.current) return;
-    GridAction.removeRow(gridRef.current);
+    GridAction.removeRow(gridRef.current, true);
   };
 
   const hotkeyConfig: HotkeyConfig = {

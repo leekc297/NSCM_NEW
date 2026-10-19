@@ -7,6 +7,7 @@ import {
   type GridPanel,
   MergeManager,
 } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { DivisionField } from 'features/master/src/components';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -15,7 +16,7 @@ import type { BUTTON_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import { useQuery } from '@foundation/query-client';
 import { type EditTracker, GridAction } from '@foundation/utils';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, ProgressIndicator } from '@shared/lges';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
@@ -32,7 +33,6 @@ import { callSaveExchangeRate } from '../../utils/sales-reports.api';
 import { toCellStr } from '../../utils/sales-reports.gridCombos';
 
 import styles from './ExchangeRateModal.module.scss';
-import { useExchangeRateModalStore } from './exchangeRateModalStore';
 
 interface Props {
   open: boolean;
@@ -129,6 +129,8 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
   const setAlert = useMessageStore.getState().setAlert;
   const setToast = useMessageStore.getState().setToast;
   const gridRef = useRef<FlexGridType<ExchangeRatePivotRow>>(undefined);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
   const editTrackerRef = useRef<EditTracker<ExchangeRatePivotRow> | undefined>(undefined);
   const sesUserId = useSessionStore.getState().session.userId ?? '';
 
@@ -136,8 +138,7 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
   const [inputDivisionId, setInputDivisionId] = useState(divisionId);
   const [inputYear, setInputYear] = useState(year);
   // 확정 조회조건 — useTabProcQuery filters 참조 안정화 원천 (stale closure·인라인 filters 사고 방지)
-  const applied = useExchangeRateModalStore(state => state.applied);
-  const setApplied = useExchangeRateModalStore(state => state.setApplied);
+  const [applied, setApplied] = useState({ divisionId, year });
 
   // 신규 행 (AS-IS InsertRow L614~653 — CRUD_TYPE='I')
   const [insertedRows, setInsertedRows] = useState<ExchangeRatePivotRow[]>([]);
@@ -197,7 +198,12 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
     [applied, versionNo, sesUserId]
   );
   // ① 골격 (AS-IS L426 DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP)
-  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.EXCHANGE_RATE>({
+  const {
+    data,
+    refetch,
+    isLoading: isBaseLoading,
+    isFetching: isBaseFetching,
+  } = useTabProcQuery<MENU_ID, SHEETS.EXCHANGE_RATE>({
     menuId: MENU_ID,
     sheetName: SHEETS.EXCHANGE_RATE,
     tabId: MENU_ID,
@@ -206,10 +212,12 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
     queryOptions: { staleTime: 0 },
   });
   // ② 값 (AS-IS L441 …_POPUP_DATA)
-  const { data: detailData, refetch: refetchDetail } = useTabProcQuery<
-    MENU_ID,
-    SHEETS.EXCHANGE_RATE
-  >({
+  const {
+    data: detailData,
+    refetch: refetchDetail,
+    isLoading: isDetailLoading,
+    isFetching: isDetailFetching,
+  } = useTabProcQuery<MENU_ID, SHEETS.EXCHANGE_RATE>({
     menuId: MENU_ID,
     sheetName: SHEETS.EXCHANGE_RATE,
     procedureAction: 'SEARCH_DATA' as BUTTON_TYPE,
@@ -219,7 +227,11 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
     queryOptions: { staleTime: 0 },
   });
   // ③ 월 헤더 (AS-IS InitSpread L263 DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE — p_year)
-  const { data: titleData } = useTabProcQuery<MENU_ID, SHEETS.EXCHANGE_RATE>({
+  const {
+    data: titleData,
+    isLoading: isTitleLoading,
+    isFetching: isTitleFetching,
+  } = useTabProcQuery<MENU_ID, SHEETS.EXCHANGE_RATE>({
     menuId: MENU_ID,
     sheetName: SHEETS.EXCHANGE_RATE,
     procedureAction: 'TITLE' as BUTTON_TYPE,
@@ -228,6 +240,14 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
     enabled: open && versionNo !== '',
     queryOptions: { staleTime: 0 },
   });
+  // 그리드 검색조회 로딩 — 골격/값/월헤더 3개 쿼리가 모두 그리드 rows(fetchedRows) 를 구성한다.
+  const loading =
+    isBaseLoading ||
+    isBaseFetching ||
+    isDetailLoading ||
+    isDetailFetching ||
+    isTitleLoading ||
+    isTitleFetching;
 
   // 동적 월 컬럼 — TITLE 커서(CALENDAR_YYYY / CALENDAR_MONTH / BASIS_START_DATE) 가 단일 원천.
   //   AS-IS 는 컬럼 Tag 를 "D"+BASIS_START_DATE 로 잡고 저장 시 그 값을 그대로 P_YYYYMMDD 로 보낸다
@@ -394,7 +414,7 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
         e.cell.style.textAlign = 'center';
         return;
       }
-      // hook #95 3색 — 편집가능 Yellow / 편집가능하나 잠금 Gray / 그 외 클래스 없음(White+zebra).
+      // hook #95 3색 — 편집가능 Yellow / 편집가능하나 잠금 Gray / 그 외 클래스 없음(White).
       //   정적 컬럼은 공용 DataGrid(formatEditableColumns)가 메타 inputTpCd 로 이미 처리한다.
       if (e.panel.cellType === CellType.Cell) {
         const binding = e.panel.columns[e.col]?.binding ?? '';
@@ -700,7 +720,8 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
     });
 
     if (payloadRows.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
+      // 변경/신규 없음 → toast + 공통 문구 (DMF0003~0007/0020/0072 과 동일 규약).
+      setToast({ type: 'error', message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
       return;
     }
     // ③ Price 전량 0 차단 — AS-IS L562~571 (join 후 '0' 과 '^' 를 지워 빈 문자열이면 오류)
@@ -826,18 +847,28 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
           />
 
           <div className={styles.gridWrapper}>
-            <DataGrid<ExchangeRatePivotRow>
-              gridRef={gridRef}
-              editTrackerRef={editTrackerRef}
-              className={styles.grid}
-              itemsSource={rows}
-              staticColumns={staticColumns}
-              dynamicColumns={dynamicColumns}
-              autoGenerateColumns={false}
-              frozenColumns={fixedBindings.length}
-              allowSorting={false}
-              allowMerging={AllowMerging.All}
+            {/* 검색조회 로딩 스피너 — 저장(saving) 스피너와 별개로 골격/값/월헤더 조회 중에 표시. */}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea title='' count={rows.length} gridRef={gridRef} gridFilterRef={gridFilterRef}>
+              <DataGrid<ExchangeRatePivotRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                editTrackerRef={editTrackerRef}
+                className={styles.grid}
+                itemsSource={rows}
+                staticColumns={staticColumns}
+                dynamicColumns={dynamicColumns}
+                autoGenerateColumns={false}
+                frozenColumns={fixedBindings.length}
+                allowSorting={false}
+                allowMerging={AllowMerging.All}
+              />
+            </ResultArea>
           </div>
 
           {/* 진행 스피너 — 자매 모달 동일. 전역 스피너는 앱 셸에 있어 다이얼로그 뒤에 깔려 안 보인다.
@@ -884,7 +915,7 @@ export const ExchangeRateModal = ({ open, modalClose, divisionId, year, versionN
                 appearance='contained'
                 priority='primary'
                 size='medium'
-                buttonLabel={t('LBL00626', 'Save')}
+                buttonLabel={t('LBL00111', 'Save')}
                 disabled={saving}
                 onClick={() => void handleSave()}
               />

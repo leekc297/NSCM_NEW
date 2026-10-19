@@ -1,7 +1,7 @@
 // ⭐ DMF0021 — 조회/저장/버킷 검증 (validation.md 141건 중 활성 메시지·silent 분기 매핑 —
 //   전체 매트릭스 = __asis-mapping__.md. anti-simplification: 각 가드에 AS-IS 라인 근거 주석 보존).
 //   근거(라인 = AS-IS DMF0021_SalesPlan.cs):
-//     V-S1 Division 필수 (FindData L1513 MSG00097) / V-S2 기간 역전 (L1474 MSG00108) /
+//     V-S1 Division 권한 (FindData L1513 — AS-IS MSG00097 의도 = 권한 Division 0건 → TO-BE MSG00667) / V-S2 기간 역전 (L1474 MSG00108) /
 //     V-S3 3년 초과 — 종료일 = 시작일+3년 보정 후 차단 (L1481 MSG00164. 주석은 "2년"이나 코드 = 3년) /
 //     V-E3 Bucket 변경 차단 — 변경분 존재 시 (cboBucketType_Click L5475 MSG00227) /
 //     V-V1 필수 13종 division 분기 (SaveData L2198~2239 — AS-IS MSG00002 용법 → 사내 MSG00429 재매핑) /
@@ -22,14 +22,15 @@ const str = (v: unknown): string =>
 export const useSalesPlanValidation = () => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
+  const setToast = useMessageStore.getState().setToast;
 
   // ===== 조회 (FindData L1460~1513 — validation.md #39~42) =====
   const validateFind = (c: SearchCondition): ValidationResult => {
-    // #42 — Division 미선택 (L1513)
+    // #42 — Division 권한 없음 (L1513 — 권한 Division 0건이면 콤보 비어 divisionId='')
     if (!str(c.divisionId)) {
       void setAlert({
         type: 'alert',
-        content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.'),
+        content: t(MSG.REQUIRE_DIVISION, '_No authority assigned.'),
       });
       return { ok: false, msgId: MSG.REQUIRE_DIVISION };
     }
@@ -95,8 +96,9 @@ export const useSalesPlanValidation = () => {
     }
 
     if (rows.length === 0) {
-      // 변경 0건 (MSG00004 '수정한 내용이 없습니다')
-      void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
+      // 변경/신규 없음 → toast + 공통 문구 (DMF0003~0007/0020/0072 과 동일 규약.
+      //   필수·중복 등 검증 실패는 modal alert 유지). MSG00004 '수정한 내용이 없습니다'.
+      setToast({ type: 'error', message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
       return { ok: false, msgId: MSG.NO_CHANGES };
     }
     for (let i = 0; i < rows.length; i++) {

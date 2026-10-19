@@ -122,42 +122,6 @@ export const groupKeyBindings = (
   return keys;
 };
 
-/**
- * 선택한 셀이 속한 머지 블록의 첫 행 인덱스 — Insert 가 그 블록 맨 위에 행을 넣기 위한 앵커.
- *
- * 위로 훑다가 멈추는 조건 2가지:
- *   1. 키 컬럼 값이 하나라도 다르면 = 다른 그룹.
- *   2. 신규행(CRUD_TYPE='I') 이면 = 병합이 끊기는 자리다. 아래 getMergedRange 가 insert 행을
- *      머지에서 빼므로 화면상으로도 거기서 블록이 갈린다. 앞서 추가한 신규행이 키를 비운 채
- *      나란히 서 있어도 그 위까지 타고 올라가지 않게 한다.
- *
- * 그룹을 못 찾거나 신규행에서 눌렀으면 index 를 그대로 돌려준다(= 포커스 행 바로 위).
- */
-export const findGroupTopIndex = (
-  rows: readonly (WijmoRowItem | undefined)[],
-  index: number,
-  keyBindings: readonly string[]
-): number => {
-  const target = rows[index];
-  const isInsert = (row: WijmoRowItem | undefined): boolean => row?.CRUD_TYPE === CRUD_TYPE.INSERT;
-  if (!target || keyBindings.length === 0 || isInsert(target)) return index;
-
-  const cell = (row: WijmoRowItem, binding: string): string => {
-    const value = row[binding];
-    return value === null || value === undefined ? '' : String(value);
-  };
-  const isSameGroup = (row: WijmoRowItem): boolean =>
-    keyBindings.every(binding => cell(row, binding) === cell(target, binding));
-
-  let top = index;
-  while (top > 0) {
-    const prev = rows[top - 1];
-    if (!prev || isInsert(prev) || !isSameGroup(prev)) break;
-    top--;
-  }
-  return top;
-};
-
 // ⭐ 계층 머지 (DMF0020 HierarchicalMergeManager 복제 — End Customer/Sales Site 세로 머지 + viewport sticky).
 //   ① Data Cell  : 좌측 fixed cols 계층(상위 동일값) 세로 머지 (v4 viewport row 제한 = sticky content).
 //   ② ColumnHeader: 정적 column verticalSpan + 동적 column 2단(년월/주차) 가로 머지.

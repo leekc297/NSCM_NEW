@@ -1,0 +1,2468 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","1","
+
+
+      
+/*      
+ * Program ID   : SCP0032_GET_UNPLAN_LIST      
+ * Description  : UNPLAN LIST 조회      
+	--No	Unplan 리스트	
+	--1 	NO BOM								모델 기준으로 BOM 자체가 없다.
+	--2 	PREFER NO BOM						모델 기준으로 Prefer Site로 지정되어있는 Site에 BOM이 미등록되어있다.
+	--3 	NO ITEM								Project Route나  BOM이 없음
+	--4 	PREFER NO PRODUCT					생산지( Prefer Site )는 지정되어있으나 Prefer Product 이 등록안되어있는 모델 
+	--5 	PREFER NO SITE						생산지( Prefer Site )가 지정안되어 있는데  Prefer Product 이 등록되어있는 모델 
+	--6 	NO BOD								Site 간 이동 BOD가 미등록 되어있다.
+	--7 	NO BOD (ELECTRONODE PAIR)			Site 간 이동 BOD가 미등록 되어있다. 전극 음극 양극 둘다 있어야 하는데 둘중 하나라도 없으면 리스트에 포함됨
+	--8 	PREFER NO BOD						모델 기준으로 Prefer Site로 지정되어있는 Site간 이동 BOD가 미등록되어있다. (자동차, 소형, ESS)
+	--9	    PREFER NO BOD (ELECTRONODE PAIR) 	모델 기준으로 Prefer Site로 지정되어있는 Site간 이동 BOD가 미등록되어있다. (전극) 전극 음극 양극 둘다 있어야하는데 둘중 하나라도 없으면 리스트에 포함됨
+	--10 	PREFER NO BOD CAL					Prefer Site 간 이동 BOD 기준으로 BOD Calender 가 Due Date까지 모두 막혀 있는 경우 항차가 모두 막혀있는 경우임
+	--11 	NO RESOURCE							모델 기준으로 설비가 없다.
+	--12	PREFER NO RESOURCE					모델 기준으로 Prefer Site로 지정되어있는 Site에 공정 설비가 등록 안되어있는 경우 
+	--13 	PAST DUE							DEMAND_ID 기준으로 DUE_DATE 가 PLAN_START_DTTM(플랜 시작 첫날) 가 일찍 나와서 Unplan되는 모델 리스트 보여줌
+	--14 	OUT OF HORIZON						DEMAND_ID 기준으로 DUE_DATE 가 PLAN_END_DATE (52주) 가 더 늦게 나와서 Unplan되는 모델 리스트 보여줌				
+ * Program History      
+ *===================================================================================================      
+ *   Date		In Charge	Description      
+ *===================================================================================================      
+ * 2018/09/12	hwyoon		Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트      
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ *
+ */      
+CREATE PROCEDURE [dbo].[SCP0032_GET_UNPLAN_LIST]      
+--chaan	@p_division_id          NVARCHAR(2)
+    @p_division_id              NVARCHAR(30),--chaan
+	@p_plan_start_yyyymmdd		NVARCHAR(8),
+	@p_plan_type				NVARCHAR(50),
+	@p_seq						NVARCHAR(1),
+	@p_sheet_name				NVARCHAR(50)
+AS      
+BEGIN      
+
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE @v_plan_id	nvarchar(MAX) ='';
+	SET @v_plan_id = (SELECT DISTINCT t.plan_id
+						FROM  SCP_PLAN_VERSION_V t
+						WHERE t.DIVISION_ID = @p_division_id
+						--AND CONVERT(CHAR(8), t.input_start_date , 112) = @p_plan_start_yyyymmdd
+						AND PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd
+						AND PLAN_TYPE = @p_plan_type
+						AND PLAN_SEQ = @p_seq);
+
+	DECLARE @v_master_id nvarchar(128) = '';
+	SET @v_master_id = @p_division_id+'::'+'WEEKLY';
+
+	DECLARE @v_version_id nvarchar(128) = '';
+	SET @v_version_id = @v_plan_id+'::'+@p_plan_type+'::'+@p_seq;
+
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/	
+    IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_PREFER_DEMAND') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0032_PREFER_DEMAND;
+
+	CREATE TABLE #TblDynamic_SCP0032_PREFER_DEMAND (
+	  DEMAND_ID		NVARCHAR(300)
+	 ,MODEL_ID		NVARCHAR(300)
+	 ,DUE_DATE		NVARCHAR(300)
+	 ,PREFERENCE_SITE_ID		NVARCHAR(300)
+	 ,SCM_SITE		NVARCHAR(300)
+	 ,SCM_SITE_T	NVARCHAR(300)
+	 ,SITE_TYPE		NVARCHAR(300)
+	 ,ROUTE_TYPE	NVARCHAR(300)
+	);
+
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_PREFER_PRODUCT') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0032_PREFER_PRODUCT;
+
+	CREATE TABLE #TblDynamic_SCP0032_PREFER_PRODUCT (
+	  DEMAND_ID		NVARCHAR(300)
+	 ,MODEL_ID		NVARCHAR(300)
+	 ,DUE_DATE		NVARCHAR(300)
+	 ,PREFERENCE_PRODUCT_ID		NVARCHAR(300)
+	 ,PREFERENCE_SITE_ID		NVARCHAR(300)
+	 ,ROUTE_TYPE	NVARCHAR(300)
+	 ,SCM_SITE		NVARCHAR(300)
+	 ,PRODUCT_ID	NVARCHAR(300)
+	);
+
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_BOM') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0032_BOM;
+
+	CREATE TABLE #TblDynamic_SCP0032_BOM (
+	  MODEL_ID		NVARCHAR(300)
+	 ,SITE_ID		NVARCHAR(300)
+	 ,ROUTE_ID		NVARCHAR(300)
+	 ,PARENT_ITEM_ID		NVARCHAR(300)
+	 ,C"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","2","HILD_ITEM_ID	NVARCHAR(300)
+	 ,ITEM_TYPE		NVARCHAR(300)
+	 ,BOM_LEVEL		NVARCHAR(300)
+	 ,SCM_SITE		NVARCHAR(300)
+	 ,ROUTE_TYPE	NVARCHAR(300)
+	);
+
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_DIV') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0032_DIV;
+
+	SELECT SCM_SITE_ID, MAX(SITE_DESCRIPTION) SITE_DESCRIPTION
+	INTO #TblDynamic_SCP0032_DIV
+	FROM SCM_MST_SITE 
+	GROUP BY SCM_SITE_ID
+
+
+	IF @p_sheet_name='1. NO BOM' 
+		BEGIN
+			/****************************
+				NO.1 NO BOM
+			*****************************/
+
+			WITH TREE_QUERY AS (
+				SELECT A.PARENT_ITEM_ID	AS MODEL_ID
+      					, A.SITE_ID
+      					, A.ROUTE_ID
+      					, A.PARENT_ITEM_ID	
+      					, A.CHILD_ITEM_ID	
+      					, B.ITEM_TYPE
+      					, 1 AS BOM_LEVEL
+    				FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK)
+					JOIN  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK) ON A.MASTER_ID = B.MASTER_ID	AND A.PLAN_ID = B.PLAN_ID AND A.CHILD_ITEM_ID = B.ITEM_ID		
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND A.PARENT_ITEM_ID IN	(
+											SELECT DISTINCT Z.PRODUCT_ITEM_ID
+												FROM  ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+													INNER JOIN  ENG_SCP.DBO.TH_ENG_NET_DEMAND Y(NOLOCK)
+														ON X.MASTER_ID = Y.MASTER_ID AND X.PLAN_ID = Y.PLAN_ID AND X.ORG_DEMAND_ID = Y.DEMAND_ID
+													INNER JOIN  ENG_SCP.DBO.TH_ENG_SALES_PRODUCT_MAP Z(NOLOCK)
+														ON Y.MASTER_ID = Z.MASTER_ID AND Y.PLAN_ID = Z.PLAN_ID AND Y.SALES_MODEL_ID = Z.SALES_MODEL_ID
+												WHERE 1=1
+												AND X.MASTER_ID = @v_master_id
+												AND X.PLAN_ID = @v_version_id
+												AND X.OUT_VERSION_ID = @v_version_id
+												AND X.PROBLEM_TYPE = 'UNPLAN'
+    										)
+				UNION ALL
+				SELECT C.MODEL_ID
+    					, A.SITE_ID
+    					, A.ROUTE_ID
+    					, A.PARENT_ITEM_ID	
+    					, A.CHILD_ITEM_ID	
+    					, B.ITEM_TYPE
+    					, C.BOM_LEVEL + 1	AS BOM_LEVEL
+    				FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK),  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK), TREE_QUERY C
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND A.MASTER_ID = B.MASTER_ID
+    				AND A.PLAN_ID = B.PLAN_ID
+    				AND A.CHILD_ITEM_ID = B.ITEM_ID
+    				AND A.PARENT_ITEM_ID = C.CHILD_ITEM_ID
+			)
+			INSERT INTO #TblDynamic_SCP0032_BOM(
+				MODEL_ID
+				 ,SITE_ID
+				 ,ROUTE_ID
+				 ,PARENT_ITEM_ID
+				 ,CHILD_ITEM_ID
+				 ,ITEM_TYPE		
+				 ,BOM_LEVEL		
+				 ,SCM_SITE		
+				 ,ROUTE_TYPE	
+			)
+			SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+					, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+					, SUBSTRING(A.SITE_ID,1,CHARINDEX('-',A.SITE_ID,1)+1) AS SCM_SITE
+					, SUBSTRING(A.SITE_ID,CHARINDEX('-',A.SITE_ID,1)+1,1) AS ROUTE_TYPE
+					--INTO #TblDynamic_SCP0032_BOM
+				FROM TREE_QUERY A
+					LEFT MERGE JOIN (
+						SELECT DISTINCT X.MODEL_ID
+							FROM (
+								SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+										, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+										, MAX(A.BOM_LEVEL) OVER(PARTITION BY A.MODEL_ID) AS MAX_BOM_LEVEL
+									FROM TREE_QUERY A
+								) X
+							WHERE 1=1
+							AND X.BOM_LEVEL = X.MAX_BOM_LEVEL
+							AND X.ITEM_TYPE != 'R'                              
+						UNION                            
+						SELECT X.MODEL_ID
+							FROM TREE_QUERY X
+							WHERE 1=1
+							AND X.ITEM_TYPE = 'H'
+							AND NOT EXISTS	(
+											SELECT 1
+												FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM Y(NOLOCK)
+												WHERE 1=1
+												AND Y.MASTER_ID = @v_master_id
+												AND Y.PLAN_ID   = @v_version_id
+												AND Y.PARENT_ITEM_ID = X.CHILD_ITEM_ID
+                							)             
+    					) B
+    					ON A.MODEL_ID = B.MODEL_ID
+				WHERE 1=1
+				AND B.MODEL_ID IS NULL
+			; 
+
+			-- 조회쿼리
+				WITH W_NO_BOM_QUERY AS (
+				SELECT DISTINCT X.DEMAND_ID, X.MODEL_ID
+					FROM (
+						SELECT DISTINCT SUBSTRING(A.DEMAND_ID,1,CHARI"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","3","NDEX('::',A.DEMAND_ID, CHARINDEX('~', A.DEMAND_ID,1) )-1) AS DEMAND_ID, A.ITEM AS MODEL_ID
+							FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+								LEFT MERGE JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+									ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+							WHERE 1=1
+							AND A.MASTER_ID = @v_master_id
+							AND A.PLAN_ID = @v_version_id
+							AND A.MASTER_ID = B.MASTER_ID
+							AND A.PLAN_ID = B.PLAN_ID
+							AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'N'
+							--AND CHARINDEX('::D::',A.DEMAND_ID,1)  <> 0
+							AND A.DEMAND_ID IN	(
+            									SELECT DISTINCT X.ORG_DEMAND_ID
+            										FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+            										WHERE 1=1
+            										AND X.MASTER_ID = @v_master_id
+            										AND X.PLAN_ID = @v_version_id
+													AND X.OUT_VERSION_ID = @v_version_id
+            										AND X.PROBLEM_TYPE = 'UNPLAN'
+													AND X.NODE_TYPE NOT IN ('PAST_DUE','OUT_OF_HORIZON','NO ITEM', 'PARTIAL SHORT')
+												)
+						) X
+						LEFT OUTER JOIN #TblDynamic_SCP0032_BOM Y    			  
+							ON X.MODEL_ID = Y.MODEL_ID 
+							AND Y.ROUTE_ID NOT IN (SELECT DISTINCT ROUTE_ID
+														FROM ENG_SCP.DBO.TH_ENG_OP_RES_GROUP_MAP(NOLOCK)
+													WHERE 1=1
+														AND MASTER_ID = @v_master_id
+														AND PLAN_ID = @v_version_id
+														AND RESOURCE_GROUP_ID IN (
+					    			    									SELECT DISTINCT RESOURCE_GROUP_ID
+					    			    										FROM ENG_SCP.DBO.TH_ENG_RESOURCE(NOLOCK)
+					    			    										WHERE 1=1
+					    			    										AND MASTER_ID = @v_master_id
+					    			    										AND PLAN_ID = @v_version_id
+					    			    										AND DESCR = 'NO_CAPA'
+					    			    									))
+					WHERE 1=1
+					AND Y.MODEL_ID IS NULL
+			)
+			SELECT *
+				FROM W_NO_BOM_QUERY A
+				WHERE 1=1
+			ORDER BY DEMAND_ID
+				;
+
+		END;
+
+	ELSE IF @p_sheet_name='2. PREFER NO BOM' 
+		BEGIN 
+			
+			/****************************
+				NO.2 PREFER NO BOM
+			*****************************/
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_PREFER_BOM') IS NOT NULL
+        		DROP TABLE #TblDynamic_SCP0032_PREFER_BOM;
+
+			INSERT INTO #TblDynamic_SCP0032_PREFER_DEMAND(
+				DEMAND_ID
+				 ,MODEL_ID
+				 ,DUE_DATE
+				 ,PREFERENCE_SITE_ID
+				 ,SCM_SITE
+				 ,SITE_TYPE
+				 ,ROUTE_TYPE
+			)
+			SELECT A.DEMAND_ID
+					, A.MODEL_ID
+					, A.DUE_DATE
+    				, A.PREFERENCE_SITE_ID
+    				, A.SCM_SITE
+    				, A.SITE_TYPE
+				, A.ROUTE_TYPE
+				--INTO #TblDynamic_SCP0032_PREFER_DEMAND
+				FROM (
+    				SELECT AA.DEMAND_ID
+    						, AA.MODEL_ID
+    						, AA.DUE_DATE
+    						, AA.PREFERENCE_SITE_ID
+    						, SUBSTRING(ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1,CHARINDEX('-',ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1) AS SCM_SITE
+							, SUBSTRING(ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),CHARINDEX('-',ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1,1) AS ROUTE_TYPE
+        					, 'PLANT_SITE'	AS SITE_TYPE
+						FROM (
+							SELECT A.DEMAND_ID, A.ITEM AS MODEL_ID, A.DUE_DATE, B.PREFERENCE_SITE_ID, LEN(B.PREFERENCE_SITE_ID)-LEN(REPLACE(B.PREFERENCE_SITE_ID,'##','#'))+1 AS PREFERENCE_SITE_QTY
+								FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+									INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+										ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+									INNER JOIN (
+                						SELECT DISTINCT X.ORG_DEMAND_ID
+                							FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                							WHERE 1=1
+                							AND X.MASTER_ID = @v_master_id
+                							AND X.PLAN_ID = @v_version_id
+    												AND X.OUT_VERSION_ID = @v_version_id
+                							AN"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","4","D X.PROBLEM_TYPE = 'UNPLAN'
+    									) C
+										ON A.DEMAND_ID = C.ORG_DEMAND_ID
+								WHERE 1=1
+								AND A.MASTER_ID = @v_master_id
+								AND A.PLAN_ID = @v_version_id
+    							AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+							) AA, 
+							(SELECT TOP 15 INT
+								FROM ENG_SCP.DBO.COPYT BB
+								ORDER BY INT	
+							) BB
+						WHERE BB.INT < AA.PREFERENCE_SITE_QTY+1
+    				UNION ALL
+    				SELECT A.DEMAND_ID
+    						, A.ITEM		AS MODEL_ID
+							, A.DUE_DATE
+    						, B.PREFERENCE_SITE_ID
+    						, A.SITE		AS SCM_SITE
+							, NULL			AS ROUTE_TYPE	
+    						, 'SALES_SITE' AS SITE_TYPE				
+    					FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+    						INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+    							ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+							INNER JOIN (
+                				SELECT DISTINCT X.ORG_DEMAND_ID
+                					FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                					WHERE 1=1
+                					AND X.MASTER_ID = @v_master_id
+                					AND X.PLAN_ID = @v_version_id
+    										AND X.OUT_VERSION_ID = @v_version_id
+                					AND X.PROBLEM_TYPE = 'UNPLAN'
+    							) C
+								ON A.DEMAND_ID = C.ORG_DEMAND_ID
+    					WHERE 1=1
+    					AND A.MASTER_ID = @v_master_id
+    					AND A.PLAN_ID = @v_version_id
+    					AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+    				) A
+			;
+
+			
+			WITH TREE_QUERY AS (
+				SELECT A.PARENT_ITEM_ID	AS MODEL_ID
+      					, A.SITE_ID
+      					, A.ROUTE_ID
+      					, A.PARENT_ITEM_ID	
+      					, A.CHILD_ITEM_ID	
+      					, B.ITEM_TYPE
+      					, 1 AS BOM_LEVEL
+    				FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK)
+					JOIN  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK) ON A.MASTER_ID = B.MASTER_ID	AND A.PLAN_ID = B.PLAN_ID AND A.CHILD_ITEM_ID = B.ITEM_ID		
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND A.PARENT_ITEM_ID IN	(
+											SELECT DISTINCT Z.PRODUCT_ITEM_ID
+												FROM  ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+													INNER JOIN  ENG_SCP.DBO.TH_ENG_NET_DEMAND Y(NOLOCK)
+														ON X.MASTER_ID = Y.MASTER_ID AND X.PLAN_ID = Y.PLAN_ID AND X.ORG_DEMAND_ID = Y.DEMAND_ID
+													INNER JOIN  ENG_SCP.DBO.TH_ENG_SALES_PRODUCT_MAP Z(NOLOCK)
+														ON Y.MASTER_ID = Z.MASTER_ID AND Y.PLAN_ID = Z.PLAN_ID AND Y.SALES_MODEL_ID = Z.SALES_MODEL_ID
+												WHERE 1=1
+												AND X.MASTER_ID = @v_master_id
+												AND X.PLAN_ID = @v_version_id
+												AND X.OUT_VERSION_ID = @v_version_id
+												AND X.PROBLEM_TYPE = 'UNPLAN'
+    										)
+				UNION ALL
+				SELECT C.MODEL_ID
+    					, A.SITE_ID
+    					, A.ROUTE_ID
+    					, A.PARENT_ITEM_ID	
+    					, A.CHILD_ITEM_ID	
+    					, B.ITEM_TYPE
+    					, C.BOM_LEVEL + 1	AS BOM_LEVEL
+    				FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK),  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK), TREE_QUERY C
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND A.MASTER_ID = B.MASTER_ID
+    				AND A.PLAN_ID = B.PLAN_ID
+    				AND A.CHILD_ITEM_ID = B.ITEM_ID
+    				AND A.PARENT_ITEM_ID = C.CHILD_ITEM_ID
+			)
+			SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+					, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+					, SUBSTRING(A.SITE_ID,1,CHARINDEX('-',A.SITE_ID,1)+1) AS SCM_SITE
+					, SUBSTRING(A.SITE_ID,CHARINDEX('-',A.SITE_ID,1)+1,1) AS ROUTE_TYPE
+					INTO #TblDynamic_SCP0032_PREFER_BOM
+				FROM TREE_QUERY A
+					LEFT MERGE JOIN (
+						SELECT DISTINCT X.MODEL_ID
+							FROM (
+								SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+										, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+										, MAX(A.BOM_LEVEL) OVER(PARTITION BY A.MODEL_ID) AS MAX_BOM_LEVEL
+									FROM TREE_QUERY A
+								) X
+							WHERE 1=1
+							AND X.BOM_LEVEL = X.M"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","5","AX_BOM_LEVEL
+							AND X.ITEM_TYPE != 'R'                              
+						UNION                            
+						SELECT X.MODEL_ID
+							FROM TREE_QUERY X
+							WHERE 1=1
+							AND X.ITEM_TYPE = 'H'
+							AND NOT EXISTS	(
+											SELECT 1
+												FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM Y(NOLOCK)
+												WHERE 1=1
+												AND Y.MASTER_ID = @v_master_id
+												AND Y.PLAN_ID   = @v_version_id
+												AND Y.PARENT_ITEM_ID = X.CHILD_ITEM_ID
+                							)             
+    					) B
+    					ON A.MODEL_ID = B.MODEL_ID
+				WHERE 1=1
+				AND B.MODEL_ID IS NULL
+			; 
+			
+			-- 조회
+			SELECT DISTINCT SUBSTRING(A.DEMAND_ID,1,CHARINDEX('::',A.DEMAND_ID, CHARINDEX('~', A.DEMAND_ID,1) )-1) AS DEMAND_ID, A.MODEL_ID
+						, A.SCM_SITE
+						, isnull(NULLIF( DIV.SITE_DESCRIPTION , '') , '-') AS SCM_SITE_DESCRIPTION
+						, A.ROUTE_TYPE AS OPERATION_GROUP
+						, CASE WHEN B.PARENT_ITEM_ID IS NOT NULL THEN B.PARENT_ITEM_ID 
+						  ELSE A.MODEL_ID END AS ITEM_ID
+			  FROM #TblDynamic_SCP0032_PREFER_DEMAND A(NOLOCK)
+					LEFT JOIN #TblDynamic_SCP0032_DIV DIV ON DIV.SCM_SITE_ID=A.SCM_SITE
+					LEFT MERGE JOIN #TblDynamic_SCP0032_PREFER_BOM B(NOLOCK)
+						ON A.MODEL_ID = B.MODEL_ID AND A.ROUTE_TYPE = B.ROUTE_TYPE AND A.SCM_SITE = B.SCM_SITE 
+							AND B.ROUTE_ID NOT  IN (SELECT DISTINCT ROUTE_ID
+													  FROM ENG_SCP.DBO.TH_ENG_OP_RES_GROUP_MAP(NOLOCK)
+													 WHERE 1=1
+													   AND MASTER_ID = @v_master_id
+													   AND PLAN_ID = @v_version_id
+													   AND RESOURCE_GROUP_ID IN (
+					    				   									SELECT DISTINCT RESOURCE_GROUP_ID
+					    				   									  FROM ENG_SCP.DBO.TH_ENG_RESOURCE(NOLOCK)
+					    				   									 WHERE 1=1
+					    				   									   AND MASTER_ID = @v_master_id
+					    				   									   AND PLAN_ID = @v_version_id
+					    				   									   AND DESCR = 'NO_CAPA'
+					    													))
+			 WHERE 1=1
+			   AND A.SITE_TYPE = 'PLANT_SITE'
+			   AND B.SCM_SITE IS NULL
+			;
+			
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_PREFER_BOM') IS NOT NULL
+        		DROP TABLE #TblDynamic_SCP0032_PREFER_BOM;
+
+		END;
+
+
+	ELSE IF @p_sheet_name='3. NO ITEM' 
+		BEGIN
+			SELECT DISTINCT SUBSTRING(B.DEMAND_ID,1,CHARINDEX('::',B.DEMAND_ID, CHARINDEX('~', B.DEMAND_ID,1) )-1) AS DEMAND_ID, B.ITEM AS ITEM_ID
+			  FROM ENG_SCP.DBO.TH_EXP_PROBLEM_DATA A(NOLOCK)
+					INNER JOIN ENG_SCP.DBO.TH_ENG_NET_DEMAND B(NOLOCK)
+						ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID			   
+					LEFT JOIN ENG_SCP.DBO.TH_ENG_ITEM C(NOLOCK)
+						ON A.MASTER_ID = C.MASTER_ID AND A.PLAN_ID = C.PLAN_ID
+					   AND C.ITEM_ID = B.ITEM
+			 WHERE 1=1
+			   AND A.MASTER_ID = @v_master_id
+			   AND A.PLAN_ID   = @v_version_id
+			   AND A.OUT_VERSION_ID = @v_version_id
+			   AND A.TABLE_NAME = 'TH_ENG_NET_DEMAND'
+			   AND CHARINDEX('##',A.COLUMN_VALUE) > 0 
+			   AND B.DEMAND_ID = LEFT(A.COLUMN_VALUE, CHARINDEX('##',A.COLUMN_VALUE)-1)	   
+			   AND C.ITEM_ID IS NULL 
+		END;
+
+
+	ELSE IF @p_sheet_name='4. PREFER NO PRODUCT' 
+		BEGIN
+			
+			/****************************
+				NO.4 PREFER NO PRODUCT
+			*****************************/
+			INSERT INTO #TblDynamic_SCP0032_PREFER_DEMAND(
+				DEMAND_ID
+				 ,MODEL_ID
+				 ,DUE_DATE
+				 ,PREFERENCE_SITE_ID
+				 ,SCM_SITE
+				 ,SITE_TYPE
+				 ,ROUTE_TYPE
+			)
+			SELECT A.DEMAND_ID
+				, A.MODEL_ID
+				, A.DUE_DATE
+    			, A.PREFERENCE_SITE_ID
+    			, A.SCM_SITE
+    			, A.SITE_TYPE
+			, A.ROUTE_TYPE
+			--INTO #TblDynamic_SCP0032_PREFER_DEMAND
+			FROM (
+    			SELECT AA.DEMAND_ID
+    					, AA.MODEL_ID
+    					, AA.DUE_DATE
+    					, AA.PREFERENCE_SITE_ID
+    					, SUBSTRING(ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1,CHARINDEX('-',ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1) AS SCM_SITE
+						, SUBSTRING(ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),CHARINDEX('-"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","6","',ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1,1) AS ROUTE_TYPE
+        				, 'PLANT_SITE'	AS SITE_TYPE
+					FROM (
+						SELECT A.DEMAND_ID, A.ITEM AS MODEL_ID, A.DUE_DATE, B.PREFERENCE_SITE_ID, LEN(B.PREFERENCE_SITE_ID)-LEN(REPLACE(B.PREFERENCE_SITE_ID,'##','#'))+1 AS PREFERENCE_SITE_QTY
+							FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+								INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+									ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+								INNER JOIN (
+                					SELECT DISTINCT X.ORG_DEMAND_ID
+                						FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                						WHERE 1=1
+                						AND X.MASTER_ID = @v_master_id
+                						AND X.PLAN_ID = @v_version_id
+    											AND X.OUT_VERSION_ID = @v_version_id
+                						AND X.PROBLEM_TYPE = 'UNPLAN'
+    								) C
+									ON A.DEMAND_ID = C.ORG_DEMAND_ID
+							WHERE 1=1
+							AND A.MASTER_ID = @v_master_id
+							AND A.PLAN_ID = @v_version_id
+    						AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+						) AA, 
+						(SELECT TOP 15 INT
+							FROM ENG_SCP.DBO.COPYT BB
+							ORDER BY INT	
+						) BB
+					WHERE BB.INT < AA.PREFERENCE_SITE_QTY+1
+    			UNION ALL
+    			SELECT A.DEMAND_ID
+    					, A.ITEM		AS MODEL_ID
+						, A.DUE_DATE
+    					, B.PREFERENCE_SITE_ID
+    					, A.SITE		AS SCM_SITE
+						, NULL			AS ROUTE_TYPE	
+    					, 'SALES_SITE' AS SITE_TYPE				
+    				FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+    					INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+    						ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+						INNER JOIN (
+                			SELECT DISTINCT X.ORG_DEMAND_ID
+                				FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                				WHERE 1=1
+                				AND X.MASTER_ID = @v_master_id
+                				AND X.PLAN_ID = @v_version_id
+    									AND X.OUT_VERSION_ID = @v_version_id
+                				AND X.PROBLEM_TYPE = 'UNPLAN'
+    						) C
+							ON A.DEMAND_ID = C.ORG_DEMAND_ID
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+    			) A
+			;
+
+
+			INSERT INTO #TblDynamic_SCP0032_PREFER_PRODUCT(
+				DEMAND_ID
+				 ,MODEL_ID
+				 ,DUE_DATE
+				 ,PREFERENCE_PRODUCT_ID
+				 ,PREFERENCE_SITE_ID
+				 ,ROUTE_TYPE
+				 ,SCM_SITE
+				 ,PRODUCT_ID
+			)
+			SELECT DISTINCT 
+				 AA.DEMAND_ID
+			   , AA.MODEL_ID
+			   , AA.DUE_DATE
+			   , AA.PREFERENCE_PRODUCT_ID
+			   , AA.PREFERENCE_SITE_ID
+			   , SUBSTRING(CC.SITE_ID,CHARINDEX('-',CC.SITE_ID,1)+1,1) AS ROUTE_TYPE
+			   , LEFT(CC.SITE_ID,CHARINDEX('-',CC.SITE_ID,1)+1) AS SCM_SITE
+			   , BB.VALUE AS PRODUCT_ID
+			--INTO #TblDynamic_SCP0032_PREFER_PRODUCT
+			FROM (
+					SELECT A.DEMAND_ID
+						 , A.ITEM AS MODEL_ID
+						 , A.DUE_DATE
+						 , B.PREFERENCE_PRODUCT_ID
+						 , B.PREFERENCE_SITE_ID
+					  FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+						   INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+								ON A.MASTER_ID = B.MASTER_ID 
+							   AND A.PLAN_ID = B.PLAN_ID 
+							   AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+					 WHERE 1=1
+					   AND A.MASTER_ID = @v_master_id
+					   AND A.PLAN_ID = @v_version_id
+					   AND B.IS_HARD_PREFERENCE = 'Y'
+				 ) AA
+				 CROSS APPLY(
+							 SELECT VALUE FROM ENG_SCP.DBO.FN_SPLIT(AA.PREFERENCE_PRODUCT_ID ,'##')
+							) BB
+				 INNER JOIN ENG_SCP.DBO.TH_ENG_ITEM_ROUTE_SITE CC(NOLOCK)
+						 ON CC.MASTER_ID = @v_master_id
+						AND CC.PLAN_ID = @v_version_id
+						AND BB.VALUE = CC.ITEM_ID
+			;
+
+			-- 조회쿼리	
+			SELECT DISTINCT SUBSTRING(Y.DEMAND_ID,1,CHARINDEX('::',Y.DEMAND_ID, CHARINDEX('~', Y.DEMAND_ID,1) )-1) AS DEMAND_ID
+					, Y.MODEL_ID
+					, Y.SCM_SITE
+					, isnull(NULLIF( DIV.SI"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","7","TE_DESCRIPTION , '') , '-') AS SCM_SITE_DESCRIPTION
+					, Y.ROUTE_TYPE AS OPERATION_GROUP
+					, Y.PRODUCT_ID AS ITEM_ID
+			  FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+				  INNER JOIN(
+						  SELECT A.DEMAND_ID, A.MODEL_ID , A.SCM_SITE, A.ROUTE_TYPE , B.PRODUCT_ID 
+							FROM (
+								SELECT DISTINCT DEMAND_ID, MODEL_ID, SCM_SITE, ROUTE_TYPE
+								  FROM #TblDynamic_SCP0032_PREFER_DEMAND(NOLOCK)
+								 WHERE 1=1
+								   AND SITE_TYPE = 'PLANT_SITE'
+								 )A LEFT OUTER JOIN
+								 (
+								SELECT DISTINCT DEMAND_ID, MODEL_ID, ROUTE_TYPE, SCM_SITE, PRODUCT_ID
+								  FROM #TblDynamic_SCP0032_PREFER_PRODUCT(NOLOCK)
+								 WHERE 1=1
+								 )B
+									ON A.DEMAND_ID = B.DEMAND_ID AND A.MODEL_ID = B.MODEL_ID AND A.ROUTE_TYPE = B.ROUTE_TYPE
+						   WHERE B.PRODUCT_ID IS NULL
+						   ) Y
+				ON X.ORG_DEMAND_ID = Y.DEMAND_ID
+				LEFT JOIN #TblDynamic_SCP0032_DIV DIV ON DIV.SCM_SITE_ID=Y.SCM_SITE
+			WHERE 1=1
+			  AND X.MASTER_ID = @v_master_id
+			  AND X.PLAN_ID = @v_version_id
+			  AND X.OUT_VERSION_ID = @v_version_id
+			  AND X.PROBLEM_TYPE = 'UNPLAN'
+
+		END;
+
+	ELSE IF @p_sheet_name='5. PREFER NO SITE' 
+		BEGIN
+			/****************************
+				NO.5 PREFER NO SITE
+			*****************************/
+			INSERT INTO #TblDynamic_SCP0032_PREFER_DEMAND(
+				DEMAND_ID
+				 ,MODEL_ID
+				 ,DUE_DATE
+				 ,PREFERENCE_SITE_ID
+				 ,SCM_SITE
+				 ,SITE_TYPE
+				 ,ROUTE_TYPE
+			)
+			SELECT A.DEMAND_ID
+				, A.MODEL_ID
+				, A.DUE_DATE
+    			, A.PREFERENCE_SITE_ID
+    			, A.SCM_SITE
+    			, A.SITE_TYPE
+			, A.ROUTE_TYPE
+			--INTO #PREFER_DEMAND_TABLE
+			FROM (
+    			SELECT AA.DEMAND_ID
+    					, AA.MODEL_ID
+    					, AA.DUE_DATE
+    					, AA.PREFERENCE_SITE_ID
+    					, SUBSTRING( ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1,CHARINDEX('-', ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1) AS SCM_SITE
+						, SUBSTRING( ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),CHARINDEX('-', ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1,1) AS ROUTE_TYPE
+        				, 'PLANT_SITE'	AS SITE_TYPE
+					FROM (
+						SELECT A.DEMAND_ID, A.ITEM AS MODEL_ID, A.DUE_DATE, B.PREFERENCE_SITE_ID, LEN(B.PREFERENCE_SITE_ID)-LEN(REPLACE(B.PREFERENCE_SITE_ID,'##','#'))+1 AS PREFERENCE_SITE_QTY
+							FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+								INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+									ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+								INNER JOIN (
+                					SELECT DISTINCT X.ORG_DEMAND_ID
+                						FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                						WHERE 1=1
+                						AND X.MASTER_ID = @v_master_id
+                						AND X.PLAN_ID = @v_version_id
+    											AND X.OUT_VERSION_ID = @v_version_id
+                						AND X.PROBLEM_TYPE = 'UNPLAN'
+    								) C
+									ON A.DEMAND_ID = C.ORG_DEMAND_ID
+							WHERE 1=1
+							AND A.MASTER_ID = @v_master_id
+							AND A.PLAN_ID = @v_version_id
+    						AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+						) AA, 
+						(SELECT TOP 15 INT
+							FROM ENG_SCP.DBO.COPYT BB
+							ORDER BY INT	
+						) BB
+					WHERE BB.INT < AA.PREFERENCE_SITE_QTY+1
+    			UNION ALL
+    			SELECT A.DEMAND_ID
+    					, A.ITEM		AS MODEL_ID
+						, A.DUE_DATE
+    					, B.PREFERENCE_SITE_ID
+    					, A.SITE		AS SCM_SITE
+						, NULL			AS ROUTE_TYPE	
+    					, 'SALES_SITE' AS SITE_TYPE				
+    				FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+    					INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+    						ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+						INNER JOIN (
+                			SELECT DISTINCT X.ORG_DEMAND_ID
+                				FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","8","		WHERE 1=1
+                				AND X.MASTER_ID = @v_master_id
+                				AND X.PLAN_ID = @v_version_id
+    							AND X.OUT_VERSION_ID = '1044::PR::1'
+                				AND X.PROBLEM_TYPE = 'UNPLAN'
+    						) C
+							ON A.DEMAND_ID = C.ORG_DEMAND_ID
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+    			) A
+			;
+
+			INSERT INTO #TblDynamic_SCP0032_PREFER_PRODUCT(
+				DEMAND_ID
+				 ,MODEL_ID
+				 ,DUE_DATE
+				 ,PREFERENCE_PRODUCT_ID
+				 ,PREFERENCE_SITE_ID
+				 ,ROUTE_TYPE
+				 ,SCM_SITE
+				 ,PRODUCT_ID
+			)
+			SELECT DISTINCT 
+				 AA.DEMAND_ID
+			   , AA.MODEL_ID
+			   , AA.DUE_DATE
+			   , AA.PREFERENCE_PRODUCT_ID
+			   , AA.PREFERENCE_SITE_ID
+			   , SUBSTRING(CC.SITE_ID,CHARINDEX('-',CC.SITE_ID,1)+1,1) AS ROUTE_TYPE
+			   , LEFT(CC.SITE_ID,CHARINDEX('-',CC.SITE_ID,1)+1) AS SCM_SITE
+			   , BB.VALUE AS PRODUCT_ID
+			--INTO #W_PREFER_PRODUCT_TABLE
+			FROM (
+					SELECT A.DEMAND_ID
+						 , A.ITEM AS MODEL_ID
+						 , A.DUE_DATE
+						 , B.PREFERENCE_PRODUCT_ID
+						 , B.PREFERENCE_SITE_ID
+					  FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+						   INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+								ON A.MASTER_ID = B.MASTER_ID 
+							   AND A.PLAN_ID = B.PLAN_ID 
+							   AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+					 WHERE 1=1
+					   AND A.MASTER_ID = @v_master_id
+					   AND A.PLAN_ID = @v_version_id
+					   AND B.IS_HARD_PREFERENCE = 'Y'
+				 ) AA
+				 CROSS APPLY(
+							 SELECT VALUE FROM ENG_SCP.DBO.FN_SPLIT(AA.PREFERENCE_PRODUCT_ID ,'##')
+							) BB
+				 INNER JOIN ENG_SCP.DBO.TH_ENG_ITEM_ROUTE_SITE CC(NOLOCK)
+						 ON CC.MASTER_ID = @v_master_id
+						AND CC.PLAN_ID = @v_version_id
+						AND BB.VALUE = CC.ITEM_ID
+			;
+
+
+			-- 조회쿼리
+			SELECT DISTINCT SUBSTRING(Y.DEMAND_ID,1,CHARINDEX('::',Y.DEMAND_ID, CHARINDEX('~', Y.DEMAND_ID,1) )-1) AS DEMAND_ID
+					, Y.MODEL_ID
+					, Y.SCM_SITE
+					, isnull(NULLIF( DIV.SITE_DESCRIPTION , '') , '-') AS SCM_SITE_DESCRIPTION
+					, Y.ROUTE_TYPE AS OPERATION_GROUP
+					, Y.PRODUCT_ID AS ITEM_ID
+			  FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+				  INNER JOIN(
+						  SELECT A.DEMAND_ID, A.MODEL_ID , A.SCM_SITE, A.ROUTE_TYPE , B.PRODUCT_ID 
+							FROM (
+								SELECT DISTINCT DEMAND_ID, MODEL_ID, SCM_SITE, ROUTE_TYPE
+								  FROM #TblDynamic_SCP0032_PREFER_DEMAND(NOLOCK)
+								 WHERE 1=1
+								   AND SITE_TYPE = 'PLANT_SITE'
+								 )A LEFT OUTER JOIN
+								 (
+								SELECT DISTINCT DEMAND_ID, MODEL_ID, ROUTE_TYPE, SCM_SITE, PRODUCT_ID
+								  FROM #TblDynamic_SCP0032_PREFER_PRODUCT(NOLOCK)
+								 WHERE 1=1
+								 )B
+									ON A.DEMAND_ID = B.DEMAND_ID AND A.MODEL_ID = B.MODEL_ID AND A.ROUTE_TYPE = B.ROUTE_TYPE AND A.SCM_SITE = B.SCM_SITE
+						   WHERE B.PRODUCT_ID IS NULL
+						   ) Y
+				ON X.ORG_DEMAND_ID = Y.DEMAND_ID
+				LEFT JOIN #TblDynamic_SCP0032_DIV DIV ON DIV.SCM_SITE_ID=Y.SCM_SITE
+			WHERE 1=1
+			  AND X.MASTER_ID = @v_master_id
+			  AND X.PLAN_ID = @v_version_id
+			  AND X.OUT_VERSION_ID = @v_version_id
+			  AND X.PROBLEM_TYPE = 'UNPLAN'
+			UNION ALL
+			SELECT DISTINCT SUBSTRING(B.DEMAND_ID,1,CHARINDEX('::',B.DEMAND_ID, CHARINDEX('~', B.DEMAND_ID,1) )-1) AS DEMAND_ID
+					, B.MODEL_ID 
+					, B.SCM_SITE 
+					, isnull(NULLIF( DIV.SITE_DESCRIPTION , '') , '-') AS SCM_SITE_DESCRIPTION
+					, B.ROUTE_TYPE
+					, B.PRODUCT_ID AS ITEM_ID
+			 FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT A(NOLOCK)
+					   INNER JOIN (
+								   SELECT DISTINCT X.DEMAND_ID, X.MODEL_ID,X.PRODUCT_ID, X.SCM_SITE, Y.ROUTE_TYPE
+									 FROM #TblDynamic_SCP0032_PREFER_PRODUCT X(NOLOCK)
+										  LEFT JOIN (
+													   SELECT DISTINCT DEMAND_ID, ROUTE_TYPE
+														 FROM #TblDynamic_SCP0032_PREFER_DEMAND(NOLOCK)
+												   ) Y
+												 ON X.DEMAND_ID = Y.DEMAND_ID AND X.ROUTE_TYPE = Y.ROUTE_TYPE
+									WHERE 1=1
+		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","9","							  AND Y.ROUTE_TYPE IS NULL
+								) B
+							 ON A.ORG_DEMAND_ID = B.DEMAND_ID
+						LEFT JOIN #TblDynamic_SCP0032_DIV DIV ON DIV.SCM_SITE_ID=B.SCM_SITE
+			 WHERE 1=1
+			   AND A.MASTER_ID = @v_master_id
+			   AND A.PLAN_ID = @v_version_id
+			   AND A.OUT_VERSION_ID = @v_version_id
+			   AND A.PROBLEM_TYPE = 'UNPLAN'
+			;
+		END;
+
+	ELSE IF @p_sheet_name='6. NO BOD'
+		BEGIN
+			/*********************************
+				No 6. NO BOD
+			**********************************/
+
+			WITH TREE_QUERY AS (
+				SELECT A.PARENT_ITEM_ID	AS MODEL_ID
+      					, A.SITE_ID
+      					, A.ROUTE_ID
+      					, A.PARENT_ITEM_ID	
+      					, A.CHILD_ITEM_ID	
+      					, B.ITEM_TYPE
+      					, 1 AS BOM_LEVEL
+    				FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK)
+					JOIN  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK) ON A.MASTER_ID = B.MASTER_ID	AND A.PLAN_ID = B.PLAN_ID AND A.CHILD_ITEM_ID = B.ITEM_ID		
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND A.PARENT_ITEM_ID IN	(
+											SELECT DISTINCT Z.PRODUCT_ITEM_ID
+												FROM  ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+													INNER JOIN  ENG_SCP.DBO.TH_ENG_NET_DEMAND Y(NOLOCK)
+														ON X.MASTER_ID = Y.MASTER_ID AND X.PLAN_ID = Y.PLAN_ID AND X.ORG_DEMAND_ID = Y.DEMAND_ID
+													INNER JOIN  ENG_SCP.DBO.TH_ENG_SALES_PRODUCT_MAP Z(NOLOCK)
+														ON Y.MASTER_ID = Z.MASTER_ID AND Y.PLAN_ID = Z.PLAN_ID AND Y.SALES_MODEL_ID = Z.SALES_MODEL_ID
+												WHERE 1=1
+												AND X.MASTER_ID = @v_master_id
+												AND X.PLAN_ID = @v_version_id
+												AND X.OUT_VERSION_ID = @v_version_id
+												AND X.PROBLEM_TYPE = 'UNPLAN'
+    										)
+				UNION ALL
+				SELECT C.MODEL_ID
+    					, A.SITE_ID
+    					, A.ROUTE_ID
+    					, A.PARENT_ITEM_ID	
+    					, A.CHILD_ITEM_ID	
+    					, B.ITEM_TYPE
+    					, C.BOM_LEVEL + 1	AS BOM_LEVEL
+    				FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK),  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK), TREE_QUERY C
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND A.MASTER_ID = B.MASTER_ID
+    				AND A.PLAN_ID = B.PLAN_ID
+    				AND A.CHILD_ITEM_ID = B.ITEM_ID
+    				AND A.PARENT_ITEM_ID = C.CHILD_ITEM_ID
+			)
+			INSERT INTO #TblDynamic_SCP0032_BOM(
+				MODEL_ID
+				 ,SITE_ID
+				 ,ROUTE_ID
+				 ,PARENT_ITEM_ID
+				 ,CHILD_ITEM_ID
+				 ,ITEM_TYPE
+				 ,BOM_LEVEL
+				 ,SCM_SITE
+				 ,ROUTE_TYPE
+			)
+			SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+					, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+					, SUBSTRING(A.SITE_ID,1,CHARINDEX('-',A.SITE_ID,1)+1) AS SCM_SITE
+					, SUBSTRING(A.SITE_ID,CHARINDEX('-',A.SITE_ID,1)+1,1) AS ROUTE_TYPE
+					--INTO #TblDynamic_SCP0032_PLAN_BOM
+				FROM TREE_QUERY A
+					LEFT MERGE JOIN (
+						SELECT DISTINCT X.MODEL_ID
+							FROM (
+								SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+										, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+										, MAX(A.BOM_LEVEL) OVER(PARTITION BY A.MODEL_ID) AS MAX_BOM_LEVEL
+									FROM TREE_QUERY A
+								) X
+							WHERE 1=1
+							AND X.BOM_LEVEL = X.MAX_BOM_LEVEL
+							AND X.ITEM_TYPE != 'R'                              
+						UNION                            
+						SELECT X.MODEL_ID
+							FROM TREE_QUERY X
+							WHERE 1=1
+							AND X.ITEM_TYPE = 'H'
+							AND NOT EXISTS	(
+											SELECT 1
+												FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM Y(NOLOCK)
+												WHERE 1=1
+												AND Y.MASTER_ID = @v_master_id
+												AND Y.PLAN_ID   = @v_version_id
+												AND Y.PARENT_ITEM_ID = X.CHILD_ITEM_ID
+                							)             
+    					) B
+    					ON A.MODEL_ID = B.MODEL_ID
+				WHERE 1=1
+				AND B.MODEL_ID IS NULL
+			; 
+
+			-- 조회쿼리
+			WITH W_DEMAND_BOD AS (
+				SELECT DISTINCT A.DEMAND_ID, A.MODEL_ID, B.SCM_SITE, 'PLANT_SITE' AS SITE_TYPE, B.PARENT_ITEM_ID AS ITEM_ID, B.ROUTE_TYPE
+					 , DENSE_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","10","RANK() OVER(PARTITION BY A.DEMAND_ID ORDER BY CASE WHEN B.ROUTE_TYPE = 'P' THEN 2 WHEN B.ROUTE_TYPE = 'A' THEN 3 ELSE 4 END)+1 AS IDX
+				  FROM (
+						SELECT A.DEMAND_ID, A.ITEM AS MODEL_ID
+						  FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+								LEFT MERGE JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+									ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+						 WHERE 1=1
+						   AND A.MASTER_ID = @v_master_id
+						   AND A.PLAN_ID = @v_version_id
+						   AND A.MASTER_ID = B.MASTER_ID
+						   AND A.PLAN_ID = B.PLAN_ID
+						   AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'N'
+						   AND A.DEMAND_ID IN	(
+            									SELECT DISTINCT X.ORG_DEMAND_ID
+            									  FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+            									 WHERE 1=1
+            									   AND X.MASTER_ID = @v_master_id
+            									   AND X.PLAN_ID = @v_version_id
+												   AND X.OUT_VERSION_ID = @v_version_id
+            									   AND X.PROBLEM_TYPE = 'UNPLAN'
+												   AND X.NODE_TYPE NOT IN ('PAST_DUE','OUT_OF_HORIZON','NO ITEM','NO BOM','PREFER NO BOM', 'PARTIAL SHORT')
+												)
+					   ) A
+						INNER JOIN #TblDynamic_SCP0032_BOM B
+							ON A.MODEL_ID = B.MODEL_ID 
+							AND B.ROUTE_ID NOT IN (SELECT DISTINCT ROUTE_ID
+													 FROM ENG_SCP.DBO.TH_ENG_OP_RES_GROUP_MAP
+													WHERE 1=1
+													  AND MASTER_ID = @v_master_id
+													  AND PLAN_ID = @v_version_id
+													  AND RESOURCE_GROUP_ID IN (
+					    													SELECT DISTINCT RESOURCE_GROUP_ID
+					    													  FROM ENG_SCP.DBO.TH_ENG_RESOURCE
+					    													 WHERE 1=1
+					    													   AND MASTER_ID = @v_master_id
+					    													   AND PLAN_ID = @v_version_id
+					    													   AND DESCR = 'NO_CAPA'
+					    													))
+				UNION
+				SELECT A.DEMAND_ID, A.ITEM AS MODEL_ID, A.SITE AS SCM_SITE, 'SALES_SITE' AS SITE_TYPE, A.ITEM AS ITEM_ID, NULL AS ROUTE_TYPE, 1 AS IDX
+				  FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+						LEFT MERGE JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+							ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+				 WHERE 1=1
+				   AND A.MASTER_ID = @v_master_id
+				   AND A.PLAN_ID = @v_version_id
+				   AND A.MASTER_ID = B.MASTER_ID
+				   AND A.PLAN_ID = B.PLAN_ID
+				   AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'N'
+				   AND A.DEMAND_ID IN	(
+       									SELECT DISTINCT X.ORG_DEMAND_ID
+       									  FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+       									 WHERE 1=1
+    									   AND X.MASTER_ID = @v_master_id
+    									   AND X.PLAN_ID = @v_version_id
+    									   AND X.OUT_VERSION_ID = @v_version_id
+    									   AND X.PROBLEM_TYPE = 'UNPLAN'
+    									   AND X.NODE_TYPE NOT IN ('PAST_DUE','OUT_OF_HORIZON','NO ITEM','NO BOM','PREFER NO BOM', 'PARTIAL SHORT')
+										)
+			)
+			SELECT DISTINCT SUBSTRING(X.DEMAND_ID,1,CHARINDEX('::',X.DEMAND_ID, CHARINDEX('~', X.DEMAND_ID,1) )-1) AS DEMAND_ID
+					, X.MODEL_ID
+					, X.ITEM_ID
+					, X.FROM_SCM_SITE AS FROM_SITE
+					, isnull(NULLIF( DIV_F.SITE_DESCRIPTION , '') , '-') AS FROM_SITE_DESCRIPTION
+					, X.TO_SCM_SITE AS TO_SITE
+					, isnull(NULLIF( DIV_T.SITE_DESCRIPTION , '') , X.TO_SCM_SITE) AS TO_SITE_DESCRIPTION
+			  FROM (
+					SELECT A.DEMAND_ID, A.MODEL_ID, B.ITEM_ID, B.SCM_SITE AS FROM_SCM_SITE, B.ROUTE_TYPE AS FROM_ROUTE_TYPE, A.SCM_SITE AS TO_SCM_SITE, A.IDX
+					  FROM W_DEMAND_BOD A
+							INNER JOIN W_DEMAND_BOD B
+								ON A.DEMAND_ID = B.DEMAND_ID AND A.IDX+1 = B.IDX
+				   ) X
+					LEFT MERGE JOIN (
+						SELECT DISTINCT A.BOD_ID, B.ITEM_ID, CASE WHEN C.SITE_GROUP LIKE '%SALES%' THEN A.FROM_SITE_ID ELSE ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(A.FROM_SITE_ID,1,'~') END AS FROM_SCM_SITE
+							 , CASE WHEN D.SITE_GROUP LIKE '%SALES%' THEN A.TO_SITE_ID ELSE ENG_SCP.DBO.FN_GETIDXDATALIKES"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","11","PLIT(A.TO_SITE_ID,1,'~') END AS TO_SCM_SITE
+						  FROM ENG_SCP.DBO.TH_ENG_BOD A(NOLOCK)
+								INNER JOIN ENG_SCP.DBO.TH_ENG_ITEM_BOD B(NOLOCK)
+									ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.BOD_ID = B.BOD_ID
+								INNER JOIN ENG_SCP.DBO.TH_ENG_SITE C(NOLOCK)
+									ON A.MASTER_ID = C.MASTER_ID AND A.PLAN_ID = C.PLAN_ID AND A.FROM_SITE_ID = C.SITE_ID
+								INNER JOIN ENG_SCP.DBO.TH_ENG_SITE D(NOLOCK)
+									ON A.MASTER_ID = D.MASTER_ID AND A.PLAN_ID = D.PLAN_ID AND A.TO_SITE_ID = D.SITE_ID
+						 WHERE 1=1
+						   AND A.MASTER_ID = @v_master_id
+						   AND A.PLAN_ID = @v_version_id
+						) Y
+						ON X.ITEM_ID = Y.ITEM_ID AND X.FROM_SCM_SITE = Y.FROM_SCM_SITE AND X.TO_SCM_SITE = Y.TO_SCM_SITE
+					LEFT JOIN #TblDynamic_SCP0032_DIV DIV_F ON DIV_F.SCM_SITE_ID=X.FROM_SCM_SITE
+					LEFT JOIN #TblDynamic_SCP0032_DIV DIV_T ON DIV_T.SCM_SITE_ID=X.TO_SCM_SITE
+			 WHERE 1=1
+			 AND BOD_ID IS NULL
+			 AND X.DEMAND_ID = ''
+			ORDER BY DEMAND_ID
+			;
+		END;
+
+	ELSE IF @p_sheet_name='7. NO BOD (ELECTRODE PAIR)'
+		BEGIN
+			/*********************************
+				No 7. NO BOD (ELECTRONODE PAIR)	
+			**********************************/
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_BOM_LIST') IS NOT NULL  
+				DROP TABLE #TblDynamic_SCP0032_BOM_LIST;
+
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_ELECTRONODE_PAIR_ITEM') IS NOT NULL  
+				DROP TABLE #TblDynamic_SCP0032_ELECTRONODE_PAIR_ITEM;
+			
+			WITH W_BOM_LIST AS (
+				SELECT CONVERT(VARCHAR(255), A.PARENT_ITEM_ID)	AS MODEL_ID
+					 , A.SITE_ID								AS PARENT_SITE_ID
+					 , A.ROUTE_ID								AS PARENT_ROUTE_ID
+					 , CONVERT(VARCHAR(255), A.PARENT_ITEM_ID)	AS PARENT_ITEM_ID
+					 , CONVERT(VARCHAR(255), A.CHILD_ITEM_ID)	AS CHILD_ITEM_ID
+					 , B.ITEM_TYPE
+					 , CONVERT(VARCHAR(5000), CONVERT(VARCHAR(255),A.PARENT_ITEM_ID) + ' > ' + CONVERT(VARCHAR(255),A.CHILD_ITEM_ID)) AS SORT
+					 , 1										AS BOM_LEVEL
+					 , CONVERT(FLOAT,1)							AS CHILD_ITEM_RATE
+					 , CONVERT(FLOAT,1)							AS ACC_CHILD_ITEM_RATE
+					 , CONVERT(FLOAT,A.CHILD_ITEM_RATE)			AS NEXT_CHILD_ITEM_RATE
+				  FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK)
+						INNER MERGE JOIN  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK)
+							ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.CHILD_ITEM_ID = B.ITEM_ID
+				 WHERE 1=1
+				   AND A.MASTER_ID = @v_master_id
+				   AND A.PLAN_ID = @v_version_id
+				   AND A.PARENT_ITEM_ID IN	(
+											SELECT DISTINCT X.ITEM
+											  FROM  ENG_SCP.DBO.TH_ENG_NET_DEMAND X(NOLOCK)
+											 WHERE 1=1
+											   AND X.MASTER_ID = @v_master_id
+											   AND X.PLAN_ID = @v_version_id
+											)
+				UNION ALL
+				SELECT CONVERT(VARCHAR(255), C.MODEL_ID)		AS MODEL_ID
+					 , A.SITE_ID								AS PARENT_SITE_ID
+					 , A.ROUTE_ID								AS PARENT_ROUTE_ID
+					 , CONVERT(VARCHAR(255), A.PARENT_ITEM_ID)	AS PARENT_ITEM_ID
+					 , CONVERT(VARCHAR(255), A.CHILD_ITEM_ID)	AS CHILD_ITEM_ID
+					 , B.ITEM_TYPE
+					 , CONVERT(VARCHAR(5000), CONVERT(VARCHAR(5000),C.SORT) + ' > ' + CONVERT(VARCHAR(255), B.ITEM_ID)) AS SORT
+					 , C.BOM_LEVEL + 1							AS BOM_LEVEL
+					 , CONVERT(FLOAT,C.NEXT_CHILD_ITEM_RATE)	AS CHILD_ITEM_RATE
+					 , CONVERT(FLOAT,C.ACC_CHILD_ITEM_RATE*C.NEXT_CHILD_ITEM_RATE) AS ACC_CHILD_ITEM_RATE
+					 , CONVERT(FLOAT,A.CHILD_ITEM_RATE)			AS NEXT_CHILD_ITEM_RATE
+				  FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK)
+						INNER MERGE JOIN  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK)
+							ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.CHILD_ITEM_ID = B.ITEM_ID
+						INNER MERGE JOIN W_BOM_LIST C
+							ON A.PARENT_ITEM_ID = C.CHILD_ITEM_ID
+				 WHERE 1=1
+				   AND A.MASTER_ID = @v_master_id
+				   AND A.PLAN_ID = @v_version_id
+			)
+			SELECT *
+			INTO #TblDynamic_SCP0032_BOM_LIST
+			FROM W_BOM_LIST
+			WHERE 1=1
+			;
+
+			WITH W_ELECTRONODE_PAIR_ITEM AS (
+				SELECT DISTINCT CASE WHEN MODEL_ID = PARENT_ITEM_ID THEN 'E' ELSE 'A' END BIZ_TYPE, MODEL_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","12","ID, PARENT_SITE_ID AS SITE_ID, PARENT_ITEM_ID AS ELECTRONODE_ITEM_ID
+					 , SUBSTRING(PARENT_SITE_ID,1,CHARINDEX('-',PARENT_SITE_ID,1)+1) AS SCM_SITE
+				  FROM #TblDynamic_SCP0032_BOM_LIST
+				 WHERE 1=1
+				   AND PARENT_ROUTE_ID LIKE 'E%'
+			)
+			SELECT *
+			INTO #TblDynamic_SCP0032_ELECTRONODE_PAIR_ITEM
+			FROM W_ELECTRONODE_PAIR_ITEM
+			WHERE 1=1
+			;
+
+			-- 조회쿼리
+			SELECT B.DEMAND_ID, B.MODEL_ID
+			FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT A
+				INNER JOIN
+				(
+			SELECT DISTINCT  SUBSTRING(X.DEMAND_ID,1,CHARINDEX('::',X.DEMAND_ID, CHARINDEX('~', X.DEMAND_ID,1) )-1) AS DEMAND_ID, X.MODEL_ID
+				 , SUM(CASE WHEN X.ELECTRONODE_ITEM_CNT = X.BOD_CNT THEN 1 ELSE 0 END) AS PREFER_NO_BOD_CHK -- 0이면 PREFER NO BOD
+			  FROM (
+					SELECT A.DEMAND_ID, A.MODEL_ID, A.FROM_SCM_SITE, A.TO_SCM_SITE, A.ELECTRONODE_ITEM_CNT
+						 , SUM(CASE WHEN B.BOD_ID IS NULL THEN 0 ELSE 1 END) AS BOD_CNT
+					  FROM (
+						SELECT X.DEMAND_ID, Y.MODEL_ID, Y.SCM_SITE AS FROM_SCM_SITE, SUBSTRING(Z.SITE_ID,0,CHARINDEX('-',Z.SITE_ID,1)+2) AS TO_SCM_SITE , Y.ELECTRONODE_ITEM_ID AS ITEM_ID, COUNT(Y.ELECTRONODE_ITEM_ID) OVER(PARTITION BY X.DEMAND_ID, Y.SCM_SITE) AS ELECTRONODE_ITEM_CNT
+						  FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND X(NOLOCK)
+			 					INNER JOIN #TblDynamic_SCP0032_ELECTRONODE_PAIR_ITEM Y(NOLOCK)
+			 						ON X.ITEM = Y.MODEL_ID
+										  INNER JOIN ENG_SCP.DBO.TH_ENG_SALES_PRODUCT_MAP Z(NOLOCK)
+										   ON X.MASTER_ID = Z.MASTER_ID AND X.PLAN_ID = Z.PLAN_ID AND X.SALES_MODEL_ID = Z.SALES_MODEL_ID AND X.ITEM = Z.PRODUCT_ITEM_ID
+						 WHERE 1=1
+						   AND X.MASTER_ID = @v_master_id
+						   AND X.PLAN_ID = @v_version_id
+						   AND NOT EXISTS (
+											SELECT 1
+											  FROM ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE XX(NOLOCK)
+											 WHERE 1=1
+											   AND MASTER_ID = @v_master_id
+				  							   AND PLAN_ID = @v_version_id
+											   AND X.MASTER_ID = XX.MASTER_ID
+											   AND X.PLAN_ID = XX.PLAN_ID
+											   AND X.DEMAND_GROUP_ID = XX.DEMAND_GROUP_ID
+											)
+						   AND EXISTS (
+			  								SELECT 1
+				  							  FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT A(NOLOCK)
+				  							 WHERE 1=1
+				  							   AND MASTER_ID = @v_master_id
+				  							   AND PLAN_ID = @v_version_id
+				  							   AND OUT_VERSION_ID = @v_version_id
+				  							   AND PROBLEM_TYPE = 'UNPLAN'
+											   AND A.MASTER_ID = X.MASTER_ID
+											   AND A.PLAN_ID = X.PLAN_ID
+				  							   AND A.ORG_DEMAND_ID = X.DEMAND_ID
+				  								)
+						   ) A
+							LEFT JOIN (
+								SELECT X.BOD_ID, X.ITEM_ID, Y.FROM_SITE_ID, Y.TO_SITE_ID, SUBSTRING(Y.FROM_SITE_ID,1,CHARINDEX('-',Y.FROM_SITE_ID,1)+1) AS FROM_SCM_SITE, SUBSTRING(Y.TO_SITE_ID,1,CHARINDEX('-',Y.TO_SITE_ID,1)+1) AS TO_SCM_SITE
+								  FROM ENG_SCP.DBO.TH_ENG_ITEM_BOD X(NOLOCK)
+										INNER JOIN ENG_SCP.DBO.TH_ENG_BOD Y(NOLOCK)
+											ON X.MASTER_ID = Y.MASTER_ID AND X.PLAN_ID = Y.PLAN_ID AND X.BOD_ID = Y.BOD_ID
+								 WHERE 1=1
+								   AND X.MASTER_ID = @v_master_id
+								   AND X.PLAN_ID = @v_version_id
+								) B
+								ON A.ITEM_ID = B.ITEM_ID AND A.FROM_SCM_SITE = B.FROM_SCM_SITE AND A.TO_SCM_SITE = B.TO_SCM_SITE
+					GROUP BY A.DEMAND_ID, A.MODEL_ID, A.FROM_SCM_SITE, A.TO_SCM_SITE, A.ELECTRONODE_ITEM_CNT
+				   ) X
+			 GROUP BY X.DEMAND_ID, X.MODEL_ID
+			 ) B
+			ON A.ORG_DEMAND_ID = B.DEMAND_ID
+			WHERE 1=1
+			AND A.PROBLEM_TYPE = 'UNPLAN'
+			AND B.PREFER_NO_BOD_CHK = 0
+			AND A.DEMAND_ID = ''
+			;
+
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_BOM_LIST') IS NOT NULL  
+				DROP TABLE #TblDynamic_SCP0032_BOM_LIST;
+
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_ELECTRONODE_PAIR_ITEM') IS NOT NULL  
+				DROP TABLE #TblDynamic_SCP0032_ELECTRONODE_PAIR_ITEM;
+		END;
+
+	ELSE IF @p_sheet_name='8. PREFER NO BOD'
+		BEGIN
+			/*********************************
+				No 8. PREFER NO BOD
+			**********************************/
+
+			INSERT INTO #TblDynamic_SCP0032_PREFER_DEMAND(
+				"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","13","DEMAND_ID
+				 ,MODEL_ID
+				 ,DUE_DATE
+				 ,PREFERENCE_SITE_ID
+				 ,SCM_SITE
+				 ,SITE_TYPE
+				 ,ROUTE_TYPE
+				 ,SCM_SITE_T
+			)
+			SELECT A.DEMAND_ID
+				, A.MODEL_ID
+				, A.DUE_DATE
+    			, A.PREFERENCE_SITE_ID
+    			, A.SCM_SITE
+    			, A.SITE_TYPE
+				, A.ROUTE_TYPE
+				, A.SCM_SITE_T
+			--INTO #PREFER_DEMAND_TABLE
+			FROM (
+    			SELECT AA.DEMAND_ID
+    					, AA.MODEL_ID
+    					, AA.DUE_DATE
+    					, AA.PREFERENCE_SITE_ID
+    					, SUBSTRING(ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1,CHARINDEX('-',ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1) AS SCM_SITE
+						, SUBSTRING(ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),CHARINDEX('-',ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1,1) AS ROUTE_TYPE
+        				, 'PLANT_SITE'	AS SITE_TYPE
+						, '' AS SCM_SITE_T
+					FROM (
+						SELECT A.DEMAND_ID, A.ITEM AS MODEL_ID, A.DUE_DATE, B.PREFERENCE_SITE_ID, LEN(B.PREFERENCE_SITE_ID)-LEN(REPLACE(B.PREFERENCE_SITE_ID,'##','#'))+1 AS PREFERENCE_SITE_QTY
+							FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+								INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+									ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+								INNER JOIN (
+                					SELECT DISTINCT X.ORG_DEMAND_ID
+                						FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                						WHERE 1=1
+                						AND X.MASTER_ID = @v_master_id
+                						AND X.PLAN_ID = @v_version_id
+    											AND X.OUT_VERSION_ID = @v_version_id
+                						AND X.PROBLEM_TYPE = 'UNPLAN'
+    								) C
+									ON A.DEMAND_ID = C.ORG_DEMAND_ID
+							WHERE 1=1
+							AND A.MASTER_ID = @v_master_id
+							AND A.PLAN_ID = @v_version_id
+    						AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+						) AA, 
+						(SELECT TOP 15 INT
+							FROM ENG_SCP.DBO.COPYT BB
+							ORDER BY INT	
+						) BB
+					WHERE BB.INT < AA.PREFERENCE_SITE_QTY+1
+    			UNION ALL
+    			SELECT A.DEMAND_ID
+    					, A.ITEM		AS MODEL_ID
+						, A.DUE_DATE
+    					, B.PREFERENCE_SITE_ID
+    					, A.SITE		AS SCM_SITE
+						, NULL			AS ROUTE_TYPE	
+    					, 'SALES_SITE' AS SITE_TYPE	
+						, A.SCM_SITE AS SCM_SITE_T			
+    				FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+    					INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+    						ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+						INNER JOIN (
+                			SELECT DISTINCT X.ORG_DEMAND_ID
+                				FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                				WHERE 1=1
+                				AND X.MASTER_ID = @v_master_id
+                				AND X.PLAN_ID = @v_version_id
+    									AND X.OUT_VERSION_ID = @v_version_id
+                				AND X.PROBLEM_TYPE = 'UNPLAN'
+    						) C
+							ON A.DEMAND_ID = C.ORG_DEMAND_ID
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+    			) A
+			;
+
+			WITH TREE_QUERY AS (
+				SELECT A.PARENT_ITEM_ID	AS MODEL_ID
+      					, A.SITE_ID
+      					, A.ROUTE_ID
+      					, A.PARENT_ITEM_ID	
+      					, A.CHILD_ITEM_ID	
+      					, B.ITEM_TYPE
+      					, 1 AS BOM_LEVEL
+    				FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK)
+					JOIN  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK) ON A.MASTER_ID = B.MASTER_ID	AND A.PLAN_ID = B.PLAN_ID AND A.CHILD_ITEM_ID = B.ITEM_ID		
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND A.PARENT_ITEM_ID IN	(
+											SELECT DISTINCT Z.PRODUCT_ITEM_ID
+												FROM  ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+													INNER JOIN  ENG_SCP.DBO.TH_ENG_NET_DEMAND Y(NOLOCK)
+														ON X.MASTER_ID = Y.MASTER_ID AND X.PLAN_ID = Y.PLAN_ID "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","14","AND X.ORG_DEMAND_ID = Y.DEMAND_ID
+													INNER JOIN  ENG_SCP.DBO.TH_ENG_SALES_PRODUCT_MAP Z(NOLOCK)
+														ON Y.MASTER_ID = Z.MASTER_ID AND Y.PLAN_ID = Z.PLAN_ID AND Y.SALES_MODEL_ID = Z.SALES_MODEL_ID
+												WHERE 1=1
+												AND X.MASTER_ID = @v_master_id
+												AND X.PLAN_ID = @v_version_id
+												AND X.OUT_VERSION_ID = @v_version_id
+												AND X.PROBLEM_TYPE = 'UNPLAN'
+    										)
+				UNION ALL
+				SELECT C.MODEL_ID
+    					, A.SITE_ID
+    					, A.ROUTE_ID
+    					, A.PARENT_ITEM_ID	
+    					, A.CHILD_ITEM_ID	
+    					, B.ITEM_TYPE
+    					, C.BOM_LEVEL + 1	AS BOM_LEVEL
+    				FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK),  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK), TREE_QUERY C
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND A.MASTER_ID = B.MASTER_ID
+    				AND A.PLAN_ID = B.PLAN_ID
+    				AND A.CHILD_ITEM_ID = B.ITEM_ID
+    				AND A.PARENT_ITEM_ID = C.CHILD_ITEM_ID
+			)
+			INSERT INTO #TblDynamic_SCP0032_BOM(
+				MODEL_ID
+				 ,SITE_ID
+				 ,ROUTE_ID
+				 ,PARENT_ITEM_ID
+				 ,CHILD_ITEM_ID
+				 ,ITEM_TYPE
+				 ,BOM_LEVEL
+				 ,SCM_SITE
+				 ,ROUTE_TYPE
+			)
+			SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+					, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+					, SUBSTRING(A.SITE_ID,1,CHARINDEX('-',A.SITE_ID,1)+1) AS SCM_SITE
+					, SUBSTRING(A.SITE_ID,CHARINDEX('-',A.SITE_ID,1)+1,1) AS ROUTE_TYPE
+					--INTO #TblDynamic_SCP0032_BOM8
+				FROM TREE_QUERY A
+					LEFT MERGE JOIN (
+						SELECT DISTINCT X.MODEL_ID
+							FROM (
+								SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+										, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+										, MAX(A.BOM_LEVEL) OVER(PARTITION BY A.MODEL_ID) AS MAX_BOM_LEVEL
+									FROM TREE_QUERY A
+								) X
+							WHERE 1=1
+							AND X.BOM_LEVEL = X.MAX_BOM_LEVEL
+							AND X.ITEM_TYPE != 'R'                              
+						UNION                            
+						SELECT X.MODEL_ID
+							FROM TREE_QUERY X
+							WHERE 1=1
+							AND X.ITEM_TYPE = 'H'
+							AND NOT EXISTS	(
+											SELECT 1
+												FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM Y(NOLOCK)
+												WHERE 1=1
+												AND Y.MASTER_ID = @v_master_id
+												AND Y.PLAN_ID   = @v_version_id
+												AND Y.PARENT_ITEM_ID = X.CHILD_ITEM_ID
+                							)             
+    					) B
+    					ON A.MODEL_ID = B.MODEL_ID
+				WHERE 1=1
+				AND B.MODEL_ID IS NULL
+			; 
+
+
+			-- 조회쿼리
+			WITH W_DEMAND_BOD AS (
+				SELECT DISTINCT A.DEMAND_ID, A.MODEL_ID, A.ROUTE_TYPE, A.SCM_SITE, A.SITE_TYPE, CASE WHEN A.SITE_TYPE = 'SALES_SITE' THEN A.MODEL_ID ELSE B.PARENT_ITEM_ID END AS ITEM_ID
+					 , DENSE_RANK() OVER(PARTITION BY A.DEMAND_ID ORDER BY CASE WHEN A.SITE_TYPE = 'SALES_SITE' THEN 1 WHEN A.ROUTE_TYPE = 'P' THEN 2 WHEN A.ROUTE_TYPE = 'A' THEN 3 ELSE 4 END) AS IDX
+					 , A.SCM_SITE_T
+				  FROM #TblDynamic_SCP0032_PREFER_DEMAND A
+						LEFT MERGE JOIN #TblDynamic_SCP0032_BOM B
+							ON A.MODEL_ID = B.MODEL_ID 
+				   AND A.SCM_SITE = B.SCM_SITE 
+				   AND B.ROUTE_ID NOT IN (SELECT DISTINCT ROUTE_ID
+										   FROM ENG_SCP.DBO.TH_ENG_OP_RES_GROUP_MAP
+										  WHERE 1=1
+											AND MASTER_ID = @v_master_id
+											AND PLAN_ID = @v_version_id
+											AND RESOURCE_GROUP_ID IN (
+					    											SELECT DISTINCT RESOURCE_GROUP_ID
+					    											  FROM ENG_SCP.DBO.TH_ENG_RESOURCE
+					    											 WHERE 1=1
+					    											   AND MASTER_ID = @v_master_id
+					    											   AND PLAN_ID = @v_version_id
+					    											   AND DESCR = 'NO_CAPA'
+					    											))
+				 WHERE 1=1
+				   AND NOT EXISTS	(
+									SELECT X.ORG_DEMAND_ID
+									  FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+									 WHERE 1=1
+									   AND X.MASTER_ID = @v_master_id
+									   AND X.PLAN_ID = @v_version_id
+									   AND X.OUT_VERSION_ID = @v_version_id
+									   AND X.P"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","15","ROBLEM_TYPE = 'UNPLAN'
+									   AND X.NODE_TYPE IN ('PAST_DUE','OUT_OF_HORIZON','NO ITEM','NO BOM','PREFER NO BOM', 'PARTIAL SHORT')
+									   AND X.ORG_DEMAND_ID = A.DEMAND_ID
+									)
+			)
+			SELECT DISTINCT SUBSTRING(X.DEMAND_ID,1,CHARINDEX('::',X.DEMAND_ID, CHARINDEX('~', X.DEMAND_ID,1) )-1) AS DEMAND_ID 
+					, X.MODEL_ID
+					, X.ROUTE_TYPE AS OPERATION_GROUP
+					, X.ITEM_ID
+					, X.FROM_SCM_SITE AS FROM_SITE 
+					, isnull(NULLIF( DIV_F.SITE_DESCRIPTION , '') , '-') AS FROM_SITE_DESCRIPTION
+					, X.TO_SCM_SITE AS TO_SITE
+					, isnull(NULLIF( DIV_T.SITE_DESCRIPTION , '') , X.TO_SCM_SITE) AS TO_SITE_DESCRIPTION --문의
+			  FROM (
+					SELECT A.DEMAND_ID, A.MODEL_ID, B.ROUTE_TYPE, B.ITEM_ID, B.SCM_SITE AS FROM_SCM_SITE, A.SCM_SITE AS TO_SCM_SITE, A.IDX, A.SCM_SITE_T
+					  FROM W_DEMAND_BOD A
+							INNER JOIN W_DEMAND_BOD B
+								ON A.DEMAND_ID = B.DEMAND_ID AND A.IDX+1 = B.IDX
+					 WHERE 1=1
+					   AND B.ITEM_ID IS NOT NULL
+				   ) X
+					LEFT MERGE JOIN (
+						SELECT DISTINCT A.BOD_ID, B.ITEM_ID, CASE WHEN C.SITE_GROUP LIKE '%SALES%' THEN A.FROM_SITE_ID ELSE SUBSTRING(A.FROM_SITE_ID,1,CHARINDEX('-',A.FROM_SITE_ID,1)+1) END AS FROM_SCM_SITE
+							 , CASE WHEN D.SITE_GROUP LIKE '%SALES%' THEN A.TO_SITE_ID ELSE SUBSTRING(A.TO_SITE_ID,1,CHARINDEX('-',A.TO_SITE_ID,1)+1) END AS TO_SCM_SITE
+						  FROM ENG_SCP.DBO.TH_ENG_BOD A(NOLOCK)
+								INNER JOIN ENG_SCP.DBO.TH_ENG_ITEM_BOD B(NOLOCK)
+									ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.BOD_ID = B.BOD_ID
+								INNER JOIN ENG_SCP.DBO.TH_ENG_SITE C(NOLOCK)
+									ON A.MASTER_ID = C.MASTER_ID AND A.PLAN_ID = C.PLAN_ID AND A.FROM_SITE_ID = C.SITE_ID
+								INNER JOIN ENG_SCP.DBO.TH_ENG_SITE D(NOLOCK)
+									ON A.MASTER_ID = D.MASTER_ID AND A.PLAN_ID = D.PLAN_ID AND A.TO_SITE_ID = D.SITE_ID
+						 WHERE 1=1
+						   AND A.MASTER_ID = @v_master_id
+						   AND A.PLAN_ID = @v_version_id
+						) Y
+						ON X.ITEM_ID = Y.ITEM_ID AND X.FROM_SCM_SITE = Y.FROM_SCM_SITE AND X.TO_SCM_SITE = Y.TO_SCM_SITE
+					LEFT JOIN #TblDynamic_SCP0032_DIV DIV_F ON DIV_F.SCM_SITE_ID=X.FROM_SCM_SITE
+					LEFT JOIN #TblDynamic_SCP0032_DIV DIV_T ON DIV_T.SCM_SITE_ID=X.SCM_SITE_T
+			 WHERE 1=1
+			 AND BOD_ID IS NULL
+			;
+		END;
+
+	ELSE IF @p_sheet_name='9. PREFER NO BOD (ELECTRODE PAIR)'
+		BEGIN
+			/*********************************
+				No 9. PREFER NO BOD (ELECTRONODE PAIR)
+			**********************************/
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_BOM_LIST_9') IS NOT NULL  
+				DROP TABLE #TblDynamic_SCP0032_BOM_LIST_9;
+
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_ELECTRONODE_PAIR_ITEM_PREFER') IS NOT NULL  
+				DROP TABLE #TblDynamic_SCP0032_ELECTRONODE_PAIR_ITEM_PREFER;
+
+			WITH W_BOM_LIST AS (
+				SELECT CONVERT(VARCHAR(255), A.PARENT_ITEM_ID)	AS MODEL_ID
+					 , A.SITE_ID								AS PARENT_SITE_ID
+					 , A.ROUTE_ID								AS PARENT_ROUTE_ID
+					 , CONVERT(VARCHAR(255), A.PARENT_ITEM_ID)	AS PARENT_ITEM_ID
+					 , CONVERT(VARCHAR(255), A.CHILD_ITEM_ID)	AS CHILD_ITEM_ID
+					 , B.ITEM_TYPE
+					 , CONVERT(VARCHAR(5000), CONVERT(VARCHAR(255),A.PARENT_ITEM_ID) + ' > ' + CONVERT(VARCHAR(255),A.CHILD_ITEM_ID)) AS SORT
+					 , 1										AS BOM_LEVEL
+					 , CONVERT(FLOAT,1)							AS CHILD_ITEM_RATE
+					 , CONVERT(FLOAT,1)							AS ACC_CHILD_ITEM_RATE
+					 , CONVERT(FLOAT,A.CHILD_ITEM_RATE)			AS NEXT_CHILD_ITEM_RATE
+				  FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK)
+						INNER MERGE JOIN  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK)
+							ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.CHILD_ITEM_ID = B.ITEM_ID
+				 WHERE 1=1
+				   AND A.MASTER_ID = @v_master_id
+				   AND A.PLAN_ID = @v_version_id
+				   AND A.PARENT_ITEM_ID IN	(
+											SELECT DISTINCT X.ITEM
+											  FROM  ENG_SCP.DBO.TH_ENG_NET_DEMAND X(NOLOCK)
+											 WHERE 1=1
+											   AND X.MASTER_ID = @v_master_id
+											   AND X.PLAN_ID = @v_version_id
+											)
+				UNION ALL
+				SELECT CO"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","16","NVERT(VARCHAR(255), C.MODEL_ID)		AS MODEL_ID
+					 , A.SITE_ID								AS PARENT_SITE_ID
+					 , A.ROUTE_ID								AS PARENT_ROUTE_ID
+					 , CONVERT(VARCHAR(255), A.PARENT_ITEM_ID)	AS PARENT_ITEM_ID
+					 , CONVERT(VARCHAR(255), A.CHILD_ITEM_ID)	AS CHILD_ITEM_ID
+					 , B.ITEM_TYPE
+					 , CONVERT(VARCHAR(5000), CONVERT(VARCHAR(5000),C.SORT) + ' > ' + CONVERT(VARCHAR(255), B.ITEM_ID)) AS SORT
+					 , C.BOM_LEVEL + 1							AS BOM_LEVEL
+					 , CONVERT(FLOAT,C.NEXT_CHILD_ITEM_RATE)	AS CHILD_ITEM_RATE
+					 , CONVERT(FLOAT,C.ACC_CHILD_ITEM_RATE*C.NEXT_CHILD_ITEM_RATE) AS ACC_CHILD_ITEM_RATE
+					 , CONVERT(FLOAT,A.CHILD_ITEM_RATE)			AS NEXT_CHILD_ITEM_RATE
+				  FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK)
+						INNER MERGE JOIN  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK)
+							ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.CHILD_ITEM_ID = B.ITEM_ID
+						INNER MERGE JOIN W_BOM_LIST C
+							ON A.PARENT_ITEM_ID = C.CHILD_ITEM_ID
+				 WHERE 1=1
+				   AND A.MASTER_ID = @v_master_id
+				   AND A.PLAN_ID = @v_version_id
+			)
+			SELECT *
+			INTO #TblDynamic_SCP0032_BOM_LIST_9
+			FROM W_BOM_LIST
+			WHERE 1=1
+			;
+
+			INSERT INTO #TblDynamic_SCP0032_PREFER_DEMAND(
+				DEMAND_ID
+				 ,MODEL_ID
+				 ,DUE_DATE
+				 ,PREFERENCE_SITE_ID
+				 ,SCM_SITE
+				 ,SITE_TYPE
+				 ,ROUTE_TYPE
+			)
+			SELECT A.DEMAND_ID
+				, A.MODEL_ID
+				, A.DUE_DATE
+    			, A.PREFERENCE_SITE_ID
+    			, A.SCM_SITE
+    			, A.SITE_TYPE
+			, A.ROUTE_TYPE
+			--INTO #PREFER_DEMAND_TABLE
+			FROM (
+    			SELECT AA.DEMAND_ID
+    					, AA.MODEL_ID
+    					, AA.DUE_DATE
+    					, AA.PREFERENCE_SITE_ID
+    					, SUBSTRING(ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1,CHARINDEX('-',ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1) AS SCM_SITE
+						, SUBSTRING(ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),CHARINDEX('-',ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1,1) AS ROUTE_TYPE
+        				, 'PLANT_SITE'	AS SITE_TYPE
+					FROM (
+						SELECT A.DEMAND_ID, A.ITEM AS MODEL_ID, A.DUE_DATE, B.PREFERENCE_SITE_ID, LEN(B.PREFERENCE_SITE_ID)-LEN(REPLACE(B.PREFERENCE_SITE_ID,'##','#'))+1 AS PREFERENCE_SITE_QTY
+							FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+								INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+									ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+								INNER JOIN (
+                					SELECT DISTINCT X.ORG_DEMAND_ID
+                						FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                						WHERE 1=1
+                						AND X.MASTER_ID = @v_master_id
+                						AND X.PLAN_ID = @v_version_id
+    											AND X.OUT_VERSION_ID = @v_version_id
+                						AND X.PROBLEM_TYPE = 'UNPLAN'
+    								) C
+									ON A.DEMAND_ID = C.ORG_DEMAND_ID
+							WHERE 1=1
+							AND A.MASTER_ID = @v_master_id
+							AND A.PLAN_ID = @v_version_id
+    						AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+						) AA, 
+						(SELECT TOP 15 INT
+							FROM ENG_SCP.DBO.COPYT BB
+							ORDER BY INT	
+						) BB
+					WHERE BB.INT < AA.PREFERENCE_SITE_QTY+1
+    			UNION ALL
+    			SELECT A.DEMAND_ID
+    					, A.ITEM		AS MODEL_ID
+						, A.DUE_DATE
+    					, B.PREFERENCE_SITE_ID
+    					, A.SITE		AS SCM_SITE
+						, NULL			AS ROUTE_TYPE	
+    					, 'SALES_SITE' AS SITE_TYPE				
+    				FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+    					INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+    						ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+						INNER JOIN (
+                			SELECT DISTINCT X.ORG_DEMAND_ID
+                				FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                				WHERE 1=1
+                				AND X.MASTER_ID = @v_master_id
+                				AND X.PLAN_ID = @v_version_id
+    									AN"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","17","D X.OUT_VERSION_ID = @v_version_id
+                				AND X.PROBLEM_TYPE = 'UNPLAN'
+    						) C
+							ON A.DEMAND_ID = C.ORG_DEMAND_ID
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+    			) A
+			;
+
+			WITH W_ELECTRONODE_PAIR_ITEM_PREFER AS (
+				SELECT DISTINCT CASE WHEN A.MODEL_ID = A.PARENT_ITEM_ID THEN 'E' ELSE 'A' END BIZ_TYPE, A.MODEL_ID, A.PARENT_SITE_ID AS SITE_ID, A.PARENT_ITEM_ID AS ELECTRONODE_ITEM_ID
+					 , SUBSTRING(A.PARENT_SITE_ID,1,CHARINDEX('-',A.PARENT_SITE_ID,1)+1) AS SCM_SITE
+				  FROM #TblDynamic_SCP0032_BOM_LIST_9 A
+				 INNER JOIN (SELECT *
+			 					FROM #TblDynamic_SCP0032_PREFER_DEMAND(NOLOCK)
+			 				   WHERE 1=1 
+			 					 AND SITE_TYPE = 'PLANT_SITE') B
+						  ON A.MODEL_ID = B.MODEL_ID AND SUBSTRING(PARENT_SITE_ID,1, CHARINDEX('-',PARENT_SITE_ID,1)+1) = B.SCM_SITE 
+				 WHERE 1=1
+				   AND PARENT_ROUTE_ID LIKE 'E%'
+			)
+			SELECT *
+			INTO #TblDynamic_SCP0032_ELECTRONODE_PAIR_ITEM_PREFER
+			FROM W_ELECTRONODE_PAIR_ITEM_PREFER
+			WHERE 1=1
+			;
+
+			-- 조회쿼리
+			SELECT B.DEMAND_ID, B.MODEL_ID
+			FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT A
+				INNER JOIN
+				(
+				   SELECT DISTINCT  SUBSTRING(X.DEMAND_ID,1,CHARINDEX('::',X.DEMAND_ID, CHARINDEX('~', X.DEMAND_ID,1) )-1) AS DEMAND_ID, X.MODEL_ID
+   					 , SUM(CASE WHEN X.ELECTRONODE_ITEM_CNT = X.BOD_CNT THEN 1 ELSE 0 END) AS PREFER_NO_BOD_CHK -- 0이면 PREFER NO BOD
+					 FROM (
+   						SELECT A.DEMAND_ID, A.MODEL_ID, A.FROM_SCM_SITE, A.TO_SCM_SITE, A.ELECTRONODE_ITEM_CNT
+   							 , SUM(CASE WHEN B.BOD_ID IS NULL THEN 0 ELSE 1 END) AS BOD_CNT
+   						  FROM (
+   							SELECT X.DEMAND_ID, Y.MODEL_ID, Y.SCM_SITE AS FROM_SCM_SITE, Z.SCM_SITE AS TO_SCM_SITE , Y.ELECTRONODE_ITEM_ID AS ITEM_ID, COUNT(Y.ELECTRONODE_ITEM_ID) OVER(PARTITION BY X.DEMAND_ID, Y.SCM_SITE) AS ELECTRONODE_ITEM_CNT
+   							  FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND X(NOLOCK)
+   			 						INNER JOIN #TblDynamic_SCP0032_ELECTRONODE_PAIR_ITEM_PREFER Y(NOLOCK)
+   			 							ON X.ITEM = Y.MODEL_ID
+   			 								INNER JOIN  (SELECT DISTINCT DEMAND_ID, MODEL_ID, SCM_SITE, ROUTE_TYPE,SITE_TYPE
+   			 											   FROM #TblDynamic_SCP0032_PREFER_DEMAND(NOLOCK)
+   			 											  WHERE 1=1 
+   															AND 'A' = SUBSTRING(SCM_SITE, CHARINDEX('-',SCM_SITE,1)+1,1)
+   			 												AND SITE_TYPE = 'PLANT_SITE'
+   			 											 )Z
+   			 											 ON  X.DEMAND_ID = Z.DEMAND_ID AND Y.MODEL_ID = Z.MODEL_ID 
+   							 WHERE 1=1
+   							   AND X.MASTER_ID = @v_master_id
+   							   AND X.PLAN_ID = @v_version_id
+   							   AND EXISTS (
+   			  									SELECT 1
+   				  								  FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT A(NOLOCK)
+   				  								 WHERE 1=1
+   				  								   AND MASTER_ID = @v_master_id
+   				  								   AND PLAN_ID = @v_version_id
+   				  								   AND OUT_VERSION_ID = @v_version_id
+   				  								   AND PROBLEM_TYPE = 'UNPLAN'
+   												   AND A.MASTER_ID = X.MASTER_ID
+   												   AND A.PLAN_ID = X.PLAN_ID
+   				  								   AND A.ORG_DEMAND_ID = X.DEMAND_ID
+   				  									)
+   							   ) A
+   								LEFT JOIN (
+   									SELECT X.BOD_ID, X.ITEM_ID, Y.FROM_SITE_ID, Y.TO_SITE_ID, SUBSTRING(Y.FROM_SITE_ID,1,CHARINDEX('-',Y.FROM_SITE_ID,1)+1) AS FROM_SCM_SITE, SUBSTRING(Y.TO_SITE_ID,1,CHARINDEX('-',Y.TO_SITE_ID,1)+1) AS TO_SCM_SITE
+   									  FROM ENG_SCP.DBO.TH_ENG_ITEM_BOD X(NOLOCK)
+   											INNER JOIN ENG_SCP.DBO.TH_ENG_BOD Y(NOLOCK)
+   												ON X.MASTER_ID = Y.MASTER_ID AND X.PLAN_ID = Y.PLAN_ID AND X.BOD_ID = Y.BOD_ID
+   									 WHERE 1=1
+   									   AND X.MASTER_ID = @v_master_id
+   									   AND X.PLAN_ID = @v_version_id
+   									) B
+   									ON A.ITEM_ID = B.ITEM_ID AND A.FROM_SCM_SITE = B.FROM_SCM_SITE AND A.TO_SCM_SITE = B.TO_SCM_SITE
+   						GROUP BY A.DEMAND_ID, A.MODEL_ID, A.FROM_SCM_SITE, A.TO_SCM_SITE, A.ELECTRONODE_ITEM_CNT
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","18","   					   ) X
+					GROUP BY X.DEMAND_ID, X.MODEL_ID
+					) B
+					ON A.ORG_DEMAND_ID = B.DEMAND_ID
+			 WHERE 1=1
+			 AND A.PROBLEM_TYPE = 'UNPLAN'
+			 AND B.PREFER_NO_BOD_CHK = 0
+			 ;
+
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_BOM_LIST_9') IS NOT NULL  
+				DROP TABLE #TblDynamic_SCP0032_BOM_LIST_9;
+
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_ELECTRONODE_PAIR_ITEM_PREFER') IS NOT NULL  
+				DROP TABLE #TblDynamic_SCP0032_ELECTRONODE_PAIR_ITEM_PREFER;
+		END;
+
+	ELSE IF @p_sheet_name='10. PREFER NO BOD CAL'
+		BEGIN
+
+			/*********************************
+				NO.10 PREFER NO BOD CAL
+			**********************************/
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_DEMAND_BOD') IS NOT NULL  
+				DROP TABLE #TblDynamic_SCP0032_DEMAND_BOD;
+
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_ITEM_BOD_CAL') IS NOT NULL  
+        		DROP TABLE #TblDynamic_SCP0032_ITEM_BOD_CAL;
+
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_NO_BOD_CAL') IS NOT NULL  
+        		DROP TABLE #TblDynamic_SCP0032_NO_BOD_CAL;
+
+			INSERT INTO #TblDynamic_SCP0032_PREFER_DEMAND(
+				DEMAND_ID
+				 ,MODEL_ID
+				 ,DUE_DATE
+				 ,PREFERENCE_SITE_ID
+				 ,SCM_SITE
+				 ,SITE_TYPE
+				 ,ROUTE_TYPE
+			)
+			SELECT A.DEMAND_ID
+				, A.MODEL_ID
+				, A.DUE_DATE
+    			, A.PREFERENCE_SITE_ID
+    			, A.SCM_SITE
+    			, A.SITE_TYPE
+			, A.ROUTE_TYPE
+			--INTO #PREFER_DEMAND_TABLE
+			FROM (
+    			SELECT AA.DEMAND_ID
+    					, AA.MODEL_ID
+    					, AA.DUE_DATE
+    					, AA.PREFERENCE_SITE_ID
+    					, SUBSTRING(ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1,CHARINDEX('-',ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1) AS SCM_SITE
+						, SUBSTRING(ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),CHARINDEX('-',ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1,1) AS ROUTE_TYPE
+        				, 'PLANT_SITE'	AS SITE_TYPE
+					FROM (
+						SELECT A.DEMAND_ID, A.ITEM AS MODEL_ID, A.DUE_DATE, B.PREFERENCE_SITE_ID, LEN(B.PREFERENCE_SITE_ID)-LEN(REPLACE(B.PREFERENCE_SITE_ID,'##','#'))+1 AS PREFERENCE_SITE_QTY
+							FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+								INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+									ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+								INNER JOIN (
+                					SELECT DISTINCT X.ORG_DEMAND_ID
+                						FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                						WHERE 1=1
+                						AND X.MASTER_ID = @v_master_id
+                						AND X.PLAN_ID = @v_version_id
+    											AND X.OUT_VERSION_ID = @v_version_id
+                						AND X.PROBLEM_TYPE = 'UNPLAN'
+    								) C
+									ON A.DEMAND_ID = C.ORG_DEMAND_ID
+							WHERE 1=1
+							AND A.MASTER_ID = @v_master_id
+							AND A.PLAN_ID = @v_version_id
+    						AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+						) AA, 
+						(SELECT TOP 15 INT
+							FROM ENG_SCP.DBO.COPYT BB
+							ORDER BY INT	
+						) BB
+					WHERE BB.INT < AA.PREFERENCE_SITE_QTY+1
+    			UNION ALL
+    			SELECT A.DEMAND_ID
+    					, A.ITEM		AS MODEL_ID
+						, A.DUE_DATE
+    					, B.PREFERENCE_SITE_ID
+    					, A.SITE		AS SCM_SITE
+						, NULL			AS ROUTE_TYPE	
+    					, 'SALES_SITE' AS SITE_TYPE				
+    				FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+    					INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+    						ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+						INNER JOIN (
+                			SELECT DISTINCT X.ORG_DEMAND_ID
+                				FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                				WHERE 1=1
+                				AND X.MASTER_ID = @v_master_id
+                				AND X.PLAN_ID = @v_version_id
+    									AND X.OUT_VERSION_ID = @v_version_id
+                				AND X.PROBLEM_TYPE = 'UNPLAN'
+    						) C
+							ON A.DEM"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","26","ECT 1
+									  FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT C(NOLOCK)
+									 WHERE 1=1
+									   AND C.MASTER_ID = @v_master_id
+									   AND C.PLAN_ID   = @v_version_id
+									   AND C.OUT_VERSION_ID = @v_version_id
+									   AND C.ORG_DEMAND_ID = A.DEMAND_ID
+									   AND NODE_ID NOT IN ('PAST DUE')
+        							)
+				;
+		END;
+	
+	
+	--임시테이블 삭제      
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_PREFER_DEMAND') IS NOT NULL  
+        DROP TABLE #TblDynamic_SCP0032_PREFER_DEMAND;
+
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_PREFER_PRODUCT') IS NOT NULL
+        DROP TABLE #TblDynamic_SCP0032_PREFER_PRODUCT;
+
+	IF OBJECT_ID('tempdb.dbo.#TblDynamic_SCP0032_BOM') is not null       
+		DROP TABLE #TblDynamic_SCP0032_BOM   
+
+
+END 
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","19","AND_ID = C.ORG_DEMAND_ID
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+    			) A
+			;
+
+			WITH TREE_QUERY AS (
+			SELECT A.PARENT_ITEM_ID	AS MODEL_ID
+      				, A.SITE_ID
+      				, A.ROUTE_ID
+      				, A.PARENT_ITEM_ID	
+      				, A.CHILD_ITEM_ID	
+      				, B.ITEM_TYPE
+      				, 1 AS BOM_LEVEL
+    			FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK)
+				JOIN  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK) ON A.MASTER_ID = B.MASTER_ID	AND A.PLAN_ID = B.PLAN_ID AND A.CHILD_ITEM_ID = B.ITEM_ID		
+    			WHERE 1=1
+    			AND A.MASTER_ID = @v_master_id
+    			AND A.PLAN_ID = @v_version_id
+    			AND A.PARENT_ITEM_ID IN	(
+										SELECT DISTINCT Z.PRODUCT_ITEM_ID
+											FROM  ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+												INNER JOIN  ENG_SCP.DBO.TH_ENG_NET_DEMAND Y(NOLOCK)
+													ON X.MASTER_ID = Y.MASTER_ID AND X.PLAN_ID = Y.PLAN_ID AND X.ORG_DEMAND_ID = Y.DEMAND_ID
+												INNER JOIN  ENG_SCP.DBO.TH_ENG_SALES_PRODUCT_MAP Z(NOLOCK)
+													ON Y.MASTER_ID = Z.MASTER_ID AND Y.PLAN_ID = Z.PLAN_ID AND Y.SALES_MODEL_ID = Z.SALES_MODEL_ID
+											WHERE 1=1
+											AND X.MASTER_ID = @v_master_id
+											AND X.PLAN_ID = @v_version_id
+											AND X.OUT_VERSION_ID = @v_version_id
+											AND X.PROBLEM_TYPE = 'UNPLAN'
+    									)
+			UNION ALL
+			SELECT C.MODEL_ID
+    				, A.SITE_ID
+    				, A.ROUTE_ID
+    				, A.PARENT_ITEM_ID	
+    				, A.CHILD_ITEM_ID	
+    				, B.ITEM_TYPE
+    				, C.BOM_LEVEL + 1	AS BOM_LEVEL
+    			FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK),  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK), TREE_QUERY C
+    			WHERE 1=1
+    			AND A.MASTER_ID = @v_master_id
+    			AND A.PLAN_ID = @v_version_id
+    			AND A.MASTER_ID = B.MASTER_ID
+    			AND A.PLAN_ID = B.PLAN_ID
+    			AND A.CHILD_ITEM_ID = B.ITEM_ID
+    			AND A.PARENT_ITEM_ID = C.CHILD_ITEM_ID
+		)
+		INSERT INTO #TblDynamic_SCP0032_BOM (
+			MODEL_ID
+			 ,SITE_ID
+			 ,ROUTE_ID
+			 ,PARENT_ITEM_ID
+			 ,CHILD_ITEM_ID
+			 ,ITEM_TYPE
+			 ,BOM_LEVEL
+			 ,SCM_SITE
+			 ,ROUTE_TYPE
+		)
+		SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+				, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+				, SUBSTRING(A.SITE_ID,1,CHARINDEX('-',A.SITE_ID,1)+1) AS SCM_SITE
+				, SUBSTRING(A.SITE_ID,CHARINDEX('-',A.SITE_ID,1)+1,1) AS ROUTE_TYPE
+				--INTO #TblDynamic_SCP0032_BOM_10
+			FROM TREE_QUERY A
+				LEFT MERGE JOIN (
+					SELECT DISTINCT X.MODEL_ID
+						FROM (
+							SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+									, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+									, MAX(A.BOM_LEVEL) OVER(PARTITION BY A.MODEL_ID) AS MAX_BOM_LEVEL
+								FROM TREE_QUERY A
+							) X
+						WHERE 1=1
+						AND X.BOM_LEVEL = X.MAX_BOM_LEVEL
+						AND X.ITEM_TYPE != 'R'                              
+					UNION                            
+					SELECT X.MODEL_ID
+						FROM TREE_QUERY X
+						WHERE 1=1
+						AND X.ITEM_TYPE = 'H'
+						AND NOT EXISTS	(
+										SELECT 1
+											FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM Y(NOLOCK)
+											WHERE 1=1
+											AND Y.MASTER_ID = @v_master_id
+											AND Y.PLAN_ID   = @v_version_id
+											AND Y.PARENT_ITEM_ID = X.CHILD_ITEM_ID
+                						)             
+    				) B
+    				ON A.MODEL_ID = B.MODEL_ID
+			WHERE 1=1
+			AND B.MODEL_ID IS NULL
+			; 
+
+			SELECT DISTINCT A.DEMAND_ID, A.MODEL_ID, A.DUE_DATE, A.SCM_SITE, A.SITE_TYPE, CASE WHEN A.SITE_TYPE = 'SALES_SITE' THEN A.MODEL_ID ELSE B.PARENT_ITEM_ID END AS ITEM_ID
+    		, DENSE_RANK() OVER(PARTITION BY A.DEMAND_ID ORDER BY CASE WHEN A.SITE_TYPE =  'SALES_SITE' THEN 1 WHEN A.ROUTE_TYPE = 'P' THEN 2 WHEN A.ROUTE_TYPE = 'A' THEN 3 ELSE 4 END) AS IDX
+    		INTO #TblDynamic_SCP0032_DEMAND_BOD
+			FROM #TblDynamic_SCP0032_PREFER_DEMAND A(NOLOCK)
+    			LEFT MERGE JOIN #TblDynamic_SCP0032_BOM B(NOLOCK)
+    						ON A.MODEL_ID = B.MODEL_ID 
+							AND A.SCM"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","20","_SITE = B.SCM_SITE 
+							AND B.ROUTE_ID NOT IN (SELECT DISTINCT ROUTE_ID
+													 FROM ENG_SCP.DBO.TH_ENG_OP_RES_GROUP_MAP(NOLOCK)
+													WHERE 1=1
+													  AND MASTER_ID = @v_master_id
+													  AND PLAN_ID = @v_version_id
+													  AND RESOURCE_GROUP_ID IN (
+					    				   	   							SELECT DISTINCT RESOURCE_GROUP_ID
+					    				   	   							  FROM ENG_SCP.DBO.TH_ENG_RESOURCE(NOLOCK)
+					    				   	   							 WHERE 1=1
+					    				   	   							   AND MASTER_ID = @v_master_id
+					    				   	   							   AND PLAN_ID = @v_version_id
+					    				   	   							   AND DESCR = 'NO_CAPA'
+					    					   							))
+    		WHERE 1=1
+    		AND NOT EXISTS	(
+    						SELECT X.ORG_DEMAND_ID
+    							FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT_ORG X(NOLOCK)
+    							WHERE 1=1
+    							AND X.MASTER_ID = @v_master_id
+    							AND X.PLAN_ID = @v_version_id 
+    							AND X.OUT_VERSION_ID = @v_version_id 
+    							AND X.PROBLEM_TYPE = 'UNPLAN'
+    							AND X.ORG_DEMAND_ID = A.DEMAND_ID
+    						)
+			;
+
+			SELECT A.ITEM_ID, A.FROM_SCM_SITE, A.TO_SCM_SITE, A.BOD_ID, A.PLAN_HORIZON, A.PLAN_START_DTTM, A.PLAN_END_DTTM, A.START_DTTM, A.END_DTTM
+			INTO #TblDynamic_SCP0032_ITEM_BOD_CAL
+			FROM (
+				SELECT X.ITEM_ID, SUBSTRING(Z.FROM_SITE_ID,1,CHARINDEX('-',Z.FROM_SITE_ID,1)+1) AS FROM_SCM_SITE
+						, CASE WHEN V.PLANT_FLAG = 'N' THEN Z.TO_SITE_ID ELSE SUBSTRING(Z.TO_SITE_ID,1,CHARINDEX('-',Z.TO_SITE_ID,1)+1) END AS TO_SCM_SITE
+						, X.BOD_ID, Y.ALT_PRIORITY, W.PLAN_HORIZON
+						, MIN(Y.ALT_PRIORITY) OVER(PARTITION BY X.ITEM_ID, Z.FROM_SITE_ID, Z.TO_SITE_ID) AS MIN_ALT_PRIORITY
+						, W.PLAN_START_DTTM, DATEADD(DAY,W.PLAN_HORIZON,W.PLAN_START_DTTM) AS PLAN_END_DTTM
+						, CASE WHEN CONVERT(CHAR(8),X.START_DTTM,112) < CONVERT(CHAR(8),W.PLAN_START_DTTM,112) THEN W.PLAN_START_DTTM ELSE X.START_DTTM END AS START_DTTM
+						, CASE WHEN CONVERT(CHAR(8),X.END_DTTM,112) > CONVERT(CHAR(8),DATEADD(DAY,W.PLAN_HORIZON,W.PLAN_START_DTTM),112) THEN DATEADD(DAY,W.PLAN_HORIZON,W.PLAN_START_DTTM) ELSE X.END_DTTM END AS END_DTTM
+					FROM ENG_SCP.DBO.TH_ENG_ITEM_BOD_CAL X(NOLOCK)
+						INNER JOIN ENG_SCP.DBO.TH_ENG_ITEM_BOD Y(NOLOCK)
+							ON X.MASTER_ID = Y.MASTER_ID AND X.PLAN_ID = Y.PLAN_ID AND X.ITEM_ID = Y.ITEM_ID AND X.BOD_ID = Y.BOD_ID
+						INNER JOIN ENG_SCP.DBO.TH_ENG_BOD Z(NOLOCK)
+							ON X.MASTER_ID = Z.MASTER_ID AND X.PLAN_ID = Z.PLAN_ID AND X.BOD_ID = Z.BOD_ID
+						INNER JOIN ENG_SCP.DBO.TH_ENG_PLAN_INFO W(NOLOCK)
+							ON X.MASTER_ID = W.MASTER_ID AND X.PLAN_ID = W.PLAN_ID
+						INNER JOIN ENG_SCP.DBO.TH_ENG_SITE V(NOLOCK)
+							ON X.MASTER_ID = V.MASTER_ID AND X.PLAN_ID = V.PLAN_ID AND Z.TO_SITE_ID = V.SITE_ID
+					WHERE 1=1
+					AND X.MASTER_ID = @v_master_id
+					AND X.PLAN_ID = @v_version_id 
+					AND ISNULL(X.IS_USE,'N') = 'N'
+				) A
+			WHERE 1=1
+			AND A.ALT_PRIORITY = A.MIN_ALT_PRIORITY
+			AND (A.PLAN_START_DTTM <= A.END_DTTM AND A.PLAN_END_DTTM >= A.START_DTTM)
+			;
+
+			SELECT DISTINCT A.DEMAND_ID, A.MODEL_ID, A.DUE_DATE
+			INTO #TblDynamic_SCP0032_NO_BOD_CAL		  
+			FROM (
+				SELECT X.DEMAND_ID, X.MODEL_ID, X.DUE_DATE, X.ITEM_ID, X.FROM_SCM_SITE, X.TO_SCM_SITE, Y.BOD_ID, DATEDIFF(DAY,X.DUE_DATE,Y.PLAN_END_DTTM) AS HORIZON_DAYS
+						, SUM(CASE WHEN Y.END_DTTM < X.DUE_DATE THEN 0 ELSE DATEDIFF(DAY,CASE WHEN Y.START_DTTM < X.DUE_DATE THEN X.DUE_DATE ELSE Y.START_DTTM END,Y.END_DTTM) END) AS NON_DAYS
+					FROM (
+						SELECT A.DEMAND_ID, A.MODEL_ID, A.DUE_DATE, B.ITEM_ID, B.SCM_SITE AS FROM_SCM_SITE, A.SCM_SITE AS TO_SCM_SITE, A.IDX
+							FROM #TblDynamic_SCP0032_DEMAND_BOD A(NOLOCK)
+								INNER JOIN #TblDynamic_SCP0032_DEMAND_BOD B(NOLOCK)
+									ON A.DEMAND_ID = B.DEMAND_ID AND A.IDX+1 = B.IDX
+						) X
+						INNER JOIN #TblDynamic_SCP0032_ITEM_BOD_CAL Y(NOLOCK)
+								ON X.ITEM_ID = Y.ITEM_ID AND X.FROM_SCM_SITE = Y.FROM_SCM_SITE AND X.TO_SCM_SITE = Y.TO_SCM_SITE AND X.DUE_DATE <= Y.END_DTTM
+					WHERE 1=1
+		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","21","		GROUP BY X.DEMAND_ID, X.MODEL_ID, X.DUE_DATE, X.ITEM_ID, X.FROM_SCM_SITE, X.TO_SCM_SITE, Y.BOD_ID, DATEDIFF(DAY,X.DUE_DATE,Y.PLAN_END_DTTM)
+				) A
+			WHERE 1=1
+			AND A.HORIZON_DAYS = A.NON_DAYS
+			;
+
+			-- 조회쿼리
+			SELECT DISTINCT SUBSTRING(B.DEMAND_ID,1,CHARINDEX('::',B.DEMAND_ID, CHARINDEX('~', B.DEMAND_ID,1) )-1) AS DEMAND_ID, B.MODEL_ID,'' AS DUE_DATE
+			  FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT A(NOLOCK)
+    					INNER JOIN #TblDynamic_SCP0032_NO_BOD_CAL B(NOLOCK)
+    						ON A.ORG_DEMAND_ID = B.DEMAND_ID
+			WHERE A.MASTER_ID = @v_master_id
+			  AND A.PLAN_ID = @v_version_id 
+			  AND A.OUT_VERSION_ID = @v_version_id 
+			  AND A.PROBLEM_TYPE = 'UNPLAN'
+			  AND A.NODE_TYPE NOT IN ('PAST_DUE','OUT_OF_HORIZON','NO ITEM','NO BOM','PREFER NO BOM','NO BOD','PREFER NO BOD'
+										  ,'NO RESOURCE','PREFER NO RESOURCE', 'PARTIAL SHORT', 'PREFER NO SITE','PREFER NO PRODUCT')
+			UNION ALL
+			SELECT *
+			FROM #TblDynamic_SCP0032_NO_BOD_CAL
+			WHERE 1=1
+			;
+
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_DEMAND_BOD') IS NOT NULL  
+				DROP TABLE #TblDynamic_SCP0032_DEMAND_BOD;
+
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_ITEM_BOD_CAL') IS NOT NULL  
+        		DROP TABLE #TblDynamic_SCP0032_ITEM_BOD_CAL;
+
+			IF OBJECT_ID('tempdb..#TblDynamic_SCP0032_NO_BOD_CAL') IS NOT NULL  
+        		DROP TABLE #TblDynamic_SCP0032_NO_BOD_CAL;
+
+		END;
+	
+	ELSE IF @p_sheet_name='11. NO RESOURCE'
+		BEGIN
+			/*********************************
+				NO.11 NO RESOURCE
+			**********************************/
+
+			WITH TREE_QUERY AS (
+				SELECT A.PARENT_ITEM_ID	AS MODEL_ID
+      					, A.SITE_ID
+      					, A.ROUTE_ID
+      					, A.PARENT_ITEM_ID	
+      					, A.CHILD_ITEM_ID	
+      					, B.ITEM_TYPE
+      					, 1 AS BOM_LEVEL
+    				FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK)
+					JOIN  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK) ON A.MASTER_ID = B.MASTER_ID	AND A.PLAN_ID = B.PLAN_ID AND A.CHILD_ITEM_ID = B.ITEM_ID		
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND A.PARENT_ITEM_ID IN	(
+											SELECT DISTINCT Z.PRODUCT_ITEM_ID
+												FROM  ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+													INNER JOIN  ENG_SCP.DBO.TH_ENG_NET_DEMAND Y(NOLOCK)
+														ON X.MASTER_ID = Y.MASTER_ID AND X.PLAN_ID = Y.PLAN_ID AND X.ORG_DEMAND_ID = Y.DEMAND_ID
+													INNER JOIN  ENG_SCP.DBO.TH_ENG_SALES_PRODUCT_MAP Z(NOLOCK)
+														ON Y.MASTER_ID = Z.MASTER_ID AND Y.PLAN_ID = Z.PLAN_ID AND Y.SALES_MODEL_ID = Z.SALES_MODEL_ID
+												WHERE 1=1
+												AND X.MASTER_ID = @v_master_id
+												AND X.PLAN_ID = @v_version_id
+												AND X.OUT_VERSION_ID = @v_version_id
+												AND X.PROBLEM_TYPE = 'UNPLAN'
+    										)
+				UNION ALL
+				SELECT C.MODEL_ID
+    					, A.SITE_ID
+    					, A.ROUTE_ID
+    					, A.PARENT_ITEM_ID	
+    					, A.CHILD_ITEM_ID	
+    					, B.ITEM_TYPE
+    					, C.BOM_LEVEL + 1	AS BOM_LEVEL
+    				FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK),  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK), TREE_QUERY C
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND A.MASTER_ID = B.MASTER_ID
+    				AND A.PLAN_ID = B.PLAN_ID
+    				AND A.CHILD_ITEM_ID = B.ITEM_ID
+    				AND A.PARENT_ITEM_ID = C.CHILD_ITEM_ID
+			)
+			INSERT INTO #TblDynamic_SCP0032_BOM (
+				MODEL_ID
+				 ,SITE_ID
+				 ,ROUTE_ID
+				 ,PARENT_ITEM_ID
+				 ,CHILD_ITEM_ID
+				 ,ITEM_TYPE
+				 ,BOM_LEVEL
+				 ,SCM_SITE
+				 ,ROUTE_TYPE
+			)
+			SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+					, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+					, SUBSTRING(A.SITE_ID,1,CHARINDEX('-',A.SITE_ID,1)+1) AS SCM_SITE
+					, SUBSTRING(A.SITE_ID,CHARINDEX('-',A.SITE_ID,1)+1,1) AS ROUTE_TYPE
+					--INTO #TblDynamic_SCP0032_BOM_11
+				FROM TREE_QUERY A
+					LEFT MERGE JOIN (
+						SELECT DISTINCT X.MODEL_ID
+							FROM (
+								SELECT A.MODEL_ID, A.SITE_ID, A.R"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","22","OUTE_ID, A.PARENT_ITEM_ID
+										, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+										, MAX(A.BOM_LEVEL) OVER(PARTITION BY A.MODEL_ID) AS MAX_BOM_LEVEL
+									FROM TREE_QUERY A
+								) X
+							WHERE 1=1
+							AND X.BOM_LEVEL = X.MAX_BOM_LEVEL
+							AND X.ITEM_TYPE != 'R'                              
+						UNION                            
+						SELECT X.MODEL_ID
+							FROM TREE_QUERY X
+							WHERE 1=1
+							AND X.ITEM_TYPE = 'H'
+							AND NOT EXISTS	(
+											SELECT 1
+												FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM Y(NOLOCK)
+												WHERE 1=1
+												AND Y.MASTER_ID = @v_master_id
+												AND Y.PLAN_ID   = @v_version_id
+												AND Y.PARENT_ITEM_ID = X.CHILD_ITEM_ID
+                							)             
+    					) B
+    					ON A.MODEL_ID = B.MODEL_ID
+				WHERE 1=1
+				AND B.MODEL_ID IS NULL
+			; 
+
+			-- 조회쿼리
+			WITH W_1_DEMAND_RESOURCE AS (
+				SELECT DISTINCT SUBSTRING(A.DEMAND_ID,1,CHARINDEX('::',A.DEMAND_ID, CHARINDEX('~', A.DEMAND_ID,1) )-1) AS DEMAND_ID, A.MODEL_ID, B.SCM_SITE, B.ROUTE_TYPE , B.PARENT_ITEM_ID AS ITEM_ID
+				  FROM (
+						SELECT A.DEMAND_ID, A.ITEM AS MODEL_ID
+						  FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+								   LEFT MERGE JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+									   ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+						 WHERE 1=1
+						   AND A.MASTER_ID = @v_master_id
+						   AND A.PLAN_ID = @v_version_id
+						   AND A.MASTER_ID = B.MASTER_ID
+						   AND A.PLAN_ID = B.PLAN_ID
+						   AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'N'
+						   AND CHARINDEX('::D::',A.DEMAND_ID,1)  <> 0
+						   AND A.DEMAND_ID IN	(
+            									SELECT DISTINCT X.ORG_DEMAND_ID
+            									  FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+            									 WHERE 1=1
+            									   AND X.MASTER_ID = @v_master_id
+            									   AND X.PLAN_ID = @v_version_id
+														 AND X.OUT_VERSION_ID = @v_version_id
+            									   AND X.PROBLEM_TYPE = 'UNPLAN'
+														 AND X.NODE_TYPE NOT IN ('PAST_DUE','OUT_OF_HORIZON','NO ITEM','NO BOM','PREFER NO BOM','NO BOD','PREFER NO BOD', 'PARTIAL SHORT')
+												)
+					   ) A
+						INNER JOIN #TblDynamic_SCP0032_BOM B
+							ON A.MODEL_ID = B.MODEL_ID 
+							AND B.ROUTE_ID NOT IN (SELECT DISTINCT ROUTE_ID
+													 FROM ENG_SCP.DBO.TH_ENG_OP_RES_GROUP_MAP(NOLOCK)
+													WHERE 1=1
+													  AND MASTER_ID = @v_master_id
+									   				  AND PLAN_ID = @v_version_id
+													  AND RESOURCE_GROUP_ID IN (
+					    													  SELECT DISTINCT RESOURCE_GROUP_ID
+					    														FROM ENG_SCP.DBO.TH_ENG_RESOURCE(NOLOCK)
+					    													   WHERE 1=1
+					    														 AND MASTER_ID = @v_master_id
+					    														 AND PLAN_ID = @v_version_id
+					    														 AND DESCR = 'NO_CAPA'
+					    													))
+			)
+			SELECT DISTINCT X.DEMAND_ID
+							, X.MODEL_ID
+							, X.SCM_SITE
+							, isnull(NULLIF( DIV.SITE_DESCRIPTION , '') , '-') AS SCM_SITE_DESCRIPTION
+							, X.ROUTE_TYPE AS OPERATION_GROUP
+							, X.ITEM_ID
+			  FROM W_1_DEMAND_RESOURCE X(NOLOCK)
+					LEFT MERGE JOIN (
+						SELECT X.ITEM_ID, ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(X.SITE_ID,1,'~') AS SCM_SITE, MAX(X.RESOURCE_GROUP_ID) AS RESOURCE_GROUP_ID
+						  FROM ENG_SCP.DBO.TH_ENG_OP_RES_GROUP_MAP X(NOLOCK)
+						 WHERE 1=1
+						   AND X.MASTER_ID = @v_master_id
+						   AND X.PLAN_ID = @v_version_id
+						GROUP BY X.ITEM_ID, ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(X.SITE_ID,1,'~')
+						) Y
+						ON X.SCM_SITE = Y.SCM_SITE AND X.ITEM_ID = Y.ITEM_ID
+					LEFT JOIN #TblDynamic_SCP0032_DIV DIV ON DIV.SCM_SITE_ID=X.SCM_SITE
+			 WHERE 1=1
+			 AND RESOURCE_GROUP_ID IS NULL
+			ORDER BY DEMAND_ID, ROUTE_TYPE, SCM_SITE
+			;
+
+		END;
+
+	ELSE IF @p_sheet_name='12. PREFER NO RESOURCE'
+		BEGIN
+			/*********************************
+				NO.12 PREF"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","23","ER NO RESOURCE
+			**********************************/
+
+			INSERT INTO #TblDynamic_SCP0032_PREFER_DEMAND(
+				DEMAND_ID
+				 ,MODEL_ID
+				 ,DUE_DATE
+				 ,PREFERENCE_SITE_ID
+				 ,SCM_SITE
+				 ,SITE_TYPE
+				 ,ROUTE_TYPE
+			)
+			SELECT A.DEMAND_ID
+				, A.MODEL_ID
+				, A.DUE_DATE
+    			, A.PREFERENCE_SITE_ID
+    			, A.SCM_SITE
+    			, A.SITE_TYPE
+			, A.ROUTE_TYPE
+			--INTO #PREFER_DEMAND_TABLE
+			FROM (
+    			SELECT AA.DEMAND_ID
+    					, AA.MODEL_ID
+    					, AA.DUE_DATE
+    					, AA.PREFERENCE_SITE_ID
+    					, SUBSTRING(ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1,CHARINDEX('-',ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1) AS SCM_SITE
+						, SUBSTRING(ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),CHARINDEX('-',ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(AA.PREFERENCE_SITE_ID,BB.INT,'##'),1)+1,1) AS ROUTE_TYPE
+        				, 'PLANT_SITE'	AS SITE_TYPE
+					FROM (
+						SELECT A.DEMAND_ID, A.ITEM AS MODEL_ID, A.DUE_DATE, B.PREFERENCE_SITE_ID, LEN(B.PREFERENCE_SITE_ID)-LEN(REPLACE(B.PREFERENCE_SITE_ID,'##','#'))+1 AS PREFERENCE_SITE_QTY
+							FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+								INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+									ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+								INNER JOIN (
+                					SELECT DISTINCT X.ORG_DEMAND_ID
+                						FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                						WHERE 1=1
+                						AND X.MASTER_ID = @v_master_id
+                						AND X.PLAN_ID = @v_version_id
+    											AND X.OUT_VERSION_ID = @v_version_id
+                						AND X.PROBLEM_TYPE = 'UNPLAN'
+    								) C
+									ON A.DEMAND_ID = C.ORG_DEMAND_ID
+							WHERE 1=1
+							AND A.MASTER_ID = @v_master_id
+							AND A.PLAN_ID = @v_version_id
+    						AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+						) AA, 
+						(SELECT TOP 15 INT
+							FROM ENG_SCP.DBO.COPYT BB
+							ORDER BY INT	
+						) BB
+					WHERE BB.INT < AA.PREFERENCE_SITE_QTY+1
+    			UNION ALL
+    			SELECT A.DEMAND_ID
+    					, A.ITEM		AS MODEL_ID
+						, A.DUE_DATE
+    					, B.PREFERENCE_SITE_ID
+    					, A.SITE		AS SCM_SITE
+						, NULL			AS ROUTE_TYPE	
+    					, 'SALES_SITE' AS SITE_TYPE				
+    				FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+    					INNER JOIN ENG_SCP.DBO.TH_ENG_DEMAND_ATTRIBUTE B(NOLOCK)
+    						ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID AND A.DEMAND_GROUP_ID = B.DEMAND_GROUP_ID
+						INNER JOIN (
+                			SELECT DISTINCT X.ORG_DEMAND_ID
+                				FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+                				WHERE 1=1
+                				AND X.MASTER_ID = @v_master_id
+                				AND X.PLAN_ID = @v_version_id
+    									AND X.OUT_VERSION_ID = @v_version_id
+                				AND X.PROBLEM_TYPE = 'UNPLAN'
+    						) C
+							ON A.DEMAND_ID = C.ORG_DEMAND_ID
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND ISNULL(B.IS_HARD_PREFERENCE,'N') = 'Y'
+    			) A
+			;
+
+			WITH TREE_QUERY AS (
+				SELECT A.PARENT_ITEM_ID	AS MODEL_ID
+      					, A.SITE_ID
+      					, A.ROUTE_ID
+      					, A.PARENT_ITEM_ID	
+      					, A.CHILD_ITEM_ID	
+      					, B.ITEM_TYPE
+      					, 1 AS BOM_LEVEL
+    				FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK)
+					JOIN  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK) ON A.MASTER_ID = B.MASTER_ID	AND A.PLAN_ID = B.PLAN_ID AND A.CHILD_ITEM_ID = B.ITEM_ID		
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND A.PARENT_ITEM_ID IN	(
+											SELECT DISTINCT Z.PRODUCT_ITEM_ID
+												FROM  ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+													INNER JOIN  ENG_SCP.DBO.TH_ENG_NET_DEMAND Y(NOLOCK)
+														ON X.MASTER_ID = Y.MASTER_ID AND X.PLAN_I"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","24","D = Y.PLAN_ID AND X.ORG_DEMAND_ID = Y.DEMAND_ID
+													INNER JOIN  ENG_SCP.DBO.TH_ENG_SALES_PRODUCT_MAP Z(NOLOCK)
+														ON Y.MASTER_ID = Z.MASTER_ID AND Y.PLAN_ID = Z.PLAN_ID AND Y.SALES_MODEL_ID = Z.SALES_MODEL_ID
+												WHERE 1=1
+												AND X.MASTER_ID = @v_master_id
+												AND X.PLAN_ID = @v_version_id
+												AND X.OUT_VERSION_ID = @v_version_id
+												AND X.PROBLEM_TYPE = 'UNPLAN'
+    										)
+				UNION ALL
+				SELECT C.MODEL_ID
+    					, A.SITE_ID
+    					, A.ROUTE_ID
+    					, A.PARENT_ITEM_ID	
+    					, A.CHILD_ITEM_ID	
+    					, B.ITEM_TYPE
+    					, C.BOM_LEVEL + 1	AS BOM_LEVEL
+    				FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM A(NOLOCK),  ENG_SCP.DBO.TH_ENG_ITEM B(NOLOCK), TREE_QUERY C
+    				WHERE 1=1
+    				AND A.MASTER_ID = @v_master_id
+    				AND A.PLAN_ID = @v_version_id
+    				AND A.MASTER_ID = B.MASTER_ID
+    				AND A.PLAN_ID = B.PLAN_ID
+    				AND A.CHILD_ITEM_ID = B.ITEM_ID
+    				AND A.PARENT_ITEM_ID = C.CHILD_ITEM_ID
+			)
+			INSERT INTO #TblDynamic_SCP0032_BOM (
+				MODEL_ID
+				 ,SITE_ID
+				 ,ROUTE_ID
+				 ,PARENT_ITEM_ID
+				 ,CHILD_ITEM_ID
+				 ,ITEM_TYPE
+				 ,BOM_LEVEL
+				 ,SCM_SITE
+				 ,ROUTE_TYPE
+			)
+			SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+					, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+					, SUBSTRING(A.SITE_ID,1,CHARINDEX('-',A.SITE_ID,1)+1) AS SCM_SITE
+					, SUBSTRING(A.SITE_ID,CHARINDEX('-',A.SITE_ID,1)+1,1) AS ROUTE_TYPE
+					--INTO #TblDynamic_SCP0032_BOM_12
+				FROM TREE_QUERY A
+					LEFT MERGE JOIN (
+						SELECT DISTINCT X.MODEL_ID
+							FROM (
+								SELECT A.MODEL_ID, A.SITE_ID, A.ROUTE_ID, A.PARENT_ITEM_ID
+										, A.CHILD_ITEM_ID, A.ITEM_TYPE, A.BOM_LEVEL
+										, MAX(A.BOM_LEVEL) OVER(PARTITION BY A.MODEL_ID) AS MAX_BOM_LEVEL
+									FROM TREE_QUERY A
+								) X
+							WHERE 1=1
+							AND X.BOM_LEVEL = X.MAX_BOM_LEVEL
+							AND X.ITEM_TYPE != 'R'                              
+						UNION                            
+						SELECT X.MODEL_ID
+							FROM TREE_QUERY X
+							WHERE 1=1
+							AND X.ITEM_TYPE = 'H'
+							AND NOT EXISTS	(
+											SELECT 1
+												FROM  ENG_SCP.DBO.TH_ENG_PLAN_BOM Y(NOLOCK)
+												WHERE 1=1
+												AND Y.MASTER_ID = @v_master_id
+												AND Y.PLAN_ID   = @v_version_id
+												AND Y.PARENT_ITEM_ID = X.CHILD_ITEM_ID
+                							)             
+    					) B
+    					ON A.MODEL_ID = B.MODEL_ID
+				WHERE 1=1
+				AND B.MODEL_ID IS NULL
+			; 
+
+			-- 조회쿼리
+			SELECT DISTINCT SUBSTRING(X.DEMAND_ID,1,CHARINDEX('::',X.DEMAND_ID, CHARINDEX('~', X.DEMAND_ID,1) )-1) AS DEMAND_ID
+							, X.MODEL_ID
+							, X.SCM_SITE
+							, isnull(NULLIF( DIV.SITE_DESCRIPTION , '') , '-') AS SCM_SITE_DESCRIPTION
+							, X.ROUTE_TYPE AS OPERATION_GROUP
+							, X.ITEM_ID
+			FROM (
+				SELECT DISTINCT A.DEMAND_ID, A.MODEL_ID, A.ROUTE_TYPE, B.PARENT_ITEM_ID AS ITEM_ID, A.SCM_SITE
+    				FROM #TblDynamic_SCP0032_PREFER_DEMAND A(NOLOCK)
+    					INNER MERGE JOIN #TblDynamic_SCP0032_BOM B(NOLOCK)
+    						ON A.MODEL_ID = B.MODEL_ID AND A.ROUTE_TYPE = B.ROUTE_TYPE AND A.SCM_SITE = B.SCM_SITE 
+							AND B.ROUTE_ID NOT IN (SELECT DISTINCT ROUTE_ID
+														FROM ENG_SCP.DBO.TH_ENG_OP_RES_GROUP_MAP(NOLOCK)
+													WHERE 1=1
+														AND MASTER_ID = @v_master_id
+														AND PLAN_ID = @v_version_id
+														AND RESOURCE_GROUP_ID IN (
+						    													SELECT DISTINCT RESOURCE_GROUP_ID
+						    													FROM ENG_SCP.DBO.TH_ENG_RESOURCE(NOLOCK)
+						    													WHERE 1=1
+						    														AND MASTER_ID = @v_master_id
+						    														AND PLAN_ID = @v_version_id
+						    														AND DESCR = 'NO_CAPA'
+						    												))
+    				WHERE 1=1
+    				AND A.SITE_TYPE = 'PLANT_SITE'
+					AND NOT EXISTS	(
+    								SELECT X.ORG_DEMAND_ID
+    									FROM ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT X(NOLOCK)
+    									WHERE 1=1"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0032_GET_UNPLAN_LIST","2142018762","25","
+    									AND X.MASTER_ID = @v_master_id
+    									AND X.PLAN_ID = @v_version_id
+    									AND X.OUT_VERSION_ID = @v_version_id
+    									AND X.PROBLEM_TYPE = 'UNPLAN'
+    									AND X.NODE_TYPE IN  ('PAST_DUE','OUT_OF_HORIZON','NO ITEM','NO BOM','PREFER NO BOM','NO BOD','PREFER NO BOD', 'PARTIAL SHORT')
+    									AND X.ORG_DEMAND_ID = A.DEMAND_ID
+    								)
+				) X
+    			LEFT MERGE JOIN (
+    				SELECT X.ITEM_ID,  ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(X.SITE_ID,1,'~') AS SCM_SITE, MAX(X.RESOURCE_GROUP_ID) AS RESOURCE_GROUP_ID
+						FROM ENG_SCP.DBO.TH_ENG_OP_RES_GROUP_MAP X(NOLOCK)
+						WHERE 1=1
+						AND X.MASTER_ID = @v_master_id
+						AND X.PLAN_ID = @v_version_id
+					GROUP BY X.ITEM_ID, ENG_SCP.DBO.FN_GETIDXDATALIKESPLIT(X.SITE_ID,1,'~')
+					) Y
+					ON X.ITEM_ID = Y.ITEM_ID AND X.SCM_SITE = Y.SCM_SITE
+				LEFT JOIN #TblDynamic_SCP0032_DIV DIV ON DIV.SCM_SITE_ID=X.SCM_SITE
+				WHERE 1=1
+				AND RESOURCE_GROUP_ID IS NULL
+			ORDER BY DEMAND_ID, SCM_SITE
+			;
+		END;
+
+	ELSE IF @p_sheet_name='13. PAST DUE'
+		BEGIN
+			/****************************
+				NO.13 PAST DUE
+			*****************************/
+			-- 조회쿼리
+			SELECT DISTINCT SUBSTRING(A.DEMAND_ID,1,CHARINDEX('::',A.DEMAND_ID, CHARINDEX('~', A.DEMAND_ID,1) )-1) AS DEMAND_ID
+							, A.ITEM AS ITEM_ID
+							, A.SCM_SITE
+							, isnull(NULLIF( DIV.SITE_DESCRIPTION , '') , '-') AS SCM_SITE_DESCRIPTION
+							, RIGHT(SITE,3) AS INCOTERMS
+							, A.QTY
+							, A.DUE_DATE
+							, B.PLAN_START_DTTM AS PLAN_START_DATE
+			  FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+						 INNER JOIN (
+			    				SELECT MASTER_ID
+				    				 , PLAN_ID
+									 , CONVERT(CHAR(8), PLAN_START_DTTM,112) PLAN_START_DTTM
+									 , CONVERT(CHAR(8),DATEADD(DAY,DEMAND_HORIZON,PLAN_START_DTTM),112) AS PLAN_END_DATE
+								  FROM  ENG_SCP.DBO.TH_ENG_PLAN_INFO(NOLOCK)
+								 WHERE MASTER_ID = @v_master_id
+								   AND PLAN_ID   = @v_version_id
+							) B
+							ON A.MASTER_ID = B.MASTER_ID AND A.PLAN_ID = B.PLAN_ID
+						LEFT JOIN #TblDynamic_SCP0032_DIV DIV ON DIV.SCM_SITE_ID=A.SCM_SITE
+				 WHERE 1=1
+				   AND A.MASTER_ID =  @v_master_id
+				   AND A.PLAN_ID   = @v_version_id
+				   AND CONVERT(CHAR(8),A.DUE_DATE,112) < B.PLAN_START_DTTM  
+				   AND NOT EXISTS	(
+									SELECT 1
+									  FROM  ENG_SCP.DBO.TH_EXP_PROBLEM_REPORT C(NOLOCK)
+									 WHERE 1=1
+									   AND C.MASTER_ID =  @v_master_id
+									   AND C.PLAN_ID   = @v_version_id
+									   AND C.OUT_VERSION_ID = @v_version_id
+									   AND C.ORG_DEMAND_ID = A.DEMAND_ID
+									)
+			;
+
+		END;
+	
+	ELSE IF @p_sheet_name='14. OUT OF HORIZON'
+		BEGIN
+			/****************************
+				NO.14 OUT OF HORIZON
+			*****************************/
+			-- 조회쿼리
+			SELECT DISTINCT SUBSTRING(A.DEMAND_ID,1,CHARINDEX('::',A.DEMAND_ID, CHARINDEX('~', A.DEMAND_ID,1) )-1) AS DEMAND_ID
+							, A.ITEM AS ITEM_ID
+							, A.SCM_SITE 
+							, isnull(NULLIF( DIV.SITE_DESCRIPTION , '') , '-') AS SCM_SITE_DESCRIPTION
+							, RIGHT(SITE,3) AS INCOTERMS
+							, A.QTY
+							, A.DUE_DATE
+							, B.PLAN_END_DATE AS PLAN_END_DATE
+			FROM ENG_SCP.DBO.TH_ENG_NET_DEMAND A(NOLOCK)
+						INNER JOIN (
+            				SELECT MASTER_ID
+              					 , PLAN_ID
+              					 , CONVERT(CHAR(8), PLAN_START_DTTM,112) PLAN_START_DTTM
+              					 , CONVERT(CHAR(8),DATEADD(DAY,DEMAND_HORIZON,PLAN_START_DTTM),112) AS PLAN_END_DATE
+            				  FROM ENG_SCP.DBO.TH_ENG_PLAN_INFO(NOLOCK)
+            				 WHERE MASTER_ID = @v_master_id
+            				   AND PLAN_ID   = @v_version_id
+							) B
+							ON A.MASTER_ID = B.MASTER_ID 
+							AND A.PLAN_ID = B.PLAN_ID	
+						LEFT JOIN #TblDynamic_SCP0032_DIV DIV ON DIV.SCM_SITE_ID=A.SCM_SITE 
+				 WHERE 1=1
+				   AND A.MASTER_ID = @v_master_id
+				   AND A.PLAN_ID   = @v_version_id
+				   AND CONVERT(CHAR(8),A.DUE_DATE,112) > B.PLAN_END_DATE  
+				   AND NOT EXISTS	(
+									SEL"

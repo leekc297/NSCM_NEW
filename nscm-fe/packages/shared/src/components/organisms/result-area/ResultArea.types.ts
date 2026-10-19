@@ -1,3 +1,5 @@
+import type { FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import type { CSSProperties, MouseEventHandler, ReactNode, RefObject } from 'react';
 
 // @lges/design-system 의 SubTitleDepthType 과 동일하나 @shared/lges 에서 re-export 되지 않아 로컬 정의.
@@ -11,8 +13,15 @@ export type ResultAreaProps = {
   title?: string;
   /** 제목 depth. 기본 'h4'. */
   depth?: SubTitleDepthType;
-  /** 제목 우측 건수. 0/undefined 면 미표시. */
+  /** 제목 우측 건수. 0/undefined 면 미표시. gridRef 를 주면 필터 적용 시 이 값 대신 실제 표시 건수를 보여준다. */
   count?: number;
+  /**
+   * 필터 반영 건수 계산 대상 그리드(선택). 주면 F4/헤더 필터로 좁혀진 실제 표시 건수를
+   * count 대신 보여준다. gridFilterRef 와 함께 줘야 필터 적용/해제 이벤트를 구독한다.
+   */
+  gridRef?: RefObject<FlexGrid | undefined>;
+  /** gridRef 그리드에 붙은 FlexGridFilter. gridRef 와 함께 준다. */
+  gridFilterRef?: RefObject<FlexGridFilter | undefined>;
   /** 제목 우측 버튼 영역(이 영역 전용 추가/삭제 등). */
   rightButtons?: ReactNode;
 

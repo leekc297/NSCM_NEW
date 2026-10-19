@@ -1,6 +1,18 @@
 export const MENU_ID = 'DMF0043' as const;
 export type MENU_ID = typeof MENU_ID;
 
+/**
+ * 이 화면의 메뉴 등록 ID (SCM_ADM_MNU_M DMF0043_01 = MNU00031 'Contribution Sales', ROUTE demand/demand-master/contribute-view).
+ *
+ * 위 MENU_ID('DMF0043')는 호출 배선용이다 — 조회·팝업 프로시저(API_M P_DMF0043_SALES_LIST_GET 등)와 버튼 권한이
+ * 부모 메뉴 DMF0043 의 salesList / salesListTitle 시트에 등록돼 있어 그대로 둔다. DMF0043_01 에도 BTN 메타가 있지만
+ * 시트명이 다르다(main / mainTitle) — 호출 메뉴를 바꾸면 시트명·procedures.d.ts 까지 함께 옮겨야 한다.
+ *
+ * 2026-10-08 통합테스트 지적: 상단 경로가 MENU_ID 로 그려져 "Demand > Demand Master > Contribution Rate Reg."(DMF0043 의
+ * 이름)가 보였다. 제목·경로·즐겨찾기(MainTitle)만 이 ID 를 쓴다.
+ */
+export const TITLE_MENU_ID = 'DMF0043_01' as const;
+
 export enum SHEETS {
   MAIN = 'salesList',
   MAIN_TITLE = 'salesListTitle',

@@ -7,20 +7,22 @@ import {
   type GridPanel,
   MergeManager,
 } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE, CRUD_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem } from '@shared/lges';
+import { Button, FormItem, ProgressIndicator } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { EXCHANGE_CATE, MENU_ID, MSG, SHEETS } from '../../business-plan.constants';
 import { callSaveExchangeRate } from '../../utils/business-plan.api';
+import { enumerateYyyymm } from '../../utils/business-plan.exchangePeriod';
 
 import styles from './ExchangeRateModal.module.scss';
 import { useExchangeRateModalStore } from './exchangeRateModalStore';
@@ -90,6 +92,8 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   const setAlert = useMessageStore.getState().setAlert;
   const setToast = useMessageStore.getState().setToast;
   const gridRef = useRef<FlexGridType<PivotRow>>(undefined);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
   // 확정 조회조건(Division/기간) — useTabProcQuery filters 참조 안정화 원천
   const applied = useExchangeRateModalStore(state => state.applied);
   const setApplied = useExchangeRateModalStore(state => state.setApplied);
@@ -117,12 +121,14 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
   const periodFrom = applied.periodFrom;
   const periodTo = applied.periodTo;
 
-  // Insert 신규 행 (AS-IS InsertRow — Division 고정 + Currency/Unit 콤보 편집)
-  const [insertedRows, setInsertedRows] = useState<PivotRow[]>([]);
+  // 표시 행 = 조회행(pivot) + Insert 신규행 + 삭제표식('D') 행. 단일 상태로 들고 Insert(선택 위치 splice)/
+  //   Delete(기존행은 CRUD_TYPE='D' 표식으로 화면에 남기고, 미저장 Insert 행은 즉시 제거)를 직접 반영한다.
+  //   조회·재조회·재오픈으로 pivotRows 가 새로 생기면 아래 재동기화 effect 가 이 상태를 pivotRows 로 되돌린다.
+  const [rows, setRows] = useState<PivotRow[]>([]);
 
-  const clearEdits = () => {
-    setInsertedRows([]);
-  };
+  // 삭제 대상은 별도 상태 없이 rows 안에서 CRUD_TYPE='D' 표식으로 들고 있다가 Save 시 active_flag='D' 로
+  //   전송한다(SP DELETE 지원 — P_DMF0042_SAVE_DM_BP_EXCHANGE_RATE). 표식/편집/Insert 초기화는 openSeq
+  //   증가 → pivotRows 재생성 → 아래 재동기화 effect 가 rows 를 새 pivotRows 로 되돌리며 일괄 수행한다.
 
   // ⭐ 모달 오픈 회차 — pivot 재생성 트리거 (2026-08-07 "닫았다 열어도 M 표식/편집값이 남는다").
   //   그리드는 행 객체를 **직접 변형**한다. react-query 는 재오픈 시 같은 data 객체를 캐시에서
@@ -141,8 +147,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
         periodTo: defaultPeriod.end,
       });
       setSavedAny(false);
-      clearEdits();
-      setOpenSeq(n => n + 1); // 오염된 행 객체 폐기 → pivot 재생성 (위 openSeq 주석)
+      setOpenSeq(n => n + 1); // 오염된 행 객체 폐기 → pivot 재생성 → 재동기화 effect 가 rows 초기화
     }
   }, [open, defaultDivision, defaultPeriod, setApplied]);
 
@@ -161,23 +166,33 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     [divisionId, startYyyymmdd, endYyyymmdd, sesUserId]
   );
   // ⭐ 자동조회 — enabled=open (모달 자동조회 표준. Find 버튼은 재조회용)
-  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.FUTURE_PRICE_DATA>({
+  const { data, refetch, isLoading, isFetching } = useTabProcQuery<
+    MENU_ID,
+    SHEETS.FUTURE_PRICE_DATA
+  >({
     menuId: MENU_ID,
     sheetName: SHEETS.FUTURE_PRICE_DATA,
     tabId: MENU_ID,
     filters,
     enabled: open,
   });
+  const loading = isLoading || isFetching;
 
   const allRows = useMemo<ExchangeRow[]>(
     () => (data as { data?: ExchangeRow[] } | undefined)?.data ?? [],
     [data]
   );
 
+  // 조회 기간 전체의 월 목록 — 헤더 기준 (AS-IS InitSpread 의 SPREAD_TITLE SP 대응. util 주석 참조).
+  //   데이터가 있는 월만 모으면 종료월 전에 환율이 끊겼을 때 헤더도 거기서 잘린다(사용자 보고 2026-09-01).
+  const periodYmKeys = useMemo(() => enumerateYyyymm(periodFrom, periodTo), [periodFrom, periodTo]);
+
   // ===== long → wide pivot (2단 헤더 YYYY/MM — 정본 구조 1:1) =====
   const { pivotRows, ymKeys, origins } = useMemo(() => {
     const groupMap = new Map<string, PivotRow>();
-    const ymSet = new Set<string>();
+    // 조회 기간의 모든 월을 먼저 담는다 = 값이 없는 월도 빈 컬럼으로 헤더에 남는다.
+    //   빈 컬럼은 origins 에 키가 없어 원본 0 으로 판정되므로 collectEdits 가 변경분으로 오인하지 않는다.
+    const ymSet = new Set<string>(periodYmKeys);
     // ⭐ 행 → (ym → 서버 원본값). 편집을 원래 값으로 되돌렸는지 판정하는 유일한 기준.
     //   키가 **없으면 원래 빈 셀** — 이 구분이 중요하다(빈 셀에 입력했다 지우면 0 이 아니라 '없음').
     const origins = new Map<PivotRow, Map<string, number>>();
@@ -222,7 +237,7 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     return { pivotRows: list, ymKeys: [...ymSet].sort(), origins };
     // openSeq — 재오픈 시 오염된 행 객체를 버리고 새로 만든다 (선언부 주석 참조).
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allRows, openSeq]);
+  }, [allRows, openSeq, periodYmKeys]);
 
   // ⭐ 원본 스냅샷 ref — 핸들러/저장이 effect dep 밖에서 참조한다.
   const originsRef = useRef<Map<PivotRow, Map<string, number>>>(new Map());
@@ -253,6 +268,9 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     for (let i = 0; i < g.rows.length; i++) {
       const item = g.rows[i]?.dataItem as PivotRow | undefined;
       if (!item) continue;
+      // 삭제 표식('D') 행은 편집 수집·M 재판정 대상에서 제외한다 — 표식이 유지되고, 이 행의 셀 값
+      //   변화는 저장 payload 에 M 으로 새어 나가지 않는다(삭제분은 handleSave 가 origins 로 조립).
+      if (item.CRUD_TYPE === CRUD_TYPE.DELETE) continue;
       const om = originsRef.current.get(item);
       let changed = false;
       for (const ym of yms) {
@@ -269,8 +287,13 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
     return out;
   };
 
-  // 조회 행 + Insert 신규 행 (저장 성공/재조회/모달 재오픈 시 초기화)
-  const displayRows = useMemo(() => [...pivotRows, ...insertedRows], [pivotRows, insertedRows]);
+  // pivotRows 재생성(조회·재조회·재오픈 openSeq) 시 표시행 재동기화 — 미저장 Insert/삭제표식('D') 폐기.
+  useEffect(() => {
+    setRows(pivotRows);
+  }, [pivotRows]);
+
+  // 그리드 표시 행 = rows 상태 그대로 (조회행 + Insert 신규행, Delete 반영된 최종 목록).
+  const displayRows = rows;
 
   const fixedBindings = useMemo(() => EXCHANGE_COLUMNS.map(c => c.key), []);
 
@@ -290,8 +313,11 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
           //   ⚠ MANDATORY(IM) 가 아니라 OPTIONAL(IO) 을 쓴다 — IM 은 헤더에 필수 빨간점(is-required)을
           //     그리는데, 그 표식은 행과 무관하게 컬럼 전체에 붙어 조회 행까지 편집 가능해 보인다.
           //     필수 검증은 handleSave 의 Insert 행 검사가 담당하므로 표식만 뺀다 (2026-08-06).
+          // Currency 는 KRW 고정·수정 불가 (SEARCH_ONLY — Division 과 동일. 2026-09-02 사용자 요구).
+          //   Insert 행에서 편집 가능한 것은 Unit Currency 뿐이다. 표시용 콤보 dataMap 은 유지(아래)라
+          //   기존 조회행의 통화 코드→명 표시는 그대로다.
           inputTpCd:
-            c.key === 'DIVISION_ID'
+            c.key === 'DIVISION_ID' || c.key === 'CURRENCY'
               ? CELL_INPUT_EDIT_TYPE.SEARCH_ONLY
               : CELL_INPUT_EDIT_TYPE.OPTIONAL_INSERT_ONLY,
           // ⭐⭐ Currency/Unit 콤보 = **wrapper 정식 경로**로 위임 (2026-08-06 — 수동 부착 3회 실패 후 전환).
@@ -563,30 +589,57 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       });
       return;
     }
-    clearEdits();
-    setOpenSeq(n => n + 1); // 편집으로 오염된 행 객체 폐기 (아래 handleSave 와 동일 사유)
+    setOpenSeq(n => n + 1); // 편집·삭제표식 폐기 → pivot 재생성 → 재동기화 effect 가 rows 초기화
     void refetch?.();
   };
 
-  // ⭐ Insert — Division 은 조회조건 값 고정, Currency/Unit 은 그리드 콤보로 입력 (AS-IS InsertRow 1:1)
+  // ⭐ Insert — Division/Currency(KRW) 고정, Unit 만 편집. 선택행 위치에 삽입해 선택행을 아래로 민다
+  //   (= 선택행 상단 추가. 2026-09-02 사용자 요구). 선택이 없으면 맨 끝에 붙인다.
   const handleInsert = () => {
-    setInsertedRows(prev => [
-      ...prev,
-      // Currency 기본값 KRW — 대부분의 등록이 KRW 라 매번 고르지 않게 한다 (2026-08-25 사용자 요구).
-      //   'CurrencyList' 콤보에 있는 코드라 드롭다운 표시/재선택 모두 정상이다.
-      {
-        DIVISION_ID: divisionId,
-        CURRENCY: 'KRW',
-        UNIT_CURRENCY: '',
-        EDIT_FLAG: 'Y',
-        CRUD_TYPE: 'I',
-      },
-    ]);
+    const newRow: PivotRow = {
+      DIVISION_ID: divisionId,
+      // Currency = KRW 고정 (컬럼도 SEARCH_ONLY 라 수정 불가). 'CurrencyList' 콤보의 코드라 표시 정상.
+      CURRENCY: 'KRW',
+      UNIT_CURRENCY: '',
+      EDIT_FLAG: 'Y',
+      CRUD_TYPE: 'I',
+    };
+    const sel = gridRef.current?.selection?.row ?? -1;
+    setRows(prev => {
+      const idx = sel >= 0 && sel <= prev.length ? sel : prev.length;
+      const copy = [...prev];
+      copy.splice(idx, 0, newRow);
+      return copy;
+    });
   };
 
-  // ⭐ 저장 — '^' bulk 6키 (DMF0042_SAVE_DM_BP_EXCHANGE_RATE — activeFlag='M'/yyyymmdd=월 1일)
+  // ⭐ Delete — 선택행 처리 (2026-09-02 사용자 요구). 기존(DB) 행은 화면에서 지우지 않고 상태 컬럼에
+  //   'D'(빨강) 표식만 남기고, 실제 삭제는 Save 시 active_flag='D' 로 전송한다(SP DELETE 지원). 미저장
+  //   Insert 행은 DB 에 없으니 즉시 제거한다(표식 불필요). 선택이 없으면 안내.
+  const handleDelete = () => {
+    const sel = gridRef.current?.selection?.row ?? -1;
+    const target = sel >= 0 ? rows[sel] : undefined;
+    if (!target) {
+      // 사용자 지정 문구(리터럴) — 별도 등록 MSG 없음.
+      void setAlert({ type: 'alert', content: '삭제할 행을 선택해 주세요.' });
+      return;
+    }
+    if (target.CRUD_TYPE === CRUD_TYPE.INSERT) {
+      setRows(prev => prev.filter(r => r !== target));
+      return;
+    }
+    // 기존 행: CRUD_TYPE='D' 표식만 (행 객체 직접 변형 → 상태 컬럼 dataset.status='D'). 새 배열로
+    //   재렌더 + invalidate 로 상태 표시를 즉시 갱신한다.
+    target.CRUD_TYPE = CRUD_TYPE.DELETE;
+    setRows(prev => [...prev]);
+    gridRef.current?.invalidate();
+  };
+
+  // ⭐ 저장 — '^' bulk 6키 (DMF0042_SAVE_DM_BP_EXCHANGE_RATE — activeFlag='I'/'M'/'D', yyyymmdd=월 1일)
   const handleSave = async () => {
-    // (1) Insert 행 필수값 — Currency/Unit 미선택 차단 (AS-IS SaveData 첫 결손 필드 알림 1:1)
+    // Insert 신규행 = rows 중 CRUD_TYPE='I' (모델이 단일 rows 상태로 통합됨).
+    const insertedRows = rows.filter(r => r.CRUD_TYPE === CRUD_TYPE.INSERT);
+    // (1) Insert 행 필수값 — Currency(KRW 고정) / Unit 미선택 차단 (AS-IS SaveData 첫 결손 필드 알림 1:1)
     for (const r of insertedRows) {
       const missing = !r.CURRENCY ? '[Currency]' : !r.UNIT_CURRENCY ? '[Unit Currency]' : '';
       if (missing) {
@@ -597,37 +650,46 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
         return;
       }
     }
-    // (2) 키 중복 차단 — 조회 행/다른 Insert 행과 Division|Currency|Unit 이 겹치면 저장 후 어느 쪽이
-    //   남는지 알 수 없다. 저장 전에 막는다.
-    const seen = new Set(pivotRows.map(r => `${r.DIVISION_ID}|${r.CURRENCY}|${r.UNIT_CURRENCY}`));
+    // (2) 키 중복 차단 — 남아 있는 조회 행/다른 Insert 행과 Division|Currency|Unit 이 겹치면 막는다.
+    //   삭제 표식('D') 행은 곧 삭제되므로 대상에서 제외한다(삭제 후 같은 키 재삽입 허용).
+    const existingRows = rows.filter(
+      r => r.CRUD_TYPE !== CRUD_TYPE.INSERT && r.CRUD_TYPE !== CRUD_TYPE.DELETE
+    );
+    const seen = new Set(
+      existingRows.map(r => `${r.DIVISION_ID}|${r.CURRENCY}|${r.UNIT_CURRENCY}`)
+    );
     for (const r of insertedRows) {
       const key = `${r.DIVISION_ID}|${r.CURRENCY}|${r.UNIT_CURRENCY}`;
       if (seen.has(key)) {
-        void setAlert({
-          type: 'alert',
-          content: t(MSG.DUPLICATE_KEY, '_저장시 중복 오류가 발생하였습니다.{0}').replace(
-            '{0}',
-            ` ${key}`
-          ),
-        });
+        // 사용자 지정 문구(리터럴) — 별도 등록 MSG 없음 (2026-09-02 사용자 요구).
+        void setAlert({ type: 'alert', content: '중복된 데이터가 있습니다' });
         return;
       }
       seen.add(key);
     }
-    // (3) 변경 셀 수집 — ⭐ 저장 시점에 **그리드에서 직접** 계산한다 (editsRef 신뢰 금지).
-    //   편집 이벤트가 한 번도 안 불린 경우에도 화면에 보이는 변경이 그대로 저장 대상이 된다.
-    const edits = collectEdits(gridRef.current);
-    if (edits.length === 0) {
+    // (3) 저장 엔트리 = 편집분 + 삭제분. 편집분은 그리드에서 직접 계산(editsRef 신뢰 금지 — 이벤트
+    //   미발화여도 화면에 보이는 변경이 대상). 삭제분은 CRUD_TYPE='D' 표식 행마다 서버 원본(origins)의
+    //   모든 월에 대해 'D' 로 조립한다(SP DELETE 는 keyset + YYYYMMDD 매칭).
+    type SaveEntry = { row: PivotRow; ym: string; value: number; flag: 'I' | 'M' | 'D' };
+    const editEntries: SaveEntry[] = collectEdits(gridRef.current).map(e => ({
+      ...e,
+      // Insert 행 'I' / 기존 행 'M' (AS-IS sActionFlag).
+      flag: e.row.CRUD_TYPE === CRUD_TYPE.INSERT ? 'I' : 'M',
+    }));
+    const deleteEntries: SaveEntry[] = [];
+    for (const dr of rows.filter(r => r.CRUD_TYPE === CRUD_TYPE.DELETE)) {
+      const om = originsRef.current.get(dr);
+      if (om)
+        for (const [ym, price] of om) deleteEntries.push({ row: dr, ym, value: price, flag: 'D' });
+    }
+    const entries = [...editEntries, ...deleteEntries];
+    if (entries.length === 0) {
       void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
       return;
     }
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
-    const join = (sel: (e: (typeof edits)[number]) => string): string => edits.map(sel).join('^');
+    const join = (sel: (e: SaveEntry) => string): string => entries.map(sel).join('^');
     const res = await callSaveExchangeRate({
-      // ⭐ 행 단위 flag — Insert 행 'I' / 기존 행 'M' (AS-IS sActionFlag).
-      //   ⚠ 동기화 과정에서 `() => 'M'` 고정으로 되돌아가 있었다 — 그러면 Insert 로 추가한 신규 통화가
-      //     UPDATE 대상으로 나가 매칭 0건으로 조용히 사라진다 (2026-08-07 재적용).
-      activeFlag: join(e => (e.row.CRUD_TYPE === 'I' ? 'I' : 'M')),
+      activeFlag: join(e => e.flag),
       divisionId: join(e => e.row.DIVISION_ID),
       yyyymmdd: join(e => `${e.ym}01`),
       currency: join(e => e.row.CURRENCY),
@@ -644,7 +706,6 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
       return;
     }
     void setToast({ message: t(MSG.SAVED, '_성공적으로 저장되었습니다.'), type: 'success' });
-    clearEdits();
     // ⭐ 저장 후에도 행 객체를 새로 만든다 (2026-08-07). refetch 가 **같은 data 객체**를 돌려주면
     //   pivot useMemo 가 재실행되지 않아 CRUD_TYPE='M' 이 붙은 옛 행이 그대로 남는다 —
     //   "저장했는데 수정 표식이 안 사라진다" 경로. openSeq 를 올려 강제로 재생성한다.
@@ -682,9 +743,11 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
             onSearch={handleFind}
             conditions={
               <>
-                <Grid size={6}>
+                {/* size 4 — 값이 division 1건 고정이라 6칸(약 600px)은 과하다. 가장 긴 표기
+                    '40 (40 Mobility & IT Battery)' 가 잘리지 않는 선까지만 줄인다 (2026-09-02). */}
+                <Grid size={4}>
                   <FormItem
-                    label={t('LBL00663', 'Div')}
+                    label={t('LBL00001', 'Div')}
                     labelAlign='right'
                     render={() => (
                       // ⭐ 화면 division 고정 — 비활성 (2026-08-06 사용자 지시. Ver. Cutoff 모달과 동일 규약).
@@ -714,17 +777,31 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
           />
 
           <div className={styles.gridWrapper}>
-            <DataGrid<PivotRow>
-              gridRef={gridRef}
-              className={styles.grid}
-              itemsSource={displayRows}
-              staticColumns={gridStaticColumns}
-              dynamicColumns={gridDynamicColumns}
-              autoGenerateColumns={false}
-              frozenColumns={fixedBindings.length}
-              allowSorting={false}
-              allowMerging={AllowMerging.All}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea
+              title=''
+              count={displayRows.length}
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<PivotRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                className={styles.grid}
+                itemsSource={displayRows}
+                staticColumns={gridStaticColumns}
+                dynamicColumns={gridDynamicColumns}
+                autoGenerateColumns={false}
+                frozenColumns={fixedBindings.length}
+                allowSorting={false}
+                allowMerging={AllowMerging.All}
+              />
+            </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
             {canSave && (
@@ -734,6 +811,15 @@ export const ExchangeRateModal = ({ open, modalClose, defaultDivision, defaultPe
                 size='medium'
                 buttonLabel='Insert'
                 onClick={handleInsert}
+              />
+            )}
+            {canSave && (
+              <Button
+                appearance='outlined'
+                priority='normal'
+                size='medium'
+                buttonLabel='Delete'
+                onClick={handleDelete}
               />
             )}
             {canSave && (

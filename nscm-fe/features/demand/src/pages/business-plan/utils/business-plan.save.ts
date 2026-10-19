@@ -28,7 +28,7 @@ import { dynKindOf } from './business-plan.editLock';
 // SAVE 한 row(= 행 × 기간셀) 의 원시 값 — 모든 키는 PKG SP positional 매핑
 //   (19키. 감사 2키는 행 무관 세션값이라 buildSavePayload 가 행 수만큼 붙인다).
 export interface SaveUnfoldRow {
-  activeFlag: string; // 'I'(신규) / 'M'(수정) / 'D'(0값 — 셀 단위 삭제 전환)
+  activeFlag: string; // 'I'(신규) / 'M'(수정) — 0·빈칸도 값 0 으로 저장(삭제 전환 없음)
   divisionId: string;
   projectCode: string; // 40=END_CUSTOMER40 값 / 81=PROJECT_CODE / 82=PROJECT_CODE82
   projectName: string;
@@ -100,7 +100,7 @@ const identityOf = (
 
 /**
  * 변경된 행/셀 → SaveUnfoldRow 목록 (+ 조립 단계 검증 — 중복 키 MSG00043).
- *   - 신규 행(insertedRows): M_ 값 존재 셀 전량 → 'I' (0값 → 'D').
+ *   - 신규 행(insertedRows): M_ 값 존재 셀 전량 → 'I' (0 도 그대로 'I').
  *   - 수정 행(editedChanges): EditTracker 추적 셀 중 M_ 만 → 'M' (배분 엔진이 Q_/Y_ 입력을 M_ 로 환산 완료).
  *
  * 금지: 수량(Business_Plan)을 고칠 때 같은 월의 단가(LOC)를 짝으로 함께 보내기.
@@ -111,8 +111,8 @@ const identityOf = (
  *     `NOT EXISTS`(화면이 이미 LOC 를 보냈으면 보완 안 함) 로 중복을 막는다.
  *   반대 방향(LOC 만 수정)도 금액 계산이 성립한다 — SalesAmt INSERT(L1290~1367)가 수량을
  *   원장 FCST 에서 읽어 `FCST.QTY * TMP.QTY` 로 만들기 때문이다.
- *   짝 전송을 FE 로 되돌리면, 값이 비어 있는 LOC 칸이 `qty '0' → activeFlag 'D'` 규칙에 걸려
- *   원장의 단가 행을 지우고(SP L830~868 — MEASURE 포함 키 삭제) 그 달 금액 계산까지 건너뛴다.
+ *   짝 전송을 FE 로 되돌리면, 값이 비어 있는 LOC 칸이 qty '0' 으로 나가 원장의 단가를 0 으로
+ *   덮어쓴다(그 달 금액이 0 이 된다).
  *   SalesAmt·KRW·USD·CAR_QTY 는 SP 산출이라 FE 가 보내지 않는다 — AS-IS 도 InsertRow L1419~1424
  *   에서 그 행들의 수량영역을 통째로 잠가 입력 자체를 막는다.
  */
@@ -129,7 +129,9 @@ export const buildUnfoldRows = (params: {
     const yyyymm = binding.slice(2);
     const qty = qtyOf(row[binding]);
     out.push({
-      activeFlag: qty === '0' ? 'D' : rowFlag, // 값 '0' → 'D' 전환 (셀 단위 삭제)
+      // 0 도 값으로 저장한다 (사용자 요청 2026-10-01 — 종전 '0' → 'D' 셀 단위 삭제 전환 제거).
+      //   빈칸으로 지운 셀도 qtyOf 가 '0' 으로 바꿔 0 으로 저장된다. 삭제는 Delete 행 표시로만 한다.
+      activeFlag: rowFlag,
       ...identityOf(row, divisionId),
       yyyymm,
       qty,
@@ -148,7 +150,7 @@ export const buildUnfoldRows = (params: {
     }
   }
 
-  // (2) 수정 행 — EditTracker 변경 셀 중 M_ 만 (현재 값 전송 — 빈 셀 '0'→'D' 포함)
+  // (2) 수정 행 — EditTracker 변경 셀 중 M_ 만 (현재 값 전송 — 빈 셀은 0 으로 저장)
   for (const [row, changedBindings] of editedChanges) {
     if (row.CRUD_TYPE === 'I') continue; // 신규는 (1) 에서 처리
     const rec = row as Rec;

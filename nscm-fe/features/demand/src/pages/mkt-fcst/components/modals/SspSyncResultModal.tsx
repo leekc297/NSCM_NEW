@@ -1,7 +1,9 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
-import { useRef } from 'react';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { useEffect, useRef } from 'react';
 
-import { DataGrid, CustomDialog } from '@shared/components';
+import { attachRowNoHeader } from '@foundation/utils';
+import { DataGrid, CustomDialog, ResultArea } from '@shared/components';
 import { Button } from '@shared/lges';
 
 import styles from '../../MktFcst.module.scss';
@@ -27,6 +29,12 @@ interface SspSyncResultModalProps {
 export const SspSyncResultModal = ({ open, modalClose, rows }: SspSyncResultModalProps) => {
   const { t } = useTranslation();
   const gridRef = useRef<FlexGrid<SspSyncResultRow>>();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
+
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, rows]);
 
   return (
     <CustomDialog
@@ -35,6 +43,10 @@ export const SspSyncResultModal = ({ open, modalClose, rows }: SspSyncResultModa
       position='basic'
       open={open}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -44,12 +56,15 @@ export const SspSyncResultModal = ({ open, modalClose, rows }: SspSyncResultModa
       customContentArea={
         <div className={styles.modalContentWrapper}>
           <div className={styles.modalGridWrapper}>
-            <DataGrid<SspSyncResultRow>
-              gridRef={gridRef}
-              isReadOnly
-              staticColumns={SSP_SYNC_COLUMNS}
-              itemsSource={rows}
-            />
+            <ResultArea title='' count={rows.length} gridRef={gridRef} gridFilterRef={gridFilterRef}>
+              <DataGrid<SspSyncResultRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                staticColumns={SSP_SYNC_COLUMNS}
+                itemsSource={rows}
+              />
+            </ResultArea>
           </div>
           <div className={styles.modalButtonWrapper}>
             <Button

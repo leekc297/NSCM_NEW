@@ -1,0 +1,754 @@
+{
+ "DMF0074": [
+  {
+   "no": 0,
+   "cid": "OK-N",
+   "title": "정상 (Metal Link=N)",
+   "expect": "(정상 — Error 0)",
+   "note": "기준행. C19 는 금주 MRF(SP_W ATTRIBUTE7=Y) 버전의 SPW 원장 존재에 의존 — 사내 2026-08-27 실측: MRF 버전(SP_W_20260728_V002)에 PLAN_C/RESULT_C 0행 → 이 상태에선 'Invalid Sales Plan Waterfall MODEL.' 로 반려된다(데이터 상태 이슈·규칙 결함 아님)",
+   "rows": 1
+  },
+  {
+   "no": 0,
+   "cid": "OK-Y",
+   "title": "정상 (Metal Link=Y, Ni 1종 완전입력)",
+   "expect": "(정상 — Error 0)",
+   "note": "OK-N 과 동일 전제",
+   "rows": 1
+  },
+  {
+   "no": 1,
+   "cid": "C2",
+   "title": "Div 공란",
+   "expect": "(SKIP 1건 — 오류 아님)",
+   "note": "[E20260831-REGEN] 기대값을 실측 기준으로 정정 — SP 의 'NULL DIVISION.' 체크는 실존하나(BODY L1272), BE 가 Division 공란 행을 스테이징에서 UPLOAD_STATUS_CODE='SKIP' 으로 선처리해 SP 검증(UPLOAD 행 대상)에 도달하지 않음(2026-08-27 실측 SKIP:1). 화면 표기는 SKIP 카운트",
+   "rows": 1
+  },
+  {
+   "no": 2,
+   "cid": "C2",
+   "title": "Plan Date 공란",
+   "expect": "NULL PLAN DATE.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 3,
+   "cid": "C2",
+   "title": "End Customer 공란",
+   "expect": "NULL END CUSTOMER.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 4,
+   "cid": "C2",
+   "title": "Project Code 공란",
+   "expect": "NULL PROJECT CODE.",
+   "note": "division 40 양식(DMF0074_40)에는 Project Code 열이 없어 대상 외 — 81/82(55열 DMF0074 양식)에서만 발생",
+   "rows": 0
+  },
+  {
+   "no": 5,
+   "cid": "C2",
+   "title": "Sales Site 공란",
+   "expect": "NULL SALES SITE.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 6,
+   "cid": "C2",
+   "title": "Currency 공란",
+   "expect": "NULL CURRENCY.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 7,
+   "cid": "C2",
+   "title": "FCST type 공란",
+   "expect": "NULL FCST TYPE.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 8,
+   "cid": "C2",
+   "title": "Metal Link 공란",
+   "expect": "NULL Metal Link.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 9,
+   "cid": "C2",
+   "title": "Team 공란 (체크 제외)",
+   "expect": "(정상 — Team 은 필수 체크 제외)",
+   "note": "[PJ2024-50461] Team 미관리 — 오류 없이 통과해야 함(마커 없음)",
+   "rows": 1
+  },
+  {
+   "no": 10,
+   "cid": "C3",
+   "title": "금주 MRF 버전 없음",
+   "expect": "There is no version of Monthly Rolling Forest:Y in Sales Plan Waterfall this week.",
+   "note": "DM_MST_VERSION(SP_W, ATTRIBUTE7='Y') 에 해당 division 버전이 없어야 발생 — 데이터 상태로만 재현 가능(40/81/82 모두 MRF 버전 보유). 파일로 유발 불가",
+   "rows": 0
+  },
+  {
+   "no": 11,
+   "cid": "C4",
+   "title": "Metal Link=Y + Key 7종 전부 공란",
+   "expect": "NULL APPLY PRICE TYPE CODE.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 12,
+   "cid": "C5",
+   "title": "Key_Ni 미등재 코드",
+   "expect": "Invalid KEY CODE : Ni",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 13,
+   "cid": "C6",
+   "title": "Key_Co 미등재 코드",
+   "expect": "Invalid KEY CODE : Co",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 14,
+   "cid": "C7",
+   "title": "Key_Li2CO3 미등재 코드",
+   "expect": "Invalid KEY CODE : Li2CO3",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 15,
+   "cid": "C8",
+   "title": "Key_LIOH 미등재 코드",
+   "expect": "Invalid KEY CODE : LIOH",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 16,
+   "cid": "C9",
+   "title": "Key_Al 미등재 코드",
+   "expect": "Invalid KEY CODE : Al",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 17,
+   "cid": "C10",
+   "title": "Key_Mn 미등재 코드",
+   "expect": "Invalid KEY CODE : Mn",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 18,
+   "cid": "C11",
+   "title": "Key_Cu 미등재 코드",
+   "expect": "Invalid KEY CODE : Cu",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 19,
+   "cid": "C12",
+   "title": "8키 동일 중복 2행",
+   "expect": "Duplication Model.",
+   "note": "결함 D3 정정(2026-08-16) 후 40 에서도 검출",
+   "rows": 2
+  },
+  {
+   "no": 20,
+   "cid": "C13",
+   "title": "Plan Date 형식 오류",
+   "expect": "Invalid Date Format.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 21,
+   "cid": "C14",
+   "title": "Plan Date 과거월",
+   "expect": "Past Date.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 22,
+   "cid": "C15",
+   "title": "End Customer 미등재",
+   "expect": "Invalid END CUSTOMER.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 23,
+   "cid": "C15",
+   "title": "Project Code 미등재",
+   "expect": "Invalid PROJECT CODE.",
+   "note": "division 40 대상 외 (Project Code 열 없음)",
+   "rows": 0
+  },
+  {
+   "no": 24,
+   "cid": "C16",
+   "title": "Model 미등재",
+   "expect": "Invalid MODEL.",
+   "note": "결함 D1 정정 후 발동",
+   "rows": 1
+  },
+  {
+   "no": 25,
+   "cid": "C17",
+   "title": "82 ENERGY 없는 모델",
+   "expect": "Invalid MODEL : NULL ENERGY",
+   "note": "division 82 전용 — 40 양식 대상 외",
+   "rows": 0
+  },
+  {
+   "no": 26,
+   "cid": "C18",
+   "title": "제품(P) 아닌 모델",
+   "expect": "Invalid MODEL : TYPE P.",
+   "note": "APCCA3173A = SITE_ITEM(IM/IM_US_TXT) 등재(C16 통과) + DM_MST_ITEM_SINGLE_V ITEM_TYPE='H'(제품 P 아님) — 2026-08-27 실측",
+   "rows": 1
+  },
+  {
+   "no": 27,
+   "cid": "C19",
+   "title": "SPW 조합 불일치 (Currency 만 다름)",
+   "expect": "Invalid Sales Plan Waterfall MODEL.",
+   "note": "EUR 은 환율 등재 통화라 C22 통과 → SPW 조합(USD)만 불일치. D5 정정 후에도 C19 로 표기되는 정상 케이스",
+   "rows": 1
+  },
+  {
+   "no": 28,
+   "cid": "C20",
+   "title": "Metal Link 코드 오류",
+   "expect": "Invalid Metal Link.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 29,
+   "cid": "C21",
+   "title": "Sales Site 미등재",
+   "expect": "Invalid Sales Site.",
+   "note": "D5 정정 전엔 C19 메시지로 마스킹(TC14) — 정정 후 구체 메시지",
+   "rows": 1
+  },
+  {
+   "no": 30,
+   "cid": "C22",
+   "title": "Currency 미등재",
+   "expect": "Invalid CURRENCY.",
+   "note": "D5 정정 전엔 C19 마스킹(TC15)",
+   "rows": 1
+  },
+  {
+   "no": 31,
+   "cid": "C23",
+   "title": "FCST type 미등재",
+   "expect": "Invalid FCST TYPE.",
+   "note": "D5 정정 전엔 C19 마스킹(TC16)",
+   "rows": 1
+  },
+  {
+   "no": 32,
+   "cid": "C24",
+   "title": "Exception 코드 오류",
+   "expect": "Invalid EXCEPTION.",
+   "note": "결함 D2 정정 후 발동",
+   "rows": 1
+  },
+  {
+   "no": 33,
+   "cid": "C25",
+   "title": "(GTT 적재 단계)",
+   "expect": "-",
+   "note": "검증이 아니라 C26~C39 판정 기준(미사용/미연동 코드) 수집 단계 — 케이스 없음",
+   "rows": 0
+  },
+  {
+   "no": 34,
+   "cid": "C26",
+   "title": "Key_Ni 미연동인데 값 입력",
+   "expect": "NEED EMPTY VALUE - Ni : Period(Fr)",
+   "note": "메시지는 '먼저 걸린 항목명' 접미 — Period(Fr) 만 입력해 Period(Fr) 로 고정",
+   "rows": 1
+  },
+  {
+   "no": 35,
+   "cid": "C27",
+   "title": "Key_Co 미연동인데 값 입력",
+   "expect": "NEED EMPTY VALUE - Co : Period(Fr)",
+   "note": "메시지는 '먼저 걸린 항목명' 접미 — Period(Fr) 만 입력해 Period(Fr) 로 고정",
+   "rows": 1
+  },
+  {
+   "no": 36,
+   "cid": "C28",
+   "title": "Key_Li2CO3 미연동인데 값 입력",
+   "expect": "NEED EMPTY VALUE - Li2CO3 : Period(Fr)",
+   "note": "메시지는 '먼저 걸린 항목명' 접미 — Period(Fr) 만 입력해 Period(Fr) 로 고정",
+   "rows": 1
+  },
+  {
+   "no": 37,
+   "cid": "C29",
+   "title": "Key_LIOH 미연동인데 값 입력",
+   "expect": "NEED EMPTY VALUE - LIOH : Period(Fr)",
+   "note": "메시지는 '먼저 걸린 항목명' 접미 — Period(Fr) 만 입력해 Period(Fr) 로 고정",
+   "rows": 1
+  },
+  {
+   "no": 38,
+   "cid": "C30",
+   "title": "Key_Al 미연동인데 값 입력",
+   "expect": "NEED EMPTY VALUE - Al : Period(Fr)",
+   "note": "메시지는 '먼저 걸린 항목명' 접미 — Period(Fr) 만 입력해 Period(Fr) 로 고정",
+   "rows": 1
+  },
+  {
+   "no": 39,
+   "cid": "C31",
+   "title": "Key_Mn 미연동인데 값 입력",
+   "expect": "NEED EMPTY VALUE - Mn : Period(Fr)",
+   "note": "메시지는 '먼저 걸린 항목명' 접미 — Period(Fr) 만 입력해 Period(Fr) 로 고정",
+   "rows": 1
+  },
+  {
+   "no": 40,
+   "cid": "C32",
+   "title": "Key_Cu 미연동인데 값 입력",
+   "expect": "NEED EMPTY VALUE - Cu : Period(Fr)",
+   "note": "메시지는 '먼저 걸린 항목명' 접미 — Period(Fr) 만 입력해 Period(Fr) 로 고정",
+   "rows": 1
+  },
+  {
+   "no": 41,
+   "cid": "C33",
+   "title": "Key_Ni 유효인데 5값 공란",
+   "expect": "NULL Ni : Period(Fr)",
+   "note": "division 앞2자리 81 제외(40 은 대상). 메시지 접미 = 먼저 걸린 항목 Period(Fr)",
+   "rows": 1
+  },
+  {
+   "no": 42,
+   "cid": "C34",
+   "title": "Key_Co 유효인데 5값 공란",
+   "expect": "NULL Co : Period(Fr)",
+   "note": "division 앞2자리 81 제외(40 은 대상). 메시지 접미 = 먼저 걸린 항목 Period(Fr)",
+   "rows": 1
+  },
+  {
+   "no": 43,
+   "cid": "C35",
+   "title": "Key_Li2CO3 유효인데 5값 공란",
+   "expect": "NULL Li2CO3 : Period(Fr)",
+   "note": "division 앞2자리 81 제외(40 은 대상). 메시지 접미 = 먼저 걸린 항목 Period(Fr)",
+   "rows": 1
+  },
+  {
+   "no": 44,
+   "cid": "C36",
+   "title": "Key_LIOH 유효인데 5값 공란",
+   "expect": "NULL LIOH : Period(Fr)",
+   "note": "division 앞2자리 81 제외(40 은 대상). 메시지 접미 = 먼저 걸린 항목 Period(Fr)",
+   "rows": 1
+  },
+  {
+   "no": 45,
+   "cid": "C37",
+   "title": "Key_Al 유효인데 5값 공란",
+   "expect": "NULL Al : Period(Fr)",
+   "note": "division 앞2자리 81 제외(40 은 대상). 메시지 접미 = 먼저 걸린 항목 Period(Fr)",
+   "rows": 1
+  },
+  {
+   "no": 46,
+   "cid": "C38",
+   "title": "Key_Mn 유효인데 5값 공란",
+   "expect": "NULL Mn : Period(Fr)",
+   "note": "division 앞2자리 81 제외(40 은 대상). 메시지 접미 = 먼저 걸린 항목 Period(Fr)",
+   "rows": 1
+  },
+  {
+   "no": 47,
+   "cid": "C39",
+   "title": "Key_Cu 유효인데 5값 공란",
+   "expect": "NULL Cu : Period(Fr)",
+   "note": "division 앞2자리 81 제외(40 은 대상). 메시지 접미 = 먼저 걸린 항목 Period(Fr)",
+   "rows": 1
+  },
+  {
+   "no": 48,
+   "cid": "C40",
+   "title": "Period 비숫자",
+   "expect": "Invalid NUMERIC.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 49,
+   "cid": "C41",
+   "title": "Period 음수",
+   "expect": "Negative Number.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 50,
+   "cid": "C42",
+   "title": "Period 12 초과",
+   "expect": "Invalid INTEGER 0 ~ 12.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 51,
+   "cid": "C43",
+   "title": "Period(Fr) <= Period(To)",
+   "expect": "From Value must be larger than To Value.",
+   "note": "",
+   "rows": 1
+  },
+  {
+   "no": 52,
+   "cid": "C44",
+   "title": "(결과 반영 MERGE)",
+   "expect": "-",
+   "note": "GTT 판정을 SCM_ADM_EXCEL_UPLOAD 에 반영하는 단계 — 케이스 없음",
+   "rows": 0
+  },
+  {
+   "no": 53,
+   "cid": "GATE",
+   "title": "오류 잔존 시 [OK] 적재 차단",
+   "expect": "NULL PLAN DATE.",
+   "note": "[E20260831-REGEN] 러너/1단계([Upload]) 실측 기대 = 'NULL PLAN DATE.' 1건(Error 유발이 목적). 본 케이스의 진짜 판정은 **수동 축**: Error 잔존 상태에서 [OK](P_MODE=1) 호출 시 CODE='-1' 'Validation errors remain' + 원장 Δ0 ([E20260827-D4-NOLOADGUARD]). FE 는 Error>0 이면 [OK] 를 막으므로 API 직접 호출로 확인",
+   "rows": 2
+  }
+ ],
+ "DMF0014": [
+  {
+   "no": 0,
+   "cid": "OK",
+   "title": "정상 (WEEKLY · CELL · 4주 수량)",
+   "expect": "(정상 — Error 0)",
+   "note": "기준행",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 1,
+   "cid": "DUP",
+   "title": "키 10개 조합 동일 2행",
+   "expect": "Duplication Key [Sales Site*: GM_US_BQN, Customer Project*: SGM Modified, Customer Model*: N2.2]",
+   "note": "ATTRIBUTE1~10 동일 (UOM/Project/Model 은 키 밖) — 2행 모두 표기",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 2
+  },
+  {
+   "no": 2,
+   "cid": "DIV",
+   "title": "Division 미등재",
+   "expect": "Invalid Division [Division*: 99]",
+   "note": "[E20260923-DMF0014VALMSG] 연쇄(Sales Site/Plant Site/Bucket…) 미표기 — 상위 검증 통과 행만 하위 검증",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 3,
+   "cid": "BKT",
+   "title": "헤더 일자 간격 DAILY (등록 WEEKLY)",
+   "expect": "Invalid Measure Upload Bucket [Measure*: Customer FCST]",
+   "note": "일자 헤더 1일 간격 → DAILY ≠ 등록 WEEKLY. DAILY 헤더는 마스터 밖 주차라 빈값 검사(Please Input QTY) 대상 아님",
+   "periods": [
+    "20260928",
+    "20260929",
+    "20260930",
+    "20261001"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 4,
+   "cid": "MUOM",
+   "title": "Upload UOM 불일치 (등록 CELL)",
+   "expect": "Invalid Measure Upload UOM [Upload UOM*: Pack]",
+   "note": "",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 5,
+   "cid": "SITE",
+   "title": "Sales Site 미등재",
+   "expect": "Invalid Sales Site [Sales Site*: ZZ_SITE]",
+   "note": "[E20260923-DMF0014VALMSG] 종전 'Invalid Measure Upload Bucket' 마스킹 해소 — Bucket/UOM/Measure 검증은 Sales Site 통과 행만",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 6,
+   "cid": "PLNT",
+   "title": "Plant Site 미등재",
+   "expect": "Invalid Plant Site [Plant Site*: ZZ_PLANT]",
+   "note": "",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 7,
+   "cid": "CPRJ",
+   "title": "Customer Project 미등재",
+   "expect": "Invalid Customer Project [Customer Project*: ZZ_PRJ]",
+   "note": "[E20260923-DMF0014VALMSG] 분리 검증 신설 — 종전 'Invalid Customer Model' 로 뭉뚱그려짐. 반려 집합 동일(메시지만 분리). ⚠ 기준행 Project/Model(A17LG8001/ACEN4065I-A1)은 SITE_ITEM 유효라 품목 경로로 구제되므로 함께 무효화(09-15 MSTCHK 이후 현행 규칙)",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 8,
+   "cid": "CMDL",
+   "title": "Customer Model 미등재",
+   "expect": "Invalid Customer Model [Customer Model*: ZZ_MODEL]",
+   "note": "기준행 Project/Model 은 SITE_ITEM 유효 → 품목 경로 구제 차단을 위해 함께 무효화",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 9,
+   "cid": "INCO",
+   "title": "Incoterms 미등재",
+   "expect": "Invalid Incoterms [Incoterms*: ZZZ]",
+   "note": "",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 10,
+   "cid": "FTYP",
+   "title": "FCST Type 미등재",
+   "expect": "Invalid FCST Type [FCST Type*: ZZ_TYPE]",
+   "note": "",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 11,
+   "cid": "CSTM",
+   "title": "Customs Handbook 미등재",
+   "expect": "Invalid Customs Handbook [Customs Handbook*: X]",
+   "note": "[E20260915-DMF0014MSTCHK] 로 부활한 규칙(D/E 룩업)",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 12,
+   "cid": "MGRP",
+   "title": "Measure Group ≠ CUST_FCST",
+   "expect": "Invalid Measure Group [Measure Group*: PSI]",
+   "note": "",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 13,
+   "cid": "QSTR",
+   "title": "기간 칸 문자 혼입",
+   "expect": "Invalid Numeric [20261005: abc]",
+   "note": "[E20260923-DMF0014VALMSG] 셀 단위 — 문제 기간(헤더 일자)과 입력값 표기",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 14,
+   "cid": "QDEC",
+   "title": "기간 칸 소수점",
+   "expect": "Invalid Decimal [20261005: 130.2]",
+   "note": "정수만 허용(E20230119-000186) — 셀 단위 표기",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 15,
+   "cid": "UOM",
+   "title": "Upload UOM 룩업 미등재",
+   "expect": "Invalid Upload UOM [Upload UOM*: BOX]",
+   "note": "[E20260923-DMF0014VALMSG] 종전 MUOM 마스킹 해소 — 룩업 미등재는 이 메시지 1건만",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 16,
+   "cid": "UOMC",
+   "title": "(Division, Sales Site, Measure) 고객 FCST 미등재",
+   "expect": "Invalid Measure [Sales Site*: GM_US_BQN, Measure*: ZZ_MEASURE]",
+   "note": "[E20260923-DMF0014VALMSG] 종전 BKT 마스킹 해소 + 'Invalid Upload UOM (Customer FCST)' → 'Invalid Measure' 개명",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 17,
+   "cid": "PRJ",
+   "title": "Project 조합 미등재",
+   "expect": "(오류 없음 — 규칙 사문. 의사결정 대기)",
+   "note": "AS-IS 원문도 /* */ 주석(파리티). 부활=명세 변경, 사용자 의사결정 대기",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 18,
+   "cid": "MDL",
+   "title": "Model 품목 마스터(ITEM_SN) 미등재",
+   "expect": "Invalid Model [Model: DMAT_0000066]",
+   "note": "SITE_ITEM 경로(GM_US_BQN/D18GM0001/DMAT_0000066 — 2026-09-23 사내 실측)로 Customer Project/Model 통과 → 품목이 SCM_MST_ITEM_SN 에 없음",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 19,
+   "cid": "QEMPTY",
+   "title": "기간 칸 빈값 (입력가능 주차)",
+   "expect": "Please Input QTY [20261005] / Please Input QTY [20261019]",
+   "note": "[E20260923-DMF0014VALMSG] 사용자 지정 문구 — 빈 칸마다 기간 표기",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 20,
+   "cid": "QGRAY",
+   "title": "회색(입력불가) 주차 빈값 = 통과",
+   "expect": "(정상 — Error 0)",
+   "note": "4번째 헤더 = 마스터 밖 주차(20270104) → GRAYZERO 정책상 빈값 검사 제외",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20270104"
+   ],
+   "rows": 1
+  },
+  {
+   "no": 21,
+   "cid": "MULTI",
+   "title": "복수 오류 누적 (Incoterms + 문자 + 빈값)",
+   "expect": "Invalid Incoterms [Incoterms*: ZZZ] / Invalid Numeric [20261005: abc] / Please Input QTY [20261019]",
+   "note": "한 행의 사유 전부 ' / ' 누적 (E20260911-DMF0014MULTI)",
+   "periods": [
+    "20260928",
+    "20261005",
+    "20261012",
+    "20261019"
+   ],
+   "rows": 1
+  }
+ ]
+}

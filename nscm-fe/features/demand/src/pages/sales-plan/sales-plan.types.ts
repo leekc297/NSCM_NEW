@@ -7,7 +7,7 @@ import type { BUCKET_TYPE, MENU_ID, SHEETS } from './sales-plan.constants';
 //   체크박스: Sum / Color / Include Internal Txn /
 //   Cell Qty dead 제외.
 export interface SearchCondition {
-  divisionId: string; // 필수 — Division 단일 콤보 (MSG00097)
+  divisionId: string; // 필수 — Division 단일 콤보 (권한 0건이면 빈값 → MSG00667)
   deptIds: string[]; // Team
   endCustomers: string[]; // End Customer (콤보 'EndCustomer' — 2026-08-22 콤보 통일)
   scmSiteIds: string[]; // Sales Site

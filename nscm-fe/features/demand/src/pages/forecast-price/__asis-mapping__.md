@@ -1,4 +1,4 @@
-﻿# __asis-mapping__.md — EID 1:1 대사표 (asis-coverage-check §0.0/§0.1)
+# __asis-mapping__.md — EID 1:1 대사표 (asis-coverage-check §0.0/§0.1)
 
 > 원천: `DMF0082_FcstNPrice_주요이벤트_상세분석.md`, `DMF0082_FcstNPrice_제약매트릭스_상세.md` · 생성: asis_mapping_gate.py --init
 > 상태 허용값: 미구현(초기) / 구현(구현 위치 필수) / 제외(사유 필수) / 해당없음(사유 필수 — 조회 전용 화면의 CRUD 행 등). 빈 칸 1개 = 게이트 실패.
@@ -249,6 +249,8 @@
 | MODAL:DMF0003_SspSyncComparePopUp | AS-IS 팝업 (분석 md) | — | 제외 — E08-B 와 동일(2026-07-20 사용자 보류 결정) | 제외 |
 | MODAL:DMF0003_SspSyncPopUp | AS-IS 팝업 (분석 md) | — | 제외 — E08-B 와 동일(SSP 동기화 계열 보류) | 제외 |
 | MODAL:ExchangeRateModal | 환율 팝업 (AS-IS DMF0000_ExchangeRatePopup 1:1) | components/modals/ExchangeRateModal.tsx — R:POPUP_GET_FUTUREPRICE_INFO / CUD:PKG_DMF0000.P_DMF0000_SAVE_EXCHANGE_POPUP_DATA(hasButton EDIT×div40 게이트, Delete=사문·사용자 확정 2026-07-24) | — | 구현 |
+| REQ:CHAT-20260915-PRICEPJTGAP | MKT FCST 저장 Unit Price 필수 — Project Code 불일치 품목 누락 보완 (사용자 지시 2026-09-15) | DB 전용: `PKG_DMF0082` P_DMF0082_SAVE_MAIN_DATA 검증 #10 + P_DMF0082_EXCEL_UPLOAD 동일 판정식 — INNER JOIN SITE_ITEM(Project 일치) → NOT EXISTS(SALES_PLAN_ADJUST_YN='N' 명시 행만 제외). 사내 적용·검증(before PASS→after BLOCK 3키 / 회귀 동일) | **AS-IS 대비 의도적 강화** — AS-IS `DMF0082_SAVE_MAIN_DATA` L1185-1191 도 동일 누락(#5 는 Site+Model, #10 은 Project 포함). 3번 제외(조정 N)는 AS-IS 유지(사용자 선택 A, AS-IS 40·81 원장 'N' 0건) | 구현 |
+| REQ:CHAT-20260915-EXLASTUPD | 환율 모달 그리드에 Last Update Date / Last Update By 컬럼 추가 (사용자 지시 2026-09-15, AS-IS 부재 — TO-BE 확장) | SP `PKG_DMF0082.P_DMF0082_POPUP_GET_FUTUREPRICE_INFO` O_RC1 +2컬럼(TO_CHAR 'YYYY-MM-DD HH24:MI:SS') 사내 적용 / forecast-price.constants.ts `EXCHANGE_RATE_AUDIT_COLUMNS` / ExchangeRateModal 피벗 시 행별 최신 수정일·수정자 쌍 선택 + 월 컬럼 뒤 조회전용 2컬럼 + 헤더 2단 세로머지 / procedures.d.ts futurePriceInfo 타입 | 대표값 = 조회기간 월 중 최신 1건 (사용자 확인 2026-09-15) | 구현 |
 | MODAL:ForecastTemplateModal | Excel Form 템플릿 다운로드 (81 전용) | components/modals/ForecastTemplateModal.tsx — 조회·다운로드 전용(저장 CRUD 없음: 템플릿 생성 모달) | — | 구현 |
 | MODAL:SavePricePeriodModal | Price Batch Input (기간 판가 일괄 저장) | components/modals/SavePricePeriodModal.tsx — R:savePriceData/savePriceTitle / CU:SAVE_PRICE 경로. div82 = 진입 버튼 숨김(2026-08-07 사용자 지정) | — | 구현 |
 | MODAL:VersionSelectModal | 버전 선택 팝업 | components/modals/VersionSelectModal.tsx — R:version 시트(DMF0073_GET_VERSION_SALESPRICE 공유) 조회 전용, dblclick 선택 | — | 구현 |
@@ -392,6 +394,7 @@
 |---|---|---|
 | L7 `titleSet` 시트 | 해소 | 공유 모달(`@master/components/columnSettingModal:96`·`columnLayoutModal:108`)이 리터럴 `'titleSet'` 으로 호출 → 화면 SHEETS 에 `TITLE_SET` 등재(sales-plan 등 4화면 동일 규약) |
 | L2P `hotkey DELETE` 권한 0그룹 | 정상 | FE 가 `hasButton('SAVE')` 로 insert/delete/save 를 **일괄 게이트**(hook #97) — DELETE 전용 권한 없이도 버튼 노출. 체커가 hotkeyConfig 내 `hasButton()` 을 읽도록 보완해 INFO 로 판정 |
+| 버튼 노출 원천 = `buttonAuth` 시트 (2026-10-02) | 변경 | Insert/Delete/Save/Price Batch/Excel Form·Upload 노출을 조회 응답(drop3 measureAuth)·division 문자열 판정 대신 `PKG_DMF0082.P_DMF0082_GET_BUTTON_AUTH`(BTN_MPG `buttonAuth/SEARCH`, API_M `DMF0082_buttonAuth_SEARCH`) 1행 Y/N 으로 가른다. 화면 오픈·Division 변경·authGroup 확정 시 호출(`ForecastPrice.tsx` buttonAuthFilters) → `store.buttonAuth`. `hasButton('SAVE')`(admin 메뉴 버튼)·`isEditableVersion`(과거 버전 숨김) 상위 게이트는 유지. 메저별 셀 편집(measureAuth)은 같은 SP 의 `measureAuth` 커서로 조회 전에도 채워지며 Search 후 drop3 가 덮어쓴다(동일 산출) |
 | L3 `futurePriceInfo/EDIT`·`/INSERT` API_ID NULL | 정상 | UI 전용 권한 게이트(편집모드 토글 / 행 추가)이고 실저장은 `futurePriceInfo/SAVE` 경유. 실측 = 각 5그룹 매핑, 3계정 `mnuBtnAuth` 에 EDIT·INSERT 존재 |
 
 ## 토큰 대사표 (hook #117 §5.6 — 2026-08-08 실측)

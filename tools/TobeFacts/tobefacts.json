@@ -1,0 +1,36 @@
+{
+  "feRoot": "C:\\Projects\\NSCM\\nscm-fe",
+  "beRoot": "C:\\Projects\\NSCM\\nscm-be",
+  "outDir": "C:\\Projects\\NSCM\\Doc\\tobefacts",
+  "asisOutDir": "C:\\Projects\\NSCM\\Doc\\asisfacts",
+  "sinks": {
+    "callProc": [
+      "apiClient.callProc",
+      "apiClient.callMutationProc",
+      "callProc",
+      "callMutationProc"
+    ],
+    "hooks": [
+      "useTabProcQuery",
+      "useProcMutation",
+      "useStreamProcQuery",
+      "useTabComboQuery",
+      "useTabComboQueries",
+      "useTabComboQueryResults",
+      "useTabLookupQuery",
+      "useTabLookupQueries"
+    ],
+    "http": [
+      "apiClient.post",
+      "apiClient.get",
+      "apiClient.put",
+      "apiClient.delete",
+      "apiClient.getCombo",
+      "apiClient.getLookup",
+      "axios.post",
+      "axios.get",
+      "fetch"
+    ]
+  },
+  "rulesDir": "C:\\Projects\\NSCM\\tools\\Harness\\rules"
+}

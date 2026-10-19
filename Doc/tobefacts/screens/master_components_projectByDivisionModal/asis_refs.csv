@@ -1,0 +1,8 @@
+﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
+"master/components/projectByDivisionModal","","features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx","28","DMF0020","","","","DMF0020 (2026-06-03): cell dblClick 시 PROJECT_STATUS / BIZ_TYPE_NAME 자동 채움 의무 — optional 추가 인자"
+"master/components/projectByDivisionModal","","features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx","35","DMF0021","","","","DMF0021 (2026-08-14, 통합테스트 1st No.61-④): Team 자동 채움 — Team 은 입력 불가 컬럼이라"
+"master/components/projectByDivisionModal","","features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx","100","COM0005","","","","필터링은 프로시저(projectCode 파라미터, COM0005 가 콤마 다중값을 이미 처리)가 하고,"
+"master/components/projectByDivisionModal","","features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx","117","COM0005","","","","SP(COM0005)가 콤마로 나눈 여러 키워드를 이미 처리하므로 화면에서 다시 거르지 않는다."
+"master/components/projectByDivisionModal","","features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx","201","COM0005","","","","빈 문자열도 'ALL' 센티널로 정규화한다. COM0005 SP 는 ""전체""를 'ALL' 로만 인식하고"
+"master/components/projectByDivisionModal","","features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx","202","","","","SCM_SITE_ID","'' 는 UF_FX_String_SplitForIN('') 가 빈 집합이라 `SCM_SITE_ID IN (빈집합)` 로 전 행"
+"master/components/projectByDivisionModal","","features/master/src/components/projectByDivisionModal/ProjectByDivisionModal.tsx","227","DMF0082","","","","상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인."

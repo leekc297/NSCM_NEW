@@ -48,22 +48,33 @@ interface SalesSiteAction {
   setOpenSearchArea: (open?: boolean) => void;
 }
 
-const initSearchParams: SearchParamProps = {
+// 주의: 상수가 아니라 함수다. 모듈 최상위 상수로 굳히면 session.div 를 이 화면 청크가 처음
+//   로드되던 그 순간 한 번만 읽는다. 로그아웃은 스토어와 sessionStorage 만 비우고 새로고침을
+//   하지 않으므로(useClearAppData.clearAllData) 모듈은 계속 살아 있고, 다른 계정으로 재로그인해도
+//   앞 계정의 division 이 그대로 남는다. 스토어는 탭별로 생성되므로 생성 시점에 세션을 읽어야
+//   항상 현재 계정 기준이 된다 (forecast-price makeInitSearchParams 와 동일 규약).
+//   fallback '40' 은 세션 미확립(로그인 전 진입) 대비 기본값이다. 권한 목록에 없는 값이면
+//   SalesSiteForm 의 보정 effect 가 콤보 목록 기준으로 다시 고른다.
+const makeInitSearchParams = (): SearchParamProps => ({
   divisionId: useSessionStore.getState().session.div ?? '40',
   endCustomer: 'ALL',
   salesSite: 'ALL',
   activeFlag: 'ALL',
   soldToCustomer: 'ALL',
-};
+});
 
-const initSalesSiteStoreState: SalesSiteState = {
+// filters 도 호출 시점에 새 객체로 만든다. 같은 객체를 reset 과 division 변경에 재사용하면
+//   탭마다 따로 만들어진 스토어가 중첩 객체를 공유하게 된다.
+const makeInitFilters = (): filtersBySheet => ({
+  [SHEETS.SITE]: undefined,
+  [SHEETS.CUSTOMER]: undefined,
+});
+
+const makeInitState = (): SalesSiteState => ({
   initialized: false,
   loading: false,
-  filters: {
-    [SHEETS.SITE]: undefined,
-    [SHEETS.CUSTOMER]: undefined,
-  },
-  searchParams: initSearchParams,
+  filters: makeInitFilters(),
+  searchParams: makeInitSearchParams(),
   salesSiteTrigger: 'division',
   staticColumns: {
     [RESPONSE_SET.SITE]: [],
@@ -74,12 +85,12 @@ const initSalesSiteStoreState: SalesSiteState = {
 
   openSearchArea: true,
   error: null,
-} as const;
+});
 
 export const useSalesSiteStore = createPersistedStoreWithTab<SalesSiteState & SalesSiteAction>(
   (set, get) => ({
-    ...initSalesSiteStoreState,
-    reset: () => set(initSalesSiteStoreState),
+    ...makeInitState(),
+    reset: () => set(makeInitState()),
     setSiteFilters: () => {
       set(state => {
         state.filters[SHEETS.SITE] = { ...state.searchParams };
@@ -102,7 +113,7 @@ export const useSalesSiteStore = createPersistedStoreWithTab<SalesSiteState & Sa
         state.searchParams = { ...get().searchParams, ...searchParams };
         if (salesSiteTrigger) state.salesSiteTrigger = salesSiteTrigger;
         if (searchParams.divisionId) {
-          state.filters = initSalesSiteStoreState.filters;
+          state.filters = makeInitFilters();
         }
       });
       // 주의: 컬럼 재조회는 set() 커밋 뒤에, division 을 인자로 넘겨서 호출한다.

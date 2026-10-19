@@ -1,4 +1,4 @@
-import { type FlexGrid } from '@mescius/wijmo.grid';
+import { CellRange, type FlexGrid } from '@mescius/wijmo.grid';
 
 import { CELL_INPUT_EDIT_TYPE, CRUD_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig } from '@foundation/models';
@@ -68,11 +68,25 @@ export const GridUtils = {
     if (grid.activeEditor) return true;
     return GridUtils.getChangedRows(grid).length > 0;
   },
+  /**
+   * 팝업 선택 등 편집 이벤트를 거치지 않고 행을 직접 고친 뒤, 그 행 전체를 리페인트한다.
+   * CellRange(row, 0, row, -1)은 "마지막 컬럼까지"가 아니라 leftCol=-1을 만들어
+   * 컬럼 0 외에는 리페인트되지 않는 버그가 있어 이 헬퍼로 대체한다.
+   */
+  refreshRow: <T>(grid: FlexGrid<T> | null | undefined, row: number): void => {
+    if (!grid || row < 0) return;
+    grid.refreshRange(new CellRange(row, 0, row, grid.columns.length - 1));
+  },
   isEditableCell: <T>(grid: FlexGrid<T> | null | undefined, row: number, col: number) => {
     if (!grid) return false;
 
-    const rowData = GridUtils.getRow(grid, row) as WijmoRowItem;
+    const rowData = GridUtils.getRow(grid, row) as WijmoRowItem | undefined;
     const column = GridUtils.getColumn(grid, col);
+
+    // 범위 밖 행(getRow 가 undefined) 가드 — hitTest 가 셀 밖(예: 편집기 오버레이 위)을 가리키면
+    //   row 가 -1 이라 rowData 가 없다. 그대로 두면 .CRUD_TYPE 접근이 터져 더블클릭 핸들러가
+    //   중단되고 콤보 드롭다운이 열리지 않는다(2026-09-03 DMF0006).
+    if (!rowData) return false;
 
     const crudType = rowData.CRUD_TYPE;
     const editFlag = rowData.EDIT_FLAG;

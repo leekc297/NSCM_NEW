@@ -11,19 +11,62 @@ body .formItem {
     min-width: 0;
   }
 
-  @include respond-to('HD') {
-    grid-template-columns: 50px auto;
+  // 라벨 컬럼 폭 — 필드마다 다른 labelSize(short=100/long=180 등)를 뷰포트와 무관하게 140px로
+  // 통일한다. 페이지 검색영역은 SEARCH_AREA_MIN_WIDTH(1460px)로 최소폭이 보장되므로 좁은
+  // 화면에서도 140px 라벨을 쓸 여유가 항상 있다. (과거 HD/FHD 뷰포트 분기는 1366px 미만 구간을
+  // 놓쳐 필드별 라벨 폭이 제각각(100px/180px)으로 어긋나 보이는 원인이었음 — 단일 값으로 단순화.)
+  //
+  // [2026-09-23] minmax(70px, 140px) 로 변경 — 위 가드는 "페이지" 한정이고, 리사이즈 가능한
+  // 팝업(CustomDialog)은 그 가드가 없다. CustomDialog 의 자동 최소폭 가드(scrollWidth 감시)는
+  // "줄 전체가 넘칠 때"만 잡아서, 라벨이 옆 칸으로 "침범"만 하고(줄 전체 폭은 그대로) 넘치지는
+  // 않는 경우를 못 잡는다(DMF0082 Version Popup 실측) — 그래서 침범 자체가 애초에 안 일어나도록
+  // 라벨이 좁아지게 한다. 140px 여유가 있을 때는 그대로 140px 를 쓰고, 없을 때만 70px 까지
+  // 따라 줄어든다 — 페이지에서는 항상 140px 그대로라 회귀 없음.
+  grid-template-columns: minmax(70px, 140px) auto;
 
-    & > div:first-of-type {
-      width: 50px;
-    }
+  & > div:first-of-type {
+    width: 100%;
+    min-width: 0;
   }
+}
 
-  @include respond-to('FHD') {
-    grid-template-columns: 140px auto;
-
-    & > div:first-of-type {
-      width: 140px;
+// 단일 날짜픽커(DatePickerCalendar usecase month/date/year)를 같은 검색행의 콤보(CustomDropdown)·
+//   입력(InputField)과 높이(36px)·폭(셀 전체)에 맞춘다. 디자인시스템 날짜픽커(size='small')는
+//   fullWidth 가 아니고 intrinsic 높이라 더 좁고(가로) 짧게(세로 ~28px vs 콤보 36px) 보인다.
+//   SearchFields 의 .datePickerFix(검증된 선례)와 같은 방식: 디자인시스템 내부 emotion hash 비의존
+//   (Mui* 부분일치) + emotion 의 height:100%/inline-flex 를 이기려 !important.
+//   이 파일은 CSS 모듈이라 전역 MUI 클래스는 :global 로 감싸야 한다(안 그러면 해시되어 매칭 실패).
+//   콤보(.MuiAutocomplete-*)는 멀티칩 가변높이라 제외한다(:not(.MuiAutocomplete-inputRoot) + reset).
+body .formItem {
+  //   콤보(.MuiAutocomplete-inputRoot)·멀티라인(.MuiInputBase-multiline) 입력은 제외한다
+  //   (콤보=칩 가변높이 / 멀티라인=여러 줄이라 36px 로 가두면 잘림).
+  :global {
+    // 날짜픽커의 바깥 박스(@lges MuiBox — 실제 보이는 테두리 박스, 기본 28px)와 그 위 래퍼까지
+    //   36px·전체폭으로. :has 로 "비-콤보·비-멀티라인 날짜/단일입력을 품은 MuiBox"만 집어
+    //   콤보/라벨/formItem/멀티라인은 안 건드린다.
+    .MuiBox-root:has(.MuiOutlinedInput-root:not(.MuiAutocomplete-inputRoot):not(.MuiInputBase-multiline)) {
+      width: 100%;
+      height: 36px !important;
+      min-height: 36px !important;
+      box-sizing: border-box;
+    }
+    // 날짜픽커 입력박스(콤보·멀티라인 제외) — 36px 고정 + 셀 전체폭.
+    .MuiOutlinedInput-root:not(.MuiAutocomplete-inputRoot):not(.MuiInputBase-multiline) {
+      width: 100%;
+      height: 36px !important;
+      min-height: 36px !important;
+      box-sizing: border-box;
+    }
+    // 입력박스를 감싸는 FormControl/TextField 도 비-fullWidth 면 내용폭만 차지하므로 폭만 넓힌다
+    //   (높이는 위 박스/입력 규칙이 담당 — 여기서 높이를 강제하면 멀티라인 FormControl 이 잘린다).
+    .MuiFormControl-root:not(.MuiFormControl-fullWidth) {
+      width: 100%;
+    }
+    // 36px 안에서 텍스트가 세로 중앙에 오도록 상하 패딩 제거(콤보·멀티라인 input 은 위 :not 로 영향 없음).
+    .MuiOutlinedInput-root:not(.MuiAutocomplete-inputRoot):not(.MuiInputBase-multiline) input {
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      box-sizing: border-box;
     }
   }
 }
@@ -43,10 +86,25 @@ body .formItem {
   & > div:first-child {
     display: flex;
     align-items: center;
-    width: calc(100% - 40px);
+    // 필수: !important — 위 .formItem 검색 날짜픽커 크기정합 블록이
+    //   .MuiOutlinedInput-root(콤보/멀티라인 제외)에 width:100% 를 더 높은 특이도로 걸어
+    //   이 40px 슬롯을 덮으면 right:-40px 팝업 버튼이 입력 밖(오른쪽 공백)으로 밀린다.
+    //   그 블록은 날짜픽커 전용 의도지만 셀렉터가 넓어 팝업 검색입력(Model/Nickname·Owner·PJT)도
+    //   잡으므로, 여기서 슬롯 폭을 다시 이겨 버튼을 입력 안쪽에 붙인다.
+    width: calc(100% - 40px) !important;
   }
   & button {
     position: absolute;
     right: -40px;
+  }
+}
+
+// 팝업 버튼이 없는 다건(개행/콤마) multiline 검색 입력(SO No / Confirm ID 등)의 텍스트를 세로 중앙
+//   정렬한다. 기본 multiline 은 상단 정렬이라 같은 행의 콤보·popup 필드(popupSearchField)와 글자
+//   세로 위치가 어긋나 보인다 — popupSearchField 의 정렬만 떼어내 폭 보정/버튼 규칙 없이 맞춘다.
+.multilineSearchField {
+  & > div:first-child {
+    display: flex;
+    align-items: center;
   }
 }

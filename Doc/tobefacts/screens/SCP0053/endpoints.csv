@@ -1,0 +1,7 @@
+﻿"page_key","menu_id","file","line","in_function","kind","callee","menu","sheet","action","url","resolved","args","commented"
+"supply/scp-bom","SCP0053","features/supply/src/pages/scp-bom/components/ScpBomForm.tsx","53","ScpBomForm","hook","useTabComboQueries","SCP0053","","","(useTabComboQueries)","Y","[COMBO.DIVISION, { comboId: COMBO.PLANT_SITE, divisionId: sc.divisionId }]","0"
+"supply/scp-bom","SCP0053","features/supply/src/pages/scp-bom/ScpBom.tsx","62","ScpBom","hook","useTabProcQuery","SCP0053","SCP BOM","","SCP0053/SCP BOM//call-proc","Y","filters[SHEETS.MAIN]","0"
+"supply/scp-bom","SCP0053","features/supply/src/pages/scp-bom/useScpBomStore.ts","118","fetchStaticColumns","http","apiClient.post","","","","/admin/menu/SCP0053/column","Y","{ sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] }","0"
+"supply/scp-bom","SCP0053","features/supply/src/pages/scp-bom/useScpBomStore.ts","148","restoreSearchConditions","http","apiClient.get","","","","/admin/menu/SCP0053/search-conditions","Y","","0"
+"supply/scp-bom","SCP0053","features/supply/src/pages/scp-bom/useScpBomStore.ts","19","","commented","fetch","","","","","","ui-dynamic-property-management — admin SCM_MST_SHEET_COLUMNS 동적 fetch(실측 27행, design 03 §1).","1"
+"supply/scp-bom","SCP0053","features/supply/src/pages/scp-bom/utils/scp-bom.save.ts","67","callSaveScpBom","http","apiClient.post","SCP0053","SCP BOM","SAVE","/SCP0053/SCP BOM/SAVE/call-proc","Y","payload","0"

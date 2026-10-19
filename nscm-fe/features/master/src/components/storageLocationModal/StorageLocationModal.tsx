@@ -1,10 +1,12 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { GridUtils } from '@foundation/utils';
-import { SearchArea, DataGrid, CustomDialog } from '@shared/components';
+import { attachRowNoHeader, GridUtils } from '@foundation/utils';
+import { SearchArea, DataGrid, CustomDialog, ResultArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
 import { MODAL_SHEET_SLOC, MODAL_SLOC } from './storage-location-modal.constants';
@@ -31,6 +33,8 @@ export const StorageLocationModal = ({
   const gridRef = useRef<
     FlexGrid<ResponseData<MODAL_SLOC, MODAL_SHEET_SLOC, 'o_rc1'>> | undefined
   >();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   const initialized = useSlocModalStore(state => state.initialized);
   const staticColumns = useSlocModalStore(state => state.staticColumns);
@@ -51,13 +55,18 @@ export const StorageLocationModal = ({
   // 입력 중인 값 — 조회하지 않고 로컬 state 에만 담아둔다.
   const [storageIdInput, setStorageIdInput] = useState<string>(storageId);
 
-  const { data: slocData } = useTabProcQuery<MODAL_SLOC>({
+  const {
+    data: slocData,
+    isLoading,
+    isFetching,
+  } = useTabProcQuery<MODAL_SLOC>({
     menuId: MODAL_SLOC,
     sheetName: MODAL_SHEET_SLOC,
     tabId: MODAL_SLOC,
     filters: searchParam,
     enabled: true,
   });
+  const loading = isLoading || isFetching;
 
   // 필터링은 프로시저(storageId 파라미터)가 하고, 그리드는 조회 결과를 그대로 보여준다.
   //   useMemo — 매 렌더 새 배열이면 그리드가 re-bind 되어 스크롤·선택이 초기화된다.
@@ -81,6 +90,22 @@ export const StorageLocationModal = ({
     modalClose();
   };
 
+  const handleSubmit = () => {
+    const selections = gridRef.current?.selectedItems as ResponseData<
+      MODAL_SLOC,
+      MODAL_SHEET_SLOC,
+      'o_rc1'
+    >[];
+    if (!selections?.length) return;
+
+    setSelectedValue(
+      selections[0].PLANT_ID,
+      selections[0].STORAGE_ID,
+      selections[0].STORAGE_DESCRIPTION
+    );
+    modalClose();
+  };
+
   useEffect(() => {
     if (!open) return;
     setSearchParam({
@@ -91,6 +116,10 @@ export const StorageLocationModal = ({
     if (!initialized) void fetchStaticColumns();
   }, [open]);
 
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, itemsSource]);
+
   return (
     <CustomDialog
       size={1000}
@@ -98,6 +127,10 @@ export const StorageLocationModal = ({
       position='basic'
       open={open}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -142,12 +175,44 @@ export const StorageLocationModal = ({
             }
           />
           <div className={styles.gridWrapper}>
-            <DataGrid<ResponseData<MODAL_SLOC, MODAL_SHEET_SLOC>>
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
+            />
+            <ResultArea
+              title=''
+              count={itemsSource.length}
               gridRef={gridRef}
-              isReadOnly
-              staticColumns={staticColumns}
-              itemsSource={itemsSource}
-              dblClick={handleDblClick}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<ResponseData<MODAL_SLOC, MODAL_SHEET_SLOC>>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                staticColumns={staticColumns}
+                itemsSource={itemsSource}
+                dblClick={handleDblClick}
+              />
+            </ResultArea>
+          </div>
+          <div className={styles.buttonWrapper}>
+            <Button
+              appearance='contained'
+              buttonLabel='OK'
+              iconComponent={<ControlConfirmIcon size='small' />}
+              iconPosition='leading'
+              priority='primary'
+              size='medium'
+              onClick={handleSubmit}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
             />
           </div>
         </div>

@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
+"supply/components/ElecMaterialPopup.tsx","","features/supply/src/components/ElecMaterialPopup.tsx","1","SCP0095 SCM0002","PKG_SCM0002 P_SCM0002_GET_ITEM_ELEC","","","Elec Material 팝업 (supply 전용) — AS-IS GSCM.SCM.Popup.UIL.SCM0002_ItembyDivisionPopupEE. SCP0095(GlobalPSI_Elec) 의 Material 필드(btnItem_Id)가 여는 팝업. 전극(Elec) Material 선택이다. 모1(ModelByDivisionPopup)과 같은 SCM0002 메뉴의 다른 sheet(ElecPopup) — SP·조건·컬럼"
+"supply/components/ElecMaterialPopup.tsx","","features/supply/src/components/ElecMaterialPopup.tsx","76","SCM0002","","","","그리드 컬럼은 admin 메타(SCM0002/ElecPopup)에서 가져온다."
+"supply/components/ElecMaterialPopup.tsx","","features/supply/src/components/ElecMaterialPopup.tsx","85","SCM0002 SCP0001","","","","오픈 시 자동조회 차단(AS-IS 파리티 — SCM0002 팝업은 오픈만, 사용자가 Search 눌러야 조회). SCP0001 c75b85ac 패턴."
+"supply/components/ElecMaterialPopup.tsx","","features/supply/src/components/ElecMaterialPopup.tsx","88","","SCM0001_GET_DIVISION","","","Division 콤보 — AS-IS 와 동일 소스(SCM0001_GET_DIVISION). 표시용(parent 값 선택), 비활성."

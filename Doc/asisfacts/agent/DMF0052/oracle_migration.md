@@ -1,0 +1,51 @@
+﻿# DMF0052 Oracle 전환 가이드
+
+## 1. 호출 SP 인벤토리
+| SP명 | 참조 테이블 (SP 내부) | EXEC 체인 | 비고 |
+|---|---|---|---|
+| DMF0052_GET_SUMMARY_DATA | XIF_ERP_EDI_CALLOFF_ITEM_R_SN | - | ERP 인터페이스 뷰 |
+| DMF0052_GET_PJT_DATA | DM_DNM_EDI_CALLOFF_ITEM, SCM_ADM_LOOKUP_MASTER_DETAIL, SCM_MST_SITE_ITEM, SCM_MST_ITEM_SN | #T_GSCM_DATA, #T_ERP_DATA (임시 테이블) | FN_GET_ITEM_NICKNAME, STRING_SPLIT 함수 사용 |
+| DMF0052_GET_STATUS_DATA | DM_DNM_EDI_CALLOFF_ITEM | - | STRING_SPLIT 함수 사용 |
+| DMF0052_GET_DETAIL_DATA | DM_DNM_EDI_CALLOFF_ITEM, SCM_ADM_LOOKUP_MASTER_DETAIL, SCM_MST_SITE_ITEM, SCM_MST_ITEM_SN | #T_EDI (임시 테이블) | FN_GET_ITEM_NICKNAME, STRING_SPLIT 함수 사용 |
+| DMF0052_GET_ERP_DATA | DM_DNM_EDI_CALLOFF_ITEM, SCM_MST_ITEM_SN | #T_EDI (임시 테이블) | FN_GET_ITEM_NICKNAME, STRING_SPLIT 함수 사용 |
+| DMF0052_GET_SPREAD_TITLE | SCM_MST_TITLESET_USER, SCM_MST_SHEET_COLUMNS | - | STRING_SPLIT 함수 사용 (메타 조회) |
+| UP_FX_GETCOMMONDATALIST_DM | SCM_ADM_LOOKUP_MASTER_DETAIL, SCM_MST_SITE, TB_FX_USERGROUPAUTHEXTENTION, SCM_MST_SITE_ITEM, SCM_MST_SSO_USER_INFO, SCM_MST_SSO_DEPT_INFO, SCM_MST_SHEET_MEASURE, SCM_SYS_CALENDAR_M, SCM_ITEM_M_SN, SCM_MST_SITE_ITEM_PRIORITY, SCM_MST_ITEM_SN, SCM_LINE_HIERARCHY_V_SN, DM_MST_BUCKET_CONVERSION, SCM_MST_PLANT_SN | DYNAMIC@UP_FX_GETCOMMONDATALIST_DM | 동적 SQL 포함, STRING_SPLIT 함수 사용 |
+
+## 2. 공통코드 분기
+| 코드 종류 | 테이블 | 메서드 | 비고 |
+|---|---|---|---|
+| EDI Sender | SCM_ADM_LOOKUP_MASTER_DETAIL | GetEdiSender:783 | UP_FX_GETCOMMONDATALIST_DM 호출 |
+| - | - | GetCheckedListValue | InitControls:144, FindData_Main:278, FindData_Pjt:344, FindData_Status:407 (CODE 컬럼 읽음) |
+
+## 3. FoxQuery 미등록/직접호출 SP
+**없음** — 모든 엔드포인트가 FoxQuery 등록(DM.* 형식) 상태
+
+## 4. Oracle 전환 시 확인 포인트
+### 4.1 MSSQL → Oracle 전환 항목
+| 항목 | MSSQL 구문 | Oracle 대응 | 비고 |
+|---|---|---|---|
+| 임시 테이블 | #T_GSCM_DATA, #T_ERP_DATA, #T_EDI | GTT (Global Temporary Table) | DMF0052_GET_PJT_DATA, DMF0052_GET_DETAIL_DATA, DMF0052_GET_ERP_DATA 에서 사용 |
+| STRING_SPLIT | STRING_SPLIT(@param, ',') | REGEXP_SUBSTR + CONNECT BY 또는 TABLE() | 6개 SP에서 사용 (멀티 값 파싱) |
+| 함수 | FN_GET_ITEM_NICKNAME | 동일 함수 Oracle 버전 확인 | 4개 SP에서 사용 |
+| 동적 SQL | DYNAMIC@UP_FX_GETCOMMONDATALIST_DM | EXECUTE IMMEDIATE | UP_FX_GETCOMMONDATALIST_DM 내부 |
+
+### 4.2 난이도 평가 (사실 기반)
+- **임시 테이블 3개**: #T_GSCM_DATA, #T_ERP_DATA, #T_EDI → GTT 전환 필요
+- **STRING_SPLIT 6회 사용**: 공통 함수로 패턴화 필요
+- **FN_GET_ITEM_NICKNAME 함수**: Oracle 버전 존재 여부 확인 필요
+- **동적 SQL**: UP_FX_GETCOMMONDATALIST_DM 내부 동적 쿼리 → Oracle EXECUTE IMMEDIATE 전환
+
+### 4.3 인터페이스 뷰
+- **XIF_ERP_EDI_CALLOFF_ITEM_R_SN**: ERP → GSCM 인터페이스 뷰 (DMF0052_GET_SUMMARY_DATA에서 사용)
+- 뷰 정의 Oracle 버전 확인 필요
+
+### 4.4 SP별 변환 우선순위 (참조 복잡도 기준)
+1. DMF0052_GET_SPREAD_TITLE (메타 조회만, 의존 최소)
+2. DMF0052_GET_SUMMARY_DATA (뷰 조회만)
+3. DMF0052_GET_STATUS_DATA (단일 테이블 + STRING_SPLIT)
+4. DMF0052_GET_ERP_DATA (임시 테이블 1개)
+5. DMF0052_GET_DETAIL_DATA (임시 테이블 1개 + 다중 테이블 조인)
+6. DMF0052_GET_PJT_DATA (임시 테이블 2개 + 다중 테이블 조인)
+7. UP_FX_GETCOMMONDATALIST_DM (동적 SQL + 다중 테이블 조인)
+
+---

@@ -2,7 +2,6 @@ import { toggleClass } from '@mescius/wijmo';
 import {
   AllowMerging,
   CellRange,
-  type CellRangeEventArgs,
   CellType,
   DataMap,
   type FlexGrid as FlexGridType,
@@ -13,17 +12,15 @@ import {
 import { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { type MutableRefObject, useCallback, useEffect, useMemo, useRef, type Ref } from 'react';
 
-import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
+import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
-import { useTabComboQueries } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
 import {
   BUCKET_TYPE,
   GRID_CASCADE_CLEAR,
-  GRID_CASCADE_FILTERS,
   MAIN_COLUMNS,
   MSG,
 } from '../sales-future-price.constants';
@@ -37,8 +34,13 @@ import {
 } from '../salesPriceExchange';
 import type { MeasureMeta } from '../useSalesFuturePriceStore';
 import { applyStaticCellBackground } from '../utils/cellBackground';
-import { groupKeyOf } from '../utils/futurePriceGroup';
+import { groupKeyOf, KEY_COLS, toStr } from '../utils/futurePriceGroup';
 import { isOverRangeCell } from '../utils/overRange';
+import {
+  deriveEndCustomer,
+  isAutoMappedColumn,
+  stripEndCustomerComboBinding,
+} from '../utils/salesPriceAutoMap';
 
 interface Props {
   rows: FuturePriceRow[];
@@ -55,15 +57,39 @@ interface Props {
   // ⭐ 편집가능 division 게이트 (메타/LOOKUP 구동 — SalesFuturePrice.tsx isEditableDivision).
   //   false = 편집제약 division → 동적 셀 편집불가(노랑 미표시) + beginningEdit 차단. 기본 true(호환).
   editable?: boolean;
+  // 조회한 버전이 Current 인지 (AS-IS isCurVersion). false = 과거 버전 조회 → 셀 편집·붙여넣기 진입 차단(안내 없음,
+  //   AS-IS EditButton `if(!isCurVersion) return` 과 동일) + 편집가능(노란) 표시 안 함. 기본 true(호환).
+  //   종전에는 입력은 되고 Save 에서만 MSG00448 로 막혀 입력값이 버려졌다(통합테스트 지적 2026-10-08).
+  isCurrentVersion?: boolean;
   bucketType?: BUCKET_TYPE;
   // ⭐ master hook §2.5 — admin SYS0004 UI Category Setup 동적 메타 (전체 속성 반영)
   staticColumns?: RawFlexGridColumnConfig[];
   staticMeasures?: MeasureMeta[];
   // Insert LOC 행 동적셀 편집 시 형제 measure 환율 재계산 연동용 (부모가 exchangeData 로 build).
   exchangeRateMap?: ExchangeRateMap;
+  // ⭐ Sales Site → End Customer 자동 매핑 맵 (콤보 'SiteEndCustomerMapDMF0082', 부모가 division 단위로 fetch).
+  //   신규행에서 Sales Site 콤보 변경 시 cellEditEnded 가 이 맵으로 END_CUSTOMER 를 파생한다.
+  siteEndCustomerMap?: Map<string, string>;
+  // 조회 기간 시간축 컬럼 키(W_/M_) — 부모가 시간축 SP(main/SPREAD_TITLE_DATE)로 받아 넘긴다.
+  //   BE 가 NULL 컬럼을 응답에서 빼기 때문에 행 키만으로는 값 없는 주차 컬럼이 서지 않는다(utils/periodAxis.ts).
+  //   행 키와 합집합으로 쓴다 — 미지정/빈 배열이면 종전처럼 행 키만으로 컬럼을 만든다(시간축 조회 실패 시 폴백).
+  periodBindings?: string[];
 }
 
-// 셀 값 → 문자열 (unknown 안전 변환 — no-base-to-string 회피, cascade 필터/비교용)
+// 조회된(기존) 행에서도 편집 가능한 고정 칸인지 — UI Category Setup 입력 구분 M(필수)/O(선택).
+//   IM/IO 는 신규 행 전용, S 는 조회 전용. 자동 매핑 칸(Team/End Customer)과 팝업 칸은 기존 행에서 열지 않는다.
+const isAlwaysEditableMeta = (meta: {
+  binding?: string;
+  _inputEditType?: string;
+  _ctrlType?: string;
+}): boolean =>
+  (meta._inputEditType === CELL_INPUT_EDIT_TYPE.MANDATORY ||
+    meta._inputEditType === CELL_INPUT_EDIT_TYPE.OPTIONAL) &&
+  meta._ctrlType !== 'FPModal' &&
+  meta._ctrlType !== 'FPTextModal' &&
+  !isAutoMappedColumn(meta.binding ?? '');
+
+// 셀 값 → 문자열 (unknown 안전 변환 — no-base-to-string 회피, 편집 전후 값 비교용)
 const cellStr = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
 
@@ -79,6 +105,7 @@ interface MergedColumnMeta {
   _ctrlType?:
     | 'FPText'
     | 'FPModal'
+    | 'FPTextModal'
     | 'FPComboBox'
     | 'FPCheckBox'
     | 'FPDate'
@@ -87,6 +114,13 @@ interface MergedColumnMeta {
   _inputEditType?: 'S' | 'M' | 'O' | 'IM' | 'IO';
   _modalKey?: string;
   _comboKey?: string;
+  // 셀 콤보 좁힘 계약 — 관리자 컬럼 메타 원문 그대로 공용 DataGrid 로 넘긴다.
+  //   PARAM2(_comboBindings)  : '행컬럼:콤보컬럼' 또는 PARAM10='D' 일 때 '행컬럼:SQL바인드명'.
+  //   PARAM9(_insertComboKey) : 신규행 전용 콤보 SQL_ID.
+  //   PARAM10(_comboMode)     : 'D' = 행 값 조합마다 재조회 / 그 외 = 전량 받아 행 필터.
+  _comboBindings?: string;
+  _insertComboKey?: string;
+  _comboMode?: string;
   cellColor?: string;
   textColor?: string;
   // hook #92 column-division-id-visibility — admin DIVISION_ID(콤마 토큰 리스트) 복사값(ATTRIBUTE3).
@@ -133,16 +167,22 @@ export const SalesFuturePriceGrid = ({
   onPopupCellDblClick,
   divisionId,
   editable = true,
+  isCurrentVersion = true,
   bucketType = BUCKET_TYPE.WEEKLY,
   staticColumns,
   staticMeasures,
   exchangeRateMap,
+  siteEndCustomerMap,
+  periodBindings,
 }: Props) => {
   const { t } = useTranslation();
   const bucketPrefix = bucketType === BUCKET_TYPE.MONTHLY ? 'M' : 'W';
   // cellEditEnded 핸들러(effect 내부)가 최신 환율맵을 stale 없이 참조 — ref 로 보관.
   const exchangeRateMapRef = useRef(exchangeRateMap);
   exchangeRateMapRef.current = exchangeRateMap;
+  // Sales Site → End Customer 맵도 같은 이유로 ref 보관 (cellEditEnded 가 deps 밖에서 참조).
+  const siteEcMapRef = useRef<Map<string, string>>(new Map<string, string>());
+  siteEcMapRef.current = siteEndCustomerMap ?? new Map<string, string>();
 
   // ⭐ MEASURE 표시명 = UI Category Setup Measure 메타(COLUMN_NAME→COLUMN_LABEL_NAME) 기반 DataMap.
   //   (2026-07-07 사용자 요구) admin 이 COLUMN_NAME='RTF_SYS_RP' / COLUMN_LABEL_NAME='RTF' 로 등록 →
@@ -178,6 +218,8 @@ export const SalesFuturePriceGrid = ({
         _comboKey: c._comboKey,
       }));
     }
+    // staticColumns 미로드 fallback 에는 PARAM2/PARAM9/PARAM10 이 없다 — 좁힘 없는 전량 콤보로
+    //   뜬다. 상수는 화면이 죽지 않게 하는 최소 보루일 뿐이고, 좁힘 계약의 단일 원천은 admin 메타다.
     return staticColumns.map(sc => {
       const fb = MAIN_COLUMNS.find(m => m.key === sc.colNm);
       return {
@@ -195,7 +237,13 @@ export const SalesFuturePriceGrid = ({
         _inputEditType: sc.inputTpCd ?? fb?._inputEditType,
         _modalKey: sc.attribute1 ?? fb?._modalKey,
         // ⭐ 콤보 SQL_ID = UI Category Setup 의 CELL_COMBO_DATA_TYPE(cellCboDataTp). 삭제(NULL) 시 콤보 미적용(상수 fallback 제거).
-        _comboKey: sc.cellCboDataTp ?? sc.attribute2,
+        //   금지: `?? sc.attribute2` fallback 부활. attribute2 는 PARAM2(좁힘 선언)라 콤보 SQL_ID 가
+        //   아니고, cellCboDataTp 가 빈 컬럼에서 'DIVISION_ID:DIVISION_ID' 같은 문자열이 comboId 로
+        //   나가 400/빈 결과가 된다.
+        _comboKey: sc.cellCboDataTp,
+        _comboBindings: sc.attribute2,
+        _insertComboKey: sc.attribute9,
+        _comboMode: sc.attribute10,
         cellColor: sc.cellColor,
         textColor: sc.textColor,
       } as MergedColumnMeta;
@@ -209,108 +257,61 @@ export const SalesFuturePriceGrid = ({
   const visibleColumns = useMemo(() => mergedColumns.filter(c => c.visible), [mergedColumns]);
   const fixedBindings = useMemo(() => visibleColumns.map(c => c.binding), [visibleColumns]);
 
-  // ===== Grid 내 combo column dropdown — useTabComboQueries + Wijmo DataMap =====
-  //   AS-IS .cs SetCellTypeCombo(dtXxx) → TO-BE 는 UI Category(cellCboDataTp) 메타로 이관 (combo SQL_ID = admin 관리).
-  // ⭐ UI Category Setup(CELL_COMBO_DATA_TYPE=cellCboDataTp) 기반 콤보 로딩 — 하드코딩 comboId 전면 제거
-  //   (2026-07-01 사용자 요구). FPComboBox 컬럼의 combo SQL_ID 를 그대로 사용 → admin 콤보 변경 즉시 반영.
-  //   공용 DataGrid 표준(staticColumns 의 cellCboDataTp)과 동일 방식 — comboId 문자열만 전달
-  //   (세션 파라미터 @sesUserId/@mnuId/@langCd 는 BE 자동 채움).
-  const comboColumns = useMemo(
-    () => visibleColumns.filter(c => c._ctrlType === 'FPComboBox' && !!c._comboKey),
-    [visibleColumns]
-  );
-  const comboResults = useTabComboQueries({
-    filters: comboColumns.map(c => c._comboKey as string),
-  });
+  // ===== Grid 셀 콤보 — 공용 DataGrid 가 admin 컬럼 메타로 전부 처리한다 (2026-09-01) =====
+  //   조회(comboId=CELL_COMBO_DATA_TYPE)·후보 좁힘(PARAM2)·행 조합별 재조회(PARAM10='D')·
+  //   신규행 전용 콤보(PARAM9)·DataMap 생성까지 mainStaticColumns 로 넘긴 메타 한 벌이 원천이다.
+  //   화면은 콤보를 따로 조회하지도, col.dataMap 을 직접 붙이지도 않는다.
+  //   이유(구조): 화면이 자체 조회 + updatedLayout 재부착을 하면 공용 경로가 만든 DataMap 을
+  //     덮어써 PARAM10/PARAM2 설정이 통째로 무효가 된다. 또 그 재부착은 `dm && ...` 가드라
+  //     콤보가 0건([])으로 바뀌어도 직전 목록이 컬럼에 그대로 남아 드롭다운이 안 바뀌었다
+  //     (사용자 보고 2026-09-01 Sales Site). 공용 경로는 0건이면 후보를 빈 목록으로 만든다.
+  //   금지: 편집 진입 시 col.dataMap 스왑. dataMap 은 셀이 아니라 컬럼 속성이라 그 컬럼 전 행이
+  //     좁혀진 맵을 탄다 (foundation getRowParamDataMap 주석 / 2026-08-21 DMF0049 실사고).
+  //   Team(DEPT_ID) 은 TeambyDivision 이 divisionId 분기를 타므로 아래 comboParams 로 해소한다.
 
-  // Team(DEPT_ID) 표시명 — 조회조건 Team 과 같은 원천 'TeambyDivision' 을 division 파라미터와 함께
-  //   따로 조회해 표시·편집 후보를 모두 이 원천으로 쓴다.
-  //   위 메타 콤보 조회는 comboId 문자열만 넘기므로 파라미터가 붙지 않는다. TeambyDivision 은 40 이
-  //   owner 경로 전용 분기라 divisionId 미전달('ALL' 분기)이면 팀이 반환되지 않아 dataMap 이 비고
-  //   DEPT_ID 코드가 그대로 노출된다(사용자 보고 2026-08-26). 메타 콤보가 'DeptId' 계열이면 코드
-  //   공간 자체가 달라(SCM_MST_SITE.DEPT_ID) 역시 매핑이 안 잡힌다 — DMF0071 BusinessPlanGrid 와 동일 사고.
-  //   주의: BE makeComboQuery 는 raw 문자열 치환이라 작은따옴표를 포함해 넘기는 계약이다.
-  //   금지: 편집 후보만 메타 콤보로 되돌리기 — 거기서 고른 CODE 는 표시 dataMap 에 없어 편집 종료
-  //   직후 다시 코드로 노출된다.
-  const [teamComboRows] = useTabComboQueries({
-    filters: [{ comboId: 'TeambyDivision', divisionId: `'${divisionId ?? ''}'` }] as never,
-  });
-  const teamSig = `${divisionId}#${teamComboRows?.length ?? 'x'}`;
-  // division 필터 + CODE dedup 을 거친 Team 후보 원본 — dataMap(표시) 과 cascade 스왑(편집) 공용.
-  const teamRows = useMemo<Record<string, unknown>[]>(() => {
-    const arr = ((teamComboRows ?? []) as unknown as Record<string, string>[]).filter(
-      r => !r.DIVISION_ID || !divisionId || r.DIVISION_ID === divisionId
-    );
-    // 같은 DEPT_ID 가 division 별로 중복 반환될 수 있어 CODE 기준 dedup.
-    return [...new Map(arr.map(r => [String(r.CODE ?? ''), r])).values()];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [teamSig]);
-  const teamDataMap = useMemo<DataMap | null>(
-    () => (teamRows.length > 0 ? new DataMap(teamRows, 'CODE', 'NAME') : null),
-    [teamRows]
-  );
+  const comboParams = useMemo(() => ({ divisionId: `'${divisionId ?? ''}'` }), [divisionId]);
 
-  // dataMap 재생성 안정화 — comboId + row count 시그니처가 바뀔 때만 rebuild
-  //   (react-query 의 data 참조는 갱신 전까지 안정적이라, count 변화로 로드 완료를 감지).
-  const comboSig = comboColumns
-    .map((c, i) => `${c._comboKey}#${comboResults[i]?.length ?? 'x'}`)
-    .join(',');
-  const dataMaps = useMemo<Record<string, DataMap | null>>(() => {
-    const m: Record<string, DataMap | null> = {};
-    comboColumns.forEach((c, i) => {
-      const arr = comboResults[i] ?? [];
-      m[c.binding] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
-    });
-    // Team 표시 오버라이드 — 메타 콤보로는 코드가 안 풀린다(위 teamDataMap 주석 참조).
-    //   DEPT_ID 가 콤보 컬럼이 아니어도(메타에서 cell type 삭제) 등록한다 — updatedLayout 은
-    //   binding 으로 dataMap 을 붙이므로 읽기전용 컬럼도 이름으로 표시된다.
-    if (teamDataMap) m.DEPT_ID = teamDataMap;
-    return m;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig, teamDataMap]);
-
-  // ⭐ cascade (hook #59 / AS-IS spdMain_ComboSelChange L2612~2757) — 편집 진입 시 행 컨텍스트
-  //   dataMap 스왑에 쓰는 콤보 원본 rows + 전체 dataMap 원복용 ref 미러 (핸들러 useEffect deps 밖 참조).
-  const comboRowsRef = useRef<Record<string, Record<string, unknown>[]>>({});
-  const dataMapsRef = useRef<Record<string, DataMap | null>>({});
-  useEffect(() => {
-    const rowsByBinding: Record<string, Record<string, unknown>[]> = {};
-    comboColumns.forEach((c, i) => {
-      rowsByBinding[c.binding] = (comboResults[i] ?? []) as unknown as Record<string, unknown>[];
-    });
-    // Team — cascade 스왑 원본도 표시와 같은 원천(TeambyDivision)으로 덮는다.
-    //   다른 원천 rows 를 남겨두면 편집 후보가 다른 코드 공간이라 선택 직후 코드가 노출된다.
-    if (teamRows.length > 0) rowsByBinding.DEPT_ID = teamRows;
-    comboRowsRef.current = rowsByBinding;
-    dataMapsRef.current = dataMaps;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig, dataMaps]);
   // 편집 시작 셀의 (binding, oldVal) — cellEditEnded 에서 실제 값 변경 여부 판정(불필요 clear 방지).
   const editingCellRef = useRef<{ binding: string; oldVal: unknown } | null>(null);
+  // 기존 행 Currency 변경 안내(MSG01429)를 이미 본 묶음(groupKeyOf) — 같은 묶음에서 안내가 반복되지 않게 한다.
+  //   조회 결과가 바뀌면(rows) 비운다. AS-IS 는 칸을 누를 때마다 띄우지만(.cs L3686~3691) 편집기와 alert 가
+  //   한 번의 동작에 겹치면 콤보가 닫히므로, 첫 진입은 안내만 띄우고 다음 진입부터 편집기를 연다.
+  const currencyNoticeRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    currencyNoticeRef.current = new Set();
+  }, [rows]);
+  // 편집제약 사업부 안내(MSG01430)가 떠 있는 동안 beginningEdit 가 연속 발화해도 alert 를 겹쳐 띄우지 않는다.
+  const delegatedAlertOpenRef = useRef(false);
+  // 조회 버전 Current 여부 — 아래 핸들러 effect 의 deps 에 없어 closure 가 stale 할 수 있으므로 ref 로 최신값을 본다.
+  //   (Current → 과거 버전으로 재조회해도 기간이 같으면 dynBindings 가 바뀌지 않아 effect 가 다시 돌지 않는다.)
+  const isCurrentVersionRef = useRef(isCurrentVersion);
+  isCurrentVersionRef.current = isCurrentVersion;
 
-  // 동적 컬럼 keys 추출 — SP 결과 모든 row 의 union
+  // 동적 컬럼 keys 추출 — 조회 기간 시간축(periodBindings) ∪ SP 결과 모든 row 의 키
   //   Bucket=W → W_yyyymmdd 중 주 시작일(월요일 OR 월 1일) / Bucket=M → M_yyyymm 만
   //   ⭐ 2026-06-28: SP 는 월경계에서 주차를 분할 반환(W_20260629(6월 월요일) + W_20260701(7월 1일)).
   //      "월요일만" 필터는 월경계 분할 주차(비월요일 시작=월 1일)를 버려 7/1 시작 주차가 누락됨 →
   //      "월요일 OR 월 1일" 로 완화(YYYYMM 단위로 동일 주차라도 월 다르면 표현 — 사용자 요구).
+  //   ⭐ 2026-10-13: 행 키만 보면 BE 가 NULL 컬럼을 빼서 값 있는 주차만 선다(통테 "5주만 표시").
+  //      시간축 키를 먼저 넣고 행 키를 합친다 — 달력 주 시작일과 다른 날짜로 저장된 판가 컬럼(행 키에만 있음)도
+  //      종전처럼 남는다. 데이터 0건이어도 시간축이 있으면 컬럼은 선다(AS-IS 헤더 동작).
   const dynBindings = useMemo<string[]>(() => {
-    if (!rows || rows.length === 0) return [];
     const set = new Set<string>();
     const matchPrefix = bucketPrefix === 'M' ? /^M_\d+$/ : /^W_\d+$/;
-    for (const r of rows) {
-      for (const k of Object.keys(r)) {
-        if (!matchPrefix.test(k)) continue;
-        if (bucketPrefix === 'W') {
-          const d = k.slice(2);
-          const dt = new Date(Date.UTC(+d.slice(0, 4), +d.slice(4, 6) - 1, +d.slice(6, 8)));
-          // 주 시작일 = 월요일(getUTCDay===1) 또는 월 1일(getUTCDate===1, 월경계 분할 주차)
-          if (dt.getUTCDay() !== 1 && dt.getUTCDate() !== 1) continue;
-        }
-        set.add(k);
+    const add = (k: string) => {
+      if (!matchPrefix.test(k)) return;
+      if (bucketPrefix === 'W') {
+        const d = k.slice(2);
+        const dt = new Date(Date.UTC(+d.slice(0, 4), +d.slice(4, 6) - 1, +d.slice(6, 8)));
+        // 주 시작일 = 월요일(getUTCDay===1) 또는 월 1일(getUTCDate===1, 월경계 분할 주차)
+        if (dt.getUTCDay() !== 1 && dt.getUTCDate() !== 1) return;
       }
-    }
+      set.add(k);
+    };
+    for (const k of periodBindings ?? []) add(k);
+    for (const r of rows ?? []) for (const k of Object.keys(r)) add(k);
     return [...set].sort();
-  }, [rows, bucketPrefix]);
+  }, [rows, bucketPrefix, periodBindings]);
 
   // ⭐ 과거 주차/월 편집불가 cutoff = "이번 주 월요일" (AS-IS L893: Today + (Monday(1) - DayOfWeek)).
   //   formatItem(gray) + beginningEdit(lock) 동일 기준. JS getDay(Sun=0)는 .NET DayOfWeek 와 동일.
@@ -324,15 +325,18 @@ export const SalesFuturePriceGrid = ({
     return { week: ymd, month: ymd.slice(0, 6) };
   }, []);
 
-  // 동적 컬럼 과거 여부 — 컬럼 날짜 < 이번 주 월요일.
-  //   Monthly 도 SP 가 컬럼 키를 '월 1일' 8자리 날짜(M_20260801)로 내려주므로 Weekly 와 같은 기준을 쓴다.
-  //   AS-IS 정합(2026-08-26 실측): 오늘이 8/26 이면 8월(8/1)은 이번 주 월요일(8/24) 이전이라 편집불가고
-  //   9월부터 편집 가능하다. 종전처럼 6자리 month 끼리 비교하면 '202608' 이 '20260801' 보다 작아
-  //   현재월이 미래로 판정돼 8월이 편집가능(노랑)으로 열렸다.
-  //   SP 가 6자리(M_yyyymm)로 내려주는 등록본을 대비해 길이로 분기한다.
+  // 동적 컬럼 과거 여부.
+  //   Weekly(W_yyyymmdd): 주 시작일 < 이번 주 월요일.
+  //   Monthly(M_yyyymmdd, SP 는 '월 1일' 8자리로 내려준다): 그 달 마지막 날 < 이번 주 월요일, 즉 그 달이
+  //   이번 주 월요일이 속한 달보다 앞설 때만 과거다. 이번 달은 1일이 월요일보다 앞서도 편집 가능하다
+  //   (2026-10-07 리포트 — 종전 '월 1일 < 월요일' 판정은 이번 달을 과거로 잠가 월 단위 판가 입력이
+  //   다음 달부터만 가능했다. 2026-08-26 에 AS-IS 정합으로 둔 판정을 사용자 결정으로 바꾼다).
+  //   이번 달 월 칸에 넣은 값은 저장 시 이번 주 월요일 이후 주에만 전개한다(SalesFuturePrice.tsx handleSave).
+  //   SP 가 6자리(M_yyyymm)로 내려주는 등록본은 앞 6자리 비교로 같은 결과가 된다.
   const isPastDynCol = useCallback(
     (binding: string): boolean => {
       const tag = binding.slice(2);
+      if (binding.startsWith('M_')) return tag.slice(0, 6) < todayCutoff.month;
       return tag.length <= 6 ? tag < todayCutoff.month : tag < todayCutoff.week;
     },
     [todayCutoff]
@@ -371,6 +375,23 @@ export const SalesFuturePriceGrid = ({
                   ? CELL_INPUT_EDIT_TYPE.OPTIONAL_INSERT_ONLY
                   : CELL_INPUT_EDIT_TYPE.OPTIONAL,
         scale: c.scale,
+        // 셀 콤보 계약만 원문 그대로 넘긴다 — 공용 DataGrid 가 이 네 값으로 조회·좁힘·DataMap 을
+        //   전부 만든다. cellCtrlObjTpCd 는 콤보 컬럼에만 싣는다: 다른 타입까지 넘기면 공용
+        //   매핑의 format/editor/dataType(날짜 편집기, n{scale} 서식 등)이 새로 붙어 이 화면이
+        //   직접 그리던 정적 컬럼 표시가 바뀐다. 콤보(FPComboBox)는 그 셋이 전부 undefined 라
+        //   추가 부작용이 없다.
+        cellCtrlObjTpCd:
+          c._ctrlType === CELL_CONTROL_TYPE.COMBO ? CELL_CONTROL_TYPE.COMBO : undefined,
+        cellCboDataTp: c._comboKey,
+        // Sales Site 콤보는 End Customer 축으로 후보를 좁히지 않는다 — End Customer 는 이제 사용자
+        //   입력이 아니라 Sales Site 에서 파생되는 값이라, 신규행에서 공란인 그 값으로 좁히면
+        //   Sales Site 목록이 비거나 잘못 좁혀진다 (Business Plan DROP_SITE_BINDS 와 같은 처리, 이 화면 한정).
+        attribute2:
+          c.binding === 'SCM_SITE_ID'
+            ? stripEndCustomerComboBinding(c._comboBindings)
+            : c._comboBindings,
+        attribute9: c._insertComboKey,
+        attribute10: c._comboMode,
       })),
     [visibleColumns]
   );
@@ -452,8 +473,6 @@ export const SalesFuturePriceGrid = ({
     const g = (gridRef as { current: FlexGridType<FuturePriceRow> | null } | null)?.current;
     if (!g || !g.columnHeaders || !g.columnHeaders.rows) return;
 
-    // ⭐ 홀수/짝수 행 zebra (사용자 명시 2026-06-28) — Wijmo 표준 alternatingRowStep=1 → 클래스 없는 셀(White 기본)에
-    //   foundation `.wj-cell.wj-alt`(#F7F7F8) 자동 적용. 명시 설정으로 zebra 보장(편집 yellow/과거 gray 셀은 우선).
     if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1;
 
     const formatHandler = (_s: FlexGridType<FuturePriceRow>, e: FormatItemEventArgs) => {
@@ -497,8 +516,8 @@ export const SalesFuturePriceGrid = ({
           toggleClass(e.cell, 'wj-cell-non-editable', isPast);
           return;
         }
-        // 편집제약 division(메타 LOOKUP 구동, 82만 편집) 은 편집가능(노란) 표시 안 함.
-        toggleClass(e.cell, 'wj-cell-editable', !isPast && editable);
+        // 편집제약 division(메타 LOOKUP 구동, 82만 편집) 과 과거 버전 조회는 편집가능(노란) 표시 안 함.
+        toggleClass(e.cell, 'wj-cell-editable', !isPast && editable && isCurrentVersionRef.current);
         toggleClass(e.cell, 'wj-cell-non-editable', isPast);
         // ⭐ 변경 셀 빨강 (AS-IS red cell) — EditTracker 가 기록한 사용자 변경 셀만 빨간 글자.
         //   Wijmo 셀 재활용 → 미변경 셀은 color 제거(잔존 방지).
@@ -520,12 +539,23 @@ export const SalesFuturePriceGrid = ({
         //   (가격 동적셀의 LOC-한정 backcolor 는 위 isDyn 분기에서 별도 처리.)
         // ⭐ 정적 컬럼 backcolor (사용자 명시 2026-06-28): InsertRow 의 IM/IO = Yellow(편집가능),
         //   그 외(조회/비-insert) = White(기본). gray 미적용 — 정적 컬럼은 절대 회색칠하지 않음.
-        //   FPModal 팝업셀(MODEL/PROJECT)은 insert 시 팝업으로 편집 가능하므로 _inputEditType 무관 색칠.
-        const editableForInsert =
+        //   FPModal/FPTextModal 팝업셀(MODEL/PROJECT)은 insert 시 팝업으로 편집 가능하므로 _inputEditType 무관 색칠.
+        //   Team(DEPT_ID) / End Customer(END_CUSTOMER) 는 자동 매핑 컬럼이라 편집 불가 —
+        //   노랑(편집가능)으로 표시하지 않는다 (Business Plan insertStaticEditable=false 대응).
+        const insertEditable =
           isInsert &&
+          !isAutoMappedColumn(col.binding) &&
           (meta._inputEditType === 'IM' ||
             meta._inputEditType === 'IO' ||
-            meta._ctrlType === 'FPModal');
+            meta._ctrlType === 'FPModal' ||
+            meta._ctrlType === 'FPTextModal');
+        // 기존 행 — UI Category Setup 입력 구분이 M(필수)/O(선택)인 칸은 조회된 행에서도 편집 가능하다.
+        //   종전에는 신규 행 여부만 보고 흰색으로 덮어, 설정을 M 으로 바꿔도 노랑이 안 보였다(사용자 보고
+        //   2026-10-13, Currency). beginningEdit 의 진입 조건(isAlwaysEditableMeta + 편집 가능 사업부 +
+        //   Current 버전)과 같은 기준이다. 칸 이름을 보지 않는다 — 어느 칸을 열지는 설정이 정한다.
+        const existingEditable =
+          !isInsert && isAlwaysEditableMeta(meta) && editable && isCurrentVersionRef.current;
+        const editableForInsert = insertEditable || existingEditable;
         toggleClass(e.cell, 'wj-cell-editable', editableForInsert);
         toggleClass(e.cell, 'wj-cell-non-editable', false);
         // ⭐ 전용 클래스 is-insert-editable 로 solid Yellow 보장(scss `.grid` scope !important).
@@ -540,7 +570,10 @@ export const SalesFuturePriceGrid = ({
         //   formatEditableColumns 의 재부착과 배경 규칙이 얽힌다. (2026-08-24: 회피 대상이던 module scss 의
         //   wj-cell-popup 그라데이션 override 는 전역 누수라 제거됨 — 그래도 전용 span 방식은 그대로 유지.)
         toggleClass(e.cell, 'wj-cell-popup', false);
-        if (editableForInsert && meta._ctrlType === 'FPModal') {
+        if (
+          editableForInsert &&
+          (meta._ctrlType === 'FPModal' || meta._ctrlType === 'FPTextModal')
+        ) {
           const cellEl = e.cell;
           cellEl.style.cursor = 'pointer';
           cellEl.title = `${meta.header} 팝업 (더블클릭)`;
@@ -567,14 +600,41 @@ export const SalesFuturePriceGrid = ({
       s: FlexGridType<FuturePriceRow>,
       e: { cancel: boolean; row: number; col: number }
     ) => {
-      // 편집제약 division(메타 LOOKUP 구동, 82만 편집) 컨텍스트는 읽기전용 — 모든 셀 편집 차단.
-      if (!editable) {
-        e.cancel = true;
-        return;
-      }
       const col = s.columns[e.col];
       const binding = col.binding ?? '';
       const row = s.rows[e.row].dataItem as FuturePriceRow | undefined;
+      // 편집제약 division(메타 LOOKUP 구동, 82만 편집) 컨텍스트는 읽기전용 — 모든 셀 편집 차단.
+      //   조용히 막기만 하면 어디서 고쳐야 하는지 알 수 없다(통합테스트 지적 2026-10-08). AS-IS EditButton 이
+      //   EDIT_YN='N' 사업부에서 띄우던 안내(.cs L870~876, "해당 사업부 편집은 Demand - Demand Plan - FcstPrice MGMT 에서…")를
+      //   편집 가능 사업부였다면 열렸을 셀(LOC 행의 현재·미래 가격 셀)에 한해 띄운다 — 그 밖의 셀은 사업부와 무관하게
+      //   원래 읽기 전용이라 안내가 오히려 오해를 준다. 더블클릭 1회 = beginningEdit 1회라 alert 1회.
+      if (!editable) {
+        e.cancel = true;
+        const isLocPriceCell =
+          /^[WM]_/.test(binding) && String(row?.MEASURE ?? '') === 'LOC' && !isPastDynCol(binding);
+        if (isLocPriceCell && !delegatedAlertOpenRef.current) {
+          delegatedAlertOpenRef.current = true;
+          void useMessageStore
+            .getState()
+            .setAlert({
+              type: 'alert',
+              content: t(
+                MSG.EDIT_DIVISION_DELEGATED,
+                '_해당 사업부 편집은 Demand - Demand Plan - FcstPrice MGMT 에서 할 수 있습니다.'
+              ),
+            })
+            .finally(() => {
+              delegatedAlertOpenRef.current = false;
+            });
+        }
+        return;
+      }
+      // 과거 버전 조회 — 편집 진입 자체를 막는다(AS-IS EditButton `if(!isCurVersion) return`, 안내 없음).
+      //   종전에는 여기서 열어 두고 Save 에서 MSG00448 로 막아 입력값이 버려졌다(통합테스트 지적 2026-10-08).
+      if (!isCurrentVersionRef.current) {
+        e.cancel = true;
+        return;
+      }
       const isInsert = row?.CRUD_TYPE === 'I';
       // INSERT: 고정컬럼(MEASURE 앞)은 머지된 공유셀이라 행 무관 편집 허용(앵커=최상단 행, cellEditEnded 가 4행 동기화).
       //   가격(동적 W_/M_) 컬럼은 아래 분기에서 LOC 행만 편집 허용. MEASURE='S' 는 meta 분기에서 차단.
@@ -583,7 +643,32 @@ export const SalesFuturePriceGrid = ({
       // Fixed col — Insert row 의 IM/IO + popup 차단
       if (meta) {
         if (!isInsert) {
-          e.cancel = true;
+          // ⭐ 기존 행 편집 허용 여부는 UI Category Setup 입력 구분이 정한다 — M/O 인 칸만 연다
+          //   (IM/IO = 신규 전용, S = 조회 전용은 종전대로 차단). 칸 이름으로 판정하지 않는다.
+          if (!isAlwaysEditableMeta(meta) || !row) {
+            e.cancel = true;
+            return;
+          }
+          // Currency 는 변경 범위 안내가 먼저다 (AS-IS [E20250113-000150], spdMain_CellClick .cs L3686~3691).
+          //   AS-IS 는 LOC 행 칸만 풀고 Currency 머지를 끊지만, TO-BE 는 묶음 4행이 한 머지 셀이라
+          //   어느 행에서 진입해도 받는다 — 묶음 전파는 cellEditEnded(A2)가 한다.
+          if (binding === 'CURRENCY') {
+            const noticeKey = groupKeyOf(row as Record<string, unknown>);
+            if (!currencyNoticeRef.current.has(noticeKey)) {
+              currencyNoticeRef.current.add(noticeKey);
+              e.cancel = true;
+              void useMessageStore.getState().setAlert({
+                type: 'alert',
+                content: t(
+                  MSG.CURRENCY_CHANGE_SCOPE,
+                  '화면에 조회된 기간의 데이터만 Currency가 변경됩니다. 기간을 확인하시고 Currency 변경을 진행해주세요.'
+                ),
+              });
+              return;
+            }
+          }
+          editingCellRef.current = { binding, oldVal: (row as Record<string, unknown>)[binding] };
+          e.cancel = false;
           return;
         }
         if (meta._ctrlType === 'FPModal') {
@@ -594,34 +679,18 @@ export const SalesFuturePriceGrid = ({
           e.cancel = true;
           return;
         }
-        // ⭐ cascade dataMap 스왑 (hook #59 / AS-IS SetCellTypeCombo 행 단위 combo 재구성 1:1):
-        //   FPComboBox 편집 진입 시 해당 행의 상위 셀 값으로 콤보 후보 필터 → 컬럼 dataMap 교체.
-        //   관대 통과: 행 상위 값 또는 콤보 row 필터 키가 비면 통과 (searchFields toOptions 관용구 —
-        //   사내 미이관 필터 키(END_CUSTOMER 콤보의 DEPT_ID 등)는 데이터 적재 시 자동 활성).
-        //   스왑 dataMap 은 cellEditEnded 진입 시 전체 dataMap 으로 원복 (타 행 CODE→NAME 표시 보존).
+        // Team(DEPT_ID) / End Customer(END_CUSTOMER) 는 사용자 직접 입력 불가 — 기준정보 자동 매핑 전용.
+        //   (Business Plan insertStaticEditable → DEPT_ID40/END_CUSTOMER40 = false 와 동일.)
+        if (isAutoMappedColumn(binding)) {
+          e.cancel = true;
+          return;
+        }
+        // 콤보 후보 좁힘은 여기서 하지 않는다 — 공용 DataGrid 가 컬럼 메타(PARAM2/PARAM10)로
+        //   드롭다운 후보를 만든다(위 콤보 섹션 주석). 여기는 clear 판정용 원본값만 기록한다.
         editingCellRef.current = {
           binding,
           oldVal: row ? (row as Record<string, unknown>)[binding] : undefined,
         };
-        const cascade = GRID_CASCADE_FILTERS[binding];
-        if (meta._ctrlType === 'FPComboBox' && cascade && row) {
-          const src = comboRowsRef.current[binding] ?? [];
-          const rowRec = row as unknown as Record<string, unknown>;
-          const filtered = src.filter(cr =>
-            cascade.every(({ rowKey, comboKey }) => {
-              const rv = cellStr(rowRec[rowKey]).trim();
-              const cv = cellStr(cr[comboKey]).trim();
-              return !rv || rv === 'ALL' || !cv || rv === cv;
-            })
-          );
-          // Map 복합 키 dedup (hook #59 §3) — 필터 후 division 컨텍스트 유지
-          const dedup = [
-            ...new Map(
-              filtered.map(cr => [`${cellStr(cr.DIVISION_ID)}|${cellStr(cr.CODE)}`, cr])
-            ).values(),
-          ];
-          col.dataMap = new DataMap(dedup, 'CODE', 'NAME');
-        }
         return;
       }
       // Dynamic col — LOC row 만 편집 허용 (#70 P7: wrapper read-only 'S' 를 LOC 만 명시 override).
@@ -642,7 +711,7 @@ export const SalesFuturePriceGrid = ({
           e.cancel = true;
           void useMessageStore.getState().setAlert({
             type: 'alert',
-            content: t(MSG.CURRENCY_EMPTY, '_Currency 가 비어 있습니다.'),
+            content: t(MSG.CURRENCY_EMPTY, 'Currency 가 비어 있습니다.'),
           });
           return;
         }
@@ -656,7 +725,17 @@ export const SalesFuturePriceGrid = ({
       e: { cancel: boolean; row: number; col: number }
     ) => {
       if (!editable) return; // 편집제약 division — wrapper cancel 유지
+      // 과거 버전 조회 — 붙여넣기도 편집이므로 명시 차단 (beginningEdit 의 isCurrentVersion 게이트와 동일 기준).
+      if (!isCurrentVersionRef.current) {
+        e.cancel = true;
+        return;
+      }
       const binding = s.columns[e.col].binding ?? '';
+      // Team / End Customer 는 자동 매핑 전용 — 붙여넣기로도 값이 들어오지 못하게 명시 차단.
+      if (isAutoMappedColumn(binding)) {
+        e.cancel = true;
+        return;
+      }
       if (!/^[WM]_/.test(binding)) return; // 정적 col 은 wrapper 판정 유지 (insert IM/IO 는 wrapper 가 이미 허용)
       const row = s.rows[e.row].dataItem as FuturePriceRow | undefined;
       if (String(row?.MEASURE ?? '') !== 'LOC') return; // LOC 행만
@@ -671,13 +750,7 @@ export const SalesFuturePriceGrid = ({
       s: FlexGridType<FuturePriceRow>,
       e: { row: number; col: number }
     ) => {
-      const col = s.columns[e.col];
-      const binding = col.binding ?? '';
-      // ⭐ cascade 스왑 원복 — beginningEdit 에서 행 컨텍스트로 필터된 dataMap 을 전체 dataMap 으로
-      //   되돌린다 (스왑이 남으면 필터 밖 CODE 를 가진 타 행의 명칭 변환이 깨짐). 편집 취소도 커버.
-      if (GRID_CASCADE_FILTERS[binding] && dataMapsRef.current[binding]) {
-        col.dataMap = dataMapsRef.current[binding];
-      }
+      const binding = s.columns[e.col].binding ?? '';
       const row = s.rows[e.row].dataItem as FuturePriceRow | undefined;
       if (!row) return;
       const items = s.collectionView.items;
@@ -719,6 +792,90 @@ export const SalesFuturePriceGrid = ({
         return;
       }
 
+      // (A2) 기존 행 Currency 변경 — AS-IS spdMain_ComboSelChange CURRENCY 분기(.cs L2780~2901) 1:1.
+      //   ① 묶음 전 행에 새 통화 전파 ② 이번 주 이후 칸의 KRW·USD 를 새 통화 기준으로 재환산
+      //   ③ 저장 대상 지정 — AS-IS 는 미래 칸을 Red 로 칠해 저장 수집 대상으로 만든다. TO-BE 는
+      //      LOC 행의 CURRENCY 변경 기록(EditTracker)이 그 표식이고, handleSave(collectDynKeys)가
+      //      그 기록을 보고 값이 있는 현재·미래 칸 전부를 보낸다.
+      if (row.CRUD_TYPE !== 'I' && binding === 'CURRENCY') {
+        const prev = editingCellRef.current;
+        editingCellRef.current = null;
+        if (prev?.binding !== 'CURRENCY') return;
+        const rec = row as Record<string, unknown>;
+        const oldCur = cellStr(prev.oldVal);
+        const newCur = cellStr(rec.CURRENCY).trim();
+        const tracker = editTrackerRef?.current;
+        const track = (item: FuturePriceRow, from: string, to: string) =>
+          tracker?.storeChange(item as never, 'CURRENCY', from as never, to as never);
+        // 묶음 = 통화를 뺀 나머지 키가 같고 화면에서 이어져 있는 기존 행.
+        //   주의: 통화 값으로 묶음을 찾으면 안 된다. Currency 칸은 묶음 4행이 머지된 한 칸이라 그리드가
+        //   편집값을 머지 범위의 모든 행에 써 넣는다 — 이 시점에 형제 행은 이미 새 통화다. 종전에는
+        //   "옛 통화 키가 같은 행"으로 찾아 LOC 행을 놓쳤고, 변경 기록이 안 남아 저장 때 아무것도 안 갔다
+        //   (사용자 보고 2026-10-13). 통화만 다른 이웃 묶음을 삼키지 않도록 이어진 행만, 통화가
+        //   옛 값이거나 새 값인 행만 받는다.
+        const keyNoCur = (item: FuturePriceRow): string =>
+          KEY_COLS.filter(k => k !== 'CURRENCY')
+            .map(k => toStr((item as Record<string, unknown>)[k]))
+            .join('|');
+        const rowKey = keyNoCur(row);
+        const inBlock = (item: FuturePriceRow | undefined): item is FuturePriceRow => {
+          if (!item || item.CRUD_TYPE === 'I' || keyNoCur(item) !== rowKey) return false;
+          const cur = cellStr((item as Record<string, unknown>).CURRENCY).trim();
+          return item === row || cur === oldCur || cur === newCur;
+        };
+        const at = items.indexOf(row);
+        let top = at;
+        let bottom = at;
+        while (top > 0 && inBlock(items[top - 1])) top--;
+        while (bottom < items.length - 1 && inBlock(items[bottom + 1])) bottom++;
+        const block = at < 0 ? [row] : items.slice(top, bottom + 1);
+        // 빈 통화로는 바꾸지 않는다 — 통화는 가격 행의 키라 비우면 저장할 수 없다. 묶음 전체를 원래 값으로 되돌린다.
+        if (newCur === '') {
+          for (const item of block) {
+            (item as Record<string, unknown>).CURRENCY = oldCur;
+            track(item, oldCur, oldCur);
+          }
+          s.invalidate(true);
+          return;
+        }
+        if (newCur === oldCur) return;
+        const loc = block.find(item => (item.MEASURE ?? '') === 'LOC');
+        for (const item of block) {
+          // 통화는 묶음 전 행의 값이 바뀌므로 전 행에 변경 기록을 남긴다 — 수정 표시(M)가 묶음 단위로 붙는다
+          //   (AS-IS 도 묶음 전 행 Currency 를 Red 로 칠한다, .cs L2791~2798). 종전에는 LOC 행에만 남겨
+          //   한 행만 수정으로 보였다(사용자 보고 2026-10-13). 저장은 그대로 LOC 행이 묶음 대표다 —
+          //   handleSave 는 M 행 중 LOC 만 골라 보내므로 형제 행의 M 은 전송량에 영향이 없다.
+          track(item, oldCur, newCur);
+          (item as Record<string, unknown>).CURRENCY = newCur;
+        }
+        if (loc) {
+          const locRec = loc as Record<string, unknown>;
+          const div = String(loc.DIVISION_ID ?? '');
+          const erMap = exchangeRateMapRef.current;
+          const currencyCodes = currencyCodesFromRateMap(erMap);
+          for (const b of dynBindings) {
+            if (isPastDynCol(b)) continue; // 지난 주차/월은 옛 통화 그대로 (AS-IS iResultCol+1 부터)
+            const locRaw = locRec[b];
+            if (locRaw == null || locRaw === '') continue; // 가격이 없는 칸은 바꿀 데이터가 없다
+            const locPrice = String(locRaw as string | number);
+            for (const item of block) {
+              if (item === loc) continue;
+              const sm = String(item.MEASURE ?? '');
+              if (!isExchangeTargetMeasure(currencyCodes, sm, newCur)) continue; // RTF 등 비통화 제외
+              const rawSib = erMap
+                ? getExchangeRate(erMap, div, newCur, sm, b.slice(2, 8), locPrice, null)
+                : locPrice;
+              const sibNum = rawSib === '' ? NaN : Number(rawSib);
+              (item as Record<string, unknown>)[b] = Number.isNaN(sibNum) ? null : sibNum;
+            }
+          }
+        }
+        // 통화가 바뀌면 묶음 키도 바뀐다 — 방금 바꾼 묶음에 안내가 다시 뜨지 않게 새 키도 등록한다.
+        currencyNoticeRef.current.add(groupKeyOf(rec));
+        s.invalidate(true);
+        return;
+      }
+
       // (B) 고정 col — insert 전용 (같은 INSERT_GROUP_ID 4 measure row 좌측 fixed cols 동기화).
       if (row.CRUD_TYPE !== 'I') return;
       const gid = row.INSERT_GROUP_ID;
@@ -747,6 +904,19 @@ export const SalesFuturePriceGrid = ({
           }
         }
       }
+
+      // ⭐ End Customer 자동 매핑 — Sales Site 콤보 변경 시 SCM_MST_SITE 기준정보
+      //   (콤보 'SiteEndCustomerMapDMF0082')로 END_CUSTOMER 를 파생한다. 사용자 직접 입력 불가
+      //   컬럼이라 여기서만 값이 채워진다. 유효 매핑이 없으면 위 clearTargets 가 이미 비운 상태 유지.
+      //   (Business Plan div40 Model 팝업 파생 패턴의 Sales Price 판 — 여기선 Sales Site 콤보가 트리거.)
+      if (binding === 'SCM_SITE_ID' && changed) {
+        const ec = deriveEndCustomer(siteEcMapRef.current, cellStr(newVal));
+        for (const item of items) {
+          if (item.CRUD_TYPE === 'I' && item.INSERT_GROUP_ID === gid) {
+            (item as Record<string, unknown>).END_CUSTOMER = ec;
+          }
+        }
+      }
       editingCellRef.current = null;
       s.invalidate(true);
     };
@@ -758,12 +928,44 @@ export const SalesFuturePriceGrid = ({
       if (ht.cellType !== CellType.Cell) return;
       const col = g.columns[ht.col];
       const meta = visibleColumns.find(c => c.binding === col.binding);
-      if (meta?._ctrlType !== 'FPModal' || meta._inputEditType !== 'IM') return;
+      // 아이콘 표시 조건(formatHandler :485-489, 504)과 동일화 — _inputEditType 무관,
+      //   FPModal/FPTextModal 이면 insert 시 팝업 편집 가능(주석 :500-502 의도와 일치).
+      if (meta?._ctrlType !== 'FPModal' && meta?._ctrlType !== 'FPTextModal') return;
       const row = g.rows[ht.row].dataItem as FuturePriceRow | undefined;
       if (!row || row.CRUD_TYPE !== 'I') return;
       if (meta._modalKey) onPopupCellDblClick?.(meta._modalKey, row);
     };
-    g.hostElement.addEventListener('dblclick', dblclickHandler);
+    // ⭐ 더블클릭 — 네이티브 'dblclick' 대신 click 2회를 직접 판정한다 (BusinessPlanGrid.tsx
+    //   2026-09-02 선례 1:1). 원인: 공용 DataGrid 의 selectionChanged → refresh(false) 가
+    //   첫 클릭마다 셀 DOM 을 다시 그려 두 클릭이 서로 다른 DOM 엘리먼트에 떨어지고, 브라우저가
+    //   dblclick 을 합성하지 못한다(실측: click 은 오지만 dblclick 은 오지 않음). click 은 DOM
+    //   재생성과 무관하게 매번 발생하므로 같은 논리 셀(hitTest row/col)을 임계시간 안에 두 번
+    //   클릭하면 더블클릭으로 본다.
+    const DBLCLICK_MS = 400;
+    let lastClickTs = 0;
+    let lastClickRow = -1;
+    let lastClickCol = -1;
+    let lastClickType: CellType | -1 = -1;
+    const clickAsDblHandler = (ev: MouseEvent) => {
+      const ht = g.hitTest(ev);
+      const now = ev.timeStamp;
+      const sameCell =
+        ht.row === lastClickRow && ht.col === lastClickCol && ht.cellType === lastClickType;
+      if (sameCell && now - lastClickTs > 0 && now - lastClickTs < DBLCLICK_MS) {
+        // 3연속 클릭이 계속 더블로 잡히지 않도록 리셋.
+        lastClickTs = 0;
+        lastClickRow = -1;
+        lastClickCol = -1;
+        lastClickType = -1;
+        dblclickHandler(ev);
+        return;
+      }
+      lastClickTs = now;
+      lastClickRow = ht.row;
+      lastClickCol = ht.col;
+      lastClickType = ht.cellType;
+    };
+    g.hostElement.addEventListener('click', clickAsDblHandler);
 
     // ⭐ v4 (2026-06-21) — Scroll 시 머지 그룹 재계산 trigger.
     //   scrollPositionChanged → g.invalidate() → mergeManager 가 새 viewRange.row/row2 로
@@ -913,7 +1115,7 @@ export const SalesFuturePriceGrid = ({
         /* unmount race */
       }
       try {
-        g.hostElement?.removeEventListener('dblclick', dblclickHandler);
+        g.hostElement?.removeEventListener('click', clickAsDblHandler);
       } catch {
         /* unmount race */
       }
@@ -939,32 +1141,20 @@ export const SalesFuturePriceGrid = ({
     if (!g) return;
 
     const applyHeaderHeight = () => {
-      // (0-a) Filter sanitize — SubTitle F4(toggleColumnFilter) 가 선택셀 기준 binding 을 filterColumns 에
-      //       push 하므로 사용자가 동적(W_/M_, 3단 머지) 컬럼 선택+F4 시 유입 가능 → 머지헤더 글리프 충돌.
-      //       동적 binding 을 영속 제거(변경 시에만 set → 무한루프 차단). 정적 컬럼 필터만 허용.
-      const f = gridFilterRef?.current;
-      if (f) {
-        const cleaned = f.filterColumns.filter(b => !/^[WM]_/.test(b));
-        if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
-      }
-      // (0-b) combo dataMap 재적용 — wrapper columnGroups 재적용이 col.dataMap 을 undefined 로 덮으므로
-      //     updatedLayout 마다 재부착(guard: 동일 참조면 skip → 무한루프 차단, invalidate 미호출).
-      //     dataMaps 는 useTabComboQueries(피처) 결과 — divisionId 종속 cascade 포함 정확 적용.
+      // (0-b) MEASURE DataMap 재부착 — UI Category Measure 메타(RTF_SYS_RP→'RTF') 는 콤보가 아니라
+      //     화면이 만드는 맵이라 공용 staticColumns 경로를 안 탄다. wrapper 가 columnGroups 를
+      //     재적용하며 col.dataMap 을 undefined 로 덮으므로 매 layout 재부착한다
+      //     (guard: 동일 참조면 skip → 무한루프 차단, invalidate 미호출). 메타 없으면 해제(raw 코드).
+      //   셀 콤보는 여기서 손대지 않는다 — 공용 DataGrid 가 컬럼 메타로 만든 DataMap 이 그대로
+      //     columnGroups 에 실려 온다. 여기서 다시 붙이면 PARAM10/PARAM2 결과를 덮어쓴다.
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];
-        const binding = col.binding ?? '';
-        // ⭐ MEASURE — UI Category Measure 메타 DataMap(RTF_SYS_RP→'RTF'). combo 와 동일하게 매 layout 재부착
-        //   (wrapper columnGroups 재적용이 col.dataMap 을 undefined 로 덮으므로). 메타 없으면 해제(raw 코드).
-        if (binding === 'MEASURE') {
-          if (measureDataMap) {
-            if (col.dataMap !== measureDataMap) col.dataMap = measureDataMap;
-          } else if (col.dataMap) {
-            col.dataMap = null;
-          }
-          continue;
+        if ((col.binding ?? '') !== 'MEASURE') continue;
+        if (measureDataMap) {
+          if (col.dataMap !== measureDataMap) col.dataMap = measureDataMap;
+        } else if (col.dataMap) {
+          col.dataMap = null;
         }
-        const dm = dataMaps[binding];
-        if (dm && col.dataMap !== dm) col.dataMap = dm;
       }
       const headerRows = g.columnHeaders?.rows;
       if (!headerRows || headerRows.length === 0) return;
@@ -991,22 +1181,15 @@ export const SalesFuturePriceGrid = ({
         /* unmount race */
       }
     };
-  }, [dynBindings, visibleColumns, dataMaps, measureDataMap, gridRef]);
+  }, [dynBindings, visibleColumns, measureDataMap, gridRef]);
 
   // ⭐ F4 Filter — 피처 소유 FlexGridFilter (공용 DataGrid 의 filterColumns:[''] 기본 생성 회피).
-  //   다중 방어로 3단 머지 헤더/LOC backcolor 깨짐 재발 차단:
-  //   ① filterChanging: 동적(W_/M_) 컬럼 필터 cancel (머지헤더 손상 원천 차단)
-  //   ② filterApplied: g.invalidate(true) → updatedLayout(applyHeaderHeight: 헤더48/dataMap) + formatItem(LOC backcolor) 재적용
-  //   ③ 영속 sanitize(위 applyHeaderHeight 0-a): toggleColumnFilter 가 push 한 동적 binding 제거
+  //   filterApplied: g.invalidate(true) → updatedLayout(applyHeaderHeight: 헤더48/dataMap) + formatItem(LOC backcolor) 재적용
   //   deps 에 dynBindings/visibleColumns 포함 → grid ready(데이터 로드) 후 실행. key prop re-mount 시 grid 교체 감지 후 재생성.
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<FuturePriceRow> | null } | null)?.current;
     if (!g || !gridFilterRef) return;
 
-    const isDynamic = (binding: string | null | undefined): boolean => /^[WM]_/.test(binding ?? '');
-    const onFilterChanging = (_s: FlexGridFilter, e: CellRangeEventArgs) => {
-      if (isDynamic(e.getColumn()?.binding)) e.cancel = true; // 동적 컬럼 필터 불가
-    };
     const onFilterApplied = () => {
       g.invalidate(true); // 헤더높이/LOC backcolor 재적용 (updatedLayout + formatItem)
     };
@@ -1020,12 +1203,10 @@ export const SalesFuturePriceGrid = ({
       f.filterColumns = [''];
       gridFilterRef.current = f;
     }
-    f.filterChanging.addHandler(onFilterChanging);
     f.filterApplied.addHandler(onFilterApplied);
 
     return () => {
       try {
-        f?.filterChanging.removeHandler(onFilterChanging);
         f?.filterApplied.removeHandler(onFilterApplied);
       } catch {
         /* unmount race */
@@ -1068,9 +1249,17 @@ export const SalesFuturePriceGrid = ({
       editTrackerRef={editTrackerRef as never}
       staticColumns={mainStaticColumns}
       dynamicColumns={mainDynamicColumns}
+      // @divisionId 토큰 콤보 해소 — TeambyDivision 은 40 이 owner 경로 전용 분기라 division 을
+      //   안 실으면('ALL' 분기) 팀이 0건으로 와 DEPT_ID 가 코드로 노출된다(2026-08-26 보고).
+      //   토큰이 없는 콤보는 BE makeComboQuery 가 여분 파라미터를 무시한다.
+      //   따옴표는 apiClient.getCombo 의 quoteComboParams 가 멱등 처리하지만, 다른 화면
+      //   (customer-model-mapping 등)과 같은 형태로 맞춰 캐시 키가 갈리지 않게 한다.
+      comboParams={comboParams}
       itemsSource={rows as unknown as WijmoRowItem[]}
       autoGenerateColumns={false}
-      allowSorting={true}
+      // allowSorting prop 은 넘기지 않는다 - grid.allowSorting 이 truthy 면 wijmo
+      //   _MouseHandler._mousedown 이 헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다.
+      //   공용 정렬(F3 스위치 + 헤더 클릭 + 아이콘)은 이 prop 없이도 그대로 동작한다.
       // ⭐ 데이터 셀 머지 — wrapper 가 allowMerging prop(default ColumnHeaders)을 매 렌더 재적용해
       //   effect 의 g.allowMerging=All 을 되돌림 → 셀 머지 OFF. prop 으로 All 전달해 일관 적용.
       allowMerging={AllowMerging.All}

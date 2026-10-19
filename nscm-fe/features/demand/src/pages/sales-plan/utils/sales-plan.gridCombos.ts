@@ -1,13 +1,11 @@
-// ⭐ DMF0021 — Grid 셀 콤보 dataMap 스왑/원복 헬퍼 (hook #59 §5-G — beginningEdit 스왑 + cellEditEnded 원복).
-//   근거(라인 = AS-IS DMF0021_SalesPlan.cs):
-//     · Catch_Up 셀콤보 3종 : DOM_EXP(dtCustomsHandbook L4877) / INCOTERMS(L4896) /
-//       FCST_TYPE(ETC 제외 — SALES_TYPE_CODE 중 ETC 제외 L4903·InsertRow ETC 고정 L2944 대비).
-//     · Insert Measure 콤보 : GET_SALES_PLAN_MEASUREINFO (L2925 dtMearsure — 기본 SalesAmt_LOC).
-//     · 행 cascade          : ComboSelChange 6키 (constants GRID_CASCADE_FILTERS/CLEAR 참조).
-import { DataMap } from '@mescius/wijmo.grid';
-
+// DMF0021 — 셀 편집 후처리 헬퍼.
+//   금지: 이 파일에서 DataMap 을 만들어 col.dataMap 에 붙이지 말 것. 셀 콤보의 후보·표시·행별
+//   좁힘은 전부 컬럼 메타(cellCboDataTp / PARAM2 / PARAM9 / PARAM10)가 단일 원천이고 공용
+//   DataGrid 가 그 메타대로 만든다 (foundation getDataMap / getRowParamDataMap).
+//   행 상태로 후보를 더 좁혀야 하면 기존 맵의 getDisplayValues 만 덮는다 (SalesPlanGrid
+//   installMeasureCandidateFilter / installCatchUpFcstTypeFilter).
 import { INSERT_DEFAULT_FCST_TYPE } from '../sales-plan.constants';
-import type { MeasureInfoRow, SalesPlanRow } from '../sales-plan.types';
+import type { SalesPlanRow } from '../sales-plan.types';
 
 // 타입 안전 string 변환 — string/number 만 (객체는 ''). no-base-to-string 회피.
 export const toCellStr = (v: unknown): string =>
@@ -18,61 +16,6 @@ export const toCellStr = (v: unknown): string =>
 //   같은 표현이어야 저장 필수값 검증(validate)이 둘을 구분 없이 걸러낸다.
 export const buildClearPatch = (fields: readonly string[]): Record<string, string> =>
   Object.fromEntries(fields.map(f => [f, '']));
-
-// 콤보 rows 중복 제거 — CODE 기준 첫 행만 남긴다(콤보 SQL 정렬 순서 보존).
-//   코드 목록은 CODE 유일이 의미상 보장인데, CMBO_SQL 이 행을 불려 내려보내는 경우가 있다.
-//   실측(2026-08-17 Measure 드롭다운 중복): CMBO 'Measure' 는 @mnuId 만 받고 division 필터가
-//   없어(comboContext) SCM_MST_SHEET_MEASURE 에 division 별로 적재된 같은 measure 가 등록
-//   division 수만큼 반복돼 온다. DataMap 은 소스 배열을 그대로 펼치므로 그 중복이 셀 드롭다운
-//   항목 중복으로 보인다. (동류 사고: sales-reports P_DMF0044_GET_MEASURE 권한 조인 16행)
-export const dedupeComboRowsByCode = <T extends Record<string, unknown>>(rows: T[]): T[] => {
-  const byCode = new Map<string, T>();
-  for (const row of rows) {
-    const code = toCellStr(row.CODE).trim();
-    if (!byCode.has(code)) byCode.set(code, row);
-  }
-  return [...byCode.values()];
-};
-
-// FCST_TYPE Catch_Up 편집 콤보 — 전체 'FcstType' 콤보 rows 에서 ETC 제외 (AS-IS FCST_TYPE(ETC 제외) 1:1).
-export const buildCatchUpFcstTypeMap = (
-  fcstTypeRows: Record<string, unknown>[]
-): DataMap | null => {
-  const filtered = fcstTypeRows.filter(
-    r => toCellStr(r.CODE).trim().toUpperCase() !== INSERT_DEFAULT_FCST_TYPE
-  );
-  return filtered.length > 0 ? new DataMap(filtered, 'CODE', 'NAME') : null;
-};
-
-// Insert 행 MEASURE 편집 콤보 — GET_SALES_PLAN_MEASUREINFO (CODE/NAME/DISPLAY_SEQ) → DataMap.
-export const buildMeasureInfoMap = (rows: MeasureInfoRow[]): DataMap | null => {
-  const sorted = [...rows].sort((a, b) => Number(a.DISPLAY_SEQ ?? 0) - Number(b.DISPLAY_SEQ ?? 0));
-  return sorted.length > 0
-    ? new DataMap(sorted as unknown as Record<string, unknown>[], 'CODE', 'NAME')
-    : null;
-};
-
-// 행 컨텍스트 cascade 필터 — 콤보 원본 rows 를 상위 셀 값으로 클라 필터 (관대 통과: 공란/'ALL' = 통과).
-export const filterComboRowsByRow = (
-  src: Record<string, unknown>[],
-  row: SalesPlanRow,
-  cascade: { rowKey: string; comboKey: string }[]
-): Record<string, unknown>[] => {
-  const rowRec = row as Record<string, unknown>;
-  const filtered = src.filter(cr =>
-    cascade.every(({ rowKey, comboKey }) => {
-      const rv = toCellStr(rowRec[rowKey]).trim();
-      const cv = toCellStr(cr[comboKey]).trim();
-      return !rv || rv === 'ALL' || !cv || rv === cv;
-    })
-  );
-  // Map 복합 키 dedup (hook #59 §3) — 필터 후 division 컨텍스트 유지.
-  return [
-    ...new Map(
-      filtered.map(cr => [`${toCellStr(cr.DIVISION_ID)}|${toCellStr(cr.CODE)}`, cr])
-    ).values(),
-  ];
-};
 
 // ⭐ R6 — Measure 전환 시 행 재구성 (AS-IS ComboSelChange Measure 분기 L4774~5082 —
 //   Catch_Up: ItemId 모달 전환+clear(L4870)/DomExp·Incoterms·FcstType 개방/Team 잠금 /

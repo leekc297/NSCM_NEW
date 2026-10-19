@@ -7,7 +7,7 @@
 // console.group 은 안 쓴다 (브라우저에 따라 펼쳐도 내용이 안 보이는 사례가 있었다).
 // 리스트는 최상위에서 배열로 찍어 접었다 펼친다. 표로 보려면 AS_TABLE = true.
 
-const ON = false;
+const ON = true;
 
 /** true = console.table(표, 항상 펼침) / false = 배열(펼침 토글) */
 const AS_TABLE = false;
@@ -102,6 +102,63 @@ export const logSearchReset = (opts: {
     `[reset] ${label} — ${changed.field}: '${changed.from}' -> '${changed.to}'\n` +
       (resets.length > 0 ? `  같이 재세팅:\n${body}` : '  같이 재세팅되는 항목 없음')
   );
+};
+
+// ============================================================================
+// [filter-combo] buildComboOptions 1건이 어느 축에서 잘렸는지
+// ============================================================================
+/**
+ * Filter 콤보 목록이 이상할 때 축 단위로 몇 건이 잘렸는지 본다.
+ *
+ * 축마다 "적용 코드"와 "축 값 분포"를 함께 찍는다. 둘을 나란히 보면 원인이 갈린다.
+ *   · 축 값 분포가 '(공란)' 위주  -> 그 컬럼이 NULL 이라 엄격 매칭에 전부 잘린다.
+ *   · 적용 코드가 []              -> 그 축은 미적용이라 전량이 남는다.
+ *   · 콤보 실제 컬럼에 이름이 없다 -> 등록 SQL 이 그 컬럼을 안 내려준다.
+ */
+export const logFilterCombo = (opts: {
+  label: string;
+  comboId: string;
+  rawRows: Record<string, unknown>[] | undefined;
+  division?: string;
+  axes?: { column: string; codes: readonly string[]; note?: string }[];
+  options: { label: string; value: string }[];
+}): void => {
+  if (off()) return;
+  const { label, comboId, rawRows, division, axes = [], options } = opts;
+  const rows = rawRows ?? [];
+  const columns = rows.length > 0 ? Object.keys(rows[0]) : [];
+  const val = (row: Record<string, unknown>, column: string) => {
+    const raw = row[column] as string | number | null | undefined;
+    return raw === null || raw === undefined ? '' : String(raw).trim();
+  };
+  const show = (items: string[]) =>
+    `${JSON.stringify(items.slice(0, 20))}${items.length > 20 ? ' ...' : ''}`;
+
+  let live = division ? rows.filter(r => val(r, 'DIVISION_ID') === division) : rows;
+  const lines: string[] = [`  DIVISION_ID='${division ?? ''}' -> ${live.length}건`];
+  for (const axis of axes) {
+    const codes = [...axis.codes];
+    const spread = [...new Set(live.map(r => val(r, axis.column) || '(공란)'))];
+    if (codes.length > 0) live = live.filter(r => codes.includes(val(r, axis.column)));
+    lines.push(
+      `  ${axis.column}[엄격] 적용 코드 ${codes.length}개 ${show(codes)}` +
+        `${axis.note ? ` (${axis.note})` : ''} -> ${live.length}건\n` +
+        `    ${axis.column} 축 값 분포(${spread.length}종): ${show(spread)}` +
+        (columns.length > 0 && !columns.includes(axis.column)
+          ? `\n    주의: 응답에 '${axis.column}' 컬럼이 없다`
+          : '')
+    );
+  }
+
+  console.log(
+    `${SEP}\n[filter-combo] ${label} (${comboId})\n${SEP}\n` +
+      `  콤보 원본: ${rows.length}건\n` +
+      `  콤보 실제 컬럼: [${columns.join(', ')}]\n` +
+      `${lines.join('\n')}\n` +
+      `  CODE 중복제거 -> 최종 옵션 ${options.length}건`
+  );
+  console.warn('  콤보 원본', rows);
+  console.warn(`  최종 옵션 — ${options.length}건`, options);
 };
 
 // ============================================================================

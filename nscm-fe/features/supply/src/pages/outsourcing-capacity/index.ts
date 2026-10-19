@@ -1,0 +1,1 @@
+export { OutsourcingCapacity } from './OutsourcingCapacity';

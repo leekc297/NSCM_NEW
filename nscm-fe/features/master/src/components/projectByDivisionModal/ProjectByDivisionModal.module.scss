@@ -2,9 +2,35 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  // 조회조건 필드의 폭 팽창 차단(사용자 신고: Project 팝업 Team 값이 길면 그 필드가
+  //   늘어나 옆 조건 End Customer/Sales Site/Project 를 침범).
+  //   표준 조회조건은 FormItem 에 commonStyles.formItem 클래스를 붙여 막지만, 이 팝업은
+  //   그 클래스가 없다. 클래스를 안 붙이고 SCSS 로만 동일 규칙을 건다(사용자 지정).
+  //
+  //   두 단계로 막는다.
+  //   1) 조건 셀(SearchArea 의 MUI Grid container 직계 item, size=4)의 min-width:auto 해제.
+  //      flex item 기본 min-width:auto 면 넓은 콘텐츠(긴 칩)가 트랙을 밀어 25% 폭을 넘어
+  //      옆 칸을 침범한다. min-width:0 이면 트랙이 남은 폭에 맞춰진다.
+  //   2) 그 안 FormItem(라벨 140px + 필드 auto 2컬럼 grid)의 필드 열(마지막 자식)도 min-width:0.
+  //      grid track 기본 min-width:auto 라 셀을 잡아도 필드 열이 다시 밀어낸다. 0 이면
+  //      넘치는 칩은 필드 안에서 …로 잘린다(commonStyles.formItem 과 동일 규칙).
+  //   specificity: 디자인시스템 FormItem 기본 스타일을 이기려면 셀렉터를 충분히 올려야 한다
+  //      (commonStyles 가 body .formItem 으로 올리는 것과 같은 이유).
+  :global(.MuiGrid-container) > :global(.MuiGrid-root) {
+    min-width: 0;
+
+    // FormItem 루트(Grid item 의 직계 div)의 필드 열(그 안 마지막 자식). 라벨이 first-of-type.
+    & > div > div:last-of-type {
+      min-width: 0;
+    }
+  }
 }
 
 .gridWrapper{
+  display: flex;
+  flex-direction: column;
+  position: relative;
   flex: 1;
   min-height: 0;
 }

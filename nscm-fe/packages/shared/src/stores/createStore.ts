@@ -14,6 +14,20 @@ export const TabIdContext = createContext<string | undefined>(undefined);
 
 export const useTabid = () => useContext(TabIdContext) ?? '';
 
+/**
+ * 현재 탭 화면의 mnuId(= 화면 코드, 예 'DMF0003'). ViewContainer 가 탭마다 Provider 로 심는다.
+ *
+ * 콤보 SQL(SCM_ADM_CMBO_SQL_M)의 @mnuId 는 BE makeComboQuery 가 이 값으로 치환한다(PROGRAM_ID = @mnuId
+ * 같은 화면 스코프 콤보). 세션 값인 @sesUserId 와 달리 mnuId 는 "어느 화면이 호출했나"라 BE 세션만으로는
+ * 알 수 없어 호출부가 실어 보내야 한다. 이 컨텍스트를 콤보 훅(useTabComboQueries/useTabComboQuery)이 읽어
+ * 검색조건·그리드 콤보 전부에 mnuId 를 기본 주입한다 — 화면별 하드코딩 없이 sesUserId 처럼 기본값이 된다.
+ *
+ * 전역 활성 탭이 아니라 "호출한 화면 자신"의 값이라 백그라운드(keep-alive) 탭 재조회에도 오염되지 않는다.
+ */
+export const MenuIdContext = createContext<string | undefined>(undefined);
+
+export const useMenuId = () => useContext(MenuIdContext);
+
 export interface BaseTabState<T = Record<keyof object, object>> {
   _tabId?: string;
   reset: () => void;

@@ -8,7 +8,7 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
 import com.github.f4b6a3.ulid.Ulid;
 import com.github.f4b6a3.ulid.UlidCreator;
@@ -19,6 +19,7 @@ import com.lgcns.nscm.framework.exception.SqlException;
 import com.lgcns.nscm.framework.utils.NullUtils;
 import com.lgcns.nscm.framework.utils.SecurityUtil;
 
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -38,10 +39,26 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Component
-public class LogInterceptor implements HandlerInterceptor {
+public class LogInterceptor implements AsyncHandlerInterceptor {
 
 	@Autowired
     protected NCommonDAO ncommondao;
+
+	/**
+	 * [E20261015-STREAMPROC] 비동기 응답(StreamingResponseBody — call-proc-stream) 대응.
+	 * 비동기 요청은 1차 디스패치 끝에 afterCompletion 대신 afterConcurrentHandlingStarted 가 불리고, 전송이 끝난 뒤
+	 * ASYNC 2차 디스패치에서 preHandle → afterCompletion 이 다시 돈다. 그대로 두면 2차 preHandle 이 MDC 를 초기화해
+	 * typeCd(=BUTTON) 를 잃고 시스템 로그가 남지 않는다 → 1차 MDC 를 요청 속성에 보관했다가 2차에서 복원한다.
+	 * 동기 요청(기존 전부)은 dispatcherType=REQUEST 라 동작 무변경.
+	 */
+	private static final String MDC_SNAPSHOT_ATTR = LogInterceptor.class.getName() + ".MDC_SNAPSHOT";
+
+	@Override
+	public void afterConcurrentHandlingStarted(HttpServletRequest request, HttpServletResponse response, Object handler) {
+		Map<String, String> snapshot = MDC.getCopyOfContextMap();
+		if(snapshot != null) request.setAttribute(MDC_SNAPSHOT_ATTR, snapshot);
+		MDC.clear();
+	}
 
 	/**
 	 * @MethodName : preHandle
@@ -55,6 +72,14 @@ public class LogInterceptor implements HandlerInterceptor {
 	 */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        // 비동기 2차 디스패치 — 1차에서 보관한 MDC 복원(afterConcurrentHandlingStarted 참조)
+        if (request.getDispatcherType() == DispatcherType.ASYNC
+                && request.getAttribute(MDC_SNAPSHOT_ATTR) instanceof Map<?, ?> snapshot) {
+            Map<String, String> restored = new HashMap<>();
+            snapshot.forEach((k, v) -> restored.put(String.valueOf(k), v == null ? null : String.valueOf(v)));
+            MDC.setContextMap(restored);
+            return true;
+        }
         // ULID 기반 Trace ID 생성 (없을 경우에만 생성)
         String traceId = request.getHeader("x-request-id");
 //        String traceId = request.getHeader("X-Request-ID");

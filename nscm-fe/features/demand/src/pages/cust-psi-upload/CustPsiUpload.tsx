@@ -121,12 +121,17 @@ export const CustPsiUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters: dayRangeFilters,
     enabled: !dayRangeApplied,
   });
+  //   Reset Condition(F10) 후 재적용 필수: F10 은 dayRangeApplied 를 false 로 되돌리지만, dayRange
+  //   쿼리는 staleTime=Infinity 캐시라 재활성화해도 dayRangeData 참조가 그대로다. deps 가
+  //   dayRangeData 뿐이면 effect 가 다시 돌지 않아 기간이 클라 기본값에 멈춘다. dayRangeApplied 를
+  //   deps 에 넣어 F10 직후 캐시된 서버 구간을 다시 적용한다(초기 진입·새로고침과 동일 경로).
   useEffect(() => {
+    if (dayRangeApplied) return;
     const range = (dayRangeData as { o_rc1?: { DAY_RANGE?: string }[] })?.o_rc1?.[0]?.DAY_RANGE;
     if (!range) return;
     applyDayRange(range);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dayRangeData]);
+  }, [dayRangeData, dayRangeApplied]);
 
   // mount 시 1회 admin 메타 fetch + persist 된 이전 filters 무효화 (NULL payload SP 자동호출 방지)
   useEffect(() => {
@@ -171,7 +176,6 @@ export const CustPsiUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
   // F5 Search — refetch 직접 호출 금지 (stale closure). setFilter + invalidateQueries([tabId]) 표준.
   const handleSearch = () => {
     if (!validateFind()) return;
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 2000 });
     setHasSearched(true);
     saveEntriesRef.current.clear(); // AS-IS FindData dtSave.Clear() 1:1
     editTrackerRef.current?.clearChanges();
@@ -355,7 +359,6 @@ export const CustPsiUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
     const rows = entries.map(e => ({ ...e, activeFlag: 'M', createdByList: sesUserId }));
     const payload = Object.fromEntries(SAVE_KEYS.map(k => [k, rows.map(r => r[k]).join('^')]));
 
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
     setIsPending(true);
     try {
       const res = await apiClient.post<Record<string, unknown>>(

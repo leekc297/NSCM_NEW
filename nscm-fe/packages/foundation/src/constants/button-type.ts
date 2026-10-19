@@ -1,5 +1,8 @@
 export enum BUTTON_TYPE {
   SEARCH = 'SEARCH',
+  // 신규('N') 전용 재조회 라우팅(SSP0200 GET_SHIPMENT_CHANGE_REQUEST_N). SEARCH 와 파라미터는 같고
+  //   대상 프로시저만 change_type='N' 이다. New 저장 성공 직후 방금 만든 신규행을 표시하는 데 쓴다.
+  SEARCH_NEW = 'SEARCH_NEW',
   SAVE = 'SAVE',
   SEARCHDETAIL = 'SEARCHDETAIL',
   SAVEDETAIL = 'SAVEDETAIL',

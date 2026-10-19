@@ -1,0 +1,1641 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_SHEET_CALENDAR_3SPAN","2138542752","1","
+/*
+ * Program ID   : [SCP0091_GET_SHEET_CALENDAR_3SPAN]
+ * Description  : 운송중재고 Report
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/03/04   vadabi3	Initial 최조생성 (참조 : [SCP0091_GET_SHEET_CALENDAR_3SPAN )
+ */
+
+CREATE PROCEDURE [dbo].[SCP0091_GET_SHEET_CALENDAR_3SPAN]
+	@p_start_yyyymmdd  NVARCHAR(8),
+    @p_end_yyyymmdd    NVARCHAR(8)
+AS
+
+BEGIN
+SET NOCOUNT ON;
+----------------------------------------------------------------------------
+ SELECT   A.BASIS_YYYYMMDD   AS COLUMN_NAME
+        , A.CALENDAR_DAY            AS COLUMN_LABEL_NAME   
+        , A.WEEK_NAME               AS SMALL_CLASS_LABEL_NAME
+        , A.MONTH_NAME              AS LARGE_CLASS_LABEL_NAME 
+        , A.DAYOFWEEK               AS DAY_CODE
+	    , A.BASIS_YYYYMMDD + CONVERT(CHAR(2), 31) AS SORT_ORDER_NO
+    FROM   [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+    WHERE  A.BASIS_YYYYMMDD >= @p_start_yyyymmdd 
+    AND    A.basis_yyyymmdd <= @p_end_yyyymmdd 
+----------------------------------------------------------------------------
+    UNION ALL
+    SELECT 'W_' + A.BASIS_YYYYMM + A.ISO_WEEK   AS COLUMN_NAME
+        , A.WEEK_NAME          AS COLUMN_LABEL_NAME   
+        , A.WEEK_NAME          AS SMALL_CLASS_LABEL_NAME
+        , A.MONTH_NAME         AS LARGE_CLASS_LABEL_NAME 
+        , ''                   AS DAY_CODE
+	    , A.BASIS_START_DATE + CONVERT(CHAR(2), 21) AS SORT_ORDER_NO
+    FROM   [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+    WHERE  A.BASIS_YYYYMMDD >= @p_start_yyyymmdd 
+    AND    A.BASIS_YYYYMMDD <= @p_end_yyyymmdd 
+    GROUP BY A.BASIS_YYYYMM
+            , A.ISO_WEEK 
+            , A.WEEK_NAME
+            , A.MONTH_NAME        
+            , A.BASIS_START_DATE
+----------------------------------------------------------------------------
+    UNION ALL
+    SELECT 'M_' + A.BASIS_YYYYMM  AS COLUMN_NAME
+            , A.MONTH_NAME          AS COLUMN_LABEL_NAME
+		    , A.MONTH_NAME          AS SMALL_CLASS_LABEL_NAME
+		    , A.MONTH_NAME          AS LARGE_CLASS_LABEL_NAME
+		    , ''                    AS DAY_CODE
+		    , MIN(A.BASIS_START_DATE) + CONVERT(CHAR(2), '01') AS SORT_ORDER_NO
+    FROM    [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+    WHERE  A.BASIS_YYYYMMDD >= @p_start_yyyymmdd 
+    AND    A.BASIS_YYYYMMDD <= @p_end_yyyymmdd 
+    GROUP BY A.BASIS_YYYYMM
+            , A.MONTH_NAME		
+    ORDER BY sort_order_no
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","6",";
+			END
+		ELSE
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND cp.GROUP_CODE2			IN ( SELECT token FROM dbo.String_Split([@p_pack_group]	 ,''''))   ' + CHAR(10);
+			END
+
+		IF @p_incoterms = '*' OR @p_incoterms = ''
+			BEGIN
+			SET @mEXEC = @MEXEC+' 	' + CHAR(10);
+			END
+		ELSE
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND sdic.final_incoterms		IN ( SELECT token FROM dbo.String_Split([@p_incoterms]	 ,''''))   ' + CHAR(10);                                                                                                                           
+			END
+
+		SET @mEXEC = @MEXEC+'       		) DATA         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       		WHERE  f_dest_eta_yyyymmdd between  [@v_start_date] and [@v_end_date]         ' + CHAR(10);
+		
+		IF @p_operation_group = '*' OR @p_operation_group = ''
+			BEGIN
+			SET @mEXEC = @MEXEC+' 	' + CHAR(10);
+			END
+		ELSE
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND operation_group		IN ( SELECT token FROM dbo.String_Split([@p_operation_group]	 ,''''))   ' + CHAR(10);                                                                                                                           
+			END
+
+
+
+		SET @mEXEC = @MEXEC+'       		ORDER BY result_date, result_type, division_id, shipment_no         ' + CHAR(10);
+
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_division_id]'		    , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.division_id','EQUAL', @p_division_id ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_plant_site_id]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.from_scm_site_id', 'LIKE', @p_plant_site_id ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_sales_site_id]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.to_scm_site_id', 'LIKE', @p_sales_site_id ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_project_code]'		    , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.project_code', 'EQUAL', @p_project_code ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_item_id]'				, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.item_id', 'EQUAL', @p_item_id ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_trans_mode]'			, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.transport_mode', 'EQUAL', @p_trans_mode ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_shipment_no]'			, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.shipment_no', 'LIKE', @p_shipment_no ));
+	    SET @mEXEC = REPLACE(@mEXEC,'[@p_result_date]'			, 'AND sdic.result_date BETWEEN '''+@p_from_yyyymmdd+''' AND '''+@p_to_yyyymmdd+'''');-- 20220810
+
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_cell_group]'			, 'N'''+@p_cell_group+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_pack_group]'			, 'N'''+@p_pack_group+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_incoterms]'			, 'N'''+@p_incoterms+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@v_start_date]'			, ''''+@v_start_date+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@v_end_date]'				, ''''+@v_end_date+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_operation_group]'		, 'N'''+@p_operation_group+'''');
+
+END
+
+
+/********************************************************************************
+-- MONTHLY
+********************************************************************************/
+ELSE IF @p_bucket_type = 'MONTHLY'
+BEGIN
+		-- Cy2
+	    SET @mEXEC = @MEXEC+' with CY2 as   (															' + CHAR(10);
+		SET @mEXEC = @MEXEC+' select * from (															' + CHAR(10);
+		SET @mEXEC = @MEXEC+' SELECT COMPANY_ID    														' + CHAR(10);
+	    SET @mEXEC = @MEXEC+' 	  , SHIPMENT_NO    														' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  , ZFCY2 AS cy2_port    												' + CHAR(10);
+		--SET @mEXEC = @MEXEC+' 	  , IIF(ZFCY2ETA = '', null, convert(char(10), convert(datetime, ZFCY2ETA ), 23)) AS cy2_eta    	' + CHAR(10);
+		--SET @mEXEC = @MEXEC+' 	  , IIF(ZFCY2ETA = '', null, convert(char(10), convert(datetime, ZFCY2ATA ), 23)) AS cy2_ata    	' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  , CASE WHEN ZFCY2ETA is null then null WHEN ZFCY2ETA = '''' then null else  convert(char(10), convert(datetime, ZFCY2ETA ), 23) END AS cy2_eta    	' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  , CASE WHEN ZFCY2ATA is null then null WHEN ZFCY2ATA = ''''"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","7"," then null else  convert(char(10), convert(datetime, ZFCY2ATA ), 23) END AS cy2_ata    	' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  , ROW_NUMBER() OVER (PARTITION BY COMPANY_ID,SHIPMENT_NO ORDER BY LAST_UPDATE_DATE DESC) AS seq    			' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  FROM SCM_DNM_DELIVERY_TRACKING WITH (NOLOCK)    									' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  WHERE COMPANY_ID is not null    										' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  AND  COMPANY_ID != ''''    											' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  AND ( ZFCY2 IS NOT NULL     											' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	     OR ZFCY2ETA IS NOT NULL     										' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		 OR ZFCY2ATA IS NOT NULL     										' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		 )    																' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		)  data  where data.seq = 1	   										' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	)    																	' + CHAR(10);
+
+		SET @mEXEC = @MEXEC+' 	, PID as   (																				  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 				SELECT COMPANY_ID , SHIPMENT_NO, MAX(PLANT_ISSUE_DATE)  AS PLANT_ISSUE_DATE		  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	 			  FROM scm_dnm_intransit_c  WITH (NOLOCK)   									    			  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	 			group by COMPANY_ID, SHIPMENT_NO										    	  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		       )	    																	      ' + CHAR(10);
+
+		SET @mEXEC = @MEXEC+'       SELECT *																																																					' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		FROM                                                                                                                                                                                                                        ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		(                                                                                                                                                                                                                           ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		SELECT convert(char(10), convert(datetime, sdic.result_date), 23) result_date                                                                                                                                               ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  --,CASE sdic.result_type WHEN ''P'' THEN ''Plant Issue'' ELSE ''Intransit'' END result_type                                                                                                                           ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,dbo.FN_GET_LOOKUP_CODE_DESC(''SHIPMENT_RESULT_TYPE'', sdic.result_type) AS result_type                                                                                                                               ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,sdic.division_id                                                                                                                                                                                                     ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,CASE sdic.result_type -- WHEN ''C'' THEN ''-'' 2020/10/07                                                                                                                                                            ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 									 WHEN ''S'' THEN ''-''                                                                                                                                                                          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 									 ELSE  dbo.FN_GET_SHIPMENT_NO_DISPLAY(sdic.shipment_no, sdic.result_type)                                                                                                                                                                         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 									 END  shipment_no -- 2018/09/20                                                "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","8","                                                                                                                 ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,sdic.project_code                                                                                                                                                                                                    ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  , cp.GROUP_CODE1 AS  CELL_GROUP                                                                                                                                                                                       ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  , cp.GROUP_CODE2 AS  PACK_GROUP                                                                                                                                                                                       ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'                                                                                                                                                                                                                                   ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  /*                                                                                                                                                                                                                    ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,CASE sdic.result_type WHEN ''C'' THEN ''-''                                                                                                                                                                          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 									 ELSE sdic.project_code                                                                                                                                                                         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 									 END  project_code -- 2018/09/20                                                                                                                                                                ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  */                                                                                                                                                                                                                    ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,sdic.item_id                                                                                                                                                                                                         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,(SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN ''-'' WHEN X.NICK_NAME='''' THEN ''-'' ELSE X.NICK_NAME END) FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK) WHERE X.ITEM_ID = sdic.item_id) AS nick_name                   ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,sdic.plant_id as plant                                                                                                                                                                                               ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,sdic.transport_mode as Trans_Mode                                                                                                                                                                                    ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) operation_group                                                                                                                                      ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,sdic.delivery_qty                                                                                                                                                                                                    ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","9",",sdic.final_soldto_code	AS customer_code                                                                                                                                                                            ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,sdic.shipto_code                                                                                                                                                                                                     ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,sdic.final_incoterms		AS incoterms                                                                                                                                                                                ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,sdic.from_scm_site_id                                                                                                                                                                                                ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,sdic.to_scm_site_id                                                                                                                                                                                                  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,smbv.lt_total bod_lead_time                                                                                                                                                                                          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,IIF(ISNULL(sdic.plant_issue_date,'''')='''','''', convert(char(10), convert(datetime, sdic.plant_issue_date), 23)) as plant_issue_date                                                                                     ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,case when isnull(sdic.pol_atd_date,'''') = '''' then ''''                                                                                                                                                                  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			   else IIF(ISNULL(sdic.pol_atd_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pol_atd_date), 23))                                                                                                            ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  end pol_atd_date                                                                                                                                                                                                      ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,case when isnull(sdic.pod_ata_date,'''') = ''''                                                                                                                                                                          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					then IIF(ISNULL(sdic.pod_eta_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pod_eta_date), 23))                                                                                                       ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					when sdic.pod_ata_date = ''''                                                                                                                                                                                     ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					then IIF(ISNULL(sdic.pod_eta_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pod_eta_date), 23))                                                                                                       ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			   else convert(char(10), convert(datetime, sdic.pod_ata_date), 23)                                                                                                                                                     ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			   end pod_ata_date                                                                                                    "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","10","                                                                                                 ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,case when isnull(sdic.pod_atd_date,'''') = ''''                                                                                                                                                                          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					then IIF(ISNULL(sdic.pod_etd_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pod_etd_date), 23))                                                                                                       ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					when sdic.pod_atd_date =''''                                                                                                                                                                                      ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					then IIF(ISNULL(sdic.pod_etd_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pod_etd_date), 23))                                                                                                       ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			   else convert(char(10), convert(datetime, sdic.pod_atd_date), 23)                                                                                                                                                     ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			   end pod_atd_date                                                                                                                                                                                                     ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,case when isnull(sdic.ATTRIBUTE3,'''')= '''' then ''''                                                                                                                                                                     ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					when sdic.ATTRIBUTE3 ='''' then ''''                                                                                                                                                                                ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					else                                                                                                                                                                                                            ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 						CASE                                                                                                                                                                                                        ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 						WHEN convert(char(10), convert(datetime, sdic.ATTRIBUTE3), 23)  <  convert(char(10), convert(datetime, sdic.result_date), 23)                                                                               ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 						then convert(char(10), convert(datetime, sdic.result_date), 23)                                                                                                                                             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 						ELSE convert(char(10), convert(datetime, sdic.ATTRIBUTE3), 23)                                                                                                                                              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 						END                                                                                                                                                                                                         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					end f_dest_eta_date                                                                                                                                                                                             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			 ,case when isnull(sdic.ATTRIBUTE3,'''')= ''"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","11","'' then ''''                                                                                                                                                                      ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					when sdic.ATTRIBUTE3 ='''' then ''''                                                                                                                                                                                ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					else                                                                                                                                                                                                            ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 						CASE                                                                                                                                                                                                        ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 						WHEN convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112)  <  convert(char(8), convert(datetime, sdic.result_date), 112)                                                                               ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 						then convert(char(8), convert(datetime, sdic.result_date), 112)                                                                                                                                             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 						ELSE convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112)                                                                                                                                              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 						END                                                                                                                                                                                                         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					end f_dest_eta_yyyymmdd                                                                                                                                                                                         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  ,case when isnull(sdic.f_dest_eta_date,'''')= '''' then ''''                                                                                                                                                                ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					when sdic.f_dest_eta_date ='''' then ''''                                                                                                                                                                           ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			  else convert(char(10), convert(datetime, sdic.f_dest_eta_date), 23) end f_dest_eta_date2                                                                                                                              ' + CHAR(10);
+
+		-- 20220819 추가
+		--SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT WITH (NOLOCK)  where concat(country,port_code) = sdic.POL)              AS pol_port				' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT WITH (NOLOCK)  where port_code = sdic.POL)              AS pol_port				' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POL_ATD_DATE,'''')='''','''', convert(char(10), convert(datetime, sdic.POL_ATD_DATE), 23))    AS pol_atd					' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,''''					AS pol_etd				' + CHAR(10);
+		--SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT where concat(country,port_code) = sdic.POD)            AS pod_arrive_port      ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT where port_code = sdic.POD)            AS pod_arrive_port      ' + CHAR(10);
+
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic."
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","12","POD_ETA_DATE    ,'''')='''','''', convert(char(10), convert(datetime, sdic.POD_ETA_DATE    ), 23)) AS pod_arrive_eta     ' + CHAR(10);		 
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POD_ATA_DATE    ,'''')='''','''', convert(char(10), convert(datetime, sdic.POD_ATA_DATE    ), 23)) AS pod_arrive_ata     ' + CHAR(10);		 
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POD_ETD_DATE    ,'''')='''','''', convert(char(10), convert(datetime, sdic.POD_ETD_DATE    ), 23)) AS pod_departure_etd  ' + CHAR(10);		 
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POD_ATD_DATE    ,'''')='''','''', convert(char(10), convert(datetime, sdic.POD_ATD_DATE    ), 23)) AS pod_departure_atd  ' + CHAR(10);		 
+		-- 20220825 추가		 
+		--SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT where concat(country,port_code) = cy2.ZFCY2) AS cy2_port					' + CHAR(10);		 
+		--SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.F_DEST_ETA_DATE ,'''')='''','''', convert(char(10), convert(datetime, cy2.ZFCY2ETA ), 23)) AS cy2_eta	' + CHAR(10);	 
+		--SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.F_DEST_ATA_DATE ,'''')='''','''', convert(char(10), convert(datetime, cy2.ZFCY2ATA ), 23)) AS cy2_ata	' + CHAR(10);	
+		--SET @mEXEC = @MEXEC+'       			  ,(select max(ZFCY2) from SCM_DNM_DELIVERY_TRACKING where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO)   AS cy2_port									' + CHAR(10);
+		--SET @mEXEC = @MEXEC+'       			  ,(select  convert(char(10), convert(datetime, max(ZFCY2ETA) ), 23) from SCM_DNM_DELIVERY_TRACKING where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO)  AS cy2_eta ' + CHAR(10);	
+		--SET @mEXEC = @MEXEC+'       			  ,(select  convert(char(10), convert(datetime, max(ZFCY2ATA) ), 23) from SCM_DNM_DELIVERY_TRACKING where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO)  AS cy2_ata ' + CHAR(10);			 
+		SET @mEXEC = @MEXEC+'       			   ,(select max(cy2_port) from CY2 where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO and sdic.plant_issue_date  =pid.plant_issue_date)  AS cy2_port		' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			   ,(select max(cy2_eta)  from CY2 where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO  and sdic.plant_issue_date =pid.plant_issue_date)  AS cy2_eta		' + CHAR(10);	
+		SET @mEXEC = @MEXEC+'       			   ,(select max(cy2_ata)  from CY2 where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO  and sdic.plant_issue_date =pid.plant_issue_date)  AS cy2_ata 		' + CHAR(10);	
+
+		SET @mEXEC = @MEXEC+' 		FROM  scm_dnm_intransit_c sdic  WITH (NOLOCK)                                                                                                                                                                                             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		LEFT JOIN scp_mst_bod_n_v smbv  WITH (NOLOCK)                                                                                                                                                                                             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			ON    sdic.division_id = smbv.division_id                                                                                                                                                                               ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			AND   sdic.from_scm_site_id = smbv.from_site                                                                                                                                                                            ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			AND   sdic.to_scm_site_id = smbv.to_site                                                                                                                                                                                ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			AND   ( CASE                                                                         "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","13","                                                                                                                                   ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			        WHEN ISNULL(sdic.final_incoterms, '''') = '''' THEN sdic.incoterms                                                                                                                                                  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 					ELSE sdic.final_incoterms                                                                                                                                                                                       ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 				    END                                                                                                                                                                                                             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 				  ) = smbv.incoterms                                                                                                                                                                                                ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			AND   sdic.transport_mode = smbv.transport_mode                                                                                                                                                                         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			AND   smbv.bod_valid_yn = ''Y''                                                                                                                                                                                         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			AND   smbv.route_valid_yn = ''Y''                                                                                                                                                                                       ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 			AND sdic.result_date >= smbv.from_yyyymmdd                                                                                                                                                                              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	        AND sdic.result_date <= smbv.to_yyyymmdd                                                                                                                                                                                ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  LEFT JOIN SCP_MST_FINAL_ITEM cp WITH (NOLOCK)  on cp.DIVISION_ID = sdic.division_id and  cp.ITEM_ID = sdic.ITEM_ID                                                                                                                           ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'             left join pid on  pid.COMPANY_ID = sdic.COMPANY_ID AND pid.SHIPMENT_NO = sdic.SHIPMENT_NO  AND pid.plant_issue_date = sdic.plant_issue_date        ' + CHAR(10);
+
+		
+		--SET @mEXEC = @MEXEC+'     LEFT JOIN SCM_DNM_DELIVERY_TRACKING cy2 ON cy2.COMPANY_ID = sdic.COMPANY_ID AND cy2.SHIPMENT_NO = sdic.SHIPMENT_NO          ' + CHAR(10); -- 20220825 CY2		
+		SET @mEXEC = @MEXEC+' 	  WHERE 1= 1																																																					' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	    [@p_division_id]						                                       ' + CHAR(10);                                                                                 
+		SET @mEXEC = @MEXEC+' 		[@p_plant_site_id]                                                             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		[@p_sales_site_id]                                                             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		[@p_project_code]                                                              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		[@p_item_id]	                                                               ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		[@p_trans_mode]                                                       "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","14","         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		[@p_shipment_no]                                                               ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       [@p_result_date]        ' + CHAR(10);
+
+
+
+		SET @mEXEC = @MEXEC+' 		AND sdic.RESULT_TYPE in (''I'',''C'',''B'')                                    ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		AND dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) != ''''    ' + CHAR(10);
+
+		IF @p_cell_group = '*' OR @p_cell_group = ''
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND cp.GROUP_CODE1 IS NULL																												 ' + CHAR(10);
+			END
+		ELSE
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND cp.GROUP_CODE1			IN ( SELECT token FROM dbo.String_Split([@p_cell_group]	 ,''''))   ' + CHAR(10);
+			END
+
+
+
+		IF @p_pack_group = '*' OR @p_pack_group = ''
+			BEGIN
+			--SET @mEXEC = @MEXEC+' 		AND cp.GROUP_CODE2 IS NULL																												 ' + CHAR(10);
+			SET @mEXEC = @MEXEC+' 										' + CHAR(10);
+			END
+		ELSE
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND cp.GROUP_CODE2			IN ( SELECT token FROM dbo.String_Split([@p_pack_group]	 ,''''))   ' + CHAR(10);
+			END
+
+		IF @p_incoterms = '*' OR @p_incoterms = ''
+			BEGIN
+			SET @mEXEC = @MEXEC+' 	' + CHAR(10);
+			END
+		ELSE
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND sdic.final_incoterms		IN ( SELECT token FROM dbo.String_Split([@p_incoterms]	 ,''''))   ' + CHAR(10);                                                                                                                           
+			END
+
+		SET @mEXEC = @MEXEC+' 		) DATA                                                                                                                                                                                                                      ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		WHERE  substring(f_dest_eta_yyyymmdd,1,6)  = [@p_searchdate]                                                                                                                                                                 ' + CHAR(10);
+		SET @MEXEC = @MEXEC+'		AND F_DEST_ETA_DATE between [@p_period_from] and [@p_period_to]				' + CHAR(10);
+		IF @p_operation_group = '*' OR @p_operation_group = ''
+			BEGIN
+			SET @mEXEC = @MEXEC+' 	' + CHAR(10);
+			END
+		ELSE
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND operation_group		IN ( SELECT token FROM dbo.String_Split([@p_operation_group]	 ,''''))   ' + CHAR(10);                                                                                                                           
+			END
+		SET @mEXEC = @MEXEC+' 		ORDER BY result_date, result_type, division_id, shipment_no;                                                                                                                                                                ' + CHAR(10);
+
+
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_division_id]'		    , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.division_id','EQUAL', @p_division_id ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_plant_site_id]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.from_scm_site_id', 'LIKE', @p_plant_site_id ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_sales_site_id]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.to_scm_site_id', 'LIKE', @p_sales_site_id ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_project_code]'		    , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.project_code', 'EQUAL', @p_project_code ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_item_id]'				, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.item_id', 'EQUAL', @p_item_id ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_trans_mode]'			, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.transport_mode', 'EQUAL', @p_trans_mode ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_shipment_no]'			, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.shipment_no', 'LIKE', @p_shipment_no ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_result_date]'			, 'AND sdic.result_date BETWEEN '''+@p_from_yyyymmdd+''' AND '''+@p_to_yyyymmdd+'''');-- 20220810
+
+
+
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_cell_group]'			, 'N'''+@p_cell_group+'"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","15","''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_pack_group]'			, 'N'''+@p_pack_group+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_incoterms]'			, 'N'''+@p_incoterms+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_searchdate]'			, ''''+@p_searchdate+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_period_to]'			, ''''+@p_period_to+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_period_from]'			, ''''+@p_period_from+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_operation_group]'		, 'N'''+@p_operation_group+'''');
+
+
+END;
+
+/********************************************************************************
+-- DAILY
+********************************************************************************/
+ELSE 
+BEGIN
+		-- Cy2
+	    SET @mEXEC = @MEXEC+' with CY2 as   (															' + CHAR(10);
+		SET @mEXEC = @MEXEC+' select * from (															' + CHAR(10);
+		SET @mEXEC = @MEXEC+' SELECT COMPANY_ID    														' + CHAR(10);
+	    SET @mEXEC = @MEXEC+' 	  , SHIPMENT_NO    														' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  , ZFCY2 AS cy2_port    												' + CHAR(10);
+		--SET @mEXEC = @MEXEC+' 	  , IIF(ZFCY2ETA = '', null, convert(char(10), convert(datetime, ZFCY2ETA ), 23)) AS cy2_eta    	' + CHAR(10);
+		--SET @mEXEC = @MEXEC+' 	  , IIF(ZFCY2ETA = '', null, convert(char(10), convert(datetime, ZFCY2ATA ), 23)) AS cy2_ata    	' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  , CASE WHEN ZFCY2ETA is null then null WHEN ZFCY2ETA = '''' then null else  convert(char(10), convert(datetime, ZFCY2ETA ), 23) END AS cy2_eta    	' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  , CASE WHEN ZFCY2ATA is null then null WHEN ZFCY2ATA = '''' then null else  convert(char(10), convert(datetime, ZFCY2ATA ), 23) END AS cy2_ata    	' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  , ROW_NUMBER() OVER (PARTITION BY COMPANY_ID,SHIPMENT_NO ORDER BY LAST_UPDATE_DATE DESC) AS seq    			' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  FROM SCM_DNM_DELIVERY_TRACKING WITH (NOLOCK)    									' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  WHERE COMPANY_ID is not null    										' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  AND  COMPANY_ID != ''''    											' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  AND ( ZFCY2 IS NOT NULL     											' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	     OR ZFCY2ETA IS NOT NULL     										' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		 OR ZFCY2ATA IS NOT NULL     										' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		 )    																' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		)  data  where data.seq = 1	   										' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	)    																	' + CHAR(10);
+
+		SET @mEXEC = @MEXEC+' 	, PID as   (																				  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 				SELECT COMPANY_ID , SHIPMENT_NO, MAX(PLANT_ISSUE_DATE)  AS PLANT_ISSUE_DATE		  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	 			  FROM scm_dnm_intransit_c WITH (NOLOCK)    									    			  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	 			group by COMPANY_ID, SHIPMENT_NO										    	  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		       )	    																	      ' + CHAR(10);
+
+		SET @mEXEC = @MEXEC+' 		SELECT *		    	' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   	FROM					' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   	(						' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   	SELECT convert(char(10), convert(datetime, sdic.result_date), 23) result_date             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,dbo.FN_GET_LOOKUP_CODE_DESC(''SHIPMENT_RESULT_TYPE'', sdic.result_type) AS result_type             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,sdic.division_id             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,CASE sdic.result_type              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		   WHEN ''S'' THEN ''-''             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		   ELSE dbo.FN_GET_SHIPMENT_NO_DISPLAY(sdic.shipment_no, sdic.result_type)               ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		   END  shipment_no              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,sdic.project_code             '"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","16"," + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  , cp.GROUP_CODE1 AS  CELL_GROUP             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  , cp.GROUP_CODE2 AS  PACK_GROUP             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,sdic.item_id             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,(SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN ''-'' WHEN X.NICK_NAME='''' THEN ''-'' ELSE X.NICK_NAME END) FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK) WHERE X.ITEM_ID = sdic.item_id) AS nick_name             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,sdic.plant_id as plant             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,sdic.transport_mode as Trans_Mode             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) operation_group             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,sdic.delivery_qty             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,sdic.final_soldto_code	AS customer_code             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,sdic.shipto_code             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,sdic.final_incoterms		AS incoterms             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,sdic.from_scm_site_id             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,sdic.to_scm_site_id             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,smbv.lt_total bod_lead_time             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,IIF(ISNULL(sdic.plant_issue_date,'''')='''','''', convert(char(10), convert(datetime, sdic.plant_issue_date), 23)) as plant_issue_date             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,case when isnull(sdic.pol_atd_date,'''') = '''' then ''''              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		   else IIF(ISNULL(sdic.pol_atd_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pol_atd_date), 23))             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  end pol_atd_date             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,case when isnull(sdic.pod_ata_date,'''') = ''''              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   				then IIF(ISNULL(sdic.pod_eta_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pod_eta_date), 23))             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   				when sdic.pod_ata_date = ''''              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   				then IIF(ISNULL(sdic.pod_eta_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pod_eta_date), 23))             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		   else convert(char(10), convert(datetime, sdic.pod_ata_date), 23)              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		   end pod_ata_date             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,case when isnull(sdic.pod_atd_date,'''') = ''''              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   				then IIF(ISNULL(sdic.pod_etd_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pod_etd_date), 23))             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   				when sdic.pod_atd_date =''''             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   				then IIF(ISNULL(sdic.pod_etd_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pod_etd_date), 23))             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		   else convert(char(10), convert(datetime, sdic.pod_atd_date), 23)              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		   end pod_atd_date             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,case when isnull(sdic.ATTRIBUTE3,'''')= '''' then ''''              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   				when sdic.ATTRIBUTE3 ='''' then ''''             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		        else              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   					CASE              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   					WHEN convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112) <  convert(char(8), convert(datetime, sdic.result_date), 112) then convert(char(8), convert(datetime, sdic.result_date), 112)         "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","17","    ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   					ELSE convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112)             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   					END             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   				end f_dest_eta_date             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  ,case when isnull(sdic.f_dest_eta_date,'''')= '''' then ''''              ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   				when sdic.f_dest_eta_date ='''' then ''''             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		  else convert(char(10), convert(datetime, sdic.f_dest_eta_date), 23) end f_dest_eta_date2             ' + CHAR(10);
+
+		-- 20220819 추가
+		--SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT WITH (NOLOCK)  where concat(country,port_code) = sdic.POL)              AS pol_port				' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT WITH (NOLOCK)  where port_code = sdic.POL)              AS pol_port				' + CHAR(10);
+
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POL_ATD_DATE,'''')='''','''', convert(char(10), convert(datetime, sdic.POL_ATD_DATE), 23))    AS pol_atd					' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,''''					AS pol_etd				' + CHAR(10);
+		--SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT WITH (NOLOCK)  where concat(country,port_code) = sdic.POD)            AS pod_arrive_port      ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT WITH (NOLOCK)  where port_code = sdic.POD)            AS pod_arrive_port      ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POD_ETA_DATE    ,'''')='''','''', convert(char(10), convert(datetime, sdic.POD_ETA_DATE    ), 23)) AS pod_arrive_eta     ' + CHAR(10);		 
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POD_ATA_DATE    ,'''')='''','''', convert(char(10), convert(datetime, sdic.POD_ATA_DATE    ), 23)) AS pod_arrive_ata     ' + CHAR(10);		 
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POD_ETD_DATE    ,'''')='''','''', convert(char(10), convert(datetime, sdic.POD_ETD_DATE    ), 23)) AS pod_departure_etd  ' + CHAR(10);		 
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POD_ATD_DATE    ,'''')='''','''', convert(char(10), convert(datetime, sdic.POD_ATD_DATE    ), 23)) AS pod_departure_atd  ' + CHAR(10);		 
+		-- 20220825 추가		 
+		--SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT where concat(country,port_code) = cy2.ZFCY2) AS cy2_port					' + CHAR(10);		 
+		--SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.F_DEST_ETA_DATE ,'''')='''','''', convert(char(10), convert(datetime, cy2.ZFCY2ETA ), 23)) AS cy2_eta	' + CHAR(10);	 
+		--SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.F_DEST_ATA_DATE ,'''')='''','''', convert(char(10), convert(datetime, cy2.ZFCY2ATA ), 23)) AS cy2_ata	' + CHAR(10);	
+		--SET @mEXEC = @MEXEC+'       			  ,(select max(ZFCY2) from SCM_DNM_DELIVERY_TRACKING where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO)   AS cy2_port									' + CHAR(10);
+		--SET @mEXEC = @MEXEC+'       			  ,(select  convert(char(10), convert(datetime, max(ZFCY2ETA) ), 23) from SCM_DNM_DELIVERY_TRACKING where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO)  AS cy2_eta ' + CHAR(10);	
+		--SET @mEXEC = @MEXEC+'       			  ,(select  convert(char(10), convert(datetime, max(ZFCY2ATA) ), 23) from SCM_DNM_DELIVERY_TRACKING where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO)  AS cy2_ata ' + CHAR(10);	 
+		SET @mEXEC = @MEXEC+'       			   ,(select max(cy2_port) from CY2 where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO and sdic.plant_issue_date  =pid.plant_issue_date)  AS cy2_port		' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			   ,(select max(cy2_eta)  from CY2 where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO  and sdic.plant_issue_date =pid.plant_is"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","18","sue_date)  AS cy2_eta		' + CHAR(10);	
+		SET @mEXEC = @MEXEC+'       			   ,(select max(cy2_ata)  from CY2 where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO  and sdic.plant_issue_date =pid.plant_issue_date)  AS cy2_ata 		' + CHAR(10);			 
+		
+		SET @mEXEC = @MEXEC+'   	FROM  scm_dnm_intransit_c sdic  WITH (NOLOCK)            ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   	LEFT JOIN scp_mst_bod_n_v smbv  WITH (NOLOCK)            ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		ON    sdic.division_id = smbv.division_id             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		AND   sdic.from_scm_site_id = smbv.from_site             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		AND   sdic.to_scm_site_id = smbv.to_site             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		AND   ( CASE WHEN ISNULL(sdic.final_incoterms, '''') = '''' THEN sdic.incoterms             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   				ELSE sdic.final_incoterms             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   			   END ) = smbv.incoterms             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		AND   sdic.transport_mode = smbv.transport_mode             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		AND   smbv.bod_valid_yn = ''Y''             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		AND   smbv.route_valid_yn = ''Y''             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		AND sdic.result_date >= smbv.from_yyyymmdd             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		AND sdic.result_date <= smbv.to_yyyymmdd             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'     LEFT JOIN SCP_MST_FINAL_ITEM cp WITH (NOLOCK) on cp.DIVISION_ID = sdic.division_id and  cp.ITEM_ID = sdic.ITEM_ID               ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'             left join pid on  pid.COMPANY_ID = sdic.COMPANY_ID AND pid.SHIPMENT_NO = sdic.SHIPMENT_NO  AND pid.plant_issue_date = sdic.plant_issue_date        ' + CHAR(10);
+		
+		
+		
+		--SET @mEXEC = @MEXEC+'     LEFT JOIN SCM_DNM_DELIVERY_TRACKING cy2 ON cy2.COMPANY_ID = sdic.COMPANY_ID AND cy2.SHIPMENT_NO = sdic.SHIPMENT_NO   		' + CHAR(10); -- 20220825 CY2			
+		SET @mEXEC = @MEXEC+'   	  WHERE 1 = 1																									' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   			[@p_division_id]																						' + CHAR(10);
+
+
+		SET @mEXEC = @MEXEC+'   		[@p_plant_site_id]             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		[@p_sales_site_id]             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		[@p_project_code]				' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		[@p_item_id]					' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		[@p_trans_mode]            ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		[@p_shipment_no]            ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       	[@p_result_date]        ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		AND sdic.RESULT_TYPE in (''I'',''C'',''B'')             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   		AND dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) != ''''             ' + CHAR(10);
+
+		IF @p_pack_group = '*' OR @p_pack_group = ''
+			BEGIN
+			--SET @mEXEC = @MEXEC+' 		AND cp.GROUP_CODE2 IS NULL																												 ' + CHAR(10);
+			SET @mEXEC = @MEXEC+' 										' + CHAR(10);
+			END
+		ELSE
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND cp.GROUP_CODE2			IN ( SELECT token FROM dbo.String_Split([@p_pack_group]	 ,''''))   ' + CHAR(10);
+			END
+
+		IF @p_incoterms = '*' OR @p_incoterms = ''
+			BEGIN
+			SET @mEXEC = @MEXEC+' 	' + CHAR(10);
+			END
+		ELSE
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND sdic.final_incoterms		IN ( SELECT token FROM dbo.String_Split([@p_incoterms]	 ,''''))   ' + CHAR(10);                                                                                                                           
+			END
+
+		SET @mEXEC = @MEXEC+'   	) DATA             ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'   	WHERE f_dest_eta_date = [@p_searchdate]             ' + CHAR(10);
+		IF @p_operation_group = '*' OR @p_operation_group = ''
+			BEGIN
+			SET @mEXEC = @MEXEC+' 	' + CHAR(10);
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","1","
+/*
+ * Program ID   : SCP0091_GET_VALIDATION_SHIPMENT_DETAIL (참고 SCM0014_GET_VALIDATION_SHIPMENT_RESULT)
+ * Description  : 출하실적 Validation
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/03/10    vadabi3	CREATE
+ * 2022/03/21    vadabi3	운영배포 후 수정
+ * 2022/03/29    vadabi3	CELL_GROUP 항목 추가
+                 vadabi3	PACK_GROUP 항목 추가
+ * 2022/03/29    vadabi3	파라미터 추가 @p_cell_group, @p_pack_group , @p_incoterms 
+ * 2022/08/07    vadabi3	shipment no = '-' 인 경우 조회 개선
+ * 2022/08/07    vadabi3	shipment no = EQUAL -> LIKE (_1,_2,_3,_4)
+ * 2022/08/10    vadabi3	Result Date 기간으로 조회 (@p_result_date => @p_from_yyyymmdd, @p_to_yyyymmdd)
+ * 2022/08/19    vadabi3	항목추가 [POL, POD(Arrive, Departure), CY2] 추가
+ * 2022/08/25    vadabi3	CY2 관련 데이터 적용
+ * 2022/12/18    vadabi3	port_description Join 개선
+ *===================================================================================================
+ EXEC SCP0091_GET_VALIDATION_SHIPMENT_DETAIL @p_result_date='20220701', @p_division_id='81', @p_plant_site_id='A040-A', @p_sales_site_id='LGCPI_US_TYM', @p_project_code='TBD', @p_item_id='ACEN4065I-A1-101', @p_from_yyyymmdd='20220701', @p_to_yyyymmdd='20220701', @p_result_type='I,C,B', @p_shipment_no='0026031522', @p_bucket_type='DAILY', @p_period_from='20220701', @p_period_to='20230701', @p_trans_mode='SEA', @p_searchdate='20220710', @p_cell_group='', @p_pack_group='', @p_incoterms='FOB', @p_operation_group='A'
+
+
+ */
+
+--CREATE PROCEDURE [dbo].[SCP0091_GET_VALIDATION_SHIPMENT_DETAIL]
+CREATE PROCEDURE [dbo].[SCP0091_GET_VALIDATION_SHIPMENT_DETAIL]  
+  @p_result_date     NVARCHAR(MAX),
+  @p_division_id     NVARCHAR(MAX),
+  @p_plant_site_id   NVARCHAR(MAX),    
+  @p_sales_site_id   NVARCHAR(MAX),    
+  @p_project_code    NVARCHAR(MAX),
+  @p_item_id		 NVARCHAR(MAX),
+  @p_from_yyyymmdd	 NVARCHAR(8),
+  @p_to_yyyymmdd	 NVARCHAR(8),
+  @p_result_type	 NVARCHAR(1),
+  @p_shipment_no	 NVARCHAR(100),
+  @p_bucket_type	 NVARCHAR(10),
+  @p_period_from	 NVARCHAR(8),
+  @p_period_to	     NVARCHAR(8),
+  @p_trans_mode		 NVARCHAR(MAX),
+  @p_searchdate	     NVARCHAR(10),
+  @p_cell_group      NVARCHAR(MAX),
+  @p_pack_group		 NVARCHAR(MAX),
+  @p_incoterms		 NVARCHAR(MAX),
+  @p_operation_group NVARCHAR(MAX)
+AS
+
+BEGIN
+ -- SCM0014 참조
+
+   --SET @p_project_code = REPLACE(@p_project_code,'-', '');
+   --SET @p_project_code = REPLACE(@p_project_code,'*', '');
+
+
+   	DECLARE @mEXEC NVARCHAR(MAX);
+	SET @mEXEC = '';
+/********************************************************************************
+-- WEEKLY
+********************************************************************************/
+IF @p_bucket_type = 'WEEKLY'
+BEGIN
+
+
+		/********************************************************************************
+		-- WEEKLY start, end date
+		********************************************************************************/
+		DECLARE @v_yyyy nvarchar(4);
+		DECLARE @v_month nvarchar(2);
+		DECLARE @v_week_no nvarchar(2);
+		DECLARE @v_year_week_no nvarchar(6);
+		DECLARE @v_start_date nvarchar(8);
+		DECLARE @v_end_date nvarchar(8);
+
+		select @v_yyyy = substring(@p_searchdate,1,4);
+		select @v_month = substring(@p_searchdate,5,2);
+		select @v_week_no = substring(@p_searchdate,7,2);
+		select @v_year_week_no = concat(@v_yyyy,@v_week_no);
+
+		-- 202201 52주 => 2021년도의 52주인데 2022년 52주로 간주되고 있음
+		if @v_month = '01' and @v_week_no > '10'
+		begin
+		SELECT @v_yyyy = CAST( CAST(@v_yyyy AS INT) -1 AS nvarchar(4))
+		select @v_year_week_no = concat(@v_yyyy,@v_week_no);
+		end
+
+		select @v_start_date = MIN(BASIS_START_DATE)
+			  ,@v_end_date   = max(BASIS_END_DATE)
+		from scm_sys_calendar_m 
+		where iso_yyyyww = @v_year_week_no
+		--select @v_yyyy,@v_month, @v_week_no, @v_year_week_no, @v_start_date, @v_end_date;
+
+		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","2","/********************************************************************************
+		-- WEEKLY Data
+		********************************************************************************/
+
+		-- Cy2
+	    SET @mEXEC = @MEXEC+' with CY2 as   (															' + CHAR(10);
+		SET @mEXEC = @MEXEC+' select * from (															' + CHAR(10);
+		SET @mEXEC = @MEXEC+' SELECT COMPANY_ID    														' + CHAR(10);
+	    SET @mEXEC = @MEXEC+' 	  , SHIPMENT_NO    														' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  , ZFCY2 AS cy2_port    												' + CHAR(10);
+	  --SET @mEXEC = @MEXEC+' 	  , IIF(ZFCY2ETA = '', null, convert(char(10), convert(datetime, ZFCY2ETA ), 23)) AS cy2_eta    	' + CHAR(10);
+	  --SET @mEXEC = @MEXEC+' 	  , IIF(ZFCY2ETA = '', null, convert(char(10), convert(datetime, ZFCY2ATA ), 23)) AS cy2_ata    	' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  , CASE WHEN ZFCY2ETA is null then null WHEN ZFCY2ETA = '''' then null else  convert(char(10), convert(datetime, ZFCY2ETA ), 23) END AS cy2_eta    	' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  , CASE WHEN ZFCY2ATA is null then null WHEN ZFCY2ATA = '''' then null else  convert(char(10), convert(datetime, ZFCY2ATA ), 23) END AS cy2_ata    	' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  , ROW_NUMBER() OVER (PARTITION BY COMPANY_ID,SHIPMENT_NO ORDER BY LAST_UPDATE_DATE DESC) AS seq    			' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  FROM SCM_DNM_DELIVERY_TRACKING WITH (NOLOCK)  									' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  WHERE COMPANY_ID is not null    										' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  AND  COMPANY_ID != ''''    											' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	  AND ( ZFCY2 IS NOT NULL     											' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	     OR ZFCY2ETA IS NOT NULL     										' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		 OR ZFCY2ATA IS NOT NULL     										' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		 )    																' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		)  data  where data.seq = 1	   										' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	)    																	' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	, PID as   (																				  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 				SELECT COMPANY_ID , SHIPMENT_NO, MAX(PLANT_ISSUE_DATE)  AS PLANT_ISSUE_DATE		  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	 			  FROM scm_dnm_intransit_c  WITH (NOLOCK)     									    			  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 	 			group by COMPANY_ID, SHIPMENT_NO										    	  ' + CHAR(10);
+		SET @mEXEC = @MEXEC+' 		       )	    																	      ' + CHAR(10);
+
+		SET @mEXEC = @MEXEC+' 				SELECT *	    	' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       		FROM         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       		(         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       		SELECT convert(char(10), convert(datetime, sdic.result_date), 23) result_date         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,dbo.FN_GET_LOOKUP_CODE_DESC(''SHIPMENT_RESULT_TYPE'', sdic.result_type) AS result_type         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,sdic.division_id         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,CASE sdic.result_type          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       				WHEN ''S'' THEN ''-''         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       				ELSE  dbo.FN_GET_SHIPMENT_NO_DISPLAY(sdic.shipment_no, sdic.result_type)         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       				END  shipment_no          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,sdic.project_code         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  , cp.GROUP_CODE1 AS  CELL_GROUP         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  , cp.GROUP_CODE2 AS  PACK_GROUP         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,sdic.item_id         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,(SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN ''-'' WHEN X.NICK_NAME='''' THEN ''-'' ELSE X.NICK_NAME END) FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK) WHERE X.ITEM_ID = sdic.item_id) "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","3","AS nick_name         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,sdic.plant_id as plant         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,sdic.transport_mode as Trans_Mode         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) operation_group         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,sdic.delivery_qty         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,sdic.final_soldto_code	AS customer_code         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,sdic.shipto_code         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,sdic.final_incoterms		AS incoterms         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,sdic.from_scm_site_id         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,sdic.to_scm_site_id         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,smbv.lt_total bod_lead_time         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.plant_issue_date,'''')='''','''', convert(char(10), convert(datetime, sdic.plant_issue_date), 23)) as plant_issue_date         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,case when isnull(sdic.pol_atd_date,'''') = '''' then ''''          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			   else IIF(ISNULL(sdic.pol_atd_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pol_atd_date), 23))         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			   end pol_atd_date         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,case when isnull(sdic.pod_ata_date,'''') = ''''          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					then IIF(ISNULL(sdic.pod_eta_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pod_eta_date), 23))         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					when sdic.pod_ata_date = ''''          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					then IIF(ISNULL(sdic.pod_eta_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pod_eta_date), 23))         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			   else convert(char(10), convert(datetime, sdic.pod_ata_date), 23)          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			   end pod_ata_date         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,case when isnull(sdic.pod_atd_date,'''') = ''''          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					then IIF(ISNULL(sdic.pod_etd_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pod_etd_date), 23))         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					when sdic.pod_atd_date =''''         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					then IIF(ISNULL(sdic.pod_etd_date,'''')='''','''', convert(char(10), convert(datetime, sdic.pod_etd_date), 23))         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			   else convert(char(10), convert(datetime, sdic.pod_atd_date), 23)          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			   end pod_atd_date         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,case when isnull(sdic.ATTRIBUTE3,'''')= '''' then ''''          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					when sdic.ATTRIBUTE3 ='''' then ''''         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					else         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       						CASE          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       						WHEN convert(char(10), convert(datetime, sdic.ATTRIBUTE3), 23)  <  convert(char(10), convert(datetime, sdic.result_date), 23)          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       						then convert(char(10), convert(datetime, sdic.result_date), 23)          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       						ELSE convert(char(10), convert(datetime, sdic.ATTRIBUTE3), 23)          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       						END         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					end f_dest_eta_date         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			 ,case when isnull(sdic.ATTRIBUTE3,'''')= '''' then ''''          ' + CHAR(10);"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","4","
+		SET @mEXEC = @MEXEC+'       					when sdic.ATTRIBUTE3 ='''' then ''''         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					else         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       						CASE          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       						WHEN convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112)  <  convert(char(8), convert(datetime, sdic.result_date), 112)          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       						then convert(char(8), convert(datetime, sdic.result_date), 112)          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       						ELSE convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112)          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       						END         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					end f_dest_eta_yyyymmdd         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,case when isnull(sdic.f_dest_eta_date,'''')= '''' then ''''          ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					when sdic.f_dest_eta_date ='''' then ''''         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  else convert(char(10), convert(datetime, sdic.f_dest_eta_date), 23) end f_dest_eta_date2         ' + CHAR(10);
+
+		-- 20220819 추가
+		--SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT WITH (NOLOCK)  where concat(country,port_code) = sdic.POL)              AS pol_port				' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT WITH (NOLOCK)  where port_code = sdic.POL)              AS pol_port				' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POL_ATD_DATE,'''')='''','''', convert(char(10), convert(datetime, sdic.POL_ATD_DATE), 23))    AS pol_atd					' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,''''					AS pol_etd				' + CHAR(10);
+		--SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT where concat(country,port_code) = sdic.POD)            AS pod_arrive_port      ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT where port_code = sdic.POD)            AS pod_arrive_port      ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POD_ETA_DATE    ,'''')='''','''', convert(char(10), convert(datetime, sdic.POD_ETA_DATE    ), 23)) AS pod_arrive_eta     ' + CHAR(10);		 
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POD_ATA_DATE    ,'''')='''','''', convert(char(10), convert(datetime, sdic.POD_ATA_DATE    ), 23)) AS pod_arrive_ata     ' + CHAR(10);		 
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POD_ETD_DATE    ,'''')='''','''', convert(char(10), convert(datetime, sdic.POD_ETD_DATE    ), 23)) AS pod_departure_etd  ' + CHAR(10);		 
+		SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.POD_ATD_DATE    ,'''')='''','''', convert(char(10), convert(datetime, sdic.POD_ATD_DATE    ), 23)) AS pod_departure_atd  ' + CHAR(10);
+
+		-- 20220825 추가		 
+		--SET @mEXEC = @MEXEC+'       			  ,(select max(port_description) from SCM_MST_PORT where concat(country,port_code) = cy2.ZFCY2) AS cy2_port					' + CHAR(10);		 
+		--SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.F_DEST_ETA_DATE ,'''')='''','''', convert(char(10), convert(datetime, cy2.ZFCY2ETA ), 23)) AS cy2_eta	' + CHAR(10);	 
+		--SET @mEXEC = @MEXEC+'       			  ,IIF(ISNULL(sdic.F_DEST_ATA_DATE ,'''')='''','''', convert(char(10), convert(datetime, cy2.ZFCY2ATA ), 23)) AS cy2_ata	' + CHAR(10);	
+		--SET @mEXEC = @MEXEC+'       			  ,(select max(ZFCY2) from SCM_DNM_DELIVERY_TRACKING where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO)   AS cy2_port												' + CHAR(10);
+		--SET @mEXEC = @MEXEC+'       			  ,(select  convert(char(10), convert(datetime, max(ZFCY2ETA) ), 23) from SCM_DNM_DELIVERY_TRACKING where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO)  AS cy2_eta ' + CHAR(10);	
+		--SET @mEXEC = @MEXEC+'       			  ,(select  convert(char(10), convert(datetime, max(ZFCY2ATA) ), 23) from SCM_DNM_DELIVERY_TRACKIN"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","5","G where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO)  AS cy2_ata ' + CHAR(10);	
+		SET @mEXEC = @MEXEC+'       			   ,(select max(cy2_port) from CY2 where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO and sdic.plant_issue_date  =pid.plant_issue_date)  AS cy2_port		' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			   ,(select max(cy2_eta)  from CY2 where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO  and sdic.plant_issue_date =pid.plant_issue_date)  AS cy2_eta		' + CHAR(10);	
+		SET @mEXEC = @MEXEC+'       			   ,(select max(cy2_ata)  from CY2 where COMPANY_ID = sdic.COMPANY_ID AND SHIPMENT_NO = sdic.SHIPMENT_NO  and sdic.plant_issue_date =pid.plant_issue_date)  AS cy2_ata 		' + CHAR(10);		 
+
+		SET @mEXEC = @MEXEC+'       		FROM  scm_dnm_intransit_c sdic WITH (NOLOCK)         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       		LEFT JOIN scp_mst_bod_n_v smbv WITH (NOLOCK)         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			ON    sdic.division_id = smbv.division_id         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			AND   sdic.from_scm_site_id = smbv.from_site         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			AND   sdic.to_scm_site_id = smbv.to_site         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			AND   ( CASE WHEN ISNULL(sdic.final_incoterms, '''') = '''' THEN sdic.incoterms         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       					ELSE sdic.final_incoterms         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       				   END ) = smbv.incoterms         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			AND   sdic.transport_mode = smbv.transport_mode         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			AND   smbv.bod_valid_yn = ''Y''         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			AND   smbv.route_valid_yn = ''Y''         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			AND sdic.result_date >= smbv.from_yyyymmdd         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			AND sdic.result_date <= smbv.to_yyyymmdd         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'             LEFT JOIN SCP_MST_FINAL_ITEM cp WITH (NOLOCK)  on cp.DIVISION_ID = sdic.division_id and  cp.ITEM_ID = sdic.ITEM_ID           ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'             left join pid on  pid.COMPANY_ID = sdic.COMPANY_ID AND pid.SHIPMENT_NO = sdic.SHIPMENT_NO  AND pid.plant_issue_date = sdic.plant_issue_date        ' + CHAR(10);
+
+		--SET @mEXEC = @MEXEC+'             LEFT JOIN SCM_DNM_DELIVERY_TRACKING cy2 ON cy2.COMPANY_ID = sdic.COMPANY_ID AND cy2.SHIPMENT_NO = sdic.SHIPMENT_NO  ' + CHAR(10); -- 20220825 CY2
+		SET @mEXEC = @MEXEC+'       		WHERE 1 = 1       ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       		    [@p_division_id]        ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			[@p_plant_site_id]      ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			[@p_sales_site_id]      ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			[@p_project_code]       ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			[@p_item_id]            ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			[@p_trans_mode]         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			[@p_shipment_no]        ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			[@p_result_date]        ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			AND sdic.RESULT_TYPE in (''I'',''C'',''B'')         ' + CHAR(10);
+		SET @mEXEC = @MEXEC+'       			AND dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) != ''''         ' + CHAR(10);
+
+
+		IF @p_cell_group = '*' OR @p_cell_group = ''
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND cp.GROUP_CODE1 IS NULL																												 ' + CHAR(10);
+			END
+		ELSE
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND cp.GROUP_CODE1			IN ( SELECT token FROM dbo.String_Split([@p_cell_group]	 ,''''))   ' + CHAR(10);
+			END
+
+		IF @p_pack_group = '*' OR @p_pack_group = ''
+			BEGIN
+			--SET @mEXEC = @MEXEC+' 		AND cp.GROUP_CODE2 IS NULL																												 ' + CHAR(10);
+			SET @mEXEC = @MEXEC+' 										' + CHAR(10)"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_DETAIL","7059161","19","			END
+		ELSE
+			BEGIN
+			SET @mEXEC = @MEXEC+' 		AND operation_group		IN ( SELECT token FROM dbo.String_Split([@p_operation_group]	 ,''''))   ' + CHAR(10);                                                                                                                           
+			END	
+	
+	
+		SET @mEXEC = @MEXEC+'   	ORDER BY result_date, result_type, division_id, shipment_no             ' + CHAR(10);
+
+
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_division_id]'		    , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.division_id','EQUAL', @p_division_id ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_plant_site_id]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.from_scm_site_id', 'LIKE', @p_plant_site_id ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_sales_site_id]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.to_scm_site_id', 'LIKE', @p_sales_site_id ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_project_code]'		    , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.project_code', 'EQUAL', @p_project_code ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_item_id]'				, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.item_id', 'EQUAL', @p_item_id ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_trans_mode]'			, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.transport_mode', 'EQUAL', @p_trans_mode ));
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_shipment_no]'			, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.shipment_no', 'LIKE', @p_shipment_no ));
+	    SET @mEXEC = REPLACE(@mEXEC,'[@p_result_date]'			, 'AND sdic.result_date BETWEEN '''+@p_from_yyyymmdd+''' AND '''+@p_to_yyyymmdd+''''); -- 20220810
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_cell_group]'			, 'N'''+@p_cell_group+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_pack_group]'			, 'N'''+@p_pack_group+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_incoterms]'			, 'N'''+@p_incoterms+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_searchdate]'			, ''''+@p_searchdate+'''');
+		SET @mEXEC = REPLACE(@mEXEC,'[@p_operation_group]'		, 'N'''+@p_operation_group+'''');
+
+END
+
+	EXEC (@mEXEC);
+
+    SELECT @mEXEC;
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_REPORT","23059218","1","
+
+
+/*
+ * Program ID   : SCP0091_GET_VALIDATION_SHIPMENT_DATA => SCP0091_GET_VALIDATION_SHIPMENT_REPORT
+ * Description  : 운송중재고 Report
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/03/22   vadabi3	최조생성
+ * 2022/07/07   vadabi3	plant_site_id ( LIKE => IN )
+ * 2022/07/14   vadabi3 Shipment no 로만 매핑 
+ * 2022/08/07   vadabi3 Shipment no => FN_GET_SHIPMENT_NO_DISPLAY
+ * 2022/08/08   vadabi3 RESULT DATE 범위 일 때 정렬순서 적용
+ * 2023/03/29   vadabi3 F_DEST_ETA_DATE 개선
+ ----------------------------------------------------------------------------------------------------
+ EXEC SCP0091_GET_VALIDATION_SHIPMENT_REPORT 
+ @p_division_id='81'
+,@p_plant_site_id=''
+,@p_sales_site_id=''
+,@p_project_code=''
+,@p_item_id=''
+,@p_from_yyyymmdd='20220906'
+,@p_to_yyyymmdd='20220906'
+,@p_result_type='I'
+,@p_bucket_type='DAILY'
+,@p_period_from='20220906'
+,@p_period_to='20230906'
+,@p_user_id='vadabi3'
+,@p_operation_group=NULL
+
+  *===================================================================================================
+ 참고 = SCP0077_GET_SHIPPING_RESULT_CHECK
+ */
+
+--CREATE PROCEDURE [dbo].[SCP0091_GET_VALIDATION_SHIPMENT_REPORT]
+CREATE PROCEDURE [dbo].[SCP0091_GET_VALIDATION_SHIPMENT_REPORT]
+  @p_division_id     NVARCHAR(MAX),
+  @p_plant_site_id   NVARCHAR(MAX),    
+  @p_sales_site_id   NVARCHAR(MAX),    
+  @p_project_code    NVARCHAR(MAX),
+  @p_item_id		 NVARCHAR(MAX),
+  @p_from_yyyymmdd	 NVARCHAR(8),
+  @p_to_yyyymmdd	 NVARCHAR(8),
+  @p_result_type	 NVARCHAR(1),
+  @p_bucket_type	 NVARCHAR(10),
+  @p_period_from	 NVARCHAR(8),
+  @p_period_to	     NVARCHAR(8),
+  @p_user_id	     NVARCHAR(30),
+  @p_operation_group	NVARCHAR(MAX)
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	--##############################################################################
+	-- 변수선언
+	--##############################################################################
+	DECLARE @v_program_id			NVARCHAR(10)	= 'SCP0091';
+	DECLARE @v_sheet_name			NVARCHAR(50)	= 'REPORT';
+	DECLARE @COLUMNS			NVARCHAR(MAX)
+	DECLARE @COLUMNS_DAILY		NVARCHAR(MAX)
+	DECLARE @COLUMNS_WEEKLY		NVARCHAR(MAX)
+	DECLARE @COLUMNS_MONTHLY	NVARCHAR(MAX)
+	DECLARE @V_COLUMN_INDEX INT = 0;
+	DECLARE @mEXEC_HEADER	NVARCHAR(4000) = '';
+	DECLARE @mEXEC_SELECT	NVARCHAR(4000) = '';
+	DECLARE @mEXEC_GROUP_BY NVARCHAR(4000) = '';
+	DECLARE @mEXEC_ORDER_BY NVARCHAR(4000) = '';
+	DECLARE @COL_HEADER		NVARCHAR(4000) = '';
+	DECLARE @COL_SELECT		NVARCHAR(4000) = '';
+	DECLARE @COL_GROUP_BY	NVARCHAR(4000) = '';
+	DECLARE @COL_ORDER_BY	NVARCHAR(4000) = '';
+	DECLARE @SQL				NVARCHAR(MAX)
+
+	DECLARE @POS INT = 0;
+	DECLARE @LEN INT = 0;
+	DECLARE @V_CNT_USR_COLUMN	int = 0;
+	DECLARE @V_INDEX INT = 0;
+
+	DECLARE @mEXEC NVARCHAR(MAX);
+	DECLARE @COL NVARCHAR(100) = '';
+	DECLARE @SORT_METHOD_CODE NVARCHAR(20) = '';
+
+	DECLARE @v_division_id			NVARCHAR(50)	= @p_division_id;
+	DECLARE @v_user_id				NVARCHAR(100)	= @p_user_id;
+
+	/*--------------------------------------------
+	SHIPMENT_RESULT_TYPE
+	--------------------------------------------
+	I	Intransit(GTS)
+	C	법인간 운송중 재고
+	S	Intransit(출하실적기반:Non GTS)
+	P	Plant Issue
+	B	SO Reserved Stock
+	*/
+
+
+
+
+
+	--##############################################################################
+	-- Monthly, Weekly, Daily
+	--##############################################################################
+	SET @COLUMNS = ''
+	SET @COLUMNS_WEEKLY = ''
+	SET @COLUMNS_MONTHLY = ''
+	SET @COLUMNS_DAILY	 = ''
+
+
+		/********************************************************************************
+		-- WEEKLY
+		********************************************************************************/
+			SELECT @COLUMNS_WEEKLY = @COLUMNS_WEEKLY + '[W_' + yyyymmdd + '],'
+				  FROM (
+      "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_REPORT","23059218","2","   									  SELECT 
+													distinct concat(calendar.basis_yyyymm, iso_week)  as yyyymmdd
+												FROM  scm_dnm_intransit_c sdic
+												LEFT JOIN scp_mst_bod_n_v smbv
+													ON    sdic.division_id = smbv.division_id
+													AND   sdic.from_scm_site_id = smbv.from_site
+													AND   sdic.to_scm_site_id = smbv.to_site
+													ANd   sdic.incoterms = smbv.incoterms
+													AND   sdic.transport_mode = smbv.transport_mode
+													AND   smbv.bod_valid_yn = 'Y'
+													AND   smbv.route_valid_yn = 'Y'
+													AND   sdic.result_date >= smbv.from_yyyymmdd
+													AND   sdic.result_date <= smbv.to_yyyymmdd
+
+												LEFT JOIN scm_sys_calendar_m calendar on calendar.BASIS_yyyymmdd =  CASE 
+																													when result_type = 'B' and  isnull(sdic.ATTRIBUTE3,'')= '' then F_DEST_ETA_DATE
+																													WHEN convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112) <  convert(char(8), convert(datetime, sdic.result_date), 112) 
+																													THEN convert(char(8), convert(datetime, sdic.result_date), 112)
+																													ELSE convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112)
+																													END
+												  WHERE (isnull(@p_division_id,   '' ) = '' OR sdic.division_id   IN ( SELECT token FROM dbo.String_Split(@p_division_id	 ,',')) )
+													--AND (isnull(@p_plant_site_id, '' ) = '' OR sdic.from_scm_site_id like '%' + @p_plant_site_id + '%') --sdic.from_scm_site_id 
+													AND (isnull(@p_plant_site_id, '' ) = '' OR sdic.from_scm_site_id IN ( SELECT token FROM dbo.String_Split(@p_plant_site_id,',')) ) --20220706  Equal => IN 으로 변경
+													AND (isnull(@p_sales_site_id, '' ) = '' OR sdic.to_scm_site_id like '%' + @p_sales_site_id + '%') --sdic.to_scm_site_id   IN ( SELECT token FROM dbo.String_Split(@p_sales_site_id,',')) )
+													AND (isnull(@p_project_code,  '' ) = '' OR sdic.project_code  IN ( SELECT token FROM dbo.String_Split(@p_project_code ,',')) )
+													AND (isnull(@p_item_id,       '' ) = '' OR sdic.item_id       IN ( SELECT token FROM dbo.String_Split(@p_item_id		 ,',')) )
+													AND sdic.result_date >= @p_from_yyyymmdd
+													AND sdic.result_date <= @p_to_yyyymmdd
+													--AND ISNULL(sdic.ATTRIBUTE3,'') >= @p_period_from
+													--AND ISNULL(sdic.ATTRIBUTE3,'') <= @p_period_to
+													/*
+													AND sdic.RESULT_TYPE = @p_result_type
+													--------------------------------------------
+													SHIPMENT_RESULT_TYPE
+													--------------------------------------------
+													I	Intransit(GTS)
+													C	법인간 운송중 재고
+													S	Intransit(출하실적기반:Non GTS)
+													P	Plant Issue
+													B	SO Reserved Stock
+													*/
+													AND sdic.RESULT_TYPE in ('I','C','B')
+													AND dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) != ''
+					   ) AS months
+				 ORDER BY yyyymmdd
+
+
+
+							--##############################################################################
+							-- 20230329 Weekly 의 @p_from_yyyymmdd, @p_to_yyyymmdd 개선 / ACEH1057I-B1-000
+							--##############################################################################
+							IF OBJECT_ID('tempdb..#TMP_WEEKLY_TERM') IS NOT NULL	
+							DROP TABLE #TMP_WEEKLY_TERM;
+
+							 SELECT 
+								distinct concat(calendar.basis_yyyymm, iso_week)  as yyyymmdd
+								INTO #TMP_WEEKLY_TERM
+								FROM  scm_dnm_intransit_c sdic
+								LEFT JOIN scp_mst_bod_n_v smbv
+									ON    sdic.division_id = smbv.division_id
+									AND   sdic.from_scm_site_id = smbv.from_site
+									AND   sdic.to_scm_site_id = smbv.to_site
+									ANd   sdic.incoterms = smbv.incoterms
+									AND   sdic.transport_mode = smbv.transport_mode
+									AND   smbv.bod_valid_yn = 'Y'
+									AND   smbv.route_valid_yn = 'Y'
+									AND   sdic.result_date >= smbv.from_yyyymmdd
+									AND   sd"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_REPORT","23059218","3","ic.result_date <= smbv.to_yyyymmdd
+
+								LEFT JOIN scm_sys_calendar_m calendar on calendar.BASIS_yyyymmdd =  CASE 
+																									when result_type = 'B' and  isnull(sdic.ATTRIBUTE3,'')= '' then F_DEST_ETA_DATE
+																									WHEN convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112) <  convert(char(8), convert(datetime, sdic.result_date), 112) 
+																									THEN convert(char(8), convert(datetime, sdic.result_date), 112)
+																									ELSE convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112)
+																									END
+									WHERE (isnull(@p_division_id,   '' ) = '' OR sdic.division_id   IN ( SELECT token FROM dbo.String_Split(@p_division_id	 ,',')) )
+									--AND (isnull(@p_plant_site_id, '' ) = '' OR sdic.from_scm_site_id like '%' + @p_plant_site_id + '%') --sdic.from_scm_site_id 
+									AND (isnull(@p_plant_site_id, '' ) = '' OR sdic.from_scm_site_id IN ( SELECT token FROM dbo.String_Split(@p_plant_site_id,',')) ) --20220706  Equal => IN 으로 변경
+									AND (isnull(@p_sales_site_id, '' ) = '' OR sdic.to_scm_site_id like '%' + @p_sales_site_id + '%') --sdic.to_scm_site_id   IN ( SELECT token FROM dbo.String_Split(@p_sales_site_id,',')) )
+									AND (isnull(@p_project_code,  '' ) = '' OR sdic.project_code  IN ( SELECT token FROM dbo.String_Split(@p_project_code ,',')) )
+									AND (isnull(@p_item_id,       '' ) = '' OR sdic.item_id       IN ( SELECT token FROM dbo.String_Split(@p_item_id		 ,',')) )
+									AND sdic.result_date >= @p_from_yyyymmdd
+									AND sdic.result_date <= @p_to_yyyymmdd
+									--AND ISNULL(sdic.ATTRIBUTE3,'') >= @p_period_from
+									--AND ISNULL(sdic.ATTRIBUTE3,'') <= @p_period_to
+									/*
+									AND sdic.RESULT_TYPE = @p_result_type
+									--------------------------------------------
+									SHIPMENT_RESULT_TYPE
+									--------------------------------------------
+									I	Intransit(GTS)
+									C	법인간 운송중 재고
+									S	Intransit(출하실적기반:Non GTS)
+									P	Plant Issue
+									B	SO Reserved Stock
+									*/
+									AND sdic.RESULT_TYPE in ('I','C','B')
+									AND dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) != ''
+
+
+							DECLARE @p_from_yyyymmdd_week nvarchar(max);
+							DECLARE @p_to_yyyymmdd_week nvarchar(max);
+
+							SELECT @p_from_yyyymmdd_week = MIN(yyyymmdd) from #TMP_WEEKLY_TERM;
+							SELECT @p_to_yyyymmdd_week   = MAX(yyyymmdd) from #TMP_WEEKLY_TERM;
+
+
+
+
+
+
+
+	
+
+	
+		/********************************************************************************
+		-- MONTHLY
+		********************************************************************************/
+				SELECT @COLUMNS_MONTHLY = @COLUMNS_MONTHLY + '[M_' + yyyymm + '],'
+				  FROM (
+         									  SELECT 
+											  	    --distinct substring(sdic.F_DEST_ETA_DATE,1,6) as yyyymm
+											        distinct
+													case 
+													when result_type = 'B' and  isnull(sdic.ATTRIBUTE3,'')= '' then F_DEST_ETA_DATE
+													when isnull(sdic.ATTRIBUTE3,'')= '' then '' 
+													when sdic.ATTRIBUTE3 ='' then ''
+													else
+														CASE 
+														WHEN substring(convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112),1,6) <  substring(convert(char(8), convert(datetime, sdic.result_date), 112),1,6)
+														then substring(convert(char(8), convert(datetime, sdic.result_date), 112),1,6)
+														ELSE substring(convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112),1,6)
+														END
+													end yyyymm
+												FROM  scm_dnm_intransit_c sdic
+												LEFT JOIN scp_mst_bod_n_v smbv
+													ON    sdic.division_id = smbv.division_id
+													AND   sdic.from_scm_site_id = smbv.from_site
+													AND   sdic.to_scm_site_id = smbv.to_site
+													ANd   sdic.incoterms = smbv.incoterms
+													AND   sdic.transport_mode = smbv.transport_mode
+													AND   smbv.bod_valid_yn = 'Y'
+													AND   smbv."
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_REPORT","23059218","4","route_valid_yn = 'Y'
+													AND sdic.result_date >= smbv.from_yyyymmdd
+													AND sdic.result_date <= smbv.to_yyyymmdd
+												  WHERE (isnull(@p_division_id,   '' ) = '' OR sdic.division_id   IN ( SELECT token FROM dbo.String_Split(@p_division_id	 ,',')) )
+													--AND (isnull(@p_plant_site_id, '' ) = '' OR sdic.from_scm_site_id like '%' + @p_plant_site_id + '%') --sdic.from_scm_site_id
+													AND (isnull(@p_plant_site_id, '' ) = '' OR sdic.from_scm_site_id IN ( SELECT token FROM dbo.String_Split(@p_plant_site_id,',')) ) --20220706  Equal => IN 으로 변경
+													AND (isnull(@p_sales_site_id, '' ) = '' OR sdic.to_scm_site_id like '%' + @p_sales_site_id + '%') --sdic.to_scm_site_id   IN ( SELECT token FROM dbo.String_Split(@p_sales_site_id,',')) )
+													AND (isnull(@p_project_code,  '' ) = '' OR sdic.project_code  IN ( SELECT token FROM dbo.String_Split(@p_project_code ,',')) )
+													AND (isnull(@p_item_id,       '' ) = '' OR sdic.item_id       IN ( SELECT token FROM dbo.String_Split(@p_item_id		 ,',')) )
+													AND sdic.result_date >= @p_from_yyyymmdd
+													AND sdic.result_date <= @p_to_yyyymmdd
+													--AND ISNULL(sdic.ATTRIBUTE3,'') >= @p_period_from
+													--AND ISNULL(sdic.ATTRIBUTE3,'') <= @p_period_to
+													/*
+													AND sdic.RESULT_TYPE = @p_result_type
+													--------------------------------------------
+													SHIPMENT_RESULT_TYPE
+													--------------------------------------------
+													I	Intransit(GTS)
+													C	법인간 운송중 재고
+													S	Intransit(출하실적기반:Non GTS)
+													P	Plant Issue
+													B	SO Reserved Stock
+													*/
+													AND sdic.RESULT_TYPE in ('I','C','B')
+													AND dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) != ''
+					   ) AS months
+				 ORDER BY yyyymm
+	
+	
+
+		/********************************************************************************
+		-- @COLUMNS
+		********************************************************************************/
+		SELECT @COLUMNS_DAILY	 = @COLUMNS_DAILY + '[D_' + yyyymmdd + '],'
+				  FROM (
+         									  SELECT 
+													--distinct sdic.F_DEST_ETA_DATE as yyyymmdd
+													distinct
+											        case 
+													when result_type = 'B' and  isnull(sdic.ATTRIBUTE3,'')= '' then F_DEST_ETA_DATE
+													when isnull(sdic.ATTRIBUTE3,'')= '' then '' 
+													when sdic.ATTRIBUTE3 ='' then ''
+													else 
+															CASE 
+															WHEN convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112) < result_date THEN result_date
+															ELSE convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112)
+															END
+													end yyyymmdd
+	
+												FROM  scm_dnm_intransit_c sdic
+												LEFT JOIN scp_mst_bod_n_v smbv
+													ON    sdic.division_id = smbv.division_id
+													AND   sdic.from_scm_site_id = smbv.from_site
+													AND   sdic.to_scm_site_id = smbv.to_site
+													ANd   sdic.incoterms = smbv.incoterms
+													AND   sdic.transport_mode = smbv.transport_mode
+													AND   smbv.bod_valid_yn = 'Y'
+													AND   smbv.route_valid_yn = 'Y'
+													AND   sdic.result_date >= smbv.from_yyyymmdd
+													AND   sdic.result_date <= smbv.to_yyyymmdd
+													
+												  WHERE (isnull(@p_division_id,   '' ) = '' OR sdic.division_id   IN ( SELECT token FROM dbo.String_Split(@p_division_id	 ,',')) )
+													--AND (isnull(@p_plant_site_id, '' ) = '' OR sdic.from_scm_site_id like '%' + @p_plant_site_id + '%') --sdic.from_scm_site_id 
+													AND (isnull(@p_plant_site_id, '' ) = '' OR sdic.from_scm_site_id IN ( SELECT token FROM dbo.String_Split(@p_plant_site_id,',')) ) --20220706  Equal => IN 으로 변경
+													AND (isnull(@p_sales_site_id, '' ) = '' OR sdic.to_scm_site_id like '%' + @p_sales_site_id + '%') --sdic.to_scm_site_id   IN ( SELECT token FROM dbo.S"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_REPORT","23059218","5","tring_Split(@p_sales_site_id,',')) )
+													AND (isnull(@p_project_code,  '' ) = '' OR sdic.project_code  IN ( SELECT token FROM dbo.String_Split(@p_project_code ,',')) )
+													AND (isnull(@p_item_id,       '' ) = '' OR sdic.item_id       IN ( SELECT token FROM dbo.String_Split(@p_item_id		 ,',')) )
+													AND sdic.result_date >= @p_from_yyyymmdd
+													AND sdic.result_date <= @p_to_yyyymmdd
+													--AND sdic.ATTRIBUTE3 >= @p_period_from
+													--AND sdic.ATTRIBUTE3 <= @p_period_to
+													/*
+													AND sdic.RESULT_TYPE = @p_result_type
+													--------------------------------------------
+													SHIPMENT_RESULT_TYPE
+													--------------------------------------------
+													I	Intransit(GTS)
+													C	법인간 운송중 재고
+													S	Intransit(출하실적기반:Non GTS)
+													P	Plant Issue
+													B	SO Reserved Stock
+													*/
+													AND sdic.RESULT_TYPE in ('I','C','B')
+													AND dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) != ''
+					   ) AS months
+				 ORDER BY yyyymmdd
+
+
+		SET @COLUMNS = @COLUMNS_WEEKLY + @COLUMNS_MONTHLY + @COLUMNS_DAILY;
+
+		if len(@COLUMNS) = 0
+			begin
+			-- no data => no result return
+			select * from scm_dnm_intransit_c sdic where sdic.result_date = '12345678'
+			RETURN(-1)  
+			end
+		else
+			begin
+			SET @COLUMNS = LEFT(@COLUMNS, LEN(@COLUMNS) - 1)
+			end
+
+
+	--##############################################################################
+	-- 사용자별 사용 컬럼 COUNT = While LOOP
+	--##############################################################################
+	SET @V_CNT_USR_COLUMN = (
+								SELECT COUNT(1) 
+								FROM SCM_MST_TITLESET_USER WITH(NOLOCK) 
+								WHERE 1=1
+								 AND PROGRAM_ID  =  @v_program_id
+								 AND SHEET_NAME  =  @v_sheet_name
+								 AND USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+								 AND USER_ID     =  @v_user_id
+							  );
+
+
+
+	--##############################################################################
+	-- 선택 COLUMN => #tmp_SCP0091_COLUMN
+	--##############################################################################
+
+ 	IF OBJECT_ID('tempdb..#tmp_SCP0091_COLUMN') IS NOT NULL	
+		DROP TABLE #tmp_SCP0091_COLUMN;
+
+		SELECT A.COLUMN_NAME AS COL
+			 , ROW_NUMBER() OVER( ORDER BY ISNULL(B.SORT_ORDER_NO, A.SORT_ORDER_NO ) )	AS USER_SORT_ORDER_NO
+			 , ISNULL(B.DATA_SORT_METHOD_CODE , A.DATA_SORT_METHOD_CODE ) AS DATA_SORT_METHOD_CODE
+		  INTO #tmp_SCP0091_COLUMN
+		  FROM SCM_MST_SHEET_COLUMNS A WITH(NOLOCK) 
+	 LEFT JOIN SCM_MST_TITLESET_USER B WITH(NOLOCK) 
+		    ON B.PROGRAM_ID  = A.PROGRAM_ID
+		   AND B.SHEET_NAME  = A.SHEET_NAME
+		   AND B.COLUMN_NAME = A.COLUMN_NAME
+		   AND B.USER_ID	 = @v_user_id
+		   AND B.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+		 WHERE A.PROGRAM_ID	= @v_program_id
+		   AND A.SHEET_NAME	= @v_sheet_name
+		   AND A.VALID_YN		= 'Y'
+		   AND A.VISIBLE_FLAG	= 'Y'
+		   AND ISNULL(NULLIF(A.USER_SELECTABLE_FLAG,''),'Y') = 'Y'  -- COLUMN 설정 창에 보이는 것들만 조회
+		   AND ( @V_CNT_USR_COLUMN = 0
+					OR EXISTS (SELECT 1
+							     FROM SCM_MST_TITLESET_USER WITH(NOLOCK)
+								WHERE PROGRAM_ID		= @v_program_id
+								  AND SHEET_NAME		= @v_sheet_name
+								  AND COLUMN_NAME		= A.COLUMN_NAME
+								  AND USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+								  AND USER_ID			= @v_user_id
+								)
+				  )
+			;	
+	SET @V_CNT_USR_COLUMN = (SELECT COUNT(1) FROM #tmp_SCP0091_COLUMN);
+
+
+
+--##################################################################
+-- Make Column -> Loop
+--##################################################################
+	WHILE @v_cnt_usr_column > @V_INDEX
+	BEGIN
+		SELECT @COL = COL
+		     , @SORT_METHOD_CODE = DATA_SORT_METHOD_CODE 
+		  FROM #tmp_SCP0091_COLUMN 
+		  WHERE USER_SORT_ORDER_NO = (@V_INDEX+1);
+
+		 SET @COL_HEADER = @COL ;
+		 SET @COL_SELECT = @COL ;
+		 SET @COL_GROUP_BY = @COL ;
+		 SET @COL_ORDER_BY = @COL ;
+
+
+		IF (@V_INDEX = 0)
+		BEGIN"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_REPORT","23059218","6","
+
+			SET @mEXEC_HEADER	= @mEXEC_HEADER		+'	DATA.' + @COL_HEADER								+CHAR(10);
+			SET @mEXEC_SELECT   = @mEXEC_SELECT		+'	' + @COL_SELECT								+CHAR(10);
+			SET @mEXEC_GROUP_BY = @mEXEC_GROUP_BY	+'	' + @COL_GROUP_BY							+CHAR(10);
+			SET @mEXEC_ORDER_BY	= @mEXEC_ORDER_BY	+'	' + @COL_ORDER_BY + ' ' + @SORT_METHOD_CODE	+CHAR(10);
+
+			
+		END
+		ELSE
+		BEGIN
+			SET @mEXEC_HEADER	= @mEXEC_HEADER		+'	,DATA.' + @COL_HEADER								+CHAR(10);
+			SET @mEXEC_SELECT   = @mEXEC_SELECT		+'	,' + @COL_SELECT								+CHAR(10);
+			SET @mEXEC_GROUP_BY = @mEXEC_GROUP_BY	+'	,' + @COL_GROUP_BY								+CHAR(10);
+			SET @mEXEC_ORDER_BY = @mEXEC_ORDER_BY	+'	,' + @COL_ORDER_BY + ' ' + @SORT_METHOD_CODE	+CHAR(10);
+			
+		END
+
+		SET @V_INDEX = @V_INDEX + 1;
+	END;
+
+	--SELECT @mEXEC_HEADER;
+	--SELECT @mEXEC_SELECT;
+	--SELECT @mEXEC_GROUP_BY;
+	--SELECT @mEXEC_ORDER_BY;
+
+
+
+
+
+--##################################################################
+-- Make QUERY
+--##################################################################
+
+
+
+	SET @mEXEC = '        select * ';
+	SET @MEXEC = @MEXEC+' FROM			' + CHAR(10);
+	SET @MEXEC = @MEXEC+' ( 			' + CHAR(10);
+
+		/********************************************************************************
+		-- WEEKLY
+		********************************************************************************/
+
+	SET @MEXEC = @MEXEC+' SELECT		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				' + @mEXEC_HEADER+ CHAR(10); 
+	SET @MEXEC = @MEXEC+'				,DATA.delivery_qty									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,COL = COL + ''_''+ DATA.F_DEST_ETA_DATE			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'  FROM 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'  ( 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'  select 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			' + @mEXEC_SELECT+ CHAR(10); 
+	SET @MEXEC = @MEXEC+'			,F_DEST_ETA_DATE 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			,sum(delivery_qty) as delivery_qty 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			FROM 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			( 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			select 														' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				 sdic.division_id 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,cp.GROUP_CODE1 AS  CELL_GROUP 							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,cp.GROUP_CODE2 AS  PACK_GROUP 							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.project_code AS project_code  					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.item_id 											' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,(SELECT TOP 1 (CASE  									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				                WHEN X.NICK_NAME IS NULL THEN ''-''  	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'								WHEN X.NICK_NAME='''' THEN ''-''  		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'								ELSE X.NICK_NAME  						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'								END 									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'								)  										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				    FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				   WHERE X.ITEM_ID = sdic.item_id 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				 ) AS nick_name 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.plant_id as plant 								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.transport_mode as Trans_Mode 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) operation_group 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.from_scm_site_id 									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.to_scm_site_id 									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.final_incoterms		AS incoterms 				' + CHAR(10);
+	--SET @MEXEC = @MEXEC+'				,CASE sdic.result_type  								' + CHAR(10);
+	--SET @MEXEC = @MEXEC+'						WHEN ''S'' THEN ''-'' 							' + CHAR(10);
+	--SET @MEXEC = @MEXEC+'						ELSE replace(replace(sdic.shipment_no, ''_1'','''') , ''_2'','''')     ' + CHAR(10); -- 20220707 '_1' 생략
+	--SET @MEXEC = @MEXEC+'						END  shipment_no 				                ' + "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_REPORT","23059218","7","CHAR(10); -- 2018/09/20 
+    SET @MEXEC = @MEXEC+'				,dbo.FN_GET_SHIPMENT_NO_DISPLAY(sdic.shipment_no, sdic.result_type ) AS shipment_no ' + CHAR(10); -- 20220807
+	SET @MEXEC = @MEXEC+'				,sdic.delivery_qty 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,convert(char(10), convert(datetime, sdic.result_date), 23) AS result_date 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,concat(calendar.basis_yyyymm, iso_week)  as F_DEST_ETA_DATE ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		FROM  scm_dnm_intransit_c sdic 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		LEFT JOIN scp_mst_bod_n_v smbv 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			ON    sdic.division_id = smbv.division_id 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.from_scm_site_id = smbv.from_site 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.to_scm_site_id = smbv.to_site 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			ANd   sdic.incoterms = smbv.incoterms 							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.transport_mode = smbv.transport_mode 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   smbv.bod_valid_yn = ''Y'' 								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   smbv.route_valid_yn = ''Y'' 								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.result_date >= smbv.from_yyyymmdd 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.result_date <= smbv.to_yyyymmdd 						' + CHAR(10);
+
+
+	SET @MEXEC = @MEXEC+'	  LEFT JOIN scm_sys_calendar_m calendar on calendar.BASIS_yyyymmdd =  CASE  						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			                                                              when result_type = ''B'' and  isnull(sdic.ATTRIBUTE3,'''')= '''' then F_DEST_ETA_DATE' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			                                                              WHEN convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112) <  convert(char(8), convert(datetime, sdic.result_date), 112) 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'																		  THEN convert(char(8), convert(datetime, sdic.result_date), 112) 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'																		  ELSE convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112)						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'																		  END 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		LEFT JOIN SCP_MST_FINAL_ITEM cp										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			on    cp.DIVISION_ID = sdic.division_id 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			and   cp.ITEM_ID = sdic.ITEM_ID  								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			WHERE 1 = 1						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			      [@p_division_id]			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_plant_site_id] 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_sales_site_id]		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_project_code]			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_item_id]				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  AND sdic.result_date >= [@p_from_yyyymmdd]				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  AND sdic.result_date <= [@p_to_yyyymmdd]					' + CHAR(10);
+
+
+	SET @MEXEC = @MEXEC+'				  AND CASE 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  when result_type = ''B'' then F_DEST_ETA_DATE  		    ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  WHEN convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112) <  convert(char(8), convert(datetime, sdic.result_date), 112) 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  THEN convert(char(8), convert(datetime, sdic.result_date), 112) 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  ELSE convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112) 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  END BETWEEN [@p_period_from] AND [@p_period_to] 					' + CHAR(10);
+
+	SET @MEXEC = @MEXEC+'		AND sdic.RESULT_TYPE in (''I'',''C'',''B'')										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		AND dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) != ''''		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		) A																				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		where 1 = 1						' "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_REPORT","23059218","8","+ CHAR(10);
+	SET @MEXEC = @MEXEC+'		[@p_operation_group]			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		GROUP BY						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			' + @mEXEC_GROUP_BY			  + CHAR(10); 
+	SET @MEXEC = @MEXEC+'		    ,F_DEST_ETA_DATE			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		) DATA							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		CROSS APPLY 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		(								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		SELECT ''W''					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		) C (COL)						' + CHAR(10);
+
+
+	SET @MEXEC = REPLACE(@MEXEC,'[@p_from_yyyymmdd]'		, ''+@p_from_yyyymmdd+''    );
+	SET @MEXEC = REPLACE(@MEXEC,'[@p_to_yyyymmdd]'			, ''+@p_to_yyyymmdd+''    );
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_division_id]'		    , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.division_id','EQUAL', @p_division_id ));
+	--SET @mEXEC = REPLACE(@mEXEC,'[@p_plant_site_id]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.from_scm_site_id', 'LIKE', @p_plant_site_id ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_plant_site_id]'        , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.from_scm_site_id', 'IN', @p_plant_site_id)); -- 20220706 EQUAL => IN
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_sales_site_id]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.to_scm_site_id', 'LIKE', @p_sales_site_id ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_project_code]'		    , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.project_code', 'EQUAL', @p_project_code ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_item_id]'				, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.item_id', 'EQUAL', @p_item_id ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_operation_group]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('operation_group', 'EQUAL', @p_operation_group ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_period_from]'			,  ''+@p_period_from+'');
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_period_to]'			,  ''+@p_period_to+'');
+		
+
+		/********************************************************************************
+		-- MONTHLY
+		********************************************************************************/
+	SET @MEXEC = @MEXEC+' UNION ALL		' + CHAR(10);
+	SET @MEXEC = @MEXEC+' SELECT		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				' + @mEXEC_HEADER+ CHAR(10); 
+	SET @MEXEC = @MEXEC+'				,DATA.delivery_qty									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,COL = COL + ''_''+ DATA.F_DEST_ETA_DATE			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'  FROM 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'  ( 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'  select 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			' + @mEXEC_SELECT+ CHAR(10); 
+	SET @MEXEC = @MEXEC+'			,substring(F_DEST_ETA_DATE,1,6) AS F_DEST_ETA_DATE 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			,sum(delivery_qty) as delivery_qty 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			FROM 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			( 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			select 														' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				 sdic.division_id 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,cp.GROUP_CODE1 AS  CELL_GROUP 							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,cp.GROUP_CODE2 AS  PACK_GROUP 							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.project_code AS project_code  					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.item_id 											' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,(SELECT TOP 1 (CASE  									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				                WHEN X.NICK_NAME IS NULL THEN ''-''  	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'								WHEN X.NICK_NAME='''' THEN ''-''  		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'								ELSE X.NICK_NAME  						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'								END 									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'								)  										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				    FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				   WHERE X.ITEM_ID = sdic.item_id 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				 ) AS nick_name 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.plant_id as plant 								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.transport_mode as Trans_Mode 						' + CHAR(10);"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_REPORT","23059218","9","
+	SET @MEXEC = @MEXEC+'				,dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) operation_group 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.from_scm_site_id 									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.to_scm_site_id 									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.final_incoterms		AS incoterms 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,dbo.FN_GET_SHIPMENT_NO_DISPLAY(sdic.shipment_no, sdic.result_type ) AS shipment_no ' + CHAR(10); -- 20220807
+	SET @MEXEC = @MEXEC+'				,convert(char(10), convert(datetime, sdic.result_date), 23) AS result_date 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.delivery_qty 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, case  												' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				when result_type = ''B'' then F_DEST_ETA_DATE  		    ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				when isnull(sdic.ATTRIBUTE3,'''')= '''' then ''''  		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				when sdic.ATTRIBUTE3 ='''' then '''' 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				else  													' + CHAR(10);
+	SET @MEXEC = @MEXEC+'					CASE  												' + CHAR(10);
+	SET @MEXEC = @MEXEC+'					WHEN convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112) <  convert(char(8), convert(datetime, sdic.result_date), 112) 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'					then convert(char(8), convert(datetime, sdic.result_date), 112) 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'					ELSE convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112) 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'					END 																	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				end F_DEST_ETA_DATE 														' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		FROM  scm_dnm_intransit_c sdic 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		LEFT JOIN scp_mst_bod_n_v smbv 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			ON    sdic.division_id = smbv.division_id 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.from_scm_site_id = smbv.from_site 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.to_scm_site_id = smbv.to_site 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			ANd   sdic.incoterms = smbv.incoterms 							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.transport_mode = smbv.transport_mode 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   smbv.bod_valid_yn = ''Y'' 								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   smbv.route_valid_yn = ''Y'' 								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.result_date >= smbv.from_yyyymmdd 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.result_date <= smbv.to_yyyymmdd 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		LEFT JOIN SCP_MST_FINAL_ITEM cp										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			on    cp.DIVISION_ID = sdic.division_id 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			and   cp.ITEM_ID = sdic.ITEM_ID  								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			WHERE 1 = 1						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			      [@p_division_id]			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_plant_site_id] 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_sales_site_id]		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_project_code]			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_item_id]				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_from_to_yyyymmdd] 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		AND sdic.RESULT_TYPE in (''I'',''C'',''B'')										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		AND dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) != ''''		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		) A																				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		where F_DEST_ETA_DATE between [@p_period_from] and [@p_period_to]				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		[@p_operation_group]' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		GROUP BY						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			' + @mEXEC_GROUP_BY			  + CHAR(10); 
+	SET @MEXEC = @MEXEC+'		    ,F_DEST_ETA_DATE			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		) DATA							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		CROSS APPLY 					' + CHAR(10);"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_REPORT","23059218","10","
+	SET @MEXEC = @MEXEC+'		(								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		SELECT ''M''					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		) C (COL)						' + CHAR(10);
+
+
+	SET @MEXEC = REPLACE(@MEXEC,'[@p_period_to]'			, @p_period_to    );
+	SET @MEXEC = REPLACE(@MEXEC,'[@p_period_from]'			, @p_period_from    );
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_division_id]'		    , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.division_id','EQUAL', @p_division_id ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_plant_site_id]'        , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.from_scm_site_id', 'IN', @p_plant_site_id)); -- 20220706 EQUAL => IN
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_sales_site_id]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.to_scm_site_id', 'LIKE', @p_sales_site_id ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_project_code]'		    , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.project_code', 'EQUAL', @p_project_code ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_item_id]'				, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.item_id', 'EQUAL', @p_item_id ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_operation_group]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('operation_group', 'EQUAL', @p_operation_group ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_from_to_yyyymmdd]'  , 'and sdic.result_date between '''+@p_from_yyyymmdd+''' AND '''+@p_to_yyyymmdd+'''');
+
+
+		/********************************************************************************
+		-- DAILY
+		********************************************************************************/
+	SET @MEXEC = @MEXEC+' UNION	ALL		' + CHAR(10);
+	SET @MEXEC = @MEXEC+' SELECT		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				' + @mEXEC_HEADER+ CHAR(10); 
+	SET @MEXEC = @MEXEC+'				,DATA.delivery_qty									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,COL = COL + ''_''+ DATA.F_DEST_ETA_DATE			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'  FROM 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'  ( 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'  select 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			' + @mEXEC_SELECT+ CHAR(10); 
+	SET @MEXEC = @MEXEC+'			,F_DEST_ETA_DATE 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			,sum(delivery_qty) as delivery_qty 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			FROM 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			( 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			select 														' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				 sdic.division_id 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,cp.GROUP_CODE1 AS  CELL_GROUP 							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,cp.GROUP_CODE2 AS  PACK_GROUP 							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.project_code AS project_code  					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.item_id 											' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,(SELECT TOP 1 (CASE  									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				                WHEN X.NICK_NAME IS NULL THEN ''-''  	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'								WHEN X.NICK_NAME='''' THEN ''-''  		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'								ELSE X.NICK_NAME  						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'								END 									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'								)  										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				    FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK)  			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				   WHERE X.ITEM_ID = sdic.item_id 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				 ) AS nick_name 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.plant_id as plant 								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.transport_mode as Trans_Mode 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) operation_group 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.from_scm_site_id 									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.to_scm_site_id 									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.final_incoterms		AS incoterms 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,dbo.FN_GET_SHIPMENT_NO_DISPLAY(sdic.shipment_no, sdic.result_type ) AS shipment_no ' + CHAR(10); -- 20220807
+	SET @MEXEC = @MEXEC+'				,convert(char(10), convert(datetime, sdic.result_d"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_REPORT","23059218","11","ate), 23) AS result_date 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				,sdic.delivery_qty 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, case  												' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				when result_type = ''B'' then F_DEST_ETA_DATE  		    ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				when isnull(sdic.ATTRIBUTE3,'''')= '''' then ''''  		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				when sdic.ATTRIBUTE3 ='''' then '''' 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				else  													' + CHAR(10);
+	SET @MEXEC = @MEXEC+'					CASE  												' + CHAR(10);
+	SET @MEXEC = @MEXEC+'					WHEN convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112) <  convert(char(8), convert(datetime, sdic.result_date), 112) then convert(char(8), convert(datetime, sdic.result_date), 112)		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'					ELSE convert(char(8), convert(datetime, sdic.ATTRIBUTE3), 112) 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'					END 																	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				end F_DEST_ETA_DATE 														' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		FROM  scm_dnm_intransit_c sdic 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		LEFT JOIN scp_mst_bod_n_v smbv 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			ON    sdic.division_id = smbv.division_id 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.from_scm_site_id = smbv.from_site 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.to_scm_site_id = smbv.to_site 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			ANd   sdic.incoterms = smbv.incoterms 							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.transport_mode = smbv.transport_mode 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   smbv.bod_valid_yn = ''Y'' 								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   smbv.route_valid_yn = ''Y'' 								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.result_date >= smbv.from_yyyymmdd 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			AND   sdic.result_date <= smbv.to_yyyymmdd 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		LEFT JOIN SCP_MST_FINAL_ITEM cp										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			on    cp.DIVISION_ID = sdic.division_id 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			and   cp.ITEM_ID = sdic.ITEM_ID  								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			WHERE 1 = 1						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			      [@p_division_id]			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_plant_site_id] 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_sales_site_id]		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_project_code]			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  [@p_item_id]				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  AND sdic.result_date >= [@p_from_yyyymmdd]				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				  AND sdic.result_date <= [@p_to_yyyymmdd]					' + CHAR(10);
+
+	SET @MEXEC = @MEXEC+'		AND sdic.RESULT_TYPE in (''I'',''C'',''B'')										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		AND dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) != ''''		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		) A																				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		where 1 = 1			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		[@p_operation_group]' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		GROUP BY						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			' + @mEXEC_GROUP_BY			  + CHAR(10); 
+	SET @MEXEC = @MEXEC+'		    ,F_DEST_ETA_DATE			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		) DATA							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		CROSS APPLY 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		(								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		SELECT ''D''					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		) C (COL)						' + CHAR(10);
+	
+		
+	SET @MEXEC = REPLACE(@MEXEC,'[@p_from_yyyymmdd]'		, ''+@p_from_yyyymmdd+''    );
+	SET @MEXEC = REPLACE(@MEXEC,'[@p_to_yyyymmdd]'			, ''+@p_to_yyyymmdd+''    );
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_division_id]'		    , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.division_id','EQUAL', @p_division_id ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_plant_site_id]'        , [dbo].[FN_SCM_GET_WHERE_SQL]('s"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0091_GET_VALIDATION_SHIPMENT_REPORT","23059218","12","dic.from_scm_site_id', 'IN', @p_plant_site_id)); -- 20220706 EQUAL => IN
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_sales_site_id]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.to_scm_site_id', 'LIKE', @p_sales_site_id ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_project_code]'		    , [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.project_code', 'EQUAL', @p_project_code ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_item_id]'				, [dbo].[FN_SCM_GET_WHERE_SQL]('sdic.item_id', 'EQUAL', @p_item_id ));
+	SET @mEXEC = REPLACE(@mEXEC,'[@p_operation_group]'		, [dbo].[FN_SCM_GET_WHERE_SQL]('operation_group', 'EQUAL', @p_operation_group ));
+
+
+	SET @MEXEC = @MEXEC+'		) LIST							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		PIVOT ( 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			sum(delivery_qty) 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			FOR COL						' + CHAR(10);
+	--SELECT @mEXEC;
+	--SELECT @COLUMNS;
+	SET @MEXEC = @MEXEC+'		    IN (' + @COLUMNS + ') 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		    ) AS pivot_result			' + CHAR(10);
+
+	-----------------------------------------------------------------------------------
+	-- 20220919 SELECT Column 에 SHIPMENT_NO 없을 시 오류 조치
+	--          SHIPMENT_NO 없을 시 조회 기준?        
+	-----------------------------------------------------------------------------------
+    DECLARE @cntOrder integer;
+	SELECT @cntOrder = LEN(@mEXEC_SELECT)-LEN(REPLACE(@mEXEC_SELECT,'SHIPMENT_NO','')) 
+
+	IF @cntOrder > 0 
+		BEGIN
+		SET @MEXEC = @MEXEC+'		ORDER BY SHIPMENT_NO			' + CHAR(10); -- 20220808 : RESULT DATE 범위 일 때 정렬순서 적용
+		END
+	ELSE
+		BEGIN
+		SET @MEXEC = @MEXEC+'		ORDER BY ' + @mEXEC_ORDER_BY	 + CHAR(10); -- 20220808 : RESULT DATE 범위 일 때 정렬순서 적용
+		END
+
+		
+
+	EXEC (@mEXEC);
+    --SELECT @MEXEC;
+	--select @mEXEC_ORDER_BY;
+
+
+
+
+
+	--##############################################################################
+	-- 임시테이블 삭제
+	--##############################################################################
+	    IF OBJECT_ID('tempdb..#tmp_SCP0091_COLUMN') IS NOT NULL	
+		DROP TABLE #tmp_SCP0091_COLUMN;
+
+
+
+END
+
+
+"

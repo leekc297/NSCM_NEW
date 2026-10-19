@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/production-plan-waterfall","SCP0017","features/supply/src/pages/production-plan-waterfall/production-plan-waterfall.constants.ts","8","code","- 저장 없음(읽기전용, InsertButton/DeleteButton/SaveButton 전량 NO-OP · EditButton 메시지 후 return)"
+"supply/production-plan-waterfall","SCP0017","features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx","40","code","읽기전용: Insert/Delete/Save NO-OP(AS-IS 주석 본문), Edit=MSG00109 후 return. 자매 SCP0101(SEARCH-only)"
+"supply/production-plan-waterfall","SCP0017","features/supply/src/pages/production-plan-waterfall/ProductionPlanWaterfall.tsx","79","endpoint","컬럼/Measure 메타 fetch(mount 1회) + keep-alive 잔여 filters 무효화(자동조회 금지, nscm-patterns §5-7)"
+"supply/production-plan-waterfall","SCP0017","features/supply/src/pages/production-plan-waterfall/useProductionPlanWaterfallStore.ts","33","endpoint","admin SCM_MST_SHEET_COLUMNS('MODEL') 동적 fetch (ui-dynamic-property-management). SCP0017 25행 등록 확인됨."

@@ -41,7 +41,14 @@ interface SalesSiteProjectModelAction {
   fetchStaticColumns: () => Promise<void>;
 }
 
-const initSearchParams: SearchParamProps = {
+// 주의: 상수가 아니라 함수다. 모듈 최상위 상수로 굳히면 session.div 를 이 화면 청크가 처음
+//   로드되던 그 순간 한 번만 읽는다. 로그아웃은 스토어와 sessionStorage 만 비우고 새로고침을
+//   하지 않으므로(useClearAppData.clearAllData) 모듈은 계속 살아 있고, 다른 계정으로 재로그인해도
+//   앞 계정의 division 이 그대로 남는다. 스토어는 탭별로 생성되므로 생성 시점에 세션을 읽어야
+//   항상 현재 계정 기준이 된다 (sales-site useSalesSiteStore.makeInitSearchParams 와 동일 규약).
+//   fallback '40' 은 세션 미확립(로그인 전 진입) 대비 기본값이다. 권한 목록에 없는 값이면
+//   폼의 보정 effect 가 콤보 목록 기준으로 다시 고른다.
+const makeInitSearchParams = (): SearchParamProps => ({
   divisionId: useSessionStore.getState().session.div ?? '40',
   deptId: 'ALL',
   endCustomer: 'ALL',
@@ -50,29 +57,33 @@ const initSearchParams: SearchParamProps = {
   itemId: '',
   activeFlag: 'ALL',
   owner: '',
-};
+});
 
-const initSalesSiteProjectModelState: SalesSiteProjectModelState = {
+// filters 도 호출 시점에 새 객체로 만든다. 같은 객체를 reset 과 division 변경에 재사용하면
+//   탭마다 따로 만들어진 스토어가 중첩 객체를 공유하게 된다.
+const makeInitFilters = (): filtersBySheet => ({
+  [SHEETS.PRODUCTION]: undefined,
+  [SHEETS.PURCHASE]: undefined,
+});
+
+const makeInitState = (): SalesSiteProjectModelState => ({
   initialized: false,
   openSearchArea: true,
   openPurchaseGrid: true,
-  filters: {
-    [SHEETS.PRODUCTION]: undefined,
-    [SHEETS.PURCHASE]: undefined,
-  },
-  searchParams: initSearchParams,
+  filters: makeInitFilters(),
+  searchParams: makeInitSearchParams(),
   staticColumns: {
     [SHEETS.PRODUCTION]: [],
     [SHEETS.PURCHASE]: [],
   },
-};
+});
 
 export const useSalesSiteProjectModelStore = createPersistedStoreWithTab<
   SalesSiteProjectModelState & SalesSiteProjectModelAction
 >(
   (set, get) => ({
-    ...initSalesSiteProjectModelState,
-    reset: () => set(initSalesSiteProjectModelState),
+    ...makeInitState(),
+    reset: () => set(makeInitState()),
     setOpenSearchArea: open => {
       set(state => {
         state.openSearchArea = open ?? !state.openSearchArea;
@@ -98,10 +109,15 @@ export const useSalesSiteProjectModelStore = createPersistedStoreWithTab<
       set(state => {
         state.searchParams = { ...get().searchParams, ...searchParams };
         if (searchParams.divisionId) {
-          void state.fetchStaticColumns();
-          state.filters = initSalesSiteProjectModelState.filters;
+          state.filters = makeInitFilters();
         }
       });
+      // division 변경 시 즉시 컬럼(헤더) 재세팅. set 콜백(immer draft) 안에서 호출하면
+      //   fetchStaticColumns 가 읽는 get().searchParams.divisionId 가 커밋 전 옛 값이라
+      //   이전 division 기준으로 조회됐다. set 이 끝난 뒤(최신 division 커밋 후) 호출한다.
+      if (searchParams.divisionId) {
+        void get().fetchStaticColumns();
+      }
     },
     fetchStaticColumns: async () => {
       const columnDivision = get().searchParams.divisionId ?? '81';

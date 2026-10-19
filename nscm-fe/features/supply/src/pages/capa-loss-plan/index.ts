@@ -1,0 +1,1 @@
+export { CapaLossPlan } from './CapaLossPlan';

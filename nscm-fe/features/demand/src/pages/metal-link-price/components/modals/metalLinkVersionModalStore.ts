@@ -22,7 +22,9 @@ interface MetalLinkVersionModalState {
 
 interface MetalLinkVersionModalAction {
   setSearchParams: (patch: Partial<MetalLinkVersionSearchParams>) => void;
-  resetSearchParams: (divisionId: string) => void;
+  // period 를 넘기면 그 값(YYYYMMDD)으로 초기화, 없으면 AS-IS 기본값(오늘±3M) 유지.
+  //   메인 화면 조회조건(fromYyyymm~toYyyymm)을 물려줄 때 from=해당월 1일 / to=해당월 말일로 변환해 전달.
+  resetSearchParams: (divisionId: string, period?: { from: string; to: string }) => void;
 }
 
 export const useMetalLinkVersionModalStore = createPersistedStore<
@@ -36,10 +38,17 @@ export const useMetalLinkVersionModalStore = createPersistedStore<
         state.searchParams = { ...state.searchParams, ...patch };
       });
     },
-    // 모달 open 시 AS-IS 기본값(오늘±3M)으로 복원 (Form_Load 1:1)
-    resetSearchParams: divisionId => {
+    // 모달 open 시 초기화. period 를 주면 메인 조회조건에서 물려받은 값으로,
+    //   없으면 AS-IS 기본값(오늘±3M — Form_Load 1:1)으로 복원.
+    resetSearchParams: (divisionId, period) => {
       set(state => {
-        state.searchParams = { ...initSearchParams(), divisionId };
+        const base = initSearchParams();
+        state.searchParams = {
+          ...base,
+          divisionId,
+          periodFrom: period?.from || base.periodFrom,
+          periodTo: period?.to || base.periodTo,
+        };
       });
     },
   }),

@@ -1,0 +1,2826 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL_0907","1239779574","2","NCOTERMS = ''FCA''  THEN ISNULL(CONVERT(INT, GAP1),0) 																																									 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FAS''  THEN ISNULL(CONVERT(INT, GAP1),0) 																																									 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FOB''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CFR''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CIF''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CIP''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CPT''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z02''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0) + ISNULL(CONVERT(INT,GAP3),0) + ISNULL(CONVERT(INT, GAP4),0) + ISNULL(CONVERT(INT, GAP5),0) 										 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DAT''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0) + ISNULL(CONVERT(INT,GAP3),0) + ISNULL(CONVERT(INT, GAP4),0) + ISNULL(CONVERT(INT, GAP5),0) 										 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DAP''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0) + ISNULL(CONVERT(INT,GAP3),0) + ISNULL(CONVERT(INT, GAP4),0) + ISNULL(CONVERT(INT, GAP5),0) 										 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DDP''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0) + ISNULL(CONVERT(INT,GAP3),0) + ISNULL(CONVERT(INT, GAP4),0) + ISNULL(CONVERT(INT, GAP5),0) 										 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DDU''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0) + ISNULL(CONVERT(INT,GAP3),0) + ISNULL(CONVERT(INT, GAP4),0) + ISNULL(CONVERT(INT, GAP5),0) 										 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         ELSE 0		' + char(10);																																																	 
+	SET @mDqry1 = @mDQry1 + '        END AS GAP_INCOTERMS	 ' + char(10); -- LOOKUP INCOTERMS : 20230905																																							 
+																																																																	 
+	-- GAP NDR INCOTERMS --------------------------------------------------------------------------------------------------																																			 
+	SET @mDqry1 = @mDQry1 + ', CASE   WHEN INCOTERMS = ''A01''  THEN 0																																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z01''  THEN 0																																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z04''  THEN 0																																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''EXW''  THEN 0																																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FCA''  THEN ISNULL(CONVERT(INT, NDR1 - GAP1),0) 																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FAS''  THEN ISNULL(CONVERT(INT, NDR1 - GAP1),0) 																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FOB''  THEN ISNULL(CONVERT(INT, NDR1 - GAP1),0) + ISNULL(CONVERT(INT,NDR2 - GAP2 ),0)																														 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CFR''  THEN ISNULL(CONVERT(INT, NDR1 - GAP1),0) + ISNULL(CONVERT(INT,NDR2 - GAP2 ),0)																														 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CIF''  TH"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL_0907","1239779574","3","EN ISNULL(CONVERT(INT, NDR1 - GAP1),0) + ISNULL(CONVERT(INT,NDR2 - GAP2 ),0)																														 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CIP''  THEN ISNULL(CONVERT(INT, NDR1 - GAP1),0) + ISNULL(CONVERT(INT,NDR2 - GAP2 ),0)																														 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CPT''  THEN ISNULL(CONVERT(INT, NDR1 - GAP1),0) + ISNULL(CONVERT(INT,NDR2 - GAP2 ),0)																														 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z02''  THEN ISNULL(CONVERT(INT, NDR1 - GAP1),0) + ISNULL(CONVERT(INT,NDR2 - GAP2 ),0) + ISNULL(CONVERT(INT,NDR3 - GAP3),0) + ISNULL(CONVERT(INT, NDR4 - GAP4),0) + ISNULL(CONVERT(INT, NDR5 - GAP5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DAT''  THEN ISNULL(CONVERT(INT, NDR1 - GAP1),0) + ISNULL(CONVERT(INT,NDR2 - GAP2 ),0) + ISNULL(CONVERT(INT,NDR3 - GAP3),0) + ISNULL(CONVERT(INT, NDR4 - GAP4),0) + ISNULL(CONVERT(INT, NDR5 - GAP5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DAP''  THEN ISNULL(CONVERT(INT, NDR1 - GAP1),0) + ISNULL(CONVERT(INT,NDR2 - GAP2 ),0) + ISNULL(CONVERT(INT,NDR3 - GAP3),0) + ISNULL(CONVERT(INT, NDR4 - GAP4),0) + ISNULL(CONVERT(INT, NDR5 - GAP5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DDP''  THEN ISNULL(CONVERT(INT, NDR1 - GAP1),0) + ISNULL(CONVERT(INT,NDR2 - GAP2 ),0) + ISNULL(CONVERT(INT,NDR3 - GAP3),0) + ISNULL(CONVERT(INT, NDR4 - GAP4),0) + ISNULL(CONVERT(INT, NDR5 - GAP5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DDU''  THEN ISNULL(CONVERT(INT, NDR1 - GAP1),0) + ISNULL(CONVERT(INT,NDR2 - GAP2 ),0) + ISNULL(CONVERT(INT,NDR3 - GAP3),0) + ISNULL(CONVERT(INT, NDR4 - GAP4),0) + ISNULL(CONVERT(INT, NDR5 - GAP5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         ELSE 0		' + char(10);
+	SET @mDqry1 = @mDQry1 + '        END AS GAP_INCOTERMS	 ' + char(10); -- LOOKUP INCOTERMS : 20230905
+
+
+	SET @mDqry1 = @mDqry1 + '  FROM ( ' + char(10);
+	----------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + ' SELECT DIVISION_ID ' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,DATA.COMPANY_ID' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,DATA.SHIPMENT_NO' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,CNTR_NO' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,BOD_ID' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,ROUTE_ID' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,FROM_SITE' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TO_SITE' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,FROM_CITY' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TO_CITY' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DATA.POL AS POL_PORT' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DATA.POD AS POD_PORT' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DATA.F_DEST_PORT_CODE AS F_DEST_CODE' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DATA.INCOTERMS' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DATA.CARRIER' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,INLAND_ATD ' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,POL_ATA ' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,POL_ATD' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,POD_ATA' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,POD_ATD' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,VMI_ATA  ---허부 ATA ?  ' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,VMI_ATD ---허부 ATD ?' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,F_DEST_ATA' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,confirm_id' + char(10);
+	-- NDR1 ---------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '       , NDR1	     ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       , NDR2		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       , NDR3		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       , NDR4		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL_0907","1239779574","4",", NDR5		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       , NDR		 ' + char(10);
+	-- GAP ---------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '	,CONVERT(INT,CASE WHEN ISDATE(INLAND_ATD)=1 AND ISDATE(POL_ATA) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, INLAND_ATD,POL_ATA)) ELSE NULL END)  - NDR1		AS GAP1   ' + char(10);--GAP1 Column 추가(덕원)	-- INT형으로 자료형 변환(덕원)
+	SET @mDqry1 = @mDQry1 + '	,CONVERT(INT,CASE WHEN ISDATE(POL_ATA) = 1  AND ISDATE(POL_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, POL_ATA,   POL_ATD)) ELSE NULL END)  - NDR2		AS GAP2	  ' + char(10);--GAP2 Column 추가(덕원) -- INT형으로 자료형 변환(덕원)
+	SET @mDqry1 = @mDQry1 + '	,CONVERT(INT,CASE WHEN ISDATE(POL_ATD) = 1  AND ISDATE(POD_ATA) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, POL_ATD,   POD_ATA)) ELSE NULL END)  - NDR3		AS GAP3   ' + char(10);--GAP3 Column 추가(덕원) -- INT형으로 자료형 변환(덕원)
+	SET @mDqry1 = @mDQry1 + '	,CONVERT(INT,CASE WHEN ISDATE(POD_ATA) = 1  AND ISDATE(POD_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, POD_ATA,   POD_ATD)) ELSE NULL END)  - NDR4		AS GAP4   ' + char(10);--GAP4 Column 추가(덕원) -- INT형으로 자료형 변환(덕원)
+	SET @mDqry1 = @mDQry1 + '	,CONVERT(INT,																																					  ' + char(10)
+    SET @mDqry1 = @mDQry1 + '	    CASE 																																						  ' + char(10)
+	SET @mDqry1 = @mDQry1 + '		WHEN VMI_YN = ''Y'' AND ISDATE(F_DEST_ATA) = 1 AND ISDATE(POD_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,POD_ATD,F_DEST_ATA))								  ' + char(10)
+	SET @mDqry1 = @mDQry1 + '		WHEN VMI_YN = ''Y'' AND ISDATE(VMI_ATA)    = 1 AND ISDATE(POD_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,POD_ATD,VMI_ATA))									  ' + char(10)
+	SET @mDqry1 = @mDQry1 + '		WHEN VMI_YN = ''N'' AND ISDATE(F_DEST_ATA) = 1 AND ISDATE(POD_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,POD_ATD,F_DEST_ATA))								  ' + char(10)
+	SET @mDqry1 = @mDQry1 + '		ELSE NULL 																																					  ' + char(10)
+	SET @mDqry1 = @mDQry1 + '		END)																																				AS GAP5	  ' + char(10) -- GAP5 재정의 : TTL5 로직 재정의와 연계(덕원)
+    -- TTL ---------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '       ,TTL1' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TTL2' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TTL3' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TTL4' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TTL5' + char(10);
+	SET @mDqry1 = @mDQry1 + ' , CASE  WHEN TRANSPORT_MODE = ''TRK'' THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TTL1 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL2 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL3 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL4 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL5 IS NULL THEN NULL' + char(10);	
+	SET @mDqry1 = @mDQry1 + '         ELSE ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	' + char(10);
+	SET @mDqry1 = @mDQry1 + '         END AS TTL	 ' + char(10);	  -- 20230901																																																				
+    -- DR ---------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '       ,DR1' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DR2' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DR3' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DR4' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DR5' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0)	AS DRTTL' + char(10);
+	
+	-- TTL INCOTERMS -"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL_0907","1239779574","5","-------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + ', CASE   WHEN DATA.INCOTERMS = ''A01''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z01''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z04''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''EXW''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FCA''  THEN ISNULL(CONVERT(INT, TTL1),0) 																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FAS''  THEN ISNULL(CONVERT(INT, TTL1),0) 																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FOB''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CFR''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIF''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIP''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CPT''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z02''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAT''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAP''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDP''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDU''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         ELSE 0		' + char(10);
+	SET @mDqry1 = @mDQry1 + '        END AS TTL_INCOTERMS	 ' + char(10); -- LOOKUP INCOTERMS : 20230905	
+	-- DR INCOTERMS --------------------------------------------------------------------------------------------------	
+	SET @mDqry1 = @mDQry1 + ', CASE   WHEN DATA.INCOTERMS = ''A01''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z01''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z04''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''EXW''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FCA''  THEN ISNULL(CONVERT(INT, DR1),0) 																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FAS''  THEN ISNULL(CONVERT(INT, DR1),0) 																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FOB''  THEN ISNULL(CON"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL_0907","1239779574","6","VERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CFR''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIF''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIP''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CPT''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z02''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAT''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAP''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDP''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDU''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         ELSE 0		' + char(10);
+	SET @mDqry1 = @mDQry1 + '        END AS DR_INCOTERMS	 ' + char(10); -- LOOKUP INCOTERMS : 20230905
+	-- NDR INCOTERMS --------------------------------------------------------------------------------------------------	
+	SET @mDqry1 = @mDQry1 + ', CASE   WHEN DATA.INCOTERMS = ''A01''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z01''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z04''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''EXW''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FCA''  THEN ISNULL(CONVERT(INT, NDR1),0) 																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FAS''  THEN ISNULL(CONVERT(INT, NDR1),0) 																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FOB''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CFR''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIF''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIP''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CPT''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z02''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0) + ISNULL(CONVERT(INT,NDR3),0) + ISNULL(CONVERT(INT, NDR4),0) + ISNULL(CONVERT(INT, NDR5),0) 	 ' + char(10);
+	SET @mDqr"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL_0907","1239779574","7","y1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAT''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0) + ISNULL(CONVERT(INT,NDR3),0) + ISNULL(CONVERT(INT, NDR4),0) + ISNULL(CONVERT(INT, NDR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAP''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0) + ISNULL(CONVERT(INT,NDR3),0) + ISNULL(CONVERT(INT, NDR4),0) + ISNULL(CONVERT(INT, NDR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDP''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0) + ISNULL(CONVERT(INT,NDR3),0) + ISNULL(CONVERT(INT, NDR4),0) + ISNULL(CONVERT(INT, NDR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDU''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0) + ISNULL(CONVERT(INT,NDR3),0) + ISNULL(CONVERT(INT, NDR4),0) + ISNULL(CONVERT(INT, NDR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         ELSE 0		' + char(10);
+	SET @mDqry1 = @mDQry1 + '        END AS NDR_INCOTERMS	 ' + char(10); -- LOOKUP INCOTERMS : 20230905
+    -- POL_AREA ---------------------------------------------------------------------------------------------	
+	SET @mDqry1 = @mDQry1 + '       ,POL_AREA' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,POD_AREA' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,SUBSTRING(EXFACTORY_DATE,0,9) AS EXFACTORY' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ------------------------------------------------------------------------------' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.ZLANDETA     AS POL_ETA     ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.POD_ETA_DATE AS POD_ETA ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.ZFCY2ETA	 AS VMI_ETA ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.F_DEST_ETA_DATE AS F_DEST_ETA ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ------------------------------------------------------------------------------' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.ZLANDETD		AS POL_ETD     ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.POD_ETD_DATE	AS POD_ETD ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.ZFCY2ETD	    AS VMI_ETD ' + char(10);
+    -- ---------------------------------------------------------------------------------------------	
+    SET @mDqry1 = @mDQry1 + '   FROM (' + char(10);
+    SET @mDqry1 = @mDQry1 + '        SELECT E.DIVISION_ID   ' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.COMPANY_ID ' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.SHIPMENT_NO ' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,T.CONTAINER_NO AS CNTR_NO' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,B.BOD_ID' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,B.route_id' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,B.from_site' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,B.to_site' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,D.FROM_CITY' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,D.TO_CITY' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,T.POL ' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,T.POD ' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,T.F_DEST_PORT_CODE' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,B.attribute1 AS INCOTERMS' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,T.CARRIER' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,T.ATTRIBUTE2 AS INLAND_ATD ' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,T.ATTRIBUTE3 AS POL_ATA ' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,T.POL_ATD_DATE AS POL_ATD' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,T.POD_ATA_DATE AS POD_ATA' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,T.POD_ATD_DATE AS POD_ATD' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,ISNULL(T.ZFCY2ATA, '''')    AS VMI_ATA  ' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,ISNULL(T.ZFCY2ATD, '''')    AS VMI_ATD' + c"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL_0907","1239779574","8","har(10);
+    SET @mDqry1 = @mDQry1 + '              ,T.F_DEST_ATA_DATE AS F_DEST_ATA' + char(10);
+	-----------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '			    , D.LT_DEPARTURE_INLAND		AS NDR1	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			    , D.LT_WAIT_SHIPPING		AS NDR2	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			    , D.LT_VOYAGE				AS NDR3	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			    , D.LT_LAY_OFF_CLEARANCE	AS NDR4	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			    , D.LT_ARRIVAL_INLAND		AS NDR5	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			    ,  D.LT_DEPARTURE_INLAND			 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			     + D.LT_WAIT_SHIPPING				 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			     + D.LT_VOYAGE						 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			     + D.LT_LAY_OFF_CLEARANCE			 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			     + D.LT_ARRIVAL_INLAND		AS NDR	 ' + char(10);	
+	-----------------------------------------------------------------------------------------------
+    SET @mDqry1 = @mDQry1 + '              ,CASE WHEN ISDATE(T.ATTRIBUTE2)   = 1 AND ISDATE(T.ATTRIBUTE3)   = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.ATTRIBUTE2, T.ATTRIBUTE3))		ELSE NULL END AS TTL1' + char(10);	
+    SET @mDqry1 = @mDQry1 + '              ,CASE WHEN ISDATE(T.ATTRIBUTE3)   = 1 AND ISDATE(T.POL_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.ATTRIBUTE3, T.POL_ATD_DATE))		ELSE NULL END AS TTL2' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,CASE WHEN ISDATE(T.POL_ATD_DATE) = 1 AND ISDATE(T.POD_ATA_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.POL_ATD_DATE, T.POD_ATA_DATE))	ELSE NULL END AS TTL3' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,CASE WHEN ISDATE(T.POD_ATA_DATE) = 1 AND ISDATE(T.POD_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.POD_ATA_DATE, T.POD_ATD_DATE))	ELSE NULL END AS TTL4' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,CASE WHEN ISDATE(T.POD_ATD_DATE) = 1 AND IIF(S.VMI_YN = ''Y'', ISDATE(ISNULL(T.ZFCY2ATA, '''')), ISDATE(T.F_DEST_ATA_DATE))  = 1 ' + char(10);
+    SET @mDqry1 = @mDQry1 + '                    THEN CONVERT(nvarchar, DATEDIFF(DD, T.POD_ATD_DATE, IIF(S.VMI_YN = ''Y'', ISNULL(T.ZFCY2ATA, ''''), T.F_DEST_ATA_DATE)))' + char(10);
+    SET @mDqry1 = @mDQry1 + '                    ELSE NULL END AS TTL5' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.CONFIRM_ID' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,E.LT_DEPARTURE_INLAND		AS DR1   --기준L/T 1 (계획시점)' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.LT_WAIT_SHIPPING			AS DR2   --기준L/T 2 (계획시점)' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.LT_VOYAGE					AS DR3   --기준L/T 3 (계획시점)' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.LT_LAY_OFF_CLEARANCE		AS DR4   --기준L/T 4 (계획시점)' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.LT_ARRIVAL_INLAND			AS DR5   --기준L/T 5 (계획시점)' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,FR.ATTRIBUTE1				AS POL_AREA' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,TZ.ATTRIBUTE1				AS POD_AREA' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,EXFACTORY_DATE' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,S.VMI_YN' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,D.TRANSPORT_MODE ' + char(10);
+    SET @mDqry1 = @mDqry1 + '          FROM (' + char(10);
+    SET @mDqry1 = @mDqry1 + '               SELECT CN.DIVISION_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,CN.FROM_SITE_COMPANY_ID AS COMPANY_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,EX.SHIPMENT_NO' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,CN.CONFIRM_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,CN.BOD_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,CN.ITEM_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,EX.EXFACTORY_DATE' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,R"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL_0907","1239779574","9","T.LT_DEPARTURE_INLAND' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,RT.LT_WAIT_SHIPPING' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,RT.LT_VOYAGE' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,RT.LT_LAY_OFF_CLEARANCE' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,RT.LT_ARRIVAL_INLAND' + char(10);
+    SET @mDqry1 = @mDqry1 + '          FROM (' + char(10);
+    SET @mDqry1 = @mDqry1 + '               SELECT X.ATTRIBUTE3 AS SHIPMENT_NO' + char(10);
+    SET @mDqry1 = @mDqry1 + '                     ,MAX(X.CONFIRM_ID) AS CONFIRM_ID ' + char(10);-------------
+    SET @mDqry1 = @mDqry1 + '                     ,MAX(SYSTEM_EXFACTORY_DATE) AS EXFACTORY_DATE' + char(10);
+    SET @mDqry1 = @mDqry1 + '                 FROM SCM_DNM_EXFACTORY_RESULT AS X WITH(NOLOCK)' + char(10);
+    SET @mDqry1 = @mDqry1 + '                      JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L WITH(NOLOCK)' + char(10);
+    SET @mDqry1 = @mDqry1 + '                   ON L.LOOKUP_TYPE = ''ERP_SSP_TYPE'' -- LOOKUP에 등록된 공정만 ' + char(10);
+    SET @mDqry1 = @mDqry1 + '                  AND L.VALID_YN = ''Y'' ' + char(10);
+    SET @mDqry1 = @mDqry1 + '                  AND X.VALID_YN = ''Y'' ' + char(10);
+    SET @mDqry1 = @mDqry1 + '                  AND L.SEGMENT1    = X.SSP_TYPE' + char(10);
+    SET @mDqry1 = @mDqry1 + '                WHERE 1 = 1' + char(10);
+    SET @mDqry1 = @mDqry1 + '                  AND X.ATTRIBUTE3 IS NOT NULL' + char(10);
+    SET @mDqry1 = @mDqry1 + '                  AND X.DIVISION_ID = '''+@p_division_id+''' ' + char(10);
+
+	IF ( @p_from_yyyymmdd   IS NOT NULL AND @p_from_yyyymmdd    != '') SET @mDqry1 = @mDqry1 + ' AND X.SYSTEM_EXFACTORY_DATE BETWEEN '''+@p_from_yyyymmdd+'''  AND '''+@p_to_yyyymmdd+'''   '+char(10);     
+
+	IF ( @p_exfactory_from_yyyymmdd   IS NOT NULL AND @p_exfactory_from_yyyymmdd   != '') SET @mDqry1 = @mDqry1 + ' AND X.SYSTEM_EXFACTORY_DATE BETWEEN '''+@p_exfactory_from_yyyymmdd+'''  AND '''+@p_exfactory_to_yyyymmdd+'''  '+char(10); 
+
+    SET @mDqry1 = @mDqry1 + '                  AND X.EXFACTORY_STATUS NOT IN (''D10'',''D90'')' + char(10);
+    SET @mDqry1 = @mDqry1 + '                  AND X.CONFIRM_ID LIKE ''C%'' ' + char(10);
+    SET @mDqry1 = @mDqry1 + '                GROUP BY X.ATTRIBUTE3' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ) AS EX' + char(10);
+    SET @mDqry1 = @mDqry1 + '              JOIN SSP_ANL_SHIP_CONFIRM AS CN  WITH(NOLOCK)' + char(10);
+    SET @mDqry1 = @mDqry1 + '           ON EX.CONFIRM_ID = CN.CONFIRM_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '              JOIN SSP_ANL_SHIP_CONFIRM_ROUTE AS RT WITH(NOLOCK)' + char(10);
+    SET @mDqry1 = @mDqry1 + '           ON CN.CONFIRM_ID = RT.CONFIRM_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '     ) AS E' + char(10);
+    SET @mDqry1 = @mDqry1 + '      JOIN SCP_MST_BOD AS B ' + char(10);
+    SET @mDqry1 = @mDqry1 + '   ON E.BOD_ID = B.BOD_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '     JOIN SCM_MST_SITE AS S' + char(10);
+    SET @mDqry1 = @mDqry1 + '   ON B.division_id = S.DIVISION_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '   AND B.to_site = S.SCM_SITE_ID' + char(10);
+	SET @mDqry1 = @mDqry1 + '       JOIN SCP_MST_DISTRIBUTION_ROUTE AS D with(nolock) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '    ON B.ROUTE_ID = D.ROUTE_ID' + char(10);
+	SET @mDqry1 = @mDqry1 + '      JOIN [dbo].[SCM_DNM_DELIVERY_TRACKING] AS T with(nolock)' + char(10);
+	SET @mDqry1 = @mDqry1 + '   ON E.COMPANY_ID = T.COMPANY_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '   AND E.SHIPMENT_NO = T.SHIPMENT_NO' + char(10);
+    SET @mDqry1 = @mDqry1 + ' 	  LEFT OUTER JOIN dbo.SCM_MST_PORT AS FR' + char(10);
+    SET @mDqry1 = @mDqry1 + '    ON D.D_COUNTRY = FR.COUNTRY' + char(10);
+    SET @mDqry1 = @mDqry1 + '   AND D.D_PORT_CODE  = FR.PORT_CODE' + char(10);
+    SET @mDqry1 = @mDqry1 + '       LEFT OUTER JOIN dbo.SCM_MST_PORT AS TZ' + char(10);
+    SET @mDqry1 = @mDqry1 + '    ON D.A_COUNTRY = TZ.COUN"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL_0907","1239779574","1","
+
+/*
+ * Program ID   : SSP0028_GET_DELIVERY_TRACKING_LT_DETAIL Copy => SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL
+ * Description  : Delivery Tracking LT
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/09/13   PARKTAEHAK		신규추가
+ * 2023-08-09   vadabi3         BOD Validation Report) UI 개선 
+ * 2023/08/23   vadabi3		    개발DB 이슈로 백업본으로 복구
+ * 2023/09/04   vadabi3		    Detail 항목 추가
+ * 2023/09/05   vadabi3		    TTL Total
+ * 2023/09/05   vadabi3		    NDR
+ * 2023/09/05   vadabi3		    GAB
+ * 2023/09/06   vadabi3		    ETD
+------------------------------------------------------------------------------------------------------
+ EXEC SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL_0907 
+ @p_division_id='40'
+ , @p_from_yyyymmdd='20210905'
+ , @p_to_yyyymmdd='20231005'
+ , @p_from_site='G182-A'
+ , @p_to_site='JMBS_PL_GWC'
+ , @p_bod_id='2683'
+ , @p_route_id ='3503'
+ , @p_exfactory_from_yyyymmdd=''
+ , @p_exfactory_to_yyyymmdd=''
+ , @p_fdest_from_yyyymmdd=''
+ , @p_fdest_to_yyyymmdd=''
+ , @p_from_country=''
+ , @p_to_country=''
+ , @p_from_city='CNNKG'
+ , @p_to_city='PLGIL'
+ , @p_from_area=''
+ , @p_to_area=''
+
+*/
+
+CREATE PROCEDURE [dbo].[SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL_0907]
+
+    @p_division_id      NVARCHAR(10),
+	@p_from_yyyymmdd  NVARCHAR(8),
+    @p_to_yyyymmdd    NVARCHAR(8),	
+	@p_from_site      NVARCHAR(MAX),
+	@p_to_site      NVARCHAR(MAX),
+	@p_bod_id      NVARCHAR(MAX),
+	@p_route_id      NVARCHAR(MAX),
+	@p_exfactory_from_yyyymmdd  NVARCHAR(8),
+    @p_exfactory_to_yyyymmdd    NVARCHAR(8),
+    @p_fdest_from_yyyymmdd  NVARCHAR(8),
+    @p_fdest_to_yyyymmdd    NVARCHAR(8),
+
+	@p_from_country NVARCHAR(MAX),
+	@p_to_country NVARCHAR(MAX),
+	@p_from_city NVARCHAR(MAX),
+	@p_to_city NVARCHAR(MAX),
+	@p_from_area NVARCHAR(MAX),
+	@p_to_area NVARCHAR(MAX)
+AS
+BEGIN
+
+  SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE @mDQry1 NVARCHAR(MAX)='';
+	DECLARE @mDQry2 NVARCHAR(MAX)='';
+
+	DECLARE  @v_from_country NVARCHAR(MAX)='';
+	DECLARE  @v_to_country NVARCHAR(MAX)='';	
+	DECLARE  @v_from_city NVARCHAR(MAX)='';
+	DECLARE  @v_to_city NVARCHAR(MAX)='';	
+
+	SET @v_from_country = [dbo].FN_GET_IN_STR(@p_from_country);
+	SET @v_to_country = [dbo].FN_GET_IN_STR(@p_to_country);	
+	SET @v_from_city = [dbo].FN_GET_IN_STR(@p_from_city);
+	SET @v_to_city = [dbo].FN_GET_IN_STR(@p_to_city);	
+
+	SET @mDqry1 = @mDQry1 + ' SELECT LIST.*' + char(10);
+	----------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '      , GAP1+GAP2+GAP3+GAP4+GAP5           AS GAP ' + char(10);
+	SET @mDqry1 = @mDQry1 + '      , NDR1 - GAP1 						AS GAP1_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + '      , NDR2 - GAP2 						AS GAP2_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + '      , NDR3 - GAP3 						AS GAP3_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + '      , NDR4 - GAP4 						AS GAP4_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + '      , NDR5 - GAP5 						AS GAP5_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + '      , NDR -  (GAP1+GAP2+GAP3+GAP4+GAP5)  AS GAP_NDR  ' + char(10);
+
+	-- GAP INCOTERMS --------------------------------------------------------------------------------------------------	
+	SET @mDqry1 = @mDQry1 + ', CASE   WHEN INCOTERMS = ''A01''  THEN 0																																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z01''  THEN 0																																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z04''  THEN 0																																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''EXW''  THEN 0																																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN I"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL_0907","1239779574","10","TRY' + char(10);
+    SET @mDqry1 = @mDqry1 + '   AND D.A_PORT_CODE  = TZ.PORT_CODE' + char(10);
+    SET @mDqry1 = @mDqry1 + '  WHERE 1=1' + char(10);
+
+	IF ( @p_from_site   IS NOT NULL AND @p_from_site    != '') SET @mDqry1 = @mDqry1 + ' 					AND  B.FROM_SITE =  '''+@p_from_site+'''   '+char(10); 
+	IF ( @p_to_site   IS NOT NULL AND @p_to_site    != '') SET @mDqry1 = @mDqry1 + ' 					AND  B.TO_SITE =  '''+@p_to_site+'''   '+char(10); 
+
+	IF ( @p_bod_id   IS NOT NULL AND @p_bod_id    != '') SET @mDqry1 = @mDqry1 + ' 					AND  B.BOD_ID =  '''+@p_bod_id+'''   '+char(10); 			
+
+	IF ( @p_route_id   IS NOT NULL AND @p_route_id    != '') SET @mDqry1 = @mDqry1 + ' 					AND B.ROUTE_ID = '''+@p_route_id+'''   '+char(10); 
+
+	IF ( @p_fdest_from_yyyymmdd   IS NOT NULL AND @p_fdest_from_yyyymmdd   != '') SET @mDqry1 = @mDqry1 + ' AND T.F_DEST_ATA_DATE BETWEEN '''+@p_fdest_from_yyyymmdd+'''  AND '''+@p_fdest_to_yyyymmdd+'''  '+char(10); 
+
+	IF ( @v_from_country   IS NOT NULL AND @v_from_country    != '') SET @mDqry1 = @mDqry1  + ' 					AND  D.FROM_COUNTRY     IN ('+ @v_from_country   +')    '+char(10); 
+	IF ( @v_to_country     IS NOT NULL AND @v_to_country    != '')	 SET @mDqry1 = @mDqry1  + ' 					AND  D.TO_COUNTRY		 IN ('+ @v_to_country   +')      '+char(10); 
+																		 
+	IF ( @v_from_city   IS NOT NULL AND @v_from_city    != '')		 SET @mDqry1 = @mDqry1  + ' 					AND  D.FROM_CITY     IN ('+ @v_from_city   +')    '+char(10); 
+	IF ( @v_to_city     IS NOT NULL AND @v_to_city    != '')		 SET @mDqry1 = @mDqry1  + ' 					AND  D.TO_CITY		 IN ('+ @v_to_city   +')      '+char(10); 
+																		
+	IF ( @p_from_area   IS NOT NULL AND @p_from_area    != '')		 SET @mDqry1 = @mDqry1  + ' 					AND  FR.ATTRIBUTE1 =N'''+@p_from_area+'''   '+char(10); 
+	IF ( @p_to_area     IS NOT NULL AND @p_to_area    != '')		 SET @mDqry1 = @mDqry1  + ' 					AND  TZ.ATTRIBUTE1	=N'''+@p_to_area+'''    '+char(10); 
+		
+    SET @mDqry1 = @mDqry1 + '   ) AS DATA' + char(10);
+
+	SET @mDqry1 = @mDqry1 + ' LEFT JOIN SCM_DNM_DELIVERY_TRACKING DT ON DT.CONTAINER_NO = DATA.CNTR_NO    ' + char(10);
+	SET @mDqry1 = @mDqry1 + ' 									   AND DT.SHIPMENT_NO = DATA.SHIPMENT_NO  ' + char(10);
+	SET @mDqry1 = @mDqry1 + ' 									   AND DT.COMPANY_ID = DATA.COMPANY_ID    ' + char(10);
+    SET @mDqry1 = @mDqry1 + ') AS LIST ' + char(10);
+    SET @mDqry1 = @mDqry1 + '  order by LIST.shipment_no, LIST.cntr_no' + char(10); 
+
+
+				DECLARE @POS INT =1;
+				SET @POS =1;
+				DECLARE @LEN INT =LEN(@mDqry1);
+				WHILE @POS <= @LEN
+				BEGIN
+					PRINT SUBSTRING(@mDqry1,@POS,4000);
+					SET @POS = @POS+4000;
+				END;
+
+	EXEC (@mDQry1);
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0919","1428304248","1","
+
+/*
+ * Program ID   : SSP0028_GET_DELIVERY_TRACKING_LT COPY => SCP0102_GET_BOD_VALIDATION_REPORT_0919
+ * Description  : Delivery Tracking LT
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/09/13   PARKTAEHAK		신규추가
+ * 2023-08-09   vadabi3         BOD Validation Report) UI 개선 - ROUTE_ID
+ * 2023/08/23   vadabi3		    개발DB 이슈로 백업본으로 복구
+ * 2023/09/01   vadabi3		    BOD Validation Report) UI 개선 - ROUTE_ID
+ ----------------------------------------------------------------------------------------------------
+
+ EXEC SCP0102_GET_BOD_VALIDATION_REPORT_0919 
+ @p_division_id='81'
+ , @p_from_yyyymmdd='20230401'
+ , @p_to_yyyymmdd='20230630'
+ , @p_from_site=''
+ , @p_to_site=''
+ , @p_PIVOT_yyyymm='[202304],[202305],[202306]'
+ , @p_from_country=''
+ , @p_to_country=''
+ , @p_from_city=''
+ , @p_to_city=''
+ , @p_from_area=''
+ , @p_to_area=''
+
+
+
+*/
+
+CREATE PROCEDURE [dbo].[SCP0102_GET_BOD_VALIDATION_REPORT_0919]
+
+    @p_division_id      NVARCHAR(10),
+	@p_from_yyyymmdd	NVARCHAR(8),
+    @p_to_yyyymmdd		NVARCHAR(8),	
+	@p_from_site		NVARCHAR(MAX),
+	@p_to_site			NVARCHAR(MAX),
+	@p_PIVOT_yyyymm		NVARCHAR(MAX),
+	@p_from_country     NVARCHAR(MAX),
+	@p_to_country		NVARCHAR(MAX),
+	@p_from_city		NVARCHAR(MAX),
+	@p_to_city			NVARCHAR(MAX),
+	@p_from_area		NVARCHAR(MAX),
+	@p_to_area			NVARCHAR(MAX)
+
+AS
+BEGIN
+
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE @mDQry1 NVARCHAR(MAX)='';
+	DECLARE @mDQry2 NVARCHAR(MAX)='';
+	DECLARE @mDqry3 NVARCHAR(MAX)='';	
+	DECLARE @mDqry4 NVARCHAR(MAX)='';	
+	
+	DECLARE  @v_from_site NVARCHAR(MAX)='';
+	DECLARE  @v_to_site NVARCHAR(MAX)='';	
+	DECLARE  @v_from_country NVARCHAR(MAX)='';
+	DECLARE  @v_to_country NVARCHAR(MAX)='';	
+	DECLARE  @v_from_city NVARCHAR(MAX)='';
+	DECLARE  @v_to_city NVARCHAR(MAX)='';	
+
+	--IN 조건으로 데이터를 가져옴
+	SET @v_from_site = [dbo].FN_GET_IN_STR(@p_from_site);
+	SET @v_to_site = [dbo].FN_GET_IN_STR(@p_to_site);	
+	SET @v_from_country = [dbo].FN_GET_IN_STR(@p_from_country);
+	SET @v_to_country = [dbo].FN_GET_IN_STR(@p_to_country);	
+	SET @v_from_city = [dbo].FN_GET_IN_STR(@p_from_city);
+	SET @v_to_city = [dbo].FN_GET_IN_STR(@p_to_city);	
+
+
+
+
+			
+-------------------------------------------------------------------------------------------------------------------------------
+-- #TMP_CONFIRM
+-------------------------------------------------------------------------------------------------------------------------------		
+	IF OBJECT_ID('TEMPDB..#TMP_CONFIRM') IS NOT NULL
+		DROP TABLE #TMP_CONFIRM;	
+
+	IF OBJECT_ID('TEMPDB..#TMP_LD') IS NOT NULL
+		DROP TABLE TMP_LD;	
+
+
+	  SELECT CN.DIVISION_ID 																						
+			,CN.FROM_SITE_COMPANY_ID AS COMPANY_ID 																
+			,EX.SHIPMENT_NO 																						
+			,CN.CONFIRM_ID 																						
+			,CN.BOD_ID 																							
+			,CN.ITEM_ID 																							
+			,EX.EXFACTORY_DATE 																					
+			,RT.LT_DEPARTURE_INLAND 																				
+			,RT.LT_WAIT_SHIPPING 																					
+			,RT.LT_VOYAGE 																						
+			,RT.LT_LAY_OFF_CLEARANCE 																				
+			,RT.LT_ARRIVAL_INLAND 	
+		INTO #TMP_CONFIRM 																			
+		FROM ( 																									
+			SELECT X.ATTRIBUTE3 AS SHIPMENT_NO 																	
+					,MAX(X.CONFIRM_ID) AS CONFIRM_ID  																
+					,MAX(SYSTEM_EXFACTORY_DATE) AS EXFACTORY_DATE 													
+				FROM SCM_DNM_EXFACTORY_RESULT AS X WITH(NOLOCK) 													
+				JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L WITH(NOLOCK) 													
+				ON L.LOOKUP_TYPE = 'ERP_SSP_TYPE' -- LOOKUP에 등록된 공정만  									
+				AND L.VALID_YN = 'Y' 																			
+				AND X.VALID_YN = 'Y' 																			
+				AND L.SEGMENT1    = X.SSP_TYPE 																	
+			WHER"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0919","1428304248","2","E 1 = 1 																						
+				AND X.ATTRIBUTE3 IS NOT NULL 																		
+				AND X.DIVISION_ID = '' +@p_division_id + ''                   --@DIVISION						
+				AND X.SYSTEM_EXFACTORY_DATE BETWEEN '' +@p_from_yyyymmdd + ''   AND '' +@p_to_yyyymmdd + '' 
+				AND X.EXFACTORY_STATUS NOT IN ('D10','D90') 													
+				AND X.CONFIRM_ID LIKE 'C%' 																		
+			GROUP BY X.ATTRIBUTE3 																					 																										
+			) AS EX 																								
+		JOIN SSP_ANL_SHIP_CONFIRM AS CN  WITH(NOLOCK) 															
+		ON EX.CONFIRM_ID = CN.CONFIRM_ID 																		
+		JOIN SSP_ANL_SHIP_CONFIRM_ROUTE AS RT WITH(NOLOCK) 														
+		ON CN.CONFIRM_ID = RT.CONFIRM_ID 	
+		
+		
+			
+					
+			
+-------------------------------------------------------------------------------------------------------------------------------
+-- WITH LD
+-------------------------------------------------------------------------------------------------------------------------------	
+	SET @mDqry1 = @mDQry1 + ' WITH LD AS (																																					' + char(10);
+
+
+
+	-- TTL 추가
+	SET @mDqry1 = @mDQry1 + 'SELECT DATA.*		' + char(10);
+	SET @mDqry1 = @mDQry1 + ' , CASE  WHEN TRANSPORT_MODE = ''TRK'' THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TTL1 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL2 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL3 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL4 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL5 IS NULL THEN NULL' + char(10);	
+	SET @mDqry1 = @mDQry1 + '         ELSE ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	' + char(10);
+	SET @mDqry1 = @mDQry1 + '         END AS TTL	 ' + char(10);	  -- 20230901																																																				
+	SET @mDqry1 = @mDQry1 + ' FROM (		' + char(10);
+	
+	
+	SET @mDqry1 = @mDQry1 + '			SELECT E.DIVISION_ID 																																' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.COMPANY_ID  																																' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,B.FROM_SITE 																																	' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,B.TO_SITE 																																	' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.SHIPMENT_NO 																																' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.D_PORT_CODE  																																' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.A_PORT_CODE  																																' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.FROM_CITY 																																	' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.TO_CITY 																																	' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.TRANSPORT_MODE			 																													' + char(10);		
+	SET @mDqry1 = @mDqry1 + '				  ,substring(E.EXFACTORY_DATE,0,7) as Y_YEAR -- ,E.EXFACTORY_DATE																				' + char(10);	
+	SET @mDqry1 = @mDqry1 + '				  ,E.EXFACTORY_DATE																																 ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,B.BOD_ID  ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,B.ROUTE_ID  ' + char(10);
+	SET @mDqry1 = @mDqry1 + '			      --,B.INCOTERMS  ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,B.ATTRIBUTE1 AS SSP_INCOTERMS ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.CARRIER  ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,S.VMI_YN ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.INLAND_ATD ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.POL_ATA ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.POL_ATD ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.POD_ATA ' + char(10);
+	SET @mDqry1 = @mDqry1 + '"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0919","1428304248","3","				  ,T.POD_ATD ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.VMI_ATA ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.VMI_ATD ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.F_DEST_ATA ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.LT_DEPARTURE_INLAND	AS NDR1  --기준L/T 1 (조회시점)   --기준L/T(현재시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.LT_WAIT_SHIPPING		AS NDR2  --기준L/T 2 (조회시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.LT_VOYAGE				AS NDR3  --기준L/T 3 (조회시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.LT_LAY_OFF_CLEARANCE	AS NDR4  --기준L/T 4 (조회시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.LT_ARRIVAL_INLAND		AS NDR5  --기준L/T 5 (조회시점)     ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,E.LT_DEPARTURE_INLAND	AS DR1   --기준L/T 1 (계획시점)   --기준L/T(과거계획평균) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,E.LT_WAIT_SHIPPING		AS DR2   --기준L/T 2 (계획시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,E.LT_VOYAGE				AS DR3   --기준L/T 3 (계획시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,E.LT_LAY_OFF_CLEARANCE	AS DR4   --기준L/T 4 (계획시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,E.LT_ARRIVAL_INLAND		AS DR5   --기준L/T 5 (계획시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,CASE WHEN ISDATE(T.INLAND_ATD) = 1	AND ISDATE(T.POL_ATA) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.INLAND_ATD, T.POL_ATA)) ELSE NULL END AS TTL1 ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,CASE WHEN ISDATE(T.POL_ATA) = 1		AND ISDATE(T.POL_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.POL_ATA, T.POL_ATD))	ELSE NULL END AS TTL2 ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,CASE WHEN ISDATE(T.POL_ATD) = 1		AND ISDATE(T.POD_ATA) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.POL_ATD, T.POD_ATA))	ELSE NULL END AS TTL3 ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,CASE WHEN ISDATE(T.POD_ATA) = 1		AND ISDATE(T.POD_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.POD_ATA, T.POD_ATD))	ELSE NULL END AS TTL4 ' + char(10);
+	--SET @mDqry1 = @mDqry1 + '				  ,CASE WHEN ISDATE(T.POD_ATD) = 1		AND IIF(S.VMI_YN = ''Y'', ISDATE(T.VMI_ATA), ISDATE(T.F_DEST_ATA))  = 1		' + char(10);
+	--SET @mDqry1 = @mDqry1 + '						THEN CONVERT(nvarchar, DATEDIFF(DD, T.POD_ATD, IIF(S.VMI_YN = ''Y'', T.VMI_ATA, T.F_DEST_ATA)))				' + char(10);
+	--SET @mDqry1 = @mDqry1 + '						ELSE NULL END AS TTL5																						' + char(10);
+    SET @mDqry1 = @mDQry1 + '             , CASE 																																										' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              WHEN S.VMI_YN = ''Y'' AND ISDATE(TX.F_DEST_ATA_DATE) = 1			AND ISDATE(TX.POD_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,TX.POD_ATD_DATE,TX.F_DEST_ATA_DATE))		' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              WHEN S.VMI_YN = ''Y'' AND ISDATE(ISNULL(TX.ZFCY2ATA, '''')) = 1	AND ISDATE(TX.POD_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,TX.POD_ATD_DATE,ISNULL(TX.ZFCY2ATA, '''')))	' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              WHEN S.VMI_YN = ''N'' AND ISDATE(TX.F_DEST_ATA_DATE) = 1			AND ISDATE(TX.POD_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,TX.POD_ATD_DATE,TX.F_DEST_ATA_DATE))		' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              ELSE NULL 																																									' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              END	AS TTL5																																									' + char(10);	  -- TTL5 재정의 : VMI_YN Y여도, F_DEST_ATA 값이 있으면 F_DEST_ATA - POD_ATD 값을 TTL5로 삼음
+	SET @mDqry1 = @mDqry1 + '				  ,E.CONFIRM_ID 																									' + char(10);
+
+	SET @mDqry1 = @mDqry1 + '				  ,FR.ATTRIBUTE1 AS POL_AREA 																						' + char(10);-----------------------------
+	SET @mDqry1 = @mDqry1 + '				  ,TZ.ATTRIBUTE1 AS POD_AREA  																						' + char(10);----------------------------
+
+	SET @mDqry1 = @mDqry1 + '			  FROM SSP_DNM_DELIVERY_TRACKING_V AS T 																				' + char(10);
+	SET @mDqry1 = @mDqry1 + '				   JOIN #TMP_CONFIRM  AS E 																							' + char(10);
+
+	SET @mDqry2 = @mDqry2 + '				ON T.COMPANY_ID "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0919","1428304248","4","= E.COMPANY_ID ' + char(10);
+	SET @mDqry2 = @mDqry2 + '			   AND T.SHIPMENT_NO = E.SHIPMENT_NO ' + char(10);
+	SET @mDqry2 = @mDqry2 + '			  JOIN SCP_MST_BOD AS B  ' + char(10);
+	SET @mDqry2 = @mDqry2 + '				ON E.BOD_ID = B.BOD_ID ' + char(10);
+	SET @mDqry2 = @mDqry2 + '			  JOIN SCM_MST_SITE AS S ' + char(10);
+	SET @mDqry2 = @mDqry2 + '				ON B.division_id = S.DIVISION_ID ' + char(10);
+	SET @mDqry2 = @mDqry2 + '			   AND B.to_site = S.SCM_SITE_ID ' + char(10);
+	SET @mDqry2 = @mDqry2 + '			  JOIN SCP_MST_DISTRIBUTION_ROUTE AS D ' + char(10);
+	SET @mDqry2 = @mDqry2 + '				ON B.ROUTE_ID = D.ROUTE_ID ' + char(10);
+	SET @mDqry2 = @mDqry2 + '  LEFT OUTER JOIN dbo.SCM_MST_PORT AS FR ' + char(10);
+  --SET @mDqry = @mDQry + '				ON D.FROM_COUNTRY = FR.COUNTRY' + char(10);-------------------------------
+	SET @mDqry2 = @mDqry2 + '				ON D.D_COUNTRY = FR.COUNTRY' + char(10);-------------------------------
+	SET @mDqry2 = @mDqry2 + '			   AND D.D_PORT_CODE  = FR.PORT_CODE' + char(10);
+	SET @mDqry2 = @mDqry2 + '  LEFT OUTER JOIN dbo.SCM_MST_PORT AS TZ ----권역정보' + char(10);
+  --SET @mDqry = @mDQry + '				ON D.FROM_COUNTRY = TZ.COUNTRY ' + char(10);------------------------------
+	SET @mDqry2 = @mDqry2 + '				ON D.A_COUNTRY=TZ.COUNTRY '+ char(10);------------------------------
+	SET @mDqry2 = @mDqry2 + '			   AND D.A_PORT_CODE  = TZ.PORT_CODE ' + char(10);
+	
+	SET @mDqry2 = @mDqry2 + '   LEFT JOIN [dbo].[SCM_DNM_DELIVERY_TRACKING] AS TX with(nolock)' + char(10);
+	SET @mDqry2 = @mDqry2 + '   ON T.COMPANY_ID = TX.COMPANY_ID' + char(10);
+    SET @mDqry2 = @mDqry2 + '   AND T.SHIPMENT_NO = TX.SHIPMENT_NO' + char(10);
+	
+	
+	
+	SET @mDqry2 = @mDqry2 + '			 WHERE 1 = 1 ' + char(10);		
+	
+		
+	
+	IF ( @v_from_site   IS NOT NULL AND @v_from_site    != '')			SET @mDqry2 =@mDqry2 + ' 					AND  B.from_site		IN ('+ @v_from_site   +')		'+char(10); 
+	IF ( @v_to_site     IS NOT NULL AND @v_to_site    != '')			SET @mDqry2 =@mDqry2 + ' 					AND  B.to_site			IN ('+ @v_to_site   +')			'+char(10); 
+																				 
+	IF ( @p_from_area   IS NOT NULL AND @p_from_area    != '')			SET @mDqry2 =@mDqry2 + ' 					AND  FR.ATTRIBUTE1		=N'''+@p_from_area+'''			'+char(10); 
+	IF ( @p_to_area     IS NOT NULL AND @p_to_area    != '')			SET @mDqry2 =@mDqry2 + ' 					AND  TZ.ATTRIBUTE1		=N'''+@p_to_area+'''			'+char(10); 
+																				 
+	IF ( @v_from_country   IS NOT NULL AND @v_from_country    != '')	SET @mDqry2 =@mDqry2 + ' 					AND  D.FROM_COUNTRY     IN ('+ @v_from_country   +')    '+char(10); 
+	IF ( @v_to_country     IS NOT NULL AND @v_to_country    != '')		SET @mDqry2 =@mDqry2 + ' 					AND  D.TO_COUNTRY		IN ('+ @v_to_country   +')      '+char(10); 
+																				 
+	IF ( @v_from_city   IS NOT NULL AND @v_from_city    != '')			SET @mDqry2 =@mDqry2 + ' 					AND  D.FROM_CITY		IN ('+ @v_from_city   +')		'+char(10); 
+	IF ( @v_to_city     IS NOT NULL AND @v_to_city    != '')			SET @mDqry2 =@mDqry2 + ' 					AND  D.TO_CITY			IN ('+ @v_to_city   +')			'+char(10); 
+	SET @mDqry2 = @mDqry2 + '			) AS DATA ' + char(10);	
+	SET @mDqry2 = @mDqry2 + '			) ' + char(10);	
+-------------------------------------------------------------------------------------------------------------------------------
+-- LD group
+-------------------------------------------------------------------------------------------------------------------------------	
+SET @mDqry3 = @mDqry3 + '
+select * 
+from
+(
+select 
+		     LD.DIVISION_ID
+			,LD.DIVISION_ID AS DIVISIONID
+			,LD.FROM_SITE
+			,LD.TO_SITE
+			,LD.POL_AREA
+			,LD.POD_AREA
+			,LD.D_PORT_CODE 
+			,LD.A_PORT_CODE
+			,LD.FROM_CITY
+			,LD.TO_CITY
+			,LD.TRANSPORT_MODE
+			,LD.BOD_ID
+			,LD.ROUTE_ID
+			,LD.SSP_INCOTERMS
+			,COUNT(LD.SHIPMENT_NO) AS SHIPMENTCOUNT
+
+			,AVG(LD.NDR1) AS NDR1
+			,AVG(LD.NDR2) AS NDR2
+			,AVG(LD.NDR3) AS NDR3
+			,AVG(LD.NDR4) AS NDR4
+			,AVG(LD.NDR5) AS NDR5
+
+			,AVG(LD.DR1) AS DR1
+			,AVG(LD.DR2) AS DR2
+			,AVG(LD.DR3) AS DR3
+			,AVG(LD.DR4) AS DR4
+			,AVG(LD"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0919","1428304248","5",".DR5) AS DR5
+
+			,AVG(convert(decimal,LD.TTL1)) AS TTL1_AVG
+			,MAX(convert(decimal,LD.TTL1)) AS TTL1_MAX
+			,MIN(convert(decimal,LD.TTL1)) AS TTL1_MIN
+		    --,STDEV(convert(decimal,LD.TTL1)) AS TTL1_STDEV
+		    --,STDEV(convert(decimal,LD.TTL1)) AS TTL1_AVG_CI_80
+
+			,AVG(convert(decimal,LD.TTL2)) AS TTL2_AVG
+			,MAX(convert(decimal,LD.TTL2)) AS TTL2_MAX
+			,MIN(convert(decimal,LD.TTL2)) AS TTL2_MIN
+		    --,STDEV(convert(decimal,LD.TTL2)) AS TTL2_STDEV
+		    --,STDEV(convert(decimal,LD.TTL2)) AS TTL2_AVG_CI_80
+
+			,AVG(convert(decimal,LD.TTL3)) AS TTL3_AVG
+			,MAX(convert(decimal,LD.TTL3)) AS TTL3_MAX
+			,MIN(convert(decimal,LD.TTL3)) AS TTL3_MIN
+		    --,STDEV(convert(decimal,LD.TTL3)) AS TTL3_STDEV
+		    --,STDEV(convert(decimal,LD.TTL3)) AS TTL3_AVG_CI_80
+
+			,AVG(convert(decimal,LD.TTL4)) AS TTL4_AVG
+			,MAX(convert(decimal,LD.TTL4)) AS TTL4_MAX
+			,MIN(convert(decimal,LD.TTL4)) AS TTL4_MIN
+		    --,STDEV(convert(decimal,LD.TTL4)) AS TTL4_STDEV
+		    --,STDEV(convert(decimal,LD.TTL4)) AS  TTL4_AVG_CI_80
+
+			,AVG(convert(decimal,LD.TTL5)) AS TTL5_AVG
+			,MAX(convert(decimal,LD.TTL5)) AS TTL5_MAX
+			,MIN(convert(decimal,LD.TTL5)) AS TTL5_MIN
+		    --,STDEV(convert(decimal,LD.TTL5)) AS TTL5_STDEV
+		    --,STDEV(convert(decimal,LD.TTL5)) AS TTL5_AVG_CI_80
+
+			,AVG(convert(decimal,LD.TTL)) AS TTL_AVG
+			,MAX(convert(decimal,LD.TTL)) AS TTL_MAX
+			,MIN(convert(decimal,LD.TTL)) AS TTL_MIN
+
+		,LD.Y_YEAR			
+
+		from LD
+
+		group by 
+		   LD.DIVISION_ID
+		  ,LD.FROM_SITE
+		  ,LD.TO_SITE
+		  ,LD.POL_AREA
+		  ,LD.POD_AREA
+		  ,LD.D_PORT_CODE
+		  ,LD.A_PORT_CODE
+		  ,LD.FROM_CITY
+		  ,LD.TO_CITY
+		  ,LD.TRANSPORT_MODE
+		  ,LD.BOD_ID
+		  ,LD.ROUTE_ID
+		  ,LD.SSP_INCOTERMS	
+		  ,LD.Y_YEAR					
+
+	) AS LD2	
+
+	pivot( MIN(DIVISION_ID) FOR Y_YEAR IN ( '+ @p_PIVOT_yyyymm +' )  ) AS PP
+order by BOD_ID
+'
+
+	
+				DECLARE @POS INT =1;
+				SET @POS =1;
+				DECLARE @LEN INT =LEN(@mDqry1 + @mDqry2 + @mDqry3);
+				WHILE @POS <= @LEN
+				BEGIN
+					PRINT SUBSTRING(@mDqry1 + @mDqry2 + @mDqry3,@POS,4000);
+					SET @POS = @POS+4000;
+				END;
+	
+
+
+--SET @mDqry3 = @mDqry3 + '	order by DIVISIONID,FROM_SITE,TO_SITE,D_PORT_CODE,A_PORT_CODE,FROM_CITY,TO_CITY,TRANSPORT_MODE,SSP_INCOTERMS,BOD_ID
+--EXEC (@mDqry1 + @mDqry2 + @mDqry3);
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- LD) SHIPMENTCOUNT, CONTAINER_COUNT
+-------------------------------------------------------------------------------------------------------------------------------	
+DECLARE @mDqry5 NVARCHAR(MAX) = ''
+
+SET @mDqry5 = @mDqry5 + '     select 
+									 LD.BOD_ID
+									,COUNT(DISTINCT LD.SHIPMENT_NO) AS SHIPMENTCOUNT
+									,COUNT(DISTINCT T.CONTAINER_NO) AS CONTAINER_COUNT
+									,LD.COMPANY_ID
+									,LD.ROUTE_ID
+								from LD
+							LEFT JOIN SCM_DNM_DELIVERY_TRACKING T ON LD.COMPANY_ID = T.COMPANY_ID AND LD.SHIPMENT_NO = T.SHIPMENT_NO
+							group by 
+							   LD.COMPANY_ID
+							  ,LD.DIVISION_ID
+							  ,LD.FROM_SITE
+							  ,LD.TO_SITE
+							  ,LD.POL_AREA
+							  ,LD.POD_AREA
+							  ,LD.D_PORT_CODE
+							  ,LD.A_PORT_CODE
+							  ,LD.FROM_CITY
+							  ,LD.TO_CITY
+							  ,LD.TRANSPORT_MODE
+							  ,LD.BOD_ID
+							  ,LD.ROUTE_ID
+							  ,LD.SSP_INCOTERMS			
+					  order by LD.BOD_ID'
+
+--EXEC (@mDqry1 + @mDqry2 + @mDqry5);
+
+
+
+EXEC (@mDqry1 + @mDqry2 + ' 
+
+, w_data as
+(
+	SELECT BOD_ID
+	, y_year
+	, avg(convert(NUMERIC(13,6), ttl) )  as avg
+	, avg(convert(NUMERIC(13,6), ttl1))  as avg1
+	, avg(convert(NUMERIC(13,6), ttl2))  as avg2
+	, avg(convert(NUMERIC(13,6), ttl3))  as avg3
+	, avg(convert(NUMERIC(13,6), ttl4))  as avg4
+	, avg(convert(NUMERIC(13,6), ttl5))  as avg5
+
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl) ))  as TTL_STDEV 
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl1)))  as TTL1_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0919","1428304248","6","ttl2)))  as TTL2_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl3)))  as TTL3_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl4)))  as TTL4_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl5)))  as TTL5_STDEV
+				
+	, COUNT(TTL )    as TTL_CNT
+	, COUNT(TTL1)    as TTL1_CNT
+	, COUNT(TTL2)    as TTL2_CNT
+	, COUNT(TTL3)    as TTL3_CNT
+	, COUNT(TTL4)    as TTL4_CNT
+	, COUNT(TTL5)    as TTL5_CNT
+
+	FROM LD
+	WHERE ttl is not null
+	GROUP BY BOD_ID, y_year
+)
+
+	select BOD_ID
+		  ,y_year
+		  ,avg
+		  ,avg1
+		  ,avg2
+		  ,avg3
+		  ,avg4
+		  ,avg5
+
+		  , TTL_STDEV 
+		  , TTL1_STDEV
+		  , TTL2_STDEV
+		  , TTL3_STDEV
+		  , TTL4_STDEV
+		  , TTL5_STDEV
+		  
+		  , TTL_CNT
+		  , TTL1_CNT
+		  , TTL2_CNT
+		  , TTL3_CNT
+		  , TTL4_CNT
+		  , TTL5_CNT
+
+		  ,concat(CI_TTL_DOWN , '' ~ '', CI_TTL_UP ) AS CI_TTL
+		  ,concat(CI_TTL1_DOWN, '' ~ '', CI_TTL1_UP) AS CI_TTL1
+		  ,concat(CI_TTL2_DOWN, '' ~ '', CI_TTL2_UP) AS CI_TTL2
+		  ,concat(CI_TTL3_DOWN, '' ~ '', CI_TTL3_UP) AS CI_TTL3
+		  ,concat(CI_TTL4_DOWN, '' ~ '', CI_TTL4_UP) AS CI_TTL4
+		  ,concat(CI_TTL5_DOWN, '' ~ '', CI_TTL5_UP) AS CI_TTL5
+
+		  ,CI_TTL
+		  ,CI_TTL1
+		  ,CI_TTL2
+		  ,CI_TTL3
+		  ,CI_TTL4
+		  ,CI_TTL5
+FROM
+(
+	select BOD_ID
+		  ,y_year
+		  ,avg
+		  ,avg1
+		  ,avg2
+		  ,avg3
+		  ,avg4
+		  ,avg5
+
+		  , TTL_STDEV 
+		  , TTL1_STDEV
+		  , TTL2_STDEV
+		  , TTL3_STDEV
+		  , TTL4_STDEV
+		  , TTL5_STDEV
+		  
+		  , TTL_CNT
+		  , TTL1_CNT
+		  , TTL2_CNT
+		  , TTL3_CNT
+		  , TTL4_CNT
+		  , TTL5_CNT
+
+		  ,CI_TTL
+		  ,CI_TTL1
+		  ,CI_TTL2
+		  ,CI_TTL3
+		  ,CI_TTL4
+		  ,CI_TTL5
+
+		  ,CONVERT(INTEGER, ROUND(avg + CI_TTL , 0, 1)) as CI_TTL_UP
+		  ,CONVERT(INTEGER, ROUND(avg + CI_TTL1, 0, 1)) as CI_TTL1_UP
+		  ,CONVERT(INTEGER, ROUND(avg + CI_TTL2, 0, 1)) as CI_TTL2_UP
+		  ,CONVERT(INTEGER, ROUND(avg + CI_TTL3, 0, 1)) as CI_TTL3_UP
+		  ,CONVERT(INTEGER, ROUND(avg + CI_TTL4, 0, 1)) as CI_TTL4_UP
+		  ,CONVERT(INTEGER, ROUND(avg + CI_TTL5, 0, 1)) as CI_TTL5_UP
+
+		  ,CONVERT(INTEGER, ROUND(avg - CI_TTL , 0, 1)) as CI_TTL_DOWN
+		  ,CONVERT(INTEGER, ROUND(avg - CI_TTL1, 0, 1)) as CI_TTL1_DOWN
+		  ,CONVERT(INTEGER, ROUND(avg - CI_TTL2, 0, 1)) as CI_TTL2_DOWN
+		  ,CONVERT(INTEGER, ROUND(avg - CI_TTL3, 0, 1)) as CI_TTL3_DOWN
+		  ,CONVERT(INTEGER, ROUND(avg - CI_TTL4, 0, 1)) as CI_TTL4_DOWN
+		  ,CONVERT(INTEGER, ROUND(avg - CI_TTL5, 0, 1)) as CI_TTL5_DOWN
+
+	from
+	(
+		SELECT 	*
+		       --TODO  = abs(NORMSINV((1-@confidenceLevel) / 2));
+			  , CONVERT(numeric(10,1) ,abs(dbo.FN_GET_SCP_NORMINV(0.2, avg,  TTL_STDEV ))/2) AS CI_TTL
+			  , CONVERT(numeric(10,1) ,abs(dbo.FN_GET_SCP_NORMINV(0.2, avg1, TTL1_STDEV))/2) AS CI_TTL1
+			  , CONVERT(numeric(10,1) ,abs(dbo.FN_GET_SCP_NORMINV(0.2, avg2, TTL2_STDEV))/2) AS CI_TTL2
+			  , CONVERT(numeric(10,1) ,abs(dbo.FN_GET_SCP_NORMINV(0.2, avg3, TTL3_STDEV))/2) AS CI_TTL3
+			  , CONVERT(numeric(10,1) ,abs(dbo.FN_GET_SCP_NORMINV(0.2, avg4, TTL4_STDEV))/2) AS CI_TTL4
+			  , CONVERT(numeric(10,1) ,abs(dbo.FN_GET_SCP_NORMINV(0.2, avg5, TTL5_STDEV))/2) AS CI_TTL5
+
+			  --, CONVERT(numeric(10,1) ,0.2 *  abs(1-TTL_STDEV  / 2) / TTL_CNT)  AS CI_TTL
+			  --, CONVERT(numeric(10,1) ,0.2 *  abs(1-TTL1_STDEV / 2) / TTL1_CNT) AS CI_TTL1
+			  --, CONVERT(numeric(10,1) ,0.2 *  abs(1-TTL2_STDEV / 2) / TTL2_CNT) AS CI_TTL2
+			  --, CONVERT(numeric(10,1) ,0.2 *  abs(1-TTL3_STDEV / 2) / TTL3_CNT) AS CI_TTL3
+			  --, CONVERT(numeric(10,1) ,0.2 *  abs(1-TTL4_STDEV / 2) / TTL4_CNT) AS CI_TTL4
+			  --, CONVERT(numeric(10,1) ,0.2 *  abs(1-TTL5_STDEV / 2) / TTL5_CNT) AS CI_TTL5
+
+		from w_data
+
+	)  data2
+) data3
+WHERE BOD_ID = ''10163''
+ORDER BY BOD_ID, Y_YEAR
+');
+
+
+
+EXEC (@mDqry1 + @mDqry2 + ' 
+
+
+
+, w_data as
+(
+	SELECT BOD_ID
+	, y_year
+	, avg(convert(NUMERIC(13,6), ttl) )  as avg
+	, avg(convert(NUMERIC(13,6), ttl1))  as avg1
+	, avg(convert(NUMERIC(13,6), ttl2))  as avg2
+	, avg(convert(NUMERIC(13,6), ttl3))  as avg3
+	, avg(convert(NUMERI"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0919","1428304248","7","C(13,6), ttl4))  as avg4
+	, avg(convert(NUMERIC(13,6), ttl5))  as avg5
+
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl) ))  as TTL_STDEV 
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl1)))  as TTL1_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl2)))  as TTL2_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl3)))  as TTL3_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl4)))  as TTL4_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl5)))  as TTL5_STDEV
+				
+	, COUNT(TTL )    as TTL_CNT
+	, COUNT(TTL1)    as TTL1_CNT
+	, COUNT(TTL2)    as TTL2_CNT
+	, COUNT(TTL3)    as TTL3_CNT
+	, COUNT(TTL4)    as TTL4_CNT
+	, COUNT(TTL5)    as TTL5_CNT
+
+	FROM LD
+	WHERE BOD_ID = ''10163''
+	GROUP BY BOD_ID, y_year
+)
+
+SELECT  *
+FROM w_data
+WHERE BOD_ID = ''10163''
+');
+
+EXEC (@mDqry1 + @mDqry2 + ' 
+
+
+
+, w_data as
+(
+	SELECT BOD_ID
+	, y_year
+
+	, SUM(CONVERT(INTEGER,ttl))   as sum
+	, SUM(CONVERT(INTEGER,ttl1))  as sum1
+	, SUM(CONVERT(INTEGER,ttl2))  as sum2
+	, SUM(CONVERT(INTEGER,ttl3))  as sum3
+	, SUM(CONVERT(INTEGER,ttl4))  as sum4
+	, SUM(CONVERT(INTEGER,ttl5))  as sum5
+
+
+	, avg(convert(NUMERIC(13,6), ttl) )  as avg
+	, avg(convert(NUMERIC(13,6), ttl1))  as avg1
+	, avg(convert(NUMERIC(13,6), ttl2))  as avg2
+	, avg(convert(NUMERIC(13,6), ttl3))  as avg3
+	, avg(convert(NUMERIC(13,6), ttl4))  as avg4
+	, avg(convert(NUMERIC(13,6), ttl5))  as avg5
+
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl) ))  as TTL_STDEV 
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl1)))  as TTL1_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl2)))  as TTL2_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl3)))  as TTL3_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl4)))  as TTL4_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl5)))  as TTL5_STDEV
+				
+	, COUNT(CASE WHEN  TTL  >= 0 THEN 1 END)  as TTL_CNT
+	, COUNT(CASE WHEN  TTL1 >= 0 THEN 1 END)  as TTL1_CNT
+	, COUNT(CASE WHEN  TTL2 >= 0 THEN 1 END)  as TTL2_CNT
+	, COUNT(CASE WHEN  TTL3 >= 0 THEN 1 END)  as TTL3_CNT
+	, COUNT(CASE WHEN  TTL4 >= 0 THEN 1 END)  as TTL4_CNT
+	, COUNT(CASE WHEN  TTL5 >= 0 THEN 1 END)  as TTL5_CNT
+
+	, COUNT(TTL )  as CNT
+	, COUNT(TTL1)  as CNT1
+	, COUNT(TTL2)  as CNT2
+	, COUNT(TTL3)  as CNT3
+	, COUNT(TTL4)  as CNT4
+	, COUNT(TTL5)  as CNT5
+
+
+	FROM LD
+	GROUP BY BOD_ID, y_year
+)
+
+SELECT  *
+FROM w_data
+WHERE BOD_ID = ''10163''
+');
+
+EXEC (@mDqry1 + @mDqry2 + ' 
+SELECT  BOD_ID
+	, y_year
+	, exfactory_date
+	, SHIPMENT_NO
+	, TTL
+	, TTL1
+	, TTL2
+	, TTL3
+	, TTL4
+	, TTL5
+FROM LD
+WHERE BOD_ID = ''10163''
+order by exfactory_date
+');
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT","7775185","1","
+
+/*
+ * PROGRAM ID   : SSP0028_GET_DELIVERY_TRACKING_LT COPY => SCP0102_GET_BOD_VALIDATION_REPORT
+ * DESCRIPTION  : DELIVERY TRACKING LT
+ * PROGRAM HISTORY
+ *===================================================================================================
+ *   DATE       IN CHARGE		DESCRIPTION
+ *===================================================================================================
+ * 2022/09/13   PARKTAEHAK		PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 신규추가
+ * 2023-08-09   VADABI3         PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 BOD VALIDATION REPORT) UI 개선 - ROUTE_ID
+ * 2023/08/23   VADABI3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 개발DB 이슈로 백업본으로 복구
+ * 2023/09/01   VADABI3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 BOD VALIDATION REPORT) UI 개선 - ROUTE_ID
+ * 2023/11/26   jahn1502		TTL1 ~ TTL5 => TTL12, TTL3, TTL45 로 변경 및 TTL12 계산로직 변경
+
+ ----------------------------------------------------------------------------------------------------
+
+ EXEC SCP0102_GET_BOD_VALIDATION_REPORT 
+ @P_DIVISION_ID='81'
+ , @P_FROM_YYYYMMDD='20230401'
+ , @P_TO_YYYYMMDD='20230630'
+ , @P_FROM_SITE=''
+ , @P_TO_SITE=''
+ , @P_PIVOT_YYYYMM='[202304],[202305],[202306]'
+ , @P_FROM_COUNTRY=''
+ , @P_TO_COUNTRY=''
+ , @P_FROM_CITY=''
+ , @P_TO_CITY=''
+ , @P_FROM_AREA=''
+ , @P_TO_AREA=''
+
+
+
+  EXEC SCP0102_GET_BOD_VALIDATION_REPORT 
+  @P_DIVISION_ID='40'
+  , @P_FROM_YYYYMMDD='20230101'
+  , @P_TO_YYYYMMDD='20231006'
+  , @P_FROM_SITE='G182-A'
+  , @P_TO_SITE=''
+  , @P_PIVOT_YYYYMM='[202301],[202302],[202303],[202304],[202305],[202306],[202307],[202308],[202309],[202310]'
+  , @P_FROM_COUNTRY=''
+  , @P_TO_COUNTRY=''
+  , @P_FROM_CITY=''
+  , @P_TO_CITY=''
+  , @P_FROM_AREA=''
+  , @P_TO_AREA=''
+
+EXCEPTION : ?????? 'AND' ?????? ?????? ??????????????.
+?????? 'AND' ?????? ?????? ??????????????.
+
+
+
+
+*/
+
+CREATE PROCEDURE [dbo].[SCP0102_GET_BOD_VALIDATION_REPORT]
+
+    @P_DIVISION_ID      NVARCHAR(10),
+	@P_FROM_YYYYMMDD	NVARCHAR(8),
+    @P_TO_YYYYMMDD		NVARCHAR(8),	
+	@P_FROM_SITE		NVARCHAR(MAX),
+	@P_TO_SITE			NVARCHAR(MAX),
+	@P_PIVOT_YYYYMM		NVARCHAR(MAX),
+	@P_FROM_COUNTRY     NVARCHAR(MAX),
+	@P_TO_COUNTRY		NVARCHAR(MAX),
+	@P_FROM_CITY		NVARCHAR(MAX),
+	@P_TO_CITY			NVARCHAR(MAX),
+	@P_FROM_AREA		NVARCHAR(MAX),
+	@P_TO_AREA			NVARCHAR(MAX)
+
+AS
+BEGIN
+
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE @MDQRY1 NVARCHAR(MAX)='';
+	DECLARE @MDQRY2 NVARCHAR(MAX)='';
+	DECLARE @MDQRY3 NVARCHAR(MAX)='';	
+	DECLARE @MDQRY4 NVARCHAR(MAX)='';	
+	
+	DECLARE  @V_FROM_SITE NVARCHAR(MAX)='';
+	DECLARE  @V_TO_SITE NVARCHAR(MAX)='';	
+	DECLARE  @V_FROM_COUNTRY NVARCHAR(MAX)='';
+	DECLARE  @V_TO_COUNTRY NVARCHAR(MAX)='';	
+	DECLARE  @V_FROM_CITY NVARCHAR(MAX)='';
+	DECLARE  @V_TO_CITY NVARCHAR(MAX)='';	
+
+	--IN 조건으로 데이터를 가져옴
+	SET @V_FROM_SITE = [DBO].FN_GET_IN_STR(@P_FROM_SITE);
+	SET @V_TO_SITE = [DBO].FN_GET_IN_STR(@P_TO_SITE);	
+	SET @V_FROM_COUNTRY = [DBO].FN_GET_IN_STR(@P_FROM_COUNTRY);
+	SET @V_TO_COUNTRY = [DBO].FN_GET_IN_STR(@P_TO_COUNTRY);	
+	SET @V_FROM_CITY = [DBO].FN_GET_IN_STR(@P_FROM_CITY);
+	SET @V_TO_CITY = [DBO].FN_GET_IN_STR(@P_TO_CITY);	
+
+
+
+
+			
+-------------------------------------------------------------------------------------------------------------------------------
+-- #TMP_CONFIRM
+-------------------------------------------------------------------------------------------------------------------------------		
+	IF OBJECT_ID('TEMPDB..#TMP_CONFIRM') IS NOT NULL
+		DROP TABLE #TMP_CONFIRM;	
+
+	IF OBJECT_ID('TEMPDB..#TMP_LD') IS NOT NULL
+		DROP TABLE TMP_LD;	
+
+
+	  SELECT CN.DIVISION_ID 																						
+			,CN.FROM_SITE_COMPANY_ID AS COMPANY_ID 																
+			,EX.SHIPMENT_NO 																						
+			,CN.CONFIRM_ID 																						
+			,CN.BOD_ID 																							
+			,CN.ITEM_ID 																							
+			,EX.EXFACTORY_DATE 																					
+			,RT.LT_DEPARTURE_INLAND 																				
+			,RT.LT_WAIT_SHIPPING 		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT","7775185","2","																			
+			,RT.LT_VOYAGE 																						
+			,RT.LT_LAY_OFF_CLEARANCE 																				
+			,RT.LT_ARRIVAL_INLAND 	
+		INTO #TMP_CONFIRM 																			
+		FROM ( 																									
+			SELECT X.ATTRIBUTE3 AS SHIPMENT_NO 																	
+					,MAX(X.CONFIRM_ID) AS CONFIRM_ID  																
+					--,MAX(SYSTEM_EXFACTORY_DATE) AS EXFACTORY_DATE
+					,MAX(PLANT_ISSUE_DATE) AS EXFACTORY_DATE
+				FROM SCM_DNM_EXFACTORY_RESULT AS X WITH(NOLOCK) 													
+				JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L WITH(NOLOCK) 													
+				ON L.LOOKUP_TYPE = 'ERP_SSP_TYPE' -- LOOKUP에 등록된 공정만  									
+				AND L.VALID_YN = 'Y' 																			
+				AND X.VALID_YN = 'Y' 																			
+				AND L.SEGMENT1    = X.SSP_TYPE 																	
+			WHERE 1 = 1 																						
+				AND X.ATTRIBUTE3 IS NOT NULL 																		
+				AND X.DIVISION_ID = '' +@P_DIVISION_ID + ''                   --@DIVISION						
+				--AND X.SYSTEM_EXFACTORY_DATE BETWEEN '' +@P_FROM_YYYYMMDD + ''   AND '' +@P_TO_YYYYMMDD + '' 
+				AND X.PLANT_ISSUE_DATE BETWEEN '' +@P_FROM_YYYYMMDD + ''   AND '' +@P_TO_YYYYMMDD + '' 
+				AND X.EXFACTORY_STATUS NOT IN ('D10','D90') 													
+				AND X.CONFIRM_ID LIKE 'C%' 																		
+			GROUP BY X.ATTRIBUTE3 																					 																										
+			) AS EX 																								
+		JOIN SSP_ANL_SHIP_CONFIRM AS CN  WITH(NOLOCK) 															
+		ON EX.CONFIRM_ID = CN.CONFIRM_ID 																		
+		JOIN SSP_ANL_SHIP_CONFIRM_ROUTE AS RT WITH(NOLOCK) 														
+		ON CN.CONFIRM_ID = RT.CONFIRM_ID 	
+		
+		
+			
+					
+			
+-------------------------------------------------------------------------------------------------------------------------------
+-- WITH LD
+-------------------------------------------------------------------------------------------------------------------------------	
+	SET @MDQRY1 = @MDQRY1 + ' WITH LD AS (																																					' + CHAR(10);
+
+
+
+	-- TTL 추가
+	SET @MDQRY1 = @MDQRY1 + 'SELECT DATA.*		' + CHAR(10);
+	--SET @MDQRY1 = @MDQRY1 + ' , CASE  WHEN TRANSPORT_MODE = ''TRK'' THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) ' + CHAR(10);
+	--SET @MDQRY1 = @MDQRY1 + '         WHEN TTL1 IS NULL THEN NULL' + CHAR(10);
+	--SET @MDQRY1 = @MDQRY1 + ' 	      WHEN TTL2 IS NULL THEN NULL' + CHAR(10);
+	--SET @MDQRY1 = @MDQRY1 + ' 	      WHEN TTL3 IS NULL THEN NULL' + CHAR(10);
+	--SET @MDQRY1 = @MDQRY1 + ' 	      WHEN TTL4 IS NULL THEN NULL' + CHAR(10);
+	--SET @MDQRY1 = @MDQRY1 + ' 	      WHEN TTL5 IS NULL THEN NULL' + CHAR(10);	
+	--SET @MDQRY1 = @MDQRY1 + '         ELSE ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	' + CHAR(10);
+	--SET @MDQRY1 = @MDQRY1 + '         END AS TTL	 ' + CHAR(10);	  -- 20230901																																																				
+	SET @MDQRY1 = @MDQRY1 + ' FROM (		' + CHAR(10);
+	
+	
+	SET @MDQRY1 = @MDQRY1 + '			SELECT E.DIVISION_ID 																																' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,T.COMPANY_ID  																																' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,B.FROM_SITE 																																	' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,B.TO_SITE 																																	' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,T.SHIPMENT_NO 																																' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,D.D_PORT_CODE  																																' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,D.A_PORT_CODE  																																' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,D.FROM_CITY 																																	' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,D.TO_CITY 																																	' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,D.TRANSPORT_MODE			 													"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT","7775185","3","																' + CHAR(10);		
+	SET @MDQRY1 = @MDQRY1 + '				  ,SUBSTRING(E.EXFACTORY_DATE,0,7) AS Y_YEAR -- ,E.EXFACTORY_DATE																				' + CHAR(10);	
+	SET @MDQRY1 = @MDQRY1 + '				  ,E.EXFACTORY_DATE																																 ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,B.BOD_ID  ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,B.ROUTE_ID  ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '			      --,B.INCOTERMS  ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,B.ATTRIBUTE1 AS SSP_INCOTERMS ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,T.CARRIER  ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,S.VMI_YN ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,T.INLAND_ATD ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,T.POL_ATA ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,T.POL_ATD ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,T.POD_ATA ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,T.POD_ATD ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,T.VMI_ATA ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,T.VMI_ATD ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,T.F_DEST_ATA ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,D.LT_DEPARTURE_INLAND	AS NDR1  --기준L/T 1 (조회시점)   --기준L/T(현재시점) ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,D.LT_WAIT_SHIPPING		AS NDR2  --기준L/T 2 (조회시점) ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,D.LT_VOYAGE				AS NDR3  --기준L/T 3 (조회시점) ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,D.LT_LAY_OFF_CLEARANCE	AS NDR4  --기준L/T 4 (조회시점) ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,D.LT_ARRIVAL_INLAND		AS NDR5  --기준L/T 5 (조회시점)     ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,E.LT_DEPARTURE_INLAND	AS DR1   --기준L/T 1 (계획시점)   --기준L/T(과거계획평균) ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,E.LT_WAIT_SHIPPING		AS DR2   --기준L/T 2 (계획시점) ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,E.LT_VOYAGE				AS DR3   --기준L/T 3 (계획시점) ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,E.LT_LAY_OFF_CLEARANCE	AS DR4   --기준L/T 4 (계획시점) ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,E.LT_ARRIVAL_INLAND		AS DR5   --기준L/T 5 (계획시점) ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,CASE WHEN ISDATE(T.INLAND_ATD) = 1	AND ISDATE(T.POL_ATA) = 1 THEN CONVERT(NVARCHAR, DATEDIFF(DD, T.INLAND_ATD, T.POL_ATA)) ELSE NULL END AS TTL1 ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,CASE WHEN ISDATE(T.POL_ATA) = 1		AND ISDATE(T.POL_ATD) = 1 THEN CONVERT(NVARCHAR, DATEDIFF(DD, T.POL_ATA, T.POL_ATD))	ELSE NULL END AS TTL2 ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,CASE WHEN ISDATE(T.POL_ATD) = 1		AND ISDATE(T.POD_ATA) = 1 THEN CONVERT(NVARCHAR, DATEDIFF(DD, T.POL_ATD, T.POD_ATA))	ELSE NULL END AS TTL3 ' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				  ,CASE WHEN ISDATE(T.POD_ATA) = 1		AND ISDATE(T.POD_ATD) = 1 THEN CONVERT(NVARCHAR, DATEDIFF(DD, T.POD_ATA, T.POD_ATD))	ELSE NULL END AS TTL4 ' + CHAR(10);
+	--SET @MDQRY1 = @MDQRY1 + '				  ,CASE WHEN ISDATE(T.POD_ATD) = 1		AND IIF(S.VMI_YN = ''Y'', ISDATE(T.VMI_ATA), ISDATE(T.F_DEST_ATA))  = 1		' + CHAR(10);
+	--SET @MDQRY1 = @MDQRY1 + '						THEN CONVERT(NVARCHAR, DATEDIFF(DD, T.POD_ATD, IIF(S.VMI_YN = ''Y'', T.VMI_ATA, T.F_DEST_ATA)))				' + CHAR(10);
+	--SET @MDQRY1 = @MDQRY1 + '						ELSE NULL END AS TTL5																						' + CHAR(10);
+    SET @MDQRY1 = @MDQRY1 + '             , CASE 																																										' + CHAR(10);	
+	SET @MDQRY1 = @MDQRY1 + '              WHEN S.VMI_YN = ''Y'' AND ISDATE(TX.F_DEST_ATA_DATE) = 1			AND ISDATE(TX.POD_ATD_DATE) = 1 THEN CONVERT(NVARCHAR, DATEDIFF(DD,TX.POD_ATD_DATE,TX.F_DEST_ATA_DATE))		' + CHAR(10);	
+	SET @MDQRY1 = @MDQRY1 + '              WHEN S.VMI_YN = ''Y'' AND ISDATE(ISNULL(TX.ZFCY2ATA, '''')) = 1	AND ISDATE(TX.POD_ATD_DATE) = 1 THEN CONVERT(NVARCHAR, DATEDIFF(DD,TX.POD_ATD_DATE,ISNULL(TX.ZFCY2ATA, '''')))	' + CHAR(10);	
+	SET @MDQRY1 = @MDQRY1 + '              WHEN S.VMI_YN = ''N'' AND ISDATE(TX.F_DEST_ATA_DATE) = 1			AND ISDATE(TX.POD_ATD_DATE) = 1 THEN CONVERT(NVARCHAR, DATEDIFF(DD,TX.POD_ATD_DATE,TX.F_DEST_ATA_DATE"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT","7775185","4","))		' + CHAR(10);	
+	SET @MDQRY1 = @MDQRY1 + '              ELSE NULL 																																									' + CHAR(10);	
+	SET @MDQRY1 = @MDQRY1 + '              END	AS TTL5																																									' + CHAR(10);	  -- TTL5 재정의 : VMI_YN Y여도, F_DEST_ATA 값이 있으면 F_DEST_ATA - POD_ATD 값을 TTL5로 삼음
+	SET @MDQRY1 = @MDQRY1 + '				  ,CASE WHEN ISDATE(T.INLAND_ATD) = 1 AND ISDATE(TX.F_DEST_ATA_DATE) = 1 THEN CONVERT(NVARCHAR, DATEDIFF(DD, T.INLAND_ATD, TX.F_DEST_ATA_DATE)) ELSE NULL END AS TTL		' + CHAR(10);	  -- Transport Mode와 무관하게 Lead Time은 FDEST과 PI Date로 계산 (2025-01-09 최정훈 수정)
+	SET @MDQRY1 = @MDQRY1 + '				  ,E.CONFIRM_ID 																									' + CHAR(10);
+
+	SET @MDQRY1 = @MDQRY1 + '				  ,FR.ATTRIBUTE1 AS POL_AREA 																						' + CHAR(10);-----------------------------
+	SET @MDQRY1 = @MDQRY1 + '				  ,TZ.ATTRIBUTE1 AS POD_AREA  																						' + CHAR(10);----------------------------
+
+	SET @MDQRY1 = @MDQRY1 + '			  FROM SSP_DNM_DELIVERY_TRACKING_V AS T 																				' + CHAR(10);
+	SET @MDQRY1 = @MDQRY1 + '				   JOIN #TMP_CONFIRM  AS E 																							' + CHAR(10);
+
+	SET @MDQRY2 = @MDQRY2 + '				ON T.COMPANY_ID = E.COMPANY_ID ' + CHAR(10);
+	SET @MDQRY2 = @MDQRY2 + '			   AND T.SHIPMENT_NO = E.SHIPMENT_NO ' + CHAR(10);
+	SET @MDQRY2 = @MDQRY2 + '			  JOIN SCP_MST_BOD AS B  ' + CHAR(10);
+	SET @MDQRY2 = @MDQRY2 + '				ON E.BOD_ID = B.BOD_ID ' + CHAR(10);
+	SET @MDQRY2 = @MDQRY2 + '			  JOIN SCM_MST_SITE AS S ' + CHAR(10);
+	SET @MDQRY2 = @MDQRY2 + '				ON B.DIVISION_ID = S.DIVISION_ID ' + CHAR(10);
+	SET @MDQRY2 = @MDQRY2 + '			   AND B.TO_SITE = S.SCM_SITE_ID ' + CHAR(10);
+	SET @MDQRY2 = @MDQRY2 + '			  JOIN SCP_MST_DISTRIBUTION_ROUTE AS D ' + CHAR(10);
+	SET @MDQRY2 = @MDQRY2 + '				ON B.ROUTE_ID = D.ROUTE_ID ' + CHAR(10);
+	SET @MDQRY2 = @MDQRY2 + '  LEFT OUTER JOIN DBO.SCM_MST_PORT AS FR ' + CHAR(10);
+  --SET @MDQRY = @MDQRY + '				ON D.FROM_COUNTRY = FR.COUNTRY' + CHAR(10);-------------------------------
+	SET @MDQRY2 = @MDQRY2 + '				ON D.D_COUNTRY = FR.COUNTRY' + CHAR(10);-------------------------------
+	SET @MDQRY2 = @MDQRY2 + '			   AND D.D_PORT_CODE  = FR.PORT_CODE' + CHAR(10);
+	SET @MDQRY2 = @MDQRY2 + '  LEFT OUTER JOIN DBO.SCM_MST_PORT AS TZ ----권역정보' + CHAR(10);
+  --SET @MDQRY = @MDQRY + '				ON D.FROM_COUNTRY = TZ.COUNTRY ' + CHAR(10);------------------------------
+	SET @MDQRY2 = @MDQRY2 + '				ON D.A_COUNTRY=TZ.COUNTRY '+ CHAR(10);------------------------------
+	SET @MDQRY2 = @MDQRY2 + '			   AND D.A_PORT_CODE  = TZ.PORT_CODE ' + CHAR(10);
+	
+	SET @MDQRY2 = @MDQRY2 + '   LEFT JOIN [DBO].[SCM_DNM_DELIVERY_TRACKING] AS TX WITH(NOLOCK)' + CHAR(10);
+	SET @MDQRY2 = @MDQRY2 + '   ON T.COMPANY_ID = TX.COMPANY_ID' + CHAR(10);
+    SET @MDQRY2 = @MDQRY2 + '   AND T.SHIPMENT_NO = TX.SHIPMENT_NO' + CHAR(10);
+	
+	
+	
+	SET @MDQRY2 = @MDQRY2 + '			 WHERE 1 = 1 ' + CHAR(10);		
+	
+		
+	
+	IF ( @V_FROM_SITE   IS NOT NULL AND @V_FROM_SITE    != '')			SET @MDQRY2 =@MDQRY2 + ' 					AND  B.FROM_SITE		IN ('+ @V_FROM_SITE   +')		'+CHAR(10); 
+	IF ( @V_TO_SITE     IS NOT NULL AND @V_TO_SITE    != '')			SET @MDQRY2 =@MDQRY2 + ' 					AND  B.TO_SITE			IN ('+ @V_TO_SITE   +')			'+CHAR(10); 
+																				 
+	IF ( @P_FROM_AREA   IS NOT NULL AND @P_FROM_AREA    != '')			SET @MDQRY2 =@MDQRY2 + ' 					AND  FR.ATTRIBUTE1		=N'''+@P_FROM_AREA+'''			'+CHAR(10); 
+	IF ( @P_TO_AREA     IS NOT NULL AND @P_TO_AREA    != '')			SET @MDQRY2 =@MDQRY2 + ' 					AND  TZ.ATTRIBUTE1		=N'''+@P_TO_AREA+'''			'+CHAR(10); 
+																				 
+	IF ( @V_FROM_COUNTRY   IS NOT NULL AND @V_FROM_COUNTRY    != '')	SET @MDQRY2 =@MDQRY2 + ' 					AND  D.FROM_COUNTRY     IN ('+ @V_FROM_COUNTRY   +')    '+CHAR(10); 
+	IF ( @V_TO_COUNTRY     IS NOT NULL AND @V_TO_COUNTRY    != '')		SET @MDQRY2 =@MDQRY2 + ' 					AND  D.TO_COUNTRY		IN ('+ @V_TO_COUNTRY   +')      '+CHAR(10); 
+																				 
+	IF ( @V_FROM_CITY   IS NOT NULL AND @V_FROM_CITY    != '')			SET @MDQRY2 =@MDQRY2 + ' 					AND  D.FRO"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT","7775185","5","M_CITY		IN ('+ @V_FROM_CITY   +')		'+CHAR(10); 
+	IF ( @V_TO_CITY     IS NOT NULL AND @V_TO_CITY    != '')			SET @MDQRY2 =@MDQRY2 + ' 					AND  D.TO_CITY			IN ('+ @V_TO_CITY   +')			'+CHAR(10); 
+	SET @MDQRY2 = @MDQRY2 + '			) AS DATA ' + CHAR(10);	
+	SET @MDQRY2 = @MDQRY2 + '			) ' + CHAR(10);	
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- TABLE 0 : MAIN
+-------------------------------------------------------------------------------------------------------------------------------		
+SET @MDQRY3 = @MDQRY3 + '
+SELECT * 
+FROM
+(
+SELECT 
+		     LD.DIVISION_ID
+			,LD.DIVISION_ID AS DIVISIONID
+			,LD.FROM_SITE
+			,LD.TO_SITE
+			,LD.POL_AREA
+			,LD.POD_AREA
+			,LD.D_PORT_CODE 
+			,LD.A_PORT_CODE
+			,LD.FROM_CITY
+			,LD.TO_CITY
+			,LD.TRANSPORT_MODE
+			,LD.BOD_ID
+			,LD.ROUTE_ID
+			,LD.SSP_INCOTERMS
+			,COUNT(LD.SHIPMENT_NO) AS SHIPMENTCOUNT
+
+			,AVG(LD.NDR1 + LD.NDR2) AS NDR12
+			,AVG(LD.NDR3) AS NDR3
+			,AVG(LD.NDR4 + LD.NDR5) AS NDR45
+
+			,AVG(LD.DR1 + LD.DR2) AS DR12
+			,AVG(LD.DR3) AS DR3
+			,AVG(LD.DR4 + LD.DR5) AS DR45
+
+			,AVG(CONVERT(DECIMAL,LD.TTL1)+CONVERT(DECIMAL,LD.TTL2)) AS TTL12_AVG
+			,MAX(CONVERT(DECIMAL,LD.TTL1))+MAX(CONVERT(DECIMAL,LD.TTL2)) AS TTL12_MAX
+			,MIN(CONVERT(DECIMAL,LD.TTL1))+MIN(CONVERT(DECIMAL,LD.TTL2)) AS TTL12_MIN
+
+			,AVG(CONVERT(DECIMAL,LD.TTL3)) AS TTL3_AVG
+			,MAX(CONVERT(DECIMAL,LD.TTL3)) AS TTL3_MAX
+			,MIN(CONVERT(DECIMAL,LD.TTL3)) AS TTL3_MIN
+
+			,AVG(CONVERT(DECIMAL,LD.TTL4)+CONVERT(DECIMAL,LD.TTL5)) AS TTL45_AVG
+			,MAX(CONVERT(DECIMAL,LD.TTL4)+CONVERT(DECIMAL,LD.TTL5)) AS TTL45_MAX
+			,MIN(CONVERT(DECIMAL,LD.TTL4)+CONVERT(DECIMAL,LD.TTL5)) AS TTL45_MIN
+
+			,AVG(CONVERT(DECIMAL,LD.TTL)) AS TTL_AVG
+			,MAX(CONVERT(DECIMAL,LD.TTL)) AS TTL_MAX
+			,MIN(CONVERT(DECIMAL,LD.TTL)) AS TTL_MIN
+
+		,LD.Y_YEAR			
+
+		FROM LD
+
+		GROUP BY 
+		   LD.DIVISION_ID
+		  ,LD.FROM_SITE
+		  ,LD.TO_SITE
+		  ,LD.POL_AREA
+		  ,LD.POD_AREA
+		  ,LD.D_PORT_CODE
+		  ,LD.A_PORT_CODE
+		  ,LD.FROM_CITY
+		  ,LD.TO_CITY
+		  ,LD.TRANSPORT_MODE
+		  ,LD.BOD_ID
+		  ,LD.ROUTE_ID
+		  ,LD.SSP_INCOTERMS	
+		  ,LD.Y_YEAR					
+
+	) AS LD2	
+
+	PIVOT( MIN(DIVISION_ID) FOR Y_YEAR IN ( '+ @P_PIVOT_YYYYMM +' )  ) AS PP
+ORDER BY BOD_ID
+'
+
+	
+				DECLARE @POS INT =1;
+				SET @POS =1;
+				DECLARE @LEN INT =LEN(@MDQRY1 + @MDQRY2 + @MDQRY3);
+				WHILE @POS <= @LEN
+				BEGIN
+					PRINT SUBSTRING(@MDQRY1 + @MDQRY2 + @MDQRY3,@POS,4000);
+					SET @POS = @POS+4000;
+				END;
+	
+
+
+--SET @MDQRY3 = @MDQRY3 + '	ORDER BY DIVISIONID,FROM_SITE,TO_SITE,D_PORT_CODE,A_PORT_CODE,FROM_CITY,TO_CITY,TRANSPORT_MODE,SSP_INCOTERMS,BOD_ID
+EXEC (@MDQRY1 + @MDQRY2 + @MDQRY3);
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- TABLE 1 : SHIPMENTCOUNT, CONTAINER_COUNT
+-------------------------------------------------------------------------------------------------------------------------------		
+DECLARE @MDQRY5 NVARCHAR(MAX) = ''
+
+SET @MDQRY5 = @MDQRY5 + '     SELECT 
+									 LD.BOD_ID
+									,COUNT(DISTINCT LD.SHIPMENT_NO) AS SHIPMENTCOUNT
+									,COUNT(DISTINCT T.CONTAINER_NO) AS CONTAINER_COUNT
+									,LD.COMPANY_ID
+									,LD.ROUTE_ID
+								FROM LD
+							LEFT JOIN SCM_DNM_DELIVERY_TRACKING T ON LD.COMPANY_ID = T.COMPANY_ID AND LD.SHIPMENT_NO = T.SHIPMENT_NO
+							GROUP BY 
+							   LD.COMPANY_ID
+							  ,LD.DIVISION_ID
+							  ,LD.FROM_SITE
+							  ,LD.TO_SITE
+							  ,LD.POL_AREA
+							  ,LD.POD_AREA
+							  ,LD.D_PORT_CODE
+							  ,LD.A_PORT_CODE
+							  ,LD.FROM_CITY
+							  ,LD.TO_CITY
+							  ,LD.TRANSPORT_MODE
+							  ,LD.BOD_ID
+							  ,LD.ROUTE_ID
+							  ,LD.SSP_INCOTERMS			
+					  ORDER BY LD.BOD_ID'
+
+EXEC (@MDQRY1 + @MDQRY2 + @MDQRY5);
+
+
+-----------------------------------------------------------------------------------------------------------------"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT","7775185","6","--------------
+-- TABLE 2 : CI 80
+-------------------------------------------------------------------------------------------------------------------------------		
+EXEC (@MDQRY1 + @MDQRY2 + ' 
+
+, W_DATA AS
+(
+	SELECT BOD_ID
+	, Y_YEAR
+	, AVG(CONVERT(NUMERIC(13,6), TTL) )  AS AVG
+	, AVG(CONVERT(NUMERIC(13,6), TTL1))  AS AVG1
+	, AVG(CONVERT(NUMERIC(13,6), TTL2))  AS AVG2
+	, AVG(CONVERT(NUMERIC(13,6), TTL3))  AS AVG3
+	, AVG(CONVERT(NUMERIC(13,6), TTL4))  AS AVG4
+	, AVG(CONVERT(NUMERIC(13,6), TTL5))  AS AVG5
+
+	, CONVERT(NUMERIC(13,6), STDEV(CONVERT(INTEGER, TTL) ))  AS TTL_STDEV 
+	, CONVERT(NUMERIC(13,6), STDEV(CONVERT(INTEGER, TTL1)))  AS TTL1_STDEV
+	, CONVERT(NUMERIC(13,6), STDEV(CONVERT(INTEGER, TTL2)))  AS TTL2_STDEV
+	, CONVERT(NUMERIC(13,6), STDEV(CONVERT(INTEGER, TTL3)))  AS TTL3_STDEV
+	, CONVERT(NUMERIC(13,6), STDEV(CONVERT(INTEGER, TTL4)))  AS TTL4_STDEV
+	, CONVERT(NUMERIC(13,6), STDEV(CONVERT(INTEGER, TTL5)))  AS TTL5_STDEV
+				
+	, COUNT(TTL )    AS TTL_CNT
+	, COUNT(TTL1)    AS TTL1_CNT
+	, COUNT(TTL2)    AS TTL2_CNT
+	, COUNT(TTL3)    AS TTL3_CNT
+	, COUNT(TTL4)    AS TTL4_CNT
+	, COUNT(TTL5)    AS TTL5_CNT
+
+	FROM LD
+	GROUP BY BOD_ID, Y_YEAR
+)
+
+	SELECT BOD_ID
+		  ,Y_YEAR
+		  ,AVG
+		  ,AVG1 + AVG2 AS AVG12
+		  ,AVG3
+		  ,AVG4 + AVG5 AS AVG45
+
+		  , TTL_STDEV 
+		  , TTL1_STDEV + TTL2_STDEV AS  TTL12_STDEV
+		  , TTL3_STDEV
+		  , TTL4_STDEV + TTL5_STDEV AS TTL45_STDEV
+		  
+		  , TTL_CNT
+		  , TTL1_CNT + TTL2_CNT AS TTL12_CNT
+		  , TTL3_CNT
+		  , TTL4_CNT + TTL5_CNT AS TTL45_CNT
+
+		, TCI_TTL
+		, TCI_TTL1 + TCI_TTL2 AS TCI_TTL12
+		, TCI_TTL3
+		, TCI_TTL4 + TCI_TTL5 AS TCI_TTL45
+
+		  ,CASE WHEN CI_TTL_DOWN  IS NULL THEN '''' ELSE CONCAT(CI_TTL_DOWN , '' ~ '', CI_TTL_UP ) END AS CI_TTL
+		  ,CASE WHEN CI_TTL1_DOWN IS NULL THEN '''' ELSE CONCAT(CI_TTL1_DOWN, '' ~ '', CI_TTL2_UP) END AS CI_TTL12
+		  ,CASE WHEN CI_TTL3_DOWN IS NULL THEN '''' ELSE CONCAT(CI_TTL3_DOWN, '' ~ '', CI_TTL3_UP) END AS CI_TTL3
+		  ,CASE WHEN CI_TTL4_DOWN IS NULL THEN '''' ELSE CONCAT(CI_TTL4_DOWN, '' ~ '', CI_TTL5_UP) END AS CI_TTL45
+
+
+FROM
+(
+	SELECT BOD_ID
+		  ,Y_YEAR
+		  ,AVG
+		  ,AVG1
+		  ,AVG2
+		  ,AVG3
+		  ,AVG4
+		  ,AVG5
+
+		  , TTL_STDEV 
+		  , TTL1_STDEV
+		  , TTL2_STDEV
+		  , TTL3_STDEV
+		  , TTL4_STDEV
+		  , TTL5_STDEV
+		  
+		  , TTL_CNT
+		  , TTL1_CNT
+		  , TTL2_CNT
+		  , TTL3_CNT
+		  , TTL4_CNT
+		  , TTL5_CNT
+
+		  ,CONVERT(INTEGER, CEILING(AVG + TCI_TTL )) AS CI_TTL_UP
+		  ,CONVERT(INTEGER, CEILING(AVG1 + TCI_TTL1)) AS CI_TTL1_UP
+		  ,CONVERT(INTEGER, CEILING(AVG2 + TCI_TTL2)) AS CI_TTL2_UP
+		  ,CONVERT(INTEGER, CEILING(AVG3 + TCI_TTL3)) AS CI_TTL3_UP
+		  ,CONVERT(INTEGER, CEILING(AVG4 + TCI_TTL4)) AS CI_TTL4_UP
+		  ,CONVERT(INTEGER, CEILING(AVG5 + TCI_TTL5)) AS CI_TTL5_UP
+													 
+		  ,CONVERT(INTEGER, ROUND(AVG - TCI_TTL , 0, 1)) AS CI_TTL_DOWN
+		  ,CONVERT(INTEGER, ROUND(AVG1 - TCI_TTL1, 0, 1)) AS CI_TTL1_DOWN
+		  ,CONVERT(INTEGER, ROUND(AVG2 - TCI_TTL2, 0, 1)) AS CI_TTL2_DOWN
+		  ,CONVERT(INTEGER, ROUND(AVG3 - TCI_TTL3, 0, 1)) AS CI_TTL3_DOWN
+		  ,CONVERT(INTEGER, ROUND(AVG4 - TCI_TTL4, 0, 1)) AS CI_TTL4_DOWN
+		  ,CONVERT(INTEGER, ROUND(AVG5 - TCI_TTL5, 0, 1)) AS CI_TTL5_DOWN
+
+			  , TCI_TTL
+			  , TCI_TTL1
+			  , TCI_TTL2
+			  , TCI_TTL3
+			  , TCI_TTL4
+			  , TCI_TTL5
+
+	FROM
+	(
+		SELECT 	*
+			  , CONVERT(NUMERIC(13,6) ,DBO.FN_GET_SCP_CONFIDENCE(0.2, TTL_STDEV , TTL_CNT) ) AS TCI_TTL
+			  , CONVERT(NUMERIC(13,6) ,DBO.FN_GET_SCP_CONFIDENCE(0.2, TTL1_STDEV, TTL1_CNT)) AS TCI_TTL1
+			  , CONVERT(NUMERIC(13,6) ,DBO.FN_GET_SCP_CONFIDENCE(0.2, TTL2_STDEV, TTL2_CNT)) AS TCI_TTL2
+			  , CONVERT(NUMERIC(13,6) ,DBO.FN_GET_SCP_CONFIDENCE(0.2, TTL3_STDEV, TTL3_CNT)) AS TCI_TTL3
+			  , CONVERT(NUMERIC(13,6) ,DBO.FN_GET_SCP_CONFIDENCE(0.2, TTL4_STDEV, TTL4_CNT)) AS TCI_TTL4
+			  , CONVERT(NUMERIC(13,6) ,DBO.FN_GET_SCP_CONFIDENCE(0.2, TTL5_STDEV, TTL5_CNT)) AS TCI_TTL5
+
+		FROM W_DATA
+
+	)  DATA2
+) DATA3
+ORDER BY BOD_ID, Y_YEAR
+');
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT","7775185","7","-------------------------------------------------------------------------------------------------------------------------------
+-- TABLE 3 : 검증 
+-------------------------------------------------------------------------------------------------------------------------------	
+EXEC (@MDQRY1 + @MDQRY2 + ' 
+
+SELECT BOD_ID
+      ,Y_YEAR
+	  , TTL1
+	  , TTL2
+	  , TTL3
+	  , TTL4
+	  , TTL5
+	  , TTL
+FROM LD
+WHERE BOD_ID = ''10163''
+ORDER BY BOD_ID, Y_YEAR
+');
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","1","
+
+/*
+ * Program ID   : SSP0028_GET_DELIVERY_TRACKING_LT_DETAIL Copy => SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL
+ * Description  : Delivery Tracking LT
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/09/13   PARKTAEHAK		PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 신규추가
+ * 2023-08-09   vadabi3         PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 BOD Validation Report) UI 개선 
+ * 2023/08/23   vadabi3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 개발DB 이슈로 백업본으로 복구
+ * 2023/09/04   vadabi3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 Detail 항목 추가
+ * 2023/09/05   vadabi3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 TTL Total
+ * 2023/09/05   vadabi3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 NDR
+ * 2023/09/05   vadabi3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 GAB
+ * 2023/09/06   vadabi3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 ETD
+ * 2023/09/11   vadabi3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 TTL5
+ * 2023/10/16   vadabi3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 GAP / TRK / TTL INCOTERMS 개선
+ * 2023/10/27   vadabi3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 ZLANDATA
+ * 2023/10/27   vadabi3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 POL_ATD_DATE
+ * 2023/11/02   vadabi3		    PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 Inland ATD
+ * 2024/11/29   jahn1502		TTL1 ~ TTL5 => TTL12, TTL3, TTL45 로 변경 및 TTL12 계산로직 변경
+ * 2025/02/03   mrchois			PJ20249346 LGES SCP 개선과제 이행 - TTL45 계산로직 변경
+
+------------------------------------------------------------------------------------------------------
+ EXEC SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL
+ @p_division_id='40'
+ , @p_from_yyyymmdd='20210907'
+ , @p_to_yyyymmdd='20231007'
+ , @p_from_site='G182-A'
+ , @p_to_site='JMBS_PL_GWC'
+ , @p_bod_id='2683'
+ , @p_route_id ='3503'
+ , @p_exfactory_from_yyyymmdd=''
+ , @p_exfactory_to_yyyymmdd=''
+ , @p_fdest_from_yyyymmdd=''
+ , @p_fdest_to_yyyymmdd=''
+ , @p_from_country=''
+ , @p_to_country=''
+ , @p_from_city='CNNKG'
+ , @p_to_city='PLGIL'
+ , @p_from_area=''
+ , @p_to_area=''
+
+*/
+
+CREATE PROCEDURE [dbo].[SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL]
+
+    @p_division_id      NVARCHAR(10),
+	@p_from_yyyymmdd  NVARCHAR(8),
+    @p_to_yyyymmdd    NVARCHAR(8),	
+	@p_from_site      NVARCHAR(MAX),
+	@p_to_site      NVARCHAR(MAX),
+	@p_bod_id      NVARCHAR(MAX),
+	@p_route_id      NVARCHAR(MAX),
+	@p_exfactory_from_yyyymmdd  NVARCHAR(8),
+    @p_exfactory_to_yyyymmdd    NVARCHAR(8),
+    @p_fdest_from_yyyymmdd  NVARCHAR(8),
+    @p_fdest_to_yyyymmdd    NVARCHAR(8),
+
+	@p_from_country NVARCHAR(MAX),
+	@p_to_country NVARCHAR(MAX),
+	@p_from_city NVARCHAR(MAX),
+	@p_to_city NVARCHAR(MAX),
+	@p_from_area NVARCHAR(MAX),
+	@p_to_area NVARCHAR(MAX)
+AS
+BEGIN
+
+  SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE @mDQry1 NVARCHAR(MAX)='';
+	DECLARE @mDQry2 NVARCHAR(MAX)='';
+
+	DECLARE  @v_from_country NVARCHAR(MAX)='';
+	DECLARE  @v_to_country NVARCHAR(MAX)='';	
+	DECLARE  @v_from_city NVARCHAR(MAX)='';
+	DECLARE  @v_to_city NVARCHAR(MAX)='';	
+
+	SET @v_from_country = [dbo].FN_GET_IN_STR(@p_from_country);
+	SET @v_to_country = [dbo].FN_GET_IN_STR(@p_to_country);	
+	SET @v_from_city = [dbo].FN_GET_IN_STR(@p_from_city);
+	SET @v_to_city = [dbo].FN_GET_IN_STR(@p_to_city);	
+
+	SET @mDqry1 = @mDQry1 + ' SELECT INFO.DIVISION_ID ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.SHIPMENT_NO ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.CNTR_NO ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.BOD_ID ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.ROUTE_ID ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.FROM_SITE ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.TO_SITE ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.FROM_CITY ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.TO"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","2","_CITY ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.POL_PORT ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.POD_PORT ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.F_DEST_CODE ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.INCOTERMS ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.CARRIER ' + char(10);
+	--SET @mDqry1 = @mDQry1 + ' 	 , INFO.INLAND_ATD ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.POL_ATA ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.POL_ATD ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.POD_ATA ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.POD_ATD ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.VMI_ATA ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.VMI_ATD ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.F_DEST_ATA ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.CONFIRM_ID ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.NDR1 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.NDR2 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.NDR3 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.NDR4 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.NDR5 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP1 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP2 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP3 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP4 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP5 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.TTL12 ' + char(10);
+	--SET @mDqry1 = @mDQry1 + ' 	 , INFO.TTL1 + INFO.TTL2 AS TTL12 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.TTL3 ' + char(10);
+	--SET @mDqry1 = @mDQry1 + ' 	 , INFO.TTL4 + INFO.TTL5 AS TTL45 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.TTL45 ' + char(10);	-- TTL45 계산로직 변경 추가 (2025-02-03 mrchois)
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.TTL ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.DR1 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.DR2 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.DR3 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.DR4 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.DR5 ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.DRTTL ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.TTL_INCOTERMS ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.DRTTL_INCOTERMS ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.NDR_INCOTERMS ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.POL_AREA ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.POD_AREA  ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.EXFACTORY  ' + char(10);
+	--SET @mDqry1 = @mDQry1 + ' 	 , INFO.EXFACTORY AS INLAND_ATD ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.PLANT_ISSUE AS INLAND_ATD ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.POL_ETA      ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.POD_ETA   ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.VMI_ETA   ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.F_DEST_ETA   ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.POL_ETD       ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.POD_ETD   ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.VMI_ETD   ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP1_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP2_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP3_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP4_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP5_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP_INCOTERMS ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.GAP_NDR_INCOTERMS ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.INCOTERMS_SSP ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	 , INFO.TRANSPORT_MODE ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' FROM ( ' + char(10);
+	SET @mDqry1 = @mDQry1 + ' SELECT LIST.*' + char(10);
+	--------"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","3","--------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + ', CASE WHEN TRANSPORT_MODE = ''TRK'' ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       THEN TTL - DRTTL ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ELSE GAP1+GAP2+GAP3+GAP4+GAP5 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       END AS GAP ' + char(10);
+	----------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '      , TTL1 - NDR1 						AS GAP1_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + '      , TTL2 - NDR2 						AS GAP2_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + '      , TTL3 - NDR3 						AS GAP3_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + '      , TTL4 - NDR4 						AS GAP4_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + '      , TTL5 - NDR5 						AS GAP5_NDR ' + char(10);
+	SET @mDqry1 = @mDQry1 + '      , TTL -  NDR                         AS GAP_NDR  ' + char(10);
+
+
+	-- GAP INCOTERMS ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    SET @mDqry1 = @mDQry1 + ' , CASE  WHEN INCOTERMS = ''A01''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z01''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z04''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''EXW''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FCA''  AND  GAP1 IS NULL  THEN NULL 																																	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FAS''  AND  GAP1 IS NULL  THEN NULL 																																	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FOB''  AND (GAP1 IS NULL OR GAP2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CFR''  AND (GAP1 IS NULL OR GAP2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CIF''  AND (GAP1 IS NULL OR GAP2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CIP''  AND (GAP1 IS NULL OR GAP2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CPT''  AND (GAP1 IS NULL OR GAP2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z02''  AND (GAP1 IS NULL OR GAP2 IS NULL OR GAP3 IS NULL OR GAP4 IS NULL OR GAP5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DAT''  AND (GAP1 IS NULL OR GAP2 IS NULL OR GAP3 IS NULL OR GAP4 IS NULL OR GAP5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DAP''  AND (GAP1 IS NULL OR GAP2 IS NULL OR GAP3 IS NULL OR GAP4 IS NULL OR GAP5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DDP''  AND (GAP1 IS NULL OR GAP2 IS NULL OR GAP3 IS NULL OR GAP4 IS NULL OR GAP5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DDU''  AND (GAP1 IS NULL OR GAP2 IS NULL OR GAP3 IS NULL OR GAP4 IS NULL OR GAP5 IS NULL )   THEN NULL 																 ' + char(10);
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FCA''  THEN CONVERT(INT, GAP1)																																		 ' + char(10);
+	SET @mDqry1 = @mDQr"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","4","y1 + '		  WHEN INCOTERMS = ''FAS''  THEN CONVERT(INT, GAP1)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FOB''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CFR''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CIF''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CIP''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CPT''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z02''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0) + ISNULL(CONVERT(INT,GAP3),0) + ISNULL(CONVERT(INT, GAP4),0) + ISNULL(CONVERT(INT, GAP5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DAT''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0) + ISNULL(CONVERT(INT,GAP3),0) + ISNULL(CONVERT(INT, GAP4),0) + ISNULL(CONVERT(INT, GAP5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DAP''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0) + ISNULL(CONVERT(INT,GAP3),0) + ISNULL(CONVERT(INT, GAP4),0) + ISNULL(CONVERT(INT, GAP5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DDP''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0) + ISNULL(CONVERT(INT,GAP3),0) + ISNULL(CONVERT(INT, GAP4),0) + ISNULL(CONVERT(INT, GAP5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DDU''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0) + ISNULL(CONVERT(INT,GAP3),0) + ISNULL(CONVERT(INT, GAP4),0) + ISNULL(CONVERT(INT, GAP5),0) 	 ' + char(10);
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  AND INCOTERMS = ''EXW''  THEN 0																															    ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  AND (GAP1 IS NULL AND GAP2 IS NULL AND GAP3 IS NULL AND GAP4 IS NULL AND GAP5 IS NULL ) THEN NULL																	' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  THEN ISNULL(CONVERT(INT, GAP1),0) + ISNULL(CONVERT(INT,GAP2),0) + ISNULL(CONVERT(INT,GAP3),0) + ISNULL(CONVERT(INT, GAP4),0) + ISNULL(CONVERT(INT, GAP5),0)	' + char(10);
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '		  WHEN (GAP1 IS NULL OR GAP2 IS NULL OR GAP3 IS NULL OR GAP4 IS NULL OR GAP5 IS NULL ) THEN NULL	' + char(10);
+	SET @mDqry1 = @mDQry1 + '         ELSE 0		' + char(10);
+	SET @mDqry1 = @mDQry1 + '        END AS GAP_INCOTERMS	 ' + char(10); -- LOOKUP INCOTERMS : 20230905																																					 
+		
+		
+	-- GAP NDR INCOTERMS ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + ' , CASE  WHEN INCOTERMS = ''A01''  THEN 0																																						 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z01''  THEN 0																																						 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z04''  THEN 0			"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","5","																																			 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''EXW''  THEN 0																																						 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FCA''  AND  TTL1 IS NULL OR NDR1 IS NULL  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FAS''  AND  TTL1 IS NULL OR NDR1 IS NULL  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FOB''  AND (TTL1 IS NULL OR TTL2 IS NULL 
+	                                                              OR NDR1 IS NULL OR NDR2 IS NULL) THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CFR''  AND (TTL1 IS NULL OR TTL2 IS NULL 
+	                                                              OR NDR1 IS NULL OR NDR2 IS NULL) THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CIF''  AND (TTL1 IS NULL OR TTL2 IS NULL 
+	                                                              OR NDR1 IS NULL OR NDR2 IS NULL) THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CIP''  AND (TTL1 IS NULL OR TTL2 IS NULL 
+	                                                              OR NDR1 IS NULL OR NDR2 IS NULL) THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CPT''  AND (TTL1 IS NULL OR TTL2 IS NULL 
+	                                                              OR NDR1 IS NULL OR NDR2 IS NULL) THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z02''  AND (TTL1 IS NULL OR TTL2 IS NULL OR TTL3 IS NULL OR TTL4 IS NULL OR TTL5 IS NULL 
+																 OR  NDR1 IS NULL OR NDR2 IS NULL OR NDR3 IS NULL OR NDR4 IS NULL OR NDR5 IS NULL )   THEN NULL 			 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DAT''  AND (TTL1 IS NULL OR TTL2 IS NULL OR TTL3 IS NULL OR TTL4 IS NULL OR TTL5 IS NULL 
+																 OR  NDR1 IS NULL OR NDR2 IS NULL OR NDR3 IS NULL OR NDR4 IS NULL OR NDR5 IS NULL )   THEN NULL 			 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DAP''  AND (TTL1 IS NULL OR TTL2 IS NULL OR TTL3 IS NULL OR TTL4 IS NULL OR TTL5 IS NULL 
+																 OR  NDR1 IS NULL OR NDR2 IS NULL OR NDR3 IS NULL OR NDR4 IS NULL OR NDR5 IS NULL )   THEN NULL 			 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DDP''  AND (TTL1 IS NULL OR TTL2 IS NULL OR TTL3 IS NULL OR TTL4 IS NULL OR TTL5 IS NULL 
+																 OR  NDR1 IS NULL OR NDR2 IS NULL OR NDR3 IS NULL OR NDR4 IS NULL OR NDR5 IS NULL )   THEN NULL 			 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DDU''  AND (TTL1 IS NULL OR TTL2 IS NULL OR TTL3 IS NULL OR TTL4 IS NULL OR TTL5 IS NULL 
+																 OR  NDR1 IS NULL OR NDR2 IS NULL OR NDR3 IS NULL OR NDR4 IS NULL OR NDR5 IS NULL )   THEN NULL 			 ' + char(10);
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FCA''  THEN CONVERT(INT, TTL1 - NDR1)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FAS''  THEN CONVERT(INT, TTL1 - NDR1)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''FOB''  THEN ISNULL(CONVERT(INT, TTL1 - NDR1),0) + ISNULL(CONVERT(INT,TTL2 - NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CFR''  THEN ISNULL(CONVERT(INT, TTL1 - NDR1),0) + ISNULL(CONVERT(INT,TTL2 - NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CIF''  THEN ISNULL(CONVERT(INT, TTL1 - NDR1),0) + ISNULL(CONVERT(INT,TT"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","6","L2 - NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CIP''  THEN ISNULL(CONVERT(INT, TTL1 - NDR1),0) + ISNULL(CONVERT(INT,TTL2 - NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''CPT''  THEN ISNULL(CONVERT(INT, TTL1 - NDR1),0) + ISNULL(CONVERT(INT,TTL2 - NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''Z02''  THEN ISNULL(CONVERT(INT, TTL1 - NDR1),0) + ISNULL(CONVERT(INT,TTL2 - NDR2),0) + ISNULL(CONVERT(INT,TTL3 - NDR3),0) + ISNULL(CONVERT(INT, TTL4 - NDR4),0) + ISNULL(CONVERT(INT, TTL5 - NDR5),0)  ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DAT''  THEN ISNULL(CONVERT(INT, TTL1 - NDR1),0) + ISNULL(CONVERT(INT,TTL2 - NDR2),0) + ISNULL(CONVERT(INT,TTL3 - NDR3),0) + ISNULL(CONVERT(INT, TTL4 - NDR4),0) + ISNULL(CONVERT(INT, TTL5 - NDR5),0)  ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DAP''  THEN ISNULL(CONVERT(INT, TTL1 - NDR1),0) + ISNULL(CONVERT(INT,TTL2 - NDR2),0) + ISNULL(CONVERT(INT,TTL3 - NDR3),0) + ISNULL(CONVERT(INT, TTL4 - NDR4),0) + ISNULL(CONVERT(INT, TTL5 - NDR5),0)  ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DDP''  THEN ISNULL(CONVERT(INT, TTL1 - NDR1),0) + ISNULL(CONVERT(INT,TTL2 - NDR2),0) + ISNULL(CONVERT(INT,TTL3 - NDR3),0) + ISNULL(CONVERT(INT, TTL4 - NDR4),0) + ISNULL(CONVERT(INT, TTL5 - NDR5),0)  ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN INCOTERMS = ''DDU''  THEN ISNULL(CONVERT(INT, TTL1 - NDR1),0) + ISNULL(CONVERT(INT,TTL2 - NDR2),0) + ISNULL(CONVERT(INT,TTL3 - NDR3),0) + ISNULL(CONVERT(INT, TTL4 - NDR4),0) + ISNULL(CONVERT(INT, TTL5 - NDR5),0)  ' + char(10);
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  AND INCOTERMS = ''EXW''  THEN 0																															    ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  AND (    TTL1 IS NULL 
+	                                                                      AND TTL2 IS NULL
+																		  AND TTL3 IS NULL 
+																		  AND TTL4 IS NULL 
+																		  AND TTL5 IS NULL 
+																		  AND NDR1 IS NULL 
+	                                                                      AND NDR2 IS NULL 
+																		  AND NDR3 IS NULL 
+																		  AND NDR4 IS NULL 
+																		  AND NDR5 IS NULL 
+																		  ) THEN NULL							' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  THEN ISNULL(CONVERT(INT, TTL1 - NDR1),0) 
+																		+ ISNULL(CONVERT(INT, TTL2 - NDR2),0) 
+																		+ ISNULL(CONVERT(INT, TTL3 - NDR3),0) 
+																		+ ISNULL(CONVERT(INT, TTL4 - NDR4),0) 
+																		+ ISNULL(CONVERT(INT, TTL5 - NDR5),0)	' + char(10);
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '		  WHEN  (TTL1 IS NULL OR TTL2 IS NULL OR TTL3 IS NULL OR TTL4 IS NULL OR TTL5 IS NULL 
+										OR   NDR1 IS NULL OR NDR2 IS NULL OR NDR3 IS NULL OR NDR4 IS NULL OR NDR5 IS NULL )   THEN NULL 			 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         ELSE 0		' + char(10);
+	SET @mDqry1 = @mDQry1 + '        END AS GAP_NDR_INCOTERMS	 ' + char(10); -- LOOKUP INCOTERMS : 20230905	
+
+	--SET @mDqry1 = @mDQry1 + '       ,INCOTERMS_SSP ' + char(10);
+	--SET @mDqry1 = @mDQry1 + '       ,TRANSPORT_MODE ' + char(10);	
+	SET @mDqry1 = @mDqry1 + '  FROM ( ' + char(10);
+	----------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @m"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","7","DQry1 + ' SELECT DIVISION_ID ' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,DATA.COMPANY_ID' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,DATA.SHIPMENT_NO' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,CNTR_NO' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,BOD_ID' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,ROUTE_ID' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,FROM_SITE' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TO_SITE' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,FROM_CITY' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TO_CITY' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DATA.POL AS POL_PORT' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DATA.POD AS POD_PORT' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DATA.F_DEST_PORT_CODE AS F_DEST_CODE' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DATA.INCOTERMS' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DATA.CARRIER' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,INLAND_ATD ' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,POL_ATA ' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,POL_ATD' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,POD_ATA' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,POD_ATD' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,VMI_ATA  ---허부 ATA ?  ' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,VMI_ATD ---허부 ATD ?' + char(10);
+    SET @mDqry1 = @mDQry1 + '       ,F_DEST_ATA' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,confirm_id' + char(10);
+	-- NDR1 ---------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '       , NDR1	     ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       , NDR2		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       , NDR3		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       , NDR4		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       , NDR5		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       , NDR		 ' + char(10);
+	-- GAP ---------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '	,CONVERT(INT,CASE WHEN ISDATE(INLAND_ATD)=1 AND ISDATE(POL_ATA) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, INLAND_ATD,POL_ATA)) ELSE NULL END)  - DR1		AS GAP1   ' + char(10);--GAP1 Column 추가(덕원)	-- INT형으로 자료형 변환(덕원)
+	SET @mDqry1 = @mDQry1 + '	,CONVERT(INT,CASE WHEN ISDATE(POL_ATA) = 1  AND ISDATE(POL_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, POL_ATA,   POL_ATD)) ELSE NULL END)  - DR2		AS GAP2	  ' + char(10);--GAP2 Column 추가(덕원) -- INT형으로 자료형 변환(덕원)
+	SET @mDqry1 = @mDQry1 + '	,CONVERT(INT,CASE WHEN ISDATE(POL_ATD) = 1  AND ISDATE(POD_ATA) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, POL_ATD,   POD_ATA)) ELSE NULL END)  - DR3		AS GAP3   ' + char(10);--GAP3 Column 추가(덕원) -- INT형으로 자료형 변환(덕원)
+	SET @mDqry1 = @mDQry1 + '	,CONVERT(INT,CASE WHEN ISDATE(POD_ATA) = 1  AND ISDATE(POD_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, POD_ATA,   POD_ATD)) ELSE NULL END)  - DR4		AS GAP4   ' + char(10);--GAP4 Column 추가(덕원) -- INT형으로 자료형 변환(덕원)
+	SET @mDqry1 = @mDQry1 + '	,CONVERT(INT,																																					  ' + char(10)
+    SET @mDqry1 = @mDQry1 + '	    CASE 																																						  ' + char(10)
+	SET @mDqry1 = @mDQry1 + '		WHEN VMI_YN = ''Y'' AND ISDATE(F_DEST_ATA) = 1 AND ISDATE(POD_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,POD_ATD,F_DEST_ATA))								  ' + char(10)
+	SET @mDqry1 = @mDQry1 + '		WHEN VMI_YN = ''Y'' AND ISDATE(VMI_ATA)    = 1 AND ISDATE(POD_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,POD_ATD,VMI_ATA))									  ' + char(10)
+	SET @mDqry1 = @mDQry1 + '		WHEN VMI_YN = ''N'' AND ISDATE(F_DEST_ATA) = 1 AND ISDATE(POD_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,POD_ATD,F_DEST_ATA))								  ' + char(10)
+	SET @mDqry1 = @mDQry1 + '		ELSE NULL 																																					  ' + char(10)
+	SET @mDqry1 = @mDQry1 + '		END) - DR5																																			 AS GAP5	  ' + char(10) -- GAP5 재정의 : TTL5 로직 재정의와 연계(덕원)
+    -- TTL ------------------------------------------"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","8","---------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '       ,TTL1' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TTL2' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TTL12' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TTL3' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TTL4' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TTL5' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TTL45' + char(10);	-- TTL45 계산로직 변경 추가 (2025-02-03 mrchois)
+	/*SET @mDqry1 = @mDQry1 + ' , CASE  WHEN TRANSPORT_MODE = ''TRK''  
+									   AND DATA.INCOTERMS = ''EXW''  	
+									  THEN 0     ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  
+	                                   AND TTL1 IS NULL 
+									   AND TTL2 IS NULL 
+									   AND TTL3 IS NULL 
+									   AND TTL4 IS NULL 
+									   AND TTL5 IS NULL 
+									  THEN NULL  ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK'' THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TTL1 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL2 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL3 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL4 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL5 IS NULL THEN NULL' + char(10);	
+	SET @mDqry1 = @mDQry1 + '         ELSE ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	' + char(10);
+	SET @mDqry1 = @mDQry1 + '         END AS TTL	 ' + char(10);*/	  -- 20230901	
+	SET @mDqry1 = @mDQry1 + ' 	    ,CASE WHEN F_DEST_ATA IS NOT NULL AND F_DEST_ATA <> '''' THEN CONVERT(nvarchar, DATEDIFF(DD,INLAND_ATD,F_DEST_ATA)) ELSE 0 END AS TTL ' + char(10); --변경 F_DEST_ATA - PI 오형선선임 2024.12
+    -- DR ---------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '       ,DR1' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DR2' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DR3' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DR4' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DR5' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0)	AS DRTTL									' + char(10);
+	
+
+	-- TTL INCOTERMS ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '  ,CASE  WHEN DATA.INCOTERMS = ''A01''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z01''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z04''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''EXW''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FCA''  AND  TTL1 IS NULL  THEN NULL 																																	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FAS''  AND  TTL1 IS NULL  THEN NULL 																																	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FOB''  AND (TTL1 IS NULL OR TTL2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CFR''  AND (TTL1 IS NULL OR TTL2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIF''  AND (TTL1 IS NULL O"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","9","R TTL2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIP''  AND (TTL1 IS NULL OR TTL2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CPT''  AND (TTL1 IS NULL OR TTL2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z02''  AND (TTL1 IS NULL OR TTL2 IS NULL OR TTL3 IS NULL OR TTL4 IS NULL OR TTL5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAT''  AND (TTL1 IS NULL OR TTL2 IS NULL OR TTL3 IS NULL OR TTL4 IS NULL OR TTL5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAP''  AND (TTL1 IS NULL OR TTL2 IS NULL OR TTL3 IS NULL OR TTL4 IS NULL OR TTL5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDP''  AND (TTL1 IS NULL OR TTL2 IS NULL OR TTL3 IS NULL OR TTL4 IS NULL OR TTL5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDU''  AND (TTL1 IS NULL OR TTL2 IS NULL OR TTL3 IS NULL OR TTL4 IS NULL OR TTL5 IS NULL )   THEN NULL 																 ' + char(10);
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FCA''  THEN CONVERT(INT, TTL1)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FAS''  THEN CONVERT(INT, TTL1)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FOB''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CFR''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIF''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIP''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CPT''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z02''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAT''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAP''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDP''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDU''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	 ' + char(10);
+	------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","10","---------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  AND DATA.INCOTERMS = ''EXW''  THEN 0																															' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  AND (TTL1 IS NULL AND TTL2 IS NULL AND TTL3 IS NULL AND TTL4 IS NULL AND TTL5 IS NULL ) THEN NULL																	' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0)	' + char(10);
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '		  WHEN (TTL1 IS NULL OR TTL2 IS NULL OR TTL3 IS NULL OR TTL4 IS NULL OR TTL5 IS NULL ) THEN NULL	' + char(10);
+	SET @mDqry1 = @mDQry1 + '         ELSE 0		' + char(10);
+	SET @mDqry1 = @mDQry1 + '        END AS TTL_INCOTERMS	 ' + char(10); -- LOOKUP INCOTERMS : 20230905
+	
+		
+
+
+	-- DRTTL INCOTERMS ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + ', CASE   WHEN DATA.INCOTERMS = ''A01''  THEN 0																																						 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z01''  THEN 0																																						 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z04''  THEN 0																																						 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''EXW''  THEN 0																																						 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FCA''  AND  DR1 IS NULL  THEN NULL 																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FAS''  AND  DR1 IS NULL  THEN NULL 																																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FOB''  AND (DR1 IS NULL OR DR2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CFR''  AND (DR1 IS NULL OR DR2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIF''  AND (DR1 IS NULL OR DR2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIP''  AND (DR1 IS NULL OR DR2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CPT''  AND (DR1 IS NULL OR DR2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z02''  AND (DR1 IS NULL OR DR2 IS NULL OR DR3 IS NULL OR DR4 IS NULL OR DR5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAT''  AND (DR1 IS NULL OR DR2 IS NULL OR DR3 IS NULL OR DR4 IS NULL OR DR5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAP''  AND (DR1 IS NULL OR DR2 IS NULL OR DR3 IS NULL OR DR4 IS NULL OR DR5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDP''  AND (DR1 IS NULL OR DR2 IS NULL OR DR3 IS NULL OR DR4 IS NULL OR DR5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDU''  AND (DR1 IS NULL OR DR2 IS NULL OR DR3 IS NULL OR DR4 IS NULL OR DR5 IS NULL )   THEN NULL 																 ' + char(10);
+	--------------------------------------------------------------------------------------------------------------------------------------"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","11","-------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FCA''  THEN CONVERT(INT, DR1)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FAS''  THEN CONVERT(INT, DR1)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FOB''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CFR''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIF''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIP''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CPT''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z02''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAT''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAP''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDP''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDU''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0) 	 ' + char(10);
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  AND DATA.INCOTERMS = ''EXW''  THEN 0																														 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  AND (DR1 IS NULL AND DR2 IS NULL AND DR3 IS NULL AND DR4 IS NULL AND DR5 IS NULL ) THEN NULL																	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  THEN ISNULL(CONVERT(INT, DR1),0) + ISNULL(CONVERT(INT,DR2),0) + ISNULL(CONVERT(INT,DR3),0) + ISNULL(CONVERT(INT, DR4),0) + ISNULL(CONVERT(INT, DR5),0)		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN (DR1 IS NULL OR DR2 IS NULL OR DR3 IS NULL OR DR4 IS NULL OR DR5 IS NULL ) THEN NULL	' + char(10);
+	SET @mDqry1 = @mDQry1 + '         ELSE 0		' + char(10);
+	SET @mDqry1 = @mDQry1 + '        END AS DRTTL_INCOTERMS	 ' + char(10); -- LOOKUP INCOTERMS : 20230905
+
+
+
+
+	-- NDR INCOTERMS ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + ' , CASE  WHEN DATA.INCOTERMS = ''A01''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z01''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z04''  THEN 0"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","12","																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''EXW''  THEN 0																																							 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FCA''  AND  NDR1 IS NULL  THEN NULL 																																	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FAS''  AND  NDR1 IS NULL  THEN NULL 																																	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FOB''  AND (NDR1 IS NULL OR NDR2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CFR''  AND (NDR1 IS NULL OR NDR2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIF''  AND (NDR1 IS NULL OR NDR2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIP''  AND (NDR1 IS NULL OR NDR2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CPT''  AND (NDR1 IS NULL OR NDR2 IS NULL )  THEN NULL 																												 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z02''  AND (NDR1 IS NULL OR NDR2 IS NULL OR NDR3 IS NULL OR NDR4 IS NULL OR NDR5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAT''  AND (NDR1 IS NULL OR NDR2 IS NULL OR NDR3 IS NULL OR NDR4 IS NULL OR NDR5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAP''  AND (NDR1 IS NULL OR NDR2 IS NULL OR NDR3 IS NULL OR NDR4 IS NULL OR NDR5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDP''  AND (NDR1 IS NULL OR NDR2 IS NULL OR NDR3 IS NULL OR NDR4 IS NULL OR NDR5 IS NULL )   THEN NULL 																 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDU''  AND (NDR1 IS NULL OR NDR2 IS NULL OR NDR3 IS NULL OR NDR4 IS NULL OR NDR5 IS NULL )   THEN NULL 																 ' + char(10);
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FCA''  THEN CONVERT(INT, NDR1)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FAS''  THEN CONVERT(INT, NDR1)																																		 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''FOB''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CFR''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIF''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CIP''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''CPT''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0)																								 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''Z02''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0) + ISNULL(CONVERT(INT,NDR3),0) + ISNULL(CONVERT(INT, NDR4),0) + ISNULL(CONVERT(INT, NDR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DAT''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0) + ISNULL(CONVERT(INT,NDR3),0) + ISNULL(CONVERT(INT, NDR4),0) + ISNULL(CONVERT(INT, NDR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCO"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","13","TERMS = ''DAP''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0) + ISNULL(CONVERT(INT,NDR3),0) + ISNULL(CONVERT(INT, NDR4),0) + ISNULL(CONVERT(INT, NDR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDP''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0) + ISNULL(CONVERT(INT,NDR3),0) + ISNULL(CONVERT(INT, NDR4),0) + ISNULL(CONVERT(INT, NDR5),0) 	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '		  WHEN DATA.INCOTERMS = ''DDU''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0) + ISNULL(CONVERT(INT,NDR3),0) + ISNULL(CONVERT(INT, NDR4),0) + ISNULL(CONVERT(INT, NDR5),0) 	 ' + char(10);
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  AND DATA.INCOTERMS = ''EXW''  THEN 0																															' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  AND (NDR1 IS NULL AND NDR2 IS NULL AND NDR3 IS NULL AND NDR4 IS NULL AND NDR5 IS NULL ) THEN NULL																' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TRANSPORT_MODE = ''TRK''  THEN ISNULL(CONVERT(INT, NDR1),0) + ISNULL(CONVERT(INT,NDR2),0) + ISNULL(CONVERT(INT,NDR3),0) + ISNULL(CONVERT(INT, NDR4),0) + ISNULL(CONVERT(INT, NDR5),0)	' + char(10);
+    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '		  WHEN (NDR1 IS NULL OR NDR2 IS NULL OR NDR3 IS NULL OR NDR4 IS NULL OR NDR5 IS NULL ) THEN NULL	' + char(10);
+	SET @mDqry1 = @mDQry1 + '         ELSE 0		' + char(10);
+	SET @mDqry1 = @mDQry1 + '        END AS NDR_INCOTERMS	 ' + char(10); -- LOOKUP INCOTERMS : 20230905
+
+    -- POL_AREA ---------------------------------------------------------------------------------------------	
+	SET @mDqry1 = @mDQry1 + '       ,POL_AREA' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,POD_AREA' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,SUBSTRING(EXFACTORY_DATE,0,9) AS EXFACTORY' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,SUBSTRING(PLANT_ISSUE_DATE,0,9) AS PLANT_ISSUE' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ------------------------------------------------------------------------------' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.ZLANDETA     AS POL_ETA     ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.POD_ETA_DATE AS POD_ETA ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.ZFCY2ETA	 AS VMI_ETA ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.F_DEST_ETA_DATE AS F_DEST_ETA ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ------------------------------------------------------------------------------' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.ZLANDETD		AS POL_ETD     ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.POD_ETD_DATE	AS POD_ETD ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,DT.ZFCY2ETD	    AS VMI_ETD ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,INCOTERMS_SSP ' + char(10);
+	SET @mDqry1 = @mDQry1 + '       ,TRANSPORT_MODE ' + char(10);	
+    -- ---------------------------------------------------------------------------------------------	
+    SET @mDqry1 = @mDQry1 + '   FROM (' + char(10);
+    SET @mDqry1 = @mDQry1 + '        SELECT E.DIVISION_ID   ' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.COMPANY_ID ' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.SHIPMENT_NO ' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,T.CONTAINER_NO AS CNTR_NO' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,B.BOD_ID' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,B.route_id' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,B.from_site'"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","14"," + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,B.to_site' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,D.FROM_CITY' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,D.TO_CITY' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,T.POL ' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,T.POD ' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,T.F_DEST_PORT_CODE' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,B.INCOTERMS AS INCOTERMS' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,B.attribute1 AS INCOTERMS_SSP' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,T.CARRIER' + char(10);
+	--SET @mDqry1 = @mDQry1 + '              ,T.ZLANDATD AS INLAND_ATD ' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,PLANT_ISSUE_DATE AS INLAND_ATD ' + char(10);	-- BOD Detail 쪽에 [Inland ATD] 필드값을 [PI Date] 로 수정요청 (2025-01-21 mrchois)
+    SET @mDqry1 = @mDQry1 + '              ,T.ZLANDATA AS POL_ATA ' + char(10);		-- ATTRIBUTE3 -> ZLANDATA
+    SET @mDqry1 = @mDQry1 + '              ,T.POL_ATD_DATE AS POL_ATD' + char(10);  -- POL_ATD_DATE -> ZLANDATD -> POL_ATD_DATE
+    SET @mDqry1 = @mDQry1 + '              ,T.POD_ATA_DATE AS POD_ATA' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,T.POD_ATD_DATE AS POD_ATD' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,ISNULL(T.ZFCY2ATA, '''')    AS VMI_ATA  ' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,ISNULL(T.ZFCY2ATD, '''')    AS VMI_ATD' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,T.F_DEST_ATA_DATE AS F_DEST_ATA' + char(10);
+	-----------------------------------------------------------------------------------------------
+	SET @mDqry1 = @mDQry1 + '			    , D.LT_DEPARTURE_INLAND		AS NDR1	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			    , D.LT_WAIT_SHIPPING		AS NDR2	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			    , D.LT_VOYAGE				AS NDR3	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			    , D.LT_LAY_OFF_CLEARANCE	AS NDR4	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			    , D.LT_ARRIVAL_INLAND		AS NDR5	 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			    ,  D.LT_DEPARTURE_INLAND			 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			     + D.LT_WAIT_SHIPPING				 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			     + D.LT_VOYAGE						 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			     + D.LT_LAY_OFF_CLEARANCE			 ' + char(10);
+	SET @mDqry1 = @mDQry1 + '			     + D.LT_ARRIVAL_INLAND		AS NDR	 ' + char(10);	
+	-----------------------------------------------------------------------------------------------
+    SET @mDqry1 = @mDQry1 + '              ,CASE WHEN ISDATE(T.ATTRIBUTE2)   = 1 AND ISDATE(T.ATTRIBUTE3)   = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.ATTRIBUTE2, T.ATTRIBUTE3))		ELSE NULL END AS TTL1' + char(10);	
+    SET @mDqry1 = @mDQry1 + '              ,CASE WHEN ISDATE(T.ATTRIBUTE3)   = 1 AND ISDATE(T.POL_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.ATTRIBUTE3, T.POL_ATD_DATE))		ELSE NULL END AS TTL2' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,CASE WHEN T.POL_ATD_DATE IS NOT NULL AND T.POL_ATD_DATE <> '''' THEN CONVERT(NVARCHAR, DATEDIFF(DD, EXFACTORY_DATE, T.POL_ATD_DATE))		ELSE NULL END AS TTL12' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,CASE WHEN ISDATE(T.POL_ATD_DATE) = 1 AND ISDATE(T.POD_ATA_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.POL_ATD_DATE, T.POD_ATA_DATE))	ELSE NULL END AS TTL3' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,CASE WHEN ISDATE(T.POD_ATA_DATE) = 1 AND ISDATE(T.POD_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.POD_ATA_DATE, T.POD_ATD_DATE))	ELSE NULL END AS TTL4' + char(10);
+    --SET @mDqry1 = @mDQry1 + '              ,CASE WHEN ISDATE(T.POD_ATD_DATE) = 1 AND IIF(S.VMI_YN = ''Y'', ISDATE(ISNULL(T.ZFCY2ATA, '''')), ISDATE(T.F_DEST_ATA_DATE))  = 1 ' + char(10);
+    --SET @mDqry1 = @mDQry1 + '                    THEN CONVERT(nvarchar, DATEDIFF(DD, T.POD_ATD_DATE, IIF(S.VMI_YN = ''Y'', ISNULL(T.ZFCY2ATA, ''''), T.F_DEST_ATA_DATE)))' + char(10);
+    "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","15","--SET @mDqry1 = @mDQry1 + '                    ELSE NULL END AS TTL5' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,CONVERT(INT,																																								' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              CASE 																																										' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              WHEN S.VMI_YN = ''Y'' AND ISDATE(T.F_DEST_ATA_DATE) = 1			AND ISDATE(T.POD_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,T.POD_ATD_DATE,T.F_DEST_ATA_DATE))		' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              WHEN S.VMI_YN = ''Y'' AND ISDATE(ISNULL(T.ZFCY2ATA, '''')) = 1	AND ISDATE(T.POD_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,T.POD_ATD_DATE,ISNULL(T.ZFCY2ATA, '''')))	' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              WHEN S.VMI_YN = ''N'' AND ISDATE(T.F_DEST_ATA_DATE) = 1			AND ISDATE(T.POD_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,T.POD_ATD_DATE,T.F_DEST_ATA_DATE))		' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              ELSE NULL 																																									' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              END																																											' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              ) AS TTL5																																									' + char(10);	  -- TTL5 재정의 : VMI_YN Y여도, F_DEST_ATA 값이 있으면 F_DEST_ATA - POD_ATD 값을 TTL5로 삼음
+	SET @mDqry1 = @mDQry1 + '              , CASE WHEN ISDATE(T.POD_ATA_DATE) = 1 AND ISDATE(T.F_DEST_ATA_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.POD_ATA_DATE, T.F_DEST_ATA_DATE))	ELSE NULL END AS TTL45		' + char(10);	  -- TTL45 계산로직 변경 추가 (2025-02-03 mrchois)
+
+
+    SET @mDqry1 = @mDQry1 + '              ,E.CONFIRM_ID' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,E.LT_DEPARTURE_INLAND		AS DR1   --기준L/T 1 (계획시점)' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.LT_WAIT_SHIPPING			AS DR2   --기준L/T 2 (계획시점)' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.LT_VOYAGE					AS DR3   --기준L/T 3 (계획시점)' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.LT_LAY_OFF_CLEARANCE		AS DR4   --기준L/T 4 (계획시점)' + char(10);
+    SET @mDqry1 = @mDQry1 + '              ,E.LT_ARRIVAL_INLAND			AS DR5   --기준L/T 5 (계획시점)' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,FR.ATTRIBUTE1				AS POL_AREA' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,TZ.ATTRIBUTE1				AS POD_AREA' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,EXFACTORY_DATE' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,PLANT_ISSUE_DATE' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,S.VMI_YN' + char(10);
+	SET @mDqry1 = @mDQry1 + '              ,D.TRANSPORT_MODE ' + char(10);
+    SET @mDqry1 = @mDqry1 + '          FROM (' + char(10);
+    SET @mDqry1 = @mDqry1 + '               SELECT CN.DIVISION_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,CN.FROM_SITE_COMPANY_ID AS COMPANY_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,EX.SHIPMENT_NO' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,CN.CONFIRM_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,CN.BOD_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,CN.ITEM_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,EX.EXFACTORY_DATE' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,EX.PLANT_ISSUE_DATE' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,RT.LT_DEPARTURE_INLAND' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,RT.LT_WAIT_SHIPPING' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,RT.LT_VOYAGE' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,RT.LT_LAY_OFF_CLEARANCE' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ,RT.LT_ARRIVAL_INLAND' + char(10);
+    SET @mDqry1 = @mDqry1 + '          FROM (' + char(10);
+    SET @mDqry1 = @mDqry1 + '               SELECT X.ATTRIBUTE3 AS SHIPMENT_NO' + char(10);
+    SET @mDqry1 = @mDqry1 + '                     ,MAX(X.CONFIRM_ID) AS CONFIRM_ID ' + char(10);-------------
+    SET @mDqry"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","16","1 = @mDqry1 + '                     ,MAX(SYSTEM_EXFACTORY_DATE) AS EXFACTORY_DATE' + char(10);
+    SET @mDqry1 = @mDqry1 + '                     ,MAX(PLANT_ISSUE_DATE) AS PLANT_ISSUE_DATE' + char(10);
+    SET @mDqry1 = @mDqry1 + '                 FROM SCM_DNM_EXFACTORY_RESULT AS X WITH(NOLOCK)' + char(10);
+    SET @mDqry1 = @mDqry1 + '                      JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L WITH(NOLOCK)' + char(10);
+    SET @mDqry1 = @mDqry1 + '                   ON L.LOOKUP_TYPE = ''ERP_SSP_TYPE'' -- LOOKUP에 등록된 공정만 ' + char(10);
+    SET @mDqry1 = @mDqry1 + '                  AND L.VALID_YN = ''Y'' ' + char(10);
+    SET @mDqry1 = @mDqry1 + '                  AND X.VALID_YN = ''Y'' ' + char(10);
+    SET @mDqry1 = @mDqry1 + '                  AND L.SEGMENT1    = X.SSP_TYPE' + char(10);
+    SET @mDqry1 = @mDqry1 + '                WHERE 1 = 1' + char(10);
+    SET @mDqry1 = @mDqry1 + '                  AND X.ATTRIBUTE3 IS NOT NULL' + char(10);
+    SET @mDqry1 = @mDqry1 + '                  AND X.DIVISION_ID = '''+@p_division_id+''' ' + char(10);
+
+	IF ( @p_from_yyyymmdd   IS NOT NULL AND @p_from_yyyymmdd    != '') SET @mDqry1 = @mDqry1 + ' AND X.SYSTEM_EXFACTORY_DATE BETWEEN '''+@p_from_yyyymmdd+'''  AND '''+@p_to_yyyymmdd+'''   '+char(10);     
+
+	IF ( @p_exfactory_from_yyyymmdd   IS NOT NULL AND @p_exfactory_from_yyyymmdd   != '') SET @mDqry1 = @mDqry1 + ' AND X.SYSTEM_EXFACTORY_DATE BETWEEN '''+@p_exfactory_from_yyyymmdd+'''  AND '''+@p_exfactory_to_yyyymmdd+'''  '+char(10); 
+
+    SET @mDqry1 = @mDqry1 + '                  AND X.EXFACTORY_STATUS NOT IN (''D10'',''D90'')' + char(10);
+    SET @mDqry1 = @mDqry1 + '                  AND X.CONFIRM_ID LIKE ''C%'' ' + char(10);
+    SET @mDqry1 = @mDqry1 + '                GROUP BY X.ATTRIBUTE3' + char(10);
+    SET @mDqry1 = @mDqry1 + '              ) AS EX' + char(10);
+    SET @mDqry1 = @mDqry1 + '              JOIN SSP_ANL_SHIP_CONFIRM AS CN  WITH(NOLOCK)' + char(10);
+    SET @mDqry1 = @mDqry1 + '           ON EX.CONFIRM_ID = CN.CONFIRM_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '              JOIN SSP_ANL_SHIP_CONFIRM_ROUTE AS RT WITH(NOLOCK)' + char(10);
+    SET @mDqry1 = @mDqry1 + '           ON CN.CONFIRM_ID = RT.CONFIRM_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '     ) AS E' + char(10);
+    SET @mDqry1 = @mDqry1 + '      JOIN SCP_MST_BOD AS B ' + char(10);
+    SET @mDqry1 = @mDqry1 + '   ON E.BOD_ID = B.BOD_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '     JOIN SCM_MST_SITE AS S' + char(10);
+    SET @mDqry1 = @mDqry1 + '   ON B.division_id = S.DIVISION_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '   AND B.to_site = S.SCM_SITE_ID' + char(10);
+	SET @mDqry1 = @mDqry1 + '       JOIN SCP_MST_DISTRIBUTION_ROUTE AS D with(nolock) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '    ON B.ROUTE_ID = D.ROUTE_ID' + char(10);
+	SET @mDqry1 = @mDqry1 + '      JOIN [dbo].[SCM_DNM_DELIVERY_TRACKING] AS T with(nolock)' + char(10);
+	SET @mDqry1 = @mDqry1 + '   ON E.COMPANY_ID = T.COMPANY_ID' + char(10);
+    SET @mDqry1 = @mDqry1 + '   AND E.SHIPMENT_NO = T.SHIPMENT_NO' + char(10);
+    SET @mDqry1 = @mDqry1 + ' 	  LEFT OUTER JOIN dbo.SCM_MST_PORT AS FR' + char(10);
+    SET @mDqry1 = @mDqry1 + '    ON D.D_COUNTRY = FR.COUNTRY' + char(10);
+    SET @mDqry1 = @mDqry1 + '   AND D.D_PORT_CODE  = FR.PORT_CODE' + char(10);
+    SET @mDqry1 = @mDqry1 + '       LEFT OUTER JOIN dbo.SCM_MST_PORT AS TZ' + char(10);
+    SET @mDqry1 = @mDqry1 + '    ON D.A_COUNTRY = TZ.COUNTRY' + char(10);
+    SET @mDqry1 = @mDqry1 + '   AND D.A_PORT_CODE  = TZ.PORT_CODE' + char(10);
+    SET @mDqry1 = @mDqry1 + '  WHERE 1=1' + char(10);
+
+	IF ( @p_from_site   IS NOT NULL AND @p_from_site    != '') SET @mDqry1 = @mDqry1 + ' 					AND  B.FROM_SITE =  '''+@p_from_site+'''   '+char(10); 
+	IF ( @p_to_site   IS NOT NULL AND @p_to_site    != '') SET @mDqry1 = @mDqry1 + ' 					AND  B.TO_SITE =  '''+@p_to_site+'''   '+char(10); 
+
+	IF ( @p_bod_id   IS NOT NULL AND @p_bod_id    != '') SET @mDqry1 = @mDq"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_DETAIL","23775242","17","ry1 + ' 					AND  B.BOD_ID =  '''+@p_bod_id+'''   '+char(10); 			
+
+	IF ( @p_route_id   IS NOT NULL AND @p_route_id    != '') SET @mDqry1 = @mDqry1 + ' 					AND B.ROUTE_ID = '''+@p_route_id+'''   '+char(10); 
+
+	IF ( @p_fdest_from_yyyymmdd   IS NOT NULL AND @p_fdest_from_yyyymmdd   != '') SET @mDqry1 = @mDqry1 + ' AND T.F_DEST_ATA_DATE BETWEEN '''+@p_fdest_from_yyyymmdd+'''  AND '''+@p_fdest_to_yyyymmdd+'''  '+char(10); 
+
+	IF ( @v_from_country   IS NOT NULL AND @v_from_country    != '') SET @mDqry1 = @mDqry1  + ' 					AND  D.FROM_COUNTRY     IN ('+ @v_from_country   +')    '+char(10); 
+	IF ( @v_to_country     IS NOT NULL AND @v_to_country    != '')	 SET @mDqry1 = @mDqry1  + ' 					AND  D.TO_COUNTRY		 IN ('+ @v_to_country   +')      '+char(10); 
+																		 
+	IF ( @v_from_city   IS NOT NULL AND @v_from_city    != '')		 SET @mDqry1 = @mDqry1  + ' 					AND  D.FROM_CITY     IN ('+ @v_from_city   +')    '+char(10); 
+	IF ( @v_to_city     IS NOT NULL AND @v_to_city    != '')		 SET @mDqry1 = @mDqry1  + ' 					AND  D.TO_CITY		 IN ('+ @v_to_city   +')      '+char(10); 
+																		
+	IF ( @p_from_area   IS NOT NULL AND @p_from_area    != '')		 SET @mDqry1 = @mDqry1  + ' 					AND  FR.ATTRIBUTE1 =N'''+@p_from_area+'''   '+char(10); 
+	IF ( @p_to_area     IS NOT NULL AND @p_to_area    != '')		 SET @mDqry1 = @mDqry1  + ' 					AND  TZ.ATTRIBUTE1	=N'''+@p_to_area+'''    '+char(10); 
+		
+    SET @mDqry1 = @mDqry1 + '   ) AS DATA' + char(10);
+
+	SET @mDqry1 = @mDqry1 + ' LEFT JOIN SCM_DNM_DELIVERY_TRACKING DT ON DT.CONTAINER_NO = DATA.CNTR_NO    ' + char(10);
+	SET @mDqry1 = @mDqry1 + ' 									   AND DT.SHIPMENT_NO = DATA.SHIPMENT_NO  ' + char(10);
+	SET @mDqry1 = @mDqry1 + ' 									   AND DT.COMPANY_ID = DATA.COMPANY_ID    ' + char(10);
+    SET @mDqry1 = @mDqry1 + ') AS LIST ' + char(10);
+    SET @mDqry1 = @mDqry1 + ') AS INFO ' + char(10);
+    SET @mDqry1 = @mDqry1 + '  ORDER BY INFO.SHIPMENT_NO, INFO.CNTR_NO ' + char(10); 
+
+
+				DECLARE @POS INT =1;
+				SET @POS =1;
+				DECLARE @LEN INT =LEN(@mDqry1);
+				WHILE @POS <= @LEN
+				BEGIN
+					PRINT SUBSTRING(@mDqry1,@POS,4000);
+					SET @POS = @POS+4000;
+				END;
+
+	EXEC (@mDQry1);
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0918","1140303222","2","X.ATTRIBUTE3 AS SHIPMENT_NO 																	
+					,MAX(X.CONFIRM_ID) AS CONFIRM_ID  																
+					,MAX(SYSTEM_EXFACTORY_DATE) AS EXFACTORY_DATE 													
+				FROM SCM_DNM_EXFACTORY_RESULT AS X WITH(NOLOCK) 													
+				JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L WITH(NOLOCK) 													
+				ON L.LOOKUP_TYPE = 'ERP_SSP_TYPE' -- LOOKUP에 등록된 공정만  									
+				AND L.VALID_YN = 'Y' 																			
+				AND X.VALID_YN = 'Y' 																			
+				AND L.SEGMENT1    = X.SSP_TYPE 																	
+			WHERE 1 = 1 																						
+				AND X.ATTRIBUTE3 IS NOT NULL 																		
+				AND X.DIVISION_ID = '' +@p_division_id + ''                   --@DIVISION						
+				AND X.SYSTEM_EXFACTORY_DATE BETWEEN '' +@p_from_yyyymmdd + ''   AND '' +@p_to_yyyymmdd + '' 
+				AND X.EXFACTORY_STATUS NOT IN ('D10','D90') 													
+				AND X.CONFIRM_ID LIKE 'C%' 																		
+			GROUP BY X.ATTRIBUTE3 																					 																										
+			) AS EX 																								
+		JOIN SSP_ANL_SHIP_CONFIRM AS CN  WITH(NOLOCK) 															
+		ON EX.CONFIRM_ID = CN.CONFIRM_ID 																		
+		JOIN SSP_ANL_SHIP_CONFIRM_ROUTE AS RT WITH(NOLOCK) 														
+		ON CN.CONFIRM_ID = RT.CONFIRM_ID 	
+		
+		
+			
+					
+			
+-------------------------------------------------------------------------------------------------------------------------------
+-- WITH LD
+-------------------------------------------------------------------------------------------------------------------------------	
+	SET @mDqry1 = @mDQry1 + ' WITH LD AS (																																					' + char(10);
+
+
+
+	-- TTL 추가
+	SET @mDqry1 = @mDQry1 + 'SELECT DATA.*		' + char(10);
+	SET @mDqry1 = @mDQry1 + ' , CASE  WHEN TRANSPORT_MODE = ''TRK'' THEN ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) ' + char(10);
+	SET @mDqry1 = @mDQry1 + '         WHEN TTL1 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL2 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL3 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL4 IS NULL THEN NULL' + char(10);
+	SET @mDqry1 = @mDQry1 + ' 	      WHEN TTL5 IS NULL THEN NULL' + char(10);	
+	SET @mDqry1 = @mDQry1 + '         ELSE ISNULL(CONVERT(INT, TTL1),0) + ISNULL(CONVERT(INT,TTL2),0) + ISNULL(CONVERT(INT,TTL3),0) + ISNULL(CONVERT(INT, TTL4),0) + ISNULL(CONVERT(INT, TTL5),0) 	' + char(10);
+	SET @mDqry1 = @mDQry1 + '         END AS TTL	 ' + char(10);	  -- 20230901																																																				
+	SET @mDqry1 = @mDQry1 + ' FROM (		' + char(10);
+	
+	
+	SET @mDqry1 = @mDQry1 + '			SELECT E.DIVISION_ID 																																' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.COMPANY_ID  																																' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,B.FROM_SITE 																																	' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,B.TO_SITE 																																	' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.SHIPMENT_NO 																																' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.D_PORT_CODE  																																' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.A_PORT_CODE  																																' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.FROM_CITY 																																	' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.TO_CITY 																																	' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.TRANSPORT_MODE			 																													' + char(10);		
+	SET @mDqry1 = @mDqry1 + '				  ,substring(E.EXFACTORY_DATE,0,7) as Y_YEAR -- ,E.EXFACTORY_DATE																				' + char(10);	
+	SET @mDqry1 = @mDqry1 + '				  ,E.EXFACTORY_DATE																																 ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,B.BOD_ID  ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,B.ROUTE_ID  ' + char("
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0918","1140303222","3","10);
+	SET @mDqry1 = @mDqry1 + '			      --,B.INCOTERMS  ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,B.ATTRIBUTE1 AS SSP_INCOTERMS ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.CARRIER  ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,S.VMI_YN ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.INLAND_ATD ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.POL_ATA ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.POL_ATD ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.POD_ATA ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.POD_ATD ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.VMI_ATA ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.VMI_ATD ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,T.F_DEST_ATA ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.LT_DEPARTURE_INLAND	AS NDR1  --기준L/T 1 (조회시점)   --기준L/T(현재시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.LT_WAIT_SHIPPING		AS NDR2  --기준L/T 2 (조회시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.LT_VOYAGE				AS NDR3  --기준L/T 3 (조회시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.LT_LAY_OFF_CLEARANCE	AS NDR4  --기준L/T 4 (조회시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,D.LT_ARRIVAL_INLAND		AS NDR5  --기준L/T 5 (조회시점)     ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,E.LT_DEPARTURE_INLAND	AS DR1   --기준L/T 1 (계획시점)   --기준L/T(과거계획평균) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,E.LT_WAIT_SHIPPING		AS DR2   --기준L/T 2 (계획시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,E.LT_VOYAGE				AS DR3   --기준L/T 3 (계획시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,E.LT_LAY_OFF_CLEARANCE	AS DR4   --기준L/T 4 (계획시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,E.LT_ARRIVAL_INLAND		AS DR5   --기준L/T 5 (계획시점) ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,CASE WHEN ISDATE(T.INLAND_ATD) = 1	AND ISDATE(T.POL_ATA) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.INLAND_ATD, T.POL_ATA)) ELSE NULL END AS TTL1 ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,CASE WHEN ISDATE(T.POL_ATA) = 1		AND ISDATE(T.POL_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.POL_ATA, T.POL_ATD))	ELSE NULL END AS TTL2 ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,CASE WHEN ISDATE(T.POL_ATD) = 1		AND ISDATE(T.POD_ATA) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.POL_ATD, T.POD_ATA))	ELSE NULL END AS TTL3 ' + char(10);
+	SET @mDqry1 = @mDqry1 + '				  ,CASE WHEN ISDATE(T.POD_ATA) = 1		AND ISDATE(T.POD_ATD) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD, T.POD_ATA, T.POD_ATD))	ELSE NULL END AS TTL4 ' + char(10);
+	--SET @mDqry1 = @mDqry1 + '				  ,CASE WHEN ISDATE(T.POD_ATD) = 1		AND IIF(S.VMI_YN = ''Y'', ISDATE(T.VMI_ATA), ISDATE(T.F_DEST_ATA))  = 1		' + char(10);
+	--SET @mDqry1 = @mDqry1 + '						THEN CONVERT(nvarchar, DATEDIFF(DD, T.POD_ATD, IIF(S.VMI_YN = ''Y'', T.VMI_ATA, T.F_DEST_ATA)))				' + char(10);
+	--SET @mDqry1 = @mDqry1 + '						ELSE NULL END AS TTL5																						' + char(10);
+    SET @mDqry1 = @mDQry1 + '             , CASE 																																										' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              WHEN S.VMI_YN = ''Y'' AND ISDATE(TX.F_DEST_ATA_DATE) = 1			AND ISDATE(TX.POD_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,TX.POD_ATD_DATE,TX.F_DEST_ATA_DATE))		' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              WHEN S.VMI_YN = ''Y'' AND ISDATE(ISNULL(TX.ZFCY2ATA, '''')) = 1	AND ISDATE(TX.POD_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,TX.POD_ATD_DATE,ISNULL(TX.ZFCY2ATA, '''')))	' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              WHEN S.VMI_YN = ''N'' AND ISDATE(TX.F_DEST_ATA_DATE) = 1			AND ISDATE(TX.POD_ATD_DATE) = 1 THEN CONVERT(nvarchar, DATEDIFF(DD,TX.POD_ATD_DATE,TX.F_DEST_ATA_DATE))		' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              ELSE NULL 																																									' + char(10);	
+	SET @mDqry1 = @mDQry1 + '              END	AS TTL5																																									' + char(10);	  -- TTL5 재정의 : VMI_YN Y여도, F_DEST_ATA 값이 있으면 F_DEST_ATA - POD_ATD 값을 TTL5로 삼음
+	SET @mDqry1 = @mDqry1 + '				  ,E.CONFIRM_ID 														"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0918","1140303222","4","											' + char(10);
+
+	SET @mDqry1 = @mDqry1 + '				  ,FR.ATTRIBUTE1 AS POL_AREA 																						' + char(10);-----------------------------
+	SET @mDqry1 = @mDqry1 + '				  ,TZ.ATTRIBUTE1 AS POD_AREA  																						' + char(10);----------------------------
+	SET @mDqry1 = @mDqry1 + '				  ,TX.CONTAINER_NO																						            ' + char(10);----------------------------
+
+	SET @mDqry1 = @mDqry1 + '			  FROM SSP_DNM_DELIVERY_TRACKING_V AS T 																				' + char(10);
+	SET @mDqry1 = @mDqry1 + '				   JOIN #TMP_CONFIRM  AS E 																							' + char(10);
+
+	SET @mDqry2 = @mDqry2 + '				ON T.COMPANY_ID = E.COMPANY_ID ' + char(10);
+	SET @mDqry2 = @mDqry2 + '			   AND T.SHIPMENT_NO = E.SHIPMENT_NO ' + char(10);
+	SET @mDqry2 = @mDqry2 + '			  JOIN SCP_MST_BOD AS B  ' + char(10);
+	SET @mDqry2 = @mDqry2 + '				ON E.BOD_ID = B.BOD_ID ' + char(10);
+	SET @mDqry2 = @mDqry2 + '			  JOIN SCM_MST_SITE AS S ' + char(10);
+	SET @mDqry2 = @mDqry2 + '				ON B.division_id = S.DIVISION_ID ' + char(10);
+	SET @mDqry2 = @mDqry2 + '			   AND B.to_site = S.SCM_SITE_ID ' + char(10);
+	SET @mDqry2 = @mDqry2 + '			  JOIN SCP_MST_DISTRIBUTION_ROUTE AS D ' + char(10);
+	SET @mDqry2 = @mDqry2 + '				ON B.ROUTE_ID = D.ROUTE_ID ' + char(10);
+	SET @mDqry2 = @mDqry2 + '  LEFT OUTER JOIN dbo.SCM_MST_PORT AS FR ' + char(10);
+  --SET @mDqry = @mDQry + '				ON D.FROM_COUNTRY = FR.COUNTRY' + char(10);-------------------------------
+	SET @mDqry2 = @mDqry2 + '				ON D.D_COUNTRY = FR.COUNTRY' + char(10);-------------------------------
+	SET @mDqry2 = @mDqry2 + '			   AND D.D_PORT_CODE  = FR.PORT_CODE' + char(10);
+	SET @mDqry2 = @mDqry2 + '  LEFT OUTER JOIN dbo.SCM_MST_PORT AS TZ ----권역정보' + char(10);
+  --SET @mDqry = @mDQry + '				ON D.FROM_COUNTRY = TZ.COUNTRY ' + char(10);------------------------------
+	SET @mDqry2 = @mDqry2 + '				ON D.A_COUNTRY=TZ.COUNTRY '+ char(10);------------------------------
+	SET @mDqry2 = @mDqry2 + '			   AND D.A_PORT_CODE  = TZ.PORT_CODE ' + char(10);
+	
+	SET @mDqry2 = @mDqry2 + '   LEFT JOIN [dbo].[SCM_DNM_DELIVERY_TRACKING] AS TX with(nolock)' + char(10);
+	SET @mDqry2 = @mDqry2 + '   ON T.COMPANY_ID = TX.COMPANY_ID' + char(10);
+    SET @mDqry2 = @mDqry2 + '   AND T.SHIPMENT_NO = TX.SHIPMENT_NO' + char(10);
+	
+	
+	
+	SET @mDqry2 = @mDqry2 + '			 WHERE 1 = 1 ' + char(10);		
+	
+		
+	
+	IF ( @v_from_site   IS NOT NULL AND @v_from_site    != '')			SET @mDqry2 =@mDqry2 + ' 					AND  B.from_site		IN ('+ @v_from_site   +')		'+char(10); 
+	IF ( @v_to_site     IS NOT NULL AND @v_to_site    != '')			SET @mDqry2 =@mDqry2 + ' 					AND  B.to_site			IN ('+ @v_to_site   +')			'+char(10); 
+																				 
+	IF ( @p_from_area   IS NOT NULL AND @p_from_area    != '')			SET @mDqry2 =@mDqry2 + ' 					AND  FR.ATTRIBUTE1		=N'''+@p_from_area+'''			'+char(10); 
+	IF ( @p_to_area     IS NOT NULL AND @p_to_area    != '')			SET @mDqry2 =@mDqry2 + ' 					AND  TZ.ATTRIBUTE1		=N'''+@p_to_area+'''			'+char(10); 
+																				 
+	IF ( @v_from_country   IS NOT NULL AND @v_from_country    != '')	SET @mDqry2 =@mDqry2 + ' 					AND  D.FROM_COUNTRY     IN ('+ @v_from_country   +')    '+char(10); 
+	IF ( @v_to_country     IS NOT NULL AND @v_to_country    != '')		SET @mDqry2 =@mDqry2 + ' 					AND  D.TO_COUNTRY		IN ('+ @v_to_country   +')      '+char(10); 
+																				 
+	IF ( @v_from_city   IS NOT NULL AND @v_from_city    != '')			SET @mDqry2 =@mDqry2 + ' 					AND  D.FROM_CITY		IN ('+ @v_from_city   +')		'+char(10); 
+	IF ( @v_to_city     IS NOT NULL AND @v_to_city    != '')			SET @mDqry2 =@mDqry2 + ' 					AND  D.TO_CITY			IN ('+ @v_to_city   +')			'+char(10); 
+	SET @mDqry2 = @mDqry2 + '			) AS DATA ' + char(10);	
+	SET @mDqry2 = @mDqry2 + '			) ' + char(10);	
+-------------------------------------------------------------------------------------------------------------------------------
+-- LD group
+-----------------------------------------------------------------------------------------------"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0918","1140303222","5","--------------------------------	
+SET @mDqry3 = @mDqry3 + '
+select * 
+from
+(
+select 
+		     LD.DIVISION_ID
+			,LD.DIVISION_ID AS DIVISIONID
+			,LD.FROM_SITE
+			,LD.TO_SITE
+			,LD.POL_AREA
+			,LD.POD_AREA
+			,LD.D_PORT_CODE 
+			,LD.A_PORT_CODE
+			,LD.FROM_CITY
+			,LD.TO_CITY
+			,LD.TRANSPORT_MODE
+			,LD.BOD_ID
+			,LD.ROUTE_ID
+			,LD.SSP_INCOTERMS
+			,COUNT(LD.SHIPMENT_NO) AS SHIPMENTCOUNT
+
+			,AVG(LD.NDR1) AS NDR1
+			,AVG(LD.NDR2) AS NDR2
+			,AVG(LD.NDR3) AS NDR3
+			,AVG(LD.NDR4) AS NDR4
+			,AVG(LD.NDR5) AS NDR5
+
+			,AVG(LD.DR1) AS DR1
+			,AVG(LD.DR2) AS DR2
+			,AVG(LD.DR3) AS DR3
+			,AVG(LD.DR4) AS DR4
+			,AVG(LD.DR5) AS DR5
+
+			,AVG(convert(decimal,LD.TTL1)) AS TTL1_AVG
+			,MAX(convert(decimal,LD.TTL1)) AS TTL1_MAX
+			,MIN(convert(decimal,LD.TTL1)) AS TTL1_MIN
+		    --,STDEV(convert(decimal,LD.TTL1)) AS TTL1_STDEV
+		    --,STDEV(convert(decimal,LD.TTL1)) AS TTL1_AVG_CI_80
+
+			,AVG(convert(decimal,LD.TTL2)) AS TTL2_AVG
+			,MAX(convert(decimal,LD.TTL2)) AS TTL2_MAX
+			,MIN(convert(decimal,LD.TTL2)) AS TTL2_MIN
+		    --,STDEV(convert(decimal,LD.TTL2)) AS TTL2_STDEV
+		    --,STDEV(convert(decimal,LD.TTL2)) AS TTL2_AVG_CI_80
+
+			,AVG(convert(decimal,LD.TTL3)) AS TTL3_AVG
+			,MAX(convert(decimal,LD.TTL3)) AS TTL3_MAX
+			,MIN(convert(decimal,LD.TTL3)) AS TTL3_MIN
+		    --,STDEV(convert(decimal,LD.TTL3)) AS TTL3_STDEV
+		    --,STDEV(convert(decimal,LD.TTL3)) AS TTL3_AVG_CI_80
+
+			,AVG(convert(decimal,LD.TTL4)) AS TTL4_AVG
+			,MAX(convert(decimal,LD.TTL4)) AS TTL4_MAX
+			,MIN(convert(decimal,LD.TTL4)) AS TTL4_MIN
+		    --,STDEV(convert(decimal,LD.TTL4)) AS TTL4_STDEV
+		    --,STDEV(convert(decimal,LD.TTL4)) AS  TTL4_AVG_CI_80
+
+			,AVG(convert(decimal,LD.TTL5)) AS TTL5_AVG
+			,MAX(convert(decimal,LD.TTL5)) AS TTL5_MAX
+			,MIN(convert(decimal,LD.TTL5)) AS TTL5_MIN
+		    --,STDEV(convert(decimal,LD.TTL5)) AS TTL5_STDEV
+		    --,STDEV(convert(decimal,LD.TTL5)) AS TTL5_AVG_CI_80
+
+			,AVG(convert(decimal,LD.TTL)) AS TTL_AVG
+			,MAX(convert(decimal,LD.TTL)) AS TTL_MAX
+			,MIN(convert(decimal,LD.TTL)) AS TTL_MIN
+
+		,LD.Y_YEAR			
+
+		from LD
+
+		group by 
+		   LD.DIVISION_ID
+		  ,LD.FROM_SITE
+		  ,LD.TO_SITE
+		  ,LD.POL_AREA
+		  ,LD.POD_AREA
+		  ,LD.D_PORT_CODE
+		  ,LD.A_PORT_CODE
+		  ,LD.FROM_CITY
+		  ,LD.TO_CITY
+		  ,LD.TRANSPORT_MODE
+		  ,LD.BOD_ID
+		  ,LD.ROUTE_ID
+		  ,LD.SSP_INCOTERMS	
+		  ,LD.Y_YEAR					
+
+	) AS LD2	
+
+	pivot( MIN(DIVISION_ID) FOR Y_YEAR IN ( '+ @p_PIVOT_yyyymm +' )  ) AS PP
+order by BOD_ID
+'
+
+	
+				DECLARE @POS INT =1;
+				SET @POS =1;
+				DECLARE @LEN INT =LEN(@mDqry1 + @mDqry2 + @mDqry3);
+				WHILE @POS <= @LEN
+				BEGIN
+					PRINT SUBSTRING(@mDqry1 + @mDqry2 + @mDqry3,@POS,4000);
+					SET @POS = @POS+4000;
+				END;
+	
+
+
+--SET @mDqry3 = @mDqry3 + '	order by DIVISIONID,FROM_SITE,TO_SITE,D_PORT_CODE,A_PORT_CODE,FROM_CITY,TO_CITY,TRANSPORT_MODE,SSP_INCOTERMS,BOD_ID
+EXEC (@mDqry1 + @mDqry2 + @mDqry3);
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+-- LD) SHIPMENTCOUNT, CONTAINER_COUNT
+-------------------------------------------------------------------------------------------------------------------------------	
+DECLARE @mDqry5 NVARCHAR(MAX) = ''
+
+SET @mDqry5 = @mDqry5 + '     select 
+									 LD.BOD_ID
+									,COUNT(DISTINCT LD.SHIPMENT_NO) AS SHIPMENTCOUNT
+									,COUNT(DISTINCT T.CONTAINER_NO) AS CONTAINER_COUNT
+									,LD.COMPANY_ID
+									,LD.ROUTE_ID
+								from LD
+							LEFT JOIN SCM_DNM_DELIVERY_TRACKING T ON LD.COMPANY_ID = T.COMPANY_ID AND LD.SHIPMENT_NO = T.SHIPMENT_NO
+							group by 
+							   LD.COMPANY_ID
+							  ,LD.DIVISION_ID
+							  ,LD.FROM_SITE
+							  ,LD.TO_SITE
+							  ,LD.POL_AREA
+							  ,LD.POD_AREA
+							  ,LD.D_PORT_CODE
+							  ,LD.A_PORT_CODE
+							  ,LD.FROM_CITY
+							  ,LD.TO_CITY
+							  ,LD.TRANSPORT_MODE
+							  ,LD.BOD_ID
+							  ,LD.ROUTE_ID
+							  "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0918","1140303222","1","
+
+/*
+ * Program ID   : SSP0028_GET_DELIVERY_TRACKING_LT COPY => SCP0102_GET_BOD_VALIDATION_REPORT_0918
+ * Description  : Delivery Tracking LT
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/09/13   PARKTAEHAK		신규추가
+ * 2023-08-09   vadabi3         BOD Validation Report) UI 개선 - ROUTE_ID
+ * 2023/08/23   vadabi3		    개발DB 이슈로 백업본으로 복구
+ * 2023/09/01   vadabi3		    BOD Validation Report) UI 개선 - ROUTE_ID
+ ----------------------------------------------------------------------------------------------------
+
+ EXEC SCP0102_GET_BOD_VALIDATION_REPORT_0918
+ @p_division_id='81'
+ , @p_from_yyyymmdd='20230401'
+ , @p_to_yyyymmdd='20230630'
+ , @p_from_site=''
+ , @p_to_site=''
+ , @p_PIVOT_yyyymm='[202304],[202305],[202306]'
+ , @p_from_country=''
+ , @p_to_country=''
+ , @p_from_city=''
+ , @p_to_city='MXMEX'
+ , @p_from_area=''
+ , @p_to_area=''
+
+
+
+  EXEC SCP0102_GET_BOD_VALIDATION_REPORT 
+  @p_division_id='40'
+  , @p_from_yyyymmdd='20230101'
+  , @p_to_yyyymmdd='20231006'
+  , @p_from_site='G182-A'
+  , @p_to_site=''
+  , @p_PIVOT_yyyymm='[202301],[202302],[202303],[202304],[202305],[202306],[202307],[202308],[202309],[202310]'
+  , @p_from_country=''
+  , @p_to_country=''
+  , @p_from_city=''
+  , @p_to_city=''
+  , @p_from_area=''
+  , @p_to_area=''
+
+EXCEPTION : ?????? 'AND' ?????? ?????? ??????????????.
+?????? 'AND' ?????? ?????? ??????????????.
+
+
+
+
+*/
+
+CREATE PROCEDURE [dbo].[SCP0102_GET_BOD_VALIDATION_REPORT_0918]
+
+    @p_division_id      NVARCHAR(10),
+	@p_from_yyyymmdd	NVARCHAR(8),
+    @p_to_yyyymmdd		NVARCHAR(8),	
+	@p_from_site		NVARCHAR(MAX),
+	@p_to_site			NVARCHAR(MAX),
+	@p_PIVOT_yyyymm		NVARCHAR(MAX),
+	@p_from_country     NVARCHAR(MAX),
+	@p_to_country		NVARCHAR(MAX),
+	@p_from_city		NVARCHAR(MAX),
+	@p_to_city			NVARCHAR(MAX),
+	@p_from_area		NVARCHAR(MAX),
+	@p_to_area			NVARCHAR(MAX)
+AS
+BEGIN
+
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE @mDQry1 NVARCHAR(MAX)='';
+	DECLARE @mDQry2 NVARCHAR(MAX)='';
+	DECLARE @mDqry3 NVARCHAR(MAX)='';	
+	DECLARE @mDqry4 NVARCHAR(MAX)='';	
+	
+	DECLARE  @v_from_site NVARCHAR(MAX)='';
+	DECLARE  @v_to_site NVARCHAR(MAX)='';	
+	DECLARE  @v_from_country NVARCHAR(MAX)='';
+	DECLARE  @v_to_country NVARCHAR(MAX)='';	
+	DECLARE  @v_from_city NVARCHAR(MAX)='';
+	DECLARE  @v_to_city NVARCHAR(MAX)='';	
+
+	--IN 조건으로 데이터를 가져옴
+	SET @v_from_site = [dbo].FN_GET_IN_STR(@p_from_site);
+	SET @v_to_site = [dbo].FN_GET_IN_STR(@p_to_site);	
+	SET @v_from_country = [dbo].FN_GET_IN_STR(@p_from_country);
+	SET @v_to_country = [dbo].FN_GET_IN_STR(@p_to_country);	
+	SET @v_from_city = [dbo].FN_GET_IN_STR(@p_from_city);
+	SET @v_to_city = [dbo].FN_GET_IN_STR(@p_to_city);	
+
+
+
+
+			
+-------------------------------------------------------------------------------------------------------------------------------
+-- #TMP_CONFIRM
+-------------------------------------------------------------------------------------------------------------------------------		
+	IF OBJECT_ID('TEMPDB..#TMP_CONFIRM') IS NOT NULL
+		DROP TABLE #TMP_CONFIRM;	
+
+	IF OBJECT_ID('TEMPDB..#TMP_LD') IS NOT NULL
+		DROP TABLE TMP_LD;	
+
+
+	  SELECT CN.DIVISION_ID 																						
+			,CN.FROM_SITE_COMPANY_ID AS COMPANY_ID 																
+			,EX.SHIPMENT_NO 																						
+			,CN.CONFIRM_ID 																						
+			,CN.BOD_ID 																							
+			,CN.ITEM_ID 																							
+			,EX.EXFACTORY_DATE 																					
+			,RT.LT_DEPARTURE_INLAND 																				
+			,RT.LT_WAIT_SHIPPING 																					
+			,RT.LT_VOYAGE 																						
+			,RT.LT_LAY_OFF_CLEARANCE 																				
+			,RT.LT_ARRIVAL_INLAND 	
+		INTO #TMP_CONFIRM 																			
+		FROM ( 																									
+			SELECT "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0102_GET_BOD_VALIDATION_REPORT_0918","1140303222","6",",LD.SSP_INCOTERMS			
+					  order by LD.BOD_ID'
+
+EXEC (@mDqry1 + @mDqry2 + @mDqry5);
+
+
+
+EXEC (@mDqry1 + @mDqry2 + ' 
+
+, w_data as
+(
+	SELECT BOD_ID
+	, y_year
+	, avg(convert(NUMERIC(13,6), ttl) )  as avg
+	, avg(convert(NUMERIC(13,6), ttl1))  as avg1
+	, avg(convert(NUMERIC(13,6), ttl2))  as avg2
+	, avg(convert(NUMERIC(13,6), ttl3))  as avg3
+	, avg(convert(NUMERIC(13,6), ttl4))  as avg4
+	, avg(convert(NUMERIC(13,6), ttl5))  as avg5
+
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl) ))  as TTL_STDEV 
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl1)))  as TTL1_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl2)))  as TTL2_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl3)))  as TTL3_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl4)))  as TTL4_STDEV
+	, convert(NUMERIC(13,6), stdev(convert(integer, ttl5)))  as TTL5_STDEV
+				
+	, convert(NUMERIC(13,6), COUNT(convert(integer, ttl) ))  as TTL_CNT
+	, convert(NUMERIC(13,6), COUNT(convert(integer, ttl1)))  as TTL1_CNT
+	, convert(NUMERIC(13,6), COUNT(convert(integer, ttl2)))  as TTL2_CNT
+	, convert(NUMERIC(13,6), COUNT(convert(integer, ttl3)))  as TTL3_CNT
+	, convert(NUMERIC(13,6), COUNT(convert(integer, ttl4)))  as TTL4_CNT
+	, convert(NUMERIC(13,6), COUNT(convert(integer, ttl5)))  as TTL5_CNT
+
+	FROM LD
+	WHERE BOD_ID = ''10163''
+	GROUP BY BOD_ID, y_year
+)
+
+select data2.BOD_ID
+	  ,data2.y_year
+
+	  ,CONVERT(numeric(10,0), avg + CI_TTL)  as CI_TTL_UP
+	  ,CONVERT(numeric(10,0), avg + CI_TTL1) as CI_TTL1_UP
+	  ,CONVERT(numeric(10,0), avg + CI_TTL2) as CI_TTL2_UP
+	  ,CONVERT(numeric(10,0), avg + CI_TTL3) as CI_TTL3_UP
+	  ,CONVERT(numeric(10,0), avg + CI_TTL4) as CI_TTL4_UP
+	  ,CONVERT(numeric(10,0), avg + CI_TTL5) as CI_TTL5_UP
+
+	  ,CONVERT(numeric(10,0), avg - CI_TTL)  as CI_TTL_DOWN
+	  ,CONVERT(numeric(10,0), avg - CI_TTL1) as CI_TTL1_DOWN
+	  ,CONVERT(numeric(10,0), avg - CI_TTL2) as CI_TTL2_DOWN
+	  ,CONVERT(numeric(10,0), avg - CI_TTL3) as CI_TTL3_DOWN
+	  ,CONVERT(numeric(10,0), avg - CI_TTL4) as CI_TTL4_DOWN
+	  ,CONVERT(numeric(10,0), avg - CI_TTL5) as CI_TTL5_DOWN
+	  ,CI_TTL
+	  ,CI_TTL1
+	  ,CI_TTL2
+	  ,CI_TTL3
+	  ,CI_TTL4
+	  ,CI_TTL5
+from
+(
+	SELECT 	*
+	      , CONVERT(numeric(10,1) ,1.2 *  abs(1-TTL_STDEV  / 2) / TTL_CNT)  AS CI_TTL
+	      , CONVERT(numeric(10,1) ,1.2 *  abs(1-TTL1_STDEV / 2) / TTL1_CNT) AS CI_TTL1
+	      , CONVERT(numeric(10,1) ,1.2 *  abs(1-TTL2_STDEV / 2) / TTL2_CNT) AS CI_TTL2
+	      , CONVERT(numeric(10,1) ,1.2 *  abs(1-TTL3_STDEV / 2) / TTL3_CNT) AS CI_TTL3
+	      , CONVERT(numeric(10,1) ,1.2 *  abs(1-TTL4_STDEV / 2) / TTL4_CNT) AS CI_TTL4
+	      , CONVERT(numeric(10,1) ,1.2 *  abs(1-TTL5_STDEV / 2) / TTL5_CNT) AS CI_TTL5
+	from w_data
+
+)  data2
+
+
+');
+
+
+
+EXEC (@mDqry1 + @mDqry2 + ' 
+SELECT  BOD_ID
+	, y_year
+	, exfactory_date
+	, SHIPMENT_NO
+	, container_no
+	, TTL
+	, TTL1
+	, TTL2
+	, TTL3
+	, TTL4
+	, TTL5
+FROM LD
+	WHERE BOD_ID = ''10163''
+
+order by exfactory_date
+');
+
+
+END
+"

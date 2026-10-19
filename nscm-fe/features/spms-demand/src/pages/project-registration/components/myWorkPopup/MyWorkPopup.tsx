@@ -1,13 +1,15 @@
 import { CellType, type FlexGrid, type FormatItemEventArgs } from '@mescius/wijmo.grid';
 import { useEffect, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import dayjs from '@foundation/dayjs';
 import { GridUtils } from '@foundation/utils';
-import { CustomDialog, DataGrid } from '@shared/components';
+import { CustomDialog } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { Button } from '@shared/lges';
 import { useTabid } from '@shared/stores';
 
+import { DataGrid } from '../../../../lib/grid';
 import { MENU_ID, SHEETS } from '../../project-registration.constants';
 import type { MyWorkScheduleRow } from '../../project-registration.types';
 
@@ -30,6 +32,23 @@ const DATE_BINDINGS = new Set([
   'SAMPLE_D_DATE',
   'SOP_DATE',
 ]);
+
+// 컴포넌트 밖 순수 핸들러 — 참조 고정 (매 렌더 새 함수면 그리드 element memo 가 무력화된다)
+const formatScheduleDates = (grid: FlexGrid<MyWorkScheduleRow>, event: FormatItemEventArgs) => {
+  if (event.panel.cellType !== CellType.Cell) return;
+
+  const binding = grid.columns[event.col]?.binding;
+  if (!binding || !DATE_BINDINGS.has(binding)) return;
+
+  const value = GridUtils.getRow(grid, event.row)?.[binding];
+  if (value == null || value === '' || typeof value === 'boolean') {
+    event.cell.textContent = value == null ? '' : String(value);
+    return;
+  }
+
+  const parsed = dayjs(value);
+  event.cell.textContent = parsed.isValid() ? parsed.format('YYYY-MM-DD') : String(value);
+};
 
 // My Work 팝업 — 화면설계서 "My Work 팝업" 시트. 조회 전용(저장/삭제 <해당없음>).
 // ⚠ 설계서 §확인사항 "2.1. 상세 내역은 추가 예정" — 샘플 일정 그리드(My Work_GRID 시트에 실제
@@ -72,23 +91,11 @@ export const MyWorkPopup = ({
     if (!initialized) void fetchStaticColumns();
   }, [open, initialized, fetchStaticColumns]);
 
-  const rows = (data?.scheduleList as unknown as MyWorkScheduleRow[] | undefined) ?? [];
-
-  const handleFormatItem = (grid: FlexGrid<MyWorkScheduleRow>, event: FormatItemEventArgs) => {
-    if (event.panel.cellType !== CellType.Cell) return;
-
-    const binding = grid.columns[event.col]?.binding;
-    if (!binding || !DATE_BINDINGS.has(binding)) return;
-
-    const value = GridUtils.getRow(grid, event.row)?.[binding];
-    if (value == null || value === '' || typeof value === 'boolean') {
-      event.cell.textContent = value == null ? '' : String(value);
-      return;
-    }
-
-    const parsed = dayjs(value);
-    event.cell.textContent = parsed.isValid() ? parsed.format('YYYY-MM-DD') : String(value);
-  };
+  // 참조 고정 — 매 렌더 새 배열이면 DataGrid 가 컬렉션을 리로드해 깜빡인다 (datagrid-rerender-flicker)
+  const rows = useMemo<MyWorkScheduleRow[]>(
+    () => (data?.scheduleList as unknown as MyWorkScheduleRow[] | undefined) ?? [],
+    [data]
+  );
 
   return (
     <CustomDialog
@@ -100,7 +107,7 @@ export const MyWorkPopup = ({
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
-          <h2 className='headerTitle'>{t('LBL00874', '_My Work')}</h2>
+          <h2 className='headerTitle'>{t('LBL00862', '_My Work')}</h2>
         </div>
       }
       customContentArea={
@@ -110,20 +117,22 @@ export const MyWorkPopup = ({
             <strong>{pjtCode}</strong>
           </div>
           <div className={styles.gridWrapper}>
+            {/* DataGrid(memo) — rows useMemo + formatItem 모듈 함수로 참조 고정 전제 */}
             <DataGrid<MyWorkScheduleRow>
               gridRef={gridRef}
               itemsSource={rows}
               staticColumns={staticColumns}
               isReadOnly
-              formatItem={handleFormatItem}
+              formatItem={formatScheduleDates}
             />
           </div>
+          {/* 조회 전용 팝업 — OK 는 닫기만 한다 (닫기는 우측 상단 X 로도 가능). */}
           <div className={styles.buttonWrapper}>
             <Button
-              appearance='outlined'
-              priority='normal'
+              appearance='contained'
+              priority='primary'
               size='medium'
-              buttonLabel={t('LBL00627', 'Close')}
+              buttonLabel='OK'
               onClick={onClose}
             />
           </div>

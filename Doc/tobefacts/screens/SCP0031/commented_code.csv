@@ -1,0 +1,8 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/global-psi","SCP0031","features/supply/src/pages/global-psi/components/GlobalPsiGrid.tsx","283","code","return) 행별 명시값 48 이 안 지워져 헤더가 그대로 높게 남는다. 각 row.height 를 실제 tier 수로"
+"supply/global-psi","SCP0031","features/supply/src/pages/global-psi/global-psi.constants.ts","112","code","HORIZON_END_DATE 를 넘으면 종료일을 horizon 으로 되돌리고 이번 조회를 중단한다(AS-IS return)."
+"supply/global-psi","SCP0031","features/supply/src/pages/global-psi/GlobalPsi.tsx","107","endpoint","mount — keep-alive 탭에 남은 stale filters 자동발사 차단(clearFilters) + admin 동적 메타 fetch(mount 1회)."
+"supply/global-psi","SCP0031","features/supply/src/pages/global-psi/GlobalPsi.tsx","140","code","중단한다(return). 조회 자체가 무해하도록 AS-IS 도 try/catch 로 감싸므로, 콤보 실패·0행이면 clamp 없이 진행."
+"supply/global-psi","SCP0031","features/supply/src/pages/global-psi/GlobalPsi.tsx","175","code","horizon 초과 = 종료일 되돌리고 조회 중단(AS-IS return)"
+"supply/global-psi","SCP0031","features/supply/src/pages/global-psi/useGlobalPsiStore.ts","38","endpoint","admin SCM_MST_SHEET_COLUMNS 동적 fetch(convert-core §2.4 하드코딩 금지). 미등록/실패 시 빈 배열."
+"supply/global-psi","SCP0031","features/supply/src/pages/global-psi/useGlobalPsiStore.ts","41","endpoint","SCM_MST_SHEET_MEASURE 동적 fetch(design 03 §1-C 'Global PSI' 16행). PIVOT measure 세로축."

@@ -63,7 +63,7 @@
 | CA-146 | §1.5 [원문 무번호] InsertRow 기간 잠금 (작월 조회) / `Substring(0,2)=="40"` | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:136~148 (R3 기간 잠금 — Insert 행 동일 엔진) |  | 구현 |
 | CA-147 | §1.5 [원문 무번호] InsertRow 기간 잠금 (당월~미래 조회) / `Substring(0,2)=="40"` | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:136~148 (R3 기간 잠금 — Insert 행 동일 엔진) |  | 구현 |
 | CA-148 | §1.5 [원문 무번호] InsertRow ITEM_ID 콤보 / `sDivision=="82"` / `Substring(0,2)=="81"` / `=="40"` | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx:153~190 (itemByDivision COM0008 — division 필터 드롭다운) |  | 구현 |
-| CA-149 | §1.6 [원문 무번호] DIVISION_ID 변경 → PLANT_SITE_ID / `sDivision.Substring(0,2) != "81"` | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:199~200 (PLANT_SITE_ID = 81 만 개방) |  | 구현 |
+| CA-149 | §1.6 [원문 무번호] DIVISION_ID 변경 → PLANT_SITE_ID / `sDivision.Substring(0,2) != "81"` | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:201~212 (PLANT_SITE_ID = 전 Div 잠금 — 2026-09-01 정정. 이 unlock 은 그리드 Division 셀 변경 전용이라 신규행에서 미도달) |  | 구현 |
 | CA-150 | §1.6 [원문 무번호] DIVISION_ID 변경 → ITEM_ID 콤보 / 82 / 81 / 40 | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx:153~172 (itemByDivision division 파라미터 재조회) |  | 구현 |
 | CA-151 | §1.6 [원문 무번호] DIVISION_ID 변경 → 연쇄 클리어 / 공통 | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx:842~852 (GRID_CASCADE_CLEAR — 하위 컬럼 연쇄 클리어) |  | 구현 |
 | CA-152 | §1.6 [원문 무번호] END_CUSTOMER 변경 → ITEM_ID / 82 / 81 / 40 | features/demand/src/pages/sales-plan/utils/sales-plan.comboContext.ts:56~67 (SiteByEndCustomer/EndCustomerByDivisionDept) + features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx:719~730 |  | 구현 |
@@ -168,7 +168,7 @@
 | CD-134 | §4.2 [원문 무번호] 저장 시 팀 변경 전파 / 40: DEPT_ID 셀이 Red(수정)이면 해당 버킷(W_/M_) 숫자컬럼 전부 Red 처리(수정 간주) |  | TO-BE 기존 행 DEPT_ID 편집 불가(정적 셀 Insert 행 한정) — Insert 행은 전량 저장이라 전파 불필요 | 해당없음 |
 | CD-135 | §4.2 [원문 무번호] 저장 대상 판정 / 셀 ForeColor == Red 만 저장 (변경 추적) | features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx:807~815 (EditTracker storeChange) + features/demand/src/pages/sales-plan/utils/sales-plan.save.ts:167~177 (변경 셀만 수집) |  | 구현 |
 | CD-136 | §4.2 [원문 무번호] 빈값 저장 치환 / sPrice=="" → "0" ([E20251125-000694]) / action != "D" && sPrice=… | features/demand/src/pages/sales-plan/utils/sales-plan.save.ts:58~62·137 (빈값→'0' / '0'→'D' 전환) |  | 구현 |
-| CD-137 | §4.2 [원문 무번호] 저장 0건 검증 / iDateCount==0 → MSG00146(행번호) | features/demand/src/pages/sales-plan/utils/sales-plan.save.ts:161~164·178~180 (라인 변경 0건 MSG00146) |  | 구현 |
+| CD-137 | §4.2 [원문 무번호] 저장 0건 검증 / iDateCount==0 → MSG00146(행번호) | features/demand/src/pages/sales-plan/utils/sales-plan.save.ts:161~164·178~180 (라인 변경 0건 — AS-IS MSG00146 → 사내 MSG00670 재매핑, MSG.LINE_NO_CHANGE) |  | 구현 |
 | CD-138 | §4.3 [원문 무번호] 규칙 / 조건 |  | 표 헤더 행 — 판정 대상 아님 | 해당없음 |
 | CD-139 | §4.3 [원문 무번호] 색상 모드(chkColor=true) — 과거 회색 / 전주(pre_YYYYMMWW)까지 `Color.Gainsboro` 배경 |  | Color 체크박스 제거(2026-07 사용자 확정) — chkColor=true 모드 미제공 | 제외 |
 | CD-140 | §4.3 [원문 무번호] 색상 모드 — 당월 White 복원 / this_YYYYMM 컬럼 White |  | Color 체크박스 제거(2026-07 사용자 확정) — chkColor=true 모드 미제공 | 제외 |
@@ -253,7 +253,7 @@
 | CF-83 | §6.3 Monthly 시 W_ 컬럼 개별 / true | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:136~157 (Insert 행 기간·버킷 — R2/R3 동일 엔진) |  | 구현 |
 | CF-84 | §6.3 Weekly 시 M_ 컬럼 개별 / true | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:136~157 (Insert 행 기간·버킷 — R2/R3 동일 엔진) |  | 구현 |
 | CF-85 | §6.4 PLANT_SITE_ID (division 비81) / true | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:199~200 (PLANT_SITE_ID 비81 잠금) |  | 구현 |
-| CF-86 | §6.4 PLANT_SITE_ID (division 81) / false | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:199~200 (PLANT_SITE_ID 81 개방) |  | 구현 |
+| CF-86 | §6.4 PLANT_SITE_ID (division 81) / false | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:201~212 (PLANT_SITE_ID 81 도 잠금 — AS-IS InsertRow L3023 무조건 lock) |  | 구현 |
 | CF-87 | §6.4 DomExp (Catch_Up 전환) / false | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:169~208 (R5 — row.MEASURE 실시간) + features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:86~158 (R1~R4) + features/demand/src/pages/sales-plan/utils/sales-plan.gridCombos.ts:61~83 (전환 clear) |  | 구현 |
 | CF-88 | §6.4 INCOTERMS (Catch_Up 전환) / false | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:169~208 (R5 — row.MEASURE 실시간) + features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:86~158 (R1~R4) + features/demand/src/pages/sales-plan/utils/sales-plan.gridCombos.ts:61~83 (전환 clear) |  | 구현 |
 | CF-89 | §6.4 FcstType (Catch_Up 전환) / false | features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:169~208 (R5 — row.MEASURE 실시간) + features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts:86~158 (R1~R4) + features/demand/src/pages/sales-plan/utils/sales-plan.gridCombos.ts:61~83 (전환 clear) |  | 구현 |
@@ -441,7 +441,7 @@
 | 29 | InsertRow | 행잠금 | `siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColu…` | 2980 | R5 — KwhCell read-only (default 잠금 붕괴 규칙) |
 | 30 | InsertRow | 행잠금 | `siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColu…` | 2983 | R5 — KwhModule read-only (default 잠금 붕괴 규칙) |
 | 31 | InsertRow | 행잠금 | `siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColu…` | 2986 | R5 — KwhPack read-only (default 잠금 붕괴 규칙) |
-| 32 | InsertRow | 행잠금 | `siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColu…` | 2989 | R5 — PLANT_SITE_ID (81 계열만 개방) |
+| 32 | InsertRow | 행잠금 | `siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColu…` | 2989 | R5 — PLANT_SITE_ID (전 Div 잠금 — InsertRow 무조건 lock) |
 | 33 | InsertRow | 행잠금 | `siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColu…` | 2995 | R5/R6 — DOM_EXP (Catch_Up 시 개방) |
 | 34 | InsertRow | 행잠금 | `siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColu…` | 3003 | R5 — SALES_PLAN_ADJUST_YN read-only |
 | 35 | InsertRow | 행잠금 | `siMain.ActiveRowIndex, siMain.GetColumnIndex(DefColu…` | 3005 | R5/R6 — INCOTERMS (Catch_Up 시 개방) |
@@ -502,7 +502,7 @@
 | 90 | Dsdm_Changed | 합계변수 | `iMonthlySum` | 3990 | footer Sum — columnFooters Aggregate.Sum (SUM 셀 터치 재기입 불필요 — Wijmo 자동 집계) |
 | 91 | Dsdm_Changed | 합계변수 | `iMonthlySum` | 3995 | footer Sum — columnFooters Aggregate.Sum (SUM 셀 터치 재기입 불필요 — Wijmo 자동 집계) |
 | 92 | Dsdm_Changed | 합계변수 | `iMonthlySum` | 4001 | footer Sum 표시 — formatItem ColumnFooter #,##0.### 포맷 |
-| 93 | spdMain_ComboSelChange | 행잠금 | `e.Row, siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID` | 4544 | R5 — PLANT_SITE_ID 81 unlock |
+| 93 | spdMain_ComboSelChange | 행잠금 | `e.Row, siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID` | 4544 | R5 — PLANT_SITE_ID 81 unlock (Division 셀 변경 전용 경로 — 신규행 미도달, 잠금 유지) |
 | 94 | spdMain_ComboSelChange | 행잠금 | `e.Row, siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID` | 4546 | R5 — PLANT_SITE_ID 비81 lock |
 | 95 | spdMain_ComboSelChange | 행잠금 | `e.Row, siMain.GetColumnIndex(DefColumns.DomExp` | 4877 | R6 — DOM_EXP 개방 (Catch_Up 전환) |
 | 96 | spdMain_ComboSelChange | 행잠금 | `e.Row, siMain.GetColumnIndex(DefColumns.PLANT_SITE_ID` | 4887 | R5 — PLANT_SITE_ID 잠금 |
@@ -535,6 +535,7 @@
 
 > 활성 메시지 20 + silent 38 + 잠금 22(→editLock) + 사업부분기 계수(→division/editLock) + 비활성(주석) — UI분석서 시트 6 재분류와 정합.
 > MSG 재매핑(사내 실문구 대사 2026-07-14): AS-IS MSG00002(필수)→MSG00429 / MSG00004({0}건 저장)→MSG00002(성공) / 변경0건→MSG00004.
+> MSG 재매핑 추가(2026-09-10 사용자 요구): AS-IS MSG00146(라인 변경 0건)→사내 MSG00670. 단일 원천 = sales-plan.constants.ts MSG.LINE_NO_CHANGE.
 
 | # | Handler | MsgID | Column | Line | TO-BE 매핑 |
 |---:|---|---|---|---:|---|
@@ -616,7 +617,7 @@
 | 76 | SaveData | MSG00002 | - | 2472 | V-V1 — Currency |
 | 77 | SaveData | - | Division | 2577 | buildUnfoldRows — 40+Catch_Up 분기 |
 | 78 | SaveData | MSG00085 | - | 2587 | buildUnfoldRows — MSG00085 {0} (Catch_Up 음수 차단) |
-| 79 | SaveData | MSG00146 | - | 2666 | buildUnfoldRows — MSG00146 {line} (라인 변경 0건) |
+| 79 | SaveData | MSG00146 | - | 2666 | buildUnfoldRows — MSG00670 {line} (라인 변경 0건. 사내 문구 대사 재매핑, AS-IS MSG00146) |
 | 80 | SaveData | MSG00428 | - | 2743 | callSaveSalesPlan — SP 반환 messageCode 분해 alert (MSG00428 등 SP 코드) |
 | 81 | SaveData | - | - | 2760 | callSaveSalesPlan — SP 원문 addMessage alert (MessageBox.Show 경로 대체) |
 | 82 | SaveData | - | - | 2766 | callSaveSalesPlan — SP 원문 addMessage alert (MessageBox.Show 경로 대체) |
@@ -650,8 +651,8 @@
 | 110 | spdMain_TextChanged | - | spdMain | 4400 | no-op(본문 주석) — 미이관 |
 | 111 | spdMain_EditChange | - | spdMain | 4407 | no-op(본문 주석) — 미이관 |
 | 112 | GetThisWeekMonday | - | - | 4478 | 해당없음 — cutoff 기준 = MAIN 커서 2(서버 기준일). 클라 월요일 계산 미사용 |
-| 113 | spdMain_ComboSelChange | - | Division | 4541 | editLock R5 — PLANT_SITE_ID 81 계열만 개방 (DIVISION 셀은 insert 잠금 — 조회조건 고정) |
-| 114 | spdMain_ComboSelChange | - | Division | 4543 | editLock R5 — PLANT_SITE_ID 81 계열만 개방 (DIVISION 셀은 insert 잠금 — 조회조건 고정) |
+| 113 | spdMain_ComboSelChange | - | Division | 4541 | editLock R5 — PLANT_SITE_ID 잠금 유지(Division 셀 변경 전용 unlock — 신규행 미도달) (DIVISION 셀은 insert 잠금 — 조회조건 고정) |
+| 114 | spdMain_ComboSelChange | - | Division | 4543 | editLock R5 — PLANT_SITE_ID 잠금 유지(Division 셀 변경 전용 unlock — 신규행 미도달) (DIVISION 셀은 insert 잠금 — 조회조건 고정) |
 | 115 | spdMain_ComboSelChange | - | Division | 4553 | ITEM_ID insert 콤보 GUBUN 분기 — CMBO 미등록 텍스트 폴백 (편차 §6-2) |
 | 116 | spdMain_ComboSelChange | - | Division | 4555 | ITEM_ID insert 콤보 GUBUN 분기 — CMBO 미등록 텍스트 폴백 (편차 §6-2) |
 | 117 | spdMain_ComboSelChange | - | Division | 4557 | ITEM_ID insert 콤보 GUBUN 분기 — CMBO 미등록 텍스트 폴백 (편차 §6-2) |
@@ -683,8 +684,10 @@
 ## 6. 편차 · 미결 (정직 보고)
 
 1. **Enter 키 팝업 (§6-1)** — AS-IS txtProject/txtItemId KeyDown Enter → 팝업. 카탈로그 PopupSearchInput 은 버튼 클릭만 지원 (shared 컴포넌트 무수정 원칙 — 전 화면 공통 개선 시 일괄).
-2. **ITEM_ID insert 콤보 (§6-2)** — AS-IS SALES_PLAN_ITEM_ID(GUBUN 40/81/82 필터) in-memory 콤보. TO-BE CMBO 미등록 → insert 행 텍스트 입력 폴백 (40+Catch_Up 은 모달 1:1). CMBO 등록 시 admin CELL_COMBO_DATA_TYPE 만으로 즉시 콤보화.
-3. **CURRENCY insert 콤보** — admin 메타 콤보 미지정('-') → 편집 전용 'CurrencyList'(DMF0020 등록 선례) 스왑 적용. 사내 CMBO 'CurrencyList' 부재 시 텍스트 입력 폴백.
+2. **ITEM_ID insert 콤보 (§6-2)** — 해소(2026-09-02 재적용). AS-IS SALES_PLAN_ITEM_ID(GUBUN 40/81/82 필터) in-memory 콤보를 CMBO 'SalesPlanItemId'(@divisionId) 로 등재하고, SalesPlanGrid `insertOnlyDataMaps` 가 화면에서 직접 붙인다. 컬럼 메타(SHEET_COLUMNS)는 FPText 그대로 둔다 — FPComboBox 로 바꾸면 조회 행까지 콤보가 되어 AS-IS(조회=텍스트)와 어긋난다. 구현은 beginningEdit 스왑이 아니라 컬럼 dataMap 1개 + `getDisplayValues` 가 CRUD_TYPE='I' 행에만 후보를 돌려주는 방식이다(MEASURE/FCST_TYPE 선례). 부착은 updatedLayout — columnGroups 재대입마다 Column 이 재생성돼 dataMap 이 날아가기 때문. 40+Catch_Up 은 종전대로 모달 1:1.
+3. **CURRENCY insert 콤보** — 해소(2026-09-02 재적용). AS-IS 는 신규행 셀만 SetCellTypeCombo(dtCurrencyList, .cs L3032~3036, 직전 LockRange 는 주석 처리)로 승격하고 조회 행은 텍스트다. ITEM_ID 와 같은 방식으로 컬럼 메타 등록 없이 SalesPlanGrid `insertOnlyDataMaps` 가 CMBO 'CurrencyList'(바인드 없음) 를 붙인다. AS-IS 원천이 Data.Common(CURRENCY_LIST) 전역 목록(.cs L528)이라 division 분기는 없다.
+
+   AS-IS 신규행 콤보 전수(2026-09-02 재검증, DMF0021_SalesPlan.cs 5,643줄 정본 + 주석 블록 제외): DEPT_ID(L2923, 40 한정 — 통합테스트 1st No.61-④ 로 TO-BE 는 잠금 유지) / CELL_PROD_SITE_ID(L2946) / END_CUSTOMER(L2951) / END_CUSTOMER40(L4547 cascade) / SCM_SITE_ID(L2952) / MEASURE(L2957) / DOM_EXP(L4910) / INCOTERMS(L4930) / FCST_TYPE(L4940) = 9종은 컬럼 메타 콤보로 기충족. 미충족은 ITEM_ID·CURRENCY 2종뿐이었다. PROJECT_CODE(L2974) 와 40+Catch_Up 의 ITEM_ID(L4905) 는 콤보가 아니라 cellTypeImage 모달이라 대상 아님. PLANT_SITE_ID Catch_Up 콤보(L4920~4929, L5022~5029)는 AS-IS 에서 블록 전체가 주석 처리라 이관 대상 아님.
 4. **MEASURE 강제 표시** — 사내 SHEET_COLUMNS VISIBLE_FLAG='N' 실측이나 PIVOT 행 식별 키 컬럼 → 강제 표시 (admin 메타 정정 시 제거).
 5. **W_ 저장 기준일** — SAVE p_yyyymmdd 를 W_yyyymm+ww → ISO주 월요일(월경계 clamp) 로 산출 (AS-IS B_* 숨김 컬럼 값 미확보 — E2E 저장 왕복 1회 검증 필요).
 6. **MSG00085/00146/00361 문구** — 사내 MSG_M [TODO] placeholder. 계약 확정 용법으로 locales 3종 반영 (MSG00361 본문은 잠정 — MSG_M 등록 시 대사). locale JSON 은 gitignore(DB 원천) — 사내 MSG_M 반영 별도.

@@ -19,6 +19,7 @@ interface UserManagementState {
   isOpenSearchArea: boolean;
   openSsoUserModal: boolean;
   openSsoDeptModal: boolean;
+  openAssignGroupModal: boolean;
 }
 
 interface UserManagementAction {
@@ -29,6 +30,7 @@ interface UserManagementAction {
   setOpenSearchArea: (open?: boolean) => void;
   setOpenSsoUserModal: (value: boolean) => void;
   setOpenSsoDeptModal: (value: boolean) => void;
+  setOpenAssignGroupModal: (value: boolean) => void;
 }
 
 const initUserManagementParam: SearchParamProps = {
@@ -46,6 +48,7 @@ const initUserManagementState: UserManagementState = {
   isOpenSearchArea: true,
   openSsoUserModal: false,
   openSsoDeptModal: false,
+  openAssignGroupModal: false,
 } as const;
 
 export const useUserManagementStore = createPersistedStoreWithTab<
@@ -110,6 +113,11 @@ export const useUserManagementStore = createPersistedStoreWithTab<
     setOpenSsoDeptModal: value => {
       set(state => {
         state.openSsoDeptModal = value;
+      });
+    },
+    setOpenAssignGroupModal: value => {
+      set(state => {
+        state.openAssignGroupModal = value;
       });
     },
   }),

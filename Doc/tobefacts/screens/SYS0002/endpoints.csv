@@ -1,0 +1,7 @@
+﻿"page_key","menu_id","file","line","in_function","kind","callee","menu","sheet","action","url","resolved","args","commented"
+"admin/user-management","SYS0002","features/admin/src/pages/user-management/components/AssignGroupModal.tsx","35","AssignGroupModal","http","apiClient.get","","","","/user/{userId}/groups","N","","0"
+"admin/user-management","SYS0002","features/admin/src/pages/user-management/components/UserManagementForm.tsx","17","UserManagementForm","hook","useTabComboQueries","SYS0002","","","(useTabComboQueries)","Y","['YesOrNo', 'UserGroup']","0"
+"admin/user-management","SYS0002","features/admin/src/pages/user-management/UserManagement.tsx","33","UserManagement","hook","useTabProcQuery","SYS0002","userMgmt","","SYS0002/userMgmt//call-proc","Y","filters","0"
+"admin/user-management","SYS0002","features/admin/src/pages/user-management/UserManagement.tsx","41","UserManagement","hook","useProcMutation","SYS0002","userMgmt","","SYS0002/userMgmt//call-proc","Y","","0"
+"admin/user-management","SYS0002","features/admin/src/pages/user-management/useUserManagementStore.ts","71","fetchStaticColumns","http","apiClient.post","","","","/admin/menu/SYS0002/column","Y","{ sheetNm: SHEETS.USER_MGMT, }","0"
+"admin/user-management","SYS0002","features/admin/src/pages/user-management/useUserManagementStore.ts","81","fetchStaticColumns","http","apiClient.get","","","","/admin/menu/SYS0002/search-conditions","Y","","0"

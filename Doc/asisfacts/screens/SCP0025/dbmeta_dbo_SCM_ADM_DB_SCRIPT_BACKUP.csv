@@ -1,0 +1,2749 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-12-17 00:00:00.463","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","1","
+
+
+
+
+/*
+ * Program ID   : SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET
+ * Description  : SHIPMENT PLAN FG/SEMI FIX 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2019/07/25   yhw				[CSR ID:4071705] Production Plan Fix에서 Unfix 기능 추가
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 2025/11/11   hrkim			[PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 
+ *								  : ESS 가상 사이트 계획을 매핑된 JV 사이트 계획으로 동기화 저장 (ESS 가상 -> JV Real 단방향 저장) 
+ *									- @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용
+ *									- TO Site 정보는 그대로 가져간다. (BOD_ID는 매핑이 안되면 '-')
+ *								    - 2025.12.16 동기화 대상 데이터 from/to 사이트와 무관하게 origin from/to division_id 컬럼 division_id와 같은 값으로 저장(81_ST) : 김춘동 책임님 
+ * 
+ */
+CREATE PROCEDURE [dbo].[SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET]
+	 @SCP0025			AS DBO.SCP0025       READONLY
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @max_loop_cnt		NVARCHAR(50);
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 실행시간 확인용    
+    DECLARE @v_start_time   DATETIME     = SYSDATETIME();    
+    DECLARE @v_exec_time    NVARCHAR(10) = ''--'00:00';   
+	
+	DECLARE @SCP0025_WITH_JV	AS DBO.SCP0025;	-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : @SCP0025 + MI법인 가상 사이트에 매핑된 JV 출하계획 정보 담을 테이블 Type 변수
+
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	/*
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0025UnFix') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0025UnFix
+
+	CREATE TABLE TblDynamic_SCP0025UnFix (
+		p_active_flag	nvarchar(1),
+		p_division_id NVARCHAR(30),
+		p_biz_type	nvarchar(1),
+		p_item_id	nvarchar(100),
+		p_to_site	nvarchar(100),
+		p_from_site	nvarchar(50),
+		p_bod_id	nvarchar(50),
+		p_yyyymmdd	nvarchar(8),
+		p_project_code	nvarchar(100),
+		p_incoterms	nvarchar(20),
+		p_qty	nvarchar(200),
+		p_origin_from_division_id NVARCHAR(30),
+		p_origin_to_division_id NVARCHAR(30),
+		p_electrode_type	nvarchar(50),
+		p_user_id	nvarchar(150),
+		FIX_ID	nvarchar(20)
+	);
+	*/
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		------------------------------------------------------------------------------------------------------------------------------------------------------- 
+		--### Start : [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : ESS 가상 라인 계획으로 매핑된 JV 라인 계획 동기화 저장 (ESS 가상 -> JV Real 단방향 저장) 
+		-------------------------------------------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' JV/ESS scm site 매핑 정보 추출' 
+		-------------------------------------------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('TEMPDB..#JV_ESS_SCM_SITE_MAP') IS NOT NULL DROP TABLE #JV_ESS_SCM_SITE_MAP;
+		SELECT VP_COMPANY_ID
+			  ,VP_DIVISION_ID
+			  ,VP_SITE_ID
+			  ,VP_PLANT_ID
+			  ,VP_SCM_SITE_ID
+			  ,RP_COMPANY_ID
+			  ,RP_DIVISION_ID
+			  ,RP_SITE_ID
+			  ,RP_PLANT_ID
+			  ,RP_SCM_SITE_ID
+		 INTO #JV_ESS_SCM_SITE_MAP
+		 FROM FN_GET_JV_REAL_ESS_VIRTUAL_SITE_MAP () 
+		 WHERE 1=1;
+		---------------------------------------------------------------"
+"2025-12-17 00:00:00.463","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","2","---------------------------------------------  
+		print  convert(varchar(30), getdate(), 121) + N' DIVISION 주차별 최종 수행 Plan 버전 정보 ' 
+		-- ESS 가상 라인 매핑 JV division의 동기화 대상 버전 정보 확인을 위한 데이터
+		-- Final Plan은 수정 대상에서 제외 ? 
+		------------------------------------------------------------------------------------------------------------  
+		IF OBJECT_ID('TEMPDB..#DIVISION_LAST_PLAN_INFO') IS NOT NULL DROP TABLE #DIVISION_LAST_PLAN_INFO;
+		;WITH SCP_PLAN_INFO AS (
+			SELECT PD.DIVISION_ID
+				 , PM.PLAN_NAME			AS PLAN_START_YYYYMMDD
+				 , PD.PLAN_TYPE
+				 , PD.PLAN_SEQ
+				 , PM.HORIZON_END_DATE	
+				 , PD.PLAN_STATUS
+				 , PD.INPUT_START_DATE 
+				 , ROW_NUMBER()	OVER (PARTITION BY PD.DIVISION_ID
+												 , PM.PLAN_NAME
+										 ORDER  BY CASE WHEN PD.PLAN_TYPE = 'PR' THEN 4
+														WHEN PD.PLAN_TYPE = 'MA' THEN 3
+														WHEN PD.PLAN_TYPE = 'SE' THEN 2
+														WHEN PD.PLAN_TYPE = 'FN' THEN 1
+														ELSE 0
+												   END
+												  ,PD.PLAN_SEQ DESC
+												  ,PD.INPUT_START_DATE DESC ) AS RN
+			 FROM SCM_MST_PLAN PM WITH(NOLOCK)
+				  INNER JOIN SCM_MST_PLAN_DETAIL PD WITH(NOLOCK)
+						  ON PD.DIVISION_ID = PM.DIVISION_ID
+						 AND PD.PLAN_ID		= PM.PLAN_ID
+						 AND PD.PLAN_STATUS	= 1
+				  INNER JOIN SCM_MST_DIVISION DM WITH(NOLOCK)
+						  ON DM.DIVISION_ID	= PM.DIVISION_ID 
+						 AND DM.ATTRIBUTE3 != 'EE'
+			WHERE 1=1 
+			  AND PM.PLAN_CYCLE = 'WEEKLY'
+			  AND PM.PLAN_NAME	>= CONVERT(NVARCHAR(8), DATEADD(DAY, -20, GETDATE()) , 112)
+		)
+		SELECT DIVISION_ID
+			  ,PLAN_START_YYYYMMDD
+			  ,PLAN_TYPE
+			  ,PLAN_SEQ
+			  ,HORIZON_END_DATE
+			  ,PLAN_STATUS
+			  ,INPUT_START_DATE
+			  ,RN
+		  INTO #DIVISION_LAST_PLAN_INFO
+		 FROM SCP_PLAN_INFO
+		WHERE 1=1
+		  AND RN = 1 
+		  AND PLAN_TYPE != 'FN' -- Final plan 대상에서 제외 
+		  ;
+		------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' BOD 및 BOD ITEM 정보' 
+		------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('TEMPDB..#BOD_ITEM') IS NOT NULL DROP TABLE #BOD_ITEM
+		;WITH BOD_ITEM AS ( 
+			SELECT  BD.DIVISION_ID
+				   ,BD.FROM_SITE
+				   ,BD.TO_SITE
+				   ,BD.INCOTERMS
+				   ,BI.ITEM_ID
+				   ,BD.BOD_ID
+				   ,ROW_NUMBER() OVER (PARTITION BY BD.DIVISION_ID
+												   ,BD.FROM_SITE
+												   ,BD.TO_SITE
+												   ,BD.INCOTERMS
+												   ,BI.ITEM_ID
+										   ORDER BY BD.PRIORITY 
+												   ,BI.PRIORITY
+												   ,BD.ATTRIBUTE3 DESC
+												   ,BD.LAST_UPDATE_DATE DESC )	AS RN 
+			  FROM SCP_MST_BOD BD WITH(NOLOCK)
+				   INNER JOIN SCP_MST_BOD_ITEM BI WITH(NOLOCK)
+						   ON BI.BOD_ID			= BD.BOD_ID
+						  AND BI.VALID_YN		= 'Y'
+						  AND BI.TO_YYYYMMDD	>= CONVERT(NVARCHAR(8), DATEADD(DAY, -7, GETDATE()) , 112)
+			 WHERE 1=1
+			   AND BD.ATTRIBUTE3 > CONVERT(NVARCHAR(8), DATEADD(DAY, -7, GETDATE()) , 112)
+			   AND BD.VALID_YN	= 'Y'
+			   AND EXISTS (SELECT TOP 1 'X'
+							 FROM #JV_ESS_SCM_SITE_MAP SM 
+							WHERE SM.RP_DIVISION_ID = BD.DIVISION_ID
+							  AND SM.RP_SCM_SITE_ID	= BD.FROM_SITE )
+		)
+		SELECT DIVISION_ID
+			  ,FROM_SITE
+			  ,TO_SITE
+			  ,INCOTERMS
+			  ,ITEM_ID
+			  ,BOD_ID
+			  ,RN
+		 INTO #BOD_ITEM
+		 FROM BOD_ITEM 
+		WHERE RN = 1 ;
+		------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' 파마미터로 받은 데이터 @SCP0025_WITH_JV 변수에 추가' 
+		-- ESS MI법인 -> JV 동기화 저장 (단방향 저장으로 가상 사이트에 매핑된 JV 사이트 데이터는 제외) 
+		------------------------------------------------------------------------------------------------------------------
+		INSERT INTO @SCP0025_WITH_JV (
+			   P_ACTIVE_FLAG
+			  ,P_DIVISION_ID
+			  ,P_OPERATION_GROUP
+			  ,P_ITEM_ID
+			  ,P_TO_SITE
+			  ,P_FROM_SITE
+			  ,P_BOD_ID
+			  ,P_YYYYMMDD
+"
+"2025-12-17 00:00:00.463","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","3","			  ,P_PROJECT_CODE
+			  ,P_INCOTERMS
+			  ,P_QTY
+			  ,P_ORIGIN_FROM_DIVISION_ID
+			  ,P_ORIGIN_TO_DIVISION_ID
+			  ,P_ELECTRODE_TYPE
+			  ,P_CREATED_BY  )
+		SELECT PR.P_ACTIVE_FLAG
+			  ,PR.P_DIVISION_ID
+			  ,PR.P_OPERATION_GROUP
+			  ,PR.P_ITEM_ID
+			  ,PR.P_TO_SITE
+			  ,PR.P_FROM_SITE
+			  ,PR.P_BOD_ID
+			  ,PR.P_YYYYMMDD
+			  ,PR.P_PROJECT_CODE
+			  ,PR.P_INCOTERMS
+			  ,PR.P_QTY
+			  ,PR.P_ORIGIN_FROM_DIVISION_ID
+			  ,PR.P_ORIGIN_TO_DIVISION_ID
+			  ,PR.P_ELECTRODE_TYPE
+			  ,PR.P_CREATED_BY 
+		 FROM @SCP0025 PR
+		-- 2025.12.16 주석 처리 (자동차 품목 생산될 수 있음) 	  LEFT JOIN #JV_ESS_SCM_SITE_MAP SM
+		-- 2025.12.16 주석 처리 (자동차 품목 생산될 수 있음) 		     ON SM.RP_DIVISION_ID	= PR.P_DIVISION_ID
+		-- 2025.12.16 주석 처리 (자동차 품목 생산될 수 있음) 		    AND SM.RP_SCM_SITE_ID	= PR.P_FROM_SITE
+		-- 2025.12.16 주석 처리 (자동차 품목 생산될 수 있음) WHERE SM.RP_DIVISION_ID IS NULL  --- 가상 사이트에 매핑된 JV 사이트 데이터는 제외
+		;
+		------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' 가상 사이트에 매핑된 JV 사이트 데이터 @SCP0025_WITH_JV 변수에 추가' 
+		-- ESS MI법인 -> JV 동기화 저장 (단방향 저장으로 가상 사이트에 매핑된 JV 사이트 데이터는 제외) 
+		------------------------------------------------------------------------------------------------------------------
+		; WITH LAST_MONDAY AS (
+			SELECT MAX(YYYYMMDD) AS LAST_MONDAY
+			 FROM SCM_MST_BUCKET B WITH(NOLOCK)
+			WHERE 1=1
+			  AND YYYYMMDD <= CONVERT(NVARCHAR(8), GETDATE(), 112) 
+			  AND DAYOFWEEK	= 'MON'  
+		)
+		INSERT INTO @SCP0025_WITH_JV (
+			   P_ACTIVE_FLAG
+			  ,P_DIVISION_ID
+			  ,P_OPERATION_GROUP
+			  ,P_ITEM_ID
+			  ,P_TO_SITE
+			  ,P_FROM_SITE
+			  ,P_BOD_ID
+			  ,P_YYYYMMDD
+			  ,P_PROJECT_CODE
+			  ,P_INCOTERMS
+			  ,P_QTY
+			  ,P_ORIGIN_FROM_DIVISION_ID
+			  ,P_ORIGIN_TO_DIVISION_ID
+			  ,P_ELECTRODE_TYPE
+			  ,P_CREATED_BY  )
+		SELECT PR.P_ACTIVE_FLAG
+			  ,SM.RP_DIVISION_ID			AS P_DIVISION_ID
+			  ,PR.P_OPERATION_GROUP
+			  ,PR.P_ITEM_ID
+			  ,PR.P_TO_SITE
+			  ,SM.RP_SCM_SITE_ID			AS P_FROM_SITE
+			  ,ISNULL(BI.BOD_ID, '-')		AS P_BOD_ID
+			  ,PR.P_YYYYMMDD
+			  ,PR.P_PROJECT_CODE
+			  ,PR.P_INCOTERMS
+			  ,PR.P_QTY
+			  ,SM.RP_DIVISION_ID			AS P_ORIGIN_FROM_DIVISION_ID
+			  ,SM.RP_DIVISION_ID			AS P_ORIGIN_TO_DIVISION_ID		-- 2025.12.16 division_id와 같은 값으로 
+			  ,PR.P_ELECTRODE_TYPE
+			  ,PR.P_CREATED_BY 
+		 FROM @SCP0025 PR
+			  INNER JOIN #JV_ESS_SCM_SITE_MAP SM
+				      ON SM.VP_DIVISION_ID	= PR.P_DIVISION_ID
+				     AND SM.VP_SCM_SITE_ID	= PR.P_FROM_SITE
+			  INNER JOIN LAST_MONDAY MD
+					  ON 1=1 
+			  INNER JOIN #DIVISION_LAST_PLAN_INFO PV				-- 수정할 대상 버전이 있어야 수정 (FN 까지 완료된 경우 수정하지 않음) 
+					  ON PV.DIVISION_ID			= SM.RP_DIVISION_ID
+					 AND PV.PLAN_START_YYYYMMDD	= MD.LAST_MONDAY
+			  LEFT  JOIN SCP_MST_BOD BO WITH(NOLOCK)
+					  ON BO.BOD_ID			= PR.P_BOD_ID
+			  LEFT  JOIN #BOD_ITEM BI
+					  ON BI.DIVISION_ID		= SM.RP_DIVISION_ID
+					 AND BI.FROM_SITE		= SM.RP_SCM_SITE_ID
+					 AND BI.TO_SITE			= PR.P_TO_SITE
+					 AND BI.INCOTERMS		= BO.INCOTERMS
+					 AND BI.ITEM_ID			= PR.P_ITEM_ID 
+		WHERE 1=1
+		;
+		------------------------------------------------------------------------------------------------------------------------------------------------------- 
+		--### End : [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : ESS 가상 라인 계획으로 매핑된 JV 라인 계획 동기화 저장 (ESS 가상 -> JV Real 단방향 저장) 
+		-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		--수정 Row
+		SET @max_loop_cnt = convert(nvarchar(50), ISNULL((
+									SELECT COUNT(*) 
+									FROM @SCP0025_WITH_JV  -- PJ2025F254 : @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용
+								  ),0))
+		;
+
+		/*
+		INSERT INTO #TblDynamic_SCP0025UnFix
+		SELECT p_active_flag,
+				p_division_id,
+				p_operation_group,
+				p_item_id,
+				p_to_site,
+				p_from_site,
+				p_bod_id,
+				p_yyyymmdd,
+				p_project_code,
+				p_in"
+"2025-12-17 00:00:00.463","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","4","coterms,
+				p_qty,
+				p_origin_from_division_id,
+				p_origin_to_division_id,
+				p_electrode_type,
+				p_created_by,
+				''
+		FROM @SCP0025
+		*/
+
+		--3. Fix History
+		INSERT INTO SCP_ANL_SHIPMENT_PLAN_FIX_H (
+			history_seq,
+			fix_id,
+			division_id,
+			BIZ_TYPE ,
+			ITEM_ID ,
+			TO_SITE ,
+			FROM_SITE ,
+			PROJECT_CODE ,
+			INCOTERMS ,
+			BOD_ID ,
+			yyyymmdd,
+			qty,
+			ORIGIN_FROM_DIVISION_ID ,
+			ORIGIN_TO_DIVISION_ID ,
+			ELECTRODE_TYPE ,
+			fix_reason,
+			created_by,
+			creation_date,
+			last_updated_by,
+			last_update_date,
+			history_creation_date,
+			ATTRIBUTE1)
+		SELECT (NEXT VALUE FOR SEQ1_SCP_ANL_PRODUCTION_PLAN_FIX_H)
+				,A.FIX_ID
+				,B.p_division_id 
+				,B.p_operation_group 
+				,B.p_item_id
+				,B.p_to_site
+				,B.p_from_site
+				,B.p_project_code
+				,B.p_incoterms
+				,B.p_bod_id
+				,B.p_yyyymmdd
+				,cast(round (cast(B.p_qty as numeric(20,10)), 0 ,1) as int)
+				,B.p_origin_from_division_id
+				,B.p_origin_to_division_id
+				,B.p_electrode_type
+				,A.fix_reason
+				,B.p_created_by
+				,SYSDATETIME()
+				,B.p_created_by
+				,SYSDATETIME()
+				,SYSDATETIME()
+				,ISNULL(B.p_active_flag,'')
+		FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0025_WITH_JV  B -- PJ2025F254 : @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용 B
+		WHERE A.division_id				= B.p_division_id
+		and A.BIZ_TYPE					= B.p_operation_group
+		and A.ITEM_ID					= B.p_item_id
+		and A.TO_SITE					= B.p_to_site
+		and A.FROM_SITE					= B.p_from_site
+		and ISNULL(NULLIF(A.PROJECT_CODE,''),'-')				= ISNULL(NULLIF(B.p_project_code,''),'-')
+		and ISNULL(NULLIF(A.INCOTERMS,''),'-')					= ISNULL(NULLIF(B.p_incoterms,''),'-')
+		and A.BOD_ID					= B.p_bod_id
+		and A.yyyymmdd					= B.p_yyyymmdd
+		AND ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID,''),'-')	= ISNULL(NULLIF(B.p_origin_from_division_id,''),'-')
+		AND ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID,''),'-')		= ISNULL(NULLIF(B.p_origin_to_division_id,''),'-')
+		AND ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-') = ISNULL(NULLIF(B.p_electrode_type,''),'-')
+
+
+		--4. 삭제
+		DELETE A
+		FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0025_WITH_JV  B -- PJ2025F254 : @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용 B
+		WHERE A.division_id				= B.p_division_id
+		and A.BIZ_TYPE					= B.p_operation_group
+		and A.ITEM_ID					= B.p_item_id
+		and A.TO_SITE					= B.p_to_site
+		and A.FROM_SITE					= B.p_from_site
+		and ISNULL(NULLIF(A.PROJECT_CODE,''),'-')				= ISNULL(NULLIF(B.p_project_code,''),'-')
+		and ISNULL(NULLIF(A.INCOTERMS,''),'-')					= ISNULL(NULLIF(B.p_incoterms,''),'-')
+		and A.BOD_ID					= B.p_bod_id
+		and A.yyyymmdd					= B.p_yyyymmdd
+		and ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID,''),'-')	= ISNULL(NULLIF(B.p_origin_from_division_id,''),'-')
+		and ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID,''),'-')		= ISNULL(NULLIF(B.p_origin_to_division_id,''),'-')
+		and ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-')	= ISNULL(NULLIF(B.p_electrode_type,''),'-')
+		AND B.p_active_flag			= 'D'
+		;
+
+		SET @v_exec_time  =  REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) + ':' +     
+							 REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60)) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60))    
+
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description  = N'[' + @v_exec_time + ']';   
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		
+	END TRY
+
+	BEGIN CATCH
+		BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event"
+"2025-11-15 00:00:00.170","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET_20251114_org","33083554","1","
+
+
+
+
+/*
+ * Program ID   : SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET
+ * Description  : SHIPMENT PLAN FG/SEMI FIX 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2019/07/25   yhw				[CSR ID:4071705] Production Plan Fix에서 Unfix 기능 추가
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 
+ */
+CREATE PROCEDURE [dbo].[SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET_20251114_org]
+	 @SCP0025			AS DBO.SCP0025       READONLY
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @max_loop_cnt		NVARCHAR(50);
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 실행시간 확인용    
+    DECLARE @v_start_time   DATETIME     = SYSDATETIME();    
+    DECLARE @v_exec_time    NVARCHAR(10) = ''--'00:00';   
+	
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	/*
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0025UnFix') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0025UnFix
+
+	CREATE TABLE TblDynamic_SCP0025UnFix (
+		p_active_flag	nvarchar(1),
+		p_division_id NVARCHAR(30),
+		p_biz_type	nvarchar(1),
+		p_item_id	nvarchar(100),
+		p_to_site	nvarchar(100),
+		p_from_site	nvarchar(50),
+		p_bod_id	nvarchar(50),
+		p_yyyymmdd	nvarchar(8),
+		p_project_code	nvarchar(100),
+		p_incoterms	nvarchar(20),
+		p_qty	nvarchar(200),
+		p_origin_from_division_id NVARCHAR(30),
+		p_origin_to_division_id NVARCHAR(30),
+		p_electrode_type	nvarchar(50),
+		p_user_id	nvarchar(150),
+		FIX_ID	nvarchar(20)
+	);
+	*/
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		--수정 Row
+		SET @max_loop_cnt = convert(nvarchar(50), ISNULL((
+									SELECT COUNT(*) 
+									FROM @SCP0025  
+								  ),0))
+		;
+
+		/*
+		INSERT INTO #TblDynamic_SCP0025UnFix
+		SELECT p_active_flag,
+				p_division_id,
+				p_operation_group,
+				p_item_id,
+				p_to_site,
+				p_from_site,
+				p_bod_id,
+				p_yyyymmdd,
+				p_project_code,
+				p_incoterms,
+				p_qty,
+				p_origin_from_division_id,
+				p_origin_to_division_id,
+				p_electrode_type,
+				p_created_by,
+				''
+		FROM @SCP0025
+		*/
+
+		--3. Fix History
+		INSERT INTO SCP_ANL_SHIPMENT_PLAN_FIX_H (
+			history_seq,
+			fix_id,
+			division_id,
+			BIZ_TYPE ,
+			ITEM_ID ,
+			TO_SITE ,
+			FROM_SITE ,
+			PROJECT_CODE ,
+			INCOTERMS ,
+			BOD_ID ,
+			yyyymmdd,
+			qty,
+			ORIGIN_FROM_DIVISION_ID ,
+			ORIGIN_TO_DIVISION_ID ,
+			ELECTRODE_TYPE ,
+			fix_reason,
+			created_by,
+			creation_date,
+			last_updated_by,
+			last_update_date,
+			history_creation_date,
+			ATTRIBUTE1)
+		SELECT (NEXT VALUE FOR SEQ1_SCP_ANL_PRODUCTION_PLAN_FIX_H)
+				,A.FIX_ID
+				,B.p_division_id 
+				,B.p_operation_group 
+				,B.p_item_id
+				,B.p_to_site
+				,B.p_from_site
+				,B.p_project_code
+				,B.p_incoterms
+				,B.p_bod_id
+				,B.p_yyyymmdd
+				,cast(round (cast(B.p_qty as numeric(20,10)), 0 ,1) as int)
+				,B.p_origin_from_division_id
+				,B.p_origin_to_division_id
+				,B.p_electrode_type
+				,A.fix_reason
+				,B.p_created_by
+				,SYSDATETIME()
+				,B.p_created_by
+				,SYSDATETIME()
+				,SYSDATETIME()
+				,ISNULL(B.p_active_flag,'')
+		FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0025 B
+		WHERE A.division_id				= B.p_division_id
+"
+"2025-11-15 00:00:00.170","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET_20251114_org","33083554","2","		and A.BIZ_TYPE					= B.p_operation_group
+		and A.ITEM_ID					= B.p_item_id
+		and A.TO_SITE					= B.p_to_site
+		and A.FROM_SITE					= B.p_from_site
+		and ISNULL(NULLIF(A.PROJECT_CODE,''),'-')				= ISNULL(NULLIF(B.p_project_code,''),'-')
+		and ISNULL(NULLIF(A.INCOTERMS,''),'-')					= ISNULL(NULLIF(B.p_incoterms,''),'-')
+		and A.BOD_ID					= B.p_bod_id
+		and A.yyyymmdd					= B.p_yyyymmdd
+		AND ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID,''),'-')	= ISNULL(NULLIF(B.p_origin_from_division_id,''),'-')
+		AND ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID,''),'-')		= ISNULL(NULLIF(B.p_origin_to_division_id,''),'-')
+		AND ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-') = ISNULL(NULLIF(B.p_electrode_type,''),'-')
+
+
+		--4. 삭제
+		DELETE A
+		FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0025 B
+		WHERE A.division_id				= B.p_division_id
+		and A.BIZ_TYPE					= B.p_operation_group
+		and A.ITEM_ID					= B.p_item_id
+		and A.TO_SITE					= B.p_to_site
+		and A.FROM_SITE					= B.p_from_site
+		and ISNULL(NULLIF(A.PROJECT_CODE,''),'-')				= ISNULL(NULLIF(B.p_project_code,''),'-')
+		and ISNULL(NULLIF(A.INCOTERMS,''),'-')					= ISNULL(NULLIF(B.p_incoterms,''),'-')
+		and A.BOD_ID					= B.p_bod_id
+		and A.yyyymmdd					= B.p_yyyymmdd
+		and ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID,''),'-')	= ISNULL(NULLIF(B.p_origin_from_division_id,''),'-')
+		and ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID,''),'-')		= ISNULL(NULLIF(B.p_origin_to_division_id,''),'-')
+		and ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-')	= ISNULL(NULLIF(B.p_electrode_type,''),'-')
+		AND B.p_active_flag			= 'D'
+		;
+
+		SET @v_exec_time  =  REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) + ':' +     
+							 REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60)) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60))    
+
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description  = N'[' + @v_exec_time + ']';   
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		
+	END TRY
+
+	BEGIN CATCH
+		BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		END;
+
+		-- error코드, errror 메시지 반환
+		SELECT 'F' AS result_code, '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() AS err_message ;
+		  
+	END CATCH;
+
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0025UnFix') IS NOT NULL	
+	DROP TABLE #TblDynamic_SCP0025UnFix 
+
+END
+
+
+
+"
+"2025-11-27 00:00:00.930","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","1","
+
+
+
+
+/*
+ * Program ID   : SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET
+ * Description  : SHIPMENT PLAN FG/SEMI FIX 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2019/07/25   yhw				[CSR ID:4071705] Production Plan Fix에서 Unfix 기능 추가
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 2025/11/11   hrkim			[PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 
+ *								  : ESS 가상 사이트 계획을 매핑된 JV 사이트 계획으로 동기화 저장 (ESS 가상 -> JV Real 단방향 저장) 
+ *									- @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용
+ *									- TO Site 정보는 그대로 가져간다. (BOD_ID는 매핑이 안되면 '-')
+ * 
+ */
+CREATE PROCEDURE [dbo].[SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET]
+	 @SCP0025			AS DBO.SCP0025       READONLY
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @max_loop_cnt		NVARCHAR(50);
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 실행시간 확인용    
+    DECLARE @v_start_time   DATETIME     = SYSDATETIME();    
+    DECLARE @v_exec_time    NVARCHAR(10) = ''--'00:00';   
+	
+	DECLARE @SCP0025_WITH_JV	AS DBO.SCP0025;	-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : @SCP0025 + MI법인 가상 사이트에 매핑된 JV 출하계획 정보 담을 테이블 Type 변수
+
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	/*
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0025UnFix') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0025UnFix
+
+	CREATE TABLE TblDynamic_SCP0025UnFix (
+		p_active_flag	nvarchar(1),
+		p_division_id NVARCHAR(30),
+		p_biz_type	nvarchar(1),
+		p_item_id	nvarchar(100),
+		p_to_site	nvarchar(100),
+		p_from_site	nvarchar(50),
+		p_bod_id	nvarchar(50),
+		p_yyyymmdd	nvarchar(8),
+		p_project_code	nvarchar(100),
+		p_incoterms	nvarchar(20),
+		p_qty	nvarchar(200),
+		p_origin_from_division_id NVARCHAR(30),
+		p_origin_to_division_id NVARCHAR(30),
+		p_electrode_type	nvarchar(50),
+		p_user_id	nvarchar(150),
+		FIX_ID	nvarchar(20)
+	);
+	*/
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		------------------------------------------------------------------------------------------------------------------------------------------------------- 
+		--### Start : [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : ESS 가상 라인 계획으로 매핑된 JV 라인 계획 동기화 저장 (ESS 가상 -> JV Real 단방향 저장) 
+		-------------------------------------------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' JV/ESS scm site 매핑 정보 추출' 
+		-------------------------------------------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('TEMPDB..#JV_ESS_SCM_SITE_MAP') IS NOT NULL DROP TABLE #JV_ESS_SCM_SITE_MAP;
+		SELECT VP_COMPANY_ID
+			  ,VP_DIVISION_ID
+			  ,VP_SITE_ID
+			  ,VP_PLANT_ID
+			  ,VP_SCM_SITE_ID
+			  ,RP_COMPANY_ID
+			  ,RP_DIVISION_ID
+			  ,RP_SITE_ID
+			  ,RP_PLANT_ID
+			  ,RP_SCM_SITE_ID
+		 INTO #JV_ESS_SCM_SITE_MAP
+		 FROM FN_GET_JV_REAL_ESS_VIRTUAL_SITE_MAP () 
+		 WHERE 1=1;
+		------------------------------------------------------------------------------------------------------------  
+		print  convert(varchar(30), getdate(), 121) + N' DIVISION 주차별 최종 수행 Plan 버전 정"
+"2025-11-27 00:00:00.930","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","2","보 ' 
+		-- ESS 가상 라인 매핑 JV division의 동기화 대상 버전 정보 확인을 위한 데이터
+		-- Final Plan은 수정 대상에서 제외 ? 
+		------------------------------------------------------------------------------------------------------------  
+		IF OBJECT_ID('TEMPDB..#DIVISION_LAST_PLAN_INFO') IS NOT NULL DROP TABLE #DIVISION_LAST_PLAN_INFO;
+		;WITH SCP_PLAN_INFO AS (
+			SELECT PD.DIVISION_ID
+				 , PM.PLAN_NAME			AS PLAN_START_YYYYMMDD
+				 , PD.PLAN_TYPE
+				 , PD.PLAN_SEQ
+				 , PM.HORIZON_END_DATE	
+				 , PD.PLAN_STATUS
+				 , PD.INPUT_START_DATE 
+				 , ROW_NUMBER()	OVER (PARTITION BY PD.DIVISION_ID
+												 , PM.PLAN_NAME
+										 ORDER  BY CASE WHEN PD.PLAN_TYPE = 'PR' THEN 4
+														WHEN PD.PLAN_TYPE = 'MA' THEN 3
+														WHEN PD.PLAN_TYPE = 'SE' THEN 2
+														WHEN PD.PLAN_TYPE = 'FN' THEN 1
+														ELSE 0
+												   END
+												  ,PD.PLAN_SEQ DESC
+												  ,PD.INPUT_START_DATE DESC ) AS RN
+			 FROM SCM_MST_PLAN PM WITH(NOLOCK)
+				  INNER JOIN SCM_MST_PLAN_DETAIL PD WITH(NOLOCK)
+						  ON PD.DIVISION_ID = PM.DIVISION_ID
+						 AND PD.PLAN_ID		= PM.PLAN_ID
+						 AND PD.PLAN_STATUS	= 1
+				  INNER JOIN SCM_MST_DIVISION DM WITH(NOLOCK)
+						  ON DM.DIVISION_ID	= PM.DIVISION_ID 
+						 AND DM.ATTRIBUTE3 != 'EE'
+			WHERE 1=1 
+			  AND PM.PLAN_CYCLE = 'WEEKLY'
+			  AND PM.PLAN_NAME	>= CONVERT(NVARCHAR(8), DATEADD(DAY, -20, GETDATE()) , 112)
+		)
+		SELECT DIVISION_ID
+			  ,PLAN_START_YYYYMMDD
+			  ,PLAN_TYPE
+			  ,PLAN_SEQ
+			  ,HORIZON_END_DATE
+			  ,PLAN_STATUS
+			  ,INPUT_START_DATE
+			  ,RN
+		  INTO #DIVISION_LAST_PLAN_INFO
+		 FROM SCP_PLAN_INFO
+		WHERE 1=1
+		  AND RN = 1 
+		  AND PLAN_TYPE != 'FN' -- Final plan 대상에서 제외 
+		  ;
+		------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' BOD 및 BOD ITEM 정보' 
+		------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('TEMPDB..#BOD_ITEM') IS NOT NULL DROP TABLE #BOD_ITEM
+		;WITH BOD_ITEM AS ( 
+			SELECT  BD.DIVISION_ID
+				   ,BD.FROM_SITE
+				   ,BD.TO_SITE
+				   ,BD.INCOTERMS
+				   ,BI.ITEM_ID
+				   ,BD.BOD_ID
+				   ,ROW_NUMBER() OVER (PARTITION BY BD.DIVISION_ID
+												   ,BD.FROM_SITE
+												   ,BD.TO_SITE
+												   ,BD.INCOTERMS
+												   ,BI.ITEM_ID
+										   ORDER BY BD.PRIORITY 
+												   ,BI.PRIORITY
+												   ,BD.ATTRIBUTE3 DESC
+												   ,BD.LAST_UPDATE_DATE DESC )	AS RN 
+			  FROM SCP_MST_BOD BD WITH(NOLOCK)
+				   INNER JOIN SCP_MST_BOD_ITEM BI WITH(NOLOCK)
+						   ON BI.BOD_ID			= BD.BOD_ID
+						  AND BI.VALID_YN		= 'Y'
+						  AND BI.TO_YYYYMMDD	>= CONVERT(NVARCHAR(8), DATEADD(DAY, -7, GETDATE()) , 112)
+			 WHERE 1=1
+			   AND BD.ATTRIBUTE3 > CONVERT(NVARCHAR(8), DATEADD(DAY, -7, GETDATE()) , 112)
+			   AND BD.VALID_YN	= 'Y'
+			   AND EXISTS (SELECT TOP 1 'X'
+							 FROM #JV_ESS_SCM_SITE_MAP SM 
+							WHERE SM.RP_DIVISION_ID = BD.DIVISION_ID
+							  AND SM.RP_SCM_SITE_ID	= BD.FROM_SITE )
+		)
+		SELECT DIVISION_ID
+			  ,FROM_SITE
+			  ,TO_SITE
+			  ,INCOTERMS
+			  ,ITEM_ID
+			  ,BOD_ID
+			  ,RN
+		 INTO #BOD_ITEM
+		 FROM BOD_ITEM 
+		WHERE RN = 1 ;
+		------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' 파마미터로 받은 데이터 @SCP0025_WITH_JV 변수에 추가' 
+		-- ESS MI법인 -> JV 동기화 저장 (단방향 저장으로 가상 사이트에 매핑된 JV 사이트 데이터는 제외) 
+		------------------------------------------------------------------------------------------------------------------
+		INSERT INTO @SCP0025_WITH_JV (
+			   P_ACTIVE_FLAG
+			  ,P_DIVISION_ID
+			  ,P_OPERATION_GROUP
+			  ,P_ITEM_ID
+			  ,P_TO_SITE
+			  ,P_FROM_SITE
+			  ,P_BOD_ID
+			  ,P_YYYYMMDD
+			  ,P_PROJECT_CODE
+			  ,P_INCOTERMS
+			  ,P_QTY
+			  ,P_ORIGIN_FROM_DIVISION_ID
+			  ,P_ORIGIN_TO_DIVISION_ID
+			  ,P_EL"
+"2025-11-27 00:00:00.930","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","3","ECTRODE_TYPE
+			  ,P_CREATED_BY  )
+		SELECT PR.P_ACTIVE_FLAG
+			  ,PR.P_DIVISION_ID
+			  ,PR.P_OPERATION_GROUP
+			  ,PR.P_ITEM_ID
+			  ,PR.P_TO_SITE
+			  ,PR.P_FROM_SITE
+			  ,PR.P_BOD_ID
+			  ,PR.P_YYYYMMDD
+			  ,PR.P_PROJECT_CODE
+			  ,PR.P_INCOTERMS
+			  ,PR.P_QTY
+			  ,PR.P_ORIGIN_FROM_DIVISION_ID
+			  ,PR.P_ORIGIN_TO_DIVISION_ID
+			  ,PR.P_ELECTRODE_TYPE
+			  ,PR.P_CREATED_BY 
+		 FROM @SCP0025 PR
+			  LEFT JOIN #JV_ESS_SCM_SITE_MAP SM
+				     ON SM.RP_DIVISION_ID	= PR.P_DIVISION_ID
+				    AND SM.RP_SCM_SITE_ID	= PR.P_FROM_SITE
+		WHERE SM.RP_DIVISION_ID IS NULL  --- 가상 사이트에 매핑된 JV 사이트 데이터는 제외
+		;
+		------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' 가상 사이트에 매핑된 JV 사이트 데이터 @SCP0025_WITH_JV 변수에 추가' 
+		-- ESS MI법인 -> JV 동기화 저장 (단방향 저장으로 가상 사이트에 매핑된 JV 사이트 데이터는 제외) 
+		------------------------------------------------------------------------------------------------------------------
+		; WITH LAST_MONDAY AS (
+			SELECT MAX(YYYYMMDD) AS LAST_MONDAY
+			 FROM SCM_MST_BUCKET B WITH(NOLOCK)
+			WHERE 1=1
+			  AND YYYYMMDD <= CONVERT(NVARCHAR(8), GETDATE(), 112) 
+			  AND DAYOFWEEK	= 'MON'  
+		)
+		INSERT INTO @SCP0025_WITH_JV (
+			   P_ACTIVE_FLAG
+			  ,P_DIVISION_ID
+			  ,P_OPERATION_GROUP
+			  ,P_ITEM_ID
+			  ,P_TO_SITE
+			  ,P_FROM_SITE
+			  ,P_BOD_ID
+			  ,P_YYYYMMDD
+			  ,P_PROJECT_CODE
+			  ,P_INCOTERMS
+			  ,P_QTY
+			  ,P_ORIGIN_FROM_DIVISION_ID
+			  ,P_ORIGIN_TO_DIVISION_ID
+			  ,P_ELECTRODE_TYPE
+			  ,P_CREATED_BY  )
+		SELECT PR.P_ACTIVE_FLAG
+			  ,SM.RP_DIVISION_ID			AS P_DIVISION_ID
+			  ,PR.P_OPERATION_GROUP
+			  ,PR.P_ITEM_ID
+			  ,PR.P_TO_SITE
+			  ,SM.RP_SCM_SITE_ID			AS P_FROM_SITE
+			  ,ISNULL(BI.BOD_ID, '-')		AS P_BOD_ID
+			  ,PR.P_YYYYMMDD
+			  ,PR.P_PROJECT_CODE
+			  ,PR.P_INCOTERMS
+			  ,PR.P_QTY
+			  ,SM.RP_DIVISION_ID			AS P_ORIGIN_FROM_DIVISION_ID
+			  ,PR.P_ORIGIN_TO_DIVISION_ID
+			  ,PR.P_ELECTRODE_TYPE
+			  ,PR.P_CREATED_BY 
+		 FROM @SCP0025 PR
+			  INNER JOIN #JV_ESS_SCM_SITE_MAP SM
+				      ON SM.VP_DIVISION_ID	= PR.P_DIVISION_ID
+				     AND SM.VP_SCM_SITE_ID	= PR.P_FROM_SITE
+			  INNER JOIN LAST_MONDAY MD
+					  ON 1=1 
+			  INNER JOIN #DIVISION_LAST_PLAN_INFO PV				-- 수정할 대상 버전이 있어야 수정 (FN 까지 완료된 경우 수정하지 않음) 
+					  ON PV.DIVISION_ID			= SM.RP_DIVISION_ID
+					 AND PV.PLAN_START_YYYYMMDD	= MD.LAST_MONDAY
+			  LEFT  JOIN SCP_MST_BOD BO WITH(NOLOCK)
+					  ON BO.BOD_ID			= PR.P_BOD_ID
+			  LEFT  JOIN #BOD_ITEM BI
+					  ON BI.DIVISION_ID		= SM.RP_DIVISION_ID
+					 AND BI.FROM_SITE		= SM.RP_SCM_SITE_ID
+					 AND BI.TO_SITE			= PR.P_TO_SITE
+					 AND BI.INCOTERMS		= BO.INCOTERMS
+					 AND BI.ITEM_ID			= PR.P_ITEM_ID 
+		WHERE 1=1
+		;
+		------------------------------------------------------------------------------------------------------------------------------------------------------- 
+		--### End : [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : ESS 가상 라인 계획으로 매핑된 JV 라인 계획 동기화 저장 (ESS 가상 -> JV Real 단방향 저장) 
+		-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		--수정 Row
+		SET @max_loop_cnt = convert(nvarchar(50), ISNULL((
+									SELECT COUNT(*) 
+									FROM @SCP0025_WITH_JV  -- PJ2025F254 : @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용
+								  ),0))
+		;
+
+		/*
+		INSERT INTO #TblDynamic_SCP0025UnFix
+		SELECT p_active_flag,
+				p_division_id,
+				p_operation_group,
+				p_item_id,
+				p_to_site,
+				p_from_site,
+				p_bod_id,
+				p_yyyymmdd,
+				p_project_code,
+				p_incoterms,
+				p_qty,
+				p_origin_from_division_id,
+				p_origin_to_division_id,
+				p_electrode_type,
+				p_created_by,
+				''
+		FROM @SCP0025
+		*/
+
+		--3. Fix History
+		INSERT INTO SCP_ANL_SHIPMENT_PLAN_FIX_H (
+			history_seq,
+			fix_id,
+			division_id,
+			BIZ_TYPE ,
+			ITEM_ID ,
+			TO_SITE ,
+			FROM_SITE ,
+			PROJ"
+"2025-11-27 00:00:00.930","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","4","ECT_CODE ,
+			INCOTERMS ,
+			BOD_ID ,
+			yyyymmdd,
+			qty,
+			ORIGIN_FROM_DIVISION_ID ,
+			ORIGIN_TO_DIVISION_ID ,
+			ELECTRODE_TYPE ,
+			fix_reason,
+			created_by,
+			creation_date,
+			last_updated_by,
+			last_update_date,
+			history_creation_date,
+			ATTRIBUTE1)
+		SELECT (NEXT VALUE FOR SEQ1_SCP_ANL_PRODUCTION_PLAN_FIX_H)
+				,A.FIX_ID
+				,B.p_division_id 
+				,B.p_operation_group 
+				,B.p_item_id
+				,B.p_to_site
+				,B.p_from_site
+				,B.p_project_code
+				,B.p_incoterms
+				,B.p_bod_id
+				,B.p_yyyymmdd
+				,cast(round (cast(B.p_qty as numeric(20,10)), 0 ,1) as int)
+				,B.p_origin_from_division_id
+				,B.p_origin_to_division_id
+				,B.p_electrode_type
+				,A.fix_reason
+				,B.p_created_by
+				,SYSDATETIME()
+				,B.p_created_by
+				,SYSDATETIME()
+				,SYSDATETIME()
+				,ISNULL(B.p_active_flag,'')
+		FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0025_WITH_JV  B -- PJ2025F254 : @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용 B
+		WHERE A.division_id				= B.p_division_id
+		and A.BIZ_TYPE					= B.p_operation_group
+		and A.ITEM_ID					= B.p_item_id
+		and A.TO_SITE					= B.p_to_site
+		and A.FROM_SITE					= B.p_from_site
+		and ISNULL(NULLIF(A.PROJECT_CODE,''),'-')				= ISNULL(NULLIF(B.p_project_code,''),'-')
+		and ISNULL(NULLIF(A.INCOTERMS,''),'-')					= ISNULL(NULLIF(B.p_incoterms,''),'-')
+		and A.BOD_ID					= B.p_bod_id
+		and A.yyyymmdd					= B.p_yyyymmdd
+		AND ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID,''),'-')	= ISNULL(NULLIF(B.p_origin_from_division_id,''),'-')
+		AND ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID,''),'-')		= ISNULL(NULLIF(B.p_origin_to_division_id,''),'-')
+		AND ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-') = ISNULL(NULLIF(B.p_electrode_type,''),'-')
+
+
+		--4. 삭제
+		DELETE A
+		FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0025_WITH_JV  B -- PJ2025F254 : @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용 B
+		WHERE A.division_id				= B.p_division_id
+		and A.BIZ_TYPE					= B.p_operation_group
+		and A.ITEM_ID					= B.p_item_id
+		and A.TO_SITE					= B.p_to_site
+		and A.FROM_SITE					= B.p_from_site
+		and ISNULL(NULLIF(A.PROJECT_CODE,''),'-')				= ISNULL(NULLIF(B.p_project_code,''),'-')
+		and ISNULL(NULLIF(A.INCOTERMS,''),'-')					= ISNULL(NULLIF(B.p_incoterms,''),'-')
+		and A.BOD_ID					= B.p_bod_id
+		and A.yyyymmdd					= B.p_yyyymmdd
+		and ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID,''),'-')	= ISNULL(NULLIF(B.p_origin_from_division_id,''),'-')
+		and ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID,''),'-')		= ISNULL(NULLIF(B.p_origin_to_division_id,''),'-')
+		and ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-')	= ISNULL(NULLIF(B.p_electrode_type,''),'-')
+		AND B.p_active_flag			= 'D'
+		;
+
+		SET @v_exec_time  =  REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) + ':' +     
+							 REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60)) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60))    
+
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description  = N'[' + @v_exec_time + ']';   
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		
+	END TRY
+
+	BEGIN CATCH
+		BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROC"
+"2025-11-27 00:00:00.930","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","5","EDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		END;
+
+		-- error코드, errror 메시지 반환
+		SELECT 'F' AS result_code, '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() AS err_message ;
+		  
+	END CATCH;
+
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0025UnFix') IS NOT NULL	
+	DROP TABLE #TblDynamic_SCP0025UnFix 
+
+END
+
+
+
+"
+"2025-12-17 00:00:00.463","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","5","_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		END;
+
+		-- error코드, errror 메시지 반환
+		SELECT 'F' AS result_code, '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() AS err_message ;
+		  
+	END CATCH;
+
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0025UnFix') IS NOT NULL	
+	DROP TABLE #TblDynamic_SCP0025UnFix 
+
+END
+
+
+
+"
+"2025-12-24 00:00:01.070","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","1","
+
+
+
+
+/*
+ * Program ID   : SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET
+ * Description  : SHIPMENT PLAN FG/SEMI FIX 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2019/07/25   yhw				[CSR ID:4071705] Production Plan Fix에서 Unfix 기능 추가
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 2025/11/11   hrkim			[PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 
+ *								  : ESS 가상 사이트 계획을 매핑된 JV 사이트 계획으로 동기화 저장 (ESS 가상 -> JV Real 단방향 저장) 
+ *									- @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용
+ *									- TO Site 정보는 그대로 가져간다. (BOD_ID는 매핑이 안되면 '-')
+ *								    - 2025.12.16 동기화 대상 데이터 from/to 사이트와 무관하게 origin from/to division_id 컬럼 division_id와 같은 값으로 저장(81_ST) : 김춘동 책임님 
+ *								    - 2025.12.23 동기화 데이터 생성시 BOD_ID 매핑이 안되는 경우 ESS 가상 사이트 BOD_ID 유지 
+ * 
+ */
+CREATE PROCEDURE [dbo].[SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET]
+	 @SCP0025			AS DBO.SCP0025       READONLY
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @max_loop_cnt		NVARCHAR(50);
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 실행시간 확인용    
+    DECLARE @v_start_time   DATETIME     = SYSDATETIME();    
+    DECLARE @v_exec_time    NVARCHAR(10) = ''--'00:00';   
+	
+	DECLARE @SCP0025_WITH_JV	AS DBO.SCP0025;	-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : @SCP0025 + MI법인 가상 사이트에 매핑된 JV 출하계획 정보 담을 테이블 Type 변수
+
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	/*
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0025UnFix') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0025UnFix
+
+	CREATE TABLE TblDynamic_SCP0025UnFix (
+		p_active_flag	nvarchar(1),
+		p_division_id NVARCHAR(30),
+		p_biz_type	nvarchar(1),
+		p_item_id	nvarchar(100),
+		p_to_site	nvarchar(100),
+		p_from_site	nvarchar(50),
+		p_bod_id	nvarchar(50),
+		p_yyyymmdd	nvarchar(8),
+		p_project_code	nvarchar(100),
+		p_incoterms	nvarchar(20),
+		p_qty	nvarchar(200),
+		p_origin_from_division_id NVARCHAR(30),
+		p_origin_to_division_id NVARCHAR(30),
+		p_electrode_type	nvarchar(50),
+		p_user_id	nvarchar(150),
+		FIX_ID	nvarchar(20)
+	);
+	*/
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		------------------------------------------------------------------------------------------------------------------------------------------------------- 
+		--### Start : [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : ESS 가상 라인 계획으로 매핑된 JV 라인 계획 동기화 저장 (ESS 가상 -> JV Real 단방향 저장) 
+		-------------------------------------------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' JV/ESS scm site 매핑 정보 추출' 
+		-------------------------------------------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('TEMPDB..#JV_ESS_SCM_SITE_MAP') IS NOT NULL DROP TABLE #JV_ESS_SCM_SITE_MAP;
+		SELECT VP_COMPANY_ID
+			  ,VP_DIVISION_ID
+			  ,VP_SITE_ID
+			  ,VP_PLANT_ID
+			  ,VP_SCM_SITE_ID
+			  ,RP_COMPANY_ID
+			  ,RP_DIVISION_ID
+			  ,RP_SITE_ID
+			  ,RP_PLANT_ID
+			  ,RP_SCM_SITE_ID
+		 INTO #JV_ESS_SCM_SITE_MAP
+		 FROM FN_GET_JV_REAL_ESS_VIRTUAL_SITE_MAP () 
+"
+"2025-12-24 00:00:01.070","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","2","		 WHERE 1=1;
+		------------------------------------------------------------------------------------------------------------  
+		print  convert(varchar(30), getdate(), 121) + N' DIVISION 주차별 최종 수행 Plan 버전 정보 ' 
+		-- ESS 가상 라인 매핑 JV division의 동기화 대상 버전 정보 확인을 위한 데이터
+		-- Final Plan은 수정 대상에서 제외 ? 
+		------------------------------------------------------------------------------------------------------------  
+		IF OBJECT_ID('TEMPDB..#DIVISION_LAST_PLAN_INFO') IS NOT NULL DROP TABLE #DIVISION_LAST_PLAN_INFO;
+		;WITH SCP_PLAN_INFO AS (
+			SELECT PD.DIVISION_ID
+				 , PM.PLAN_NAME			AS PLAN_START_YYYYMMDD
+				 , PD.PLAN_TYPE
+				 , PD.PLAN_SEQ
+				 , PM.HORIZON_END_DATE	
+				 , PD.PLAN_STATUS
+				 , PD.INPUT_START_DATE 
+				 , ROW_NUMBER()	OVER (PARTITION BY PD.DIVISION_ID
+												 , PM.PLAN_NAME
+										 ORDER  BY CASE WHEN PD.PLAN_TYPE = 'PR' THEN 4
+														WHEN PD.PLAN_TYPE = 'MA' THEN 3
+														WHEN PD.PLAN_TYPE = 'SE' THEN 2
+														WHEN PD.PLAN_TYPE = 'FN' THEN 1
+														ELSE 0
+												   END
+												  ,PD.PLAN_SEQ DESC
+												  ,PD.INPUT_START_DATE DESC ) AS RN
+			 FROM SCM_MST_PLAN PM WITH(NOLOCK)
+				  INNER JOIN SCM_MST_PLAN_DETAIL PD WITH(NOLOCK)
+						  ON PD.DIVISION_ID = PM.DIVISION_ID
+						 AND PD.PLAN_ID		= PM.PLAN_ID
+						 AND PD.PLAN_STATUS	= 1
+				  INNER JOIN SCM_MST_DIVISION DM WITH(NOLOCK)
+						  ON DM.DIVISION_ID	= PM.DIVISION_ID 
+						 AND DM.ATTRIBUTE3 != 'EE'
+			WHERE 1=1 
+			  AND PM.PLAN_CYCLE = 'WEEKLY'
+			  AND PM.PLAN_NAME	>= CONVERT(NVARCHAR(8), DATEADD(DAY, -20, GETDATE()) , 112)
+		)
+		SELECT DIVISION_ID
+			  ,PLAN_START_YYYYMMDD
+			  ,PLAN_TYPE
+			  ,PLAN_SEQ
+			  ,HORIZON_END_DATE
+			  ,PLAN_STATUS
+			  ,INPUT_START_DATE
+			  ,RN
+		  INTO #DIVISION_LAST_PLAN_INFO
+		 FROM SCP_PLAN_INFO
+		WHERE 1=1
+		  AND RN = 1 
+		  AND PLAN_TYPE != 'FN' -- Final plan 대상에서 제외 
+		  ;
+		------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' BOD 및 BOD ITEM 정보' 
+		------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('TEMPDB..#BOD_ITEM') IS NOT NULL DROP TABLE #BOD_ITEM
+		;WITH BOD_ITEM AS ( 
+			SELECT  BD.DIVISION_ID
+				   ,BD.FROM_SITE
+				   ,BD.TO_SITE
+				   ,BD.INCOTERMS
+				   ,BI.ITEM_ID
+				   ,BD.BOD_ID
+				   ,ROW_NUMBER() OVER (PARTITION BY BD.DIVISION_ID
+												   ,BD.FROM_SITE
+												   ,BD.TO_SITE
+												   ,BD.INCOTERMS
+												   ,BI.ITEM_ID
+										   ORDER BY BD.PRIORITY 
+												   ,BI.PRIORITY
+												   ,BD.ATTRIBUTE3 DESC
+												   ,BD.LAST_UPDATE_DATE DESC )	AS RN 
+			  FROM SCP_MST_BOD BD WITH(NOLOCK)
+				   INNER JOIN SCP_MST_BOD_ITEM BI WITH(NOLOCK)
+						   ON BI.BOD_ID			= BD.BOD_ID
+						  AND BI.VALID_YN		= 'Y'
+						  AND BI.TO_YYYYMMDD	>= CONVERT(NVARCHAR(8), DATEADD(DAY, -7, GETDATE()) , 112)
+			 WHERE 1=1
+			   AND BD.ATTRIBUTE3 > CONVERT(NVARCHAR(8), DATEADD(DAY, -7, GETDATE()) , 112)
+			   AND BD.VALID_YN	= 'Y'
+			   AND EXISTS (SELECT TOP 1 'X'
+							 FROM #JV_ESS_SCM_SITE_MAP SM 
+							WHERE SM.RP_DIVISION_ID = BD.DIVISION_ID
+							  AND SM.RP_SCM_SITE_ID	= BD.FROM_SITE )
+		)
+		SELECT DIVISION_ID
+			  ,FROM_SITE
+			  ,TO_SITE
+			  ,INCOTERMS
+			  ,ITEM_ID
+			  ,BOD_ID
+			  ,RN
+		 INTO #BOD_ITEM
+		 FROM BOD_ITEM 
+		WHERE RN = 1 ;
+		------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' 파마미터로 받은 데이터 @SCP0025_WITH_JV 변수에 추가' 
+		-- ESS MI법인 -> JV 동기화 저장 (단방향 저장으로 가상 사이트에 매핑된 JV 사이트 데이터는 제외) 
+		------------------------------------------------------------------------------------------------------------------
+		INSERT INTO @SCP0025_WITH_JV (
+			   P_ACTIVE_FLAG
+			  ,P_DIVISION_ID
+			  ,P_OPERATION_GROUP
+			  ,P"
+"2025-12-24 00:00:01.070","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","3","_ITEM_ID
+			  ,P_TO_SITE
+			  ,P_FROM_SITE
+			  ,P_BOD_ID
+			  ,P_YYYYMMDD
+			  ,P_PROJECT_CODE
+			  ,P_INCOTERMS
+			  ,P_QTY
+			  ,P_ORIGIN_FROM_DIVISION_ID
+			  ,P_ORIGIN_TO_DIVISION_ID
+			  ,P_ELECTRODE_TYPE
+			  ,P_CREATED_BY  )
+		SELECT PR.P_ACTIVE_FLAG
+			  ,PR.P_DIVISION_ID
+			  ,PR.P_OPERATION_GROUP
+			  ,PR.P_ITEM_ID
+			  ,PR.P_TO_SITE
+			  ,PR.P_FROM_SITE
+			  ,PR.P_BOD_ID
+			  ,PR.P_YYYYMMDD
+			  ,PR.P_PROJECT_CODE
+			  ,PR.P_INCOTERMS
+			  ,PR.P_QTY
+			  ,PR.P_ORIGIN_FROM_DIVISION_ID
+			  ,PR.P_ORIGIN_TO_DIVISION_ID
+			  ,PR.P_ELECTRODE_TYPE
+			  ,PR.P_CREATED_BY 
+		 FROM @SCP0025 PR
+		-- 2025.12.16 주석 처리 (자동차 품목 생산될 수 있음) 	  LEFT JOIN #JV_ESS_SCM_SITE_MAP SM
+		-- 2025.12.16 주석 처리 (자동차 품목 생산될 수 있음) 		     ON SM.RP_DIVISION_ID	= PR.P_DIVISION_ID
+		-- 2025.12.16 주석 처리 (자동차 품목 생산될 수 있음) 		    AND SM.RP_SCM_SITE_ID	= PR.P_FROM_SITE
+		-- 2025.12.16 주석 처리 (자동차 품목 생산될 수 있음) WHERE SM.RP_DIVISION_ID IS NULL  --- 가상 사이트에 매핑된 JV 사이트 데이터는 제외
+		;
+		------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' 가상 사이트에 매핑된 JV 사이트 데이터 @SCP0025_WITH_JV 변수에 추가' 
+		-- ESS MI법인 -> JV 동기화 저장 (단방향 저장으로 가상 사이트에 매핑된 JV 사이트 데이터는 제외) 
+		------------------------------------------------------------------------------------------------------------------
+		; WITH LAST_MONDAY AS (
+			SELECT MAX(YYYYMMDD) AS LAST_MONDAY
+			 FROM SCM_MST_BUCKET B WITH(NOLOCK)
+			WHERE 1=1
+			  AND YYYYMMDD <= CONVERT(NVARCHAR(8), GETDATE(), 112) 
+			  AND DAYOFWEEK	= 'MON'  
+		)
+		INSERT INTO @SCP0025_WITH_JV (
+			   P_ACTIVE_FLAG
+			  ,P_DIVISION_ID
+			  ,P_OPERATION_GROUP
+			  ,P_ITEM_ID
+			  ,P_TO_SITE
+			  ,P_FROM_SITE
+			  ,P_BOD_ID
+			  ,P_YYYYMMDD
+			  ,P_PROJECT_CODE
+			  ,P_INCOTERMS
+			  ,P_QTY
+			  ,P_ORIGIN_FROM_DIVISION_ID
+			  ,P_ORIGIN_TO_DIVISION_ID
+			  ,P_ELECTRODE_TYPE
+			  ,P_CREATED_BY  )
+		SELECT PR.P_ACTIVE_FLAG
+			  ,SM.RP_DIVISION_ID			AS P_DIVISION_ID
+			  ,PR.P_OPERATION_GROUP
+			  ,PR.P_ITEM_ID
+			  ,PR.P_TO_SITE
+			  ,SM.RP_SCM_SITE_ID							AS P_FROM_SITE
+			  ,ISNULL(ISNULL(BI.BOD_ID, PR.P_BOD_ID), '-')	AS P_BOD_ID		-- 2025.12.23 bod_id 매핑이 안되는 경우 ESS가상 사이트 기준 BOD_ID 유지	
+			  ,PR.P_YYYYMMDD
+			  ,PR.P_PROJECT_CODE
+			  ,PR.P_INCOTERMS
+			  ,PR.P_QTY
+			  ,SM.RP_DIVISION_ID			AS P_ORIGIN_FROM_DIVISION_ID
+			  ,SM.RP_DIVISION_ID			AS P_ORIGIN_TO_DIVISION_ID		-- 2025.12.16 division_id와 같은 값으로 
+			  ,PR.P_ELECTRODE_TYPE
+			  ,PR.P_CREATED_BY 
+		 FROM @SCP0025 PR
+			  INNER JOIN #JV_ESS_SCM_SITE_MAP SM
+				      ON SM.VP_DIVISION_ID	= PR.P_DIVISION_ID
+				     AND SM.VP_SCM_SITE_ID	= PR.P_FROM_SITE
+			  INNER JOIN LAST_MONDAY MD
+					  ON 1=1 
+			  INNER JOIN #DIVISION_LAST_PLAN_INFO PV				-- 수정할 대상 버전이 있어야 수정 (FN 까지 완료된 경우 수정하지 않음) 
+					  ON PV.DIVISION_ID			= SM.RP_DIVISION_ID
+					 AND PV.PLAN_START_YYYYMMDD	= MD.LAST_MONDAY
+			  LEFT  JOIN SCP_MST_BOD BO WITH(NOLOCK)
+					  ON BO.BOD_ID			= PR.P_BOD_ID
+			  LEFT  JOIN #BOD_ITEM BI
+					  ON BI.DIVISION_ID		= SM.RP_DIVISION_ID
+					 AND BI.FROM_SITE		= SM.RP_SCM_SITE_ID
+					 AND BI.TO_SITE			= PR.P_TO_SITE
+					 AND BI.INCOTERMS		= BO.INCOTERMS
+					 AND BI.ITEM_ID			= PR.P_ITEM_ID 
+		WHERE 1=1
+		;
+		------------------------------------------------------------------------------------------------------------------------------------------------------- 
+		--### End : [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : ESS 가상 라인 계획으로 매핑된 JV 라인 계획 동기화 저장 (ESS 가상 -> JV Real 단방향 저장) 
+		-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		--수정 Row
+		SET @max_loop_cnt = convert(nvarchar(50), ISNULL((
+									SELECT COUNT(*) 
+									FROM @SCP0025_WITH_JV  -- PJ2025F254 : @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용
+								  ),0))
+		;
+
+		/*
+		INSERT INTO #TblDynamic_SCP0025UnFix
+		SELECT p_active_f"
+"2025-12-24 00:00:01.070","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","4","lag,
+				p_division_id,
+				p_operation_group,
+				p_item_id,
+				p_to_site,
+				p_from_site,
+				p_bod_id,
+				p_yyyymmdd,
+				p_project_code,
+				p_incoterms,
+				p_qty,
+				p_origin_from_division_id,
+				p_origin_to_division_id,
+				p_electrode_type,
+				p_created_by,
+				''
+		FROM @SCP0025
+		*/
+
+		--3. Fix History
+		INSERT INTO SCP_ANL_SHIPMENT_PLAN_FIX_H (
+			history_seq,
+			fix_id,
+			division_id,
+			BIZ_TYPE ,
+			ITEM_ID ,
+			TO_SITE ,
+			FROM_SITE ,
+			PROJECT_CODE ,
+			INCOTERMS ,
+			BOD_ID ,
+			yyyymmdd,
+			qty,
+			ORIGIN_FROM_DIVISION_ID ,
+			ORIGIN_TO_DIVISION_ID ,
+			ELECTRODE_TYPE ,
+			fix_reason,
+			created_by,
+			creation_date,
+			last_updated_by,
+			last_update_date,
+			history_creation_date,
+			ATTRIBUTE1)
+		SELECT (NEXT VALUE FOR SEQ1_SCP_ANL_PRODUCTION_PLAN_FIX_H)
+				,A.FIX_ID
+				,B.p_division_id 
+				,B.p_operation_group 
+				,B.p_item_id
+				,B.p_to_site
+				,B.p_from_site
+				,B.p_project_code
+				,B.p_incoterms
+				,B.p_bod_id
+				,B.p_yyyymmdd
+				,cast(round (cast(B.p_qty as numeric(20,10)), 0 ,1) as int)
+				,B.p_origin_from_division_id
+				,B.p_origin_to_division_id
+				,B.p_electrode_type
+				,A.fix_reason
+				,B.p_created_by
+				,SYSDATETIME()
+				,B.p_created_by
+				,SYSDATETIME()
+				,SYSDATETIME()
+				,ISNULL(B.p_active_flag,'')
+		FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0025_WITH_JV  B -- PJ2025F254 : @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용 B
+		WHERE A.division_id				= B.p_division_id
+		and A.BIZ_TYPE					= B.p_operation_group
+		and A.ITEM_ID					= B.p_item_id
+		and A.TO_SITE					= B.p_to_site
+		and A.FROM_SITE					= B.p_from_site
+		and ISNULL(NULLIF(A.PROJECT_CODE,''),'-')				= ISNULL(NULLIF(B.p_project_code,''),'-')
+		and ISNULL(NULLIF(A.INCOTERMS,''),'-')					= ISNULL(NULLIF(B.p_incoterms,''),'-')
+		and A.BOD_ID					= B.p_bod_id
+		and A.yyyymmdd					= B.p_yyyymmdd
+		AND ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID,''),'-')	= ISNULL(NULLIF(B.p_origin_from_division_id,''),'-')
+		AND ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID,''),'-')		= ISNULL(NULLIF(B.p_origin_to_division_id,''),'-')
+		AND ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-') = ISNULL(NULLIF(B.p_electrode_type,''),'-')
+
+
+		--4. 삭제
+		DELETE A
+		FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0025_WITH_JV  B -- PJ2025F254 : @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용 B
+		WHERE A.division_id				= B.p_division_id
+		and A.BIZ_TYPE					= B.p_operation_group
+		and A.ITEM_ID					= B.p_item_id
+		and A.TO_SITE					= B.p_to_site
+		and A.FROM_SITE					= B.p_from_site
+		and ISNULL(NULLIF(A.PROJECT_CODE,''),'-')				= ISNULL(NULLIF(B.p_project_code,''),'-')
+		and ISNULL(NULLIF(A.INCOTERMS,''),'-')					= ISNULL(NULLIF(B.p_incoterms,''),'-')
+		and A.BOD_ID					= B.p_bod_id
+		and A.yyyymmdd					= B.p_yyyymmdd
+		and ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID,''),'-')	= ISNULL(NULLIF(B.p_origin_from_division_id,''),'-')
+		and ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID,''),'-')		= ISNULL(NULLIF(B.p_origin_to_division_id,''),'-')
+		and ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-')	= ISNULL(NULLIF(B.p_electrode_type,''),'-')
+		AND B.p_active_flag			= 'D'
+		;
+
+		SET @v_exec_time  =  REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) + ':' +     
+							 REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60)) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60))    
+
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description  = N'[' + @v_exec_time + ']';   
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		
+	END TRY
+
+	BEGIN CATCH
+		BEGIN
+			I"
+"2025-12-24 00:00:01.070","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","5","NSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		END;
+
+		-- error코드, errror 메시지 반환
+		SELECT 'F' AS result_code, '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() AS err_message ;
+		  
+	END CATCH;
+
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0025UnFix') IS NOT NULL	
+	DROP TABLE #TblDynamic_SCP0025UnFix 
+
+END
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0025_GET_SHIPMENT_PLAN_FIX","1950018078","1","/*
+ * Program ID   : SCP0025_GET_SHIPMENT_PLAN_FIX
+ * Description  : Production Plan Line 별 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge			Description
+ *===================================================================================================
+ * 2018/05/28   byunghunjung		Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/05/31	KYH					년조회시 년도가 다른 같은 월 조회시 sum이 표시되는 문제 ex) 2018.0528 ~ 2019.0527 조회시 2019.5월 (마지막 주)에 2018.5월 sum값 표시2018.5월의 sum이 표시된다
+ * 2018/07/02	KYH					신규 컬럼 추가 조회. (ORIGIN_FROM_DIVISION_ID, ORIGIN_TO_DIVISION_ID, ELECTRODE_TYPE)
+ * 2019/06/07	HWYOON				[CSR ID:4010290] SCP UI 생산/출하 계획 저장속도 개선
+ * 2019/07/15	HWYOON				[CSR ID:4071705] Production Plan Fix에서 Unfix 기능 추가 - BOD 조회추가
+ * 2021/07/07   khj79			    PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD 2단계 개발 : FROM,TO 추가 , scp_mst_bod_v=> scp_mst_bod_n_v
+ * 2022/04/29   chaan				81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 2023/04/10   LWY					PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 이행 - DIVISION_ID 공통화 작업(div_commonization)
+
+ ex) EXEC SCP0025_GET_SHIPMENT_PLAN_FIX @p_division_id='81', @p_biz_type='P', @p_item_id='', @p_from_yyyymmdd='20180702', @p_to_yyyymmdd='20190630', @p_electype='', @p_program_id='SCP0025', @p_sheet_name='Shipment Plan Fix', @p_user_id='kaiser99', @debug_mode='T'
+   
+*/
+
+CREATE PROCEDURE [dbo].[SCP0025_GET_SHIPMENT_PLAN_FIX]
+--chaan	 @p_division_id		NVARCHAR(2) 
+	 @p_division_id		NVARCHAR(30) --chaan
+	,@p_biz_type		NVARCHAR(1) 
+	,@p_item_id			NVARCHAR(MAX) 
+	,@p_from_yyyymmdd	NVARCHAR(8)
+    ,@p_to_yyyymmdd		NVARCHAR(8)
+	,@p_electype		NVARCHAR(300)
+	,@p_program_id		NVARCHAR(MAX)
+	,@p_sheet_name		NVARCHAR(MAX)
+	,@p_user_id			NVARCHAR(MAX)
+	,@debug_mode        NVARCHAR(MAX)
+
+AS  
+
+BEGIN
+
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+	
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0025') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0025;
+
+	-- BOD 2단계 개발 : FROM , TO 추가
+	CREATE TABLE #TblDynamicPivot_SCP0025 (
+		 division_id	 NVARCHAR(128)	,biz_type			NVARCHAR(128)			,item_id		NVARCHAR(128)
+		,ELECTRODE_TYPE	 NVARCHAR(128)	,ORIGIN_TO_DIVISION_ID		NVARCHAR(128)	,to_site		NVARCHAR(128)
+		,ORIGIN_FROM_DIVISION_ID	NVARCHAR(128) , from_site		NVARCHAR(128)	,incoterms		NVARCHAR(128)
+		,project_code	 NVARCHAR(128)	,transport_mode		NVARCHAR(128)			,lt_total		INT
+		,measure		NVARCHAR(128)	,qty				NUMERIC(20,0)			,from_yyyymmdd   NVARCHAR(128)
+		,yyyymmdd		NVARCHAR(128)	,yyyymm				NVARCHAR(128)			,iso_week NVARCHAR(128)
+		,BOD_ID			NVARCHAR(150)
+		,BOD_FROM_YYYYMMDD NVARCHAR(008), BOD_TO_YYYYMMDD NVARCHAR(008)
+	);
+ 
+	/********************************************************************************
+	* 데이타조회, 임시테이블에 저장
+	********************************************************************************/
+	--IF @p_division_id NOT IN ('EE','EE_UC')
+	IF @p_division_id NOT IN (SELECT DIVISION_ID FROM dbo.FN_GET_DIVISION_DIV('EE')) --div_commonization
+	BEGIN
+		INSERT #TblDynamicPivot_SCP0025
+		SELECT  
+	         division_id
+			,biz_type
+			,item_id
+			,ELECTRODE_TYPE
+			,ORIGIN_TO_DIVISION_ID
+			,to_site
+			,ORIGIN_FROM_DIVISION_ID
+			,from_site
+			,incoterms
+			,project_code
+			,transport_mode
+			,lt_total
+			,measure			
+			,qty
+			,@p_from_yyyymmdd AS from_yyyymmdd
+			,'D_'+yyyymmdd AS yyyymmdd
+			,n.basis_yyyymm AS yyyymm
+			,RIGHT(n.basis_yyyymm, 4)+n.iso_week AS iso_week	
+			,bod_id
+			-- BOD 2단계 개발 : from, to추가
+			,BOD_FROM_YYYYMMDD
+			,BOD_TO_YYYYMMDD
+		FROM (	 
+			SELECT 
+				 a.division_id
+				,a.biz_type
+				,a.item_id
+				,ISNULL(NULLIF(a.electrode_type,''),'-') ELECTRODE_TYPE
+				,ISNULL(NULLIF(a.ORIGIN_TO_DIVISION_ID,''), '-') as OR"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0025_GET_SHIPMENT_PLAN_FIX","1950018078","2","IGIN_TO_DIVISION_ID
+				,a.to_site
+				,ISNULL(NULLIF(a.ORIGIN_FROM_DIVISION_ID,'') , '-') as ORIGIN_FROM_DIVISION_ID
+				,a.from_site
+				,a.incoterms
+				,a.project_code
+				,b.transport_mode
+				,b.lt_total
+				,'Ship Plan' as measure	
+				,yyyymmdd				
+				,qty
+				,a.bod_id
+				-- BOD 2단계 개발 : from, to추가
+				,b.from_yyyymmdd	AS BOD_FROM_YYYYMMDD
+				,b.to_yyyymmdd		AS BOD_TO_YYYYMMDD
+			FROM scp_anl_shipment_plan_fix a
+			-- BOD 2단계 개발 : scp_mst_bod_v=> scp_mst_bod_n_v
+			--JOIN scp_mst_bod_v b ON a.division_id = b.division_id AND a.bod_id = b.bod_id
+			JOIN scp_mst_bod_n_v b ON a.division_id = b.division_id AND a.bod_id = b.bod_id
+			WHERE 1=1 
+			AND a.yyyymmdd			  >= @p_from_yyyymmdd
+			AND a.yyyymmdd			  <= @p_to_yyyymmdd		
+			AND a.division_id	       = @p_division_id
+			AND a.biz_type      = @p_biz_type
+			AND ( ( @p_item_id	IS NULL OR  @p_item_id  ='') OR a.item_id			IN (SELECT token FROM dbo.String_Split(@p_item_id ,',')))
+			--AND ( ( @p_electype IS NULL OR  @p_electype ='') OR A.ELECTRODE_TYPE	IN (SELECT token FROM dbo.String_Split(@p_electype, ',')))
+			UNION ALL
+			SELECT 
+				 a.division_id
+				,a.biz_type
+				,a.item_id
+				, ISNULL(NULLIF(a.ELECTRODE_TYPE,'') , '-') as ELECTRODE_TYPE
+				, ISNULL(NULLIF(a.ORIGIN_TO_DIVISION_ID,'') , '-') as ORIGIN_TO_DIVISION_ID
+				,a.to_site
+				, ISNULL(NULLIF(a.ORIGIN_FROM_DIVISION_ID,'') , '-') as ORIGIN_FROM_DIVISION_ID
+				,a.from_site
+				,a.incoterms
+				,a.project_code
+				,b.transport_mode
+				,b.lt_total
+				,'Fix Reason' as measure	
+				,yyyymmdd				
+				,null as qty
+				,a.bod_id
+				-- BOD 2단계 개발 : from, to추가
+				,b.from_yyyymmdd	AS BOD_FROM_YYYYMMDD
+				,b.to_yyyymmdd		AS BOD_TO_YYYYMMDD
+			FROM scp_anl_shipment_plan_fix a
+			-- BOD 2단계 개발 : scp_mst_bod_v=> scp_mst_bod_n_v
+			--JOIN scp_mst_bod_v b ON a.division_id = b.division_id AND a.bod_id = b.bod_id
+			JOIN scp_mst_bod_n_v b ON a.division_id = b.division_id AND a.bod_id = b.bod_id
+			WHERE 1=1 
+			AND a.yyyymmdd			  >= @p_from_yyyymmdd
+			AND a.yyyymmdd			  <= @p_to_yyyymmdd		
+			AND a.division_id	       = @p_division_id
+			AND a.biz_type			   = @p_biz_type
+			AND ( ( @p_item_id IS NULL OR         @p_item_id         ='' ) OR a.item_id         IN (SELECT token FROM dbo.String_Split(@p_item_id    ,',')) )
+			--AND ( ( @p_electype IS NULL OR  @p_electype ='') OR A.ELECTRODE_TYPE	IN (SELECT token FROM dbo.String_Split(@p_electype, ',')))
+		) m
+		JOIN scm_sys_calendar_m n on m.yyyymmdd = n.basis_yyyymmdd	
+		;
+	END
+	ELSE
+	BEGIN
+		INSERT #TblDynamicPivot_SCP0025
+		SELECT  
+	         division_id
+			,biz_type
+			,item_id
+			,ELECTRODE_TYPE
+			,ORIGIN_TO_DIVISION_ID
+			,to_site
+			,ORIGIN_FROM_DIVISION_ID
+			,from_site
+			,incoterms
+			,project_code
+			,transport_mode
+			,lt_total
+			,measure			
+			,qty
+			,@p_from_yyyymmdd AS from_yyyymmdd
+			,'D_'+yyyymmdd AS yyyymmdd
+			,n.basis_yyyymm AS yyyymm
+			,RIGHT(n.basis_yyyymm, 4)+n.iso_week AS iso_week	
+			,bod_id
+			-- BOD 2단계 개발 : from, to추가
+			,BOD_FROM_YYYYMMDD
+			,BOD_TO_YYYYMMDD
+		FROM (
+			SELECT 
+				 a.division_id
+				,a.biz_type
+				,a.item_id
+				, ISNULL(NULLIF(a.ELECTRODE_TYPE , '') , '-') as ELECTRODE_TYPE
+				, ISNULL(NULLIF(a.ORIGIN_TO_DIVISION_ID,'') , '-') as ORIGIN_TO_DIVISION_ID
+				,a.to_site
+				, ISNULL(NULLIF(a.ORIGIN_FROM_DIVISION_ID, '') , '-') as ORIGIN_FROM_DIVISION_ID
+				,a.from_site
+				,a.incoterms
+				,a.project_code
+				,b.transport_mode
+				,b.lt_total
+				,'Ship Plan' as measure	
+				,yyyymmdd				
+				,qty
+				,a.bod_id
+				-- BOD 2단계 개발 : from, to추가
+				,b.from_yyyymmdd	AS BOD_FROM_YYYYMMDD
+				,b.to_yyyymmdd		AS BOD_TO_YYYYMMDD
+			FROM scp_anl_shipment_plan_fix a
+			-- BOD 2단계 개발 : scp_mst_bod_v=> scp_mst_bod_n_v
+			--JOIN scp_mst_bod_v b ON a.bod_id = b.bod_id
+			JOIN scp_mst_bod_n_v b ON a.bod_id = b.bod_id
+			WHERE 1=1 
+			AND a.yyyymmdd			  >= @p_from_yyyymmdd
+			AND a.yyyymmdd			  <= @p_to_yyyymmdd		
+			AND a.d"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0025_GET_SHIPMENT_PLAN_FIX","1950018078","3","ivision_id	       = @p_division_id
+			AND a.biz_type      = @p_biz_type
+			AND ( ( @p_item_id	IS NULL OR  @p_item_id  ='') OR a.item_id			IN (SELECT token FROM dbo.String_Split(@p_item_id ,',')))
+			AND ( ( @p_electype IS NULL OR  @p_electype ='') OR A.ELECTRODE_TYPE	IN (SELECT token FROM dbo.String_Split(@p_electype, ',')))
+			UNION ALL
+			SELECT 
+				 a.division_id
+				,a.biz_type
+				,a.item_id
+				, ISNULL(NULLIF(a.ELECTRODE_TYPE,'') , '-') as ELECTRODE_TYPE
+				, ISNULL(NULLIF(a.ORIGIN_TO_DIVISION_ID,'') , '-') as ORIGIN_TO_DIVISION_ID
+				,a.to_site
+				, ISNULL(NULLIF(a.ORIGIN_FROM_DIVISION_ID,'') , '-') as ORIGIN_FROM_DIVISION_ID
+				,a.from_site
+				,a.incoterms
+				,a.project_code
+				,b.transport_mode
+				,b.lt_total
+				,'Fix Reason' as measure	
+				,yyyymmdd				
+				,null as qty
+				,a.bod_id
+				-- BOD 2단계 개발 : from, to추가
+				,b.from_yyyymmdd	AS BOD_FROM_YYYYMMDD
+				,b.to_yyyymmdd		AS BOD_TO_YYYYMMDD
+			FROM scp_anl_shipment_plan_fix a
+			-- BOD 2단계 개발 : scp_mst_bod_v=> scp_mst_bod_n_v
+			--JOIN scp_mst_bod_v b ON a.bod_id = b.bod_id
+			JOIN scp_mst_bod_n_v b ON a.bod_id = b.bod_id
+			WHERE 1=1 
+			AND a.yyyymmdd			  >= @p_from_yyyymmdd
+			AND a.yyyymmdd			  <= @p_to_yyyymmdd		
+			AND a.division_id	       = @p_division_id
+			AND a.biz_type			   = @p_biz_type
+			AND ( ( @p_item_id IS NULL OR         @p_item_id         ='' ) OR a.item_id         IN (SELECT token FROM dbo.String_Split(@p_item_id    ,',')) )
+			AND ( ( @p_electype IS NULL OR  @p_electype ='') OR A.ELECTRODE_TYPE	IN (SELECT token FROM dbo.String_Split(@p_electype, ',')))
+		) m
+		JOIN scm_sys_calendar_m n on m.yyyymmdd = n.basis_yyyymmdd	
+		;
+
+	END;
+
+		/********************************************************************************
+		* PIVOIT처리
+		********************************************************************************/
+		BEGIN
+		DECLARE @mQuery NVARCHAR(MAX);
+		DECLARE @mEXEC NVARCHAR(MAX);
+
+			-- PIVOIT 대상 날짜문자열 생성
+		SET @mQuery = '';
+		--SELECT @mQuery = @mQuery + '[' + yyyymmdd + '], '
+		SELECT  @mQuery = @mQuery+','+ CASE WHEN CHARINDEX('M_', yyyymmdd) =1 THEN  'convert(nvarchar,SUM(CASE WHEN yyyymm   = RIGHT('''+yyyymmdd+''',6) THEN QTY END )) AS ' + yyyymmdd
+											WHEN CHARINDEX('W_', yyyymmdd) =1 THEN  'convert(nvarchar,SUM(CASE WHEN iso_week = RIGHT('''+yyyymmdd+''',6) THEN  QTY  END )) AS ' + yyyymmdd
+											WHEN CHARINDEX('D_', yyyymmdd) =1 THEN  'convert(nvarchar,SUM(CASE WHEN yyyymmdd = '''+yyyymmdd+''' THEN  QTY  END )) AS ' + yyyymmdd
+									   END +''+CHAR(10)
+		FROM ( 
+			SELECT 'W_'+a.basis_yyyymm + a.iso_week AS yyyymmdd        
+				, a.basis_start_date + CONVERT(CHAR(2), 21) AS sort_order_no
+				FROM [dbo].[scm_sys_calendar_m] a
+			WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+			GROUP BY a.basis_yyyymm, a.iso_week, a.basis_start_date
+			UNION ALL
+			SELECT 'M_'+a.basis_yyyymm  AS yyyymmdd
+					,MIN(a.basis_start_date) + CONVERT(CHAR(2), '01') AS sort_order_no
+				FROM [dbo].[scm_sys_calendar_m] a
+				WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+			GROUP BY a.basis_yyyymm, a.month_name		
+			UNION ALL
+			SELECT 'D_'+a.basis_yyyymmdd   AS yyyymmdd      
+					, a.basis_yyyymmdd + CONVERT(CHAR(2), 31) AS sort_order_no
+				FROM [dbo].[scm_sys_calendar_m] a
+				WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+			GROUP BY a.basis_yyyymmdd		
+		) AS A
+		ORDER BY sort_order_no  ;
+
+		IF( LEN(@mQuery)>0)
+			SET @mQuery = LEFT(@mQuery, LEN(@mQuery) - 1);
+
+			SET @mEXEC = '';
+			SET @mEXEC = @mEXEC+'       SELECT  '+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	 division_id	'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,dbo.fn_get_division_name(division_id) AS division_name	'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,biz_type	'+CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,dbo.fn_get_lookup_code_desc(''biz_type'',biz_type) biz_type_name '+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,item_id '+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0025_GET_SHIPMENT_PLAN_FIX","1950018078","4","CHAR(10);
+			SET @mEXEC = @mEXEC+' 			, (case when dbo.FN_GET_ITEM_NICKNAME( division_id, item_id ) ='''' then ''-''					'+CHAR(10);
+			SET @mEXEC = @mEXEC+' 			   else dbo.FN_GET_ITEM_NICKNAME( division_id, item_id ) end) AS nick_name						'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,ORIGIN_TO_DIVISION_ID			'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,to_site	'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,dbo.fn_get_scm_site_description(division_id,to_site) AS to_site_description	'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,ORIGIN_FROM_DIVISION_ID		'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,from_site						'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,dbo.fn_get_scm_site_description(division_id,from_site) AS from_site_description	'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,isnull(incoterms,''-'') as incoterms'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,isnull(project_code,''-'') as project_code '+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,transport_mode '+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	,lt_total '+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	, ELECTRODE_TYPE		'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	, BOD_ID		'+CHAR(10);
+			-- BOD 2단계 개발 : FROM , TO 추가
+			SET @mEXEC = @mEXEC+'       	, BOD_FROM_YYYYMMDD		'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	, BOD_TO_YYYYMMDD		'+CHAR(10);
+			SET @mEXEC = @mEXEC+'       	, measure	'+CHAR(10);
+			SET @mEXEC = @mEXEC+' 			'+@mQuery	;
+			SET @mEXEC = @mEXEC+'       FROM #TblDynamicPivot_SCP0025 '+CHAR(10);
+			SET @mEXEC = @mEXEC+'		GROUP BY  division_id, biz_type, item_id, to_site, from_site, incoterms  , project_code, transport_mode, lt_total,  measure , ELECTRODE_TYPE, ORIGIN_FROM_DIVISION_ID, ORIGIN_TO_DIVISION_ID, BOD_ID '+CHAR(10);
+			SET @mEXEC = @mEXEC+'				, BOD_FROM_YYYYMMDD , BOD_TO_YYYYMMDD		'+CHAR(10);  -- BOD 2단계 개발 : FROM , TO 추가
+			--SET @mEXEC = @mEXEC+'		ORDER BY  division_id, biz_type, item_id, to_site, from_site, transport_mode, incoterms, project_code, measure desc '+CHAR(10);
+			SET @mEXEC = @mEXEC+'		ORDER BY  division_id, biz_type, item_id, to_site, from_site, transport_mode, incoterms, project_code,BOD_ID, measure desc '+CHAR(10);
+			
+			IF( @debug_mode ='T') PRINT @mEXEC;
+			
+			-----------------------------------------------------------
+			-- DEBUG QRY 출력
+			-----------------------------------------------------------	
+			IF( @debug_mode ='T')
+				BEGIN				
+					DECLARE @POS INT =1;
+					DECLARE @LEN INT =LEN(@mEXEC);
+					WHILE @POS <= @LEN
+						BEGIN
+							PRINT SUBSTRING(@mEXEC,@POS,4000);
+							SET @POS = @POS+4000;
+						END;
+				END;
+			-----------------------------------------------------------
+
+			EXEC (@mEXEC);
+		
+		--IF @p_division_id NOT IN ('EE','EE_UC')
+		IF @p_division_id NOT IN (SELECT DIVISION_ID FROM dbo.FN_GET_DIVISION_DIV('EE')) --div_commonization
+		BEGIN
+			SELECT 
+				 a.division_id
+				,a.biz_type
+				,a.item_id
+				, isnull(NULLIF(a.ELECTRODE_TYPE ,'') , '-') as ELECTRODE_TYPE
+				, isnull(NULLIF(a.ORIGIN_TO_DIVISION_ID,'') , '-') as ORIGIN_TO_DIVISION_ID
+				,a.to_site
+				, isnull(NULLIF(a.ORIGIN_FROM_DIVISION_ID,'') , '-') as ORIGIN_FROM_DIVISION_ID
+				,a.from_site
+				,a.incoterms
+				,a.project_code
+				,b.transport_mode
+				,b.lt_total
+				,b.bod_id		-- BOD 2단계 개발
+				,'Fix Reason' as measure
+				,yyyymmdd				
+				,fix_reason
+			FROM scp_anl_shipment_plan_fix a
+			-- BOD 2단계 개발 : scp_mst_bod_v -> scp_mst_bod_n_v
+			--JOIN scp_mst_bod_v b ON a.division_id = b.division_id AND a.bod_id = b.bod_id
+			JOIN scp_mst_bod_n_v b ON a.division_id = b.division_id AND a.bod_id = b.bod_id
+			WHERE 1=1 
+			AND a.yyyymmdd			  >= @p_from_yyyymmdd
+			AND a.yyyymmdd			  <= @p_to_yyyymmdd		
+			AND a.division_id	       = @p_division_id
+			AND a.biz_type			   = @p_biz_type
+			AND ( ( @p_item_id IS NULL OR         @p_item_id         ='' ) OR a.item_id         IN (SELECT token FROM dbo.String_Split(@p_item_id    ,',')) )
+			--AND ( ( @p_electype IS NULL OR  @p_electype =''"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0025_GET_SHIPMENT_PLAN_FIX","1950018078","5",") OR A.ELECTRODE_TYPE	IN (SELECT token FROM dbo.String_Split(@p_electype, ',')))
+			ORDER BY  division_id, biz_type, item_id, to_site, from_site, measure desc
+		END
+		ELSE
+			SELECT 
+				 a.division_id
+				,a.biz_type
+				,a.item_id
+				, isnull(NULLIF(a.ELECTRODE_TYPE,'') , '-') as ELECTRODE_TYPE
+				, isnull(NULLIF(a.ORIGIN_TO_DIVISION_ID, '') , '-') as ORIGIN_TO_DIVISION_ID
+				,a.to_site
+				, isnull(NULLIF(a.ORIGIN_FROM_DIVISION_ID, '') , '-') as ORIGIN_FROM_DIVISION_ID
+				,a.from_site
+				,a.incoterms
+				,a.project_code
+				,b.transport_mode
+				,b.lt_total
+				,b.bod_id		-- BOD 2단계 개발
+				,'Fix Reason' as measure
+				,yyyymmdd				
+				,fix_reason
+			FROM scp_anl_shipment_plan_fix a
+			-- BOD 2단계 개발 : scp_mst_bod_v -> scp_mst_bod_n_v
+			--JOIN scp_mst_bod_v b ON  a.bod_id = b.bod_id
+			JOIN scp_mst_bod_n_v b ON  a.bod_id = b.bod_id
+			WHERE 1=1 
+			AND a.yyyymmdd			  >= @p_from_yyyymmdd
+			AND a.yyyymmdd			  <= @p_to_yyyymmdd		
+			AND a.division_id	       = @p_division_id
+			AND a.biz_type			   = @p_biz_type
+			AND ( ( @p_item_id IS NULL OR         @p_item_id         ='' ) OR a.item_id         IN (SELECT token FROM dbo.String_Split(@p_item_id    ,',')) )
+			AND ( ( @p_electype IS NULL OR  @p_electype ='') OR A.ELECTRODE_TYPE	IN (SELECT token FROM dbo.String_Split(@p_electype, ',')))
+			ORDER BY  division_id, biz_type, item_id, to_site, from_site, measure desc
+		END;
+	
+		 --임시테이블 삭제
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0025') IS NOT NULL
+			DROP TABLE #TblDynamicPivot_SCP0025 ;
+			  
+END
+
+  
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","1","
+
+
+
+/*
+ * Program ID   : SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET
+ * Description  : SHIPMENT PLAN FG/SEMI FIX 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2019/07/25   yhw				[CSR ID:4071705] Production Plan Fix에서 Unfix 기능 추가
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 
+ */
+CREATE PROCEDURE [dbo].[SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET]
+	 @SCP0025			AS DBO.SCP0025       READONLY
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @max_loop_cnt		NVARCHAR(50);
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 실행시간 확인용    
+    DECLARE @v_start_time   DATETIME     = SYSDATETIME();    
+    DECLARE @v_exec_time    NVARCHAR(10) = ''--'00:00';   
+	
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	/*
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0025UnFix') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0025UnFix
+
+	CREATE TABLE TblDynamic_SCP0025UnFix (
+		p_active_flag	nvarchar(1),
+		p_division_id NVARCHAR(30),
+		p_biz_type	nvarchar(1),
+		p_item_id	nvarchar(100),
+		p_to_site	nvarchar(100),
+		p_from_site	nvarchar(50),
+		p_bod_id	nvarchar(50),
+		p_yyyymmdd	nvarchar(8),
+		p_project_code	nvarchar(100),
+		p_incoterms	nvarchar(20),
+		p_qty	nvarchar(200),
+		p_origin_from_division_id NVARCHAR(30),
+		p_origin_to_division_id NVARCHAR(30),
+		p_electrode_type	nvarchar(50),
+		p_user_id	nvarchar(150),
+		FIX_ID	nvarchar(20)
+	);
+	*/
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		--수정 Row
+		SET @max_loop_cnt = convert(nvarchar(50), ISNULL((
+									SELECT COUNT(*) 
+									FROM @SCP0025  
+								  ),0))
+		;
+
+		/*
+		INSERT INTO #TblDynamic_SCP0025UnFix
+		SELECT p_active_flag,
+				p_division_id,
+				p_operation_group,
+				p_item_id,
+				p_to_site,
+				p_from_site,
+				p_bod_id,
+				p_yyyymmdd,
+				p_project_code,
+				p_incoterms,
+				p_qty,
+				p_origin_from_division_id,
+				p_origin_to_division_id,
+				p_electrode_type,
+				p_created_by,
+				''
+		FROM @SCP0025
+		*/
+
+		--3. Fix History
+		INSERT INTO SCP_ANL_SHIPMENT_PLAN_FIX_H (
+			history_seq,
+			fix_id,
+			division_id,
+			BIZ_TYPE ,
+			ITEM_ID ,
+			TO_SITE ,
+			FROM_SITE ,
+			PROJECT_CODE ,
+			INCOTERMS ,
+			BOD_ID ,
+			yyyymmdd,
+			qty,
+			ORIGIN_FROM_DIVISION_ID ,
+			ORIGIN_TO_DIVISION_ID ,
+			ELECTRODE_TYPE ,
+			fix_reason,
+			created_by,
+			creation_date,
+			last_updated_by,
+			last_update_date,
+			history_creation_date,
+			ATTRIBUTE1)
+		SELECT (NEXT VALUE FOR SEQ1_SCP_ANL_PRODUCTION_PLAN_FIX_H)
+				,A.FIX_ID
+				,B.p_division_id 
+				,B.p_operation_group 
+				,B.p_item_id
+				,B.p_to_site
+				,B.p_from_site
+				,B.p_project_code
+				,B.p_incoterms
+				,B.p_bod_id
+				,B.p_yyyymmdd
+				,cast(round (cast(B.p_qty as numeric(20,10)), 0 ,1) as int)
+				,B.p_origin_from_division_id
+				,B.p_origin_to_division_id
+				,B.p_electrode_type
+				,A.fix_reason
+				,B.p_created_by
+				,SYSDATETIME()
+				,B.p_created_by
+				,SYSDATETIME()
+				,SYSDATETIME()
+				,ISNULL(B.p_active_flag,'')
+		FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0025 B
+		WHERE A.division_id				= B.p_division_id
+		and A.BIZ_TYP"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","2","E					= B.p_operation_group
+		and A.ITEM_ID					= B.p_item_id
+		and A.TO_SITE					= B.p_to_site
+		and A.FROM_SITE					= B.p_from_site
+		and ISNULL(NULLIF(A.PROJECT_CODE,''),'-')				= ISNULL(NULLIF(B.p_project_code,''),'-')
+		and ISNULL(NULLIF(A.INCOTERMS,''),'-')					= ISNULL(NULLIF(B.p_incoterms,''),'-')
+		and A.BOD_ID					= B.p_bod_id
+		and A.yyyymmdd					= B.p_yyyymmdd
+		AND ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID,''),'-')	= ISNULL(NULLIF(B.p_origin_from_division_id,''),'-')
+		AND ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID,''),'-')		= ISNULL(NULLIF(B.p_origin_to_division_id,''),'-')
+		AND ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-') = ISNULL(NULLIF(B.p_electrode_type,''),'-')
+
+
+		--4. 삭제
+		DELETE A
+		FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0025 B
+		WHERE A.division_id				= B.p_division_id
+		and A.BIZ_TYPE					= B.p_operation_group
+		and A.ITEM_ID					= B.p_item_id
+		and A.TO_SITE					= B.p_to_site
+		and A.FROM_SITE					= B.p_from_site
+		and ISNULL(NULLIF(A.PROJECT_CODE,''),'-')				= ISNULL(NULLIF(B.p_project_code,''),'-')
+		and ISNULL(NULLIF(A.INCOTERMS,''),'-')					= ISNULL(NULLIF(B.p_incoterms,''),'-')
+		and A.BOD_ID					= B.p_bod_id
+		and A.yyyymmdd					= B.p_yyyymmdd
+		and ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID,''),'-')	= ISNULL(NULLIF(B.p_origin_from_division_id,''),'-')
+		and ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID,''),'-')		= ISNULL(NULLIF(B.p_origin_to_division_id,''),'-')
+		and ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-')	= ISNULL(NULLIF(B.p_electrode_type,''),'-')
+		AND B.p_active_flag			= 'D'
+		;
+
+		SET @v_exec_time  =  REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) + ':' +     
+							 REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60)) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60))    
+
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description  = N'[' + @v_exec_time + ']';   
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		
+	END TRY
+
+	BEGIN CATCH
+		BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		END;
+
+		-- error코드, errror 메시지 반환
+		SELECT 'F' AS result_code, '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() AS err_message ;
+		  
+	END CATCH;
+
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0025UnFix') IS NOT NULL	
+	DROP TABLE #TblDynamic_SCP0025UnFix 
+
+END
+
+
+
+"
+"2025-11-20 00:00:00.883","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","1","
+
+
+
+
+/*
+ * Program ID   : SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET
+ * Description  : SHIPMENT PLAN FG/SEMI FIX 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2019/07/25   yhw				[CSR ID:4071705] Production Plan Fix에서 Unfix 기능 추가
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 2025/11/11   hrkim			[PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 
+ *								  : ESS 가상 사이트 계획을 매핑된 JV 사이트 계획으로 동기화 저장 (ESS 가상 -> JV Real 단방향 저장) 
+ *									- @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용
+ *									- TO Site 정보는 그대로 가져간다. (BOD_ID는 매핑이 안되면 '-')
+ * 
+ */
+CREATE PROCEDURE [dbo].[SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET]
+	 @SCP0025			AS DBO.SCP0025       READONLY
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @max_loop_cnt		NVARCHAR(50);
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 실행시간 확인용    
+    DECLARE @v_start_time   DATETIME     = SYSDATETIME();    
+    DECLARE @v_exec_time    NVARCHAR(10) = ''--'00:00';   
+	
+	DECLARE @SCP0025_WITH_JV	AS DBO.SCP0025;	-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : @SCP0025 + MI법인 가상 사이트에 매핑된 JV 출하계획 정보 담을 테이블 Type 변수
+
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	/*
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0025UnFix') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0025UnFix
+
+	CREATE TABLE TblDynamic_SCP0025UnFix (
+		p_active_flag	nvarchar(1),
+		p_division_id NVARCHAR(30),
+		p_biz_type	nvarchar(1),
+		p_item_id	nvarchar(100),
+		p_to_site	nvarchar(100),
+		p_from_site	nvarchar(50),
+		p_bod_id	nvarchar(50),
+		p_yyyymmdd	nvarchar(8),
+		p_project_code	nvarchar(100),
+		p_incoterms	nvarchar(20),
+		p_qty	nvarchar(200),
+		p_origin_from_division_id NVARCHAR(30),
+		p_origin_to_division_id NVARCHAR(30),
+		p_electrode_type	nvarchar(50),
+		p_user_id	nvarchar(150),
+		FIX_ID	nvarchar(20)
+	);
+	*/
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		------------------------------------------------------------------------------------------------------------------------------------------------------- 
+		--### Start : [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : ESS 가상 라인 계획으로 매핑된 JV 라인 계획 동기화 저장 (ESS 가상 -> JV Real 단방향 저장) 
+		-------------------------------------------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' JV/ESS scm site 매핑 정보 추출' 
+		-------------------------------------------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('TEMPDB..#JV_ESS_SCM_SITE_MAP') IS NOT NULL DROP TABLE #JV_ESS_SCM_SITE_MAP;
+		SELECT VP_COMPANY_ID
+			  ,VP_DIVISION_ID
+			  ,VP_SITE_ID
+			  ,VP_PLANT_ID
+			  ,VP_SCM_SITE_ID
+			  ,RP_COMPANY_ID
+			  ,RP_DIVISION_ID
+			  ,RP_SITE_ID
+			  ,RP_PLANT_ID
+			  ,RP_SCM_SITE_ID
+		 INTO #JV_ESS_SCM_SITE_MAP
+		 FROM FN_GET_JV_REAL_ESS_VIRTUAL_SITE_MAP () 
+		 WHERE 1=1;
+		------------------------------------------------------------------------------------------------------------  
+		print  convert(varchar(30), getdate(), 121) + N' DIVISION 주차별 최종 수행 Plan 버전 정"
+"2025-11-20 00:00:00.883","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","2","보 ' 
+		-- ESS 가상 라인 매핑 JV division의 동기화 대상 버전 정보 확인을 위한 데이터
+		-- Final Plan은 수정 대상에서 제외 ? 
+		------------------------------------------------------------------------------------------------------------  
+		IF OBJECT_ID('TEMPDB..#DIVISION_LAST_PLAN_INFO') IS NOT NULL DROP TABLE #DIVISION_LAST_PLAN_INFO;
+		;WITH SCP_PLAN_INFO AS (
+			SELECT PD.DIVISION_ID
+				 , PM.PLAN_NAME			AS PLAN_START_YYYYMMDD
+				 , PD.PLAN_TYPE
+				 , PD.PLAN_SEQ
+				 , PM.HORIZON_END_DATE	
+				 , PD.PLAN_STATUS
+				 , PD.INPUT_START_DATE 
+				 , ROW_NUMBER()	OVER (PARTITION BY PD.DIVISION_ID
+												 , PM.PLAN_NAME
+										 ORDER  BY CASE WHEN PD.PLAN_TYPE = 'PR' THEN 4
+														WHEN PD.PLAN_TYPE = 'MA' THEN 3
+														WHEN PD.PLAN_TYPE = 'SE' THEN 2
+														WHEN PD.PLAN_TYPE = 'FN' THEN 1
+														ELSE 0
+												   END
+												  ,PD.PLAN_SEQ DESC
+												  ,PD.INPUT_START_DATE DESC ) AS RN
+			 FROM SCM_MST_PLAN PM WITH(NOLOCK)
+				  INNER JOIN SCM_MST_PLAN_DETAIL PD WITH(NOLOCK)
+						  ON PD.DIVISION_ID = PM.DIVISION_ID
+						 AND PD.PLAN_ID		= PM.PLAN_ID
+						 AND PD.PLAN_STATUS	= 1
+				  INNER JOIN SCM_MST_DIVISION DM WITH(NOLOCK)
+						  ON DM.DIVISION_ID	= PM.DIVISION_ID 
+						 AND DM.ATTRIBUTE3 != 'EE'
+			WHERE 1=1 
+			  AND PM.PLAN_CYCLE = 'WEEKLY'
+			  AND PM.PLAN_NAME	>= CONVERT(NVARCHAR(8), DATEADD(DAY, -20, GETDATE()) , 112)
+		)
+		SELECT DIVISION_ID
+			  ,PLAN_START_YYYYMMDD
+			  ,PLAN_TYPE
+			  ,PLAN_SEQ
+			  ,HORIZON_END_DATE
+			  ,PLAN_STATUS
+			  ,INPUT_START_DATE
+			  ,RN
+		  INTO #DIVISION_LAST_PLAN_INFO
+		 FROM SCP_PLAN_INFO
+		WHERE 1=1
+		  AND RN = 1 
+		  AND PLAN_TYPE != 'FN' -- Final plan 대상에서 제외 
+		  ;
+		------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' BOD 및 BOD ITEM 정보' 
+		------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('TEMPDB..#BOD_ITEM') IS NOT NULL DROP TABLE #BOD_ITEM
+		;WITH BOD_ITEM AS ( 
+			SELECT  BD.DIVISION_ID
+				   ,BD.FROM_SITE
+				   ,BD.TO_SITE
+				   ,BD.INCOTERMS
+				   ,BI.ITEM_ID
+				   ,BD.BOD_ID
+				   ,ROW_NUMBER() OVER (PARTITION BY BD.DIVISION_ID
+												   ,BD.FROM_SITE
+												   ,BD.TO_SITE
+												   ,BD.INCOTERMS
+												   ,BI.ITEM_ID
+										   ORDER BY BD.PRIORITY 
+												   ,BI.PRIORITY
+												   ,BD.ATTRIBUTE3 DESC
+												   ,BD.LAST_UPDATE_DATE DESC )	AS RN 
+			  FROM SCP_MST_BOD BD WITH(NOLOCK)
+				   INNER JOIN SCP_MST_BOD_ITEM BI WITH(NOLOCK)
+						   ON BI.BOD_ID			= BD.BOD_ID
+						  AND BI.VALID_YN		= 'Y'
+						  AND BI.TO_YYYYMMDD	>= CONVERT(NVARCHAR(8), DATEADD(DAY, -7, GETDATE()) , 112)
+			 WHERE 1=1
+			   AND BD.ATTRIBUTE3 > CONVERT(NVARCHAR(8), DATEADD(DAY, -7, GETDATE()) , 112)
+			   AND BD.VALID_YN	= 'Y'
+			   AND EXISTS (SELECT TOP 1 'X'
+							 FROM #JV_ESS_SCM_SITE_MAP SM 
+							WHERE SM.RP_DIVISION_ID = BD.DIVISION_ID
+							  AND SM.RP_SCM_SITE_ID	= BD.FROM_SITE )
+		)
+		SELECT DIVISION_ID
+			  ,FROM_SITE
+			  ,TO_SITE
+			  ,INCOTERMS
+			  ,ITEM_ID
+			  ,BOD_ID
+			  ,RN
+		 INTO #BOD_ITEM
+		 FROM BOD_ITEM 
+		WHERE RN = 1 ;
+		------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' 파마미터로 받은 데이터 @SCP0025_WITH_JV 변수에 추가' 
+		-- ESS MI법인 -> JV 동기화 저장 (단방향 저장으로 가상 사이트에 매핑된 JV 사이트 데이터는 제외) 
+		------------------------------------------------------------------------------------------------------------------
+		INSERT INTO @SCP0025_WITH_JV (
+			   P_ACTIVE_FLAG
+			  ,P_DIVISION_ID
+			  ,P_OPERATION_GROUP
+			  ,P_ITEM_ID
+			  ,P_TO_SITE
+			  ,P_FROM_SITE
+			  ,P_BOD_ID
+			  ,P_YYYYMMDD
+			  ,P_PROJECT_CODE
+			  ,P_INCOTERMS
+			  ,P_QTY
+			  ,P_ORIGIN_FROM_DIVISION_ID
+			  ,P_ORIGIN_TO_DIVISION_ID
+			  ,P_EL"
+"2025-11-20 00:00:00.883","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","3","ECTRODE_TYPE
+			  ,P_CREATED_BY  )
+		SELECT PR.P_ACTIVE_FLAG
+			  ,PR.P_DIVISION_ID
+			  ,PR.P_OPERATION_GROUP
+			  ,PR.P_ITEM_ID
+			  ,PR.P_TO_SITE
+			  ,PR.P_FROM_SITE
+			  ,PR.P_BOD_ID
+			  ,PR.P_YYYYMMDD
+			  ,PR.P_PROJECT_CODE
+			  ,PR.P_INCOTERMS
+			  ,PR.P_QTY
+			  ,PR.P_ORIGIN_FROM_DIVISION_ID
+			  ,PR.P_ORIGIN_TO_DIVISION_ID
+			  ,PR.P_ELECTRODE_TYPE
+			  ,PR.P_CREATED_BY 
+		 FROM @SCP0025 PR
+			  LEFT JOIN #JV_ESS_SCM_SITE_MAP SM
+				     ON SM.RP_DIVISION_ID	= PR.P_DIVISION_ID
+				    AND SM.RP_SCM_SITE_ID	= PR.P_FROM_SITE
+		WHERE SM.RP_DIVISION_ID IS NULL  --- 가상 사이트에 매핑된 JV 사이트 데이터는 제외
+		;
+		------------------------------------------------------------------------------------------------------------------
+		print  convert(varchar(30), getdate(), 121) + N' 가상 사이트에 매핑된 JV 사이트 데이터 @SCP0025_WITH_JV 변수에 추가' 
+		-- ESS MI법인 -> JV 동기화 저장 (단방향 저장으로 가상 사이트에 매핑된 JV 사이트 데이터는 제외) 
+		------------------------------------------------------------------------------------------------------------------
+		; WITH LAST_MONDAY AS (
+			SELECT MAX(YYYYMMDD) AS LAST_MONDAY
+			 FROM SCM_MST_BUCKET B WITH(NOLOCK)
+			WHERE 1=1
+			  AND YYYYMMDD <= CONVERT(NVARCHAR(8), GETDATE(), 112) 
+			  AND DAYOFWEEK	= 'MON'  
+		)
+		INSERT INTO @SCP0025_WITH_JV (
+			   P_ACTIVE_FLAG
+			  ,P_DIVISION_ID
+			  ,P_OPERATION_GROUP
+			  ,P_ITEM_ID
+			  ,P_TO_SITE
+			  ,P_FROM_SITE
+			  ,P_BOD_ID
+			  ,P_YYYYMMDD
+			  ,P_PROJECT_CODE
+			  ,P_INCOTERMS
+			  ,P_QTY
+			  ,P_ORIGIN_FROM_DIVISION_ID
+			  ,P_ORIGIN_TO_DIVISION_ID
+			  ,P_ELECTRODE_TYPE
+			  ,P_CREATED_BY  )
+		SELECT PR.P_ACTIVE_FLAG
+			  ,SM.RP_DIVISION_ID			AS P_DIVISION_ID
+			  ,PR.P_OPERATION_GROUP
+			  ,PR.P_ITEM_ID
+			  ,PR.P_TO_SITE
+			  ,SM.RP_SCM_SITE_ID			AS P_FROM_SITE
+			  ,ISNULL(BI.BOD_ID, '-')		AS P_BOD_ID
+			  ,PR.P_YYYYMMDD
+			  ,PR.P_PROJECT_CODE
+			  ,PR.P_INCOTERMS
+			  ,PR.P_QTY
+			  ,SM.RP_DIVISION_ID			AS P_ORIGIN_FROM_DIVISION_ID
+			  ,PR.P_ORIGIN_TO_DIVISION_ID
+			  ,PR.P_ELECTRODE_TYPE
+			  ,PR.P_CREATED_BY 
+		 FROM @SCP0025 PR
+			  INNER JOIN #JV_ESS_SCM_SITE_MAP SM
+				      ON SM.VP_DIVISION_ID	= PR.P_DIVISION_ID
+				     AND SM.VP_SCM_SITE_ID	= PR.P_FROM_SITE
+			  INNER JOIN LAST_MONDAY MD
+					  ON 1=1 
+			  INNER JOIN #DIVISION_LAST_PLAN_INFO PV				-- 수정할 대상 버전이 있어야 수정 (FN 까지 완료된 경우 수정하지 않음) 
+					  ON PV.DIVISION_ID			= SM.RP_DIVISION_ID
+					 AND PV.PLAN_START_YYYYMMDD	= MD.LAST_MONDAY	
+			  LEFT  JOIN #BOD_ITEM BI
+					  ON BI.DIVISION_ID		= SM.RP_DIVISION_ID
+					 AND BI.FROM_SITE		= SM.RP_SCM_SITE_ID
+					 AND BI.TO_SITE			= PR.TO_SITE
+					 AND BI.INCOTERMS		= PR.INCOTERMS
+					 AND BI.ITEM_ID			= PR.ITEM_ID 
+		WHERE 1=1
+		;
+		------------------------------------------------------------------------------------------------------------------------------------------------------- 
+		--### End : [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : ESS 가상 라인 계획으로 매핑된 JV 라인 계획 동기화 저장 (ESS 가상 -> JV Real 단방향 저장) 
+		-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		--수정 Row
+		SET @max_loop_cnt = convert(nvarchar(50), ISNULL((
+									SELECT COUNT(*) 
+									FROM @SCP0025_WITH_JV  -- PJ2025F254 : @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용
+								  ),0))
+		;
+
+		/*
+		INSERT INTO #TblDynamic_SCP0025UnFix
+		SELECT p_active_flag,
+				p_division_id,
+				p_operation_group,
+				p_item_id,
+				p_to_site,
+				p_from_site,
+				p_bod_id,
+				p_yyyymmdd,
+				p_project_code,
+				p_incoterms,
+				p_qty,
+				p_origin_from_division_id,
+				p_origin_to_division_id,
+				p_electrode_type,
+				p_created_by,
+				''
+		FROM @SCP0025
+		*/
+
+		--3. Fix History
+		INSERT INTO SCP_ANL_SHIPMENT_PLAN_FIX_H (
+			history_seq,
+			fix_id,
+			division_id,
+			BIZ_TYPE ,
+			ITEM_ID ,
+			TO_SITE ,
+			FROM_SITE ,
+			PROJECT_CODE ,
+			INCOTERMS ,
+			BOD_ID ,
+			yyyymmdd,
+			qty,
+			ORIGIN_FROM_DIVISI"
+"2025-11-20 00:00:00.883","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","4","ON_ID ,
+			ORIGIN_TO_DIVISION_ID ,
+			ELECTRODE_TYPE ,
+			fix_reason,
+			created_by,
+			creation_date,
+			last_updated_by,
+			last_update_date,
+			history_creation_date,
+			ATTRIBUTE1)
+		SELECT (NEXT VALUE FOR SEQ1_SCP_ANL_PRODUCTION_PLAN_FIX_H)
+				,A.FIX_ID
+				,B.p_division_id 
+				,B.p_operation_group 
+				,B.p_item_id
+				,B.p_to_site
+				,B.p_from_site
+				,B.p_project_code
+				,B.p_incoterms
+				,B.p_bod_id
+				,B.p_yyyymmdd
+				,cast(round (cast(B.p_qty as numeric(20,10)), 0 ,1) as int)
+				,B.p_origin_from_division_id
+				,B.p_origin_to_division_id
+				,B.p_electrode_type
+				,A.fix_reason
+				,B.p_created_by
+				,SYSDATETIME()
+				,B.p_created_by
+				,SYSDATETIME()
+				,SYSDATETIME()
+				,ISNULL(B.p_active_flag,'')
+		FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0025_WITH_JV  B -- PJ2025F254 : @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용 B
+		WHERE A.division_id				= B.p_division_id
+		and A.BIZ_TYPE					= B.p_operation_group
+		and A.ITEM_ID					= B.p_item_id
+		and A.TO_SITE					= B.p_to_site
+		and A.FROM_SITE					= B.p_from_site
+		and ISNULL(NULLIF(A.PROJECT_CODE,''),'-')				= ISNULL(NULLIF(B.p_project_code,''),'-')
+		and ISNULL(NULLIF(A.INCOTERMS,''),'-')					= ISNULL(NULLIF(B.p_incoterms,''),'-')
+		and A.BOD_ID					= B.p_bod_id
+		and A.yyyymmdd					= B.p_yyyymmdd
+		AND ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID,''),'-')	= ISNULL(NULLIF(B.p_origin_from_division_id,''),'-')
+		AND ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID,''),'-')		= ISNULL(NULLIF(B.p_origin_to_division_id,''),'-')
+		AND ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-') = ISNULL(NULLIF(B.p_electrode_type,''),'-')
+
+
+		--4. 삭제
+		DELETE A
+		FROM SCP_ANL_SHIPMENT_PLAN_FIX A, @SCP0025_WITH_JV  B -- PJ2025F254 : @SCP0025를 @SCP0025_WITH_JV 변수로 대체하여 사용 B
+		WHERE A.division_id				= B.p_division_id
+		and A.BIZ_TYPE					= B.p_operation_group
+		and A.ITEM_ID					= B.p_item_id
+		and A.TO_SITE					= B.p_to_site
+		and A.FROM_SITE					= B.p_from_site
+		and ISNULL(NULLIF(A.PROJECT_CODE,''),'-')				= ISNULL(NULLIF(B.p_project_code,''),'-')
+		and ISNULL(NULLIF(A.INCOTERMS,''),'-')					= ISNULL(NULLIF(B.p_incoterms,''),'-')
+		and A.BOD_ID					= B.p_bod_id
+		and A.yyyymmdd					= B.p_yyyymmdd
+		and ISNULL(NULLIF(A.ORIGIN_FROM_DIVISION_ID,''),'-')	= ISNULL(NULLIF(B.p_origin_from_division_id,''),'-')
+		and ISNULL(NULLIF(A.ORIGIN_TO_DIVISION_ID,''),'-')		= ISNULL(NULLIF(B.p_origin_to_division_id,''),'-')
+		and ISNULL(NULLIF(A.ELECTRODE_TYPE,''),'-')	= ISNULL(NULLIF(B.p_electrode_type,''),'-')
+		AND B.p_active_flag			= 'D'
+		;
+
+		SET @v_exec_time  =  REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) + ':' +     
+							 REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60)) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60))    
+
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description  = N'[' + @v_exec_time + ']';   
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		
+	END TRY
+
+	BEGIN CATCH
+		BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		END;
+
+		-- error코드, errror"
+"2025-11-20 00:00:00.883","LGCE_SCMDEV","P ","SCP0025_SAVE_SHIPMENT_PLAN_FIX_DATASET","1966018135","5"," 메시지 반환
+		SELECT 'F' AS result_code, '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() AS err_message ;
+		  
+	END CATCH;
+
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0025UnFix') IS NOT NULL	
+	DROP TABLE #TblDynamic_SCP0025UnFix 
+
+END
+
+
+
+"

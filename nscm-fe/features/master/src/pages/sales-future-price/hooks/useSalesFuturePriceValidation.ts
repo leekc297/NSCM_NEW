@@ -18,6 +18,7 @@ import { isPeriodInverted } from '../utils/futurePriceDate';
 export const useSalesFuturePriceValidation = () => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
+  const setToast = useMessageStore.getState().setToast;
 
   // ----- F5 FindData (validation.md #18~22) -----
   const validateFind = (c: SearchCondition): ValidationResult => {
@@ -67,8 +68,9 @@ export const useSalesFuturePriceValidation = () => {
   ): ValidationResult => {
     const dirty = rows.filter(r => r.CRUD_TYPE === 'I' || r.CRUD_TYPE === 'M');
     if (dirty.length === 0) {
-      // AS-IS MSG00004 "수정한 내용이 없습니다." (변경분 0건 = 저장 대상 없음)
-      void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
+      // 변경분 0건 = 저장 대상 없음. 다른 화면(DMF0004~0007)과 동일하게 toast 로 알린다
+      //   (변경 없음 = toast / 필수·중복 검증 실패 = modal alert). AS-IS MSG00004.
+      setToast({ type: 'error', message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
       return { ok: false };
     }
 
@@ -172,10 +174,10 @@ export const useSalesFuturePriceValidation = () => {
     return { ok: true };
   };
 
-  // ----- 셀 클릭 가드 (#63 spdMain_CellClick MSG00447 Currency 빈값) -----
+  // ----- 셀 클릭 가드 (Currency 빈값 — MSG.CURRENCY_EMPTY = MSG00447) -----
   const validateCellClick = (binding: string, value: unknown): ValidationResult => {
     if (binding === 'CURRENCY' && String((value as string | undefined) ?? '').trim() === '') {
-      void setAlert({ type: 'alert', content: t('MSG00447', '_Currency 가 비어 있습니다.') });
+      void setAlert({ type: 'alert', content: t(MSG.CURRENCY_EMPTY, 'Currency 가 비어 있습니다.') });
       return { ok: false, msgId: MSG.CURRENCY_EMPTY };
     }
     return { ok: true };

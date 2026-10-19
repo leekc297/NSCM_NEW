@@ -1,0 +1,23 @@
+{
+  "envFile": "C:\\Projects\\NSCM\\.env.asis",
+  "outDir": "C:\\Projects\\NSCM\\Doc\\db",
+  "connections": {
+    "asis": {
+      "title": "As-is MSSQL (LGCE_SCMDEV)",
+      "type": "mssql",
+      "envPrefix": "ASIS_DB",
+      "keys": { "host": "HOST", "port": "PORT", "database": "NAME", "user": "USER", "password": "PASS", "driver": "DRIVER" },
+      "readOnly": true,
+      "note": "SELECT / 읽기전용 SP 실행만. 파서(AsisFacts db), golden 원본 결과 추출에 사용"
+    },
+    "tobe": {
+      "title": "To-Be Oracle (ZIOUI1 / SCM_MGR)",
+      "type": "oracle",
+      "envPrefix": "TOBE_DB",
+      "keys": { "host": "HOST", "port": "PORT", "service": "PDB", "user": "USER", "password": "PASS" },
+      "schema": "SCM_MGR",
+      "readOnly": false,
+      "note": "메타 export(export_tobe_meta.py), golden 대조, E2E 데이터 준비/원복. 쓰기는 명시 옵션(--write)에서만"
+    }
+  }
+}

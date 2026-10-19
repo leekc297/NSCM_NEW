@@ -1,0 +1,7 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/CapaLineMaster.tsx","222","code","(1) 활성 그리드에 'I'/'M' 행이 남아 있으면 return(미저장 편집 중 토글 차단, cs:478~486)"
+"supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/CapaLineMaster.tsx","223","code","(2) 토글 후 편집중 레벨이 2개 이상이면 되돌리고 return(동시 1개만, cs:498~502) -> store 가 담당"
+"supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/CapaLineMaster.tsx","261","code","선택행이 신규행('I')일 때만 로컬 제거한다. 기존행은 삭제 불가(메시지 없이 return, hook #138)."
+"supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/useCapaLineMasterStore.ts","40","endpoint","ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch(시트별)."
+"supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/useCapaLineMasterStore.ts","273","code","Edit 토글 — 이미 다른 레벨이 편집중이면 무시(AS-IS editCnt>1 되돌림 후 return, cs:498~502)."
+"supply/capa-line-master","SCP0114","features/supply/src/pages/capa-line-master/useCapaLineMasterStore.ts","294","endpoint","admin SCM_MST_SHEET_COLUMNS 동적 fetch(5시트) — 미등록/실패 시 빈 배열 유지(console 금지 룰)."

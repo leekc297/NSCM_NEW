@@ -35,7 +35,7 @@ export const isCellEditableTab2 = (inputTpCd: string | undefined): boolean =>
 // 비활성 체크 토글 게이트 (계약 ⑥ — CHECKED/UNCHECKED 서버 2값만 토글. 그 외 값 = 잠금)
 export const isDisableToggleable = (value: unknown): boolean => isCheckToggleable(value);
 
-// 승인 D-PJT Code 6자리 게이트 (P-08 — SP WHERE LENGTH=6 가드의 FE 선검증 D12.
+// 승인 D-PJT Code 9자리 게이트 (P-08 — SP CODE 길이 가드의 FE 선검증 D12.
 //   '수정' 행은 SP 가 기존 CODE 유지(P-06) — 검증은 현재 행 값 기준 동일 적용)
 export const isDpjtCodeValid = (dpjtCode: unknown): boolean =>
   toText(dpjtCode).trim().length === DPJT_CODE_LENGTH;

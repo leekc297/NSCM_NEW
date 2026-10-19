@@ -29,7 +29,8 @@ export const validateFind = (
 ): ValidateResult => {
   if (!versionNo) return { ok: false, msgId: MSG.VERSION_REQUIRED };
   if (!periodFrom || !periodTo) return { ok: false, msgId: MSG.REQUIRED_FIELD, param: 'Period' };
-  if (!isValidYm(periodFrom) || !isValidYm(periodTo)) return { ok: false, msgId: MSG.INVALID_DATE };
+  if (!isValidYm(periodFrom) || !isValidYm(periodTo))
+    return { ok: false, msgId: MSG.INVALID_DATE, param: '' };
   if (periodFrom > periodTo) return { ok: false, msgId: MSG.PERIOD_ORDER };
   return OK;
 };
@@ -54,7 +55,7 @@ export const validateSaveRow = (row: DemandManagerRow): ValidateResult => {
   }
   if (intPart(approval) <= 0 || intPart(now) <= 0) return { ok: false, msgId: MSG.POSITIVE_INT };
 
-  if (!isValidYm(from) || !isValidYm(to)) return { ok: false, msgId: MSG.INVALID_DATE };
+  if (!isValidYm(from) || !isValidYm(to)) return { ok: false, msgId: MSG.INVALID_DATE, param: '' };
   if (from > to) return { ok: false, msgId: MSG.PERIOD_ORDER };
   return OK;
 };

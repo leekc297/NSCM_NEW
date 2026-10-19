@@ -89,7 +89,7 @@ validation.md 전수 (라인 = AS-IS .cs):
 
 MSG ID 5종 (00097/00108/00137/00164/00227) 전부 사내 SCM_ADM_MSG_M 실존 — 재채번 없이 재사용.
 
-## §4 Expression 축 (7/7)
+## §4 Expression 축 (8/8)
 
 | # | AS-IS (expressions.md) | TO-BE |
 |---|---|---|
@@ -100,6 +100,7 @@ MSG ID 5종 (00097/00108/00137/00164/00227) 전부 사내 SCM_ADM_MSG_M 실존 �
 | 5 | `ColumnHeaderSpan(1, iLargeStartCol,2,1,20,"SUM")` L1378 | 동일 (마지막 월 그룹 flush) |
 | 6 | `iMonthlySum += GetText(...)` L1456 (Dsdm_Changed 월합계 누적) | **N/A — read-only** (셀 편집 불가 → 재계산 트리거 없음. 합계는 SP 가 M_/W_ 컬럼으로 서버 계산 반환) |
 | 7 | `SetText(e.Row, iStartCol-1, iMonthlySum)` L1461 (월합계 기록) | **N/A — read-only** (동일) |
+| 8 | `InitSpreadFooterSum()` L408~425 (ColumnFooter.Visible / Cells[0,1]="Sum" / M_·W_·D_ SetAggregationType SumIgnoreHidden / 서식 `{0:#,##0.###}` / LightGray) | 하단 합계 줄 — `SalesMonitoringGrid` footer effect: `columnFooters` GroupRow 1행 + 기간 컬럼 `aggregate=Sum`(CollectionView 필터 적용 뷰로 집계 = 숨긴 행 제외) + 첫 컬럼 라벨 `FOOTER_LABEL`. formatItem ColumnFooter 분기에서 `FOOTER_FORMAT`(n3) 서식과 `FOOTER_BG_COLOR` 배경. 조회 결과 0건이면 footer 제거. 2026-10-07 추가(사용자 요청: 기간 칸 합계를 화면에서 바로 확인) |
 
 ⭐ 의도적 편차 (사용자 지시 2026-07-04): AS-IS `Freeze(0, MEASURE+1)` (L1380 — 식별 컬럼 블록 전체
 하드코드 고정, FIXED_FLAG 미참조)은 **재현하지 않음**. TO-BE 는 컬럼 고정을 admin

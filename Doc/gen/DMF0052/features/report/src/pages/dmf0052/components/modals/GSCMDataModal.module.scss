@@ -1,0 +1,7 @@
+// GSCMDataModal — 인라인 style 금지(룰 03) → SCSS Module
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}

@@ -28,6 +28,15 @@ interface Props {
 //   - usrDiscard (Checkbox)  : 불일치 조회 — dis='N' / his='N' 강제 + 즉시 onSearch
 //   - usrHis (Checkbox)      : History     — his='Y' / dis='ALL' 강제 + 즉시 onSearch
 // 표준: SearchArea + FormItem + CustomDropdown + Checkbox (lges)
+//
+// 2026-10-08 통합테스트 지적: Discard/History 체크 2개가 주석으로 꺼져 있어 조회 전달값이 항상 dis='ALL', his='N' 이었다
+//   (프로시저 분기는 살아 있음). 두 체크를 복원한다.
+//   - Discard(불일치조회) = 기여율 월합계가 100 이 아닌 키 + 기여율 미등록 판매 키만 조회(p_dis='N').
+//   - History = 판매 기준정보에서 사라진 기여율 키를 편집 불가(EDIT_FLAG='N')로 조회(p_his='Y').
+//   - 서로 배타(AS-IS usrHis_CheckedChanged / usrDiscard_Click 이 상대를 false 로 되돌림 .cs L861~870), 체크 변경 즉시 조회
+//     (AS-IS InitSpread → 칸 제목 재구성 + FindData .cs L138~156). TO-BE onSearch 가 setFilters + fetchStaticColumns + refetch 로
+//     칸 메타와 데이터를 함께 다시 받는다.
+//   - 참고: 레포의 AS-IS Designer 는 두 컨트롤이 Visible=false(L220, L295)다. 운영 AS-IS 화면에 보인다는 통합테스트 보고를 따른다.
 export const SearchBar = ({ onSearch, onYearChange }: Props) => {
   const { t } = useTranslation();
   const openSearchArea = useContributeMainStore(s => s.openSearchArea);
@@ -129,7 +138,8 @@ export const SearchBar = ({ onSearch, onYearChange }: Props) => {
               </div>
             )}
           />
-          {/* <FormItem
+          {/* 불일치조회 — AS-IS usrDiscard_Click: usrHis=false + InitSpread(재조회). p_dis='N' */}
+          <FormItem
             className={styles.display_flex}
             render={() => (
               <div className={styles.customCheckbox}>
@@ -137,15 +147,16 @@ export const SearchBar = ({ onSearch, onYearChange }: Props) => {
                   checked={searchParams.dis === 'N'}
                   onChange={checked => {
                     setSearchParams({ dis: checked ? 'N' : 'ALL', his: 'N' });
-                    // 다음 paint 후 onSearch — state 반영 보장 (AS-IS usrDiscard_Click).
-                    setTimeout(onSearch, 0);
+                    // 다음 틱에 onSearch — 체크 상태가 store 에 반영된 뒤 setFilters 가 읽게 한다 (AS-IS 즉시 조회).
+                    globalThis.setTimeout(onSearch, 0);
                   }}
                 />
                 <Label labelText={t('LBL00602', '_Discard')} depth='sub' />
               </div>
             )}
-          /> */}
-          {/* <FormItem
+          />
+          {/* History — AS-IS usrHis_CheckedChanged: usrDiscard=false + InitSpread(재조회). p_his='Y', 전 행 EDIT_FLAG='N' */}
+          <FormItem
             className={styles.display_flex}
             render={() => (
               <div className={styles.customCheckbox}>
@@ -153,13 +164,13 @@ export const SearchBar = ({ onSearch, onYearChange }: Props) => {
                   checked={searchParams.his === 'Y'}
                   onChange={checked => {
                     setSearchParams({ his: checked ? 'Y' : 'N', dis: 'ALL' });
-                    setTimeout(onSearch, 0);
+                    globalThis.setTimeout(onSearch, 0);
                   }}
                 />
-                <Label labelText={t('LBL00648', '_History')} depth='sub' />
+                <Label labelText={t('LBL00603', '_History')} depth='sub' />
               </div>
             )}
-          /> */}
+          />
         </>
       }
     />

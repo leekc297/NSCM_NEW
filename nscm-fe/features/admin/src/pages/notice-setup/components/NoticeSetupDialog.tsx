@@ -6,6 +6,8 @@ import { useTabComboQueries } from '@shared/hooks';
 import { Button, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
 import { useMessageStore } from '@shared/stores';
 
+import { COMBO_ID } from '../notice-setup.constants';
+import type { ComboOption } from '../notice-setup.types';
 import { getSafeNoticeImageSource } from '../notice-setup.util';
 import { useNoticeImageUpload } from '../useNoticeImageUpload';
 import { useNoticeSetupStore } from '../useNoticeSetupStore';
@@ -32,13 +34,23 @@ export const NoticeSetupDialog = ({ onSave, onDelete, isSaving }: NoticeSetupDia
 
   const { mutateAsync: uploadImage, isPending: isImageUploading } = useNoticeImageUpload();
 
+  // 이전 comboId 'Module'/'SubModule' 은 SCM_ADM_CMBO_SQL_M 에 등록되지 않아 신규 등록 시
+  // module 선택 콤보가 항상 빈 목록이었다(2026-09-11). mail-setup 표준으로 교체.
+  // const [modules, subModules] = useTabComboQueries({
+  //   filters: ['Module', { comboId: 'SubModule', module: draft.MODULE }],
+  //   enabled: isEditorOpen,
+  // });
   const [modules, subModules] = useTabComboQueries({
-    filters: ['Module', { comboId: 'SubModule', module: draft.MODULE }],
+    filters: [COMBO_ID.MODULE, COMBO_ID.SUB_MODULE],
     enabled: isEditorOpen,
   });
 
-  const moduleOptions = modules?.map(item => ({ label: item.NAME, value: item.CODE })) ?? [];
-  const subModuleOptions = subModules?.map(item => ({ label: item.NAME, value: item.CODE })) ?? [];
+  const moduleOptions =
+    (modules as ComboOption[] | undefined)?.map(item => ({ label: item.NAME, value: item.CODE })) ??
+    [];
+  // 2026-09-16 사용자 요구 - Module:Sub Module 은 1:1 매핑이라 입력 칸을 없애고 Module 선택 시
+  // 매핑되는 Sub Module 을 자동으로 draft 에 채워 저장한다 (rawSubModules 는 CMBO 원본, PARENT_CODE=Module).
+  const rawSubModules = (subModules as ComboOption[] | undefined) ?? [];
   const imageSource = getSafeNoticeImageSource(draft.NOTICE_IMAGE);
   const startDateValue = draft.START_DATE ? dayjs(draft.START_DATE) : null;
   const endDateValue = draft.END_DATE ? dayjs(draft.END_DATE) : null;
@@ -121,8 +133,9 @@ export const NoticeSetupDialog = ({ onSave, onDelete, isSaving }: NoticeSetupDia
       customContentArea={
         <div className={styles.dialogContent}>
           <div className={styles.scrollArea}>
-            <section className={styles.section}>
+            <section className={styles.sectionWrapper}>
               <h3 className={styles.sectionTitle}>{t('LBL00391', '_Basic Information')}</h3>
+              <div className={styles.section}>
               <div className={styles.formGrid}>
                 <FormItem
                   label={t('LBL00379', '_Module')}
@@ -133,17 +146,23 @@ export const NoticeSetupDialog = ({ onSave, onDelete, isSaving }: NoticeSetupDia
                       isInput={false}
                       value={draft.MODULE}
                       options={moduleOptions}
-                      onChange={(_, option) =>
+                      onChange={(_, option) => {
+                        const nextModule = option ?? '';
+                        // Module:Sub Module 1:1 매핑 - PARENT_CODE 로 매칭되는 Sub Module 을 자동 채움
+                        const matchedSubModule = rawSubModules.find(
+                          item => item.PARENT_CODE === nextModule
+                        );
                         setDraft({
-                          MODULE: option,
+                          MODULE: nextModule,
                           MODULE_NM: '',
-                          SUB_MODULE: '',
-                          SUB_MODULE_NM: '',
-                        })
-                      }
+                          SUB_MODULE: matchedSubModule?.CODE ?? '',
+                          SUB_MODULE_NM: matchedSubModule?.NAME ?? '',
+                        });
+                      }}
                     />
                   )}
                 />
+                {/* 2026-09-16 사용자 요구 - Module:Sub Module 1:1 매핑이라 입력 칸 제거, Module 선택 시 자동 매핑
                 <FormItem
                   label={t('LBL00378', '_Sub Module')}
                   labelAlign='right'
@@ -157,6 +176,7 @@ export const NoticeSetupDialog = ({ onSave, onDelete, isSaving }: NoticeSetupDia
                     />
                   )}
                 />
+                */}
                 <div className={styles.fullRow}>
                   <FormItem
                     label={t('LBL00388', '_Notice *')}
@@ -235,10 +255,12 @@ export const NoticeSetupDialog = ({ onSave, onDelete, isSaving }: NoticeSetupDia
                   />
                 </div>
               </div>
+              </div>
             </section>
 
-            <section className={styles.section}>
+            <section className={styles.sectionWrapper}>
               <h3 className={styles.sectionTitle}>{t('LBL00389', '_Publication Period')}</h3>
+              <div className={styles.section}>
               <div className={styles.dateRow}>
                 <label className={styles.dateField}>
                   <span>{t('LBL00390', '_Start Date')}</span>
@@ -273,10 +295,12 @@ export const NoticeSetupDialog = ({ onSave, onDelete, isSaving }: NoticeSetupDia
                   </div>
                 </label>
               </div>
+              </div>
             </section>
 
-            <section className={styles.section}>
+            <section className={styles.sectionWrapper}>
               <h3 className={styles.sectionTitle}>{t('LBL00383', '_Message Setup')}</h3>
+              <div className={styles.section}>
               <div className={styles.messageFields}>
                 <FormItem
                   label={t('LBL00384', '_Notice Title *')}
@@ -350,6 +374,7 @@ export const NoticeSetupDialog = ({ onSave, onDelete, isSaving }: NoticeSetupDia
                     <NoticeRichTextEditor />
                   </div>
                 </div>
+              </div>
               </div>
             </section>
           </div>

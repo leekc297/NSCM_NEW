@@ -1,25 +1,32 @@
-import { type FlexGrid as TFlexGrid } from '@mescius/wijmo.grid';
+﻿import { type FlexGrid as TFlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import type { PivotEngine } from '@mescius/wijmo.olap';
 import { MeasureSelectModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { IcMeasureSelect } from '@foundation/assets';
+import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
 import dayjs from '@foundation/dayjs';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
-import { MainTitle, ResultArea, SubTitle, type OlapPivotGridRef } from '@shared/components';
+import {
+  ColumnLayoutModal,
+  MainTitle,
+  ResultArea,
+  saveTitleSet,
+  SubTitle,
+  toColumnLayoutSettings,
+  type ColumnLayoutRow,
+} from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { DemandPlanWaterfallForm } from './components/DemandPlanWaterfallForm';
 import { DemandPlanWaterfallGrid } from './components/DemandPlanWaterfallGrid';
-import { OlapFieldRail, OlapGridMeta } from './components/olap-field-rail/OlapFieldRail';
-import { OlapChartPane, type OlapChartType } from './components/OlapChartPane';
 import {
+  divisorFor,
   GUBUN,
   GUBUN_META,
   MENU_ID,
+  PERIOD_COLUMN_REGEX,
   PERIOD_LIMIT_YEARS,
   SHEETS,
 } from './demand-plan-waterfall.constants';
@@ -30,15 +37,14 @@ import { useDemandPlanWaterfallStore } from './useDemandPlanWaterfallStore';
 //   MSG 는 AS-IS 실문구 대사(#114) — MSG00137/00108/00164/00097 (통합분석 §2.F 실측).
 
 export const DemandPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
-  const olapRef = useRef<OlapPivotGridRef | null>(null);
-  // SubTitle 연동용 — PivotGrid 는 FlexGrid 파생 (OlapPivotGridRef.grid 인스턴스 프록시)
+  // SubTitle(Excel/Filter/Sort) 연동용 — 공용 DataGrid 가 채운다
   const gridRef = useRef<TFlexGrid | undefined>(undefined);
-  // UM-07 — PivotGrid(FlexGrid 파생)에 FlexGridFilter 를 붙여 SubTitle Filter(F4) 가 산다 (Grid 가 마운트 시 채움)
   const gridFilterRef = useRef<FlexGridFilter | undefined>(undefined);
 
   const { t } = useTranslation();
   const session = useSessionStore(state => state.session);
   const { setAlert } = useMessageStore();
+  const setToast = useMessageStore.getState().setToast;
   const queryClient = useQueryClient();
 
   const filters = useDemandPlanWaterfallStore(state => state.filters);
@@ -53,6 +59,9 @@ export const DemandPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
   const staticMeasures = useDemandPlanWaterfallStore(state => state.staticMeasures);
   const visibleMeasures = useDemandPlanWaterfallStore(state => state.visibleMeasures);
   const applyVisibleMeasures = useDemandPlanWaterfallStore(state => state.applyVisibleMeasures);
+  const staticColumns = useDemandPlanWaterfallStore(state => state.staticColumns);
+  const columnSettings = useDemandPlanWaterfallStore(state => state.columnSettings);
+  const applyColumnSettings = useDemandPlanWaterfallStore(state => state.applyColumnSettings);
   const restoreSearchConditions = useDemandPlanWaterfallStore(
     state => state.restoreSearchConditions
   );
@@ -76,8 +85,22 @@ export const DemandPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
   // UM-01 — Division 변경 = Grid 초기화 (#59 §1.4 / memory feedback_division_change_grid_reset).
   //   filters 를 비우면 3 GUBUN 쿼리가 전부 disabled 되어 데이터·타이틀이 비고, 다시 보려면 Search 를 눌러야 한다.
   //   조회 전용 화면 = CRUD reset 해당없음. 정적 컬럼은 divisionId deps effect 가 뒤따라 재fetch.
+  //   ⭐ GRID COLUMN SET 도 함께 초기화 — SHEET_COLUMNS 는 DIVISION_ID 토큰으로 컬럼 집합이 갈리므로
+  //   이전 division 의 선택을 그대로 쓰면 없는 컬럼을 켠 상태가 된다.
   const handleDivisionChange = () => {
     clearData();
+    // division 이 바뀌면 표시 대상 컬럼·메저 집합 자체가 달라진다(SHEET_COLUMNS/MEASURE 의 DIVISION_ID 축).
+    //   null 로 비워 두면 뒤따르는 메타 재조회가 새 division 의 개인화로 다시 시드한다([E20260904-METASEED]).
+    applyColumnSettings(gubun, null);
+    applyVisibleMeasures(gubun, null);
+  };
+
+  // Waterfall Type(GUBUN) 변경 = GRID 초기화 (사용자 지시 2026-09-04).
+  //   TYPE 이 바뀌면 시트·종속 PROGRAM_ID·컬럼/메저 메타 축이 통째로 바뀌므로 이전 결과는 무효다.
+  //   컬럼·메저 설정은 뒤따르는 메타 effect 가 새 TYPE 의 서버 저장분으로 재시드한다([E20260904-METASEED]).
+  const handleGubunChange = () => {
+    clearData();
+    queryClient.removeQueries({ queryKey: [tabId] });
   };
 
   // [E20260831-BUCKETRESET] BUCKET 변경 = 항상 GRID 초기화 (사용자 지시 2026-08-31 — 구 UM-08 경계 판정 폐기).
@@ -123,13 +146,78 @@ export const DemandPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
     () => (activeRows ?? []) as Record<string, string | number>[],
     [activeRows]
   );
-  // [E20260831-MEASCOUNT] 메저 선택(MeasureSelectModal) 행 필터를 페이지로 승격 — 그리드 행과
-  //   건수 표시(SubTitle dataCount / OlapGridMeta rowCount)가 같은 축을 쓴다 (구: 그리드만 필터,
-  //   건수는 원본 data.length 라 "5개 선택했는데 15,897건" 불일치 실사고 2026-08-31).
+  // ⭐ [E20260902-MEASDEPS] 메저 선택은 **서버 축(TITLESET_USER 'M')** 단일 출처 — 클라이언트 행 필터 ⛔.
+  //   메인 SP 는 사용자 저장 메저를 base 로 **종속(파생) 메저를 서버에서 덧붙여** 반환한다:
+  //     `PKG_DMF0035` L433~481 CUST_FCST → Immidiate/Planning_Forecast/Commercial_Agreement/Firm_Temp/
+  //       Manumacturing_Material_Temp/Material_Temp/Backorder/CUST_FCST_EDI
+  //     `PKG_DMF0035` L489~556 CUST_FCST(_ORG) → DM_MST_CUSTOMER_FCST.MEASURE / 'Customer Fcst[Org.]'
+  //   이 종속 메저 코드들은 모달 목록의 원천(`SCM_MST_SHEET_MEASURE` VALID_YN='Y')에 **없거나 VALID_YN='N'**
+  //   이라, 구 구현의 `vis.includes(MEASURE)` 필터가 종속 메저를 통째로 잘라냈다
+  //   (사용자 신고 2026-09-02 "div 81 최초 조회는 나오는데 Measure 모달 저장 후 종속메저 사라짐" —
+  //    선택을 바꾸지 않고 OK 만 눌러도 재현. AS-IS `DMF0035_MktFcstWaterfall.cs:1809` 은 팝업 OK 시
+  //    `InitSpread()` 뿐이고 행 필터가 없다 = 서버가 선택+종속을 함께 내려주는 계약).
+  //   → FE 는 SP 반환 measure 집합을 그대로 렌더한다. 정본 = DMF0003 `MktFcst.tsx:867~873` 동일 문구.
+  //   `visibleMeasures` 는 모달 재진입 시 좌/우 복원 + 아래 **면제형 행 필터**의 입력으로 쓰인다.
+  //
+  // ⭐ [E20260902-MEASFILTEREXEMPT] 사용자 확정 2026-09-02 — "종속메저는 메저필터 적용 대상에서 제외(항상 표시)".
+  //   필터를 **전면 제거**하면 건수 표시가 선택에 반응하지 않고(REQ:CHAT-20260831-W44 후퇴),
+  //   **전면 적용**하면 종속메저가 잘린다(REQ:CHAT-20260902-W46 원인). 둘 다 아닌 **면제 규칙**을 쓴다:
+  //     · 모달 목록(= SHEET_MEASURE VALID_YN='Y' 후보)에 있는 메저 → 선택 여부대로 필터
+  //     · 모달 목록에 **없는** 메저(= SP 가 붙인 종속/파생) → 필터 면제, 항상 표시
+  //   판정 원천은 `staticMeasures`(모달에 넘기는 바로 그 목록)라 모달과 축이 어긋날 수 없다.
+  //   ⚠ staticMeasures 가 비면(fetch 실패) 전 메저가 '면제' 로 떨어져 필터가 no-op 이 된다 —
+  //     메타 실패로 행이 사라지는 쪽보다 안전한 degrade (의도된 동작).
+  const selectableMeasures = useMemo(
+    () => new Set(staticMeasures.map(measure => measure.colNm)),
+    [staticMeasures]
+  );
   const visibleData = useMemo(() => {
     const vis = visibleMeasures[gubun];
-    return vis == null ? data : data.filter(r => vis.includes(String(r.MEASURE ?? '')));
-  }, [data, visibleMeasures, gubun]);
+    if (vis == null) return data;
+    return data.filter(row => {
+      const measure = String(row.MEASURE ?? '');
+      if (!selectableMeasures.has(measure)) return true; // 종속메저 = 면제
+      return vis.includes(measure);
+    });
+  }, [data, visibleMeasures, gubun, selectableMeasures]);
+
+  // ⭐ 환산(KRW/USD/LOC/QTY 배수)은 **값 단계**에서 나눈다 — footer 집계(useAggregationRow)·Excel
+  //   (FlexGridXlsxConverter)·F4 필터가 모두 셀 값을 보므로 formatItem 텍스트 치환으로는 셋 다 어긋난다.
+  //   AS-IS `SetAmountCalculating`(0035 .cs:2246~2262 / 0022 .cs:2467~2571)도 스프레드 **값**을 갱신하고
+  //   그 위에서 `SumIgnoreHidden` 이 돈다 = 값 단계가 1:1.
+  //   배수가 전부 1이면 원배열 참조를 그대로 돌려준다(itemsSource 재대입 회피 — 스크롤·컬럼폭 보존).
+  const scaledData = useMemo(() => {
+    const d = {
+      krw: Number(searchParams.krw) || 1,
+      usd: Number(searchParams.usd) || 1,
+      loc: Number(searchParams.loc) || 1,
+      qty: Number(searchParams.qty) || 1,
+    };
+    if (d.krw === 1 && d.usd === 1 && d.loc === 1 && d.qty === 1) return visibleData;
+    return visibleData.map(row => {
+      const divisor = divisorFor(gubun, String(row.MEASURE ?? ''), d);
+      if (divisor === 1) return row;
+      // react-query 캐시 객체이므로 원본 mutate 금지 — shallow copy 후 기간 컬럼만 환산
+      const next: Record<string, string | number> = { ...row };
+      Object.keys(next).forEach(key => {
+        if (!PERIOD_COLUMN_REGEX.test(key)) return;
+        const value = Number(next[key]);
+        if (!Number.isFinite(value)) return;
+        next[key] = Math.round((value / divisor) * 100) / 100; // AS-IS Round 2
+      });
+      return next;
+    });
+  }, [visibleData, gubun, searchParams.krw, searchParams.usd, searchParams.loc, searchParams.qty]);
+
+  // 당기(당월·당주) 헤더 강조 기준 — 메인 SP o_rc2 (AS-IS ds.Tables[1]["ISO_WEEK"], .cs:1140)
+  //   ⚠ `procedures.d.ts` 의 DMF0035 블록(o_rc2 선언)이 아직 병합되지 않은 저장소에서도 **빌드가 깨지지 않게**
+  //   구조적 접근으로 읽는다 (2026-09-04 클라우드 TS2551 — 이관 시 FE_MERGE 블록이 뒤늦게 적용되는 순서 문제).
+  //   PROC_M 에는 o_rc2 가 등록돼 있어 런타임 값은 선언 유무와 무관하게 내려온다.
+  const isoWeekRaw = (
+    active.data as unknown as { o_rc2?: Array<{ ISO_WEEK?: string | number }> } | undefined
+  )?.o_rc2?.[0]?.ISO_WEEK;
+  const isoWeek = typeof isoWeekRaw === 'number' ? String(isoWeekRaw) : (isoWeekRaw ?? '');
+
   const isFetching = active.isFetching;
 
   useEffect(() => {
@@ -139,12 +227,17 @@ export const DemandPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
       divisionId: searchParams.divisionId,
       sheetNm: GUBUN_META[gubun].sheetNm,
       programId: GUBUN_META[gubun].programId,
+      gubun,
+      // 진입·division·GUBUN 변경 = 서버 저장분이 정본 (이전 세션 잔재 무시)
+      reseed: true,
     });
     // [E20260831-MEASURE] 공통 메저 선택(AS-IS 0035/0022/0051 공통 기능) — SHEET_MEASURE 메타 동반 fetch
     void fetchStaticMeasures({
       divisionId: searchParams.divisionId,
       measureSheetNm: GUBUN_META[gubun].measureSheetNm,
       programId: GUBUN_META[gubun].programId,
+      gubun,
+      reseed: true,
     });
   }, [
     tabId,
@@ -154,11 +247,6 @@ export const DemandPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
     fetchStaticColumns,
     fetchStaticMeasures,
   ]);
-
-  // SubTitle 의 FlexGrid ref 를 OLAP 내부 그리드로 동기 (PivotGrid = FlexGrid 파생)
-  useEffect(() => {
-    gridRef.current = (olapRef.current?.grid as TFlexGrid | undefined) ?? undefined;
-  });
 
   const handleSubmit = () => {
     if (!session.userId) return;
@@ -229,54 +317,126 @@ export const DemandPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!changed) void queryClient.invalidateQueries({ queryKey: [tabId] });
   };
 
-  // 조회 전용 — CUD/업로드 숨김 (AS-IS F7/F8/F9 no-op, F2=MSG00109)
-  //   [CHART/EXPORT 2026-08-27] Export = 공통 [Excel] 버튼 위치 그대로, 동작만 OLAP 내보내기
-  //   (OlapPivotGrid.exportExcel — FlexGridXlsxConverter, 피벗 헤더 포함)로 교체. 조회 전(그리드 미마운트)엔 기본 동작.
-  // Grid Layout 편집기 — [RAIL 2026-08-27] 팝업(OlapLayoutModal) → 좌측 분할 패널 → **우측 300px 도킹 레일**
-  //   (디자인 핸드오프 1a). SubTitle 의 [Grid Layout] 버튼은 삭제(사용자 지시 2026-08-27) — 레일 헤더 [Hide ›] 와
-  //   접힌 가장자리 [‹] 만으로 토글한다. 기본 = 열림(디자인 기준).
-  const [showLayout, setShowLayout] = useState<boolean>(true);
-
+  // 조회 전용 — CUD/업로드 숨김 (AS-IS F7/F8/F9 no-op, F2=MSG00109).
+  //   Excel/Filter/Sort 는 공용 경로 복귀 — 실 FlexGrid 이므로 `GridAction.excelDownload`(다단 헤더 재구성)와
+  //   F3/F4 가 그대로 동작한다 (구 OLAP 오버라이드·`filter:false`/`sort:false` 폐기, 2026-09-04).
   const hotkeyConfig: HotkeyConfig = {
     insert: false,
     delete: false,
     save: false,
     upload: false,
     manual: false,
-    // [E20260831-NOCOMMONFS] 공통 FILTER/SORT 기능 제외 — 버튼 숨김 (사용자 지시 2026-08-31).
-    //   피벗 필터 축은 레일 Filters 영역이 담당(구 UM-07 F4=레일 열기 재해석은 폐기 — 레일은 [‹]/[Hide ›] 토글).
-    filter: false,
-    sort: false,
-    ...(olapRef.current?.engine
-      ? { excel: () => olapRef.current?.exportExcel('DemandPlanWaterfall') }
-      : {}),
   };
 
-  // [CHART 2026-08-27] 차트 분할 상태 — [E20260831-NOCHARTBTN] Chart 버튼 삭제(사용자 지시 2026-08-31):
-  //   showChart 는 false 고정(토글 진입점 제거), OlapChartPane 코드는 보존(재도입 시 버튼만 복원).
-  const [showChart] = useState<boolean>(false);
-  const [chartType, setChartType] = useState<OlapChartType>(0);
   // [E20260831-MEASURE] 공통 메저 선택 모달 (AS-IS 0035/0022/0051 공통 기능 — 정본 사용형 DMF0003, hook #132)
   const [openMeasureSelect, setOpenMeasureSelect] = useState(false);
+
+  // ⭐ [E20260902-MEASDEPS] Measure 모달 OK — 정본 DMF0003 `MktFcst.tsx:1204~1226` 1:1.
+  //   ① 그리드 비움: 이전 조회 rows 는 이전 메저 집합 기준이라 무효. `clearData()` 로 filters 를 비워
+  //      3 GUBUN 쿼리를 disable 하고, `removeQueries([tabId])` 로 캐시까지 지운다.
+  //      ⚠ removeQueries 필수 — queryKey 는 `buildTabQueryKey(tabId, sheet, action, filters)` 라
+  //        동일 조건으로 다시 Search 하면 전역 staleTime=Infinity 캐시가 옛 rows 를 그대로 돌려준다.
+  //      ⚠ 키 prefix 는 **tabId(UUID)** 다 — `invalidateQueries([MENU_ID])` 는 메인 그리드에 매칭되지 않는다.
+  //   ② 서버 저장: 표시 메저만 sortOrderNo 1..n (titleSetApi 저장 계약 = 행 존재가 곧 표시).
+  //      codes === null(전체 선택)이면 전 메저 코드를 그대로 저장한다 — 빈 배열 저장은 SP no-op(false).
+  //   ③ 저장 성공 후 메저 메타 재fetch — 모달 재진입 목록/기본값을 서버 기준으로 다시 맞춘다.
+  //   재조회는 Search 버튼 (division/bucket 변경 초기화와 동일 정책 — 자동 재조회 없음).
+  const handleApplyMeasures = (codes: string[] | null) => {
+    clearData();
+    queryClient.removeQueries({ queryKey: [tabId] });
+    // 모달 재진입 시 좌/우 복원 상태 (행 필터 아님 — 위 [E20260902-MEASDEPS] 주석 참조)
+    applyVisibleMeasures(gubun, codes);
+
+    const meta = GUBUN_META[gubun];
+    const selected = codes ?? staticMeasures.map(measure => measure.colNm);
+    void saveTitleSet({
+      menuId: meta.programId,
+      sheetName: meta.titleSetSheetNm,
+      // Measure 개인화 — 폭/색은 대상이 아니라 미전달(빈 값으로 저장됨).
+      columnType: 'M',
+      rows: selected.map((name, index) => ({ name, sortOrderNo: index + 1 })),
+    }).then(ok => {
+      if (!ok) {
+        void setAlert({ type: 'alert', content: t('MSG00618', '_An error occurred while saving.') });
+        return;
+      }
+      if (!session.userId || !searchParams.divisionId) return;
+      void fetchStaticMeasures({
+        divisionId: searchParams.divisionId,
+        measureSheetNm: meta.measureSheetNm,
+        programId: meta.programId,
+      });
+    });
+  };
+  // ⭐ GRID COLUMN SET — 공용 정본 모달(@shared ColumnLayoutModal, hook #132 §2-1. 구 ColumnSettingModal ⛔).
+  //   ⚠ 축은 GUBUN 별 **종속 PROGRAM_ID + SHEET_COLUMNS 실등록 시트명**이다(GUBUN_META).
+  //     저장 SP(`SCM0002_SET_TITLESET_POPUP`)의 'C' 분기가 `SCM_MST_SHEET_COLUMNS` 에서 SELECT 해
+  //     INSERT 하므로(사내 라이브 L138~156), 메타에 없는 시트명으로 저장하면 DELETE 만 되고 0행이 들어간다.
+  const [openColumnSetting, setOpenColumnSetting] = useState(false);
+  const columnLayoutSettings = useMemo(
+    () => columnSettings[gubun] ?? toColumnLayoutSettings(staticColumns),
+    [columnSettings, gubun, staticColumns]
+  );
+
+  const handleSaveColumnLayout = (settings: ColumnLayoutRow[]) => {
+    // ① 그리드 비움 (#132 §2-2) — 이전 조회 rows 는 이전 컬럼 구성 기준이라 무효.
+    //    키 prefix 는 tabId(UUID) — invalidateQueries([MENU_ID]) 는 메인 그리드에 매칭되지 않는다.
+    clearData();
+    queryClient.removeQueries({ queryKey: [tabId] });
+    // ② FE 적용 (MKT 는 SP 개인화 축과 달라 FE 가 정본 — B-2 축 정정 전까지의 안전망 겸용)
+    applyColumnSettings(gubun, settings);
+
+    // ③ 서버 저장 (titleset 'C')
+    const meta = GUBUN_META[gubun];
+    const visible = settings.filter(row => row.USER_FLAG === 'Y');
+    void saveTitleSet({
+      menuId: meta.programId,
+      sheetName: meta.sheetNm,
+      columnType: 'C',
+      rows: visible.map((row, index) => ({
+        name: row.COLUMN_NAME,
+        sortOrderNo: index + 1,
+        colWidth: row.COL_WIDTH,
+        cellColor: row.CELL_COLOR,
+        textColor: row.TEXT_COLOR,
+      })),
+    }).then(ok => {
+      if (!ok) {
+        void setAlert({ type: 'alert', content: t('MSG00618', '_An error occurred while saving.') });
+        return;
+      }
+      void setToast({ message: t('MSG00606', '_Saved.'), type: 'success' });
+      // ⚠ 모달 titleset 쿼리 키의 첫 요소는 menuId(= 종속 PROGRAM_ID) — MENU_ID 로 무효화하면
+      //   SALES/BIZ 가 "저장했는데 재진입 시 원복" 으로 보인다.
+      void queryClient.invalidateQueries({ queryKey: [meta.programId] });
+      if (!session.userId || !searchParams.divisionId) return;
+      void fetchStaticColumns({
+        divisionId: searchParams.divisionId,
+        sheetNm: meta.sheetNm,
+        programId: meta.programId,
+      });
+    });
+  };
+
+  // #120 아이콘 버튼 순서 = 환율 → ColumnSet → Measure (본 화면은 환율 없음).
+  //   BTN 권한 배선(COLUMN_SETUP/MEASURE_SELECT)은 메타 미등재 상태라 무게이트 노출 —
+  //   등재 후 `hasButton` 게이트로 전환한다(정본 DMF0003 `MktFcst.tsx:836~857`).
   const customButtons = [
-    // #120 아이콘 순서 규약(환율→ColumnSet→Measure) — 본 화면은 Measure 만 해당. BTN 권한 배선(MEASURE_SELECT)은
-    // 사내/클라우드 메타 미등재 상태라 무게이트 노출(사용자 지시 2026-08-31) — 배선 등재 시 hasButton 게이트 전환.
     {
-      label: t('LBL00712', '_Measure'),
-      title: t('LBL00712', '_Measure'),
+      label: t('LBL00605', '_Column Setting'),
+      title: t('LBL00605', '_Column Setting'),
+      action: () => setOpenColumnSetting(true),
+      iconComponent: <IcGridColumnSetup />,
+      buttonLabel: '',
+    },
+    {
+      label: t('LBL00310', '_Measure'),
+      title: t('LBL00310', '_Measure'),
       action: () => setOpenMeasureSelect(true),
       iconComponent: <IcMeasureSelect />,
       buttonLabel: '',
     },
   ];
-
-  // 패널이 쓰는 PivotEngine — 그리드는 조회 후에야 마운트되므로 ref 값을 state 로 승격해 패널이 따라 렌더되게 한다.
-  //   그리드 마운트/교체 시점 = 데이터·GUBUN 변경 직후이므로 그 deps 로 검사한다(동일 인스턴스면 setState 생략).
-  const [engine, setEngine] = useState<PivotEngine | null>(null);
-  useEffect(() => {
-    const next = olapRef.current?.engine ?? null;
-    if (next !== engine) setEngine(next);
-  }, [engine, data, gubun, showLayout]);
 
   return (
     <>
@@ -290,65 +450,70 @@ export const DemandPlanWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
         onSubmit={handleSubmit}
         onDivisionChange={handleDivisionChange}
         onBucketChange={handleBucketChange}
+        onGubunChange={handleGubunChange}
       />
       <SubTitle
         menuId={MENU_ID}
         grid={gridRef}
         gridFilter={gridFilterRef}
-        dataCount={visibleData.length}
+        // wide 바인딩이라 UI 건수 = 그리드 행수 = Excel 행수가 자동 일치 (구 피벗 병합 보정 불요).
+        //   F4 필터로 행이 줄면 SubTitle 이 collectionView.items.length 로 보정한다.
+        dataCount={scaledData.length}
         excelFileName='DemandPlanWaterfall'
         useHotkey={true}
         searchParam={searchParams}
         hotkeyConfig={hotkeyConfig}
         customButtons={customButtons}
       />
-      {/* [RAIL 2026-08-27] 디자인 핸드오프 "1a Docked field rail" — 좌 = 그리드 팬(메타 스트립 + OLAP 그리드,
-          flex:1) / 우 = 300px 도킹 레일(Hide › 로 28px 가장자리까지 접힘, 그리드가 남은 폭 차지). */}
-      <ResultArea.Group direction='horizontal' gap={0}>
-        {/* 그리드 팬 — Chart 토글 시 세로 분할(그리드 6 : 차트 4, 드래그 조절). key 로 split 재구성 */}
-        <ResultArea.Group key={showChart ? 'chart' : 'grid'} split={showChart} minSize={20}>
-          <ResultArea flex={6}>
-            <OlapGridMeta
-              engine={engine}
-              rowTotals={searchParams.rowTotals}
-              rowCount={visibleData.length}
-            />
-            <DemandPlanWaterfallGrid
-              olapRef={olapRef}
-              gridFilterRef={gridFilterRef}
-              gubun={gubun}
-              data={visibleData}
-              tabId={tabId}
-              onBucketChange={handleBucketChange}
-            />
-          </ResultArea>
-          {showChart && (
-            <OlapChartPane
-              engine={engine}
-              chartType={chartType}
-              onChartTypeChange={setChartType}
-              flex={4}
-            />
-          )}
-        </ResultArea.Group>
-        <OlapFieldRail
-          engine={engine}
-          rowTotals={searchParams.rowTotals}
-          onRowTotalsChange={mode => setSearchParams({ rowTotals: mode })}
-          open={showLayout}
-          onToggleOpen={setShowLayout}
+      {/* 결과 영역 — 공용 셸(ResultArea)이 남은 높이를 준다. 그리드 래퍼 div 금지(#132 §1-3). */}
+      <ResultArea>
+        <DemandPlanWaterfallGrid
+          gridRef={gridRef}
+          gridFilterRef={gridFilterRef}
+          gubun={gubun}
+          data={scaledData}
+          isoWeek={isoWeek}
+          tabId={tabId}
         />
-      </ResultArea.Group>
+      </ResultArea>
 
-      {/* [E20260831-MEASURE] 공통 메저 선택 — master 공용 정본 모달(hook #132, 사본 ⛔). OK = GUBUN 별 표시
-          메저 적용(클라 행 필터 — OLAP MEASURE 축은 그리드에 항상 유지). titleset 'M' 서버 저장은 DMF0035
-          titleSet SAVE 배선 부재(사내 실측 SEARCH 3본뿐)로 잔여 — 배선 등재 후 DMF0003 형 저장 추가. */}
+      {/* ⭐ GRID COLUMN SET — 공용 정본(@shared). 축 = GUBUN 별 종속 PROGRAM_ID + SHEET_COLUMNS 실등록 시트명.
+          fallbackColumns/initialSettings 는 현재 화면 컬럼(개인화 반영본) — 미전달 시 재진입에 선택이 원복된다. */}
+      <ColumnLayoutModal
+        open={openColumnSetting}
+        modalClose={() => setOpenColumnSetting(false)}
+        menuId={GUBUN_META[gubun].programId}
+        sheetName={GUBUN_META[gubun].sheetNm}
+        columnType='C'
+        divisionId={searchParams.divisionId}
+        fallbackColumns={staticColumns.map(column => ({
+          key: column.colNm,
+          header: column.colLblNm,
+          width: column.colWth,
+        }))}
+        initialSettings={columnLayoutSettings}
+        title={t('LBL00711', '_Column')}
+        leftTitle={t('LBL00764', 'Invisible')}
+        rightTitle={t('LBL00765', 'Visible')}
+        onSave={handleSaveColumnLayout}
+      />
+
+      {/* [E20260831-MEASURE] 공통 메저 선택 — master 공용 정본 모달(hook #132, 사본 ⛔).
+          ⭐ [E20260902-MEASDEPS] OK = **서버 영구 저장(titleset 'M') + 그리드 비움** (정본 DMF0003
+             `MktFcst.tsx:1204~1226` 1:1). AS-IS `DM0002_TitleSetForm_Popup.cs:425` SaveTitleSet →
+             `SCM0002_SET_TITLESET_POPUP` 과 동일 계약이며, 종속 메저는 다음 조회 때 SP 가 붙여 내려준다.
+          ⚠ 저장 엔드포인트는 공용 `POST /admin/menu/{mnuId}/titleset` (BE 고정 매핑) —
+             `MenuServiceImpl.saveTitleSet` javadoc 대로 `SCM_ADM_MNU_BTN_MPG_M` 등록을 요구하지 않는다
+             (화면별 `{menuId}/titleSet/SAVE/call-proc` 경로였다면 403). 따라서 메타 배선 작업 불요.
+          ⚠ menuId(=GUBUN_META.programId)는 사용자 지시(2026-09-08)로 GUBUN 무관하게 화면 MENU_ID(DMF0035)
+             단일화 — VERSION 따라 mnuId 가 바뀌던 이레귤러 제거. BE 가 path mnuId 를 P_PROGRAM_ID 로 넘기므로,
+             SALES/BIZ 메타·titleset·메인 SP 의 P_PROGRAM_ID 해소가 DMF0035 로 등록/정렬돼 있어야 조회에 잡힌다. */}
       <MeasureSelectModal
         open={openMeasureSelect}
         modalClose={() => setOpenMeasureSelect(false)}
         measures={staticMeasures}
         visibleMeasures={visibleMeasures[gubun]}
-        onApply={codes => applyVisibleMeasures(gubun, codes)}
+        onApply={handleApplyMeasures}
       />
     </>
   );

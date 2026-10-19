@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { type FlexGrid as TFlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { GridAction } from '@foundation/utils';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { attachRowNoHeader, GridAction } from '@foundation/utils';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, Tooltip } from '@shared/lges';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
@@ -35,10 +37,12 @@ import styles from './ForecastTemplateModal.module.scss';
 //   - 0건 = MSG01023 (MSG00705 는 '업로드분 없음' 이라 의미가 반대라 재사용 금지)
 //     ⚠ 구 코드 MSG00718 은 2026-08-21 클라우드 동기화로 '권한 요청을 반려하시겠습니까?' 로 재정의됨
 //
-//   [Excel Download] 정적 메타 컬럼 + M4~M16(빈칸) 평탄 헤더.
-//   ⚠ 토큰 10개와 'M4'~'M16' 은 **원형 유지 의무** — BE cvtListUploadRows 가 HEADER_CONTENT 문자열
-//   일치로 컬럼을 찾는다. 정보성 컬럼은 HEADER_CONTENT 에 없어 업로드 시 무시된다(자유 추가 가능).
-//   그리드/미리보기 라벨에만 실월(당월+4~+16) 병기.
+//   [Excel Download] ⭐ [E20260921-XLSFORMASIS] AS-IS DMF0020 파리티 — 평탄 1행 헤더 19컬럼:
+//     Div / Team / End Customer / Project Code / Currency / Model / M0 ... M12
+//   컬럼 정의 원천 = admin 메타 `SCM_MST_SHEET_COLUMNS`(DMF0082, 'Sales Price Template') 19행.
+//   주의: 헤더 문자열은 원형 유지 의무 — BE cvtListUploadRows 가 HEADER_CONTENT 문자열 일치로 컬럼을 찾는다.
+//   ⭐ M0~M12 는 **조회해도 항상 빈칸**이다 (사용자 지시 2026-09-21 · AS-IS SP 도 `'' AS M0..M12`).
+//     SP 측에서도 구 LOC 단가 프리필을 제거했고, FE 도 buildExcelFormRows 가 월 컬럼을 비운다(이중 보장).
 interface ForecastTemplateModalProps {
   open: boolean;
   modalClose: () => void;
@@ -50,9 +54,9 @@ interface ForecastTemplateModalProps {
   filters?: Record<string, unknown>;
 }
 
-/** [E20260820-XLSWEEKLY] 주 시작일 헤더(YYYYMMDD) → 미리보기 라벨 'YYYY-MM-DD' */
-const weekLabel = (token: string): string =>
-  /^\d{8}$/.test(token) ? `${token.slice(0, 4)}-${token.slice(4, 6)}-${token.slice(6)}` : token;
+/** [E20260907-XLSMONTH] 미리보기 라벨 — AS-IS DMF0020 템플릿처럼 월 토큰(M4..M16) 원형 그대로 표시.
+ *  (참고용 실제 월은 monthTokenLabel 로 산출 가능 — 현재는 AS-IS 파리티로 토큰 표기 우선.) */
+const monthLabel = (token: string): string => token;
 
 export const ForecastTemplateModal = ({
   open,
@@ -62,6 +66,9 @@ export const ForecastTemplateModal = ({
 }: ForecastTemplateModalProps) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
+  const gridRef = useRef<TFlexGrid>();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   // Div 표기 — 메인 화면 조회조건 고정 (수정 불가 · metal-link MetalLinkTemplateModal 동일)
   const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
@@ -77,8 +84,6 @@ export const ForecastTemplateModal = ({
 
   // 조회 상태 — AS-IS 팝업류 표준: 진입 시 자동조회 없음, Search 명시 게이트 (모달 닫으면 초기화)
   const [rows, setRows] = useState<UploadPreviewRow[]>([]);
-  // [E20260820-XLSWEEKLY] SP WEEK_LIST — 기간(주차) 동적 컬럼의 단일 원천
-  const [weekList, setWeekList] = useState<string[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   useEffect(() => {
     if (!open) {
@@ -87,17 +92,29 @@ export const ForecastTemplateModal = ({
     }
   }, [open]);
 
-  // ⭐ 양식 컬럼 = 단가 테이블 축 고정(토큰 10) + Project/Owner 정보성 + 동적 주차 [E20260825-XLSPRICECOL]
-  //   토큰 헤더는 HEADER_CONTENT 원형 문자열(BE 이름 매핑). 정보성 컬럼은 업로드 시 무시된다.
-  //   [E20260825-XLSPRJ] 전 행이 빈 정보성 컬럼은 숨김(토큰·주차 보존) — 그리드·다운로드 동일 목록.
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, rows]);
+
+  // ⭐ [E20260921-XLSFORMASIS] 양식 컬럼 = **admin 메타 주도** (SHEET_NAME='Sales Price Template').
+  //   AS-IS DMF0020_SalesPriceTemplatePopup 이 DMF0000_GET_COMMON_SPREAD_TITLE 로 메타 헤더를
+  //   가져와 CreateSheetHeaderColumn 하는 구조와 동일([PJ2024-50611]). 컬럼 변경은 DB 메타만 고친다.
+  //   헤더 문자열 = 메타 COLUMN_LABEL_NAME = SCM_ADM_EXCEL_COLUMNS.HEADER_CONTENT 토큰 (1:1 의무).
+  //   메타 조회 실패/미적재 시 buildExcelFormColumns 가 FALLBACK_TEMPLATE_COLUMNS 로 폴백한다.
+  const templateColumns = useForecastPriceStore(s => s.templateColumns);
+  const fetchTemplateColumns = useForecastPriceStore(s => s.fetchTemplateColumns);
+  useEffect(() => {
+    if (open && divisionId) fetchTemplateColumns(divisionId);
+  }, [open, divisionId, fetchTemplateColumns]);
+
   const formColumns = useMemo(
-    () => pruneEmptyInfoColumns(buildExcelFormColumns(weekList), rows),
-    [weekList, rows]
+    () => pruneEmptyInfoColumns(buildExcelFormColumns(templateColumns), rows),
+    [templateColumns, rows]
   );
 
   // 미리보기 그리드 = 다운로드 결과와 1:1 (조회 전/후 컬럼이 갈리지 않는다)
   const gridColumns = useMemo<RawFlexGridColumnConfig[]>(
-    () => toPreviewColumns(formColumns, weekLabel),
+    () => toPreviewColumns(formColumns, monthLabel),
     [formColumns]
   );
 
@@ -132,10 +149,11 @@ export const ForecastTemplateModal = ({
   const handleFind = (silent = false) => {
     if (isFetching) return;
     setIsFetching(true);
+    // [E20260907-XLSMONTH] SP 는 양식 행(o_rc1 = 키 조합 × measure)만 쓰고, 기간 컬럼은
+    //   기간 컬럼은 고정 월 토큰(M4~M16)이라 SP 응답의 WEEK_LIST 는 더 이상 소비하지 않는다.
     void fetchExcelFormData(filters ?? buildFallbackFilters())
-      .then(({ ok, message, pivot, weekList: wks }) => {
+      .then(({ ok, message, pivot }) => {
         setRows(ok ? pivot : []);
-        setWeekList(ok ? wks : []);
         if (!ok) {
           if (!silent) {
             void setAlert({
@@ -158,7 +176,7 @@ export const ForecastTemplateModal = ({
   // [E20260825-XLSPRICECOL] 오픈 시 자동 조회 없음 — Search 명시 게이트 (사용자 지시 2026-08-25:
   //   "OPEN 후 조회 클릭하면 조회". AS-IS 팝업류 표준과 동일). MAIN 조회 여부와도 무관.
 
-  // ⭐ 양식 다운로드 — 평탄 1행 헤더(토큰 원형) + 정보성 컬럼. M4~M16 은 입력용 빈칸.
+  // 양식 다운로드 — 평탄 1행 헤더(토큰 원형) + 정보성 컬럼 + 월 버킷(입력용 빈칸).
   const handleExcel = () => {
     if (formColumns.length === 0) {
       void setAlert({
@@ -184,6 +202,10 @@ export const ForecastTemplateModal = ({
       type='modal'
       position='basic'
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       disableButtonCancel
       customHeaderTitle={
         <div className='headerContainer'>
@@ -198,9 +220,7 @@ export const ForecastTemplateModal = ({
               0 높이로 눌러 덮어버린다 (2026-08-14 실사고). */}
           <div className={styles.searchWrapper}>
             <SearchArea
-              searchButtonLabel={
-                isFetching ? t('LBL00665', 'Loading...') : t('LBL00112', '_Search')
-              }
+              searchButtonLabel={t('LBL00664', 'Search')}
               onSearch={() => handleFind(false)}
               conditions={
                 <>
@@ -220,7 +240,15 @@ export const ForecastTemplateModal = ({
           </div>
           {/* 조회 전 = 업로드 양식 미리보기(헤더만) / 조회 후 = 최종 업로드분 Daily 분배 미리보기 */}
           <div className={styles.gridWrapper}>
-            <DataGrid isReadOnly staticColumns={gridColumns} itemsSource={rows} />
+            <ResultArea title='' count={rows.length} gridRef={gridRef} gridFilterRef={gridFilterRef}>
+              <DataGrid
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                staticColumns={gridColumns}
+                itemsSource={rows}
+              />
+            </ResultArea>
           </div>
           {/* ⭐ 하단 — Excel Download 아이콘 버튼 + Close 맨 오른쪽 (metal-link 동일) */}
           <div className={styles.buttonWrapper}>

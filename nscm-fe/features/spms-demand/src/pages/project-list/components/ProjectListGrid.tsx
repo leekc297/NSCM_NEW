@@ -1,5 +1,5 @@
 import type { FlexGrid as FlexGridType, FormatItemEventArgs } from '@mescius/wijmo.grid';
-import { CellType, Column, DataMap } from '@mescius/wijmo.grid';
+import { CellType, Column } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import {
   memo,
@@ -9,25 +9,27 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { ComboParam, RawFlexGridColumnConfig } from '@foundation/models';
+import type { RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
-import { DataGrid } from '@shared/components';
-import { useTabComboQueries } from '@shared/hooks';
 
 import { colorTypeColumnOf, TagLayer, type TagLayerHandle } from '../../../components/tag-layer';
-import { restoreMultiRangeSelection } from '../../../lib/grid';
+import { attachComboCascadeAutoFill } from '../../../lib/comboCascadeAutoFill';
 import {
-  CELL_TYPE_BINDING,
-  CELLTYPE_SCOPED_COMBO,
+  DataGrid,
+  keepDivisionCodeDisplay,
+  keepServerComboOrder,
+  restoreMultiRangeSelection,
+} from '../../../lib/grid';
+import {
   LINK_SEALED,
   MODAL_ATTR,
   REQ_ACTION_ATTR,
   REQ_CHECK,
   REQ_CHECK_BINDINGS,
-  STACK_METHOD_BINDING,
   TAG_ATTR,
   TAG_SOURCE,
 } from '../project-list.constants';
@@ -43,18 +45,15 @@ import { toText } from '../utils/project-list.value';
 
 import styles from './ProjectListGrid.module.scss';
 
-const DIVISION_BINDING = 'DIVISION_ID';
-const END_CUSTOMER_BINDING = 'END_CUSTOMER';
-const CELL_TYPE_COMBO = 'CellTypeByDivision';
 const quoteCombo = (value?: string): string => `'${value && value.trim() !== '' ? value : 'ALL'}'`;
 
 // ⭐ SDM1020 'Project List' 단일 그리드 — 정적 30컬럼(계약 ④) admin 메타 100% 주도 (hook #113).
 //   - 편집 게이트 = utils/project-list.editLock (INPUT_TP_CD × MOD_ROW_YN='Y' 행 — P-01. EditTracker 가
 //     편집 확정 시 CRUD_TYPE 'M' 마킹 → [등록요청] 대상 축, P-06/P-25).
-//   - 셀 콤보 : CODE 컬럼 직결 dataMap(CODE→NAME 표시 — 콤보 셀 명칭 표시 의무). division 종속은
-//     조회 Division 단일 축(따옴표 전달) — Division 변경 시 그리드가 비워지므로 dataMap 재구성으로 충분.
-//     행 단위 종속은 CF-11 (CELL_TYPE→STACK_METHOD) 1건: 전체 NAME DataMap은 유지하고
-//     getDisplayValues로 편집 후보만 제한 + Cell Type 변경 시 Stack Method clear.
+//   - 셀 콤보 : 공용 DataGrid 가 admin 메타(FPComboBox + CELL_COMBO_DATA_TYPE + ATTRIBUTE2)로
+//     전부 처리한다 — 후보 좁힘·상위 변경 시 stale clear·첫 후보 autofill 모두 Column param2
+//     (ATTRIBUTE2) 단일 원천 (2026-08-28 협의: 모든 SPMS 화면 cascade 는 admin 메타 주도,
+//     FE 하드코딩 금지). @divisionId 토큰 콤보는 comboParams 로 해소.
 //   - TAG 셀 (메타 ATTRIBUTE1='TAG') : 표시 = TAG_SOURCE NAME 컬럼(D2 커서명 보정) / 색 = COLOR 컬럼.
 //   - FPModal 셀 (DPJT_AUTH_MGMT/ATTRIBUTE1='ProjectAuthRegModal') : SP 값 '-'=봉인 / 그 외('' NULL)
 //     = '권한관리' 링크 → 권한관리 모달 (P-02 — SP 산출값 단일 원천).
@@ -93,164 +92,43 @@ export const ProjectListGrid = memo(function ProjectListGrid({
   const { t } = useTranslation();
   const tagLayerRef = useRef<TagLayerHandle>(null);
 
-  const gridColumns = useMemo(
-    () =>
-      (staticColumns ?? []).map(column =>
-        column.colNm === END_CUSTOMER_BINDING && !column.attribute2
-          ? { ...column, attribute2: 'DIVISION_ID:DIVISION_ID' }
-          : column
-      ),
-    [staticColumns]
-  );
-
   // ⭐ 정적 컬럼 — admin 메타 100% 주도 (visible/display 2 boolean 만. FALLBACK 금지)
   const visibleColumns = useMemo<RawFlexGridColumnConfig[]>(
-    () => gridColumns.filter(c => c.visible !== false && c.display !== false),
-    [gridColumns]
+    () => (staticColumns ?? []).filter(c => c.visible !== false && c.display !== false),
+    [staticColumns]
   );
   const staticBindingSet = useMemo(
     () => new Set(visibleColumns.map(c => c.colNm)),
     [visibleColumns]
   );
 
-  // ===== Grid 콤보 — 메타(FPComboBox + cellCboDataTp) 기반. division 종속 콤보는 따옴표 전달
-  //   (BE makeComboQuery raw 치환 — @divisionId 토큰 없는 콤보는 전달해도 무해).
-  //   StackMethodByCellType 은 @cellType 토큰 필수 — 기본 map 은 빈 값(전체 반환 NVL 가드) =====
-  const comboColumns = useMemo(
-    () =>
-      visibleColumns.filter(
-        c =>
-          c.colNm !== END_CUSTOMER_BINDING &&
-          (c.cellCtrlObjTpCd as unknown as string) === 'FPComboBox' &&
-          !!c.cellCboDataTp
-      ),
-    [visibleColumns]
-  );
-  const comboResults = useTabComboQueries({
-    filters: comboColumns.map((c): ComboParam => {
-      const comboId = c.cellCboDataTp as string;
-      const param: ComboParam =
-        comboId === CELL_TYPE_COMBO ? { comboId } : { comboId, divisionId: quoteCombo(divisionId) };
-      if ((c.cellCboDataTp as unknown as string) === CELLTYPE_SCOPED_COMBO) {
-        // 빈값 NVL 가드 = 전체 반환 (계약 ⑤ 스모크 실측 — 'ALL' 센티널 아님)
-        param.divisionId = `'${divisionId}'`;
-        param.cellType = '\'\'';
-      }
-      return param;
-    }),
-  });
-  // ⚠ division 을 시그니처에 포함 — 미포함 시 division 전환 후 행수가 우연히 같으면
-  //   이전 division 의 dataMap 이 잔존한다 (DMF0042 실측 계보)
-  const comboSig = comboColumns
-    .map((c, i) => `${c.cellCboDataTp}@${divisionId}#${comboResults[i]?.length ?? 'x'}`)
-    .join(',');
-  const dataMaps = useMemo<Record<string, DataMap | null>>(() => {
-    const m: Record<string, DataMap | null> = {};
-    comboColumns.forEach((c, i) => {
-      const arr = comboResults[i] ?? [];
-      // DpjtDevelopStatus lookup 원장 0행(계약 ⑤ 보고) = 빈 콤보 허용 — null 로 두고 원문 표시
-      m[c.colNm] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
-    });
-    return m;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig]);
+  // ⭐ wijmo react 는 initialized 를 setTimeout 으로 비동기 호출한다 — 컬럼 메타 도착으로 key 가
+  //   바뀌어 그리드가 재생성된 렌더에서는 gridRef.current 가 아직 비어 있어, ref 만 보는 effect 는
+  //   조용히 skip 된다(콤보 결과가 캐시에 있으면 재실행 계기도 없어 cascade 가 영영 안 걸리던
+  //   원인). ProjectMasterTab1Grid 와 동일하게 state 로 받아 등록 effect 를 그 뒤에 다시 태운다.
+  // ⭐ 메타 ref 미러 — initialized 1회 등록 핸들러(keepServerComboOrder)도 최신 ATTRIBUTE2 를 본다
+  const colMetaRef = useRef<Map<string, RawFlexGridColumnConfig>>(new Map());
+  colMetaRef.current = new Map(visibleColumns.map(c => [c.colNm, c]));
 
-  const cellTypeRows = useMemo(() => {
-    const index = comboColumns.findIndex(
-      c => (c.cellCboDataTp as unknown as string) === CELL_TYPE_COMBO
-    );
-    return index >= 0 ? (comboResults[index] ?? []) : [];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig]);
-  useEffect(() => {
-    const cellTypeMap = dataMaps[CELL_TYPE_BINDING];
-    if (!cellTypeMap) return;
+  const [gridControl, setGridControl] = useState<FlexGridType<MainRow> | null>(null);
+  const handleGridInitialized = useCallback((grid: FlexGridType) => {
+    restoreMultiRangeSelection(grid);
+    // 행 필터(ATTRIBUTE2) 콤보는 그 행으로 좁힌 서버 순서로 복원 (사업부 중복 NAME 섞임 방지)
+    keepServerComboOrder(grid, binding => colMetaRef.current.get(binding)?.attribute2);
+    keepDivisionCodeDisplay(grid);
+    setGridControl(grid as FlexGridType<MainRow>);
+  }, []);
 
-    cellTypeMap.getDisplayValues = (rowItem?: unknown): string[] => {
-      const rowDivisionId = toText((rowItem as MainRow | undefined)?.DIVISION_ID);
-      return [
-        ...new Set(
-          cellTypeRows
-            .filter(row => toText(row.DIVISION_ID) === rowDivisionId)
-            .map(row => toText(cellTypeMap.getDisplayValue(row.CODE)))
-            .filter(value => value !== '')
-        ),
-      ];
-    };
-  }, [cellTypeRows, dataMaps]);
-
-  // ===== ⭐ CF-11 행 CELL_TYPE 종속 — StackMethodByCellType 을 CellType 코드별 선적재 후
-  //   전체 표시 DataMap의 getDisplayValues로 행별 편집 후보만 제한 =====
-  const cellTypeScopes = useMemo(
-    () =>
-      [
-        ...new Map(
-          cellTypeRows.map(row => {
-            const scope = {
-              divisionId: toText(row.DIVISION_ID),
-              cellType: toText(row.CODE),
-            };
-            return [`${scope.divisionId}:${scope.cellType}`, scope] as const;
-          })
-        ).values(),
-      ].filter(scope => scope.divisionId !== '' && scope.cellType !== ''),
-    [cellTypeRows]
-  );
-  const stackScopedFilters = useMemo(
-    () =>
-      cellTypeScopes.map(
-        (scope): ComboParam => ({
-          comboId: CELLTYPE_SCOPED_COMBO,
-          divisionId: quoteCombo(scope.divisionId),
-          cellType: quoteCombo(scope.cellType),
-        })
-      ),
-    [cellTypeScopes]
-  );
-  const stackScopedResults = useTabComboQueries({ filters: stackScopedFilters });
-  const stackScopedSig = stackScopedFilters
-    .map((f, i) => `${f.divisionId}:${f.cellType}#${stackScopedResults[i]?.length ?? 'x'}`)
-    .join(',');
-  useEffect(() => {
-    const stackMap = dataMaps[STACK_METHOD_BINDING];
-    if (!stackMap) return;
-
-    const stackColumnIndex = comboColumns.findIndex(c => c.colNm === STACK_METHOD_BINDING);
-    const allRows = stackColumnIndex >= 0 ? (comboResults[stackColumnIndex] ?? []) : [];
-    const rowsByScope = new Map<string, typeof allRows>();
-    stackScopedFilters.forEach((f, i) => {
-      const scopedDivisionId = toText(f.divisionId).replace(/'/g, '');
-      const scopedCellType = toText(f.cellType).replace(/'/g, '');
-      rowsByScope.set(`${scopedDivisionId}:${scopedCellType}`, stackScopedResults[i] ?? []);
-    });
-
-    // DataMap은 컬럼 전체의 표시명 원천으로 유지하고, 편집 후보만 현재 행의 셀 유형으로 제한한다.
-    // 좁은 DataMap으로 교체하면 후보에 없는 기존 값이 편집 중 CODE로 노출된다.
-    stackMap.getDisplayValues = (rowItem?: unknown): string[] => {
-      const row = rowItem as MainRow | undefined;
-      const scopeKey = `${toText(row?.DIVISION_ID)}:${toText(row?.CELL_TYPE)}`;
-      const candidates = rowsByScope.get(scopeKey) ?? [];
-      return [
-        ...new Set(
-          candidates
-            .map(row => toText(stackMap.getDisplayValue(row.CODE)))
-            .filter(value => value !== '')
-        ),
-      ];
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig, stackScopedSig, dataMaps]);
-  // CELL_TYPE 편집 직전 값 (변경 여부 판정 — 동일 값 재선택 시 STACK_METHOD clear 방지)
-  const preEditCellTypeRef = useRef<string>('');
-  const preEditDivisionRef = useRef<string>('');
+  // ===== Grid 콤보 — 공용 DataGrid 가 admin 메타로 생성 (Column param2 = ATTRIBUTE2 계약).
+  //   @divisionId 토큰 콤보 해소용 comboParams 만 전달한다 (BE makeComboQuery raw 치환
+  //   — 토큰 없는 콤보는 여분 파라미터 무시. CELL_TYPE 좁힘은 ATTRIBUTE2 행 필터 담당) =====
+  const comboParams = useMemo(() => ({ divisionId: quoteCombo(divisionId) }), [divisionId]);
 
   // ⭐ 메타 ref 미러 — 핸들러가 effect 안에서 등록되므로 최신 메타를 ref 로 본다
   const inputTpRef = useRef<Map<string, string | undefined>>(new Map());
   inputTpRef.current = new Map(
     visibleColumns.map(c => [c.colNm, c.inputTpCd as string | undefined])
   );
-  const colMetaRef = useRef<Map<string, RawFlexGridColumnConfig>>(new Map());
-  colMetaRef.current = new Map(visibleColumns.map(c => [c.colNm, c]));
 
   const formatRowHeader = useCallback(
     (grid: FlexGridType<MainRow>, event: FormatItemEventArgs) => {
@@ -290,10 +168,10 @@ export const ProjectListGrid = memo(function ProjectListGrid({
 
   // ===== grid 핸들러 =====
   useEffect(() => {
-    const g = (gridRef as { current: FlexGridType<MainRow> | null } | null)?.current;
+    const g = gridControl;
     if (!g || !g.columnHeaders || !g.columnHeaders.rows) return;
 
-    if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1; // zebra (#95)
+    if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1;
 
     const toggleClass = (el: HTMLElement, cls: string, on: boolean) => {
       if (on) el.classList.add(cls);
@@ -323,7 +201,7 @@ export const ProjectListGrid = memo(function ProjectListGrid({
       const isTagColumn = meta.attribute1 === TAG_ATTR;
       const isCheckboxColumn = (meta.cellCtrlObjTpCd as unknown as string) === 'FPCheckBox';
 
-      // 조회/잠금 셀은 기본 White+zebra를 유지한다. 편집 가능 셀의 Yellow만 별도로 표시한다.
+      // 조회/잠금 셀은 기본 White를 유지한다. 편집 가능 셀의 Yellow만 별도로 표시한다.
       toggleClass(e.cell, 'wj-cell-non-editable', false);
       toggleClass(e.cell, styles.reqCheckboxCell, isCheckboxColumn);
 
@@ -387,7 +265,7 @@ export const ProjectListGrid = memo(function ProjectListGrid({
         if (e.cell.textContent !== text) e.cell.textContent = text;
       }
 
-      // 편집 가능한 행의 셀만 Yellow, 나머지는 White+zebra.
+      // 편집 가능한 행의 셀만 Yellow, 나머지는 White.
       const inputTp = inputTpRef.current.get(binding);
       const editable = isCellEditable(inputTp, rowItem);
       toggleClass(e.cell, 'wj-cell-editable', editable);
@@ -415,38 +293,13 @@ export const ProjectListGrid = memo(function ProjectListGrid({
         return;
       }
       e.cancel = !isCellEditable(inputTpRef.current.get(binding), row);
-      if (e.cancel) return;
-      if (binding === DIVISION_BINDING) preEditDivisionRef.current = toText(row?.DIVISION_ID);
-      if (binding === CELL_TYPE_BINDING) preEditCellTypeRef.current = toText(row?.CELL_TYPE);
     };
     g.beginningEdit.addHandler(beginningEditHandler);
     g.pastingCell.addHandler(beginningEditHandler as never);
 
-    // 편집 종료 — CELL_TYPE 변경 시 STACK_METHOD clear (CF-11 계단식)
-    const cellEditEndedHandler = (s: FlexGridType<MainRow>, e: { row: number; col: number }) => {
-      const binding = s.columns[e.col]?.binding ?? '';
-      const row = s.rows[e.row]?.dataItem as MainRow | undefined;
-      if (!row) return;
-      const rec = row as Record<string, unknown>;
-      const clearDependentCell = (dependentBinding: string) => {
-        const previousValue = toText(rec[dependentBinding]);
-        if (previousValue === '') return;
-        editTrackerRef?.current?.storeChange(row, dependentBinding, previousValue, '');
-        rec[dependentBinding] = '';
-      };
-      if (binding === DIVISION_BINDING && toText(rec[binding]) !== preEditDivisionRef.current) {
-        clearDependentCell(CELL_TYPE_BINDING);
-        clearDependentCell(STACK_METHOD_BINDING);
-        s.invalidate();
-        return;
-      }
-      if (binding === CELL_TYPE_BINDING && toText(rec[binding]) !== preEditCellTypeRef.current) {
-        clearDependentCell(STACK_METHOD_BINDING);
-        s.invalidate();
-      }
-    };
-    g.cellEditEnded.addHandler(cellEditEndedHandler);
-    g.pastedCell.addHandler(cellEditEndedHandler as never);
+    // (CF-11 계단식 clear 는 화면 코드가 아니라 공용 DataGrid 의 stale clear 가 담당한다 —
+    //   admin ATTRIBUTE2(Column param2) 기준 findStaleComboCells. 비운 자리는
+    //   attachComboCascadeAutoFill 이 microtask 에서 첫 후보로 채운다.)
 
     // 클릭 라우팅 — FPModal(권한관리)/REQ_ACTION(권한요청)/FPCheckBox(토글) 메타 소비 (바인딩 하드코딩 금지)
     const clickHandler = (ev: MouseEvent) => {
@@ -507,26 +360,31 @@ export const ProjectListGrid = memo(function ProjectListGrid({
         g.formatItem?.removeHandler(cornerHandler);
         g.beginningEdit?.removeHandler(beginningEditHandler);
         g.pastingCell?.removeHandler(beginningEditHandler as never);
-        g.cellEditEnded?.removeHandler(cellEditEndedHandler);
-        g.pastedCell?.removeHandler(cellEditEndedHandler as never);
         g.hostElement?.removeEventListener('click', clickHandler);
       } catch {
         /* unmount race */
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visibleColumns, dataMaps, onAuthMgmtClick, onAuthReqClick, t]);
+  }, [gridControl, visibleColumns, onAuthMgmtClick, onAuthReqClick, t]);
 
-  // ⭐ hook #93 — 헤더 총 48px (n단 = 48/n 자동 분배) + combo dataMap 재적용 (UC-05 Excel NAME 승계)
+  // ⭐ SDM 공통 — 상위 셀 변경 시 종속 콤보 첫 후보 자동 입력 (CF-11: Division→Cell 유형→Stack Method).
+  //   공용 stale clear 가 하위를 비운 뒤(헬퍼는 microtask 로 늦게 돈다) 새 후보의 첫 값을 채운다.
+  //   종속 선언·후보 전부 admin 메타(Column param2 = ATTRIBUTE2) 단일 원천 — FE 보강 없음.
   useEffect(() => {
-    const g = (gridRef as { current: FlexGridType<MainRow> | null } | null)?.current;
+    if (!gridControl) return;
+    return attachComboCascadeAutoFill({
+      grid: gridControl,
+      getColumns: () => [...colMetaRef.current.values()],
+      getEditTracker: () => editTrackerRef?.current,
+    });
+  }, [gridControl, visibleColumns, editTrackerRef]);
+
+  // ⭐ hook #93 — 헤더 총 48px (n단 = 48/n 자동 분배)
+  useEffect(() => {
+    const g = gridControl;
     if (!g) return;
     const applyHeaderHeight = () => {
-      for (let i = 0; i < g.columns.length; i++) {
-        const col = g.columns[i];
-        const dm = dataMaps[col.binding ?? ''];
-        if (dm && col.dataMap !== dm) col.dataMap = dm;
-      }
       const headerRows = g.columnHeaders?.rows;
       if (!headerRows || headerRows.length === 0) return;
       const per = Math.round(48 / headerRows.length);
@@ -548,7 +406,7 @@ export const ProjectListGrid = memo(function ProjectListGrid({
         /* unmount race */
       }
     };
-  }, [visibleColumns, dataMaps, gridRef]);
+  }, [gridControl]);
 
   return (
     <>
@@ -559,12 +417,13 @@ export const ProjectListGrid = memo(function ProjectListGrid({
         gridRef={gridRef as never}
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef as never}
-        staticColumns={gridColumns}
+        staticColumns={staticColumns ?? []}
         itemsSource={rows as unknown as WijmoRowItem[]}
         autoGenerateColumns={false}
         allowSorting={true}
         useCheckbox={true}
-        initialized={restoreMultiRangeSelection}
+        comboParams={comboParams}
+        initialized={handleGridInitialized}
         loadedRows={handleLoadedRows}
       />
     </>

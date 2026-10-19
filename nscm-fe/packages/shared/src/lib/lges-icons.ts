@@ -1,5 +1,6 @@
 export {
   ArrowChevron2Icon,
+  ArrowChevronIcon,
   ControlConfirmIcon,
   ControlCloseIcon,
   ControlMaximizeIcon,
@@ -8,5 +9,6 @@ export {
   FileUploadIcon,
   FileExceldownloadIcon,
   FunctionSearchIcon,
+  FunctionCalendarIcon,
   CheckboxIcon,
 } from '@lges/design-system/icon';

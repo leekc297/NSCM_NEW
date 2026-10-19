@@ -64,6 +64,8 @@ export const ApiManagementForm = ({ onSearch, apiIdInputRef }: ApiManagementForm
               render={() => (
                 <CustomDropdown
                   multiple
+                  allOption
+                  useClearIcon
                   isInput={false}
                   value={searchParams.apiType}
                   options={

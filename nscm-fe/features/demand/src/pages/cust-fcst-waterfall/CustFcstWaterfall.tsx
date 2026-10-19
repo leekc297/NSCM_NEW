@@ -29,6 +29,12 @@ import { saveTitleSet } from './utils/cust-fcst-waterfall.api';
 //   L577/582/596 · EditButton=MSG00109 L591 · 조회 후 전열 잠금 L786) — CUD 진입점 전부 미노출.
 //   정본 분석: Doc/화면분석서/DMF0053_CustFcstWaterfall_주요이벤트_상세분석.md (E01~E23).
 
+// 빈 조회 결과는 모듈 상수로 둔다 — `?? []` 인라인은 렌더마다 새 배열 참조라
+//   data/spreadTitle -> dynColMetas -> dynamicColumns -> columnGroups memo 체인이 매 렌더 깨지고,
+//   그때 wijmo 가 set columnGroups 로 Column 을 통째로 재생성해 헤더·그리드가 다시 그려진다
+//   (조회조건 값이 바뀔 때마다 그리드가 깜빡이던 원인). 참조 안정이 그 재생성을 막는다.
+const EMPTY_ROWS: never[] = [];
+
 export const CustFcstWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
   const gridRef = useRef<TFlexGrid<WaterfallRow> | undefined>(undefined);
   const gridFilterRef = useRef<FlexGridFilter | undefined>(undefined);
@@ -70,14 +76,12 @@ export const CustFcstWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.SPREAD_TITLE],
   });
 
-  const data = (mainQuery.data?.o_rc1 ?? []) as WaterfallRow[];
-  const spreadTitle = (titleQuery.data?.o_rc1 ?? []) as SpreadTitleRow[];
+  const data = (mainQuery.data?.o_rc1 ?? EMPTY_ROWS) as WaterfallRow[];
+  const spreadTitle = (titleQuery.data?.o_rc1 ?? EMPTY_ROWS) as SpreadTitleRow[];
 
   // [COND 2026-08-27] UI 오픈 시 F6 저장 조회조건 복원 (탭당 1회 — store initialized 가드).
   //   복원된 divisionId 는 아래 정적 컬럼 effect 의 deps 라 컬럼·Measure 도 뒤따라 재fetch 된다.
-  const restoreSearchConditions = useCustFcstWaterfallStore(
-    state => state.restoreSearchConditions
-  );
+  const restoreSearchConditions = useCustFcstWaterfallStore(state => state.restoreSearchConditions);
   useEffect(() => {
     if (!session.userId) return;
     void restoreSearchConditions();
@@ -116,7 +120,10 @@ export const CustFcstWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
   }, [tabId, session.userId, searchParams.divisionId, fetchStaticColumns, fetchStaticMeasures]);
 
   // Column Setting 모달 재진입 복원/Default — 현재 grid 메타 (개인화는 titleSet 저장·재조회로 복원)
-  const columnLayoutSettings = useMemo(() => toColumnLayoutSettings(staticColumns), [staticColumns]);
+  const columnLayoutSettings = useMemo(
+    () => toColumnLayoutSettings(staticColumns),
+    [staticColumns]
+  );
 
   // ── 조회 (AS-IS FindData L662~924 — A-01~A-05) ──
   const handleSubmit = () => {
@@ -124,7 +131,10 @@ export const CustFcstWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
 
     // A-01 (MSG00097) — Division 필수
     if (!searchParams.divisionId) {
-      void setAlert({ type: 'alert', content: t(MSG.DIVISION_REQUIRED, '_Please select Division.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.DIVISION_REQUIRED, '_Please select Division.'),
+      });
       return;
     }
 
@@ -133,7 +143,10 @@ export const CustFcstWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
     const fromCd = dayjs(searchParams.fromCreateYyyymmdd, 'YYYYMMDD');
     const toCd = dayjs(searchParams.toCreateYyyymmdd, 'YYYYMMDD');
     if (!fromDt.isValid() || !toDt.isValid() || !fromCd.isValid() || !toCd.isValid()) {
-      void setAlert({ type: 'alert', content: t('MSG00013', '_Please enter the required fields.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00013', '_Please enter the required fields.'),
+      });
       return;
     }
 
@@ -159,7 +172,9 @@ export const CustFcstWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
     // A-05 (MSG00164) — Input Date 3년 초과: 보정 후 중단 (AS-IS L709~716)
     if (fromCd.add(PERIOD_LIMIT_YEARS, 'year').isBefore(toCd)) {
       void setAlert({ type: 'alert', content: t(MSG.PERIOD_LIMIT, '_The period is too long.') });
-      setSearchParams({ toCreateYyyymmdd: fromCd.add(PERIOD_LIMIT_YEARS, 'year').format('YYYYMMDD') });
+      setSearchParams({
+        toCreateYyyymmdd: fromCd.add(PERIOD_LIMIT_YEARS, 'year').format('YYYYMMDD'),
+      });
       return;
     }
 
@@ -188,8 +203,8 @@ export const CustFcstWaterfall = ({ tabId, title }: PageProps<MENU_ID>) => {
       buttonLabel: '',
     },
     {
-      label: t('LBL00712', '_Measure'),
-      title: t('LBL00712', '_Measure'),
+      label: t('LBL00310', '_Measure'),
+      title: t('LBL00310', '_Measure'),
       action: () => setMeasureModalOpen(true),
       iconComponent: <IcMeasureSelect />,
       buttonLabel: '',

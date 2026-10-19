@@ -1,0 +1,184 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0073_SAVE_VERSION_SALESPRICE","1839501782","1","
+/*
+ * Program ID   : [DMF0073_SAVE_VERSION_SALESPRICE]
+ * Description  : VERSION_SALESPRICE 수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2024. 05. 13   KJJ			최초 작성
+
+ exec DMF0073_SAVE_VERSION_SALESPRICE 
+@P_DIVISION_ID=N'81'
+,@P_VERSION_NO=N'I'
+,@P_MONTHLY_ROLLING_FCST=N'Y'
+,@P_USER_ID=N'kjj0070'
+
+ */
+CREATE PROCEDURE [dbo].[DMF0073_SAVE_VERSION_SALESPRICE]
+		
+	@P_DIVISION_ID			NVARCHAR(MAX),
+	@P_VERSION_NO			NVARCHAR(MAX), 
+	@P_MONTHLY_ROLLING_FCST	NVARCHAR(MAX), 
+	@P_USER_ID     			NVARCHAR(100)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	
+	-- LOG 용 변수 설정
+	DECLARE @v_creation_date    datetime ;
+	SET @v_creation_date    = SYSDATETIME(); 
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'DMF0073_SAVE_VERSION_SALESPRICE';
+    DECLARE @v_log_type     NVARCHAR(30);
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+
+	BEGIN TRY
+
+	SET @v_log_type = 'START';
+	SET @v_log_message = '########## Start of procedure ##########';
+	SET @v_description = '';
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+	
+	SELECT 
+		B1.TOKEN AS VERSION_NO
+		, B2.TOKEN AS MONTHLY_ROLLING_FCST
+
+	INTO #T_MAIN
+	FROM DBO.UF_FX_STRING_SPLIT(@P_VERSION_NO, '^') B1
+		LEFT OUTER JOIN DBO.UF_FX_STRING_SPLIT(@P_MONTHLY_ROLLING_FCST			, '^') B2  ON B1.NR = B2.NR
+
+
+
+	UPDATE M_VER
+	SET
+		M_VER.ATTRIBUTE7 = T_LIST.MONTHLY_ROLLING_FCST
+		,LAST_UPDATED_BY = @P_USER_ID
+		,LAST_UPDATE_DATE = GETDATE()
+	FROM DM_MST_VERSION M_VER
+	INNER JOIN #T_MAIN T_LIST
+		ON M_VER.DIVISION_ID = @P_DIVISION_ID
+		AND M_VER.VERSION_NO = T_LIST.VERSION_NO
+
+	DECLARE @ROWCNT INT
+	SET @ROWCNT = @@ROWCOUNT
+
+	SET @v_log_type = 'END';
+	SET @v_log_message = '########## END of procedure ##########';
+	SET @v_description = '';
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	-- 결과코드, 결과 카운트 반환
+	SELECT  'S' AS result_code,  @ROWCNT AS result_cnt ;
+
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				     
+			; 
+		END;
+	END CATCH;
+
+END
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0073_GET_VERSION_SALESPRICE","1855501839","1","/************************************************************************************************
+ Program ID  : DMF0073_GET_VERSION_SALESPRICE                                                        
+ Description : Procedure 작성 가이드                                                             
+ Usage       : Procedure 작성 시 참조하세요!                                                     
+ Parameter   :                                                                                   
+                                                                                                 
+-------------------------------------------------------------------------------------------------
+ Date        In Charge    Description                                                            
+-------------------------------------------------------------------------------------------------
+ 2024/05/13  KJJ       신규생성
+ * 2025.01.01	P.C.I			[PJ20228272] NERP 대응. No Plan 날짜 Start_date를 ISO_YYYYWW 기준으로 변경
+
+******************************************************************************************************/
+
+
+CREATE PROCEDURE [dbo].[DMF0073_GET_VERSION_SALESPRICE]
+    @p_start_yyyymmdd  NVARCHAR(8),
+    @p_end_yyyymmdd    NVARCHAR(8),
+	@p_created_by	   NVARCHAR(50),
+	@p_division_id	   NVARCHAR(MAX),
+	@p_version_type	   NVARCHAR(MAX),
+	@p_description	   NVARCHAR(MAX)
+
+	-- EXEC DMF0073_GET_VERSION_SALESPRICE @p_start_yyyymmdd='20240401', @p_end_yyyymmdd='20240601', @p_created_by='20140001', @p_division_id='82', @p_version_type='SP_W', @p_description=''
+
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	SELECT 'SP_Z_CURRENT' AS CODE, 'Current' AS VERSION_NO, 'Current' VERSION_DESCRIPTION, '' VERSION_TYPE
+			, '' EDI_APPLY,'' VER_CRE_SEQ, '' YYYYMMDD, '' CREATED_BY, GETDATE() CREATION_DATE 
+			, '' MONTHLY_ROLLING_FCST , 'N' EDITABLE
+	UNION ALL	
+	SELECT VERSION_NO AS CODE
+		, CASE WHEN C.DM_RTF_YN = 'N' 
+				THEN CONCAT(VERSION_NO, '(',B.WEEK_NAME,') (NO PLAN)') 
+				ELSE CONCAT(VERSION_NO, '(',B.WEEK_NAME,')')
+				END AS VERSION_NO
+		, VERSION_DESCRIPTION, VERSION_TYPE
+		, (CASE WHEN VERSION_TYPE = 'ME_S' THEN 'Y'
+					ELSE 'N' END) AS EDI_APPLY
+		, VER_CRE_SEQ, YYYYMMDD, MAX(CREATED_BY), MAX(CREATION_DATE)
+		, ISNULL(A.ATTRIBUTE7, 'N') MONTHLY_ROLLING_FCST
+		, CASE WHEN B.ISO_WEEK = DATEPART(WEEK, GETDATE()) THEN 'Y' ELSE 'N' END EDITABLE --현재 주차만 수정가능
+		FROM [dbo].[DM_MST_VERSION] AS A  WITH(NOLOCK)
+	INNER JOIN SCM_SYS_CALENDAR_M AS B
+		ON A.YYYYMMDD = B.BASIS_YYYYMMDD
+	LEFT JOIN SCP_PLN_INTERFACE_YN AS C(NOLOCK)
+		ON A.DIVISION_ID = C.DIVISION_ID
+		--AND B.BASIS_START_DATE = C.PLAN_START_YYYYMMDD --[PJ20228272] NERP 대응. No Plan 날짜 Start_date를 ISO_YYYYWW 기준으로 변경
+		AND ( SELECT MIN(BASIS_YYYYMMDD) FROM SCM_SYS_CALENDAR_M WITH(NOLOCK) WHERE  ISO_YYYYWW = B.ISO_YYYYWW) = C.PLAN_START_YYYYMMDD
+	WHERE (YYYYMMDD >= @p_start_yyyymmdd and YYYYMMDD <= @p_end_yyyymmdd)  
+		AND A.DIVISION_ID IN (SELECT token FROM dbo.String_Split(@p_division_id	,','))  		
+		AND VERSION_TYPE IN (SELECT token FROM dbo.String_Split(@p_version_type	,','))    
+		--AND Exists (Select * from dbo.UF_FX_String_Split (@p_version_no,',') as P Where [VERSION_NO] LIKE P.token +'%')
+		AND VERSION_DESCRIPTION LIKE '%' + @p_description + '%'
+		AND ISNULL(ATTRIBUTE1,'') <> 'MOVE'
+	GROUP BY VERSION_NO , VERSION_NO, VERSION_DESCRIPTION, VERSION_TYPE, VER_CRE_SEQ, YYYYMMDD, B.WEEK_NAME, C.DM_RTF_YN,ISNULL(A.ATTRIBUTE7, 'N'), B.ISO_WEEK
+	ORDER BY CODE DESC, VERSION_NO DESC
+
+END
+"

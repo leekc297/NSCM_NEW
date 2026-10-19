@@ -1,0 +1,1 @@
+export { InventoryRaw } from './InventoryRaw';

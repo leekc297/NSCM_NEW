@@ -29,9 +29,10 @@ export const MailSetupForm = ({ onSearch }: MailSetupFormProps) => {
   }));
 
   // Sub Module 은 Module 종속 — CMBO 가 PARENT_CODE 를 함께 내려주므로 클라이언트 필터
-  const subModuleOptions = (subModules as ComboOption[] | undefined)
-    ?.filter(item => searchParams.module === ALL || item.PARENT_CODE === searchParams.module)
-    .map(item => ({ label: item.NAME, value: item.CODE }));
+  // Module 이 다중 선택(콤마 구분 코드 목록)일 수 있어, 선택된 어느 하나에라도 속하면 남긴다.
+  // Sub Module 미사용에 따른 주석 추가
+  const selectedModules = searchParams.module === ALL ? null : searchParams.module.split(',');
+  //const subModuleOptions = (subModules as ComboOption[] | undefined) ?.filter(item => !selectedModules || selectedModules.includes(item.PARENT_CODE ?? '')).map(item => ({ label: item.NAME, value: item.CODE }));
 
   const activeOptions = (yesOrNo as ComboOption[] | undefined)?.map(item => ({
     label: item.NAME,
@@ -52,6 +53,7 @@ export const MailSetupForm = ({ onSearch }: MailSetupFormProps) => {
               labelAlign='right'
               render={() => (
                 <CustomDropdown
+                  multiple
                   allOption
                   isInput={false}
                   value={searchParams.module}
@@ -61,6 +63,7 @@ export const MailSetupForm = ({ onSearch }: MailSetupFormProps) => {
               )}
             />
           </Grid>
+          {/* 26.09.11 요구사항 203 -Sub Module Main 화면 및 그리드 화면에서 제외
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}
@@ -77,6 +80,7 @@ export const MailSetupForm = ({ onSearch }: MailSetupFormProps) => {
               )}
             />
           </Grid>
+          */}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}

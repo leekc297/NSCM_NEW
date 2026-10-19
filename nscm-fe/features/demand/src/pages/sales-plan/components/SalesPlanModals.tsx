@@ -2,6 +2,7 @@ import {
   MeasureSelectModal,
   ItemByDivisionModal,
   ProjectByDivisionModal,
+  TeamModal,
 } from 'features/master/src/components';
 import { useEffect, useMemo, useRef } from 'react';
 
@@ -10,6 +11,7 @@ import { ColumnLayoutModal, saveTitleSet, toColumnLayoutSettings } from '@shared
 import { useMessageStore } from '@shared/stores';
 
 import {
+  DEPT_CASCADE_CLEAR_NON40,
   ITEM_CLEAR_FIELDS,
   MENU_ID,
   PROJECT_POPUP_CANCEL_CLEAR,
@@ -19,14 +21,16 @@ import {
 } from '../sales-plan.constants';
 import type { SalesPlanRow } from '../sales-plan.types';
 import { useSalesPlanStore } from '../useSalesPlanStore';
+import { isDiv40 } from '../utils/sales-plan.division';
 import { buildClearPatch } from '../utils/sales-plan.gridCombos';
 
-export type SalesPlanModalKey = 'PROJECT' | 'ITEM' | 'COLUMN' | 'MEASURE';
+export type SalesPlanModalKey = 'PROJECT' | 'ITEM' | 'COLUMN' | 'MEASURE' | 'TEAM';
 
 interface SalesPlanModalsProps {
   divisionId: string;
   openProject: boolean;
   openItem: boolean;
+  openTeam: boolean;
   openColumnSetting: boolean;
   openMeasureSelect: boolean;
   popupRow: SalesPlanRow | null;
@@ -39,17 +43,20 @@ interface SalesPlanModalsProps {
   onSettingChanged: () => void;
 }
 
-// ⭐ DMF0021 모달 4종 묶음 (진입 컴포넌트 분리 — components/ 분리 의무 진입≤400):
+// ⭐ DMF0021 모달 5종 묶음 (진입 컴포넌트 분리 — components/ 분리 의무 진입≤400):
 //   ① PROJECT 셀 모달 (81·82 신규행 — AS-IS spdMain_CellDoubleClick L3834: Project/Name 세팅 + Item 클리어)
 //   ② ITEM 셀 모달 (40+Catch_Up 신규행 — L3863~3912: Item/NickName 세팅 [E20231019-001234])
-//   ③ Column 설정 (공용 ColumnLayoutModal + titleSet 'C' — AS-IS btnColumn L4427 → InitSpread.
+//   ③ TEAM(DEPT_ID) 셀 모달 (신규행 Catch_Up 제외 — 2026-09-18 콤보→모달+키인 전환. 선택 시
+//     DEPT_ID 세팅 + 40 제외 division 하위 clear = 그리드 키인 cellEditEnded 와 동일 cascade)
+//   ④ Column 설정 (공용 ColumnLayoutModal + titleSet 'C' — AS-IS btnColumn L4427 → InitSpread.
 //     forecast-price(DMF0082)·mkt-fcst 와 동일 팝업 — 구본 ColumnSettingModal 사용 금지)
-//   ④ Measure 선택 (MeasureSelectModal + titleSet 'M' — AS-IS btnMeasure L4440. 메인 SP 가
+//   ⑤ Measure 선택 (MeasureSelectModal + titleSet 'M' — AS-IS btnMeasure L4440. 메인 SP 가
 //     TITLESET 'M' 으로 measure 행을 필터하므로 저장 후 invalidate 재조회로 반영)
 export const SalesPlanModals = ({
   divisionId,
   openProject,
   openItem,
+  openTeam,
   openColumnSetting,
   openMeasureSelect,
   popupRow,
@@ -115,15 +122,7 @@ export const SalesPlanModals = ({
       <ProjectByDivisionModal
         open={openProject}
         modalClose={handleProjectClose}
-        setSelectedValue={(
-          projectCode,
-          projectName,
-          projectStatus,
-          bizTypeName,
-          projectOwner,
-          deptId,
-          deptName
-        ) => {
+        setSelectedValue={(projectCode, projectName, projectStatus, bizTypeName, projectOwner) => {
           // 이 호출을 지나면 확정 — 뒤이어 오는 modalClose 는 취소 clear 를 건너뛴다.
           projectPickedRef.current = true;
           applyToInsertRow({
@@ -134,14 +133,15 @@ export const SalesPlanModals = ({
             PROJECT_OWNER: projectOwner ?? '',
             // Project 가 바뀌면 Model 은 무효 — 취소 경로와 같은 묶음으로 비운다.
             ...buildClearPatch(ITEM_CLEAR_FIELDS),
-            // [No.61-④] Team 파생 — 입력 불가 컬럼이라 마스터(선택 행)의 팀이 유일한 출처.
-            //   팝업이 팀을 안 내려주면(구 버전·다건 선택) 종전 값을 유지한다.
-            ...(deptId ? { DEPT_ID: deptId, TEAM_NAME: deptName ?? '' } : {}),
+            // Team(DEPT_ID)은 이 팝업에서 파생하지 않는다 (2026-09-08) — 전 Division 에서 메타
+            //   콤보(TeamByDivision)로 직접 편집하는 독립 컬럼이다.
           });
         }}
         preSearchParams={
           {
             divisionId: rowValue('DIVISION_ID', divisionId),
+            // Team(DEPT_ID)을 Project 팝업 조회조건으로 실어 연다 (사용자 요구 2026-09-14 재도입).
+            //   주의: 재오픈 시 직전 Team 이 필터로 남을 수 있음 — 과거 이 이유로 ALL 로 뺐던 이력 있음.
             deptId: rowValue('DEPT_ID'),
             endCustomer: rowValue('END_CUSTOMER'),
             salesSite: rowValue('SCM_SITE_ID'),
@@ -156,23 +156,15 @@ export const SalesPlanModals = ({
       <ItemByDivisionModal
         open={openItem}
         modalClose={() => onClose('ITEM')}
-        setSelectedValue={(
-          itemId,
-          itemName,
-          itemClassName,
-          nickName,
-          itemType,
-          deptId,
-          deptName
-        ) => {
+        setSelectedValue={(itemId, itemName, itemClassName, nickName, itemType) => {
           applyToInsertRow({
             ITEM_ID: itemId,
             ITEM_NAME: itemName ?? '',
             ITEM_CLASS_NAME: itemClassName ?? '',
             ITEM_TYPE: itemType ?? '',
             NICK_NAME: nickName ?? '',
-            // [No.61-④] Team 파생 — 위 PROJECT 모달과 동일 계약.
-            ...(deptId ? { DEPT_ID: deptId, TEAM_NAME: deptName ?? '' } : {}),
+            // Team(DEPT_ID)은 이 팝업에서 파생하지 않는다 (2026-09-08) — 위 PROJECT 모달과 동일.
+            //   40+Catch_Up 은 DEPT_ID 잠금이라 편집 Team 이 없다(그 외는 메타 콤보로 직접 편집).
           });
         }}
         preSearchParams={
@@ -188,6 +180,27 @@ export const SalesPlanModals = ({
           } as never
         }
         callFromCell={true}
+      />
+
+      {/* 셀 모달 — TEAM (팀명 TEAM_NAME 셀 팝업, 신규행 Catch_Up 제외).
+          선택 시 DEPT_ID(코드)+TEAM_NAME(명)을 짝으로 세팅 — 하위 파생·저장은 DEPT_ID 를 읽는다. */}
+      <TeamModal
+        open={openTeam}
+        modalClose={() => onClose('TEAM')}
+        setSelectedValue={(teamId, teamName) => {
+          applyToInsertRow({
+            DEPT_ID: teamId,
+            TEAM_NAME: teamName ?? '',
+            // Team 변경 = 40 제외 division 에서 하위(End Customer/Sales Site/Project) 초기화
+            //   — 그리드 키인(cellEditEnded) 의 DEPT_CASCADE_CLEAR_NON40 과 동일 동작.
+            ...(isDiv40(rowValue('DIVISION_ID', divisionId))
+              ? {}
+              : buildClearPatch(DEPT_CASCADE_CLEAR_NON40)),
+          });
+        }}
+        teamId={rowValue('DEPT_ID', '')}
+        teamName={rowValue('TEAM_NAME', '')}
+        divisionId={rowValue('DIVISION_ID', divisionId)}
       />
 
       {/* Column 설정 — 공용 ColumnLayoutModal (표시/순서 + Width/Cell·Text Color) + titleSet 'C' 영구 저장 */}

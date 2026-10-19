@@ -1,0 +1,3459 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_GET_DELEGATEE_LOAD","2019590333","1","
+
+/*
+ * Program ID   : SSP0003_SSP0003_GET_DELEGATEE_LOAD
+ * Description  : DELEGATEE_LOAD
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019/07/15   mcTheJ         [CSR ID:4044806] Model PIC 담당자 위임 기능 추가
+
+ ex) 
+ */
+
+CREATE PROCEDURE [dbo].[SSP0202_GET_DELEGATEE_LOAD]
+	 @p_division_id			NVARCHAR(MAX)
+	 ,@p_apploval			NVARCHAR(MAX)
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	
+	SELECT
+		T0.DELEGATEE_ID
+		, T1.Dept_ID
+	FROM SSP_MST_DELEGATE T0
+	INNER JOIN TB_FX_USER T1
+	ON T1.UserID = T0.DELEGATEE_ID
+	WHERE T0.DIVISION_ID =  @p_division_id
+	AND T0.USER_ID = @p_apploval
+	AND T0.VALID_YN = 'Y'
+	AND CONVERT(NVARCHAR(8), GETDATE(), 112) BETWEEN T0.FROM_DATE AND T0.TO_DATE
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_GET_SCS_CONFIRM_ID_CHECK","2035590390","1","
+
+
+/*
+ * Program ID   : SSP0202_GET_SCS_CONFIRM_ID_CHECK
+ * Description  : Check CONFIRM_ID in SCM_DNM_SCS_SHIP_RESULT
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2021/11/12   SHINMYUNGSU    최초 작성
+ * 2021/11/18   KIMYONGHO      재고 수신 여부 체크 로직 추가
+ */
+
+CREATE PROCEDURE [dbo].[SSP0202_GET_SCS_CONFIRM_ID_CHECK]
+	 @p_confirm_id			NVARCHAR(MAX)
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE @mDQry						NVARCHAR(MAX)='';
+	DECLARE @mDQry2						NVARCHAR(MAX)='';			-- 재고 수신 여부 체크용
+
+	DECLARE @v_confirm_id				NVARCHAR(MAX);
+
+	DECLARE @v_valid_cnt				INT = 0;	
+	DECLARE @v_plan_start_yyyymmdd		NVARCHAR(MAX)='';
+	DECLARE @v_cutoff_date				NVARCHAR(MAX)='';	
+	DECLARE @v_plan_cutoff_datetime		datetime;
+
+
+	SELECT @v_plan_start_yyyymmdd = CONVERT(VARCHAR, DATEADD(D, 1, CONVERT(DATETIME, ATTRIBUTE1 ,112)) ,112)
+	  FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK)
+	 WHERE LOOKUP_TYPE		= 'SSP_ANL_SHIP_PLAN_P'
+	   AND SEGMENT1			= '40'
+	   AND VALID_YN			= 'Y'
+	;
+
+	SET @v_cutoff_date			 = CONVERT(VARCHAR, DATEADD(D, -2, CONVERT(DATETIME, @v_plan_start_yyyymmdd ,112)) ,112) ;
+	--SET @@v_plan_cutoff_datetime = CONVERT(DATETIME, CONVERT(VARCHAR, DATEADD(D, -1, CONVERT(DATETIME, @v_plan_start_yyyymmdd ,112)) ,112) + ' 07:15:00')	 
+
+
+	if  (datepart(DW, convert(date, CONVERT(VARCHAR, DATEADD(D, 0, CONVERT(DATETIME, @v_plan_start_yyyymmdd ,112)) ,112))) = 2)
+	   	SET @v_plan_cutoff_datetime = CONVERT(DATETIME, CONVERT(VARCHAR, DATEADD(D, 0, CONVERT(DATETIME, @v_plan_start_yyyymmdd ,112)) ,112) + ' 15:30:00')
+	else
+	    SET @v_plan_cutoff_datetime = CONVERT(DATETIME, CONVERT(VARCHAR, DATEADD(D, 0, CONVERT(DATETIME, @v_plan_start_yyyymmdd ,112)) ,112) + ' 07:15:00')
+
+
+	SET @v_confirm_id = [dbo].FN_GET_IN_STR(@p_confirm_id);
+
+
+	SET @mDQry = @mDQry + ' SELECT COUNT(*) CNT																	' + char(10);
+	SET @mDQry = @mDQry + '	  FROM SCM_DNM_SCS_SHIP_RESULT (NOLOCK) 											' + char(10);
+	SET @mDQry = @mDQry + '	 WHERE ATTRIBUTE5 IN ('+ @v_confirm_id   +')										' + char(10);
+
+	EXEC (@mDQry);
+
+
+	-- 2022-02-15 KIMYONGHO 재고 체크 임시 제외
+	SELECT 0 AS CNT																			
+	
+	--SELECT COUNT (*) CNT																			
+	--FROM																							
+	--(																								
+	--	SELECT CASE WHEN B.STOCK_QTY > 0 THEN 'Y' ELSE 'N' END EDIT_FLAG , A.* 					
+	--	FROM SSP_ANL_SHIP_CONFIRM A WITH(NOLOCK)																	
+	--	LEFT OUTER JOIN SCM_DNM_SCS_STOCK B 	WITH(NOLOCK)															
+	--		ON A.DIVISION_ID		 = B.DIVISION_ID													
+	--		AND A.FROM_SITE			 = B.SCM_SITE_ID
+	--		AND A.ITEM_ID			 = B.ITEM_ID																						
+	--	WHERE  1 = 1	
+	--	AND B.DIVISION_ID		 = '40'															
+	--	AND B.CUTOFF_DATE		 =  @v_cutoff_date 												
+	--	AND B.LAST_UPDATE_DATE  <= @v_plan_cutoff_datetime										
+	--	AND B.CELL_PACK			 = 'P'								
+	--	AND ( ( @p_confirm_id   IS NULL OR @p_confirm_id ='')  OR A.CONFIRM_ID IN (SELECT token FROM dbo.String_Split(@p_confirm_id,',')) )
+	--) A																																															
+	--WHERE A.EDIT_FLAG = 'N'																		
+	--;
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","5","COMPANY_ID
+												,A.TO_SITE_TYPE
+												,A.TO_SITE_PLANT_ID
+												,A.TO_SITE_VENDOR_ID
+												,A.TO_SITE_SOLDTO_CODE
+												,A.TO_SITE_SHIPTO_CODE
+												,A.TO_SITE_COMPANY_ID
+												,null CHANGE_REQ_NO
+												,null ERP_SO_NO			--신규 일 경우에는 ERP 4개 컬럼 NULL로 넣어준다.
+												,null ERP_SO_ITEM_NO
+												,null ERP_DO_NO
+												,null ERP_STATUS
+												,'C'
+												,@p_last_updated_by CREATED_BY
+												,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) CREATION_DATE
+												,@p_last_updated_by LAST_UPDATED_BY
+												,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) LAST_UPDATE_DATE
+												,A.ELECTRODE_YN
+												,A.ELECTRODE_TYPE
+												,A.ORIGIN_FROM_DIVISION_ID
+												,A.ORIGIN_TO_DIVISION_ID
+												,0 BEFORE_QTY
+												,'Y' CHECK_NEED_YN
+												,@v_remarks
+												,@v_remarks2
+												,@v_remarks3
+												/*----------------------------------------------------------------------------------------
+													2020.06.30 : KBK
+													I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+												------------------------------------------------------------------------------------------*/
+												,A.PACKAGE_TYPE_CODE
+												,A.FACTORY_ID
+												,CASE WHEN A.ELECTRODE_YN = 'N' THEN @v_new_qty
+												 ELSE CEILING(CASE WHEN B.PACKAGE_TYPE_CODE = 'BX' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.BOX_PER_CUT ,1)
+ 																   WHEN B.PACKAGE_TYPE_CODE = 'SC' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELCRATE_PER_CUT ,1)
+ 																   WHEN B.PACKAGE_TYPE_CODE = 'SR' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELRACK_PER_CUT ,1)
+ 															  ELSE NULL  END) END  AS PACKAGE_QTY
+												,DOM_EXP
+												,ERP_ATTR1
+												,ERP_ATTR2
+												,ERP_ATTR3
+												,ERP_ATTR4
+												,ERP_ATTR5
+											FROM SSP_ANL_SHIP_CONFIRM A with(nolock)
+												LEFT OUTER JOIN SSP_MST_SITE_ITEM_EE_V B with(nolock)
+													ON  B.DIVISION_ID = A.DIVISION_ID 
+													AND B.SCM_SITE_ID = A.FROM_SITE 
+													AND B.ITEM_ID     = A.ITEM_ID 
+											WHERE CONFIRM_ID = @v_confirm_id;
+										END
+									ELSE IF @p_change_type = 'N'
+										BEGIN	
+											SET @v_chk = 0;
+											SELECT @v_chk = count(*)
+											FROM SSP_ANL_SHIP_CONFIRM with(nolock)
+											WHERE CONFIRM_ID = @v_new_confirm_id;
+
+											IF @v_chk > 0
+												BEGIN
+													UPDATE SSP_ANL_SHIP_CONFIRM
+														SET CHANGE_TYPE = 'C'
+															,SHIPMENT_STATUS = 'C'
+															,CHANGE_REQ_NO = null
+															,YYYYMMDD = @v_new_ship_date
+															,QTY = @v_new_qty
+															,BOD_ID = @v_new_bod_id
+															,ROUTE_ID = @v_new_route_id
+															,INCOTERMS = @v_new_incoterms
+															,D_COUNTRY = @v_new_d_contry
+															,D_PORT_CODE = @v_new_d_port_code
+															,A_COUNTRY = @v_new_a_country
+															,A_PORT_CODE = @v_new_a_port_code
+															,TO_COUNTRY = @v_new_to_country
+															,TO_CITY = @v_new_to_city
+															,TRANSPORT_MODE = @v_new_transport_mode
+															,ETD_DATE = @v_new_etd_date
+															,ETA_DATE = @v_new_eta_date
+															,CUSTOMER_LT = @v_new_lt_day
+															,BEFORE_QTY = 0
+															,CHECK_NEED_YN = 'Y'
+															,LAST_UPDATED_BY = @p_last_updated_by
+															,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+															,REMARKS		= @v_remarks
+															,REMARKS2		= @v_remarks2
+															,REMARKS3		= @v_remarks3
+															/*----------------------------------------------------------------------------------------
+																2020.06.30 : KBK
+																I/F 추가요청으로 인하여 컬럼 추가 전극에"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","6","서만 사용. DDL 표준을 맞추기 위하여 추가함 
+															------------------------------------------------------------------------------------------*/
+															,PACKAGE_QTY = CASE WHEN A.ELECTRODE_YN = 'N' THEN @v_new_qty
+																			 ELSE CEILING(CASE WHEN B.PACKAGE_TYPE_CODE = 'BX' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.BOX_PER_CUT ,1)
+ 																								WHEN B.PACKAGE_TYPE_CODE = 'SC' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELCRATE_PER_CUT ,1)
+ 																								WHEN B.PACKAGE_TYPE_CODE = 'SR' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELRACK_PER_CUT ,1)
+ 																							ELSE NULL  END) END
+													FROM SSP_ANL_SHIP_CONFIRM A with(nolock) 
+														LEFT OUTER JOIN SSP_MST_SITE_ITEM_EE_V B with(nolock)
+															ON  B.DIVISION_ID = A.DIVISION_ID 
+															AND B.SCM_SITE_ID = A.FROM_SITE 
+															AND B.ITEM_ID     = A.ITEM_ID 
+													WHERE CONFIRM_ID = @v_new_confirm_id
+												END
+											ELSE
+												BEGIN
+													INSERT INTO SSP_ANL_SHIP_CONFIRM(
+															CONFIRM_ID
+															,SHIPMENT_STATUS
+															,DIVISION_ID
+															,PLAN_START_YYYYMMDD
+															,PLAN_TYPE
+															,SEQ
+															,ITEM_ID
+															,FROM_SITE
+															,TO_SITE
+															,YYYYMMDD
+															,PLANNED_QTY
+															,QTY
+															,BOD_ID
+															,ROUTE_ID
+															,BIZ_TYPE
+															,PROJECT_CODE
+															,FCST_TYPE
+															,FCST_ETD_DATE
+															,FCST_ETA_DATE
+															,ETD_DATE
+															,ETA_DATE
+															,INCOTERMS
+															,TRANSPORT_MODE
+															,D_COUNTRY
+															,D_PORT_CODE
+															,A_COUNTRY
+															,A_PORT_CODE
+															,CUSTOMER_LT
+															,TO_COUNTRY
+															,TO_CITY
+															,FROM_SITE_TYPE
+															,FROM_SITE_PLANT_ID
+															,FROM_SITE_VENDOR_ID
+															,FROM_SITE_SOLDTO_CODE
+															,FROM_SITE_SHIPTO_CODE
+															,FROM_SITE_COMPANY_ID
+															,TO_SITE_TYPE
+															,TO_SITE_PLANT_ID
+															,TO_SITE_VENDOR_ID
+															,TO_SITE_SOLDTO_CODE
+															,TO_SITE_SHIPTO_CODE
+															,TO_SITE_COMPANY_ID
+															,CHANGE_REQ_NO
+															,ERP_SO_NO			--신규 일 경우에는 ERP 4개 컬럼 NULL로 넣어준다.
+															,ERP_SO_ITEM_NO
+															,ERP_DO_NO
+															,ERP_STATUS
+															,CHANGE_TYPE
+															,CREATED_BY
+															,CREATION_DATE
+															,LAST_UPDATED_BY
+															,LAST_UPDATE_DATE
+															,ELECTRODE_YN
+															,ELECTRODE_TYPE
+															,ORIGIN_FROM_DIVISION_ID
+															,ORIGIN_TO_DIVISION_ID
+															,BEFORE_QTY
+															,CHECK_NEED_YN
+															,REMARKS
+															,REMARKS2
+															,REMARKS3
+															/*----------------------------------------------------------------------------------------
+																2020.06.30 : KBK
+																I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+															------------------------------------------------------------------------------------------*/
+															,PACKAGE_TYPE_CODE
+															,FACTORY_ID
+															,PACKAGE_QTY
+															,DOM_EXP
+															,ERP_ATTR1
+															,ERP_ATTR2
+															,ERP_ATTR3
+															,ERP_ATTR4
+															,ERP_ATTR5
+													) SELECT @v_new_confirm_id CONFIRM_ID
+															,'C' SHIPMENT_STATUS
+															,A.DIVISION_ID
+															,A.PLAN_START_YYYYMMDD
+															,A.PLAN_TYPE
+															,A.SEQ
+															,A.ITEM_ID
+															,A.FROM_SITE
+															,A.TO_SITE
+															,@v_new_ship_date YYYYMMDD
+															,0 PLANNED_QTY
+															,@v_new_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","7","qty QTY
+															,@v_new_bod_id BOD_ID
+															,@v_new_route_id ROUTE_ID
+															,A.BIZ_TYPE
+															,A.PROJECT_CODE
+															,A.FCST_TYPE
+															,A.FCST_ETD_DATE
+															,A.FCST_ETA_DATE
+															,@v_new_etd_date ETD_DATE
+															,@v_new_eta_date ETA_DATE
+															,@v_new_incoterms INCOTERMS
+															,@v_new_transport_mode TRANSPORT_MODE
+															,@v_new_d_contry D_COUNTRY
+															,@v_new_d_port_code D_PORT_CODE
+															,@v_new_a_country A_COUNTRY
+															,@v_new_a_port_code A_PORT_CODE
+															,@v_new_lt_day CUSTOMER_LT
+															,@v_new_to_country TO_COUNTRY
+															,@v_new_to_city TO_CITY
+															,A.FROM_SITE_TYPE
+															,A.FROM_SITE_PLANT_ID
+															,A.FROM_SITE_VENDOR_ID
+															,A.FROM_SITE_SOLDTO_CODE
+															,A.FROM_SITE_SHIPTO_CODE
+															,A.FROM_SITE_COMPANY_ID
+															,A.TO_SITE_TYPE
+															,A.TO_SITE_PLANT_ID
+															,A.TO_SITE_VENDOR_ID
+															,A.TO_SITE_SOLDTO_CODE
+															,A.TO_SITE_SHIPTO_CODE
+															,A.TO_SITE_COMPANY_ID
+															,null CHANGE_REQ_NO
+															,null ERP_SO_NO			--신규 일 경우에는 ERP 4개 컬럼 NULL로 넣어준다.
+															,null ERP_SO_ITEM_NO
+															,null ERP_DO_NO
+															,null ERP_STATUS
+															,'C'
+															,@p_last_updated_by CREATED_BY
+															,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) CREATION_DATE
+															,@p_last_updated_by LAST_UPDATED_BY
+															,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) LAST_UPDATE_DATE
+															,A.ELECTRODE_YN
+															,A.ELECTRODE_TYPE
+															,A.ORIGIN_FROM_DIVISION_ID
+															,A.ORIGIN_TO_DIVISION_ID
+															,0 BEFORE_QTY
+															,'Y' CHECK_NEED_YN
+															,@v_remarks
+															,@v_remarks2
+															,@v_remarks3
+															/*----------------------------------------------------------------------------------------
+																2020.06.30 : KBK
+																I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+															------------------------------------------------------------------------------------------*/
+															,A.PACKAGE_TYPE_CODE
+															,A.FACTORY_ID
+															,CASE WHEN A.ELECTRODE_YN = 'N' THEN @v_new_qty
+															 ELSE CEILING(CASE WHEN B.PACKAGE_TYPE_CODE = 'BX' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.BOX_PER_CUT ,1)
+ 																			   WHEN B.PACKAGE_TYPE_CODE = 'SC' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELCRATE_PER_CUT ,1)
+ 																			   WHEN B.PACKAGE_TYPE_CODE = 'SR' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELRACK_PER_CUT ,1)
+ 																		  ELSE NULL  END) END    AS PACKAGE_QTY
+															,A.DOM_EXP
+															,A.ERP_ATTR1
+															,A.ERP_ATTR2
+															,A.ERP_ATTR3
+															,A.ERP_ATTR4
+															,A.ERP_ATTR5
+														FROM SSP_ANL_SHIP_CONFIRM A  with(nolock)
+															LEFT OUTER JOIN SSP_MST_SITE_ITEM_EE_V B with(nolock)
+																ON  B.DIVISION_ID = A.DIVISION_ID 
+																AND B.SCM_SITE_ID = A.FROM_SITE 
+																AND B.ITEM_ID     = A.ITEM_ID 
+														WHERE CONFIRM_ID = @v_confirm_id;
+												END
+											-- SSP0200 에서 사용 시  @p_change_type = 'N' 변경 후 다시 'C' 변경
+											SET @p_change_type ='c'; 
+										END
+										
+									ELSE
+										BEGIN
+										
+										SET @v_planned_qty = 0;
+
+										SELECT @v_planned_qty = PLANNED_QTY
+										FROM SSP_ANL_SHIP_CONFIRM WITH(NOLOCK)
+										WHERE ATTRIBUTE1 = @v_new_confirm_id;										  
+											
+											--SSP_ANL_SHIP_CONFIRM table insert
+										INSERT INTO SSP_ANL_SHIP_CONFIRM(
+												CONFIRM_ID
+	"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","8","											,SHIPMENT_STATUS
+												,DIVISION_ID
+												,PLAN_START_YYYYMMDD
+												,PLAN_TYPE
+												,SEQ
+												,ITEM_ID
+												,FROM_SITE
+												,TO_SITE
+												,YYYYMMDD
+												,PLANNED_QTY
+												,QTY
+												,BOD_ID
+												,ROUTE_ID
+												,BIZ_TYPE
+												,PROJECT_CODE
+												,FCST_TYPE
+												,FCST_ETD_DATE
+												,FCST_ETA_DATE
+												,ETD_DATE
+												,ETA_DATE
+												,INCOTERMS
+												,TRANSPORT_MODE
+												,D_COUNTRY
+												,D_PORT_CODE
+												,A_COUNTRY
+												,A_PORT_CODE
+												,CUSTOMER_LT
+												,TO_COUNTRY
+												,TO_CITY
+												,FROM_SITE_TYPE
+												,FROM_SITE_PLANT_ID
+												,FROM_SITE_VENDOR_ID
+												,FROM_SITE_SOLDTO_CODE
+												,FROM_SITE_SHIPTO_CODE
+												,FROM_SITE_COMPANY_ID
+												,TO_SITE_TYPE
+												,TO_SITE_PLANT_ID
+												,TO_SITE_VENDOR_ID
+												,TO_SITE_SOLDTO_CODE
+												,TO_SITE_SHIPTO_CODE
+												,TO_SITE_COMPANY_ID
+												,CHANGE_REQ_NO
+												,ERP_SO_NO			--신규 일 경우에는 ERP 4개 컬럼 NULL로 넣어준다.
+												,ERP_SO_ITEM_NO
+												,ERP_DO_NO
+												,ERP_STATUS
+												,CHANGE_TYPE
+												,CREATED_BY
+												,CREATION_DATE
+												,LAST_UPDATED_BY
+												,LAST_UPDATE_DATE
+												,ELECTRODE_YN
+												,ELECTRODE_TYPE
+												,ORIGIN_FROM_DIVISION_ID
+												,ORIGIN_TO_DIVISION_ID
+												,BEFORE_QTY
+												,CHECK_NEED_YN
+												,REMARKS
+												,REMARKS2
+												,REMARKS3
+												/*----------------------------------------------------------------------------------------
+													2020.06.30 : KBK
+													I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+												------------------------------------------------------------------------------------------*/
+												,PACKAGE_TYPE_CODE
+												,FACTORY_ID
+												,PACKAGE_QTY
+												,DOM_EXP
+												,ERP_ATTR1
+												,ERP_ATTR2
+												,ERP_ATTR3
+												,ERP_ATTR4
+												,ERP_ATTR5
+										) SELECT @v_new_confirm_id CONFIRM_ID
+												,'C' SHIPMENT_STATUS
+												,A.DIVISION_ID
+												,A.PLAN_START_YYYYMMDD
+												,A.PLAN_TYPE
+												,A.SEQ
+												,A.ITEM_ID
+												,A.FROM_SITE
+												,A.TO_SITE
+												,@v_new_ship_date YYYYMMDD
+												,@v_planned_qty PLANNED_QTY
+												,@v_new_qty QTY
+												,@v_new_bod_id BOD_ID
+												,@v_new_route_id ROUTE_ID
+												,A.BIZ_TYPE
+												,A.PROJECT_CODE
+												,A.FCST_TYPE
+												,A.FCST_ETD_DATE
+												,A.FCST_ETA_DATE
+												,@v_new_etd_date ETD_DATE
+												,@v_new_eta_date ETA_DATE
+												,@v_new_incoterms INCOTERMS
+												,@v_new_transport_mode TRANSPORT_MODE
+												,@v_new_d_contry D_COUNTRY
+												,@v_new_d_port_code D_PORT_CODE
+												,@v_new_a_country A_COUNTRY
+												,@v_new_a_port_code A_PORT_CODE
+												,@v_new_lt_day CUSTOMER_LT
+												,@v_new_to_country TO_COUNTRY
+												,@v_new_to_city TO_CITY
+												,A.FROM_SITE_TYPE
+												,A.FROM_SITE_PLANT_ID
+												,A.FROM_SITE_VENDOR_ID
+												,A.FROM_SITE_SOLDTO_CODE
+												,A.FROM_SITE_SHIPTO_CODE
+												,A.FROM_SITE_COMPANY_ID
+												,A.TO_SITE_TYPE
+												,A.TO_SITE_PLANT_ID
+												,A.TO_SITE_VENDOR_ID
+												,A.TO_SITE_SOLDTO_CODE
+												,A.TO_SITE_SHIPTO_CODE
+												,A.TO_SITE_COMPANY_ID
+												,null CHANGE_REQ_NO
+												,null ERP_SO_NO
+												,null ERP_SO_ITEM_NO
+												,null ERP_DO_NO
+												,null ERP_STATUS
+												,'C'
+												,@p_last_updated_by CREATED_BY
+												,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) CREATION_DATE
+												,@p_last_updated_by L"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","9","AST_UPDATED_BY
+												,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) LAST_UPDATE_DATE
+												,A.ELECTRODE_YN
+												,A.ELECTRODE_TYPE
+												,A.ORIGIN_FROM_DIVISION_ID
+												,A.ORIGIN_TO_DIVISION_ID
+												,A.QTY BEFORE_QTY
+												,'Y' CHECK_NEED_YN
+												,@v_remarks
+												,@v_remarks2
+												,@v_remarks3
+												/*----------------------------------------------------------------------------------------
+													2020.06.30 : KBK
+													I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+												------------------------------------------------------------------------------------------*/
+												,A.PACKAGE_TYPE_CODE
+												,A.FACTORY_ID
+												,CASE WHEN A.ELECTRODE_YN = 'N' THEN @v_new_qty
+												 ELSE CEILING(CASE WHEN B.PACKAGE_TYPE_CODE = 'BX' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.BOX_PER_CUT ,1)
+ 																   WHEN B.PACKAGE_TYPE_CODE = 'SC' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELCRATE_PER_CUT ,1)
+ 																   WHEN B.PACKAGE_TYPE_CODE = 'SR' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELRACK_PER_CUT ,1)
+ 															  ELSE NULL  END) END  AS PACKAGE_QTY
+												,A.DOM_EXP
+												,A.ERP_ATTR1
+												,A.ERP_ATTR2
+												,A.ERP_ATTR3
+												,A.ERP_ATTR4
+												,A.ERP_ATTR5
+											FROM SSP_ANL_SHIP_CONFIRM  A  with(nolock)
+												LEFT OUTER JOIN SSP_MST_SITE_ITEM_EE_V B with(nolock)
+													ON  B.DIVISION_ID = A.DIVISION_ID 
+													AND B.SCM_SITE_ID = A.FROM_SITE 
+													AND B.ITEM_ID     = A.ITEM_ID 
+											WHERE ATTRIBUTE1 = @v_confirm_id;
+
+											UPDATE SSP_ANL_SHIP_CONFIRM
+												SET SHIPMENT_STATUS = 'P'
+													,CHANGE_REQ_NO = null
+													,QTY = 0
+													,BEFORE_QTY = QTY
+													,CHECK_NEED_YN = 'Y'
+													,LAST_UPDATED_BY = @p_last_updated_by
+													,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+													,PACKAGE_QTY = 0
+											WHERE ATTRIBUTE1 = @v_new_confirm_id
+										END
+								END						
+							ELSE
+								BEGIN
+									--SSP_ANL_SHIP_CONFIRM update
+									UPDATE SSP_ANL_SHIP_CONFIRM
+										SET SHIPMENT_STATUS = 'C'
+											,CHANGE_REQ_NO = null
+											,YYYYMMDD = @v_new_ship_date
+											,QTY = @v_new_qty
+											,BOD_ID = @v_new_bod_id
+											,ROUTE_ID = @v_new_route_id
+											,INCOTERMS = @v_new_incoterms
+											,D_COUNTRY = @v_new_d_contry
+											,D_PORT_CODE = @v_new_d_port_code
+											,A_COUNTRY = @v_new_a_country
+											,A_PORT_CODE = @v_new_a_port_code
+											,TO_COUNTRY = @v_new_to_country
+											,TO_CITY = @v_new_to_city
+											,TRANSPORT_MODE = @v_new_transport_mode
+											,ETD_DATE = @v_new_etd_date
+											,ETA_DATE = @v_new_eta_date
+											,FCST_ETD_DATE = @v_new_etd_date
+											,FCST_ETA_DATE = @v_new_eta_date
+											,CUSTOMER_LT = @v_new_lt_day
+											,BEFORE_QTY = QTY
+											,CHECK_NEED_YN = 'Y'
+											,LAST_UPDATED_BY = @p_last_updated_by
+											,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+											,REMARKS		= @v_remarks
+											,REMARKS2		= @v_remarks2
+											,REMARKS3		= @v_remarks3
+											/*----------------------------------------------------------------------------------------
+												2020.06.30 : KBK
+												I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+											------------------------------------------------------------------------------------------*/
+											,PACKAGE_QTY = CASE WHEN A.ELECTRODE_YN = 'N' THEN @v_new_qty
+																ELSE CEILING(CASE WHEN B.PACKAGE_TYPE_CODE = 'BX' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.BOX_PER_CUT ,1)
+ 						"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","10","														WHEN B.PACKAGE_TYPE_CODE = 'SC' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELCRATE_PER_CUT ,1)
+ 																				WHEN B.PACKAGE_TYPE_CODE = 'SR' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELRACK_PER_CUT ,1)
+ 																			ELSE NULL  END) END
+									FROM SSP_ANL_SHIP_CONFIRM A with(nolock) 
+									LEFT OUTER JOIN SSP_MST_SITE_ITEM_EE_V B with(nolock)
+										ON  B.DIVISION_ID = A.DIVISION_ID 
+										AND B.SCM_SITE_ID = A.FROM_SITE 
+										AND B.ITEM_ID     = A.ITEM_ID 
+									WHERE CONFIRM_ID = @v_new_confirm_id
+								END
+
+							----이력저장
+							--EXEC [dbo].[PR_SSP_ANL_SHIP_CONFIRM_HIST] @p_change_request_no, 'C', @v_new_confirm_id, @v_new_etd_date,@v_new_eta_date,@v_new_qty,@v_new_ship_date,@v_new_yn
+							--										,@v_new_bod_id,@v_new_route_id,@v_new_incoterms, @v_new_d_contry, @v_new_d_port_code, @v_new_a_country,@v_new_a_port_code
+							--										,@v_new_to_country,@v_new_to_city,@v_new_lt_day, @v_new_transport_mode
+							--										,@p_last_updated_by,@p_time_zone
+						
+							--20191002 PLAN TB 미사용으로 인한 주석 시작
+							/*
+							   SELECT @n_division_id = DIVISION_ID
+									 , @n_item_id = ITEM_ID
+									 , @n_from_site = FROM_SITE
+									 , @n_to_site = TO_SITE
+									 , @n_yyyymmdd = YYYYMMDD
+									 , @n_bod_id = BOD_ID
+									 , @n_project_code = PROJECT_CODE
+									 , @n_fcst_type = FCST_TYPE
+									 , @n_incoterms = INCOTERMS
+									 , @n_transport_mode = TRANSPORT_MODE
+									 , @n_confirm_id = CONFIRM_ID
+								--FROM SSP_ANL_SHIP_CONFIRM_CHG_REQ_de a
+								FROM SSP_ANL_SHIP_CONFIRM a
+								WHERE A.CONFIRM_ID = @v_new_confirm_id
+								
+								SELECT @v_plan_start_yyyymmdd = MAX(PLAN_START_YYYYMMDD)
+									  ,@v_seq                 = MAX(PLAN_SEQ)
+								FROM   SSP_PLAN_VERSION_V
+								WHERE  PLAN_TYPE    = 'SP'
+								AND    DIVISION_ID  = @n_division_id 
+								AND    CONFIRM_FLAG = 'Y'
+								AND    PLAN_START_YYYYMMDD = (SELECT MAX(PLAN_START_YYYYMMDD)
+													FROM SSP_PLAN_VERSION_V T
+													WHERE T.DIVISION_ID = @n_division_id 
+													AND   T.plan_type  = 'SP'
+													AND   T.CONFIRM_FLAG = 'Y');
+								
+								IF @p_change_type = 'P'
+									BEGIN
+											SELECT @v_chk = COUNT(*)
+											FROM SSP_ANL_SHIP_PLAN A
+											WHERE A.DIVISION_ID = @n_division_id
+											  AND A.PLAN_START_YYYYMMDD = @v_plan_start_yyyymmdd
+											  AND A.PLAN_TYPE = 'SP'
+											  AND A.SEQ = @v_seq
+											  AND A.ITEM_ID = @n_item_id
+											  AND A.FROM_SITE = @n_from_site
+											  AND A.TO_SITE = @n_to_site
+											  AND A.YYYYMMDD = @n_yyyymmdd
+											  --AND A.BOD_ID = @n_bod_id
+											  --AND A.PROJECT_CODE = @n_project_code
+											  --AND A.FCST_TYPE = @n_fcst_type
+											  --AND A.INCOTERMS = @n_incoterms
+											  --AND A.TRANSPORT_MODE = @n_transport_mode
+											  AND MEASURE in ('SHIP_CONFIRM', 'SHIP_PLAN')
+											 -- AND A.CONFIRM_FLAG = 'Y' -- Plan 일 경우 둘다 삭제
+											  --AND A.CONFIRM_ID = @v_new_confirm_id
+											  ;
+
+											  -- SSP_ANL_SHIP_PLAN MEASURE SHIP_PLAN, SHIP_CONFIRM 이 있을 경우 Delete, Insert	 
+											IF 	@v_chk > 0 
+												BEGIN 										
+													DELETE FROM SSP_ANL_SHIP_PLAN
+													WHERE DIVISION_ID = @n_division_id
+														AND PLAN_START_YYYYMMDD = @v_plan_start_yyyymmdd
+														AND PLAN_TYPE = 'SP'
+														AND SEQ = @v_seq
+														AND ITEM_ID = @n_item_id
+														AND FROM_SITE = @n_from_site
+														AND TO_SITE = @n_to_site
+														AND YYYYMMDD = @n_yyyymmdd
+														--AND BOD_ID = @n_bod_id
+														--AND PROJECT_CODE = @n_project_code
+														--AND FCST_TYPE = @n_fcst_type
+														--AND INCOTERMS = @n_incoterms
+														--AND TRANSPORT_MODE = @n_transport_mode
+														AND MEA"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","11","SURE in ('SHIP_CONFIRM', 'SHIP_PLAN')
+														--AND CONFIRM_FLAG = 'Y' -- Plan 일 경우 둘다 삭제
+														--AND CONFIRM_ID = @v_new_confirm_id
+														;
+												END
+									END
+								ELSE
+									BEGIN
+											SELECT @v_chk = COUNT(*)
+											FROM SSP_ANL_SHIP_PLAN A
+											WHERE A.DIVISION_ID = @n_division_id
+											  AND A.PLAN_START_YYYYMMDD = @v_plan_start_yyyymmdd
+											  AND A.PLAN_TYPE = 'SP'
+											  AND A.SEQ = @v_seq
+											  AND A.ITEM_ID = @n_item_id
+											  AND A.FROM_SITE = @n_from_site
+											  AND A.TO_SITE = @n_to_site
+											  AND A.YYYYMMDD = @n_yyyymmdd
+											  --AND A.BOD_ID = @n_bod_id
+											  --AND A.PROJECT_CODE = @n_project_code
+											  --AND A.FCST_TYPE = @n_fcst_type
+											  --AND A.INCOTERMS = @n_incoterms
+											  --AND A.TRANSPORT_MODE = @n_transport_mode
+											  AND MEASURE in ('SHIP_CONFIRM', 'SHIP_PLAN')
+											  AND A.CONFIRM_FLAG = 'Y' -- Confrim ID가 없는건 삭제하지 않음
+											  --AND A.CONFIRM_ID = @v_new_confirm_id
+											  ;
+
+											  -- SSP_ANL_SHIP_PLAN MEASURE SHIP_PLAN, SHIP_CONFIRM 이 있을 경우 Delete, Insert	 
+											IF 	@v_chk > 0 
+												BEGIN 
+										
+													DELETE FROM SSP_ANL_SHIP_PLAN
+													WHERE DIVISION_ID = @n_division_id
+														AND PLAN_START_YYYYMMDD = @v_plan_start_yyyymmdd
+														AND PLAN_TYPE = 'SP'
+														AND SEQ = @v_seq
+														AND ITEM_ID = @n_item_id
+														AND FROM_SITE = @n_from_site
+														AND TO_SITE = @n_to_site
+														AND YYYYMMDD = @n_yyyymmdd
+														--AND BOD_ID = @n_bod_id
+														--AND PROJECT_CODE = @n_project_code
+														--AND FCST_TYPE = @n_fcst_type
+														--AND INCOTERMS = @n_incoterms
+														--AND TRANSPORT_MODE = @n_transport_mode
+														AND MEASURE in ('SHIP_CONFIRM', 'SHIP_PLAN')
+														AND CONFIRM_FLAG = 'Y' -- Confrim ID가 없는건 삭제하지 않음
+														--AND CONFIRM_ID = @v_new_confirm_id
+														;
+												END
+									END
+								
+								/*
+								IF @p_change_type = 'P' -- Plan 일 경우 기존 날짜는 수량을 0으로 업데이트한다.
+									BEGIN
+										SELECT @n_ori_division_id = DIVISION_ID
+											 , @n_ori_item_id = ITEM_ID
+											 , @n_ori_from_site = FROM_SITE
+											 , @n_ori_to_site = TO_SITE
+											 , @n_ori_yyyymmdd = YYYYMMDD
+											 , @n_ori_bod_id = BOD_ID
+											 , @n_ori_project_code = PROJECT_CODE
+											 , @n_ori_fcst_type = FCST_TYPE
+											 , @n_ori_incoterms = INCOTERMS
+											 , @n_ori_transport_mode = TRANSPORT_MODE
+											 , @n_ori_confirm_id = CONFIRM_ID
+										FROM SSP_ANL_SHIP_CONFIRM_CHG_REQ_de a
+										WHERE A.CONFIRM_ID = @v_new_confirm_id;
+
+										UPDATE SSP_ANL_SHIP_PLAN
+											SET QTY = 0
+												,LAST_UPDATED_BY = @p_last_updated_by
+												,LAST_UPDATE_DATE = @v_last_update_date
+										WHERE DIVISION_ID = @n_ori_division_id
+											AND PLAN_START_YYYYMMDD = @v_plan_start_yyyymmdd
+											AND PLAN_TYPE = 'SP'
+											AND SEQ = @v_seq
+											AND ITEM_ID = @n_ori_item_id
+											AND FROM_SITE = @n_ori_from_site
+											AND TO_SITE = @n_ori_to_site
+											AND YYYYMMDD = @n_ori_yyyymmdd
+											--AND BOD_ID = @n_ori_bod_id
+											AND PROJECT_CODE = @n_ori_project_code
+											AND FCST_TYPE = @n_ori_fcst_type
+											--AND INCOTERMS = @n_ori_incoterms
+											--AND TRANSPORT_MODE = @n_ori_transport_mode
+											AND MEASURE in ('SHIP_CONFIRM', 'SHIP_PLAN')
+											AND CONFIRM_FLAG = 'N'
+									END
+									*/
+								IF @p_change_type = 'C' -- Confirm 일 경우에는 날짜가 변경되면 기존것도 지우고 다시 넣는다.
+									BEGIN
+										SELECT TOP 1 @n_ori_division_id = DIVISION_ID
+											 , @n_ori_item_id = ITEM_ID
+											 , @n_ori_from_site = FROM_SITE
+											 , @n_ori_to_site = TO_SITE
+											 , @n_ori_yyyymmdd = YYYYMMDD
+									"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","12","		 , @n_ori_bod_id = BOD_ID
+											 , @n_ori_project_code = PROJECT_CODE
+											 , @n_ori_fcst_type = FCST_TYPE
+											 , @n_ori_incoterms = INCOTERMS
+											 , @n_ori_transport_mode = TRANSPORT_MODE
+											 , @n_ori_confirm_id = CONFIRM_ID
+										FROM SSP_ANL_SHIP_CONFIRM_CHG_REQ_de a
+										WHERE A.CONFIRM_ID = @v_new_confirm_id
+										  AND A.VALID_YN = 'Y'
+										ORDER BY LAST_UPDATE_DATE desc;
+
+										SET @v_chk = 0;
+
+										SELECT @v_chk = COUNT(*)
+										FROM SSP_ANL_SHIP_PLAN A
+										WHERE A.DIVISION_ID = @n_ori_division_id
+										  AND A.PLAN_START_YYYYMMDD = @v_plan_start_yyyymmdd
+										  AND A.PLAN_TYPE = 'SP'
+										  AND A.SEQ = @v_seq
+										  AND A.ITEM_ID = @n_ori_item_id
+										  AND A.FROM_SITE = @n_ori_from_site
+										  AND A.TO_SITE = @n_ori_to_site
+										  AND A.YYYYMMDD = @n_ori_yyyymmdd
+										  AND MEASURE in ('SHIP_CONFIRM', 'SHIP_PLAN')
+										  AND A.CONFIRM_FLAG = 'Y' -- Confrim ID가 없는건 삭제하지 않음
+										  ;
+
+										IF 	@v_chk > 0 and @n_yyyymmdd <> @n_ori_yyyymmdd
+											BEGIN 										
+												DELETE FROM SSP_ANL_SHIP_PLAN
+												WHERE DIVISION_ID = @n_ori_division_id
+												  AND PLAN_START_YYYYMMDD = @v_plan_start_yyyymmdd
+												  AND PLAN_TYPE = 'SP'
+												  AND SEQ = @v_seq
+												  AND ITEM_ID = @n_ori_item_id
+												  AND FROM_SITE = @n_ori_from_site
+												  AND TO_SITE = @n_ori_to_site
+												  AND YYYYMMDD = @n_ori_yyyymmdd
+												  AND MEASURE in ('SHIP_CONFIRM', 'SHIP_PLAN')
+												  AND CONFIRM_FLAG = 'Y' -- Confrim ID가 없는건 삭제하지 않음
+												  ;
+
+												  BEGIN
+													INSERT INTO SSP_ANL_SHIP_PLAN(
+																	 DIVISION_ID      
+																	,PLAN_START_YYYYMMDD
+																	,PLAN_TYPE       
+																	,SEQ             
+																	,ITEM_ID         
+																	,FROM_SITE       
+																	,TO_SITE         
+																	,MEASURE         
+																	,YYYYMMDD        
+																	,BOD_ID          
+																	,QTY             
+																	,ROUTE_ID        
+																	,INCOTERMS       
+																	,TRANSPORT_MODE  
+																	,BIZ_TYPE        
+																	,PROJECT_CODE    
+																	,FCST_TYPE       
+																	,FCST_ETD_DATE   
+																	,FCST_ETA_DATE   
+																	,ETD_DATE        
+																	,ETA_DATE        
+																	,CONFIRM_FLAG    
+																	,CONFIRM_ID      
+																	,CREATED_BY      
+																	,CREATION_DATE   
+																	,LAST_UPDATED_BY 
+																	,LAST_UPDATE_DATE
+																	,ELECTRODE_YN
+																	,ELECTRODE_TYPE
+																	,ORIGIN_FROM_DIVISION_ID
+																	,ORIGIN_TO_DIVISION_ID)
+															SELECT A.DIVISION_ID
+																  ,@v_plan_start_yyyymmdd PLAN_START_YYYYMMDD
+																  ,A.PLAN_TYPE
+																  ,@v_seq SEQ
+																  ,A.ITEM_ID
+																  ,A.FROM_SITE
+																  ,A.TO_SITE
+																  ,'SHIP_CONFIRM' MEASURE
+																  ,YYYYMMDD
+																  ,BOD_ID
+																  ,QTY
+																  ,ROUTE_ID
+																  ,INCOTERMS
+																  ,TRANSPORT_MODE
+																  ,A.BIZ_TYPE
+																  ,A.PROJECT_CODE
+																  ,A.FCST_TYPE
+																  ,A.FCST_ETD_DATE
+																  ,A.FCST_ETA_DATE
+																  ,ETD_DATE
+																  ,ETA_DATE
+																  ,'Y' CONFIRM_FLAG
+																  ,A.CONFIRM_ID CONFIRM_ID
+																  ,@p_last_updated_by CREATED_BY
+																  ,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) CREATION_DATE
+																  ,@p_last_updated_by LAST_UPDATED_BY
+																  ,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) LAST_UPDATE_DATE
+																  ,ELECTRODE_YN
+							"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","13","									  ,ELECTRODE_TYPE
+																  ,ORIGIN_FROM_DIVISION_ID
+																  ,ORIGIN_TO_DIVISION_ID
+															FROM SSP_ANL_SHIP_CONFIRM A
+															WHERE A.CONFIRM_ID in (SELECT CONFIRM_ID
+																				FROM SSP_ANL_SHIP_CONFIRM
+																				WHERE DIVISION_ID = @n_ori_division_id
+																				  AND ITEM_ID = @n_ori_item_id
+																				  AND FROM_SITE = @n_ori_from_site
+																				  AND TO_SITE = @n_ori_to_site
+																				  AND YYYYMMDD = @n_ori_yyyymmdd
+																				  AND CHANGE_TYPE = 'C'
+																				  --AND BOD_ID = @v_new_bod_id
+																				  --AND INCOTERMS = @v_new_incoterms
+																				  --AND TRANSPORT_MODE = @v_new_transport_mode
+																				  )
+												END
+
+												--MEASURE SHIP_PLAN INSERT
+												BEGIN
+													INSERT INTO SSP_ANL_SHIP_PLAN(
+																	 DIVISION_ID      
+																	,PLAN_START_YYYYMMDD
+																	,PLAN_TYPE       
+																	,SEQ             
+																	,ITEM_ID         
+																	,FROM_SITE       
+																	,TO_SITE         
+																	,MEASURE         
+																	,YYYYMMDD        
+																	,BOD_ID          
+																	,QTY             
+																	,ROUTE_ID        
+																	,INCOTERMS       
+																	,TRANSPORT_MODE  
+																	,BIZ_TYPE        
+																	,PROJECT_CODE    
+																	,FCST_TYPE       
+																	,FCST_ETD_DATE   
+																	,FCST_ETA_DATE   
+																	,ETD_DATE        
+																	,ETA_DATE        
+																	,CONFIRM_FLAG    
+																	,CONFIRM_ID      
+																	,CREATED_BY      
+																	,CREATION_DATE   
+																	,LAST_UPDATED_BY 
+																	,LAST_UPDATE_DATE
+																	,ELECTRODE_YN
+																	,ELECTRODE_TYPE
+																	,ORIGIN_FROM_DIVISION_ID
+																	,ORIGIN_TO_DIVISION_ID)
+															SELECT A.DIVISION_ID
+																  ,@v_plan_start_yyyymmdd PLAN_START_YYYYMMDD
+																  ,A.PLAN_TYPE
+																  ,@v_seq SEQ
+																  ,A.ITEM_ID
+																  ,A.FROM_SITE
+																  ,A.TO_SITE
+																  ,'SHIP_PLAN' MEASURE
+																  ,YYYYMMDD
+																  ,BOD_ID
+																  ,A.PLANNED_QTY QTY
+																  ,ROUTE_ID
+																  ,INCOTERMS
+																  ,TRANSPORT_MODE
+																  ,A.BIZ_TYPE
+																  ,A.PROJECT_CODE
+																  ,A.FCST_TYPE
+																  ,A.FCST_ETD_DATE
+																  ,A.FCST_ETA_DATE
+																  ,ETD_DATE
+																  ,ETA_DATE
+																  ,'Y' CONFIRM_FLAG
+																  ,A.CONFIRM_ID CONFIRM_ID
+																  ,@p_last_updated_by CREATED_BY
+																  ,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) CREATION_DATE
+																  ,@p_last_updated_by LAST_UPDATED_BY
+																  ,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) LAST_UPDATE_DATE
+																  ,ELECTRODE_YN
+																  ,ELECTRODE_TYPE
+																  ,ORIGIN_FROM_DIVISION_ID
+																  ,ORIGIN_TO_DIVISION_ID
+															FROM SSP_ANL_SHIP_CONFIRM A
+															WHERE A.CONFIRM_ID in (SELECT CONFIRM_ID
+																				FROM SSP_ANL_SHIP_CONFIRM
+																				WHERE  DIVISION_ID = @n_ori_division_id
+																				  AND ITEM_ID = @n_ori_item_id
+																				  AND FROM_SITE = @n_ori_from_site
+																				  AND TO_SITE = @n_ori_to_site
+																				  AND YYYYMMDD = @n_ori_yyyymmdd
+																				  AND CHANGE_TYPE = 'C'
+																				  --AND BOD_ID = @v_new_bod_id
+																				  --AND INCOTERMS = @v_new_incoterms
+																				  --AND TRANSPORT_MODE = @v_new_transport_mode
+																				  )
+												END
+											END
+									END
+								--ME"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","14","ASURE SHIP_CONFIRM INSERT
+								BEGIN
+									INSERT INTO SSP_ANL_SHIP_PLAN(
+													 DIVISION_ID      
+													,PLAN_START_YYYYMMDD
+													,PLAN_TYPE       
+													,SEQ             
+													,ITEM_ID         
+													,FROM_SITE       
+													,TO_SITE         
+													,MEASURE         
+													,YYYYMMDD        
+													,BOD_ID          
+													,QTY             
+													,ROUTE_ID        
+													,INCOTERMS       
+													,TRANSPORT_MODE  
+													,BIZ_TYPE        
+													,PROJECT_CODE    
+													,FCST_TYPE       
+													,FCST_ETD_DATE   
+													,FCST_ETA_DATE   
+													,ETD_DATE        
+													,ETA_DATE        
+													,CONFIRM_FLAG    
+													,CONFIRM_ID      
+													,CREATED_BY      
+													,CREATION_DATE   
+													,LAST_UPDATED_BY 
+													,LAST_UPDATE_DATE
+													,ELECTRODE_YN
+													,ELECTRODE_TYPE
+													,ORIGIN_FROM_DIVISION_ID
+													,ORIGIN_TO_DIVISION_ID)
+											SELECT A.DIVISION_ID
+												  ,@v_plan_start_yyyymmdd PLAN_START_YYYYMMDD
+												  ,A.PLAN_TYPE
+												  ,@v_seq SEQ
+												  ,A.ITEM_ID
+												  ,A.FROM_SITE
+												  ,A.TO_SITE
+												  ,'SHIP_CONFIRM' MEASURE
+												  ,YYYYMMDD
+												  ,BOD_ID
+												  ,QTY
+												  ,ROUTE_ID
+												  ,INCOTERMS
+												  ,TRANSPORT_MODE
+												  ,A.BIZ_TYPE
+												  ,A.PROJECT_CODE
+												  ,A.FCST_TYPE
+												  ,A.FCST_ETD_DATE
+												  ,A.FCST_ETA_DATE
+												  ,ETD_DATE
+												  ,ETA_DATE
+												  ,'Y' CONFIRM_FLAG
+												  ,A.CONFIRM_ID CONFIRM_ID
+												  ,@p_last_updated_by CREATED_BY
+												  ,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) CREATION_DATE
+												  ,@p_last_updated_by LAST_UPDATED_BY
+												  ,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) LAST_UPDATE_DATE
+												  ,ELECTRODE_YN
+												  ,ELECTRODE_TYPE
+												  ,ORIGIN_FROM_DIVISION_ID
+												  ,ORIGIN_TO_DIVISION_ID
+											FROM SSP_ANL_SHIP_CONFIRM A
+											WHERE A.CONFIRM_ID in (SELECT CONFIRM_ID
+																FROM SSP_ANL_SHIP_CONFIRM
+																WHERE DIVISION_ID = @n_division_id
+																  AND ITEM_ID = @n_item_id
+																  AND FROM_SITE = @n_from_site
+																  AND TO_SITE = @n_to_site
+																  AND YYYYMMDD = @v_new_ship_date
+																  AND CHANGE_TYPE = 'C'
+																  --AND BOD_ID = @v_new_bod_id
+																  --AND INCOTERMS = @v_new_incoterms
+																  --AND TRANSPORT_MODE = @v_new_transport_mode
+																  )
+								END
+
+								--MEASURE SHIP_PLAN INSERT
+								BEGIN
+									INSERT INTO SSP_ANL_SHIP_PLAN(
+													 DIVISION_ID      
+													,PLAN_START_YYYYMMDD
+													,PLAN_TYPE       
+													,SEQ             
+													,ITEM_ID         
+													,FROM_SITE       
+													,TO_SITE         
+													,MEASURE         
+													,YYYYMMDD        
+													,BOD_ID          
+													,QTY             
+													,ROUTE_ID        
+													,INCOTERMS       
+													,TRANSPORT_MODE  
+													,BIZ_TYPE        
+													,PROJECT_CODE    
+													,FCST_TYPE       
+													,FCST_ETD_DATE   
+													,FCST_ETA_DATE   
+													,ETD_DATE        
+													,ETA_DATE        
+													,CONFIRM_FLAG    
+													,CONFIRM_ID      
+													,CREATED_BY      
+													,CREATION_DATE   
+													,LAST_UPDATED_BY 
+													,LAST_UPDATE_DATE
+													,ELECTRODE_YN
+													,ELECTRODE_TYPE
+													,ORIGIN_FROM_DIVISION_ID
+													,ORIGIN_TO_DIVISION_ID)
+											SELECT A.DIVISION_ID
+												  ,@v_plan_start_yyyymmdd PLAN_START_YYYYMMDD
+								"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","15","				  ,A.PLAN_TYPE
+												  ,@v_seq SEQ
+												  ,A.ITEM_ID
+												  ,A.FROM_SITE
+												  ,A.TO_SITE
+												  ,'SHIP_PLAN' MEASURE
+												  ,YYYYMMDD
+												  ,BOD_ID
+												  ,A.PLANNED_QTY QTY
+												  ,ROUTE_ID
+												  ,INCOTERMS
+												  ,TRANSPORT_MODE
+												  ,A.BIZ_TYPE
+												  ,A.PROJECT_CODE
+												  ,A.FCST_TYPE
+												  ,A.FCST_ETD_DATE
+												  ,A.FCST_ETA_DATE
+												  ,ETD_DATE
+												  ,ETA_DATE
+												  ,'Y' CONFIRM_FLAG
+												  ,A.CONFIRM_ID CONFIRM_ID
+												  ,@p_last_updated_by CREATED_BY
+												  ,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) CREATION_DATE
+												  ,@p_last_updated_by LAST_UPDATED_BY
+												  ,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) LAST_UPDATE_DATE
+												  ,ELECTRODE_YN
+												  ,ELECTRODE_TYPE
+												  ,ORIGIN_FROM_DIVISION_ID
+												  ,ORIGIN_TO_DIVISION_ID
+											FROM SSP_ANL_SHIP_CONFIRM A
+											WHERE A.CONFIRM_ID in (SELECT CONFIRM_ID
+																FROM SSP_ANL_SHIP_CONFIRM
+																WHERE DIVISION_ID = @n_division_id
+																  AND ITEM_ID = @n_item_id
+																  AND FROM_SITE = @n_from_site
+																  AND TO_SITE = @n_to_site
+																  AND YYYYMMDD = @v_new_ship_date
+																  AND CHANGE_TYPE = 'C'
+																  --AND BOD_ID = @v_new_bod_id
+																  --AND INCOTERMS = @v_new_incoterms
+																  --AND TRANSPORT_MODE = @v_new_transport_mode
+																  )
+								END
+							*/
+							--20191002 PLAN TB 미사용으로 인한 주석 끝
+						END
+				END
+			
+				--이력저장
+				EXEC [dbo].[PR_SSP_ANL_SHIP_CONFIRM_HIST] @p_change_request_no,@p_last_updated_by,@p_time_zone
+			END
+		ELSE
+			BEGIN
+				IF @p_change_type = 'C'
+					BEGIN
+						--SSP_ANL_SHIP_CONFIRM update
+						UPDATE SSP_ANL_SHIP_CONFIRM
+							SET SHIPMENT_STATUS = 'C'
+								,CHANGE_REQ_NO = null
+								,ATTRIBUTE1 = null
+								,LAST_UPDATED_BY = @p_last_updated_by
+								,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+						WHERE CHANGE_REQ_NO = @p_change_request_no;
+					END
+				ELSE IF @p_change_type = 'N'
+					BEGIN
+						--SSP_ANL_SHIP_CONFIRM update
+						DELETE SSP_ANL_SHIP_CONFIRM
+						WHERE CHANGE_REQ_NO = @p_change_request_no;
+					END
+				ELSE
+					BEGIN
+						--SSP_ANL_SHIP_CONFIRM update
+						UPDATE SSP_ANL_SHIP_CONFIRM
+							SET SHIPMENT_STATUS = 'P'
+								,CHANGE_REQ_NO = null
+								,ATTRIBUTE1 = null
+								,LAST_UPDATED_BY = @p_last_updated_by
+								,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+						WHERE CHANGE_REQ_NO = @p_change_request_no;
+					END
+			END
+
+		IF @p_change_status = 'A' --변경확정
+			BEGIN
+				--SET @p_yyyymmdd = REPLACE(SUBSTRING(@p_yyyymmdd,1,10),'-','')
+
+				--20191002 PLAN TB 미사용으로 인한 주석 시작
+				/*
+				SELECT @p_yyyymmdd = yyyymmdd
+				FROM(
+					SELECT top 1 case when YYYYMMDD > NEW_YYYYMMDD then NEW_YYYYMMDD else YYYYMMDD end yyyymmdd
+					FROM SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE with(nolock)
+					WHERE CHANGE_REQ_NO = @p_change_request_no
+					ORDER BY YYYYMMDD, NEW_YYYYMMDD
+				) a
+
+				EXEC PR_SSP_ANL_SHIP_UPDATE_BOH_VAL @p_division_id, @p_item_id, @p_from_site, @p_yyyymmdd, @p_last_updated_by         
+				*/
+				--20191002 PLAN TB 미사용으로 인한 주석 끝
+
+				--메일 발송
+				EXEC SCM_SSP_MAIL_SEND @p_change_request_no, @p_change_status
+
+				--SCS I/F
+				EXEC [dbo].[PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_SCS] 'B' , @p_change_request_no
+				;
+				
+			END 
+		ELSE --변경 Reject
+			BEGIN
+				--메일 발송
+				 EXEC SCM_SSP_MAIL_SEND @p_change_request_no, @p_change_status
+			END 
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","2051590447","2","EFT OUTER JOIN TB_FX_User U2 ON a.approval_user = U2.UserID AND U2.UseYN = 'Y'
+		LEFT OUTER JOIN TB_FX_User U3 ON a.DELEGATEE_USER = U3.UserID AND U3.UseYN = 'Y'
+		LEFT OUTER JOIN SSP_MST_DELEGATE b
+			ON a.division_id = b.division_id
+			AND a.approval_user = b.USER_ID
+			AND b.VALID_YN = 'Y'
+			AND CONVERT(NVARCHAR(8), GETDATE(), 112) BETWEEN b.FROM_DATE AND b.TO_DATE
+		LEFT OUTER JOIN TB_FX_User U4 ON b.DELEGATEE_ID = U4.UserID AND U4.UseYN = 'Y'
+		WHERE 1=1
+			AND convert(nvarchar(8), a.request_time, 112) >= @p_from_yyyymmdd
+			AND convert(nvarchar(8), a.request_time, 112) <= @p_to_yyyymmdd
+			AND ( ( @p_division_id   IS NULL OR @p_division_id ='')  OR a.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id,',')) )
+			AND ( ( @p_from_site   IS NULL OR @p_from_site ='')  OR a.from_site IN (SELECT token FROM dbo.String_Split(@p_from_site,',')) )
+			AND ( ( @p_request_id   IS NULL OR @p_request_id ='')  OR a.request_user IN (SELECT token FROM dbo.String_Split(@p_request_id,',')) )
+			AND ( ( @p_status   IS NULL OR @p_status ='')  OR a.change_req_status = @p_status )
+			AND ( ( @p_change_type   IS NULL OR @p_change_type ='')  OR a.change_type = @p_change_type )
+			AND a.VALID_YN = 'Y'
+			AND EXISTS (SELECT MS.SCM_SITE_ID FROM SCM_MST_SITE MS WITH(NOLOCK) WHERE MS.DIVISION_ID ='40' AND MS.SITE_TYPE='PLANT' AND MS.OSP_YN = 'Y' AND A.FROM_SITE = MS.SCM_SITE_ID )
+			--AND a.change_type != 'A'
+	) A
+	where 1=1
+	  AND ( ( @p_item_id   IS NULL OR @p_item_id ='')  OR a.item_id IN (SELECT token FROM dbo.String_Split(@p_item_id,',')) )
+	order by a.request_time DESC,a.change_req_no
+	 
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM","2051590447","1","
+/*
+ * Program ID   : SSP0003_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM
+ * Description  : Shipment Change Request Confirm
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2018/04/19   ygkim			Initial Release [PJ20182279] 전지본부 출하계획 시스템 구축 프로젝트
+ * 2018/06/27   ygkim			Item_id, nick_name 컬럼 추가, @p_item_id 파라미터 추가
+ * 2018/07/10   ygkim			Change Type 컬럼 추가
+ * 2018/09/03   ygkim			Division 'EE' 추가로 인한 쿼리 수정
+ * 2018/10/11   ygkim			Shipment Plan Change 화면에서 승인한 항목은 제외
+ * 2019/02/14	hwyoon			[CSR ID:3920817] Shipment change Request Confirm List 에 To site 정보 추가 요청
+ * 2019/06/17   mcTheJ			[CSR ID:3994058] [요청]생산관리 출하변경 시 사유 code화 관리 Cnage_Type = 'A' 주석처리
+ * 2019/07/15	mcTheJ			[CSR ID:4044806] Model PIC 담당자 위임 기능 추가 - 위임자 결재 추가
+ */
+
+CREATE PROCEDURE [dbo].[SSP0202_GET_SHIPMENT_CHANGE_REQUEST_CONFIRM]
+	 @p_division_id			NVARCHAR(MAX)
+	,@p_from_site			NVARCHAR(MAX)
+	,@p_request_id			NVARCHAR(MAX)
+	,@p_from_yyyymmdd		NVARCHAR(8)
+	,@p_to_yyyymmdd			NVARCHAR(8)
+	,@p_status				NVARCHAR(MAX)
+	,@p_language            NVARCHAR(MAX) = 'KO'
+	,@p_item_id				NVARCHAR(MAX)
+	,@p_change_type         NVARCHAR(MAX) = 'C'
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	SELECT a.division_id
+			,a.from_site
+			,a.change_req_no
+			,shipment_status
+			,item_id
+			,dbo.fn_get_item_nickname( (case when a.division_id = 'EE' then a.origin_from_division_id else a.division_id end), a.item_id ) AS nick_name
+			,a.request_title
+			,A.change_reason_code
+			,a.request_user
+			,a.request_dept
+			,a.request_time
+			,a.approval_user
+			,a.approval_dept
+			,a.DELEGATEE_USER
+			,a.DELEGATEE_DEPT 
+			,a.DELEGATEE_USER
+			,a.DELEGATEE_DEPT
+			,a.approval_time
+			,a.reject_reason
+			,request_user_name
+			,approval_user_name
+			,a.delegatee_user_name 
+			,change_type
+			,to_site
+	FROM(
+		SELECT a.division_id
+				,a.from_site
+				,a.change_req_no
+				,a.change_req_status shipment_status
+				,(select max(item_id) from SSP_ANL_SHIP_CONFIRM_CHG_REQ_de where DIVISION_ID = a.division_id and  CHANGE_REQ_NO = a.CHANGE_REQ_NO) item_id
+				,a.request_title
+				,A.change_reason_code
+				,a.request_user
+				,a.request_dept
+				,a.request_time
+				,a.approval_user
+				,a.approval_dept
+				,CASE WHEN a.DELEGATEE_USER IS NOT NULL THEN
+					a.DELEGATEE_USER
+				 ELSE
+					CASE WHEN a.change_req_status = 'Q' OR a.change_req_status = 'D' THEN
+						b.DELEGATEE_ID
+					ELSE
+						NULL
+					END
+				END AS DELEGATEE_USER
+				,CASE WHEN a.DELEGATEE_DEPT IS NOT NULL THEN 
+					a.DELEGATEE_DEPT
+				 ELSE 
+					CASE WHEN a.change_req_status = 'Q' OR a.change_req_status = 'D' THEN
+						U4.Dept_ID
+					ELSE
+						NULL
+					END
+				 END AS DELEGATEE_DEPT
+				,a.approval_time
+				,a.reject_reason
+				,a.change_type
+				,CASE WHEN @p_language = 'KO' THEN U.UserName ELSE U.UserName_E END + '(' + a.request_user + ')' request_user_name
+				,CASE WHEN @p_language = 'KO' THEN U2.UserName ELSE U2.UserName_E END + '(' +  a.approval_user + ')' approval_user_name
+				,CASE WHEN a.DELEGATEE_USER IS NOT NULL THEN
+					CASE WHEN @p_language = 'KO' THEN U3.UserName ELSE U3.UserName_E END + '(' +  a.DELEGATEE_USER + ')' 
+				ELSE
+					CASE WHEN a.change_req_status = 'Q' OR a.change_req_status = 'D' THEN
+						CASE WHEN @p_language = 'KO' THEN U4.UserName ELSE U4.UserName_E END + '(' +  b.DELEGATEE_ID + ')'
+					ELSE
+						NULL
+					END
+				END AS delegatee_user_name
+				,origin_from_division_id
+				,(select max(TO_SITE) from SSP_ANL_SHIP_CONFIRM_CHG_REQ_de WITH(NOLOCK) where DIVISION_ID = a.division_id and  CHANGE_REQ_NO = a.CHANGE_REQ_NO) to_site
+		FROM SSP_ANL_SHIP_CONFIRM_CHG_REQ a WITH(NOLOCK)
+		LEFT OUTER JOIN TB_FX_User U ON a.REQUEST_USER = U.UserID AND U.UseYN = 'Y'
+		L"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","2067590504","1","
+/*
+ * Program ID   : SSP0003_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING
+ * Description  : Shipment Change Request 확정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/04/19   ygkim          Initial Release [PJ20182279] 전지본부 출하계획 시스템 구축 프로젝트
+ * 2018/05/30   ygkim			project name 가져오는 부분 수정
+ * 2018/09/03   ygkim			Division 'EE' 추가로 인한 쿼리 수정
+ * 2018/10/17   ygkim			new_base_confirm_yn
+ * 2018/10/25   ygkim			Division 40 일 경우 Project Name -> Project Code로
+ * 2019/04/04	ayj			    [PJ20189106] 전지.GSCM 고도화 이행- 소형 컬럼추가
+ */
+
+CREATE PROCEDURE [dbo].[SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING]
+	 @p_change_request_no	NVARCHAR(40)
+	 ,@p_language            NVARCHAR(MAX) = 'KO'
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	SELECT a.division_id
+			, a.erp_so_no
+			, case when a.DIVISION_ID = '40' then a.PROJECT_CODE else [dbo].[FN_GET_PROJECT_NAME](a.division_id,a.project_code) end project_name
+			--, d.project_name
+			, a.fcst_type
+			, a.item_id
+			, a.from_site
+			, isnull(dbo.fn_get_scm_site_description( (case when a.division_id = 'EE' then a.origin_from_division_id else a.division_id end), a.from_site ),'-') AS from_site_description
+			, a.to_site
+			, isnull(dbo.FN_GET_SCM_SITE_DESCRIPTION (a.division_id , a.to_site ),'-') as to_site_description
+			, dbo.fn_get_site_customer_info( (case when a.division_id = 'EE' then a.origin_from_division_id else a.division_id end), a.to_site, 'SOLDTO_DESCRIPTION' ) AS soldto_description
+			, dbo.fn_get_site_customer_info( (case when a.division_id = 'EE' then a.origin_from_division_id else a.division_id end), a.to_site, 'SHIPTO_DESCRIPTION' ) AS shipto_description
+			--, b.incoterms
+			, b.ssp_incoterms  AS INCOTERMS  -- 20201223 incoterms 변경 작업 modify KIMYONGHO
+			, b.transport_mode	
+			, case when isnull(a.yyyymmdd,'') = '' then '' else convert(char(10), convert(datetime, a.yyyymmdd), 23) end shipment_date
+			, a.qty AS shipment_confirm_qty	 	 		 
+			, a.bod_id		
+			, a.ROUTE_ID
+			, b.lt_total AS lt_day
+			, c.to_site_shipto_code AS SHIPTO_CODE
+			, CONVERT(VARCHAR(10),   CONVERT(DATETIME, a.ETD_DATE,112), 23) AS etd
+			, CONVERT(VARCHAR(10),   CONVERT(DATETIME, a.ETA_DATE,112), 23) AS eta
+			, a.new_bod_id new_bod_id
+			, a.new_route_id new_route
+			, a.new_d_country 
+			, a.new_d_port_code
+			, a.new_a_country
+			, a.new_a_port_code
+			, a.new_to_country
+			, a.new_to_city
+			, a.new_customer_lt AS new_lt_day
+			, A.to_site_shipto_code AS NEW_SHIPTO_CODE
+			, CONVERT(VARCHAR(10),   CONVERT(DATETIME, a.NEW_ETD_DATE,112), 23) AS new_etd
+			, CONVERT(VARCHAR(10),   CONVERT(DATETIME, a.NEW_ETA_DATE,112), 23) AS new_eta
+			, a.new_incoterms new_incoterms
+			, a.NEW_TRANSPORT_MODE new_transport_mode
+			, case when isnull(a.new_yyyymmdd,'') = '' then '' else convert(char(10), convert(datetime, a.new_yyyymmdd), 23) end new_shipment_date
+			, a.new_qty AS new_shipment_confirm_qty	
+			, a.confirm_id
+			, A.change_req_no
+			, a.NEW_YN
+			, case when c.CONFIRM_ID is not null then 'Y' else 'N' end new_base_confirm_yn
+			, a.remarks
+			, a.remarks2
+			, a.remarks3
+		FROM SSP_ANL_SHIP_CONFIRM_CHG_REQ_de A WITH(NOLOCK)
+		INNER JOIN  [DBO].[scp_mst_bod_n_v] b WITH(NOLOCK) ON (case when a.division_id = 'EE' then a.origin_from_division_id else a.division_id end)  = b.division_id  AND a.bod_id = b.bod_id
+		LEFT OUTER JOIN SSP_ANL_SHIP_CONFIRM c WITH(NOLOCK) on c.DIVISION_ID = a.DIVISION_ID and (case when (c.SHIPMENT_STATUS != 'P' and c.CHANGE_TYPE = 'P' and c.ATTRIBUTE1 is not null) then c.ATTRIBUTE1 else c.CONFIRM_ID end) = a.CONFIRM_ID
+		WHERE A.CHANGE_REQ_NO = @p_change_request_no
+			AND A.VALID_YN = 'Y'
+		ORDER BY new_shipment_date;
+
+		SELECT CHANGE_REQ_NO
+			,CHANGE_REQ_STATUS
+			,D"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_GET_SHIPMENT_REQUEST_CONFIRM_DRAFTING","2067590504","2","IVISION_ID
+			,FROM_SITE
+			,REQUEST_TITLE
+			--,REQUEST_USER
+			,CASE @p_language WHEN 'KO' THEN C.UserName ELSE C.UserName_E END REQUEST_USER
+			--,REQUEST_DEPT
+			,CASE @p_language WHEN 'KO' THEN E.DEPT_NAME_KO
+				                 WHEN 'EN' THEN E.DEPT_NAME_EN
+								 WHEN 'CN' THEN E.DEPT_NAME_CN
+						ELSE E.DEPT_NAME_KO END REQUEST_DEPT
+			,REQUEST_TIME
+			--,APPROVAL_USER
+			,CASE @p_language WHEN 'KO' THEN D.UserName ELSE D.UserName_E END APPROVAL_USER
+			--,APPROVAL_DEPT
+			,CASE @p_language WHEN 'KO' THEN B.DEPT_NAME_KO
+				                WHEN 'EN' THEN B.DEPT_NAME_EN
+								WHEN 'CN' THEN B.DEPT_NAME_CN
+					ELSE B.DEPT_NAME_KO END APPROVAL_DEPT_NAME
+			,APPROVAL_TIME
+			,CASE WHEN @p_language = 'KO' THEN LMD.SEGMENT2 ELSE LMD.SEGMENT3 END CHANGE_REASON_CODE
+			--,CHANGE_REASON_CODE
+			,CHANGE_REASON_DETAIL
+			,REJECT_REASON
+		FROM SSP_ANL_SHIP_CONFIRM_CHG_REQ A WITH(NOLOCK)
+		LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO B WITH(NOLOCK) ON A.APPROVAL_DEPT = B.DEPT_ID
+		LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO E WITH(NOLOCK) ON A.REQUEST_DEPT = E.DEPT_ID
+		LEFT OUTER JOIN TB_FX_User C WITH(NOLOCK) ON A.REQUEST_USER = C.UserID
+		LEFT OUTER JOIN TB_FX_User D WITH(NOLOCK) ON A.APPROVAL_USER = D.UserID
+		LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LMD WITH(NOLOCK) ON A.CHANGE_REASON_CODE = LMD.SEGMENT1 AND LMD.LOOKUP_TYPE = 'CHANGE_REASON_CODE' AND LMD.VALID_YN = 'Y'
+		WHERE A.CHANGE_REQ_NO = @p_change_request_no
+		  AND A.VALID_YN = 'Y';	
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_GET_SSP_PLAN_PROCESSING_CHECK","2083590561","1","
+
+/*
+ * Program ID   : SSP0003_GET_SSP_PLAN_PROCESSING_CHECK
+ * Description  : Shipment Model PIC UserID Check
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019/06/26   AYJ            SSP Daily Plan 엔진 완료여부 체크
+ * 2022.04.01   SSP Pjt.       JV DIVISION_ID 적용
+ */
+
+CREATE PROCEDURE [dbo].[SSP0202_GET_SSP_PLAN_PROCESSING_CHECK]
+	 @p_division_id			NVARCHAR(MAX)
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	
+	SELECT CASE WHEN D.PLAN_STATUS = 0 THEN 'Y' ELSE 'N' END  PLAN_STATUS -- Y:수행중 
+	,      ISNULL( CASE WHEN D.PLAN_STATUS = 0 THEN 
+				CASE WHEN (CASE 
+								--WHEN P.DIVISION_ID = '81' THEN 20 - DATEDIFF(MI,D.INPUT_START_DATE, GETDATE())
+								--WHEN P.DIVISION_ID = '82' THEN  6 - DATEDIFF(MI,D.INPUT_START_DATE, GETDATE())
+								--WHEN P.DIVISION_ID = '40' THEN  5 - DATEDIFF(MI,D.INPUT_START_DATE, GETDATE())
+								WHEN MD.ATTRIBUTE3 = '81' THEN 20 - DATEDIFF(MI,D.INPUT_START_DATE, GETDATE())
+								WHEN MD.ATTRIBUTE3 = '82' THEN  6 - DATEDIFF(MI,D.INPUT_START_DATE, GETDATE())
+								WHEN MD.ATTRIBUTE3 = '40' THEN  5 - DATEDIFF(MI,D.INPUT_START_DATE, GETDATE())
+						   ELSE NULL 
+						   END ) <= 0 THEN 1 
+				ELSE 
+					 CASE 
+						  --WHEN P.DIVISION_ID = '81' THEN 20 - DATEDIFF(MI,D.INPUT_START_DATE, GETDATE())
+						  --WHEN P.DIVISION_ID = '82' THEN  6 - DATEDIFF(MI,D.INPUT_START_DATE, GETDATE())
+						  --WHEN P.DIVISION_ID = '40' THEN  5 - DATEDIFF(MI,D.INPUT_START_DATE, GETDATE())
+						  WHEN MD.ATTRIBUTE3 = '81' THEN 20 - DATEDIFF(MI,D.INPUT_START_DATE, GETDATE())
+						  WHEN MD.ATTRIBUTE3 = '82' THEN  6 - DATEDIFF(MI,D.INPUT_START_DATE, GETDATE())
+						  WHEN MD.ATTRIBUTE3 = '40' THEN  5 - DATEDIFF(MI,D.INPUT_START_DATE, GETDATE())
+					 ELSE NULL 
+					 END  
+				END 
+		   ELSE NULL  
+		   END 	,0)  AS ESTIMATED_REMAIN_MINUTE
+--	,      P.DIVISION_ID
+--	,      P.PLAN_NAME 
+--	,      D.INPUT_START_DATE 
+--	,      D.ANL_END_DATE
+	FROM SCM_MST_PLAN P WITH(NOLOCK) 
+	     JOIN SCM_MST_DIVISION AS MD WITH(NOLOCK)
+	  ON P.DIVISION_ID = MD.DIVISION_ID
+	LEFT OUTER JOIN SCM_MST_PLAN_DETAIL D WITH(NOLOCK) 
+				ON D.DIVISION_ID = P.DIVISION_ID 
+				AND D.PLAN_ID = P.PLAN_ID 
+				AND D.PLAN_TYPE = 'SP'
+				AND D.PLAN_STATUS <> -1
+				AND D.PLAN_SEQ = ( SELECT MAX(Y.PLAN_SEQ)
+										FROM SCM_MST_PLAN_DETAIL Y WITH(NOLOCK) 
+										WHERE Y.MODELING_ID = D.MODELING_ID
+										AND   Y.DIVISION_ID = D.DIVISION_ID
+										AND   Y.PLAN_ID = D.PLAN_ID
+										AND   Y.PLAN_TYPE = D.PLAN_TYPE
+										) 
+
+	WHERE 1=1
+	  AND P.PLAN_CYCLE = 'DAILY'
+	  AND P.PLAN_NAME = ( SELECT MAX(B.PLAN_NAME) 
+								  FROM SCM_MST_PLAN B WITH(NOLOCK) 
+								  WHERE B.DIVISION_ID = P.DIVISION_ID 
+								  AND   B.PLAN_CYCLE = P.PLAN_CYCLE) 
+	  AND P.DIVISION_ID = @p_division_id 
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","1","
+
+
+
+/*
+ * Program ID   : SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM
+ * Description  : Shipment Change Request Confirm Save
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/04/20   ygkim          Initial Release [PJ20182279] 전지본부 출하계획 시스템 구축 프로젝트
+ * 2018/05/29   ygkim			create date, last update date 시간 변경
+ * 2018/06/11   ygkim			PR_SSP_ANL_SHIP_CONFIRM_HIST 저장 로직 수정
+ * 2018/06/28   ygkim			SSP_ANL_SHIP_PLAN 테이블 체크 조건 Confirm ID 추가
+ *								SSP_ANL_SHIP_PLAN 테이블 PROJECT_CODE, FCST_TYPE 조회조건 제거
+ * 2018/07/02   ygkim			SSP_ANL_SHIP_PLAN 저장 로직 수정
+ * 2018/07/05   ygkim			SSP_ANL_SHIP_PLAN 체크 조건 변경
+ * 2018/07/10   ygkim			SSP_ANL_SHIP_CONFIRM Attribute1 수정 추가
+ * 2018/07/20   ygkim			Confirm 일 경우 SSP_ANL_SHIP_PLAN 테이블에 기존 날짜 데이터 지우고 Insert 하는 로직 추가
+ * 2018/08/09   ygkim			Plan 일 경우 Confirm 테이블에 넣는 로직 수정
+ * 2018/09/03   ygkim			Division 'EE' 추가로 인한 쿼리 수정
+ * 2018/10/08   ygkim		    Change Type Plan 일 경우 Status 'C' -> 'P'로 변경으로 인한 수정
+ * 2018/10/10   ygkim			SSP_ANL_SHIP_CONFIRM_CHG_REQ_de 가져오는 조건 변경
+ * 2018/10/12   ygkim           신규 일 경우에는 ERP 4개 컬럼 NULL로 넣어준다.
+ * 2018/10/15   ygkim			Change Type New 로직 추가
+ * 2018/10/16   ygkim			승인 일 경우 PR_SSP_ANL_SHIP_UPDATE_BOH_VAL 프로시저 호출 파라미터 yyyymmdd 수정
+ * 2019/04/04	ayj			    [PJ20189106] 전지.GSCM 고도화 이행- 소형 컬럼추가
+ * 2019/07/15	mcTheJ			[CSR ID:4044806] Model PIC 담당자 위임 기능 추가 - 위임자 결재 추가
+ * 2019/10/02	ayj				PLAN TB 미사용으로 인한 주석
+ * 2019/10/29	ayj				FCST_ETA_DATE, ETA_DATE 저장 값 수정(출발일 기준 항차를 고려한 ETA_DATE 계산)
+ * 2021/01/07   KIMYONGHO       [C20201223-000448] MKT FCST - SSP Sync
+ * 2021/01/12   KIMYONGHO       [C20201223-000448] MKT FCST - SSP Sync 운영이관 검증 단계에서 처리 지연 현상으로 END LOG 이후 호출로 조정함.
+ * 2021/03/05   KIMYONGHO       SCS I/F 추가
+ * 2021/04/08   KIMYONGHO       [C20210406-000222] MKT FCST - SSP Sync DIVISION_ID parameter 변경
+
+ --SCS I/F
+ */
+
+CREATE PROCEDURE [dbo].[SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM]
+	 @p_change_request_no	NVARCHAR(MAX)
+	,@p_change_status		NVARCHAR(MAX)
+	,@p_reject_reason		NVARCHAR(MAX)
+
+	,@p_division_id			NVARCHAR(MAX)
+	,@p_item_id				NVARCHAR(MAX)
+	,@p_from_site			NVARCHAR(MAX)
+	,@p_yyyymmdd			NVARCHAR(MAX)
+
+	,@p_confirm_id			NVARCHAR(MAX)
+	,@p_new_confirm_id		NVARCHAR(MAX)
+	,@p_new_etd_date		NVARCHAR(MAX)
+	,@p_new_eta_date		NVARCHAR(MAX)
+	,@p_new_qty				NVARCHAR(MAX)
+	,@p_new_ship_date		NVARCHAR(MAX)
+	,@p_new_yn				NVARCHAR(MAX)
+
+	,@p_new_bod_id			NVARCHAR(MAX)
+	,@p_new_route_id		NVARCHAR(MAX)
+	,@p_new_incoterms		NVARCHAR(MAX)
+	,@p_new_d_contry		NVARCHAR(MAX)
+	,@p_new_d_port_code		NVARCHAR(MAX)
+	,@p_new_a_country		NVARCHAR(MAX)
+	,@p_new_a_port_code		NVARCHAR(MAX)
+	,@p_new_to_country		NVARCHAR(MAX)
+	,@p_new_to_city			NVARCHAR(MAX)
+	,@p_new_lt_day			NVARCHAR(MAX)
+	,@p_new_transport_mode	NVARCHAR(MAX)
+
+	,@p_last_updated_by		NVARCHAR(MAX)
+	,@p_time_zone			NVARCHAR(MAX)
+	,@p_change_type			NVARCHAR(MAX)
+
+	,@p_remarks				NVARCHAR(MAX)
+	,@p_remarks2			NVARCHAR(MAX)
+	,@p_remarks3			NVARCHAR(MAX)
+
+	,@p_delegatee			NVARCHAR(MAX)
+	,@p_delegatee_dept		NVARCHAR(MAX)
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE @v_division_id			NVARCHAR(MAX)
+	DECLARE @v_confirm_id			NVARCHAR(MAX)
+	DECLARE @v_new_confirm_id		NVARCHAR(MAX)
+	DECLARE @v_new_etd_date			NVARCHAR(MAX)
+	DECLARE @v_new_eta_date			NVARCHAR(MAX)
+	DECLARE @v_new_qty				NVARCHAR(MAX)
+	DECLARE @v_new_ship_date		NVARCHAR(MAX)
+	DECLARE @v_new_yn				NVARCHAR(MAX)
+
+	DECLARE @v_new_bod_id			NVARCHAR(MAX);
+	DECLARE @v_new_route_id			NVARCHAR(MAX);
+	DECLARE @v_new_incoterms		NVARCHAR(MAX);
+	DECLARE @v_new_d_contry			NVARCHAR(MAX);
+	DECLARE @v_new_d_port_code		NVARCHAR(MAX);
+	DECLARE @v_new_a_country		NVARCHAR(MAX);
+	DECLARE @v_new_a_port_code		NVARCHAR(MAX);
+	DECLARE @v_new_to_country		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","2","NVARCHAR(MAX);
+	DECLARE @v_new_to_city			NVARCHAR(MAX);
+	DECLARE @v_new_lt_day			NVARCHAR(MAX);
+	DECLARE @v_new_transport_mode	NVARCHAR(MAX);
+
+	DECLARE @n_division_id			NVARCHAR(MAX);
+	DECLARE @n_plan_start_yyyymmdd	NVARCHAR(MAX);
+	DECLARE @n_plan_type			NVARCHAR(MAX);
+	DECLARE @n_seq					NVARCHAR(MAX);
+	DECLARE @n_item_id				NVARCHAR(MAX);
+	DECLARE @n_from_site			NVARCHAR(MAX);
+	DECLARE @n_to_site				NVARCHAR(MAX);
+	DECLARE @n_yyyymmdd				NVARCHAR(MAX);
+	DECLARE @n_bod_id				NVARCHAR(MAX);
+	DECLARE @n_project_code			NVARCHAR(MAX);
+	DECLARE @n_fcst_type			NVARCHAR(MAX);
+	DECLARE @n_incoterms			NVARCHAR(MAX);
+	DECLARE @n_transport_mode		NVARCHAR(MAX);
+	DECLARE @n_confirm_id			NVARCHAR(MAX);
+	DECLARE @n_max_seq				NVARCHAR(MAX);
+	DECLARE @n_last_update_date		NVARCHAR(MAX);
+	DECLARE @v_plan_start_yyyymmdd  NVARCHAR(MAX);
+	DECLARE @v_seq					NVARCHAR(MAX);
+
+	DECLARE @n_ori_division_id			NVARCHAR(MAX);
+	DECLARE @n_ori_item_id				NVARCHAR(MAX);
+	DECLARE @n_ori_from_site			NVARCHAR(MAX);
+	DECLARE @n_ori_to_site				NVARCHAR(MAX);
+	DECLARE @n_ori_yyyymmdd				NVARCHAR(MAX);
+	DECLARE @n_ori_bod_id				NVARCHAR(MAX);
+	DECLARE @n_ori_project_code			NVARCHAR(MAX);
+	DECLARE @n_ori_fcst_type			NVARCHAR(MAX);
+	DECLARE @n_ori_incoterms			NVARCHAR(MAX);
+	DECLARE @n_ori_transport_mode		NVARCHAR(MAX);
+	DECLARE @n_ori_confirm_id			NVARCHAR(MAX);
+	DECLARE @v_planned_qty              INT;
+
+	DECLARE @v_chk					INT
+	DECLARE @v_last_update_date     datetime;
+
+	DECLARE @v_remarks					NVARCHAR(MAX);
+	DECLARE @v_remarks2					NVARCHAR(MAX);
+	DECLARE @v_remarks3					NVARCHAR(MAX);
+	
+	SET @v_division_id = null
+	SET @v_confirm_id = null
+	SET @v_new_confirm_id = null
+	SET @v_new_etd_date = null
+	SET @v_new_eta_date = null
+	SET @v_new_qty = null
+	SET @v_new_ship_date = null
+	SET @v_new_yn = null
+
+	SET @v_new_bod_id			= NULL;
+	SET @v_new_route_id			= NULL;
+	SET @v_new_incoterms		= NULL;
+	SET @v_new_d_contry			= NULL;
+	SET @v_new_d_port_code		= NULL;	
+	SET @v_new_a_country		= NULL;	
+	SET @v_new_a_port_code		= NULL;	
+	SET @v_new_to_country		= NULL;	
+	SET @v_new_to_city			= NULL;	
+	SET @v_new_lt_day			= NULL;
+	SET @v_new_transport_mode = NULL;
+
+	SET @n_division_id				= null;
+	SET @n_plan_start_yyyymmdd		= null;
+	SET @n_plan_type				= null;
+	SET @n_seq						= null;
+	SET @n_item_id					= null;
+	SET @n_from_site				= null;
+	SET @n_to_site					= null;
+	SET @n_yyyymmdd					= null;
+	SET @n_bod_id					= null;
+	SET @n_project_code				= null;
+	SET @n_fcst_type				= null;
+	SET @n_incoterms				= null;
+	SET @n_transport_mode			= null;
+	SET @n_confirm_id				= null;
+	SET @n_max_seq					= null;
+	SET @n_last_update_date			= null;
+	SET @v_last_update_date    = SYSDATETIME();
+
+	SET @n_ori_division_id			= null;
+	SET @n_ori_item_id				= null;
+	SET @n_ori_from_site			= null;
+	SET @n_ori_to_site				= null;
+	SET @n_ori_yyyymmdd				= null;
+	SET @n_ori_bod_id				= null;
+	SET @n_ori_project_code			= null;
+	SET @n_ori_fcst_type			= null;
+	SET @n_ori_incoterms			= null;
+	SET @n_ori_transport_mode		= null;
+	SET @n_ori_confirm_id			= null;
+	SET @v_planned_qty				= 0;
+
+	SET @v_remarks					= null;
+	SET @v_remarks2					= null;
+	SET @v_remarks3					= null;
+	
+	SET @v_chk = 0
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;	
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	-- 트렌젝션 시작
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = @v_last_update_date;--[dbo].[FN_MULTY_TIME](@p_time_zone);
+		EXEC PR_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","3","SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		BEGIN
+			IF LEN(ISNULL(@p_delegatee, '')) = 0
+			begin
+				UPDATE SSP_ANL_SHIP_CONFIRM_CHG_REQ
+				   SET CHANGE_REQ_STATUS = @p_change_status
+					  ,APPROVAL_TIME = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+					  ,REJECT_REASON = @p_reject_reason
+					  ,LAST_UPDATED_BY = @p_last_updated_by
+					  ,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+				WHERE CHANGE_REQ_NO = @p_change_request_no;
+			end
+			else
+			begin
+				UPDATE SSP_ANL_SHIP_CONFIRM_CHG_REQ
+				   SET CHANGE_REQ_STATUS = @p_change_status
+					  ,APPROVAL_TIME = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+					  ,REJECT_REASON = @p_reject_reason
+					  ,DELEGATEE_USER = @p_delegatee
+					  ,DELEGATEE_DEPT = @p_delegatee_dept
+					  ,LAST_UPDATED_BY = @p_last_updated_by
+					  ,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+				WHERE CHANGE_REQ_NO = @p_change_request_no;
+			end;
+		END
+
+		IF @p_change_status = 'A'
+			BEGIN
+				SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_confirm_id, @v_delimiter);    
+				--SELECT    @max_loop_cnt;
+				--	WHILE LEN(@p_active_flag) > 0
+				WHILE LEN(@p_confirm_id) > 0 AND @mst_loop_cnt < @max_loop_cnt
+				BEGIN
+					SET @mst_loop_cnt = @mst_loop_cnt + 1;
+
+					BEGIN
+						SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ;  
+						SET @v_confirm_id = [dbo].[SCM_ARR_SPL_VAL](@p_confirm_id, @v_delimiter , @mst_loop_cnt) ;  
+						SET @v_new_confirm_id = [dbo].[SCM_ARR_SPL_VAL](@p_new_confirm_id, @v_delimiter , @mst_loop_cnt) ;  
+						SET @v_new_etd_date = [dbo].[SCM_ARR_SPL_VAL](@p_new_etd_date, @v_delimiter , @mst_loop_cnt) ;  
+						SET @v_new_eta_date = [dbo].[SCM_ARR_SPL_VAL](@p_new_eta_date, @v_delimiter , @mst_loop_cnt) ;  
+						SET @v_new_qty = [dbo].[SCM_ARR_SPL_VAL](@p_new_qty, @v_delimiter , @mst_loop_cnt) ;  
+						SET @v_new_ship_date = [dbo].[SCM_ARR_SPL_VAL](@p_new_ship_date, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_yn = [dbo].[SCM_ARR_SPL_VAL](@p_new_yn, @v_delimiter , @mst_loop_cnt) ; 
+
+						SET @v_new_bod_id = [dbo].[SCM_ARR_SPL_VAL](@p_new_bod_id, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_route_id = [dbo].[SCM_ARR_SPL_VAL](@p_new_route_id, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_incoterms = [dbo].[SCM_ARR_SPL_VAL](@p_new_incoterms, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_d_contry = [dbo].[SCM_ARR_SPL_VAL](@p_new_d_contry, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_d_port_code = [dbo].[SCM_ARR_SPL_VAL](@p_new_d_port_code, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_a_country = [dbo].[SCM_ARR_SPL_VAL](@p_new_a_country, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_a_port_code = [dbo].[SCM_ARR_SPL_VAL](@p_new_a_port_code, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_to_country = [dbo].[SCM_ARR_SPL_VAL](@p_new_to_country, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_to_city = [dbo].[SCM_ARR_SPL_VAL](@p_new_to_city, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_lt_day = [dbo].[SCM_ARR_SPL_VAL](@p_new_lt_day, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_transport_mode = [dbo].[SCM_ARR_SPL_VAL](@p_new_transport_mode, @v_delimiter , @mst_loop_cnt) ; 
+
+						SET @v_remarks = [dbo].[SCM_ARR_SPL_VAL](@p_remarks, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_remarks2 = [dbo].[SCM_ARR_SPL_VAL](@p_remarks2, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_remarks3 = [dbo].[SCM_ARR_SPL_VAL](@p_remarks3, @v_delimiter , @mst_loop_cnt) ; 
+					END
+			
+					IF @mst_loop_cnt > 0 
+						BEGIN
+							SET @v_new_etd_date = REPLACE(SUBSTRING(@v_new_etd_date,1,10),'-','')
+							--SET @v_new_eta_date = REPLACE(SUBSTRING(@v_new_eta_date,1,10),'-','')
+							SET @v_new_ship_date = REPLACE(SUBSTRING(@v_new_ship_date,1,10),'-','')
+
+							/* 2019.10.29 출발일 기"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","4","준 항차를 고려한 ETA_DATE 계산*/
+							--2021.04.08 [C20210406-000222]  @P_division_id - > @v_division_id
+							SET @v_new_eta_date = [dbo].[FN_GET_SSP_ETA_DATE](@v_division_id, @v_new_bod_id, @v_new_ship_date) 
+							
+							SET @v_chk = 0;	
+																			
+							IF @v_new_yn = 'Y'
+								BEGIN
+									-- SSP0200 에서 사용 시  @p_change_type = 'N' 변경
+									SET @p_change_type ='N'; 
+									IF @p_change_type = 'C'
+										BEGIN
+										--SSP_ANL_SHIP_CONFIRM table insert
+										INSERT INTO SSP_ANL_SHIP_CONFIRM(
+												CONFIRM_ID
+												,SHIPMENT_STATUS
+												,DIVISION_ID
+												,PLAN_START_YYYYMMDD
+												,PLAN_TYPE
+												,SEQ
+												,ITEM_ID
+												,FROM_SITE
+												,TO_SITE
+												,YYYYMMDD
+												,PLANNED_QTY
+												,QTY
+												,BOD_ID
+												,ROUTE_ID
+												,BIZ_TYPE
+												,PROJECT_CODE
+												,FCST_TYPE
+												,FCST_ETD_DATE
+												,FCST_ETA_DATE
+												,ETD_DATE
+												,ETA_DATE
+												,INCOTERMS
+												,TRANSPORT_MODE
+												,D_COUNTRY
+												,D_PORT_CODE
+												,A_COUNTRY
+												,A_PORT_CODE
+												,CUSTOMER_LT
+												,TO_COUNTRY
+												,TO_CITY
+												,FROM_SITE_TYPE
+												,FROM_SITE_PLANT_ID
+												,FROM_SITE_VENDOR_ID
+												,FROM_SITE_SOLDTO_CODE
+												,FROM_SITE_SHIPTO_CODE
+												,FROM_SITE_COMPANY_ID
+												,TO_SITE_TYPE
+												,TO_SITE_PLANT_ID
+												,TO_SITE_VENDOR_ID
+												,TO_SITE_SOLDTO_CODE
+												,TO_SITE_SHIPTO_CODE
+												,TO_SITE_COMPANY_ID
+												,CHANGE_REQ_NO
+												,ERP_SO_NO			--신규 일 경우에는 ERP 4개 컬럼 NULL로 넣어준다.
+												,ERP_SO_ITEM_NO
+												,ERP_DO_NO
+												,ERP_STATUS
+												,CHANGE_TYPE
+												,CREATED_BY
+												,CREATION_DATE
+												,LAST_UPDATED_BY
+												,LAST_UPDATE_DATE
+												,ELECTRODE_YN
+												,ELECTRODE_TYPE
+												,ORIGIN_FROM_DIVISION_ID
+												,ORIGIN_TO_DIVISION_ID
+												,BEFORE_QTY
+												,CHECK_NEED_YN
+												,REMARKS
+												,REMARKS2
+												,REMARKS3
+												/*----------------------------------------------------------------------------------------
+													2020.06.30 : KBK
+													I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+												------------------------------------------------------------------------------------------*/
+												,PACKAGE_TYPE_CODE
+												,FACTORY_ID
+												,PACKAGE_QTY
+												,DOM_EXP
+												,ERP_ATTR1
+												,ERP_ATTR2
+												,ERP_ATTR3
+												,ERP_ATTR4
+												,ERP_ATTR5
+										) SELECT @v_new_confirm_id CONFIRM_ID
+												,'C' SHIPMENT_STATUS
+												,A.DIVISION_ID
+												,A.PLAN_START_YYYYMMDD
+												,A.PLAN_TYPE
+												,A.SEQ
+												,A.ITEM_ID
+												,A.FROM_SITE
+												,A.TO_SITE
+												,@v_new_ship_date YYYYMMDD
+												,0 PLANNED_QTY
+												,@v_new_qty QTY
+												,@v_new_bod_id BOD_ID
+												,@v_new_route_id ROUTE_ID
+												,A.BIZ_TYPE
+												,A.PROJECT_CODE
+												,A.FCST_TYPE
+												,A.FCST_ETD_DATE
+												,A.FCST_ETA_DATE
+												,@v_new_etd_date ETD_DATE
+												,@v_new_eta_date ETA_DATE
+												,@v_new_incoterms INCOTERMS
+												,@v_new_transport_mode TRANSPORT_MODE
+												,@v_new_d_contry D_COUNTRY
+												,@v_new_d_port_code D_PORT_CODE
+												,@v_new_a_country A_COUNTRY
+												,@v_new_a_port_code A_PORT_CODE
+												,@v_new_lt_day CUSTOMER_LT
+												,@v_new_to_country TO_COUNTRY
+												,@v_new_to_city TO_CITY
+												,A.FROM_SITE_TYPE
+												,A.FROM_SITE_PLANT_ID
+												,A.FROM_SITE_VENDOR_ID
+												,A.FROM_SITE_SOLDTO_CODE
+												,A.FROM_SITE_SHIPTO_CODE
+												,A.FROM_SITE_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM","2099590618","16","n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code ;
+
+
+		-- [C20201223-000448] MKT FCST - SSP Sync
+		IF @p_change_status = 'A' --변경확정
+			EXEC PR_DM_SSP_CONFIRM_SYNC @p_division_id, @p_new_confirm_id;
+
+
+	 END TRY
+
+	 BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","1","
+
+
+
+
+/*
+ * Program ID   : SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40
+ * Description  : Shipment Change Request Confirm Save_40
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019/03/19   AYJ            Initial Release [PJ20182279] 전지본부 출하계획 시스템 구축 프로젝트
+ * 2019/07/15	mcTheJ		   [CSR ID:4044806] Model PIC 담당자 위임 기능 추가 - 위임자 결재 추가
+ * 2019/10/29	ayj			   FCST_ETA_DATE, ETA_DATE 저장 값 수정(출발일 기준 항차를 고려한 ETA_DATE 계산)
+ * 2021/01/07   KIMYONGHO      [C20201223-000448] MKT FCST - SSP Sync
+ * 2021/01/12   KIMYONGHO       [C20201223-000448] MKT FCST - SSP Sync 운영이관 검증 단계에서 처리 지연 현상으로 END LOG 이후 호출로 조정함.
+ * 2021/01/12   KIMYONGHO       [C20201223-000448] MKT FCST - SSP Sync CONFIRM_ID parameter 변경
+ * 2021/04/08   KIMYONGHO       [C20210406-000222] MKT FCST - SSP Sync DIVISION_ID parameter 변경
+ */
+
+CREATE PROCEDURE [dbo].[SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40]
+	 @p_change_request_no	NVARCHAR(MAX)
+	,@p_change_status		NVARCHAR(MAX)
+	,@p_reject_reason		NVARCHAR(MAX)
+
+	,@p_division_id			NVARCHAR(MAX)
+	,@p_item_id				NVARCHAR(MAX)
+	,@p_from_site			NVARCHAR(MAX)
+	,@p_yyyymmdd			NVARCHAR(MAX)
+
+	,@p_confirm_id			NVARCHAR(MAX)
+	,@p_new_confirm_id		NVARCHAR(MAX)
+	,@p_new_etd_date		NVARCHAR(MAX)
+	,@p_new_eta_date		NVARCHAR(MAX)
+	,@p_new_qty				NVARCHAR(MAX)
+	,@p_new_ship_date		NVARCHAR(MAX)
+	,@p_new_yn				NVARCHAR(MAX)
+
+	,@p_new_bod_id			NVARCHAR(MAX)
+	,@p_new_route_id		NVARCHAR(MAX)
+	,@p_new_incoterms		NVARCHAR(MAX)
+	,@p_new_d_contry		NVARCHAR(MAX)
+	,@p_new_d_port_code		NVARCHAR(MAX)
+	,@p_new_a_country		NVARCHAR(MAX)
+	,@p_new_a_port_code		NVARCHAR(MAX)
+	,@p_new_to_country		NVARCHAR(MAX)
+	,@p_new_to_city			NVARCHAR(MAX)
+	,@p_new_lt_day			NVARCHAR(MAX)
+	,@p_new_transport_mode	NVARCHAR(MAX)
+
+	,@p_last_updated_by		NVARCHAR(MAX)
+	,@p_time_zone			NVARCHAR(MAX)
+	,@p_change_type			NVARCHAR(MAX)
+
+	,@p_remarks				NVARCHAR(MAX)
+	,@p_remarks2			NVARCHAR(MAX)
+	,@p_remarks3			NVARCHAR(MAX)
+
+	,@p_delegatee			NVARCHAR(MAX)
+	,@p_delegatee_dept		NVARCHAR(MAX)
+	,@p_shipto_code			NVARCHAR(MAX)
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE @v_division_id			NVARCHAR(MAX)
+	DECLARE @v_confirm_id			NVARCHAR(MAX)
+	DECLARE @v_new_confirm_id		NVARCHAR(MAX)
+	DECLARE @v_new_etd_date			NVARCHAR(MAX)
+	DECLARE @v_new_eta_date			NVARCHAR(MAX)
+	DECLARE @v_new_qty				NVARCHAR(MAX)
+	DECLARE @v_new_ship_date		NVARCHAR(MAX)
+	DECLARE @v_new_yn				NVARCHAR(MAX)
+
+	DECLARE @v_new_bod_id			NVARCHAR(MAX);
+	DECLARE @v_new_route_id			NVARCHAR(MAX);
+	DECLARE @v_new_incoterms		NVARCHAR(MAX);
+	DECLARE @v_new_d_contry			NVARCHAR(MAX);
+	DECLARE @v_new_d_port_code		NVARCHAR(MAX);
+	DECLARE @v_new_a_country		NVARCHAR(MAX);
+	DECLARE @v_new_a_port_code		NVARCHAR(MAX);
+	DECLARE @v_new_to_country		NVARCHAR(MAX);
+	DECLARE @v_new_to_city			NVARCHAR(MAX);
+	DECLARE @v_new_lt_day			NVARCHAR(MAX);
+	DECLARE @v_new_transport_mode	NVARCHAR(MAX);
+
+	DECLARE @n_division_id			NVARCHAR(MAX);
+	DECLARE @n_plan_start_yyyymmdd	NVARCHAR(MAX);
+	DECLARE @n_plan_type			NVARCHAR(MAX);
+	DECLARE @n_seq					NVARCHAR(MAX);
+	DECLARE @n_item_id				NVARCHAR(MAX);
+	DECLARE @n_from_site			NVARCHAR(MAX);
+	DECLARE @n_to_site				NVARCHAR(MAX);
+	DECLARE @n_yyyymmdd				NVARCHAR(MAX);
+	DECLARE @n_bod_id				NVARCHAR(MAX);
+	DECLARE @n_project_code			NVARCHAR(MAX);
+	DECLARE @n_fcst_type			NVARCHAR(MAX);
+	DECLARE @n_incoterms			NVARCHAR(MAX);
+	DECLARE @n_transport_mode		NVARCHAR(MAX);
+	DECLARE @n_confirm_id			NVARCHAR(MAX);
+	DECLARE @n_max_seq				NVARCHAR(MAX);
+	DECLARE @n_last_update_date		NVARCHAR(MAX);
+	DECLARE @v_plan_start_yyyymmdd  NVARCHAR(MAX);
+	DECLARE @v_seq					NVARCHAR(MAX);
+
+	DECLARE @n_ori_division_id			NVARCHAR(MAX);
+	DECLARE @n_ori_item_id				NVARCHAR(MAX);
+	DECLARE @n"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","2","_ori_from_site			NVARCHAR(MAX);
+	DECLARE @n_ori_to_site				NVARCHAR(MAX);
+	DECLARE @n_ori_yyyymmdd				NVARCHAR(MAX);
+	DECLARE @n_ori_bod_id				NVARCHAR(MAX);
+	DECLARE @n_ori_project_code			NVARCHAR(MAX);
+	DECLARE @n_ori_fcst_type			NVARCHAR(MAX);
+	DECLARE @n_ori_incoterms			NVARCHAR(MAX);
+	DECLARE @n_ori_transport_mode		NVARCHAR(MAX);
+	DECLARE @n_ori_confirm_id			NVARCHAR(MAX);
+	DECLARE @v_planned_qty              INT;
+
+	DECLARE @v_chk					INT
+	DECLARE @v_last_update_date     datetime;
+
+	DECLARE @v_remarks					NVARCHAR(MAX);
+	DECLARE @v_remarks2					NVARCHAR(MAX);
+	DECLARE @v_remarks3					NVARCHAR(MAX);
+
+	DECLARE @v_shipto_code		    NVARCHAR(MAX);
+
+	DECLARE @IF_GROUP_NO				 [NVARCHAR](50)   = FORMAT(CURRENT_TIMESTAMP, 'yyyyMMddHHmmss');
+
+	SET @v_confirm_id = null
+	SET @v_confirm_id = null
+	SET @v_new_confirm_id = null
+	SET @v_new_etd_date = null
+	SET @v_new_eta_date = null
+	SET @v_new_qty = null
+	SET @v_new_ship_date = null
+	SET @v_new_yn = null
+
+	SET @v_new_bod_id			= NULL;
+	SET @v_new_route_id			= NULL;
+	SET @v_new_incoterms		= NULL;
+	SET @v_new_d_contry			= NULL;
+	SET @v_new_d_port_code		= NULL;	
+	SET @v_new_a_country		= NULL;	
+	SET @v_new_a_port_code		= NULL;	
+	SET @v_new_to_country		= NULL;	
+	SET @v_new_to_city			= NULL;	
+	SET @v_new_lt_day			= NULL;
+	SET @v_new_transport_mode = NULL;
+
+	SET @n_division_id				= null;
+	SET @n_plan_start_yyyymmdd		= null;
+	SET @n_plan_type				= null;
+	SET @n_seq						= null;
+	SET @n_item_id					= null;
+	SET @n_from_site				= null;
+	SET @n_to_site					= null;
+	SET @n_yyyymmdd					= null;
+	SET @n_bod_id					= null;
+	SET @n_project_code				= null;
+	SET @n_fcst_type				= null;
+	SET @n_incoterms				= null;
+	SET @n_transport_mode			= null;
+	SET @n_confirm_id				= null;
+	SET @n_max_seq					= null;
+	SET @n_last_update_date			= null;
+	SET @v_last_update_date    = SYSDATETIME();
+
+	SET @n_ori_division_id			= null;
+	SET @n_ori_item_id				= null;
+	SET @n_ori_from_site			= null;
+	SET @n_ori_to_site				= null;
+	SET @n_ori_yyyymmdd				= null;
+	SET @n_ori_bod_id				= null;
+	SET @n_ori_project_code			= null;
+	SET @n_ori_fcst_type			= null;
+	SET @n_ori_incoterms			= null;
+	SET @n_ori_transport_mode		= null;
+	SET @n_ori_confirm_id			= null;
+	SET @v_planned_qty				= 0;
+
+	SET @v_remarks					= null;
+	SET @v_remarks2					= null;
+	SET @v_remarks3					= null;
+
+	SET @v_shipto_code				= null;
+
+	
+	SET @v_chk = 0
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_40';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;	
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	-- 트렌젝션 시작
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = @v_last_update_date;--[dbo].[FN_MULTY_TIME](@p_time_zone);
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		BEGIN
+			IF LEN(ISNULL(@p_delegatee, '')) = 0
+			BEGIN
+				UPDATE SSP_ANL_SHIP_CONFIRM_CHG_REQ
+				   SET CHANGE_REQ_STATUS = @p_change_status
+					  ,APPROVAL_TIME = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+					  ,REJECT_REASON = @p_reject_reason
+					  ,LAST_UPDATED_BY = @p_last_updated_by
+					  ,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+				WHERE CHANGE_REQ_NO = @p_change_request_no;
+			END
+			ELSE
+			BEGIN
+				UPDATE SSP_ANL_SHIP_CONFIRM_CHG_REQ
+				   SET CHANGE_REQ_STATUS = @p_change_status
+					  ,APPROVAL_TIME = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+					  ,REJECT_REASON = @p_reject_re"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","3","ason
+					  ,DELEGATEE_USER = @p_delegatee
+					  ,DELEGATEE_DEPT = @p_delegatee_dept
+					  ,LAST_UPDATED_BY = @p_last_updated_by
+					  ,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+				WHERE CHANGE_REQ_NO = @p_change_request_no;
+			END
+
+			
+		END
+
+		IF @p_change_status = 'A'
+			BEGIN
+				SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_confirm_id, @v_delimiter);    
+				--SELECT    @max_loop_cnt;
+				--	WHILE LEN(@p_active_flag) > 0
+				WHILE LEN(@p_confirm_id) > 0 AND @mst_loop_cnt < @max_loop_cnt
+				BEGIN
+					SET @mst_loop_cnt = @mst_loop_cnt + 1;
+
+					BEGIN  
+						SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ;  
+						SET @v_confirm_id = [dbo].[SCM_ARR_SPL_VAL](@p_confirm_id, @v_delimiter , @mst_loop_cnt) ;  
+						SET @v_new_confirm_id = [dbo].[SCM_ARR_SPL_VAL](@p_new_confirm_id, @v_delimiter , @mst_loop_cnt) ;  
+						SET @v_new_etd_date = [dbo].[SCM_ARR_SPL_VAL](@p_new_etd_date, @v_delimiter , @mst_loop_cnt) ;  
+						SET @v_new_eta_date = [dbo].[SCM_ARR_SPL_VAL](@p_new_eta_date, @v_delimiter , @mst_loop_cnt) ;  
+						SET @v_new_qty = [dbo].[SCM_ARR_SPL_VAL](@p_new_qty, @v_delimiter , @mst_loop_cnt) ;  
+						SET @v_new_ship_date = [dbo].[SCM_ARR_SPL_VAL](@p_new_ship_date, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_yn = [dbo].[SCM_ARR_SPL_VAL](@p_new_yn, @v_delimiter , @mst_loop_cnt) ; 
+
+						SET @v_new_bod_id = [dbo].[SCM_ARR_SPL_VAL](@p_new_bod_id, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_route_id = [dbo].[SCM_ARR_SPL_VAL](@p_new_route_id, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_incoterms = [dbo].[SCM_ARR_SPL_VAL](@p_new_incoterms, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_d_contry = [dbo].[SCM_ARR_SPL_VAL](@p_new_d_contry, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_d_port_code = [dbo].[SCM_ARR_SPL_VAL](@p_new_d_port_code, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_a_country = [dbo].[SCM_ARR_SPL_VAL](@p_new_a_country, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_a_port_code = [dbo].[SCM_ARR_SPL_VAL](@p_new_a_port_code, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_to_country = [dbo].[SCM_ARR_SPL_VAL](@p_new_to_country, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_to_city = [dbo].[SCM_ARR_SPL_VAL](@p_new_to_city, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_lt_day = [dbo].[SCM_ARR_SPL_VAL](@p_new_lt_day, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_new_transport_mode = [dbo].[SCM_ARR_SPL_VAL](@p_new_transport_mode, @v_delimiter , @mst_loop_cnt) ; 
+
+						SET @v_remarks = [dbo].[SCM_ARR_SPL_VAL](@p_remarks, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_remarks2 = [dbo].[SCM_ARR_SPL_VAL](@p_remarks2, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_remarks3 = [dbo].[SCM_ARR_SPL_VAL](@p_remarks3, @v_delimiter , @mst_loop_cnt) ; 
+						SET @v_shipto_code   = dbo.SCM_ARR_SPL_VAL( @p_shipto_code     , @v_delimiter, @mst_loop_cnt );
+					END
+			
+					IF @mst_loop_cnt > 0 
+						BEGIN
+							SET @v_new_etd_date = REPLACE(SUBSTRING(@v_new_etd_date,1,10),'-','')
+							--SET @v_new_eta_date = REPLACE(SUBSTRING(@v_new_eta_date,1,10),'-','')
+							SET @v_new_ship_date = REPLACE(SUBSTRING(@v_new_ship_date,1,10),'-','')
+
+							/* 2019.10.29 출발일 기준 항차를 고려한 ETA_DATE 계산*/
+							--2021.04.08 [C20210406-000222]  @P_division_id - > @v_division_id
+							SET @v_new_eta_date = [dbo].[FN_GET_SSP_ETA_DATE](@v_division_id, @v_new_bod_id, @v_new_ship_date) 
+							
+							SET @v_chk = 0;	
+																			
+							IF @v_new_yn = 'Y'
+								BEGIN
+									-- SSP0200 에서 사용 시  @p_change_type = 'N' 변경
+									SET @p_change_type ='N'; 
+									IF @p_change_type = 'C'
+										BEGIN
+										--SSP_ANL_SHIP_CONFIRM table insert
+										INSERT INTO SSP_ANL_SHIP_CONFIRM(
+												CONFIRM_ID
+												,SHIPMENT_STATUS
+												,DIVISION_ID
+												,PLAN_START_YYYYMMDD
+												,PLAN_TYPE
+												,SEQ
+						"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","4","						,ITEM_ID
+												,FROM_SITE
+												,TO_SITE
+												,YYYYMMDD
+												,PLANNED_QTY
+												,QTY
+												,BOD_ID
+												,ROUTE_ID
+												,BIZ_TYPE
+												,PROJECT_CODE
+												,FCST_TYPE
+												,FCST_ETD_DATE
+												,FCST_ETA_DATE
+												,ETD_DATE
+												,ETA_DATE
+												,INCOTERMS
+												,TRANSPORT_MODE
+												,D_COUNTRY
+												,D_PORT_CODE
+												,A_COUNTRY
+												,A_PORT_CODE
+												,CUSTOMER_LT
+												,TO_COUNTRY
+												,TO_CITY
+												,FROM_SITE_TYPE
+												,FROM_SITE_PLANT_ID
+												,FROM_SITE_VENDOR_ID
+												,FROM_SITE_SOLDTO_CODE
+												,FROM_SITE_SHIPTO_CODE
+												,FROM_SITE_COMPANY_ID
+												,TO_SITE_TYPE
+												,TO_SITE_PLANT_ID
+												,TO_SITE_VENDOR_ID
+												,TO_SITE_SOLDTO_CODE
+												,TO_SITE_SHIPTO_CODE
+												,TO_SITE_COMPANY_ID
+												,CHANGE_REQ_NO
+												,ERP_SO_NO			--신규 일 경우에는 ERP 4개 컬럼 NULL로 넣어준다.
+												,ERP_SO_ITEM_NO
+												,ERP_DO_NO
+												,ERP_STATUS
+												,CHANGE_TYPE
+												,CREATED_BY
+												,CREATION_DATE
+												,LAST_UPDATED_BY
+												,LAST_UPDATE_DATE
+												,ELECTRODE_YN
+												,ELECTRODE_TYPE
+												,ORIGIN_FROM_DIVISION_ID
+												,ORIGIN_TO_DIVISION_ID
+												,BEFORE_QTY
+												,CHECK_NEED_YN
+												,REMARKS
+												,REMARKS2
+												,REMARKS3
+												/*----------------------------------------------------------------------------------------
+													2020.06.30 : KBK
+													I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+												------------------------------------------------------------------------------------------*/
+												,PACKAGE_TYPE_CODE
+												,FACTORY_ID
+												,PACKAGE_QTY
+												,DOM_EXP
+												,ERP_ATTR1
+												,ERP_ATTR2
+												,ERP_ATTR3
+												,ERP_ATTR4
+												,ERP_ATTR5
+										) SELECT @v_new_confirm_id CONFIRM_ID
+												,'C' SHIPMENT_STATUS
+												,A.DIVISION_ID
+												,A.PLAN_START_YYYYMMDD
+												,A.PLAN_TYPE
+												,A.SEQ
+												,A.ITEM_ID
+												,A.FROM_SITE
+												,A.TO_SITE
+												,@v_new_ship_date YYYYMMDD
+												,0 PLANNED_QTY
+												,@v_new_qty QTY
+												,@v_new_bod_id BOD_ID
+												,@v_new_route_id ROUTE_ID
+												,A.BIZ_TYPE
+												,A.PROJECT_CODE
+												,A.FCST_TYPE
+												,A.FCST_ETD_DATE
+												,A.FCST_ETA_DATE
+												,@v_new_etd_date ETD_DATE
+												,@v_new_eta_date ETA_DATE
+												,@v_new_incoterms INCOTERMS
+												,@v_new_transport_mode TRANSPORT_MODE
+												,@v_new_d_contry D_COUNTRY
+												,@v_new_d_port_code D_PORT_CODE
+												,@v_new_a_country A_COUNTRY
+												,@v_new_a_port_code A_PORT_CODE
+												,@v_new_lt_day CUSTOMER_LT
+												,@v_new_to_country TO_COUNTRY
+												,@v_new_to_city TO_CITY
+												,A.FROM_SITE_TYPE
+												,A.FROM_SITE_PLANT_ID
+												,A.FROM_SITE_VENDOR_ID
+												,A.FROM_SITE_SOLDTO_CODE
+												,A.FROM_SITE_SHIPTO_CODE
+												,A.FROM_SITE_COMPANY_ID
+												,A.TO_SITE_TYPE
+												,A.TO_SITE_PLANT_ID
+												,A.TO_SITE_VENDOR_ID
+												,A.TO_SITE_SOLDTO_CODE
+												,TO_SITE_SHIPTO_CODE as TO_SITE_SHIPTO_CODE -- A.TO_SITE_SHIPTO_CODE
+												,A.TO_SITE_COMPANY_ID
+												,null CHANGE_REQ_NO
+												,null ERP_SO_NO			--신규 일 경우에는 ERP 4개 컬럼 NULL로 넣어준다.
+												,null ERP_SO_ITEM_NO
+												,null ERP_DO_NO
+												,null ERP_STATUS
+												,'C'
+												,@p_last_updated_by CREATED_BY
+												,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) CREATION_DATE
+												,@p_last_updated_by LAST_UPDATED_BY
+												,@v_last_update_date--[dbo].[FN_MULTY_TI"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","5","ME](@p_time_zone) LAST_UPDATE_DATE
+												,A.ELECTRODE_YN
+												,A.ELECTRODE_TYPE
+												,A.ORIGIN_FROM_DIVISION_ID
+												,A.ORIGIN_TO_DIVISION_ID
+												,0 BEFORE_QTY
+												,'Y' CHECK_NEED_YN
+												,@v_remarks
+												,@v_remarks2
+												,@v_remarks3
+												/*----------------------------------------------------------------------------------------
+													2020.06.30 : KBK
+													I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+												------------------------------------------------------------------------------------------*/
+												,A.PACKAGE_TYPE_CODE
+												,A.FACTORY_ID
+												,CASE WHEN A.ELECTRODE_YN = 'N' THEN @v_new_qty
+												 ELSE CEILING(CASE WHEN B.PACKAGE_TYPE_CODE = 'BX' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.BOX_PER_CUT ,1)
+ 																   WHEN B.PACKAGE_TYPE_CODE = 'SC' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELCRATE_PER_CUT ,1)
+ 																   WHEN B.PACKAGE_TYPE_CODE = 'SR' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELRACK_PER_CUT ,1)
+ 															  ELSE NULL  END) END  AS PACKAGE_QTY
+												,A.DOM_EXP
+												,A.ERP_ATTR1
+												,A.ERP_ATTR2
+												,A.ERP_ATTR3
+												,A.ERP_ATTR4
+												,A.ERP_ATTR5
+											FROM SSP_ANL_SHIP_CONFIRM A  with(nolock)
+												LEFT OUTER JOIN SSP_MST_SITE_ITEM_EE_V B with(nolock)
+													ON  B.DIVISION_ID = A.DIVISION_ID 
+													AND B.SCM_SITE_ID = A.FROM_SITE 
+													AND B.ITEM_ID     = A.ITEM_ID 
+											WHERE CONFIRM_ID = @v_confirm_id;
+										END
+									ELSE IF @p_change_type = 'N'
+										BEGIN	
+											SET @v_chk = 0;
+											SELECT @v_chk = count(*)
+											FROM SSP_ANL_SHIP_CONFIRM with(nolock)
+											WHERE CONFIRM_ID = @v_new_confirm_id;
+
+											IF @v_chk > 0
+												BEGIN
+													UPDATE SSP_ANL_SHIP_CONFIRM
+														SET CHANGE_TYPE = 'C'
+															,SHIPMENT_STATUS = 'C'
+															,CHANGE_REQ_NO = null
+															,YYYYMMDD = @v_new_ship_date
+															,QTY = @v_new_qty
+															,BOD_ID = @v_new_bod_id
+															,ROUTE_ID = @v_new_route_id
+															,INCOTERMS = @v_new_incoterms
+															,D_COUNTRY = @v_new_d_contry
+															,D_PORT_CODE = @v_new_d_port_code
+															,A_COUNTRY = @v_new_a_country
+															,A_PORT_CODE = @v_new_a_port_code
+															,TO_COUNTRY = @v_new_to_country
+															,TO_CITY = @v_new_to_city
+															,TRANSPORT_MODE = @v_new_transport_mode
+															,ETD_DATE = @v_new_etd_date
+															,ETA_DATE = @v_new_eta_date
+															,CUSTOMER_LT = @v_new_lt_day
+															,BEFORE_QTY = 0
+															,CHECK_NEED_YN = 'Y'
+															,LAST_UPDATED_BY = @p_last_updated_by
+															,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+															,REMARKS		= @v_remarks
+															,REMARKS2		= @v_remarks2
+															,REMARKS3		= @v_remarks3
+															,TO_SITE_SHIPTO_CODE = @v_shipto_code
+															/*----------------------------------------------------------------------------------------
+																2020.06.30 : KBK
+																I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+															------------------------------------------------------------------------------------------*/
+															,PACKAGE_QTY = CASE WHEN A.ELECTRODE_YN = 'N' THEN @v_new_qty
+																			 ELSE CEILING(CASE WHEN B.PACKAGE_TYPE_CODE = 'BX' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.BOX_PER_CUT ,1)
+ 																								WHEN B.PACKAGE_TYPE_CODE = 'SC' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELCRATE_PER_CUT ,1)
+ 																								WHEN B.PACKAGE_TYPE_CO"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","6","DE = 'SR' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELRACK_PER_CUT ,1)
+ 																							ELSE NULL  END) END
+													FROM SSP_ANL_SHIP_CONFIRM A with(nolock) 
+													LEFT OUTER JOIN SSP_MST_SITE_ITEM_EE_V B with(nolock)
+														ON  B.DIVISION_ID = A.DIVISION_ID 
+														AND B.SCM_SITE_ID = A.FROM_SITE 
+														AND B.ITEM_ID     = A.ITEM_ID 
+													WHERE CONFIRM_ID = @v_new_confirm_id
+												END
+											ELSE
+												BEGIN
+													INSERT INTO SSP_ANL_SHIP_CONFIRM(
+															CONFIRM_ID
+															,SHIPMENT_STATUS
+															,DIVISION_ID
+															,PLAN_START_YYYYMMDD
+															,PLAN_TYPE
+															,SEQ
+															,ITEM_ID
+															,FROM_SITE
+															,TO_SITE
+															,YYYYMMDD
+															,PLANNED_QTY
+															,QTY
+															,BOD_ID
+															,ROUTE_ID
+															,BIZ_TYPE
+															,PROJECT_CODE
+															,FCST_TYPE
+															,FCST_ETD_DATE
+															,FCST_ETA_DATE
+															,ETD_DATE
+															,ETA_DATE
+															,INCOTERMS
+															,TRANSPORT_MODE
+															,D_COUNTRY
+															,D_PORT_CODE
+															,A_COUNTRY
+															,A_PORT_CODE
+															,CUSTOMER_LT
+															,TO_COUNTRY
+															,TO_CITY
+															,FROM_SITE_TYPE
+															,FROM_SITE_PLANT_ID
+															,FROM_SITE_VENDOR_ID
+															,FROM_SITE_SOLDTO_CODE
+															,FROM_SITE_SHIPTO_CODE
+															,FROM_SITE_COMPANY_ID
+															,TO_SITE_TYPE
+															,TO_SITE_PLANT_ID
+															,TO_SITE_VENDOR_ID
+															,TO_SITE_SOLDTO_CODE
+															,TO_SITE_SHIPTO_CODE
+															,TO_SITE_COMPANY_ID
+															,CHANGE_REQ_NO
+															,ERP_SO_NO			--신규 일 경우에는 ERP 4개 컬럼 NULL로 넣어준다.
+															,ERP_SO_ITEM_NO
+															,ERP_DO_NO
+															,ERP_STATUS
+															,CHANGE_TYPE
+															,CREATED_BY
+															,CREATION_DATE
+															,LAST_UPDATED_BY
+															,LAST_UPDATE_DATE
+															,ELECTRODE_YN
+															,ELECTRODE_TYPE
+															,ORIGIN_FROM_DIVISION_ID
+															,ORIGIN_TO_DIVISION_ID
+															,BEFORE_QTY
+															,CHECK_NEED_YN
+															,REMARKS
+															,REMARKS2
+															,REMARKS3
+															/*----------------------------------------------------------------------------------------
+																2020.06.30 : KBK
+																I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+															------------------------------------------------------------------------------------------*/
+															,PACKAGE_TYPE_CODE
+															,FACTORY_ID
+															,PACKAGE_QTY
+															,DOM_EXP
+															,ERP_ATTR1
+															,ERP_ATTR2
+															,ERP_ATTR3
+															,ERP_ATTR4
+															,ERP_ATTR5
+													) SELECT @v_new_confirm_id CONFIRM_ID
+															,'C' SHIPMENT_STATUS
+															,A.DIVISION_ID
+															,A.PLAN_START_YYYYMMDD
+															,A.PLAN_TYPE
+															,A.SEQ
+															,A.ITEM_ID
+															,A.FROM_SITE
+															,A.TO_SITE
+															,@v_new_ship_date YYYYMMDD
+															,0 PLANNED_QTY
+															,@v_new_qty QTY
+															,@v_new_bod_id BOD_ID
+															,@v_new_route_id ROUTE_ID
+															,A.BIZ_TYPE
+															,A.PROJECT_CODE
+															,A.FCST_TYPE
+															,A.FCST_ETD_DATE
+															,A.FCST_ETA_DATE
+															,@v_new_etd_date ETD_DATE
+															,@v_new_eta_date ETA_DATE
+															,@v_new_incoterms INCOTERMS
+															,@v_new_transport_mode TRANSPORT_MODE
+															,@v_new_d_contry D_COUNTRY
+															,@v_new_d_port_code D_PORT_CODE
+															,@v_new_a_country A_COUNTRY
+															,@v_new_a_port_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","7","code A_PORT_CODE
+															,@v_new_lt_day CUSTOMER_LT
+															,@v_new_to_country TO_COUNTRY
+															,@v_new_to_city TO_CITY
+															,A.FROM_SITE_TYPE
+															,A.FROM_SITE_PLANT_ID
+															,A.FROM_SITE_VENDOR_ID
+															,A.FROM_SITE_SOLDTO_CODE
+															,A.FROM_SITE_SHIPTO_CODE
+															,A.FROM_SITE_COMPANY_ID
+															,A.TO_SITE_TYPE
+															,A.TO_SITE_PLANT_ID
+															,A.TO_SITE_VENDOR_ID
+															,A.TO_SITE_SOLDTO_CODE
+															,A.TO_SITE_SHIPTO_CODE
+															,A.TO_SITE_COMPANY_ID
+															,null CHANGE_REQ_NO
+															,null ERP_SO_NO			--신규 일 경우에는 ERP 4개 컬럼 NULL로 넣어준다.
+															,null ERP_SO_ITEM_NO
+															,null ERP_DO_NO
+															,null ERP_STATUS
+															,'C'
+															,@p_last_updated_by CREATED_BY
+															,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) CREATION_DATE
+															,@p_last_updated_by LAST_UPDATED_BY
+															,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) LAST_UPDATE_DATE
+															,A.ELECTRODE_YN
+															,A.ELECTRODE_TYPE
+															,A.ORIGIN_FROM_DIVISION_ID
+															,A.ORIGIN_TO_DIVISION_ID
+															,0 BEFORE_QTY
+															,'Y' CHECK_NEED_YN
+															,@v_remarks
+															,@v_remarks2
+															,@v_remarks3
+															/*----------------------------------------------------------------------------------------
+																2020.06.30 : KBK
+																I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+															------------------------------------------------------------------------------------------*/
+															,A.PACKAGE_TYPE_CODE
+															,A.FACTORY_ID
+															,CASE WHEN A.ELECTRODE_YN = 'N' THEN @v_new_qty
+															 ELSE CEILING(CASE WHEN B.PACKAGE_TYPE_CODE = 'BX' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.BOX_PER_CUT ,1)
+ 																			   WHEN B.PACKAGE_TYPE_CODE = 'SC' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELCRATE_PER_CUT ,1)
+ 																			   WHEN B.PACKAGE_TYPE_CODE = 'SR' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELRACK_PER_CUT ,1)
+ 																		  ELSE NULL  END) END  AS PACKAGE_QTY
+															,A.DOM_EXP
+															,A.ERP_ATTR1
+															,A.ERP_ATTR2
+															,A.ERP_ATTR3
+															,A.ERP_ATTR4
+															,A.ERP_ATTR5
+														FROM SSP_ANL_SHIP_CONFIRM A  with(nolock)
+															LEFT OUTER JOIN SSP_MST_SITE_ITEM_EE_V B with(nolock)
+																ON  B.DIVISION_ID = A.DIVISION_ID 
+																AND B.SCM_SITE_ID = A.FROM_SITE 
+																AND B.ITEM_ID     = A.ITEM_ID 
+														WHERE CONFIRM_ID = @v_confirm_id;
+												END
+												-- SSP0200 에서 사용 시  @p_change_type = 'N' 변경 후 다시 'C' 변경
+												SET @p_change_type ='c'; 
+										END									
+									ELSE
+										BEGIN
+										
+										SET @v_planned_qty = 0;
+
+										SELECT @v_planned_qty = PLANNED_QTY
+										FROM SSP_ANL_SHIP_CONFIRM WITH(NOLOCK)
+										WHERE ATTRIBUTE1 = @v_new_confirm_id;										  
+											
+											--SSP_ANL_SHIP_CONFIRM table insert
+										INSERT INTO SSP_ANL_SHIP_CONFIRM(
+												CONFIRM_ID
+												,SHIPMENT_STATUS
+												,DIVISION_ID
+												,PLAN_START_YYYYMMDD
+												,PLAN_TYPE
+												,SEQ
+												,ITEM_ID
+												,FROM_SITE
+												,TO_SITE
+												,YYYYMMDD
+												,PLANNED_QTY
+												,QTY
+												,BOD_ID
+												,ROUTE_ID
+												,BIZ_TYPE
+												,PROJECT_CODE
+												,FCST_TYPE
+												,FCST_ETD_DATE
+												,FCST_ETA_DATE
+												,ETD_DATE
+												,ETA_DATE
+												,INCOTERMS
+												,TRANSPORT_MODE
+												,D_COUNTRY
+												,D_PORT_CODE
+					"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","8","							,A_COUNTRY
+												,A_PORT_CODE
+												,CUSTOMER_LT
+												,TO_COUNTRY
+												,TO_CITY
+												,FROM_SITE_TYPE
+												,FROM_SITE_PLANT_ID
+												,FROM_SITE_VENDOR_ID
+												,FROM_SITE_SOLDTO_CODE
+												,FROM_SITE_SHIPTO_CODE
+												,FROM_SITE_COMPANY_ID
+												,TO_SITE_TYPE
+												,TO_SITE_PLANT_ID
+												,TO_SITE_VENDOR_ID
+												,TO_SITE_SOLDTO_CODE
+												,TO_SITE_SHIPTO_CODE
+												,TO_SITE_COMPANY_ID
+												,CHANGE_REQ_NO
+												,ERP_SO_NO			--신규 일 경우에는 ERP 4개 컬럼 NULL로 넣어준다.
+												,ERP_SO_ITEM_NO
+												,ERP_DO_NO
+												,ERP_STATUS
+												,CHANGE_TYPE
+												,CREATED_BY
+												,CREATION_DATE
+												,LAST_UPDATED_BY
+												,LAST_UPDATE_DATE
+												,ELECTRODE_YN
+												,ELECTRODE_TYPE
+												,ORIGIN_FROM_DIVISION_ID
+												,ORIGIN_TO_DIVISION_ID
+												,BEFORE_QTY
+												,CHECK_NEED_YN
+												,REMARKS
+												,REMARKS2
+												,REMARKS3
+												/*----------------------------------------------------------------------------------------
+													2020.06.30 : KBK
+													I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+												------------------------------------------------------------------------------------------*/
+												,PACKAGE_TYPE_CODE
+												,FACTORY_ID
+												,PACKAGE_QTY
+												,DOM_EXP
+												,ERP_ATTR1
+												,ERP_ATTR2
+												,ERP_ATTR3
+												,ERP_ATTR4
+												,ERP_ATTR5
+										) SELECT @v_new_confirm_id CONFIRM_ID
+												,'C' SHIPMENT_STATUS
+												,A.DIVISION_ID
+												,A.PLAN_START_YYYYMMDD
+												,A.PLAN_TYPE
+												,A.SEQ
+												,A.ITEM_ID
+												,A.FROM_SITE
+												,A.TO_SITE
+												,@v_new_ship_date YYYYMMDD
+												,@v_planned_qty PLANNED_QTY
+												,@v_new_qty QTY
+												,@v_new_bod_id BOD_ID
+												,@v_new_route_id ROUTE_ID
+												,A.BIZ_TYPE
+												,A.PROJECT_CODE
+												,A.FCST_TYPE
+												,A.FCST_ETD_DATE
+												,A.FCST_ETA_DATE
+												,@v_new_etd_date ETD_DATE
+												,@v_new_eta_date ETA_DATE
+												,@v_new_incoterms INCOTERMS
+												,@v_new_transport_mode TRANSPORT_MODE
+												,@v_new_d_contry D_COUNTRY
+												,@v_new_d_port_code D_PORT_CODE
+												,@v_new_a_country A_COUNTRY
+												,@v_new_a_port_code A_PORT_CODE
+												,@v_new_lt_day CUSTOMER_LT
+												,@v_new_to_country TO_COUNTRY
+												,@v_new_to_city TO_CITY
+												,A.FROM_SITE_TYPE
+												,A.FROM_SITE_PLANT_ID
+												,A.FROM_SITE_VENDOR_ID
+												,A.FROM_SITE_SOLDTO_CODE
+												,A.FROM_SITE_SHIPTO_CODE
+												,A.FROM_SITE_COMPANY_ID
+												,TO_SITE_TYPE
+												,A.TO_SITE_PLANT_ID
+												,A.TO_SITE_VENDOR_ID
+												,A.TO_SITE_SOLDTO_CODE
+												,TO_SITE_SHIPTO_CODE AS TO_SITE_SHIPTO_CODE --A.TO_SITE_SHIPTO_CODE
+												,A.TO_SITE_COMPANY_ID
+												,null CHANGE_REQ_NO
+												,null ERP_SO_NO
+												,null ERP_SO_ITEM_NO
+												,null ERP_DO_NO
+												,null ERP_STATUS
+												,'C'
+												,@p_last_updated_by CREATED_BY
+												,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) CREATION_DATE
+												,@p_last_updated_by LAST_UPDATED_BY
+												,@v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone) LAST_UPDATE_DATE
+												,A.ELECTRODE_YN
+												,A.ELECTRODE_TYPE
+												,A.ORIGIN_FROM_DIVISION_ID
+												,A.ORIGIN_TO_DIVISION_ID
+												,A.QTY BEFORE_QTY
+												,'Y' CHECK_NEED_YN
+												,@v_remarks
+												,@v_remarks2
+												,@v_remarks3
+												/*----------------------------------------------------------------------------------------
+													2020.06.30 : KBK
+													I/F 추가요청으로 인하여 컬럼 추가 "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","9","전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+												------------------------------------------------------------------------------------------*/
+												,A.PACKAGE_TYPE_CODE
+												,A.FACTORY_ID
+												,CASE WHEN A.ELECTRODE_YN = 'N' THEN @v_new_qty
+												 ELSE CEILING(CASE WHEN B.PACKAGE_TYPE_CODE = 'BX' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.BOX_PER_CUT ,1)
+ 																   WHEN B.PACKAGE_TYPE_CODE = 'SC' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELCRATE_PER_CUT ,1)
+ 																   WHEN B.PACKAGE_TYPE_CODE = 'SR' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELRACK_PER_CUT ,1)
+ 															  ELSE NULL  END) END  AS PACKAGE_QTY
+												,A.DOM_EXP
+												,A.ERP_ATTR1
+												,A.ERP_ATTR2
+												,A.ERP_ATTR3
+												,A.ERP_ATTR4
+												,A.ERP_ATTR5
+											FROM SSP_ANL_SHIP_CONFIRM  A with(nolock)
+												LEFT OUTER JOIN SSP_MST_SITE_ITEM_EE_V B with(nolock)
+													ON  B.DIVISION_ID = A.DIVISION_ID 
+													AND B.SCM_SITE_ID = A.FROM_SITE 
+													AND B.ITEM_ID     = A.ITEM_ID 
+											WHERE ATTRIBUTE1 = @v_confirm_id;
+
+											UPDATE SSP_ANL_SHIP_CONFIRM
+												SET SHIPMENT_STATUS = 'P'
+													,CHANGE_REQ_NO = null
+													,QTY = 0
+													,BEFORE_QTY = QTY
+													,CHECK_NEED_YN = 'Y'
+													,LAST_UPDATED_BY = @p_last_updated_by
+													,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+													,PACKAGE_QTY = 0
+											WHERE ATTRIBUTE1 = @v_new_confirm_id
+										END
+								END						
+							ELSE
+								BEGIN
+									--SSP_ANL_SHIP_CONFIRM update
+									UPDATE SSP_ANL_SHIP_CONFIRM
+										SET SHIPMENT_STATUS = 'C'
+											,CHANGE_REQ_NO = null
+											,YYYYMMDD = @v_new_ship_date
+											,QTY = @v_new_qty
+											,BOD_ID = @v_new_bod_id
+											,ROUTE_ID = @v_new_route_id
+											,INCOTERMS = @v_new_incoterms
+											,D_COUNTRY = @v_new_d_contry
+											,D_PORT_CODE = @v_new_d_port_code
+											,A_COUNTRY = @v_new_a_country
+											,A_PORT_CODE = @v_new_a_port_code
+											,TO_COUNTRY = @v_new_to_country
+											,TO_CITY = @v_new_to_city
+											,TRANSPORT_MODE = @v_new_transport_mode
+											,ETD_DATE = @v_new_etd_date
+											,ETA_DATE = @v_new_eta_date
+											,FCST_ETD_DATE = @v_new_etd_date
+											,FCST_ETA_DATE = @v_new_eta_date
+											,CUSTOMER_LT = @v_new_lt_day
+											,BEFORE_QTY = QTY
+											,CHECK_NEED_YN = 'Y'
+											,LAST_UPDATED_BY = @p_last_updated_by
+											,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+											,TO_SITE_SHIPTO_CODE = @v_shipto_code
+											,REMARKS		= @v_remarks
+											,REMARKS2		= @v_remarks2
+											,REMARKS3		= @v_remarks3
+											/*----------------------------------------------------------------------------------------
+												2020.06.30 : KBK
+												I/F 추가요청으로 인하여 컬럼 추가 전극에서만 사용. DDL 표준을 맞추기 위하여 추가함 
+											------------------------------------------------------------------------------------------*/
+											,PACKAGE_QTY = CASE WHEN A.ELECTRODE_YN = 'N' THEN @v_new_qty
+															 ELSE CEILING(CASE WHEN B.PACKAGE_TYPE_CODE = 'BX' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.BOX_PER_CUT ,1)
+ 																				WHEN B.PACKAGE_TYPE_CODE = 'SC' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELCRATE_PER_CUT ,1)
+ 																				WHEN B.PACKAGE_TYPE_CODE = 'SR' THEN CEILING(@v_new_qty * isnull(B.CONVERT_TO_PC_ROLL_LENGTH ,1) ) * isnull(B.STEELRACK_PER_CUT ,1)
+ 																			ELSE NULL  END) END
+									FROM SSP_ANL_SHIP_CONFIRM A with(nolock) 
+									LEFT OUTER JOIN SSP_MST_SITE_ITEM_EE_V B with(nolock)
+										ON  B.DIVISION_ID = A.DIVISION_ID"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","10"," 
+										AND B.SCM_SITE_ID = A.FROM_SITE 
+										AND B.ITEM_ID     = A.ITEM_ID 
+									WHERE CONFIRM_ID = @v_new_confirm_id
+								END
+
+
+								IF @p_change_type = 'C' -- Confirm 일 경우에는 날짜가 변경되면 기존것도 지우고 다시 넣는다.
+									BEGIN
+										SELECT TOP 1 @n_ori_division_id = DIVISION_ID
+											 , @n_ori_item_id = ITEM_ID
+											 , @n_ori_from_site = FROM_SITE
+											 , @n_ori_to_site = TO_SITE
+											 , @n_ori_yyyymmdd = YYYYMMDD
+											 , @n_ori_bod_id = BOD_ID
+											 , @n_ori_project_code = PROJECT_CODE
+											 , @n_ori_fcst_type = FCST_TYPE
+											 , @n_ori_incoterms = INCOTERMS
+											 , @n_ori_transport_mode = TRANSPORT_MODE
+											 , @n_ori_confirm_id = CONFIRM_ID
+										FROM SSP_ANL_SHIP_CONFIRM_CHG_REQ_de a WITH(NOLOCK)
+										WHERE A.CONFIRM_ID = @v_new_confirm_id
+										  AND A.VALID_YN = 'Y'
+										ORDER BY LAST_UPDATE_DATE desc;
+
+										SET @v_chk = 0;
+									END
+
+						END
+				END
+
+				------------------ SSP_ANL_SHIP_PLAN_PACK_REQ  테이블 UPDATE해야하는지 확인 필요 --------------------------------------
+
+				--MERGE SSP_ANL_SHIP_PLAN_PACK_REQ AS A 
+				--USING (
+				--SELECT 
+				--	   C.DIVISION_ID
+				--	 , C.ITEM_ID 
+				--	 , C.FROM_SITE
+				--	 , C.TO_SITE
+				--	 , C.TO_SITE_SHIPTO_CODE
+				--	 , C.YYYYMMDD
+				--	 , C.BOD_ID
+				--	 , C.QTY
+				--	 , C.CONFIRM_ID
+				--	 , C.INCOTERMS
+				--	 , C.TRANSPORT_MODE				
+				--	 , C.CREATION_DATE
+				--	 , C.LAST_UPDATED_BY
+				--	 , C.LAST_UPDATE_DATE
+				--	 , C.ATTRIBUTE1
+				--	 , C.ATTRIBUTE2
+				--	 , C.ATTRIBUTE3
+				--	 , C.ATTRIBUTE4
+				--	 , C.ATTRIBUTE5
+				--	 , C.ATTRIBUTE6
+				--	 , C.ATTRIBUTE7
+				--	 , C.ATTRIBUTE8
+				--	 , C.ATTRIBUTE9
+				--	 , C.ATTRIBUTE10
+				--FROM SSP_ANL_SHIP_CONFIRM C WITH(NOLOCK)
+				--LEFT OUTER JOIN SCM_MST_SITE MS WITH(NOLOCK)
+				--  ON C.DIVISION_ID = MS.DIVISION_ID
+				--  AND C.FROM_SITE = MS.SCM_SITE_ID
+				--WHERE 1=1
+				-- AND C.DIVISION_ID		= '40' 
+				-- AND MS.OPERATION_GROUP = 'P'
+				-- AND MS.OSP_YN			= 'Y'
+				-- AND C.CONFIRM_ID LIKE 'R%'
+				--) AS B 
+				--ON (A.REQUEST_ID = B.CONFIRM_ID ) 
+				
+				--WHEN MATCHED THEN 
+				--UPDATE SET   QTY		  = B.QTY --CEILING(@v_new_qty)
+				--	, YYYYMMDD			  = B.YYYYMMDD --@v_new_ship_date
+				--	, SHIPTO_CODE		  = B.TO_SITE_SHIPTO_CODE --@v_shipto_code
+				--	, INCOTERMS			  = B.INCOTERMS --@v_new_incoterms
+				--	, TRANSPORT_MODE	  = B.TRANSPORT_MODE --@v_new_transport_mode
+				--	, LAST_UPDATED_BY     = B.LAST_UPDATED_BY --@p_last_updated_by
+				--	, LAST_UPDATE_DATE    = B.LAST_UPDATE_DATE --@v_last_update_date
+
+				--WHEN NOT MATCHED THEN 
+				--	INSERT
+				--	(
+				--		 DIVISION_ID
+				--		 , MODEL_TYPE
+				--		 , MODEL_ID
+				--		 , FROM_SITE
+				--		 , TO_SITE
+				--		 , SHIPTO_CODE
+				--		 , YYYYMMDD
+				--		 , BOD_ID
+				--		 , QTY
+				--		 , REQUEST_ID
+				--		 , CONFIRM_ID
+				--		 , INCOTERMS
+				--		 , TRANSPORT_MODE
+				--		 , ORDER_TYPE_DETAIL
+				--		 , REMARK
+				--		 , CREATED_BY
+				--		 , CREATION_DATE
+				--		 , LAST_UPDATED_BY
+				--		 , LAST_UPDATE_DATE
+				--		 , ATTRIBUTE1
+				--		 , ATTRIBUTE2
+				--		 , ATTRIBUTE3
+				--		 , ATTRIBUTE4
+				--		 , ATTRIBUTE5
+				--		 , ATTRIBUTE6
+				--		 , ATTRIBUTE7
+				--		 , ATTRIBUTE8
+				--		 , ATTRIBUTE9
+				--		 , ATTRIBUTE10
+				--	) VALUES
+				--	(
+				--	   B.DIVISION_ID
+				--	 , '-' 
+				--	 , B.ITEM_ID 
+				--	 , B.FROM_SITE
+				--	 , B.TO_SITE
+				--	 , B.TO_SITE_SHIPTO_CODE
+				--	 , B.YYYYMMDD
+				--	 , B.BOD_ID
+				--	 , B.QTY
+				--	 , NULL
+				--	 , B.CONFIRM_ID
+				--	 , B.INCOTERMS
+				--	 , B.TRANSPORT_MODE
+				--	 , '-'
+				--	 , '-'
+				--	 , B.LAST_UPDATED_BY
+				--	 , B.CREATION_DATE
+				--	 , B.LAST_UPDATED_BY
+				--	 , B.LAST_UPDATE_DATE
+				--	 , B.ATTRIBUTE1
+				--	 , B.ATTRIBUTE2
+				--	 , B.ATTRIBUTE3
+				--	 , B.ATTRIBUTE4
+				--	 , B.ATTRIBUTE5
+				--	 , B.ATTRIBUTE6
+				--	 ,"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","11"," B.ATTRIBUTE7
+				--	 , B.ATTRIBUTE8
+				--	 , B.ATTRIBUTE9
+				--	 , B.ATTRIBUTE10
+				--	)
+				--	 ;
+
+
+				----UPDATE SSP_ANL_SHIP_PLAN_PACK_REQ
+				----SET   QTY				  = CEILING(@v_new_qty)
+				----	, YYYYMMDD			  = @v_new_ship_date
+				----	, SHIPTO_CODE		  = @v_shipto_code
+				----	, INCOTERMS			  = @v_new_incoterms
+				----	, TRANSPORT_MODE	  = @v_new_transport_mode
+				----	, LAST_UPDATED_BY     = @p_last_updated_by
+				----	, LAST_UPDATE_DATE    = @v_last_update_date
+				----WHERE 1=1
+				----  AND CONFIRM_ID = @v_confirm_id;
+
+				--INSERT INTO SSP_ANL_SHIP_PLAN_PACK_REQ_H (
+				--	   HISTORY_SEQ
+				--	 , DIVISION_ID
+				--	 , MODEL_TYPE
+				--	 , MODEL_ID
+				--	 , FROM_SITE
+				--	 , TO_SITE
+				--	 , SHIPTO_CODE
+				--	 , YYYYMMDD
+				--	 , BOD_ID
+				--	 , QTY
+				--	 , REQUEST_ID
+				--	 , CONFIRM_ID
+				--	 , INCOTERMS
+				--	 , TRANSPORT_MODE
+				--	 , ORDER_TYPE_DETAIL
+				--	 , REMARK
+				--	 , CREATED_BY
+				--	 , CREATION_DATE
+				--	 , LAST_UPDATED_BY
+				--	 , LAST_UPDATE_DATE
+				--	 , ATTRIBUTE1
+				--	 , ATTRIBUTE2
+				--	 , ATTRIBUTE3
+				--	 , ATTRIBUTE4
+				--	 , ATTRIBUTE5
+				--	 , ATTRIBUTE6
+				--	 , ATTRIBUTE7
+				--	 , ATTRIBUTE8
+				--	 , ATTRIBUTE9
+				--	 , ATTRIBUTE10
+				--	   )
+				--SELECT NEXT VALUE FOR SEQ1_SSP_ANL_SHIP_PACKER_REQ_H   AS HISTORY_SEQ
+				--	 , A.DIVISION_ID
+				--	 , A.MODEL_TYPE
+				--	 , A.MODEL_ID
+				--	 , A.FROM_SITE
+				--	 , A.TO_SITE
+				--	 , A.SHIPTO_CODE
+				--	 , A.YYYYMMDD
+				--	 , A.BOD_ID
+				--	 , A.QTY
+				--	 , A.REQUEST_ID
+				--	 , A.CONFIRM_ID
+				--	 , A.INCOTERMS
+				--	 , A.TRANSPORT_MODE
+				--	 , A.ORDER_TYPE_DETAIL
+				--	 , A.REMARK
+				--	 , A.CREATED_BY
+				--	 , A.CREATION_DATE
+				--	 , A.LAST_UPDATED_BY
+				--	 , A.LAST_UPDATE_DATE
+				--	 , A.ATTRIBUTE1
+				--	 , A.ATTRIBUTE2
+				--	 , A.ATTRIBUTE3
+				--	 , A.ATTRIBUTE4
+				--	 , A.ATTRIBUTE5
+				--	 , A.ATTRIBUTE6
+				--	 , A.ATTRIBUTE7
+				--	 , A.ATTRIBUTE8
+				--	 , A.ATTRIBUTE9
+				--	 , A.ATTRIBUTE10
+				--FROM   SSP_ANL_SHIP_PLAN_PACK_REQ  A WITH(NOLOCK)	
+				--WHERE  1 = 1
+				-- AND CONFIRM_ID = @v_confirm_id;
+
+				-- INSERT INTO XIF_SCS_PACK_SHIP_PLAN_S_SN (
+				--	   IF_SEQ           
+				--	 , IF_TYPE          
+				--	 , IF_ID            
+				--	 , IF_INS_DATE      
+				--	 , IF_FLAG          
+				--	 , PACKER_CODE      
+				--	 , DIVISION_ID      
+				--	 , PLAN_VERSION   
+				--	 , PACK_MODEL_CODE  
+				--	 , NICK_NAME 
+				--	 , TARGET_ORDER
+				--	 , SSP_CNFM
+				--	 , SALES_SITE
+				--	 , SHIP_TO
+				--	 , SHIP_TO_NAME
+				--	 , TRANSPORT_MODE
+				--	 , INCOTERMS
+				--	 , SHIP_PLAN_DATE 
+				--	 , SHIP_PLAN_QTY 
+				--	 , COMMENT
+				--	 , ATTR_01           
+				--	 , ATTR_02           
+				--	 , ATTR_03           
+				--	 , ATTR_04           
+				--	 , ATTR_05           
+				--	 , ATTR_06           
+				--	 , ATTR_07           
+				--	 , ATTR_08           
+				--	 , ATTR_09           
+				--	 , ATTR_10 
+				--	 , ORDER_TYPE_DETAIL
+				--	 )
+				--SELECT 'OSCM' + CONVERT(VARCHAR,GETDATE(),12) + DBO.FN_ZERO_LPAD(CONVERT(VARCHAR,NEXT VALUE FOR DBO.SEQ1_XIF_SCS),10)  AS IF_SEQ
+				--	 , N'I'         AS IF_TYPE          
+				--	 , N'OSCM_OSCS_SCS_PACK_SHIP_PLAN'  AS IF_ID            
+				--	 , GETDATE()    AS IF_INS_DATE      
+				--	 , 'N'          AS IF_FLAG          
+				--	 , A.FROM_SITE  AS PACKER_CODE      
+				--	 , A.DIVISION_ID AS DIVISION_ID      
+				--	 , CONVERT(VARCHAR(8), CONVERT(DATETIME, getdate()), 112)    AS PLAN_VERSION   
+				--	 , A.ITEM_ID    AS PACK_MODEL_CODE  
+				--	 , [dbo].[FN_GET_ITEM_NICKNAME](A.DIVISION_ID, A.ITEM_ID)  AS NICK_NAME 
+				--	 , N'O'          AS TARGET_ORDER
+				--	 , N'-'			 AS SSP_CNFM
+				--	 , A.TO_SITE     AS SALES_SITE
+				--	 , A.TO_SITE_SHIPTO_CODE AS SHIP_TO
+				--	-- , [dbo].[FN_GET_SITE_CUSTOMER_INFO](B.DIVISION_ID, B.TO_SITE,'SHIPTO_CODE')	AS SHIP_TO
+				--	 , [dbo].[FN_GET_SITE_CUST"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","12","OMER_INFO](A.DIVISION_ID, A.TO_SITE,'SHIPTO_DESCRIPTION')	AS SHIP_TO_NAME
+				--	 , A.TRANSPORT_MODE
+				--	 , A.INCOTERMS
+				--	 , A.YYYYMMDD    AS SHIP_PLAN_DATE 
+				--	 , A.QTY         AS SHIP_PLAN_QTY 
+				--	 , NULL								AS COMMENT
+				--	 , A.DIVISION_ID + '_' + @v_plan_start_yyyymmdd + '_' + @IF_GROUP_NO	AS ATTR_01           
+				--	 , NULL								AS ATTR_02           
+				--	 , NULL								AS ATTR_03           
+				--	 , NULL								AS ATTR_04           
+				--	 , NULL								AS ATTR_05           
+				--	 , NULL								AS ATTR_06           
+				--	 , NULL								AS ATTR_07           
+				--	 , NULL								AS ATTR_08           
+				--	 , NULL								AS ATTR_09           
+				--	 , A.CONFIRM_ID						AS ATTR_10
+				--	 , '-'				AS ORDER_TYPE_DETAIL
+				--FROM SSP_ANL_SHIP_CONFIRM A WITH(NOLOCK)
+				--WHERE  1 = 1
+				-- AND CONFIRM_ID = @v_confirm_id;
+
+				----------------------------------------------------------------------------------------------------------------------
+			
+				--이력저장
+				EXEC [dbo].[PR_SSP_ANL_SHIP_CONFIRM_HIST] @p_change_request_no,@p_last_updated_by,@p_time_zone
+
+				-- 
+				
+			END
+		ELSE
+			BEGIN
+				IF @p_change_type = 'C'
+					BEGIN
+						--SSP_ANL_SHIP_CONFIRM update
+						UPDATE SSP_ANL_SHIP_CONFIRM
+							SET SHIPMENT_STATUS = 'C'
+								,CHANGE_REQ_NO = null
+								,ATTRIBUTE1 = null
+								,LAST_UPDATED_BY = @p_last_updated_by
+								,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+						WHERE CHANGE_REQ_NO = @p_change_request_no;
+					END
+				ELSE IF @p_change_type = 'N'
+					BEGIN
+						--SSP_ANL_SHIP_CONFIRM update
+						DELETE SSP_ANL_SHIP_CONFIRM
+						WHERE CHANGE_REQ_NO = @p_change_request_no;
+					END
+				ELSE
+					BEGIN
+						--SSP_ANL_SHIP_CONFIRM update
+						UPDATE SSP_ANL_SHIP_CONFIRM
+							SET SHIPMENT_STATUS = 'P'
+								,CHANGE_REQ_NO = null
+								,ATTRIBUTE1 = null
+								,LAST_UPDATED_BY = @p_last_updated_by
+								,LAST_UPDATE_DATE = @v_last_update_date--[dbo].[FN_MULTY_TIME](@p_time_zone)
+						WHERE CHANGE_REQ_NO = @p_change_request_no;
+					END
+			END
+
+		IF @p_change_status = 'A' --변경확정
+			BEGIN
+				--SET @p_yyyymmdd = REPLACE(SUBSTRING(@p_yyyymmdd,1,10),'-','')
+
+				SELECT @p_yyyymmdd = yyyymmdd
+				FROM(
+					SELECT top 1 case when YYYYMMDD > NEW_YYYYMMDD then NEW_YYYYMMDD else YYYYMMDD end yyyymmdd
+					FROM SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE with(nolock)
+					WHERE CHANGE_REQ_NO = @p_change_request_no
+					ORDER BY YYYYMMDD, NEW_YYYYMMDD
+				) a
+     
+				--메일 발송
+				EXEC SCM_SSP_MAIL_SEND @p_change_request_no, @p_change_status
+
+				
+			END 
+		ELSE --변경 Reject
+			BEGIN
+				--메일 발송
+				 EXEC SCM_SSP_MAIL_SEND @p_change_request_no, @p_change_status
+			END 
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code ;
+
+		-- [C20201223-000448] MKT FCST - SSP Sync
+		--IF @p_change_status = 'A' --변경 확정시에만 호출 하도록 변경
+		--	EXEC PR_DM_SSP_CONFIRM_SYNC @p_division_id, @p_new_confirm_id;
+
+	 END TRY
+
+	 BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_40","2115590675","13","(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK","2131590732","1","
+
+
+
+/*
+ * Program ID   : SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK
+ * Description  : Shipment Change Request Confirm Interface Check
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/05/23   ygkim          Initial Release [PJ20182279] 전지본부 출하계획 시스템 구축 프로젝트
+ * 2018/05/29   ygkim			event_date 시간 변경
+ * 2018/07/10   ygkim			@p_change_type 파라미터 추가
+ */
+
+CREATE PROCEDURE [dbo].[SSP0202_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK]
+	 @p_change_request_no	NVARCHAR(MAX)
+	,@p_change_status		NVARCHAR(MAX)
+	,@p_time_zone			NVARCHAR(MAX)
+	,@p_change_type			NVARCHAR(MAX) = 'C'
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE @v_status       NVARCHAR(10)
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SSP0003_SAVE_SHIPMENT_REQUEST_CONFIRM_IF_CHECK';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	SET @v_status = NULL
+	-- 트렌젝션 시작
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();--[dbo].[FN_MULTY_TIME](@p_time_zone);
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+				
+		IF @p_change_status = 'A' --변경확정
+			BEGIN
+				IF @p_change_type = 'C'
+					BEGIN
+						SET @v_status = 'B'
+					END
+				ELSE
+					BEGIN
+						SET @v_status = 'A'
+					END				
+
+				--출하확정변경시 ERP 전송 이터 테이블 저장 B: 변경확정,C: 변경요청, D: 변경 Reject
+				EXEC PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER @v_status, @p_change_request_no
+			END 
+		ELSE --변경 Reject
+			BEGIN
+			    UPDATE SSP_ANL_SHIP_CONFIRM_CHG_REQ_de
+					  SET ATTRIBUTE1 = 'Y'
+					     --,LAST_UPDATED_BY = @p_last_updated_by
+						 --,LAST_UPDATE_DATE = [dbo].[FN_MULTY_TIME](@p_time_zone)
+					WHERE CHANGE_REQ_NO = @p_change_request_no
+					  AND VALID_YN = 'Y';
+
+				--출하확정변경시 ERP 전송 이터 테이블 저장 B: 변경확정,C: 변경요청, D: 변경 Reject
+				EXEC PR_SSP_ANL_SHIP_CONFIRM_CHG_BATCH_PACKER 'D', @p_change_request_no
+			END 
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code ;
+	 END TRY
+
+	 BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+END
+"

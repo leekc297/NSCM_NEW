@@ -4,8 +4,8 @@
 //     R1 행 게이트   : EditButton L644~ — EDIT_FLAG=='Y' 행 × Measure∈{Business_Plan, LOC} 만 수량영역 unlock.
 //                      (KRW/USD/SalesAmt_*/CAR_QTY/MKT_FCST = SP 파생 — 전체 잠금. InsertRow 동일)
 //     R2 버킷 게이트 : EditButton L582~637 — 활성 버킷 축(M_/Q_/Y_)만 편집, 나머지 축 잠금.
-//     R3 금년 잠금   : L670~689 — 금년 이전 컬럼 잠금 (기준 = 금주 월요일 GetThisWeekMonday — FE 산정,
-//                      조회 파라미터 p_now_yyyymmdd 와 동일 값).
+//     R3 금년 잠금   : L660/L1411 — 금년 이전 컬럼 잠금 (기준 = 오늘 날짜 연도 DateTime.Now.Year — cutoff.lockYear.
+//                      과거 회색 표시·조회 p_now_yyyymmdd 는 금주 월요일 그대로).
 //     R4' 버킷축별 유효구간 (2026-07-21 G1 교정 — 신정본 EditButton L582~637 / InsertRow L1406~1461 1:1):
 //                      M_  = 40 && VALID_YN=='Y' && 구간 비공란일 때만 구간 밖 잠금 — else 없음(비40 전면 개방, L588).
 //                      Q_/Y_ = 40 && VALID_YN=='Y' && 구간 비공란 && 구간 내 에서만 개방 —
@@ -91,8 +91,14 @@ export interface BizPlanCutoff {
   thisMonth: string; // yyyymm
   thisYear: number;
   thisQuarter: number;
+  // R3 지난 연도 잠금 기준 = 오늘 날짜의 연도 (AS-IS EditButton L660 / InsertRow L1411 `DateTime.Now.Year`).
+  //   금주 월요일 연도(thisYear)를 쓰면 1월 첫 주(월요일이 전년)에 전년 칸이 열린다.
+  lockYear: number;
 }
-export const buildCutoff = (nowYyyymmdd: string): BizPlanCutoff | null => {
+export const buildCutoff = (
+  nowYyyymmdd: string,
+  todayYear: number = new Date().getFullYear()
+): BizPlanCutoff | null => {
   if (!/^\d{8}$/.test(nowYyyymmdd)) return null;
   const month = Number(nowYyyymmdd.slice(4, 6));
   return {
@@ -100,6 +106,7 @@ export const buildCutoff = (nowYyyymmdd: string): BizPlanCutoff | null => {
     thisMonth: nowYyyymmdd.slice(0, 6),
     thisYear: Number(nowYyyymmdd.slice(0, 4)),
     thisQuarter: Math.ceil(month / 3),
+    lockYear: todayYear,
   };
 };
 
@@ -113,6 +120,14 @@ export interface ValidWindow {
   startYyyy: string;
   endYyyy: string;
 }
+// 'yyyyq'(5자) / 'yyyymm'(6자) 앞 4자리 = 연도. 둘 다 형식이 아니면 '' (= 구간 미지정 유지).
+const yyyyOf = (...candidates: string[]): string => {
+  for (const v of candidates) {
+    if (/^\d{4}/.test(v)) return v.slice(0, 4);
+  }
+  return '';
+};
+
 export const buildValidWindow = (calendar: CutoffWindow | null): ValidWindow | null => {
   if (!calendar) return null;
   // 타입 안전 string 변환 — string/number 만 (객체는 ''. no-base-to-string 회피)
@@ -124,8 +139,17 @@ export const buildValidWindow = (calendar: CutoffWindow | null): ValidWindow | n
     endYyyymm: s(calendar.END_YYYYMM),
     startYyyyqq: s(calendar.START_YYYYQQ),
     endYyyyqq: s(calendar.END_YYYYQQ),
-    startYyyy: s(calendar.START_YYYY),
-    endYyyy: s(calendar.END_YYYY),
+    // 연 축은 SP 응답에 START_YYYY / END_YYYY 가 없을 때 QQ(없으면 MM) 앞 4자리에서 유도한다.
+    //   2026-08-28 실측: 커서 2 가 VALID_YN='Y' / START_YYYYMM='202701' / END_YYYYMM='202707' /
+    //   START_YYYYQQ='20271' / END_YYYYQQ='20272' 만 내려주고 START_YYYY·END_YYYY 는 아예 없다.
+    //   그러면 R4' 의 "구간 비공란" 조건이 깨져 Yearly 가 무조건 잠긴다 — Monthly 는 창이 없으면
+    //   전면 개방이고 Quarterly 는 QQ 로 통과하므로 Yearly 만 죽어 보였다.
+    //   주의: 이건 SP 가 두 컬럼을 되돌려주면 자동으로 물러나는 fallback 이다. 정본 수정은 SP 쪽 —
+    //   AS-IS 는 Tables[1]["START_YYYY"] 를 직접 읽으므로(DMF0042_BizPlan.cs L838) 원본 SP 에는 있다.
+    //   유도 규칙은 같은 유효구간을 축만 바꿔 표현한 값이라는 전제다. 연 축 구간이 월/분기 축보다
+    //   넓게 등록되는 운영 케이스가 있으면 이 fallback 이 실제보다 좁게 잠근다.
+    startYyyy: s(calendar.START_YYYY) || yyyyOf(s(calendar.START_YYYYQQ), s(calendar.START_YYYYMM)),
+    endYyyy: s(calendar.END_YYYY) || yyyyOf(s(calendar.END_YYYYQQ), s(calendar.END_YYYYMM)),
   };
 };
 
@@ -176,8 +200,8 @@ export const evalBizPlanDynCell = (params: {
     return { editable: false, isPast };
   }
 
-  // ── R3 금년 이전 잠금 (L648~660 — 금년 이후 컬럼만 unlock) ──
-  if (tag.year < cutoff.thisYear) return { editable: false, isPast };
+  // ── R3 금년 이전 잠금 (L648~660 — 금년 이후 컬럼만 unlock). 금년 = 오늘 날짜 연도(lockYear) ──
+  if (tag.year < cutoff.lockYear) return { editable: false, isPast };
 
   // ── R4' 버킷축별 유효구간 (2026-07-21 G1 교정 — 신정본 EditButton L582~637 / InsertRow L1406~1461 1:1) ──
   //   R2 통과 후이므로 tag.kind === 활성 버킷 축.
@@ -221,11 +245,13 @@ export const insertStaticEditable = (
     case 'DEPT_ID':
       return !d40; // 81·82 콤보 (L1195)
     case 'DEPT_ID40':
-      return d40; // 40 콤보 (L1193)
+      // 40 Team — 입력 불가. Model 선택 시 기존 Item 팝업의 SCM_MST_SITE_ITEM.DEPT_ID로 자동 채움.
+      return false;
     case 'END_CUSTOMER':
       return !d40;
     case 'END_CUSTOMER40':
-      return d40; // 40 콤보 (EndCustomerByDivision40)
+      // 40 End Customer — 입력 불가. Model 선택 시 SCM_MST_SITE_ITEM.PROJECT_CODE(= 저장 p_PROJECT_CODE 슬롯) 자동.
+      return false;
     case 'SCM_SITE_ID40':
       return d40;
     case 'SCM_SITE_ID81':
@@ -245,10 +271,8 @@ export const insertStaticEditable = (
     case 'UNIT_ENERGY':
       return d82; // 82 에너지 원단위 (직접 입력)
     case 'ENERGE_WH':
-      // 40 Energy(WH) — 신규행 직접 입력 (2026-08-25 사용자 요구). 저장은 P_UNIT_ENERGY 슬롯으로 나간다
-      //   (readUnitEnergySlot). AS-IS 는 이 컬럼을 파생으로 보고 잠갔으나(DMF0005 L759 · DMF0021 L3274)
-      //   TO-BE 40 은 입력값을 저장한다.
-      return d40;
+      // 40 Energy(WH) — 입력 불가. 저장 후 기존 Business Plan 조회가 Item master에서 파생한다.
+      return false;
     case 'ITEM_USE':
       return d82;
     case 'CURRENCY':

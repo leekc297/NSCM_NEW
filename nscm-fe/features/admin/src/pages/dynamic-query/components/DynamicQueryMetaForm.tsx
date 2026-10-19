@@ -45,7 +45,7 @@ export const DynamicQueryMetaForm = ({ dynamicQueryMeta }: Props) => {
       </Grid>
       <Grid size={4}>
         <FormItem
-          label={t('LBL00719', 'Description')}
+          label={t('LBL00608', 'Description')}
           labelAlign='right'
           render={() => (
             <InputField fullWidth readOnly value={dynamicQueryMeta?.description ?? ''} />

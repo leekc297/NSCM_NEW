@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"master/nn-master-mapping","DMF0072","features/master/src/pages/nn-master-mapping/components/NnMasterMappingGrid.tsx","96","code","(change-effect 는 grid mount 전에 early-return 될 수 있다 — SCP0048 선례)."
+"master/nn-master-mapping","DMF0072","features/master/src/pages/nn-master-mapping/nn-master-mapping.constants.ts","20","code","const object — enum 대체 (NSCM 단일 cursor 표준 'o_rc1' 다수 중복 허용)"
+"master/nn-master-mapping","DMF0072","features/master/src/pages/nn-master-mapping/useNnMasterMappingStore.ts","23","endpoint","BE 메타 SHEET_COLUMNS 동적 fetch (admin UI Category Setup 즉시 반영, 룰 #65)"
+"master/nn-master-mapping","DMF0072","features/master/src/pages/nn-master-mapping/useNnMasterMappingStore.ts","83","endpoint","fetchStaticColumns — admin SHEET_COLUMNS 동적 fetch (DMF0004 표준). 메모리 feedback_admin_meta_dynamic_fetch + feedback_grid_no_hardcoded_static_columns. BE: POST /admin/menu/{MENU_ID}/column { sheetNm }"

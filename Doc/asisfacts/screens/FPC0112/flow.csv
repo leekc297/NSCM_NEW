@@ -1,0 +1,5 @@
+﻿"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"only","06.UIL\GSCM.FP.Common.UIL\Popup\FPC0112_AlarmPopup.cs","FPC0112_AlarmPopup","event","this.btnSave.Click","btnSave_Click > SaveToDB","SaveToDB","762","biz:FPCommonDataBLL.GeneralPseudoBatch [batchId=saveAll_planAmendAlarmMemoP]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.FP.Common.UIL\Popup\FPC0112_AlarmPopup.cs","FPC0112_AlarmPopup","event","this.btnSave.Click","btnSave_Click > SaveToDB","SaveToDB","762","FP\Common\PlanAmendMemo#saveAll_planAmendAlarmMemoP","MATCH_PATTERN","[update-batch] ",""
+"only","06.UIL\GSCM.FP.Common.UIL\Popup\FPC0112_AlarmPopup.cs","FPC0112_AlarmPopup","event","this.spdMain.CellClick","spdMain_CellClick","spdMain_CellClick","868","biz:FPCommonDataBLL.GeneralExecuteQuery [batchId=find_alarm]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.FP.Common.UIL\Popup\FPC0112_AlarmPopup.cs","FPC0112_AlarmPopup","event","this.spdMain.CellClick","spdMain_CellClick","spdMain_CellClick","868","FP\Common\PICAlarm#find_alarm","MATCH_PATTERN","[sql] foxquery_sql\FP_Common_PICAlarm_find_alarm.sql","SELECT:FP_AMEND_PIC_ALARM"

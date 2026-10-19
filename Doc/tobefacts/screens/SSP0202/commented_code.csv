@@ -1,0 +1,4 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"shipping/shipment-change-request-confirm","SSP0202","features/shipping/src/pages/shipment-change-request-confirm/components/ConfirmDetailPanel.tsx","40","jsx","우측 1/3 은 빈 칸(`<Grid size={4} />`)으로 비워 2열을 유지한다(자매 SSP0200/SSP0201 과 동일)."
+"shipping/shipment-change-request-confirm","SSP0202","features/shipping/src/pages/shipment-change-request-confirm/useShipmentChangeRequestConfirmStore.ts","42","endpoint","ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch(메인/서브 2회)."
+"shipping/shipment-change-request-confirm","SSP0202","features/shipping/src/pages/shipment-change-request-confirm/useShipmentChangeRequestConfirmStore.ts","213","endpoint","메인/서브 2 시트 컬럼메타 각각 fetch (design 03 §4). 미등록/실패 시 빈 배열 유지."

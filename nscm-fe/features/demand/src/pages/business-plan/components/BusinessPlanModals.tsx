@@ -150,19 +150,31 @@ export const BusinessPlanModals = ({
         callFromCell={true}
       />
 
-      {/* 셀 모달 — ITEM (신규행. 40=ITEM_ID40 / 81·82=ITEM_ID — AS-IS L1687~1697) */}
+      {/* 셀 모달 — ITEM (신규행. 40=ITEM_ID40 / 81·82=ITEM_ID — AS-IS L1687~1697).
+          40 은 Team / End Customer가 입력 불가 컬럼이라 선택한 Site-Item 행의 값으로 함께 채운다.
+          Energy(WH)는 저장 후 기존 Business Plan 조회에서 Item master 기준으로 표시한다. */}
       <ItemByDivisionModal
         open={openItem}
         modalClose={() => onClose('ITEM')}
         setSelectedValue={(
           itemId: string,
           itemName?: string,
+          _itemClassName?: string,
+          nickName?: string,
           _itemType?: string,
-          nickName?: string
+          deptId?: string,
+          _deptName?: string,
+          endCustomer?: string
         ) => {
           applyToInsertBlock(
             div40
-              ? { ITEM_ID40: itemId, ITEM_NAME: itemName ?? '', NICK_NAME: nickName ?? '' }
+              ? {
+                  ITEM_ID40: itemId,
+                  ITEM_NAME: itemName ?? '',
+                  NICK_NAME: nickName ?? '',
+                  ...(deptId ? { DEPT_ID40: deptId } : {}),
+                  ...(endCustomer ? { END_CUSTOMER40: endCustomer } : {}),
+                }
               : { ITEM_ID: itemId, ITEM_NAME: itemName ?? '', NICK_NAME: nickName ?? '' }
           );
         }}
@@ -271,11 +283,13 @@ export const BusinessPlanModals = ({
       />
 
       {/* Ver. Cutoff — 'BP_M' 고정 (AS-IS L2857. 팝업 자체 저장 — blnOK 후 처리 없음 L2862).
-          기간은 메인을 승계하지 않는다 — 팝업 자체 기본값(오늘~+5개월, AS-IS L106~108). */}
+          기간 기본값은 메인 조회기간을 승계한다 (2026-09-02 사용자 요청. 구: 팝업 자체
+          기본값 오늘~+5개월 — AS-IS L106~108). 팝업 안에서 다시 바꿀 수 있다. */}
       <VersionCutoffModal
         open={openCutoff}
         modalClose={() => onClose('CUTOFF')}
         divisionId={divisionId}
+        mainPeriod={period}
       />
 
       {/* Replace by Cutoff — 선택 M_ 범위 from/to (AS-IS L3465. 실행 후 메인 재조회) */}

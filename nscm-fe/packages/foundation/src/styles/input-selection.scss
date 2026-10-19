@@ -1,0 +1,23 @@
+// ============================================================================
+// input-selection.scss — OutlinedInput 드래그 선택 보정 전역 규칙
+//   index.tsx 에서 직접 import (date-picker.scss 와 같은 non-module 전역 scss 패턴).
+//
+// 증상: 입력 박스 테두리 안이지만 <input> 밖 영역(좌우 padding, 테두리를 그리는
+//   fieldset/legend)을 드래그하면, 브라우저가 <input> 이 아니라 legend 안의
+//   zero-width 텍스트 노드를 문서 선택(selection)으로 잡는다. 선택된 것처럼 보이지만
+//   편집 커서가 아니라 selection 이라 백스페이스로 지워지지 않는다.
+//   design-system 의 InputField(@lges) 는 MUI OutlinedInput 구조라 전 화면 공통이고,
+//   각 화면이 감싸는 wrapper 방식은 제각각이라 화면별 대응은 계속 누락이 생긴다.
+//   → OutlinedInput wrapper 전체를 선택 불가로 두고, 실제 <input>/<textarea> 만
+//   선택/편집 가능하게 복원한다. 드래그 시작점이 padding 이든 fieldset/legend 든
+//   모두 커버된다. 버튼(endAdornment) 등 나머지는 원래 선택 대상이 아니다.
+// ============================================================================
+
+.MuiOutlinedInput-root {
+  user-select: none;
+
+  input,
+  textarea {
+    user-select: text;
+  }
+}

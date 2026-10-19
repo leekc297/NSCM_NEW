@@ -3,7 +3,7 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { GridAction } from '@foundation/utils';
-import { CustomDialog, CustomDropdown, SearchArea } from '@shared/components';
+import { CustomDialog, CustomDropdown, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, Tooltip } from '@shared/lges';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
@@ -157,6 +157,10 @@ export const MetalLinkTemplateModal = ({
       position='basic'
       handleClose={modalClose}
       disableButtonCancel
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -167,7 +171,7 @@ export const MetalLinkTemplateModal = ({
         <div className={styles.dialogContent}>
           {/* ⭐ 표준 SearchArea — Search 버튼 상단 (Div = 메인 화면 division 고정) */}
           <SearchArea
-            searchButtonLabel={isFetching ? t('LBL00665', 'Loading...') : t('LBL00664', 'Search')}
+            searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleFind}
             conditions={
               <Grid size={3}>
@@ -183,12 +187,19 @@ export const MetalLinkTemplateModal = ({
           />
           {/* 업로드 대상 조합 미리보기 — Base + 메탈 42 ('-' placeholder). division 고정 */}
           <div className={styles.gridWrapper}>
-            <MetalLinkPriceGrid
+            <ResultArea
+              title=''
+              count={rows.length}
               gridRef={gridRef}
               gridFilterRef={gridFilterRef}
-              data={rows}
-              searchedDivision={divisionId}
-            />
+            >
+              <MetalLinkPriceGrid
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                data={rows}
+                searchedDivision={divisionId}
+              />
+            </ResultArea>
           </div>
           {/* ⭐ 하단 — Excel Download 아이콘 버튼 + Close 맨 오른쪽 (사용자 요구 2026-07-10) */}
           <div className={styles.buttonWrapper}>

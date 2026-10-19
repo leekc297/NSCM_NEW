@@ -1,0 +1,12 @@
+application_context.json
+.intake-staging/
+chat-debug.log
+workbenches/*/history/actions*.jsonl
+graphs/.runtimes-applied.json
+graphs/**/__pycache__/
+agent/memory-local/
+agent/memory/MEMORY.md
+workbenches/*/tools/code/**/node_modules/
+workbenches/*/tools/code/**/.applied.json
+workbenches/*/tools/code/**/.installing
+ui/

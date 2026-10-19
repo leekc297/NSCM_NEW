@@ -1,0 +1,784 @@
+{
+ "SSPM": {
+  "table": "SCM_MST_SITE_ITEM",
+  "key_cols": [
+   "PROJECT_CODE",
+   "SCM_SITE_ID",
+   "ITEM_ID"
+  ],
+  "val_cols": [
+   "CURRENCY",
+   "DEPT_ID",
+   "OWNER",
+   "CUST_GROUP",
+   "APPLICATION",
+   "ROUTE",
+   "LIABILITY_PERIOD",
+   "INVENTORY_DAY"
+  ],
+  "by_div": {
+   "40": [
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "HQ06-A",
+     "ITEM_ID": "MACH340030A2-D02",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    },
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "HQ06-A",
+     "ITEM_ID": "MACH340030A2-D03",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    },
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "HQ06-A",
+     "ITEM_ID": "MACH340030A2-D04",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    },
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "HQ06-A",
+     "ITEM_ID": "MACH340035A1",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    },
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "HQ06-A",
+     "ITEM_ID": "MACH340035A1-D06",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    }
+   ],
+   "81": [
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "MI00-E",
+     "ITEM_ID": "APCCA3025A",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    },
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "MI00-E",
+     "ITEM_ID": "APCCA3063A",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    },
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "MI00-E",
+     "ITEM_ID": "APCCA3074A",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    },
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "MI00-E",
+     "ITEM_ID": "APCCA3094A",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    },
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "MI00-E",
+     "ITEM_ID": "APCCA3200A",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    }
+   ],
+   "82": [
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "KR32625300_82-P",
+     "ITEM_ID": "EM048128P6BB-A01",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    },
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "KR32625300_82-P",
+     "ITEM_ID": "EM048145P5B1",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    },
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "KR32625300_82-P",
+     "ITEM_ID": "EM048145P5BD",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    },
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "KR32625300_82-P",
+     "ITEM_ID": "EM048189P3B5",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    },
+    {
+     "PROJECT_CODE": "-",
+     "SCM_SITE_ID": "KR32625300_82-P",
+     "ITEM_ID": "EM048189P3BA",
+     "CURRENCY": null,
+     "DEPT_ID": null,
+     "OWNER": null,
+     "CUST_GROUP": null,
+     "APPLICATION": null,
+     "ROUTE": null,
+     "LIABILITY_PERIOD": null,
+     "INVENTORY_DAY": null
+    }
+   ]
+  }
+ },
+ "NN": {
+  "table": "DM_CUST_MODEL_MAPPING_M",
+  "key_cols": [
+   "DATA_TYPE_CODE",
+   "SOLDTO_CODE",
+   "SHIPTO_CODE",
+   "CUSTOMER_ITEM_ID",
+   "SCM_SITE_ID",
+   "PROJECT_CODE",
+   "ITEM_ID"
+  ],
+  "val_cols": [
+   "FCST_TYPE",
+   "INCOTERMS",
+   "DOM_EXP",
+   "MAPPING_ITEM_ID"
+  ],
+  "by_div": {
+   "40": [],
+   "81": [
+    {
+     "DATA_TYPE_CODE": "ERP",
+     "SOLDTO_CODE": "SE00103800",
+     "SHIPTO_CODE": "SE00103800",
+     "CUSTOMER_ITEM_ID": "31407043",
+     "SCM_SITE_ID": "Volvo AS_SE_GOT",
+     "PROJECT_CODE": "A19VO6001",
+     "ITEM_ID": "EMFO00003AA",
+     "FCST_TYPE": "MPS",
+     "INCOTERMS": "FCA",
+     "DOM_EXP": "E",
+     "MAPPING_ITEM_ID": "EMFO00003AA"
+    },
+    {
+     "DATA_TYPE_CODE": "ERP",
+     "SOLDTO_CODE": "SE00103800",
+     "SHIPTO_CODE": "SE00103800",
+     "CUSTOMER_ITEM_ID": "31407047",
+     "SCM_SITE_ID": "Volvo AS_SE_GOT",
+     "PROJECT_CODE": "A19VO6001",
+     "ITEM_ID": "EASL00003AB",
+     "FCST_TYPE": "MPS",
+     "INCOTERMS": "FCA",
+     "DOM_EXP": "E",
+     "MAPPING_ITEM_ID": "EASL00003AB"
+    },
+    {
+     "DATA_TYPE_CODE": "ERP",
+     "SOLDTO_CODE": "SE00103800",
+     "SHIPTO_CODE": "SE00103800",
+     "CUSTOMER_ITEM_ID": "31407048",
+     "SCM_SITE_ID": "Volvo AS_SE_GOT",
+     "PROJECT_CODE": "A19VO6001",
+     "ITEM_ID": "EMVV00004AA",
+     "FCST_TYPE": "MPS",
+     "INCOTERMS": "FCA",
+     "DOM_EXP": "E",
+     "MAPPING_ITEM_ID": "EMVV00004AA"
+    },
+    {
+     "DATA_TYPE_CODE": "ERP",
+     "SOLDTO_CODE": "SE00103800",
+     "SHIPTO_CODE": "SE00103800",
+     "CUSTOMER_ITEM_ID": "31407215",
+     "SCM_SITE_ID": "Volvo AS_SE_GOT",
+     "PROJECT_CODE": "A19VO6001",
+     "ITEM_ID": "EMFO00004AA",
+     "FCST_TYPE": "MPS",
+     "INCOTERMS": "FCA",
+     "DOM_EXP": "E",
+     "MAPPING_ITEM_ID": "EMFO00004AA"
+    },
+    {
+     "DATA_TYPE_CODE": "ERP",
+     "SOLDTO_CODE": "SE00103800",
+     "SHIPTO_CODE": "SE00103800",
+     "CUSTOMER_ITEM_ID": "31409382",
+     "SCM_SITE_ID": "Volvo AS_SE_GOT",
+     "PROJECT_CODE": "A19VO6001",
+     "ITEM_ID": "EEA00063AC",
+     "FCST_TYPE": "MPS",
+     "INCOTERMS": "FCA",
+     "DOM_EXP": "E",
+     "MAPPING_ITEM_ID": "EEA00063AC"
+    }
+   ],
+   "82": []
+  }
+ },
+ "CFM": {
+  "table": "DM_MST_CUSTOMER_FCST",
+  "key_cols": [
+   "PLAN_WEEK",
+   "CUSTOMER_CODE",
+   "SCM_SITE_ID",
+   "MEASURE_GROUP",
+   "MEASURE"
+  ],
+  "val_cols": [
+   "SUMMARY_BUCKET_VALUE",
+   "CUSTOMER_PSI"
+  ],
+  "by_div": {
+   "40": [
+    {
+     "PLAN_WEEK": "202635",
+     "CUSTOMER_CODE": "IM",
+     "SCM_SITE_ID": "IM_CN_NGG",
+     "MEASURE_GROUP": "CUST_FCST",
+     "MEASURE": "Customer FCST",
+     "SUMMARY_BUCKET_VALUE": "20000102",
+     "CUSTOMER_PSI": "-"
+    },
+    {
+     "PLAN_WEEK": "202635",
+     "CUSTOMER_CODE": "IM",
+     "SCM_SITE_ID": "IM_CN_NGG",
+     "MEASURE_GROUP": "PSI",
+     "MEASURE": "Cust FCST",
+     "SUMMARY_BUCKET_VALUE": "20000102",
+     "CUSTOMER_PSI": "S"
+    },
+    {
+     "PLAN_WEEK": "202635",
+     "CUSTOMER_CODE": "TWEnersys",
+     "SCM_SITE_ID": "TWEnersys_KR_TJN",
+     "MEASURE_GROUP": "CUST_FCST",
+     "MEASURE": "Customer FCST",
+     "SUMMARY_BUCKET_VALUE": "20000102",
+     "CUSTOMER_PSI": "-"
+    }
+   ],
+   "81": [
+    {
+     "PLAN_WEEK": "202635",
+     "CUSTOMER_CODE": "ANDURIL",
+     "SCM_SITE_ID": "ANDURIL_US_CZM",
+     "MEASURE_GROUP": "CUST_FCST",
+     "MEASURE": "Cutomer FCST",
+     "SUMMARY_BUCKET_VALUE": "20000102",
+     "CUSTOMER_PSI": "-"
+    },
+    {
+     "PLAN_WEEK": "202635",
+     "CUSTOMER_CODE": "ATL",
+     "SCM_SITE_ID": "ATL_DE_RDG",
+     "MEASURE_GROUP": "CUST_FCST",
+     "MEASURE": "Customer FCST",
+     "SUMMARY_BUCKET_VALUE": "20000102",
+     "CUSTOMER_PSI": "-"
+    },
+    {
+     "PLAN_WEEK": "202635",
+     "CUSTOMER_CODE": "Aeonus",
+     "SCM_SITE_ID": "Aeonus_KR_GUN",
+     "MEASURE_GROUP": "CUST_FCST",
+     "MEASURE": "Customer FCST",
+     "SUMMARY_BUCKET_VALUE": "20000102",
+     "CUSTOMER_PSI": "-"
+    },
+    {
+     "PLAN_WEEK": "202635",
+     "CUSTOMER_CODE": "Ampere Electricity",
+     "SCM_SITE_ID": "Ampere Electricity_FR_DOI",
+     "MEASURE_GROUP": "CUST_FCST",
+     "MEASURE": "Customer FCST",
+     "SUMMARY_BUCKET_VALUE": "20000102",
+     "CUSTOMER_PSI": "-"
+    },
+    {
+     "PLAN_WEEK": "202635",
+     "CUSTOMER_CODE": "BAE",
+     "SCM_SITE_ID": "BAE_US_ENC",
+     "MEASURE_GROUP": "CUST_FCST",
+     "MEASURE": "Customer FCST",
+     "SUMMARY_BUCKET_VALUE": "20000102",
+     "CUSTOMER_PSI": "-"
+    }
+   ],
+   "82": []
+  }
+ },
+ "CMM": {
+  "table": "DM_MST_CUSTOMER_MODEL",
+  "key_cols": [
+   "ITEM_ID"
+  ],
+  "val_cols": [
+   "SCM_SITE_ID",
+   "PROJECT_CODE"
+  ],
+  "by_div": {
+   "40": [
+    {
+     "ITEM_ID": "MCCH129520B1",
+     "SCM_SITE_ID": "Husqvarna_SE_JKG",
+     "PROJECT_CODE": null
+    },
+    {
+     "ITEM_ID": "MCCM346014B2-K",
+     "SCM_SITE_ID": "Wuxi_CN_AIN",
+     "PROJECT_CODE": null
+    },
+    {
+     "ITEM_ID": "MCCE132502A1-GA",
+     "SCM_SITE_ID": "China Effort_CN_SZX",
+     "PROJECT_CODE": null
+    },
+    {
+     "ITEM_ID": "MCCM356015A2-K",
+     "SCM_SITE_ID": "Shuodao_CN_SZH",
+     "PROJECT_CODE": null
+    },
+    {
+     "ITEM_ID": "MCCM348015A1-D67-E",
+     "SCM_SITE_ID": "Shuodao_CN_SZH",
+     "PROJECT_CODE": null
+    }
+   ],
+   "81": [
+    {
+     "ITEM_ID": null,
+     "SCM_SITE_ID": "BMW_DE_MUC",
+     "PROJECT_CODE": "A18BW2003"
+    },
+    {
+     "ITEM_ID": "APBMW48CL-B1-B02",
+     "SCM_SITE_ID": "BMW_DE_MUC",
+     "PROJECT_CODE": "A18BW2003"
+    },
+    {
+     "ITEM_ID": "APBMW48CL-B1-B03",
+     "SCM_SITE_ID": "BMW_DE_MUC",
+     "PROJECT_CODE": "A18BW2003"
+    },
+    {
+     "ITEM_ID": "APBMW48CL-B1-B04",
+     "SCM_SITE_ID": "BMW_DE_MUC",
+     "PROJECT_CODE": "A18BW2003"
+    },
+    {
+     "ITEM_ID": "APBMW48CL-B1-B05",
+     "SCM_SITE_ID": "BMW_DE_MUC",
+     "PROJECT_CODE": "A18BW2003"
+    }
+   ],
+   "82": [
+    {
+     "ITEM_ID": "EM048218P5B1",
+     "SCM_SITE_ID": "EDF_FR_ECI",
+     "PROJECT_CODE": "C-18-101"
+    },
+    {
+     "ITEM_ID": "EM048290P5B1",
+     "SCM_SITE_ID": "EDF_FR_ECI",
+     "PROJECT_CODE": "C-18-101"
+    },
+    {
+     "ITEM_ID": "EM048126P3B7",
+     "SCM_SITE_ID": "BOSCH_DE_STR",
+     "PROJECT_CODE": "G-18-080"
+    },
+    {
+     "ITEM_ID": "EM048126P3BA",
+     "SCM_SITE_ID": "HYbrid Energy Solutions_IE_KLK",
+     "PROJECT_CODE": "G-18-239"
+    },
+    {
+     "ITEM_ID": "EM048218P5B9",
+     "SCM_SITE_ID": "GE Fuel Cells_US_NYC",
+     "PROJECT_CODE": "G-17-256"
+    }
+   ]
+  }
+ },
+ "RSLT": {
+  "table": "DM_DNM_SALES_RESULT_IF",
+  "key_cols": [
+   "ITEM_ID",
+   "PROJECT_CODE",
+   "CUSTOMER_CODE"
+  ],
+  "val_cols": [
+   "CREATION_DATE",
+   "FCST_TYPE"
+  ],
+  "by_div": {
+   "40": [
+    {
+     "ITEM_ID": "MCCM125010A1",
+     "PROJECT_CODE": "N",
+     "CUSTOMER_CODE": "IN00276800",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "MPS"
+    },
+    {
+     "ITEM_ID": "MCCH129520A4",
+     "PROJECT_CODE": "N",
+     "CUSTOMER_CODE": "DE00102700",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "MPS"
+    },
+    {
+     "ITEM_ID": "MCCM120510A3",
+     "PROJECT_CODE": "N",
+     "CUSTOMER_CODE": "US00204500",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "MPS"
+    },
+    {
+     "ITEM_ID": "MCCM131012A1",
+     "PROJECT_CODE": "N",
+     "CUSTOMER_CODE": "US00204500",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "MPS"
+    },
+    {
+     "ITEM_ID": "MCCM125010A1",
+     "PROJECT_CODE": "N",
+     "CUSTOMER_CODE": "IN00290000",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "MPS"
+    }
+   ],
+   "81": [
+    {
+     "ITEM_ID": "AMVAGBEVM-A4-C01",
+     "PROJECT_CODE": "N",
+     "CUSTOMER_CODE": "BE00110400",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "SMC"
+    },
+    {
+     "ITEM_ID": "AMVAGBEVN-A4-C01",
+     "PROJECT_CODE": "N",
+     "CUSTOMER_CODE": "BE00110400",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "SMC"
+    },
+    {
+     "ITEM_ID": "APAAGIHEV-A2",
+     "PROJECT_CODE": "A15AI7001",
+     "CUSTOMER_CODE": "DE00172400",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "MPS"
+    },
+    {
+     "ITEM_ID": "EMCV00143AB",
+     "PROJECT_CODE": "A15AI7001",
+     "CUSTOMER_CODE": "DE00172400",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "MPS"
+    },
+    {
+     "ITEM_ID": "ETC",
+     "PROJECT_CODE": "N",
+     "CUSTOMER_CODE": "DE00172400",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "SMC"
+    }
+   ],
+   "82": [
+    {
+     "ITEM_ID": "ECW01487AA",
+     "PROJECT_CODE": "G-17-160",
+     "CUSTOMER_CODE": "US00534500",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "MPS"
+    },
+    {
+     "ITEM_ID": "ECW01488AA",
+     "PROJECT_CODE": "G-17-160",
+     "CUSTOMER_CODE": "US00534500",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "MPS"
+    },
+    {
+     "ITEM_ID": "ECW01489AA",
+     "PROJECT_CODE": "G-17-160",
+     "CUSTOMER_CODE": "US00534500",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "MPS"
+    },
+    {
+     "ITEM_ID": "ECW01490AA",
+     "PROJECT_CODE": "G-17-160",
+     "CUSTOMER_CODE": "US00534500",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "MPS"
+    },
+    {
+     "ITEM_ID": "EABB00252AA",
+     "PROJECT_CODE": "S-17-177",
+     "CUSTOMER_CODE": "KR03647300",
+     "CREATION_DATE": "2018-09-12 15:18:58",
+     "FCST_TYPE": "MPS"
+    }
+   ]
+  }
+ },
+ "EDI": {
+  "table": "DM_DNM_EDI_CALLOFF_ITEM",
+  "key_cols": [
+   "ITEM_ID",
+   "SCM_SITE_ID",
+   "PROJECT_CODE"
+  ],
+  "val_cols": [
+   "QTY",
+   "YYYYMMDD",
+   "CREATION_DATE"
+  ],
+  "by_div": {
+   "40": [],
+   "81": [
+    {
+     "ITEM_ID": "APFMCV36X-A1",
+     "SCM_SITE_ID": "Ford AS_DE_QKL",
+     "PROJECT_CODE": "A19FD2004",
+     "QTY": "0",
+     "YYYYMMDD": "20240701",
+     "CREATION_DATE": "2024-05-07 11:20:03"
+    },
+    {
+     "ITEM_ID": "APBMW48CL-A2-780",
+     "SCM_SITE_ID": "BMW_DE_NBH",
+     "PROJECT_CODE": "A15BW7002",
+     "QTY": "71",
+     "YYYYMMDD": "20251201",
+     "CREATION_DATE": "2024-05-07 11:20:03"
+    },
+    {
+     "ITEM_ID": "APBMW48CL-A2-770",
+     "SCM_SITE_ID": "BMW_DE_NBH",
+     "PROJECT_CODE": "A15BW7002",
+     "QTY": "18",
+     "YYYYMMDD": "20240507",
+     "CREATION_DATE": "2024-05-07 11:20:03"
+    },
+    {
+     "ITEM_ID": "AMVCCCMAE-A1-010",
+     "SCM_SITE_ID": "Zhongjia_CN_TIZ",
+     "PROJECT_CODE": "A17VO4001",
+     "QTY": "1728",
+     "YYYYMMDD": "20240725",
+     "CREATION_DATE": "2024-06-30 17:20:05"
+    },
+    {
+     "ITEM_ID": "AMVCCCMAE-A1-000",
+     "SCM_SITE_ID": "Zhongjia_CN_TIZ",
+     "PROJECT_CODE": "A17VO4001",
+     "QTY": "6",
+     "YYYYMMDD": "20240828",
+     "CREATION_DATE": "2024-06-30 17:20:05"
+    }
+   ],
+   "82": []
+  }
+ },
+ "VMI": {
+  "table": "DM_PLN_MKT_FCST_RESULT",
+  "key_cols": [
+   "ITEM_ID",
+   "SCM_SITE_ID",
+   "PROJECT_CODE"
+  ],
+  "val_cols": [
+   "QTY",
+   "YYYYMMDD",
+   "CREATION_DATE",
+   "MEASURE"
+  ],
+  "by_div": {
+   "40": [
+    {
+     "ITEM_ID": "MPPDELBK4C1N",
+     "SCM_SITE_ID": "Dell_BR_HTL",
+     "PROJECT_CODE": "Dell",
+     "QTY": 1996.0,
+     "YYYYMMDD": "20210301",
+     "CREATION_DATE": "2021-05-01 23:11:03",
+     "MEASURE": "VMI_Inv"
+    },
+    {
+     "ITEM_ID": "MPPDELM3421C",
+     "SCM_SITE_ID": "Dell_BR_HTL",
+     "PROJECT_CODE": "Dell",
+     "QTY": 1264.0,
+     "YYYYMMDD": "20210304",
+     "CREATION_DATE": "2021-05-01 23:11:03",
+     "MEASURE": "VMI_Inv"
+    },
+    {
+     "ITEM_ID": "MPPDELM4601C",
+     "SCM_SITE_ID": "Dell_BR_HTL",
+     "PROJECT_CODE": "Dell",
+     "QTY": 1642.0,
+     "YYYYMMDD": "20210304",
+     "CREATION_DATE": "2021-05-01 23:11:03",
+     "MEASURE": "VMI_Inv"
+    },
+    {
+     "ITEM_ID": "MPPDELMA3C1N",
+     "SCM_SITE_ID": "Dell_BR_HTL",
+     "PROJECT_CODE": "Dell",
+     "QTY": 2040.0,
+     "YYYYMMDD": "20210612",
+     "CREATION_DATE": "2021-08-01 23:33:27",
+     "MEASURE": "VMI_Inv"
+    },
+    {
+     "ITEM_ID": "MPPDELMODN1C",
+     "SCM_SITE_ID": "Dell_BR_HTL",
+     "PROJECT_CODE": "Dell",
+     "QTY": 895.0,
+     "YYYYMMDD": "20210304",
+     "CREATION_DATE": "2021-05-01 23:11:03",
+     "MEASURE": "VMI_Inv"
+    }
+   ],
+   "81": [],
+   "82": [
+    {
+     "ITEM_ID": "EH048252P3S1",
+     "SCM_SITE_ID": "LGCEG_DE_MWA",
+     "PROJECT_CODE": "R-18-004",
+     "QTY": 4.0,
+     "YYYYMMDD": "20201102",
+     "CREATION_DATE": "2021-01-01 23:16:52",
+     "MEASURE": "VMI_Inv"
+    },
+    {
+     "ITEM_ID": "EH153064P8S1",
+     "SCM_SITE_ID": "LGCEG_DE_MWA",
+     "PROJECT_CODE": "R-18-011",
+     "QTY": 173.0,
+     "YYYYMMDD": "20210604",
+     "CREATION_DATE": "2021-08-01 23:33:27",
+     "MEASURE": "VMI_Inv"
+    },
+    {
+     "ITEM_ID": "EH153064P8S8",
+     "SCM_SITE_ID": "LGCEG_DE_MWA",
+     "PROJECT_CODE": "R-18-011",
+     "QTY": 78.0,
+     "YYYYMMDD": "20220901",
+     "CREATION_DATE": "2022-11-01 23:43:06",
+     "MEASURE": "VMI_Inv"
+    },
+    {
+     "ITEM_ID": "MBK01064AB",
+     "SCM_SITE_ID": "LGCEG_DE_MWA",
+     "PROJECT_CODE": "R-18-011",
+     "QTY": 500.0,
+     "YYYYMMDD": "20211104",
+     "CREATION_DATE": "2022-01-01 23:27:15",
+     "MEASURE": "VMI_Inv"
+    }
+   ]
+  }
+ }
+}

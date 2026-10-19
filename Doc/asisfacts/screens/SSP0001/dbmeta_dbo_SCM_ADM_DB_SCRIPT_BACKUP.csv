@@ -1,0 +1,834 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_GET_SHIPMENT_PLAN_CONFIRM","727061726","1","/*
+ * Program ID   : SSP0001_GET_SHIPMENT_PLAN_CONFIRM
+ * Description  : Shipment Plan Confrim
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/04/10   byunghunjung   IInitial Release [PJ20182279] 전지본부 출하계획 시스템 구축 프로젝트
+ * 2018/06/01   ygkim		   ship_frozen 컬럼 추가
+ * 2018/06/04   ygkim		   seq 컬럼 추가
+ * 2018/08/30   ygkim		   Division 'EE' 추가에 따른 쿼리 수정
+ ex)
+EXEC SSP0001_GET_SHIPMENT_PLAN_CONFIRM @p_division_id='40,81,82', @p_from_site='', @p_item_id='', @p_plan_start_yyyymmdd='20180515', @p_plan_type='', @p_from_yyyymmdd='20180515', @p_to_yyyymmdd='20180617', @p_user_id='addio777', @p_program_id='SSP0001', @p_sheet_name='Shipment Plan Confirm', @debug_mode='T'
+ */
+CREATE PROCEDURE [dbo].[SSP0001_GET_SHIPMENT_PLAN_CONFIRM]
+	 @p_division_id			NVARCHAR(MAX)
+	,@p_from_site			NVARCHAR(MAX)
+	,@p_item_id				NVARCHAR(MAX)
+	,@p_plan_start_yyyymmdd  NVARCHAR(8)
+	,@p_plan_type			NVARCHAR(50)
+	,@p_from_yyyymmdd		NVARCHAR(MAX)
+	,@p_to_yyyymmdd			NVARCHAR(MAX)
+	,@p_user_id				NVARCHAR(MAX)
+	,@p_program_id			NVARCHAR(MAX) = 'SSP0001' 
+	,@p_sheet_name			NVARCHAR(MAX) = 'Shipment Plan Confirm'
+	,@debug_mode			NVARCHAR(1)='F'
+
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE @v_data_cnt NVARCHAR(8);
+	SET @v_data_cnt =0;
+	
+	DECLARE @v_cnt_usr_measure	INT =0;
+
+	SET @v_cnt_usr_measure = (
+								SELECT COUNT(*) 
+								FROM scm_mst_titleset_user   with(nolock)
+								WHERE 1=1
+								 AND program_id  =  @p_program_id
+								 AND sheet_name  =  @p_sheet_name 
+								 AND user_id     =  @p_user_id
+							  )
+
+
+
+   /********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/	
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SSP0001_1') IS NOT NULL
+		   DROP TABLE #TblDynamicPivot_SSP0001_1 
+
+    create table #TblDynamicPivot_SSP0001_1(
+		 division_id NVARCHAR(60)
+		,plan_start_yyyymmdd NVARCHAR(8)
+		,plan_type NVARCHAR(50)
+		,from_site NVARCHAR(30)
+		,item_id NVARCHAR(50)
+		,ship_frozen int
+		,seq int
+		,nick_name NVARCHAR(100)
+		,measure NVARCHAR(100)
+		,measure_name NVARCHAR(2000)
+		,user_sort_order_no NUMERIC
+		,from_yyyymmdd NVARCHAR(8)
+		,to_yyyymmdd NVARCHAR(8)
+		,yyyymmdd NVARCHAR(10)		
+		,qty NUMERIC
+
+	);
+
+   /********************************************************************************
+	* 데이타조회, 임시테이블에 저장
+	********************************************************************************/
+	DECLARE @mDQry NVARCHAR(MAX)='';
+	
+	DECLARE  @v_division_id NVARCHAR(MAX)='';
+	DECLARE  @v_from_site NVARCHAR(MAX)='';
+	DECLARE  @v_item_id NVARCHAR(MAX)='';
+	
+	--IN 조건으로 데이터를 가져옴
+	SET @v_division_id = [dbo].FN_GET_IN_STR(@p_division_id);
+	SET @v_from_site = [dbo].FN_GET_IN_STR(@p_from_site);
+	SET @v_item_id = [dbo].FN_GET_IN_STR(@p_item_id);
+
+	SET @mDQry = @mDQry + ' INSERT INTO #TblDynamicPivot_SSP0001_1	                          ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' SELECT m.division_id	                          ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 		  ,m.plan_start_yyyymmdd                  ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 		  ,m.plan_type                            ' + char(10) ;                                                                           "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_GET_SHIPMENT_PLAN_CONFIRM","727061726","2","                                                                       
+	SET @mDQry = @mDQry + ' 		  ,m.from_site                            ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 		  ,m.item_id                              ' + char(10) ;  
+	SET @mDQry = @mDQry + ' 		  ,m.ship_frozen                          ' + char(10) ;  
+	SET @mDQry = @mDQry + ' 		  ,m.seq		                          ' + char(10) ; 
+	SET @mDQry = @mDQry + ' 		  ,m.nick_name                            ' + char(10) ;                                                                                                                                               
+	SET @mDQry = @mDQry + ' 		  ,m.measure                              ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 		  ,m.measure_name                         ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 		  ,m.user_sort_order_no                   ' + char(10) ;  	                                                                                                                                                                                                                                                                                           
+	SET @mDQry = @mDQry + ' 		  ,'''+@p_from_yyyymmdd +''' as from_yyyymmdd      ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 		  ,'''+@p_to_yyyymmdd   +'''  as to_yyyymmdd          ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 		  ,''D_'' + m.yyyymmdd as yyyymmdd        ' + char(10) ;                                                                                                                                                    
+	SET @mDQry = @mDQry + ' 		  ,n.qty                                  ' + char(10) ;
+	--SET @mDQry = @mDQry + '     INTO  #TblDynamicPivot_SSP0001_1                ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 	FROM (                                        ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 		SELECT                                    ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 			  c.division_id			              ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 			 ,c.plan_start_yyyymmdd               ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 			 ,c.plan_type                         ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 			 ,c.from_site			              ' + char(10) ;                                                                                                                            "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_GET_SHIPMENT_PLAN_CONFIRM","727061726","3","                      
+	SET @mDQry = @mDQry + ' 			 ,c.item_id			                  ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 			 ,a.column_name	AS measure	          ' + char(10) ;                                                                                                                                                  
+	SET @mDQry = @mDQry + ' 			 ,a.COLUMN_LABEL_NAME AS measure_name ' + char(10) ;                                                                                                                                               
+	SET @mDQry = @mDQry + ' 			 ,c.yyyymmdd                          ' + char(10) ; 
+	SET @mDQry = @mDQry + ' 			 ,c.ship_frozen                       ' + char(10) ;    
+	SET @mDQry = @mDQry + ' 			 ,c.seq			                      ' + char(10) ;      
+	SET @mDQry = @mDQry + ' 			 ,c.nick_name	                      ' + char(10) ;                                                                                                                                              
+	SET @mDQry = @mDQry + ' 			 ,isnull(b.sort_order_no,a.sort_order_no ) AS user_sort_order_no	    ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 		FROM scm_mst_sheet_measure a with(nolock) LEFT OUTER JOIN                   ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 			 scm_mst_titleset_user b with(nolock) ON b.program_id  = a.program_id   ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 					                AND b.sheet_name  = a.sheet_name                ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 									AND b.column_name = a.column_name               ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 									AND b.user_id     = '''+@p_user_id+'''  ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 			, ( SELECT                                                              ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 					   p.DIVISION_ID 			                                    ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 					  ,p.PLAN_START_YYYYMMDD		                                ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 					  ,p.PLAN_TYPE                                                  ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 					  ,p.FROM_SITE				                                    ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 					  ,p.ITEM_ID				                                    ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 					  ,p.YYYYMMDD                                                   ' + char(10);    
+	SET @mDQry = @mDQry + ' 					  ,s.SHIP_FROZEN                                                ' + char(10); 
+	SET @mDQry = @mDQry + ' 					  ,p"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_GET_SHIPMENT_PLAN_CONFIRM","727061726","4",".SEQ		                                                ' + char(10); 
+	--SET @mDQry = @mDQry + ' 					  ,dbo.fn_get_item_nickname( p.division_id, p.item_id ) AS nick_name      ' + char(10);                                                                                                            
+	SET @mDQry = @mDQry + ' 					  ,dbo.fn_get_item_nickname( (case when p.division_id = ''EE'' then p.origin_from_division_id else p.division_id end) , p.item_id ) AS nick_name      ' + char(10);                                                                                                            
+	SET @mDQry = @mDQry + ' 				FROM SSP_ANL_SHIP_PLAN P with(nolock)                               ' + char(10);  
+	SET @mDQry = @mDQry + ' 				LEFT OUTER JOIN SCM_MST_SITE S WITH(NOLOCK) ON (CASE WHEN P.DIVISION_ID = ''EE'' THEN P.ORIGIN_FROM_DIVISION_ID ELSE P.DIVISION_ID END) = S.DIVISION_ID AND P.FROM_SITE = S.SCM_SITE_ID AND S.VALID_YN = ''Y''    ' + char(10);    
+	--SET @mDQry = @mDQry + ' 				LEFT OUTER JOIN SCM_MST_SITE S WITH(NOLOCK) ON (CASE WHEN P.DIVISION_ID = ''EE'' THEN ELSE P.DIVISION_ID END) = S.DIVISION_ID AND P.FROM_SITE = S.SCM_SITE_ID AND S.VALID_YN = ''Y''    ' + char(10);    
+	SET @mDQry = @mDQry + ' 				WHERE 1=1                                                           ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 					AND yyyymmdd    >= '''+@p_from_yyyymmdd +'''                            ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 					AND yyyymmdd    <= '''+@p_to_yyyymmdd + '''                              ' + char(10);                                                                                                             
+	SET @mDQry = @mDQry + ' 					--AND division_id  = @p_division_id                             ' + char(10);                                                                                                             
+	IF ( @v_division_id IS NOT NULL AND @v_division_id    != '') SET @mDQry = @mDQry + ' 					AND  p.division_id   IN ('+ @v_division_id +')'+char(10);                     
+	IF ( @v_from_site   IS NOT NULL AND @v_from_site    != '') SET @mDQry = @mDQry + ' 					AND  p.from_site     IN ('+ @v_from_site   +')'+char(10);                     
+	IF ( @v_item_id     IS NOT NULL AND @v_item_id    != ''  ) SET @mDQry = @mDQry + ' 					AND  p.item_id       IN ('+ @v_item_id     +')'+char(10);                     
+	IF ( @p_plan_start_yyyymmdd   IS NOT NULL AND @p_plan_start_yyyymmdd    != '') SET @mDQry = @mDQry + ' 					AND  PLAN_START_YYYYMMDD = '''+@p_plan_start_yyyymmdd +''''+char(10);                   
+	IF ( @p_plan_type   IS NOT NULL AND @p_plan_type    != '') SET @mDQry = @mDQry + ' 				    AND  p.PLAN_TYPE           = '''+@p_plan_type   +''''+char(10);                   
+	SET @mDQry = @mDQry + ' 					AND EXISTS (SELECT 1                                                                                                                                        '+char(10);                 
+	SET @mDQry = @mDQry + ' 								FROM(                                                                                                                                           '+char(10);                 
+	SET @mDQry = @mDQry + ' 									SELECT division_id,MAX(PLAN_SEQ) PLAN_SEQ                                                      '+char(10);                 
+	SET @mDQry = @mDQry + ' 									FROM   SSP_PLAN_VERSION_V with(nolock)                                                                                                      '+char(10);                 
+	SET @mDQry = @mDQry + ' 									WHERE  PLAN_TYPE    = ''SP''                                                                                                                '+char(10);                   
+	--SET @mDQry = @mDQry +"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_GET_SHIPMENT_PLAN_CONFIRM","727061726","5"," ' 									AND    ( ( @p_division_id IS NULL OR @p_division_id ='''')  OR division_id   IN (SELECT token FROM dbo.String_Split(@p_division_id,'','')) )'+char(10); 
+   IF ( @v_division_id IS NOT NULL AND @v_division_id !='') SET @mDQry = @mDQry + ' 									AND  division_id   IN ('+ @v_division_id +')'+char(10);                     	                    
+	SET @mDQry = @mDQry + ' 									AND    CONFIRM_FLAG = ''Y''                                       '+char(10); 
+	SET @mDQry = @mDQry + ' 									AND    PLAN_START_YYYYMMDD = '''+@p_plan_start_yyyymmdd +'''      '+char(10); 							                                                                                            
+	--SET @mDQry = @mDQry + ' 									AND    PLAN_START_YYYYMMDD = (SELECT MAX(PLAN_START_YYYYMMDD)     '+char(10);                                                                                           
+	--SET @mDQry = @mDQry + ' 														FROM SSP_PLAN_VERSION_V T with(nolock)        '+char(10);                                                                                           
+	--SET @mDQry = @mDQry + ' 														WHERE 1=1'+char(10);
+	----SET @mDQry = @mDQry + ' 														WHERE ( ( @p_division_id IS NULL OR @p_division_id ='''')  OR t.division_id   IN (SELECT token FROM dbo.String_Split(@p_division_id,'','')) )'+char(10);
+	--IF ( @v_division_id IS NOT NULL AND @v_division_id !='' ) SET @mDQry = @mDQry + ' 														AND  t.division_id   IN ('+ @v_division_id +')'+char(10);                     	                    
+	--SET @mDQry = @mDQry + ' 														AND   T.plan_type  = ''SP''        '+char(10);                                                                                                        
+	--SET @mDQry = @mDQry + ' 														AND   T.CONFIRM_FLAG = ''Y'')      '+char(10);                                                                                                        
+	SET @mDQry = @mDQry + ' 									group by division_id                                   '+char(10);                                                                                                      
+	SET @mDQry = @mDQry + ' 								) E WHERE E.DIVISION_ID = P.DIVISION_ID AND E.PLAN_SEQ = P.SEQ )  '+char(10);                                             
+	SET @mDQry = @mDQry + ' 				GROUP BY   p.DIVISION_ID ,p.origin_from_division_id, p.PLAN_START_YYYYMMDD, p.PLAN_TYPE, p.FROM_SITE, p.ITEM_ID, p.YYYYMMDD, s.SHIP_FROZEN, p.SEQ           '+char(10);                                             
+	SET @mDQry = @mDQry + ' 			  ) c                                                              ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + '                                                                                ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 			WHERE 1=1                                                          ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 			  AND a.program_id       =  '''+@p_program_id  +'''                        ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 			  AND a.sheet_name       =  '''+@p_sheet_name  +'''                        ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 			  AND a.valid_yn		 =	''Y''                                  ' + char(10) ;                                                                                                                   
+	SET @mDQry = @mDQry + ' 			  AND ('+convert(varchar,@v_cnt_usr_measure)+' = 0                          "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_GET_SHIPMENT_PLAN_CONFIRM","727061726","6","            ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 						OR EXISTS (SELECT 1                                    ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 									 FROM scm_mst_titleset_user with(nolock)   ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 									WHERE program_id  = '''+@p_program_id+'''          ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 									  AND sheet_name  = '''+@p_sheet_name+'''          ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 									  AND user_id     = '''+@p_user_id   +'''          ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 									  AND column_name = a.column_name)         ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 				                  )                                            ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 		) m LEFT HASH JOIN                                                    ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 		 (SELECT p.DIVISION_ID                                                 ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 				,p.PLAN_START_YYYYMMDD                                         ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 				,p.PLAN_TYPE                                                   ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 				,p.FROM_SITE	                                               ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 				,p.ITEM_ID                                                     ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 				,p.YYYYMMDD                                                    ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 				,p.measure		                                               ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 				,sum(p.qty) as qty                                             ' + char(10) ;                                                                                                                 
+    SET @mDQry = @mDQry + ' 				,max(p.seq) as seq                                             ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 			FROM SSP_ANL_SHIP_PLAN P with(nolock)                              ' + char(10) ;                                           "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_GET_SHIPMENT_PLAN_CONFIRM","727061726","7","                                                                      
+	SET @mDQry = @mDQry + ' 			WHERE 1=1                                                          ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 			AND yyyymmdd    >= '''+@p_from_yyyymmdd +'''                               ' + char(10) ;                                                                                                                 
+	SET @mDQry = @mDQry + ' 			AND yyyymmdd    <= '''+@p_to_yyyymmdd   +'''                               ' + char(10) ;                                                                                                                 
+	IF ( @v_division_id IS NOT NULL AND @v_division_id !='') SET @mDQry = @mDQry + ' 					AND  division_id   IN ('+ @v_division_id +')'+char(10);                     
+	IF ( @v_from_site   IS NOT NULL AND @v_from_site !='') SET @mDQry = @mDQry + ' 					AND  from_site     IN ('+ @v_from_site   +')'+char(10);                     
+	IF ( @v_item_id     IS NOT NULL AND @v_item_id !='') SET @mDQry = @mDQry + ' 					AND  item_id       IN ('+ @v_item_id     +')'+char(10);                     
+	IF ( @p_plan_start_yyyymmdd   IS NOT NULL AND @p_plan_start_yyyymmdd !='') SET @mDQry = @mDQry + ' 					AND  PLAN_START_YYYYMMDD = '''+@p_plan_start_yyyymmdd +''''+char(10);                   
+	IF ( @p_plan_type   IS NOT NULL AND @p_plan_type !='') SET @mDQry = @mDQry + ' 				    AND  PLAN_TYPE           = '''+@p_plan_type   +''''+char(10);                   
+
+	SET @mDQry = @mDQry + ' 			AND EXISTS (SELECT 1                                                                                                                                    '+ char(10);                             
+	SET @mDQry = @mDQry + ' 								FROM(                                                                                                                               '+ char(10);                             
+	SET @mDQry = @mDQry + ' 									SELECT division_id,MAX(PLAN_SEQ) PLAN_SEQ                                          '+ char(10);                             
+	SET @mDQry = @mDQry + ' 									FROM   SSP_PLAN_VERSION_V with(nolock)                                                                                          '+ char(10);                             
+	SET @mDQry = @mDQry + ' 									WHERE  PLAN_TYPE    = ''SP''                                                                                                    '+ char(10);                               
+	--SET @mDQry = @mDQry + ' 									AND    ( ( @p_division_id IS NULL OR @p_division_id ='''')  OR division_id   IN (SELECT token FROM dbo.String_Split(@p_division_id,'','')) ) '+ char(10);                                                   
+	IF ( @v_division_id IS NOT NULL AND @v_division_id !='') SET @mDQry = @mDQry + ' 									AND  division_id   IN ('+ @v_division_id +')'+char(10);                     	                    
+	SET @mDQry = @mDQry + ' 									AND    CONFIRM_FLAG = ''Y''   '+ char(10);                           
+	SET @mDQry = @mDQry + ' 									AND    PLAN_START_YYYYMMDD = '''+@p_plan_start_yyyymmdd +'''      '+char(10);                                                                                                                                     
+	--SET @mDQry = @mDQry + ' 									AND    PLAN_START_YYYYMMDD = (SELECT MAX(PLAN_START_YYYYMMDD)    '+ char(10);                                                                                                                           
+	--SET @mDQry = @mDQry + ' 														FROM SSP_PLAN_VERSION_V T with(nolock)       '+ char(10);                                                                                                                           
+	--SET @mDQry = @mDQry + ' 														WHERE 1=1 '+ char(10);                               
+	----SET @mDQry = @mDQry + ' 												"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_GET_SHIPMENT_PLAN_CONFIRM","727061726","8","		WHERE ( ( @p_division_id IS NULL OR @p_division_id ='''')  OR t.division_id   IN (SELECT token FROM dbo.String_Split(@p_division_id,'','')) ) '+ char(10);                               
+	--IF ( @v_division_id IS NOT NULL AND @v_division_id !='') SET @mDQry = @mDQry + ' 									AND  t.division_id   IN ('+ @v_division_id +')'+char(10);                     	                    
+	--SET @mDQry = @mDQry + ' 														AND   T.plan_type  = ''SP''      '+ char(10);                                                                                                                                         
+	--SET @mDQry = @mDQry + ' 														AND   T.CONFIRM_FLAG = ''Y'')    '+ char(10);                                                                                                                                         
+	SET @mDQry = @mDQry + ' 									group by division_id                                 '+ char(10);                                                                                                                                       
+	SET @mDQry = @mDQry + ' 								) E WHERE E.DIVISION_ID = P.DIVISION_ID AND E.PLAN_SEQ = P.SEQ ) '+ char(10);                                                                             
+	SET @mDQry = @mDQry + ' 			GROUP BY  p.division_id , p.plan_start_yyyymmdd, p.plan_type, p.from_site, p.item_id, p.yyyymmdd, p.measure                            '+ char(10);                                                                             
+	SET @mDQry = @mDQry + ' 		) n ON  m.division_id         = n.division_id          ' +char(10);                                                                                                                                  
+	SET @mDQry = @mDQry + ' 			AND m.plan_start_yyyymmdd = n.plan_start_yyyymmdd  ' +char(10);                                                                                                                                  
+	SET @mDQry = @mDQry + ' 			AND m.plan_type           = n.plan_type            ' +char(10);                                                                                                                                  
+	SET @mDQry = @mDQry + ' 			AND m.from_site           = n.from_site            ' +char(10);                                                                                                                                  
+	SET @mDQry = @mDQry + ' 			AND m.item_id             = n.item_id              ' +char(10);                                                                                                                                  
+	SET @mDQry = @mDQry + ' 			AND m.yyyymmdd            = n.yyyymmdd             ' +char(10);                                                                                                                                  
+	SET @mDQry = @mDQry + ' 			AND m.measure             = n.measure              ' +char(10);                                                                                                                                  
+    SET @mDQry = @mDQry + ' 			AND m.seq                 = n.seq                  ' +char(10);                                                                                                                                  	
+	SET @mDQry = @mDQry + ' 		WHERE 1=1                                              ' +char(10);                                                                                                                                  
+
+	
+	EXEC (@mDQry);
+	--select @mDQry;
+	IF( @debug_mode ='T')
+	BEGIN				
+		DECLARE @POS INT =1;
+		DECLARE @LEN INT =LEN(@mDQry);
+		WHILE @POS <= @LEN
+			BEGIN
+				PRINT SUBSTRING(@mDQry,@POS,4000);
+				SET @POS = @POS+4000;
+			END;
+	END;
+
+	
+	--return;
+	
+	-----------------------------------------------------------
+	/********************************************************************************
+	* PIVOIT처리
+	*****************************************"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_GET_SHIPMENT_PLAN_CONFIRM","727061726","9","***************************************/		
+	BEGIN
+		DECLARE @mQuery NVARCHAR(MAX);
+		DECLARE @mEXEC NVARCHAR(MAX);
+
+			-- PIVOIT 대상 날짜문자열 생성
+		SET @mQuery = '';
+		SELECT @mQuery = @mQuery + '[' + yyyymmdd + '], '
+		FROM ( 
+			SELECT 'W_'+a.basis_yyyymm + a.iso_week AS yyyymmdd        
+				, a.basis_start_date + CONVERT(CHAR(2), 21) AS sort_order_no
+				FROM [dbo].[scm_sys_calendar_m] a with(nolock)
+			WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+			GROUP BY a.basis_yyyymm, a.iso_week, a.basis_start_date
+
+			UNION ALL
+
+			SELECT 'M_'+a.basis_yyyymm  AS yyyymmdd
+					,MIN(a.basis_start_date) + CONVERT(CHAR(2), '01') AS sort_order_no
+				FROM [dbo].[scm_sys_calendar_m] a with(nolock)
+				WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+			GROUP BY a.basis_yyyymm, a.month_name		
+
+			UNION ALL
+
+			SELECT 'D_'+a.basis_yyyymmdd   AS yyyymmdd      
+					, a.basis_yyyymmdd + CONVERT(CHAR(2), 31) AS sort_order_no
+				FROM [dbo].[scm_sys_calendar_m] a with(nolock)
+				WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+			GROUP BY a.basis_yyyymmdd		
+				  	
+		) AS A
+		ORDER BY sort_order_no  ;
+
+		IF( LEN(@mQuery)>0)
+			SET @mQuery = LEFT(@mQuery, LEN(@mQuery) - 1);
+
+			SET @mEXEC = '';
+			SET @mEXEC = @mEXEC+'      SELECT  ' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			 division_id ' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,from_site		' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,plan_start_yyyymmdd		' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,plan_type		' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,isnull(dbo.fn_get_scm_site_description(division_id, from_site ),''-'') AS from_site_description		' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,item_id	' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,ISNULL(ship_frozen,0)	ship_frozen' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,seq	' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,case when nick_name is null or nick_name = '''' then ''-'' else nick_name end nick_name	' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,measure	' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,measure_name	' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,user_sort_order_no	' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,from_yyyymmdd	' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,to_yyyymmdd	' +CHAR(10);
+			SET @mEXEC = @mEXEC+' 			,'+@mQuery	 +CHAR(10);
+			SET @mEXEC = @mEXEC+'       FROM #TblDynamicPivot_SSP0001_1 ' +CHAR(10);
+			SET @mEXEC = @mEXEC+'       PIVOT ( ' +CHAR(10);
+			SET @mEXEC = @mEXEC+'               SUM(qty) FOR  yyyymmdd IN ('+ @mQuery +') ' +CHAR(10);
+			SET @mEXEC = @mEXEC+'             ) AS A'   +CHAR(10);
+			SET @mEXEC = @mEXEC+'	   ORDER BY division_id, from_site,item_id, user_sort_order_no' +CHAR(10);
+			
+			EXEC (@mEXEC);
+
+			--임시테이블 삭제
+			IF OBJECT_ID('tempdb..#TblDynamicPivot_SSP0001_1') IS NOT NULL
+		   DROP TABLE #TblDynamicPivot_SSP0001_1 
+
+	end
+
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_GET_SHIPMENT_PLAN_CONFIRM_DETAIL","743061783","1","
+
+/*
+ * Program ID   : SSP0001_GET_SHIPMENT_PLAN_CONFIRM_DETAIL
+ * Description  : Shipment Plan Confrim Detail
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/04/10   byunghunjung   Initial Release [PJ20182279] 전지본부 출하계획 시스템 구축 프로젝트
+ * 2018/05/30   ygkim			project name 가져오는 부분 수정
+ * 2018/06/04   ygkim		    seq 파라미터 추가
+ * 2018/07/03   ygkim			ComfirmID 컬럼 수정
+ * 2018/07/11   ygkim			LAST_UPDATED_BY, LAST_UPDATE_DATE, CHANGE_REQ_NO 컬럼 추가
+ * 2018/07/16   ygkim			LAST_UPDATED_BY, LAST_UPDATE_DATE, CHANGE_REQ_NO 가져오는 쿼리 변경
+ * 2018/07/24   ygkim			Plan Qty, LAST_UPDATED_BY 가져오는 쿼리 수정
+ * 2018/09/03   ygkim			Division 'EE' 추가에 따른 쿼리 수정
+ * 2018/10/25   ygkim			Division 40 일 경우 Project Name -> Project Code로 
+ * 2019/02/13   hwyoon			[CSR ID:3907873] SSP Distribution route/BOD상 'L/T TYPE'컬럼 추가요청
+ ex) 
+  EXEC SSP0001_GET_SHIPMENT_PLAN_CONFIRM_DETAIL @p_division_id='81', @p_from_site='A040-A', @p_item_id='ACEN1042I-A1', @p_plan_start_yyyymmdd='20180409', @p_plan_type='SP', @p_yyyymmdd='20180423', @p_user_id='20140001', @p_program_id='SSP0001', @p_sheet_name='Shipment Plan Confirm Detail', @debug_mode='F'
+
+ */
+
+CREATE PROCEDURE [dbo].[SSP0001_GET_SHIPMENT_PLAN_CONFIRM_DETAIL]
+	 @p_division_id			NVARCHAR(MAX)
+	,@p_from_site			NVARCHAR(MAX)
+	,@p_item_id				NVARCHAR(MAX)
+	,@p_plan_start_yyyymmdd NVARCHAR(8)
+	,@p_plan_type			NVARCHAR(50)
+	,@p_yyyymmdd			NVARCHAR(8)
+	,@p_seq					NVARCHAR(MAX)
+	,@p_user_id				NVARCHAR(MAX)
+	,@p_program_id			NVARCHAR(MAX) = 'SSP0001' 
+	,@p_sheet_name			NVARCHAR(MAX) = 'Shipment Plan Confirm Detail'
+	,@debug_mode			NVARCHAR(1)='F'
+	,@p_language			NVARCHAR(MAX) = 'KO'
+
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	SELECT a.division_id
+		 , a.plan_start_yyyymmdd
+		 , a.plan_type
+		 , a.seq
+		 , a.item_id
+		 , a.from_site
+		 , isnull(dbo.FN_GET_SCM_SITE_DESCRIPTION (a.division_id , a.to_site ),'-') as to_site_description
+		 , a.to_site
+		 , a.yyyymmdd
+		 , a.bod_id
+		 , a.biz_type 
+		 , (SELECT TOP 1 b.segment2  FROM scm_adm_lookup_master_detail b   WHERE b.valid_yn = 'Y'   AND b.lookup_type = 'BIZ_TYPE'   AND b.segment1 = a.biz_type   ) AS biz_type_name 
+		 , a.project_code
+		 --, [dbo].[FN_GET_PROJECT_NAME](a.division_id,a.project_code) as project_name
+		 , case when a.DIVISION_ID = '40' then a.PROJECT_CODE else [dbo].[FN_GET_PROJECT_NAME](CASE WHEN a.division_id = 'EE' THEN A.ORIGIN_FROM_DIVISION_ID ELSE A.DIVISION_ID END,a.project_code) end as project_name
+		 --,( SELECT TOP 1 pp.project_name FROM scm_mst_project_item pi(NOLOCK),scm_mst_project pp  WHERE pi.project_code = pp.project_code	AND pi.item_id = a.item_id AND pi.PROJECT_CODE = a.PROJECT_CODE ) AS project_name
+
+		 --, dbo.fn_get_item_nickname( a.division_id, a.item_id ) AS nick_name
+		 --, dbo.fn_get_site_customer_info( a.division_id, a.to_site, 'SOLDTO_DESCRIPTION' ) AS soldto_description
+		 --, dbo.fn_get_site_customer_info( a.division_id, a.to_site, 'SHIPTO_DESCRIPTION' ) AS shipto_description
+		 
+		 -- 전극추가(8/29, LJH)
+		 , dbo.fn_get_item_nickname( CASE WHEN a.division_id = 'EE' THEN A.ORIGIN_FROM_DIVISION_ID ELSE A.DIVISION_ID END, a.item_id ) AS nick_name
+		 , dbo.fn_get_site_customer_info(CASE WHEN a.division_id = 'EE' THEN A.ORIGIN_FROM_DIVISION_ID ELSE A.DIVISION_ID END, a.to_site, 'SOLDTO_DESCRIPTION' ) AS soldto_description
+		 , dbo.fn_get_site_customer_info(CASE WHEN a.division_id = 'EE' THEN A.ORIGIN_FROM_DIVISION_ID ELSE A.DIVISION_ID END, a.to_site, 'SHIPTO_DESCRIPTION' ) AS shipto_description
+
+
+		 
+		 , b.lt_total as lt_day
+		 , CONVERT(VARCHAR(10),   CONVERT(DATETIME, a.yyyymmdd,112), 23) AS etd
+		 , CONVERT(VARCHAR(10), ( CONVERT(DATETIME, a.yyyymmdd,112) + b.lt_total ), 23) AS eta
+		 , b.incoterms
+		 , b.transpo"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_GET_SHIPMENT_PLAN_CONFIRM_DETAIL","743061783","2","rt_mode
+		 , CONVERT(VARCHAR(10),   CONVERT(DATETIME, a.yyyymmdd,112), 23)  AS plan_date
+		 , ISNULL(MAX(a.confirm_flag),'N') AS confirm_flag
+		 --, SUM(CASE WHEN a.measure ='SHIP_PLAN' THEN a.qty END ) AS plan_qty
+		 --, SUM(CASE WHEN a.measure ='SHIP_CONFIRM' THEN a.qty END ) AS confirm_qty	 
+		 ,SUM(F.plan_qty) AS plan_qty
+		 ,SUM(A.qty) AS confirm_qty
+		 , a.fcst_type
+		 --, max(a.confirm_id)  confirm_id
+		 , a.confirm_id
+		 , d.ERP_SO_NO
+		 ,CASE WHEN U.UserName is null THEN a.LAST_UPDATED_BY ELSE CASE WHEN @p_language = 'KO' THEN U.UserName ELSE U.UserName_E END + '(' + c.LAST_UPDATED_BY + ')' END LAST_UPDATED_BY
+		 ,CASE WHEN c.LAST_UPDATE_DATE is null then a.LAST_UPDATE_DATE else c.LAST_UPDATE_DATE end LAST_UPDATE_DATE
+		 ,c.CHANGE_REQ_NO
+		 ,a.origin_from_division_id
+		 ,b.lt_type
+		FROM ssp_anl_ship_plan  a 
+		-- INNER JOIN SCP_MST_BOD_N_V      b ON a.division_id = b.division_id AND a.bod_id = b.bod_id
+
+		--전극추가(8/29, LJH)
+		INNER JOIN SCP_MST_BOD_N_V      b ON CASE WHEN a.division_id = 'EE' THEN A.ORIGIN_FROM_DIVISION_ID ELSE A.DIVISION_ID END = b.division_id AND a.bod_id = b.bod_id
+		LEFT OUTER JOIN ( SELECT A.CONFIRM_ID, LAST_UPDATED_BY, LAST_UPDATE_DATE, CHANGE_REQ_NO
+							FROM SSP_ANL_SHIP_CONFIRM_H A
+							WHERE a.HISTORY_SEQ = (select max(HISTORY_SEQ) from SSP_ANL_SHIP_CONFIRM_H b where a.CONFIRM_ID = b.CONFIRM_ID group by CONFIRM_ID)
+					) c on a.CONFIRM_ID = c.CONFIRM_ID
+		LEFT OUTER JOIN TB_FX_User U ON c.LAST_UPDATED_BY = u.UserID AND U.UseYN = 'Y' 
+		LEFT OUTER JOIN SSP_ANL_SHIP_CONFIRM d on a.CONFIRM_ID = d.CONFIRM_ID and d.ERP_STATUS <> 'B' 
+		--INNER JOIN (select a.division_id
+		--					 , a.plan_start_yyyymmdd
+		--					 , a.plan_type
+		--					 , a.seq
+		--					 , a.item_id
+		--					 , a.from_site
+		--					 , a.to_site
+		--					 , a.yyyymmdd
+		--					 , a.bod_id
+		--					 , a.biz_type 
+		--					 , a.project_code
+		--					 , a.fcst_type
+		--					 , a.confirm_id
+		--				  ,max(LAST_UPDATE_DATE) LAST_UPDATE_DATE
+		--			from ssp_anl_ship_plan a
+		--			where 1=1
+		--			    AND a.division_id         = @p_division_id
+		--				AND a.plan_start_yyyymmdd = @p_plan_start_yyyymmdd
+		--				AND a.plan_type           = @p_plan_type
+		--				AND a.from_site           = @p_from_site
+		--				AND a.item_id             = @p_item_id
+		--				AND a.yyyymmdd            = @p_yyyymmdd
+		--				AND a.seq				  = @p_seq
+		--				AND a.measure = 'SHIP_CONFIRM'
+		--			GROUP BY  a.division_id
+		--					 , a.plan_start_yyyymmdd
+		--					 , a.plan_type
+		--					 , a.seq
+		--					 , a.item_id
+		--					 , a.from_site
+		--					 , a.to_site
+		--					 , a.yyyymmdd
+		--					 , a.bod_id
+		--					 , a.biz_type 
+		--					 , a.project_code
+		--					 , a.fcst_type
+		--					 , a.confirm_id) E ON a.DIVISION_ID = e.DIVISION_ID and a.PLAN_START_YYYYMMDD = e.PLAN_START_YYYYMMDD
+		--					                    and a.PLAN_TYPE = e.PLAN_TYPE and a.SEQ = e.SEQ and a.ITEM_ID = e.ITEM_ID
+		--										and a.FROM_SITE = e.FROM_SITE and a.YYYYMMDD = e.YYYYMMDD
+		--										AND a.CONFIRM_ID = e.CONFIRM_ID AND A.TO_SITE = E.TO_SITE AND A.PROJECT_CODE = E.PROJECT_CODE
+		--										AND A.FCST_TYPE = E.FCST_TYPE AND A.LAST_UPDATE_DATE = E.LAST_UPDATE_DATE
+		INNER JOIN (select a.division_id
+							 , a.plan_start_yyyymmdd
+							 , a.plan_type
+							 , a.seq
+							 , a.item_id
+							 , a.from_site
+							 , a.to_site
+							 , a.yyyymmdd
+							 , a.bod_id
+							 , a.biz_type 
+							 , a.project_code
+							 , a.fcst_type
+							 , a.confirm_id
+						  ,SUM(QTY) plan_qty
+					from ssp_anl_ship_plan a
+					where 1=1
+					    AND a.division_id         = @p_division_id
+						AND a.plan_start_yyyymmdd = @p_plan_start_yyyymmdd
+						AND a.plan_type           = @p_plan_type
+						AND a.from_site           = @p_from_site
+						AND a.item_id             = @p_item_id
+						AND a.yyyymmdd            = @p_yyyymmdd
+						AND a.seq				  = @p_seq
+						AND a.measure = 'SHIP_PLAN'
+					G"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_GET_SHIPMENT_PLAN_CONFIRM_DETAIL","743061783","3","ROUP BY  a.division_id
+							 , a.plan_start_yyyymmdd
+							 , a.plan_type
+							 , a.seq
+							 , a.item_id
+							 , a.from_site
+							 , a.to_site
+							 , a.yyyymmdd
+							 , a.bod_id
+							 , a.biz_type 
+							 , a.project_code
+							 , a.fcst_type
+							 , a.confirm_id) F ON a.DIVISION_ID = f.DIVISION_ID and a.PLAN_START_YYYYMMDD = f.PLAN_START_YYYYMMDD
+							                    and a.PLAN_TYPE = f.PLAN_TYPE and a.SEQ = f.SEQ and a.ITEM_ID = f.ITEM_ID
+												and a.FROM_SITE = f.FROM_SITE and a.YYYYMMDD = f.YYYYMMDD
+												AND a.CONFIRM_ID = f.CONFIRM_ID and A.TO_SITE = F.TO_SITE AND A.PROJECT_CODE = F.PROJECT_CODE
+												AND A.FCST_TYPE = F.FCST_TYPE
+	  WHERE 1=1
+		AND a.measure = 'SHIP_CONFIRM' --IN ( 'SHIP_PLAN','SHIP_CONFIRM')
+		AND a.division_id         = @p_division_id
+		AND a.plan_start_yyyymmdd = @p_plan_start_yyyymmdd
+		AND a.plan_type           = @p_plan_type
+		AND a.from_site           = @p_from_site
+		AND a.item_id             = @p_item_id
+		AND a.yyyymmdd            = @p_yyyymmdd
+		AND a.seq				  = @p_seq
+		-- AND isnull(a.qty,0)       <> 0
+	 GROUP BY  a.division_id
+			 , a.plan_start_yyyymmdd
+			 , a.plan_type
+			 , a.seq
+			 , a.item_id
+			 , a.from_site
+			 , a.to_site
+			 , a.yyyymmdd
+			 , a.bod_id
+			 , a.biz_type 
+			 , a.project_code
+			 , b.lt_total
+			 , b.incoterms
+			 , b.transport_mode
+			 , a.fcst_type
+			 , a.confirm_id
+			 ,CASE WHEN U.UserName is null THEN a.LAST_UPDATED_BY ELSE CASE WHEN @p_language = 'KO' THEN U.UserName ELSE U.UserName_E END + '(' + c.LAST_UPDATED_BY + ')' END
+		     ,CASE WHEN c.LAST_UPDATE_DATE is null then a.LAST_UPDATE_DATE else c.LAST_UPDATE_DATE end
+			 , c.CHANGE_REQ_NO
+			 , d.ERP_SO_NO
+			 , A.ORIGIN_FROM_DIVISION_ID -- 전극추가(8/29, LJH)
+			 , b.lt_type
+			 --, a.confirm_flag
+	--SELECT
+	--	 a.biz_type 
+	--	 ,( SELECT TOP 1 b.segment2  FROM scm_adm_lookup_master_detail b   WHERE b.valid_yn = 'Y'   AND b.lookup_type = 'BIZ_TYPE'   AND b.segment1 = a.biz_type   ) AS biz_type_name 
+	--	,a.project_code
+	--	,( SELECT TOP 1 pp.project_name FROM scm_mst_project_item pi(NOLOCK),scm_mst_project pp(NOLOCK)
+	--	   WHERE pi.project_code = pp.project_code	AND pi.item_id = a.item_id ) AS project_name
+	--	, a.item_id
+	--	, dbo.FN_GET_ITEM_NICKNAME( a.division_id, a.item_id ) AS nick_name
+	--	, a.to_site
+	--	, dbo.FN_GET_SITE_CUSTOMER_INFO( a.division_id, a.to_site, 'SOLDTO_DESCRIPTION' ) AS SOLDTO_DESCRIPTION
+	--	, dbo.FN_GET_SITE_CUSTOMER_INFO( a.division_id, a.to_site, 'SHIPTO_DESCRIPTION' ) AS SHIPTO_DESCRIPTION
+	--	, c.lt_total AS LT_DAY
+	--	, CONVERT(char(10),   CONVERT(datetime, a.yyyymmdd,112), 23) AS ETD
+	--	, CONVERT(char(10), ( CONVERT(datetime, a.yyyymmdd,112) + c.lt_total ), 23) AS ETA
+	--	, c.incoterms
+	--	, c.transport_mode
+	--	, a.bod_id
+	--	, CONVERT(char(10),   CONVERT(datetime, a.yyyymmdd,112), 23)  AS plan_date
+	--	, CONVERT(INT,a.qty) AS plan_qty
+	--	, a.confirm_flag
+	--FROM SSP_ANL_SHIP_PLAN  a INNER JOIN 
+	--      SCP_MST_BOD_N_V     c ON a.division_id = c.division_id 
+	--	                     AND a.bod_id      = c.bod_id
+	--WHERE 1=1
+	--AND a.measure  IN ( 'SHIP_PLAN','')
+	--AND a.division_id         = @p_division_id
+	--AND a.plan_start_yyyymmdd = @p_plan_start_yyyymmdd
+	--AND a.plan_type           = @p_plan_type
+	--AND a.from_site           = @p_from_site
+	--AND a.item_id             = @p_item_id
+	--and a.yyyymmdd            = @p_yyyymmdd
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_SAVE_SHIPMENT_PLAN_CONFIRM_DETAIL","759061840","1","
+/*
+ * Program ID   : [SSP0001_SAVE_SHIPMENT_PLAN_CONFIRM_DETAIL]
+ * Description  : Shipment Plan 수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/04/12   PJS			   Initial Release [PJ20182279] 전지본부 출하계획 시스템 구축 프로젝트
+ * 2018/06/07   ygkim	       @p_project_code 추가
+ * 2018/07/03   ygkim		   @p_Confirm_ID 추가	
+ */
+CREATE PROCEDURE [dbo].[SSP0001_SAVE_SHIPMENT_PLAN_CONFIRM_DETAIL]
+	 @p_active_flag		     NVARCHAR(MAX)
+	,@p_division_id          NVARCHAR(MAX)
+	,@p_plan_start_yyyymmdd  NVARCHAR(MAX)
+	,@p_plan_type            NVARCHAR(MAX)
+	,@p_seq                  NVARCHAR(MAX)
+	,@p_item_id              NVARCHAR(MAX)
+	,@p_from_site            NVARCHAR(MAX)
+	,@p_to_site              NVARCHAR(MAX)
+	,@p_measure              NVARCHAR(MAX)
+	,@p_yyyymmdd             NVARCHAR(MAX)
+	,@p_bod_id               NVARCHAR(MAX)
+	,@p_qty                  NVARCHAR(MAX)
+	,@p_fcst_type            NVARCHAR(MAX)
+	,@p_project_code         NVARCHAR(MAX)
+	,@p_Confirm_ID           NVARCHAR(MAX)
+
+	,@p_user_id              NVARCHAR(MAX)
+	,@debug_mode			 NVARCHAR(1) ='F'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag          NVARCHAR(MAX);
+	DECLARE @v_division_id          NVARCHAR(MAX);
+	DECLARE @v_plan_start_yyyymmdd  NVARCHAR(MAX);
+	DECLARE @v_plan_type            NVARCHAR(MAX);
+	DECLARE @v_seq                  NVARCHAR(MAX);
+	DECLARE @v_item_id              NVARCHAR(MAX);
+	DECLARE @v_from_site            NVARCHAR(MAX);
+	DECLARE @v_to_site              NVARCHAR(MAX);
+	DECLARE @v_measure              NVARCHAR(MAX);
+	DECLARE @v_yyyymmdd             NVARCHAR(MAX);
+	DECLARE @v_bod_id               NVARCHAR(MAX);
+	DECLARE @v_qty                  NVARCHAR(MAX);
+	DECLARE @v_fcst_type            NVARCHAR(MAX);
+	DECLARE @v_project_code         NVARCHAR(MAX);
+	DECLARE @v_Confirm_ID           NVARCHAR(MAX);
+
+	DECLARE @v_confirm_flag         NVARCHAR(MAX);
+	DECLARE @v_last_updated_by      NVARCHAR(MAX);
+	DECLARE @v_last_update_date     datetime;
+
+	--DECLARE @v_last_update_date NVARCHAR(MAX);
+
+
+	SET @v_active_flag         = NULL;
+	SET @v_division_id         = NULL;
+	SET @v_plan_start_yyyymmdd = NULL;
+	SET @v_plan_type           = NULL;
+	SET @v_seq                 = NULL;
+	SET @v_item_id             = NULL;
+	SET @v_from_site           = NULL;
+	SET @v_to_site             = NULL;
+	SET @v_measure             = NULL;
+	SET @v_yyyymmdd            = NULL;
+	SET @v_bod_id              = NULL;
+	SET @v_qty                 = NULL;
+	SET @v_fcst_type           = NULL;
+	SET @v_project_code        = NULL;
+	SET @v_project_code        = NULL;
+
+	--SET @v_confirm_flag        = 'Y';
+	SET @v_confirm_id          = null;
+
+	SET @v_last_updated_by     = @p_user_id;
+	SET @v_last_update_date    = SYSDATETIME(); ;
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = '[SSP0001_SAVE_SHIPMENT_PLAN_CONFIRM_DETAIL]';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	--BEGIN TRAN;
+
+	BEGIN TRY
+
+		--PRINT '1';
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_SAVE_SHIPMENT_PLAN_CONFIRM_DETAIL","759061840","2","_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		
+		
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN			
+				SET @v_active_flag         = dbo.SCM_ARR_SPL_VAL(@p_active_flag        , @v_delimiter, @mst_loop_cnt );
+				SET @v_division_id         = dbo.SCM_ARR_SPL_VAL(@p_division_id        , @v_delimiter, @mst_loop_cnt );
+				SET @v_plan_start_yyyymmdd = dbo.SCM_ARR_SPL_VAL(@p_plan_start_yyyymmdd, @v_delimiter, @mst_loop_cnt );
+				SET @v_plan_type           = dbo.SCM_ARR_SPL_VAL(@p_plan_type          , @v_delimiter, @mst_loop_cnt );
+				SET @v_seq                 = dbo.SCM_ARR_SPL_VAL(@p_seq                , @v_delimiter, @mst_loop_cnt );
+				SET @v_item_id             = dbo.SCM_ARR_SPL_VAL(@p_item_id            , @v_delimiter, @mst_loop_cnt );
+				SET @v_from_site           = dbo.SCM_ARR_SPL_VAL(@p_from_site          , @v_delimiter, @mst_loop_cnt );
+				SET @v_to_site             = dbo.SCM_ARR_SPL_VAL(@p_to_site            , @v_delimiter, @mst_loop_cnt );
+				SET @v_measure             = dbo.SCM_ARR_SPL_VAL(@p_measure            , @v_delimiter, @mst_loop_cnt );
+				SET @v_yyyymmdd            = dbo.SCM_ARR_SPL_VAL(@p_yyyymmdd           , @v_delimiter, @mst_loop_cnt );
+				SET @v_bod_id              = dbo.SCM_ARR_SPL_VAL(@p_bod_id             , @v_delimiter, @mst_loop_cnt );
+				SET @v_qty                 = dbo.SCM_ARR_SPL_VAL(@p_qty                , @v_delimiter, @mst_loop_cnt );
+				SET @v_fcst_type           = dbo.SCM_ARR_SPL_VAL(@p_fcst_type          , @v_delimiter, @mst_loop_cnt );
+				SET @v_project_code        = dbo.SCM_ARR_SPL_VAL(@p_project_code       , @v_delimiter, @mst_loop_cnt );
+				SET @v_confirm_id          = dbo.SCM_ARR_SPL_VAL(@p_Confirm_ID         , @v_delimiter, @mst_loop_cnt );
+			END;
+
+			-- LOOP 파라미터 출력 DEBUG용			
+			IF (@debug_mode ='T') 
+			BEGIN		
+				PRINT '===============================================';			
+				PRINT '@v_data_dup_cnt = ' +CONVERT(VARCHAR,@v_data_dup_cnt);
+				PRINT ' @v_active_flag         = '''+@v_active_flag        	+'''';
+				PRINT ' @v_division_id         = '''+@v_division_id         +'''';
+				PRINT ' @v_plan_start_yyyymmdd = '''+@v_plan_start_yyyymmdd +'''';
+				PRINT ' @v_plan_type           = '''+@v_plan_type           +'''';
+				PRINT ' @v_seq                 = '''+@v_seq                 +'''';
+				PRINT ' @v_item_id             = '''+@v_item_id             +'''';
+				PRINT ' @v_from_site           = '''+@v_from_site           +'''';
+				PRINT ' @v_to_site             = '''+@v_to_site             +'''';
+				PRINT ' @v_measure             = '''+@v_measure             +'''';
+				PRINT ' @v_yyyymmdd            = '''+@v_yyyymmdd            +'''';
+				PRINT ' @v_bod_id              = '''+@v_bod_id              +'''';
+				PRINT ' @v_qty                 = '''+@v_qty                 +'''';
+				PRINT ' @v_fcst_type           = '''+@v_fcst_type           +'''';
+				PRINT ' @v_project_code        = '''+@v_project_code        +'''';
+				PRINT ' @v_confirm_id        = '''+@v_confirm_id        +'''';
+			END;
+		  	
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+				BEGIN		
+					-- 수정
+					IF( @v_active_flag ='M' OR @v_active_flag ='I') 
+						BEGIN
+							UPDATE dbo.SSP_ANL_SHIP_PLAN                       
+							   SET QTY                 = @v_qty                
+								  --,CONFIRM_FLAG        = @v_confirm_flag    --배치가 가져가면서 Y값 기록함   
+								  --,CONFIRM_ID          = @v_confirm_id         
+								  ,LAST_UPDATED_BY     = @v_last_updated_by    
+								  ,LAST_UPDATE_DATE    = @v_last_update_date   
+							 WHERE DIVISION_ID         = @v_division_id        
+							   AND PLAN_START_YYYYMMDD = @v"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0001_SAVE_SHIPMENT_PLAN_CONFIRM_DETAIL","759061840","3","_plan_start_yyyymmdd
+							   AND PLAN_TYPE           = @v_plan_type          
+							   AND SEQ                 = @v_seq                
+							   AND ITEM_ID             = @v_item_id            
+							   AND FROM_SITE           = @v_from_site          
+							   AND TO_SITE             = @v_to_site            
+							   AND MEASURE             = @v_measure            
+							   AND YYYYMMDD            = @v_yyyymmdd           
+							   AND BOD_ID              = @v_bod_id  
+							   AND FCST_TYPE		   = @v_fcst_type
+							   AND PROJECT_CODE		   = @v_project_code
+							   AND CONFIRM_ID		   = @v_confirm_id
+							   ;
+							   
+							  EXEC PR_SSP_ANL_SHIP_UPDATE_BOH_VAL @v_division_id, @v_item_id, @v_from_site, @v_yyyymmdd, @v_last_updated_by         
+						END; 	
+				END  -- END OF STMT. IF( @mst_loop_cnt > 0 )			
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--COMMIT TRAN;			
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @mst_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			--if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+					  
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				     
+			; 
+		END;
+	END CATCH;
+END
+
+"

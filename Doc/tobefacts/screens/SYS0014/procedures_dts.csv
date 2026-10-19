@@ -1,0 +1,5 @@
+﻿"menu_id","sheet","request_keys","response_cursors","response_keys","sp_hints","line"
+"SYS0014","GroupInfo","search","o_rc1","o_rc1.USER_GR_ID o_rc1.USER_GR_NM o_rc1.USE_YN","P_SYS0014_GET_GROUP_LIST_M","2815"
+"SYS0014","UserInfo","userGrId","o_rc1","o_rc1.USER_ID o_rc1.USER_NM o_rc1.USER_ENG_NM o_rc1.USER_EML o_rc1.DEPT_NM o_rc1.USE_YN o_rc1.CREATED_BY o_rc1.CREATION_DATE o_rc1.LAST_UPDATED_BY o_rc1.LAST_UPDATE_DATE","P_SYS0014_GET_GROUP_LIST_M","2827"
+"SYS0014","Division","userGrId userId unitTpCd","o_rc1","o_rc1.UNIT_ID o_rc1.UNIT_NM o_rc1.JV_PLANT_ID o_rc1.UPPR_UNIT_ID o_rc1.EDIT_YN o_rc1.USE_YN","P_SYS0014_GET_GROUP_LIST_M","2846"
+"SYS0014","DivisionPopup","searchText","o_rc","o_rc.CODE o_rc.NAME","P_SYS0014_GET_GROUP_LIST_M","2863"

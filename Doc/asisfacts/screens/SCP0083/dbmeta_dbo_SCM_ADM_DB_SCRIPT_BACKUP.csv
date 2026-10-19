@@ -1,0 +1,2820 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_AGING_LT","1802541555","1","
+
+
+
+/*
+ * Program ID   : SCP0083_GET_DIO_AGING_LT
+ * Description  : DIO AGING LT
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/12/28   hyerakim 			Query
+ * 2021/12/28   vadabi3 			Initial Release
+ ----------------------------------------------------------------------------------------------------
+EXEC SCP0083_GET_DIO_AGING_LT @p_division_id ='81'
+                            , @p_plan_start_yyyymmdd = '20220815'
+							, @p_plan_type = 'FN'
+							, @p_seq = '1'
+							, @p_ver = '1'
+							, @p_nick_name = N'E60A'
+*/
+
+CREATE PROCEDURE [dbo].[SCP0083_GET_DIO_AGING_LT]
+    @p_division_id          NVARCHAR(30),--chaan
+	@p_plan_start_yyyymmdd	NVARCHAR(8),
+	@p_plan_type			NVARCHAR(5),
+	@p_seq					NVARCHAR(2),
+	@p_nick_name			NVARCHAR(50),
+	--@p_plant_id				NVARCHAR(30),
+	--@p_operation_group		NVARCHAR(10),
+	--@p_from_site			NVARCHAR(max),
+	--@p_to_site				NVARCHAR(max),
+ 	@p_ver					INT,
+	@debug_mode				NVARCHAR(1) = 'T'
+
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	SET ANSI_WARNINGS OFF
+	SET ARITHIGNORE ON
+	SET ARITHABORT OFF
+
+			----------------------------------------------------------------------------------------------------
+			/*
+			declare @P_DIVISION_ID		         	NVARCHAR(30) = '81' ; 
+			declare @P_PLAN_START_YYYYMMDD			NVARCHAR(8)= '20220815' ; 
+			declare	@P_PLAN_TYPE                    NVARCHAR(50) = 'FN' ;
+			declare	@P_SEQ                     		NVARCHAR(8) = '1' ;
+			declare @P_VER int						= 1; 
+			declare @P_nick_name					nvarchar(60) = N'E60A' --  N'E76A' -- N'개발'  -- 'F2-1' --  N'개발' -- 'P2.7' -- 'LV15B' -- 'LV15A' -- 'F2' -- 'E76A' -- 'E64B' -- 'E63F' -- 'E61D' -- 'E60A' -- 'A7' -- 'H5.5A' -- 'F2-1' ; -- 'E54M' ;  -- 'E54M' -- 'E51_ESNB' -- 'F2-1' ; 
+			*/
+			---------------------------------------------------------------------------------------------------- 
+			;WITH BASE_DATA AS (
+			SELECT 
+				   A.COMPANY_ID
+				  ,A.DIVISION_ID
+				  ,A.SITE_ID
+				  ,A.NICK_NAME
+				  ,A.LINE_ID
+				  ,A.ITEM_ID
+				  ,A.PLANT_ID
+				  ,A.OPERATION_ID
+				  ,A.FACTORY_ID 
+				  ,A.CELL_AGING_LT	   
+				  ,A.LINE_AVG_AGING_LT 
+				  ,A.TOTAL  
+				  ,A.M1	  ,A.M2	  ,A.M3	  ,A.M4	  ,A.M5	  ,A.M6
+				  ,A.M7	  ,A.M8	  ,A.M9	  ,A.M10  ,A.M11  ,A.M12
+				  ,SUM(TOTAL) OVER (PARTITION BY A.NICK_NAME) AS TOTAL_SUM 
+			 FROM SCP_ANL_DIO_REPORT_DETAIL_AGING A WITH(NOLOCK)
+			WHERE 1=1
+			  AND A.DIVISION_ID			= @P_DIVISION_ID
+			  AND A.PLAN_START_YYYYMMDD = @P_PLAN_START_YYYYMMDD
+			  AND A.PLAN_TYPE			= @P_PLAN_TYPE
+			  AND A.SEQ					= @P_SEQ
+			  AND A.VER					= @P_VER
+			  AND A.NICK_NAME			= @P_NICK_NAME
+			)
+			,FDATA AS (
+				SELECT BD.*
+					  ,AVG(CASE WHEN FACTORY_ID = '' 
+								THEN NULL 
+								ELSE CELL_AGING_LT END)  
+								OVER (PARTITION BY NICK_NAME) 											    AS NICKNAME_AVG_AGING_LT
+					  ,CASE WHEN BD.TOTAL_SUM = 0 THEN 0 ELSE TOTAL / TOTAL_SUM							END AS RATIO
+					  ,CASE WHEN BD.TOTAL_SUM = 0 THEN 0 ELSE TOTAL / TOTAL_SUM * LINE_AVG_AGING_LT 	END AS AGING_LT
+					  ,CASE WHEN BD.TOTAL_SUM = 0 THEN 0 ELSE TOTAL / TOTAL_SUM							END
+					   * 
+					   AVG(CASE WHEN FACTORY_ID = '' 
+								THEN NULL 
+								ELSE CELL_AGING_LT END)  
+								OVER (PARTITION BY NICK_NAME) 											AS AGING_LT_N
+					  ,SUM(CASE WHEN BD.TOTAL_SUM = 0 
+								THEN 0 
+								ELSE TOTAL / TOTAL_SUM * LINE_AVG_AGING_LT END)
+								OVER (PARTITION BY NICK_NAME)											AS AGING_LT_NICKNAME_SUM
+				  FROM BASE_DATA BD
+			)
+			,LINE_NAME_INFO AS ( 
+				SELECT L.COMPANY_ID
+					  ,L.DIVISION_ID
+					  ,L.SITE_ID
+					  ,L.PLANT_ID
+					  ,L.OPERATION_ID
+					  ,L.LINE_ID
+					  ,L.LINE_NAME 
+					  ,ROW_NUMBER() OVER (PARTITION BY L.COMPANY_ID
+				"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_AGING_LT","1802541555","2","									  ,L.DIVISION_ID
+													  ,L.SITE_ID
+													  ,L.PLANT_ID
+													  ,L.OPERATION_ID
+													  ,L.LINE_ID
+											  ORDER BY CASE WHEN L.ACTIVE_FLAG = 'Y' THEN 1 ELSE 2 END 
+													  ,L.LINE_NAME
+													  ,L.ELECTRODE_TYPE
+													  )	AS LINE_NAME_PRIORITY 
+				 FROM SCM_MST_LINE_SN L WITH(NOLOCK)
+				WHERE 1=1
+			)
+			SELECT F.COMPANY_ID
+				  ,F.SITE_ID
+				  ,F.PLANT_ID
+				  ,P.PLANT_NAME		-- Plant Site 
+				  ,F.FACTORY_ID		-- Bld.
+				  ,F.LINE_ID
+				  ,ISNULL(L.LINE_NAME, F.LINE_ID) AS LINE_NAME 	-- Line Name (값이 없으면 line_id로 ?) 
+				  ,F.ITEM_ID		-- Material 
+				  ,F.NICK_NAME
+				  ,CASE WHEN ISNULL(F.OPERATION_ID, '') = '' 
+						THEN IM.FLOW_ID 
+						ELSE F.OPERATION_ID 
+					END AS OPERATION_ID  -- Oper.
+				  ,CASE WHEN IM.SCP_OPERATION_GROUP = 'A' THEN 'Cell'
+						WHEN IM.SCP_OPERATION_GROUP = 'P' THEN 'Pack'
+						ELSE IM.SCP_OPERATION_GROUP
+				   END  AS ITEM_TYPE
+				  ,F.CELL_AGING_LT	AS AGING_LT			--- Aging L/T 
+				  ,F.LINE_AVG_AGING_LT	AS AGING_LT_LINE_AVG -- 20220823 추가
+				  ,CASE WHEN F.AGING_LT_NICKNAME_SUM = 0
+						THEN F.NICKNAME_AVG_AGING_LT    --- production이 없는 경우 nickname별로 avg aging lt 적용됨. 
+						ELSE F.LINE_AVG_AGING_LT	    --- Aging L/T (실제 적용 Aging L/T - line단위 avg가 적용됨) -> ui항목에 추가 (line은 존재하고 item이 없는 경우도 적용을 위해?)
+					END AS APPLY_AGING_LT			    --- Aging L/T(Aplly)	 실제적용 aging LT -> ui 설계서에는 없으나 추가 필요 !! 
+				  ,Y.YIELD
+				  ,S.SHORTER_LT
+				  ,F.TOTAL								-- SUM(M1+~M12)
+				  ,F.RATIO
+				  ,CASE WHEN F.AGING_LT_NICKNAME_SUM = 0
+						THEN F.AGING_LT_N
+						ELSE F.AGING_LT
+					END AS 	AGING_LT_RATIO				-- Aging L/T(적용) * Ratio
+				  ,F.M1	  ,F.M2	  ,F.M3	  ,F.M4	  ,F.M5	  ,F.M6
+				  ,F.M7	  ,F.M8	  ,F.M9	  ,F.M10  ,F.M11  ,F.M12
+			 FROM FDATA F
+				  LEFT JOIN SCM_MST_ITEM_SN IM WITH(NOLOCK)
+						 ON IM.ITEM_ID		= F.ITEM_ID
+						AND IM.COMPANY_ID	= F.COMPANY_ID
+						AND IM.DIVISION_ID	= F.DIVISION_ID
+						AND IM.SITE_ID		= F.SITE_ID
+				  LEFT JOIN SCM_MST_PLANT_SN P WITH(NOLOCK)
+						 ON P.COMPANY_ID	= F.COMPANY_ID
+						AND P.DIVISION_ID	= F.DIVISION_ID
+						AND P.SITE_ID		= F.SITE_ID
+						AND P.PLANT_ID		= F.PLANT_ID
+				  LEFT JOIN LINE_NAME_INFO L WITH(NOLOCK)
+						 ON L.COMPANY_ID	  = F.COMPANY_ID
+						AND L.DIVISION_ID	  = F.DIVISION_ID
+						AND L.SITE_ID		  = F.SITE_ID
+						AND L.PLANT_ID		  = F.PLANT_ID
+						AND L.OPERATION_ID	  = CASE WHEN ISNULL(F.OPERATION_ID, '') = '' 
+													 THEN IM.FLOW_ID 
+													 ELSE F.OPERATION_ID 
+												 END
+						AND L.LINE_ID		  = F.LINE_ID
+						AND L.LINE_NAME_PRIORITY = 1 
+				  LEFT OUTER HASH JOIN SCM_MST_YIELD_SN Y WITH(NOLOCK)
+						 ON  Y.COMPANY_ID   =  F.COMPANY_ID  
+						AND  Y.DIVISION_ID  =  F.DIVISION_ID 
+						AND  Y.SITE_ID      =  F.SITE_ID     
+						AND  Y.PLANT_ID     =  F.PLANT_ID    
+						AND  Y.FACTORY_ID   =  F.FACTORY_ID  
+						AND  Y.OPERATION_ID =  F.OPERATION_ID
+						AND  Y.LINE_ID      =  F.LINE_ID     
+						AND  Y.ITEM_ID      =  F.ITEM_ID     
+						AND  Y.MONTH        = SUBSTRING(@P_PLAN_START_YYYYMMDD, 1, 6)  
+				  LEFT OUTER HASH JOIN FP_FORMATION_SHORTER_LT_M_SN S WITH(NOLOCK) 
+						 ON  S.COMPANY_ID   =  F.COMPANY_ID  
+						AND  S.DIVISION_ID  =  F.DIVISION_ID 
+						AND  S.SITE_ID      =  F.SITE_ID     
+						AND  S.PLANT_ID     =  F.PLANT_ID    
+						AND  S.FACTORY_ID   =  F.FACTORY_ID  
+						AND  S.OPERATION_ID =  F.OPERATION_ID
+						AND  S.LINE_ID      =  F.LINE_ID     
+						AND  S.ITEM_ID      =  F.ITEM_ID  
+			WHERE 1=1
+			ORDER BY P.PLANT_NAME
+					,F.LINE_ID
+
+
+
+	SELECT TOP 1
+		   CONVERT(CHAR(7), DATEADD(MONTH,  1, @p_plan_start_yyyymmdd ), 23)	AS M1
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  2, @p_plan_start_yyyymmdd ), 23)	AS M2
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  3, @p_plan_start_yyyymmdd ), 23)	AS M3
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  4, @p_plan_start_yyyymmdd ), 23)	AS M4
+		 , CONVERT(CHAR(7), DAT"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_AGING_LT","1802541555","3","EADD(MONTH,  5, @p_plan_start_yyyymmdd ), 23)	AS M5
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  6, @p_plan_start_yyyymmdd ), 23)	AS M6
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  7, @p_plan_start_yyyymmdd ), 23)	AS M7
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  8, @p_plan_start_yyyymmdd ), 23)	AS M8
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  9, @p_plan_start_yyyymmdd ), 23)	AS M9
+		 , CONVERT(CHAR(7), DATEADD(MONTH, 10, @p_plan_start_yyyymmdd ), 23)	AS M10
+		 , CONVERT(CHAR(7), DATEADD(MONTH, 11, @p_plan_start_yyyymmdd ), 23)	AS M11
+		 , CONVERT(CHAR(7), DATEADD(MONTH, 12, @p_plan_start_yyyymmdd ), 23)	AS M12
+		 , DATA_RANGE															AS DATA_RANGE
+	  FROM SCP_ANL_DIO_REPORT_DETAIL WITH(NOLOCK)
+	 WHERE PLAN_START_YYYYMMDD	= @p_plan_start_yyyymmdd
+	   AND DIVISION_ID			= @p_division_id
+	   AND PLAN_TYPE			= @p_plan_type
+	   AND SEQ					= @p_seq 
+	   AND VER					= @p_ver
+	   AND NICK_NAME			= @p_nick_name
+
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_CYCLE_INVENTORY","1818541612","1","
+
+/*
+ * Program ID   : SCP0083_GET_DIO_CYCLE_INVENTORY
+ * Description  : SCP_ANL_DIO_CYCLE_INVENTORY 조회 , 81 주기 재고
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/11/30   kmj				Initial Release - [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2)
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 2022/06/10   vadabi3			VERSION 추가
+ */
+
+CREATE PROCEDURE [dbo].[SCP0083_GET_DIO_CYCLE_INVENTORY]
+--chaan  @p_division_id            NVARCHAR(5),
+    @p_division_id          NVARCHAR(30),--chaan
+	@p_plan_start_yyyymmdd	NVARCHAR(8),
+	@p_plan_type			NVARCHAR(5),
+	@p_seq					NVARCHAR(2),
+	@p_ver					INT,
+	@p_user_id				NVARCHAR(30),
+	@debug_mode				NVARCHAR(1) = 'T'
+
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	DECLARE @mEXEC NVARCHAR(MAX);
+
+
+	IF OBJECT_ID('TEMPDB..#TMP_SCP0083_A') IS NOT NULL
+		DROP TABLE #TMP_SCP0083_A;
+
+	IF OBJECT_ID('TEMPDB..#TMP_SCP0083_P') IS NOT NULL
+		DROP TABLE #TMP_SCP0083_P;
+
+
+	BEGIN
+	
+		-- CELL일 때
+		-- 주기재고 외 변경 안되는 SUM 값 등 조회
+		--  ROW DATA 계산
+		WITH MODEL_SUM AS (
+			-- 모델별 합계, 호기별 수량(실제)
+			SELECT 
+				DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, VER, FROM_SITE, TRANSPORT_MODE_LINE, NICK_NAME
+				, SUM(M1+M2+M3+M4+M5+M6+M7+M8+M9+M10+M11+M12) AS MODEL_SUM
+			FROM SCP_ANL_DIO_CYCLE_INVENTORY A WITH(NOLOCK)
+			WHERE DIVISION_ID = @p_division_id
+			AND PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd
+			AND PLAN_TYPE = @p_plan_type
+			AND SEQ = @p_seq
+			AND VER = @p_ver
+			AND OPERATION_GROUP = 'A'
+			GROUP BY
+				DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, VER, FROM_SITE, TRANSPORT_MODE_LINE, NICK_NAME
+		),
+		LINE_SUM AS (
+			--  라인별 총 합계
+			SELECT 
+				DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, VER, FROM_SITE, TRANSPORT_MODE_LINE
+				, SUM(MODEL_SUM) AS LINE_SUM, COUNT(NICK_NAME) AS MODEL_CNT
+			FROM MODEL_SUM A WITH(NOLOCK)
+			GROUP BY
+				DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, VER, FROM_SITE, TRANSPORT_MODE_LINE
+		),
+		LINE_RATIO AS (
+			-- 호기 내 비중
+			SELECT 
+				A.DIVISION_ID, A.PLAN_START_YYYYMMDD, A.PLAN_TYPE, A.SEQ, A.VER, A.FROM_SITE, A.TRANSPORT_MODE_LINE, A.NICK_NAME
+				, ROUND((A.MODEL_SUM/B.LINE_SUM)*100, 1) AS LINE_RATIO, B.MODEL_CNT
+			FROM MODEL_SUM A
+			JOIN LINE_SUM B
+			ON A.FROM_SITE = B.FROM_SITE
+			AND A.TRANSPORT_MODE_LINE = B.TRANSPORT_MODE_LINE
+		),
+		NON_OPERATION AS (
+			-- 비가동률
+			SELECT 
+				A.DIVISION_ID, A.PLAN_START_YYYYMMDD, A.PLAN_TYPE, A.SEQ, A.VER, A.FROM_SITE, A.TRANSPORT_MODE_LINE, A.NICK_NAME, B.LINE_RATIO, B.MODEL_CNT
+				, (100 - B.LINE_RATIO) AS NON_OPERATION
+			FROM MODEL_SUM A
+			JOIN LINE_RATIO B
+			ON A.NICK_NAME = B.NICK_NAME
+			AND A.FROM_SITE = B.FROM_SITE
+			AND A.TRANSPORT_MODE_LINE = B.TRANSPORT_MODE_LINE
+		),
+		GLOBAL_MODEL_SUM AS (
+			-- GLOBAL 수량
+			SELECT
+				NICK_NAME
+				, SUM(MODEL_SUM) AS GLOBAL_MODEL_SUM
+			FROM MODEL_SUM
+			GROUP BY NICK_NAME
+		),
+		GLOBAL_RATIO AS (
+			-- Global비중
+			SELECT 
+				A.DIVISION_ID, A.PLAN_START_YYYYMMDD, A.PLAN_TYPE, A.SEQ, A.VER, A.FROM_SITE, A.TRANSPORT_MODE_LINE, A.NICK_NAME, B.GLOBAL_MODEL_SUM
+				, ROUND((A.MODEL_SUM/B.GLOBAL_MODEL_SUM)*100, 1) AS GLOBAL_RATIO
+			FROM MODEL_SUM A
+			JOIN GLOBAL_MODEL_SUM B
+			ON A.NICK_NAME = B.NICK_NAME
+		),
+		GLOBAL_SITE_RATIO AS (
+			-- Global Site 비중
+			SELECT 
+				A.DIVISION_ID, A.PLAN_START_YYYYMMDD, A.PLAN_TYPE, A.SEQ, A.VER, A.FROM_SITE, A.NICK_NAME
+				, SUM(A.GLOBAL_RATIO) AS GLOBAL_SITE_RATIO
+			FROM GLOBAL_RATIO A
+			GROUP BY A.DIVISION_ID, A.PLAN_START_YYYYMMDD, A.PLAN_TYPE, A.SEQ, A.VER, A.FROM_SITE, A.NICK_NAME
+		)
+		SELECT 
+			RTRIM(A.DIVISION_ID) AS DIVISION_ID
+			, A.PLAN_START_YYYYMMDD
+			, RTRIM(A.PLAN_TYPE) AS PLAN_TYPE
+			, A.SEQ
+			, A.VER
+			, "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_CYCLE_INVENTORY","1818541612","2","RTRIM(A.PLANT_ID) AS PLANT_ID
+			, RTRIM(A.FROM_SITE) AS FROM_SITE
+			, A.FROM_SITE_DESCRIPTION
+			, RTRIM(A.TRANSPORT_MODE_LINE) AS TRANSPORT_MODE_LINE
+			, RTRIM(A.NICK_NAME) AS NICK_NAME
+			, RTRIM(A.PACK_GROUP) AS PACK_GROUP
+			, A.CELL_GROUP
+			, RTRIM(A.OPERATION_GROUP) AS OPERATION_GROUP
+			, (SELECT SEGMENT2
+				 FROM SCM_ADM_LOOKUP_MASTER_DETAIL X WITH(NOLOCK)
+			    WHERE LOOKUP_TYPE = 'OPERATION_GROUP'
+				  AND VALID_YN = 'Y'
+				  AND X.SEGMENT1 = RTRIM(A.OPERATION_GROUP)
+			  ) 							AS OPERATION_GROUP_NAME
+			, A.M1, A.M2, A.M3, A.M4, A.M5, A.M6, A.M7, A.M8, A.M9, A.M10, A.M11, A.M12
+			, B.MODEL_SUM																			-- 모델별 SUM
+			, C.LINE_RATIO																			-- 호기내비중
+			, C.NON_OPERATION																		-- 비가동률
+			, ISNULL(A.PRIVATE_FLAG, IIF(C.MODEL_CNT=1, 'Y', 'N')) AS PRIVATE_FLAG					-- 전용여부 (SEL)
+			, A.CYCLE																				-- 주기
+			, (30.4*A.CYCLE/2*C.NON_OPERATION)*0.01 AS CYCLE_STOCK									-- 주기 재고
+			, B.MODEL_SUM AS MODEL_SUM2																-- 호기별 수량(실제)
+			, D.GLOBAL_MODEL_SUM																	-- GLOBAL 수량
+			, D.GLOBAL_RATIO																		-- GLOBAL 비중
+			, ((30.4*A.CYCLE/2*C.NON_OPERATION)*0.01) * D.GLOBAL_RATIO *0.01 AS WEIGHT_CYCLE_STOCK	-- 주기재고(비중반영)
+			, E.GLOBAL_SITE_RATIO
+		
+		INTO #TMP_SCP0083_A
+		FROM SCP_ANL_DIO_CYCLE_INVENTORY A WITH(NOLOCK)
+		
+		JOIN MODEL_SUM B 
+		ON A.DIVISION_ID			= B.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= B.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= B.PLAN_TYPE
+		AND A.SEQ					= B.SEQ
+		AND A.VER					= B.VER
+		AND A.FROM_SITE				= B.FROM_SITE
+		AND A.TRANSPORT_MODE_LINE	= B.TRANSPORT_MODE_LINE
+		AND A.NICK_NAME				= B.NICK_NAME
+	
+		JOIN NON_OPERATION C
+		ON A.DIVISION_ID			= C.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= C.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= C.PLAN_TYPE
+		AND A.SEQ					= C.SEQ
+		AND A.VER					= C.VER
+		AND A.FROM_SITE				= C.FROM_SITE
+		AND A.TRANSPORT_MODE_LINE	= C.TRANSPORT_MODE_LINE
+		AND A.NICK_NAME				= C.NICK_NAME
+
+		JOIN GLOBAL_RATIO D
+		ON A.DIVISION_ID			= D.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= D.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= D.PLAN_TYPE
+		AND A.SEQ					= D.SEQ
+		AND A.VER					= D.VER
+		AND A.FROM_SITE				= D.FROM_SITE
+		AND A.TRANSPORT_MODE_LINE	= D.TRANSPORT_MODE_LINE
+		AND A.NICK_NAME				= D.NICK_NAME
+		
+		JOIN GLOBAL_SITE_RATIO E
+		ON A.DIVISION_ID			= E.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= E.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE 			= E.PLAN_TYPE
+		AND A.SEQ					= E.SEQ
+		AND A.VER					= E.VER
+		AND A.FROM_SITE				= E.FROM_SITE
+		AND A.NICK_NAME				= E.NICK_NAME
+	
+		ORDER BY A.FROM_SITE, A.TRANSPORT_MODE_LINE, A.NICK_NAME
+		;
+
+	END
+	
+	BEGIN
+
+		-- PACK일 때, PACK_GROUP 기준으로 SUM
+		-- 주기재고 외 변경 안되는 SUM 값 등 조회
+		-- ROW DATA 계산
+		WITH MODEL_SUM AS (
+			-- 모델별 합계, 호기별 수량(실제)
+			SELECT 
+				DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, VER, FROM_SITE, TRANSPORT_MODE_LINE, PACK_GROUP
+				, SUM(M1+M2+M3+M4+M5+M6+M7+M8+M9+M10+M11+M12) AS MODEL_SUM
+			FROM SCP_ANL_DIO_CYCLE_INVENTORY A WITH(NOLOCK)
+			WHERE DIVISION_ID = @p_division_id
+			AND PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd
+			AND PLAN_TYPE = @p_plan_type
+			AND SEQ = @p_seq
+			AND VER = @p_ver
+			AND OPERATION_GROUP = 'P'
+			AND PACK_GROUP IS NOT NULL
+			GROUP BY
+				DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, VER, FROM_SITE, TRANSPORT_MODE_LINE, PACK_GROUP
+		),
+		LINE_SUM AS (
+			--  라인별 총 합계
+			SELECT 
+				DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, VER, FROM_SITE, TRANSPORT_MODE_LINE
+				, SUM(MODEL_SUM) AS LINE_SUM, COUNT(PACK_GROUP) AS MODEL_CNT
+			FROM MODEL_SUM A WITH(NOLOCK)
+			GROUP BY
+				DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, VER, FROM_SITE, TRANSPORT_MODE_LINE
+		),
+		LINE_RATIO AS (
+			-- 호기 내 비중
+			SELECT 
+				A.DIVISION_ID, A.PLAN_START_YYYYMMDD, A.PLAN_TYPE, A.SEQ, A.VER, A.FROM_SITE, A.TRANSPORT_MODE_LINE, A.PACK_GROUP
+				, ROUND((A.MODEL_SUM/B.LINE_SUM)*100, 1) AS LINE_RATIO, B.MODEL_CNT
+			"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_CYCLE_INVENTORY","1818541612","3","FROM MODEL_SUM A
+			JOIN LINE_SUM B
+			ON A.FROM_SITE = B.FROM_SITE
+			AND A.TRANSPORT_MODE_LINE = B.TRANSPORT_MODE_LINE
+		),
+		NON_OPERATION AS (
+			-- 비가동률
+			SELECT 
+				A.DIVISION_ID, A.PLAN_START_YYYYMMDD, A.PLAN_TYPE, A.SEQ, A.VER, A.FROM_SITE, A.TRANSPORT_MODE_LINE, A.PACK_GROUP, B.LINE_RATIO, B.MODEL_CNT
+				, (100 - B.LINE_RATIO) AS NON_OPERATION
+			FROM MODEL_SUM A
+			JOIN LINE_RATIO B
+			ON A.PACK_GROUP = B.PACK_GROUP
+			AND A.FROM_SITE = B.FROM_SITE
+			AND A.TRANSPORT_MODE_LINE = B.TRANSPORT_MODE_LINE
+		),
+		GLOBAL_MODEL_SUM AS (
+			-- GLOBAL 수량
+			SELECT
+				PACK_GROUP
+				, SUM(MODEL_SUM) AS GLOBAL_MODEL_SUM
+			FROM MODEL_SUM
+			GROUP BY PACK_GROUP
+		),
+		GLOBAL_RATIO AS (
+			-- Global비중
+			SELECT 
+				A.DIVISION_ID, A.PLAN_START_YYYYMMDD, A.PLAN_TYPE, A.SEQ, A.VER, A.FROM_SITE, A.TRANSPORT_MODE_LINE, A.PACK_GROUP, B.GLOBAL_MODEL_SUM
+				, ROUND((A.MODEL_SUM/B.GLOBAL_MODEL_SUM)*100, 1) AS GLOBAL_RATIO
+			FROM MODEL_SUM A
+			JOIN GLOBAL_MODEL_SUM B
+			ON A.PACK_GROUP = B.PACK_GROUP
+		),
+		GLOBAL_SITE_RATIO AS (
+			-- Global Site 비중
+			SELECT 
+				A.DIVISION_ID, A.PLAN_START_YYYYMMDD, A.PLAN_TYPE, A.SEQ, A.VER, A.FROM_SITE, A.PACK_GROUP
+				, SUM(A.GLOBAL_RATIO) AS GLOBAL_SITE_RATIO
+			FROM GLOBAL_RATIO A
+			GROUP BY A.DIVISION_ID, A.PLAN_START_YYYYMMDD, A.PLAN_TYPE, A.SEQ, A.VER, A.FROM_SITE, A.PACK_GROUP
+		)
+		SELECT 
+			RTRIM(A.DIVISION_ID) AS DIVISION_ID
+			, A.PLAN_START_YYYYMMDD
+			, RTRIM(A.PLAN_TYPE) AS PLAN_TYPE
+			, A.SEQ
+			, A.VER
+			, RTRIM(A.PLANT_ID) AS PLANT_ID
+			, RTRIM(A.FROM_SITE) AS FROM_SITE
+			, A.FROM_SITE_DESCRIPTION
+			, RTRIM(A.TRANSPORT_MODE_LINE) AS TRANSPORT_MODE_LINE
+			, RTRIM(A.NICK_NAME) AS NICK_NAME
+			, RTRIM(A.PACK_GROUP) AS PACK_GROUP
+			, A.CELL_GROUP
+			, RTRIM(A.OPERATION_GROUP) AS OPERATION_GROUP
+			, (SELECT SEGMENT2
+				 FROM SCM_ADM_LOOKUP_MASTER_DETAIL X WITH(NOLOCK)
+			    WHERE LOOKUP_TYPE = 'OPERATION_GROUP'
+				  AND VALID_YN = 'Y'
+				  AND X.SEGMENT1 = RTRIM(A.OPERATION_GROUP)
+			  ) 							AS OPERATION_GROUP_NAME
+			, A.M1, A.M2, A.M3, A.M4, A.M5, A.M6, A.M7, A.M8, A.M9, A.M10, A.M11, A.M12
+			, B.MODEL_SUM																			-- 모델별 SUM
+			, C.LINE_RATIO																			-- 호기내비중
+			, C.NON_OPERATION																		-- 비가동률
+			, ISNULL(A.PRIVATE_FLAG, IIF(C.MODEL_CNT=1, 'Y', 'N')) AS PRIVATE_FLAG					-- 전용여부 (SEL)
+			, A.CYCLE																				-- 주기
+			, (30.4*A.CYCLE/2*C.NON_OPERATION)*0.01 AS CYCLE_STOCK									-- 주기 재고
+			, B.MODEL_SUM AS MODEL_SUM2																-- 호기별 수량(실제)
+			, D.GLOBAL_MODEL_SUM																	-- GLOBAL 수량
+			, D.GLOBAL_RATIO																		-- GLOBAL 비중
+			, ((30.4*A.CYCLE/2*C.NON_OPERATION)*0.01) * D.GLOBAL_RATIO *0.01 AS WEIGHT_CYCLE_STOCK	-- 주기재고(비중반영)
+			, E.GLOBAL_SITE_RATIO
+		
+		INTO #TMP_SCP0083_P
+		FROM SCP_ANL_DIO_CYCLE_INVENTORY A WITH(NOLOCK)
+		
+		JOIN MODEL_SUM B 
+		ON A.DIVISION_ID			= B.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= B.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= B.PLAN_TYPE
+		AND A.SEQ					= B.SEQ
+		AND A.VER					= B.VER
+		AND A.FROM_SITE				= B.FROM_SITE
+		AND A.TRANSPORT_MODE_LINE	= B.TRANSPORT_MODE_LINE
+		AND A.PACK_GROUP			= B.PACK_GROUP
+	
+		JOIN NON_OPERATION C
+		ON A.DIVISION_ID			= C.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= C.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= C.PLAN_TYPE
+		AND A.SEQ					= C.SEQ
+		AND A.VER					= C.VER
+		AND A.FROM_SITE				= C.FROM_SITE
+		AND A.TRANSPORT_MODE_LINE	= C.TRANSPORT_MODE_LINE
+		AND A.PACK_GROUP			= C.PACK_GROUP
+
+		JOIN GLOBAL_RATIO D
+		ON A.DIVISION_ID			= D.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= D.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= D.PLAN_TYPE
+		AND A.SEQ					= D.SEQ
+		AND A.VER					= D.VER
+		AND A.FROM_SITE				= D.FROM_SITE
+		AND A.TRANSPORT_MODE_LINE	= D.TRANSPORT_MODE_LINE
+		AND A.PACK_GROUP			= D.PACK_GROUP
+		
+		JOIN GLOBAL_SITE_RATIO E
+		ON A.DIVISION_ID			= E.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= E.PLAN_START_YYYYMMDD
+		AND A.PLAN_TY"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_CYCLE_INVENTORY","1818541612","4","PE 			= E.PLAN_TYPE
+		AND A.SEQ					= E.SEQ
+		AND A.VER					= E.VER
+		AND A.FROM_SITE				= E.FROM_SITE
+		AND A.PACK_GROUP			= E.PACK_GROUP
+
+		ORDER BY A.FROM_SITE, A.TRANSPORT_MODE_LINE, A.PACK_GROUP
+		;
+
+
+	END
+
+
+	SET @MEXEC = '';
+	SET @MEXEC = @MEXEC+'SELECT *' + CHAR(10);
+	SET @MEXEC = @MEXEC+'FROM (' + CHAR(10);
+
+		BEGIN
+		SET @MEXEC = @MEXEC+'SELECT * FROM #TMP_SCP0083_A ' + CHAR(10);
+		SET @MEXEC = @MEXEC+'UNION ALL ' + CHAR(10);
+		SET @MEXEC = @MEXEC+'SELECT * FROM #TMP_SCP0083_P ' + CHAR(10);
+		END
+
+	SET @MEXEC = @MEXEC+') T' + CHAR(10);
+	SET @MEXEC = @MEXEC+'ORDER BY FROM_SITE, TRANSPORT_MODE_LINE, NICK_NAME, PACK_GROUP, OPERATION_GROUP' + CHAR(10);
+
+	EXEC(@MEXEC);
+
+	-----------------------------------------------------------	
+	-- DEBUG
+	-----------------------------------------------------------
+	IF( @debug_mode ='T')
+		BEGIN				
+			DECLARE @POS INT =1;
+			DECLARE @LEN INT =LEN(@MEXEC);
+			WHILE @POS <= @LEN
+				BEGIN
+					PRINT SUBSTRING(@MEXEC,@POS,4000);
+					SET @POS = @POS+4000;
+				END;
+		END;
+
+
+
+	-- RETURN TABLE[1]
+	-- 몇 개월 선택과 개월 칼럼
+	-- PLAN DATE 차월 부터 집계 됨
+	SELECT TOP 1 
+		  CONVERT(CHAR(7), DATEADD(MONTH, 1, @p_plan_start_yyyymmdd), 23) AS M1
+		, CONVERT(CHAR(7), DATEADD(MONTH, 2, @p_plan_start_yyyymmdd), 23) AS M2
+		, CONVERT(CHAR(7), DATEADD(MONTH, 3, @p_plan_start_yyyymmdd), 23) AS M3
+		, CONVERT(CHAR(7), DATEADD(MONTH, 4, @p_plan_start_yyyymmdd), 23) AS M4
+		, CONVERT(CHAR(7), DATEADD(MONTH, 5, @p_plan_start_yyyymmdd), 23) AS M5
+		, CONVERT(CHAR(7), DATEADD(MONTH, 6, @p_plan_start_yyyymmdd), 23) AS M6
+		, CONVERT(CHAR(7), DATEADD(MONTH, 7, @p_plan_start_yyyymmdd), 23) AS M7
+		, CONVERT(CHAR(7), DATEADD(MONTH, 8, @p_plan_start_yyyymmdd), 23) AS M8
+		, CONVERT(CHAR(7), DATEADD(MONTH, 9, @p_plan_start_yyyymmdd), 23) AS M9
+		, CONVERT(CHAR(7), DATEADD(MONTH, 10, @p_plan_start_yyyymmdd), 23) AS M10
+		, CONVERT(CHAR(7), DATEADD(MONTH, 11, @p_plan_start_yyyymmdd), 23) AS M11
+		, CONVERT(CHAR(7), DATEADD(MONTH, 12, @p_plan_start_yyyymmdd), 23) AS M12
+		, DATA_RANGE
+	FROM SCP_ANL_DIO_CYCLE_INVENTORY A WITH(NOLOCK)
+	WHERE DIVISION_ID = @p_division_id
+	AND PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd
+	AND PLAN_TYPE = @p_plan_type
+	AND SEQ = @p_seq
+	AND VER = @p_ver
+	;
+
+
+	------------------------------------------------------------
+	--	임시테이블 삭제
+	------------------------------------------------------------
+	IF OBJECT_ID('TEMPDB..#TMP_SCP0083_A') IS NOT NULL
+		DROP TABLE #TMP_SCP0083_A
+		;
+
+	IF OBJECT_ID('TEMPDB..#TMP_SCP0083_P') IS NOT NULL
+		DROP TABLE #TMP_SCP0083_P
+		;
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_OPERATION_LT","1834541669","1","
+
+
+/*
+ * Program ID   : SCP0083_GET_DIO_OPERATION_LT
+ * Description  : SCP_ANL_DIO_CYCLE_INVENTORY 조회 , 81 주기 재고
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/12/28   khj79			Initial Release - [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3)
+ * 2021/02/09   khj79			BOD_ID, ROUTE_ID 추가 : 정욱기 책임
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 2022/05/30   vadabi3			항목추가(장병일) / 계산식 개선(김혜라)
+ * 2022/06/10   vadabi3			VERSION 추가
+ */
+
+CREATE PROCEDURE [dbo].[SCP0083_GET_DIO_OPERATION_LT]
+--chaan  @p_division_id            NVARCHAR(5),
+    @p_division_id          NVARCHAR(30),--chaan
+	@p_plan_start_yyyymmdd	NVARCHAR(8),
+	@p_plan_type			NVARCHAR(5),
+	@p_seq					NVARCHAR(2),
+	@p_nick_name			NVARCHAR(50),
+	@p_plant_id				NVARCHAR(30),
+	@p_operation_group		NVARCHAR(10),
+	@p_from_site			NVARCHAR(max),
+	@p_to_site				NVARCHAR(max),
+ 	@p_ver					INT,
+	@debug_mode				NVARCHAR(1) = 'T'
+
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	SET ANSI_WARNINGS OFF
+	SET ARITHIGNORE ON
+	SET ARITHABORT OFF
+
+	IF OBJECT_ID('tempdb..#tmp_SCP0083_REPORT_DETAIL') IS NOT NULL
+		DROP TABLE #tmp_SCP0083_REPORT_DETAIL;
+
+	CREATE TABLE #tmp_SCP0083_REPORT_DETAIL(
+		   DIVISION_ID						NVARCHAR(060)
+		 , PLAN_START_YYYYMMDD				NVARCHAR(008)
+		 , SEQ								NVARCHAR(010)
+		 , NICK_NAME						NVARCHAR(060)
+		 , FROM_SITE						NVARCHAR(060)
+		 , TO_SITE							NVARCHAR(060)
+		 , TRANSPORT_MODE_LINE				NVARCHAR(100)
+		 , BOD_ID							NVARCHAR(150)
+		 , INCOTERMS						NVARCHAR(100)
+		 , FROM_CITY						NVARCHAR(060)
+		 , TO_CITY							NVARCHAR(060)
+		 , M1								NUMERIC(20,0)
+		 , M2								NUMERIC(20,0)
+		 , M3								NUMERIC(20,0)
+		 , M4								NUMERIC(20,0)
+		 , M5								NUMERIC(20,0)
+		 , M6								NUMERIC(20,0)
+		 , M7								NUMERIC(20,0)
+		 , M8								NUMERIC(20,0)
+		 , M9								NUMERIC(20,0)
+		 , M10								NUMERIC(20,0)
+		 , M11								NUMERIC(20,0)
+		 , M12								NUMERIC(20,0)
+		 , MODEL_SUM						NUMERIC(20,0)
+		 , DNI_DEPART_DAYS					NUMERIC(20,1)
+		 , DNI_DEPARTURE_INLAND				NUMERIC(20,1)
+		 , DNI_WAITING_FOR_SHIPPING			NUMERIC(20,1)
+		 , DNI_VOYAGE						NUMERIC(20,1)
+		 , DNI_LAY_OFF_CUSTOMS_CLEARANCE	NUMERIC(20,1)
+		 , DNI_ARRIVAL_INLAND				NUMERIC(20,1)
+		 , DNI_SUM							NUMERIC(20,1)
+		 , CONVERT_CELL_QTY					NUMERIC(20,3)
+		 , LT_CONDITION						NVARCHAR(150)
+		 , LT_INCOTERMS_CONST				INT
+		 , DNI_SUM_INCOTERMS				NUMERIC(20,1)
+		 , SITE_TYPE						NVARCHAR(150)
+		 , PLANT_ID						    NVARCHAR(30)
+	)
+
+
+	INSERT INTO #tmp_SCP0083_REPORT_DETAIL	
+
+	SELECT RD.DIVISION_ID					
+		 , RD.PLAN_START_YYYYMMDD			
+		 , RD.SEQ							
+		 , RD.NICK_NAME	
+		 , RD.FROM_SITE						
+		 , RD.TO_SITE						
+		 , RD.TRANSPORT_MODE_LINE			
+		 , RD.BOD_ID						
+		 , RD.INCOTERMS						
+		 , RD.FROM_CITY						
+		 , RD.TO_CITY						
+		 , M1	 , M2	 , M3	 , M4	 , M5	 , M6		
+		 , M7	 , M8	 , M9	 , M10	 , M11	 , M12		
+		 , (	M1 + M2 + M3 + M4  + M5  + M6							
+			  + M7 + M8 + M9 + M10 + M11 + M12) AS MODEL_SUM			
+		 , DNI_DEPART_DAYS												
+		 , DNI_DEPARTURE_INLAND											
+		 , DNI_WAITING_FOR_SHIPPING										
+		 , DNI_VOYAGE													
+		 , DNI_LAY_OFF_CUSTOMS_CLEARANCE								
+		 , DNI_ARRIVAL_INLAND											
+		 , (	  DNI_DEPART_DAYS				 						
+				+ DNI_DEPARTURE_INLAND		 							
+				+ DNI_WAITING_FOR_SHIPPING		 						
+				+ DNI_VOYAGE		 									
+				+ DNI_LAY_OFF_CUSTOMS_CLEARANCE		  					
+				+ DNI_ARRIVAL_INLAND									
+	       ) AS DNI_SUM													
+	     , CONVERT(NUMERIC(20,3), RD.ATTRIBUTE1) as CONVERT_CELL_QTY	
+		 , LD.SEGMENT3 AS LT_CONDITION									
+		 , (	  1										
+		        + CASE WHEN  TS.SITE_TYPE <> 'SALES' OR ISNULL(LD.SEGMENT3, 'F') != 'A'								TH"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_OPERATION_LT","1834541669","2","EN  1	else 0 end 	
+		        + CASE WHEN  TS.SITE_TYPE <> 'SALES' OR ISNULL(LD.SEGMENT3, 'F') NOT IN ('A', 'B')					THEN  1	else 0 end 	
+		        + CASE WHEN  TS.SITE_TYPE <> 'SALES' OR ISNULL(LD.SEGMENT3, 'F') NOT IN ('A', 'B', 'C')				THEN  1	else 0 end 	
+		        + CASE WHEN  TS.SITE_TYPE <> 'SALES' OR ISNULL(LD.SEGMENT3, 'F') NOT IN ('A', 'B', 'C', 'D')		THEN  1 else 0 end 	
+		        + CASE WHEN  TS.SITE_TYPE <> 'SALES' OR ISNULL(LD.SEGMENT3, 'F') NOT IN ('A', 'B', 'C', 'D', 'E')	THEN  1	else 0 end 	
+		   ) AS LT_INCOTERMS_CONST	-- 2022.06.03 추가										
+		 , (	  DNI_DEPART_DAYS										
+		        + CASE WHEN  TS.SITE_TYPE <> 'SALES' OR ISNULL(LD.SEGMENT3, 'F') != 'A'								THEN  DNI_DEPARTURE_INLAND			else 0 end 	
+		        + CASE WHEN  TS.SITE_TYPE <> 'SALES' OR ISNULL(LD.SEGMENT3, 'F') NOT IN ('A', 'B')					THEN  DNI_WAITING_FOR_SHIPPING		else 0 end 	
+		        + CASE WHEN  TS.SITE_TYPE <> 'SALES' OR ISNULL(LD.SEGMENT3, 'F') NOT IN ('A', 'B', 'C')				THEN  DNI_VOYAGE					else 0 end 	
+		        + CASE WHEN  TS.SITE_TYPE <> 'SALES' OR ISNULL(LD.SEGMENT3, 'F') NOT IN ('A', 'B', 'C', 'D')		THEN  DNI_LAY_OFF_CUSTOMS_CLEARANCE else 0 end 	
+		        + CASE WHEN  TS.SITE_TYPE <> 'SALES' OR ISNULL(LD.SEGMENT3, 'F') NOT IN ('A', 'B', 'C', 'D', 'E')	THEN  DNI_ARRIVAL_INLAND			else 0 end 	
+		   ) AS DNI_SUM_INCOTERMS											
+	     , TS.SITE_TYPE
+		 , CASE WHEN TS.SITE_TYPE = 'SALES'
+				THEN FS.PLANT_ID  -- FG : From plant
+				ELSE TS.PLANT_ID  -- SEMI : To plant
+		   END  AS PLANT_ID
+	FROM SCP_ANL_DIO_REPORT_DETAIL RD WITH(NOLOCK)						
+		 INNER JOIN SCM_MST_SITE TS WITH(NOLOCK)									
+			     ON TS.DIVISION_ID	= RD.DIVISION_ID							
+			    AND TS.SCM_SITE_ID	= RD.TO_SITE						
+			    AND TS.SITE_TYPE = CASE WHEN @p_operation_group = 'A'  THEN 'PLANT' -- SEMI
+										WHEN @p_operation_group = 'P'  THEN 'SALES' -- FG
+										ELSE TS.SITE_TYPE							-- ALL 			     
+								   END     
+		 LEFT  JOIN SCM_MST_SITE FS WITH(NOLOCK)									
+			     ON FS.DIVISION_ID	= RD.DIVISION_ID							
+			    AND FS.SCM_SITE_ID	= RD.FROM_SITE						
+								
+		 LEFT  JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LD  WITH(NOLOCK)				
+			     ON LD.LOOKUP_TYPE = 'INCOTERMS'							
+			    AND LD.VALID_YN = 'Y'										
+			    AND LD.SEGMENT1 = CASE WHEN TS.SITE_TYPE = 'SALES' 
+									   THEN RD.INCOTERMS 
+									   ELSE 'DAP' -- PLANT site INCOTERMS
+								   END	
+	 WHERE RD.PLAN_START_YYYYMMDD	= @p_plan_start_yyyymmdd 	
+	   AND RD.DIVISION_ID			= @p_division_id		
+	   AND RD.PLAN_TYPE			    = @p_plan_type				
+	   AND RD.SEQ					= @p_seq	
+	   AND RD.VER					= @p_ver
+	   AND RD.NICK_NAME			    = @p_nick_name	
+	   /* 20220530 주석처리 
+	   AND (TS.PLANT_ID = @p_plant_id 
+	        OR 
+			FS.PLANT_ID = @p_plant_id)  
+	   AND  @p_plant_id  = CASE WHEN @p_operation_group = 'A'  THEN TS.PLANT_ID	 -- SEMI는 To site Plant
+	                            WHEN @p_operation_group = 'P'  THEN FS.PLANT_ID	 -- FG는   From Stie Plant
+								ELSE @p_plant_id
+						   END 
+						   */
+
+	SELECT DIVISION_ID
+		 , PLAN_START_YYYYMMDD
+		 , SEQ
+		 , NICK_NAME
+		 , FROM_SITE
+		 , (SELECT X1.SITE_DESCRIPTION
+			  FROM SCM_MST_SITE X1 WITH(NOLOCK)
+			 WHERE B.DIVISION_ID	= X1.DIVISION_ID
+			   AND B.FROM_SITE		= X1.SCM_SITE_ID
+		   )						AS FROM_SITE_DESCRIPTION
+		 , TO_SITE
+		 , (SELECT X2.SITE_DESCRIPTION
+			  FROM SCM_MST_SITE X2 WITH(NOLOCK)
+			 WHERE B.DIVISION_ID	= X2.DIVISION_ID
+			   AND B.TO_SITE		= X2.SCM_SITE_ID
+		   )						AS TO_SITE_DESCRIPTION
+		 , TRANSPORT_MODE_LINE
+		 , BOD_ID					-- 2022.02.09 : 추가 , 정욱기 책임
+		 , (SELECT ROUTE_ID
+			  FROM SCP_MST_BOD_V X3
+			 WHERE B.BOD_ID	= X3.BOD_ID
+			)						AS ROUTE_ID
+		 , INCOTERMS
+		 , LT_CONDITION
+		 , LT_INCOTERMS_CONST		-- 2022.06.03 추가
+		 , FROM_CITY
+		 , TO_CITY
+		 , M1		 , M2		 , M3		 , M4		 , M5		 , M6
+		 , M7		 , M8		 , M9		 , M10		 , M11		 , M12
+		 , MODEL_SUM
+         , MODEL_SUM_CELL_CONV
+		 , DNI_SUM										AS TOTAL_LT
+		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_OPERATION_LT","1834541669","3"," , DNI_SUM_INCOTERMS							AS LT_INCOTERMS
+		 , ISNULL(SUM(MODEL_SUM)			OVER(PARTITION BY NICK_NAME, SITE_TYPE),0)	AS NICK_SUM
+		 , ISNULL(SUM(MODEL_SUM_CELL_CONV)  OVER(PARTITION BY NICK_NAME, SITE_TYPE),0)	AS NICK_SUM_CONV
+		 , ISNULL(MODEL_SUM_CELL_CONV / SUM(MODEL_SUM_CELL_CONV) OVER(PARTITION BY NICK_NAME, SITE_TYPE),0) AS LINE_RATIO
+		 --, ISNULL(ROUND(DNI_SUM * ( MODEL_SUM / SUM(MODEL_SUM) OVER(PARTITION BY NICK_NAME)),2),0) AS	LINE_RATIO_LT
+		 , ISNULL(ROUND(DNI_SUM_INCOTERMS * ( MODEL_SUM_cell_conv / SUM(MODEL_SUM_cell_conv) OVER(PARTITION BY NICK_NAME, SITE_TYPE)),2),0) AS	LINE_RATIO_LT
+		, DNI_DEPART_DAYS
+		, DNI_DEPARTURE_INLAND
+		, DNI_WAITING_FOR_SHIPPING
+		, DNI_VOYAGE
+		, DNI_LAY_OFF_CUSTOMS_CLEARANCE
+		, DNI_ARRIVAL_INLAND
+	  FROM (
+			SELECT DIVISION_ID
+				 , PLAN_START_YYYYMMDD
+				 , SEQ
+				 , NICK_NAME
+				 , FROM_SITE
+				 , TO_SITE
+				 , TRANSPORT_MODE_LINE
+				 , BOD_ID				-- 2022.02.09 : 추가 , 정욱기 책임
+				 , INCOTERMS
+				 , LT_CONDITION
+				 , LT_INCOTERMS_CONST	-- 2022.06.03 추가
+				 , SITE_TYPE
+				 , PLANT_ID
+				 , FROM_CITY
+				 , TO_CITY
+				 , SUM(M1)	AS M1
+				 , SUM(M2)	AS M2
+				 , SUM(M3)	AS M3
+				 , SUM(M4)	AS M4
+				 , SUM(M5)	AS M5
+				 , SUM(M6)	AS M6
+				 , SUM(M7)	AS M7
+				 , SUM(M8)	AS M8
+				 , SUM(M9)	AS M9
+				 , SUM(M10)	AS M10
+				 , SUM(M11)	AS M11
+				 , SUM(M12)	AS M12
+				 , SUM(MODEL_SUM) AS MODEL_SUM
+				 , SUM(MODEL_SUM * ISNULL(CONVERT_CELL_QTY,1)) AS MODEL_SUM_CELL_CONV
+				 -- 2022.03.11 : NICK_NAME 이 같고 ITEM_ID 가 다른 데이터 존재 하여 수정
+				 , ISNULL(MAX(DNI_SUM),0)	AS DNI_SUM
+				 , ISNULL(MAX(DNI_SUM_INCOTERMS),0)	AS DNI_SUM_INCOTERMS
+
+				 , ISNULL(MAX(DNI_DEPART_DAYS),0)				AS DNI_DEPART_DAYS
+				 , ISNULL(MAX(DNI_DEPARTURE_INLAND),0)			AS DNI_DEPARTURE_INLAND
+				 , ISNULL(MAX(DNI_WAITING_FOR_SHIPPING),0)		AS DNI_WAITING_FOR_SHIPPING
+				 , ISNULL(MAX(DNI_VOYAGE),0)					AS DNI_VOYAGE
+				 , ISNULL(MAX(DNI_LAY_OFF_CUSTOMS_CLEARANCE),0)	AS DNI_LAY_OFF_CUSTOMS_CLEARANCE
+				 , ISNULL(MAX(DNI_ARRIVAL_INLAND),0)			AS DNI_ARRIVAL_INLAND
+			FROM #tmp_SCP0083_REPORT_DETAIL A
+			GROUP BY DIVISION_ID
+				, PLAN_START_YYYYMMDD
+				, SEQ
+				, NICK_NAME
+				, FROM_SITE
+				, TO_SITE
+				, TRANSPORT_MODE_LINE
+				, BOD_ID
+				, INCOTERMS
+				, LT_CONDITION
+				, LT_INCOTERMS_CONST
+				 , SITE_TYPE 
+				, PLANT_ID
+				, FROM_CITY
+				, TO_CITY
+		) B
+	ORDER BY NICK_NAME
+		 , FROM_SITE
+		 , TO_SITE
+
+
+	SELECT TOP 1
+		   CONVERT(CHAR(7), DATEADD(MONTH,  1, @p_plan_start_yyyymmdd ), 23)	AS M1
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  2, @p_plan_start_yyyymmdd ), 23)	AS M2
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  3, @p_plan_start_yyyymmdd ), 23)	AS M3
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  4, @p_plan_start_yyyymmdd ), 23)	AS M4
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  5, @p_plan_start_yyyymmdd ), 23)	AS M5
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  6, @p_plan_start_yyyymmdd ), 23)	AS M6
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  7, @p_plan_start_yyyymmdd ), 23)	AS M7
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  8, @p_plan_start_yyyymmdd ), 23)	AS M8
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  9, @p_plan_start_yyyymmdd ), 23)	AS M9
+		 , CONVERT(CHAR(7), DATEADD(MONTH, 10, @p_plan_start_yyyymmdd ), 23)	AS M10
+		 , CONVERT(CHAR(7), DATEADD(MONTH, 11, @p_plan_start_yyyymmdd ), 23)	AS M11
+		 , CONVERT(CHAR(7), DATEADD(MONTH, 12, @p_plan_start_yyyymmdd ), 23)	AS M12
+		 , DATA_RANGE															AS DATA_RANGE
+	  FROM SCP_ANL_DIO_REPORT_DETAIL WITH(NOLOCK)
+	 WHERE PLAN_START_YYYYMMDD	= @p_plan_start_yyyymmdd
+	   AND DIVISION_ID			= @p_division_id
+	   AND PLAN_TYPE			= @p_plan_type
+	   AND SEQ					= @p_seq 
+	   AND VER					= @p_ver
+	   AND NICK_NAME			= @p_nick_name
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_REPORT","1850541726","1","
+
+/*
+ * Program ID   : SCP0083_GET_DIO_REPORT
+ * Description  : SCP_ANL_DIO_REPORT 조회 
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/10/28   kmj				Initial Release - [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2)
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 2022/05/09   vadabi3			ATTRIBUTE1 = Safety Stock > 내부 (=SAFETY_STOCK_PIN_HOUSE)
+ * 2022/06/10   vadabi3			VERSION 추가
+ * 2022/10/24   vadabi3			SHIPMENT SUM 컬럼 추가
+ */
+
+CREATE PROCEDURE [dbo].[SCP0083_GET_DIO_REPORT]
+--chaan  @p_division_id            NVARCHAR(5),
+    @p_division_id          NVARCHAR(30),--chaan
+	@p_plan_start_yyyymmdd	NVARCHAR(8),
+	@p_plan_type			NVARCHAR(5),
+	@p_seq					NVARCHAR(2),
+ 	@p_ver					INT,
+	@p_user_id				NVARCHAR(30),
+	@debug_mode				NVARCHAR(1) = 'T'
+
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	DECLARE @mEXEC NVARCHAR(MAX);
+	
+
+		WITH AA AS (		
+			
+			SELECT 
+				RTRIM(DIVISION_ID) AS DIVISION_ID
+				, PLAN_START_YYYYMMDD
+				, RTRIM(PLAN_TYPE) AS PLAN_TYPE
+				, SEQ
+				, VER
+				, RTRIM(NICK_NAME) AS NICK_NAME
+				, RTRIM(FROM_SITE) AS FROM_SITE
+				, ISNULL(CUTOFF_FLAG, 'N') AS VERSION
+				, FROM_SITE_DESCRIPTION
+				, END_CUSTOMER -- TO_SITE
+				, TO_SITE
+				, PRODUCTION_TYPE
+				, EXTRA_SPEC
+				, RTRIM(ITEM_ID) AS ITEM_ID
+				, CELL_ITEM_ID
+				, RTRIM(BIZ_TYPE) AS BIZ_TYPE
+				, INCOTERMS
+				, ISNULL(CELL_AGING_LT, 0) AS CELL_AGING_LT
+				, ISNULL(CELL_EOL_SHIPPING_LOT, 0) AS CELL_EOL_SHIPPING_LOT
+				--, 0 AS CELL_SUM
+				, ISNULL(PACK_INCOMMING, 0) AS PACK_INCOMMING
+				, ISNULL(PACK_OPERATION_LT, 0) AS PACK_OPERATION_LT
+				--, 0 AS PACK_SUM
+				, ISNULL(SHIPMENT_CELL_INSPECTION_LOAD, 0) AS SHIPMENT_CELL_INSPECTION_LOAD
+				, ISNULL(SHIPMENT_CELL_INSPECTION_WAITING, 0) AS SHIPMENT_CELL_INSPECTION_WAITING
+				--, 0 AS SHIPMENT_CELL_SUM
+				, ISNULL(SHIPMENT_PACK_INSPECTION_LOAD, 0) AS SHIPMENT_PACK_INSPECTION_LOAD
+				, ISNULL(SHIPMENT_PACK_INSPECTION_WAITING, 0) AS SHIPMENT_PACK_INSPECTION_WAITING
+				--, 0 AS SHIPMENT_PACK_SUM
+				--, 0 AS SHIPMENT_INSPECTION_LOAD_SUM
+				--, 0 AS SHIPMENT_INSPECTION_WAITING_SUM
+				--, 0 AS SHIPMENT_SUM
+				, ISNULL(DNI_CELL_DEPARTURE_DAYS, 0) AS DNI_CELL_DEPARTURE_DAYS
+				, ISNULL(DNI_CELL_DEPARTURE_INLAND, 0) AS DNI_CELL_DEPARTURE_INLAND
+				, ISNULL(DNI_CELL_WAITING_FOR_SHIPPING, 0) AS DNI_CELL_WAITING_FOR_SHIPPING
+				, ISNULL(DNI_CELL_VOYAGE, 0) AS DNI_CELL_VOYAGE
+				, ISNULL(DNI_CELL_LAY_OFF_CUSTOMS_CLEARANCE, 0) AS DNI_CELL_LAY_OFF_CUSTOMS_CLEARANCE
+				, ISNULL(DNI_CELL_ARRIVAL_INLAND, 0) AS DNI_CELL_ARRIVAL_INLAND
+				--, 0 AS DNI_CELL_SUM
+				, ISNULL(DNI_PACK_DEPARTURE_DAYS, 0) AS DNI_PACK_DEPARTURE_DAYS
+				, ISNULL(DNI_PACK_DEPARTURE_INLAND, 0) AS DNI_PACK_DEPARTURE_INLAND
+				, ISNULL(DNI_PACK_WAITING_FOR_SHIPPING, 0) AS DNI_PACK_WAITING_FOR_SHIPPING
+				, ISNULL(DNI_PACK_VOYAGE, 0) AS DNI_PACK_VOYAGE
+				, ISNULL(DNI_PACK_LAY_OFF_CUSTOMS_CLEARANCE, 0) AS DNI_PACK_LAY_OFF_CUSTOMS_CLEARANCE
+				, ISNULL(DNI_PACK_ARRIVAL_INLAND, 0) AS DNI_PACK_ARRIVAL_INLAND
+				--, 0 AS DNI_PACK_SUM
+				--, 0 AS DNI_DEPARTURE_DAYS_SUM
+				--, 0 AS DNI_DEPARTURE_INLAND_SUM
+				--, 0 AS DNI_WAITING_FOR_SHIPPING_SUM
+				--, 0 AS DNI_VOYAGE_SUM
+				--, 0 AS DNI_LAY_OFF_CUSTOMS_CLEARANCE_SUM
+				--, 0 AS DNI_ARRIVAL_INLAND_SUM
+				--, 0 AS DNI_SUM
+				, ISNULL(PRE_INSPECTION_CELL, 0) AS PRE_INSPECTION_CELL
+				, ISNULL(PRE_INSPECTION_PACK, 0) AS PRE_INSPECTION_PACK
+				--, 0 AS PRE_INSPECTION_SUM
+				, ISNULL(VMI_CELL, 0) AS VMI_CELL
+				, ISNULL(VMI_PACK, 0) AS VMI_PACK
+				--, 0 AS VMI_SUM
+				, ISNULL(FOREIGN_CORP, 0) AS FOREIGN_CORP
+				, ISNULL(RACK_BIZ, 0) AS RACK_BIZ
+				, ISNULL(DEPARTURE_INTRANSIT_VMI, 0) AS DEPARTUR"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_REPORT","1850541726","2","E_INTRANSIT_VMI_AUTO
+				, ISNULL(SAFETY_STOCK_CELL, 0) AS SAFETY_STOCK_CELL
+				, ISNULL(SAFETY_STOCK_PACK, 0) AS SAFETY_STOCK_PACK
+				--, 0 AS SAFETY_STOCK_SUM
+				, ISNULL(OTHER_STOCK_CELL, 0) AS OTHER_STOCK_CELL
+				, ISNULL(OTHER_STOCK_PACK, 0) AS OTHER_STOCK_PACK
+				--, 0 AS OTHER_STOCK_SUM
+				, ISNULL(PRODUCTION_CYCLE_CELL, 0) AS PRODUCTION_CYCLE_CELL
+				, ISNULL(PRODUCTION_CYCLE_PACK, 0) AS PRODUCTION_CYCLE_PACK
+				--, 0 AS PRODUCTION_CYCLE_SUM
+				, ISNULL(STANDARD_DIO, 0) AS STANDARD_DIO_AUTO
+				, ISNULL(ASSEMBLY_QTY, 0) AS ASSEMBLY_QTY
+				, ISNULL(ASSEMBLY_TYPE_RATIO, 0) AS ASSEMBLY_TYPE_RATIO
+				, ISNULL(ASSEMBLY_TOTAL_RATIO, 0) AS ASSEMBLY_TOTAL_RATIO
+				, ISNULL(WEIGHT_DIO, 0) AS WEIGHT_DIO_AUTO
+				--, 0 AS OP_LT_TOTAL_AUTO
+				--, 0 AS CYCLE_TOTAL_AUTO
+				--, 0 AS INTRANSIT_TOTAL_AUTO
+				--, 0 AS WEIGHT_OPEARTION_TYPE_AUTO
+				--, 0 AS WEIGHT_OPEARTION_TOTAL_AUTO
+				--, 0 AS WEIGHT_CYCLE_TYPE_AUTO
+				--, 0 AS WEIGHT_CYCLE_TOTAL_AUTO
+				--, 0 AS WEIGHT_INTRANSIT_TYPE_AUTO
+				--, 0 AS WEIGHT_INTRANSIT_TOTAL_AUTO
+				, RTRIM(TRANSPORT_MODE_LINE) AS TRANSPORT_MODE_LINE
+				, RTRIM(OPERATION_GROUP) AS OPERATION_GROUP
+				, RTRIM(PLANT_ID) AS PLANT_ID
+				, CONVERT(numeric, ISNULL(ATTRIBUTE1, 0)) AS SAFETY_STOCK_PIN_HOUSE -- 20220509 추가
+				, SHIPMENT_CELL_SUM 
+				, SHIPMENT_PACK_SUM 
+				, SHIPMENT_SUM		 
+			FROM SCP_ANL_DIO_REPORT A WITH(NOLOCK)
+			WHERE 1=1
+			AND A.DIVISION_ID			= @p_division_id
+			AND A.PLAN_START_YYYYMMDD	= @p_plan_start_yyyymmdd
+			AND A.PLAN_TYPE				= @p_plan_type
+			AND A.SEQ					= @p_seq
+			AND A.VER					= @p_ver
+	
+		)
+		SELECT 
+			DIVISION_ID
+			, PLAN_START_YYYYMMDD
+			, PLAN_TYPE
+			, SEQ
+			, VER
+			, NICK_NAME
+			, FROM_SITE
+			, VERSION -- CUTOFF_FLAG // 'N' -> UI 수정 O, 'Y' -> UI 수정 X
+			, FROM_SITE_DESCRIPTION
+			, END_CUSTOMER -- TO_SITE
+			, TO_SITE
+			, PRODUCTION_TYPE
+			, EXTRA_SPEC
+			, ITEM_ID
+			, CELL_ITEM_ID
+			, BIZ_TYPE
+			, INCOTERMS
+			, CELL_AGING_LT
+			, CELL_EOL_SHIPPING_LOT
+			, (CELL_AGING_LT + CELL_EOL_SHIPPING_LOT) AS CELL_SUM
+			, PACK_INCOMMING
+			, PACK_OPERATION_LT
+			, (PACK_INCOMMING + PACK_OPERATION_LT) AS PACK_SUM
+			, SHIPMENT_CELL_INSPECTION_LOAD
+			, SHIPMENT_CELL_INSPECTION_WAITING
+			, CASE WHEN SHIPMENT_CELL_SUM IS NOT NULL THEN SHIPMENT_CELL_SUM
+			       ELSE (SHIPMENT_CELL_INSPECTION_LOAD + SHIPMENT_CELL_INSPECTION_WAITING)
+				   END AS SHIPMENT_CELL_SUM
+			, SHIPMENT_PACK_INSPECTION_LOAD
+			, SHIPMENT_PACK_INSPECTION_WAITING
+			, CASE WHEN SHIPMENT_PACK_SUM IS NOT NULL THEN SHIPMENT_PACK_SUM
+			       ELSE (SHIPMENT_PACK_INSPECTION_LOAD + SHIPMENT_PACK_INSPECTION_WAITING) 
+				   END AS SHIPMENT_PACK_SUM
+			, (SHIPMENT_CELL_INSPECTION_LOAD + SHIPMENT_PACK_INSPECTION_LOAD) AS SHIPMENT_INSPECTION_LOAD_SUM
+			, (SHIPMENT_CELL_INSPECTION_WAITING + SHIPMENT_PACK_INSPECTION_WAITING) AS SHIPMENT_INSPECTION_WAITING_SUM
+			, CASE WHEN SHIPMENT_SUM IS NOT NULL THEN SHIPMENT_SUM
+			       ELSE (SHIPMENT_CELL_INSPECTION_LOAD + SHIPMENT_CELL_INSPECTION_WAITING + SHIPMENT_PACK_INSPECTION_LOAD + SHIPMENT_PACK_INSPECTION_WAITING)
+				   END AS SHIPMENT_SUM
+			, DNI_CELL_DEPARTURE_DAYS
+			, DNI_CELL_DEPARTURE_INLAND
+			, DNI_CELL_WAITING_FOR_SHIPPING
+			, DNI_CELL_VOYAGE
+			, DNI_CELL_LAY_OFF_CUSTOMS_CLEARANCE
+			, DNI_CELL_ARRIVAL_INLAND
+			, (DNI_CELL_DEPARTURE_DAYS + DNI_CELL_DEPARTURE_INLAND + DNI_CELL_WAITING_FOR_SHIPPING + DNI_CELL_VOYAGE + DNI_CELL_LAY_OFF_CUSTOMS_CLEARANCE + DNI_CELL_ARRIVAL_INLAND) AS DNI_CELL_SUM
+			, DNI_PACK_DEPARTURE_DAYS
+			, DNI_PACK_DEPARTURE_INLAND
+			, DNI_PACK_WAITING_FOR_SHIPPING
+			, DNI_PACK_VOYAGE
+			, DNI_PACK_LAY_OFF_CUSTOMS_CLEARANCE
+			, DNI_PACK_ARRIVAL_INLAND
+			, (DNI_PACK_DEPARTURE_DAYS + DNI_PACK_DEPARTURE_INLAND + DNI_PACK_WAITING_FOR_SHIPPING + DNI_PACK_VOYAGE + DNI_PACK_LAY_OFF_CUSTOMS_CLEARANCE + DNI_PACK_ARRIVAL_INLAND) AS DNI_PACK_SUM
+			, (DNI_CELL_DEPARTURE_DAYS + DNI_PACK_DEPARTURE_DAYS) AS DNI_DE"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_REPORT","1850541726","3","PARTURE_DAYS_SUM
+			, (DNI_CELL_DEPARTURE_INLAND + DNI_PACK_DEPARTURE_INLAND) AS DNI_DEPARTURE_INLAND_SUM
+			, (DNI_CELL_WAITING_FOR_SHIPPING + DNI_PACK_WAITING_FOR_SHIPPING) AS DNI_WAITING_FOR_SHIPPING_SUM
+			, (DNI_CELL_VOYAGE + DNI_PACK_VOYAGE) AS DNI_VOYAGE_SUM
+			, (DNI_CELL_LAY_OFF_CUSTOMS_CLEARANCE + DNI_PACK_LAY_OFF_CUSTOMS_CLEARANCE) AS DNI_LAY_OFF_CUSTOMS_CLEARANCE_SUM
+			, (DNI_CELL_ARRIVAL_INLAND + DNI_PACK_ARRIVAL_INLAND) AS DNI_ARRIVAL_INLAND_SUM
+			, (DNI_CELL_DEPARTURE_DAYS + DNI_CELL_DEPARTURE_INLAND + DNI_CELL_WAITING_FOR_SHIPPING + DNI_CELL_VOYAGE + DNI_CELL_LAY_OFF_CUSTOMS_CLEARANCE + DNI_CELL_ARRIVAL_INLAND + DNI_PACK_DEPARTURE_DAYS + DNI_PACK_DEPARTURE_INLAND + DNI_PACK_WAITING_FOR_SHIPPING + DNI_PACK_VOYAGE + DNI_PACK_LAY_OFF_CUSTOMS_CLEARANCE + DNI_PACK_ARRIVAL_INLAND) AS DNI_SUM
+			, PRE_INSPECTION_CELL
+			, PRE_INSPECTION_PACK
+			, (PRE_INSPECTION_CELL + PRE_INSPECTION_PACK) AS PRE_INSPECTION_SUM
+			, VMI_CELL
+			, VMI_PACK
+			, (VMI_CELL + VMI_PACK) AS VMI_SUM
+			, FOREIGN_CORP
+			, RACK_BIZ
+			, DEPARTURE_INTRANSIT_VMI_AUTO
+			, SAFETY_STOCK_CELL
+			, SAFETY_STOCK_PACK
+			, (SAFETY_STOCK_CELL + SAFETY_STOCK_PACK + SAFETY_STOCK_PIN_HOUSE) AS SAFETY_STOCK_SUM
+			, OTHER_STOCK_CELL
+			, OTHER_STOCK_PACK
+			, (OTHER_STOCK_CELL + OTHER_STOCK_PACK) AS OTHER_STOCK_SUM
+			, PRODUCTION_CYCLE_CELL
+			, PRODUCTION_CYCLE_PACK
+			, (PRODUCTION_CYCLE_CELL + PRODUCTION_CYCLE_PACK) AS PRODUCTION_CYCLE_SUM
+			, STANDARD_DIO_AUTO
+			, ASSEMBLY_QTY
+			, ASSEMBLY_TYPE_RATIO
+			, ASSEMBLY_TOTAL_RATIO
+			, WEIGHT_DIO_AUTO
+			, 0.0 AS OP_LT_TOTAL_AUTO
+			, 0.0 AS CYCLE_TOTAL_AUTO
+			, 0.0 AS INTRANSIT_TOTAL_AUTO
+			, 0.0 AS WEIGHT_OPEARTION_TYPE_AUTO
+			, 0.0 AS WEIGHT_OPEARTION_TOTAL_AUTO
+			, 0.0 AS WEIGHT_CYCLE_TYPE_AUTO
+			, 0.0 AS WEIGHT_CYCLE_TOTAL_AUTO
+			, 0.0 AS WEIGHT_INTRANSIT_TYPE_AUTO
+			, 0.0 AS WEIGHT_INTRANSIT_TOTAL_AUTO
+			, TRANSPORT_MODE_LINE
+			, OPERATION_GROUP
+			, PLANT_ID
+			, SAFETY_STOCK_PIN_HOUSE
+		FROM AA
+		ORDER BY PLANT_ID, END_CUSTOMER, NICK_NAME, ITEM_ID, BIZ_TYPE, INCOTERMS
+		;
+	
+
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_REPORT_H","1866541783","1","
+
+/*
+ * Program ID   : SCP0083_GET_DIO_REPORT_H
+ * Description  : SCP_ANL_DIO_REPORT_H 조회 
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/11/04   kmj				Initial Release - [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2)
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 2022/06/10   vadabi3			VERSION 추가
+ */
+
+CREATE PROCEDURE [dbo].[SCP0083_GET_DIO_REPORT_H]
+--chaan  @p_division_id            NVARCHAR(5),
+    @p_division_id          NVARCHAR(30),--chaan
+	@p_plan_start_yyyymmdd	NVARCHAR(8),
+	@p_plan_type			NVARCHAR(5),
+	@p_seq					NVARCHAR(2),
+	@p_item_id				NVARCHAR(50),
+	@p_nick_name			NVARCHAR(50),
+	@p_plant_id				NVARCHAR(50),
+	@p_sel_column			NVARCHAR(50),
+ 	@p_ver					INT,
+	@debug_mode				NVARCHAR(1) = 'T'
+
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	DECLARE @mEXEC NVARCHAR(MAX) = '';
+
+		SET @mEXEC = '';
+
+		SET @mEXEC = @mEXEC+'SELECT '+CHAR(10);
+		SET @mEXEC = @mEXEC+'	DIVISION_ID'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, PLAN_START_YYYYMMDD'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, PLAN_TYPE'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, SEQ'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, NICK_NAME'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, FROM_SITE'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, FROM_SITE_DESCRIPTION'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, END_CUSTOMER'+CHAR(10); -- TO_SITE
+		SET @mEXEC = @mEXEC+'	, PRODUCTION_TYPE'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, EXTRA_SPEC'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, ITEM_ID'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, CELL_ITEM_ID'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, BIZ_TYPE'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, INCOTERMS'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, ' +@p_sel_column + ' AS SEL_COLUMN'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, LAST_UPDATED_BY'+CHAR(10);
+		SET @mEXEC = @mEXEC+'	, LAST_UPDATE_DATE'+CHAR(10);
+
+		SET @mEXEC = @mEXEC+'FROM SCP_ANL_DIO_REPORT_H A WITH(NOLOCK)'+CHAR(10);
+		SET @mEXEC = @mEXEC+'WHERE 1=1'+CHAR(10);
+		SET @mEXEC = @mEXEC+'AND A.DIVISION_ID			= '''+ @p_division_id +''''+CHAR(10);
+		SET @mEXEC = @mEXEC+'AND A.PLAN_START_YYYYMMDD	= '''+ @p_plan_start_yyyymmdd +''''+CHAR(10);
+		SET @mEXEC = @mEXEC+'AND A.PLAN_TYPE			= '''+ @p_plan_type +''''+CHAR(10);
+		SET @mEXEC = @mEXEC+'AND A.SEQ					= '''+ @p_seq +''''+CHAR(10);
+		SET @mEXEC = @mEXEC+'AND A.VER					= '''+  CONVERT(NVARCHAR(10), ISNULL(@p_ver, 1)) +''''+CHAR(10);
+		SET @mEXEC = @mEXEC+'AND A.ITEM_ID				= '''+ @p_item_id +''''+CHAR(10);
+		SET @mEXEC = @mEXEC+'AND A.NICK_NAME			= N'''+ @p_nick_name +''''+CHAR(10);
+		SET @mEXEC = @mEXEC+'AND A.PLANT_ID				= '''+ @p_plant_id +''''+CHAR(10);
+		SET @mEXEC = @mEXEC+'ORDER BY PLANT_ID, END_CUSTOMER, NICK_NAME, ITEM_ID, BIZ_TYPE, INCOTERMS, LAST_UPDATE_DATE DESC'+CHAR(10);
+
+		-----------------------------------------------------------7
+		-- DEBUG QRY 출력
+		-----------------------------------------------------------	
+		IF( @debug_mode ='T')
+			BEGIN				
+				DECLARE @POS INT =1;
+				DECLARE @LEN INT =LEN(@mEXEC);
+				WHILE @POS <= @LEN
+					BEGIN
+						PRINT SUBSTRING(@mEXEC,@POS,4000);
+						SET @POS = @POS+4000;
+					END;
+			END;
+		-----------------------------------------------------------
+		EXEC (@mEXEC);
+	
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_VERSION_INFO","1882541840","1","
+/*
+ * Program ID   : SCP0083_GET_DIO_VERSION_INFO
+ * Description  : SCP0083 DIO Report 화면의 Version Combo매핑
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/06/14   vadabi3				최초생성 
+                                    변경전 ( Plan Type Combobox 리스트 조회)
+									변경후 ( Version  Combobox 리스트 조회)
+ ----------------------------------------------------------------------------------------------------
+ -- select * from SCP_ANL_DIO_REPORT_VERSION
+ */
+
+CREATE PROCEDURE [dbo].[SCP0083_GET_DIO_VERSION_INFO]
+    @p_division_id				NVARCHAR(30),
+	@p_plan_start_yyyymmdd		NVARCHAR(8),
+	@p_plan_type				NVARCHAR(5),
+	@p_seq						NVARCHAR(2)
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+
+	--------------------------------------------------
+	-- @VER_CNT
+	--------------------------------------------------
+	DECLARE @MAX_VER INT;
+	DECLARE @MAX_VER_STATUS NVARCHAR(MAX);
+
+	select  @MAX_VER  = ISNULL(MAX(ver),0)
+	from SCP_ANL_DIO_REPORT_VERSION v with(nolock)
+	where 1=1
+	  and v.division_id = @p_division_id
+	  and v.plan_start_yyyymmdd = @p_plan_start_yyyymmdd
+	  and v.plan_type = @p_plan_type
+	  and v.seq = @p_seq
+
+	select  @MAX_VER_STATUS  = ver_status
+	from SCP_ANL_DIO_REPORT_VERSION v with(nolock)
+	where 1=1
+	  and v.division_id = @p_division_id
+	  and v.plan_start_yyyymmdd = @p_plan_start_yyyymmdd
+	  and v.plan_type = @p_plan_type
+	  and v.seq = @p_seq
+	  and v.ver = @MAX_VER
+
+
+
+	IF @MAX_VER = 0
+		BEGIN
+			select 1 AS CODE 
+				  ,CONCAT(1, '-', 'N', '-', N'미생성') AS NAME -- 미생성 -> Version Create 버튼 활성화 
+				   ,'' as data_range  -- Range Editable 
+				   ,'' as creation_date 
+	
+		END
+
+	ELSE IF @MAX_VER > 0 AND @MAX_VER_STATUS = 'P'
+		BEGIN
+			SELECT  VER AS CODE 
+				  , CONCAT(VER, '-', ver_status, '-', ver_status_name)  AS NAME    -- C:생성완료, P:생성중
+				  , data_range
+			from
+			(
+				select ver 
+					, ver_status
+					, case when ver_status = 'C' then N'생성완료'
+					       when ver_status = 'P' then N'생성중'
+						   else ver_status
+					       end as ver_status_name
+					, v.data_range   
+					, convert(nvarchar(10), creation_date, 23) + ' ' +convert(nvarchar(8), creation_date, 24) as creation_date
+				 from SCP_ANL_DIO_REPORT_VERSION v with(nolock)
+				where 1=1
+				  and v.division_id = @p_division_id
+				  and v.plan_start_yyyymmdd = @p_plan_start_yyyymmdd
+				  and v.plan_type = @p_plan_type
+				  and v.seq = @p_seq
+			) DATA
+			order by DATA.VER DESC
+		END
+	ELSE
+		BEGIN
+		SELECT  VER  AS CODE 
+		      , CONCAT(VER, '-', ver_status, '-', ver_status_name)  AS NAME     -- C:생성완료, P:생성중
+			  , data_range
+		from
+		(
+			select ver
+				, ver_status
+					, case when ver_status = 'C' then N'생성완료'
+					       when ver_status = 'P' then N'생성중'
+						   else ver_status
+					       end as ver_status_name
+				, v.data_range   
+				, convert(nvarchar(10), creation_date, 23) + ' ' +convert(nvarchar(8), creation_date, 24) as creation_date
+			 from SCP_ANL_DIO_REPORT_VERSION v with(nolock)
+			where 1=1
+			  and v.division_id = @p_division_id
+			  and v.plan_start_yyyymmdd = @p_plan_start_yyyymmdd
+			  and v.plan_type = @p_plan_type
+			  and v.seq = @p_seq
+
+			union all
+			SELECT @MAX_VER + 1 as ver 
+				   , 'N' as ver_status 
+				   ,  N'미생성'AS ver_status_name
+				   ,'' as data_range  
+				   ,'' as creation_date 
+	    ) DATA
+		order by DATA.VER DESC
+		;
+
+	END
+
+
+
+/*
+		with target_create as (
+		select isnull(max(ver)+1, 1) as ver 
+			   ,'N' as ver_status  -- 미생성 -> Version Create 버튼 활성화 
+			   ,'' as data_range  -- Range Editable 
+			   ,'' as creation_date 
+		 from SCP_ANL_DIO_REPORT_VERSION v with(nolock)
+		where 1=1
+		  and v.division_id = @p_division_id
+		  and v.plan_start_yyyym"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_VERSION_INFO","1882541840","2","mdd = @p_plan_start_yyyymmdd
+		  and v.plan_type = @p_plan_type
+		  and v.seq = @p_seq
+		)
+		select VER AS CODE
+			  , CONCAT(VER, '-', ver_status)  AS NAME
+			  ,data_range
+			  ,creation_date
+		 from target_create with(nolock)
+		where 1=1
+		  and not exists (select 1
+							from scp_anl_dio_report_version p with(nolock)
+						   where p.division_id = @p_division_id
+							 and p.plan_start_yyyymmdd= @p_plan_start_yyyymmdd
+							 and p.plan_type= @p_plan_type
+							 and p.seq= @p_seq
+							 and p.ver_status != 'C' 
+						 ) -- 생성중 버전이 없을 경우만... 
+
+*/
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_PLAN_VERSION_INFO","1898541897","1","
+/*
+ * Program ID   : SCP0083_GET_PLAN_VERSION_INFO
+ * Description  : SCP0083 DIO Report 화면의 Version Combo매핑
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/12/01   kmj				Initial Release - [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2)
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 2022/05/26   jahn1501	    SCM_SYS_CALENDAR_M 주차 추가
+ * 2022/06/13   vadabi3	        SCP0083_GET_DIO_VERSION_INFO => SCP0083_GET_PLAN_VERSION_INFO
+
+ */
+
+CREATE PROCEDURE [dbo].[SCP0083_GET_PLAN_VERSION_INFO]
+--chaan  	@p_division_id			NVARCHAR(5)
+  @p_division_id            NVARCHAR(30)--chaan
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+		--	SELECT TOP 10 
+		--	(A.plan_start_yyyymmdd+'-FN-'+CONVERT(VARCHAR, MAX(A.plan_seq))) AS CODE, 
+		--	(A.plan_start_yyyymmdd+'-FN-'+CONVERT(VARCHAR, MAX(A.plan_seq))) AS NAME,
+		--	(SELECT DISTINCT 1 FROM SCP_ANL_DIO_REPORT B WITH(NOLOCK) WHERE B.DIVISION_ID=A.DIVISION_ID AND B.PLAN_START_YYYYMMDD=A.PLAN_START_YYYYMMDD AND B.PLAN_TYPE='FN' AND B.SEQ=MAX(A.PLAN_SEQ)) AS CODEDESC,
+		--	(SELECT TOP 1 (PLAN_START_YYYYMMDD+'-FN-'+CONVERT(NVARCHAR, SEQ)) FROM SCP_ANL_DIO_REPORT C WITH(NOLOCK) WHERE C.DIVISION_ID=@p_division_id GROUP BY DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ ORDER BY PLAN_START_YYYYMMDD DESC) AS EDIT_CYCLE_VERSION
+		--FROM SCP_PLAN_VERSION_V A WITH(NOLOCK)
+		--WHERE A.division_id = @p_division_id
+		--AND A.plan_type = 'FN'
+		--AND A.confirm_flag = 'Y'
+		--AND A.ui_display_yn = 'Y'
+		--AND A.active_flag = 'Y'
+		--GROUP BY A.division_id, A.plan_start_yyyymmdd
+		--ORDER BY CODE DESC
+		;
+
+		SELECT TOP 20 
+			   (A.plan_start_yyyymmdd+'-FN-'+CONVERT(VARCHAR, MAX(A.plan_seq)))		AS CODE
+			 , (A.plan_start_yyyymmdd+ '(' + C.WEEK_NAME + ')'+'-FN-'+CONVERT(VARCHAR, MAX(A.plan_seq)))		AS NAME
+			 , (CASE WHEN B.PLAN_START_YYYYMMDD IS NULL THEN 'Y' ELSE 'N' END)		AS CREATE_YN
+			 , (SELECT TOP 1 (PLAN_START_YYYYMMDD+'-FN-'+CONVERT(NVARCHAR, SEQ)) 
+				  FROM SCP_ANL_DIO_REPORT C WITH(NOLOCK) 
+				 WHERE C.DIVISION_ID = A.DIVISION_ID
+				 GROUP BY DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ 
+				 ORDER BY PLAN_START_YYYYMMDD DESC)								AS EDIT_CYCLE_VERSION
+		  FROM SCP_PLAN_VERSION_V A WITH(NOLOCK)
+		  LEFT JOIN SCP_ANL_DIO_REPORT B WITH(NOLOCK)
+			ON A.DIVISION_ID=B.DIVISION_ID 
+		   AND A.PLAN_START_YYYYMMDD	= B.PLAN_START_YYYYMMDD 
+		   AND A.PLAN_TYPE				= B.PLAN_TYPE
+		   AND A.PLAN_SEQ				= B.SEQ
+		  LEFT JOIN SCM_SYS_CALENDAR_M C WITH(NOLOCK) ON A.plan_start_yyyymmdd = C.basis_yyyymmdd
+		 WHERE A.division_id = @p_division_id
+		   AND A.PLAN_TYPE		= 'FN'
+		   AND A.CONFIRM_FLAG	= 'Y'
+		   AND A.UI_DISPLAY_YN	= 'Y'
+		   AND A.ACTIVE_FLAG	= 'Y'
+		GROUP BY A.DIVISION_ID, A.PLAN_START_YYYYMMDD , B.PLAN_START_YYYYMMDD , C.WEEK_NAME
+		ORDER BY CODE DESC
+		;
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_SAVE_DIO_CYCLE_INVENTORY_ROW_DATASET","1914541954","1","
+
+
+
+/*
+ * Program ID   : [SCP0083_SAVE_DIO_CYCLE_INVENTORY_ROW_DATASET]
+ * Description  : DIO Report 내 주기재고 (Cycle Stock Tab) 수정본 저장(Type Table 저장방식), 관련 DIO Report 테이블 수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/11/03   KMJ			    [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - initial release
+ * 2021/12/21   KMJ			    [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - PLANT_ID 추가
+ * 2022/06/10   vadabi3			SCP0083_CYCLE > VERSION 추가
+ */
+CREATE PROCEDURE [dbo].[SCP0083_SAVE_DIO_CYCLE_INVENTORY_ROW_DATASET]
+	 @SCP0083_CYCLE			AS DBO.SCP0083_CYCLE       READONLY
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0083_SAVE_DIO_CYCLE_INVENTORY_ROW_DATASET';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+    -- 실행시간 확인용    
+    DECLARE @v_start_time   DATETIME     = SYSDATETIME();    
+    DECLARE @v_exec_time    NVARCHAR(10) = ''--'00:00';    
+
+	-- BUCKET 확인
+	DECLARE @v_bucket_type NVARCHAR(10) = '';
+	DECLARE @v_from_yyyymmdd NVARCHAR(8) = '';
+	DECLARE @v_to_yyyymmdd NVARCHAR(8) = '';
+
+	BEGIN TRY
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		--------------------------------------------------------------
+		-- SCP_ANL_DIO_CYCLE_INVENTORY 수정
+		--------------------------------------------------------------
+		UPDATE A SET
+			A.PRIVATE_FLAG			= B.PRIVATE_FLAG,
+			A.CYCLE					= B.CYCLE,
+			A.LAST_UPDATED_BY		= B.USER_ID,
+			A.LAST_UPDATE_DATE		= GETDATE()	
+		FROM SCP_ANL_DIO_CYCLE_INVENTORY A, @SCP0083_CYCLE B
+		WHERE A.DIVISION_ID			= B.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= B.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= B.PLAN_TYPE
+		AND A.SEQ					= B.SEQ
+		AND A.VER					= B.VER
+		AND A.NICK_NAME				= B.NICK_NAME
+		AND A.PLANT_ID				= B.PLANT_ID
+		AND A.TRANSPORT_MODE_LINE	= B.TRANSPORT_MODE_LINE
+		;
+
+
+		--------------------------------------------------------------
+		-- #SCP0083_CYCLE_SUM
+		--------------------------------------------------------------
+		IF OBJECT_ID('tempdb..##SCP0083_CYCLE_SUM') IS NOT NULL
+			DROP TABLE #SCP0083_CYCLE_SUM;
+
+	  SELECT DIVISION_ID
+			,PLAN_START_YYYYMMDD
+			,PLAN_TYPE
+			,SEQ
+			,VER
+			,NICK_NAME
+			,OPERATION_GROUP
+			,SUM(WEIGHT_CYCLE_STOCK) AS WEIGHT_CYCLE_STOCK
+			,SUM(GLOBAL_MODEL_SUM)  AS GLOBAL_MODEL_SUM
+			,SUM(GLOBAL_SITE_RATIO) AS GLOBAL_SITE_RATIO
+			,MAX(USER_ID) AS USER_ID
+		INTO #SCP0083_CYCLE_SUM  -- nick_name별 sum
+		FROM @SCP0083_CYCLE
+	GROUP BY DIVISION_ID
+			,PLAN_START_YYYYMMDD
+			,PLAN_TYPE
+			,SEQ
+			,VER
+			,NICK_NAME
+			,OPERATION_GROUP
+
+
+
+		--------------------------------------------------------------
+		-- SCP_ANL_DIO_REPORT > CELL 수정
+		--------------------------------------------------------------
+		-- 관련 DIO 정보 수정
+		--WEIGHT_CYCLE_STOCK  -> PRODUCTION_CYCLE_CELL, PRODUCTION_CYCLE_PACK
+        --GLOBAL_MODEL_SUM	  -> ASSEMBLY_QTY
+        --GLOBAL_SITE_RATIO	  -> ASSEMBLY_TOTAL_RATIO
+		 UPDATE A SET
+				A.PRODUCTION_CYCLE_CELL	= B.WEIGHT_CYCLE_STOCK,
+				A.ASSEMBLY_QTY			= B.GLOBAL_MODEL_SUM,
+				A.ASSEMBLY_TOTAL_RATIO	= B.GLOBAL_SITE_RATIO,
+				A.LAST_UPDATED_BY		= B"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_SAVE_DIO_CYCLE_INVENTORY_ROW_DATASET","1914541954","2",".USER_ID,
+				A.LAST_UPDATE_DATE		= GETDATE()	
+			FROM SCP_ANL_DIO_REPORT A
+			   , #SCP0083_CYCLE_SUM B
+			WHERE A.DIVISION_ID			= B.DIVISION_ID
+			AND A.PLAN_START_YYYYMMDD	= B.PLAN_START_YYYYMMDD
+			AND A.PLAN_TYPE				= B.PLAN_TYPE
+			AND A.SEQ					= B.SEQ
+			AND A.VER					= B.VER
+			AND A.NICK_NAME				= B.NICK_NAME
+			--AND A.PLANT_ID				= B.PLANT_ID
+			--AND A.OPERATION_GROUP		= B.OPERATION_GROUP
+			AND B.OPERATION_GROUP		= 'A' -- CELL UPDATE
+			;
+
+		--------------------------------------------------------------
+		-- SCP_ANL_DIO_REPORT > PACK 수정
+		--------------------------------------------------------------
+		UPDATE A SET
+			A.PRODUCTION_CYCLE_PACK	= B.WEIGHT_CYCLE_STOCK,
+			A.LAST_UPDATED_BY		= B.USER_ID,
+			A.LAST_UPDATE_DATE		= GETDATE()	
+		FROM SCP_ANL_DIO_REPORT A
+		   , #SCP0083_CYCLE_SUM B
+		WHERE A.DIVISION_ID			= B.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= B.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= B.PLAN_TYPE
+		AND A.SEQ					= B.SEQ
+		AND A.VER					= B.VER 
+		AND A.NICK_NAME				= B.NICK_NAME
+		--AND A.PLANT_ID				= B.PLANT_ID
+		--AND A.OPERATION_GROUP		= B.OPERATION_GROUP
+		AND B.OPERATION_GROUP		= 'P' -- PACK UPDATE
+		;
+
+
+		--------------------------------------------------------------
+		-- @MAX_VER
+		--------------------------------------------------------------
+		-- DIO 이력 저장
+		-- 수정된 목록 이력 저장
+		-- MAX VER 조회
+		DECLARE @MAX_VER INT = 0;
+
+		SELECT @MAX_VER = ISNULL(MAX(VERSION), 0) + 1
+		FROM SCP_ANL_DIO_REPORT_H A WITH(NOLOCK)
+		JOIN (
+			SELECT DISTINCT
+				DIVISION_ID
+				, PLAN_START_YYYYMMDD
+				, PLAN_TYPE
+				, SEQ
+				, VER
+			FROM @SCP0083_CYCLE
+		) B
+		ON A.DIVISION_ID			= B.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= B.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= B.PLAN_TYPE
+		AND A.SEQ					= B.SEQ
+		AND A.VER					= B.VER
+		;
+		
+
+		--------------------------------------------------------------
+		-- SCP_ANL_DIO_REPORT_H 등록
+		--------------------------------------------------------------
+		INSERT INTO SCP_ANL_DIO_REPORT_H (
+			DIVISION_ID
+			, PLAN_START_YYYYMMDD
+			, PLAN_TYPE
+			, SEQ
+			, VER
+			, NICK_NAME
+			, PLANT_ID
+			, FROM_SITE
+			, VERSION
+			, FROM_SITE_DESCRIPTION
+			, OPERATION_GROUP
+			, TO_SITE
+			, TO_BOH_QTY
+			, BOD_ID
+			, TRANSPORT_MODE_LINE
+			, MEASURE
+			, SHIP_PLAN_QTY
+			, END_CUSTOMER -- TO_SITE
+			, PRODUCTION_TYPE
+			, EXTRA_SPEC
+			, ITEM_ID
+			, CELL_ITEM_ID
+			, BIZ_TYPE
+			, INCOTERMS
+			, CELL_AGING_LT
+			, CELL_EOL_SHIPPING_LOT
+			, PACK_INCOMMING
+			, PACK_OPERATION_LT
+			, SHIPMENT_CELL_INSPECTION_LOAD
+			, SHIPMENT_CELL_INSPECTION_WAITING
+			, SHIPMENT_PACK_INSPECTION_LOAD
+			, SHIPMENT_PACK_INSPECTION_WAITING
+			, DNI_CELL_DEPARTURE_DAYS
+			, DNI_CELL_DEPARTURE_INLAND
+			, DNI_CELL_WAITING_FOR_SHIPPING
+			, DNI_CELL_VOYAGE
+			, DNI_CELL_LAY_OFF_CUSTOMS_CLEARANCE
+			, DNI_CELL_ARRIVAL_INLAND
+			, DNI_PACK_DEPARTURE_DAYS
+			, DNI_PACK_DEPARTURE_INLAND
+			, DNI_PACK_WAITING_FOR_SHIPPING
+			, DNI_PACK_VOYAGE
+			, DNI_PACK_LAY_OFF_CUSTOMS_CLEARANCE
+			, DNI_PACK_ARRIVAL_INLAND
+			, PRE_INSPECTION_CELL
+			, PRE_INSPECTION_PACK
+			, VMI_CELL
+			, VMI_PACK
+			, FOREIGN_CORP
+			, RACK_BIZ
+			, DEPARTURE_INTRANSIT_VMI
+			, SAFETY_STOCK_CELL
+			, SAFETY_STOCK_PACK
+			, OTHER_STOCK_CELL
+			, OTHER_STOCK_PACK
+			, PRODUCTION_CYCLE_CELL
+			, PRODUCTION_CYCLE_PACK
+			, STANDARD_DIO
+			, ASSEMBLY_QTY
+			, ASSEMBLY_TYPE_RATIO
+			, ASSEMBLY_TOTAL_RATIO
+			, WEIGHT_DIO
+			, CREATED_BY
+			, CREATION_DATE
+			, LAST_UPDATED_BY
+			, LAST_UPDATE_DATE
+			, ATTRIBUTE1
+			, ATTRIBUTE2
+			, ATTRIBUTE3
+			, ATTRIBUTE4
+			, ATTRIBUTE5
+			, ATTRIBUTE6
+			, ATTRIBUTE7
+			, ATTRIBUTE8
+			, ATTRIBUTE9
+			, ATTRIBUTE10
+		)
+		SELECT 
+			A.DIVISION_ID
+			, A.PLAN_START_YYYYMMDD
+			, A.PLAN_TYPE
+			, A.SEQ
+			, A.VER
+			, A.NICK_NAME
+			, A.PLANT_ID
+			, A.FROM_SITE
+			, @MAX_VER
+			, A.FROM_SITE_DESCRIPTION
+			, A.OPERATION_GROUP
+			, A.TO_SITE"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_SAVE_DIO_CYCLE_INVENTORY_ROW_DATASET","1914541954","3","
+			, A.TO_BOH_QTY
+			, A.BOD_ID
+			, A.TRANSPORT_MODE_LINE
+			, A.MEASURE
+			, A.SHIP_PLAN_QTY
+			, A.END_CUSTOMER -- TO_SITE
+			, A.PRODUCTION_TYPE
+			, A.EXTRA_SPEC
+			, A.ITEM_ID
+			, A.CELL_ITEM_ID
+			, A.BIZ_TYPE
+			, A.INCOTERMS
+			, A.CELL_AGING_LT
+			, A.CELL_EOL_SHIPPING_LOT
+			, A.PACK_INCOMMING
+			, A.PACK_OPERATION_LT
+			, A.SHIPMENT_CELL_INSPECTION_LOAD
+			, A.SHIPMENT_CELL_INSPECTION_WAITING
+			, A.SHIPMENT_PACK_INSPECTION_LOAD
+			, A.SHIPMENT_PACK_INSPECTION_WAITING
+			, A.DNI_CELL_DEPARTURE_DAYS
+			, A.DNI_CELL_DEPARTURE_INLAND
+			, A.DNI_CELL_WAITING_FOR_SHIPPING
+			, A.DNI_CELL_VOYAGE
+			, A.DNI_CELL_LAY_OFF_CUSTOMS_CLEARANCE
+			, A.DNI_CELL_ARRIVAL_INLAND
+			, A.DNI_PACK_DEPARTURE_DAYS
+			, A.DNI_PACK_DEPARTURE_INLAND
+			, A.DNI_PACK_WAITING_FOR_SHIPPING
+			, A.DNI_PACK_VOYAGE
+			, A.DNI_PACK_LAY_OFF_CUSTOMS_CLEARANCE
+			, A.DNI_PACK_ARRIVAL_INLAND
+			, A.PRE_INSPECTION_CELL
+			, A.PRE_INSPECTION_PACK
+			, A.VMI_CELL
+			, A.VMI_PACK
+			, A.FOREIGN_CORP
+			, A.RACK_BIZ
+			, A.DEPARTURE_INTRANSIT_VMI
+			, A.SAFETY_STOCK_CELL
+			, A.SAFETY_STOCK_PACK
+			, A.OTHER_STOCK_CELL
+			, A.OTHER_STOCK_PACK
+			, A.PRODUCTION_CYCLE_CELL
+			, A.PRODUCTION_CYCLE_PACK
+			, A.STANDARD_DIO
+			, A.ASSEMBLY_QTY
+			, A.ASSEMBLY_TYPE_RATIO
+			, A.ASSEMBLY_TOTAL_RATIO
+			, A.WEIGHT_DIO
+			, A.CREATED_BY
+			, A.CREATION_DATE
+			, A.LAST_UPDATED_BY
+			, A.LAST_UPDATE_DATE
+			, A.ATTRIBUTE1
+			, A.ATTRIBUTE2
+			, A.ATTRIBUTE3
+			, A.ATTRIBUTE4
+			, A.ATTRIBUTE5
+			, A.ATTRIBUTE6
+			, A.ATTRIBUTE7
+			, A.ATTRIBUTE8
+			, A.ATTRIBUTE9
+			, A.ATTRIBUTE10
+		FROM SCP_ANL_DIO_REPORT A WITH(NOLOCK)
+		JOIN (
+			SELECT DISTINCT
+				DIVISION_ID
+				, PLAN_START_YYYYMMDD
+				, PLAN_TYPE
+				, SEQ
+				, VER
+			FROM @SCP0083_CYCLE
+		) B
+		ON A.DIVISION_ID			= B.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= B.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= B.PLAN_TYPE
+		AND A.SEQ					= B.SEQ
+		AND A.VER					= B.VER
+		;
+
+
+		-- 임시 운영반영시에 주석처리 할것.    
+		SET @v_exec_time  =  REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) + ':' +     
+							 REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60)) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60))    
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description  = N'[' + @v_exec_time + ']';   
+		SET @d_event_date = SYSDATETIME();
+		
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		COMMIT TRAN;			
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  1 AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+					  
+
+			-- error코드, errror 메시지 반환
+			--SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				     
+			; 
+		END;
+	END CATCH;
+END
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_SAVE_DIO_REPORT_ROW_DATASET","1930542011","1","
+
+
+/*
+ * Program ID   : [SCP0083_SAVE_DIO_REPORT_ROW_DATASET]
+ * Description  : DIO Report UI 수정본 저장(Type Table 저장방식)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/11/03   KMJ			    [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - initial release
+ * 2021/12/21   KMJ			    [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - PLANT_ID 추가
+ * 2022/05/30   vadabi3			ATTRIBUTE1 = SAFETY_STOCK_PIN_HOUSE
+ * 2022/06/10   vadabi3			SCP0083 > VERSION 추가
+ */
+CREATE PROCEDURE [dbo].[SCP0083_SAVE_DIO_REPORT_ROW_DATASET]
+	 @SCP0083			AS DBO.SCP0083      READONLY
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0083_SAVE_DIO_REPORT_ROW_DATASET';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+    -- 실행시간 확인용    
+    DECLARE @v_start_time   DATETIME     = SYSDATETIME();    
+    DECLARE @v_exec_time    NVARCHAR(10) = ''--'00:00';    
+
+	-- BUCKET 확인
+	DECLARE @v_bucket_type NVARCHAR(10) = '';
+	DECLARE @v_from_yyyymmdd NVARCHAR(8) = '';
+	DECLARE @v_to_yyyymmdd NVARCHAR(8) = '';
+
+	BEGIN TRY
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--수정
+		UPDATE A SET
+			A.CELL_AGING_LT						= B.CELL_AGING_LT,
+			A.CELL_EOL_SHIPPING_LOT				= B.CELL_EOL_SHIPPING_LOT,
+			A.PACK_INCOMMING					= B.PACK_INCOMMING,
+			A.PACK_OPERATION_LT					= B.PACK_OPERATION_LT,
+			A.SHIPMENT_CELL_INSPECTION_LOAD		= B.SHIPMENT_CELL_INSPECTION_LOAD,
+			A.SHIPMENT_CELL_INSPECTION_WAITING	= B.SHIPMENT_CELL_INSPECTION_WAITING,
+			A.SHIPMENT_PACK_INSPECTION_LOAD		= B.SHIPMENT_PACK_INSPECTION_LOAD,
+			A.SHIPMENT_PACK_INSPECTION_WAITING	= B.SHIPMENT_PACK_INSPECTION_WAITING,
+			A.PRE_INSPECTION_CELL				= ISNULL(B.PRE_INSPECTION_CELL, A.PRE_INSPECTION_CELL),
+			A.PRE_INSPECTION_PACK				= ISNULL(B.PRE_INSPECTION_PACK, A.PRE_INSPECTION_PACK),
+			A.VMI_CELL							= ISNULL(B.VMI_CELL, A.VMI_CELL),
+			A.VMI_PACK							= ISNULL(B.VMI_PACK, A.VMI_PACK),	
+			A.FOREIGN_CORP						= ISNULL(B.FOREIGN_CORP, A.FOREIGN_CORP),
+			A.RACK_BIZ							= ISNULL(B.RACK_BIZ, A.RACK_BIZ),
+			A.DEPARTURE_INTRANSIT_VMI			= B.DEPARTURE_INTRANSIT_VMI,
+			A.SAFETY_STOCK_CELL					= B.SAFETY_STOCK_CELL,
+			A.SAFETY_STOCK_PACK					= B.SAFETY_STOCK_PACK,
+			A.OTHER_STOCK_CELL					= ISNULL(B.OTHER_STOCK_CELL, A.OTHER_STOCK_CELL),
+			A.OTHER_STOCK_PACK					= ISNULL(B.OTHER_STOCK_PACK, A.OTHER_STOCK_PACK),
+			A.PRODUCTION_CYCLE_CELL				= B.PRODUCTION_CYCLE_CELL,
+			A.PRODUCTION_CYCLE_PACK				= B.PRODUCTION_CYCLE_PACK,
+			A.STANDARD_DIO						= B.STANDARD_DIO,
+			A.ASSEMBLY_QTY						= B.ASSEMBLY_QTY,
+			A.ASSEMBLY_TYPE_RATIO				= B.ASSEMBLY_TYPE_RATIO,
+			A.ASSEMBLY_TOTAL_RATIO				= B.ASSEMBLY_TOTAL_RATIO,
+			A.WEIGHT_DIO						= B.WEIGHT_DIO,
+			A.ATTRIBUTE1					    = ISNULL(B.ATTRIBUTE1, A.ATTRIBUTE1), -- 20220509 SAFETY_STOCK_PIN_HOUSE
+			A.LAST_UPDATED_BY					= B.USER_ID,
+			A.LAST_UPDATE_DATE					= GETDATE(),
+			A.SHIPMENT_CELL_SUM					= B.SHIPMENT_CELL_SUM,
+			A.SHIPMENT_PACK_SUM					= B.SHIPMENT_PACK_SUM,
+			A.SHIPMENT_SUM						= B.SHIPMENT_SUM
+
+		
+
+		FROM SCP_ANL_DIO_REPORT A, @SCP0083 B
+		WHERE A.DIVISION_ID			= B.DIVISION_ID
+		AND A.PLAN_STA"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_SAVE_DIO_REPORT_ROW_DATASET","1930542011","2","RT_YYYYMMDD	= B.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= B.PLAN_TYPE
+		AND A.SEQ					= B.SEQ
+		AND A.VER					= B.VER
+		AND A.ITEM_ID				= B.ITEM_ID
+		AND A.NICK_NAME				= B.NICK_NAME
+		AND A.PLANT_ID				= B.PLANT_ID
+		;
+		
+
+		-- 수정된 목록 이력 저장
+		-- MAX VER 조회
+		DECLARE @MAX_VER INT = 0;
+
+		SELECT @MAX_VER = ISNULL(MAX(VERSION), 0) + 1
+		FROM SCP_ANL_DIO_REPORT_H A WITH(NOLOCK)
+		JOIN (
+			SELECT DISTINCT
+				DIVISION_ID
+				, PLAN_START_YYYYMMDD
+				, PLAN_TYPE
+				, SEQ
+				, VER
+			FROM @SCP0083
+		) B
+		ON A.DIVISION_ID			= B.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= B.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= B.PLAN_TYPE
+		AND A.SEQ					= B.SEQ
+		AND A.VER					= B.VER
+		;
+		
+		INSERT INTO SCP_ANL_DIO_REPORT_H (
+			DIVISION_ID
+			, PLAN_START_YYYYMMDD
+			, PLAN_TYPE
+			, SEQ
+			, VER
+			, ITEM_ID
+			, NICK_NAME
+			, PLANT_ID
+			, FROM_SITE
+			, VERSION
+			, FROM_SITE_DESCRIPTION
+			, OPERATION_GROUP
+			, TO_SITE
+			, TO_BOH_QTY
+			, BOD_ID
+			, TRANSPORT_MODE_LINE
+			, MEASURE
+			, SHIP_PLAN_QTY
+			, END_CUSTOMER -- TO_SITE
+			, PRODUCTION_TYPE
+			, EXTRA_SPEC
+			, CELL_ITEM_ID
+			, BIZ_TYPE
+			, INCOTERMS
+			, CELL_AGING_LT
+			, CELL_EOL_SHIPPING_LOT
+			, PACK_INCOMMING
+			, PACK_OPERATION_LT
+			, SHIPMENT_CELL_INSPECTION_LOAD
+			, SHIPMENT_CELL_INSPECTION_WAITING
+			, SHIPMENT_PACK_INSPECTION_LOAD
+			, SHIPMENT_PACK_INSPECTION_WAITING
+			, DNI_CELL_DEPARTURE_DAYS
+			, DNI_CELL_DEPARTURE_INLAND
+			, DNI_CELL_WAITING_FOR_SHIPPING
+			, DNI_CELL_VOYAGE
+			, DNI_CELL_LAY_OFF_CUSTOMS_CLEARANCE
+			, DNI_CELL_ARRIVAL_INLAND
+			, DNI_PACK_DEPARTURE_DAYS
+			, DNI_PACK_DEPARTURE_INLAND
+			, DNI_PACK_WAITING_FOR_SHIPPING
+			, DNI_PACK_VOYAGE
+			, DNI_PACK_LAY_OFF_CUSTOMS_CLEARANCE
+			, DNI_PACK_ARRIVAL_INLAND
+			, PRE_INSPECTION_CELL
+			, PRE_INSPECTION_PACK
+			, VMI_CELL
+			, VMI_PACK
+			, FOREIGN_CORP
+			, RACK_BIZ
+			, DEPARTURE_INTRANSIT_VMI
+			, SAFETY_STOCK_CELL
+			, SAFETY_STOCK_PACK
+			, OTHER_STOCK_CELL
+			, OTHER_STOCK_PACK
+			, PRODUCTION_CYCLE_CELL
+			, PRODUCTION_CYCLE_PACK
+			, STANDARD_DIO
+			, ASSEMBLY_QTY
+			, ASSEMBLY_TYPE_RATIO
+			, ASSEMBLY_TOTAL_RATIO
+			, WEIGHT_DIO
+			, CREATED_BY
+			, CREATION_DATE
+			, LAST_UPDATED_BY
+			, LAST_UPDATE_DATE
+			, ATTRIBUTE1
+			, ATTRIBUTE2
+			, ATTRIBUTE3
+			, ATTRIBUTE4
+			, ATTRIBUTE5
+			, ATTRIBUTE6
+			, ATTRIBUTE7
+			, ATTRIBUTE8
+			, ATTRIBUTE9
+			, ATTRIBUTE10
+			, SHIPMENT_CELL_SUM					
+			, SHIPMENT_PACK_SUM					
+			, SHIPMENT_SUM						
+		)
+		SELECT 
+			A.DIVISION_ID
+			, A.PLAN_START_YYYYMMDD
+			, A.PLAN_TYPE
+			, A.SEQ
+			, A.VER
+			, A.ITEM_ID
+			, A.NICK_NAME
+			, A.PLANT_ID
+			, A.FROM_SITE
+			, @MAX_VER
+			, A.FROM_SITE_DESCRIPTION
+			, A.OPERATION_GROUP
+			, A.TO_SITE
+			, A.TO_BOH_QTY
+			, A.BOD_ID
+			, A.TRANSPORT_MODE_LINE
+			, A.MEASURE
+			, A.SHIP_PLAN_QTY
+			, A.END_CUSTOMER -- TO_SITE
+			, A.PRODUCTION_TYPE
+			, A.EXTRA_SPEC
+			, A.CELL_ITEM_ID
+			, A.BIZ_TYPE
+			, A.INCOTERMS
+			, A.CELL_AGING_LT
+			, A.CELL_EOL_SHIPPING_LOT
+			, A.PACK_INCOMMING
+			, A.PACK_OPERATION_LT
+			, A.SHIPMENT_CELL_INSPECTION_LOAD
+			, A.SHIPMENT_CELL_INSPECTION_WAITING
+			, A.SHIPMENT_PACK_INSPECTION_LOAD
+			, A.SHIPMENT_PACK_INSPECTION_WAITING
+			, A.DNI_CELL_DEPARTURE_DAYS
+			, A.DNI_CELL_DEPARTURE_INLAND
+			, A.DNI_CELL_WAITING_FOR_SHIPPING
+			, A.DNI_CELL_VOYAGE
+			, A.DNI_CELL_LAY_OFF_CUSTOMS_CLEARANCE
+			, A.DNI_CELL_ARRIVAL_INLAND
+			, A.DNI_PACK_DEPARTURE_DAYS
+			, A.DNI_PACK_DEPARTURE_INLAND
+			, A.DNI_PACK_WAITING_FOR_SHIPPING
+			, A.DNI_PACK_VOYAGE
+			, A.DNI_PACK_LAY_OFF_CUSTOMS_CLEARANCE
+			, A.DNI_PACK_ARRIVAL_INLAND
+			, A.PRE_INSPECTION_CELL
+			, A.PRE_INSPECTION_PACK
+			, A.VMI_CELL
+			, A.VMI_PACK
+			, A.FOREIGN_CORP
+			, A.RACK_BIZ
+			, A.DEPARTURE_INTRANSIT_VMI
+			, A.SAFETY_STOCK_CELL
+			, A.SAFETY_STOCK_PACK
+			, A.OTHER_STOCK_CELL
+			, A.OTHER_STOCK_PACK
+			, A.PRODUCTION_CYCLE_CELL
+			, "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_SAVE_DIO_REPORT_ROW_DATASET","1930542011","3","A.PRODUCTION_CYCLE_PACK
+			, A.STANDARD_DIO
+			, A.ASSEMBLY_QTY
+			, A.ASSEMBLY_TYPE_RATIO
+			, A.ASSEMBLY_TOTAL_RATIO
+			, A.WEIGHT_DIO
+			, A.CREATED_BY
+			, A.CREATION_DATE
+			, A.LAST_UPDATED_BY
+			, A.LAST_UPDATE_DATE
+			, A.ATTRIBUTE1
+			, A.ATTRIBUTE2
+			, A.ATTRIBUTE3
+			, A.ATTRIBUTE4
+			, A.ATTRIBUTE5
+			, A.ATTRIBUTE6
+			, A.ATTRIBUTE7
+			, A.ATTRIBUTE8
+			, A.ATTRIBUTE9
+			, A.ATTRIBUTE10
+			, A.SHIPMENT_CELL_SUM					
+			, A.SHIPMENT_PACK_SUM					
+			, A.SHIPMENT_SUM	
+		FROM SCP_ANL_DIO_REPORT A WITH(NOLOCK)
+		JOIN (
+			SELECT DISTINCT
+				DIVISION_ID
+				, PLAN_START_YYYYMMDD
+				, PLAN_TYPE
+				, SEQ
+				, VER
+			FROM @SCP0083
+		) B
+		ON A.DIVISION_ID			= B.DIVISION_ID
+		AND A.PLAN_START_YYYYMMDD	= B.PLAN_START_YYYYMMDD
+		AND A.PLAN_TYPE				= B.PLAN_TYPE
+		AND A.SEQ					= B.SEQ
+		AND A.VER					= B.VER
+		;
+
+
+		-- 임시 운영반영시에 주석처리 할것.    
+		SET @v_exec_time  =  REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) + ':' +     
+							 REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60)) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60))    
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description  = N'[' + @v_exec_time + ']';   
+		SET @d_event_date = SYSDATETIME();
+		
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		COMMIT TRAN;			
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  1 AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			--if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+					  
+
+			-- error코드, errror 메시지 반환
+			--SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				     
+			; 
+		END;
+	END CATCH;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_PLAN_VERSION_INFO1","83635491","1","
+/*
+ * Program ID   : SCP0083_GET_PLAN_VERSION_INFO1
+ * Description  : SCP0083 DIO Report 화면의 Version Combo매핑
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/12/01   kmj				Initial Release - [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2)
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 2022/05/26   jahn1501	    SCM_SYS_CALENDAR_M 주차 추가
+ * 2022/06/13   vadabi3	        SCP0083_GET_DIO_VERSION_INFO => SCP0083_GET_PLAN_VERSION_INFO
+ * 2023/12/20   anhcv2	        CREATE SCP0083_GET_PLAN_VERSION_INFO1
+ */
+
+CREATE PROCEDURE [dbo].[SCP0083_GET_PLAN_VERSION_INFO1]
+--chaan  	@p_division_id			NVARCHAR(5)
+  @p_division_id            NVARCHAR(30)--chaan
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+		--	SELECT TOP 10 
+		--	(A.plan_start_yyyymmdd+'-FN-'+CONVERT(VARCHAR, MAX(A.plan_seq))) AS CODE, 
+		--	(A.plan_start_yyyymmdd+'-FN-'+CONVERT(VARCHAR, MAX(A.plan_seq))) AS NAME,
+		--	(SELECT DISTINCT 1 FROM SCP_ANL_DIO_REPORT B WITH(NOLOCK) WHERE B.DIVISION_ID=A.DIVISION_ID AND B.PLAN_START_YYYYMMDD=A.PLAN_START_YYYYMMDD AND B.PLAN_TYPE='FN' AND B.SEQ=MAX(A.PLAN_SEQ)) AS CODEDESC,
+		--	(SELECT TOP 1 (PLAN_START_YYYYMMDD+'-FN-'+CONVERT(NVARCHAR, SEQ)) FROM SCP_ANL_DIO_REPORT C WITH(NOLOCK) WHERE C.DIVISION_ID=@p_division_id GROUP BY DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ ORDER BY PLAN_START_YYYYMMDD DESC) AS EDIT_CYCLE_VERSION
+		--FROM SCP_PLAN_VERSION_V A WITH(NOLOCK)
+		--WHERE A.division_id = @p_division_id
+		--AND A.plan_type = 'FN'
+		--AND A.confirm_flag = 'Y'
+		--AND A.ui_display_yn = 'Y'
+		--AND A.active_flag = 'Y'
+		--GROUP BY A.division_id, A.plan_start_yyyymmdd
+		--ORDER BY CODE DESC
+		;
+
+		SELECT TOP 20 
+			   (A.plan_start_yyyymmdd+'-FN-'+CONVERT(VARCHAR, MAX(A.plan_seq)))		AS CODE
+			 , (A.plan_start_yyyymmdd+ '(' + C.WEEK_NAME + ')'+'-FN-'+CONVERT(VARCHAR, MAX(A.plan_seq)))		AS NAME
+			 , (CASE WHEN B.PLAN_START_YYYYMMDD IS NULL THEN 'Y' ELSE 'N' END)		AS CREATE_YN
+			 , (SELECT TOP 1 (PLAN_START_YYYYMMDD+'-FN-'+CONVERT(NVARCHAR, SEQ)) 
+				  FROM SCP_ANL_DIO_REPORT C WITH(NOLOCK) 
+				 WHERE C.DIVISION_ID = A.DIVISION_ID
+				 GROUP BY DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ 
+				 ORDER BY PLAN_START_YYYYMMDD DESC)								AS EDIT_CYCLE_VERSION
+				 ,A.DIVISION_ID DIVISION_ID
+		  FROM SCP_PLAN_VERSION_V A WITH(NOLOCK)
+		  LEFT JOIN SCP_ANL_DIO_REPORT B WITH(NOLOCK)
+			ON A.DIVISION_ID=B.DIVISION_ID 
+		   AND A.PLAN_START_YYYYMMDD	= B.PLAN_START_YYYYMMDD 
+		   AND A.PLAN_TYPE				= B.PLAN_TYPE
+		   AND A.PLAN_SEQ				= B.SEQ
+		  LEFT JOIN SCM_SYS_CALENDAR_M C WITH(NOLOCK) ON A.plan_start_yyyymmdd = C.basis_yyyymmdd
+		 WHERE ( ( @p_division_id IS NULL OR  @p_division_id='' ) OR A.division_id = @p_division_id)
+		   AND A.PLAN_TYPE		= 'FN'
+		   AND A.CONFIRM_FLAG	= 'Y'
+		   AND A.UI_DISPLAY_YN	= 'Y'
+		   AND A.ACTIVE_FLAG	= 'Y'
+		GROUP BY A.DIVISION_ID, A.PLAN_START_YYYYMMDD , B.PLAN_START_YYYYMMDD , C.WEEK_NAME
+		ORDER BY CODE DESC
+		;
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_VERSION_INFO1","115635605","1","
+/*
+ * Program ID   : SCP0083_GET_DIO_VERSION_INFO1
+ * Description  : SCP0083 DIO Report 화면의 Version Combo매핑
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/06/14   vadabi3				최초생성 
+                                    변경전 ( Plan Type Combobox 리스트 조회)
+									변경후 ( Version  Combobox 리스트 조회)
+* 2022/12/20   anhcv2			create SCP0083_GET_DIO_VERSION_INFO1
+ ----------------------------------------------------------------------------------------------------
+ -- select * from SCP_ANL_DIO_REPORT_VERSION
+ */
+
+CREATE PROCEDURE [dbo].[SCP0083_GET_DIO_VERSION_INFO1]
+    @p_division_id				NVARCHAR(30),
+	@p_plan_start_yyyymmdd		NVARCHAR(8),
+	@p_plan_type				NVARCHAR(5),
+	@p_seq						NVARCHAR(2)
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+
+	--------------------------------------------------
+	-- @VER_CNT
+	--------------------------------------------------
+	DECLARE @MAX_VER INT;
+	DECLARE @MAX_VER_STATUS NVARCHAR(MAX);
+
+	select  @MAX_VER  = ISNULL(MAX(ver),0)
+	from SCP_ANL_DIO_REPORT_VERSION v with(nolock)
+	where 1=1
+	  and( ( @p_division_id IS NULL OR  @p_division_id='' ) OR v.division_id = @p_division_id)
+	  and ( ( @p_plan_start_yyyymmdd IS NULL OR  @p_plan_start_yyyymmdd='' ) OR v.plan_start_yyyymmdd = @p_plan_start_yyyymmdd)
+	  and ( ( @p_plan_type IS NULL OR  @p_plan_type='' ) OR v.plan_type = @p_plan_type)
+	  and ( ( @p_seq IS NULL OR  @p_seq='' ) OR v.seq = @p_seq )
+
+	select  @MAX_VER_STATUS  = ver_status
+	from SCP_ANL_DIO_REPORT_VERSION v with(nolock)
+	where 1=1
+	  and( ( @p_division_id IS NULL OR  @p_division_id='' ) OR v.division_id = @p_division_id)
+	  and ( (@p_plan_start_yyyymmdd IS NULL OR  @p_plan_start_yyyymmdd='' ) OR v.plan_start_yyyymmdd = @p_plan_start_yyyymmdd)
+	  and ( (@p_plan_type IS NULL OR  @p_plan_type='' ) OR v.plan_type = @p_plan_type)
+	  and ( ( @p_seq IS NULL OR  @p_seq='' ) OR v.seq = @p_seq)
+	  and v.ver = @MAX_VER
+
+
+
+	IF @MAX_VER = 0
+		BEGIN
+			select 1 AS CODE 
+				  ,CONCAT(1, '-', 'N', '-', N'미생성') AS NAME -- 미생성 -> Version Create 버튼 활성화 
+				   ,'' as data_range  -- Range Editable 
+				   ,'' as creation_date 
+	
+		END
+
+	ELSE IF @MAX_VER > 0 AND @MAX_VER_STATUS = 'P'
+		BEGIN
+			SELECT  VER AS CODE 
+				  , CONCAT(VER, '-', ver_status, '-', ver_status_name)  AS NAME    -- C:생성완료, P:생성중
+				  , data_range
+			from
+			(
+				select ver 
+					, ver_status
+					, case when ver_status = 'C' then N'생성완료'
+					       when ver_status = 'P' then N'생성중'
+						   else ver_status
+					       end as ver_status_name
+					, v.data_range   
+					, convert(nvarchar(10), creation_date, 23) + ' ' +convert(nvarchar(8), creation_date, 24) as creation_date
+				 from SCP_ANL_DIO_REPORT_VERSION v with(nolock)
+				where 1=1
+				  and ( ( @p_division_id IS NULL OR  @p_division_id='' ) OR v.division_id = @p_division_id)
+				  and( (@p_plan_start_yyyymmdd IS NULL OR  @p_plan_start_yyyymmdd='' ) OR v.plan_start_yyyymmdd = @p_plan_start_yyyymmdd)
+				  and ( (@p_plan_type IS NULL OR  @p_plan_type='' ) OR v.plan_type = @p_plan_type)
+				  and ( ( @p_seq IS NULL OR  @p_seq='' ) OR v.seq = @p_seq)
+			) DATA
+			order by DATA.VER DESC
+		END
+	ELSE
+		BEGIN
+		SELECT  VER  AS CODE 
+		      , CONCAT(VER, '-', ver_status, '-', ver_status_name)  AS NAME     -- C:생성완료, P:생성중
+			  , data_range
+			  , DIVISION_ID
+			  , PLAN_DATE
+			  , PLAN_TYPE
+			  , SEP
+		from
+		(
+			select ver
+				, ver_status
+					, case when ver_status = 'C' then N'생성완료'
+					       when ver_status = 'P' then N'생성중'
+						   else ver_status
+					       end as ver_status_name
+				, v.data_range   
+				, convert(nvarchar(10), creation_date, 23) + ' ' +convert(nvarchar(8), creation_date, 24) as creation_date
+				,v.division_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_DIO_VERSION_INFO1","115635605","2","id DIVISION_ID
+				,v.plan_start_yyyymmdd PLAN_DATE
+				,v.plan_type PLAN_TYPE
+				,v.seq SEP
+			 from SCP_ANL_DIO_REPORT_VERSION v with(nolock)
+			where 1=1
+			  and ( ( @p_division_id IS NULL OR  @p_division_id='' ) OR v.division_id = @p_division_id)
+				  and( (@p_plan_start_yyyymmdd IS NULL OR  @p_plan_start_yyyymmdd='' ) OR v.plan_start_yyyymmdd = @p_plan_start_yyyymmdd)
+				  and ( (@p_plan_type IS NULL OR  @p_plan_type='' ) OR v.plan_type = @p_plan_type)
+				  and ( ( @p_seq IS NULL OR  @p_seq='' ) OR v.seq = @p_seq)
+
+			union all
+			SELECT @MAX_VER + 1 as ver 
+				   , 'N' as ver_status 
+				   ,  N'미생성'AS ver_status_name
+				   ,'' as data_range  
+				   ,'' as creation_date 
+				   ,'' as DIVISION_ID
+				   ,'' as PLAN_DATE
+			       ,'' as PLAN_TYPE
+			       ,'' as SEP
+				  
+	    ) DATA
+		order by DATA.VER DESC
+		;
+
+	END
+
+
+
+/*
+		with target_create as (
+		select isnull(max(ver)+1, 1) as ver 
+			   ,'N' as ver_status  -- 미생성 -> Version Create 버튼 활성화 
+			   ,'' as data_range  -- Range Editable 
+			   ,'' as creation_date 
+		 from SCP_ANL_DIO_REPORT_VERSION v with(nolock)
+		where 1=1
+		  and v.division_id = @p_division_id
+		  and v.plan_start_yyyymmdd = @p_plan_start_yyyymmdd
+		  and v.plan_type = @p_plan_type
+		  and v.seq = @p_seq
+		)
+		select VER AS CODE
+			  , CONCAT(VER, '-', ver_status)  AS NAME
+			  ,data_range
+			  ,creation_date
+		 from target_create with(nolock)
+		where 1=1
+		  and not exists (select 1
+							from scp_anl_dio_report_version p with(nolock)
+						   where p.division_id = @p_division_id
+							 and p.plan_start_yyyymmdd= @p_plan_start_yyyymmdd
+							 and p.plan_type= @p_plan_type
+							 and p.seq= @p_seq
+							 and p.ver_status != 'C' 
+						 ) -- 생성중 버전이 없을 경우만... 
+
+*/
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0083_GET_PLAN_VERSION_INFO_01","403636631","1","
+/*
+ * Program ID   : SCP0083_GET_PLAN_VERSION_INFO
+ * Description  : SCP0083 DIO Report 화면의 Version Combo매핑
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/12/01   kmj				Initial Release - [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2)
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ * 2022/05/26   jahn1501	    SCM_SYS_CALENDAR_M 주차 추가
+ * 2022/06/13   vadabi3	        SCP0083_GET_DIO_VERSION_INFO => SCP0083_GET_PLAN_VERSION_INFO
+
+ */
+
+CREATE PROCEDURE [dbo].[SCP0083_GET_PLAN_VERSION_INFO_01]
+--chaan  	@p_division_id			NVARCHAR(5)
+  @p_division_id            NVARCHAR(30)--chaan
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+		--	SELECT TOP 10 
+		--	(A.plan_start_yyyymmdd+'-FN-'+CONVERT(VARCHAR, MAX(A.plan_seq))) AS CODE, 
+		--	(A.plan_start_yyyymmdd+'-FN-'+CONVERT(VARCHAR, MAX(A.plan_seq))) AS NAME,
+		--	(SELECT DISTINCT 1 FROM SCP_ANL_DIO_REPORT B WITH(NOLOCK) WHERE B.DIVISION_ID=A.DIVISION_ID AND B.PLAN_START_YYYYMMDD=A.PLAN_START_YYYYMMDD AND B.PLAN_TYPE='FN' AND B.SEQ=MAX(A.PLAN_SEQ)) AS CODEDESC,
+		--	(SELECT TOP 1 (PLAN_START_YYYYMMDD+'-FN-'+CONVERT(NVARCHAR, SEQ)) FROM SCP_ANL_DIO_REPORT C WITH(NOLOCK) WHERE C.DIVISION_ID=@p_division_id GROUP BY DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ ORDER BY PLAN_START_YYYYMMDD DESC) AS EDIT_CYCLE_VERSION
+		--FROM SCP_PLAN_VERSION_V A WITH(NOLOCK)
+		--WHERE A.division_id = @p_division_id
+		--AND A.plan_type = 'FN'
+		--AND A.confirm_flag = 'Y'
+		--AND A.ui_display_yn = 'Y'
+		--AND A.active_flag = 'Y'
+		--GROUP BY A.division_id, A.plan_start_yyyymmdd
+		--ORDER BY CODE DESC
+		;
+
+		SELECT TOP 20 
+			   (A.plan_start_yyyymmdd+'-FN-'+CONVERT(VARCHAR, MAX(A.plan_seq)))		AS CODE
+			 , (A.plan_start_yyyymmdd+ '(' + C.WEEK_NAME + ')'+'-FN-'+CONVERT(VARCHAR, MAX(A.plan_seq)))		AS NAME
+			 , (CASE WHEN B.PLAN_START_YYYYMMDD IS NULL THEN 'Y' ELSE 'N' END)		AS CREATE_YN
+			 , (SELECT TOP 1 (PLAN_START_YYYYMMDD+'-FN-'+CONVERT(NVARCHAR, SEQ)) 
+				  FROM SCP_ANL_DIO_REPORT C WITH(NOLOCK) 
+				 WHERE C.DIVISION_ID = A.DIVISION_ID
+				 GROUP BY DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ 
+				 ORDER BY PLAN_START_YYYYMMDD DESC)								AS EDIT_CYCLE_VERSION
+			, A.DIVISION_ID
+		  FROM SCP_PLAN_VERSION_V A WITH(NOLOCK)
+		  LEFT JOIN SCP_ANL_DIO_REPORT B WITH(NOLOCK)
+			ON A.DIVISION_ID=B.DIVISION_ID 
+		   AND A.PLAN_START_YYYYMMDD	= B.PLAN_START_YYYYMMDD 
+		   AND A.PLAN_TYPE				= B.PLAN_TYPE
+		   AND A.PLAN_SEQ				= B.SEQ
+		  LEFT JOIN SCM_SYS_CALENDAR_M C WITH(NOLOCK) ON A.plan_start_yyyymmdd = C.basis_yyyymmdd
+		 WHERE A.division_id = @p_division_id
+		   AND A.PLAN_TYPE		= 'FN'
+		   AND A.CONFIRM_FLAG	= 'Y'
+		   AND A.UI_DISPLAY_YN	= 'Y'
+		   AND A.ACTIVE_FLAG	= 'Y'
+		GROUP BY A.DIVISION_ID, A.PLAN_START_YYYYMMDD , B.PLAN_START_YYYYMMDD , C.WEEK_NAME
+		ORDER BY CODE DESC
+		;
+
+END
+"
+"2026-05-01 00:00:00.537","LGCE_SCMDEV","P ","SCP0083_GET_DIO_AGING_LT","1802541555","1","
+
+
+
+/*
+ * Program ID   : SCP0083_GET_DIO_AGING_LT
+ * Description  : DIO AGING LT
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/12/28   hyerakim 			Query
+ * 2021/12/28   vadabi3 			Initial Release
+ ----------------------------------------------------------------------------------------------------
+EXEC SCP0083_GET_DIO_AGING_LT @p_division_id ='81'
+                            , @p_plan_start_yyyymmdd = '20220815'
+							, @p_plan_type = 'FN'
+							, @p_seq = '1'
+							, @p_ver = '1'
+							, @p_nick_name = N'E60A'
+*/
+
+CREATE PROCEDURE [dbo].[SCP0083_GET_DIO_AGING_LT]
+    @p_division_id          NVARCHAR(30),--chaan
+	@p_plan_start_yyyymmdd	NVARCHAR(8),
+	@p_plan_type			NVARCHAR(5),
+	@p_seq					NVARCHAR(2),
+	@p_nick_name			NVARCHAR(50),
+	--@p_plant_id				NVARCHAR(30),
+	--@p_operation_group		NVARCHAR(10),
+	--@p_from_site			NVARCHAR(max),
+	--@p_to_site				NVARCHAR(max),
+ 	@p_ver					INT,
+	@debug_mode				NVARCHAR(1) = 'T'
+
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	SET ANSI_WARNINGS OFF
+	SET ARITHIGNORE ON
+	SET ARITHABORT OFF
+
+			----------------------------------------------------------------------------------------------------
+			/*
+			declare @P_DIVISION_ID		         	NVARCHAR(30) = '81' ; 
+			declare @P_PLAN_START_YYYYMMDD			NVARCHAR(8)= '20220815' ; 
+			declare	@P_PLAN_TYPE                    NVARCHAR(50) = 'FN' ;
+			declare	@P_SEQ                     		NVARCHAR(8) = '1' ;
+			declare @P_VER int						= 1; 
+			declare @P_nick_name					nvarchar(60) = N'E60A' --  N'E76A' -- N'개발'  -- 'F2-1' --  N'개발' -- 'P2.7' -- 'LV15B' -- 'LV15A' -- 'F2' -- 'E76A' -- 'E64B' -- 'E63F' -- 'E61D' -- 'E60A' -- 'A7' -- 'H5.5A' -- 'F2-1' ; -- 'E54M' ;  -- 'E54M' -- 'E51_ESNB' -- 'F2-1' ; 
+			*/
+			---------------------------------------------------------------------------------------------------- 
+			;WITH BASE_DATA AS (
+			SELECT 
+				   A.COMPANY_ID
+				  ,A.DIVISION_ID
+				  ,A.SITE_ID
+				  ,A.NICK_NAME
+				  ,A.LINE_ID
+				  ,A.ITEM_ID
+				  ,A.PLANT_ID
+				  ,A.OPERATION_ID
+				  ,A.FACTORY_ID 
+				  ,A.CELL_AGING_LT	   
+				  ,A.LINE_AVG_AGING_LT 
+				  ,A.TOTAL  
+				  ,A.M1	  ,A.M2	  ,A.M3	  ,A.M4	  ,A.M5	  ,A.M6
+				  ,A.M7	  ,A.M8	  ,A.M9	  ,A.M10  ,A.M11  ,A.M12
+				  ,SUM(TOTAL) OVER (PARTITION BY A.NICK_NAME) AS TOTAL_SUM 
+			 FROM SCP_ANL_DIO_REPORT_DETAIL_AGING A WITH(NOLOCK)
+			WHERE 1=1
+			  AND A.DIVISION_ID			= @P_DIVISION_ID
+			  AND A.PLAN_START_YYYYMMDD = @P_PLAN_START_YYYYMMDD
+			  AND A.PLAN_TYPE			= @P_PLAN_TYPE
+			  AND A.SEQ					= @P_SEQ
+			  AND A.VER					= @P_VER
+			  AND A.NICK_NAME			= @P_NICK_NAME
+			)
+			,FDATA AS (
+				SELECT BD.*
+					  ,AVG(CASE WHEN FACTORY_ID = '' 
+								THEN NULL 
+								ELSE CELL_AGING_LT END)  
+								OVER (PARTITION BY NICK_NAME) 											    AS NICKNAME_AVG_AGING_LT
+					  ,CASE WHEN BD.TOTAL_SUM = 0 THEN 0 ELSE TOTAL / TOTAL_SUM							END AS RATIO
+					  ,CASE WHEN BD.TOTAL_SUM = 0 THEN 0 ELSE TOTAL / TOTAL_SUM * LINE_AVG_AGING_LT 	END AS AGING_LT
+					  ,CASE WHEN BD.TOTAL_SUM = 0 THEN 0 ELSE TOTAL / TOTAL_SUM							END
+					   * 
+					   AVG(CASE WHEN FACTORY_ID = '' 
+								THEN NULL 
+								ELSE CELL_AGING_LT END)  
+								OVER (PARTITION BY NICK_NAME) 											AS AGING_LT_N
+					  ,SUM(CASE WHEN BD.TOTAL_SUM = 0 
+								THEN 0 
+								ELSE TOTAL / TOTAL_SUM * LINE_AVG_AGING_LT END)
+								OVER (PARTITION BY NICK_NAME)											AS AGING_LT_NICKNAME_SUM
+				  FROM BASE_DATA BD
+			)
+			,LINE_NAME_INFO AS ( 
+				SELECT L.COMPANY_ID
+					  ,L.DIVISION_ID
+					  ,L.SITE_ID
+					  ,L.PLANT_ID
+					  ,L.OPERATION_ID
+					  ,L.LINE_ID
+					  ,L.LINE_NAME 
+					  ,ROW_NUMBER() OVER (PARTITION BY L.COMPANY_ID
+				"
+"2026-05-01 00:00:00.537","LGCE_SCMDEV","P ","SCP0083_GET_DIO_AGING_LT","1802541555","2","									  ,L.DIVISION_ID
+													  ,L.SITE_ID
+													  ,L.PLANT_ID
+													  ,L.OPERATION_ID
+													  ,L.LINE_ID
+											  ORDER BY CASE WHEN L.ACTIVE_FLAG = 'Y' THEN 1 ELSE 2 END 
+													  ,L.LINE_NAME
+													  ,L.ELECTRODE_TYPE
+													  )	AS LINE_NAME_PRIORITY 
+				 FROM SCM_MST_LINE_SN L WITH(NOLOCK)
+				WHERE 1=1
+			)
+			SELECT F.COMPANY_ID
+				  ,F.SITE_ID
+				  ,F.PLANT_ID
+				  ,P.PLANT_NAME		-- Plant Site 
+				  ,F.FACTORY_ID		-- Bld.
+				  ,F.LINE_ID
+				  ,ISNULL(L.LINE_NAME, F.LINE_ID) AS LINE_NAME 	-- Line Name (값이 없으면 line_id로 ?) 
+				  ,F.ITEM_ID		-- Material 
+				  ,F.NICK_NAME
+				  ,CASE WHEN ISNULL(F.OPERATION_ID, '') = '' 
+						THEN IM.FLOW_ID 
+						ELSE F.OPERATION_ID 
+					END AS OPERATION_ID  -- Oper.
+				  ,CASE WHEN IM.SCP_OPERATION_GROUP = 'A' THEN 'Cell'
+						WHEN IM.SCP_OPERATION_GROUP = 'P' THEN 'Pack'
+						ELSE IM.SCP_OPERATION_GROUP
+				   END  AS ITEM_TYPE
+				  ,F.CELL_AGING_LT	AS AGING_LT			--- Aging L/T 
+				  ,F.LINE_AVG_AGING_LT	AS AGING_LT_LINE_AVG -- 20220823 추가
+				  ,CASE WHEN F.AGING_LT_NICKNAME_SUM = 0
+						THEN F.NICKNAME_AVG_AGING_LT    --- production이 없는 경우 nickname별로 avg aging lt 적용됨. 
+						ELSE F.LINE_AVG_AGING_LT	    --- Aging L/T (실제 적용 Aging L/T - line단위 avg가 적용됨) -> ui항목에 추가 (line은 존재하고 item이 없는 경우도 적용을 위해?)
+					END AS APPLY_AGING_LT			    --- Aging L/T(Aplly)	 실제적용 aging LT -> ui 설계서에는 없으나 추가 필요 !! 
+				  ,Y.YIELD
+				  ,S.SHORTER_LT
+				  ,F.TOTAL								-- SUM(M1+~M12)
+				  ,F.RATIO
+				  ,CASE WHEN F.AGING_LT_NICKNAME_SUM = 0
+						THEN F.AGING_LT_N
+						ELSE F.AGING_LT
+					END AS 	AGING_LT_RATIO				-- Aging L/T(적용) * Ratio
+				  ,F.M1	  ,F.M2	  ,F.M3	  ,F.M4	  ,F.M5	  ,F.M6
+				  ,F.M7	  ,F.M8	  ,F.M9	  ,F.M10  ,F.M11  ,F.M12
+			 FROM FDATA F
+				  LEFT JOIN SCM_MST_ITEM_SN IM WITH(NOLOCK)
+						 ON IM.ITEM_ID		= F.ITEM_ID
+						AND IM.COMPANY_ID	= F.COMPANY_ID
+						AND IM.DIVISION_ID	= F.DIVISION_ID
+						AND IM.SITE_ID		= F.SITE_ID
+				  LEFT JOIN SCM_MST_PLANT_SN P WITH(NOLOCK)
+						 ON P.COMPANY_ID	= F.COMPANY_ID
+						AND P.DIVISION_ID	= F.DIVISION_ID
+						AND P.SITE_ID		= F.SITE_ID
+						AND P.PLANT_ID		= F.PLANT_ID
+				  LEFT JOIN LINE_NAME_INFO L WITH(NOLOCK)
+						 ON L.COMPANY_ID	  = F.COMPANY_ID
+						AND L.DIVISION_ID	  = F.DIVISION_ID
+						AND L.SITE_ID		  = F.SITE_ID
+						AND L.PLANT_ID		  = F.PLANT_ID
+						AND L.OPERATION_ID	  = CASE WHEN ISNULL(F.OPERATION_ID, '') = '' 
+													 THEN IM.FLOW_ID 
+													 ELSE F.OPERATION_ID 
+												 END
+						AND L.LINE_ID		  = F.LINE_ID
+						AND L.LINE_NAME_PRIORITY = 1 
+				  LEFT OUTER HASH JOIN SCM_MST_YIELD_SN Y WITH(NOLOCK)
+						 ON  Y.COMPANY_ID   =  F.COMPANY_ID  
+						AND  Y.DIVISION_ID  =  F.DIVISION_ID 
+						AND  Y.SITE_ID      =  F.SITE_ID     
+						AND  Y.PLANT_ID     =  F.PLANT_ID    
+						AND  Y.FACTORY_ID   =  F.FACTORY_ID  
+						AND  Y.OPERATION_ID =  F.OPERATION_ID
+						AND  Y.LINE_ID      =  F.LINE_ID     
+						AND  Y.ITEM_ID      =  F.ITEM_ID     
+						AND  Y.MONTH        = SUBSTRING(@P_PLAN_START_YYYYMMDD, 1, 6)  
+				  LEFT OUTER HASH JOIN FP_FORMATION_SHORTER_LT_M_SN S WITH(NOLOCK) 
+						 ON  S.COMPANY_ID   =  F.COMPANY_ID  
+						AND  S.DIVISION_ID  =  F.DIVISION_ID 
+						AND  S.SITE_ID      =  F.SITE_ID     
+						AND  S.PLANT_ID     =  F.PLANT_ID    
+						AND  S.FACTORY_ID   =  F.FACTORY_ID  
+						AND  S.OPERATION_ID =  F.OPERATION_ID
+						AND  S.LINE_ID      =  F.LINE_ID     
+						AND  S.ITEM_ID      =  F.ITEM_ID  
+			WHERE 1=1
+			ORDER BY P.PLANT_NAME
+					,F.LINE_ID
+
+
+
+	SELECT TOP 1
+		   CONVERT(CHAR(7), DATEADD(MONTH,  1, @p_plan_start_yyyymmdd ), 23)	AS M1
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  2, @p_plan_start_yyyymmdd ), 23)	AS M2
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  3, @p_plan_start_yyyymmdd ), 23)	AS M3
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  4, @p_plan_start_yyyymmdd ), 23)	AS M4
+		 , CONVERT(CHAR(7), DAT"
+"2026-05-01 00:00:00.537","LGCE_SCMDEV","P ","SCP0083_GET_DIO_AGING_LT","1802541555","3","EADD(MONTH,  5, @p_plan_start_yyyymmdd ), 23)	AS M5
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  6, @p_plan_start_yyyymmdd ), 23)	AS M6
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  7, @p_plan_start_yyyymmdd ), 23)	AS M7
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  8, @p_plan_start_yyyymmdd ), 23)	AS M8
+		 , CONVERT(CHAR(7), DATEADD(MONTH,  9, @p_plan_start_yyyymmdd ), 23)	AS M9
+		 , CONVERT(CHAR(7), DATEADD(MONTH, 10, @p_plan_start_yyyymmdd ), 23)	AS M10
+		 , CONVERT(CHAR(7), DATEADD(MONTH, 11, @p_plan_start_yyyymmdd ), 23)	AS M11
+		 , CONVERT(CHAR(7), DATEADD(MONTH, 12, @p_plan_start_yyyymmdd ), 23)	AS M12
+		 , DATA_RANGE															AS DATA_RANGE
+	  FROM SCP_ANL_DIO_REPORT_DETAIL WITH(NOLOCK)
+	 WHERE PLAN_START_YYYYMMDD	= @p_plan_start_yyyymmdd
+	   AND DIVISION_ID			= @p_division_id
+	   AND PLAN_TYPE			= @p_plan_type
+	   AND SEQ					= @p_seq 
+	   AND VER					= @p_ver
+	   AND NICK_NAME			= @p_nick_name
+
+
+END
+
+
+"

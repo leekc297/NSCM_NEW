@@ -1,6 +1,7 @@
 # DMF0043_01 (Contribute View) — As-Is ↔ To-Be 4축 매핑
 
 화면 ID: **DMF0043_01**
+메뉴 ID 2원화(2026-10-08): 제목·상단 경로·즐겨찾기(MainTitle)는 메뉴 등록 ID `TITLE_MENU_ID='DMF0043_01'`(MNU00031 'Contribution Sales'), 프로시저 호출·버튼 권한·컬럼 메타는 종전대로 `MENU_ID='DMF0043'`(API_M·BTN_MPG 가 부모 메뉴의 salesList/salesListTitle 시트에 등록). 종전엔 둘 다 DMF0043 이라 상단 경로에 'Contribution Rate Reg.' 가 떴다(통합테스트 지적). DMF0043_01 쪽 BTN 메타(main/mainTitle 시트)는 시트명이 달라 호출 전환 시 함께 손봐야 한다.
 As-Is 소스: `Doc/_legacy_source/06_UIL/domain_DM/GSCM.DM.Forms.UIL/Master/DMF0043_Contribute_View/`
 To-Be 위치: `nscm-fe/features/master/src/pages/contribute-view/`
 작성: 2026-06-02 (룰 25 §1.5.1 / §1.5.3 / 룰 12 §11.8 적용)
@@ -12,7 +13,7 @@ To-Be 위치: `nscm-fe/features/master/src/pages/contribute-view/`
 | Button | As-Is 메서드 (라인) | As-Is 본문 요약 | To-Be hotkeyConfig | To-Be 결정 | 비고 |
 |---|---|---|---|---|---|
 | Search | `FindButton` L244 | `FindData()` | `search` | `handleSearch` (function) | 활성 |
-| Insert | `InsertButton` L249 | `InsertRow()` | `insert` | `handleInsert` (TODO placeholder) | As-Is 본문 있음 — Figma "조회 전용" 의도와 충돌. placeholder 안내 (silent fail 방지) |
+| Insert | `InsertButton` L249 | `InsertRow()` | `insert` | `handleInsert` (TODO placeholder) | As-Is 본문 있음 — 화면 설계 "조회 전용" 의도와 충돌. placeholder 안내 (silent fail 방지) |
 | Delete | `DeleteButton` L254 | 주석 처리됨 (전체 주석) | `delete` | `false` | 명시 숨김 |
 | Edit | `EditButton` L268 | 빈 본문 `{ }` | (별도 IsReadOnly toggle) | hotkeyConfig 미지원 | |
 | Save | `SaveButton` L276 | `SaveData()` | `save` | `handleSave` (TODO placeholder) | As-Is 본문 있음 — placeholder 안내 |

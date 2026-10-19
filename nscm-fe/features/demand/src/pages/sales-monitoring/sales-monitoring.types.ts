@@ -1,6 +1,6 @@
 import type { BUCKET_TYPE } from './sales-monitoring.constants';
 
-// AS-IS DMF0048 조회조건 (Figma Doc/_figma/DMF0048/DMF0048.png + .cs FindData L655~713):
+// AS-IS DMF0048 조회조건 (화면 설계 + .cs FindData L655~713):
 //   Row1: Div* / Team / End Customer / Sales Site
 //   Row2: Period* / Bucket* / 체크박스(Sum / Color / Include Internal Txn)
 //   확장 : Item Type / Biz. Type / PJT🔍 / Model·Nickname🔍 / Plant Site / Owner🔍

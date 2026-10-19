@@ -11,6 +11,18 @@
      페이지 = MainTitle + SearchArea + SubTitle + Result 의 수직 flex 배치 —
      Result(그리드, flex:1 1 0)가 남은 높이를 차지하고 스크롤은 그리드 내부에 생긴다. */
   flex-direction: column;
+  /* 뷰포트가 페이지 최소 폭(viewInner의 min-width)보다 좁아지면 이 컨테이너 하나에서만
+     가로 스크롤이 생긴다 — MainTitle/SearchArea/SubTitle/Result 가 항상 같은 폭으로 함께
+     스크롤되어 스크롤바가 여러 개(검색조건/툴바/그리드 각자) 생기지 않는다. */
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.viewInner {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Page 영역 전체화면 — 다이얼로그 최대화(MUI fullScreen)처럼 뷰포트 전체를 덮는다.

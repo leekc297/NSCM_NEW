@@ -1,0 +1,8 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"demand/dmf0045","DMF0045","features/demand/src/pages/dmf0045/components/modals/BodItemRouteModal.tsx","57","endpoint","팝업 컬럼 admin 메타(SCM_MST_SHEET_COLUMNS bodPopup) — 모달 자기완결 fetch(부모 store 미확장)."
+"demand/dmf0045","DMF0045","features/demand/src/pages/dmf0045/components/ShipmentRequestGrid.tsx","440","code","개인화 색 (ColumnLayoutModal 저장값) — 정적 컬럼만 (동적 기간 컬럼은 위에서 return)."
+"demand/dmf0045","DMF0045","features/demand/src/pages/dmf0045/ShipmentRequest.tsx","138","endpoint","mount 시 1회 admin 메타 fetch (동적 속성관리 baseline) + persist 된 이전 filters 무효화 +"
+"demand/dmf0045","DMF0045","features/demand/src/pages/dmf0045/useShipmentRequestStore.ts","117","code","저장된 컬럼 개인화(titleSet) 복원 — fetchStaticColumns 가 await 후 메타에 적용."
+"demand/dmf0045","DMF0045","features/demand/src/pages/dmf0045/useShipmentRequestStore.ts","335","endpoint","master hook §2.3 ""UI 생성의 동적 속성관리"" — Column 동적 fetch (SHEET_COLUMNS, division 서버 필터)."
+"demand/dmf0045","DMF0045","features/demand/src/pages/dmf0045/useShipmentRequestStore.ts","369","endpoint","master hook §5 — Measure 동적 fetch (SHEET_MEASURE — Measure Select 팝업 대상)"
+"demand/dmf0045","DMF0045","features/demand/src/pages/dmf0045/utils/dmf0045.searchCombos.ts","34","endpoint","— useTabComboQueries(CMBO 경로)가 아니라 useTabLookupQueries(LOOKUP 경로)로 조회해야 한다."

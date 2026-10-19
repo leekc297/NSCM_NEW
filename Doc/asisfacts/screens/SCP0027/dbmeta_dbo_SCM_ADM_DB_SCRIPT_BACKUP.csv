@@ -1,0 +1,1627 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-11-03 00:00:01.790","LGCE_SCMDEV","P ","SCP0027_GET_PROJECTROUTE_ELECTRODE","2014018306","4","@p_division_id  ,',')) )
+	 and t.valid_yn = 'Y'
+	ORDER BY t.division_id, t.item_id, t.from_yyyymmdd  ,t.priority,t.valid_yn desc,t.to_yyyymmdd
+
+
+	--아이템 조회용
+	SELECT A.ITEM_ID, A.NICK_NAME
+	FROM (
+	select A.ITEM_ID, A.NICK_NAME, ROW_NUMBER() OVER ( PARTITION BY ITEM_ID, NICK_NAME ORDER BY NICK_NAME ASC ) NUMS
+		from SCP_MST_FINAL_ITEM a with(nolock)
+		WHERE A.OPERATION_GROUP = 'E'
+		GROUP BY A.ITEM_ID,A.NICK_NAME
+	) A WHERE A.NUMS=1
+	;
+								  
+END
+
+"
+"2025-11-02 00:00:00.917","LGCE_SCMDEV","P ","SCP0027_SAVE_PROJECTROUTE_ELECTRODE","2030018363","1","
+/*
+ * Program ID   : SCP0027_SAVE_PROJECTROUTE_ELECTRODE
+ * Description  : Project Route Plant Site 등록,수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/06/26   YHW				Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/08/23	YHW				이력 저장 호출 변경(PARAM : PLANT_SITE) 
+ * 2025/10/31   kimcd           [PJ2025F254]  JV법인 ESS 혼용 생산 시스템 개선
+ *                              JV ESS 생산에 따른 실제 Link scm site id 값을 ATTRIBUTE9에 할당 관리
+ *                              Project Route 동기화 입력 수행
+ */
+CREATE PROCEDURE [dbo].[SCP0027_SAVE_PROJECTROUTE_ELECTRODE]
+	 @p_active_flag			NVARCHAR(MAX)
+	,@p_priority_seq		NVARCHAR(MAX)
+	,@p_division_id			NVARCHAR(MAX)
+	,@p_project_code		NVARCHAR(MAX)
+	,@p_scm_site_id 		NVARCHAR(MAX)
+	,@p_plant_site_id 		NVARCHAR(MAX)
+	,@p_item_id 			NVARCHAR(MAX)
+	,@p_created_by			NVARCHAR(MAX)
+	,@p_creation_date		NVARCHAR(MAX)
+	,@p_last_updated_by		NVARCHAR(MAX)
+
+	,@p_priority			NVARCHAR(MAX)
+	,@p_from_yyyymmdd		NVARCHAR(MAX)
+	,@p_to_yyyymmdd			NVARCHAR(MAX)
+	,@p_valid_yn			NVARCHAR(MAX)
+	,@debug_mode            NVARCHAR(20) ='F'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	
+	--DECLARE @DEBUG_MODE NVARCHAR(20) ='FALSE';
+	--DECLARE @DEBUG_MODE NVARCHAR(20) ='TRUE';
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_priority_seq		    NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_project_code 		NVARCHAR(MAX);
+	DECLARE @v_scm_site_id 			NVARCHAR(MAX);
+	DECLARE @v_plant_site_id		NVARCHAR(MAX);
+	
+	DECLARE @v_item_id				NVARCHAR(MAX);
+	DECLARE @v_s_valid_yn			NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+	DECLARE @v_creation_date		DATETIME;
+	DECLARE @v_last_updated_by		NVARCHAR(MAX);
+
+	DECLARE @v_priority				NVARCHAR(MAX);
+	DECLARE @v_from_yyyymmdd		NVARCHAR(MAX);
+	DECLARE @v_to_yyyymmdd			NVARCHAR(MAX);
+	DECLARE @v_valid_yn				NVARCHAR(MAX);
+	DECLARE @v_link_plant_site_id   NVARCHAR(MAX); -- 2025/10/24 kimcd [PJ2025F254] JV법인 ESS 혼용 생산 시스템 개선 JV ESS 생산에 따른 실제 Link scm site id 값을 ATTRIBUTE9 값 설정
+	DECLARE @v_link_division_id     NVARCHAR(MAX); -- 2025/10/24 kimcd [PJ2025F254] JV법인 ESS 혼용 생산 시스템 개선 JV ESS 생산에 따른 실제 Link scm site id 값을 ATTRIBUTE9 값 설정
+	DECLARE @v_link_cp_priority_seq [bigint];      -- 2025/10/24 kimcd [PJ2025F254] JV법인 ESS 혼용 생산 시스템 개선 JV ESS 생산에 따른 실제 Link scm site id 값을 ATTRIBUTE9 값 설정
+
+	DECLARE @p_currency				NVARCHAR(MAX);
+	DECLARE @p_liability_period		NVARCHAR(MAX);
+	DECLARE @p_sales_plan_adjust_yn	NVARCHAR(MAX);
+	DECLARE @p_item_hrcy_id			NVARCHAR(MAX);
+	DECLARE @p_bpms_exist			NVARCHAR(MAX);
+
+
+	SET @v_active_flag = NULL;
+	SET @v_priority_seq= NULL;
+	SET @v_division_id = NULL;
+	SET @v_project_code = NULL;
+	SET @v_scm_site_id = NULL;
+	SET @v_item_id = NULL;
+	SET @v_priority = NULL;
+	SET @v_s_valid_yn = NULL;
+	SET @v_created_by = NULL;	  
+	SET @v_creation_date = NULL;
+	SET @v_last_updated_by = NULL;
+
+	SET @p_currency				 = NULL;
+	SET @p_liability_period		 = NULL;
+	SET @p_sales_plan_adjust_yn	 = NULL;
+	SET @p_item_hrcy_id			 = NULL;
+	SET @p_bpms_exist			 = 'Y';
+
+	SET @v_priority = NULL;
+	SET @v_from_yyyymmdd = NULL;
+	SET @v_to_yyyymmdd = NULL;
+	SET @v_valid_yn = NULL;
+	SET @v_link_plant_site_id    = NULL; -- 2025/10/24 kimcd [PJ2025F254] JV법인 ESS 혼용 생산 시스템 개선 JV ESS 생산에 따른 실제 Link scm site id 값을 ATTRIBUTE9 값 설정
+	SET @v_link_division_id      = NULL; -- 2025/10/24 kimcd [PJ2025F254] JV법인 ESS 혼용 생산 시스템 개선 JV ESS 생산에 따른 실제 Link scm site id 값을 ATTRIBUTE9 값 설정
+	SET @v_link_cp_priority_seq  = NULL; -- 2025/10/24 kimcd [PJ2025F254] JV법인 ESS 혼용 생산 시스템 개선 JV ESS 생산에 따른 실제 Link scm site id 값을 ATTRIBUTE9 값"
+"2025-11-02 00:00:00.917","LGCE_SCMDEV","P ","SCP0027_SAVE_PROJECTROUTE_ELECTRODE","2030018363","2"," 설정
+
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0027_SAVE_PROJECTROUTE_ELECTRODE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		PRINT '1';
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+			--PRINT '3';	
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				--PRINT '4';
+				SET @v_priority_seq		= [dbo].[SCM_ARR_SPL_VAL](@p_priority_seq	, @v_delimiter , @mst_loop_cnt) ;    
+				IF(ISNULL(@v_priority_seq,'') ='')
+					SET @v_priority_seq = NEXT VALUE FOR SEQ1_SCM_MST_SITE_ITEM_PRIORITY;
+				--PRINT '5';
+
+				SET @v_active_flag		= [dbo].[SCM_ARR_SPL_VAL](@p_active_flag	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_division_id		= [dbo].[SCM_ARR_SPL_VAL](@p_division_id	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_project_code		= [dbo].[SCM_ARR_SPL_VAL](@p_project_code	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_scm_site_id		= [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_plant_site_id	= [dbo].[SCM_ARR_SPL_VAL](@p_plant_site_id	, @v_delimiter , @mst_loop_cnt) ; 				   				
+				SET @v_item_id			= [dbo].[SCM_ARR_SPL_VAL](@p_item_id		, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_s_valid_yn		= (select t.VALID_YN from scm_mst_site_item t where t.division_id = @v_division_id AND t.SCM_SITE_ID =@v_scm_site_id AND t.ITEM_ID = @v_item_id AND t.project_code =@v_project_code)
+				SET @v_created_by		= [dbo].[SCM_ARR_SPL_VAL](@p_created_by		, @v_delimiter, @mst_loop_cnt) ; 
+				--SET @v_creation_date	= CONVERT(DATETIME, [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter, @mst_loop_cnt) , 112);
+				SET @v_creation_date	=  [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_last_updated_by	= [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter, @mst_loop_cnt) ; 
+
+				SET @v_priority			= [dbo].[SCM_ARR_SPL_VAL](@p_priority		, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_from_yyyymmdd	= [dbo].[SCM_ARR_SPL_VAL](@p_from_yyyymmdd	, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_to_yyyymmdd		= [dbo].[SCM_ARR_SPL_VAL](@p_to_yyyymmdd	, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_valid_yn			= [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn		, @v_delimiter, @mst_loop_cnt) ; 
+				--PRINT '6';
+			END
+
+			-- LOOP 파라미터 출력 DEBUG용			
+			IF (@debug_mode ='T') 
+			BEGIN		
+				PRINT '===============================================';			
+				PRINT '@v_active_flag     = ''' +@v_active_flag +'''';
+				PRINT '@v_priority_seq    = ''' +@v_priority_seq +'''';
+				PRINT '@v_division_id     = ''' +@v_division_id +'''';
+				PRINT '@v_project_code    = ''' +@v_project_code +'''';
+				PRINT '@v_scm_site_id     = ''' +@v_scm_site_id +'''';
+				PRINT '@v_plant_site_id   = ''' +@v_plant_site_id +'''';				
+				PRINT '@v_item_id         = ''' +@v_item_id +'''';
+				PRINT '@v_s_valid_yn      = ''' +@v_s_valid_yn +'''';
+				PRINT '@v_priority        = ''' +@v_priority +'''';
+				PRINT '@v_from_yyyymmdd   = ''' +@v_from_yyyymmdd +'''';
+				PRINT '@v_to_yyyymmdd     = ''' +@v_to_yyyymmdd +'''';
+				PRINT '@v_valid_yn        = ''' +@v_valid_yn +'''';
+				PRINT '"
+"2025-11-02 00:00:00.917","LGCE_SCMDEV","P ","SCP0027_SAVE_PROJECTROUTE_ELECTRODE","2030018363","3","@v_last_updated_by = ''' +@v_last_updated_by +'''';				
+				PRINT '@mst_loop_cnt      = ''' +CONVERT(VARCHAR(10), @mst_loop_cnt) +'''';				
+
+
+			END;
+
+		   --이력저장
+			--EXEC [PR_SCM_MST_SITE_ITEM_HIST] @v_division_id,@v_project_code,@v_scm_site_id,@v_item_id,@p_currency,@p_liability_period,@p_sales_plan_adjust_yn,@p_item_hrcy_id,@v_s_valid_yn,@p_bpms_exist,@v_created_by,@v_creation_date,@v_last_updated_by ; 
+			EXEC [PR_SCM_MST_SITE_ITEM_HIST] @v_division_id,@v_project_code,@v_plant_site_id,@v_item_id,@p_currency,@p_liability_period,@p_sales_plan_adjust_yn,@p_item_hrcy_id,@v_s_valid_yn,@p_bpms_exist,@v_created_by,@v_creation_date,@v_last_updated_by ; 
+			EXEC [PR_SCM_MST_SITE_ITEM_PRIORITY_HIST] @v_priority_seq,@v_division_id,@v_project_code,@v_scm_site_id ,@v_plant_site_id,@v_item_id ,@v_priority,@v_from_yyyymmdd,@v_to_yyyymmdd,@v_valid_yn,@v_created_by,@v_creation_date,@v_last_updated_by ;
+			
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+				BEGIN		
+					MERGE INTO SCM_MST_SITE_ITEM A
+					USING (
+							SELECT 
+									 @v_division_id as division_id
+									,@v_project_code as project_code
+									,@v_plant_site_id as scm_site_id
+									,@v_item_id	 as	 item_id
+							) B
+					ON(
+									a.division_id = b.division_id
+								AND a.project_code = b.project_code
+								AND	a.scm_site_id = b.scm_site_id
+								AND	a.item_id = b.item_id
+						)
+					WHEN MATCHED THEN
+							UPDATE SET 	
+								-- valid_yn			  = @v_valid_yn
+								 last_updated_by	  = @v_last_updated_by
+								,last_update_date	  = sysdatetime()
+					                
+					WHEN NOT MATCHED THEN
+					INSERT	(		
+								 division_id,project_code,scm_site_id,item_id
+								,currency,liability_period,sales_plan_adjust_yn,item_hrcy_id
+								,valid_yn,bpms_exist
+								,created_by, creation_date, last_updated_by, last_update_date
+							)
+					VALUES  (
+					 			 @v_division_id,@v_project_code,@v_plant_site_id,@v_item_id
+								,null,null,null,null
+								,'Y','Y'
+								,@v_created_by, SYSDATETIME(), @v_created_by, SYSDATETIME()
+							);
+
+
+					-- SCM_MST_SITE_ITEM_PRIORITY입력/수정
+					IF( @v_active_flag ='M') 
+						BEGIN
+							UPDATE SCM_MST_SITE_ITEM_PRIORITY
+							SET  SALES_SITE_ID        = @v_scm_site_id
+								,PLANT_SITE_ID        = @v_plant_site_id
+							    ,priority			  = @v_priority
+								,from_yyyymmdd		  = @v_from_yyyymmdd
+								,to_yyyymmdd		  = @v_to_yyyymmdd
+								,valid_yn			  = @v_valid_yn
+								,last_updated_by	  = @v_last_updated_by
+								,last_update_date	  = sysdatetime()
+							WHERE priority_seq   = @v_priority_seq
+							;
+
+							  
+						END
+					ELSE IF(@v_active_flag ='I') 
+						BEGIN
+							INSERT INTO SCM_MST_SITE_ITEM_PRIORITY(		
+									 priority_seq,division_id,project_code,SALES_SITE_ID,PLANT_SITE_ID,item_id
+									,priority,from_yyyymmdd,to_yyyymmdd,valid_yn
+									,created_by, creation_date, last_updated_by, last_update_date
+								)
+							VALUES  (
+					 				 @v_priority_seq,@v_division_id,@v_project_code,@v_scm_site_id,@v_plant_site_id,@v_item_id
+									,@v_priority,@v_from_yyyymmdd,@v_to_yyyymmdd,@v_valid_yn
+									,@v_created_by, SYSDATETIME(), @v_created_by, SYSDATETIME()
+								);
+	
+						END
+
+						-- 2025/10/31 kimcd [PJ2025F254] JV법인 ESS 혼용 생산 시스템 개선 JV ESS 생산에 따른 실제 Link scm site id 값. JV 동기화 설정 시작
+						SET @v_link_plant_site_id               = NULL;
+						SET @v_link_division_id                 = NULL;
+						SET @v_link_cp_priority_seq             = NULL;
+
+						SELECT TOP 1 @v_link_division_id   = L.DIVISION_ID,
+				                     @v_link_plant_site_id = L.SCM_SITE_ID
+				        FROM   SCM_MST_SITE  P WITH(NOLOCK)
+				               INNER JOIN SCM_MST_SITE L WITH(NOLOCK)
+				        	       ON L.SCM_SITE_ID = P.ATTRIBUTE9
+			            WHERE P.SCM_SITE_ID = @v_plant_site_id
+				        AND   P.DIVISION_ID = @v_division_id
+
+						IF @v_link_division_id IS NOT NULL AND @v_link_plan"
+"2025-11-02 00:00:00.917","LGCE_SCMDEV","P ","SCP0027_SAVE_PROJECTROUTE_ELECTRODE","2030018363","4","t_site_id IS NOT NULL
+						BEGIN
+  							MERGE INTO SCM_MST_SITE_ITEM A
+							USING
+							(
+								SELECT	  @v_link_division_id	AS DIVISION_ID
+										, @v_project_code	    AS PROJECT_CODE
+										, @v_link_plant_site_id	AS SCM_SITE_ID
+										, @v_item_id		    AS ITEM_ID
+							) B ON
+							(
+									A.DIVISION_ID	= B.DIVISION_ID
+								AND A.PROJECT_CODE	= B.PROJECT_CODE
+								AND	A.SCM_SITE_ID	= B.SCM_SITE_ID
+								AND	A.ITEM_ID		= B.ITEM_ID
+							)
+							WHEN MATCHED THEN
+							UPDATE
+							SET
+								-- VALID_YN			  = @v_valid_yn
+								  LAST_UPDATED_BY	  = @v_last_updated_by
+								, LAST_UPDATE_DATE	  = SYSDATETIME()
+							WHEN NOT MATCHED THEN
+							INSERT
+							(
+								  DIVISION_ID
+								, PROJECT_CODE
+								, SCM_SITE_ID
+								, ITEM_ID
+								, CURRENCY
+								, LIABILITY_PERIOD
+								, SALES_PLAN_ADJUST_YN
+								, ITEM_HRCY_ID
+								, VALID_YN
+								, BPMS_EXIST
+								, CREATED_BY
+								, CREATION_DATE
+								, LAST_UPDATED_BY
+								, LAST_UPDATE_DATE
+							)
+							VALUES
+							(
+								  @v_link_division_id
+								, @v_project_code
+								, @v_link_plant_site_id
+								, @v_item_id
+								, NULL
+								, NULL
+								, NULL
+								, NULL
+								, 'Y'
+								, 'Y'
+								, @v_created_by
+								, SYSDATETIME()
+								, @v_created_by
+								, SYSDATETIME()
+							);
+
+							-- SCM_MST_SITE_ITEM_PRIORITY입력/수정
+							SELECT TOP 1 @v_link_cp_priority_seq = PRIORITY_SEQ
+							FROM   SCM_MST_SITE_ITEM_PRIORITY WITH(NOLOCK)
+							WHERE  DIVISION_ID    = @v_link_division_id
+							AND    PROJECT_CODE   = @v_project_code 
+							AND    SALES_SITE_ID  = @v_scm_site_id
+							AND    PLANT_SITE_ID  = @v_link_plant_site_id
+							AND    ITEM_ID        = @v_item_id
+							AND    FROM_YYYYMMDD <= @v_to_yyyymmdd
+							AND    TO_YYYYMMDD   >= @v_from_yyyymmdd
+					
+							IF @v_link_cp_priority_seq IS NOT NULL
+								BEGIN
+									UPDATE SCM_MST_SITE_ITEM_PRIORITY
+									SET
+										  SALES_SITE_ID	    = @v_scm_site_id
+										, PRIORITY			= @v_priority
+										, FROM_YYYYMMDD		= @v_from_yyyymmdd
+										, TO_YYYYMMDD		= @v_to_yyyymmdd
+										, VALID_YN			= @v_valid_yn
+										, LAST_UPDATED_BY	= @v_last_updated_by
+										, LAST_UPDATE_DATE	= sysdatetime()
+									WHERE PRIORITY_SEQ = @v_link_cp_priority_seq;
+								END;
+							ELSE
+								BEGIN
+									SET @v_link_cp_priority_seq = (NEXT VALUE FOR SEQ1_SCM_MST_SITE_ITEM_PRIORITY);
+
+									INSERT INTO SCM_MST_SITE_ITEM_PRIORITY
+									(
+										  PRIORITY_SEQ
+										, DIVISION_ID
+										, PROJECT_CODE
+										, SALES_SITE_ID
+										, PLANT_SITE_ID
+										, ITEM_ID
+										, PRIORITY
+										, FROM_YYYYMMDD
+										, TO_YYYYMMDD
+										, VALID_YN
+										, CREATED_BY
+										, CREATION_DATE
+										, LAST_UPDATED_BY
+										, LAST_UPDATE_DATE
+									)
+									VALUES
+									(
+										  @v_link_cp_priority_seq
+										, @v_link_division_id
+										, @v_project_code
+										, @v_scm_site_id
+										, @v_link_plant_site_id
+										, @v_item_id
+										, @v_priority
+										, @v_from_yyyymmdd
+										, @v_to_yyyymmdd
+										, @v_valid_yn
+										, @v_created_by
+										, SYSDATETIME()
+										, @v_created_by
+										, SYSDATETIME()
+									);
+								END;
+
+							--CP 수정 end ------------------------------------------------------------------------------------------------------------------
+							EXEC [PR_SCM_MST_SITE_ITEM_HIST]
+								@v_link_division_id,
+								@v_project_code,
+								@v_link_plant_site_id,
+								@v_item_id,
+								@p_currency,
+								@p_liability_period,
+								@p_sales_plan_adjust_yn,
+								@p_item_hrcy_id,
+								@v_s_valid_yn,
+								@p_bpms_exist,
+								@v_created_by,
+								@v_creation_date,
+								@v_last_updated_by;
+
+							EXEC [PR_SCM_MST_SITE_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0027_GET_PROJECTROUTE_ELECTRODE","2014018306","1","
+/*
+ * Program ID   : SCP0027_GET_PROJECTROUTE_ELECTRODE
+ * Description  : Project Route Plant Site(Electrode) 조회
+ * Program History
+ *===================================================================================================
+ * Date         In Charge		Description
+ *===================================================================================================
+ * 2018/06/26   yhw				          Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/08/08   byunghunjung	          82 사업부 전극 모델 리스트에서 제외
+ * 2018/08/09	yhw				          아이템 별 tact time, outsourcing capa PLANT SITE 등록여부 조회 추가
+ * 2018/08/28   ygkim			          @p_division_id 멀티로 변경
+ * 2018/09/19   hwyoon			          validation용 조회항목 추가(plant_site_id_b)
+ * 2018/09/21	hwyoon			          item 조회조건 입력 시 신규입력건 조회 제거
+ * 2018/12/21	hwyoon			          T/T 등록여부 체크 시 해당 라인 활성화 여부 포함하여 체크
+ * 2019/12/17	hwyoon			          Tact Time 등록여부 조회컬럼 추가
+ * 2020/02/10	hwyoon			          ESS 외주 Pakcer Line 생산 Target 적용
+ * 2024-01-08   chaan                     PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - UI성능개선 - 조회조건 속도 개선
+ */
+CREATE PROCEDURE [dbo].[SCP0027_GET_PROJECTROUTE_ELECTRODE]
+--CREATE PROCEDURE [dbo].[SCP0027_GET_PROJECTROUTE_ELECTRODE]
+  @p_division_id    NVARCHAR(MAX),
+  @p_plant_site     NVARCHAR(MAX),
+  @p_operation_group NVARCHAR(MAX),
+  @p_item_id		NVARCHAR(200),
+  @p_from_yyyymm    NVARCHAR(200)='',
+  @p_to_yyyymm		NVARCHAR(200)='',
+  @p_valid_flag		NVARCHAR(200)
+AS  
+BEGIN
+  SET NOCOUNT ON; 
+  SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;	
+
+    --DECLARE @p_division_id      NVARCHAR(MAX)   = N'81';
+    --DECLARE @p_plant_site       NVARCHAR(MAX)   = N'';
+    --DECLARE @p_operation_group  NVARCHAR(MAX)   = N'';
+    --DECLARE @p_item_id		    NVARCHAR(200)   = N'';
+    --DECLARE @p_from_yyyymm      NVARCHAR(200)   = N'';
+    --DECLARE @p_to_yyyymm		NVARCHAR(200)   = N'';
+    --DECLARE @p_valid_flag		NVARCHAR(200)   = N'';
+
+
+  --  Cell계획기준 전극미등록 모델 리스트 추가
+	SELECT DISTINCT 
+		  '' AS priority_seq
+		  ,B.DIVISION_ID
+		  ,'-' AS  project_code
+		  ,B.CHILD_ITEM_ID as ITEM_ID
+		  ,'-' AS scm_site_id
+		  ,'' AS PLANT_SITE_ID_B
+		  ,'' AS PLANT_SITE_ID 
+		  ,'' AS TACT_TIME_FLAG
+		  ,'' AS priority
+		  ,'Y' AS valid_yn
+		  ,'Y' AS org_valid_yn
+		  ,'' AS from_yyyymmdd 
+		  ,'' AS to_yyyymmdd 
+		  ,'' AS created_by
+		  ,NULL AS creation_date
+		  ,'' AS last_updated_by
+		  ,NULL AS last_update_date
+		  ,B.OPERATION_GROUP_ID as OPERATION_GROUP
+		  ,'' AS org_from_yyyymmdd
+		  ,'' AS org_to_yyyymmdd
+		  ,'' AS merge_date
+		  ,'' as is_pass_n1
+		  ,'' as is_pass_n2
+		  ,'' as is_pass_n3
+		  ,'' as is_pass_n4
+		  ,'' as is_pass_n5
+		  ,'' as is_pass_n6
+		  ,'' as is_pass_n7
+		  ,dbo.FN_GET_ITEM_NICKNAME (B.DIVISION_ID, B.CHILD_ITEM_ID) AS nick_name
+		  ,D.SEGMENT2 OPERATION_GROUP_NAME
+		  ,'-' ACTION_FLAG_DIV
+		  ,0 ROW_COLOR_INDEX
+		  ,0 SORT_ORDER
+	FROM 
+	(SELECT DISTINCT DIVISION_ID,ITEM_ID
+	  FROM SCP_ANL_PRODUCTION_PLAN WITH(NOLOCK)
+	WHERE DIVISION_ID IN (SELECT DIVISION_ID from scm_mst_division WITH(NOLOCK) WHERE attribute3 <> 'EE' AND division_id <> '82') --IN ('81','40') -- 82사업부 제외
+	--WHERE DIVISION_ID IN ('81','40') -- 82사업부 제외
+	   AND PLAN_START_YYYYMMDD >=[dbo].[FN_GET_BUCKET_YYYYMMDD](-1)
+	   AND OPERATION_GROUP='A'
+	   AND MEASURE ='PROD_PLAN_AMEND'
+	) A, SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK)
+		JOIN SCM_ADM_LOOKUP_MASTER C ON C.LOOKUP_TYPE='OPERATION_GROUP' AND C.VALID_YN='Y'
+		JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D WITH(NOLOCK)
+		  ON D.LOOKUP_TYPE=C.LOOKUP_TYPE 
+		 AND D.VALID_YN='Y' 
+		 AND D.SEGMENT1='E' -- B.OPERATION_GROUP_ID
+	WHERE 1=1
+	  AND A.DIVISION_ID = B.DIVISION_ID
+	  AND A.ITEM_ID = B.MODEL_ID
+	  AND B.OPERATION_GROUP_ID ='E'
+	  AND ( ( @p_operation_group   IS NULL OR  @p_operation_group = ''   ) OR B.OPERATION_GROUP_ID  IN (SELECT token FROM dbo.String_Split(@p_operation_group  ,',')) )
+	  AND NOT EXISTS ( SELECT '*'
+	"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0027_GET_PROJECTROUTE_ELECTRODE","2014018306","2","					 FROM SCM_MST_SITE_ITEM_PRIORITY T WITH(NOLOCK)
+						WHERE T.DIVISION_ID = B.DIVISION_ID
+						  AND T.ITEM_ID     = B.CHILD_ITEM_ID
+						  AND T.VALID_YN ='Y' )
+	  AND ( ( @p_item_id		 IS NULL OR  @p_item_id = ''    ) OR B.CHILD_ITEM_ID  LIKE '%' + @p_item_id + '%' )
+	UNION ALL
+	SELECT A.priority_seq
+			,A.division_id
+			,A.project_code
+			,A.item_id
+			,A.scm_site_id
+			,A.PLANT_SITE_ID AS PLANT_SITE_ID_B
+			--ESS 외주 Pakcer Line 생산 Target 적용
+			,A.DIVISION_ID + '   ' + A.PLANT_SITE_ID + '   ' + A.SITE_DESCRIPTION + (CASE WHEN (TACT_CNT>0 AND OSP_YN='N') OR (OUT_CAPA_CNT>0 AND ATTRIBUTE1 IN ('','N')) OR (OUT_TACT_CNT>0 AND ATTRIBUTE1='Y') THEN ' Y' ELSE ' N' END) AS PLANT_SITE_ID
+			--ESS 외주 Pakcer Line 생산 Target 적용
+			--,(CASE WHEN TACT_CNT>0 OR OUT_CAPA_CNT>0 THEN ' Y' ELSE ' N' END) AS TACT_TIME_FLAG
+			,(CASE WHEN (TACT_CNT>0 AND OSP_YN='N') OR (OUT_CAPA_CNT>0 AND ATTRIBUTE1 IN ('','N')) OR (OUT_TACT_CNT>0 AND ATTRIBUTE1='Y') THEN ' Y' ELSE ' N' END) AS TACT_TIME_FLAG
+			,A.priority
+			,A.valid_yn
+			,A.org_valid_yn
+			,A.from_yyyymmdd 
+			,A.to_yyyymmdd 
+			,A.created_by
+			,A.creation_date
+			,A.last_updated_by
+			,A.last_update_date
+			,A.OPERATION_GROUP
+			,A.org_from_yyyymmdd
+			,A.org_to_yyyymmdd
+			,A.merge_date
+			,A.is_pass_n1
+			,A.is_pass_n2
+			,A.is_pass_n3
+			,A.is_pass_n4
+			,A.is_pass_n5
+			,A.is_pass_n6
+			,A.is_pass_n7
+			,A.nick_name
+			,A.OPERATION_GROUP_NAME
+			,A.ACTION_FLAG_DIV
+			,A.ROW_COLOR_INDEX
+			,A.SORT_ORDER
+			--,A.DIVISION_ID + '   ' + A.PLANT_SITE_ID + '   ' + A.SITE_DESCRIPTION + (CASE WHEN TACT_CNT>0 OR OUT_CAPA_CNT>0 THEN ' Y' ELSE ' N' END) AS PLANT_SITE_NAME
+	FROM (
+	SELECT 
+			CONVERT(NVARCHAR(MAX), t.priority_seq) AS priority_seq
+			,t.division_id
+			,ISNULL(NULLIF(t.project_code,''),'-') project_code
+			,t.item_id
+			,ISNULL(NULLIF(t.SALES_SITE_ID,''),'-') AS scm_site_id
+			,T.PLANT_SITE_ID 
+			,t.priority
+			,t.valid_yn
+			,t.valid_yn as org_valid_yn
+			,CONVERT(NVARCHAR(10),CONVERT(DATETIME,t.from_yyyymmdd,112),121) AS from_yyyymmdd 
+			,CONVERT(NVARCHAR(10),CONVERT(DATETIME,t.to_yyyymmdd,112)  ,121) AS to_yyyymmdd 
+			--,CONVERT(NVARCHAR(10),dbo.fn_char_to_date(t.from_yyyymmdd),121) AS from_yyyymmdd 
+			--,CONVERT(NVARCHAR(10),dbo.fn_char_to_date(t.to_yyyymmdd)  ,121) AS to_yyyymmdd 
+			,t.created_by
+			,t.creation_date
+			,t.last_updated_by
+			,t.last_update_date
+			,s.OPERATION_GROUP
+			,t.from_yyyymmdd AS org_from_yyyymmdd
+			,t.to_yyyymmdd AS org_to_yyyymmdd
+			,t.from_yyyymmdd + t.to_yyyymmdd AS merge_date
+			,'' as is_pass_n1
+			,'' as is_pass_n2
+			,'' as is_pass_n3
+			,'' as is_pass_n4
+			,'' as is_pass_n5
+			,'' as is_pass_n6
+			,'' as is_pass_n7
+			, dbo.FN_GET_ITEM_NICKNAME (t.division_id, t.item_id ) AS nick_name
+			, B.SEGMENT2 OPERATION_GROUP_NAME
+			, '-' ACTION_FLAG_DIV
+			, 0 ROW_COLOR_INDEX
+			, 1 SORT_ORDER
+			, ISNULL((
+				SELECT COUNT(c.PLANT_SITE_ID) FROM SCP_MST_TACT_TIME c WITH(NOLOCK)
+						JOIN SCM_MST_LINE_SN LS WITH(NOLOCK) ON LS.COMPANY_ID=S.COMPANY_ID AND LS.DIVISION_ID=C.DIVISION_ID AND LS.SITE_ID=S.SITE_ID AND LS.PLANT_ID=S.PLANT_ID
+																		AND LS.OPERATION_ID=C.OPERATION_ID AND LS.LINE_ID=C.LINE_ID AND LS.ACTIVE_FLAG='Y'
+						 WHERE 1=1
+				AND ( ( @p_division_id IS NULL OR  @p_division_id = '') OR c.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+						  -- AND c.DIVISION_ID = @p_division_id
+						   AND c.ITEM_ID = t.item_id
+						   AND c.VALID_YN='Y' 		
+						   AND c.PLANT_SITE_ID = s.scm_site_id
+				GROUP BY c.ITEM_ID, c.PLANT_SITE_ID
+			 ),0) TACT_CNT
+			 ,ISNULL((
+				SELECT COUNT(c.PLANT_SITE_ID) FROM SCP_MST_OUTSOURCING_CAPA c WITH(NOLOCK)
+				WHERE 1=1
+				AND ( ( @p_division_id IS NULL OR  @p_division_id = '') OR c.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+						    --and c.DIVISION_ID = @p_division_id
+						   AND c.ITEM_ID = t.item_id
+						   AND c.VALID_YN "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0027_GET_PROJECTROUTE_ELECTRODE","2014018306","3","='Y'
+						   AND c.PLANT_SITE_ID = s.scm_site_id
+						 GROUP BY c.PLANT_SITE_ID, c.item_id
+			 ),0) OUT_CAPA_CNT
+			 , s.SITE_DESCRIPTION
+			 --ESS 외주 Pakcer Line 생산 Target 적용
+			 ,ISNULL((
+				SELECT COUNT(c.PLANT_SITE_ID) FROM SCP_MST_TACT_TIME_OSP c WITH(NOLOCK)
+						JOIN SCM_MST_LINE_OSP LS WITH(NOLOCK) ON LS.DIVISION_ID=C.DIVISION_ID AND LS.SCM_SITE_ID=C.PLANT_SITE_ID AND LS.LINE_ID=C.LINE_ID AND LS.VALID_YN='Y'
+						 WHERE 1=1
+						   AND ( ( @p_division_id IS NULL OR  @p_division_id = '') OR c.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+						    --and c.DIVISION_ID = @p_division_id
+						   AND c.ITEM_ID = t.item_id
+						   AND c.VALID_YN ='Y'
+						   AND c.PLANT_SITE_ID = s.scm_site_id
+						 GROUP BY c.PLANT_SITE_ID, c.item_id
+			 ),0) OUT_TACT_CNT
+			 , ISNULL(S.OSP_YN,'N') AS OSP_YN
+			 , ISNULL(S.ATTRIBUTE1,'N') AS ATTRIBUTE1
+		FROM scm_mst_site_item_priority t (NOLOCK)
+		--JOIN scm_mst_site s (NOLOCK) ON t.division_id = s.division_id and t.PLANT_SITE_ID = s.scm_site_id
+		JOIN scm_mst_site s (NOLOCK) ON ( (t.division_id = s.division_id and s.OPERATION_GROUP!='E') OR (s.OPERATION_GROUP='E') )
+									and t.PLANT_SITE_ID = s.scm_site_id
+		JOIN SCM_ADM_LOOKUP_MASTER A WITH(NOLOCK) ON A.LOOKUP_TYPE='OPERATION_GROUP' AND A.VALID_YN='Y'
+		JOIN SCM_ADM_LOOKUP_MASTER_DETAIL B WITH(NOLOCK) 
+			ON B.LOOKUP_TYPE=A.LOOKUP_TYPE 
+			AND B.VALID_YN='Y' 
+			AND B.SEGMENT1=s.OPERATION_GROUP-- 198
+		WHERE s.site_type     = 'PLANT'
+			AND ( ( @p_division_id IS NULL OR  @p_division_id = '') OR T.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+			AND ( ( @p_plant_site IS NULL OR  @p_plant_site = '') OR T.PLANT_SITE_ID IN (SELECT token FROM dbo.String_Split(@p_plant_site  ,',')) )
+			AND ( ( @p_item_id IS NULL OR  @p_item_id = '') OR t.item_id  LIKE '%' + @p_item_id + '%' )
+			AND ( ( @p_operation_group IS NULL OR  @p_operation_group = ''   ) OR s.OPERATION_GROUP  IN (SELECT token FROM dbo.String_Split(@p_operation_group  ,',')) )
+			AND ( ( @p_valid_flag IS NULL OR  @p_valid_flag = ''    ) OR t.valid_yn = @p_valid_flag )
+			--ORDER BY SORT_ORDER, division_id, item_id, from_yyyymmdd ,priority, valid_yn desc, to_yyyymmdd
+	) A
+		ORDER BY SORT_ORDER, division_id, item_id, from_yyyymmdd ,priority, valid_yn desc, to_yyyymmdd
+
+
+	--전체조회
+	SELECT 
+		CONVERT(NVARCHAR(MAX), t.priority_seq) AS priority_seq
+	   ,t.division_id
+       ,ISNULL(t.project_code,'-') project_code
+	   ,t.item_id
+	   ,ISNULL(t.SALES_SITE_ID,'-') AS scm_site_id
+	   ,T.PLANT_SITE_ID 
+	   ,t.priority
+	   ,t.valid_yn
+	   ,t.valid_yn as org_valid_yn
+	   ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,t.from_yyyymmdd,112),121) AS from_yyyymmdd 
+	   ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,t.to_yyyymmdd,112)  ,121) AS to_yyyymmdd 
+	   --,CONVERT(NVARCHAR(10),dbo.fn_char_to_date(t.from_yyyymmdd),121) AS from_yyyymmdd 
+	   --,CONVERT(NVARCHAR(10),dbo.fn_char_to_date(t.to_yyyymmdd)  ,121) AS to_yyyymmdd 
+	   ,t.created_by
+	   ,t.creation_date
+	   ,t.last_updated_by
+	   ,t.last_update_date
+	   ,s.OPERATION_GROUP
+	   ,t.from_yyyymmdd AS org_from_yyyymmdd
+	   ,t.to_yyyymmdd AS org_to_yyyymmdd
+	   ,t.from_yyyymmdd + t.to_yyyymmdd AS merge_date
+	   ,'' as is_pass_n1
+	   ,'' as is_pass_n2
+	   ,'' as is_pass_n3
+	   ,'' as is_pass_n4
+	   ,'' as is_pass_n5
+	   ,'' as is_pass_n6
+	   ,'' as is_pass_n7
+	   , '-' ACTION_FLAG_DIV
+	   , 0 ROW_COLOR_INDEX
+	FROM scm_mst_site_item_priority t (NOLOCK)
+	--JOIN scm_mst_site s (NOLOCK) ON t.division_id = s.division_id and t.PLANT_SITE_ID = s.scm_site_id
+	JOIN scm_mst_site s (NOLOCK) ON ( (t.division_id = s.division_id and s.OPERATION_GROUP!='E') OR (s.OPERATION_GROUP='E') )
+								and t.PLANT_SITE_ID = s.scm_site_id
+   WHERE s.site_type     = 'PLANT'
+	 --AND t.division_id   = @p_division_id   -- '40'
+	 AND ( ( @p_division_id   IS NULL OR  @p_division_id = ''   ) OR t.division_id      IN (SELECT token FROM dbo.String_Split("
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0027_GET_PROJECTROUTE_ELECTRODE","2014018306","4","@p_division_id  ,',')) )
+	 and t.valid_yn = 'Y'
+	ORDER BY t.division_id, t.item_id, t.from_yyyymmdd  ,t.priority,t.valid_yn desc,t.to_yyyymmdd
+
+
+	--아이템 조회용
+	SELECT A.ITEM_ID, A.NICK_NAME
+	FROM (
+	select A.ITEM_ID, A.NICK_NAME, ROW_NUMBER() OVER ( PARTITION BY ITEM_ID, NICK_NAME ORDER BY NICK_NAME ASC ) NUMS
+		from SCP_MST_FINAL_ITEM a with(nolock)
+		WHERE A.OPERATION_GROUP = 'E'
+		GROUP BY A.ITEM_ID,A.NICK_NAME
+	) A WHERE A.NUMS=1
+	;
+								  
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0027_SAVE_PROJECTROUTE_ELECTRODE","2030018363","1","
+/*
+ * Program ID   : SCP0027_SAVE_PROJECTROUTE_ELECTRODE
+ * Description  : Project Route Plant Site 등록,수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/06/26   YHW				Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/08/23	YHW				이력 저장 호출 변경(PARAM : PLANT_SITE) 
+ */
+CREATE PROCEDURE [dbo].[SCP0027_SAVE_PROJECTROUTE_ELECTRODE]
+	 @p_active_flag			NVARCHAR(MAX)
+	,@p_priority_seq		NVARCHAR(MAX)
+	,@p_division_id			NVARCHAR(MAX)
+	,@p_project_code		NVARCHAR(MAX)
+	,@p_scm_site_id 		NVARCHAR(MAX)
+	,@p_plant_site_id 		NVARCHAR(MAX)
+	,@p_item_id 			NVARCHAR(MAX)
+	,@p_created_by			NVARCHAR(MAX)
+	,@p_creation_date		NVARCHAR(MAX)
+	,@p_last_updated_by		NVARCHAR(MAX)
+
+	,@p_priority			NVARCHAR(MAX)
+	,@p_from_yyyymmdd		NVARCHAR(MAX)
+	,@p_to_yyyymmdd			NVARCHAR(MAX)
+	,@p_valid_yn			NVARCHAR(MAX)
+	,@debug_mode            NVARCHAR(20) ='F'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	
+	--DECLARE @DEBUG_MODE NVARCHAR(20) ='FALSE';
+	--DECLARE @DEBUG_MODE NVARCHAR(20) ='TRUE';
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_priority_seq		    NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_project_code 		NVARCHAR(MAX);
+	DECLARE @v_scm_site_id 			NVARCHAR(MAX);
+	DECLARE @v_plant_site_id		NVARCHAR(MAX);
+	
+	DECLARE @v_item_id				NVARCHAR(MAX);
+	DECLARE @v_s_valid_yn			NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+	DECLARE @v_creation_date		DATETIME;
+	DECLARE @v_last_updated_by		NVARCHAR(MAX);
+
+	DECLARE @v_priority				NVARCHAR(MAX);
+	DECLARE @v_from_yyyymmdd		NVARCHAR(MAX);
+	DECLARE @v_to_yyyymmdd			NVARCHAR(MAX);
+	DECLARE @v_valid_yn				NVARCHAR(MAX);
+
+	DECLARE @p_currency				NVARCHAR(MAX);
+	DECLARE @p_liability_period		NVARCHAR(MAX);
+	DECLARE @p_sales_plan_adjust_yn	NVARCHAR(MAX);
+	DECLARE @p_item_hrcy_id			NVARCHAR(MAX);
+	DECLARE @p_bpms_exist			NVARCHAR(MAX);
+
+
+	SET @v_active_flag = NULL;
+	SET @v_priority_seq= NULL;
+	SET @v_division_id = NULL;
+	SET @v_project_code = NULL;
+	SET @v_scm_site_id = NULL;
+	SET @v_item_id = NULL;
+	SET @v_priority = NULL;
+	SET @v_s_valid_yn = NULL;
+	SET @v_created_by = NULL;	  
+	SET @v_creation_date = NULL;
+	SET @v_last_updated_by = NULL;
+
+	SET @p_currency				 = NULL;
+	SET @p_liability_period		 = NULL;
+	SET @p_sales_plan_adjust_yn	 = NULL;
+	SET @p_item_hrcy_id			 = NULL;
+	SET @p_bpms_exist			 = 'Y';
+
+	SET @v_priority = NULL;
+	SET @v_from_yyyymmdd = NULL;
+	SET @v_to_yyyymmdd = NULL;
+	SET @v_valid_yn = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0027_SAVE_PROJECTROUTE_ELECTRODE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		PRINT '1';
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+			--PRINT '3';	
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loo"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0027_SAVE_PROJECTROUTE_ELECTRODE","2030018363","2","p_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				--PRINT '4';
+				SET @v_priority_seq		= [dbo].[SCM_ARR_SPL_VAL](@p_priority_seq	, @v_delimiter , @mst_loop_cnt) ;    
+				IF(ISNULL(@v_priority_seq,'') ='')
+					SET @v_priority_seq = NEXT VALUE FOR SEQ1_SCM_MST_SITE_ITEM_PRIORITY;
+				--PRINT '5';
+
+				SET @v_active_flag		= [dbo].[SCM_ARR_SPL_VAL](@p_active_flag	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_division_id		= [dbo].[SCM_ARR_SPL_VAL](@p_division_id	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_project_code		= [dbo].[SCM_ARR_SPL_VAL](@p_project_code	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_scm_site_id		= [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_plant_site_id	= [dbo].[SCM_ARR_SPL_VAL](@p_plant_site_id	, @v_delimiter , @mst_loop_cnt) ; 				   				
+				SET @v_item_id			= [dbo].[SCM_ARR_SPL_VAL](@p_item_id		, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_s_valid_yn		= (select t.VALID_YN from scm_mst_site_item t where t.division_id = @v_division_id AND t.SCM_SITE_ID =@v_scm_site_id AND t.ITEM_ID = @v_item_id AND t.project_code =@v_project_code)
+				SET @v_created_by		= [dbo].[SCM_ARR_SPL_VAL](@p_created_by		, @v_delimiter, @mst_loop_cnt) ; 
+				--SET @v_creation_date	= CONVERT(DATETIME, [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter, @mst_loop_cnt) , 112);
+				SET @v_creation_date	=  [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_last_updated_by	= [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter, @mst_loop_cnt) ; 
+
+				SET @v_priority			= [dbo].[SCM_ARR_SPL_VAL](@p_priority		, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_from_yyyymmdd	= [dbo].[SCM_ARR_SPL_VAL](@p_from_yyyymmdd	, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_to_yyyymmdd		= [dbo].[SCM_ARR_SPL_VAL](@p_to_yyyymmdd	, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_valid_yn			= [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn		, @v_delimiter, @mst_loop_cnt) ; 
+				--PRINT '6';
+			END
+
+			-- LOOP 파라미터 출력 DEBUG용			
+			IF (@debug_mode ='T') 
+			BEGIN		
+				PRINT '===============================================';			
+				PRINT '@v_active_flag     = ''' +@v_active_flag +'''';
+				PRINT '@v_priority_seq    = ''' +@v_priority_seq +'''';
+				PRINT '@v_division_id     = ''' +@v_division_id +'''';
+				PRINT '@v_project_code    = ''' +@v_project_code +'''';
+				PRINT '@v_scm_site_id     = ''' +@v_scm_site_id +'''';
+				PRINT '@v_plant_site_id   = ''' +@v_plant_site_id +'''';				
+				PRINT '@v_item_id         = ''' +@v_item_id +'''';
+				PRINT '@v_s_valid_yn      = ''' +@v_s_valid_yn +'''';
+				PRINT '@v_priority        = ''' +@v_priority +'''';
+				PRINT '@v_from_yyyymmdd   = ''' +@v_from_yyyymmdd +'''';
+				PRINT '@v_to_yyyymmdd     = ''' +@v_to_yyyymmdd +'''';
+				PRINT '@v_valid_yn        = ''' +@v_valid_yn +'''';
+				PRINT '@v_last_updated_by = ''' +@v_last_updated_by +'''';				
+				PRINT '@mst_loop_cnt      = ''' +CONVERT(VARCHAR(10), @mst_loop_cnt) +'''';				
+
+
+			END;
+
+		   --이력저장
+			--EXEC [PR_SCM_MST_SITE_ITEM_HIST] @v_division_id,@v_project_code,@v_scm_site_id,@v_item_id,@p_currency,@p_liability_period,@p_sales_plan_adjust_yn,@p_item_hrcy_id,@v_s_valid_yn,@p_bpms_exist,@v_created_by,@v_creation_date,@v_last_updated_by ; 
+			EXEC [PR_SCM_MST_SITE_ITEM_HIST] @v_division_id,@v_project_code,@v_plant_site_id,@v_item_id,@p_currency,@p_liability_period,@p_sales_plan_adjust_yn,@p_item_hrcy_id,@v_s_valid_yn,@p_bpms_exist,@v_created_by,@v_creation_date,@v_last_updated_by ; 
+			EXEC [PR_SCM_MST_SITE_ITEM_PRIORITY_HIST] @v_priority_seq,@v_division_id,@v_project_code,@v_scm_site_id ,@v_plant_site_id,@v_item_id ,@v_priority,@v_from_yyyymmdd,@v_to_yyyymmdd,@v_valid_yn,@v_created_by,@v_creation_date,@v_last_updated_by ;
+			
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+				BEGIN		
+					MERGE INTO SCM_MST_SITE_ITEM A
+					USING (
+							SELECT 
+									 @v_division_id as division_id
+									,@v_project_code as project_code
+					"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0027_SAVE_PROJECTROUTE_ELECTRODE","2030018363","3","				,@v_plant_site_id as scm_site_id
+									,@v_item_id	 as	 item_id
+							) B
+					ON(
+									a.division_id = b.division_id
+								AND a.project_code = b.project_code
+								AND	a.scm_site_id = b.scm_site_id
+								AND	a.item_id = b.item_id
+						)
+					WHEN MATCHED THEN
+							UPDATE SET 	
+								-- valid_yn			  = @v_valid_yn
+								 last_updated_by	  = @v_last_updated_by
+								,last_update_date	  = sysdatetime()
+					                
+					WHEN NOT MATCHED THEN
+					INSERT	(		
+								 division_id,project_code,scm_site_id,item_id
+								,currency,liability_period,sales_plan_adjust_yn,item_hrcy_id
+								,valid_yn,bpms_exist
+								,created_by, creation_date, last_updated_by, last_update_date
+							)
+					VALUES  (
+					 			 @v_division_id,@v_project_code,@v_plant_site_id,@v_item_id
+								,null,null,null,null
+								,'Y','Y'
+								,@v_created_by, SYSDATETIME(), @v_created_by, SYSDATETIME()
+							);
+
+
+					-- SCM_MST_SITE_ITEM_PRIORITY입력/수정
+					IF( @v_active_flag ='M') 
+						BEGIN
+							UPDATE SCM_MST_SITE_ITEM_PRIORITY
+							SET  SALES_SITE_ID        = @v_scm_site_id
+								,PLANT_SITE_ID        = @v_plant_site_id
+							    ,priority			  = @v_priority
+								,from_yyyymmdd		  = @v_from_yyyymmdd
+								,to_yyyymmdd		  = @v_to_yyyymmdd
+								,valid_yn			  = @v_valid_yn
+								,last_updated_by	  = @v_last_updated_by
+								,last_update_date	  = sysdatetime()
+							WHERE priority_seq   = @v_priority_seq
+							;
+
+							  
+						END
+					ELSE IF(@v_active_flag ='I') 
+						BEGIN
+							INSERT INTO SCM_MST_SITE_ITEM_PRIORITY(		
+									 priority_seq,division_id,project_code,SALES_SITE_ID,PLANT_SITE_ID,item_id
+									,priority,from_yyyymmdd,to_yyyymmdd,valid_yn
+									,created_by, creation_date, last_updated_by, last_update_date
+								)
+							VALUES  (
+					 				 @v_priority_seq,@v_division_id,@v_project_code,@v_scm_site_id,@v_plant_site_id,@v_item_id
+									,@v_priority,@v_from_yyyymmdd,@v_to_yyyymmdd,@v_valid_yn
+									,@v_created_by, SYSDATETIME(), @v_created_by, SYSDATETIME()
+								);
+	
+						END
+				END  -- END OF STMT. IF( @mst_loop_cnt > 0 )			
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+
+		  if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0027_GET_PROJECTROUTE_ELECTRODE_NEW","128159652","1","
+/*
+ * Program ID   : SCP0027_GET_PROJECTROUTE_ELECTRODE
+ * Description  : Project Route Plant Site(Electrode) 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2018/06/26   yhw				Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/08/08   byunghunjung	82 사업부 전극 모델 리스트에서 제외
+ * 2018/08/09	yhw				아이템 별 tact time, outsourcing capa PLANT SITE 등록여부 조회 추가
+ * 2018/08/28   ygkim			@p_division_id 멀티로 변경
+ * 2018/09/19   hwyoon			validation용 조회항목 추가(plant_site_id_b)
+ * 2018/09/21	hwyoon			item 조회조건 입력 시 신규입력건 조회 제거
+ * 2018/12/21	hwyoon			T/T 등록여부 체크 시 해당 라인 활성화 여부 포함하여 체크
+ * 2019/12/17	hwyoon			Tact Time 등록여부 조회컬럼 추가
+ * 2020/02/10	hwyoon			ESS 외주 Pakcer Line 생산 Target 적용
+ */
+CREATE PROCEDURE [dbo].[SCP0027_GET_PROJECTROUTE_ELECTRODE_NEW]
+ @p_division_id     NVARCHAR(MAX),
+ @p_plant_site      NVARCHAR(MAX),
+ @p_operation_group NVARCHAR(MAX),
+ @p_item_id			NVARCHAR(200),
+ @p_from_yyyymm     NVARCHAR(200)='',
+ @p_to_yyyymm		NVARCHAR(200)='',
+ @p_valid_flag		NVARCHAR(200)
+AS  
+
+BEGIN
+
+  SET NOCOUNT ON; 
+  SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;	
+
+  --  Cell계획기준 전극미등록 모델 리스트 추가
+	SELECT DISTINCT 
+		  '' AS priority_seq
+		  ,B.DIVISION_ID
+		  ,'-' AS  project_code
+		  ,B.CHILD_ITEM_ID as ITEM_ID
+		  ,'-' AS scm_site_id
+		  ,'' AS PLANT_SITE_ID_B
+		  ,'' AS PLANT_SITE_ID 
+		  ,'' AS TACT_TIME_FLAG
+		  ,'' AS priority
+		  ,'Y' AS valid_yn
+		  ,'Y' AS org_valid_yn
+		  ,'' AS from_yyyymmdd 
+		  ,'' AS to_yyyymmdd 
+		  ,'' AS created_by
+		  ,NULL AS creation_date
+		  ,'' AS last_updated_by
+		  ,NULL AS last_update_date
+		  ,B.OPERATION_GROUP_ID as OPERATION_GROUP
+		  ,'' AS org_from_yyyymmdd
+		  ,'' AS org_to_yyyymmdd
+		  ,'' AS merge_date
+		  ,'' as is_pass_n1
+		  ,'' as is_pass_n2
+		  ,'' as is_pass_n3
+		  ,'' as is_pass_n4
+		  ,'' as is_pass_n5
+		  ,'' as is_pass_n6
+		  ,'' as is_pass_n7
+		  ,dbo.FN_GET_ITEM_NICKNAME (B.DIVISION_ID, B.CHILD_ITEM_ID) AS nick_name
+		  ,D.SEGMENT2 OPERATION_GROUP_NAME
+		  ,'-' ACTION_FLAG_DIV
+		  ,0 ROW_COLOR_INDEX
+		  ,0 SORT_ORDER
+	FROM 
+	(SELECT DISTINCT DIVISION_ID,ITEM_ID
+	  FROM SCP_ANL_PRODUCTION_PLAN WITH(NOLOCK)
+	WHERE DIVISION_ID IN (SELECT DIVISION_ID from scm_mst_division WITH(NOLOCK) WHERE attribute3 <> 'EE' AND division_id <> '82') --IN ('81','40') -- 82사업부 제외
+	--WHERE DIVISION_ID IN ('81','40') -- 82사업부 제외
+	   AND PLAN_START_YYYYMMDD >=[dbo].[FN_GET_BUCKET_YYYYMMDD](-1)
+	   AND OPERATION_GROUP='A'
+	   AND MEASURE ='PROD_PLAN_AMEND'
+	) A, SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK)
+		JOIN SCM_ADM_LOOKUP_MASTER C ON C.LOOKUP_TYPE='OPERATION_GROUP' AND C.VALID_YN='Y'
+		JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D WITH(NOLOCK)
+		  ON D.LOOKUP_TYPE=C.LOOKUP_TYPE 
+		 AND D.VALID_YN='Y' 
+		 AND D.SEGMENT1='E' -- B.OPERATION_GROUP_ID
+	WHERE 1=1
+	  AND A.DIVISION_ID = B.DIVISION_ID
+	  AND A.ITEM_ID = B.MODEL_ID
+	  AND B.OPERATION_GROUP_ID ='E'
+	  AND ( ( @p_operation_group   IS NULL OR  @p_operation_group = ''   ) OR B.OPERATION_GROUP_ID  IN (SELECT token FROM dbo.String_Split(@p_operation_group  ,',')) )
+	  AND NOT EXISTS ( SELECT '*'
+						 FROM SCM_MST_SITE_ITEM_PRIORITY T WITH(NOLOCK)
+						WHERE T.DIVISION_ID = B.DIVISION_ID
+						  AND T.ITEM_ID     = B.CHILD_ITEM_ID
+						  AND T.VALID_YN ='Y' )
+	  AND ( ( @p_item_id		 IS NULL OR  @p_item_id = ''    ) OR B.CHILD_ITEM_ID  LIKE '%' + @p_item_id + '%' )
+
+	UNION ALL
+
+	SELECT A.priority_seq
+			,A.division_id
+			,A.project_code
+			,A.item_id
+			,A.scm_site_id
+			,A.PLANT_SITE_ID AS PLANT_SITE_ID_B
+			--ESS 외주 Pakcer Line 생산 Target 적용
+			,A.DIVISION_ID + '   ' + A.PLANT_SITE_ID + '   ' + A.SITE_DESCRIPTION + (CASE WHEN (TACT_CNT>0 AND OSP_YN='N') OR (OUT_CAPA_CNT>0 AND ATTRIBUTE1 IN ('','N')) OR (OUT_TACT_CNT>0 AND ATTRIBUTE1="
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0027_GET_PROJECTROUTE_ELECTRODE_NEW","128159652","2","'Y') THEN ' Y' ELSE ' N' END) AS PLANT_SITE_ID
+			--ESS 외주 Pakcer Line 생산 Target 적용
+			--,(CASE WHEN TACT_CNT>0 OR OUT_CAPA_CNT>0 THEN ' Y' ELSE ' N' END) AS TACT_TIME_FLAG
+			,(CASE WHEN (TACT_CNT>0 AND OSP_YN='N') OR (OUT_CAPA_CNT>0 AND ATTRIBUTE1 IN ('','N')) OR (OUT_TACT_CNT>0 AND ATTRIBUTE1='Y') THEN ' Y' ELSE ' N' END) AS TACT_TIME_FLAG
+			,A.priority
+			,A.valid_yn
+			,A.org_valid_yn
+			,A.from_yyyymmdd 
+			,A.to_yyyymmdd 
+			,A.created_by
+			,A.creation_date
+			,A.last_updated_by
+			,A.last_update_date
+			,A.OPERATION_GROUP
+			,A.org_from_yyyymmdd
+			,A.org_to_yyyymmdd
+			,A.merge_date
+			,A.is_pass_n1
+			,A.is_pass_n2
+			,A.is_pass_n3
+			,A.is_pass_n4
+			,A.is_pass_n5
+			,A.is_pass_n6
+			,A.is_pass_n7
+			,A.nick_name
+			,A.OPERATION_GROUP_NAME
+			,A.ACTION_FLAG_DIV
+			,A.ROW_COLOR_INDEX
+			,A.SORT_ORDER
+			--,A.DIVISION_ID + '   ' + A.PLANT_SITE_ID + '   ' + A.SITE_DESCRIPTION + (CASE WHEN TACT_CNT>0 OR OUT_CAPA_CNT>0 THEN ' Y' ELSE ' N' END) AS PLANT_SITE_NAME
+	FROM (
+		SELECT 
+			CONVERT(NVARCHAR(MAX), t.priority_seq) AS priority_seq
+			,t.division_id
+			,ISNULL(NULLIF(t.project_code,''),'-') project_code
+			,t.item_id
+			,ISNULL(NULLIF(t.SALES_SITE_ID,''),'-') AS scm_site_id
+			,T.PLANT_SITE_ID 
+			,t.priority
+			,t.valid_yn
+			,t.valid_yn as org_valid_yn
+			,CONVERT(NVARCHAR(10),CONVERT(DATETIME,t.from_yyyymmdd,112),121) AS from_yyyymmdd 
+			,CONVERT(NVARCHAR(10),CONVERT(DATETIME,t.to_yyyymmdd,112)  ,121) AS to_yyyymmdd 
+			--,CONVERT(NVARCHAR(10),dbo.fn_char_to_date(t.from_yyyymmdd),121) AS from_yyyymmdd 
+			--,CONVERT(NVARCHAR(10),dbo.fn_char_to_date(t.to_yyyymmdd)  ,121) AS to_yyyymmdd 
+			,t.created_by
+			,t.creation_date
+			,t.last_updated_by
+			,t.last_update_date
+			,s.OPERATION_GROUP
+			,t.from_yyyymmdd AS org_from_yyyymmdd
+			,t.to_yyyymmdd AS org_to_yyyymmdd
+			,t.from_yyyymmdd + t.to_yyyymmdd AS merge_date
+			,'' as is_pass_n1
+			,'' as is_pass_n2
+			,'' as is_pass_n3
+			,'' as is_pass_n4
+			,'' as is_pass_n5
+			,'' as is_pass_n6
+			,'' as is_pass_n7
+			, dbo.FN_GET_ITEM_NICKNAME (t.division_id, t.item_id ) AS nick_name
+			, B.SEGMENT2 OPERATION_GROUP_NAME
+			, '-' ACTION_FLAG_DIV
+			, 0 ROW_COLOR_INDEX
+			, 1 SORT_ORDER
+			, ISNULL((
+				SELECT COUNT(c.PLANT_SITE_ID) FROM SCP_MST_TACT_TIME c WITH(NOLOCK)
+						JOIN SCM_MST_LINE_SN LS WITH(NOLOCK) ON LS.COMPANY_ID=S.COMPANY_ID AND LS.DIVISION_ID=C.DIVISION_ID AND LS.SITE_ID=S.SITE_ID AND LS.PLANT_ID=S.PLANT_ID
+													AND LS.OPERATION_ID=C.OPERATION_ID AND LS.LINE_ID=C.LINE_ID AND LS.ACTIVE_FLAG='Y'
+				WHERE 1=1
+				AND ( ( @p_division_id IS NULL OR  @p_division_id = '') OR c.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+				-- AND c.DIVISION_ID = @p_division_id
+				AND c.ITEM_ID = t.item_id
+				AND c.VALID_YN='Y' 		
+				AND c.PLANT_SITE_ID = s.scm_site_id
+				GROUP BY c.ITEM_ID, c.PLANT_SITE_ID
+			 ),0) TACT_CNT
+			 ,ISNULL((
+				SELECT COUNT(c.PLANT_SITE_ID) FROM SCP_MST_OUTSOURCING_CAPA c WITH(NOLOCK)
+				WHERE 1=1
+				AND ( ( @p_division_id IS NULL OR  @p_division_id = '') OR c.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+				--and c.DIVISION_ID = @p_division_id
+				AND c.ITEM_ID = t.item_id
+				AND c.VALID_YN ='Y'
+				AND c.PLANT_SITE_ID = s.scm_site_id
+				GROUP BY c.PLANT_SITE_ID, c.item_id
+			 ),0) OUT_CAPA_CNT
+			 , s.SITE_DESCRIPTION
+			 --ESS 외주 Pakcer Line 생산 Target 적용
+			 ,ISNULL((
+				SELECT COUNT(c.PLANT_SITE_ID) FROM SCP_MST_TACT_TIME_OSP c WITH(NOLOCK)
+						JOIN SCM_MST_LINE_OSP LS WITH(NOLOCK) ON LS.DIVISION_ID=C.DIVISION_ID AND LS.SCM_SITE_ID=C.PLANT_SITE_ID AND LS.LINE_ID=C.LINE_ID AND LS.VALID_YN='Y'
+						 WHERE 1=1
+						   AND ( ( @p_division_id IS NULL OR  @p_division_id = '') OR c.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+						    --and c.DIVISION_ID = @p_division_id
+						   AND c.ITEM_ID = t.item_id
+						   AND c.VALID_YN ='Y'
+	"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0027_GET_PROJECTROUTE_ELECTRODE_NEW","128159652","3","					   AND c.PLANT_SITE_ID = s.scm_site_id
+						 GROUP BY c.PLANT_SITE_ID, c.item_id
+			 ),0) OUT_TACT_CNT
+			 , ISNULL(S.OSP_YN,'N') AS OSP_YN
+			 , ISNULL(S.ATTRIBUTE1,'N') AS ATTRIBUTE1
+		FROM scm_mst_site_item_priority t (NOLOCK)
+		--JOIN scm_mst_site s (NOLOCK) ON t.division_id = s.division_id and t.PLANT_SITE_ID = s.scm_site_id
+		JOIN scm_mst_site s (NOLOCK) ON ( (t.division_id = s.division_id and s.OPERATION_GROUP!='E') OR (s.OPERATION_GROUP='E') )
+									and t.PLANT_SITE_ID = s.scm_site_id
+		JOIN SCM_ADM_LOOKUP_MASTER A WITH(NOLOCK) ON A.LOOKUP_TYPE='OPERATION_GROUP' AND A.VALID_YN='Y'
+		JOIN SCM_ADM_LOOKUP_MASTER_DETAIL B WITH(NOLOCK) 
+			ON B.LOOKUP_TYPE=A.LOOKUP_TYPE 
+			AND B.VALID_YN='Y' 
+			AND B.SEGMENT1=s.OPERATION_GROUP-- 198
+		WHERE s.site_type     = 'PLANT'
+			AND ( ( @p_division_id IS NULL OR  @p_division_id = '') OR T.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+			AND ( ( @p_plant_site IS NULL OR  @p_plant_site = '') OR T.PLANT_SITE_ID IN (SELECT token FROM dbo.String_Split(@p_plant_site  ,',')) )
+			AND ( ( @p_item_id IS NULL OR  @p_item_id = '') OR t.item_id  LIKE '%' + @p_item_id + '%' )
+			AND ( ( @p_operation_group IS NULL OR  @p_operation_group = ''   ) OR s.OPERATION_GROUP  IN (SELECT token FROM dbo.String_Split(@p_operation_group  ,',')) )
+			AND ( ( @p_valid_flag IS NULL OR  @p_valid_flag = ''    ) OR t.valid_yn = @p_valid_flag )
+			--ORDER BY SORT_ORDER, division_id, item_id, from_yyyymmdd ,priority, valid_yn desc, to_yyyymmdd
+	) A
+		ORDER BY SORT_ORDER, division_id, item_id, from_yyyymmdd ,priority, valid_yn desc, to_yyyymmdd
+
+	--전체조회
+	SELECT 
+		CONVERT(NVARCHAR(MAX), t.priority_seq) AS priority_seq
+	   ,t.division_id
+       ,ISNULL(t.project_code,'-') project_code
+	   ,t.item_id
+	   ,ISNULL(t.SALES_SITE_ID,'-') AS scm_site_id
+	   ,T.PLANT_SITE_ID 
+	   ,t.priority
+	   ,t.valid_yn
+	   ,t.valid_yn as org_valid_yn
+	   ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,t.from_yyyymmdd,112),121) AS from_yyyymmdd 
+	   ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,t.to_yyyymmdd,112)  ,121) AS to_yyyymmdd 
+	   --,CONVERT(NVARCHAR(10),dbo.fn_char_to_date(t.from_yyyymmdd),121) AS from_yyyymmdd 
+	   --,CONVERT(NVARCHAR(10),dbo.fn_char_to_date(t.to_yyyymmdd)  ,121) AS to_yyyymmdd 
+	   ,t.created_by
+	   ,t.creation_date
+	   ,t.last_updated_by
+	   ,t.last_update_date
+	   ,s.OPERATION_GROUP
+	   ,t.from_yyyymmdd AS org_from_yyyymmdd
+	   ,t.to_yyyymmdd AS org_to_yyyymmdd
+	   ,t.from_yyyymmdd + t.to_yyyymmdd AS merge_date
+	   ,'' as is_pass_n1
+	   ,'' as is_pass_n2
+	   ,'' as is_pass_n3
+	   ,'' as is_pass_n4
+	   ,'' as is_pass_n5
+	   ,'' as is_pass_n6
+	   ,'' as is_pass_n7
+	   , '-' ACTION_FLAG_DIV
+	   , 0 ROW_COLOR_INDEX
+	FROM scm_mst_site_item_priority t (NOLOCK)
+	--JOIN scm_mst_site s (NOLOCK) ON t.division_id = s.division_id and t.PLANT_SITE_ID = s.scm_site_id
+	JOIN scm_mst_site s (NOLOCK) ON ( (t.division_id = s.division_id and s.OPERATION_GROUP!='E') OR (s.OPERATION_GROUP='E') )
+								and t.PLANT_SITE_ID = s.scm_site_id
+   WHERE s.site_type     = 'PLANT'
+	 --AND t.division_id   = @p_division_id   -- '40'
+	 AND ( ( @p_division_id   IS NULL OR  @p_division_id = ''   ) OR t.division_id      IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+	 and t.valid_yn = 'Y'
+	ORDER BY t.division_id, t.item_id, t.from_yyyymmdd  ,t.priority,t.valid_yn desc,t.to_yyyymmdd
+
+	--아이템 조회용
+	SELECT A.ITEM_ID, A.NICK_NAME
+	FROM (
+	select A.ITEM_ID, A.NICK_NAME, ROW_NUMBER() OVER ( PARTITION BY ITEM_ID, NICK_NAME ORDER BY NICK_NAME ASC ) NUMS
+		from SCP_MST_FINAL_ITEM a WITH(NOLOCK)
+		WHERE A.OPERATION_GROUP = 'E'
+		GROUP BY A.ITEM_ID,A.NICK_NAME
+	) A WHERE A.NUMS=1
+	;
+								  
+END
+
+"
+"2025-11-02 00:00:00.917","LGCE_SCMDEV","P ","SCP0027_SAVE_PROJECTROUTE_ELECTRODE","2030018363","5","ITEM_PRIORITY_HIST]
+								@v_link_cp_priority_seq,
+								@v_link_division_id,
+								@v_project_code,
+								@v_scm_site_id ,
+								@v_link_plant_site_id,
+								@v_item_id ,
+								@v_priority,
+								@v_from_yyyymmdd,
+								@v_to_yyyymmdd,
+								@v_valid_yn,
+								@v_created_by,
+								@v_creation_date,
+								@v_last_updated_by;
+
+						END;
+	                    -- 2025/10/31 kimcd [PJ2025F254] JV법인 ESS 혼용 생산 시스템 개선 JV ESS 생산에 따른 실제 Link scm site id 값. JV 동기화 설정 끝
+
+				END  -- END OF STMT. IF( @mst_loop_cnt > 0 )			
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+
+		  if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+"
+"2025-11-03 00:00:01.790","LGCE_SCMDEV","P ","SCP0027_GET_PROJECTROUTE_ELECTRODE","2014018306","1","
+/*
+ * Program ID   : SCP0027_GET_PROJECTROUTE_ELECTRODE
+ * Description  : Project Route Plant Site(Electrode) 조회
+ * Program History
+ *===================================================================================================
+ * Date         In Charge		Description
+ *===================================================================================================
+ * 2018/06/26   yhw				          Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/08/08   byunghunjung	          82 사업부 전극 모델 리스트에서 제외
+ * 2018/08/09	yhw				          아이템 별 tact time, outsourcing capa PLANT SITE 등록여부 조회 추가
+ * 2018/08/28   ygkim			          @p_division_id 멀티로 변경
+ * 2018/09/19   hwyoon			          validation용 조회항목 추가(plant_site_id_b)
+ * 2018/09/21	hwyoon			          item 조회조건 입력 시 신규입력건 조회 제거
+ * 2018/12/21	hwyoon			          T/T 등록여부 체크 시 해당 라인 활성화 여부 포함하여 체크
+ * 2019/12/17	hwyoon			          Tact Time 등록여부 조회컬럼 추가
+ * 2020/02/10	hwyoon			          ESS 외주 Pakcer Line 생산 Target 적용
+ * 2024-01-08   chaan                     PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - UI성능개선 - 조회조건 속도 개선
+ */
+CREATE PROCEDURE [dbo].[SCP0027_GET_PROJECTROUTE_ELECTRODE]
+--CREATE PROCEDURE [dbo].[SCP0027_GET_PROJECTROUTE_ELECTRODE]
+  @p_division_id    NVARCHAR(MAX),
+  @p_plant_site     NVARCHAR(MAX),
+  @p_operation_group NVARCHAR(MAX),
+  @p_item_id		NVARCHAR(200),
+  @p_from_yyyymm    NVARCHAR(200)='',
+  @p_to_yyyymm		NVARCHAR(200)='',
+  @p_valid_flag		NVARCHAR(200)
+AS  
+BEGIN
+  SET NOCOUNT ON; 
+  SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;	
+
+    --DECLARE @p_division_id      NVARCHAR(MAX)   = N'81';
+    --DECLARE @p_plant_site       NVARCHAR(MAX)   = N'';
+    --DECLARE @p_operation_group  NVARCHAR(MAX)   = N'';
+    --DECLARE @p_item_id		    NVARCHAR(200)   = N'';
+    --DECLARE @p_from_yyyymm      NVARCHAR(200)   = N'';
+    --DECLARE @p_to_yyyymm		NVARCHAR(200)   = N'';
+    --DECLARE @p_valid_flag		NVARCHAR(200)   = N'';
+
+
+  --  Cell계획기준 전극미등록 모델 리스트 추가
+	SELECT DISTINCT 
+		  '' AS priority_seq
+		  ,B.DIVISION_ID
+		  ,'-' AS  project_code
+		  ,B.CHILD_ITEM_ID as ITEM_ID
+		  ,'-' AS scm_site_id
+		  ,'' AS PLANT_SITE_ID_B
+		  ,'' AS PLANT_SITE_ID 
+		  ,'' AS TACT_TIME_FLAG
+		  ,'' AS priority
+		  ,'Y' AS valid_yn
+		  ,'Y' AS org_valid_yn
+		  ,'' AS from_yyyymmdd 
+		  ,'' AS to_yyyymmdd 
+		  ,'' AS created_by
+		  ,NULL AS creation_date
+		  ,'' AS last_updated_by
+		  ,NULL AS last_update_date
+		  ,B.OPERATION_GROUP_ID as OPERATION_GROUP
+		  ,'' AS org_from_yyyymmdd
+		  ,'' AS org_to_yyyymmdd
+		  ,'' AS merge_date
+		  ,'' as is_pass_n1
+		  ,'' as is_pass_n2
+		  ,'' as is_pass_n3
+		  ,'' as is_pass_n4
+		  ,'' as is_pass_n5
+		  ,'' as is_pass_n6
+		  ,'' as is_pass_n7
+		  ,dbo.FN_GET_ITEM_NICKNAME (B.DIVISION_ID, B.CHILD_ITEM_ID) AS nick_name
+		  ,D.SEGMENT2 OPERATION_GROUP_NAME
+		  ,'-' ACTION_FLAG_DIV
+		  ,0 ROW_COLOR_INDEX
+		  ,0 SORT_ORDER
+	FROM 
+	(SELECT DISTINCT DIVISION_ID,ITEM_ID
+	  FROM SCP_ANL_PRODUCTION_PLAN WITH(NOLOCK)
+	WHERE DIVISION_ID IN (SELECT DIVISION_ID from scm_mst_division WITH(NOLOCK) WHERE attribute3 <> 'EE' AND division_id <> '82') --IN ('81','40') -- 82사업부 제외
+	--WHERE DIVISION_ID IN ('81','40') -- 82사업부 제외
+	   AND PLAN_START_YYYYMMDD >=[dbo].[FN_GET_BUCKET_YYYYMMDD](-1)
+	   AND OPERATION_GROUP='A'
+	   AND MEASURE ='PROD_PLAN_AMEND'
+	) A, SCM_MST_MODEL_FINAL_ITEM_BOM_V B WITH(NOLOCK)
+		JOIN SCM_ADM_LOOKUP_MASTER C ON C.LOOKUP_TYPE='OPERATION_GROUP' AND C.VALID_YN='Y'
+		JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D WITH(NOLOCK)
+		  ON D.LOOKUP_TYPE=C.LOOKUP_TYPE 
+		 AND D.VALID_YN='Y' 
+		 AND D.SEGMENT1='E' -- B.OPERATION_GROUP_ID
+	WHERE 1=1
+	  AND A.DIVISION_ID = B.DIVISION_ID
+	  AND A.ITEM_ID = B.MODEL_ID
+	  AND B.OPERATION_GROUP_ID ='E'
+	  AND ( ( @p_operation_group   IS NULL OR  @p_operation_group = ''   ) OR B.OPERATION_GROUP_ID  IN (SELECT token FROM dbo.String_Split(@p_operation_group  ,',')) )
+	  AND NOT EXISTS ( SELECT '*'
+	"
+"2025-11-03 00:00:01.790","LGCE_SCMDEV","P ","SCP0027_GET_PROJECTROUTE_ELECTRODE","2014018306","2","					 FROM SCM_MST_SITE_ITEM_PRIORITY T WITH(NOLOCK)
+						WHERE T.DIVISION_ID = B.DIVISION_ID
+						  AND T.ITEM_ID     = B.CHILD_ITEM_ID
+						  AND T.VALID_YN ='Y' )
+	  AND ( ( @p_item_id		 IS NULL OR  @p_item_id = ''    ) OR B.CHILD_ITEM_ID  LIKE '%' + @p_item_id + '%' )
+	UNION ALL
+	SELECT A.priority_seq
+			,A.division_id
+			,A.project_code
+			,A.item_id
+			,A.scm_site_id
+			,A.PLANT_SITE_ID AS PLANT_SITE_ID_B
+			--ESS 외주 Pakcer Line 생산 Target 적용
+			,A.DIVISION_ID + '   ' + A.PLANT_SITE_ID + '   ' + A.SITE_DESCRIPTION + (CASE WHEN (TACT_CNT>0 AND OSP_YN='N') OR (OUT_CAPA_CNT>0 AND ATTRIBUTE1 IN ('','N')) OR (OUT_TACT_CNT>0 AND ATTRIBUTE1='Y') THEN ' Y' ELSE ' N' END) AS PLANT_SITE_ID
+			--ESS 외주 Pakcer Line 생산 Target 적용
+			--,(CASE WHEN TACT_CNT>0 OR OUT_CAPA_CNT>0 THEN ' Y' ELSE ' N' END) AS TACT_TIME_FLAG
+			,(CASE WHEN (TACT_CNT>0 AND OSP_YN='N') OR (OUT_CAPA_CNT>0 AND ATTRIBUTE1 IN ('','N')) OR (OUT_TACT_CNT>0 AND ATTRIBUTE1='Y') THEN ' Y' ELSE ' N' END) AS TACT_TIME_FLAG
+			,A.priority
+			,A.valid_yn
+			,A.org_valid_yn
+			,A.from_yyyymmdd 
+			,A.to_yyyymmdd 
+			,A.created_by
+			,A.creation_date
+			,A.last_updated_by
+			,A.last_update_date
+			,A.OPERATION_GROUP
+			,A.org_from_yyyymmdd
+			,A.org_to_yyyymmdd
+			,A.merge_date
+			,A.is_pass_n1
+			,A.is_pass_n2
+			,A.is_pass_n3
+			,A.is_pass_n4
+			,A.is_pass_n5
+			,A.is_pass_n6
+			,A.is_pass_n7
+			,A.nick_name
+			,A.OPERATION_GROUP_NAME
+			,A.ACTION_FLAG_DIV
+			,A.ROW_COLOR_INDEX
+			,A.SORT_ORDER
+			--,A.DIVISION_ID + '   ' + A.PLANT_SITE_ID + '   ' + A.SITE_DESCRIPTION + (CASE WHEN TACT_CNT>0 OR OUT_CAPA_CNT>0 THEN ' Y' ELSE ' N' END) AS PLANT_SITE_NAME
+	FROM (
+	SELECT 
+			CONVERT(NVARCHAR(MAX), t.priority_seq) AS priority_seq
+			,t.division_id
+			,ISNULL(NULLIF(t.project_code,''),'-') project_code
+			,t.item_id
+			,ISNULL(NULLIF(t.SALES_SITE_ID,''),'-') AS scm_site_id
+			,T.PLANT_SITE_ID 
+			,t.priority
+			,t.valid_yn
+			,t.valid_yn as org_valid_yn
+			,CONVERT(NVARCHAR(10),CONVERT(DATETIME,t.from_yyyymmdd,112),121) AS from_yyyymmdd 
+			,CONVERT(NVARCHAR(10),CONVERT(DATETIME,t.to_yyyymmdd,112)  ,121) AS to_yyyymmdd 
+			--,CONVERT(NVARCHAR(10),dbo.fn_char_to_date(t.from_yyyymmdd),121) AS from_yyyymmdd 
+			--,CONVERT(NVARCHAR(10),dbo.fn_char_to_date(t.to_yyyymmdd)  ,121) AS to_yyyymmdd 
+			,t.created_by
+			,t.creation_date
+			,t.last_updated_by
+			,t.last_update_date
+			,s.OPERATION_GROUP
+			,t.from_yyyymmdd AS org_from_yyyymmdd
+			,t.to_yyyymmdd AS org_to_yyyymmdd
+			,t.from_yyyymmdd + t.to_yyyymmdd AS merge_date
+			,'' as is_pass_n1
+			,'' as is_pass_n2
+			,'' as is_pass_n3
+			,'' as is_pass_n4
+			,'' as is_pass_n5
+			,'' as is_pass_n6
+			,'' as is_pass_n7
+			, dbo.FN_GET_ITEM_NICKNAME (t.division_id, t.item_id ) AS nick_name
+			, B.SEGMENT2 OPERATION_GROUP_NAME
+			, '-' ACTION_FLAG_DIV
+			, 0 ROW_COLOR_INDEX
+			, 1 SORT_ORDER
+			, ISNULL((
+				SELECT COUNT(c.PLANT_SITE_ID) FROM SCP_MST_TACT_TIME c WITH(NOLOCK)
+						JOIN SCM_MST_LINE_SN LS WITH(NOLOCK) ON LS.COMPANY_ID=S.COMPANY_ID AND LS.DIVISION_ID=C.DIVISION_ID AND LS.SITE_ID=S.SITE_ID AND LS.PLANT_ID=S.PLANT_ID
+																		AND LS.OPERATION_ID=C.OPERATION_ID AND LS.LINE_ID=C.LINE_ID AND LS.ACTIVE_FLAG='Y'
+						 WHERE 1=1
+				AND ( ( @p_division_id IS NULL OR  @p_division_id = '') OR c.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+						  -- AND c.DIVISION_ID = @p_division_id
+						   AND c.ITEM_ID = t.item_id
+						   AND c.VALID_YN='Y' 		
+						   AND c.PLANT_SITE_ID = s.scm_site_id
+				GROUP BY c.ITEM_ID, c.PLANT_SITE_ID
+			 ),0) TACT_CNT
+			 ,ISNULL((
+				SELECT COUNT(c.PLANT_SITE_ID) FROM SCP_MST_OUTSOURCING_CAPA c WITH(NOLOCK)
+				WHERE 1=1
+				AND ( ( @p_division_id IS NULL OR  @p_division_id = '') OR c.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+						    --and c.DIVISION_ID = @p_division_id
+						   AND c.ITEM_ID = t.item_id
+						   AND c.VALID_YN "
+"2025-11-03 00:00:01.790","LGCE_SCMDEV","P ","SCP0027_GET_PROJECTROUTE_ELECTRODE","2014018306","3","='Y'
+						   AND c.PLANT_SITE_ID = s.scm_site_id
+						 GROUP BY c.PLANT_SITE_ID, c.item_id
+			 ),0) OUT_CAPA_CNT
+			 , s.SITE_DESCRIPTION
+			 --ESS 외주 Pakcer Line 생산 Target 적용
+			 ,ISNULL((
+				SELECT COUNT(c.PLANT_SITE_ID) FROM SCP_MST_TACT_TIME_OSP c WITH(NOLOCK)
+						JOIN SCM_MST_LINE_OSP LS WITH(NOLOCK) ON LS.DIVISION_ID=C.DIVISION_ID AND LS.SCM_SITE_ID=C.PLANT_SITE_ID AND LS.LINE_ID=C.LINE_ID AND LS.VALID_YN='Y'
+						 WHERE 1=1
+						   AND ( ( @p_division_id IS NULL OR  @p_division_id = '') OR c.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+						    --and c.DIVISION_ID = @p_division_id
+						   AND c.ITEM_ID = t.item_id
+						   AND c.VALID_YN ='Y'
+						   AND c.PLANT_SITE_ID = s.scm_site_id
+						 GROUP BY c.PLANT_SITE_ID, c.item_id
+			 ),0) OUT_TACT_CNT
+			 , ISNULL(S.OSP_YN,'N') AS OSP_YN
+			 , ISNULL(S.ATTRIBUTE1,'N') AS ATTRIBUTE1
+		FROM scm_mst_site_item_priority t (NOLOCK)
+		--JOIN scm_mst_site s (NOLOCK) ON t.division_id = s.division_id and t.PLANT_SITE_ID = s.scm_site_id
+		JOIN scm_mst_site s (NOLOCK) ON ( (t.division_id = s.division_id and s.OPERATION_GROUP!='E') OR (s.OPERATION_GROUP='E') )
+									and t.PLANT_SITE_ID = s.scm_site_id
+		JOIN SCM_ADM_LOOKUP_MASTER A WITH(NOLOCK) ON A.LOOKUP_TYPE='OPERATION_GROUP' AND A.VALID_YN='Y'
+		JOIN SCM_ADM_LOOKUP_MASTER_DETAIL B WITH(NOLOCK) 
+			ON B.LOOKUP_TYPE=A.LOOKUP_TYPE 
+			AND B.VALID_YN='Y' 
+			AND B.SEGMENT1=s.OPERATION_GROUP-- 198
+		WHERE s.site_type     = 'PLANT'
+			AND ( ( @p_division_id IS NULL OR  @p_division_id = '') OR T.division_id IN (SELECT token FROM dbo.String_Split(@p_division_id  ,',')) )
+			AND ( ( @p_plant_site IS NULL OR  @p_plant_site = '') OR T.PLANT_SITE_ID IN (SELECT token FROM dbo.String_Split(@p_plant_site  ,',')) )
+			AND ( ( @p_item_id IS NULL OR  @p_item_id = '') OR t.item_id  LIKE '%' + @p_item_id + '%' )
+			AND ( ( @p_operation_group IS NULL OR  @p_operation_group = ''   ) OR s.OPERATION_GROUP  IN (SELECT token FROM dbo.String_Split(@p_operation_group  ,',')) )
+			AND ( ( @p_valid_flag IS NULL OR  @p_valid_flag = ''    ) OR t.valid_yn = @p_valid_flag )
+			--ORDER BY SORT_ORDER, division_id, item_id, from_yyyymmdd ,priority, valid_yn desc, to_yyyymmdd
+	) A
+		ORDER BY SORT_ORDER, division_id, item_id, from_yyyymmdd ,priority, valid_yn desc, to_yyyymmdd
+
+
+	--전체조회
+	SELECT 
+		CONVERT(NVARCHAR(MAX), t.priority_seq) AS priority_seq
+	   ,t.division_id
+       ,ISNULL(t.project_code,'-') project_code
+	   ,t.item_id
+	   ,ISNULL(t.SALES_SITE_ID,'-') AS scm_site_id
+	   ,T.PLANT_SITE_ID 
+	   ,t.priority
+	   ,t.valid_yn
+	   ,t.valid_yn as org_valid_yn
+	   ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,t.from_yyyymmdd,112),121) AS from_yyyymmdd 
+	   ,CONVERT(NVARCHAR(10),CONVERT(DATETIME,t.to_yyyymmdd,112)  ,121) AS to_yyyymmdd 
+	   --,CONVERT(NVARCHAR(10),dbo.fn_char_to_date(t.from_yyyymmdd),121) AS from_yyyymmdd 
+	   --,CONVERT(NVARCHAR(10),dbo.fn_char_to_date(t.to_yyyymmdd)  ,121) AS to_yyyymmdd 
+	   ,t.created_by
+	   ,t.creation_date
+	   ,t.last_updated_by
+	   ,t.last_update_date
+	   ,s.OPERATION_GROUP
+	   ,t.from_yyyymmdd AS org_from_yyyymmdd
+	   ,t.to_yyyymmdd AS org_to_yyyymmdd
+	   ,t.from_yyyymmdd + t.to_yyyymmdd AS merge_date
+	   ,'' as is_pass_n1
+	   ,'' as is_pass_n2
+	   ,'' as is_pass_n3
+	   ,'' as is_pass_n4
+	   ,'' as is_pass_n5
+	   ,'' as is_pass_n6
+	   ,'' as is_pass_n7
+	   , '-' ACTION_FLAG_DIV
+	   , 0 ROW_COLOR_INDEX
+	FROM scm_mst_site_item_priority t (NOLOCK)
+	--JOIN scm_mst_site s (NOLOCK) ON t.division_id = s.division_id and t.PLANT_SITE_ID = s.scm_site_id
+	JOIN scm_mst_site s (NOLOCK) ON ( (t.division_id = s.division_id and s.OPERATION_GROUP!='E') OR (s.OPERATION_GROUP='E') )
+								and t.PLANT_SITE_ID = s.scm_site_id
+   WHERE s.site_type     = 'PLANT'
+	 --AND t.division_id   = @p_division_id   -- '40'
+	 AND ( ( @p_division_id   IS NULL OR  @p_division_id = ''   ) OR t.division_id      IN (SELECT token FROM dbo.String_Split("

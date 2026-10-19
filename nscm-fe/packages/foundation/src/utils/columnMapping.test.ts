@@ -2,7 +2,7 @@ import { DataType } from '@mescius/wijmo';
 import { CellRange, FlexGrid, type DataMap } from '@mescius/wijmo.grid';
 import { describe, expect, it } from 'vitest';
 
-import { CELL_CONTROL_TYPE } from '@foundation/constants';
+import { CELL_CONTROL_TYPE, CRUD_TYPE } from '@foundation/constants';
 import type {
   ComboResponse,
   FlexGridColumnConfig,
@@ -11,9 +11,12 @@ import type {
 
 import {
   findStaleComboCells,
+  findStaleRowParamComboCells,
   normalizeDynamicColumns,
   hasRequiredMark,
   mapRawColumnsToWijmoColumns,
+  rowParamKey,
+  rowParamValues,
   stripRequiredMark,
 } from './columnMapping';
 
@@ -217,6 +220,46 @@ describe('동적 컬럼 숫자 dataType 보정', () => {
   });
 });
 
+// 관리자 메타(SCM_MST_SHEET_COLUMNS.DATA_MAX_LENGTH)로 입력 글자수를 제한하는 경로 —
+//   AS-IS SpdSheet MaxLength 이식. PRIORITY(DATA_MAX_LENGTH=2)처럼 화면 코드가 아니라 메타로
+//   "N자까지만 입력" 을 건다. Wijmo Column.maxLength 로 배선되어야 편집기가 실제로 막는다.
+describe('입력 최대 길이 (DATA_MAX_LENGTH -> Wijmo maxLength)', () => {
+  it('dataMaxLength 를 leaf 컬럼 maxLength 로 싣는다', () => {
+    const [mapped] = mapRawColumnsToWijmoColumns([col({ colNm: 'PRIORITY', dataMaxLength: 2 })]);
+
+    expect(mapped.maxLength).toBe(2);
+  });
+
+  it('dataMaxLength 가 없으면 maxLength 를 걸지 않는다 (무제한)', () => {
+    const [mapped] = mapRawColumnsToWijmoColumns([col({ colNm: 'ITEM_ID' })]);
+
+    expect(mapped.maxLength).toBeUndefined();
+  });
+
+  it('다단 헤더 leaf 에도 실린다', () => {
+    const [group] = mapRawColumnsToWijmoColumns([
+      col({ colNm: 'PRIORITY', sClsLblNm: 'Plan', dataMaxLength: 2 }),
+    ]);
+
+    expect(group.columns?.[0].maxLength).toBe(2);
+  });
+
+  // 증상 회귀 — 실제 FlexGrid Column 에 maxLength 가 실제로 반영되는지 확인한다.
+  //   (config 필드만 보면 Wijmo 가 그 프로퍼티명을 안 읽을 때 놓친다.)
+  it('실제 Wijmo Column.maxLength 로 반영된다', () => {
+    const columns = mapRawColumnsToWijmoColumns([col({ colNm: 'PRIORITY', dataMaxLength: 2 })]);
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const grid = new FlexGrid(host, {
+      autoGenerateColumns: false,
+      columnGroups: columns as never,
+      itemsSource: [{ PRIORITY: 1 }],
+    });
+
+    expect(grid.columns[0].maxLength).toBe(2);
+  });
+});
+
 describe('셀 콤보 행 단위 필터 (attribute2)', () => {
   // SalesSite 콤보 실측 형태 — 좁힘 기준 컬럼을 결과로도 내려준다.
   const SITES: ComboResponse[] = [
@@ -390,6 +433,135 @@ describe('상위 콤보 변경 시 후보 밖이 된 하위 셀 (findStaleComboC
   });
 });
 
+describe('재조회형 상위 콤보 변경 시 후보 밖 하위 셀 (findStaleRowParamComboCells)', () => {
+  const SITE = 'SCM_SITE_ID';
+  // DMF0007 Sales Site — PARAM10='D' 재조회형. PARAM2 오른쪽은 SQL 바인드명이다.
+  const COLUMNS: RawFlexGridColumnConfig[] = [
+    col({
+      colNm: SITE,
+      cellCtrlObjTpCd: CELL_CONTROL_TYPE.COMBO,
+      cellCboDataTp: 'SalesSite',
+      attribute10: 'D',
+      attribute2: 'DIVISION_ID:divisionId,END_CUSTOMER:endCustomer',
+    }),
+  ];
+  const bindings = { DIVISION_ID: 'divisionId', END_CUSTOMER: 'endCustomer' };
+  const keyOf = (row: WijmoRowItem) => rowParamKey(bindings, row);
+
+  // End Customer C2 로 재조회한 Sales Site 후보 = S2 만.
+  const rowC2: WijmoRowItem = { DIVISION_ID: '40', END_CUSTOMER: 'C2', [SITE]: 'S1' };
+  const byBinding = {
+    [SITE]: { [keyOf(rowC2)]: [{ CODE: 'S2', NAME: 'Site 2' }] as ComboResponse[] },
+  };
+
+  it('End Customer 를 바꿔 Sales Site 값이 새 후보 밖이면 stale 이다', () => {
+    const { stale, awaiting } = findStaleRowParamComboCells(
+      COLUMNS,
+      byBinding,
+      {},
+      rowC2,
+      'END_CUSTOMER'
+    );
+    expect(stale).toEqual([{ binding: SITE, previousValue: 'S1' }]);
+    expect(awaiting).toEqual([]);
+  });
+
+  it('값이 새 후보에 있으면 그대로 둔다', () => {
+    const rowValid: WijmoRowItem = { DIVISION_ID: '40', END_CUSTOMER: 'C2', [SITE]: 'S2' };
+    const map = {
+      [SITE]: { [keyOf(rowValid)]: [{ CODE: 'S2', NAME: 'Site 2' }] as ComboResponse[] },
+    };
+    expect(
+      findStaleRowParamComboCells(COLUMNS, map, {}, rowValid, 'END_CUSTOMER').stale
+    ).toEqual([]);
+  });
+
+  it('재조회 미도착이면 비우지 않고 awaiting 으로 미룬다', () => {
+    const { stale, awaiting } = findStaleRowParamComboCells(COLUMNS, {}, {}, rowC2, 'END_CUSTOMER');
+    expect(stale).toEqual([]);
+    expect(awaiting).toEqual([SITE]);
+  });
+
+  it('도착한 0건은 stale 이다 — 미도착(undefined)과 구분한다', () => {
+    const map = { [SITE]: { [keyOf(rowC2)]: [] as ComboResponse[] } };
+    const { stale, awaiting } = findStaleRowParamComboCells(COLUMNS, map, {}, rowC2, 'END_CUSTOMER');
+    expect(stale).toEqual([{ binding: SITE, previousValue: 'S1' }]);
+    expect(awaiting).toEqual([]);
+  });
+
+  it('하위가 비어 있으면 대상이 아니다', () => {
+    const row: WijmoRowItem = { DIVISION_ID: '40', END_CUSTOMER: 'C2', [SITE]: '' };
+    expect(findStaleRowParamComboCells(COLUMNS, byBinding, {}, row, 'END_CUSTOMER').stale).toEqual(
+      []
+    );
+  });
+
+  it('바뀐 셀에 종속되지 않은 컬럼은 대상이 아니다', () => {
+    const { stale, awaiting } = findStaleRowParamComboCells(
+      COLUMNS,
+      byBinding,
+      {},
+      rowC2,
+      'DEPT_ID'
+    );
+    expect(stale).toEqual([]);
+    expect(awaiting).toEqual([]);
+  });
+
+  it('자기 자신은 비우지 않는다', () => {
+    expect(findStaleRowParamComboCells(COLUMNS, byBinding, {}, rowC2, SITE).stale).toEqual([]);
+  });
+
+  it('필터형(PARAM10≠D) 콤보는 대상이 아니다 — findStaleComboCells 몫이다', () => {
+    const filterCols = [
+      col({
+        colNm: SITE,
+        cellCtrlObjTpCd: CELL_CONTROL_TYPE.COMBO,
+        cellCboDataTp: 'SalesSite',
+        attribute2: 'END_CUSTOMER:END_CUSTOMER',
+      }),
+    ];
+    const { stale, awaiting } = findStaleRowParamComboCells(
+      filterCols,
+      byBinding,
+      {},
+      rowC2,
+      'END_CUSTOMER'
+    );
+    expect(stale).toEqual([]);
+    expect(awaiting).toEqual([]);
+  });
+
+  it('신규행은 PARAM9 insert 버킷을 기준으로 판정한다', () => {
+    const insertCols = [
+      col({
+        colNm: SITE,
+        cellCtrlObjTpCd: CELL_CONTROL_TYPE.COMBO,
+        cellCboDataTp: 'SalesSite',
+        attribute9: 'SalesSiteInsert',
+        attribute10: 'D',
+        attribute2: 'DIVISION_ID:divisionId,END_CUSTOMER:endCustomer',
+      }),
+    ];
+    const insertRow: WijmoRowItem = {
+      CRUD_TYPE: CRUD_TYPE.INSERT,
+      DIVISION_ID: '40',
+      END_CUSTOMER: 'C2',
+      [SITE]: 'S1',
+    };
+    // 기본 버킷엔 S1 이 있어도, 신규행은 insert 버킷(S9 만)을 봐야 하므로 S1 은 stale 이다.
+    const base = {
+      [SITE]: { [keyOf(insertRow)]: [{ CODE: 'S1', NAME: 'Site 1' }] as ComboResponse[] },
+    };
+    const insert = {
+      [SITE]: { [keyOf(insertRow)]: [{ CODE: 'S9', NAME: 'Site 9' }] as ComboResponse[] },
+    };
+    expect(
+      findStaleRowParamComboCells(insertCols, base, insert, insertRow, 'END_CUSTOMER').stale
+    ).toEqual([{ binding: SITE, previousValue: 'S1' }]);
+  });
+});
+
 // 헤더 클릭 정렬(dataGridUtils.setSortableColumnHeaderClick)이 allowSorting 을 스위치로 읽으므로,
 //   여기서 true 가 새어 나가면 F3 없이도 헤더 클릭만으로 정렬이 걸린다.
 describe('정렬 스위치 기본값 (헤더 클릭 정렬 차단 전제)', () => {
@@ -486,5 +658,130 @@ describe('숫자 전용 컬럼 (Cell object = FPNumber)', () => {
 
     expect(ok).toBe(true);
     expect(items[0].YYYY).toBe('test');
+  });
+});
+
+// 텍스트 셀(Cell object = FPText / FPTextBox)은 문자열로 못박는다 — SCP0005 ROUTE_ID 증상.
+//   원본 컬럼이 Oracle NUMBER 라 값이 숫자로 내려오면, dataType 을 비워 둘 때 Wijmo 가 컬럼을
+//   Number 로 추론해(items[0]) 텍스트 지정에도 숫자로 렌더된다. dataType=String 으로 차단한다.
+describe('텍스트 셀 컬럼 (Cell object = FPText / FPTextBox)', () => {
+  const routeMeta = (ctrlType: CELL_CONTROL_TYPE): RawFlexGridColumnConfig[] => [
+    col({ colNm: 'ROUTE_ID', colLblNm: 'Route Id', cellCtrlObjTpCd: ctrlType }),
+  ];
+
+  it('FPText 메타는 컬럼 dataType 을 String 으로 만든다', () => {
+    const [column] = mapRawColumnsToWijmoColumns(routeMeta(CELL_CONTROL_TYPE.TEXT));
+
+    expect(column.dataType).toBe(DataType.String);
+  });
+
+  it('FPTextBox 메타도 String 으로 만든다', () => {
+    const [column] = mapRawColumnsToWijmoColumns(routeMeta(CELL_CONTROL_TYPE.TEXT_BOX));
+
+    expect(column.dataType).toBe(DataType.String);
+  });
+
+  it('원본이 숫자여도 컬럼 타입은 String 으로 고정된다 (숫자 추론 차단)', () => {
+    const host = document.createElement('div');
+    document.body.appendChild(host);
+    const grid = new FlexGrid(host, {
+      autoGenerateColumns: false,
+      columnGroups: mapRawColumnsToWijmoColumns(routeMeta(CELL_CONTROL_TYPE.TEXT_BOX)) as never,
+      itemsSource: [{ ROUTE_ID: 61386 }] as WijmoRowItem[],
+    });
+
+    expect(grid.columns[0].dataType).toBe(DataType.String);
+  });
+});
+
+/**
+ * 신규행 전용 콤보 (컬럼 메타 PARAM9) — 2026-08-31 사용자 확정.
+ *
+ * 신규행(CRUD_TYPE='I')만 PARAM9 콤보를 보고, 조회로 내려온 행은 종전대로 Cell Combo Data Type
+ * 을 본다. 방식(필터/재조회)은 양쪽 다 PARAM10 을 따르고 PARAM2 도 공유한다.
+ * PARAM9 가 비면 종전과 완전히 같아야 한다.
+ */
+describe('신규행 전용 콤보 (PARAM9)', () => {
+  const BASE = [{ CODE: 'B1', NAME: '기존1' }] as unknown as ComboResponse[];
+  const INSERT = [{ CODE: 'N1', NAME: '신규1' }] as unknown as ComboResponse[];
+
+  const leafOf = (extra: Partial<RawFlexGridColumnConfig>) =>
+    mapRawColumnsToWijmoColumns([
+      col({ colNm: 'SCM_SITE_ID', cellCboDataTp: 'Base', dataMap: BASE, ...extra }),
+    ])[0];
+
+  it('PARAM9 가 비면 종전과 같다 - 신규행도 기본 콤보를 본다', () => {
+    const leaf = leafOf({});
+    expect((leaf.dataMap as DataMap).getDisplayValues({ CRUD_TYPE: 'I' })).toEqual(['기존1']);
+  });
+
+  it('신규행은 PARAM9 콤보 후보만 본다', () => {
+    const leaf = leafOf({ attribute9: 'InsertCombo', insertDataMap: INSERT });
+    expect((leaf.dataMap as DataMap).getDisplayValues({ CRUD_TYPE: 'I' })).toEqual(['신규1']);
+  });
+
+  it('조회로 내려온 행은 기본 콤보 후보만 본다', () => {
+    const leaf = leafOf({ attribute9: 'InsertCombo', insertDataMap: INSERT });
+    expect((leaf.dataMap as DataMap).getDisplayValues({ CRUD_TYPE: 'M' })).toEqual(['기존1']);
+    expect((leaf.dataMap as DataMap).getDisplayValues({})).toEqual(['기존1']);
+  });
+
+  it('색인에는 두 콤보가 다 들어간다 - 라벨과 getKeyValue 가 양쪽 다 살아야 한다', () => {
+    const leaf = leafOf({ attribute9: 'InsertCombo', insertDataMap: INSERT });
+    const map = leaf.dataMap as DataMap;
+    expect(map.getDisplayValue('B1')).toBe('기존1');
+    expect(map.getDisplayValue('N1')).toBe('신규1');
+    expect(map.getKeyValue('신규1')).toBe('N1');
+  });
+
+  it('PARAM2 는 두 콤보가 공유한다 - 신규행 후보도 같은 조건으로 좁힌다', () => {
+    const leaf = leafOf({
+      attribute2: 'DIVISION_ID:DIVISION_ID',
+      attribute9: 'InsertCombo',
+      insertDataMap: [
+        { CODE: 'N1', NAME: '신규1', DIVISION_ID: '40' },
+        { CODE: 'N2', NAME: '신규2', DIVISION_ID: '82' },
+      ] as unknown as ComboResponse[],
+    });
+    expect(
+      (leaf.dataMap as DataMap).getDisplayValues({ CRUD_TYPE: 'I', DIVISION_ID: '82' })
+    ).toEqual(['신규2']);
+  });
+});
+
+describe('행 파라미터 콤보 - 바인드 값 접기 (PARAM10=D)', () => {
+  const BINDINGS = {
+    DIVISION_ID: 'divisionId',
+    END_CUSTOMER: 'endCustomer',
+    END_CUSTOMER40: 'endCustomer',
+  };
+
+  it('한 바인드명에 걸린 행 컬럼 중 먼저 채워진 값을 쓴다 - 비40 행', () => {
+    expect(
+      rowParamValues(BINDINGS, { DIVISION_ID: '82', END_CUSTOMER: 'C1', END_CUSTOMER40: '' })
+    ).toEqual({ divisionId: '82', endCustomer: 'C1' });
+  });
+
+  it('앞 컬럼이 비면 뒤 컬럼 값을 쓴다 - 40 행', () => {
+    expect(
+      rowParamValues(BINDINGS, { DIVISION_ID: '40', END_CUSTOMER: '', END_CUSTOMER40: 'C40' })
+    ).toEqual({ divisionId: '40', endCustomer: 'C40' });
+  });
+
+  it('전부 비면 공란을 남긴다 - 키를 빼지 않는다', () => {
+    expect(rowParamValues(BINDINGS, {})).toEqual({ divisionId: '', endCustomer: '' });
+  });
+
+  it('바인드명이 겹치지 않으면 종전과 같다', () => {
+    expect(
+      rowParamValues({ DIVISION_ID: 'divisionId', ITEM_ID: 'itemId' }, {
+        DIVISION_ID: '40',
+        ITEM_ID: 'IT1',
+      })
+    ).toEqual({ divisionId: '40', itemId: 'IT1' });
+  });
+
+  it('바인드명이 Object 프로토타입 키여도 값으로 다룬다', () => {
+    expect(rowParamValues({ A: 'constructor' }, { A: 'V' })).toEqual({ constructor: 'V' });
   });
 });

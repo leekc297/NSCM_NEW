@@ -27,6 +27,11 @@ interface CustomerFcstUploadState {
 
 interface CustomerFcstUploadAction {
   reset: () => void;
+  /**
+   * F6 로 저장한 조회조건(SCM_ADM_USER_MNU_SRCH_COND_M)을 탭 진입 시 1회 복원한다.
+   * initialized 가드 — F10(초기화)은 MotherStore 가 initialized 를 보존하므로 재복원되지 않는다.
+   */
+  restoreSearchConditions: () => Promise<void>;
   setOpenSearchArea: (open?: boolean) => void;
   setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
   setFilters: () => void;
@@ -71,12 +76,85 @@ const initCustomerFcstUploadState: CustomerFcstUploadState = {
   dayRangeApplied: false,
 };
 
+/**
+ * F6 저장 조회조건 역파싱 키 분류.
+ *
+ * 저장(GridAction.personalizeCondition)은 모든 값을 문자열로 coerce 한다(배열=콤마 join /
+ * 불리언=String). 이 화면 SearchParamProps 는 현재 전부 문자열(멀티 콤보도 콤마 문자열)이라
+ * 실제로는 두 집합이 비지만, 조회조건에 배열/불리언 필드가 추가돼도 자동으로 따라오게
+ * 초기값의 실제 타입에서 파생해 둔다.
+ */
+const initSearchParams = initCustomerFcstUploadState.searchParams;
+const ARRAY_KEYS = new Set<string>(
+  Object.entries(initSearchParams)
+    .filter(([, v]) => Array.isArray(v))
+    .map(([k]) => k)
+);
+const BOOL_KEYS = new Set<string>(
+  Object.entries(initSearchParams)
+    .filter(([, v]) => typeof v === 'boolean')
+    .map(([k]) => k)
+);
+// 열거형(Bucket)은 유효값만 채택 — 구버전 저장값/오염이 들어오면 SP 가 빈 결과를 돌려준다.
+const BUCKET_VALUES = new Set<string>(Object.values(BUCKET_TYPE));
+// 저장 포맷 = yyyymmdd 8자리. 다른 포맷이면 Period 검증(validateFind)이 통과하지 못한다.
+const isYyyymmdd = (v: unknown): v is string => typeof v === 'string' && /^\d{8}$/.test(v);
+
 export const useCustomerFcstUploadStore = createPersistedStoreWithTab<
   CustomerFcstUploadState & CustomerFcstUploadAction
 >(
   (set, get) => ({
     ...initCustomerFcstUploadState,
     reset: () => set(initCustomerFcstUploadState),
+
+    // F6 저장 조회조건 복원 — 탭 수명 내 1회(initialized 가드). 저장조건 없음/조회 실패는
+    //   기본값 유지(화면 차단 금지, console 금지 룰). F10(Reset Condition)은 SubTitle 공통이
+    //   DB 삭제 + MotherStore.resetSearchCondition 으로 처리하는데, 그 쪽이 initialized 를 보존하므로
+    //   초기화 직후 이 함수가 다시 복원해 버리는 일은 없다.
+    //   주의: initialized 는 fetchStaticColumns 도 세운다. 마운트 effect 가 이 함수를 먼저
+    //   await 하므로 순서 경쟁은 없다 — 호출 순서를 바꾸면 복원이 통째로 건너뛰어진다.
+    restoreSearchConditions: async () => {
+      if (get().initialized) return;
+      set(state => {
+        state.initialized = true; // 먼저 세운다 — 마운트 중복 호출/재마운트 재복원 방지.
+      });
+      try {
+        const res = await apiClient.get<{ paramNm: string; paramCtn: string }[]>(
+          `/admin/menu/${MENU_ID}/search-conditions`
+        );
+        const rows = res.data.result ?? [];
+        if (rows.length === 0) return;
+
+        const patch: Record<string, unknown> = {};
+        for (const { paramNm, paramCtn } of rows) {
+          // 현재 SearchParamProps 에 없는 키(구버전 잔재)는 버린다 — setFilters 가 조회조건을
+          //   SP payload 로 옮겨 담으므로 모르는 필드가 섞이면 그대로 새어 나간다.
+          if (!(paramNm in initSearchParams)) continue;
+          const val = paramCtn ?? '';
+          if (ARRAY_KEYS.has(paramNm)) patch[paramNm] = val ? val.split(',').filter(Boolean) : [];
+          else if (BOOL_KEYS.has(paramNm)) patch[paramNm] = val === 'true';
+          else patch[paramNm] = val;
+        }
+        if (typeof patch.bucket === 'string' && !BUCKET_VALUES.has(patch.bucket))
+          delete patch.bucket;
+        if (!isYyyymmdd(patch.startYyyymmdd)) delete patch.startYyyymmdd;
+        if (!isYyyymmdd(patch.endYyyymmdd)) delete patch.endYyyymmdd;
+
+        // 저장된 Period 를 복원했으면 PR_GET_DAY_RANGE 기본 구간이 덮지 못하게 잠근다.
+        //   (dayRange 응답은 비동기라 복원보다 늦게 도착할 수 있다.)
+        const periodRestored = patch.startYyyymmdd !== undefined || patch.endYyyymmdd !== undefined;
+
+        set(state => {
+          state.searchParams = {
+            ...state.searchParams,
+            ...(patch as Partial<SearchParamProps>),
+          };
+          if (periodRestored) state.dayRangeApplied = true;
+        });
+      } catch {
+        // 저장조건 미존재/조회 실패 시 기본값 유지 (console 금지 룰)
+      }
+    },
     setOpenSearchArea: open => {
       set(state => {
         state.isOpenSearchArea = open ?? !state.isOpenSearchArea;
@@ -148,7 +226,7 @@ export const useCustomerFcstUploadStore = createPersistedStoreWithTab<
           state.initialized = true;
         });
       } catch {
-        // BE 메타 미응답 시 silent fallback — MAIN_COLUMNS 하드코딩 유지 (console 금지 룰)
+        // BE 메타 미응답 시 silent — staticColumn 은 빈 배열로 남는다 (console 금지 룰)
       }
     },
 

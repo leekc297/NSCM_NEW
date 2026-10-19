@@ -1,0 +1,1108 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0051_GET_NEW_INFO","826538078","1","
+/*
+ * Program ID   : SCP0051_GET_NEW_INFO
+ * Description  : 
+ * Program History
+ *  @PARAM1 = DIVISION, @PARAM2 = OPERATION_GROUP, @PARAM3 = Plan Date, @PARAM4 = Plan Type, @PARAM5 = Seq
+================================================================================
+   Date       In Charge      Description
+================================================================================
+ 2022/11/10   lwy           PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - Initial Release
+                            - 개체참조 오류 지속 발생으로 sp 생성
+ 2024.01.25   vadabi3       NERP - 특정 Company 별도 처리 개선
+ 2024.06.09	  vadabi5	    NERP) QA, 개발 DB 적용
+ ----------------------------------------------------------------------------------------------------
+ exec NERP_SCP0051_GET_NEW_INFO
+   @code   = ''
+ , @param1 = ''
+ , @param2 = ''
+ , @param3 = ''
+ , @param4 = ''
+ , @param5 = ''
+ , @param6 = ''
+
+ exec SCP0051_GET_NEW_INFO
+   @code   = ''
+ , @param1 = ''
+ , @param2 = ''
+ , @param3 = ''
+ , @param4 = ''
+ , @param5 = ''
+ , @param6 = ''
+*/
+
+CREATE PROCEDURE [dbo].[SCP0051_GET_NEW_INFO]
+   @code   NVARCHAR(100)
+ , @param1 NVARCHAR(200)
+ , @param2 NVARCHAR(200)
+ , @param3 NVARCHAR(200)
+ , @param4 NVARCHAR(200)
+ , @param5 NVARCHAR(200)
+ , @param6 NVARCHAR(200)
+
+AS
+
+BEGIN
+ SET NOCOUNT ON;
+ SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+ -- NERP 매핑코드
+ DECLARE @v_PLANT_NJ NVARCHAR(8); -- G182
+ SELECT @v_PLANT_NJ = dbo.FN_GET_LOOKUP_VALUE('SCP0051_GET_NEW_INFO','PLANT_ID')
+
+ IF @Code = 'ItemProdPlanLinePopup'
+	BEGIN
+		IF @Param1 = 'EE'
+			BEGIN
+				SELECT a.ITEM_ID CODE
+						,a.ITEM_ID NAME
+						,PLANT_SITE_ID
+						,c.SITE_DESCRIPTION
+						,(select top 1 NICK_NAME from SCM_MST_ITEM_SN b WITH(NOLOCK) where b.ITEM_ID = a.ITEM_ID) NICK_NAME
+						,CASE WHEN C.OSP_YN='Y' THEN (select top 1 ITEM_TYPE from SCM_MST_ITEM_SN b WITH(NOLOCK) where b.ITEM_ID = a.ITEM_ID AND (B.ITEM_TYPE='P' OR B.ITEM_TYPE='H'))
+							  ELSE (select MIN(ISNULL(ITEM_TYPE,'Z')) from SCM_MST_ITEM_SN b WITH(NOLOCK) where b.ITEM_ID = a.ITEM_ID and b.site_id=c.site_id)
+						 END ITEM_TYPE
+						,OPERATION_ID
+						,a.DIVISION_ID
+						,C.OSP_YN
+				FROM(
+						SELECT distinct a.ITEM_ID, a.PLANT_SITE_ID, SUBSTRING(i.FLOW_ID,1,5) OPERATION_ID, a.division_id
+						FROM scm_mst_site_item_priority a (NOLOCK)
+						JOIN SCM_MST_SITE C WITH(NOLOCK) ON C.SCM_SITE_ID=A.PLANT_SITE_ID
+						-- 테이블 변경
+						LEFT JOIN ( SELECT DISTINCT DIVISION_ID, ITEM_ID, PLANT_ID
+									  FROM SCM_MST_TACT_TIME_SN X WITH(NOLOCK)
+									 WHERE ( @Param3='' or @Param3 is null or X.DIVISION_ID=@Param3)
+									   AND X.MONTH >= CONVERT(VARCHAR(6),GETDATE(),112)
+									   AND X.TACT_TIME > 0
+									    ----- 계획 종료 구간 추가
+									   AND MONTH <= (  SELECT MAX(p.horizon_end_date) AS horizon_end_date
+														 FROM dbo.scm_mst_plan p WITH(NOLOCK)
+														WHERE ( @Param3='' or @Param3 is null or P.DIVISION_ID=@Param3)
+														  AND p.plan_id     = (SELECT max(plan_id) FROM dbo.scm_mst_plan p WITH(NOLOCK)
+																				WHERE ( @Param3='' or @Param3 is null or X.DIVISION_ID=@Param3)
+																				  and plan_id < 9999)
+																				)
+													) B
+							 ON A.DIVISION_ID	= B.DIVISION_ID
+							AND A.ITEM_ID		= B.ITEM_ID
+							AND C.PLANT_ID		= B.PLANT_ID
+
+						LEFT OUTER JOIN SCP_MST_FINAL_ITEM i (NOLOCK) ON a.division_id = i.division_id AND a.item_id = i.item_id
+						LEFT JOIN SCP_MST_OUTSOURCING_CAPA P WITH(NOLOCK) ON P.division_id=A.DIVISION_ID AND P.PLANT_SITE_ID=A.PLANT_SITE_ID AND A.ITEM_ID = P.ITEM_ID
+						WHERE a.VALID_YN ='Y'
+						AND (
+									( C.OSP_YN='N' ) OR   -- 테이블 변경
+									(C.OSP_YN='Y')
+								)
+						and ( @Param2='' or @Param2 is null or i.OPERATION_GROUP = @Param2 )
+						AND (
+									(C.OSP_YN='N' AND B.DIVISION_ID IS NOT NULL) OR  -- 테이블 변경
+									(C.OSP_YN='Y' AND P.daily_capa_qty IS NOT NULL)
+								)
+						and ( @Param3='' or @"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0051_GET_NEW_INFO","826538078","2","Param3 is null or a.DIVISION_ID=@Param3)
+				) a
+				LEFT OUTER JOIN SCM_MST_SITE c WITH(NOLOCK) ON A.PLANT_SITE_ID = c.SCM_SITE_ID AND C.VALID_YN = 'Y'
+				WHERE a.DIVISION_ID IN ('40','81','82')
+				order by a.item_id
+			END
+		ELSE IF @Param1 = 'EE_UC'
+			BEGIN
+				SELECT a.ITEM_ID CODE
+						,a.ITEM_ID NAME
+						,PLANT_SITE_ID
+						,c.SITE_DESCRIPTION
+						,(select top 1 NICK_NAME from SCM_MST_ITEM_SN b WITH(NOLOCK) where b.ITEM_ID = a.ITEM_ID) NICK_NAME
+						,CASE WHEN C.OSP_YN='Y' THEN (select top 1 ITEM_TYPE from SCM_MST_ITEM_SN b WITH(NOLOCK) where b.ITEM_ID = a.ITEM_ID AND (B.ITEM_TYPE='P' OR B.ITEM_TYPE='H'))
+							  ELSE (select MIN(ISNULL(ITEM_TYPE,'Z')) from SCM_MST_ITEM_SN b WITH(NOLOCK) where b.ITEM_ID = a.ITEM_ID and b.site_id=c.site_id)
+						 END ITEM_TYPE
+						,OPERATION_ID
+						,a.DIVISION_ID
+						,C.OSP_YN
+				FROM(
+						SELECT distinct a.ITEM_ID, a.PLANT_SITE_ID, SUBSTRING(i.FLOW_ID,1,5) OPERATION_ID, a.division_id
+						FROM scm_mst_site_item_priority a (NOLOCK)
+						JOIN SCM_MST_SITE C WITH(NOLOCK) ON C.SCM_SITE_ID=A.PLANT_SITE_ID
+						-- 테이블 변경
+						LEFT JOIN ( SELECT DISTINCT DIVISION_ID, ITEM_ID, PLANT_ID
+									  FROM SCM_MST_TACT_TIME_SN X WITH(NOLOCK)
+									 WHERE ( @Param3='' or @Param3 is null or X.DIVISION_ID=@Param3)
+									   AND X.MONTH >= CONVERT(VARCHAR(6),GETDATE(),112)
+									   AND X.TACT_TIME > 0
+									    ----- 계획 종료 구간 추가
+									   AND MONTH <= (  SELECT MAX(p.horizon_end_date) AS horizon_end_date
+														 FROM dbo.scm_mst_plan p WITH(NOLOCK)
+														WHERE ( @Param3='' or @Param3 is null or P.DIVISION_ID=@Param3)
+														  AND p.plan_id     = (SELECT max(plan_id) FROM dbo.scm_mst_plan p WITH(NOLOCK)
+																				WHERE ( @Param3='' or @Param3 is null or X.DIVISION_ID=@Param3)
+																				  and plan_id < 9999)
+																				)
+													) B
+							 ON A.DIVISION_ID	= B.DIVISION_ID
+							AND A.ITEM_ID		= B.ITEM_ID
+							AND C.PLANT_ID		= B.PLANT_ID
+
+						LEFT OUTER JOIN SCP_MST_FINAL_ITEM i (NOLOCK) ON a.division_id = i.division_id AND a.item_id = i.item_id
+						LEFT JOIN SCP_MST_OUTSOURCING_CAPA P WITH(NOLOCK) ON P.division_id=A.DIVISION_ID AND P.PLANT_SITE_ID=A.PLANT_SITE_ID AND A.ITEM_ID = P.ITEM_ID
+						WHERE a.VALID_YN ='Y'
+						AND (
+									( C.OSP_YN='N' ) OR   -- 테이블 변경
+									(C.OSP_YN='Y')
+								)
+						and ( @Param2='' or @Param2 is null or i.OPERATION_GROUP = @Param2 )
+						AND (
+									(C.OSP_YN='N' AND B.DIVISION_ID IS NOT NULL) OR  -- 테이블 변경
+									(C.OSP_YN='Y' AND P.daily_capa_qty IS NOT NULL)
+								)
+						and ( @Param3='' or @Param3 is null or a.DIVISION_ID=@Param3)
+				) a
+				LEFT OUTER JOIN SCM_MST_SITE c WITH(NOLOCK) ON A.PLANT_SITE_ID = c.SCM_SITE_ID AND C.VALID_YN = 'Y'
+				WHERE a.DIVISION_ID IN ('81_UC')
+				order by a.item_id
+			END
+		ELSE
+			BEGIN
+					SELECT a.ITEM_ID CODE
+							,a.ITEM_ID NAME
+							,PLANT_SITE_ID
+							,c.SITE_DESCRIPTION
+							,(select top 1 NICK_NAME from SCM_MST_ITEM_SN b WITH(NOLOCK) where b.ITEM_ID = a.ITEM_ID) NICK_NAME
+							,CASE WHEN C.OSP_YN='Y' THEN (select top 1 ITEM_TYPE from SCM_MST_ITEM_SN b WITH(NOLOCK) where b.ITEM_ID = a.ITEM_ID AND (B.ITEM_TYPE='P' OR B.ITEM_TYPE='H'))
+								  ELSE (select MIN(ISNULL(ITEM_TYPE,'Z')) from SCM_MST_ITEM_SN b WITH(NOLOCK) where b.ITEM_ID = a.ITEM_ID and b.site_id=c.site_id)
+							 END ITEM_TYPE
+							,OPERATION_ID
+							,a.DIVISION_ID
+							,C.OSP_YN
+					FROM(
+							SELECT distinct a.ITEM_ID, a.PLANT_SITE_ID, SUBSTRING(i.FLOW_ID,1,5) OPERATION_ID, a.DIVISION_ID
+							FROM scm_mst_site_item_priority a (NOLOCK)
+							LEFT OUTER JOIN SCP_MST_FINAL_ITEM i (NOLOCK) ON a.division_id = i.division_id AND a.item_id = i.item_id
+							JOIN SCM_MST_SITE C WITH(NOLOCK) ON C.SCM_SITE_ID=A.PLANT_SITE_ID
+							-- 테이블 변경
+							LEFT JOIN ( SELECT DISTINCT DIVISION_ID, ITEM_ID, PLANT_ID
+									  FROM SCM_MST_TACT_TIME_SN X WITH"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0051_GET_NEW_INFO","826538078","3","(NOLOCK)
+									 WHERE X.DIVISION_ID  = @Param1
+									   AND X.MONTH >= CONVERT(VARCHAR(6),GETDATE(),112)
+									   AND X.TACT_TIME > 0
+									     ----- 계획 종료 구간 추가
+									   AND MONTH <= (  SELECT p.horizon_end_date
+														 FROM dbo.scm_mst_plan p WITH(NOLOCK)
+														WHERE ( @Param1='' or @Param1 is null or P.DIVISION_ID=@Param1)
+														  AND p.plan_id     = (SELECT max(plan_id) FROM dbo.scm_mst_plan p WITH(NOLOCK)
+																				WHERE ( @Param1='' or @Param1 is null or X.DIVISION_ID=@Param1)
+																				  and plan_id < 9999)
+													)
+										) B
+							 ON A.DIVISION_ID	= B.DIVISION_ID
+							AND A.ITEM_ID		= B.ITEM_ID
+							AND C.PLANT_ID		= B.PLANT_ID
+
+							LEFT JOIN SCP_MST_OUTSOURCING_CAPA P WITH(NOLOCK) ON P.division_id=A.DIVISION_ID AND P.PLANT_SITE_ID=A.PLANT_SITE_ID AND A.ITEM_ID = P.ITEM_ID
+							WHERE a.VALID_YN ='Y'
+							AND (
+									( C.OSP_YN='N' ) OR   -- 테이블 변경
+									(C.OSP_YN='Y' AND ISNULL(C.ATTRIBUTE1,'N') IN ('','N'))
+								)
+							AND a.DIVISION_ID = @Param1
+							and ( @Param2='' or @Param2 is null or i.OPERATION_GROUP = @Param2 )
+							AND (
+									(C.OSP_YN='N' AND B.DIVISION_ID IS NOT NULL) OR  -- 테이블 변경
+									(C.OSP_YN='Y' AND P.daily_capa_qty IS NOT NULL AND ISNULL(C.ATTRIBUTE1,'N') IN ('','N'))
+								)
+							
+							-- ESS 외주 Pakcer Line 생산 Target 적용
+							UNION ALL
+							SELECT distinct a.ITEM_ID, a.PLANT_SITE_ID, SUBSTRING(i.FLOW_ID,1,5) OPERATION_ID, a.DIVISION_ID
+							FROM scm_mst_site_item_priority a (NOLOCK)
+							JOIN scp_mst_tact_time_OSP b (NOLOCK) ON a.division_id = b.division_id AND a.item_id = b.item_id AND a.PLANT_SITE_ID = b.PLANT_SITE_ID	AND B.VALID_YN='Y'
+							LEFT OUTER JOIN SCP_MST_FINAL_ITEM i (NOLOCK) ON a.division_id = i.division_id AND a.item_id = i.item_id
+							JOIN SCM_MST_SITE C WITH(NOLOCK) ON C.SCM_SITE_ID=A.PLANT_SITE_ID AND C.OSP_YN='Y' AND ISNULL(C.ATTRIBUTE1,'N')='Y'
+							WHERE a.VALID_YN ='Y'
+							AND a.DIVISION_ID = @Param1
+							AND ( @Param2='' or @Param2 is null or i.OPERATION_GROUP = @Param2 )
+					) a
+					LEFT OUTER JOIN SCM_MST_SITE c WITH(NOLOCK) ON A.PLANT_SITE_ID = c.SCM_SITE_ID AND C.VALID_YN = 'Y'
+					order by a.item_id
+				END
+
+	END
+
+
+
+ ELSE IF @Code = 'LineProdPlanLinePopup'
+	BEGIN
+		IF @Param1 = 'EE'
+			BEGIN
+				SELECT
+				DISTINCT
+						A.LINE_ID						  AS CODE
+					,A.LINE_ID + '   ' + A.LINE_NAME  AS NAME
+				FROM [dbo].SCM_MST_LINE_SN A WITH(NOLOCK)
+				JOIN [dbo].SCM_MST_SITE B WITH(NOLOCK) ON A.COMPANY_ID = B.COMPANY_ID AND A.SITE_ID = B.SITE_ID AND A.PLANT_ID = B.PLANT_ID
+				INNER JOIN  (SELECT DISTINCT b.segment4, b.segment1
+								FROM   scm_adm_lookup_master_detail b WITH(NOLOCK)
+								WHERE  b.lookup_type = 'LOCATION_GROUP_ROUTE'
+								AND    b.valid_yn    = 'Y'
+								AND    b.segment3    = 'Y' -- Capa 세부 공정 여부
+							) f ON a.operation_id = f.segment4 --AND c.operation_group_id = f.segment3 -- operation group id 에 추가된 operation 만보이도록
+				--JOIN scp_mst_tact_time t WITH(NOLOCK) on t.division_id=@Param5 and t.plant_site_id=b.SCM_SITE_ID and t.item_id=@Param6 and t.operation_id=@Param4 and t.line_id=A.LINE_ID
+				 JOIN ( SELECT DISTINCT X.DIVISION_ID, ITEM_ID , PLANT_ID , LINE_ID
+								  FROM SCM_MST_TACT_TIME_SN X WITH(NOLOCK)
+								 WHERE X.DIVISION_ID  = @Param5
+								   AND X.ITEM_ID = @Param6
+								   AND X.OPERATION_ID = @Param4
+								   AND X.MONTH >= CONVERT(VARCHAR(6),GETDATE(),112)
+								   AND X.TACT_TIME > 0
+								   ----- 계획 종료 구간 추가
+								    AND MONTH <= (  SELECT p.horizon_end_date
+													  FROM dbo.scm_mst_plan p WITH(NOLOCK)
+													 WHERE ( @Param5='' or @Param5 is null or P.DIVISION_ID=@Param5)
+													   AND p.plan_id     = (SELECT max(plan_id) FROM dbo.scm_mst_plan p WITH(NOLOCK)
+																			 WHERE ( @Param5='' or @Param5 is null or X.DIVISION_ID=@Param5)
+																			   and plan_id < 9999)
+							"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0051_GET_NEW_INFO","826538078","4","						)
+
+						) T
+				  ON T.LINE_ID = A.LINE_ID
+				 AND T.PLANT_ID = B.PLANT_ID
+				WHERE 1=1
+				AND A.ACTIVE_FLAG ='Y'
+				AND A.DIVISION_ID  IN ('40','81','82')
+				AND A.OPERATION_ID = @Param4
+				AND (@Param2='' OR @Param2 IS NULL OR b.OPERATION_GROUP = @Param2 )
+				AND b.SCM_SITE_ID = @Param3
+				AND (@Param5='' OR @Param5 IS NULL OR A.DIVISION_ID=@Param5)
+			END
+		ELSE IF @Param1 = 'EE_UC'
+			BEGIN
+				SELECT
+				DISTINCT
+						A.LINE_ID						  AS CODE
+					,A.LINE_ID + '   ' + A.LINE_NAME  AS NAME
+				FROM [dbo].SCM_MST_LINE_SN A WITH(NOLOCK)
+				JOIN [dbo].SCM_MST_SITE B WITH(NOLOCK) ON A.COMPANY_ID = B.COMPANY_ID AND A.SITE_ID = B.SITE_ID AND A.PLANT_ID = B.PLANT_ID
+				INNER JOIN  (SELECT DISTINCT b.segment4, b.segment1
+								FROM   scm_adm_lookup_master_detail b WITH(NOLOCK)
+								WHERE  b.lookup_type = 'LOCATION_GROUP_ROUTE'
+								AND    b.valid_yn    = 'Y'
+								AND    b.segment3    = 'Y' -- Capa 세부 공정 여부
+							) f ON a.operation_id = f.segment4 --AND c.operation_group_id = f.segment3 -- operation group id 에 추가된 operation 만보이도록
+				--JOIN scp_mst_tact_time t WITH(NOLOCK) on t.division_id=@Param5 and t.plant_site_id=b.SCM_SITE_ID and t.item_id=@Param6 and t.operation_id=@Param4 and t.line_id=A.LINE_ID
+				 JOIN ( SELECT DISTINCT X.DIVISION_ID, ITEM_ID , PLANT_ID , LINE_ID
+								  FROM SCM_MST_TACT_TIME_SN X WITH(NOLOCK)
+								 WHERE X.DIVISION_ID  = @Param5
+								   AND X.ITEM_ID = @Param6
+								   AND X.OPERATION_ID = @Param4
+								   AND X.MONTH >= CONVERT(VARCHAR(6),GETDATE(),112)
+								   AND X.TACT_TIME > 0
+								   ----- 계획 종료 구간 추가
+								    AND MONTH <= (  SELECT p.horizon_end_date
+													  FROM dbo.scm_mst_plan p WITH(NOLOCK)
+													 WHERE ( @Param5='' or @Param5 is null or P.DIVISION_ID=@Param5)
+													   AND p.plan_id     = (SELECT max(plan_id) FROM dbo.scm_mst_plan p WITH(NOLOCK)
+																			 WHERE ( @Param5='' or @Param5 is null or X.DIVISION_ID=@Param5)
+																			   and plan_id < 9999)
+													)
+
+						) T
+				  ON T.LINE_ID = A.LINE_ID
+				 AND T.PLANT_ID = B.PLANT_ID
+				WHERE 1=1
+				AND A.ACTIVE_FLAG ='Y'
+				AND A.DIVISION_ID  = '81_UC'
+				AND A.OPERATION_ID = @Param4
+				AND (@Param2='' OR @Param2 IS NULL OR b.OPERATION_GROUP = @Param2 )
+				AND b.SCM_SITE_ID = @Param3
+				AND (@Param5='' OR @Param5 IS NULL OR A.DIVISION_ID=@Param5)
+			END
+		ELSE
+			BEGIN
+				SELECT
+				DISTINCT
+						A.LINE_ID						  AS CODE
+					,A.LINE_ID + '   ' + A.LINE_NAME  AS NAME
+				FROM [dbo].SCM_MST_LINE_SN A WITH(NOLOCK)
+				JOIN [dbo].SCM_MST_SITE B WITH(NOLOCK) ON A.COMPANY_ID = B.COMPANY_ID AND A.SITE_ID = B.SITE_ID AND  A.DIVISION_ID = B.DIVISION_ID AND A.PLANT_ID = B.PLANT_ID
+				INNER JOIN  (SELECT DISTINCT b.segment4, b.segment1
+								FROM   scm_adm_lookup_master_detail b WITH(NOLOCK)
+								WHERE  b.lookup_type = 'LOCATION_GROUP_ROUTE'
+								AND    b.valid_yn    = 'Y'
+								AND    b.segment3    = 'Y' -- Capa 세부 공정 여부
+							) f ON a.operation_id = f.segment4 --AND c.operation_group_id = f.segment3 -- operation group id 에 추가된 operation 만보이도록
+				--JOIN scp_mst_tact_time t WITH(NOLOCK) on t.division_id=@Param1 and t.plant_site_id=b.SCM_SITE_ID and t.item_id=@Param6 and t.operation_id=@Param4 and t.line_id=A.LINE_ID
+				 JOIN ( SELECT DISTINCT X.DIVISION_ID, ITEM_ID , PLANT_ID , LINE_ID
+								  FROM SCM_MST_TACT_TIME_SN X WITH(NOLOCK)
+								 WHERE X.DIVISION_ID  = @Param1
+								   AND X.ITEM_ID = @Param6
+								   AND X.OPERATION_ID = @Param4
+								   AND X.MONTH >= CONVERT(VARCHAR(6),GETDATE(),112)
+								   AND X.TACT_TIME > 0
+								    ----- 계획 종료 구간 추가
+								    AND MONTH <= (  SELECT p.horizon_end_date
+													  FROM dbo.scm_mst_plan p WITH(NOLOCK)
+													 WHERE ( @Param1='' or @Param1 is null or P.DIVISION_ID=@Param1)
+													   AND p.plan_id     = (SELECT max(plan_id) FROM dbo.scm_mst_plan p WITH(NOLOCK)
+														"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0051_GET_NEW_INFO","826538078","5","					 WHERE ( @Param1='' or @Param1 is null or X.DIVISION_ID=@Param1)
+																			   and plan_id < 9999)
+													)
+						) T
+				  ON T.LINE_ID = A.LINE_ID
+				 AND T.PLANT_ID = B.PLANT_ID
+				WHERE 1=1
+				AND A.ACTIVE_FLAG ='Y'
+				AND A.DIVISION_ID  = @Param1
+				AND A.OPERATION_ID = @Param4
+				AND (@Param2='' OR @Param2 IS NULL OR b.OPERATION_GROUP = @Param2)
+				AND b.SCM_SITE_ID = @Param3
+				--ESS 외주 Pakcer Line 생산 Target 적용
+				UNION
+				SELECT
+				DISTINCT
+					A.LINE_ID						  AS CODE
+					,A.LINE_ID + '   ' + A.LINE_NAME  AS NAME
+				FROM SCM_MST_LINE_OSP A WITH(NOLOCK)
+				JOIN SCM_MST_SITE S WITH(NOLOCK) ON S.DIVISION_ID=A.DIVISION_ID
+												 AND S.SCM_SITE_ID=A.SCM_SITE_ID
+												 AND S.OSP_YN='Y'
+												 AND ISNULL(S.ATTRIBUTE1,'N')='Y'
+				JOIN SCP_MST_TACT_TIME_OSP B WITH(NOLOCK) ON A.DIVISION_ID=B.DIVISION_ID
+														  AND A.SCM_SITE_ID=B.PLANT_SITE_ID
+														  AND B.ITEM_ID=@Param6
+														  AND B.VALID_YN='Y'
+														  AND A.LINE_ID=B.LINE_ID
+				WHERE A.DIVISION_ID=@Param1
+				AND A.SCM_SITE_ID=@Param3
+				AND A.VALID_YN='Y'
+				UNION
+				SELECT '-' AS CODE, '-' AS NAME
+				FROM SCM_MST_SITE S WITH(NOLOCK)
+				WHERE S.DIVISION_ID=@Param1
+				AND S.SCM_SITE_ID=@Param3
+				AND S.VALID_YN='Y'
+				AND S.OSP_YN='Y'
+				AND ISNULL(S.ATTRIBUTE1,'N') IN ('','N')
+
+			   -- 2022.07.22 Begin
+			   UNION
+			   
+			   SELECT
+				DISTINCT
+						A.LINE_ID						  AS CODE
+					,A.LINE_ID + '   ' + A.LINE_NAME  AS NAME
+				FROM [dbo].SCM_MST_LINE_SN A WITH(NOLOCK)
+				JOIN [dbo].SCM_MST_SITE B WITH(NOLOCK) ON A.COMPANY_ID = B.COMPANY_ID AND A.SITE_ID = B.SITE_ID AND  A.DIVISION_ID = B.DIVISION_ID AND A.PLANT_ID = B.PLANT_ID
+				
+				 JOIN ( SELECT DISTINCT X.DIVISION_ID, X.ITEM_ID , X.PLANT_ID , X.LINE_ID
+								  FROM SCM_MST_TACT_TIME_SN X WITH(NOLOCK)
+								  JOIN dbo.SCM_MST_FINAL_ITEM_V A WITH(NOLOCK)
+									ON X.ITEM_ID = A.ITEM_ID
+								   AND X.DIVISION_ID = A.DIVISION_ID
+								 WHERE X.DIVISION_ID  = @Param1
+								   AND X.ITEM_ID = @Param6
+								   AND X.OPERATION_ID = @Param4
+								   AND X.MONTH >= CONVERT(VARCHAR(6),GETDATE(),112)
+								   AND X.TACT_TIME > 0
+								    ----- 계획 종료 구간 추가
+								    AND MONTH <= (  SELECT p.horizon_end_date
+													  FROM dbo.scm_mst_plan p WITH(NOLOCK)
+													 WHERE ( @Param1='' or @Param1 is null or P.DIVISION_ID=@Param1)
+													   AND p.plan_id     = (SELECT max(plan_id) FROM dbo.scm_mst_plan p WITH(NOLOCK)
+																			 WHERE ( @Param1='' or @Param1 is null or X.DIVISION_ID=@Param1)
+																			   and plan_id < 9999)
+												 )
+						) T
+				  ON T.LINE_ID = A.LINE_ID
+				 AND T.PLANT_ID = B.PLANT_ID
+				WHERE 1=1
+				AND A.ACTIVE_FLAG ='Y'
+				AND A.DIVISION_ID  = @Param1
+				AND A.OPERATION_ID = @Param4
+				AND (@Param2='' OR @Param2 IS NULL OR b.OPERATION_GROUP = @Param2)
+				AND b.SCM_SITE_ID = @Param3
+
+				-- 2022.07.22 End
+
+			END
+	END
+
+ELSE IF @Code = 'LineProdPlanLinePopupAll'
+	BEGIN
+		SELECT
+		DISTINCT
+				A.LINE_ID						  AS CODE
+			,A.LINE_ID + '   ' + A.LINE_NAME  AS NAME
+			--,t.PLANT_SITE_ID
+			,B.SCM_SITE_ID	AS plant_site_id
+			,t.ITEM_ID
+			,t.OPERATION_ID
+			,A.DIVISION_ID
+		FROM [dbo].SCM_MST_LINE_SN A WITH(NOLOCK)
+		JOIN [dbo].SCM_MST_SITE B WITH(NOLOCK) ON A.COMPANY_ID = B.COMPANY_ID AND A.SITE_ID = B.SITE_ID AND A.PLANT_ID = B.PLANT_ID AND A.DIVISION_ID=B.DIVISION_ID
+		INNER HASH JOIN  (SELECT DISTINCT b.segment4, b.segment1
+						FROM   scm_adm_lookup_master_detail b WITH(NOLOCK)
+						WHERE  b.lookup_type = 'LOCATION_GROUP_ROUTE'
+						AND    b.valid_yn    = 'Y'
+						AND    b.segment3    = 'Y' -- Capa 세부 공정 여부
+					) f ON a.operation_id = f.segment4 --AND c.operation_group_id = f.segment3 -- operation group id 에 추가된 operation 만보이도록
+		--JOIN scp_mst_tact_time t WITH(NOLOCK) on t.division_id=A.DIVISION_ID and t.plant_site_id=b.SCM_SITE_ID and t.oper"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0051_GET_NEW_INFO","826538078","6","ation_id=A.OPERATION_ID and t.line_id=A.LINE_ID
+		 JOIN ( SELECT DISTINCT X.DIVISION_ID, ITEM_ID , PLANT_ID , LINE_ID , OPERATION_ID
+				  FROM SCM_MST_TACT_TIME_SN X WITH(NOLOCK)
+				 WHERE X.MONTH >= CONVERT(VARCHAR(6),GETDATE(),112)
+				   AND X.TACT_TIME > 0
+			  ) T
+		   ON T.DIVISION_ID = A.DIVISION_ID AND T.PLANT_ID = B.PLANT_ID AND T.OPERATION_ID = A.OPERATION_ID AND T.LINE_ID=A.LINE_ID
+		WHERE 1=1
+		AND A.ACTIVE_FLAG ='Y'
+		AND  (@Param1 IS NULL OR @Param1='' OR b.OPERATION_GROUP = @Param1 )
+		UNION
+		SELECT
+		DISTINCT
+			A.LINE_ID						  AS CODE
+			,A.LINE_ID + '   ' + A.LINE_NAME  AS NAME
+			,B.PLANT_SITE_ID
+			,B.ITEM_ID
+			,B.OPERATION_ID
+			,A.DIVISION_ID
+		FROM SCM_MST_LINE_OSP A WITH(NOLOCK)
+		JOIN SCM_MST_SITE S WITH(NOLOCK) ON S.DIVISION_ID=A.DIVISION_ID
+											AND S.SCM_SITE_ID=A.SCM_SITE_ID
+											AND S.OSP_YN='Y'
+											AND ISNULL(S.ATTRIBUTE1,'N')='Y'
+		JOIN SCP_MST_TACT_TIME_OSP B WITH(NOLOCK) ON A.DIVISION_ID=B.DIVISION_ID
+													AND A.SCM_SITE_ID=B.PLANT_SITE_ID
+													--AND B.ITEM_ID=@Param6
+													AND B.VALID_YN='Y'
+													AND A.LINE_ID=B.LINE_ID
+		WHERE 1=1--A.DIVISION_ID=@Param1
+		--AND A.SCM_SITE_ID=@Param3
+		AND A.VALID_YN='Y'
+		AND  (@Param1 IS NULL OR @Param1='' OR S.OPERATION_GROUP=@Param1 )
+
+		-- 2022.07.22 Begin
+		UNION
+
+		SELECT
+		DISTINCT
+				A.LINE_ID						  AS CODE
+			   ,A.LINE_ID + '   ' + A.LINE_NAME  AS NAME			
+			   ,B.SCM_SITE_ID	AS plant_site_id
+			   ,t.ITEM_ID
+			   ,t.OPERATION_ID
+			   ,A.DIVISION_ID
+		FROM [dbo].SCM_MST_LINE_SN A WITH(NOLOCK)
+		JOIN [dbo].SCM_MST_SITE B WITH(NOLOCK) ON A.COMPANY_ID = B.COMPANY_ID AND A.SITE_ID = B.SITE_ID AND A.PLANT_ID = B.PLANT_ID AND A.DIVISION_ID=B.DIVISION_ID
+		
+		JOIN ( SELECT DISTINCT X.DIVISION_ID, X.ITEM_ID , X.PLANT_ID , X.LINE_ID , X.OPERATION_ID
+			     FROM SCM_MST_TACT_TIME_SN X WITH(NOLOCK)
+				 JOIN dbo.SCM_MST_FINAL_ITEM_V A WITH(NOLOCK)
+					ON X.ITEM_ID = A.ITEM_ID
+				   AND X.DIVISION_ID = A.DIVISION_ID
+				WHERE X.MONTH >= CONVERT(VARCHAR(6),GETDATE(),112)
+				  AND X.TACT_TIME > 0
+			 ) T
+		   ON T.DIVISION_ID = A.DIVISION_ID AND T.PLANT_ID = B.PLANT_ID AND T.OPERATION_ID = A.OPERATION_ID AND T.LINE_ID=A.LINE_ID
+		WHERE 1=1
+		AND A.ACTIVE_FLAG ='Y'
+		AND  (@Param1 IS NULL OR @Param1='' OR b.OPERATION_GROUP = @Param1 )
+		-- 2022.07.22 End
+
+	END
+
+ ELSE IF (@Code = 'LineProdPlanLine' )
+	 BEGIN
+		SELECT DISTINCT
+				  A.LINE_ID AS CODE
+				, A.LINE_ID + '   ' + A.LINE_NAME AS NAME
+		FROM	SCM_MST_LINE_SN A WITH (NOLOCK)
+				JOIN
+					(
+						SELECT	  SEGMENT2 OPERATION_GROUP
+								, SEGMENT3 SCM_SITE_ID
+								, SEGMENT4 LINE_ID
+								, SEGMENT5 OPERATION_ID
+								, ATTRIBUTE1 ORIGIN_DIVISION_ID
+						FROM	SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK)
+						WHERE	LOOKUP_TYPE = 'EE_PRODUCTION_PLAN'
+							AND SEGMENT1 = 'SCP'
+							AND VALID_YN = 'Y'
+							AND ATTRIBUTE2 = @Param1
+					) C ON
+						((@Param2 IS NULL OR @Param2 = '') OR C.OPERATION_GROUP IN (SELECT token FROM dbo.String_Split(@Param2, ',')))
+					AND ((@Param3 IS NULL OR @Param3 ='') OR C.SCM_SITE_ID IN (SELECT token FROM dbo.String_Split(@Param3, ',')))
+		WHERE	1=1
+			AND A.ACTIVE_FLAG   ='Y'
+			AND A.DIVISION_ID   = C.ORIGIN_DIVISION_ID
+			AND A.LINE_ID       = C.LINE_ID
+			AND A.OPERATION_ID  = C.OPERATION_ID
+		UNION ALL
+		SELECT	  '-'  AS CODE
+				, '-'  AS NAME
+		ORDER BY	NAME
+
+ END
+
+ ELSE IF @Code = 'LineByOperationAddOSP'
+	BEGIN
+		SELECT
+				DISTINCT
+				A.LINE_ID						  AS CODE
+			, A.LINE_ID + '   ' + A.LINE_NAME  AS NAME
+			, A.OPERATION_ID
+			, B.SCM_SITE_ID
+			FROM [dbo].SCM_MST_LINE_SN A WITH(NOLOCK)
+			JOIN [dbo].SCM_MST_SITE B WITH(NOLOCK) ON A.COMPANY_ID = B.COMPANY_ID AND A.SITE_ID = B.SITE_ID AND  A.DIVISION_ID = B.DIVISION_ID AND A.PLANT_ID = B.PLANT_ID
+		INNER JOIN  (SELECT DISTINCT b.segment4, b.segment1
+						FROM scm_adm_lookup_master_detail b WITH(NOLOCK)
+						WHERE b.lookup_type = 'LOCAT"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0051_GET_NEW_INFO","826538078","7","ION_GROUP_ROUTE'
+						AND    b.valid_yn    = 'Y'
+						AND    b.segment3    = 'Y' -- Capa 세부 공정 여부
+					) f ON a.operation_id = f.segment4 --AND c.operation_group_id = f.segment3 -- operation group id 에 추가된 operation 만보이도록
+			WHERE 1=1
+			AND A.ACTIVE_FLAG ='Y'
+			AND ( (@Param1 IS NULL OR @Param1 ='') OR A.DIVISION_ID IN  ( SELECT token FROM dbo.String_Split(@Param1,',')))
+			AND ( (@Param2 IS NULL OR @Param2 ='') OR A.PLANT_ID IN     ( SELECT token FROM dbo.String_Split(SUBSTRING(@Param2,1,4),',')))
+			AND ( (@Param3 IS NULL OR @Param3 ='') OR A.FACTORY_ID IN   ( SELECT token FROM dbo.String_Split(@Param3,',')))
+			AND ( (@Param4 IS NULL OR @Param4 ='') OR A.OPERATION_ID IN ( SELECT token FROM dbo.String_Split(@Param4,',')))
+			AND ( (@Param5 IS NULL OR @Param5 ='') OR B.SCM_SITE_ID IN  ( SELECT token FROM dbo.String_Split(@Param5,',')))
+		UNION
+		SELECT
+				'-'  AS CODE
+				, '-'  AS NAME
+				, '-'  AS OPERATION_ID
+				, '-'  AS SCM_SITE_ID
+		UNION
+		-- 외주
+		SELECT
+				DISTINCT
+				A.LINE_ID						AS CODE
+			, A.LINE_ID + '   ' + A.LINE_NAME  AS NAME
+			, A.OPERATION_ID
+			, B.SCM_SITE_ID
+			FROM [dbo].SCM_MST_LINE_OSP A WITH(NOLOCK)
+			JOIN [dbo].SCM_MST_SITE B WITH(NOLOCK) ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+		WHERE b.ATTRIBUTE1 = 'Y'
+			AND ( (@Param1 IS NULL OR @Param1 ='') OR A.DIVISION_ID  IN ( SELECT token FROM dbo.String_Split(@Param1,',')))
+			AND ( (@Param2 IS NULL OR @Param2 ='') OR B.PLANT_ID     IN ( SELECT token FROM dbo.String_Split(SUBSTRING(@Param2,1,4),',')))
+			AND ( (@Param4 IS NULL OR @Param4 ='') OR A.OPERATION_ID IN ( SELECT token FROM dbo.String_Split(@Param4,',')))
+			AND ( (@Param5 IS NULL OR @Param5 ='') OR B.SCM_SITE_ID  IN ( SELECT token FROM dbo.String_Split(@Param5,',')))
+		
+		-- 2022/08/31 start
+		--ORDER BY NAME		
+		UNION
+		--Isuzu : P5000
+		SELECT
+				  DISTINCT
+				  A.LINE_ID						  AS CODE
+				, A.LINE_ID + '   ' + A.LINE_NAME  AS NAME
+				, A.OPERATION_ID
+				, B.SCM_SITE_ID
+			FROM [dbo].SCM_MST_LINE_SN A WITH(NOLOCK)
+			JOIN [dbo].SCM_MST_SITE B WITH(NOLOCK) ON A.COMPANY_ID = B.COMPANY_ID AND A.SITE_ID = B.SITE_ID AND  A.DIVISION_ID = B.DIVISION_ID AND A.PLANT_ID = B.PLANT_ID
+
+			WHERE 1=1
+			AND A.ACTIVE_FLAG ='Y'
+			AND ( (@Param1 IS NULL OR @Param1 ='') OR A.DIVISION_ID IN  ( SELECT token FROM dbo.String_Split(@Param1,',')))
+			AND ( (@Param2 IS NULL OR @Param2 ='') OR A.PLANT_ID IN     ( SELECT token FROM dbo.String_Split(SUBSTRING(@Param2,1,4),',')))
+			AND ( (@Param3 IS NULL OR @Param3 ='') OR A.FACTORY_ID IN   ( SELECT token FROM dbo.String_Split(@Param3,',')))
+			AND ( (@Param4 IS NULL OR @Param4 ='') OR A.OPERATION_ID IN ( SELECT token FROM dbo.String_Split(@Param4,',')))
+			AND ( (@Param5 IS NULL OR @Param5 ='') OR B.SCM_SITE_ID IN  ( SELECT token FROM dbo.String_Split(@Param5,',')))
+			AND A.PLANT_ID = @v_PLANT_NJ
+			and A.OPERATION_ID = 'P5000'
+
+		ORDER BY NAME
+		-- 2022/08/31 end
+
+	END;
+
+
+
+RETURN;
+
+ --------------
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0051_GET_PRODUCTION_PLAN_TARGET","842538135","1","
+
+/*
+ * Program ID   : SCP0051_GET_PRODUCTION_PLAN_TARGET
+ * Description  : PRODUCTION PLAN TARTGET
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2020/09/24   khj79          [PJ20199555] 공급 대응력 향상을 위한 자재재공 수급 점검 체계 개선 - 최초작성
+ * 2022.05.13   LSC            PJ20216891 Digital SCM 3 Level 가속화를 위한 개선 : GM JV 추가
+ * 2023/04/10   LWY			   PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 이행 - DIVISION_ID 공통화 작업(div_commonization)
+ * 2023/06/17   vadabi3		   PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제 이행 - 활성화코드) 제약조건 추가 (국내 CA)
+*/
+
+CREATE PROCEDURE [dbo].[SCP0051_GET_PRODUCTION_PLAN_TARGET]
+	 @p_division_id			NVARCHAR(20)
+	,@p_scm_site_id			NVARCHAR(MAX)
+	,@p_line_id				NVARCHAR(MAX)
+	,@p_item_id				NVARCHAR(MAX)
+	,@p_from_yyyymmdd		NVARCHAR(MAX)
+	,@p_to_yyyymmdd			NVARCHAR(MAX)
+	,@p_program_id			NVARCHAR(MAX)
+	,@p_sheet_name			NVARCHAR(MAX)
+	,@p_user_id				NVARCHAR(MAX)
+	,@p_nick_name			NVARCHAR(MAX)
+	,@debug_mode			NVARCHAR(1) = 'F'
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	SELECT A.TARGET_ID
+		 , CONVERT(DATETIME,A.PROD_DATE,23) AS PROD_DATE
+		 , A.DIVISION_ID
+		 , A.ORIGIN_DIVISION_ID
+		 , A.ITEM_ID
+		 , FI.NICK_NAME		AS NICK_NAME
+ 		 , A.PLANT_SCM_SITE_ID
+		 , A.LINE_ID
+		 , A.OPERATION_ID
+		 , A.ORDER_TYPE
+		 , A.MARKET
+		 , A.QTY			AS PLANT_QTY
+		 , A.REASON
+		 , A.REASON_DETAIL
+		 , A.REQUEST_USER_ID
+		 , A.CHARGE_USER_ID
+		 , A.CONFIRM_USER_ID
+		 , A.CONFIRM_YN
+		 , A.TARGET_YN
+		 , A.INPUT_DATE
+		 , A.CONFIRM_DATE
+		 , CASE WHEN SUBSTRING(a.ITEM_ID,1,2) IN ('AC','EC') THEN 'CP'  -- Cell Product
+				WHEN SUBSTRING(a.ITEM_ID,1,2) IN ('AA','EA') THEN 'CA1'  -- Cell Assy
+				ELSE ''  
+			  END AS CELL_TYPE
+		, null AS COUNTRY
+		,  (
+		   SELECT max(country) FROM  [dbo].[SCM_MST_SITE]   WITH(NOLOCK)  
+            WHERE  1 = 1  
+		      AND  VALID_YN ='Y'  
+		      AND  SITE_TYPE = 'PLANT'
+			  AND  SCM_SITE_ID = A.PLANT_SCM_SITE_ID
+		  ) AS  COUNTRY2
+	  FROM SCP_ANL_PRODUCTION_PLAN_TARGET A WITH(NOLOCK)
+	  JOIN SCP_MST_FINAL_ITEM FI WITH(NOLOCK)
+	    --ON (CASE WHEN @p_division_id IN ('EE','EE_UC') THEN A.ORIGIN_DIVISION_ID ELSE A.DIVISION_ID END) 	= FI.DIVISION_ID
+		ON (CASE WHEN @p_division_id IN (SELECT DIVISION_ID FROM dbo.FN_GET_DIVISION_DIV('EE')) THEN A.ORIGIN_DIVISION_ID ELSE A.DIVISION_ID END) 	= FI.DIVISION_ID --div_commonization
+	   AND A.ITEM_ID		= FI.ITEM_ID
+	 WHERE 1 = 1
+	   AND A.PROD_DATE >= @p_from_yyyymmdd
+	   AND A.PROD_DATE <= @p_to_yyyymmdd
+	   AND (( @p_division_id		IS NULL OR  @p_division_id		= '' ) OR A.DIVISION_ID			= @p_division_id	)
+	   AND (( @p_scm_site_id		IS NULL OR  @p_scm_site_id		= '' ) OR A.PLANT_SCM_SITE_ID	IN (SELECT token FROM dbo.String_Split(@p_scm_site_id		,',')))
+	   AND (( @p_line_id			IS NULL OR  @p_line_id			= '' ) OR A.LINE_ID				IN (SELECT token FROM dbo.String_Split(@p_line_id			,',')))
+	   AND (( @p_item_id			IS NULL OR  @p_item_id			= '' ) OR A.ITEM_ID		LIKE '%' + @p_item_id	+'%')
+	   AND (( @p_nick_name			IS NULL OR  @p_nick_name		= '' ) OR FI.NICK_NAME	LIKE '%' + @p_nick_name	+'%')
+	 ORDER BY CONFIRM_YN ,  CONFIRM_DATE DESC ,INPUT_DATE DESC
+
+END
+  
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0051_SAVE_PRODUCTION_PLAN_TARGET","858538192","1","
+/*
+ * Program ID   : SCP0051_SAVE_PRODUCTION_PLAN_TARGET
+ * Description  : PRODUCTION PLAN TARTGET 등록,수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2020-10-05   khj79          [PJ20199555] 공급 대응력 향상을 위한 자재재공 수급 점검 체계 개선 - 최초작성
+ * 2024.03.25	vadabi5	       NERP) 특정 Plant 별도 처리
+ * 2024.06.09	vadabi5	       NERP) QA, 개발 DB 적용
+ ---------------------------------------------------------------------------------------------------- 
+ EXEC NERP_SCP0051_SAVE_PRODUCTION_PLAN_TARGET
+  @p_active_flag		= ''
+ ,@p_target_id			= ''
+ ,@p_prod_date			= ''
+ ,@p_division_id		= ''
+ ,@p_origin_division_id	= ''
+ ,@p_item_id 			= ''
+ ,@p_plant_scm_site_id 	= ''
+ ,@p_line_id 			= ''
+ ,@p_operation_id 		= ''
+ ,@p_order_type 		= ''
+ ,@p_market 			= ''
+ ,@p_plant_qty			= ''
+ ,@p_reason				= ''
+ ,@p_reason_detail		= ''
+ ,@p_request_user_id	= ''
+ ,@p_charge_user_id		= ''
+ ,@debug_mode			= ''
+
+ EXEC SCP0051_SAVE_PRODUCTION_PLAN_TARGET
+  @p_active_flag		= ''
+ ,@p_target_id			= ''
+ ,@p_prod_date			= ''
+ ,@p_division_id		= ''
+ ,@p_origin_division_id	= ''
+ ,@p_item_id 			= ''
+ ,@p_plant_scm_site_id 	= ''
+ ,@p_line_id 			= ''
+ ,@p_operation_id 		= ''
+ ,@p_order_type 		= ''
+ ,@p_market 			= ''
+ ,@p_plant_qty			= ''
+ ,@p_reason				= ''
+ ,@p_reason_detail		= ''
+ ,@p_request_user_id	= ''
+ ,@p_charge_user_id		= ''
+ ,@debug_mode			= ''
+
+
+ */
+CREATE PROCEDURE [dbo].[SCP0051_SAVE_PRODUCTION_PLAN_TARGET]
+	 @p_active_flag			NVARCHAR(MAX)
+	,@p_target_id			NVARCHAR(MAX)
+	,@p_prod_date			NVARCHAR(MAX)
+	,@p_division_id			NVARCHAR(MAX)
+	,@p_origin_division_id	NVARCHAR(MAX)
+	,@p_item_id 			NVARCHAR(MAX)
+	,@p_plant_scm_site_id 	NVARCHAR(MAX)
+	,@p_line_id 			NVARCHAR(MAX)
+	,@p_operation_id 		NVARCHAR(MAX)
+	,@p_order_type 			NVARCHAR(MAX)
+	,@p_market 				NVARCHAR(MAX)
+	,@p_plant_qty			NVARCHAR(MAX)
+	,@p_reason				NVARCHAR(MAX)
+	,@p_reason_detail		NVARCHAR(MAX)
+	,@p_request_user_id		NVARCHAR(MAX)
+	,@p_charge_user_id		NVARCHAR(MAX)
+	,@debug_mode			NVARCHAR(20) ='F'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX) = NULL;
+	DECLARE @v_target_id			NVARCHAR(MAX) = NULL;
+	DECLARE @v_prod_date			NVARCHAR(MAX) = NULL;
+	DECLARE @v_division_id			NVARCHAR(MAX) = NULL;
+	DECLARE @v_origin_division_id	NVARCHAR(MAX) = NULL;
+	DECLARE @v_item_id 				NVARCHAR(MAX) = NULL;
+	DECLARE @v_plant_scm_site_id 	NVARCHAR(MAX) = NULL;
+	DECLARE @v_line_id 				NVARCHAR(MAX) = NULL;
+	DECLARE @v_operation_id 		NVARCHAR(MAX) = NULL;
+	DECLARE @v_order_type 			NVARCHAR(MAX) = NULL;
+	DECLARE @v_market 				NVARCHAR(MAX) = NULL;
+	DECLARE @v_plant_qty			NVARCHAR(MAX) = NULL;
+	DECLARE @v_reason				NVARCHAR(MAX) = NULL;
+	DECLARE @v_reason_detail		NVARCHAR(MAX) = NULL;
+	DECLARE @v_request_user_id		NVARCHAR(MAX) = NULL;
+	DECLARE @v_charge_user_id		NVARCHAR(MAX) = NULL;
+	DECLARE @v_id_delimiter			NVARCHAR(10) = '::';
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0;
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0051_SAVE_PRODUCTION_PLAN_TARGET';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_cou"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0051_SAVE_PRODUCTION_PLAN_TARGET","858538192","2","nt, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				SET @v_active_flag			= [dbo].[SCM_ARR_SPL_VAL](@p_active_flag		, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_target_id			= [dbo].[SCM_ARR_SPL_VAL](@p_target_id			, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_prod_date			= [dbo].[SCM_ARR_SPL_VAL](@p_prod_date			, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_division_id			= [dbo].[SCM_ARR_SPL_VAL](@p_division_id		, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_origin_division_id	= [dbo].[SCM_ARR_SPL_VAL](@p_origin_division_id	, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_item_id				= UPPER([dbo].[SCM_ARR_SPL_VAL](@p_item_id		, @v_delimiter, @mst_loop_cnt)) ;
+				SET @v_plant_scm_site_id	= [dbo].[SCM_ARR_SPL_VAL](@p_plant_scm_site_id	, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_line_id				= [dbo].[SCM_ARR_SPL_VAL](@p_line_id			, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_operation_id			= [dbo].[SCM_ARR_SPL_VAL](@p_operation_id		, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_order_type			= [dbo].[SCM_ARR_SPL_VAL](@p_order_type			, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_market				= [dbo].[SCM_ARR_SPL_VAL](@p_market				, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_plant_qty			= [dbo].[SCM_ARR_SPL_VAL](@p_plant_qty			, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_reason				= [dbo].[SCM_ARR_SPL_VAL](@p_reason				, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_reason_detail		= [dbo].[SCM_ARR_SPL_VAL](@p_reason_detail		, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_request_user_id		= [dbo].[SCM_ARR_SPL_VAL](@p_request_user_id	, @v_delimiter, @mst_loop_cnt) ;
+				SET @v_charge_user_id		= [dbo].[SCM_ARR_SPL_VAL](@p_charge_user_id		, @v_delimiter, @mst_loop_cnt) ;
+			END
+
+			-- LOOP 파라미터 출력 DEBUG용
+			IF (@debug_mode ='T')
+			BEGIN		
+				PRINT '===============================================';
+				PRINT '@v_active_flag			= ''' +@v_active_flag			+'''';
+				PRINT '@v_target_id				= ''' +@v_target_id				+'''';
+				PRINT '@v_prod_date				= ''' +@v_prod_date				+'''';
+				PRINT '@v_division_id			= ''' +@v_division_id			+'''';
+				PRINT '@v_origin_division_id	= ''' +@v_origin_division_id	+'''';
+				PRINT '@v_item_id				= ''' +@v_item_id				+'''';
+				PRINT '@v_plant_scm_site_id		= ''' +@v_plant_scm_site_id		+'''';
+				PRINT '@v_line_id				= ''' +@v_line_id				+'''';
+				PRINT '@v_operation_id			= ''' +@v_operation_id			+'''';
+				PRINT '@v_order_type			= ''' +@v_order_type			+'''';
+				PRINT '@v_market				= ''' +@v_market				+'''';
+				PRINT '@v_plant_qty				= ''' +@v_plant_qty				+'''';
+				PRINT '@v_reason				= ''' +@v_reason				+'''';
+				PRINT '@v_reason_detail			= ''' +@v_reason_detail			+'''';
+				PRINT '@v_request_user_id		= ''' +@v_request_user_id		+'''';
+				PRINT '@v_charge_user_id		= ''' +@v_charge_user_id		+'''';
+				PRINT '@mst_loop_cnt			= ''' +CONVERT(VARCHAR(10), @mst_loop_cnt) +'''';
+			END;
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0
+				BEGIN
+
+				IF @v_active_flag = 'D'
+				BEGIN
+					DELETE FROM SCP_ANL_PRODUCTION_PLAN_TARGET WHERE TARGET_ID = @v_target_id;
+				END
+				ELSE IF @v_active_flag = 'I'
+				BEGIN
+					DECLARE @v_temp_dom_exp NVARCHAR(10);
+					DECLARE @v_temp_target_num NVARCHAR(500);
+					DECLARE @v_temp_target_id NVARCHAR(500)
+
+					----------------------------------------------------------------
+					-- @v_WarrantyPlant
+					----------------------------------------------------------------
+					DECLARE @v_WarrantyPlant NVARCHAR(500)
+					SELECT @v_WarrantyPlant  = SEGMENT2
+					FROM SCM_CODE_LOOKUP_VALUE 
+					WHERE LOOKUP_TYPE_CODE = 'SCP0051_SAVE_PRODUCTION_PLAN_TARGET'
+					AND SEGMENT1 = 'WarrantyPlant'
+					----------------------------------------------------------------
+
+		"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0051_SAVE_PRODUCTION_PLAN_TARGET","858538192","3","			IF @v_plant_scm_site_id = @v_WarrantyPlant
+						SET @v_temp_dom_exp =  SUBSTRING(@v_market,1,1);
+					ELSE
+						SET @v_temp_dom_exp =  'D'
+
+					-- target id 생성
+					SELECT @v_temp_target_num = MAX(RIGHT(TARGET_ID,3))
+					  FROM SCP_ANL_PRODUCTION_PLAN_TARGET
+					 WHERE DIVISION_ID			= @v_division_id
+					   AND PLANT_SCM_SITE_ID	= @v_plant_scm_site_id
+					   AND PROD_DATE			= @v_prod_date
+					   AND ITEM_ID				= @v_item_id
+					   AND LINE_ID				= @v_line_id
+					   AND OPERATION_ID			= @v_operation_id
+					   AND ORDER_TYPE			= @v_order_type
+					   AND MARKET				= @v_market
+						;
+
+					IF @v_temp_target_num IS NULL
+					BEGIN
+						SET @v_target_id =  @v_division_id + @v_id_delimiter + @v_plant_scm_site_id + @v_id_delimiter + @v_prod_date + @v_id_delimiter + @v_item_id + @v_id_delimiter + @v_line_id+ @v_id_delimiter + @v_operation_id + @v_id_delimiter +  @v_order_type+ @v_id_delimiter	
+							+  @v_temp_dom_exp  + @v_id_delimiter + '001';
+					END
+					ELSE
+					BEGIN
+						SET @v_temp_target_num = REPLICATE('0',3 - LEN(CONVERT(VARCHAR(3),CONVERT(INT,@v_temp_target_num) + 1))) + CONVERT(VARCHAR(3),CONVERT(INT,@v_temp_target_num) + 1);
+						SET @v_target_id = @v_division_id + @v_id_delimiter + @v_plant_scm_site_id + @v_id_delimiter + @v_prod_date + @v_id_delimiter + @v_item_id + @v_id_delimiter + @v_line_id+ @v_id_delimiter + @v_operation_id + @v_id_delimiter +  @v_order_type+ @v_id_delimiter	
+							+  @v_temp_dom_exp  + @v_id_delimiter + @v_temp_target_num;
+					END
+				
+						INSERT INTO SCP_ANL_PRODUCTION_PLAN_TARGET
+						(
+									  TARGET_ID
+									, DIVISION_ID
+									, ORIGIN_DIVISION_ID
+									, ITEM_ID
+									, PLANT_SCM_SITE_ID
+									, LINE_ID
+									, OPERATION_ID
+									, ORDER_TYPE
+									, MARKET
+									, PROD_DATE
+									, QTY
+									, REASON		
+									, REASON_DETAIL
+									, REQUEST_USER_ID
+									, CHARGE_USER_ID
+									, CONFIRM_YN
+									, TARGET_YN
+									, INPUT_DATE
+								)
+						VALUES  (
+					 				  @v_target_id
+									, @v_division_id
+									, @v_origin_division_id
+									, @v_item_id
+									, @v_plant_scm_site_id
+									, @v_line_id
+									, @v_operation_id
+									, @v_order_type
+									, @v_market
+									, @v_prod_date
+									, @v_plant_qty
+									, @v_reason
+									, @v_reason_detail
+									, @v_request_user_id
+									, @v_charge_user_id
+									, 'N'    -- CONFIRM_YN
+									, 'N'    -- TARGET_YN
+									, SYSDATETIME()  -- INPUT_DATE
+								);
+					END
+				END  -- END OF STMT. IF( @mst_loop_cnt > 0 )			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+
+		  if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM","874538249","1","
+/*
+ * Program ID   : SCP0051_SAVE_PRODUCTION_PLAN_CONFIRM
+ * Description  : PRODUCTION PLAN TARTGET CONFIRM
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2020-10-07   khj79          [PJ20199555] 공급 대응력 향상을 위한 자재재공 수급 점검 체계 개선 - 최초작성
+ */
+
+ 
+CREATE PROCEDURE [dbo].[SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM]
+	 @p_target_id			NVARCHAR(MAX)
+	,@p_confirm_user_id		NVARCHAR(MAX)
+	,@debug_mode			NVARCHAR(20) ='F'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0051_SAVE_PRODUCTION_PLAN_TARGET_CONFIRM';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		-- 긴급 TARGET CONFIRM 정보 수정
+		UPDATE SCP_ANL_PRODUCTION_PLAN_TARGET
+		   SET CONFIRM_YN = 'Y'
+		     , CONFIRM_USER_ID = @p_confirm_user_id
+		     , CONFIRM_DATE = SYSDATETIME()
+		 WHERE 1 = 1
+		   AND TARGET_ID  IN (SELECT token FROM dbo.String_Split(@p_target_id  ,@v_delimiter) ) 
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code ;
+
+	END TRY
+
+	BEGIN CATCH 
+
+		  if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+"

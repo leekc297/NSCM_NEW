@@ -24,8 +24,16 @@ export const ProjectRegistrationForm = ({ hidden, onSearch }: ProjectRegistratio
   const searchParams = useProjectRegistrationStore(state => state.searchParams);
   const setSearchParams = useProjectRegistrationStore(state => state.setSearchParams);
 
+  // 고객 콤보 — SDM1020(ProjectListForm)과 동일하게 사업부 종속 서버 콤보(EndCustomerByDivision).
+  //   BE makeComboQuery 는 raw 치환이라 divisionId 를 **따옴표 포함** 전달(미따옴표 = ORA 오류).
+  //   division 변경 = 쿼리키 변경 = 자동 재적재.
   const [divisions, endCustomers, myAuthTypes, regStatuses] = useTabComboQueries({
-    filters: ['MyDivision', 'EndCustomer', 'DpjtAuthType', 'DpjtRegStatus'],
+    filters: [
+      'MyDivision',
+      { comboId: 'EndCustomerByDivision', divisionId: `'${searchParams.divisionId}'` },
+      'DpjtAuthType',
+      'DpjtRegStatus',
+    ],
   });
   // 나의 권한 / 등록 상태 — 공용 콤보가 아니라 SCM0001_GET_LOOKUP_VALUES(p_lookup_type) 룩업.
 
@@ -57,7 +65,10 @@ export const ProjectRegistrationForm = ({ hidden, onSearch }: ProjectRegistratio
                 <CustomDropdown
                   value={searchParams.divisionId}
                   options={divisions?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []}
-                  onChange={(_, option) => setSearchParams({ divisionId: option })}
+                  // 고객은 division 종속 — 변경 시 ALL reset (SDM1020 동일)
+                  onChange={(_, option) =>
+                    setSearchParams({ divisionId: option, endCustomer: 'ALL' })
+                  }
                 />
               )}
             />
@@ -76,11 +87,11 @@ export const ProjectRegistrationForm = ({ hidden, onSearch }: ProjectRegistratio
                   limitTags={1}
                   value={searchParams.endCustomer}
                   options={
-                    endCustomers
-                      ?.filter(item => item.DIVISION_ID === searchParams.divisionId)
-                      .map(item => ({ label: item.NAME, value: item.CODE })) ?? []
+                    endCustomers?.map(item => ({ label: item.NAME, value: item.CODE })) ?? []
                   }
-                  onChange={(_, options) => setSearchParams({ endCustomer: options })}
+                  onChange={(_, options) =>
+                    setSearchParams({ endCustomer: String(options ?? 'ALL') || 'ALL' })
+                  }
                 />
               )}
             />
@@ -142,7 +153,7 @@ export const ProjectRegistrationForm = ({ hidden, onSearch }: ProjectRegistratio
           <Grid size={6}>
             <FormItem
               className={`${commonStyles.formItem} ${styles.keepWordsFormItem}`}
-              label={t('LBL00877', '_Reg. Completion Date')}
+              label={t('LBL00857', '_Reg. Completion Date')}
               labelAlign='right'
               render={() => (
                 <div className={styles.periodSplit}>

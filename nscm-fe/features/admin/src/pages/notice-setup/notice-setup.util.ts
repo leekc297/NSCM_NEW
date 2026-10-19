@@ -22,6 +22,13 @@ const ALLOWED_NOTICE_TAGS = new Set([
 ]);
 
 const ALLOWED_NOTICE_FORMATS = new Set(['p', 'h1', 'h2']);
+// 2026-09-16 - 굵게/기울임/밑줄 토글용 커스텀 span 속성.
+const ALLOWED_NOTICE_STYLE_ATTRIBUTES = new Set([
+  'data-notice-bold',
+  'data-notice-italic',
+  'data-notice-underline',
+]);
+const ALLOWED_NOTICE_STYLE_VALUES = new Set(['on', 'off']);
 const NOTICE_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 const isSafeLink = (href: string) => {
@@ -41,7 +48,8 @@ export const createEmptyNotice = (): NoticeSetupRow => ({
   SUB_MODULE: 'DM',
   SUB_MODULE_NM: '',
   NOTICE: '',
-  ACTIVE: 'N',
+  // 2026-09-11 사용자 요구 - 신규 등록 시 Active 기본값 Y
+  ACTIVE: 'Y',
   START_DATE: '',
   END_DATE: '',
   PUBLICATION_PERIOD: '',
@@ -77,7 +85,11 @@ export const sanitizeNoticeHtml = (html?: string | null) => {
         tagName === 'span' &&
         attribute.name.toLowerCase() === 'data-notice-format' &&
         ALLOWED_NOTICE_FORMATS.has(attribute.value);
-      if (!isAllowedLinkAttribute && !isAllowedFormatAttribute) {
+      const isAllowedStyleAttribute =
+        tagName === 'span' &&
+        ALLOWED_NOTICE_STYLE_ATTRIBUTES.has(attribute.name.toLowerCase()) &&
+        ALLOWED_NOTICE_STYLE_VALUES.has(attribute.value);
+      if (!isAllowedLinkAttribute && !isAllowedFormatAttribute && !isAllowedStyleAttribute) {
         element.removeAttribute(attribute.name);
       }
     });

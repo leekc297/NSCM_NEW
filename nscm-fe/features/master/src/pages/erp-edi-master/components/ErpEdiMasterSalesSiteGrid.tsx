@@ -1,6 +1,5 @@
 import { toggleClass } from '@mescius/wijmo';
 import {
-  CellRange,
   CellType,
   type CellRangeEventArgs,
   type FlexGrid,
@@ -113,7 +112,7 @@ export const ErpEdiMasterSalesSiteGrid = ({
     if (args.panel.cellType !== CellType.Cell) return;
     const binding = GridUtils.getBinding(grid, args.col);
     if (typeof binding !== 'string') return;
-    // 편집 가능 컬럼 = 표준 Yellow(`wj-cell-editable`). 그 외 = White+zebra (클래스 없음). hook #95.
+    // 편집 가능 컬럼 = 표준 Yellow(`wj-cell-editable`). 그 외 = White (클래스 없음). hook #95.
     toggleClass(args.cell, 'wj-cell-editable', EDITABLE_COLUMNS.has(binding));
   };
 
@@ -187,7 +186,7 @@ export const ErpEdiMasterSalesSiteGrid = ({
         }
       }
     });
-    grid.refreshRange(new CellRange(e.row, 0, e.row, -1));
+    GridUtils.refreshRow(grid, e.row);
   };
 
   const setTeam = (teamId: string, teamName?: string) => {
@@ -208,7 +207,7 @@ export const ErpEdiMasterSalesSiteGrid = ({
         dblClick={handleDblClick}
         formatItem={handleFormatItem}
         cellEditEnded={handleCellEditEnded}
-        isReadOnly={false}
+        isReadOnly={true}
       />
       {openCustomerModal && (
         <CustomerModal

@@ -4,6 +4,7 @@ import { ToastMessage, Alert } from '@shared/components';
 import { ProgressIndicator } from '@shared/lges';
 import { useUIStore } from '@shared/stores';
 
+import { AtlasBridge } from './AtlasBridge';
 import styles from './MDIContainer.module.scss';
 import { MDITabs } from './MDITabs';
 import { RouterSync } from './RouterSync';
@@ -40,6 +41,7 @@ export const MDIContainer = ({ mirrorRouteOnMount = true }: MDIContainerProps) =
       <MDITabs />
       <div className={styles.mdiContent}>
         <RouterSync mirrorOnMount={mirrorRouteOnMount} />
+        <AtlasBridge />
         <ViewContainer />
         <ToastMessage />
         <Alert />

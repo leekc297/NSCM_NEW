@@ -1,6 +1,8 @@
-// AS-IS DMF0043_ContributeRatePopup.cs — 기여율 버전관리 POPUP
-// 룰 24 §3 / 룰 12 §11 / 룰 23 §1 (CustomDialog) — inline style 절대 금지
-
+/*
+  이 팝업(Reject Reason)과 무관한 DMF0043 기여율 버전관리 팝업의 SCSS가 그대로 복사돼 있던 것을 정리함 
+  filterBar/yearSelect/gridWrapper 등 미사용 클래스 + 하드코딩 버튼 색상 제거.
+  버튼은 표준 Button 컴포넌트(@shared/lges)가 스타일을 갖고 있어 wrapper 배치만 필요
+ */
 .dialogContent {
   display: flex;
   flex-direction: column;
@@ -8,136 +10,9 @@
   padding: 4px 0;
 }
 
-.filterBar {
+.buttonWrapper {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  background: #f5f7fa;
-  border: 1px solid #e0e4e9;
-  border-radius: 4px;
-  flex-wrap: wrap;
-
-  .field {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .fieldLabel {
-    font-size: 13px;
-    color: #2b3a4a;
-    font-weight: 600;
-    min-width: 48px;
-  }
-
-  .yearSelect {
-    min-width: 160px;
-    padding: 6px 8px;
-    font-size: 13px;
-    border: 1px solid #b8bfc9;
-    border-radius: 3px;
-    background: white;
-  }
+  justify-content: end;
+  gap: 4px;
+  margin-top: 5px;
 }
-
-.actionBar {
-  display: flex !important;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  flex-wrap: wrap;
-  padding: 12px 8px;
-  margin-top: 8px;
-  border: 1px solid #e0e4e9;
-  border-radius: 4px;
-  background: #fafbfc;
-  flex-shrink: 0;
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  min-height: 48px;
-
-  .modeIndicator {
-    margin-right: auto;
-    font-size: 12px;
-    color: #1976d2;
-    font-weight: 600;
-  }
-}
-
-.actionButton {
-  padding: 6px 14px;
-  font-size: 13px;
-  font-weight: 500;
-  background: white;
-  color: #2b3a4a;
-  border: 1px solid #b8bfc9;
-  border-radius: 3px;
-  cursor: pointer;
-  min-width: 60px;
-
-  &:hover:not(:disabled) {
-    background: #f0f3f7;
-  }
-
-  &:disabled {
-    background: #f5f7fa;
-    color: #a0a8b0;
-    cursor: not-allowed;
-  }
-
-  &.primary {
-    background: #1976d2;
-    color: white;
-    border-color: #1976d2;
-
-    &:hover:not(:disabled) {
-      background: #1565c0;
-    }
-
-    &:disabled {
-      background: #cfd8dc;
-      border-color: #cfd8dc;
-    }
-  }
-
-  &.edit {
-    background: #5a6c7f;
-    color: white;
-    border-color: #5a6c7f;
-
-    &:hover:not(:disabled) {
-      background: #485a6c;
-    }
-  }
-
-  &.editActive {
-    background: #f57c00;
-    color: white;
-    border-color: #f57c00;
-
-    &:hover:not(:disabled) {
-      background: #ef6c00;
-    }
-  }
-
-  &.danger {
-    background: white;
-    color: #c62828;
-    border-color: #c62828;
-
-    &:hover:not(:disabled) {
-      background: #ffebee;
-    }
-  }
-}
-
-.gridWrapper {
-  height: 300px;
-  border: 1px solid #e0e4e9;
-  border-radius: 4px;
-  overflow: hidden;
-  background: white;
-}
-

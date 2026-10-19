@@ -1,0 +1,46 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px;
+}
+
+// AS-IS 의 테두리 박스 안 라디오 2개(좌우 분산) 재현.
+.radioBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  min-height: 48px;
+  border: 1px solid #c8ccd0;
+  border-radius: 2px;
+}
+
+.radioOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #34383e;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  input {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    accent-color: #2f6fed;
+    cursor: pointer;
+  }
+}
+
+.hint {
+  color: var(--red-500, #e02020);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

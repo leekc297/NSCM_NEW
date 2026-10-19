@@ -10,7 +10,7 @@ import {
 
 // UM-04 — P_DMF0053_GET_SPREAD_TITLE 기간 컬럼 `3 AS DATA_SCALE_NUMBER` → AS-IS decimalPlaces=3
 describe('scaleOf (UM-04, DMF0053)', () => {
-  it('\'\'/NULL = 화면 fallback(3) — DMF0040(0) 과 다르다', () => {
+  it("''/NULL = 화면 fallback(3) — DMF0040(0) 과 다르다", () => {
     expect(DEFAULT_DYN_SCALE).toBe(3);
     expect(scaleOf('')).toBe(3);
     expect(scaleOf(null)).toBe(3);

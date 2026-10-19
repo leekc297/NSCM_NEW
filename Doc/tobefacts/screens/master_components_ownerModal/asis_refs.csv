@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
+"master/components/ownerModal","","features/master/src/components/ownerModal/OwnerModal.tsx","27","DMF0005","","","","확정할 수 있는 최대 인원. 넘게 선택한 채 OK 를 누르면 경고하고 닫지 않는다(singleSelect 와 같은 방식). 미지정이면 상한 없음(종전 동작). singleSelect 가 켜져 있으면 그 판정이 먼저다. 첫 사용처 DMF0005 Owner 10명 제한 (2026-10-13 사용자 요청). 선택 중 추가 자체는 막지 않고 OK 시점에만 판정한다 — 후보에서 옮기는 동작은 그대로 두어 사용자가 정리할 수 있게 한다."
+"master/components/ownerModal","","features/master/src/components/ownerModal/OwnerModal.tsx","63","COM0004","","","","(useTabProcQuery 는 filters 가 query key 라 값이 바뀌면 재조회. COM0004 는 user 를 IN"
+"master/components/ownerModal","","features/master/src/components/ownerModal/OwnerModal.tsx","64","COM0004","","","","파라미터로 받는다 — configs/types/procedures.d.ts COM0004.owner.request 참고)"
+"master/components/ownerModal","","features/master/src/components/ownerModal/OwnerModal.tsx","209","DMF0082","","","","상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인."

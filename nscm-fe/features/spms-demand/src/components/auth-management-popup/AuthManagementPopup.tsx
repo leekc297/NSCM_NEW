@@ -1,17 +1,17 @@
 import { CellType, type FlexGrid, type FormatItemEventArgs } from '@mescius/wijmo.grid';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
 import { BUTTON_TYPE, CRUD_TYPE } from '@foundation/constants';
 import { GridUtils } from '@foundation/utils';
-import { CustomDialog, DataGrid } from '@shared/components';
+import { CustomDialog } from '@shared/components';
 import { useProcMutation, useTabProcQuery } from '@shared/hooks';
 import { Button, InputField, ProgressIndicator } from '@shared/lges';
 import { FunctionSearchIcon } from '@shared/lges-icons';
 import { useMessageStore, useSessionStore, useTabid } from '@shared/stores';
 
-import { restoreMultiRangeSelection } from '../../lib/grid';
+import { DataGrid, restoreMultiRangeSelection } from '../../lib/grid';
 import {
   MENU_ID,
   RESPONSE_SET,
@@ -207,9 +207,12 @@ export const AuthManagementPopup = ({
     () => collectDeptPathIds(orgTree, sesDeptId),
     [orgTree, sesDeptId]
   );
-  const userRows = hasUserCondition
-    ? ((userData?.userList as unknown as PopupUserRow[] | undefined) ?? [])
-    : [];
+  // 참조 고정 — 매 렌더 새 배열이면 DataGrid 가 컬렉션을 리로드해 깜빡인다 (UserSearchPopup 동일)
+  const userRows = useMemo<PopupUserRow[]>(
+    () =>
+      hasUserCondition ? ((userData?.userList as unknown as PopupUserRow[] | undefined) ?? []) : [],
+    [hasUserCondition, userData]
+  );
   const allRequestRows = useMemo(
     () => (authReqData?.authRequestList as unknown as AuthRequestRow[] | undefined) ?? [],
     [authReqData]
@@ -243,8 +246,11 @@ export const AuthManagementPopup = ({
     authMgmtDraft.filter(
       row => row.AUTH_TYPE_CD === authType && row.CRUD_TYPE !== CRUD_TYPE.DELETE
     );
-  const inputAuthRows = activeAuthRows(AUTH_TYPE.INPUT);
-  const viewAuthRows = activeAuthRows(AUTH_TYPE.VIEW);
+  // 참조 고정 — filter 산출물이라 매 렌더 새 배열. authMgmtDraft 가 바뀔 때만 재계산한다.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const inputAuthRows = useMemo(() => activeAuthRows(AUTH_TYPE.INPUT), [authMgmtDraft]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const viewAuthRows = useMemo(() => activeAuthRows(AUTH_TYPE.VIEW), [authMgmtDraft]);
 
   const handleSelectDept = (selectedId: string) => {
     setSelectedDeptId(selectedId);
@@ -501,9 +507,9 @@ export const AuthManagementPopup = ({
     })();
   };
 
-  // 요청 그리드 PROCESS 셀 버튼 — 하단 Close/OK 버튼과 같은 <Button> 컴포넌트를 그대로 써서
-  // 입력/조회는 OK(appearance='contained' priority='primary'), 반려는 Close(appearance='outlined'
-  // priority='normal')와 완전히 같은 스타일이 나오게 한다. Wijmo FlexGrid 셀은 React 트리 밖에서
+  // 요청 그리드 PROCESS 셀 버튼 — 하단 OK 버튼과 같은 <Button> 컴포넌트를 그대로 써서
+  // 입력/조회는 OK(appearance='contained' priority='primary')와 같은 스타일, 반려는 보조 버튼
+  // 표준(appearance='outlined' priority='normal') 스타일이 나오게 한다. Wijmo FlexGrid 셀은 React 트리 밖에서
   // formatItem 이 만드는 순수 DOM이라 <Button> 을 직접 못 앉히므로, formatItem 이 셀 안에 빈
   // 컨테이너 div만 만들어 두고 그 div로 실제 <Button> 들을 createPortal 한다(JSX는 아래 requestPanel
   // 블록 참고). processPortalsRef 는 "요청 키 → 그 셀의 컨테이너 DOM" 맵으로, formatItem(Wijmo 콜백,
@@ -511,38 +517,43 @@ export const AuthManagementPopup = ({
   const processPortalsRef = useRef<Map<string, HTMLDivElement>>(new Map());
   const [, setPortalTick] = useState(0);
 
-  const formatRequestProcess = (sender: FlexGrid<AuthRequestRow>, event: FormatItemEventArgs) => {
-    if (event.panel.cellType !== CellType.Cell) return;
-    if (sender.columns[event.col]?.binding !== 'PROCESS') return;
+  // useCallback 참조 고정 — 아래 요청 그리드 element memo 의존성. requestHandled 변경 때만 재생성.
 
-    const row = GridUtils.getRow(sender, event.row);
-    if (!row) return;
-    const key = requestKey(row);
+  const formatRequestProcess = useCallback(
+    (sender: FlexGrid<AuthRequestRow>, event: FormatItemEventArgs) => {
+      if (event.panel.cellType !== CellType.Cell) return;
+      if (sender.columns[event.col]?.binding !== 'PROCESS') return;
 
-    if (requestHandled.get(key) === 'REJECTED_SAVED') {
-      processPortalsRef.current.delete(key);
-      event.cell.textContent = '';
-      return;
-    }
+      const row = GridUtils.getRow(sender, event.row);
+      if (!row) return;
+      const key = requestKey(row);
 
-    // DataGrid 는 columnGroups 를 매 부모 리렌더마다 통째로 재대입한다(DataGrid.tsx 상단 주석
-    // 참고) — 그 말은 event.cell 이 "매 리렌더" 새 DOM 노드로 바뀐다는 뜻이다. 그래서 이미 아는
-    // key면 새 컨테이너를 만들지 않고 "같은 컨테이너 객체"를 새 셀로 옮겨 붙이기만 한다(리렌더 유발
-    // 없음 — portal 은 컨테이너 참조가 그대로면 리렌더 없이도 새 위치에서 계속 유효하다). 여기서
-    // 매번 setState 했다면 리렌더→(다음 렌더에서) 셀 재생성→다시 setState 로 무한루프(깜빡임)가 난다
-    // (2026-08-18 확인) — key 가 처음 등장할 때 딱 한 번만 setState 한다.
-    const existing = processPortalsRef.current.get(key);
-    if (existing) {
-      if (event.cell.firstElementChild !== existing) event.cell.replaceChildren(existing);
-      return;
-    }
+      if (requestHandled.get(key) === 'REJECTED_SAVED') {
+        processPortalsRef.current.delete(key);
+        event.cell.textContent = '';
+        return;
+      }
 
-    const container = globalThis.document.createElement('div');
-    container.className = styles.processButtons;
-    event.cell.replaceChildren(container);
-    processPortalsRef.current.set(key, container);
-    setPortalTick(tick => tick + 1);
-  };
+      // DataGrid 는 columnGroups 를 매 부모 리렌더마다 통째로 재대입한다(DataGrid.tsx 상단 주석
+      // 참고) — 그 말은 event.cell 이 "매 리렌더" 새 DOM 노드로 바뀐다는 뜻이다. 그래서 이미 아는
+      // key면 새 컨테이너를 만들지 않고 "같은 컨테이너 객체"를 새 셀로 옮겨 붙이기만 한다(리렌더 유발
+      // 없음 — portal 은 컨테이너 참조가 그대로면 리렌더 없이도 새 위치에서 계속 유효하다). 여기서
+      // 매번 setState 했다면 리렌더→(다음 렌더에서) 셀 재생성→다시 setState 로 무한루프(깜빡임)가 난다
+      // (2026-08-18 확인) — key 가 처음 등장할 때 딱 한 번만 setState 한다.
+      const existing = processPortalsRef.current.get(key);
+      if (existing) {
+        if (event.cell.firstElementChild !== existing) event.cell.replaceChildren(existing);
+        return;
+      }
+
+      const container = globalThis.document.createElement('div');
+      container.className = styles.processButtons;
+      event.cell.replaceChildren(container);
+      processPortalsRef.current.set(key, container);
+      setPortalTick(tick => tick + 1);
+    },
+    [requestHandled]
+  );
 
   // requestRows 에서 빠진(승인 등으로 처리된) 요청의 포탈 컨테이너를 정리한다.
   useEffect(() => {
@@ -619,7 +630,7 @@ export const AuthManagementPopup = ({
       position='basic'
       handleClose={onClose}
       customHeaderTitle={
-        <div className={`headerContainer ${styles.headerContainer}`}>
+        <div className='headerContainer'>
           <div className='headerDot' />
           <h2 className='headerTitle'>{t('LBL00868', '_Project Authority Management')}</h2>
         </div>
@@ -790,7 +801,7 @@ export const AuthManagementPopup = ({
                 formatItem={formatRequestProcess}
               />
               {/* PROCESS 셀 버튼 — formatRequestProcess 가 만들어 둔 컨테이너 div로 실제 <Button> 을
-                  portal. 입력/조회는 OK와, 반려는 Close와 완전히 같은 <Button> appearance/priority. */}
+                  portal. 입력/조회는 OK와 같은, 반려는 보조 버튼 표준 <Button> appearance/priority. */}
               {[...processPortalsRef.current.entries()].flatMap(([key, container]) => {
                 const row = requestRows.find((item: AuthRequestRow) => requestKey(item) === key);
                 if (!row) return [];
@@ -826,15 +837,8 @@ export const AuthManagementPopup = ({
               })}
             </div>
           </div>
-          {/* Close = 미저장 변경분 버리고 닫기 / OK = 권한 리스트·요청 승인 저장 */}
+          {/* OK = 권한 리스트·요청 승인 저장. 저장 없이 닫기는 우측 상단 X(헤더)로만 한다. */}
           <div className={styles.buttonWrapper}>
-            <Button
-              appearance='outlined'
-              priority='normal'
-              size='medium'
-              buttonLabel={t('LBL00627', 'Close')}
-              onClick={onClose}
-            />
             <Button
               appearance='contained'
               priority='primary'

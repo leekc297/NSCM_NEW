@@ -1,18 +1,16 @@
-import {
-  CellType,
-  type FlexGrid as FlexGridType,
-  type HitTestInfo,
-  type FormatItemEventArgs,
-} from '@mescius/wijmo.grid';
-import { FlexGrid, FlexGridColumn } from '@mescius/wijmo.react.grid';
+import { CellType, type FlexGrid as FlexGridType, type HitTestInfo } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import dayjs, { type Dayjs } from 'dayjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import { t } from '@foundation/i18n';
 import _ from '@foundation/lodash';
-import { CustomDialog, CustomDropdown, SearchArea } from '@shared/components';
+import type { RawFlexGridColumnConfig } from '@foundation/models';
+import { attachRowNoHeader } from '@foundation/utils';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabLookupQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
@@ -86,9 +84,27 @@ const DIVISION_FALLBACK: Array<{ value: string; label: string }> = [
   { value: '30', label: '30' },
 ];
 
+// AS-IS .cs L161~168 의 8 컬럼 중 표기 5 컬럼 (DIVISION_ID/VER_CRE_SEQ/YYYYMMDD 은 visible=false)
+const VERSION_COLUMNS: RawFlexGridColumnConfig[] = [
+  { colNm: 'VERSION_NO', colLblNm: 'Version', colWth: 220 },
+  { colNm: 'VERSION_DESCRIPTION', colLblNm: 'Description', colWth: 300 },
+  { colNm: 'VERSION_TYPE', colLblNm: 'Type', colWth: 117 },
+  { colNm: 'MAX(CREATED_BY)', colLblNm: 'Create By', colWth: 120 },
+  { colNm: 'MAX(CREATION_DATE)', colLblNm: 'Create Date', colWth: 150 },
+].map(c => ({
+  ...c,
+  fixed: false,
+  visible: true,
+  display: true,
+  inputTpCd: CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
+})) as RawFlexGridColumnConfig[];
+
 export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
   const setAlert = useMessageStore(s => s.setAlert);
-  const gridRef = useRef<FlexGridType<VersionPopupRow> | null>(null);
+  const gridRef = useRef<FlexGridType<VersionPopupRow> | undefined>(undefined);
+  // F3(Sort)/F4(Filter) 핫키가 팝업 내부에서 동작하려면 DataGrid 가 CustomDialog scope 안에서
+  // FlexGridFilter 를 직접 소유해야 한다 (raw FlexGrid 는 이 배선이 없어 핫키가 무효였다).
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   // 사용자 권한 기반 전체 Division lookup (사용자 요구 2026-06-02)
   const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
@@ -131,13 +147,15 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
   const filters = useContributeVersionModalStore(state => state.filters);
   const setFilters = useContributeVersionModalStore(state => state.setFilters);
 
-  const { data } = useTabProcQuery({
+  const { data, isLoading, isFetching } = useTabProcQuery({
     menuId: MENU_ID,
     sheetName: SHEETS.VERSION_POPUP,
     tabId: MENU_ID,
     filters,
     enabled: open && !!filters,
   });
+
+  const loading = isLoading || isFetching;
 
   const rows = useMemo<VersionPopupRow[]>(
     () => (data?.o_rc1 ?? []) as unknown as VersionPopupRow[],
@@ -195,6 +213,28 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
     onClose();
   };
 
+  // ⭐ #70 — DataGrid `initialized` prop deprecated → useEffect + gridRef. isReadOnly/dblclick 적용.
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    g.isReadOnly = true;
+    attachRowNoHeader(g, t('LBL00674', 'No'));
+
+    const onDbl = (e: MouseEvent) => {
+      // hitTest 메서드를 사용하여 마우스 클릭 위치의 가상 좌표 정보(HitTestInfo) 추출
+      const ht: HitTestInfo = g.hitTest(e);
+      // 사용자가 헤더가 아닌 '일반 데이터 셀(Cell)'을 더블클릭했는지 검증
+      if (ht.cellType !== CellType.Cell) return;
+      const selectedRowData = g.rows[ht.row].dataItem as VersionPopupRow | null;
+      const versionNo = String(selectedRowData?.VERSION_NO ?? selectedRowData?.CODE ?? '');
+      onSelect(versionNo);
+      onClose();
+    };
+    g.hostElement?.addEventListener('dblclick', onDbl);
+    return () => g.hostElement?.removeEventListener('dblclick', onDbl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rows]);
+
   const headerTitle = (
     <div className={styles.headerContainer}>
       <div className={styles.headerDot} />
@@ -210,12 +250,16 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
       position='basic'
       handleClose={onClose}
       disableButtonCancel
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={headerTitle}
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           {/* AS-IS 조회 조건 영역: Division (.cs L116), Period (drpPeriod), Type (clbType), Description (txtDes) */}
           <SearchArea
-            searchButtonLabel={t('LBL00722', '_Search')}
+            searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={onSearch}
             conditions={
               <>
@@ -228,7 +272,9 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
                       3열(size=4)까지는 여유가 있으나 4열(size=3)로 더 줄이면 datepicker 가 잘린다. */}
                 <Grid size={4}>
                   <FormItem
-                    label={t('LBL00086', '_Year')}
+                    // 사업부 콤보인데 라벨 코드가 Year(LBL00086) 로 잘못 걸려 있었다(2026-10-08 사용자 지적).
+                    //   메인 화면 Year 콤보 라벨을 그대로 가져온 흔적. AS-IS DMF0043_VersionPopup 의 lblDivision 과 같이 Div.
+                    label={t('LBL00001', '_Div.')}
                     labelAlign='right'
                     render={() => (
                       <CustomDropdown disabled value={divisionId} options={divisionOptions} />
@@ -237,7 +283,7 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
                 </Grid>
                 <Grid size={4}>
                   <FormItem
-                    label={t('LBL00092', '_Report Type')}
+                    label={t('LBL00795', '_Report Type')}
                     labelAlign='right'
                     render={() => (
                       <CustomDropdown
@@ -264,7 +310,7 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
                 />
                 <Grid size={4}>
                   <FormItem
-                    label={t('LBL00656', '_Description')}
+                    label={t('LBL00608', '_Description')}
                     labelAlign='right'
                     render={() => (
                       <InputField
@@ -280,61 +326,23 @@ export const ContributeVersionModal = ({ open, onClose, onSelect }: Props) => {
           />
           {/* 버전 리스트 grid — AS-IS InitSpread_X (.cs L156) 의 8 컬럼 매핑 */}
           <div className={styles.gridWrapper}>
-            <FlexGrid
-              initialized={(g: FlexGridType<VersionPopupRow>) => {
-                gridRef.current = g;
-                g.isReadOnly = true;
-                g.selectionMode = 1; // Row
-
-                g.hostElement.addEventListener('dblclick', (e: MouseEvent) => {
-                  // hitTest 메서드를 사용하여 마우스 클릭 위치의 가상 좌표 정보(HitTestInfo) 추출
-                  const ht: HitTestInfo = g.hitTest(e);
-
-                  // 사용자가 헤더가 아닌 '일반 데이터 셀(Cell)'을 더블클릭했는지 검증
-                  if (ht.cellType === CellType.Cell) {
-                    // 4. 더블클릭한 위치의 행(Row) 인덱스를 이용해 데이터 추출
-                    const selectedRowIndex = ht.row;
-                    const selectedRowData = g.rows[selectedRowIndex]
-                      .dataItem as VersionPopupRow | null;
-
-                    const versionNo = String(
-                      selectedRowData?.VERSION_NO ?? selectedRowData?.CODE ?? ''
-                    );
-                    onSelect(versionNo);
-                    onClose();
-                  }
-                });
-
-                g.formatItem.addHandler((_s, e: FormatItemEventArgs) => {
-                  const row = e.row;
-                  const col = e.col;
-                  const cell = e.cell;
-                  const cellType = e.panel.cellType;
-
-                  if (cellType === CellType.RowHeader && col === 0) {
-                    if (col === 0) {
-                      const rowNum = row + 1;
-                      cell.textContent = rowNum.toString();
-                      if (rowNum % 2 === 0) {
-                        cell.style.backgroundColor = '#F7F7F8';
-                      } else {
-                        cell.style.backgroundColor = '#FFFFFF';
-                      }
-                    }
-                  }
-                });
-              }}
-              itemsSource={rows}
-              autoGenerateColumns={false}
-              className={styles.grid}
-            >
-              {/* AS-IS .cs L161~168 의 8 컬럼 (DIVISION_ID/VER_CRE_SEQ/YYYYMMDD 은 visible=false) */}
-              <FlexGridColumn binding='VERSION_NO' header='Version' width={220} />
-              <FlexGridColumn binding='VERSION_DESCRIPTION' header='Description' width={300} />
-              <FlexGridColumn binding='VERSION_TYPE' header='Type' width={117} />
-              <FlexGridColumn binding='MAX(CREATED_BY)' header='Create By' width={120} />
-              <FlexGridColumn binding='MAX(CREATION_DATE)' header='Create Date' width={150} />
-            </FlexGrid>
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
+            />
+            <ResultArea title='' count={rows.length} gridRef={gridRef} gridFilterRef={gridFilterRef}>
+              <DataGrid<VersionPopupRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                itemsSource={rows}
+                staticColumns={VERSION_COLUMNS}
+                autoGenerateColumns={false}
+                className={styles.grid}
+              />
+            </ResultArea>
           </div>
 
           <div className={styles.buttonWrapper}>

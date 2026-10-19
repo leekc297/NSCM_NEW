@@ -3,7 +3,13 @@ import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
-import { DATA_TYPE, DIVISION, MENU_ID, REPORT_TYPE, SHEETS } from './sales-reports.constants';
+import {
+  DATA_TYPE,
+  // DIVISION, // 미사용 (divisionId 초기값을 '' 로 변경하며 제거)
+  MENU_ID,
+  REPORT_TYPE,
+  SHEETS,
+} from './sales-reports.constants';
 import type { SearchCondition } from './sales-reports.types';
 
 // SP filter payload — useTabProcQuery enabled 가드 (Version 필수 게이트 포함)
@@ -34,10 +40,17 @@ interface State {
   userColumnLayout: ColumnLayoutSetting[] | null;
   // ⭐ 조회 시점 고정 — 현재월 yyyymm (editLock 시점 경계. AS-IS iCurCol 산정 원천)
   thisMonth: string;
+  /** F6 저장 조회조건 복원 1회 가드 (탭 오픈당) — MotherStore PRESERVED_ON_CONDITION_RESET 보존 키 */
+  initialized: boolean;
 }
 
 interface Action {
   reset: () => void;
+  /**
+   * F6 로 저장한 조회조건(SCM_ADM_USER_MNU_SRCH_COND_M)을 탭 진입 시 1회 복원한다.
+   * initialized 가드 — F10(초기화)은 MotherStore 가 initialized 를 보존하므로 재복원되지 않는다.
+   */
+  restoreSearchConditions: () => Promise<void>;
   setSearchCondition: (p: Partial<SearchCondition>) => void;
   setFilter: () => void;
   clearFilters: () => void;
@@ -124,7 +137,8 @@ export const resolveSearchedCondition = (
       };
 
 const initSearch: SearchCondition = {
-  divisionId: DIVISION.MOBILITY,
+  // divisionId: DIVISION.MOBILITY, // 화면의 division 자동선택 effect 로 대체 (2026-09-10)
+  divisionId: '',
   mdfType: REPORT_TYPE.SP_W, // 기본 Report Type (AS-IS clbType MDF_TYPE 첫 항목)
   yyyy: dayjs().format('YYYY'), // 기본 당해년 (AS-IS usrYear 기본값)
   dataType: DATA_TYPE.ALL, // 기본 ALL (편집 차단 상태 — AS-IS usrDataType 기본)
@@ -141,12 +155,86 @@ const initState: State = {
   visibleMeasures: null,
   userColumnLayout: null,
   thisMonth: dayjs().format('YYYYMM'),
+  initialized: false,
 };
+
+/**
+ * F6 저장 조회조건 역파싱 키 분류.
+ *
+ * 저장(GridAction.personalizeCondition)은 모든 값을 문자열로 coerce 한다(배열=콤마 join /
+ * 불리언=String). 이 화면 SearchCondition 은 현재 전부 문자열이라 두 집합이 비지만,
+ * 조회조건 필드가 늘어도 따라오도록 초기값의 실제 타입에서 파생해 둔다.
+ */
+const ARRAY_KEYS = new Set<string>(
+  Object.entries(initSearch)
+    .filter(([, v]) => Array.isArray(v))
+    .map(([k]) => k)
+);
+const BOOL_KEYS = new Set<string>(
+  Object.entries(initSearch)
+    .filter(([, v]) => typeof v === 'boolean')
+    .map(([k]) => k)
+);
+// 열거형은 유효값만 채택 — 구버전 저장값/오염이 들어오면 SP 가 빈 결과를 돌려준다.
+const REPORT_TYPE_VALUES = new Set<string>(Object.values(REPORT_TYPE));
+const DATA_TYPE_VALUES = new Set<string>(Object.values(DATA_TYPE));
 
 export const useSalesReportsStore = createPersistedStoreWithTab<State & Action>(
   (set, get) => ({
     ...initState,
     reset: () => set(initState),
+
+    // F6 저장 조회조건 복원 — 탭 수명 내 1회(initialized 가드). 저장조건 없음/조회 실패는
+    //   기본값 유지(화면 차단 금지, console 금지 룰). F10(Reset Condition)은 SubTitle 공통이
+    //   DB 삭제 + MotherStore.resetSearchCondition 으로 처리하는데, 그 쪽이 initialized 를 보존하므로
+    //   초기화 직후 이 함수가 다시 복원해 버리는 일은 없다.
+    //   필수: fetchStaticColumns/fetchStaticMeasures 보다 먼저 await 한다 — 둘 다
+    //   get().searchCondition.divisionId 를 admin 메타 SP 로 넘기므로, 복원된 division 이
+    //   기본값과 다르면 컬럼·메저가 엉뚱한 division 기준으로 잡힌다.
+    restoreSearchConditions: async () => {
+      if (get().initialized) return;
+      set(state => {
+        state.initialized = true; // 먼저 세운다 — 마운트 중복 호출/재마운트 재복원 방지.
+      });
+      try {
+        const res = await apiClient.get<{ paramNm: string; paramCtn: string }[]>(
+          `/admin/menu/${MENU_ID}/search-conditions`
+        );
+        const rows = res.data.result ?? [];
+        if (rows.length === 0) return;
+
+        const patch: Record<string, unknown> = {};
+        for (const { paramNm, paramCtn } of rows) {
+          // 현재 SearchCondition 에 없는 키(구버전 잔재)는 버린다 — setFilter 가 조회조건을
+          //   SP payload 로 옮겨 담으므로 모르는 필드가 섞이면 그대로 새어 나간다.
+          if (!(paramNm in initSearch)) continue;
+          const val = paramCtn ?? '';
+          if (ARRAY_KEYS.has(paramNm)) patch[paramNm] = val ? val.split(',').filter(Boolean) : [];
+          else if (BOOL_KEYS.has(paramNm)) patch[paramNm] = val === 'true';
+          else patch[paramNm] = val;
+        }
+        if (typeof patch.mdfType === 'string' && !REPORT_TYPE_VALUES.has(patch.mdfType))
+          delete patch.mdfType;
+        if (typeof patch.dataType === 'string' && !DATA_TYPE_VALUES.has(patch.dataType))
+          delete patch.dataType;
+        if (typeof patch.yyyy !== 'string' || !/^\d{4}$/.test(patch.yyyy)) delete patch.yyyy;
+        // versionNo 는 United 팝업이 주입하는 연도별 스냅샷이라 해가 바뀌면 그 해에 없는 값일 수
+        //   있다. 그래도 사용자가 저장한 조건이므로 그대로 복원한다 — 없는 버전이면 SP 가 0건을
+        //   돌려줄 뿐이고, 표시문(versionLabel)과 짝을 이뤄 무엇으로 조회했는지는 화면에 남는다.
+        //   금지: versionNo 만 살리고 versionLabel 을 버리지 말 것 (버전은 걸렸는데 칸은 빈 상태).
+        if (typeof patch.versionNo === 'string' && patch.versionNo && !patch.versionLabel)
+          patch.versionLabel = patch.versionNo;
+
+        set(state => {
+          state.searchCondition = {
+            ...state.searchCondition,
+            ...(patch as Partial<SearchCondition>),
+          };
+        });
+      } catch {
+        // 저장조건 미존재/조회 실패 시 기본값 유지 (console 금지 룰)
+      }
+    },
     setSearchCondition: p =>
       set(state => {
         state.searchCondition = { ...get().searchCondition, ...p };

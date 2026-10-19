@@ -69,6 +69,7 @@ interface DynamicQueryAction {
   setSqlText: (sqlText: string) => void;
   setResultGridColumns: (columns: ResultGridColumn[]) => void;
   setExecuteFilter: (sqlText: string) => void;
+  clearResultFilter: () => void;
   getTempDqId: () => string;
   setSaveColumnsAndParametersList: (saveParams: ColumsAndParameters) => void;
   clearSaveColumnsAndParametersList: () => void;
@@ -232,6 +233,14 @@ export const useDynamicQueryStore = createPersistedStoreWithTab<
     setExecuteFilter: sqlText => {
       set(state => {
         state.filters[SHEETS.RESULT] = { sqlText };
+      });
+    },
+    // 다른 리포트의 View 를 열 때 호출 — filters[RESULT] 를 안 지우면 이전 리포트의 실행 결과가
+    // react-query 캐시에 그대로 남아, Result 건수(resultCount)가 새 리포트로 바뀐 뒤에도 이전
+    // 값을 계속 보여준다(그리드 자체는 resultGridColumns 초기화로 비어 보이지만 건수만 stale).
+    clearResultFilter: () => {
+      set(state => {
+        state.filters[SHEETS.RESULT] = undefined;
       });
     },
     getTempDqId: () => {

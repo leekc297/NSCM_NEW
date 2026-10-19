@@ -13,11 +13,7 @@ import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/
 import type { EditTracker } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 
-import {
-  CODE_DISPLAY_COLUMNS,
-  GRID_COMBO_PARAMS,
-  MAIN_COLUMNS,
-} from '../customer-fcst-upload.constant';
+import { CODE_DISPLAY_COLUMNS, GRID_COMBO_PARAMS } from '../customer-fcst-upload.constant';
 import type { CustomerFcstUploadRow, SpreadTitleRow } from '../customer-fcst-upload.types';
 import { useCustomerFcstUploadStore } from '../useCustomerFcstUploadStore';
 
@@ -58,47 +54,33 @@ export const CustomerFcstUploadGrid = ({
 }: CustomerFcstUploadGridProps) => {
   const staticColumn = useCustomerFcstUploadStore(state => state.staticColumn);
 
-  // ⭐ admin staticColumns 우선 + MAIN_COLUMNS fallback (BE 미응답 시 작동 보장 — visible fallback 손실 금지)
-  const mergedColumns = useMemo<MergedColumnMeta[]>(() => {
-    if (!staticColumn || staticColumn.length === 0) {
-      return MAIN_COLUMNS.map<MergedColumnMeta>(c => ({
-        binding: c.key,
-        header: c.header,
-        width: c.width ?? 100,
-        align: c.align ?? 'L',
-        visible: c.visible !== false,
-        display: c._default === true,
-        // AS-IS Freeze(0..EditFlag) — 식별 컬럼 전체 고정 (SHEET_COLUMNS FIXED_FLAG='Y' 등재 1:1)
-        fixed: c.visible !== false,
-        cellCboDataTp: c._comboKey,
-        cellCtrlObjTpCd: c._comboKey
-          ? CELL_CONTROL_TYPE.COMBO
-          : (c._ctrlType as CELL_CONTROL_TYPE | undefined),
-      }));
-    }
-    return staticColumn.map(col => {
-      const fb = MAIN_COLUMNS.find(m => m.key === col.colNm);
-      // 콤보 SQL_ID 는 admin 메타 우선, 없으면 MAIN_COLUMNS fallback (AS-IS AddComboColumn 8종).
-      //   단 CODE_DISPLAY_COLUMNS(Division)는 메타에 등재돼 있어도 코드 표기를 유지한다.
-      const comboKey = CODE_DISPLAY_COLUMNS.includes(col.colNm)
-        ? undefined
-        : col.cellCboDataTp?.trim() || fb?._comboKey;
-      return {
-        binding: col.colNm,
-        header: col.colLblNm || fb?.header || col.colNm,
-        width: col.colWth ?? fb?.width ?? 100,
-        align: col.horzAlgnCd ?? fb?.align ?? 'L',
-        visible: col.visible !== false,
-        display: col.display === true, // BE 계산값 (개인화 있으면 개인화 / 없으면 DEFAULT_FLAG)
-        fixed: col.fixed === true, // admin FIXED_FLAG 위임 (등재값 'Y' — AS-IS Freeze 1:1)
-        cellCboDataTp: comboKey,
-        // 콤보 SQL_ID 가 잡히면 COMBO 로 승격한다 — admin 메타의 CELL_CONTROL_OBJECT_TYPE_CODE 가
-        //   'FPText'/공란으로 등재돼 있어도 표시 매핑이 살아야 하기 때문이다. 이 화면 식별 컬럼은
-        //   전부 읽기전용('S')이라 COMBO 선언은 CODE -> NAME 표시 스위치로만 작동한다(편집화 아님).
-        cellCtrlObjTpCd: comboKey ? CELL_CONTROL_TYPE.COMBO : col.cellCtrlObjTpCd,
-      } as MergedColumnMeta;
-    });
-  }, [staticColumn]);
+  // 컬럼 메타 정본 = admin `/column` 응답(SCM_MST_SHEET_COLUMNS) 단일 원천.
+  //   admin UI Category Setup 변경이 코드 수정 없이 그대로 반영된다.
+  const mergedColumns = useMemo<MergedColumnMeta[]>(
+    () =>
+      (staticColumn ?? []).map(col => {
+        // 콤보 SQL_ID = admin 메타 CELL_COMBO_DATA_TYPE.
+        //   단 CODE_DISPLAY_COLUMNS(Division)는 등재돼 있어도 코드 표기를 유지한다.
+        const comboKey = CODE_DISPLAY_COLUMNS.includes(col.colNm)
+          ? undefined
+          : col.cellCboDataTp?.trim();
+        return {
+          binding: col.colNm,
+          header: col.colLblNm || col.colNm,
+          width: col.colWth ?? 100,
+          align: col.horzAlgnCd ?? 'L',
+          visible: col.visible !== false,
+          display: col.display === true, // BE 계산값 (개인화 있으면 개인화 / 없으면 DEFAULT_FLAG)
+          fixed: col.fixed === true, // admin FIXED_FLAG 위임 (등재값 'Y' — AS-IS Freeze 1:1)
+          cellCboDataTp: comboKey,
+          // 콤보 SQL_ID 가 잡히면 COMBO 로 승격한다 — admin 메타의 CELL_CONTROL_OBJECT_TYPE_CODE 가
+          //   'FPText'/공란으로 등재돼 있어도 표시 매핑이 살아야 하기 때문이다. 이 화면 식별 컬럼은
+          //   전부 읽기전용('S')이라 COMBO 선언은 CODE -> NAME 표시 스위치로만 작동한다(편집화 아님).
+          cellCtrlObjTpCd: comboKey ? CELL_CONTROL_TYPE.COMBO : col.cellCtrlObjTpCd,
+        } as MergedColumnMeta;
+      }),
+    [staticColumn]
+  );
 
   // 표시 판정 — display(BE DEFAULT/개인화) && visible(VISIBLE_FLAG — EDIT_FLAG/EDIT_YN='N' 숨김)
   const visibleColumns = useMemo(
@@ -191,7 +173,7 @@ export const CustomerFcstUploadGrid = ({
       if (e.panel.cellType !== CellType.Cell) return;
       if (!binding) return;
 
-      // #95 — 편집 가능 셀만 Yellow (D_ 기간 셀 × EDIT_FLAG='Y' 행), 그 외 White + zebra
+      // #95 — 편집 가능 셀만 Yellow (D_ 기간 셀 × EDIT_FLAG='Y' 행), 그 외 White
       if (dynBindings.has(binding)) {
         const item = (e.panel.rows[e.row] as { dataItem?: CustomerFcstUploadRow }).dataItem;
         const editable = item?.EDIT_FLAG === 'Y';
@@ -300,14 +282,11 @@ export const CustomerFcstUploadGrid = ({
     };
   }, [gridRef]);
 
-  // ⭐ F4 Filter — 피처 소유 FlexGridFilter (동적 D_ 컬럼 필터 제외 — sales-monitoring 패턴)
+  // ⭐ F4 Filter — 피처 소유 FlexGridFilter
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
 
-    const onFilterChanging = (_s: FlexGridFilter, e: CellRangeEventArgs) => {
-      if (/^D_\d{8}$/.test(e.getColumn()?.binding ?? '')) e.cancel = true;
-    };
     const onFilterApplied = () => g.invalidate(true);
 
     let f = gridFilterRef.current;
@@ -316,20 +295,22 @@ export const CustomerFcstUploadGrid = ({
       f.filterColumns = [''];
       gridFilterRef.current = f;
     }
-    const cleaned = f.filterColumns.filter(b => !/^D_\d{8}$/.test(b));
-    if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
-    f.filterChanging.addHandler(onFilterChanging);
     f.filterApplied.addHandler(onFilterApplied);
 
     return () => {
       try {
-        f?.filterChanging.removeHandler(onFilterChanging);
         f?.filterApplied.removeHandler(onFilterApplied);
       } catch {
         /* unmount race */
       }
     };
-  }, [dynBindings, visibleColumns, gridRef, gridFilterRef]);
+    // 필수: deps 를 [gridRef, gridFilterRef] 로만 두면 두 값이 ref 라 불변 → effect 가 최초 1회만
+    //   실행된다. 이 화면은 DataGrid key(311) 가 조회 시 mainStaticColumns 변경으로 리마운트되어
+    //   wijmo grid 인스턴스가 새로 생기는데, effect 가 재실행되지 않으면 새 인스턴스에 FlexGridFilter
+    //   가 안 붙어 gridFilterRef.current 가 undefined 로 남는다 → SubTitle F4 action(gridFilter.current
+    //   가 falsy 면 no-op)이 무동작 = F4 필터 안 먹음. visibleColumns/dynBindings 를 deps 에 넣어
+    //   컬럼/인스턴스 변경마다 재실행해 새 grid 에 filter 를 (재)생성한다(sales-monitoring 1:1).
+  }, [visibleColumns, dynBindings, gridRef, gridFilterRef]);
 
   return (
     <DataGrid<CustomerFcstUploadRow>
@@ -341,7 +322,9 @@ export const CustomerFcstUploadGrid = ({
       comboParams={GRID_COMBO_PARAMS}
       itemsSource={data}
       autoGenerateColumns={false}
-      allowSorting={true}
+      // allowSorting prop 은 넘기지 않는다 - grid.allowSorting 이 truthy 면 wijmo
+      //   _MouseHandler._mousedown 이 헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다.
+      //   공용 정렬(F3 스위치 + 헤더 클릭 + 아이콘)은 이 prop 없이도 그대로 동작한다.
     />
   );
 };

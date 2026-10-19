@@ -43,7 +43,12 @@ const findMissingMandatory = <T>(
   saveData: T[],
   staticColumns: RawFlexGridColumnConfig[]
 ): RawFlexGridColumnConfig | undefined => {
-  const mandatoryColumns = staticColumns.filter(isMandatoryColumn);
+  // 숨긴 컬럼(visible=false)은 필수여도 검증 대상에서 뺀다 — 화면에 없어 사용자가 값을 채울
+  //   방법이 없으므로 필수로 막으면 저장이 영구히 불가능해진다(읽기전용 컬럼을 isEditableForRow 로
+  //   거르는 것과 같은 이유). visible 미지정(undefined)은 노출이므로 종전대로 검증한다.
+  const mandatoryColumns = staticColumns.filter(
+    col => isMandatoryColumn(col) && col.visible !== false
+  );
 
   if (mandatoryColumns.length <= 0) return undefined;
 
@@ -67,18 +72,17 @@ export const useSaveWithValidation = () => {
   const saveWithValidation = <T>(
     saveData: T[] | undefined,
     staticColumns: RawFlexGridColumnConfig[],
-    mutate: (data: T[]) => void
+    mutate: (data: T[]) => void,
+    // 필수값 검증 대상 행. 미지정 시 saveData 로 검증(기존 동작). 화면이 저장 payload 를
+    //   재구성(pivot 등)하면서 행 수/필드가 달라지는 경우, payload 대신 "신규/수정 원본 행" 을
+    //   넘겨 검증한다 — payload 가 비어도 원본에 남은 미입력 필수값을 잡기 위함이다
+    //   (DMF0007: 날짜셀이 없는 신규행은 pivot payload 가 0건이라, payload 로만 검증하면
+    //    필수 미입력이 그대로 "수정한 내용이 없습니다" 로 새어 나갔다).
+    validationRows?: WijmoRowItem[]
   ) => {
-    // 저장 대상 자체가 없으면 어느 항목이 비었는지 특정할 수 없어 일반 문구를 쓴다.
-    if (!saveData) {
-      void setAlert({
-        type: 'alert',
-        content: t(CRUD_MSG.REQUIRED_INPUT.id, CRUD_MSG.REQUIRED_INPUT.fallback),
-      });
-      return;
-    }
-
-    const missing = findMissingMandatory(saveData, staticColumns);
+    // 필수값 검증을 먼저 한다 — payload 유무보다 "무엇이 비었는지" 를 우선 알린다.
+    const rowsForValidation = (validationRows ?? saveData ?? []) as WijmoRowItem[];
+    const missing = findMissingMandatory(rowsForValidation, staticColumns);
     if (missing) {
       // 항목명은 컬럼 메타의 화면 라벨(colLblNm) 우선 — 사용자가 헤더에서 본 이름과 같게.
       //   라벨 끝 `*` 는 떼고 보여준다(헤더도 `*` 없이 빨간 점으로 그려진다).
@@ -89,6 +93,15 @@ export const useSaveWithValidation = () => {
           '{0}',
           `[${label}]`
         ),
+      });
+      return;
+    }
+
+    // 저장 대상 자체가 없으면(payload undefined) 어느 항목이 비었는지 특정할 수 없어 일반 문구.
+    if (!saveData) {
+      void setAlert({
+        type: 'alert',
+        content: t(CRUD_MSG.REQUIRED_INPUT.id, CRUD_MSG.REQUIRED_INPUT.fallback),
       });
       return;
     }

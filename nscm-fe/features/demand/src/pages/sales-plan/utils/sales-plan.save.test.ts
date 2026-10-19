@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { BUCKET_TYPE, EDIT_MEASURE } from '../sales-plan.constants';
+import { BUCKET_TYPE, EDIT_MEASURE, MSG } from '../sales-plan.constants';
 import type { SalesPlanRow } from '../sales-plan.types';
 
 import { bindingToSaveTag, buildUnfoldRows } from './sales-plan.save';
@@ -11,7 +11,7 @@ const buildMonthly = (row: Partial<SalesPlanRow>) =>
     editedChanges: new Map(),
     divisionId: typeof row.DIVISION_ID === 'string' ? row.DIVISION_ID : '',
     bucketType: BUCKET_TYPE.MONTHLY,
-    msg: { catchupMinZero: 'MSG00085', lineNoChange: 'MSG00146' },
+    msg: { catchupMinZero: MSG.CATCHUP_MIN_ZERO, lineNoChange: MSG.LINE_NO_CHANGE },
   });
 
 describe('bindingToSaveTag', () => {
@@ -23,8 +23,8 @@ describe('bindingToSaveTag', () => {
   });
 });
 
-describe('monthly save distribution', () => {
-  it('splits a monthly quantity into week tags and preserves the total', () => {
+describe('monthly save — one M tag per cell (AS-IS SaveData / TO-BE SP: 태그당 1행, 월→주 분할 없음)', () => {
+  it('keeps a Division 81 monthly value as a single M tag', () => {
     const result = buildMonthly({
       CRUD_TYPE: 'I',
       DIVISION_ID: '81',
@@ -34,26 +34,21 @@ describe('monthly save distribution', () => {
     });
 
     expect(result.error).toBeUndefined();
-    expect(result.rows.map(row => row.yyyymmdd)).toEqual([
-      'W_20260205',
-      'W_20260206',
-      'W_20260207',
-      'W_20260208',
-      'W_20260209',
-    ]);
-    expect(result.rows.reduce((sum, row) => sum + Number(row.qty), 0)).toBe(100);
+    expect(result.rows).toHaveLength(1);
+    expect(result.rows[0]).toMatchObject({ yyyymmdd: 'M_202602', qty: '100' });
   });
 
-  it('preserves SalesAmt_LOC totals at the 0.001 unit', () => {
+  it('keeps a Division 82 SalesAmt_LOC monthly value as a single M tag', () => {
     const result = buildMonthly({
       CRUD_TYPE: 'I',
-      DIVISION_ID: '81',
+      DIVISION_ID: '82',
       FCST_TYPE: 'RMA',
       MEASURE: EDIT_MEASURE.SALES_AMT_LOC,
       M_202602: 1.001,
     });
 
-    expect(result.rows.reduce((sum, row) => sum + Number(row.qty), 0)).toBeCloseTo(1.001, 3);
+    expect(result.rows).toHaveLength(1);
+    expect(result.rows[0]).toMatchObject({ yyyymmdd: 'M_202602', qty: '1.001' });
   });
 
   it('keeps Division 40 ETC monthly values as one M tag', () => {

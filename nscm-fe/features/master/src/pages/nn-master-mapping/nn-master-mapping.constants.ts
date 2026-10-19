@@ -38,14 +38,10 @@ export const FALLBACK_ALL: ReadonlyArray<{ value: string; label: string }> = [
   { value: 'ALL', label: 'ALL' },
 ];
 
-/**
- * Div - Team - End Customer - Sales Site cascade 를 한 번에 내려주는 조인 콤보 ID.
- *
- * 종전에는 단계마다 콤보를 따로 조회하고(MyDivision / TeambyDivision / EndCustomer / SalesSite)
- * 화면이 cascade 컬럼과 strict 여부까지 배선했다. 이 화면은 End Customer 를 'SalesSite' 콤보의
- * PROJECT_CODE 자리로 읽는 우회까지 하고 있었다 — 조인 1건으로 바꾸면 그 배선이 전부 사라진다.
- *
- * 콤보 SQL 컬럼 규약은 CascadeFields 헤더 주석 참조 —
- *   중간 단계: <LEVEL>_CODE / <LEVEL>_NAME, 마지막 단계: CODE / NAME.
- */
-export const SEARCH_CASCADE_COMBO_ID = 'SalesSite';
+// lookup 타입 (SCM0001_GET_LOOKUP_VALUES 도메인 — useTabLookupQueries 소비)
+//   COMPANY = AS-IS InsertRow cs:558 GetLookupValues("DM_EDI_COMPANY_LIST") (MI00/NA00/GM00 3건).
+//   TO-BE 컬럼 메타는 Company 콤보(SCM_MST_COMPANY_SN 전건)로 잘못 배선돼 후보범위가 다르다(design 03 §6 불일치).
+//   AS-IS 와 동일 후보를 보이도록 FE 가 이 lookup 을 조회해 COMPANY_ID 신규행 셀에 DataMap 을 주입한다.
+export const LOOKUP = {
+  COMPANY: 'DM_EDI_COMPANY_LIST',
+} as const;

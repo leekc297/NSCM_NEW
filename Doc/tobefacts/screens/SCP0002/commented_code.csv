@@ -1,0 +1,6 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/line-master","SCP0002","features/supply/src/pages/line-master/line-master.constants.ts","146","code","=> 신규전용(필수) SCM_SITE_ID/LINE_ID/RACK_YN=IM, 상시(필수) LINE_NAME/VALID_YN=M, 상시(선택) SCS_PROD_AMEND=O,"
+"supply/line-master","SCP0002","features/supply/src/pages/line-master/LineMaster.tsx","69","endpoint","SAVE 는 CLOB '^' bulk proc 라 useProcMutation(행 배열) 불가 → savePackerOsp 로 폴딩 POST."
+"supply/line-master","SCP0002","features/supply/src/pages/line-master/useLineMasterStore.ts","29","endpoint","ui-dynamic-property-management §2.3 — admin SCM_MST_SHEET_COLUMNS 동적 fetch (미등록 시 빈 배열 →"
+"supply/line-master","SCP0002","features/supply/src/pages/line-master/useLineMasterStore.ts","138","endpoint","'Line Master' 중복 sheetNm 은 제외 — Plant/Packer 2종만 fetch (design 03 §화면구조전제)."
+"supply/line-master","SCP0002","features/supply/src/pages/line-master/utils/line-master.api.ts","2","endpoint","useProcMutation(행 배열 그대로 전송)으로는 저장되지 않는다 — BE makeProcedure 가 PROC_M 의"

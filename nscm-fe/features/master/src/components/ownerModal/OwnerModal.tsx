@@ -1,10 +1,11 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef, useState } from 'react';
 
-import { GridUtils } from '@foundation/utils';
-import { SearchArea, DataGrid, CustomDialog } from '@shared/components';
+import { attachRowNoHeader, GridUtils } from '@foundation/utils';
+import { SearchArea, DataGrid, CustomDialog, ResultArea } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ArrowChevron2Icon, ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
@@ -23,6 +24,13 @@ interface OwnerModalProps {
   ownerId?: string;
   /** true 면 담당자를 한 명만 확정할 수 있다 — 2명 이상 선택 후 OK 시 경고하고 닫지 않는다. */
   singleSelect?: boolean;
+  /**
+   * 확정할 수 있는 최대 인원. 넘게 선택한 채 OK 를 누르면 경고하고 닫지 않는다(singleSelect 와 같은 방식).
+   * 미지정이면 상한 없음(종전 동작). singleSelect 가 켜져 있으면 그 판정이 먼저다.
+   * 첫 사용처 DMF0005 Owner 10명 제한 (2026-10-13 사용자 요청). 선택 중 추가 자체는 막지 않고
+   *   OK 시점에만 판정한다 — 후보에서 옮기는 동작은 그대로 두어 사용자가 정리할 수 있게 한다.
+   */
+  maxSelect?: number;
 }
 
 export const OwnerModal = ({
@@ -32,6 +40,7 @@ export const OwnerModal = ({
   divisionId,
   ownerId,
   singleSelect = false,
+  maxSelect,
 }: OwnerModalProps) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
@@ -42,6 +51,9 @@ export const OwnerModal = ({
   const selectedGridRef = useRef<
     FlexGrid<ResponseData<MODAL_OWNER, MODAL_SHEET_OWNER, 'o_rc1'>> | undefined
   >();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const candidateGridFilterRef = useRef<FlexGridFilter | undefined>();
+  const selectedGridFilterRef = useRef<FlexGridFilter | undefined>();
 
   const initialized = useOwnerModalStore(state => state.initialized);
   const staticColumns = useOwnerModalStore(state => state.staticColumns);
@@ -64,13 +76,18 @@ export const OwnerModal = ({
   // 입력 중인 값 — 조회하지 않고 로컬 state 에만 담아둔다.
   const [userInput, setUserInput] = useState<string>('');
 
-  const { data: userData } = useTabProcQuery<MODAL_OWNER>({
+  const {
+    data: userData,
+    isLoading,
+    isFetching,
+  } = useTabProcQuery<MODAL_OWNER>({
     menuId: MODAL_OWNER,
     sheetName: MODAL_SHEET_OWNER,
     tabId: 'OwnerModal',
     filters: searchParam,
     enabled: true,
   });
+  const loading = isLoading || isFetching;
 
   const [selectedUsers, setSelectedUsers] = useState<
     ResponseData<MODAL_OWNER, MODAL_SHEET_OWNER, 'o_rc1'>[]
@@ -120,6 +137,18 @@ export const OwnerModal = ({
       return;
     }
 
+    // 인원 상한 — 백엔드 메시지 코드가 아직 없어 임시 키 + 기본문구(MSG01000 과 같은 alert 방식).
+    if (maxSelect !== undefined && selectedUsers.length > maxSelect) {
+      void setAlert({
+        type: 'alert',
+        content: t(
+          'MSG_OWNER_MAX_COUNT',
+          `Owner 는 최대 ${maxSelect}명까지 선택할 수 있습니다. (선택 ${selectedUsers.length}명)`
+        ),
+      });
+      return;
+    }
+
     setSelectedValue(selectedUsers);
     modalClose();
   };
@@ -160,6 +189,14 @@ export const OwnerModal = ({
     if (!initialized) void fetchStaticColumns();
   }, [open, ownerId]);
 
+  useEffect(() => {
+    if (candidateGridRef.current) attachRowNoHeader(candidateGridRef.current, t('LBL00674', 'No'));
+  }, [candidateGridRef, t, candidateUsers]);
+
+  useEffect(() => {
+    if (selectedGridRef.current) attachRowNoHeader(selectedGridRef.current, t('LBL00674', 'No'));
+  }, [selectedGridRef, t, selectedUsers]);
+
   return (
     <CustomDialog
       size={800}
@@ -167,6 +204,10 @@ export const OwnerModal = ({
       position='basic'
       open={open}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -196,13 +237,29 @@ export const OwnerModal = ({
             }
           />
           <div className={styles.gridWrapper}>
-            <DataGrid<ResponseData<MODAL_OWNER, MODAL_SHEET_OWNER, 'o_rc1'>>
-              gridRef={candidateGridRef}
-              isReadOnly
-              staticColumns={staticColumns}
-              itemsSource={candidateUsers}
-              dblClick={handleCandidateDblClick}
-            />
+            <div className={styles.candidateGridWrapper}>
+              <ProgressIndicator
+                shape='circular'
+                apprearance='infinite'
+                open={loading}
+                placement='parent'
+              />
+              <ResultArea
+                title=''
+                count={candidateUsers.length}
+                gridRef={candidateGridRef}
+                gridFilterRef={candidateGridFilterRef}
+              >
+                <DataGrid<ResponseData<MODAL_OWNER, MODAL_SHEET_OWNER, 'o_rc1'>>
+                  gridRef={candidateGridRef}
+                  gridFilterRef={candidateGridFilterRef}
+                  isReadOnly
+                  staticColumns={staticColumns}
+                  itemsSource={candidateUsers}
+                  dblClick={handleCandidateDblClick}
+                />
+              </ResultArea>
+            </div>
             <div className={styles.arrowButtonWrapper}>
               <Button
                 iconComponent={<ArrowChevron2Icon appearance='single' direction='right' />}
@@ -213,13 +270,23 @@ export const OwnerModal = ({
                 onClick={handleCancelUsers}
               />
             </div>
-            <DataGrid<ResponseData<MODAL_OWNER, MODAL_SHEET_OWNER, 'o_rc1'>>
-              gridRef={selectedGridRef}
-              isReadOnly
-              staticColumns={staticColumns}
-              itemsSource={selectedUsers}
-              dblClick={handleSelectedDblClick}
-            />
+            <div className={styles.selectedGridWrapper}>
+              <ResultArea
+                title=''
+                count={selectedUsers.length}
+                gridRef={selectedGridRef}
+                gridFilterRef={selectedGridFilterRef}
+              >
+                <DataGrid<ResponseData<MODAL_OWNER, MODAL_SHEET_OWNER, 'o_rc1'>>
+                  gridRef={selectedGridRef}
+                  gridFilterRef={selectedGridFilterRef}
+                  isReadOnly
+                  staticColumns={staticColumns}
+                  itemsSource={selectedUsers}
+                  dblClick={handleSelectedDblClick}
+                />
+              </ResultArea>
+            </div>
           </div>
           <div className={styles.buttonWrapper}>
             {/* <Button

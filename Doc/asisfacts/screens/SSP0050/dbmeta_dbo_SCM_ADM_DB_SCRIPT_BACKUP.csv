@@ -1,0 +1,526 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0050_GET_SHIPMENT_APPORVAL","1228687575","1","
+
+/*
+ * Program ID   : SSP0050_GET_SHIPMENT_APPORVAL
+ * Description  : Shipment Apporval
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *=================================================================================================== 
+ * 2024/02/06   jilee          SSP 전자 결재 연동 승인자 기준 정보
+
+ ex) EXEC SSP0050_GET_SHIPMENT_APPORVAL @p_user_id
+ */
+
+CREATE PROCEDURE [dbo].[SSP0050_GET_SHIPMENT_APPORVAL]	
+	@p_user_id				NVARCHAR(MAX)	
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	
+	
+	SELECT A.USER_ID
+	       ,A.PERIOD_FROM
+		   ,A.PERIOD_TO
+		   ,A.DAYS_MON_YN
+		   ,A.DAYS_MON_FROM_TO		   
+		   ,A.DAYS_TUE_YN
+		   ,A.DAYS_TUE_FROM_TO		   
+		   ,A.DAYS_WED_YN
+		   ,A.DAYS_WED_FROM_TO		   
+		   ,A.DAYS_THU_YN
+		   ,A.DAYS_THU_FROM_TO		   
+		   ,A.DAYS_FRI_YN
+		   ,A.DAYS_FRI_FROM_TO		   
+		   ,A.DAYS_SAT_YN
+		   ,A.DAYS_SAT_FROM_TO		   
+		   ,A.DAYS_SUN_YN
+		   ,A.DAYS_SUN_FROM_TO		   
+		   ,A.VALID_YN
+		   ,A.CREATED_BY
+		   ,A.CREATION_DATE
+		   ,A.LAST_UPDATED_BY 
+		   ,A.LAST_UPDATE_DATE
+	FROM SSP_MST_APPROVAL A WITH(NOLOCK)
+	LEFT OUTER JOIN TB_FX_User u on u.UserID = A.USER_ID
+	ORDER BY A.PERIOD_FROM DESC, A.PERIOD_TO DESC
+
+	--SELECT DIVISION_ID
+	--	  ,OPERATION_GROUP
+	--	  ,FROM_SITE
+	--	  ,ITEM_ID
+	--	  ,dbo.fn_get_item_nickname(a.DIVISION_ID, a.ITEM_ID ) AS NICK_NAME
+	--	  ,a.USER_ID
+	--	  ,case when @p_language = 'KO' then u.UserName else u.UserName_E end USER_NAME
+	--	  ,a.PART_LEADER
+	--	  ,case when @p_language = 'KO' then pl.UserName else pl.UserName_E end PART_LEADER_NAME
+	--	  ,a.TEAM_LEADER
+	--	  ,case when @p_language = 'KO' then tl.UserName else tl.UserName_E end TEAM_LEADER_NAME
+	--	  ,isnull(a.VALID_YN,'Y') VALID_YN
+	--	  ,case when @p_language = 'KO' then cu.UserName else cu.UserName_E end + '(' + a.CREATED_BY + ')' CREATED_BY
+	--	  ,a.CREATION_DATE
+	--	  ,case when @p_language = 'KO' then lu.UserName else lu.UserName_E end + '(' + a.LAST_UPDATED_BY + ')' LAST_UPDATED_BY
+	--	  ,a.LAST_UPDATE_DATE
+	--	  ,a.ATTRIBUTE1 AS MAIL_USER1
+	--	  ,a.ATTRIBUTE2 AS MAIL_USER2
+	--	  ,a.ATTRIBUTE3 AS MAIL_USER3
+	--	  ,a.ATTRIBUTE4 AS MAIL_USER4
+	--	  ,a.ATTRIBUTE5 AS MAIL_USER5
+	--FROM(
+	--		SELECT SI.DIVISION_ID 			
+	--			  ,FS.OPERATION_GROUP
+	--			  ,SI.SCM_SITE_ID FROM_SITE 
+	--			  ,SI.ITEM_ID 
+	--			  ,MU.USER_ID
+	--			  ,MU.PART_LEADER
+	--			  ,MU.TEAM_LEADER
+	--			  ,MU.VALID_YN			
+	--			  ,max(mu.CREATED_BY) CREATED_BY
+	--			  ,max(MU.CREATION_DATE) CREATION_DATE
+	--			  ,max(mu.LAST_UPDATED_BY) LAST_UPDATED_BY
+	--			  ,max(mu.LAST_UPDATE_DATE) LAST_UPDATE_DATE
+	--			  ,MU.ATTRIBUTE1
+	--			  ,MU.ATTRIBUTE2
+	--			  ,MU.ATTRIBUTE3
+	--			  ,MU.ATTRIBUTE4
+	--			  ,MU.ATTRIBUTE5
+	--		FROM SCM_MST_SITE_ITEM SI WITH(NOLOCK) 			
+	--			JOIN SCM_MST_SITE  FS WITH(NOLOCK) ON FS.DIVISION_ID = SI.DIVISION_ID AND  FS.SCM_SITE_ID = SI.SCM_SITE_ID AND  FS.SITE_TYPE  = 'PLANT'		
+	--			LEFT OUTER JOIN SSP_MST_MODEL_USER MU WITH(NOLOCK) ON MU.DIVISION_ID = SI.DIVISION_ID AND MU.FROM_SITE = SI.SCM_SITE_ID AND MU.ITEM_ID = SI.ITEM_iD 	
+	--		WHERE 1=1 				
+	--		GROUP BY SI.DIVISION_ID, FS.OPERATION_GROUP, SI.SCM_SITE_ID, SI.ITEM_ID, MU.USER_ID, MU.PART_LEADER, MU.TEAM_LEADER, MU.VALID_YN, MU.ATTRIBUTE1, MU.ATTRIBUTE2
+	--		         , MU.ATTRIBUTE3, MU.ATTRIBUTE4, MU.ATTRIBUTE5			
+	--) a
+	--LEFT OUTER JOIN TB_FX_User u on u.UserID = a.USER_ID
+	--LEFT OUTER JOIN TB_FX_User pl on pl.UserID = a.PART_LEADER
+	--LEFT OUTER JOIN TB_FX_User tl on tl.UserID = a.TEAM_LEADER
+	--LEFT OUTER JOIN TB_FX_User cu on cu.UserID = a.CREATED_BY
+	--LEFT OUTER JOIN TB_FX_User lu on lu.UserID = a.LAST_UPDATED_BY
+	--WHERE a.DIVISION_ID = @p_division_id
+	--  AND ( ( @p_operation_group   IS NULL OR @p_operation_group ='')  OR a.OPERATION_GROUP IN (SELECT token FROM dbo.String_Split(@p_operation_group,',')) )
+	--  AND ( ("
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0050_GET_SHIPMENT_APPORVAL","1228687575","2"," @p_from_site   IS NULL OR @p_from_site ='')  OR a.from_site IN (SELECT token FROM dbo.String_Split(@p_from_site,',')) )
+	--  AND ( ( @p_valid_yn   IS NULL OR @p_valid_yn ='')  OR a.VALID_YN IN (SELECT token FROM dbo.String_Split(@p_valid_yn,',')) )
+	--  AND ( ( @p_item_id   IS NULL OR @p_item_id ='')  OR a.ITEM_ID IN (SELECT token FROM dbo.String_Split(@p_item_id,',')) )
+	--  AND ( ( @p_user_id   IS NULL OR @p_user_id ='')  OR (a.USER_ID like '%' + @p_user_id + '%') or (u.UserName like '%' + @p_user_id + '%')  
+	--												   OR (a.PART_LEADER like '%' + @p_user_id + '%') or (pl.UserName like '%' + @p_user_id + '%') 
+	--												   OR (a.TEAM_LEADER like '%' + @p_user_id + '%') or (tl.UserName like '%' + @p_user_id + '%') )
+	--ORDER BY DIVISION_ID
+	--	  ,OPERATION_GROUP
+	--	  ,from_site
+	--	  ,ITEM_ID
+	--	  ,a.USER_ID
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0050_GET_SHIPMENT_APPORVAL_VALID_USER","1612688943","1","
+
+/*
+ * Program ID   : SSP0050_GET_SHIPMENT_APPORVAL_VALID_USER
+ * Description  : Shipment Apporval
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *=================================================================================================== 
+ * 2024/02/06   jilee          SSP 전자 결재 연동 승인자 기준일 적합성 유무
+
+ ex) EXEC SSP0050_GET_SHIPMENT_APPORVAL_VALID_USER @p_user_id
+ */
+
+CREATE PROCEDURE [dbo].[SSP0050_GET_SHIPMENT_APPORVAL_VALID_USER]	
+	 @p_user_id				NVARCHAR(100)	= ''
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	
+	DECLARE @v_yn                NVARCHAR(1)    = 'N';
+	DECLARE @v_now_date          NVARCHAR(8)    = CONVERT(NVARCHAR(8), GETDATE() ,112); 
+	DECLARE @v_now_time          NVARCHAR(5)    = CONVERT(VARCHAR(5), CONVERT(TIME,GETDATE()));
+	DECLARE @v_date_part         NVARCHAR(10)   = '';
+	DECLARE @v_date_from_to      NVARCHAR(11)   = '';
+	DECLARE @v_user_start_time   NVARCHAR(5)    = '';
+	DECLARE @v_user_end_time     NVARCHAR(5)    = '';
+	DECLARE @v_cnt_find_user	 INT            = 0;
+
+	DECLARE @v_days_sun_yn       NVARCHAR(1)    = '';
+	DECLARE @v_days_mon_yn       NVARCHAR(1)    = '';
+	DECLARE @v_days_tue_yn       NVARCHAR(1)    = '';
+	DECLARE @v_days_wed_yn       NVARCHAR(1)    = '';
+	DECLARE @v_days_thu_yn       NVARCHAR(1)    = '';
+	DECLARE @v_days_fri_yn       NVARCHAR(1)    = '';
+	DECLARE @v_days_sat_yn       NVARCHAR(1)    = '';
+
+	DECLARE @v_days_sun_from_to  NVARCHAR(11)   = '';
+	DECLARE @v_days_mon_from_to  NVARCHAR(11)   = '';
+	DECLARE @v_days_tue_from_to  NVARCHAR(11)   = '';
+	DECLARE @v_days_wed_from_to  NVARCHAR(11)   = '';
+	DECLARE @v_days_thu_from_to  NVARCHAR(11)   = '';
+	DECLARE @v_days_fri_from_to  NVARCHAR(11)   = '';
+	DECLARE @v_days_sat_from_to  NVARCHAR(11)   = '';
+
+	SET @v_cnt_find_user = (	
+	                            SELECT COUNT(*)
+								FROM SSP_MST_APPROVAL A WITH(NOLOCK)
+								WHERE 1=1
+								AND @v_now_date BETWEEN A.PERIOD_FROM AND A.PERIOD_TO
+								AND USER_ID = @p_user_id
+								AND A.VALID_YN = 'Y'
+							)
+							
+    IF @v_cnt_find_user = 0
+		BEGIN
+			SELECT @v_yn AS RESULT_CODE
+			RETURN;
+		END
+    ELSE
+		BEGIN
+		   
+		    SELECT  @v_days_sun_yn      = A.DAYS_SUN_YN
+				   ,@v_days_mon_yn      = A.DAYS_MON_YN
+				   ,@v_days_tue_yn      = A.DAYS_TUE_YN
+				   ,@v_days_wed_yn      = A.DAYS_WED_YN
+				   ,@v_days_thu_yn      = A.DAYS_THU_YN
+				   ,@v_days_fri_yn      = A.DAYS_FRI_YN 
+				   ,@v_days_sat_yn      = A.DAYS_SAT_YN				   
+				   ,@v_days_sun_from_to = A.DAYS_SUN_FROM_TO
+				   ,@v_days_mon_from_to	= A.DAYS_MON_FROM_TO
+				   ,@v_days_tue_from_to	= A.DAYS_TUE_FROM_TO
+				   ,@v_days_wed_from_to	= A.DAYS_WED_FROM_TO
+				   ,@v_days_thu_from_to	= A.DAYS_THU_FROM_TO
+				   ,@v_days_fri_from_to	= A.DAYS_FRI_FROM_TO
+				   ,@v_days_sat_from_to	= A.DAYS_SAT_FROM_TO
+            FROM SSP_MST_APPROVAL A WITH(NOLOCK) WHERE 1=1
+			AND @v_now_date BETWEEN A.PERIOD_FROM AND A.PERIOD_TO
+			AND USER_ID = @p_user_id
+			AND A.VALID_YN = 'Y'
+			                
+			SELECT @v_date_part = CASE WHEN(DATEPART(WEEKDAY,GETDATE())='1') THEN @v_days_sun_yn             
+			                           WHEN(DATEPART(WEEKDAY,GETDATE())='2') THEN @v_days_mon_yn
+			                           WHEN(DATEPART(WEEKDAY,GETDATE())='3') THEN @v_days_tue_yn
+			                           WHEN(DATEPART(WEEKDAY,GETDATE())='4') THEN @v_days_wed_yn 
+			                		   WHEN(DATEPART(WEEKDAY,GETDATE())='5') THEN @v_days_thu_yn
+									   WHEN(DATEPART(WEEKDAY,GETDATE())='6') THEN @v_days_fri_yn
+									   WHEN(DATEPART(WEEKDAY,GETDATE())='7') THEN @v_days_sat_yn
+								       END
+			IF @v_date_part = 'Y'
+				BEGIN
+					SELECT @v_date_from_to = CASE WHEN(DATEPART(WEEKDAY,GETDATE())='1') THEN @v_days_sun_from_to
+												  WHEN(DATEPART(WEEKDAY,GETDATE())='2') THEN"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0050_GET_SHIPMENT_APPORVAL_VALID_USER","1612688943","2"," @v_days_mon_from_to
+												  WHEN(DATEPART(WEEKDAY,GETDATE())='3') THEN @v_days_tue_from_to 
+												  WHEN(DATEPART(WEEKDAY,GETDATE())='4') THEN @v_days_wed_from_to
+												  WHEN(DATEPART(WEEKDAY,GETDATE())='5') THEN @v_days_thu_from_to
+												  WHEN(DATEPART(WEEKDAY,GETDATE())='6') THEN @v_days_fri_from_to
+												  WHEN(DATEPART(WEEKDAY,GETDATE())='7') THEN @v_days_sat_from_to
+											      END 
+				END
+
+			SET @v_user_start_time = SUBSTRING(@v_date_from_to, 1,  5)
+			SET @v_user_end_time   = SUBSTRING(@v_date_from_to, 7, 11)
+			
+			IF @v_user_start_time <= @v_now_time AND @v_user_end_time >= @v_now_time
+				BEGIN
+					SET @v_yn = 'Y'
+				END
+
+			SELECT @v_yn AS RESULT_CODE
+
+		END		
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0050_GET_EMPLOYEE_NUMBER_LOAD","697209684","1","
+
+
+/*
+ * Program ID   : SSP0050_GET_EMPLOYEE_NUMBER_LOAD
+ * Description  : EMPLOYEE_NUMBER_LOAD
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2024/02/21   jilee          요청자,승인자 임직원 사번 조회
+
+ ex) 
+ */
+
+CREATE PROCEDURE [dbo].[SSP0050_GET_EMPLOYEE_NUMBER_LOAD]
+	  @p_requester			NVARCHAR(100)
+	 ,@p_approver			NVARCHAR(100)
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	
+	SELECT (SELECT EMP_NO FROM LP_SYS_USER_SN A WITH(NOLOCK) WHERE A.USER_ID = @p_requester) AS REQUESTER
+          ,(SELECT EMP_NO FROM LP_SYS_USER_SN B WITH(NOLOCK) WHERE B.USER_ID = @p_approver)  AS APPROVER
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0050_SAVE_SHIPTMENT_APPORVAL","777209969","1","/*
+ * Program ID   : [SSP0050_SAVE_SHIPTMENT_APPORVAL]
+ * Description  : Shipment Apporval
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2024/02/21   jilee		   SSP 전자 결재 연동 승인자 기준 정보	
+ 
+ */
+CREATE PROCEDURE [dbo].[SSP0050_SAVE_SHIPTMENT_APPORVAL]
+	 @p_user_id 			NVARCHAR(MAX)
+	,@p_period_from			NVARCHAR(MAX)
+	,@p_period_to			NVARCHAR(MAX)    
+	,@p_days_mon_yn         NVARCHAR(MAX) 
+	,@p_days_mon_from_to	NVARCHAR(MAX)
+	,@p_days_tue_yn			NVARCHAR(MAX)
+	,@p_days_tue_from_to	NVARCHAR(MAX)
+	,@p_days_wed_yn			NVARCHAR(MAX)
+	,@p_days_wed_from_to	NVARCHAR(MAX)
+	,@p_days_thu_yn			NVARCHAR(MAX)
+	,@p_days_thu_from_to	NVARCHAR(MAX)
+	,@p_days_fri_yn			NVARCHAR(MAX)
+	,@p_days_fri_from_to	NVARCHAR(MAX)
+	,@p_days_sat_yn			NVARCHAR(MAX)
+	,@p_days_sat_from_to	NVARCHAR(MAX)
+	,@p_days_sun_yn			NVARCHAR(MAX)
+	,@p_days_sun_from_to	NVARCHAR(MAX)
+	,@p_valid_yn			NVARCHAR(MAX)
+	,@p_active_flag         NVARCHAR(MAX)
+	,@p_requester           NVARCHAR(MAX)
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+	
+	DECLARE @v_user_id   		    NVARCHAR(MAX);
+	DECLARE @v_period_from		    NVARCHAR(MAX);
+	DECLARE @v_period_to			NVARCHAR(MAX);
+	DECLARE @v_days_mon_yn      	NVARCHAR(MAX);
+	DECLARE @v_days_mon_from_to		NVARCHAR(MAX);
+	DECLARE @v_days_tue_yn			NVARCHAR(MAX);
+	DECLARE @v_days_tue_from_to		NVARCHAR(MAX);
+	DECLARE @v_days_wed_yn			NVARCHAR(MAX);
+	DECLARE @v_days_wed_from_to		NVARCHAR(MAX);
+	DECLARE @v_days_thu_yn			NVARCHAR(MAX);
+	DECLARE @v_days_thu_from_to		NVARCHAR(MAX);
+	DECLARE @v_days_fri_yn			NVARCHAR(MAX);
+	DECLARE @v_days_fri_from_to		NVARCHAR(MAX);
+	DECLARE @v_days_sat_yn			NVARCHAR(MAX);
+	DECLARE @v_days_sat_from_to		NVARCHAR(MAX);
+	DECLARE @v_days_sun_yn			NVARCHAR(MAX);
+	DECLARE @v_days_sun_from_to		NVARCHAR(MAX);
+	DECLARE @v_valid_yn				NVARCHAR(MAX);	
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_requester            NVARCHAR(100);
+
+	SET @v_user_id                 = NULL;	
+	SET @v_period_from		       = NULL;
+	SET @v_period_to			   = NULL;
+	SET @v_days_mon_yn      	   = NULL;
+	SET @v_days_mon_from_to		   = NULL;
+	SET @v_days_tue_yn			   = NULL;
+	SET @v_days_tue_from_to		   = NULL;
+	SET @v_days_wed_yn			   = NULL;
+	SET @v_days_wed_from_to		   = NULL;
+	SET @v_days_thu_yn			   = NULL;
+	SET @v_days_thu_from_to		   = NULL;
+	SET @v_days_fri_yn			   = NULL;
+	SET @v_days_fri_from_to		   = NULL;
+	SET @v_days_sat_yn			   = NULL;
+	SET @v_days_sat_from_to		   = NULL;
+	SET @v_days_sun_yn			   = NULL;
+	SET @v_days_sun_from_to		   = NULL;
+	SET @v_valid_yn				   = NULL;
+	SET @v_active_flag	           = NULL;
+	SET @v_requester               = @p_requester;  
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SSP0050_SAVE_SHIPTMENT_APPORVAL';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+	
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    	
+			-- @m"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0050_SAVE_SHIPTMENT_APPORVAL","777209969","2","st_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				SET @v_user_id             = [dbo].[SCM_ARR_SPL_VAL](@p_user_id  	        , @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_period_from		   = [dbo].[SCM_ARR_SPL_VAL](@p_period_from	        , @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_period_to		   = [dbo].[SCM_ARR_SPL_VAL](@p_period_to	        , @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_mon_yn         = [dbo].[SCM_ARR_SPL_VAL](@p_days_mon_yn      	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_mon_from_to	   = [dbo].[SCM_ARR_SPL_VAL](@p_days_mon_from_to	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_tue_yn		   = [dbo].[SCM_ARR_SPL_VAL](@p_days_tue_yn			, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_tue_from_to	   = [dbo].[SCM_ARR_SPL_VAL](@p_days_tue_from_to	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_wed_yn		   = [dbo].[SCM_ARR_SPL_VAL](@p_days_wed_yn			, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_wed_from_to	   = [dbo].[SCM_ARR_SPL_VAL](@p_days_wed_from_to	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_thu_yn		   = [dbo].[SCM_ARR_SPL_VAL](@p_days_thu_yn			, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_thu_from_to	   = [dbo].[SCM_ARR_SPL_VAL](@p_days_thu_from_to	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_fri_yn		   = [dbo].[SCM_ARR_SPL_VAL](@p_days_fri_yn			, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_fri_from_to	   = [dbo].[SCM_ARR_SPL_VAL](@p_days_fri_from_to	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_sat_yn		   = [dbo].[SCM_ARR_SPL_VAL](@p_days_sat_yn			, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_sat_from_to	   = [dbo].[SCM_ARR_SPL_VAL](@p_days_sat_from_to	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_sun_yn		   = [dbo].[SCM_ARR_SPL_VAL](@p_days_sun_yn			, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_days_sun_from_to	   = [dbo].[SCM_ARR_SPL_VAL](@p_days_sun_from_to	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_valid_yn			   = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn			, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_active_flag	       = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag	    	, @v_delimiter , @mst_loop_cnt) ; 
+			END			
+
+			--SSP0050_Save시 24시 입력하면 23:59 강제 변경 00:00~23:59					
+			IF(SUBSTRING(@v_days_mon_from_to,7,8) = '24' OR SUBSTRING(@v_days_tue_from_to,7,8) = '24' OR SUBSTRING(@v_days_wed_from_to,7,8) = '24' OR
+			   SUBSTRING(@v_days_thu_from_to,7,8) = '24' OR SUBSTRING(@v_days_fri_from_to,7,8) = '24' OR SUBSTRING(@v_days_sat_from_to,7,8) = '24' OR
+			   SUBSTRING(@v_days_sun_from_to,7,8) = '24'
+			   )
+				BEGIN
+					SELECT  'X' AS result_code,  @max_loop_cnt AS result_cnt ;
+					RETURN;
+				END
+
+			--SSP0050_Save시 To시간이 작으면 체크	
+			IF(SUBSTRING(@v_days_mon_from_to,1,2) > SUBSTRING(@v_days_mon_from_to,7,8) OR
+			   SUBSTRING(@v_days_tue_from_to,1,2) > SUBSTRING(@v_days_tue_from_to,7,8) OR			   
+			   SUBSTRING(@v_days_wed_from_to,1,2) > SUBSTRING(@v_days_wed_from_to,7,8) OR
+			   SUBSTRING(@v_days_thu_from_to,1,2) > SUBSTRING(@v_days_thu_from_to,7,8) OR 
+			   SUBSTRING(@v_days_fri_from_to,1,2) > SUBSTRING(@v_days_fri_from_to,7,8) OR
+			   SUBSTRING(@v_days_sat_from_to,1,2) > SUBSTRING(@v_days_sat_from_to,7,8) OR
+			   SUBSTRING(@v_days_sun_from_to,1,2) > SUBSTRING(@v_days_sun_from_to,7,8)
+			   )
+				BEGIN
+					SELECT  'Z' AS result_code,  @max_loop_cnt AS result_cnt ;
+					RETURN;
+				END
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+				BEGIN
+				    
+					MERGE INTO SSP_MST_APPROVAL A
+					USING (
+							SELECT 
+									 @v_user_id      as user_id
+									,@v_period_from  as period_from
+									,@v_period_to    as period_to
+						  ) B
+					ON    (
+									a.user_id       = b.user_id
+								AND a.period_from   = b.period_from
+								AND	a.period_to     = b.period_to
+					      )
+					WHEN MATCHED THEN
+							UPDATE SET							
+								  days_mon_yn       = @v_days_mon_yn      
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SSP0050_SAVE_SHIPTMENT_APPORVAL","777209969","3","								 ,days_mon_from_to  = @v_days_mon_from_to	
+								 ,days_tue_yn		= @v_days_tue_yn		
+								 ,days_tue_from_to  = @v_days_tue_from_to	
+								 ,days_wed_yn		= @v_days_wed_yn		
+								 ,days_wed_from_to  = @v_days_wed_from_to	
+								 ,days_thu_yn		= @v_days_thu_yn		
+								 ,days_thu_from_to  = @v_days_thu_from_to	
+								 ,days_fri_yn		= @v_days_fri_yn		
+								 ,days_fri_from_to  = @v_days_fri_from_to	
+								 ,days_sat_yn		= @v_days_sat_yn		
+								 ,days_sat_from_to  = @v_days_sat_from_to	
+								 ,days_sun_yn		= @v_days_sun_yn		
+								 ,days_sun_from_to  = @v_days_sun_from_to	
+								 ,valid_yn		    = @v_valid_yn
+								 ,last_updated_by   = @v_requester
+								 ,last_update_date  = sysdatetime()
+					WHEN NOT MATCHED THEN
+					INSERT	(		
+					              USER_ID
+								 ,PERIOD_FROM
+								 ,PERIOD_TO
+								 ,DAYS_MON_YN     
+								 ,DAYS_MON_FROM_TO
+								 ,DAYS_TUE_YN		
+								 ,DAYS_TUE_FROM_TO
+								 ,DAYS_WED_YN		
+								 ,DAYS_WED_FROM_TO
+								 ,DAYS_THU_YN		
+								 ,DAYS_THU_FROM_TO
+								 ,DAYS_FRI_YN		
+								 ,DAYS_FRI_FROM_TO
+								 ,DAYS_SAT_YN		
+								 ,DAYS_SAT_FROM_TO
+								 ,DAYS_SUN_YN		
+								 ,DAYS_SUN_FROM_TO
+								 ,VALID_YN
+								 ,CREATED_BY
+								 ,CREATION_DATE
+								 ,LAST_UPDATED_BY
+								 ,LAST_UPDATE_DATE
+							)
+					VALUES  (
+					 			 @v_user_id, @v_period_from, @v_period_to, @v_days_mon_yn, @v_days_mon_from_to, @v_days_tue_yn, @v_days_tue_from_to,
+								 @v_days_wed_yn, @v_days_wed_from_to, @v_days_thu_yn, @v_days_thu_from_to, @v_days_fri_yn, @v_days_fri_from_to,
+								 @v_days_sat_yn, @v_days_sat_from_to, @v_days_sun_yn, @v_days_sun_from_to, @v_valid_yn,
+								 @v_requester, sysdatetime(), @v_requester, sysdatetime()								
+							);
+
+				END  -- END OF STMT. IF( @mst_loop_cnt > 0 )			
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+
+		  if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+"

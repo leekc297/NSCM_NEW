@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/demand-exception","SCP0129","features/supply/src/pages/demand-exception/DemandException.tsx","25","code","SCP0129 Demand Exception — 단일 그리드 CRUD 마스터(SCP0122/SCP0127/SCP0128 계열 구조). 신규(NEW) 판정 — convert-flow/goal.md ①. domain=SCP(형제 트리 실측 + namespace, 00_checklist.md §0). nscmPath 는 goal.md ①에서 확정한 `features/supply/src/pages/demand-exception/`. "
+"supply/demand-exception","SCP0129","features/supply/src/pages/demand-exception/DemandException.tsx","111","code","buttonGuards#1 — fps==null(선택 행 없음) 시 무동작 return(design 01 §2 규칙#5)."
+"supply/demand-exception","SCP0129","features/supply/src/pages/demand-exception/DemandException.tsx","123","endpoint","useProcMutation({data:[rows]}) 로는 null 바인딩 no-op 이므로 전용 조립 util 을 mutationFn 으로"
+"supply/demand-exception","SCP0129","features/supply/src/pages/demand-exception/utils/demandExceptionSaveRequest.ts","5","endpoint","→ 공용 useProcMutation({data:[rows]}) 로는 top-level 에 activeFlag/divisionId... 키가 없어 전부"

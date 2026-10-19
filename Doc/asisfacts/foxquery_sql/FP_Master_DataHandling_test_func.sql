@@ -1,0 +1,2 @@
+﻿SELECT  'a' AS COMPANY_ID, 'b' AS DIVISION_ID, '11ddd' as SITE_ID,
+      null as ITEM_CLASS_LEVEL_3, 3 as ITEM_CLASS_LEVEL_4

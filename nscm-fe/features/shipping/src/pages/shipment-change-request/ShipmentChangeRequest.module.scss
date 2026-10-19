@@ -1,0 +1,66 @@
+// SSP0201 레이아웃 — 상/하 3분할: Grid1(main) / 요청정보 폼 + 액션바(px 고정) / Grid2(sub).
+//   **자매 SSP0200 과 동일 배열**(사용자 지시 2026-10-07 — AS-IS Designer 는 Grid1/Grid2/panel3 순서지만
+//   두 화면의 조작감 일치를 우선한 의도적 드리프트).
+//   폼 Panel 은 px 고정(min=max)이라 위·아래 스플리터가 각각 Grid1·Grid2 만 리사이즈한다(폼 높이 불변).
+.splitWrapper {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+}
+
+// PanelGroup 은 basis 0(`flex:1 1 0`)이어야 뷰포트 높이를 즉시 확정받아 채운다. basis auto 면 그룹이
+//   내용 높이로 잡혀 패널 분배가 어긋나고(위 그리드 크고 아래 그리드 붕괴) 아래 빈 공간이 생긴다.
+.panelGroup {
+  flex: 1 1 0;
+  min-height: 0;
+
+  // Wijmo 그리드가 Panel 높이를 넘지 않게 — Panel 이 준 높이 안에서 내부 스크롤이 생긴다.
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+
+  // Group > 각 Panel 내부 콘텐츠 래퍼를 flex column 으로 — Panel 높이가 mainPane/subPane/formPane 로 전파된다.
+  > div > div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.splitBar {
+  height: 6px;
+  cursor: row-resize;
+}
+
+// 상단 Panel1 = master 그리드 전용. 아래 pane 규칙은 자매 SSP0200 과 동일하게 둔다(패널 순서가 같아졌다).
+.mainPane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+// spdSub 영역. 공용 DataGrid 는 `flex:1 1 0%` + `height:100%` 로 부모를 채우는데, 이 컨테이너가
+//   display:flex 가 아니면 flex 규칙이 무시되고 basis auto 와 겹쳐 Wijmo 가 초기 높이를 0 으로 측정한다
+//   (그리드가 안 보이고 내부 스크롤도 죽는다). flex-basis 는 0 으로 둬 측정 즉시 확정 높이를 준다.
+.subPane {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+// 가운데 고정 폼 Panel = 요청정보(RequestInfoPanel) + 액션바. Panel 이 px 고정이라 내용이 넘치면 잘린다 —
+//   폼은 FORM_PANEL_SIZE 안에 들어가는 컴팩트 크기여야 한다.
+.formPane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.requestInfo {
+  flex: 0 0 auto; // 내용(컴팩트 폼) 자연 높이 — 고정 패널 안에서 늘어나 필드 간 빈틈이 생기지 않게.
+  padding: 6px 12px 0;
+}

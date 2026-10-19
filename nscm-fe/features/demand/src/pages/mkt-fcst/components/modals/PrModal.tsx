@@ -1,9 +1,11 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
-import { DataGrid, CustomDialog, SearchArea } from '@shared/components';
+import { attachRowNoHeader } from '@foundation/utils';
+import { DataGrid, CustomDialog, ResultArea, SearchArea } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { Grid } from '@shared/mui';
@@ -46,6 +48,8 @@ interface PrModalProps {
 export const PrModal = ({ open, modalClose, params, onSaved }: PrModalProps) => {
   const { t } = useTranslation();
   const gridRef = useRef<FlexGrid<ResponseData<MENU_ID, SHEETS.PR_POPUP>>>();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
   const setAlert = useMessageStore.getState().setAlert;
   const setToast = useMessageStore.getState().setToast;
 
@@ -134,6 +138,10 @@ export const PrModal = ({ open, modalClose, params, onSaved }: PrModalProps) => 
     }
   }, [header]);
 
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, detailRows]);
+
   // SAVE — DMF0003_SAVE_PRPOPUP. ^delim 다건은 GET filters(이미 ^delim)를 재사용 (AS-IS L346~402).
   //   useProcMutation 은 array unfold → top-level ^delim payload 부적합. apiClient.post 직접 (memory
   //   feedback_save_sp_bulk_payload_apiclient_post). createdBy 는 BE 세션 자동(PROC_M createdBy).
@@ -144,7 +152,6 @@ export const PrModal = ({ open, modalClose, params, onSaved }: PrModalProps) => 
       content: t('MSG00649', '_Issue PR?'),
     });
     if (!ok) return;
-    void setToast({ message: t('LBL00665', '_Loading...'), type: 'default', duration: 3000 });
 
     // detailRows(O_RC1) 의 행 단위 ^delim 재구성 (AS-IS i 루프 L346~372).
     const detail = detailRows as Record<string, unknown>[];
@@ -205,6 +212,10 @@ export const PrModal = ({ open, modalClose, params, onSaved }: PrModalProps) => 
       position='basic'
       open={open}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -229,7 +240,7 @@ export const PrModal = ({ open, modalClose, params, onSaved }: PrModalProps) => 
                 </Grid>
                 <Grid size={3}>
                   <FormItem
-                    label={t('LBL00745', '_Division')}
+                    label={t('LBL00641', '_Division')}
                     labelAlign='right'
                     render={() => (
                       <InputField fullWidth disabled value={String(header?.DIVISION_NAME ?? '')} />
@@ -302,13 +313,21 @@ export const PrModal = ({ open, modalClose, params, onSaved }: PrModalProps) => 
           <div className={styles.modalGridWrapper}>
             {/* ⭐ 격차① — isReadOnly 하드코딩 제거. popupType 별 편집 컬럼(inputTpCd) 로 제어
                 (Add_History = QTY 포함 편집, AS-IS L282~284). key 로 컬럼 rebuild. */}
-            <DataGrid<ResponseData<MENU_ID, SHEETS.PR_POPUP>>
-              key={effectiveType}
+            <ResultArea
+              title=''
+              count={detailRows.length}
               gridRef={gridRef}
-              isReadOnly={isReadOnly}
-              staticColumns={gridColumns}
-              itemsSource={detailRows}
-            />
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<ResponseData<MENU_ID, SHEETS.PR_POPUP>>
+                key={effectiveType}
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly={isReadOnly}
+                staticColumns={gridColumns}
+                itemsSource={detailRows}
+              />
+            </ResultArea>
           </div>
           <div className={styles.modalButtonWrapper}>
             {!isReadOnly && (

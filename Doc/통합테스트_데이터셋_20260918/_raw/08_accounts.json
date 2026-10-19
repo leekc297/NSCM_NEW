@@ -1,0 +1,299 @@
+{
+ "combos": {
+  "MktFcstWsPlannerYn": {
+   "USE_YN": "Y",
+   "LAST_UPDATE": "2026-07-11 14:41"
+  },
+  "FcstPriceUserAuthGroup": {
+   "USE_YN": "Y",
+   "LAST_UPDATE": "2026-09-07 13:44"
+  },
+  "SalesPlanUserAuthGroup": {
+   "USE_YN": "Y",
+   "LAST_UPDATE": "2026-09-07 13:44"
+  },
+  "BizPlanUserAuthGroup": {
+   "USE_YN": "Y",
+   "LAST_UPDATE": "2026-09-07 13:44"
+  },
+  "FcstTypeWs": {
+   "USE_YN": "Y",
+   "LAST_UPDATE": "2026-08-16 00:33"
+  },
+  "FcstTypeEditMode": {
+   "USE_YN": "Y",
+   "LAST_UPDATE": "2026-08-16 00:33"
+  },
+  "SalesFuturePriceEditableDivision": {
+   "USE_YN": "Y",
+   "LAST_UPDATE": "2026-08-12 13:26"
+  },
+  "MyDivision": {
+   "USE_YN": "Y",
+   "LAST_UPDATE": "2026-09-08 15:57"
+  },
+  "DMF0042_BP_Measure": {
+   "USE_YN": "Y",
+   "LAST_UPDATE": "2026-09-07 13:44"
+  },
+  "Dmf0003ScpPlannerEditFlag": {
+   "USE_YN": "Y",
+   "LAST_UPDATE": "2026-08-16 00:33"
+  }
+ },
+ "holders": {
+  "DM Planner": [
+   "bpark416",
+   "cmjin",
+   "eunah.koo",
+   "jaehun_cho",
+   "minyonglee1",
+   "wcyoon",
+   "ys_cho"
+  ],
+  "DM Planner (W/S)": [
+   "jaehun_cho",
+   "jaehyeok",
+   "minyonglee1",
+   "miyeong.lee",
+   "ys_cho"
+  ],
+  "SCP Planner": [
+   "bottle",
+   "coeogus",
+   "dodae",
+   "jaehun_cho",
+   "minyonglee1"
+  ]
+ },
+ "people": [
+  {
+   "USER_ID": "bottle",
+   "USER_NM": "김재병",
+   "groups": [
+    "SCP Planner"
+   ],
+   "wsPlannerYn": "N",
+   "resolved": {
+    "DMF0082": "SCP Planner",
+    "DMF0021": "SCP Planner",
+    "DMF0042": "SCP Planner",
+    "DMF0003": "SCP Planner"
+   },
+   "admin_masked": false
+  },
+  {
+   "USER_ID": "bpark416",
+   "USER_NM": "박병창",
+   "groups": [
+    "DM Planner"
+   ],
+   "wsPlannerYn": "N",
+   "resolved": {
+    "DMF0082": "DM Planner",
+    "DMF0021": "DM Planner",
+    "DMF0042": "DM Planner",
+    "DMF0003": "DM Planner"
+   },
+   "admin_masked": false
+  },
+  {
+   "USER_ID": "cmjin",
+   "USER_NM": "",
+   "groups": [
+    "DM Planner"
+   ],
+   "wsPlannerYn": "N",
+   "resolved": {
+    "DMF0082": "DM Planner",
+    "DMF0021": "DM Planner",
+    "DMF0042": "DM Planner",
+    "DMF0003": "DM Planner"
+   },
+   "admin_masked": false
+  },
+  {
+   "USER_ID": "coeogus",
+   "USER_NM": "채대현",
+   "groups": [
+    "SCP Planner"
+   ],
+   "wsPlannerYn": "N",
+   "resolved": {
+    "DMF0082": "SCP Planner",
+    "DMF0021": "SCP Planner",
+    "DMF0042": "SCP Planner",
+    "DMF0003": "SCP Planner"
+   },
+   "admin_masked": false
+  },
+  {
+   "USER_ID": "dodae",
+   "USER_NM": "도대현",
+   "groups": [
+    "SCP Planner"
+   ],
+   "wsPlannerYn": "N",
+   "resolved": {
+    "DMF0082": "SCP Planner",
+    "DMF0021": "SCP Planner",
+    "DMF0042": "SCP Planner",
+    "DMF0003": "SCP Planner"
+   },
+   "admin_masked": false
+  },
+  {
+   "USER_ID": "eunah.koo",
+   "USER_NM": "구은아",
+   "groups": [
+    "DM Planner"
+   ],
+   "wsPlannerYn": "N",
+   "resolved": {
+    "DMF0082": "DM Planner",
+    "DMF0021": "DM Planner",
+    "DMF0042": "DM Planner",
+    "DMF0003": "DM Planner"
+   },
+   "admin_masked": false
+  },
+  {
+   "USER_ID": "jaehun_cho",
+   "USER_NM": "조재훈",
+   "groups": [
+    "ADMIN",
+    "DM ADMIN",
+    "DM Planner",
+    "DM Planner (W/S)",
+    "SCP Planner"
+   ],
+   "wsPlannerYn": "Y",
+   "resolved": {
+    "DMF0082": "ADMIN",
+    "DMF0021": "ADMIN",
+    "DMF0042": "ADMIN",
+    "DMF0003": "ADMIN"
+   },
+   "admin_masked": true
+  },
+  {
+   "USER_ID": "jaehyeok",
+   "USER_NM": "유재혁",
+   "groups": [
+    "DM Planner (W/S)"
+   ],
+   "wsPlannerYn": "Y",
+   "resolved": {
+    "DMF0082": "DM Planner (W/S)",
+    "DMF0021": null,
+    "DMF0042": null,
+    "DMF0003": "DM Planner (W/S)"
+   },
+   "admin_masked": false
+  },
+  {
+   "USER_ID": "minyonglee1",
+   "USER_NM": "이민용",
+   "groups": [
+    "ADMIN",
+    "DM ADMIN",
+    "DM Planner",
+    "DM Planner (W/S)",
+    "DM Viewer",
+    "JV Planner",
+    "SCP Planner"
+   ],
+   "wsPlannerYn": "Y",
+   "resolved": {
+    "DMF0082": "ADMIN",
+    "DMF0021": "ADMIN",
+    "DMF0042": "ADMIN",
+    "DMF0003": "ADMIN"
+   },
+   "admin_masked": true
+  },
+  {
+   "USER_ID": "miyeong.lee",
+   "USER_NM": "이미영",
+   "groups": [
+    "DM Planner (W/S)"
+   ],
+   "wsPlannerYn": "Y",
+   "resolved": {
+    "DMF0082": "DM Planner (W/S)",
+    "DMF0021": null,
+    "DMF0042": null,
+    "DMF0003": "DM Planner (W/S)"
+   },
+   "admin_masked": false
+  },
+  {
+   "USER_ID": "wcyoon",
+   "USER_NM": "윤우창",
+   "groups": [
+    "DM Planner"
+   ],
+   "wsPlannerYn": "N",
+   "resolved": {
+    "DMF0082": "DM Planner",
+    "DMF0021": "DM Planner",
+    "DMF0042": "DM Planner",
+    "DMF0003": "DM Planner"
+   },
+   "admin_masked": false
+  },
+  {
+   "USER_ID": "ys_cho",
+   "USER_NM": "조윤성",
+   "groups": [
+    "DM Planner",
+    "DM Planner (W/S)"
+   ],
+   "wsPlannerYn": "Y",
+   "resolved": {
+    "DMF0082": "DM Planner",
+    "DMF0021": "DM Planner",
+    "DMF0042": "DM Planner",
+    "DMF0003": "DM Planner"
+   },
+   "admin_masked": false
+  }
+ ],
+ "recommend": {
+  "DM Planner": {
+   "사용가능": [
+    "bpark416",
+    "cmjin",
+    "eunah.koo",
+    "wcyoon",
+    "ys_cho"
+   ],
+   "사용불가(ADMIN 해석)": [
+    "jaehun_cho",
+    "minyonglee1"
+   ]
+  },
+  "DM Planner (W/S)": {
+   "사용가능": [
+    "jaehyeok",
+    "miyeong.lee",
+    "ys_cho"
+   ],
+   "사용불가(ADMIN 해석)": [
+    "jaehun_cho",
+    "minyonglee1"
+   ]
+  },
+  "SCP Planner": {
+   "사용가능": [
+    "bottle",
+    "coeogus",
+    "dodae"
+   ],
+   "사용불가(ADMIN 해석)": [
+    "jaehun_cho",
+    "minyonglee1"
+   ]
+  }
+ }
+}

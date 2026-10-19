@@ -1,0 +1,1 @@
+export { CapaTeepReport } from './CapaTeepReport';

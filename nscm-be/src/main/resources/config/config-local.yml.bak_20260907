@@ -1,0 +1,101 @@
+# [local profile 설정]
+config:
+  datasources[0]: # ORACLE
+    databaseName: nscm_oracle
+    databaseType: oracle
+# ⭐ [로컬 2026-08-14] 사내 Oracle 로 복구. 클라우드 소스의 기본값(10.34.220.81:2521:ESSCMD /
+#   SCMD_APP)은 사내망에서 도달할 수 없다. 계정도 다르다 — UI/BE 는 SCMP_APP 이다(≠ SCM_MGR).
+#   실측(2026-08-14): 100.65.143.121:1521 TCP 도달 OK · SCMP_APP 접속 OK(DB_NAME=OCGSCMD_P01).
+#                     구 주소 10.34.222.16:2521 은 도달 불가라 백업본을 그대로 쓰면 안 된다.
+#   ⭐ [2026-09-02] 사내 주소 변경 — 100.65.143.121:1521 → 175.211.29.206:3521(사용자 통보).
+#      동일 인스턴스 확인(SYS_CONTEXT SERVER_HOST=ol9-db · DB_NAME=OCGSCMD_P01), 계정/비밀번호 무변경.
+#   ⭐ [2026-09-05] DB 교체 — 175.211.29.206:3521/OCGSCMD_P01 → **175.211.29.206:2521/AJS**(사용자 통보).
+#      다른 인스턴스다(SYS_CONTEXT SERVER_HOST=itx · DB_NAME=AJS · Oracle 26ai 23.26.1).
+#      비밀번호도 변경 — SCM_MGR/SCMP_APP 모두 zionex1! 로 접속 실측(구 !ScMpaP_wndls@ 는 ORA-01017).
+#      SCMD_APP 계정은 신규 DB 에 존재하지 않는다.
+#   ⚠ 클라우드 배포 시 아래 4줄을 주석 처리하고 cloud 블록을 되살릴 것.
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    jdbc-url: jdbc:log4jdbc:oracle:thin:@175.211.29.206:2521/AJS
+    username: SCMP_APP
+    password: "zionex1!"
+# --- 이전 접속 정보 (보관 / DEPRECATED) ---
+#   2026-09-02~09-05 : @175.211.29.206:3521/OCGSCMD_P01  SCMP_APP / "!ScMpaP_wndls@"
+#   2026-07-27~09-02 : @100.65.143.121:1521/OCGSCMD_P01  SCMP_APP / "!ScMpaP_wndls@"
+#   2026-06-17~07-27 : @121.162.245.167:2521/OCGSCMD_P01 SCMP_APP / "!ScMpaP_wndls@"
+# --- cloud 기본값 (배포 시 복원) ---
+#    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#    jdbc-url: jdbc:log4jdbc:oracle:thin:@10.34.220.81:2521:ESSCMD
+#    username: SCMD_APP
+#    password: "!SCMroqkf2026"
+    maxPoolSize: 10
+    minIdel: 10
+#    connectionTestQuery: "select 1 from dual"
+    mapperLocations: classpath:/sql/**/*.xml
+    configLocations: classpath:/mybatis/mybatis-config.xml
+  datasources[1]: # MS-SQL
+    databaseName: nscm_mssql
+    databaseType: mssql
+    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    jdbc-url: jdbc:log4jdbc:sqlserver://165.244.95.223:1433;databaseName=NSCM_DEV;encrypt=false;trustServerCertificate=true
+    username: scp_mgr_dev
+    password: 1234qwer
+    maxPoolSize: 10
+    minIdel: 10
+#    connectionTestQuery: "select 1"
+    mapperLocations: "classpath:/sql/**/*.xml"
+    configLocations: "classpath:/mybatis/mybatis-config.xml"
+
+  domain:
+    fe: "http://localhost:3000/"
+    be: "http://localhost:8080/"
+
+  sso:
+    service-name: "LESAGSCMUIDOA01"
+    server-url: "http://nscm-server.dev.lgensol.com"
+    server-port: "7070"
+    nls-url: "http://gssodev.lgensol.com"
+    nls-port: "8001"
+    nls-login-url-suffix: "/nls3/clientLogin.jsp"
+    nls-logout-url-suffix: "/nls3/NCLogout.jsp"
+    nls-error-url-suffix: "/nls3/error.jsp"
+    ascp-url-suffix: "/sso/login_exec"
+    nd-url: "http://gssodev.lgensol.com:5480"
+    sso-domain: ".lgensol.com"
+    toa: "1"
+#    redirect-suffix: "" # ascp-url-suffix 사용하면 될듯?
+    cookie-session-timeout: 3000000
+    timeout: 15000
+    provider-list:
+      - "ssodev.lgensol.com"
+      - "ssolesdev.lgchem.com"
+      - "gssodev.ultiumcell.com"
+      - "gssodev.lgensol.com"
+      - "sso.lgensol.com"
+      - "ssoles.lgchem.com"
+      - "gsso.lgensol.com"
+      - "gssoles.lgchem.com"
+      - "gsso.ultiumcell.com"
+
+# logback-spring.xml에서 import되는 property
+logging:
+  level:
+    root: INFO
+    nscm: INFO
+    sql: INFO
+  file:
+    path: ./logs
+    name: nscm
+  pattern: "%d{HH:mm:ss} %-5level %X{txId} %X{requestUri} %logger{50} - %msg%n"
+  max-history: 30 # day
+
+sap:
+  jco:
+    destination-name: SAP_NSCM_DEST_TEST
+    ashost: "10.31.134.32"        # SAP App. IP 주소 or 호스트
+    sysnr: "00"                   # 시스템 번호 서버내의 인스턴스 번호
+    client: "110"                 # 클라이언트 번호
+    user: "IF_GSCM_01"            # SAP 접속 아이디
+    passwd: "Lgensolgscm2023#"    # SAP 접속 패스워드
+    lang: "EN"                    # 언어 설정(+) (+)는 옵션
+    pool_capacity: "10"           # Default 커넥션 유지수량
+    peak_limit: "20"              # max 커넥션 수

@@ -1,0 +1,491 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0047_GET_KPI_TARGET","458536767","1","
+
+
+
+
+/*
+ * Program ID   : SCP0047_GET_KPI_TARGET
+ * Description  : SCP KPI Target 리스트조회
+ * Comments     : 
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2019/12/19	YHW				Initial Release [] 전지GSCM(SCP) 운영
+ * 
+ */
+CREATE PROCEDURE [dbo].[SCP0047_GET_KPI_TARGET]
+   @p_kpi_id		NVARCHAR(100)
+  ,@p_division_id	NVARCHAR(30)
+  ,@p_from_yyyymm	NVARCHAR(6)
+  ,@p_to_yyyymm		NVARCHAR(6)
+  ,@debug_mode		NVARCHAR(1) ='F'
+AS  
+  
+BEGIN
+
+	DECLARE @p_from_yyyymmdd	AS NVARCHAR(8)='';
+	DECLARE @p_to_yyyymmdd		AS NVARCHAR(8)='';
+	DECLARE @v_from_yyyymmdd	AS NVARCHAR(8)='';
+	DECLARE @v_to_yyyymmdd		AS NVARCHAR(8)='';
+
+	-- 월의 시작일자 설정
+	IF( ISNULL(@p_from_yyyymm ,'') ='') 
+		SET @p_from_yyyymmdd =  '';
+	ELSE
+		SET @v_from_yyyymmdd =  @p_from_yyyymm +'01';
+
+	-- 월의 마지막일자 설정
+	IF( ISNULL(@p_to_yyyymm ,'') ='') 
+		SET @p_to_yyyymmdd =  '';
+	ELSE
+		SET @v_to_yyyymmdd =  convert(varchar, dateadd(day,-1, dateadd(month, 1, convert(datetime,@p_to_yyyymm+'01'))) ,112) ;
+
+	IF ( @debug_mode ='T')
+		BEGIN
+			PRINT '==============PARMS INFO================';
+			PRINT '@p_kpi_id		= ' + @p_kpi_id ;
+			PRINT '@p_division_id   = ' + @p_division_id ;
+			PRINT '@p_from_yyyymm	= ' + @p_from_yyyymm ;
+			PRINT '@p_to_yyyymm		= ' + @p_to_yyyymm	 ;
+			PRINT '@p_from_yyyymm	= ' + @p_from_yyyymm ;
+			PRINT '@p_to_yyyymm		= ' + @p_to_yyyymm	 ;
+			PRINT '@v_from_yyyymmdd = ' + @v_from_yyyymmdd ;
+			PRINT '@v_to_yyyymmdd   = ' + @v_to_yyyymmdd   ;
+			PRINT '';
+		END;
+
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0047_LOOKUP') IS NOT NULL
+	DROP TABLE #TblDynamicPivot_SCP0047_LOOKUP;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0047_PIVOT') IS NOT NULL
+	DROP TABLE #TblDynamicPivot_SCP0047_PIVOT;
+
+	declare @pv_kpi_id		NVARCHAR(100)='';
+	declare @pv_division_id	NVARCHAR(30) = '';
+	declare @pv_from_yyyymm	NVARCHAR(6) = '';
+	declare @pv_to_yyyymm		NVARCHAR(6) = '';
+
+	SET @pv_kpi_id			= @p_kpi_id;
+	SET @pv_division_id		= @p_division_id;
+	SET @pv_from_yyyymm		= @p_from_yyyymm;
+	SET @pv_to_yyyymm		= @p_to_yyyymm;
+
+	/* LOOK UP 조회 */
+	SELECT A.SEGMENT1 AS KPI_ID
+			, A.SEGMENT2 AS KPI_NM
+			, A.SEGMENT3 AS DIVISION_ID
+			, A.SEGMENT4 AS DEPT_ID
+			, A.DISPLAY_SEQ
+			, (Select TOP 1 TOKEN from dbo.UF_FX_String_Split (DEPT.DEPT_NAME_KO,'.') as P ORDER BY P.NR DESC) AS DEPT_NM
+	INTO #TblDynamicPivot_SCP0047_LOOKUP
+	FROM SCM_ADM_LOOKUP_MASTER_DETAIL A WITH(NOLOCK)
+	JOIN SCM_MST_SSO_DEPT_INFO DEPT WITH(NOLOCK) ON DEPT.DEPT_ID=A.SEGMENT4
+	WHERE A.LOOKUP_TYPE='SCM_KPI_GOAL'
+	AND A.VALID_YN='Y'
+	AND ( ( @pv_kpi_id IS NULL		OR     @pv_kpi_id      ='' ) OR A.SEGMENT1 IN (SELECT token FROM dbo.String_Split(@pv_kpi_id,',')) ) 
+	AND ( ( @pv_division_id IS NULL OR     @pv_division_id ='' ) OR A.SEGMENT3 IN (SELECT token FROM dbo.String_Split(@pv_division_id,',')) )
+	;
+
+
+	SELECT A.KPI_ID
+		, A.KPI_NM
+		, A.DIVISION_ID
+		, A.DEPT_ID
+		, A.DEPT_NM
+		, A.MONTH
+		, A.KPI_TARGET
+		, A.TYPE
+		, A.DISPLAY_SEQ
+	INTO #TblDynamicPivot_SCP0047_PIVOT
+	FROM (
+		-- TYPE 1. KPI별 전체 부서
+		SELECT A.KPI_ID
+			, A.KPI_NM
+			, A.DIVISION_ID
+			, A.DEPT_ID
+			, A.DEPT_NM
+			, '999912' MONTH
+			, 0 KPI_TARGET
+			, 1 TYPE
+			, A.DISPLAY_SEQ
+		FROM #TblDynamicPivot_SCP0047_LOOKUP A WITH(NOLOCK)
+		--JOIN SCM_MST_SSO_DEPT_INFO DEPT WITH(NOLOCK) ON DEPT.DEPT_ID=A.DEPT_ID
+		WHERE 1=1
+		AND NOT EXISTS (
+					SELECT 'X' FROM SCM_KPI_TARGET K WITH(NOLOCK)
+					WHERE K.KPI_ID=A.KPI_ID
+					AND K.DIVISION_ID=A.DIVISION_ID
+					AND K.DEPT_ID = A.DEPT_ID
+					AND K.YYYYMM >= @pv_from_yyyymm
+					AND K.YYYYMM <= @pv_to_yyyymm
+					)"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0047_GET_KPI_TARGET","458536767","2","
+		UNION ALL
+		-- TYPE 2. 이미 입력된 KPI 목표
+		SELECT A.KPI_ID
+			, L.KPI_NM
+			, A.DIVISION_ID
+			, A.DEPT_ID
+			, L.DEPT_NM
+			, A.YYYYMM MONTH
+			, A.KPI_TARGET
+			, 2 TYPE
+			, L.DISPLAY_SEQ
+		FROM SCM_KPI_TARGET A WITH(NOLOCK)
+		JOIN #TblDynamicPivot_SCP0047_LOOKUP L WITH(NOLOCK) ON L.KPI_ID=A.KPI_ID AND L.DIVISION_ID=A.DIVISION_ID AND L.DEPT_ID=A.DEPT_ID
+		--JOIN SCM_MST_SSO_DEPT_INFO DEPT WITH(NOLOCK) ON DEPT.DEPT_ID=A.DEPT_ID
+	) A
+
+
+	BEGIN
+
+		--월조회 쿼리문 생성
+		DECLARE @mQuery_cal NVARCHAR(MAX);
+		DECLARE @mQuery NVARCHAR(MAX);
+		DECLARE @mQuery_sum NVARCHAR(MAX);
+		DECLARE @mEXEC NVARCHAR(MAX);
+
+		SET @mQuery_cal = '';
+		SET @mQuery = '';
+		SET @mQuery_sum = '';
+		SET @mEXEC = '';
+
+		SELECT  @mQuery_cal = @mQuery_cal+ 'SUM(CASE WHEN MONTH= '''+month+''' THEN KPI_TARGET END ) AS [M_'+month + '],'
+		FROM (
+		SELECT a.basis_yyyymm  AS month
+								,MIN(a.basis_start_date) + CONVERT(CHAR(2), '01') AS sort_order_no
+						FROM [dbo].[scm_sys_calendar_m] a
+						WHERE a.basis_yyyymmdd  BETWEEN @v_from_yyyymmdd AND @v_to_yyyymmdd
+						GROUP BY a.basis_yyyymm, a.month_name	) AS A
+
+		SET @mQuery_cal = LEFT(@mQuery_cal, LEN(@mQuery_cal) - 1);
+
+		SELECT @mQuery = @mQuery + '[M_' + month + '], '
+		FROM ( 	SELECT a.basis_yyyymm  AS month
+						,MIN(a.basis_start_date) + CONVERT(CHAR(2), '01') AS sort_order_no
+				FROM [dbo].[scm_sys_calendar_m] a
+				WHERE a.basis_yyyymmdd  BETWEEN @v_from_yyyymmdd AND @v_to_yyyymmdd
+				GROUP BY a.basis_yyyymm, a.month_name	
+				) AS A
+		ORDER BY month  ;
+
+		SET @mQuery = LEFT(@mQuery, LEN(@mQuery) - 1);
+
+
+		SELECT @mQuery_sum = @mQuery_sum + 'SUM([M_' + month + ']) AS M_'+month+' , '
+		FROM ( 	SELECT a.basis_yyyymm  AS month
+						,MIN(a.basis_start_date) + CONVERT(CHAR(2), '01') AS sort_order_no
+				FROM [dbo].[scm_sys_calendar_m] a
+				WHERE a.basis_yyyymmdd  BETWEEN @v_from_yyyymmdd AND @v_to_yyyymmdd
+				GROUP BY a.basis_yyyymm, a.month_name	
+				) AS A
+		ORDER BY month  ;
+		SET @mQuery_sum = LEFT(@mQuery_sum, LEN(@mQuery_sum) - 1);
+
+
+		-- PIVOT 쿼리 실행
+		SET @mEXEC = @mEXEC + ' WITH SCP0047 AS (																										' + CHAR(10);
+		SET @mEXEC = @mEXEC + ' 		SELECT  KPI_ID, KPI_NM, DIVISION_ID, DEPT_ID, DEPT_NM, DISPLAY_SEQ	' + CHAR(10);
+		SET @mEXEC = @mEXEC + '  			,'+@mQuery_cal + CHAR(10);
+		SET @mEXEC = @mEXEC + ' 		FROM #TblDynamicPivot_SCP0047_PIVOT																					' + CHAR(10);
+		SET @mEXEC = @mEXEC + ' 		WHERE 1=1																										' + CHAR(10);
+		SET @mEXEC = @mEXEC + ' 		GROUP BY KPI_ID, KPI_NM, DIVISION_ID, DEPT_ID, DEPT_NM, DISPLAY_SEQ	' + CHAR(10);
+		SET @mEXEC = @mEXEC + ' 	)																													' + CHAR(10);
+		SET @mEXEC = @mEXEC + ' 	SELECT A.KPI_ID, A.KPI_NM, A.DIVISION_ID, D.DIVISION_NAME, A.DEPT_ID, A.DEPT_NM	' + CHAR(10);
+		SET @mEXEC = @mEXEC + ' 		,'+@mQuery + CHAR(10);
+		SET @mEXEC = @mEXEC + ' 	FROM SCP0047 A																											' + CHAR(10);
+		SET @mEXEC = @mEXEC + ' 	JOIN SCM_MST_DIVISION D ON A.DIVISION_ID=D.DIVISION_ID																		' + CHAR(10);
+		SET @mEXEC = @mEXEC + ' 	ORDER BY A.KPI_ID, A.DIVISION_ID, A.DISPLAY_SEQ																					' + CHAR(10);
+
+		IF( @debug_mode ='T') PRINT @mEXEC;
+		EXEC (@mEXEC);
+
+
+	END;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0047_LOOKUP') IS NOT NULL
+	DROP TABLE #TblDynamicPivot_SCP0047_LOOKUP;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0047_PIVOT') IS NOT NULL
+	DROP TABLE #TblDynamicPivot_SCP0047_PIVOT;
+								  
+END
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0047_SAVE_KPI_TARGET_DATASET","474536824","1","
+
+
+
+
+
+/*
+ * Program ID   : SCP0047_SAVE_KPI_TARGET_DATASET
+ * Description  : KPI Target 일괄저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2019/12/20	YHW				Initial Release [] 전지 GSCM(SCP) 운영
+ */
+CREATE PROCEDURE [dbo].[SCP0047_SAVE_KPI_TARGET_DATASET]
+	 @SCP0047			AS DBO.SCP0047       READONLY
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @v_creation_date    datetime =SYSDATETIME(); 
+	DECLARE @v_last_updated_by  NVARCHAR(MAX)='hwwoonins';
+	
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0047_SAVE_KPI_TARGET_DATASET';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+
+          -- 실행시간 확인용    
+    DECLARE @v_start_time   DATETIME     = SYSDATETIME();    
+    DECLARE @v_exec_time    NVARCHAR(10) = ''--'00:00';    
+
+
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamic_SCP0047_SET') IS NOT NULL	
+		DROP TABLE #TblDynamic_SCP0047_SET
+	;
+
+	CREATE TABLE #TblDynamic_SCP0047_SET (
+		p_active_flag			nvarchar(1),
+		p_kpi_id				nvarchar(100),
+		p_division_id			nvarchar(30),
+		p_dept_id				nvarchar(50),
+		p_yyyymm				nvarchar(6),
+		p_kpi_target			nvarchar(200),
+		p_user_id				nvarchar(150)
+	);
+
+	BEGIN TRY
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		INSERT INTO #TblDynamic_SCP0047_SET
+		SELECT p_active_flag,
+				p_kpi_id,
+				p_division_id,
+				p_dept_id,
+				p_yyyymm,
+				p_kpi_target,
+				p_user_id
+		FROM @SCP0047
+		;
+
+
+		-- 수정 저장
+		UPDATE A
+		SET A.KPI_TARGET = B.p_kpi_target
+			, a.LAST_UPDATE_DATE = @v_creation_date
+			, a.LAST_UPDATED_BY = B.p_user_id
+		FROM SCM_KPI_TARGET A, @SCP0047 B
+		WHERE A.KPI_ID          = B.p_kpi_id          
+		AND A.DIVISION_ID		= B.p_division_id
+		AND A.DEPT_ID           = B.p_dept_id
+		AND A.YYYYMM            = B.p_yyyymm
+		AND B.p_active_flag		= 'M'
+		AND EXISTS(
+					SELECT 'X' FROM SCM_KPI_TARGET C
+					WHERE C.KPI_ID          = B.p_kpi_id          
+						AND C.DIVISION_ID		= B.p_division_id
+						AND C.DEPT_ID           = B.p_dept_id
+						AND C.YYYYMM            = B.p_yyyymm
+						AND B.p_active_flag		= 'M'
+		          )
+		;
+
+		-- 신규저장
+		INSERT INTO SCM_KPI_TARGET
+		(KPI_ID, DIVISION_ID, DEPT_ID, YYYYMM, KPI_TARGET, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, ATTRIBUTE1)
+		SELECT B.p_kpi_id
+				, B.p_division_id
+				, B.p_dept_id
+				, B.p_yyyymm
+				, B.p_kpi_target
+				, B.p_user_id
+				, @v_creation_date
+				, B.p_user_id
+				, @v_creation_date
+				, B.p_active_flag
+		FROM @SCP0047 B
+		WHERE 1=1
+		AND B.p_active_flag		= 'M'
+		AND NOT EXISTS(
+					SELECT 'X' FROM SCM_KPI_TARGET C
+					WHERE C.KPI_ID          = B.p_kpi_id          
+						AND C.DIVISION_ID		= B.p_division_id
+						AND C.DEPT_ID           = B.p_dept_id
+						AND C.YYYYMM            = B.p_yyyymm
+						AND B.p_active_flag		= 'M'
+		          )
+		;
+
+
+		--이력저장(수정건)
+		INSERT	INTO  SCM_KPI_TARGET_H(									   
+					HISTORY_SEQ
+					, KPI_ID
+					, DIVISION_ID
+			"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0047_SAVE_KPI_TARGET_DATASET","474536824","2","		, DEPT_ID
+					, YYYYMM
+					, KPI_TARGET
+					, CREATED_BY
+					, CREATION_DATE
+					, LAST_UPDATED_BY
+					, LAST_UPDATE_DATE
+					, ATTRIBUTE1
+					, HISTORY_CREATION_DATE)
+		SELECT (NEXT VALUE FOR SEQ1_SCM_KPI_TARGET_H)
+					, p_kpi_id
+					, p_division_id
+					, p_dept_id
+					, p_yyyymm
+					, p_kpi_target
+					, p_user_id
+					, @v_creation_date
+					, p_user_id
+					, @v_creation_date
+					, p_active_flag
+					, @v_creation_date
+		FROM @SCP0047
+		WHERE p_active_flag = 'M'
+		;
+
+		--이력저장(삭제건)
+		INSERT	INTO  SCM_KPI_TARGET_H(									   
+					HISTORY_SEQ
+					, KPI_ID
+					, DIVISION_ID
+					, DEPT_ID
+					, YYYYMM
+					, KPI_TARGET
+					, CREATED_BY
+					, CREATION_DATE
+					, LAST_UPDATED_BY
+					, LAST_UPDATE_DATE
+					, ATTRIBUTE1
+					, HISTORY_CREATION_DATE)
+		SELECT (NEXT VALUE FOR SEQ1_SCM_KPI_TARGET_H) AS history_seq
+					, B.p_kpi_id
+					, B.p_division_id
+					, B.p_dept_id
+					, B.p_yyyymm
+					, A.KPI_TARGET
+					, B.p_user_id
+					, @v_creation_date
+					, B.p_user_id
+					, @v_creation_date
+					, B.p_active_flag
+					, @v_creation_date
+		FROM @SCP0047 B, SCM_KPI_TARGET A
+		WHERE A.KPI_ID=B.p_kpi_id
+		AND A.DIVISION_ID=B.p_division_id
+		AND A.DEPT_ID=B.p_dept_id
+		AND A.YYYYMM=B.p_yyyymm
+		AND B.p_active_flag = 'D'
+		;
+		
+
+		-- 삭제
+		DELETE FROM A
+		FROM SCM_KPI_TARGET A, @SCP0047 B
+		WHERE A.KPI_ID          = B.p_kpi_id          
+		AND A.DIVISION_ID		= B.p_division_id
+		AND A.DEPT_ID           = B.p_dept_id
+		AND A.YYYYMM            = B.p_yyyymm
+		AND B.p_active_flag		= 'D'
+		;
+
+		-- 임시 운영반영시에 주석처리 할것.    
+		SET @v_exec_time  =  REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) + ':' +     
+							 REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60)) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60))    
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description  = N'[' + @v_exec_time + ']';   
+		SET @d_event_date = SYSDATETIME();
+		
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		COMMIT TRAN;			
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  1 AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			--if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+					  
+
+			-- error코드, errror 메시지 반환
+			--SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT 'F' AS result_code
+				   ,@v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				     
+			; 
+		END;
+	END CATCH;
+END
+
+
+
+
+
+
+"

@@ -2,6 +2,7 @@ import { Breadcrumb } from '@lges/design-system';
 import { useTheme } from '@mui/material';
 import { memo, useMemo } from 'react';
 
+import { resolveMenuLabel } from '@foundation/models';
 import { Switch, TitleArea } from '@shared/lges';
 import { ControlZoomIcon } from '@shared/lges-icons';
 import { useSessionStore, useUIStore } from '@shared/stores';
@@ -56,7 +57,7 @@ const MainTitleComp = ({
   return (
     <div className={styles.titleAreaWrapper}>
       <TitleArea
-        title={t(title, menuId)}
+        title={resolveMenuLabel(t, { mnuMsgId: title, mnuDesc: menu?.mnuDesc, mnuId: menuId })}
         bookmark={menu?.favorite}
         onFavorite={() => {
           toggleFavorite(menuId, !menu?.favorite);

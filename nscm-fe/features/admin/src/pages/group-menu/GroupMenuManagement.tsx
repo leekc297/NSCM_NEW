@@ -130,17 +130,25 @@ export const GroupMenu = ({ tabId, title }: PageProps<MENU_ID>) => {
         openSearchArea={isOpenSearchArea}
         disableSearchArea
       />
+      {/* 3 그리드(Group/Menu/Button)가 항상 동시에 보이므로, 상단 툴바 줄의 건수 배지는
+          어느 그리드인지 모호해 숨기고 각 영역 라벨 옆에 나눠 표시한다. */}
       <SubTitle
         menuId={MENU_ID}
         grid={gridRefs[activeTab]}
         gridFilter={gridFilterRefs[activeTab]}
-        dataCount={0}
+        dataCount={rows[activeTab]?.length ?? 0}
+        hideTotalCases
         excelFileName='Menu'
         hotkeyConfig={hotkeyConfig}
       />
       <div className={styles.gridWrapper}>
         <div className={styles.mainGridWrapper}>
-          <Label className={styles.labelGrid} labelText={t('LBL00357', '_Group Info')} />
+          <div className={styles.labelRow}>
+            <Label className={styles.labelGrid} labelText={t('LBL00357', '_Group Info')} />
+            {rows[SHEET_INDEX.GROUP].length > 0 && (
+              <span className={styles.sectionCount}>총 {rows[SHEET_INDEX.GROUP].length}건</span>
+            )}
+          </div>
           <GroupGrid
             gridRef={gridRefs[SHEET_INDEX.GROUP]}
             gridFilterRef={gridFilterRefs[SHEET_INDEX.GROUP]}
@@ -151,7 +159,12 @@ export const GroupMenu = ({ tabId, title }: PageProps<MENU_ID>) => {
         <PanelGroup className={styles.subGridWrapper} orientation='vertical'>
           <Panel defaultSize={70} minSize={20}>
             <div className={styles.menuGridWrapper}>
-              <Label className={styles.labelGrid} labelText={t('LBL00356', '_Menu Item Info')} />
+              <div className={styles.labelRow}>
+                <Label className={styles.labelGrid} labelText={t('LBL00356', '_Menu Item Info')} />
+                {!menuGridCleared && rows[SHEET_INDEX.MENU].length > 0 && (
+                  <span className={styles.sectionCount}>총 {rows[SHEET_INDEX.MENU].length}건</span>
+                )}
+              </div>
               <MenuGrid
                 gridRef={gridRefs[SHEET_INDEX.MENU]}
                 gridFilterRef={gridFilterRefs[SHEET_INDEX.MENU]}
@@ -163,7 +176,14 @@ export const GroupMenu = ({ tabId, title }: PageProps<MENU_ID>) => {
           <PanelSeparator className={styles.splitBar} />
           <Panel defaultSize={30} minSize={15}>
             <div className={styles.buttonGridWrapper}>
-              <Label className={styles.labelGrid} labelText={t('LBL00355', '_Sheet Auth')} />
+              <div className={styles.labelRow}>
+                <Label className={styles.labelGrid} labelText={t('LBL00355', '_Sheet Auth')} />
+                {!buttonGridCleared && rows[SHEET_INDEX.BUTTON].length > 0 && (
+                  <span className={styles.sectionCount}>
+                    총 {rows[SHEET_INDEX.BUTTON].length}건
+                  </span>
+                )}
+              </div>
               <ButtonGrid
                 gridRef={gridRefs[SHEET_INDEX.BUTTON]}
                 gridFilterRef={gridFilterRefs[SHEET_INDEX.BUTTON]}

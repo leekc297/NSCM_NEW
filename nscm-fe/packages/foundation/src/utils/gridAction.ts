@@ -1,15 +1,20 @@
-import { CollectionView } from '@mescius/wijmo';
+import { CollectionView, SortDescription } from '@mescius/wijmo';
 import { AllowMerging, CellType, Column, type DataMap, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import type { IFlexGridXlsxOptions, XlsxFormatItemEventArgs } from '@mescius/wijmo.grid.xlsx';
 import { FlexGridXlsxConverter } from '@mescius/wijmo.grid.xlsx';
 import {
+  BorderStyle,
   HAlign,
   VAlign,
   Workbook,
+  WorkbookBorder,
+  WorkbookBorderSetting,
   WorkbookCell,
+  WorkbookColumn,
   WorkbookFill,
   WorkbookFont,
+  WorkbookFrozenPane,
   WorkbookRow,
   WorkbookStyle,
   WorkSheet,
@@ -170,6 +175,52 @@ export const restoreGridFilter = <T extends WijmoRowItem = WijmoRowItem>(
   if (filters.length === 0) return false;
 
   gridFilter.filterDefinition = JSON.stringify({ ...parsed, filters });
+  return true;
+};
+
+/** `captureGridSort` 가 뜬 정렬 한 항목. */
+interface GridSortSnapshot {
+  property: string;
+  ascending: boolean;
+}
+
+/**
+ * `itemsSource` 가 새 배열로 갈리기 직전, 사용자가 헤더 클릭으로 건 정렬을 떠 둔다
+ * (`restoreGridSort` 와 한 쌍 — `captureGridFilter`/`restoreGridFilter` 의 정렬판).
+ *
+ * wijmo `FlexGrid.itemsSource` setter 는 배열 참조가 바뀌면 기존 `CollectionView` 를 버리고 새로 만든다. 
+ * 새 `CollectionView` 는 `sortDescriptions` 가 항상 비어 있어, 신규행 삽입처럼 화면이 `itemsSource` 를 새 배열로 갈아끼우는 화면에서는 헤더 클릭 정렬이 그때마다 풀린다.
+ *
+ * @returns 걸린 정렬이 있으면 스냅샷 배열, 없으면 null
+ */
+export const captureGridSort = (grid: FlexGrid): GridSortSnapshot[] | null => {
+  const sortDescriptions = grid.collectionView?.sortDescriptions;
+  if (!sortDescriptions || sortDescriptions.length === 0) return null;
+  const snapshot: GridSortSnapshot[] = [];
+  for (let i = 0; i < sortDescriptions.length; i++) {
+    const sd = sortDescriptions[i];
+    if (sd?.property) snapshot.push({ property: sd.property, ascending: sd.ascending });
+  }
+  return snapshot.length > 0 ? snapshot : null;
+};
+
+/**
+ * `captureGridSort` 로 떠 둔 정렬을 새로 실린 데이터 위에 다시 적용한다.
+ *
+ * 지금 그리드에 없는 컬럼을 가리키는 정렬은 버린다 — division 전환처럼 컬럼 구성이 바뀌는 조회에서 존재하지 않는 컬럼을 정렬 대상으로 복원하면 보이지도 풀리지도 않는 정렬이 남는다
+ * (`restoreGridFilter` 의 동일 가드와 같은 이유).
+ *
+ * @returns 되돌린 정렬이 있으면 true
+ */
+export const restoreGridSort = (grid: FlexGrid, snapshot: GridSortSnapshot[] | null): boolean => {
+  if (!snapshot || snapshot.length === 0) return false;
+  const valid = snapshot.filter(s => grid.getColumn(s.property));
+  if (valid.length === 0) return false;
+
+  grid.collectionView.sortDescriptions.clear();
+  valid.forEach(s => {
+    grid.collectionView.sortDescriptions.push(new SortDescription(s.property, s.ascending));
+  });
   return true;
 };
 
@@ -343,6 +394,27 @@ const mergeBoundaryRow = <T extends WijmoRowItem = WijmoRowItem>(
 export type GridRowPlacement = 'below' | 'top' | 'bottom' | 'above';
 
 /**
+ * pin(`pinInsertedRow`)이 걸린 신규행을 계속 타고 올라가 "진짜" 앵커(저장된 행, 또는 pin이
+ * 없는 행)를 찾는다 — `installInsertPinConverter`의 `resolveSortValue`와 같은 목적의 재귀다.
+ *
+ * 필요한 이유: 사용자가 방금 추가한(아직 저장 전) 신규 세트를 다시 클릭해 그 위에 또
+ * Insert하면, 그 세트는 아직 업무 키 값이 비어 있어 `groupKey`로 이웃 행과 묶이지 않는다.
+ * 이때 이 신규 세트가 "누구의 앵커였는지"(pin.anchor)를 따라 진짜 앵커까지 올라가면, 그
+ * 세트 전체를 하나의 묶음으로 취급해 세트 중간이 아니라 세트 옆에 다음 신규 세트를 놓을 수
+ * 있다. seen 은 순환 참조 방지용 안전장치다.
+ */
+const chaseInsertPinAnchor = <T extends WijmoRowItem = WijmoRowItem>(
+  grid: FlexGrid<T>,
+  item: T,
+  seen: Set<T> = new Set()
+): T => {
+  const pin = (grid as GridWithInsertPins<T>)._insertPins?.get(item);
+  if (!pin || seen.has(item)) return item;
+  seen.add(item);
+  return chaseInsertPinAnchor(grid, pin.anchor, seen);
+};
+
+/**
  * 신규행이 들어갈 원본 배열(sourceCollection) 인덱스를 계산한다 — 행추가 위치의 공통 규칙.
  *
  * 주의: grid.selection.row 는 필터·정렬을 거친 뷰(collectionView.items) 기준 인덱스인데
@@ -358,21 +430,42 @@ export type GridRowPlacement = 'below' | 'top' | 'bottom' | 'above';
  *   (예: DMF0068 의 월 컬럼)에 포커스가 있으면 머지 경계 보정이 걸리지 않아 한 건을 이루는
  *   여러 행 사이에 신규행이 끼어든다. 같은 키가 이어지는 구간까지 기준행을 밀어 이를 막는다.
  *
+ *   그룹 경계는 정렬·필터가 반영된 표시 순서(collectionView.items)를 기준으로 walk 한다 —
+ *   원본 배열(source) 순서로 walk 하면 정렬이 걸렸을 때 화면에는 붙어 보이는 세트의 두 행이
+ *   원본 배열에서는 서로 떨어져 있어 경계를 잘못 잡는다. walk 가 끝난 뒤에만 그 지점의
+ *   item 을 source 에서 findIndex 로 역산해 splice 인덱스로 쓴다.
+ *
+ *   walk 도중에 만나는 이웃이 미저장 신규행(CRUD_TYPE='C'/'I')이면 groupKey 값이 우연히
+ *   같아도 항상 거기서 멈춘다 — ForecastPrice/SalesPlan/BusinessPlan 의 실제 테스트
+ *   (findGroupTopIndex, "위쪽 신규행에서 멈춘다")가 이미 이 계약을 굳혀 두고 있다. 반면
+ *   "클릭한 행 자체가 이미 등록된 pin(미저장 신규행)"인 경우는 다르게 처리한다 — 그
+ *   신규행은 아직 업무 키가 비어 있어 groupKey 로 자기 세트의 형제 행과도 안 묶이므로,
+ *   walk 를 시작하기 전에 그 pin이 기록해 둔 진짜 앵커로 즉시 치환하고 그 앵커의 현재
+ *   위치에서 walk 를 새로 시작한다 — BusinessPlan.tsx 의 `groupTopRowOf`(클릭한 행이
+ *   pending 이면 findGroupTopIndex 를 아예 안 부르고 그 pending 이 기록해 둔 앵커를
+ *   그대로 쓰는 방식)와 동일 규약이다. 이러면 "방금 추가한 내 세트를 다시 클릭해 그 위에
+ *   또 Insert"도 정상 동작하면서, walk 도중에 실제 저장된 행과 인접한 (남의) pending
+ *   행을 같은 묶음으로 잘못 흡수하는 일도 없다.
+ *
  * GridAction.addRow 가 이 함수를 쓰고, 배열을 직접 다루는 화면(useState + useMemo 로 rows 를
  *   만드는 화면)도 같은 규칙을 쓰도록 밖으로 내보낸다.
+ *
+ * 물리적으로 신규행과 인접하게 되는 원본 행(anchorItem)도 함께 돌려준다 — 정렬이 걸려 있을 때
+ *   GridAction.addRow 가 그 값을 참고해 신규행을 화면상 앵커 옆에 고정시키는 데 쓴다
+ *   (addRow 주석 참고).
  */
-const resolveInsertIndex = <T extends WijmoRowItem = WijmoRowItem>(
+const resolveInsertAnchor = <T extends WijmoRowItem = WijmoRowItem>(
   grid: FlexGrid<T>,
   source: readonly T[],
   placement: GridRowPlacement = 'above',
   options?: { groupKey?: (row: T) => string }
-): number => {
-  if (placement === 'top') return 0;
-  if (placement === 'bottom') return source.length;
+): { index: number; anchorItem?: T } => {
+  if (placement === 'top') return { index: 0 };
+  if (placement === 'bottom') return { index: source.length };
 
   const view = grid.collectionView as CollectionView<T> | undefined;
   const selectedRow = grid.selection?.row ?? -1;
-  const anchorRow =
+  const mergeRow =
     selectedRow < 0
       ? -1
       : mergeBoundaryRow(
@@ -381,28 +474,180 @@ const resolveInsertIndex = <T extends WijmoRowItem = WijmoRowItem>(
           grid.selection?.col ?? -1,
           placement === 'below' ? 'bottom' : 'top'
         );
-  const selectedItem = anchorRow < 0 ? undefined : view?.items?.[anchorRow];
+  const clickedItem = mergeRow < 0 ? undefined : (view?.items?.[mergeRow] as T | undefined);
+
+  // 클릭한 행 자체가 pin(미저장 신규행)이면 그 pin이 기록해 둔 진짜 앵커로 치환하고,
+  // walk 시작 위치도 그 앵커의 현재 뷰 인덱스로 다시 잡는다 (위 주석 참고).
+  const resolvedItem = clickedItem ? chaseInsertPinAnchor(grid, clickedItem) : undefined;
+  const anchorRow =
+    !resolvedItem || resolvedItem === clickedItem
+      ? mergeRow
+      : ((view?.items as (T | undefined)[] | undefined)?.findIndex(item => item === resolvedItem) ??
+        -1);
+
+  const selectedItem = anchorRow < 0 ? undefined : (resolvedItem ?? clickedItem);
   let index = selectedItem ? source.findIndex(item => item === selectedItem) : -1;
 
   // 선택이 없으면(-1) 맨 위 — 기존 동작 유지.
-  if (index < 0) return 0;
+  if (index < 0) return { index: 0 };
 
   const groupKey = options?.groupKey;
-  const anchorItem = source[index];
-  if (groupKey && anchorItem) {
+  let anchorItem = source[index];
+  if (groupKey && anchorItem && view) {
     const key = groupKey(anchorItem);
+    const viewItemAt = (i: number): T | undefined => view.items?.[i] as T | undefined;
     const keyAt = (i: number): string | undefined => {
-      const item = source[i];
+      const item = viewItemAt(i);
       return item ? groupKey(item) : undefined;
     };
+    // walk 는 미저장 신규행(CRUD_TYPE='I'/'C')에서 groupKey 값이 우연히 같아도 항상 멈춘다 —
+    //   업무 키를 아직 안 채운 신규행은 물론, 이미 채워 넣은 값이 이웃 실제 행과 같은 값이어도
+    //   같은 묶음으로 흡수하지 않는다(ForecastPrice/SalesPlan/BusinessPlan 의 findGroupTopIndex
+    //   가 이미 이렇게 동작함 — business-plan.insertAnchor.test.ts "위쪽 신규행에서 멈춘다").
+    //   클릭한 행 자체가 신규행인 경우는 위에서 이미 진짜 앵커로 치환했으므로 여기서는
+    //   "walk 도중에 만나는 이웃"만 걸러내면 된다.
+    const isPendingInsert = (item: T | undefined): boolean =>
+      item?.CRUD_TYPE === CRUD_TYPE.CREATE || item?.CRUD_TYPE === CRUD_TYPE.INSERT;
+
     if (key) {
-      if (placement === 'below') while (keyAt(index + 1) === key) index++;
-      else while (index > 0 && keyAt(index - 1) === key) index--;
+      let viewRow = anchorRow;
+      if (placement === 'below') {
+        while (keyAt(viewRow + 1) === key && !isPendingInsert(viewItemAt(viewRow + 1))) viewRow++;
+      } else {
+        while (viewRow > 0 && keyAt(viewRow - 1) === key && !isPendingInsert(viewItemAt(viewRow - 1)))
+          viewRow--;
+      }
+
+      // 그룹 경계까지 밀렸으면, 신규행과 실제로 물리적으로 인접하게 되는 행은 처음 선택했던
+      // 행이 아니라 경계에 있는 행이다 — 그 item 을 원본 배열 인덱스로 역산한다.
+      const boundaryItem = viewItemAt(viewRow);
+      const boundaryIndex = boundaryItem ? source.findIndex(item => item === boundaryItem) : -1;
+      if (boundaryItem && boundaryIndex >= 0) {
+        index = boundaryIndex;
+        anchorItem = boundaryItem;
+      }
     }
   }
 
-  return placement === 'below' ? index + 1 : index;
+  return { index: placement === 'below' ? index + 1 : index, anchorItem };
 };
+
+/**
+ * resolveInsertAnchor 의 index 만 돌려주는 얇은 래퍼 — 외부 공개 시그니처
+ * (GridAction.resolveInsertIndex, ProjectRegistration.tsx 등 기존 호출부)를 그대로 유지하기
+ * 위해서다.
+ */
+const resolveInsertIndex = <T extends WijmoRowItem = WijmoRowItem>(
+  grid: FlexGrid<T>,
+  source: readonly T[],
+  placement: GridRowPlacement = 'above',
+  options?: { groupKey?: (row: T) => string }
+): number => resolveInsertAnchor(grid, source, placement, options).index;
+
+interface InsertPin<T> {
+  anchor: T;
+}
+
+type GridWithInsertPins<T extends WijmoRowItem> = FlexGrid<T> & {
+  _insertPins?: WeakMap<T, InsertPin<T>>;
+};
+
+/**
+ * 정렬이 걸린 그리드에서 신규행이 앵커(삽입 위치 계산에 쓰인 인접 행) 옆에 "계속" 붙어 있도록
+ * pin(신규행 → 앵커)을 등록한다. 실제 정렬 비교에 개입하는 sortConverter 설치는
+ * `installInsertPinConverter` 가 별도로 맡는다 — 이 함수는 Insert 시점에 한 번만 부르면 된다.
+ *
+ * pin 은 CollectionView 가 아니라 **grid(FlexGrid) 인스턴스**에 매단다. `GridAction.addRow` 처럼
+ * 같은 CollectionView 를 계속 쓰는 화면뿐 아니라, 신규행을 React state 로 들고 있다가
+ * `itemsSource` 를 Insert 마다 새 배열로 갈아끼우는 화면(그때마다 CollectionView 자체가 통째로
+ * 새로 만들어진다)에서도 pin 이 살아남게 하기 위해서다 — grid 인스턴스는 화면이 언마운트되기
+ * 전까지 바뀌지 않는다.
+ *
+ * 필수: pin은 사용자가 정렬 기준 컬럼 값을 직접 입력해도 풀리지 않는다 — Save(저장)/재조회로
+ *   신규행 객체 참조 자체가 사라지기 전까지는 삽입 위치에 무조건 고정돼야 한다는 요구사항이다
+ *   (installInsertPinConverter 주석 참고). 값 변경으로 자동 해제하는 판정 로직을 추가하지 말 것.
+ *
+ * `sortDescriptions` 유무와 무관하게 항상 등록한다 — wijmo 헤더 정렬(sortDescriptions)이 없어도
+ *   `getInsertAnchor` 로 이 앵커를 조회하는 화면(예: forecast-price 의 표시-정렬 재적용)이 있다.
+ *   `installInsertPinConverter` 의 `sortConverter` 는 wijmo 가 실제로 정렬을 수행할 때만 호출되므로
+ *   sortDescriptions 가 비어 있으면 등록된 pin 이 있어도 정렬 비교에는 전혀 관여하지 않는다 — 이
+ *   가드를 없애도 기존 동작(정렬된 그리드에서의 위치 고정)에는 영향이 없다.
+ *
+ * @param anchorItem 없으면(맨 위/맨 아래 삽입 등) 아무 것도 하지 않는다 — 고정할 대상이 없다.
+ */
+export const pinInsertedRow = <T extends WijmoRowItem = WijmoRowItem>(
+  grid: FlexGrid<T>,
+  newRow: T,
+  anchorItem?: T
+): void => {
+  if (!anchorItem) return;
+
+  const gridWithPins = grid as GridWithInsertPins<T>;
+  gridWithPins._insertPins ??= new WeakMap<T, InsertPin<T>>();
+  gridWithPins._insertPins.set(newRow, { anchor: anchorItem });
+};
+
+/**
+ * `pinInsertedRow` 로 등록해 둔 앵커를 조회한다 — 이 행이 아직 저장 전 신규행이고 pin 이 걸려
+ * 있으면 그 앵커 객체를, 아니면 `undefined` 를 돌려준다.
+ *
+ * 용도: 화면이 자체적으로 행 배열을 재정렬해야 하는 경우(예: forecast-price 의 컬럼 설정/Measure
+ *   개인화 변경 시 표시 순서 재계산) 저장된 행만 정렬하고 신규행은 이 함수로 조회한 앵커 옆에
+ *   다시 끼워 넣는 데 쓴다 — `resolveInsertAnchor`/`chaseInsertPinAnchor` 가 내부적으로 하는 일을
+ *   화면이 직접 재현할 수 있게 하는 읽기 전용 창구다. 체인(신규행이 다른 신규행을 앵커로 잡은 경우)을
+ *   끝까지 타려면 반환값이 다시 신규행일 수 있으므로 호출부가 순환 가드를 두고 반복 호출한다.
+ */
+export const getInsertAnchor = <T extends WijmoRowItem = WijmoRowItem>(
+  grid: FlexGrid<T>,
+  row: T
+): T | undefined => (grid as GridWithInsertPins<T>)._insertPins?.get(row)?.anchor;
+
+/**
+ * `pinInsertedRow` 로 등록해 둔 pin 을 지금 `grid.collectionView` 에 실제로 적용한다
+ * (`sortConverter` 설치, 정렬 계산에만 쓰이는 값을 앵커 값으로 바꿔치기).
+ *
+ * CollectionView 가 바뀔 때마다(재조회, `itemsSource` 를 새 배열로 갈아끼우는 화면의 Insert 등)
+ * 다시 불러야 한다 — pin 데이터 자체는 grid 에 계속 남아 있지만 `sortConverter` 는 CollectionView
+ * 인스턴스 소속이라 교체되면 함께 사라진다. pin 이 하나도 없는(신규행 삽입이 없거나
+ * `pinInsertedRow`/`addRow` 를 안 쓰는) 그리드에서 불러도 원래 값을 그대로 돌려줄 뿐 영향 없다.
+ *
+ * 왜 값을 실제로 바꿨다가 되돌리는 방식이 아닌가: refresh() 는 호출될 때마다 그 시점의 진짜
+ *   저장값으로 전체를 다시 정렬한다. "맞췄다가 되돌리는" 방식은 그 직후의 refresh() 한 번에만
+ *   유효하고, 그 다음 발생하는 어떤 refresh() 든(다음 Insert, 무관한 셀 편집 등) 신규행을 실제
+ *   값(빈 값) 기준 위치로 다시 흩어버린다. sortConverter 는 값을 절대 바꾸지 않고, "정렬 비교에
+ *   쓸 값만" 매 refresh() 마다 대신 돌려주는 공식 훅이라(@mescius/wijmo index.d.ts,
+ *   ISortConverter) 설치돼 있는 한 몇 번째 refresh() 든 계속 적용된다. 화면에 보이는 셀 값·저장
+ *   payload(item[property])는 전혀 건드리지 않는다.
+ *
+ * 필수: pin이 걸려 있는 한 사용자가 정렬 기준 컬럼 값을 직접 입력해도 anchor 값을 계속
+ *   대신 쓴다 — "값을 실제로 입력하면 자기 값 기준으로 재정렬"하는 자동 해제 분기를 넣지
+ *   않는다(Save/재조회 전까지 삽입 위치 무조건 고정 요구사항, pinInsertedRow 주석 참고).
+ *
+ * pin 등록은 WeakMap 이라 재조회로 신규행 객체 참조 자체가 소실되면 별도 정리 없이 자연히
+ *   사라진다.
+ */
+export const installInsertPinConverter = <T extends WijmoRowItem = WijmoRowItem>(
+  grid: FlexGrid<T>
+): void => {
+  const view = grid.collectionView as CollectionView<T> | undefined;
+  if (!view) return;
+  const pins = (grid as GridWithInsertPins<T>)._insertPins;
+
+  // pin이 걸려 있으면(=아직 저장되지 않은 신규행이면) 항상 앵커의 값을 대신 쓴다. 앵커 자신도
+  // 아직 저장 전 신규행(연속 Insert)이면 그 pin 을 따라 진짜 저장된 행까지 재귀적으로 타고
+  // 올라간다 — seen 은 순환 참조 방지용 안전장치다.
+  const resolveSortValue = (item: T, property: string, rawValue: unknown, seen: Set<T>): unknown => {
+    const pin = pins?.get(item);
+    if (!pin || seen.has(item)) return rawValue;
+    seen.add(item);
+    const anchorRaw = (pin.anchor as Record<string, unknown>)[property];
+    return resolveSortValue(pin.anchor, property, anchorRaw, seen);
+  };
+
+  view.sortConverter = (sd, item: T, value) => resolveSortValue(item, sd.property, value, new Set<T>());
+};
+
+const EXCLUDED_DATE_PARAM = /(yyyymmdd|yyyymm|^yyyy$|^period(from|to)?$|date(fr|to))$/i;
 
 export const GridAction = {
   GridAction: {},
@@ -432,16 +677,57 @@ export const GridAction = {
     grid.invalidate();
   },
 
-  // F3: Toggle sort property of columns
+  // F3: 선택한 컬럼의 "헤더클릭 정렬 가능 여부"를 토글한다.
+  //   ⚠️ 2026-09-08 실측(Sales Future Price Model 컬럼) — 이 스위치는 실제 Wijmo
+  //   `Column.allowSorting` 을 켜면 안 된다. `Column.allowSorting=true` 는 grid 레벨
+  //   `allowSorting=AllowSorting.None` 과 무관하게 Wijmo 자체 내장 헤더클릭 정렬
+  //   (`_MouseHandler._clickSort` → 자체 `toggleColumnSort`)을 동시에 켜 버려, 이 파일의
+  //   `setSortableColumnHeaderClick` 3단 순환 로직과 같은 클릭에 서로 다른 `sortDescriptions`
+  //   를 덮어쓰며 충돌한다 — 매 클릭 직후 Wijmo 내장 로직이 오름차순으로 되돌려 사용자에게는
+  //   "정렬이 멈춰서 안 바뀐다"로 보인다(콘솔 스택트레이스로 확인: chunk-FBGV5QN2.js
+  //   `_MouseHandler2._click`→`_clickSort`→내장 `toggleColumnSort`).
+  //   그래서 실제 `column.allowSorting` 은 절대 true 로 바꾸지 않고(toLeafColumn 의 false 유지),
+  //   "이 컬럼은 사용자가 정렬을 켰다"는 상태는 grid 인스턴스의 `_userSortEnabledBindings` Set
+  //   (binding 문자열 집합)에만 적는다. 헤더클릭 핸들러/아이콘 렌더 모두 Column.allowSorting 이
+  //   아니라 이 Set 을 읽는다 — `columnGroups` 재대입으로 Column 객체가 재생성돼도 Set 은
+  //   grid 인스턴스 소유라 그대로 남는다(별도 복원 불필요, DataGrid.tsx 의 옛 allowSorting
+  //   복원 로직도 함께 제거).
+  //   sortDescriptions 는 건드리지 않으므로 이미 정렬된 컬럼에서 눌러도 행 순서·정렬 화살표는
+  //   그대로 유지되고 "헤더클릭으로 재정렬 가능한지"만 꺼졌다 켜졌다 한다.
+  //   꺼져 있던 걸 다시 켤 때는, 이미 정렬돼 있던 컬럼이라도 ◆(미정렬) 아이콘이 다시
+  //   보여야 한다(재정렬 전까지) — sortIconPending 마킹은 dataGridUtils.formatSortableColumns가
+  //   읽고, 헤더를 실제로 클릭해 재정렬하면 setSortableColumnHeaderClick 이 해제한다.
   toggleColumnSort: <T extends WijmoRowItem = WijmoRowItem>(grid: FlexGrid<T>) => {
     const selection = grid?.selection;
     const minCol = Math.min(selection.col, selection.col2);
     const maxCol = Math.max(selection.col, selection.col2);
 
+    const gridWithSortState = grid as unknown as {
+      _userSortEnabledBindings?: Set<string>;
+      _userSortIconPendingBindings?: Set<string>;
+    };
+    gridWithSortState._userSortEnabledBindings ??= new Set();
+    gridWithSortState._userSortIconPendingBindings ??= new Set();
+    const enabledBindings = gridWithSortState._userSortEnabledBindings;
+    const pendingBindings = gridWithSortState._userSortIconPendingBindings;
+
     for (let selectedCol = minCol; selectedCol <= maxCol; selectedCol++) {
-      const binding = grid.columns[selectedCol].binding;
-      if (!grid.collectionView.sortDescriptions.some(sd => sd.property === binding))
-        grid.columns[selectedCol].allowSorting = !grid.columns[selectedCol].allowSorting;
+      const column = grid.columns[selectedCol];
+
+      const binding = column.binding;
+      if (!binding) continue;
+
+      const turningOn = !enabledBindings.has(binding);
+      // Wijmo 내장 헤더클릭 정렬과의 충돌 방지 — 실제 allowSorting 은 항상 false 로 고정.
+      column.allowSorting = false;
+
+      if (turningOn) enabledBindings.add(binding);
+      else enabledBindings.delete(binding);
+
+      if (turningOn) {
+        (column as unknown as { _sortIconPending?: boolean })._sortIconPending = true;
+        pendingBindings.add(binding);
+      }
     }
 
     grid.invalidate();
@@ -486,10 +772,20 @@ export const GridAction = {
   //   ⚠️ BE SearchCondition.paramCtn 은 String — 값이 배열(multi-select)/불리언이면 그대로 보내면
   //      Jackson 역직렬화 실패(400)로 저장이 조용히 안 됨. → payload 는 항상 문자열로 coerce.
   //      (배열=콤마 join / null·undefined='' / 그 외 String). string 값 화면은 무변경(회귀 0).
-  personalizeCondition: async (menuId: string, searchParam: Record<string, unknown>) => {
+  personalizeCondition: async (
+    menuId: string,
+    searchParam: Record<string, unknown>,
+    includeKeys?: string[]
+  ) => {
     await apiClient.post(
       `/admin/menu/${menuId}/search-conditions`,
       Object.entries(searchParam)
+        // 기간/날짜 조회조건은 저장하지 않는다 - EXCLUDED_DATE_PARAM 주석 참조.
+        //   저장 SP(P_SCM0000_SAVE_SRCH_COND)는 (USER_ID, MNU_ID) 전체 DELETE 후 재삽입이므로,
+        //   이 필터가 걸린 뒤 한 번만 저장하면 기존에 저장돼 있던 날짜 행도 함께 정리된다.
+        //   단 includeKeys 에 명시된 키는 날짜형이어도 저장한다 — 'plan date 선택'처럼 날짜 포맷이지만
+        //   보존해야 하는 조회조건을 화면이 opt-in 으로 허용하는 통로(예: SCP0010 planStartYyyymmdd).
+        .filter(([key]) => includeKeys?.includes(key) || !EXCLUDED_DATE_PARAM.test(key))
         .map(([key, data]) => {
           let paramCtn: string;
           if (Array.isArray(data)) paramCtn = data.join(',');
@@ -506,14 +802,22 @@ export const GridAction = {
   // 행추가 위치 계산 — 배열을 직접 다루는 화면이 addRow 와 같은 규칙을 쓰도록 공개한다.
   resolveInsertIndex,
 
-  // F8: Add row
-  addRow: <T extends WijmoRowItem = WijmoRowItem>(
+  // F8: Add row set — 업무상 한 건이 여러 물리행(예: Measure N행 1세트)인 화면을 위한 원자적
+  //   삽입. 앵커를 세트 전체에 대해 **한 번만** 계산해 한 번에 splice 한다 — 행마다 반복
+  //   호출하면 addRow 가 grid.selection 을 옮기지 않아 두 번째 행부터도 같은(또는 낡은) 앵커를
+  //   계산해, 호출 순서와 실제 삽입 순서가 어긋난다(2026-08-23 SalesFuturePrice.tsx 실측:
+  //   LOC/USD/KRW/RTF 가 조회 순서와 반대로 들어감 — 삽입 후 source.indexOf 로 순서를 다시
+  //   맞추는 수작업 보정이 있었다. addRowSet 도입으로 그 보정은 불필요해진다).
+  //   options.groupKey 는 resolveInsertAnchor 로 그대로 전달한다 — "화면이 아는 묶음"이 있는
+  //   화면(월 컬럼처럼 병합이 안 걸리는 컬럼에 포커스가 있는 경우 등)이 세트 사이에 신규
+  //   세트가 끼어들지 않게 하는 통로다.
+  addRowSet: <T extends WijmoRowItem = WijmoRowItem>(
     grid: FlexGrid<T>,
-    defaultCopyProps: Partial<T>,
+    defaultCopyPropsList: Partial<T>[],
     placement: GridRowPlacement = 'above',
-    preserveMergeManager = false
-  ) => {
-    if (grid.isReadOnly) return undefined;
+    options?: { preserveMergeManager?: boolean; groupKey?: (row: T) => string }
+  ): T[] | undefined => {
+    if (grid.isReadOnly || defaultCopyPropsList.length === 0) return undefined;
     const itemsSource = grid.itemsSource as T[];
     const editFlag = itemsSource.every(item => item?.EDIT_FLAG === 'N');
     // TODO: 조회 없이 (그리드에 데이터 없이) 추가할 때 handle 추가적으로 필요  - 강민재
@@ -522,43 +826,87 @@ export const GridAction = {
     const view = grid.collectionView as CollectionView<T>;
     const source = view.sourceCollection as T[];
 
-    const newRow = {
-      ...defaultCopyProps,
-      CRUD_TYPE: 'I',
-    } as unknown as T;
+    const newRows = defaultCopyPropsList.map(
+      defaultCopyProps => ({ ...defaultCopyProps, CRUD_TYPE: 'I' }) as unknown as T
+    );
 
-    // 삽입 위치 계산은 resolveInsertIndex 한 곳에 모여 있다 — 그 주석 참고.
-    source.splice(resolveInsertIndex(grid, source, placement), 0, newRow);
-    (grid.collectionView as CollectionView).itemsAdded.push(newRow);
-    // 필터가 걸려 있어도 신규행은 보여야 한다 — refresh 전에 필터 예외로 등록.
-    keepRowVisibleUnderFilter(grid, newRow);
+    // 삽입 위치 계산은 resolveInsertAnchor 한 곳에 모여 있다 — resolveInsertIndex 주석 참고.
+    const { index: insertIndex, anchorItem } = resolveInsertAnchor(grid, source, placement, {
+      groupKey: options?.groupKey,
+    });
+    source.splice(insertIndex, 0, ...newRows);
+    const itemsAdded = (grid.collectionView as CollectionView).itemsAdded;
+    newRows.forEach(row => {
+      itemsAdded.push(row);
+      // 필터가 걸려 있어도 신규행은 보여야 한다 — refresh 전에 필터 예외로 등록.
+      keepRowVisibleUnderFilter(grid, row);
+    });
 
     // 주의: 아래 한 줄뿐이다. 예전에는 같은 대입이 무조건 실행되는 줄이 하나 더 있어
     //   preserveMergeManager=true 로 넘겨도 화면 전용 머지 매니저가 매번 덮였다.
-    if (!preserveMergeManager) grid.mergeManager = new CustomMergeManager(grid);
+    if (!options?.preserveMergeManager) grid.mergeManager = new CustomMergeManager(grid);
+
+    // 정렬이 걸려 있으면 세트 전체를 앵커 옆에 "계속" 고정한다 — pinInsertedRow/
+    //   installInsertPinConverter 주석 참고. 세트의 모든 행이 같은 앵커 값으로 정렬 비교되므로
+    //   서로 떨어지지 않는다. addRowSet 은 CollectionView 가 안 바뀌는 화면이라 즉시 한 번만
+    //   설치하면 충분하다(참조가 바뀌는 화면은 DataGrid.tsx 가 itemsSourceChanged 마다
+    //   재설치한다).
+    newRows.forEach(row => pinInsertedRow(grid, row, anchorItem));
+    installInsertPinConverter(grid);
+
     grid.collectionView.refresh();
     grid.invalidate();
-    return newRow;
+    return newRows;
   },
 
+  // F8: Add row — 단일 행 삽입은 addRowSet 의 1행짜리 특수형이다.
+  addRow: <T extends WijmoRowItem = WijmoRowItem>(
+    grid: FlexGrid<T>,
+    defaultCopyProps: Partial<T>,
+    placement: GridRowPlacement = 'above',
+    preserveMergeManager = false
+  ): T | undefined =>
+    GridAction.addRowSet(grid, [defaultCopyProps], placement, { preserveMergeManager })?.[0],
+
   // F9: Remove row
+  //   options.groupKey 는 addRowSet 과 대칭되는 세트 삭제 통로다 — 세트 중 병합 안 된
+  //   컬럼(Measure/월 컬럼 등)을 클릭해 미저장 신규 세트의 한 행만 선택된 상태로 불려도,
+  //   같은 groupKey 를 가진 다른 미저장 신규행까지 함께 지워 "세트 절반만 삭제" 되는
+  //   일을 막는다. 이미 저장된(CRUD_TYPE 없음/D/M) 행에는 적용하지 않는다 — 저장된 행은
+  //   화면이 명시적으로 선택한 것만 지운다는 기존 규약을 그대로 따른다.
   removeRow: <T extends WijmoRowItem = WijmoRowItem>(
     grid: FlexGrid<T>,
-    deleteOnlyNew: boolean = false
+    deleteOnlyNew: boolean = false,
+    preserveMergeManager: boolean = false,
+    options?: { groupKey?: (row: T) => string }
   ) => {
     if (grid.isReadOnly) return false;
 
     const rows = GridUtils.getSelectedRows(grid);
     if (!rows?.length) return false;
 
-    rows.forEach(row => {
-      if (row.CRUD_TYPE === CRUD_TYPE.CREATE || row.CRUD_TYPE === CRUD_TYPE.INSERT)
-        grid.editableCollectionView.remove(row);
+    const isPendingInsert = (row: T): boolean =>
+      row.CRUD_TYPE === CRUD_TYPE.CREATE || row.CRUD_TYPE === CRUD_TYPE.INSERT;
+
+    const targets = new Set<T>(rows);
+    const groupKey = options?.groupKey;
+    if (groupKey) {
+      const source = grid.collectionView?.sourceCollection as T[] | undefined;
+      const keys = new Set(rows.filter(isPendingInsert).map(groupKey).filter(Boolean));
+      source?.forEach(item => {
+        if (isPendingInsert(item) && keys.has(groupKey(item))) targets.add(item);
+      });
+    }
+
+    targets.forEach(row => {
+      if (isPendingInsert(row)) grid.editableCollectionView.remove(row);
       else if (!deleteOnlyNew) row['CRUD_TYPE'] = CRUD_TYPE.DELETE;
     });
 
     grid.editableCollectionView.commitEdit();
-    grid.mergeManager = new CustomMergeManager(grid);
+    // addRow 의 preserveMergeManager 와 동일 규약 — 화면이 컬럼 단위 예외를 둔 커스텀 mergeManager
+    //   (ColumnInsertMergeManager 등)를 설치했다면 F9 삭제가 일반 CustomMergeManager 로 되돌리지 않게 한다.
+    if (!preserveMergeManager) grid.mergeManager = new CustomMergeManager(grid);
     grid.invalidate();
 
     return true;
@@ -623,7 +971,7 @@ export const GridAction = {
   //     — 셀마다 새 스타일을 만들면 수천 개가 생겨 xlsx 가 비대해진다.
   flatExcelDownload: (
     rows: ReadonlyArray<Record<string, string | number | null | undefined>>,
-    columns: ReadonlyArray<{ header: string; key: string }>,
+    columns: ReadonlyArray<{ header: string; key: string; width?: number }>,
     fileNamePrefix: string,
     cellFill?: (
       row: Record<string, string | number | null | undefined>,
@@ -636,6 +984,28 @@ export const GridAction = {
     headerFont.size = 12;
     headerFont.bold = true;
 
+    // 본문 셀 폰트 — 그리드 F11 다운로드(excelDownload)와 동일(Spoqa 12, non-bold). 폼도 같은 서식을 쓴다.
+    const bodyFont = new WorkbookFont();
+    bodyFont.family = 'Spoqa Han Sans Neo';
+    bodyFont.size = 12;
+    bodyFont.bold = false;
+
+    // Thin 검정 4변 테두리 — excelDownload 와 동일. 스타일마다 새 인스턴스를 만든다(공유 시 wijmo 가 오작동).
+    const thinBorder = () => {
+      const setting = () => {
+        const s = new WorkbookBorderSetting();
+        s.style = BorderStyle.Thin;
+        s.color = '#000000';
+        return s;
+      };
+      const b = new WorkbookBorder();
+      b.top = setting();
+      b.bottom = setting();
+      b.left = setting();
+      b.right = setting();
+      return b;
+    };
+
     // format '@' (텍스트) 필수 — 없으면 wijmo 가 '40' / '202607' / '0' 을 숫자 셀로 기록하고
     //   POI getNumericCellValue 가 '40.0' 을 돌려줘 업로드 검증(정수·날짜)에서 전량 탈락한다.
     const headerStyle = new WorkbookStyle();
@@ -643,9 +1013,13 @@ export const GridAction = {
     headerStyle.hAlign = HAlign.Center;
     headerStyle.vAlign = VAlign.Center;
     headerStyle.format = '@';
+    headerStyle.borders = thinBorder();
 
     const textStyle = new WorkbookStyle();
     textStyle.format = '@';
+    textStyle.font = bodyFont;
+    textStyle.vAlign = VAlign.Center;
+    textStyle.borders = thinBorder();
 
     const toCell = (value: string, style: WorkbookStyle) => {
       const cell = new WorkbookCell();
@@ -664,6 +1038,9 @@ export const GridAction = {
       const style = new WorkbookStyle();
       style.format = '@'; // 텍스트 유지 — 채움색을 넣어도 숫자 셀로 바뀌면 안 된다
       style.fill = fill;
+      style.font = bodyFont;
+      style.vAlign = VAlign.Center;
+      style.borders = thinBorder();
       fillStyles.set(color, style);
       return style;
     };
@@ -677,6 +1054,13 @@ export const GridAction = {
 
     const sheet = new WorkSheet();
     sheet.name = 'Sheet1';
+    if (columns.some(column => column.width != null)) {
+      columns.forEach(column => {
+        const workbookColumn = new WorkbookColumn();
+        if (column.width != null) workbookColumn.width = column.width;
+        sheet.columns.push(workbookColumn);
+      });
+    }
     sheet.rows.push(
       buildRow(
         columns.map(column => column.header),
@@ -712,11 +1096,115 @@ export const GridAction = {
     });
   },
 
+  // Excel Upload 양식 다운로드 — AS-IS 2단 병합 헤더 양식 (그리드 없이 컬럼 정의로 직접 생성).
+  //   1행 = group 없는 컬럼은 1~2행 세로 병합 / group 컬럼은 연속 구간 가로 병합(그룹명)
+  //   2행 = group 컬럼의 하위명(header). 데이터 영역은 입력용 빈 시트(행 없음).
+  //   BE ExcelUtils.convertGroupedHeaderExcelToJson 이 "그룹명_하위명" 으로 키를 합성해 HEADER_CONTENT 와 매칭한다
+  //   — group/header 문자열은 HEADER_CONTENT 토큰과 1바이트도 달라선 안 된다.
+  //   헤더 스타일 = AS-IS 양식 실측 (Arial 9 / 배경 #F0F0F0 / 가운데·줄바꿈 / 얇은 테두리).
+  //   데이터 영역은 컬럼 스타일 '@'(텍스트) — 입력한 202607 이 숫자 셀로 바뀌지 않게 한다.
+  groupedHeaderExcelDownload: (
+    columns: ReadonlyArray<{ header: string; key: string; group?: string; width?: string }>,
+    fileNamePrefix: string,
+    sheetName = 'Sheet1'
+  ): Promise<void> => {
+    const headerFont = new WorkbookFont();
+    headerFont.family = 'Arial';
+    // WorkbookFont.size = 픽셀 — 12px = 엑셀 9pt (AS-IS 양식). 9 로 주면 7pt 로 기록된다(실측).
+    headerFont.size = 12;
+
+    const thin = () => {
+      const setting = new WorkbookBorderSetting();
+      setting.style = BorderStyle.Thin;
+      setting.color = '#000000';
+      return setting;
+    };
+    const border = new WorkbookBorder();
+    border.top = thin();
+    border.bottom = thin();
+    border.left = thin();
+    border.right = thin();
+
+    const headerFill = new WorkbookFill();
+    headerFill.color = '#F0F0F0';
+
+    const headerStyle = new WorkbookStyle();
+    headerStyle.font = headerFont;
+    headerStyle.fill = headerFill;
+    headerStyle.borders = border;
+    headerStyle.hAlign = HAlign.Center;
+    headerStyle.vAlign = VAlign.Center;
+    headerStyle.wordWrap = true;
+    headerStyle.format = '@';
+
+    const textStyle = new WorkbookStyle();
+    textStyle.format = '@';
+
+    const toCell = (value: string, span?: { colSpan?: number; rowSpan?: number }) => {
+      const cell = new WorkbookCell();
+      cell.value = value;
+      cell.style = headerStyle;
+      if (span?.colSpan) cell.colSpan = span.colSpan;
+      if (span?.rowSpan) cell.rowSpan = span.rowSpan;
+      return cell;
+    };
+
+    // 병합으로 가려지는 위치에도 빈 셀을 채운다 — 비워 두면 병합 영역 테두리가 끊겨 보인다.
+    const topRow = new WorkbookRow();
+    const subRow = new WorkbookRow();
+    columns.forEach((column, index) => {
+      if (!column.group) {
+        topRow.cells.push(toCell(column.header, { rowSpan: 2 }));
+        subRow.cells.push(toCell(''));
+        return;
+      }
+      const isGroupStart = index === 0 || columns[index - 1].group !== column.group;
+      if (isGroupStart) {
+        let span = 1;
+        while (columns[index + span]?.group === column.group) span += 1;
+        topRow.cells.push(toCell(column.group, { colSpan: span }));
+      } else {
+        topRow.cells.push(toCell(''));
+      }
+      subRow.cells.push(toCell(column.header));
+    });
+
+    const sheet = new WorkSheet();
+    sheet.name = sheetName;
+    sheet.rows.push(topRow, subRow);
+    columns.forEach(column => {
+      const sheetColumn = new WorkbookColumn();
+      if (column.width) sheetColumn.width = column.width;
+      sheetColumn.style = textStyle;
+      sheet.columns.push(sheetColumn);
+    });
+
+    const workbook = new Workbook();
+    workbook.sheets.push(sheet);
+
+    return new Promise<void>((resolve, reject) => {
+      workbook.saveAsync(
+        `${fileNamePrefix}_${dayjs().format('YYYYMMDD_hhmmss')}.xlsx`,
+        () => resolve(),
+        (reason?: unknown) =>
+          reject(
+            reason instanceof Error
+              ? reason
+              : new Error(typeof reason === 'string' ? reason : 'xlsx save failed')
+          )
+      );
+    });
+  },
+
   // F11 : Excel download
+  //   headerCellStyle — opt-in 헤더 셀 꾸밈(기본 undefined = 기존 화면 전부 무변화).
+  //     border: 헤더 셀 4방향 테두리(Thin/검정). fillColor: 헤더 셀 배경색(#RRGGBB).
+  //     bold: 헤더 폰트 굵기(미지정 시 기존 기본값 true 유지).
   excelDownload: <T extends WijmoRowItem = WijmoRowItem>(
     grid: FlexGrid<T>,
     menuName: string,
-    setProgress?: (progress: number) => void
+    setProgress?: (progress: number) => void,
+    headerCellStyle?: { border?: boolean; fillColor?: string; bold?: boolean }
   ) => {
     grid.beginUpdate();
 
@@ -724,7 +1212,14 @@ export const GridAction = {
 
     const clonedAllowMerging = grid.allowMerging;
     const clonedColumnGroups = [...(grid.columnGroups as FlexGridColumnConfig[])];
-    const clonedColumnHeaderHeight = grid.columnHeaders.rows[0].height;
+    // 다단 헤더 전체 행 높이 스냅샷 (2026-09-08 — DMF0082 등 다단 헤더 화면 리포트).
+    //   복원 때 rows[0] 한 행만 되돌리면, columnGroups 재구성으로 새로 생긴 rows[1..] 이 export 중
+    //   부풀린 헤더 높이(아래 columnHeaders.rows[0].height = 48)를 그대로 물려받아 헤더가 커진 채
+    //   고정된다(엑셀 다운로드 후 헤더 48px -> 112px). 전 행을 떠서 그대로 되돌린다.
+    const clonedColumnHeaderHeights: (number | null)[] = [];
+    for (let i = 0; i < grid.columnHeaders.rows.length; i++) {
+      clonedColumnHeaderHeights.push(grid.columnHeaders.rows[i].height);
+    }
     // 화면에 실제 표시중인 컬럼 binding 집합 (grid.columns.clear() 이전 = 원본 상태).
     //   컬럼설정 팝업으로 런타임 숨김한 컬럼까지 정확히 반영(정적 display + 런타임 visible 모두).
     const visibleBindings = new Set<string>();
@@ -740,9 +1235,12 @@ export const GridAction = {
       }
     }
 
-    const flatColumnGroups = clonedColumnGroups
+    // 숨김 컬럼까지 포함한 전체 flat 목록 — 화면 고정(DataGrid.tsx frozenColumns)이 이 "전체"
+    //   기준으로 경계를 잡으므로, 엑셀 고정 경계를 화면과 맞추려면 걸러내기 전 목록도 필요하다.
+    const fullFlatColumnGroups = clonedColumnGroups
       .flatMap(largeGroup => largeGroup.columns ?? [largeGroup])
-      .flatMap(smallGroup => smallGroup.columns ?? [smallGroup])
+      .flatMap(smallGroup => smallGroup.columns ?? [smallGroup]);
+    const flatColumnGroups = fullFlatColumnGroups
       // 숨긴 컬럼은 엑셀 export 에서 제외 (2026-07-01 사용자 요구 — 전체 화면 공통).
       .filter(columnGroup => !columnGroup.binding || visibleBindings.has(columnGroup.binding));
 
@@ -776,7 +1274,7 @@ export const GridAction = {
     const headerFontStyle = new WorkbookFont();
     headerFontStyle.family = 'Spoqa Han Sans Neo';
     headerFontStyle.size = 12;
-    headerFontStyle.bold = true;
+    headerFontStyle.bold = headerCellStyle?.bold ?? true;
 
     const fontStyle = new WorkbookFont();
     fontStyle.family = 'Spoqa Han Sans Neo';
@@ -788,6 +1286,25 @@ export const GridAction = {
     columnHeaderStyle.vAlign = VAlign.Center;
     columnHeaderStyle.hAlign = HAlign.Center;
     columnHeaderStyle.font = headerFontStyle;
+    if (headerCellStyle?.border) {
+      const borderSetting = () => {
+        const setting = new WorkbookBorderSetting();
+        setting.style = BorderStyle.Thin;
+        setting.color = '#000000';
+        return setting;
+      };
+      const border = new WorkbookBorder();
+      border.top = borderSetting();
+      border.bottom = borderSetting();
+      border.left = borderSetting();
+      border.right = borderSetting();
+      columnHeaderStyle.borders = border;
+    }
+    if (headerCellStyle?.fillColor) {
+      const fill = new WorkbookFill();
+      fill.color = headerCellStyle.fillColor;
+      columnHeaderStyle.fill = fill;
+    }
 
     const cellStyle = new WorkbookStyle();
     cellStyle.vAlign = VAlign.Center;
@@ -804,6 +1321,31 @@ export const GridAction = {
           : 1;
       return Math.max(depth, groupDepth);
     }, 1);
+
+    // Excel 틀고정 (2026-09-08 사용자 요구 — 전체 화면 공통):
+    //   Header 행 + 좌측 고정(_fixed) 블록을 xlsx 창 고정으로 내보낸다 — 화면 고정과 같게 보이도록.
+    //   frozenPane.rows 는 저장 경로별 실제 헤더 행 수(평탄 저장=1, 다단=headerDepth)를 인자로
+    //   받아 데이터 행이 얼려지지 않게 한다.
+    //
+    //   고정 컬럼 수 계산: 화면 고정 경계(DataGrid.tsx frozenColumns)는 숨김 컬럼까지 포함한
+    //   "전체" 컬럼 기준 findLastIndex(_fixed)+1 이다. 그런데 엑셀은 숨김 컬럼을 아예 내보내지
+    //   않으므로(flatColumnGroups 는 visibleBindings 로 걸러진 목록), _fixed 가 숨김 컬럼에만 걸린
+    //   화면(예: DMF0005 는 유일한 _fixed 가 숨김인 DEPT_ID)에서 걸러진 목록으로 findLastIndex 를
+    //   돌리면 _fixed 가 하나도 안 남아 고정 수가 0 이 된다. → 전체 컬럼에서 화면과 같은 경계를
+    //   구한 뒤, 그 경계 안에서 "실제로 내보내는(보이는)" 컬럼 수만 센다. 그래야 화면의 시각적
+    //   고정 경계(숨김 컬럼은 0px 라 Div 까지만 고정돼 보이는 것)와 엑셀 고정이 일치한다.
+    const frozenBoundary = fullFlatColumnGroups.findLastIndex(columnGroup => columnGroup._fixed) + 1;
+    const frozenColumnCount = fullFlatColumnGroups
+      .slice(0, frozenBoundary)
+      .filter(columnGroup => !columnGroup.binding || visibleBindings.has(columnGroup.binding)).length;
+    const applyExcelFrozenPane = (workbook: Workbook, frozenRows: number) => {
+      const sheet = workbook.sheets[0];
+      if (!sheet) return;
+      const frozenPane = new WorkbookFrozenPane();
+      frozenPane.rows = frozenRows;
+      frozenPane.columns = frozenColumnCount;
+      sheet.frozenPane = frozenPane;
+    };
 
     const convertOptions: IFlexGridXlsxOptions = {
       includeStyles: false,
@@ -832,6 +1374,16 @@ export const GridAction = {
           const dataType = flatColumnGroups[col]._ctrlType;
           xlsxCell.isDate = dataType === CELL_CONTROL_TYPE.DATE; // TODO: CELL_CONTROL_TYPE DATE 타입 추가 시 조건 변경 필요 - 강민재
           xlsxCell.isNumber = dataType === CELL_CONTROL_TYPE.NUMBER;
+
+          // 컬럼 전용 엑셀 서식(opt-in) — 변환기가 컬럼 format 에서 만든 서식을 그대로 덮어쓴다.
+          //   AS-IS 스프레드 내려받기의 `#,##0.000;[Red]-#,##0.000`(음수 빨강) 같은 구간 서식은
+          //   화면 format 으로 표현할 수 없어 여기서만 적용한다. 미지정 컬럼은 종전과 같다.
+          //   숫자 셀에만 건다 — 편집으로 문자열이 섭인 셀에 숫자 서식을 걸어도 Excel 은 무시하지만
+          //   의도를 분명히 하기 위해 값 타입을 본다.
+          const excelFormat = flatColumnGroups[col]._excelFormat;
+          if (excelFormat && typeof xlsxCell.value === 'number') {
+            xlsxCell.style = { ...xlsxCell.style, format: excelFormat };
+          }
         }
       },
     };
@@ -843,7 +1395,11 @@ export const GridAction = {
       grid.allowMerging = clonedAllowMerging;
       grid.columns.clear();
       grid.columnGroups = clonedColumnGroups;
-      grid.columnHeaders.rows[0].height = clonedColumnHeaderHeight;
+      // 헤더 전체 행 높이 복원 — rows[0] 만이 아니라 뜬 전 행을 되돌린다(위 스냅샷 주석 참조).
+      const restoredHeaderRows = grid.columnHeaders.rows;
+      for (let i = 0; i < restoredHeaderRows.length && i < clonedColumnHeaderHeights.length; i++) {
+        restoredHeaderRows[i].height = clonedColumnHeaderHeights[i];
+      }
       grid.endUpdate();
     };
 
@@ -862,6 +1418,7 @@ export const GridAction = {
           ...convertOptions,
           includeColumnHeaders: true,
         });
+        applyExcelFrozenPane(workbook, 1); // 평탄 저장 = 헤더 1행 고정
         resetGridProps(); // 파일 생성 전에 원복 — 이후 리렌더는 workbook 에 영향 없음
         workbook.saveAsync(
           fileName,
@@ -962,6 +1519,7 @@ export const GridAction = {
 
           // WorkSheet.rows 도 readonly getter — unshift 로 헤더 행을 데이터 앞에 삽입
           sheet.rows.unshift(...headerRows);
+          applyExcelFrozenPane(workbook, headerDepth); // 다단 = 헤더 depth 만큼 행 고정
           workbook.saveAsync(
             fileName,
             () => {

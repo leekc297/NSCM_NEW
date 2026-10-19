@@ -1,4 +1,6 @@
 import { CustomDialog } from '@shared/components';
+import { Button } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
 import { useMessageStore } from '@shared/stores';
 
 import { MAIL_CONTENT_MAX_BYTES } from '../mail-setup.constants';
@@ -28,11 +30,15 @@ export const MailContentDialog = ({ onApply }: MailContentDialogProps) => {
     if (isOverMailContentLimit(value)) {
       void setAlert({
         type: 'alert',
-        content: t('MSG00698', '_You have exceeded the number of digits you can enter.'),
+        content: t('MSG00165', '_You have exceeded the number of digits you can enter.'),
       });
       return;
     }
     setContentDraft(value);
+  };
+
+  const handleOk = () => {
+    onApply(contentDraft);
   };
 
   return (
@@ -53,6 +59,29 @@ export const MailContentDialog = ({ onApply }: MailContentDialogProps) => {
             maxLength={MAIL_CONTENT_MAX_BYTES}
             onChange={event => handleChange(event.target.value)}
           />
+          {/* CustomDialog 는 customContentArea 지정 시 기본 하단 OK/Cancel 버튼을 렌더링하지 않는다
+              (CustomDialogContent.tsx lowerButtonGroup 분기) — 위 handleSubmit/disableButtonCancel 은
+              그래서 실제로는 호출되지 않는다. SmsContentDialog.tsx 와 동일하게 버튼을 직접 둔다. */}
+          <div className={styles.buttonWrapper}>
+            {!readOnly && (
+              <Button
+                appearance='contained'
+                priority='primary'
+                size='medium'
+                iconComponent={<ControlConfirmIcon size='small' />}
+                iconPosition='leading'
+                buttonLabel={t('LBL00359', '_확인')}
+                onClick={handleOk}
+              />
+            )}
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00107', '_취소')}
+              onClick={closeContentDialog}
+            />
+          </div>
         </div>
       }
     />

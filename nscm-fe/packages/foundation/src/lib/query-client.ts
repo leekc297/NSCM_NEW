@@ -159,7 +159,14 @@ export const queryClient = new QueryClient({
 });
 
 export const useIsBusy = (key: string[]) => {
-  const isFetching = useIsFetching({ queryKey: key }); // 현재 실행 중인 GET 쿼리 수
+  // `meta.background === true` 로 표시된 구조적 fetch(예: 조회 전 컬럼 생성용 3SPAN)는 "조회 중"
+  //   busy 스피너 집계에서 제외한다 — 사용자 액션 없는 백그라운드 로드까지 스피너를 띄우면 화면
+  //   진입마다 스피너가 반짝인다(SSP0005 진입 스피너, 2026-09-30). 태그 없는 기존 쿼리는 전부 그대로
+  //   집계되므로 다른 화면 동작은 불변이다.
+  const isFetching = useIsFetching({
+    queryKey: key,
+    predicate: query => query.meta?.background !== true,
+  }); // 현재 실행 중인 GET 쿼리 수(백그라운드 제외)
   const isMutating = useIsMutating({ mutationKey: key }); // 현재 실행 중인 POST/PUT/DELETE 수
 
   // 하나라도 0보다 크면 true를 반환

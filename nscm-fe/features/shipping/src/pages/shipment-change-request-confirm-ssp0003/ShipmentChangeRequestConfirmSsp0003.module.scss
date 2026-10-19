@@ -1,0 +1,30 @@
+// SSP0003 레이아웃 — splitContainer(상 마스터 그리드 / 하 디테일 폼 + 디테일 그리드), AS-IS 상하 분할(design 01 §1).
+.mainGrid {
+  height: 40%;
+  min-height: 200px;
+}
+
+.detailForm {
+  padding: 8px 12px;
+}
+
+.subGrid {
+  height: 30%;
+  min-height: 140px;
+}
+
+// 액션(승인/반려) 진행 스피너 — 조회 로딩(전역 MDIContainer .spinner)과 동일한 딤 오버레이 + 중앙 원형.
+//   수동 apiClient 경로라 전역 useIsBusy 스피너가 안 잡혀 화면에서 직접 렌더한다(기준: 조회 로딩).
+.actionSpinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  cursor: not-allowed;
+  background-color: rgba(0, 0, 0, 0.4);
+}

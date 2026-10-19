@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { IcArrowLeft, IcCloseTemp } from '@foundation/assets';
+import { resolveMenuLabel } from '@foundation/models';
 import { clsx } from '@shared/clsx';
 
 import styles from './MDITabs.module.scss';
@@ -66,6 +67,14 @@ export const MDITabs = () => {
     closeTab(tabIndex);
   };
 
+  // 마우스 휠(가운데) 클릭으로 탭 닫기 — 크롬 탭 닫기와 동일(AS-IS 파리티). closable 탭만 닫는다.
+  //   e.button===1 이 가운데 버튼. onAuxClick 은 가운데/오른쪽 클릭에서 발생하므로 버튼을 가린다.
+  const handleTabAuxClick = (e: React.MouseEvent, tabIndex: number) => {
+    if (e.button !== 1) return;
+    e.preventDefault();
+    if (tabs[tabIndex]?.closable) closeTab(tabIndex);
+  };
+
   if (tabs.length === 0) return null;
 
   return (
@@ -79,8 +88,13 @@ export const MDITabs = () => {
               ref={isActive ? activeTabRef : undefined}
               className={clsx(styles.tab, { [styles.active]: isActive })}
               onClick={() => setActiveTab(index)}
+              onAuxClick={e => handleTabAuxClick(e, index)}
+              // 가운데(휠) 클릭 시 브라우저 기본 자동스크롤 커서가 뜨지 않게 막는다.
+              onMouseDown={e => {
+                if (e.button === 1) e.preventDefault();
+              }}
             >
-              <span className={styles.tabContent}>{t(tab.mnuMsgId, `${tab.mnuId}`)}</span>
+              <span className={styles.tabContent}>{resolveMenuLabel(t, tab)}</span>
               {tab.closable && (
                 <div className={styles.closeBtn}>
                   <IcCloseTemp height={14} onClick={e => handleTabClose(e, index)} />

@@ -21,7 +21,7 @@ describe('callProc', () => {
     expect(result).toStrictEqual({ ok: false, message: 'server error' });
   });
 
-  it('첫 커서 첫 값이 \'success\' 이면 성공', async () => {
+  it("첫 커서 첫 값이 'success' 이면 성공", async () => {
     postMock.mockResolvedValue({ status: 200, data: { result: [{ MSG: 'success' }] } });
     const result = await callProc(SHEETS.MAIN, 'SAVE', {});
     expect(result).toStrictEqual({ ok: true });
@@ -80,7 +80,7 @@ describe('saveTitleSet', () => {
     expect(postMock).not.toHaveBeenCalled();
   });
 
-  it('\'^\' 구분 payload 로 컬럼 순서를 유지해 전달한다', async () => {
+  it("'^' 구분 payload 로 컬럼 순서를 유지해 전달한다", async () => {
     postMock.mockResolvedValue({ status: 200, data: { result: [] } });
     await saveTitleSet('C', [{ name: 'COL_A' }, { name: 'COL_B', sortOrderNo: 5 }]);
     expect(postMock).toHaveBeenCalledWith(

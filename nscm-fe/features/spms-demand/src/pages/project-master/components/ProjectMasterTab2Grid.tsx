@@ -1,14 +1,21 @@
 import type { FlexGrid as FlexGridType, FormatItemEventArgs } from '@mescius/wijmo.grid';
-import { CellType, DataMap } from '@mescius/wijmo.grid';
+import { CellType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, type Ref, useEffect, useMemo, useRef } from 'react';
+import {
+  type MutableRefObject,
+  type Ref,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
-import type { ComboParam, RawFlexGridColumnConfig } from '@foundation/models';
+import type { RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
-import { DataGrid } from '@shared/components';
-import { useTabComboQueries } from '@shared/hooks';
 
 import { colorTypeColumnOf, TagLayer, type TagLayerHandle } from '../../../components/tag-layer';
+import { DataGrid, keepDivisionCodeDisplay } from '../../../lib/grid';
 import {
   DISABLE_CHECK,
   DISABLE_YN_BINDING,
@@ -67,33 +74,13 @@ export const ProjectMasterTab2Grid = ({
     [visibleColumns]
   );
 
-  // ===== Grid 콤보 — 메타(FPComboBox + cellCboDataTp) 기반 (DpjtDevelopStatus — 독립 lookup CF-19.
-  //   @divisionId 토큰 없는 콤보는 전달해도 무해 — 관례 유지) =====
-  const comboColumns = useMemo(
-    () =>
-      visibleColumns.filter(
-        c => (c.cellCtrlObjTpCd as unknown as string) === 'FPComboBox' && !!c.cellCboDataTp
-      ),
-    [visibleColumns]
-  );
-  const q = (v?: string): string => `'${v && v.trim() !== '' ? v : 'ALL'}'`;
-  const comboResults = useTabComboQueries({
-    filters: comboColumns.map(
-      (c): ComboParam => ({ comboId: c.cellCboDataTp as string, divisionId: q(divisionId) })
-    ),
-  });
-  const comboSig = comboColumns
-    .map((c, i) => `${c.cellCboDataTp}@${divisionId}#${comboResults[i]?.length ?? 'x'}`)
-    .join(',');
-  const dataMaps = useMemo<Record<string, DataMap | null>>(() => {
-    const m: Record<string, DataMap | null> = {};
-    comboColumns.forEach((c, i) => {
-      const arr = comboResults[i] ?? [];
-      m[c.colNm] = arr.length > 0 ? new DataMap(arr, 'CODE', 'NAME') : null;
-    });
-    return m;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [comboSig]);
+  // ===== Grid 콤보 — 메타(FPComboBox + cellCboDataTp) 기반, 공용 DataGrid 파이프라인 단일 원천
+  //   (TAB1 동일 — comboParams 만 전달. DpjtDevelopStatus 는 독립 lookup CF-19,
+  //   @divisionId 토큰 없는 콤보는 전달해도 무해).
+  //   ⚠ 화면 자체 useTabComboQueries + updatedLayout dataMap 재대입(구 hook #93 방식)은 금지 —
+  //   공용 파이프라인이 대입하는 dataMap 과 서로 덮어쓰며 invalidate 를 반복해 상태(TAG) 컬럼이
+  //   pill ↔ raw 로 계속 깜빡였다 (2026-09-02 실증 — TAB2 에서만 재현되던 원인).
+  const comboParams = useMemo(() => ({ divisionId: `'${divisionId || 'ALL'}'` }), [divisionId]);
 
   // ⭐ 메타 ref 미러 — 핸들러가 effect 안에서 등록되므로 최신 메타를 ref 로 본다
   const inputTpRef = useRef<Map<string, string | undefined>>(new Map());
@@ -103,12 +90,27 @@ export const ProjectMasterTab2Grid = ({
   const colMetaRef = useRef<Map<string, RawFlexGridColumnConfig>>(new Map());
   colMetaRef.current = new Map(visibleColumns.map(c => [c.colNm, c]));
 
+  // ⭐ 페이지 콜백 ref 미러 — effect 의존성에서 빼 클릭→페이지 리렌더마다 핸들러 재등록 +
+  //   invalidate(true) 전체 재그리기(깜빡임)가 나는 것을 막는다 (datagrid-rerender-flicker)
+  const onAuthRegCellClickRef = useRef(onAuthRegCellClick);
+  onAuthRegCellClickRef.current = onAuthRegCellClick;
+
+  // ⭐ TAB1 동일 처방(#83-88) — gridRef.current 직접 참조 effect 는 재실행 타이밍에 그리드가
+  //   미준비면 조용히 bail 해, cleanup 으로 지운 핸들러(formatItem TAG/편집색 포함)가 재등록되지
+  //   않은 채 남는다(상태 pill ↔ raw 텍스트가 번갈아 보이던 원인). initialized 를 state 로 받아
+  //   등록 effect 를 그 뒤에 다시 태운다.
+  const [gridControl, setGridControl] = useState<FlexGridType<Tab2Row> | null>(null);
+  const handleGridInitialized = useCallback((grid: FlexGridType) => {
+    keepDivisionCodeDisplay(grid); // 인스턴스당 1회 (WeakSet) — 여기서 등록
+    setGridControl(grid as FlexGridType<Tab2Row>);
+  }, []);
+
   // ===== grid 핸들러 =====
   useEffect(() => {
-    const g = (gridRef as { current: FlexGridType<Tab2Row> | null } | null)?.current;
-    if (!g || !g.columnHeaders || !g.columnHeaders.rows) return;
+    const g = gridControl;
+    if (!g || !g.hostElement?.isConnected || !g.columnHeaders || !g.columnHeaders.rows) return;
 
-    if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1; // zebra (#95)
+    if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1;
 
     const toggleClass = (el: HTMLElement, cls: string, on: boolean) => {
       if (on) el.classList.add(cls);
@@ -221,7 +223,7 @@ export const ProjectMasterTab2Grid = ({
       if (!row) return;
       const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
       if (ctrlType === 'FPModal' && meta.attribute1 === MODAL_ATTR.AUTH_REG) {
-        onAuthRegCellClick?.(row);
+        onAuthRegCellClickRef.current?.(row);
         return;
       }
       if (ctrlType === 'FPCheckBox' && binding === DISABLE_YN_BINDING) {
@@ -257,19 +259,16 @@ export const ProjectMasterTab2Grid = ({
         /* unmount race */
       }
     };
+    // ⭐ 콜백은 ref 미러 — 의존성에서 제외해 페이지 리렌더마다 재등록 + invalidate(깜빡임) 방지
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visibleColumns, dataMaps, onAuthRegCellClick]);
+  }, [gridControl, visibleColumns]);
 
-  // ⭐ hook #93 — 헤더 총 48px (n단 = 48/n 자동 분배) + combo dataMap 재적용 (UC-05 Excel NAME 승계)
+  // ⭐ hook #93 — 헤더 총 48px (n단 = 48/n 자동 분배. dataMap 재적용은 폐기 — 공용 파이프라인
+  //   단일 원천, 위 콤보 주석 참조)
   useEffect(() => {
-    const g = (gridRef as { current: FlexGridType<Tab2Row> | null } | null)?.current;
-    if (!g) return;
+    const g = gridControl;
+    if (!g || !g.hostElement?.isConnected) return;
     const applyHeaderHeight = () => {
-      for (let i = 0; i < g.columns.length; i++) {
-        const col = g.columns[i];
-        const dm = dataMaps[col.binding ?? ''];
-        if (dm && col.dataMap !== dm) col.dataMap = dm;
-      }
       const headerRows = g.columnHeaders?.rows;
       if (!headerRows || headerRows.length === 0) return;
       const per = Math.round(48 / headerRows.length);
@@ -291,7 +290,7 @@ export const ProjectMasterTab2Grid = ({
         /* unmount race */
       }
     };
-  }, [visibleColumns, dataMaps, gridRef]);
+  }, [visibleColumns, gridControl]);
 
   return (
     <>
@@ -303,7 +302,9 @@ export const ProjectMasterTab2Grid = ({
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef as never}
         excludeFromDirtyCheck={excludeFromDirtyCheck}
+        initialized={handleGridInitialized}
         staticColumns={visibleColumns}
+        comboParams={comboParams}
         itemsSource={rows as unknown as WijmoRowItem[]}
         autoGenerateColumns={false}
         allowSorting={true}

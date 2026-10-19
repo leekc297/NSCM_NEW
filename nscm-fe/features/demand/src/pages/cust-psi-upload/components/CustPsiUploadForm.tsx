@@ -201,7 +201,7 @@ export const CustPsiUploadForm = ({
         <>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00003', '_Model/Nickname')}
+              label={t('LBL00618', '_Model/Nickname')}
               labelAlign='right'
               render={() => (
                 <InputField

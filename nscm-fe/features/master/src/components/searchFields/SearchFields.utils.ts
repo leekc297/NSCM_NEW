@@ -58,10 +58,21 @@ interface ComboOptionArgs {
 /**
  * division 으로 자르고 team 으로 좁힌 뒤 코드 기준 중복을 없앤 옵션 목록.
  *
- * team 은 관대하게 통과시킨다 — 콤보 행의 팀은 owner 기준이라 NULL 이 많고 그리드 팀
- * (SITE_ITEM.DEPT_ID)과 기준도 달라, 엄격하게 자르면 이미 선택돼 있는 값이 옵션에서 빠진다.
  * 팝업의 이 콤보들은 disabled 표시 전용이라 옵션에 없는 값은 화면에서 그냥 사라져(ALL 로
- * 보여) 조회조건이 안 넘어온 것처럼 보인다. 그래서 팀이 빈 행과 이미 선택된 값은 남긴다.
+ * 보여) 조회조건이 안 넘어온 것처럼 보인다. 그래서 이미 선택된 값(selected)은 어떤 축으로도
+ * 자르지 않는다.
+ *
+ * team 은 그 밖의 행도 관대하게 통과시킨다 - 콤보 행의 팀은 owner 기준이라 NULL 이 많고
+ * 그리드 팀(SITE_ITEM.DEPT_ID)과 기준도 달라, 엄격하게 자르면 목록이 통째로 빈다.
+ *
+ * division 도 선택값에는 걸지 않는다 - 팝업이 쓰는 콤보(EndCustomer / SalesSite)와 호출 화면이
+ * 쓰는 콤보가 같지 않다. DMF0003 은 End Customer 를 AS-IS BigFilter 등록본
+ * FilterEndCustomerByDivision 으로 채우는데, 그 코드가 팝업 쪽 EndCustomer 콤보에는 같은
+ * DIVISION_ID 로 없어 division 엄격 매칭에서 탈락했다 - 조회조건에서 고객을 골라도 팝업
+ * End Customer 가 ALL 로 보이던 원인(2026-09-02).
+ *
+ * 그래도 어느 행에도 없는 선택값은 마지막에 코드 자체를 라벨로 세운다. 표시 전용이라
+ * 이름을 못 찾아도 코드는 보여야 한다 - 값이 안 넘어간 것과 구분이 된다.
  */
 const buildOptions = (
   { rows, divisionId, deptId, selected }: ComboOptionArgs,
@@ -69,25 +80,27 @@ const buildOptions = (
   nameColumns: string[]
 ) => {
   const deptFilter = (deptId ?? '').split(',').filter(Boolean);
-  const selectedCodes = (selected ?? '').split(',').filter(Boolean);
+  // 'ALL' 은 조건 없음 sentinel 이라 선택값으로 보지 않는다 (칩 대신 placeholder 가 맞다).
+  const selectedCodes = (selected ?? '')
+    .split(',')
+    .map(code => code.trim())
+    .filter(code => code !== '' && code.toUpperCase() !== 'ALL');
   const skipTeamFilter = deptFilter.length === 0 || deptFilter.includes('ALL');
 
-  return [
-    ...new Map(
-      (rows ?? [])
-        .map(row => readRow(row, codeColumns, nameColumns))
-        .filter(
-          row =>
-            row.code !== '' &&
-            row.divisionCode === divisionId &&
-            (skipTeamFilter ||
-              row.teamCode === '' ||
-              deptFilter.includes(row.teamCode) ||
-              selectedCodes.includes(row.code))
-        )
-        .map(row => [row.code, { label: row.name || row.code, value: row.code }] as const)
-    ).values(),
-  ];
+  const byCode = new Map<string, { label: string; value: string }>();
+  for (const row of (rows ?? []).map(row => readRow(row, codeColumns, nameColumns))) {
+    if (row.code === '') continue;
+    if (!selectedCodes.includes(row.code)) {
+      if (row.divisionCode !== divisionId) continue;
+      if (!skipTeamFilter && row.teamCode !== '' && !deptFilter.includes(row.teamCode)) continue;
+    }
+    if (byCode.has(row.code)) continue;
+    byCode.set(row.code, { label: row.name || row.code, value: row.code });
+  }
+  for (const code of selectedCodes) {
+    if (!byCode.has(code)) byCode.set(code, { label: code, value: code });
+  }
+  return [...byCode.values()];
 };
 
 /** 'EndCustomer' 콤보 -> End Customer 드롭다운 옵션. */

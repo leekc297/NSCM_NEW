@@ -3,15 +3,17 @@ import {
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
-import { PeriodField } from 'features/master/src/components';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { buildComboOptions, PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { CustomDialog, DataGrid, SearchArea } from '@shared/components';
-import { useTabProcQuery } from '@shared/hooks';
+import { CustomDialog, DataGrid, ResultArea, SearchArea } from '@shared/components';
+import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
@@ -26,6 +28,8 @@ interface Props {
   open: boolean;
   modalClose: () => void;
   divisionId: string;
+  // 메인 화면 조회기간 (yyyymmdd 8자리) — 팝업 Period 기본값 원천.
+  mainPeriod: { start: string; end: string };
 }
 
 // 화면 입력·SP 파라미터 모두 일(日) 단위 yyyymmdd 8자리다 (AS-IS DateTimePicker → drpPeriod.Value
@@ -51,31 +55,51 @@ const VERSION_COLUMNS = [
 //   (DMF0042_GET_DM_MDF_VERSION, versionType='BP_M') + 설명 입력 + Cutoff 실행
 //   (DMF0042_SAVE_DM_PLN_BP_FCST_CUTOFF — division 단일, createdBy BE주입).
 //   완료 안내 = MSG00675 '[Division ID : {0}] {1}' (AS-IS 00151). 권한 게이트 = 부모 hasButton('CUTOFF').
-export const VersionCutoffModal = ({ open, modalClose, divisionId }: Props) => {
+export const VersionCutoffModal = ({ open, modalClose, divisionId, mainPeriod }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
   const gridRef = useRef<FlexGridType<MdfVersionRow>>(undefined);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
-  // 기간 기본값 = **오늘 ~ 오늘+5개월** (AS-IS VersionCutOffPopUp L106~108 1:1):
-  //     sStartDate = DateTime.Now / sEndDate = DateTime.Now.AddMonths(5) → drpPeriod.InitValue
-  //   금지: 메인 화면 조회기간 승계. AS-IS 는 이 팝업의 기간을 메인과 무관하게 자기 기본값으로 연다
-  //   (2026-08-25 실화면 대조 — 메인 2026.08.01~2027.02.28 인데 팝업은 2026-08-25~2027-01-25).
-  const defaultPeriod = () => ({
-    from: dayjs().format('YYYYMMDD'),
-    to: dayjs().add(5, 'month').format('YYYYMMDD'),
+  // Div 표시 라벨 — 메인 화면(BusinessPlanForm) Division 드롭다운과 동일하게 코드가 아니라
+  //   이름(예: '40 Mobility&IT')을 보여준다. 같은 'FilterMyDivision' 콤보를 다시 구독해도
+  //   메인이 이미 받아 둔 react-query 캐시(같은 queryKey)를 그대로 쓰므로 추가 요청은 없다.
+  const [divisions] = useTabComboQueries({ filters: ['FilterMyDivision'] });
+  const divisionLabel = useMemo(
+    () => buildComboOptions(divisions).find(o => o.value === divisionId)?.label ?? divisionId,
+    [divisions, divisionId]
+  );
+
+  // 기간 기본값 = **메인 화면 조회기간 승계** (2026-09-02 사용자 요청으로 변경).
+  //   구 동작: AS-IS VersionCutOffPopUp L106~108 의 자기 기본값(오늘 ~ 오늘+5개월)을 그대로 썼다
+  //   (sStartDate = DateTime.Now / sEndDate = DateTime.Now.AddMonths(5) → drpPeriod.InitValue).
+  //   메인 그리드와 같은 구간의 버전을 바로 보려는 사용 흐름에 맞춰 승계로 바꿨다 — AS-IS 와
+  //   의도적으로 다른 지점이니 "AS-IS 1:1" 을 이유로 되돌리지 말 것.
+  //   메인 값이 비어 있거나 8자리가 아닐 때만 AS-IS 기본값으로 떨어진다.
+  const isYmd8 = (v: string) => /^\d{8}$/.test(v);
+  const initialPeriod = () => ({
+    from: isYmd8(mainPeriod.start) ? mainPeriod.start : dayjs().format('YYYYMMDD'),
+    to: isYmd8(mainPeriod.end) ? mainPeriod.end : dayjs().add(5, 'month').format('YYYYMMDD'),
   });
 
   const { startYmd, endYmd } = useVersionCutoffModalStore(state => state.period);
   const setPeriod = useVersionCutoffModalStore(state => state.setPeriod);
   const [description, setDescription] = useState('');
+  // 조회에 실리는 Description 은 Search 클릭 시점에만 확정한다(appliedDescription). 입력(description)은
+  //   Cutoff 실행 인자(새 버전 설명)로만 즉시 반영되고, 타이핑이 그리드 조회를 다시 트리거하지 않는다.
+  //   구: filters 가 description 을 직접 dep 으로 물어 키 입력마다 재조회 → 그리드가 실시간 필터되던
+  //   것을 제거(2026-09-02 사용자 요청). AS-IS 도 조회(FindData)는 Find 클릭에서만 txtDes 를 싣는다.
+  const [appliedDescription, setAppliedDescription] = useState('');
   const [running, setRunning] = useState(false);
   const [lastError, setLastError] = useState('');
 
   useEffect(() => {
     if (open) {
-      const { from, to } = defaultPeriod();
+      const { from, to } = initialPeriod();
       setPeriod({ startYmd: from, endYmd: to });
       setDescription('');
+      setAppliedDescription('');
       setRunning(false);
       setLastError('');
     }
@@ -87,20 +111,21 @@ export const VersionCutoffModal = ({ open, modalClose, divisionId }: Props) => {
   //   이 SP 만 부르고, 그리드 8컬럼도 이 커서 기준이다 (2026-08-25 리뷰).
   //   파라미터 6종 — 기간은 **yyyymmdd 8자리 그대로** (MDF 계약 P_FROM/TO_YYYYMMDD).
   //   2번째 p_version_description 은 화면 Description 입력값이다 — AS-IS 는 조회(txtDes)와
-  //   실행(Confirm)이 같은 입력칸을 공유한다 (L281 · L333 · L529).
+  //   실행(Confirm)이 같은 입력칸을 공유하되, 조회는 Find 클릭 시점 값만 싣는다 (L281 · L333 · L529).
+  //   여기서는 Search 시 확정된 appliedDescription 만 dep 으로 물어 타이핑 재조회를 막는다.
   const filters = useMemo(
     () => ({
       divisionId,
-      versionDescription: description.trim(),
+      versionDescription: appliedDescription,
       versionType: CUTOFF_VER_TYPE, // 'BP_M' 고정 (AS-IS txtType.Text)
       fromYyyymmdd: startYmd,
       toYyyymmdd: endYmd,
       userId: sesUserId,
       mnuId: MENU_ID,
     }),
-    [divisionId, description, startYmd, endYmd, sesUserId]
+    [divisionId, appliedDescription, startYmd, endYmd, sesUserId]
   );
-  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.MDF_VERSION>({
+  const { data, refetch, isLoading, isFetching } = useTabProcQuery<MENU_ID, SHEETS.MDF_VERSION>({
     menuId: MENU_ID,
     sheetName: SHEETS.MDF_VERSION,
     tabId: MENU_ID,
@@ -111,6 +136,7 @@ export const VersionCutoffModal = ({ open, modalClose, divisionId }: Props) => {
     () => (data as { data?: MdfVersionRow[] } | undefined)?.data ?? [],
     [data]
   );
+  const loading = isLoading || isFetching;
 
   const gridStaticColumns = useMemo<RawFlexGridColumnConfig[]>(
     () =>
@@ -195,6 +221,10 @@ export const VersionCutoffModal = ({ open, modalClose, divisionId }: Props) => {
       position='basic'
       size={1200}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       disableButtonCancel
       customHeaderTitle={
         <div className='headerContainer'>
@@ -214,56 +244,116 @@ export const VersionCutoffModal = ({ open, modalClose, divisionId }: Props) => {
             placement='parent'
           />
           <SearchArea
+            // 조회 버튼은 SearchArea 내장(onSearch)을 쓰고 실행 버튼(Cutoff/Close)은 하단 버튼줄에 둔다 —
+            //   PriceBatchInputModal / ReplaceByCutoffModal 등 다른 팝업과 같은 배치다.
+            //   구: 3종 모두 extraButtons 로 조회조건 줄에 두었는데(AS-IS Find-Confirm-Close 순 재현),
+            //   버튼 그룹이 폭을 크게 먹어 조회조건 4칸이 눌려 필드가 제각각 좁아졌다 (2026-09-02 교정).
             searchButtonLabel={t('LBL00664', 'Search')}
-            onSearch={() => void refetch?.()}
+            // Search 클릭에서만 Description 을 조회 필터로 확정한다(appliedDescription). 값이 바뀌면
+            //   setState 로 쿼리 키가 바뀌어 자동 재조회되고, 그대로면 키가 안 바뀌므로 refetch 로만
+            //   강제 재조회한다(둘 다 부르면 이중 요청이 나가므로 분기).
+            onSearch={() => {
+              const next = description.trim();
+              if (next === appliedDescription) void refetch?.();
+              else setAppliedDescription(next);
+            }}
             conditions={
-              // ⭐ 조회조건 = Div / Period 만 (2026-08-07 되돌림).
-              //   Description 은 조회 필터가 아니라 **Cutoff 실행 인자**(새 버전의 설명)라 하단
-              //   실행 버튼 옆으로 되돌렸다. 조회조건 자리에 두면 "이 값으로 거르는 건가"로 읽힌다.
+              // 조회조건 1행 = Div / Type / Description / Period (2026-09-02 AS-IS 배치로 정렬).
+              //   AS-IS VersionCutOffPopUp 상단 줄 순서 그대로다 — Type(BP_M 고정 표시)까지 포함한다.
+              //   Description 은 조회 필터이면서 동시에 **Cutoff 실행 인자**(새 버전의 설명)다 —
+              //   AS-IS 도 조회(L281)와 실행(L333 · L529)이 같은 입력칸을 공유한다.
+              //   배분 2.5+2.5+(0.5 offset)+3+3.5 = 12칸 — Div/Type 은 2.5칸, Description 은 3칸,
+              //   Period 는 3.5칸으로 최종 확정한다(2026-09-21).
+              //   라벨 폭 — Div/Type/Description/Period 4필드 모두 styles.shortLabel(50px)로 좁혀
+              //   짧은 라벨 앞(labelAlign='right' 기준 왼쪽) 여백을 없앤다. commonStyles.formItem 의
+              //   140px 통일 폭은 라벨이 짧으면 이 여백을 만든다 (2026-09-21 사용자 지적).
               <>
-                <Grid size={4}>
+                <Grid size={2.5}>
                   <FormItem
-                    label={t('LBL00663', 'Div')}
+                    className={styles.shortLabel}
+                    label={t('LBL00001', 'Div')}
                     labelAlign='right'
-                    render={() => <InputField value={divisionId} disabled />}
+                    render={() => <InputField fullWidth value={divisionLabel} disabled />}
                   />
                 </Grid>
-                {/* ⭐ Period — 부모 화면(BusinessPlanForm)과 동일한 카탈로그 PeriodField(일 달력).
+                {/* Type — AS-IS txtType 과 동일하게 'BP_M' 고정 표시(입력 불가).
+                    조회·실행 파라미터는 CUTOFF_VER_TYPE 상수를 그대로 쓴다. */}
+                <Grid size={2.5}>
+                  <FormItem
+                    className={styles.shortLabel}
+                    label={t('LBL00052', 'Type')}
+                    labelAlign='right'
+                    render={() => <InputField fullWidth value={CUTOFF_VER_TYPE} disabled />}
+                  />
+                </Grid>
+                {/* Type ~ Description 사이 여백 — offset 0.5칸(약 48px) (2026-09-21 사용자 요청:
+                    붙어 보인다는 지적). offset 은 marginLeft=(offset/12)*100% 라 소수 허용. */}
+                <Grid size={3} offset={0.5}>
+                  <FormItem
+                    className={styles.shortLabel}
+                    label={t('LBL00608', 'Description')}
+                    labelAlign='right'
+                    render={() => (
+                      <InputField
+                        fullWidth
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                        placeholder='Version description'
+                      />
+                    )}
+                  />
+                </Grid>
+                {/* Period — 부모 화면(BusinessPlanForm)과 동일한 카탈로그 PeriodField(일 달력).
                     AS-IS 도 일 단위 DateTimePicker 라 월 달력(usecase='month')으로 바꾸지 않는다.
                     화면값은 yyyymmdd 그대로 보관하고 SP 파라미터에서만 yyyymm 으로 자른다.
-                    required={false} — 모달 Period 는 선택 필터(부모는 필수 조회조건). */}
-                <PeriodField
-                  gridSize={8}
-                  start={startYmd}
-                  end={endYmd}
-                  onChange={(start, end) => setPeriod({ startYmd: start, endYmd: end })}
-                />
+                    라벨 폭은 styles.periodShortLabelWrap(BusinessPlan.module.scss) 이 구조 선택자로
+                    좁힌다 — PeriodField 는 공용 카탈로그라 className prop 을 추가하지 않는다. */}
+                <div className={styles.periodShortLabelWrap}>
+                  <PeriodField
+                    gridSize={3.5}
+                    start={startYmd}
+                    end={endYmd}
+                    onChange={(start, end) => setPeriod({ startYmd: start, endYmd: end })}
+                  />
+                </div>
               </>
             }
           />
 
           <div className={styles.modalGridWrapper}>
-            <DataGrid<MdfVersionRow>
-              gridRef={gridRef}
-              itemsSource={versionRows}
-              staticColumns={gridStaticColumns}
-              autoGenerateColumns={false}
-              allowSorting={false}
+            {/* 검색조회 로딩 스피너 — 위 Cutoff 실행(running) 스피너와 별개. */}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea
+              title=''
+              count={versionRows.length}
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<MdfVersionRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                itemsSource={versionRows}
+                staticColumns={gridStaticColumns}
+                autoGenerateColumns={false}
+                allowSorting={false}
+              />
+            </ResultArea>
           </div>
           {lastError && <div className={styles.modalErrorBox}>{lastError}</div>}
-          <div className={styles.modalActionRow}>
-            <span className={styles.modalActionLabel}>Description</span>
-            <InputField
-              value={description}
-              onChange={e => setDescription(e.target.value)}
-              placeholder='Version description'
-            />
+
+          {/* 실행 버튼줄 — ReplaceByCutoffModal 과 동일 배치(하단 우측). */}
+          <div className={styles.modalButtonWrapper}>
             <Button
               appearance='contained'
               priority='primary'
               size='medium'
               buttonLabel='Cutoff'
+              iconComponent={<ControlConfirmIcon size='default' iconSize={20} />}
               disabled={running}
               onClick={() => void handleCutoff()}
             />

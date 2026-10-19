@@ -1,0 +1,3698 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-13 00:00:01.937","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","1","---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*********************************************************************************************
+* Program ID  : DMF0002_GET_ITEM_BY_DIVISION_POPUPEx                                          
+* Description : Procedure 작성 가이드                                                          
+* Usage       : Procedure 작성 시 참조하세요!                                                  
+* Parameter   :                                                                               
+*		DMF0002_GET_ITEM_BY_DIVISION_POPUPEx_kcw '81', 'ALL', 'ALL', '', 'ALL', ''  , ''                                                                                          
+*---------------------------------------------------------------------------------------------
+* Date        In Charge    Description                                                        
+*---------------------------------------------------------------------------------------------
+* 2017/10/24  SongDH       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 
+* 2018/06/11    JYE			소형 관련 수정                                                      
+* 20181205 nick name 조회요청으로 변경                                                            
+* 20181218		JYE       82 currency 수정                                                     
+* 20190123		JYE       42, 44 추가                                                    
+* 20220428		rosia27		과제PJ20216891R
+* 20231130      HMIN     [E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선 
+* 2024.04.04    KCW3408  DM 프로시저 속도개선 
+/* 2024/08/14	KJJ			[PJ2024-50461] Team Mapping*/
+* 2024.11.18  JSSBAE	   [E20241118-000143]_ESS 사업부 Sales Price 입력 시 제외조건 일시조치 요청
+* 2025.03.12    Philsu Park 속도개선.(불필요 컬럼 제외, WITH 절 처리.)
+   exec DMF0002_GET_ITEM_BY_DIVISION_POPUPEx @p_division_id=N'81',@p_dept_id=N'ALL',@p_end_customer=N'ALL',@p_project_code=N'',@p_scm_site_id=N'ALL',@p_item_id=N'APBMW12V0-A1-D13',@p_mdmActive_Sw=N'Y'
+****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0002_GET_ITEM_BY_DIVISION_POPUPEx]  
+   @p_division_id   NVARCHAR(MAX)
+ , @p_dept_id       NVARCHAR(MAX)	--Department
+ , @p_end_customer  NVARCHAR(MAX)	--Endcustomer
+ , @p_project_code  NVARCHAR(MAX)
+ , @p_scm_site_id   NVARCHAR(MAX)
+ , @p_item_id       NVARCHAR(MAX)
+ , @p_mdmActive_Sw  NVARCHAR(MAX)  --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선 (개발서버 및 운영배포시 NULL SETTING 제거) 
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+
+  SET NOCOUNT ON;
+
+   print 'DMF0002-01-' + convert(varchar(30), getdate(), 121);
+
+-- Philsu Park: 기존 Temp 사용하던 구문 With절로 처리하고 불필요한 컬럼 쳐냄.
+WITH TEMP_DM_MST_ITEM_SINGLE_V AS 
+    (   SELECT    A.DIVISION_ID, A.ITEM_ID
+                , ITEM_NAME, ITEM_CLASS_NAME, NICK_NAME, ITEM_TYPE
+                , ACTIVE_FLAG 
+        FROM    (   SELECT  T1.DIVISION_ID          AS DIVISION_ID,
+                            T1.ITEM_ID              AS ITEM_ID,
+                            MAX(T1.ITEM_NAME)		AS ITEM_NAME,				--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+                            MAX(T1.ITEM_CLASS_NAME)	AS ITEM_CLASS_NAME,		--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+                            MAX(T1.NICK_NAME)		AS NICK_NAME,			--닉네임이 NULL인 경우가 있으므로 하나로 통일
+                            CASE  MIN( CASE WHEN T1.ITEM_TYPE = 'P' THEN 1					--타입이 사이트와 사업부, 법인에 따라 다양하게 존재 하므로 하나로 통일
+                                            WHEN T1.ITEM_TYPE = 'H' THEN 2					--또한 가장 완성된 상태의 자재 타입을 판매한다고 가정, 해당 자재타입을 사용함
+                                            WHEN T1.ITEM_TYPE = 'Q' THEN 3
+                                            ELSE 4 END )
+                                WHEN 1 THEN 'P'
+                                WHEN 2 THEN 'H'
+                                WHEN 3 TH"
+"2025-03-13 00:00:01.937","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","2","EN 'Q'
+                                ELSE 'R' END        AS ITEM_TYPE,
+                            MAX(T1.ACTIVE_FLAG)		AS ACTIVE_FLAG  -- 20180720 ADD 'Y'대상중 1건 추출
+                    FROM    SCM_MST_ITEM_SN T1 WITH(NOLOCK)
+                    WHERE   T1.DIVISION_ID  = @p_division_id
+                    GROUP BY T1.DIVISION_ID, T1.ITEM_ID
+                ) A 
+        WHERE A.DIVISION_ID = @p_division_id
+    )
+    , TMP_81_UC_EXCEPTION AS 
+    (
+        SELECT @P_DIVISION_ID AS DIVISION_ID, V.ITEM_ID, V.ACTIVE_FLAG
+        FROM    (   SELECT  @p_division_id AS DIVISION_ID,  V.ITEM_ID,  V.ACTIVE_FLAG
+                    FROM    TEMP_DM_MST_ITEM_SINGLE_V V WITH (NOLOCK)
+                    WHERE   V.DIVISION_ID = '81'  --고정값사용 (81_UC의 경우 81번 값으로 대체 처리 , ACTIVE_FLAG 가 NULL인경우에 한함.)
+                    GROUP BY V.ITEM_ID, V.ACTIVE_FLAG
+                ) V
+        INNER JOIN (    SELECT  S.DIVISION_ID, S.ITEM_ID
+                        FROM    SCM_MST_SITE_ITEM S WITH (NOLOCK)
+                        WHERE   S.DIVISION_ID   = @p_division_id
+                        AND     S.ITEM_ID      != ''
+                        GROUP BY S.DIVISION_ID, S.ITEM_ID
+                    )  S
+            ON  S.DIVISION_ID   = V.DIVISION_ID 
+            AND S.ITEM_ID       = V.ITEM_ID
+        WHERE   1=1
+        AND     @p_division_id  = '81_UC'  --Philsu Park: Having절 대체. 굳이 Having으로 할 필요가??
+        GROUP BY V.ITEM_ID, V.ACTIVE_FLAG
+        -- HAVING CASE WHEN ISNULL(@p_division_id,'N')  = '81_UC' THEN @p_division_id ELSE 'X' END = CASE WHEN ISNULL(@p_division_id,'N')  = '81_UC' THEN @p_division_id ELSE 'XX' END
+    )
+    /* 2024.04.04    KCW3408  DM 프로시저 속도개선 */
+    SELECT    I.DIVISION_ID
+            , I.DIVISION_ID  AS DIVISION_NAME
+            , D.PROJECT_CODE
+            , A.PROJECT_NAME
+            , S.SCM_SITE_ID
+            , S.SITE_DESCRIPTION
+            , D.ITEM_ID	 
+            , T.ITEM_NAME
+            , T.ITEM_TYPE
+            , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+            , T.NICK_NAME
+            , T.ITEM_CLASS_NAME
+            , TEAM.DEPT_ID
+            , TEAM.DEPT_NAME_KO
+            , S.END_CUSTOMER
+            , D.CURRENCY
+            , D.PROJECT_CODE AS END_CUSTOMER40
+    FROM [SCM_MST_DIVISION] I WITH(NOLOCK) 
+    LEFT JOIN  [SCM_MST_SITE_ITEM] D WITH(NOLOCK)
+	    ON  I.DIVISION_ID   = D.DIVISION_ID
+	    AND D.VALID_YN      = 'Y'
+    LEFT JOIN [SCM_MST_PROJECT] A WITH(NOLOCK)
+	    ON  I.DIVISION_ID   = D.DIVISION_ID	   
+	    AND D.PROJECT_CODE  = A.PROJECT_CODE
+    LEFT JOIN [SCM_MST_SITE] S WITH(NOLOCK) 
+	    ON  D.SCM_SITE_ID   = S.SCM_SITE_ID
+	    AND S.VALID_YN      = 'Y'
+    LEFT JOIN TEMP_DM_MST_ITEM_SINGLE_V T WITH(NOLOCK)
+        ON  I.DIVISION_ID   = T.DIVISION_ID 
+        AND D.ITEM_ID       = T.ITEM_ID
+    LEFT JOIN (
+                SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID 
+                FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+                INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+                ON B.DEPT_ID = C.DEPT_ID ) AS TEAM
+        ON  TEAM.USER_ID IN (SELECT top 1 token FROM [dbo].[String_Split](D.owner, ','))
+    LEFT JOIN (
+                SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+                FROM    SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+                WHERE   VALID_YN ='Y' 
+                AND     LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+	            )  AS ITEM_TYPE_CODE
+        ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+    LEFT OUTER JOIN TMP_81_UC_EXCEPTION  EX ON EX.DIVISION_ID = D.DIVISION_ID AND EX.ITEM_ID = D.ITEM_ID  --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+    WHERE   I.DIVISION_ID       = @p_division_id   -- DIVISION 이 자동차인 경우에는 SITE-ITEM에 연결된것 만 조회 
+    AND   I.DIVISION_ID    LIKE '81%'    
+    AND   I.VALID_YN          = 'Y'   
+    AND   S.SITE_TYPE         = 'SALES'
+    AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+        ELSE TEAM.DEPT_ID"
+"2025-03-13 00:00:01.937","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","3","
+         END IN (
+                SELECT  *
+                FROM    dbo.UF_FX_String_SplitForIN (@p_dept_id,',') AS P 
+                WHERE   (CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+                )
+    AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+        ELSE ISNULL(S.END_CUSTOMER,'')
+         END IN (
+                SELECT  * 
+                FROM    dbo.UF_FX_String_SplitForIN (@p_end_customer,',') AS P 
+                WHERE   (CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(S.END_CUSTOMER,'') END) = P.data
+                )				   
+    AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+        ELSE S.SCM_SITE_ID			
+            END IN (
+                SELECT  *
+                FROM    dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P 
+                WHERE   (CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+                )
+    AND (
+		 EXISTS (SELECT * FROM dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+	     OR
+		 EXISTS (SELECT * FROM dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+		)
+    AND (
+		 EXISTS (SELECT * FROM dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+		  OR
+		 EXISTS (SELECT * FROM dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.nick_name LIKE P.token +'%')
+		)	 -- 20181205 nick name 조회요청으로 변경
+	--[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선 
+	AND CASE WHEN @p_division_id = '81_UC' THEN 
+                CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE ISNULL(T.ACTIVE_FLAG,EX.ACTIVE_FLAG)  END
+		ELSE 
+			    CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END
+		END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END
+    UNION
+    SELECT    I.DIVISION_ID
+            , I.DIVISION_ID  AS DIVISION_NAME
+            , D.PROJECT_CODE
+            , A.PROJECT_NAME
+            , S.SCM_SITE_ID
+            , S.SITE_DESCRIPTION
+            , T.ITEM_ID	 
+            , T.ITEM_NAME
+            , T.ITEM_TYPE
+            , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+            , T.NICK_NAME
+            , T.ITEM_CLASS_NAME
+            , TEAM.DEPT_ID
+            , TEAM.DEPT_NAME_KO
+            , S.END_CUSTOMER
+            , D.CURRENCY
+            , D.PROJECT_CODE AS END_CUSTOMER40
+    FROM    [SCM_MST_DIVISION] I WITH(NOLOCK) 
+    LEFT JOIN   [SCM_MST_SITE_ITEM] D WITH(NOLOCK)  
+    ON  I.DIVISION_ID   = D.DIVISION_ID
+    AND D.VALID_YN      = 'Y'
+    LEFT JOIN [SCM_MST_PROJECT] A WITH(NOLOCK)
+    ON  I.DIVISION_ID   = D.DIVISION_ID	   
+    AND D.PROJECT_CODE  = A.PROJECT_CODE
+    LEFT JOIN [SCM_MST_SITE] S WITH(NOLOCK) 
+    ON  I.DIVISION_ID   = D.DIVISION_ID	   
+    AND D.SCM_SITE_ID   = S.SCM_SITE_ID   
+    AND S.VALID_YN      = 'Y' 
+    LEFT OUTER JOIN TEMP_DM_MST_ITEM_SINGLE_V  T WITH(NOLOCK)
+        ON  I.DIVISION_ID       = T.DIVISION_ID 
+        AND D.ITEM_ID           = T.ITEM_ID 
+        --[E20241118-000143]_ESS 사업부 Sales Price 입력 시 제외조건 일시조치 요청 START
+        --AND T.ITEM_TYPE not in ( 'H', 'R')  
+        --AND T.ITEM_ID LIKE 'E%' -- 자재 반재품 는 제외 
+        --[E20241118-000143]_ESS 사업부 Sales Price 입력 시 제외조건 일시조치 요청 END
+    LEFT JOIN (
+                SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID 
+                FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+                INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+                ON B.DEPT_ID = C.DEPT_ID
+                ) AS TEAM
+        ON  TEAM.USER_ID IN (SELECT TOP 1 TOKEN FROM [dbo].[String_Split](D.owner, ','))
+    LEFT JOIN ( SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+                FROM    SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+                WHERE   LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+                AND     VALID_YN    = 'Y' 
+                )  AS ITEM_TYPE_CODE
+        ON T.ITEM_TYP"
+"2025-03-13 00:00:01.937","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","4","E  = ITEM_TYPE_CODE.CODE
+    WHERE   I.DIVISION_ID   = @p_division_id   
+    AND     I.DIVISION_ID   = '82'
+    AND     I.VALID_YN      = 'Y'
+    AND     S.SITE_TYPE     = 'SALES'
+    AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+        ELSE TEAM.DEPT_ID			
+         END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+                (CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+                )
+    AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+        ELSE ISNULL(S.END_CUSTOMER,'')			
+         END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+                (CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(S.END_CUSTOMER,'') END) = P.data
+                )
+    AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+                ELSE S.SCM_SITE_ID			
+        END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+                (CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+                )
+    AND (
+        Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+        OR
+        Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+        )
+    AND (
+        Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_ID LIKE P.token +'%')
+        OR
+        Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.nick_name LIKE P.token +'%')
+        )	 -- 20181205 nick name 조회요청으로 변경
+	 --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+    AND CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END --20231127 
+    UNION -- 20180611 소형 추가, 42, 44
+    SELECT    I.DIVISION_ID
+            , I.DIVISION_ID  AS DIVISION_NAME
+            , D.PROJECT_CODE
+            , '' AS PROJECT_NAME
+            , S.SCM_SITE_ID
+            , S.SITE_DESCRIPTION
+            , D.ITEM_ID	 
+            , T.ITEM_NAME
+            , T.ITEM_TYPE
+            , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+            , T.NICK_NAME
+            , T.ITEM_CLASS_NAME
+            , TEAM.DEPT_ID
+            , TEAM.DEPT_NAME_KO
+            , S.END_CUSTOMER
+            , D.CURRENCY
+            , D.PROJECT_CODE AS END_CUSTOMER40
+    FROM  [SCM_MST_DIVISION] I WITH(NOLOCK) 
+    LEFT JOIN [SCM_MST_SITE_ITEM] D WITH(NOLOCK) 
+        ON  I.DIVISION_ID   = D.DIVISION_ID 
+        AND D.VALID_YN      = 'Y'
+    LEFT JOIN SCM_MST_SSO_USER_INFO USER_INFO WITH(NOLOCK) 			       
+        ON  D.OWNER = USER_INFO.USER_ID 
+    LEFT JOIN SCM_MST_SSO_DEPT_INFO TEAM WITH(NOLOCK) 			       
+	    ON  USER_INFO.DEPT_ID   = TEAM.DEPT_ID 
+	    AND TEAM.VALID_YN       = 'Y' 
+    LEFT JOIN [SCM_MST_SITE] S WITH(NOLOCK) 
+	    ON  I.DIVISION_ID   = D.DIVISION_ID	   
+        AND D.SCM_SITE_ID   = S.SCM_SITE_ID   
+        AND S.VALID_YN      ='Y' 
+    LEFT JOIN TEMP_DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+	   ON   I.DIVISION_ID   = T.DIVISION_ID 
+       AND  D.ITEM_ID       = T.ITEM_ID
+    LEFT JOIN   (
+                SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+                FROM    SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+                WHERE   LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+                AND     VALID_YN    = 'Y' 
+	            )  AS ITEM_TYPE_CODE
+        ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+    LEFT OUTER JOIN TMP_81_UC_EXCEPTION  EX ON EX.DIVISION_ID = D.DIVISION_ID AND EX.ITEM_ID = D.ITEM_ID --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+    WHERE   I.DIVISION_ID       = @p_division_id		-- 20190123  
+    AND     I.DIVISION_ID    LIKE '4%'    
+    AND     I.VALID_YN          = 'Y'   
+    AND     S.SITE_TYPE         = 'SALES'
+    AND     CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+  "
+"2025-03-13 00:00:01.937","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","5","          ELSE TEAM.DEPT_ID			
+			 END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+					(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+	                )
+    AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+        ELSE isnull(
+					CASE WHEN @p_division_id <> '40' THEN S.END_CUSTOMER ELSE D.PROJECT_CODE END
+				 ,'')
+         END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+                (CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(
+                    CASE WHEN @p_division_id <> '40' THEN S.END_CUSTOMER ELSE D.PROJECT_CODE END
+                ,'') END) = P.data
+                )
+    AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+        ELSE S.SCM_SITE_ID			
+         END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+                (CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+                )
+    AND (
+        Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+        OR
+        Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.nick_name LIKE P.token +'%')
+        )  -- 20181205 nick name 조회요청으로 변경
+    --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+    --AND CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END --20231127 
+    AND CASE WHEN @p_division_id = '81_UC' THEN 
+            CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE ISNULL(T.ACTIVE_FLAG,EX.ACTIVE_FLAG)  END
+        ELSE 
+            CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END		 
+        END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END
+  ORDER BY I.DIVISION_ID
+         , D.PROJECT_CODE
+         --, A.PROJECT_NAME
+         , S.SCM_SITE_ID
+         , S.SITE_DESCRIPTION
+         , D.ITEM_ID
+	     , T.ITEM_NAME
+
+END
+
+  print 'DMF0002-03-' + convert(varchar(30), getdate(), 121)  
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","1","---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*********************************************************************************************
+* Program ID  : DMF0002_GET_ITEM_BY_DIVISION_POPUPEx                                          
+* Description : Procedure 작성 가이드                                                          
+* Usage       : Procedure 작성 시 참조하세요!                                                  
+* Parameter   :                                                                               
+*		DMF0002_GET_ITEM_BY_DIVISION_POPUPEx_kcw '81', 'ALL', 'ALL', '', 'ALL', ''  , ''                                                                                          
+*---------------------------------------------------------------------------------------------
+* Date        In Charge    Description                                                        
+*---------------------------------------------------------------------------------------------
+* 2017/10/24  SongDH       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 
+* 2018/06/11    JYE			소형 관련 수정                                                      
+* 20181205 nick name 조회요청으로 변경                                                            
+* 20181218		JYE       82 currency 수정                                                     
+* 20190123		JYE       42, 44 추가                                                    
+* 20220428		rosia27		과제PJ20216891R
+* 20231130      HMIN     [E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선 
+* 2024.04.04    KCW3408  DM 프로시저 속도개선 
+/* 2024/08/14	KJJ			[PJ2024-50461] Team Mapping*/
+
+   exec DMF0002_GET_ITEM_BY_DIVISION_POPUPEx @p_division_id=N'81',@p_dept_id=N'ALL',@p_end_customer=N'ALL',@p_project_code=N'',@p_scm_site_id=N'ALL',@p_item_id=N'APBMW12V0-A1-D13',@p_mdmActive_Sw=N'Y'
+****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0002_GET_ITEM_BY_DIVISION_POPUPEx]  
+   @p_division_id   NVARCHAR(MAX)
+ , @p_dept_id       NVARCHAR(MAX)	--Department
+ , @p_end_customer  NVARCHAR(MAX)	--Endcustomer
+ , @p_project_code  NVARCHAR(MAX)
+ , @p_scm_site_id   NVARCHAR(MAX)
+ , @p_item_id       NVARCHAR(MAX)
+ , @p_mdmActive_Sw  NVARCHAR(MAX)  --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선 (개발서버 및 운영배포시 NULL SETTING 제거) 
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+
+  SET NOCOUNT ON;
+
+   print 'DMF0002-01-' + convert(varchar(30), getdate(), 121);
+
+-- Philsu Park: 기존 Temp 사용하던 구문 With절로 처리하고 불필요한 컬럼 쳐냄.
+WITH TEMP_DM_MST_ITEM_SINGLE_V AS 
+    (   SELECT    A.DIVISION_ID, A.ITEM_ID
+                , ITEM_NAME, ITEM_CLASS_NAME, NICK_NAME, ITEM_TYPE
+                , ACTIVE_FLAG 
+        FROM    (   SELECT  T1.DIVISION_ID          AS DIVISION_ID,
+                            T1.ITEM_ID              AS ITEM_ID,
+                            MAX(T1.ITEM_NAME)		AS ITEM_NAME,				--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+                            MAX(T1.ITEM_CLASS_NAME)	AS ITEM_CLASS_NAME,		--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+                            MAX(T1.NICK_NAME)		AS NICK_NAME,			--닉네임이 NULL인 경우가 있으므로 하나로 통일
+                            CASE  MIN( CASE WHEN T1.ITEM_TYPE = 'P' THEN 1					--타입이 사이트와 사업부, 법인에 따라 다양하게 존재 하므로 하나로 통일
+                                            WHEN T1.ITEM_TYPE = 'H' THEN 2					--또한 가장 완성된 상태의 자재 타입을 판매한다고 가정, 해당 자재타입을 사용함
+                                            WHEN T1.ITEM_TYPE = 'Q' THEN 3
+                                            ELSE 4 END )
+                                WHEN 1 THEN 'P'
+                                WHEN 2 THEN 'H'
+                                WHEN 3 THEN 'Q'
+                                ELSE 'R' END        AS ITEM_TYPE,
+                            MAX(T1.ACTIVE_FLAG)		AS ACTIVE_FLAG"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","2","  -- 20180720 ADD 'Y'대상중 1건 추출
+                    FROM    SCM_MST_ITEM_SN T1 WITH(NOLOCK)
+                    WHERE   T1.DIVISION_ID  = @p_division_id
+                    GROUP BY T1.DIVISION_ID, T1.ITEM_ID
+                ) A 
+        WHERE A.DIVISION_ID = @p_division_id
+    )
+    , TMP_81_UC_EXCEPTION AS 
+    (
+        SELECT @P_DIVISION_ID AS DIVISION_ID, V.ITEM_ID, V.ACTIVE_FLAG
+        FROM    (   SELECT  @p_division_id AS DIVISION_ID,  V.ITEM_ID,  V.ACTIVE_FLAG
+                    FROM    TEMP_DM_MST_ITEM_SINGLE_V V WITH (NOLOCK)
+                    WHERE   V.DIVISION_ID = '81'  --고정값사용 (81_UC의 경우 81번 값으로 대체 처리 , ACTIVE_FLAG 가 NULL인경우에 한함.)
+                    GROUP BY V.ITEM_ID, V.ACTIVE_FLAG
+                ) V
+        INNER JOIN (    SELECT  S.DIVISION_ID, S.ITEM_ID
+                        FROM    SCM_MST_SITE_ITEM S WITH (NOLOCK)
+                        WHERE   S.DIVISION_ID   = @p_division_id
+                        AND     S.ITEM_ID      != ''
+                        GROUP BY S.DIVISION_ID, S.ITEM_ID
+                    )  S
+            ON  S.DIVISION_ID   = V.DIVISION_ID 
+            AND S.ITEM_ID       = V.ITEM_ID
+        WHERE   1=1
+        AND     @p_division_id  = '81_UC'  --Philsu Park: Having절 대체. 굳이 Having으로 할 필요가??
+        GROUP BY V.ITEM_ID, V.ACTIVE_FLAG
+        -- HAVING CASE WHEN ISNULL(@p_division_id,'N')  = '81_UC' THEN @p_division_id ELSE 'X' END = CASE WHEN ISNULL(@p_division_id,'N')  = '81_UC' THEN @p_division_id ELSE 'XX' END
+    )
+    /* 2024.04.04    KCW3408  DM 프로시저 속도개선 */
+    SELECT    I.DIVISION_ID
+            , I.DIVISION_ID  AS DIVISION_NAME
+            , D.PROJECT_CODE
+            , A.PROJECT_NAME
+            , S.SCM_SITE_ID
+            , S.SITE_DESCRIPTION
+            , D.ITEM_ID	 
+            , T.ITEM_NAME
+            , T.ITEM_TYPE
+            , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+            , T.NICK_NAME
+            , T.ITEM_CLASS_NAME
+            , TEAM.DEPT_ID
+            , TEAM.DEPT_NAME_KO
+            , S.END_CUSTOMER
+            , D.CURRENCY
+            , D.PROJECT_CODE AS END_CUSTOMER40
+    FROM [SCM_MST_DIVISION] I WITH(NOLOCK) 
+    LEFT JOIN  [SCM_MST_SITE_ITEM] D WITH(NOLOCK)
+	    ON  I.DIVISION_ID   = D.DIVISION_ID
+	    AND D.VALID_YN      = 'Y'
+    LEFT JOIN [SCM_MST_PROJECT] A WITH(NOLOCK)
+	    ON  I.DIVISION_ID   = D.DIVISION_ID	   
+	    AND D.PROJECT_CODE  = A.PROJECT_CODE
+    LEFT JOIN [SCM_MST_SITE] S WITH(NOLOCK) 
+	    ON  D.SCM_SITE_ID   = S.SCM_SITE_ID
+	    AND S.VALID_YN      = 'Y'
+    LEFT JOIN TEMP_DM_MST_ITEM_SINGLE_V T WITH(NOLOCK)
+        ON  I.DIVISION_ID   = T.DIVISION_ID 
+        AND D.ITEM_ID       = T.ITEM_ID
+    LEFT JOIN (
+                SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID 
+                FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+                INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+                ON B.DEPT_ID = C.DEPT_ID ) AS TEAM
+        ON  TEAM.USER_ID IN (SELECT top 1 token FROM [dbo].[String_Split](D.owner, ','))
+    LEFT JOIN (
+                SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+                FROM    SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+                WHERE   VALID_YN ='Y' 
+                AND     LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+	            )  AS ITEM_TYPE_CODE
+        ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+    LEFT OUTER JOIN TMP_81_UC_EXCEPTION  EX ON EX.DIVISION_ID = D.DIVISION_ID AND EX.ITEM_ID = D.ITEM_ID  --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+    WHERE   I.DIVISION_ID       = @p_division_id   -- DIVISION 이 자동차인 경우에는 SITE-ITEM에 연결된것 만 조회 
+    AND   I.DIVISION_ID    LIKE '81%'    
+    AND   I.VALID_YN          = 'Y'   
+    AND   S.SITE_TYPE         = 'SALES'
+    AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+        ELSE TEAM.DEPT_ID
+         END IN (
+                SELECT  *
+                FROM    dbo.UF_FX_String_SplitForIN (@p_dept_id,',') AS P 
+              "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","3","  WHERE   (CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+                )
+    AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+        ELSE ISNULL(S.END_CUSTOMER,'')
+         END IN (
+                SELECT  * 
+                FROM    dbo.UF_FX_String_SplitForIN (@p_end_customer,',') AS P 
+                WHERE   (CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(S.END_CUSTOMER,'') END) = P.data
+                )				   
+    AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+        ELSE S.SCM_SITE_ID			
+            END IN (
+                SELECT  *
+                FROM    dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P 
+                WHERE   (CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+                )
+    AND (
+		 EXISTS (SELECT * FROM dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+	     OR
+		 EXISTS (SELECT * FROM dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+		)
+    AND (
+		 EXISTS (SELECT * FROM dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+		  OR
+		 EXISTS (SELECT * FROM dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.nick_name LIKE P.token +'%')
+		)	 -- 20181205 nick name 조회요청으로 변경
+	--[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선 
+	AND CASE WHEN @p_division_id = '81_UC' THEN 
+                CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE ISNULL(T.ACTIVE_FLAG,EX.ACTIVE_FLAG)  END
+		ELSE 
+			    CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END
+		END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END
+    UNION
+    SELECT    I.DIVISION_ID
+            , I.DIVISION_ID  AS DIVISION_NAME
+            , D.PROJECT_CODE
+            , A.PROJECT_NAME
+            , S.SCM_SITE_ID
+            , S.SITE_DESCRIPTION
+            , T.ITEM_ID	 
+            , T.ITEM_NAME
+            , T.ITEM_TYPE
+            , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+            , T.NICK_NAME
+            , T.ITEM_CLASS_NAME
+            , TEAM.DEPT_ID
+            , TEAM.DEPT_NAME_KO
+            , S.END_CUSTOMER
+            , D.CURRENCY
+            , D.PROJECT_CODE AS END_CUSTOMER40
+    FROM    [SCM_MST_DIVISION] I WITH(NOLOCK) 
+    LEFT JOIN   [SCM_MST_SITE_ITEM] D WITH(NOLOCK)  
+    ON  I.DIVISION_ID   = D.DIVISION_ID
+    AND D.VALID_YN      = 'Y'
+    LEFT JOIN [SCM_MST_PROJECT] A WITH(NOLOCK)
+    ON  I.DIVISION_ID   = D.DIVISION_ID	   
+    AND D.PROJECT_CODE  = A.PROJECT_CODE
+    LEFT JOIN [SCM_MST_SITE] S WITH(NOLOCK) 
+    ON  I.DIVISION_ID   = D.DIVISION_ID	   
+    AND D.SCM_SITE_ID   = S.SCM_SITE_ID   
+    AND S.VALID_YN      = 'Y' 
+    LEFT OUTER JOIN TEMP_DM_MST_ITEM_SINGLE_V  T WITH(NOLOCK)
+        ON  I.DIVISION_ID       = T.DIVISION_ID 
+        AND D.ITEM_ID           = T.ITEM_ID 
+        AND T.ITEM_TYPE    NOT IN ( 'H', 'R')  
+        AND T.ITEM_ID        LIKE 'E%' -- 자재 반재품 는 제외
+    LEFT JOIN (
+                SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID 
+                FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+                INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+                ON B.DEPT_ID = C.DEPT_ID
+                ) AS TEAM
+        ON  TEAM.USER_ID IN (SELECT TOP 1 TOKEN FROM [dbo].[String_Split](D.owner, ','))
+    LEFT JOIN ( SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+                FROM    SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+                WHERE   LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+                AND     VALID_YN    = 'Y' 
+                )  AS ITEM_TYPE_CODE
+        ON T.ITEM_TYPE  = ITEM_TYPE_CODE.CODE
+    WHERE   I.DIVISION_ID   = @p_division_id   
+    AND     I.DIVISION_ID   = '82'
+    AND     I.VALID_YN      = 'Y'
+    AND     S.SITE_TYPE     = 'SALES'
+    AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+        ELSE TEAM.DEPT_ID			
+         END IN"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","4"," (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+                (CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+                )
+    AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+        ELSE ISNULL(S.END_CUSTOMER,'')			
+         END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+                (CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(S.END_CUSTOMER,'') END) = P.data
+                )
+    AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+                ELSE S.SCM_SITE_ID			
+        END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+                (CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+                )
+    AND (
+        Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+        OR
+        Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+        )
+    AND (
+        Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_ID LIKE P.token +'%')
+        OR
+        Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.nick_name LIKE P.token +'%')
+        )	 -- 20181205 nick name 조회요청으로 변경
+	 --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+    AND CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END --20231127 
+    UNION -- 20180611 소형 추가, 42, 44
+    SELECT    I.DIVISION_ID
+            , I.DIVISION_ID  AS DIVISION_NAME
+            , D.PROJECT_CODE
+            , '' AS PROJECT_NAME
+            , S.SCM_SITE_ID
+            , S.SITE_DESCRIPTION
+            , D.ITEM_ID	 
+            , T.ITEM_NAME
+            , T.ITEM_TYPE
+            , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+            , T.NICK_NAME
+            , T.ITEM_CLASS_NAME
+            , TEAM.DEPT_ID
+            , TEAM.DEPT_NAME_KO
+            , S.END_CUSTOMER
+            , D.CURRENCY
+            , D.PROJECT_CODE AS END_CUSTOMER40
+    FROM  [SCM_MST_DIVISION] I WITH(NOLOCK) 
+    LEFT JOIN [SCM_MST_SITE_ITEM] D WITH(NOLOCK) 
+        ON  I.DIVISION_ID   = D.DIVISION_ID 
+        AND D.VALID_YN      = 'Y'
+    LEFT JOIN SCM_MST_SSO_USER_INFO USER_INFO WITH(NOLOCK) 			       
+        ON  D.OWNER = USER_INFO.USER_ID 
+    LEFT JOIN SCM_MST_SSO_DEPT_INFO TEAM WITH(NOLOCK) 			       
+	    ON  USER_INFO.DEPT_ID   = TEAM.DEPT_ID 
+	    AND TEAM.VALID_YN       = 'Y' 
+    LEFT JOIN [SCM_MST_SITE] S WITH(NOLOCK) 
+	    ON  I.DIVISION_ID   = D.DIVISION_ID	   
+        AND D.SCM_SITE_ID   = S.SCM_SITE_ID   
+        AND S.VALID_YN      ='Y' 
+    LEFT JOIN TEMP_DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+	   ON   I.DIVISION_ID   = T.DIVISION_ID 
+       AND  D.ITEM_ID       = T.ITEM_ID
+    LEFT JOIN   (
+                SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+                FROM    SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+                WHERE   LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+                AND     VALID_YN    = 'Y' 
+	            )  AS ITEM_TYPE_CODE
+        ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+    LEFT OUTER JOIN TMP_81_UC_EXCEPTION  EX ON EX.DIVISION_ID = D.DIVISION_ID AND EX.ITEM_ID = D.ITEM_ID --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+    WHERE   I.DIVISION_ID       = @p_division_id		-- 20190123  
+    AND     I.DIVISION_ID    LIKE '4%'    
+    AND     I.VALID_YN          = 'Y'   
+    AND     S.SITE_TYPE         = 'SALES'
+    AND     CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+            ELSE TEAM.DEPT_ID			
+			 END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+					(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+	                )
+    AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+   "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","5","     ELSE isnull(
+					CASE WHEN @p_division_id <> '40' THEN S.END_CUSTOMER ELSE D.PROJECT_CODE END
+				 ,'')
+         END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+                (CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(
+                    CASE WHEN @p_division_id <> '40' THEN S.END_CUSTOMER ELSE D.PROJECT_CODE END
+                ,'') END) = P.data
+                )
+    AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+        ELSE S.SCM_SITE_ID			
+         END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+                (CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+                )
+    AND (
+        Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+        OR
+        Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.nick_name LIKE P.token +'%')
+        )  -- 20181205 nick name 조회요청으로 변경
+    --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+    --AND CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END --20231127 
+    AND CASE WHEN @p_division_id = '81_UC' THEN 
+            CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE ISNULL(T.ACTIVE_FLAG,EX.ACTIVE_FLAG)  END
+        ELSE 
+            CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END		 
+        END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END
+  ORDER BY I.DIVISION_ID
+         , D.PROJECT_CODE
+         --, A.PROJECT_NAME
+         , S.SCM_SITE_ID
+         , S.SITE_DESCRIPTION
+         , D.ITEM_ID
+	     , T.ITEM_NAME
+
+END
+
+  print 'DMF0002-03-' + convert(varchar(30), getdate(), 121)  
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx","1817825588","1","/****************************************************************************************************/
+/* Program ID  : DM0003_GET_ITEM_BY_DIVISION_POP                                                 */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2017/10/24  SongDH       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/* 20181205 nick name 조회요청으로 수정                                                             */
+/* 2024/08/29	KJJ			[PJ2024-50461] Team Mapping*/
+/*                                                                                                  */
+/****************************************************************************************************/
+
+/*****************************************************************************************************
+ ※ 작성 Rule 
+   1. 대문자, 소문자
+      - 테이블, 컬럼, 변수는 소문자로 작성하고, 그 이외는 대문자로 통일
+   2. Naming Rule - Prefix
+      - 파라메터 : @p_
+      - 변수 : 데이타 타입에 따라 @v_(문자), @n_(숫자), @d_(날짜)
+   3. 들여쓰기 : 2 space
+   4. 기타
+      - SQL 수직 배치 : SQL 구문의 세로줄(왼쪽)로 맞춤, 컬럼이나 변수도 KEYWORD 이후 왼쪽 정렬
+      - 콤마로 분리된 ID 가 여러 줄에 걸쳐 나올 때, 콤마를 라인의 처음에 위치
+******************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx]  
+  @p_division_id   NVARCHAR(MAX),
+  @p_dept_id        NVARCHAR(MAX),	--Department
+  @p_end_customer   NVARCHAR(MAX),	--Endcustomer
+  @p_project_code  NVARCHAR(MAX),
+  @p_scm_site_id   NVARCHAR(MAX),
+  @p_item_id       NVARCHAR(MAX),
+  @p_item_type     NVARCHAR(MAX)
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+  
+  /*  
+  SELECT I.DIVISION_ID
+     , I.DIVISION_NAME
+     , D.PROJECT_CODE
+     , A.PROJECT_NAME
+     , S.SCM_SITE_ID
+     , S.SITE_DESCRIPTION
+     , D.ITEM_ID	 
+	 , T.ITEM_NAME
+	 , T.ITEM_TYPE
+	 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+	 , T.NICK_NAME
+	 , T.ITEM_CLASS_NAME
+	 , TEAM.DEPT_ID
+	 , TEAM.DEPT_NAME_KO
+	 , C.END_CUSTOMER
+	 , D.CURRENCY
+
+  FROM   (SELECT * FROM [dbo].[SCM_MST_DIVISION] WITH(NOLOCK) WHERE VALID_YN='Y') AS  I 
+       LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE_ITEM] WITH(NOLOCK) WHERE VALID_YN='Y') AS D 
+	   ON I.DIVISION_ID  = D.DIVISION_ID
+       LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_PROJECT] WITH(NOLOCK)) AS A 
+	   ON D.PROJECT_CODE = A.PROJECT_CODE
+       LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE] WITH(NOLOCK) WHERE VALID_YN='Y') S 
+	   ON D.SCM_SITE_ID  = S.SCM_SITE_ID
+	   --LEFT JOIN [dbo].[SCM_MST_ITEM_SN]     T WITH(NOLOCK)
+	   LEFT JOIN [dbo].DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+	   ON I.DIVISION_ID  = T.DIVISION_ID AND    D.ITEM_ID      = T.ITEM_ID
+	   LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, END_CUSTOMER FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+	   ON I.DIVISION_ID = C.DIVISION_ID AND D.SCM_SITE_ID = C.SCM_SITE_ID
+	   LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y')  AS TEAM			       
+	   ON C.DEPT_ID = TEAM.DEPT_ID
+	   LEFT JOIN (
+					SELECT  LOOKUP_CODE AS CODE, [DESCRIPTION] AS NAME
+					FROM [dbo].[SCM_ADM_LOOKUP_VALUES] WITH(NOLOCK) 
+					WHERE
+					VALID_YN ='Y' 
+					AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+	   )  AS ITEM_TYPE_CODE			       
+	   ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+	   
+
+WHERE 
+        CASE WHEN @p_division_id = "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx","1817825588","2","'ALL' THEN 'ALL'
+		   		 ELSE I.DIVISION_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+					(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END) = P.data
+	               )
+		AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   		 ELSE TEAM.DEPT_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+					(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+	               )
+		AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   		 ELSE isnull(C.END_CUSTOMER,'')			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+					(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+	               )				   
+		 
+		AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   		 ELSE S.SCM_SITE_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+					(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+	               )
+		--AND CASE WHEN @p_project_code = '' THEN ''
+		--   		 ELSE A.PROJECT_CODE			
+		--	END IN (
+		--			Select * from dbo.UF_FX_String_SplitForIN (@p_project_code,',') as P Where 
+		--			(CASE WHEN @p_project_code = '' THEN '' ELSE A.PROJECT_CODE END) = P.data
+	 --              )
+		--AND CASE WHEN @p_project_code = '' THEN ''
+		--   		 ELSE A.PROJECT_NAME			
+		--	END IN (
+		--			Select * from dbo.UF_FX_String_SplitForIN (@p_project_code,',') as P Where 
+		--			(CASE WHEN @p_project_code = '' THEN '' ELSE A.PROJECT_NAME END) = P.data
+	 --              ) 
+
+		--AND CASE WHEN @p_item_id = '' THEN ''
+		--   		 ELSE D.ITEM_ID			
+		--	END IN (
+		--			Select * from dbo.UF_FX_String_SplitForIN (@p_item_id,',') as P Where 
+		--			(CASE WHEN @p_item_id = '' THEN '' ELSE D.ITEM_ID END) = P.data
+	 --              )
+		--AND CASE WHEN @p_item_id = '' THEN ''
+		--   		 ELSE T.ITEM_NAME			
+		--	END IN (
+		--			Select * from dbo.UF_FX_String_SplitForIN (@p_item_id,',') as P Where 
+		--			(CASE WHEN @p_item_id = '' THEN '' ELSE T.ITEM_NAME END) = P.data
+	 --              )
+	 AND (
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_CODE LIKE P.token +'%')
+	     OR
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+		 )
+	 AND (
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+	     OR
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+		 )	 
+	 --AND    (   A.PROJECT_CODE LIKE '%'+ @p_project_code + '%'
+		--  OR A.PROJECT_NAME LIKE '%'+ @p_project_code + '%'
+		-- )
+  
+  --   AND    (   D.ITEM_ID   LIKE '%' + @p_item_id + '%' 
+  --        OR T.ITEM_NAME LIKE '%' + @p_item_id + '%' )
+
+
+  GROUP BY 
+		I.DIVISION_ID
+     , I.DIVISION_NAME
+     , D.PROJECT_CODE
+     , A.PROJECT_NAME
+     , S.SCM_SITE_ID
+     , S.SITE_DESCRIPTION
+     , D.ITEM_ID	 
+	 , T.ITEM_NAME
+	 , T.ITEM_TYPE
+	 , ITEM_TYPE_CODE.NAME
+	 , T.NICK_NAME
+	 , T.ITEM_CLASS_NAME
+	 , TEAM.DEPT_ID
+	 , TEAM.DEPT_NAME_KO
+	 , C.END_CUSTOMER
+	 , D.CURRENCY
+
+  ORDER BY I.DIVISION_ID
+         , D.PROJECT_CODE
+         , A.PROJECT_NAME
+         , S.SCM_SITE_ID
+         , S.SITE_DESCRIPTION
+         , D.ITEM_ID
+	     , T.ITEM_NAME
+*/		 
+  
+  if @p_division_id <> '40'
+  BEGIN
+	  SELECT DISTINCT I.DIVISION_ID
+		 , I.DIVISION_ID  AS DIVISION_NAME
+		 , D.PROJECT_CODE
+		 , A.PROJECT_NAME
+		 , S.SCM_SITE_ID
+		 , S.SITE_DESCRIPTION
+		 , D.ITEM_ID	 
+		 , T.ITEM_NAME
+		 , T.ITEM_TYPE
+		 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+		 , T.NICK_NAME
+		 , T.ITEM_CLASS_NAME
+		 , TEAM.DEPT_ID
+		 , TEAM.DEPT_NAME_KO
+		 , C.END_CUSTOMER
+		 , D.CURRENCY
+
+	  FROM   (SELECT * FROM [dbo].[SCM_MST_DIVISION] WITH(NOLOCK) WHERE VALID_YN='Y') AS  I "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx","1817825588","3","
+		   LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE_ITEM] WITH(NOLOCK) WHERE VALID_YN='Y') AS D 
+		   ON I.DIVISION_ID  = D.DIVISION_ID
+		   LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_PROJECT] WITH(NOLOCK)) AS A 
+		   ON D.PROJECT_CODE = A.PROJECT_CODE
+		   LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE] WITH(NOLOCK) WHERE VALID_YN='Y') S 
+		   ON D.SCM_SITE_ID  = S.SCM_SITE_ID   
+		   --LEFT JOIN [dbo].[SCM_MST_ITEM_SN]     T WITH(NOLOCK)
+		   LEFT JOIN [dbo].DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+		   ON I.DIVISION_ID  = T.DIVISION_ID AND    D.ITEM_ID      = T.ITEM_ID
+		   LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, END_CUSTOMER FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+		   ON I.DIVISION_ID = C.DIVISION_ID AND D.SCM_SITE_ID = C.SCM_SITE_ID
+
+		   --[PJ2024-50461] Team Mapping------------------------------------
+		   --LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y')  AS TEAM			       
+		   --ON C.DEPT_ID = TEAM.DEPT_ID
+			LEFT JOIN (
+				SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO 
+				FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+				INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+				ON B.DEPT_ID = C.DEPT_ID
+			) AS TEAM
+			ON              TEAM.USER_ID   IN (SELECT top 1 token FROM [dbo].[String_Split](D.owner, ','))
+		   --[PJ2024-50461] Team Mapping------------------------------------
+		   LEFT JOIN (
+						 SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+						 FROM [dbo].SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+						WHERE
+						VALID_YN ='Y' 
+						AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+		   )  AS ITEM_TYPE_CODE			       
+		   ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+	   
+	WHERE   I.DIVISION_ID = '81'   -- DIVISION 이 자동차인 경우에는 SITE-ITEM에 연결된것 만 조회 
+	  AND   SITE_TYPE = 'SALES'
+	  AND   CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   			 ELSE I.DIVISION_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+						(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END) = P.data
+					   )
+			AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   			 ELSE TEAM.DEPT_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+						(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+					   )
+			AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   			 ELSE isnull(C.END_CUSTOMER,'')			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+						(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+					   )				   
+		 
+			AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   			 ELSE S.SCM_SITE_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+						(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+					   )
+		 AND (
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+			 OR
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+			 )
+		 AND (
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+			 --OR
+			 --Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+			 OR
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.NICK_NAME LIKE P.token +'%')
+			 )	 --20181205 nick name 조회요청으로 수정
+
+	UNION 
+
+	  SELECT DISTINCT I.DIVISION_ID
+		 , I.DIVISION_ID  AS DIVISION_NAME
+		 , D.PROJECT_CODE
+		 , A.PROJECT_NAME
+		 , S.SCM_SITE_ID
+		 , S.SITE_DESCRIPTION
+		 , T.ITEM_ID	 
+		 , T.ITEM_NAME
+		 , T.ITEM_TYPE
+		 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+		 , T.NICK_NAME
+		 , T.ITEM_CLASS_NAME
+		 , TEAM.DEPT_ID
+		 , TEAM.DEPT_NAME_KO
+		 , C.END_CUSTOMER
+		 , "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx","1817825588","4","A.CURRENCY
+
+	  FROM   (SELECT * FROM [dbo].[SCM_MST_DIVISION] WITH(NOLOCK) WHERE VALID_YN='Y') AS  I 
+	  --[PJ2024-50461] Team Mapping------------------------------------
+		   --LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, PROJECT_CODE FROM [dbo].[SCM_MST_SITE_ITEM] WITH(NOLOCK) WHERE VALID_YN='Y') AS D 
+		   LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, PROJECT_CODE,owner FROM [dbo].[SCM_MST_SITE_ITEM] WITH(NOLOCK) WHERE VALID_YN='Y') AS D 
+		--[PJ2024-50461] Team Mapping------------------------------------
+		ON I.DIVISION_ID  = D.DIVISION_ID
+		   LEFT OUTER JOIN (SELECT * FROM [dbo].[SCM_MST_PROJECT] WITH(NOLOCK)) AS A 
+		ON D.PROJECT_CODE = A.PROJECT_CODE
+		   LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE] WITH(NOLOCK) WHERE VALID_YN='Y') S 
+		ON D.SCM_SITE_ID  = S.SCM_SITE_ID
+
+		LEFT OUTER JOIN [dbo].DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+
+		ON I.DIVISION_ID  = T.DIVISION_ID AND T.ITEM_TYPE not in ( 'H', 'R')  AND T.ITEM_ID LIKE 'E%' -- 자재 반재품 는 제외
+		LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, END_CUSTOMER FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+		ON I.DIVISION_ID = C.DIVISION_ID AND D.SCM_SITE_ID = C.SCM_SITE_ID
+
+		--[PJ2024-50461] Team Mapping------------------------------------
+		--LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y')  AS TEAM          
+		--ON C.DEPT_ID = TEAM.DEPT_ID
+		LEFT JOIN (
+			SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO 
+			FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+			INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+			ON B.DEPT_ID = C.DEPT_ID
+		) AS TEAM
+		ON              TEAM.USER_ID   IN (SELECT top 1 token FROM [dbo].[String_Split](D.owner, ','))
+		--[PJ2024-50461] Team Mapping------------------------------------
+
+
+		LEFT JOIN (
+		 SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+		 FROM [dbo].SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+		 WHERE
+		 VALID_YN ='Y' 
+		 AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+		)  AS ITEM_TYPE_CODE          
+		ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+	   
+	WHERE   I.DIVISION_ID = '82'   -- DIVISION 이 자동차인 경우에는 SITE-ITEM에 연결된것 만 조회 
+	  AND   SITE_TYPE = 'SALES'
+	--  AND   D.PROJECT_CODE = 'DC-17-001'
+
+
+	  AND   CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   			 ELSE I.DIVISION_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+						(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END) = P.data
+					   )
+			AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   			 ELSE TEAM.DEPT_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+						(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+					   )
+			AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   			 ELSE isnull(C.END_CUSTOMER,'')			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+						(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+					   )				   
+		 
+			AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   			 ELSE S.SCM_SITE_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+						(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+					   )
+		 AND (
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+			 OR
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+			 )
+		 AND (
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_ID LIKE P.token +'%')
+			 --OR
+			 --Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+			 OR
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.NICK_NAME LIKE P.token +'%')
+			 )	"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx","1817825588","5"," --20181205 nick name 조회요청으로 수정
+		ORDER BY I.DIVISION_ID
+		, D.PROJECT_CODE
+		, A.PROJECT_NAME
+		, S.SCM_SITE_ID
+		, S.SITE_DESCRIPTION
+		, D.ITEM_ID
+		, T.ITEM_NAME
+	END
+	ELSE	--40
+	BEGIN
+		--DIVISION_ID, DIVISION_NAME, ITEM_ID, ITEM_NAME, ITEM_TYPE, ITEM_TYPE_NAME, NICK_NAME, ITEM_CLASS_NAME
+ 	  SELECT  T.DIVISION_ID
+		 , T.DIVISION_ID  AS DIVISION_NAME
+		 , '' AS PROJECT_CODE
+		 , '' AS PROJECT_NAME
+		 , '' AS SCM_SITE_ID
+		 , '' AS SITE_DESCRIPTION
+		 , T.ITEM_ID	 
+		 , T.ITEM_NAME
+		 , T.ITEM_TYPE
+		 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+		 , T.NICK_NAME
+		 , T.ITEM_CLASS_NAME	--model type
+		 , '' AS DEPT_ID
+		 , '' AS DEPT_NAME_KO
+		 , '' AS END_CUSTOMER
+		 , '' AS CURRENCY
+	  FROM DM_MST_ITEM_SINGLE_V	T
+		LEFT JOIN (
+		 SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+		 FROM [dbo].SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+		 WHERE
+		 VALID_YN ='Y' 
+		 AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+		)  AS ITEM_TYPE_CODE          
+		ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+	WHERE  T.division_id = '40'
+		 AND (
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_ID LIKE P.token +'%')
+			 --OR
+			 --Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+			 OR
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.NICK_NAME LIKE P.token +'%')
+			 )	 --20181205 nick name 조회요청으로 수정
+		AND T.ITEM_TYPE  IN (
+						 Select * from dbo.UF_FX_String_SplitForIN (@p_item_type,',') as P Where (CASE WHEN @p_item_type = '' THEN '' ELSE T.ITEM_TYPE END) = P.data
+						)
+	  ORDER BY T.ITEM_ID	   
+		 
+	  /*	      
+	  SELECT DISTINCT top 1000 I.DIVISION_ID
+		 , I.DIVISION_ID  AS DIVISION_NAME
+		 , '' AS PROJECT_CODE
+		 , '' AS PROJECT_NAME
+		 , '' AS SCM_SITE_ID
+		 , '' AS SITE_DESCRIPTION
+		 , T.ITEM_ID	 
+		 , T.ITEM_NAME
+		 , T.ITEM_TYPE
+		 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+		 , T.NICK_NAME
+		 , T.ITEM_CLASS_NAME	--model type
+		 , '' AS DEPT_ID
+		 , '' AS DEPT_NAME_KO
+		 , '' AS END_CUSTOMER
+		 , '' AS CURRENCY
+
+	  FROM   (SELECT * FROM [dbo].[SCM_MST_DIVISION] WITH(NOLOCK) WHERE VALID_YN='Y') AS  I 
+		   LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, PROJECT_CODE FROM [dbo].[SCM_MST_SITE_ITEM] WITH(NOLOCK) WHERE VALID_YN='Y') AS D 
+		ON I.DIVISION_ID  = D.DIVISION_ID
+		   LEFT OUTER JOIN (SELECT * FROM [dbo].[SCM_MST_PROJECT] WITH(NOLOCK)) AS A 
+		ON D.PROJECT_CODE = A.PROJECT_CODE
+		   LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE] WITH(NOLOCK) WHERE VALID_YN='Y') S 
+		ON D.SCM_SITE_ID  = S.SCM_SITE_ID
+
+		LEFT OUTER JOIN [dbo].DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+
+		ON I.DIVISION_ID  = T.DIVISION_ID ------AND T.ITEM_TYPE not in ( 'H', 'R')  AND T.ITEM_ID LIKE 'E%' -- 자재 반재품 는 제외
+		LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, END_CUSTOMER FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+		ON I.DIVISION_ID = C.DIVISION_ID AND D.SCM_SITE_ID = C.SCM_SITE_ID
+		LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y')  AS TEAM          
+		ON C.DEPT_ID = TEAM.DEPT_ID
+		LEFT JOIN (
+		 SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+		 FROM [dbo].SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+		 WHERE
+		 VALID_YN ='Y' 
+		 AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+		)  AS ITEM_TYPE_CODE          
+		ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+
+	WHERE I.DIVISION_ID = '40'  -- DIVISION 이 자동차인 경우에는 SITE-ITEM에 연결된것 만 조회 
+	 AND   SITE_TYPE = 'SALES'
+	  AND   CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   			 ELSE I.DIVISION_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+						(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END) = P.data
+					   )
+			AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   			 ELSE TEAM.DEPT_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+						(CASE WHEN @p_dept_id = 'ALL' THEN 'AL"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx","1817825588","6","L' ELSE TEAM.DEPT_ID END) = P.data
+					   )
+			--AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+			--   		 ELSE isnull(C.END_CUSTOMER,'')			
+			--	END IN (
+			--			Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+			--			(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+		 --              )				   
+			  AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   			 ELSE isnull(
+						CASE WHEN @p_division_id <> '40' THEN C.END_CUSTOMER ELSE D.PROJECT_CODE END
+					 ,'')			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+						(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(
+							CASE WHEN @p_division_id <> '40' THEN C.END_CUSTOMER ELSE D.PROJECT_CODE END
+						,'') END) = P.data
+			)
+			AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   			 ELSE S.SCM_SITE_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+						(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+					   )
+	--***
+		 ----AND (
+			---- Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+		 ----    OR
+			---- Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+			---- )
+	--***
+		 ------AND (
+			------ Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_ID LIKE P.token +'%')
+		 ------    OR
+			------ Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+			------ )	 
+
+				AND CASE WHEN @p_item_id = '' THEN ''
+		   			 ELSE T.ITEM_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_item_id,',') as P Where 
+						(CASE WHEN @p_item_id = '' THEN '' ELSE T.ITEM_ID END) = P.data
+					   )
+				AND CASE WHEN @p_item_type = '' THEN ''
+		   			 ELSE T.ITEM_TYPE			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_item_type,',') as P Where 
+						(CASE WHEN @p_item_type = '' THEN '' ELSE T.ITEM_TYPE END) = P.data
+					   )
+
+		----AND (T.ITEM_TYPE  = 'H' OR T.ITEM_TYPE  = 'P' OR T.ITEM_TYPE  = 'R' OR T.ITEM_TYPE  = 'Q')	--*****
+	  ORDER BY I.DIVISION_ID
+			 --, D.PROJECT_CODE
+			 --, A.PROJECT_NAME
+			 --, S.SCM_SITE_ID
+			 --, S.SITE_DESCRIPTION
+			 , T.ITEM_ID
+			 , T.ITEM_NAME
+	 --DIVISION_ID, DIVISION_NAME, ITEM_ID, ITEM_NAME, ITEM_TYPE, ITEM_TYPE_NAME, NICK_NAME, ITEM_CLASS_NAME
+	 */
+	END
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_MONTH_TO_WEEK_DATA","1833825645","2","
+                ELSE A.DIVISION_ID
+	       END  IN (SELECT t.c.value(''.'', ''NVARCHAR(4000)'')
+                    FROM   (SELECT x = CAST(''<t>'' + REPLACE(N''[@p_division_id]'', '','', ''</t><t>'') + ''</t>'' AS xml)) b
+                    CROSS APPLY x.nodes(''/t'') t(c)
+	               )
+    AND    CASE WHEN N''[@p_site_id]'' = ''ALL'' THEN ''ALL''
+                ELSE A.SCM_SITE_ID
+	       END  IN (SELECT t.c.value(''.'', ''NVARCHAR(4000)'')
+                    FROM   (SELECT x = CAST(''<t>'' + REPLACE(N''[@p_site_id]'', '','', ''</t><t>'') + ''</t>'' AS xml)) b
+                    CROSS APPLY x.nodes(''/t'') t(c)
+	               )     
+	GROUP BY A.DIVISION_ID
+           , B.END_CUSTOMER
+           , A.SCM_SITE_ID
+  '; 
+  
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]'  , @v_iteration);
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_from_yyyymm]', @p_from_yyyymm);
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_to_yyyymm]'  , @p_to_yyyymm);
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_division_id]', @p_division_id);
+  SET @v_sql_text = REPLACE(@v_sql_text,'[@p_site_id]'    , @p_site_id); 
+
+  --SET @p_debug = @v_sql_text;
+  --RETURN @p_debug;
+    
+  EXEC SP_EXECUTESQL @v_sql_text; 
+								  
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_MONTH_TO_WEEK_DATA","1833825645","1","/****************************************************************************************************/
+/* Program ID  : DMF0002_GET_MONTH_TO_WEEK_DATA                                                             */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2017/11/15  SongDH       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/*                                                                                                  */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0002_GET_MONTH_TO_WEEK_DATA]
+  @p_division_id  NVARCHAR(30),
+  @p_site_id      NVARCHAR(30),
+  @p_from_yyyymm  NVARCHAR(6),
+  @p_to_yyyymm    NVARCHAR(6)
+  --@p_debug        NVARCHAR(4000) OUTPUT
+AS  
+  
+BEGIN
+  SET NOCOUNT ON;
+
+  DECLARE @v_sql_text       AS NVARCHAR(MAX);
+  DECLARE @v_iteration      AS NVARCHAR(MAX);
+  DECLARE @v_column_text    AS NVARCHAR(1000);
+  DECLARE @v_column_name    AS NVARCHAR(50);
+  DECLARE @v_weekstart_date AS NVARCHAR(8);
+  DECLARE @p_param_list     AS NVARCHAR(4000);
+  DECLARE @p_end_week       AS NVARCHAR(6);
+  
+  DECLARE c_bucket CURSOR FAST_FORWARD FOR
+    SELECT 'W_' + C.BASIS_START_DATE + '_' + CASE WHEN C.BASIS_START_DATE > CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112) 
+                                                THEN 'UNLOCK_' + CONVERT(CHAR(1), ROW_NUMBER() OVER(PARTITION BY C.month_name  ORDER BY C.month_name ASC))
+		  							          ELSE 'LOCK_' + CONVERT(CHAR(1), ROW_NUMBER() OVER(PARTITION BY month_name  ORDER BY month_name ASC))
+			  							 END   AS column_name       
+         , C.BASIS_START_DATE
+    FROM   [dbo].[SCM_SYS_CALENDAR_M] C WITH(NOLOCK)	
+    WHERE  C.basis_yyyymm >= @p_from_yyyymm --CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)
+    AND    C.basis_yyyymm <= @p_to_yyyymm   --CONVERT(CHAR(6), DATEADD(YYYY, 1, CURRENT_TIMESTAMP), 112)
+    GROUP BY C.BASIS_START_DATE
+           , C.BASIS_END_DATE
+           , C.week_name
+           , C.month_name                                  
+           --, C.start_yyyymmdd
+           --, C.end_yyyymmdd
+	;
+	
+  SELECT @v_iteration = '';
+
+  OPEN c_bucket;
+  FETCH NEXT FROM c_bucket INTO @v_column_name, @v_weekstart_date
+  WHILE @@FETCH_STATUS = 0   
+  BEGIN
+
+	SET @v_column_text = ', SUM(CASE WHEN A.YYYYMMDD = ''[@v_weekstart_date]'' THEN A.BUCKET_PER ELSE '''' END) AS [@v_column_name] ';
+	
+	SET @v_column_text = REPLACE(@v_column_text,'[@v_weekstart_date]', @v_weekstart_date);
+	SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]', @v_column_name);
+
+	SELECT @v_iteration = @v_iteration + @v_column_text;	
+    
+    FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_weekstart_date
+  END;
+  
+  --SELECT @v_iteration AS xxxx;
+
+  CLOSE c_bucket;  
+  DEALLOCATE c_bucket;
+
+  SET @v_sql_text = '
+    SELECT A.DIVISION_ID
+         , B.END_CUSTOMER
+      	 , A.SCM_SITE_ID
+         [@v_iteration]    
+    FROM   [dbo].[DM_MST_BUCKET_CONVERSION] A WITH(NOLOCK)
+         , [dbo].[SCM_MST_SITE]             B WITH(NOLOCK)
+    WHERE  A.SCM_SITE_ID = B.SCM_SITE_ID
+    AND    A.CONVERSION_TYPE = ''MTOW''
+    AND    A.YYYYMMDD >= ''[@p_from_yyyymm]'' 
+    AND    A.YYYYMMDD <= ''[@p_to_yyyymm]'' 
+    AND    CASE WHEN N''[@p_division_id]'' = ''ALL'' THEN ''ALL''"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_MTOW_SPREAD_TITLE","1849825702","1","-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[DMF0002_GET_MTOW_SPREAD_TITLE]
+	@p_from_month          NVARCHAR(6)
+   ,@p_to_month            NVARCHAR(6)
+AS
+BEGIN
+  -- SET NOCOUNT ON added to prevent extra result sets from
+  -- interfering with SELECT statements.
+  SET NOCOUNT ON;
+
+  SELECT 'W_' + a.BASIS_START_DATE + '_' + CASE WHEN a.BASIS_START_DATE > CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112) 
+                                              THEN 'UNLOCK_' + CONVERT(CHAR(1), ROW_NUMBER() OVER(PARTITION BY a.month_name  ORDER BY a.month_name ASC))
+		  							          ELSE 'LOCK_' + CONVERT(CHAR(1), ROW_NUMBER() OVER(PARTITION BY month_name  ORDER BY month_name ASC))
+			  							 END   AS column_name     
+       , a.week_name                           AS column_label
+       , a.month_name                          AS small_label_name 
+       , a.BASIS_START_DATE
+       , a.BASIS_END_DATE
+  FROM   [dbo].[SCM_SYS_CALENDAR_M] a WITH(NOLOCK)	
+  WHERE  a.basis_yyyymm >= @p_from_month --CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)
+  AND    a.basis_yyyymm <= @p_to_month   --CONVERT(CHAR(6), DATEADD(YYYY, 1, CURRENT_TIMESTAMP), 112)
+  GROUP BY a.BASIS_START_DATE
+         , a.BASIS_END_DATE
+         , a.week_name
+         , a.month_name                                  
+         --, a.start_yyyymmdd
+         --, a.end_yyyymmdd
+  ;
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_TITLESET_POPUP","1865825759","1","
+/*
+ * Program ID   : SCM0002_GET_TITLESET_POPUP
+ * Description  : Column Setting, Measure Setting
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017.11.21   정병훈         Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018.05.31		JYE			DIVISION_ID 별로 칼럼 해더 리턴
+ */
+
+CREATE PROCEDURE [dbo].[DMF0002_GET_TITLESET_POPUP]
+  @p_program_id   NVARCHAR(Max),
+  @p_sheet_name   NVARCHAR(Max),
+  @p_column_type  NVARCHAR(Max),
+  @p_user_id  NVARCHAR(Max),
+  @p_division_id NVARCHAR(Max)		-- 20180604 소형 추가
+AS
+BEGIN
+	-- SET NOCOUNT ON;
+	EXEC [dbo].[SCM0002_SET_DEFAULT_TITLESET_POPUP] @p_program_id , @p_sheet_name, @p_column_type, @p_user_id
+	
+	IF (@p_division_id = '')	-- 20180604 소형. 분기 추가
+		BEGIN
+
+
+
+    IF @p_column_type = 'C' -- Column
+	    BEGIN
+			SELECT b.program_id
+				 , b.sheet_name
+				 , b.column_name
+				 , b.column_label_name
+				 , b.small_class_label_name
+				 , b.large_class_label_name
+				 , b.data_sort_method_code
+                 , b.column_width
+                 , b.sort_order_no
+				 , u.sub_total_flag
+				 , dbo.fn_scm_sys_nvl(dbo.fn_scm_sys_nvl(u.data_sort_method_code, b.data_sort_method_code), 'ASC') AS user_sort_method_code
+				 , u.sort_order_no AS user_sort_order_no
+				 ,  (CASE ISNULL(u.column_name,'@@')
+					 WHEN '@@' THEN'N'
+					 ELSE 'Y'
+					 END)              user_flag
+				 , dbo.FN_SCM_SYS_NVL(b.default_flag, 'N') AS default_flag
+				 , dbo.FN_SCM_SYS_NVL(b.user_selectable_flag, 'Y') AS user_selectable_flag
+				 ,'N' AS total_use_flag  
+			 FROM scm_mst_sheet_columns b  WITH(NOLOCK)
+			 LEFT OUTER JOIN scm_mst_titleset_user u  WITH(NOLOCK) ON u.program_id = b.program_id AND u.sheet_name = b.sheet_name AND u.column_name = b.column_name AND u.user_id = @p_user_id
+		    WHERE   b.program_id             = @p_program_id
+			  AND   b.sheet_name             = @p_sheet_name			  
+			  AND   b.valid_yn				 = 'Y'
+			  AND   b.visible_flag           = 'Y'
+			 
+			ORDER BY b.sort_order_no;
+		END;
+    ELSE   -- Measure
+	    BEGIN
+			SELECT b.program_id
+				 , b.sheet_name
+				 , b.column_name				 
+				 , b.column_label_name       
+				 , b.small_class_label_name
+				 , b.large_class_label_name    
+				 , u.data_sort_method_code 
+				 , b.sort_order_no
+				 , NULL AS sub_total_flag
+				 , NULL AS user_sort_method_code
+				 , u.sort_order_no AS user_sort_order_no
+				 --, 'Y'                            user_selectable_flag
+				 , b.USER_SELECTABLE_FLAG
+				 ,  (CASE ISNULL(u.column_name,'@@')
+					WHEN '@@' THEN'N'
+					ELSE 'Y'
+					END)                user_flag
+				 , [dbo].[FN_SCM_SYS_NVL](b.default_flag, 'N')       default_flag
+				 , 'N' AS total_use_flag
+			 FROM  scm_mst_sheet_measure b  WITH(NOLOCK)
+			 LEFT OUTER JOIN  scm_mst_titleset_user u  WITH(NOLOCK) ON u.program_id = b.program_id AND u.sheet_name = b.sheet_name AND u.column_name = b.column_name AND u.user_id = @p_user_id
+		    WHERE   b.program_id             = @p_program_id
+			  AND   b.sheet_name             = @p_sheet_name
+			  AND   b.valid_yn				 = 'Y'
+
+			ORDER BY b.sort_order_no;
+       END;
+
+
+		END
+	ELSE	-- 20180604 소형. ESLE 내용 추가
+		BEGIN
+
+			IF @p_column_type = 'C' -- Column
+			BEGIN
+
+					SELECT b.program_id
+						 , b.sheet_name
+						 , b.column_name
+						 , b.column_label_name
+						 , b.small_class_label_name
+						 , b.large_class_label_name
+						 , b.data_sort_method_code
+						 , b.column_width
+						 , b.sort_order_no
+						 , u.sub_total_flag
+						 , dbo.fn_scm_sys_nvl(dbo.fn_scm_sys_nvl(u.data_sort_method_code, b.data_sort_method_code), 'ASC') AS user_sort_method_code
+						 , u.sort_order_no AS user_sort_order_no
+						 ,  (CASE ISNULL(u.column_name,'@@')
+							 WHEN '@@' THEN'N'
+							 ELSE '"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_TITLESET_POPUP","1865825759","2","Y'
+							 END)              user_flag
+						 , dbo.FN_SCM_SYS_NVL(b.default_flag, 'N') AS default_flag
+						 , dbo.FN_SCM_SYS_NVL(b.user_selectable_flag, 'Y') AS user_selectable_flag
+						 ,'N' AS total_use_flag  
+					 FROM scm_mst_sheet_columns b  WITH(NOLOCK)
+					 LEFT OUTER JOIN scm_mst_titleset_user u  WITH(NOLOCK) ON u.program_id = b.program_id AND u.sheet_name = b.sheet_name AND u.column_name = b.column_name AND u.user_id = @p_user_id
+					WHERE   b.program_id             = @p_program_id
+					  AND   b.sheet_name             = @p_sheet_name			  
+					  AND   b.valid_yn				 = 'Y'
+					  AND   b.visible_flag           = 'Y'
+					  AND @p_division_id IN (SELECT token FROM dbo.String_Split(b.DIVISION_ID ,',') )		-- 20180604 division 추가
+					ORDER BY b.sort_order_no;
+			END;
+		ELSE   -- Measure
+			BEGIN
+				SELECT b.program_id
+					 , b.sheet_name
+					 , b.column_name				 
+					 , b.column_label_name       
+					 , b.small_class_label_name
+					 , b.large_class_label_name    
+					 , u.data_sort_method_code 
+					 , b.sort_order_no
+					 , NULL AS sub_total_flag
+					 , NULL AS user_sort_method_code
+					 , u.sort_order_no AS user_sort_order_no
+					 --, 'Y'                            user_selectable_flag
+					 , b.USER_SELECTABLE_FLAG
+					 ,  (CASE ISNULL(u.column_name,'@@')
+						WHEN '@@' THEN'N'
+						ELSE 'Y'
+						END)                user_flag
+					 , [dbo].[FN_SCM_SYS_NVL](b.default_flag, 'N')       default_flag
+					 , 'N' AS total_use_flag
+				 FROM  scm_mst_sheet_measure b  WITH(NOLOCK)
+				 LEFT OUTER JOIN  scm_mst_titleset_user u  WITH(NOLOCK) ON u.program_id = b.program_id AND u.sheet_name = b.sheet_name AND u.column_name = b.column_name AND u.user_id = @p_user_id
+				WHERE   b.program_id             = @p_program_id
+				  AND   b.sheet_name             = @p_sheet_name
+				  AND   b.valid_yn				 = 'Y'
+				  AND @p_division_id IN (SELECT token FROM dbo.String_Split(b.DIVISION_ID ,',') )		-- 20180604 division 추가
+				ORDER BY b.sort_order_no;
+		   END;
+			 
+		END;
+
+END
+
+-- USE [LGCE_SCMDEV]
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_WEEK_TO_DAY_DATA","1881825816","1","/****************************************************************************************************/
+/* Program ID  : [DMF0002_GET_WEEK_TO_DAY_DATA]                                                             */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2017/11/15  SongDH       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/*                                                                                                  */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0002_GET_WEEK_TO_DAY_DATA]
+  @p_division_id  NVARCHAR(30),
+  @p_site_id      NVARCHAR(30)
+AS  
+  
+BEGIN
+  SET NOCOUNT ON;
+
+  --DECLARE @v_sql_text       AS NVARCHAR(MAX);  
+  
+  --SET @v_sql_text = '
+    SELECT A.DIVISION_ID
+         , B.END_CUSTOMER
+      	 , A.SCM_SITE_ID
+   --      , SUM(CASE WHEN A.YYYYMMDD = 'MON' THEN A.BUCKET_PER ELSE '' END) AS D_MON
+		 --, SUM(CASE WHEN A.YYYYMMDD = 'TUE' THEN A.BUCKET_PER ELSE '' END) AS D_TUE
+		 --, SUM(CASE WHEN A.YYYYMMDD = 'WED' THEN A.BUCKET_PER ELSE '' END) AS D_WED
+		 --, SUM(CASE WHEN A.YYYYMMDD = 'THU' THEN A.BUCKET_PER ELSE '' END) AS D_THU	
+		 --, SUM(CASE WHEN A.YYYYMMDD = 'FRI' THEN A.BUCKET_PER ELSE '' END) AS D_FRI
+		 --, SUM(CASE WHEN A.YYYYMMDD = 'SAT' THEN A.BUCKET_PER ELSE '' END) AS D_SAT
+		 --, SUM(CASE WHEN A.YYYYMMDD = 'SUN' THEN A.BUCKET_PER ELSE '' END) AS D_SUN
+    FROM   [dbo].[DM_MST_BUCKET_CONVERSION] A WITH(NOLOCK)
+         , [dbo].[SCM_MST_SITE]             B WITH(NOLOCK)
+    WHERE  A.SCM_SITE_ID = B.SCM_SITE_ID
+    AND    A.CONVERSION_TYPE = 'WTOD'
+    AND    CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+                ELSE A.DIVISION_ID
+	       END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+    AND    CASE WHEN @p_site_id = 'ALL' THEN 'ALL'
+                ELSE A.SCM_SITE_ID
+	       END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_site_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )     
+	GROUP BY A.DIVISION_ID
+           , B.END_CUSTOMER
+           , A.SCM_SITE_ID
+	;
+ 
+  
+								  
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_SAVE_BUCKET_CONVERSION","1897825873","3","R_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+	END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+		END CATCH;
+	END;
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_SAVE_BUCKET_CONVERSION","1897825873","1","/****************************************************************************************************/
+/* Program ID  : [DMF0002_SAVE_BUCKET_CONVERSION]                                                   */
+/* Description : BUCKET COVERSION 저장, 수정, 삭제                                                  */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2017/11/16  DWOK/DWPARK  Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/*                                                                                                  */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0002_SAVE_BUCKET_CONVERSION]
+
+	-- Add the parameters for the stored procedure here
+	@p_active_flag			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_scm_site_id			NVARCHAR(MAX),
+	@p_yyyymmdd				NVARCHAR(MAX),
+	@p_bucket_per			NVARCHAR(MAX),
+	@p_conversion_type		NVARCHAR(MAX)
+	--@p_success_yn			NVARCHAR(1) OUTPUT
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @recv_active_flag			NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_scm_site_id			NVARCHAR(MAX);
+	DECLARE @v_yyyymmdd				NVARCHAR(MAX);
+	DECLARE @v_bucket_per			NVARCHAR(MAX);
+	DECLARE @v_conversion_type		NVARCHAR(MAX);
+
+	SET @v_active_flag = NULL;
+	SET @v_division_id = NULL;
+	SET @v_scm_site_id = NULL;
+	SET @v_yyyymmdd = NULL;
+	SET @v_bucket_per = NULL;
+	SET @v_conversion_type = NULL;	 
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^'
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'DMF0002_SAVE_BUCKET_CONVERSION';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	BEGIN TRY
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+				SELECT @v_active_flag
+					  
+				SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 
+				SELECT @v_division_id
+
+				SET @v_scm_site_id = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id, @v_delimiter , @mst_loop_cnt) ;    
+				SELECT @v_scm_site_id
+
+				SET @v_yyyymmdd = [dbo].[SCM_ARR_SPL_VAL](@p_yyyymmdd, @v_delimiter , @mst_loop_cnt) ;    
+				SELECT @v_yyyymmdd
+
+				SET @v_bucket_per = [dbo].[SCM_ARR_SPL_VAL](@p_bucket_per"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_SAVE_BUCKET_CONVERSION","1897825873","2",", @v_delimiter , @mst_loop_cnt) ; 
+				SELECT @v_bucket_per
+
+				SET @v_conversion_type = [dbo].[SCM_ARR_SPL_VAL](@p_conversion_type, @v_delimiter, @mst_loop_cnt) ; 
+				SELECT @v_conversion_type
+						
+			END
+			
+
+			IF @mst_loop_cnt > 0 
+
+				BEGIN       
+			 
+					MERGE INTO [dbo].[dm_mst_bucket_conversion] A
+					USING (
+							SELECT 
+								@v_division_id	as division_id, 
+								@v_scm_site_id	as scm_site_id, 
+								@v_yyyymmdd		as yyyymmdd
+						  ) B
+					ON(
+							    A.division_id = B.division_id
+							AND A.scm_site_id = B.scm_site_id
+							AND A.yyyymmdd = B.yyyymmdd
+					  )
+					WHEN MATCHED THEN
+						 UPDATE SET 
+									division_id		 = @v_division_id
+								   ,scm_site_id		 = @v_scm_site_id 
+								   ,yyyymmdd		 = @v_yyyymmdd
+								   --,bucket_per		 = @v_bucket_per
+								   --,bucket_per		 = CONVERT(INT,  REPLACE(@v_bucket_per,@v_delimiter,''))
+								   --,bucket_per		 = CONVERT(INT, @v_bucket_per)
+								   , bucket_per		 = CONVERT(INT,  CAST(@v_bucket_per AS NVARCHAR(10)))
+								   ,last_updated_by  = 'SYSTEM'
+								   ,last_update_date = sysdatetime()
+					                
+					WHEN NOT MATCHED THEN
+
+						 INSERT (  division_id
+								  ,project_code
+								  ,scm_site_id
+								  ,item_id
+								  ,yyyymmdd
+								  ,bucket_per
+								  ,conversion_type
+								  ,valid_yn
+								  ,created_by
+								  ,creation_date
+								  ,last_updated_by
+								  ,last_update_date
+								)
+						 VALUES (   @v_division_id
+								   ,'***'
+								   ,@v_scm_site_id 
+								   ,'***'
+								   ,@v_yyyymmdd
+								   --,@v_bucket_per
+								   ,CONVERT(INT,  CAST(@v_bucket_per AS NVARCHAR(10)))
+								   --,CONVERT(INT,  REPLACE(@v_bucket_per,@v_delimiter,''))
+								   ,@v_conversion_type
+								   ,'Y'
+								   ,'SYSTEM'
+								   ,sysdatetime()
+								   ,'SYSTEM'
+								   ,sysdatetime()
+								);
+
+			  END
+
+
+
+			ELSE    --단일 ROW 일때
+			 
+				BEGIN        
+					SET @v_active_flag = @p_active_flag        
+					SET @p_active_flag = NULL       
+					SET @v_division_id = @p_division_id        
+					SET @p_division_id = NULL      
+					SET @v_scm_site_id = @p_scm_site_id        
+					SET @p_scm_site_id = NULL    
+					SET @v_yyyymmdd = @p_yyyymmdd       
+					SET @p_yyyymmdd = NULL  
+					SET @v_bucket_per = @p_bucket_per 
+					SET @p_bucket_per = NULL
+					SET @v_conversion_type = @p_conversion_type 
+					SET @p_conversion_type = NULL
+
+					
+					MERGE INTO [dbo].[dm_mst_bucket_conversion] A
+					USING (
+							SELECT @v_division_id as division_id, @v_scm_site_id as scm_site_id, @v_yyyymmdd as yyyymmdd
+						  ) B
+					ON(
+							    A.division_id = B.division_id
+							AND A.scm_site_id = B.scm_site_id
+							AND A.yyyymmdd = B.yyyymmdd
+					  )
+					WHEN MATCHED THEN
+						 UPDATE SET 
+									division_id		 = @v_division_id
+								   ,scm_site_id		 = @v_scm_site_id 
+								   ,yyyymmdd		 = @v_yyyymmdd
+								   ,bucket_per		 = @v_bucket_per
+								   ,last_updated_by  = 'system'
+								   ,last_update_date = sysdatetime()
+					    
+					WHEN NOT MATCHED THEN
+
+						 INSERT (  division_id
+								  ,project_code
+								  ,scm_site_id
+								  ,item_id
+								  ,yyyymmdd
+								  ,bucket_per
+								  ,conversion_type
+								  ,valid_yn
+								  ,created_by
+								  ,creation_date
+								  ,last_updated_by
+								  ,last_update_date
+								)
+						 VALUES (   @v_division_id
+								   ,'***'
+								   ,@v_scm_site_id 
+								   ,'***'
+								   ,@v_yyyymmdd
+								   ,@v_bucket_per
+								   ,@v_conversion_type
+								   ,'Y'
+								   ,'system'
+								   ,sysdatetime()
+								   ,'system'
+								   ,sysdatetime()
+								);
+				END
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC P"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_SAVE_BUCKET_CONVERSION_OK","1913825930","1","/****************************************************************************************************/
+/* Program ID  : [DMF0002_SAVE_BUCKET_CONVERSION]                                                   */
+/* Description : BUCKET COVERSION 저장, 수정, 삭제                                                  */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2017/11/16  DWOK/DWPARK  Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/*                                                                                                  */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0002_SAVE_BUCKET_CONVERSION_OK]
+
+	-- Add the parameters for the stored procedure here
+	@p_active_flag			NVARCHAR(MAX),
+	@p_division_id			NVARCHAR(MAX),
+	@p_scm_site_id			NVARCHAR(MAX),
+	@p_yyyymmdd				NVARCHAR(MAX),
+	@p_bucket_per			NVARCHAR(MAX),
+	@p_conversion_type		NVARCHAR(MAX)
+	--@p_success_yn			NVARCHAR(1) OUTPUT
+AS
+
+BEGIN
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @recv_active_flag			NVARCHAR(MAX);
+	DECLARE @recv_division_id			NVARCHAR(MAX);
+	DECLARE @recv_scm_site_id			NVARCHAR(MAX);
+	DECLARE @recv_yyyymmdd				NVARCHAR(MAX);
+	DECLARE @recv_bucket_per			NVARCHAR(MAX);
+	DECLARE @recv_conversion_type		NVARCHAR(MAX);
+
+	SET @recv_active_flag = NULL;
+	SET @recv_division_id = NULL;
+	SET @recv_scm_site_id = NULL;
+	SET @recv_yyyymmdd = NULL;
+	SET @recv_bucket_per = NULL;
+	SET @recv_conversion_type = NULL;	 
+		
+	SET @recv_active_flag = @p_active_flag;
+	SET @recv_division_id = @p_division_id;
+	SET @recv_scm_site_id = @p_scm_site_id;
+	SET @recv_yyyymmdd = @p_yyyymmdd;
+	SET @recv_bucket_per = @p_bucket_per;
+	SET @recv_conversion_type = @p_conversion_type;
+	
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_scm_site_id			NVARCHAR(MAX);
+	DECLARE @v_yyyymmdd				NVARCHAR(MAX);
+	DECLARE @v_bucket_per			NVARCHAR(MAX);
+	DECLARE @v_conversion_type		NVARCHAR(MAX);
+
+	SET @v_active_flag = NULL;
+	SET @v_division_id = NULL;
+	SET @v_scm_site_id = NULL;
+	SET @v_yyyymmdd = NULL;
+	SET @v_bucket_per = NULL;
+	SET @v_conversion_type = NULL;	 
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^'
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'DMF0002_SAVE_BUCKET_CONVERSION_OK';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+		BEGIN TRY
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+			-- 각 컬럼들에 대한"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_SAVE_BUCKET_CONVERSION_OK","1913825930","2"," 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+				SELECT @v_active_flag
+					  
+				SET @v_division_id = [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 
+				SELECT @v_division_id
+
+				SET @v_scm_site_id = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id, @v_delimiter , @mst_loop_cnt) ;    
+				SELECT @v_scm_site_id
+
+				SET @v_yyyymmdd = [dbo].[SCM_ARR_SPL_VAL](@p_yyyymmdd, @v_delimiter , @mst_loop_cnt) ;    
+				SELECT @v_yyyymmdd
+
+				SET @v_bucket_per = [dbo].[SCM_ARR_SPL_VAL](@p_bucket_per, @v_delimiter , @mst_loop_cnt) ; 
+				SELECT @v_bucket_per
+
+				SET @v_conversion_type = [dbo].[SCM_ARR_SPL_VAL](@p_conversion_type, @v_delimiter, @mst_loop_cnt) ; 
+				SELECT @v_conversion_type
+						
+			END
+			
+			IF @mst_loop_cnt > 0 
+
+				BEGIN       
+				
+					MERGE INTO [dbo].[dm_mst_bucket_conversion] A
+					USING (
+							SELECT 
+								@v_division_id	as division_id, 
+								@v_scm_site_id	as scm_site_id, 
+								@v_yyyymmdd		as yyyymmdd
+						  ) B
+					ON(
+							    A.division_id = B.division_id
+							AND A.scm_site_id = B.scm_site_id
+							AND A.yyyymmdd = B.yyyymmdd
+					  )
+					WHEN MATCHED THEN
+						 UPDATE SET 
+									division_id		 = @v_division_id
+								   ,scm_site_id		 = @v_scm_site_id 
+								   ,yyyymmdd		 = @v_yyyymmdd
+								   --,bucket_per		 = @v_bucket_per
+								   --,bucket_per		 = CONVERT(INT,  REPLACE(@v_bucket_per,@v_delimiter,''))
+								   --,bucket_per		 = CONVERT(INT, @v_bucket_per)
+								   , bucket_per		 = CONVERT(INT,  CAST(@v_bucket_per AS NVARCHAR(10)))
+								   ,last_updated_by  = 'SYSTEM'
+								   ,last_update_date = sysdatetime()
+					                
+					WHEN NOT MATCHED THEN
+
+						 INSERT (  division_id
+								  ,project_code
+								  ,scm_site_id
+								  ,item_id
+								  ,yyyymmdd
+								  ,bucket_per
+								  ,conversion_type
+								  ,valid_yn
+								  ,created_by
+								  ,creation_date
+								  ,last_updated_by
+								  ,last_update_date
+								)
+						 VALUES (   @v_division_id
+								   ,'***'
+								   ,@v_scm_site_id 
+								   ,'***'
+								   ,@v_yyyymmdd
+								   --,@v_bucket_per
+								   ,CONVERT(INT,  CAST(@v_bucket_per AS NVARCHAR(10)))
+								   --,CONVERT(INT,  REPLACE(@v_bucket_per,@v_delimiter,''))
+								   ,@v_conversion_type
+								   ,'Y'
+								   ,'SYSTEM'
+								   ,sysdatetime()
+								   ,'SYSTEM'
+								   ,sysdatetime()
+								);
+
+			  END
+
+
+
+			ELSE    --단일 ROW 일때
+			 
+				BEGIN        
+					SET @v_active_flag = @p_active_flag        
+					SET @p_active_flag = NULL       
+					SET @v_division_id = @p_division_id        
+					SET @p_division_id = NULL      
+					SET @v_scm_site_id = @p_scm_site_id        
+					SET @p_scm_site_id = NULL    
+					SET @v_yyyymmdd = @p_yyyymmdd       
+					SET @p_yyyymmdd = NULL  
+					SET @v_bucket_per = @p_bucket_per 
+					SET @p_bucket_per = NULL
+					SET @v_conversion_type = @p_conversion_type 
+					SET @p_conversion_type = NULL
+					
+					MERGE INTO [dbo].[dm_mst_bucket_conversion] A
+					USING (
+							SELECT @v_division_id as division_id, @v_scm_site_id as scm_site_id, @v_yyyymmdd as yyyymmdd
+						  ) B
+					ON(
+							    A.division_id = B.division_id
+							AND A.scm_site_id = B.scm_site_id
+							AND A.yyyymmdd = B.yyyymmdd
+					  )
+					WHEN MATCHED THEN
+						 UPDATE SET 
+									division_id		 = @v_division_id
+								   ,scm_site_id		 = @v_scm_site_id 
+								   ,yyyymmdd		 = @v_yyyymmdd
+								   ,bucket_per		 = @v_bucket_per
+								   ,last_updated_by  = 'system'
+								   ,last_update_date = sysdatetime()
+					    
+					WHEN NOT MATCHED THEN
+
+						 INSERT (  division_id
+								  ,project_code
+								  ,scm_site_id
+								  ,item_id
+								  ,yyyymmdd
+								  ,bucket_per
+								  ,conversion_type
+								  ,valid_yn
+								  ,created_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_SAVE_BUCKET_CONVERSION_OK","1913825930","3","by
+								  ,creation_date
+								  ,last_updated_by
+								  ,last_update_date
+								)
+						 VALUES (   @v_division_id
+								   ,'***'
+								   ,@v_scm_site_id 
+								   ,'***'
+								   ,@v_yyyymmdd
+								   ,@v_bucket_per
+								   ,@v_conversion_type
+								   ,'Y'
+								   ,'system'
+								   ,sysdatetime()
+								   ,'system'
+								   ,sysdatetime()
+								);
+				END
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+		END CATCH;
+	END;
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx_20240829","2142838896","1","/****************************************************************************************************/
+/* Program ID  : DM0003_GET_ITEM_BY_DIVISION_POP                                                 */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2017/10/24  SongDH       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/* 20181205 nick name 조회요청으로 수정                                                             */
+/*                                                                                                  */
+/****************************************************************************************************/
+
+/*****************************************************************************************************
+ ※ 작성 Rule 
+   1. 대문자, 소문자
+      - 테이블, 컬럼, 변수는 소문자로 작성하고, 그 이외는 대문자로 통일
+   2. Naming Rule - Prefix
+      - 파라메터 : @p_
+      - 변수 : 데이타 타입에 따라 @v_(문자), @n_(숫자), @d_(날짜)
+   3. 들여쓰기 : 2 space
+   4. 기타
+      - SQL 수직 배치 : SQL 구문의 세로줄(왼쪽)로 맞춤, 컬럼이나 변수도 KEYWORD 이후 왼쪽 정렬
+      - 콤마로 분리된 ID 가 여러 줄에 걸쳐 나올 때, 콤마를 라인의 처음에 위치
+******************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx_20240829]  
+  @p_division_id   NVARCHAR(MAX),
+  @p_dept_id        NVARCHAR(MAX),	--Department
+  @p_end_customer   NVARCHAR(MAX),	--Endcustomer
+  @p_project_code  NVARCHAR(MAX),
+  @p_scm_site_id   NVARCHAR(MAX),
+  @p_item_id       NVARCHAR(MAX),
+  @p_item_type     NVARCHAR(MAX)
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+  
+  /*  
+  SELECT I.DIVISION_ID
+     , I.DIVISION_NAME
+     , D.PROJECT_CODE
+     , A.PROJECT_NAME
+     , S.SCM_SITE_ID
+     , S.SITE_DESCRIPTION
+     , D.ITEM_ID	 
+	 , T.ITEM_NAME
+	 , T.ITEM_TYPE
+	 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+	 , T.NICK_NAME
+	 , T.ITEM_CLASS_NAME
+	 , TEAM.DEPT_ID
+	 , TEAM.DEPT_NAME_KO
+	 , C.END_CUSTOMER
+	 , D.CURRENCY
+
+  FROM   (SELECT * FROM [dbo].[SCM_MST_DIVISION] WITH(NOLOCK) WHERE VALID_YN='Y') AS  I 
+       LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE_ITEM] WITH(NOLOCK) WHERE VALID_YN='Y') AS D 
+	   ON I.DIVISION_ID  = D.DIVISION_ID
+       LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_PROJECT] WITH(NOLOCK)) AS A 
+	   ON D.PROJECT_CODE = A.PROJECT_CODE
+       LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE] WITH(NOLOCK) WHERE VALID_YN='Y') S 
+	   ON D.SCM_SITE_ID  = S.SCM_SITE_ID
+	   --LEFT JOIN [dbo].[SCM_MST_ITEM_SN]     T WITH(NOLOCK)
+	   LEFT JOIN [dbo].DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+	   ON I.DIVISION_ID  = T.DIVISION_ID AND    D.ITEM_ID      = T.ITEM_ID
+	   LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, END_CUSTOMER FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+	   ON I.DIVISION_ID = C.DIVISION_ID AND D.SCM_SITE_ID = C.SCM_SITE_ID
+	   LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y')  AS TEAM			       
+	   ON C.DEPT_ID = TEAM.DEPT_ID
+	   LEFT JOIN (
+					SELECT  LOOKUP_CODE AS CODE, [DESCRIPTION] AS NAME
+					FROM [dbo].[SCM_ADM_LOOKUP_VALUES] WITH(NOLOCK) 
+					WHERE
+					VALID_YN ='Y' 
+					AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+	   )  AS ITEM_TYPE_CODE			       
+	   ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+	   
+
+WHERE 
+        CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   		 ELSE I.DIVISION_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx_20240829","2142838896","2","ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+					(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END) = P.data
+	               )
+		AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   		 ELSE TEAM.DEPT_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+					(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+	               )
+		AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   		 ELSE isnull(C.END_CUSTOMER,'')			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+					(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+	               )				   
+		 
+		AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   		 ELSE S.SCM_SITE_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+					(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+	               )
+		--AND CASE WHEN @p_project_code = '' THEN ''
+		--   		 ELSE A.PROJECT_CODE			
+		--	END IN (
+		--			Select * from dbo.UF_FX_String_SplitForIN (@p_project_code,',') as P Where 
+		--			(CASE WHEN @p_project_code = '' THEN '' ELSE A.PROJECT_CODE END) = P.data
+	 --              )
+		--AND CASE WHEN @p_project_code = '' THEN ''
+		--   		 ELSE A.PROJECT_NAME			
+		--	END IN (
+		--			Select * from dbo.UF_FX_String_SplitForIN (@p_project_code,',') as P Where 
+		--			(CASE WHEN @p_project_code = '' THEN '' ELSE A.PROJECT_NAME END) = P.data
+	 --              ) 
+
+		--AND CASE WHEN @p_item_id = '' THEN ''
+		--   		 ELSE D.ITEM_ID			
+		--	END IN (
+		--			Select * from dbo.UF_FX_String_SplitForIN (@p_item_id,',') as P Where 
+		--			(CASE WHEN @p_item_id = '' THEN '' ELSE D.ITEM_ID END) = P.data
+	 --              )
+		--AND CASE WHEN @p_item_id = '' THEN ''
+		--   		 ELSE T.ITEM_NAME			
+		--	END IN (
+		--			Select * from dbo.UF_FX_String_SplitForIN (@p_item_id,',') as P Where 
+		--			(CASE WHEN @p_item_id = '' THEN '' ELSE T.ITEM_NAME END) = P.data
+	 --              )
+	 AND (
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_CODE LIKE P.token +'%')
+	     OR
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+		 )
+	 AND (
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+	     OR
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+		 )	 
+	 --AND    (   A.PROJECT_CODE LIKE '%'+ @p_project_code + '%'
+		--  OR A.PROJECT_NAME LIKE '%'+ @p_project_code + '%'
+		-- )
+  
+  --   AND    (   D.ITEM_ID   LIKE '%' + @p_item_id + '%' 
+  --        OR T.ITEM_NAME LIKE '%' + @p_item_id + '%' )
+
+
+  GROUP BY 
+		I.DIVISION_ID
+     , I.DIVISION_NAME
+     , D.PROJECT_CODE
+     , A.PROJECT_NAME
+     , S.SCM_SITE_ID
+     , S.SITE_DESCRIPTION
+     , D.ITEM_ID	 
+	 , T.ITEM_NAME
+	 , T.ITEM_TYPE
+	 , ITEM_TYPE_CODE.NAME
+	 , T.NICK_NAME
+	 , T.ITEM_CLASS_NAME
+	 , TEAM.DEPT_ID
+	 , TEAM.DEPT_NAME_KO
+	 , C.END_CUSTOMER
+	 , D.CURRENCY
+
+  ORDER BY I.DIVISION_ID
+         , D.PROJECT_CODE
+         , A.PROJECT_NAME
+         , S.SCM_SITE_ID
+         , S.SITE_DESCRIPTION
+         , D.ITEM_ID
+	     , T.ITEM_NAME
+*/		 
+  
+  if @p_division_id <> '40'
+  BEGIN
+	  SELECT DISTINCT I.DIVISION_ID
+		 , I.DIVISION_ID  AS DIVISION_NAME
+		 , D.PROJECT_CODE
+		 , A.PROJECT_NAME
+		 , S.SCM_SITE_ID
+		 , S.SITE_DESCRIPTION
+		 , D.ITEM_ID	 
+		 , T.ITEM_NAME
+		 , T.ITEM_TYPE
+		 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+		 , T.NICK_NAME
+		 , T.ITEM_CLASS_NAME
+		 , TEAM.DEPT_ID
+		 , TEAM.DEPT_NAME_KO
+		 , C.END_CUSTOMER
+		 , D.CURRENCY
+
+	  FROM   (SELECT * FROM [dbo].[SCM_MST_DIVISION] WITH(NOLOCK) WHERE VALID_YN='Y') AS  I 
+		   LEFT JOIN (SELECT * FROM [dbo].[SCM"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx_20240829","2142838896","3","_MST_SITE_ITEM] WITH(NOLOCK) WHERE VALID_YN='Y') AS D 
+		   ON I.DIVISION_ID  = D.DIVISION_ID
+		   LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_PROJECT] WITH(NOLOCK)) AS A 
+		   ON D.PROJECT_CODE = A.PROJECT_CODE
+		   LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE] WITH(NOLOCK) WHERE VALID_YN='Y') S 
+		   ON D.SCM_SITE_ID  = S.SCM_SITE_ID   
+		   --LEFT JOIN [dbo].[SCM_MST_ITEM_SN]     T WITH(NOLOCK)
+		   LEFT JOIN [dbo].DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+		   ON I.DIVISION_ID  = T.DIVISION_ID AND    D.ITEM_ID      = T.ITEM_ID
+		   LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, END_CUSTOMER FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+		   ON I.DIVISION_ID = C.DIVISION_ID AND D.SCM_SITE_ID = C.SCM_SITE_ID
+		   LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y')  AS TEAM			       
+		   ON C.DEPT_ID = TEAM.DEPT_ID
+		   LEFT JOIN (
+						 SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+						 FROM [dbo].SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+						WHERE
+						VALID_YN ='Y' 
+						AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+		   )  AS ITEM_TYPE_CODE			       
+		   ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+	   
+	WHERE   I.DIVISION_ID = '81'   -- DIVISION 이 자동차인 경우에는 SITE-ITEM에 연결된것 만 조회 
+	  AND   SITE_TYPE = 'SALES'
+	  AND   CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   			 ELSE I.DIVISION_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+						(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END) = P.data
+					   )
+			AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   			 ELSE TEAM.DEPT_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+						(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+					   )
+			AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   			 ELSE isnull(C.END_CUSTOMER,'')			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+						(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+					   )				   
+		 
+			AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   			 ELSE S.SCM_SITE_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+						(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+					   )
+		 AND (
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+			 OR
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+			 )
+		 AND (
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+			 --OR
+			 --Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+			 OR
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.NICK_NAME LIKE P.token +'%')
+			 )	 --20181205 nick name 조회요청으로 수정
+
+	UNION 
+
+	  SELECT DISTINCT I.DIVISION_ID
+		 , I.DIVISION_ID  AS DIVISION_NAME
+		 , D.PROJECT_CODE
+		 , A.PROJECT_NAME
+		 , S.SCM_SITE_ID
+		 , S.SITE_DESCRIPTION
+		 , T.ITEM_ID	 
+		 , T.ITEM_NAME
+		 , T.ITEM_TYPE
+		 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+		 , T.NICK_NAME
+		 , T.ITEM_CLASS_NAME
+		 , TEAM.DEPT_ID
+		 , TEAM.DEPT_NAME_KO
+		 , C.END_CUSTOMER
+		 , A.CURRENCY
+
+	  FROM   (SELECT * FROM [dbo].[SCM_MST_DIVISION] WITH(NOLOCK) WHERE VALID_YN='Y') AS  I 
+		   LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, PROJECT_CODE FROM [dbo].[SCM_MST_SITE_ITEM] WITH(NOLOCK) WHERE VALID_YN='Y') AS D 
+		ON I.DIVISION_ID  = D.DIVISION_ID
+		   LEFT OUTER JOIN (SELECT * FROM [dbo].[SCM_MST_PROJECT] WITH(NOLOCK)) AS A 
+		ON D.PROJECT_CODE = A.PROJECT_CODE
+		   LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE] WITH(NOLOCK) WHERE VALID_YN='Y') S 
+		ON D.SCM_SITE_ID  = S.SCM_SITE_ID
+
+		LEFT O"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx_20240829","2142838896","4","UTER JOIN [dbo].DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+
+		ON I.DIVISION_ID  = T.DIVISION_ID AND T.ITEM_TYPE not in ( 'H', 'R')  AND T.ITEM_ID LIKE 'E%' -- 자재 반재품 는 제외
+		LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, END_CUSTOMER FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+		ON I.DIVISION_ID = C.DIVISION_ID AND D.SCM_SITE_ID = C.SCM_SITE_ID
+		LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y')  AS TEAM          
+		ON C.DEPT_ID = TEAM.DEPT_ID
+		LEFT JOIN (
+		 SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+		 FROM [dbo].SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+		 WHERE
+		 VALID_YN ='Y' 
+		 AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+		)  AS ITEM_TYPE_CODE          
+		ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+	   
+	WHERE   I.DIVISION_ID = '82'   -- DIVISION 이 자동차인 경우에는 SITE-ITEM에 연결된것 만 조회 
+	  AND   SITE_TYPE = 'SALES'
+	--  AND   D.PROJECT_CODE = 'DC-17-001'
+
+
+	  AND   CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   			 ELSE I.DIVISION_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+						(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END) = P.data
+					   )
+			AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   			 ELSE TEAM.DEPT_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+						(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+					   )
+			AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   			 ELSE isnull(C.END_CUSTOMER,'')			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+						(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+					   )				   
+		 
+			AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   			 ELSE S.SCM_SITE_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+						(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+					   )
+		 AND (
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+			 OR
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+			 )
+		 AND (
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_ID LIKE P.token +'%')
+			 --OR
+			 --Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+			 OR
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.NICK_NAME LIKE P.token +'%')
+			 )	 --20181205 nick name 조회요청으로 수정
+		ORDER BY I.DIVISION_ID
+		, D.PROJECT_CODE
+		, A.PROJECT_NAME
+		, S.SCM_SITE_ID
+		, S.SITE_DESCRIPTION
+		, D.ITEM_ID
+		, T.ITEM_NAME
+	END
+	ELSE	--40
+	BEGIN
+		--DIVISION_ID, DIVISION_NAME, ITEM_ID, ITEM_NAME, ITEM_TYPE, ITEM_TYPE_NAME, NICK_NAME, ITEM_CLASS_NAME
+ 	  SELECT  T.DIVISION_ID
+		 , T.DIVISION_ID  AS DIVISION_NAME
+		 , '' AS PROJECT_CODE
+		 , '' AS PROJECT_NAME
+		 , '' AS SCM_SITE_ID
+		 , '' AS SITE_DESCRIPTION
+		 , T.ITEM_ID	 
+		 , T.ITEM_NAME
+		 , T.ITEM_TYPE
+		 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+		 , T.NICK_NAME
+		 , T.ITEM_CLASS_NAME	--model type
+		 , '' AS DEPT_ID
+		 , '' AS DEPT_NAME_KO
+		 , '' AS END_CUSTOMER
+		 , '' AS CURRENCY
+	  FROM DM_MST_ITEM_SINGLE_V	T
+		LEFT JOIN (
+		 SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+		 FROM [dbo].SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+		 WHERE
+		 VALID_YN ='Y' 
+		 AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+		)  AS ITEM_TYPE_CODE          
+		ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+	WHERE  T.division_id = '40'
+		 AND (
+			 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_ID LIKE P.token +'%')
+			 --OR
+			 --Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+			 OR
+			 Exists (Select * from"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx_20240829","2142838896","5"," dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.NICK_NAME LIKE P.token +'%')
+			 )	 --20181205 nick name 조회요청으로 수정
+		AND T.ITEM_TYPE  IN (
+						 Select * from dbo.UF_FX_String_SplitForIN (@p_item_type,',') as P Where (CASE WHEN @p_item_type = '' THEN '' ELSE T.ITEM_TYPE END) = P.data
+						)
+	  ORDER BY T.ITEM_ID	   
+		 
+	  /*	      
+	  SELECT DISTINCT top 1000 I.DIVISION_ID
+		 , I.DIVISION_ID  AS DIVISION_NAME
+		 , '' AS PROJECT_CODE
+		 , '' AS PROJECT_NAME
+		 , '' AS SCM_SITE_ID
+		 , '' AS SITE_DESCRIPTION
+		 , T.ITEM_ID	 
+		 , T.ITEM_NAME
+		 , T.ITEM_TYPE
+		 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+		 , T.NICK_NAME
+		 , T.ITEM_CLASS_NAME	--model type
+		 , '' AS DEPT_ID
+		 , '' AS DEPT_NAME_KO
+		 , '' AS END_CUSTOMER
+		 , '' AS CURRENCY
+
+	  FROM   (SELECT * FROM [dbo].[SCM_MST_DIVISION] WITH(NOLOCK) WHERE VALID_YN='Y') AS  I 
+		   LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, PROJECT_CODE FROM [dbo].[SCM_MST_SITE_ITEM] WITH(NOLOCK) WHERE VALID_YN='Y') AS D 
+		ON I.DIVISION_ID  = D.DIVISION_ID
+		   LEFT OUTER JOIN (SELECT * FROM [dbo].[SCM_MST_PROJECT] WITH(NOLOCK)) AS A 
+		ON D.PROJECT_CODE = A.PROJECT_CODE
+		   LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE] WITH(NOLOCK) WHERE VALID_YN='Y') S 
+		ON D.SCM_SITE_ID  = S.SCM_SITE_ID
+
+		LEFT OUTER JOIN [dbo].DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+
+		ON I.DIVISION_ID  = T.DIVISION_ID ------AND T.ITEM_TYPE not in ( 'H', 'R')  AND T.ITEM_ID LIKE 'E%' -- 자재 반재품 는 제외
+		LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, END_CUSTOMER FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+		ON I.DIVISION_ID = C.DIVISION_ID AND D.SCM_SITE_ID = C.SCM_SITE_ID
+		LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y')  AS TEAM          
+		ON C.DEPT_ID = TEAM.DEPT_ID
+		LEFT JOIN (
+		 SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+		 FROM [dbo].SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+		 WHERE
+		 VALID_YN ='Y' 
+		 AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+		)  AS ITEM_TYPE_CODE          
+		ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+
+	WHERE I.DIVISION_ID = '40'  -- DIVISION 이 자동차인 경우에는 SITE-ITEM에 연결된것 만 조회 
+	 AND   SITE_TYPE = 'SALES'
+	  AND   CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   			 ELSE I.DIVISION_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+						(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END) = P.data
+					   )
+			AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   			 ELSE TEAM.DEPT_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+						(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+					   )
+			--AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+			--   		 ELSE isnull(C.END_CUSTOMER,'')			
+			--	END IN (
+			--			Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+			--			(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+		 --              )				   
+			  AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   			 ELSE isnull(
+						CASE WHEN @p_division_id <> '40' THEN C.END_CUSTOMER ELSE D.PROJECT_CODE END
+					 ,'')			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+						(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(
+							CASE WHEN @p_division_id <> '40' THEN C.END_CUSTOMER ELSE D.PROJECT_CODE END
+						,'') END) = P.data
+			)
+			AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   			 ELSE S.SCM_SITE_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+						(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+					   )
+	--***
+		 ----AND (
+			---- Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+		 ----    OR
+			---- Exists (Select * from dbo.UF_FX_Strin"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_SMALLDIVISION_POPUPEx_20240829","2142838896","6","g_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+			---- )
+	--***
+		 ------AND (
+			------ Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_ID LIKE P.token +'%')
+		 ------    OR
+			------ Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+			------ )	 
+
+				AND CASE WHEN @p_item_id = '' THEN ''
+		   			 ELSE T.ITEM_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_item_id,',') as P Where 
+						(CASE WHEN @p_item_id = '' THEN '' ELSE T.ITEM_ID END) = P.data
+					   )
+				AND CASE WHEN @p_item_type = '' THEN ''
+		   			 ELSE T.ITEM_TYPE			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_item_type,',') as P Where 
+						(CASE WHEN @p_item_type = '' THEN '' ELSE T.ITEM_TYPE END) = P.data
+					   )
+
+		----AND (T.ITEM_TYPE  = 'H' OR T.ITEM_TYPE  = 'P' OR T.ITEM_TYPE  = 'R' OR T.ITEM_TYPE  = 'Q')	--*****
+	  ORDER BY I.DIVISION_ID
+			 --, D.PROJECT_CODE
+			 --, A.PROJECT_NAME
+			 --, S.SCM_SITE_ID
+			 --, S.SITE_DESCRIPTION
+			 , T.ITEM_ID
+			 , T.ITEM_NAME
+	 --DIVISION_ID, DIVISION_NAME, ITEM_ID, ITEM_NAME, ITEM_TYPE, ITEM_TYPE_NAME, NICK_NAME, ITEM_CLASS_NAME
+	 */
+	END
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx_250219BK","1128651364","1","---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*********************************************************************************************
+* Program ID  : DMF0002_GET_ITEM_BY_DIVISION_POPUPEx                                          
+* Description : Procedure 작성 가이드                                                          
+* Usage       : Procedure 작성 시 참조하세요!                                                  
+* Parameter   :                                                                               
+*		DMF0002_GET_ITEM_BY_DIVISION_POPUPEx_kcw '81', 'ALL', 'ALL', '', 'ALL', ''  , ''                                                                                          
+*---------------------------------------------------------------------------------------------
+* Date        In Charge    Description                                                        
+*---------------------------------------------------------------------------------------------
+* 2017/10/24  SongDH       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 
+* 2018/06/11    JYE			소형 관련 수정                                                      
+* 20181205 nick name 조회요청으로 변경                                                            
+* 20181218		JYE       82 currency 수정                                                     
+* 20190123		JYE       42, 44 추가                                                    
+* 20220428		rosia27		과제PJ20216891R
+* 20231130      HMIN     [E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선 
+* 2024.04.04    KCW3408  DM 프로시저 속도개선 
+/* 2024/08/14	KJJ			[PJ2024-50461] Team Mapping*/
+
+   exec DMF0002_GET_ITEM_BY_DIVISION_POPUPEx @p_division_id=N'81',@p_dept_id=N'ALL',@p_end_customer=N'ALL',@p_project_code=N'',@p_scm_site_id=N'ALL',@p_item_id=N'APBMW12V0-A1-D13',@p_mdmActive_Sw=N'Y'
+****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0002_GET_ITEM_BY_DIVISION_POPUPEx_250219BK]  
+   @p_division_id   NVARCHAR(MAX)
+ , @p_dept_id       NVARCHAR(MAX)	--Department
+ , @p_end_customer  NVARCHAR(MAX)	--Endcustomer
+ , @p_project_code  NVARCHAR(MAX)
+ , @p_scm_site_id   NVARCHAR(MAX)
+ , @p_item_id       NVARCHAR(MAX)
+ , @p_mdmActive_Sw  NVARCHAR(MAX)  --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선 (개발서버 및 운영배포시 NULL SETTING 제거) 
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+
+  /* Temp Table 존재 여부 체크 (BEGIN)  */
+  IF OBJECT_ID (N'tempdb..#TMP_81_UC_EXCEPTION', N'U') IS NOT NULL   
+  DROP TABLE #TMP_81_UC_EXCEPTION  
+  IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_V', N'U') IS NOT NULL   
+  DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_V  
+
+  print 'DMF0002-01-' + convert(varchar(30), getdate(), 121)  
+
+  /* 2024.04.04    KCW3408  DM 프로시저 속도개선 */
+  SELECT DISTINCT A.DIVISION_ID, A.ITEM_ID, ITEM_CLASS  
+   , ITEM_NAME, ITEM_CLASS_NAME, NICK_NAME, ITEM_TYPE, MIN_CAPACITY  
+   , FORECAST_INFO_BIZ_TYPE, FORECAST_INFO_CELL_PACK_COUNT, FORECAST_INFO_PRODUCT_GROUP  
+   , FORECAST_INFO_CELL_MODEL, FORECAST_INFO_SPEC, FORECAST_INFOR_VERSION  
+   , ENERGE, CELL_QUANTITY  
+   , MDM_PROJECT_NAME, CELL_TYPE,ACTIVE_FLAG 
+  INTO #TEMP_DM_MST_ITEM_SINGLE_V   
+  FROM 
+  (
+			SELECT	T1.DIVISION_ID,
+				T1.ITEM_ID, 
+				MAX(T1.ITEM_NAME)					AS ITEM_NAME,				--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+				MAX(T1.ITEM_CLASS)					AS ITEM_CLASS,				--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+				MAX(T1.ITEM_CLASS_NAME)					AS ITEM_CLASS_NAME,		--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+				MAX(T1.NICK_NAME)						AS NICK_NAME,			--닉네임이 NULL인 경우가 있으므로 하나로 통일
+				case  min( case when T1.item_type = 'P' then 1					--타입이 사이트와 사업부, 법인에 따라 다양하게 존재 하므로 하나로 통일
+								when T1.item_type = 'H' then 2					--또한 가장 완성된 상태의 자재 타입을 판매한다고 가정, 해당 자재타입을 사용함
+								when T1.item_type = 'Q' then 3
+								else 4"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx_250219BK","1128651364","2"," end )  
+												when 1 then 'P' 
+												when 2 then 'H'
+												when 3 then 'Q'
+												else 'R' end	AS ITEM_TYPE,
+				MAX(T1.MATERIAL_CLASS_NAME				)		AS MATERIAL_CLASS_NAME,
+				MAX(T1.ITEM_UOM							)		AS ITEM_UOM,
+				MAX(T1.SPEC								)		AS SPEC,
+				MAX(T1.MDM_PROJECT_NAME					)		AS MDM_PROJECT_NAME,
+				MAX(T1.MIN_CAPACITY						)		AS MIN_CAPACITY,
+				MAX(T2.FORECAST_INFO_BIZ_TYPE			)		AS FORECAST_INFO_BIZ_TYPE,
+				MAX(T2.FORECAST_INFO_PRODUCT_GROUP		)		AS FORECAST_INFO_PRODUCT_GROUP,
+				MAX(T2.FORECAST_INFO_CELL_MODEL			)		AS FORECAST_INFO_CELL_MODEL,
+				MAX(T2.FORECAST_INFO_CELL_PACK_COUNT	)		AS FORECAST_INFO_CELL_PACK_COUNT,
+				MAX(T2.FORECAST_INFO_SPEC				)		AS FORECAST_INFO_SPEC,
+				MAX(T2.FORECAST_INFOR_VERSION			)		AS FORECAST_INFOR_VERSION,
+				MAX(T1.ACTIVE_FLAG						)		AS ACTIVE_FLAG,  -- 20180720 ADD 'Y'대상중 1건 추출
+				MAX(T2.CELL_TYPE						)		AS CELL_TYPE,  -- 20180911 ADD cell_type
+				MAX(T1.ENERGE							)  	    AS ENERGE,			-- 20200116 khsong ADD ENERGE
+				MAX(T1.CELL_QUANTITY					)	    AS CELL_QUANTITY,	-- 20200116 khsong ADD CELL_QUANTITY
+				MAX(T1.SCP_EXTRA_SPEC)						  AS SCP_EXTRA_SPEC		-- [20210428 SJHAN / CSR ID:C20210323-000420]
+			FROM SCM_MST_ITEM_SN T1 WITH(NOLOCK)					
+			INNER JOIN ( SELECT DIVISION_ID, LEFT(ITEM_ID, 12) AS ITEM_ID
+							, MAX(FORECAST_INFO_BIZ_TYPE) AS FORECAST_INFO_BIZ_TYPE
+							, MAX(FORECAST_INFO_PRODUCT_GROUP) AS FORECAST_INFO_PRODUCT_GROUP
+							, MAX(FORECAST_INFO_CELL_MODEL) AS FORECAST_INFO_CELL_MODEL
+							, MAX(FORECAST_INFO_CELL_PACK_COUNT) AS FORECAST_INFO_CELL_PACK_COUNT
+							, MAX(FORECAST_INFO_SPEC) AS FORECAST_INFO_SPEC
+							, MAX(FORECAST_INFOR_VERSION) AS FORECAST_INFOR_VERSION
+							, MAX(CELL_TYPE) AS CELL_TYPE
+						FROM  SCM_MST_ITEM_SN T2 WITH(NOLOCK) 
+					   WHERE  DIVISION_ID =  @p_division_id
+						GROUP BY DIVISION_ID, LEFT(ITEM_ID, 12)
+					) T2 ON T1.DIVISION_ID = T2.DIVISION_ID
+				AND SUBSTRING(T1.ITEM_ID,1,12) = T2.ITEM_ID
+			where 1=1
+			AND		T1.DIVISION_ID = @p_division_id
+			--AND		T1.ACTIVE_FLAG = 'Y'  --이걸 막아야 건수가 동일해짐 수정전/후 count
+			--WHERE ACTIVE_FLAG = 'Y'  -- 20180720 ADD 'Y'대상만
+			--LGCE_FPDEV_TR.DBO.SCM_ITEM_M T1
+			group by T1.DIVISION_ID, T1.ITEM_ID
+  ) A 
+  WHERE A.DIVISION_ID = @p_division_id
+  
+CREATE CLUSTERED INDEX [IDX1_TEMP_DM_MST_ITEM_SINGLE_V] ON [#TEMP_DM_MST_ITEM_SINGLE_V]
+(division_id   ASC
+,item_id       ASC
+)WITH (PAD_INDEX = ON, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+;
+
+  --START [E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+  CREATE TABLE #TMP_81_UC_EXCEPTION (
+	  DIVISION_ID		NVARCHAR(30)		
+	, ITEM_ID			NVARCHAR(50)			
+	, ACTIVE_FLAG	    NVARCHAR(2)
+	)
+
+	DECLARE @V_EXCEPT_SW AS NVARCHAR(2);
+	SET @V_EXCEPT_SW = 'N';  --Default : N
+
+	--81_UC의 MDM중지여부 데이터가 없는 경우 → 81의 MDM중지여부 데이터와 동일하게 반영하기를 요청 (오윤종PI님)		
+	IF ( @p_division_id = '81_UC' )
+		BEGIN
+			SET @V_EXCEPT_SW = 'Y';
+		END 
+
+
+	INSERT INTO #TMP_81_UC_EXCEPTION (DIVISION_ID, ITEM_ID, ACTIVE_FLAG)				
+	SELECT @P_DIVISION_ID AS DIVISION_ID, V.ITEM_ID, V.ACTIVE_FLAG
+	FROM 
+	(
+		SELECT @p_division_id AS DIVISION_ID,  V.ITEM_ID,  V.ACTIVE_FLAG
+		FROM #TEMP_DM_MST_ITEM_SINGLE_V V WITH (NOLOCK)
+		WHERE V.DIVISION_ID = '81'  --고정값사용 (81_UC의 경우 81번 값으로 대체 처리 , ACTIVE_FLAG 가 NULL인경우에 한함.)
+		GROUP BY V.ITEM_ID, V.ACTIVE_FLAG
+	) V
+	INNER JOIN
+	(
+		SELECT S.DIVISION_ID, S.ITEM_ID
+		FROM SCM_MST_SITE_ITEM S WITH (NOLOCK)
+		WHERE S.DIVISION_ID = @p_division_id
+		AND ISNULL(S.ITEM_ID, '') <> ''					
+		GROUP BY S.DIVISION_ID, S.ITEM_ID
+	)  S ON S.DIVISION_ID = V.DIVISION_ID AND S.ITEM_ID = V.ITEM_ID
+	WHERE 1=1
+	--AND ISNULL(S.ITEM_ID ,'') <> ''		
+	GROUP BY V.ITEM_ID, V.ACTIVE_FLAG
+	HAVING CASE WHEN ISNULL(@V_EXCEPT_SW,'N')  = @V_EXCEPT_SW THEN @V_EXCEPT_SW ELSE 'X' END = CASE WHEN ISNULL(@V_EXCEPT_SW,'N')  = 'Y' THEN @V_EXCEPT_SW ELSE 'XX' END
+	--END======="
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx_250219BK","1128651364","3","===================================================================================
+
+  print 'DMF0002-02-' + convert(varchar(30), getdate(), 121)  
+
+--SELECT @p_mdmActive_Sw  RETURN;
+
+  /* 2024.04.04    KCW3408  DM 프로시저 속도개선 */
+  SELECT I.DIVISION_ID
+     , I.DIVISION_ID  AS DIVISION_NAME
+     , D.PROJECT_CODE
+     , A.PROJECT_NAME
+     , S.SCM_SITE_ID
+     , S.SITE_DESCRIPTION
+     , D.ITEM_ID	 
+	 , T.ITEM_NAME
+	 , T.ITEM_TYPE
+	 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+	 , T.NICK_NAME
+	 , T.ITEM_CLASS_NAME
+	 , TEAM.DEPT_ID
+	 , TEAM.DEPT_NAME_KO
+	 , S.END_CUSTOMER
+	 , D.CURRENCY
+	 , D.PROJECT_CODE AS END_CUSTOMER40
+  FROM [dbo].[SCM_MST_DIVISION] I WITH(NOLOCK) 
+       LEFT JOIN  [dbo].[SCM_MST_SITE_ITEM] D WITH(NOLOCK)  
+	   ON I.DIVISION_ID  = D.DIVISION_ID
+	  AND D.VALID_YN='Y'
+       LEFT JOIN [dbo].[SCM_MST_PROJECT] A WITH(NOLOCK)
+	   ON I.DIVISION_ID  = D.DIVISION_ID	   
+	  AND D.PROJECT_CODE = A.PROJECT_CODE
+       LEFT JOIN [dbo].[SCM_MST_SITE] S WITH(NOLOCK) 
+	   ON D.SCM_SITE_ID  = S.SCM_SITE_ID   
+	  AND S.VALID_YN='Y'
+	   --LEFT JOIN [dbo].[SCM_MST_ITEM_SN]     T WITH(NOLOCK)
+	   LEFT JOIN #TEMP_DM_MST_ITEM_SINGLE_V T WITH(NOLOCK)
+	   ON I.DIVISION_ID  = T.DIVISION_ID AND    D.ITEM_ID      = T.ITEM_ID
+	   
+       /* 2024.04.04    KCW3408  DM 프로시저 속도개선 */
+	   /*
+	   LEFT JOIN  SCM_MST_SITE C WITH(NOLOCK)  
+	   ON I.DIVISION_ID = C.DIVISION_ID AND D.SCM_SITE_ID = C.SCM_SITE_ID AND C.VALID_YN = 'Y'
+	   */
+
+
+	   --[PJ2024-50461]
+	   /*
+	   LEFT JOIN SCM_MST_SSO_DEPT_INFO TEAM WITH(NOLOCK) 			       
+	   ON S.DEPT_ID = TEAM.DEPT_ID
+	  AND TEAM.VALID_YN='Y'*/
+		LEFT JOIN (
+			SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID 
+			FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+			INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+			ON B.DEPT_ID = C.DEPT_ID
+		) AS TEAM
+		ON      
+		TEAM.USER_ID   IN (SELECT top 1 token FROM [dbo].[String_Split](D.owner, ','))
+		--====================================================================================
+
+
+	   LEFT JOIN (
+					 SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+					 FROM [dbo].SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+					WHERE
+					VALID_YN ='Y' 
+					AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+	   )  AS ITEM_TYPE_CODE			       
+	   ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+	   LEFT OUTER JOIN #TMP_81_UC_EXCEPTION  EX ON EX.DIVISION_ID = D.DIVISION_ID AND EX.ITEM_ID = D.ITEM_ID  --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+WHERE   I.DIVISION_ID = @p_division_id   -- DIVISION 이 자동차인 경우에는 SITE-ITEM에 연결된것 만 조회 
+  AND   I.DIVISION_ID LIKE '81%'    
+  AND   I.VALID_YN='Y'   
+  AND   S.SITE_TYPE = 'SALES'
+  /*
+  AND   CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   		 ELSE I.DIVISION_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+					(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END) = P.data
+	               )
+  */
+		AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   		 ELSE TEAM.DEPT_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+					(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+	               )
+		AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   		 ELSE isnull(S.END_CUSTOMER,'')			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+					(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(S.END_CUSTOMER,'') END) = P.data
+	               )				   
+		 
+		AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   		 ELSE S.SCM_SITE_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+					(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+	               )
+	 AND (
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+	     OR
+		 E"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx_250219BK","1128651364","4","xists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+		 )
+	 AND (
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+	  --   OR
+		 --Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+		  OR
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.nick_name LIKE P.token +'%')
+		 )	 -- 20181205 nick name 조회요청으로 변경
+	
+	--[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선 
+	AND CASE WHEN @p_division_id = '81_UC' THEN 
+			CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE ISNULL(T.ACTIVE_FLAG,EX.ACTIVE_FLAG)  END
+		ELSE 
+			CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END		 
+		END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END
+	         
+
+
+
+UNION 
+
+  SELECT DISTINCT I.DIVISION_ID
+     , I.DIVISION_ID  AS DIVISION_NAME
+     , D.PROJECT_CODE
+     , A.PROJECT_NAME
+     , S.SCM_SITE_ID
+     , S.SITE_DESCRIPTION
+     , T.ITEM_ID	 
+	 , T.ITEM_NAME
+	 , T.ITEM_TYPE
+	 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+	 , T.NICK_NAME
+	 , T.ITEM_CLASS_NAME
+	 , TEAM.DEPT_ID
+	 , TEAM.DEPT_NAME_KO
+	 , S.END_CUSTOMER
+	 , D.CURRENCY
+	 , D.PROJECT_CODE AS END_CUSTOMER40
+  FROM  [dbo].[SCM_MST_DIVISION] I WITH(NOLOCK) 
+       LEFT JOIN  [dbo].[SCM_MST_SITE_ITEM] D WITH(NOLOCK)  
+	   ON I.DIVISION_ID  = D.DIVISION_ID
+	  AND D.VALID_YN='Y' 
+       LEFT JOIN [dbo].[SCM_MST_PROJECT] A WITH(NOLOCK)
+	   ON I.DIVISION_ID  = D.DIVISION_ID	   
+	  AND D.PROJECT_CODE = A.PROJECT_CODE
+       LEFT JOIN [dbo].[SCM_MST_SITE] S WITH(NOLOCK) 
+	   ON I.DIVISION_ID  = D.DIVISION_ID	   
+	  AND D.SCM_SITE_ID  = S.SCM_SITE_ID   
+	  AND S.VALID_YN='Y' 
+    LEFT OUTER JOIN #TEMP_DM_MST_ITEM_SINGLE_V  T WITH(NOLOCK)
+    ON I.DIVISION_ID  = T.DIVISION_ID AND D.ITEM_ID = T.ITEM_ID AND T.ITEM_TYPE not in ( 'H', 'R')  AND T.ITEM_ID LIKE 'E%' -- 자재 반재품 는 제외
+	
+    /* 2024.04.04    KCW3408  DM 프로시저 속도개선 */
+	/*
+    LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, END_CUSTOMER FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+    ON I.DIVISION_ID = C.DIVISION_ID AND D.SCM_SITE_ID = C.SCM_SITE_ID
+	*/
+
+	--[PJ2024-50461]
+	/*
+	LEFT JOIN SCM_MST_SSO_DEPT_INFO TEAM WITH(NOLOCK) 			       
+	ON S.DEPT_ID = TEAM.DEPT_ID
+   AND TEAM.VALID_YN='Y'  */   
+		LEFT JOIN (
+			SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID 
+			FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+			INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+			ON B.DEPT_ID = C.DEPT_ID
+		) AS TEAM
+		ON      
+		TEAM.USER_ID   IN (SELECT top 1 token FROM [dbo].[String_Split](D.owner, ','))
+		--====================================================================================
+
+    LEFT JOIN (
+     SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+     FROM [dbo].SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+     WHERE
+     VALID_YN ='Y' 
+     AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+    )  AS ITEM_TYPE_CODE          
+    ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+	   
+WHERE   I.DIVISION_ID = @p_division_id   
+  AND   I.DIVISION_ID = '82'    
+  AND   I.VALID_YN='Y'   
+  AND   SITE_TYPE = 'SALES'
+--  AND   D.PROJECT_CODE = 'DC-17-001'
+
+  /*
+  AND   CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   		 ELSE I.DIVISION_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+					(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END) = P.data
+	               )
+  */
+		AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   		 ELSE TEAM.DEPT_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+					(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+	               )
+		AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   		 ELSE isnull(S.END_CUSTOMER,'')			
+			END IN ("
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx_250219BK","1128651364","5","
+					Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+					(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(S.END_CUSTOMER,'') END) = P.data
+	               )				   
+		 
+		AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   		 ELSE S.SCM_SITE_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+					(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+	               )
+	 AND (
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+	     OR
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+		 )
+	 AND (
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_ID LIKE P.token +'%')
+	  --   OR
+		 --Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+		  OR
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.nick_name LIKE P.token +'%')
+		 )	 -- 20181205 nick name 조회요청으로 변경
+	 --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+	 AND CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END --20231127 
+     
+	 UNION -- 20180611 소형 추가, 42, 44
+
+SELECT DISTINCT I.DIVISION_ID
+     , I.DIVISION_ID  AS DIVISION_NAME
+     , D.PROJECT_CODE
+     , '' AS PROJECT_NAME
+     , S.SCM_SITE_ID
+     , S.SITE_DESCRIPTION
+     , D.ITEM_ID	 
+	 , T.ITEM_NAME
+	 , T.ITEM_TYPE
+	 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+	 , T.NICK_NAME
+	 , T.ITEM_CLASS_NAME
+	 , TEAM.DEPT_ID
+	 , TEAM.DEPT_NAME_KO
+	 , S.END_CUSTOMER
+	 , D.CURRENCY
+	 , D.PROJECT_CODE AS END_CUSTOMER40
+  FROM  [dbo].[SCM_MST_DIVISION] I WITH(NOLOCK) 
+       LEFT JOIN [dbo].[SCM_MST_SITE_ITEM] D WITH(NOLOCK) 
+	   ON I.DIVISION_ID  = D.DIVISION_ID 
+	  AND D.VALID_YN='Y' 
+	   LEFT JOIN SCM_MST_SSO_USER_INFO USER_INFO WITH(NOLOCK) 			       
+	   ON D.OWNER = USER_INFO.USER_ID 
+	   LEFT JOIN SCM_MST_SSO_DEPT_INFO TEAM WITH(NOLOCK) 			       
+	   ON USER_INFO.DEPT_ID = TEAM.DEPT_ID 
+	  AND TEAM.VALID_YN='Y' 
+       LEFT JOIN [dbo].[SCM_MST_SITE] S WITH(NOLOCK) 
+	   ON I.DIVISION_ID  = D.DIVISION_ID	   
+	  AND D.SCM_SITE_ID  = S.SCM_SITE_ID   
+	  AND S.VALID_YN='Y' 
+	   LEFT JOIN #TEMP_DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+	   ON I.DIVISION_ID  = T.DIVISION_ID AND    D.ITEM_ID      = T.ITEM_ID
+	   /* 
+	   LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, END_CUSTOMER FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+	   ON I.DIVISION_ID = C.DIVISION_ID AND D.SCM_SITE_ID = C.SCM_SITE_ID
+	   */
+	   LEFT JOIN (
+					 SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+					 FROM [dbo].SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+					WHERE
+					VALID_YN ='Y' 
+					AND LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+	   )  AS ITEM_TYPE_CODE			       
+	   ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+	   LEFT OUTER JOIN #TMP_81_UC_EXCEPTION  EX ON EX.DIVISION_ID = D.DIVISION_ID AND EX.ITEM_ID = D.ITEM_ID --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+WHERE   I.DIVISION_ID = @p_division_id		-- 20190123  
+  AND   I.DIVISION_ID LIKE '4%'    
+  AND   I.VALID_YN ='Y'   
+  AND   SITE_TYPE = 'SALES'
+  /*
+  AND   CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   		 ELSE I.DIVISION_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+					(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END) = P.data
+	               )
+ */
+		AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   		 ELSE TEAM.DEPT_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+					(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+	            )
+		/*20180611. 소형 수정
+		AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   		 ELSE isnull(C.END_CUSTO"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx_250219BK","1128651364","6","MER,'')			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+					(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+	               )				   
+		 */
+		 AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   		 ELSE isnull(
+					CASE WHEN @p_division_id <> '40' THEN S.END_CUSTOMER ELSE D.PROJECT_CODE END
+				 ,'')			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+					(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(
+						CASE WHEN @p_division_id <> '40' THEN S.END_CUSTOMER ELSE D.PROJECT_CODE END
+					,'') END) = P.data
+	               )
+
+		AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   		 ELSE S.SCM_SITE_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+					(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+	               )
+	 --AND (
+		-- Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+	 --    OR
+		-- Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+		-- )
+	 AND (
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+	  --   OR
+		 --Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+		  OR
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.nick_name LIKE P.token +'%')
+		 )  -- 20181205 nick name 조회요청으로 변경
+     
+	 --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+	 --AND CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END --20231127 
+	 AND CASE WHEN @p_division_id = '81_UC' THEN 
+			CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE ISNULL(T.ACTIVE_FLAG,EX.ACTIVE_FLAG)  END
+		ELSE 
+			CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END		 
+		END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END
+  ORDER BY I.DIVISION_ID
+         , D.PROJECT_CODE
+         --, A.PROJECT_NAME
+         , S.SCM_SITE_ID
+         , S.SITE_DESCRIPTION
+         , D.ITEM_ID
+	     , T.ITEM_NAME
+
+END
+
+
+  print 'DMF0002-03-' + convert(varchar(30), getdate(), 121)  
+
+  /*  
+  SELECT I.DIVISION_ID
+     , I.DIVISION_NAME
+     , D.PROJECT_CODE
+     , A.PROJECT_NAME
+     , S.SCM_SITE_ID
+     , S.SITE_DESCRIPTION
+     , D.ITEM_ID	 
+	 , T.ITEM_NAME
+	 , T.ITEM_TYPE
+	 , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+	 , T.NICK_NAME
+	 , T.ITEM_CLASS_NAME
+	 , TEAM.DEPT_ID
+	 , TEAM.DEPT_NAME_KO
+	 , C.END_CUSTOMER
+	 , D.CURRENCY
+
+  FROM   (SELECT * FROM [dbo].[SCM_MST_DIVISION] WITH(NOLOCK) WHERE VALID_YN='Y') AS  I 
+       LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE_ITEM] WITH(NOLOCK) WHERE VALID_YN='Y') AS D 
+	   ON I.DIVISION_ID  = D.DIVISION_ID
+       LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_PROJECT] WITH(NOLOCK)) AS A 
+	   ON D.PROJECT_CODE = A.PROJECT_CODE
+       LEFT JOIN (SELECT * FROM [dbo].[SCM_MST_SITE] WITH(NOLOCK) WHERE VALID_YN='Y') S 
+	   ON D.SCM_SITE_ID  = S.SCM_SITE_ID
+	   --LEFT JOIN [dbo].[SCM_MST_ITEM_SN]     T WITH(NOLOCK)
+	   LEFT JOIN [dbo].DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+	   ON I.DIVISION_ID  = T.DIVISION_ID AND    D.ITEM_ID      = T.ITEM_ID
+	   LEFT JOIN (SELECT DISTINCT DIVISION_ID, SCM_SITE_ID, DEPT_ID, 1END_CUSTOMER FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+	   ON I.DIVISION_ID = C.DIVISION_ID AND D.SCM_SITE_ID = C.SCM_SITE_ID
+	   LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y')  AS TEAM			       
+	   ON C.DEPT_ID = TEAM.DEPT_ID
+	   LEFT JOIN (
+					SELECT  LOOKUP_CODE AS CODE, [DESCRIPTION] AS NAME
+					FROM [dbo].[SCM_ADM_LOOKUP_VALUES] WITH(NOLOCK) 
+					WHERE
+					VALID_YN ='Y' 
+					AND LOOKUP_TYPE "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx_250219BK","1128651364","7","= 'ITEM_TYPE_CODE'
+	   )  AS ITEM_TYPE_CODE			       
+	   ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+	   
+
+WHERE 
+        CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   		 ELSE I.DIVISION_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+					(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END) = P.data
+	               )
+		AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   		 ELSE TEAM.DEPT_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+					(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+	               )
+		AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   		 ELSE isnull(C.END_CUSTOMER,'')			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+					(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+	               )				   
+		 
+		AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   		 ELSE S.SCM_SITE_ID			
+			END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+					(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+	               )
+		--AND CASE WHEN @p_project_code = '' THEN ''
+		--   		 ELSE A.PROJECT_CODE			
+		--	END IN (
+		--			Select * from dbo.UF_FX_String_SplitForIN (@p_project_code,',') as P Where 
+		--			(CASE WHEN @p_project_code = '' THEN '' ELSE A.PROJECT_CODE END) = P.data
+	 --              )
+		--AND CASE WHEN @p_project_code = '' THEN ''
+		--   		 ELSE A.PROJECT_NAME			
+		--	END IN (
+		--			Select * from dbo.UF_FX_String_SplitForIN (@p_project_code,',') as P Where 
+		--			(CASE WHEN @p_project_code = '' THEN '' ELSE A.PROJECT_NAME END) = P.data
+	 --              ) 
+
+		--AND CASE WHEN @p_item_id = '' THEN ''
+		--   		 ELSE D.ITEM_ID			
+		--	END IN (
+		--			Select * from dbo.UF_FX_String_SplitForIN (@p_item_id,',') as P Where 
+		--			(CASE WHEN @p_item_id = '' THEN '' ELSE D.ITEM_ID END) = P.data
+	 --              )
+		--AND CASE WHEN @p_item_id = '' THEN ''
+		--   		 ELSE T.ITEM_NAME			
+		--	END IN (
+		--			Select * from dbo.UF_FX_String_SplitForIN (@p_item_id,',') as P Where 
+		--			(CASE WHEN @p_item_id = '' THEN '' ELSE T.ITEM_NAME END) = P.data
+	 --              )
+	 AND (
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_CODE LIKE P.token +'%')
+	     OR
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+		 )
+	 AND (
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+	     OR
+		 Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_NAME LIKE P.token +'%')
+		 )	 
+	 --AND    (   A.PROJECT_CODE LIKE '%'+ @p_project_code + '%'
+		--  OR A.PROJECT_NAME LIKE '%'+ @p_project_code + '%'
+		-- )
+  
+  --   AND    (   D.ITEM_ID   LIKE '%' + @p_item_id + '%' 
+  --        OR T.ITEM_NAME LIKE '%' + @p_item_id + '%' )
+
+
+  GROUP BY 
+		I.DIVISION_ID
+     , I.DIVISION_NAME
+     , D.PROJECT_CODE
+     , A.PROJECT_NAME
+     , S.SCM_SITE_ID
+     , S.SITE_DESCRIPTION
+     , D.ITEM_ID	 
+	 , T.ITEM_NAME
+	 , T.ITEM_TYPE
+	 , ITEM_TYPE_CODE.NAME
+	 , T.NICK_NAME
+	 , T.ITEM_CLASS_NAME
+	 , TEAM.DEPT_ID
+	 , TEAM.DEPT_NAME_KO
+	 , C.END_CUSTOMER
+	 , D.CURRENCY
+
+  ORDER BY I.DIVISION_ID
+         , D.PROJECT_CODE
+         , A.PROJECT_NAME
+         , S.SCM_SITE_ID
+         , S.SITE_DESCRIPTION
+         , D.ITEM_ID
+	     , T.ITEM_NAME
+*/
+
+
+
+"
+"2026-03-12 00:00:01.423","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","1","
+/*=====================================================================================================================================================
+ * Program ID  : DMF0002_GET_ITEM_BY_DIVISION_POPUPEx                                          
+ * Description : Procedure 작성 가이드                                                          
+ * Usage       : Procedure 작성 시 참조하세요!                                                  
+ * Parameter   : DMF0002_GET_ITEM_BY_DIVISION_POPUPEx_kcw '81', 'ALL', 'ALL', '', 'ALL', ''  , ''          
+ *=====================================================================================================================================================
+ * Date        In Charge    Description                                                        
+ *=====================================================================================================================================================
+ * 2017.10.24  SongDH       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 
+ * 2018.06.11  JYE		   소형 관련 수정                                                      
+ * 2018.12.05			   nick name 조회요청으로 변경                                                            
+ * 2018.12.18  JYE          82 currency 수정                                                     
+ * 2019.01.23  JYE          42, 44 추가                                                    
+ * 2022.04.28  rosia27	   과제PJ20216891R
+ * 2023.11.30  HMIN         [E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선 
+ * 2024.04.04  KCW3408      DM 프로시저 속도개선 
+ * 2024.08.14  KJJ		   [PJ2024-50461] Team Mapping
+ * 2024.11.18  JSSBAE	   [E20241118-000143]_ESS 사업부 Sales Price 입력 시 제외조건 일시조치 요청
+ * 2025.03.12    Philsu Park 속도개선.(불필요 컬럼 제외, WITH 절 처리.)
+   exec DMF0002_GET_ITEM_BY_DIVISION_POPUPEx @p_division_id=N'81',@p_dept_id=N'ALL',@p_end_customer=N'ALL',@p_project_code=N'',@p_scm_site_id=N'ALL',@p_item_id=N'APBMW12V0-A1-D13',@p_mdmActive_Sw=N'Y'
+ *===================================================================================================================================================*/
+CREATE PROCEDURE [dbo].[DMF0002_GET_ITEM_BY_DIVISION_POPUPEx]  
+   @p_division_id   NVARCHAR(MAX)
+ , @p_dept_id       NVARCHAR(MAX)	--Department
+ , @p_end_customer  NVARCHAR(MAX)	--Endcustomer
+ , @p_project_code  NVARCHAR(MAX)
+ , @p_scm_site_id   NVARCHAR(MAX)
+ , @p_item_id       NVARCHAR(MAX)
+ , @p_mdmActive_Sw  NVARCHAR(MAX)  --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선 (개발서버 및 운영배포시 NULL SETTING 제거) 
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+
+  WITH TEMP_DM_MST_ITEM_SINGLE_V AS 
+    (   SELECT    A.DIVISION_ID, A.ITEM_ID
+                , ITEM_NAME, ITEM_CLASS_NAME, NICK_NAME, ITEM_TYPE
+                , ACTIVE_FLAG 
+        FROM    (   SELECT  T1.DIVISION_ID          AS DIVISION_ID,
+                            T1.ITEM_ID              AS ITEM_ID,
+                            MAX(T1.ITEM_NAME)		AS ITEM_NAME,				--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+                            MAX(T1.ITEM_CLASS_NAME)	AS ITEM_CLASS_NAME,		--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+                            MAX(T1.NICK_NAME)		AS NICK_NAME,			--닉네임이 NULL인 경우가 있으므로 하나로 통일
+                            CASE  MIN( CASE WHEN T1.ITEM_TYPE = 'P' THEN 1					--타입이 사이트와 사업부, 법인에 따라 다양하게 존재 하므로 하나로 통일
+                                            WHEN T1.ITEM_TYPE = 'H' THEN 2					--또한 가장 완성된 상태의 자재 타입을 판매한다고 가정, 해당 자재타입을 사용함
+                                            WHEN T1.ITEM_TYPE = 'Q' THEN 3
+                                            ELSE 4 END )
+                                WHEN 1 THEN 'P'
+                                WHEN 2 THEN 'H'
+                                WHEN 3 THEN 'Q'
+                                ELSE 'R' END        AS ITEM_TYPE,
+                            MAX(T1.ACTIVE_FLAG)		AS ACTIVE_FLAG  -- 20180720 ADD 'Y'대상중 1건 추출
+                    FROM    SCM_MST_ITEM_SN T1 WITH(NOLOCK)
+                    WHERE   T1.DIVISION_ID  = @p_division_id
+     "
+"2026-03-12 00:00:01.423","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","2","               GROUP BY T1.DIVISION_ID, T1.ITEM_ID
+                ) A 
+        WHERE A.DIVISION_ID = @p_division_id
+    )
+    , TMP_81_UC_EXCEPTION AS 
+    (
+        SELECT @P_DIVISION_ID AS DIVISION_ID, V.ITEM_ID, V.ACTIVE_FLAG
+        FROM    (   SELECT  @p_division_id AS DIVISION_ID,  V.ITEM_ID,  V.ACTIVE_FLAG
+                    FROM    TEMP_DM_MST_ITEM_SINGLE_V V WITH (NOLOCK)
+                    WHERE   V.DIVISION_ID = '81'  --고정값사용 (81_UC의 경우 81번 값으로 대체 처리 , ACTIVE_FLAG 가 NULL인경우에 한함.)
+                    GROUP BY V.ITEM_ID, V.ACTIVE_FLAG
+                ) V
+        INNER JOIN (    SELECT  S.DIVISION_ID, S.ITEM_ID
+                        FROM    SCM_MST_SITE_ITEM S WITH (NOLOCK)
+                        WHERE   S.DIVISION_ID   = @p_division_id
+                        AND     S.ITEM_ID      != ''
+                        GROUP BY S.DIVISION_ID, S.ITEM_ID
+                    )  S
+            ON  S.DIVISION_ID   = V.DIVISION_ID 
+            AND S.ITEM_ID       = V.ITEM_ID
+        WHERE   1=1
+        AND     @p_division_id  = '81_UC'  --Philsu Park: Having절 대체. 굳이 Having으로 할 필요가??
+        GROUP BY V.ITEM_ID, V.ACTIVE_FLAG
+        -- HAVING CASE WHEN ISNULL(@p_division_id,'N')  = '81_UC' THEN @p_division_id ELSE 'X' END = CASE WHEN ISNULL(@p_division_id,'N')  = '81_UC' THEN @p_division_id ELSE 'XX' END
+    )
+    /* 2024.04.04    KCW3408  DM 프로시저 속도개선 */
+    SELECT    I.DIVISION_ID
+            , I.DIVISION_ID  AS DIVISION_NAME
+            , D.PROJECT_CODE
+            , A.PROJECT_NAME
+            , S.SCM_SITE_ID
+            , S.SITE_DESCRIPTION
+            , D.ITEM_ID	 
+            , T.ITEM_NAME
+            , T.ITEM_TYPE
+            , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+            , T.NICK_NAME
+            , T.ITEM_CLASS_NAME
+            , TEAM.DEPT_ID
+            , TEAM.DEPT_NAME_KO
+            , S.END_CUSTOMER
+            , D.CURRENCY
+            , D.PROJECT_CODE AS END_CUSTOMER40
+    FROM [SCM_MST_DIVISION] I WITH(NOLOCK) 
+    LEFT JOIN  [SCM_MST_SITE_ITEM] D WITH(NOLOCK)
+	    ON  I.DIVISION_ID   = D.DIVISION_ID
+	    AND D.VALID_YN      = 'Y'
+    LEFT JOIN [SCM_MST_PROJECT] A WITH(NOLOCK)
+	    ON  I.DIVISION_ID   = D.DIVISION_ID	   
+	    AND D.PROJECT_CODE  = A.PROJECT_CODE
+    LEFT JOIN [SCM_MST_SITE] S WITH(NOLOCK) 
+	    ON  D.SCM_SITE_ID   = S.SCM_SITE_ID
+	    AND S.VALID_YN      = 'Y'
+    LEFT JOIN TEMP_DM_MST_ITEM_SINGLE_V T WITH(NOLOCK)
+        ON  I.DIVISION_ID   = T.DIVISION_ID 
+        AND D.ITEM_ID       = T.ITEM_ID
+    LEFT JOIN (
+                SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID 
+                FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+                INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+                ON B.DEPT_ID = C.DEPT_ID ) AS TEAM
+        ON  TEAM.USER_ID IN (SELECT top 1 token FROM [dbo].[String_Split](D.owner, ','))
+    LEFT JOIN (
+                SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+                FROM    SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+                WHERE   VALID_YN ='Y' 
+                AND     LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+	            )  AS ITEM_TYPE_CODE
+        ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+    LEFT OUTER JOIN TMP_81_UC_EXCEPTION  EX ON EX.DIVISION_ID = D.DIVISION_ID AND EX.ITEM_ID = D.ITEM_ID  --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+    WHERE   I.DIVISION_ID       = @p_division_id   -- DIVISION 이 자동차인 경우에는 SITE-ITEM에 연결된것 만 조회 
+    AND   I.DIVISION_ID    LIKE '81%'    
+    AND   I.VALID_YN          = 'Y'   
+    AND   S.SITE_TYPE         = 'SALES'
+    AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+        ELSE TEAM.DEPT_ID
+         END IN (
+                SELECT  *
+                FROM    dbo.UF_FX_String_SplitForIN (@p_dept_id,',') AS P 
+                WHERE   (CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+                )
+    AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+   "
+"2026-03-12 00:00:01.423","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","3","     ELSE ISNULL(S.END_CUSTOMER,'')
+         END IN (
+                SELECT  * 
+                FROM    dbo.UF_FX_String_SplitForIN (@p_end_customer,',') AS P 
+                WHERE   (CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(S.END_CUSTOMER,'') END) = P.data
+                )				   
+    AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+        ELSE S.SCM_SITE_ID			
+            END IN (
+                SELECT  *
+                FROM    dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P 
+                WHERE   (CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+                )
+    AND (
+		 EXISTS (SELECT * FROM dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+	     OR
+		 EXISTS (SELECT * FROM dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+		)
+    AND (
+		 EXISTS (SELECT * FROM dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+		  OR
+		 EXISTS (SELECT * FROM dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.nick_name LIKE P.token +'%')
+		)	 -- 20181205 nick name 조회요청으로 변경
+	--[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선 
+	AND CASE WHEN @p_division_id = '81_UC' THEN 
+                CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE ISNULL(T.ACTIVE_FLAG,EX.ACTIVE_FLAG)  END
+		ELSE 
+			    CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END
+		END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END
+    UNION
+    SELECT    I.DIVISION_ID
+            , I.DIVISION_ID  AS DIVISION_NAME
+            , D.PROJECT_CODE
+            , A.PROJECT_NAME
+            , S.SCM_SITE_ID
+            , S.SITE_DESCRIPTION
+            , T.ITEM_ID	 
+            , T.ITEM_NAME
+            , T.ITEM_TYPE
+            , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+            , T.NICK_NAME
+            , T.ITEM_CLASS_NAME
+            , TEAM.DEPT_ID
+            , TEAM.DEPT_NAME_KO
+            , S.END_CUSTOMER
+            , D.CURRENCY
+            , D.PROJECT_CODE AS END_CUSTOMER40
+    FROM    [SCM_MST_DIVISION] I WITH(NOLOCK) 
+    LEFT JOIN   [SCM_MST_SITE_ITEM] D WITH(NOLOCK)  
+    ON  I.DIVISION_ID   = D.DIVISION_ID
+    AND D.VALID_YN      = 'Y'
+    LEFT JOIN [SCM_MST_PROJECT] A WITH(NOLOCK)
+    ON  I.DIVISION_ID   = D.DIVISION_ID	   
+    AND D.PROJECT_CODE  = A.PROJECT_CODE
+    LEFT JOIN [SCM_MST_SITE] S WITH(NOLOCK) 
+    ON  I.DIVISION_ID   = D.DIVISION_ID	   
+    AND D.SCM_SITE_ID   = S.SCM_SITE_ID   
+    AND S.VALID_YN      = 'Y' 
+    LEFT OUTER JOIN TEMP_DM_MST_ITEM_SINGLE_V  T WITH(NOLOCK)
+        ON  I.DIVISION_ID       = T.DIVISION_ID 
+        AND D.ITEM_ID           = T.ITEM_ID 
+        --[E20241118-000143]_ESS 사업부 Sales Price 입력 시 제외조건 일시조치 요청 START
+        --AND T.ITEM_TYPE not in ( 'H', 'R')  
+        --AND T.ITEM_ID LIKE 'E%' -- 자재 반재품 는 제외 
+        --[E20241118-000143]_ESS 사업부 Sales Price 입력 시 제외조건 일시조치 요청 END
+    LEFT JOIN (
+                SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID 
+                FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+                INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+                ON B.DEPT_ID = C.DEPT_ID
+                ) AS TEAM
+        ON  TEAM.USER_ID IN (SELECT TOP 1 TOKEN FROM [dbo].[String_Split](D.owner, ','))
+    LEFT JOIN ( SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+                FROM    SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+                WHERE   LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+                AND     VALID_YN    = 'Y' 
+                )  AS ITEM_TYPE_CODE
+        ON T.ITEM_TYPE  = ITEM_TYPE_CODE.CODE
+    WHERE   I.DIVISION_ID   = @p_division_id   
+    AND     I.DIVISION_ID   = '82'
+    AND     I.VALID_YN      = 'Y'
+    AND     S.SITE_TYPE     = 'SALES'
+    AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+        ELSE TEAM.DEPT_ID			
+         END IN (
+               "
+"2026-03-12 00:00:01.423","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","4"," Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+                (CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+                )
+    AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+        ELSE ISNULL(S.END_CUSTOMER,'')			
+         END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+                (CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(S.END_CUSTOMER,'') END) = P.data
+                )
+    AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+                ELSE S.SCM_SITE_ID			
+        END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+                (CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+                )
+    AND (
+        Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where D.PROJECT_CODE LIKE P.token +'%')
+        OR
+        Exists (Select * from dbo.UF_FX_String_Split (@p_project_code,',') as P Where A.PROJECT_NAME LIKE P.token +'%')
+        )
+    AND (
+        Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.ITEM_ID LIKE P.token +'%')
+        OR
+        Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.nick_name LIKE P.token +'%')
+        )	 -- 20181205 nick name 조회요청으로 변경
+	 --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+    AND CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END --20231127 
+    UNION -- 20180611 소형 추가, 42, 44
+    SELECT    I.DIVISION_ID
+            , I.DIVISION_ID  AS DIVISION_NAME
+            , D.PROJECT_CODE
+            , '' AS PROJECT_NAME
+            , S.SCM_SITE_ID
+            , S.SITE_DESCRIPTION
+            , D.ITEM_ID	 
+            , T.ITEM_NAME
+            , T.ITEM_TYPE
+            , ITEM_TYPE_CODE.NAME AS ITEM_TYPE_NAME
+            , T.NICK_NAME
+            , T.ITEM_CLASS_NAME
+            , TEAM.DEPT_ID
+            , TEAM.DEPT_NAME_KO
+            , S.END_CUSTOMER
+            , D.CURRENCY
+            , D.PROJECT_CODE AS END_CUSTOMER40
+    FROM  [SCM_MST_DIVISION] I WITH(NOLOCK) 
+    LEFT JOIN [SCM_MST_SITE_ITEM] D WITH(NOLOCK) 
+        ON  I.DIVISION_ID   = D.DIVISION_ID 
+        AND D.VALID_YN      = 'Y'
+    LEFT JOIN SCM_MST_SSO_USER_INFO USER_INFO WITH(NOLOCK) 			       
+        ON  D.OWNER = USER_INFO.USER_ID 
+    LEFT JOIN SCM_MST_SSO_DEPT_INFO TEAM WITH(NOLOCK) 			       
+	    ON  USER_INFO.DEPT_ID   = TEAM.DEPT_ID 
+	    AND TEAM.VALID_YN       = 'Y' 
+    LEFT JOIN [SCM_MST_SITE] S WITH(NOLOCK) 
+	    ON  I.DIVISION_ID   = D.DIVISION_ID	   
+        AND D.SCM_SITE_ID   = S.SCM_SITE_ID   
+        AND S.VALID_YN      ='Y' 
+    LEFT JOIN TEMP_DM_MST_ITEM_SINGLE_V     T WITH(NOLOCK)
+	   ON   I.DIVISION_ID   = T.DIVISION_ID 
+       AND  D.ITEM_ID       = T.ITEM_ID
+    LEFT JOIN   (
+                SELECT  SEGMENT1 AS CODE, SEGMENT2 AS NAME
+                FROM    SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+                WHERE   LOOKUP_TYPE = 'ITEM_TYPE_CODE'
+                AND     VALID_YN    = 'Y' 
+	            )  AS ITEM_TYPE_CODE
+        ON T.ITEM_TYPE = ITEM_TYPE_CODE.CODE
+    LEFT OUTER JOIN TMP_81_UC_EXCEPTION  EX ON EX.DIVISION_ID = D.DIVISION_ID AND EX.ITEM_ID = D.ITEM_ID --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+    WHERE   I.DIVISION_ID       = @p_division_id		-- 20190123  
+    AND     I.DIVISION_ID    LIKE '4%'    
+    AND     I.VALID_YN          = 'Y'   
+    AND     S.SITE_TYPE         = 'SALES'
+    AND     CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+            ELSE TEAM.DEPT_ID			
+			 END IN (
+					Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+					(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+	                )
+    AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+        ELSE isnull(
+"
+"2026-03-12 00:00:01.423","LGCE_SCMDEV","P ","DMF0002_GET_ITEM_BY_DIVISION_POPUPEx","1801825531","5","					CASE WHEN @p_division_id <> '40' THEN S.END_CUSTOMER ELSE D.PROJECT_CODE END
+				 ,'')
+         END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+                (CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(
+                    CASE WHEN @p_division_id <> '40' THEN S.END_CUSTOMER ELSE D.PROJECT_CODE END
+                ,'') END) = P.data
+                )
+    AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+        ELSE S.SCM_SITE_ID			
+         END IN (
+                Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+                (CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE S.SCM_SITE_ID END) = P.data
+                )
+    AND (
+        Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where D.ITEM_ID LIKE P.token +'%')
+        OR
+        Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where T.nick_name LIKE P.token +'%')
+        )  -- 20181205 nick name 조회요청으로 변경
+    --[E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선
+    --AND CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END --20231127 
+    AND CASE WHEN @p_division_id = '81_UC' THEN 
+            CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE ISNULL(T.ACTIVE_FLAG,EX.ACTIVE_FLAG)  END
+        ELSE 
+            CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE T.ACTIVE_FLAG END		 
+        END = CASE WHEN ISNULL(@p_mdmActive_Sw, '') = '' THEN ''  ELSE 'Y' END
+  ORDER BY I.DIVISION_ID
+         , D.PROJECT_CODE
+         --, A.PROJECT_NAME
+         , S.SCM_SITE_ID
+         , S.SITE_DESCRIPTION
+         , D.ITEM_ID
+	     , T.ITEM_NAME
+
+END
+
+"

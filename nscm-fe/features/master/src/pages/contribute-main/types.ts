@@ -20,6 +20,18 @@ export interface MainRow extends WijmoRowItem {
   // [k: string]: WijmoPrimitive 를 상속받음 (별도 명시 시 CRUD_TYPE?: string 과 충돌).
 }
 
+// 칸 제목 SP(P_DMF0043_GET_MAIN_SPREAD_TITLE, 시트 mainTitle) o_rc1 행.
+//   기본 칸(SHEET_COLUMNS) 8행 + 동적 칸 117행(월 12 × 법인 9 = M#YYYYMM#RBU_xxxx, 연도 9 = Y#YYYY#RBU_xxxx).
+//   데이터 유무와 무관하게 선택 연도 전체를 내려준다 — 그리드 칸은 이 행으로 만든다 (AS-IS InitSpread 1:1).
+export interface SpreadTitleRow extends WijmoRowItem {
+  COLUMN_NAME: string;
+  COLUMN_LABEL_NAME: string; // 법인 한글명 (대만·중국-화남 … 구분)
+  SMALL_CLASS_LABEL_NAME: string;
+  LARGE_CLASS_LABEL_NAME: string; // 기간 표기 (2025-01 / 2025)
+  // SORT_ORDER_NO 도 오지만(법인 DISPLAY_SEQ, 모든 달이 같은 값) 정렬에 쓰지 않아 명시하지 않는다.
+  //   선택(?) 필드는 WijmoRowItem 의 인덱스 시그니처(undefined 미포함)와 충돌한다.
+}
+
 export interface VersionRow {
   VER_SEQ: string;
   YYYY: string;

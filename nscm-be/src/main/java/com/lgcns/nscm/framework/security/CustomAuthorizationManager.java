@@ -80,6 +80,7 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
 
         if (lookupPath == null
         		|| (!pathMatcher.match("/*/*/*/call-proc", lookupPath)
+        		&& !pathMatcher.match("/*/*/*/call-proc-stream", lookupPath)   // [E20261015-STREAMPROC] call-proc 와 같은 버튼 권한 검사
         		&& !pathMatcher.match("/*/*/*/excel-upload", lookupPath))) {
             return new AuthorizationDecision(false);
         }

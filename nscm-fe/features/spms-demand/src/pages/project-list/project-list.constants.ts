@@ -44,7 +44,7 @@ export enum RESPONSE_SET {
 
 // 커스텀/링크 버튼 BTN_CD (계약 ② — hasButton 게이트 축. SEARCH/EXCEL/FILTER/SORT 는 공통 버튼)
 export const BTN = {
-  REQ: 'REQ', // 등록요청 — PKG_SDM1020.P_SDM1020_BTN_REQ_PJT_REG (행별 단건 — '^' join 금지)
+  REQ: 'REQ', // 등록요청 — PKG_SDM1020.P_SDM1020_BTN_REQ_PJT_REG ('^' 벌크 1건 — SPMS 표준 lib/bulk-save)
   AUTHREQ: 'AUTHREQ', // 권한요청 링크 — PKG_SDM1020.P_SDM1020_REQ_PJT_AUTH
 } as const;
 
@@ -71,7 +71,10 @@ export const MSG = {
   DIVISION_REQUIRED: 'MSG00097', // Division 필수 (P-09)
   DATE_INVERTED: 'MSG00108', // 등록 완료일 필수·역전 (P-10)
   NO_CHANGES: 'MSG00004', // 수정된 내용 없음 (P-06 — 근사 재사용 확정)
-  NO_CHECKED: 'MSG00709', // 선택 항목 없음 (P-07)
+  // P-07 선택 항목 없음 — MSG00709 는 실제 locale(public/locales/*.json) 텍스트가 "프로젝트를 등록/변경
+  //   하시겠습니까?"(= REQ_CONFIRM) 라 체크 0건 알림에 confirm 문구가 떴다. 같은 뜻으로 이미 등재된
+  //   MSG01019("선택한 항목이 존재하지 않습니다.")를 재사용한다(임의 채번 금지).
+  NO_CHECKED: 'MSG01019',
   REQ_CONFIRM: 'MSG00709', // 등록/변경 confirm (P-08)
   REQ_DONE: 'MSG00712', // 등록요청 성공 (toast)
   REQ_FAIL: 'MSG00711', // 등록요청 실패

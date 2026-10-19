@@ -1,0 +1,3 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"admin/batch-log","SCM0016","features/admin/src/pages/batch-log/batch-log.constants.ts","34","code","layoutAppliedColumns.filter(c => c.display) 로 빌드하므로 display 가 없으면(undefined=falsy)"
+"admin/batch-log","SCM0016","features/admin/src/pages/batch-log/useBatchLogStore.ts","40","endpoint","admin 등록 컬럼 3시트 동적 fetch(마운트 1회). 미등록/실패는 constants fallback(tact-time 패턴)."

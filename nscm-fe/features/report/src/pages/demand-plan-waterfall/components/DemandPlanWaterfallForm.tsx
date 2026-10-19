@@ -13,7 +13,6 @@ import {
 import { useEffect, useState } from 'react';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { clsx } from '@shared/clsx';
 import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
@@ -28,7 +27,6 @@ import {
 } from '../demand-plan-waterfall.constants';
 import { gubunResetParams, useDemandPlanWaterfallStore } from '../useDemandPlanWaterfallStore';
 
-import styles from './DemandPlanWaterfallForm.module.scss';
 import { WaterfallVersionModal } from './WaterfallVersionModal';
 
 // 조회조건 = @master searchFields 카탈로그 의무(hook #112 계보) + 2단 구성 표준.
@@ -42,6 +40,8 @@ interface DemandPlanWaterfallFormProps {
   onDivisionChange?: () => void;
   /** UM-08 — bucket 전환 (경계 판정·InitSpread 등가는 페이지가 담당) */
   onBucketChange?: (prev: string, next: string) => void;
+  /** Waterfall Type(GUBUN) 전환 = 시트·메타 축 전환 → Grid 초기화 (사용자 지시 2026-09-04) */
+  onGubunChange?: () => void;
 }
 
 // GUBUN 콤보 — 통합 UI 고유 상수 (DMF0044 REPORT_TYPE as-const 선례). 초기값 MKT_FCST (사용자 확정).
@@ -70,6 +70,7 @@ export const DemandPlanWaterfallForm = ({
   onSubmit,
   onDivisionChange,
   onBucketChange,
+  onGubunChange,
 }: DemandPlanWaterfallFormProps) => {
   const { t } = useTranslation();
 
@@ -132,14 +133,18 @@ export const DemandPlanWaterfallForm = ({
         sx={{ flexShrink: 0 }}
         conditions={
           <>
-            {/* Row 1 — Div* / Team / End Customer / Sales Site (Waterfall Type 은 Bucket 뒤 — 사용자 지시 2026-08-27) */}
+            {/* Row 1 — Div* / Plan Type / Team / End Customer (Plan Type 을 Div 옆으로 — 사용자 지시 2026-09-09) */}
             <DivisionField
               gridSize={3}
               value={searchParams.divisionId}
               onChange={option => {
                 if (option === searchParams.divisionId) return;
+                // Division 변경 시 Plan Type(GUBUN)도 초기값 MKT FCST 로 리셋 (사용자 지시)
+                //   gubunResetParams = gubun + 종속(버킷·기간·version 'CURRENT'·senderCodes·전용 체크) 일괄 초기화
+                const gubunChanged = gubun !== GUBUN.MKT_FCST;
                 // Division cascade + 팝업류 클리어 (AS-IS .cs:1609-1612)
                 setSearchParams({
+                  ...gubunResetParams(GUBUN.MKT_FCST),
                   divisionId: option,
                   deptIds: [],
                   endCustomers: [],
@@ -148,14 +153,46 @@ export const DemandPlanWaterfallForm = ({
                   plantSiteIds: [],
                   projectCodes: [],
                   itemIds: [],
+                  itemTypes: [],
                   owners: [],
-                  version: '',
-                  senderCodes: [],
+                  // Division 변경 시 환산 콤보(QTY/KRW/USD/LOC)도 초기값 '1' 로 리셋 (사용자 지시)
+                  qty: '1',
+                  krw: '1',
+                  usd: '1',
+                  loc: '1',
+                  // Division 변경 시 조회조건 체크박스 전부 해제 (사용자 지시).
+                  //   Cell Qty / Qty≠0 은 gubunResetParams 가 이미 false 로 되돌리고, Sum 만 여기서 해제한다.
+                  isSumChecked: false,
                 });
                 // UM-01 — AS-IS .cs:1397 InitSpread(): 남은 조회 결과는 새 division 과 어긋나므로 비운다
                 onDivisionChange?.();
+                // Plan Type 이 실제 바뀌었으면 시트·메타 축도 전환됨 → Grid 초기화도 함께
+                if (gubunChanged) onGubunChange?.();
               }}
             />
+            {/* Plan Type(구 Gubun) — Division 옆 배치 (사용자 지시 2026-09-09) */}
+            <Grid size={3}>
+              <FormItem
+                className={commonStyles.formItem}
+                label={t('LBL00040', '_Plan Type')}
+                labelAlign='right'
+                render={() => (
+                  <CustomDropdown
+                    isInput={false}
+                    value={gubun}
+                    options={GUBUN_OPTIONS}
+                    onChange={(_, option) => {
+                      if (option === gubun) return;
+                      // GUBUN 전환 = 시트 전환 — 버킷 체계 스왑 + 버전·전용 조건 클리어
+                      setSearchParams(gubunResetParams(option as Gubun));
+                      // 남은 조회 결과는 이전 TYPE 의 컬럼·메저 구성이라 새 TYPE 과 어긋난다 → 비운다
+                      //   (Division 변경과 동일 규약 — 재조회는 Search 버튼)
+                      onGubunChange?.();
+                    }}
+                  />
+                )}
+              />
+            </Grid>
             <TeamField
               gridSize={3}
               value={searchParams.deptIds}
@@ -190,17 +227,17 @@ export const DemandPlanWaterfallForm = ({
               endCustomer={searchParams.endCustomers.join(',')}
               deptId={isProjectPlantEnabled ? '' : searchParams.deptIds.join(',')}
             />
-            {/* Row 2 — Ver. / Period* / Bucket / Waterfall Type(구 Gubun — 명칭 사용자 확정 2026-08-06) */}
+            {/* Row 2 이어서 — Ver. / Period* / Bucket (Sales Site 는 위, 시각적으로 2행 선두) */}
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t('LBL00031', 'Ver.')}
+                label={t('LBL00606', '_Version')}
                 labelAlign='right'
                 required // [E20260831-VERREQ] 전 waterfall type 필수 (사용자 지시 2026-08-31 — 구 'MKT 비필수' 폐기. 기본값 CURRENT)
                 render={() => (
                   <InputField
                     fullWidth
-                    className={clsx(styles.inputWithSearch, styles.input)}
+                    className={commonStyles.popupSearchField}
                     value={searchParams.version}
                     onChange={event => setSearchParams({ version: event.target.value })}
                     InputProps={{
@@ -243,24 +280,6 @@ export const DemandPlanWaterfallForm = ({
                       const prev = searchParams.bucket;
                       setSearchParams({ bucket: option });
                       if (prev !== option) onBucketChange?.(prev, option);
-                    }}
-                  />
-                )}
-              />
-            </Grid>
-            <Grid size={3}>
-              <FormItem
-                className={commonStyles.formItem}
-                label={t('', 'Waterfall Type')}
-                labelAlign='right'
-                render={() => (
-                  <CustomDropdown
-                    isInput={false}
-                    value={gubun}
-                    options={GUBUN_OPTIONS}
-                    onChange={(_, option) => {
-                      // GUBUN 전환 = 시트 전환 — 버킷 체계 스왑 + 버전·전용 조건 클리어
-                      setSearchParams(gubunResetParams(option as Gubun));
                     }}
                   />
                 )}
@@ -452,12 +471,13 @@ export const DemandPlanWaterfallForm = ({
                 labelAlign='right'
                 render={() => (
                   <Stack direction='row' spacing={1} alignItems='center' sx={{ width: '100%' }}>
-                    <Checkbox
+                    {/* Sum 체크박스 미표시 (사용자 지시 2026-09-18) */}
+                    {/* <Checkbox
                       labelText={t('LBL00687', 'Sum')}
                       checked={searchParams.isSumChecked}
                       disabled={searchParams.bucket === BUCKET_TYPE.ONLY_WEEKLY}
                       onChange={checked => setSearchParams({ isSumChecked: checked })}
-                    />
+                    /> */}
                     {/* Cell Qty — MKT·BIZ div40 만. SALES 는 AS-IS Visible=false 라 미표시 */}
                     {!isSales && (
                       <Checkbox
@@ -467,14 +487,14 @@ export const DemandPlanWaterfallForm = ({
                         onChange={checked => setSearchParams({ isCellQtyChecked: checked })}
                       />
                     )}
-                    {/* Qty≠0 — BIZ 전용 (p_qty_yn) */}
-                    {isBiz && (
+                    {/* Qty≠0 — BIZ 전용 (p_qty_yn). 미표시 (사용자 지시 2026-09-18) */}
+                    {/* {isBiz && (
                       <Checkbox
                         labelText={t('', 'Qty≠0')}
                         checked={searchParams.isQtyNotZeroChecked}
                         onChange={checked => setSearchParams({ isQtyNotZeroChecked: checked })}
                       />
-                    )}
+                    )} */}
                   </Stack>
                 )}
               />
@@ -488,7 +508,13 @@ export const DemandPlanWaterfallForm = ({
         gubun={gubun}
         defaultDivision={searchParams.divisionId}
         defaultPeriod={{ start: searchParams.startYyyymmdd, end: searchParams.endYyyymmdd }}
-        onApply={versionIds => setSearchParams({ version: versionIds })}
+        onApply={(versionIds, period) =>
+          setSearchParams({
+            version: versionIds,
+            startYyyymmdd: period.start,
+            endYyyymmdd: period.end,
+          })
+        }
       />
     </>
   );

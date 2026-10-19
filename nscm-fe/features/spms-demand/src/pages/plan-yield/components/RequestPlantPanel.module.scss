@@ -1,0 +1,136 @@
+// SDM2020 [1. 샘플 요청 법인] 패널 — 설계서 GRID LEFT 시트 (SDM2010 SampleBuildPanel 골격 승계)
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 340px;
+  flex-shrink: 0;
+  min-height: 0;
+  gap: 8px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+// min-height = 우측 SubTitle 제목행과 동일 (PlanYield.module.scss .yieldHeader 참조)
+.title {
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+  font-weight: 600;
+}
+
+.fieldTable {
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 4px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.row {
+  display: flex;
+  min-height: 30px;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.label {
+  width: 90px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  background: var(--table-header-bg, #f5f6f8);
+  font-size: 12px;
+}
+
+.value {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  font-size: 12px;
+  white-space: pre-wrap;
+
+  // 빌드 차수 B | 2 | - | 1 칸 구분선
+  & + & {
+    border-left: 1px solid var(--border-color, #e0e0e0);
+  }
+}
+
+.grid {
+  flex: 1;
+  min-height: 160px;
+}
+
+.plantGrid {
+  width: 100%;
+  height: 100%;
+
+  :global {
+    .wj-colheaders .wj-cell {
+      line-height: 14px;
+      padding: 1px 4px;
+      font-size: 11px;
+    }
+  }
+}
+
+// 확인 체크박스 — 조회 전용 표시 (disabled 렌더, 클릭 무반응), 값은 서버 문자열 왕복
+.checkbox {
+  pointer-events: none;
+  margin: 0;
+  width: 14px;
+  height: 14px;
+}
+
+// 진행률 도넛 — SVG stroke-dasharray (값은 JSX 속성). 색 = 목업 청록 계열
+.progress {
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.donut {
+  width: 48px;
+  height: 48px;
+  transform: rotate(-90deg); // 12시 방향 시작
+}
+
+.donutTrack,
+.donutValue {
+  fill: none;
+  stroke-width: 4;
+}
+
+.donutTrack {
+  stroke: #e6e8eb;
+}
+
+.donutValue {
+  stroke: #2e9cb2;
+  stroke-linecap: butt;
+}
+
+.donutText {
+  transform: rotate(90deg);
+  transform-origin: 20px 20px;
+  font-size: 9px;
+  font-weight: 600;
+  fill: #2e9cb2;
+  text-anchor: middle;
+  dominant-baseline: central;
+}

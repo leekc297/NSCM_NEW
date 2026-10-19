@@ -40,6 +40,14 @@
   overscroll-behavior: contain;
 }
 
+// 2026-09-11 사용자 요구 - 섹션 제목을 테두리 박스 밖으로 이동. sectionWrapper 가 제목 + section
+// 박스를 감싸고, section 은 더 이상 제목을 포함하지 않는다.
+.sectionWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .section {
   padding: 16px 18px;
   border: 1px solid #e1e4e8;
@@ -48,7 +56,7 @@
 }
 
 .sectionTitle {
-  margin: 0 0 14px;
+  margin: 0;
   color: #292d32;
   font-size: 15px;
   font-weight: 700;
@@ -143,31 +151,35 @@
   flex-direction: column;
   gap: 10px;
 }
+// 2026-09-16 사용자 요구 - 라벨(이미지/Notice Content)을 박스 위가 아니라 박스 옆으로 이동.
+// 라벨·박스를 같은 grid-row 에 두어 좌우로 나란히 배치한다.
 .imageField,
 .contentField {
   display: grid;
   grid-template-columns: 100px minmax(0, 1fr);
+  align-items: start;
   column-gap: 8px;
   row-gap: 6px;
 }
 
+// 2026-09-16 사용자 요구 - 이미지/Notice Content 라벨을 박스 상단에 맞춘다.
 .imageLabel,
 .contentLabel {
   grid-column: 1;
   grid-row: 1;
+  align-self: start;
   color: #4f555d;
   font-size: 12px;
   font-weight: 700;
   text-align: right;
 }
 
-
 .editorField {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 1;
 }
 
 .imageUploadArea {
@@ -176,7 +188,7 @@
   width: 100%;
   min-width: 0;
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 1;
   align-items: center;
   gap: 14px;
   padding: 14px;
@@ -296,17 +308,19 @@
     grid-template-columns: 1fr;
   }
 
-  .imageLabel,
-  .contentLabel,
-  .imageUploadArea,
-  .editorField {
-    grid-column: 1;
-  }
-
+  // 데스크톱은 라벨·박스가 같은 row 에서 나란히 배치되지만, 모바일은 세로로 다시 쌓는다
+  // (grid-row 를 명시적으로 되돌려야 함 - 데스크톱 기본값이 둘 다 row 1 이라 그대로 두면 겹침).
   .imageLabel,
   .contentLabel {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
     text-align: left;
   }
 
-
+  .imageUploadArea,
+  .editorField {
+    grid-column: 1;
+    grid-row: 2;
+  }
 }

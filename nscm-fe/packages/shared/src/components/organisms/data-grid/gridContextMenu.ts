@@ -41,8 +41,9 @@ export interface GridContextMenuOptions {
   getFilter: () => FlexGridFilter | undefined;
   /** Export 항목 동작 (GridAction.excelDownload 래핑) */
   onExport: (context: GridContextMenuContext) => void;
-  /** 화면 전용 추가 항목 (바디 메뉴 하단에 구분선과 함께 붙는다) */
-  getCustomItems?: () => GridContextMenuItem[] | undefined;
+  /** 화면 전용 추가 항목 (바디 메뉴 하단에 구분선과 함께 붙는다). 우클릭 지점 context 를 받아
+   *   셀 조건부(예: 특정 measure 행에서만 항목 노출)로 반환할 수 있다. */
+  getCustomItems?: (context: GridContextMenuContext) => GridContextMenuItem[] | undefined;
   /**
    * 레이아웃 개인화 항목 (Save/Load/Reset Layout) — DataGrid 가 layoutKey 지정 시 제공.
    * 헤더/바디 메뉴 양쪽 하단에 구분선과 함께 붙는다 (wingui 단일 메뉴의 SAVE/LOAD_GRID_LAYOUT 대응).
@@ -168,6 +169,22 @@ const showMenu = (
 const fullRange = (grid: FlexGrid) =>
   new CellRange(0, 0, grid.rows.length - 1, grid.columns.length - 1);
 
+/**
+ * 클립보드 복사 — 반드시 그리드에 포커스를 준 뒤 복사한다.
+ *
+ * Wijmo Clipboard.copy 는 임시 textarea 를 "현재 활성요소" 기준 위치에 붙여 select() 후
+ * execCommand('copy') 한다. 우클릭 메뉴는 그리드에 포커스를 주지 않으므로, Copy 를 누르는 순간
+ * 활성요소가 (닫힌) 메뉴 버튼 → body 가 되고 textarea 가 모달 focus-trap 바깥(body)에 붙는다.
+ * 그러면 MUI FocusTrap 이 그 focus 를 곧바로 모달 안으로 되돌려 select() 가 무력화되고 빈
+ * 문자열이 복사된다(붙여넣기 빈값 — DMF0020 Exchange Rate 팝업에서 재현).
+ * Wijmo 자체 Ctrl+C 는 복사 직전 grid._eFocus.focus() 를 호출해 이 문제를 피한다 — 같은 방식으로 맞춘다.
+ * (clip 문자열은 호출부에서 focus 이전에 이미 만들어 넘기므로 selection 에는 영향이 없다.)
+ */
+const copyToClipboard = (grid: FlexGrid, text: string) => {
+  grid.focus();
+  Clipboard.copy(text);
+};
+
 /** 현재 선택의 행 범위를 전체 컬럼 폭으로 확장. 선택이 없으면 우클릭 행 */
 const lineRange = (grid: FlexGrid, hitRow: number) => {
   const selection = grid.selection;
@@ -288,24 +305,27 @@ const buildHeaderItems = (options: GridContextMenuOptions): GridContextMenuItem[
     : []),
 ];
 
-const buildBodyItems = (options: GridContextMenuOptions): GridContextMenuItem[] => {
+const buildBodyItems = (
+  options: GridContextMenuOptions,
+  context: GridContextMenuContext
+): GridContextMenuItem[] => {
   const items: GridContextMenuItem[] = [
     {
       label: t('CTX_COPY', 'Copy'),
       action: ({ grid }) => {
-        Clipboard.copy(grid.getClipString());
+        copyToClipboard(grid, grid.getClipString());
       },
     },
     {
       label: t('CTX_COPY_HEADERS_ALL', 'Copy with Headers (Copy All)'),
       action: ({ grid }) => {
-        Clipboard.copy(grid.getClipString(fullRange(grid), false, true));
+        copyToClipboard(grid, grid.getClipString(fullRange(grid), false, true));
       },
     },
     {
       label: t('CTX_COPY_HEADERS_LINE', 'Copy with Headers (Line)'),
       action: ({ grid, hitRow }) => {
-        Clipboard.copy(grid.getClipString(lineRange(grid, hitRow), false, true));
+        copyToClipboard(grid, grid.getClipString(lineRange(grid, hitRow), false, true));
       },
     },
     {
@@ -315,7 +335,7 @@ const buildBodyItems = (options: GridContextMenuOptions): GridContextMenuItem[] 
     },
   ];
 
-  const customItems = options.getCustomItems?.();
+  const customItems = options.getCustomItems?.(context);
   if (customItems?.length) {
     items.push(
       ...customItems.map((item, index) => ({
@@ -345,11 +365,12 @@ export const attachGridContextMenu = (
 
     if (hit.col < 0) return;
 
+    const context: GridContextMenuContext = { grid, hitRow: hit.row, hitCol: hit.col };
     let items: GridContextMenuItem[];
     if (hit.cellType === CellType.ColumnHeader) {
       items = buildHeaderItems(options);
     } else if (hit.cellType === CellType.Cell && hit.row >= 0) {
-      items = buildBodyItems(options);
+      items = buildBodyItems(options, context);
     } else {
       return;
     }
@@ -368,7 +389,7 @@ export const attachGridContextMenu = (
 
     event.preventDefault();
     event.stopPropagation();
-    showMenu(items, { grid, hitRow: hit.row, hitCol: hit.col }, event.clientX, event.clientY);
+    showMenu(items, context, event.clientX, event.clientY);
   };
 
   grid.hostElement.addEventListener('contextmenu', handler);

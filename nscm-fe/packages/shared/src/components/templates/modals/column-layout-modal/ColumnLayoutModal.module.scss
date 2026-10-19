@@ -19,7 +19,7 @@
   overflow: hidden;
 }
 
-// 필수(key) 컬럼 라벨 — 라벨 끝 '*' 규칙. 비표시로 옮길 수 없음을 색으로 알린다.
+// 고정(key) 컬럼 라벨 — USER_SELECTABLE_FLAG='N' 규칙. 비표시로 옮길 수 없음을 색으로 알린다.
 .keyLabel {
   color: #d32f2f;
 }

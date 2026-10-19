@@ -31,7 +31,11 @@ export class DemandManagerMergeManager extends MergeManager {
     }
 
     // ===== 행 헤더(No.) — 세트 단위 병합 =====
+    //   col 0(No)만 세트로 세로 병합한다. col 1(CRUD 상태 M/I/D)은 병합하지 않는다 —
+    //   상태는 행마다 독립이라 세트로 묶으면 짝 행(둘째 행)을 고쳐도 M 이 첫 행의 병합 셀에
+    //   가려 보이지 않는다(2026-09-16 사용자 지적). No 만 묶고 상태는 행별로 그린다.
     if (panel.cellType === CellType.RowHeader) {
+      if (c !== 0) return null;
       return this.pairRange(panel, r, c);
     }
 

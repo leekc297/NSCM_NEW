@@ -1,0 +1,31 @@
+name_pattern,field,kind,param_key,combo_id,lbl,note
+^cboDivision$|^cboDiv$,DivisionField,single,divisionId,MyDivision,LBL00001,필수·cascade 기준. 기본값 session.div ?? '40' 는 store 에서
+^clbTeam$|^cboTeam$,TeamField,multi,teamIds,TeambyDivision,LBL00502,division 종속
+^clb(End)?Customer$|^cboEndCustomer$,EndCustomerField,multi,endCustomer,EndCustomerByDivision,,division 종속
+^clbSalesSite$|^cboSalesSite$,SalesSiteField,multi,salesSiteIds,SalesSite,,division/endCustomer 종속
+^clbPlantSite$|^cboPlantSite$|^clbPlant$,PlantSiteField,multi,plantSiteIds,PlantSitebyEndCustomer,,
+^clbSoldTo|^cboSoldTo,SoldToCustomerField,multi,soldToCustomer,SoldCustomer,,
+^cboBizType$|^cboBiz,BizTypeField,single,bizType,BizTypeByDivision,,
+^(txt|usr)Project(Code)?$,ProjectField,popup,projectCodes,,,팝업 내장 ProjectByDivisionModal — btnProject 는 흡수
+^(txt|usr)(Item|ItemId|Model|ModelId|Nickname|Material|MaterialId)$,ItemField,popup,itemIds,,,팝업 내장 ItemByDivisionModal — btnItemId/btnModel 흡수
+^(txt|cbo|usr)Owner$,OwnerField,popup,owners,,,팝업 내장 OwnerByDivisionModal
+^(drp|d|mrp)Period\d*$|^dCalendar$|^drpDate$,PeriodField,period,period,,,start/end 두 값(YYYYMMDD). 월 단위 As-is 는 mode='month'
+^cboBucket(Type)?$,BucketField,single,bucketType,BucketType,,
+^cboVersion$|^cboVer(sion)?No$,VersionField,single,version,,,
+^cboYear$|^cboYYYY$,YearField,single,year,,,
+^chk(Over|SearchOver)Range$,SearchOverRangeField,check,overRange,,,
+^clb(EDI)?Sender(Code)?$|^cboSender(Code)?$,,multi,senderCodes,SenderCode,,카탈로그 없음 — CustomDropdown multiple + 콤보 SenderCode
+^cboActive(Flag)?$|^cboUseYn$|^cboValidYn$,,single,useYn,YesOrNo,LBL00007,allOption
+^cboItemType$,,single,itemType,ItemType,,
+^clbDivision$|^clbDiv$,,multi,divisionIds,MyDivision,LBL00001,다중 Division 선택 — 카탈로그 DivisionField 는 단일이라 CustomDropdown multiple 로
+^cboValid(Yn|YN)?$|^cboActive$,,single,validYn,YesOrNo,LBL00007,allOption
+^clbItemType$|^cboItemType$,,multi,itemTypes,ItemType,,
+^clbBizType$,BizTypeField,single,bizType,BizTypeByDivision,,As-is 다중이나 카탈로그 BizTypeField(단일) 표준 — 다중 필요 시 CustomDropdown multiple 로 교체(사유 기록)
+^clbFromSite$|^cboFromSite$,,multi,fromSiteIds,,,SCP From Site — 콤보ID 확정 필요(SiteByDivision 계열)
+^clbToSite$|^cboToSite$,,multi,toSiteIds,,,SCP To Site — 콤보ID 확정 필요
+^clbSite$|^cboSite$,,multi,siteIds,,,
+^clbPlanGroup$|^cboPlanGroup$,,multi,planGroups,,,SCP Plan Group — 콤보ID 확정 필요
+^cboOperationGroup$|^clbOperationGroup$,,single,operationGroup,,,
+^cboPlanDate$|^cboPlanVersion$,,single,planDate,,,계획 버전/일자 — VersionField 검토
+^chkSum$,,check,sumYn,,,상위 버킷 합계 표시 토글 — 그리드 applyDynVisibility 연계
+^(txt|usr)NickName$,ItemField,popup,itemIds,,,Nickname = Item 검색 필드와 동일 팝업

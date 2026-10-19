@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/project-route-warranty","SCP0048","features/supply/src/pages/project-route-warranty/project-route-warranty.constants.ts","31","endpoint","컬럼 메타 fetch(/admin/menu/SCP0048/column)의 sheetNm 은 SCM_MST_SHEET_COLUMNS.SHEET_NAME 과 정확히 일치해야 한다(BE 문자열 매칭). SCP0048 은 단일 시트(AS-IS spdMain)이며 DB SHEET_NAME 으로 'Main' 배포된 것으로 본다(design/03 §1). 라이브 확인필요(design/03 §6)."
+"supply/project-route-warranty","SCP0048","features/supply/src/pages/project-route-warranty/ProjectRouteWarranty.tsx","88","endpoint","mount 1회 컬럼 메타 fetch(admin 즉시반영 baseline) + F10 자가복구. reset()→initState() 가"
+"supply/project-route-warranty","SCP0048","features/supply/src/pages/project-route-warranty/ProjectRouteWarranty.tsx","91","code","(자매 SCP0039 master-validation 패턴). fetchStaticColumns 가 GET await 전에 initialized 를"
+"supply/project-route-warranty","SCP0048","features/supply/src/pages/project-route-warranty/useProjectRouteWarrantyStore.ts","95","endpoint","컬럼 메타는 admin(SCM_MST_SHEET_COLUMNS)에서 동적 fetch(ui-category hook, 하드코딩 금지)."

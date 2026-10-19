@@ -46,7 +46,7 @@ export const DynamicQueryForm = ({ onSearch }: Props) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00719', 'Description')}
+              label={t('LBL00608', 'Description')}
               labelAlign='right'
               className={commonStyles.formItem}
               render={() => (

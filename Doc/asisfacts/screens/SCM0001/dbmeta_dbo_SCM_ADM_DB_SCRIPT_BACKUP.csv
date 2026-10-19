@@ -1,0 +1,1180 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_TEAM_BY_DIVISION","1201491409","1","
+/*
+ * Program ID   : SCM0001_GET_TEAM_BY_DIVISION
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/19  SongDH         Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE procedure [dbo].[SCM0001_GET_TEAM_BY_DIVISION]
+  @p_division_id NVARCHAR(18)
+AS
+BEGIN
+	
+  SELECT DISTINCT 
+         B.DEPT_ID       AS CODE
+       , B.DEPT_NAME_KO  AS NAME
+  FROM   [dbo].[SCM_MST_SITE]          A  WITH(NOLOCK)
+       , [dbo].[SCM_MST_SSO_DEPT_INFO] B  WITH(NOLOCK)
+  WHERE  A.SITE_TYPE = 'SALES'
+  AND    A.DEPT_ID  = B.DEPT_ID
+  AND    CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+                ELSE A.DIVISION_ID
+	       END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+	;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_TO_SITE","1217491466","1","
+/*
+ * Program ID   : SCM0001_GET_TO_SITE
+ * Description  : To Site 정보 Combobox 생성
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/01   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_TO_SITE]
+  
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+  
+	SELECT SCM_SITE_ID        AS CODE
+		 , SITE_DESCRIPTION   AS NAME
+	FROM [dbo].[SCM_MST_SITE] WITH(NOLOCK)	
+	;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_TO_SITE_BY_DIVISION","1233491523","1","
+/*
+ * Program ID   : SCM0001_GET_TO_SITE
+ * Description  : To Site 정보 Combobox 생성
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/26   junheejeen   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_TO_SITE_BY_DIVISION]
+    @p_division_id NVARCHAR(18)
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+  
+	SELECT SCM_SITE_ID        AS CODE
+		 , SITE_DESCRIPTION   AS NAME
+	FROM [dbo].[SCM_MST_SITE] AS A WITH(NOLOCK)	
+	WHERE   A.VALID_YN  = 'Y'
+	AND    CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+                ELSE A.DIVISION_ID
+	       END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+	;
+
+	;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_WEEK_MONDAY_PERIOD","1249491580","1","
+
+
+/*
+ * Program ID   : SCM0001_GET_WEEK_MONDAY_PERIOD
+ * Description  : PERIOD 일자별 기간조회 (조회시점 월요일 기준)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2019/09/06   YWH				Initial Release [PJ20189106] 전지GSCM 고도화
+
+ ex)
+ EXEC SCM0001_GET_SCP_PERIOD @p_from_date='20180417', @p_offset_month='12',@p_timezone='AM073'
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_WEEK_MONDAY_PERIOD]
+	 @p_from_date    NVARCHAR(30) 
+	,@p_offset_day   INT
+	,@p_timezone     NVARCHAR(200) 
+AS
+
+BEGIN
+	IF ISNULL(@p_from_date,'')='' 
+		SET @p_from_date = CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112);
+		--SET @p_from_date = convert(varchar(8), [dbo].[FN_MULTY_TIME](@p_timezone),112);
+		
+	IF ISNULL(@p_offset_day,'')='' 
+		SET @p_offset_day = '370'
+	
+	IF CHARINDEX('-',@p_offset_day) = 1
+		BEGIN
+			SELECT
+				MIN(BASIS_YYYYMMDD) + ':' + MAX(BASIS_YYYYMMDD)
+			FROM SCM_SYS_CALENDAR_M A
+			WHERE A.BASIS_YYYYMMDD <= @p_from_date
+			 AND A.BASIS_YYYYMMDD >= CONVERT(varchar(8) , DATEADD(DAY, @p_offset_day, @p_from_date), 112)
+		END
+	ELSE
+		BEGIN
+			SELECT
+				MIN(BASIS_YYYYMMDD) + ':' + MAX(BASIS_YYYYMMDD)
+			FROM SCM_SYS_CALENDAR_M A
+			WHERE A.BASIS_YYYYMMDD >= @p_from_date
+			 AND A.BASIS_YYYYMMDD <= CONVERT(varchar(8) , DATEADD(DAY, @p_offset_day, @p_from_date), 112)
+		END
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_BIZ_TYPE_BY_DIVISION","817490041","1","
+/*
+ * Program ID   : SCM0001_GET_BIZ_TYPE_BY_DIVISION
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/18  SongDH         Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE procedure [dbo].[SCM0001_GET_BIZ_TYPE_BY_DIVISION]
+  @p_division_id NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SELECT DISTINCT 
+         BIZ_TYPE       AS CODE 
+       , BIZ_TYPE_NAME  AS NAME
+  FROM   [DBO].[SCM_MST_PROJECT]  WITH(NOLOCK)
+  WHERE   BIZ_TYPE_NAME != ''
+  AND     CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+              ELSE DIVISION_ID
+	     END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                  FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                  CROSS APPLY x.nodes('/t') t(c)
+	             )
+  ;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_BUILDING_BY_DIVISION","833490098","1","
+/*
+ * Program ID   : SCM0001_GET_BUILDING_BY_DIVISION
+ * Description  : Division 별 Building 정보 Combobox 생성
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/13   byunghunjung  Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE procedure [dbo].[SCM0001_GET_BUILDING_BY_DIVISION]
+ @p_division_id NVARCHAR(100)
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+  
+ SELECT 
+  DISTINCT 
+        A.FACTORY_ID    AS CODE
+	  , A.FACTORY_NAME  AS NAME
+ FROM  [dbo].[SCM_MST_FACTORY_SN] A  
+ WHERE 1=1
+	AND (@p_division_id IS NULL OR A.DIVISION_ID IN 
+				(SELECT t.c.value('.', 'NVARCHAR(4000)')
+                FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                CROSS APPLY x.nodes('/t') t(c)
+	           )   
+		)
+;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_BUILDING_BY_PLANT","849490155","1","
+/*
+ * Program ID   : SCM0001_GET_BUILDING_BY_PLANTSITE
+ * Description  : Plant site 별 Building 정보 Combobox 생성
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/01   byunghunjung  Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE procedure [dbo].[SCM0001_GET_BUILDING_BY_PLANT]
+@p_plant_id			NVARCHAR(MAX)
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+
+ SELECT 
+  DISTINCT 
+       A.FACTORY_ID    AS CODE
+	  , A.FACTORY_NAME  AS NAME
+ FROM  [dbo].[SCM_MST_FACTORY_SN] A  
+ WHERE 1=1
+AND (@p_plant_id IS NULL OR A.PLANT_ID IN 
+			(SELECT t.c.value('.', 'NVARCHAR(4000)')
+            FROM   (SELECT x = CAST('<t>' + REPLACE(@p_plant_id, ',', '</t><t>') + '</t>' AS xml)) b
+            CROSS APPLY x.nodes('/t') t(c)
+	        )   
+	)
+
+;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_BUILDING_BY_PLANTSITE","865490212","1","
+/*
+ * Program ID   : SCM0001_GET_BUILDING_BY_PLANTSITE
+ * Description  : Plant site 별 Building 정보 Combobox 생성
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/01   byunghunjung  Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE procedure [dbo].[SCM0001_GET_BUILDING_BY_PLANTSITE]
+@p_plant_site_id			NVARCHAR(MAX),
+@p_division_id		NVARCHAR(MAX)
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+
+ SELECT 
+  DISTINCT 
+       A.FACTORY_ID    AS CODE
+	  , A.FACTORY_NAME  AS NAME
+ FROM  [dbo].[SCM_MST_FACTORY_SN] A  
+ WHERE 1=1
+AND (@p_plant_site_id IS NULL OR A.PLANT_ID IN 
+			(SELECT t.c.value('.', 'NVARCHAR(4000)')
+            FROM   (SELECT x = CAST('<t>' + REPLACE(SUBSTRING(@p_plant_site_id,1,4), ',', '</t><t>') + '</t>' AS xml)) b
+            CROSS APPLY x.nodes('/t') t(c)
+	        )   
+	)
+AND (@p_division_id IS NULL OR A.DIVISION_ID IN 
+			(SELECT t.c.value('.', 'NVARCHAR(4000)')
+            FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+            CROSS APPLY x.nodes('/t') t(c)
+	        )   
+	)
+;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_CALENDAR_WEEK","881490269","1","/*
+ * Program ID   : SCM0001_GET_CALENDAR_WEEK
+ * Description  : Calendar Week 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/01/02   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+create PROCEDURE [dbo].[SCM0001_GET_CALENDAR_WEEK]
+  
+@p_from_yyyymmdd  NVARCHAR(MAX),
+@p_to_yyyymmdd    NVARCHAR(MAX) 
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	SELECT 
+		 q.basis_yyyymmdd
+		,q.week_name
+	FROM scm_sys_calendar_m q with(nolock)	
+	WHERE 1=1
+	AND q.basis_yyyymmdd >= @p_from_yyyymmdd
+	AND q.basis_yyyymmdd <= @p_to_yyyymmdd
+ 
+    ;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_CUSTOMER_BY_DIVISION","897490326","1","
+/*
+ * Program ID   : SCM0001_GET_CUSTOMER_BY_DIVISION
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/18  SongDH         Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/01/09  SongDH         검색 조건 수정   @p_scm_site_id -> @p_dept_name_ko
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_CUSTOMER_BY_DIVISION]
+  @p_division_id  NVARCHAR(MAX),
+  @p_dept_id      NVARCHAR(MAX)
+AS
+BEGIN
+	
+  SELECT DISTINCT
+         A.END_CUSTOMER AS CODE
+       , A.END_CUSTOMER AS NAME
+  FROM   [dbo].[SCM_MST_SITE]          A WITH(NOLOCK)
+       , [dbo].[SCM_MST_SSO_DEPT_INFO] T WITH(NOLOCK)
+  WHERE  1 = 1  
+  AND    A.DEPT_ID = T.DEPT_ID
+  AND    A.VALID_YN  = 'Y'
+  AND    A.END_CUSTOMER <> ''
+  AND    CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+              ELSE A.DIVISION_ID
+	     END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                  FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                  CROSS APPLY x.nodes('/t') t(c)
+	             )
+  AND    CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+              ELSE T.DEPT_ID
+	     END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                  FROM   (SELECT x = CAST('<t>' + REPLACE(@p_dept_id, ',', '</t><t>') + '</t>' AS xml)) b
+                  CROSS APPLY x.nodes('/t') t(c)
+	             )
+  ;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_DIVISION","913490383","1","
+/*
+ * Program ID   : SCM0001_GET_DIVISION
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/11/15  SongDH         Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_DIVISION]
+  
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	SELECT DIVISION_ID        AS CODE
+		 , DIVISION_NAME      AS NAME
+	FROM [dbo].[SCM_MST_DIVISION] WITH(NOLOCK)	
+	;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_FROM_SITE","929490440","1","
+/*
+ * Program ID   : SCM0001_GET_FROM_SITE
+ * Description  : From Site 정보 Combobox 생성
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/01   byunghunjung    Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_FROM_SITE]
+  
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+  
+	SELECT SCM_SITE_ID        AS CODE
+		 , SITE_DESCRIPTION   AS NAME
+	FROM [dbo].[SCM_MST_SITE] WITH(NOLOCK)	
+	WHERE SITE_TYPE = 'PLANT'
+	;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_FROM_SITE_BY_DIVISION","945490497","1","
+/*
+ * Program ID   : SCM0001_GET_FROM_SITE
+ * Description  : From Site 정보 Combobox 생성
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/26   junheejeen     Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_FROM_SITE_BY_DIVISION]
+  @p_division_id NVARCHAR(18)
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+  
+	SELECT SCM_SITE_ID        AS CODE
+		 , SITE_DESCRIPTION   AS NAME
+	FROM [dbo].[SCM_MST_SITE] AS A WITH(NOLOCK)	
+	WHERE SITE_TYPE = 'PLANT'
+	AND    A.VALID_YN  = 'Y'
+	AND    CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+                ELSE A.DIVISION_ID
+	       END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+	;
+
+	;
+	;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_LINE_BY_OPERATION","961490554","1","
+/*
+ * Program ID   : SCM0001_GET_LINE_BY_OPERATION
+ * Description  : Operation 별 Line 정보 Combobox 생성
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/01   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE procedure [dbo].[SCM0001_GET_LINE_BY_OPERATION]
+@p_division_id		NVARCHAR(MAX),
+@p_plant_site_id	NVARCHAR(MAX),
+@p_factory_id		NVARCHAR(MAX),
+@p_operation_id		NVARCHAR(MAX)
+
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+  
+ SELECT 
+ DISTINCT 
+        A.LINE_ID    AS CODE
+	  , A.LINE_NAME  AS NAME
+ FROM [dbo].SCM_MST_LINE_SN A  
+ WHERE 1=1
+ AND (@p_division_id IS NULL OR A.DIVISION_ID IN 
+			(SELECT t.c.value('.', 'NVARCHAR(4000)')
+            FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+            CROSS APPLY x.nodes('/t') t(c)
+	        )   
+	)
+AND (@p_plant_site_id IS NULL OR A.PLANT_ID IN 
+			(SELECT t.c.value('.', 'NVARCHAR(4000)')
+            FROM   (SELECT x = CAST('<t>' + REPLACE(SUBSTRING(@p_plant_site_id,1,4), ',', '</t><t>') + '</t>' AS xml)) b
+            CROSS APPLY x.nodes('/t') t(c)
+	        )   
+	)
+ AND (@p_factory_id = '' OR A.FACTORY_ID IN 
+			(SELECT t.c.value('.', 'NVARCHAR(4000)')
+            FROM   (SELECT x = CAST('<t>' + REPLACE(@p_factory_id, ',', '</t><t>') + '</t>' AS xml)) b
+            CROSS APPLY x.nodes('/t') t(c)
+	        )   
+	)
+ AND (@p_operation_id IS NULL OR A.OPERATION_ID IN 
+			(SELECT t.c.value('.', 'NVARCHAR(4000)')
+            FROM   (SELECT x = CAST('<t>' + REPLACE(@p_operation_id, ',', '</t><t>') + '</t>' AS xml)) b
+            CROSS APPLY x.nodes('/t') t(c)
+	        )   
+	)
+;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_LOCATION_BY_PLANTSITE","977490611","1","/*
+ * Program ID   : SCM0001_GET_LOCATION_BY_PLANTSITE
+ * Description  : Division, SCM_SITE 별 Location Combobox 생성
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/20   byunghunjung  Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+CREATE PROCEDURE [dbo].[SCM0001_GET_LOCATION_BY_PLANTSITE]  
+  @p_division_id    NVARCHAR(MAX),
+  @p_scm_site_id    NVARCHAR(MAX)
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+    
+  SELECT 
+	     L.LOCATION_CODE AS CODE
+	   , L.LOCATION_DESCRIPTION AS NAME
+  FROM   [dbo].[SCM_MST_LOCATION] L WITH(NOLOCK)	
+  WHERE 1=1
+  AND    L.LOCATION_CODE = L.LOCATION_CODE
+  AND    L.STORAGE_ID IS NOT NULL
+  AND    (@p_division_id IS NULL OR L.DIVISION_ID IN 
+				(SELECT t.c.value('.', 'NVARCHAR(4000)')
+				FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+				CROSS APPLY x.nodes('/t') t(c)
+				)   
+	     )
+  AND    (@p_scm_site_id IS NULL OR L.SCM_SITE_ID IN 
+				(SELECT t.c.value('.', 'NVARCHAR(4000)')
+				FROM   (SELECT x = CAST('<t>' + REPLACE(@p_scm_site_id, ',', '</t><t>') + '</t>' AS xml)) b
+				CROSS APPLY x.nodes('/t') t(c)
+				)   
+	     )
+  ORDER BY L.LOCATION_CODE
+  ;
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_LOOKUP_VALUES","993490668","1","
+/*
+ * Program ID   : SCM0001_GET_LOOKUP_VALUES
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/11/30   SongDH         Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE procedure [dbo].[SCM0001_GET_LOOKUP_VALUES]
+  @p_lookup_type NVARCHAR(100)
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+  
+  SELECT L.SEGMENT1  AS CODE
+       , L.SEGMENT2  AS NAME
+  FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L  WITH(NOLOCK)
+  WHERE  1 = 1
+  AND    L.LOOKUP_TYPE = @p_lookup_type
+  AND    L.VALID_YN    = 'Y'
+  ORDER BY L.DISPLAY_SEQ
+  ;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_SCP_DAILY_PLAN_PERIOD","1105491067","1","
+/*
+ * Program ID   : SCM0001_GET_SCP_DAILY_PLAN_PERIOD
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2021/06/15   khj79          [PJ20209642] LGES Digital SCM Level.3 달성을 위한 개선 - 최초작성
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_SCP_DAILY_PLAN_PERIOD]
+   @p_division_id    NVARCHAR(30) 
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	SELECT DAILY_PLAN_PERIOD
+	FROM [dbo].[SCM_MST_DIVISION] WITH(NOLOCK)	
+	WHERE DIVISION_ID = @p_division_id
+	;
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_OPERATION_BY_BUILDING","1009490725","1","
+/*
+ * Program ID   : SCM0001_GET_OPERATION
+ * Description  : Building 별 Operation 정보 Combobox 생성
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/01   byunghunjung     Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_OPERATION_BY_BUILDING]
+@p_division_id  NVARCHAR(MAX),
+@p_plant_site_id	NVARCHAR(MAX),
+@p_factory_id	NVARCHAR(MAX)
+
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+  
+ SELECT 
+ DISTINCT 
+        A.OPERATION_ID    AS CODE
+	  , (A.OPERATION_ID + ' ' + B.OPERATION_NAME)  AS NAME
+ FROM [dbo].SCM_MST_LINE_SN A 
+ JOIN [dbo].SCM_MST_OPERATION_SN B ON  A.OPERATION_ID = B.OPERATION_ID
+ WHERE 1=1
+ AND (@p_division_id IS NULL OR A.DIVISION_ID IN 
+			(SELECT t.c.value('.', 'NVARCHAR(4000)')
+            FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+            CROSS APPLY x.nodes('/t') t(c)
+	        )   
+	)
+
+AND (@p_plant_site_id IS NULL OR A.PLANT_ID IN 
+			(SELECT t.c.value('.', 'NVARCHAR(4000)')
+            FROM   (SELECT x = CAST('<t>' + REPLACE(SUBSTRING(@p_plant_site_id,1,4), ',', '</t><t>') + '</t>' AS xml)) b
+            CROSS APPLY x.nodes('/t') t(c)
+	        )   
+	)
+
+ AND (@p_factory_id = '' OR A.FACTORY_ID IN 
+			(SELECT t.c.value('.', 'NVARCHAR(4000)')
+            FROM   (SELECT x = CAST('<t>' + REPLACE(@p_factory_id, ',', '</t><t>') + '</t>' AS xml)) b
+            CROSS APPLY x.nodes('/t') t(c)
+	        )   
+	)
+;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_PLANT_BY_DIVISION","1025490782","1","
+/*
+ * Program ID   : SCM0001_GET_PLANT
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/11/30   SongDH         Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_PLANT_BY_DIVISION]
+  @p_division_id NVARCHAR(18)
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+  
+  SELECT A.PLANT_ID      AS CODE
+       , A.PLANT_NAME    AS NAME
+  FROM  [dbo].[SCM_MST_PLANT_SN] A
+  WHERE  1 = 1
+  AND    A.DIVISION_ID IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+	;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_PLANT_SITE_BY_DIVISION","1041490839","1","
+/*
+ * Program ID   : SCM0001_GET_PLANT_SITE_BY_DIVISION
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/11  byunghunjung    Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_PLANT_SITE_BY_DIVISION]
+  @p_division_id NVARCHAR(18)
+AS
+BEGIN
+	
+  SELECT A.SCM_SITE_ID AS CODE
+       , A.SITE_DESCRIPTION AS NAME
+  FROM   [LGCE_SCMDEV].[dbo].[SCM_MST_SITE] A  WITH(NOLOCK)
+  WHERE  1 = 1
+  AND    A.SITE_TYPE = 'PLANT'
+  AND    A.DIVISION_ID  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+	;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_PLANT_SITE_BY_DIVISION_OSP","1057490896","1","
+/*
+ * Program ID   : SCM0001_GET_PLANT_SITE_BY_DIVISION_OSP
+ * Description  : DIVISION 별 PLANT SITE 조회 (outsourcing)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/13  byunghunjung    Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_PLANT_SITE_BY_DIVISION_OSP]
+  @p_division_id NVARCHAR(18)
+AS
+BEGIN
+	
+  SELECT A.SCM_SITE_ID AS CODE
+       , A.SITE_DESCRIPTION AS NAME
+  FROM   [LGCE_SCMDEV].[dbo].[SCM_MST_SITE] A  WITH(NOLOCK)
+  WHERE  1 = 1
+  AND    A.SITE_TYPE = 'PLANT'
+  AND    A.DIVISION_ID IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+  AND A.OSP_YN ='Y'	
+	;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER","1073490953","1","
+/*
+ * Program ID   : SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/01/26  SongDH         Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER]
+    @p_division_id  NVARCHAR(MAX),
+    @p_dept_id      NVARCHAR(MAX),
+    @p_end_customer NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SELECT A.SCM_SITE_ID      AS CODE
+         , A.SITE_DESCRIPTION AS NAME
+    FROM   [dbo].[SCM_MST_SITE]          A  WITH(NOLOCK)
+    WHERE  1 = 1
+    AND    A.SITE_TYPE = 'PLANT'
+    AND    A.VALID_YN  = 'Y'
+    AND    CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+                ELSE A.DIVISION_ID
+	       END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+    AND    CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+                ELSE A.DEPT_ID
+	       END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_dept_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+	 AND    CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+                ELSE A.END_CUSTOMER
+	       END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_end_customer, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+	;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_SALES_SITE_BY_DIVISION","1089491010","1","
+/*
+ * Program ID   : SCM0001_GET_SALES_SITE_BY_DIVISION
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/01/08  byunghunjung    Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE procedure [dbo].[SCM0001_GET_SALES_SITE_BY_DIVISION]
+  @p_division_id NVARCHAR(18)
+AS
+BEGIN
+	
+  SELECT A.SCM_SITE_ID AS CODE
+       , A.SITE_DESCRIPTION AS NAME
+  FROM   [dbo].[SCM_MST_SITE] A  WITH(NOLOCK)
+  WHERE  1 = 1
+  AND    A.SITE_TYPE = 'SALES'
+  AND    A.DIVISION_ID  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+	;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_SCP_DAY_PERIOD","1121491124","1","
+/*
+ * Program ID   : SCM0001_GET_SCP_DAY_PERIOD
+ * Description  : PERIOD 일자별 기간조회 
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/04/19   ygkim		   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+
+ ex)
+ EXEC SCM0001_GET_SCP_PERIOD @p_from_date='20180417', @p_offset_month='12',@p_timezone='AM073'
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_SCP_DAY_PERIOD]
+	 @p_from_date    NVARCHAR(30) 
+	,@p_offset_day   INT
+	,@p_timezone     NVARCHAR(200) 
+AS
+
+BEGIN
+	IF ISNULL(@p_from_date,'')='' 
+		SET @p_from_date = convert(varchar(8), [dbo].[FN_MULTY_TIME](@p_timezone),112);
+		
+	IF ISNULL(@p_offset_day,'')='' 
+		SET @p_offset_day = '6'
+	
+	IF CHARINDEX('-',@p_offset_day) = 1
+		BEGIN
+			SELECT
+				MIN(BASIS_YYYYMMDD) + ':' + MAX(BASIS_YYYYMMDD)
+			FROM SCM_SYS_CALENDAR_M A
+			WHERE A.BASIS_YYYYMMDD <= @p_from_date
+			 AND A.BASIS_YYYYMMDD >= CONVERT(varchar(8) , DATEADD(DAY, @p_offset_day, @p_from_date), 112)
+		END
+	ELSE
+		BEGIN
+			SELECT
+				MIN(BASIS_YYYYMMDD) + ':' + MAX(BASIS_YYYYMMDD)
+			FROM SCM_SYS_CALENDAR_M A
+			WHERE A.BASIS_YYYYMMDD >= @p_from_date
+			 AND A.BASIS_YYYYMMDD <= CONVERT(varchar(8) , DATEADD(DAY, @p_offset_day, @p_from_date), 112)
+		END
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_SCP_MONTH_PERIOD","1137491181","1","
+
+/*
+ * Program ID   : SCM0001_GET_SCP_MONTH_PERIOD
+ * Description  : PERIOD 기간조회 SCM_MST_PLAN 테이블에서 가져옴(공용)
+ * Program History
+
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/06/01   ygkim		   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2021/05/27   khj79          [PJ20209642] LGES Digital SCM Level.3 달성을 위한 개선 - 중장기
+ * 
+
+ ex)
+ EXEC SCM0001_GET_SCP_MONTH_PERIOD @p_division_id='81', @p_plan_cycle = 'WEEKLY', @p_from_date = '20180604', @p_offset_month='12',@p_timezone='AM073'
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_SCP_MONTH_PERIOD]
+	 @p_division_id    NVARCHAR(max) 
+	,@p_plan_cycle	   NVARCHAR(max) 
+	,@p_from_date    NVARCHAR(30) 
+	,@p_offset_month NVARCHAR(2) 	
+	,@p_timezone       NVARCHAR(200) 
+AS
+
+BEGIN
+	
+	DECLARE @n_chk INT
+	SET @n_chk = 0;
+
+	SELECT @n_chk = count(*)
+	FROM SCM_MST_PLAN WITH(NOLOCK)
+	WHERE DIVISION_ID = @p_division_id
+	  AND PLAN_CYCLE = 'WEEKLY'
+	  AND PLAN_NAME = @p_from_date;
+
+	IF @n_chk > 0
+		BEGIN
+			-- 2021-05-27 : 중장기
+			--SELECT PLAN_NAME +':'+HORIZON_END_DATE
+			--FROM SCM_MST_PLAN
+			--WHERE DIVISION_ID = @p_division_id
+			--  AND PLAN_CYCLE = 'WEEKLY'
+			--  AND PLAN_NAME = @p_from_date;
+			SELECT PLAN_NAME +':'+ CONVERT(VARCHAR(8), DATEADD(D, 363, CONVERT(DATE, PLAN_NAME)), 112)
+			  FROM SCM_MST_PLAN
+			 WHERE DIVISION_ID = @p_division_id
+			   AND PLAN_CYCLE = 'WEEKLY'
+			   AND PLAN_NAME = @p_from_date;
+		END
+	ELSE
+		BEGIN
+			IF ISNULL(@p_from_date,'')='' 
+				SET @p_from_date = convert(varchar(8), [dbo].[FN_MULTY_TIME](@p_timezone),112);
+		
+			IF ISNULL(@p_offset_month,'')='' 
+				SET @p_offset_month = '12'
+
+			-- MAX일자는 해당주의 뒷 일요일 구함
+			SELECT MIN_BASIS_YYYYMMDD +':'+MAX_BASIS_YYYYMMDD
+			FROM (
+					SELECT MIN_BASIS_YYYYMMDD
+						  ,DATEPART(DW,MIN_BASIS_YYYYMMDD ) AS MIN_PART
+						  --,CONVERT(VARCHAR, CONVERT(DATETIME, MAX_BASIS_YYYYMMDD )+ 7-DATEPART(DW,MAX_BASIS_YYYYMMDD )+1,112)  AS MAX_BASIS_YYYYMMDD
+						  ,CONVERT(VARCHAR, CONVERT(DATETIME, MAX_BASIS_YYYYMMDD )-DATEPART(DW,MAX_BASIS_YYYYMMDD )+1,112)  AS MAX_BASIS_YYYYMMDD
+						  ,DATEPART(DW,MAX_BASIS_YYYYMMDD ) AS MAX_PART
+					 FROM (	SELECT MIN(A.BASIS_YYYYMMDD) AS MIN_BASIS_YYYYMMDD , MAX(BASIS_YYYYMMDD) AS MAX_BASIS_YYYYMMDD
+							  FROM SCM_SYS_CALENDAR_M A  WITH(NOLOCK)
+							 WHERE A.BASIS_YYYYMMDD >= @p_from_date
+							   AND A.BASIS_YYYYMMDD <= CONVERT(varchar(8) , DATEADD(MM, convert(int,@p_offset_month), @p_from_date), 112)
+						  ) T
+				  ) U
+			END
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_SCP_PERIOD","1153491238","1","
+/*
+ * Program ID   : SCM0001_GET_SCP_PERIOD
+ * Description  : PERIOD 기간조회 (공용)
+ * Program History
+ * ex)
+  EXEC SCM0001_GET_SCP_PERIOD @p_from_date='', @p_offset_month='6', @p_timezone='AS055'
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/04/17   PJS   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/05/31   PJS	           OFFSET 12개월로 강제 수정
+ * 2018/05/31   byunghunjung   OFFSET 12개월 -7일로 수정
+
+ ex)
+ EXEC SCM0001_GET_SCP_PERIOD @p_from_date='20180417', @p_offset_month='12',@p_timezone='AM073'
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_SCP_PERIOD]
+	 @p_from_date    NVARCHAR(30) 
+	,@p_offset_month NVARCHAR(2) 
+	,@p_timezone     NVARCHAR(200) 
+AS
+
+BEGIN
+	IF ISNULL(@p_from_date,'')='' 
+		SET @p_from_date = convert(varchar(8), [dbo].[FN_MULTY_TIME](@p_timezone),112);
+		--SET @p_from_date = convert(varchar(8), getdate(),112);
+		
+	--IF ISNULL(@p_offset_month,'')='' 
+		SET @p_offset_month = '12'
+
+    -- MAX일자는 해당주의 뒷 일요일 구함
+	SELECT MIN_BASIS_YYYYMMDD +':'+MAX_BASIS_YYYYMMDD
+	FROM (
+			SELECT MIN_BASIS_YYYYMMDD
+				  ,DATEPART(DW,MIN_BASIS_YYYYMMDD ) AS MIN_PART
+				  --,CONVERT(VARCHAR, CONVERT(DATETIME, MAX_BASIS_YYYYMMDD )+ 7-DATEPART(DW,MAX_BASIS_YYYYMMDD )+1,112)  AS MAX_BASIS_YYYYMMDD
+				  ,CONVERT(VARCHAR, CONVERT(DATETIME, MAX_BASIS_YYYYMMDD )-DATEPART(DW,MAX_BASIS_YYYYMMDD )+1,112)  AS MAX_BASIS_YYYYMMDD
+				  ,DATEPART(DW,MAX_BASIS_YYYYMMDD ) AS MAX_PART
+			 FROM (	SELECT MIN(A.BASIS_YYYYMMDD) AS MIN_BASIS_YYYYMMDD , MAX(BASIS_YYYYMMDD) AS MAX_BASIS_YYYYMMDD
+					  FROM SCM_SYS_CALENDAR_M A
+					 WHERE A.BASIS_YYYYMMDD >= @p_from_date
+					   AND A.BASIS_YYYYMMDD <= CONVERT(varchar(8) , DATEADD(MM, convert(int,@p_offset_month), @p_from_date), 112)
+				  ) T
+		  ) U
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_SITE_BY_DIVISION","1169491295","1","
+/*
+ * Program ID   : SCM0001_GET_SITE_BY_DIVISION
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/11/15  SongDH         Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/01/09  SongDH         조건 추가 @p_dept_name_ko, @p_end_customer
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_SITE_BY_DIVISION]
+    @p_division_id  NVARCHAR(MAX),
+    @p_dept_id      NVARCHAR(MAX),
+    @p_end_customer NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SELECT A.SCM_SITE_ID      AS CODE
+         , A.SITE_DESCRIPTION AS NAME
+    FROM   [dbo].[SCM_MST_SITE]          A  WITH(NOLOCK)
+    WHERE  1 = 1
+    AND    A.SITE_TYPE = 'SALES'
+    AND    A.VALID_YN  = 'Y'
+    AND    CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+                ELSE A.DIVISION_ID
+	       END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+    AND    CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+                ELSE A.DEPT_ID
+	       END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_dept_id, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+	 AND    CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+                ELSE A.END_CUSTOMER
+	       END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+                    FROM   (SELECT x = CAST('<t>' + REPLACE(@p_end_customer, ',', '</t><t>') + '</t>' AS xml)) b
+                    CROSS APPLY x.nodes('/t') t(c)
+	               )
+	ORDER BY A.SITE_DESCRIPTION
+	;
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0001_GET_SITE_INFO_BY_DIVISION","1185491352","1","
+/*
+ * Program ID   : SCM0001_GET_SITE_BY_DIVISION
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/11/15  SongDH         Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0001_GET_SITE_INFO_BY_DIVISION]
+  @p_division_id NVARCHAR(1000),
+  @p_scm_site_id NVARCHAR(1000)
+AS
+BEGIN
+	
+  SELECT A.DIVISION_ID
+       , A.SCM_SITE_ID
+       , A.CITY
+       , A.COUNTRY
+	   , A.PLANT_ID
+	   , A.OPERATION_GROUP
+	   , D.DEPT_ID
+	   , D.DEPT_NAME_KO
+	   , T.DEPT_ID       AS TEAM_ID
+	   , T.DEPT_NAME_KO  AS TEAM_NAME_KO
+	   , SC.SOLDTO_CODE  
+	   , C.SOLDTO_DESCRIPTION 
+	   , SC.SHIPTO_CODE   
+	   , C.SHIPTO_DESCRIPTION 	   
+	   , A.VMI_YN
+	   , A.VALID_YN
+	   , A.NEW_YN
+	   , A.SITE_HRCY_ID
+	   , A.OSP_YN
+	   , A.SHIP_FROZEN
+	   , A.PROD_FROZEN
+	   , A.END_CUSTOMER
+	   , A.FP_PLAN_PERIOD
+       , A.SCM_SITE_ID AS NAME
+  FROM   [dbo].[SCM_MST_SITE]             A  WITH(NOLOCK)
+         LEFT JOIN SCM_MST_SSO_DEPT_INFO  T  WITH(NOLOCK)
+	       ON A.DEPT_ID = T.DEPT_ID
+	     LEFT JOIN SCM_MST_SSO_DEPT_INFO  D  WITH(NOLOCK)
+	       ON T.UPPER_DEPT_ID = D.DEPT_ID
+	    LEFT OUTER JOIN SCM_MST_SITE_CUSTOMER AS SC  WITH(NOLOCK)
+	       ON (    A.DIVISION_ID = SC.DIVISION_ID
+	           AND A.SCM_SITE_ID = SC.SCM_SITE_ID
+	           AND SC.REP_YN = 'Y' )
+		LEFT JOIN SCM_MST_CUSTOMER  AS C  WITH(NOLOCK)
+		  ON (    SC.DIVISION_ID = C.DIVISION_ID
+		      AND SC.SOLDTO_CODE = C.SOLDTO_CODE
+		      AND SC.SHIPTO_CODE = C.SHIPTO_CODE
+			 )
+  WHERE  1 = 1
+  AND    A.SITE_TYPE     = 'SALES'
+  AND    CASE WHEN @p_division_id = 'ALL' THEN @p_division_id			
+                        ELSE A.DIVISION_ID
+ 	               END  IN ( SELECT token FROM dbo.String_Split(@p_division_id,',') )
+  AND    CASE WHEN @p_scm_site_id = 'ALL' THEN @p_division_id			
+                        ELSE A.SCM_SITE_ID
+ 	               END  IN ( SELECT token FROM dbo.String_Split(@p_scm_site_id,',') )
+  --AND    CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+  --              ELSE A.DIVISION_ID
+	 --      END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+  --                  FROM   (SELECT x = CAST('<t>' + REPLACE(@p_division_id, ',', '</t><t>') + '</t>' AS xml)) b
+  --                  CROSS APPLY x.nodes('/t') t(c)
+	 --              )
+  --AND    CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+  --              ELSE A.SCM_SITE_ID
+	 --      END  IN (SELECT t.c.value('.', 'NVARCHAR(4000)')
+  --                  FROM   (SELECT x = CAST('<t>' + REPLACE(@p_scm_site_id, ',', '</t><t>') + '</t>' AS xml)) b
+  --                  CROSS APPLY x.nodes('/t') t(c)
+	 --              )
+	;
+
+END
+
+"

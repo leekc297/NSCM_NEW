@@ -37,9 +37,12 @@ export const RESPONSE_SET = {
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
 
 // AS-IS .cs 의 5 Validation MSG codes
+//   2026-10-08 정정: AS-IS 번호 MSG00303/MSG00308 은 TO-BE DB(SCM_ADM_MSG_M)에 미등록이라 ID 가 그대로 노출되거나
+//   fallback 만 보였다. 같은 문구가 등록된 TO-BE 코드로 바꾼다 (개발 DB 실측 2026-10-08, MSG-04 문구 대조).
+//   저장 전 두 검증은 모두 화면(utils/validators.ts)에서 하며 저장 SP 는 이 검사를 하지 않는다.
 export const VALIDATION_MSG = {
-  RATIO_OUT_OF_RANGE: 'MSG00303', // 입력 데이터 100% 초과/미만 차단 (ValidChk)
-  REQUIRED_DIVISION: 'MSG00308', // 필수값 — 구분값 입력 (ValidChk2)
+  RATIO_OUT_OF_RANGE: 'MSG01306', // "입력한 데이터가 100을 초과하거나 미만입니다." (ValidChk — 기간별 법인 합계 ≠ 100)
+  REQUIRED_DIVISION: 'MSG01310', // "구분값을 입력해 주세요." (ValidChk2 — 기여율이 있는 기간의 구분(RBU_0999) 칸 공란)
   SAVE_CONFIRM: 'MSG00001', // 저장 전 확인
   VERSION_REQUIRED: 'MSG00283', // FindData — 버전 미선택
   NOT_LOCK: 'MSG00266', // chkYear — sheet 잠금 상태 확인

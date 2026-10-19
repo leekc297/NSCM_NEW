@@ -2,9 +2,8 @@ import type { DialogProps, PaperProps } from '@mui/material';
 import { Dialog as MuiDialog, Paper, Popover } from '@mui/material';
 import { Box } from '@mui/system';
 import { memo, type ReactNode, useCallback, useEffect, useId, useRef, useState } from 'react';
-import Draggable from 'react-draggable';
+import Draggable, { type DraggableData } from 'react-draggable';
 
-import _ from '@foundation/lodash';
 import { confirmIfScopeDirty, DialogScopeContext, useDialogStore } from '@shared/stores';
 
 import DialogContentArea from './components/CustomDialogContent';
@@ -38,6 +37,10 @@ export type DialogNavigationProps = {
   disableMaximize?: boolean;
   /** size/height 1.5배 확대 미적용 (기본 false). 메시지(Alert) 등 원본 크기를 유지해야 하는 다이얼로그에서 사용 */
   disableScale?: boolean;
+  /** 리사이즈 최소 폭(기본 MIN_WIDTH). 기본 폭보다 작게 여는 소형 팝업에서 첫 드래그 시 크기가 튀지 않게 낮출 때 사용 */
+  minWidth?: number;
+  /** 리사이즈 최소 높이(기본 MIN_HEIGHT). minWidth 와 같은 용도 */
+  minHeight?: number;
 } & DialogProps;
 
 /**
@@ -52,7 +55,11 @@ export type DialogNavigationProps = {
 
 const DIALOG_SCALE = 1.5;
 const MAX_WIDTH = 2000;
-const MIN_WIDTH = 400;
+// [2026-09-23] 400 → 800 — 조회조건(SearchArea) 팝업을 기본 크기보다 좁게 드래그하면 라벨·
+//   Period 날짜박스처럼 폭이 px 로 고정된 조회조건이 옆 칸 위로 겹쳐 보이는 문제(DMF0082 Version
+//   Popup 실측). "겹칠 수 있는 폭 자체"에 도달하지 못하도록 리사이즈 최소폭을 기본폭(DEFAULT_WIDTH)
+//   과 같은 값으로 올렸다 — 모든 CustomDialog 팝업에 공통 적용.
+const MIN_WIDTH = 800;
 const MAX_HEIGHT = 1600;
 const MIN_HEIGHT = 300;
 const DEFAULT_WIDTH = 800;
@@ -90,13 +97,17 @@ const DraggablePaper = ({
                 typeof dialogSize.width === 'number'
                   ? dialogSize.width * scale
                   : `calc(${String(dialogSize.width)} * ${scale})`,
-              maxWidth: MAX_WIDTH,
+              // scale(1.5) 적용 폭이 뷰포트보다 넓으면 가로로 화면을 넘어간다. MUI Dialog 기본
+              //   여백(상하좌우 32px)을 뺀 뷰포트 폭으로 함께 상한을 걸어 넘침을 막는다.
+              maxWidth: `min(${MAX_WIDTH}px, calc(100vw - 64px))`,
+              // 높이도 같은 이유로 뷰포트 높이(여백 제외)로 상한을 건다. draggable 이 아닌
+              //   팝업(인라인 height 없음)도 긴 콘텐츠로 세로를 넘길 수 있어 maxHeight 는 공통 적용.
+              maxHeight: `min(${MAX_HEIGHT}px, calc(100vh - 64px))`,
               ...(draggable && {
                 height:
                   typeof dialogSize.height === 'number'
                     ? dialogSize.height * scale
                     : `calc(${String(dialogSize.height)} * ${scale})`,
-                maxHeight: MAX_HEIGHT,
               }),
             }),
       }}
@@ -108,6 +119,24 @@ const DraggablePaper = ({
     </Paper>
   );
 
+  // 드래그가 팝업을 브라우저 밖으로 끌어내지 못하게 막는다. react-draggable 의 bounds 는
+  //   MUI 가 Paper 를 flex 로 중앙 배치해 원점이 가변이라 정확히 맞지 않는다. 대신 onDrag 에서
+  //   이번 프레임의 증분(deltaX/Y)을 적용한 뒤 Paper 가 뷰포트를 벗어나면 false 를 돌려 그
+  //   프레임을 취소한다(rect 은 이동 적용 직전 위치).
+  const handleDrag = (_e: unknown, data: DraggableData) => {
+    const rect = data.node.getBoundingClientRect();
+    const nextLeft = rect.left + data.deltaX;
+    const nextTop = rect.top + data.deltaY;
+    if (
+      nextLeft < 0 ||
+      nextTop < 0 ||
+      nextLeft + rect.width > window.innerWidth ||
+      nextTop + rect.height > window.innerHeight
+    ) {
+      return false;
+    }
+  };
+
   // 최대화 상태에서는 드래그 비활성(위치 고정)
   if (draggable && !isMaximized) {
     return (
@@ -115,6 +144,7 @@ const DraggablePaper = ({
         handle='#draggable-dialog-title'
         cancel='[class*="MuiDialogContent-root"]'
         nodeRef={nodeRef}
+        onDrag={handleDrag}
       >
         {paperElement}
       </Draggable>
@@ -138,12 +168,14 @@ const CustomDialogComponent = ({
   customHeaderSubTitle,
   customContentArea,
   disableButtonCancel,
-  handleClose = () => _.noop(),
-  handleSubmit = () => _.noop(),
+  handleClose = () => {},
+  handleSubmit = () => {},
   draggable = true,
   height,
   disableMaximize = false,
   disableScale = false,
+  minWidth = MIN_WIDTH,
+  minHeight = MIN_HEIGHT,
   // ⚠️ 이 컴포넌트는 나머지 props 를 MuiDialog 로 spread 하지 않는다 → 전달할 prop 은 명시 선언 필수.
   disableEnforceFocus,
 }: DialogNavigationProps) => {
@@ -161,18 +193,21 @@ const CustomDialogComponent = ({
   const startSize = useRef<{ width: number; height: number }>({ width: 0, height: 0 });
   const sizeRef = useRef<DialogSizeRef | null>(null);
 
-  const handleMouseMove = useCallback((mouseEvent: MouseEvent) => {
-    if (!isResizing.current) return;
-    const newWidth = Math.min(
-      MAX_WIDTH,
-      Math.max(MIN_WIDTH, startSize.current.width + (mouseEvent.clientX - startPos.current.x))
-    );
-    const newHeight = Math.min(
-      MAX_HEIGHT,
-      Math.max(MIN_HEIGHT, startSize.current.height + (mouseEvent.clientY - startPos.current.y))
-    );
-    setDialogSize({ width: newWidth, height: newHeight });
-  }, []);
+  const handleMouseMove = useCallback(
+    (mouseEvent: MouseEvent) => {
+      if (!isResizing.current) return;
+      const newWidth = Math.min(
+        MAX_WIDTH,
+        Math.max(minWidth, startSize.current.width + (mouseEvent.clientX - startPos.current.x))
+      );
+      const newHeight = Math.min(
+        MAX_HEIGHT,
+        Math.max(minHeight, startSize.current.height + (mouseEvent.clientY - startPos.current.y))
+      );
+      setDialogSize({ width: newWidth, height: newHeight });
+    },
+    [minWidth, minHeight]
+  );
 
   const handleMouseUp = useCallback(() => {
     isResizing.current = false;
@@ -185,11 +220,14 @@ const CustomDialogComponent = ({
     mouseEvent.stopPropagation();
     isResizing.current = true;
     startPos.current = { x: mouseEvent.clientX, y: mouseEvent.clientY };
+    // height 가 '50vh' 같은 CSS 값이면 실제 화면 높이(scale 적용 후 px)를 재므로, dialogSize 와
+    //   같은 논리값 단위로 맞추려면 /scale 해서 저장한다(width 는 이미 논리값이라 그대로).
+    const scale = disableScale ? 1 : DIALOG_SCALE;
     const currentHeight =
       typeof dialogSize.height === 'string'
         ? ((mouseEvent.currentTarget as HTMLElement)
             .closest('.MuiPaper-root')
-            ?.getBoundingClientRect().height ?? 0)
+            ?.getBoundingClientRect().height ?? 0) / scale
         : dialogSize.height;
     startSize.current = { width: dialogSize.width, height: currentHeight };
     document.body.style.cursor = 'se-resize';

@@ -1,0 +1,1883 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-07-12 00:00:00.507","LGCE_SCMDEV","P ","SCP0015_GET_PLAN_MST","1422016197","1","/*
+ * Program ID   : [SCP0015_GET_PLAN_MST]
+ * Description  : Plan Management 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2018-02-23   PJS				Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018-04-16   PJS				화면그리드 조회시 REVISION_NO 상태 초기값 조회쿼리로 변경 
+ * 2018-05-21   PJS				confirm, run 사용자 권한 기능 추가
+ * 2018-06-18   PJS				modeling_id 조회방식 변경
+ * 2018-11-01   YHW				TE 플랜 추가
+ * 2019-06-14	YHW				[CSR ID:4004411] GSCM(SCP) 서비스 점검결과 조치(Message Exception 처리)
+ * 2025-07-19	YMH				[CSR : 20250618-001038] 관련조치 
+									1. 권한을 GROUP MENU MODIFY 권한으로 수정
+									2. RUN은 오류종료시에만 가능
+									3. 취소버튼 추가 
+									4. 취소버튼은 정상종료만 가능.
+ * ex)
+    EXEC SCP0015_GET_PLAN_MST @p_division_id='81',@p_plan_year='2018',@p_plan_week='',@p_user_id=''
+ */
+CREATE PROCEDURE [dbo].[SCP0015_GET_PLAN_MST]
+ (
+  	 @p_division_id		NVARCHAR(MAX)  
+	,@p_plan_year  		NVARCHAR(MAX)
+	,@p_plan_week	  	NVARCHAR(MAX)
+	,@p_user_id         NVARCHAR(MAX)
+	,@p_group_id		NVARCHAR(MAX)
+	--,@p_plan_type	  	NVARCHAR(MAX) =''
+ )
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON;
+
+	/* 화면 그리드 조회 */
+	--SELECT  B.division_id
+	--	   ,B.DIVISION_NAME
+	--	   ,A.SEGMENT2 PLAN_TYPE_DESCRIPTION
+	--	   ,A.SEGMENT3 PLAN_TYPE
+	--	   ,'' AS REVISION_NO
+	--	   ,'' AS REVISION_DESC
+	--	   ,'' AS CONFIRM_TIME
+	--	   ,'' AS CONFIRM_USER
+	--FROM   SCM_ADM_LOOKUP_MASTER_DETAIL A
+	--	, (SELECT division_id, DIVISION_NAME 
+	--		FROM dbo.SCM_MST_DIVISION
+	--	   WHERE DIVISION_ID =@p_division_id
+	--	  ) B 	 
+	--WHERE A.LOOKUP_TYPE ='PLAN_TYPE'
+	--  AND A.VALID_YN    ='Y'
+	--ORDER BY A.DISPLAY_SEQ ;
+
+	SELECT t.division_id
+		  ,t.division_name
+		  ,t.plan_type_description
+		  ,t.plan_type
+		  ,(SELECT modeling_id FROM scm_mst_modeling WHERE  plan_cycle  = 'WEEKLY' AND division_id    = @p_division_id) AS modeling_id 
+		  ,u.revision_no
+		  ,u.revision_desc
+		  ,u.plan_status_name
+		  ,u.plan_status
+		  ,u.confirm_flag as confirm_yn
+		  ,u.confirm_time
+		  ,u.confirm_user
+
+		  /* 20250709 [csr : E20250618-001038] 관련 수정 주석처리 시작 */
+		  --,ISNULL(v.confirm_auth,'N') AS confirm_auth
+		  --,ISNULL(v.run_auth,'N') AS run_auth
+		  /* 20250709 [csr : E20250618-001038] 관련 수정 주석처리 끝 */
+		  /* 20250709 [csr : E20250618-001038] 관련 신규로직 시작 */
+		  ,ISNULL(v.confirm_auth,'N') AS confirm_auth
+		  ,ISNULL(v.run_auth,'N') AS run_auth
+		  ,ISNULL(v.CANCEL_AUTH,'N') AS CANCEL_AUTH
+		  /* 20250709 [csr : E20250618-001038] 관련 신규로직 끝   */
+	  FROM(
+			SELECT  b.division_id
+				   ,b.division_name
+				   ,a.segment2 plan_type_description
+				   ,a.segment3 plan_type
+				   ,'' AS revision_no
+				   ,'' AS revision_desc
+				   ,'' AS confirm_time
+				   ,'' AS confirm_user
+				   ,a.display_seq
+			FROM   scm_adm_lookup_master_detail a
+				, (SELECT division_id, division_name 
+					FROM dbo.scm_mst_division
+				   WHERE division_id = @p_division_id
+				  ) B 	 
+			WHERE A.LOOKUP_TYPE ='PLAN_TYPE'
+			  AND A.VALID_YN    ='Y'
+		
+		 ) T LEFT OUTER JOIN
+		 (
+			SELECT m.division_id
+				  ,m.plan_type
+				  ,m.revision_no
+				  ,m.modeling_id
+				  ,m.revision_desc
+				  ,m.plan_status
+				  ,m.plan_status_name			
+				  ,n.confirm_date AS confirm_time
+				  ,n.confirm_flag
+				  ,n.confirm_user
+			  FROM (
+					SELECT   a.plan_version_id as revision_no
+							,a.plan_version_id as revision_desc
+							--,a.modeling_id
+							,a.plan_status
+							,a.plan_status_name			
+							,c.segment2 AS plan_type_description
+							,c.display_seq
+							,RANK() OVER(PARTITION BY a.plan_type ORDER BY A.plan_version_id DESC) AS rank
+							,a.modeling_id
+							,a.division_id
+							,a.plan_id
+							,a.plan_type
+							,convert(int, [dbo].[fn_scm_split](a.plan_version_id,3,'-')) "
+"2025-07-12 00:00:00.507","LGCE_SCMDEV","P ","SCP0015_GET_PLAN_MST","1422016197","2","as plan_seq			
+					 FROM   fn_scp_plan_version_v(@p_division_id,'',@p_plan_year,@p_plan_week) a 
+							JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+							JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'			
+					WHERE    1=1	  
+					) m
+					LEFT JOIN scm_mst_plan_detail n  ON m.modeling_id = n.modeling_id
+													and m.division_id = n.division_id
+													and m.plan_id     = n.plan_id
+													and m.plan_type   = n.plan_type
+													and m.plan_seq    = n.plan_seq   
+			WHERE 1=1
+			  and rank =1
+		   ) U ON t.DIVISION_ID =u.division_id
+			  and t.PLAN_TYPE   =u.plan_type
+		  /* 20250709 [csr : E20250618-001038] 관련 수정 주석처리 */
+		  /*
+		  LEFT OUTER JOIN (SELECT division_id
+							     ,MAX(CASE WHEN  action_type ='CONFIRM' THEN 'Y' END) AS confirm_auth
+								 ,MAX(CASE WHEN  action_type ='RUN' THEN 'Y' END) AS run_auth
+							FROM scm_mst_plan_user
+						   WHERE division_id = @p_division_id
+					         AND plan_cycle  = 'WEEKLY'
+					         AND user_id     = @p_user_id
+					       GROUP BY division_id
+					) V ON t.division_id = v.division_id
+			*/
+			/* 20250709 [csr : E20250618-001038] 관련 신규로직 시작*/
+			LEFT OUTER JOIN (
+								SELECT 
+									B.CODE AS DIVISION_ID
+									, 'Y' AS CONFIRM_AUTH
+									, 'Y' AS RUN_AUTH
+									, 'Y' AS CANCEL_AUTH
+								FROM TB_FX_UserGroupInfo  AS A
+									LEFT OUTER JOIN TB_FX_UserGroupAuthExtention AS B
+									ON A.GroupID = B.GROUPID
+									AND A.UserID = B.UserID
+								WHERE A.GROUPID IN
+								(
+									SELECT GROUPID
+									FROM TB_FX_GroupMenuAuth AS A WITH(NOLOCK) 
+									WHERE MENUID = 'SCP0015' -- 메뉴고정.
+									AND GROUPID = @p_group_id
+									AND BASICACLU = 1
+								) AND USEYN = 'Y'
+								AND A.USERID =  @p_user_id
+								AND B.AuthType = 'D' -- 디비전 고정.
+								AND B.Code = @p_division_id
+							) V ON t.division_id = v.division_id
+			/* 20250709 [csr : E20250618-001038] 관련 신규로직 끝*/
+
+	ORDER BY T.display_seq 		
+
+
+   /* Revision 조회  view를 사용하면 소팅시 속도 저장=> view 원본으로 쿼리 재작성 => view를 함수로 변경하여 재작성*/
+   SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name			
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'TE',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name			
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'TM',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+
+
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name			
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'PR',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name"
+"2025-07-12 00:00:00.507","LGCE_SCMDEV","P ","SCP0015_GET_PLAN_MST","1422016197","3","
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name			
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'MA',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+		SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name						
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'SE',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name						
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'FN',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name						
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'SU',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+
+
+END
+"
+"2025-09-23 00:00:00.220","LGCE_SCMDEV","P ","SCP0015_SAVE_PLAN_MST_RUN","1470016368","1","/*
+ * Program ID   : [SCP0015_SAVE_PLAN_MST_RUN]
+ * Description  : PLAN RUN 실행
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/04/18   PJS   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2025/09/22	YMH	  5분안에 엔진수행기록 있을때 재수행 안되게 수정.
+ * 실행예제)
+ *  EXEC SCP0015_SAVE_PLAN_MST_RUN @p_modeling_id='2',@p_plan_type='MA'
+ */
+CREATE PROCEDURE [dbo].[SCP0015_SAVE_PLAN_MST_RUN]
+ (
+	 @p_modeling_id  	NVARCHAR(1000)
+  	,@p_plan_type		NVARCHAR(1000)  
+ )
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+
+	DECLARE @v_plan_name NVARCHAR(8)='';
+	DECLARE @v_plan_type NVARCHAR(2)='';
+	DECLARE @v_plan_seq  NVARCHAR(2)='';
+    DECLARE @v_plan_id   NVARCHAR(30)='';	
+	
+		-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0015_SAVE_PLAN_MST_RUN';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	
+	BEGIN TRY
+
+		
+		-- YMH 동일동작 실행시킨것이 있다면 실행시키지 않는다.
+		DECLARE @NDIFFCHKMIN INT = 5
+
+		-- 20250922 YMH 5분안에 동일한 엔진시작건이 있으면 수행하지 않는다.
+		IF NOT EXISTS(
+			SELECT * FROM SCM_SYS_LOG_BATCH T WITH(NOLOCK)
+			WHERE 1 = 1 
+			AND T.PROGRAM_NAME = 'SCP0015_SAVE_PLAN_MST_RUN'
+			AND CONVERT(CHAR(8), T.EVENT_DATE, 112) = CONVERT(CHAR(8), GETDATE(), 112)
+			AND T.LOG_TYPE = 'START'
+			AND CONVERT(VARCHAR(MAX),T.DESCRIPTION) = concat(@p_modeling_id, ' : ' , @p_plan_type)
+			AND DATEDIFF(MINUTE,T.EVENT_DATE,GETDATE())  < @NDIFFCHKMIN
+			AND NOT EXISTS  -- 종료나 에러가 있으면 대상이 아님.
+			(
+				SELECT * FROM SCM_SYS_LOG_BATCH T2 WITH(NOLOCK)
+				WHERE 1 = 1 
+				AND T2.PROGRAM_NAME = 'SCP0015_SAVE_PLAN_MST_RUN'
+				AND T2.EVENT_DATE > T.EVENT_DATE
+				AND T2.LOG_TYPE <> 'START'
+				AND CONVERT(VARCHAR(MAX),T2.DESCRIPTION) = concat(@p_modeling_id, ' : ' , @p_plan_type)
+			)
+		)
+		BEGIN
+
+			SET @v_log_type = 'START';
+			SET @v_log_message = '########## Start of procedure ##########';
+			SET @v_description = concat(@p_modeling_id, ' : ' , @p_plan_type); 
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+			--PLAN RUN 실행
+			EXEC PR_SCP_ENG_CONTROL @p_modeling_id, @p_plan_type
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = concat(@p_modeling_id, ' : ' , @p_plan_type); 
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code, 1 result_cnt ;		
+		END
+		ELSE
+		BEGIN
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'E' AS result_code, 0 result_cnt ;		
+			SELECT '해당 엔진이 이미 실행 되었습니다.';
+		END
+
+	END TRY
+
+	BEGIN CATCH 
+	  BEGIN
+		INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+		VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+		IF @@TRANCOUNT > 0
+		  COMMIT WORK;
+	  END;
+
+	  -- error코드, errror 메시지 반환
+	  SELECT 'F' AS result_code;
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+"
+"2025-07-11 00:00:00.573","LGCE_SCMDEV","P ","SCP0015_SAVE_PLAN_MST_CANCEL","2067134755","1","/*
+ * Program ID   : [SCP0015_SAVE_PLAN_MST_CANCEL]
+ * Description  : PLAN CANCEL 저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2025/07/09   YMH			 CSR:E20250618-001038
+ * 실행예제)
+ *  EXEC SCP0015_SAVE_PLAN_MST_CANCEL @p_modeling_id='2',@p_division_id='81',@p_revision_no='20171211-MA-02',@p_confirm_user='2014001'
+ */
+CREATE PROCEDURE [dbo].[SCP0015_SAVE_PLAN_MST_CANCEL]
+ (
+	 @p_modeling_id  	NVARCHAR(1000)
+  	,@p_division_id		NVARCHAR(1000)  
+	,@p_revision_no		NVARCHAR(1000)
+	,@p_confirm_user	NVARCHAR(1000)
+ )
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+
+	DECLARE @v_plan_name NVARCHAR(8)='';
+	DECLARE @v_plan_type NVARCHAR(2)='';
+	DECLARE @v_plan_seq  NVARCHAR(2)='';
+    DECLARE @v_plan_id   NVARCHAR(30)='';	
+	
+		-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0015_SAVE_PLAN_MST_CANCEL';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	
+		SET @v_plan_name = [dbo].[FN_SCM_SPLIT](@p_revision_no,1,'-');
+		SET @v_plan_type = [dbo].[FN_SCM_SPLIT](@p_revision_no,2,'-');
+		SET @v_plan_seq  = [dbo].[FN_SCM_SPLIT](@p_revision_no,3,'-');
+
+		SET @v_plan_id = (
+							SELECT b.plan_id
+							  FROM dbo.scm_mst_plan A
+								   INNER JOIN scm_mst_plan_detail B ON a.division_id=b.division_id
+																   AND a.plan_id    =b.plan_id	   
+							 WHERE b.modeling_id = @p_modeling_id
+							   AND a.division_id = @p_division_id
+							   AND a.plan_name   = @v_plan_name
+							   AND b.plan_type   = @v_plan_type
+							   AND b.plan_seq    = @v_plan_seq 
+							) ;
+		
+
+		   
+		UPDATE scm_mst_plan_detail
+		   SET PLAN_STATUS = '-1'
+		     , display_yn         = 'N'
+		     , ui_display_yn      = 'N'
+		     , normal_complete_yn = 'N'
+		     , confirm_flag       = ''
+		     , confirm_user       = ''
+		     , confirm_date       = null
+			 , LAST_UPDATE_DATE = GETDATE()
+			 , LAST_UPDATED_BY = @p_confirm_user
+		 WHERE modeling_id = @p_modeling_id
+		   AND division_id = @p_division_id
+		   AND plan_id     = @v_plan_id
+		   AND plan_type   = @v_plan_type 
+		   AND plan_seq    = @v_plan_seq ;
+
+		--  PRINT '@p_modeling_id = '+ @p_modeling_id;
+		--	PRINT '@p_division_id = '+ @p_division_id;
+		--	PRINT '@v_plan_id     = '+ @v_plan_id;
+		--	PRINT '@v_plan_type   = '+ @v_plan_type;
+		--	PRINT '@v_plan_seq    = '+ @v_plan_seq;
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		DECLARE @x_seq  INT;
+		SET @x_seq=	CONVERT(INT, @v_plan_seq);
+
+		----  엔진결과 외부시스템 인터페이스 처리 실행
+		EXEC PR_SCP_PLN_INTERFACE_PLAN 	@p_division_id,	@v_plan_name, @v_plan_type,	@x_seq, @p_confirm_user ;
+
+		-- ESS 전극소요관련 매출 INSERT
+		--IF ( @p_division_id ='82')
+		--	BEGIN
+		--		EXEC dbo.PR_SCM_PLN_MKT_FCST_ESS_ELEC_TRAN;
+		--	END;
+
+		COMMIT TRAN;	
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code, (SELECT COUNT(*)  
+										FROM scm_mst_plan_detail 
+										WHERE modeling_id = @p_modeling_id
+									   AND division_id = @p_division_id
+									   AND plan_id     = @v_plan_id
+									   AND plan_type   = @v_plan_t"
+"2025-07-10 00:00:01.263","LGCE_SCMDEV","P ","SCP0015_GET_PLAN_MST","1422016197","1","/*
+ * Program ID   : [SCP0015_GET_PLAN_MST]
+ * Description  : Plan Management 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2018-02-23   PJS				Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018-04-16   PJS				화면그리드 조회시 REVISION_NO 상태 초기값 조회쿼리로 변경 
+ * 2018-05-21   PJS				confirm, run 사용자 권한 기능 추가
+ * 2018-06-18   PJS				modeling_id 조회방식 변경
+ * 2018-11-01   YHW				TE 플랜 추가
+ * 2019-06-14	YHW				[CSR ID:4004411] GSCM(SCP) 서비스 점검결과 조치(Message Exception 처리)
+ * 2025-07-19	YMH				[CSR : 20250618-001038] 관련조치 
+									1. 권한을 GROUP MENU MODIFY 권한으로 수정
+									2. RUN은 오류종료시에만 가능
+									3. 취소버튼 추가 
+									4. 취소버튼은 정상종료만 가능.
+ * ex)
+    EXEC SCP0015_GET_PLAN_MST @p_division_id='81',@p_plan_year='2018',@p_plan_week='',@p_user_id=''
+ */
+CREATE PROCEDURE [dbo].[SCP0015_GET_PLAN_MST]
+ (
+  	 @p_division_id		NVARCHAR(MAX)  
+	,@p_plan_year  		NVARCHAR(MAX)
+	,@p_plan_week	  	NVARCHAR(MAX)
+	,@p_user_id         NVARCHAR(MAX)
+	--,@p_plan_type	  	NVARCHAR(MAX) =''
+ )
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON;
+
+	/* 화면 그리드 조회 */
+	--SELECT  B.division_id
+	--	   ,B.DIVISION_NAME
+	--	   ,A.SEGMENT2 PLAN_TYPE_DESCRIPTION
+	--	   ,A.SEGMENT3 PLAN_TYPE
+	--	   ,'' AS REVISION_NO
+	--	   ,'' AS REVISION_DESC
+	--	   ,'' AS CONFIRM_TIME
+	--	   ,'' AS CONFIRM_USER
+	--FROM   SCM_ADM_LOOKUP_MASTER_DETAIL A
+	--	, (SELECT division_id, DIVISION_NAME 
+	--		FROM dbo.SCM_MST_DIVISION
+	--	   WHERE DIVISION_ID =@p_division_id
+	--	  ) B 	 
+	--WHERE A.LOOKUP_TYPE ='PLAN_TYPE'
+	--  AND A.VALID_YN    ='Y'
+	--ORDER BY A.DISPLAY_SEQ ;
+
+	SELECT t.division_id
+		  ,t.division_name
+		  ,t.plan_type_description
+		  ,t.plan_type
+		  ,(SELECT modeling_id FROM scm_mst_modeling WHERE  plan_cycle  = 'WEEKLY' AND division_id    = @p_division_id) AS modeling_id 
+		  ,u.revision_no
+		  ,u.revision_desc
+		  ,u.plan_status_name
+		  ,u.plan_status
+		  ,u.confirm_flag as confirm_yn
+		  ,u.confirm_time
+		  ,u.confirm_user
+
+		  /* 20250709 [csr : E20250618-001038] 관련 수정 주석처리 시작 */
+		  --,ISNULL(v.confirm_auth,'N') AS confirm_auth
+		  --,ISNULL(v.run_auth,'N') AS run_auth
+		  /* 20250709 [csr : E20250618-001038] 관련 수정 주석처리 끝 */
+		  /* 20250709 [csr : E20250618-001038] 관련 신규로직 시작 */
+		  ,ISNULL(v.confirm_auth,'N') AS confirm_auth
+		  ,ISNULL(v.run_auth,'N') AS run_auth
+		  ,ISNULL(v.CANCEL_AUTH,'N') AS CANCEL_AUTH
+		  /* 20250709 [csr : E20250618-001038] 관련 신규로직 끝   */
+	  FROM(
+			SELECT  b.division_id
+				   ,b.division_name
+				   ,a.segment2 plan_type_description
+				   ,a.segment3 plan_type
+				   ,'' AS revision_no
+				   ,'' AS revision_desc
+				   ,'' AS confirm_time
+				   ,'' AS confirm_user
+				   ,a.display_seq
+			FROM   scm_adm_lookup_master_detail a
+				, (SELECT division_id, division_name 
+					FROM dbo.scm_mst_division
+				   WHERE division_id = @p_division_id
+				  ) B 	 
+			WHERE A.LOOKUP_TYPE ='PLAN_TYPE'
+			  AND A.VALID_YN    ='Y'
+		
+		 ) T LEFT OUTER JOIN
+		 (
+			SELECT m.division_id
+				  ,m.plan_type
+				  ,m.revision_no
+				  ,m.modeling_id
+				  ,m.revision_desc
+				  ,m.plan_status
+				  ,m.plan_status_name			
+				  ,n.confirm_date AS confirm_time
+				  ,n.confirm_flag
+				  ,n.confirm_user
+			  FROM (
+					SELECT   a.plan_version_id as revision_no
+							,a.plan_version_id as revision_desc
+							--,a.modeling_id
+							,a.plan_status
+							,a.plan_status_name			
+							,c.segment2 AS plan_type_description
+							,c.display_seq
+							,RANK() OVER(PARTITION BY a.plan_type ORDER BY A.plan_version_id DESC) AS rank
+							,a.modeling_id
+							,a.division_id
+							,a.plan_id
+							,a.plan_type
+							,convert(int, [dbo].[fn_scm_split](a.plan_version_id,3,'-')) as plan_seq			
+					 FROM   f"
+"2025-07-10 00:00:01.263","LGCE_SCMDEV","P ","SCP0015_GET_PLAN_MST","1422016197","2","n_scp_plan_version_v(@p_division_id,'',@p_plan_year,@p_plan_week) a 
+							JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+							JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'			
+					WHERE    1=1	  
+					) m
+					LEFT JOIN scm_mst_plan_detail n  ON m.modeling_id = n.modeling_id
+													and m.division_id = n.division_id
+													and m.plan_id     = n.plan_id
+													and m.plan_type   = n.plan_type
+													and m.plan_seq    = n.plan_seq   
+			WHERE 1=1
+			  and rank =1
+		   ) U ON t.DIVISION_ID =u.division_id
+			  and t.PLAN_TYPE   =u.plan_type
+		  /* 20250709 [csr : E20250618-001038] 관련 수정 주석처리 */
+		  /*
+		  LEFT OUTER JOIN (SELECT division_id
+							     ,MAX(CASE WHEN  action_type ='CONFIRM' THEN 'Y' END) AS confirm_auth
+								 ,MAX(CASE WHEN  action_type ='RUN' THEN 'Y' END) AS run_auth
+							FROM scm_mst_plan_user
+						   WHERE division_id = @p_division_id
+					         AND plan_cycle  = 'WEEKLY'
+					         AND user_id     = @p_user_id
+					       GROUP BY division_id
+					) V ON t.division_id = v.division_id
+			*/
+			/* 20250709 [csr : E20250618-001038] 관련 신규로직 시작*/
+			LEFT OUTER JOIN (
+								SELECT 
+									B.CODE AS DIVISION_ID
+									, 'Y' AS CONFIRM_AUTH
+									, 'Y' AS RUN_AUTH
+									, 'Y' AS CANCEL_AUTH
+								FROM TB_FX_UserGroupInfo  AS A
+									LEFT OUTER JOIN TB_FX_UserGroupAuthExtention AS B
+									ON A.GroupID = B.GROUPID
+									AND A.UserID = B.UserID
+								WHERE A.GROUPID IN
+								(
+									SELECT GROUPID
+									FROM TB_FX_GroupMenuAuth AS A WITH(NOLOCK) 
+									WHERE MENUID = 'SCP0015' -- 메뉴고정.
+									AND BASICACLU = 1
+								) AND USEYN = 'Y'
+								AND A.USERID =  @p_user_id
+								AND B.AuthType = 'D' -- 디비전 고정.
+								AND B.Code = @p_division_id
+							) V ON t.division_id = v.division_id
+			/* 20250709 [csr : E20250618-001038] 관련 신규로직 끝*/
+
+	ORDER BY T.display_seq 		
+
+
+   /* Revision 조회  view를 사용하면 소팅시 속도 저장=> view 원본으로 쿼리 재작성 => view를 함수로 변경하여 재작성*/
+   SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name			
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'TE',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name			
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'TM',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+
+
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name			
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'PR',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name			
+"
+"2025-07-10 00:00:01.263","LGCE_SCMDEV","P ","SCP0015_GET_PLAN_MST","1422016197","3","			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'MA',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+		SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name						
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'SE',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name						
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'FN',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name						
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'SU',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+
+
+END
+"
+"2025-07-10 00:00:01.263","LGCE_SCMDEV","P ","SCP0015_SAVE_PLAN_MST_CANCEL","2067134755","1","/*
+ * Program ID   : [SCP0015_SAVE_PLAN_MST_CANCEL]
+ * Description  : PLAN CANCEL 저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2025/07/09   YMH			 CSR:E20250618-001038
+ * 실행예제)
+ *  EXEC SCP0015_SAVE_PLAN_MST_CANCEL @p_modeling_id='2',@p_division_id='81',@p_revision_no='20171211-MA-02',@p_confirm_user='2014001'
+ */
+CREATE PROCEDURE [dbo].[SCP0015_SAVE_PLAN_MST_CANCEL]
+ (
+	 @p_modeling_id  	NVARCHAR(1000)
+  	,@p_division_id		NVARCHAR(1000)  
+	,@p_revision_no		NVARCHAR(1000)
+	,@p_confirm_user	NVARCHAR(1000)
+ )
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+
+	DECLARE @v_plan_name NVARCHAR(8)='';
+	DECLARE @v_plan_type NVARCHAR(2)='';
+	DECLARE @v_plan_seq  NVARCHAR(2)='';
+    DECLARE @v_plan_id   NVARCHAR(30)='';	
+	
+		-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0015_SAVE_PLAN_MST_CANCEL';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	
+		SET @v_plan_name = [dbo].[FN_SCM_SPLIT](@p_revision_no,1,'-');
+		SET @v_plan_type = [dbo].[FN_SCM_SPLIT](@p_revision_no,2,'-');
+		SET @v_plan_seq  = [dbo].[FN_SCM_SPLIT](@p_revision_no,3,'-');
+
+		SET @v_plan_id = (
+							SELECT b.plan_id
+							  FROM dbo.scm_mst_plan A
+								   INNER JOIN scm_mst_plan_detail B ON a.division_id=b.division_id
+																   AND a.plan_id    =b.plan_id	   
+							 WHERE b.modeling_id = @p_modeling_id
+							   AND a.division_id = @p_division_id
+							   AND a.plan_name   = @v_plan_name
+							   AND b.plan_type   = @v_plan_type
+							   AND b.plan_seq    = @v_plan_seq 
+							) ;
+		
+
+		   
+		UPDATE scm_mst_plan_detail
+		   SET PLAN_STATUS = '-1'
+		     , display_yn         = 'N'
+		     , ui_display_yn      = 'N'
+		     , normal_complete_yn = 'N'
+		     , confirm_flag       = ''
+		     , confirm_user       = ''
+		     , confirm_date       = ''
+			 , LAST_UPDATE_DATE = GETDATE()
+			 , LAST_UPDATED_BY = @p_confirm_user
+		 WHERE modeling_id = @p_modeling_id
+		   AND division_id = @p_division_id
+		   AND plan_id     = @v_plan_id
+		   AND plan_type   = @v_plan_type 
+		   AND plan_seq    = @v_plan_seq ;
+
+		--  PRINT '@p_modeling_id = '+ @p_modeling_id;
+		--	PRINT '@p_division_id = '+ @p_division_id;
+		--	PRINT '@v_plan_id     = '+ @v_plan_id;
+		--	PRINT '@v_plan_type   = '+ @v_plan_type;
+		--	PRINT '@v_plan_seq    = '+ @v_plan_seq;
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		DECLARE @x_seq  INT;
+		SET @x_seq=	CONVERT(INT, @v_plan_seq);
+
+		----  엔진결과 외부시스템 인터페이스 처리 실행
+		EXEC PR_SCP_PLN_INTERFACE_PLAN 	@p_division_id,	@v_plan_name, @v_plan_type,	@x_seq, @p_confirm_user ;
+
+		-- ESS 전극소요관련 매출 INSERT
+		--IF ( @p_division_id ='82')
+		--	BEGIN
+		--		EXEC dbo.PR_SCM_PLN_MKT_FCST_ESS_ELEC_TRAN;
+		--	END;
+
+		COMMIT TRAN;	
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code, (SELECT COUNT(*)  
+										FROM scm_mst_plan_detail 
+										WHERE modeling_id = @p_modeling_id
+									   AND division_id = @p_division_id
+									   AND plan_id     = @v_plan_id
+									   AND plan_type   = @v_plan_typ"
+"2025-07-10 00:00:01.263","LGCE_SCMDEV","P ","SCP0015_SAVE_PLAN_MST_CANCEL","2067134755","2","e 
+									   AND plan_seq    = @v_plan_seq
+									 ) AS result_cnt ;		
+		 
+		-- 수정결과 반환
+		SELECT CONFIRM_FLAG AS CONFIRM_YN
+			  ,CONFIRM_USER AS CONFIRM_USER
+			  ,CONFIRM_DATE AS CONFIRM_TIME
+		 FROM scm_mst_plan_detail	  
+		WHERE modeling_id = @p_modeling_id
+		   AND division_id = @p_division_id
+		   AND plan_id     = @v_plan_id
+		   AND plan_type   = @v_plan_type 
+		   AND plan_seq    = @v_plan_seq ;
+
+	END TRY
+
+	BEGIN CATCH 
+	  BEGIN
+	    if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+		VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+		--IF @@TRANCOUNT > 0
+		--  COMMIT WORK;
+	  END;
+
+	  -- error코드, errror 메시지 반환
+	  SELECT 'F' AS result_code;
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+"
+"2025-08-01 00:00:00.900","LGCE_SCMDEV","P ","SCP0015_SAVE_PLAN_MST_CANCEL","2067134755","1","/*
+ * Program ID   : [SCP0015_SAVE_PLAN_MST_CANCEL]
+ * Description  : PLAN CANCEL 저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2025/07/09   YMH			 CSR:E20250618-001038
+ * 실행예제)
+ *  EXEC SCP0015_SAVE_PLAN_MST_CANCEL @p_modeling_id='1',@p_division_id='40',@p_revision_no='20250728-FN-2',@p_confirm_user='scp_batch'
+ */
+CREATE PROCEDURE [dbo].[SCP0015_SAVE_PLAN_MST_CANCEL]
+ (
+	 @p_modeling_id  	NVARCHAR(1000)
+  	,@p_division_id		NVARCHAR(1000)  
+	,@p_revision_no		NVARCHAR(1000)
+	,@p_confirm_user	NVARCHAR(1000)
+ )
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+
+	DECLARE @v_plan_name NVARCHAR(8)='';
+	DECLARE @v_plan_type NVARCHAR(2)='';
+	DECLARE @v_plan_seq  NVARCHAR(2)='';
+    DECLARE @v_plan_id   NVARCHAR(30)='';	
+	
+		-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0015_SAVE_PLAN_MST_CANCEL';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	
+		SET @v_plan_name = [dbo].[FN_SCM_SPLIT](@p_revision_no,1,'-');
+		SET @v_plan_type = [dbo].[FN_SCM_SPLIT](@p_revision_no,2,'-');
+		SET @v_plan_seq  = [dbo].[FN_SCM_SPLIT](@p_revision_no,3,'-');
+
+		SET @v_plan_id = (
+							SELECT b.plan_id
+							  FROM dbo.scm_mst_plan A
+								   INNER JOIN scm_mst_plan_detail B ON a.division_id=b.division_id
+																   AND a.plan_id    =b.plan_id	   
+							 WHERE b.modeling_id = @p_modeling_id
+							   AND a.division_id = @p_division_id
+							   AND a.plan_name   = @v_plan_name
+							   AND b.plan_type   = @v_plan_type
+							   AND b.plan_seq    = @v_plan_seq 
+							) ;
+		
+
+		   
+		UPDATE scm_mst_plan_detail
+		   SET PLAN_STATUS = '-1'
+		     , display_yn         = 'N'
+		     , ui_display_yn      = 'N'
+		     , normal_complete_yn = 'N'
+		     , confirm_flag       = ''
+		     , confirm_user       = ''
+		     , confirm_date       = null
+			 , LAST_UPDATE_DATE = GETDATE()
+			 , LAST_UPDATED_BY = @p_confirm_user
+		 WHERE modeling_id = @p_modeling_id
+		   AND division_id = @p_division_id
+		   AND plan_id     = @v_plan_id
+		   AND plan_type   = @v_plan_type 
+		   AND plan_seq    = @v_plan_seq ;
+
+		--  PRINT '@p_modeling_id = '+ @p_modeling_id;
+		--	PRINT '@p_division_id = '+ @p_division_id;
+		--	PRINT '@v_plan_id     = '+ @v_plan_id;
+		--	PRINT '@v_plan_type   = '+ @v_plan_type;
+		--	PRINT '@v_plan_seq    = '+ @v_plan_seq;
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		COMMIT TRAN;	
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code, (SELECT COUNT(*)  
+										FROM scm_mst_plan_detail 
+										WHERE modeling_id = @p_modeling_id
+									   AND division_id = @p_division_id
+									   AND plan_id     = @v_plan_id
+									   AND plan_type   = @v_plan_type 
+									   AND plan_seq    = @v_plan_seq
+									 ) AS result_cnt ;		
+		 
+		-- 수정결과 반환
+		SELECT CONFIRM_FLAG AS CONFIRM_YN
+			  ,CONFIRM_USER AS CONFIRM_USER
+			  ,CONFIRM_DATE AS CONFIRM_TIME
+		 FROM scm_mst_plan_detail	  
+		WHERE modeling_id = @p_modeling_id
+		   AND division_id = @p_division_id
+		   AND plan_id     ="
+"2025-08-01 00:00:00.900","LGCE_SCMDEV","P ","SCP0015_SAVE_PLAN_MST_CANCEL","2067134755","2"," @v_plan_id
+		   AND plan_type   = @v_plan_type 
+		   AND plan_seq    = @v_plan_seq ;
+
+	END TRY
+
+	BEGIN CATCH 
+	  BEGIN
+	    if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+		VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+		--IF @@TRANCOUNT > 0
+		--  COMMIT WORK;
+	  END;
+
+	  -- error코드, errror 메시지 반환
+	  SELECT 'F' AS result_code;
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0015_GET_PLAN_ENGINE_RUN","1406016140","1","/*
+ * Program ID   : [SCP0015_GET_PLAN_ENGINE_RUN]
+ * Description  : ENGINE RUN 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/02/23   PJS   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 실행예제)
+ *  EXEC SCP0015_GET_PLAN_ENGINE_RUN @p_modeling_id='2',@p_division_id='81',@p_revision_no='20180226-PR-02'
+ *  EXEC SCP0015_GET_PLAN_ENGINE_RUN @p_modeling_id='2',@p_division_id='81',@p_revision_no='20171211-MA-02'
+ */
+CREATE PROCEDURE [dbo].[SCP0015_GET_PLAN_ENGINE_RUN]
+ (
+	 @p_modeling_id  	NVARCHAR(1000)
+  	,@p_division_id		NVARCHAR(1000)  
+	,@p_revision_no		NVARCHAR(1000)
+ )
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON;
+
+	DECLARE @v_plan_name NVARCHAR(8)='';
+	DECLARE @v_plan_type NVARCHAR(2)='';
+	DECLARE @v_plan_seq  NVARCHAR(2)='';
+	DECLARE @v_plan_id   NVARCHAR(30)='';	
+
+	SET @v_plan_name = [dbo].[FN_SCM_SPLIT](@p_revision_no,1,'-');
+	SET @v_plan_type = [dbo].[FN_SCM_SPLIT](@p_revision_no,2,'-');
+	SET @v_plan_seq  = [dbo].[FN_SCM_SPLIT](@p_revision_no,3,'-');
+
+	SET @v_plan_id = (
+						SELECT b.plan_id
+						  FROM dbo.scm_mst_plan A
+							   INNER JOIN scm_mst_plan_detail B ON a.division_id=b.division_id
+															   AND a.plan_id    =b.plan_id	   
+						 WHERE b.modeling_id = @p_modeling_id
+						   AND a.division_id = @p_division_id
+						   AND a.plan_name   = @v_plan_name
+						   AND b.plan_type   = @v_plan_type
+						   AND b.plan_seq    = @v_plan_seq 
+						) ;
+
+	SELECT a.code AS step_cd
+		  ,a.name  AS step_name
+		  ,'' AS step_process1
+		  ,'' AS step_process2
+		  ,'' AS step_process3
+		  ,'' AS step_process4
+		  ,b.modeling_id
+		  ,b.division_id
+		  ,b.plan_name
+		  ,b.plan_id
+		  ,b.plan_seq
+		  ,b.plan_type
+		  ,b.plan_status
+		  ,CASE WHEN CODE =10 AND B.INPUT_START_DATE 	IS NOT NULL AND INPUT_END_DATE 		 IS NOT NULL THEN '1'
+				WHEN CODE =20 AND B.PLAN_START_DATE 	IS NOT NULL AND PLAN_END_DATE 		 IS NOT NULL THEN '1'
+				WHEN CODE =30 AND B.PLAN_END_DATE 		IS NOT NULL AND PLAN_OUTPUT_END_DATE IS NOT NULL THEN '1'
+				WHEN CODE =40 AND B.OUTPUT_START_DATE 	IS NOT NULL AND ANL_END_DATE 	 IS NOT NULL THEN '1'
+				WHEN CODE =10 AND B.INPUT_START_DATE 	IS NULL 	AND INPUT_END_DATE 		 IS NULL THEN '-1'
+				WHEN CODE =20 AND B.PLAN_START_DATE 	IS NULL 	AND PLAN_END_DATE 		 IS NULL THEN '-1'
+				WHEN CODE =30 AND B.PLAN_END_DATE 		IS NULL 	AND PLAN_OUTPUT_END_DATE IS NULL THEN '-1'
+				WHEN CODE =40 AND B.OUTPUT_START_DATE IS  NULL AND ANL_END_DATE 			 IS NULL THEN '-1'				
+				ELSE '0'
+		   END AS STEP_STATUS -- 1:실행완료, -1:실행전, 0:실행중
+		  ,CASE WHEN code =10 THEN b.input_start_date
+				WHEN code =20 THEN b.plan_start_date
+				WHEN code =30 THEN b.plan_end_date
+				WHEN code =40 THEN b.output_start_date
+		   END AS START_TIME
+		  ,CASE WHEN code =10 THEN b.input_end_date
+				WHEN code =20 THEN b.plan_end_date
+				WHEN code =30 THEN b.plan_output_end_date
+				WHEN code =40 THEN b.ANL_END_DATE
+		   END AS END_TIME		
+		 , '' AS view_log  		
+	  FROM(
+			SELECT segment1 as code
+				  ,segment2 as name 
+			  FROM dbo.scm_adm_lookup_master_detail
+			 WHERE lookup_type ='ENGINE_RUN_STATUS'
+			   AND valid_yn='Y'
+		  ) A LEFT OUTER JOIN 
+		  (	
+			SELECT b.modeling_id
+				  ,b.division_id
+				  ,a.plan_name
+				  ,b.plan_id
+				  ,b.plan_seq
+				  ,b.plan_type	 
+				  ,b.plan_status
+				  ,CONVERT(VARCHAR, b.input_start_date, 120) AS input_start_date
+				  ,CONVERT(VARCHAR, b.input_end_date, 120) AS input_end_date
+				  ,CONVERT(VARCHAR, b.plan_start_date, 120) AS plan_start_date
+				  ,CONVERT(VARCHAR, b.plan_end_date, 120) AS plan_end_date
+				  ,CONVERT(VARCHAR, b.plan_output_end_date, 120) AS plan_output_end_date
+				  ,CONVERT(VARCHAR, b.output_start_date"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0015_GET_PLAN_ENGINE_RUN","1406016140","2",", 120) AS output_start_date
+				  --,CONVERT(VARCHAR, b.output_end_date, 120) AS output_end_date
+				  ,CONVERT(VARCHAR, b.ANL_END_DATE, 120) AS ANL_END_DATE
+				  
+			  FROM dbo.scm_mst_plan A
+				   INNER JOIN scm_mst_plan_detail B ON a.division_id=b.division_id
+												   AND a.plan_id    =b.plan_id	   
+			 WHERE b.modeling_id = @p_modeling_id
+			   and a.division_id = @p_division_id
+			   AND a.plan_name   = @v_plan_name
+			   AND b.plan_type   = @v_plan_type
+			   AND b.plan_seq    = @v_plan_seq 
+		 ) B  ON 1=1
+	where 1=1	 
+	ORDER BY a.code;
+
+	-- 플랜상태정보 조회
+	SELECT plan_status
+	      ,dbo.fn_get_lookup_code_desc('PLAN_RUN_STATUS',plan_status) AS plan_status_name
+	 FROM scm_mst_plan_detail	  
+	WHERE modeling_id  = @p_modeling_id
+	   AND division_id = @p_division_id
+	   AND plan_id     = @v_plan_id
+	   AND plan_type   = @v_plan_type 
+	   AND plan_seq    = @v_plan_seq ;
+
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0015_GET_PLAN_MST","1422016197","1","/*
+ * Program ID   : [SCP0015_GET_PLAN_MST]
+ * Description  : Plan Management 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2018-02-23   PJS				Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018-04-16   PJS				화면그리드 조회시 REVISION_NO 상태 초기값 조회쿼리로 변경 
+ * 2018-05-21   PJS				confirm, run 사용자 권한 기능 추가
+ * 2018-06-18   PJS				modeling_id 조회방식 변경
+ * 2018-11-01   YHW				TE 플랜 추가
+ * 2019-06-14	YHW				[CSR ID:4004411] GSCM(SCP) 서비스 점검결과 조치(Message Exception 처리)
+ * ex)
+    EXEC SCP0015_GET_PLAN_MST @p_division_id='81',@p_plan_year='2018',@p_plan_week='',@p_user_id=''
+ */
+CREATE PROCEDURE [dbo].[SCP0015_GET_PLAN_MST]
+ (
+  	 @p_division_id		NVARCHAR(MAX)  
+	,@p_plan_year  		NVARCHAR(MAX)
+	,@p_plan_week	  	NVARCHAR(MAX)
+	,@p_user_id         NVARCHAR(MAX)
+	--,@p_plan_type	  	NVARCHAR(MAX) =''
+ )
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON;
+
+	/* 화면 그리드 조회 */
+	--SELECT  B.division_id
+	--	   ,B.DIVISION_NAME
+	--	   ,A.SEGMENT2 PLAN_TYPE_DESCRIPTION
+	--	   ,A.SEGMENT3 PLAN_TYPE
+	--	   ,'' AS REVISION_NO
+	--	   ,'' AS REVISION_DESC
+	--	   ,'' AS CONFIRM_TIME
+	--	   ,'' AS CONFIRM_USER
+	--FROM   SCM_ADM_LOOKUP_MASTER_DETAIL A
+	--	, (SELECT division_id, DIVISION_NAME 
+	--		FROM dbo.SCM_MST_DIVISION
+	--	   WHERE DIVISION_ID =@p_division_id
+	--	  ) B 	 
+	--WHERE A.LOOKUP_TYPE ='PLAN_TYPE'
+	--  AND A.VALID_YN    ='Y'
+	--ORDER BY A.DISPLAY_SEQ ;
+
+	SELECT t.division_id
+		  ,t.division_name
+		  ,t.plan_type_description
+		  ,t.plan_type
+		  ,(SELECT modeling_id FROM scm_mst_modeling WHERE  plan_cycle  = 'WEEKLY' AND division_id    = @p_division_id) AS modeling_id 
+		  ,u.revision_no
+		  ,u.revision_desc
+		  ,u.plan_status_name
+		  ,u.plan_status
+		  ,u.confirm_flag as confirm_yn
+		  ,u.confirm_time
+		  ,u.confirm_user
+		  ,ISNULL(v.confirm_auth,'N') AS confirm_auth
+		  ,ISNULL(v.run_auth,'N') AS run_auth
+	  FROM(
+			SELECT  b.division_id
+				   ,b.division_name
+				   ,a.segment2 plan_type_description
+				   ,a.segment3 plan_type
+				   ,'' AS revision_no
+				   ,'' AS revision_desc
+				   ,'' AS confirm_time
+				   ,'' AS confirm_user
+				   ,a.display_seq
+			FROM   scm_adm_lookup_master_detail a
+				, (SELECT division_id, division_name 
+					FROM dbo.scm_mst_division
+				   WHERE division_id = @p_division_id
+				  ) B 	 
+			WHERE A.LOOKUP_TYPE ='PLAN_TYPE'
+			  AND A.VALID_YN    ='Y'
+		
+		 ) T LEFT OUTER JOIN
+		 (
+			SELECT m.division_id
+				  ,m.plan_type
+				  ,m.revision_no
+				  ,m.modeling_id
+				  ,m.revision_desc
+				  ,m.plan_status
+				  ,m.plan_status_name			
+				  ,n.confirm_date AS confirm_time
+				  ,n.confirm_flag
+				  ,n.confirm_user
+			  FROM (
+					SELECT   a.plan_version_id as revision_no
+							,a.plan_version_id as revision_desc
+							--,a.modeling_id
+							,a.plan_status
+							,a.plan_status_name			
+							,c.segment2 AS plan_type_description
+							,c.display_seq
+							,RANK() OVER(PARTITION BY a.plan_type ORDER BY A.plan_version_id DESC) AS rank
+							,a.modeling_id
+							,a.division_id
+							,a.plan_id
+							,a.plan_type
+							,convert(int, [dbo].[fn_scm_split](a.plan_version_id,3,'-')) as plan_seq			
+					 FROM   fn_scp_plan_version_v(@p_division_id,'',@p_plan_year,@p_plan_week) a 
+							JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+							JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'			
+					WHERE    1=1	  
+					) m
+					LEFT JOIN scm_mst_plan_detail n  ON m.modeling_id = n.modeling_id
+													and m.division_id = n.division_id
+													and m.plan_id     = n.plan_id
+													and m.plan_type   = n.plan_type
+													and m.plan_seq    = n.plan_seq  "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0015_GET_PLAN_MST","1422016197","2"," 
+			WHERE 1=1
+			  and rank =1
+		   ) U ON t.DIVISION_ID =u.division_id
+			  and t.PLAN_TYPE   =u.plan_type
+		  LEFT OUTER JOIN (SELECT division_id
+							     ,MAX(CASE WHEN  action_type ='CONFIRM' THEN 'Y' END) AS confirm_auth
+								 ,MAX(CASE WHEN  action_type ='RUN' THEN 'Y' END) AS run_auth
+							FROM scm_mst_plan_user
+						   WHERE division_id = @p_division_id
+					         AND plan_cycle  = 'WEEKLY'
+					         AND user_id     = @p_user_id
+					       GROUP BY division_id
+					) V ON t.division_id = v.division_id
+	ORDER BY T.display_seq 		
+
+
+   /* Revision 조회  view를 사용하면 소팅시 속도 저장=> view 원본으로 쿼리 재작성 => view를 함수로 변경하여 재작성*/
+   SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name			
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'TE',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name			
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'TM',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+
+
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name			
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'PR',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name			
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'MA',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+		SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name						
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'SE',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name						
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'FN',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON     "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0015_GET_PLAN_MST","1422016197","3","  a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+	SELECT   a.plan_version_id as code
+			,a.plan_version_id as name
+			,a.modeling_id
+			,a.plan_status
+			,a.plan_status_name						
+			,a.plan_type
+			,c.segment2 AS plan_type_description
+			,c.display_seq
+			--,plan_start_yyyymmdd +'-' + b.week_name AS week
+	 FROM   fn_scp_plan_version_v(@p_division_id,'SU',@p_plan_year,@p_plan_week) a 
+			JOIN scm_sys_calendar_m b  ON       a.plan_start_yyyymmdd = b.basis_yyyymmdd
+			JOIN scm_adm_lookup_master_detail c ON a.plan_type = c.segment1 AND c.lookup_type ='PLAN_TYPE'
+	WHERE    1=1	  
+	ORDER BY a.plan_type_order , code desc;
+	
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0015_GET_PLAN_MST_COMFIRM","1438016254","1","/*
+ * Program ID   : [SCP0015_GET_PLAN_MST_COMFIRM]
+ * Description  : PLAN CONFIRM 정보 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/02/28   PJS   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 실행예제)
+ *  EXEC SCP0015_GET_PLAN_MST_COMFIRM @p_modeling_id='2',@p_division_id='81',@p_revision_no='20171211-MA-02'
+ */
+CREATE PROCEDURE [dbo].[SCP0015_GET_PLAN_MST_COMFIRM]
+ (
+	 @p_modeling_id  	NVARCHAR(1000)
+  	,@p_division_id		NVARCHAR(1000)  
+	,@p_revision_no		NVARCHAR(1000)
+ )
+AS
+BEGIN
+	
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;	
+	SET NOCOUNT ON;
+
+	DECLARE @v_plan_name NVARCHAR(8)='';
+	DECLARE @v_plan_type NVARCHAR(2)='';
+	DECLARE @v_plan_seq  NVARCHAR(2)='';
+    DECLARE @v_plan_id   NVARCHAR(30)='';	
+	
+	SET @v_plan_name = [dbo].[FN_SCM_SPLIT](@p_revision_no,1,'-');
+	SET @v_plan_type = [dbo].[FN_SCM_SPLIT](@p_revision_no,2,'-');
+	SET @v_plan_seq  = [dbo].[FN_SCM_SPLIT](@p_revision_no,3,'-');
+
+	SET @v_plan_id = (
+						SELECT b.plan_id
+						  FROM dbo.scm_mst_plan A
+							   INNER JOIN scm_mst_plan_detail B ON a.division_id=b.division_id
+															   AND a.plan_id    =b.plan_id	   
+						 WHERE b.modeling_id = @p_modeling_id
+						   AND a.division_id = @p_division_id
+						   AND a.plan_name   = @v_plan_name
+						   AND b.plan_type   = @v_plan_type
+						   AND b.plan_seq    = @v_plan_seq 
+						) ;
+		 
+	-- CONFIRM 정보 확인
+	SELECT CONFIRM_FLAG AS CONFIRM_YN
+		  ,CONFIRM_USER AS CONFIRM_USER
+		  ,CONFIRM_DATE AS CONFIRM_TIME
+	 FROM scm_mst_plan_detail	  
+	WHERE modeling_id  = @p_modeling_id
+	   AND division_id = @p_division_id
+	   AND plan_id     = @v_plan_id
+	   AND plan_type   = @v_plan_type 
+	   AND plan_seq    = @v_plan_seq ;
+	
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0015_SAVE_PLAN_MST_COMFIRM","1454016311","1","/*
+ * Program ID   : [SCP0015_SAVE_PLAN_MST_COMFIRM]
+ * Description  : PLAN CONFIRM 저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/02/28   PJS   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/05/17   byunghunjung   전극 제외
+ * 실행예제)
+ *  EXEC SCP0015_SAVE_PLAN_MST_COMFIRM @p_modeling_id='2',@p_division_id='81',@p_revision_no='20171211-MA-02',@p_confirm_user='2014001'
+ */
+CREATE PROCEDURE [dbo].[SCP0015_SAVE_PLAN_MST_COMFIRM]
+ (
+	 @p_modeling_id  	NVARCHAR(1000)
+  	,@p_division_id		NVARCHAR(1000)  
+	,@p_revision_no		NVARCHAR(1000)
+	,@p_confirm_user	NVARCHAR(1000)
+ )
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+
+	DECLARE @v_plan_name NVARCHAR(8)='';
+	DECLARE @v_plan_type NVARCHAR(2)='';
+	DECLARE @v_plan_seq  NVARCHAR(2)='';
+    DECLARE @v_plan_id   NVARCHAR(30)='';	
+	
+		-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0015_SAVE_PLAN_MST_COMFIRM';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	
+		SET @v_plan_name = [dbo].[FN_SCM_SPLIT](@p_revision_no,1,'-');
+		SET @v_plan_type = [dbo].[FN_SCM_SPLIT](@p_revision_no,2,'-');
+		SET @v_plan_seq  = [dbo].[FN_SCM_SPLIT](@p_revision_no,3,'-');
+
+		SET @v_plan_id = (
+							SELECT b.plan_id
+							  FROM dbo.scm_mst_plan A
+								   INNER JOIN scm_mst_plan_detail B ON a.division_id=b.division_id
+																   AND a.plan_id    =b.plan_id	   
+							 WHERE b.modeling_id = @p_modeling_id
+							   AND a.division_id = @p_division_id
+							   AND a.plan_name   = @v_plan_name
+							   AND b.plan_type   = @v_plan_type
+							   AND b.plan_seq    = @v_plan_seq 
+							) ;
+		
+		UPDATE scm_mst_plan_detail
+		   SET CONFIRM_FLAG =''
+			  ,CONFIRM_USER =''
+			  ,CONFIRM_DATE =''
+		 WHERE modeling_id = @p_modeling_id
+		   AND division_id = @p_division_id
+		   AND plan_id     = @v_plan_id
+		   AND plan_type   = @v_plan_type ;
+		   
+		UPDATE scm_mst_plan_detail
+		   SET CONFIRM_FLAG ='Y'
+			  ,CONFIRM_USER = @p_confirm_user
+			  ,CONFIRM_DATE = CONVERT(VARCHAR, GETDATE(),120)
+		 WHERE modeling_id = @p_modeling_id
+		   AND division_id = @p_division_id
+		   AND plan_id     = @v_plan_id
+		   AND plan_type   = @v_plan_type 
+		   AND plan_seq    = @v_plan_seq ;
+
+		--  PRINT '@p_modeling_id = '+ @p_modeling_id;
+		--	PRINT '@p_division_id = '+ @p_division_id;
+		--	PRINT '@v_plan_id     = '+ @v_plan_id;
+		--	PRINT '@v_plan_type   = '+ @v_plan_type;
+		--	PRINT '@v_plan_seq    = '+ @v_plan_seq;
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		DECLARE @x_seq  INT;
+		SET @x_seq=	CONVERT(INT, @v_plan_seq);
+
+		----  엔진결과 외부시스템 인터페이스 처리 실행
+		EXEC PR_SCP_PLN_INTERFACE_PLAN 	@p_division_id,	@v_plan_name, @v_plan_type,	@x_seq, @p_confirm_user ;
+
+		-- ESS 전극소요관련 매출 INSERT
+		--IF ( @p_division_id ='82')
+		--	BEGIN
+		--		EXEC dbo.PR_SCM_PLN_MKT_FCST_ESS_ELEC_TRAN;
+		--	END;
+
+		COMMIT TRAN;	
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code, (SELECT COUNT(*)  
+										FROM scm_mst_plan_detail 
+										WHERE modeling_id = @p_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0015_SAVE_PLAN_MST_COMFIRM","1454016311","2","modeling_id
+									   AND division_id = @p_division_id
+									   AND plan_id     = @v_plan_id
+									   AND plan_type   = @v_plan_type 
+									   AND plan_seq    = @v_plan_seq
+									 ) AS result_cnt ;		
+		 
+		-- 수정결과 반환
+		SELECT CONFIRM_FLAG AS CONFIRM_YN
+			  ,CONFIRM_USER AS CONFIRM_USER
+			  ,CONFIRM_DATE AS CONFIRM_TIME
+		 FROM scm_mst_plan_detail	  
+		WHERE modeling_id = @p_modeling_id
+		   AND division_id = @p_division_id
+		   AND plan_id     = @v_plan_id
+		   AND plan_type   = @v_plan_type 
+		   AND plan_seq    = @v_plan_seq ;
+
+	END TRY
+
+	BEGIN CATCH 
+	  BEGIN
+	    if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+		VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+		--IF @@TRANCOUNT > 0
+		--  COMMIT WORK;
+	  END;
+
+	  -- error코드, errror 메시지 반환
+	  SELECT 'F' AS result_code;
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0015_SAVE_PLAN_MST_RUN","1470016368","1","/*
+ * Program ID   : [SCP0015_SAVE_PLAN_MST_RUN]
+ * Description  : PLAN RUN 실행
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/04/18   PJS   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 실행예제)
+ *  EXEC SCP0015_SAVE_PLAN_MST_RUN @p_modeling_id='2',@p_plan_type='MA'
+ */
+CREATE PROCEDURE [dbo].[SCP0015_SAVE_PLAN_MST_RUN]
+ (
+	 @p_modeling_id  	NVARCHAR(1000)
+  	,@p_plan_type		NVARCHAR(1000)  
+ )
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+
+	DECLARE @v_plan_name NVARCHAR(8)='';
+	DECLARE @v_plan_type NVARCHAR(2)='';
+	DECLARE @v_plan_seq  NVARCHAR(2)='';
+    DECLARE @v_plan_id   NVARCHAR(30)='';	
+	
+		-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0015_SAVE_PLAN_MST_RUN';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	
+	BEGIN TRY
+
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PLAN RUN 실행
+		EXEC PR_SCP_ENG_CONTROL @p_modeling_id, @p_plan_type
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code, 1 result_cnt ;		
+
+	END TRY
+
+	BEGIN CATCH 
+	  BEGIN
+		INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+		VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+		IF @@TRANCOUNT > 0
+		  COMMIT WORK;
+	  END;
+
+	  -- error코드, errror 메시지 반환
+	  SELECT 'F' AS result_code;
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0015_SAVE_PLAN_MST_STOP","1486016425","2",",ERROR_PROCEDURE());
+
+		IF @@TRANCOUNT > 0
+		  COMMIT WORK;
+	  END;
+
+	  -- error코드, errror 메시지 반환
+	  SELECT 'F' AS result_code;
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0015_SAVE_PLAN_MST_STOP","1486016425","1","/*
+ * Program ID   : [SCP0015_SAVE_PLAN_MST_STOP]
+ * Description  : PLAN STOP 저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/04/18   PJS   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 실행예제)
+ *  EXEC SCP0015_SAVE_PLAN_MST_STOP @p_modeling_id='2',@p_division_id='81',@p_revision_no='20171211-MA-02',@p_confirm_user='2014001'
+ */
+CREATE PROCEDURE [dbo].[SCP0015_SAVE_PLAN_MST_STOP]
+ (
+	 @p_modeling_id  	NVARCHAR(1000)
+  	,@p_division_id		NVARCHAR(1000)  
+	,@p_revision_no		NVARCHAR(1000)
+	,@p_confirm_user	NVARCHAR(1000)
+ )
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+
+	DECLARE @v_plan_name NVARCHAR(8)='';
+	DECLARE @v_plan_type NVARCHAR(2)='';
+	DECLARE @v_plan_seq  NVARCHAR(2)='';
+    DECLARE @v_plan_id   NVARCHAR(30)='';	
+	
+		-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0015_SAVE_PLAN_MST_STOP';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	
+	BEGIN TRY
+
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	
+		SET @v_plan_name = [dbo].[FN_SCM_SPLIT](@p_revision_no,1,'-');
+		SET @v_plan_type = [dbo].[FN_SCM_SPLIT](@p_revision_no,2,'-');
+		SET @v_plan_seq  = [dbo].[FN_SCM_SPLIT](@p_revision_no,3,'-');
+
+		SET @v_plan_id = (
+							SELECT b.plan_id
+							  FROM dbo.scm_mst_plan A
+								   INNER JOIN scm_mst_plan_detail B ON a.division_id=b.division_id
+																   AND a.plan_id    =b.plan_id	   
+							 WHERE b.modeling_id = @p_modeling_id
+							   AND a.division_id = @p_division_id
+							   AND a.plan_name   = @v_plan_name
+							   AND b.plan_type   = @v_plan_type
+							   AND b.plan_seq    = @v_plan_seq 
+							) ;
+	
+		UPDATE SCM_MST_PLAN_DETAIL
+		   SET ABNORMAL_REASON ='customer request'
+		      ,ABNORMAL_REASON_UPDATED_BY= @p_confirm_user
+			  ,ABNORMAL_REASON_UPDATE_DATE = CONVERT(VARCHAR, GETDATE(),120)
+			  ,PLAN_STATUS = '-2'
+		 WHERE modeling_id = @p_modeling_id
+		   AND division_id = @p_division_id
+		   AND plan_id     = @v_plan_id
+		   AND plan_type   = @v_plan_type 
+		   AND plan_seq    = @v_plan_seq ;
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code, (SELECT COUNT(*)  
+										FROM scm_mst_plan_detail 
+										WHERE modeling_id = @p_modeling_id
+									   AND division_id = @p_division_id
+									   AND plan_id     = @v_plan_id
+									   AND plan_type   = @v_plan_type 
+									   AND plan_seq    = @v_plan_seq
+									 ) AS result_cnt ;		
+		 
+		-- 수정결과 반환
+		SELECT ABNORMAL_REASON
+			  ,ABNORMAL_REASON_UPDATED_BY
+			  ,ABNORMAL_REASON_UPDATE_DATE
+			  ,PLAN_STATUS 
+		 FROM scm_mst_plan_detail	  
+		WHERE modeling_id = @p_modeling_id
+		  AND division_id = @p_division_id
+		  AND plan_id     = @v_plan_id
+		  AND plan_type   = @v_plan_type 
+		  AND plan_seq    = @v_plan_seq ;
+
+	END TRY
+
+	BEGIN CATCH 
+	  BEGIN
+		INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+		VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME()"
+"2025-07-11 00:00:00.573","LGCE_SCMDEV","P ","SCP0015_SAVE_PLAN_MST_CANCEL","2067134755","2","ype 
+									   AND plan_seq    = @v_plan_seq
+									 ) AS result_cnt ;		
+		 
+		-- 수정결과 반환
+		SELECT CONFIRM_FLAG AS CONFIRM_YN
+			  ,CONFIRM_USER AS CONFIRM_USER
+			  ,CONFIRM_DATE AS CONFIRM_TIME
+		 FROM scm_mst_plan_detail	  
+		WHERE modeling_id = @p_modeling_id
+		   AND division_id = @p_division_id
+		   AND plan_id     = @v_plan_id
+		   AND plan_type   = @v_plan_type 
+		   AND plan_seq    = @v_plan_seq ;
+
+	END TRY
+
+	BEGIN CATCH 
+	  BEGIN
+	    if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+		VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+		--IF @@TRANCOUNT > 0
+		--  COMMIT WORK;
+	  END;
+
+	  -- error코드, errror 메시지 반환
+	  SELECT 'F' AS result_code;
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+"

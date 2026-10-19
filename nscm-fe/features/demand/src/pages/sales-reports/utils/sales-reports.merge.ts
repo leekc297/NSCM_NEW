@@ -70,32 +70,6 @@ export const buildSetKeyMap = (rows: readonly Rec[], setSize: number = SET_SIZE)
   return map;
 };
 
-/**
- * 신규 세트를 끼워 넣을 위치 — 포커스 행이 속한 **세트의 첫 행** 인덱스.
- *
- * AS-IS InsertRow 파리티(`.cs:931~933`): `GetCellNumbersByRow(ActiveRowIndex)` 로 활성 행이 속한
- * 2행 세트의 행 번호를 구해 `SetActiveCell(iArray[0], 2)` 로 **세트 첫 행**으로 옮긴 뒤 `Insert(2)`
- * 한다 — 포커스한 줄 한가운데를 쪼개지 않고 그 세트 바로 위에 붙는다.
- *
- * 포커스가 없거나 화면 목록에서 못 찾으면 0(맨 위) — 종전 동작.
- * ⚠ 세트 첫 행에 맞추는 것은 위치 규약(`P:floor(idx/2)`) 유지에도 필요하다 — 홀수 위치에 2행을
- *   끼우면 그 아래 SP 행들의 짝이 통째로 어긋난다.
- */
-export const setHeadIndexOf = (
-  rows: readonly Rec[],
-  focused: Rec | undefined,
-  setKeys: SetKeyMap | undefined
-): number => {
-  if (!focused) return 0;
-  const idx = rows.indexOf(focused);
-  if (idx < 0) return 0;
-  const key = setKeys?.get(focused);
-  if (!key) return idx; // 세트키를 모르면 그 행 위에 그대로 넣는다
-  let head = idx;
-  while (head > 0 && setKeys?.get(rows[head - 1]) === key) head--;
-  return head;
-};
-
 /** 그룹 판정 입력 — 화면 표시 순서 그대로의 컬럼 정보(`grid.columns` 를 인덱스 루프로 복사한 것). */
 export interface GroupKeyColumn {
   binding: string;
@@ -176,6 +150,38 @@ export const findGroupTopIndex = (
     top--;
   }
   return top;
+};
+
+/**
+ * 선택한 셀이 속한 머지 블록의 **첫 행 ~ 끝 행** 인덱스 — Delete 대상 범위.
+ *
+ * 블록 판정은 `findGroupTopIndex` 와 **같은 규칙**이다(키 컬럼 값 비교 + 신규행에서 끊김).
+ * 위쪽 끝은 그 함수를 그대로 쓰고, 아래쪽 끝만 같은 조건으로 내려가며 찾는다.
+ *
+ * 주의: 화면의 병합(`SalesReportsMergeManager`)은 보이는 행 범위(viewRange)까지만 그리지만,
+ *   여기서는 **전체 행**을 훑는다. 스크롤에 가려진 행도 같은 블록의 데이터이므로 함께 지워야 한다.
+ */
+export const findGroupRowRange = (
+  rows: readonly (Rec | undefined)[],
+  index: number,
+  keyBindings: readonly string[]
+): { top: number; bottom: number } => {
+  const top = findGroupTopIndex(rows, index, keyBindings);
+  const target = rows[index];
+  if (!target || keyBindings.length === 0 || target.CRUD_TYPE === 'I') {
+    return { top, bottom: index };
+  }
+  const cell = (row: Rec, binding: string): string =>
+    (row as Record<string, string>)[binding] ?? '';
+  const isSameGroup = (row: Rec): boolean =>
+    keyBindings.every(binding => cell(row, binding) === cell(target, binding));
+  let bottom = index;
+  while (bottom < rows.length - 1) {
+    const next = rows[bottom + 1];
+    if (!next || next.CRUD_TYPE === 'I' || !isSameGroup(next)) break;
+    bottom++;
+  }
+  return { top, bottom };
 };
 
 /** 병합 판정에 필요한 화면 상태 — 세트키 맵 + 지금 편집 진입한 세트키(없으면 광역 병합). */

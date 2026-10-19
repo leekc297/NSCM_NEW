@@ -72,6 +72,11 @@
     content: 'Enter notice content';
     pointer-events: none;
   }
+  // 전역 리셋(font.style.css)이 font: inherit로 i/em 기본 스타일을 지워 기울임 버튼이 동작하지 않던 문제 수정
+  i,
+  em {
+    font-style: italic;
+  }
 
   p {
     margin: 0 0 8px;
@@ -118,6 +123,32 @@
 
   [data-notice-format]:empty::after {
     content: '\200b';
+  }
+
+  // 2026-09-16 - 굵게/기울임/밑줄은 native <b>/<i>/<u> 대신 자체 span 으로 토글한다.
+  // off 값은 H1/H2 처럼 크기 포맷 자체가 굵게(font-weight:700)인 경우에도 명시적으로 되돌리기 위함.
+  [data-notice-bold='on'] {
+    font-weight: 700;
+  }
+
+  [data-notice-bold='off'] {
+    font-weight: 400;
+  }
+
+  [data-notice-italic='on'] {
+    font-style: italic;
+  }
+
+  [data-notice-italic='off'] {
+    font-style: normal;
+  }
+
+  [data-notice-underline='on'] {
+    text-decoration-line: underline;
+  }
+
+  [data-notice-underline='off'] {
+    text-decoration-line: none;
   }
 
   ul,

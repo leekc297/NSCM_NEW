@@ -107,7 +107,7 @@
 | V-10 | 버전 리셋 (Type 변경) / `clbType_SelectedIndexChanged` | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx Type 변경 → 버전 리셋 + 라벨 분기 |  | 구현 |
 | V-11 | 버전 리셋 (Division 변경) / `clbDivision_SelectedIndexChanged` | nscm-fe/features/demand/src/pages/sales-reports/SalesReports.tsx:141 handleDivisionChange — 버전 리셋 |  | 구현 |
 | V-12 | 버전 선택 진입 / `btnSPVer_Click` | components/versionModal/VersionModal.tsx — btnSPVer 진입, 반환 버전 채택 |  | 구현 |
-| V-13 | 조회 기간 / 조회 파라미터 `p_yyyy = usrYear` (연 단위), 헤더 SP `p_start_dt = YYYY+"0101"` ~ `p_end_dt =… | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx 연도 콤보(CMBO 'CALENDAR_YYYY', 기본 올해) + spreadTitle 시트 |  | 구현 |
+| V-13 | 조회 기간 / 조회 파라미터 `p_yyyy = usrYear` (연 단위), 헤더 SP `p_start_dt = YYYY+"0101"` ~ `p_end_dt =… | nscm-fe/features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx YearField(연도 피커, 범위는 CMBO 'CALENDAR_YYYY' min/max, 기본 올해) + spreadTitle 시트 |  | 구현 |
 | V-14 | Transfer / `SEND_YN == "N"` 만 | components/versionModal/version-modal.api.ts callTransfer — SEND_YN='N' 게이트 |  | 구현 |
 | V-15 | Transfer Cancel / `SEND_YN == "Y"` 만 | components/versionModal/version-modal.api.ts callTransfer('C') — SEND_YN='Y' 게이트 |  | 구현 |
 | V-16 | Version Delete / `SEND_YN ∈ {"N","C"}` 만 | components/versionModal/version-modal.api.ts callAction('D') — SEND_YN∈{N,C} 게이트 |  | 구현 |

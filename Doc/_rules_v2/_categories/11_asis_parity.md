@@ -5,6 +5,7 @@
 
 | # | Hook | 강도 | 계율 1줄 |
 |---:|---|:--:|---|
+| 151 | [asis-db-live-connection-mandatory](../hooks/asis-db-live-connection-mandatory.md) | ⭐⭐⭐ | **AS-IS 사실 확인 = DB 직접 접속 의무** — 정본은 `sys.sql_modules.definition`·`sys.objects`·실데이터, DDL 파일은 보조. 접속 불가(VPN 등) 시 **작업 중단 후 사용자 확인** — 무단 파일 fallback ⛔, 승인 시 "DB 미접속·파일 기준·승인일시" 표기. 보고문에 서버/DB/계정/조회시각 병기 + 요청 환경(DEV/QA/PROD) 일치 확인. 라인번호는 **DB 정의 기준**(파일은 SSMS 래퍼로 어긋남) |
 | 2 | [asis-coverage-check](../hooks/asis-coverage-check.md) | ⭐⭐ | AS-IS 4축(Event/API/Validation/Expression) 100% 매핑 + §0.5 권한 게이트 3형 + `__asis-mapping__.md` 의무 |
 | 1 | [asis-button-mapping](../hooks/asis-button-mapping.md) | ⭐ | CRUD 6 + Aux 4 버튼 AS-IS 매핑 → hotkeyConfig |
 | 49 | [screen-entry-asis-baseline](../hooks/screen-entry-asis-baseline.md) | ⭐ | 신규 화면 진입 AS-IS baseline 4단계 |
@@ -23,7 +24,7 @@
 2. **분석 MD 8종**: `Doc/_analysis/domain_{DM|Common|SCM}/screens/{ID}/` — **validation.md + expressions.md 필독** + 카운트 일치 의무(PR 게이트)
 3. **xlsx 13시트**: `_analysis/_screens/{27~32}_*_Screens/` — ⚠️ 1~10 시트 오염 사고 이력: `00_정정안내` 시트 있으면 **MD 폴더 1차 신뢰**
 4. **통합 매트릭스**: `_analysis/Screen_POPUP_SP_Tables_Matrix.xlsx`(3,318행/395화면/710 SP)
-5. **AS-IS DB**: `.env.asis` MSSQL 직접 (SP body=sys.sql_modules / lookup 값 / collation 실측)
+5. **AS-IS DB**: `.env.asis` MSSQL **직접 접속이 정본** (SP body=`sys.sql_modules` / lookup 값 / collation 실측). ⭐ hook #151 — DDL 파일로 대체 금지, 접속 불가 시 사용자 확인 후에만 파일 사용
 
 ## Cross-ref
 - AS-IS Framework 7: `_rules_v2/_asis/00_framework/01~07`(BaseForm/DataService/MessageHelper/Logging/Auth/UsrControls/FoxDataClient)

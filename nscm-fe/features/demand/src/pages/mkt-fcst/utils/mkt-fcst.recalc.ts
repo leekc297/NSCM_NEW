@@ -48,6 +48,24 @@ const bucketAllows = (bucket: string, binding: string): boolean => {
   return bucket.length > idx && bucket.charAt(idx) === '1';
 };
 
+// 기본 배분요일(sDefaultDay) 요일코드('SUN'~'SAT') → 요일 인덱스(0=일..6=토).
+//   AS-IS 는 sDefaultDay 문자열과 dtWekk.ToString("ddd")(=SUN/MON/…/SAT)를 문자열 비교한다
+//   (.cs L3719/3721, L3815/3817). TO-BE 는 D_ 컬럼을 dayOfWeekOf(0=일..6=토)로 다루므로 인덱스로 접는다.
+//   미지정/미매칭(마스터 DefaultBucketDay 조회 실패)은 -1 → 호출측이 AS-IS 폴백(주=마지막 D_)로 처리.
+const DOW_CODE_TO_IDX: Record<string, number> = {
+  SUN: 0,
+  MON: 1,
+  TUE: 2,
+  WED: 3,
+  THU: 4,
+  FRI: 5,
+  SAT: 6,
+};
+export const dowIndexOfCode = (dayCode?: string): number => {
+  const key = (dayCode ?? '').trim().toUpperCase();
+  return key in DOW_CODE_TO_IDX ? DOW_CODE_TO_IDX[key] : -1;
+};
+
 const numOr0 = (v: number | null): number => (v == null ? 0 : v);
 const ymd8 = (binding: string): string => binding.slice(2, 10);
 
@@ -111,7 +129,9 @@ export const recalcWeeklyToDaily = (
   acc: RecalcAccessor,
   editedBinding: string,
   divisionId: string,
-  measure: string
+  measure: string,
+  // 기본 배분요일 인덱스(0=일..6=토, 마스터 DefaultBucketDay 조회값). -1 = 미해소.
+  defaultBucketDow: number
 ): WeeklySplitResult => {
   const cols = acc.dynBindings;
   const ei = cols.indexOf(editedBinding);
@@ -200,22 +220,27 @@ export const recalcWeeklyToDaily = (
       if (isD(b) && acc.get(b) != null && acc.sspSyncOf(b) !== 'A') acc.set(b, null);
       if (!isD(b)) break;
     }
-    // ⭐ 룰2 정합(2026-07-21 공통 배분 룰) — 적용요일 없음 폴백 = "월요일" D_ 셀에 전량.
-    //   주 범위에 월요일이 없거나(월경계 분할 주) 월요일이 SSP 동기화('A') 셀이면 첫 비동기화 D_ 로 폴백.
-    //   (구 코드 = 첫 비동기화 D_ 근사 / AS-IS 는 마스터 DefaultBucketDay(.cs L1449) — 룰 확정으로 월요일 표준화.)
-    let mondayIdx = -1;
-    let firstIdx = -1;
+    // 적용요일 없음 폴백 — AS-IS sDefaultDay(마스터 DefaultBucketDay, .cs L1449) 매칭 (.cs L3707~3742).
+    //   D_ 를 좌→우로 훑어 요일이 sDefaultDay 와 같은(비동기화) 셀에 전량 배분하고 멈춘다.
+    //   그 주에 sDefaultDay 요일이 없으면(월경계 분할 주 등) 그 주의 "마지막 D_ 셀"에 전량 배분한다
+    //   (.cs L3732~3741 — 비D_ 경계 직전 컬럼). 마스터 미해소(defaultBucketDow<0)면 이 매칭은 건너뛰고
+    //   곧바로 마지막 D_ 폴백을 쓴다.
+    let matchedIdx = -1;
+    let lastDIdx = -1;
     for (let i = startCol; i < cols.length; i++) {
       const b = cols[i];
       if (!isD(b)) break;
-      if (acc.sspSyncOf(b) === 'A') continue;
-      if (firstIdx < 0) firstIdx = i;
-      if (dayOfWeekOf(b) === 1) {
-        mondayIdx = i;
+      lastDIdx = i;
+      if (
+        defaultBucketDow >= 0 &&
+        acc.sspSyncOf(b) !== 'A' && // PaleGreen 동기화 셀 제외 (.cs L3713)
+        dayOfWeekOf(b) === defaultBucketDow
+      ) {
+        matchedIdx = i;
         break;
       }
     }
-    const targetIdx = mondayIdx >= 0 ? mondayIdx : firstIdx;
+    const targetIdx = matchedIdx >= 0 ? matchedIdx : lastDIdx;
     if (targetIdx >= 0) acc.set(cols[targetIdx], dailyQty);
   }
 
@@ -249,7 +274,8 @@ export interface MonthlySplitResult {
 
 export const recalcMonthlyToDaily = (
   acc: RecalcAccessor,
-  editedBinding: string
+  editedBinding: string,
+  defaultBucketDow: number // 0=일..6=토, -1 = master 미해소
 ): MonthlySplitResult => {
   const cols = acc.dynBindings;
   const ei = cols.indexOf(editedBinding);
@@ -259,12 +285,14 @@ export const recalcMonthlyToDaily = (
   const monthlySum = numOr0(acc.get(editedBinding)); // (.cs L3777~3784)
   const resultDate = +acc.thisMondayYmd; // sResultDate (.cs L3792~3793)
 
-  let dayCnt = 0;
+  let dayCnt = 0; // iDaycnt: bucket 허용 요일 수 (.cs L3822~3828)
+  let monthCnt = 0; // iMonthCnt: sDefaultDay 일치 요일 수 (.cs L3814~3820)
   let dailyQty = 0;
   let remnant = 0;
   let lastWeeklySum = 0; // 과거(이번주월요일 이전) 일자 합 (.cs L3790)
+  let monthAll = false; // bMonthAll: bucket 이 없어 sDefaultDay 로 분배 (.cs L3837)
 
-  // ── 분배 요일수 + 과거 합 (.cs L3797~3853) ──
+  // ── 분배 요일수(iDaycnt/iMonthCnt) + 과거 합 (.cs L3797~3853) ──
   for (let i = startCol; i < cols.length; i++) {
     const b = cols[i];
     if (isD(b)) {
@@ -272,12 +300,18 @@ export const recalcMonthlyToDaily = (
         if (acc.get(b) != null) lastWeeklySum += numOr0(acc.get(b)); // (.cs L3802~3810)
         continue;
       }
+      if (defaultBucketDow >= 0 && dayOfWeekOf(b) === defaultBucketDow) monthCnt += 1; // (.cs L3817~3820)
     }
     if (isD(b) && bucketAllows(acc.bucket, b)) {
       if (resultDate <= +ymd8(b)) dayCnt += 1; // (.cs L3822~3828)
     }
     if (isM(b) || i === cols.length - 1) {
-      if (dayCnt === 0) dayCnt = 1; // bMonthAll 근사 (.cs L3833~3838; AS-IS=iMonthCnt sDefaultDay)
+      if (dayCnt === 0) {
+        // bMonthAll: bucket 요일이 하나도 없으면 sDefaultDay 일치 요일로 분배 (.cs L3833~3838)
+        dayCnt = monthCnt;
+        monthAll = true;
+      }
+      if (dayCnt === 0) dayCnt = 1; // sDefaultDay 도 미해소 시 0 나눗셈 방지 (AS-IS 는 master 항상 해소 전제)
       if (lastWeeklySum > 0 && monthlySum - lastWeeklySum <= 0) {
         return { belowActual: true }; // MSG00225 (.cs L3840~3847)
       }
@@ -287,21 +321,26 @@ export const recalcMonthlyToDaily = (
     }
   }
 
-  // ── 분배 적용 (.cs L3949~4020) ──
+  const isTarget = (b: string): boolean =>
+    monthAll
+      ? defaultBucketDow >= 0 && dayOfWeekOf(b) === defaultBucketDow // (.cs L4068 sDefaultDay==dow)
+      : bucketAllows(acc.bucket, b); // (.cs L3954 dBucket)
+
+  // ── 분배 적용 (.cs L3949~4020 / bMonthAll L4027~4092) ──
   let check = 0;
   for (let i = startCol; i < cols.length; i++) {
     const b = cols[i];
-    if (isD(b) && bucketAllows(acc.bucket, b)) {
-      if (resultDate > +ymd8(b)) continue; // 과거 일자 보존 (.cs L3957~3960)
+    if (isD(b) && isTarget(b)) {
+      if (resultDate > +ymd8(b)) continue; // 과거 일자 보존 (.cs L3957~3960 / L4058~4061)
       check += 1;
       let q = dailyQty;
-      if (dayCnt === check && remnant > 0) q = dailyQty + remnant; // (.cs L3964~3969)
+      if (dayCnt === check && remnant > 0) q = dailyQty + remnant; // (.cs L3964~3969 / L4071~4077)
       acc.set(b, q);
-    } else if (isD(b) && !bucketAllows(acc.bucket, b)) {
-      if (resultDate > +ymd8(b)) continue; // (.cs L3989~3992)
-      acc.set(b, null); // 비요일 clear (.cs L4000/4009)
+    } else if (isD(b)) {
+      if (resultDate > +ymd8(b)) continue; // (.cs L3989~3992 / L4031~4034)
+      acc.set(b, null); // 비대상 clear (.cs L4000/4009, bMonthAll L4037)
     }
-    if (isM(b) || i === cols.length - 1) break; // (.cs L4016~4019)
+    if (isM(b) || i === cols.length - 1) break; // (.cs L4016~4019 / L4044~4047)
   }
 
   return { belowActual: false };
@@ -330,8 +369,10 @@ export const dispatchRecalc = (params: {
   bucketType: BUCKET_TYPE;
   divisionId: string;
   measure: string;
+  // 기본 배분요일 인덱스(0=일..6=토, 마스터 DefaultBucketDay 조회값). -1 = 미해소.
+  defaultBucketDow: number;
 }): RecalcOutcome => {
-  const { acc, editedBinding, bucketType, divisionId, measure } = params;
+  const { acc, editedBinding, bucketType, divisionId, measure, defaultBucketDow } = params;
   const kind = dynKindOf(editedBinding);
   if (!kind) return { kind: 'ok' };
 
@@ -342,7 +383,7 @@ export const dispatchRecalc = (params: {
   }
   // 주버킷 + 주 수정 (.cs L3423)
   if (bucketType === BUCKET_TYPE.WEEKLY && kind === 'W') {
-    const r = recalcWeeklyToDaily(acc, editedBinding, divisionId, measure);
+    const r = recalcWeeklyToDaily(acc, editedBinding, divisionId, measure, defaultBucketDow);
     if (r.forceWeeklyValue != null) {
       return { kind: 'forceWeekly', binding: editedBinding, value: r.forceWeeklyValue };
     }
@@ -350,7 +391,7 @@ export const dispatchRecalc = (params: {
   }
   // 월버킷 + 월 수정 (.cs L3770)
   if (bucketType === BUCKET_TYPE.MONTHLY && kind === 'M') {
-    const r = recalcMonthlyToDaily(acc, editedBinding);
+    const r = recalcMonthlyToDaily(acc, editedBinding, defaultBucketDow);
     return r.belowActual ? { kind: 'belowActual' } : { kind: 'ok' };
   }
   // 주/월 버킷 + 일 수정 (.cs L4117)

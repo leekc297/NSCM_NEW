@@ -7,13 +7,28 @@ import { CRUD_TYPE } from '@foundation/constants';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle } from '@shared/components';
-import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
-import { useMessageStore } from '@shared/stores';
+import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { NnMasterMappingForm } from './components/NnMasterMappingForm';
 import { NnMasterMappingGrid } from './components/NnMasterMappingGrid';
 import { MENU_ID, SHEETS } from './nn-master-mapping.constants';
 import { useNnMasterMappingStore } from './useNnMasterMappingStore';
+import { SEARCH_COMBO } from './utils/searchCombos';
+
+// YYYYMMDD 8자리 문자열이 실제 달력상 유효한 날짜인지 검사한다.
+//   AS-IS 는 Convert.ToDateTime("YYYY-MM-DD") 파싱 성공 여부로 판정 → 20261332(13월)·20260230(2월30일) 등
+//   달력에 없는 날짜를 catch 로 차단. TO-BE 는 /^\d{8}$/(자릿수) 만 봐서 이런 값이 통과하던 결함을 보정.
+//   재구성한 Date 의 연·월·일이 입력과 모두 일치해야 실제 존재하는 날짜다(JS Date 롤오버로 존재 여부 판별).
+const isValidYmd = (ymd: string): boolean => {
+  if (!/^\d{8}$/.test(ymd)) return false;
+  const y = Number(ymd.slice(0, 4));
+  const m = Number(ymd.slice(4, 6));
+  const d = Number(ymd.slice(6, 8));
+  if (m < 1 || m > 12 || d < 1 || d > 31) return false;
+  const dt = new Date(y, m - 1, d);
+  return dt.getFullYear() === y && dt.getMonth() === m - 1 && dt.getDate() === d;
+};
 
 // AS-IS DMF0072_NNMasterMapping — N:N Master Mapping (Insert / Delete / Save 풀스택)
 // 룰 #10 datagrid-shared-component-mandatory: DataGrid 공용 컴포넌트 (components/NnMasterMappingGrid.tsx)
@@ -29,6 +44,7 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
   const filters = useNnMasterMappingStore(s => s.filters);
   const initialized = useNnMasterMappingStore(s => s.initialized);
   const searchCondition = useNnMasterMappingStore(s => s.searchCondition);
+  const setSearchCondition = useNnMasterMappingStore(s => s.setSearchCondition);
   const setFilter = useNnMasterMappingStore(s => s.setFilter);
   const openSearchArea = useNnMasterMappingStore(s => s.openSearchArea);
   const setOpenSearchArea = useNnMasterMappingStore(s => s.setOpenSearchArea);
@@ -51,6 +67,25 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Division 첫 값 자동선택 — AS-IS InitControls L155 clbDivisions.ControlValues 1:1.
+  //   권한필터 FilterMyDivision 목록에 세션 divisionId 가 있으면 그것, 없으면 목록 첫 행으로 보정한다
+  //   (설계 07 §S6 "81 하드코딩 금지, 목록 첫 값" 확정). 콤보 로드 후 1회만 — didFallbackRef 로
+  //   사용자 선택·복원값 재보정을 막는다.
+  const session = useSessionStore(s => s.session);
+  const [divisionRows] = useTabComboQueries({ filters: [SEARCH_COMBO.division] });
+  const didFallbackRef = useRef(false);
+  useEffect(() => {
+    if (didFallbackRef.current) return;
+    const codes = (divisionRows ?? []).map(r => String(r.CODE ?? '')).filter(Boolean);
+    if (codes.length === 0) return;
+    didFallbackRef.current = true;
+    const sessionDiv = String(session.div ?? '');
+    if (!codes.includes(searchCondition.divisionId)) {
+      setSearchCondition({ divisionId: codes.includes(sessionDiv) ? sessionDiv : codes[0] });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [divisionRows]);
+
   useEffect(() => {
     if (initialized && !filters[SHEETS.MAIN]) setFilter();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -64,9 +99,14 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: hasSearched && !!filters[SHEETS.MAIN],
   });
 
+  // insertedRowCount 를 의존성에 둔다 — division 변경으로 clearInsertedRows 가 신규행을 비우면
+  //   insertedRowsRef 만 바뀌고 data 는 그대로라, data 만 의존하면 rows 가 재계산되지 않아 비운 신규행이
+  //   DataGrid 에 그대로 남는다(사용자 신고 2026-10-06). count 를 의존성에 둬 추가·삭제·클리어 때 재계산.
   const rows = useMemo<ResponseData<MENU_ID, SHEETS.MAIN>[]>(
     () => [...insertedRowsRef.current, ...(data?.o_rc1 ?? [])],
-    [data]
+    // insertedRowsRef 는 ref 라 eslint 가 의존성으로 안 세지만, count 변화가 곧 ref 내용 변화이므로 의도적으로 둔다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data, insertedRowCount]
   );
 
   const clearInsertedRows = () => {
@@ -89,6 +129,17 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
     await refetch?.();
     clearInsertedRows();
   };
+
+  // division 변경 시 조회 전 신규행 초기화 — division 은 조회 데이터·컬럼 기준이라 값/컬럼이
+  //   어긋난 신규행이 남으면 안 된다. setSearchCondition 이 filters 를 비워 조회 데이터는 사라지지만,
+  //   insertedRowsRef 의 신규행은 clearInsertedRows 로만 지워지므로 여기서 함께 비운다(DMF0004~0007
+  //   와 동일 정책). 다른 조회조건 변경에는 신규행을 유지한다.
+  const prevDivisionRef = useRef(searchCondition.divisionId);
+  useEffect(() => {
+    if (prevDivisionRef.current === searchCondition.divisionId) return;
+    prevDivisionRef.current = searchCondition.divisionId;
+    clearInsertedRows();
+  }, [searchCondition.divisionId]);
 
   // AS-IS L538-602: InsertRow — DATA_TYPE='SCM' fixed, DIVISION=search div, ACTIVE_YN='Y' default
   const handleInsert = () => {
@@ -135,7 +186,9 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleSave = () => {
     const dirty = rows.filter(r => r.CRUD_TYPE === CRUD_TYPE.INSERT || r.CRUD_TYPE === 'M');
     if (dirty.length === 0) {
-      void setAlert({ type: 'alert', content: t('MSG00609', '_저장할 행이 없습니다.') });
+      // 변경/신규 없음 → toast + 공통 메시지("수정한 내용이 없습니다") (DMF0004~0007/0020 과 동일 규약.
+      //   필수 검증 실패는 modal alert 유지).
+      setToast({ type: 'error', message: t('MSG_NO_CHANGE', '_수정한 내용이 없습니다.') });
       return;
     }
 
@@ -163,7 +216,9 @@ export const NnMasterMapping = ({ tabId, title }: PageProps<MENU_ID>) => {
         });
         return;
       }
-      if (!/^\d{8}$/.test(validFrom) || !/^\d{8}$/.test(validTo)) {
+      // AS-IS 는 Convert.ToDateTime 성공 여부(실제 달력 날짜)로 판정 — 자릿수만이 아니라 20261332·20260230
+      //   같은 달력에 없는 값도 차단한다(isValidYmd).
+      if (!isValidYmd(validFrom) || !isValidYmd(validTo)) {
         void setAlert({
           type: 'alert',
           content: t('MSG00611', '_유효한 날짜 형식이 아닙니다. (YYYYMMDD)') + ` (${row})`,

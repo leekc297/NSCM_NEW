@@ -1,0 +1,819 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0052_GET_DETAIL_DATA","258868039","2","_INCOTERMS
+			 , CASE WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN '00' 
+					   ELSE '11' END AS SORT_KEY
+	 FROM DM_DNM_EDI_CALLOFF_ITEM A WITH(NOLOCK)
+	 JOIN #T_EDI B WITH(NOLOCK)
+	   ON A.EDI_IF_SEQ = B.EDI_IF_SEQ 
+	      AND A.SUB_NO = B.SUB_NO 
+		  AND A.YYYYMMDD = B.YYYYMMDD
+	 LEFT OUTER JOIN SCM_MST_SITE_ITEM F WITH(NOLOCK)
+	   ON F.DIVISION_ID = '81'
+		  AND A.ATTRIBUTE7 = F.PROJECT_CODE
+		  AND A.ATTRIBUTE8 = F.SCM_SITE_ID
+		  AND A.ITEM_ID = F.ITEM_ID
+   WHERE A.ATTRIBUTE1 = 'ING'	
+   ORDER BY 1, 2
+				, CASE WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN '00' ELSE '11' END
+				, CASE WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN 'Unknown'
+						  ELSE A.ATTRIBUTE7 END			
+	
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0052_GET_DETAIL_DATA","258868039","1","/*
+ * Program ID   : DMF0052_GET_DETAIL_DATA
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ 2022.11.16	   HWI1993		  C20221103-000432 EDI 상시 점검
+ 2022.12.14	   rosia27		  [C20221103-000435] EDI데이터 송수신 I/F변경
+ 2023.01.03	   kdmcc14		  [C20230102-000019] NICK NAME 컬럼 추가
+
+ EXEC DMF0052_GET_DETAIL_DATA '', '', '20221101', '20221130', '1000', 'TOTAL'
+ */
+----------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[DMF0052_GET_DETAIL_DATA]
+	@p_PROJECT_CODE				NVARCHAR(4000),
+	@p_ITEM_ID						NVARCHAR(4000),	
+	@p_FROM_YYYYMMDD		NVARCHAR(8),
+	@p_TO_YYYYMMDD				NVARCHAR(8),
+	@p_GRID_SENDER_CODE		NVARCHAR(5),
+	@p_GRID_PROJECT_CODE		NVARCHAR(50)
+AS
+
+BEGIN
+	
+	SET NOCOUNT ON;
+
+	-- TEMP TABLE 확인후 삭제  
+	IF OBJECT_ID (N'tempdb..#T_EDI', N'U') IS NOT NULL   
+	DROP TABLE #T_EDI
+
+	--EDI GSCM DATA(ING)
+	CREATE TABLE #T_EDI (
+				EDI_IF_SEQ		NVARCHAR(35)
+			  , SUB_NO			SMALLINT
+			  , YYYYMMDD	NCHAR(8)
+	)
+
+	CREATE CLUSTERED INDEX [IDX_T_EDI_DATA] ON [#T_EDI] 
+    (  
+				EDI_IF_SEQ		ASC  
+			  , SUB_NO			ASC  
+			  , YYYYMMDD	ASC
+    )WITH (PAD_INDEX = ON, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]  
+    ;
+
+	INSERT INTO #T_EDI ( EDI_IF_SEQ, SUB_NO, YYYYMMDD )
+	SELECT EDI_IF_SEQ
+			 , SUB_NO
+			 , YYYYMMDD
+	 FROM DM_DNM_EDI_CALLOFF_ITEM A WITH(NOLOCK)
+	 LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL B WITH(NOLOCK)
+	  ON A.SENDER_CODE = B.SEGMENT2 
+	     AND B.LOOKUP_TYPE = 'EDI_SENDER_CODE' 
+		 AND B.SEGMENT1 = '81' 
+		 AND B.VALID_YN = 'Y'
+	WHERE A.CREATE_DATE BETWEEN @p_FROM_YYYYMMDD AND @p_TO_YYYYMMDD
+		AND A.SENDER_CODE = @p_GRID_SENDER_CODE
+		AND CASE WHEN @p_ITEM_ID = '' THEN @p_ITEM_ID
+					   ELSE A.ITEM_ID END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_ITEM_ID, ','))
+		AND CASE WHEN @p_project_code = '' THEN @p_project_code
+					   ELSE ISNULL(A.ATTRIBUTE7,'') END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_project_code, ','))
+		AND ISNULL(A.ATTRIBUTE7,'') = CASE WHEN @p_GRID_PROJECT_CODE = 'Total' THEN ISNULL(A.ATTRIBUTE7, '')
+															 WHEN @p_GRID_PROJECT_CODE = 'Unknown' THEN ''
+															 ELSE @p_GRID_PROJECT_CODE END
+		AND A.ATTRIBUTE1 = 'ING'
+	
+	--GSCM DATA
+	SELECT DISTINCT
+			   A.SENDER_NAME
+			 , A.SENDER_CODE
+			 , A.ITEM_ID
+			 , IIF([dbo].[FN_GET_ITEM_NICKNAME](A.DIVISION_ID, A.ITEM_ID) != '', [dbo].[FN_GET_ITEM_NICKNAME](A.DIVISION_ID, A.ITEM_ID), N'-')  AS NICK_NAME
+			 , CASE WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN 'Unknown'
+					   ELSE A.ATTRIBUTE7 END AS PROJECT_CODE
+			 , CASE WHEN ISNULL(A.ATTRIBUTE8,'') = '' THEN N'Fault'
+					   ELSE A.ATTRIBUTE8 END AS CHECK_SALES_SITE
+			 , CASE WHEN ISNULL(A.ATTRIBUTE8,'') = '' THEN N'-'
+					   WHEN ISNULL(A.ATTRIBUTE9,'') = 'ING_SS_NULL' THEN N'Fault'
+					   ELSE 'Active = Y' END AS CHECK_SALES_ACTIVE
+			 , CASE WHEN ISNULL(A.ATTRIBUTE8,'') = '' THEN N'-'
+					   WHEN ISNULL(A.ATTRIBUTE9,'') = 'ING_SS_NULL' THEN N'-'
+					   WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN N'Fault'
+					   ELSE N'Completed' END AS CHECK_SSPM
+			 , CASE WHEN ISNULL(A.ATTRIBUTE8,'') = '' THEN N'-'
+					   WHEN ISNULL(A.ATTRIBUTE9,'') = ''	THEN N'-'
+					   WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN N'-'
+					   WHEN F.VALID_YN = 'N' THEN N'Fault'
+					   ELSE 'Active = Y' END AS CHECK_SSPM_ACTIVE
+			 , CASE WHEN ISNULL(A.ATTRIBUTE8,'') = '' THEN N'-'
+					   WHEN ISNULL(A.ATTRIBUTE9,'') = ''	THEN N'-'
+					   WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN N'-'
+					   WHEN F.VALID_YN = 'N' THEN N'-'
+					   WHEN  ISNULL(F.ATTRIBUTE6, '') = '' THEN N'Fault'
+					   ELSE F.ATTRIBUTE6 END AS CHECK"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0052_GET_ERP_DATA","274868096","1","/*
+ * Program ID   : DMF0052_GET_ERP_DATA
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ 2022.11.21	   HWI1993		  C20221103-000432 EDI 상시 점검
+ 2022.12.14	   rosia27		  [C20221103-000435] EDI데이터 송수신 I/F변경
+ 2023.01.03	   kdmcc14		  [C20230102-000019] Status Detail 데이터 값 표기 변경 (WRONG_DEMANDDATE -> WRONG_DATE) 
+
+ EXEC DMF0052_GET_ERP_DATA '', '', '20221101', '20221130', 'A001', 'TOTAL'
+ */
+----------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[DMF0052_GET_ERP_DATA]
+	@p_PROJECT_CODE				NVARCHAR(4000),
+	@p_ITEM_ID						NVARCHAR(4000),	
+	@p_FROM_YYYYMMDD		NVARCHAR(8),
+	@p_TO_YYYYMMDD				NVARCHAR(8),
+	@p_GRID_SENDER_CODE		NVARCHAR(5),
+	@p_GRID_PROJECT_CODE		NVARCHAR(50)
+AS
+
+BEGIN
+	
+	SET NOCOUNT ON;
+
+	-- TEMP TABLE 확인후 삭제  
+	IF OBJECT_ID (N'tempdb..#T_EDI', N'U') IS NOT NULL   
+	DROP TABLE #T_EDI
+
+	--EDI ERP DATA('FAILED', 'FAILED_EST')
+	CREATE TABLE #T_EDI (
+			    EDI_IF_SEQ		NVARCHAR(35)
+			  , SUB_NO			SMALLINT
+			  , YYYYMMDD	NCHAR(8)
+	)
+
+	CREATE CLUSTERED INDEX [IDX_T_EDI_DATA] ON [#T_EDI] 
+    (  
+				EDI_IF_SEQ		ASC  
+			  , SUB_NO			ASC  
+			  , YYYYMMDD	ASC
+    )WITH (PAD_INDEX = ON, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]  
+    ;
+
+	INSERT INTO #T_EDI ( EDI_IF_SEQ, SUB_NO, YYYYMMDD )
+	SELECT EDI_IF_SEQ
+			 , SUB_NO
+			 , YYYYMMDD
+	 FROM DM_DNM_EDI_CALLOFF_ITEM A WITH(NOLOCK)
+	WHERE A.CREATE_DATE BETWEEN @p_FROM_YYYYMMDD AND @p_TO_YYYYMMDD
+		AND A.SENDER_CODE = @p_GRID_SENDER_CODE
+		AND CASE WHEN @p_ITEM_ID = '' THEN @p_ITEM_ID
+						ELSE A.ITEM_ID END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_ITEM_ID, ','))
+		AND CASE WHEN @p_project_code = '' THEN @p_project_code
+						ELSE ISNULL(A.ATTRIBUTE7,'') END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_project_code, ','))
+		AND ISNULL(A.ATTRIBUTE7,'') = CASE WHEN @p_GRID_PROJECT_CODE = 'Total' THEN ISNULL(A.ATTRIBUTE7,'')
+															WHEN @p_GRID_PROJECT_CODE = 'Unknown' THEN ''
+															ELSE @p_GRID_PROJECT_CODE END
+		AND A.ATTRIBUTE1 IN ( 'FAILED', 'FAILED_EST' )
+
+	--ERP DATA
+	SELECT A.EDI_IF_SEQ
+			 , A.SENDER_NAME
+			 , A.SENDER_CODE
+			 , A.COMPANY_ID
+			 , A.ITEM_ID
+			 , IIF([dbo].[FN_GET_ITEM_NICKNAME](A.DIVISION_ID, A.ITEM_ID) != '', [dbo].[FN_GET_ITEM_NICKNAME](A.DIVISION_ID, A.ITEM_ID), N'-')  AS NICK_NAME
+			 , A.SOLDTO_CODE
+			 , A.SHIPTO_CODE
+			 , CASE WHEN A.ATTRIBUTE1 = 'FAILED' THEN N'Failed'
+					   ELSE N'Success' END AS ERP_STATUS
+			 , CASE WHEN A.ATTRIBUTE1 = 'FAILED' THEN N'FAILED'
+					   ELSE N'FAILED_EST' END AS GSCM_STATUS
+			 , CASE WHEN A.ATTRIBUTE1 = 'FAILED' THEN N'FAILED'
+					   ELSE CASE WHEN A.ATTRIBUTE9 = 'WRONG_DEMANDDATE' THEN N'WRONG_DATE'
+									  ELSE A.ATTRIBUTE9 END
+					   END AS STATUS_DETAIL
+	 FROM DM_DNM_EDI_CALLOFF_ITEM A WITH(NOLOCK)
+	 JOIN #T_EDI B WITH(NOLOCK)
+	   ON A.EDI_IF_SEQ = B.EDI_IF_SEQ 
+	      AND A.SUB_NO = B.SUB_NO 
+		  AND A.YYYYMMDD = B.YYYYMMDD
+   GROUP BY A.EDI_IF_SEQ, A.SENDER_NAME, A.SENDER_CODE, A.COMPANY_ID, A.ITEM_ID, A.SOLDTO_CODE, A.SHIPTO_CODE, A.DIVISION_ID
+				 , CASE WHEN A.ATTRIBUTE1 = 'FAILED' THEN N'Failed'
+						   ELSE N'Success' END
+				 , CASE WHEN A.ATTRIBUTE1 = 'FAILED' THEN N'FAILED'
+						   ELSE N'FAILED_EST' END
+				 , CASE WHEN A.ATTRIBUTE1 = 'FAILED' THEN N'FAILED'              
+						   ELSE CASE WHEN A.ATTRIBUTE9 = 'WRONG_DEMANDDATE' THEN N'WRONG_DATE'
+										   ELSE A.ATTRIBUTE9 END 
+						   END
+				 , CASE WHEN A.ATTRIBUTE7 IN ( 'UNKNOWN') THEN 0 ELSE 1 END
+	ORDER BY 1, 2, CASE WHEN A.ATTRIBUTE7 IN ( 'UNKNOWN') THEN 0 ELSE 1 END, 3
+			
+	
+
+END"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0052_GET_ERP_DATA","274868096","2","
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0052_GET_PJT_DATA","290868153","1","/*
+ * Program ID   : DMF0052_GET_PJT_DATA
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ 2022.11.16	   HWI1993		  C20221103-000432 EDI 상시 점검
+ 2023.01.03	   kdmcc14		  [C20230102-000019] GSCM DETAIL DATA, ERP DETAIL DATA의 실제 건수를 GSCM PJT DATA 조회시 표기 
+
+ EXEC DMF0052_GET_PJT_DATA 'ALL', '', '', '20221101', '20221130'
+ */
+----------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[DMF0052_GET_PJT_DATA]
+	@p_SENDER_CODE			NVARCHAR(4000),
+	@p_ITEM_ID					NVARCHAR(4000),
+	@p_project_code				NVARCHAR(4000),
+	@p_FROM_YYYYMMDD	NVARCHAR(8),
+	@p_TO_YYYYMMDD			NVARCHAR(8)
+AS
+
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	-- TEMP TABLE 확인후 삭제  	
+	IF OBJECT_ID (N'tempdb..#T_GSCM_DATA', N'U') IS NOT NULL   
+	DROP TABLE #T_GSCM_DATA
+
+	IF OBJECT_ID (N'tempdb..#T_ERP_DATA', N'U') IS NOT NULL   
+	DROP TABLE #T_ERP_DATA
+	
+	--GSCM DATA
+	CREATE TABLE #T_GSCM_DATA (
+			    SENDER_NAME			NVARCHAR(100)
+			  , SENDER_CODE			NVARCHAR(5)
+			  , ITEM_ID						NVARCHAR(50)
+			  , NICK_NAME				NVARCHAR(50)
+			  , PROJECT_CODE			NVARCHAR(150)
+			  , CHECK_SALES_SITE		NVARCHAR(150)
+			  , CHECK_SALES_ACTIVE	NVARCHAR(150)
+			  , CHECK_SSPM				NVARCHAR(150)
+			  , CHECK_SSPM_ACTIVE	NVARCHAR(150)
+			  , CHECK_INCOTERMS		NVARCHAR(150)
+	)
+
+	CREATE CLUSTERED INDEX [IDX_T_GSCM_DATA] ON [#T_GSCM_DATA] 
+    (  
+				SENDER_NAME			ASC  
+			  , SENDER_CODE			ASC  
+			  , ITEM_ID						ASC 			  
+			  , PROJECT_CODE			ASC			  
+    )WITH (PAD_INDEX = ON, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]  
+    ;
+
+	INSERT INTO #T_GSCM_DATA ( SENDER_NAME, SENDER_CODE, ITEM_ID, NICK_NAME, PROJECT_CODE, 
+												CHECK_SALES_SITE, CHECK_SALES_ACTIVE, CHECK_SSPM, CHECK_SSPM_ACTIVE, CHECK_INCOTERMS )	
+	SELECT DISTINCT
+			   A.SENDER_NAME
+			 , A.SENDER_CODE
+			 , A.ITEM_ID
+			 , IIF([dbo].[FN_GET_ITEM_NICKNAME](A.DIVISION_ID, A.ITEM_ID) != '', [dbo].[FN_GET_ITEM_NICKNAME](A.DIVISION_ID, A.ITEM_ID), '-')  AS NICK_NAME
+			 , CASE WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN 'Unknown'
+						ELSE A.ATTRIBUTE7 END AS PROJECT_CODE
+			 , CASE WHEN ISNULL(A.ATTRIBUTE8,'') = '' THEN N'Fault'
+						ELSE A.ATTRIBUTE8 END AS CHECK_SALES_SITE
+			 , CASE WHEN ISNULL(A.ATTRIBUTE8,'') = '' THEN N'-'
+						WHEN ISNULL(A.ATTRIBUTE9,'') = 'ING_SS_NULL' THEN N'Fault'
+						ELSE 'Active = Y' END AS CHECK_SALES_ACTIVE
+			 , CASE WHEN ISNULL(A.ATTRIBUTE8,'') = '' THEN N'-'
+						WHEN ISNULL(A.ATTRIBUTE9,'') = 'ING_SS_NULL' THEN N'-'
+						WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN N'Fault'
+						ELSE N'Completed' END AS CHECK_SSPM
+			 , CASE WHEN ISNULL(A.ATTRIBUTE8,'') = '' THEN N'-'
+						WHEN ISNULL(A.ATTRIBUTE9,'') = ''	THEN N'-'
+						WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN N'-'
+						WHEN F.VALID_YN = 'N' THEN N'Fault'
+						ELSE 'Active = Y' END AS CHECK_SSPM_ACTIVE
+			 , CASE WHEN ISNULL(A.ATTRIBUTE8,'') = '' THEN N'-'
+						WHEN ISNULL(A.ATTRIBUTE9,'') = ''	THEN N'-'
+						WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN N'-'
+						WHEN F.VALID_YN = 'N' THEN N'-'
+						WHEN  ISNULL(F.ATTRIBUTE6, '') = '' THEN N'Fault'
+						ELSE F.ATTRIBUTE6 END AS CHECK_INCOTERMS	
+	  FROM DM_DNM_EDI_CALLOFF_ITEM A WITH(NOLOCK)
+	    JOIN (
+					SELECT EDI_IF_SEQ, SUB_NO, YYYYMMDD
+					 FROM DM_DNM_EDI_CALLOFF_ITEM A WITH(NOLOCK)
+						LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL B WITH(NOLOCK)
+						 ON A.SENDER_CODE = B.SEGMENT2 
+							  AND B.LOOKUP_TYPE = 'EDI_SENDER_CODE' 
+							  AND B.SEGMENT1 = '81' 
+							  AND B.VALID_YN = 'Y'
+					WHERE A.CREATE_DATE BETWEEN @p_FROM_YYYYMMDD AND @p_TO_YYYYMMDD
+						AND CASE WHEN @p_SENDER_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0052_GET_PJT_DATA","290868153","2","CODE = 'ALL' THEN @p_SENDER_CODE
+										ELSE A.SENDER_CODE END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_SENDER_CODE, ','))
+						AND CASE WHEN @p_ITEM_ID = '' THEN @p_ITEM_ID
+										ELSE A.ITEM_ID END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_ITEM_ID, ','))
+						AND CASE WHEN @p_project_code = '' THEN @p_project_code
+										ELSE ISNULL(A.ATTRIBUTE7,'') END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_project_code, ','))		
+						AND A.ATTRIBUTE1 = 'ING'
+				) B 
+		  ON A.EDI_IF_SEQ = B.EDI_IF_SEQ 
+		        AND A.SUB_NO = B.SUB_NO 
+				AND A.YYYYMMDD = B.YYYYMMDD
+	    LEFT OUTER JOIN SCM_MST_SITE_ITEM F WITH(NOLOCK)
+		  ON F.DIVISION_ID = '81'
+				AND A.ATTRIBUTE7 = F.PROJECT_CODE
+				AND A.ATTRIBUTE8 = F.SCM_SITE_ID
+				AND A.ITEM_ID = F.ITEM_ID
+	WHERE A.ATTRIBUTE1 = 'ING'
+
+	--ERP DATA
+	CREATE TABLE #T_ERP_DATA (			    
+				EDI_IF_SEQ					NVARCHAR(35)
+			  , SENDER_NAME			NVARCHAR(100)
+			  , SENDER_CODE			NVARCHAR(5)
+			  , COMPANY_ID				NVARCHAR(30)
+			  , ITEM_ID						NVARCHAR(50)
+			  , NICK_NAME				NVARCHAR(50)
+			  , SOLDTO_CODE			NVARCHAR(10)
+			  , SHIPTO_CODE				NVARCHAR(10)
+			  , ERP_STATUS				NVARCHAR(150)
+			  , GSCM_STATUS			NVARCHAR(150)
+			  , STATUS_DETAIL			NVARCHAR(150)
+			  , PROJECT_CODE			NVARCHAR(150)
+	)
+
+	CREATE CLUSTERED INDEX [IDX_T_ERP_DATA] ON [#T_ERP_DATA]  
+    (  
+				SENDER_NAME			ASC  
+			  , SENDER_CODE			ASC  
+			  , PROJECT_CODE			ASC
+    )WITH (PAD_INDEX = ON, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]  
+    ; 
+	
+	INSERT INTO #T_ERP_DATA ( EDI_IF_SEQ, SENDER_NAME, SENDER_CODE, COMPANY_ID, ITEM_ID
+										   , NICK_NAME, SOLDTO_CODE, SHIPTO_CODE, ERP_STATUS, GSCM_STATUS
+										   ,	STATUS_DETAIL, PROJECT_CODE )
+	SELECT A.EDI_IF_SEQ
+			 , A.SENDER_NAME
+			 , A.SENDER_CODE
+			 , A.COMPANY_ID
+			 , A.ITEM_ID
+			 , IIF([dbo].[FN_GET_ITEM_NICKNAME](A.DIVISION_ID, A.ITEM_ID) != '', [dbo].[FN_GET_ITEM_NICKNAME](A.DIVISION_ID, A.ITEM_ID), '-')  AS NICK_NAME
+			 , A.SOLDTO_CODE
+			 , A.SHIPTO_CODE
+			 , CASE WHEN A.ATTRIBUTE1 = 'FAILED' THEN N'Failed'
+					   ELSE N'Success' END AS ERP_STATUS
+			 , CASE WHEN A.ATTRIBUTE1 = 'FAILED' THEN N'FAILED'
+					   ELSE N'FAILED_EST' END AS GSCM_STATUS
+			 , CASE WHEN A.ATTRIBUTE1 = 'FAILED' THEN N'FAILED'
+					   ELSE A.ATTRIBUTE9 END AS STATUS_DETAIL
+			 , CASE WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN 'Unknown'
+					   ELSE A.ATTRIBUTE7 END AS PROJECT_CODE
+	 FROM DM_DNM_EDI_CALLOFF_ITEM A WITH(NOLOCK)
+	   JOIN (
+					SELECT EDI_IF_SEQ, SUB_NO, YYYYMMDD
+					 FROM DM_DNM_EDI_CALLOFF_ITEM A WITH(NOLOCK)
+					WHERE A.CREATE_DATE BETWEEN @p_FROM_YYYYMMDD AND @p_TO_YYYYMMDD
+						AND CASE WHEN @p_SENDER_CODE = 'ALL' THEN @p_SENDER_CODE
+										ELSE A.SENDER_CODE END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_SENDER_CODE, ','))
+						AND CASE WHEN @p_ITEM_ID = '' THEN @p_ITEM_ID
+										ELSE A.ITEM_ID END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_ITEM_ID, ','))
+						AND CASE WHEN @P_PROJECT_CODE = '' THEN @P_PROJECT_CODE
+										ELSE ISNULL(A.ATTRIBUTE7,'') END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@P_PROJECT_CODE, ','))		
+						AND A.ATTRIBUTE1 IN ( 'FAILED', 'FAILED_EST' )
+			   ) B 
+	     ON A.EDI_IF_SEQ = B.EDI_IF_SEQ AND A.SUB_NO = B.SUB_NO AND A.YYYYMMDD = B.YYYYMMDD
+	GROUP BY A.EDI_IF_SEQ, A.SENDER_NAME, A.SENDER_CODE, A.COMPANY_ID, A.ITEM_ID, A.SOLDTO_CODE, A.SHIPTO_CODE, A.DIVISION_ID
+				  , CASE WHEN A.ATTRIBUTE1 = 'FAILED' THEN N'Failed'
+							ELSE N'Success' END
+				  , CASE WHEN A.ATTRIBUTE1 = 'FAILED' THEN N'FAILED'
+							ELSE N'FAILED_EST' END
+				  , CASE WHEN A.ATTRIBUTE1 = 'FAILED' THEN N'FAILED'
+							ELSE A.ATTRIBUTE9	END
+				  , CASE WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN 'Unknown'
+						    ELSE A.ATTRIBUTE7 END
+
+
+	--PJT DATA
+	SELECT A.SENDER_NAME
+			 , A.SENDER_CODE
+			 , B.CREATION_DATE
+			 , A.PROJECT_CODE
+			 , A.PROJECT_C"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0052_GET_PJT_DATA","290868153","3","NT
+			 , A.COMPLETED_CNT
+			 , (CASE WHEN A.PROJECT_CODE = 'Total' THEN 
+								(SELECT COUNT(*) FROM #T_GSCM_DATA WITH(NOLOCK) WHERE SENDER_CODE = A.SENDER_CODE)
+						ELSE (SELECT COUNT(*) FROM #T_GSCM_DATA WITH(NOLOCK) WHERE SENDER_NAME = A.SENDER_NAME AND SENDER_CODE = A.SENDER_CODE AND PROJECT_CODE = A.PROJECT_CODE) END) AS CHECK_GSCM_CNT
+			 , (CASE WHEN A.PROJECT_CODE = 'Total' THEN 
+								(SELECT COUNT(*) FROM #T_ERP_DATA WITH(NOLOCK) WHERE SENDER_CODE = A.SENDER_CODE)
+						ELSE (SELECT COUNT(*) FROM #T_ERP_DATA WITH(NOLOCK) WHERE SENDER_NAME = A.SENDER_NAME AND SENDER_CODE = A.SENDER_CODE AND PROJECT_CODE = A.PROJECT_CODE) END) AS CHECK_ERP_CNT
+			 , CASE WHEN A.PROJECT_CODE = 'Total' THEN 1
+					   WHEN A.PROJECT_CODE = 'Unknown' THEN 999
+					   ELSE 2 END AS SORT_ORDER
+   FROM (
+			  SELECT A.SENDER_NAME
+					   , A.SENDER_CODE
+					   , CASE WHEN GROUPING(CASE WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN 'Unknown' ELSE A.ATTRIBUTE7 END) = 1 THEN 'Total'
+								 ELSE CASE WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN 'Unknown' 
+										        ELSE A.ATTRIBUTE7 END 
+								 END AS PROJECT_CODE
+					   , COUNT(*) AS PROJECT_CNT
+					   , SUM(CASE WHEN A.ATTRIBUTE1 = 'COMPLETED' THEN 1 ELSE 0 END ) AS COMPLETED_CNT					   
+			   FROM DM_DNM_EDI_CALLOFF_ITEM A WITH(NOLOCK)
+			 WHERE A.CREATE_DATE BETWEEN @p_FROM_YYYYMMDD AND @p_TO_YYYYMMDD
+			 	 AND CASE WHEN @p_SENDER_CODE = 'ALL' THEN @p_SENDER_CODE
+								 ELSE A.SENDER_CODE END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_SENDER_CODE, ','))
+				 AND CASE WHEN @p_ITEM_ID = '' THEN @p_ITEM_ID
+								 ELSE A.ITEM_ID END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_ITEM_ID, ','))
+				 AND CASE WHEN @p_project_code = '' THEN @p_project_code
+								 ELSE ISNULL(A.ATTRIBUTE7,'') END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_project_code, ','))
+	         GROUP BY A.SENDER_NAME, A.SENDER_CODE, CASE WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN 'Unknown' ELSE A.ATTRIBUTE7 END WITH ROLLUP
+			 HAVING GROUPING(A.SENDER_NAME)
+						 + GROUPING(A.SENDER_CODE)
+						 + GROUPING(CASE WHEN ISNULL(A.ATTRIBUTE7,'') = '' THEN 'Unknown' ELSE A.ATTRIBUTE7 END)
+							< 2
+			) A
+	LEFT OUTER JOIN (
+			  SELECT A.SENDER_CODE
+					   , MAX(CREATE_DATE) AS CREATION_DATE
+			   FROM DM_DNM_EDI_CALLOFF_ITEM A WITH(NOLOCK)
+			 WHERE A.CREATE_DATE BETWEEN @p_FROM_YYYYMMDD AND @p_TO_YYYYMMDD
+				 AND CASE WHEN @p_SENDER_CODE = 'ALL' THEN @p_SENDER_CODE
+						ELSE A.SENDER_CODE END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_SENDER_CODE, ','))
+				 AND CASE WHEN @p_ITEM_ID = '' THEN @p_ITEM_ID
+						ELSE A.ITEM_ID END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_ITEM_ID, ','))
+				 AND CASE WHEN @p_project_code = '' THEN @p_project_code
+						ELSE ISNULL(A.ATTRIBUTE7,'') END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_project_code, ','))
+			GROUP BY A.SENDER_CODE
+		) B ON A.SENDER_CODE = B.SENDER_CODE
+ORDER BY A.SENDER_NAME, SORT_ORDER
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0052_GET_SITE_POPUP","306868210","1","---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+ * Program ID   : DMF0052_GET_SITE_POPUP
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ 2022.11.21	HWI1993	C20221103-000432 EDI 상시 점검
+
+ */
+----------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[DMF0052_GET_SITE_POPUP]
+	@p_SENDER_CODE		NVARCHAR(4000),	--
+	@p_ITEM_ID			NVARCHAR(4000),	--
+	@p_PROJECT_CODE		NVARCHAR(50),
+	@p_FROM_YYYYMMDD	NVARCHAR(8),	--
+	@p_TO_YYYYMMDD		NVARCHAR(8),	--
+	@p_POPUP_TYPE		NVARCHAR(30)	-- CHECK_SALES_SITE,  CHECK_SALES_ACTIVE
+AS
+
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	IF ( @p_POPUP_TYPE = 'CHECK_SALES_SITE')
+	BEGIN
+		SELECT DISTINCT A.SENDER_CODE, A.SENDER_NAME, A.COMPANY_ID, A.SOLDTO_CODE, A.SHIPTO_CODE, N'Check the ''Sales Site'' for using this EDI data. ' AS MESSAGE
+		FROM DM_DNM_EDI_CALLOFF_ITEM A
+		WHERE CREATE_DATE BETWEEN @p_FROM_YYYYMMDD AND @p_TO_YYYYMMDD
+			AND A.SENDER_CODE = @p_SENDER_CODE
+			AND A.ITEM_ID = @p_ITEM_ID
+			AND ISNULL(A.ATTRIBUTE7,'') = CASE WHEN @p_PROJECT_CODE = 'Unknown' THEN ''
+												ELSE @p_PROJECT_CODE 
+												END
+			AND ISNULL(A.ATTRIBUTE8, '') = ''
+			AND A.ATTRIBUTE1 = 'ING'
+			AND A.ATTRIBUTE9 = 'ING_SS_NULL'
+	END
+	ELSE
+	BEGIN 
+		SELECT DISTINCT A.SENDER_CODE, A.SENDER_NAME, A.COMPANY_ID, A.SOLDTO_CODE, A.SHIPTO_CODE
+				, A.ATTRIBUTE8 AS SCM_SITE_ID, B.VALID_YN AS VALID_YN
+				, CONCAT(B.SOLDTO_CODE, '/', B.SHIPTO_CODE) AS GSCM_CODE
+				, B.VALID_YN AS CODE_VALID_YN
+				, N'Change the status of ''Active'' for using this EDI data.' AS MESSAGE
+		FROM DM_DNM_EDI_CALLOFF_ITEM A
+		JOIN SCM_MST_SITE_CUSTOMER B ON A.ATTRIBUTE8 = B.SCM_SITE_ID AND A.SHIPTO_CODE = B.SHIPTO_CODE AND A.SOLDTO_CODE = B.SOLDTO_CODE AND B.DIVISION_ID = '81'
+		WHERE CREATE_DATE BETWEEN @p_FROM_YYYYMMDD AND @p_TO_YYYYMMDD
+			AND A.SENDER_CODE = @p_SENDER_CODE
+			AND A.ITEM_ID = @p_ITEM_ID
+			AND ISNULL(A.ATTRIBUTE7,'') = CASE WHEN @p_PROJECT_CODE = 'Unknown' THEN ''
+												ELSE @p_PROJECT_CODE 
+												END
+			AND ISNULL(A.ATTRIBUTE8, '') <> ''
+			AND A.ATTRIBUTE1 = 'ING'
+			AND A.ATTRIBUTE9 = 'ING_SS_ACTIVE'
+	END
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0052_GET_SPREAD_TITLE","322868267","1","/*************************************************************************************************
+ Program ID  : DMF0052_GET_SPREAD_TITLE                                                         
+ Description : Procedure 작성 가이드                                                            
+ Usage       : Procedure 작성 시 참조하세요!                                                    
+ Parameter   :                                                                                  
+                                                                                                
+------------------------------------------------------------------------------------------------
+ Date        In Charge    Description                                                           
+------------------------------------------------------------------------------------------------
+ 2022.11.10  HWI1993	Initial Release 
+
+*************************************************************************************************/
+
+CREATE PROCEDURE [dbo].[DMF0052_GET_SPREAD_TITLE]
+    @p_created_by	   NVARCHAR(50),
+	@p_division_id	   NVARCHAR(20),
+	@p_sheet_name	   NVARCHAR(MAX)
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+    
+	DECLARE @v_user_col_cnt   AS INT;
+	DECLARE @p_program_id	   NVARCHAR(50)
+
+	SET @v_user_col_cnt = 0;
+	SET @p_program_id = 'DMF0052';
+
+	SELECT @v_user_col_cnt = COUNT(*)
+	FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+	WHERE  1 = 1
+	AND    U.PROGRAM_ID = @p_program_id
+    AND    U.SHEET_NAME = @p_sheet_name
+	AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+    AND    U.USER_ID    = @p_created_by;
+
+	IF @v_user_col_cnt > 0	   
+	    BEGIN
+		SELECT * FROM (
+			SELECT U.PROGRAM_ID
+						 , U.SHEET_NAME
+						 , U.COLUMN_NAME
+						 , C.COLUMN_LABEL_NAME
+						 , U.SORT_ORDER_NO        --CONVERT(NVARCHAR(10), U.SORT_ORDER_NO) AS SORT_ORDER_NO
+						 , U.DATA_SORT_METHOD_CODE
+						 , C.SMALL_CLASS_LABEL_NAME
+						 , C.LARGE_CLASS_LABEL_NAME
+						 , '' AS DAY_CODE
+						 , C.FIXED_FLAG
+						 , C.COLUMN_WIDTH
+						 , C.CELL_CONTROL_OBJECT_TYPE_CODE
+						 , C.CELL_COMBO_DATA_TYPE
+						 , C.DATA_SCALE_NUMBER
+						 , C.DATA_MAX_LENGTH
+						 , C.HORIZONTAL_ALIGN_CODE
+						 , C.UPPERCASE_APPLY_FLAG
+						 , C.VISIBLE_FLAG
+						 , C.DEFAULT_FLAG
+						 , C.USER_SELECTABLE_FLAG
+						 , C.VALID_YN
+						 , C.DIVISION_ID
+					FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+						 , [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+					WHERE  1 = 1
+					AND    U.PROGRAM_ID  = C.PROGRAM_ID
+					AND    U.SHEET_NAME  = C.SHEET_NAME
+					AND    U.COLUMN_NAME = C.COLUMN_NAME
+					AND    U.PROGRAM_ID  = @p_program_id
+					AND    U.SHEET_NAME  = @p_sheet_name
+					AND    U.USER_ID     = @p_created_by
+					AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+					AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )
+					UNION ALL
+	
+					SELECT C.PROGRAM_ID
+							, C.SHEET_NAME
+							, C.COLUMN_NAME
+							, C.COLUMN_LABEL_NAME
+							, C.SORT_ORDER_NO        --CONVERT(NVARCHAR(10), U.SORT_ORDER_NO) AS SORT_ORDER_NO
+							, C.DATA_SORT_METHOD_CODE
+							, C.SMALL_CLASS_LABEL_NAME
+							, C.LARGE_CLASS_LABEL_NAME
+							, '' AS DAY_CODE
+							, C.FIXED_FLAG
+							, C.COLUMN_WIDTH
+							, C.CELL_CONTROL_OBJECT_TYPE_CODE
+							, C.CELL_COMBO_DATA_TYPE
+							, C.DATA_SCALE_NUMBER
+							, C.DATA_MAX_LENGTH
+							, C.HORIZONTAL_ALIGN_CODE
+							, C.UPPERCASE_APPLY_FLAG
+							, C.VISIBLE_FLAG
+							, C.DEFAULT_FLAG
+							, C.USER_SELECTABLE_FLAG
+							, C.VALID_YN
+							, C.DIVISION_ID
+					FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+					WHERE  1 = 1    
+					AND    C.PROGRAM_ID  = @p_program_id
+					AND    C.SHEET_NAME  = @p_sheet_name
+					AND    C.VISIBLE_FLAG = 'N'
+					AND    C.DEFAULT_FLAG = ''
+					AND    C.VALID_YN     = 'Y'
+					AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )
+					) A
+				ORDE"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0052_GET_SPREAD_TITLE","322868267","2","R BY A.SORT_ORDER_NO ;
+	      END;
+	  ELSE
+	      BEGIN		
+				SELECT C.PROGRAM_ID
+				 , C.SHEET_NAME
+				 , C.COLUMN_NAME
+				 , C.COLUMN_LABEL_NAME
+				 , C.SORT_ORDER_NO        --CONVERT(NVARCHAR(10), U.SORT_ORDER_NO) AS SORT_ORDER_NO
+				 , C.DATA_SORT_METHOD_CODE
+				 , C.SMALL_CLASS_LABEL_NAME
+				 , C.LARGE_CLASS_LABEL_NAME
+				 , '' AS DAY_CODE
+				 , C.FIXED_FLAG
+				 , C.COLUMN_WIDTH
+				 , C.CELL_CONTROL_OBJECT_TYPE_CODE
+				 , C.CELL_COMBO_DATA_TYPE
+				 , C.DATA_SCALE_NUMBER
+				 , C.DATA_MAX_LENGTH
+				 , C.HORIZONTAL_ALIGN_CODE
+				 , C.UPPERCASE_APPLY_FLAG
+				 , C.VISIBLE_FLAG
+				 , C.DEFAULT_FLAG
+				 , C.USER_SELECTABLE_FLAG
+				 , C.VALID_YN
+				 , C.DIVISION_ID
+			FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+			WHERE  1 = 1    
+			AND    C.PROGRAM_ID  = @p_program_id
+			AND    C.SHEET_NAME  = @p_sheet_name
+			AND    C.DEFAULT_FLAG = 'Y'
+			AND    C.VALID_YN     = 'Y'
+			AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )
+			UNION ALL
+			SELECT * FROM (
+				SELECT C.PROGRAM_ID
+					 , C.SHEET_NAME
+					 , C.COLUMN_NAME
+					 , C.COLUMN_LABEL_NAME
+					 , C.SORT_ORDER_NO        --CONVERT(NVARCHAR(10), U.SORT_ORDER_NO) AS SORT_ORDER_NO
+					 , C.DATA_SORT_METHOD_CODE
+					 , C.SMALL_CLASS_LABEL_NAME
+					 , C.LARGE_CLASS_LABEL_NAME
+					 , '' AS DAY_CODE
+					 , C.FIXED_FLAG
+					 , C.COLUMN_WIDTH
+					 , C.CELL_CONTROL_OBJECT_TYPE_CODE
+					 , C.CELL_COMBO_DATA_TYPE
+					 , C.DATA_SCALE_NUMBER
+					 , C.DATA_MAX_LENGTH
+					 , C.HORIZONTAL_ALIGN_CODE
+					 , C.UPPERCASE_APPLY_FLAG
+					 , C.VISIBLE_FLAG
+					 , C.DEFAULT_FLAG
+					 , C.USER_SELECTABLE_FLAG
+					 , C.VALID_YN
+					 , C.DIVISION_ID
+				FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+				WHERE  1 = 1    
+				AND    C.PROGRAM_ID  = @p_program_id
+				AND    C.SHEET_NAME  = @p_sheet_name
+				AND    C.VISIBLE_FLAG = 'N'
+				AND    C.DEFAULT_FLAG = ''			
+				AND    C.VALID_YN     = 'Y'
+				AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )
+				) A
+			  ORDER BY C.SORT_ORDER_NO   ;
+				  
+        END;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0052_GET_STATUS_DATA","338868324","1","/*
+ * Program ID   : DMF0052_GET_STATUS_DATA
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ 2022.11.16	   HWI1993		  C20221103-000432  EDI 상시 점검
+ 2023.01.03	   kdmcc14		  [C20230102-000019]  Status ERP 칼럼 내림차순 정렬, Status ERP 칼럼 값이 FAILED인 경우 Status GSCM을 전부 FAILED로 표기, 퍼센티지 값 표기 추가
+
+ EXEC DMF0052_GET_STATUS_DATA 'ALL', '', '', '20221013', '20230111'
+ */
+----------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[DMF0052_GET_STATUS_DATA]
+	@p_SENDER_CODE			NVARCHAR(4000),
+	@p_ITEM_ID					NVARCHAR(4000),
+	@p_project_code				NVARCHAR(4000),
+	@p_FROM_YYYYMMDD	NVARCHAR(8),
+	@p_TO_YYYYMMDD			NVARCHAR(8)
+AS
+
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	    SELECT STATUS_ERP
+				 , STATUS_GSCM
+				 , QTY 
+				 , CONVERT(NVARCHAR, ROUND((CONVERT(FLOAT, QTY) / CONVERT(FLOAT, SUM_QTY)) * 100, 2)) + '%' AS AVG_PERCENT				 
+		 FROM (
+					SELECT CASE WHEN ATTRIBUTE6 IN ( 'S', 'W' ) THEN 'SUCCESS'  
+									   ELSE 'FAILED' END AS STATUS_ERP  
+							 , CASE WHEN ATTRIBUTE6 IN ('S', 'W') THEN ATTRIBUTE1
+									   ELSE 'FAILED' END AS STATUS_GSCM  
+							 , COUNT(*) AS QTY
+							 , SUM(COUNT(*)) OVER () AS SUM_QTY				
+					 FROM DM_DNM_EDI_CALLOFF_ITEM A WITH(NOLOCK) 
+				    WHERE A.CREATE_DATE BETWEEN @p_FROM_YYYYMMDD AND @p_TO_YYYYMMDD
+					    AND CASE WHEN @p_SENDER_CODE = 'ALL' THEN @p_SENDER_CODE
+										ELSE A.SENDER_CODE END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_SENDER_CODE, ','))  
+						AND CASE WHEN @p_ITEM_ID = '' THEN @p_ITEM_ID
+										ELSE A.ITEM_ID END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_ITEM_ID, ','))  
+						AND CASE WHEN @p_project_code = '' THEN @p_project_code
+										ELSE ISNULL(A.ATTRIBUTE7,'') END IN ( SELECT TOKEN FROM DBO.STRING_SPLIT(@p_project_code, ','))  
+					GROUP BY CASE WHEN ATTRIBUTE6 IN ( 'S', 'W' ) THEN 'SUCCESS'  
+											ELSE 'FAILED' END  
+								  , CASE WHEN ATTRIBUTE6 IN ('S', 'W') THEN ATTRIBUTE1
+											ELSE 'FAILED' END  
+				   ) A	    
+	   GROUP BY STATUS_ERP, STATUS_GSCM, QTY, SUM_QTY
+	   ORDER BY 1 DESC, 2
+	
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0052_GET_SUMMARY_DATA","354868381","1","/*
+ * Program ID   : DMF0052_GET_SUMMARY_DATA
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ 2022.11.16	   HWI1993		  C20221103-000432  EDI 상시 점검 날짜조건만 적용함. 나머지는 구조상 적용하지 않음.
+ 2023.01.03	   kdmcc14		  [C20230102-000019]  EDI SUMMARY DATA 날짜 내림차순 정렬
+ */
+----------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[DMF0052_GET_SUMMARY_DATA]
+	@p_SENDER_CODE			NVARCHAR(4000),
+	@p_ITEM_ID					NVARCHAR(4000),
+	@p_project_code				NVARCHAR(4000),
+	@p_FROM_YYYYMMDD	NVARCHAR(8),
+	@p_TO_YYYYMMDD			NVARCHAR(8)
+AS
+
+BEGIN
+	
+    SET NOCOUNT ON;
+	-- SENDER 조건이 있으면 SENDER_CNT 를 체크하고 없으면 TT_CNT 를 체크한다.
+
+	SELECT ISNULL(A.YYYYMMDD,B.YYYYMMDD) AS YYYYMMDD
+			 , ISNULL(B.ERP_CNT, 0) AS SEND_CNT
+			 , ISNULL(A.GSCM_CNT, 0) AS RCV_CNT
+			 , CASE WHEN ISNULL(B.ERP_CNT, 0) = ISNULL(A.GSCM_CNT, 0) THEN 'COMPLETE'
+					   ELSE 'Need to Check' END AS STATUS
+	 FROM (
+				SELECT TRANSFER_CREATE_DATE AS YYYYMMDD
+						 , COUNT(*) AS GSCM_CNT
+				 FROM XIF_ERP_EDI_CALLOFF_ITEM_R_SN A
+			    WHERE TRANSFER_CREATE_DATE BETWEEN @p_FROM_YYYYMMDD AND @p_TO_YYYYMMDD
+			    GROUP BY TRANSFER_CREATE_DATE
+			   ) A
+	 FULL OUTER JOIN 
+			   (
+				-- 총 건수는 ERP 에서 국내와 해외를 각각 보내는 관계로 합산해야 한다. ( IFSEQNO LIKE '1%' : 해외, '5%' 국내 )
+				SELECT ISNULL(A.YYYYMMDD, B.YYYYMMDD) AS YYYYMMDD
+						 , ISNULL(A.ERP_CNT, 0) + ISNULL(B.ERP_CNT,0) AS ERP_CNT
+				 FROM (
+							SELECT TRANSFER_CREATE_DATE AS YYYYMMDD
+									 , MAX(CASE WHEN ISNUMERIC(ATTRIBUTE2) > 0 THEN CAST(ATTRIBUTE2 AS INT) 
+													  ELSE 0 END) AS ERP_CNT
+							 FROM XIF_ERP_EDI_CALLOFF_ITEM_R_SN A
+						   WHERE TRANSFER_CREATE_DATE BETWEEN @p_FROM_YYYYMMDD AND @p_TO_YYYYMMDD
+							   AND IFSEQNO LIKE '1%'
+						   GROUP BY TRANSFER_CREATE_DATE
+						  ) A
+				 FULL OUTER JOIN 
+						 (
+						  SELECT TRANSFER_CREATE_DATE AS YYYYMMDD
+							 	   , MAX(CASE WHEN ISNUMERIC(ATTRIBUTE2) > 0 THEN CAST(ATTRIBUTE2 AS INT) 
+												    ELSE 0 END) AS ERP_CNT
+						   FROM XIF_ERP_EDI_CALLOFF_ITEM_R_SN A
+					     WHERE TRANSFER_CREATE_DATE BETWEEN @p_FROM_YYYYMMDD AND @p_TO_YYYYMMDD
+						     AND IFSEQNO LIKE '5%'
+					     GROUP BY TRANSFER_CREATE_DATE
+					     ) B ON A.YYYYMMDD = B.YYYYMMDD		
+			   ) B ON A.YYYYMMDD = B.YYYYMMDD
+	ORDER BY ISNULL(A.YYYYMMDD,B.YYYYMMDD) DESC
+	
+
+END
+"

@@ -1,0 +1,1 @@
+export { CapaLobReport } from './CapaLobReport';

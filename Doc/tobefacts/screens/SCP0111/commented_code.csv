@@ -1,0 +1,6 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/integration-psi","SCP0111","features/supply/src/pages/integration-psi/integration-psi.constants.ts","156","endpoint","'^'delim bulk SAVE 는 useProcMutation(배열 unfold)을 우회해 apiClient.post 직접 호출"
+"supply/integration-psi","SCP0111","features/supply/src/pages/integration-psi/IntegrationPsi.tsx","77","code","`dtPSI = DBUtils.Filter(dtPSIAll, sb, true); if (dtPSI.Rows.Count > 0) { MSG00260; return; }`"
+"supply/integration-psi","SCP0111","features/supply/src/pages/integration-psi/useIntegrationPsiStore.ts","40","endpoint","admin SCM_MST_SHEET_COLUMNS 동적 fetch (ui-dynamic-property-management §2.3). 'Integration PSI' 24행"
+"supply/integration-psi","SCP0111","features/supply/src/pages/integration-psi/useIntegrationPsiStore.ts","43","endpoint","SCM_MST_SHEET_MEASURE 동적 fetch (design 03 §1-M 7행). PIVOT measure 세로축. division=81 은 MKT_FCST 제외."
+"supply/integration-psi","SCP0111","features/supply/src/pages/integration-psi/utils/integrationPsiApi.ts","1","endpoint","SCP0111 저장 call-proc 직접 호출 — '^'delim bulk payload 는 useProcMutation(배열 unfold)을 우회해"

@@ -1,0 +1,4 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"shipping/shipment-change-history","SSP0019","features/shipping/src/pages/shipment-change-history/components/ShipmentChangeHistoryGrid.tsx","55","endpoint","셀콤보 dataMap 직접 fetch(design 03 §6-1) — lookupType 이 서로 달라 comboParams 단일값으로 못 실어"
+"shipping/shipment-change-history","SSP0019","features/shipping/src/pages/shipment-change-history/shipment-change-history.constants.ts","45","endpoint","그리드 셀 콤보 lookupType 직접 fetch(useTabLookupQueries) — comboParams 단일값으로 못 푸는 2종(design 03 §6-1)."
+"shipping/shipment-change-history","SSP0019","features/shipping/src/pages/shipment-change-history/ShipmentChangeHistory.tsx","84","endpoint","진입 자동조회 금지 — keep-alive 잔여 filters 무효화(§5-7) + 컬럼메타 1회 fetch(admin 동적 속성관리)."

@@ -1,0 +1,11 @@
+[2026-10-16 16:41:27.28] agent start  
+DMF0052: bundle 51 KB, endpoints 7, events 8, sheets 7, driver=claude-cli
+Unhandled exception. System.ComponentModel.Win32Exception (2): An error occurred trying to start process 'claude.cmd' with working directory 'C:\Projects\NSCM\tools\AsisFacts'. 지정된 파일을 찾을 수 없습니다.
+   at System.Diagnostics.Process.StartWithCreateProcess(ProcessStartInfo startInfo)
+   at System.Diagnostics.Process.Start(ProcessStartInfo startInfo)
+   at AsisFacts.Agent.CallCli(String model, String prompt) in C:\Projects\NSCM\tools\AsisFacts\src\Agent.cs:line 160
+   at AsisFacts.Agent.Call(String driver, String model, String prompt) in C:\Projects\NSCM\tools\AsisFacts\src\Agent.cs:line 150
+   at AsisFacts.Agent.RunOne(String outDir, String id, String driver, String model, String agentOut) in C:\Projects\NSCM\tools\AsisFacts\src\Agent.cs:line 45
+   at AsisFacts.Agent.Run(Config cfg, String outDir, List`1 ids, String driver, String model, String agentOut) in C:\Projects\NSCM\tools\AsisFacts\src\Agent.cs:line 26
+   at AsisFacts.Program.Main(String[] args) in C:\Projects\NSCM\tools\AsisFacts\src\Program.cs:line 35
+[2026-10-16 16:42:04.18] agent exit -532462766 

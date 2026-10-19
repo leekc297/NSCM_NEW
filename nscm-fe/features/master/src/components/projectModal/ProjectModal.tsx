@@ -1,8 +1,9 @@
 import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { GridUtils } from '@foundation/utils';
-import { CustomDropdown, DataGrid, CustomDialog, SearchArea } from '@shared/components';
+import { attachRowNoHeader, GridUtils } from '@foundation/utils';
+import { CustomDropdown, DataGrid, CustomDialog, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
@@ -30,6 +31,8 @@ export const ProjectModal = ({
   const { t } = useTranslation();
 
   const gridRef = useRef<FlexGrid<ResponseData<MODAL_PROJECT, MODAL_SHEET_PROJECT>>>();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   const initialized = useProjectModalStore(state => state.initialized);
   const staticColumns = useProjectModalStore(state => state.staticColumns);
@@ -46,10 +49,10 @@ export const ProjectModal = ({
   // useTabProcQuery 는 filters 참조가 바뀌면 캐시를 버리고 재조회한다. 이전엔
   // DEFAULT_FILTER 라는 상수 이름의 객체를 렌더 본문에서 매번 새로 만들어 넘겼는데,
   // searchParam.divisionId 가 그대로여도 다른 이유로 리렌더될 때마다 그리드가
-  // 깜빡였다. useMemo 로 참조를 divisionId 에 고정한다.
+  // 깜빡였다. useMemo 로 참조를 divisionId/projectCode 에 고정한다.
   const filters = useMemo(
-    () => ({ divisionId: searchParam.divisionId }),
-    [searchParam.divisionId]
+    () => ({ divisionId: searchParam.divisionId, projectCode: searchParam.projectCode ?? '' }),
+    [searchParam.divisionId, searchParam.projectCode]
   );
 
   const { data: projectData } = useTabProcQuery<MODAL_PROJECT>({
@@ -60,20 +63,19 @@ export const ProjectModal = ({
     enabled: open,
   });
 
-  const [modalFilters, setModalFilters] = useState<{
-    project: string;
-  }>({ project: '' });
+  // COM0012 는 division 과 project 키워드(콤마 다중값, 부분일치) 둘 다 서버에서 필터한다
+  //   (PKG_COM0000.P_COM0012_GET_PROJECT_BY_ONLY_DIVISION_POPUP, 2026-09-15 p_project_code
+  //   파라미터 추가 + SCM_ADM_PROC_M 메타 등록). 그리드는 응답을 그대로 보여준다.
+  const itemsSource = useMemo(() => projectData?.o_rc1 ?? [], [projectData]);
 
-  const itemsSource = (projectData?.o_rc1 ?? []).filter(
-    project =>
-      (project.PROJECT_CODE ?? '').toLowerCase().includes(modalFilters.project.toLowerCase()) ||
-      (project.PROJECT_NAME ?? '').toLowerCase().includes(modalFilters.project.toLowerCase())
-  );
+  const [projectInput, setProjectInput] = useState('');
 
   // 입력값은 제어 컴포넌트로 둔다. modaless 라 닫아도 언마운트되지 않아, defaultValue 로 두면 다시 열 때
   //   초기화 effect 가 state 를 되돌려도 입력창에는 직전 문자가 그대로 남는다.
   // 주의: debounce 금지 - 제어 입력에서 setState 를 늦추면 타이핑이 밀리거나 글자가 유실된다.
-  const handleProjectChange = (project: string) => setModalFilters({ project });
+  const handleProjectChange = (project: string) => setProjectInput(project);
+
+  const handleSearch = () => setSearchParam(prev => ({ ...prev, projectCode: projectInput.trim() }));
 
   const handleSubmit = () => {
     const selections = gridRef.current?.selectedItems as ResponseData<
@@ -106,10 +108,14 @@ export const ProjectModal = ({
 
   useEffect(() => {
     if (!open) return;
-    setModalFilters({ project: preProject ?? '' });
-    setSearchParam(preSearchParams);
+    setProjectInput(preProject ?? '');
+    setSearchParam({ ...preSearchParams, projectCode: preProject ?? '' });
     if (!initialized) void fetchStaticColumns();
   }, [open]);
+
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, itemsSource]);
 
   return (
     <CustomDialog
@@ -118,6 +124,10 @@ export const ProjectModal = ({
       position='basic'
       open={open}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -127,6 +137,8 @@ export const ProjectModal = ({
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           <SearchArea
+            searchButtonLabel={t('LBL00664', 'Search')}
+            onSearch={handleSearch}
             conditions={
               <>
                 <Grid size={4}>
@@ -147,13 +159,14 @@ export const ProjectModal = ({
                 </Grid>
                 <Grid size={4}>
                   <FormItem
-                    label={t('LBL00327', '_Project')}
+                    label={t('LBL00012', '_Project')}
                     labelAlign='right'
                     render={() => (
                       <InputField
                         fullWidth
-                        value={modalFilters.project}
+                        value={projectInput}
                         onChange={e => handleProjectChange(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && handleSearch()}
                       />
                     )}
                   />
@@ -162,13 +175,21 @@ export const ProjectModal = ({
             }
           />
           <div className={styles.gridWrapper}>
-            <DataGrid<ResponseData<MODAL_PROJECT, MODAL_SHEET_PROJECT>>
+            <ResultArea
+              title=''
+              count={itemsSource.length}
               gridRef={gridRef}
-              isReadOnly
-              staticColumns={staticColumns}
-              itemsSource={itemsSource}
-              dblClick={handleDblClick}
-            />
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<ResponseData<MODAL_PROJECT, MODAL_SHEET_PROJECT>>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                staticColumns={staticColumns}
+                itemsSource={itemsSource}
+                dblClick={handleDblClick}
+              />
+            </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
             <Button

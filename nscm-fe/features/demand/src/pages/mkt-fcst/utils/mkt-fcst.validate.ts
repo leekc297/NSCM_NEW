@@ -31,17 +31,21 @@ const hasAnyDailyInput = (row: MktFcstRow): boolean => {
 export const useMktFcstValidation = () => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
+  const setToast = useMessageStore.getState().setToast;
 
   // ===== 조회조건 (FindData L1207~1233 — validation.md #29~32) =====
-  //   #30 MSG00097 Division 미선택 / #31 MSG00108 기간 역전 / #32 MSG00164 기간 3년 초과.
+  //   #31 MSG00108 기간 역전 / #32 MSG00164 기간 3년 초과.
+  //   Division 은 MktFcst.tsx 의 자동선택 effect 가 항상 채우므로 여기서 별도 필수 검증을 하지 않는다.
   const validateFind = (c: SearchCondition): ValidationResult => {
-    if (!str(c.divisionId)) {
+
+    /* if (!str(c.divisionId)) {
       void setAlert({
         type: 'alert',
         content: t(MSG.REQUIRE_DIVISION, '_Division 을 선택하세요.'),
       });
       return { ok: false, msgId: MSG.REQUIRE_DIVISION };
-    }
+    }*/
+
     const start = str(c.startYyyymmdd);
     const end = str(c.endYyyymmdd);
 
@@ -92,7 +96,9 @@ export const useMktFcstValidation = () => {
     // 신규('I') + 수정('M') 행만 검증 대상.
     const dirty = rows.filter(r => r.CRUD_TYPE === 'I' || r.CRUD_TYPE === 'M');
     if (dirty.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_SAVE_DATA, '_저장할 데이터가 없습니다.') });
+      // 변경/신규 없음 → toast + 공통 문구 (DMF0004~0007/0020/0072 과 동일 규약.
+      //   필수·중복 등 검증 실패는 modal alert 유지).
+      setToast({ type: 'error', message: t('MSG_NO_CHANGE', '_수정한 내용이 없습니다.') });
       return { ok: false, msgId: MSG.NO_SAVE_DATA };
     }
 

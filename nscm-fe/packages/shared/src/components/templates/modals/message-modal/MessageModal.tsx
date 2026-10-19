@@ -7,7 +7,8 @@ import { i18n } from '@foundation/i18n';
 import { GridUtils } from '@foundation/utils';
 import { CustomDropdown, DataGrid, SearchArea, CustomDialog } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { FormItem, InputField, type DialogNavigationSize } from '@shared/lges';
+import { Button, FormItem, InputField, type DialogNavigationSize } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
 import { SHEETS, POPUP_ID } from './message-modal.constants';
@@ -100,13 +101,37 @@ export const MessageModal = ({
     modalClose();
   };
 
+  const handleSubmit = () => {
+    const selections = gridRef.current?.selectedItems as ResponseData<POPUP_ID, SHEETS.MESSAGE>[];
+    if (!selections?.length) return;
+    const dataItem = selections[0];
+
+    let messageName = '';
+    switch (i18n.language) {
+      case 'KO':
+        messageName = dataItem.MSG_NM_KO;
+        break;
+      case 'EN':
+        messageName = dataItem.MSG_NM_EN;
+        break;
+      case 'CN':
+        messageName = dataItem.MSG_NM_CN;
+        break;
+    }
+
+    setSelectedValue(dataItem.MSG_ID, messageName);
+    modalClose();
+  };
+
   useEffect(() => {
     if (!open) return;
     setModalFilters({
       type: initialType,
       message: initialMessage,
     });
-    if (!initialized) void fetchStaticColumns();
+    // initialized 가 과거의 빈 조회 결과를 영속(sessionStorage)해 컬럼이 비어버리는 경우가 있어
+    // (예: admin 메타 유실 중 한 번 열림), 컬럼이 비어 있으면 재조회한다.
+    if (!initialized || staticColumns.length === 0) void fetchStaticColumns();
   }, [open]);
 
   return (
@@ -125,7 +150,7 @@ export const MessageModal = ({
       customContentArea={
         <div className={styles.dialogContentWrapper}>
           <SearchArea
-            searchButtonLabel={t('LBL00722', '_Search')}
+            searchButtonLabel={t('LBL00664', 'Search')}
             conditions={
               <>
                 <Grid size={4}>
@@ -177,6 +202,24 @@ export const MessageModal = ({
               staticColumns={staticColumns}
               itemsSource={itemsSource}
               dblClick={handleDblClick}
+            />
+          </div>
+          <div className={styles.buttonWrapper}>
+            <Button
+              appearance='contained'
+              buttonLabel='OK'
+              iconComponent={<ControlConfirmIcon size='small' />}
+              iconPosition='leading'
+              priority='primary'
+              size='medium'
+              onClick={handleSubmit}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel='Close'
+              onClick={modalClose}
             />
           </div>
         </div>

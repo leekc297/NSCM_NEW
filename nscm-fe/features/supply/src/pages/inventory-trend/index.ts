@@ -1,0 +1,1 @@
+export { InventoryTrend } from './InventoryTrend';

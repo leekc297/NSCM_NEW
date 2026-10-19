@@ -1,0 +1,28 @@
+// SSP0021 Measure 선택 popup — dual list + 버튼바. 레이아웃은 공용 ColumnSettingModal 과 동일.
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 2px;
+  height: 460px;
+  min-height: 350px;
+  max-height: 68vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+// ColumnSelectDualList wrapper — 버튼바를 뺀 나머지를 차지 + min-height 보장
+.container > div:first-child {
+  flex: 1 1 auto;
+  min-height: 250px;
+  overflow: hidden;
+}
+
+.actionBar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 6px 2px 2px;
+  flex-shrink: 0;
+}

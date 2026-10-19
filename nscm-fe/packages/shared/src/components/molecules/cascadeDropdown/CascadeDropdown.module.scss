@@ -1,0 +1,62 @@
+// 팝업 리스트 — 기본 콤보박스(CustomDropdown)의 리스트 디자인에 맞춘다.
+//   참고: customDropdown/components/CustomListboxRow.module.scss(.childItem) · 행 높이 ITEM_SIZE=36px.
+//   위치(left)·폭(min/max)은 동적이라 호출부에서 인라인으로 얹는다.
+.menu {
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+// 표준 옵션(.childItem)과 동일 — flex·중앙정렬·한 줄 말줄임. 행 높이는 36px(ITEM_SIZE)로 맞춘다.
+.item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  min-height: 36px;
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+  color: #1f1f1f;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  // hover — 표준 콤보(CustomDropdown) 옵션 hover 색(디자인시스템 테마 실측값, 라벤더).
+  &:hover {
+    background: #eeeaf8;
+  }
+}
+
+// 현재 선택된(펼쳐진 경로) 항목 — 표준 콤보 선택색(aria-selected)과 동일한 틸/블루 톤(실측값).
+//   선택 0.08, 선택+hover 0.12 (디자인시스템 MuiAutocomplete-option 테마).
+.itemActive {
+  background: rgba(45, 155, 178, 0.08);
+
+  &:hover {
+    background: rgba(45, 155, 178, 0.12);
+  }
+}
+
+.itemLabel {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

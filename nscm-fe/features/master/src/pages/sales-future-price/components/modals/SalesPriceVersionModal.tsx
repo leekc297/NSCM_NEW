@@ -1,11 +1,14 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import commonStyles from '@foundation/styles/common-styles.module.scss';
+import { attachRowNoHeader } from '@foundation/utils';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
@@ -83,6 +86,8 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
   const { t } = useTranslation();
   const setAlert = useMessageStore(s => s.setAlert);
   const gridRef = useRef<FlexGridType<VersionPopupRow> | null>(null);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   // 사용자 권한 기반 Division lookup (자매 화면 ContributeVersionModal 패턴)
   const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
@@ -188,12 +193,15 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
     const g = gridRef.current;
     if (!g) return;
     g.isReadOnly = true;
-    g.selectionMode = 2; // SelectionMode.ListBox — Ctrl/Shift 다중선택
     const onDbl = () => handleApply();
     g.hostElement?.addEventListener('dblclick', onDbl);
     return () => g.hostElement?.removeEventListener('dblclick', onDbl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows]);
+
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, rows]);
 
   return (
     <CustomDialog
@@ -203,6 +211,10 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
       position='basic'
       handleClose={modalClose}
       disableButtonCancel
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -213,12 +225,13 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
         <div className={styles.dialogContent}>
           {/* 조회 조건 — 표준 SearchArea (Div disabled + Period + Description) */}
           <SearchArea
-            searchButtonLabel={loading ? t('LBL00665', 'Loading...') : t('LBL00664', 'Search')}
+            searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleFind}
             conditions={
               <>
                 <Grid size={3}>
                   <FormItem
+                    className={commonStyles.formItem}
                     label={t('LBL00001', 'Div.')}
                     labelAlign='right'
                     render={() => (
@@ -235,12 +248,11 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
                   gridSize={4}
                   start={periodFrom}
                   end={periodTo}
-                  onChange={(start, end) =>
-                    setSearchParams({ periodFrom: start, periodTo: end })
-                  }
+                  onChange={(start, end) => setSearchParams({ periodFrom: start, periodTo: end })}
                 />
                 <Grid size={3}>
                   <FormItem
+                    className={commonStyles.formItem}
                     label={t('LBL00608', 'Description')}
                     labelAlign='right'
                     render={() => (
@@ -258,14 +270,28 @@ export const SalesPriceVersionModal = ({ open, modalClose, defaultDivision, onAp
 
           {/* Grid — Version / Details / Type / Monthly Rolling Forecast / Create By / Create Date */}
           <div className={styles.gridWrapper}>
-            <DataGrid
-              gridRef={gridRef as never}
-              isReadOnly
-              itemsSource={rows as unknown as WijmoRowItem[]}
-              staticColumns={VERSION_COLUMNS}
-              autoGenerateColumns={false}
-              className={styles.grid}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea
+              title=''
+              count={rows.length}
+              gridRef={gridRef as never}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid
+                gridRef={gridRef as never}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                itemsSource={rows as unknown as WijmoRowItem[]}
+                staticColumns={VERSION_COLUMNS}
+                autoGenerateColumns={false}
+                className={styles.grid}
+              />
+            </ResultArea>
           </div>
 
           {/* Action — 표준 buttonWrapper (하단 우측 정렬, @shared/lges Button) */}

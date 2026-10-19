@@ -1,0 +1,2 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"master/customer-model-mapping","DMF0006","features/master/src/pages/customer-model-mapping/customer-model-mapping.constants.ts","182","code","조회조건 콤보 원천 7종. 등록명은 AS-IS DMF0006_CustomerModelMapping.cs 호출부와 1:1 이다. DMF0006 은 속도개선(PJT202350699) 대상에서 빠진 화면이라 SetChangeControl / GetDMInnerTable 이 한 줄도 없다. 조회조건 콤보와 그리드 셀 콤보 모두 예외 없이 재조회 방식이다. 조인 평면 콤보 1건으로 묶는 CascadeFields 는 이 화면에 쓰지 않는"

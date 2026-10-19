@@ -1,0 +1,3 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/formation","SCP0022","features/supply/src/pages/formation/formation.constants.ts","40","endpoint","컬럼 메타 fetch(/admin/menu/SCP0022/column)의 sheetNm 은 SCM_MST_SHEET_COLUMNS.SHEET_NAME 과 정확히 일치해야 한다(BE 가 문자열 그대로 매칭). SCP0022 는 공백 포함 표시명으로 배포돼 있어 코드 키(SHEETS)와 분리한다."
+"supply/formation","SCP0022","features/supply/src/pages/formation/useFormationStore.ts","3","code","import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';"

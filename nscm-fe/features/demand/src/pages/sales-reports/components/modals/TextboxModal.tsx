@@ -12,8 +12,6 @@ import styles from '../../SalesReports.module.scss';
 import { callSaveTextboxRow } from '../../utils/sales-reports.api';
 import { toCellStr } from '../../utils/sales-reports.gridCombos';
 
-import { useTextboxModalStore } from './textboxModalStore';
-
 interface Props {
   open: boolean;
   modalClose: () => void;
@@ -38,28 +36,21 @@ export const TextboxModal = ({ open, modalClose, versionNo }: Props) => {
   const [edited, setEdited] = useState<Record<number, Record<string, string>>>({});
   const [saving, setSaving] = useState(false);
 
-  // 확정된 조회조건 — useTabProcQuery filters 참조 안정화 원천
-  const appliedVersionNo = useTextboxModalStore(state => state.appliedVersionNo);
-  const setAppliedVersionNo = useTextboxModalStore(state => state.setAppliedVersionNo);
-
   useEffect(() => {
-    if (open) {
-      setEdited({});
-      setAppliedVersionNo(versionNo);
-    }
-  }, [open, versionNo, setAppliedVersionNo]);
+    if (open) setEdited({});
+  }, [open]);
 
   const sesUserId = useSessionStore.getState().session.userId ?? '';
   const filters = useMemo(
-    () => ({ versionNo: appliedVersionNo, userId: sesUserId, mnuId: MENU_ID }),
-    [appliedVersionNo, sesUserId]
+    () => ({ versionNo, userId: sesUserId, mnuId: MENU_ID }),
+    [versionNo, sesUserId]
   );
   const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.TEXTBOX>({
     menuId: MENU_ID,
     sheetName: SHEETS.TEXTBOX,
     tabId: MENU_ID,
     filters,
-    enabled: open && appliedVersionNo !== '',
+    enabled: open && versionNo !== '',
   });
   const rows = useMemo<TextboxRow[]>(
     () => (data as { data?: TextboxRow[] } | undefined)?.data ?? [],
@@ -99,7 +90,8 @@ export const TextboxModal = ({ open, modalClose, versionNo }: Props) => {
     if (saving) return;
     const targets = Object.keys(edited).map(Number);
     if (targets.length === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
+      // 변경/신규 없음 → toast + 공통 문구 (DMF0003~0007/0020/0072 과 동일 규약).
+      setToast({ type: 'error', message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
       return;
     }
     setSaving(true);

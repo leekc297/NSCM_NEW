@@ -17,10 +17,12 @@
   },
   "dependencies": {
     "@foundation": "workspace:*",
-    "@shared": "workspace:*"
+    "@shared": "workspace:*",
+    "react-router-dom": "^6.28.0"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react-dom": ">=18.0.0",
+    "react-router-dom": ">=6.0.0"
   }
 }

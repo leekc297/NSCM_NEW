@@ -4,13 +4,12 @@
 //       — D_ 컬럼 / 비Red 셀 / 버킷 불일치(W_↔M_) 셀 수집 제외 = silent skip).
 //     · 빈값→'0' 치환   : [E20251125-000694] + 값 '0' & action≠D → 셀 action 'D' 전환 (L2553~2572).
 //     · Catch_Up 음수   : 40 && Catch_Up && Price<0 → MSG00085 {0} (L2587).
-//     · 변경 0건 행     : iDateCount==0 → MSG00146 {line} (L2666).
+//     · 변경 0건 행     : iDateCount==0 → MSG00146 {line} (L2666. TO-BE 는 사내 MSG00670 재매핑 —
+//       MSG.LINE_NO_CHANGE 가 단일 원천이므로 코드/테스트에 ID 리터럴 금지).
 //     · p_project_code  : 40 = END_CUSTOMER40 값 (L2355) / p_text: 81=TEXT, 40·82=TEXT4082.
 //   18키 = 업무 데이터 16키 + createdBy/lastUpdatedBy 감사 2키(FE 세션 userId).
 //   '^' bulk 다건 = apiClient.post 직접 (useProcMutation array unfold 회피 표준 —
 //   memory feedback_save_sp_bulk_payload_apiclient_post).
-import { distributeMonthToWeeks, isoWeeksOfMonth } from '@shared/lib/bucket-distribution';
-
 import type { MSG } from '../sales-plan.constants';
 import { BUCKET_TYPE, EDIT_MEASURE } from '../sales-plan.constants';
 import type { SalesPlanRow } from '../sales-plan.types';
@@ -122,23 +121,13 @@ export const buildUnfoldRows = (params: {
     if (d40 && identity.measure === EDIT_MEASURE.CATCH_UP && Number(qty) < 0) {
       return { msgId: msg.catchupMinZero, param: '0' };
     }
-    const isMonthlySplit =
-      dynKindOf(binding) === 'M' && !(isDiv40(identity.divisionId) && identity.fcstType === 'ETC');
-    const saveCells = isMonthlySplit
-      ? distributeMonthToWeeks(
-          Number(qty),
-          isoWeeksOfMonth(binding.slice(2)),
-          identity.measure === EDIT_MEASURE.SALES_AMT_LOC ? 0.001 : 1
-        ).map(cell => ({ saveTag: cell.key, qty: String(cell.qty) }))
-      : [{ saveTag, qty }];
-
-    saveCells.forEach(cell => {
-      out.push({
-        activeFlag: cell.qty === '0' ? 'D' : rowFlag, // 값 '0' → 'D' 전환 (L2571)
-        ...identity,
-        yyyymmdd: cell.saveTag,
-        qty: cell.qty,
-      });
+    // 버킷 태그 원문 그대로 1건 전송 (AS-IS SaveData L2512~2663: Monthly=M_ 태그 1건, W_ skip).
+    //   SAVE SP 는 태그당 1행 저장(월→주 fan-out 없음) — FE 배분 금지.
+    out.push({
+      activeFlag: qty === '0' ? 'D' : rowFlag, // 값 '0' → 'D' 전환 (L2571)
+      ...identity,
+      yyyymmdd: saveTag,
+      qty,
     });
     void lineNo;
     return null;

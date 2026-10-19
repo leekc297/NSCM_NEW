@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<queryMap provider="MSSQL" xmlns="http://schema.theonetech.co.kr/fx/mapping/2011/04/">
+  <statements>
+    <procedure id="T_ACTIVE_1" methodName="T_ACTIVE_1"><text><![CDATA[ SP_T1 ]]></text></procedure>
+    <procedure id="T_ACTIVE_2"><text><![CDATA[ SP_T2 ]]></text></procedure>
+    <!-- <procedure id="T_XML_COMMENTED"><text><![CDATA[ SP_DEAD ]]></text></procedure> -->
+    <sql id="T_ACTIVE_3"><text><![CDATA[
+      SELECT A.X -- FROM COMMENTED_TABLE
+      FROM REAL_TABLE A /* JOIN DEAD_TABLE */
+      WHERE A.Y = '-- not comment'
+    ]]></text></sql>
+  </statements>
+</queryMap>

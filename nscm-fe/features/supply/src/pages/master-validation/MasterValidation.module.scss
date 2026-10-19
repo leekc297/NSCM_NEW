@@ -1,0 +1,39 @@
+// 좌 마스터목록 | 우 detail 2-pane(좌우 분할) — project-route .tableWrapper 패턴(design 01 §1.1).
+.tableWrapper {
+  flex: 1 1 0;
+  min-height: 0;
+
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+
+  > div > div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+// 좌우 분할 드래그 바 — ResultArea splitBarCol 과 동일 패턴.
+.splitBar {
+  position: relative;
+  width: 16px;
+  cursor: col-resize;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
+}

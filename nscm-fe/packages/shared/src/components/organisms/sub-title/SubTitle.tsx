@@ -11,11 +11,12 @@ import {
 } from '@lges/design-system/icon';
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { memo, type RefObject, useContext, useEffect, useState } from 'react';
+import { memo, type ReactNode, type RefObject, useContext, useEffect, useRef } from 'react';
 
 import { IcSave } from '@foundation/assets';
 import { type HotkeyConfig, Hotkeys } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
+import { useFilteredGridCount } from '@shared/hooks';
 import type { ButtonProps } from '@shared/lges';
 import { Button, TitleArea, Tooltip } from '@shared/lges';
 import {
@@ -23,12 +24,18 @@ import {
   DialogScopeContext,
   scopeDirtyKey,
   tabDirtyKey,
+  registerViewActions,
+  unregisterViewActions,
   useDialogStore,
   useMessageStore,
   useMotherStore,
   useTabid,
   useUIStore,
 } from '@shared/stores';
+
+// Atlas 브리지 노출 게이트 — dev 또는 VITE_ATLAS_BRIDGE 플래그일 때만 액션을 registry 에 등록.
+// (운영에서는 registry 등록 자체를 하지 않아 자동화 표면이 노출되지 않는다)
+const BRIDGE_ENABLED = import.meta.env.DEV || import.meta.env.VITE_ATLAS_BRIDGE === 'true';
 
 const isHotKeyName = (key: string): key is keyof typeof Hotkeys => {
   return key in Hotkeys;
@@ -61,13 +68,26 @@ interface SubTitleProps {
    * 그리드에 고정하고 싶을 때 지정한다(툴바 동작 대상은 그대로 grid).
    */
   countGrid?: RefObject<FlexGrid | undefined>;
+  /**
+   * true 면 건수 배지를 숨긴다. 화면에 그리드가 여럿이고 각 그리드 제목 줄에서
+   * 개별 건수를 이미 표시하는 경우, 이 상단 툴바 줄의 건수 배지가 특정 그리드를
+   * 가리키는지 모호해지므로 숨긴다(툴바 동작 자체는 grid 대상 그대로 유지).
+   */
+  hideTotalCases?: boolean;
   excelFileName?: string;
   useHotkey?: boolean;
   visible?: boolean;
   hotkeyConfig?: HotkeyConfig;
   searchParam?: Record<keyof object, string>;
+  /**
+   * Condition(F6) 저장 시 날짜 제외 규칙(EXCLUDED_DATE_PARAM)을 무시하고 강제로 저장할 키 목록.
+   * 날짜 포맷이지만 보존해야 하는 조회조건(예: SCP0010 planStartYyyymmdd=plan date 선택)을 위한 opt-in.
+   */
+  conditionIncludeKeys?: string[];
   customButtons?: CustomButtonProps[];
   searchAction?: () => void;
+  /** 건수 배지와 우측 버튼 그룹 사이에 표시할 내용(예: 헤더 요약). */
+  children?: ReactNode;
 }
 
 const SubTitleComp = ({
@@ -78,13 +98,16 @@ const SubTitleComp = ({
   title = '',
   depth,
   countGrid,
+  hideTotalCases = false,
   excelFileName,
   useHotkey = true,
   visible = true,
   hotkeyConfig,
   searchParam,
+  conditionIncludeKeys,
   customButtons,
   searchAction,
+  children,
 }: SubTitleProps) => {
   const { t } = useTranslation();
   // 이 SubTitle이 속한 단축키 스코프. 다이얼로그 안이면 그 스코프 id, 페이지 최상위면 null(root).
@@ -94,55 +117,12 @@ const SubTitleComp = ({
   const tabId = useTabid();
   const resetSearchCondition = useMotherStore().resetSearchCondition;
 
-  // 필터 적용 시 collectionView 기준 필터된 건수, 미적용 시 null (DB dataCount 사용)
-  const [filteredCount, setFilteredCount] = useState<number | null>(null);
-
   // 건수 기준 그리드 — 미지정이면 툴바 대상 그리드와 동일(종전 동작).
   const countGridRef = countGrid ?? grid;
 
-  useEffect(() => {
-    const gridInstance = countGridRef.current;
-    if (!gridInstance) return;
-
-    // 현재 collectionView 기준으로 필터된 건수 재계산
-    const recompute = () => {
-      const collectionView = gridInstance.collectionView;
-      if (!collectionView) return;
-      const total = collectionView.sourceCollection?.length ?? 0;
-      const visible = collectionView.items?.length ?? 0;
-      // 필터가 행을 숨기고 있으면 필터된 건수, 아니면 null(=DB dataCount)
-      setFilteredCount(visible < total ? visible : null);
-    };
-
-    // Wijmo는 itemsSource(배열) 변경 시 collectionView를 새 인스턴스로 교체하므로
-    // 교체될 때마다 collectionChanged 핸들러를 다시 붙여준다.
-    let boundView: FlexGrid['collectionView'] | undefined;
-    const bindView = () => {
-      const collectionView = gridInstance.collectionView;
-      if (collectionView === boundView) {
-        recompute();
-        return;
-      }
-      boundView?.collectionChanged.removeHandler(recompute);
-      boundView = collectionView;
-      boundView?.collectionChanged.addHandler(recompute);
-      recompute();
-    };
-
-    gridInstance.itemsSourceChanged.addHandler(bindView);
-    gridFilter.current?.filterChanged.addHandler(recompute);
-    bindView();
-
-    return () => {
-      gridInstance.itemsSourceChanged.removeHandler(bindView);
-      gridFilter.current?.filterChanged.removeHandler(recompute);
-      boundView?.collectionChanged.removeHandler(recompute);
-    };
-  }, [countGridRef.current, gridFilter.current, dataCount]);
-
-  // 필터 적용 시엔 0건이어도 명시 표시, 미적용 시엔 dataCount가 0이면 숨김
-  const totalCasesValue =
-    filteredCount !== null ? filteredCount : dataCount === 0 ? undefined : dataCount;
+  // 필터 적용 시 collectionView 기준 필터된 건수, 미적용 시 dataCount 그대로 반환.
+  const totalCasesValue = useFilteredGridCount(countGridRef, gridFilter, dataCount);
+  const displayTotalCases = hideTotalCases ? undefined : totalCasesValue;
 
   const DefaultButtonActions: HotkeyConfig = {
     [Hotkeys.F1]: () => GridAction.getManual(menuId),
@@ -158,7 +138,7 @@ const SubTitleComp = ({
     [Hotkeys.F5]: () => undefined,
     [Hotkeys.F6]: () =>
       searchParam &&
-      void GridAction.personalizeCondition(menuId, searchParam)
+      void GridAction.personalizeCondition(menuId, searchParam, conditionIncludeKeys)
         .then(() =>
           setAlert({
             type: 'alert',
@@ -230,6 +210,43 @@ const SubTitleComp = ({
     };
   }
 
+  // 편집형 저장/행조작 공통 커밋 가드 — F7(저장)/F8(삽입)/F9(삭제)을 단축키로 누르면 편집 중이던
+  //   셀 에디터가 열린 채라 cellEditEnded 가 아직 안 떠 변경이 커밋되지 않는다(EditTracker 미기록).
+  //   그대로 저장하면 수집 대상이 0건이 되어 "수정한 내용이 없습니다" 로 빠진다. 버튼 클릭은
+  //   포커스 상실로 Wijmo 가 자동 커밋하지만 단축키 경로는 아니다. 버튼/단축키가 같은 buttonActions
+  //   를 공유하므로 여기서 한 번 감싸면 양쪽 모두, 모든 편집형 화면이 편집을 커밋한 뒤 실행된다.
+  const wrapWithEditCommit = (raw: false | (() => void) | undefined): false | (() => void) => {
+    if (typeof raw !== 'function') return raw ?? false;
+    return () => {
+      if (grid.current?.activeEditor) grid.current.finishEditing();
+      raw();
+    };
+  };
+  buttonActions[Hotkeys.F7] = wrapWithEditCommit(buttonActions[Hotkeys.F7]);
+  buttonActions[Hotkeys.F8] = wrapWithEditCommit(buttonActions[Hotkeys.F8]);
+  buttonActions[Hotkeys.F9] = wrapWithEditCommit(buttonActions[Hotkeys.F9]);
+
+  // Atlas 브리지 액션 노출 — 툴바가 실제로 실행하는 buttonActions(가드 포함)를 tabId 로
+  // registry 에 등록한다. 브라우저 에이전트가 call_page_tool 로 버튼과 동일한 동작을 호출한다.
+  // 페이지 최상위 SubTitle 만 등록(scopeId===null) — 다이얼로그 SubTitle 이 덮어쓰지 않게.
+  // 안정 래퍼가 ref 로 최신 buttonActions 를 읽으므로 매 렌더 재등록이 불필요하다.
+  const buttonActionsRef = useRef(buttonActions);
+  buttonActionsRef.current = buttonActions;
+  useEffect(() => {
+    if (!BRIDGE_ENABLED || !tabId || scopeId !== null) return;
+    const wrapped: Record<string, (args?: unknown) => unknown> = {};
+    for (const name of Object.values(Hotkeys)) {
+      wrapped[name] = () => {
+        const action = buttonActionsRef.current[name as Hotkeys];
+        if (typeof action !== 'function') return { error: `action not available: ${name}` };
+        action();
+        return { ok: true, action: name };
+      };
+    }
+    registerViewActions(tabId, wrapped);
+    return () => unregisterViewActions(tabId);
+  }, [tabId, scopeId]);
+
   useEffect(() => {
     const hotkeyHandler = (keyboardEvent: KeyboardEvent) => {
       // 현재 활성(최상위) 스코프에서만 단축키가 동작한다.
@@ -271,7 +288,7 @@ const SubTitleComp = ({
         }}
         title={title}
         depth={depth}
-        totalCases={totalCasesValue}
+        totalCases={displayTotalCases}
         isSubTitle
       />
     );
@@ -285,7 +302,7 @@ const SubTitleComp = ({
         }}
         title={title}
         depth={depth}
-        totalCases={totalCasesValue}
+        totalCases={displayTotalCases}
         isSubTitle
         rightButtons={
           <>
@@ -462,7 +479,9 @@ const SubTitleComp = ({
             )}
           </>
         }
-      />
+      >
+        {children}
+      </TitleArea>
     )
   );
 };

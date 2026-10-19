@@ -1,0 +1,6 @@
+﻿"page_key","menu_id","file","line","in_function","kind","callee","menu","sheet","action","url","resolved","args","commented"
+"shipping/inventory-raw","SSP0017","features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx","41","InventoryRawForm","hook","useTabComboQueries","SSP0017","","","(useTabComboQueries)","Y","[COMBO.DIVISION, plantSiteFilter]","0"
+"shipping/inventory-raw","SSP0017","features/shipping/src/pages/inventory-raw/components/InventoryRawForm.tsx","46","InventoryRawForm","hook","useTabLookupQueries","SSP0017","","","(useTabLookupQueries)","Y","[{ lookupType: LOOKUP.INVENTORY_TYPE }]","0"
+"shipping/inventory-raw","SSP0017","features/shipping/src/pages/inventory-raw/InventoryRaw.tsx","46","InventoryRaw","hook","useTabProcQuery","SSP0017","main","","SSP0017/main//call-proc","Y","filters","0"
+"shipping/inventory-raw","SSP0017","features/shipping/src/pages/inventory-raw/useInventoryRawStore.ts","86","fetchStaticColumns","http","apiClient.post","","","","/admin/menu/SSP0017/column","Y","{ sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] }","0"
+"shipping/inventory-raw","SSP0017","features/shipping/src/pages/inventory-raw/useInventoryRawStore.ts","115","restoreSearchConditions","http","apiClient.get","","","","/admin/menu/SSP0017/search-conditions","Y","","0"

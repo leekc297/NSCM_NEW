@@ -1,13 +1,16 @@
 import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import commonStyles from '@foundation/styles/common-styles.module.scss';
+import { attachRowNoHeader } from '@foundation/utils';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, Checkbox, FormItem, InputField } from '@shared/lges';
+import { Button, Checkbox, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid, Stack } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
@@ -97,6 +100,8 @@ export const VersionSelectModal = ({
   const { t } = useTranslation();
   const setAlert = useMessageStore(s => s.setAlert);
   const gridRef = useRef<FlexGridType<VersionPopupRow>>(undefined);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
   const divisionOptions = useMemo<Array<{ value: string; label: string }>>(() => {
@@ -194,12 +199,15 @@ export const VersionSelectModal = ({
     modalClose();
   };
 
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, rows]);
+
   // #70 — initialized deprecated → useEffect + gridRef. 읽기전용 + 다중선택 + 더블클릭 적용
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
     g.isReadOnly = true;
-    g.selectionMode = 2; // SelectionMode.ListBox — Ctrl/Shift 다중선택 (최대 2 는 Apply 가드)
     const onDbl = () => handleApply();
     g.hostElement?.addEventListener('dblclick', onDbl);
     return () => g.hostElement?.removeEventListener('dblclick', onDbl);
@@ -214,6 +222,10 @@ export const VersionSelectModal = ({
       position='basic'
       handleClose={modalClose}
       disableButtonCancel
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -224,12 +236,13 @@ export const VersionSelectModal = ({
       customContentArea={
         <div className={styles.dialogContent}>
           <SearchArea
-            searchButtonLabel={loading ? t('LBL00665', 'Loading...') : t('LBL00664', 'Search')}
+            searchButtonLabel={t('LBL00664', 'Search')}
             onSearch={handleFind}
             conditions={
               <>
-                <Grid size={3}>
+                <Grid size={2}>
                   <FormItem
+                    className={`${commonStyles.formItem} ${styles.divFormItem}`}
                     label={t('LBL00001', 'Div.')}
                     labelAlign='right'
                     render={() => (
@@ -243,17 +256,15 @@ export const VersionSelectModal = ({
                   />
                 </Grid>
                 <PeriodField
-                  gridSize={4}
+                  gridSize={5}
                   start={periodFrom}
                   end={periodTo}
-                  onChange={(start, end) =>
-                    setSearchParams({ periodFrom: start, periodTo: end })
-                  }
+                  onChange={(start, end) => setSearchParams({ periodFrom: start, periodTo: end })}
                 />
                 {/* AS-IS chkDay / chkWeek — Designer L140~165 배치 순서 그대로.
                     ⭐ Manual(chkMonth) 체크박스는 2026-08-11 제거(통합테스트 No.33 사용자 요구).
                     ForecastPriceForm Sum/Qty 체크박스와 동일 패턴 (Checkbox labelText + Stack row). */}
-                <Grid size={2} sx={{ display: 'flex', alignItems: 'center' }}>
+                <Grid size={1} sx={{ display: 'flex', alignItems: 'center' }}>
                   <Stack direction='row' spacing={1} alignItems='center' sx={{ width: '100%' }}>
                     <Checkbox
                       labelText='Day'
@@ -269,6 +280,7 @@ export const VersionSelectModal = ({
                 </Grid>
                 <Grid size={3}>
                   <FormItem
+                    className={commonStyles.formItem}
                     label={t('LBL00608', 'Description')}
                     labelAlign='right'
                     render={() => (
@@ -284,13 +296,32 @@ export const VersionSelectModal = ({
             }
           />
           <div className={styles.gridWrapper}>
-            <DataGrid<VersionPopupRow>
-              gridRef={gridRef}
-              itemsSource={rows}
-              staticColumns={VERSION_COLUMNS}
-              autoGenerateColumns={false}
-              className={styles.grid}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea
+              title=''
+              count={rows.length}
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<VersionPopupRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                // prop 으로 줘야 한다 - 아래 effect 의 g.isReadOnly 는 이미 늦다. DataGrid 는
+                //   초기화 시점에 prop 을 보고 rowHeaders 에 CRUD 상태 컬럼을 넣을지 정하는데,
+                //   그 컬럼이 생기면 코너(TopLeft)가 2칸이 되어 attachRowNoHeader 가 'No' 를
+                //   두 번 찍는다.
+                isReadOnly
+                itemsSource={rows}
+                staticColumns={VERSION_COLUMNS}
+                autoGenerateColumns={false}
+                className={styles.grid}
+              />
+            </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
             <Button

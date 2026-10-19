@@ -36,6 +36,8 @@
 }
 
 .gridWrapper {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-height: 300px;
   border: 1px solid #e0e4e9;

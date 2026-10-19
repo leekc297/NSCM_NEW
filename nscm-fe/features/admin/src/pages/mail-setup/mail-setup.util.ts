@@ -70,8 +70,9 @@ export const createEmptyCategory = (): Record<string, string> => ({
   ACTIVE_FLAG: 'Y',
 });
 
-/** PopSQL 8분할 텍스트 결합 (AS-IS TEXT1~TEXT8) */
+/** PopSQL 8분할 텍스트 결합 (AS-IS TEXT1~TEXT8)  ->  CLOB — SP가 VARCHAR2 4000자 제한으로 sql_text 커럼 하나로 반환하도록 변경
 export const joinSqlText = (row?: Record<string, string>) => {
   if (!row) return '';
   return [1, 2, 3, 4, 5, 6, 7, 8].map(index => row[`TEXT${index}`] ?? '').join('');
 };
+*/

@@ -1,0 +1,808 @@
+'use strict';
+// To-Be 화면 골격 템플릿 — 표준 참조 nscm-fe/features/admin/src/pages/user-management 의 구조·import 순서·명명 을 그대로 따른다.
+const H = (ctx, extra = '') => `// ${ctx.ID} ${ctx.asisName} — TobeGen 생성 골격 (As-is ${ctx.mainClass}, Fact Pack Doc/asisfacts/screens/${ctx.ID})
+//   생성기: tools/Harness/gen.js · 사전: tools/Harness/rules/ · 수정 지점은 TODO(이식) 주석 — 그 외는 사전 규칙이므로 손대지 말 것${extra ? '\n' + extra : ''}`;
+
+function constants(c) {
+  const sheets = c.mainSheets.concat(c.popupSheets);
+  return `${H(c)}
+export const MENU_ID = '${c.ID}' as const;
+export type MENU_ID = typeof MENU_ID;
+
+// 시트명은 배포 DB SCM_MST_SHEET_COLUMNS.SHEET_NAME 케이싱 그대로 (BE 시트 검증은 대소문자 구분)
+export enum SHEETS {
+${sheets.map(s => `  ${s.key} = '${s.name}', // ${s.rule}${s.popup ? ' (팝업)' : ''}`).join('\n')}${c.hasSpreadTitle ? `\n  SPREAD_TITLE = 'spreadTitle', // 동적 헤더 메타 (As-is *_GET_SPREAD_TITLE)` : ''}
+}
+
+export enum RESPONSE_SET {
+  MAIN = 'o_rc',
+}
+${c.divisionCols.length ? `
+// As-is grid_effective division 축: ${c.divisionCols.join(', ')} — division 분기는 통합하지 말고 switch 유지
+export const DIVISION = {
+${[...new Set(c.divisionCols.map(d => d.split('_')[0]))].filter(d => /^\d+$|^[A-Z]{2}$/.test(d)).map(d => `  D${d}: '${d}',`).join('\n')}
+} as const;
+` : ''}`;
+}
+
+// 조회조건 종류 판정 — store/form 공용
+const kindOfField = f => f.cat ? f.cat.kind : f.kindHint ? f.kindHint : (f.r.tobe_component === 'Checkbox' ? 'check' : (f.r.tobe_component === 'CustomDropdown' && /multiple/.test(f.r.props_template)) ? 'multi' : f.r.tobe_component === 'PeriodField' ? 'period' : 'single');
+// division 필수 카탈로그 필드(ItemField/ProjectField/OwnerField 는 division: string 필수)
+const needsDivision = c => c.fields.some(f => f.cat && /^(Item|Project|Owner)Field$/.test(f.cat.field)) && !c.fields.some(f => f.key === 'divisionId');
+function store(c) {
+  const kindOf = f => f.cat ? f.cat.kind : f.kindHint ? f.kindHint : (f.r.tobe_component === 'Checkbox' ? 'check' : (f.r.tobe_component === 'CustomDropdown' && /multiple/.test(f.r.props_template)) ? 'multi' : f.r.tobe_component === 'PeriodField' ? 'period' : 'single');
+  const typeOf = f => ({ single: 'string', multi: 'string[]', popup: 'string[]', check: 'boolean', period: 'string' }[kindOf(f)]);
+  const initOf = f => ({ single: "''", multi: '[]', popup: '[]', check: 'false', period: "''" }[kindOf(f)]);
+  const paramLines = c.fields.flatMap(f => kindOf(f) === 'period' ? [`  ${f.key}From: string; // YYYYMMDD`, `  ${f.key}To: string;`] : [`  ${f.key}: ${typeOf(f)};`]);
+  const init = c.fields.flatMap(f => kindOf(f) === 'period' ? [`  ${f.key}From: '',`, `  ${f.key}To: '',`] : [`  ${f.key}: ${initOf(f)},`]).join('\n');
+  const multiSheet = c.mainSheets.length > 1;
+  const switchGrids = c.gridPlan.filter(g => g.sheets.length > 1);
+  const modals = c.buttons.filter(b => b.modalName && !b.absorbed);
+  const popupModals = (c.popupClasses || []).map(cls => ({ modalName: modalName(cls, c.ID).replace(/Modal$/, ''), c: { name: cls }, b: { modal: modalName(cls, c.ID) + ' (화면 종속 모달 — As-is 팝업 클래스)' } }));
+  for (const pm of popupModals) if (!modals.some(m => m.modalName === pm.modalName)) modals.push(pm);
+  return `${H(c)}
+import { apiClient } from '@foundation/apis';
+import type { RawFlexGridColumnConfig } from '@foundation/models';
+import { createPersistedStoreWithTab } from '@shared/stores';
+
+import { MENU_ID, SHEETS } from './${c.kebab}.constants';
+
+interface SearchParamProps {
+${paramLines.join('\n')}${needsDivision(c) ? `\n  divisionId: string; // As-is 에 Division 조회조건 없음 — 팝업 필드(ItemField/ProjectField) 의 division 필수 → MyDivision 첫 값으로 채움(Form useEffect)` : ''}
+}
+
+// SP IN 파라미터(call-proc filters) — 멀티선택 = 콤마 delim('ALL' = 빈값), 팝업 텍스트 = raw(''), 체크 = 'Y'/'N' (AS-IS ControlValues 1:1 · dmf0045 선례)
+//   SCM_ADM_PROC_M.COL_NM(camelCase) 과 키가 같아야 BE 가 positional 매핑한다 — 등록 SQL(<ID>_registration.sql BLOCK 2) 과 대사할 것
+type ${c.Page}Filter = Record<keyof SearchParamProps, string>;
+const j = (arr?: string[]): string => (!arr || arr.length === 0 ? 'ALL' : arr.join(','));
+const raw = (arr?: string[]): string => (!arr || arr.length === 0 ? '' : arr.join(','));
+const yn = (b?: boolean): string => (b ? 'Y' : 'N');
+const toFilter = (p: SearchParamProps): ${c.Page}Filter => ({
+${c.fields.flatMap(f => { const k = kindOf(f); return k === 'period' ? [`  ${f.key}From: p.${f.key}From,`, `  ${f.key}To: p.${f.key}To,`] : [`  ${f.key}: ${k === 'multi' ? `j(p.${f.key})` : k === 'popup' ? `raw(p.${f.key})` : k === 'check' ? `yn(p.${f.key})` : `p.${f.key}`},`]; }).join('\n')}${needsDivision(c) ? `\n  divisionId: p.divisionId,` : ''}
+});
+
+interface ${c.Page}State {
+  initialized: boolean;
+  filters?: ${c.Page}Filter; // useTabProcQuery filters — ProcRequest 와 호환(string 값)
+  searchParams: SearchParamProps;
+  ${multiSheet ? `staticColumns: Partial<Record<SHEETS, RawFlexGridColumnConfig[]>>; // 시트별 메타 컬럼` : 'staticColumns: RawFlexGridColumnConfig[];'}${switchGrids.map(g => `
+  activeSheet${g.suffix}: SHEETS; // ${g.name}: ${g.sheets.map(s => s.name).join(' / ')} 전환`).join('')}
+  isOpenSearchArea: boolean;
+${modals.map(b => `  open${b.modalName}Modal: boolean; // As-is ${b.c.name} → ${b.b.modal}`).join('\n')}
+}
+
+interface ${c.Page}Action {
+  reset: () => void;
+  setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
+  setFilters: () => void;
+  fetchStaticColumns: () => Promise<void>;${switchGrids.map(g => `
+  setActiveSheet${g.suffix}: (sheet: SHEETS) => void;`).join('')}
+  setOpenSearchArea: (open?: boolean) => void;
+${modals.map(b => `  setOpen${b.modalName}Modal: (value: boolean) => void;`).join('\n')}
+}
+
+const init${c.Page}Param: SearchParamProps = {
+${init}${needsDivision(c) ? `\n  divisionId: '',` : ''}
+};
+
+const init${c.Page}State: ${c.Page}State = {
+  initialized: false,
+  filters: undefined,
+  searchParams: init${c.Page}Param,
+  staticColumns: ${multiSheet ? '{}' : '[]'},${switchGrids.map(g => `
+  activeSheet${g.suffix}: SHEETS.${g.sheets[0].key},`).join('')}
+  isOpenSearchArea: true,
+${modals.map(b => `  open${b.modalName}Modal: false,`).join('\n')}
+} as const;
+
+export const use${c.Page}Store = createPersistedStoreWithTab<${c.Page}State & ${c.Page}Action>(
+  (set, get) => ({
+    ...init${c.Page}State,
+    reset: () => set(init${c.Page}State),
+    setSearchParams: searchParams => {
+      set(state => {
+        state.searchParams = { ...get().searchParams, ...searchParams };
+      });
+    },
+    setFilters: () => {
+      set(state => {
+        state.filters = toFilter(get().searchParams);
+      });
+    },
+    fetchStaticColumns: async () => {${multiSheet ? `
+      // 시트별 메타 컬럼(SCM_MST_SHEET_COLUMNS) 을 한 번에 — 시트명은 배포 케이싱 그대로
+      const sheets = [${c.mainSheets.concat(c.popupSheets.filter(s => s.used !== false)).map(s => `SHEETS.${s.key}`).join(', ')}]; // 팝업 시트 포함(모달 staticColumns)
+      const results = await Promise.all(sheets.map(sheetNm => apiClient.post<RawFlexGridColumnConfig[]>(\`/admin/menu/\${MENU_ID}/column\`, { sheetNm })));
+      set(state => {
+        sheets.forEach((sheetNm, i) => { state.staticColumns[sheetNm] = results[i].data.result; });
+      });` : `
+      const result = await apiClient.post<RawFlexGridColumnConfig[]>(\`/admin/menu/\${MENU_ID}/column\`, {
+        sheetNm: SHEETS.${c.mainSheets[0].key},
+      });
+      set(state => {
+        state.staticColumns = result.data.result;
+      });`}
+      if (get().initialized) return;
+      const param = await apiClient.get<{ paramNm: string; paramCtn: string }[]>(
+        \`/admin/menu/\${MENU_ID}/search-conditions\`
+      );
+      if (param.data.result?.length > 0) {
+        // 저장된 조회조건(문자열) → 화면 타입으로 복원 (멀티/팝업: 콤마 분리, 체크: Y/N, 그 외 문자열)
+        const saved = Object.fromEntries(param.data.result.map(r => [r.paramNm, r.paramCtn])) as Record<string, string | undefined>;
+        const arr = (v?: string) => (v && v !== 'ALL' ? v.split(',').filter(Boolean) : []);
+        const bool = (v?: string) => v === 'Y' || v === 'true';
+        const str = (v: string | undefined, d: string) => v ?? d;
+        const searchParams: SearchParamProps = {
+          ...init${c.Page}Param,
+${c.fields.flatMap(f => { const k = kindOf(f); return k === 'period' ? [`          ${f.key}From: str(saved.${f.key}From, init${c.Page}Param.${f.key}From),`, `          ${f.key}To: str(saved.${f.key}To, init${c.Page}Param.${f.key}To),`] : [`          ${f.key}: ${k === 'multi' || k === 'popup' ? `arr(saved.${f.key})` : k === 'check' ? `bool(saved.${f.key})` : `str(saved.${f.key}, init${c.Page}Param.${f.key})`},`]; }).join('\n')}${needsDivision(c) ? `\n          divisionId: str(saved.divisionId, ''),` : ''}
+        };
+        set(state => {
+          state.searchParams = searchParams;
+        });
+      }
+      set(state => {
+        state.initialized = true;
+      });
+    },${switchGrids.map(g => `
+    setActiveSheet${g.suffix}: sheet => {
+      set(state => {
+        state.activeSheet${g.suffix} = sheet;
+      });
+    },`).join('')}
+    setOpenSearchArea: open => {
+      set(state => {
+        state.isOpenSearchArea = open ?? !state.isOpenSearchArea;
+      });
+    },${modals.map(b => `
+    setOpen${b.modalName}Modal: value => {
+      set(state => {
+        state.open${b.modalName}Modal = value;
+      });
+    },`).join('')}
+  }),
+  '${c.kebab}'
+);
+`;
+}
+
+function index(c) { return `export { ${c.Page} } from './${c.Page}';\n`; }
+module.exports = { H, constants, store, index };
+
+// As-is SplitContainer 트리 → PanelGroup 중첩 JSX (들여쓰기 6칸부터)
+function renderLayout(c, G) {
+  const byName = Object.fromEntries(G.map(g => [g.name, g]));
+  const gridJsx = (g, ind) => `${ind}<${g.comp} gridRef={${g.ref}} gridFilterRef={${g.fref}} data={${g.dataVar}?.o_rc ?? []} staticColumns={${c.mainSheets.length > 1 ? `staticColumns[${g.sheetExpr}] ?? []` : 'staticColumns'}} />`;
+  const sub = (g, ind) => g.idx === 0 ? '' : `${ind}<SubTitle menuId={MENU_ID} grid={${g.ref}} gridFilter={${g.fref}} dataCount={${g.dataVar}?.o_rc?.length ?? 0} title='${g.sheets[0].name}' useHotkey={false} />\n`;
+  const node = (n, ind) => {
+    if (n.kind === 'grid') { const g = byName[n.plan.name]; return sub(g, ind) + gridJsx(g, ind); }
+    if (n.kind === 'group') return `${ind}{/* As-is ${n.name} (${n.orientation === 'vertical' ? '상/하' : '좌/우'} 분할, SplitterDistance 기준 ${n.panels.map(p => p.size + '%').join('/')}) */}
+${ind}<PanelGroup orientation='${n.orientation}'>
+${n.panels.map((p, i) => `${i ? `${ind}  <PanelSeparator />\n` : ''}${ind}  <Panel defaultSize='${p.size}%' minSize='10%'>
+${p.nodes.map(x => node(x, ind + '    ')).join('\n')}
+${ind}  </Panel>`).join('\n')}
+${ind}</PanelGroup>`;
+    if (n.kind === 'tabs') return `${ind}{/* As-is ${n.name} TabControl → TabWrapper (TODO(이식): 탭 라벨·활성 탭 상태) */}
+${n.pages.map(x => node(x, ind)).join('\n')}`;
+    if (n.kind === 'stack') return n.nodes.map(x => node(x, ind)).join('\n');
+    return '';
+  };
+  const parts = c.layout.roots.map(n => node(n, '      ')).filter(Boolean);
+  for (const g of c.layout.unplaced) parts.push(`      {/* As-is ${g.name} — 디자이너 배치 트리에서 위치를 못 찾음(동적 추가 추정). TODO(이식): 위치 조정 */}\n` + sub(byName[g.name], '      ') + gridJsx(byName[g.name], '      '));
+  if (!parts.length) parts.push(gridJsx(G[0], '      '));
+  return '\n' + parts.join('\n');
+}
+
+function page(c) {
+  const multiSheet = c.mainSheets.length > 1, multiGrid = c.gridPlan.length > 1;
+  const hasSave = c.procs.some(p => p.btn === 'SAVE');
+  const cb0 = c.commonButtons || {}; const cb = Object.fromEntries(Object.entries(cb0).filter(([, b]) => b.hasBody)); // 빈 override(3줄 이하)는 BaseForm 기능 비활성 → false
+  const cbWhere = b => b.src === 'members' ? `${(b.file || '').split('\\').pop()}:${b.line} ${b.lines}줄` : 'flow.csv'; const emptyOverrides = Object.entries(cb0).filter(([, b]) => !b.hasBody).map(([n, b]) => `${n}(${cbWhere(b)} 빈 본문)`);
+  const custom = c.buttons.filter(b => !b.merged && !b.absorbed && (!b.b || ['subtitle-custom', 'subtitle-button'].includes(b.b.kind)));
+  const fieldNames = new Set(c.fields.map(f => f.c.name));
+  const pageHandlers = c.handlers.filter(h => h.r.tobe_slot === 'handler' && !c.gridPlan.some(g => g.events.includes(h)) && !c.buttons.find(b => (b.merged || b.absorbed) && ('this.' + b.c.name) === h.e.target) && !fieldNames.has(h.e.target.replace(/^this\./, '')));
+  const handlerFor = b => pageHandlers.find(h => h.e.target.replace(/^this\./, '') === b.c.name && /Click/.test(h.e.event));
+  const G = c.gridPlan.map((g, i) => ({ ...g, idx: i, comp: `${c.Page}Grid${g.suffix}`, ref: `grid${g.suffix || ''}Ref`, fref: `gridFilter${g.suffix || ''}Ref`, sheetExpr: g.sheets.length > 1 ? `activeSheet${g.suffix}` : `SHEETS.${g.sheets[0].key}`, dataVar: `data${g.suffix || ''}` }));
+  const cols = g => multiSheet ? `staticColumns[${g.sheetExpr}] ?? []` : 'staticColumns';
+  return `${H(c)}
+import { type FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { useEffect, useRef } from 'react';
+
+import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { MainTitle, SubTitle } from '@shared/components';
+import { ${hasSave ? 'useProcMutation, useSaveWithValidation, ' : ''}useTabProcQuery } from '@shared/hooks';${(cb.InsertButton || cb.DeleteButton) ? "\nimport { GridAction } from '@foundation/utils';" : ''}${multiGrid ? `\nimport { Panel, PanelGroup, PanelSeparator } from '@shared/panel';` : ''}
+
+import { ${c.Page}Form } from './components/${c.Page}Form';
+${G.map(g => `import { ${g.comp} } from './components/${g.comp}';`).join('\n')}${(c.popupClasses || []).map(cls => `\nimport { ${modalName(cls, c.ID)} } from './components/modals/${modalName(cls, c.ID)}';`).join('')}
+import type { RESPONSE_SET } from './${c.kebab}.constants';
+import { MENU_ID, SHEETS } from './${c.kebab}.constants';
+import { use${c.Page}Store } from './use${c.Page}Store';
+
+export const ${c.Page} = ({ tabId, title }: PageProps<MENU_ID>) => {${custom.length ? `
+  const { t } = useTranslation();` : ''}
+${G.map(g => `  const ${g.ref} = useRef<FlexGrid<ResponseData<MENU_ID, SHEETS.${g.sheets[0].key}, RESPONSE_SET.MAIN>>>();
+  const ${g.fref} = useRef<FlexGridFilter>();`).join('\n')}
+
+  const filters = use${c.Page}Store(state => state.filters);
+  const setFilters = use${c.Page}Store(state => state.setFilters);
+  const staticColumns = use${c.Page}Store(state => state.staticColumns);
+  const fetchStaticColumns = use${c.Page}Store(state => state.fetchStaticColumns);
+  const isOpenSearchArea = use${c.Page}Store(state => state.isOpenSearchArea);
+  const setOpenSearchArea = use${c.Page}Store(state => state.setOpenSearchArea);
+${(c.popupClasses || []).map(cls => { const k = modalName(cls, c.ID).replace(/Modal$/, ''); return `  const open${k}Modal = use${c.Page}Store(state => state.open${k}Modal);\n  const setOpen${k}Modal = use${c.Page}Store(state => state.setOpen${k}Modal);`; }).join('\n')}${G.filter(g => g.sheets.length > 1).map(g => `
+  const activeSheet${g.suffix} = use${c.Page}Store(state => state.activeSheet${g.suffix});`).join('')}
+${hasSave ? `  const { saveWithValidation } = useSaveWithValidation();\n` : ''}
+${G.map(g => `  // ${g.name} ← 시트 ${g.sheets.map(s => `'${s.name}'`).join(' / ')}${g.sheets.length > 1 ? ' (activeSheet 전환)' : ''}. As-is 조회 SP: ${c.procs.filter(p => p.btn === 'SEARCH' && g.sheets.some(s => s.name === p.sheet)).map(p => p.asis_sp).join(', ') || '(Fact Pack endpoints 참조)'}
+  const { data: ${g.dataVar} } = useTabProcQuery<MENU_ID>({
+    menuId: MENU_ID,
+    sheetName: ${g.sheetExpr},
+    tabId,
+    filters,
+    enabled: filters !== undefined,
+  });`).join('\n\n')}
+${hasSave ? `
+  // As-is 저장: ${c.procs.filter(p => p.btn === 'SAVE').map(p => p.asis_sp).join(', ')}
+  const { mutate } = useProcMutation<MENU_ID>({
+    menuId: MENU_ID,
+    sheetName: ${G[0].sheetExpr},
+    tabId,
+  });
+` : '  // As-is 저장 SP 없음 — 조회 전용 화면 (useProcMutation 미사용)'}
+
+  // As-is this.Load (Form_Load) → 메타 컬럼 + 저장된 조회조건
+  useEffect(() => {
+    void fetchStaticColumns();
+  }, [tabId, fetchStaticColumns]);
+${hasSave ? `
+  const onSave = () => {
+    const saveData = ${G[0].dataVar}?.o_rc?.filter?.(item => item.CRUD_TYPE) ?? [];
+    saveWithValidation(saveData, ${cols(G[0])}, mutate);
+  };` : ''}
+${pageHandlers.map(h => `
+  // AS-IS ${h.e.target}.${h.e.event} → ${h.e.handler} (${h.e.file.split('\\').pop()}:${h.e.line})${h.calls.length ? `\n  //   호출 엔드포인트: ${h.calls.join(', ')}` : ''}
+  //   To-Be 패턴: ${h.r.tobe_pattern}
+  const ${h.name} = () => {
+    // TODO(이식): As-is ${h.e.handler} 로직 — Fact Pack flow.csv / Agent analysis.md 참조
+  };`).join('\n')}
+
+${cb.InsertButton ? `  // AS-IS InsertButton ${cbWhere(cb.InsertButton)} → 행 추가
+  const handleInsertRow = () => {
+    // TODO(이식): As-is InsertButton/InsertRow 본문 — 기본값·잠금 컬럼(LockColumn)·cellType 은 그리드 컬럼 메타(_inputEditType/_ctrlType)로
+    if (!${G[0].ref}.current) return;
+    GridAction.addRow(${G[0].ref}.current, { /* TODO(이식): As-is InsertRow 기본값 (예: DIVISION_ID: divisionId, VALID_YN: 'Y') */ }, 'above');
+  };
+` : ''}${cb.DeleteButton ? `  // AS-IS DeleteButton ${cbWhere(cb.DeleteButton)} → 선택 행 삭제
+  const handleDeleteRow = () => {
+    // TODO(이식): As-is DeleteButton 본문 (삭제 가능 조건·확인 메시지 MSG 코드)
+    if (!${G[0].ref}.current) return;
+    GridAction.removeRow(${G[0].ref}.current);
+  };
+` : ''}${!hasSave && cb.SaveButton ? `  // AS-IS SaveButton ${cbWhere(cb.SaveButton)} — 저장 SP 가 Fact Pack 에 없음(그리드 외 저장/파일 등) → TODO(이식)
+  const handleSave = () => {
+    // TODO(이식): As-is SaveButton 본문
+  };
+` : ''}${cb.UploadButton || cb.ImportButton ? `  const handleUpload = () => {
+    // TODO(이식): As-is ${cb.UploadButton ? 'UploadButton' : 'ImportButton'} — 엑셀 업로드 모달(공통 ExcelUploadModal 선례 참조)
+  };
+` : ''}${cb.EditButton ? `  // AS-IS EditButton ${cbWhere(cb.EditButton)} — hotkeyConfig 미지원: customButtons 의 편집 토글(IsReadOnly) 로 — TODO(이식)
+` : ''}
+${emptyOverrides.length ? `  // AS-IS 빈 override(기능 비활성으로 해석 → false): ${emptyOverrides.join(', ')}\n` : ''}  // 공통 버튼 — As-is BaseForm override 근거(members.csv). 룰 25 §1.5.1/§1.5.3: 정의 없는 키는 false 명시(silent omit 금지), UsrConditionPanel 없으면 condition/resetCondition false
+  const hotkeyConfig: HotkeyConfig = {
+    search: setFilters, // AS-IS FindButton${cb.FindButton ? ` (${cbWhere(cb.FindButton)})` : ' 미정의 — BaseForm 기본 조회'}
+    save: ${hasSave ? 'onSave' : cb.SaveButton ? 'handleSave' : 'false'}, // AS-IS SaveButton ${cb.SaveButton ? cbWhere(cb.SaveButton) : '미정의'}${hasSave && !cb.SaveButton ? ' / 저장 SP 있음' : ''}
+    insert: ${cb.InsertButton ? 'handleInsertRow' : 'false'}, // AS-IS InsertButton ${cb.InsertButton ? cbWhere(cb.InsertButton) : '미정의'}
+    delete: ${cb.DeleteButton ? 'handleDeleteRow' : 'false'}, // AS-IS DeleteButton ${cb.DeleteButton ? cbWhere(cb.DeleteButton) : '미정의'}
+    ${cb.ExcelButton ? '// excel: (생략 = 기본 활성) AS-IS ExcelButton ' + cbWhere(cb.ExcelButton) : 'excel: false, // AS-IS ExcelButton 미정의'}
+    upload: ${cb.UploadButton || cb.ImportButton ? 'handleUpload' : 'false'}, // AS-IS ${cb.UploadButton ? 'UploadButton ' + cbWhere(cb.UploadButton) : cb.ImportButton ? 'ImportButton ' + cbWhere(cb.ImportButton) : 'Upload/ImportButton 미정의'}
+    manual: false,${c.hasConditionPanel ? '\n    // condition/resetCondition: (생략 = 기본 활성) AS-IS UsrConditionPanel 있음' : '\n    condition: false, // AS-IS UsrConditionPanel 없음 (룰 25 §1.5.3)\n    resetCondition: false,'}
+  };
+
+${custom.length ? `  // As-is 화면 버튼 → SubTitle customButtons (dmf0045 선례). 라벨은 LBL 코드, 동작은 위 핸들러
+  const customButtons = [
+${custom.map(b => `    { label: t('${b.lbl || 'LBL?????'}', '_${b.label}'), action: ${handlerFor(b) ? handlerFor(b).name : `() => { /* TODO(이식): As-is ${b.c.name} Click — events.csv 에 핸들러 없음 */ }`} }, // AS-IS ${b.c.name}`).join('\n')}
+  ];
+` : ''}  return (
+    <>
+      <MainTitle
+        title={title}
+        menuId={MENU_ID}
+        openSearchArea={isOpenSearchArea}
+        toggleOpenSearchArea={setOpenSearchArea}
+      />
+      <${c.Page}Form />
+      <SubTitle
+        menuId={MENU_ID}
+        grid={${G[0].ref}}
+        gridFilter={${G[0].fref}}
+        dataCount={${G[0].dataVar}?.o_rc?.length ?? 0}
+        excelFileName='${c.asisName}'
+        hotkeyConfig={hotkeyConfig}
+        searchParam={filters as Record<string, string> | undefined}${custom.length ? `
+        customButtons={customButtons}` : ''}
+      />${renderLayout(c, G)}${(c.popupClasses || []).map(cls => { const n = modalName(cls, c.ID); const k = n.replace(/Modal$/, ''); return `
+      {/* AS-IS 팝업 ${cls} — 열기: 해당 이벤트 핸들러에서 setOpen${k}Modal(true) (TODO(이식): 트리거·파라미터·반환 처리) */}
+      <${n} open={open${k}Modal} modalClose={() => setOpen${k}Modal(false)} />`; }).join('')}
+    </>
+  );
+};
+`;
+}
+
+function form(c) {
+  const plain = c.fields.filter(f => !f.cat);
+  const combos = plain.filter(f => f.r.tobe_component === 'CustomDropdown');
+  const catalogImports = new Set(c.fields.filter(f => f.cat).map(f => f.cat.field));
+  const imports = new Set(plain.length ? ['FormItem'] : []);
+  for (const f of plain) if (['InputField', 'Checkbox', 'TextField', 'RadioGroup', 'Radio'].includes(f.r.tobe_component)) imports.add(f.r.tobe_component);
+  const sharedImports = new Set(['SearchArea']);
+  for (const f of plain) if (['CustomDropdown', 'DatePickerCalendar', 'FunctionSearchIcon'].includes(f.r.tobe_component)) sharedImports.add(f.r.tobe_component);
+  if (plain.some(f => f.popup)) sharedImports.add('FunctionSearchIcon');
+  if (plain.some(f => f.r.tobe_component === 'PeriodField')) catalogImports.add('PeriodField');
+  const catalog = f => {
+    const asis = `{/* AS-IS ${f.c.name} / ${f.c.type.split('.').pop()} (${f.c.file.split('\\').pop()}:${f.c.line})${f.popup ? ` + ${f.popup.c.name} 팝업(필드 내장)` : ''} — 카탈로그 ${f.cat.field}${f.cat.combo_id ? ' · 콤보 ' + f.cat.combo_id : ''} */}`;
+    switch (f.cat.kind) {
+      case 'period': return `          ${asis}
+          <PeriodField
+            start={searchParams.${f.key}From}
+            end={searchParams.${f.key}To}
+            onChange={(start, end) => setSearchParams({ ${f.key}From: start, ${f.key}To: end })}
+            gridSize={3}
+          />`;
+      case 'check': return `          ${asis}
+          <${f.cat.field} value={searchParams.${f.key}} onChange={v => setSearchParams({ ${f.key}: v })} gridSize={3} />`;
+      case 'multi': case 'popup': return `          ${asis}
+          <${f.cat.field}
+            value={searchParams.${f.key}}
+            onChange={v => setSearchParams({ ${f.key}: v })}${/^(Item|Project|Owner)Field$/.test(f.cat.field) ? `
+            division={searchParams.divisionId}` : /Team|Customer|Site|BizType/.test(f.cat.field) && c.fields.some(x => x.key === 'divisionId') ? `
+            division={searchParams.divisionId}` : ''}
+            gridSize={3}
+          />`;
+      default: return `          ${asis}
+          <${f.cat.field} value={searchParams.${f.key}} onChange={v => setSearchParams({ ${f.key}: v })} gridSize={3} />`;
+    }
+  };
+  const field = f => {
+    if (f.cat) return catalog(f);
+    const v = `searchParams.${f.key}`, set = `setSearchParams({ ${f.key}: __V__ })`;
+    const asis = `{/* AS-IS ${f.c.name} / ${f.c.type.split('.').pop()} (${f.c.file.split('\\').pop()}:${f.c.line})${f.popup ? ` + ${f.popup.c.name} 팝업 → ${f.popup.b.modal}` : ''} */}`;
+    let inner;
+    switch (f.r.tobe_component) {
+      case 'CustomDropdown': { const multi = /multiple/.test(f.r.props_template); inner = multi ? `<CustomDropdown
+                  multiple
+                  allOption
+                  useClearIcon
+                  limitTags={1}
+                  isInput={false}
+                  value={${v}.join(',')}
+                  options={${f.key}Combo?.map(item => ({ label: String(item.NAME ?? item.CODE), value: String(item.CODE) })) ?? []}
+                  onChange={(_, picked) => ${set.replace('__V__', "String(picked ?? '').split(',').filter(Boolean)")}}
+                />` : `<CustomDropdown
+                  isInput={false}
+                  value={${v}}
+                  options={${f.key}Combo?.map(item => ({ label: String(item.NAME ?? item.CODE), value: String(item.CODE) })) ?? []}
+                  onChange={(_, option) => ${set.replace('__V__', 'option')}}
+                />`; break; }
+      case 'PeriodField': return `          ${asis}
+          <PeriodField start={searchParams.${f.key}From} end={searchParams.${f.key}To} onChange={(start, end) => setSearchParams({ ${f.key}From: start, ${f.key}To: end })} gridSize={3} />`;
+      case 'DatePickerCalendar': inner = `<DatePickerCalendar ${f.r.props_template} value={${v}} onChange={value => ${set.replace('__V__', 'value')}} />`; break;
+      case 'Checkbox': inner = `<Checkbox checked={${v}} onChange={checked => ${set.replace('__V__', 'checked')}} />`; break;
+      case 'RadioGroup': inner = `<RadioGroup value={${v}} onChange={event => ${set.replace('__V__', 'event.target.value')}}>{/* TODO(이식): As-is 라디오 항목 */}</RadioGroup>`; break;
+      case 'TextField': inner = `<TextField ${f.r.props_template} value={${v}} onChange={event => ${set.replace('__V__', 'event.target.value')}} />`; break;
+      default: inner = `<InputField
+                  fullWidth
+                  value={${v}}
+                  onChange={event => ${set.replace('__V__', 'event.target.value')}}${f.popup ? `
+                  slotProps={{ input: { endAdornment: <FunctionSearchIcon onClick={() => setOpen${f.popup.modalName}Modal(true)} /> } }}` : ''}
+                />`;
+    }
+    return `          <Grid size={3}>
+            ${asis}
+            <FormItem
+              label={t('${f.lbl || 'LBL?????'}', '_${f.label}')}
+              labelAlign='right'
+              render={() => (
+                ${inner}
+              )}
+              className={commonStyles.formItem}
+            />
+          </Grid>`;
+  };
+  return `${H(c)}
+${plain.length ? `import commonStyles from '@foundation/styles/common-styles.module.scss';\n` : ''}import { ${[...sharedImports].sort().join(', ')} } from '@shared/components';${combos.length || needsDivision(c) ? `\nimport { useTabComboQueries } from '@shared/hooks';` : ''}${needsDivision(c) ? `\nimport { useEffect } from 'react';` : ''}${imports.size ? `\nimport { ${[...imports].sort().join(', ')} } from '@shared/lges';` : ''}${plain.length ? `\nimport { Grid } from '@shared/mui';` : ''}${catalogImports.size ? `\n// 조회조건 카탈로그(features/master searchFields — 31개 화면이 같은 경로로 import)\nimport { ${[...catalogImports].sort().join(', ')} } from 'features/master/src/components';` : ''}
+
+import { use${c.Page}Store } from '../use${c.Page}Store';
+
+export const ${c.Page}Form = () => {
+  const { t } = useTranslation();
+
+  const searchParams = use${c.Page}Store(state => state.searchParams);
+  const setSearchParams = use${c.Page}Store(state => state.setSearchParams);
+  const setFilters = use${c.Page}Store(state => state.setFilters);
+  const isOpenSearchArea = use${c.Page}Store(state => state.isOpenSearchArea);${c.fields.filter(f => f.popup && !f.cat).map(f => `\n  const setOpen${f.popup.modalName}Modal = use${c.Page}Store(state => state.setOpen${f.popup.modalName}Modal);`).join('')}
+${needsDivision(c) ? `
+  // As-is 에 Division 조회조건 없음 — 팝업 필드(division 필수)용 기본 사업부 = 공용 콤보 MyDivision 첫 값 (SCM_ADM_CMBO_SQL_M)
+  const [myDivision] = useTabComboQueries({ filters: ['MyDivision'] });
+  useEffect(() => {
+    const first = myDivision?.[0]?.CODE;
+    if (!searchParams.divisionId && first) setSearchParams({ divisionId: String(first) });
+  }, [myDivision, searchParams.divisionId, setSearchParams]);
+` : ''}${combos.length ? `
+  // TODO(이식): 콤보ID 확정 — As-is 콤보 소스(UP_FX_GetCommonDataList_* / LOOKUP) ↔ To-Be 등록 콤보ID. 미등록이면 admin 콤보 등록 선행
+  const [${combos.map(f => f.key + 'Combo').join(', ')}] = useTabComboQueries({
+    filters: [${combos.map(f => `'${f.comboId || f.label.replace(/\s/g, '')}'`).join(', ')}],
+  });
+` : ''}
+${(() => { const fieldNames = new Set(c.fields.map(f => f.c.name)); const own = c.handlers.filter(h => h.r.tobe_slot === 'handler' && fieldNames.has(h.e.target.replace(/^this\./, ''))); return own.length ? `  // 조회조건 컨트롤의 As-is 이벤트 — 값 변경은 setSearchParams 가 맡고, 아래 부수효과만 이식(TODO):\n${own.map(h => `  //   AS-IS ${h.e.target}.${h.e.event} → ${h.e.handler} (${h.e.file.split('\\').pop()}:${h.e.line})${h.calls.length ? ' 호출: ' + h.calls.join(', ') : ''} — ${h.r.tobe_pattern}`).join('\n')}\n` : ''; })()}
+  return (
+    <SearchArea
+      searchButtonLabel={t('LBL00112', '_Search')}
+      onSearch={setFilters}
+      isHidden={!isOpenSearchArea}
+      conditions={
+        <>
+${c.fields.map(field).join('\n')}
+        </>
+      }
+    />
+  );
+};
+`;
+}
+module.exports.page = page; module.exports.form = form;
+
+function gridTpl(c, g) {
+  const hard = g.sheets.filter(s => /하드코딩/.test(s.rule));
+  const comp = `${c.Page}Grid${g.suffix}`;
+  const ev = g.events;
+  const multi = g.sheets.length > 1;
+  return `${H(c, `// As-is 스프레드 ${g.name} ← 시트 ${g.sheets.map(s => `'${s.name}'`).join(' / ')}${multi ? ' (activeSheet' + g.suffix + ' 전환)' : ''}`)}
+import { ${ev.some(h => /dblClick|click/.test(h.r.tobe_pattern)) ? 'CellType, ' : ''}type FlexGrid } from '@mescius/wijmo.grid';
+import { type FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { useRef, type MutableRefObject } from 'react';
+
+import type { RawFlexGridColumnConfig } from '@foundation/models';
+import type { EditTracker } from '@foundation/utils';${ev.some(h => /dblClick|click/.test(h.r.tobe_pattern)) ? `\nimport { GridUtils } from '@foundation/utils';` : ''}
+import { DataGrid } from '@shared/components';
+
+import type { MENU_ID, RESPONSE_SET, SHEETS } from '../${c.kebab}.constants';${multi ? `\nimport { use${c.Page}Store } from '../use${c.Page}Store';` : ''}
+${hard.map(s => `
+// AS-IS 시트 '${s.name}' — ${s.rule}. grid_effective.csv 근거 (division 축: ${c.divisionCols.join(', ') || '없음'})
+//   메타(SCM_MST_SHEET_COLUMNS) 미등록 시트이므로 하드코딩 허용. 등록 후에는 staticColumns 로 전환하고 이 배열을 지울 것.
+const HARD_COLUMNS_${s.key}: RawFlexGridColumnConfig[] = [
+${s.rows.map(r => `  { colNm: '${r.column}', colLblNm: '${(r.label || r.column).replace(/'/g, "\\'")}', visible: true, display: true, defaultFlag: true }, // ${r.source}${c.divisionCols.filter(d => r[d] && r[d] !== '코드추가' && r[d] !== '코드추가?').map(d => ` ${d}:${r[d]}`).join('')}`).join('\n')}
+];`).join('\n')}
+
+interface ${comp}Props {
+  gridRef: MutableRefObject<FlexGrid<ResponseData<MENU_ID, SHEETS.${g.sheets[0].key}>> | undefined>;
+  gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
+  data: ResponseData<MENU_ID, SHEETS.${g.sheets[0].key}>[];
+  staticColumns: RawFlexGridColumnConfig[];
+}
+
+export const ${comp} = ({ gridRef, gridFilterRef, data, staticColumns }: ${comp}Props) => {
+  const editTrackerRef = useRef<EditTracker<ResponseData<MENU_ID, SHEETS.${g.sheets[0].key}, RESPONSE_SET.MAIN>>>();${multi ? `
+  const activeSheet = use${c.Page}Store(state => state.activeSheet${g.suffix});
+  const setActiveSheet = use${c.Page}Store(state => state.setActiveSheet${g.suffix});
+  // TODO(이식): 시트 ${g.sheets.map(s => s.name).join(' / ')} 전환 UI — TabWrapper 또는 SubTitle 탭 (DMF0045 activeSheet 선례)
+  void activeSheet; void setActiveSheet;` : ''}
+${ev.filter(h => !/dblClick|click/.test(h.r.tobe_pattern)).length ? `
+  // AS-IS 그리드 이벤트(이식 TODO — DataGrid 의 initialized={grid => grid.<event>.addHandler(...)} 또는 해당 prop 으로 배선):
+${ev.filter(h => !/dblClick|click/.test(h.r.tobe_pattern)).map(h => `  //   ${h.e.target.replace(/^this\./, '')}.${h.e.event} → ${h.e.handler} (${h.e.file.split('\\').pop()}:${h.e.line})${h.calls.length ? ' 호출: ' + h.calls.join(', ') : ''} — ${h.r.tobe_pattern}`).join('\n')}` : ''}
+${ev.filter(h => /dblClick|click/.test(h.r.tobe_pattern)).map(h => `
+  // AS-IS ${h.e.target}.${h.e.event} → ${h.e.handler} (${h.e.file.split('\\').pop()}:${h.e.line})${h.calls.length ? `\n  //   호출 엔드포인트: ${h.calls.join(', ')}` : ''}
+  //   To-Be 패턴: ${h.r.tobe_pattern}
+  const ${h.name} = (${/dblClick|click/.test(h.r.tobe_pattern) ? 'e: MouseEvent' : ''}) => {
+    const grid = gridRef.current;
+    if (!grid) return;${/dblClick|click/.test(h.r.tobe_pattern) ? `
+    const ht = grid.hitTest(e);
+    if (ht.cellType !== CellType.Cell) return;
+    const dataItem = GridUtils.getRow(grid, ht.row);
+    if (!dataItem) return;
+    const binding = GridUtils.getBinding(grid, ht.col);
+    void binding;` : ''}
+    // TODO(이식): As-is ${h.e.handler} 로직
+  };`).join('\n')}
+
+  return (
+    <DataGrid<ResponseData<MENU_ID, SHEETS.${g.sheets[0].key}>>
+      gridRef={gridRef}
+      gridFilterRef={gridFilterRef}
+      editTrackerRef={editTrackerRef}
+      itemsSource={data}
+      staticColumns={${hard.length && hard[0] === g.sheets[0] ? `staticColumns.length ? staticColumns : HARD_COLUMNS_${hard[0].key}` : 'staticColumns'}}${hard.length && hard[0] === g.sheets[0] ? ` // 메타 등록 전까지 하드코딩 컬럼(As-is DefColumns) 폴백` : ''}${ev.filter(h => /dblClick/.test(h.r.tobe_pattern)).slice(0, 1).map(h => `\n      dblClick={${h.name}}`).join('')}${ev.filter(h => /^DataGrid click/.test(h.r.tobe_pattern)).slice(0, 1).map(h => `\n      click={${h.name}}`).join('')}
+    />
+  );
+};
+`;
+}
+
+
+// As-is 팝업 클래스 → 화면 종속 모달 골격 (룰 25 §3: 공통 lookup 이 아니면 components/modals/<Name>Modal.tsx 1:1)
+//   공통 모달(ItemByDivisionModal 등)로 대체 가능하면 매핑표 §POPUP 에 '공통 재사용' 으로 적고 이 파일을 지운다.
+function modalName(cls, ID) { const stem = cls.replace(new RegExp('^' + ID + '_?'), '').replace(/Popup|PopUp|Dialog|Form$/gi, '') || 'Popup'; return stem.replace(/[^A-Za-z0-9]/g, '').replace(/^./, ch => ch.toUpperCase()) + 'Modal'; }
+function modalTpl(c, cls) {
+  const name = modalName(cls, c.ID);
+  const ctl = (c.controlsAll || []).filter(x => x.class === cls); const ev = (c.eventsAll || []).filter(x => x.class === cls && x.op === '+=' && /^[A-Z]/.test(x.event));
+  const eps = (c.endpointsAll || []).filter(x => x.class === cls && x.status === 'MATCH' && /^SP\s/.test(x.sp_or_sql || '')).map(x => x.sp_or_sql.replace(/^SP\s+/, ''));
+  const popupSheet = c.popupSheets.find(s => new RegExp(cls.replace(/^[A-Z0-9]+_/, '').replace(/Popup|PopUp/i, '').slice(0, 5), 'i').test(s.name)) || c.popupSheets[0];
+  const grids = ctl.filter(x => /FpSpread|Spread|SheetView/.test(x.type)); const buttons = ctl.filter(x => /Button/.test(x.type) && !/Close|Cancel|Exit/i.test(x.name)); const inputs = ctl.filter(x => /TextBox|TextEdit|Combo|CheckedList|CheckBox|DateRange|MultiLine/.test(x.type));
+  const file = ctl[0] ? ctl[0].file.split('\\').pop() : cls + '.cs';
+  return `${H(c, `// As-is 팝업 ${cls} (${file}) → 화면 종속 모달. 공통 lookup(features/master/src/components *Modal)으로 대체 가능하면 매핑표 §POPUP 에 명시하고 이 파일을 삭제`)}
+import type { FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { useEffect, useRef, useState } from 'react';
+
+import type { RawFlexGridColumnConfig } from '@foundation/models';
+import { CustomDialog, DataGrid${inputs.length ? ', SearchArea' : ''} } from '@shared/components';
+import { useTabProcQuery } from '@shared/hooks';
+import { Button${inputs.length ? ', FormItem, InputField' : ''} } from '@shared/lges';${inputs.length ? `\nimport { Grid } from '@shared/mui';` : ''}
+
+import { MENU_ID, SHEETS } from '../../${c.kebab}.constants';
+
+import styles from './${name}.module.scss';
+
+interface ${name}Props {
+  open: boolean;
+  modalClose: () => void;
+  /** 선택 결과를 부모에 돌려준다 — As-is 팝업 반환값(DialogResult/Tag) 1:1. TODO(이식): 반환 타입을 As-is 로 맞출 것 */
+  onSelect?: (rows: Record<string, unknown>[]) => void;
+  /** 부모 조회조건(As-is 팝업 생성자 인자) */
+  preSearchParams?: Record<string, string>;
+  /** 팝업 그리드 컬럼 — 메타(SCM_MST_SHEET_COLUMNS SHEET_NAME='${popupSheet ? popupSheet.name : cls}') 를 부모 store 가 내려준다 */
+  staticColumns?: RawFlexGridColumnConfig[];
+}
+
+// AS-IS 컨트롤 ${ctl.length}: ${ctl.map(x => `${x.name}(${x.type.split('.').pop()})`).slice(0, 12).join(', ')}${ctl.length > 12 ? ' …' : ''}
+// AS-IS 이벤트 ${ev.length}: ${ev.map(x => `${x.target.replace(/^this\./, '')}.${x.event}`).slice(0, 8).join(', ')}
+// AS-IS SP ${eps.length}: ${[...new Set(eps)].join(', ') || '(없음)'} — 등록 3-키는 register.json / <ID>_registration.sql 참조
+export const ${name} = ({ open, modalClose, onSelect, preSearchParams, staticColumns = [] }: ${name}Props) => {
+  const { t } = useTranslation();
+  const gridRef = useRef<FlexGrid>(undefined);
+  const gridFilterRef = useRef<FlexGridFilter | undefined>(undefined);
+  const [filters, setFilters] = useState<Record<string, string> | undefined>(undefined);
+${inputs.map(x => `  const [${x.name.replace(/^(txt|cbo|clb|chk|drp|usr)/, '').replace(/^./, ch => ch.toLowerCase())}, set${x.name.replace(/^(txt|cbo|clb|chk|drp|usr)/, '').replace(/^./, ch => ch.toUpperCase())}] = useState(''); // AS-IS ${x.name} (${x.type.split('.').pop()})`).join('\n')}
+
+  // AS-IS 팝업 조회 SP: ${eps[0] || '(Fact Pack 에 없음)'} — 시트 '${popupSheet ? popupSheet.name : 'popup'}'
+  const { data } = useTabProcQuery<MENU_ID>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.${popupSheet ? popupSheet.key : 'MAIN'},
+    tabId: '${c.ID}-${name}',
+    filters,
+    enabled: open && filters !== undefined,
+  });
+
+  const handleSearch = () => {
+    // TODO(이식): As-is 팝업 조회 파라미터 — 생성자 인자(preSearchParams) + 입력값
+    setFilters({ ...(preSearchParams ?? {})${inputs.map(x => `, ${x.name.replace(/^(txt|cbo|clb|chk|drp|usr)/, '').replace(/^./, ch => ch.toLowerCase())}`).join('')} });
+  };
+  // As-is 팝업 Load 시 조회 — 열릴 때 1회 (조회조건 입력이 있으면 SearchArea 조회 버튼이 담당)
+  useEffect(() => {
+    if (open${inputs.length ? ' && false' : ''}) handleSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+  const handleSubmit = () => {
+    // TODO(이식): As-is 선택 반환 — 선택 행(GridUtils.getSelectedRows) → onSelect
+    onSelect?.([]);
+    modalClose();
+  };
+${ev.length ? `
+  // AS-IS 팝업 이벤트(이식 TODO — DataGrid 이벤트 prop 또는 버튼 onClick 으로 배선):
+${ev.map(x => `  //   ${x.target.replace(/^this\./, '')}.${x.event} → ${x.handler} (${x.file.split('\\').pop()}:${x.line})`).join('\n')}` : ''}
+
+  return (
+    <CustomDialog
+      size={1000}
+      type='modaless'
+      position='basic'
+      open={open}
+      handleClose={modalClose}
+      disableEnforceFocus
+      customHeaderTitle={
+        <div className='headerContainer'>
+          <div className='headerDot' />
+          <h2 className='headerTitle'>{t('LBL?????', '_${cls.replace(/^[A-Z0-9]+_/, '').replace(/([a-z])([A-Z])/g, '$1 $2')}')}</h2>
+        </div>
+      }
+      customContentArea={
+        <>${inputs.length ? `
+          <SearchArea
+            searchButtonLabel={t('LBL00112', '_Search')}
+            onSearch={handleSearch}
+            conditions={
+              <>
+${inputs.map(x => { const k = x.name.replace(/^(txt|cbo|clb|chk|drp|usr)/, ''); const v = k.replace(/^./, ch => ch.toLowerCase()); const S = k.replace(/^./, ch => ch.toUpperCase()); return `                <Grid size={4}>
+                  {/* AS-IS ${x.name} / ${x.type.split('.').pop()} */}
+                  <FormItem label={t('LBL?????', '_${k.replace(/([a-z])([A-Z])/g, '$1 $2')}')} labelAlign='right' render={() => <InputField fullWidth value={${v}} onChange={event => set${S}(event.target.value)} />} />
+                </Grid>`; }).join('\n')}
+              </>
+            }
+          />` : ''}
+          <DataGrid
+            gridRef={gridRef}
+            gridFilterRef={gridFilterRef}
+            itemsSource={data?.o_rc ?? []}
+            staticColumns={staticColumns}
+          />
+          <div className={styles.actions}>${buttons.map(x => `
+            {/* AS-IS ${x.name} */}`).join('')}
+            <Button appearance='contained' priority='primary' buttonLabel={t('LBL00013', '_Confirm')} onClick={handleSubmit} />
+            <Button appearance='outlined' priority='normal' buttonLabel={t('LBL00012', '_Cancel')} onClick={modalClose} />
+          </div>
+        </>
+      }
+    />
+  );
+};
+`;
+}
+
+function mapping(c) {
+  const row = (id, summary, impl, reason, status) => `| ${id} | ${summary} | ${impl} | ${reason} | ${status} |`;
+  const lines = [`# __asis-mapping__.md — ${c.ID} design 번호 1:1 대사표 (TobeGen 초기본 — Fact Pack 기준)`, '',
+    '> 원천: Doc/asisfacts/screens/' + c.ID + ' (controls/events/endpoints/grid_effective) · 생성: tools/Harness/gen.js',
+    '> 상태 허용값: 미구현(초기) / 구현(구현 위치 필수) / 제외(사유 필수) / 해당없음(사유 필수). 빈 칸 1개 = 게이트 실패.', '',
+    '## §1 컨트롤', '', '| ID | 요지 (원천 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |', '|---|---|---|---|---|'];
+  let n = 0; const all = c.fields.map(f => ({ c: f.c, impl: `components/${c.Page}Form.tsx (${f.cat ? f.cat.field + ' 카탈로그' : f.r.tobe_component}${f.popup ? ' + ' + (f.cat ? '팝업 내장' : f.popup.b.modal) : ''})`, st: '구현', reason: '' }))
+    .concat(c.buttons.map(b => b.absorbed ? { c: b.c, impl: `components/${c.Page}Form.tsx (${b.merged.cat.field} 내장 팝업)`, st: '구현', reason: '' } : b.merged ? { c: b.c, impl: `components/${c.Page}Form.tsx (${b.merged.key} FunctionSearchIcon → ${b.b.modal})`, st: '미구현', reason: '모달 배선 필요' } : (b.b && ['search', 'n/a'].includes(b.b.kind)) ? { c: b.c, impl: '', st: '해당없음', reason: b.b.note || '내장 기능으로 흡수' } : (b.b && b.b.tobe === 'SubTitle.excel') ? { c: b.c, impl: '', st: '해당없음', reason: b.b.note } : { c: b.c, impl: `${c.Page}.tsx (SubTitle ${b.b ? b.b.tobe : 'customButtons'})`, st: '미구현', reason: '버튼 배선·로직 이식 필요' }))
+    .concat(c.gridPlan.filter(g => g.ctl.file).map(g => ({ c: g.ctl, impl: `components/${c.Page}Grid${g.suffix}.tsx (DataGrid ← ${g.sheets.map(s => s.name).join('/')})`, st: '구현', reason: '' })))
+    .concat(c.todos.map(t => ({ c: t.c, impl: '', st: '미구현', reason: t.r.note })))
+    .concat(c.skipped.map(s => ({ c: s.c, impl: '', st: '해당없음', reason: s.reason })))
+    .sort((x, y) => Number(x.c.line) - Number(y.c.line));
+  for (const x of all) lines.push(row(`D00-1-${String(++n).padStart(3, '0')}`, `§1 ${x.c.name} / ${x.c.type.split('.').pop()}`, x.impl, x.reason, x.st));
+  lines.push('', '## §2 이벤트', '', '| ID | 요지 (원천 1줄) | 구현 위치 (파일:라인) | 사유 | 상태 |', '|---|---|---|---|---|'); n = 0;
+  for (const h of c.handlers) { const g = c.rules.gaps.find(g => g.kind === 'event' && new RegExp(g.pattern).test(h.e.target + ' ' + h.e.event)); lines.push(row(`D00-2-${String(++n).padStart(3, '0')}`, `§2 ${h.e.target.replace(/^this\./, '')} / ${h.e.event}`, g ? '' : `${c.gridPlan.find(g => g.events.includes(h)) ? `components/${c.Page}Grid${c.gridPlan.find(g => g.events.includes(h)).suffix}.tsx` : h.r.tobe_slot === 'lifecycle' ? `${c.Page}.tsx (useEffect)` : `${c.Page}.tsx`} (${h.name} 스텁)`, g ? g.reason : (h.r.tobe_slot === 'lifecycle' ? '' : '스텁만 생성 — 로직 이식 후 구현으로'), g ? '해당없음' : (h.r.tobe_slot === 'lifecycle' ? '구현' : '미구현'))); }
+  lines.push('', '## §4 엔드포인트 (As-is SP → To-Be call-proc 3-키)', '', '| ID | 요지 | 구현 위치 | 사유 | 상태 |', '|---|---|---|---|---|'); n = 0;
+  for (const p of c.procs) lines.push(row(`D00-4-${String(++n).padStart(3, '0')}`, `§4 ${p.asis_endpoint} / ${p.asis_sp}`, p.allowed_gap ? '' : `register.json → ${c.ID}/${p.sheet}/${p.btn}`, p.allowed_gap || 'SCM_ADM_PROC_M 등록 + Oracle PKG 배포 후 구현으로', p.allowed_gap ? '해당없음' : '미구현'));
+  if ((c.popupClasses || []).length) { lines.push('', '## POPUP 매핑 (룰 25 §3 — button/SP/event/validation 4축)', '', '| ID | 요지 | 구현 위치 | 사유 | 상태 |', '|---|---|---|---|---|'); let pn = 0; for (const cls of c.popupClasses) { const n = modalName(cls, c.ID); const evs = (c.eventsAll || []).filter(x => x.class === cls && x.op === '+=' && /^[A-Z]/.test(x.event)).length; const sps = [...new Set((c.endpointsAll || []).filter(x => x.class === cls && x.status === 'MATCH' && /^SP\s/.test(x.sp_or_sql || '')).map(x => x.sp_or_sql.replace(/^SP\s+/, '')))]; lines.push(row(`D00-P-${String(++pn).padStart(3, '0')}`, `§P ${cls} / 팝업(이벤트 ${evs}, SP ${sps.length}: ${sps.join(', ') || '-'})`, `components/modals/${n}.tsx`, '골격만 — 트리거·조회 파라미터·반환·검증 4축 이식 후 구현으로 (공통 lookup 으로 대체하면 사유에 명시하고 파일 삭제)', '미구현')); } }
+  lines.push('', '## §5 Grid 시트', '', '| ID | 요지 | 구현 위치 | 사유 | 상태 |', '|---|---|---|---|---|'); n = 0;
+  for (const s of c.sheets) lines.push(row(`D00-5-${String(++n).padStart(3, '0')}`, `§5 시트 '${s.name}' / ${s.rule} (${s.rows.length}컬럼)`, s.popup ? (s.used === false || !(c.popupClasses || []).length ? '' : `components/modals/${modalName(c.popupClasses[0], c.ID)}.tsx (SHEETS.${s.key})`) : `components/${c.Page}Grid${(c.gridPlan.find(g => g.sheets.includes(s)) || c.gridPlan[0]).suffix}.tsx (SHEETS.${s.key})`, s.popup ? (s.used === false ? '메타 정의만 있고 As-is 코드 미참조(미사용) — 등록·배선 생략' : '팝업 시트 — 모달 컴포넌트 DataGrid staticColumns') : (/하드코딩/.test(s.rule) ? 'HARD_COLUMNS 배열 — 메타 등록 시 전환' : ''), s.popup ? (s.used === false ? '제외' : ((c.popupClasses || []).length ? '구현' : '미구현')) : '구현'));
+  return lines.join('\n') + '\n';
+}
+
+function tests(c) {
+  if (!c.tcs.length) return null;
+  return `${H(c, '// As-is 기반 단위테스트 초안 — Doc/asisfacts/agent/' + c.ID + '/unit_test.md 의 TC 를 it.todo 로. 구현 시 it 로 바꾸고 삭제 금지(건수 게이트 대상).')}
+import { describe, it } from 'vitest';
+
+describe('${c.ID} ${c.asisName} — As-is 단위테스트 (${c.tcs.length}건)', () => {
+${c.tcs.map(t => `  it.todo('${t.id} [${t.kind}] ${t.expect.replace(/'/g, "\\'").slice(0, 120)} — 근거: ${t.basis.replace(/'/g, "\\'").slice(0, 100)}');`).join('\n')}
+});
+`;
+}
+
+function register(c) {
+  return JSON.stringify({ menuId: c.ID, screenName: c.asisName, feature: c.feature, pageDir: c.kebab, routePath: `${c.feature}/${c.kebab}`,
+    sheets: c.sheets.map(s => ({ sheetName: s.name, rule: s.rule, columns: s.rows.length, popup: s.popup })).concat(c.hasSpreadTitle ? [{ sheetName: 'spreadTitle', rule: '동적 헤더 메타', columns: 0, popup: false }] : []),
+    procs: c.procs, note: 'PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요' }, null, 2) + '\n';
+}
+
+// E2E 생성기(tools/E2E/gen-e2e.js) 입력 — 화면의 조회조건/버튼/시트/프로시저/핸들러를 데이터로 고정한다
+function e2ePlan(c) {
+  const saveProcs = c.procs.filter(p => p.btn === 'SAVE'); const hasSave = saveProcs.length > 0 || c.buttons.some(b => /save/i.test(b.key));
+  return JSON.stringify({
+    menuId: c.ID, page: c.Page, feature: c.feature, routePath: `${c.feature}/${c.kebab}`, asisName: c.asisName,
+    fields: c.fields.map(f => ({ key: f.key, label: f.label, lbl: f.lbl, kind: f.kindHint || (f.cat ? f.cat.kind : 'single'), component: f.cat ? f.cat.field : f.r.tobe_component, comboId: f.comboId, popup: !!f.popup, asis: f.c.name })),
+    buttons: c.buttons.filter(b => !b.absorbed).map(b => ({ key: b.key, label: b.label, lbl: b.lbl, kind: b.b ? b.b.kind : 'n/a', tobe: b.b ? b.b.tobe : '', asis: b.c.name })),
+    sheets: c.sheets.map(s => ({ name: s.name, key: s.key, popup: s.popup, rule: s.rule, columns: s.rows.map(r => r.column), labels: s.rows.map(r => r.label), divisionCols: c.divisionCols })),
+    procs: c.procs.map(p => ({ sp: p.asis_sp, sheet: p.sheet, btn: p.btn, status: p.status, candidate: p.tobe_pkg_candidate, entries: p.entries })),
+    hasSave, hasSpreadTitle: c.hasSpreadTitle,
+    handlers: c.handlers.map(h => ({ name: h.name, target: h.e.target, event: h.e.event, slot: h.r.tobe_slot, calls: h.calls })),
+    tcs: c.tcs, divisionCols: c.divisionCols
+  }, null, 2) + '\n';
+}
+
+function notes(c) {
+  const unresolvedCombo = c.fields.filter(f => f.r.tobe_component === 'CustomDropdown');
+  return `# GEN_NOTES — ${c.ID} ${c.asisName} (TobeGen ${new Date().toISOString().slice(0, 10)})
+
+생성 대상: \`features/${c.feature}/src/pages/${c.kebab}/\` ${c.menuMeta ? `(To-Be 메뉴 메타 확정: 상위 ${c.menuMeta.parent}, MNU_URL ${c.menuMeta.pageDir}, USE_YN=${c.menuMeta.useYn}${c.menuMeta.useYn === 'N' ? ' — 등록 SQL 이 Y 로 올림' : ''})` : '(feature 는 map_domain.csv 추정 — **SCM_ADM_MNU_M 트리로 확정** 필요)'}
+As-is grid_mode: ${c.idx.grid_mode || '?'} · 시트 ${c.mainSheets.length} (+팝업 ${c.popupSheets.length}) · 조회조건 ${c.fields.length} · 버튼 ${c.buttons.length} · 이벤트 ${c.handlers.length} · 엔드포인트 ${c.procs.length}
+
+## 기계가 끝낸 것 (손대지 말 것 — 사전 규칙)
+- constants(MENU_ID/SHEETS/RESPONSE_SET${c.divisionCols.length ? '/DIVISION' : ''}), store(검색 파라미터·메타 컬럼·저장 조회조건), Page 조합, Form 필드 ${c.fields.length}개, Grid(DataGrid${c.mainSheets.some(s => /하드코딩/.test(s.rule)) ? ' + HARD_COLUMNS' : ''}), __asis-mapping__.md 초기본, register.json${c.tcs.length ? `, 단위테스트 it.todo ${c.tcs.length}건` : ''}
+
+## Claude Code 가 채울 것 (TODO(이식) 표시 지점만)
+1. 라벨 코드: 자동 매칭 ${c.fields.filter(f => f.lbl || f.cat).length}/${c.fields.length} (To-Be 코드 사용 빈도 사전 rules/lbl_codes.csv). 미확정 \`LBL?????\` ${c.fields.filter(f => !f.lbl && !f.cat).length}곳: ${c.fields.filter(f => !f.lbl && !f.cat).map(f => `${f.c.name}='${f.label}'`).join(', ') || '없음'} → 메시지 마스터(SCM_ADM_MSG_M) 조회 후 코드 기입, 없으면 신규 채번 요청. Doc/tobefacts/db/msg_master.csv 가 있으면 생성기가 자동 조회
+2. 콤보ID ${unresolvedCombo.length}개: ${unresolvedCombo.map(f => `${f.c.name}→'${f.label.replace(/\s/g, '')}'`).join(', ') || '없음'} — As-is 소스는 Fact Pack endpoints 의 UP_FX_GetCommonDataList_* / meta_reads 참조
+3. 이벤트 핸들러 로직 ${c.handlers.filter(h => h.r.tobe_slot !== 'lifecycle').length}개 (flow.csv 의 호출 체인 그대로)
+4. 팝업/모달: ${c.buttons.filter(b => b.b && b.b.modal).map(b => `${b.c.name}→${b.b.modal}`).join(', ') || '없음'}${c.popupClasses.length ? ` · As-is 팝업 클래스 ${c.popupClasses.join(', ')} → components/modals/` : ''}
+5. 스프레드 ${c.gridPlan.length}개 → ${c.gridPlan.map(g => `${g.name}→Grid${g.suffix || ''}(${g.sheets.map(s => s.name).join('/')})`).join(', ')}${c.gridPlan.length > 1 ? ' — PanelGroup 세로 분할로 생성. As-is SplitContainer 방향/비율에 맞게 orientation·defaultSize 조정' : ''}
+6. division 변형: ${c.divisionCols.length ? c.divisionCols.join(', ') + ' — grid_effective 의 division 열이 비어있지 않은 컬럼은 표시 조건 분기' : '없음'}
+7. 검증/표현식: hooks/use${c.Page}Validation.ts V-마커 ${c.validations.filter(v => !v.popup).length}건(+팝업 ${c.validations.filter(v => v.popup).length}) · use${c.Page}Expression.ts E-마커 ${c.expressions.filter(v => !v.popup).length}건 — apply 본문 채우기 (마커 수 = validation.md 행 수, 게이트 V01)
+8. register.json → P_REGISTER_SCREEN (클라우드) → \`pnpm gen:procedures\` → procedures.d.ts 반영 후 타입 느슨 구간 제거
+
+## 사전에 없던 것 (룰 보완 후보 — rules/*.csv 에 추가)
+${c.todos.map(t => `- ${t.c.name} / ${t.c.type.split('.').pop()} : ${t.r.note}`).join('\n') || '- 없음'}
+${c.handlers.filter(h => /사전 없음/.test(h.r.tobe_pattern)).map(h => `- 이벤트 ${h.e.target}.${h.e.event} : map_event.csv 추가`).join('\n')}
+`;
+}
+
+
+function validationHook(c) {
+  const main = c.validations.filter(v => !v.popup), pop = c.validations.filter(v => v.popup);
+  const row = v => `  // V-${String(v.no).padStart(3, '0')} [${v.category}${v.kind ? '/' + v.kind : ''}] L${v.line}${v.handler ? ' ' + v.handler : ''}${v.msg ? ' ' + v.msg : ''}${v.column ? ' col=' + v.column : ''}
+  //   As-is: ${(v.cond || '').replace(/\*\//g, '* /').slice(0, 140)} → ${v.action}${v.msgText ? ' "' + v.msgText.slice(0, 60) + '"' : ''}
+  { id: 'V-${String(v.no).padStart(3, '0')}', asisLine: ${Number(v.line) || 0}, msg: ${v.msg ? `'${v.msg}'` : 'undefined'}, apply: () => { /* TODO(이식): ${v.category} — ${v.action} */ } },`;
+  return `${H(c, '// As-is Validation 100% 적용 (룰 09) — Doc/_analysis/.../' + (main[0] ? main[0].src : ID_src(c)) + '/validation.md ' + main.length + '건' + (pop.length ? ' + 팝업 ' + pop.length + '건(모달에서 구현)' : '') + '.\n//   V-nnn 마커는 게이트(check.js V01)가 센다 — 삭제·병합 금지. 적용이 끝나면 apply 본문을 채우고 마커는 유지.')}
+import { useCallback } from 'react';
+
+export interface AsisValidationRule {
+  id: string;        // V-nnn (validation.md #)
+  asisLine: number;  // As-is .cs 줄
+  msg?: string;      // MSG 코드 → t('msg.MSGxxxxx')
+  apply: () => void; // TODO(이식): 조건·차단 로직
+}
+
+export const ${c.Page.toUpperCase().replace(/[^A-Z0-9]/g, '_')}_VALIDATIONS: AsisValidationRule[] = [
+${main.map(row).join('\n')}
+];
+
+export const use${c.Page}Validation = () => {
+  // 저장/조회 직전에 순서대로 적용한다. 실패 시 메시지(MSG) 후 중단 — As-is GMessageBox 흐름 1:1.
+  const runAll = useCallback(() => { for (const r of ${c.Page.toUpperCase().replace(/[^A-Z0-9]/g, '_')}_VALIDATIONS) r.apply(); }, []);
+  return { rules: ${c.Page.toUpperCase().replace(/[^A-Z0-9]/g, '_')}_VALIDATIONS, runAll };
+};
+`;
+}
+function ID_src(c) { return c.ID; }
+function expressionHook(c) {
+  const main = c.expressions.filter(v => !v.popup);
+  const row = e => `  // E-${String(e.no).padStart(3, '0')} [${e.category}${e.sub && e.sub !== e.category ? '/' + e.sub : ''}] L${e.line} ${e.kind}${e.target ? ' ' + e.target : ''}
+  //   As-is: ${(e.code || '').replace(/\*\//g, '* /').slice(0, 140)}
+  { id: 'E-${String(e.no).padStart(3, '0')}', asisLine: ${Number(e.line) || 0}, kind: '${e.kind}', apply: () => { /* TODO(이식): Wijmo ${/header|Span/i.test(e.kind) ? 'columnHeaders 병합(allowMerging/HierarchicalMergeManager)' : /Formula|Expression/i.test(e.kind) ? 'cellEditEnded 재계산 (FlexSheet 필요 시)' : 'formatItem/cellEditEnded'} */ } },`;
+  return `${H(c, '// As-is Spread Expression/계산식 100% 적용 (룰 09) — expressions.md ' + main.length + '건. E-nnn 마커는 게이트(check.js V01)가 센다.')}
+export interface AsisExpressionRule { id: string; asisLine: number; kind: string; apply: () => void; }
+
+export const ${c.Page.toUpperCase().replace(/[^A-Z0-9]/g, '_')}_EXPRESSIONS: AsisExpressionRule[] = [
+${main.map(row).join('\n')}
+];
+`;
+}
+module.exports.validationHook = validationHook; module.exports.expressionHook = expressionHook;
+
+function render(c) {
+  const f = {};
+  f[`${c.kebab}.constants.ts`] = constants(c);
+  f[`use${c.Page}Store.ts`] = store(c);
+  f[`${c.Page}.tsx`] = page(c);
+  f['index.ts'] = index(c);
+  f[`components/${c.Page}Form.tsx`] = form(c);
+  for (const g of c.gridPlan) f[`components/${c.Page}Grid${g.suffix}.tsx`] = gridTpl(c, g);
+  for (const cls of c.popupClasses || []) { f[`components/modals/${modalName(cls, c.ID)}.tsx`] = modalTpl(c, cls); f[`components/modals/${modalName(cls, c.ID)}.module.scss`] = `// ${modalName(cls, c.ID)} — 인라인 style 금지(룰 03) → SCSS Module\n.actions {\n  display: flex;\n  justify-content: flex-end;\n  gap: 8px;\n  margin-top: 8px;\n}\n`; }
+  f['__asis-mapping__.md'] = mapping(c);
+  const t = tests(c); if (t) f[`__tests__/${c.Page}.asis.spec.ts`] = t;
+  if (c.validations.length) f[`hooks/use${c.Page}Validation.ts`] = validationHook(c);
+  if (c.expressions.length) f[`hooks/use${c.Page}Expression.ts`] = expressionHook(c);
+  f['@register.json'] = register(c);
+  f['@e2e_plan.json'] = e2ePlan(c);
+  f['@GEN_NOTES.md'] = notes(c);
+  for (const k of Object.keys(f)) if (/\.tsx?$/.test(k)) f[k] = tidy(f[k]);
+  return f;
+}
+
+// eslint import/order(configs/eslint.config.mjs) 규약대로 import 블록을 정렬: [external·features/*] / [@foundation·@shared…(알파벳)] / [../] / [./] — 그룹 사이 빈 줄, 그룹 안 알파벳(대소문자 무시). 3줄 이상 연속 빈 줄은 1줄로.
+function tidy(src) {
+  const lines = src.split('\n'); let i = 0; const head = [];
+  while (i < lines.length && (lines[i].startsWith('//') || lines[i].trim() === '')) { head.push(lines[i]); i++; }
+  const imports = []; let cur = null;
+  while (i < lines.length) {
+    const l = lines[i];
+    if (cur) { cur.text.push(l); if (/from\s+['"][^'"]+['"];?\s*$/.test(l) || /^import\s+['"][^'"]+['"];?\s*$/.test(l)) { cur.mod = (l.match(/['"]([^'"]+)['"]/) || [])[1] || ''; imports.push(cur); cur = null; } i++; continue; }
+    if (/^import\b/.test(l)) { cur = { pre: [], text: [l], mod: '' }; if (/from\s+['"][^'"]+['"];?\s*$/.test(l) || /^import\s+['"][^'"]+['"];?\s*$/.test(l)) { cur.mod = (l.match(/['"]([^'"]+)['"]/) || [])[1] || ''; imports.push(cur); cur = null; } i++; continue; }
+    if (l.trim() === '' ) { i++; continue; }
+    if (l.startsWith('//') && imports.length < 40) { // import 사이 주석은 다음 import 에 붙인다
+      let k = i; const pre = []; while (k < lines.length && lines[k].startsWith('//')) { pre.push(lines[k]); k++; }
+      if (k < lines.length && /^import\b/.test(lines[k])) { cur = { pre, text: [], mod: '' }; i = k; continue; }
+    }
+    break;
+  }
+  const body = lines.slice(i);
+  const grp = m => m.startsWith('./') ? 4 : m.startsWith('../') ? 3 : /^@(foundation|shared|admin|master|demand|supply|factory|shipping|report|authority|sdm)(\/|$)/.test(m) ? 2 : 1;
+  imports.sort((a, b) => grp(a.mod) - grp(b.mod) || a.mod.toLowerCase().localeCompare(b.mod.toLowerCase()) || (a.text[0].startsWith('import type') ? -1 : 1));
+  const out = [...head]; let last = 0;
+  for (const im of imports) { const g = grp(im.mod); if (last && g !== last) out.push(''); out.push(...im.pre, ...im.text); last = g; }
+  if (imports.length) out.push('');
+  return (out.join('\n') + '\n' + body.join('\n')).replace(/\n{3,}/g, '\n\n');
+}
+module.exports.render = render;

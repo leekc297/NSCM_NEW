@@ -1,14 +1,10 @@
 import {
-  BizTypeField,
-  DivisionField,
-  EndCustomerField,
   ItemField,
   OwnerField,
   PeriodField,
-  PlantSiteField,
   ProjectField,
-  SalesSiteField,
-  TeamField,
+  buildComboOptions,
+  toSelectedCodes,
 } from 'features/master/src/components';
 import { useEffect } from 'react';
 
@@ -20,12 +16,21 @@ import { Grid } from '@shared/mui';
 
 import { BUCKET_TYPE, QTY_DIVISOR_OPTIONS } from '../cust-fcst-waterfall.constants';
 import { useCustFcstWaterfallStore } from '../useCustFcstWaterfallStore';
+import {
+  SEARCH_COMBO,
+  isProjectEnabled as resolveProjectEnabled,
+  resolveSalesSiteDeptIds,
+  resolveSalesSiteEndCustomers,
+} from '../utils/cust-fcst-waterfall.searchCombos';
 
 // DMF0053 조회조건 — #112 카탈로그 'Customer FCST Waterfall' 17행 전 행 대조 (Cascade_Filter_전수.md §1).
 //   conditions(상시 2단): Div.*/Team/End Customer/Sales Site + Biz.Type/Input Date*/Period*/Bucket
 //   extraConditions(펼침): PJT/Model·Nickname/Plant Site/Item Type + Owner/QTY/Sum
-//   Version(Date*) 칸 = AS-IS btnVersion 숨김 + Figma·카탈로그 부재 → 미구현 (E21/E22/D-01).
+//   Version(Date*) 칸 = AS-IS btnVersion 숨김 + 화면 설계·카탈로그 부재 → 미구현 (E21/E22/D-01).
 //   division cascade = AS-IS cboDivision_SelectedIndexChanged L928~1028 (하위 클리어 + 텍스트 클리어).
+// 2026-09-01 콤보 통일 — Div / Team / End Customer / Sales Site / Biz.Type / Plant Site 여섯 칸을
+//   필터 콤보로 옮겼다(원천·축은 utils/cust-fcst-waterfall.searchCombos). PJT / Model·Nickname /
+//   Owner / Period 는 카탈로그 필드(@master/searchFields) 그대로다.
 
 interface CustFcstWaterfallFormProps {
   onSubmit: () => void;
@@ -47,20 +52,117 @@ export const CustFcstWaterfallForm = ({
   const isOpenSearchArea = useCustFcstWaterfallStore(state => state.isOpenSearchArea);
 
   // AS-IS B-04 (cboDivision L951~983): 81 계열·82 = PJT·Plant Site 활성 / 그 외(40) = 비활성
-  const isProjectEnabled =
-    searchParams.divisionId.startsWith('81') || searchParams.divisionId === '82';
+  const isProjectEnabled = resolveProjectEnabled(searchParams.divisionId);
+
+  /**
+   * 조회조건 콤보 6종은 전부 필터다 - 파라미터 없이 전량을 한 번 받고 좁히는 일은 화면이 한다.
+   * 원천과 축은 utils/cust-fcst-waterfall.searchCombos 참조.
+   *
+   * 종전에는 카탈로그 필드(DivisionField/TeamField/...)의 기본 콤보와 서버 바인드 경로를 썼다.
+   * 그 경로는 Biz.Type 처럼 DIVISION_ID 컬럼이 없는 전역 lookup 이 섞여 있어 division 을 넘겨도
+   * 목록이 좁혀지지 않았고, Sales Site / Plant Site 는 선택이 바뀔 때마다 SQL 이 다시 나갔다.
+   */
+  const [divisions, teams, endCustomers, bizType, salesSites, plantSites] = useTabComboQueries({
+    filters: [
+      SEARCH_COMBO.division,
+      SEARCH_COMBO.team,
+      SEARCH_COMBO.endCustomer,
+      SEARCH_COMBO.bizType,
+      SEARCH_COMBO.salesSite,
+      SEARCH_COMBO.plantSite,
+    ],
+  });
 
   const [reportBucketType, qtyType, itemType] = useTabComboQueries({
     filters: ['ReportBucketType', 'QtyType', 'ItemType'],
   });
 
+  // 전체선택('ALL')과 전체해제는 필터상 같다 - 둘 다 그 축이 미적용된다.
+  const deptIds = toSelectedCodes(searchParams.deptIds);
+  const endCustomerCodes = toSelectedCodes(searchParams.endCustomers);
+
+  // FilterMyDivision(#0)은 DIVISION_ID 컬럼이 없다 - 축을 걸지 않는다.
+  const divisionOptions = buildComboOptions(divisions);
+  const teamOptions = buildComboOptions(teams, { division: searchParams.divisionId });
+  const bizTypeOptions = buildComboOptions(bizType, { division: searchParams.divisionId });
+
+  /**
+   * End Customer 목록 = Division + Team. DEPT_ID 는 엄격 매칭이다 - 이 콤보는 DEPT_ID 가 공란인
+   * 행이 대다수라(lookup-only UNION 분기) 관대하게 두면 Team 을 골라도 목록이 그대로다.
+   * 40 은 CODE 자리에 PROJECT_CODE 가 들어온다(#2 주석) - 라벨만 End Customer 다.
+   */
+  const endCustomerOptions = buildComboOptions(endCustomers, {
+    division: searchParams.divisionId,
+    narrow: { column: 'DEPT_ID', codes: deptIds },
+  });
+
+  /**
+   * Sales Site = Division + Team + End Customer.
+   *
+   * 팀은 두 갈래로 전달된다 - 40 은 DEPT_ID 축을 직접 걸고, 비40 은 그 분기가 DEPT_ID 를 빈
+   * 문자열로 고정해 내려주므로 축을 걸 수 없다(걸면 전 행 탈락). 그래서 비40 은 End Customer
+   * 축을 통해 반영한다. 규칙과 근거는 utils/cust-fcst-waterfall.searchCombos 참조.
+   */
+  const salesSiteDeptIds = resolveSalesSiteDeptIds(searchParams.divisionId, deptIds);
+  const salesSiteEndCustomers = resolveSalesSiteEndCustomers(endCustomerCodes, endCustomerOptions);
+  const salesSiteOptions = buildComboOptions(salesSites, {
+    division: searchParams.divisionId,
+    narrow: [
+      { column: 'DEPT_ID', codes: salesSiteDeptIds },
+      { column: 'END_CUSTOMER', codes: salesSiteEndCustomers },
+    ],
+  });
+
+  // Plant Site = Division 단독. FilterFromSiteByDivision(#5)에는 END_CUSTOMER 컬럼이 아예 없다.
+  const plantSiteOptions = buildComboOptions(plantSites, { division: searchParams.divisionId });
+
+  /**
+   * 다중선택 조회조건 한 벌.
+   *
+   * 조회조건 드롭다운은 전부 표시명 순(숫자-영문-한글)으로 둔다 - 눈으로 찾는 목록이라
+   * 콤보 SQL 의 ORDER BY 보다 이쪽이 낫다는 사용자 확정(2026-08-28). Division 만 단일선택이다.
+   */
+  const multiField = (
+    labelCode: string,
+    labelEn: string,
+    value: string[],
+    options: { label: string; value: string }[],
+    onPick: (codes: string[]) => void,
+    extra?: { disabled?: boolean }
+  ) => (
+    <Grid size={3}>
+      <FormItem
+        className={commonStyles.formItem}
+        label={t(labelCode, labelEn)}
+        labelAlign='right'
+        render={() => (
+          <CustomDropdown
+            multiple
+            allOption
+            useClearIcon
+            limitTags={1}
+            sortBy='label'
+            disabled={extra?.disabled}
+            value={value.join(',')}
+            options={options}
+            onChange={(_, picked) =>
+              onPick(
+                String(picked ?? '')
+                  .split(',')
+                  .filter(Boolean)
+              )
+            }
+          />
+        )}
+      />
+    </Grid>
+  );
+
   const comboOr = (
     rows: Array<{ CODE: string; NAME: string }> | undefined,
     fallback: Array<{ value: string; label: string }>
   ) =>
-    rows && rows.length > 0
-      ? rows.map(item => ({ label: item.NAME, value: item.CODE }))
-      : fallback;
+    rows && rows.length > 0 ? rows.map(item => ({ label: item.NAME, value: item.CODE })) : fallback;
 
   const bucketOptions = comboOr(reportBucketType, []);
   const qtyOptions = comboOr(qtyType, QTY_DIVISOR_OPTIONS);
@@ -81,66 +183,60 @@ export const CustFcstWaterfallForm = ({
       conditions={
         <>
           {/* Row 1 — Div.* / Team / End Customer / Sales Site */}
-          <DivisionField
-            gridSize={3}
-            value={searchParams.divisionId}
-            onChange={option => {
-              if (option === searchParams.divisionId) return;
-              // AS-IS E02 (L1020~1025): 하위 cascade 클리어 + 텍스트 3칸(PJT/Model/Owner) 클리어
-              setSearchParams({
-                divisionId: option,
-                deptIds: [],
-                endCustomers: [],
-                salesSiteIds: [],
-                bizTypes: [],
-                plantSiteIds: [],
-                projectCodes: [],
-                itemIds: [],
-                owners: [],
-              });
-              // UM-01 — AS-IS L935 InitSpread(): 남은 조회 결과는 새 division 과 어긋나므로 비운다
-              onDivisionChange?.();
-            }}
-          />
-          <TeamField
-            gridSize={3}
-            value={searchParams.deptIds}
-            onChange={v => setSearchParams({ deptIds: v, endCustomers: [], salesSiteIds: [] })}
-            division={searchParams.divisionId}
-          />
+          <Grid size={3}>
+            <FormItem
+              className={commonStyles.formItem}
+              label={t('LBL00001', 'Div')}
+              labelAlign='right'
+              required
+              render={() => (
+                <CustomDropdown
+                  value={searchParams.divisionId}
+                  options={divisionOptions}
+                  onChange={(_, option) => {
+                    const picked = String(option ?? '');
+                    if (picked === searchParams.divisionId) return;
+                    // AS-IS E02 (L1020~1025): 하위 cascade 클리어 + 텍스트 3칸(PJT/Model/Owner) 클리어
+                    setSearchParams({
+                      divisionId: picked,
+                      deptIds: [],
+                      endCustomers: [],
+                      salesSiteIds: [],
+                      bizTypes: [],
+                      plantSiteIds: [],
+                      projectCodes: [],
+                      itemIds: [],
+                      owners: [],
+                    });
+                    // UM-01 — AS-IS L935 InitSpread(): 남은 조회 결과는 새 division 과 어긋나므로 비운다
+                    onDivisionChange?.();
+                  }}
+                />
+              )}
+            />
+          </Grid>
+          {multiField('LBL00502', 'Team', searchParams.deptIds, teamOptions, v =>
+            setSearchParams({ deptIds: v, endCustomers: [], salesSiteIds: [] })
+          )}
           {/* UM-02 — Team → End Customer cascade (AS-IS clbTeam_SelectedIndexChanged L1030~1065:
-              EndCustomerByDivision(division, team) 재적재). 공용 필드 cascade(DEPT_ID) 로 팀 선택 시 좁힌다.
-              [E20260831-UM02FIX] 기본 콤보는 DEPT_ID 속성 부재 → strict cascade 가 팀 선택 시 전 행 탈락
-              (DMF0035 와 동일 family — 사용자 신고 2026-08-31). 정본 'EndCustomerByDivision' + 40 한정 cascade. */}
-          <EndCustomerField
-            gridSize={3}
-            value={searchParams.endCustomers}
-            onChange={v => setSearchParams({ endCustomers: v, salesSiteIds: [] })}
-            division={searchParams.divisionId}
-            comboId='EndCustomerByDivision'
-            cascade={
-              searchParams.divisionId === '40'
-                ? { DEPT_ID: { values: searchParams.deptIds, strict: true } }
-                : undefined
-            }
-          />
-          {/* AS-IS L1042/L1054 — Sales Site 재적재의 team 파라미터: 81 계열·82 는 '' / 40 은 team */}
-          <SalesSiteField
-            gridSize={3}
-            value={searchParams.salesSiteIds}
-            onChange={v => setSearchParams({ salesSiteIds: v })}
-            division={searchParams.divisionId}
-            comboId='UserSiteByEndCustomer'
-            endCustomer={searchParams.endCustomers.join(',')}
-            deptId={isProjectEnabled ? '' : searchParams.deptIds.join(',')}
-          />
+              EndCustomerByDivision(division, team) 재적재). DEPT_ID 축은 사업부를 가리지 않는다 -
+              종전 40 한정 분기는 서버 바인드 콤보의 DEPT_ID 공란 행 때문에 두었던 것이고,
+              FilterEndCustomerByDivision(#2)은 두 갈래 모두 DEPT_ID 를 실어 내려준다. */}
+          {multiField(
+            'LBL00080',
+            'End Customer',
+            searchParams.endCustomers,
+            endCustomerOptions,
+            v => setSearchParams({ endCustomers: v, salesSiteIds: [] })
+          )}
+          {/* AS-IS L1042/L1054 — Sales Site 의 team 축: 81 계열·82 는 빈 값 고정 / 40 만 team */}
+          {multiField('LBL00506', 'Sales Site', searchParams.salesSiteIds, salesSiteOptions, v =>
+            setSearchParams({ salesSiteIds: v })
+          )}
           {/* Row 2 — Biz.Type / Input Date* / Period* / Bucket */}
-          <BizTypeField
-            gridSize={3}
-            value={searchParams.bizTypes}
-            onChange={v => setSearchParams({ bizTypes: v })}
-            division={searchParams.divisionId}
-          />
+          {multiField('LBL00085', 'Biz.Type', searchParams.bizTypes, bizTypeOptions, v =>
+            setSearchParams({ bizTypes: v })
+          )}
           <PeriodField
             gridSize={3}
             label={t('LBL00302', 'Input Date')}
@@ -202,14 +298,14 @@ export const CustFcstWaterfallForm = ({
             scmSiteIds={searchParams.salesSiteIds}
             projectCodes={searchParams.projectCodes}
           />
-          <PlantSiteField
-            gridSize={3}
-            value={searchParams.plantSiteIds}
-            onChange={v => setSearchParams({ plantSiteIds: v })}
-            division={searchParams.divisionId}
-            endCustomer={searchParams.endCustomers.join(',')}
-            disabled={!isProjectEnabled} // AS-IS B-04 — 40 은 Plant Site 비활성
-          />
+          {multiField(
+            'LBL00005',
+            'Plant Site',
+            searchParams.plantSiteIds,
+            plantSiteOptions,
+            v => setSearchParams({ plantSiteIds: v }),
+            { disabled: !isProjectEnabled } // AS-IS B-04 — 40 은 Plant Site 비활성
+          )}
           <Grid size={3}>
             <FormItem
               className={commonStyles.formItem}

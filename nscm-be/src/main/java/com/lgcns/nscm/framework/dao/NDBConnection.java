@@ -196,7 +196,10 @@ public class NDBConnection implements InitializingBean, DisposableBean, NDaoInte
 
 				// 3. [성능 최적화] 페치 사이즈 (Fetch Size)
 				// 한 번의 네트워크 통신으로 가져올 로우(Row) 수를 늘려 조회 속도를 높입니다.
-				prop.setProperty("defaultRowPrefetch", "100");
+				// [E20261015-ROWPREFETCH] 100 -> 1000. SP OUT 커서(REF CURSOR)는 mybatis-config 의 defaultFetchSize(1000)가
+				//   적용되지 않고 이 연결 기본값을 따른다. SCP0030 BOD ITEM(289,551행 x 37컬럼) 실측:
+				//   100 = 38.5s / 500 = 13.5s / 1000 = 10.5s / 2000 = 8.9s / 5000 = 8.2s (1000 이후 체감 감소, 풀 전체 메모리 고려해 1000).
+				prop.setProperty("defaultRowPrefetch", "1000");
 				hikariConfig.setDataSourceProperties(prop);
 
 				HikariDataSource ds = new HikariDataSource(hikariConfig);

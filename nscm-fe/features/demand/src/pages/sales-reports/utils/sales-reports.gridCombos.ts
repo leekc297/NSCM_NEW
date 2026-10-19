@@ -44,15 +44,104 @@ export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: st
 //   TO-BE 등가 = 원천 콤보를 화면 단위로 받아 `beginningEdit` 에서 행 컨텍스트로 골라 스왑(hook #59 §5-G).
 // ============================================================================
 
+/**
+ * DEPARTMENT_ID 코드의 '기타' 센티널 — 내부 전용.
+ *
+ * AS-IS L1176~1178 은 `GetValue`(=표시명이 아니라 **코드**)로 '기타' 를 본다. DMF0049 가
+ *   `GetText`(표시명)로 보는 것과 반대이므로 그대로 따라간다 — 실제로 갈린다.
+ *   AS-IS DB 실측(2026-08-31) 룩업 `MDF_DEPARTMENT` 에는 SEGMENT1='기타' 행이 있는 한편
+ *   SEGMENT2(표시명)만 '기타' 인 행도 셋(58461689/58519609/58607727) 있어, 표시명으로 보면
+ *   그 셋까지 '기타' 분기로 잘못 넘어간다.
+ */
+const ETC_DEPARTMENT = '기타';
+
 /** 행별 콤보 원천 — 그리드가 화면 진입 시 한 번에 받는다 */
 export const ROW_COMBO_IDS = {
-  // DEPT_ID(Team) 콤보 3종(DMF0044_DEPARTMENT_TEAM2 / _TEAM / ETC_SALE_RESULT_TYPE_40)은 제거 —
-  //   사용자 지시 2026-08-28 (REQ:CHAT-20260828-05): 메타에 콤보 미설정 컬럼이라 코드 그대로 표시·입력.
+  /**
+   * DEPT_ID(Team) 기본 후보 — DEPARTMENT_ID 미입력 상태 (AS-IS InsertRow L989~991).
+   *   콤보 SQL 이 LOOKUP_TYPE 을 division 으로 분기한다:
+   *     'DMF0044_DEPARTMENT_TEAM2' + (division='40' ? '' : '_' + division)
+   *   이는 AS-IS 조회 SP `DMF0044_GET_SALES_REPORTS_DATA` L487/L605 의 LK2 조인 규칙과 동일하다.
+   */
+  DEPT_DEFAULT: 'DMF0044_DEPARTMENT_TEAM2',
+  /**
+   * DEPT_ID(Team) — DEPARTMENT_ID 가 '기타' 가 아닐 때 (AS-IS L1178~1181).
+   *   AS-IS 원천 SQL(`UP_FX_GetCommonDataList` @Code='DMF0044_DEPARTMENT_TEAM'):
+   *     SELECT DEPT_ID AS CODE, DEPT_NAME_KO AS NAME FROM SCM_MST_SSO_DEPT_INFO
+   *      WHERE UPPER_DEPT_ID = @Param1 AND VALID_YN = 'Y'
+   *   즉 그 부서의 하위 팀이다. TO-BE 등록본은 파라미터 없이 부모키 `DEPARTMENT_ID` 를 함께
+   *   내려주는 superset 이라, 행 컨텍스트 필터는 FE 가 한다(`resolveDeptIdRows`).
+   */
+  DEPT_BY_DEPARTMENT: 'DMF0044_DEPARTMENT_TEAM',
+  /**
+   * DEPT_ID(Team) — DEPARTMENT_ID 가 '기타' 일 때 (AS-IS L1193~1196). 파라미터 없음.
+   *   AS-IS 실측 유효행은 '기타'/'기타' 하나뿐이다(나머지 ESR01~ESR08 은 VALID_YN='N').
+   */
+  DEPT_ETC: 'DMF0044_ETC_SALE_RESULT_TYPE_40',
   /** DEPT_ID 변경 시 CUST_REPORT (AS-IS Changed L1244) */
   CUST_REPORT: 'DMF0005_REPORT_GROUP2',
   /** DEPT_ID 변경 시 PRODUCT_GROUP (AS-IS Changed L1225 `GetLookupData("REPORT_GROUP3")`) */
   PRODUCT_GROUP: 'DMF0005_REPORT_GROUP3',
 } as const;
+
+/** DEPT_ID 후보의 세 원천 — AS-IS 3분기와 1:1 */
+export interface DeptIdComboSource {
+  /** `DMF0044_DEPARTMENT_TEAM2` — division 단위 */
+  deptDefault: Record<string, unknown>[];
+  /** `DMF0044_DEPARTMENT_TEAM` — 부모키 `DEPARTMENT_ID` 동반 superset */
+  deptByDepartment: Record<string, unknown>[];
+  /** `DMF0044_ETC_SALE_RESULT_TYPE_40` — 파라미터 없음 */
+  deptEtc: Record<string, unknown>[];
+}
+
+/**
+ * DEPT_ID 후보 행 해석 — AS-IS 3분기 1:1.
+ *
+ * | 행의 DEPARTMENT_ID(코드) | 후보 | AS-IS |
+ * |---|---|---|
+ * | 공란(아직 미선택)        | `DMF0044_DEPARTMENT_TEAM2`         | InsertRow L989~991 |
+ * | '기타'                   | `DMF0044_ETC_SALE_RESULT_TYPE_40`  | Changed L1193~1196 |
+ * | 그 외                    | `DMF0044_DEPARTMENT_TEAM`(그 부서) | Changed L1178~1181 |
+ *
+ * 주의: division 가드가 없다. DMF0049 는 `if (gsDivision_id == "40")` 로 비40 을 통째로
+ *   비켜가지만 DMF0044 에는 그 가드가 없다 — 형제 화면이라도 원문 그대로 따른다.
+ */
+export const resolveDeptIdRows = (
+  row: SalesReportRow | undefined,
+  src: DeptIdComboSource
+): Record<string, unknown>[] => {
+  const departmentId = toCellStr(
+    (row as Record<string, unknown> | undefined)?.DEPARTMENT_ID
+  ).trim();
+  if (!departmentId) return src.deptDefault;
+  if (departmentId === ETC_DEPARTMENT) return src.deptEtc;
+  return src.deptByDepartment.filter(cr => toCellStr(cr.DEPARTMENT_ID).trim() === departmentId);
+};
+
+/**
+ * DEPT_ID 컬럼 DataMap — 표시는 컬럼 전체(superset)로 고정하고, 드롭다운 후보만 행 컨텍스트로 좁힌다.
+ *
+ * 금지: `beginningEdit` 에서 `column.dataMap` 을 행별 콤보로 갈아끼우지 말 것.
+ *   dataMap 은 셀이 아니라 **컬럼** 속성이라 한 셀이 편집에 들어가는 순간 그 컬럼 전 행이 좁혀진
+ *   맵을 타고, 후보에 없는 코드가 전부 원 코드로 드러난다
+ *   (규약 전문 = `.atlas/wiki/wijmo-column-datamap-not-per-cell.md`).
+ * 대신 wijmo 가 후보 목록 전용으로 제공하는 `DataMap.getDisplayValues(dataItem)` 를 쓴다 —
+ *   공용 컬럼 매핑(`packages/foundation/src/utils/columnMapping.ts` getRowParamDataMap)과
+ *   자매 화면 DMF0049(`etc-sales-reports.gridCombos.ts` buildDeptIdDataMap)의 처방과 같다.
+ *
+ * 표시명 우선순위는 먼저 넣은 `deptDefault` 다 — DataMap 내부 색인이 같은 CODE 의 첫 항목만
+ *   담으므로, 세 원천에 같은 코드가 겹쳐도 편집 전후로 글자가 갈리지 않는다.
+ */
+export const buildDeptIdDataMap = (src: DeptIdComboSource): DataMap | null => {
+  const superset = [...src.deptDefault, ...src.deptByDepartment, ...src.deptEtc];
+  if (superset.length === 0) return null;
+  const dataMap = new DataMap(superset, 'CODE', 'NAME');
+  dataMap.getDisplayValues = (rowItem?: unknown): string[] =>
+    resolveDeptIdRows(rowItem as SalesReportRow | undefined, src).map(cr =>
+      dataMap.getDisplayValue(toCellStr(cr.CODE))
+    );
+  return dataMap;
+};
 
 /** DEPARTMENT_ID 변경 시 clear 대상 (AS-IS L1187~1191 / L1211~1215 — 양 분기 동일 5컬럼) */
 export const DEPARTMENT_CHANGE_CLEAR = [
@@ -63,7 +152,17 @@ export const DEPARTMENT_CHANGE_CLEAR = [
   'PRODUCT_GROUP',
 ] as const;
 
-/** DEPT_ID 의 'MDF' 센티널 (AS-IS L1396 `sTEAM_NAME != "MDF"` 분기) — 내부 전용 */
+/**
+ * DEPT_ID 의 'MDF' 센티널 (AS-IS L1396 `sTEAM_NAME != "MDF"` 분기) — 내부 전용.
+ *
+ * 주의: AS-IS DB 실측(2026-08-31) 결과 세 원천 어디에도 'MDF' 후보가 없다.
+ *   · `DMF0044_DEPARTMENT_TEAM2` 의 SEGMENT1='MDF' 행은 VALID_YN='N' 이고 콤보 SQL 이 'Y' 로 거른다.
+ *   · `DMF0044_DEPARTMENT_TEAM` 의 `SELECT 'MDF' AS CODE` UNION 은 AS-IS 원천 SQL 에서 주석 처리다
+ *     (`UP_FX_GetCommonDataList` 변경이력 2019/08/19 "DMF0044_DEPARTMENT_TEAM > MDF 제거").
+ *   · `DMF0044_ETC_SALE_RESULT_TYPE_40` 의 유효행은 '기타' 하나뿐이다.
+ *   따라서 아래 분기는 사실상 항상 비MDF 쪽으로 간다. AS-IS 도 같은 원천/같은 코드 비교라
+ *   동작 파리티는 유지된다 — 규칙을 없애지 않고 그대로 둔다.
+ */
 const MDF_TEAM = 'MDF';
 
 /** 비MDF 팀의 MODEL 강제값 (AS-IS L1405~1406). 이 값이면 Item 팝업도 열리지 않는다(M-8 L93) */

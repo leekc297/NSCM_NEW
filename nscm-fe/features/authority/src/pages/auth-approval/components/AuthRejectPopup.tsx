@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
 import { CustomDialog } from '@shared/components';
-import { FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
 import { useMessageStore } from '@shared/stores';
 
 import { useAuthApprovalStore } from '../useAuthApprovalStore';
@@ -42,6 +43,7 @@ export const AuthRejectPopup = ({ onReject }: Props) => {
       size={600}
       type='modal'
       position='basic'
+      draggable={false}
       handleClose={() => setOpen(false)}
       customHeaderTitle={headerTitle}
       customContentArea={
@@ -59,17 +61,25 @@ export const AuthRejectPopup = ({ onReject }: Props) => {
               />
             )}
           />
-          <div className={styles.actionBar}>
-            <button
-              type='button'
-              className={`${styles.actionButton} ${styles.primary}`}
+          {/* 룰 v2 _tobe/10_popup_modal.md §6.4 — raw button 대신 표준 Button 컴포넌트만 사용.
+              기존에는 무관한 팝업(DMF0043)의 SCSS를 복사한 raw button + 하드코딩 색상이었음. */}
+          <div className={styles.buttonWrapper}>
+            <Button
+              appearance='contained'
+              priority='primary'
+              size='medium'
+              iconComponent={<ControlConfirmIcon size='small' />}
+              iconPosition='leading'
+              buttonLabel={t('LBL00111', 'Save')}
               onClick={handleSave}
-            >
-              {t('LBL00626', 'Save')}
-            </button>
-            <button type='button' className={styles.actionButton} onClick={() => setOpen(false)}>
-              {t('LBL00627', 'Close')}
-            </button>
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00627', 'Close')}
+              onClick={() => setOpen(false)}
+            />
           </div>
         </div>
       }

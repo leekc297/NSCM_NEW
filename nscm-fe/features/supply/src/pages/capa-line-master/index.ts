@@ -1,0 +1,1 @@
+export { CapaLineMaster } from './CapaLineMaster';

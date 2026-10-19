@@ -1,0 +1,4 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/bod-item","SCP0030","features/supply/src/pages/bod-item/BodItem.tsx","91","endpoint","Search(=setFilters 가 새 filters 객체를 만듦)마다 재조회 — 기존 useTabProcQuery(filters 참조 변경 시 조회)와 같은 규약."
+"supply/bod-item","SCP0030","features/supply/src/pages/bod-item/BodItem.tsx","174","code","메인(BOD Item): action != 'I' 면 즉시 return하고, InsertButton(cs:247~)은 본문 전건 주석(""insert 없음"","
+"supply/bod-item","SCP0030","features/supply/src/pages/bod-item/BodItem.tsx","313","code","DELETE 도 Excluded 전용 — BOD Item 은 Insert 없음 → 신규행 없음 → AS-IS DeleteButton(action!='I' return)상 삭제 불가(cs:239-245)."

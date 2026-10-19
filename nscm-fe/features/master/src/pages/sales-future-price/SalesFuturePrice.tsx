@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { apiClient } from '@foundation/apis';
 import { IcExchangeRate, IcGridColumnSetup } from '@foundation/assets';
 import type { HotkeyConfig, PageProps, RawFlexGridColumnConfig } from '@foundation/models';
-import { queryClient } from '@foundation/query-client';
+import { queryClient, useQuery } from '@foundation/query-client';
 import type { EditTracker } from '@foundation/utils';
 import { GridAction } from '@foundation/utils';
 import {
@@ -16,6 +16,7 @@ import {
   SubTitle,
 } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { ProgressIndicator } from '@shared/lges';
 import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ItemByDivisionModal, ProjectByDivisionModal } from '../../components';
@@ -39,6 +40,7 @@ import {
   MENU_ID,
   MSG,
   SHEETS,
+  SITE_EC_COMBO_ID,
   TITLESET_COLUMN_TYPE,
   TITLESET_SHEET,
 } from './sales-future-price.constants';
@@ -52,7 +54,10 @@ import {
 } from './salesPriceExchange';
 import { normalizeVersionIds, useSalesFuturePriceStore } from './useSalesFuturePriceStore';
 import { isEditableDivision } from './utils/editableDivision';
+import { thisWeekMonday, yyyymmddOf } from './utils/futurePriceDate';
 import { groupKeyOf, toStr } from './utils/futurePriceGroup';
+import { type PeriodAxisRow, periodBindingsOf, weeklyDatesByMonthOf } from './utils/periodAxis';
+import { buildSiteEndCustomerMap } from './utils/salesPriceAutoMap';
 
 // AS-IS DMF0020_SalesFuturePrice.cs (3,969줄 Forms.UIL/Master 정본) — 메인 화면
 //   - 24 Event (Form_Load / clbDivisions_Change / btnExchangeRate_Click / btnSavePricePeriod_Click / ...)
@@ -137,6 +142,17 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const validate = useSalesFuturePriceValidation();
   const { t } = useTranslation();
   const sessionUserId = useSessionStore(s => s.session.userId);
+  const session = useSessionStore(s => s.session);
+
+  // Division 기본 선택 (DMF0003/DMF0040/DMF0053 정본 통일). 비어 있을 때만 채움 - 기존 값은 유지.
+  const [myDivisions] = useTabComboQueries({ filters: ['MyDivision'] });
+  useEffect(() => {
+    if (sc.divisionId) return;
+    const codes = (myDivisions ?? []).map(r => String(r.CODE ?? '')).filter(Boolean);
+    if (codes.length === 0) return;
+    const sessionDiv = String(session.div ?? '');
+    setSearchCondition({ divisionId: codes.includes(sessionDiv) ? sessionDiv : codes[0] });
+  }, [myDivisions, sc.divisionId, session.div, setSearchCondition]);
 
   // ui-dynamic-property-management §3 / screen-meta-and-permissions #50 — Menu Button 권한 동적 fetch
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
@@ -157,6 +173,21 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   }, [editableDivRows]);
   // 현재 조회 division 이 편집 가능한지 — 셀 편집(그리드) + Insert/Delete/Save 버튼 표시의 division 게이트.
   const editable = isEditableDivision(sc.divisionId, editableSet);
+  // 조회한 버전이 Current 인지 — 셀 편집 진입 + Insert/Save 의 버전 게이트 (AS-IS isCurVersion, EditButton .cs L868).
+  //   기준은 조회조건 입력값(sc)이 아니라 실제로 조회한 filters[MAIN].versionType 이다. 과거 버전을 조회한 뒤
+  //   드롭다운만 Current 로 되돌리고 재조회하지 않은 화면은 그리드에 과거 데이터가 남아 있으므로 여전히 편집 불가.
+  //   조회 전(filters 없음)에는 입력값으로 판정한다 — 그 때는 그리드가 비어 있어 결과가 같다.
+  //   종전(2026-10-08 통합테스트 지적 전)에는 입력은 되고 Save 에서만 MSG00448 로 막혀 입력값이 버려졌다.
+  const appliedVersion = (filters[SHEETS.MAIN] as { versionType?: string } | undefined)?.versionType;
+  const isCurrentVersion = normalizeVersionIds(appliedVersion ?? sc.versionId) === 'Current';
+
+  // ⭐ Sales Site → End Customer 자동 매핑 원천 — 기존 콤보 'SiteEndCustomerMapDMF0082'
+  //   (SELECT SCM_SITE_ID CODE, NVL(END_CUSTOMER,'-') NAME FROM SCM_MST_SITE WHERE DIVISION_ID=TRIM(@divisionId)).
+  //   (DIV, SITE) → END_CUSTOMER 1:1 실측 확인(2026-09-08). 신규행 Sales Site 콤보 변경 시 Grid 가 이 맵으로 파생.
+  const [siteEcRows] = useTabComboQueries({
+    filters: [{ comboId: SITE_EC_COMBO_ID, divisionId: `'${sc.divisionId}'` }] as never,
+  });
+  const siteEndCustomerMap = useMemo(() => buildSiteEndCustomerMap(siteEcRows), [siteEcRows]);
 
   // 메인 그리드 SP (P_DMF0020_GET_FUTUREPRICE_INFO — 4 IN + 2 OUT)
   const { data, refetch, isLoading, isFetching } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
@@ -167,6 +198,33 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.MAIN],
   });
   const loading = isLoading || isFetching;
+
+  // ⭐ 조회 기간 시간축 (SP P_DMF0020_GET_SPREAD_TITLE_DATE — BTN_MPG main/SPREAD_TITLE_DATE, SEARCH 와 같은 그룹 권한).
+  //   그리드 동적 컬럼 뼈대용. 조회 SP 는 기간 전체 컬럼을 내려주지만 BE 가 NULL 컬럼을 응답에서 빼서
+  //   값 있는 주차만 컬럼이 서던 문제(2026-10-13 통테 "5주만 표시") — 사유와 키 규칙은 utils/periodAxis.ts.
+  //   기준은 입력값(sc)이 아니라 실제 조회한 filters[MAIN] 기간이다 — 그리드 데이터와 같은 기간이어야 한다.
+  //   createdBy 는 BE 자동 채움 대상이 아니라(sesUserId/mnuId 만) 직접 싣는다. 실패해도 alert 없이 빈 축으로
+  //   두어 종전(행 키만으로 컬럼) 동작으로 폴백한다 — 조회 자체를 막지 않는다.
+  const appliedPeriod = filters[SHEETS.MAIN] as
+    | { fromYyyymmdd?: string; toYyyymmdd?: string }
+    | undefined;
+  const axisFrom = appliedPeriod?.fromYyyymmdd ?? '';
+  const axisTo = appliedPeriod?.toYyyymmdd ?? '';
+  const { data: axisRows } = useQuery<PeriodAxisRow[]>({
+    queryKey: [MENU_ID, 'periodAxis', tabId, axisFrom, axisTo, sessionUserId ?? ''],
+    queryFn: async () => {
+      const res = await apiClient.post<{ O_RC1?: PeriodAxisRow[]; o_rc1?: PeriodAxisRow[] }>(
+        `/${MENU_ID}/${SHEETS.MAIN}/SPREAD_TITLE_DATE/call-proc`,
+        { startYyyymmdd: axisFrom, endYyyymmdd: axisTo, createdBy: sessionUserId ?? '' }
+      );
+      if (res.status >= 400 || Number(res.data?.code)) return [];
+      // 커서 키는 PROC_M COL_NM 그대로다 — 이 SP 는 'O_RC1'(대문자), 조회 SP 는 'o_rc1'. 등록이 바뀌어도 받도록 둘 다 본다.
+      const r = res.data?.result;
+      return r?.O_RC1 ?? r?.o_rc1 ?? [];
+    },
+    enabled: !!axisFrom && !!axisTo,
+  });
+  const periodBindings = useMemo(() => periodBindingsOf(axisRows), [axisRows]);
 
   // ⭐ 환율 데이터 (SP PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO — ExchangeRateModal 동일 소스).
   //   LOC 편집 시 KRW/USD/RTF 형제 measure 를 환율 재계산(AS-IS GetExchangeRate)해 3쌍 전송하기 위함.
@@ -242,6 +300,9 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // #23 blnWork — 저장 in-flight 가드 (연속작업 방지, AS-IS L1549 MSG00137).
   const savingRef = useRef(false);
+  // 저장 진행중 오버레이(원형 스피너) — mkt-fcst/sales-plan 과 동일 패턴. savingRef 는 재진입 차단용
+  //   (비반응), 화면 표시는 반응 state 가 필요하므로 둘을 handleSave 에서 함께 토글한다.
+  const [isSaving, setIsSaving] = useState(false);
   // ⭐ 저장 직후 재조회 데이터에서 "방금 저장한 행" 위치로 스크롤/선택 (신규 행이 맨 위 → 정렬 위치로
   //   이동해 "안 보임"으로 인지되는 문제 해소). 값 = 저장한 첫 LOC 행의 그룹 키.
   const scrollTargetRef = useRef<string | null>(null);
@@ -306,7 +367,6 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const handleSearch = () => {
     const v = validate.validateFind(sc);
     if (!v.ok) return;
-    // void setToast({ message: t('LBL00665', 'Loading...'), type: 'default', duration: 2000 });
     setFilter();
     // ⭐ 2026-07-03 — refetch?.() 제거: refetch 는 "이 렌더" 관찰자(=이전 filters, division 변경 직후엔
     //   undefined)로 즉시 발사되어 실제 조회와 병렬로 전-파라미터 NULL SP 호출이 매번 1회 나감
@@ -329,7 +389,8 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!editable) return; // 편집제약 division 방어 (버튼도 미표시되나 이중 가드)
     // ⭐ isCurVersion 게이트 (MSG00448) — 과거버전 조회 상태에서는 Insert 불가.
     //   AS-IS EditButton(.cs L868~): txtVersion=='Current' 조회일 때만 편집/신규 허용.
-    if (sc.versionId !== 'Current') {
+    //   판정 원천은 실제 조회 버전(isCurrentVersion) — 그리드 셀 편집 차단과 같은 기준.
+    if (!isCurrentVersion) {
       void setAlert({
         type: 'alert',
         content: t(MSG.EDIT_NOT_CURRENT_VER, '_현재 버전이 아닙니다.'),
@@ -388,39 +449,26 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         MEASURE: m,
       })
     );
-    const addedRows: FuturePriceRow[] = [];
-    newRows.forEach(newRow => {
-      const addedRow = GridAction.addRow(
-        g as unknown as FlexGridType<WijmoRowItem>,
-        newRow as unknown as WijmoRowItem,
-        'above',
-        true
-      );
-      if (addedRow) addedRows.push(addedRow as unknown as FuturePriceRow);
-    });
+    // measures 순서 그대로 한 세트로 원자적 삽입 — 앵커를 세트 전체에 대해 한 번만 계산해
+    //   한 번에 splice 하므로(addRowSet 주석 참고) 예전처럼 호출 순서와 실제 삽입 순서가
+    //   어긋나(2026-08-23 실측: LOC/USD/KRW/RTF 가 조회 순서와 반대) source.indexOf 로
+    //   순서를 다시 맞추는 수작업 보정이 더는 필요 없다.
+    const addedRows = GridAction.addRowSet(
+      g as unknown as FlexGridType<WijmoRowItem>,
+      newRows as unknown as Partial<WijmoRowItem>[],
+      'above',
+      {
+        preserveMergeManager: true,
+        // measure 묶음(RTF/KRW/USD/LOC = 같은 9키) 중 어느 행을 눌러도 묶음 맨 위에 넣는다.
+        //   MEASURE 칸은 머지가 없어 머지 경계 보정이 걸리지 않는다 — 종전에는 KRW 행을 누르면
+        //   RTF 와 KRW 사이에 신규 세트가 끼어 RTF 가 묶음에서 떨어져 보였다(사용자 보고 2026-10-13).
+        //   묶음 판정 키는 저장·환율 재계산과 같은 groupKeyOf(KEY_COLS). SalesPlan/ForecastPrice 와 같은
+        //   GridAction.addRowSet groupKey 통로 — 미저장 신규 세트를 다시 눌렀을 때의 처리도 공용 규칙을 따른다.
+        groupKey: (row: WijmoRowItem) => groupKeyOf(row as Record<string, unknown>),
+      }
+    ) as unknown as FuturePriceRow[] | undefined;
 
-    // measure 배치 보정 — GridAction.addRow 의 삽입 위치(resolveInsertIndex)는 현재 선택 행과
-    //   머지 상태에 따라 정해진다. 선택이 삽입된 행을 따라 내려가면 호출 순서대로 쌓이고, 그렇지
-    //   않으면 매번 같은 자리에 꽂혀 역순으로 쌓인다 → 호출 순서만으로는 순서를 보장할 수 없다.
-    //   (사용자 보고 2026-08-23: 신규행이 LOC/USD/KRW/RTF 로 조회 순서(RTF/KRW/USD/LOC)와 반대.)
-    //   그래서 실제로 들어간 자리(index)만 모아 measures 순서대로 다시 배치한다.
-    const source = g.collectionView.sourceCollection;
-    const slots = addedRows
-      .map(r => source.indexOf(r))
-      .filter(i => i >= 0)
-      .sort((a, b) => a - b);
-    const rank = new Map(measures.map((m, i) => [m, i]));
-    const orderedRows = [...addedRows].sort(
-      (a, b) => (rank.get(String(a.MEASURE ?? '')) ?? 0) - (rank.get(String(b.MEASURE ?? '')) ?? 0)
-    );
-    if (slots.length === orderedRows.length) {
-      slots.forEach((slot, i) => {
-        source[slot] = orderedRows[i];
-      });
-      g.collectionView.refresh();
-      g.invalidate();
-    }
-    insertedRowsRef.current = [...orderedRows, ...insertedRowsRef.current];
+    insertedRowsRef.current = [...(addedRows ?? []), ...insertedRowsRef.current];
     setInsertedRowCount(insertedRowsRef.current.length);
   };
 
@@ -458,7 +506,8 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       return;
     }
     // ⭐ isCurVersion 게이트 (MSG00448) — 과거버전 조회 상태에서는 저장 불가 (AS-IS L868 편집 대전제).
-    if (sc.versionId !== 'Current') {
+    //   셀 편집이 이미 차단되므로 평소에는 도달하지 않는 2차 가드. 판정 원천은 실제 조회 버전(isCurrentVersion).
+    if (!isCurrentVersion) {
       void setAlert({
         type: 'alert',
         content: t(MSG.EDIT_NOT_CURRENT_VER, '_현재 버전이 아닙니다.'),
@@ -475,10 +524,14 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     const v = validate.validateSaveRows(targetRows, [...insertedRows, ...spRowsAll], sc);
     if (!v.ok) return;
 
-    // 저장 확인창(MSG00001) 없이 즉시 저장 (사용자 요구 2026-08-25).
-    //   위 검증(validateSaveRows)을 모두 통과한 시점이다. 팝업(PriceBatchInputModal) 정책과 동일.
-
-    // void setToast({ message: t('LBL00665', 'Loading...'), type: 'default', duration: 3000 });
+    // 저장 확인창(MSG00001 "저장하시겠습니까?") — 검증 통과 후 저장 직전 (사용자 요구 2026-10-09,
+    //   종전 "확인창 없이 즉시 저장"(2026-08-25) 번복). 취소 시 편집분 유지하고 중단. 다른 저장 화면
+    //   (production-request/plan-yield/shipment-* 등) 공통 패턴과 정합.
+    const confirmed = await setAlert({
+      type: 'confirm',
+      content: t(MSG.CONFIRM_SAVE, '_저장하시겠습니까?'),
+    });
+    if (!confirmed) return;
 
     // 17 IN params 의 ^-delim 누적 array (AS-IS SaveData nvc 동등)
     const acc: Record<string, string[]> = {
@@ -545,6 +598,18 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       if (isInsert) return allDyn;
       const changed = changedMap?.get(row as never);
       if (!changed) return [];
+      // ⭐ 기존 행 Currency 변경 (AS-IS [E20250113-000150], .cs L2826~2900) — 통화는 주차 가격 행의 키라
+      //   가격을 안 고쳤어도 이번 주 이후의 가격 칸을 전부 새 통화로 다시 보내야 DB 가 교체된다
+      //   (SAVE SP 는 받은 주차만 처리하고, 기존 행 삭제 조건에 통화가 없어 옛 통화 행이 지워진다).
+      //   AS-IS 는 그 칸들을 Red 로 칠해 수집시킨다 — 여기서는 LOC 행의 CURRENCY 변경 기록이 그 표식이다
+      //   (Grid cellEditEnded A2). 지난 주차/월과 가격이 없는 칸은 보내지 않는다(그리드 isPastDynCol 과 같은 기준).
+      if ('CURRENCY' in changed) {
+        const monday = yyyymmddOf(thisWeekMonday());
+        const rec = row as Record<string, unknown>;
+        const isPast = (k: string): boolean =>
+          k.startsWith('M_') ? k.slice(2, 8) < monday.slice(0, 6) : k.slice(2) < monday;
+        return allDyn.filter(k => k in changed || (!isPast(k) && rec[k] != null && rec[k] !== ''));
+      }
       return allDyn.filter(k => k in changed);
     };
 
@@ -568,9 +633,10 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           : toStr(kr.PROJECT_CODE)
       );
       acc.scmSiteId.push(toStr(kr.SCM_SITE_ID));
-      // ⭐ PLANT_SITE_ID NOT NULL — 신규 insert(특히 div 82/40)는 plant 미입력이라 빈값 → ORA-01400.
-      //   기존 데이터·AS-IS 동일 placeholder '-' 로 기본 처리(div 81 실제값은 비어있지 않아 무영향).
-      acc.plantSiteId.push(toStr(kr.PLANT_SITE_ID) || '-');
+      // PLANT_SITE_ID 는 값 그대로 전송 — AS-IS 는 div 81 만 그리드 값을 넣고 82/40 은 빈값("")을
+      //   보낸다(.cs:1584 p_plant_site_id="" 초기화, 1598 에서 81 일 때만 대입). 빈값을 '-' 로 치환하던
+      //   종전 처리는 AS-IS 와 다른 하드코딩이었다.
+      acc.plantSiteId.push(toStr(kr.PLANT_SITE_ID));
       acc.itemId.push(toStr(kr.ITEM_ID));
       acc.yyyymmdd.push(yyyymmdd);
       acc.currency.push(toStr(kr.CURRENCY));
@@ -584,6 +650,41 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       acc.lastUpdatedByList.push(userId);
       acc.rownumKey.push(String(rownum));
     };
+
+    // Monthly 백필 실패(spRowsAll 전체에 그 달의 실제 W_ 날짜가 하나도 없음 — 조회 결과가 0건인
+    //   상태에서 신규 행만 저장 시도하는 경우에만 발생) 추적. "월 1일" 합성 날짜로 조용히 fallback
+    //   하지 않고, 안전하게 저장을 막기 위함(2026-09-09 계획서 §해결방향).
+    const missingWeeklyMonths = new Set<string>();
+
+    // Monthly 저장 시 실제 W_ 주차 백필용 — spRowsAll 전체에서 yyyymm → W_yyyymmdd[] union map.
+    //   SP 동적 PIVOT 컬럼은 조회기간에만 의존, division/site 등 row 조건과 무관하다
+    //   (03_sp_get_scm_mst_future_price.sql:48-59 — BASIS_YYYYMMDD BETWEEN 절만 있고 DIVISION_ID 등
+    //   필터 없음) → 조회된 행이 하나라도 있으면 그 W_ 키 집합을 신규 Insert 행에도 그대로 쓸 수 있다.
+    //   신규 Insert 행은 W_ 프로퍼티 자체가 없어(Monthly 뷰는 M_ 컬럼만 렌더링) 자기 자신의 키로는
+    //   항상 실패한다 — spRowsAll 전체에서 빌려온다(신규 SP 호출 없이 이미 fetch된 데이터 재사용).
+    // 이번 주 월요일(YYYYMMDD) — Monthly 전개에서 지난 주를 거르는 기준. 그리드 isPastDynCol 과 같은 기준일이다.
+    const thisMondayYmd = yyyymmddOf(thisWeekMonday());
+    //   2026-10-13: 달력 시간축(axisRows)에서 먼저 채운다 — 값 없는 달도 컬럼이 서게 되면서 그 달의 주차를
+    //   데이터 행에서 빌릴 수 없는 경우가 생겼다. 데이터 행 W_ 키는 종전처럼 합친다(달력과 다른 날짜 보존).
+    const weeklyDatesByMonth = weeklyDatesByMonthOf(
+      (sc.bucketType as BUCKET_TYPE) === BUCKET_TYPE.MONTHLY ? axisRows : undefined
+    );
+    if ((sc.bucketType as BUCKET_TYPE) === BUCKET_TYPE.MONTHLY) {
+      for (const r of spRowsAll) {
+        for (const k of Object.keys(r)) {
+          if (!/^W_\d+$/.test(k)) continue;
+          const d = k.slice(2);
+          const ym = d.slice(0, 6);
+          const list = weeklyDatesByMonth.get(ym);
+          if (list) {
+            if (!list.includes(d)) list.push(d);
+          } else {
+            weeklyDatesByMonth.set(ym, [d]);
+          }
+        }
+      }
+      for (const list of weeklyDatesByMonth.values()) list.sort(); // Grid dynBindings(246-263행)와 동일하게 정렬
+    }
 
     // ⭐ LOC 주도 3쌍 전송 (AS-IS CellsUpdated: LOC 편집 시 형제 measure 를 환율 재계산해 함께 변경/전송).
     //   화면은 LOC measure 행만 편집 가능 → LOC 행을 그룹 대표로 삼아 LOC + KRW/USD/RTF 동시 emit.
@@ -601,29 +702,61 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         if (isInsert && (rawLoc === undefined || rawLoc === '' || rawLoc === null)) continue;
         const locPrice =
           rawLoc === undefined || rawLoc === '' || rawLoc === null ? '0' : toStr(rawLoc);
-        const yyyymmdd = dk.slice(2); // W_yyyymmdd / M_yyyymmdd(월 1일) → yyyymmdd
-        const yyyymm = yyyymmdd.slice(0, 6);
+        const monthAnchor = dk.slice(2); // W_yyyymmdd / M_yyyymmdd(월 1일) → yyyymmdd
+        const yyyymm = monthAnchor.slice(0, 6);
+        // ⭐ AS-IS Dsdm_Changed/SetExchangeValues 동등 백필 — Monthly 입력은 그 달의 실제 W_ 날짜
+        //   전체로 분산 저장, Weekly 는 기존과 동일하게 자기 자신 1개만 사용.
+        //   실제 주 날짜는 위에서 미리 union 해둔 weeklyDatesByMonth 에서 읽는다(이 행 자신의 W_
+        //   키가 아니라 spRowsAll 전체에서 빌려온 값) — 신규 Insert 행도 동일하게 구제된다.
+        //   이번 달 월 칸은 편집이 열리므로(그리드 isPastDynCol — 그 달 마지막 날 < 이번 주 월요일일 때만
+        //   과거), 월 값을 전개할 때 이번 주 월요일보다 앞선 주(이미 지난 주)는 제외한다 — 과거 주 판가를
+        //   덮어쓰지 않는다(2026-10-07 리포트). 그 달의 주가 전부 지난 경우는 월 칸 자체가 잠겨 여기 오지 않는다.
+        const monthWeeks = weeklyDatesByMonth.get(yyyymm) ?? [];
+        const targetDates =
+          (sc.bucketType as BUCKET_TYPE) === BUCKET_TYPE.MONTHLY
+            ? monthWeeks.filter(d => d >= thisMondayYmd)
+            : [monthAnchor];
+        if (targetDates.length === 0) {
+          missingWeeklyMonths.add(yyyymm);
+          continue;
+        }
 
-        // LOC entry — price==0 → 'D' (AS-IS [E20240206-000758]: LOC 메져만 0 시 상태 D).
-        const locFlag = locPrice === '0' ? 'D' : isInsert ? 'I' : 'M';
-        pushEntry(kr, 'LOC', yyyymmdd, locPrice, locFlag);
+        for (const yyyymmdd of targetDates) {
+          // LOC entry — price==0 → 'D' (AS-IS [E20240206-000758]: LOC 메져만 0 시 상태 D).
+          const locFlag = locPrice === '0' ? 'D' : isInsert ? 'I' : 'M';
+          pushEntry(kr, 'LOC', yyyymmdd, locPrice, locFlag);
 
-        // 형제 measure (KRW/USD) — LOC 값 환율 재계산 (AS-IS GetExchangeRate).
-        //   ⭐ RTF(RTF_SYS_RP) 제외 (AS-IS 실측 정합 2026-07-08): RTF 는 시스템 생성 measure(이동계획 판가)
-        //   — 저장 대상 아님. GET SP 적재도 COLUMN_NAME <> 'RTF_SYS_RP' 필터로 제외해 저장해도 쓰레기 행.
-        //   SAVE SP 3쌍 검증(HAVING COUNT(*) < 3)은 LOC/KRW/USD 3건으로 정확 충족.
-        //   판정 = 환율 통화코드 집합(하드코딩 금지, 미로드 시 기존 동작 보존).
-        for (const sib of sibs) {
-          const sm = toStr((sib as Record<string, unknown>).MEASURE);
-          if (!sm) continue;
-          if (!isExchangeTargetMeasure(saveCurrencyCodes, sm, baseCur)) continue; // RTF 등 비통화 제외
-          const sibRaw = (sib as Record<string, unknown>)[dk];
-          const sibCur = sibRaw === undefined || sibRaw === null ? null : toStr(sibRaw);
-          const sibPrice = getExchangeRate(erMap, div, baseCur, sm, yyyymm, locPrice, sibCur);
-          // ^-delim 빈 토큰 방지 (AS-IS sPRICE "" → "0"). 형제는 LOC 가 아니므로 D 변환 없음.
-          pushEntry(kr, sm, yyyymmdd, sibPrice === '' ? '0' : sibPrice, isInsert ? 'I' : 'M');
+          // 형제 measure (KRW/USD) — LOC 값 환율 재계산 (AS-IS GetExchangeRate).
+          //   ⭐ RTF(RTF_SYS_RP) 제외 (AS-IS 실측 정합 2026-07-08): RTF 는 시스템 생성 measure(이동계획 판가)
+          //   — 저장 대상 아님. GET SP 적재도 COLUMN_NAME <> 'RTF_SYS_RP' 필터로 제외해 저장해도 쓰레기 행.
+          //   SAVE SP 3쌍 검증(HAVING COUNT(*) < 3)은 LOC/KRW/USD 3건으로 정확 충족.
+          //   판정 = 환율 통화코드 집합(하드코딩 금지, 미로드 시 기존 동작 보존).
+          for (const sib of sibs) {
+            const sm = toStr((sib as Record<string, unknown>).MEASURE);
+            if (!sm) continue;
+            if (!isExchangeTargetMeasure(saveCurrencyCodes, sm, baseCur)) continue; // RTF 등 비통화 제외
+            const sibRaw = (sib as Record<string, unknown>)[dk];
+            const sibCur = sibRaw === undefined || sibRaw === null ? null : toStr(sibRaw);
+            const sibPrice = getExchangeRate(erMap, div, baseCur, sm, yyyymm, locPrice, sibCur);
+            // ^-delim 빈 토큰 방지 (AS-IS sPRICE "" → "0"). 형제는 LOC 가 아니므로 D 변환 없음.
+            pushEntry(kr, sm, yyyymmdd, sibPrice === '' ? '0' : sibPrice, isInsert ? 'I' : 'M');
+          }
         }
       }
+    }
+
+    // Monthly 백필 실패 — 잘못된 날짜(월 1일 합성값)로 저장하는 것보다 안전하게 막는다.
+    //   신규 Insert 행도 spRowsAll union(weeklyDatesByMonth)에서 백필되므로 더 이상 항상 막히지
+    //   않는다 — 조회 결과 자체가 0건(spRowsAll 빈 배열)일 때만 이 경로를 탄다(불가피한 한계로 수용 —
+    //   조회 없이 신규 행만 저장하는 시나리오는 대상 외, 2026-09-09).
+    if (missingWeeklyMonths.size > 0) {
+      void setAlert({
+        type: 'alert',
+        content:
+          t('MSG00618', '_저장 중 오류가 발생했습니다.') +
+          ` (조회된 데이터가 없어 ${[...missingWeeklyMonths].join(', ')} 월의 실제 Weekly 날짜를 확인할 수 없습니다. 먼저 조회 후 다시 저장해주세요.)`,
+      });
+      return;
     }
 
     if (acc.activeFlag.length === 0) {
@@ -635,6 +768,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     for (const [k, arr] of Object.entries(acc)) payload[k] = arr.join('^');
 
     savingRef.current = true;
+    setIsSaving(true);
     try {
       const res = await apiClient.post<Record<string, unknown>>(
         `/${MENU_ID}/main/SAVE/call-proc`,
@@ -674,6 +808,7 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       void setAlert({ type: 'alert', content: msg });
     } finally {
       savingRef.current = false;
+      setIsSaving(false);
     }
   };
 
@@ -797,10 +932,13 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         editTrackerRef={editTrackerRef}
         divisionId={sc.divisionId}
         editable={editable}
+        isCurrentVersion={isCurrentVersion}
         bucketType={sc.bucketType as BUCKET_TYPE}
         staticColumns={staticColumns[SHEETS.MAIN]}
         staticMeasures={staticMeasures[SHEETS.MAIN]}
         exchangeRateMap={exchangeRateMap}
+        siteEndCustomerMap={siteEndCustomerMap}
+        periodBindings={periodBindings}
         onPopupCellDblClick={handlePopupCellDblClick}
       />
 
@@ -819,6 +957,9 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         // 메인 조회조건 이월 (사용자 요구 2026-08-23) — 팝업 오픈 시 Sales Site / Project 초기값.
         defaultSalesSite={sc.scmSiteIds}
         defaultProjectCodes={sc.projectCodes}
+        // End Customer 는 초기값이 아니라 팝업 Sales Site 콤보의 목록 구성 조건이다
+        //   (AS-IS :2377 이 이 값을 팝업으로 넘겨 SiteByEndCustomer 를 부른다).
+        defaultEndCustomer={sc.endCustomers}
         onSaveResult={() => refetch?.()}
         // AS-IS — 일괄 저장 후 허용범위 초과분은 메인이 가진 Range Rate 팝업으로 표시.
         onRangeOver={over => {
@@ -848,7 +989,10 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         menuId={MENU_ID}
         // admin SHEET_NAME(AS-IS 'Sales Price')로 컬럼 메타 조회 — 메인 그리드와 동일 소스 (SHEET_NAME 불변).
         sheetName={ADMIN_SHEET_NAME[SHEETS.MAIN] ?? SHEETS.MAIN}
-        columnType='main'
+        // 저장(saveTitleSet)·그리드 복원(fetchUserColumnLayout)과 반드시 같은 columnType('C').
+        //   종전 'main' 은 저장('C')과 달라, 저장은 성공해도 팝업 재조회가 그 행을 못 찾아
+        //   개인화(예: Model Type/Model Name/Nick Name 표시)가 매번 원복됐다. sales-plan 2026-07-29 동일 교정.
+        columnType={TITLESET_COLUMN_TYPE}
         divisionId={sc.divisionId}
         fallbackColumns={MAIN_COLUMNS.map(c => ({ key: c.key, header: c.header, width: c.width }))}
         // ⭐ 재진입 복원 — 현재 grid 상태(개인화 반영본).
@@ -898,6 +1042,11 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
             //   저장 전 값이 그대로 이겨서 재진입 시 원복된 것처럼 보인다.
             //   팝업 query 의 tabId = MENU_ID 이므로 이 prefix 로 매칭된다.
             void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+            // 저장 즉시 컬럼 재세팅 (sales-plan/mkt-fcst 동일 정책). fetchStaticColumns 가
+            //   방금 applyColumnLayout 이 보관한 userColumnLayout 을 서버 메타에 재적용하며
+            //   staticColumns 를 새 배열로 set 한다 → 그리드 컬럼이 그 자리에서 재세팅된다.
+            //   이 호출이 없으면 applyColumnLayout 만으로는 반영이 늦어 Search 를 눌러야 컬럼이 바뀐다.
+            void fetchStaticColumns(sc.divisionId); // divisionId → SP 서버측 DIVISION_ID 필터
           });
         }}
       />
@@ -915,6 +1064,14 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
             PROJECT_NAME: projectName ?? '',
             PROJECT_STATUS: projectStatus ?? '',
             BIZ_TYPE_NAME: bizTypeName ?? '',
+            // 상위(Project) 변경 → 하위 Model / Team 은 옛 컨텍스트라 비운다 (사용자가 Model 재선택 시 Team 재매핑).
+            //   Project 팝업 선택은 cellEditEnded 를 경유하지 않으므로 GRID_CASCADE_CLEAR 가 안 걸린다 —
+            //   여기서 직접 비운다 (Business Plan 비40 Project 팝업 콜백이 ITEM_ID 등을 비우는 것과 동일).
+            ITEM_ID: '',
+            ITEM_NAME: '',
+            ITEM_CLASS_NAME: '',
+            NICK_NAME: '',
+            DEPT_ID: '',
           });
         }}
         preSearchParams={
@@ -935,13 +1092,36 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       <ItemByDivisionModal
         open={openItem}
         modalClose={() => setOpenItem(false)}
-        setSelectedValue={(itemId, itemName, itemClass, nickName) => {
+        setSelectedValue={(
+          itemId,
+          itemName,
+          itemClass,
+          nickName,
+          _itemType,
+          deptId,
+          _deptName,
+          _endCustomer,
+          _scmSiteId,
+          _projectCode,
+          currency
+        ) => {
           if (!popupGroupId) return;
+          // ⭐ Team 자동 매핑 — Sales Site + Project + Item(Model) 이 모두 결정된 시점.
+          //   ItemByDivisionModal(COM0008) 이 선택 행의 SCM_MST_SITE_ITEM.DEPT_ID 를 반환한다(인자 6).
+          //   팝업은 클릭 행의 Sales Site + Project 로 이미 필터되어 있어 (Site+Project+Item) 기준 Team 이다.
+          //   Business Plan div40 Model 팝업 콜백(BusinessPlanModals)이 DEPT_ID40 을 채우는 것과 동일 패턴.
+          //   deptId 미반환(다건 선택 등)이면 '' 로 비워 stale Team 을 남기지 않는다(사용자 요구).
           updateInsertedGroup(popupGroupId, {
             ITEM_ID: itemId,
             ITEM_NAME: itemName ?? '', // Model Name
             ITEM_CLASS_NAME: itemClass ?? '', // Model Type
             NICK_NAME: nickName ?? '', // ⭐ Nick Name (AS-IS DefColumns.NICK_NAME)
+            DEPT_ID: deptId ?? '', // Team (SCM_MST_SITE_ITEM.DEPT_ID — 자동 매핑, 직접 입력 불가)
+            // Currency — AS-IS spdMain_CellClick(.cs L2735~2736)이 팝업 popItem.currency 를 묶음(메저) 4행
+            //   CURRENCY 에 SetTextCellsToRowSpanRange 로 넣는 것 1:1. 팝업(COM0008 o_rc1.CURRENCY)이 돌려주는
+            //   값을 그대로 쓰며, 비어 있으면 AS-IS 와 같이 빈 값이 들어가 사용자가 직접 고른다
+            //   (2026-10-07 리포트 — 종전엔 Currency 를 안 넘겨 신규 행이 항상 빈 값이었다).
+            CURRENCY: currency ?? '',
           });
         }}
         preSearchParams={
@@ -957,6 +1137,9 @@ export const SalesFuturePrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         }
         callFromCell={true}
       />
+      {/* 저장 진행중 오버레이(원형 스피너) — mkt-fcst/sales-plan 과 동일 패턴. handleSave 의
+          setIsSaving(true/false) 를 그대로 open 에 연결한다. */}
+      <ProgressIndicator shape='circular' placement='parent' open={isSaving} />
     </>
   );
 };

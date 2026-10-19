@@ -10,7 +10,7 @@ import {
 
 // UM-04 — DMF0040_GET_SPREAD_TITLE 기간 컬럼 DATA_SCALE_NUMBER='' → AS-IS decimalPlaces=0 (SpreadInfo.cs L1433~1440)
 describe('scaleOf (UM-04)', () => {
-  it('\'\'/NULL/undefined = 화면 fallback(0)', () => {
+  it("''/NULL/undefined = 화면 fallback(0)", () => {
     expect(DEFAULT_DYN_SCALE).toBe(0);
     expect(scaleOf('')).toBe(0);
     expect(scaleOf(null)).toBe(0);

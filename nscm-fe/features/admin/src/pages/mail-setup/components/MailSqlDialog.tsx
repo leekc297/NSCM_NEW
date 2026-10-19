@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { CustomDialog } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
+import { Button } from '@shared/lges';
+import { ControlConfirmIcon } from '@shared/lges-icons';
 
 import { MENU_ID, SHEETS, USE_TYPE_CODE } from '../mail-setup.constants';
-import { joinSqlText } from '../mail-setup.util';
 import { useMailSetupStore } from '../useMailSetupStore';
 
 import styles from './MailDialog.module.scss';
@@ -47,7 +48,7 @@ export const MailSqlDialog = ({ tabId, onSave }: MailSqlDialogProps) => {
 
   useEffect(() => {
     if (!isOpen) return;
-    setSqlText(joinSqlText(data?.o_rc1?.[0] as Record<string, string> | undefined));
+    setSqlText((data?.o_rc1?.[0] as Record<string, string> | undefined)?.SQL_TEXT ?? '');
   }, [isOpen, data]);
 
   if (!isOpen) return null;
@@ -67,6 +68,27 @@ export const MailSqlDialog = ({ tabId, onSave }: MailSqlDialogProps) => {
             value={sqlText}
             onChange={event => setSqlText(event.target.value)}
           />
+          {/* CustomDialog 는 customContentArea 지정 시 기본 하단 OK/Cancel 버튼을 렌더링하지 않는다
+              (CustomDialogContent.tsx lowerButtonGroup 분기) — 위 handleSubmit 은 그래서 실제로는
+              호출되지 않는다. */}
+          <div className={styles.buttonWrapper}>
+            <Button
+              appearance='contained'
+              priority='primary'
+              size='medium'
+              iconComponent={<ControlConfirmIcon size='small' />}
+              iconPosition='leading'
+              buttonLabel={t('LBL00359', '_확인')}
+              onClick={() => onSave(sqlText)}
+            />
+            <Button
+              appearance='outlined'
+              priority='normal'
+              size='medium'
+              buttonLabel={t('LBL00107', '_취소')}
+              onClick={closeSqlDialog}
+            />
+          </div>
         </div>
       }
     />

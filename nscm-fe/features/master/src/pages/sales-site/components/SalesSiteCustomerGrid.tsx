@@ -1,4 +1,4 @@
-import { CellRange, CellType, type CellRangeEventArgs, type FlexGrid } from '@mescius/wijmo.grid';
+import { CellType, type CellRangeEventArgs, type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useRef, useState, type MutableRefObject } from 'react';
 
@@ -92,7 +92,7 @@ export const SalesSiteCustomerGrid = ({
     dataItem.SHIPTO_REGION_NAME = shipToRegion ?? '';
     dataItem.SHIPTO_CITY_NAME = shipToCity ?? '';
 
-    gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
+    GridUtils.refreshRow(gridRef.current, clickedRow);
   };
 
   const handleFocus = () => {
@@ -124,7 +124,7 @@ export const SalesSiteCustomerGrid = ({
     const revertValue = typeof dataItem.REP_YN === 'boolean' ? false : 'N';
     editTrackerRef.current?.storeChange(dataItem, 'REP_YN', dataItem.REP_YN, revertValue);
     dataItem.REP_YN = revertValue as typeof dataItem.REP_YN;
-    grid.refreshRange(new CellRange(row, 0, row, -1));
+    GridUtils.refreshRow(grid, row);
   };
 
   const handleDblClick = (mouseEvent: MouseEvent) => {

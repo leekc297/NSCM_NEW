@@ -1,0 +1,4935 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-08-01 00:00:00.900","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","2","PRINT '------------------------------------------------------------------';
+
+	IF OBJECT_ID('TEMPDB..#SCM_MST_SITE_FROM') IS NOT NULL DROP TABLE #SCM_MST_SITE_FROM
+	SELECT SCM_SITE_ID
+	      ,SITE_DESCRIPTION
+		  ,OSP_YN
+		  ,OPERATION_GROUP
+		  ,COUNTRY
+		  ,CITY
+	 INTO #SCM_MST_SITE_FROM
+	 FROM SCM_MST_SITE WITH(NOLOCK)
+	WHERE 1=1
+	  AND DIVISION_ID= @v_division_id
+	  AND SITE_TYPE= 'PLANT'
+	  AND VALID_YN= 'Y'
+
+	IF OBJECT_ID('TEMPDB..#PROJECT_ROUTE') IS NOT NULL DROP TABLE #PROJECT_ROUTE
+
+	SELECT PR.DIVISION_ID
+	      ,PR.ITEM_ID
+	      ,PR.SALES_SITE_ID
+	      ,PR.PROJECT_CODE
+	      ,PR.PLANT_SITE_ID
+	      ,PR.FROM_YYYYMMDD
+	      ,PR.TO_YYYYMMDD
+	      ,PS.COUNTRY
+	      ,PS.CITY
+	      ,ROW_NUMBER() OVER (PARTITION BY PR.ITEM_ID
+	          ,PR.SALES_SITE_ID
+	          ,PR.PROJECT_CODE
+	          ,PR.FROM_YYYYMMDD
+	          ,PR.TO_YYYYMMDD
+	  	      ORDER BY PR.PRIORITY ) AS PR_PRIORITY
+	  INTO #PROJECT_ROUTE
+  	  FROM SCM_MST_SITE_ITEM_PRIORITY PR WITH(NOLOCK)
+	 INNER JOIN #SCM_MST_SITE_FROM PS WITH(NOLOCK)
+	    ON PS.SCM_SITE_ID = PR.PLANT_SITE_ID
+ 	 WHERE 1=1
+	   AND PR.DIVISION_ID  = @v_division_id
+	   AND PR.VALID_YN  = 'Y'
+	   AND PR.TO_YYYYMMDD >= @v_from_yyyymmdd
+   
+	SELECT DISTINCT  X.DIVISION_ID,  X.ITEM_ID
+	                -- ,X.SALES_SITE_ID, X.ITEM_ID AS CODE, X.ITEM_ID AS NAME
+	FROM (
+		  SELECT X.DIVISION_ID, X.SALES_SITE_ID, X.ITEM_ID
+		    FROM #PROJECT_ROUTE X
+		   WHERE 1=1
+		   UNION ALL
+		  SELECT X.DIVISION_ID, X.SCM_SITE_ID, X.ITEM_ID
+            FROM SCM_MST_SITE_ITEM X  WITH(NOLOCK)
+           WHERE X.DIVISION_ID =@v_division_id
+		     AND  VALID_YN		= 'Y'
+		  )X
+	  WHERE 1=1
+	  AND ( ( @v_site_id      IS NULL OR @v_site_id   = '' )    OR X.SALES_SITE_ID      IN (SELECT token FROM dbo.String_Split(@v_site_id  ,',')) )
+	  ORDER BY  x.ITEM_ID
+ 
+
+  --SELECT * FROM SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+END
+
+ "
+"2025-07-25 00:00:01.607","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","3","AFETY_STOCK_DAY
+                WHERE DIVISION_ID           = @v_division_id
+                AND   OPMZ_PLAN_GR_ID       = @v_opmz_plan_gr_id
+                AND   SCM_SITE_ID           = @v_scm_site_id
+                AND   STAGE                 = @v_stage
+                AND   ITEM_ID               = @v_item_id
+                AND   VALUE_TYPE            = @v_value_type
+                AND   FROM_YYYYMMDD         = @v_from_yyyymmdd
+                AND   TO_YYYYMMDD           = @v_to_yyyymmdd
+
+			END
+
+		END
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+			
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+	END TRY
+	BEGIN CATCH
+		IF (XACT_STATE() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+		BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+											,log_type
+											,log_count
+											,log_message
+											,description
+											,event_date
+											,creation_date
+											,created_by
+											,last_update_date
+											,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+					,'ERROR'
+					,NULL
+					,ERROR_MESSAGE()
+					,NULL
+					,SYSDATETIME()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--	COMMIT WORK;
+
+		END;
+
+		-- error코드, errror 메시지 반환
+		SELECT 'F' AS result_code;
+		SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+
+
+
+
+
+
+"
+"2025-09-25 00:00:00.643","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	AND VALID_YN='Y'
+	ORDER BY OPMZ_PLAN_GR_NAME
+	
+
+
+	----2. 재고 SCM SITE ID 
+	--SELECT DISTINCT A.DIVISION_ID
+	--	, SCM_SITE_ID AS CODE 
+	--	, SCM_SITE_ID AS NAME
+	--FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	--WHERE  1 = 1
+	--AND A.SITE_TYPE = 'SALES'	
+	--AND A.DIVISION_ID != '40'
+	--AND A.VALID_YN = 'Y'	
+	--UNION ALL
+	--SELECT DISTINCT A.DIVISION_ID
+	--	, A.SCM_SITE_ID AS CODE 
+	--	, A.SCM_SITE_ID AS NAME
+	--FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	--LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+	--	ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	--WHERE  1 = 1
+	--AND A.SITE_TYPE = 'SALES'
+	--AND  A.DIVISION_ID = '40'
+	--AND A.VALID_YN = 'Y'
+	--UNION ALL
+	--SELECT DISTINCT A.DIVISION_ID
+	--	, SCM_SITE_ID AS CODE 
+	--	, SCM_SITE_ID AS NAME
+	--FROM   [dbo].[SCM_MST_SITE] A
+	--WHERE  1 = 1
+	--AND    A.SITE_TYPE = 'PLANT'
+	--ORDER BY A.SCM_SITE_ID  -- A.DIVISION_ID
+		
+		SELECT DIVISION_ID
+			 ,CODE
+			 ,NAME
+		FROM (
+ 				SELECT DISTINCT A.DIVISION_ID
+					, SCM_SITE_ID AS CODE 
+					, SCM_SITE_ID AS NAME
+					, SITE_TYPE
+				FROM   SCM_MST_SITE A WITH(NOLOCK) 
+				WHERE  1 = 1
+				AND A.SITE_TYPE = 'SALES'	
+				AND A.DIVISION_ID != '40'
+				AND A.VALID_YN = 'Y'	
+				UNION ALL
+				SELECT DISTINCT A.DIVISION_ID
+					, A.SCM_SITE_ID AS CODE 
+					, A.SCM_SITE_ID AS NAME
+					, A.SITE_TYPE
+				FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+				LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+					ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+				WHERE  1 = 1
+				AND A.SITE_TYPE = 'SALES'
+				AND  A.DIVISION_ID = '40'
+				AND A.VALID_YN = 'Y'
+				UNION ALL
+				SELECT DISTINCT A.DIVISION_ID
+					, SCM_SITE_ID AS CODE 
+					, SCM_SITE_ID AS NAME
+					, A.SITE_TYPE
+				FROM   [dbo].[SCM_MST_SITE] A
+				WHERE  1 = 1
+				AND    A.SITE_TYPE = 'PLANT'
+			   ) X
+		ORDER BY SITE_TYPE, NAME  -- A.DIVISION_ID
+	 
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'OPMZ_STAGE_CD'
+   AND   M.VALID_YN='Y'
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+   --6.SCM0002_ItembyDivisionPopup 기준으로 ITEM_ID 조회
+   	  SELECT distinct
+		   I.DIVISION_ID
+		 , I.ITEM_ID	 
+	  FROM   SCP_MST_FINAL_ITEM I WITH(NOLOCK)	
+	  WHERE 1=1
+	  AND CASE WHEN @p_division_id = 'ALL' THEN"
+"2025-09-25 00:00:00.643","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","2"," 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  ORDER BY  I.ITEM_ID, I.DIVISION_ID 
+
+END
+
+ "
+"2025-09-25 00:00:00.643","LGCE_SCMDEV","P ","SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY","1288703989","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : CAPA - No Work 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY]
+	  @p_division_id		NVARCHAR(MAX)
+	, @p_plan_group_id	    NVARCHAR(MAX)
+	, @p_scm_site_id		NVARCHAR(MAX)
+	, @p_item_id			NVARCHAR(MAX)
+	, @p_stage				NVARCHAR(MAX)
+	, @p_valid_yn			NVARCHAR(MAX)
+	, @p_value_type			NVARCHAR(MAX)
+
+    , @p_period_from		NVARCHAR(MAX)
+    , @p_period_to			NVARCHAR(MAX)
+
+AS
+BEGIN
+	
+  SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+-- 파라미터로 받을 값 변수  
+  DECLARE @v_division_id		NVARCHAR(200)	= @p_division_id
+  DECLARE @v_plan_group_id		NVARCHAR(200)	= @p_plan_group_id
+  DECLARE @v_scm_site_id		NVARCHAR(200)	= @p_scm_site_id
+  DECLARE @v_item_id		    NVARCHAR(200)	= @p_item_id
+  DECLARE @v_stage		        NVARCHAR(200)	= @p_stage
+  DECLARE @v_valid_yn		    NVARCHAR(200)	= @p_valid_yn
+  DECLARE @v_value_type		    NVARCHAR(200)	= @p_value_type
+  
+  DECLARE @v_period_from		NVARCHAR(200)	= @p_period_from
+  DECLARE @v_period_to		    NVARCHAR(200)	= @p_period_to
+
+  SELECT a.VALUE_TYPE
+        ,a.DIVISION_ID
+        ,a.OPMZ_PLAN_GR_ID
+        ,a.SCM_SITE_ID
+        ,a.ITEM_ID
+        ,a.STAGE
+        , CONVERT(date, a.FROM_YYYYMMDD, 112) AS FROM_YYYYMMDD
+        , CONVERT(date, a.TO_YYYYMMDD, 112) AS TO_YYYYMMDD
+        ,a.TYPE_APPLY_DAY
+        ,a.VALUE_DESCRIPTION
+        ,a.VALID_YN
+        ,a.CREATED_BY
+        ,a.CREATION_DATE
+        ,a.LAST_UPDATED_BY
+        ,a.LAST_UPDATE_DATE
+        , a.VALUE_TYPE + '|' + a.DIVISION_ID+ '|' + a.OPMZ_PLAN_GR_ID+ '|' + a.SCM_SITE_ID+ '|' + a.ITEM_ID + '|' + a.STAGE + '|' + a.FROM_YYYYMMDD+ '|' +  a.TO_YYYYMMDD AS PRE_KEY_VALUES
+    FROM DBO.SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY a  with(nolock)
+      INNER JOIN ( SELECT DISTINCT '%'+token+'%' tst FROM dbo.String_Split(@p_item_id,',') ) b
+              ON a.ITEM_ID  like  b.tst 
+    WHERE 1=1
+    AND ( ( @v_division_id   IS NULL OR @v_division_id = '' )   OR a.DIVISION_ID     IN (SELECT token FROM dbo.String_Split(@v_division_id  ,',')) )
+    AND ( ( @v_scm_site_id   IS NULL OR @v_scm_site_id = '' )   OR a.SCM_SITE_ID     IN (SELECT token FROM dbo.String_Split(@v_scm_site_id  ,',')) )
+    AND ( ( @v_value_type    IS NULL OR @v_value_type = '' )    OR a.VALUE_TYPE      IN (SELECT token FROM dbo.String_Split(@v_value_type  ,',')) )
+    AND ( ( @p_valid_yn      IS NULL OR @v_valid_yn   = '' )    OR a.VALID_YN        IN (SELECT token FROM dbo.String_Split(@v_valid_yn  ,',')) )
+    AND ( ( @v_plan_group_id IS NULL OR @v_plan_group_id = '' ) OR a.OPMZ_PLAN_GR_ID IN (SELECT token FROM dbo.String_Split(@v_plan_group_id  ,',')) )
+    AND ( ( @v_stage         IS NULL OR @v_stage = '' )         OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_stage  ,',')) )
+    -- AND ( ( FROM_YYYYMMDD    BETWEEN @v_period_from AND @v_period_to) OR ( TO_YYYYMMDD    BETWEEN @v_period_from AND @v_period_to) )
+    AND  FROM_YYYYMMDD  <=  @v_period_to 
+    AND  TO_YYYYMMDD    >= @v_period_from
+
+END
+
+"
+"2025-07-29 00:00:00.473","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	 AND VALID_YN='Y'
+	
+
+
+	--2. 재고 SCM SITE ID 
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'	
+	AND A.DIVISION_ID != '40'
+	AND A.VALID_YN = 'Y'	
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, A.SCM_SITE_ID AS CODE 
+		, A.SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+		ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'
+	AND  A.DIVISION_ID = '40'
+	AND A.VALID_YN = 'Y'
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   [dbo].[SCM_MST_SITE] A
+	WHERE  1 = 1
+	AND    A.SITE_TYPE = 'PLANT'
+	ORDER BY A.DIVISION_ID
+	
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'SCP_OPT_ENG_CONST_DEF_STAGE'
+   AND   M.VALID_YN='Y'
+   -- AND   M.SEGMENT1 ='81' --DIVISION_NO
+	
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	  	-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+		-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+END
+
+"
+"2025-08-08 00:00:01.007","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","4","an_gr_id
+                AND   SCM_SITE_ID           = @v_pre_scm_site_id
+                AND   STAGE                 = @v_pre_stage
+                AND   ITEM_ID               = @v_pre_item_id
+                AND   VALUE_TYPE            = @v_pre_value_type
+                AND   FROM_YYYYMMDD         = @v_pre_from_yyyymmdd
+                AND   TO_YYYYMMDD           = @v_pre_to_yyyymmdd
+
+			END
+
+		END
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+			
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+	END TRY
+	BEGIN CATCH
+		IF (XACT_STATE() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+		BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+											,log_type
+											,log_count
+											,log_message
+											,description
+											,event_date
+											,creation_date
+											,created_by
+											,last_update_date
+											,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+					,'ERROR'
+					,NULL
+					,ERROR_MESSAGE()
+					,NULL
+					,SYSDATETIME()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--	COMMIT WORK;
+
+		END;
+
+		-- error코드, errror 메시지 반환
+		SELECT 'F' AS result_code;
+		SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+
+
+
+
+
+
+"
+"2025-08-08 00:00:01.007","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","2"," @v_to_yyyymmdd;
+	PRINT '------------------------------------------------------------------';
+
+	IF OBJECT_ID('TEMPDB..#SCM_MST_SITE_FROM') IS NOT NULL DROP TABLE #SCM_MST_SITE_FROM
+	SELECT SCM_SITE_ID
+	      ,SITE_DESCRIPTION
+		  ,OSP_YN
+		  ,OPERATION_GROUP
+		  ,COUNTRY
+		  ,CITY
+	 INTO #SCM_MST_SITE_FROM
+	 FROM SCM_MST_SITE WITH(NOLOCK)
+	WHERE 1=1
+	  AND DIVISION_ID= @v_division_id
+	  AND SITE_TYPE= 'PLANT'
+	  AND VALID_YN= 'Y'
+
+	IF OBJECT_ID('TEMPDB..#PROJECT_ROUTE') IS NOT NULL DROP TABLE #PROJECT_ROUTE
+
+	SELECT PR.DIVISION_ID
+	      ,PR.ITEM_ID
+	      ,PR.SALES_SITE_ID
+	      ,PR.PROJECT_CODE
+	      ,PR.PLANT_SITE_ID
+	      ,PR.FROM_YYYYMMDD
+	      ,PR.TO_YYYYMMDD
+	      ,PS.COUNTRY
+	      ,PS.CITY
+	      ,ROW_NUMBER() OVER (PARTITION BY PR.ITEM_ID
+	          ,PR.SALES_SITE_ID
+	          ,PR.PROJECT_CODE
+	          ,PR.FROM_YYYYMMDD
+	          ,PR.TO_YYYYMMDD
+	  	      ORDER BY PR.PRIORITY ) AS PR_PRIORITY
+	  INTO #PROJECT_ROUTE
+  	  FROM SCM_MST_SITE_ITEM_PRIORITY PR WITH(NOLOCK)
+	 INNER JOIN #SCM_MST_SITE_FROM PS WITH(NOLOCK)
+	    ON PS.SCM_SITE_ID = PR.PLANT_SITE_ID
+ 	 WHERE 1=1
+	   AND PR.DIVISION_ID  = @v_division_id
+	   AND PR.VALID_YN  = 'Y'
+	   AND PR.TO_YYYYMMDD >= @v_from_yyyymmdd
+   
+	SELECT DISTINCT  X.DIVISION_ID,  X.ITEM_ID
+	                -- ,X.SALES_SITE_ID, X.ITEM_ID AS CODE, X.ITEM_ID AS NAME
+	FROM (
+		  SELECT X.DIVISION_ID, X.SALES_SITE_ID, X.ITEM_ID
+		    FROM #PROJECT_ROUTE X
+		   WHERE 1=1
+		   UNION ALL
+		  SELECT X.DIVISION_ID, X.SCM_SITE_ID, X.ITEM_ID
+            FROM SCM_MST_SITE_ITEM X  WITH(NOLOCK)
+           WHERE X.DIVISION_ID =@v_division_id
+		     AND  VALID_YN		= 'Y'
+		  )X
+	  WHERE 1=1
+	  AND ( ( @v_site_id      IS NULL OR @v_site_id   = '' )    OR X.SALES_SITE_ID      IN (SELECT token FROM dbo.String_Split(@v_site_id  ,',')) )
+	  ORDER BY  x.ITEM_ID
+ 
+
+  --SELECT * FROM SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+END
+
+ "
+"2025-07-30 00:00:00.540","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	 AND VALID_YN='Y'
+	
+
+
+	--2. 재고 SCM SITE ID 
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'	
+	AND A.DIVISION_ID != '40'
+	AND A.VALID_YN = 'Y'	
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, A.SCM_SITE_ID AS CODE 
+		, A.SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+		ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'
+	AND  A.DIVISION_ID = '40'
+	AND A.VALID_YN = 'Y'
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   [dbo].[SCM_MST_SITE] A
+	WHERE  1 = 1
+	AND    A.SITE_TYPE = 'PLANT'
+	ORDER BY A.DIVISION_ID
+	
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'SCP_OPT_ENG_CONST_DEF_STAGE'
+   AND   M.VALID_YN='Y'
+   -- AND   M.SEGMENT1 ='81' --DIVISION_NO
+	
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	  	-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+		-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+	--6.Item 정보(Validation 체크용)
+	SELECT DISTINCT DIVISION_ID
+	             , ITEM_ID
+	FROM SCM_MST_ITEM_SN WITH(NOLOCK)
+END
+
+"
+"2025-07-30 00:00:00.540","LGCE_SCMDEV","P ","SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY","1288703989","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : CAPA - No Work 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY]
+	  @p_division_id		NVARCHAR(MAX)
+	, @p_plan_group_id	    NVARCHAR(MAX)
+	, @p_scm_site_id		NVARCHAR(MAX)
+	, @p_item_id			NVARCHAR(MAX)
+	, @p_stage				NVARCHAR(MAX)
+	, @p_valid_yn			NVARCHAR(MAX)
+	, @p_value_type			NVARCHAR(MAX)
+
+
+AS
+BEGIN
+	
+  SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+-- 파라미터로 받을 값 변수  
+  DECLARE @v_division_id		NVARCHAR(200)	= @p_division_id
+  DECLARE @v_plan_group_id		NVARCHAR(200)	= @p_plan_group_id
+  DECLARE @v_scm_site_id		NVARCHAR(200)	= @p_scm_site_id
+  DECLARE @v_item_id		    NVARCHAR(200)	= @p_item_id
+  DECLARE @v_stage		        NVARCHAR(200)	= @p_stage
+  DECLARE @v_valid_yn		    NVARCHAR(200)	= @p_valid_yn
+  DECLARE @v_value_type		    NVARCHAR(200)	= @p_value_type
+
+  SELECT a.VALUE_TYPE
+        ,a.DIVISION_ID
+       -- ,a.OPMZ_PLAN_GR_ID
+        ,a.OPMZ_PLAN_GR_ID
+       -- ,b.OPMZ_PLAN_GR_NAME
+        ,a.SCM_SITE_ID
+        ,a.ITEM_ID
+        ,a.STAGE
+        , CONVERT(date, a.FROM_YYYYMMDD, 112) AS FROM_YYYYMMDD
+        , CONVERT(date, a.TO_YYYYMMDD, 112) AS TO_YYYYMMDD
+        -- ,a.FROM_YYYYMMDD
+        -- ,a.TO_YYYYMMDD
+        ,a.TYPE_APPLY_DAY
+        ,a.VALUE_DESCRIPTION
+        ,a.VALID_YN
+        ,a.CREATED_BY
+        ,a.CREATION_DATE
+        ,a.LAST_UPDATED_BY
+        ,a.LAST_UPDATE_DATE
+        , a.VALUE_TYPE + '|' + a.DIVISION_ID+ '|' + a.OPMZ_PLAN_GR_ID+ '|' + a.SCM_SITE_ID+ '|' + a.ITEM_ID + '|' + a.STAGE + '|' + a.FROM_YYYYMMDD+ '|' +  a.TO_YYYYMMDD AS PRE_KEY_VALUES
+    FROM DBO.SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY a  with(nolock)
+    --INNER JOIN SCP_OPMZ_PLAN_GR_M b with(nolock)
+    --    ON( a.DIVISION_ID = b.DIVISION_ID
+    --    AND a.OPMZ_PLAN_GR_ID = b.OPMZ_PLAN_GR_ID
+    --    AND b.VALID_YN='Y'
+    --   )
+    WHERE 1=1
+    AND ( ( @v_division_id   IS NULL OR @v_division_id = '' )   OR a.DIVISION_ID     IN (SELECT token FROM dbo.String_Split(@v_division_id  ,',')) )
+    AND ( ( @v_scm_site_id   IS NULL OR @v_scm_site_id = '' )   OR a.SCM_SITE_ID     IN (SELECT token FROM dbo.String_Split(@v_scm_site_id  ,',')) )
+    AND ( ( @v_value_type    IS NULL OR @v_value_type = '' )    OR a.VALUE_TYPE      IN (SELECT token FROM dbo.String_Split(@v_value_type  ,',')) )
+    AND ( ( @p_valid_yn      IS NULL OR @v_valid_yn   = '' )    OR a.VALID_YN        IN (SELECT token FROM dbo.String_Split(@v_valid_yn  ,',')) )
+    AND ( ( @v_plan_group_id IS NULL OR @v_plan_group_id = '' ) OR a.OPMZ_PLAN_GR_ID IN (SELECT token FROM dbo.String_Split(@v_plan_group_id  ,',')) )
+    AND ( ( @v_item_id       IS NULL OR @v_item_id = '' )       OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )
+    AND ( ( @v_stage         IS NULL OR @v_stage = '' )         OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_stage  ,',')) )
+  
+END
+
+"
+"2025-07-30 00:00:00.540","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","1","
+/*
+ * Program ID   : SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : STOCK 조정 등록,수정 
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY]
+
+	-- Add the parameters for the stored procedure here
+  @p_active_flag         NVARCHAR(MAX),
+  @p_value_type          NVARCHAR(MAX),
+  @p_division_id         NVARCHAR(MAX),
+  @p_opmz_plan_gr_id     NVARCHAR(MAX),
+  @p_scm_site_id         NVARCHAR(MAX),
+  @p_item_id             NVARCHAR(MAX),
+  @p_stage               NVARCHAR(MAX),
+  @p_from_yyyymmdd       NVARCHAR(MAX),
+  @p_to_yyyymmdd         NVARCHAR(MAX),
+  @p_type_apply_day      NVARCHAR(MAX),
+  @p_value_description   NVARCHAR(MAX),
+  @p_valid_yn            NVARCHAR(MAX),
+  @p_user_id			 NVARCHAR(MAX),
+
+  @p_pre_value_type	       NVARCHAR(MAX),
+  @p_pre_division_id	   NVARCHAR(MAX),
+  @p_pre_opmz_plan_gr_id   NVARCHAR(MAX),
+  @p_pre_scm_site_id	   NVARCHAR(MAX),
+  @p_pre_item_id	       NVARCHAR(MAX),
+  @p_pre_stage	           NVARCHAR(MAX),
+  @p_pre_from_yyyymmdd	   NVARCHAR(MAX),
+  @p_pre_to_yyyymmdd	   NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @v_working_time			DATETIME =sysdatetime();
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag		  NVARCHAR(MAX);
+    DECLARE @v_value_type         NVARCHAR(MAX);
+    DECLARE @v_division_id        NVARCHAR(MAX);
+    DECLARE @v_opmz_plan_gr_id    NVARCHAR(MAX);
+    DECLARE @v_scm_site_id        NVARCHAR(MAX);
+    DECLARE @v_item_id            NVARCHAR(MAX);
+    DECLARE @v_stage              NVARCHAR(MAX);
+    DECLARE @v_from_yyyymmdd      NVARCHAR(MAX);
+    DECLARE @v_to_yyyymmdd        NVARCHAR(MAX);
+    DECLARE @v_type_apply_day     NVARCHAR(MAX);
+    DECLARE @v_value_description  NVARCHAR(MAX);
+    DECLARE @v_valid_yn           NVARCHAR(MAX);
+	DECLARE @v_user_id		      NVARCHAR(MAX);
+	DECLARE @v_last_updated_by	  NVARCHAR(MAX);
+	
+	DECLARE @v_pre_value_type	   NVARCHAR(MAX);
+    DECLARE @v_pre_division_id	   NVARCHAR(MAX);
+    DECLARE @V_pre_opmz_plan_gr_id NVARCHAR(MAX);
+    DECLARE @v_pre_scm_site_id	   NVARCHAR(MAX);
+    DECLARE @v_pre_item_id	       NVARCHAR(MAX);
+    DECLARE @v_pre_stage	       NVARCHAR(MAX);
+    DECLARE @v_pre_from_yyyymmdd   NVARCHAR(MAX);
+    DECLARE @v_pre_to_yyyymmdd	   NVARCHAR(MAX);
+
+
+
+
+
+	SET @v_active_flag       = NULL;	
+	SET @v_value_type        = NULL;
+	SET @v_division_id       = NULL;	
+	SET @v_opmz_plan_gr_id   = NULL;
+	SET @v_scm_site_id       = NULL;
+	SET @v_item_id           = NULL;
+	SET @v_stage             = NULL;
+	SET @v_from_yyyymmdd     = NULL;
+	SET @v_to_yyyymmdd       = NULL;	
+	SET @v_type_apply_day    = NULL;
+	SET @v_value_description = NULL;
+	SET @v_valid_yn          = NULL;
+	SET @v_user_id	         = NULL;
+	SET @v_last_updated_by	 = NULL;
+
+	SET @v_pre_value_type	   = NULL;
+	SET @v_pre_division_id	   = NULL;
+	SET @V_pre_opmz_plan_gr_id = NULL;
+	SET @v_pre_scm_site_id	   = NULL;
+	SET @v_pre_item_id	       = NULL;
+	SET @v_pre_stage	       = NULL;
+	SET @v_pre_from_yyyymmdd   = NULL;
+	SET @v_pre_to_yyyymmdd	   = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+		
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date "
+"2025-07-30 00:00:00.540","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","2","  DATETIME;
+
+	DECLARE @v_data_dup_cnt  INT=0;
+
+
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code     INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+
+	SET @v_last_updated_by  = @p_user_id
+
+	BEGIN TRY
+
+		-- 트렌젝션 시작
+		BEGIN TRAN;
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);   
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN
+
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag		 = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag,       @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_value_type        = [dbo].[SCM_ARR_SPL_VAL](@p_value_type,        @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_division_id       = [dbo].[SCM_ARR_SPL_VAL](@p_division_id,       @v_delimiter , @mst_loop_cnt) ;	
+				SET @v_opmz_plan_gr_id   = [dbo].[SCM_ARR_SPL_VAL](@p_opmz_plan_gr_id,   @v_delimiter , @mst_loop_cnt) ;
+				SET @v_scm_site_id       = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id,       @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_item_id           = [dbo].[SCM_ARR_SPL_VAL](@p_item_id,           @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_stage             = [dbo].[SCM_ARR_SPL_VAL](@p_stage,             @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_from_yyyymmdd     = [dbo].[SCM_ARR_SPL_VAL](@p_from_yyyymmdd	,    @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_to_yyyymmdd       = [dbo].[SCM_ARR_SPL_VAL](@p_to_yyyymmdd	,    @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_type_apply_day    = [dbo].[SCM_ARR_SPL_VAL](@p_type_apply_day,    @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_value_description = [dbo].[SCM_ARR_SPL_VAL](@p_value_description, @v_delimiter , @mst_loop_cnt) ;	
+				SET @v_valid_yn          = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn,          @v_delimiter , @mst_loop_cnt) ;
+
+				SET @v_pre_value_type	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_value_type,      @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_division_id	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_division_id,     @v_delimiter , @mst_loop_cnt) ;
+				SET @V_pre_opmz_plan_gr_id = [dbo].[SCM_ARR_SPL_VAL](@p_pre_opmz_plan_gr_id, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_scm_site_id	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_scm_site_id,     @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_item_id	       = [dbo].[SCM_ARR_SPL_VAL](@p_pre_item_id,         @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_stage	       = [dbo].[SCM_ARR_SPL_VAL](@p_pre_stage,           @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_from_yyyymmdd   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_from_yyyymmdd,   @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_to_yyyymmdd	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_to_yyyymmdd,     @v_delimiter , @mst_loop_cnt) ;
+
+			END
+
+			--삭제가 아닌 경우, 중복체크
+			IF (@v_active_flag <> 'D')
+			BEGIN 
+				/***** 중복체크 *****/
+				DECLARE @cnt INTEGER;
+				SET @cnt = 0;
+
+				SELECT @cnt = COUNT(*)
+				FROM SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY  WITH(NOLOCK)
+				WHERE DIVISION_ID	= @v_division_id
+				AND OPMZ_PLAN_GR_ID = @v_opmz_plan_gr_id
+				AND SCM_SITE_ID	    = @v_scm_site_id
+				AND STAGE	        = @v_stage
+				AND VALUE_TYPE      = @v_value_type
+				AND ITEM_ID         = @v_item_id
+				AND FROM_YYYYMMDD   = @v_from_yyyymmdd
+				AND TO_YYYYMMDD	    = @v_to_yyyymmdd
+				AND NOT (
+						    DIVISION_ID     = @v_pre_division_id
+						AND OPMZ_PLAN_GR_ID = @v_pre_opmz_plan_gr_id
+						AND SCM_SITE_ID	    = @v_pre_scm_site_id
+						AND STAGE	        = @v_pre_stage
+						AND VALUE_TYPE      = @v_pre_value_type
+						AND ITEM_ID         = @v_pre_item_id
+						AND FROM_YYYYMMDD   = @v_pre_from_yyyymmdd
+						AND TO_YYYYMMDD	    = @v_pre_to_yyyymmdd
+	"
+"2025-07-30 00:00:00.540","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","3","					)
+
+				IF(@cnt > 0)
+				BEGIN
+					SET @v_err_code    = 99010 ; 
+					SET @v_err_message = N' 신규 입력 데이터 중 중복된 데이터가 있습니다.';
+					THROW  @v_err_code, @v_err_message , 1; --예외발생
+				END
+
+				/**** 날짜 중복 체크 ****/
+				SELECT @cnt = COUNT(1)
+				FROM SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY x
+				WHERE DIVISION_ID	= @v_division_id
+				AND OPMZ_PLAN_GR_ID = @v_opmz_plan_gr_id
+				AND SCM_SITE_ID	    = @v_scm_site_id
+				AND STAGE	        = @v_stage
+				AND VALUE_TYPE      = @v_value_type
+				AND ITEM_ID         = @v_item_id
+				AND NOT ( @v_to_yyyymmdd   < x.FROM_YYYYMMDD OR @v_from_yyyymmdd > x.TO_YYYYMMDD )
+				AND NOT (x.FROM_YYYYMMDD = @v_pre_from_yyyymmdd AND X.TO_YYYYMMDD = @v_pre_to_yyyymmdd ) -- 기존 값
+
+				IF(@cnt > 0)
+				BEGIN
+					SET @v_err_code    = 99010 ; 
+					SET @v_err_message = N' 입력 데이터 중 날짜가 중복되는 데이터가 있습니다.';
+					THROW  @v_err_code, @v_err_message , 1; --예외발생
+				END
+
+				/***** 중복체크 *****/
+			END
+
+			IF(@v_active_flag = 'I')
+			BEGIN
+
+                INSERT INTO SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                (
+                       DIVISION_ID
+                      ,OPMZ_PLAN_GR_ID
+                      ,SCM_SITE_ID
+                      ,STAGE
+                      ,ITEM_ID
+                      ,VALUE_TYPE
+                      ,FROM_YYYYMMDD
+                      ,TO_YYYYMMDD
+                      ,TYPE_APPLY_DAY
+                      ,VALUE_DESCRIPTION
+                      ,VALID_YN
+                      ,CREATED_BY
+                      ,CREATION_DATE
+                      ,LAST_UPDATED_BY
+                      ,LAST_UPDATE_DATE
+                )
+                VALUES
+                (
+                       @v_division_id
+                      ,@v_opmz_plan_gr_id
+                      ,@v_scm_site_id
+                      ,@v_stage
+                      ,@v_item_id
+                      ,@v_value_type
+                      ,@v_from_yyyymmdd
+                      ,@v_to_yyyymmdd
+                      ,@v_type_apply_day
+                      ,@v_value_description
+                      ,@v_valid_yn
+                      ,@v_last_updated_by
+                      ,GETDATE()
+                      ,@v_last_updated_by
+                      ,GETDATE()
+                )
+
+			END
+			ELSE IF( @v_active_flag ='M' )
+			BEGIN
+
+                UPDATE SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                SET DIVISION_ID           = @v_division_id
+                   ,OPMZ_PLAN_GR_ID       = @v_opmz_plan_gr_id
+                   ,SCM_SITE_ID           = @v_scm_site_id
+                   ,STAGE                 = @v_stage
+                   ,ITEM_ID               = @v_item_id
+                   ,VALUE_TYPE            = @v_value_type
+                   ,FROM_YYYYMMDD         = @v_from_yyyymmdd
+                   ,TO_YYYYMMDD           = @v_to_yyyymmdd
+                   ,TYPE_APPLY_DAY        = @v_type_apply_day
+                   ,VALUE_DESCRIPTION     = @v_value_description
+                   ,VALID_YN              = @v_valid_yn
+                   ,LAST_UPDATED_BY	      = @v_last_updated_by
+                   ,LAST_UPDATE_DATE      = SYSDATETIME()
+                WHERE DIVISION_ID           = @v_pre_division_id
+                AND   OPMZ_PLAN_GR_ID       = @v_pre_opmz_plan_gr_id
+                AND   SCM_SITE_ID           = @v_pre_scm_site_id
+                AND   STAGE                 = @v_pre_stage
+                AND   ITEM_ID               = @v_pre_item_id
+                AND   VALUE_TYPE            = @v_pre_value_type
+                AND   FROM_YYYYMMDD         = @v_pre_from_yyyymmdd
+                AND   TO_YYYYMMDD           = @v_pre_to_yyyymmdd
+				;
+
+			END
+			--삭제기능 추가 (2025-07-16)
+			ELSE IF(@v_active_flag ='D')
+			BEGIN
+				
+				DELETE SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                WHERE DIVISION_ID           = @v_pre_division_id
+                AND   OPMZ_PLAN_GR_ID       = @v_pre_opmz_plan_gr_id
+         "
+"2025-07-30 00:00:00.540","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","4","       AND   SCM_SITE_ID           = @v_pre_scm_site_id
+                AND   STAGE                 = @v_pre_stage
+                AND   ITEM_ID               = @v_pre_item_id
+                AND   VALUE_TYPE            = @v_pre_value_type
+                AND   FROM_YYYYMMDD         = @v_pre_from_yyyymmdd
+                AND   TO_YYYYMMDD           = @v_pre_to_yyyymmdd
+
+			END
+
+		END
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+			
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+	END TRY
+	BEGIN CATCH
+		IF (XACT_STATE() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+		BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+											,log_type
+											,log_count
+											,log_message
+											,description
+											,event_date
+											,creation_date
+											,created_by
+											,last_update_date
+											,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+					,'ERROR'
+					,NULL
+					,ERROR_MESSAGE()
+					,NULL
+					,SYSDATETIME()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--	COMMIT WORK;
+
+		END;
+
+		-- error코드, errror 메시지 반환
+		SELECT 'F' AS result_code;
+		SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+
+
+
+
+
+
+"
+"2025-08-28 00:00:00.883","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	 AND VALID_YN='Y'
+	
+
+
+	--2. 재고 SCM SITE ID 
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'	
+	AND A.DIVISION_ID != '40'
+	AND A.VALID_YN = 'Y'	
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, A.SCM_SITE_ID AS CODE 
+		, A.SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+		ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'
+	AND  A.DIVISION_ID = '40'
+	AND A.VALID_YN = 'Y'
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   [dbo].[SCM_MST_SITE] A
+	WHERE  1 = 1
+	AND    A.SITE_TYPE = 'PLANT'
+	ORDER BY A.SCM_SITE_ID  -- A.DIVISION_ID
+	
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'OPMZ_STAGE_CD'
+--   FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+--   WHERE M.LOOKUP_TYPE LIKE 'SCP_OPT_ENG_CONST_DEF_STAGE'
+   AND   M.VALID_YN='Y'
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	  	-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+		-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+   --6.SCM0002_ItembyDivisionPopup 기준으로 ITEM_ID 조회
+   	  SELECT distinct
+		   I.DIVISION_ID
+		 -- , S.SCM_SITE_ID
+		 , I.ITEM_ID	 
+	  FROM   SCP_MST_FINAL_ITEM I WITH(NOLOCK)	
+	  WHERE 1=1
+	  AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  ORDER BY  I.ITEM_ID, I.DIVISION_ID 
+
+	  --SELECT distinct
+		 --  D.DIVISION_ID
+		 ---- , S.SCM_SITE_ID
+		 --, I.ITEM_ID	 
+	  --FROM [SCM_MST_SITE_ITEM]			I WITH(NOLOCK)	     
+	  --JOIN [SCM_MST_DIVISION]			D WITH(NOLOCK) ON I.DIVISION_ID  = D.DIVISION_ID
+	  --JOIN [SCM_MST_SITE]				S WITH(NOLOCK) ON I.DIVISION_ID  = S.DIVISION_ID AND I.SCM_SITE_ID  = S.SCM_SITE_ID	
+	  --JOIN [SCM_MST_ITEM_SN]			T WITH(NOLOCK) ON I.DIVISION_ID  = T.DIVISION_ID AND I.ITEM_ID      = T.ITEM_ID  
+	  --LEFT OUTER JOIN [SCM_MST_PROJECT] P WITH(NOLOCK) ON I.DIVISION_ID  = P.DIVISION_ID AND I.PROJECT_CODE = P.PROJECT_CODE
+	  --WHERE 1=1
+	  --AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  --ORDER BY  I.ITEM_ID, D.DI"
+"2025-08-28 00:00:00.883","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","2","VISION_ID 
+END
+
+ "
+"2025-08-01 00:00:00.900","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	 AND VALID_YN='Y'
+	
+
+
+	--2. 재고 SCM SITE ID 
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'	
+	AND A.DIVISION_ID != '40'
+	AND A.VALID_YN = 'Y'	
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, A.SCM_SITE_ID AS CODE 
+		, A.SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+		ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'
+	AND  A.DIVISION_ID = '40'
+	AND A.VALID_YN = 'Y'
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   [dbo].[SCM_MST_SITE] A
+	WHERE  1 = 1
+	AND    A.SITE_TYPE = 'PLANT'
+	ORDER BY A.DIVISION_ID
+	
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'SCP_OPT_ENG_CONST_DEF_STAGE'
+   AND   M.VALID_YN='Y'
+   -- AND   M.SEGMENT1 ='81' --DIVISION_NO
+	
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	  	-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+		-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+	--6.Item 정보(Validation 체크용)
+	--SELECT DISTINCT DIVISION_ID
+	 --            , ITEM_ID
+	--FROM SCM_MST_ITEM_SN WITH(NOLOCK)
+
+
+   --6.Project Route 기준정보 및 Sales Site Project Model 기준 Model 코드 조회
+	---------------------------------------------------------------------------------------------------
+	print  convert(varchar(30), getdate(), 121) + N' 기준 일자 정보 ' 
+	---------------------------------------------------------------------------------------------------
+	-- 당주 월요일 (plan_start_yyyymmdd) 
+	SELECT @v_from_yyyymmdd = MD.YYYYMMDD
+	 FROM SCM_MST_BUCKET TD WITH(NOLOCK)
+		  INNER JOIN SCM_MST_BUCKET MD WITH(NOLOCK) 
+				  ON MD.YYYYWW = TD.YYYYWW 
+				 AND MD.DAYOFWEEK = 'MON'
+	WHERE 1=1
+	  AND TD.YYYYMMDD = CONVERT(NVARCHAR(8), GETDATE(), 112) 
+
+	-- plan horizon_end_date
+	SELECT @v_to_yyyymmdd = PM.HORIZON_END_DATE
+	  FROM SCM_MST_PLAN PM WITH(NOLOCK)
+	WHERE 1=1 
+	  AND PM.DIVISION_ID	= @V_DIVISION_ID
+	  AND PM.PLAN_NAME		= @v_from_yyyymmdd
+	  AND PM.PLAN_CYCLE		= 'WEEKLY'
+
+	PRINT '------------------------------------------------------------------';
+	PRINT '@v_division_id		= ' + @v_division_id;
+	PRINT '@v_from_yyyymmdd		= ' + @v_from_yyyymmdd;
+	PRINT '@v_to_yyyymmdd		= ' + @v_to_yyyymmdd;
+	"
+"2025-07-26 00:00:00.390","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","4","SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+			
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+	END TRY
+	BEGIN CATCH
+		IF (XACT_STATE() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+		BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+											,log_type
+											,log_count
+											,log_message
+											,description
+											,event_date
+											,creation_date
+											,created_by
+											,last_update_date
+											,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+					,'ERROR'
+					,NULL
+					,ERROR_MESSAGE()
+					,NULL
+					,SYSDATETIME()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--	COMMIT WORK;
+
+		END;
+
+		-- error코드, errror 메시지 반환
+		SELECT 'F' AS result_code;
+		SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+
+
+
+
+
+
+"
+"2025-07-31 00:00:00.870","LGCE_SCMDEV","P ","SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY","1288703989","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : CAPA - No Work 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY]
+	  @p_division_id		NVARCHAR(MAX)
+	, @p_plan_group_id	    NVARCHAR(MAX)
+	, @p_scm_site_id		NVARCHAR(MAX)
+	, @p_item_id			NVARCHAR(MAX)
+	, @p_stage				NVARCHAR(MAX)
+	, @p_valid_yn			NVARCHAR(MAX)
+	, @p_value_type			NVARCHAR(MAX)
+
+
+AS
+BEGIN
+	
+  SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+-- 파라미터로 받을 값 변수  
+  DECLARE @v_division_id		NVARCHAR(200)	= @p_division_id
+  DECLARE @v_plan_group_id		NVARCHAR(200)	= @p_plan_group_id
+  DECLARE @v_scm_site_id		NVARCHAR(200)	= @p_scm_site_id
+  DECLARE @v_item_id		    NVARCHAR(200)	= @p_item_id
+  DECLARE @v_stage		        NVARCHAR(200)	= @p_stage
+  DECLARE @v_valid_yn		    NVARCHAR(200)	= @p_valid_yn
+  DECLARE @v_value_type		    NVARCHAR(200)	= @p_value_type
+
+  SELECT a.VALUE_TYPE
+        ,a.DIVISION_ID
+       -- ,a.OPMZ_PLAN_GR_ID
+        ,a.OPMZ_PLAN_GR_ID
+       -- ,b.OPMZ_PLAN_GR_NAME
+        ,a.SCM_SITE_ID
+        ,a.ITEM_ID
+        ,a.STAGE
+        , CONVERT(date, a.FROM_YYYYMMDD, 112) AS FROM_YYYYMMDD
+        , CONVERT(date, a.TO_YYYYMMDD, 112) AS TO_YYYYMMDD
+        -- ,a.FROM_YYYYMMDD
+        -- ,a.TO_YYYYMMDD
+        ,a.TYPE_APPLY_DAY
+        ,a.VALUE_DESCRIPTION
+        ,a.VALID_YN
+        ,a.CREATED_BY
+        ,a.CREATION_DATE
+        ,a.LAST_UPDATED_BY
+        ,a.LAST_UPDATE_DATE
+        , a.VALUE_TYPE + '|' + a.DIVISION_ID+ '|' + a.OPMZ_PLAN_GR_ID+ '|' + a.SCM_SITE_ID+ '|' + a.ITEM_ID + '|' + a.STAGE + '|' + a.FROM_YYYYMMDD+ '|' +  a.TO_YYYYMMDD AS PRE_KEY_VALUES
+    FROM DBO.SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY a  with(nolock)
+      INNER JOIN ( SELECT DISTINCT '%'+token+'%' tst FROM dbo.String_Split(@p_item_id,',') ) b
+              ON a.ITEM_ID  like  b.tst 
+    WHERE 1=1
+    AND ( ( @v_division_id   IS NULL OR @v_division_id = '' )   OR a.DIVISION_ID     IN (SELECT token FROM dbo.String_Split(@v_division_id  ,',')) )
+    AND ( ( @v_scm_site_id   IS NULL OR @v_scm_site_id = '' )   OR a.SCM_SITE_ID     IN (SELECT token FROM dbo.String_Split(@v_scm_site_id  ,',')) )
+    AND ( ( @v_value_type    IS NULL OR @v_value_type = '' )    OR a.VALUE_TYPE      IN (SELECT token FROM dbo.String_Split(@v_value_type  ,',')) )
+    AND ( ( @p_valid_yn      IS NULL OR @v_valid_yn   = '' )    OR a.VALID_YN        IN (SELECT token FROM dbo.String_Split(@v_valid_yn  ,',')) )
+    AND ( ( @v_plan_group_id IS NULL OR @v_plan_group_id = '' ) OR a.OPMZ_PLAN_GR_ID IN (SELECT token FROM dbo.String_Split(@v_plan_group_id  ,',')) )
+   -- AND ( ( @v_item_id       IS NULL OR @v_item_id = '' )       OR a.ITEM_ID         IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )
+    AND ( ( @v_stage         IS NULL OR @v_stage = '' )         OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_stage  ,',')) )
+  
+END
+
+"
+"2025-07-24 00:00:01.133","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	
+
+
+	--2. 재고 SCM SITE ID 
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'	
+	AND A.DIVISION_ID != '40'
+	AND A.VALID_YN = 'Y'	
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, A.SCM_SITE_ID AS CODE 
+		, A.SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+		ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'
+	AND  A.DIVISION_ID = '40'
+	AND A.VALID_YN = 'Y'
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   [dbo].[SCM_MST_SITE] A
+	WHERE  1 = 1
+	AND    A.SITE_TYPE = 'PLANT'
+	ORDER BY A.DIVISION_ID
+	
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'SCP_OPT_ENG_CONST_DEF_STAGE'
+   AND   M.VALID_YN='Y'
+   -- AND   M.SEGMENT1 ='81' --DIVISION_NO
+	
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+		,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+		,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+END
+
+"
+"2025-09-26 00:00:01.180","LGCE_SCMDEV","P ","SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY","1288703989","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : CAPA - No Work 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY]
+	  @p_division_id		NVARCHAR(MAX)
+	, @p_plan_group_id	    NVARCHAR(MAX)
+	, @p_scm_site_id		NVARCHAR(MAX)
+	, @p_item_id			NVARCHAR(MAX)
+	, @p_stage				NVARCHAR(MAX)
+	, @p_valid_yn			NVARCHAR(MAX)
+	, @p_value_type			NVARCHAR(MAX)
+
+    , @p_period_from		NVARCHAR(MAX)
+    , @p_period_to			NVARCHAR(MAX)
+
+AS
+BEGIN
+	
+  SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+-- 파라미터로 받을 값 변수  
+  DECLARE @v_division_id		NVARCHAR(200)	= @p_division_id
+  DECLARE @v_plan_group_id		NVARCHAR(200)	= @p_plan_group_id
+  DECLARE @v_scm_site_id		NVARCHAR(200)	= @p_scm_site_id
+  DECLARE @v_item_id		    NVARCHAR(200)	= @p_item_id
+  DECLARE @v_stage		        NVARCHAR(200)	= @p_stage
+  DECLARE @v_valid_yn		    NVARCHAR(200)	= @p_valid_yn
+  DECLARE @v_value_type		    NVARCHAR(200)	= @p_value_type
+  
+  DECLARE @v_period_from		NVARCHAR(200)	= @p_period_from
+  DECLARE @v_period_to		    NVARCHAR(200)	= @p_period_to
+
+  SELECT a.VALUE_TYPE
+        ,a.DIVISION_ID
+        ,a.OPMZ_PLAN_GR_ID
+        ,a.SCM_SITE_ID
+        ,a.ITEM_ID
+        ,a.STAGE
+        , CONVERT(date, a.FROM_YYYYMMDD, 112) AS FROM_YYYYMMDD
+        , CONVERT(date, a.TO_YYYYMMDD, 112) AS TO_YYYYMMDD
+        ,a.TYPE_APPLY_DAY
+        ,a.VALUE_DESCRIPTION
+        ,a.VALID_YN
+        ,a.CREATED_BY
+        ,a.CREATION_DATE
+        ,a.LAST_UPDATED_BY
+        ,a.LAST_UPDATE_DATE
+        , a.VALUE_TYPE + '|' + a.DIVISION_ID+ '|' + a.OPMZ_PLAN_GR_ID+ '|' + a.SCM_SITE_ID+ '|' + a.ITEM_ID + '|' + a.STAGE + '|' + a.FROM_YYYYMMDD+ '|' +  a.TO_YYYYMMDD AS PRE_KEY_VALUES
+    FROM DBO.SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY a  with(nolock)
+      INNER JOIN ( SELECT DISTINCT '%'+token+'%' tst FROM dbo.String_Split(@p_item_id,',') ) b
+              ON a.ITEM_ID  like  b.tst 
+    WHERE 1=1
+    AND ( ( @v_division_id   IS NULL OR @v_division_id = '' )   OR a.DIVISION_ID     IN (SELECT token FROM dbo.String_Split(@v_division_id  ,',')) )
+    AND ( ( @v_scm_site_id   IS NULL OR @v_scm_site_id = '' )   OR a.SCM_SITE_ID     IN (SELECT token FROM dbo.String_Split(@v_scm_site_id  ,',')) )
+    AND ( ( @v_value_type    IS NULL OR @v_value_type = '' )    OR a.VALUE_TYPE      IN (SELECT token FROM dbo.String_Split(@v_value_type  ,',')) )
+    AND ( ( @p_valid_yn      IS NULL OR @v_valid_yn   = '' )    OR a.VALID_YN        IN (SELECT token FROM dbo.String_Split(@v_valid_yn  ,',')) )
+    AND ( ( @v_plan_group_id IS NULL OR @v_plan_group_id = '' ) OR a.OPMZ_PLAN_GR_ID IN (SELECT token FROM dbo.String_Split(@v_plan_group_id  ,',')) )
+    AND ( ( @v_stage         IS NULL OR @v_stage = '' )         OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_stage  ,',')) )
+    AND  FROM_YYYYMMDD  <=  @v_period_to 
+    AND  TO_YYYYMMDD    >= @v_period_from
+
+END
+
+"
+"2025-07-26 00:00:00.390","LGCE_SCMDEV","P ","SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY","1288703989","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : CAPA - No Work 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY]
+	  @p_division_id		NVARCHAR(MAX)
+	, @p_plan_group_id	    NVARCHAR(MAX)
+	, @p_scm_site_id		NVARCHAR(MAX)
+	, @p_item_id			NVARCHAR(MAX)
+	, @p_stage				NVARCHAR(MAX)
+	, @p_valid_yn			NVARCHAR(MAX)
+	, @p_value_type			NVARCHAR(MAX)
+
+
+AS
+BEGIN
+	
+  SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+-- 파라미터로 받을 값 변수  
+  DECLARE @v_division_id		NVARCHAR(200)	= @p_division_id
+  DECLARE @v_plan_group_id		NVARCHAR(200)	= @p_plan_group_id
+  DECLARE @v_scm_site_id		NVARCHAR(200)	= @p_scm_site_id
+  DECLARE @v_item_id		    NVARCHAR(200)	= @p_item_id
+  DECLARE @v_stage		        NVARCHAR(200)	= @p_stage
+  DECLARE @v_valid_yn		    NVARCHAR(200)	= @p_valid_yn
+  DECLARE @v_value_type		    NVARCHAR(200)	= @p_value_type
+
+  SELECT a.VALUE_TYPE
+        ,a.DIVISION_ID
+       -- ,a.OPMZ_PLAN_GR_ID
+        ,a.OPMZ_PLAN_GR_ID
+       -- ,b.OPMZ_PLAN_GR_NAME
+        ,a.SCM_SITE_ID
+        ,a.ITEM_ID
+        ,a.STAGE
+        ,a.FROM_YYYYMMDD
+        ,a.TO_YYYYMMDD
+        ,a.TYPE_APPLY_DAY
+        ,a.VALUE_DESCRIPTION
+        ,a.VALID_YN
+        ,a.CREATED_BY
+        ,a.CREATION_DATE
+        ,a.LAST_UPDATED_BY
+        ,a.LAST_UPDATE_DATE
+        , a.VALUE_TYPE + '|' + a.DIVISION_ID+ '|' + a.OPMZ_PLAN_GR_ID+ '|' + a.SCM_SITE_ID+ '|' + a.ITEM_ID + '|' + a.STAGE + '|' + a.FROM_YYYYMMDD+ '|' +  a.TO_YYYYMMDD AS PRE_KEY_VALUES
+    FROM DBO.SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY a  with(nolock)
+    --INNER JOIN SCP_OPMZ_PLAN_GR_M b with(nolock)
+    --    ON( a.DIVISION_ID = b.DIVISION_ID
+    --    AND a.OPMZ_PLAN_GR_ID = b.OPMZ_PLAN_GR_ID
+    --    AND b.VALID_YN='Y'
+    --   )
+    WHERE 1=1
+    AND ( ( @v_division_id   IS NULL OR @v_division_id = '' )   OR a.DIVISION_ID     IN (SELECT token FROM dbo.String_Split(@v_division_id  ,',')) )
+    AND ( ( @v_scm_site_id   IS NULL OR @v_scm_site_id = '' )   OR a.SCM_SITE_ID     IN (SELECT token FROM dbo.String_Split(@v_scm_site_id  ,',')) )
+    AND ( ( @v_value_type    IS NULL OR @v_value_type = '' )    OR a.VALUE_TYPE      IN (SELECT token FROM dbo.String_Split(@v_value_type  ,',')) )
+    AND ( ( @p_valid_yn      IS NULL OR @v_valid_yn   = '' )    OR a.VALID_YN        IN (SELECT token FROM dbo.String_Split(@v_valid_yn  ,',')) )
+    AND ( ( @v_plan_group_id IS NULL OR @v_plan_group_id = '' ) OR a.OPMZ_PLAN_GR_ID IN (SELECT token FROM dbo.String_Split(@v_plan_group_id  ,',')) )
+    AND ( ( @v_item_id       IS NULL OR @v_item_id = '' )       OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )
+    AND ( ( @v_stage         IS NULL OR @v_stage = '' )         OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_stage  ,',')) )
+  
+END
+
+"
+"2025-07-26 00:00:00.390","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","1","
+/*
+ * Program ID   : SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : STOCK 조정 등록,수정 
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY]
+
+	-- Add the parameters for the stored procedure here
+  @p_active_flag         NVARCHAR(MAX),
+  @p_value_type          NVARCHAR(MAX),
+  @p_division_id         NVARCHAR(MAX),
+  @p_opmz_plan_gr_id     NVARCHAR(MAX),
+  @p_scm_site_id         NVARCHAR(MAX),
+  @p_item_id             NVARCHAR(MAX),
+  @p_stage               NVARCHAR(MAX),
+  @p_from_yyyymmdd       NVARCHAR(MAX),
+  @p_to_yyyymmdd         NVARCHAR(MAX),
+  @p_type_apply_day      NVARCHAR(MAX),
+  @p_value_description   NVARCHAR(MAX),
+  @p_valid_yn            NVARCHAR(MAX),
+  @p_user_id			 NVARCHAR(MAX),
+
+  @p_pre_value_type	       NVARCHAR(MAX),
+  @p_pre_division_id	   NVARCHAR(MAX),
+  @p_pre_opmz_plan_gr_id   NVARCHAR(MAX),
+  @p_pre_scm_site_id	   NVARCHAR(MAX),
+  @p_pre_item_id	       NVARCHAR(MAX),
+  @p_pre_stage	           NVARCHAR(MAX),
+  @p_pre_from_yyyymmdd	   NVARCHAR(MAX),
+  @p_pre_to_yyyymmdd	   NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @v_working_time			DATETIME =sysdatetime();
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag		  NVARCHAR(MAX);
+    DECLARE @v_value_type         NVARCHAR(MAX);
+    DECLARE @v_division_id        NVARCHAR(MAX);
+    DECLARE @v_opmz_plan_gr_id    NVARCHAR(MAX);
+    DECLARE @v_scm_site_id        NVARCHAR(MAX);
+    DECLARE @v_item_id            NVARCHAR(MAX);
+    DECLARE @v_stage              NVARCHAR(MAX);
+    DECLARE @v_from_yyyymmdd      NVARCHAR(MAX);
+    DECLARE @v_to_yyyymmdd        NVARCHAR(MAX);
+    DECLARE @v_type_apply_day     NVARCHAR(MAX);
+    DECLARE @v_value_description  NVARCHAR(MAX);
+    DECLARE @v_valid_yn           NVARCHAR(MAX);
+	DECLARE @v_user_id		      NVARCHAR(MAX);
+	DECLARE @v_last_updated_by	  NVARCHAR(MAX);
+	
+	DECLARE @v_pre_value_type	   NVARCHAR(MAX);
+    DECLARE @v_pre_division_id	   NVARCHAR(MAX);
+    DECLARE @V_pre_opmz_plan_gr_id NVARCHAR(MAX);
+    DECLARE @v_pre_scm_site_id	   NVARCHAR(MAX);
+    DECLARE @v_pre_item_id	       NVARCHAR(MAX);
+    DECLARE @v_pre_stage	       NVARCHAR(MAX);
+    DECLARE @v_pre_from_yyyymmdd   NVARCHAR(MAX);
+    DECLARE @v_pre_to_yyyymmdd	   NVARCHAR(MAX);
+
+
+
+
+
+	SET @v_active_flag       = NULL;	
+	SET @v_value_type        = NULL;
+	SET @v_division_id       = NULL;	
+	SET @v_opmz_plan_gr_id   = NULL;
+	SET @v_scm_site_id       = NULL;
+	SET @v_item_id           = NULL;
+	SET @v_stage             = NULL;
+	SET @v_from_yyyymmdd     = NULL;
+	SET @v_to_yyyymmdd       = NULL;	
+	SET @v_type_apply_day    = NULL;
+	SET @v_value_description = NULL;
+	SET @v_valid_yn          = NULL;
+	SET @v_user_id	         = NULL;
+	SET @v_last_updated_by	 = NULL;
+
+	SET @v_pre_value_type	   = NULL;
+	SET @v_pre_division_id	   = NULL;
+	SET @V_pre_opmz_plan_gr_id = NULL;
+	SET @v_pre_scm_site_id	   = NULL;
+	SET @v_pre_item_id	       = NULL;
+	SET @v_pre_stage	       = NULL;
+	SET @v_pre_from_yyyymmdd   = NULL;
+	SET @v_pre_to_yyyymmdd	   = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+		
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date "
+"2025-07-26 00:00:00.390","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","2","  DATETIME;
+
+	DECLARE @v_data_dup_cnt  INT=0;
+
+
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code     INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+
+	SET @v_last_updated_by  = @p_user_id
+
+	BEGIN TRY
+
+		-- 트렌젝션 시작
+		BEGIN TRAN;
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);   
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN
+
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag		 = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag,       @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_value_type        = [dbo].[SCM_ARR_SPL_VAL](@p_value_type,        @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_division_id       = [dbo].[SCM_ARR_SPL_VAL](@p_division_id,       @v_delimiter , @mst_loop_cnt) ;	
+				SET @v_opmz_plan_gr_id   = [dbo].[SCM_ARR_SPL_VAL](@p_opmz_plan_gr_id,   @v_delimiter , @mst_loop_cnt) ;
+				SET @v_scm_site_id       = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id,       @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_item_id           = [dbo].[SCM_ARR_SPL_VAL](@p_item_id,           @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_stage             = [dbo].[SCM_ARR_SPL_VAL](@p_stage,             @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_from_yyyymmdd     = [dbo].[SCM_ARR_SPL_VAL](@p_from_yyyymmdd	,    @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_to_yyyymmdd       = [dbo].[SCM_ARR_SPL_VAL](@p_to_yyyymmdd	,    @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_type_apply_day    = [dbo].[SCM_ARR_SPL_VAL](@p_type_apply_day,    @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_value_description = [dbo].[SCM_ARR_SPL_VAL](@p_value_description, @v_delimiter , @mst_loop_cnt) ;	
+				SET @v_valid_yn          = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn,          @v_delimiter , @mst_loop_cnt) ;
+
+				SET @v_pre_value_type	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_value_type,      @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_division_id	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_division_id,     @v_delimiter , @mst_loop_cnt) ;
+				SET @V_pre_opmz_plan_gr_id = [dbo].[SCM_ARR_SPL_VAL](@p_pre_opmz_plan_gr_id, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_scm_site_id	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_scm_site_id,     @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_item_id	       = [dbo].[SCM_ARR_SPL_VAL](@p_pre_item_id,         @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_stage	       = [dbo].[SCM_ARR_SPL_VAL](@p_pre_stage,           @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_from_yyyymmdd   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_from_yyyymmdd,   @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_to_yyyymmdd	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_to_yyyymmdd,     @v_delimiter , @mst_loop_cnt) ;
+
+			END
+
+			--삭제가 아닌 경우, 중복체크
+			IF (@v_active_flag <> 'D')
+			BEGIN 
+				/***** 중복체크 *****/
+				DECLARE @cnt INTEGER;
+				SET @cnt = 0;
+
+				SELECT @cnt = COUNT(*)
+				FROM SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY  WITH(NOLOCK)
+				WHERE DIVISION_ID	= @v_division_id
+				AND OPMZ_PLAN_GR_ID = @v_opmz_plan_gr_id
+				AND SCM_SITE_ID	    = @v_scm_site_id
+				AND STAGE	        = @v_stage
+				AND VALUE_TYPE      = @v_value_type
+				AND ITEM_ID         = @v_item_id
+				AND FROM_YYYYMMDD   = @v_from_yyyymmdd
+				AND TO_YYYYMMDD	    = @v_to_yyyymmdd
+
+				IF(@cnt > 0)
+				BEGIN
+					SET @v_err_code    = 99010 ; 
+					SET @v_err_message = N' 신규 입력 데이터 중 중복된 데이터가 있습니다.';
+					THROW  @v_err_code, @v_err_message , 1; --예외발생
+				END
+
+				/**** 날짜 중복 체크 ****/
+				SELECT @cnt = COUNT(1)
+				FROM SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY x
+				WHERE DIVISION_ID	= @v_division_id
+				AND OPMZ_PLAN_GR_ID = @v_opmz_plan_gr_id
+				AND SCM_SITE_"
+"2025-07-26 00:00:00.390","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","3","ID	    = @v_scm_site_id
+				AND STAGE	        = @v_stage
+				AND VALUE_TYPE      = @v_value_type
+				AND ITEM_ID         = @v_item_id
+				AND NOT ( @v_to_yyyymmdd   < x.FROM_YYYYMMDD OR @v_from_yyyymmdd > x.TO_YYYYMMDD )
+				AND NOT (x.FROM_YYYYMMDD = @v_pre_from_yyyymmdd AND X.TO_YYYYMMDD = @v_pre_to_yyyymmdd ) -- 기존 값
+
+				IF(@cnt > 0)
+				BEGIN
+					SET @v_err_code    = 99010 ; 
+					SET @v_err_message = N' 입력 데이터 중 날짜가 중복되는 데이터가 있습니다.';
+					THROW  @v_err_code, @v_err_message , 1; --예외발생
+				END
+
+				/***** 중복체크 *****/
+			END
+
+			IF(@v_active_flag = 'I')
+			BEGIN
+
+                INSERT INTO SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                (
+                       DIVISION_ID
+                      ,OPMZ_PLAN_GR_ID
+                      ,SCM_SITE_ID
+                      ,STAGE
+                      ,ITEM_ID
+                      ,VALUE_TYPE
+                      ,FROM_YYYYMMDD
+                      ,TO_YYYYMMDD
+                      ,TYPE_APPLY_DAY
+                      ,VALUE_DESCRIPTION
+                      ,VALID_YN
+                      ,CREATED_BY
+                      ,CREATION_DATE
+                      ,LAST_UPDATED_BY
+                      ,LAST_UPDATE_DATE
+                )
+                VALUES
+                (
+                       @v_division_id
+                      ,@v_opmz_plan_gr_id
+                      ,@v_scm_site_id
+                      ,@v_stage
+                      ,@v_item_id
+                      ,@v_value_type
+                      ,@v_from_yyyymmdd
+                      ,@v_to_yyyymmdd
+                      ,@v_type_apply_day
+                      ,@v_value_description
+                      ,@v_valid_yn
+                      ,@v_last_updated_by
+                      ,GETDATE()
+                      ,@v_last_updated_by
+                      ,GETDATE()
+                )
+
+			END
+			ELSE IF( @v_active_flag ='M' )
+			BEGIN
+
+                UPDATE SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                SET DIVISION_ID           = @v_division_id
+                   ,OPMZ_PLAN_GR_ID       = @v_opmz_plan_gr_id
+                   ,SCM_SITE_ID           = @v_scm_site_id
+                   ,STAGE                 = @v_stage
+                   ,ITEM_ID               = @v_item_id
+                   ,VALUE_TYPE            = @v_value_type
+                   ,FROM_YYYYMMDD         = @v_from_yyyymmdd
+                   ,TO_YYYYMMDD           = @v_to_yyyymmdd
+                   ,TYPE_APPLY_DAY        = @v_type_apply_day
+                   ,VALUE_DESCRIPTION     = @v_value_description
+                   ,VALID_YN              = @v_valid_yn
+                   ,LAST_UPDATED_BY	      = @v_last_updated_by
+                   ,LAST_UPDATE_DATE      = SYSDATETIME()
+                WHERE DIVISION_ID           = @v_pre_division_id
+                AND   OPMZ_PLAN_GR_ID       = @v_pre_opmz_plan_gr_id
+                AND   SCM_SITE_ID           = @v_pre_scm_site_id
+                AND   STAGE                 = @v_pre_stage
+                AND   ITEM_ID               = @v_pre_item_id
+                AND   VALUE_TYPE            = @v_pre_value_type
+                AND   FROM_YYYYMMDD         = @v_pre_from_yyyymmdd
+                AND   TO_YYYYMMDD           = @v_pre_to_yyyymmdd
+				;
+
+			END
+			--삭제기능 추가 (2025-07-16)
+			ELSE IF(@v_active_flag ='D')
+			BEGIN
+				
+				DELETE SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                WHERE DIVISION_ID           = @v_pre_division_id
+                AND   OPMZ_PLAN_GR_ID       = @v_pre_opmz_plan_gr_id
+                AND   SCM_SITE_ID           = @v_pre_scm_site_id
+                AND   STAGE                 = @v_pre_stage
+                AND   ITEM_ID               = @v_pre_item_id
+                AND   VALUE_TYPE            = @v_pre_value_type
+                AND   FROM_YYYYMMDD         = @v_pre_from_yyyymmdd
+                AND   TO_YYYYMMDD           = @v_pre_to_yyyymmdd
+
+			END
+
+		END
+
+		"
+"2025-08-19 00:00:00.953","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	 AND VALID_YN='Y'
+	
+
+
+	--2. 재고 SCM SITE ID 
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'	
+	AND A.DIVISION_ID != '40'
+	AND A.VALID_YN = 'Y'	
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, A.SCM_SITE_ID AS CODE 
+		, A.SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+		ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'
+	AND  A.DIVISION_ID = '40'
+	AND A.VALID_YN = 'Y'
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   [dbo].[SCM_MST_SITE] A
+	WHERE  1 = 1
+	AND    A.SITE_TYPE = 'PLANT'
+	ORDER BY A.SCM_SITE_ID  -- A.DIVISION_ID
+	
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'SCP_OPT_ENG_CONST_DEF_STAGE'
+   AND   M.VALID_YN='Y'
+   -- AND   M.SEGMENT1 ='81' --DIVISION_NO
+	
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	  	-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+		-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+	--6.Item 정보(Validation 체크용)
+	--SELECT DISTINCT DIVISION_ID
+	 --            , ITEM_ID
+	--FROM SCM_MST_ITEM_SN WITH(NOLOCK)
+
+
+   --6.Project Route 기준정보 및 Sales Site Project Model 기준 Model 코드 조회
+	---------------------------------------------------------------------------------------------------
+	print  convert(varchar(30), getdate(), 121) + N' 기준 일자 정보 ' 
+	---------------------------------------------------------------------------------------------------
+	-- 당주 월요일 (plan_start_yyyymmdd) 
+	SELECT @v_from_yyyymmdd = MD.YYYYMMDD
+	 FROM SCM_MST_BUCKET TD WITH(NOLOCK)
+		  INNER JOIN SCM_MST_BUCKET MD WITH(NOLOCK) 
+				  ON MD.YYYYWW = TD.YYYYWW 
+				 AND MD.DAYOFWEEK = 'MON'
+	WHERE 1=1
+	  AND TD.YYYYMMDD = CONVERT(NVARCHAR(8), GETDATE(), 112) 
+
+	-- plan horizon_end_date
+	SELECT @v_to_yyyymmdd = PM.HORIZON_END_DATE
+	  FROM SCM_MST_PLAN PM WITH(NOLOCK)
+	WHERE 1=1 
+	  AND PM.DIVISION_ID	= @V_DIVISION_ID
+	  AND PM.PLAN_NAME		= @v_from_yyyymmdd
+	  AND PM.PLAN_CYCLE		= 'WEEKLY'
+
+	PRINT '------------------------------------------------------------------';
+	PRINT '@v_division_id		= ' + @v_division_id;
+	PRINT '@v_from_yyyymmdd		= ' + @v_from_yyyymmdd;
+	PRINT '@v_"
+"2025-08-19 00:00:00.953","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","2","to_yyyymmdd		= ' + @v_to_yyyymmdd;
+	PRINT '------------------------------------------------------------------';
+
+	IF OBJECT_ID('TEMPDB..#SCM_MST_SITE_FROM') IS NOT NULL DROP TABLE #SCM_MST_SITE_FROM
+	SELECT SCM_SITE_ID
+	      ,SITE_DESCRIPTION
+		  ,OSP_YN
+		  ,OPERATION_GROUP
+		  ,COUNTRY
+		  ,CITY
+	 INTO #SCM_MST_SITE_FROM
+	 FROM SCM_MST_SITE WITH(NOLOCK)
+	WHERE 1=1
+	  AND DIVISION_ID= @v_division_id
+	  AND SITE_TYPE= 'PLANT'
+	  AND VALID_YN= 'Y'
+
+	IF OBJECT_ID('TEMPDB..#PROJECT_ROUTE') IS NOT NULL DROP TABLE #PROJECT_ROUTE
+
+	SELECT PR.DIVISION_ID
+	      ,PR.ITEM_ID
+	      ,PR.SALES_SITE_ID
+	      ,PR.PROJECT_CODE
+	      ,PR.PLANT_SITE_ID
+	      ,PR.FROM_YYYYMMDD
+	      ,PR.TO_YYYYMMDD
+	      ,PS.COUNTRY
+	      ,PS.CITY
+	      ,ROW_NUMBER() OVER (PARTITION BY PR.ITEM_ID
+	          ,PR.SALES_SITE_ID
+	          ,PR.PROJECT_CODE
+	          ,PR.FROM_YYYYMMDD
+	          ,PR.TO_YYYYMMDD
+	  	      ORDER BY PR.PRIORITY ) AS PR_PRIORITY
+	  INTO #PROJECT_ROUTE
+  	  FROM SCM_MST_SITE_ITEM_PRIORITY PR WITH(NOLOCK)
+	 INNER JOIN #SCM_MST_SITE_FROM PS WITH(NOLOCK)
+	    ON PS.SCM_SITE_ID = PR.PLANT_SITE_ID
+ 	 WHERE 1=1
+	   AND PR.DIVISION_ID  = @v_division_id
+	   AND PR.VALID_YN  = 'Y'
+	   AND PR.TO_YYYYMMDD >= @v_from_yyyymmdd
+   
+	SELECT DISTINCT  X.DIVISION_ID,  X.ITEM_ID
+	                -- ,X.SALES_SITE_ID, X.ITEM_ID AS CODE, X.ITEM_ID AS NAME
+	FROM (
+		  SELECT X.DIVISION_ID, X.SALES_SITE_ID, X.ITEM_ID
+		    FROM #PROJECT_ROUTE X
+		   WHERE 1=1
+		   UNION ALL
+		  SELECT X.DIVISION_ID, X.SCM_SITE_ID, X.ITEM_ID
+            FROM SCM_MST_SITE_ITEM X  WITH(NOLOCK)
+           WHERE X.DIVISION_ID =@v_division_id
+		     AND  VALID_YN		= 'Y'
+		  )X
+	  WHERE 1=1
+	  AND ( ( @v_site_id      IS NULL OR @v_site_id   = '' )    OR X.SALES_SITE_ID      IN (SELECT token FROM dbo.String_Split(@v_site_id  ,',')) )
+	  ORDER BY  x.ITEM_ID
+ 
+
+  --SELECT * FROM SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+END
+
+ "
+"2025-08-21 00:00:00.093","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	 AND VALID_YN='Y'
+	
+
+
+	--2. 재고 SCM SITE ID 
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'	
+	AND A.DIVISION_ID != '40'
+	AND A.VALID_YN = 'Y'	
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, A.SCM_SITE_ID AS CODE 
+		, A.SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+		ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'
+	AND  A.DIVISION_ID = '40'
+	AND A.VALID_YN = 'Y'
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   [dbo].[SCM_MST_SITE] A
+	WHERE  1 = 1
+	AND    A.SITE_TYPE = 'PLANT'
+	ORDER BY A.SCM_SITE_ID  -- A.DIVISION_ID
+	
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'OPMZ_STAGE_CD'
+--   FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+--   WHERE M.LOOKUP_TYPE LIKE 'SCP_OPT_ENG_CONST_DEF_STAGE'
+   AND   M.VALID_YN='Y'
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	  	-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+		-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+   --6.SCM0002_ItembyDivisionPopup 기준으로 ITEM_ID 조회
+	  SELECT distinct
+		   D.DIVISION_ID
+		 -- , S.SCM_SITE_ID
+		 , I.ITEM_ID	 
+	  FROM [SCM_MST_SITE_ITEM]			I WITH(NOLOCK)	     
+	  JOIN [SCM_MST_DIVISION]			D WITH(NOLOCK) ON I.DIVISION_ID  = D.DIVISION_ID
+	  JOIN [SCM_MST_SITE]				S WITH(NOLOCK) ON I.DIVISION_ID  = S.DIVISION_ID AND I.SCM_SITE_ID  = S.SCM_SITE_ID	
+	  JOIN [SCM_MST_ITEM_SN]			T WITH(NOLOCK) ON I.DIVISION_ID  = T.DIVISION_ID AND I.ITEM_ID      = T.ITEM_ID  
+	  LEFT OUTER JOIN [SCM_MST_PROJECT] P WITH(NOLOCK) ON I.DIVISION_ID  = P.DIVISION_ID AND I.PROJECT_CODE = P.PROJECT_CODE
+	  WHERE 1=1
+	  AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  ORDER BY  I.ITEM_ID, D.DIVISION_ID 
+END
+
+ "
+"2025-12-18 00:00:01.027","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ20257329  최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ * 2025/11/24   mrchois    		PJ20257329  최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - ITEM 유효성 체크 마스터 테이블 변경, SCP_MST_FINAL_ITEM -> SCM_MST_ITEM_SN
+ * 2025/12/17   mrchois    		PJ20257329  최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Scheduled Reciept Information-Virtual BOM에 등록한 ITEM도 입력 가능하도록 변경
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	AND VALID_YN='Y'
+	ORDER BY OPMZ_PLAN_GR_NAME
+	
+
+
+	----2. 재고 SCM SITE ID 
+	--SELECT DISTINCT A.DIVISION_ID
+	--	, SCM_SITE_ID AS CODE 
+	--	, SCM_SITE_ID AS NAME
+	--FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	--WHERE  1 = 1
+	--AND A.SITE_TYPE = 'SALES'	
+	--AND A.DIVISION_ID != '40'
+	--AND A.VALID_YN = 'Y'	
+	--UNION ALL
+	--SELECT DISTINCT A.DIVISION_ID
+	--	, A.SCM_SITE_ID AS CODE 
+	--	, A.SCM_SITE_ID AS NAME
+	--FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	--LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+	--	ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	--WHERE  1 = 1
+	--AND A.SITE_TYPE = 'SALES'
+	--AND  A.DIVISION_ID = '40'
+	--AND A.VALID_YN = 'Y'
+	--UNION ALL
+	--SELECT DISTINCT A.DIVISION_ID
+	--	, SCM_SITE_ID AS CODE 
+	--	, SCM_SITE_ID AS NAME
+	--FROM   [dbo].[SCM_MST_SITE] A
+	--WHERE  1 = 1
+	--AND    A.SITE_TYPE = 'PLANT'
+	--ORDER BY A.SCM_SITE_ID  -- A.DIVISION_ID
+		
+		SELECT DIVISION_ID
+			 ,CODE
+			 ,NAME
+		FROM (
+ 				SELECT DISTINCT A.DIVISION_ID
+					, SCM_SITE_ID AS CODE 
+					, SCM_SITE_ID AS NAME
+					, SITE_TYPE
+				FROM   SCM_MST_SITE A WITH(NOLOCK) 
+				WHERE  1 = 1
+				AND A.SITE_TYPE = 'SALES'	
+				AND A.DIVISION_ID != '40'
+				AND A.VALID_YN = 'Y'	
+				UNION ALL
+				SELECT DISTINCT A.DIVISION_ID
+					, A.SCM_SITE_ID AS CODE 
+					, A.SCM_SITE_ID AS NAME
+					, A.SITE_TYPE
+				FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+				LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+					ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+				WHERE  1 = 1
+				AND A.SITE_TYPE = 'SALES'
+				AND  A.DIVISION_ID = '40'
+				AND A.VALID_YN = 'Y'
+				UNION ALL
+				SELECT DISTINCT A.DIVISION_ID
+					, SCM_SITE_ID AS CODE 
+					, SCM_SITE_ID AS NAME
+					, A.SITE_TYPE
+				FROM   [dbo].[SCM_MST_SITE] A
+				WHERE  1 = 1
+				AND    A.SITE_TYPE = 'PLANT'
+			   ) X
+		ORDER BY SITE_TYPE, NAME  -- A.DIVISION_ID
+	 
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'OPMZ_STAGE_CD'
+   AND   M.VALID_YN='Y'
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_"
+"2025-12-18 00:00:01.027","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","2","MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+   --6.SCM0002_ItembyDivisionPopup 기준으로 ITEM_ID 조회
+   	  SELECT distinct
+		   I.DIVISION_ID
+		 , I.ITEM_ID	 
+	  FROM   SCM_MST_ITEM_SN I WITH(NOLOCK)		--[PJ20257329]ITEM 유효성 체크 마스터 테이블 변경, SCP_MST_FINAL_ITEM -> SCM_MST_ITEM_SN (2025-11-24)
+	  WHERE 1=1
+	  AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  --[PJ20257329] Scheduled Reciept Information-Virtual BOM에 등록한 ITEM도 입력 가능하도록 변경 (2025-12-17) START
+	  UNION
+	  SELECT distinct
+		   DIVISION_ID
+		 , ITEM_ID_CHILD	 AS ITEM_ID
+	  FROM   SCP_OPMZ_VIRTUAL_BOM I WITH(NOLOCK)
+	  WHERE 1=1
+	  AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  ORDER BY ITEM_ID, DIVISION_ID 
+	  --[PJ20257329] Scheduled Reciept Information-Virtual BOM에 등록한 ITEM도 입력 가능하도록 변경 (2025-12-17) END
+
+END
+
+ "
+"2025-12-18 00:00:01.027","LGCE_SCMDEV","P ","SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY","1288703989","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : CAPA - No Work 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ * 2025/12/17   mrchois			PJ20257329 최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - 조회 정렬 변경
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY]
+	  @p_division_id		NVARCHAR(MAX)
+	, @p_plan_group_id	    NVARCHAR(MAX)
+	, @p_scm_site_id		NVARCHAR(MAX)
+	, @p_item_id			NVARCHAR(MAX)
+	, @p_stage				NVARCHAR(MAX)
+	, @p_valid_yn			NVARCHAR(MAX)
+	, @p_value_type			NVARCHAR(MAX)
+
+    , @p_period_from		NVARCHAR(MAX)
+    , @p_period_to			NVARCHAR(MAX)
+
+AS
+BEGIN
+	
+  SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+-- 파라미터로 받을 값 변수  
+  DECLARE @v_division_id		NVARCHAR(200)	= @p_division_id
+  DECLARE @v_plan_group_id		NVARCHAR(200)	= @p_plan_group_id
+  DECLARE @v_scm_site_id		NVARCHAR(200)	= @p_scm_site_id
+  DECLARE @v_item_id		    NVARCHAR(200)	= @p_item_id
+  DECLARE @v_stage		        NVARCHAR(200)	= @p_stage
+  DECLARE @v_valid_yn		    NVARCHAR(200)	= @p_valid_yn
+  DECLARE @v_value_type		    NVARCHAR(200)	= @p_value_type
+  
+  DECLARE @v_period_from		NVARCHAR(200)	= @p_period_from
+  DECLARE @v_period_to		    NVARCHAR(200)	= @p_period_to
+
+  SELECT a.VALUE_TYPE
+        ,a.DIVISION_ID
+        ,a.OPMZ_PLAN_GR_ID
+        ,a.SCM_SITE_ID
+        ,a.ITEM_ID
+        ,a.STAGE
+        , CONVERT(date, a.FROM_YYYYMMDD, 112) AS FROM_YYYYMMDD
+        , CONVERT(date, a.TO_YYYYMMDD, 112) AS TO_YYYYMMDD
+        ,a.TYPE_APPLY_DAY
+        ,a.VALUE_DESCRIPTION
+        ,a.VALID_YN
+        ,a.CREATED_BY
+        ,a.CREATION_DATE
+        ,a.LAST_UPDATED_BY
+        ,a.LAST_UPDATE_DATE
+        , a.VALUE_TYPE + '|' + a.DIVISION_ID+ '|' + a.OPMZ_PLAN_GR_ID+ '|' + a.SCM_SITE_ID+ '|' + a.ITEM_ID + '|' + a.STAGE + '|' + a.FROM_YYYYMMDD+ '|' +  a.TO_YYYYMMDD AS PRE_KEY_VALUES
+    FROM DBO.SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY a  with(nolock)
+      INNER JOIN ( SELECT DISTINCT '%'+token+'%' tst FROM dbo.String_Split(@p_item_id,',') ) b
+              ON a.ITEM_ID  like  b.tst 
+	--[PJ20257329] 조회 정렬 변경 (2025-12-17) START
+	LEFT JOIN SCP_OPMZ_PLAN_GR_M pg with(nolock)
+		ON pg.DIVISION_ID = a.DIVISION_ID AND pg.OPMZ_PLAN_GR_ID = a. OPMZ_PLAN_GR_ID
+	--[PJ20257329] 조회 정렬 변경 (2025-12-17) END
+    WHERE 1=1
+    AND ( ( @v_division_id   IS NULL OR @v_division_id = '' )   OR a.DIVISION_ID     IN (SELECT token FROM dbo.String_Split(@v_division_id  ,',')) )
+    AND ( ( @v_scm_site_id   IS NULL OR @v_scm_site_id = '' )   OR a.SCM_SITE_ID     IN (SELECT token FROM dbo.String_Split(@v_scm_site_id  ,',')) )
+    AND ( ( @v_value_type    IS NULL OR @v_value_type = '' )    OR a.VALUE_TYPE      IN (SELECT token FROM dbo.String_Split(@v_value_type  ,',')) )
+    AND ( ( @p_valid_yn      IS NULL OR @v_valid_yn   = '' )    OR a.VALID_YN        IN (SELECT token FROM dbo.String_Split(@v_valid_yn  ,',')) )
+    AND ( ( @v_plan_group_id IS NULL OR @v_plan_group_id = '' ) OR a.OPMZ_PLAN_GR_ID IN (SELECT token FROM dbo.String_Split(@v_plan_group_id  ,',')) )
+    AND ( ( @v_stage         IS NULL OR @v_stage = '' )         OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_stage  ,',')) )
+    AND  FROM_YYYYMMDD  <=  @v_period_to 
+    AND  TO_YYYYMMDD    >= @v_period_from
+	ORDER BY a.VALUE_TYPE, a.DIVISION_ID, pg.OPMZ_PLAN_GR_NAME, a.SCM_SITE_ID, a.ITEM_ID, a.STAGE, CONVERT(date, a.FROM_YYYYMMDD, 112), CONVERT(date, a.TO_YYYYMMDD, 112)	--[PJ20257329] 조회 정렬 변경 (2025-12-17)
+
+END
+
+"
+"2025-07-25 00:00:01.607","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	
+
+
+	--2. 재고 SCM SITE ID 
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'	
+	AND A.DIVISION_ID != '40'
+	AND A.VALID_YN = 'Y'	
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, A.SCM_SITE_ID AS CODE 
+		, A.SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+		ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'
+	AND  A.DIVISION_ID = '40'
+	AND A.VALID_YN = 'Y'
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   [dbo].[SCM_MST_SITE] A
+	WHERE  1 = 1
+	AND    A.SITE_TYPE = 'PLANT'
+	ORDER BY A.DIVISION_ID
+	
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'SCP_OPT_ENG_CONST_DEF_STAGE'
+   AND   M.VALID_YN='Y'
+   -- AND   M.SEGMENT1 ='81' --DIVISION_NO
+	
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	  	-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+		-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+END
+
+"
+"2025-07-25 00:00:01.607","LGCE_SCMDEV","P ","SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY","1288703989","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : CAPA - No Work 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY]
+	  @p_division_id		NVARCHAR(MAX)
+	, @p_plan_group_id	    NVARCHAR(MAX)
+	, @p_scm_site_id		NVARCHAR(MAX)
+	, @p_item_id			NVARCHAR(MAX)
+	, @p_stage				NVARCHAR(MAX)
+	, @p_valid_yn			NVARCHAR(MAX)
+	, @p_value_type			NVARCHAR(MAX)
+
+
+AS
+BEGIN
+	
+  SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+-- 파라미터로 받을 값 변수  
+  DECLARE @v_division_id		NVARCHAR(200)	= @p_division_id
+  DECLARE @v_plan_group_id		NVARCHAR(200)	= @p_plan_group_id
+  DECLARE @v_scm_site_id		NVARCHAR(200)	= @p_scm_site_id
+  DECLARE @v_item_id		    NVARCHAR(200)	= @p_item_id
+  DECLARE @v_stage		        NVARCHAR(200)	= @p_stage
+  DECLARE @v_valid_yn		    NVARCHAR(200)	= @p_valid_yn
+  DECLARE @v_value_type		    NVARCHAR(200)	= @p_value_type
+
+
+  insert into dbo.test2 (col1, col2)
+  values('@P = d : '+@p_division_id
+         +'^P : '+@p_plan_group_id
+         +'^s : '+@p_scm_site_id
+         +'^i : '+@p_item_id
+         +'^s : '+@p_stage
+         +'^y : '+@p_valid_yn
+         +'^t : '+@p_value_type
+
+       ,'@v = d : '+@v_division_id
+         +'^P : '+@v_plan_group_id
+         +'^s : '+@v_scm_site_id
+         +'^i : '+@v_item_id
+         +'^s : '+@v_stage
+         +'^y : '+@v_valid_yn
+         +'^t : '+@v_value_type
+         )
+
+  SELECT a.VALUE_TYPE
+        ,a.DIVISION_ID
+        ,a.OPMZ_PLAN_GR_ID
+        ,a.SCM_SITE_ID
+        ,a.ITEM_ID
+        ,a.STAGE
+        ,a.FROM_YYYYMMDD
+        ,a.TO_YYYYMMDD
+        ,a.TYPE_APPLY_DAY
+        ,a.VALUE_DESCRIPTION
+        ,a.VALID_YN
+        ,a.CREATED_BY
+        ,a.CREATION_DATE
+        ,a.LAST_UPDATED_BY
+        ,a.LAST_UPDATE_DATE
+    FROM DBO.SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY a
+    WHERE 1=1
+    AND ( ( @v_division_id   IS NULL OR @v_division_id = '' )   OR a.DIVISION_ID     IN (SELECT token FROM dbo.String_Split(@v_division_id  ,',')) )
+    AND ( ( @v_scm_site_id   IS NULL OR @v_scm_site_id = '' )   OR a.SCM_SITE_ID     IN (SELECT token FROM dbo.String_Split(@v_scm_site_id  ,',')) )
+    AND ( ( @v_value_type    IS NULL OR @v_value_type = '' )    OR a.VALUE_TYPE      IN (SELECT token FROM dbo.String_Split(@v_value_type  ,',')) )
+    AND ( ( @p_valid_yn      IS NULL OR @p_valid_yn   = '' )    OR a.VALID_YN        IN (SELECT token FROM dbo.String_Split(@p_valid_yn  ,',')) )
+    AND ( ( @v_plan_group_id IS NULL OR @v_plan_group_id = '' ) OR a.OPMZ_PLAN_GR_ID IN (SELECT token FROM dbo.String_Split(@v_plan_group_id  ,',')) )
+    AND ( ( @v_item_id       IS NULL OR @v_item_id = '' )       OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )
+    AND ( ( @v_stage         IS NULL OR @v_stage = '' )         OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_stage  ,',')) )
+  
+END
+
+"
+"2025-07-25 00:00:01.607","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","1","
+/*
+ * Program ID   : SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : STOCK 조정 등록,수정 
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY]
+
+	-- Add the parameters for the stored procedure here
+  @p_active_flag         NVARCHAR(MAX),
+  @p_value_type          NVARCHAR(MAX),
+  @p_division_id         NVARCHAR(MAX),
+  @p_opmz_plan_gr_id     NVARCHAR(MAX),
+  @p_scm_site_id         NVARCHAR(MAX),
+  @p_item_id             NVARCHAR(MAX),
+  @p_stage               NVARCHAR(MAX),
+  @p_from_yyyymmdd       NVARCHAR(MAX),
+  @p_to_yyyymmdd         NVARCHAR(MAX),
+  @p_type_apply_day      NVARCHAR(MAX),
+  @p_value_description   NVARCHAR(MAX),
+  @p_valid_yn            NVARCHAR(MAX),
+  @p_user_id			 NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @v_working_time			DATETIME =sysdatetime();
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag		  NVARCHAR(MAX);
+    DECLARE @v_value_type         NVARCHAR(MAX);
+    DECLARE @v_division_id        NVARCHAR(MAX);
+    DECLARE @v_opmz_plan_gr_id    NVARCHAR(MAX);
+    DECLARE @v_scm_site_id        NVARCHAR(MAX);
+    DECLARE @v_item_id            NVARCHAR(MAX);
+    DECLARE @v_stage              NVARCHAR(MAX);
+    DECLARE @v_from_yyyymmdd      NVARCHAR(MAX);
+    DECLARE @v_to_yyyymmdd        NVARCHAR(MAX);
+    DECLARE @v_type_apply_day     NVARCHAR(MAX);
+    DECLARE @v_value_description  NVARCHAR(MAX);
+    DECLARE @v_valid_yn           NVARCHAR(MAX);
+	DECLARE @v_user_id		      NVARCHAR(MAX);
+	DECLARE @v_last_updated_by	  NVARCHAR(MAX);
+	
+	SET @v_active_flag       = NULL;	
+	SET @v_value_type        = NULL;
+	SET @v_division_id       = NULL;	
+	SET @v_opmz_plan_gr_id   = NULL;
+	SET @v_scm_site_id       = NULL;
+	SET @v_item_id           = NULL;
+	SET @v_stage             = NULL;
+	SET @v_from_yyyymmdd     = NULL;
+	SET @v_to_yyyymmdd       = NULL;	
+	SET @v_type_apply_day    = NULL;
+	SET @v_value_description = NULL;
+	SET @v_valid_yn          = NULL;
+	SET @v_user_id	         = NULL;
+	SET @v_last_updated_by	 = NULL;
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+		
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0xxx_SAVE_PRECEDE_SAFETY_STOCK_DAY_GET_NO_WORK';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	DECLARE @v_data_dup_cnt  INT=0;
+
+
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code     INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+
+	SET @v_last_updated_by  = @p_user_id
+
+	
+
+	BEGIN TRY
+
+		-- 트렌젝션 시작
+		BEGIN TRAN;
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);   
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN
+
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag		 = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag,       @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_value_type        = [dbo].[SCM_ARR_SPL_VAL](@p_value_type,        @v_delimiter "
+"2025-07-25 00:00:01.607","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","2",", @mst_loop_cnt) ;   
+				SET @v_division_id       = [dbo].[SCM_ARR_SPL_VAL](@p_division_id,       @v_delimiter , @mst_loop_cnt) ;	
+				SET @v_opmz_plan_gr_id   = [dbo].[SCM_ARR_SPL_VAL](@p_opmz_plan_gr_id,   @v_delimiter , @mst_loop_cnt) ;
+				SET @v_scm_site_id       = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id,       @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_item_id           = [dbo].[SCM_ARR_SPL_VAL](@p_item_id,           @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_stage             = [dbo].[SCM_ARR_SPL_VAL](@p_stage,             @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_from_yyyymmdd     = [dbo].[SCM_ARR_SPL_VAL](@p_from_yyyymmdd	,    @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_to_yyyymmdd       = [dbo].[SCM_ARR_SPL_VAL](@p_to_yyyymmdd	,    @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_type_apply_day    = [dbo].[SCM_ARR_SPL_VAL](@p_type_apply_day,    @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_value_description = [dbo].[SCM_ARR_SPL_VAL](@p_value_description, @v_delimiter , @mst_loop_cnt) ;	
+				SET @v_valid_yn          = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn,          @v_delimiter , @mst_loop_cnt) ;
+
+			END
+
+
+
+			IF(@v_active_flag = 'I')
+			BEGIN
+
+                INSERT INTO SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                (
+                       DIVISION_ID
+                      ,OPMZ_PLAN_GR_ID
+                      ,SCM_SITE_ID
+                      ,STAGE
+                      ,ITEM_ID
+                      ,VALUE_TYPE
+                      ,FROM_YYYYMMDD
+                      ,TO_YYYYMMDD
+                      ,TYPE_APPLY_DAY
+                      ,VALUE_DESCRIPTION
+                      ,VALID_YN
+                      ,CREATED_BY
+                      ,CREATION_DATE
+                      ,LAST_UPDATED_BY
+                      ,LAST_UPDATE_DATE
+                )
+                VALUES
+                (
+                       @v_division_id
+                      ,@v_opmz_plan_gr_id
+                      ,@v_scm_site_id
+                      ,@v_stage
+                      ,@v_item_id
+                      ,@v_value_type
+                      ,@v_from_yyyymmdd
+                      ,@v_to_yyyymmdd
+                      ,@v_type_apply_day
+                      ,@v_value_description
+                      ,@v_valid_yn
+                      ,@v_last_updated_by
+                      ,GETDATE()
+                      ,@v_last_updated_by
+                      ,GETDATE()
+                )
+
+			END
+			ELSE IF( @v_active_flag ='M' )
+			BEGIN
+
+                UPDATE SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                SET DIVISION_ID           = @v_division_id
+                   ,OPMZ_PLAN_GR_ID       = @v_opmz_plan_gr_id
+                   ,SCM_SITE_ID           = @v_scm_site_id
+                   ,STAGE                 = @v_stage
+                   ,ITEM_ID               = @v_item_id
+                   ,VALUE_TYPE            = @v_value_type
+                   ,FROM_YYYYMMDD         = @v_from_yyyymmdd
+                   ,TO_YYYYMMDD           = @v_to_yyyymmdd
+                   ,TYPE_APPLY_DAY        = @v_type_apply_day
+                   ,VALUE_DESCRIPTION     = @v_value_description
+                   ,VALID_YN              = @v_valid_yn
+                   ,LAST_UPDATED_BY	      = @v_last_updated_by
+                   ,LAST_UPDATE_DATE      = SYSDATETIME()
+                WHERE DIVISION_ID           = @v_division_id
+                AND   OPMZ_PLAN_GR_ID       = @v_opmz_plan_gr_id
+                AND   SCM_SITE_ID           = @v_scm_site_id
+                AND   STAGE                 = @v_stage
+                AND   ITEM_ID               = @v_item_id
+                AND   VALUE_TYPE            = @v_value_type
+                AND   FROM_YYYYMMDD         = @v_from_yyyymmdd
+                AND   TO_YYYYMMDD           = @v_to_yyyymmdd
+				;
+
+			END
+			--삭제기능 추가 (2025-07-16)
+			ELSE IF(@v_active_flag ='D')
+			BEGIN
+				
+				DELETE SCP_OPMZ_PRECEDE_S"
+"2025-07-26 00:00:00.390","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	 AND VALID_YN='Y'
+	
+
+
+	--2. 재고 SCM SITE ID 
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'	
+	AND A.DIVISION_ID != '40'
+	AND A.VALID_YN = 'Y'	
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, A.SCM_SITE_ID AS CODE 
+		, A.SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+		ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'
+	AND  A.DIVISION_ID = '40'
+	AND A.VALID_YN = 'Y'
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   [dbo].[SCM_MST_SITE] A
+	WHERE  1 = 1
+	AND    A.SITE_TYPE = 'PLANT'
+	ORDER BY A.DIVISION_ID
+	
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'SCP_OPT_ENG_CONST_DEF_STAGE'
+   AND   M.VALID_YN='Y'
+   -- AND   M.SEGMENT1 ='81' --DIVISION_NO
+	
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	  	-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+		-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+END
+
+"
+"2025-08-08 00:00:01.007","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	 AND VALID_YN='Y'
+	
+
+
+	--2. 재고 SCM SITE ID 
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'	
+	AND A.DIVISION_ID != '40'
+	AND A.VALID_YN = 'Y'	
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, A.SCM_SITE_ID AS CODE 
+		, A.SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+		ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'
+	AND  A.DIVISION_ID = '40'
+	AND A.VALID_YN = 'Y'
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   [dbo].[SCM_MST_SITE] A
+	WHERE  1 = 1
+	AND    A.SITE_TYPE = 'PLANT'
+	ORDER BY A.DIVISION_ID
+	
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'SCP_OPT_ENG_CONST_DEF_STAGE'
+   AND   M.VALID_YN='Y'
+   -- AND   M.SEGMENT1 ='81' --DIVISION_NO
+	
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	  	-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+		-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+	--6.Item 정보(Validation 체크용)
+	--SELECT DISTINCT DIVISION_ID
+	 --            , ITEM_ID
+	--FROM SCM_MST_ITEM_SN WITH(NOLOCK)
+
+
+   --6.Project Route 기준정보 및 Sales Site Project Model 기준 Model 코드 조회
+	---------------------------------------------------------------------------------------------------
+	print  convert(varchar(30), getdate(), 121) + N' 기준 일자 정보 ' 
+	---------------------------------------------------------------------------------------------------
+	-- 당주 월요일 (plan_start_yyyymmdd) 
+	SELECT @v_from_yyyymmdd = MD.YYYYMMDD
+	 FROM SCM_MST_BUCKET TD WITH(NOLOCK)
+		  INNER JOIN SCM_MST_BUCKET MD WITH(NOLOCK) 
+				  ON MD.YYYYWW = TD.YYYYWW 
+				 AND MD.DAYOFWEEK = 'MON'
+	WHERE 1=1
+	  AND TD.YYYYMMDD = CONVERT(NVARCHAR(8), GETDATE(), 112) 
+
+	-- plan horizon_end_date
+	SELECT @v_to_yyyymmdd = PM.HORIZON_END_DATE
+	  FROM SCM_MST_PLAN PM WITH(NOLOCK)
+	WHERE 1=1 
+	  AND PM.DIVISION_ID	= @V_DIVISION_ID
+	  AND PM.PLAN_NAME		= @v_from_yyyymmdd
+	  AND PM.PLAN_CYCLE		= 'WEEKLY'
+
+	PRINT '------------------------------------------------------------------';
+	PRINT '@v_division_id		= ' + @v_division_id;
+	PRINT '@v_from_yyyymmdd		= ' + @v_from_yyyymmdd;
+	PRINT '@v_to_yyyymmdd		= ' +"
+"2025-08-08 00:00:01.007","LGCE_SCMDEV","P ","SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY","1288703989","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : CAPA - No Work 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY]
+	  @p_division_id		NVARCHAR(MAX)
+	, @p_plan_group_id	    NVARCHAR(MAX)
+	, @p_scm_site_id		NVARCHAR(MAX)
+	, @p_item_id			NVARCHAR(MAX)
+	, @p_stage				NVARCHAR(MAX)
+	, @p_valid_yn			NVARCHAR(MAX)
+	, @p_value_type			NVARCHAR(MAX)
+
+
+AS
+BEGIN
+	
+  SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+-- 파라미터로 받을 값 변수  
+  DECLARE @v_division_id		NVARCHAR(200)	= @p_division_id
+  DECLARE @v_plan_group_id		NVARCHAR(200)	= @p_plan_group_id
+  DECLARE @v_scm_site_id		NVARCHAR(200)	= @p_scm_site_id
+  DECLARE @v_item_id		    NVARCHAR(200)	= @p_item_id
+  DECLARE @v_stage		        NVARCHAR(200)	= @p_stage
+  DECLARE @v_valid_yn		    NVARCHAR(200)	= @p_valid_yn
+  DECLARE @v_value_type		    NVARCHAR(200)	= @p_value_type
+
+  SELECT a.VALUE_TYPE
+        ,a.DIVISION_ID
+       -- ,a.OPMZ_PLAN_GR_ID
+        ,a.OPMZ_PLAN_GR_ID
+       -- ,b.OPMZ_PLAN_GR_NAME
+        ,a.SCM_SITE_ID
+        ,a.ITEM_ID
+        ,a.STAGE
+        , CONVERT(date, a.FROM_YYYYMMDD, 112) AS FROM_YYYYMMDD
+        , CONVERT(date, a.TO_YYYYMMDD, 112) AS TO_YYYYMMDD
+        -- ,a.FROM_YYYYMMDD
+        -- ,a.TO_YYYYMMDD
+        ,a.TYPE_APPLY_DAY
+        ,a.VALUE_DESCRIPTION
+        ,a.VALID_YN
+        ,a.CREATED_BY
+        ,a.CREATION_DATE
+        ,a.LAST_UPDATED_BY
+        ,a.LAST_UPDATE_DATE
+        , a.VALUE_TYPE + '|' + a.DIVISION_ID+ '|' + a.OPMZ_PLAN_GR_ID+ '|' + a.SCM_SITE_ID+ '|' + a.ITEM_ID + '|' + a.STAGE + '|' + a.FROM_YYYYMMDD+ '|' +  a.TO_YYYYMMDD AS PRE_KEY_VALUES
+    FROM DBO.SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY a  with(nolock)
+      INNER JOIN ( SELECT DISTINCT '%'+token+'%' tst FROM dbo.String_Split(@p_item_id,',') ) b
+              ON a.ITEM_ID  like  b.tst 
+    WHERE 1=1
+    AND ( ( @v_division_id   IS NULL OR @v_division_id = '' )   OR a.DIVISION_ID     IN (SELECT token FROM dbo.String_Split(@v_division_id  ,',')) )
+    AND ( ( @v_scm_site_id   IS NULL OR @v_scm_site_id = '' )   OR a.SCM_SITE_ID     IN (SELECT token FROM dbo.String_Split(@v_scm_site_id  ,',')) )
+    AND ( ( @v_value_type    IS NULL OR @v_value_type = '' )    OR a.VALUE_TYPE      IN (SELECT token FROM dbo.String_Split(@v_value_type  ,',')) )
+    AND ( ( @p_valid_yn      IS NULL OR @v_valid_yn   = '' )    OR a.VALID_YN        IN (SELECT token FROM dbo.String_Split(@v_valid_yn  ,',')) )
+    AND ( ( @v_plan_group_id IS NULL OR @v_plan_group_id = '' ) OR a.OPMZ_PLAN_GR_ID IN (SELECT token FROM dbo.String_Split(@v_plan_group_id  ,',')) )
+   -- AND ( ( @v_item_id       IS NULL OR @v_item_id = '' )       OR a.ITEM_ID         IN (SELECT token FROM dbo.String_Split(@v_item_id  ,',')) )
+    AND ( ( @v_stage         IS NULL OR @v_stage = '' )         OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_stage  ,',')) )
+  
+END
+
+"
+"2025-08-08 00:00:01.007","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","1","
+/*
+ * Program ID   : SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : STOCK 조정 등록,수정 
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY]
+
+	-- Add the parameters for the stored procedure here
+  @p_active_flag         NVARCHAR(MAX),
+  @p_value_type          NVARCHAR(MAX),
+  @p_division_id         NVARCHAR(MAX),
+  @p_opmz_plan_gr_id     NVARCHAR(MAX),
+  @p_scm_site_id         NVARCHAR(MAX),
+  @p_item_id             NVARCHAR(MAX),
+  @p_stage               NVARCHAR(MAX),
+  @p_from_yyyymmdd       NVARCHAR(MAX),
+  @p_to_yyyymmdd         NVARCHAR(MAX),
+  @p_type_apply_day      NVARCHAR(MAX),
+  @p_value_description   NVARCHAR(MAX),
+  @p_valid_yn            NVARCHAR(MAX),
+  @p_user_id			 NVARCHAR(MAX),
+
+  @p_pre_value_type	       NVARCHAR(MAX),
+  @p_pre_division_id	   NVARCHAR(MAX),
+  @p_pre_opmz_plan_gr_id   NVARCHAR(MAX),
+  @p_pre_scm_site_id	   NVARCHAR(MAX),
+  @p_pre_item_id	       NVARCHAR(MAX),
+  @p_pre_stage	           NVARCHAR(MAX),
+  @p_pre_from_yyyymmdd	   NVARCHAR(MAX),
+  @p_pre_to_yyyymmdd	   NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @v_working_time			DATETIME =sysdatetime();
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag		  NVARCHAR(MAX);
+    DECLARE @v_value_type         NVARCHAR(MAX);
+    DECLARE @v_division_id        NVARCHAR(MAX);
+    DECLARE @v_opmz_plan_gr_id    NVARCHAR(MAX);
+    DECLARE @v_scm_site_id        NVARCHAR(MAX);
+    DECLARE @v_item_id            NVARCHAR(MAX);
+    DECLARE @v_stage              NVARCHAR(MAX);
+    DECLARE @v_from_yyyymmdd      NVARCHAR(MAX);
+    DECLARE @v_to_yyyymmdd        NVARCHAR(MAX);
+    DECLARE @v_type_apply_day     NVARCHAR(MAX);
+    DECLARE @v_value_description  NVARCHAR(MAX);
+    DECLARE @v_valid_yn           NVARCHAR(MAX);
+	DECLARE @v_user_id		      NVARCHAR(MAX);
+	DECLARE @v_last_updated_by	  NVARCHAR(MAX);
+	
+	DECLARE @v_pre_value_type	   NVARCHAR(MAX);
+    DECLARE @v_pre_division_id	   NVARCHAR(MAX);
+    DECLARE @V_pre_opmz_plan_gr_id NVARCHAR(MAX);
+    DECLARE @v_pre_scm_site_id	   NVARCHAR(MAX);
+    DECLARE @v_pre_item_id	       NVARCHAR(MAX);
+    DECLARE @v_pre_stage	       NVARCHAR(MAX);
+    DECLARE @v_pre_from_yyyymmdd   NVARCHAR(MAX);
+    DECLARE @v_pre_to_yyyymmdd	   NVARCHAR(MAX);
+
+
+
+
+
+	SET @v_active_flag       = NULL;	
+	SET @v_value_type        = NULL;
+	SET @v_division_id       = NULL;	
+	SET @v_opmz_plan_gr_id   = NULL;
+	SET @v_scm_site_id       = NULL;
+	SET @v_item_id           = NULL;
+	SET @v_stage             = NULL;
+	SET @v_from_yyyymmdd     = NULL;
+	SET @v_to_yyyymmdd       = NULL;	
+	SET @v_type_apply_day    = NULL;
+	SET @v_value_description = NULL;
+	SET @v_valid_yn          = NULL;
+	SET @v_user_id	         = NULL;
+	SET @v_last_updated_by	 = NULL;
+
+	SET @v_pre_value_type	   = NULL;
+	SET @v_pre_division_id	   = NULL;
+	SET @V_pre_opmz_plan_gr_id = NULL;
+	SET @v_pre_scm_site_id	   = NULL;
+	SET @v_pre_item_id	       = NULL;
+	SET @v_pre_stage	       = NULL;
+	SET @v_pre_from_yyyymmdd   = NULL;
+	SET @v_pre_to_yyyymmdd	   = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+		
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DEC"
+"2025-08-08 00:00:01.007","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","2","LARE @d_event_date   DATETIME;
+
+	DECLARE @v_data_dup_cnt  INT=0;
+
+
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code     INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+
+	SET @v_last_updated_by  = @p_user_id
+
+	BEGIN TRY
+
+		-- 트렌젝션 시작
+		BEGIN TRAN;
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);   
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN
+
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag		 = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag,       @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_value_type        = [dbo].[SCM_ARR_SPL_VAL](@p_value_type,        @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_division_id       = [dbo].[SCM_ARR_SPL_VAL](@p_division_id,       @v_delimiter , @mst_loop_cnt) ;	
+				SET @v_opmz_plan_gr_id   = [dbo].[SCM_ARR_SPL_VAL](@p_opmz_plan_gr_id,   @v_delimiter , @mst_loop_cnt) ;
+				SET @v_scm_site_id       = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id,       @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_item_id           = [dbo].[SCM_ARR_SPL_VAL](@p_item_id,           @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_stage             = [dbo].[SCM_ARR_SPL_VAL](@p_stage,             @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_from_yyyymmdd     = [dbo].[SCM_ARR_SPL_VAL](@p_from_yyyymmdd	,    @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_to_yyyymmdd       = [dbo].[SCM_ARR_SPL_VAL](@p_to_yyyymmdd	,    @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_type_apply_day    = [dbo].[SCM_ARR_SPL_VAL](@p_type_apply_day,    @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_value_description = [dbo].[SCM_ARR_SPL_VAL](@p_value_description, @v_delimiter , @mst_loop_cnt) ;	
+				SET @v_valid_yn          = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn,          @v_delimiter , @mst_loop_cnt) ;
+
+				SET @v_pre_value_type	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_value_type,      @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_division_id	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_division_id,     @v_delimiter , @mst_loop_cnt) ;
+				SET @V_pre_opmz_plan_gr_id = [dbo].[SCM_ARR_SPL_VAL](@p_pre_opmz_plan_gr_id, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_scm_site_id	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_scm_site_id,     @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_item_id	       = [dbo].[SCM_ARR_SPL_VAL](@p_pre_item_id,         @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_stage	       = [dbo].[SCM_ARR_SPL_VAL](@p_pre_stage,           @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_from_yyyymmdd   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_from_yyyymmdd,   @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_to_yyyymmdd	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_to_yyyymmdd,     @v_delimiter , @mst_loop_cnt) ;
+
+			END
+
+			--삭제가 아닌 경우, 중복체크
+			IF (@v_active_flag <> 'D')
+			BEGIN 
+				/***** 중복체크 *****/
+				DECLARE @cnt INTEGER;
+				SET @cnt = 0;
+
+				SELECT @cnt = COUNT(*)
+				FROM SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY  WITH(NOLOCK)
+				WHERE DIVISION_ID	= @v_division_id
+				AND OPMZ_PLAN_GR_ID = @v_opmz_plan_gr_id
+				AND SCM_SITE_ID	    = @v_scm_site_id
+				AND STAGE	        = @v_stage
+				AND VALUE_TYPE      = @v_value_type
+				AND ITEM_ID         = @v_item_id
+				AND FROM_YYYYMMDD   = @v_from_yyyymmdd
+				AND TO_YYYYMMDD	    = @v_to_yyyymmdd
+				AND NOT (
+						    DIVISION_ID     = @v_pre_division_id
+						AND OPMZ_PLAN_GR_ID = @v_pre_opmz_plan_gr_id
+						AND SCM_SITE_ID	    = @v_pre_scm_site_id
+						AND STAGE	        = @v_pre_stage
+						AND VALUE_TYPE      = @v_pre_value_type
+						AND ITEM_ID         = @v_pre_item_id
+						AND FROM_YYYYMMDD   = @v_pre_from_yyyymmdd
+						AND TO_YYYYMMDD	    = @v"
+"2025-08-08 00:00:01.007","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","3","_pre_to_yyyymmdd
+						)
+
+				IF(@cnt > 0)
+				BEGIN
+					SET @v_err_code    = 99010 ; 
+					SET @v_err_message = N' 신규 입력 데이터 중 중복된 데이터가 있습니다.';
+					THROW  @v_err_code, @v_err_message , 1; --예외발생
+				END
+
+				/**** 날짜 중복 체크 ****/
+				SELECT @cnt = COUNT(1)
+				FROM SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY x
+				WHERE DIVISION_ID	= @v_division_id
+				AND OPMZ_PLAN_GR_ID = @v_opmz_plan_gr_id
+				AND SCM_SITE_ID	    = @v_scm_site_id
+				AND STAGE	        = @v_stage
+				AND VALUE_TYPE      = @v_value_type
+				AND ITEM_ID         = @v_item_id
+				AND NOT ( @v_to_yyyymmdd   < x.FROM_YYYYMMDD OR @v_from_yyyymmdd > x.TO_YYYYMMDD )
+				AND NOT (x.FROM_YYYYMMDD = @v_pre_from_yyyymmdd AND X.TO_YYYYMMDD = @v_pre_to_yyyymmdd ) -- 기존 값
+
+				IF(@cnt > 0)
+				BEGIN
+					SET @v_err_code    = 99010 ; 
+					SET @v_err_message = N' 입력 데이터 중 날짜가 중복되는 데이터가 있습니다.';
+					THROW  @v_err_code, @v_err_message , 1; --예외발생
+				END
+
+				/***** 중복체크 *****/
+			END
+
+			IF(@v_active_flag = 'I')
+			BEGIN
+
+                INSERT INTO SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                (
+                       DIVISION_ID
+                      ,OPMZ_PLAN_GR_ID
+                      ,SCM_SITE_ID
+                      ,STAGE
+                      ,ITEM_ID
+                      ,VALUE_TYPE
+                      ,FROM_YYYYMMDD
+                      ,TO_YYYYMMDD
+                      ,TYPE_APPLY_DAY
+                      ,VALUE_DESCRIPTION
+                      ,VALID_YN
+                      ,CREATED_BY
+                      ,CREATION_DATE
+                      ,LAST_UPDATED_BY
+                      ,LAST_UPDATE_DATE
+                )
+                VALUES
+                (
+                       @v_division_id
+                      ,@v_opmz_plan_gr_id
+                      ,@v_scm_site_id
+                      ,@v_stage
+                      ,@v_item_id
+                      ,@v_value_type
+                      ,@v_from_yyyymmdd
+                      ,@v_to_yyyymmdd
+                      ,@v_type_apply_day
+                      ,@v_value_description
+                      ,@v_valid_yn
+                      ,@v_last_updated_by
+                      ,GETDATE()
+                      ,@v_last_updated_by
+                      ,GETDATE()
+                )
+
+			END
+			ELSE IF( @v_active_flag ='M' )
+			BEGIN
+
+                UPDATE SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                SET DIVISION_ID           = @v_division_id
+                   ,OPMZ_PLAN_GR_ID       = @v_opmz_plan_gr_id
+                   ,SCM_SITE_ID           = @v_scm_site_id
+                   ,STAGE                 = @v_stage
+                   ,ITEM_ID               = @v_item_id
+                   ,VALUE_TYPE            = @v_value_type
+                   ,FROM_YYYYMMDD         = @v_from_yyyymmdd
+                   ,TO_YYYYMMDD           = @v_to_yyyymmdd
+                   ,TYPE_APPLY_DAY        = @v_type_apply_day
+                   ,VALUE_DESCRIPTION     = @v_value_description
+                   ,VALID_YN              = @v_valid_yn
+                   ,LAST_UPDATED_BY	      = @v_last_updated_by
+                   ,LAST_UPDATE_DATE      = SYSDATETIME()
+                WHERE DIVISION_ID           = @v_pre_division_id
+                AND   OPMZ_PLAN_GR_ID       = @v_pre_opmz_plan_gr_id
+                AND   SCM_SITE_ID           = @v_pre_scm_site_id
+                AND   STAGE                 = @v_pre_stage
+                AND   ITEM_ID               = @v_pre_item_id
+                AND   VALUE_TYPE            = @v_pre_value_type
+                AND   FROM_YYYYMMDD         = @v_pre_from_yyyymmdd
+                AND   TO_YYYYMMDD           = @v_pre_to_yyyymmdd
+				;
+
+			END
+			--삭제기능 추가 (2025-07-16)
+			ELSE IF(@v_active_flag ='D')
+			BEGIN
+				
+				DELETE SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                WHERE DIVISION_ID           = @v_pre_division_id
+                AND   OPMZ_PLAN_GR_ID       = @v_pre_opmz_pl"
+"2025-11-19 00:00:00.850","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/11/14   mrchois    		PJ20257329	최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	AND VALID_YN='Y'
+	ORDER BY OPMZ_PLAN_GR_NAME
+	
+
+
+	----2. 재고 SCM SITE ID 
+	SELECT DIVISION_ID
+			,CODE
+			,NAME
+	FROM (
+ 			SELECT DISTINCT A.DIVISION_ID
+				, SCM_SITE_ID AS CODE 
+				, SCM_SITE_ID AS NAME
+				, SITE_TYPE
+			FROM   SCM_MST_SITE A WITH(NOLOCK) 
+			WHERE  1 = 1
+			AND A.SITE_TYPE = 'SALES'	
+			AND A.DIVISION_ID != '40'
+			AND A.VALID_YN = 'Y'	
+			UNION ALL
+			SELECT DISTINCT A.DIVISION_ID
+				, A.SCM_SITE_ID AS CODE 
+				, A.SCM_SITE_ID AS NAME
+				, A.SITE_TYPE
+			FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+			LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+				ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+			WHERE  1 = 1
+			AND A.SITE_TYPE = 'SALES'
+			AND  A.DIVISION_ID = '40'
+			AND A.VALID_YN = 'Y'
+			UNION ALL
+			SELECT DISTINCT A.DIVISION_ID
+				, SCM_SITE_ID AS CODE 
+				, SCM_SITE_ID AS NAME
+				, A.SITE_TYPE
+			FROM   [dbo].[SCM_MST_SITE] A
+			WHERE  1 = 1
+			AND    A.SITE_TYPE = 'PLANT'
+			) X
+	ORDER BY SITE_TYPE, NAME  -- A.DIVISION_ID
+	 
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'OPMZ_STAGE_CD'
+   AND   M.VALID_YN='Y'
+   AND   M.ATTRIBUTE2 ='Y'
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+   --6.SCM0002_ItembyDivisionPopup 기준으로 ITEM_ID 조회
+   	  SELECT distinct
+		   I.DIVISION_ID
+		 , I.ITEM_ID	 
+	  FROM   SCP_MST_FINAL_ITEM I WITH(NOLOCK)	
+	  WHERE 1=1
+	  AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  ORDER BY  I.ITEM_ID, I.DIVISION_ID 
+
+END
+
+ "
+"2025-08-20 00:00:00.960","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	 AND VALID_YN='Y'
+	
+
+
+	--2. 재고 SCM SITE ID 
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'	
+	AND A.DIVISION_ID != '40'
+	AND A.VALID_YN = 'Y'	
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, A.SCM_SITE_ID AS CODE 
+		, A.SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+		ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'
+	AND  A.DIVISION_ID = '40'
+	AND A.VALID_YN = 'Y'
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   [dbo].[SCM_MST_SITE] A
+	WHERE  1 = 1
+	AND    A.SITE_TYPE = 'PLANT'
+	ORDER BY A.SCM_SITE_ID  -- A.DIVISION_ID
+	
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM SCP_OPMZ_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'SCP_OPT_ENG_CONST_DEF_STAGE'
+   AND   M.VALID_YN='Y'
+   -- AND   M.SEGMENT1 ='81' --DIVISION_NO
+	
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	  	-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+		-- ,M.DISPLAY_SEQ
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+   --6.SCM0002_ItembyDivisionPopup 기준으로 ITEM_ID 조회
+	  SELECT distinct
+		   D.DIVISION_ID
+		 -- , S.SCM_SITE_ID
+		 , I.ITEM_ID	 
+	  FROM [SCM_MST_SITE_ITEM]			I WITH(NOLOCK)	     
+	  JOIN [SCM_MST_DIVISION]			D WITH(NOLOCK) ON I.DIVISION_ID  = D.DIVISION_ID
+	  JOIN [SCM_MST_SITE]				S WITH(NOLOCK) ON I.DIVISION_ID  = S.DIVISION_ID AND I.SCM_SITE_ID  = S.SCM_SITE_ID	
+	  JOIN [SCM_MST_ITEM_SN]			T WITH(NOLOCK) ON I.DIVISION_ID  = T.DIVISION_ID AND I.ITEM_ID      = T.ITEM_ID  
+	  LEFT OUTER JOIN [SCM_MST_PROJECT] P WITH(NOLOCK) ON I.DIVISION_ID  = P.DIVISION_ID AND I.PROJECT_CODE = P.PROJECT_CODE
+	  WHERE 1=1
+	  AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  ORDER BY  I.ITEM_ID, D.DIVISION_ID 
+END
+
+ "
+"2025-08-29 00:00:01.620","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	 AND VALID_YN='Y'
+	
+
+
+	--2. 재고 SCM SITE ID 
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'	
+	AND A.DIVISION_ID != '40'
+	AND A.VALID_YN = 'Y'	
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, A.SCM_SITE_ID AS CODE 
+		, A.SCM_SITE_ID AS NAME
+	FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+		ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	WHERE  1 = 1
+	AND A.SITE_TYPE = 'SALES'
+	AND  A.DIVISION_ID = '40'
+	AND A.VALID_YN = 'Y'
+	UNION ALL
+	SELECT DISTINCT A.DIVISION_ID
+		, SCM_SITE_ID AS CODE 
+		, SCM_SITE_ID AS NAME
+	FROM   [dbo].[SCM_MST_SITE] A
+	WHERE  1 = 1
+	AND    A.SITE_TYPE = 'PLANT'
+	ORDER BY A.SCM_SITE_ID  -- A.DIVISION_ID
+	
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'OPMZ_STAGE_CD'
+   AND   M.VALID_YN='Y'
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+   --6.SCM0002_ItembyDivisionPopup 기준으로 ITEM_ID 조회
+   	  SELECT distinct
+		   I.DIVISION_ID
+		 , I.ITEM_ID	 
+	  FROM   SCP_MST_FINAL_ITEM I WITH(NOLOCK)	
+	  WHERE 1=1
+	  AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  ORDER BY  I.ITEM_ID, I.DIVISION_ID 
+
+END
+
+ "
+"2025-08-29 00:00:01.620","LGCE_SCMDEV","P ","SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY","1288703989","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : CAPA - No Work 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY]
+	  @p_division_id		NVARCHAR(MAX)
+	, @p_plan_group_id	    NVARCHAR(MAX)
+	, @p_scm_site_id		NVARCHAR(MAX)
+	, @p_item_id			NVARCHAR(MAX)
+	, @p_stage				NVARCHAR(MAX)
+	, @p_valid_yn			NVARCHAR(MAX)
+	, @p_value_type			NVARCHAR(MAX)
+
+
+AS
+BEGIN
+	
+  SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+-- 파라미터로 받을 값 변수  
+  DECLARE @v_division_id		NVARCHAR(200)	= @p_division_id
+  DECLARE @v_plan_group_id		NVARCHAR(200)	= @p_plan_group_id
+  DECLARE @v_scm_site_id		NVARCHAR(200)	= @p_scm_site_id
+  DECLARE @v_item_id		    NVARCHAR(200)	= @p_item_id
+  DECLARE @v_stage		        NVARCHAR(200)	= @p_stage
+  DECLARE @v_valid_yn		    NVARCHAR(200)	= @p_valid_yn
+  DECLARE @v_value_type		    NVARCHAR(200)	= @p_value_type
+
+  SELECT a.VALUE_TYPE
+        ,a.DIVISION_ID
+        ,a.OPMZ_PLAN_GR_ID
+        ,a.SCM_SITE_ID
+        ,a.ITEM_ID
+        ,a.STAGE
+        , CONVERT(date, a.FROM_YYYYMMDD, 112) AS FROM_YYYYMMDD
+        , CONVERT(date, a.TO_YYYYMMDD, 112) AS TO_YYYYMMDD
+        ,a.TYPE_APPLY_DAY
+        ,a.VALUE_DESCRIPTION
+        ,a.VALID_YN
+        ,a.CREATED_BY
+        ,a.CREATION_DATE
+        ,a.LAST_UPDATED_BY
+        ,a.LAST_UPDATE_DATE
+        , a.VALUE_TYPE + '|' + a.DIVISION_ID+ '|' + a.OPMZ_PLAN_GR_ID+ '|' + a.SCM_SITE_ID+ '|' + a.ITEM_ID + '|' + a.STAGE + '|' + a.FROM_YYYYMMDD+ '|' +  a.TO_YYYYMMDD AS PRE_KEY_VALUES
+    FROM DBO.SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY a  with(nolock)
+      INNER JOIN ( SELECT DISTINCT '%'+token+'%' tst FROM dbo.String_Split(@p_item_id,',') ) b
+              ON a.ITEM_ID  like  b.tst 
+    WHERE 1=1
+    AND ( ( @v_division_id   IS NULL OR @v_division_id = '' )   OR a.DIVISION_ID     IN (SELECT token FROM dbo.String_Split(@v_division_id  ,',')) )
+    AND ( ( @v_scm_site_id   IS NULL OR @v_scm_site_id = '' )   OR a.SCM_SITE_ID     IN (SELECT token FROM dbo.String_Split(@v_scm_site_id  ,',')) )
+    AND ( ( @v_value_type    IS NULL OR @v_value_type = '' )    OR a.VALUE_TYPE      IN (SELECT token FROM dbo.String_Split(@v_value_type  ,',')) )
+    AND ( ( @p_valid_yn      IS NULL OR @v_valid_yn   = '' )    OR a.VALID_YN        IN (SELECT token FROM dbo.String_Split(@v_valid_yn  ,',')) )
+    AND ( ( @v_plan_group_id IS NULL OR @v_plan_group_id = '' ) OR a.OPMZ_PLAN_GR_ID IN (SELECT token FROM dbo.String_Split(@v_plan_group_id  ,',')) )
+    AND ( ( @v_stage         IS NULL OR @v_stage = '' )         OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_stage  ,',')) )
+  
+END
+
+"
+"2025-08-29 00:00:01.620","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","1","
+/*
+ * Program ID   : SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : STOCK 조정 등록,수정 
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY]
+
+	-- Add the parameters for the stored procedure here
+  @p_active_flag         NVARCHAR(MAX),
+  @p_value_type          NVARCHAR(MAX),
+  @p_division_id         NVARCHAR(MAX),
+  @p_opmz_plan_gr_id     NVARCHAR(MAX),
+  @p_scm_site_id         NVARCHAR(MAX),
+  @p_item_id             NVARCHAR(MAX),
+  @p_stage               NVARCHAR(MAX),
+  @p_from_yyyymmdd       NVARCHAR(MAX),
+  @p_to_yyyymmdd         NVARCHAR(MAX),
+  @p_type_apply_day      NVARCHAR(MAX),
+  @p_value_description   NVARCHAR(MAX),
+  @p_valid_yn            NVARCHAR(MAX),
+  @p_user_id			 NVARCHAR(MAX),
+
+  @p_pre_value_type	       NVARCHAR(MAX),
+  @p_pre_division_id	   NVARCHAR(MAX),
+  @p_pre_opmz_plan_gr_id   NVARCHAR(MAX),
+  @p_pre_scm_site_id	   NVARCHAR(MAX),
+  @p_pre_item_id	       NVARCHAR(MAX),
+  @p_pre_stage	           NVARCHAR(MAX),
+  @p_pre_from_yyyymmdd	   NVARCHAR(MAX),
+  @p_pre_to_yyyymmdd	   NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	DECLARE @v_working_time			DATETIME =sysdatetime();
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag		  NVARCHAR(MAX);
+    DECLARE @v_value_type         NVARCHAR(MAX);
+    DECLARE @v_division_id        NVARCHAR(MAX);
+    DECLARE @v_opmz_plan_gr_id    NVARCHAR(MAX);
+    DECLARE @v_scm_site_id        NVARCHAR(MAX);
+    DECLARE @v_item_id            NVARCHAR(MAX);
+    DECLARE @v_stage              NVARCHAR(MAX);
+    DECLARE @v_from_yyyymmdd      NVARCHAR(MAX);
+    DECLARE @v_to_yyyymmdd        NVARCHAR(MAX);
+    DECLARE @v_type_apply_day     NVARCHAR(MAX);
+    DECLARE @v_value_description  NVARCHAR(MAX);
+    DECLARE @v_valid_yn           NVARCHAR(MAX);
+	DECLARE @v_user_id		      NVARCHAR(MAX);
+	DECLARE @v_last_updated_by	  NVARCHAR(MAX);
+	
+	DECLARE @v_pre_value_type	   NVARCHAR(MAX);
+    DECLARE @v_pre_division_id	   NVARCHAR(MAX);
+    DECLARE @V_pre_opmz_plan_gr_id NVARCHAR(MAX);
+    DECLARE @v_pre_scm_site_id	   NVARCHAR(MAX);
+    DECLARE @v_pre_item_id	       NVARCHAR(MAX);
+    DECLARE @v_pre_stage	       NVARCHAR(MAX);
+    DECLARE @v_pre_from_yyyymmdd   NVARCHAR(MAX);
+    DECLARE @v_pre_to_yyyymmdd	   NVARCHAR(MAX);
+
+
+
+
+
+	SET @v_active_flag       = NULL;	
+	SET @v_value_type        = NULL;
+	SET @v_division_id       = NULL;	
+	SET @v_opmz_plan_gr_id   = NULL;
+	SET @v_scm_site_id       = NULL;
+	SET @v_item_id           = NULL;
+	SET @v_stage             = NULL;
+	SET @v_from_yyyymmdd     = NULL;
+	SET @v_to_yyyymmdd       = NULL;	
+	SET @v_type_apply_day    = NULL;
+	SET @v_value_description = NULL;
+	SET @v_valid_yn          = NULL;
+	SET @v_user_id	         = NULL;
+	SET @v_last_updated_by	 = NULL;
+
+	SET @v_pre_value_type	   = NULL;
+	SET @v_pre_division_id	   = NULL;
+	SET @V_pre_opmz_plan_gr_id = NULL;
+	SET @v_pre_scm_site_id	   = NULL;
+	SET @v_pre_item_id	       = NULL;
+	SET @v_pre_stage	       = NULL;
+	SET @v_pre_from_yyyymmdd   = NULL;
+	SET @v_pre_to_yyyymmdd	   = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+		
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DEC"
+"2025-08-29 00:00:01.620","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","2","LARE @d_event_date   DATETIME;
+
+	DECLARE @v_data_dup_cnt  INT=0;
+
+
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code     INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+
+	SET @v_last_updated_by  = @p_user_id
+
+	BEGIN TRY
+
+		-- 트렌젝션 시작
+		BEGIN TRAN;
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);   
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN
+
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag		 = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag,       @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_value_type        = [dbo].[SCM_ARR_SPL_VAL](@p_value_type,        @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_division_id       = [dbo].[SCM_ARR_SPL_VAL](@p_division_id,       @v_delimiter , @mst_loop_cnt) ;	
+				SET @v_opmz_plan_gr_id   = [dbo].[SCM_ARR_SPL_VAL](@p_opmz_plan_gr_id,   @v_delimiter , @mst_loop_cnt) ;
+				SET @v_scm_site_id       = [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id,       @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_item_id           = [dbo].[SCM_ARR_SPL_VAL](@p_item_id,           @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_stage             = [dbo].[SCM_ARR_SPL_VAL](@p_stage,             @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_from_yyyymmdd     = [dbo].[SCM_ARR_SPL_VAL](@p_from_yyyymmdd	,    @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_to_yyyymmdd       = [dbo].[SCM_ARR_SPL_VAL](@p_to_yyyymmdd	,    @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_type_apply_day    = [dbo].[SCM_ARR_SPL_VAL](@p_type_apply_day,    @v_delimiter , @mst_loop_cnt) ;   
+				SET @v_value_description = [dbo].[SCM_ARR_SPL_VAL](@p_value_description, @v_delimiter , @mst_loop_cnt) ;	
+				SET @v_valid_yn          = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn,          @v_delimiter , @mst_loop_cnt) ;
+
+				SET @v_pre_value_type	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_value_type,      @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_division_id	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_division_id,     @v_delimiter , @mst_loop_cnt) ;
+				SET @V_pre_opmz_plan_gr_id = [dbo].[SCM_ARR_SPL_VAL](@p_pre_opmz_plan_gr_id, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_scm_site_id	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_scm_site_id,     @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_item_id	       = [dbo].[SCM_ARR_SPL_VAL](@p_pre_item_id,         @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_stage	       = [dbo].[SCM_ARR_SPL_VAL](@p_pre_stage,           @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_from_yyyymmdd   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_from_yyyymmdd,   @v_delimiter , @mst_loop_cnt) ;
+				SET @v_pre_to_yyyymmdd	   = [dbo].[SCM_ARR_SPL_VAL](@p_pre_to_yyyymmdd,     @v_delimiter , @mst_loop_cnt) ;
+
+			END
+
+			--삭제가 아닌 경우, 중복체크
+			IF (@v_active_flag <> 'D')
+			BEGIN 
+				/***** 중복체크 *****/
+				DECLARE @cnt INTEGER;
+				SET @cnt = 0;
+
+				SELECT @cnt = COUNT(*)
+				FROM SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY  WITH(NOLOCK)
+				WHERE DIVISION_ID	= @v_division_id
+				AND OPMZ_PLAN_GR_ID = @v_opmz_plan_gr_id
+				AND SCM_SITE_ID	    = @v_scm_site_id
+				AND STAGE	        = @v_stage
+				AND VALUE_TYPE      = @v_value_type
+				AND ITEM_ID         = @v_item_id
+				AND FROM_YYYYMMDD   = @v_from_yyyymmdd
+				AND TO_YYYYMMDD	    = @v_to_yyyymmdd
+				AND NOT (
+						    DIVISION_ID     = @v_pre_division_id
+						AND OPMZ_PLAN_GR_ID = @v_pre_opmz_plan_gr_id
+						AND SCM_SITE_ID	    = @v_pre_scm_site_id
+						AND STAGE	        = @v_pre_stage
+						AND VALUE_TYPE      = @v_pre_value_type
+						AND ITEM_ID         = @v_pre_item_id
+						AND FROM_YYYYMMDD   = @v_pre_from_yyyymmdd
+						AND TO_YYYYMMDD	    = @v"
+"2025-08-29 00:00:01.620","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","3","_pre_to_yyyymmdd
+						)
+
+				IF(@cnt > 0)
+				BEGIN
+					SET @v_err_code    = 99010 ; 
+					SET @v_err_message = N' 신규 입력 데이터 중 중복된 데이터가 있습니다.';
+					THROW  @v_err_code, @v_err_message , 1; --예외발생
+				END
+
+				/**** 날짜 중복 체크 ****/
+				SELECT @cnt = COUNT(1)
+				FROM SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY x
+				WHERE DIVISION_ID	= @v_division_id
+				AND OPMZ_PLAN_GR_ID = @v_opmz_plan_gr_id
+				AND SCM_SITE_ID	    = @v_scm_site_id
+				AND STAGE	        = @v_stage
+				AND VALUE_TYPE      = @v_value_type
+				AND ITEM_ID         = @v_item_id
+				AND NOT ( @v_to_yyyymmdd   < x.FROM_YYYYMMDD OR @v_from_yyyymmdd > x.TO_YYYYMMDD )
+				AND NOT (x.FROM_YYYYMMDD = @v_pre_from_yyyymmdd AND X.TO_YYYYMMDD = @v_pre_to_yyyymmdd ) -- 기존 값
+
+				IF(@cnt > 0)
+				BEGIN
+					SET @v_err_code    = 99010 ; 
+					SET @v_err_message = N' 입력 데이터 중 날짜가 중복되는 데이터가 있습니다.';
+					THROW  @v_err_code, @v_err_message , 1; --예외발생
+				END
+
+				/***** 중복체크 *****/
+			END
+
+			IF(@v_active_flag = 'I')
+			BEGIN
+
+                INSERT INTO SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                (
+                       DIVISION_ID
+                      ,OPMZ_PLAN_GR_ID
+                      ,SCM_SITE_ID
+                      ,STAGE
+                      ,ITEM_ID
+                      ,VALUE_TYPE
+                      ,FROM_YYYYMMDD
+                      ,TO_YYYYMMDD
+                      ,TYPE_APPLY_DAY
+                      ,VALUE_DESCRIPTION
+                      ,VALID_YN
+                      ,CREATED_BY
+                      ,CREATION_DATE
+                      ,LAST_UPDATED_BY
+                      ,LAST_UPDATE_DATE
+                )
+                VALUES
+                (
+                       @v_division_id
+                      ,@v_opmz_plan_gr_id
+                      ,@v_scm_site_id
+                      ,@v_stage
+                      ,@v_item_id
+                      ,@v_value_type
+                      ,@v_from_yyyymmdd
+                      ,@v_to_yyyymmdd
+                      ,@v_type_apply_day
+                      ,@v_value_description
+                      ,@v_valid_yn
+                      ,@v_last_updated_by
+                      ,GETDATE()
+                      ,@v_last_updated_by
+                      ,GETDATE()
+                )
+
+			END
+			ELSE IF( @v_active_flag ='M' )
+			BEGIN
+
+                UPDATE SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                SET DIVISION_ID           = @v_division_id
+                   ,OPMZ_PLAN_GR_ID       = @v_opmz_plan_gr_id
+                   ,SCM_SITE_ID           = @v_scm_site_id
+                   ,STAGE                 = @v_stage
+                   ,ITEM_ID               = @v_item_id
+                   ,VALUE_TYPE            = @v_value_type
+                   ,FROM_YYYYMMDD         = @v_from_yyyymmdd
+                   ,TO_YYYYMMDD           = @v_to_yyyymmdd
+                   ,TYPE_APPLY_DAY        = @v_type_apply_day
+                   ,VALUE_DESCRIPTION     = @v_value_description
+                   ,VALID_YN              = @v_valid_yn
+                   ,LAST_UPDATED_BY	      = @v_last_updated_by
+                   ,LAST_UPDATE_DATE      = SYSDATETIME()
+                WHERE DIVISION_ID           = @v_pre_division_id
+                AND   OPMZ_PLAN_GR_ID       = @v_pre_opmz_plan_gr_id
+                AND   SCM_SITE_ID           = @v_pre_scm_site_id
+                AND   STAGE                 = @v_pre_stage
+                AND   ITEM_ID               = @v_pre_item_id
+                AND   VALUE_TYPE            = @v_pre_value_type
+                AND   FROM_YYYYMMDD         = @v_pre_from_yyyymmdd
+                AND   TO_YYYYMMDD           = @v_pre_to_yyyymmdd
+				;
+
+			END
+			--삭제기능 추가 (2025-07-16)
+			ELSE IF(@v_active_flag ='D')
+			BEGIN
+				
+				DELETE SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY
+                WHERE DIVISION_ID           = @v_pre_division_id
+                AND   OPMZ_PLAN_GR_ID       = @v_pre_opmz_pl"
+"2025-08-29 00:00:01.620","LGCE_SCMDEV","P ","SCP0127_SAVE_PRECEDE_SAFETY_STOCK_DAY","1304704046","4","an_gr_id
+                AND   SCM_SITE_ID           = @v_pre_scm_site_id
+                AND   STAGE                 = @v_pre_stage
+                AND   ITEM_ID               = @v_pre_item_id
+                AND   VALUE_TYPE            = @v_pre_value_type
+                AND   FROM_YYYYMMDD         = @v_pre_from_yyyymmdd
+                AND   TO_YYYYMMDD           = @v_pre_to_yyyymmdd
+
+			END
+
+		END
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+			
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+	END TRY
+	BEGIN CATCH
+		IF (XACT_STATE() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+		BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+											,log_type
+											,log_count
+											,log_message
+											,description
+											,event_date
+											,creation_date
+											,created_by
+											,last_update_date
+											,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+					,'ERROR'
+					,NULL
+					,ERROR_MESSAGE()
+					,NULL
+					,SYSDATETIME()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE()
+					,SYSDATETIME()
+					,ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--	COMMIT WORK;
+
+		END;
+
+		-- error코드, errror 메시지 반환
+		SELECT 'F' AS result_code;
+		SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+
+
+
+
+
+
+"
+"2025-09-10 00:00:01.723","LGCE_SCMDEV","P ","SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY","1288703989","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY
+ * Description  : CAPA - No Work 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/24   kh   			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_PRECEDE_SAFETY_STOCK_DAY]
+	  @p_division_id		NVARCHAR(MAX)
+	, @p_plan_group_id	    NVARCHAR(MAX)
+	, @p_scm_site_id		NVARCHAR(MAX)
+	, @p_item_id			NVARCHAR(MAX)
+	, @p_stage				NVARCHAR(MAX)
+	, @p_valid_yn			NVARCHAR(MAX)
+	, @p_value_type			NVARCHAR(MAX)
+
+    , @p_period_from		NVARCHAR(MAX)
+    , @p_period_to			NVARCHAR(MAX)
+
+AS
+BEGIN
+	
+  SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+-- 파라미터로 받을 값 변수  
+  DECLARE @v_division_id		NVARCHAR(200)	= @p_division_id
+  DECLARE @v_plan_group_id		NVARCHAR(200)	= @p_plan_group_id
+  DECLARE @v_scm_site_id		NVARCHAR(200)	= @p_scm_site_id
+  DECLARE @v_item_id		    NVARCHAR(200)	= @p_item_id
+  DECLARE @v_stage		        NVARCHAR(200)	= @p_stage
+  DECLARE @v_valid_yn		    NVARCHAR(200)	= @p_valid_yn
+  DECLARE @v_value_type		    NVARCHAR(200)	= @p_value_type
+  
+  DECLARE @v_period_from		NVARCHAR(200)	= @p_period_from
+  DECLARE @v_period_to		    NVARCHAR(200)	= @p_period_to
+
+  SELECT a.VALUE_TYPE
+        ,a.DIVISION_ID
+        ,a.OPMZ_PLAN_GR_ID
+        ,a.SCM_SITE_ID
+        ,a.ITEM_ID
+        ,a.STAGE
+        , CONVERT(date, a.FROM_YYYYMMDD, 112) AS FROM_YYYYMMDD
+        , CONVERT(date, a.TO_YYYYMMDD, 112) AS TO_YYYYMMDD
+        ,a.TYPE_APPLY_DAY
+        ,a.VALUE_DESCRIPTION
+        ,a.VALID_YN
+        ,a.CREATED_BY
+        ,a.CREATION_DATE
+        ,a.LAST_UPDATED_BY
+        ,a.LAST_UPDATE_DATE
+        , a.VALUE_TYPE + '|' + a.DIVISION_ID+ '|' + a.OPMZ_PLAN_GR_ID+ '|' + a.SCM_SITE_ID+ '|' + a.ITEM_ID + '|' + a.STAGE + '|' + a.FROM_YYYYMMDD+ '|' +  a.TO_YYYYMMDD AS PRE_KEY_VALUES
+    FROM DBO.SCP_OPMZ_PRECEDE_SAFETY_STOCK_DAY a  with(nolock)
+      INNER JOIN ( SELECT DISTINCT '%'+token+'%' tst FROM dbo.String_Split(@p_item_id,',') ) b
+              ON a.ITEM_ID  like  b.tst 
+    WHERE 1=1
+    AND ( ( @v_division_id   IS NULL OR @v_division_id = '' )   OR a.DIVISION_ID     IN (SELECT token FROM dbo.String_Split(@v_division_id  ,',')) )
+    AND ( ( @v_scm_site_id   IS NULL OR @v_scm_site_id = '' )   OR a.SCM_SITE_ID     IN (SELECT token FROM dbo.String_Split(@v_scm_site_id  ,',')) )
+    AND ( ( @v_value_type    IS NULL OR @v_value_type = '' )    OR a.VALUE_TYPE      IN (SELECT token FROM dbo.String_Split(@v_value_type  ,',')) )
+    AND ( ( @p_valid_yn      IS NULL OR @v_valid_yn   = '' )    OR a.VALID_YN        IN (SELECT token FROM dbo.String_Split(@v_valid_yn  ,',')) )
+    AND ( ( @v_plan_group_id IS NULL OR @v_plan_group_id = '' ) OR a.OPMZ_PLAN_GR_ID IN (SELECT token FROM dbo.String_Split(@v_plan_group_id  ,',')) )
+    AND ( ( @v_stage         IS NULL OR @v_stage = '' )         OR a.STAGE           IN (SELECT token FROM dbo.String_Split(@v_stage  ,',')) )
+    AND ( ( FROM_YYYYMMDD    BETWEEN @v_period_from AND @v_period_to) OR ( TO_YYYYMMDD    BETWEEN @v_period_from AND @v_period_to) )
+
+END
+
+"
+"2025-11-21 00:00:00.357","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ20257329  최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	AND VALID_YN='Y'
+	ORDER BY OPMZ_PLAN_GR_NAME
+	
+
+
+	----2. 재고 SCM SITE ID 
+	SELECT DIVISION_ID
+			,CODE
+			,NAME
+	FROM (
+ 			SELECT DISTINCT A.DIVISION_ID
+				, SCM_SITE_ID AS CODE 
+				, SCM_SITE_ID AS NAME
+				, SITE_TYPE
+			FROM   SCM_MST_SITE A WITH(NOLOCK) 
+			WHERE  1 = 1
+			AND A.SITE_TYPE = 'SALES'	
+			AND A.DIVISION_ID != '40'
+			AND A.VALID_YN = 'Y'	
+			UNION ALL
+			SELECT DISTINCT A.DIVISION_ID
+				, A.SCM_SITE_ID AS CODE 
+				, A.SCM_SITE_ID AS NAME
+				, A.SITE_TYPE
+			FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+			LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+				ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+			WHERE  1 = 1
+			AND A.SITE_TYPE = 'SALES'
+			AND  A.DIVISION_ID = '40'
+			AND A.VALID_YN = 'Y'
+			UNION ALL
+			SELECT DISTINCT A.DIVISION_ID
+				, SCM_SITE_ID AS CODE 
+				, SCM_SITE_ID AS NAME
+				, A.SITE_TYPE
+			FROM   [dbo].[SCM_MST_SITE] A
+			WHERE  1 = 1
+			AND    A.SITE_TYPE = 'PLANT'
+			) X
+	ORDER BY SITE_TYPE, NAME  -- A.DIVISION_ID
+	 
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'OPMZ_STAGE_CD'
+   AND   M.VALID_YN='Y'
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+   --6.SCM0002_ItembyDivisionPopup 기준으로 ITEM_ID 조회
+   	  SELECT distinct
+		   I.DIVISION_ID
+		 , I.ITEM_ID	 
+	  FROM   SCP_MST_FINAL_ITEM I WITH(NOLOCK)	
+	  WHERE 1=1
+	  AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  ORDER BY  I.ITEM_ID, I.DIVISION_ID 
+
+END
+
+ "
+"2025-12-02 00:00:00.523","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ20257329  최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ * 2025/11/24   mrchois    		PJ20257329  최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - ITEM 유효성 체크 마스터 테이블 변경, SCP_MST_FINAL_ITEM -> SCM_MST_ITEM_SN
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	AND VALID_YN='Y'
+	ORDER BY OPMZ_PLAN_GR_NAME
+	
+
+
+	----2. 재고 SCM SITE ID 
+	--SELECT DISTINCT A.DIVISION_ID
+	--	, SCM_SITE_ID AS CODE 
+	--	, SCM_SITE_ID AS NAME
+	--FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	--WHERE  1 = 1
+	--AND A.SITE_TYPE = 'SALES'	
+	--AND A.DIVISION_ID != '40'
+	--AND A.VALID_YN = 'Y'	
+	--UNION ALL
+	--SELECT DISTINCT A.DIVISION_ID
+	--	, A.SCM_SITE_ID AS CODE 
+	--	, A.SCM_SITE_ID AS NAME
+	--FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	--LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+	--	ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	--WHERE  1 = 1
+	--AND A.SITE_TYPE = 'SALES'
+	--AND  A.DIVISION_ID = '40'
+	--AND A.VALID_YN = 'Y'
+	--UNION ALL
+	--SELECT DISTINCT A.DIVISION_ID
+	--	, SCM_SITE_ID AS CODE 
+	--	, SCM_SITE_ID AS NAME
+	--FROM   [dbo].[SCM_MST_SITE] A
+	--WHERE  1 = 1
+	--AND    A.SITE_TYPE = 'PLANT'
+	--ORDER BY A.SCM_SITE_ID  -- A.DIVISION_ID
+		
+		SELECT DIVISION_ID
+			 ,CODE
+			 ,NAME
+		FROM (
+ 				SELECT DISTINCT A.DIVISION_ID
+					, SCM_SITE_ID AS CODE 
+					, SCM_SITE_ID AS NAME
+					, SITE_TYPE
+				FROM   SCM_MST_SITE A WITH(NOLOCK) 
+				WHERE  1 = 1
+				AND A.SITE_TYPE = 'SALES'	
+				AND A.DIVISION_ID != '40'
+				AND A.VALID_YN = 'Y'	
+				UNION ALL
+				SELECT DISTINCT A.DIVISION_ID
+					, A.SCM_SITE_ID AS CODE 
+					, A.SCM_SITE_ID AS NAME
+					, A.SITE_TYPE
+				FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+				LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+					ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+				WHERE  1 = 1
+				AND A.SITE_TYPE = 'SALES'
+				AND  A.DIVISION_ID = '40'
+				AND A.VALID_YN = 'Y'
+				UNION ALL
+				SELECT DISTINCT A.DIVISION_ID
+					, SCM_SITE_ID AS CODE 
+					, SCM_SITE_ID AS NAME
+					, A.SITE_TYPE
+				FROM   [dbo].[SCM_MST_SITE] A
+				WHERE  1 = 1
+				AND    A.SITE_TYPE = 'PLANT'
+			   ) X
+		ORDER BY SITE_TYPE, NAME  -- A.DIVISION_ID
+	 
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'OPMZ_STAGE_CD'
+   AND   M.VALID_YN='Y'
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+   --6.SCM0002_ItembyDivisionPopup 기준으로 ITEM_ID 조회
+  "
+"2025-12-02 00:00:00.523","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","2"," 	  SELECT distinct
+		   I.DIVISION_ID
+		 , I.ITEM_ID	 
+	  FROM   SCM_MST_ITEM_SN I WITH(NOLOCK)		--[PJ20257329]ITEM 유효성 체크 마스터 테이블 변경, SCP_MST_FINAL_ITEM -> SCM_MST_ITEM_SN (2025-11-24)
+	  WHERE 1=1
+	  AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  ORDER BY  I.ITEM_ID, I.DIVISION_ID 
+
+END
+
+ "
+"2025-11-25 00:00:01.297","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ20257329  최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ * 2025/11/24   mrchois    		PJ20257329  최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - ITEM 유효성 체크 마스터 테이블 변경, SCP_MST_FINAL_ITEM -> SCM_MST_ITEM_SN
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	AND VALID_YN='Y'
+	ORDER BY OPMZ_PLAN_GR_NAME
+	
+
+
+	----2. 재고 SCM SITE ID 
+	SELECT DIVISION_ID
+			,CODE
+			,NAME
+	FROM (
+ 			SELECT DISTINCT A.DIVISION_ID
+				, SCM_SITE_ID AS CODE 
+				, SCM_SITE_ID AS NAME
+				, SITE_TYPE
+			FROM   SCM_MST_SITE A WITH(NOLOCK) 
+			WHERE  1 = 1
+			AND A.SITE_TYPE = 'SALES'	
+			AND A.DIVISION_ID != '40'
+			AND A.VALID_YN = 'Y'	
+			UNION ALL
+			SELECT DISTINCT A.DIVISION_ID
+				, A.SCM_SITE_ID AS CODE 
+				, A.SCM_SITE_ID AS NAME
+				, A.SITE_TYPE
+			FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+			LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+				ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+			WHERE  1 = 1
+			AND A.SITE_TYPE = 'SALES'
+			AND  A.DIVISION_ID = '40'
+			AND A.VALID_YN = 'Y'
+			UNION ALL
+			SELECT DISTINCT A.DIVISION_ID
+				, SCM_SITE_ID AS CODE 
+				, SCM_SITE_ID AS NAME
+				, A.SITE_TYPE
+			FROM   [dbo].[SCM_MST_SITE] A
+			WHERE  1 = 1
+			AND    A.SITE_TYPE = 'PLANT'
+			) X
+	ORDER BY SITE_TYPE, NAME  -- A.DIVISION_ID
+	 
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'OPMZ_STAGE_CD'
+   AND   M.VALID_YN='Y'
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+   --6.SCM0002_ItembyDivisionPopup 기준으로 ITEM_ID 조회
+   	  SELECT distinct
+		   I.DIVISION_ID
+		 , I.ITEM_ID	 
+	  FROM   SCM_MST_ITEM_SN I WITH(NOLOCK)		--[PJ20257329]ITEM 유효성 체크 마스터 테이블 변경, SCP_MST_FINAL_ITEM -> SCM_MST_ITEM_SN (2025-11-24)
+	  WHERE 1=1
+	  AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  ORDER BY  I.ITEM_ID, I.DIVISION_ID 
+
+END
+
+ "
+"2025-11-18 00:00:01.600","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","1","
+
+
+/*
+ * Program ID   : SCP0127_GET_SEARCH_INFO
+ * Description  : 선행생산 일수 (PRECEDE / SAFETY STOCK DAY)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   kh    			PJ20257329    최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0127_GET_SEARCH_INFO]
+	 @p_division_id		NVARCHAR(MAX)
+	,@p_site_id         NVARCHAR(MAX)
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	DECLARE @v_division_id   NVARCHAR(200)   = @p_division_id
+	DECLARE @v_site_id       NVARCHAR(200)   = @p_site_id
+     -- 참조 기간 및 기준일자 정보 변수
+    DECLARE @v_from_yyyymmdd		NVARCHAR(8)		= NULL	-- 당주 월요일 (plan_start_yyyymmdd) 
+    DECLARE @v_to_yyyymmdd			NVARCHAR(8)		= NULL	-- horizon_end_date ?
+
+	--1. Plan Group 정보 
+	select OPMZ_PLAN_GR_ID	AS CODE
+		, OPMZ_PLAN_GR_NAME	AS NAME
+		, DIVISION_ID
+	from SCP_OPMZ_PLAN_GR_M with(nolock)
+	WHERE 1=1
+	AND VALID_YN='Y'
+	ORDER BY OPMZ_PLAN_GR_NAME
+	
+
+
+	----2. 재고 SCM SITE ID 
+	--SELECT DISTINCT A.DIVISION_ID
+	--	, SCM_SITE_ID AS CODE 
+	--	, SCM_SITE_ID AS NAME
+	--FROM   SCM_MST_SITE A WITH(NOLOCK) 
+	--WHERE  1 = 1
+	--AND A.SITE_TYPE = 'SALES'	
+	--AND A.DIVISION_ID != '40'
+	--AND A.VALID_YN = 'Y'	
+	--UNION ALL
+	--SELECT DISTINCT A.DIVISION_ID
+	--	, A.SCM_SITE_ID AS CODE 
+	--	, A.SCM_SITE_ID AS NAME
+	--FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+	--LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+	--	ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+	--WHERE  1 = 1
+	--AND A.SITE_TYPE = 'SALES'
+	--AND  A.DIVISION_ID = '40'
+	--AND A.VALID_YN = 'Y'
+	--UNION ALL
+	--SELECT DISTINCT A.DIVISION_ID
+	--	, SCM_SITE_ID AS CODE 
+	--	, SCM_SITE_ID AS NAME
+	--FROM   [dbo].[SCM_MST_SITE] A
+	--WHERE  1 = 1
+	--AND    A.SITE_TYPE = 'PLANT'
+	--ORDER BY A.SCM_SITE_ID  -- A.DIVISION_ID
+		
+		SELECT DIVISION_ID
+			 ,CODE
+			 ,NAME
+		FROM (
+ 				SELECT DISTINCT A.DIVISION_ID
+					, SCM_SITE_ID AS CODE 
+					, SCM_SITE_ID AS NAME
+					, SITE_TYPE
+				FROM   SCM_MST_SITE A WITH(NOLOCK) 
+				WHERE  1 = 1
+				AND A.SITE_TYPE = 'SALES'	
+				AND A.DIVISION_ID != '40'
+				AND A.VALID_YN = 'Y'	
+				UNION ALL
+				SELECT DISTINCT A.DIVISION_ID
+					, A.SCM_SITE_ID AS CODE 
+					, A.SCM_SITE_ID AS NAME
+					, A.SITE_TYPE
+				FROM   SCM_MST_SITE AS A WITH(NOLOCK) 
+				LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+					ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+				WHERE  1 = 1
+				AND A.SITE_TYPE = 'SALES'
+				AND  A.DIVISION_ID = '40'
+				AND A.VALID_YN = 'Y'
+				UNION ALL
+				SELECT DISTINCT A.DIVISION_ID
+					, SCM_SITE_ID AS CODE 
+					, SCM_SITE_ID AS NAME
+					, A.SITE_TYPE
+				FROM   [dbo].[SCM_MST_SITE] A
+				WHERE  1 = 1
+				AND    A.SITE_TYPE = 'PLANT'
+			   ) X
+		ORDER BY SITE_TYPE, NAME  -- A.DIVISION_ID
+	 
+  
+
+   -- 3. STAGE 최적화 
+   SELECT M.SEGMENT1  AS DIVISION_ID
+         ,M.SEGMENT3 AS CODE
+         ,M.ATTRIBUTE1 AS NAME
+   FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+   WHERE M.LOOKUP_TYPE LIKE 'OPMZ_STAGE_CD'
+   AND   M.VALID_YN='Y'
+   AND   M.ATTRIBUTE2 ='Y'
+
+	-- 4. TYPE (COVER_DAY_TYPE : MIN/MAX) 호출
+	SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	 'COVER_DAY_TYPE'
+    ORDER BY M.DISPLAY_SEQ
+  
+    -- 5. valid YN
+    SELECT M.SEGMENT1 AS CODE
+		,M.SEGMENT2 AS NAME
+	FROM   dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+	WHERE  LOOKUP_TYPE = 	'DM_YN' -- 'DEFAULT_FLAG'
+    ORDER BY M.DISPLAY_SEQ
+  
+
+   --6.SCM0002_ItembyDivisionPopup 기준으로 ITEM_ID 조회
+   	  SELECT distinct
+		   I.DIVISION_ID
+		 , I.ITEM_ID	 
+	  FROM   SCP_MST_FINAL_ITEM I WITH(NOLOCK)	
+	  WHERE 1=1
+	  AND CASE WHEN"
+"2025-11-18 00:00:01.600","LGCE_SCMDEV","P ","SCP0127_GET_SEARCH_INFO","1192703647","2"," @p_division_id = 'ALL' THEN 'ALL' ELSE I.DIVISION_ID END IN (SELECT token FROM dbo.String_Split(@p_division_id  ,','))
+	  ORDER BY  I.ITEM_ID, I.DIVISION_ID 
+
+END
+
+ "

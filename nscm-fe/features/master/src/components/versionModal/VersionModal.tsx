@@ -4,11 +4,12 @@ import {
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import type { Dayjs } from 'dayjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import dayjs from '@foundation/dayjs';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, Checkbox, DatePickerCalendar, FormItem, InputField } from '@shared/lges';
 import { Grid } from '@shared/mui';
@@ -34,6 +35,13 @@ export interface VersionModalProps {
 }
 
 type SalesVersionRow = ResponseData<MODAL_SALES_VERSION, MODAL_SALES_VERSION_SHEET, 'data'>;
+
+interface VersionSearchConditions {
+  sdt: string;
+  edt: string;
+  versionType: string;
+  description: string;
+}
 
 const isSalesPlanType = (versionType: string) => versionType.includes('SP');
 const isReportType = (versionType: string) => versionType.startsWith('REPORT_');
@@ -61,11 +69,11 @@ export const VersionModal = ({
   const setAlert = useMessageStore(state => state.setAlert);
   const sessionUserId = useSessionStore(state => state.session.userId ?? '');
   const gridRef = useRef<FlexGridType<SalesVersionRow>>(undefined);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
   const { hasButton } = useTabBtnPermissions({ menuId: MODAL_SALES_VERSION });
   const staticColumns = useVersionModalStore(state => state.staticColumns);
   const fetchStaticColumns = useVersionModalStore(state => state.fetchStaticColumns);
-  const searchConditions = useVersionModalStore(state => state.searchConditions);
-  const setSearchConditions = useVersionModalStore(state => state.setSearchConditions);
 
   const [sdt, setSdt] = useState<Dayjs | null>(null);
   const [edt, setEdt] = useState<Dayjs | null>(null);
@@ -76,6 +84,12 @@ export const VersionModal = ({
   const [movePlan, setMovePlan] = useState(false);
   const [movePlanMonth, setMovePlanMonth] = useState<Dayjs | null>(null);
   const [updateLatest, setUpdateLatest] = useState(true);
+  const [searchConditions, setSearchConditions] = useState<VersionSearchConditions>({
+    sdt: '',
+    edt: '',
+    versionType: '',
+    description: '',
+  });
   const [selectedIdx, setSelectedIdx] = useState(-1);
   const [running, setRunning] = useState(false);
   // Type 변경 = Grid 초기화. 목록/액션 버튼(Create·Transfer·Copy·Delete)이 전부 versionType 축이라
@@ -261,10 +275,11 @@ export const VersionModal = ({
     const grid = gridRef.current;
     if (!grid || !grid.columnHeaders) return;
 
+    const noLabel = t('LBL00674', 'No');
     const formatHandler = (_sender: unknown, event: FormatItemEventArgs) => {
       if (event.panel.cellType !== CellType.TopLeft) return;
-      if (event.panel.getCellData(0, 0, false) !== 'No.') {
-        event.panel.setCellData(0, 0, 'No.');
+      if (event.panel.getCellData(0, 0, false) !== noLabel) {
+        event.panel.setCellData(0, 0, noLabel);
       }
       event.cell.style.textAlign = 'center';
     };
@@ -278,7 +293,7 @@ export const VersionModal = ({
       grid.formatItem?.removeHandler(formatHandler);
       grid.selectionChanged?.removeHandler(selectionHandler);
     };
-  }, [open, versionRows]);
+  }, [open, versionRows, t]);
 
   const runAction = async (action: string) => {
     const actionRow = selectedRow ?? getGridSelectedRow();
@@ -407,10 +422,14 @@ export const VersionModal = ({
       size={980}
       handleClose={modalClose}
       disableButtonCancel
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
-          <h2 className='headerTitle'>{t('LBL00653', '_Version')}</h2>
+          <h2 className='headerTitle'>{t('LBL00606', '_Version')}</h2>
         </div>
       }
       customContentArea={
@@ -422,7 +441,7 @@ export const VersionModal = ({
               <>
                 <Grid size={4}>
                   <FormItem
-                    label={t('LBL00663', '_Div')}
+                    label={t('LBL00001', '_Div')}
                     labelAlign='right'
                     required
                     render={() => <InputField value={divisionLabel} disabled />}
@@ -477,7 +496,7 @@ export const VersionModal = ({
                 </Grid>
                 <Grid size={4}>
                   <FormItem
-                    label={t('LBL00719', '_Description')}
+                    label={t('LBL00608', '_Description')}
                     labelAlign='right'
                     render={() => (
                       <InputField
@@ -612,17 +631,25 @@ export const VersionModal = ({
           </div>
 
           <div className={styles.modalGridWrapper}>
-            <DataGrid<SalesVersionRow>
+            <ResultArea
+              title=''
+              count={versionRows.length}
               gridRef={gridRef}
-              itemsSource={versionRows}
-              staticColumns={staticColumns}
-              autoGenerateColumns={false}
-              allowSorting={false}
-              // Division 등 동일값 데이터 셀 세로 병합 — DataGrid 기본값(ColumnHeaders)은 헤더만 병합.
-              //   wrapper 가 매 렌더 prop 을 grid 에 재적용하므로 effect 가 아닌 prop 으로 줘야 유지된다.
-              allowMerging={AllowMerging.All}
-              dblClick={handleGridDblClick}
-            />
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<SalesVersionRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                itemsSource={versionRows}
+                staticColumns={staticColumns}
+                autoGenerateColumns={false}
+                allowSorting={false}
+                // Division 등 동일값 데이터 셀 세로 병합 — DataGrid 기본값(ColumnHeaders)은 헤더만 병합.
+                //   wrapper 가 매 렌더 prop 을 grid 에 재적용하므로 effect 가 아닌 prop 으로 줘야 유지된다.
+                allowMerging={AllowMerging.All}
+                dblClick={handleGridDblClick}
+              />
+            </ResultArea>
           </div>
 
           <div className={styles.modalButtonWrapper}>

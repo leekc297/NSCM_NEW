@@ -1,0 +1,89 @@
+# -*- coding: utf-8 -*-
+r"""
+run_sql — 하네스가 생성한 SQL*Plus 스타일 스크립트(<ID>_PKG.sql, <ID>_registration.sql)를 python-oracledb 로 실행한다 (SQL*Plus/SQLcl 불필요)
+  python run_sql.py <file.sql> [--commit] [--define V_X=val ...]
+  지원: DEFINE V_X = 'v' 치환(&V_X / &V_X.), SET/PROMPT/UNDEFINE/SPOOL 무시, PL/SQL 블록(DECLARE|BEGIN|CREATE … 끝의 '/' 줄), 일반 문장은 줄 끝 ';'
+  CREATE PACKAGE 후 USER_ERRORS 를 출력한다. --commit 없으면 끝에 ROLLBACK (등록 SQL 은 BLOCK 8 결과를 보고 --commit 으로 재실행하거나, 결과가 좋으면 바로 --commit)
+  DBMS_OUTPUT 을 수집해 보여준다. 종료코드: 0 전부 성공 / 1 문장 오류 또는 컴파일 오류
+"""
+import sys as _sys
+try: _sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+except Exception: pass
+import sys, os, re
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import dbconn
+
+def split_script(text, defines):
+    out, buf, in_block = [], [], False
+    for raw in text.splitlines():
+        line = raw.rstrip('\n')
+        s = line.strip()
+        m = re.match(r"^DEFINE\s+(\w+)\s*=\s*'?(.*?)'?\s*(?:--.*)?$", s, re.I)
+        if m and not in_block: defines[m.group(1)] = m.group(2).strip(); continue
+        if not in_block and re.match(r'^(SET|PROMPT|UNDEFINE|SPOOL|WHENEVER|COLUMN|TTITLE|REM)\b', s, re.I): continue
+        if not in_block and (s == '' or s.startswith('--')) and not buf: continue
+        if not in_block and re.match(r'^(DECLARE|BEGIN|CREATE\s+(OR\s+REPLACE\s+)?(PACKAGE|PROCEDURE|FUNCTION|TRIGGER|TYPE)\b)', s, re.I):
+            in_block = True
+        if in_block:
+            if s == '/':
+                out.append(('block', '\n'.join(buf))); buf = []; in_block = False
+            else: buf.append(line)
+            continue
+        buf.append(line)
+        code = re.sub(r"'(?:[^']|'')*'", "''", s)
+        if code.rstrip().endswith(';') and not re.search(r'--.*;$', code):
+            stmt = '\n'.join(buf).strip(); buf = []
+            stmt = re.sub(r';\s*$', '', stmt)
+            out.append(('sql', stmt))
+    if buf and ''.join(buf).strip(): out.append(('block' if in_block else 'sql', '\n'.join(buf)))
+    return out
+
+def subst(stmt, defines):
+    def rep(m): k = m.group(1); return defines.get(k, m.group(0))
+    return re.sub(r'&(\w+)\.?', rep, stmt)
+
+def main():
+    args = [x for x in sys.argv[1:] if not x.startswith('--')]
+    if not args: sys.exit(__doc__)
+    path = args[0]; commit = '--commit' in sys.argv
+    defines = {}
+    for i, x in enumerate(sys.argv):
+        if x == '--define' and i + 1 < len(sys.argv): k, _, v = sys.argv[i + 1].partition('='); defines[k.strip()] = v.strip().strip("'")
+    text = open(path, encoding='utf-8-sig').read()
+    stmts = split_script(text, defines)
+    cfg = dbconn.load_cfg(); cx = dbconn.connect('tobe', cfg, write=True); cur = cx.cursor()
+    print(f"접속: {dbconn.describe('tobe', cfg)} · 문장 {len(stmts)} · DEFINE {defines}")
+    cur.callproc('DBMS_OUTPUT.ENABLE', [None])
+    fail = 0; compiled = []
+    for i, (kind, stmt) in enumerate(stmts, 1):
+        sql = subst(stmt, defines).strip()
+        if not sql: continue
+        head = re.sub(r'\s+', ' ', sql)[:90]
+        try:
+            cur.execute(sql)
+            if re.match(r'^\s*SELECT', sql, re.I):
+                rows = cur.fetchmany(50); cols = [d[0] for d in cur.description]
+                print(f"[{i}] SELECT → {len(rows)}행"); print('     ' + ' | '.join(cols))
+                for r in rows: print('     ' + ' | '.join('' if v is None else str(v) for v in r))
+            else:
+                print(f"[{i}] OK  {head}")
+            m = re.match(r'^\s*CREATE\s+OR\s+REPLACE\s+PACKAGE\s+(BODY\s+)?(?:\w+\.)?(\w+)', sql, re.I)
+            if m: compiled.append((m.group(2).upper(), 'PACKAGE BODY' if m.group(1) else 'PACKAGE'))
+        except Exception as e:
+            fail += 1; print(f"[{i}] FAIL {head}\n     {dbconn.mask(str(e), cfg).splitlines()[0][:300]}")
+        # DBMS_OUTPUT
+        line = cur.var(str); status = cur.var(int)
+        while True:
+            cur.callproc('DBMS_OUTPUT.GET_LINE', (line, status))
+            if status.getvalue() != 0: break
+            print('     > ' + (line.getvalue() or ''))
+    for name, typ in compiled:
+        cur.execute("SELECT LINE, POSITION, TEXT FROM USER_ERRORS WHERE NAME = :n AND TYPE = :t ORDER BY SEQUENCE", n=name, t=typ)
+        errs = cur.fetchall()
+        if errs: fail += 1; print(f"컴파일 오류 {typ} {name}: {len(errs)}건"); [print(f"     L{l}:{p} {t.strip()[:200]}") for l, p, t in errs[:30]]
+        else: print(f"컴파일 OK {typ} {name}")
+    if commit and not fail: cx.commit(); print('COMMIT')
+    else: cx.rollback(); print('ROLLBACK' + ('' if commit else ' (--commit 없음)') + (' — 오류 있음' if fail else ''))
+    cx.close(); sys.exit(1 if fail else 0)
+
+if __name__ == '__main__': main()

@@ -27,7 +27,7 @@
 // ====================================================================================
 
 import dayjs, { type Dayjs } from 'dayjs';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -43,6 +43,7 @@ import { ProjectByDivisionModal } from '../projectByDivisionModal/ProjectByDivis
 
 import { logCascade } from './SearchFields.debug';
 import styles from './SearchFields.module.scss';
+import { yearBoundsOf, yearToDayjs, yearValueOf } from './yearField.util';
 
 // ====================================================================================
 // 표준 props
@@ -229,26 +230,49 @@ const PopupSearchInput = ({
   onOpenPopup,
   disabled,
   onFocus,
-}: PopupSearchInputProps) => (
-  <div style={popupRowStyle}>
-    <InputField
-      fullWidth
-      disabled={disabled}
-      value={value}
-      onFocus={onFocus}
-      onChange={e => onValueChange((e.target as HTMLInputElement).value)}
-    />
-    <Button
-      appearance='outlined'
-      priority='normal'
-      disabled={disabled}
-      iconComponent={<FunctionSearchIcon appearance='lined' />}
-      onClick={() => {
-        if (!disabled) onOpenPopup();
-      }}
-    />
-  </div>
-);
+}: PopupSearchInputProps) => {
+  // 콤마 입력 즉시 소실 버그 수정 (2026-09-16): 부모는 값을 string[]로 들고 있다가
+  // `value.join(',')`로 내려주는데, 콤마 뒤에 아직 토큰이 없는 편집 중간 상태
+  // (예: "ABC,")는 split+filter(Boolean)에서 빈 문자열이 걸러져 즉시 "ABC"로 되돌아온다.
+  // 그 결과 방금 입력한 콤마가 렌더 직후 사라지는 것처럼 보인다. 포커스 중에는 로컬
+  // 텍스트를 그대로 보여주고, blur/외부 값 변경 시에만 부모가 정리한 값으로 동기화한다.
+  const [text, setText] = useState(value);
+  const focusedRef = useRef(false);
+  useEffect(() => {
+    if (!focusedRef.current) setText(value);
+  }, [value]);
+  return (
+    <div style={popupRowStyle}>
+      <InputField
+        fullWidth
+        disabled={disabled}
+        value={text}
+        onFocus={() => {
+          focusedRef.current = true;
+          onFocus?.();
+        }}
+        onBlur={() => {
+          focusedRef.current = false;
+          setText(value);
+        }}
+        onChange={e => {
+          const v = (e.target as HTMLInputElement).value;
+          setText(v);
+          onValueChange(v);
+        }}
+      />
+      <Button
+        appearance='outlined'
+        priority='normal'
+        disabled={disabled}
+        iconComponent={<FunctionSearchIcon appearance='lined' />}
+        onClick={() => {
+          if (!disabled) onOpenPopup();
+        }}
+      />
+    </div>
+  );
+};
 
 // ====================================================================================
 // 1. DivisionField (필수, size=4, combo=MyDivision)
@@ -408,7 +432,7 @@ export const EndCustomerField = ({
     <Grid size={gridSize ?? 4}>
       <FormItem
         className={commonStyles.formItem}
-        label={L('LBL00503', 'End Customer')}
+        label={L('LBL00080', 'End Customer')}
         labelAlign='right'
         render={() => (
           <CustomDropdown
@@ -758,7 +782,7 @@ export const PlantSiteField = ({
     <Grid size={gridSize ?? 4}>
       <FormItem
         className={commonStyles.formItem}
-        label={L('LBL00509', 'Plant Site')}
+        label={L('LBL00005', 'Plant Site')}
         labelAlign='right'
         render={() => (
           <CustomDropdown
@@ -809,7 +833,7 @@ export const BizTypeField = ({
     <Grid size={gridSize ?? 4}>
       <FormItem
         className={commonStyles.formItem}
-        label={L('LBL00504', 'Biz.Type')}
+        label={L('LBL00085', 'Biz.Type')}
         labelAlign='right'
         render={() => (
           <CustomDropdown
@@ -896,8 +920,11 @@ export const ProjectField = (props: ProjectFieldProps) => {
             deptId: orAll(deptIds),
             endCustomer: orAll(endCustomers),
             salesSite: orAll(scmSiteIds),
-            // multiCheckbox: 재기동 시 선택값 미전달(carry 없음) → 'ALL'(=전체 목록, 필터 없음).
-            projectCode: multiCheckbox ? 'ALL' : orAll(projectCodes),
+            // 그리드 형태(체크박스 다중선택 여부)와 무관하게 입력값을 그대로 넘긴다 - 모달이 그
+            //   값으로 조회한 결과를 처음부터 보여줘야 한다 (사용자 지정 2026-09-07).
+            //   종전에는 multiCheckbox 일 때 'ALL'(전체 목록)로 버렸다. 이미 고른 값이 많으면
+            //   목록이 그만큼 좁아지는데, 그건 감수하기로 한 트레이드오프다.
+            projectCode: orAll(projectCodes),
             etc: 'N',
           } as never
         }
@@ -935,7 +962,7 @@ export const ItemField = (props: ItemFieldProps) => {
     <Grid size={gridSize ?? 4}>
       <FormItem
         className={commonStyles.formItem}
-        label={L('LBL00508', 'Model / Nickname')}
+        label={L('LBL00618', 'Model / Nickname')}
         labelAlign='right'
         render={() => (
           <PopupSearchInput
@@ -971,8 +998,8 @@ export const ItemField = (props: ItemFieldProps) => {
             endCustomer: orAll(endCustomers),
             salesSite: orAll(scmSiteIds),
             projectCode: orAll(projectCodes),
-            // multiCheckbox(체크박스 선택) 모드: 재기동 시 선택값 미전달(carry 없음) → 전체 목록.
-            itemId: multiCheckbox ? '' : itemIds && itemIds.length > 0 ? itemIds.join(',') : '',
+            // 그리드 형태와 무관하게 입력값을 그대로 넘긴다 (위 ProjectField 와 같은 규약).
+            itemId: itemIds && itemIds.length > 0 ? itemIds.join(',') : '',
           } as never
         }
         headerTitle='Model / Nickname'
@@ -1049,7 +1076,9 @@ export const OwnerField = (props: OwnerFieldProps) => {
             owner: owners && owners.length > 0 ? owners.join(',') : '',
           } as never
         }
-        ownerId=''
+        // ownerId 는 넘기지 않는다. 모달이 `ownerId ?? preSearchParams.owner` 로 fallback 하는데
+        //   `??` 는 nullish 만 통과시키므로 빈 문자열을 넘기면 그 fallback 이 막혀 위 owner 값이
+        //   영원히 안 읽힌다 (2026-09-07 실측: SP 6번째 인자 P_OWNER_ID 가 항상 '').
         multiCheckbox={multiCheckbox}
       />
     </Grid>
@@ -1082,8 +1111,25 @@ interface PeriodFieldProps {
    * ⚠ 값 형식이 모드에 따라 다르다(YYYYMM vs YYYYMMDD) — 스토어 초기값·SP 계약과 맞출 것.
    */
   mode?: 'date' | 'month';
+  /**
+   * 시작(From) 피커를 비활성화한다 — AS-IS 일부 화면(SCP0006 등)이 `MonthMin1=MonthMax1`로
+   * From 월 자체를 고정하는 동작 재현용(design/02_search-combo.md §2 #6). 기본 false —
+   * 미지정 시 기존 사용처와 동일하게 동작(회귀 0).
+   */
+  disabledStart?: boolean;
+  /** From/To 두 피커 모두 비활성화 (예: SSP0015 Packer 시트 — Period 편집 불가). 기본 false(회귀 0). */
+  disabled?: boolean;
 }
-export const PeriodField = ({ start, end, onChange, gridSize, label, mode }: PeriodFieldProps) => {
+export const PeriodField = ({
+  start,
+  end,
+  onChange,
+  gridSize,
+  label,
+  mode,
+  disabledStart,
+  disabled,
+}: PeriodFieldProps) => {
   const L = useL();
   // 시작일/종료일을 각각 독립 달력 2개로 분리 (mode='month' 는 월 달력).
   //   필드별로 자기 팝업이 뜨며, 종료일은 시작일 이후만 선택 가능(mindate).
@@ -1110,6 +1156,7 @@ export const PeriodField = ({ start, end, onChange, gridSize, label, mode }: Per
                 size='small'
                 format={isMonth ? 'YYYY.MM' : 'YYYY.MM.DD'}
                 value={startValue}
+                disabled={disabled || disabledStart}
                 onChange={
                   ((date: Dayjs | null) => {
                     onChange(date?.format(outFormat) ?? '', end);
@@ -1125,6 +1172,7 @@ export const PeriodField = ({ start, end, onChange, gridSize, label, mode }: Per
                 size='small'
                 format={isMonth ? 'YYYY.MM' : 'YYYY.MM.DD'}
                 value={endValue}
+                disabled={disabled}
                 mindate={startValue ?? undefined}
                 onChange={
                   ((date: Dayjs | null) => {
@@ -1133,6 +1181,76 @@ export const PeriodField = ({ start, end, onChange, gridSize, label, mode }: Per
                 }
               />
             </div>
+          </div>
+        )}
+      />
+    </Grid>
+  );
+};
+
+// ====================================================================================
+// 11-1. YearField (size=3, DatePickerCalendar usecase='year')
+//     연도만 다루는 조회조건. 직접 입력(YYYY 4자리)과 연도 그리드 팝오버를 둘 다 지원한다.
+//     값 형식은 'YYYY' 4자리 문자열 — 스토어의 yyyy 규약을 그대로 쓴다.
+//
+//     선택 범위는 달력 마스터(CALENDAR_YYYY 콤보)에서 뽑은 최소/최대 연도로 막는다.
+//     콤보를 목록으로 그리지 않고 경계 계산에만 쓰는 이유: 목록이 2009 부터 수십 건이라
+//     드롭다운으로는 원하는 연도를 찾기 어려운데, 그렇다고 범위를 풀면 데이터가 없는 연도를
+//     입력할 수 있고 그때는 조회 0건으로만 드러난다(SP 판정 — FE 사전 검증 없음).
+//     minYear/maxYear 를 직접 주면 그 값이 이긴다.
+// ====================================================================================
+interface YearFieldProps {
+  value: string; // 'YYYY'
+  onChange: (v: string) => void;
+  gridSize?: number;
+  label?: string;
+  required?: boolean;
+  // 달력 마스터 범위를 쓰지 않고 직접 막을 때만 준다.
+  minYear?: number;
+  maxYear?: number;
+}
+export const YearField = ({
+  value,
+  onChange,
+  gridSize,
+  label,
+  required = true,
+  minYear,
+  maxYear,
+}: YearFieldProps) => {
+  const L = useL();
+  // 경계 계산 전용 조회. 쿼리 키가 콤보 ID 단위라 같은 콤보를 쓰는 다른 호출과 캐시를 공유한다.
+  const [calendarYyyy] = useTabComboQueries({ filters: ['CALENDAR_YYYY'] });
+  const bounds = useMemo(() => yearBoundsOf(calendarYyyy), [calendarYyyy]);
+
+  return (
+    <Grid size={gridSize ?? 3}>
+      <FormItem
+        className={commonStyles.formItem}
+        label={label ?? L('LBL00086', 'Year')}
+        labelAlign='right'
+        required={required}
+        render={() => (
+          // 디자인 기준 높이 36px 정합 — PeriodField 와 같은 wrapper 를 쓴다.
+          <div className={styles.datePickerFix}>
+            <DatePickerCalendar
+              usecase='year'
+              elevation
+              size='small'
+              value={yearToDayjs(value)}
+              minYear={minYear ?? bounds.minYear}
+              maxYear={maxYear ?? bounds.maxYear}
+              // 피커 자체 폭이 96px 고정이라 조회조건 칸을 채우려면 풀어 준다.
+              sx={{ width: '100%', justifyContent: 'flex-start' }}
+              onChange={
+                ((date: Dayjs | null) => {
+                  // 비우거나 덜 친 상태에서도 onChange 가 온다. 쓸 수 없는 값이면 직전 연도를
+                  //   그대로 둔다 - yearValueOf 주석 참조(조회키·편집잠금이 4자리를 전제한다).
+                  const year = yearValueOf(date);
+                  if (year !== null) onChange(year);
+                }) as never
+              }
+            />
           </div>
         )}
       />

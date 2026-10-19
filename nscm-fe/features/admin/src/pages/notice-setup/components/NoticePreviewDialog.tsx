@@ -115,7 +115,7 @@ export const NoticePreviewDialog = () => {
                 <span className={styles.publicationPeriod}>{publicationPeriod}</span>
               )}
               <Checkbox
-                labelText={t('LBL00413', '_Do not open again today')}
+                labelText={t('LBL00381', '_Do not open again today')}
                 checked={previewHideToday}
                 onChange={setPreviewHideToday}
               />

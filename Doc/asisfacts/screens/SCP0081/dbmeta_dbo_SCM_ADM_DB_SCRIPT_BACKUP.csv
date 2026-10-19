@@ -1,0 +1,4420 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","1","
+/*
+ * Program ID    : SCP0080_GET_PRODUCTION_PLAN_REPORT
+ * Description    : PRODUCTION PLAN 조회
+ * Program History
+ *===================================================================================================
+ * Date         In Charge		Description
+ *===================================================================================================
+ * 2021/09/13   kmj                       OPERATION_ID 조건 추가
+ * 2021/09/28   kmj                       VERSION 조건 추가, 2개 버전 MEASURE + GAP 추가, Sub Total
+ * 2022/01/25   chaan                     CELL 환산계수 적용
+ * 2022/02/15   chaan           V1.31     WPP 기준을 일요일 Cuttoff 로 변경
+ * 2022/02/17   chaan           V1.5      CELL 환산계수 적용 -> 전극 관련 보완
+ * 2022/02/18   chaan           V1.6      WPP 기준을 일요일 Cuttoff 로 변경 -> ITEM 별 최종 주차를 가져오는 것이 아니라, 조회 기간 중 최종 주차를 찾아 해당 데이터가 없는 ITEM은 0 으로 표시
+ * 2022/03/22   khj79                     조회 속도 이슈 발생되어 쿼리 수정 함
+ * 2022/07/21   chaan           V1.1.7    필터조건을 SCP 기준으로 통합(Shop Group -> Operation Group), PlantID 필터 조건에서 제외(line 이 이미 plant로 필터링된 상태임)
+ * 2022/10/27   chaan           V1.1.8    - 전극(EE, EE_UC) 사업부 일 때 division 에 따른 Operation Group 오류로 divsion 필터 조건 수정
+ *                                        - Version Column 추가
+ * 2022/11/24   chaan           V1.1.9    데이터 조회오류 확인
+ *                                         ~ Version No 추가후 정렬 오류 수정
+ * 2022/12/13   chaan           V1.1.10   전극사업부 조회 오류 수정
+ * 2022/12/23   chaan           V1.1.11   WPP 조회 오류 수정
+                                            - WPP 조회시 키 상관없이 전체 최종 주차만 조회 => PLAN_DATE 기준 키별 자기 주차로 변경
+                                            - RESULT 수치 중복 오류 수정
+ * 2024-01-08   chaan           V1.1.12   PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - UI성능개선 - 조회조건 속도 개선
+ */
+
+CREATE PROCEDURE [dbo].[SCP0081_GET_PRODUCTION_PLAN_REPORT]
+--CREATE PROCEDURE [dbo].[SCP0081_GET_PRODUCTION_PLAN_REPORT]
+    @p_from_yyyymmdd     NVARCHAR(8),
+    @p_to_yyyymmdd       NVARCHAR(8),
+    @p_division_id       NVARCHAR(1000),
+    @p_operation_group   NVARCHAR(1000),
+    @p_line_id           NVARCHAR(MAX),
+    @p_item_id           NVARCHAR(1000),
+    @p_nickname          NVARCHAR(1000),
+    @p_user_id           NVARCHAR(30),
+    @p_version_id        NVARCHAR(50),
+    @p_version_a         NVARCHAR(20),
+    @p_version_b         NVARCHAR(20),
+    @p_group_column      NVARCHAR(20),
+    @debug_mode          NVARCHAR(1) = 'T'
+AS
+BEGIN
+    SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+    SET NOCOUNT ON;
+
+    --DECLARE @p_from_yyyymmdd    NVARCHAR(8)			= N'20230219';
+    --DECLARE @p_to_yyyymmdd      NVARCHAR(8)			= N'20230219';
+    --DECLARE @p_division_id      NVARCHAR(1000)		= N'81';
+    --DECLARE @p_operation_group     NVARCHAR(1000)	= N'P,A';
+    ----DECLARE @p_operation_group     NVARCHAR(1000)	= N'A,E'; --전극
+    ----DECLARE @p_plant_id         NVARCHAR(1000)		= N'';
+    --DECLARE @p_line_id          NVARCHAR(MAX)		= N'';
+    --DECLARE @p_item_id          NVARCHAR(1000)		= N'ACLT1010U-A1-D05';
+    --DECLARE @p_nickname         NVARCHAR(1000)		= N'';
+    --DECLARE @p_user_id          NVARCHAR(30)		= N'iamarock';
+    --DECLARE @p_version_id       NVARCHAR(50)		= N'';
+    --DECLARE @p_version_a        NVARCHAR(20)		= N'';
+    --DECLARE @p_version_b        NVARCHAR(20)		= N'';
+    --DECLARE @p_group_column     NVARCHAR(20)		= N'';
+    --DECLARE @debug_mode         NVARCHAR(1)			= N'F';
+
+
+    DECLARE @v_program_id       NVARCHAR(10)    = 'SCP0081';
+    DECLARE @v_sheet_name       NVARCHAR(50)    = 'Production Plan Report';
+
+    DECLARE @V_CNT_USR_MEASURE  INT = 0;
+    DECLARE @V_CNT_USR_COLUMN   INT = 0;
+
+    SET @V_CNT_USR_MEASURE = (  SELECT  Count(1)
+                                FROM    SCM_MST_TITLESET_USER WITH(NOLOCK)
+                                WHERE   1 = 1
+                                    AND PROGRAM_ID = @V_PROGRAM_ID
+                                    AND SHEET_NAME = @V_SHEET_NAME
+                        "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","2","            AND USER_INQUIRY_COLUMN_TYPE_CODE = 'M'
+                                    AND USER_ID = @p_user_id);
+    SET @V_CNT_USR_COLUMN = (   SELECT  Count(1)
+                                FROM    SCM_MST_TITLESET_USER WITH(NOLOCK)
+                                WHERE   1 = 1
+                                    AND PROGRAM_ID = @V_PROGRAM_ID
+                                    AND SHEET_NAME = @V_SHEET_NAME
+                                    AND USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+                                    AND USER_ID = @p_user_id);
+--TESTING : OK
+--print '@V_CNT_USR_MEASURE : ' + CONVERT(NVARCHAR, @V_CNT_USR_MEASURE);
+--print '@V_CNT_USR_COLUMN : ' + CONVERT(NVARCHAR, @V_CNT_USR_COLUMN);
+--return;
+
+    DECLARE @V_INDEX    INT             = 0;
+    DECLARE @mEXEC      NVARCHAR(MAX);
+    -- COLOMN 순서대로 조회
+    DECLARE @COL        NVARCHAR(20)    = '';
+    DECLARE @COL2       NVARCHAR(20)    = '';
+
+    /********************************************************************************
+    * 임시테이블만들기 - 선택 COLUMN
+    ********************************************************************************/
+        IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_COLUMN') IS NOT NULL
+            DROP TABLE #TblDynamicPivot_SCP0081_COLUMN;
+
+		SELECT    A.COLUMN_NAME AS COL
+				, ROW_NUMBER() OVER(ORDER BY ISNULL(B.SORT_ORDER_NO, A.SORT_ORDER_NO)) AS USER_SORT_ORDER_NO
+		INTO    #TblDynamicPivot_SCP0081_COLUMN
+		FROM    SCM_MST_SHEET_COLUMNS A WITH(NOLOCK)
+				LEFT JOIN SCM_MST_TITLESET_USER B WITH(NOLOCK) ON
+						B.PROGRAM_ID = A.PROGRAM_ID
+					AND B.SHEET_NAME = A.SHEET_NAME
+					AND B.COLUMN_NAME = A.COLUMN_NAME
+					AND B.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+					AND B.USER_ID = @p_user_id
+		WHERE       A.PROGRAM_ID = @V_PROGRAM_ID
+				AND A.SHEET_NAME = @V_SHEET_NAME
+				AND A.VALID_YN = 'Y'
+				AND A.VISIBLE_FLAG = 'Y'
+				AND
+					(
+						@V_CNT_USR_COLUMN = 0
+						OR EXISTS
+							(
+								SELECT  1
+								FROM    SCM_MST_TITLESET_USER WITH(NOLOCK)
+								WHERE       PROGRAM_ID = @V_PROGRAM_ID
+										AND SHEET_NAME = @V_SHEET_NAME
+										AND COLUMN_NAME = A.COLUMN_NAME
+										AND USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+										AND USER_ID = @p_user_id
+							)
+					);
+
+        SET @V_CNT_USR_COLUMN = (   SELECT  Count(1)
+                                    FROM    #TblDynamicPivot_SCP0081_COLUMN);
+
+
+--TESTING : OK
+--select * from SCM_LINE_HIERARCHY_V_SN where DIVISION_ID IN ('EE', 'EE_UC');
+--select * from SCP_MST_FINAL_ITEM where DIVISION_ID IN ('EE', 'EE_UC');
+--return;
+    /********************************************************************************
+    * 임시테이블만들기 - OPERATION    GROUP
+    ********************************************************************************/
+        IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_GROUP') IS NOT NULL
+            DROP TABLE #TblDynamicPivot_SCP0081_GROUP;
+
+        SELECT DISTINCT
+				  COMPANY_ID
+				, DIVISION_ID
+				, SITE_ID
+				, PLANT_ID
+				, OPERATION_GROUP AS OPERATION_GROUP_NAME
+				, OPERATION_GROUP_ID
+				, OPERATION_ID
+				, LINE_ID
+				, FACTORY_ID
+        INTO    #TblDynamicPivot_SCP0081_GROUP
+        FROM    SCM_LINE_HIERARCHY_V_SN S WITH(NOLOCK)
+        WHERE   1=1
+                AND (
+                           ISNULL(@p_division_id, '') = ''
+                        OR (1 = IIF(SUBSTRING(@p_division_id, 1, 2) = 'EE', 1, IIF(DIVISION_ID IN (SELECT token FROM dbo.String_Split(@p_division_id,',')), 1, 0)))
+                    )
+                AND (
+                        ISNULL(@p_operation_group, '') = ''
+                        OR OPERATION_GROUP_ID IN
+                            (
+                                SELECT  token
+                                FROM    dbo.String_Split(@p_operation_group,',')
+                            )
+					)
+     --           AND (
+     --                   ISNULL(@p_plant_id, '') = ''
+     --                   OR "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","3","PLANT_ID IN
+     --                       (
+     --                           SELECT  token
+     --                           FROM    dbo.String_Split(@p_plant_id,',')
+					--		)
+					--)
+                AND (
+                        ISNULL(@p_line_id, '') = ''
+                        OR LINE_ID IN
+                            (
+                                SELECT  token
+                                FROM    dbo.String_Split(@p_line_id,',')
+							)
+					)
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_GROUP; return;
+
+        /********************************************************************************
+        * 임시테이블만들기 - GROUP CODE MANAGEMENT
+        ********************************************************************************/
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_GROUP_CODE') IS NOT NULL
+            DROP TABLE #TblDynamicPivot_SCP0081_GROUP_CODE;
+
+        SELECT    DIVISION_ID
+                , ITEM_ID
+                , NICK_NAME
+                , GROUP_CODE1
+                , GROUP_CODE2
+                , GROUP_CODE3
+                , GROUP_CODE4
+                , GROUP_CODE5
+        INTO    #TblDynamicPivot_SCP0081_GROUP_CODE
+        FROM    SCP_MST_FINAL_ITEM S WITH(NOLOCK)
+        WHERE   1=1
+                AND (
+                           ISNULL(@p_division_id, '') = ''
+                        OR (1 = IIF(SUBSTRING(@p_division_id, 1, 2) = 'EE', 1, IIF(DIVISION_ID IN (SELECT token FROM dbo.String_Split(@p_division_id,',')), 1, 0)))
+                    )
+                AND (
+                        ISNULL(@p_item_id, '') = ''
+                        OR ITEM_ID IN
+                            (
+                                SELECT    token
+                                FROM      dbo.String_Split(@p_item_id,',')
+						    )
+				    );
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_GROUP_CODE; return;
+
+
+    /********************************************************************************
+    * 임시테이블만들기 - MEASURE
+    ********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_MEASURE') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_MEASURE;
+
+    SELECT    A.COLUMN_NAME AS MEASURE
+            , A.COLUMN_LABEL_NAME AS MEASURE_NAME
+            , ISNULL(B.SORT_ORDER_NO, A.SORT_ORDER_NO) AS USER_SORT_ORDER_NO
+    INTO    #TblDynamicPivot_SCP0081_MEASURE
+    FROM    SCM_MST_SHEET_MEASURE A WITH(NOLOCK)
+            LEFT JOIN SCM_MST_TITLESET_USER B WITH(NOLOCK) ON
+	                B.PROGRAM_ID                    = A.PROGRAM_ID
+				AND B.SHEET_NAME                    = A.SHEET_NAME
+				AND B.COLUMN_NAME                   = A.COLUMN_NAME
+				AND B.USER_INQUIRY_COLUMN_TYPE_CODE = 'M'
+				AND B.USER_ID                       = @p_user_id
+	WHERE   A.PROGRAM_ID = @V_PROGRAM_ID
+		AND A.SHEET_NAME = @V_SHEET_NAME
+		AND A.VALID_YN   = 'Y'
+		AND
+			(
+				@V_CNT_USR_MEASURE = 0
+				OR EXISTS
+					(
+						SELECT  1
+						FROM    SCM_MST_TITLESET_USER WITH(NOLOCK)
+						WHERE   PROGRAM_ID                      = @V_PROGRAM_ID
+							AND SHEET_NAME                      = @V_SHEET_NAME
+							AND COLUMN_NAME                     = A.COLUMN_NAME
+							AND USER_INQUIRY_COLUMN_TYPE_CODE   = 'M'
+							AND USER_ID                         = @p_user_id
+					)
+			) ;
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_MEASURE order by USER_SORT_ORDER_NO;return;
+
+--TESTING : OK
+----select * from SCM_DNM_FP_RELEASE_PROD_PLAN_SN;
+--select * from #TblDynamicPivot_SCP0081_GROUP;
+--select * from #TblDynamicPivot_SCP0081_GROUP_CODE;
+----select * from SCM_DNM_FP_RELEASE_PROD_PLAN_DW_SN;
+----select * from SCP_ANL_PRODUCTION_PLAN_N;
+--select * from SCM_DNM_DAILY_PRODUCT_RESULT_SN;return;
+    /********************************************************************************
+    * 임시테이블만들기 -
+    ********************************************************"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","4","************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_MPP') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_02_MPP;
+
+    SELECT    A.DIVISION_ID
+            , B.OPERATION_GROUP_ID
+            , B.OPERATION_GROUP_NAME
+            , A.PLANT_ID
+            , (
+                    SELECT  SITE_DESCRIPTION
+                    FROM    SCM_MST_SITE C WITH(NOLOCK)
+                    WHERE   A.COMPANY_ID=C.COMPANY_ID
+						AND A.DIVISION_ID=C.DIVISION_ID
+						AND A.SITE_ID=C.SITE_ID
+						AND A.PLANT_ID=C.PLANT_ID
+						AND IIF(B.OPERATION_GROUP_ID = 'F', 'A', B.OPERATION_GROUP_ID) = C.OPERATION_GROUP
+                )                                   AS SCM_SITE_NAME
+            , A.OPERATION_ID
+            , A.LINE_ID
+            , A.ITEM_ID
+            , D.NICK_NAME
+            , D.GROUP_CODE1
+            , D.GROUP_CODE2
+            , D.GROUP_CODE3
+            , D.GROUP_CODE4
+            , D.GROUP_CODE5
+            , A.PLAN_TYPE                           AS MEASURE
+            , ''                                    AS VERSION_NO
+            , CONVERT(VARCHAR, A.PLAN_DATE, 112)    AS YYYYMMDD
+            , A.PLAN_QTY                            AS QTY
+    INTO    #TblDynamicPivot_SCP0081_02_MPP
+    FROM    SCM_DNM_FP_RELEASE_PROD_PLAN_SN A WITH(NOLOCK)
+            JOIN #TblDynamicPivot_SCP0081_GROUP B ON
+					A.COMPANY_ID    = B.COMPANY_ID
+				AND A.DIVISION_ID   = B.DIVISION_ID
+				AND A.SITE_ID       = B.SITE_ID
+				AND A.PLANT_ID      = B.PLANT_ID
+				AND A.OPERATION_ID  = B.OPERATION_ID
+				AND A.LINE_ID       = B.LINE_ID
+				AND A.FACTORY_ID    = B.FACTORY_ID
+            LEFT JOIN #TblDynamicPivot_SCP0081_GROUP_CODE D ON
+                    A.DIVISION_ID   = D.DIVISION_ID
+                AND A.ITEM_ID       = D.ITEM_ID
+    WHERE   1=1
+		AND A.PLAN_QTY > 0
+		AND A.PLAN_TYPE <> 'WPP'
+		AND A.PLAN_DATE >= CONVERT(DATETIME, @p_from_yyyymmdd)
+		AND A.PLAN_DATE <= CONVERT(DATETIME, @p_to_yyyymmdd)
+		AND
+			(
+					ISNULL(@p_item_id, '') = ''
+					OR A.ITEM_ID IN
+						(
+							SELECT  token
+							FROM    dbo.String_Split(@p_item_id,',')
+						)
+			)
+		AND
+			(
+				ISNULL(@p_nickname, '') = ''
+				OR D.NICK_NAME LIKE '%' + @p_nickname + '%'
+			)
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_MPP;return;
+
+	-- chaan FP계획 begin
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_WPP_T') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_WPP_T;
+
+	SELECT    A.YYYYWW
+            , A.DIVISION_ID
+            , B.OPERATION_GROUP_ID
+            , B.OPERATION_GROUP_NAME
+			, A.PLANT_ID
+            , (
+                    SELECT  SITE_DESCRIPTION
+                    FROM    SCM_MST_SITE C WITH(NOLOCK)
+                    WHERE   A.COMPANY_ID = C.COMPANY_ID
+						AND A.DIVISION_ID = C.DIVISION_ID
+						AND A.SITE_ID = C.SITE_ID
+						AND A.PLANT_ID = C.PLANT_ID
+						AND IIF(B.OPERATION_GROUP_ID = 'F', 'A', B.OPERATION_GROUP_ID)=C.OPERATION_GROUP
+                ) AS SCM_SITE_NAME
+            , A.OPERATION_ID
+            , A.LINE_ID
+            , A.ITEM_ID
+            , D.NICK_NAME
+            , D.GROUP_CODE1
+            , D.GROUP_CODE2
+            , D.GROUP_CODE3
+            , D.GROUP_CODE4
+            , D.GROUP_CODE5
+			, A.PLAN_TYPE  AS MEASURE
+			, '' AS VERSION_NO
+			, CONVERT(NVARCHAR, A.PLAN_DATE, 112) AS YYYYMMDD
+			, A.PLAN_QTY AS QTY
+    INTO    #TblDynamicPivot_SCP0081_02_WPP_T
+	FROM	SCM_DNM_FP_RELEASE_PROD_PLAN_DW_SN A WITH(NOLOCK)
+            JOIN
+				#TblDynamicPivot_SCP0081_GROUP B ON
+						A.COMPANY_ID   = B.COMPANY_ID
+					AND A.DIVISION_ID  = B.DIVISION_ID
+					AND A.SITE_ID      = B.SITE_ID
+					AND A.PLANT_ID     = B.PLANT_ID
+					AND A.OPERATION_ID = B.OPERATION_ID
+					AND A.LINE_ID      = B.LINE_ID
+					AND A.FACTORY_ID   = B.FACTORY_ID
+            LEFT JOIN #TblDynamicPivot_SCP0081_GROUP_CODE D ON
+                    A.DIVISION_ID      = D.DIVISION_ID
+                AN"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","5","D A.ITEM_ID          = D.ITEM_ID
+	WHERE	1=1
+            AND A.PLAN_QTY > 0
+            AND A.PLAN_TYPE = 'WPP'
+            AND A.PLAN_DATE >= CONVERT(DATETIME,@p_from_yyyymmdd)
+            AND A.PLAN_DATE <= CONVERT(DATETIME,@p_to_yyyymmdd)
+            AND
+                (
+                        ISNULL(@p_item_id, '') = '' OR A.ITEM_ID IN
+                            (
+                                SELECT  token
+                                FROM    dbo.String_Split(@p_item_id,',')
+                            )
+                )
+            AND
+                (
+                    ISNULL(@p_nickname, '') = '' OR D.NICK_NAME LIKE '%' + @p_nickname + '%'
+                )
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_WPP_T;return;
+
+    --각 키별 최종주차를 찾음 begin --------------------------------------------------------------------------------------------
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_WPP_LAST') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_WPP_LAST;
+
+    SELECT        A.DIVISION_ID
+				, A.OPERATION_GROUP_ID
+				, A.OPERATION_GROUP_NAME
+				, A.PLANT_ID
+				, A.SCM_SITE_NAME
+				, A.OPERATION_ID
+				, A.LINE_ID
+				, A.ITEM_ID
+				, A.NICK_NAME
+				, A.GROUP_CODE1
+				, A.GROUP_CODE2
+				, A.GROUP_CODE3
+				, A.GROUP_CODE4
+				, A.GROUP_CODE5
+				, A.MEASURE
+				, A.VERSION_NO
+				, A.YYYYMMDD
+                --, MAX(C.ISO_YYYYWW) AS YYYYWW
+                , MAX(A.YYYYWW) AS YYYYWW
+    INTO        #TblDynamicPivot_SCP0081_02_WPP_LAST
+    FROM        #TblDynamicPivot_SCP0081_02_WPP_T A
+                --JOIN
+                --    (
+                --        SELECT    ISO_YYYYWW
+                --                , BASIS_YYYYMMDD
+                --        FROM    SCM_SYS_CALENDAR_M
+                --    ) C ON
+                --        A.YYYYMMDD = C.BASIS_YYYYMMDD
+    GROUP BY      A.DIVISION_ID
+				, A.OPERATION_GROUP_ID
+				, A.OPERATION_GROUP_NAME
+				, A.PLANT_ID
+				, A.SCM_SITE_NAME
+				, A.OPERATION_ID
+				, A.LINE_ID
+				, A.ITEM_ID
+				, A.NICK_NAME
+				, A.GROUP_CODE1
+				, A.GROUP_CODE2
+				, A.GROUP_CODE3
+				, A.GROUP_CODE4
+				, A.GROUP_CODE5
+				, A.MEASURE
+				, A.VERSION_NO
+				, A.YYYYMMDD
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_WPP_T;
+--select * from #TblDynamicPivot_SCP0081_02_WPP_LAST;return;
+    --각 키별 최종주차를 찾음 end --------------------------------------------------------------------------------------------
+
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_WPP') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_WPP;
+
+    SELECT        A.DIVISION_ID
+				, A.OPERATION_GROUP_ID
+				, A.OPERATION_GROUP_NAME
+				, A.PLANT_ID
+				, A.SCM_SITE_NAME
+				, A.OPERATION_ID
+				, A.LINE_ID
+				, A.ITEM_ID
+				, A.NICK_NAME
+				, A.GROUP_CODE1
+				, A.GROUP_CODE2
+				, A.GROUP_CODE3
+				, A.GROUP_CODE4
+				, A.GROUP_CODE5
+				, A.MEASURE
+				, A.VERSION_NO
+				, A.YYYYMMDD
+                , A.QTY
+    INTO        #TblDynamicPivot_SCP0081_02_WPP
+    FROM        #TblDynamicPivot_SCP0081_02_WPP_T A
+                JOIN #TblDynamicPivot_SCP0081_02_WPP_LAST B ON
+                            A.DIVISION_ID           = B.DIVISION_ID
+                        AND A.OPERATION_GROUP_ID    = B.OPERATION_GROUP_ID
+                        AND A.OPERATION_GROUP_NAME	= B.OPERATION_GROUP_NAME
+                        AND A.PLANT_ID				= B.PLANT_ID
+                        AND A.SCM_SITE_NAME			= B.SCM_SITE_NAME
+                        AND A.OPERATION_ID			= B.OPERATION_ID
+                        AND A.LINE_ID				= B.LINE_ID
+                        AND A.ITEM_ID				= B.ITEM_ID
+                        AND A.NICK_NAME				= B.NICK_NAME
+                        AND A.GROUP_CODE1			= B.GROUP_CODE1
+                        AND A.GROUP_CODE2			= B.GROUP_CODE2
+                        AND A.GROUP_CODE3			= B.GROUP_CODE3
+                        AND A.GROUP_CODE4			= B.GR"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","6","OUP_CODE4
+                        AND A.GROUP_CODE5			= B.GROUP_CODE5
+                        AND A.MEASURE				= B.MEASURE
+                        AND A.VERSION_NO			= B.VERSION_NO
+                        AND A.YYYYMMDD				= B.YYYYMMDD
+                        AND A.YYYYWW				= B.YYYYWW
+
+--TESTING : NOK
+--select * from #TblDynamicPivot_SCP0081_02_WPP;return;
+
+    -- chaan FP계획 end
+
+
+print '@p_from_yyyymmdd  : ' + @p_from_yyyymmdd;
+print '@p_to_yyyymmdd : ' + @p_to_yyyymmdd;
+
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_SCP_PLAN') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_SCP_PLAN;
+
+    SELECT    A.DIVISION_ID
+            , B.OPERATION_GROUP_ID
+            , B.OPERATION_GROUP_NAME
+            , B.PLANT_ID
+            , (
+                SELECT  SITE_DESCRIPTION
+                FROM    SCM_MST_SITE WITH(NOLOCK)
+                WHERE       DIVISION_ID = A.DIVISION_ID
+                        AND SCM_SITE_ID = A.SCM_SITE_ID
+                ) AS SCM_SITE_NAME
+            , A.OPERATION_ID
+            , A.LINE_ID
+            , A.ITEM_ID
+            , D.NICK_NAME
+            , D.GROUP_CODE1
+            , D.GROUP_CODE2
+            , D.GROUP_CODE3
+            , D.GROUP_CODE4
+            , D.GROUP_CODE5
+            , 'SCP_PLAN'    AS MEASURE
+            , V.VERSION_NO  AS VERSION_NO
+            , A.YYYYMMDD
+            , A.QTY
+    INTO    #TblDynamicPivot_SCP0081_02_SCP_PLAN
+    FROM    SCP_ANL_PRODUCTION_PLAN_N A WITH(NOLOCK)
+            JOIN
+                    (
+                        SELECT DISTINCT
+                                    DIVISION_ID
+                                , PLANT_ID
+                                , OPERATION_GROUP_NAME
+                                , OPERATION_GROUP_ID
+                                , OPERATION_ID
+                                , LINE_ID
+                        FROM    #TblDynamicPivot_SCP0081_GROUP
+                    ) B ON
+                            A.DIVISION_ID = B.DIVISION_ID
+                        AND A.OPERATION_ID = B.OPERATION_ID
+                        AND A.LINE_ID = B.LINE_ID
+            LEFT JOIN #TblDynamicPivot_SCP0081_GROUP_CODE D ON
+                    A.DIVISION_ID = D.DIVISION_ID
+                AND A.ITEM_ID = D.ITEM_ID
+            LEFT JOIN 
+                (
+	                SELECT DISTINCT
+                                A.DIVISION_ID
+                            , A.VERSION_NO
+                            , A.PLAN_START_YYYYMMDD
+	                FROM    SCP_ANL_PRODUCTION_PLAN_C A WITH(NOLOCK)
+                ) V ON
+                    A.DIVISION_ID         = V.DIVISION_ID
+                AND A.PLAN_START_YYYYMMDD = V.PLAN_START_YYYYMMDD
+    WHERE   1=1
+            AND A.QTY > 0
+            AND A.MEASURE = 'PROD_PLAN_AMEND'
+            AND A.YYYYMMDD >= @p_from_yyyymmdd
+            AND A.YYYYMMDD <= @p_to_yyyymmdd
+            AND
+                (
+                    ISNULL(@p_item_id, '') = ''
+                    OR A.ITEM_ID IN
+                        (
+                            SELECT  token
+                            FROM    dbo.String_Split(@p_item_id,',')
+                        )
+                )
+            AND
+                (
+                    ISNULL(@p_nickname, '') = ''
+                    OR D.NICK_NAME LIKE '%' + @p_nickname + '%'
+                )
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_SCP_PLAN;return;
+
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_RESULT') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_RESULT;
+
+    SELECT    A.DIVISION_ID
+            , B.OPERATION_GROUP_ID
+            , B.OPERATION_GROUP_NAME
+            , A.PLANT_ID
+            , (
+                SELECT  SITE_DESCRIPTION
+                FROM    SCM_MST_SITE C WITH(NOLOCK)
+                WHERE   A.COMPANY_ID = C.COMPANY_ID
+                        AND A.DIVISION_ID = C.DIVISION_ID
+                        AND A.S"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","7","ITE_ID = C.SITE_ID
+                        AND A.PLANT_ID = C.PLANT_ID
+                        AND IIF(B.OPERATION_GROUP_ID = 'F', 'A', B.OPERATION_GROUP_ID)=C.OPERATION_GROUP
+                ) AS SCM_SITE_NAME
+            , A.OPERATION_ID
+            , A.LINE_ID
+            , A.ITEM_ID
+            , D.NICK_NAME
+            , D.GROUP_CODE1
+            , D.GROUP_CODE2
+            , D.GROUP_CODE3
+            , D.GROUP_CODE4
+            , D.GROUP_CODE5
+            , 'RESULT'  AS MEASURE
+            , '' AS VERSION_NO
+            , CONVERT(VARCHAR, A.PLAN_DATE, 112) AS YYYYMMDD
+            , A.ACTUAL_GOOD_QTY AS QTY
+    INTO    #TblDynamicPivot_SCP0081_02_RESULT
+    FROM    SCM_DNM_DAILY_PRODUCT_RESULT_SN A WITH(NOLOCK)
+            JOIN #TblDynamicPivot_SCP0081_GROUP B ON
+                    A.COMPANY_ID = B.COMPANY_ID
+                AND A.DIVISION_ID = B.DIVISION_ID
+                AND A.SITE_ID = B.SITE_ID
+                AND A.PLANT_ID = B.PLANT_ID
+                AND A.OPERATION_ID = B.OPERATION_ID
+                AND A.LINE_ID = B.LINE_ID
+                AND A.FACTORY_ID = B.FACTORY_ID
+            LEFT JOIN #TblDynamicPivot_SCP0081_GROUP_CODE D ON
+                    A.DIVISION_ID = D.DIVISION_ID
+                AND A.ITEM_ID = D.ITEM_ID
+    WHERE   1=1
+            AND A.ACTUAL_GOOD_QTY > 0
+			-- 2022.03.22 : 수정
+            AND A.PLAN_DATE >= CONVERT(DATETIME,@p_from_yyyymmdd)
+            AND A.PLAN_DATE <= CONVERT(DATETIME,@p_to_yyyymmdd)
+            AND
+                (
+                    ISNULL(@p_item_id, '') = ''
+                    OR A.ITEM_ID IN
+                        (
+                            SELECT  token
+                            FROM    dbo.String_Split(@p_item_id,',')
+                        )
+                )
+            AND
+                (
+                    ISNULL(@p_nickname, '') = ''
+                    OR D.NICK_NAME LIKE '%' + @p_nickname + '%'
+				)
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_RESULT;return;
+--                SELECT TOP 1  *
+--                FROM    #TblDynamicPivot_SCP0081_02_MPP
+
+--                SELECT TOP 1 *
+--                FROM    #TblDynamicPivot_SCP0081_02_WPP
+
+--                SELECT TOP 1 *
+--                FROM    #TblDynamicPivot_SCP0081_02_SCP_PLAN
+
+--                SELECT TOP 1 *
+--                FROM    #TblDynamicPivot_SCP0081_02_RESULT
+--RETURN;    
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_AA') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_AA;
+
+    SELECT  A.*
+    INTO    #TblDynamicPivot_SCP0081_02_AA
+    FROM    (
+                SELECT  *
+                FROM    #TblDynamicPivot_SCP0081_02_MPP
+                UNION ALL
+                SELECT  *
+                FROM    #TblDynamicPivot_SCP0081_02_WPP
+                UNION ALL
+                SELECT  *
+                FROM    #TblDynamicPivot_SCP0081_02_SCP_PLAN
+                UNION ALL
+                SELECT  *
+                FROM    #TblDynamicPivot_SCP0081_02_RESULT
+            ) A
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_AA;return;
+
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_02;
+
+	SELECT    AA.DIVISION_ID
+			, AA.OPERATION_GROUP_ID
+			, AA.OPERATION_GROUP_NAME
+			, AA.PLANT_ID
+			, AA.SCM_SITE_NAME
+			, AA.OPERATION_ID
+			, AA.LINE_ID
+			, AA.ITEM_ID
+			, AA.NICK_NAME
+			, AA.GROUP_CODE1
+			, AA.GROUP_CODE2
+			, AA.GROUP_CODE3
+			, AA.GROUP_CODE4
+			, AA.GROUP_CODE5
+			, M.MEASURE_NAME   AS MEASURE
+            , CASE
+                WHEN M.MEASURE = 'SCP_PLAN_VERSION_A' THEN RTRIM(LTRIM(@p_version_a))
+                WHEN M.MEASURE = 'SCP_PLAN_VERSION_B' THEN RTRIM(LTRIM(@p_version_b))
+                ELSE ''
+              END AS VERSION_NO
+			, AA.YYYYMMDD
+			, AA.QTY
+			,(ISNULL(AA.QTY,0) * ISNULL(   CASE WHEN AA.OPERATION_GROUP_ID = 'A' THEN 1
+										  	    WHE"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","8","N AA.OPERATION_GROUP_ID = 'E' THEN FI.CONVERT_QTY_CELL
+											    WHEN AA.OPERATION_GROUP_ID = 'P' THEN IB.ACCUMULATED_CHILD_QTY
+										    END, 1)
+             ) AS CELL_QTY
+			, M.USER_SORT_ORDER_NO AS MEASURE_ORDER_NO
+	INTO    #TblDynamicPivot_SCP0081_02
+	FROM    #TblDynamicPivot_SCP0081_02_AA AA
+            JOIN #TblDynamicPivot_SCP0081_MEASURE M ON
+				    AA.MEASURE              = M.MEASURE
+----------------------------------------------------------------------------------------
+	        --LEFT JOIN SCP_MST_FINAL_ITEM FI WITH(NOLOCK) ON
+			      --  FI.OPERATION_GROUP      = 'E'
+		       -- AND FI.DIVISION_ID          = AA.DIVISION_ID
+		       -- AND FI.ITEM_ID              = AA.ITEM_ID
+		       -- AND FI.OPERATION_GROUP      = AA.OPERATION_GROUP_ID
+	        --LEFT JOIN SCM_MST_MODEL_FINAL_ITEM_BOM_V IB WITH(NOLOCK) ON
+			      --  IB.MODEL_ID             = AA.ITEM_ID
+		       -- AND IB.PLANT_ID	            = AA.PLANT_ID
+		       -- AND IB.OPERATION_GROUP_ID   = 'A'
+	        LEFT JOIN SCP_MST_FINAL_ITEM FI WITH(NOLOCK) ON
+		            AA.DIVISION_ID			= FI.DIVISION_ID
+		        AND AA.ITEM_ID				= FI.ITEM_ID
+		        AND AA.OPERATION_GROUP_ID	= FI.OPERATION_GROUP
+			    AND FI.OPERATION_GROUP      = 'E'
+	        LEFT JOIN SCM_MST_MODEL_FINAL_ITEM_BOM_V IB WITH(NOLOCK) ON
+			        AA.ITEM_ID				= IB.MODEL_ID
+		        AND AA.PLANT_ID				= IB.PLANT_ID
+		        AND IB.OPERATION_GROUP_ID   = 'A'
+----------------------------------------------------------------------------------------
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_AA where MEASURE = 'RESULT';return;
+--select * from #TblDynamicPivot_SCP0081_02 where MEASURE = 'RESULT';return;
+--select  AA.*
+--from    #TblDynamicPivot_SCP0081_02 AA
+--        join #TblDynamicPivot_SCP0081_MEASURE M on
+--				    AA.MEASURE              = M.MEASURE
+--where   AA.MEASURE = 'WPP';return;
+                
+
+
+	/********************************************************************************
+	* VERSION 조회
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VERSION') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_VERSION;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VERSION_T') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_VERSION_T;
+
+print '@p_version_id : ' + @p_version_id
+
+	IF (@p_version_id IS NOT NULL AND @p_version_id != '')
+	BEGIN
+	-- TEMP TABLE VERSION
+		SELECT    A.DIVISION_ID
+				, B.OPERATION_GROUP_ID
+				, B.OPERATION_GROUP_NAME
+				, B.PLANT_ID
+				, (
+					SELECT  SITE_DESCRIPTION
+					FROM    SCM_MST_SITE WITH(NOLOCK)
+					WHERE       DIVISION_ID=A.DIVISION_ID
+							AND SCM_SITE_ID=A.SCM_SITE_ID
+				  ) AS SCM_SITE_NAME
+				, A.OPERATION_ID
+				, A.LINE_ID
+				, A.ITEM_ID
+				, ISNULL(D.NICK_NAME, '') AS NICK_NAME
+				, ISNULL(D.GROUP_CODE1, '') AS GROUP_CODE1
+				, ISNULL(D.GROUP_CODE2, '') AS GROUP_CODE2
+				, ISNULL(D.GROUP_CODE3, '') AS GROUP_CODE3
+				, ISNULL(D.GROUP_CODE4, '') AS GROUP_CODE4
+				, ISNULL(D.GROUP_CODE5, '') AS GROUP_CODE5
+				, IIF(A.VERSION_NO=@p_version_a, 'SCP_PLAN_VERSION_A', 'SCP_PLAN_VERSION_B') AS MEASURE
+                , A.VERSION_NO --chaan
+                , A.YYYYMMDD
+				, A.QTY
+                , A.PLAN_START_YYYYMMDD
+		INTO    #TblDynamicPivot_SCP0081_VERSION
+		FROM    SCP_ANL_PRODUCTION_PLAN_C A WITH(NOLOCK)
+				JOIN (
+						SELECT DISTINCT
+								  DIVISION_ID
+								, PLANT_ID
+								, OPERATION_GROUP_NAME
+								, OPERATION_GROUP_ID
+								, OPERATION_ID
+								, LINE_ID
+						FROM    #TblDynamicPivot_SCP0081_GROUP ) B ON
+										A.DIVISION_ID   = B.DIVISION_ID
+									AND A.OPERATION_ID  = B.OPERATION_ID
+									AND A.LINE_ID       = B.LINE_ID
+								LEFT JOIN #TblDynamicPivot_SCP0081_GROUP_CODE D ON
+										A.DIVISION_ID   = D.DIVISION_ID
+									AND A.ITEM_ID       = D.ITEM_ID
+						WHERE    1=1
+								AND A.VER"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","9","SION_NO IN (@p_version_a, @p_version_b)
+								AND A.PLAN_TYPE = 'FN'
+								AND A.QTY       > 0
+								AND A.MEASURE   = 'PROD_PLAN_AMEND'
+								AND A.YYYYMMDD >= @p_from_yyyymmdd
+								AND A.YYYYMMDD <= @p_to_yyyymmdd
+								AND
+									(
+										ISNULL(@p_item_id, '') = ''
+										OR A.ITEM_ID IN
+											(
+												SELECT    token
+												FROM      dbo.String_Split(@p_item_id,',')
+											)
+									)
+								AND
+									(
+										ISNULL(@p_nickname, '') = ''
+										OR D.NICK_NAME LIKE '%' + @p_nickname + '%'
+									)
+								-- 2022.03.22 : DIVISION 조건 추가
+                                AND (
+                                           ISNULL(@p_division_id, '') = ''
+                                        OR (1 = IIF(SUBSTRING(@p_division_id, 1, 2) = 'EE', 1, IIF(A.DIVISION_ID IN (SELECT token FROM dbo.String_Split(@p_division_id,',')), 1, 0)))
+                                    );
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_VERSION;return;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VER_A') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_VER_A;
+
+	SELECT  A.*
+    INTO    #TblDynamicPivot_SCP0081_VER_A
+    FROM
+		    (
+			    SELECT    DIVISION_ID
+					    , OPERATION_GROUP_ID
+					    , OPERATION_GROUP_NAME
+					    , PLANT_ID
+					    , SCM_SITE_NAME
+					    , OPERATION_ID
+					    , LINE_ID
+					    , ITEM_ID
+					    , NICK_NAME
+					    , GROUP_CODE1
+					    , GROUP_CODE2
+					    , GROUP_CODE3
+					    , GROUP_CODE4
+					    , GROUP_CODE5
+					    , MEASURE
+                        , VERSION_NO --chaan
+					    , YYYYMMDD
+					    , QTY
+			    FROM    #TblDynamicPivot_SCP0081_VERSION A WITH(NOLOCK)
+			    WHERE   MEASURE = 'SCP_PLAN_VERSION_A'
+			    UNION ALL
+			    SELECT    DIVISION_ID
+					    , OPERATION_GROUP_ID
+					    , OPERATION_GROUP_NAME
+					    , PLANT_ID
+					    , SCM_SITE_NAME
+					    , OPERATION_ID
+					    , LINE_ID
+					    , ITEM_ID
+					    , NICK_NAME
+					    , GROUP_CODE1
+					    , GROUP_CODE2
+					    , GROUP_CODE3
+					    , GROUP_CODE4
+					    , GROUP_CODE5
+					    , 'SCP_PLAN_VERSION_B' AS MEASURE
+                        , RTRIM(LTRIM(@p_version_b)) AS VERSION_NO --chaan
+					    , YYYYMMDD
+					    , 0 AS QT
+			    FROM    #TblDynamicPivot_SCP0081_VERSION A WITH(NOLOCK)
+			    WHERE   MEASURE = 'SCP_PLAN_VERSION_A'
+		    ) A;
+
+       
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_NEW_A') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_NEW_A;
+
+	SELECT    DIVISION_ID
+			, OPERATION_GROUP_ID
+			, OPERATION_GROUP_NAME
+			, PLANT_ID
+			, SCM_SITE_NAME
+			, OPERATION_ID
+			, LINE_ID
+			, ITEM_ID
+			, NICK_NAME
+			, GROUP_CODE1
+			, GROUP_CODE2
+			, GROUP_CODE3
+			, GROUP_CODE4
+			, GROUP_CODE5
+			, MEASURE
+            , VERSION_NO
+			, YYYYMMDD
+			, Sum(QTY) AS QTY
+    INTO    #TblDynamicPivot_SCP0081_NEW_A
+	FROM    #TblDynamicPivot_SCP0081_VER_A A WITH(NOLOCK)
+	GROUP BY  DIVISION_ID
+			, OPERATION_GROUP_ID
+			, OPERATION_GROUP_NAME
+			, PLANT_ID
+			, SCM_SITE_NAME
+			, OPERATION_ID
+			, LINE_ID
+			, ITEM_ID
+			, NICK_NAME
+			, GROUP_CODE1
+			, GROUP_CODE2
+			, GROUP_CODE3
+			, GROUP_CODE4
+			, GROUP_CODE5
+			, MEASURE
+            , VERSION_NO --chaan
+			, YYYYMMDD
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VER_B') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_VER_B;
+
+	SELECT  A.*
+    INTO    #TblDynamicPivot_SCP0081_VER_B
+    FROM
+		    (
+			    SELECT    DIVISION_ID
+					    , OPERATION_GROUP_ID
+					    , OPERATION_GROUP_NAME
+					    , PLANT_ID
+					    , SCM_SITE_NAME
+					    , OPERATION_ID
+					    , LINE_ID
+					    , ITEM_ID
+					    , NICK_NAME
+					    , GROUP_CODE1
+					    , GROUP_CODE2
+					    , GROUP_CODE3
+					    , GROUP_CODE4
+					    , GROUP_CODE5
+					    , MEASURE
+                        , VERSION_NO --chaan
+					    , YYYYMMDD
+					    , QTY
+			    FROM   "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","10"," #TblDynamicPivot_SCP0081_VERSION A WITH(NOLOCK)
+			    WHERE   MEASURE = 'SCP_PLAN_VERSION_B'
+			    UNION ALL
+			    SELECT    DIVISION_ID
+					    , OPERATION_GROUP_ID
+					    , OPERATION_GROUP_NAME
+					    , PLANT_ID
+					    , SCM_SITE_NAME
+					    , OPERATION_ID
+					    , LINE_ID
+					    , ITEM_ID
+					    , NICK_NAME
+					    , GROUP_CODE1
+					    , GROUP_CODE2
+					    , GROUP_CODE3
+					    , GROUP_CODE4
+					    , GROUP_CODE5
+					    , 'SCP_PLAN_VERSION_A' AS MEASURE
+                        , RTRIM(LTRIM(@p_version_a)) AS VERSION_NO --chaan
+					    , YYYYMMDD
+					    , 0 AS QTY
+			    FROM    #TblDynamicPivot_SCP0081_VERSION A WITH(NOLOCK)
+			    WHERE   MEASURE = 'SCP_PLAN_VERSION_B'
+		    ) A
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_NEW_B') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_NEW_B;
+
+	SELECT    DIVISION_ID
+			, OPERATION_GROUP_ID
+			, OPERATION_GROUP_NAME
+			, PLANT_ID
+			, SCM_SITE_NAME
+			, OPERATION_ID
+			, LINE_ID
+			, ITEM_ID
+			, NICK_NAME
+			, GROUP_CODE1
+			, GROUP_CODE2
+			, GROUP_CODE3
+			, GROUP_CODE4
+			, GROUP_CODE5
+			, MEASURE
+            , VERSION_NO --chaan
+			, YYYYMMDD
+			, Sum(QTY) AS QTY
+    INTO    #TblDynamicPivot_SCP0081_NEW_B
+	FROM    #TblDynamicPivot_SCP0081_VER_B WITH(NOLOCK)
+	GROUP BY  DIVISION_ID
+			, OPERATION_GROUP_ID
+			, OPERATION_GROUP_NAME
+			, PLANT_ID
+			, SCM_SITE_NAME
+			, OPERATION_ID
+			, LINE_ID
+			, ITEM_ID
+			, NICK_NAME
+			, GROUP_CODE1
+			, GROUP_CODE2
+			, GROUP_CODE3
+			, GROUP_CODE4
+			, GROUP_CODE5
+			, MEASURE
+            , VERSION_NO
+			, YYYYMMDD
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VERSION_KEYS') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_VERSION_KEYS;
+
+    SELECT DISTINCT
+              A.DIVISION_ID
+			, A.OPERATION_GROUP_ID
+			, A.OPERATION_GROUP_NAME
+			, A.PLANT_ID
+			, A.SCM_SITE_NAME
+			, A.OPERATION_ID
+			, A.LINE_ID
+			, A.ITEM_ID
+			, A.NICK_NAME
+			, A.GROUP_CODE1
+			, A.GROUP_CODE2
+			, A.GROUP_CODE3
+			, A.GROUP_CODE4
+			, A.GROUP_CODE5
+			, A.MEASURE
+			, A.YYYYMMDD                    
+    INTO    #TblDynamicPivot_SCP0081_VERSION_KEYS
+    FROM    
+        (
+            SELECT    DIVISION_ID
+			        , OPERATION_GROUP_ID
+			        , OPERATION_GROUP_NAME
+			        , PLANT_ID
+			        , SCM_SITE_NAME
+			        , OPERATION_ID
+			        , LINE_ID
+			        , ITEM_ID
+			        , NICK_NAME
+			        , GROUP_CODE1
+			        , GROUP_CODE2
+			        , GROUP_CODE3
+			        , GROUP_CODE4
+			        , GROUP_CODE5
+			        , MEASURE
+			        , YYYYMMDD                    
+            FROM    #TblDynamicPivot_SCP0081_NEW_A
+            UNION
+            SELECT    DIVISION_ID
+			        , OPERATION_GROUP_ID
+			        , OPERATION_GROUP_NAME
+			        , PLANT_ID
+			        , SCM_SITE_NAME
+			        , OPERATION_ID
+			        , LINE_ID
+			        , ITEM_ID
+			        , NICK_NAME
+			        , GROUP_CODE1
+			        , GROUP_CODE2
+			        , GROUP_CODE3
+			        , GROUP_CODE4
+			        , GROUP_CODE5
+			        , MEASURE
+			        , YYYYMMDD                    
+            FROM    #TblDynamicPivot_SCP0081_NEW_B
+        ) A
+
+--TESTING : OK
+--select * From #TblDynamicPivot_SCP0081_VERSION_KEYS;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_JOIN_A') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_JOIN_A;
+
+	SELECT  A.*
+    INTO    #TblDynamicPivot_SCP0081_JOIN_A
+    FROM
+		(
+			SELECT    K.DIVISION_ID
+					, K.OPERATION_GROUP_ID
+					, K.OPERATION_GROUP_NAME
+					, K.PLANT_ID
+					, K.SCM_SITE_NAME
+					, K.OPERATION_ID
+					, K.LINE_ID
+					, K.ITEM_ID
+					, K.NICK_NAME
+					, K.GROUP_CODE1
+					, K.GROUP_CODE2
+					, K.GROUP_CODE3
+					, K.GROUP_CODE4
+					, K.GROUP_CODE5
+					, 'GAP' AS MEASURE
+                    , ''    AS VERSION_NO
+					, K.YYYYMMDD
+					, (ISNULL(A.QTY, 0) - ISNULL(B.QTY, 0)) AS QTY
+			FROM    #TblDynamicPivot_SCP0081_V"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","11","ERSION_KEYS K
+                    LEFT JOIN #TblDynamicPivot_SCP0081_NEW_A A ON
+							K.DIVISION_ID           = A.DIVISION_ID
+						AND K.OPERATION_GROUP_ID    = A.OPERATION_GROUP_ID
+						AND K.OPERATION_GROUP_NAME  = A.OPERATION_GROUP_NAME
+						AND K.PLANT_ID              = A.PLANT_ID
+						AND K.SCM_SITE_NAME         = A.SCM_SITE_NAME
+						AND K.OPERATION_ID          = A.OPERATION_ID
+						AND K.LINE_ID               = A.LINE_ID
+						AND K.ITEM_ID               = A.ITEM_ID
+						AND K.NICK_NAME             = A.NICK_NAME
+						AND K.GROUP_CODE1           = A.GROUP_CODE1
+						AND K.GROUP_CODE2           = A.GROUP_CODE2
+						AND K.GROUP_CODE3           = A.GROUP_CODE3
+						AND K.GROUP_CODE4           = A.GROUP_CODE4
+						AND K.GROUP_CODE5           = A.GROUP_CODE5
+						AND K.MEASURE               = A.MEASURE
+						AND K.YYYYMMDD              = A.YYYYMMDD
+                    LEFT JOIN #TblDynamicPivot_SCP0081_NEW_B B ON
+							K.DIVISION_ID           = B.DIVISION_ID
+						AND K.OPERATION_GROUP_ID    = B.OPERATION_GROUP_ID
+						AND K.OPERATION_GROUP_NAME  = B.OPERATION_GROUP_NAME
+						AND K.PLANT_ID              = B.PLANT_ID
+						AND K.SCM_SITE_NAME         = B.SCM_SITE_NAME
+						AND K.OPERATION_ID          = B.OPERATION_ID
+						AND K.LINE_ID               = B.LINE_ID
+						AND K.ITEM_ID               = B.ITEM_ID
+						AND K.NICK_NAME             = B.NICK_NAME
+						AND K.GROUP_CODE1           = B.GROUP_CODE1
+						AND K.GROUP_CODE2           = B.GROUP_CODE2
+						AND K.GROUP_CODE3           = B.GROUP_CODE3
+						AND K.GROUP_CODE4           = B.GROUP_CODE4
+						AND K.GROUP_CODE5           = B.GROUP_CODE5
+						AND K.MEASURE               = B.MEASURE
+						AND K.YYYYMMDD              = B.YYYYMMDD
+		) A
+
+--TESTING : OK
+--select * From #TblDynamicPivot_SCP0081_NEW_A;
+--select * From #TblDynamicPivot_SCP0081_NEW_B;
+--select * From #TblDynamicPivot_SCP0081_JOIN_A;return;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_AA') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_AA;
+
+	SELECT  A.*
+    INTO    #TblDynamicPivot_SCP0081_AA
+    FROM
+		(
+			SELECT  *
+			FROM    #TblDynamicPivot_SCP0081_NEW_A
+			UNION ALL
+			SELECT  *
+			FROM    #TblDynamicPivot_SCP0081_NEW_B
+			UNION ALL
+			SELECT  *
+			FROM    #TblDynamicPivot_SCP0081_JOIN_A
+		) A;
+
+--TESGING : OK;
+--select * from #TblDynamicPivot_SCP0081_AA;return;
+--select * from #TblDynamicPivot_SCP0081_AA where MEASURE = 'WPP';return;
+
+	SELECT    AA.DIVISION_ID
+			, AA.OPERATION_GROUP_ID
+			, AA.OPERATION_GROUP_NAME
+			, AA.PLANT_ID
+			, AA.SCM_SITE_NAME
+			, AA.OPERATION_ID
+			, AA.LINE_ID
+			, AA.ITEM_ID
+			, AA.NICK_NAME
+			, AA.GROUP_CODE1
+			, AA.GROUP_CODE2
+			, AA.GROUP_CODE3
+			, AA.GROUP_CODE4
+			, AA.GROUP_CODE5
+			, BB.MEASURE_NAME AS MEASURE
+            , AA.VERSION_NO --chaan
+			, AA.YYYYMMDD
+			, AA.QTY
+			, (ISNULL(AA.QTY,0) * ISNULL(CASE WHEN AA.OPERATION_GROUP_ID = 'A' THEN 1
+											  WHEN AA.OPERATION_GROUP_ID = 'E' THEN FI.CONVERT_QTY_CELL
+											  WHEN AA.OPERATION_GROUP_ID = 'P' THEN IB.ACCUMULATED_CHILD_QTY
+										 END ,1)
+              ) AS CELL_QTY
+			, BB.USER_SORT_ORDER_NO AS MEASURE_ORDER_NO
+	INTO    #TblDynamicPivot_SCP0081_VERSION_T
+	FROM    #TblDynamicPivot_SCP0081_AA AA
+			INNER MERGE JOIN #TblDynamicPivot_SCP0081_MEASURE BB ON
+					AA.MEASURE              = BB.MEASURE
+		    --LEFT JOIN SCP_MST_FINAL_ITEM FI WITH(NOLOCK) ON
+      --              FI.OPERATION_GROUP      = 'E'
+      --          AND FI.DIVISION_ID		    = AA.DIVISION_ID
+      --          AND FI.ITEM_ID			    = AA.ITEM_ID
+      --          AND FI.OPERATION_GROUP      = AA.OPERATION_GROUP_ID
+      --      LEFT JOIN SCM_MST_MODEL_FINAL_ITEM_BOM_V IB WITH(NOLOCK) ON
+      --              IB.MODEL_ID			    = AA.ITEM_ID
+      --          AND IB.PLANT_ID			    = AA.PLANT_ID
+      --          AND IB.OPERATION_GROUP_ID	= 'A'
+	        LEFT JOIN SCP_MST_FINAL_ITEM FI WITH(NOLOCK) ON
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","12","		            AA.DIVISION_ID			= FI.DIVISION_ID
+		        AND AA.ITEM_ID				= FI.ITEM_ID
+		        AND AA.OPERATION_GROUP_ID	= FI.OPERATION_GROUP
+			    AND FI.OPERATION_GROUP      = 'E'
+	        LEFT JOIN SCM_MST_MODEL_FINAL_ITEM_BOM_V IB WITH(NOLOCK) ON
+			        AA.ITEM_ID				= IB.MODEL_ID
+		        AND AA.PLANT_ID				= IB.PLANT_ID
+		        AND IB.OPERATION_GROUP_ID   = 'A'
+	END
+--TESGING : OK;
+--select * from #TblDynamicPivot_SCP0081_VERSION_T;return;
+
+	/********************************************************************************
+	* SUB TOTAL 조회
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_SUB') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_SUB
+
+	CREATE TABLE #TblDynamicPivot_SCP0081_SUB
+	(
+		  DIVISION_ID             NVARCHAR(50)
+		, OPERATION_GROUP_ID      NVARCHAR(50)
+		, OPERATION_GROUP_NAME    NVARCHAR(50)
+		, PLANT_ID                NVARCHAR(50)
+		, SCM_SITE_NAME           NVARCHAR(50)
+		, OPERATION_ID            NVARCHAR(50)
+		, LINE_ID                 NVARCHAR(50)
+		, ITEM_ID                 NVARCHAR(50)
+		, NICK_NAME               NVARCHAR(150)
+		, GROUP_CODE1             NVARCHAR(150)
+		, GROUP_CODE2             NVARCHAR(150)
+		, GROUP_CODE3             NVARCHAR(150)
+		, GROUP_CODE4             NVARCHAR(150)
+		, GROUP_CODE5             NVARCHAR(150)
+		, MEASURE                 NVARCHAR(50)
+		, VERSION_NO              NVARCHAR(50)
+		, YYYYMMDD                NVARCHAR(8)
+		, QTY                     NUMERIC(20,10)
+		, CELL_QTY                NUMERIC(20,10)
+		, MEASURE_ORDER_NO        INT
+	);
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_COLUMN;return;
+
+	-- SUB TOTAL 선택IF @p_group_column != ''
+	BEGIN
+		SET @V_INDEX                = 0;
+		DECLARE @V_COLUMN_INDEX INT = 0;
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT  COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			IF @COL = @p_group_column
+			BEGIN
+				SET @V_COLUMN_INDEX = @V_INDEX;
+				BREAK;
+			END;
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END;
+
+		SET @V_INDEX    = 0;
+		SET @mEXEC      = 'INSERT INTO #TblDynamicPivot_SCP0081_SUB ' + CHAR(10);
+		SET @mEXEC      = @mEXEC + '( ' + CHAR(10);
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+			(
+				SELECT    COL
+				FROM      #TblDynamicPivot_SCP0081_COLUMN
+				WHERE     USER_SORT_ORDER_NO = (@V_INDEX + 1)
+			);
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '    ' + @COL2 + ','
+				END
+
+				SET @mEXEC = @mEXEC + '    ' + @COL + CHAR(10);
+			END
+			ELSE
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '   ,' + @COL2 + CHAR(10);
+				END
+
+				SET @mEXEC = @mEXEC + '   ,' + @COL + CHAR(10);
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		--SET @mEXEC = @mEXEC + '    , MEASURE' + CHAR(10);
+		SET @mEXEC     = @mEXEC + '   , YYYYMMDD ' + CHAR(10);
+		SET @mEXEC     = @mEXEC + '   , QTY ' + CHAR(10);
+		SET @mEXEC     = @mEXEC + '   , CELL_QTY ' + CHAR(10);--chaan
+		SET @mEXEC     = @mEXEC + '   , MEASURE_ORDER_NO ' + CHAR(10);
+		SET @mEXEC     = @mEXEC + ') ' + CHAR(10);
+		SET @V_INDEX   = 0;
+		SET @mEXEC     = @mEXEC + 'SELECT' + CHAR(10);
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+			(
+				SELECT  COL
+				FROM    #TblDynamicPivot_SCP0081_COLUMN
+				WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+			);
+
+			--PRINT @COL;
+			--PRINT @V_COLUMN_INDEX;
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","13","'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '        ' + @COL2 +',' + CHAR(10);
+				END
+
+				SET @mEXEC = @mEXEC + '        ' + @COL + CHAR(10);
+			END
+			ELSE
+			BEGIN
+				IF(@V_INDEX > @V_COLUMN_INDEX)
+				BEGIN
+					IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+					BEGIN
+						SET @mEXEC = @mEXEC + '       ,''ZZZ Total'' AS ' + @COL2 + CHAR(10);
+					END
+
+					IF @COL = 'MEASURE' OR @COL = 'VERSION_NO'
+						SET @mEXEC = @mEXEC + '       ,' + @COL + CHAR(10);
+					ELSE
+						SET @mEXEC = @mEXEC + '       ,''ZZZ Total'' AS '+@COL + CHAR(10);
+					END
+				ELSE
+				BEGIN
+					IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+					BEGIN
+						SET @mEXEC = @mEXEC + '       ,' + @COL2 + CHAR(10);
+					END
+
+					SET @mEXEC = @mEXEC + '       ,' + @COL + CHAR(10);
+				END;
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		--SET @mEXEC = @mEXEC + '     , MEASURE  ' + CHAR(10);
+		SET @mEXEC = @mEXEC + '       , YYYYMMDD ' +  CHAR(10);
+		SET @mEXEC = @mEXEC + '       , SUM(QTY) AS QTY ' + CHAR(10);
+		SET @mEXEC = @mEXEC + '       , SUM(CELL_QTY) AS CELL_QTY ' + CHAR(10);--chaan
+		SET @mEXEC = @mEXEC + '       , MEASURE_ORDER_NO ' + CHAR(10);
+
+		IF @p_version_id = ''
+		BEGIN
+			SET @mEXEC = @mEXEC + '                FROM    #TblDynamicPivot_SCP0081_02' + CHAR(10);
+		END
+		ELSE
+		BEGIN
+			SET @mEXEC = @mEXEC + '                FROM    (
+															  SELECT
+																	    DIVISION_ID
+																	  , OPERATION_GROUP_ID
+																	  , OPERATION_GROUP_NAME
+																	  , PLANT_ID
+																	  , SCM_SITE_NAME
+																	  , OPERATION_ID
+																	  , LINE_ID
+																	  , ITEM_ID
+																	  , NICK_NAME
+																	  , GROUP_CODE1
+																	  , GROUP_CODE2
+																	  , GROUP_CODE3
+																	  , GROUP_CODE4
+																	  , GROUP_CODE5
+																	  , MEASURE
+																	  , VERSION_NO
+																	  , YYYYMMDD
+																	  , QTY
+																	  , CELL_QTY
+																	  , MEASURE_ORDER_NO
+															  FROM    #TblDynamicPivot_SCP0081_VERSION_T
+															  UNION ALL
+															  SELECT
+																	    DIVISION_ID
+																	  , OPERATION_GROUP_ID
+																	  , OPERATION_GROUP_NAME
+																	  , PLANT_ID
+																	  , SCM_SITE_NAME
+																	  , OPERATION_ID
+																	  , LINE_ID
+																	  , ITEM_ID
+																	  , NICK_NAME
+																	  , GROUP_CODE1
+																	  , GROUP_CODE2
+																	  , GROUP_CODE3
+																	  , GROUP_CODE4
+																	  , GROUP_CODE5
+																	  , MEASURE
+																	  , VERSION_NO
+																	  , YYYYMMDD
+																	  , QTY
+																	  , CELL_QTY
+																	  , MEASURE_ORDER_NO
+															  FROM    #TblDynamicPivot_SCP0081_02
+														  ) AA' + CHAR(10);
+		END
+
+		SET @mEXEC     = @mEXEC + '              GROUP BY' + CHAR(10);
+
+		SET @V_INDEX = 0;
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT    COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE    USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '     '+@COL2 +','
+				END
+
+
+				SET @mEXEC = @mEXEC + '        '+@COL
+			END
+			ELSE
+			BEGIN
+				IF(@V_INDEX <= @V_COLUMN_INDEX)
+				BEGIN
+					IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+					BEGIN
+						SET @mEXEC = @mEXEC + '     ,' +"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","14"," @COL2
+					END
+
+					SET @mEXEC = @mEXEC + '        ,' + @COL
+				END;
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		SET @mEXEC					= @mEXEC + '                     , MEASURE' + CHAR(10);
+		SET @mEXEC					= @mEXEC + '                     , VERSION_NO' + CHAR(10);
+		SET @mEXEC					= @mEXEC + '                     , YYYYMMDD' + CHAR(10);
+		SET @mEXEC					= @mEXEC + '                     , MEASURE_ORDER_NO' + CHAR(10);
+
+--TESTING : OK
+--exec debug_log @mEXEC, 'T';return;
+--select * from #TblDynamicPivot_SCP0081_02;return;
+
+		EXEC (@mEXEC);
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_SUB;return;
+	END;
+
+	/********************************************************************************
+	* 임시테이블만들기- Main 조회 테이블
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_01') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_01
+
+	CREATE TABLE #TblDynamicPivot_SCP0081_01
+	(
+		  DIVISION_ID             NVARCHAR(50)
+		, OPERATION_GROUP_ID      NVARCHAR(50)
+		, OPERATION_GROUP_NAME    NVARCHAR(50)
+		, PLANT_ID                NVARCHAR(50)
+		, SCM_SITE_NAME			  NVARCHAR(50)
+		, OPERATION_ID            NVARCHAR(50)
+		, LINE_ID                 NVARCHAR(50)
+		, ITEM_ID                 NVARCHAR(50)
+		, NICK_NAME               NVARCHAR(150)
+		, GROUP_CODE1             NVARCHAR(150)
+		, GROUP_CODE2             NVARCHAR(150)
+		, GROUP_CODE3             NVARCHAR(150)
+		, GROUP_CODE4             NVARCHAR(150)
+		, GROUP_CODE5             NVARCHAR(150)
+		, MEASURE                 NVARCHAR(50)
+		, VERSION_NO              NVARCHAR(50)
+		, YYYYMMDD                NVARCHAR(10)
+		, QTY                     NUMERIC(20, 10)
+		, CELL_QTY                NUMERIC(20, 10)
+		, MEASURE_ORDER_NO        NUMERIC(2)
+		, YYYYMM                  NVARCHAR(6)
+		, ISO_WEEK                NVARCHAR(10)
+	);
+
+	SET @mEXEC = '';
+
+	/*SqlFormat begin
+INSERT INTO #TblDynamicPivot_SCP0081_01
+(
+    DIVISION_ID,
+    OPERATION_GROUP_ID,
+    OPERATION_GROUP_NAME,
+    PLANT_ID,
+    SCM_SITE_NAME,
+    OPERATION_ID,
+    LINE_ID,
+    ITEM_ID,
+    NICK_NAME,
+    GROUP_CODE1,
+    GROUP_CODE2,
+    GROUP_CODE3,
+    GROUP_CODE4,
+    GROUP_CODE5,
+    MEASURE,
+    VERSION_NO,
+    YYYYMMDD,
+    QTY,
+    CELL_QTY,
+    MEASURE_ORDER_NO,
+    YYYYMM,
+    ISO_WEEK
+)
+    SELECT
+            AA.DIVISION_ID,
+            AA.OPERATION_GROUP_ID,
+            AA.OPERATION_GROUP_NAME,
+            AA.PLANT_ID,
+            AA.SCM_SITE_NAME,
+            AA.OPERATION_ID,
+            AA.LINE_ID,
+            AA.ITEM_ID,
+            AA.NICK_NAME,
+            AA.GROUP_CODE1,
+            AA.GROUP_CODE2,
+            AA.GROUP_CODE3,
+            AA.GROUP_CODE4,
+            AA.GROUP_CODE5,
+            AA.MEASURE,
+            AA.VERSION_NO,
+            'D_' + ISNULL(AA.YYYYMMDD, 20211101) AS YYYYMMDD,
+            ISNULL(AA.QTY, 0) AS QTY,
+            ISNULL(AA.CELL_QTY, 0) AS CELL_QTY,
+            AA.MEASURE_ORDER_NO,
+            O.BASIS_YYYYMM AS YYYYMM,
+            RIGHT(O.BASIS_YYYYMM, 4)+O.ISO_WEEK AS ISO_WEEK
+     FROM    (
+                SELECT
+                    DIVISION_ID
+                    OPERATION_GROUP_ID
+                    OPERATION_GROUP_NAME
+                    PLANT_ID
+                    SCM_SITE_NAME
+                    OPERATION_ID
+                    LINE_ID
+                    ITEM_ID
+                    NICK_NAME
+                    GROUP_CODE1
+                    GROUP_CODE2
+                    GROUP_CODE3
+                    GROUP_CODE4
+                    GROUP_CODE5
+                    MEASURE
+                    VERSION_NO
+                    YYYYMMDD
+                    QTY
+                    CELL_QTY
+                    MEASURE_ORDER_NO
+                    FROM    #TblDynamicPivot_SCP0081_02
+             ) AA
+            JOIN SCM_SYS_CALENDAR_M O WITH(NOLOCK) ON ISNULL(AA.YYYYMM"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","15","DD, 20211101) = O.BASIS_YYYYMMDD
+SqlFormat end*/
+
+	SET @mEXEC = 'INSERT INTO #TblDynamicPivot_SCP0081_01' +CHAR(10);
+
+	SET @mEXEC = @mEXEC + '(' + CHAR(10);
+
+	SET @V_INDEX = 0;
+
+	WHILE @v_cnt_usr_column > @V_INDEX
+	BEGIN
+		SET @COL =
+			(
+				SELECT  COL
+				FROM    #TblDynamicPivot_SCP0081_COLUMN
+				WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+			);
+
+		-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+		IF @COL = 'OPERATION_GROUP_NAME'
+			SET @COL2 = 'OPERATION_GROUP_ID';
+
+		IF @COL = 'SCM_SITE_NAME'
+			SET @COL2 = 'PLANT_ID';
+
+		IF (@V_INDEX = 0)
+		BEGIN
+			IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+			BEGIN
+				SET @mEXEC = @mEXEC + '     '+@COL2 +',' +Char(10);
+			END
+
+			SET @mEXEC = @mEXEC + '        '+@COL +Char(10);
+		END
+		ELSE
+		BEGIN
+			IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+			BEGIN
+				SET @mEXEC = @mEXEC + '     ,' + @COL2
+			END
+
+			SET @mEXEC = @mEXEC + '        ,' + @COL
+
+		END
+
+		SET @V_INDEX = @V_INDEX + 1;
+	END
+
+	--SET @mEXEC = @mEXEC + '                 , MEASURE
+	SET @mEXEC = @mEXEC + '                 , YYYYMMDD' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , QTY' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , CELL_QTY' + CHAR(10);--chaan
+	SET @mEXEC = @mEXEC + '                 , MEASURE_ORDER_NO' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , YYYYMM' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , ISO_WEEK' + CHAR(10);
+
+	SET @mEXEC = @mEXEC + ')' + CHAR(10);
+
+
+	SET @V_INDEX    = 0;
+	SET @mEXEC        = @mEXEC + 'SELECT' + CHAR(10);
+
+	WHILE @v_cnt_usr_column > @V_INDEX
+	BEGIN
+		SET @COL =
+			(
+				SELECT  COL
+				FROM    #TblDynamicPivot_SCP0081_COLUMN
+				WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+			);
+
+		-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+		IF @COL = 'OPERATION_GROUP_NAME'
+			SET @COL2 = 'OPERATION_GROUP_ID';
+
+		IF @COL = 'SCM_SITE_NAME'
+			SET @COL2 = 'PLANT_ID';
+
+		IF (@V_INDEX = 0)
+		BEGIN
+			IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+			BEGIN
+				SET @mEXEC = @mEXEC + '     AA.'+@COL2 +','
+			END
+
+			SET @mEXEC = @mEXEC + '        AA.'+@COL
+		END
+		ELSE
+		BEGIN
+			IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+			BEGIN
+				SET @mEXEC = @mEXEC + '     ,AA.'+@COL2
+			END
+
+			SET @mEXEC = @mEXEC + '        ,AA.'+@COL
+		END
+
+		SET @V_INDEX = @V_INDEX + 1;
+	END
+
+	--SET @mEXEC = @mEXEC + '                 , AA.MEASURE
+	SET @mEXEC = @mEXEC + '                 , ''D_'' + ISNULL(AA.YYYYMMDD, ' + @p_from_yyyymmdd + ') AS YYYYMMDD' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , ISNULL(AA.QTY, 0) AS QTY' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , ISNULL(AA.CELL_QTY, 0) AS CELL_QTY' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , AA.MEASURE_ORDER_NO' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , O.BASIS_YYYYMM AS YYYYMM' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , RIGHT(O.BASIS_YYYYMM, 4)+O.ISO_WEEK AS ISO_WEEK' + CHAR(10);
+
+	SET @mEXEC = @mEXEC + '                 FROM    (' + CHAR(10);
+
+	-- SELECT    #TblDynamicPivot_SCP0081_02
+	SET @V_INDEX = 0;
+	SET @mEXEC = @mEXEC + 'SELECT' + CHAR(10);
+
+	WHILE @v_cnt_usr_column > @V_INDEX
+	BEGIN
+		SET @COL =
+			(
+				SELECT  COL
+				FROM    #TblDynamicPivot_SCP0081_COLUMN
+				WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+			);
+
+		-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+		IF @COL = 'OPERATION_GROUP_NAME'
+			SET @COL2 = 'OPERATION_GROUP_ID';
+
+		IF @COL = 'SCM_SITE_NAME'
+			SET @COL2 = 'PLANT_ID';
+
+		IF (@V_INDEX = 0)
+		BEGIN
+			IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+			BEGIN
+				SET @mEXEC = @mEXEC + '     '+@COL2 +','
+			END
+
+			SET @mEXEC = @mEXEC + '        '+@COL
+		END
+		ELSE
+		BEGIN
+			IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+			BEGIN
+				SET @mEXEC = @mEXEC + '     ,' + @COL2
+			END
+
+			SET @mEXEC = @mEXEC + '        ,' + @COL
+
+		END
+
+		SET @V_INDEX = @V_INDEX + 1;"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","16","
+	END
+
+	--SET @mEXEC = @mEXEC + '                 , MEASURE
+	SET @mEXEC = @mEXEC + '                 , YYYYMMDD' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , QTY' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , CELL_QTY' + CHAR(10);--chaan
+	SET @mEXEC = @mEXEC + '                 , MEASURE_ORDER_NO' + CHAR(10);
+
+	SET @mEXEC = @mEXEC + '                FROM    #TblDynamicPivot_SCP0081_02' + CHAR(10);
+
+	-- VERSION
+	IF @p_version_id != ''
+	BEGIN
+		SET @mEXEC = @mEXEC + '    UNION ALL' + CHAR(10);
+
+		-- SELECT    #TblDynamicPivot_SCP0081_VERSION_T
+		SET @V_INDEX     = 0;
+		SET @mEXEC         = @mEXEC + 'SELECT' + CHAR(10);
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT    COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE    USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '     '+@COL2 +','
+				END
+
+				SET @mEXEC = @mEXEC + '        '+@COL
+			END
+			ELSE
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '     ,' + @COL2
+				END
+
+				SET @mEXEC = @mEXEC + '        ,' + @COL
+
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		--SET @mEXEC = @mEXEC + '                 , MEASURE
+		SET @mEXEC = @mEXEC + '                 , YYYYMMDD' + CHAR(10);
+		SET @mEXEC = @mEXEC + '                 , QTY' + CHAR(10);
+		SET @mEXEC = @mEXEC + '                 , CELL_QTY' + CHAR(10);--chaan
+		SET @mEXEC = @mEXEC + '                 , MEASURE_ORDER_NO' + CHAR(10);
+
+		SET @mEXEC = @mEXEC + '    FROM     #TblDynamicPivot_SCP0081_VERSION_T' + CHAR(10);
+	END
+
+	-- SUB TOTAL
+	IF @p_group_column != ''
+	BEGIN
+		SET @mEXEC = @mEXEC + '    UNION ALL' + CHAR(10);
+
+		-- SELECT    #TblDynamicPivot_SCP0081_SUB
+		SET @V_INDEX = 0;
+		SET @mEXEC = @mEXEC + 'SELECT' + CHAR(10);
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT    COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE    USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '     '+@COL2 +','
+				END
+
+				SET @mEXEC = @mEXEC + '        '+@COL
+			END
+			ELSE
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '     ,' + @COL2
+				END
+
+				SET @mEXEC = @mEXEC + '        ,' + @COL
+
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		--SET @mEXEC = @mEXEC + '                 , MEASURE
+		SET @mEXEC = @mEXEC + '                 , YYYYMMDD' + CHAR(10);
+		SET @mEXEC = @mEXEC + '                 , QTY' + CHAR(10);
+		SET @mEXEC = @mEXEC + '                 , CELL_QTY' + CHAR(10);--chaan
+		SET @mEXEC = @mEXEC + '                 , MEASURE_ORDER_NO' + CHAR(10);
+		SET @mEXEC = @mEXEC + '            FROM     #TblDynamicPivot_SCP0081_SUB' + CHAR(10);
+	END
+
+	SET @mEXEC = @mEXEC + '                 ) AA' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 JOIN SCM_SYS_CALENDAR_M O WITH(NOLOCK) ON ISNULL(AA.YYYYMMDD, ' + @p_from_yyyymmdd + ') = O.BASIS_YYYYMMDD' + CHAR(10);
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02;;return;
+
+--TESTING : OK
+--exec debug_log @mEXEC, 'T';return;
+
+	EXEC (@mEXEC);
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_01;return;
+
+--    UPDATE #TblDynamicPivot_SCP0081_01
+--    SET
+--        VERSION_NO = IIF(MEASURE = 'SCP PLAN_Version A', RTRIM(LTRIM(@p_version_a)"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","17","), IIF(MEASURE = 'SCP PLAN_Version B', RTRIM(LTRIM(@p_version_b)), ''))
+--    WHERE   MEASURE IN ('SCP PLAN_Version A', 'SCP PLAN_Version B')
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_01;return;
+
+	--chaan begin
+    --DECLARE @p_from_yyyymmdd    NVARCHAR(8)     = N'20211101',
+    --DECLARE @p_to_yyyymmdd      NVARCHAR(8)     = N'20230205',
+    --DECLARE @p_division_id      NVARCHAR(1000)  = N'81',
+    --DECLARE @p_operation_group  NVARCHAR(1000)  = N'P',
+    --DECLARE @p_plant_id         NVARCHAR(1000)  = N'G388',
+    --DECLARE @p_line_id          NVARCHAR(MAX)   = N'PBQ01',
+    --DECLARE @p_item_id          NVARCHAR(1000)  = N'AMDAU0217B',
+    --DECLARE @p_nickname         NVARCHAR(1000)  = NULL,
+    --DECLARE @p_user_id          NVARCHAR(30)    = N'iamarock',
+    --DECLARE @p_operation_id     NVARCHAR(1000)  = N'P5000',
+    --DECLARE @p_version_id       NVARCHAR(50)    = NULL,
+    --DECLARE @p_version_a        NVARCHAR(20)    = NULL,
+    --DECLARE @p_version_b        NVARCHAR(20)    = NULL,
+    --DECLARE @p_group_column     NVARCHAR(20)    = NULL,
+    --DECLARE @p_debug_mode       NVARCHAR(1)     = N'T'
+
+--TESTING : OK;
+--select * from #TblDynamicPivot_SCP0081_01;return;
+
+
+	/********************************************************************************
+	* PIVOIT처리
+	********************************************************************************/
+
+	PRINT N'***start PIVOIT처리';
+
+	BEGIN
+		DECLARE @mDAY_QTY        NVARCHAR(MAX);
+		DECLARE @mDAY_CELL_QTY   NVARCHAR(MAX);
+		DECLARE @mQry_sum        NVARCHAR(MAX);--chaan
+		DECLARE @mQry_field      NVARCHAR(MAX);
+
+		-- PIVOIT 대상 날짜문자열 생성
+		SET @mDAY_QTY         ='QTY';
+		SET @mDAY_CELL_QTY    ='CELL_QTY';--chaan
+		SET @mQry_sum         = '';
+		SET @mQry_field       = '';
+
+		SELECT  @mQry_field    = @mQry_field + ',' + yyyymmdd + CHAR(10),
+				@mQry_field    = @mQry_field + ',' + yyyymmdd + '_CELL' + CHAR(10),--chaan
+				@mQry_sum      = @mQry_sum + ',' +
+					CASE
+						WHEN CHARINDEX('M_', yyyymmdd) = 1 THEN  '                   SUM(CASE WHEN YYYYMM   = RIGHT('''+yyyymmdd+''',6) THEN '  + @mDAY_QTY + ' ELSE 0 END ) AS ' + yyyymmdd
+						WHEN CHARINDEX('W_', yyyymmdd) = 1 THEN  '                   SUM(CASE WHEN ISO_WEEK = RIGHT('''+yyyymmdd+''', 6) THEN ' + @mDAY_QTY + ' ELSE 0 END ) AS ' + yyyymmdd
+						WHEN CHARINDEX('D_', yyyymmdd) = 1 THEN  '                   SUM(CASE WHEN YYYYMMDD = '''+yyyymmdd+''' THEN '           + @mDAY_QTY + ' ELSE 0 END ) AS ' + yyyymmdd
+					END + ',' + CHAR(10) +
+					CASE
+						WHEN CHARINDEX('M_', yyyymmdd) = 1 THEN  '                   SUM(CASE WHEN YYYYMM   = RIGHT('''+yyyymmdd+''',6) THEN '  + @mDAY_CELL_QTY + ' ELSE 0 END ) AS ' + yyyymmdd + '_CELL'
+						WHEN CHARINDEX('W_', yyyymmdd) = 1 THEN  '                   SUM(CASE WHEN ISO_WEEK = RIGHT('''+yyyymmdd+''', 6) THEN ' + @mDAY_CELL_QTY + ' ELSE 0 END ) AS ' + yyyymmdd + '_CELL'
+						WHEN CHARINDEX('D_', yyyymmdd) = 1 THEN  '                   SUM(CASE WHEN YYYYMMDD = '''+yyyymmdd+''' THEN '           + @mDAY_CELL_QTY + ' ELSE 0 END ) AS ' + yyyymmdd + '_CELL'
+					END + CHAR(10)
+		FROM    (
+					SELECT  'W_'+A.BASIS_YYYYMM + A.ISO_WEEK AS YYYYMMDD,
+							A.BASIS_START_DATE + CONVERT(CHAR(2), 21) AS SORT_ORDER_NO
+					FROM    [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+					WHERE   A.BASIS_YYYYMMDD BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+					GROUP BY A.BASIS_YYYYMM, A.ISO_WEEK, A.BASIS_START_DATE
+					UNION ALL
+					SELECT  'M_'+A.BASIS_YYYYMM  AS YYYYMMDD,
+							MIN(A.BASIS_START_DATE) + CONVERT(CHAR(2), '01') AS SORT_ORDER_NO
+					FROM    [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+					WHERE   A.BASIS_YYYYMMDD  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+					GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME
+					UNION ALL
+					SELECT  'D_'+A.BASIS_YYYYMMDD   AS YYYYMMDD,
+							A.BASIS_YYYYMMDD + CONVERT(CHAR(2), 31) AS SORT_ORDER_NO
+					FROM    [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+					WHERE   A.BASIS_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","18","YYYYMMDD  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+					GROUP BY A.BASIS_YYYYMMDD
+				) AS A
+		ORDER BY sort_order_no;
+
+		SET @mEXEC = '';
+		SET @mEXEC = @mEXEC + 'SELECT' + CHAR(10);
+
+		SET @V_INDEX = 0;
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT  COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				SET @mEXEC = @mEXEC + '       ' + @COL + CHAR(10)
+			END
+			ELSE
+			BEGIN
+				SET @mEXEC = @mEXEC + '      ,' + @COL + CHAR(10)
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		SET @mEXEC = @mEXEC + '       ' + @mQry_field    ;
+		SET @mEXEC = @mEXEC + 'FROM    (' +CHAR(10);
+		SET @mEXEC = @mEXEC + '            SELECT' +CHAR(10);
+
+		SET @V_INDEX = 0;
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT  COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '                    ' + @COL2 + ',' + CHAR(10)
+				END
+
+				SET @mEXEC = @mEXEC + '                    ' + @COL + CHAR(10)
+			END
+			ELSE
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '                   ,' + @COL2 + CHAR(10)
+				END
+
+				SET @mEXEC = @mEXEC + '                   ,' + @COL + CHAR(10)
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		SET @mEXEC = @mEXEC + '                   , MEASURE_ORDER_NO' + CHAR(10);
+		SET @mEXEC = @mEXEC + '                   '+@mQry_sum + CHAR(10);
+		SET @mEXEC = @mEXEC + '            FROM    #TblDynamicPivot_SCP0081_01' + CHAR(10); --chaan 일요일 cutoff용 임시 테이블로 변경
+
+		-- COLOMN 순서대로 GROUP BY
+		SET @V_INDEX = 0;
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT  COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				SET @mEXEC = @mEXEC + '            GROUP BY    ';
+
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '                        '+@COL2 +',' + CHAR(10);
+				END
+
+				SET @mEXEC = @mEXEC + '                        '+@COL + CHAR(10);
+
+			END
+			ELSE
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '                       ,' + @COL2 + CHAR(10);
+				END
+
+				SET @mEXEC = @mEXEC + '                       ,' + @COL + CHAR(10);
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		SET @mEXEC = @mEXEC + '                        ,MEASURE_ORDER_NO' + CHAR(10);
+		SET @mEXEC = @mEXEC + '        ) A' + CHAR(10);
+
+		-- COLOMN 순서대로 ORDER BY
+		SET @V_INDEX = 0;
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT  COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			-- NAME으로 매핑하는 것은 ID로 ORDER BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			-- MEASURE의 경우 MEASURE_ORDER_NO로 ORDER BY
+			IF @COL = 'MEASURE'
+				SET @COL = 'MEASURE_ORDER_NO';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				SET @mEXEC = @mEXEC + 'ORDER BY    ';
+
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+					SET @COL = @COL2;
+
+				SET @mEXEC = @mEXEC + '            ' + @COL + CHAR(10);
+			END
+			ELSE
+			BEGIN
+				IF @COL = '"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT","1786541498","19","OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+					SET @COL = @COL2;
+
+				SET @mEXEC = @mEXEC + '           ,' + @COL + CHAR(10);
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_01 where MEASURE = 'WPP';return;
+--select * from #TblDynamicPivot_SCP0081_01;return;
+
+--TESTING : OK
+--exec debug_log @mEXEC, 'T';return;
+
+		EXEC (@mEXEC);
+	END;
+
+
+	--임시테이블 삭제
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_COLUMN') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_COLUMN;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_GROUP') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_GROUP;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_GROUP_CODE') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_GROUP_CODE;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_MEASURE') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_MEASURE;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_MPP') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_MPP;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_WPP') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_WPP;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_SCP_PLAN') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_SCP_PLAN;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_RESULT') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_RESULT;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_AA') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_AA;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VERSION') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_VERSION;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VERSION_T') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_VERSION_T;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VER_A') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_VER_A;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_NEW_A') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_NEW_A;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VER_B') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_VER_B;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_NEW_B') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_NEW_B;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_JOIN_A') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_JOIN_A;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VERSION_KEYS') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_VERSION_KEYS;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_AA') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_AA;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_SUB') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_SUB;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_01') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_01;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","1","
+/*
+ * Program ID    : SCP0080_GET_PRODUCTION_PLAN_REPORT
+ * Description    : PRODUCTION PLAN 조회
+ * Program History======================================================
+ *    Date        In Charge        Description
+ *=============================================
+ *===================================================================================================
+ * 2021/08/24    kmj                        Initial Release - PJ20214907 LGES SCP 계획 수립 시간 단축 및 분석 기능 강화
+ * 2021/09/13    kmj                        OPERATION_ID 조건 추가
+ * 2021/09/28    kmj                        VERSION 조건 추가, 2개 버전 MEASURE + GAP 추가, Sub Total
+ * 2022/01/25    chaan                      CELL 환산계수 적용
+ * 2022/02/15    chaan              V1.31   WPP 기준을 일요일 Cuttoff 로 변경
+ * 2022/02/17    chaan              V1.5    CELL 환산계수 적용 -> 전극 관련 보완
+ * 2022/02/18    chaan              V1.6    WPP 기준을 일요일 Cuttoff 로 변경 -> ITEM 별 최종 주차를 가져오는 것이 아니라, 조회 기간 중 최종 주차를 찾아 해당 데이터가 없는 ITEM은 0 으로 표시
+ * 2022/03/22    khj79                      조회 속도 이슈 발생되어 쿼리 수정 함
+ * 2022/07/21    chaan              V1.1.7  필터조건을 SCP 기준으로 통합(Shop Group -> Operation Group), PlantID 필터 조건에서 제외(line 이 이미 plant로 필터링된 상태임)
+ * 2022/10/27    chaan              V1.1.8  - 전극(EE, EE_UC) 사업부 일 때 division 에 따른 Operation Group 오류로 divsion 필터 조건 수정
+ *                                          - Version Column 추가
+ * 2022/11/24    chaan              V1.1.9  데이터 조회오류 확인
+ *                                             ~ Version No 추가후 정렬 오류 수정
+ * 2022/12/13    chaan              V1.1.10 전극사업부 조회 오류 수정
+ * 2022/12/23    chaan              V1.1.11 WPP 조회 오류 수정
+                                            - WPP 조회시 키 상관없이 전체 최종 주차만 조회 => PLAN_DATE 기준 키별 자기 주차로 변경
+                                            - RESULT 수치 중복 오류 수정
+ */
+
+CREATE PROCEDURE [dbo].[SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW]
+   @p_from_yyyymmdd     NVARCHAR(8),
+   @p_to_yyyymmdd       NVARCHAR(8),
+   @p_division_id       NVARCHAR(1000),
+   @p_operation_group   NVARCHAR(1000),
+   @p_line_id           NVARCHAR(MAX),
+   @p_item_id           NVARCHAR(1000),
+   @p_nickname          NVARCHAR(1000),
+   @p_user_id           NVARCHAR(30),
+   @p_version_id        NVARCHAR(50),
+   @p_version_a         NVARCHAR(20),
+   @p_version_b         NVARCHAR(20),
+   @p_group_column      NVARCHAR(20),
+   @debug_mode          NVARCHAR(1) = 'T'
+AS
+BEGIN
+    SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+    SET NOCOUNT ON;
+
+    DECLARE @v_program_id       NVARCHAR(10)    = 'SCP0081';
+    DECLARE @v_sheet_name       NVARCHAR(50)    = 'Production Plan Report';
+
+    DECLARE @V_CNT_USR_MEASURE  INT = 0;
+    DECLARE @V_CNT_USR_COLUMN   INT = 0;
+
+    SET @V_CNT_USR_MEASURE = (  SELECT  Count(1)
+                                FROM    SCM_MST_TITLESET_USER WITH(NOLOCK)
+                                WHERE   1 = 1
+                                    AND PROGRAM_ID = @V_PROGRAM_ID
+                                    AND SHEET_NAME = @V_SHEET_NAME
+                                    AND USER_INQUIRY_COLUMN_TYPE_CODE = 'M'
+                                    AND USER_ID = @p_user_id);
+    SET @V_CNT_USR_COLUMN = (   SELECT  Count(1)
+                                FROM    SCM_MST_TITLESET_USER WITH(NOLOCK)
+                                WHERE   1 = 1
+                                    AND PROGRAM_ID = @V_PROGRAM_ID
+                                    AND SHEET_NAME = @V_SHEET_NAME
+                                    AND USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+                                    AND USER_ID = @p_user_id);
+--TESTING : OK
+--print '@V_CNT_USR_MEASURE : ' + CONVERT(NVARCHAR, @V_CNT_USR_MEASURE);
+--print '@V_CNT_USR_COLUMN : ' + CONVERT(NVARCHAR, @V_CNT_USR_COLUMN);
+--return;
+
+    DECLARE @V_INDEX    INT             = 0;
+    DECLARE @mEXEC      NVARCHAR(MAX);
+    -- COLOMN 순서대로 조회
+    DECLARE @COL        NVARCHAR(20)    = '';
+    DECLARE @COL2       NVARCHAR(20)    = '';
+
+    /*****************"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","2","***************************************************************
+    * 임시테이블만들기 - 선택 COLUMN
+    ********************************************************************************/
+        IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_COLUMN') IS NOT NULL
+            DROP TABLE #TblDynamicPivot_SCP0081_COLUMN;
+
+		SELECT    A.COLUMN_NAME AS COL
+				, ROW_NUMBER() OVER(ORDER BY ISNULL(B.SORT_ORDER_NO, A.SORT_ORDER_NO)) AS USER_SORT_ORDER_NO
+		INTO    #TblDynamicPivot_SCP0081_COLUMN
+		FROM    SCM_MST_SHEET_COLUMNS A WITH(NOLOCK)
+				LEFT JOIN SCM_MST_TITLESET_USER B WITH(NOLOCK) ON
+						B.PROGRAM_ID = A.PROGRAM_ID
+					AND B.SHEET_NAME = A.SHEET_NAME
+					AND B.COLUMN_NAME = A.COLUMN_NAME
+					AND B.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+					AND B.USER_ID = @p_user_id
+		WHERE       A.PROGRAM_ID = @V_PROGRAM_ID
+				AND A.SHEET_NAME = @V_SHEET_NAME
+				AND A.VALID_YN = 'Y'
+				AND A.VISIBLE_FLAG = 'Y'
+				AND
+					(
+						@V_CNT_USR_COLUMN = 0
+						OR EXISTS
+							(
+								SELECT  1
+								FROM    SCM_MST_TITLESET_USER WITH(NOLOCK)
+								WHERE       PROGRAM_ID = @V_PROGRAM_ID
+										AND SHEET_NAME = @V_SHEET_NAME
+										AND COLUMN_NAME = A.COLUMN_NAME
+										AND USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+										AND USER_ID = @p_user_id
+							)
+					);
+
+        SET @V_CNT_USR_COLUMN = (   SELECT  Count(1)
+                                    FROM    #TblDynamicPivot_SCP0081_COLUMN);
+
+
+--TESTING : OK
+--select * from SCM_LINE_HIERARCHY_V_SN where DIVISION_ID IN ('EE', 'EE_UC');
+--select * from SCP_MST_FINAL_ITEM where DIVISION_ID IN ('EE', 'EE_UC');
+--return;
+
+    /********************************************************************************
+    * 임시테이블만들기 - OPERATION    GROUP
+    ********************************************************************************/
+        IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_GROUP') IS NOT NULL
+            DROP TABLE #TblDynamicPivot_SCP0081_GROUP;
+
+        SELECT DISTINCT
+				  COMPANY_ID
+				, DIVISION_ID
+				, SITE_ID
+				, PLANT_ID
+				, OPERATION_GROUP AS OPERATION_GROUP_NAME
+				, OPERATION_GROUP_ID
+				, OPERATION_ID
+				, LINE_ID
+				, FACTORY_ID
+        INTO    #TblDynamicPivot_SCP0081_GROUP
+        FROM    SCM_LINE_HIERARCHY_V_SN S WITH(NOLOCK)
+        WHERE   1=1
+                AND (
+                           ISNULL(@p_division_id, '') = ''
+                        OR (1 = IIF(SUBSTRING(@p_division_id, 1, 2) = 'EE', 1, IIF(DIVISION_ID IN (SELECT token FROM dbo.String_Split(@p_division_id,',')), 1, 0)))
+                    )
+                AND (
+                        ISNULL(@p_operation_group, '') = ''
+                        OR OPERATION_GROUP_ID IN
+                            (
+                                SELECT  token
+                                FROM    dbo.String_Split(@p_operation_group,',')
+                            )
+					)
+     --           AND (
+     --                   ISNULL(@p_plant_id, '') = ''
+     --                   OR PLANT_ID IN
+     --                       (
+     --                           SELECT  token
+     --                           FROM    dbo.String_Split(@p_plant_id,',')
+					--		)
+					--)
+                AND (
+                        ISNULL(@p_line_id, '') = ''
+                        OR LINE_ID IN
+                            (
+                                SELECT  token
+                                FROM    dbo.String_Split(@p_line_id,',')
+							)
+					)
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_GROUP; return;
+
+        /********************************************************************************
+        * 임시테이블만들기 - GROUP CODE MANAGEMENT
+        ********************************************************************************/
+		IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_GROUP_CODE') IS NOT NULL
+            DROP TABLE #TblDynamicPivot_SCP0081_GROUP_CODE;
+
+        SELECT    DIVISION_ID
+                , "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","3","ITEM_ID
+                , NICK_NAME
+                , GROUP_CODE1
+                , GROUP_CODE2
+                , GROUP_CODE3
+                , GROUP_CODE4
+                , GROUP_CODE5
+        INTO    #TblDynamicPivot_SCP0081_GROUP_CODE
+        FROM    SCP_MST_FINAL_ITEM S WITH(NOLOCK)
+        WHERE   1=1
+                AND (
+                           ISNULL(@p_division_id, '') = ''
+                        OR (1 = IIF(SUBSTRING(@p_division_id, 1, 2) = 'EE', 1, IIF(DIVISION_ID IN (SELECT token FROM dbo.String_Split(@p_division_id,',')), 1, 0)))
+                    )
+                AND (
+                        ISNULL(@p_item_id, '') = ''
+                        OR ITEM_ID IN
+                            (
+                                SELECT    token
+                                FROM      dbo.String_Split(@p_item_id,',')
+						    )
+				    );
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_GROUP_CODE; return;
+
+
+
+    /********************************************************************************
+    * 임시테이블만들기 - MEASURE
+    ********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_MEASURE') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_MEASURE;
+
+    SELECT    A.COLUMN_NAME AS MEASURE
+            , A.COLUMN_LABEL_NAME AS MEASURE_NAME
+            , ISNULL(B.SORT_ORDER_NO, A.SORT_ORDER_NO) AS USER_SORT_ORDER_NO
+    INTO    #TblDynamicPivot_SCP0081_MEASURE
+    FROM    SCM_MST_SHEET_MEASURE A WITH(NOLOCK)
+            LEFT JOIN SCM_MST_TITLESET_USER B WITH(NOLOCK) ON
+	                B.PROGRAM_ID                    = A.PROGRAM_ID
+				AND B.SHEET_NAME                    = A.SHEET_NAME
+				AND B.COLUMN_NAME                   = A.COLUMN_NAME
+				AND B.USER_INQUIRY_COLUMN_TYPE_CODE = 'M'
+				AND B.USER_ID                       = @p_user_id
+	WHERE   A.PROGRAM_ID = @V_PROGRAM_ID
+		AND A.SHEET_NAME = @V_SHEET_NAME
+		AND A.VALID_YN   = 'Y'
+		AND
+			(
+				@V_CNT_USR_MEASURE = 0
+				OR EXISTS
+					(
+						SELECT  1
+						FROM    SCM_MST_TITLESET_USER WITH(NOLOCK)
+						WHERE   PROGRAM_ID                      = @V_PROGRAM_ID
+							AND SHEET_NAME                      = @V_SHEET_NAME
+							AND COLUMN_NAME                     = A.COLUMN_NAME
+							AND USER_INQUIRY_COLUMN_TYPE_CODE   = 'M'
+							AND USER_ID                         = @p_user_id
+					)
+			) ;
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_MEASURE order by USER_SORT_ORDER_NO;return;
+
+--TESTING : OK
+----select * from SCM_DNM_FP_RELEASE_PROD_PLAN_SN;
+--select * from #TblDynamicPivot_SCP0081_GROUP;
+--select * from #TblDynamicPivot_SCP0081_GROUP_CODE;
+----select * from SCM_DNM_FP_RELEASE_PROD_PLAN_DW_SN;
+----select * from SCP_ANL_PRODUCTION_PLAN_N;
+--select * from SCM_DNM_DAILY_PRODUCT_RESULT_SN;return;
+
+    /********************************************************************************
+    * 임시테이블만들기 -
+    ********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_MPP') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_02_MPP;
+
+    SELECT    A.DIVISION_ID
+            , B.OPERATION_GROUP_ID
+            , B.OPERATION_GROUP_NAME
+            , A.PLANT_ID
+            , (
+                    SELECT  SITE_DESCRIPTION
+                    FROM    SCM_MST_SITE C WITH(NOLOCK)
+                    WHERE   A.COMPANY_ID=C.COMPANY_ID
+						AND A.DIVISION_ID=C.DIVISION_ID
+						AND A.SITE_ID=C.SITE_ID
+						AND A.PLANT_ID=C.PLANT_ID
+						AND IIF(B.OPERATION_GROUP_ID = 'F', 'A', B.OPERATION_GROUP_ID) = C.OPERATION_GROUP
+                )                                   AS SCM_SITE_NAME
+            , A.OPERATION_ID
+            , A.LINE_ID
+            , A.ITEM_ID
+            , D.NICK_NAME
+            , D.GROUP_CODE1
+            , D.GROUP_CODE2
+            , D.GROUP_CODE3
+            , D.GROUP_CODE4
+            , D.GROUP_COD"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","4","E5
+            , A.PLAN_TYPE                           AS MEASURE
+            , ''                                    AS VERSION_NO
+            , CONVERT(VARCHAR, A.PLAN_DATE, 112)    AS YYYYMMDD
+            , A.PLAN_QTY                            AS QTY
+    INTO    #TblDynamicPivot_SCP0081_02_MPP
+    FROM    SCM_DNM_FP_RELEASE_PROD_PLAN_SN A WITH(NOLOCK)
+            JOIN #TblDynamicPivot_SCP0081_GROUP B ON
+					A.COMPANY_ID    = B.COMPANY_ID
+				AND A.DIVISION_ID   = B.DIVISION_ID
+				AND A.SITE_ID       = B.SITE_ID
+				AND A.PLANT_ID      = B.PLANT_ID
+				AND A.OPERATION_ID  = B.OPERATION_ID
+				AND A.LINE_ID       = B.LINE_ID
+				AND A.FACTORY_ID    = B.FACTORY_ID
+            LEFT JOIN #TblDynamicPivot_SCP0081_GROUP_CODE D ON
+                    A.DIVISION_ID   = D.DIVISION_ID
+                AND A.ITEM_ID       = D.ITEM_ID
+    WHERE   1=1
+		AND A.PLAN_QTY > 0
+		AND A.PLAN_TYPE <> 'WPP'
+		AND A.PLAN_DATE >= CONVERT(DATETIME, @p_from_yyyymmdd)
+		AND A.PLAN_DATE <= CONVERT(DATETIME, @p_to_yyyymmdd)
+		AND
+			(
+					ISNULL(@p_item_id, '') = ''
+					OR A.ITEM_ID IN
+						(
+							SELECT  token
+							FROM    dbo.String_Split(@p_item_id,',')
+						)
+			)
+		AND
+			(
+				ISNULL(@p_nickname, '') = ''
+				OR D.NICK_NAME LIKE '%' + @p_nickname + '%'
+			)
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_MPP;return;
+
+	-- chaan FP계획 begin
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_WPP_T') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_WPP_T;
+
+	SELECT    A.YYYYWW
+            , A.DIVISION_ID
+            , B.OPERATION_GROUP_ID
+            , B.OPERATION_GROUP_NAME
+			, A.PLANT_ID
+            , (
+                    SELECT  SITE_DESCRIPTION
+                    FROM    SCM_MST_SITE C WITH(NOLOCK)
+                    WHERE   A.COMPANY_ID = C.COMPANY_ID
+						AND A.DIVISION_ID = C.DIVISION_ID
+						AND A.SITE_ID = C.SITE_ID
+						AND A.PLANT_ID = C.PLANT_ID
+						AND IIF(B.OPERATION_GROUP_ID = 'F', 'A', B.OPERATION_GROUP_ID)=C.OPERATION_GROUP
+                ) AS SCM_SITE_NAME
+            , A.OPERATION_ID
+            , A.LINE_ID
+            , A.ITEM_ID
+            , D.NICK_NAME
+            , D.GROUP_CODE1
+            , D.GROUP_CODE2
+            , D.GROUP_CODE3
+            , D.GROUP_CODE4
+            , D.GROUP_CODE5
+			, A.PLAN_TYPE  AS MEASURE
+			, '' AS VERSION_NO
+			, CONVERT(NVARCHAR, A.PLAN_DATE, 112) AS YYYYMMDD
+			, A.PLAN_QTY AS QTY
+    INTO    #TblDynamicPivot_SCP0081_02_WPP_T
+	FROM	SCM_DNM_FP_RELEASE_PROD_PLAN_DW_SN A WITH(NOLOCK)
+            JOIN
+				#TblDynamicPivot_SCP0081_GROUP B ON
+						A.COMPANY_ID   = B.COMPANY_ID
+					AND A.DIVISION_ID  = B.DIVISION_ID
+					AND A.SITE_ID      = B.SITE_ID
+					AND A.PLANT_ID     = B.PLANT_ID
+					AND A.OPERATION_ID = B.OPERATION_ID
+					AND A.LINE_ID      = B.LINE_ID
+					AND A.FACTORY_ID   = B.FACTORY_ID
+            LEFT JOIN #TblDynamicPivot_SCP0081_GROUP_CODE D ON
+                    A.DIVISION_ID      = D.DIVISION_ID
+                AND A.ITEM_ID          = D.ITEM_ID
+	WHERE	1=1
+            AND A.PLAN_QTY > 0
+            AND A.PLAN_TYPE = 'WPP'
+            AND A.PLAN_DATE >= CONVERT(DATETIME,@p_from_yyyymmdd)
+            AND A.PLAN_DATE <= CONVERT(DATETIME,@p_to_yyyymmdd)
+            AND
+                (
+                        ISNULL(@p_item_id, '') = '' OR A.ITEM_ID IN
+                            (
+                                SELECT  token
+                                FROM    dbo.String_Split(@p_item_id,',')
+                            )
+                )
+            AND
+                (
+                    ISNULL(@p_nickname, '') = '' OR D.NICK_NAME LIKE '%' + @p_nickname + '%'
+                )
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_WPP_T;return;
+
+    --각 키별 최종주차를 찾음 begin --------------------------------------------------------------------------------------------
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_WPP_L"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","5","AST') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_WPP_LAST;
+
+    SELECT        A.DIVISION_ID
+				, A.OPERATION_GROUP_ID
+				, A.OPERATION_GROUP_NAME
+				, A.PLANT_ID
+				, A.SCM_SITE_NAME
+				, A.OPERATION_ID
+				, A.LINE_ID
+				, A.ITEM_ID
+				, A.NICK_NAME
+				, A.GROUP_CODE1
+				, A.GROUP_CODE2
+				, A.GROUP_CODE3
+				, A.GROUP_CODE4
+				, A.GROUP_CODE5
+				, A.MEASURE
+				, A.VERSION_NO
+				, A.YYYYMMDD
+                --, MAX(C.ISO_YYYYWW) AS YYYYWW
+                , MAX(A.YYYYWW) AS YYYYWW
+    INTO        #TblDynamicPivot_SCP0081_02_WPP_LAST
+    FROM        #TblDynamicPivot_SCP0081_02_WPP_T A
+                --JOIN
+                --    (
+                --        SELECT    ISO_YYYYWW
+                --                , BASIS_YYYYMMDD
+                --        FROM    SCM_SYS_CALENDAR_M
+                --    ) C ON
+                --        A.YYYYMMDD = C.BASIS_YYYYMMDD
+    GROUP BY      A.DIVISION_ID
+				, A.OPERATION_GROUP_ID
+				, A.OPERATION_GROUP_NAME
+				, A.PLANT_ID
+				, A.SCM_SITE_NAME
+				, A.OPERATION_ID
+				, A.LINE_ID
+				, A.ITEM_ID
+				, A.NICK_NAME
+				, A.GROUP_CODE1
+				, A.GROUP_CODE2
+				, A.GROUP_CODE3
+				, A.GROUP_CODE4
+				, A.GROUP_CODE5
+				, A.MEASURE
+				, A.VERSION_NO
+				, A.YYYYMMDD
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_WPP_T;
+--select * from #TblDynamicPivot_SCP0081_02_WPP_LAST;return;
+    --각 키별 최종주차를 찾음 end --------------------------------------------------------------------------------------------
+
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_WPP') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_WPP;
+
+    SELECT        A.DIVISION_ID
+				, A.OPERATION_GROUP_ID
+				, A.OPERATION_GROUP_NAME
+				, A.PLANT_ID
+				, A.SCM_SITE_NAME
+				, A.OPERATION_ID
+				, A.LINE_ID
+				, A.ITEM_ID
+				, A.NICK_NAME
+				, A.GROUP_CODE1
+				, A.GROUP_CODE2
+				, A.GROUP_CODE3
+				, A.GROUP_CODE4
+				, A.GROUP_CODE5
+				, A.MEASURE
+				, A.VERSION_NO
+				, A.YYYYMMDD
+                , A.QTY
+    INTO        #TblDynamicPivot_SCP0081_02_WPP
+    FROM        #TblDynamicPivot_SCP0081_02_WPP_T A
+                JOIN #TblDynamicPivot_SCP0081_02_WPP_LAST B ON
+                            A.DIVISION_ID           = B.DIVISION_ID
+                        AND A.OPERATION_GROUP_ID    = B.OPERATION_GROUP_ID
+                        AND A.OPERATION_GROUP_NAME	= B.OPERATION_GROUP_NAME
+                        AND A.PLANT_ID				= B.PLANT_ID
+                        AND A.SCM_SITE_NAME			= B.SCM_SITE_NAME
+                        AND A.OPERATION_ID			= B.OPERATION_ID
+                        AND A.LINE_ID				= B.LINE_ID
+                        AND A.ITEM_ID				= B.ITEM_ID
+                        AND A.NICK_NAME				= B.NICK_NAME
+                        AND A.GROUP_CODE1			= B.GROUP_CODE1
+                        AND A.GROUP_CODE2			= B.GROUP_CODE2
+                        AND A.GROUP_CODE3			= B.GROUP_CODE3
+                        AND A.GROUP_CODE4			= B.GROUP_CODE4
+                        AND A.GROUP_CODE5			= B.GROUP_CODE5
+                        AND A.MEASURE				= B.MEASURE
+                        AND A.VERSION_NO			= B.VERSION_NO
+                        AND A.YYYYMMDD				= B.YYYYMMDD
+                        AND A.YYYYWW				= B.YYYYWW
+
+--TESTING : NOK
+--select * from #TblDynamicPivot_SCP0081_02_WPP;return;
+
+    -- chaan FP계획 end
+
+
+print '@p_from_yyyymmdd  : ' + @p_from_yyyymmdd;
+print '@p_to_yyyymmdd : ' + @p_to_yyyymmdd;
+
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_SCP_PLAN') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_SCP_PLAN;
+
+    SELECT    A.DIVISION_ID
+            , B.OPERATION_GROUP_ID
+            , B.OPERATION_GROUP_NAME
+            , B.PLANT_ID
+            , (
+                SELECT  SITE_DESCRIPTION
+                FROM    SCM_MST_SITE WITH(NOLOCK)
+                WHERE       DIVISION_ID = A.DIVISION_ID
+                        AND SCM_SIT"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","6","E_ID = A.SCM_SITE_ID
+                ) AS SCM_SITE_NAME
+            , A.OPERATION_ID
+            , A.LINE_ID
+            , A.ITEM_ID
+            , D.NICK_NAME
+            , D.GROUP_CODE1
+            , D.GROUP_CODE2
+            , D.GROUP_CODE3
+            , D.GROUP_CODE4
+            , D.GROUP_CODE5
+            , 'SCP_PLAN'    AS MEASURE
+            , V.VERSION_NO  AS VERSION_NO
+            , A.YYYYMMDD
+            , A.QTY
+    INTO    #TblDynamicPivot_SCP0081_02_SCP_PLAN
+    FROM    SCP_ANL_PRODUCTION_PLAN_N A WITH(NOLOCK)
+            JOIN
+                    (
+                        SELECT DISTINCT
+                                    DIVISION_ID
+                                , PLANT_ID
+                                , OPERATION_GROUP_NAME
+                                , OPERATION_GROUP_ID
+                                , OPERATION_ID
+                                , LINE_ID
+                        FROM    #TblDynamicPivot_SCP0081_GROUP
+                    ) B ON
+                            A.DIVISION_ID = B.DIVISION_ID
+                        AND A.OPERATION_ID = B.OPERATION_ID
+                        AND A.LINE_ID = B.LINE_ID
+            LEFT JOIN #TblDynamicPivot_SCP0081_GROUP_CODE D ON
+                    A.DIVISION_ID = D.DIVISION_ID
+                AND A.ITEM_ID = D.ITEM_ID
+            LEFT JOIN 
+                (
+	                SELECT DISTINCT
+                                A.DIVISION_ID
+                            , A.VERSION_NO
+                            , A.PLAN_START_YYYYMMDD
+	                FROM    SCP_ANL_PRODUCTION_PLAN_C A WITH(NOLOCK)
+                ) V ON
+                    A.DIVISION_ID         = V.DIVISION_ID
+                AND A.PLAN_START_YYYYMMDD = V.PLAN_START_YYYYMMDD
+    WHERE   1=1
+            AND A.QTY > 0
+            AND A.MEASURE = 'PROD_PLAN_AMEND'
+            AND A.YYYYMMDD >= @p_from_yyyymmdd
+            AND A.YYYYMMDD <= @p_to_yyyymmdd
+            AND
+                (
+                    ISNULL(@p_item_id, '') = ''
+                    OR A.ITEM_ID IN
+                        (
+                            SELECT  token
+                            FROM    dbo.String_Split(@p_item_id,',')
+                        )
+                )
+            AND
+                (
+                    ISNULL(@p_nickname, '') = ''
+                    OR D.NICK_NAME LIKE '%' + @p_nickname + '%'
+                )
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_SCP_PLAN;return;
+
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_RESULT') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_RESULT;
+
+    SELECT    A.DIVISION_ID
+            , B.OPERATION_GROUP_ID
+            , B.OPERATION_GROUP_NAME
+            , A.PLANT_ID
+            , (
+                SELECT  SITE_DESCRIPTION
+                FROM    SCM_MST_SITE C WITH(NOLOCK)
+                WHERE   A.COMPANY_ID = C.COMPANY_ID
+                        AND A.DIVISION_ID = C.DIVISION_ID
+                        AND A.SITE_ID = C.SITE_ID
+                        AND A.PLANT_ID = C.PLANT_ID
+                        AND IIF(B.OPERATION_GROUP_ID = 'F', 'A', B.OPERATION_GROUP_ID)=C.OPERATION_GROUP
+                ) AS SCM_SITE_NAME
+            , A.OPERATION_ID
+            , A.LINE_ID
+            , A.ITEM_ID
+            , D.NICK_NAME
+            , D.GROUP_CODE1
+            , D.GROUP_CODE2
+            , D.GROUP_CODE3
+            , D.GROUP_CODE4
+            , D.GROUP_CODE5
+            , 'RESULT'  AS MEASURE
+            , '' AS VERSION_NO
+            , CONVERT(VARCHAR, A.PLAN_DATE, 112) AS YYYYMMDD
+            , A.ACTUAL_GOOD_QTY AS QTY
+    INTO    #TblDynamicPivot_SCP0081_02_RESULT
+    FROM    SCM_DNM_DAILY_PRODUCT_RESULT_SN A WITH(NOLOCK)
+            JOIN #TblDynamicPivot_SCP0081_GROUP B ON
+                    A.COMPANY_ID = B.COMPANY_ID
+                AND A.DIVISION_ID = B.DIVISION_ID
+                AND A.SITE_ID = B.SITE_ID
+                AND"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","7"," A.PLANT_ID = B.PLANT_ID
+                AND A.OPERATION_ID = B.OPERATION_ID
+                AND A.LINE_ID = B.LINE_ID
+                AND A.FACTORY_ID = B.FACTORY_ID
+            LEFT JOIN #TblDynamicPivot_SCP0081_GROUP_CODE D ON
+                    A.DIVISION_ID = D.DIVISION_ID
+                AND A.ITEM_ID = D.ITEM_ID
+    WHERE   1=1
+            AND A.ACTUAL_GOOD_QTY > 0
+			-- 2022.03.22 : 수정
+            AND A.PLAN_DATE >= CONVERT(DATETIME,@p_from_yyyymmdd)
+            AND A.PLAN_DATE <= CONVERT(DATETIME,@p_to_yyyymmdd)
+            AND
+                (
+                    ISNULL(@p_item_id, '') = ''
+                    OR A.ITEM_ID IN
+                        (
+                            SELECT  token
+                            FROM    dbo.String_Split(@p_item_id,',')
+                        )
+                )
+            AND
+                (
+                    ISNULL(@p_nickname, '') = ''
+                    OR D.NICK_NAME LIKE '%' + @p_nickname + '%'
+				)
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_RESULT;return;
+--                SELECT TOP 1  *
+--                FROM    #TblDynamicPivot_SCP0081_02_MPP
+
+--                SELECT TOP 1 *
+--                FROM    #TblDynamicPivot_SCP0081_02_WPP
+
+--                SELECT TOP 1 *
+--                FROM    #TblDynamicPivot_SCP0081_02_SCP_PLAN
+
+--                SELECT TOP 1 *
+--                FROM    #TblDynamicPivot_SCP0081_02_RESULT
+--RETURN;    
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_AA') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_AA;
+
+    SELECT  A.*
+    INTO    #TblDynamicPivot_SCP0081_02_AA
+    FROM    (
+                SELECT  *
+                FROM    #TblDynamicPivot_SCP0081_02_MPP
+                UNION ALL
+                SELECT  *
+                FROM    #TblDynamicPivot_SCP0081_02_WPP
+                UNION ALL
+                SELECT  *
+                FROM    #TblDynamicPivot_SCP0081_02_SCP_PLAN
+                UNION ALL
+                SELECT  *
+                FROM    #TblDynamicPivot_SCP0081_02_RESULT
+            ) A
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_AA;return;
+
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_02;
+
+	SELECT    AA.DIVISION_ID
+			, AA.OPERATION_GROUP_ID
+			, AA.OPERATION_GROUP_NAME
+			, AA.PLANT_ID
+			, AA.SCM_SITE_NAME
+			, AA.OPERATION_ID
+			, AA.LINE_ID
+			, AA.ITEM_ID
+			, AA.NICK_NAME
+			, AA.GROUP_CODE1
+			, AA.GROUP_CODE2
+			, AA.GROUP_CODE3
+			, AA.GROUP_CODE4
+			, AA.GROUP_CODE5
+			, M.MEASURE_NAME   AS MEASURE
+            , CASE
+                WHEN M.MEASURE = 'SCP_PLAN_VERSION_A' THEN RTRIM(LTRIM(@p_version_a))
+                WHEN M.MEASURE = 'SCP_PLAN_VERSION_B' THEN RTRIM(LTRIM(@p_version_b))
+                ELSE ''
+              END AS VERSION_NO
+			, AA.YYYYMMDD
+			, AA.QTY
+			,(ISNULL(AA.QTY,0) * ISNULL(   CASE WHEN AA.OPERATION_GROUP_ID = 'A' THEN 1
+										  	    WHEN AA.OPERATION_GROUP_ID = 'E' THEN FI.CONVERT_QTY_CELL
+											    WHEN AA.OPERATION_GROUP_ID = 'P' THEN IB.ACCUMULATED_CHILD_QTY
+										    END, 1)
+             ) AS CELL_QTY
+			, M.USER_SORT_ORDER_NO AS MEASURE_ORDER_NO
+	INTO    #TblDynamicPivot_SCP0081_02
+	FROM    #TblDynamicPivot_SCP0081_02_AA AA
+            JOIN #TblDynamicPivot_SCP0081_MEASURE M ON
+				    AA.MEASURE              = M.MEASURE
+----------------------------------------------------------------------------------------
+	        --LEFT JOIN SCP_MST_FINAL_ITEM FI WITH(NOLOCK) ON
+			      --  FI.OPERATION_GROUP      = 'E'
+		       -- AND FI.DIVISION_ID          = AA.DIVISION_ID
+		       -- AND FI.ITEM_ID              = AA.ITEM_ID
+		       -- AND FI.OPERATION_GROUP      = AA.OPERATION_GROUP_ID
+	        --LEFT JOIN SCM_MST_MODEL_FINAL_ITEM_BOM_V IB WITH(NOLOCK) ON
+			      --  IB.MODEL_ID             = AA.ITEM_ID
+		       -- AND IB.PLANT_ID	            = AA.PLANT_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","8","ID
+		       -- AND IB.OPERATION_GROUP_ID   = 'A'
+	        LEFT JOIN SCP_MST_FINAL_ITEM FI WITH(NOLOCK) ON
+		            AA.DIVISION_ID			= FI.DIVISION_ID
+		        AND AA.ITEM_ID				= FI.ITEM_ID
+		        AND AA.OPERATION_GROUP_ID	= FI.OPERATION_GROUP
+			    AND FI.OPERATION_GROUP      = 'E'
+	        LEFT JOIN SCM_MST_MODEL_FINAL_ITEM_BOM_V IB WITH(NOLOCK) ON
+			        AA.ITEM_ID				= IB.MODEL_ID
+		        AND AA.PLANT_ID				= IB.PLANT_ID
+		        AND IB.OPERATION_GROUP_ID   = 'A'
+----------------------------------------------------------------------------------------
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02_AA where MEASURE = 'RESULT';return;
+--select * from #TblDynamicPivot_SCP0081_02 where MEASURE = 'RESULT';return;
+--select  AA.*
+--from    #TblDynamicPivot_SCP0081_02 AA
+--        join #TblDynamicPivot_SCP0081_MEASURE M on
+--				    AA.MEASURE              = M.MEASURE
+--where   AA.MEASURE = 'WPP';return;
+                
+
+
+	/********************************************************************************
+	* VERSION 조회
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VERSION') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_VERSION;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VERSION_T') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_VERSION_T;
+
+print '@p_version_id : ' + @p_version_id
+
+	IF (@p_version_id IS NOT NULL AND @p_version_id != '')
+	BEGIN
+	-- TEMP TABLE VERSION
+		SELECT    A.DIVISION_ID
+				, B.OPERATION_GROUP_ID
+				, B.OPERATION_GROUP_NAME
+				, B.PLANT_ID
+				, (
+					SELECT  SITE_DESCRIPTION
+					FROM    SCM_MST_SITE WITH(NOLOCK)
+					WHERE       DIVISION_ID=A.DIVISION_ID
+							AND SCM_SITE_ID=A.SCM_SITE_ID
+				  ) AS SCM_SITE_NAME
+				, A.OPERATION_ID
+				, A.LINE_ID
+				, A.ITEM_ID
+				, ISNULL(D.NICK_NAME, '') AS NICK_NAME
+				, ISNULL(D.GROUP_CODE1, '') AS GROUP_CODE1
+				, ISNULL(D.GROUP_CODE2, '') AS GROUP_CODE2
+				, ISNULL(D.GROUP_CODE3, '') AS GROUP_CODE3
+				, ISNULL(D.GROUP_CODE4, '') AS GROUP_CODE4
+				, ISNULL(D.GROUP_CODE5, '') AS GROUP_CODE5
+				, IIF(A.VERSION_NO=@p_version_a, 'SCP_PLAN_VERSION_A', 'SCP_PLAN_VERSION_B') AS MEASURE
+                , A.VERSION_NO --chaan
+                , A.YYYYMMDD
+				, A.QTY
+                , A.PLAN_START_YYYYMMDD
+		INTO    #TblDynamicPivot_SCP0081_VERSION
+		FROM    SCP_ANL_PRODUCTION_PLAN_C A WITH(NOLOCK)
+				JOIN (
+						SELECT DISTINCT
+								  DIVISION_ID
+								, PLANT_ID
+								, OPERATION_GROUP_NAME
+								, OPERATION_GROUP_ID
+								, OPERATION_ID
+								, LINE_ID
+						FROM    #TblDynamicPivot_SCP0081_GROUP ) B ON
+										A.DIVISION_ID   = B.DIVISION_ID
+									AND A.OPERATION_ID  = B.OPERATION_ID
+									AND A.LINE_ID       = B.LINE_ID
+								LEFT JOIN #TblDynamicPivot_SCP0081_GROUP_CODE D ON
+										A.DIVISION_ID   = D.DIVISION_ID
+									AND A.ITEM_ID       = D.ITEM_ID
+						WHERE    1=1
+								AND A.VERSION_NO IN (@p_version_a, @p_version_b)
+								AND A.PLAN_TYPE = 'FN'
+								AND A.QTY       > 0
+								AND A.MEASURE   = 'PROD_PLAN_AMEND'
+								AND A.YYYYMMDD >= @p_from_yyyymmdd
+								AND A.YYYYMMDD <= @p_to_yyyymmdd
+								AND
+									(
+										ISNULL(@p_item_id, '') = ''
+										OR A.ITEM_ID IN
+											(
+												SELECT    token
+												FROM      dbo.String_Split(@p_item_id,',')
+											)
+									)
+								AND
+									(
+										ISNULL(@p_nickname, '') = ''
+										OR D.NICK_NAME LIKE '%' + @p_nickname + '%'
+									)
+								-- 2022.03.22 : DIVISION 조건 추가
+                                AND (
+                                           ISNULL(@p_division_id, '') = ''
+                                        OR (1 = IIF(SUBSTRING(@p_division_id, 1, 2) = 'EE', 1, IIF(A.DIVISION_ID IN (SELECT token FROM dbo.String_Split(@p_division_id,',')), 1, 0)))
+                                    );
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","9","--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_VERSION;return;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VER_A') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_VER_A;
+
+	SELECT  A.*
+    INTO    #TblDynamicPivot_SCP0081_VER_A
+    FROM
+		    (
+			    SELECT    DIVISION_ID
+					    , OPERATION_GROUP_ID
+					    , OPERATION_GROUP_NAME
+					    , PLANT_ID
+					    , SCM_SITE_NAME
+					    , OPERATION_ID
+					    , LINE_ID
+					    , ITEM_ID
+					    , NICK_NAME
+					    , GROUP_CODE1
+					    , GROUP_CODE2
+					    , GROUP_CODE3
+					    , GROUP_CODE4
+					    , GROUP_CODE5
+					    , MEASURE
+                        , VERSION_NO --chaan
+					    , YYYYMMDD
+					    , QTY
+			    FROM    #TblDynamicPivot_SCP0081_VERSION A WITH(NOLOCK)
+			    WHERE   MEASURE = 'SCP_PLAN_VERSION_A'
+			    UNION ALL
+			    SELECT    DIVISION_ID
+					    , OPERATION_GROUP_ID
+					    , OPERATION_GROUP_NAME
+					    , PLANT_ID
+					    , SCM_SITE_NAME
+					    , OPERATION_ID
+					    , LINE_ID
+					    , ITEM_ID
+					    , NICK_NAME
+					    , GROUP_CODE1
+					    , GROUP_CODE2
+					    , GROUP_CODE3
+					    , GROUP_CODE4
+					    , GROUP_CODE5
+					    , 'SCP_PLAN_VERSION_B' AS MEASURE
+                        , RTRIM(LTRIM(@p_version_b)) AS VERSION_NO --chaan
+					    , YYYYMMDD
+					    , 0 AS QT
+			    FROM    #TblDynamicPivot_SCP0081_VERSION A WITH(NOLOCK)
+			    WHERE   MEASURE = 'SCP_PLAN_VERSION_A'
+		    ) A;
+
+       
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_NEW_A') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_NEW_A;
+
+	SELECT    DIVISION_ID
+			, OPERATION_GROUP_ID
+			, OPERATION_GROUP_NAME
+			, PLANT_ID
+			, SCM_SITE_NAME
+			, OPERATION_ID
+			, LINE_ID
+			, ITEM_ID
+			, NICK_NAME
+			, GROUP_CODE1
+			, GROUP_CODE2
+			, GROUP_CODE3
+			, GROUP_CODE4
+			, GROUP_CODE5
+			, MEASURE
+            , VERSION_NO
+			, YYYYMMDD
+			, Sum(QTY) AS QTY
+    INTO    #TblDynamicPivot_SCP0081_NEW_A
+	FROM    #TblDynamicPivot_SCP0081_VER_A A WITH(NOLOCK)
+	GROUP BY  DIVISION_ID
+			, OPERATION_GROUP_ID
+			, OPERATION_GROUP_NAME
+			, PLANT_ID
+			, SCM_SITE_NAME
+			, OPERATION_ID
+			, LINE_ID
+			, ITEM_ID
+			, NICK_NAME
+			, GROUP_CODE1
+			, GROUP_CODE2
+			, GROUP_CODE3
+			, GROUP_CODE4
+			, GROUP_CODE5
+			, MEASURE
+            , VERSION_NO --chaan
+			, YYYYMMDD
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VER_B') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_VER_B;
+
+	SELECT  A.*
+    INTO    #TblDynamicPivot_SCP0081_VER_B
+    FROM
+		    (
+			    SELECT    DIVISION_ID
+					    , OPERATION_GROUP_ID
+					    , OPERATION_GROUP_NAME
+					    , PLANT_ID
+					    , SCM_SITE_NAME
+					    , OPERATION_ID
+					    , LINE_ID
+					    , ITEM_ID
+					    , NICK_NAME
+					    , GROUP_CODE1
+					    , GROUP_CODE2
+					    , GROUP_CODE3
+					    , GROUP_CODE4
+					    , GROUP_CODE5
+					    , MEASURE
+                        , VERSION_NO --chaan
+					    , YYYYMMDD
+					    , QTY
+			    FROM    #TblDynamicPivot_SCP0081_VERSION A WITH(NOLOCK)
+			    WHERE   MEASURE = 'SCP_PLAN_VERSION_B'
+			    UNION ALL
+			    SELECT    DIVISION_ID
+					    , OPERATION_GROUP_ID
+					    , OPERATION_GROUP_NAME
+					    , PLANT_ID
+					    , SCM_SITE_NAME
+					    , OPERATION_ID
+					    , LINE_ID
+					    , ITEM_ID
+					    , NICK_NAME
+					    , GROUP_CODE1
+					    , GROUP_CODE2
+					    , GROUP_CODE3
+					    , GROUP_CODE4
+					    , GROUP_CODE5
+					    , 'SCP_PLAN_VERSION_A' AS MEASURE
+                        , RTRIM(LTRIM(@p_version_a)) AS VERSION_NO --chaan
+					    , YYYYMMDD
+					    , 0 AS QTY
+			    FROM    #TblDynamicPivot_SCP0081_VERSION A WITH(NOLOCK)
+			    WHERE   MEASURE = 'SCP_PLAN_VERSION_B'
+		    ) A
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_NEW_B') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_NEW_B;
+
+	SELECT    DIVISION_ID
+			, OPERATION_GROUP_ID
+			, OPERATION_GROUP_NAME
+			, PLANT_ID
+			,"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","10"," SCM_SITE_NAME
+			, OPERATION_ID
+			, LINE_ID
+			, ITEM_ID
+			, NICK_NAME
+			, GROUP_CODE1
+			, GROUP_CODE2
+			, GROUP_CODE3
+			, GROUP_CODE4
+			, GROUP_CODE5
+			, MEASURE
+            , VERSION_NO --chaan
+			, YYYYMMDD
+			, Sum(QTY) AS QTY
+    INTO    #TblDynamicPivot_SCP0081_NEW_B
+	FROM    #TblDynamicPivot_SCP0081_VER_B WITH(NOLOCK)
+	GROUP BY  DIVISION_ID
+			, OPERATION_GROUP_ID
+			, OPERATION_GROUP_NAME
+			, PLANT_ID
+			, SCM_SITE_NAME
+			, OPERATION_ID
+			, LINE_ID
+			, ITEM_ID
+			, NICK_NAME
+			, GROUP_CODE1
+			, GROUP_CODE2
+			, GROUP_CODE3
+			, GROUP_CODE4
+			, GROUP_CODE5
+			, MEASURE
+            , VERSION_NO
+			, YYYYMMDD
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VERSION_KEYS') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_VERSION_KEYS;
+
+    SELECT DISTINCT
+              A.DIVISION_ID
+			, A.OPERATION_GROUP_ID
+			, A.OPERATION_GROUP_NAME
+			, A.PLANT_ID
+			, A.SCM_SITE_NAME
+			, A.OPERATION_ID
+			, A.LINE_ID
+			, A.ITEM_ID
+			, A.NICK_NAME
+			, A.GROUP_CODE1
+			, A.GROUP_CODE2
+			, A.GROUP_CODE3
+			, A.GROUP_CODE4
+			, A.GROUP_CODE5
+			, A.MEASURE
+			, A.YYYYMMDD                    
+    INTO    #TblDynamicPivot_SCP0081_VERSION_KEYS
+    FROM    
+        (
+            SELECT    DIVISION_ID
+			        , OPERATION_GROUP_ID
+			        , OPERATION_GROUP_NAME
+			        , PLANT_ID
+			        , SCM_SITE_NAME
+			        , OPERATION_ID
+			        , LINE_ID
+			        , ITEM_ID
+			        , NICK_NAME
+			        , GROUP_CODE1
+			        , GROUP_CODE2
+			        , GROUP_CODE3
+			        , GROUP_CODE4
+			        , GROUP_CODE5
+			        , MEASURE
+			        , YYYYMMDD                    
+            FROM    #TblDynamicPivot_SCP0081_NEW_A
+            UNION
+            SELECT    DIVISION_ID
+			        , OPERATION_GROUP_ID
+			        , OPERATION_GROUP_NAME
+			        , PLANT_ID
+			        , SCM_SITE_NAME
+			        , OPERATION_ID
+			        , LINE_ID
+			        , ITEM_ID
+			        , NICK_NAME
+			        , GROUP_CODE1
+			        , GROUP_CODE2
+			        , GROUP_CODE3
+			        , GROUP_CODE4
+			        , GROUP_CODE5
+			        , MEASURE
+			        , YYYYMMDD                    
+            FROM    #TblDynamicPivot_SCP0081_NEW_B
+        ) A
+
+--TESTING : OK
+--select * From #TblDynamicPivot_SCP0081_VERSION_KEYS;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_JOIN_A') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_JOIN_A;
+
+	SELECT  A.*
+    INTO    #TblDynamicPivot_SCP0081_JOIN_A
+    FROM
+		(
+			SELECT    K.DIVISION_ID
+					, K.OPERATION_GROUP_ID
+					, K.OPERATION_GROUP_NAME
+					, K.PLANT_ID
+					, K.SCM_SITE_NAME
+					, K.OPERATION_ID
+					, K.LINE_ID
+					, K.ITEM_ID
+					, K.NICK_NAME
+					, K.GROUP_CODE1
+					, K.GROUP_CODE2
+					, K.GROUP_CODE3
+					, K.GROUP_CODE4
+					, K.GROUP_CODE5
+					, 'GAP' AS MEASURE
+                    , ''    AS VERSION_NO
+					, K.YYYYMMDD
+					, (ISNULL(A.QTY, 0) - ISNULL(B.QTY, 0)) AS QTY
+			FROM    #TblDynamicPivot_SCP0081_VERSION_KEYS K
+                    LEFT JOIN #TblDynamicPivot_SCP0081_NEW_A A ON
+							K.DIVISION_ID           = A.DIVISION_ID
+						AND K.OPERATION_GROUP_ID    = A.OPERATION_GROUP_ID
+						AND K.OPERATION_GROUP_NAME  = A.OPERATION_GROUP_NAME
+						AND K.PLANT_ID              = A.PLANT_ID
+						AND K.SCM_SITE_NAME         = A.SCM_SITE_NAME
+						AND K.OPERATION_ID          = A.OPERATION_ID
+						AND K.LINE_ID               = A.LINE_ID
+						AND K.ITEM_ID               = A.ITEM_ID
+						AND K.NICK_NAME             = A.NICK_NAME
+						AND K.GROUP_CODE1           = A.GROUP_CODE1
+						AND K.GROUP_CODE2           = A.GROUP_CODE2
+						AND K.GROUP_CODE3           = A.GROUP_CODE3
+						AND K.GROUP_CODE4           = A.GROUP_CODE4
+						AND K.GROUP_CODE5           = A.GROUP_CODE5
+						AND K.MEASURE               = A.MEASURE
+						AND K.YYYYMMDD              = A.YYYYMMDD
+                    LEFT JOIN #TblDynamicPivot_SCP0081_NEW_B B ON
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","11","							K.DIVISION_ID           = B.DIVISION_ID
+						AND K.OPERATION_GROUP_ID    = B.OPERATION_GROUP_ID
+						AND K.OPERATION_GROUP_NAME  = B.OPERATION_GROUP_NAME
+						AND K.PLANT_ID              = B.PLANT_ID
+						AND K.SCM_SITE_NAME         = B.SCM_SITE_NAME
+						AND K.OPERATION_ID          = B.OPERATION_ID
+						AND K.LINE_ID               = B.LINE_ID
+						AND K.ITEM_ID               = B.ITEM_ID
+						AND K.NICK_NAME             = B.NICK_NAME
+						AND K.GROUP_CODE1           = B.GROUP_CODE1
+						AND K.GROUP_CODE2           = B.GROUP_CODE2
+						AND K.GROUP_CODE3           = B.GROUP_CODE3
+						AND K.GROUP_CODE4           = B.GROUP_CODE4
+						AND K.GROUP_CODE5           = B.GROUP_CODE5
+						AND K.MEASURE               = B.MEASURE
+						AND K.YYYYMMDD              = B.YYYYMMDD
+		) A
+
+--TESTING : OK
+--select * From #TblDynamicPivot_SCP0081_NEW_A;
+--select * From #TblDynamicPivot_SCP0081_NEW_B;
+--select * From #TblDynamicPivot_SCP0081_JOIN_A;return;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_AA') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_AA;
+
+	SELECT  A.*
+    INTO    #TblDynamicPivot_SCP0081_AA
+    FROM
+		(
+			SELECT  *
+			FROM    #TblDynamicPivot_SCP0081_NEW_A
+			UNION ALL
+			SELECT  *
+			FROM    #TblDynamicPivot_SCP0081_NEW_B
+			UNION ALL
+			SELECT  *
+			FROM    #TblDynamicPivot_SCP0081_JOIN_A
+		) A;
+
+--TESGING : OK;
+--select * from #TblDynamicPivot_SCP0081_AA;return;
+--select * from #TblDynamicPivot_SCP0081_AA where MEASURE = 'WPP';return;
+
+	SELECT    AA.DIVISION_ID
+			, AA.OPERATION_GROUP_ID
+			, AA.OPERATION_GROUP_NAME
+			, AA.PLANT_ID
+			, AA.SCM_SITE_NAME
+			, AA.OPERATION_ID
+			, AA.LINE_ID
+			, AA.ITEM_ID
+			, AA.NICK_NAME
+			, AA.GROUP_CODE1
+			, AA.GROUP_CODE2
+			, AA.GROUP_CODE3
+			, AA.GROUP_CODE4
+			, AA.GROUP_CODE5
+			, BB.MEASURE_NAME AS MEASURE
+            , AA.VERSION_NO --chaan
+			, AA.YYYYMMDD
+			, AA.QTY
+			, (ISNULL(AA.QTY,0) * ISNULL(CASE WHEN AA.OPERATION_GROUP_ID = 'A' THEN 1
+											  WHEN AA.OPERATION_GROUP_ID = 'E' THEN FI.CONVERT_QTY_CELL
+											  WHEN AA.OPERATION_GROUP_ID = 'P' THEN IB.ACCUMULATED_CHILD_QTY
+										 END ,1)
+              ) AS CELL_QTY
+			, BB.USER_SORT_ORDER_NO AS MEASURE_ORDER_NO
+	INTO    #TblDynamicPivot_SCP0081_VERSION_T
+	FROM    #TblDynamicPivot_SCP0081_AA AA
+
+			INNER MERGE JOIN #TblDynamicPivot_SCP0081_MEASURE BB ON
+
+					AA.MEASURE              = BB.MEASURE
+		    --LEFT JOIN SCP_MST_FINAL_ITEM FI WITH(NOLOCK) ON
+      --              FI.OPERATION_GROUP      = 'E'
+      --          AND FI.DIVISION_ID		    = AA.DIVISION_ID
+      --          AND FI.ITEM_ID			    = AA.ITEM_ID
+      --          AND FI.OPERATION_GROUP      = AA.OPERATION_GROUP_ID
+      --      LEFT JOIN SCM_MST_MODEL_FINAL_ITEM_BOM_V IB WITH(NOLOCK) ON
+      --              IB.MODEL_ID			    = AA.ITEM_ID
+      --          AND IB.PLANT_ID			    = AA.PLANT_ID
+      --          AND IB.OPERATION_GROUP_ID	= 'A'
+	        LEFT JOIN SCP_MST_FINAL_ITEM FI WITH(NOLOCK) ON
+		            AA.DIVISION_ID			= FI.DIVISION_ID
+		        AND AA.ITEM_ID				= FI.ITEM_ID
+		        AND AA.OPERATION_GROUP_ID	= FI.OPERATION_GROUP
+			    AND FI.OPERATION_GROUP      = 'E'
+	        LEFT JOIN SCM_MST_MODEL_FINAL_ITEM_BOM_V IB WITH(NOLOCK) ON
+			        AA.ITEM_ID				= IB.MODEL_ID
+		        AND AA.PLANT_ID				= IB.PLANT_ID
+		        AND IB.OPERATION_GROUP_ID   = 'A'
+	END
+
+--TESGING : OK;
+--select * from #TblDynamicPivot_SCP0081_VERSION_T;return;
+
+	/********************************************************************************
+	* SUB TOTAL 조회
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_SUB') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_SUB
+
+	CREATE TABLE #TblDynamicPivot_SCP0081_SUB
+	(
+		  DIVISION_ID             NVARCHAR(50)
+		, OPERATION_GROUP_ID      NVARCHAR(50)
+		, OPERATION_GROUP_NAME    NVARCHAR(50)
+		, PLANT"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","12","_ID                NVARCHAR(50)
+		, SCM_SITE_NAME           NVARCHAR(50)
+		, OPERATION_ID            NVARCHAR(50)
+		, LINE_ID                 NVARCHAR(50)
+		, ITEM_ID                 NVARCHAR(50)
+		, NICK_NAME               NVARCHAR(150)
+		, GROUP_CODE1             NVARCHAR(150)
+		, GROUP_CODE2             NVARCHAR(150)
+		, GROUP_CODE3             NVARCHAR(150)
+		, GROUP_CODE4             NVARCHAR(150)
+		, GROUP_CODE5             NVARCHAR(150)
+		, MEASURE                 NVARCHAR(50)
+		, VERSION_NO              NVARCHAR(50)
+		, YYYYMMDD                NVARCHAR(8)
+		, QTY                     NUMERIC(20,10)
+		, CELL_QTY                NUMERIC(20,10)
+		, MEASURE_ORDER_NO        INT
+	);
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_COLUMN;return;
+
+	-- SUB TOTAL 선택IF @p_group_column != ''
+	BEGIN
+		SET @V_INDEX                = 0;
+		DECLARE @V_COLUMN_INDEX INT = 0;
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT  COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			IF @COL = @p_group_column
+			BEGIN
+				SET @V_COLUMN_INDEX = @V_INDEX;
+				BREAK;
+			END;
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END;
+
+		SET @V_INDEX    = 0;
+		SET @mEXEC      = 'INSERT INTO #TblDynamicPivot_SCP0081_SUB ' + CHAR(10);
+		SET @mEXEC      = @mEXEC + '( ' + CHAR(10);
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+			(
+				SELECT    COL
+				FROM      #TblDynamicPivot_SCP0081_COLUMN
+				WHERE     USER_SORT_ORDER_NO = (@V_INDEX + 1)
+			);
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '    ' + @COL2 + ','
+				END
+
+				SET @mEXEC = @mEXEC + '    ' + @COL + CHAR(10);
+			END
+			ELSE
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '   ,' + @COL2 + CHAR(10);
+				END
+
+				SET @mEXEC = @mEXEC + '   ,' + @COL + CHAR(10);
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		--SET @mEXEC = @mEXEC + '    , MEASURE' + CHAR(10);
+		SET @mEXEC     = @mEXEC + '   , YYYYMMDD ' + CHAR(10);
+		SET @mEXEC     = @mEXEC + '   , QTY ' + CHAR(10);
+		SET @mEXEC     = @mEXEC + '   , CELL_QTY ' + CHAR(10);--chaan
+		SET @mEXEC     = @mEXEC + '   , MEASURE_ORDER_NO ' + CHAR(10);
+		SET @mEXEC     = @mEXEC + ') ' + CHAR(10);
+		SET @V_INDEX   = 0;
+		SET @mEXEC     = @mEXEC + 'SELECT' + CHAR(10);
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+			(
+				SELECT  COL
+				FROM    #TblDynamicPivot_SCP0081_COLUMN
+				WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+			);
+
+			--PRINT @COL;
+			--PRINT @V_COLUMN_INDEX;
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '        ' + @COL2 +',' + CHAR(10);
+				END
+
+				SET @mEXEC = @mEXEC + '        ' + @COL + CHAR(10);
+			END
+			ELSE
+			BEGIN
+				IF(@V_INDEX > @V_COLUMN_INDEX)
+				BEGIN
+					IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+					BEGIN
+						SET @mEXEC = @mEXEC + '       ,''ZZZ Total'' AS ' + @COL2 + CHAR(10);
+					END
+
+					IF @COL = 'MEASURE' OR @COL = 'VERSION_NO'
+						SET @mEXEC = @mEXEC + '       ,' + @COL + CHAR(10);
+					ELSE
+						SET @mEXEC = @mEXEC + '       ,''ZZZ Total'' AS '+@COL + CHAR(10);
+					END
+				ELSE
+				BEGIN
+					IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+					BEGIN
+						SET @mEXEC = @mEXEC + '       ,' + @COL2 + CHAR(10);
+					END
+
+					SET @mEXEC = @mEXEC + '       ,' + @COL + CHAR(10)"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","13",";
+				END;
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		--SET @mEXEC = @mEXEC + '     , MEASURE  ' + CHAR(10);
+		SET @mEXEC = @mEXEC + '       , YYYYMMDD ' +  CHAR(10);
+		SET @mEXEC = @mEXEC + '       , SUM(QTY) AS QTY ' + CHAR(10);
+		SET @mEXEC = @mEXEC + '       , SUM(CELL_QTY) AS CELL_QTY ' + CHAR(10);--chaan
+		SET @mEXEC = @mEXEC + '       , MEASURE_ORDER_NO ' + CHAR(10);
+
+		IF @p_version_id = ''
+		BEGIN
+			SET @mEXEC = @mEXEC + '                FROM    #TblDynamicPivot_SCP0081_02' + CHAR(10);
+		END
+		ELSE
+		BEGIN
+			SET @mEXEC = @mEXEC + '                FROM    (
+															  SELECT
+																	    DIVISION_ID
+																	  , OPERATION_GROUP_ID
+																	  , OPERATION_GROUP_NAME
+																	  , PLANT_ID
+																	  , SCM_SITE_NAME
+																	  , OPERATION_ID
+																	  , LINE_ID
+																	  , ITEM_ID
+																	  , NICK_NAME
+																	  , GROUP_CODE1
+																	  , GROUP_CODE2
+																	  , GROUP_CODE3
+																	  , GROUP_CODE4
+																	  , GROUP_CODE5
+																	  , MEASURE
+																	  , VERSION_NO
+																	  , YYYYMMDD
+																	  , QTY
+																	  , CELL_QTY
+																	  , MEASURE_ORDER_NO
+															  FROM    #TblDynamicPivot_SCP0081_VERSION_T
+															  UNION ALL
+															  SELECT
+																	    DIVISION_ID
+																	  , OPERATION_GROUP_ID
+																	  , OPERATION_GROUP_NAME
+																	  , PLANT_ID
+																	  , SCM_SITE_NAME
+																	  , OPERATION_ID
+																	  , LINE_ID
+																	  , ITEM_ID
+																	  , NICK_NAME
+																	  , GROUP_CODE1
+																	  , GROUP_CODE2
+																	  , GROUP_CODE3
+																	  , GROUP_CODE4
+																	  , GROUP_CODE5
+																	  , MEASURE
+																	  , VERSION_NO
+																	  , YYYYMMDD
+																	  , QTY
+																	  , CELL_QTY
+																	  , MEASURE_ORDER_NO
+															  FROM    #TblDynamicPivot_SCP0081_02
+														  ) AA' + CHAR(10);
+		END
+
+		SET @mEXEC     = @mEXEC + '              GROUP BY' + CHAR(10);
+		SET @V_INDEX = 0;
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT    COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE    USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '     '+@COL2 +','
+				END
+
+
+				SET @mEXEC = @mEXEC + '        '+@COL
+			END
+			ELSE
+			BEGIN
+				IF(@V_INDEX <= @V_COLUMN_INDEX)
+				BEGIN
+					IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+					BEGIN
+						SET @mEXEC = @mEXEC + '     ,' + @COL2
+					END
+
+					SET @mEXEC = @mEXEC + '        ,' + @COL
+				END;
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		SET @mEXEC					= @mEXEC + '                     , MEASURE' + CHAR(10);
+		SET @mEXEC					= @mEXEC + '                     , VERSION_NO' + CHAR(10);
+		SET @mEXEC					= @mEXEC + '                     , YYYYMMDD' + CHAR(10);
+		SET @mEXEC					= @mEXEC + '                     , MEASURE_ORDER_NO' + CHAR(10);
+
+--TESTING : OK
+--exec debug_log @mEXEC, 'T';return;
+--select * from #TblDynamicPivot_SCP0081_02;return;
+
+		EXEC (@mEXEC);
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_SUB;return;
+	END;
+
+	/********************************************************************************
+	* 임시테이블만들기- Main 조회 테이블
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_01') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0081_01
+
+	CREA"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","14","TE TABLE #TblDynamicPivot_SCP0081_01
+	(
+		  DIVISION_ID             NVARCHAR(50)
+		, OPERATION_GROUP_ID      NVARCHAR(50)
+		, OPERATION_GROUP_NAME    NVARCHAR(50)
+		, PLANT_ID                NVARCHAR(50)
+		, SCM_SITE_NAME			  NVARCHAR(50)
+		, OPERATION_ID            NVARCHAR(50)
+		, LINE_ID                 NVARCHAR(50)
+		, ITEM_ID                 NVARCHAR(50)
+		, NICK_NAME               NVARCHAR(150)
+		, GROUP_CODE1             NVARCHAR(150)
+		, GROUP_CODE2             NVARCHAR(150)
+		, GROUP_CODE3             NVARCHAR(150)
+		, GROUP_CODE4             NVARCHAR(150)
+		, GROUP_CODE5             NVARCHAR(150)
+		, MEASURE                 NVARCHAR(50)
+		, VERSION_NO              NVARCHAR(50)
+		, YYYYMMDD                NVARCHAR(10)
+		, QTY                     NUMERIC(20, 10)
+		, CELL_QTY                NUMERIC(20, 10)
+		, MEASURE_ORDER_NO        NUMERIC(2)
+		, YYYYMM                  NVARCHAR(6)
+		, ISO_WEEK                NVARCHAR(10)
+	);
+
+	SET @mEXEC = '';
+
+	/*SqlFormat begin
+INSERT INTO #TblDynamicPivot_SCP0081_01
+(
+    DIVISION_ID,
+    OPERATION_GROUP_ID,
+    OPERATION_GROUP_NAME,
+    PLANT_ID,
+    SCM_SITE_NAME,
+    OPERATION_ID,
+    LINE_ID,
+    ITEM_ID,
+    NICK_NAME,
+    GROUP_CODE1,
+    GROUP_CODE2,
+    GROUP_CODE3,
+    GROUP_CODE4,
+    GROUP_CODE5,
+    MEASURE,
+    VERSION_NO,
+    YYYYMMDD,
+    QTY,
+    CELL_QTY,
+    MEASURE_ORDER_NO,
+    YYYYMM,
+    ISO_WEEK
+)
+    SELECT
+            AA.DIVISION_ID,
+            AA.OPERATION_GROUP_ID,
+            AA.OPERATION_GROUP_NAME,
+            AA.PLANT_ID,
+            AA.SCM_SITE_NAME,
+            AA.OPERATION_ID,
+            AA.LINE_ID,
+            AA.ITEM_ID,
+            AA.NICK_NAME,
+            AA.GROUP_CODE1,
+            AA.GROUP_CODE2,
+            AA.GROUP_CODE3,
+            AA.GROUP_CODE4,
+            AA.GROUP_CODE5,
+            AA.MEASURE,
+            AA.VERSION_NO,
+            'D_' + ISNULL(AA.YYYYMMDD, 20211101) AS YYYYMMDD,
+            ISNULL(AA.QTY, 0) AS QTY,
+            ISNULL(AA.CELL_QTY, 0) AS CELL_QTY,
+            AA.MEASURE_ORDER_NO,
+            O.BASIS_YYYYMM AS YYYYMM,
+            RIGHT(O.BASIS_YYYYMM, 4)+O.ISO_WEEK AS ISO_WEEK
+     FROM    (
+                SELECT
+                    DIVISION_ID
+                    OPERATION_GROUP_ID
+                    OPERATION_GROUP_NAME
+                    PLANT_ID
+                    SCM_SITE_NAME
+                    OPERATION_ID
+                    LINE_ID
+                    ITEM_ID
+                    NICK_NAME
+                    GROUP_CODE1
+                    GROUP_CODE2
+                    GROUP_CODE3
+                    GROUP_CODE4
+                    GROUP_CODE5
+                    MEASURE
+                    VERSION_NO
+                    YYYYMMDD
+                    QTY
+                    CELL_QTY
+                    MEASURE_ORDER_NO
+                    FROM    #TblDynamicPivot_SCP0081_02
+             ) AA
+            JOIN SCM_SYS_CALENDAR_M O WITH(NOLOCK) ON ISNULL(AA.YYYYMMDD, 20211101) = O.BASIS_YYYYMMDD
+SqlFormat end*/
+
+	SET @mEXEC = 'INSERT INTO #TblDynamicPivot_SCP0081_01' +CHAR(10);
+
+	SET @mEXEC = @mEXEC + '(' + CHAR(10);
+
+	SET @V_INDEX = 0;
+
+	WHILE @v_cnt_usr_column > @V_INDEX
+	BEGIN
+		SET @COL =
+			(
+				SELECT  COL
+				FROM    #TblDynamicPivot_SCP0081_COLUMN
+				WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+			);
+
+		-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+		IF @COL = 'OPERATION_GROUP_NAME'
+			SET @COL2 = 'OPERATION_GROUP_ID';
+
+		IF @COL = 'SCM_SITE_NAME'
+			SET @COL2 = 'PLANT_ID';
+
+		IF (@V_INDEX = 0)
+		BEGIN
+			IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+			BEGIN
+				SET @mEXEC = @mEXEC + '     '+@COL2 +',' +Char(10);
+			END
+
+			SET @mEXEC = @mEXEC + '        '+@COL +Char(10);
+		END
+		ELSE
+		BEGIN
+			IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+			BEGIN
+				SET @mEXEC = @mEXEC + '     ,' + @COL2
+			END
+
+			SET @mEXEC = @mEXEC + '        ,' + "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","15","@COL
+
+		END
+
+		SET @V_INDEX = @V_INDEX + 1;
+	END
+
+	--SET @mEXEC = @mEXEC + '                 , MEASURE
+	SET @mEXEC = @mEXEC + '                 , YYYYMMDD' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , QTY' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , CELL_QTY' + CHAR(10);--chaan
+	SET @mEXEC = @mEXEC + '                 , MEASURE_ORDER_NO' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , YYYYMM' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , ISO_WEEK' + CHAR(10);
+
+	SET @mEXEC = @mEXEC + ')' + CHAR(10);
+
+
+	SET @V_INDEX    = 0;
+	SET @mEXEC        = @mEXEC + 'SELECT' + CHAR(10);
+
+	WHILE @v_cnt_usr_column > @V_INDEX
+	BEGIN
+		SET @COL =
+			(
+				SELECT  COL
+				FROM    #TblDynamicPivot_SCP0081_COLUMN
+				WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+			);
+
+		-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+		IF @COL = 'OPERATION_GROUP_NAME'
+			SET @COL2 = 'OPERATION_GROUP_ID';
+
+		IF @COL = 'SCM_SITE_NAME'
+			SET @COL2 = 'PLANT_ID';
+
+		IF (@V_INDEX = 0)
+		BEGIN
+			IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+			BEGIN
+				SET @mEXEC = @mEXEC + '     AA.'+@COL2 +','
+			END
+
+			SET @mEXEC = @mEXEC + '        AA.'+@COL
+		END
+		ELSE
+		BEGIN
+			IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+			BEGIN
+				SET @mEXEC = @mEXEC + '     ,AA.'+@COL2
+			END
+
+			SET @mEXEC = @mEXEC + '        ,AA.'+@COL
+		END
+
+		SET @V_INDEX = @V_INDEX + 1;
+	END
+
+	--SET @mEXEC = @mEXEC + '                 , AA.MEASURE
+	SET @mEXEC = @mEXEC + '                 , ''D_'' + ISNULL(AA.YYYYMMDD, ' + @p_from_yyyymmdd + ') AS YYYYMMDD' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , ISNULL(AA.QTY, 0) AS QTY' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , ISNULL(AA.CELL_QTY, 0) AS CELL_QTY' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , AA.MEASURE_ORDER_NO' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , O.BASIS_YYYYMM AS YYYYMM' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , RIGHT(O.BASIS_YYYYMM, 4)+O.ISO_WEEK AS ISO_WEEK' + CHAR(10);
+
+	SET @mEXEC = @mEXEC + '                 FROM    (' + CHAR(10);
+
+	-- SELECT    #TblDynamicPivot_SCP0081_02
+	SET @V_INDEX = 0;
+	SET @mEXEC = @mEXEC + 'SELECT' + CHAR(10);
+
+	WHILE @v_cnt_usr_column > @V_INDEX
+	BEGIN
+		SET @COL =
+			(
+				SELECT  COL
+				FROM    #TblDynamicPivot_SCP0081_COLUMN
+				WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+			);
+
+		-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+		IF @COL = 'OPERATION_GROUP_NAME'
+			SET @COL2 = 'OPERATION_GROUP_ID';
+
+		IF @COL = 'SCM_SITE_NAME'
+			SET @COL2 = 'PLANT_ID';
+
+		IF (@V_INDEX = 0)
+		BEGIN
+			IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+			BEGIN
+				SET @mEXEC = @mEXEC + '     '+@COL2 +','
+			END
+
+			SET @mEXEC = @mEXEC + '        '+@COL
+		END
+		ELSE
+		BEGIN
+			IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+			BEGIN
+				SET @mEXEC = @mEXEC + '     ,' + @COL2
+			END
+
+			SET @mEXEC = @mEXEC + '        ,' + @COL
+
+		END
+
+		SET @V_INDEX = @V_INDEX + 1;
+	END
+
+	--SET @mEXEC = @mEXEC + '                 , MEASURE
+	SET @mEXEC = @mEXEC + '                 , YYYYMMDD' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , QTY' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 , CELL_QTY' + CHAR(10);--chaan
+	SET @mEXEC = @mEXEC + '                 , MEASURE_ORDER_NO' + CHAR(10);
+
+	SET @mEXEC = @mEXEC + '                FROM    #TblDynamicPivot_SCP0081_02' + CHAR(10);
+
+	-- VERSION
+	IF @p_version_id != ''
+	BEGIN
+		SET @mEXEC = @mEXEC + '    UNION ALL' + CHAR(10);
+
+		-- SELECT    #TblDynamicPivot_SCP0081_VERSION_T
+		SET @V_INDEX     = 0;
+		SET @mEXEC         = @mEXEC + 'SELECT' + CHAR(10);
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT    COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE    USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERA"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","16","TION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '     '+@COL2 +','
+				END
+
+				SET @mEXEC = @mEXEC + '        '+@COL
+			END
+			ELSE
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '     ,' + @COL2
+				END
+
+				SET @mEXEC = @mEXEC + '        ,' + @COL
+
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		--SET @mEXEC = @mEXEC + '                 , MEASURE
+		SET @mEXEC = @mEXEC + '                 , YYYYMMDD' + CHAR(10);
+		SET @mEXEC = @mEXEC + '                 , QTY' + CHAR(10);
+		SET @mEXEC = @mEXEC + '                 , CELL_QTY' + CHAR(10);--chaan
+		SET @mEXEC = @mEXEC + '                 , MEASURE_ORDER_NO' + CHAR(10);
+
+		SET @mEXEC = @mEXEC + '    FROM     #TblDynamicPivot_SCP0081_VERSION_T' + CHAR(10);
+	END
+
+	-- SUB TOTAL
+	IF @p_group_column != ''
+	BEGIN
+		SET @mEXEC = @mEXEC + '    UNION ALL' + CHAR(10);
+
+		-- SELECT    #TblDynamicPivot_SCP0081_SUB
+		SET @V_INDEX = 0;
+		SET @mEXEC = @mEXEC + 'SELECT' + CHAR(10);
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT    COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE    USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '     '+@COL2 +','
+				END
+
+				SET @mEXEC = @mEXEC + '        '+@COL
+			END
+			ELSE
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '     ,' + @COL2
+				END
+
+				SET @mEXEC = @mEXEC + '        ,' + @COL
+
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		--SET @mEXEC = @mEXEC + '                 , MEASURE
+		SET @mEXEC = @mEXEC + '                 , YYYYMMDD' + CHAR(10);
+		SET @mEXEC = @mEXEC + '                 , QTY' + CHAR(10);
+		SET @mEXEC = @mEXEC + '                 , CELL_QTY' + CHAR(10);--chaan
+		SET @mEXEC = @mEXEC + '                 , MEASURE_ORDER_NO' + CHAR(10);
+		SET @mEXEC = @mEXEC + '            FROM     #TblDynamicPivot_SCP0081_SUB' + CHAR(10);
+	END
+
+	SET @mEXEC = @mEXEC + '                 ) AA' + CHAR(10);
+	SET @mEXEC = @mEXEC + '                 JOIN SCM_SYS_CALENDAR_M O WITH(NOLOCK) ON ISNULL(AA.YYYYMMDD, ' + @p_from_yyyymmdd + ') = O.BASIS_YYYYMMDD' + CHAR(10);
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_02;;return;
+
+--TESTING : OK
+--exec debug_log @mEXEC, 'T';return;
+
+	EXEC (@mEXEC);
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_01;return;
+
+--    UPDATE #TblDynamicPivot_SCP0081_01
+--    SET
+--        VERSION_NO = IIF(MEASURE = 'SCP PLAN_Version A', RTRIM(LTRIM(@p_version_a)), IIF(MEASURE = 'SCP PLAN_Version B', RTRIM(LTRIM(@p_version_b)), ''))
+--    WHERE   MEASURE IN ('SCP PLAN_Version A', 'SCP PLAN_Version B')
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_01;return;
+
+	--chaan begin
+    --DECLARE @p_from_yyyymmdd    NVARCHAR(8)     = N'20211101',
+    --DECLARE @p_to_yyyymmdd      NVARCHAR(8)     = N'20230205',
+    --DECLARE @p_division_id      NVARCHAR(1000)  = N'81',
+    --DECLARE @p_operation_group  NVARCHAR(1000)  = N'P',
+    --DECLARE @p_plant_id         NVARCHAR(1000)  = N'G388',
+    --DECLARE @p_line_id          NVARCHAR(MAX)   = N'PBQ01',
+    --DECLARE @p_item_id          NVARCHAR(1000)  = N'AMDAU0217B',
+    --DECLARE @p_nickname         NVARCHAR(1000)  = NULL,
+    --DECLARE @p_user_id          NVARCHAR(30)    = N'iamarock',
+    --DECLARE @p_operation_id     NVARCHAR(1000)  = N'P5000',
+    --DECLARE @p_version_id       NVARCHAR(50)    = NULL,
+    --DECLARE @p_version_a       "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","17"," NVARCHAR(20)    = NULL,
+    --DECLARE @p_version_b        NVARCHAR(20)    = NULL,
+    --DECLARE @p_group_column     NVARCHAR(20)    = NULL,
+    --DECLARE @p_debug_mode       NVARCHAR(1)     = N'T'
+
+--TESTING : OK;
+--select * from #TblDynamicPivot_SCP0081_01;return;
+
+
+	/********************************************************************************
+	* PIVOIT처리
+	********************************************************************************/
+
+	PRINT N'***start PIVOIT처리';
+
+	BEGIN
+		DECLARE @mDAY_QTY        NVARCHAR(MAX);
+		DECLARE @mDAY_CELL_QTY   NVARCHAR(MAX);
+		DECLARE @mQry_sum        NVARCHAR(MAX);--chaan
+		DECLARE @mQry_field      NVARCHAR(MAX);
+
+		-- PIVOIT 대상 날짜문자열 생성
+		SET @mDAY_QTY         ='QTY';
+		SET @mDAY_CELL_QTY    ='CELL_QTY';--chaan
+		SET @mQry_sum         = '';
+		SET @mQry_field       = '';
+
+		SELECT  @mQry_field    = @mQry_field + ',' + yyyymmdd + CHAR(10),
+				@mQry_field    = @mQry_field + ',' + yyyymmdd + '_CELL' + CHAR(10),--chaan
+				@mQry_sum      = @mQry_sum + ',' +
+					CASE
+						WHEN CHARINDEX('M_', yyyymmdd) = 1 THEN  '                   SUM(CASE WHEN YYYYMM   = RIGHT('''+yyyymmdd+''',6) THEN '  + @mDAY_QTY + ' ELSE 0 END ) AS ' + yyyymmdd
+						WHEN CHARINDEX('W_', yyyymmdd) = 1 THEN  '                   SUM(CASE WHEN ISO_WEEK = RIGHT('''+yyyymmdd+''', 6) THEN ' + @mDAY_QTY + ' ELSE 0 END ) AS ' + yyyymmdd
+						WHEN CHARINDEX('D_', yyyymmdd) = 1 THEN  '                   SUM(CASE WHEN YYYYMMDD = '''+yyyymmdd+''' THEN '           + @mDAY_QTY + ' ELSE 0 END ) AS ' + yyyymmdd
+					END + ',' + CHAR(10) +
+					CASE
+						WHEN CHARINDEX('M_', yyyymmdd) = 1 THEN  '                   SUM(CASE WHEN YYYYMM   = RIGHT('''+yyyymmdd+''',6) THEN '  + @mDAY_CELL_QTY + ' ELSE 0 END ) AS ' + yyyymmdd + '_CELL'
+						WHEN CHARINDEX('W_', yyyymmdd) = 1 THEN  '                   SUM(CASE WHEN ISO_WEEK = RIGHT('''+yyyymmdd+''', 6) THEN ' + @mDAY_CELL_QTY + ' ELSE 0 END ) AS ' + yyyymmdd + '_CELL'
+						WHEN CHARINDEX('D_', yyyymmdd) = 1 THEN  '                   SUM(CASE WHEN YYYYMMDD = '''+yyyymmdd+''' THEN '           + @mDAY_CELL_QTY + ' ELSE 0 END ) AS ' + yyyymmdd + '_CELL'
+					END + CHAR(10)
+		FROM    (
+					SELECT  'W_'+A.BASIS_YYYYMM + A.ISO_WEEK AS YYYYMMDD,
+							A.BASIS_START_DATE + CONVERT(CHAR(2), 21) AS SORT_ORDER_NO
+					FROM    [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+					WHERE   A.BASIS_YYYYMMDD BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+					GROUP BY A.BASIS_YYYYMM, A.ISO_WEEK, A.BASIS_START_DATE
+					UNION ALL
+					SELECT  'M_'+A.BASIS_YYYYMM  AS YYYYMMDD,
+							MIN(A.BASIS_START_DATE) + CONVERT(CHAR(2), '01') AS SORT_ORDER_NO
+					FROM    [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+					WHERE   A.BASIS_YYYYMMDD  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+					GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME
+					UNION ALL
+					SELECT  'D_'+A.BASIS_YYYYMMDD   AS YYYYMMDD,
+							A.BASIS_YYYYMMDD + CONVERT(CHAR(2), 31) AS SORT_ORDER_NO
+					FROM    [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)
+					WHERE   A.BASIS_YYYYMMDD  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd
+					GROUP BY A.BASIS_YYYYMMDD
+				) AS A
+		ORDER BY sort_order_no;
+
+		SET @mEXEC = '';
+		SET @mEXEC = @mEXEC + 'SELECT' + CHAR(10);
+
+		SET @V_INDEX = 0;
+
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT  COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				SET @mEXEC = @mEXEC + '       ' + @COL + CHAR(10)
+			END
+			ELSE
+			BEGIN
+				SET @mEXEC = @mEXEC + '      ,' + @COL + CHAR(10)
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		SET @mEXEC = @mEXEC + '       ' + @mQry_field    ;
+		SET @mEXEC = @mEXEC + 'FROM    (' +CHAR(10);
+		SET @mEXEC = @mEXEC + '            SELECT' +CHAR(10);
+
+		SET @V_INDEX = 0;
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT  COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHER"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","18","E   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '                    ' + @COL2 + ',' + CHAR(10)
+				END
+
+				SET @mEXEC = @mEXEC + '                    ' + @COL + CHAR(10)
+			END
+			ELSE
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '                   ,' + @COL2 + CHAR(10)
+				END
+
+				SET @mEXEC = @mEXEC + '                   ,' + @COL + CHAR(10)
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		SET @mEXEC = @mEXEC + '                   , MEASURE_ORDER_NO' + CHAR(10);
+		SET @mEXEC = @mEXEC + '                   '+@mQry_sum + CHAR(10);
+		SET @mEXEC = @mEXEC + '            FROM    #TblDynamicPivot_SCP0081_01' + CHAR(10); --chaan 일요일 cutoff용 임시 테이블로 변경
+
+		-- COLOMN 순서대로 GROUP BY
+		SET @V_INDEX = 0;
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT  COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			-- NAME으로 매핑하는 것은 ID도 같이 GROUP BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				SET @mEXEC = @mEXEC + '            GROUP BY    ';
+
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '                        '+@COL2 +',' + CHAR(10);
+				END
+
+				SET @mEXEC = @mEXEC + '                        '+@COL + CHAR(10);
+
+			END
+			ELSE
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+				BEGIN
+					SET @mEXEC = @mEXEC + '                       ,' + @COL2 + CHAR(10);
+				END
+
+				SET @mEXEC = @mEXEC + '                       ,' + @COL + CHAR(10);
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+		SET @mEXEC = @mEXEC + '                        ,MEASURE_ORDER_NO' + CHAR(10);
+		SET @mEXEC = @mEXEC + '        ) A' + CHAR(10);
+
+		-- COLOMN 순서대로 ORDER BY
+		SET @V_INDEX = 0;
+		WHILE @v_cnt_usr_column > @V_INDEX
+		BEGIN
+			SET @COL =
+				(
+					SELECT  COL
+					FROM    #TblDynamicPivot_SCP0081_COLUMN
+					WHERE   USER_SORT_ORDER_NO = (@V_INDEX + 1)
+				);
+
+			-- NAME으로 매핑하는 것은 ID로 ORDER BY
+			IF @COL = 'OPERATION_GROUP_NAME'
+				SET @COL2 = 'OPERATION_GROUP_ID';
+
+			IF @COL = 'SCM_SITE_NAME'
+				SET @COL2 = 'PLANT_ID';
+
+			-- MEASURE의 경우 MEASURE_ORDER_NO로 ORDER BY
+			IF @COL = 'MEASURE'
+				SET @COL = 'MEASURE_ORDER_NO';
+
+			IF (@V_INDEX = 0)
+			BEGIN
+				SET @mEXEC = @mEXEC + 'ORDER BY    ';
+
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+					SET @COL = @COL2;
+
+				SET @mEXEC = @mEXEC + '            ' + @COL + CHAR(10);
+			END
+			ELSE
+			BEGIN
+				IF @COL = 'OPERATION_GROUP_NAME' OR @COL = 'SCM_SITE_NAME'
+					SET @COL = @COL2;
+
+				SET @mEXEC = @mEXEC + '           ,' + @COL + CHAR(10);
+			END
+
+			SET @V_INDEX = @V_INDEX + 1;
+		END
+
+--TESTING : OK
+--select * from #TblDynamicPivot_SCP0081_01 where MEASURE = 'WPP';return;
+--select * from #TblDynamicPivot_SCP0081_01;return;
+
+--TESTING : OK
+--exec debug_log @mEXEC, 'T';return;
+
+		EXEC (@mEXEC);
+	END;
+
+	--임시테이블 삭제
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_COLUMN') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_COLUMN;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_GROUP') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_GROUP;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_GROUP_CODE') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_GROUP_CODE;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_MEASURE') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_MEASURE;
+    IF OBJECT_ID('tempdb..#"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0081_GET_PRODUCTION_PLAN_REPORT_NEW","32159310","19","TblDynamicPivot_SCP0081_02_MPP') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_MPP;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_WPP') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_WPP;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_SCP_PLAN') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_SCP_PLAN;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_RESULT') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_RESULT;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02_AA') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02_AA;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_02') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_02;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VERSION') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_VERSION;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VERSION_T') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_VERSION_T;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VER_A') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_VER_A;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_NEW_A') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_NEW_A;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VER_B') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_VER_B;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_NEW_B') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_NEW_B;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_JOIN_A') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_JOIN_A;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_VERSION_KEYS') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_VERSION_KEYS;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_AA') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_AA;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_SUB') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_SUB;
+    IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0081_01') IS NOT NULL
+	    DROP TABLE #TblDynamicPivot_SCP0081_01;
+
+END
+
+"

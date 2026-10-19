@@ -1,0 +1,7 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/production-plan-fix","SCP0024","features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx","28","code","노출 + 명시적 무동작(insert/delete: ()=>undefined). EditButton=MSG00109(""Read-only mode."") 안내 후"
+"supply/production-plan-fix","SCP0024","features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx","29","code","return(cs:621-634, SwitchLock 주석) — 모드 토글 자체는 asis_to_tobe.md §11 (b) 결정으로 미이식."
+"supply/production-plan-fix","SCP0024","features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx","90","endpoint","— mount 1회 fetch(hook #66). Search 시에도 refetch(handleSearch)."
+"supply/production-plan-fix","SCP0024","features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx","123","code","R1 — 미조회(데이터 없음) 상태면 안내 후 return. AS-IS 는 무반응(cs:1259)이나 TO-BE 는 안내를 유지(사용자 결정)."
+"supply/production-plan-fix","SCP0024","features/supply/src/pages/production-plan-fix/ProductionPlanFix.tsx","160","code","종전 `() => undefined` 상시 노출(2026-09-26 G20)을 대체한다 — 권한 판정을 타게 되었으므로"
+"supply/production-plan-fix","SCP0024","features/supply/src/pages/production-plan-fix/useProductionPlanFixStore.ts","30","endpoint","admin SCM_MST_SHEET_COLUMNS('Model') 동적 fetch (ui-dynamic-property-management §2.3). 12행 등록 확인."

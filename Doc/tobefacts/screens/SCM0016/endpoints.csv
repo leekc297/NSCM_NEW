@@ -1,0 +1,7 @@
+﻿"page_key","menu_id","file","line","in_function","kind","callee","menu","sheet","action","url","resolved","args","commented"
+"admin/batch-log","SCM0016","features/admin/src/pages/batch-log/BatchLog.tsx","43","BatchLog","hook","useTabProcQuery","SCM0016","batchLog","","SCM0016/batchLog//call-proc","Y","filters[SHEETS.BATCH_LOG]","0"
+"admin/batch-log","SCM0016","features/admin/src/pages/batch-log/BatchLog.tsx","51","BatchLog","hook","useTabProcQuery","SCM0016","stepInfo","","SCM0016/stepInfo//call-proc","Y","filters[SHEETS.STEP_INFO]","0"
+"admin/batch-log","SCM0016","features/admin/src/pages/batch-log/BatchLog.tsx","59","BatchLog","hook","useTabProcQuery","SCM0016","batchLogHist","","SCM0016/batchLogHist//call-proc","Y","filters[SHEETS.BATCH_LOG_HIST]","0"
+"admin/batch-log","SCM0016","features/admin/src/pages/batch-log/components/BatchLogForm.tsx","23","BatchLogForm","hook","useTabLookupQueries","SCM0016","","","(useTabLookupQueries)","Y","[{ lookupType: RUN_STATUS_LOOKUP_TYPE }]","0"
+"admin/batch-log","SCM0016","features/admin/src/pages/batch-log/useBatchLogStore.ts","110","fetchAdminColumns","http","apiClient.post","","","","/admin/menu/SCM0016/column","Y","{ sheetNm: sheet }","0"
+"admin/batch-log","SCM0016","features/admin/src/pages/batch-log/useBatchLogStore.ts","40","","commented","fetch","","","","","","admin 등록 컬럼 3시트 동적 fetch(마운트 1회). 미등록/실패는 constants fallback(tact-time 패턴).","1"

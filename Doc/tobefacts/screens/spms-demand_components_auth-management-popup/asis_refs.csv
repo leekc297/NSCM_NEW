@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
+"spms-demand/components/auth-management-popup","","features/spms-demand/src/components/auth-management-popup/AuthManagementPopup.tsx","84","","P_SES_DIVISION_ID P_SES_USER_ID","","","요청 4: P_SES_DIVISION_ID/P_SES_USER_ID는 팝업 대상 행이 아니라 로그인 세션에서 전달한다."
+"spms-demand/components/auth-management-popup","","features/spms-demand/src/components/auth-management-popup/AuthManagementPopup.tsx","91","","P_SES_","","","요청 4: 프로젝트별 권한/요청 조회의 P_SES_* 값도 동일한 세션 키로 전달한다."
+"spms-demand/components/auth-management-popup","","features/spms-demand/src/components/auth-management-popup/AuthManagementPopup.tsx","97","","P_SDM1010_GET_POP_USER_ORG","","","조직도 — P_SDM1010_GET_POP_USER_ORG(sesDivisionId, sesUserId)."
+"spms-demand/components/auth-management-popup","","features/spms-demand/src/components/auth-management-popup/useAuthManagementPopupStore.ts","35","SDM1010","","","","RegionModal(공용 국가/도시 팝업)과 달리 이 팝업은 SDM1010 화면 전용 시트만 다루므로"

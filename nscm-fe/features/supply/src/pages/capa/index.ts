@@ -1,0 +1,1 @@
+export { Capa } from './Capa';

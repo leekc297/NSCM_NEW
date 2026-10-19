@@ -1,0 +1,73 @@
+// SDM2010 샘플 빌드 등록 패널 — 설계서 GRID LEFT 시트 (Default/Insert View)
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.fieldTable {
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  min-height: 32px;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.label {
+  width: 90px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  background: var(--table-header-bg, #f5f6f8);
+  font-size: 12px;
+}
+
+.value {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.seqEditors {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+
+  > * {
+    min-width: 0;
+  }
+}
+
+.separator {
+  flex-shrink: 0;
+}

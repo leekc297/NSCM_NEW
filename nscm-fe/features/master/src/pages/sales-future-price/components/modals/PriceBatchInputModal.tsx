@@ -9,14 +9,15 @@ import {
   type GridPanel,
   MergeManager,
 } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { CELL_CONTROL_TYPE, CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { GridAction } from '@foundation/utils';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { attachRowNoHeader, GridAction } from '@foundation/utils';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon, FileExceldownloadIcon, FunctionSearchIcon } from '@shared/lges-icons';
@@ -39,6 +40,7 @@ import { useSalesFuturePriceStore } from '../../useSalesFuturePriceStore';
 import { fromYyyymmdd, isPeriodInverted, yyyymmddOf } from '../../utils/futurePriceDate';
 import { toStr } from '../../utils/futurePriceGroup';
 
+import { PRICE_BATCH_COMBO, resolveBatchEndCustomer } from './priceBatchCombos';
 import styles from './PriceBatchInputModal.module.scss';
 import { usePriceBatchInputModalStore } from './priceBatchInputModalStore';
 import type { SalesPriceRangeRow } from './SalesPriceRangeModal';
@@ -195,6 +197,9 @@ interface Props {
   //   Sales Site 는 메인과 동일한 다중선택 계약(string[]), Project 도 메인이 다중이라 코드 배열로 받는다.
   defaultSalesSite?: string[];
   defaultProjectCodes?: string[];
+  // 메인 화면 End Customer. 이 팝업에는 End Customer 칸이 없고 Sales Site 콤보의 목록 구성
+  //   조건으로만 쓴다 (AS-IS LoadData sEndCustomer_ - priceBatchCombos 헤더 참조).
+  defaultEndCustomer?: string[];
   onSaveResult?: () => void;
   // 저장 응답의 허용범위(Range Rate) 초과 목록 — 메인 화면이 소유한 SalesPriceRangeModal 로 넘긴다
   //   (AS-IS: 일괄 저장 후에도 Range Rate 팝업이 떠야 함).
@@ -241,6 +246,7 @@ export const PriceBatchInputModal = ({
   defaultPeriod,
   defaultSalesSite,
   defaultProjectCodes,
+  defaultEndCustomer,
   onSaveResult,
   onRangeOver,
 }: Props) => {
@@ -248,6 +254,8 @@ export const PriceBatchInputModal = ({
   const setAlert = useMessageStore.getState().setAlert;
   const setToast = useMessageStore.getState().setToast;
   const gridRef = useRef<FlexGridType<PriceBatchRow> | null>(null);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
   // ⭐ 헤더높이 정규화 함수 참조(permanent 효과가 주입 — ResizeObserver 등에서 직접 호출) + 그리드 컨테이너 ref.
   const headerNormalizeRef = useRef<() => void>(() => {});
   const gridWrapRef = useRef<HTMLDivElement>(null);
@@ -327,12 +335,18 @@ export const PriceBatchInputModal = ({
     void fetchBatchColumns(defaultDivision);
   }, [open, defaultDivision, fetchBatchColumns]);
 
+  // 조회조건 Sales Site 콤보에 실을 End Customer. 팝업에 End Customer 칸이 없으므로 메인 화면이
+  //   넘긴 값을 그대로 쓴다 - 상태로 들지 않는 이유는 팝업 안에서 바뀌지 않기 때문이다.
+  //   미선택은 'ALL' 센티널이다 (근거: priceBatchCombos).
+  const batchEndCustomer = resolveBatchEndCustomer(defaultEndCustomer);
+
   // ===== Combo dropdown — Div / Sales Site / Team / Incoterms / FCST / Customs Handbook / Currency =====
   const [divQ, ssQ, teamQ, incoQ, currQ, fcstQ, customsQ] = useTabComboQueries({
     filters: [
       'MyDivision',
-      // ⭐ Sales Site = 메인 화면 SalesSiteField 와 동일 콤보 'SalesSite'(전체 반환 → division 클라이언트 필터).
-      //   기존 'SiteByEndCustomer' 는 endCustomer 파라미터 필요 → 빈 결과 사고. (2026-07-01 보완)
+      // 여기 'SalesSite'(전량)는 그리드 SCM_SITE_ID 셀의 코드→명칭 DataMap 전용이다.
+      //   조회조건 Sales Site 드롭다운은 아래 SalesSiteField 가 재조회 콤보(SiteByEndCustomer)로
+      //   따로 받는다. 표시용 DataMap 까지 좁히면 조회조건 밖의 사이트가 든 행이 원시 코드로 보인다.
       'SalesSite',
       { comboId: 'TeambyDivision', divisionId },
       'Incoterms',
@@ -502,36 +516,17 @@ export const PriceBatchInputModal = ({
     gridRef.current?.invalidate(true);
   }, [allRows]);
 
-  // ⭐ 2026-08-24 — CustomDropdown(allOption) 은 전체 선택을 **열거가 아니라 'ALL' sentinel** 로 내보낸다
-  //   (CustomDropdown.tsx L370/L375, 2026-08-18 사용자 요구). 그래서 ALL 선택 시 salesSite = ['ALL'] 이다.
-  //   서버 payload 는 join 결과가 그대로 'ALL' 이라 정상이지만, 아래 client-side 필터는
-  //   ['ALL'].includes('<실제 사이트>') === false 라 **전 행을 걸러 그리드가 빈다**.
-  //   실사고: Sales Site 조건 조회 후 다시 ALL 로 조회하면 데이터가 안 보임.
-  //   -> 필터 판정에는 sentinel 을 제거한 목록을 쓴다(빈 배열 = 필터 없음).
-  const siteFilter = useMemo(
-    () => (appliedCond?.salesSite ?? []).filter(s => s && s.toUpperCase() !== 'ALL'),
-    [appliedCond]
-  );
-
-  // 추가 client-side filter (사용자 명시 검색조건)
-  //   ⭐ 이 Modal 은 LOC Measure 만 등록 사용 (AS-IS GET_MEASURE_COUNTINFO_SAVE_PRICE = LOC only) → LOC 행만 표시.
+  // ⭐ 이 Modal 은 LOC Measure 만 등록 사용 (AS-IS GET_MEASURE_COUNTINFO_SAVE_PRICE = LOC only) → LOC 행만 표시.
+  //   salesSite/projectCode/itemId 는 SP(filters, 위 참고)가 이미 걸러 내려주므로 여기서 다시 거르지 않는다 —
+  //   재확인 필터가 콤마·다중 조건을 온전히 반영 못 해 결과를 잘못 좁히는 문제가 있었다.
   const rows = useMemo(
     () =>
       // ⭐ 미조회(재진입 초기) 상태면 빈 그리드 → 헤더 단단(1단)로 리셋 + 이전 데이터/입력 비표시.
       //   EMPTY_ROWS 상수 반환 = 참조 안정(매번 새 [] 생성 금지 — DataGrid memo 보존).
       !appliedCond
         ? EMPTY_ROWS
-        : allRows.filter(r => {
-            if (String(r.MEASURE ?? '').toUpperCase() !== 'LOC') return false;
-            const { projectTokens: pts, itemId: iid } = appliedCond;
-            if (siteFilter.length > 0 && !siteFilter.includes(String(r.SCM_SITE_ID ?? '')))
-              return false;
-            if (pts.length > 0 && !pts.some(tk => String(r.PROJECT_CODE ?? '').includes(tk)))
-              return false;
-            if (iid && !String(r.ITEM_ID ?? '').includes(iid)) return false;
-            return true;
-          }),
-    [allRows, appliedCond, siteFilter]
+        : allRows.filter(r => String(r.MEASURE ?? '').toUpperCase() === 'LOC'),
+    [allRows, appliedCond]
   );
 
   // ⭐ 동적 주별 bindings (W_yyyymmdd) — 주 시작일(월요일 OR 월 1일, 월경계 분할 주차) 만.
@@ -756,9 +751,6 @@ export const PriceBatchInputModal = ({
       void setAlert({ type: 'alert', content: t('MSG00108', '_조회된 주차가 없습니다.') });
       return;
     }
-
-    // 저장 확인창 없이 즉시 저장 (사용자 요구 2026-08-23). 위 검증을 모두 통과한 시점이다.
-    void setToast({ message: t('LBL00665', 'Loading...'), type: 'default', duration: 3000 });
 
     const erRows = (exchangeData as { o_rc1?: ExchangeRateRow[] })?.o_rc1 ?? [];
     const erMap = buildExchangeRateMap(erRows);
@@ -1183,6 +1175,11 @@ export const PriceBatchInputModal = ({
     if (changed) g.invalidate();
   }, [dataMaps]);
 
+  // 기존 rowHeader 인덱스 컬럼 헤더에 'No' 라벨 추가 (사용자 요구 2026-06-28, 팝업 확대적용 2026-09-03)
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, rows]);
+
   // ⭐ 헤더높이 커진 채 잔존 방지 핵심 — CustomDialog open 애니메이션으로 grid 컨테이너가 0→full 로 리사이즈될 때
   //   wijmo 는 그 시점(수 프레임 후)에야 3단 헤더를 확정 build 하는데, 이후 정적이라 updatedLayout 이 안 뜬다.
   //   ResizeObserver 로 컨테이너 크기 변화를 감지 → invalidate(true)(레이아웃 재계산 + updatedLayout 유발)
@@ -1248,7 +1245,7 @@ export const PriceBatchInputModal = ({
                   <Grid size={3}>
                     <FormItem
                       className={commonStyles.formItem}
-                      label={t('LBL00663', 'Div')}
+                      label={t('LBL00001', 'Div')}
                       labelAlign='right'
                       render={() => (
                         <CustomDropdown
@@ -1263,12 +1260,18 @@ export const PriceBatchInputModal = ({
                       )}
                     />
                   </Grid>
-                  {/* No.27 — 단일선택→다중선택 (2026-08-04). 공용 SalesSiteField 재사용(메인 조회조건과 동일 계약). */}
+                  {/* No.27 — 단일선택→다중선택 (2026-08-04). 공용 SalesSiteField 재사용(메인 조회조건과 동일 계약).
+                      목록 구성 조건 = Division + 본화면에서 받은 End Customer 이고 원천은 재조회 콤보
+                      SiteByEndCustomer 다 (AS-IS 팝업 :318 · :2173 — priceBatchCombos 헤더).
+                      두 조건이 전부 파라미터라 하나만 바뀌어도 콤보 쿼리 키가 갈려 SQL 이 다시 나간다.
+                      서버가 이미 좁혀 CODE/NAME 만 내려주므로 화면에서 다시 거르지 않는다. */}
                   <SalesSiteField
                     gridSize={3}
                     value={salesSite}
                     onChange={setSalesSite}
                     division={divisionId}
+                    comboId={PRICE_BATCH_COMBO.salesSite}
+                    endCustomer={batchEndCustomer}
                   />
                   <Grid size={3}>
                     <FormItem
@@ -1341,16 +1344,24 @@ export const PriceBatchInputModal = ({
                 open={loading || saving}
                 placement='parent'
               />
-              <DataGrid
+              <ResultArea
+                title=''
+                count={rows.length}
                 gridRef={gridRef as never}
-                className={styles.grid}
-                itemsSource={rows as unknown as WijmoRowItem[]}
-                staticColumns={fixedColumns}
-                dynamicColumns={dynamicColumns}
-                autoGenerateColumns={false}
-                allowSorting={true}
-                allowMerging={AllowMerging.All}
-              />
+                gridFilterRef={gridFilterRef}
+              >
+                <DataGrid
+                  gridRef={gridRef as never}
+                  gridFilterRef={gridFilterRef}
+                  className={styles.grid}
+                  itemsSource={rows as unknown as WijmoRowItem[]}
+                  staticColumns={fixedColumns}
+                  dynamicColumns={dynamicColumns}
+                  autoGenerateColumns={false}
+                  allowSorting={true}
+                  allowMerging={AllowMerging.All}
+                />
+              </ResultArea>
             </div>
 
             {/* Action — 표준 buttonWrapper (하단 우측 정렬, @shared/lges Button) */}

@@ -1,0 +1,1468 @@
+{
+  "_source": "04_TESTDATA_SET.xlsx",
+  "divisions": [
+    "40",
+    "81",
+    "82"
+  ],
+  "accounts": [
+    {
+      "id": "jaehun_cho",
+      "name": "조재훈",
+      "groups": [
+        "ADMIN",
+        "DM ADMIN",
+        "DM Planner",
+        "DM Planner (W/S)",
+        "SCP Planner"
+      ],
+      "ws": true,
+      "adminAlso": true,
+      "screens": {
+        "DMF0082": "ADMIN",
+        "DMF0021": "ADMIN",
+        "DMF0042": "ADMIN"
+      },
+      "divisions": [
+        "40"
+      ],
+      "usable": false,
+      "note": "⚠ 권한경계 검증 불가 — 항상 ADMIN 으로 해석됨 (DM ADMIN/ADMIN 단계 전용)",
+      "loginOk": false
+    },
+    {
+      "id": "minyonglee1",
+      "name": "이민용",
+      "groups": [
+        "ADMIN",
+        "DM ADMIN",
+        "DM Planner",
+        "DM Planner (W/S)",
+        "DM Viewer",
+        "JV Planner",
+        "SCP Planner"
+      ],
+      "ws": true,
+      "adminAlso": true,
+      "screens": {
+        "DMF0082": "ADMIN",
+        "DMF0021": "ADMIN",
+        "DMF0042": "ADMIN"
+      },
+      "divisions": [
+        "40",
+        "81",
+        "82"
+      ],
+      "usable": false,
+      "note": "⚠ 권한경계 검증 불가 — 항상 ADMIN 으로 해석됨 (DM ADMIN/ADMIN 단계 전용)",
+      "loginOk": false
+    },
+    {
+      "id": "bottle",
+      "name": "김재병",
+      "groups": [
+        "SCP Planner"
+      ],
+      "ws": false,
+      "adminAlso": false,
+      "screens": {
+        "DMF0082": "SCP Planner",
+        "DMF0021": "SCP Planner",
+        "DMF0042": "SCP Planner"
+      },
+      "divisions": [
+        "40",
+        "81"
+      ],
+      "usable": true,
+      "note": "사용 가능",
+      "loginOk": false
+    },
+    {
+      "id": "bpark416",
+      "name": "박병창",
+      "groups": [
+        "DM Planner"
+      ],
+      "ws": false,
+      "adminAlso": false,
+      "screens": {
+        "DMF0082": "DM Planner",
+        "DMF0021": "DM Planner",
+        "DMF0042": "DM Planner"
+      },
+      "divisions": [
+        "40",
+        "81",
+        "82"
+      ],
+      "usable": true,
+      "note": "사용 가능",
+      "loginOk": false
+    },
+    {
+      "id": "cmjin",
+      "name": "",
+      "groups": [
+        "DM Planner"
+      ],
+      "ws": false,
+      "adminAlso": false,
+      "screens": {
+        "DMF0082": "DM Planner",
+        "DMF0021": "DM Planner",
+        "DMF0042": "DM Planner"
+      },
+      "divisions": [
+        "40",
+        "81",
+        "82"
+      ],
+      "usable": true,
+      "note": "사용 가능",
+      "loginOk": false
+    },
+    {
+      "id": "coeogus",
+      "name": "채대현",
+      "groups": [
+        "SCP Planner"
+      ],
+      "ws": false,
+      "adminAlso": false,
+      "screens": {
+        "DMF0082": "SCP Planner",
+        "DMF0021": "SCP Planner",
+        "DMF0042": "SCP Planner"
+      },
+      "divisions": [
+        "40",
+        "81"
+      ],
+      "usable": true,
+      "note": "사용 가능",
+      "loginOk": false
+    },
+    {
+      "id": "dodae",
+      "name": "도대현",
+      "groups": [
+        "SCP Planner"
+      ],
+      "ws": false,
+      "adminAlso": false,
+      "screens": {
+        "DMF0082": "SCP Planner",
+        "DMF0021": "SCP Planner",
+        "DMF0042": "SCP Planner"
+      },
+      "divisions": [
+        "40"
+      ],
+      "usable": true,
+      "note": "사용 가능",
+      "loginOk": false
+    },
+    {
+      "id": "eunah.koo",
+      "name": "구은아",
+      "groups": [
+        "DM Planner"
+      ],
+      "ws": false,
+      "adminAlso": false,
+      "screens": {
+        "DMF0082": "DM Planner",
+        "DMF0021": "DM Planner",
+        "DMF0042": "DM Planner"
+      },
+      "divisions": [
+        "40",
+        "81",
+        "82"
+      ],
+      "usable": true,
+      "note": "사용 가능",
+      "loginOk": false
+    },
+    {
+      "id": "jaehyeok",
+      "name": "유재혁",
+      "groups": [
+        "DM Planner (W/S)"
+      ],
+      "ws": true,
+      "adminAlso": false,
+      "screens": {
+        "DMF0082": "DM Planner (W/S)"
+      },
+      "divisions": [
+        "81",
+        "82"
+      ],
+      "usable": true,
+      "note": "사용 가능",
+      "loginOk": false
+    },
+    {
+      "id": "miyeong.lee",
+      "name": "이미영",
+      "groups": [
+        "DM Planner (W/S)"
+      ],
+      "ws": true,
+      "adminAlso": false,
+      "screens": {
+        "DMF0082": "DM Planner (W/S)"
+      },
+      "divisions": [
+        "81",
+        "82"
+      ],
+      "usable": true,
+      "note": "사용 가능",
+      "loginOk": false
+    },
+    {
+      "id": "wcyoon",
+      "name": "윤우창",
+      "groups": [
+        "DM Planner"
+      ],
+      "ws": false,
+      "adminAlso": false,
+      "screens": {
+        "DMF0082": "DM Planner",
+        "DMF0021": "DM Planner",
+        "DMF0042": "DM Planner"
+      },
+      "divisions": [
+        "40",
+        "81",
+        "82"
+      ],
+      "usable": true,
+      "note": "사용 가능",
+      "loginOk": false
+    },
+    {
+      "id": "ys_cho",
+      "name": "조윤성",
+      "groups": [
+        "DM Planner",
+        "DM Planner (W/S)"
+      ],
+      "ws": true,
+      "adminAlso": false,
+      "screens": {
+        "DMF0082": "DM Planner",
+        "DMF0021": "DM Planner",
+        "DMF0042": "DM Planner"
+      },
+      "divisions": [
+        "40"
+      ],
+      "usable": true,
+      "note": "사용 가능",
+      "loginOk": false
+    }
+  ],
+  "authMatrix": [
+    {
+      "group": "ADMIN",
+      "screen": "DMF0003",
+      "div": "81",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0003",
+      "div": "81",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0003",
+      "div": "81",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner (W/S)",
+      "screen": "DMF0003",
+      "div": "81",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0003",
+      "div": "81",
+      "editMeasure": "MKT_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0003",
+      "div": "81_HD",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0003",
+      "div": "81_HD",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0003",
+      "div": "81_HD",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner (W/S)",
+      "screen": "DMF0003",
+      "div": "81_HD",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0003",
+      "div": "81_HD",
+      "editMeasure": "MKT_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0003",
+      "div": "81_HG",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0003",
+      "div": "81_HG",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0003",
+      "div": "81_HG",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner (W/S)",
+      "screen": "DMF0003",
+      "div": "81_HG",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0003",
+      "div": "81_HG",
+      "editMeasure": "MKT_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0003",
+      "div": "81_HM",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0003",
+      "div": "81_HM",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0003",
+      "div": "81_HM",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner (W/S)",
+      "screen": "DMF0003",
+      "div": "81_HM",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0003",
+      "div": "81_HM",
+      "editMeasure": "MKT_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0003",
+      "div": "81_ST",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0003",
+      "div": "81_ST",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0003",
+      "div": "81_ST",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner (W/S)",
+      "screen": "DMF0003",
+      "div": "81_ST",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0003",
+      "div": "81_ST",
+      "editMeasure": "MKT_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0003",
+      "div": "81_UC",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0003",
+      "div": "81_UC",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0003",
+      "div": "81_UC",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner (W/S)",
+      "screen": "DMF0003",
+      "div": "81_UC",
+      "editMeasure": "MKT_FCST",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0003",
+      "div": "81_UC",
+      "editMeasure": "MKT_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "40",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": ""
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "40",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0021",
+      "div": "40",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0021",
+      "div": "40",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "40",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": ""
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "40",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0021",
+      "div": "40",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": ""
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "81",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "81",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0021",
+      "div": "81",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0021",
+      "div": "81",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "81",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "81",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0021",
+      "div": "81",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "81_HD",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "81_HD",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0021",
+      "div": "81_HD",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0021",
+      "div": "81_HD",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "81_HD",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "81_HD",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0021",
+      "div": "81_HD",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "81_HG",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "81_HG",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0021",
+      "div": "81_HG",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0021",
+      "div": "81_HG",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "81_HG",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "81_HG",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0021",
+      "div": "81_HG",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "81_HM",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "81_HM",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0021",
+      "div": "81_HM",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0021",
+      "div": "81_HM",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "81_HM",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "81_HM",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0021",
+      "div": "81_HM",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "81_ST",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "81_ST",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0021",
+      "div": "81_ST",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0021",
+      "div": "81_ST",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "81_ST",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "81_ST",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0021",
+      "div": "81_ST",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "81_UC",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "81_UC",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0021",
+      "div": "81_UC",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0021",
+      "div": "81_UC",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "81_UC",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "81_UC",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0021",
+      "div": "81_UC",
+      "editMeasure": "RTF_SYS_RP",
+      "editDay": "WED"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0021",
+      "div": "82",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0021",
+      "div": "82",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0021",
+      "div": "82",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0021",
+      "div": "82",
+      "editMeasure": "SalesAmt_LOC",
+      "editDay": ""
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "SCM_FCST",
+      "editDay": "MON"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "VMI_In_Req",
+      "editDay": "-"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "VMI_In_Req",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "VMI_In_Req",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "SCM_FCST",
+      "editDay": "MON"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "VMI_In_Req",
+      "editDay": "-"
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0082",
+      "div": "40",
+      "editMeasure": "SCM_FCST",
+      "editDay": "MON"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "81",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "81",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "81",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "81",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner (W/S)",
+      "screen": "DMF0082",
+      "div": "81",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0082",
+      "div": "81",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HD",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HD",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HD",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HD",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HD",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "81_HD",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "81_HD",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner (W/S)",
+      "screen": "DMF0082",
+      "div": "81_HD",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_HD",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_HD",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_HD",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0082",
+      "div": "81_HD",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HG",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HG",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HG",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HG",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HG",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "81_HG",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "81_HG",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner (W/S)",
+      "screen": "DMF0082",
+      "div": "81_HG",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_HG",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_HG",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_HG",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0082",
+      "div": "81_HG",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HM",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HM",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HM",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HM",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "81_HM",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "81_HM",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "81_HM",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner (W/S)",
+      "screen": "DMF0082",
+      "div": "81_HM",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_HM",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_HM",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_HM",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0082",
+      "div": "81_HM",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_ST",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_ST",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_ST",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "81_ST",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "81_ST",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "81_ST",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "81_ST",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner (W/S)",
+      "screen": "DMF0082",
+      "div": "81_ST",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_ST",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_ST",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_ST",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0082",
+      "div": "81_ST",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_UC",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_UC",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "ADMIN",
+      "screen": "DMF0082",
+      "div": "81_UC",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "81_UC",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM ADMIN",
+      "screen": "DMF0082",
+      "div": "81_UC",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "81_UC",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner",
+      "screen": "DMF0082",
+      "div": "81_UC",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "DM Planner (W/S)",
+      "screen": "DMF0082",
+      "div": "81_UC",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_UC",
+      "editMeasure": "LOC",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_UC",
+      "editMeasure": "MKT_FCST",
+      "editDay": "-"
+    },
+    {
+      "group": "SCM PI Admin",
+      "screen": "DMF0082",
+      "div": "81_UC",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    },
+    {
+      "group": "SCP Planner",
+      "screen": "DMF0082",
+      "div": "81_UC",
+      "editMeasure": "SCM_FCST",
+      "editDay": "TUE"
+    }
+  ],
+  "loginProbe": {
+    "be": "http://localhost:8080",
+    "at": "2026-10-19T05:25:57.011Z",
+    "ok": []
+  }
+}

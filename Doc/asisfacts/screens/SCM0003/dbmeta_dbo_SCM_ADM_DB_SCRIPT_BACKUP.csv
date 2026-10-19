@@ -1,0 +1,2217 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_DELETE_LOOKUP_MASTER","1841493689","1","
+/*
+ * Program ID   : SCM0003_DELETE_LOOKUP_MASTER
+ * Description  : Lookup Type 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/07   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+CREATE PROCEDURE [dbo].[SCM0003_DELETE_LOOKUP_MASTER]
+
+	-- Add the parameters for the stored procedure here
+	@LOOKUP_TYPE	NVARCHAR(200)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	DECLARE @v_cnt INT;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCM0003_DELETE_LOOKUP_TYPE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		BEGIN
+			SELECT @v_cnt = COUNT(*)
+			FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+			WHERE LOOKUP_TYPE = @LOOKUP_TYPE
+		END
+
+		--LOOKUP VALUE가 있으면 그 값도 같이 삭제
+		IF @v_cnt > 0
+			BEGIN
+				DELETE FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = @LOOKUP_TYPE
+			END
+
+		BEGIN
+			DELETE FROM  SCM_ADM_LOOKUP_MASTER WHERE LOOKUP_TYPE = @LOOKUP_TYPE
+		END			
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code ;
+
+	END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_DELETE_LOOKUP_MASTER_DETAIL","1857493746","1","
+/*
+ * Program ID   : SCM0003_DELETE_LOOKUP_MASTER_DETAIL
+ * Description  : Lookup Type 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2017/12/07   byunghunjung	Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/10/25	hwyoon			lookup 삭제 시 히스토리 추가
+ *
+ */
+CREATE PROCEDURE [dbo].[SCM0003_DELETE_LOOKUP_MASTER_DETAIL]
+
+	-- Add the parameters for the stored procedure here
+	@Action				NVARCHAR(1),
+	@LOOKUP_TYPE		NVARCHAR(200), 
+	@DESCRIPTION		NVARCHAR(MAX),
+	@DISPLAY_SEQ		INT, 
+	@VALID_YN			NVARCHAR(1),
+	@SEGMENT1			NVARCHAR(100),
+	@SEGMENT2			NVARCHAR(100),
+	@SEGMENT3			NVARCHAR(100),
+	@SEGMENT4			NVARCHAR(100),
+	@SEGMENT5			NVARCHAR(100),
+	@SEGMENT1_KEY		NVARCHAR(100),
+	@SEGMENT2_KEY		NVARCHAR(100),
+	@SEGMENT3_KEY		NVARCHAR(100),
+	@SEGMENT4_KEY		NVARCHAR(100),
+	@SEGMENT5_KEY		NVARCHAR(100),
+	@ATTRIBUTE1			NVARCHAR(100),
+	@ATTRIBUTE2			NVARCHAR(100),
+	@ATTRIBUTE3			NVARCHAR(100),
+	@ATTRIBUTE4			NVARCHAR(100),
+	@ATTRIBUTE5			NVARCHAR(100),
+	@ATTRIBUTE6			NVARCHAR(100),
+	@ATTRIBUTE7			NVARCHAR(100),
+	@ATTRIBUTE8			NVARCHAR(100),
+	@ATTRIBUTE9			NVARCHAR(100),
+	@ATTRIBUTE10		NVARCHAR(100),
+	@ATTRIBUTE11		NVARCHAR(100),
+	@ATTRIBUTE12		NVARCHAR(100),
+	@ATTRIBUTE13		NVARCHAR(100),
+	@ATTRIBUTE14		NVARCHAR(100),
+	@ATTRIBUTE15		NVARCHAR(100),
+	@CREATED_BY			NVARCHAR(300),
+	@CREATION_DATE		DATETIME,
+	@LAST_UPDATED_BY	NVARCHAR(300)
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	DECLARE @v_cnt INT;
+
+	DECLARE @p_active_flag		NVARCHAR(1);
+	DECLARE @p_lookup_type		NVARCHAR(200); 
+	DECLARE @p_description		NVARCHAR(MAX);
+	DECLARE @p_display_seq		NVARCHAR(200); 
+	DECLARE @p_valid_yn			NVARCHAR(2);
+	DECLARE @p_segment1			NVARCHAR(100);
+	DECLARE @p_segment2			NVARCHAR(100);
+	DECLARE @p_segment3			NVARCHAR(100);
+	DECLARE @p_segment4			NVARCHAR(100);
+	DECLARE @p_segment5			NVARCHAR(100);
+	DECLARE @p_segment1_key		NVARCHAR(100);
+	DECLARE @p_segment2_key		NVARCHAR(100);
+	DECLARE @p_segment3_key		NVARCHAR(100);
+	DECLARE @p_segment4_key		NVARCHAR(100);
+	DECLARE @p_segment5_key		NVARCHAR(100);
+	DECLARE @p_attribute1		NVARCHAR(100);
+	DECLARE @p_attribute2		NVARCHAR(100);
+	DECLARE @p_attribute3		NVARCHAR(100);
+	DECLARE @p_attribute4		NVARCHAR(100);
+	DECLARE @p_attribute5		NVARCHAR(100);
+	DECLARE @p_attribute6		NVARCHAR(100);
+	DECLARE @p_attribute7		NVARCHAR(100);
+	DECLARE @p_attribute8		NVARCHAR(100);
+	DECLARE @p_attribute9		NVARCHAR(100);
+	DECLARE @p_attribute10		NVARCHAR(100);
+	DECLARE @p_attribute11		NVARCHAR(100);
+	DECLARE @p_attribute12		NVARCHAR(100);
+	DECLARE @p_attribute13		NVARCHAR(100);
+	DECLARE @p_attribute14		NVARCHAR(100);
+	DECLARE @p_attribute15		NVARCHAR(100);
+	DECLARE @p_created_by		NVARCHAR(300);
+	DECLARE @p_creation_date	DATETIME;
+	DECLARE @p_last_updated_by	NVARCHAR(300);
+
+	SET @p_active_flag		= @Action;
+	SET @p_lookup_type		= @LOOKUP_TYPE;
+	SET @p_description		= @DESCRIPTION;
+	SET @p_display_seq		= @DISPLAY_SEQ;
+	SET @p_valid_yn			= @VALID_YN;
+	SET @p_segment1			= @SEGMENT1;
+	SET @p_segment2			= @SEGMENT2;
+	SET @p_segment3			= @SEGMENT3;
+	SET @p_segment4			= @SEGMENT4;
+	SET @p_segment5			= @SEGMENT5;
+	SET @p_segment1_key		= @SEGMENT1_KEY;
+	SET @p_segment2_key		= @SEGMENT2_KEY;
+	SET @p_segment3_key		= @SEGMENT3_KEY;
+	SET @p_segment4_key		= @SEGMENT4_KEY;
+	SET @p_segment5_key		= @SEGMENT5_KEY;
+	SET @p_attribute1		= @ATTRIBUTE1;
+	SET @p_attribute2		= @ATTRIBUTE2;
+	SET @p_attribute3		= @ATTRIBUTE3;
+	SET @p_attribute4		= @ATTRIBUTE4;
+	SET @p_attribute5		= @ATTRIBUTE5;
+	SET @p_attribute6		= @ATTRIBUTE6;
+	SET @p_attribute7		= @ATTRIBUTE7;
+	SET @p_attribute8		= @ATTRIBUTE8;
+	SET @p_attribute9		= @ATTRIBUTE9;
+	SET @p_attribute10		= @ATTRIBUTE10;
+	SET @p_attribute11		= @ATTRIBUTE11;
+	SET @p_attribute12		= @ATTRIBUTE12;
+	SET"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_DELETE_LOOKUP_MASTER_DETAIL","1857493746","2"," @p_attribute13		= @ATTRIBUTE13;
+	SET @p_attribute14		= @ATTRIBUTE14;
+	SET @p_attribute15		= @ATTRIBUTE15;
+	SET @p_created_by		= @CREATED_BY;
+	SET @p_creation_date	= @CREATION_DATE;
+	SET @p_last_updated_by	= @LAST_UPDATED_BY;
+
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCM0003_DELETE_LOOKUP_MASTER_DETAIL';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+
+		--HISTORY INSERT
+		EXEC [PR_SCM_ADM_LOOKUP_MASTER_DETAIL_HIST]
+										@p_lookup_type			
+										,@p_description		
+										,@p_display_seq			
+										,@p_valid_yn											 	
+										,@p_segment1				
+										,@p_segment2			
+										,@p_segment3		
+										,@p_segment4      
+										,@p_segment5
+										,@p_attribute1
+										,@p_attribute2
+										,@p_attribute3
+										,@p_attribute4
+										,@p_attribute5
+										,@p_attribute6
+										,@p_attribute7
+										,@p_attribute8
+										,@p_attribute9
+										,@p_attribute10
+										,@p_attribute11
+										,@p_attribute12
+										,@p_attribute13
+										,@p_attribute14
+										,@p_attribute15
+										,@p_created_by			
+										,@p_creation_date		
+										,@p_last_updated_by     ;
+
+
+		BEGIN
+			DELETE FROM [SCM_ADM_LOOKUP_MASTER_DETAIL] 
+			WHERE LOOKUP_TYPE = @LOOKUP_TYPE
+			  AND SEGMENT1 = @SEGMENT1_KEY
+			  AND SEGMENT2 = @SEGMENT2_KEY
+			  AND SEGMENT3 = @SEGMENT3_KEY
+			  AND SEGMENT4 = @SEGMENT4_KEY
+			  AND SEGMENT5 = @SEGMENT5_KEY;
+		END		
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code ;
+
+	END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_DELETE_LOOKUP_TYPE","1873493803","1","/*
+ * Program ID   : SCM0003_DELETE_LOOKUP_TYPE
+ * Description  : Lookup Type 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/07   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+CREATE PROCEDURE [dbo].[SCM0003_DELETE_LOOKUP_TYPE]
+
+	-- Add the parameters for the stored procedure here
+	@LOOKUP_TYPE	NVARCHAR(200)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	DECLARE @v_cnt INT;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCM0003_DELETE_LOOKUP_TYPE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		BEGIN
+			SELECT @v_cnt = COUNT(*)
+			FROM SCM_ADM_LOOKUP_TYPE_T
+			WHERE LOOKUP_TYPE = @LOOKUP_TYPE
+		END
+
+		--LOOKUP VALUE가 있으면 그 값도 같이 삭제
+		IF @v_cnt > 0
+			BEGIN
+				DELETE FROM [SCM_ADM_LOOKUP_VALUES_T] WHERE LOOKUP_TYPE = @LOOKUP_TYPE
+			END
+
+		BEGIN
+			DELETE FROM  SCM_ADM_LOOKUP_TYPE_T WHERE LOOKUP_TYPE = @LOOKUP_TYPE
+		END			
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code ;
+
+	END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_DELETE_LOOKUP_VALUE","1889493860","1","/*
+ * Program ID   : SCM0003_DELETE_LOOKUP_VALUE
+ * Description  : Lookup Type 삭제
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/07   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+CREATE PROCEDURE [dbo].[SCM0003_DELETE_LOOKUP_VALUE]
+
+	-- Add the parameters for the stored procedure here
+	@LOOKUP_TYPE		NVARCHAR(200),
+	@SEGMENT1_KEY		NVARCHAR(100),
+	@SEGMENT2_KEY		NVARCHAR(100),
+	@SEGMENT3_KEY		NVARCHAR(100),
+	@SEGMENT4_KEY		NVARCHAR(100),
+	@SEGMENT5_KEY		NVARCHAR(100)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	DECLARE @v_cnt INT;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCM0003_DELETE_LOOKUP_VALUE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		BEGIN
+			DELETE FROM [SCM_ADM_LOOKUP_VALUES_T] 
+			WHERE LOOKUP_TYPE = @LOOKUP_TYPE
+			  AND SEGMENT1 = @SEGMENT1_KEY
+			  AND SEGMENT2 = @SEGMENT2_KEY
+			  AND SEGMENT3 = @SEGMENT3_KEY
+			  AND SEGMENT4 = @SEGMENT4_KEY
+			  AND SEGMENT5 = @SEGMENT5_KEY;
+		END		
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code ;
+
+	END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_GET_LOOKUP_MASTER","1905493917","1","
+
+
+/*
+ * Program ID   : SCM0003_GET_LOOKUP_MASTER
+ * Description  : Lookup Master 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/14   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0003_GET_LOOKUP_MASTER]
+  @p_lookup_type    NVARCHAR(MAX),
+  @p_lookup_group   NVARCHAR(MAX),
+  @p_valid_yn		NVARCHAR(100)
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+    SELECT
+		 lookup_type lookup_type_key 
+		  ,lookup_type
+		  ,description
+		  ,lookup_group
+		  ,valid_yn
+		  ,segment1
+		  ,segment2
+		  ,segment3
+		  ,segment4
+		  ,segment5
+		  ,attribute1
+		  ,attribute2
+		  ,attribute3
+		  ,attribute4
+		  ,attribute5
+		  ,attribute6
+		  ,attribute7
+		  ,attribute8
+		  ,attribute9
+		  ,attribute10
+		  ,attribute11
+		  ,attribute12
+		  ,attribute13
+		  ,attribute14
+		  ,attribute15
+		  ,created_by
+		  ,creation_date
+		  ,last_updated_by
+		  ,last_update_date
+	 FROM dbo.SCM_ADM_LOOKUP_MASTER
+     WHERE  ( @p_lookup_type IS NULL OR lookup_type LIKE '%' + @p_lookup_type + '%' ) 
+	 AND (@p_lookup_group IS NULL OR lookup_group = @p_lookup_group)
+	 AND (@p_valid_yn IS NULL OR valid_yn = @p_valid_yn)
+	 ORDER BY lookup_type
+	 ;
+  
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_GET_LOOKUP_MASTER_DETAIL","1921493974","1","
+
+
+/*
+ * Program ID   : SCM0003_GET_LOOKUP_MASTER_DETAIL
+ * Description  : Lookup Value 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/14   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2021/05/26   khj79          [PJ20209642] LGES Digital SCM Level.3 달성을 위한 개선 - 공유잠금 해제 옵션 추가
+ */
+
+CREATE PROCEDURE [dbo].[SCM0003_GET_LOOKUP_MASTER_DETAIL]
+  @p_lookup_type    NVARCHAR(MAX)
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+	DECLARE @v_sql_text AS NVARCHAR(MAX);
+
+    SELECT 
+		  lookup_type
+		  ,description  
+		  ,display_seq
+		  ,segment1
+		  ,segment2
+		  ,segment3
+		  ,segment4
+		  ,segment5
+		  ,segment1 segment1_key
+		  ,segment2 segment2_key
+		  ,segment3 segment3_key
+		  ,segment4 segment4_key
+		  ,segment5 segment5_key
+		  ,valid_yn		  
+		  ,attribute1
+		  ,attribute2
+		  ,attribute3
+		  ,attribute4
+		  ,attribute5
+		  ,attribute6
+		  ,attribute7
+		  ,attribute8
+		  ,attribute9
+		  ,attribute10
+		  ,attribute11
+		  ,attribute12
+		  ,attribute13
+		  ,attribute14
+		  ,attribute15
+		  ,created_by
+		  ,creation_date
+		  ,last_updated_by
+		  ,last_update_date
+	 FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK)
+	 WHERE (@p_lookup_type IS NULL OR lookup_type = @p_lookup_type)
+	 order by display_seq
+	 ;
+  
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_GET_LOOKUP_TYPE","1937494031","1","
+/*
+ * Program ID   : SCM0003_GET_LOOKUP_TYPE
+ * Description  : Lookup Master 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/14   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0003_GET_LOOKUP_TYPE]
+  @p_lookup_type    NVARCHAR(MAX),
+  @p_lookup_group   NVARCHAR(MAX),
+  @p_admin_only_yn	NVARCHAR(100),
+  @p_valid_yn		NVARCHAR(100)
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+    SELECT 
+		   lookup_type
+		  ,description
+		  ,lookup_group
+		  ,admin_only_yn
+		  ,valid_yn
+		  ,segment1
+		  ,segment2
+		  ,segment3
+		  ,attribute1
+		  ,attribute2
+		  ,attribute3
+		  ,attribute4
+		  ,attribute5
+		  ,created_by
+		  ,creation_date
+		  ,last_updated_by
+		  ,last_update_date
+	 FROM dbo.SCM_ADM_LOOKUP_TYPE
+     WHERE  ( @p_lookup_type IS NULL OR lookup_type LIKE '%' + @p_lookup_type + '%' ) 
+	 AND (@p_lookup_group IS NULL OR lookup_group = @p_lookup_group)
+	 AND (@p_admin_only_yn IS NULL OR admin_only_yn = @p_admin_only_yn)
+	 AND (@p_valid_yn IS NULL OR valid_yn = @p_valid_yn)
+	 ORDER BY lookup_type
+	 ;
+  
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_GET_LOOKUP_VALUES","1953494088","1","
+/*
+ * Program ID   : SCM0003_GET_LOOKUP_VALUES
+ * Description  : Lookup Master 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/14   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCM0003_GET_LOOKUP_VALUES]
+  @p_lookup_type    NVARCHAR(MAX)
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+	DECLARE @v_sql_text AS NVARCHAR(MAX);
+
+    SELECT 
+		   division_id
+		  ,lookup_type
+		  ,lookup_code
+		  ,description  
+		  ,display_seq
+		  ,default_value_flag
+		  ,valid_yn
+		  ,segment1
+		  ,segment2
+		  ,segment3
+		  ,attribute1
+		  ,attribute2
+		  ,attribute3
+		  ,attribute4
+		  ,attribute5
+		  ,created_by
+		  ,creation_date
+		  ,last_updated_by
+		  ,last_update_date
+	 FROM LGCE_SCMDEV.dbo.SCM_ADM_LOOKUP_VALUES
+	 WHERE (@p_lookup_type IS NULL OR lookup_type = @p_lookup_type)
+	 order by display_seq
+	 ;
+  
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_MASTER","1969494145","1","
+/*
+ * Program ID   : SCM0003_SAVE_LOOKUP_MASTER
+ * Description  : Lookup Type 등록,수정 임시
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2017/12/07   byunghunjung	Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2019/01/29	hwyoon			[PS02199094B] GSCM(DM/SCP) SM운영/유지보수 LTRIM, RTRIM 적용
+ *
+ */
+CREATE PROCEDURE [dbo].[SCM0003_SAVE_LOOKUP_MASTER]
+
+	-- Add the parameters for the stored procedure here
+	@Action				NVARCHAR(1),
+	@LOOKUP_TYPE_KEY	NVARCHAR(200), 
+	@LOOKUP_TYPE		NVARCHAR(200), 
+	@DESCRIPTION		NVARCHAR(MAX),
+	@LOOKUP_GROUP		NVARCHAR(200), 
+	@VALID_YN			NVARCHAR(2),
+	@SEGMENT1			NVARCHAR(100),
+	@SEGMENT2			NVARCHAR(100),
+	@SEGMENT3			NVARCHAR(100),
+	@SEGMENT4			NVARCHAR(100),
+	@SEGMENT5			NVARCHAR(100),
+	@ATTRIBUTE1			NVARCHAR(100),
+	@ATTRIBUTE2			NVARCHAR(100),
+	@ATTRIBUTE3			NVARCHAR(100),
+	@ATTRIBUTE4			NVARCHAR(100),
+	@ATTRIBUTE5			NVARCHAR(100),
+	@ATTRIBUTE6			NVARCHAR(100),
+	@ATTRIBUTE7			NVARCHAR(100),
+	@ATTRIBUTE8			NVARCHAR(100),
+	@ATTRIBUTE9			NVARCHAR(100),
+	@ATTRIBUTE10		NVARCHAR(100),
+	@ATTRIBUTE11		NVARCHAR(100),
+	@ATTRIBUTE12		NVARCHAR(100),
+	@ATTRIBUTE13		NVARCHAR(100),
+	@ATTRIBUTE14		NVARCHAR(100),
+	@ATTRIBUTE15		NVARCHAR(100),
+	@CREATED_BY			NVARCHAR(300),
+	@CREATION_DATE		DATETIME,
+	@LAST_UPDATED_BY	NVARCHAR(300)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	
+	DECLARE @p_active_flag		NVARCHAR(1);
+	DECLARE @p_lookup_type_key	NVARCHAR(200); 
+	DECLARE @p_lookup_type		NVARCHAR(200); 
+	DECLARE @p_description		NVARCHAR(MAX);
+	DECLARE @p_lookup_group		NVARCHAR(200); 
+	DECLARE @p_valid_yn			NVARCHAR(2);
+	DECLARE @p_segment1			NVARCHAR(100);
+	DECLARE @p_segment2			NVARCHAR(100);
+	DECLARE @p_segment3			NVARCHAR(100);
+	DECLARE @p_segment4			NVARCHAR(100);
+	DECLARE @p_segment5			NVARCHAR(100);
+	DECLARE @p_attribute1		NVARCHAR(100);
+	DECLARE @p_attribute2		NVARCHAR(100);
+	DECLARE @p_attribute3		NVARCHAR(100);
+	DECLARE @p_attribute4		NVARCHAR(100);
+	DECLARE @p_attribute5		NVARCHAR(100);
+	DECLARE @p_attribute6		NVARCHAR(100);
+	DECLARE @p_attribute7		NVARCHAR(100);
+	DECLARE @p_attribute8		NVARCHAR(100);
+	DECLARE @p_attribute9		NVARCHAR(100);
+	DECLARE @p_attribute10		NVARCHAR(100);
+	DECLARE @p_attribute11		NVARCHAR(100);
+	DECLARE @p_attribute12		NVARCHAR(100);
+	DECLARE @p_attribute13		NVARCHAR(100);
+	DECLARE @p_attribute14		NVARCHAR(100);
+	DECLARE @p_attribute15		NVARCHAR(100);
+	DECLARE @p_created_by		NVARCHAR(300);
+	DECLARE @p_creation_date	DATETIME;
+	DECLARE @p_last_updated_by	NVARCHAR(300);
+
+	SET @p_active_flag		= @Action;
+	SET @p_lookup_type_key	= RTRIM(LTRIM(ISNULL(@LOOKUP_TYPE_KEY,'')));
+	SET @p_lookup_type		= RTRIM(LTRIM(ISNULL(@LOOKUP_TYPE,'')));
+	SET @p_description		= @DESCRIPTION;
+	SET @p_lookup_group		= @LOOKUP_GROUP;
+	SET @p_valid_yn			= @VALID_YN;
+	SET @p_segment1			= RTRIM(LTRIM(ISNULL(@SEGMENT1,'')));
+	SET @p_segment2			= RTRIM(LTRIM(ISNULL(@SEGMENT2,'')));
+	SET @p_segment3			= RTRIM(LTRIM(ISNULL(@SEGMENT3,'')));
+	SET @p_segment4			= RTRIM(LTRIM(ISNULL(@SEGMENT4,'')));
+	SET @p_segment5			= RTRIM(LTRIM(ISNULL(@SEGMENT5,'')));
+	SET @p_attribute1		= @ATTRIBUTE1;
+	SET @p_attribute2		= @ATTRIBUTE2;
+	SET @p_attribute3		= @ATTRIBUTE3;
+	SET @p_attribute4		= @ATTRIBUTE4;
+	SET @p_attribute5		= @ATTRIBUTE5;
+	SET @p_attribute6		= @ATTRIBUTE6;
+	SET @p_attribute7		= @ATTRIBUTE7;
+	SET @p_attribute8		= @ATTRIBUTE8;
+	SET @p_attribute9		= @ATTRIBUTE9;
+	SET @p_attribute10		= @ATTRIBUTE10;
+	SET @p_attribute11		= @ATTRIBUTE11;
+	SET @p_attribute12		= @ATTRIBUTE12;
+	SET @p_attribute13		= @ATTRIBUTE13;
+	SET @p_attribute14		= @ATTRIBUTE14;
+	SET @p_attribute15		= @ATTRIBUTE15;
+	SET @p_created_by		= @CREATED_BY;
+	SET @p_creation_date	= @CREATION_DATE;
+	SET @p_last_updated_by	= @LAST_UPDATED_BY;
+	-- LOG 용 변수 설정
+    D"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_MASTER","1969494145","2","ECLARE @v_program_name NVARCHAR(150) = 'SCM0003_SAVE_LOOKUP_MASTER';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		IF ISNULL(@p_creation_date,'') = ''
+			SET @p_creation_date = SYSDATETIME()
+		
+		--HISTORY INSERT
+		EXEC [PR_SCM_ADM_LOOKUP_MASTER_HIST]
+										@p_lookup_type			
+										,@p_description		
+										,@p_lookup_group			
+										,@p_valid_yn											
+										,@p_segment1				
+										,@p_segment2			
+										,@p_segment3		
+										,@p_segment4      
+										,@p_segment5
+										,@p_attribute1
+										,@p_attribute2
+										,@p_attribute3
+										,@p_attribute4
+										,@p_attribute5
+										,@p_attribute6
+										,@p_attribute7
+										,@p_attribute8
+										,@p_attribute9
+										,@p_attribute10
+										,@p_attribute11
+										,@p_attribute12
+										,@p_attribute13
+										,@p_attribute14
+										,@p_attribute15
+										,@p_created_by			
+										,@p_creation_date		
+										,@p_last_updated_by      	
+										;
+
+		IF @p_active_flag = 'I'
+			BEGIN
+				INSERT INTO SCM_ADM_LOOKUP_MASTER
+					    (
+							lookup_type, description, lookup_group, valid_yn, segment1, segment2, segment3, segment4, segment5, created_by, creation_date,
+							last_updated_by, last_update_date, attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,
+							attribute10,attribute11,attribute12,attribute13,attribute14,attribute15
+						)
+					VALUES(
+							@p_lookup_type_key, @p_description, @p_lookup_group, @p_valid_yn, @p_segment1, @p_segment2, @p_segment3, @p_segment4, @p_segment5, @p_created_by, @p_creation_date,
+							@p_last_updated_by, SYSDATETIME(), @p_attribute1, @p_attribute2, @p_attribute3, @p_attribute4, @p_attribute5, @p_attribute6, @p_attribute7, @p_attribute8, @p_attribute9,
+							@p_attribute10, @p_attribute11, @p_attribute12, @p_attribute13, @p_attribute14, @p_attribute15
+						)
+				;
+			END
+		ELSE 
+			BEGIN
+				UPDATE SCM_ADM_LOOKUP_MASTER
+					SET lookup_type = @p_lookup_type
+					    ,description = @p_description
+						,lookup_group = @p_lookup_group
+						,valid_yn = @p_valid_yn
+						,segment1 = @p_segment1
+						,segment2 = @p_segment2
+						,segment3 = @p_segment3
+						,segment4 = @p_segment4
+						,segment5 = @p_segment5
+						,last_updated_by = @p_last_updated_by
+						,last_update_date = sysdatetime()
+						,attribute1 = @p_attribute1
+						,attribute2 = @p_attribute2
+						,attribute3 = @p_attribute3
+						,attribute4 = @p_attribute4
+						,attribute5 = @p_attribute5
+						,attribute6 = @p_attribute6
+						,attribute7 = @p_attribute7
+						,attribute8 = @p_attribute8
+						,attribute9 = @p_attribute9
+						,attribute10 = @p_attribute10
+						,attribute11 = @p_attribute11
+						,attribute12 = @p_attribute12
+						,attribute13 = @p_attribute13
+						,attribute14 = @p_attribute14
+						,attribute15 = @p_attribute15
+				WHERE lookup_type = @p_lookup_type_key;
+
+				IF @p_lookup_type_key != @p_lookup_type
+					BEGIN
+						UPDATE SCM_ADM_LOOKUP_MASTER_DETAIL SET lookup_type = @p_lookup_type WHERE lookup_type = @p_lookup_type_key
+					END
+
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			-- 결과코"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_MASTER","1969494145","3","드, 결과 카운트 반환
+			SELECT  'S' AS result_code ;
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_MASTER_DETAIL","1985494202","1","
+/*
+ * Program ID   : SCM0003_SAVE_LOOKUP_MASTER_DETAIL
+ * Description  : Lookup Values 등록,수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/14   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2019/01/29	hwyoon			[PS02199094B] GSCM(DM/SCP) SM운영/유지보수 LTRIM, RTRIM 적용
+ *
+ */
+CREATE PROCEDURE [dbo].[SCM0003_SAVE_LOOKUP_MASTER_DETAIL]
+
+-- Add the parameters for the stored procedure here
+	@Action				NVARCHAR(1),
+	@LOOKUP_TYPE		NVARCHAR(200), 
+	@DESCRIPTION		NVARCHAR(MAX),
+	@DISPLAY_SEQ		INT, 
+	@VALID_YN			NVARCHAR(1),
+	@SEGMENT1			NVARCHAR(100),
+	@SEGMENT2			NVARCHAR(100),
+	@SEGMENT3			NVARCHAR(100),
+	@SEGMENT4			NVARCHAR(100),
+	@SEGMENT5			NVARCHAR(100),
+	@SEGMENT1_KEY		NVARCHAR(100),
+	@SEGMENT2_KEY		NVARCHAR(100),
+	@SEGMENT3_KEY		NVARCHAR(100),
+	@SEGMENT4_KEY		NVARCHAR(100),
+	@SEGMENT5_KEY		NVARCHAR(100),
+	@ATTRIBUTE1			NVARCHAR(100),
+	@ATTRIBUTE2			NVARCHAR(100),
+	@ATTRIBUTE3			NVARCHAR(100),
+	@ATTRIBUTE4			NVARCHAR(100),
+	@ATTRIBUTE5			NVARCHAR(100),
+	@ATTRIBUTE6			NVARCHAR(100),
+	@ATTRIBUTE7			NVARCHAR(100),
+	@ATTRIBUTE8			NVARCHAR(100),
+	@ATTRIBUTE9			NVARCHAR(100),
+	@ATTRIBUTE10		NVARCHAR(100),
+	@ATTRIBUTE11		NVARCHAR(100),
+	@ATTRIBUTE12		NVARCHAR(100),
+	@ATTRIBUTE13		NVARCHAR(100),
+	@ATTRIBUTE14		NVARCHAR(100),
+	@ATTRIBUTE15		NVARCHAR(100),
+	@CREATED_BY			NVARCHAR(300),
+	@CREATION_DATE		DATETIME,
+	@LAST_UPDATED_BY	NVARCHAR(300)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	DECLARE @p_active_flag		NVARCHAR(1);
+	DECLARE @p_lookup_type		NVARCHAR(200); 
+	DECLARE @p_description		NVARCHAR(MAX);
+	DECLARE @p_display_seq		NVARCHAR(200); 
+	DECLARE @p_valid_yn			NVARCHAR(2);
+	DECLARE @p_segment1			NVARCHAR(100);
+	DECLARE @p_segment2			NVARCHAR(100);
+	DECLARE @p_segment3			NVARCHAR(100);
+	DECLARE @p_segment4			NVARCHAR(100);
+	DECLARE @p_segment5			NVARCHAR(100);
+	DECLARE @p_segment1_key		NVARCHAR(100);
+	DECLARE @p_segment2_key		NVARCHAR(100);
+	DECLARE @p_segment3_key		NVARCHAR(100);
+	DECLARE @p_segment4_key		NVARCHAR(100);
+	DECLARE @p_segment5_key		NVARCHAR(100);
+	DECLARE @p_attribute1		NVARCHAR(100);
+	DECLARE @p_attribute2		NVARCHAR(100);
+	DECLARE @p_attribute3		NVARCHAR(100);
+	DECLARE @p_attribute4		NVARCHAR(100);
+	DECLARE @p_attribute5		NVARCHAR(100);
+	DECLARE @p_attribute6		NVARCHAR(100);
+	DECLARE @p_attribute7		NVARCHAR(100);
+	DECLARE @p_attribute8		NVARCHAR(100);
+	DECLARE @p_attribute9		NVARCHAR(100);
+	DECLARE @p_attribute10		NVARCHAR(100);
+	DECLARE @p_attribute11		NVARCHAR(100);
+	DECLARE @p_attribute12		NVARCHAR(100);
+	DECLARE @p_attribute13		NVARCHAR(100);
+	DECLARE @p_attribute14		NVARCHAR(100);
+	DECLARE @p_attribute15		NVARCHAR(100);
+	DECLARE @p_created_by		NVARCHAR(300);
+	DECLARE @p_creation_date	DATETIME;
+	DECLARE @p_last_updated_by	NVARCHAR(300);
+
+	SET @p_active_flag		= @Action;
+	SET @p_lookup_type		= RTRIM(LTRIM(ISNULL(@LOOKUP_TYPE,'')));
+	SET @p_description		= @DESCRIPTION;
+	SET @p_display_seq		= @DISPLAY_SEQ;
+	SET @p_valid_yn			= @VALID_YN;
+	SET @p_segment1			= RTRIM(LTRIM(ISNULL(@SEGMENT1,'')));
+	SET @p_segment2			= RTRIM(LTRIM(ISNULL(@SEGMENT2,'')));
+	SET @p_segment3			= RTRIM(LTRIM(ISNULL(@SEGMENT3,'')));
+	SET @p_segment4			= RTRIM(LTRIM(ISNULL(@SEGMENT4,'')));
+	SET @p_segment5			= RTRIM(LTRIM(ISNULL(@SEGMENT5,'')));
+	SET @p_segment1_key		= RTRIM(LTRIM(ISNULL(@SEGMENT1_KEY,'')));
+	SET @p_segment2_key		= RTRIM(LTRIM(ISNULL(@SEGMENT2_KEY,'')));
+	SET @p_segment3_key		= RTRIM(LTRIM(ISNULL(@SEGMENT3_KEY,'')));
+	SET @p_segment4_key		= RTRIM(LTRIM(ISNULL(@SEGMENT4_KEY,'')));
+	SET @p_segment5_key		= RTRIM(LTRIM(ISNULL(@SEGMENT5_KEY,'')));
+	SET @p_attribute1		= @ATTRIBUTE1;
+	SET @p_attribute2		= @ATTRIBUTE2;
+	SET @p_attribute3		= @A"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_MASTER_DETAIL","1985494202","2","TTRIBUTE3;
+	SET @p_attribute4		= @ATTRIBUTE4;
+	SET @p_attribute5		= @ATTRIBUTE5;
+	SET @p_attribute6		= @ATTRIBUTE6;
+	SET @p_attribute7		= @ATTRIBUTE7;
+	SET @p_attribute8		= @ATTRIBUTE8;
+	SET @p_attribute9		= @ATTRIBUTE9;
+	SET @p_attribute10		= @ATTRIBUTE10;
+	SET @p_attribute11		= @ATTRIBUTE11;
+	SET @p_attribute12		= @ATTRIBUTE12;
+	SET @p_attribute13		= @ATTRIBUTE13;
+	SET @p_attribute14		= @ATTRIBUTE14;
+	SET @p_attribute15		= @ATTRIBUTE15;
+	SET @p_created_by		= @CREATED_BY;
+	SET @p_creation_date	= @CREATION_DATE;
+	SET @p_last_updated_by	= @LAST_UPDATED_BY;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCM0003_SAVE_LOOKUP_MASTER_DETAIL';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		IF ISNULL(@p_creation_date,'') = ''
+		SET @p_creation_date = SYSDATETIME()
+		
+		--HISTORY INSERT
+		EXEC [PR_SCM_ADM_LOOKUP_MASTER_DETAIL_HIST]
+										@p_lookup_type			
+										,@p_description		
+										,@p_display_seq			
+										,@p_valid_yn											 	
+										,@p_segment1				
+										,@p_segment2			
+										,@p_segment3		
+										,@p_segment4      
+										,@p_segment5
+										,@p_attribute1
+										,@p_attribute2
+										,@p_attribute3
+										,@p_attribute4
+										,@p_attribute5
+										,@p_attribute6
+										,@p_attribute7
+										,@p_attribute8
+										,@p_attribute9
+										,@p_attribute10
+										,@p_attribute11
+										,@p_attribute12
+										,@p_attribute13
+										,@p_attribute14
+										,@p_attribute15
+										,@p_created_by			
+										,@p_creation_date		
+										,@p_last_updated_by     ;
+
+		IF @p_active_flag = 'I'
+			BEGIN
+				INSERT INTO SCM_ADM_LOOKUP_MASTER_DETAIL
+					    (
+							lookup_type, description, display_seq, valid_yn, segment1, segment2, segment3, segment4, segment5, created_by, creation_date,
+							last_updated_by, last_update_date, attribute1,attribute2,attribute3,attribute4,attribute5,attribute6,attribute7,attribute8,attribute9,
+							attribute10,attribute11,attribute12,attribute13,attribute14,attribute15
+						)
+					VALUES(
+							@p_lookup_type, @p_description, @p_display_seq, @p_valid_yn, @p_segment1, @p_segment2, @p_segment3, @p_segment4, @p_segment5, @p_created_by, @p_creation_date,
+							@p_last_updated_by, sysdatetime(), @p_attribute1, @p_attribute2, @p_attribute3, @p_attribute4, @p_attribute5, @p_attribute6, @p_attribute7, @p_attribute8, @p_attribute9,
+							@p_attribute10, @p_attribute11, @p_attribute12, @p_attribute13, @p_attribute14, @p_attribute15
+						)
+				;
+			END
+		ELSE 
+			BEGIN
+				UPDATE SCM_ADM_LOOKUP_MASTER_DETAIL
+					SET description = @p_description
+					    ,display_seq = @p_display_seq
+						,valid_yn = @p_valid_yn
+						,segment1 = @p_segment1
+						,segment2 = @p_segment2
+						,segment3 = @p_segment3
+						,segment4 = @p_segment4
+						,segment5 = @p_segment5
+						,last_updated_by = @p_last_updated_by
+						,last_update_date = sysdatetime()
+						,attribute1 = @p_attribute1
+						,attribute2 = @p_attribute2
+						,attribute3 = @p_attribute3
+						,attribute4 = @p_attribute4
+						,attribute5 = @p_attribute5
+						,attribute6 = @p_attribute6
+						,attribute7 = @p_attribute7
+						,attribute8 = @p_attribute8
+						,attribute9 = @p_attribute9
+						,attribute10 = @p_attribute10
+						,attribute11 = @p_attribute11
+						,attribute12 = @p_attribute12
+						,attribute13 = @p_attribute13
+						,attribute14 = @p_attribute14
+						,a"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_MASTER_DETAIL","1985494202","3","ttribute15 = @p_attribute15
+				WHERE lookup_type = @p_lookup_type
+				  and segment1 = @p_segment1_key
+				  and segment2 = @p_segment2_key
+				  and segment3 = @p_segment3_key
+				  and segment4 = @p_segment4_key
+				  and segment5 = @p_segment5_key;
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code ;
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_TYPE","2001494259","1","/*
+ * Program ID   : SCM0003_SAVE_LOOKUP_TYPE
+ * Description  : Lookup Type 등록,수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/07   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+CREATE PROCEDURE [dbo].[SCM0003_SAVE_LOOKUP_TYPE]
+
+	-- Add the parameters for the stored procedure here
+@p_active_flag			NVARCHAR(MAX),
+@p_lookup_type			NVARCHAR(MAX), 
+@p_l_description		NVARCHAR(MAX),
+@p_lookup_group			NVARCHAR(MAX), 
+@p_admin_only_yn		NVARCHAR(MAX),
+@p_valid_yn				NVARCHAR(MAX),
+@p_created_by			NVARCHAR(MAX),
+@p_creation_date		NVARCHAR(MAX),
+@p_last_updated_by      NVARCHAR(MAX), 
+@p_segment1				NVARCHAR(MAX), 
+@p_segment2				NVARCHAR(MAX), 
+@p_segment3				NVARCHAR(MAX), 
+@p_attribute1			NVARCHAR(MAX), 
+@p_attribute2			NVARCHAR(MAX), 
+@p_attribute3			NVARCHAR(MAX), 
+@p_attribute4			NVARCHAR(MAX), 
+@p_attribute5			NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX); 
+    DECLARE @v_lookup_type			NVARCHAR(MAX); 
+    DECLARE @v_l_description		NVARCHAR(MAX);
+    DECLARE @v_lookup_group			NVARCHAR(MAX); 
+    DECLARE @v_admin_only_yn		NVARCHAR(MAX);
+    DECLARE @v_valid_yn				NVARCHAR(MAX);
+    DECLARE @v_created_by			NVARCHAR(MAX);
+    DECLARE @v_creation_date		NVARCHAR(MAX);
+    DECLARE @v_last_updated_by      NVARCHAR(MAX); 
+    DECLARE @v_segment1				NVARCHAR(MAX); 
+    DECLARE @v_segment2				NVARCHAR(MAX); 
+    DECLARE @v_segment3				NVARCHAR(MAX);
+	DECLARE @v_attribute1			NVARCHAR(MAX); 
+    DECLARE @v_attribute2			NVARCHAR(MAX); 
+    DECLARE @v_attribute3			NVARCHAR(MAX); 
+    DECLARE @v_attribute4			NVARCHAR(MAX); 
+    DECLARE @v_attribute5			NVARCHAR(MAX); 
+
+	SET @v_active_flag      = NULL; 
+	SET @v_lookup_type      = NULL; 
+    SET @v_l_description    = NULL;
+    SET @v_lookup_group     = NULL; 
+    SET @v_admin_only_yn    = NULL;
+    SET @v_valid_yn			= NULL;
+    SET @v_created_by		= NULL;
+    SET @v_creation_date    = NULL;
+    SET @v_last_updated_by  = NULL; 
+    SET @v_segment1			= NULL; 
+    SET @v_segment2			= NULL; 
+    SET @v_segment3			= NULL; 
+	SET @v_attribute1       = NULL; 
+    SET @v_attribute2		= NULL; 
+    SET @v_attribute3		= NULL; 
+    SET @v_attribute4		= NULL; 
+    SET @v_attribute5		= NULL; 
+    
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCM0003_SAVE_LOOKUP_TYPE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+			 
+
+		   SET @v_active_flag		= [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;  "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_TYPE","2001494259","2","  
+           SET @v_lookup_type       = [dbo].[SCM_ARR_SPL_VAL](@p_lookup_type, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_l_description     = [dbo].[SCM_ARR_SPL_VAL](@p_l_description, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_lookup_group      = [dbo].[SCM_ARR_SPL_VAL](@p_lookup_group, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_admin_only_yn     = [dbo].[SCM_ARR_SPL_VAL](@p_admin_only_yn, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_valid_yn          = [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_created_by        = [dbo].[SCM_ARR_SPL_VAL](@p_created_by, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_creation_date     = [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_last_updated_by   = [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_segment1			= [dbo].[SCM_ARR_SPL_VAL](@p_segment1, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_segment2			= [dbo].[SCM_ARR_SPL_VAL](@p_segment2, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_segment3			= [dbo].[SCM_ARR_SPL_VAL](@p_segment3, @v_delimiter , @mst_loop_cnt) ; 
+		   SET @v_attribute1		= [dbo].[SCM_ARR_SPL_VAL](@p_attribute1, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_attribute2		= [dbo].[SCM_ARR_SPL_VAL](@p_attribute2, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_attribute3		= [dbo].[SCM_ARR_SPL_VAL](@p_attribute3, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_attribute4		= [dbo].[SCM_ARR_SPL_VAL](@p_attribute4, @v_delimiter , @mst_loop_cnt) ; 
+           SET @v_attribute5		= [dbo].[SCM_ARR_SPL_VAL](@p_attribute5, @v_delimiter , @mst_loop_cnt) ; 
+           
+			END
+
+		   --HISTORY INSERT
+		   
+			EXEC [PR_SCM_ADM_LOOKUP_TYPE_HIST]
+											 @v_lookup_type			
+											,@v_l_description		
+											,@v_lookup_group			
+											,@v_admin_only_yn		
+											,@v_valid_yn				
+											,@v_created_by			
+											,@v_creation_date		
+											,@v_last_updated_by      
+											,@v_segment1
+											,@v_segment2
+											,@v_segment3
+											,@v_attribute1
+											,@v_attribute2
+											,@v_attribute3
+											,@v_attribute4
+											,@v_attribute5
+															
+			 ;
+			
+			IF @mst_loop_cnt > 0 
+			
+			BEGIN
+			MERGE INTO [SCM_ADM_LOOKUP_TYPE] A
+			USING (
+					SELECT 
+					@v_lookup_type as lookup_type
+				   ,@v_segment1 as segment1
+				   ,@v_segment2 as segment2
+				   ,@v_segment3 as segment3
+						
+				  ) B
+			ON(
+					A.lookup_type = B.lookup_type	
+				AND	A.segment1 = b.segment1
+				AND	A.segment2 = b.segment2
+				AND	A.segment3 = b.segment3
+				)
+			WHEN MATCHED THEN
+					UPDATE SET 
+					 description		=	@v_l_description
+					,lookup_group		=	@v_lookup_group
+					,admin_only_yn		=	@v_admin_only_yn
+					,valid_yn     		=	@v_valid_yn     
+					,created_by			=	@v_created_by
+					,creation_date		=	@v_creation_date
+					,last_updated_by	=	@v_last_updated_by
+					,last_update_date	=   sysdatetime()
+					,segment1			=	@v_segment1
+					,segment2			=	@v_segment2
+					,segment3			=	@v_segment3
+					,attribute1			=	@v_attribute1
+					,attribute2			=	@v_attribute2
+					,attribute3			=	@v_attribute3
+					,attribute4			=	@v_attribute4
+					,attribute5			=	@v_attribute5
+
+
+			WHEN NOT MATCHED THEN
+		
+			  INSERT 
+			   (
+				lookup_type           ,description          ,lookup_group           ,admin_only_yn
+			   ,valid_yn			  ,created_by           ,creation_date          ,last_updated_by	   ,last_update_date     
+			   ,segment1			  ,segment2			    ,segment3      
+			   ,attribute1			  ,attribute2		    ,attribute3				,attribute4			   ,attribute5      
+			   )
+			  VALUES
+			  (
+				@v_lookup_type        ,@v_l_description     ,@v_lookup_group        ,@v_admin_only_yn
+			   ,@v_valid_yn           ,@v_created_by        ,sysdatetime()          ,@v_last_updated_by    ,sysdatetime()"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_TYPE","2001494259","3","   
+			   ,@v_segment1			  ,@v_segment2			,@v_segment3         
+			   ,@v_attribute1		  ,@v_attribute2		,@v_attribute3			,@v_attribute4         ,@v_attribute5      
+			   )
+			   ;
+	
+			END
+			ELSE -- 단일 row
+			 
+			BEGIN   
+
+			SET @v_active_flag		= @p_active_flag        
+			SET @p_active_flag		= NULL       
+			SET	@v_lookup_type		=	@p_lookup_type
+			SET	@p_lookup_type		=	NULL
+			SET	@v_l_description	=	@p_l_description
+			SET	@p_l_description	=	NULL
+			SET	@v_lookup_group		=	@p_lookup_group
+			SET	@p_lookup_group		=	NULL
+			SET	@v_admin_only_yn	=	@p_admin_only_yn
+			SET	@p_admin_only_yn	=	NULL
+			SET	@v_valid_yn			=	@p_valid_yn
+			SET	@p_valid_yn			=	NULL
+			SET	@v_created_by		=	@p_created_by
+			SET	@p_created_by		=	NULL
+			SET	@v_creation_date	=	@p_creation_date
+			SET	@p_creation_date	=	NULL
+			SET	@v_last_updated_by	=	@p_last_updated_by
+			SET	@p_last_updated_by	=	NULL
+			SET	@v_segment1		=	@p_segment1
+			SET	@p_segment1		=	NULL
+			SET	@v_segment2		=	@p_segment2
+			SET	@p_segment2		=	NULL
+			SET	@v_segment3		=	@p_segment3
+			SET	@p_segment3		=	NULL
+			SET	@v_attribute1	=	@p_attribute1
+			SET	@p_attribute1	=	NULL
+			SET	@v_attribute2	=	@p_attribute2
+			SET	@p_attribute2	=	NULL
+			SET	@v_attribute3	=	@p_attribute3
+			SET	@p_attribute3	=	NULL
+			SET	@v_attribute4	=	@p_attribute4
+			SET	@p_attribute4	=	NULL
+			SET	@v_attribute5	=	@p_attribute5
+			SET	@p_attribute5	=	NULL
+
+			MERGE INTO [SCM_ADM_LOOKUP_TYPE] A
+			USING (
+					SELECT 
+					@v_lookup_type as lookup_type
+						
+				  ) B
+			ON(
+					A.lookup_type = B.lookup_type	
+				)
+					WHEN MATCHED THEN
+					UPDATE SET 
+					 description		=	@v_l_description
+					,lookup_group		=	@v_lookup_group
+					,admin_only_yn		=	@v_admin_only_yn
+					,valid_yn     		=	@v_valid_yn     
+					,created_by			=	@v_created_by
+					,creation_date		=	@v_creation_date
+					,last_updated_by	=	@v_last_updated_by
+					,last_update_date	=   sysdatetime()
+					,segment1			=	@v_segment1
+					,segment2			=	@v_segment2
+					,segment3			=	@v_segment3
+					,attribute1			=	@v_attribute1
+					,attribute2			=	@v_attribute2
+					,attribute3			=	@v_attribute3
+					,attribute4			=	@v_attribute4
+					,attribute5			=	@v_attribute5
+			WHEN NOT MATCHED THEN
+		
+			  INSERT 
+			   (
+				lookup_type           ,description          ,lookup_group           ,admin_only_yn
+			   ,valid_yn			  ,created_by           ,creation_date          ,last_updated_by	   ,last_update_date     
+			   ,segment1			  ,segment2			    ,segment3      
+			   ,attribute1			  ,attribute2		    ,attribute3				,attribute4			   ,attribute5     
+			   )
+			  VALUES
+			  (
+				@v_lookup_type        ,@v_l_description     ,@v_lookup_group        ,@v_admin_only_yn
+			   ,@v_valid_yn           ,@v_created_by        ,sysdatetime()          ,@v_last_updated_by    ,sysdatetime()   
+			   ,@v_segment1			  ,@v_segment2			,@v_segment3         
+			   ,@v_attribute1		  ,@v_attribute2		,@v_attribute3			,@v_attribute4         ,@v_attribute5     
+			   )
+			   ;
+		   ;
+				END	
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+		END CATCH;"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_TYPE","2001494259","4","
+	END
+
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_VALUES","2017494316","1","/*
+ * Program ID   : SCM0003_SAVE_LOOKUP_VALUES
+ * Description  : Lookup Values 등록,수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/14   byunghunjung   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+CREATE PROCEDURE [dbo].[SCM0003_SAVE_LOOKUP_VALUES]
+
+-- Add the parameters for the stored procedure here
+@p_active_flag			NVARCHAR(MAX),
+@p_lookup_type			NVARCHAR(MAX), 
+@p_division_id			NVARCHAR(MAX), 
+@p_lookup_code			NVARCHAR(MAX), 
+@p_l_description		NVARCHAR(MAX),
+@p_display_seq			NVARCHAR(MAX), 
+@p_default_value_flag	NVARCHAR(MAX), 
+@p_valid_yn				NVARCHAR(MAX),
+@p_created_by			NVARCHAR(MAX),
+@p_creation_date		NVARCHAR(MAX),
+@p_last_updated_by      NVARCHAR(MAX), 
+@p_segment1				NVARCHAR(MAX), 
+@p_segment2				NVARCHAR(MAX), 
+@p_segment3				NVARCHAR(MAX), 
+@p_attribute1			NVARCHAR(MAX), 
+@p_attribute2			NVARCHAR(MAX), 
+@p_attribute3			NVARCHAR(MAX), 
+@p_attribute4			NVARCHAR(MAX), 
+@p_attribute5			NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX); 
+    DECLARE @v_lookup_type			NVARCHAR(MAX); 
+	DECLARE @v_division_id			NVARCHAR(MAX); 
+	DECLARE @v_lookup_code			NVARCHAR(MAX);
+	DECLARE @v_l_description		NVARCHAR(MAX);
+	DECLARE @v_display_seq			NVARCHAR(MAX);
+	DECLARE @v_default_value_flag	NVARCHAR(MAX); 
+	DECLARE @v_valid_yn				NVARCHAR(MAX);
+    DECLARE @v_created_by			NVARCHAR(MAX);
+    DECLARE @v_creation_date		NVARCHAR(MAX);
+    DECLARE @v_last_updated_by      NVARCHAR(MAX); 
+    DECLARE @v_segment1				NVARCHAR(MAX); 
+    DECLARE @v_segment2				NVARCHAR(MAX); 
+    DECLARE @v_segment3				NVARCHAR(MAX);
+	DECLARE @v_attribute1			NVARCHAR(MAX); 
+    DECLARE @v_attribute2			NVARCHAR(MAX); 
+    DECLARE @v_attribute3			NVARCHAR(MAX); 
+    DECLARE @v_attribute4			NVARCHAR(MAX); 
+    DECLARE @v_attribute5			NVARCHAR(MAX); 
+
+	SET @v_active_flag			= NULL; 
+	SET @v_lookup_type			= NULL; 
+	SET @v_division_id			= NULL; 
+    SET @v_lookup_code			= NULL;
+    SET @v_l_description		= NULL;
+    SET @v_display_seq			= NULL;
+    SET @v_default_value_flag   = NULL;
+    SET @v_valid_yn				= NULL;
+    SET @v_created_by			= NULL;
+    SET @v_creation_date		= NULL;
+    SET @v_last_updated_by      = NULL; 
+    SET @v_segment1			= NULL; 
+    SET @v_segment2			= NULL; 
+    SET @v_segment3			= NULL; 
+	SET @v_attribute1       = NULL; 
+    SET @v_attribute2		= NULL; 
+    SET @v_attribute3		= NULL; 
+    SET @v_attribute4		= NULL; 
+    SET @v_attribute5		= NULL; 
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCM0003_SAVE_LOOKUP_VALUES';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	BEGIN TRY
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt ="
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_VALUES","2017494316","2"," @mst_loop_cnt + 1;
+			SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+			   SET @v_active_flag			= [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+			   SET @v_lookup_type			= [dbo].[SCM_ARR_SPL_VAL](@p_lookup_type, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_division_id			= [dbo].[SCM_ARR_SPL_VAL](@p_division_id, @v_delimiter , @mst_loop_cnt) ; 
+	 		   SET @v_lookup_code			= [dbo].[SCM_ARR_SPL_VAL](@p_lookup_code, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_l_description			= [dbo].[SCM_ARR_SPL_VAL](@p_l_description, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_display_seq			= [dbo].[SCM_ARR_SPL_VAL](@p_display_seq, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_default_value_flag	= [dbo].[SCM_ARR_SPL_VAL](@p_default_value_flag, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_valid_yn				= [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_created_by			= [dbo].[SCM_ARR_SPL_VAL](@p_created_by, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_creation_date			= [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_last_updated_by		= [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter , @mst_loop_cnt) ;  
+			   SET @v_segment1			= [dbo].[SCM_ARR_SPL_VAL](@p_segment1, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_segment2			= [dbo].[SCM_ARR_SPL_VAL](@p_segment2, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_segment3			= [dbo].[SCM_ARR_SPL_VAL](@p_segment3, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_attribute1		= [dbo].[SCM_ARR_SPL_VAL](@p_attribute1, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_attribute2		= [dbo].[SCM_ARR_SPL_VAL](@p_attribute2, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_attribute3		= [dbo].[SCM_ARR_SPL_VAL](@p_attribute3, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_attribute4		= [dbo].[SCM_ARR_SPL_VAL](@p_attribute4, @v_delimiter , @mst_loop_cnt) ; 
+			   SET @v_attribute5		= [dbo].[SCM_ARR_SPL_VAL](@p_attribute5, @v_delimiter , @mst_loop_cnt) ; 
+			END
+
+		   --HISTORY INSERT
+
+			EXEC [PR_SCM_ADM_LOOKUP_VALUES_HIST]
+											 @v_lookup_type
+											,@v_division_id
+											,@v_lookup_code
+											,@v_l_description
+											,@v_display_seq
+											,@v_default_value_flag
+											,@v_valid_yn
+											,@v_created_by
+											,@v_creation_date
+											,@v_last_updated_by
+											,@v_segment1
+											,@v_segment2
+											,@v_segment3
+											,@v_attribute1
+											,@v_attribute2
+											,@v_attribute3
+											,@v_attribute4
+											,@v_attribute5
+
+						
+															
+			 ;
+
+			IF @mst_loop_cnt > 0 
+			
+			BEGIN
+			MERGE INTO [SCM_ADM_LOOKUP_VALUES] A
+			USING (
+					SELECT 
+					 @v_lookup_type as lookup_type
+					,@v_lookup_code as lookup_code
+					,@v_segment1 as segment1
+				    ,@v_segment2 as segment2
+				    ,@v_segment3 as segment3
+						
+				  ) B
+			ON(
+					A.lookup_type = B.lookup_type	
+				AND A.lookup_code = B.lookup_code
+				AND	A.segment1 = b.segment1
+				AND	A.segment2 = b.segment2
+				AND	A.segment3 = b.segment3
+				)
+			WHEN MATCHED THEN
+				UPDATE SET 
+					 division_id		=   @v_division_id
+					,description		=	@v_l_description
+					,display_seq		=	@v_display_seq
+					,default_value_flag	=	@v_default_value_flag
+					,valid_yn     		=	@v_valid_yn     
+					,created_by			=	@v_created_by
+					,creation_date		=	@v_creation_date
+					,last_updated_by	=	@v_last_updated_by
+					,last_update_date	=   sysdatetime()
+					,segment1			=	@v_segment1
+					,segment2			=	@v_segment2
+					,segment3			=	@v_segment3
+					,attribute1			=	@v_attribute1
+					,attribute2			=	@v_attribute2
+					,attribute3			=	@v_attribute3
+					,attribute4			=	@v_attribute4
+					,attribute5			=	@v_attribute5
+			WHEN NOT MATCHED THEN
+		
+			  INSERT 
+			   (
+			    division_id		,lookup_type	,lookup_code		,description       
+			   ,valid_yn		,display_seq	,default"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_VALUES","2017494316","3","_value_flag       
+			   ,created_by      ,creation_date  ,last_updated_by	,last_update_date     
+			   ,segment1        ,segment2		,segment3      
+			   ,attribute1      ,attribute2     ,attribute3			,attribute4    ,attribute5      
+			   
+			  )
+			  VALUES
+			  (
+			    @v_division_id	   ,@v_lookup_type	  ,@v_lookup_code		 ,@v_l_description       
+			   ,@v_valid_yn		   ,@v_display_seq	  ,@v_default_value_flag       
+			   ,@v_created_by      ,sysdatetime()     ,@v_last_updated_by	 ,sysdatetime()    
+			   ,@v_segment1        ,@v_segment2		  ,@v_segment3         
+			   ,@v_attribute1      ,@v_attribute2     ,@v_attribute3		 ,@v_attribute4       ,@v_attribute5      
+			   )
+		   ;
+	
+			END
+			ELSE -- 단일 row
+			 
+			BEGIN   
+
+			SET @v_active_flag = @p_active_flag        
+			SET @p_active_flag = NULL       
+			SET	@v_lookup_type	=	@p_lookup_type
+			SET	@p_lookup_type	=	NULL
+			SET	@v_division_id	=	@p_division_id
+			SET	@p_division_id	=	NULL
+			SET	@v_lookup_code	=	@p_lookup_code
+			SET	@p_lookup_code	=	NULL
+			SET	@v_l_description	=	@p_l_description
+			SET	@p_l_description	=	NULL
+			SET	@v_display_seq	=	@p_display_seq
+			SET	@p_display_seq	=	NULL
+			SET	@v_default_value_flag	=	@p_default_value_flag
+			SET	@p_default_value_flag	=	NULL
+			SET	@v_valid_yn	=	@p_valid_yn
+			SET	@p_valid_yn	=	NULL
+			SET	@v_created_by	=	@p_created_by
+			SET	@p_created_by	=	NULL
+			SET	@v_creation_date	=	@p_creation_date
+			SET	@p_creation_date	=	NULL
+			SET	@v_last_updated_by	=	@p_last_updated_by
+			SET	@p_last_updated_by	=	NULL
+			SET	@v_segment1		=	@p_segment1
+			SET	@p_segment1		=	NULL
+			SET	@v_segment2		=	@p_segment2
+			SET	@p_segment2		=	NULL
+			SET	@v_segment3		=	@p_segment3
+			SET	@p_segment3		=	NULL
+			SET	@v_attribute1	=	@p_attribute1
+			SET	@p_attribute1	=	NULL
+			SET	@v_attribute2	=	@p_attribute2
+			SET	@p_attribute2	=	NULL
+			SET	@v_attribute3	=	@p_attribute3
+			SET	@p_attribute3	=	NULL
+			SET	@v_attribute4	=	@p_attribute4
+			SET	@p_attribute4	=	NULL
+			SET	@v_attribute5	=	@p_attribute5
+			SET	@p_attribute5	=	NULL
+
+			
+			MERGE INTO [SCM_ADM_LOOKUP_VALUES] A
+			USING (
+					SELECT 
+					 @v_lookup_type as lookup_type
+					,@v_lookup_code as lookup_code
+						
+				  ) B
+			ON(
+					A.lookup_type = B.lookup_type	
+				AND A.lookup_code = B.lookup_code
+				)
+			WHEN MATCHED THEN
+					UPDATE SET 
+					 division_id		=   @v_division_id
+					,description		=	@v_l_description
+					,display_seq		=	@v_display_seq
+					,default_value_flag	=	@v_default_value_flag
+					,valid_yn     		=	@v_valid_yn     
+					,created_by			=	@v_created_by
+					,creation_date		=	@v_creation_date
+					,last_updated_by	=	@v_last_updated_by
+					,last_update_date	=   sysdatetime()
+					,segment1			=	@v_segment1
+					,segment2			=	@v_segment2
+					,segment3			=	@v_segment3
+					,attribute1			=	@v_attribute1
+					,attribute2			=	@v_attribute2
+					,attribute3			=	@v_attribute3
+					,attribute4			=	@v_attribute4
+					,attribute5			=	@v_attribute5
+			WHEN NOT MATCHED THEN
+		
+			  INSERT 
+			   (
+			    division_id		,lookup_type	,lookup_code		,description       
+			   ,valid_yn		,display_seq	,default_value_flag       
+			   ,created_by      ,creation_date  ,last_updated_by	,last_update_date           
+			   ,segment1        ,segment2		,segment3      
+			   ,attribute1      ,attribute2     ,attribute3			,attribute4    ,attribute5    
+			  )
+			  VALUES
+			  (
+			    @v_division_id	   ,@v_lookup_type	  ,@v_lookup_code		 ,@v_l_description       
+			   ,@v_valid_yn		   ,@v_display_seq	  ,@v_default_value_flag       
+			   ,@v_created_by      ,sysdatetime()     ,@v_last_updated_by	 ,sysdatetime()    
+			   ,@v_segment1        ,@v_segment2		  ,@v_segment3         
+			   ,@v_attribute1      ,@v_attribute2     ,@v_attribute3		 ,@v_attribute4       ,@v_attribute5  
+			   )
+		   
+		   ;
+				END	
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_SAVE_LOOKUP_VALUES","2017494316","4","procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+		END CATCH;
+	END
+
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_AFTER_LOOKUP_MASTER_DETAIL","352928529","1","
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * Program ID   : SCM0003_AFTER_LOOKUP_MASTER_DETAIL
+ * Description  : Lookup 저장후 공통(SCM) 과 별도로 추가로 후처리할 내용이 있으면 이곳에 추가
+ * Program History
+ *================================================================================================================================================
+ * Date         In Charge                          Description
+ *================================================================================================================================================
+ * 2024/10/10   chaan        V1.1.1                PJ20230692  SCM 역량 강화 위한 SCP 개선과제 이행 Phase2     - Initial Release
+ * 2025/02/10   mrchois      V1.1.2                PJ20249346  LGES SCP 개선과제 이행	 - Improvement Rate 입력 영역을 제거하고 Operation Plan 에 Goal 직접 입력 형태로 수정
+*/
+
+
+--CREATE PROCEDURE [dbo].[SCM0003_AFTER_LOOKUP_MASTER_DETAIL]
+CREATE PROCEDURE [dbo].[SCM0003_AFTER_LOOKUP_MASTER_DETAIL]
+	  @p_program_id			NVARCHAR(100)
+	, @p_sheet_name			NVARCHAR(100)
+	, @p_user_id			NVARCHAR(30)
+	, @debug_mode			NVARCHAR(1)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+	--DECLARE @p_program_id		NVARCHAR(100)		= N'SCM0003';
+	--DECLARE @p_sheet_name		NVARCHAR(100)		= N'SCP_CAPA_LOSS_MEASURE';
+ --   DECLARE @p_user_id			NVARCHAR(30)		= N'iamarock';
+ --   DECLARE @debug_mode			NVARCHAR(1)			= N'F';
+
+ 
+ DECLARE @test_mode                          NVARCHAR(20)		= N'F';
+	--DECLARE @test_mode                          NVARCHAR(20)	= N'T';
+
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150)	= 'SCM0003_AFTER_LOOKUP_MASTER_DETAIL';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER			= 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+        
+	BEGIN TRY
+		-- 시작 LOG
+		SET @v_log_type						= 'START';
+		SET @v_log_message					= '########## Start of procedure ##########';
+		SET @v_description					= '';
+		SET @d_event_date					= SYSDATETIME();
+
+        IF @test_mode <> 'T'
+        BEGIN
+		    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        END
+
+		DECLARE @v_all_cnt		        INTEGER		= 0;
+
+		-- Improvement Rate 입력 영역을 제거하고 Operation Plan 에 Goal 직접 입력 형태로 수정(2025-02-10 mrchois) START
+        --BEGIN-- 시스템별 추가 작업할 내용들을 별도의 프로시저로 만들어 여기서 호출
+        --    IF @p_sheet_name = N'SCP_CAPA_LOSS_MEASURE'
+        --    BEGIN-- SCP Capa I/G 변경
+        --        PRINT 'EXEC dbo.PR_SCP_MST_CAPA_LOSS_MEASURE_IG_CHNG_AP';
+        --        EXEC dbo.PR_SCP_MST_CAPA_LOSS_MEASURE_IG_CHNG_AP @p_user_id;
+        --    END
+        --    ELSE IF @p_sheet_name = N'SCP_CAPA_ELTR_LOSS_MEASURE'
+        --    BEGIN
+        --        PRINT 'EXEC dbo.PR_SCP_MST_CAPA_LOSS_MEASURE_IG_CHNG_ELTR';
+        --        EXEC dbo.PR_SCP_MST_CAPA_LOSS_MEASURE_IG_CHNG_ELTR @p_user_id;
+        --    END-- SCP Capa I/G 변경
+        --END-- 시스템별 추가 작업할 내용들을 별도의 프로시저로 만들어 여기서 호출
+		-- Improvement Rate 입력 영역을 제거하고 Operation Plan 에 Goal 직접 입력 형태로 수정(2025-02-10 mrchois) END
+
+
+        -- LOG end
+		SET @v_log_type     = 'END'
+		SET @v_log_message  = '########## END of procedure ##########'
+		SET @v_description  = ''
+		SET @d_event_date   = SYSDATETIME()
+
+        EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date
+
+		COMMIT TRAN;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @v_all_cnt AS result_cnt;
+	END TRY
+	BEGIN CATCH
+		  IF (XACT_STATE() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+		  BEGIN
+			INSERT INTO SCM_SYS_LOG_BATCH
+			(
+				  PROGRAM_NAME
+				, LOG_TYPE
+				, LOG_COUNT
+				, LOG_ME"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_AFTER_LOOKUP_MASTER_DETAIL","352928529","2","SSAGE
+				, DESCRIPTION
+				, EVENT_DATE
+				, CREATION_DATE
+				, CREATED_BY
+				, LAST_UPDATE_DATE
+				, LAST_UPDATED_BY
+			)
+			VALUES
+			(
+				  ISNULL(ERROR_PROCEDURE(), 'SCM0003_AFTER_LOOKUP_MASTER_DETAIL')
+	 			, 'ERROR'
+	 			, NULL
+	 			, ERROR_MESSAGE()
+	 			, NULL
+	 			, SYSDATETIME()
+	 			, SYSDATETIME()
+	 			, ERROR_PROCEDURE()
+	 			, SYSDATETIME()
+				, ERROR_PROCEDURE()
+			)
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + CONCAT('[ERROR LINE : ', ERROR_PROCEDURE(), ' - ', ERROR_LINE(), ']') + ERROR_MESSAGE();
+	END CATCH;
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0003_GET_LOOKUP_MASTER_DETAIL_NERP","544161134","1","
+/*
+ * Program ID   : SCM0003_GET_LOOKUP_MASTER_DETAIL_NERP
+ * Description  : Lookup Value 조회 
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2024/12/14   byunghunjung   NERP )  Lookup Value 조회 - 하드코딩 대응 및 개선
+ ----------------------------------------------------------------------------------------------------
+ exec SCM0003_GET_LOOKUP_MASTER_DETAIL_NERP 'NERP_HARD_CODE_COMPANY', 'ESOC',null,'ASIS'
+ exec SCM0003_GET_LOOKUP_MASTER_DETAIL_NERP 'NERP_HARD_CODE_COMPANY', 'ESOC',null,'NERP'
+ */
+
+CREATE PROCEDURE [dbo].[SCM0003_GET_LOOKUP_MASTER_DETAIL_NERP]
+  @p_lookup_type    NVARCHAR(200)
+ ,@p_param1			NVARCHAR(200)
+ ,@p_param2			NVARCHAR(200)
+ ,@p_use_code       NVARCHAR(8)
+AS
+BEGIN
+
+    SET NOCOUNT ON;
+	DECLARE @v_sql_text AS NVARCHAR(MAX);
+
+	---------------------------------------------------------
+	-- COMPANY, PLANT, STORAGE
+	---------------------------------------------------------
+    SELECT 
+		  CASE 
+		  WHEN @p_use_code = 'NERP' 
+		  THEN segment4 -- TOBE
+		  ELSE segment3 -- ASIS
+		  END AS VALUE
+	 FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK)
+	 WHERE lookup_type = @p_lookup_type
+	   AND segment1 = @p_param1
+	   AND (@p_param2 IS NULL OR segment2 = @p_param2)
+	 order by display_seq
+	 ;
+  
+END
+
+"

@@ -3,15 +3,16 @@ import {
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { Grid } from '@shared/mui';
 import { useMessageStore } from '@shared/stores';
 
@@ -59,6 +60,8 @@ export const VersionPopupModal = ({ open, modalClose, onSelect }: Props) => {
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
   const gridRef = useRef<FlexGridType<VersionPopupRow>>(undefined);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   const [sdt, setSdt] = useState('');
   const [edt, setEdt] = useState('');
@@ -105,13 +108,14 @@ export const VersionPopupModal = ({ open, modalClose, onSelect }: Props) => {
     }),
     [sdt, edt, versionType, description]
   );
-  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.VERSION_POPUP>({
+  const { data, refetch, isLoading, isFetching } = useTabProcQuery<MENU_ID, SHEETS.VERSION_POPUP>({
     menuId: MENU_ID,
     sheetName: SHEETS.VERSION_POPUP,
     tabId: MENU_ID,
     filters,
     enabled: open && sdt !== '' && edt !== '' && versionType !== '',
   });
+  const loading = isLoading || isFetching;
   const versionRows = useMemo<VersionPopupRow[]>(
     () => (data as { o_rc1?: VersionPopupRow[] } | undefined)?.o_rc1 ?? [],
     [data]
@@ -226,6 +230,10 @@ export const VersionPopupModal = ({ open, modalClose, onSelect }: Props) => {
       position='basic'
       size={980}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       disableButtonCancel
       customHeaderTitle={
         <div className='headerContainer'>
@@ -243,7 +251,7 @@ export const VersionPopupModal = ({ open, modalClose, onSelect }: Props) => {
                 {/* Div — 40 고정. 콤보로 보여주되 선택은 잠근다(화면 자체가 Division 40 전용). */}
                 <Grid size={4}>
                   <FormItem
-                    label={t('LBL00663', 'Div')}
+                    label={t('LBL00001', 'Div')}
                     labelAlign='right'
                     render={() => (
                       <CustomDropdown value={DIVISION_40} options={divisionOptions} disabled />
@@ -294,14 +302,28 @@ export const VersionPopupModal = ({ open, modalClose, onSelect }: Props) => {
 
           {/* 더블클릭 채택 — 리스너 등록 타이밍에 의존하지 않도록 래퍼에서 받는다(위 주석 참조) */}
           <div className={styles.modalGridWrapper} onDoubleClick={handleGridDoubleClick}>
-            <DataGrid<VersionPopupRow>
-              gridRef={gridRef}
-              itemsSource={versionRows}
-              staticColumns={gridStaticColumns}
-              autoGenerateColumns={false}
-              allowSorting={false}
-              isReadOnly={true}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea
+              title=''
+              count={versionRows.length}
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<VersionPopupRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                itemsSource={versionRows}
+                staticColumns={gridStaticColumns}
+                autoGenerateColumns={false}
+                allowSorting={false}
+                isReadOnly={true}
+              />
+            </ResultArea>
           </div>
 
           <div className={styles.modalButtonWrapper}>

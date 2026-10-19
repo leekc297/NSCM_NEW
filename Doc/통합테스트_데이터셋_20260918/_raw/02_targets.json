@@ -1,0 +1,1886 @@
+{
+ "divisions": {
+  "40": [
+   {
+    "PROJECT_CODE": "acer",
+    "SCM_SITE_ID": "acer_CN_CKG",
+    "ITEM_ID": "MPPACEAP161C",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "DAP",
+    "PLANT_SITE_ID": "-",
+    "M_CNT": 13,
+    "ROW_CNT": 2172,
+    "MIN_YMD": "20190101",
+    "MAX_YMD": "20251207",
+    "item_stat": {
+     "ITEM_ID": "MPPACEAP161C",
+     "M_CNT": 13,
+     "ROW_CNT": 2172,
+     "SITE_CNT": 1,
+     "MKT": 91,
+     "SCM": 1,
+     "CUST": 0,
+     "RTF": 82,
+     "RTF_RP": 76
+    },
+    "measures": [
+     {
+      "MEASURE": "VMI_DIO",
+      "CNT": 1291,
+      "MIN_YMD": "20191122",
+      "MAX_YMD": "20240219",
+      "SUM_QTY": 899166,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 330,
+      "MIN_YMD": "20190328",
+      "MAX_YMD": "20220605",
+      "SUM_QTY": -2881947,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 103,
+      "MIN_YMD": "20190328",
+      "MAX_YMD": "20251201",
+      "SUM_QTY": 958870,
+      "LAST_BY": "youngsangkim"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 91,
+      "MIN_YMD": "20190328",
+      "MAX_YMD": "20251201",
+      "SUM_QTY": 881742,
+      "LAST_BY": "youngsangkim"
+     },
+     {
+      "MEASURE": "RTF",
+      "CNT": 82,
+      "MIN_YMD": "20191206",
+      "MAX_YMD": "20211231",
+      "SUM_QTY": 235233,
+      "LAST_BY": "youngsangkim"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 76,
+      "MIN_YMD": "20191116",
+      "MAX_YMD": "20251201",
+      "SUM_QTY": 834690,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 76,
+      "MIN_YMD": "20191116",
+      "MAX_YMD": "20251201",
+      "SUM_QTY": 834690,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 55,
+      "MIN_YMD": "20190328",
+      "MAX_YMD": "20220401",
+      "SUM_QTY": 631699,
+      "LAST_BY": "youngsangkim"
+     },
+     {
+      "MEASURE": "VMI_In_Plan",
+      "CNT": 46,
+      "MIN_YMD": "20191116",
+      "MAX_YMD": "20211030",
+      "SUM_QTY": 274474,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_TEST",
+      "CNT": 13,
+      "MIN_YMD": "20190101",
+      "MAX_YMD": "20190905",
+      "SUM_QTY": 360000,
+      "LAST_BY": "benlim"
+     },
+     {
+      "MEASURE": "VMI_Inv",
+      "CNT": 7,
+      "MIN_YMD": "20251201",
+      "MAX_YMD": "20251207",
+      "SUM_QTY": 14420,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "SCM_FCST",
+      "CNT": 1,
+      "MIN_YMD": "20251201",
+      "MAX_YMD": "20251201",
+      "SUM_QTY": 40,
+      "LAST_BY": "^"
+     },
+     {
+      "MEASURE": "RTF_PR",
+      "CNT": 1,
+      "MIN_YMD": "20251201",
+      "MAX_YMD": "20251201",
+      "SUM_QTY": 40,
+      "LAST_BY": "SYSTEM"
+     }
+    ],
+    "focus_have": [
+     "MKT_FCST",
+     "RTF",
+     "RTF_SYS_RP",
+     "SCM_FCST"
+    ],
+    "focus_miss": [
+     "CUST_FCST",
+     "LOC"
+    ]
+   },
+   {
+    "PROJECT_CODE": "Dell",
+    "SCM_SITE_ID": "Dell_CN_CTU",
+    "ITEM_ID": "MPPDELROGU1C",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "DAP",
+    "PLANT_SITE_ID": "-",
+    "M_CNT": 11,
+    "ROW_CNT": 1057,
+    "MIN_YMD": "20190927",
+    "MAX_YMD": "20211017",
+    "item_stat": {
+     "ITEM_ID": "MPPDELROGU1C",
+     "M_CNT": 13,
+     "ROW_CNT": 1609,
+     "SITE_CNT": 2,
+     "MKT": 58,
+     "SCM": 0,
+     "CUST": 46,
+     "RTF": 27,
+     "RTF_RP": 72
+    },
+    "measures": [
+     {
+      "MEASURE": "VMI_DIO",
+      "CNT": 426,
+      "MIN_YMD": "20200427",
+      "MAX_YMD": "20211014",
+      "SUM_QTY": 425574,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_In_Plan",
+      "CNT": 135,
+      "MIN_YMD": "20190927",
+      "MAX_YMD": "20211015",
+      "SUM_QTY": 2483060,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 132,
+      "MIN_YMD": "20200525",
+      "MAX_YMD": "20211017",
+      "SUM_QTY": -14424606,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 67,
+      "MIN_YMD": "20190927",
+      "MAX_YMD": "20211015",
+      "SUM_QTY": 6849428,
+      "LAST_BY": "tedlee"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 63,
+      "MIN_YMD": "20200525",
+      "MAX_YMD": "20211015",
+      "SUM_QTY": 2273531,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 63,
+      "MIN_YMD": "20200525",
+      "MAX_YMD": "20211015",
+      "SUM_QTY": 2273531,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "CUST_FCST_LATEST",
+      "CNT": 46,
+      "MIN_YMD": "20200525",
+      "MAX_YMD": "20210528",
+      "SUM_QTY": 621923,
+      "LAST_BY": "alicekim"
+     },
+     {
+      "MEASURE": "CUST_FCST",
+      "CNT": 46,
+      "MIN_YMD": "20200525",
+      "MAX_YMD": "20210528",
+      "SUM_QTY": 621923,
+      "LAST_BY": "alicekim"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 42,
+      "MIN_YMD": "20200601",
+      "MAX_YMD": "20211015",
+      "SUM_QTY": 3652209,
+      "LAST_BY": "mbkim"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 34,
+      "MIN_YMD": "20200525",
+      "MAX_YMD": "20211015",
+      "SUM_QTY": 3482478,
+      "LAST_BY": "mbkim"
+     },
+     {
+      "MEASURE": "CFCR",
+      "CNT": 3,
+      "MIN_YMD": "20200525",
+      "MAX_YMD": "20200629",
+      "SUM_QTY": 33.33,
+      "LAST_BY": "KPI"
+     }
+    ],
+    "focus_have": [
+     "CUST_FCST",
+     "MKT_FCST",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "LOC",
+     "RTF",
+     "SCM_FCST"
+    ]
+   },
+   {
+    "PROJECT_CODE": "Dell",
+    "SCM_SITE_ID": "Dell_CN_KUS",
+    "ITEM_ID": "MPPDELBR4L1I",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "DAP",
+    "PLANT_SITE_ID": "-",
+    "M_CNT": 13,
+    "ROW_CNT": 673,
+    "MIN_YMD": "20190211",
+    "MAX_YMD": "20210117",
+    "item_stat": {
+     "ITEM_ID": "MPPDELBR4L1I",
+     "M_CNT": 13,
+     "ROW_CNT": 986,
+     "SITE_CNT": 4,
+     "MKT": 59,
+     "SCM": 0,
+     "CUST": 3,
+     "RTF": 33,
+     "RTF_RP": 15
+    },
+    "measures": [
+     {
+      "MEASURE": "VMI_DIO",
+      "CNT": 333,
+      "MIN_YMD": "20190211",
+      "MAX_YMD": "20210117",
+      "SUM_QTY": 59891,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_In_Plan",
+      "CNT": 70,
+      "MIN_YMD": "20190215",
+      "MAX_YMD": "20210115",
+      "SUM_QTY": 272876,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 54,
+      "MIN_YMD": "20200423",
+      "MAX_YMD": "20210110",
+      "SUM_QTY": -40093,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 53,
+      "MIN_YMD": "20190215",
+      "MAX_YMD": "20210115",
+      "SUM_QTY": 753150,
+      "LAST_BY": "tedlee"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 38,
+      "MIN_YMD": "20190228",
+      "MAX_YMD": "20210108",
+      "SUM_QTY": 193030,
+      "LAST_BY": "tedlee"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 37,
+      "MIN_YMD": "20190228",
+      "MAX_YMD": "20210108",
+      "SUM_QTY": 191530,
+      "LAST_BY": "tedlee"
+     },
+     {
+      "MEASURE": "RTF_TEST",
+      "CNT": 29,
+      "MIN_YMD": "20190301",
+      "MAX_YMD": "20190913",
+      "SUM_QTY": 157500,
+      "LAST_BY": "tedlee"
+     },
+     {
+      "MEASURE": "RTF",
+      "CNT": 24,
+      "MIN_YMD": "20190228",
+      "MAX_YMD": "20201127",
+      "SUM_QTY": 182606,
+      "LAST_BY": "tedlee"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 19,
+      "MIN_YMD": "20190228",
+      "MAX_YMD": "20210108",
+      "SUM_QTY": 152766,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 7,
+      "MIN_YMD": "20200131",
+      "MAX_YMD": "20210108",
+      "SUM_QTY": 8608,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "CUST_FCST",
+      "CNT": 3,
+      "MIN_YMD": "20200406",
+      "MAX_YMD": "20200601",
+      "SUM_QTY": 6503,
+      "LAST_BY": "alicekim"
+     },
+     {
+      "MEASURE": "CUST_FCST_LATEST",
+      "CNT": 3,
+      "MIN_YMD": "20200406",
+      "MAX_YMD": "20200601",
+      "SUM_QTY": 6503,
+      "LAST_BY": "alicekim"
+     },
+     {
+      "MEASURE": "CFCR",
+      "CNT": 3,
+      "MIN_YMD": "20200406",
+      "MAX_YMD": "20200601",
+      "SUM_QTY": 33.33,
+      "LAST_BY": "KPI"
+     }
+    ],
+    "focus_have": [
+     "CUST_FCST",
+     "MKT_FCST",
+     "RTF",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "LOC",
+     "SCM_FCST"
+    ]
+   },
+   {
+    "PROJECT_CODE": "Dell",
+    "SCM_SITE_ID": "Dell_CN_KUS",
+    "ITEM_ID": "MPPDELS6781C",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "DAP",
+    "PLANT_SITE_ID": "-",
+    "M_CNT": 13,
+    "ROW_CNT": 519,
+    "MIN_YMD": "20190211",
+    "MAX_YMD": "20200412",
+    "item_stat": {
+     "ITEM_ID": "MPPDELS6781C",
+     "M_CNT": 13,
+     "ROW_CNT": 531,
+     "SITE_CNT": 1,
+     "MKT": 21,
+     "SCM": 0,
+     "CUST": 1,
+     "RTF": 22,
+     "RTF_RP": 8
+    },
+    "measures": [
+     {
+      "MEASURE": "VMI_DIO",
+      "CNT": 316,
+      "MIN_YMD": "20190211",
+      "MAX_YMD": "20200403",
+      "SUM_QTY": 10971,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 45,
+      "MIN_YMD": "20190301",
+      "MAX_YMD": "20200406",
+      "SUM_QTY": 81400,
+      "LAST_BY": "tedlee"
+     },
+     {
+      "MEASURE": "VMI_In_Plan",
+      "CNT": 39,
+      "MIN_YMD": "20190302",
+      "MAX_YMD": "20200410",
+      "SUM_QTY": 22345,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF",
+      "CNT": 21,
+      "MIN_YMD": "20190426",
+      "MAX_YMD": "20200406",
+      "SUM_QTY": 22701,
+      "LAST_BY": "tedlee"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 20,
+      "MIN_YMD": "20190426",
+      "MAX_YMD": "20200404",
+      "SUM_QTY": 22201,
+      "LAST_BY": "tedlee"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 20,
+      "MIN_YMD": "20190426",
+      "MAX_YMD": "20200404",
+      "SUM_QTY": 18158,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 20,
+      "MIN_YMD": "20190426",
+      "MAX_YMD": "20200404",
+      "SUM_QTY": 22201,
+      "LAST_BY": "tedlee"
+     },
+     {
+      "MEASURE": "RTF_TEST",
+      "CNT": 20,
+      "MIN_YMD": "20190503",
+      "MAX_YMD": "20190913",
+      "SUM_QTY": 22422,
+      "LAST_BY": "tedlee"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 8,
+      "MIN_YMD": "20191129",
+      "MAX_YMD": "20200404",
+      "SUM_QTY": 9275,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 7,
+      "MIN_YMD": "20200406",
+      "MAX_YMD": "20200412",
+      "SUM_QTY": 3500,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "CUST_FCST",
+      "CNT": 1,
+      "MIN_YMD": "20200406",
+      "MAX_YMD": "20200406",
+      "SUM_QTY": 500,
+      "LAST_BY": "alicekim"
+     },
+     {
+      "MEASURE": "CUST_FCST_LATEST",
+      "CNT": 1,
+      "MIN_YMD": "20200406",
+      "MAX_YMD": "20200406",
+      "SUM_QTY": 500,
+      "LAST_BY": "alicekim"
+     },
+     {
+      "MEASURE": "CFCR",
+      "CNT": 1,
+      "MIN_YMD": "20200406",
+      "MAX_YMD": "20200406",
+      "SUM_QTY": 11.11,
+      "LAST_BY": "KPI"
+     }
+    ],
+    "focus_have": [
+     "CUST_FCST",
+     "MKT_FCST",
+     "RTF",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "LOC",
+     "SCM_FCST"
+    ]
+   },
+   {
+    "PROJECT_CODE": "TWS",
+    "SCM_SITE_ID": "TWS Liangshi_CN_CA0",
+    "ITEM_ID": "MCCM134010A1",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "Z01",
+    "PLANT_SITE_ID": "-",
+    "M_CNT": 11,
+    "ROW_CNT": 1318,
+    "MIN_YMD": "20181123",
+    "MAX_YMD": "20250825",
+    "item_stat": {
+     "ITEM_ID": "MCCM134010A1",
+     "M_CNT": 12,
+     "ROW_CNT": 48307,
+     "SITE_CNT": 179,
+     "MKT": 6376,
+     "SCM": 999,
+     "CUST": 0,
+     "RTF": 1333,
+     "RTF_RP": 3333
+    },
+    "measures": [
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 499,
+      "MIN_YMD": "20181123",
+      "MAX_YMD": "20250406",
+      "SUM_QTY": -181429037,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 226,
+      "MIN_YMD": "20181127",
+      "MAX_YMD": "20250825",
+      "SUM_QTY": 54874097,
+      "LAST_BY": "yoojjkk"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 224,
+      "MIN_YMD": "20181127",
+      "MAX_YMD": "20250825",
+      "SUM_QTY": 54720497,
+      "LAST_BY": "yoojjkk"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 155,
+      "MIN_YMD": "20181127",
+      "MAX_YMD": "20250825",
+      "SUM_QTY": 23543400,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 144,
+      "MIN_YMD": "20190712",
+      "MAX_YMD": "20250825",
+      "SUM_QTY": 22609400,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF",
+      "CNT": 37,
+      "MIN_YMD": "20181123",
+      "MAX_YMD": "20191231",
+      "SUM_QTY": 3576200,
+      "LAST_BY": "kimsm17"
+     },
+     {
+      "MEASURE": "CUST_FCST_LATEST",
+      "CNT": 13,
+      "MIN_YMD": "20181130",
+      "MAX_YMD": "20191129",
+      "SUM_QTY": 3000000,
+      "LAST_BY": "kimsm17"
+     },
+     {
+      "MEASURE": "RTF_TEST",
+      "CNT": 11,
+      "MIN_YMD": "20181123",
+      "MAX_YMD": "20190907",
+      "SUM_QTY": 2280000,
+      "LAST_BY": "kimsm17"
+     },
+     {
+      "MEASURE": "RTF_PR",
+      "CNT": 4,
+      "MIN_YMD": "20250430",
+      "MAX_YMD": "20250825",
+      "SUM_QTY": 1242800,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "SCM_FCST",
+      "CNT": 3,
+      "MIN_YMD": "20250627",
+      "MAX_YMD": "20250825",
+      "SUM_QTY": 927400,
+      "LAST_BY": "wbchoi"
+     },
+     {
+      "MEASURE": "CFCR",
+      "CNT": 2,
+      "MIN_YMD": "20181126",
+      "MAX_YMD": "20181231",
+      "SUM_QTY": 22.22,
+      "LAST_BY": "KPI"
+     }
+    ],
+    "focus_have": [
+     "MKT_FCST",
+     "RTF",
+     "RTF_SYS_RP",
+     "SCM_FCST"
+    ],
+    "focus_miss": [
+     "CUST_FCST",
+     "LOC"
+    ]
+   }
+  ],
+  "81": [
+   {
+    "PROJECT_CODE": "A15FD7001",
+    "SCM_SITE_ID": "Ford_TR_KCO",
+    "ITEM_ID": "APFMCV36X-A1",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "DAP",
+    "PLANT_SITE_ID": "HQ07-P",
+    "M_CNT": 12,
+    "ROW_CNT": 3337,
+    "MIN_YMD": "20190304",
+    "MAX_YMD": "20230210",
+    "item_stat": {
+     "ITEM_ID": "APFMCV36X-A1",
+     "M_CNT": 19,
+     "ROW_CNT": 5310,
+     "SITE_CNT": 11,
+     "MKT": 631,
+     "SCM": 0,
+     "CUST": 422,
+     "RTF": 123,
+     "RTF_RP": 316
+    },
+    "measures": [
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 486,
+      "MIN_YMD": "20190401",
+      "MAX_YMD": "20220918",
+      "SUM_QTY": -180654,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 483,
+      "MIN_YMD": "20190401",
+      "MAX_YMD": "20230210",
+      "SUM_QTY": 70134,
+      "LAST_BY": "kimjiyoon"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 468,
+      "MIN_YMD": "20190401",
+      "MAX_YMD": "20230210",
+      "SUM_QTY": 69471,
+      "LAST_BY": "kimjiyoon"
+     },
+     {
+      "MEASURE": "EDI",
+      "CNT": 352,
+      "MIN_YMD": "20190304",
+      "MAX_YMD": "20200731",
+      "SUM_QTY": 33992,
+      "LAST_BY": "jangwookkim"
+     },
+     {
+      "MEASURE": "CUST_FCST",
+      "CNT": 339,
+      "MIN_YMD": "20190304",
+      "MAX_YMD": "20200731",
+      "SUM_QTY": 43798,
+      "LAST_BY": "jangwookkim"
+     },
+     {
+      "MEASURE": "CUST_FCST_LATEST",
+      "CNT": 305,
+      "MIN_YMD": "20190304",
+      "MAX_YMD": "20200731",
+      "SUM_QTY": 43976,
+      "LAST_BY": "jangwookkim"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 255,
+      "MIN_YMD": "20190719",
+      "MAX_YMD": "20230210",
+      "SUM_QTY": 44584,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 255,
+      "MIN_YMD": "20190719",
+      "MAX_YMD": "20230210",
+      "SUM_QTY": 44584,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "Commercial_Agreement*",
+      "CNT": 226,
+      "MIN_YMD": "20190916",
+      "MAX_YMD": "20200731",
+      "SUM_QTY": 11484,
+      "LAST_BY": "cherinlee"
+     },
+     {
+      "MEASURE": "RTF",
+      "CNT": 76,
+      "MIN_YMD": "20190404",
+      "MAX_YMD": "20201231",
+      "SUM_QTY": 25101,
+      "LAST_BY": "cherinlee"
+     },
+     {
+      "MEASURE": "CFCR",
+      "CNT": 49,
+      "MIN_YMD": "20190304",
+      "MAX_YMD": "20200210",
+      "SUM_QTY": 2701.03,
+      "LAST_BY": "KPI"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 43,
+      "MIN_YMD": "20220501",
+      "MAX_YMD": "20230210",
+      "SUM_QTY": 5710,
+      "LAST_BY": "kimjiyoon"
+     }
+    ],
+    "focus_have": [
+     "CUST_FCST",
+     "MKT_FCST",
+     "RTF",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "LOC",
+     "SCM_FCST"
+    ]
+   },
+   {
+    "PROJECT_CODE": "A15FD7001",
+    "SCM_SITE_ID": "Ford_TR_KCO",
+    "ITEM_ID": "APFMCV36X-B1",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "DAP",
+    "PLANT_SITE_ID": "HQ07-P",
+    "M_CNT": 12,
+    "ROW_CNT": 1436,
+    "MIN_YMD": "20190304",
+    "MAX_YMD": "20221127",
+    "item_stat": {
+     "ITEM_ID": "APFMCV36X-B1",
+     "M_CNT": 19,
+     "ROW_CNT": 3224,
+     "SITE_CNT": 10,
+     "MKT": 346,
+     "SCM": 0,
+     "CUST": 212,
+     "RTF": 109,
+     "RTF_RP": 157
+    },
+    "measures": [
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 198,
+      "MIN_YMD": "20190401",
+      "MAX_YMD": "20221126",
+      "SUM_QTY": 9994,
+      "LAST_BY": "kimjiyoon"
+     },
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 187,
+      "MIN_YMD": "20190401",
+      "MAX_YMD": "20221127",
+      "SUM_QTY": -38864,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 187,
+      "MIN_YMD": "20190401",
+      "MAX_YMD": "20221126",
+      "SUM_QTY": 9121,
+      "LAST_BY": "kimjiyoon"
+     },
+     {
+      "MEASURE": "EDI",
+      "CNT": 162,
+      "MIN_YMD": "20190309",
+      "MAX_YMD": "20200731",
+      "SUM_QTY": 1672,
+      "LAST_BY": "jangwookkim"
+     },
+     {
+      "MEASURE": "CUST_FCST",
+      "CNT": 158,
+      "MIN_YMD": "20190309",
+      "MAX_YMD": "20200731",
+      "SUM_QTY": 1891,
+      "LAST_BY": "jangwookkim"
+     },
+     {
+      "MEASURE": "CUST_FCST_LATEST",
+      "CNT": 138,
+      "MIN_YMD": "20190309",
+      "MAX_YMD": "20200731",
+      "SUM_QTY": 882,
+      "LAST_BY": "jangwookkim"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 99,
+      "MIN_YMD": "20190719",
+      "MAX_YMD": "20221126",
+      "SUM_QTY": 5879,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 99,
+      "MIN_YMD": "20190719",
+      "MAX_YMD": "20221126",
+      "SUM_QTY": 5879,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "Commercial_Agreement*",
+      "CNT": 73,
+      "MIN_YMD": "20190916",
+      "MAX_YMD": "20200731",
+      "SUM_QTY": 261,
+      "LAST_BY": "cherinlee"
+     },
+     {
+      "MEASURE": "RTF",
+      "CNT": 60,
+      "MIN_YMD": "20190404",
+      "MAX_YMD": "20201218",
+      "SUM_QTY": 1308,
+      "LAST_BY": "cherinlee"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 38,
+      "MIN_YMD": "20220501",
+      "MAX_YMD": "20221126",
+      "SUM_QTY": 3214,
+      "LAST_BY": "kimjiyoon"
+     },
+     {
+      "MEASURE": "CFCR",
+      "CNT": 37,
+      "MIN_YMD": "20190304",
+      "MAX_YMD": "20200203",
+      "SUM_QTY": 2687.64,
+      "LAST_BY": "KPI"
+     }
+    ],
+    "focus_have": [
+     "CUST_FCST",
+     "MKT_FCST",
+     "RTF",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "LOC",
+     "SCM_FCST"
+    ]
+   },
+   {
+    "PROJECT_CODE": "A19VO6001",
+    "SCM_SITE_ID": "Volvo AS_WA_SE_GOT",
+    "ITEM_ID": "AMVCC519H-A1R000",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "WSF",
+    "INCOTERMS": "FCA",
+    "PLANT_SITE_ID": "WA00-P",
+    "M_CNT": 7,
+    "ROW_CNT": 171,
+    "MIN_YMD": "20250124",
+    "MAX_YMD": "20260315",
+    "item_stat": {
+     "ITEM_ID": "AMVCC519H-A1R000",
+     "M_CNT": 19,
+     "ROW_CNT": 2970,
+     "SITE_CNT": 7,
+     "MKT": 181,
+     "SCM": 0,
+     "CUST": 76,
+     "RTF": 31,
+     "RTF_RP": 108
+    },
+    "measures": [
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 37,
+      "MIN_YMD": "20250207",
+      "MAX_YMD": "20260315",
+      "SUM_QTY": -26386,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 28,
+      "MIN_YMD": "20250124",
+      "MAX_YMD": "20260313",
+      "SUM_QTY": 27572,
+      "LAST_BY": "lwg0721"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 26,
+      "MIN_YMD": "20250207",
+      "MAX_YMD": "20260313",
+      "SUM_QTY": 23642,
+      "LAST_BY": "lwg0721"
+     },
+     {
+      "MEASURE": "RTF",
+      "CNT": 22,
+      "MIN_YMD": "20250214",
+      "MAX_YMD": "20251102",
+      "SUM_QTY": 14576,
+      "LAST_BY": "SYSTEM_WS"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 22,
+      "MIN_YMD": "20250214",
+      "MAX_YMD": "20251102",
+      "SUM_QTY": 14576,
+      "LAST_BY": "SYSTEM_WS"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 22,
+      "MIN_YMD": "20250214",
+      "MAX_YMD": "20251102",
+      "SUM_QTY": 14576,
+      "LAST_BY": "SYSTEM_WS"
+     },
+     {
+      "MEASURE": "RTF_PR",
+      "CNT": 14,
+      "MIN_YMD": "20250418",
+      "MAX_YMD": "20251102",
+      "SUM_QTY": 7998,
+      "LAST_BY": "SYSTEM_WS"
+     }
+    ],
+    "focus_have": [
+     "MKT_FCST",
+     "RTF",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "CUST_FCST",
+     "LOC",
+     "SCM_FCST"
+    ]
+   },
+   {
+    "PROJECT_CODE": "A15FD5002",
+    "SCM_SITE_ID": "Ford_TR_KCO",
+    "ITEM_ID": "AMFMCC727-D1-010",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "DAP",
+    "PLANT_SITE_ID": "WA00-P",
+    "M_CNT": 12,
+    "ROW_CNT": 8722,
+    "MIN_YMD": "20220418",
+    "MAX_YMD": "20280320",
+    "item_stat": {
+     "ITEM_ID": "AMFMCC727-D1-010",
+     "M_CNT": 18,
+     "ROW_CNT": 9292,
+     "SITE_CNT": 7,
+     "MKT": 932,
+     "SCM": 0,
+     "CUST": 283,
+     "RTF": 13,
+     "RTF_RP": 787
+    },
+    "measures": [
+     {
+      "MEASURE": "SS_GAP",
+      "CNT": 1504,
+      "MIN_YMD": "20220704",
+      "MAX_YMD": "20260823",
+      "SUM_QTY": 2978558,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "SS_LVL",
+      "CNT": 1267,
+      "MIN_YMD": "20220704",
+      "MAX_YMD": "20260823",
+      "SUM_QTY": 1736609,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 897,
+      "MIN_YMD": "20220418",
+      "MAX_YMD": "20271210",
+      "SUM_QTY": 226903,
+      "LAST_BY": "soohyung.sun"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 892,
+      "MIN_YMD": "20220418",
+      "MAX_YMD": "20271210",
+      "SUM_QTY": 225927,
+      "LAST_BY": "soohyung.sun"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 886,
+      "MIN_YMD": "20220425",
+      "MAX_YMD": "20271210",
+      "SUM_QTY": 224911,
+      "LAST_BY": "soohyung.sun"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 747,
+      "MIN_YMD": "20220418",
+      "MAX_YMD": "20271108",
+      "SUM_QTY": 228697,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 732,
+      "MIN_YMD": "20220418",
+      "MAX_YMD": "20271108",
+      "SUM_QTY": 227113,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 718,
+      "MIN_YMD": "20220418",
+      "MAX_YMD": "20280320",
+      "SUM_QTY": -2155198,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "RTF_PR",
+      "CNT": 299,
+      "MIN_YMD": "20250414",
+      "MAX_YMD": "20271108",
+      "SUM_QTY": 57697,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "Customer FCST",
+      "CNT": 260,
+      "MIN_YMD": "20240708",
+      "MAX_YMD": "20250912",
+      "SUM_QTY": 34115,
+      "LAST_BY": "heechulbyun"
+     },
+     {
+      "MEASURE": "CUST_FCST_LATEST",
+      "CNT": 260,
+      "MIN_YMD": "20240708",
+      "MAX_YMD": "20250912",
+      "SUM_QTY": 34115,
+      "LAST_BY": "heechulbyun"
+     },
+     {
+      "MEASURE": "CUST_FCST",
+      "CNT": 260,
+      "MIN_YMD": "20240708",
+      "MAX_YMD": "20250912",
+      "SUM_QTY": 34115,
+      "LAST_BY": "MAKE_CUST_FCST"
+     }
+    ],
+    "focus_have": [
+     "CUST_FCST",
+     "MKT_FCST",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "LOC",
+     "RTF",
+     "SCM_FCST"
+    ]
+   },
+   {
+    "PROJECT_CODE": "A15FD5002",
+    "SCM_SITE_ID": "Ford_TR_KCO",
+    "ITEM_ID": "AMFMCC727-C1-010",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "DAP",
+    "PLANT_SITE_ID": "WA00-P",
+    "M_CNT": 12,
+    "ROW_CNT": 8694,
+    "MIN_YMD": "20220418",
+    "MAX_YMD": "20280320",
+    "item_stat": {
+     "ITEM_ID": "AMFMCC727-C1-010",
+     "M_CNT": 18,
+     "ROW_CNT": 9097,
+     "SITE_CNT": 6,
+     "MKT": 922,
+     "SCM": 0,
+     "CUST": 284,
+     "RTF": 15,
+     "RTF_RP": 774
+    },
+    "measures": [
+     {
+      "MEASURE": "SS_GAP",
+      "CNT": 1504,
+      "MIN_YMD": "20220704",
+      "MAX_YMD": "20260823",
+      "SUM_QTY": 2599926,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "SS_LVL",
+      "CNT": 1283,
+      "MIN_YMD": "20220704",
+      "MAX_YMD": "20260823",
+      "SUM_QTY": 1795872,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 893,
+      "MIN_YMD": "20220418",
+      "MAX_YMD": "20271210",
+      "SUM_QTY": 211747,
+      "LAST_BY": "soohyung.sun"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 888,
+      "MIN_YMD": "20220418",
+      "MAX_YMD": "20271210",
+      "SUM_QTY": 212947,
+      "LAST_BY": "soohyung.sun"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 882,
+      "MIN_YMD": "20220425",
+      "MAX_YMD": "20271210",
+      "SUM_QTY": 211931,
+      "LAST_BY": "soohyung.sun"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 737,
+      "MIN_YMD": "20220418",
+      "MAX_YMD": "20271110",
+      "SUM_QTY": 208066,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 722,
+      "MIN_YMD": "20220418",
+      "MAX_YMD": "20271110",
+      "SUM_QTY": 205954,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 699,
+      "MIN_YMD": "20220418",
+      "MAX_YMD": "20280320",
+      "SUM_QTY": -2088261,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "RTF_PR",
+      "CNT": 291,
+      "MIN_YMD": "20250414",
+      "MAX_YMD": "20271110",
+      "SUM_QTY": 58676,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "Customer FCST",
+      "CNT": 265,
+      "MIN_YMD": "20240708",
+      "MAX_YMD": "20250912",
+      "SUM_QTY": 33914,
+      "LAST_BY": "heechulbyun"
+     },
+     {
+      "MEASURE": "CUST_FCST_LATEST",
+      "CNT": 265,
+      "MIN_YMD": "20240708",
+      "MAX_YMD": "20250912",
+      "SUM_QTY": 33914,
+      "LAST_BY": "heechulbyun"
+     },
+     {
+      "MEASURE": "CUST_FCST",
+      "CNT": 265,
+      "MIN_YMD": "20240708",
+      "MAX_YMD": "20250912",
+      "SUM_QTY": 33914,
+      "LAST_BY": "MAKE_CUST_FCST"
+     }
+    ],
+    "focus_have": [
+     "CUST_FCST",
+     "MKT_FCST",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "LOC",
+     "RTF",
+     "SCM_FCST"
+    ]
+   }
+  ],
+  "82": [
+   {
+    "PROJECT_CODE": "R-20-012",
+    "SCM_SITE_ID": "LGCAU_AU_BNE",
+    "ITEM_ID": "EH048252P3S2",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "EXW",
+    "PLANT_SITE_ID": "-",
+    "M_CNT": 11,
+    "ROW_CNT": 2302,
+    "MIN_YMD": "20210809",
+    "MAX_YMD": "20251228",
+    "item_stat": {
+     "ITEM_ID": "EH048252P3S2",
+     "M_CNT": 15,
+     "ROW_CNT": 5271,
+     "SITE_CNT": 7,
+     "MKT": 81,
+     "SCM": 0,
+     "CUST": 0,
+     "RTF": 66,
+     "RTF_RP": 66
+    },
+    "measures": [
+     {
+      "MEASURE": "VMI_DIO",
+      "CNT": 1001,
+      "MIN_YMD": "20211129",
+      "MAX_YMD": "20251207",
+      "SUM_QTY": 165963,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_Inv",
+      "CNT": 1001,
+      "MIN_YMD": "20211129",
+      "MAX_YMD": "20251207",
+      "SUM_QTY": 202576,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 76,
+      "MIN_YMD": "20210809",
+      "MAX_YMD": "20251226",
+      "SUM_QTY": 23769,
+      "LAST_BY": "minseok-kim"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 42,
+      "MIN_YMD": "20211122",
+      "MAX_YMD": "20251226",
+      "SUM_QTY": 2261,
+      "LAST_BY": "soonkyu.jung"
+     },
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 41,
+      "MIN_YMD": "20211122",
+      "MAX_YMD": "20251228",
+      "SUM_QTY": -4554,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 36,
+      "MIN_YMD": "20211122",
+      "MAX_YMD": "20251226",
+      "SUM_QTY": 2136,
+      "LAST_BY": "minseok-kim"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 34,
+      "MIN_YMD": "20211129",
+      "MAX_YMD": "20251030",
+      "SUM_QTY": 1401,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF",
+      "CNT": 34,
+      "MIN_YMD": "20211129",
+      "MAX_YMD": "20251030",
+      "SUM_QTY": 1401,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 34,
+      "MIN_YMD": "20211129",
+      "MAX_YMD": "20251030",
+      "SUM_QTY": 1401,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_In_Plan",
+      "CNT": 2,
+      "MIN_YMD": "20251030",
+      "MAX_YMD": "20251128",
+      "SUM_QTY": 2,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_PR",
+      "CNT": 1,
+      "MIN_YMD": "20251030",
+      "MAX_YMD": "20251030",
+      "SUM_QTY": 24,
+      "LAST_BY": "SYSTEM"
+     }
+    ],
+    "focus_have": [
+     "MKT_FCST",
+     "RTF",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "CUST_FCST",
+     "LOC",
+     "SCM_FCST"
+    ]
+   },
+   {
+    "PROJECT_CODE": "R-18-012",
+    "SCM_SITE_ID": "LGCEG_DE_MWA",
+    "ITEM_ID": "EH257064P8S1",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "EXW",
+    "PLANT_SITE_ID": "-",
+    "M_CNT": 10,
+    "ROW_CNT": 2641,
+    "MIN_YMD": "20210113",
+    "MAX_YMD": "20241027",
+    "item_stat": {
+     "ITEM_ID": "EH257064P8S1",
+     "M_CNT": 14,
+     "ROW_CNT": 9280,
+     "SITE_CNT": 22,
+     "MKT": 223,
+     "SCM": 0,
+     "CUST": 0,
+     "RTF": 196,
+     "RTF_RP": 196
+    },
+    "measures": [
+     {
+      "MEASURE": "VMI_DIO",
+      "CNT": 1094,
+      "MIN_YMD": "20210113",
+      "MAX_YMD": "20241027",
+      "SUM_QTY": 196771,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_Inv",
+      "CNT": 1094,
+      "MIN_YMD": "20210113",
+      "MAX_YMD": "20241027",
+      "SUM_QTY": 138202,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 111,
+      "MIN_YMD": "20210505",
+      "MAX_YMD": "20221106",
+      "SUM_QTY": -47230,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 103,
+      "MIN_YMD": "20210113",
+      "MAX_YMD": "20221114",
+      "SUM_QTY": 141922,
+      "LAST_BY": "jiyounghwang"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 53,
+      "MIN_YMD": "20210303",
+      "MAX_YMD": "20230228",
+      "SUM_QTY": 19160,
+      "LAST_BY": "luis.kim"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 50,
+      "MIN_YMD": "20210303",
+      "MAX_YMD": "20230228",
+      "SUM_QTY": 17676,
+      "LAST_BY": "luis.kim"
+     },
+     {
+      "MEASURE": "RTF",
+      "CNT": 43,
+      "MIN_YMD": "20210303",
+      "MAX_YMD": "20230228",
+      "SUM_QTY": 8465,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 43,
+      "MIN_YMD": "20210303",
+      "MAX_YMD": "20230228",
+      "SUM_QTY": 8465,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 43,
+      "MIN_YMD": "20210303",
+      "MAX_YMD": "20230228",
+      "SUM_QTY": 8465,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_In_Plan",
+      "CNT": 7,
+      "MIN_YMD": "20210113",
+      "MAX_YMD": "20210325",
+      "SUM_QTY": 313,
+      "LAST_BY": "SYSTEM"
+     }
+    ],
+    "focus_have": [
+     "MKT_FCST",
+     "RTF",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "CUST_FCST",
+     "LOC",
+     "SCM_FCST"
+    ]
+   },
+   {
+    "PROJECT_CODE": "S-16-037",
+    "SCM_SITE_ID": "LGCEG_DE_MWA",
+    "ITEM_ID": "EH048189P3S1",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "EXW",
+    "PLANT_SITE_ID": "-",
+    "M_CNT": 10,
+    "ROW_CNT": 3365,
+    "MIN_YMD": "20180327",
+    "MAX_YMD": "20250302",
+    "item_stat": {
+     "ITEM_ID": "EH048189P3S1",
+     "M_CNT": 14,
+     "ROW_CNT": 8985,
+     "SITE_CNT": 16,
+     "MKT": 372,
+     "SCM": 0,
+     "CUST": 0,
+     "RTF": 229,
+     "RTF_RP": 191
+    },
+    "measures": [
+     {
+      "MEASURE": "VMI_DIO",
+      "CNT": 1178,
+      "MIN_YMD": "20201117",
+      "MAX_YMD": "20250126",
+      "SUM_QTY": 336398,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_Inv",
+      "CNT": 1178,
+      "MIN_YMD": "20201117",
+      "MAX_YMD": "20250126",
+      "SUM_QTY": 653900,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 253,
+      "MIN_YMD": "20181005",
+      "MAX_YMD": "20250302",
+      "SUM_QTY": -59988,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 183,
+      "MIN_YMD": "20180327",
+      "MAX_YMD": "20250228",
+      "SUM_QTY": 29937,
+      "LAST_BY": "luis.kim"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 175,
+      "MIN_YMD": "20180327",
+      "MAX_YMD": "20250228",
+      "SUM_QTY": 29435,
+      "LAST_BY": "luis.kim"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 140,
+      "MIN_YMD": "20201117",
+      "MAX_YMD": "20250228",
+      "SUM_QTY": 140438,
+      "LAST_BY": "luis.kim"
+     },
+     {
+      "MEASURE": "RTF",
+      "CNT": 98,
+      "MIN_YMD": "20181012",
+      "MAX_YMD": "20240901",
+      "SUM_QTY": 15043,
+      "LAST_BY": "kmseol"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 69,
+      "MIN_YMD": "20201127",
+      "MAX_YMD": "20240901",
+      "SUM_QTY": 13646,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 69,
+      "MIN_YMD": "20201127",
+      "MAX_YMD": "20240901",
+      "SUM_QTY": 13646,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_In_Plan",
+      "CNT": 22,
+      "MIN_YMD": "20201117",
+      "MAX_YMD": "20210322",
+      "SUM_QTY": 4451,
+      "LAST_BY": "SYSTEM"
+     }
+    ],
+    "focus_have": [
+     "MKT_FCST",
+     "RTF",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "CUST_FCST",
+     "LOC",
+     "SCM_FCST"
+    ]
+   },
+   {
+    "PROJECT_CODE": "S-16-036",
+    "SCM_SITE_ID": "LGCEG_DE_MWA",
+    "ITEM_ID": "EH048126P3S1",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "EXW",
+    "PLANT_SITE_ID": "-",
+    "M_CNT": 10,
+    "ROW_CNT": 2968,
+    "MIN_YMD": "20180402",
+    "MAX_YMD": "20240915",
+    "item_stat": {
+     "ITEM_ID": "EH048126P3S1",
+     "M_CNT": 14,
+     "ROW_CNT": 6880,
+     "SITE_CNT": 14,
+     "MKT": 325,
+     "SCM": 0,
+     "CUST": 0,
+     "RTF": 200,
+     "RTF_RP": 155
+    },
+    "measures": [
+     {
+      "MEASURE": "VMI_Inv",
+      "CNT": 1045,
+      "MIN_YMD": "20201216",
+      "MAX_YMD": "20240915",
+      "SUM_QTY": 384751,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_DIO",
+      "CNT": 1045,
+      "MIN_YMD": "20201216",
+      "MAX_YMD": "20240915",
+      "SUM_QTY": 271238,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 241,
+      "MIN_YMD": "20181005",
+      "MAX_YMD": "20230604",
+      "SUM_QTY": -22845,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 152,
+      "MIN_YMD": "20180402",
+      "MAX_YMD": "20240901",
+      "SUM_QTY": 15957,
+      "LAST_BY": "luis.kim"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 148,
+      "MIN_YMD": "20180402",
+      "MAX_YMD": "20240901",
+      "SUM_QTY": 15771,
+      "LAST_BY": "luis.kim"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 120,
+      "MIN_YMD": "20201123",
+      "MAX_YMD": "20230531",
+      "SUM_QTY": 66704,
+      "LAST_BY": "luis.kim"
+     },
+     {
+      "MEASURE": "RTF",
+      "CNT": 89,
+      "MIN_YMD": "20181012",
+      "MAX_YMD": "20240901",
+      "SUM_QTY": 8513,
+      "LAST_BY": "kmseol"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 57,
+      "MIN_YMD": "20210106",
+      "MAX_YMD": "20240901",
+      "SUM_QTY": 6813,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 57,
+      "MIN_YMD": "20210106",
+      "MAX_YMD": "20240901",
+      "SUM_QTY": 6813,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_In_Plan",
+      "CNT": 14,
+      "MIN_YMD": "20201216",
+      "MAX_YMD": "20210325",
+      "SUM_QTY": 2955,
+      "LAST_BY": "SYSTEM"
+     }
+    ],
+    "focus_have": [
+     "MKT_FCST",
+     "RTF",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "CUST_FCST",
+     "LOC",
+     "SCM_FCST"
+    ]
+   },
+   {
+    "PROJECT_CODE": "R-18-012",
+    "SCM_SITE_ID": "LGCEG_DE_MWA",
+    "ITEM_ID": "EH257064P8S8",
+    "DOM_EXP": "E",
+    "FCST_TYPE": "MPS",
+    "INCOTERMS": "EXW",
+    "PLANT_SITE_ID": "-",
+    "M_CNT": 10,
+    "ROW_CNT": 1950,
+    "MIN_YMD": "20220124",
+    "MAX_YMD": "20260104",
+    "item_stat": {
+     "ITEM_ID": "EH257064P8S8",
+     "M_CNT": 14,
+     "ROW_CNT": 4078,
+     "SITE_CNT": 9,
+     "MKT": 43,
+     "SCM": 0,
+     "CUST": 0,
+     "RTF": 33,
+     "RTF_RP": 33
+    },
+    "measures": [
+     {
+      "MEASURE": "VMI_DIO",
+      "CNT": 872,
+      "MIN_YMD": "20220829",
+      "MAX_YMD": "20251230",
+      "SUM_QTY": 626634,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "VMI_Inv",
+      "CNT": 872,
+      "MIN_YMD": "20220829",
+      "MAX_YMD": "20251230",
+      "SUM_QTY": 4386418,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "BALANCE",
+      "CNT": 37,
+      "MIN_YMD": "20220901",
+      "MAX_YMD": "20260104",
+      "SUM_QTY": -11790,
+      "LAST_BY": "BALANCE_MAKE"
+     },
+     {
+      "MEASURE": "VMI_In_Req",
+      "CNT": 33,
+      "MIN_YMD": "20220124",
+      "MAX_YMD": "20251231",
+      "SUM_QTY": 43342,
+      "LAST_BY": "ellie"
+     },
+     {
+      "MEASURE": "MKT_FCST_LATEST",
+      "CNT": 32,
+      "MIN_YMD": "20220901",
+      "MAX_YMD": "20251231",
+      "SUM_QTY": 4034,
+      "LAST_BY": "luis.kim"
+     },
+     {
+      "MEASURE": "MKT_FCST",
+      "CNT": 31,
+      "MIN_YMD": "20220901",
+      "MAX_YMD": "20251231",
+      "SUM_QTY": 3619,
+      "LAST_BY": "luis.kim"
+     },
+     {
+      "MEASURE": "RTF",
+      "CNT": 24,
+      "MIN_YMD": "20220901",
+      "MAX_YMD": "20251231",
+      "SUM_QTY": 1286,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SCP",
+      "CNT": 24,
+      "MIN_YMD": "20220901",
+      "MAX_YMD": "20251231",
+      "SUM_QTY": 1286,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_SYS_RP",
+      "CNT": 24,
+      "MIN_YMD": "20220901",
+      "MAX_YMD": "20251231",
+      "SUM_QTY": 1286,
+      "LAST_BY": "SYSTEM"
+     },
+     {
+      "MEASURE": "RTF_PR",
+      "CNT": 1,
+      "MIN_YMD": "20251231",
+      "MAX_YMD": "20251231",
+      "SUM_QTY": 6,
+      "LAST_BY": "SYSTEM"
+     }
+    ],
+    "focus_have": [
+     "MKT_FCST",
+     "RTF",
+     "RTF_SYS_RP"
+    ],
+    "focus_miss": [
+     "CUST_FCST",
+     "LOC",
+     "SCM_FCST"
+    ]
+   }
+  ]
+ }
+}

@@ -1,0 +1,2890 @@
+{
+ "meta": {
+  "db": "ZIOUI1",
+  "host": "ol9-db",
+  "user": "SCM_MGR",
+  "fetched": "2026-09-18 07:56:13"
+ },
+ "auth_group": [
+  {
+   "AUTH": "ADMIN",
+   "SCOPE": "ALL",
+   "ATTR1": "Y",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCOPE": "ALL",
+   "ATTR1": "Y",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCOPE": "ALL",
+   "ATTR1": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCOPE": "DMF000",
+   "ATTR1": "Y",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCOPE": "DMF0003",
+   "ATTR1": "Y",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCOPE": "ALL",
+   "ATTR1": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCOPE": "ALL",
+   "ATTR1": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCOPE": "DMF0039",
+   "ATTR1": " ",
+   "VALID_YN": "Y"
+  }
+ ],
+ "auth_measure": [
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0003",
+   "DIV": "81",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0003",
+   "DIV": "81",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0003",
+   "DIV": "81",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCR": "DMF0003",
+   "DIV": "81",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0003",
+   "DIV": "81",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0003",
+   "DIV": "81_HD",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0003",
+   "DIV": "81_HD",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0003",
+   "DIV": "81_HD",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCR": "DMF0003",
+   "DIV": "81_HD",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0003",
+   "DIV": "81_HD",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0003",
+   "DIV": "81_HG",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0003",
+   "DIV": "81_HG",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0003",
+   "DIV": "81_HG",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCR": "DMF0003",
+   "DIV": "81_HG",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0003",
+   "DIV": "81_HG",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0003",
+   "DIV": "81_HM",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0003",
+   "DIV": "81_HM",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0003",
+   "DIV": "81_HM",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCR": "DMF0003",
+   "DIV": "81_HM",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0003",
+   "DIV": "81_HM",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0003",
+   "DIV": "81_ST",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0003",
+   "DIV": "81_ST",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0003",
+   "DIV": "81_ST",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCR": "DMF0003",
+   "DIV": "81_ST",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0003",
+   "DIV": "81_ST",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0003",
+   "DIV": "81_UC",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0003",
+   "DIV": "81_UC",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0003",
+   "DIV": "81_UC",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCR": "DMF0003",
+   "DIV": "81_UC",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0003",
+   "DIV": "81_UC",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "40",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "40",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "40",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0021",
+   "DIV": "40",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "40",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "40",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0021",
+   "DIV": "40",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0021",
+   "DIV": "81",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "81",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "81",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0021",
+   "DIV": "81",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_HD",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_HD",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_HD",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0021",
+   "DIV": "81_HD",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "81_HD",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "81_HD",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0021",
+   "DIV": "81_HD",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_HG",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_HG",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_HG",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0021",
+   "DIV": "81_HG",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "81_HG",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "81_HG",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0021",
+   "DIV": "81_HG",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_HM",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_HM",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_HM",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0021",
+   "DIV": "81_HM",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "81_HM",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "81_HM",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0021",
+   "DIV": "81_HM",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_ST",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_ST",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_ST",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0021",
+   "DIV": "81_ST",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "81_ST",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "81_ST",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0021",
+   "DIV": "81_ST",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_UC",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_UC",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "81_UC",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0021",
+   "DIV": "81_UC",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "81_UC",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "81_UC",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0021",
+   "DIV": "81_UC",
+   "MEASURE": "RTF_SYS_RP",
+   "EDIT_DAY": "WED",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "82",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0021",
+   "DIV": "82",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0021",
+   "DIV": "82",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0021",
+   "DIV": "82",
+   "MEASURE": "SalesAmt_LOC",
+   "EDIT_DAY": " ",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "MON",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "VMI_In_Req",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "VMI_In_Req",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "VMI_In_Req",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "MON",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "VMI_In_Req",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0082",
+   "DIV": "40",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "MON",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "81",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "81",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCR": "DMF0082",
+   "DIV": "81",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0082",
+   "DIV": "81",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HD",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HD",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HD",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HD",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HD",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_HD",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_HD",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCR": "DMF0082",
+   "DIV": "81_HD",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_HD",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_HD",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_HD",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_HD",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HG",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HG",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HG",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HG",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HG",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_HG",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_HG",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCR": "DMF0082",
+   "DIV": "81_HG",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_HG",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_HG",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_HG",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_HG",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HM",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HM",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HM",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HM",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_HM",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_HM",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_HM",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCR": "DMF0082",
+   "DIV": "81_HM",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_HM",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_HM",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_HM",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_HM",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_ST",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_ST",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_ST",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_ST",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_ST",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_ST",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_ST",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCR": "DMF0082",
+   "DIV": "81_ST",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_ST",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_ST",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_ST",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_ST",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_UC",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_UC",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_UC",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_UC",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "SCR": "DMF0082",
+   "DIV": "81_UC",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_UC",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_UC",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "SCR": "DMF0082",
+   "DIV": "81_UC",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_UC",
+   "MEASURE": "LOC",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_UC",
+   "MEASURE": "MKT_FCST",
+   "EDIT_DAY": null,
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCM PI Admin",
+   "SCR": "DMF0082",
+   "DIV": "81_UC",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "SCR": "DMF0082",
+   "DIV": "81_UC",
+   "MEASURE": "SCM_FCST",
+   "EDIT_DAY": "TUE",
+   "VALID_YN": "Y"
+  }
+ ],
+ "accounts": [
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "attackgo",
+   "USER_NM": "고원택"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "bindy122678",
+   "USER_NM": "강민재"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "candoism",
+   "USER_NM": "최상민"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "dong.lee2",
+   "USER_NM": null
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "donghoon.lee",
+   "USER_NM": "이동훈"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "jaehun_cho",
+   "USER_NM": "조재훈"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "jaeuk.shin",
+   "USER_NM": "신재욱"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "jssbae",
+   "USER_NM": "배지선"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "k0101",
+   "USER_NM": "김현기"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "loveidea",
+   "USER_NM": "김태종"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "minyonglee1",
+   "USER_NM": "이민용"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "park.choyi",
+   "USER_NM": "박초이"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "qjastar",
+   "USER_NM": "김범주"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "seongwon.j",
+   "USER_NM": "장성원"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "sooykwon",
+   "USER_NM": "권수영"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "story55",
+   "USER_NM": "김민근"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "test001",
+   "USER_NM": "테스트"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "testa",
+   "USER_NM": "testa"
+  },
+  {
+   "AUTH": "ADMIN",
+   "USER_ID": "yangsh2",
+   "USER_NM": "양수형"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "DM_A_TEST",
+   "USER_NM": null
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "bindy122678",
+   "USER_NM": "강민재"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "dong.lee2",
+   "USER_NM": null
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "hongjae.kim",
+   "USER_NM": "김홍재"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "jaehun_cho",
+   "USER_NM": "조재훈"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "jaeuk.shin",
+   "USER_NM": "신재욱"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "jiwon.park",
+   "USER_NM": "박지원"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "joowon.kim",
+   "USER_NM": null
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "klittrup",
+   "USER_NM": null
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "minyonglee1",
+   "USER_NM": "이민용"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "park.choyi",
+   "USER_NM": "박초이"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "story55",
+   "USER_NM": "김민근"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "wonqthanq",
+   "USER_NM": "정원규"
+  },
+  {
+   "AUTH": "DM ADMIN",
+   "USER_ID": "yangsh2",
+   "USER_NM": "양수형"
+  },
+  {
+   "AUTH": "DM Planner",
+   "USER_ID": "bpark416",
+   "USER_NM": "박병창"
+  },
+  {
+   "AUTH": "DM Planner",
+   "USER_ID": "cmjin",
+   "USER_NM": null
+  },
+  {
+   "AUTH": "DM Planner",
+   "USER_ID": "eunah.koo",
+   "USER_NM": "구은아"
+  },
+  {
+   "AUTH": "DM Planner",
+   "USER_ID": "jaehun_cho",
+   "USER_NM": "조재훈"
+  },
+  {
+   "AUTH": "DM Planner",
+   "USER_ID": "minyonglee1",
+   "USER_NM": "이민용"
+  },
+  {
+   "AUTH": "DM Planner",
+   "USER_ID": "wcyoon",
+   "USER_NM": "윤우창"
+  },
+  {
+   "AUTH": "DM Planner",
+   "USER_ID": "ys_cho",
+   "USER_NM": "조윤성"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "USER_ID": "jaehun_cho",
+   "USER_NM": "조재훈"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "USER_ID": "jaehyeok",
+   "USER_NM": "유재혁"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "USER_ID": "minyonglee1",
+   "USER_NM": "이민용"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "USER_ID": "miyeong.lee",
+   "USER_NM": "이미영"
+  },
+  {
+   "AUTH": "DM Planner (W/S)",
+   "USER_ID": "ys_cho",
+   "USER_NM": "조윤성"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "USER_ID": "bottle",
+   "USER_NM": "김재병"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "USER_ID": "coeogus",
+   "USER_NM": "채대현"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "USER_ID": "dodae",
+   "USER_NM": "도대현"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "USER_ID": "jaehun_cho",
+   "USER_NM": "조재훈"
+  },
+  {
+   "AUTH": "SCP Planner",
+   "USER_ID": "minyonglee1",
+   "USER_NM": "이민용"
+  }
+ ],
+ "jobs": [
+  {
+   "JOB_NAME": "JOB_LGCE_SCMPROD_PR_DM_PLN_ADJUSTED_MKT_FCST_R_TO_MKT_FCST",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=HOURLY;INTERVAL=1",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : JOB.LGCE_SCMPROD.PR_DM_PLN_ADJUSTED_MKT_FCST_R_TO_MKT_FCST\n  PR_DM_PLN_ADJUSTED_MKT_FCST_R_TO_MKT_FCST;\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_LGCE_SCMPROD_PR_DM_PLN_MKT_FCST_TO_XIF_PLM_PLAN_S",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=DAILY;BYHOUR=1;BYMINUTE=0;BYSECOND=0",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : JOB.LGCE_SCMPROD.PR_DM_PLN_MKT_FCST_TO_XIF_PLM_PLAN_S\n  PR_DM_PLN_MKT_FCST_TO_XIF_PLM_PLAN_S;\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_DNM_EDI_CALLOFF",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "SCH_JOB_PR_DM_DNM_EDI_CALLOFF_1,SCH_JOB_PR_DM_DNM_EDI_CALLOFF_2",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : PR_DM_DNM_EDI_CALLOFF\n  BEGIN\n    PR_DM_DNM_EDI_CALLOFF;\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 2 : PR_DM_PLN_CUST_FCST_RECORD\n  PR_DM_PLN_CUST_FCST_RECORD('81', 'EDI');\n  PR_DM_PLN_CUST_FCST_RECORD('81_UC', 'EDI');\n  PR_DM_PLN_CUST_FCST_RECORD('81', 'RPA');\n  PR_DM_PLN_CUST_FCST_RECORD('40', 'RPA');\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_DNM_EDI_CUTOFF",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=DAILY;BYHOUR=6;BYMINUTE=15;BYSECOND=0",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : PR_DM_DNM_EDI_CUTOFF\n  PR_DM_DNM_EDI_CUTOFF;\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_DNM_ERP_EDI_MST_SUMMARY_MAIL_SEND",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=DAILY;BYHOUR=8;BYMINUTE=0;BYSECOND=0",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : PR_DM_DNM_ERP_EDI_MST_SUMMARY_MAIL_SEND\n  PR_DM_DNM_ERP_EDI_MST_SUMMARY_MAIL_SEND;\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_MST_CUST_FCST_WEEKLY_ROLLING_MON_TOTAL",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=WEEKLY;BYDAY=MON;BYHOUR=0;BYMINUTE=0;BYSECOND=0",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : PR_DM_MST_CUST_FCST_WEEKLY_ROLLING\n  BEGIN\n    PR_DM_MST_CUST_FCST_WEEKLY_ROLLING;\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 2 : PR_DM_PLN_MKT_FCST_RESULT_MOVE_81\n  BEGIN\n    PR_DM_PLN_MKT_FCST_RESULT_MOVE('81');\n    PR_DM_PLN_MKT_FCST_RESULT_MOVE('81_UC');\n    PR_DM_PLN_MKT_FCST_RESULT_MOVE('81_HM');\n    PR_DM_PLN_MKT_FCST_RESULT_MOVE('81_ST');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 3 : PR_DM_PLN_MKT_FCST_RESULT_MOVE_82\n  BEGIN\n    PR_DM_PLN_MKT_FCST_RESULT_MOVE('82');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 4 : PR_DM_PLN_SALES_PLAN_RESULT_MOVE_81\n  BEGIN\n    PR_DM_PLN_SALES_PLAN_RESULT_MOVE('81');\n    PR_DM_PLN_SALES_PLAN_RESULT_MOVE('81_UC');\n    PR_DM_PLN_SALES_PLAN_RESULT_MOVE('81_HM');\n    PR_DM_PLN_SALES_PLAN_RESULT_MOVE('81_ST');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 5 : PR_DM_PLN_SALES_PLAN_RESULT_MOVE_82\n  BEGIN\n    PR_DM_PLN_SALES_PLAN_RESULT_MOVE('82');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 6 : PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_81\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_UC', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_HM', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_ST', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 7 : PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_82\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('82', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 8 : [E20260109-002614]_40 사업부_FcstPriceMGMT_Sales Price_MKT FCST 동기화\n  BEGIN\n    PR_DM_PLN_CFM_TO_MKT_FCST_ALL('40');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 9 : PR_DM_PLN_MKT_FCST_RESULT_MOVE_MON_MOBILE\n  PR_DM_PLN_MKT_FCST_RESULT_MOVE('40');\n  PR_DM_PLN_SALES_PLAN_RESULT_MOVE('40');\n  PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('40', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_MST_EDI_CUST_MATERIAL_INFO",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=HOURLY;INTERVAL=1",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : JOB.PR_DM_MST_EDI_CUST_MATERIAL_INFO\n  PR_DM_MST_EDI_CUST_MATERIAL_INFO;\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_MST_EDI_UNLOADING_POINT",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=HOURLY;INTERVAL=1",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : JOB.PR_DM_MST_EDI_UNLOADING_POINT\n  PR_DM_MST_EDI_UNLOADING_POINT;\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_MON_40",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=WEEKLY;BYDAY=MON;BYHOUR=15;BYMINUTE=0;BYSECOND=0",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : MKT FCST CUTOFF (MF_W) 40사업부\n  PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('40', 'MKT FCST Weekly Cutoff', 'MF_W', 'Weekly Rolling', 'system');\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_MON_82",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=WEEKLY;BYDAY=MON;BYHOUR=16;BYMINUTE=0;BYSECOND=0",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : MKT FCST CUTOFF (MF_W) 82 사업부\n  PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('82', 'MKT FCST Weekly Cutoff', 'MF_W', 'Weekly Rolling', 'system');\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TOTAL_MOBILE",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=WEEKLY;BYDAY=SUN,WED,THU,FRI,SAT;BYHOUR=0;BYMINUTE=0;BYSECOND=0",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : [E20260109-002614]_40 사업부_FcstPriceMGMT_Sales Price_MKT FCST 동기화\n  BEGIN\n    PR_DM_PLN_CFM_TO_MKT_FCST_ALL('40');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 2 : MKT FCST CUTOFF (MF_D) 40 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('40', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 3 : MKT FCST CUTOFF (MF_D) 81 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 4 : MKT FCST CUTOFF (MF_D) 81_UC 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_UC', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 5 : MKT FCST CUTOFF (MF_D) 81_HM 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_HM', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 6 : MKT FCST CUTOFF (MF_D) 81_ST 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_ST', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 7 : MKT FCST CUTOFF (MF_D) 81_HD 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_HD', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 8 : MKT FCST CUTOFF (MF_D) 81_HG 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_HG', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 9 : MKT FCST CUTOFF (MF_D) 82 사업부\n  PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('82', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_2",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=WEEKLY;BYDAY=TUE;BYHOUR=4;BYMINUTE=0;BYSECOND=0",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : MKT FCST CUTOFF (MF_W) 81 사업부\n  PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81', 'MKT FCST Weekly Cutoff', 'MF_W', 'Weekly Rolling', 'system');\n  -- step 2 : MKT FCST CUTOFF (MF_W) 81_HM 사업부\n  PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_HM', 'MKT FCST Weekly Cutoff', 'MF_W', 'Weekly Rolling', 'system');\n  -- step 3 : MKT FCST CUTOFF (MF_W) 81_ST 사업부\n  PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_ST', 'MKT FCST Weekly Cutoff', 'MF_W', 'Weekly Rolling', 'system');\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HG",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "SCH_JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HG_1,SCH_JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HG_2,SCH_JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_HG_3",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : MKT FCST CUTOFF (MF_W) 81_HG 사업부\n  PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_HG', 'MKT FCST Weekly Cutoff', 'MF_W', 'Weekly Rolling', 'system');\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_81_UC",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=WEEKLY;BYDAY=TUE;BYHOUR=10;BYMINUTE=0;BYSECOND=0",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : MKT FCST CUTOFF (MF_W) 81_UC 사업부\n  PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_UC', 'MKT FCST Weekly Cutoff', 'MF_W', 'Weekly Rolling', 'system');\n  -- step 2 : MKT FCST CUTOFF (MF_W) 81_HD 사업부\n  PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_HD', 'MKT FCST Weekly Cutoff', 'MF_W', 'Weekly Rolling', 'system');\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_SCM_FCST",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=WEEKLY;BYDAY=MON;BYHOUR=17;BYMINUTE=30;BYSECOND=0",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : MKT FCST CUTOFF (SF_W) 40 사업부\n  PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('40', 'SCM FCST Weekly Cutoff', 'SF_W', 'Weekly Rolling', 'system');\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING_TUE_TOTAL",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "FREQ=WEEKLY;BYDAY=TUE;BYHOUR=0;BYMINUTE=15;BYSECOND=0",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : MKT FCST CUTOFF (MF_D) 82 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('82', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 2 : MKT FCST CUTOFF (MF_W) 82 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('82', 'MKT FCST Weekly Cutoff', 'MF_W', 'Weekly Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 3 : [E20260109-002614]_40 사업부_FcstPriceMGMT_Sales Price_MKT FCST 동기화\n  BEGIN\n    PR_DM_PLN_CFM_TO_MKT_FCST_ALL('40');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 4 : MKT FCST CUTOFF (MF_D) 40사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('40', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 5 : MKT FCST CUTOFF (MF_D) 81 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 6 : MKT FCST CUTOFF (MF_D) 81_UC 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_UC', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 7 : MKT FCST CUTOFF (MF_D) 81_HM 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_HM', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 8 : MKT FCST CUTOFF (MF_D) 81_ST 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_ST', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 9 : MKT FCST CUTOFF (MF_D) 81_HD 사업부\n  BEGIN\n    PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_HD', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\n  EXCEPTION WHEN OTHERS THEN NULL;  -- MSSQL on_fail_action=3\n  END;\n  -- step 10 : MKT FCST CUTOFF (MF_D) 81_HG 사업부\n  PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING('81_HG', 'MKT FCST Daily Cutoff', 'MF_D', 'Daily Rolling', 'system');\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_40",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "SCH_JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_40_1,SCH_JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_40_2,SCH_JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_40_3,SCH_JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_40_4,SCH_JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_40_5",
+   "JOB_ACTION": "\r\nBEGIN\r\n    -- step 1 : RTF Check\r\n    DECLARE\r\n        V_RETURN_VALUE VARCHAR2(120);\r\n    BEGIN\r\n        SELECT MAX(PLAN_ID)\r\n          INTO V_RETURN_VALUE\r\n          FROM SCM_MGR.SCP_PLN_RTF_ALLOCATION_V\r\n         WHERE DIVISION_ID = '40'\r\n           AND PLAN_START_YYYYMMDD =\r\n               TO_CHAR(\r\n                   SCM_MGR.FN_NEXT_DAY(SYSDATE, 'MON') - 7 * 1,\r\n                   'YYYYMMDD'\r\n               );\r\n\r\n        IF V_RETURN_VALUE IS NULL THEN\r\n            SCM_MGR.PR_SCM_SYS_LOG_BATCH(\r\n                'PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE',\r\n                'ERROR',\r\n                0,\r\n                '40 Final Plan NULL',\r\n                '@v_description',\r\n                SYSDATE\r\n            );\r\n\r\n            RAISE_APPLICATION_ERROR(\r\n                -20001,\r\n                'Final Plan Error'\r\n            );\r\n        END IF;\r\n    END;\r\n\r\n    -- step 2 : PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE\r\n    SCM_MGR.PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE(\r\n        P_DIVISION_ID     => '40',\r\n        P_CUTOFF_YYYYMMDD => NULL,\r\n        P_CREATION_TYPE   => NULL\r\n    );\r\n\r\n    COMMIT;\r\nEND;\r\n"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "SCH_JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_1,SCH_JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_81_2",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : RTF Check\n  DECLARE\n    V_RETURN_VALUE VARCHAR2(120);\n  BEGIN\n    SELECT MAX(PLAN_ID) INTO V_RETURN_VALUE\n      FROM SCP_PLN_RTF_ALLOCATION_V\n     WHERE DIVISION_ID = '81'\n       AND PLAN_START_YYYYMMDD = TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7 * 1, 'YYYYMMDD');\n    IF V_RETURN_VALUE IS NULL THEN\n       PR_SCM_SYS_LOG_BATCH('PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE', 'ERROR', 0,\n                            '81 Final Plan NULL', '@v_description', SYSDATE);\n       RAISE_APPLICATION_ERROR(-20001, 'Final Plan Error');\n    END IF;\n  END;\n  -- step 2 : PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE\n  PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE('81', '');\n  -- step 3 : RTF존재하나 PRICE없는 데이터 대상 메일링\n  PR_DM_DNM_SALES_PRICE_EXIST_MAIL_SEND('81');\nEND;"
+  },
+  {
+   "JOB_NAME": "JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_82",
+   "ENABLED": "FALSE",
+   "REPEAT_INTERVAL": "SCH_JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_82_1,SCH_JOB_PR_DM_PLN_SALES_PLAN_WEEKLY_ROLLING_82_2",
+   "JOB_ACTION": "\nBEGIN\n  -- step 1 : RTF Check\n  DECLARE\n    V_RETURN_VALUE VARCHAR2(120);\n  BEGIN\n    SELECT MAX(PLAN_ID) INTO V_RETURN_VALUE\n      FROM SCP_PLN_RTF_ALLOCATION_V\n     WHERE DIVISION_ID = '82'\n       AND PLAN_START_YYYYMMDD = TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7 * 1, 'YYYYMMDD');\n    IF V_RETURN_VALUE IS NULL THEN\n       PR_SCM_SYS_LOG_BATCH('PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE', 'ERROR', 0,\n                            '82 Final Plan NULL', '@v_description', SYSDATE);\n       RAISE_APPLICATION_ERROR(-20001, 'Final Plan Error');\n    END IF;\n  END;\n  -- step 2 : PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE\n  PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE('82', '');\n  -- step 3 : RTF존재하나 PRICE없는 데이터 대상 메일링\n  PR_DM_DNM_SALES_PRICE_EXIST_MAIL_SEND('82');\nEND;"
+  }
+ ],
+ "wiring": [
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "Mkt Fcst",
+   "MNU_BTN_CD": "COLUMN_SETUP",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "Mkt Fcst",
+   "MNU_BTN_CD": "DELETE",
+   "API_URL": "PKG_DMF0003.P_DMF0003_SAVE_MKT_FCST"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "Mkt Fcst",
+   "MNU_BTN_CD": "EXCEL",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "Mkt Fcst",
+   "MNU_BTN_CD": "FILTER",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "Mkt Fcst",
+   "MNU_BTN_CD": "INSERT",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "Mkt Fcst",
+   "MNU_BTN_CD": "MEASURE_SELECT",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "Mkt Fcst",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0003.P_DMF0003_SAVE_MKT_FCST"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "Mkt Fcst",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "Mkt Fcst",
+   "MNU_BTN_CD": "SORT",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_MKT_FCST_DATA"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "car",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_REF"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "carProperty",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_CAR_PROPERTY"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "carTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_CAR"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "custDemand",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0003.P_DMF0003_SAVE_DM_ANL_MKT_PSI_DETAIL"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "custDemandInit",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPINIT"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "custDemandResult",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DPRESULT"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "dayRange",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PR_GET_DAY_RANGE"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "prHistory",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_PR_HISTORY_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "prPopup",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0003.P_DMF0003_SAVE_PRPOPUP"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "prPopup",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_PRPOPUP"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "psi",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_DATA"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "psiLogic",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_DM_ANL_MKT_PSI_AN_LOGIC"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "psiTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE_PSI"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "spreadTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "sspCompare",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0003.P_DMF0003_GET_MKT_FCST_COMPARE_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "SCM0002_SET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0003",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "SHT_NM": "FCST Upload",
+   "MNU_BTN_CD": "DELETE",
+   "API_URL": "PKG_DMF0014.P_DMF0014_GET_CUST_FCST_UPLOAD_DATA"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "SHT_NM": "FCST Upload",
+   "MNU_BTN_CD": "EXCEL",
+   "API_URL": "PKG_DMF0014.P_DMF0014_GET_CUST_FCST_UPLOAD_DATA"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "SHT_NM": "FCST Upload",
+   "MNU_BTN_CD": "FILTER",
+   "API_URL": "PKG_DMF0014.P_DMF0014_GET_CUST_FCST_UPLOAD_DATA"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "SHT_NM": "FCST Upload",
+   "MNU_BTN_CD": "FORM_DATA",
+   "API_URL": "PKG_DMF0014.P_DMF0014_GET_EXCEL_FORM_DATA"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "SHT_NM": "FCST Upload",
+   "MNU_BTN_CD": "INSERT",
+   "API_URL": "PKG_DMF0014.P_DMF0014_GET_CUST_FCST_UPLOAD_DATA"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "SHT_NM": "FCST Upload",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0014.P_DMF0014_SAVE_CUST_FCST_UPLOAD_DATA"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "SHT_NM": "FCST Upload",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0014.P_DMF0014_GET_CUST_FCST_UPLOAD_DATA"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "SHT_NM": "FCST Upload",
+   "MNU_BTN_CD": "SORT",
+   "API_URL": "PKG_DMF0014.P_DMF0014_GET_CUST_FCST_UPLOAD_DATA"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "SHT_NM": "FCST Upload",
+   "MNU_BTN_CD": "UPLOAD",
+   "API_URL": "PKG_DMF0014.P_DMF0014_CUST_FCST_EXCEL_UPLOAD"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "SHT_NM": "FCST Upload",
+   "MNU_BTN_CD": "UPLOAD_SAVE",
+   "API_URL": "PKG_DMF0014.P_DMF0014_CUST_FCST_EXCEL_UPLOAD"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "SHT_NM": "dayRange",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PR_GET_DAY_RANGE"
+  },
+  {
+   "MNU_ID": "DMF0014",
+   "SHT_NM": "spreadTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0014.P_DMF0014_GET_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "exchange",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0020.P_DMF0020_SAVE_DM_MST_EXCHANGE_RATE_ALL"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "exchange",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "exchangeRate",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0020.P_DMF0020_SAVE_DM_MST_EXCHANGE_RATE_ALL"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "exchangeRate",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0020.P_DMF0020_GET_FUTUREPRICE_INFO"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0020.P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "main",
+   "MNU_BTN_CD": "SPREAD_TITLE_DATE",
+   "API_URL": "PKG_DMF0020.P_DMF0020_GET_SPREAD_TITLE_DATE"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "mainTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0020_GET_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "owner",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0020_GET_OWNER_DATA"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "priceBatch",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0020.P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "priceBatch",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "priceBatchInput",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "priceBatchInput",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "salesPriceRange",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0020.P_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_CONVERSION"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "salesPriceRange",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "salesPriceTemplate",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "version",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0073_GET_VERSION_SALESPRICE"
+  },
+  {
+   "MNU_ID": "DMF0020",
+   "SHT_NM": "week",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0020_GET_WEEKDATA"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "Sales Plan",
+   "MNU_BTN_CD": "COLUMN_SETUP",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "Sales Plan",
+   "MNU_BTN_CD": "DELETE",
+   "API_URL": "PKG_DMF0021.P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "Sales Plan",
+   "MNU_BTN_CD": "EXCEL",
+   "API_URL": "PKG_DMF0021.P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "Sales Plan",
+   "MNU_BTN_CD": "FILTER",
+   "API_URL": "PKG_DMF0021.P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "Sales Plan",
+   "MNU_BTN_CD": "INSERT",
+   "API_URL": "PKG_DMF0021.P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "Sales Plan",
+   "MNU_BTN_CD": "MEASURE_SELECT",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "Sales Plan",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0021.P_DMF0021_SAVE_DM_PLN_SALES_PLAN_ALL"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "Sales Plan",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0021.P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "Sales Plan",
+   "MNU_BTN_CD": "SORT",
+   "API_URL": "PKG_DMF0021.P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "dayRange",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PR_GET_DAY_RANGE"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "measureInfo",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0021.P_DMF0021_GET_SALES_PLAN_MEASUREINFO"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "spreadTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0021.P_DMF0021_GET_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "SCM0002_SET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0021",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0035",
+   "SHT_NM": "bizPlanSpreadTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0051.P_DMF0051_GET_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0035",
+   "SHT_NM": "bizPlanWaterfall",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL"
+  },
+  {
+   "MNU_ID": "DMF0035",
+   "SHT_NM": "mktFcstSpreadTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0035.P_DMF0035_GET_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0035",
+   "SHT_NM": "mktFcstWaterfall",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL"
+  },
+  {
+   "MNU_ID": "DMF0035",
+   "SHT_NM": "salesPlanSpreadTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0022.P_DMF0022_GET_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0035",
+   "SHT_NM": "salesPlanWaterfall",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL"
+  },
+  {
+   "MNU_ID": "DMF0035",
+   "SHT_NM": "version",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0073_GET_VERSION_SALESPRICE"
+  },
+  {
+   "MNU_ID": "DMF0035",
+   "SHT_NM": "versionWf",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_SCM0002.P_SCM0002_GET_VERSIONBYWATERFALLPOPUP"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "COLUMN_SETUP",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "CUTOFF",
+   "API_URL": "PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST_CUTOFF"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "DELETE",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "EXCEL",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "EXCHANGE_RATE",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_EXCHANGE_PRICE"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "FILTER",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "INSERT",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "MEASURE_SELECT",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "REPLACE",
+   "API_URL": "PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_REPLACE_BY_CUTOFF"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "SET_PRICE",
+   "API_URL": "PKG_DMF0042.P_DMF0042_SAVE_DM_PLN_BP_FCST_PRICE_CONV"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "Biz Plan",
+   "MNU_BTN_CD": "SORT",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "cutoffVersion",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "dayRange",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PR_GET_DAY_RANGE"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "exchangeRate",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0042.P_DMF0042_SAVE_DM_BP_EXCHANGE_RATE"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "exchangeRate",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_EXCHANGE_PRICE"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "futurePrice",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "futurePriceData",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "mdfVersion",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_DM_MDF_VERSION"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "spreadTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0042.P_DMF0042_GET_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "SCM0002_SET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0042",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "COLUMN_SETUP",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "DELETE",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SALES_REPORTS_DATA"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "EXCEL",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SALES_REPORTS_DATA"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "EXCHANGE_RATE",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "FILTER",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SALES_REPORTS_DATA"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "MEASURE_SELECT",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_REPORT_C"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "SAVE_CF",
+   "API_URL": "PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_REPORT_C_CF"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SALES_REPORTS_DATA"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "SORT",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SALES_REPORTS_DATA"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "SP_VER",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SALES_VERSION_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "TEXTBOX",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_TEXTBOX"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "exchangeRate",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0044.P_DMF0044_SAVE_DM_EXCHANGE_RATE_REPORT"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "exchangeRate",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "exchangeRate",
+   "MNU_BTN_CD": "SEARCH_DATA",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SCM_MST_EXCHANGE_RATE_POPUP_DATA"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "exchangeRate",
+   "MNU_BTN_CD": "TITLE",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_EXCHANGE_POPUP_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "measure",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_MEASURE"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "spreadTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "textbox",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0044.P_DMF0044_SAVE_TEXTBOX"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "textbox",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_TEXTBOX"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "SCM0002_SET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "unitedVersion",
+   "MNU_BTN_CD": "ACTION",
+   "API_URL": "PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_VERSION_COPY"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "unitedVersion",
+   "MNU_BTN_CD": "ACTION_BP",
+   "API_URL": "PKG_DMF0044.P_DMF0044_SAVE_BIZ_PLAN_VERSION_COPY"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "unitedVersion",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SALES_VERSION_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "unitedVersion",
+   "MNU_BTN_CD": "TITLE",
+   "API_URL": "PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0044",
+   "SHT_NM": "unitedVersion",
+   "MNU_BTN_CD": "TRANSFER",
+   "API_URL": "PKG_DMF0044.P_DMF0044_MOBILE_REPORT_CREATE"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "COLUMN_SETUP",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "DELETE",
+   "API_URL": "PKG_DMF0049.P_DMF0049_GET_SALES_ETC_REPORTS_DATA"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "EXCEL",
+   "API_URL": "PKG_DMF0049.P_DMF0049_GET_SALES_ETC_REPORTS_DATA"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "FILTER",
+   "API_URL": "PKG_DMF0049.P_DMF0049_GET_SALES_ETC_REPORTS_DATA"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "INSERT",
+   "API_URL": "PKG_DMF0049.P_DMF0049_GET_SALES_ETC_REPORTS_DATA"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "MEASURE_SELECT",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0049.P_DMF0049_SAVE_SALES_ETC_REPORT_C"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0049.P_DMF0049_GET_SALES_ETC_REPORTS_DATA"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "SORT",
+   "API_URL": "PKG_DMF0049.P_DMF0049_GET_SALES_ETC_REPORTS_DATA"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "MDF Reports",
+   "MNU_BTN_CD": "SP_VER",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SALES_VERSION_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "measure",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0049.P_DMF0049_GET_MEASURE"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "spreadTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0049.P_DMF0049_GET_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "SCM0002_SET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "unitedVersion",
+   "MNU_BTN_CD": "ACTION",
+   "API_URL": "PKG_DMF0044.P_DMF0044_SAVE_SALES_PLAN_VERSION_COPY"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "unitedVersion",
+   "MNU_BTN_CD": "ACTION_BP",
+   "API_URL": "PKG_DMF0044.P_DMF0044_SAVE_BIZ_PLAN_VERSION_COPY"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "unitedVersion",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0044.P_DMF0044_GET_SALES_VERSION_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "unitedVersion",
+   "MNU_BTN_CD": "TITLE",
+   "API_URL": "PKG_DMF0000.P_DMF0000_GET_COMMON_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0049",
+   "SHT_NM": "unitedVersion",
+   "MNU_BTN_CD": "TRANSFER",
+   "API_URL": "PKG_DMF0044.P_DMF0044_MOBILE_REPORT_CREATE"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "FcstNPrice",
+   "MNU_BTN_CD": "FORM_DATA",
+   "API_URL": "PKG_DMF0082.P_DMF0082_GET_EXCEL_FORM_DATA"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "FcstNPrice",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0082.P_DMF0082_SAVE_MAIN_DATA"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "FcstNPrice",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0082.P_DMF0082_GET_MAIN_DATA"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "FcstNPrice",
+   "MNU_BTN_CD": "SEARCH_CURRENT",
+   "API_URL": "PKG_DMF0082.P_DMF0082_GET_MAIN_DATA_CURRENT"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "FcstNPrice",
+   "MNU_BTN_CD": "UPLOAD",
+   "API_URL": "PKG_DMF0082.P_DMF0082_EXCEL_UPLOAD"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "FcstNPrice",
+   "MNU_BTN_CD": "UPLOAD_DATA",
+   "API_URL": "PKG_DMF0082.P_DMF0082_GET_EXCEL_UPLOAD_DATA"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "FcstNPrice",
+   "MNU_BTN_CD": "UPLOAD_SAVE",
+   "API_URL": "PKG_DMF0082.P_DMF0082_EXCEL_UPLOAD"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "fcstNPrice",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0082.P_DMF0082_SAVE_MAIN_DATA"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "fcstNPrice",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0082.P_DMF0082_GET_MAIN_DATA"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "futurePriceInfo",
+   "MNU_BTN_CD": "IF",
+   "API_URL": "PKG_DMF0082.P_PR_SCM_MST_EXCHANGE_RATE_UI"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "futurePriceInfo",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "PKG_DMF0000.P_DMF0000_SAVE_EXCHANGE_POPUP_DATA"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "futurePriceInfo",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0082.P_DMF0082_POPUP_GET_FUTUREPRICE_INFO"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "savePriceData",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0082.P_DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "savePriceTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0082.P_DMF0082_POPUP_GET_SPREAD_TITLE_SAVE_PRICE"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "spreadTitle",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "PKG_DMF0082.P_DMF0082_GET_SPREAD_TITLE"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SAVE",
+   "API_URL": "SCM0002_SET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "titleSet",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0002_GET_TITLESET_POPUP"
+  },
+  {
+   "MNU_ID": "DMF0082",
+   "SHT_NM": "version",
+   "MNU_BTN_CD": "SEARCH",
+   "API_URL": "DMF0073_GET_VERSION_SALESPRICE"
+  }
+ ],
+ "versions": [
+  {
+   "DIVISION_ID": "40",
+   "CUTOFF_TYPE": "MF_D",
+   "LATEST_VER": "MF_D_20260827_V001",
+   "VER_CNT": 18
+  },
+  {
+   "DIVISION_ID": "40",
+   "CUTOFF_TYPE": "MF_W",
+   "LATEST_VER": "MF_W_20260824_V001",
+   "VER_CNT": 13
+  },
+  {
+   "DIVISION_ID": "40",
+   "CUTOFF_TYPE": "SF_W",
+   "LATEST_VER": "SF_W_20260824_V001",
+   "VER_CNT": 13
+  },
+  {
+   "DIVISION_ID": "81",
+   "CUTOFF_TYPE": "MF_D",
+   "LATEST_VER": "MF_D_20260827_V001",
+   "VER_CNT": 18
+  },
+  {
+   "DIVISION_ID": "81",
+   "CUTOFF_TYPE": "MF_W",
+   "LATEST_VER": "MF_W_20260825_V001",
+   "VER_CNT": 22
+  },
+  {
+   "DIVISION_ID": "81_HD",
+   "CUTOFF_TYPE": "MF_D",
+   "LATEST_VER": "MF_D_20260827_V001",
+   "VER_CNT": 15
+  },
+  {
+   "DIVISION_ID": "81_HD",
+   "CUTOFF_TYPE": "MF_W",
+   "LATEST_VER": "MF_W_20260825_V001",
+   "VER_CNT": 22
+  },
+  {
+   "DIVISION_ID": "81_HG",
+   "CUTOFF_TYPE": "MF_D",
+   "LATEST_VER": "MF_D_20260827_V001",
+   "VER_CNT": 15
+  },
+  {
+   "DIVISION_ID": "81_HG",
+   "CUTOFF_TYPE": "MF_W",
+   "LATEST_VER": "MF_W_20260825_V002",
+   "VER_CNT": 23
+  },
+  {
+   "DIVISION_ID": "81_HM",
+   "CUTOFF_TYPE": "MF_D",
+   "LATEST_VER": "MF_D_20260827_V001",
+   "VER_CNT": 18
+  },
+  {
+   "DIVISION_ID": "81_HM",
+   "CUTOFF_TYPE": "MF_W",
+   "LATEST_VER": "MF_W_20260825_V001",
+   "VER_CNT": 22
+  },
+  {
+   "DIVISION_ID": "81_ST",
+   "CUTOFF_TYPE": "MF_D",
+   "LATEST_VER": "MF_D_20260827_V001",
+   "VER_CNT": 18
+  },
+  {
+   "DIVISION_ID": "81_ST",
+   "CUTOFF_TYPE": "MF_W",
+   "LATEST_VER": "MF_W_20260825_V001",
+   "VER_CNT": 22
+  },
+  {
+   "DIVISION_ID": "81_UC",
+   "CUTOFF_TYPE": "MF_D",
+   "LATEST_VER": "MF_D_20260827_V001",
+   "VER_CNT": 18
+  },
+  {
+   "DIVISION_ID": "81_UC",
+   "CUTOFF_TYPE": "MF_W",
+   "LATEST_VER": "MF_W_20260825_V001",
+   "VER_CNT": 22
+  },
+  {
+   "DIVISION_ID": "82",
+   "CUTOFF_TYPE": "MF_D",
+   "LATEST_VER": "MF_D_20260827_V001",
+   "VER_CNT": 18
+  },
+  {
+   "DIVISION_ID": "82",
+   "CUTOFF_TYPE": "MF_W",
+   "LATEST_VER": "MF_W_20260825_V001",
+   "VER_CNT": 17
+  }
+ ]
+}

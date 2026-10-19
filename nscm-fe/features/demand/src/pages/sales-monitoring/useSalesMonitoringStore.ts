@@ -43,6 +43,15 @@ interface State {
   initialized: boolean;
   filters: FiltersBySheet;
   searchCondition: SearchCondition;
+  /**
+   * Plant Site 콤보 원천. AS-IS 가 경로마다 다른 목록을 쓴다(문서 §3-2).
+   *   'endCustomer' 진입 - FilterPlantSiteByEndCustomer (Division + End Customer)  :398
+   *   'division'    Division 변경 - FilterFromSiteByDivision (Division)            :1916
+   *
+   * searchCondition 바깥에 둔다 - setFilter 가 그 객체를 통째로 proc 요청에 실으므로 안에 두면
+   * 서버가 모르는 필드가 조회 파라미터로 새어 나간다.
+   */
+  plantSiteSource: 'endCustomer' | 'division';
   openSearchArea: boolean;
   staticColumns: StaticColumnsBySheet;
   // 개인화 적용 전 admin 메타 원본 — 팝업 Default 버튼의 원복 기준.
@@ -60,7 +69,18 @@ interface State {
 
 interface Action {
   reset: () => void;
-  setSearchCondition: (p: Partial<SearchCondition>) => void;
+  /**
+   * F6 로 저장한 조회조건(SCM_ADM_USER_MNU_SRCH_COND_M)을 탭 진입 시 1회 복원한다.
+   * initialized 가드 — F10(초기화)은 MotherStore 가 initialized 를 보존하므로 재복원되지 않는다.
+   *
+   * 반환 = 복원 반영 후의 조회조건. 이 스토어는 탭별 멀티톤이라 getState() 를 쓸 수 없어
+   * (createStore.ts createPersistedStoreWithTab 주석), 호출부가 결과 division·bucket 을 알 방법이 이것뿐이다.
+   */
+  restoreSearchConditions: () => Promise<SearchCondition>;
+  setSearchCondition: (
+    p: Partial<SearchCondition>,
+    plantSiteSource?: 'endCustomer' | 'division'
+  ) => void;
   setFilter: () => void;
   clearFilters: () => void;
   setOpenSearchArea: (open?: boolean) => void;
@@ -112,11 +132,34 @@ const initSearch: SearchCondition = {
   // 기본 Period = FE 근사값 → 화면 진입 후 PR_GET_DAY_RANGE o_rc2(월 경계, 사용자 timezone)로 교체.
   startYyyymmdd: today,
   endYyyymmdd: sixMonthsAhead,
-  bucketType: BUCKET_TYPE.MONTHLY, // Figma 기본 = Monthly (AS-IS cboBucketType 초기값 동일)
+  bucketType: BUCKET_TYPE.MONTHLY, // 화면 설계 기본 = Monthly (AS-IS cboBucketType 초기값 동일)
   sumYn: false,
   colorYn: false,
   internalYn: false,
 };
+
+/**
+ * F6 저장 조회조건 역파싱 키 분류.
+ *
+ * 저장(GridAction.personalizeCondition)은 모든 값을 문자열로 coerce 한다(배열=콤마 join /
+ * 불리언=String). 복원은 그 반대로 SearchCondition 타입대로 되돌린다:
+ *   배열키 = 콤마 split / 불리언키 = 'true' 비교 / 그 외 = 문자열.
+ * 분류는 initSearch 의 실제 값 타입에서 파생한다 — 조회조건 필드가 늘어도 자동 반영된다.
+ */
+const ARRAY_KEYS = new Set<string>(
+  Object.entries(initSearch)
+    .filter(([, v]) => Array.isArray(v))
+    .map(([k]) => k)
+);
+const BOOL_KEYS = new Set<string>(
+  Object.entries(initSearch)
+    .filter(([, v]) => typeof v === 'boolean')
+    .map(([k]) => k)
+);
+// 열거형(Bucket)은 유효값만 채택 — 구버전 저장값/오염이 들어오면 SP 가 빈 결과를 돌려준다.
+const BUCKET_VALUES = new Set<string>(Object.values(BUCKET_TYPE));
+// 저장 포맷 = yyyymmdd 8자리. 다른 포맷이면 Period 검증(validateFind)이 통과하지 못한다.
+const isYyyymmdd = (v: unknown): v is string => typeof v === 'string' && /^\d{8}$/.test(v);
 
 // staticColumns / originalStaticColumns 는 각각 독립 객체여야 한다 (같은 참조를 공유하면 얽힌다).
 const makeEmptyCols = (): StaticColumnsBySheet =>
@@ -141,6 +184,7 @@ const initState: State = {
   initialized: false,
   filters: {},
   searchCondition: initSearch,
+  plantSiteSource: 'endCustomer',
   openSearchArea: true,
   staticColumns: emptyCols,
   originalStaticColumns: makeEmptyCols(),
@@ -190,9 +234,61 @@ export const useSalesMonitoringStore = createPersistedStoreWithTab<State & Actio
   (set, get) => ({
     ...initState,
     reset: () => set(initState),
-    setSearchCondition: p =>
+
+    // F6 저장 조회조건 복원 — 탭 수명 내 1회(initialized 가드). 저장조건 없음/조회 실패는
+    //   기본값 유지(화면 차단 금지, console 금지 룰). F10(Reset Condition)은 SubTitle 공통이
+    //   DB 삭제 + MotherStore.resetSearchCondition 으로 처리하는데, 그 쪽이 initialized 를 보존하므로
+    //   초기화 직후 이 함수가 다시 복원해 버리는 일은 없다.
+    restoreSearchConditions: async () => {
+      if (get().initialized) return get().searchCondition;
+      set(state => {
+        state.initialized = true; // 먼저 세운다 — 마운트 중복 호출/재마운트 재복원 방지.
+      });
+      try {
+        const res = await apiClient.get<{ paramNm: string; paramCtn: string }[]>(
+          `/admin/menu/${MENU_ID}/search-conditions`
+        );
+        const rows = res.data.result ?? [];
+        if (rows.length === 0) return get().searchCondition;
+
+        const patch: Record<string, unknown> = {};
+        for (const { paramNm, paramCtn } of rows) {
+          // 현재 SearchCondition 에 없는 키(구버전 잔재)는 버린다 — setFilter 가 조회조건 객체를
+          //   통째로 SP payload 로 쓰므로 모르는 필드가 섞이면 그대로 새어 나간다.
+          if (!(paramNm in initSearch)) continue;
+          const val = paramCtn ?? '';
+          if (ARRAY_KEYS.has(paramNm)) patch[paramNm] = val ? val.split(',').filter(Boolean) : [];
+          else if (BOOL_KEYS.has(paramNm)) patch[paramNm] = val === 'true';
+          else patch[paramNm] = val;
+        }
+        if (typeof patch.bucketType === 'string' && !BUCKET_VALUES.has(patch.bucketType))
+          delete patch.bucketType;
+        if (!isYyyymmdd(patch.startYyyymmdd)) delete patch.startYyyymmdd;
+        if (!isYyyymmdd(patch.endYyyymmdd)) delete patch.endYyyymmdd;
+
+        // 저장된 Period 를 복원했으면 PR_GET_DAY_RANGE 기본 구간이 덮지 못하게 잠근다.
+        //   (dayRange 응답은 비동기라 복원보다 늦게 도착할 수 있다.)
+        const periodRestored = patch.startYyyymmdd !== undefined || patch.endYyyymmdd !== undefined;
+
+        set(state => {
+          state.searchCondition = {
+            ...state.searchCondition,
+            ...(patch as Partial<SearchCondition>),
+          };
+          if (periodRestored) state.dayRangeApplied = true;
+        });
+      } catch {
+        // 저장조건 미존재/조회 실패 시 기본값 유지 (console 금지 룰)
+      }
+      return get().searchCondition;
+    },
+    setSearchCondition: (
+      p: Partial<SearchCondition>,
+      plantSiteSource?: 'endCustomer' | 'division'
+    ) =>
       set(state => {
         state.searchCondition = { ...get().searchCondition, ...p };
+        if (plantSiteSource) state.plantSiteSource = plantSiteSource;
       }),
     setFilter: () => {
       // ⭐ 키명 = PKG_DMF0048.P_DMF0048_GET_DM_PLN_SALES_MONITORING PROC_M COL_NM (ALL_ARGUMENTS 실측

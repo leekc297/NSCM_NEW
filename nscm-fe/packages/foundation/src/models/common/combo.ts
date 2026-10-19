@@ -33,6 +33,18 @@ export const quoteComboParams = (params: ComboParam): ComboParam => {
   const quoted: ComboParam = { comboId: params.comboId };
   for (const [key, value] of Object.entries(params)) {
     if (key === 'comboId') continue;
+    // mnuId 는 raw 로 보낸다 — @sesUserId 처럼 BE LookupServiceImpl 가 홑따옴표를 붙인다(인용 주체 = BE).
+    //   화면이 quoteParam 으로 미리 감싸 넣었어도 여기서 겉 홑따옴표 한 겹을 벗겨 raw 로 통일한다
+    //   (mnuId 는 단순 화면코드라 내부 따옴표가 없다). 안 벗기면 BE 가 멱등이라 결과는 같지만
+    //   네트워크 payload 에 인용값이 그대로 남아 화면마다 표기가 갈린다.
+    if (key === 'mnuId') {
+      const trimmed = (value ?? '').trim();
+      quoted[key] =
+        trimmed.length >= 2 && trimmed.startsWith('\'') && trimmed.endsWith('\'')
+          ? trimmed.slice(1, -1)
+          : trimmed;
+      continue;
+    }
     quoted[key] = quoteComboValue(value);
   }
   return quoted;

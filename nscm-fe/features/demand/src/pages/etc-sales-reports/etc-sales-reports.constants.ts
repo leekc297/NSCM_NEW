@@ -122,3 +122,11 @@ export const INSERT_ROW_DEFAULTS = {
   CURRENCY: '',
   ETC_DESCR: '',
 } as const;
+
+// 엑셀 내려받기 숫자 서식 — AS-IS 스프레드 ExcelButton(DMF0049 .cs:487) `#,##0.000;[Red]-#,##0.000` 을
+//   메타 자릿수(DATA_SCALE_NUMBER)로 일반화. 양수 구간 ; 음수 구간([Red] + '-' 부호).
+//   자릿수 0 이면 소수점 없이 `#,##0;[Red]-#,##0`. 동적 월 컬럼의 `_excelFormat` 에 실린다.
+export const excelNumberFormat = (scale: number): string => {
+  const digits = scale > 0 ? `.${'0'.repeat(scale)}` : '';
+  return `#,##0${digits};[Red]-#,##0${digits}`;
+};

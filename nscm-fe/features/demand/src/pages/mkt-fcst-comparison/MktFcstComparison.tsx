@@ -3,7 +3,7 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { MeasureSelectModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
+import { IcGridColumnSetup } from '@foundation/assets';
 import dayjs from '@foundation/dayjs';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
@@ -29,6 +29,12 @@ import { saveTitleSet } from './utils/mkt-fcst-comparison.api';
 //   L578/583/597 · EditButton=MSG00109 L588 · 조회 후 전열 잠금 L760) — CUD 진입점 전부 미노출.
 //   정본 분석: Doc/화면분석서/DMF0040_MktFcstComparison_주요이벤트_상세분석.md (E01~E22).
 
+// 빈 조회 결과는 모듈 상수로 둔다 — `?? []` 인라인은 렌더마다 새 배열 참조라
+//   data/spreadTitle -> dynColMetas -> dynamicColumns -> columnGroups memo 체인이 매 렌더 깨지고,
+//   그때 wijmo 가 set columnGroups 로 Column 을 통째로 재생성해 헤더·그리드가 다시 그려진다
+//   (조회조건 값이 바뀔 때마다 그리드가 깜빡이던 원인). 참조 안정이 그 재생성을 막는다.
+const EMPTY_ROWS: never[] = [];
+
 export const MktFcstComparison = ({ tabId, title }: PageProps<MENU_ID>) => {
   const gridRef = useRef<TFlexGrid<ComparisonRow> | undefined>(undefined);
   const gridFilterRef = useRef<FlexGridFilter | undefined>(undefined);
@@ -47,6 +53,7 @@ export const MktFcstComparison = ({ tabId, title }: PageProps<MENU_ID>) => {
   const fetchStaticColumns = useMktFcstComparisonStore(state => state.fetchStaticColumns);
   const fetchStaticMeasures = useMktFcstComparisonStore(state => state.fetchStaticMeasures);
   const staticColumns = useMktFcstComparisonStore(state => state.staticColumns);
+  const originalStaticColumns = useMktFcstComparisonStore(state => state.originalStaticColumns);
   const staticMeasures = useMktFcstComparisonStore(state => state.staticMeasures);
   const applyColumnLayout = useMktFcstComparisonStore(state => state.applyColumnLayout);
   const clearData = useMktFcstComparisonStore(state => state.clearData);
@@ -70,14 +77,12 @@ export const MktFcstComparison = ({ tabId, title }: PageProps<MENU_ID>) => {
     enabled: !!filters[SHEETS.SPREAD_TITLE],
   });
 
-  const data = (mainQuery.data?.o_rc1 ?? []) as ComparisonRow[];
-  const spreadTitle = (titleQuery.data?.o_rc1 ?? []) as SpreadTitleRow[];
+  const data = (mainQuery.data?.o_rc1 ?? EMPTY_ROWS) as ComparisonRow[];
+  const spreadTitle = (titleQuery.data?.o_rc1 ?? EMPTY_ROWS) as SpreadTitleRow[];
 
   // [COND 2026-08-27] UI 오픈 시 F6 저장 조회조건 복원 (탭당 1회 — store initialized 가드).
   //   복원된 divisionId 는 아래 정적 컬럼 effect 의 deps 라 컬럼·Measure 도 뒤따라 재fetch 된다.
-  const restoreSearchConditions = useMktFcstComparisonStore(
-    state => state.restoreSearchConditions
-  );
+  const restoreSearchConditions = useMktFcstComparisonStore(state => state.restoreSearchConditions);
   useEffect(() => {
     if (!session.userId) return;
     void restoreSearchConditions();
@@ -115,8 +120,16 @@ export const MktFcstComparison = ({ tabId, title }: PageProps<MENU_ID>) => {
     void fetchStaticMeasures({ divisionId: searchParams.divisionId });
   }, [tabId, session.userId, searchParams.divisionId, fetchStaticColumns, fetchStaticMeasures]);
 
-  // Column Setting 모달 재진입 복원/Default — 현재 grid 메타 (개인화는 titleSet 저장·재조회로 복원)
-  const columnLayoutSettings = useMemo(() => toColumnLayoutSettings(staticColumns), [staticColumns]);
+  // Column Setting 모달 재진입 복원 — 현재 grid 상태(개인화 반영본).
+  const columnLayoutSettings = useMemo(
+    () => toColumnLayoutSettings(staticColumns),
+    [staticColumns]
+  );
+  // Default 원복 기준 — 개인화 적용 전 admin 원본 (siblings DMF0003/DMF0082 동형).
+  const columnLayoutDefaults = useMemo(
+    () => toColumnLayoutSettings(originalStaticColumns),
+    [originalStaticColumns]
+  );
 
   // ── 조회 (AS-IS FindData L652~940 — A-01/A-02/A-03) ──
   const handleSubmit = () => {
@@ -124,14 +137,20 @@ export const MktFcstComparison = ({ tabId, title }: PageProps<MENU_ID>) => {
 
     // A-01 (MSG00097) — Division 필수
     if (!searchParams.divisionId) {
-      void setAlert({ type: 'alert', content: t(MSG.DIVISION_REQUIRED, '_Please select Division.') });
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.DIVISION_REQUIRED, '_Please select Division.'),
+      });
       return;
     }
 
     const fromDt = dayjs(searchParams.startYyyymmdd, 'YYYYMMDD');
     const toDt = dayjs(searchParams.endYyyymmdd, 'YYYYMMDD');
     if (!fromDt.isValid() || !toDt.isValid()) {
-      void setAlert({ type: 'alert', content: t('MSG00013', '_Please enter the required fields.') });
+      void setAlert({
+        type: 'alert',
+        content: t('MSG00013', '_Please enter the required fields.'),
+      });
       return;
     }
 
@@ -179,13 +198,13 @@ export const MktFcstComparison = ({ tabId, title }: PageProps<MENU_ID>) => {
       iconComponent: <IcGridColumnSetup />,
       buttonLabel: '',
     },
-    {
-      label: t('LBL00712', '_Measure'),
-      title: t('LBL00712', '_Measure'),
-      action: () => setMeasureModalOpen(true),
-      iconComponent: <IcMeasureSelect />,
-      buttonLabel: '',
-    },
+    // {
+    //   label: t('LBL00310', '_Measure'),
+    //   title: t('LBL00310', '_Measure'),
+    //   action: () => setMeasureModalOpen(true),
+    //   iconComponent: <IcMeasureSelect />,
+    //   buttonLabel: '',
+    // },
   ];
 
   return (
@@ -231,7 +250,7 @@ export const MktFcstComparison = ({ tabId, title }: PageProps<MENU_ID>) => {
         leftTitle={t('LBL00764', 'Invisible')}
         rightTitle={t('LBL00765', 'Visible')}
         initialSettings={columnLayoutSettings}
-        defaultSettings={columnLayoutSettings}
+        defaultSettings={columnLayoutDefaults}
         onSave={settings => {
           applyColumnLayout(
             settings.map(s => ({

@@ -1,14 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  BIZ_TYPE_COMBO_ID,
-  bizTypeComboFilterOf,
-  isDiv40,
-  isPlantSiteDisabled,
-} from './sales-monitoring.combos';
+import { isDiv40, isPlantSiteDisabled } from './sales-monitoring.combos';
 
-// 콤보 파라미터는 홑따옴표로 감싸 나간다 (BE makeComboQuery raw 치환).
-const quoted = (v: string): string => `'${v}'`;
+// [E20260901-COMMONSYNC] 공통소스 8f0b2a60 "salesplan 미사용 콤보 제거" 가 BIZ_TYPE_COMBO_ID /
+//   bizTypeComboFilterOf export 를 제거했는데 자기 test 는 미정합(공통 HEAD 컴파일 불가 계보 — 3번째).
+//   해당 describe 를 소스와 정합 삭제 — 잔여 유틸 2종 검증은 유지.
 
 describe('isDiv40', () => {
   it('40 만 true, 그 외 division 은 false', () => {
@@ -18,39 +14,6 @@ describe('isDiv40', () => {
     expect(isDiv40('82')).toBe(false);
     expect(isDiv40('')).toBe(false);
     expect(isDiv40(undefined)).toBe(false);
-  });
-});
-
-// AS-IS DMF0048 InitControls L338 sDivision=="40" 분기 1:1
-describe('bizTypeComboFilterOf', () => {
-  it('division 40 = 전역 BizType (divisionId 미전달)', () => {
-    expect(bizTypeComboFilterOf('40')).toEqual({ comboId: BIZ_TYPE_COMBO_ID.D40 });
-  });
-
-  it('division 40 외 = BizTypeByDivision + divisionId 바인드', () => {
-    expect(bizTypeComboFilterOf('81')).toEqual({
-      comboId: BIZ_TYPE_COMBO_ID.BY_DIVISION,
-      divisionId: quoted('81'),
-    });
-    expect(bizTypeComboFilterOf('82')).toEqual({
-      comboId: BIZ_TYPE_COMBO_ID.BY_DIVISION,
-      divisionId: quoted('82'),
-    });
-  });
-
-  it('division 미선택 = BizTypeByDivision + ALL', () => {
-    expect(bizTypeComboFilterOf('')).toEqual({
-      comboId: BIZ_TYPE_COMBO_ID.BY_DIVISION,
-      divisionId: quoted('ALL'),
-    });
-    expect(bizTypeComboFilterOf(undefined)).toEqual({
-      comboId: BIZ_TYPE_COMBO_ID.BY_DIVISION,
-      divisionId: quoted('ALL'),
-    });
-  });
-
-  it('division 이 바뀌면 콤보 필터도 바뀐다 - react-query 키 재생성 근거', () => {
-    expect(bizTypeComboFilterOf('40')).not.toEqual(bizTypeComboFilterOf('81'));
   });
 });
 
@@ -67,6 +30,3 @@ describe('isPlantSiteDisabled', () => {
     expect(isPlantSiteDisabled('82')).toBe(false);
   });
 });
-
-// 2026-08-22 콤보 통일 — Plant Site 는 카탈로그 기본 'PlantSitebyEndCustomer' 를 쓴다.
-//   화면이 comboId 를 넘기지 않으므로 상수 자체가 사라졌다.

@@ -14,15 +14,17 @@
 import { Component, Suspense, useCallback, useEffect, useState, type ReactNode } from 'react';
 
 import { clsx } from '@shared/clsx';
+import { SEARCH_AREA_MIN_WIDTH } from '@shared/components';
 import { ProgressIndicator } from '@shared/lges';
 import { useTheme } from '@shared/mui';
-import { TabIdContext, useUIStore } from '@shared/stores';
+import { TabIdContext, MenuIdContext, isTabDirty, useUIStore } from '@shared/stores';
 
 import { HomePage } from '../pages/Home';
 import { NotFoundPage } from '../pages/NotFound';
 
 import { useMDIStore } from './useMDIStore';
 import { useTabActivation } from './useTabActivation';
+import { useViewReload } from './useViewReload';
 import styles from './ViewContainer.module.scss';
 import { resetView, resolveView, type AnyPage } from './viewRegistry';
 
@@ -82,11 +84,25 @@ export const ViewContainer = () => {
   // 지연 마운트 이력 — 활성화된 적 있는 탭만 마운트한다(위 파일 주석 참고).
   const activated = useTabActivation(state => state.activated);
   const activate = useTabActivation(state => state.activate);
+  const pruneTo = useTabActivation(state => state.pruneTo);
 
-  // 활성 탭은 항상 마운트 대상으로 이력에 등록한다.
+  // 컴포넌트 강제 remount nonce — key 에 결합해 특정 탭만 unmount→mount 시킨다.
+  // (Atlas 브리지 reload page tool 이 useViewReload.reload 로 증가시킨다)
+  const reloadNonce = useViewReload(state => state.nonce);
+
+  // 닫힌 탭을 마운트 이력에서 먼저 정리한다 — LRU 카운트가 열린 탭만 세도록.
+  // (아래 activate effect 보다 먼저 선언 = 먼저 실행 → 탭을 닫아도 잘못된 언마운트가 안 일어남)
   useEffect(() => {
-    if (activeTabId) activate(activeTabId);
-  }, [activeTabId, activate]);
+    pruneTo(tabs.map(tab => tab.tabId));
+  }, [tabs, pruneTo]);
+
+  // 활성 탭은 항상 마운트 대상으로 이력에 등록하고, 상한 초과 시 LRU 언마운트한다.
+  // 미저장 편집(dirty) 탭은 보호 대상으로 넘겨 언마운트에서 제외한다(데이터 유실 방지).
+  useEffect(() => {
+    if (!activeTabId) return;
+    const dirtyTabIds = tabs.filter(tab => isTabDirty(tab.tabId)).map(tab => tab.tabId);
+    activate(activeTabId, dirtyTabIds);
+  }, [activeTabId, tabs, activate]);
 
   // 화면 로드 실패 후 "다시 시도" — lazy 캐시를 비우고 재렌더해 새 lazy 인스턴스로 다시 import 한다.
   // nonce 는 재렌더 트리거용(캐시를 비워도 부모가 다시 렌더하지 않으면 옛 인스턴스가 그대로 쓰인다).
@@ -136,7 +152,8 @@ export const ViewContainer = () => {
 
         return (
           <div
-            key={tab.tabId}
+            // nonce 를 key 에 결합 — reload 시 이 값만 바뀌어 해당 탭이 remount 된다.
+            key={`${tab.tabId}:${reloadNonce[tab.tabId] ?? 0}`}
             className={clsx(styles.view, { [styles.viewFullscreen]: isFullscreen })}
             style={{
               // flex column — 페이지 = MainTitle + SearchArea + SubTitle + Result(그리드) 수직 배치.
@@ -145,24 +162,32 @@ export const ViewContainer = () => {
               ...(isFullscreen && { backgroundColor: palette.background.default }),
             }}
           >
-            <TabIdContext.Provider value={tab.tabId}>
-              <ViewErrorBoundary
-                onRetry={() => retryView({ routePath: tab.routePath, mnuUrl: tab.mnuUrl })}
-              >
-                <Suspense fallback={<Fallback />}>
-                  {/*
-                    VIEW_REGISTRY 에 mnuId 매핑이 없는 탭(메뉴는 DB 에 있으나 화면 미구현/오타).
-                    null 을 렌더하면 빈 화면이라 원인을 알 수 없으므로 404 를 표시한다.
-                    탭 단위로만 처리 — 탭 바와 다른 탭들은 그대로 유지된다.
-                  */}
-                  {View ? (
-                    <View tabId={tab.tabId} title={tab.mnuMsgId} menu={tab} />
-                  ) : (
-                    <NotFoundPage />
-                  )}
-                </Suspense>
-              </ViewErrorBoundary>
-            </TabIdContext.Provider>
+            {/* .view(위 style.display)가 스크롤 컨테이너, 이 래퍼가 스크롤 대상 콘텐츠 —
+                MainTitle/SearchArea/SubTitle/Result 를 항상 SEARCH_AREA_MIN_WIDTH 이상의
+                같은 폭으로 묶어, 뷰포트가 좁아져도 스크롤바가 .view 하나에서만 생기게 한다. */}
+            <div className={styles.viewInner} style={{ minWidth: `${SEARCH_AREA_MIN_WIDTH}px` }}>
+              <TabIdContext.Provider value={tab.tabId}>
+                {/* 콤보 훅이 @mnuId 를 화면 스코프로 기본 주입할 수 있도록 이 탭의 화면 코드를 심는다. */}
+                <MenuIdContext.Provider value={String(tab.mnuId)}>
+                  <ViewErrorBoundary
+                    onRetry={() => retryView({ routePath: tab.routePath, mnuUrl: tab.mnuUrl })}
+                  >
+                    <Suspense fallback={<Fallback />}>
+                      {/*
+                        VIEW_REGISTRY 에 mnuId 매핑이 없는 탭(메뉴는 DB 에 있으나 화면 미구현/오타).
+                        null 을 렌더하면 빈 화면이라 원인을 알 수 없으므로 404 를 표시한다.
+                        탭 단위로만 처리 — 탭 바와 다른 탭들은 그대로 유지된다.
+                      */}
+                      {View ? (
+                        <View tabId={tab.tabId} title={tab.mnuMsgId} menu={tab} />
+                      ) : (
+                        <NotFoundPage />
+                      )}
+                    </Suspense>
+                  </ViewErrorBoundary>
+                </MenuIdContext.Provider>
+              </TabIdContext.Provider>
+            </div>
           </div>
         );
       })}

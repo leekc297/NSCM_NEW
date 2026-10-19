@@ -42,27 +42,47 @@ export const GUBUN_SHEET: Record<Gubun, { main: SHEETS; title: SHEETS }> = {
  *   DEFAULT(Rows) 만 노출. SALES/BIZ 메타는 통합 원천 화면의 **종속 PROGRAM_ID**(DMF0022/DMF0051) 소속
  *   (hook #148 G2 — DMF0035=DMF0022+DMF0051 통합 계보)이라 프로그램 경로도 함께 스위칭해야 한다.
  * ⚠ call-proc 배선 시트명(SHEETS enum, camel)은 별개 축 — 개명 금지 (BTN/API/PROC 배선이 그 표기).
+ *
+ * ⭐ [E20260908-MEASUNIFY] `titleSetSheetNm` = 메저 개인화 저장 축(`SCM_MST_TITLESET_USER`,
+ *   `USER_INQUIRY_COLUMN_TYPE_CODE='M'`). **컬럼 축과 동일하게 저장=조회 시트명을 통일**한다
+ *   (사용자 지시 2026-09-08 "컬럼 가져오는거랑 동일하게"). measure 조회(`measureSheetNm`)와
+ *   measure 개인화 저장(`titleSetSheetNm`)이 1바이트라도 다르면 저장은 되는데 재조회가 그 행을
+ *   못 찾아 개인화가 사라지므로(titleSetApi.ts 주석), 세 축(`sheetNm`/`measureSheetNm`/
+ *   `titleSetSheetNm`)을 gubun 별 한 시트명으로 맞춘다.
+ *   전제: 메인 데이터 SP(`PKG_DMF0022`/`PKG_DMF0035`)의 'M' titleset 읽기 시트명(V_P_SHEET_NAME)도
+ *   이 통일 시트명으로 재등록/정렬되어야 메인 그리드 measure 개인화가 회귀하지 않는다.
+ *   ⚠ call-proc 배선 시트명(SHEETS enum, camel)은 여전히 별개 축 — BTN/API/PROC 배선이라 개명 금지.
  */
 export const GUBUN_META: Record<
   Gubun,
-  { programId: string; sheetNm: string; measureSheetNm: string }
+  { programId: string; sheetNm: string; measureSheetNm: string; titleSetSheetNm: string }
 > = {
-  // ⚠ 축별 시트명이 다르다(사내 실측 2026-08-31): SALES 는 COLUMN 축='salesPlanWaterfall'(65행) /
-  //   MEASURE 축='Sales Plan Waterfall'(31행). 실측 표기 그대로 — 개명 ⛔.
+  // mnuId 통일(사용자 지시 2026-09-08 "url에 mnuId도 맞춰주세요 / titleset 저장할때도 동일한 mnuId로"):
+  //   admin 메타·titleset 경로 mnuId 를 gubun 무관하게 화면 자신 MENU_ID(DMF0035)로 고정한다.
+  //   대상 URL: `/admin/menu/{mnuId}/column`·`/measure`·`/titleset`(fetch/save 'C'·'M') + ColumnLayoutModal.
+  //   구 설계는 GUBUN 별 종속 PROGRAM_ID(DMF0035/DMF0022/DMF0051)를 실었으나, VERSION 따라 mnuId 가
+  //   바뀌는 것이 이레귤러라는 지적에 따라 단일화. BE 가 path mnuId 를 P_PROGRAM_ID 로 넘기므로,
+  //   전제: SALES/BIZ 의 SCM_MST_SHEET_COLUMNS/SHEET_MEASURE 메타 + titleset + 메인 SP 의 P_PROGRAM_ID
+  //   해소가 DMF0035 로 등록/정렬되어 있어야 SALES/BIZ 컬럼·메저 조회가 0행이 되지 않는다(SYS0004 통합 전제).
+  // 시트명 통일: gubun 별로 컬럼(sheetNm)·measure 조회(measureSheetNm)·measure 저장(titleSetSheetNm)을
+  //   한 시트명으로 맞춘다(컬럼 fetch=저장 방식과 동일).
   [GUBUN.MKT_FCST]: {
-    programId: 'DMF0035',
+    programId: MENU_ID,
     sheetNm: 'Mkt Fcst Waterfall',
     measureSheetNm: 'Mkt Fcst Waterfall',
+    titleSetSheetNm: 'Mkt Fcst Waterfall',
   },
   [GUBUN.SALES_PLAN]: {
-    programId: 'DMF0022',
-    sheetNm: 'salesPlanWaterfall',
+    programId: MENU_ID,
+    sheetNm: 'Sales Plan Waterfall',
     measureSheetNm: 'Sales Plan Waterfall',
+    titleSetSheetNm: 'Sales Plan Waterfall',
   },
   [GUBUN.BIZ_PLAN]: {
-    programId: 'DMF0051',
+    programId: MENU_ID,
     sheetNm: 'Biz Plan Waterfall',
     measureSheetNm: 'Biz Plan Waterfall',
+    titleSetSheetNm: 'Biz Plan Waterfall',
   },
 };
 
@@ -126,6 +146,27 @@ export const QTY_MEASURES_SALES = [
 
 export const QTY_MEASURES_BIZ = [...QTY_MEASURES_SALES, 'Business_Plan'] as const;
 
+/**
+ * MEASURE → 환산 나눗셈 배수 (AS-IS SetAmountCalculating 실측).
+ *   MKT 는 measure 필터 없이 전 행에 QTY 배수를 적용한다(.cs:2246-2262).
+ * ⚠ 값(itemsSource) 단계에서 나눈다 — footer 집계·Excel·필터가 모두 셀 값을 보므로
+ *   formatItem 텍스트 치환으로는 셋 다 어긋난다.
+ */
+export const divisorFor = (
+  gubun: Gubun,
+  measure: string,
+  d: { krw: number; usd: number; loc: number; qty: number }
+): number => {
+  if (gubun === GUBUN.MKT_FCST) return d.qty;
+  if ((AMOUNT_MEASURES.KRW as readonly string[]).includes(measure)) return d.krw;
+  if ((AMOUNT_MEASURES.USD as readonly string[]).includes(measure)) return d.usd;
+  if ((AMOUNT_MEASURES.LOC as readonly string[]).includes(measure)) return d.loc;
+  const qtyMeasures: readonly string[] =
+    gubun === GUBUN.BIZ_PLAN ? QTY_MEASURES_BIZ : QTY_MEASURES_SALES;
+  if (qtyMeasures.includes(measure)) return d.qty;
+  return 1;
+};
+
 /** 기간(버킷) 컬럼 판정 — D_yyyymmdd / W_yyyymmWW / M_yyyymm / Q_yyyy_q / Y_yyyy */
 export const PERIOD_COLUMN_REGEX = /^(D_|W_|M_|Q_|Y_)\d/;
 
@@ -177,3 +218,31 @@ export const formatByNotation = (value: number, notation: string): string | null
   }
   return null;
 };
+
+/**
+ * 기간 컬럼 표시 rank (hook #103 §1-2) — 활성 버킷 kind = 표시 / 상위(rank 작음) = 합계(Sum 토글) /
+ * 하위(rank 큼) = 기본 숨김(헤더 더블클릭 드릴로만 노출).
+ *   MKT·SALES : M(월) > W(주) > D(일)      — AS-IS SetSpreadColumn .cs:1790-1820
+ *   BIZ       : Y(연) > Q(분기) > M(월)     — AS-IS 0051 .cs:932-954 (M/Q/Y 3계층)
+ */
+export const DYN_RANK: Record<Gubun, Record<string, number>> = {
+  [GUBUN.MKT_FCST]: { M: 0, W: 1, D: 2 },
+  [GUBUN.SALES_PLAN]: { M: 0, W: 1, D: 2 },
+  [GUBUN.BIZ_PLAN]: { Y: 0, Q: 1, M: 2 },
+};
+
+/** 헤더 강조색 (AS-IS .cs 실측) — 당기 버킷 Green Bold / 주말(토 파랑·일 빨강) */
+export const HEADER_COLORS = {
+  /** 당월 M_ · 당주 W_ 헤더 (AS-IS Color.Green + Bold) */
+  CURRENT: '#008000',
+  SATURDAY: '#1565c0',
+  SUNDAY: '#d32f2f',
+} as const;
+
+/**
+ * 셀 콤보 파라미터 quoting — BE `BaseService.makeComboQuery` 가 `@토큰` 을 **raw 치환**하므로
+ * 따옴표 없이 넘기면 ORA-00904/01722 가 난다(정본 규약: forecast-price `q()` / SearchFields `q()`).
+ * 값이 비면 관대형 SQL 의 전체 게이트인 'ALL' 로 보낸다.
+ */
+export const quoteComboParam = (value: string | undefined): string =>
+  `'${(value && value.trim() !== '' ? value : 'ALL').replace(/'/g, '\'\'')}'`;

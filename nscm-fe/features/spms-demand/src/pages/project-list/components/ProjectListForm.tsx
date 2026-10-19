@@ -151,7 +151,7 @@ export const ProjectListForm = ({ onSearch, onDivisionChange }: ProjectListFormP
           <Grid size={6}>
             <FormItem
               className={`${commonStyles.formItem} ${styles.keepWordsFormItem}`}
-              label={t('LBL00877', '_Reg Complete Date')}
+              label={t('LBL00857', '_Reg Complete Date')}
               labelAlign='right'
               render={() => (
                 <div className={styles.periodSplit}>

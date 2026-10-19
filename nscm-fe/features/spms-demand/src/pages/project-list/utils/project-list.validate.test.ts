@@ -5,6 +5,7 @@ import type { MainRow, SearchCondition } from '../project-list.types';
 
 import {
   defaultRegCompDates,
+  toBulkReqPayload,
   toDisplayDate,
   toMultiParam,
   toReqPayload,
@@ -135,9 +136,49 @@ describe('toReqPayload — BTN_REQ 13키 단건 계약 (계약 ① · D4)', () =
     });
   });
 
-  it('누락 필드 = "" (단건 호출 — 빈 토큰 행밀림 없음 · "-" 센티널 금지)', () => {
+  it('누락 필드 = "" (행 토큰 단계 — 벌크 접기에서 " " 센티널로 치환된다)', () => {
     const p = toReqPayload({ CRUD_TYPE: 'M' } as unknown as MainRow);
     expect(p.dpjtKey).toBe('');
     expect(p.sopDate).toBe('');
+  });
+});
+
+describe('toBulkReqPayload — SPMS 표준 "^" 벌크 1건 (lib/bulk-save 승계)', () => {
+  const row = (over: Record<string, unknown> = {}): MainRow =>
+    ({
+      CRUD_TYPE: 'M',
+      DPJT_KEY: 'PJT2600001_000001',
+      DPJT_CODE: 'PJT2600001',
+      DPJT_SEQ: 1,
+      DIVISION_ID: '81',
+      DPJT_CLASS: 'CLASS_A',
+      END_CUSTOMER: 'EC01',
+      DPJT_NAME: 'Test Project',
+      CELL_TYPE: 'ALS',
+      STACK_METHOD: 'STK',
+      BIZ_TYPE: 'CELL',
+      SOP_DATE: '2026-10-01T00:00:00',
+      SOP_PLANT_ID: 'PLT1',
+      ...over,
+    }) as unknown as MainRow;
+
+  it('N행 = 키별 \'^\' 조인 1건 (SP REGEXP_SUBSTR 벌크 파서 계약)', () => {
+    const p = toBulkReqPayload([row(), row({ DPJT_KEY: 'K2', DIVISION_ID: '82' })]);
+    expect(p.activeFlag).toBe('M^M');
+    expect(p.dpjtKey).toBe('PJT2600001_000001^K2');
+    expect(p.divisionId).toBe('81^82');
+    expect(p.sopDate).toBe('2026-10-01 00:00:00^2026-10-01 00:00:00');
+  });
+
+  it('빈 값 = " " 공백 센티널 — [^\\^]+ 빈 토큰 행밀림 방지', () => {
+    const p = toBulkReqPayload([row({ SOP_DATE: '', END_CUSTOMER: null }), row()]);
+    expect(p.sopDate).toBe(' ^2026-10-01 00:00:00');
+    expect(p.endCustomer).toBe(' ^EC01');
+  });
+
+  it('단건 = 조인 없는 1행 문자열 (기존 단건 호출과 동일 형태 — SP 1행 호환)', () => {
+    const p = toBulkReqPayload([row()]);
+    expect(p.dpjtKey).toBe('PJT2600001_000001');
+    expect(p.sopDate).toBe('2026-10-01 00:00:00');
   });
 });

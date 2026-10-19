@@ -1,0 +1,7 @@
+﻿"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"only","06.UIL\GSCM.SystemMgmt.UIL\MessageInfo.cs","MessageInfo","event","this.Load","Form_Load > InitControl","InitControl","114","biz:CommonData.BaseCode [baseCode=0201000]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SystemMgmt.UIL\MessageInfo.cs","MessageInfo","button","FindButton","FindButton > FindData","FindData","198","SystemManager.UP_FX_GetMessageInfoSearchList","MATCH","SP UP_FX_GetMessageInfoSeachList","EXEC:UP_FX_GETMESSAGEINFOSEACHLIST, SELECT:TB_FX_MESSAGEINFO"
+"only","06.UIL\GSCM.SystemMgmt.UIL\MessageInfo.cs","MessageInfo","button","SaveButton","SaveButton > SaveData > FindData","FindData","198","SystemManager.UP_FX_GetMessageInfoSearchList","MATCH","SP UP_FX_GetMessageInfoSeachList","EXEC:UP_FX_GETMESSAGEINFOSEACHLIST, SELECT:TB_FX_MESSAGEINFO"
+"only","06.UIL\GSCM.SystemMgmt.UIL\MessageInfo.cs","MessageInfo","unreached","(진입점 미연결)","<field:dtYesOrNo>","<field:dtYesOrNo>","46","biz:CommonData.YesOrNo","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SystemMgmt.UIL\MessageInfo.cs","MessageInfo","unreached","(진입점 미연결)","<field:dtMessageType>","<field:dtMessageType>","44","biz:CommonData.BaseCode [baseCode=0201000]","BIZ_MATCH","",""
+"only","06.UIL\GSCM.SystemMgmt.UIL\MessageInfo.cs","MessageInfo","unreached","(진입점 미연결)","<field:dtMessageButton>","<field:dtMessageButton>","45","biz:CommonData.BaseCode [baseCode=0202000]","BIZ_MATCH","",""

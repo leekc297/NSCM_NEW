@@ -27,7 +27,7 @@
 | E18 | `btnMeasure_Click` / Measure (L1338) | CustFcstWaterfall.tsx:219~233 (MeasureSelectModal + saveTitleSet('M') + clearData) |  | 구현 |
 | E19 | `chkSum_CheckedChanged` / Sum 체크 (L1351) | components/CustFcstWaterfallForm.tsx:231~242 (Sum 체크 — ONLY_WEEKLY 비활성) + components/CustFcstWaterfallGrid.tsx:263~276 (요약 컬럼 가시성) |  | 구현 |
 | E20 | `chkColor_CheckedChanged` / — |  | 제외 — AS-IS 미배선 사문 + 실적 회색 로직 전부 주석 (L811~903) | 제외 |
-| E21 | `btnVersion_Click` / Version 팝업 (L1657) |  | 제외 — Version 조회조건 미구현 (AS-IS btnVersion.Visible=false Designer L348 + #112 카탈로그 17행·Figma 프레임 모두 부재 → versionNo='' 고정 useCustFcstWaterfallStore.ts:118) | 제외 |
+| E21 | `btnVersion_Click` / Version 팝업 (L1657) |  | 제외 — Version 조회조건 미구현 (AS-IS btnVersion.Visible=false Designer L348 + #112 카탈로그 17행·화면 설계 모두 부재 → versionNo='' 고정 useCustFcstWaterfallStore.ts:118) | 제외 |
 | E22 | `txtVersion_KeyDown` / Version 칸 키 입력 (L1676) |  | 제외 — E21 과 동일 사유 (숨겨진 팝업의 유일한 진입로) | 제외 |
 | E23 | DMF0053 (Customer FCST Waterfall) — 주요 이벤트 상세분석 (E01~E23) | components/CustFcstWaterfallForm.tsx:204~213 (OwnerField — master 공용 OwnerByDivisionModal) + components/CustFcstWaterfallGrid.tsx:88~103 (cboQTY→QTY 표시 사본 divisor E23+) |  | 구현 |
 | A-01 | FindData L677~682 / Division 미선택 | CustFcstWaterfall.tsx:83~87 (MSG00097 차단) |  | 구현 |
@@ -153,18 +153,23 @@
 ## 콤보 토큰 대사표 (hook #117 §5.6 — 조회조건 콤보)
 
 > DMF0053 은 그리드 셀 콤보 0종(읽기 전용 — CELL_COMBO_DATA_TYPE 지정 3건은 사전 D12 'AS-IS 잔재·정정 대상 아님' 판정).
-> 토큰 전달 주체는 **master 공용 검색필드** — 페이지 폴더에 comboParams 리터럴이 없어 게이트 섹션 7 이
-> "미전달" WARN 을 낼 수 있다 (도구 스캔 범위 = 페이지 폴더 한계 — 실전달은 아래 실측 인용).
+>
+> **2026-09-01 콤보 통일 (사용자 지정).** 조회조건 6종은 전부 **필터**다 — 파라미터 없이 전량을
+> 한 번 받고 좁히는 일은 화면이 한다(`buildComboOptions`). 그래서 아래 표의 "필요 토큰"은
+> 서버 바인드가 아니라 **클라이언트 축**을 뜻한다. 원천 상수와 축 규칙은
+> `utils/cust-fcst-waterfall.searchCombos.ts`, 결과셋별 반환 컬럼은
+> `GSCm/04.WSL/FoxQuery/DM/Common/BigFilter_list_line_dm.md` 참조.
+> PJT / Model·Nickname / Owner / Period 는 종전대로 master 공용 검색필드를 쓴다.
 
-| SQL_ID | 필요 토큰 | 전달 주체 (실측) | 판정 |
+| SQL_ID (원천) | 목록 구성 조건 (클라 축) | 전달 주체 (실측) | 판정 |
 |---|---|---|---|
-| Division | @divisionId | 공용 SQL 관대형 — Division 목록 자체 조회 (DMF0035/0040 동일) | 정합 |
-| TeamByDivision 계열 | @divisionId | `TeamField division={searchParams.divisionId}` (components/CustFcstWaterfallForm.tsx:93~98) | 정합 |
-| EndCustomerByDivision(Dept) | @divisionId·@deptId | `EndCustomerField division=... cascade={{ DEPT_ID: { values: deptIds, strict: true } }}` (components/CustFcstWaterfallForm.tsx) — ⚠ 2026-08-28 정정: 종전 "공용 필드 내부 전달" 은 허위 기재(cascade 미전달 = Team→End Customer 무반응, UM-02). 코드 증거 없는 산문 '정합' 금지(hook #149 §0-2) | 정합 |
-| UserSiteByEndCustomer | @divisionId·@endCustomer·@deptId | `SalesSiteField comboId='UserSiteByEndCustomer' division=... endCustomer=... deptId=...` (L105~113) | 정합 |
-| BizTypeByDivision | @divisionId | `BizTypeField division=...` (L115~120) | 정합 |
-| PlantSitebyEndCustomer | @divisionId·@endCustomer | `PlantSiteField division=... endCustomer=...` (L176~183) | 정합 |
-| ReportBucketType / QtyType / ItemType | (무토큰) | `useTabComboQueries` (L44~46) | 정합 |
+| FilterMyDivision (#0) | 없음 — 단순 호출 | `buildComboOptions(divisions)` (CustFcstWaterfallForm.tsx) — 이 결과셋은 DIVISION_ID 컬럼 자체가 없다 | 정합 |
+| FilterTeambyDivision (#1) | Division | `buildComboOptions(teams, { division })` | 정합 |
+| FilterEndCustomerByDivision (#2) | Division + Team | `buildComboOptions(endCustomers, { division, narrow: { column: 'DEPT_ID', codes: deptIds } })` — DEPT_ID 엄격 매칭. 2026-08-28 정정(UM-02 Team→End Customer 무반응)의 후속으로, 종전 40 한정 cascade 분기는 이 원천에서 불필요해져 제거했다 | 정합 |
+| FilterBizType (#3) | Division | `buildComboOptions(bizType, { division })` — DMF0048 Sales Monitoring 과 동일 원천 | 정합 |
+| FilterSiteByEndCustomer (#4) | Division + End Customer / 40 은 + Team | `buildComboOptions(salesSites, { division, narrow: [DEPT_ID, END_CUSTOMER] })` — 팀 축은 `resolveSalesSiteDeptIds` 가 40 에서만 켠다(81 계열·82 분기는 DEPT_ID 가 빈 문자열 고정) | 정합 |
+| FilterFromSiteByDivision (#5) | Division | `buildComboOptions(plantSites, { division })` — 이 결과셋에는 END_CUSTOMER 컬럼이 없다. 40 은 disabled | 정합 |
+| ReportBucketType / QtyType / ItemType | (무토큰) | `useTabComboQueries` — 재조회로 남긴 3종 | 정합 |
 
 ## 단위테스트 축 사유 (asis-coverage-check §0.4 — 게이트 섹션 9)
 

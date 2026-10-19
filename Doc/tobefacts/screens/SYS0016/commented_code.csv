@@ -1,0 +1,8 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"admin/notice-setup","SYS0016","features/admin/src/pages/notice-setup/components/NoticeSetupDialog.tsx","39","endpoint","const [modules, subModules] = useTabComboQueries({"
+"admin/notice-setup","SYS0016","features/admin/src/pages/notice-setup/components/NoticeSetupDialog.tsx","42","code","});"
+"admin/notice-setup","SYS0016","features/admin/src/pages/notice-setup/components/NoticeSetupForm.tsx","24","endpoint","const [modules, subModules, yesOrNo] = useTabComboQueries({"
+"admin/notice-setup","SYS0016","features/admin/src/pages/notice-setup/components/NoticeSetupForm.tsx","26","code","});"
+"admin/notice-setup","SYS0016","features/admin/src/pages/notice-setup/components/NoticeSetupForm.tsx","29","endpoint","const [modules, subModules, yesOrNo] = useTabComboQueries({"
+"admin/notice-setup","SYS0016","features/admin/src/pages/notice-setup/components/NoticeSetupForm.tsx","31","code","});"
+"admin/notice-setup","SYS0016","features/admin/src/pages/notice-setup/components/NoticeSetupForm.tsx","45","code",".map(item => ({ label: item.NAME, value: item.CODE })) ?? [];"

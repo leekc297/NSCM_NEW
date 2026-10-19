@@ -10,7 +10,8 @@
 
 - "사내 DB 적용해줘 / 클라우드 적용 / cloud apply / corporate apply"
 - "Docker 적용분을 사내에 / 양쪽 DB 동기화"
-- 사내 DB (`100.65.143.121:1521/OCGSCMD_P01`, 2026-06-15 IP 변경 · 2026-06-17 Service Name 전환 · 2026-07-27 IP:PORT 변경) 에 SQL 실행 요청
+- 사내 DB (`175.211.29.206:2521/ZIOUI1`, 2026-06-15 IP · 2026-06-17 Service Name · 2026-07-27 IP:PORT · 2026-09-02 IP:PORT · 2026-09-05 DB 교체 AJS · ⭐ 2026-09-07 DB명 ZIOUI1) 에 SQL 실행 요청
+  - 이전 접속(보관/DEPRECATED): `175.211.29.206:3521/OCGSCMD_P01` · `100.65.143.121:1521/OCGSCMD_P01` · `121.162.245.167:2521/OCGSCMD_P01`
 - Docker 와 사내 DB row count 차이 검토 후 patch 작업
 
 ---
@@ -21,7 +22,7 @@
 ```bash
 # 단일 SQL 실행
 tr -d '\r' < script.sql | docker exec -i nscm-oracle bash -c \
-  "sqlplus -L -S 'SCM_MGR/\"!SCMroqkf2026\"@100.65.143.121:1521/OCGSCMD_P01'" > log.log 2>&1
+  "sqlplus -L -S 'SCM_MGR/\"zionex1!\"@175.211.29.206:2521/ZIOUI1'" > log.log 2>&1
 ```
 
 ### 1.2 핵심 요소
@@ -64,6 +65,11 @@ tr -d '\r' < script.sql | docker exec -i nscm-oracle bash -c \
 ---
 
 ## §3. PRE-CHECK 의무 (적용 전)
+
+### 3.0 ⭐ 최신 원문 새로고침 + FRESH-GATE (#152, 2026-09-15 — 최우선)
+- 적용할 객체·메타 행을 **지금 DB 에서 다시 조회**해 기준본으로 삼는다 (로컬 적용본/백업/패키지 파일 기준 ⛔).
+- 적용 **직전** 한 번 더 조회해 기준본과 같을 때만 실행 — 다르면 중단, 변경분 확인 후 최신 원문 위에 재병합.
+- 상세·실사고(09-09 DMF0040 VERLABEL / 09-11 DMF0014_40 NLSDATE / 09-14 PDB 재생성 / 09-14 PKG_DMF0074 hook#150) = `db-source-refresh-before-work.md`
 
 ### 3.1 사내 DB baseline 캡쳐
 - 전체 row count (MNU/API/PROC/SHEET/BTN/GR_MNU/GR_BTN/MSG)

@@ -1,4 +1,4 @@
-// ⭐ 수량/금액 Bucket 배분 공통 유틸 (2026-07-21 사용자 확정 룰 — DMF0021 최초 적용, 전 화면 공통 표준).
+// 수량/금액 Bucket 배분 공통 유틸 — 화면 recalc(표시) 배분용 순수 함수.
 //
 //   룰1 (월 → 주): 월 수량 입력 시 주별 "월내 기여 일수" Rate 산출 후 주별 배분.
 //        끝자리(rounding 잔여)는 마지막 주차에 +/- 로 처리 (음수 잔여 포함 — 총합 보존).
@@ -9,8 +9,9 @@
 //   주 태그 규약 = GET_SPREAD_TITLE 공통: 'W_' + yyyymm + ISO주차 2자리 (월경계 주는 월별 분할 — 각 월 컨텍스트 유지).
 //   요일 비트 규약 = SUN-first 7자리 ('V_SUN..V_SAT', index 0=일 … 6=토) — DM_MST_BUCKET_CONVERSION 표준.
 //
-//   사용처: DMF0021 sales-plan(save 월→주 분할). DMF0082/DMF0003 은 AS-IS 1:1 자체 배분 보유(동일 룰 정합 교정 완료)
-//   — 신규 화면에 배분이 필요하면 본 유틸 사용.
+//   사용처: 화면 recalc(표시) 층의 배분에만 쓴다. DMF0003(mkt-fcst) 등은 AS-IS 1:1 자체 배분 보유.
+//   주의: DMF0021 sales-plan save 는 배분하지 않는다 — AS-IS SaveData·TO-BE SP 모두 버킷 태그당 1행 저장(월=M_ 1건).
+//   과거 save 월→주 분할은 AS-IS/SP 와 모순돼 제거됨(근거 없는 "2026-07-21 확정 룰" — 조사 결과 사용자 승인 근거 없음).
 
 // 월 안의 한 주 (월경계 분할 컨텍스트) — daysInMonth = 그 주가 해당 월에 기여하는 일수(1~7).
 export interface WeekOfMonth {

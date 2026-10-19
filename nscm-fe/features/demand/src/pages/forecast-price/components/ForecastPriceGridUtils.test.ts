@@ -17,10 +17,26 @@ import {
   bucketBitsOfDay,
   divideByMonth,
   divideByWeek,
+  isDistributedMeasure,
   isNonEditableCell,
   LOC_BUCKET_BITS,
   type CalendarInfo,
 } from './ForecastPriceGridUtils';
+
+describe('isDistributedMeasure — 주·월 입력의 일자 배분 대상 (AS-IS sMeasure != "LOC")', () => {
+  it.each(['MKT_FCST', 'SCM_FCST', 'VMI_In_Req', 'AS_In_Req'])('%s 는 배분 대상', measure => {
+    expect(isDistributedMeasure(measure)).toBe(true);
+  });
+  it('LOC 는 일괄할당(allocateLoc)이라 배분 대상이 아니다', () => {
+    expect(isDistributedMeasure('LOC')).toBe(false);
+  });
+  it('편집 불가 메저·빈값·문자열 아님은 배분 대상이 아니다', () => {
+    expect(isDistributedMeasure('RTF_SYS_RP')).toBe(false);
+    expect(isDistributedMeasure(undefined)).toBe(false);
+    expect(isDistributedMeasure(null)).toBe(false);
+    expect(isDistributedMeasure(1)).toBe(false);
+  });
+});
 
 /** EditTracker 스텁 — 배분 함수는 storeChange 로 변경 이력만 남기므로 no-op 로 충분. */
 const tracker = () => ({ storeChange: vi.fn() }) as never;
@@ -167,6 +183,7 @@ describe('allocateLoc — LOC 일괄 할당 (M-16 / M-20)', () => {
     expect(r['W_2026081']).toBe(500);
     expect(r['W_2026082']).toBe(500);
   });
+
 });
 
 describe('isNonEditableCell — 편집 차단 게이트 (M-03 / M-04·F-01 / M-07)', () => {

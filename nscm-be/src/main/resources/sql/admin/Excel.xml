@@ -11,6 +11,16 @@
            AND  SHEET_NAME = #{shtNm}
 	</select>
 
+	<!-- 26.09.22 업로드 오류 문구 1건 조회 (세션 언어 우선 → EN → 그 외). sesLangCd 는 BaseService 가 자동 주입. -->
+	<select id="selectMessageNm" resultType="java.util.HashMap">
+		SELECT  MSG_NM
+		  FROM  SCM_ADM_MSG_M
+		 WHERE  MSG_ID = #{msgId}
+		   AND  USE_YN = 'Y'
+		 ORDER BY CASE WHEN LANG_CD = #{sesLangCd} THEN 0 WHEN LANG_CD = 'EN' THEN 1 ELSE 2 END
+		 FETCH FIRST 1 ROWS ONLY
+	</select>
+
 	<select id="excelUploadTmp" statementType="CALLABLE" >
 		<![CDATA[
     	{ call PKG_NSCM_UI_EXCEL.PR_SAVE_EXCEL_UPLOAD(#{excelData}, #{colCnt}, #{mnuId}, #{shtNm}, #{sesUserId} 

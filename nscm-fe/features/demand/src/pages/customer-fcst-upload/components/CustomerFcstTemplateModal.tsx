@@ -1,10 +1,11 @@
 import { type FlexGrid as TFlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
-import { GridAction } from '@foundation/utils';
-import { CustomDialog, CustomDropdown, DataGrid, SearchArea } from '@shared/components';
+import { attachRowNoHeader, GridAction } from '@foundation/utils';
+import { CustomDialog, CustomDropdown, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { Button, FormItem, Tooltip } from '@shared/lges';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
@@ -77,6 +78,8 @@ export const CustomerFcstTemplateModal = ({
   }, [myDivisions]);
 
   const gridRef = useRef<TFlexGrid>();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
   const [rows, setRows] = useState<ExcelFormRow[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   useEffect(() => {
@@ -132,6 +135,10 @@ export const CustomerFcstTemplateModal = ({
   //   생성에만 쓰고 미리보기·다운로드의 데이터행에는 넣지 않는다 → 양식 = 헤더 1행 + 빈 시트.
   const headerOnly = rows.length > 0 && rows.every(r => !r['SCM_SITE_ID']);
   const dataRows = useMemo(() => (headerOnly ? [] : rows), [headerOnly, rows]);
+
+  useEffect(() => {
+    if (gridRef.current) attachRowNoHeader(gridRef.current, t('LBL00674', 'No'));
+  }, [gridRef, t, dataRows]);
   const formColumns = useMemo(
     () => buildExcelFormColumns(staticColumns, periodBuckets),
     [staticColumns, periodBuckets]
@@ -215,6 +222,10 @@ export const CustomerFcstTemplateModal = ({
       type='modal'
       position='basic'
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       disableButtonCancel
       customHeaderTitle={
         <div className='headerContainer'>
@@ -228,9 +239,7 @@ export const CustomerFcstTemplateModal = ({
               searchWrapper = flex 축소 금지 (없으면 그리드가 조회조건을 0 높이로 눌러 덮는다). */}
           <div className={styles.searchWrapper}>
             <SearchArea
-              searchButtonLabel={
-                isFetching ? t('LBL00665', 'Loading...') : t('LBL00112', '_Search')
-              }
+              searchButtonLabel={t('LBL00664', 'Search')}
               onSearch={handleFind}
               conditions={
                 <>
@@ -250,12 +259,20 @@ export const CustomerFcstTemplateModal = ({
           </div>
           {/* 조회 전 = 식별 컬럼만 / 조회 후 = 식별 컬럼 + 조회구간 버킷 일자 컬럼 (데이터행 없음 — HDRONLY) */}
           <div className={styles.gridWrapper}>
-            <DataGrid
+            <ResultArea
+              title=''
+              count={dataRows.length}
               gridRef={gridRef}
-              isReadOnly
-              staticColumns={gridColumns}
-              itemsSource={dataRows as WijmoRowItem[]}
-            />
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                staticColumns={gridColumns}
+                itemsSource={dataRows as WijmoRowItem[]}
+              />
+            </ResultArea>
           </div>
           {/* 하단 — Excel Download 아이콘 버튼 + Close 맨 오른쪽 (정본 동일) */}
           <div className={styles.buttonWrapper}>

@@ -40,9 +40,9 @@
 | 5 | L573-580 | btnCutOff.Click | `btnCutOff_Click` | `DMF0043_ContributeRatePopup.ShowDialog()` | 모달 호출 | `customButtons.VERSION_MGMT` → `ContributeVersionModal` open |
 | 6 | L911-914 | usrYear.SelectedIndexChanged | `usrYear_SelectedIndexChanged` | `InitSpread` 재호출 | `spdMain` 헤더 재구성 | `searchParams.year` 변경 → `staticColumns` 재 fetch |
 | 7 | L699-708 | chkYear.CheckedChanged | `chkYear_CheckedChanged` | `SetSpreadColumn` (Y# vs M# visibility) | `spdMain` 컬럼 visibility | `searchParams.chkYear` → DataGrid `staticColumns` visible flag |
-| 8 | L899-903 | usrHis.CheckedChanged | `usrHis_CheckedChanged` | `InitSpread` + `usrDiscard=false` | `spdMain` (History) | `searchParams.his`/`searchParams.dis` 상호 배타 토글 |
-| 9 | L905-909 | usrDiscard.Click | `usrDiscard_Click` | `InitSpread` + `usrHis=false` | `spdMain` (불일치) | 동일 (위와 짝) |
-| 10 | L916-936 | spdMain.DataModel.Changed | `spdMain_Changed` | (로컬) empty cell → '0' 자동 + EDIT_FLAG='U' | `spdMain` | `cellEditEnded` 가드 + `editTracker.storeChange` |
+| 8 | L899-903 | usrHis.CheckedChanged | `usrHis_CheckedChanged` | `InitSpread` + `usrDiscard=false` | `spdMain` (History) | `searchParams.his`/`searchParams.dis` 상호 배타 토글 + 즉시 onSearch. **2026-10-08 복원** — SearchBar 에 주석으로 꺼져 있어 his='N' 고정이었다(통합테스트 지적). p_his='Y' 결과는 전 행 EDIT_FLAG='N'(2026·ver15 실측 2,885행, 기여율 키 PRODUCT_GROUP 대조는 PKG 본문 L2562 에 2026-09-28 복원 완료) |
+| 9 | L905-909 | usrDiscard.Click | `usrDiscard_Click` | `InitSpread` + `usrHis=false` | `spdMain` (불일치) | 동일 (위와 짝). **2026-10-08 복원** — dis='ALL' 고정이었다. p_dis='N' 2026·ver15 실측 100행(DISCARD='Y', 전부 VER_SEQ NULL = 미등록 키; 보고서 기대 97행과 3행 차이 — AS-IS 동일 DB 재실측 필요) |
+| 10 | L916-936 | spdMain.DataModel.Changed | `spdMain_Changed` | (로컬) empty cell → '0' 자동 + EDIT_FLAG='U' | `spdMain` | ContributeMainGrid `emptyCellAsZero={isRatioBinding}` (공용 DataGrid prop, EditTracker 직후 등록 보장) — 2026-10-08 배선. 편집으로 지운 기여율 칸은 '0' 으로 채워져 저장된다 |
 
 ---
 
@@ -53,7 +53,7 @@
 | 1 | L114 (InitControls) | `DM.DMF0043_GET_MAIN_VARSION_DATA` | (sesUserId, mnuId) | `DMF0043_GET_MAIN_VARSION_DATA` | `version` | `P_DMF0043_VERSION_GET` | usrYear combo + Version master list |
 | 2 | L143-152 (InitSpread) | `DM.DMF0043_GET_MAIN_SPREAD_TITLE` | (divisionId='40', yyyy, sesUserId, mnuId) | `DMF0043_GET_MAIN_SPREAD_TITLE` (PKG wrapper L362 + standalone L270) | `mainTitle` | `P_DMF0043_MAIN_TITLE` | 헤더 동적 (Y1~Y12, M1~M12) + ColumnHeaderSpan SUM |
 | 3 | L289-300 (FindData) | `DM.DMF0043_GET_CONTRIBUTE_MAIN_DATA` | (yyyy, verSeq, dis, his, sesUserId, userGroup) | `DMF0043_GET_CONTRIBUTE_MAIN_DATA` | `main` | `P_DMF0043_MAIN_GET` | 메인 그리드 조회. dis×his 4 분기 |
-| 4 | L432-466 (SaveData) | `DM.DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO` | 13 params (activeFlag~contributionRatio + sesUserId) | `DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO` | `main` (SAVE) | `P_DMF0043_MAIN_SAVE` | IUD 통합 + ^ 구분 bulk payload (`apiClient.post` direct) |
+| 4 | L432-466 (SaveData) | `DM.DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO` | 13 params (activeFlag~contributionRatio + sesUserId) | `DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO` | `main` (SAVE) | `P_DMF0043_MAIN_SAVE` | IUD 통합 + ^ 구분 bulk payload (`apiClient.post` direct). **전송 단위 = M 행의 값 있는 칸 전부(빈 칸 제외, 전 기간)** — AS-IS L343~393 1:1. 2026-10-08 통합테스트 지적("값이 하나라도 있는 달은 빈 칸 8개 법인을 0 으로 채워 전송 → 0 비율 행 증가")으로 2026-08-11 의 8개 법인 0 채움을 되돌림. 주의: 저장 SP 가 DTL 을 키 단위 DELETE 후 INSERT 하므로(PKG L1063~1087) 편집한 달만 보내면 다른 달 비율이 사라진다 — 반드시 M 행의 모든 값 있는 칸을 보낸다. 확인: 저장 요청 토큰 수 = 값 있는 칸 수 |
 | 5 | btnCutOff.Click 경로 | `DMF0043_ContributeRatePopup` 내부 호출 | (yyyy / verSeq) | `DMF0043_GET_CONTRIBUTE_RATE_POPUP` + `DMF0043_GET_CONTRIBUTE_YEAR_POPUP` + `DMF0043_GET_CONT_VIEW_VERSIONPOPUP` + `DMF0043_SAVE_DM_MST_CONTRIBUTE_VER` | `ratePopup` / `yearPopup` / `versionPopup` / `version`(SAVE) | `P_DMF0043_RATE_POPUP` / `P_DMF0043_YEAR_POPUP` / `P_DMF0043_VERSION_POPUP` / `P_DMF0043_VERSION_SAVE` | TO-BE 분리: 3 조회 + 1 저장 sheet |
 
 > SP body 위치: `_artifacts/_deploy_packages/DMF0043/01_SP_BODY/010_DMF0043_main_SP_bodies.sql` (9 standalone) + 040/041 (Version mgmt 2)
@@ -64,8 +64,8 @@
 
 | # | As-Is Method (Line) | Kind | Category | MsgID | Msg (KO) | 조건 | To-Be 적용 위치 |
 |---:|---|---|---|---|---|---|---|
-| 1 | `SaveData` L344 | GMessageBox | 숫자값검증 | **MSG00303** | "입력한 데이터가 100을 초과하거나 미만입니다." | 연/월 기여율 합계 ≠ 100 | `utils/validators.ts` → `validChk(rows): boolean` + `ContributeMain.handleSave` 호출 전 검증 + `useMessageStore.setAlert({type:'alert', msgId:'MSG00303'})` |
-| 2 | `SaveData` L351 | GMessageBox | 필수값 | **MSG00308** | "구분값을 입력해 주세요." | `RBU_0999` 컬럼 NULL when 기여율 입력 | `utils/validators.ts` → `validChk2(rows): boolean` + 동일 setAlert |
+| 1 | `SaveData` L344 | GMessageBox | 숫자값검증 | **MSG00303** → TO-BE **MSG01306** | "입력한 데이터가 100을 초과하거나 미만입니다." | 연/월 기여율 합계 ≠ 100 | `utils/validators.ts` → `validChk(rows): boolean` + `ContributeMain.handleSave` 호출 전 검증 + setAlert. 2026-10-08 정정: AS-IS 번호 MSG00303 은 TO-BE DB 미등록 → 같은 문구가 등록된 MSG01306 사용(DB 실측). 화면 검증이며 저장 SP 는 이 검사를 하지 않는다 |
+| 2 | `SaveData` L351 | GMessageBox | 필수값 | **MSG00308** → TO-BE **MSG01310** | "구분값을 입력해 주세요." | `RBU_0999` 컬럼 NULL when 기여율 입력 | `utils/validators.ts` → `validChk2(rows): boolean` + 동일 setAlert. 2026-10-08 정정: MSG00308 미등록 → MSG01310 사용, fallback 도 종전 '필수값을 입력해주세요.' 에서 AS-IS 문구로 맞춤 |
 | 3 | `SaveData` L459 | GMessageBox | 확인메시지 | **MSG00004** | "저장하시겠습니까?" | response.DataSet[0]='success' | `useMessageStore.setAlert({type:'confirm', msgId:'MSG00004'}) → boolean` 후 진행 |
 | 4 | `chkYear_CheckedChanged` L703 | GMessageBox | 기타 | **MSG00266** | "(미등록)" | `!siMain.IsLock(sheetName)` | `chkYear` 토글 핸들러 + setAlert |
 

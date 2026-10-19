@@ -1,6 +1,6 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { ComboResponse, HotkeyConfig, PageProps } from '@foundation/models';
 import { GridAction } from '@foundation/utils';
@@ -12,6 +12,7 @@ import {
   useTabProcQuery,
 } from '@shared/hooks';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
+import { useMessageStore } from '@shared/stores';
 
 import { SalesSiteBucketGrid } from './components/SalesSiteBucketGrid';
 import { SalesSiteCustomerGrid } from './components/SalesSiteCustomerGrid';
@@ -23,7 +24,15 @@ import { MENU_ID, SHEET_INDEX, SHEETS } from './sales-site.constants';
 import styles from './SalesSite.module.scss';
 import { useSalesSiteStore } from './useSalesSiteStore';
 import { SALES_SITE_STALE_COMBO_IDS } from './utils/sales-site.salesSiteCombo';
-import { resolveComboCodeByDivision } from './utils/sales-site.util';
+import {
+  BUCKET_DUPLICATE_KEYS,
+  DUPLICATE_KEY_MSG,
+  DUPLICATE_KEY_MSG_ID,
+  findDuplicateKeyRow,
+  formatDuplicateKeyMessage,
+  LOCATION_DUPLICATE_KEYS,
+  resolveComboCodeByDivision,
+} from './utils/sales-site.util';
 
 export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
@@ -49,6 +58,7 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [openDetailGrid, setOpenDetailGrid] = useState<boolean>(true);
 
   const { saveWithValidation } = useSaveWithValidation();
+  const { setToast, setAlert } = useMessageStore.getState();
   const invalidateCombos = useInvalidateCombos();
 
   const { data: siteData } = useTabProcQuery<MENU_ID, SHEETS.SITE>({
@@ -99,11 +109,38 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
     tabId,
   });
 
+  // itemsSource 참조 안정화 — 조회 전 매 렌더 새 `?? []` 로 신규행이 리렌더에 사라지는 것 방지
+  //   (handleSave 가 그리드 소스에서 신규행을 읽으려면 필요). DMF0006/DMF0007 과 동일.
+  //   단, division 이 바뀌면 새 `[]` 를 만들어(deps 에 divisionId) 상/하단 그리드를 비운다 —
+  //   조회 전 addRow 한 신규행은 데이터가 계속 undefined 라 참조가 고정돼 남아 있었는데,
+  //   division 을 바꾸면 초기화되어야 한다.
+  // divisionId 는 memo 본문에서 읽지 않지만, 바뀌면 새 [] 를 만들어 그리드를 비우는 리셋 트리거다.
+  const siteRows = useMemo(
+    () => siteData?.salesSite ?? [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [siteData, searchParams.divisionId]
+  );
+  const customerRows = useMemo(
+    () => detailData?.salesCustomer ?? [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [detailData, searchParams.divisionId]
+  );
+  const locationRows = useMemo(
+    () => detailData?.salesLocation ?? [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [detailData, searchParams.divisionId]
+  );
+  const bucketRows = useMemo(
+    () => detailData?.salesBucket ?? [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [detailData, searchParams.divisionId]
+  );
+
   const detailDataCountByTab: Record<number, number> = {
-    [SHEET_INDEX.SITE]: siteData?.salesSite.length ?? 0,
-    [SHEET_INDEX.CUSTOMER]: detailData?.salesCustomer.length ?? 0,
-    [SHEET_INDEX.LOCATION]: detailData?.salesLocation.length ?? 0,
-    [SHEET_INDEX.BUCKET]: detailData?.salesBucket.length ?? 0,
+    [SHEET_INDEX.SITE]: siteRows.length,
+    [SHEET_INDEX.CUSTOMER]: customerRows.length,
+    [SHEET_INDEX.LOCATION]: locationRows.length,
+    [SHEET_INDEX.BUCKET]: bucketRows.length,
   };
 
   const handleInsert = () => {
@@ -112,9 +149,12 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
     const scmSiteId =
       activeTab === SHEET_INDEX.SITE ? undefined : filters[SHEETS.CUSTOMER]?.salesSite;
 
+    // 신규행 division 은 조회조건에서 선택한 값(searchParams.divisionId)을 따른다. filters 는
+    //   조회를 눌러야 채워지므로, 조회 전 행추가 때 filters 를 쓰면 undefined 로 빠져 하드코딩
+    //   기본값(구 '81')이 들어가던 버그가 있었다 — 상/하단 그리드 공통 handleInsert 라 전 탭에 영향.
     // Rep 기본값은 N. Y 로 바꿀 때의 중복 검사는 Customer 그리드 cellEditEnded 에서 처리한다.
     GridAction.addRow(gridRefs[activeTab].current, {
-      DIVISION_ID: filters[SHEETS.SITE]?.divisionId ?? '81',
+      DIVISION_ID: searchParams.divisionId,
       SCM_SITE_ID: scmSiteId,
       VMI_YN: 'N',
       VALID_YN: 'Y',
@@ -123,23 +163,69 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
     });
   };
 
+  // VALID_YN 으로 사용 여부를 관리하는 그리드라 삭제는 신규행 제거 전용으로만 쓴다.
+  // removeRow 두 번째 인자 deleteOnlyNew=true 로 기존행에 D flag 를 찍지 않는다
+  //   (기존 항목 비활성은 VALID_YN='N' 으로 처리). activeTab 기준이라 전 탭 공통 적용된다.
   const handleDelete = () => {
     if (!gridRefs[activeTab].current) return;
-    GridAction.removeRow(gridRefs[activeTab].current);
+    GridAction.removeRow(gridRefs[activeTab].current, true);
+  };
+
+  // 하단 탭 중복 키 — 저장 직전에 그리드 행끼리 비교해 MSG00060 으로 막는다 (AS-IS 파리티).
+  //   비교 키는 utils/sales-site.util 의 *_DUPLICATE_KEYS. 중복 행으로 선택을 옮겨 어느 행인지 보인다.
+  //   AS-IS 는 그 행의 키 셀을 비웠지만(.cs:1537~1539), 여기엔 수정 행 원값을 되돌릴 추적기가 없어
+  //   값은 그대로 두고 저장만 취소한다.
+  const alertDuplicateKey = (
+    grid: FlexGrid | undefined,
+    keys: readonly string[],
+    row: WijmoRowItem
+  ) => {
+    void setAlert({
+      type: 'alert',
+      content: formatDuplicateKeyMessage(
+        t(DUPLICATE_KEY_MSG_ID, DUPLICATE_KEY_MSG),
+        keys,
+        key => grid?.columns.getColumn(key)?.header
+      ),
+    });
+    const rowIndex = grid?.rows.findIndex(r => r.dataItem === row) ?? -1;
+    if (grid && rowIndex >= 0) {
+      grid.select(rowIndex, Math.max(0, grid.selection.col));
+      grid.scrollIntoView(rowIndex, -1);
+    }
   };
 
   const handleSave = () => {
-    gridRefs[activeTab].current?.finishEditing();
+    const grid = gridRefs[activeTab].current;
+    grid?.finishEditing();
 
+    // 변경/신규 행이 없으면 "수정한 내용이 없습니다" toast — 저장 훅의 빈배열 가드를 컴포넌트로
+    //   앞당긴다(변경 없음 = toast, 필수·검증 실패 = modal alert. DMF0005/0006/0007 과 동일 규약).
+    //   dirty 행은 그리드 소스(collectionView.sourceCollection)에서 읽는다 — 신규행(addRow)은 조회
+    //   전 쿼리 데이터가 undefined 라 그쪽으로는 안 잡힌다.
+    const dirtyRows = (
+      (grid?.collectionView?.sourceCollection ?? []) as { CRUD_TYPE?: string }[]
+    ).filter(row => row.CRUD_TYPE);
+    if (dirtyRows.length === 0) {
+      setToast({ type: 'error', message: t('MSG_NO_CHANGE', '_수정한 내용이 없습니다.') });
+      return;
+    }
+
+    // dirty 행은 그리드 소스(collectionView.sourceCollection)에서 읽는다 — 신규행(GridAction.addRow)은
+    //   그 배열에 splice 되고 조회 전엔 쿼리 데이터가 undefined 라 그쪽으로는 안 잡힌다. 그리드
+    //   소스로 읽어야 신규행 저장 시 필수검증이 걸린다(DMF0006/DMF0007 과 동일 규약).
     switch (activeTab) {
       case SHEET_INDEX.SITE: {
-        const grid = gridRefs[SHEET_INDEX.SITE].current;
         const endCustomerRows = (grid?.columns.getColumn('END_CUSTOMER')?.dataMap?.collectionView
           .items ?? []) as ComboResponse[];
         const soldToCustomerRows = (grid?.columns.getColumn('SOLDTO_CUSTOMER')?.dataMap
           ?.collectionView.items ?? []) as ComboResponse[];
-        const saveData = (siteData?.salesSite?.filter?.(item => item.CRUD_TYPE) ?? []).map(
-          item => ({
+        const src = (grid?.collectionView?.sourceCollection ?? []) as NonNullable<
+          typeof siteData
+        >['salesSite'];
+        const saveData = src
+          .filter(item => item.CRUD_TYPE)
+          .map(item => ({
             ...item,
             END_CUSTOMER: resolveComboCodeByDivision(
               endCustomerRows,
@@ -151,8 +237,7 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
               String(item.DIVISION_ID ?? ''),
               String(item.SOLDTO_CUSTOMER ?? '')
             ),
-          })
-        );
+          }));
         const staticColumn = staticColumns.salesSite;
         // 이 그리드가 조회조건 Sales Site 콤보의 원천이다 — 저장으로 사이트가 늘거나(신규)
         //   Active 가 바뀌면 콤보 목록도 달라지므로 저장 성공 직후 콤보를 다시 받는다.
@@ -165,21 +250,42 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
         break;
       }
       case SHEET_INDEX.CUSTOMER: {
-        const saveData = detailData?.salesCustomer?.filter?.(item => item.CRUD_TYPE) ?? [];
-        const staticColumn = staticColumns.salesCustomer;
-        saveWithValidation(saveData, staticColumn, mutateCustomer);
+        const src = (grid?.collectionView?.sourceCollection ?? []) as NonNullable<
+          typeof detailData
+        >['salesCustomer'];
+        const saveData = src.filter(item => item.CRUD_TYPE);
+        saveWithValidation(saveData, staticColumns.salesCustomer, mutateCustomer);
         break;
       }
       case SHEET_INDEX.LOCATION: {
-        const saveData = detailData?.salesLocation?.filter?.(item => item.CRUD_TYPE) ?? [];
-        const staticColumn = staticColumns.salesLocation;
-        saveWithValidation(saveData, staticColumn, mutateLocation);
+        const src = (grid?.collectionView?.sourceCollection ?? []) as NonNullable<
+          typeof detailData
+        >['salesLocation'];
+        // 같은 사이트·Plant·SLOC 행이 둘 이상이면 저장 전 차단 — AS-IS SaveButton(.cs:1512~1532).
+        //   저장 SP 는 "다른 사이트에서 사용 중"만 검사해 같은 사이트의 같은 SLOC 가 그대로 추가된다.
+        const duplicateLocation = findDuplicateKeyRow(src, LOCATION_DUPLICATE_KEYS);
+        if (duplicateLocation) {
+          alertDuplicateKey(grid, LOCATION_DUPLICATE_KEYS, duplicateLocation);
+          return;
+        }
+        const saveData = src.filter(item => item.CRUD_TYPE);
+        saveWithValidation(saveData, staticColumns.salesLocation, mutateLocation);
         break;
       }
       case SHEET_INDEX.BUCKET: {
-        const saveData = detailData?.salesBucket?.filter?.(item => item.CRUD_TYPE) ?? [];
-        const staticColumn = staticColumns.salesBucket;
-        saveWithValidation(saveData, staticColumn, mutateBucket);
+        const src = (grid?.collectionView?.sourceCollection ?? []) as NonNullable<
+          typeof detailData
+        >['salesBucket'];
+        // 같은 사이트·Incoterms 행이 둘 이상이면 저장 전 차단. 입력 즉시 검사(SalesSiteBucketGrid)가
+        //   1차이고, 붙여넣기 등으로 그 검사를 지나친 행을 여기서 한 번 더 막는다. 저장 SP 는 같은 키
+        //   두 행을 받으면 뒤 행 값으로 앞 행을 덮어쓴다.
+        const duplicateBucket = findDuplicateKeyRow(src, BUCKET_DUPLICATE_KEYS);
+        if (duplicateBucket) {
+          alertDuplicateKey(grid, BUCKET_DUPLICATE_KEYS, duplicateBucket);
+          return;
+        }
+        const saveData = src.filter(item => item.CRUD_TYPE);
+        saveWithValidation(saveData, staticColumns.salesBucket, mutateBucket);
         break;
       }
     }
@@ -230,7 +336,7 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
           <SalesSiteGrid
             gridRef={gridRefs[SHEET_INDEX.SITE]}
             gridFilterRef={gridFilterRefs[SHEET_INDEX.SITE]}
-            data={siteData?.salesSite ?? []}
+            data={siteRows}
             setActiveTab={setActiveTab}
           />
         </Panel>
@@ -244,7 +350,7 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
                   <SalesSiteCustomerGrid
                     gridRef={gridRefs[SHEET_INDEX.CUSTOMER]}
                     gridFilterRef={gridFilterRefs[SHEET_INDEX.CUSTOMER]}
-                    data={detailData?.salesCustomer ?? []}
+                    data={customerRows}
                     setActiveTab={setActiveTab}
                   />
                 </TabItem>
@@ -252,7 +358,7 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
                   <SalesSiteLocationGrid
                     gridRef={gridRefs[SHEET_INDEX.LOCATION]}
                     gridFilterRef={gridFilterRefs[SHEET_INDEX.LOCATION]}
-                    data={detailData?.salesLocation ?? []}
+                    data={locationRows}
                     setActiveTab={setActiveTab}
                   />
                 </TabItem>
@@ -260,7 +366,7 @@ export const SalesSite = ({ tabId, title }: PageProps<MENU_ID>) => {
                   <SalesSiteBucketGrid
                     gridRef={gridRefs[SHEET_INDEX.BUCKET]}
                     gridFilterRef={gridFilterRefs[SHEET_INDEX.BUCKET]}
-                    data={detailData?.salesBucket ?? []}
+                    data={bucketRows}
                     setActiveTab={setActiveTab}
                   />
                 </TabItem>

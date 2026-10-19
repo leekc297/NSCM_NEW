@@ -1,0 +1,4 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/capa-loss-plan","SCP0106","features/supply/src/pages/capa-loss-plan/CapaLossPlan.tsx","117","endpoint","진입 자동조회 금지 — keep-alive 잔여 filters 무효화 + 메타 1회 fetch(nscm-patterns §5-7)."
+"supply/capa-loss-plan","SCP0106","features/supply/src/pages/capa-loss-plan/useCapaLossPlanStore.ts","172","jsx","개인화 조회조건 복원 (SubTitle F6 저장분 되불러오기, 1회) — basic-check #3, 자매 정본 `capa-speed-plan`/`capa-line-assign`. 저장측은 Page 가 `<SubTitle searchParam={sc}>` 로 이미 배선돼 있으나([[f6-save-needs-searchparam-prop]]), 복원측이 없으면 저장은 되는데 **새로고침/재진입 시 조건이 사라진다**(신규 스캐"
+"supply/capa-loss-plan","SCP0106","features/supply/src/pages/capa-loss-plan/useCapaLossPlanStore.ts","379","endpoint","Measure 메타 fetch(PIVOT 화면 의무) — 현재 시트분만. 코드 하드코딩 배열 금지."

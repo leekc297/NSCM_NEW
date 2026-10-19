@@ -1,4 +1,4 @@
-import { DivisionField, VersionField } from 'features/master/src/components';
+import { DivisionField, VersionField, YearField } from 'features/master/src/components';
 
 import dayjs from '@foundation/dayjs';
 import commonStyles from '@foundation/styles/common-styles.module.scss';
@@ -6,6 +6,7 @@ import { CustomDropdown, SearchArea } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { FormItem } from '@shared/lges';
 import { Grid } from '@shared/mui';
+import { confirmIfDirtyKey, tabDirtyKey, useTabid } from '@shared/stores';
 
 import {
   PLAN_RESULT,
@@ -45,10 +46,16 @@ export const EtcSalesReportsForm = ({
   const set = useEtcSalesReportsStore(s => s.setSearchCondition);
   const openSearchArea = useEtcSalesReportsStore(s => s.openSearchArea);
 
+  // Division 변경은 그리드를 초기화한다(onDivisionChange → clearChanges/clearFilters). 편집중(dirty)
+  //   이면 MSG00704 confirm 후에만 바꾼다 — 조회 공통 가드 confirmIfDirtyKey(..., 'search')를 콤보
+  //   변경에도 동일 적용. DivisionField 는 controlled(value=sc.divisionId)라 취소 시 자동 복귀.
+  const tabId = useTabid();
+
   // 콤보 원천 (SCM_ADM_CMBO_SQL_M — MDF_TYPE 기등록 / MDF_TYPE2·CALENDAR_YYYY P4 신설 2026-07-22)
-  const [mdfType, calendarYyyy] = useTabComboQueries({
-    filters: ['MDF_TYPE', 'CALENDAR_YYYY'],
-  });
+  // const [mdfType, calendarYyyy] = useTabComboQueries({
+  //   filters: ['MDF_TYPE', 'CALENDAR_YYYY'],
+  // });
+  const [mdfType] = useTabComboQueries({ filters: ['MDF_TYPE'] });
 
   const toOptions = (rows: Array<Record<string, unknown>> | undefined) =>
     ((rows ?? []) as unknown as Array<Record<string, string>>).map(r => ({
@@ -68,16 +75,19 @@ export const EtcSalesReportsForm = ({
             gridSize={3}
             value={sc.divisionId}
             onChange={v => {
-              // Version 은 division 종속(버전 목록이 division별) — 변경 시 초기화 (AS-IS 파리티)
-              set({
-                divisionId: v,
-                versionNo: '',
-                versionLabel: '',
-                mdfType: REPORT_TYPE.SP_W,
-                yyyy: dayjs().format('YYYY'),
-                planResult: PLAN_RESULT.PLAN,
+              void confirmIfDirtyKey(tabDirtyKey(tabId), 'search').then(ok => {
+                if (!ok) return;
+                // Version 은 division 종속(버전 목록이 division별) — 변경 시 초기화 (AS-IS 파리티)
+                set({
+                  divisionId: v,
+                  versionNo: '',
+                  versionLabel: '',
+                  mdfType: REPORT_TYPE.SP_W,
+                  yyyy: dayjs().format('YYYY'),
+                  planResult: PLAN_RESULT.PLAN,
+                });
+                onDivisionChange();
               });
-              onDivisionChange();
             }}
           />
           <Grid size={3}>
@@ -103,23 +113,15 @@ export const EtcSalesReportsForm = ({
               )}
             />
           </Grid>
+          <YearField
+            gridSize={3}
+            label={t('LBL00086', '_Year')}
+            value={sc.yyyy}
+            onChange={v => set({ yyyy: v })}
+          />
           <Grid size={3}>
             <FormItem
-              label={t('LBL00086', '_Year')}
-              labelAlign='right'
-              className={commonStyles.formItem}
-              render={() => (
-                <CustomDropdown
-                  value={sc.yyyy}
-                  options={toOptions(calendarYyyy)}
-                  onChange={(_, v) => set({ yyyy: String(v ?? '') })}
-                />
-              )}
-            />
-          </Grid>
-          <Grid size={3}>
-            <FormItem
-              label={t('LBL00800', '_Plan/Result')}
+              label={t('LBL00094', '_Plan/Result')}
               labelAlign='right'
               className={commonStyles.formItem}
               render={() => (
@@ -153,6 +155,7 @@ export const EtcSalesReportsForm = ({
             onOpenPopup={onOpenVersionModal}
             // 직접 입력(key-in) 허용 — 친 문자열을 그대로 조회키(versionNo)로 쓴다 (DMF0044 동일 규약).
             //   팝업 선택은 표시문에 DESCRIPTION 이 붙지만 직접 입력은 원문이 곧 표시문이다.
+            //    --> 해당 주석 변경, DESCRIPTION을 아예 붙이지 않는 것으로 변경됨 (2026-09-03)
             //   존재하지 않는 버전을 치면 조회 0건으로 떨어진다(SP 판정 — FE 사전 검증 없음).
             onValueChange={v => set({ versionNo: v, versionLabel: v })}
             // 팝업 라벨('VERSION_NO 설명') 뒤에서 편집을 시작하면 설명까지 조회키가 되므로

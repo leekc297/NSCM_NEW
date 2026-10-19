@@ -6,7 +6,7 @@ import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 import {
   ADMIN_SHEET_NAME,
   BUCKET_TYPE,
-  DIVISION,
+  // DIVISION, // 미사용 (divisionId 초기값을 '' 로 변경하며 제거)
   MENU_ID,
   SHEETS,
   TITLESET_COLUMN_TYPE,
@@ -118,7 +118,8 @@ export const normalizeVersionIds = (ids: string): string =>
     .join(',');
 
 const initSearch: SearchCondition = {
-  divisionId: DIVISION.MOBILITY,
+  // divisionId: DIVISION.MOBILITY, // 화면의 division 자동선택 effect 로 대체 (2026-09-10)
+  divisionId: '',
   deptIds: [],
   endCustomers: ['ALL'], // End Customer 초기값 ALL (명시적)
   scmSiteIds: [],
@@ -173,6 +174,10 @@ const applyLayoutToColumns = (
   return (
     cols
       .map(c => {
+        // 관리자 비노출 컬럼(visible===false, 예: COL_LIST/GROUP_ID 등 내부 컬럼)은 저장된
+        //   개인화에 USER_FLAG='Y' 로 남아 있어도 절대 표시하지 않는다 — titleSet 저장본에 내부
+        //   컬럼이 섞여 들어가면 그리드로 새어 나오던 사고 방지(공용 applyGridLayout 와 동일 가드).
+        if (c.visible === false) return { ...c, visible: false };
         const s = byCol.get(c.colNm);
         // 개인화 목록에 없는 컬럼 = 사용자가 비표시로 저장한 것.
         if (!s) return { ...c, visible: false };

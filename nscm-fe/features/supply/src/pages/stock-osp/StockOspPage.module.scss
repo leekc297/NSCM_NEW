@@ -1,0 +1,27 @@
+// SCP0041 Stock OSP / Pack Hold Stock — 화면 고유 스타일만 (폼 레이아웃은 공용 클래스 — hook #121)
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  flex-shrink: 0;
+  padding-bottom: 20px;
+}
+
+.mainContent {
+  flex-grow: 1;
+}
+
+// 룰 #95 — cell coloring 3색 (편집 Yellow / 잠금 Gray / 기본 White+zebra).
+//   Pack Hold Stock 의 DIR!=='HOLD' 비편집 행·컬럼은 메타 INPUT_TP_CD='S' 로 non-editable 처리된다.
+:global(.wj-cell-editable) {
+  background: #fff8cd !important;
+}
+
+:global(.wj-cell-non-editable) {
+  background: #f1f4f3 !important;
+  color: #5b6470 !important;
+}

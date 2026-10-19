@@ -148,7 +148,7 @@ export const requiredFieldsFor = (divisionId: string): RequiredField[] => {
   } else if (d81) {
     fields.push({ col: 'PROJECT_CODE', fallback: 'Project' });
     fields.push({ col: 'SCM_SITE_ID81', lblKey: 'LBL00011', fallback: 'Sales Site' });
-    fields.push({ col: 'PLANT_SITE_ID', lblKey: 'LBL00509', fallback: 'Plant Site' });
+    fields.push({ col: 'PLANT_SITE_ID', lblKey: 'LBL00005', fallback: 'Plant Site' });
     fields.push({ col: 'ITEM_ID', lblKey: 'LBL00669', fallback: 'Model' });
     fields.push({ col: 'DEPT_ID', fallback: 'Team' });
     fields.push({ col: 'END_CUSTOMER', lblKey: 'LBL00080', fallback: 'End Customer' });

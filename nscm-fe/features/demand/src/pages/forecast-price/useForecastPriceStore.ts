@@ -3,8 +3,15 @@ import dayjs from '@foundation/dayjs';
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
-import { MENU_ID, SAVE_PRICE_META_SHEET, SHEETS } from './forecast-price.constants';
+import {
+  MENU_ID,
+  SAVE_PRICE_META_SHEET,
+  SHEETS,
+  TEMPLATE_META_SHEET,
+} from './forecast-price.constants';
 import type {
+  ButtonAuthFlags,
+  ButtonAuthRow,
   CalendarRow,
   MeasureAuthRow,
   MonthInfoRow,
@@ -38,6 +45,9 @@ interface ForecastPriceState {
   //   보유그룹의 시간창 정의 행이 있으나 지금이 창 밖 → 편집 시도 시 MSG00477 안내 대상.
   //   (그룹 미보유 因 'N' 과 구분 — DM Viewer 등에는 시간 메시지를 띄우지 않는다.)
   measureTimeGate: Record<string, boolean>;
+  // 버튼 활성화 권한 (buttonAuth 시트 — P_DMF0082_GET_BUTTON_AUTH 1행). 조회 결과가 아니라
+  //   화면 오픈·Division 변경 시 받는다. Insert/Delete/Save/Price Batch/Excel 버튼 노출의 단일 원천.
+  buttonAuth: ButtonAuthFlags;
   // 현재 주차 binding (GET drop2 THIS_YYYYMMWW) — 과거 잠금 경계 산출 입력.
   thisYyyymmww: string;
   // ⭐ 배분 캘린더 (GET drop4=O_RC5) — 'D_YYYYMMDD' → {monthDayCnt, weekDayCnt}. 월(M_) 배분(#1) 입력.
@@ -47,6 +57,8 @@ interface ForecastPriceState {
   // ⭐ SavePricePeriodModal 고정 컬럼 메타 (SHEET_NAME='Sales Price Save All' 25 컬럼 —
   //   admin UI Category Setup 동적 fetch, hook ui-category-setup-column-meta).
   savePriceColumns: RawFlexGridColumnConfig[];
+  templateColumns: RawFlexGridColumnConfig[];
+  templateColumnsRequest: number;
   // ⭐ P_USERINFO 권한 그룹 (CMBO 'FcstPriceUserAuthGroup' 1행) — 세션 groupId 유령 필드 대체.
   //   2026-07-15 sales-plan(DMF0021) 선례. 미매칭 시 '' → setFilters 가 userId fallback.
   authGroup: string;
@@ -60,9 +72,14 @@ interface ForecastPriceState {
   // ⭐ 저장된 컬럼 개인화 (titleSet 'C') — 표시/순서 + width/색상.
   //   저장 이력이 없으면 null → 서버 메타 기본값 그대로 사용.
   userColumnLayout: ColumnLayoutSetting[] | null;
+  // 컬럼 admin 기본 정렬(titleSet SORT_ORDER_NO) colNm→순번 — 개인화에 누락된 필수 컬럼을
+  //   자동 추가할 때 admin 순서상 제자리에 끼우기 위한 기준. (/column 응답 배열 순서는 숨김-먼저라 부정확)
+  adminColOrder: Record<string, number>;
   // ⭐ 개인화 적용 전 admin 메타 원본 — 팝업 Default 버튼의 원복 기준.
   //   staticColumns 는 개인화로 mutate 되므로 별도 스냅샷이 필요하다.
   originalStaticColumns: RawFlexGridColumnConfig[];
+  // F6 저장 조회조건 복원 1회 가드 (탭 오픈당) — MotherStore PRESERVED_ON_CONDITION_RESET 보존 키.
+  initialized: boolean;
 }
 
 /** ColumnLayoutModal 개인화 1행 — 표시/순서/폭/색. */
@@ -81,6 +98,11 @@ interface ForecastPriceAction {
    *  persisted store 라 저장된 조건도 함께 초기값으로 돌아간다. division 변경이 수반되면
    *  ForecastPrice.tsx 의 division-변경 effect 가 그리드 초기화·CRUD reset 을 수행한다. */
   resetSearchParams: () => void;
+  /**
+   * F6 로 저장한 조회조건(SCM_ADM_USER_MNU_SRCH_COND_M)을 탭 진입 시 1회 복원한다.
+   * initialized 가드 — F10(초기화)은 MotherStore 가 initialized 를 보존하므로 재복원되지 않는다.
+   */
+  restoreSearchConditions: () => Promise<void>;
   setSearchParams: (searchParams: Partial<SearchParamProps>) => void;
   setFilters: () => boolean;
   /** 조회조건 무효화 — division 전환 시 이전 division 조회결과가 그리드에 잔존하는 것을 막는다. */
@@ -89,9 +111,12 @@ interface ForecastPriceAction {
   fetchStaticColumns: () => void;
   fetchStaticMeasures: () => void;
   fetchSavePriceColumns: (divisionId: string) => void;
+  fetchTemplateColumns: (divisionId: string) => Promise<void>;
   setStaticColumns: (staticColumns: RawFlexGridColumnConfig[]) => void;
   setDateColumns: (dateColumns: FlexGridColumnConfig[]) => void;
   setMeasureAuth: (rows: MeasureAuthRow[]) => void;
+  /** buttonAuth 시트 1행 → boolean 게이트. row 가 없으면(응답 0행) 전 버튼 false. */
+  setButtonAuth: (row?: ButtonAuthRow) => void;
   setThisYyyymmww: (v: string) => void;
   setCalendar: (rows: CalendarRow[]) => void;
   setM3Cutoff: (rows: MonthInfoRow[]) => void;
@@ -103,8 +128,17 @@ interface ForecastPriceAction {
   applyColumnLayout: (settings: ColumnLayoutSetting[]) => void;
 }
 
-const initSearchParams: SearchParamProps = {
-  divisionId: '40',
+// 주의: 상수가 아니라 함수다. 모듈 최상위 상수로 굳히면 session.div 를 DMF0082 청크가 처음
+//   로드되던 그 순간 한 번만 읽는다. 로그아웃은 스토어와 sessionStorage 만 비우고 새로고침을
+//   하지 않으므로(useClearAppData.clearAllData) 모듈은 계속 살아 있고, 다른 계정으로 재로그인해도
+//   앞 계정의 division 이 그대로 얼어붙는다. 스토어는 탭별로 생성되므로 생성 시점에 세션을 읽어야
+//   항상 현재 계정 기준이 된다 (business-plan useBusinessPlanStore.makeInitSearch 와 동일 규약).
+const makeInitSearchParams = (): SearchParamProps => ({
+  // 진입 division 기본값 = 로그인 세션 권한 division (mkt-fcst useMktFcstStore.ts 1:1).
+  //   '40' 하드코딩 시 40 권한이 없는 사용자(예: 81 단일권한)는 콤보 옵션에 '40'이 없어
+  //   Division 칸이 공백으로 뜬다(2026-09-03 실측 — FilterMyDivision 이 81 한 행만 반환).
+  //   fallback '40' 은 세션 미확립(로그인 전 진입) 대비 규칙 기본값 1건.
+  divisionId: useSessionStore.getState().session.div ?? '40',
   deptIds: [],
   endCustomers: [],
   salesSites: [],
@@ -126,25 +160,66 @@ const initSearchParams: SearchParamProps = {
   projectCodes: [],
   owners: [],
   senderCodes: [],
-};
+});
 
-const initState: ForecastPriceState = {
-  searchParams: initSearchParams,
+const makeInitButtonAuth = (): ButtonAuthFlags => ({
+  insert: false,
+  delete: false,
+  save: false,
+  priceBatch: false,
+  excelForm: false,
+  excelUpload: false,
+  editAuth: false,
+});
+
+const makeInitState = (): ForecastPriceState => ({
+  searchParams: makeInitSearchParams(),
   isOpenSearchArea: true,
   staticColumns: [],
   staticMeasures: [],
   dateColumns: [],
   measureAuth: {},
   measureTimeGate: {},
+  buttonAuth: makeInitButtonAuth(),
   thisYyyymmww: '',
   calendar: {},
   m3CutoffYyyymm: '',
   savePriceColumns: [],
+  templateColumns: [],
+  templateColumnsRequest: 0,
   authGroup: '',
   wsPlannerYn: false,
   userColumnLayout: null,
+  adminColOrder: {},
   originalStaticColumns: [],
-};
+  initialized: false,
+});
+
+// 키 분류/복원 검증 전용 shape - 값이 아니라 "어떤 키가 어떤 타입인가"만 쓴다.
+const SEARCH_PARAM_SHAPE: SearchParamProps = makeInitSearchParams();
+
+/**
+ * F6 저장 조회조건 역파싱 키 분류.
+ *
+ * 저장(GridAction.personalizeCondition)은 모든 값을 문자열로 coerce 한다(배열=콤마 join /
+ * 불리언=String). 복원은 그 반대로 SearchParamProps 타입대로 되돌린다:
+ *   배열키 = 콤마 split / 불리언키 = 'true' 비교 / 그 외 = 문자열.
+ * 분류는 SEARCH_PARAM_SHAPE 의 실제 값 타입에서 파생한다 — 조회조건 필드가 늘어도 자동 반영된다.
+ */
+const ARRAY_KEYS = new Set<string>(
+  Object.entries(SEARCH_PARAM_SHAPE)
+    .filter(([, v]) => Array.isArray(v))
+    .map(([k]) => k)
+);
+const BOOL_KEYS = new Set<string>(
+  Object.entries(SEARCH_PARAM_SHAPE)
+    .filter(([, v]) => typeof v === 'boolean')
+    .map(([k]) => k)
+);
+// Bucket 은 유효값(Daily/Weekly/Monthly)만 채택 — 구버전 저장값/오염이 들어오면 콤보가 빈 선택으로 떨어진다.
+const BUCKET_VALUES = new Set<string>(['D', 'W', 'M']);
+// 저장 포맷 = yyyymmdd 8자리. 다른 포맷이면 기간 필드가 SP 로 그대로 새어 나간다.
+const isYyyymmdd = (v: unknown): v is string => typeof v === 'string' && /^\d{8}$/.test(v);
 
 // BE 가 폭을 안 내려줄 때의 기본 폭 (ColumnLayoutModal DEFAULT_COL_WIDTH 와 동일 계약).
 const DEFAULT_COL_WIDTH = 100;
@@ -154,28 +229,54 @@ const DEFAULT_COL_WIDTH = 100;
 //   저장한 개인화를 FE 가 직접 admin 메타에 덧씌운다. settings 순서 = 화면 컬럼 순서.
 const applyLayoutToColumns = (
   cols: RawFlexGridColumnConfig[],
-  settings: ColumnLayoutSetting[]
+  settings: ColumnLayoutSetting[],
+  adminColOrder: Record<string, number> = {}
 ): RawFlexGridColumnConfig[] => {
   const byCol = new Map(settings.map(s => [s.colNm, s]));
+  // 개인화에 없는 필수 컬럼(USER_SELECT_FLAG='N' = personalizable:false)을 자동 추가할 때의 정렬 위치 —
+  //   admin 순서(SORT_ORDER_NO)상 자기 앞에 있는 '개인화된' 컬럼들의 최대 user order 바로 뒤(+0.5)에
+  //   끼워 제자리에 붙인다(맨 앞 키 컬럼이면 앞쪽, MEASURE 처럼 뒤 키 컬럼이면 뒤쪽).
+  //   ⚠️ /column 응답 배열 순서는 숨김-컬럼-먼저라 위치 기준으로 못 쓴다 → titleSet SORT_ORDER_NO 사용.
+  const autoAddOrder = (colNm: string): number => {
+    const myAdmin = adminColOrder[colNm] ?? Number.MAX_SAFE_INTEGER;
+    let anchor = 0;
+    for (const s of settings) {
+      const sAdmin = adminColOrder[s.colNm] ?? Number.MAX_SAFE_INTEGER;
+      if (sAdmin < myAdmin) anchor = Math.max(anchor, s.order);
+    }
+    return anchor + 0.5;
+  };
+  const orderKey = (c: RawFlexGridColumnConfig): number => {
+    const s = byCol.get(c.colNm);
+    if (s) return s.order;
+    // 개인화에 없는 필수 컬럼 = admin 상대 위치로, 그 외(사용자가 숨긴) = 맨 뒤(어차피 미표시).
+    return c.personalizable === false ? autoAddOrder(c.colNm) : Number.MAX_SAFE_INTEGER;
+  };
   return cols
     .map(c => {
       const s = byCol.get(c.colNm);
-      // 개인화 목록에 없는 컬럼 = 사용자가 비표시로 저장한 것.
-      if (!s) return { ...c, visible: false, display: false };
-      return {
-        ...c,
-        visible: s.visible,
-        display: s.visible,
-        colWth: s.width,
-        cellColor: s.cellColor,
-        textColor: s.textColor,
-      };
+      if (s)
+        return {
+          ...c,
+          visible: s.visible,
+          display: s.visible,
+          colWth: s.width,
+          cellColor: s.cellColor,
+          textColor: s.textColor,
+        };
+      // 개인화 목록에 없는 컬럼:
+      //   - USER_SELECT_FLAG='N'(personalizable===false, 사용자가 숨길 수 없는 필수 컬럼)이고
+      //     **표시용 컬럼(visible===true)** 이면, division 변경 등으로 개인화 저장 내역에 누락됐어도
+      //     자동 표시한다. (사용자 요구 2026-09-03 — 변경된 division 의 필수 컬럼 누락 보완)
+      //     ⚠️ display=true 를 강제한다 — BE /column 이 개인화 USER_FLAG='N' 을 반영해 display:false 로
+      //       내려주므로(실측 r193 CELL_PROD_SITE_ID) c 를 그대로 두면 여전히 숨겨진다.
+      //     ⚠️ visible===true 로 좁힌다 — VMI_STD_DIO 처럼 personalizable:false 지만 visible:false·colWth:0
+      //       인 내부/시스템 컬럼은 표시 대상이 아니다(좁은 폭으로 새어나오던 것 차단).
+      //   - 그 외(사용자가 숨길 수 있는데 목록에 없는)는 사용자가 비표시로 저장한 것 → 숨김.
+      if (c.personalizable === false && c.visible === true) return { ...c, display: true };
+      return { ...c, visible: false, display: false };
     })
-    .sort(
-      (a, b) =>
-        (byCol.get(a.colNm)?.order ?? Number.MAX_SAFE_INTEGER) -
-        (byCol.get(b.colNm)?.order ?? Number.MAX_SAFE_INTEGER)
-    );
+    .sort((a, b) => orderKey(a) - orderKey(b));
 };
 
 // 멀티선택 → SP 파라미터: ⚠️ DMF0082 는 콤마 구분 (PKG_DMF0082 REGEXP_SUBSTR '[^,]+' 실측).
@@ -186,12 +287,57 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
   ForecastPriceState & ForecastPriceAction
 >(
   (set, get) => ({
-    ...initState,
-    reset: () => set(initState),
+    ...makeInitState(),
+    reset: () => set(makeInitState()),
     resetSearchParams: () =>
       set(state => {
-        state.searchParams = { ...initSearchParams };
+        state.searchParams = makeInitSearchParams();
       }),
+
+    // F6 저장 조회조건 복원 — 탭 수명 내 1회(initialized 가드). 저장조건 없음/조회 실패는
+    //   기본값 유지(화면 차단 금지, console 금지 룰). F10(Reset Condition)은 SubTitle 공통이
+    //   MotherStore.resetSearchCondition 으로 처리하는데, 그 쪽이 initialized 를 보존하므로
+    //   초기화 직후 이 함수가 다시 복원해 버리는 일은 없다.
+    //   복원이 divisionId 를 바꾸면 division-키 effect(컬럼/메저 재fetch)가 알아서 따라온다.
+    restoreSearchConditions: async () => {
+      if (get().initialized) return;
+      set(state => {
+        state.initialized = true; // 먼저 세운다 — 마운트 중복 호출/재마운트 재복원 방지.
+      });
+      try {
+        const res = await apiClient.get<{ paramNm: string; paramCtn: string }[]>(
+          `/admin/menu/${MENU_ID}/search-conditions`
+        );
+        const rows = res.data.result ?? [];
+        if (rows.length === 0) return;
+
+        const patch: Record<string, unknown> = {};
+        for (const { paramNm, paramCtn } of rows) {
+          // 현재 SearchParamProps 에 없는 키(구버전 잔재)는 버린다.
+          if (!(paramNm in SEARCH_PARAM_SHAPE)) continue;
+          const val = paramCtn ?? '';
+          if (ARRAY_KEYS.has(paramNm)) patch[paramNm] = val ? val.split(',').filter(Boolean) : [];
+          else if (BOOL_KEYS.has(paramNm)) patch[paramNm] = val === 'true';
+          else patch[paramNm] = val;
+        }
+        if (typeof patch.bucketType === 'string' && !BUCKET_VALUES.has(patch.bucketType))
+          delete patch.bucketType;
+        if (!isYyyymmdd(patch.startYyyymmdd)) delete patch.startYyyymmdd;
+        if (!isYyyymmdd(patch.endYyyymmdd)) delete patch.endYyyymmdd;
+        // versionType 은 버전 팝업이 주입하는 값이라 없는 버전일 수 있다. 그래도 사용자가 저장한
+        //   조건이므로 그대로 복원한다 — 없는 버전이면 조회가 0건을 돌려줄 뿐이다.
+
+        set(state => {
+          // 부분 병합 — 저장분에 없는 키는 기본값 유지 (신규 조회조건 추가 시 유실 방지).
+          state.searchParams = {
+            ...state.searchParams,
+            ...(patch as Partial<SearchParamProps>),
+          };
+        });
+      } catch {
+        // 저장조건 미존재/조회 실패 시 기본값 유지 (console 금지 룰)
+      }
+    },
     setAuthGroup: (group: string) =>
       set(state => {
         state.authGroup = group;
@@ -214,7 +360,7 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
       const sesUserId = useSessionStore.getState().session.userId ?? '';
       const userGroup = get().authGroup || sesUserId;
       // persist rehydrate 가 구버전 shape 일 수 있어 기본값 머지로 완전한 조회조건 보장.
-      const sp: SearchParamProps = { ...initSearchParams, ...get().searchParams };
+      const sp: SearchParamProps = { ...makeInitSearchParams(), ...get().searchParams };
 
       const newFilters: ProcRequest<MENU_ID, SHEETS.FCST_N_PRICE_40> = {
         divisionId: sp.divisionId,
@@ -285,11 +431,19 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
             //   inputTpRef / FlexGridFilter filterColumns / toColumnLayoutSettings)이 `.map` 에서
             //   터져 화면이 통째로 에러 바운더리로 떨어진다 (2026-08-13 division 81 실측).
             //   실패(catch)와 달리 이 경로는 예외가 아니라 **정상 응답**이라 try/catch 로는 못 막는다.
-            const fetched = result.data.result ?? [];
+            // USER_SELECT_FLAG='N'(personalizable:false) + 표시용(visible:true) 필수 컬럼은 개인화/BE
+            //   display 와 무관하게 항상 표시한다 — BE /column 이 개인화 USER_FLAG='N' 을 display:false 로
+            //   반영해 내려주므로(실측 r193 CELL_PROD_SITE_ID) 개인화 미적용 경로에서도 여기서 되살린다.
+            //   visible:false 내부 컬럼(VMI_STD_DIO 등, colWth:0)은 제외 — 표시 대상이 아니다.
+            const fetched = (result.data.result ?? []).map(c =>
+              c.personalizable === false && c.visible === true ? { ...c, display: true } : c
+            );
             // 개인화 적용 전 원본 보관 — 팝업 Default 원복 기준 (개인화로 덮이지 않는다).
             state.originalStaticColumns = fetched;
             state.staticColumns =
-              layout && layout.length > 0 ? applyLayoutToColumns(fetched, layout) : fetched;
+              layout && layout.length > 0
+                ? applyLayoutToColumns(fetched, layout, get().adminColOrder)
+                : fetched;
           });
         } catch {
           /* 메타 미적재 시 빈 배열 유지 — 화면은 fallback 없이 메타 주도 */
@@ -332,13 +486,23 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
             };
           })
           .filter(s => s.colNm);
+        // admin 기본 정렬(SORT_ORDER_NO) — 개인화에 누락된 필수 컬럼을 제자리에 끼울 때 쓴다.
+        //   전체 행(USER_FLAG 무관)에서 뽑는다. layout 유무와 무관하게 보관.
+        const adminColOrder: Record<string, number> = {};
+        for (const r of rows) {
+          const nm = String(r.COLUMN_NAME ?? '');
+          if (nm) adminColOrder[nm] = Number(r.SORT_ORDER_NO ?? 0);
+        }
+        set(state => {
+          state.adminColOrder = adminColOrder;
+        });
         if (layout.length === 0) return null;
         set(state => {
           state.userColumnLayout = layout;
           // ⚠️ 이 조회는 fetchStaticColumns 와 독립 발사라 응답 순서가 보장되지 않는다.
           //   /column 이 먼저 도착했으면 override 가 생략됐으므로 여기서 소급 적용한다.
           if (state.staticColumns.length > 0) {
-            state.staticColumns = applyLayoutToColumns(state.staticColumns, layout);
+            state.staticColumns = applyLayoutToColumns(state.staticColumns, layout, adminColOrder);
           }
         });
         return layout;
@@ -357,7 +521,11 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
           .sort((a, b) => a.order - b.order)
           .map((s, i) => ({ ...s, order: i + 1 }));
         if (state.staticColumns.length === 0) return;
-        state.staticColumns = applyLayoutToColumns(state.staticColumns, state.userColumnLayout);
+        state.staticColumns = applyLayoutToColumns(
+          state.staticColumns,
+          state.userColumnLayout,
+          state.adminColOrder
+        );
       });
     },
     fetchStaticMeasures: () => {
@@ -398,6 +566,22 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
         }
       })();
     },
+    fetchTemplateColumns: async divisionId => {
+      const request = get().templateColumnsRequest + 1;
+      set({ templateColumnsRequest: request, templateColumns: [] });
+      try {
+        const result = await apiClient.post<RawFlexGridColumnConfig[]>(
+          `/admin/menu/${MENU_ID}/column`,
+          { sheetNm: TEMPLATE_META_SHEET, divisionId }
+        );
+        // 이전 사업부의 늦은 응답이 현재 양식 메타를 덮어쓰지 않게 한다.
+        if (get().templateColumnsRequest !== request) return;
+        set({ templateColumns: result.data.result ?? [] });
+      } catch {
+        // 빈 메타는 양식 생성 함수의 19컬럼 폴백으로 처리한다.
+        if (get().templateColumnsRequest === request) set({ templateColumns: [] });
+      }
+    },
     setStaticColumns: staticColumns => {
       set({ staticColumns });
     },
@@ -420,6 +604,22 @@ export const useForecastPriceStore = createPersistedStoreWithTab<
       set(state => {
         state.measureAuth = auth;
         state.measureTimeGate = timeGate;
+      });
+    },
+    setButtonAuth: row => {
+      const yn = (v: unknown) => v === 'Y';
+      set(state => {
+        state.buttonAuth = row
+          ? {
+              insert: yn(row.INSERT_YN),
+              delete: yn(row.DELETE_YN),
+              save: yn(row.SAVE_YN),
+              priceBatch: yn(row.PRICE_BATCH_YN),
+              excelForm: yn(row.EXCEL_FORM_YN),
+              excelUpload: yn(row.EXCEL_UPLOAD_YN),
+              editAuth: yn(row.EDIT_AUTH_YN),
+            }
+          : makeInitButtonAuth();
       });
     },
     setThisYyyymmww: v => {

@@ -1,6 +1,5 @@
 import { toggleClass } from '@mescius/wijmo';
 import {
-  CellRange,
   CellType,
   type CellRangeEventArgs,
   type FlexGrid,
@@ -18,7 +17,7 @@ import {
   OwnerByDivisionModal,
   ProjectByDivisionModal,
 } from '../../../components';
-import type { MENU_ID, SHEETS } from '../erp-edi-master.constants';
+import { MENU_ID, type SHEETS } from '../erp-edi-master.constants';
 import { useErpEdiMasterStore } from '../useErpEdiMasterStore';
 
 interface ErpEdiMasterSspmGridProps {
@@ -100,7 +99,7 @@ export const ErpEdiMasterSspmGrid = ({
     if (args.panel.cellType !== CellType.Cell) return;
     const binding = GridUtils.getBinding(grid, args.col);
     if (typeof binding !== 'string') return;
-    // 편집 가능 컬럼 = 표준 Yellow(`wj-cell-editable`). 그 외 = White+zebra (클래스 없음). hook #95.
+    // 편집 가능 컬럼 = 표준 Yellow(`wj-cell-editable`). 그 외 = White (클래스 없음). hook #95.
     toggleClass(args.cell, 'wj-cell-editable', EDITABLE_COLUMNS.has(binding));
   };
 
@@ -127,7 +126,7 @@ export const ErpEdiMasterSspmGrid = ({
         dataItem.SCM_SITE_ID40 = '';
       }
     });
-    grid.refreshRange(new CellRange(e.row, 0, e.row, -1));
+    GridUtils.refreshRow(grid, e.row);
   };
 
   const setProject = (projects: string, projectsNames?: string) => {
@@ -169,7 +168,7 @@ export const ErpEdiMasterSspmGrid = ({
         dblClick={handleDblClick}
         formatItem={handleFormatItem}
         cellEditEnded={handleCellEditEnded}
-        isReadOnly={false}
+        isReadOnly={true}
       />
       {openProjectModal && (
         <ProjectByDivisionModal
@@ -201,6 +200,13 @@ export const ErpEdiMasterSspmGrid = ({
             itemId: '',
           }}
           callFromCell
+          // 그리드 셀 호출은 좁은 조회를 쓴다 - AS-IS 가 셀 팝업만 DM0002_ItembySmallDivPopup
+          //   으로 갈랐던 것과 같다(DMF0008_ErpEdiMaster.cs L2367 · L3150. 둘 다 sub grid 의
+          //   ITEM_ID 셀, 신규 행에서만). 넓은 쪽은 team/end customer/site 축까지 펼쳐져 있어
+          //   같은 Model 이 여러 줄로 보인다. 좁은 쪽은 아이템 마스터 축이라 그 중복이 없다.
+          //   위 preSearchParams 의 dept/end customer/site/project 는 좁은 조회에 실리지 않는다 -
+          //   팝업이 AS-IS 와 같이 'ALL' 로 덮는다(ItemByDivisionModal queryFilters).
+          smallDivision={{ menuId: MENU_ID }}
         />
       )}
       {openOwnerModal && (

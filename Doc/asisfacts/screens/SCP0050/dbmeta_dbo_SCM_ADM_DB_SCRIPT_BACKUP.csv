@@ -1,0 +1,653 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0050_GET_USER_ID_CHECK","794537964","1","
+/*
+ * Program ID   : SCP0050_MDMAuthManagement
+ * Description  : UserID Check
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2020/07/30   khj79          [PJ20199555] 공급 대응력 향상을 위한 자재재공 수급 점검 체계 개선 - 최초작성
+
+ ex) 
+ */
+
+CREATE PROCEDURE [dbo].[SCP0050_GET_USER_ID_CHECK]
+	 @p_user_id			NVARCHAR(MAX)
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	
+	SELECT USER_ID
+	FROM SCM_MST_SSO_USER_INFO
+	WHERE USER_ID IN  ( SELECT token FROM dbo.String_Split(@p_user_id,'^') )
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0050_GET_CAPA_PIC","762537850","1","
+
+/*
+ * Program ID   : SCP0050_GET_CAPA_PIC
+ * Description  : MDM Auth Management
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2020/07/20   khj79          [PJ20199555] 공급 대응력 향상을 위한 자재재공 수급 점검 체계 개선 - 최초작성
+ * 2020/07/21   khj79          SCM_MASTER_MANAGER_M_SN 컬럼 변경 CATEGORY_ID , KEY_ID => LOSS_CODE 로 변경
+ * 2021/01/26   khj79          YEILD LINE TYPE(ELECTRODE_TYPE) 제외 - YIELD 는 LINE TYPE 이 없음
+ * 2021/03/08   khj79          PIC 사용자(USER_4 , USER_ 5) 추가
+ */
+
+
+
+CREATE PROCEDURE [dbo].[SCP0050_GET_CAPA_PIC]
+	 @p_division_id			NVARCHAR(20)
+	,@p_plant_id			NVARCHAR(MAX)
+	,@p_group_id			NVARCHAR(MAX)
+	,@p_factory_id			NVARCHAR(MAX)
+	,@p_line_id				NVARCHAR(MAX)
+	,@p_operation_id		NVARCHAR(MAX)
+	,@p_category_id			NVARCHAR(MAX)
+	,@p_key_id				NVARCHAR(MAX)   -- 사용안함
+	,@p_loss_code			NVARCHAR(MAX)
+	,@p_manager_name		NVARCHAR(MAX)
+	,@p_language			NVARCHAR(2)
+	,@debug_mode			CHAR(1)
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	WITH LINE_INFO
+	AS (
+			SELECT DISTINCT
+				   COMPANY_ID
+				 , DIVISION_ID
+				 , SITE_ID
+				 , PLANT_ID
+				 , FACTORY_ID
+				 , OPERATION_ID
+				 , LINE_ID
+				 , LINE_NAME
+				 , ELECTRODE_TYPE
+			  FROM SCM_LINE_M_SN A
+			 WHERE 1=1
+			   AND ACTIVE_FLAG = 'Y'
+			   /** FP라인 유무 조건 막음....
+			   AND EXISTS (SELECT 1
+							 FROM FP_INSTANCE_LINE_V_SN B WITH(NOLOCK)
+							WHERE 1=1
+							  AND A.COMPANY_ID		= B.COMPANY_ID
+							  AND A.SITE_ID			= B.SITE_ID
+							  AND A.PLANT_ID		= B.PLANT_ID
+							  AND A.DIVISION_ID		= B.DIVISION_ID
+							  AND A.FACTORY_ID		= B.FACTORY_ID
+							  AND A.OPERATION_ID	= B.OPERATION_ID
+							  AND A.LINE_ID			= B.LINE_ID
+							  AND A.ELECTRODE_TYPE	= B.ELECTRODE_TYPE
+						)
+			   */
+			   AND (( @p_division_id  IS NULL OR @p_division_id  ='') OR A.DIVISION_ID  IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_division_id	, ',')))
+			   AND (( @p_plant_id     IS NULL OR @p_plant_id     ='') OR A.PLANT_ID     IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_plant_id		, ',')))
+			   AND (( @p_factory_id   IS NULL OR @p_factory_id   ='') OR A.FACTORY_ID   IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_factory_id	, ',')))
+			   AND (( @p_line_id      IS NULL OR @p_line_id      ='') OR A.LINE_ID      IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_line_id		, ',')))
+			   AND (( @p_operation_id IS NULL OR @p_operation_id ='') OR A.OPERATION_ID IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_operation_id	, ',')))
+		)
+	, LOOKUP
+	AS (
+			SELECT SEGMENT1   AS LOSS_CODE
+				 , ATTRIBUTE1 AS CATEGORY_ID
+				 , ATTRIBUTE2 AS KEY_ID
+				 , ATTRIBUTE3 AS DATA_TABLE
+				 , ATTRIBUTE4 AS OFF_CAL
+				 , ATTRIBUTE5 AS FP_UTIL_CAL
+				 , ATTRIBUTE6 AS SCP_UTIL_CAL
+				 , SORT_ORDER	
+			  FROM SCM_SYS_LOOKUP_VALUE_SN LV WITH(NOLOCK)
+			 WHERE 1=1
+			   AND LOOKUP_TYPE_CODE = 'CAPA_UI_LOSS_TYPE_DEFINIT'
+			   AND ACTIVE_FLAG = 'Y'
+			   --AND SEGMENT1 NOT IN ( 'M11' ) -- Quality(%)
+			   AND ATTRIBUTE7 = 'Y'
+			   AND (( @p_category_id IS NULL OR @p_category_id ='') OR LV.ATTRIBUTE1 IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_category_id	, ',')))
+			   AND (( @p_loss_code   IS NULL OR @p_loss_code   ='') OR LV.SEGMENT1   IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_loss_code	, ',')))
+		)
+	, MAIN
+	AS (
+			SELECT A.*, B.LOSS_CODE , B.CATEGORY_ID, B.KEY_ID, B.SORT_ORDER
+			  FROM LINE_INFO A
+				 , LOOKUP B
+		)
+
+
+	
+	SELECT A.DIVISION_ID
+		 , A.COMPANY_ID
+		 , A.SITE_ID
+		 , A.PLANT_ID
+		 , A.FACTORY_ID
+		 , F.FACTORY_NAME
+		 , A.LINE_ID
+		 , A.LINE_NAME
+		 , A.ELECTRODE_TYPE
+		 , A.OPERATION_ID
+		 , O.OPERATION_NAME
+		 , A.CATEGORY_ID
+		 , A.KEY_ID
+		 , A.LOSS_CODE
+		 , ISNULL(A.DEPARTMENT, CASE WHEN A.SITE_ID = 'A001' THEN C.DEPT_NAME_KO
+									 WHEN A.SITE_ID"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0050_GET_CAPA_PIC","762537850","2"," = 'A002' THEN C.DEPT_NAME_CN
+									 ELSE DEPT_NAME_EN	
+								END) AS DEPARTMENT
+		 , A.USER_ID_1
+		 , C.USER_NAME	AS USER_NAME_1
+		 , A.USER_ID_2
+		 , D.USER_NAME	AS USER_NAME_2
+		 , A.USER_ID_3
+		 , E.USER_NAME	AS USER_NAME_3
+		 , A.USER_ID_4
+		 , H.USER_NAME	AS USER_NAME_4
+		 , A.USER_ID_5
+		 , I.USER_NAME	AS USER_NAME_5
+		 , A.USER_ID_6
+		 , U6.USER_NAME	AS USER_NAME_6
+		 , A.USER_ID_7
+		 , U7.USER_NAME	AS USER_NAME_7
+		 , A.USER_ID_8
+		 , U8.USER_NAME	AS USER_NAME_8
+		 , A.USER_ID_9
+		 , U9.USER_NAME	AS USER_NAME_9
+		 , A.USER_ID_10
+		 , U10.USER_NAME	AS USER_NAME_10
+	  FROM (SELECT T1.DIVISION_ID
+				 , T1.COMPANY_ID
+				 , T1.SITE_ID
+				 , T1.PLANT_ID
+				 , T1.FACTORY_ID
+				 , T1.LINE_ID
+				 , T1.LINE_NAME
+				 , T1.OPERATION_ID
+				 , T1.ELECTRODE_TYPE
+				 , T1.CATEGORY_ID
+				 , T1.KEY_ID
+				 , T1.LOSS_CODE
+				 , B.USER_ID_1
+				 , B.USER_ID_2
+				 , B.USER_ID_3
+				 , B.USER_ID_4
+				 , B.USER_ID_5
+				 , B.USER_ID_6
+				 , B.USER_ID_7
+				 , B.USER_ID_8
+				 , B.USER_ID_9
+				 , B.USER_ID_10
+				 , B.DEPARTMENT
+			  FROM MAIN T1
+			  LEFT JOIN SCM_MASTER_MANAGER_M_SN B WITH(NOLOCK)  --기준정보별 담당자 정보
+				ON 1 = 1
+			   AND T1.COMPANY_ID	= B.COMPANY_ID
+			   AND T1.DIVISION_ID	= B.DIVISION_ID
+			   AND T1.SITE_ID		= B.SITE_ID
+			   AND T1.PLANT_ID		= B.PLANT_ID
+			   AND T1.FACTORY_ID	= B.FACTORY_ID
+			   AND T1.OPERATION_ID	= B.OPERATION_ID
+			   AND T1.LINE_ID		= B.LINE_ID
+			   AND T1.LOSS_CODE		= B.LOSS_CODE
+			   AND T1.ELECTRODE_TYPE = B.ELECTRODE_TYPE
+
+			 WHERE T1.LOSS_CODE <> 'LA003'  -- YIELD 제외
+
+			  UNION ALL
+
+			 SELECT T1.DIVISION_ID
+				 , T1.COMPANY_ID
+				 , T1.SITE_ID
+				 , T1.PLANT_ID
+				 , T1.FACTORY_ID
+				 , T1.LINE_ID
+				 , T1.LINE_NAME
+				 , T1.OPERATION_ID
+				 , '-'				AS ELECTRODE_TYPE
+				 , T1.CATEGORY_ID
+				 , T1.KEY_ID
+				 , T1.LOSS_CODE
+				 , B.USER_ID_1
+				 , B.USER_ID_2
+				 , B.USER_ID_3
+				 , B.USER_ID_4
+				 , B.USER_ID_5
+				 , B.USER_ID_6
+				 , B.USER_ID_7
+				 , B.USER_ID_8
+				 , B.USER_ID_9
+				 , B.USER_ID_10
+				 , B.DEPARTMENT
+			  FROM (SELECT DISTINCT 
+						   COMPANY_ID
+						 , DIVISION_ID 
+						 , SITE_ID
+						 , PLANT_ID
+						 , FACTORY_ID
+						 , OPERATION_ID
+						 , LINE_ID
+						 , LINE_NAME
+						 , LOSS_CODE
+						 , CATEGORY_ID
+						 , KEY_ID
+					   FROM MAIN ) T1
+			  LEFT JOIN SCM_MASTER_MANAGER_M_SN B WITH(NOLOCK)  --기준정보별 담당자 정보
+				ON 1 = 1
+			   AND T1.COMPANY_ID	= B.COMPANY_ID
+			   AND T1.DIVISION_ID	= B.DIVISION_ID
+			   AND T1.SITE_ID		= B.SITE_ID
+			   AND T1.PLANT_ID		= B.PLANT_ID
+			   AND T1.FACTORY_ID	= B.FACTORY_ID
+			   AND T1.OPERATION_ID	= B.OPERATION_ID
+			   AND T1.LINE_ID		= B.LINE_ID
+			   AND T1.LOSS_CODE		= B.LOSS_CODE
+
+			 WHERE T1.LOSS_CODE = 'LA003'  -- YIELD 만 조회
+			) A
+
+	  JOIN SCM_OPERATION_M_SN O WITH(NOLOCK) -- OPERATION 정보
+		ON A.DIVISION_ID	= O.DIVISION_ID
+	   AND A.COMPANY_ID		= O.COMPANY_ID
+	   AND A.SITE_ID		= O.SITE_ID
+	   AND A.OPERATION_ID	= O.OPERATION_ID
+
+	  JOIN SCM_MST_FACTORY_SN F WITH(NOLOCK) -- FACTORY 정보
+		ON A.FACTORY_ID		= F.FACTORY_ID
+	   AND A.COMPANY_ID		= F.COMPANY_ID
+
+
+	  JOIN SCM_SITE_M_SN S WITH(NOLOCK)
+		ON A.COMPANY_ID		= S.COMPANY_ID
+	   AND A.SITE_ID		= S.SITE_ID
+
+	  LEFT JOIN (SELECT A.USER_NAME, A.USER_ID, A.DEPT_ID, B.DEPT_NAME_KO, B.DEPT_NAME_EN, B.DEPT_NAME_CN
+				   FROM SCM_MST_SSO_USER_INFO A WITH(NOLOCK)
+					  , SCM_MST_SSO_DEPT_INFO B WITH(NOLOCK)
+				  WHERE 1=1
+					AND A.DEPT_ID = B.DEPT_ID
+				) C
+	    ON 1 = 1
+	   AND A.USER_ID_1 = C.USER_ID
+
+	  LEFT OUTER JOIN SCM_MST_SSO_USER_INFO D WITH(NOLOCK)
+	    ON 1 = 1
+	   AND A.USER_ID_2 = D.USER_ID
+
+	  LEFT OUTER JOIN SCM_MST_SSO_USER_INFO E WITH(NOLOCK)
+	    ON 1=1
+	   AND A.USER_ID_3 = E.USER_ID
+
+	    LEFT OUTER JOIN SCM_MST_SSO_USER_INFO H WITH(NOLOCK)
+	    ON 1=1
+	   AND A.USER_ID_4 = H.USER_ID
+
+	    LEFT OUTER JOIN SCM_MST_SSO_USER_INFO I WITH(NOLOCK)
+	    ON 1="
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0050_GET_CAPA_PIC","762537850","3","1
+	   AND A.USER_ID_5 = I.USER_ID
+
+	   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO U6 WITH(NOLOCK)
+	    ON 1=1
+	   AND A.USER_ID_6 = U6.USER_ID
+
+	   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO U7 WITH(NOLOCK)
+	    ON 1=1
+	   AND A.USER_ID_7 = U7.USER_ID
+
+	   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO U8 WITH(NOLOCK)
+	    ON 1=1
+	   AND A.USER_ID_8 = U8.USER_ID
+
+	   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO U9 WITH(NOLOCK)
+	    ON 1=1
+	   AND A.USER_ID_9 = U9.USER_ID
+
+	   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO U10 WITH(NOLOCK)
+	    ON 1=1
+	   AND A.USER_ID_10 = U10.USER_ID
+
+	 WHERE ( (@p_manager_name  IS NULL OR @p_manager_name  ='')
+	     OR (A.USER_ID_1 LIKE '%' + @p_manager_name + '%')
+		 OR (A.USER_ID_2 LIKE '%' + @p_manager_name + '%')
+		 OR (A.USER_ID_3 LIKE '%' + @p_manager_name + '%')
+		 OR (A.USER_ID_4 LIKE '%' + @p_manager_name + '%')
+		 OR (A.USER_ID_5 LIKE '%' + @p_manager_name + '%')
+		 OR (A.USER_ID_6 LIKE '%' + @p_manager_name + '%')
+		 OR (A.USER_ID_7 LIKE '%' + @p_manager_name + '%')
+		 OR (A.USER_ID_8 LIKE '%' + @p_manager_name + '%')
+		 OR (A.USER_ID_9 LIKE '%' + @p_manager_name + '%')
+		 OR (A.USER_ID_10 LIKE '%' + @p_manager_name + '%')
+		 OR (C.USER_NAME LIKE '%' + @p_manager_name + '%')
+		 OR (D.USER_NAME LIKE '%' + @p_manager_name + '%')
+		 OR (E.USER_NAME LIKE '%' + @p_manager_name + '%')
+		 OR (H.USER_NAME LIKE '%' + @p_manager_name + '%')
+		 OR (I.USER_NAME LIKE '%' + @p_manager_name + '%')
+		 OR (U6.USER_NAME LIKE '%' + @p_manager_name + '%')
+		 OR (U7.USER_NAME LIKE '%' + @p_manager_name + '%')
+		 OR (U8.USER_NAME LIKE '%' + @p_manager_name + '%')
+		 OR (U9.USER_NAME LIKE '%' + @p_manager_name + '%')
+		 OR (U10.USER_NAME LIKE '%' + @p_manager_name + '%')
+		  )
+
+	ORDER BY A.PLANT_ID
+		 , A.FACTORY_ID
+		 , A.LINE_ID
+		 , A.OPERATION_ID
+		 , O.OPERATION_NAME
+		 , CASE WHEN A.ELECTRODE_TYPE = '-' THEN 'ZZZ' ELSE A.ELECTRODE_TYPE END
+		 , A.LOSS_CODE
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0050_GET_CAPA_PIC_USERINFO_POPUP","778537907","1","
+
+
+/*
+ * Program ID   : SCP0050_GET_CAPA_PIC_USERINFO_POPUP
+ * Description  : MDM Auth Management
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2020/07/20   khj79          [PJ20199555] 공급 대응력 향상을 위한 자재재공 수급 점검 체계 개선 - 최초작성
+
+ ex)  EXEC	SCP0050_GET_CAPA_PIC_USERINFO_POPUP
+		  @Search = ''	, @Language = ''
+ */
+ 
+CREATE PROCEDURE [dbo].[SCP0050_GET_CAPA_PIC_USERINFO_POPUP]
+	
+	@Search			NVARCHAR(12)
+   ,@Language		NVARCHAR(2) = 'KO'
+
+AS
+BEGIN
+	
+	SELECT UI.USER_ID
+		 , UI.USER_NAME
+		 , UI.USER_NAME_EN
+		 , UI.DEPT_ID
+		 , DI.DEPT_NAME_KO	AS DEPT_NAME
+		 , UI.COMPANY_ID
+		 , UI.WORKING_CODE
+		 , UI.WORKING_NAME
+		 , UI.SSO_LOCATE
+	FROM SCM_MST_SSO_USER_INFO UI WITH(NOLOCK)
+	JOIN SCM_MST_SSO_DEPT_INFO DI WITH(NOLOCK)
+	  ON UI.DEPT_ID = DI.DEPT_ID
+	WHERE (@Search IS NULL OR UI.USER_ID		LIKE '%' + @Search + '%')
+	   OR (@Search IS NULL OR UI.USER_NAME		LIKE '%' + @Search + '%')
+	   OR (@Search IS NULL OR UI.USER_NAME_EN	LIKE '%' + @Search + '%')
+
+END
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0050_SAVE_CAPA_PIC","810538021","1","
+/*
+ * Program ID   : SCP0050_SAVE_CAPA_PIC
+ * Description  : MDM Auth Management
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2020/07/20   khj79          [PJ20199555] 공급 대응력 향상을 위한 자재재공 수급 점검 체계 개선 - 최초작성
+ * 2021/01/26   khj79          [PJ20199555] MERGE USING 문에 ELECTRODE TYPE 추가
+ * 2021/03/08   khj79          PIC 사용자(USER_4 , USER_ 5) 추가
+
+ */
+ 
+CREATE PROCEDURE [dbo].[SCP0050_SAVE_CAPA_PIC]
+	  @p_active_flag		NVARCHAR(MAX)
+	, @p_company_id			NVARCHAR(MAX)
+	, @p_division_id		NVARCHAR(MAX)
+	, @p_site_id			NVARCHAR(MAX)
+	, @p_plant_id			NVARCHAR(MAX)
+	, @p_factory_id			NVARCHAR(MAX)
+	, @p_operation_id		NVARCHAR(MAX)
+	, @p_line_id			NVARCHAR(MAX)
+	, @p_electrode_type		NVARCHAR(MAX)
+	, @p_loss_code			NVARCHAR(MAX)
+	, @p_user_id_1			NVARCHAR(MAX)
+	, @p_user_id_2			NVARCHAR(MAX)
+	, @p_user_id_3			NVARCHAR(MAX)
+	, @p_user_id_4			NVARCHAR(MAX)
+	, @p_user_id_5			NVARCHAR(MAX)
+	, @p_user_id_6			NVARCHAR(MAX)
+	, @p_user_id_7			NVARCHAR(MAX)
+	, @p_user_id_8			NVARCHAR(MAX)
+	, @p_user_id_9			NVARCHAR(MAX)
+	, @p_user_id_10			NVARCHAR(MAX)
+	, @p_update_id			NVARCHAR(MAX)
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;
+	SET @recv_active_flag = @p_active_flag;
+
+	
+	DECLARE @v_active_flag		NVARCHAR(10) = NULL;
+	DECLARE @v_company_id		NVARCHAR(30) = NULL;
+	DECLARE @v_division_id		NVARCHAR(30) = NULL;
+	DECLARE @v_site_id			NVARCHAR(30) = NULL;
+	DECLARE @v_plant_id			NVARCHAR(30) = NULL;
+	DECLARE @v_factory_id		NVARCHAR(30) = NULL;
+	DECLARE @v_operation_id		NVARCHAR(30) = NULL;
+	DECLARE @v_line_id			NVARCHAR(30) = NULL;
+	DECLARE @v_electrode_type	NVARCHAR(30) = NULL;
+	DECLARE @v_loss_code		NVARCHAR(30) = NULL;
+	DECLARE @v_user_id_1		NVARCHAR(30) = NULL;
+	DECLARE @v_user_id_2		NVARCHAR(30) = NULL;
+	DECLARE @v_user_id_3		NVARCHAR(30) = NULL;
+	DECLARE @v_user_id_4		NVARCHAR(30) = NULL;
+	DECLARE @v_user_id_5		NVARCHAR(30) = NULL;
+	DECLARE @v_user_id_6		NVARCHAR(30) = NULL;
+	DECLARE @v_user_id_7		NVARCHAR(30) = NULL;
+	DECLARE @v_user_id_8		NVARCHAR(30) = NULL;
+	DECLARE @v_user_id_9		NVARCHAR(30) = NULL;
+	DECLARE @v_user_id_10		NVARCHAR(30) = NULL;
+	DECLARE @v_update_id		NVARCHAR(30) = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^'
+	DECLARE @max_loop_cnt		INTEGER = 0;
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0050_SAVE_CAPA_PIC';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 시작 LOG
+	SET @v_log_type = 'START';
+	SET @v_log_message = '########## Start of procedure ##########';
+	SET @v_description = '';
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    	
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				SET @v_active_flag		= [dbo].[SCM_ARR_SPL_VAL](@p_active_flag	, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_company_id		= [dbo].[SCM_ARR_SPL_VAL](@p_company_id		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_division_id		= [dbo].[SCM_ARR_SPL_VAL](@p_division_id	, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_site_id			= [dbo].[SCM_ARR_SPL_VAL](@p_site_id		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_plant_id			= [dbo].[SCM_ARR_SPL_VAL](@P_plant_id"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0050_SAVE_CAPA_PIC","810538021","2","		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_factory_id		= [dbo].[SCM_ARR_SPL_VAL](@p_factory_id		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_operation_id		= [dbo].[SCM_ARR_SPL_VAL](@p_operation_id	, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_line_id			= [dbo].[SCM_ARR_SPL_VAL](@p_line_id		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_electrode_type	= [dbo].[SCM_ARR_SPL_VAL](@p_electrode_type	, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_loss_code		= [dbo].[SCM_ARR_SPL_VAL](@p_loss_code		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_user_id_1		= [dbo].[SCM_ARR_SPL_VAL](@p_user_id_1		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_user_id_2		= [dbo].[SCM_ARR_SPL_VAL](@p_user_id_2		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_user_id_3		= [dbo].[SCM_ARR_SPL_VAL](@p_user_id_3		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_user_id_4		= [dbo].[SCM_ARR_SPL_VAL](@p_user_id_4		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_user_id_5		= [dbo].[SCM_ARR_SPL_VAL](@p_user_id_5		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_user_id_6		= [dbo].[SCM_ARR_SPL_VAL](@p_user_id_6		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_user_id_7		= [dbo].[SCM_ARR_SPL_VAL](@p_user_id_7		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_user_id_8		= [dbo].[SCM_ARR_SPL_VAL](@p_user_id_8		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_user_id_9		= [dbo].[SCM_ARR_SPL_VAL](@p_user_id_9		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_user_id_10		= [dbo].[SCM_ARR_SPL_VAL](@p_user_id_10		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_update_id		= [dbo].[SCM_ARR_SPL_VAL](@p_update_id		, @v_delimiter , @mst_loop_cnt) ;
+			END
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0
+			BEGIN
+				MERGE INTO SCM_MASTER_MANAGER_M_SN M
+				USING (
+						SELECT
+							  @v_company_id		AS COMPANY_ID
+							, @v_division_id	AS DIVISION_ID
+							, @v_site_id		AS SITE_ID
+							, @v_plant_id		AS PLANT_ID
+							, @v_factory_id		AS FACTORY_ID
+							, @v_operation_id	AS OPERATION_ID
+							, @v_line_id		AS LINE_ID
+							, @v_electrode_type	AS ELECTRODE_TYPE
+							, @v_loss_code		AS LOSS_CODE
+						) B
+						 ON M.COMPANY_ID		= B.COMPANY_ID
+						AND M.DIVISION_ID		= B.DIVISION_ID
+						AND M.SITE_ID			= B.SITE_ID
+						AND M.PLANT_ID			= B.PLANT_ID
+						AND M.FACTORY_ID		= B.FACTORY_ID
+						AND M.OPERATION_ID		= B.OPERATION_ID
+						AND M.LINE_ID			= B.LINE_ID
+						AND M.ELECTRODE_TYPE	= B.ELECTRODE_TYPE
+						AND M.LOSS_CODE			= B.LOSS_CODE
+					
+
+				WHEN MATCHED THEN
+					UPDATE SET
+						  USER_ID_1		= @v_user_id_1
+						, USER_ID_2		= @v_user_id_2
+						, USER_ID_3		= @v_user_id_3
+						, USER_ID_4		= @v_user_id_4
+						, USER_ID_5		= @v_user_id_5
+						, USER_ID_6		= @v_user_id_6
+						, USER_ID_7		= @v_user_id_7
+						, USER_ID_8		= @v_user_id_8
+						, USER_ID_9		= @v_user_id_9
+						, USER_ID_10	= @v_user_id_10
+						, UPDATE_ID		= @v_update_id
+						, UPDATE_TIME	= sysdatetime()
+
+				WHEN NOT MATCHED THEN
+					INSERT	(		
+								  COMPANY_ID
+								, DIVISION_ID
+								, SITE_ID
+								, PLANT_ID
+								, FACTORY_ID
+								, OPERATION_ID
+								, LINE_ID
+								, ELECTRODE_TYPE
+								, LOSS_CODE
+								, USER_ID_1
+								, USER_ID_2
+								, USER_ID_3
+								, USER_ID_4
+								, USER_ID_5
+								, USER_ID_6
+								, USER_ID_7
+								, USER_ID_8
+								, USER_ID_9
+								, USER_ID_10
+								, INSERT_ID
+								, INSERT_TIME
+								, UPDATE_ID
+								, UPDATE_TIME
+							)
+					VALUES  (
+					 			  @v_company_id
+								, @v_division_id
+								, @v_site_id
+								, @v_plant_id
+								, @v_factory_id
+								, @v_operation_id
+								, @v_line_id
+								, @v_electrode_type
+								, @v_loss_code
+								, @v_user_id_1
+								, @v_user_id_2
+								, @v_user_id_3
+								, @v_user_id_4
+								, @v_user_id_5
+								, @v_user_id_6
+								, @v_user_id_7
+								, @v_user_id_8
+								, @v_user_id_9
+								, @v_user_id_10
+								, @v_update_id
+								, SYSDATETIME()
+			"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0050_SAVE_CAPA_PIC","810538021","3","					, @v_update_id
+								, SYSDATETIME()
+							);
+
+							END  -- END OF STMT. IF( @mst_loop_cnt > 0 )
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		
+			
+		COMMIT TRAN;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+
+		  if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+	END
+
+"

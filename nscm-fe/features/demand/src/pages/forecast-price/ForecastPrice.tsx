@@ -6,30 +6,26 @@ import {
   MeasureSelectModal,
   ProjectByDivisionModal,
 } from 'features/master/src/components';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import { IcExchangeRate, IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
 import type { PageProps } from '@foundation/models';
 import { queryClient } from '@foundation/query-client';
-import type { EditTracker } from '@foundation/utils';
+import { getInsertAnchor, GridAction, type EditTracker } from '@foundation/utils';
 // ⭐ [2026-08-20 정본 단일화] Grid Column Setting 모달 = @shared/components 표준 정본 직행
 //   (packages/shared/.../templates/modals/column-layout-modal — hook #132 §Column 모달 정본)
 import { ColumnLayoutModal, MainTitle, SubTitle, toColumnLayoutSettings } from '@shared/components';
 import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
 import { ProgressIndicator } from '@shared/lges';
 import { FileExceldownloadIcon } from '@shared/lges-icons';
-import { useDirtyReset, useMessageStore, useSessionStore } from '@shared/stores';
+import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { FcstUploadModal } from '../../components';
 
 import { ForecastPriceForm } from './components/ForecastPriceForm';
 import { ForecastPriceGrid } from './components/ForecastPriceGrid';
-import {
-  findGroupTopIndex,
-  groupKeyBindings,
-  type GroupKeyColumn,
-} from './components/ForecastPriceGridUtils';
+import { compareForecastRows, groupKeyBindings, type GroupKeyColumn } from './components/ForecastPriceGridUtils';
 import {
   ExchangeRateModal,
   ForecastTemplateModal,
@@ -45,6 +41,7 @@ import {
   UPLOAD_SHEET,
 } from './forecast-price.constants';
 import type {
+  ButtonAuthRow,
   CalendarRow,
   ForecastPriceRow,
   MeasureAuthRow,
@@ -58,17 +55,6 @@ import { editableDayColumnsOf } from './utils/forecast-price.editLock';
 import { buildSavePayload, buildSaveRows } from './utils/forecast-price.save';
 import { validateSaveRows } from './utils/forecast-price.validate';
 import { buildWsFcstTypeSet, parseWsPlannerYn } from './utils/forecast-price.wsAuth';
-
-/**
- * 저장 전 신규행 1건 — 그리드 표시 위치를 결정하는 앵커를 함께 보관한다.
- *   anchor = Insert 를 누른 시점의 선택 셀이 속한 **머지 블록의 첫 행** 객체 참조.
- *   null = 선택 없이 Insert (그리드 맨 위에 놓는다).
- * 배열 순서 = 누른 순서. 같은 앵커에 여러 건이 걸리면 누른 순서대로 위에서 아래로 쌓인다.
- */
-interface PendingInsert {
-  row: ForecastPriceRow;
-  anchor: ForecastPriceRow | null;
-}
 
 // ⭐ DMF0082 (Fcst&Price MGMT) — AS-IS DMF0082_FcstNPrice_Mgmt 1:1. 조회 = PKG_DMF0082.
 //   P_DMF0082_GET_MAIN_DATA(12 IN+6 cursor) / 저장 = DMF0082_SAVE_MAIN_DATA(17 IN '^' bulk).
@@ -86,12 +72,14 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const [savePriceModalOpen, setSavePriceModalOpen] = useState(false);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [templateModalOpen, setTemplateModalOpen] = useState(false);
-  const [insertedRows, setInsertedRows] = useState<PendingInsert[]>([]);
-  // Insert 직후 포커스를 옮길 신규행 — gridRows 재계산 후 effect 가 소비하고 비운다.
   // 저장 진행 오버레이 — '^' bulk 저장은 react-query 밖이라 전역 스피너가 뜨지 않는다
   //   (정본 SalesReports.tsx:133·493 동일 패턴). 화면 스피너로 진행 중임을 알린다.
   const [saving, setSaving] = useState(false);
-  const focusRowRef = useRef<ForecastPriceRow | null>(null);
+  // GridAction.addRowSet/removeRow 는 itemsSource 배열을 직접 splice/remove 하고 setState 를
+  //   호출하지 않는다 — React 리렌더가 안 일어나면 이 컴포넌트가 렌더에서 파생하는 값(SubTitle
+  //   의 dataCount 등)이 Insert/Delete 이후에도 그 이전 렌더 시점 값에 멈춰 있는다.
+  //   handleInsert/handleDelete 끝에서 이 카운터를 올려 강제로 한 번 리렌더시킨다.
+  const [, forceGridRerender] = useState(0);
 
   /**
    * 저장·업로드·설정변경 후 **자동 재조회** (사용자 요구 — "저장완료 메세지 후에는 자동재조회").
@@ -123,12 +111,15 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setOpenSearchArea = useForecastPriceStore(state => state.setOpenSearchArea);
   const fetchStaticColumns = useForecastPriceStore(state => state.fetchStaticColumns);
   const fetchStaticMeasures = useForecastPriceStore(state => state.fetchStaticMeasures);
+  const restoreSearchConditions = useForecastPriceStore(state => state.restoreSearchConditions);
   const setMeasureAuth = useForecastPriceStore(state => state.setMeasureAuth);
   const setCalendar = useForecastPriceStore(state => state.setCalendar);
   const setM3Cutoff = useForecastPriceStore(state => state.setM3Cutoff);
   // M+4 동결 경계월 — 저장(Insert/Delete 일자 산출)에서도 셀 편집과 같은 기준을 써야 한다.
   const m3CutoffYyyymm = useForecastPriceStore(state => state.m3CutoffYyyymm);
   const measureAuth = useForecastPriceStore(state => state.measureAuth);
+  const buttonAuth = useForecastPriceStore(state => state.buttonAuth);
+  const setButtonAuth = useForecastPriceStore(state => state.setButtonAuth);
   const staticColumns = useForecastPriceStore(state => state.staticColumns);
   const originalStaticColumns = useForecastPriceStore(state => state.originalStaticColumns);
   const staticMeasures = useForecastPriceStore(state => state.staticMeasures);
@@ -138,10 +129,12 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   const setAuthGroup = useForecastPriceStore(state => state.setAuthGroup);
   const setWsPlannerYn = useForecastPriceStore(state => state.setWsPlannerYn);
 
-  // 이탈 가드(조회·탭 닫기·팝업 닫기) 확인 시 화면이 들고 있는 신규행 state 도 함께 버린다.
-  //   그리드 되돌리기는 DataGrid 가 자동 등록하지만, 그것은 itemsSource 배열에서 'I' 행을 지울 뿐이라
-  //   insertedRows 가 살아 있으면 다음 렌더의 gridRows useMemo 가 버린 행을 그대로 되살린다.
-  useDirtyReset(() => setInsertedRows([]));
+  // 마운트 1회 — F6 로 저장한 조회조건 복원. 복원이 divisionId 를 바꾸면 아래 division-키 effect 가
+  //   컬럼/메저를 복원된 division 기준으로 다시 받는다(별도 순서 await 불필요).
+  useEffect(() => {
+    void restoreSearchConditions();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabId]);
 
   // division-linked 메타(SHEET_COLUMNS/SHEET_MEASURE) — 81 전환 시 재fetch (fetch 는 호출 시점 divisionId 를 body 로 전송)
   useEffect(() => {
@@ -162,7 +155,6 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   useEffect(() => {
     if (prevDivisionRef.current === searchParams.divisionId) return;
     prevDivisionRef.current = searchParams.divisionId;
-    setInsertedRows([]); // 신규(CRUD_TYPE='I') 행 reset
     editTrackerRef.current?.clearChanges(); // 미저장 편집 추적 reset
     clearFilters(); // filters/titleFilters 무효화 → useTabProcQuery enabled=false → rows/동적컬럼 비움
   }, [searchParams.divisionId, clearFilters]);
@@ -247,13 +239,44 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     setWsPlannerYn(parseWsPlannerYn(wsPlannerCombo as ReadonlyArray<{ CODE?: unknown }>));
   }, [wsPlannerCombo, setWsPlannerYn]);
 
+  // 버튼 활성화 권한 — 조회(Search)와 분리해 화면 오픈·Division 변경 시 받는다.
+  //   PKG_DMF0082.P_DMF0082_GET_BUTTON_AUTH 가 GET_MAIN_DATA 의 메저 편집권한 산출 블록을 그대로 돌려
+  //   Insert/Delete/Save/Price Batch/Excel 버튼 Y/N 1행(buttonAuth)과 메저별 권한(measureAuth)을 준다.
+  //   userGroup 은 setFilters 와 같은 규칙(authGroup, 미확정 시 userId) — authGroup 도착 시 filters
+  //   참조가 바뀌어 자동 재조회된다. Division 이 비어 있으면 SP 가 전 버튼 'N' 을 주므로 호출하지 않는다.
+  const sesUserId = useSessionStore(state => state.session?.userId ?? '');
+  const buttonAuthFilters = useMemo<ProcRequest<MENU_ID, SHEETS.BUTTON_AUTH>>(
+    () => ({
+      divisionId: searchParams.divisionId,
+      sesUserId,
+      userGroup: authGroup || sesUserId,
+    }),
+    [searchParams.divisionId, sesUserId, authGroup]
+  );
+  const { data: buttonAuthData } = useTabProcQuery<MENU_ID, SHEETS.BUTTON_AUTH>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.BUTTON_AUTH,
+    tabId,
+    filters: buttonAuthFilters,
+    enabled: searchParams.divisionId.trim() !== '',
+  });
+  useEffect(() => {
+    if (!buttonAuthData) return;
+    const d = buttonAuthData as unknown as Record<string, unknown[]>;
+    setButtonAuth((d.buttonAuth ?? [])[0] as ButtonAuthRow | undefined);
+    // 메저 편집권한도 함께 갱신 — 조회 전에도 셀 편집/Insert 기본 MEASURE 판정이 가능해진다.
+    //   (조회 응답 drop3 와 같은 산출이라 Search 후 덮어써도 값이 같다.)
+    const rows = (d.measureAuth ?? []) as MeasureAuthRow[];
+    if (rows.length > 0) setMeasureAuth(rows);
+  }, [buttonAuthData, setButtonAuth, setMeasureAuth]);
+
   // AS FROM SITE 필수 검증(V0) 입력 2종 (현업 요청 2026-07-31 — mkt-fcst MktFcst.tsx L497~525 규칙).
   //   · FcstTypeWs   = W/S·A/S 4종(SALES_TYPE_CODE2) — 이 FcstType 일 때만 필수 대상.
   //   · AS_FROM_SITE = 비축(AS)향 사이트 목록(NAME=사이트) — 여기에 없는 사이트가 '고객향'.
   //   그리드도 같은 콤보를 쓰지만 useTabComboQueries 가 동일 키를 캐시 공유하므로 중복 호출이 아니다.
   const wsPlannerYn = useForecastPriceStore(state => state.wsPlannerYn);
   const [wsFcstTypeWsCombo, asFromSiteCombo] = useTabComboQueries({
-    filters: ['FcstTypeWs', { comboId: 'AS_FROM_SITE', param1: `'${searchParams.divisionId}'` }],
+    filters: ['FcstTypeWs', { comboId: 'AS_FROM_SITE', divisionId: q(searchParams.divisionId) }],
   });
   // 필수: 집합 생성은 wsAuth.buildWsFcstTypeSet 단일 출처 — 그리드(셀 개방)와 같은 집합이어야 한다.
   //   CODE 만 담았다가 "컬럼은 열리는데 MSG00476 은 안 뜨는" 사고를 냈다 (2026-08-06, 함수 주석 참조).
@@ -284,7 +307,6 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (authRows.length > 0) setMeasureAuth(authRows);
     setM3Cutoff((d.drop1 ?? []) as MonthInfoRow[]);
     setCalendar((d.drop4 ?? []) as CalendarRow[]);
-    setInsertedRows([]); // 재조회 = pending insert reset (hook #97)
     editTrackerRef.current?.clearChanges();
   }, [data, setMeasureAuth, setM3Cutoff, setCalendar]);
 
@@ -293,17 +315,35 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     [titleData]
   );
 
-  // 조회행 + 신규행 병합 — 신규행은 앵커(=선택 셀이 속한 머지 블록의 첫 행) **바로 위**에 놓는다.
-  //   앵커가 사라진 경우(재조회로 객체 참조 교체 등)는 맨 위로 폴백 — 행이 증발하지 않게 한다.
-  const gridRows = useMemo(() => {
-    const baseRows = data?.fcstNPrice ?? [];
-    // [ENDCUSTDISP] 표시/키 분리 — 행 객체 **제자리** 변환(참조 유지 필수: editTracker·insert 앵커가
-    //   행 참조를 쥔다. 새 객체로 map 하면 앵커/변경추적이 전부 끊긴다). 멱등: END_CUSTOMER_KEY
-    //   보유 행은 재변환하지 않는다. 맵 미도착 시 원값 유지 — 도착하면 siteEcVersion 이 재실행시킨다.
+  // 신규행은 GridAction.addRowSet 이 spRows(=grid.collectionView.sourceCollection)에 직접
+  //   splice 하므로 별도 병합이 필요 없다 — rows 는 spRows 참조 그대로다(handleInsert 참고).
+  const spRows = useMemo<ForecastPriceRow[]>(() => data?.fcstNPrice ?? [], [data]);
+  const gridRows: ForecastPriceRow[] = spRows;
+
+  // [ENDCUSTDISP] 표시값 매핑 + [E20260826-DISPSORT]/[DISPSORT-MEASURE] 표시 정렬 재적용.
+  //
+  //   이 화면은 나머지 6개 마이그레이션 화면과 달리, 관리자 설정(표시 컬럼 순서·Measure 개인화
+  //   순서)이 바뀔 때마다 **조회된(저장) 행 전체**를 표시값 기준으로 다시 정렬해야 한다 —
+  //   wijmo 헤더 클릭 정렬(sortDescriptions)과 무관한 별개 요구사항이다. GridAction.addRowSet 은
+  //   신규행을 배열에 물리적으로 고정 스플라이스해 두는 모델이라, 이 재정렬이 저장된 행과
+  //   신규행을 뒤섞어 버리면 신규행이 자기 앵커에서 떨어져 나간다.
+  //   ⇒ 저장된 행만 compareForecastRows 로 재정렬하고, 신규(미저장, CRUD_TYPE='I') 행은 정렬
+  //   대상에서 뺀 뒤 GridAction.getInsertAnchor 로 자기 앵커를 다시 찾아 그 바로 위에 끼워
+  //   넣는다 — addRowSet 이 Insert 시점에 pinInsertedRow 로 등록해 둔 바로 그 앵커다.
+  //   등록된 앵커는 항상 "진짜"(미저장이 아닌) 행이다 — resolveInsertAnchor 의 진입부 pin
+  //   체이스가 신규행 위에 또 Insert 하는 경우도 이미 진짜 앵커까지 타고 올라가 등록해 두기
+  //   때문에, 여기서 다시 체인을 재귀로 풀 필요가 없다(gridAction.ts resolveInsertAnchor 주석 참고).
+  //   앵커가 없거나(맨 위 삽입) 유실된 경우(재조회로 앵커 객체가 사라짐 등)는 맨 위로 폴백한다.
+  //
+  //   useLayoutEffect 로 페인트 전에 재정렬을 끝내 정렬 전 순서가 잠깐 보이는 것을 막는다.
+  //   spRows 배열 참조는 그대로 두고 내용(순서)만 바꾼다 — grid.itemsSource 가 이 배열 자체라
+  //   참조를 바꾸면 CollectionView 가 재생성된다.
+  useLayoutEffect(() => {
+    const g = gridRef.current;
+    // [ENDCUSTDISP] 행 객체 제자리 변환(참조 유지 필수: editTracker·insert 앵커가 행 참조를 쥔다).
+    //   멱등: END_CUSTOMER_KEY 보유 행은 재변환하지 않는다. 맵 미도착 시 원값 유지.
     if (siteEcMapRef.current.size > 0) {
-      // 값 타입은 WijmoRowItem(WijmoPrimitive) — Record<string, unknown> 로 두면 String(row.X)
-      //   가 no-base-to-string 에 걸린다.
-      for (const row of baseRows as unknown as WijmoRowItem[]) {
+      for (const row of spRows as unknown as WijmoRowItem[]) {
         if ('END_CUSTOMER_KEY' in row) continue;
         const disp = siteEcMapRef.current.get(String(row.SCM_SITE_ID ?? ''));
         if (disp === undefined) continue;
@@ -311,95 +351,54 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         row.END_CUSTOMER = disp;
       }
     }
-    // [E20260826-DISPSORT] 행 정렬 = **표시값** 기준 (사용자 신고 2026-08-26: Audi→VW 일부→BMW).
-    //   SP 정렬 키는 원장 END_CUSTOMER(비40=프로젝트 코드)인데 표시값은 위에서 사이트 파생 고객명으로
-    //   교체(ENDCUSTDISP)되므로 표시 기준으로 어긋나 보인다. 표시 컬럼(staticColumns 개인화 순서)
-    //   순으로 재정렬한다 — 얕은 복사 정렬(행 참조 보존: editTracker·insert 앵커 무손상), stable sort
-    //   라 동순위(같은 키의 메저 행들)는 SP 원 순서(메저 SORT) 그대로 유지된다. 40 도 표시값=원장값이라
-    //   비교 결과가 SP binary 정렬과 동일(UTF-16 코드단위 비교 — localeCompare 미사용 의도).
+
     const sortCols = staticColumns
       .filter(c => c.visible !== false && !!c.colNm && c.colNm !== 'NO')
       .map(c => c.colNm);
-    const displaySorted = ([...baseRows] as unknown as WijmoRowItem[]).sort((a, b) => {
-      for (const col of sortCols) {
-        const av = String(a[col] ?? '');
-        const bv = String(b[col] ?? '');
-        if (av < bv) return -1;
-        if (av > bv) return 1;
-      }
-      return 0;
-    }) as unknown as ForecastPriceRow[];
-    if (insertedRows.length === 0) return displaySorted;
+    const measureOrder = new Map<string, number>(staticMeasures.map((m, i) => [m.colNm, i]));
 
-    const knownRows = new Set<ForecastPriceRow>(baseRows);
-    insertedRows.forEach(pending => knownRows.add(pending.row));
-
-    // 앵커 → 그 위에 놓을 신규행 목록(누른 순서 유지). 앵커 없는/유실된 건은 orphanRows.
-    const rowsByAnchor = new Map<ForecastPriceRow, ForecastPriceRow[]>();
-    const orphanRows: ForecastPriceRow[] = [];
-    insertedRows.forEach(({ row, anchor }) => {
-      if (!anchor || !knownRows.has(anchor)) {
-        orphanRows.push(row);
-        return;
-      }
-      const bucket = rowsByAnchor.get(anchor);
-      if (bucket) bucket.push(row);
-      else rowsByAnchor.set(anchor, [row]);
-    });
-
-    // 앵커가 신규행인 경우(추가한 행을 다시 찍고 Insert)까지 재귀로 펼친다.
-    const merged: ForecastPriceRow[] = [];
-    const emit = (target: ForecastPriceRow) => {
-      rowsByAnchor.get(target)?.forEach(emit);
-      merged.push(target);
-    };
-    orphanRows.forEach(emit);
-    displaySorted.forEach(emit); // [E20260826-DISPSORT] 신규행 병합도 표시 정렬 순서 기준
-    return merged;
-    // siteEcVersion — [ENDCUSTDISP] 맵 도착 시 표시 변환 재실행 트리거 (맵 자체는 ref).
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [insertedRows, data, siteEcVersion, staticColumns]);
-
-  // Insert 직후 새 행으로 포커스·스크롤 이동.
-  //   필수: 실패 시 **다음 프레임에 한 번 더** 시도한다. itemsSource 가 바뀌면 wijmo 는 스크롤을
-  //   0 으로 되돌리는데, 이 시점에 grid.rows 가 아직 새 배열을 반영하지 않았으면 findIndex 가 -1 이라
-  //   그대로 빠져나가 화면이 맨 위에 머문다 — 사용자는 중간에 생긴 신규행을 찾아 스크롤하게 된다
-  //   (2026-08-17 리포트). 재시도 후에도 못 찾으면 조용히 포기(다음 Insert 에 영향 없음).
-  useEffect(() => {
-    const target = focusRowRef.current;
-    if (!target) return;
-    const grid = gridRef.current;
-    if (!grid) return;
-    const focusTarget = (): boolean => {
-      const rowIndex = grid.rows.findIndex(r => r.dataItem === target);
-      if (rowIndex < 0) return false;
-      grid.select(rowIndex, Math.max(0, grid.selection.col));
-      grid.scrollIntoView(rowIndex, -1);
-      return true;
-    };
-    if (focusTarget()) {
-      focusRowRef.current = null;
-      return;
+    const pending: ForecastPriceRow[] = [];
+    const real: ForecastPriceRow[] = [];
+    for (const row of spRows) {
+      if ((row as unknown as WijmoRowItem)['CRUD_TYPE'] === 'I') pending.push(row);
+      else real.push(row);
     }
-    // ⭐ [2026-08-22] 재시도를 **여러 프레임**으로 늘린다 (사용자 신고: "INSERT 한 ROW 로 FOCUS 가
-    //   이동하지 않아서 INSERT 된 ROW 을 찾아야 합니다").
-    //   필터가 걸린 상태의 Insert 는 신규행이 곧바로 `grid.rows` 에 나타나지 않는다 —
-    //   ①필터 복원(apply) → ②예외집합 등록(keepRowVisibleUnderFilter) → ③collectionView.refresh()
-    //   → ④wijmo 레이아웃 재계산 순서라, 1프레임 재시도로는 ③~④ 사이에서 놓칠 수 있다.
-    //   찾으면 즉시 중단하고, 못 찾으면 조용히 포기한다(다음 Insert 에 영향 없음).
-    let frame = 0;
-    let tries = 0;
-    const retry = () => {
-      if (focusTarget()) {
-        focusRowRef.current = null;
-        return;
-      }
-      if (++tries >= 10) return; // 약 10프레임(≈160ms) — 그 이상은 행이 없다고 본다
-      frame = requestAnimationFrame(retry);
-    };
-    frame = requestAnimationFrame(retry);
-    return () => cancelAnimationFrame(frame);
-  }, [gridRows]);
+    (real as unknown as WijmoRowItem[]).sort((a, b) =>
+      compareForecastRows(a, b, sortCols, measureOrder)
+    );
+
+    let merged: ForecastPriceRow[];
+    if (g && pending.length > 0) {
+      const realSet = new Set(real);
+      const byAnchor = new Map<ForecastPriceRow, ForecastPriceRow[]>();
+      const orphans: ForecastPriceRow[] = [];
+      pending.forEach(row => {
+        const anchor = getInsertAnchor(
+          g as unknown as TFlexGrid<WijmoRowItem>,
+          row as unknown as WijmoRowItem
+        ) as unknown as ForecastPriceRow | undefined;
+        if (!anchor || !realSet.has(anchor)) {
+          orphans.push(row);
+          return;
+        }
+        const bucket = byAnchor.get(anchor);
+        if (bucket) bucket.push(row);
+        else byAnchor.set(anchor, [row]);
+      });
+      merged = [...orphans];
+      real.forEach(row => {
+        const bucket = byAnchor.get(row);
+        if (bucket) merged.push(...bucket);
+        merged.push(row);
+      });
+    } else {
+      merged = real;
+    }
+
+    for (let i = 0; i < merged.length; i++) spRows[i] = merged[i];
+    g?.collectionView?.refresh();
+    // siteEcVersion — [ENDCUSTDISP] 맵 도착 시 표시 변환 재실행 트리거 (맵 자체는 ref).
+  }, [spRows, siteEcVersion, staticColumns, staticMeasures]);
 
   const editableDayColumns = useMemo(
     () =>
@@ -421,23 +420,18 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     isCurVersion ||
     ((data?.fcstNPrice ?? []) as WijmoRowItem[]).some(r => String(r.EDIT_FLAG ?? '') !== 'N');
 
-  // Excel Form / Excel Upload 버튼 노출 게이트 — ⭐ division 81 계열 전용 (2026-08-19 사용자 지시 — 구 40 전용 역전).
-  //   근거: PKG_DMF0082 [E20260819-XLS81LOC] — Upload 검증절 'Invalid Division(81 Only)' + Form 진입 가드(MSG01014) 실측.
-  //   대상 measure 도 LOC(Unit Price) 한정 — SP 가 템플릿 산출·업로드 검증에서 LOC 외 제외/오류 분류(서버 권위).
-  //   Sender Code disabled 관례(startsWith('81'))와 동일 판정식.
-  const isExcelDiv = searchParams.divisionId.startsWith('81');
-  // [UICATEGORY 2026-08-07] Division 82 = 조회 전용 (사용자 확정) — Insert/Delete/Save 버튼 차단.
-  //   서버 권위 = PKG EDIT_FLAG='N' 일괄 + SAVE V82-00 가드. FE 는 UX 게이트(진입점 원천 차단).
-  const isDiv82 = searchParams.divisionId === '82';
+  // 버튼 노출 게이트(division 82 조회 전용 / Excel 81 계열 전용 / 메저 편집권한 유무)는 FE 에서
+  //   division 문자열로 판정하지 않는다 — buttonAuth 시트(P_DMF0082_GET_BUTTON_AUTH)가 같은 규칙으로
+  //   Y/N 을 내려준다(store.buttonAuth). 서버 권위(EDIT_FLAG/SAVE V82-00/Upload 81 Only)는 그대로.
 
   // ── Search (AS-IS FindButton — V1~V4 검증 후 조회) ──
   //   [공통 C2 2026-08-14 정정] 수정 중 재조회 가드(MSG 확인 팝업)는 여기서 하지 않는다.
   //   조회 진입점 두 곳(SearchArea 조회 버튼 · SubTitle F5)이 이미 공통 가드
   //   confirmIfDirtyKey(..., 'search') 로 감싸 confirm + 편집분 되돌리기까지 수행한다.
   //   화면이 같은 검사를 한 번 더 하면 팝업이 2연속으로 뜬다 — 공통 가드가 확인 직후
-  //   discardDirtyKey 로 그리드만 되돌리고 화면 state(insertedRows)는 남기기 때문에
-  //   여기 검사가 다시 걸렸다(2번째 팝업은 MSG00703 = 닫기 문구라 "이 화면을 닫으시겠습니까?" 로 떴다).
-  //   화면 state 정리는 아래 useDirtyReset 등록이 담당한다.
+  //   뜬다(2번째 팝업은 MSG00703 = 닫기 문구라 "이 화면을 닫으시겠습니까?" 로 떴다). 신규행은
+  //   grid.collectionView.sourceCollection 에 직접 물려 있어 discardDirtyKey 의 그리드 되돌리기로
+  //   함께 사라지므로 화면이 별도로 정리할 state 가 없다.
   const handleSubmit = async () => {
     if (!searchParams.divisionId) {
       await setAlert({ type: 'alert', content: t(MSG.DIVISION_NO_AUTH, '_Select Division.') });
@@ -465,50 +459,37 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   };
 
   /**
-   * 선택한 셀이 속한 머지 블록의 첫 행 — Insert 앵커.
-   *
-   * 판정 입력은 **그리드가 실제로 그리고 있는 것**에서 뽑는다: 표시 순서(개인화로 바뀐다) ·
-   * 표시 여부 · 필터/정렬이 반영된 행 순서(`g.rows`). 조회 응답 배열(gridRows)이 아니다 —
-   * 사용자가 본 화면상의 블록과 어긋나면 안 된다.
-   *
-   * 범위 축 = **선택한 컬럼(`g.selection.col`)** — 사용자 요구 "선택한 값의 병합한 데이터 위로"
-   *   (2026-08-17). Sales Site 셀은 그 안의 여러 Model 블록을, Model 셀은 그 안의 Incoterms 블록을,
-   *   Incoterms 셀은 measure 블록만 덮는다. 축은 `groupKeyBindings` 에 **인덱스 그대로** 넘긴다
-   *   (binding 이름 역탐색 금지 — 그 방식이 2026-08-17 Sales Site 미동작의 원인이었다).
-   *
-   * 값이 빈 셀은 wijmo 가 아예 병합하지 않으므로(mergeManager `isEmptyCellValue`) 축에서 빼고
-   *   data Group(measure 블록) 기준으로 떨어뜨린다.
-   *
-   * 금지: wijmo 컬렉션(`g.columns`/`g.rows`)에 `.map`/`.filter` 를 쓰지 말 것 — Array 상속이라
-   *   species 규약(`new ObservableArray(length)`)으로 새 ObservableArray 를 만들며 결과가 깨진다.
-   *   실제로 이 때문에 앵커 계산이 통째로 무력화돼 "포커스 행 바로 위"로 떨어졌다(2026-08-17).
-   *   인덱스 루프로 순수 배열에 복사한 뒤 다룬다.
+   * 클릭한 셀 기준 병합 축 컬럼(keyBindings)으로 groupKey 함수를 만든다 — GridAction.addRowSet
+   * 의 groupKey 옵션에 그대로 넘긴다. 판정 축은 옛 groupTopRowOf 와 동일 규칙 — Sales Site 셀은
+   * 그 안의 여러 Model 블록을, Model 셀은 그 안의 Incoterms 블록을, Incoterms 셀은 measure
+   * 블록만 덮는다(사용자 요구 2026-08-17 "선택한 값의 병합한 데이터 위로"). 값이 빈 셀은 wijmo
+   * 가 아예 병합하지 않으므로(mergeManager `isEmptyCellValue`) 축에서 빼고 data Group(measure
+   * 블록) 기준으로 떨어뜨린다.
    */
-  const groupTopRowOf = (index: number): ForecastPriceRow | undefined => {
-    const g = gridRef.current;
-    if (!g || index < 0) return undefined;
-
+  const buildGroupKeyOf = (g: TFlexGrid<ForecastPriceRow>): ((row: ForecastPriceRow) => string) => {
     const columns: GroupKeyColumn[] = [];
     for (let i = 0; i < g.columns.length; i++) {
       const column = g.columns[i];
       // visible 미지정(undefined)은 표시로 본다 — 잘못 빼면 축이 통째로 폴백된다.
       columns.push({ binding: column?.binding ?? '', visible: column?.visible !== false });
     }
-    const rows: (WijmoRowItem | undefined)[] = [];
-    for (let i = 0; i < g.rows.length; i++) {
-      rows.push(g.rows[i]?.dataItem as WijmoRowItem | undefined);
-    }
-
+    const selectedIndex = g.selection.row;
     const clickedIndex = g.selection.col;
     const clickedBinding = columns[clickedIndex]?.binding ?? '';
-    const clickedValue = clickedBinding ? rows[index]?.[clickedBinding] : undefined;
+    const clickedValue = clickedBinding
+      ? (g.rows[selectedIndex]?.dataItem as WijmoRowItem | undefined)?.[clickedBinding]
+      : undefined;
     const isEmptyCell =
       clickedValue === null || clickedValue === undefined || String(clickedValue).trim() === '';
 
     const keyBindings = groupKeyBindings(columns, isEmptyCell ? -1 : clickedIndex);
-    return g.rows[findGroupTopIndex(rows, index, keyBindings)]?.dataItem as
-      | ForecastPriceRow
-      | undefined;
+    return (row: ForecastPriceRow) => {
+      if (keyBindings.length === 0) return '';
+      const rec = row as unknown as WijmoRowItem;
+      // 값이 전부 빈 문자열이어도 key 가 falsy 로 접히지 않도록 접두사를 붙인다 —
+      //   resolveInsertAnchor 는 groupKey 가 falsy 면 walk 자체를 건너뛴다.
+      return `K:${keyBindings.map(binding => String(rec[binding] ?? '')).join('')}`;
+    };
   };
 
   // ── Insert (AS-IS InsertButton — Current 버전 조회 시에만) ──
@@ -516,6 +497,9 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   단 MEASURE 는 복사 대상에서 제외 — 통합테스트 35번 요구 (아래 MEASURE 주석 참조).
   const handleInsert = () => {
     if (!isEditableVersion) return;
+    // 신규행 생성 자격 없는 역할(SCP Planner 등)은 진입 차단 — 버튼 은닉과 같은 기준(buttonAuth.insert).
+    //   판정은 SP(P_DMF0082_GET_BUTTON_AUTH INSERT_YN)가 한다: MKT_FCST/LOC/VMI_In_Req 중 하나라도 'Y'.
+    if (!buttonAuth.insert) return;
     const g = gridRef.current;
     const selectedIndex = g?.selection.row ?? -1;
     const seedRow = g?.rows[selectedIndex]?.dataItem as ForecastPriceRow | undefined;
@@ -575,16 +559,34 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       BUCKET: str(seed?.['BUCKET']),
       EDIT_FLAG: 'Y',
     } as unknown as ForecastPriceRow;
-    // 앵커 = 선택한 셀이 속한 **머지 블록의 첫 행** — 그 바로 위에 놓는다 (앵커 null = 맨 위).
-    //   [통합테스트 35번] 앵커가 포커스 행 자체면 그룹 중간(measure 2~3번째)을 찍었을 때 신규행이
-    //   measure 사이에 낀다. 요구는 "data Group 제일 위로 / 선택한 값의 병합한 데이터 위로".
-    //   시드 값은 그대로 **선택한 행**에서 복사한다 — 위치만 블록 맨 위로 올린다.
-    //   배열 끝에 붙여 누른 순서를 유지한다 — 같은 앵커에 연속 Insert 시 누른 순서대로 쌓인다.
-    const anchorRow = groupTopRowOf(selectedIndex) ?? null;
-    setInsertedRows(prev => [...prev, { row: newRow, anchor: anchorRow }]);
-    focusRowRef.current = newRow;
+    if (!g) return;
+    // 앵커·정렬 고정·필터 예외 등록은 GridAction.addRowSet(groupKey=buildGroupKeyOf) 이 전부
+    //   처리한다 — [통합테스트 35번] 앵커가 포커스 행 자체면 그룹 중간(measure 2~3번째)을 찍었을
+    //   때 신규행이 measure 사이에 끼는 문제를, 클릭 컬럼 기준 병합 축(groupKeyBindings)으로
+    //   그룹 최상단까지 밀어 올려 해결한다. 배열 끝에 붙여 누른 순서를 유지한다 — 같은 앵커에
+    //   연속 Insert 시 누른 순서대로 쌓인다(resolveInsertAnchor 의 pin 체이스).
+    const added = GridAction.addRowSet(
+      g as unknown as TFlexGrid<WijmoRowItem>,
+      [newRow] as unknown as Partial<WijmoRowItem>[],
+      'above',
+      {
+        groupKey: buildGroupKeyOf(g) as unknown as (row: WijmoRowItem) => string,
+        preserveMergeManager: true,
+      }
+    ) as unknown as ForecastPriceRow[] | undefined;
+    const target = added?.[0];
+    if (!target) return;
+    for (let i = 0; i < g.rows.length; i++) {
+      if (g.rows[i]?.dataItem !== target) continue;
+      g.select(i, Math.max(0, g.selection.col));
+      g.scrollIntoView(i, -1);
+      break;
+    }
+    // addRowSet 이 setState 를 호출하지 않으므로 강제 리렌더 — SubTitle dataCount 등을 최신
+    //   rows 로 다시 계산시킨다.
+    forceGridRerender(v => v + 1);
     // [공통 C1 2026-08-11 → 2026-08-12 정정] 필터링 상태 Insert 시 신규행이 안 보이던 문제는
-    //   ForecastPriceGrid 가 신규(CRUD_TYPE='I') 행을 필터에서 제외해 해결한다.
+    //   addRowSet 이 신규(CRUD_TYPE='I') 행을 필터 예외로 등록해 해결한다.
     //   구 구현의 `gridFilterRef.current?.clear()` 는 사용자가 걸어둔 필터까지 날려서 제거했다.
   };
 
@@ -618,7 +620,10 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // ── Bucket 전환 가드 (AS-IS cboBucketType_Click :3361 — Insert 행 존재 시 MSG00227 차단) ── #13
   const handleBucketChange = (bucket: string) => {
-    if (insertedRows.length > 0) {
+    // 매 호출 시 gridRows(=spRows, 살아있는 grid.collectionView.sourceCollection)를 직접
+    //   걸러 판정한다 — outer scope 에 캐시해 두면 addRowSet/removeRow 가 setState 를 안 불러
+    //   이 핸들러의 클로저가 재정의(리렌더)되지 않는 한 값이 갱신되지 않는다(2026-09-17 리뷰 발견).
+    if (gridRows.some(r => (r as unknown as WijmoRowItem)['CRUD_TYPE'] === 'I')) {
       void setAlert({
         type: 'alert',
         content: t(MSG.BUCKET_CHANGE_BLOCK, '_Cannot change bucket while rows are inserted.'),
@@ -636,15 +641,15 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!item) return;
     const crud = item['CRUD_TYPE'];
     if (crud === 'I') {
-      // 삭제 대상이 다른 신규행의 앵커였다면 그 앵커를 삭제 행의 앵커로 승계시킨다.
-      //   (승계하지 않으면 앵커 유실로 딸린 행들이 그리드 맨 위로 튄다.)
-      setInsertedRows(prev => {
-        const removed = prev.find(p => (p.row as unknown as WijmoRowItem) === item);
-        if (!removed) return prev;
-        return prev
-          .filter(p => p !== removed)
-          .map(p => (p.anchor === removed.row ? { ...p, anchor: removed.anchor } : p));
-      });
+      // 행 객체 자체를 grid.collectionView 에서 없앤다(GridAction.removeRow 와 동일 방식).
+      //   앵커 승계는 별도로 필요 없다 — pin 이 grid 인스턴스의 WeakMap 에 걸려 있어(React
+      //   state 가 아니다) 삭제된 행 객체가 참조로 남아 있는 한, 그 행을 앵커로 삼았던 다른
+      //   신규행의 pin.anchor 도 그대로 살아 있고, 다음 Insert/표시-정렬 재적용 때
+      //   resolveInsertAnchor/getInsertAnchor 가 그 pin 을 타고 올라가 실제 앵커까지 자동으로
+      //   재해석한다.
+      g.editableCollectionView.remove(item as unknown as ForecastPriceRow);
+      g.editableCollectionView.commitEdit();
+      forceGridRerender(v => v + 1);
       return;
     }
     if (crud === 'D') {
@@ -764,33 +769,29 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       // [공통 C4 2026-08-11] 저장 완료 = 팝업 아닌 **토스트**(하단 중앙, 자동 소멸) — 통합테스트 1st
       //   Common "별도 팝업으로 Alert 하지 않고 하단 중앙 메시지 표기 후 사라지도록"(LGES WDG 표준).
       //   실패·검증 메시지는 종전대로 팝업 유지(사용자 확인 필요) — 완료 계열만 토스트.
-      setToast({ message: t(MSG.SAVED, '_Saved.') });
+      setToast({ type: 'success', message: t(MSG.SAVED, '_Saved.') });
       tracker.clearChanges();
-      setInsertedRows([]);
       invalidateAfterSave();
     } finally {
       setSaving(false);
     }
   };
 
-  // [E20260826-AUTHVIEW] 편집 가능 메저 존재 여부 — drop3(measureAuth) 에 'Y' 가 하나라도 있는가.
-  //   DM Viewer(전 메저 N)·시간창 밖 SCP Planner(전 메저 N/T) 는 false → 편집 진입 버튼 숨김.
-  const hasEditAuth = Object.values(measureAuth).some(Boolean);
-
   const hotkeyConfig = {
     search: () => void handleSubmit(),
     manual: false as const, // Manual(F1) 버튼 미표시 (전체 삭제 방침 — 강민재)
-    // 추가/삭제/저장 = 저장권한(hasButton) AND **편집 가능 버전일 때만** 노출.
+    // 추가/삭제/저장 = 메뉴 버튼권한(hasButton SAVE — admin 에서 끄면 숨김) AND buttonAuth 시트 Y/N
+    //   AND 편집 가능 버전. buttonAuth 는 화면 오픈·Division 변경 시 SP 가 내려주므로 조회 전에도 정해진다.
+    //   SP 판정(P_DMF0082_GET_BUTTON_AUTH): SAVE/DELETE = 편집 가능 메저 존재 AND division<>82
+    //   (DM Viewer 전 메저 N → 숨김, 82 조회 전용) / INSERT = SAVE AND MKT_FCST·LOC·VMI_In_Req 중 'Y'
+    //   (SCP Planner 단독 = SCM_FCST 수정만 가능, 신규행 불가 — [E20260917-INSERTGATE] 규칙 그대로).
     //   과거(조회 전용) 버전은 전 행 EDIT_FLAG='N' → isEditableVersion=false → 세 버튼 숨김(미렌더).
-    //   Insert 는 handleInsert 내부에도 동일 가드가 있으나, 버튼 자체를 숨겨 진입점을 원천 차단한다.
-    //   [UICATEGORY 2026-08-07] div 82 = 조회 전용 — isCurVersion 이 true 여도 세 버튼 차단(!isDiv82).
-    //   [E20260826-AUTHVIEW] + 편집 가능 메저 존재(hasEditAuth) — hasButton('SAVE') 는 메뉴 단위
-    //     합집합이라 DM Viewer 의 titleSet:SAVE 가 MAIN 편집 버튼까지 열었다(사용자 지시 2026-08-26:
-    //     DM Viewer = INSERT/DELETE/수정 전면 불가). drop3 전 메저 'N'(Viewer·시간창 밖 SCP)이면 숨김.
-    ...(hasButton('SAVE') && isEditableVersion && !isDiv82 && hasEditAuth
+    //   형제 화면처럼 hasButton('INSERT'/'DELETE') 로 가르지 않는 이유: 메인 시트에 그 버튼이 미등록이고
+    //   버튼권한 API 가 서브시트(Price Batch 팝업 INSERT)를 합쳐 내려줘 항상 true 다(실측 2026-09-04).
+    ...(hasButton('SAVE') && isEditableVersion && buttonAuth.save
       ? {
-          insert: handleInsert,
-          delete: () => void handleDelete(),
+          insert: buttonAuth.insert ? handleInsert : (false as const),
+          delete: buttonAuth.delete ? () => void handleDelete() : (false as const),
           save: () => void handleSave(),
         }
       : { insert: false as const, delete: false as const, save: false as const }),
@@ -805,7 +806,8 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
   //   View PR/MKT FCST 미등록 제외/Include Internal Txn 오매핑 사고 → 교정 2026-07-12).
   const customButtons = [
     // ⭐ Excel Form(템플릿 다운로드 모달) — division 81 계열 전용 노출 [E20260819-XLS81LOC] (metal-link 'Excel Form' 이식).
-    ...(isExcelDiv && hasButton('FORM_DATA')
+    //   81 계열 판정은 buttonAuth 시트 EXCEL_FORM_YN (SP 가 division LIKE '81%' 로 산출).
+    ...(buttonAuth.excelForm && hasButton('FORM_DATA')
       ? [
           {
             // SubTitle 이 buttonLabel={label} 기본 적용 → 아이콘 + 'Excel Form' 텍스트 (metal-link 동일 shape)
@@ -817,7 +819,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         ]
       : []),
     // ⭐ Excel Upload — [2026-08-12 사용자 지시] Excel Form 다음(2번째). division 81 계열 전용 [E20260819-XLS81LOC].
-    ...(isExcelDiv && hasButton('UPLOAD')
+    ...(buttonAuth.excelUpload && hasButton('UPLOAD')
       ? [
           {
             label: t('LBL00346', 'Excel Upload'),
@@ -829,20 +831,23 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       : []),
     // [UICATEGORY 2026-08-07] div 82 = 조회 전용 — Price Batch Input(기간 일괄 저장 진입점)도 숨김 (사용자 지정)
     // [E20260826-AUTHVIEW] + 판가 편집권한(LOC='Y') 보유 시에만 — SCP Planner(판가 불가)·DM Viewer(전면 불가)
-    //   숨김 (사용자 지시 2026-08-26). 판가 일괄 입력의 권한 축 = drop3 LOC (AS-IS bEDIT_AUTH_LOC 계보).
-    ...(!isDiv82 && measureAuth['LOC'] === true
+    //   숨김 (사용자 지시 2026-08-26). 두 조건 모두 buttonAuth 시트 PRICE_BATCH_YN (= LOC 'Y' AND division<>82).
+    ...(buttonAuth.priceBatch
       ? [
           {
             // 명칭 = DMF0020 과 동일 'Price Batch Input' (LBL00662, 2026-07-12 요청)
             label: t('LBL00662', 'Price Batch Input'),
             title: t('LBL00662', 'Price Batch Input'),
             action: () => {
-              // AS-IS V15: 수정모드(변경 존재) 시 차단 (MSG00669) 후 SavePricePeriodModal open
+              // AS-IS V15: 수정모드(변경 존재) 시 차단 (MSG00680 pending 차단) 후 SavePricePeriodModal open
               const changed = editTrackerRef.current?.getOriginalValues();
               if (changed && changed.size > 0) {
                 void setAlert({
                   type: 'alert',
-                  content: t(MSG.EDIT_MODE_NO_INPUT, '_Not in edit mode.'),
+                  content: t(
+                    MSG.EDIT_MODE_NO_INPUT,
+                    '_변경 중인 데이터가 있어 수행할 수 없습니다. 저장 또는 취소 후 다시 시도해 주세요.'
+                  ),
                 });
                 return;
               }
@@ -864,7 +869,10 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         if (changed && changed.size > 0) {
           void setAlert({
             type: 'alert',
-            content: t(MSG.EDIT_MODE_NO_ACTION, '_Edit Mode 에서는 수행할 수 없습니다.'),
+            content: t(
+              MSG.EDIT_MODE_NO_ACTION,
+              '_변경 중인 데이터가 있어 수행할 수 없습니다. 저장 또는 취소 후 다시 시도해 주세요.'
+            ),
           });
           return;
         }
@@ -881,8 +889,8 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
       buttonLabel: '',
     },
     {
-      label: t('LBL00712', '_Measure'),
-      title: t('LBL00712', '_Measure'),
+      label: t('LBL00310', '_Measure'),
+      title: t('LBL00310', '_Measure'),
       action: () => setMeasureModalOpen(true),
       iconComponent: <IcMeasureSelect />,
       buttonLabel: '',
@@ -911,6 +919,7 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
         dataCount={gridRows.length}
         excelFileName='FcstPrice'
         hotkeyConfig={hotkeyConfig}
+        searchParam={searchParams}
         customButtons={customButtons}
       />
       <ForecastPriceGrid
@@ -1111,7 +1120,6 @@ export const ForecastPrice = ({ tabId, title }: PageProps<MENU_ID>) => {
           //   1st Common "기존에 조회된 데이터가 있을 경우 Reset 후 재조회 할 수 있도록 수정".
           //   Division 변경 가드와 동일 3종 reset — 그리드 공백 후 Search 로 재조회.
           if (filters !== undefined) {
-            setInsertedRows([]);
             editTrackerRef.current?.clearChanges();
             clearFilters();
           }

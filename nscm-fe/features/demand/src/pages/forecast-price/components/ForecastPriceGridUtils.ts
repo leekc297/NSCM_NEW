@@ -9,12 +9,20 @@ import { isPastPeriodLocked } from '../utils/forecast-price.editLock';
 dayjs.extend(isoWeek);
 
 // AS-IS 권한 4분기 대상 measure (bEDIT_AUTH_SCM_FCST/MKT_FCST/LOC/VMI_IN_REQ — .cs L119~122).
-//   배분(divideBy*)은 MKT_FCST/SCM_FCST 만, LOC=allocate, VMI_In_Req=배분 없이 단일 셀 편집.
+//   배분(divideBy*)은 LOC 를 뺀 수량 메저 전부(isDistributedMeasure), LOC=allocate.
 // 시간축 잠금 판정(isNonEditableCell)이 다루는 measure 화이트리스트.
 //   AS_In_Req 는 2026-08-12 추가 — 현업 검수 41번(81 계열·82 + DM Planner(W/S) 입력 가능).
-//   ⚠️ 실제 권한 판정은 `forecast-price.wsAuth.isMeasureEditableByAuth` 가 단독으로 한다.
+//   주의: 실제 권한 판정은 `forecast-price.wsAuth.isMeasureEditableByAuth` 가 단독으로 한다.
 //     이 집합은 "시간축 규칙을 적용할 대상인가"만 가른다.
 export const editableMeasures = new Set(['MKT_FCST', 'SCM_FCST', 'LOC', 'VMI_In_Req', 'AS_In_Req']);
+
+// 주·월 입력을 일자(D_)로 배분하는 수량 메저 — LOC(단가)만 제외하고 편집 가능 메저 전부.
+//   AS-IS spdMain_Changed 의 주 버킷·월 버킷 분기가 모두 `sMeasure != "LOC"` 로 배분 대상을 고른다
+//   (UI분석서 v2.3 R27: Weekly L6555~6634 / Monthly L7205~7368). 저장·검증은 D_ 만 보므로
+//   여기서 빠진 메저는 W_/M_ 에 넣어도 "입력 없음"(MSG00670)으로 막힌다 (2026-10-13 보완 요청 —
+//   종전에는 MKT_FCST/SCM_FCST 두 개만 배분해 VMI_In_Req·AS_In_Req 입력이 사라졌다).
+export const isDistributedMeasure = (measure: WijmoPrimitive | undefined): boolean =>
+  typeof measure === 'string' && measure !== 'LOC' && editableMeasures.has(measure);
 
 // ⭐ 요일비트 정합 (SUN-first) — AS-IS BUCKET 및 PKG_DMF0082 GET_MAIN_DATA(BUCKET=SUN||MON||…||SAT, L3483)
 //   는 일~토(index 0=SUN … 6=SAT) 규약. dayjs().day() (0=SUN..6=SAT) 로 조회해야 정합.
@@ -322,9 +330,19 @@ export const divideByDate = (
   dataItem[monthColumn] = newMonthValue;
 };
 
+// LOC 대표일(anchor) = (부분)주차의 월요일, 없으면 그 부분주의 첫 일자.
+//   weekMap 은 월경계로 쪼갠 부분주(W40A/W40B) 단위라 월요일이 없는 뒷쪽 부분주가 존재한다.
+//   월요일 고정 조건만 쓰면 그런 부분주는 전 일자가 0 이 되어 SP 가 삭제로 전도된다.
+const locWeekAnchor = (dayColumns: string[]): string | undefined => {
+  if (dayColumns.length === 0) return undefined;
+  const monday = dayColumns.find(c => dowSunFirst(c.split('_')[1]) === MON_IDX);
+  // D_YYYYMMDD 는 사전순 = 날짜순 → 월요일이 없으면 그 부분주의 첫 일자.
+  return monday ?? [...dayColumns].sort()[0];
+};
+
 // LOC 일괄할당 로직
-// week -> 해당 주차 월요일에 할당, 나머지 0
-// month -> 해당 월의 1일에 할당 + 각 주차의 월요일에 할당, 나머지 0
+// week -> 해당 (부분)주차 대표일(anchor)에 할당, 나머지 0
+// month -> 해당 월의 각 주차 대표일(anchor)에 할당 + week column 갱신, 나머지 0
 export const allocateLoc = (
   binding: string,
   dataItem: WijmoRowItem,
@@ -335,19 +353,14 @@ export const allocateLoc = (
 ) => {
   if (binding?.startsWith('M_')) {
     monthMap.get(binding)?.forEach(week => {
-      weekMap.get(week)?.forEach(dateColumn => {
-        const dateString = dateColumn.split('_')[1];
-        const dayValue = dowSunFirst(dateString);
-
-        // ⭐ [2026-08-12 결함 정정 — 재적용] 월요일 = MON_IDX(1). 구 코드는 0(=SUN-first 의 **일요일**)
-        //   이라 LOC 월 기준일이 일요일에 들어갔다(2026-08-08 발견분 유실 — W_ 경로만 고쳐져 있었음).
-        if (dayValue === MON_IDX) {
-          editTracker.storeChange(dataItem, dateColumn, dataItem[dateColumn], newValue);
-          dataItem[dateColumn] = newValue;
-        } else {
-          editTracker.storeChange(dataItem, dateColumn, dataItem[dateColumn], 0);
-          dataItem[dateColumn] = 0;
-        }
+      // 부분주 대표일(anchor)에만 값을 넣고 나머지는 0.
+      //   월요일 고정 시 월요일 없는 부분주(W40B 등)가 전 일자 0 → SP 삭제 전도.
+      const dayColumns = [...(weekMap.get(week) ?? [])];
+      const anchor = locWeekAnchor(dayColumns);
+      dayColumns.forEach(dateColumn => {
+        const cellValue = dateColumn === anchor ? newValue : 0;
+        editTracker.storeChange(dataItem, dateColumn, dataItem[dateColumn], cellValue);
+        dataItem[dateColumn] = cellValue;
       });
 
       // week column
@@ -360,17 +373,14 @@ export const allocateLoc = (
     editTracker.storeChange(dataItem, binding, dataItem[firstDateOfMonth], newValue);
     dataItem[firstDateOfMonth] = newValue;
   } else if (binding?.startsWith('W_')) {
-    weekMap.get(binding)?.forEach(dateColumn => {
-      const dateString = dateColumn.split('_')[1];
-      const dayValue = dowSunFirst(dateString);
-      // 월요일 (SUN-first index 1)
-      if (dayValue === MON_IDX) {
-        editTracker.storeChange(dataItem, dateColumn, dataItem[dateColumn], newValue);
-        dataItem[dateColumn] = newValue;
-      } else {
-        editTracker.storeChange(dataItem, dateColumn, dataItem[dateColumn], 0);
-        dataItem[dateColumn] = 0;
-      }
+    // 부분주 대표일(anchor)에만 값을 넣고 나머지는 0.
+    //   월요일 고정 시 월요일 없는 부분주(W40B 등)가 전 일자 0 → SP 삭제 전도.
+    const dayColumns = [...(weekMap.get(binding) ?? [])];
+    const anchor = locWeekAnchor(dayColumns);
+    dayColumns.forEach(dateColumn => {
+      const cellValue = dateColumn === anchor ? newValue : 0;
+      editTracker.storeChange(dataItem, dateColumn, dataItem[dateColumn], cellValue);
+      dataItem[dateColumn] = cellValue;
     });
 
     // ⭐ LOC 월합 = 값 있는 주차의 평균 (AS-IS L6716~6729 — FCST 는 합계, LOC 는 평균).
@@ -448,6 +458,43 @@ export const isM4Locked = (
 export const isInsertRow = (dataItem: WijmoRowItem | undefined | null): boolean =>
   dataItem?.['CRUD_TYPE'] === 'I';
 
+/**
+ * 그리드 행 표시 정렬 비교자 — 1순위 표시 키 컬럼(개인화 순서), 동순위(같은 키의 메저 행들)는
+ * Measure 설정 팝업 순서를 따른다.
+ *
+ * 왜 메저 tiebreaker 인가 (사용자 신고 2026-09-04): 조회 SP(GET_MAIN_DATA)는 메저를 자체 SORT_KEY 로
+ *   내려주는데, 그 순서가 팝업(Measure 설정)의 개인화 순서와 무관해 "그리드 메저 순서가 팝업과 다르다"는
+ *   신고가 났다. 팝업 순서는 사용자별 개인화(titleSet 'M' SORT_ORDER_NO → staticMeasures 배열 순서)라
+ *   고정 SP ORDER BY 로는 따라갈 수 없어 FE 에서 맞춘다.
+ *
+ * measureOrder = staticMeasures(= /admin/menu/DMF0082/measure, 개인화 반영) 의 MEASURE 코드→인덱스 맵.
+ *   맵이 비어 있으면(조회 시점에 아직 미도착) 두 행 모두 MAX 로 떨어져 차가 0 → **SP 원 순서 보존**
+ *   (로딩 중 재정렬로 화면이 튀지 않게 한다). 맵에 없는 메저는 MAX 로 뒤에 둔다(미등록 방어).
+ *
+ * 필수: MEASURE 컬럼은 제네릭 키 비교에서 **제외**한다. sortCols(=그리드 visible 컬럼)에는 MEASURE 도
+ *   들어 있는데, 여기서 문자열 비교하면 메저 **코드 알파벳순**(LOC<MKT_FCST<…)으로 정렬돼 팝업 순서와
+ *   어긋난다(이번 신고의 원인 중 하나). 메저 순서는 오직 measureOrder(팝업/개인화)로만 결정한다.
+ * 필수: MEASURE 외 표시 키 비교는 기존과 동일하게 UTF-16 코드단위(`<`/`>`) — localeCompare 미사용
+ *   (SP binary 정렬과 동일 결과 유지). ForecastPrice.tsx gridRows 정렬이 이 함수를 그대로 쓴다.
+ */
+export const compareForecastRows = (
+  a: WijmoRowItem,
+  b: WijmoRowItem,
+  sortCols: readonly string[],
+  measureOrder: ReadonlyMap<string, number>
+): number => {
+  for (const col of sortCols) {
+    if (col === 'MEASURE') continue; // 메저는 measureOrder(팝업 순서)로만 — 아래 tiebreaker 참조
+    const av = String(a[col] ?? '');
+    const bv = String(b[col] ?? '');
+    if (av < bv) return -1;
+    if (av > bv) return 1;
+  }
+  const am = measureOrder.get(String(a['MEASURE'] ?? '')) ?? Number.MAX_SAFE_INTEGER;
+  const bm = measureOrder.get(String(b['MEASURE'] ?? '')) ?? Number.MAX_SAFE_INTEGER;
+  return am - bm;
+};
+
 /** 그룹 판정 입력 — 그리드 **표시 순서 그대로**의 컬럼 정보. */
 export interface GroupKeyColumn {
   binding: string;
@@ -504,44 +551,6 @@ export const groupKeyBindings = (
     if (usable(column)) keys.push(column.binding);
   }
   return keys;
-};
-
-/**
- * 선택한 셀이 속한 머지 블록의 **첫 행 인덱스** — Insert 가 그 블록 맨 위에 행을 넣기 위한 앵커.
- *
- * 요구(통합테스트 35번): "라인추가할 때 data Group 제일 위로 추가해야함. 선택된 위치에 따라서
- *   measure 중간에 라인이 추가됨." + 사용자 추가 요구(2026-08-17): "선택한 값 그 그룹의 젤 위".
- *
- * 위로 훑다가 멈추는 조건 2가지:
- *   1. 키 컬럼 값이 하나라도 다르면 = 다른 그룹.
- *   2. 신규행(CRUD_TYPE='I') 이면 = 병합이 끊기는 자리다. `_getCellMergedRange` 가 신규행을
- *      병합에서 빼므로(mergeManager.ts) 화면상으로도 거기서 블록이 갈린다. 앞서 추가한 신규행은
- *      시드로 키를 복사받아 값이 같으므로, 이 가드가 없으면 그 위까지 타고 올라가 버린다.
- *
- * 그룹을 못 찾거나 신규행에서 눌렀으면 `index` 를 그대로 돌려준다(= 포커스 행 바로 위).
- */
-export const findGroupTopIndex = (
-  rows: readonly (WijmoRowItem | undefined)[],
-  index: number,
-  keyBindings: readonly string[]
-): number => {
-  const target = rows[index];
-  if (!target || keyBindings.length === 0 || isInsertRow(target)) return index;
-
-  const cell = (row: WijmoRowItem, binding: string): string => {
-    const value = row[binding];
-    return value === null || value === undefined ? '' : String(value);
-  };
-  const isSameGroup = (row: WijmoRowItem): boolean =>
-    keyBindings.every(binding => cell(row, binding) === cell(target, binding));
-
-  let top = index;
-  while (top > 0) {
-    const prev = rows[top - 1];
-    if (!prev || isInsertRow(prev) || !isSameGroup(prev)) break;
-    top--;
-  }
-  return top;
 };
 
 // cell 수정여부 판별 로직

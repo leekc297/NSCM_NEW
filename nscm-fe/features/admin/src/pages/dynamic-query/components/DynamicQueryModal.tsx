@@ -464,6 +464,10 @@ export const DynamicQueryModal = ({
       position='basic'
       handleClose={modalClose}
       disableButtonCancel
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -490,7 +494,7 @@ export const DynamicQueryModal = ({
             </Grid>
             <Grid size={4}>
               <FormItem
-                label={t('LBL00719', 'Description')}
+                label={t('LBL00608', 'Description')}
                 labelAlign='right'
                 render={() => (
                   <InputField
@@ -528,7 +532,7 @@ export const DynamicQueryModal = ({
               <div className={styles.leftPane}>
                 <TitleArea
                   isSubTitle
-                  title={t('LBL00727', 'SQL')}
+                  title={t('LBL00652', 'SQL')}
                   depth='h4'
                   rightButtons={
                     <Button
@@ -559,7 +563,7 @@ export const DynamicQueryModal = ({
               <div className={styles.rightPane_1}>
                 <TitleArea
                   isSubTitle
-                  title={t('LBL00725', 'Columns')}
+                  title={t('LBL00646', 'Columns')}
                   depth='h4'
                   rightButtons={
                     <>

@@ -14,11 +14,23 @@ interface LookupDetailGridProps {
     FlexGrid<ResponseData<MENU_ID, SHEETS.LOOKUP_DETAIL, RESPONSE_SET.SAVE>> | undefined
   >;
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
+  /**
+   * 저장 시 세그먼트 원본값(UPDATE 키)을 읽어야 해서 화면이 tracker 를 넘겨받는다.
+   * 미지정이면 내부 ref 를 쓴다.
+   */
+  editTrackerRef?: MutableRefObject<
+    EditTracker<ResponseData<MENU_ID, SHEETS.LOOKUP_DETAIL, RESPONSE_SET.SAVE>> | undefined
+  >;
   data: ResponseData<MENU_ID, SHEETS.LOOKUP_DETAIL, RESPONSE_SET.SAVE>[];
 }
 
-export const LookupDetailGrid = ({ gridRef, gridFilterRef, data }: LookupDetailGridProps) => {
-  const editTrackerRef =
+export const LookupDetailGrid = ({
+  gridRef,
+  gridFilterRef,
+  editTrackerRef,
+  data,
+}: LookupDetailGridProps) => {
+  const internalEditTrackerRef =
     useRef<EditTracker<ResponseData<MENU_ID, SHEETS.LOOKUP_DETAIL, RESPONSE_SET.SAVE>>>();
 
   const baseColumns = useLookupStore(state => state.staticColumns.lookupDetail);
@@ -52,7 +64,7 @@ export const LookupDetailGrid = ({ gridRef, gridFilterRef, data }: LookupDetailG
     <DataGrid<ResponseData<MENU_ID, SHEETS.LOOKUP_DETAIL, RESPONSE_SET.SAVE>>
       gridRef={gridRef}
       gridFilterRef={gridFilterRef}
-      editTrackerRef={editTrackerRef}
+      editTrackerRef={editTrackerRef ?? internalEditTrackerRef}
       itemsSource={data}
       staticColumns={staticColumns}
       gotFocus={handleGotFocus}

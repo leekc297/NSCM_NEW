@@ -1,0 +1,6 @@
+﻿"page_key","menu_id","file","line","in_function","kind","callee","menu","sheet","action","url","resolved","args","commented"
+"supply/long-term-stock","SCP0084","features/supply/src/pages/long-term-stock/components/LongTermStockForm.tsx","58","LongTermStockForm","hook","useTabComboQueries","SCP0084","","","(useTabComboQueries)","Y","[{ comboId: COMBO.DIVISION, mnuId: MENU_ID }, COMBO.PLANT, COMBO.MONTH_RANGE]","0"
+"supply/long-term-stock","SCP0084","features/supply/src/pages/long-term-stock/LongTermStock.tsx","46","LongTermStock","hook","useTabProcQuery","SCP0084","main","","SCP0084/main//call-proc","Y","filters[SHEETS.MAIN]","0"
+"supply/long-term-stock","SCP0084","features/supply/src/pages/long-term-stock/LongTermStock.tsx","97","handleSave","http","apiClient.post","SCP0084","main","SAVE","/SCP0084/main/SAVE/call-proc","Y","payload","0"
+"supply/long-term-stock","SCP0084","features/supply/src/pages/long-term-stock/useLongTermStockStore.ts","99","fetchStaticColumns","http","apiClient.post","","","","/admin/menu/SCP0084/column","Y","{ sheetNm: ADMIN_SHEET_NAME[SHEETS.MAIN] }","0"
+"supply/long-term-stock","SCP0084","features/supply/src/pages/long-term-stock/useLongTermStockStore.ts","116","loadSavedCondition","http","apiClient.get","","","","/admin/menu/SCP0084/search-conditions","Y","","0"

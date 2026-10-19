@@ -1,0 +1,189 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0016_GET_BATCH_LOG","238011979","1","/*
+ * Program ID   : SCM0016_GET_BATCH_LOG
+ * Description  : BATCH LOG(JOB SCHEDULE) 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/03/02   PJS   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * ex)
+ * exec SCM0016_GET_BATCH_LOG
+ */
+
+CREATE PROCEDURE [dbo].[SCM0016_GET_BATCH_LOG]
+  @p_run_status		NVARCHAR(MAX) =''
+AS
+BEGIN
+		
+	SELECT
+		  a.[job_id] AS [job_id]
+		, a.[name] AS [job_name]
+		, a.[description] AS [job_description]
+		, CASE a.[enabled] WHEN 1 THEN 'Yes' WHEN 0 THEN 'No' END AS [is_enabled]
+		--, a.[date_created] AS [JobCreatedOn]
+		--, a.[date_modified] AS [JobLastModifiedOn]
+		--, d.[name] AS [OriginatingServerName]
+		, e.[step_id] AS [step_id]
+		, e.[step_name] AS [step_name]
+		, CASE WHEN f.[schedule_uid] IS NULL THEN 'No' ELSE 'Yes' END AS [is_scheduled]
+		, f.[schedule_uid] AS [schedule_uid]
+		, f.[name] AS [schedule_name]
+		, CASE WHEN c.[run_date] IS NULL OR c.[run_time] IS NULL THEN NULL
+			   ELSE convert(varchar, CAST( CAST(c.[run_date] AS CHAR(8)) + ' '  + STUFF( STUFF(RIGHT('000000' + CAST(c.[run_time] AS VARCHAR(6)),  6), 3, 0, ':'), 6, 0, ':') AS DATETIME),120)
+		  END AS [run_date]
+		, c.[run_status]
+		, DBO.FN_GET_LOOKUP_CODE_DESC('JOB_RUN_STATUS',c.[run_status]) AS [run_status_name]
+		, STUFF(STUFF(RIGHT('000000' + CAST(c.[run_duration] AS VARCHAR(6)),  6) , 3, 0, ':') , 6, 0, ':')   AS [run_duration] --[LastRunDuration (HH:MM:SS)]
+		, c.[message] AS [run_status_message]
+		, CASE b.[NextRunDate]  WHEN 0 THEN NULL
+			ELSE convert(varchar, CAST( CAST(b.[NextRunDate] AS CHAR(8)) + ' ' + STUFF( STUFF(RIGHT('000000' + CAST(b.[NextRunTime] AS VARCHAR(6)),  6), 3, 0, ':'), 6, 0, ':') AS DATETIME),120)
+		  END AS [next_run_date]
+
+	 FROM [msdb].[dbo].[sysjobs] AS a
+		  LEFT JOIN (
+					SELECT
+						  [job_id]
+						, [schedule_id]
+						, MIN([next_run_date]) AS [NextRunDate]
+						, MIN([next_run_time]) AS [NextRunTime]
+					FROM [msdb].[dbo].[sysjobschedules]
+					GROUP BY [job_id],[schedule_id]
+				  ) AS b ON a.[job_id] = b.[job_id]
+		  LEFT JOIN (
+					SELECT
+						[job_id]
+						, [run_date]
+						, [run_time]
+						, [run_status]
+						, [run_duration]
+						, [message]
+						, ROW_NUMBER() OVER ( PARTITION BY [job_id]	ORDER BY [run_date] DESC, [run_time] DESC  ) AS RowNumber
+					FROM [msdb].[dbo].[sysjobhistory]
+					WHERE [step_id] = 0
+				) AS c ON a.[job_id] = c.[job_id] AND c.[RowNumber] = 1
+		  LEFT JOIN [msdb].[sys].[servers]             AS d    ON a.[originating_server_id] = d.[server_id]
+		  LEFT JOIN [msdb].[dbo].[sysjobsteps]         AS e   ON a.[job_id]                = e.[job_id] AND a.[start_step_id] = e.[step_id]
+		  LEFT JOIN [msdb].[dbo].[sysschedules]        AS f    ON b.[schedule_id]        = f.[schedule_id]
+	WHERE f.[schedule_uid] IS NOT NULL
+	  AND a.[enabled] ='1'  -- '0'
+	  AND ( (@p_run_status IS NULL OR  @p_run_status ='') OR ( c.[run_status]  IN (SELECT token FROM dbo.String_Split(@p_run_status	,',')) ) )
+	ORDER BY [job_name]
+   ;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0016_GET_BATCH_LOG_HIST","254012036","1","/*
+ * Program ID   : SCM0016_GET_BATCH_LOG_HIST
+ * Description  : 일자별 BATCH LOG 정보 조회(최근 100개)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/03/02   PJS   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * ex)
+ * exec SCM0016_GET_BATCH_LOG_HIST @p_job_id='{4B46F507-0745-468E-AD76-0A5EC082910B}'
+ */
+
+CREATE PROCEDURE [dbo].[SCM0016_GET_BATCH_LOG_HIST]
+  @p_job_id NVARCHAR(MAX)
+AS
+BEGIN
+		
+		
+	SELECT t.*
+	  FROM (
+	  SELECT
+			[job_id]
+		  , CASE WHEN c.[run_date] IS NULL OR c.[run_time] IS NULL THEN NULL
+				 ELSE convert(varchar, CAST( CAST(c.[run_date] AS CHAR(8)) + ' '  + STUFF( STUFF(RIGHT('000000' + CAST(c.[run_time] AS VARCHAR(6)),  6), 3, 0, ':'), 6, 0, ':') AS DATETIME),120)
+			END AS [run_date]	  
+		  , c.[run_status]
+		  , DBO.FN_GET_LOOKUP_CODE_DESC('JOB_RUN_STATUS',c.[run_status]) AS [run_status_name]
+		  , STUFF(STUFF(RIGHT('000000' + CAST(c.[run_duration] AS VARCHAR(6)),  6) , 3, 0, ':') , 6, 0, ':')   AS [run_duration] --[LastRunDuration (HH:MM:SS)]
+		  , [message] AS run_status_message
+		  , ROW_NUMBER() OVER (	PARTITION BY [job_id] ORDER BY [run_date] DESC, [run_time] DESC  ) AS RowNumber
+		FROM [msdb].[dbo].[sysjobhistory] c
+		WHERE [step_id] = 0
+		--AND job_id ='{4B46F507-0745-468E-AD76-0A5EC082910B}'
+		AND job_id =@p_job_id
+		   ) t
+	where t.RowNumber <=100
+	order by RowNumber	   
+   ;
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0016_GET_BATCH_STEP_INFO","270012093","1","/*
+ * Program ID   : SCM0016_GET_BATCH_STEP_INFO
+ * Description  : JOB SCHEDULE STEP 정보 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/03/02   PJS   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * ex)
+ * exec SCM0016_GET_BATCH_STEP_INFO @p_job_id='{4B46F507-0745-468E-AD76-0A5EC082910B}'
+ */
+
+CREATE PROCEDURE [dbo].[SCM0016_GET_BATCH_STEP_INFO]
+  @p_job_id NVARCHAR(MAX)
+AS
+BEGIN
+		
+		
+	SELECT
+		  a.[job_id] AS [job_id]
+		, a.[name] AS [job_name]
+		, e.[step_uid] AS [step_uid]
+		, e.[step_id] AS [step_id]
+		, e.[step_name] AS [step_name]
+		, CASE e.[subsystem]
+			WHEN 'ActiveScripting' THEN 'ActiveX Script'
+			WHEN 'CmdExec' THEN 'Operating system (CmdExec)'
+			WHEN 'PowerShell' THEN 'PowerShell'
+			WHEN 'Distribution' THEN 'Replication Distributor'
+			WHEN 'Merge' THEN 'Replication Merge'
+			WHEN 'QueueReader' THEN 'Replication Queue Reader'
+			WHEN 'Snapshot' THEN 'Replication Snapshot'
+			WHEN 'LogReader' THEN 'Replication Transaction-Log Reader'
+			WHEN 'ANALYSISCOMMAND' THEN 'SQL Server Analysis Services Command'
+			WHEN 'ANALYSISQUERY' THEN 'SQL Server Analysis Services Query'
+			WHEN 'SSIS' THEN 'SQL Server Integration Services Package'
+			WHEN 'TSQL' THEN 'Transact-SQL script (T-SQL)'
+			ELSE e.subsystem
+		  END AS [step_type]
+		--, [sPROX].[name] AS [RunAs]
+		--, e.[database_name] AS [Database]
+		, e.[command] AS [exec_command]
+		, CASE e.[on_success_action]
+			WHEN 1 THEN 'Quit the job reporting success'
+			WHEN 2 THEN 'Quit the job reporting failure'
+			WHEN 3 THEN 'Go to the next step'
+			WHEN 4 THEN 'Go to Step: '
+						+ QUOTENAME(CAST(e.[on_success_step_id] AS VARCHAR(3)))
+						+ ' '
+						+ [sOSSTP].[step_name]
+		  END AS [on_success_action]
+		, e.[retry_attempts] AS [retry_attempts]
+		, e.[retry_interval] AS [retry_interval] -- [retry_interval (Minutes)]
+		, CASE e.[on_fail_action]
+			WHEN 1 THEN 'Quit the job reporting success'
+			WHEN 2 THEN 'Quit the job reporting failure'
+			WHEN 3 THEN 'Go to the next step'
+			WHEN 4 THEN 'Go to Step: '
+						+ QUOTENAME(CAST(e.[on_fail_step_id] AS VARCHAR(3)))
+						+ ' '
+						+ [sOFSTP].[step_name]
+		  END AS [on_failure_action]
+	FROM [msdb].[dbo].[sysjobsteps] AS e
+		 INNER JOIN [msdb].[dbo].[sysjobs]     AS a    ON e.[job_id]             = a.[job_id]
+		 LEFT  JOIN [msdb].[dbo].[sysjobsteps] AS [sOSSTP]  ON e.[job_id]             = [sOSSTP].[job_id]
+														   AND e.[on_success_step_id] = [sOSSTP].[step_id]
+		 LEFT  JOIN [msdb].[dbo].[sysjobsteps] AS [sOFSTP]  ON e.[job_id]             = [sOFSTP].[job_id]
+														   AND e.[on_fail_step_id]    = [sOFSTP].[step_id]
+	   --  LEFT JOIN [msdb].[dbo].[sysproxies] AS [sPROX]     ON e.[proxy_id]           = [sPROX].[proxy_id]
+	where 1=1
+	  and a.job_id =@p_job_id	 
+	ORDER BY [job_name], [step_id]
+   ;
+END
+"

@@ -1,0 +1,14 @@
+// [E20261015-STREAMPROC] BOD ITEM 스트리밍 수신 중 안내 (수신 완료 시 사라짐)
+.streamStatus {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #1f5fbf;
+}
+
+.gridWrapper {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+}

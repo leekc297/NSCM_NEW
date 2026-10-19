@@ -1,0 +1,28 @@
+// UOM Type(BOH 3-radio) 폼 스타일. 정본: admin NoticeSetupDialog.module.scss .radioGroup/.radioOption
+//   (공용 @shared 에 RadioGroup 컴포넌트가 없어 동일 마크업·스타일을 로컬 재현).
+.radioGroup {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  // UOM Type 은 한 줄로 유지(사용자 지시 2026-10-12). 칸 폭이 좁아도 줄바꿈하지 않는다.
+  flex-wrap: nowrap;
+  gap: 12px;
+}
+
+.radioOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #34383e;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  input {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    accent-color: #2f6fed;
+    cursor: pointer;
+  }
+}

@@ -48,8 +48,7 @@ export const useSalesSiteProjectModelSave = <
     retry: 0,
 
     mutationFn: async (data: ResponseData<MENU_ID, S, RS>[]) => {
-      if (!data.length) throw new Error(t('MSG_NO_CHANGE', '_수정한 내용이 없습니다.'));
-
+      // 빈 배열(변경 없음) 가드는 화면 handleSave 의 early-guard 로 공통화했다 — 여기서는 안 막는다.
       const response = await apiClient.post<MutateResponse, MutateRequest<MENU_ID, S, RS>>(
         `${MENU_ID}/${sheetName}/${BUTTON_TYPE.SAVE}/call-proc`,
         { data }

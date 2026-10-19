@@ -92,7 +92,7 @@ export const UserManagementForm = () => {
                     })) ?? []
                   }
                   onChange={(_, option) => {
-                    setSearchParams({ useYn: option });
+                    setSearchParams({ useYn: option || 'ALL' });
                   }}
                 />
               )}

@@ -34,10 +34,15 @@ import {
   MENU_ID,
   MSG,
   PRICE_MEASURES,
+  SHEETS,
 } from '../forecast-price.constants';
 import type { ForecastPriceRow, SpreadTitleRow } from '../forecast-price.types';
 import { useForecastPriceStore } from '../useForecastPriceStore';
 import { isAsFromSiteEditable } from '../utils/forecast-price.asFromSite';
+import {
+  cellProdSiteKey,
+  createCellProdSiteCandidates,
+} from '../utils/forecast-price.cellProdSites';
 import { q } from '../utils/forecast-price.combo';
 import { isPastPeriodLocked, thisWeekMondayYmd } from '../utils/forecast-price.editLock';
 import {
@@ -125,6 +130,7 @@ import {
   divideByDate,
   divideByMonth,
   divideByWeek,
+  isDistributedMeasure,
   isInsertRow,
   isNonEditableCell,
   toNumber,
@@ -166,6 +172,22 @@ const comboCellStr = (v: unknown): string =>
 
 const kindOf = (b: string): 'M' | 'W' | 'D' | null =>
   /^M_\d{6}$/.test(b) ? 'M' : /^W_\d{7,10}$/.test(b) ? 'W' : /^D_\d{8}$/.test(b) ? 'D' : null;
+
+// 값 셀에서 허용하는 소수 자리 — 키 입력 차단(enforceDecimalKey)과 커밋 정규화 공용.
+//   MKT_FCST[R+P]·AS In Request[R+P](AS_In_Req) = 정수(0, 소수점 입력 불가)
+//   / Unit Price(LOC)·POINT3 표기 = 소수 3자리 / 그 외 = 제한 없음(null).
+//   (사용자 요구 2026-09-03 / AS_In_Req 추가 2026-09-15)
+//   표시 서식(formatItem)의 isPoint3 판정(NOTATION==='POINT3' || MEASURE==='LOC')과 같은 축을
+//   써서 "표시 자리 = 입력 자리" 를 일치시킨다 — 0.9 가 저장은 0.9 인데 화면만 1 로 보이던
+//   불일치(표시 maximumFractionDigits:0 반올림)를 입력 단계에서 원천 차단한다.
+const measureMaxDecimals = (
+  dataItem: Record<string, unknown> | undefined | null
+): number | null => {
+  const measure = dataItem?.['MEASURE'];
+  if (measure === 'MKT_FCST' || measure === 'AS_In_Req') return 0;
+  if (measure === 'LOC' || dataItem?.['NOTATION'] === 'POINT3') return 3;
+  return null;
+};
 
 // 표시 rank (M=0 상위 합계 … D=2 하위 상세). 활성 bucket = 데이터에 존재하는 최정밀 kind(max rank).
 //   상위(rank<활성) = SUM 합계 컬럼 → chkSum(sumYn) 으로 표시 토글 (AS-IS chkSum / mkt-fcst 패턴 #92).
@@ -322,7 +344,7 @@ export const ForecastPriceGrid = ({
   //   먼저 하고(AS_FROM_SITE) 매칭될 때만 스왑한다(0행이면 생략 → IncotermsEdit 유지). 정본 = mkt-fcst:320-342.
   const [asSiteRows, asIncotermsRows, wsFcstTypeRows, fcstTypeEditRows] = useTabComboQueries({
     filters: [
-      { comboId: 'AS_FROM_SITE', param1: q(searchParams.divisionId) },
+      { comboId: 'AS_FROM_SITE', divisionId: q(searchParams.divisionId) },
       { comboId: 'AsIncotermsEdit', divisionId: q(searchParams.divisionId) },
       // [No.63-② 2026-08-11] AS From Site 편집 활성 판정용 FCST Type 기준 목록.
       //   AS-IS `GetLookupValues("FCST_TYPE", "DM Planner (W/S)")` → `UP_FX_GetCommonDataList_DM` L72~79 =
@@ -404,7 +426,25 @@ export const ForecastPriceGrid = ({
   //   컬럼 dataMap 스왑(편집 후보=편집가능 measure), 편집 종료 시 원 dataMap(전체 표시용) 원복.
   const editMeasuresRef = useRef<WeakMap<object, ComboResponse[]>>(new WeakMap());
   // D9 — 행별 Cell Prod Site 후보 캐시 (ITEM_ID 변경 시 재조회).
-  const cellProdSitesRef = useRef<WeakMap<object, ComboResponse[]>>(new WeakMap());
+  //   행 참조 + (DIVISION_ID, ITEM_ID) 키로 보관한다 — 계약·근거는 `forecast-price.cellProdSites.ts`.
+  const cellProdSitesRef = useRef(
+    createCellProdSiteCandidates((divisionId, itemId) =>
+      apiClient.getCombo({
+        comboId: 'CELL_PROD_SITE_ID',
+        divisionId: q(divisionId),
+        itemId: q(itemId),
+      })
+    )
+  );
+  // 후보 조회를 마치고 편집기를 다시 여는 순간의 (행, 키) 표식 — beginCellEditHandler 재진입 통과용.
+  const cellProdSiteEditRef = useRef<{ row: WijmoRowItem; key: string } | null>(null);
+  // Cell Prod Site 표시용 code→name 맵 — 이 콤보는 itemId 별로만 실제 사이트를 줘 base 표시 dataMap 이
+  //   비어(divisionId 만이면 '-'/Common 1행) 조회행·신규행 모두 code(NJ01-A)로 노출됐다. 데이터의
+  //   (div,item) 조합별로 로드해 누적하고 컬럼 dataMap 으로 그린다(2026-09-03).
+  const cellProdSiteNameMapRef = useRef<Map<string, string>>(new Map());
+  // 컬럼에 붙인 표시 dataMap 과 그때의 맵 크기 — updatedView 재적용을 멱등으로 만드는 가드.
+  const cellProdSiteDmRef = useRef<DataMap | null>(null);
+  const cellProdSiteDmSizeRef = useRef(-1);
   // 행별 Sales Site 후보 캐시 (END_CUSTOMER 변경 시 재조회).
   const salesSitesRef = useRef<WeakMap<object, ComboResponse[]>>(new WeakMap());
 
@@ -438,6 +478,32 @@ export const ForecastPriceGrid = ({
     dataItem[binding] = '';
     gridRef.current?.invalidate();
     return true;
+  };
+
+  // Insert 행 값이 비었거나 후보 밖이면 필터 후보의 첫 번째 값으로 채운다.
+  //   사용자가 그 셀을 편집 중이면 건드리지 않는다(선택을 덮지 않음).
+  const fillFirstCandidate = (
+    dataItem: WijmoRowItem,
+    binding: string,
+    rows: ComboResponse[] | undefined
+  ) => {
+    const g = gridRef.current;
+    if (!g || !rows || rows.length === 0) return;
+    const current = String(dataItem[binding] ?? '').trim();
+    if (current !== '' && rows.some(r => String(r.CODE ?? '') === current)) return;
+    const edit = g.editRange;
+    if (
+      g.activeEditor &&
+      edit &&
+      g.rows[edit.row]?.dataItem === dataItem &&
+      g.columns[edit.col]?.binding === binding
+    )
+      return;
+    const first = String(rows[0]?.CODE ?? '');
+    if (first === '') return;
+    editTrackerRef.current?.storeChange(dataItem, binding, current, first);
+    dataItem[binding] = first;
+    if (!g.activeEditor) g.invalidate();
   };
 
   /**
@@ -525,7 +591,8 @@ export const ForecastPriceGrid = ({
   // #7 — Insert 행 Site 변경 시 편집가능 Measure 후보 재조회 → 행별 캐시 (MEASURE 편집 진입 시 사용).
   //   [No.63 2026-08-11] 후보 3분기(site 향)는 콤보 SQL 이 AS_SITE_PLANT 룩업으로 판정(서버 권위):
   //   미입력=MKT+AS_In_Req+LOC / 고객향=MKT+LOC / 비축향=AS_In_Req+LOC (통합테스트 1st No.63 매트릭스 1:1).
-  const applyEditMeasures = (dataItem: WijmoRowItem, clearStale = false) => {
+  // const applyEditMeasures = (dataItem: WijmoRowItem, clearStale = false) => {
+  const applyEditMeasures = (dataItem: WijmoRowItem, clearStale = false, fillFirst = false) => {
     const div = String(dataItem['DIVISION_ID'] ?? '');
     const site = String(dataItem['SCM_SITE_ID'] ?? '');
     // ⭐ [2026-08-18 W/S 메저 3분기 정정] Sales Site 미입력도 **정당한 분기**다 — 여기서 return 하면
@@ -539,7 +606,7 @@ export const ForecastPriceGrid = ({
       .getCombo({
         comboId: 'FcstPriceEditMeasure',
         divisionId: q(div),
-        scmSiteId: `'${site.trim() !== '' ? site.replace(/'/g, '\'\'') : ' '}'`,
+        scmSiteId: `'${site.trim() !== '' ? site.replace(/'/g, "''") : ' '}'`,
         bucketType: q(bucketTypeParamRef.current),
       })
       .then(rows => {
@@ -555,6 +622,7 @@ export const ForecastPriceGrid = ({
           : (rows ?? []).filter(r => String(r.CODE) !== AS_MEASURE);
         editMeasuresRef.current.set(dataItem, out);
         if (clearStale) clearIfNotInCandidates(dataItem, 'MEASURE', out);
+        if (fillFirst) fillFirstCandidate(dataItem, 'MEASURE', out);
         return;
       })
       .catch((err: unknown) => {
@@ -595,18 +663,64 @@ export const ForecastPriceGrid = ({
   //   .cs L5854). AS-IS SP 는 PARAM1(division) 유무로 분기해, 이벤트 호출 시 해당 품목의 BIZ_TYPE 이
   //   CELL 이 아니면 '-'(Common) 만 남긴다. CMBO 가 여분 컬럼을 반환하지 않아 클라 필터가 불가 →
   //   Measure 와 동일하게 행별 서버 재조회 + WeakMap 캐시로 처리한다.
-  const applyCellProdSites = (dataItem: WijmoRowItem, clearStale = false) => {
-    const div = String(dataItem['DIVISION_ID'] ?? '');
-    const item = String(dataItem['ITEM_ID'] ?? '');
-    if (!div || !item) return;
-    void apiClient
-      .getCombo({ comboId: 'CELL_PROD_SITE_ID', divisionId: q(div), itemId: q(item) })
+  // 누적된 code→name(cellProdSiteNameMapRef)으로 CELL_PROD_SITE_ID 컬럼의 표시 dataMap 을 채운다.
+  //   이 컬럼은 divisionId 만으로는 '-'(Common) 만 오고 실제 사이트는 itemId 별로만 와 base dataMap 이
+  //   비었다 → 조회행·신규행이 code(NJ01-A)로 노출됐다. wijmo 네이티브 dataMap 으로 해석해야 frozen
+  //   복제셀까지 name 으로 그려진다(formatItem 의 textContent 오버라이드는 frozen clone 에 안 붙는다).
+  //   편집 스왑(beginningEdit)이 백업/복원하는 base 도 이 맵으로 유지한다(편집 종료 후 code 회귀 방지).
+  const syncCellProdSiteDisplayMap = () => {
+    const g = gridRef.current;
+    if (!g) return;
+    // 편집 중에는 손대지 않는다 — beginningEdit 가 이 컬럼 dataMap 을 편집 후보로 스왑해 둔 상태라
+    //   여기서 표시맵으로 덮으면 드롭다운 후보가 갈려 선택이 안 된다. 편집 종료 시 cellEditEnded 가
+    //   표시맵(origDataMapRef)으로 복원하므로 표시는 그대로 유지된다.
+    if (g.activeEditor) return;
+    const col = g.columns.getColumn('CELL_PROD_SITE_ID');
+    if (!col) return;
+    // 컬럼 dataMap 을 새 표시맵으로 갈기 전에, 지금 붙어 있는 맵(DataGrid 가 행별 재조회 결과로 붙인
+    //   맵 포함)의 code→name 을 누적 맵에 흡수한다. 안 하면 그 맵으로만 해석되던 다른 행이 code 로 보인다.
+    for (const entry of col.dataMap?.collectionView.items ?? []) {
+      const site = entry as ComboResponse;
+      const code = String(site.CODE ?? '');
+      if (!cellProdSiteNameMapRef.current.has(code))
+        cellProdSiteNameMapRef.current.set(code, String(site.NAME ?? code));
+    }
+    const size = cellProdSiteNameMapRef.current.size;
+    if (size === 0) return;
+    // 이미 최신 표시맵이 그대로 붙어 있으면 skip — updatedView 로 매번 불려도 재빌드/루프가 없다.
+    //   (DataGrid 가 combo/columnGroups 재구성으로 col.dataMap 을 base 로 되돌리거나 컬럼 인스턴스를
+    //    갈아끼우면 참조가 어긋나므로 그때만 재적용된다 → 첫 조회 code 회귀 방지.)
+    if (col.dataMap === cellProdSiteDmRef.current && cellProdSiteDmSizeRef.current === size) return;
+    const entries = [...cellProdSiteNameMapRef.current].map(([CODE, NAME]) => ({ CODE, NAME }));
+    const dm = new DataMap(entries, 'CODE', 'NAME');
+    cellProdSiteDmRef.current = dm;
+    cellProdSiteDmSizeRef.current = size;
+    col.dataMap = dm;
+    origDataMapRef.current['CELL_PROD_SITE_ID'] = dm;
+    g.invalidate();
+  };
+
+  // 행의 후보를 조회해 캐시·표시맵에 반영한다. 반영했으면 true — 조회 생략(Division/Model 공란)·
+  //   결과 폐기(그 사이 Model 변경 등)·조회 실패면 false (beginCellEditHandler 가 편집기 재오픈 판단에 쓴다).
+  const applyCellProdSites = (dataItem: WijmoRowItem, clearStale = false, fillFirst = false) => {
+    return cellProdSitesRef.current
+      .load(dataItem)
       .then(rows => {
-        cellProdSitesRef.current.set(dataItem, rows ?? []);
+        if (rows === undefined) return false;
+        // 전역 표시맵에도 병합 — 신규행에서 갓 고른 item 별 코드의 name 을 조회행과 같은 경로로 표시.
+        for (const rr of rows ?? [])
+          cellProdSiteNameMapRef.current.set(String(rr.CODE ?? ''), String(rr.NAME ?? ''));
+        // 크기 가드를 무효화해 syncCellProdSiteDisplayMap 이 표시맵을 반드시 다시 붙이게 한다
+        //   (새 code 가 없어 크기가 같아도, 그 사이 DataGrid 가 컬럼 dataMap 을 갈았을 수 있다).
+        cellProdSiteDmSizeRef.current = -1;
         if (clearStale) clearIfNotInCandidates(dataItem, 'CELL_PROD_SITE_ID', rows);
+        if (fillFirst) fillFirstCandidate(dataItem, 'CELL_PROD_SITE_ID', rows);
+        syncCellProdSiteDisplayMap();
+        return true;
       })
       .catch((err: unknown) => {
         console.error('[combo] CELL_PROD_SITE_ID 조회 실패 — 전체 목록으로 폴백', err);
+        return false;
       });
   };
 
@@ -614,16 +728,70 @@ export const ForecastPriceGrid = ({
   //   Measure / Cell Prod Site / Sales Site 후보를 **시드 키로 즉시 재조회**한다).
   //   구 코드는 SCM_SITE_ID 를 사용자가 다시 바꿀 때만 조회해, 시드 그대로 저장하는 정상 흐름에서
   //   사이트 특성(VMI_YN) 기반 Measure 필터가 **한 번도 적용되지 않았다**.
+  //   주의: addRowSet 은 data 배열에 직접 splice 해 참조가 안 바뀐다 — Insert 시 재실행되도록
+  //     data?.length 를 deps 에 추가 (2026-09-28).
   const primedRowsRef = useRef<WeakSet<object>>(new WeakSet());
   useEffect(() => {
     for (const row of data ?? []) {
       const item = row as unknown as WijmoRowItem;
       if (item['CRUD_TYPE'] !== 'I' || primedRowsRef.current.has(item)) continue;
       primedRowsRef.current.add(item);
-      applyEditMeasures(item);
-      applyCellProdSites(item);
+      // applyEditMeasures(item);
+      // applyCellProdSites(item);
+      // 신규행은 필터 후보 첫 번째 값으로 자동 입력한다.
+      applyEditMeasures(item, false, true);
+      void applyCellProdSites(item, false, true);
       applySalesSites(item);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, data?.length]);
+
+  // Cell Prod Site 표시용 code→name 맵 로드 — 이 콤보는 divisionId 만으로는 '-'(Common) 만 주고
+  //   실제 사이트(예: NJ01-A)는 **itemId 를 함께** 넘겨야 나온다(2026-09-03 BE 응답 실측). 그래서 base
+  //   표시 dataMap 이 비어 조회행이 code 로 노출됐다. 데이터에 실린 (div,item) 조합별로 한 번씩(중복 제거)
+  //   조회해 맵을 채운다. 이미 아는 code 는 건너뛰고, 요청한 조합은 재요청하지 않는다.
+  const cellProdSitePairLoadedRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    const rows = data ?? [];
+    const pairs = new Map<string, { div: string; item: string }>();
+    for (const r of rows) {
+      const it = r as unknown as WijmoRowItem;
+      const div = String(it['DIVISION_ID'] ?? '');
+      const item = String(it['ITEM_ID'] ?? '');
+      const code = String(it['CELL_PROD_SITE_ID'] ?? '').trim();
+      if (!div || !item || !code) continue;
+      if (cellProdSiteNameMapRef.current.has(code)) continue; // 이미 해석 가능
+      const key = `${div}|${item}`;
+      if (cellProdSitePairLoadedRef.current.has(key)) continue; // 이미 요청함
+      pairs.set(key, { div, item });
+    }
+    if (pairs.size === 0) {
+      // 새로 로드할 조합이 없어도(재조회·캐시 적중) 컬럼이 재생성됐을 수 있으니 표시맵을 재적용한다.
+      syncCellProdSiteDisplayMap();
+      return;
+    }
+    let alive = true;
+    for (const key of pairs.keys()) cellProdSitePairLoadedRef.current.add(key);
+    void Promise.all(
+      [...pairs.values()].map(({ div, item }) =>
+        apiClient
+          .getCombo({ comboId: 'CELL_PROD_SITE_ID', divisionId: q(div), itemId: q(item) })
+          .then(res => {
+            for (const rr of res ?? [])
+              cellProdSiteNameMapRef.current.set(String(rr.CODE ?? ''), String(rr.NAME ?? ''));
+          })
+          .catch(() => {
+            /* 개별 실패는 무시 — 그 행만 code 로 남는다 */
+          })
+      )
+    ).then(() => {
+      if (alive) syncCellProdSiteDisplayMap(); // 맵 채운 뒤 컬럼 dataMap 갱신(네이티브 렌더)
+    });
+    return () => {
+      alive = false;
+    };
+    // syncCellProdSiteDisplayMap 은 렌더마다 새로 만들어지는 헬퍼라 deps 에 넣으면 매 렌더 재실행된다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   // ⭐ VMI_In_Req 개방 판정 입력 (현업 검수 41번 — "Sales Site 가 VMI = Y 인 경우만").
@@ -746,9 +914,9 @@ export const ForecastPriceGrid = ({
   const dynamicColumns = useMemo<FlexGridColumnConfig[]>(() => {
     if (dynColMetas.length === 0) return [];
     type LeafCol = FlexGridColumnConfig & { binding: string };
-    // ⭐ 헤더 단수 동적 (#93 캐노니컬 + Figma DMF0082 Table 실측 정합):
+    // 헤더 단수 동적 (#93 캐노니컬 + 화면 설계 실측 정합):
     //   D_ 존재(Daily 조회) = 3단(년월>주차>일, 각 16px) / D_ 부재(W/M 조회) = 2단(년월>주차, 각 24px
-    //   — Figma Table 프레임 실측 24+24=48 과 일치). hasDaily/tierH = 컴포넌트 스코프 파생.
+    //   — 화면 설계 실측 24+24=48 과 일치). hasDaily/tierH = 컴포넌트 스코프 파생.
     const largeMap = new Map<
       string,
       { label: string; subs: Map<string, LeafCol[]>; order: number }
@@ -813,7 +981,7 @@ export const ForecastPriceGrid = ({
                     a.binding.localeCompare(b.binding)
                 ),
               }))
-          : // 2단 — 주차/SUM 컬럼을 직접 leaf 로 (Figma Table 실측 구조)
+          : // 2단 — 주차/SUM 컬럼을 직접 leaf 로 (화면 설계 실측 구조)
             [...bucket.subs.entries()]
               .sort(([a], [b]) => subOrder(a) - subOrder(b))
               .flatMap(([, leafCols]) =>
@@ -966,46 +1134,13 @@ export const ForecastPriceGrid = ({
     return () => gridFilter.filterApplied.removeHandler(rememberFilter);
   }, [gridFilterRef, gridRef, dynamicColumns]);
 
-  useEffect(() => {
-    const g = gridRef.current;
-    if (!g) return;
-    // 컬럼이 하나도 없는 그리드에는 적용할 것이 없다.
-    //   division 별 admin 컬럼 메타가 미적재면(예: 81 — /admin/menu/DMF0082/column 이 result:null)
-    //   staticColumns 가 빈 배열이 되고, 조회 결과까지 0건이면 동적 컬럼도 비어 columnGroups 가
-    //   통째로 빈 배열이 된다. 이 상태에서 아래 collectionView.refresh() 로 신규행을 밀어 넣으면
-    //   wijmo 가 컬럼 인덱스 -1 로 내부 계산을 하다 'Positive number expected.' 를 던져 화면이
-    //   에러 바운더리로 떨어진다 (2026-08-13 division 81 조회 0건 + 행추가 실측).
-    //   어차피 컬럼이 없어 신규행을 보여줄 수단도 없으므로 건너뛰는 것이 무손실이다.
-    if (g.columns.length === 0) return;
-
-    const insertRows = (data ?? []).filter(
-      row => (row as unknown as WijmoRowItem)['CRUD_TYPE'] === 'I'
-    );
-    // ⭐ 신규행이 없다 = **조회 결과 교체**(Search). 이때는 필터를 복원하지 않는다 (2026-08-13 정정).
-    //   구 구현은 data 가 바뀔 때마다 무조건 복원해서 두 가지 문제가 있었다:
-    //     ① 새로 조회했는데 직전 필터가 되살아난다 (사용자 기대와 반대).
-    //     ② 조회로 컬럼 구성이 바뀌면 옛 filterDefinition 이 없는 컬럼을 가리켜 wijmo 내부
-    //        인덱스가 음수가 될 수 있다 → `Positive number expected`.
-    //   기억해 둔 정의도 함께 버린다 — 다음 조회에 유령 필터가 붙지 않게.
-    if (insertRows.length === 0) {
-      filterDefinitionRef.current = '';
-      return;
-    }
-
-    const gridFilter = gridFilterRef.current;
-    const savedFilter = filterDefinitionRef.current;
-    if (gridFilter && savedFilter && gridFilter.filterDefinition !== savedFilter) {
-      try {
-        gridFilter.filterDefinition = savedFilter; // setter 가 apply 까지 수행
-      } catch {
-        // 컬럼 구성이 바뀌어 정의를 못 붙이는 경우 — 필터 없이 진행 (화면 차단 금지).
-        filterDefinitionRef.current = '';
-      }
-    }
-
-    insertRows.forEach(row => keepRowVisibleUnderFilter(g, row));
-    g.collectionView?.refresh();
-  }, [gridRef, gridFilterRef, data]);
+  // ⚠️ 옛 "data 참조 변경 시 필터 복원 + 신규행 예외 재등록" effect는 여기서 삭제했다 — 부모
+  //   (ForecastPrice.tsx)가 GridAction.addRowSet 으로 마이그레이션된 뒤로 `data`(=gridRows=
+  //   spRows) 는 실제 재조회(Search) 때만 참조가 바뀌고, 그 시점의 새 조회 결과에는 애초에
+  //   CRUD_TYPE='I' 행이 있을 수 없다(서버가 신규 마커를 내려줄 리 없다) — 즉 이 effect의
+  //   "신규행 존재" 분기가 다시는 실행되지 않는 죽은 코드가 됐다. Insert 시점의 필터 예외
+  //   등록은 addRowSet 이 자체적으로 처리하고, 사용자가 필터 팝업에서 직접 Apply 를 눌러
+  //   그 예외 집합이 지워지는 경우는 위 `rememberFilter`(filterApplied 핸들러)가 담당한다.
 
   // ── grid 핸들러 등록 (useEffect + gridRef, deps=[staticColumns, dynamicColumns], cleanup 의무) ──
   useEffect(() => {
@@ -1127,6 +1262,35 @@ export const ForecastPriceGrid = ({
       };
     };
 
+    // Cell Prod Site 편집 후보 제한 — MEASURE 와 동일 규약: dataMap 을 **교체하지 않고**
+    //   getDisplayValues 만 덮어 행별 후보로 드롭다운을 좁힌다.
+    //   [2026-09-04 사용자 신고] 종전엔 편집 진입 시 컬럼 dataMap 을 그 행의 후보 목록으로 통째로
+    //     갈아끼웠는데(아래 rowScopedRef 스왑), dataMap 은 컬럼 단위라 후보 밖 code 를 가진 **다른 행**이
+    //     편집 중 raw code 로 노출됐다(추가행 편집 시 그 아래 행이 code 로 보임). MEASURE 가 2026-08-12
+    //     에 겪고 고친 것과 동일한 유형이다.
+    //   표시용 dataMap(cellProdSiteNameMapRef 기반)에 후보 code 가 이미 병합돼 있어(applyCellProdSites)
+    //     code→name 해석이 유지된다. 후보를 아직 안 받았으면(undefined — 조회행·Model 공란·조회 실패)
+    //     전체 표시 목록으로 폴백한다. 받은 후보가 0건이면 폴백하지 않고 빈 목록을 그대로 보여준다
+    //     (2026-09-29 — 종전 `length > 0` 판정은 0건일 때 전체 목록을 띄워 후보 밖 사이트를 고를 수 있었다).
+    const installCellProdSiteCandidateFilter = (dataMap?: DataMap) => {
+      if (!dataMap) return;
+      const map = dataMap as MeasureCandidateDataMap;
+      if (map.rowScopedCandidates) return;
+      map.rowScopedCandidates = true;
+      const allDisplayValues = map.getDisplayValues.bind(map) as (item?: unknown) => string[];
+      map.getDisplayValues = (item?: unknown): string[] => {
+        const candidates = item ? cellProdSitesRef.current.get(item as WijmoRowItem) : undefined;
+        if (candidates !== undefined) {
+          return candidates.map(
+            candidate =>
+              map.getDisplayValue(String(candidate.CODE)) ||
+              String(candidate.NAME ?? candidate.CODE ?? '')
+          );
+        }
+        return allDisplayValues(item);
+      };
+    };
+
     // ⭐ 정적 컬럼 편집 가능 판정 — 편집 차단(beginningEdit/pastingCell)과 셀 색칠(formatItem)이
     //   **반드시 같은 함수**를 봐야 한다. 2026-08-11 No.35 로 편집 조건만 INPUT_TP_CD 로 좁히고
     //   색칠은 isInsert 그대로 둬서, 조회전용(INPUT_TP_CD='S') 인 Nick Name/Team 등이 신규행에서
@@ -1191,16 +1355,17 @@ export const ForecastPriceGrid = ({
           return;
         }
 
-        // 행 단위 서버 재조회로 좁혀진 후보가 있으면 그것으로 스왑 (없으면 표시용 유지 = 회귀 0).
-        //   CELL_PROD_SITE_ID ← ITEM_ID 변경 / SCM_SITE_ID ← END_CUSTOMER 변경.
-        const rowScopedRef =
-          binding === 'CELL_PROD_SITE_ID'
-            ? cellProdSitesRef
-            : binding === 'SCM_SITE_ID'
-              ? salesSitesRef
-              : null;
-        if (rowScopedRef) {
-          const candidates = rowScopedRef.current.get(dataItem);
+        // CELL_PROD_SITE_ID — dataMap 을 교체하지 않고 getDisplayValues 만 좁힌다(MEASURE 와 동일 규약).
+        //   dataMap 교체는 컬럼 단위라 후보 밖 code 를 가진 다른 행이 편집 중 raw code 로 보였다
+        //   (2026-09-04 신고 — installCellProdSiteCandidateFilter 주석 참조).
+        if (binding === 'CELL_PROD_SITE_ID') {
+          installCellProdSiteCandidateFilter(sender.columns[e.col]?.dataMap as DataMap | undefined);
+          return;
+        }
+        // SCM_SITE_ID(Sales Site) — 행 단위 서버 재조회 후보로 dataMap 스왑 (편집 종료 시 cellEditEnded 원복).
+        //   END_CUSTOMER 변경으로 재조회된 행별 후보가 있으면 그것으로 좁힌다(없으면 표시용 유지 = 회귀 0).
+        if (binding === 'SCM_SITE_ID') {
+          const candidates = salesSitesRef.current.get(dataItem);
           const rsCol = sender.columns[e.col];
           if (candidates && candidates.length > 0 && rsCol) {
             if (!(binding in origDataMapRef.current))
@@ -1323,7 +1488,7 @@ export const ForecastPriceGrid = ({
       // D9 — Model(ITEM_ID) 변경 → Cell Prod Site 후보 재조회 (AS-IS .cs L5854).
       //   Division 변경도 CMBO 바인드(@divisionId)에 들어가므로 함께 재조회.
       if ((binding === 'ITEM_ID' || binding === 'DIVISION_ID') && isInsert)
-        applyCellProdSites(dataItem, true);
+        void applyCellProdSites(dataItem, true);
       // End Customer 변경 → Sales Site 후보 재조회 (AS-IS .cs L8237·8283·8294).
       if ((binding === 'END_CUSTOMER' || binding === 'DIVISION_ID') && isInsert)
         applySalesSites(dataItem, true);
@@ -1354,19 +1519,26 @@ export const ForecastPriceGrid = ({
       const tracker = editTrackerRef.current;
       if (!tracker) return;
       const measure = dataItem['MEASURE'];
-      // #14 — Daily 버킷 D_ 직접 입력 시 FCST 3종은 정수 절삭 (AS-IS :6094~6103).
-      if (
-        binding.startsWith('D_') &&
-        (measure === 'MKT_FCST' || measure === 'SCM_FCST' || measure === 'VMI_In_Req')
-      ) {
-        const truncated = Math.trunc(toNumber(val));
-        if (truncated !== toNumber(val)) {
-          val = truncated;
-          sender.setCellData(e.row, e.col, truncated);
+      // 소수 자리 정규화 — 키 입력은 keydown(enforceDecimalKey)에서 막지만, 붙여넣기/드래그
+      //   채우기는 에디터를 안 거치므로 커밋 시점에 값 자체를 맞춘다.
+      //   MKT_FCST[R+P]=정수 / Unit Price(LOC)·POINT3=소수 3자리 (사용자 요구 2026-09-03).
+      //   SCM_FCST/VMI_In_Req 의 D_ 정수 절삭은 AS-IS #14(:6094~6103) 파리티로 유지한다.
+      const maxDec =
+        measureMaxDecimals(dataItem) ??
+        ((measure === 'SCM_FCST' || measure === 'VMI_In_Req') && binding.startsWith('D_')
+          ? 0
+          : null);
+      if (maxDec !== null) {
+        const num = toNumber(val);
+        // 정수는 절삭(AS-IS 수량 파리티), 소수는 반올림(부동소수 오차로 0.123→0.122 방지).
+        const norm = maxDec === 0 ? Math.trunc(num) : Number(num.toFixed(maxDec));
+        if (norm !== num) {
+          val = norm;
+          sender.setCellData(e.row, e.col, norm);
         }
       }
-      // 배분 대상 = MKT_FCST/SCM_FCST 만 (AS-IS L498 실측). LOC=일괄할당. VMI_In_Req=단일 셀(배분 없음).
-      if (measure === 'MKT_FCST' || measure === 'SCM_FCST') {
+      // 배분 대상 = LOC 를 뺀 수량 메저 전부 (isDistributedMeasure — AS-IS `sMeasure != "LOC"`). LOC=일괄할당.
+      if (isDistributedMeasure(measure)) {
         if (binding.startsWith('M_'))
           divideByMonth(
             binding,
@@ -1397,7 +1569,7 @@ export const ForecastPriceGrid = ({
       sender.invalidate();
     };
 
-    // 셀 표시 (#95 3색 표준 — 편집가능 Yellow / 기준주차 이전 잠금 Gray / 기본 White+zebra)
+    // 셀 표시 (#95 3색 표준 — 편집가능 Yellow / 기준주차 이전 잠금 Gray / 기본 White)
     //   + #108 No. 코너 헤더 (TopLeft 전체 단일 머지 + 'No.' 라벨, 재귀 가드).
     const formatHandler = (
       sender: FlexGrid,
@@ -1543,7 +1715,7 @@ export const ForecastPriceGrid = ({
             tracker.storeChange(dataItem, binding, oldValue, 0);
             dataItem[binding] = 0;
             const measure = dataItem['MEASURE'];
-            if (measure === 'MKT_FCST' || measure === 'SCM_FCST') {
+            if (isDistributedMeasure(measure)) {
               if (binding.startsWith('M_'))
                 divideByMonth(
                   binding,
@@ -1644,40 +1816,128 @@ export const ForecastPriceGrid = ({
       applyDynVisibilityRef.current?.();
     };
 
-    // ⭐ 동적(M_/W_/D_) 헤더 정렬 차단 (사용자 요구 2026-07-22) — 주차/SUM 단일클릭 시 공용
-    //   DataGrid `setSortableColumnHeaderClick` 가 정렬을 걸고 `select(-1,-1)+scrollIntoView(0,0)` 로
-    //   그리드를 맨 앞으로 스크롤한다. 그 스크롤 탓에 뒤이은 dblclick 의 hitTest 가 앞쪽 컬럼을 집어
-    //   드릴다운(특히 October M_)이 죽는다. allowSorting=false 재설정은 columnGroups 재적용과 경쟁해
-    //   클릭 순간을 못 막으므로, **capture 단계**에서 동적 헤더 click 을 선점 차단한다.
-    //   (click 대상은 셀=하위 요소 → hostElement 의 capture 가 공용 bubble 핸들러보다 먼저 실행.
-    //    dblclick 은 건드리지 않아 드릴다운은 그대로 동작. 정적 컬럼 정렬은 유지 — kindOf 대상만 차단.)
-    const dynHeaderSortGuard = (ev: MouseEvent) => {
-      const ht = g.hitTest(ev);
-      if (ht.cellType !== CellType.ColumnHeader) return;
-      const hb = g.columns[ht.col]?.binding ?? '';
-      if (!kindOf(hb)) return;
-      ev.stopImmediatePropagation();
+    // 값 셀 소수점 입력 차단 — 편집 중 measure 별 허용 소수 자리를 초과하는 키 입력을 막는다.
+    //   MKT_FCST[R+P]='.' 자체 차단(정수), Unit Price(LOC)=소수 4째자리·중복 소수점 차단.
+    //   capture 로 잡는 이유: Wijmo 에디터가 keydown 을 먼저 소비하면 이미 값이 들어간 뒤다
+    //   (정본 mkt-fcst blockQtyDotKey). 붙여넣기/드래그 경로는 cellEditHandler 커밋 정규화가 받는다.
+    const enforceDecimalKey = (ev: KeyboardEvent) => {
+      const binding = g.columns[g.selection.col]?.binding ?? '';
+      if (!kindOf(binding)) return; // 숫자 measure 값 컬럼(M_/W_/D_)만
+      const max = measureMaxDecimals(
+        g.rows[g.selection.row]?.dataItem as Record<string, unknown> | undefined
+      );
+      if (max === null) return;
+
+      const isDot = ev.key === '.' || ev.key === 'Decimal';
+      const isDigit = ev.key.length === 1 && ev.key >= '0' && ev.key <= '9';
+      if (!isDot && !isDigit) return; // 방향키·Backspace·수정키 등은 통과
+
+      if (max === 0) {
+        if (isDot) ev.preventDefault(); // 정수 measure: 소수점 자체 차단
+        return;
+      }
+
+      // max === 3 (LOC/POINT3): 소수점 중복·4째자리 이상 차단
+      const ed = g.activeEditor as HTMLInputElement | null;
+      const value = ed?.value ?? ''; // 편집 시작 전 첫 글자면 빈 값으로 간주
+      const selStart = ed?.selectionStart ?? value.length;
+      const selEnd = ed?.selectionEnd ?? value.length;
+      const dotIdx = value.indexOf('.');
+      if (isDot) {
+        // 이미 소수점이 있고 그 소수점을 선택 범위로 덮어쓰는 게 아니면 중복 차단
+        if (dotIdx >= 0 && !(selStart <= dotIdx && dotIdx < selEnd)) ev.preventDefault();
+        return;
+      }
+      // 숫자 키: 소수점이 없거나 커서가 정수부면 무제한 통과
+      if (dotIdx < 0 || selStart <= dotIdx) return;
+      // 커서가 소수부: 선택으로 덮어쓰지 않고 소수부가 이미 3자리면 차단
+      if (selStart === selEnd && value.length - dotIdx - 1 >= 3) ev.preventDefault();
     };
 
-    g.beginningEdit.addHandler(cellEditableHandler);
+    // Cell Prod Site 표시맵 재적용 — DataGrid 가 combo/columnGroups 재구성으로 col.dataMap 을 base 로
+    //   되돌리거나 컬럼 인스턴스를 갈아끼우면(첫 조회 시 code 회귀) 여기서 다시 붙인다. sync 는 멱등이라
+    //   (참조·크기 동일하면 skip) updatedView 로 매번 불려도 재빌드/루프가 없다.
+    const reapplyCellProdSiteMap = () => syncCellProdSiteDisplayMap();
+    let disposed = false;
+
+    // Cell Prod Site 편집 진입 — 그 행의 후보를 **먼저 받아 둔 뒤** 편집기를 연다(2026-09-29).
+    //   [사용자 신고] 첫 조회 때 그리드가 첫 행을 자동 선택하면서 그 행 기준으로 CELL_PROD_SITE_ID 가
+    //     조회되고, 이후 다른 행에서 열어도 드롭다운이 그 목록으로 고정됐다(로컬도 동일).
+    //   원인: 편집기(드롭다운)는 열리는 순간의 목록을 잡는다. 그런데 DataGrid 는 편집 중에는 콤보
+    //     dataMap 갱신을 미루므로(applyComboDataMaps pending), 편집기를 연 뒤에 후보가 도착하면
+    //     이미 열린 드롭다운에 반영되지 않는다.
+    //   그래서 이 컬럼은 편집 시작을 한 번 취소하고, 후보 조회가 끝나면 표시맵을 맞춘 뒤 편집기를
+    //     다시 연다(toggleDropDownList → 이 핸들러 재진입 → cellProdSiteEditRef 로 통과).
+    //   붙여넣기(pastingCell)는 편집기를 열지 않으므로 종전대로 cellEditableHandler 만 쓴다.
+    const beginCellEditHandler = (
+      sender: FlexGrid,
+      e: { row: number; col: number; cancel: boolean }
+    ) => {
+      const row = sender.rows[e.row]?.dataItem as WijmoRowItem | undefined;
+      const binding = sender.columns[e.col]?.binding;
+      if (e.cancel || binding !== 'CELL_PROD_SITE_ID' || !row || !canEditStaticCell(binding, row)) {
+        cellEditableHandler(sender, e);
+        return;
+      }
+      // Division/Model 이 비면 조회하지 않는다(createCellProdSiteCandidates 계약) — 기다릴 게 없으므로
+      //   바로 편집기를 연다. 후보가 없어 드롭다운은 전체 표시 목록으로 폴백한다(종전 동작).
+      if (!row['DIVISION_ID'] || !row['ITEM_ID']) {
+        cellEditableHandler(sender, e);
+        return;
+      }
+      const ready = cellProdSiteEditRef.current;
+      if (ready?.row === row && ready.key === cellProdSiteKey(row)) {
+        cellProdSiteEditRef.current = null;
+        cellEditableHandler(sender, e);
+        return;
+      }
+      e.cancel = true;
+      void applyCellProdSites(row).then(loaded => {
+        // 조회 실패·결과 폐기, 또는 기다리는 사이 화면이 닫혔거나 사용자가 다른 셀로 옮겼으면 열지 않는다.
+        if (
+          !loaded ||
+          disposed ||
+          sender.activeEditor ||
+          sender.selection.row !== e.row ||
+          sender.selection.col !== e.col ||
+          sender.rows[e.row]?.dataItem !== row
+        )
+          return;
+        syncCellProdSiteDisplayMap();
+        cellProdSiteEditRef.current = { row, key: cellProdSiteKey(row) };
+        try {
+          // 예약된 표시 갱신을 먼저 끝낸다 — 편집기를 연 뒤 refresh 가 돌면 finishEditing 으로 닫힌다.
+          sender.refresh();
+          sender.toggleDropDownList();
+        } finally {
+          cellProdSiteEditRef.current = null;
+        }
+      });
+    };
+
+    g.beginningEdit.addHandler(beginCellEditHandler);
     g.pastingCell.addHandler(cellEditableHandler);
     g.cellEditEnded.addHandler(cellEditHandler);
     g.pastedCell.addHandler(cellEditHandler);
     g.formatItem.addHandler(formatHandler);
+    g.updatedView.addHandler(reapplyCellProdSiteMap);
+    g.hostElement.addEventListener('keydown', enforceDecimalKey, true);
     g.hostElement.addEventListener('keydown', keydownHandler);
     g.hostElement.addEventListener('dblclick', dblclickHandler);
-    // capture 단계 등록 — 공용 setSortableColumnHeaderClick(bubble)보다 먼저 실행돼 정렬 선점 차단.
-    g.hostElement.addEventListener('click', dynHeaderSortGuard, true);
+    // 컬럼이 방금 (재)생성된 직후 1회 — 이미 누적된 표시맵이 있으면 즉시 붙인다.
+    reapplyCellProdSiteMap();
 
     return () => {
-      g.beginningEdit.removeHandler(cellEditableHandler);
+      disposed = true;
+      g.beginningEdit.removeHandler(beginCellEditHandler);
       g.pastingCell.removeHandler(cellEditableHandler);
       g.cellEditEnded.removeHandler(cellEditHandler);
       g.pastedCell.removeHandler(cellEditHandler);
       g.formatItem.removeHandler(formatHandler);
+      g.updatedView.removeHandler(reapplyCellProdSiteMap);
+      g.hostElement.removeEventListener('keydown', enforceDecimalKey, true);
       g.hostElement.removeEventListener('keydown', keydownHandler);
       g.hostElement.removeEventListener('dblclick', dblclickHandler);
-      g.hostElement.removeEventListener('click', dynHeaderSortGuard, true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [staticColumns, dynamicColumns]);
@@ -1724,17 +1984,27 @@ export const ForecastPriceGrid = ({
     const drillSet = new Set(drillBindings);
     const dynSet = new Set(dynBindings);
     const applyDynVisibility = () => {
+      // 우클릭 Hide Column 으로 숨긴 컬럼(공용 DataGrid 가 grid 인스턴스에 얹어 준다 — Column
+      //   객체의 커스텀 플래그는 wijmo 생성자가 `_` 로 시작하는 키를 무시해 전달되지 않는다).
+      const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+        ._userHiddenColumns;
       let changed = false;
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];
         const b = col.binding ?? '';
         if (!dynSet.has(b)) continue;
-        // ⭐ 동적 컬럼 정렬 금지 (사용자 요구 2026-07-22) — 헤더 클릭 시 정렬이 걸려 드릴다운이
-        //   오작동한다. 공용 DataGrid 는 **컬럼 객체의 allowSorting** 으로 정렬 아이콘과 클릭을
-        //   판정하므로(dataGridUtils `formatSortableColumns` / `setSortableColumnHeaderClick`),
-        //   dynamicColumns config 의 allowSorting:false 가 columnGroups 재적용으로 되살아나도
-        //   여기서 매 updatedLayout 마다 다시 눌러 확정한다. 정적 컬럼은 정렬 유지(dynSet 만 대상).
-        if (col.allowSorting) col.allowSorting = false;
+        // Hide Column 으로 숨긴 컬럼은 sum/드릴 재계산 대상에서 제외 — 숨김 유지.
+        if (userHiddenColumns?.has(b)) {
+          if (col.visible !== false) {
+            col.visible = false;
+            changed = true;
+          }
+          continue;
+        }
+        // 동적 컬럼 정렬은 공용 DataGrid 규약(F3 로 allowSorting 켠 컬럼만 헤더 클릭 정렬)을 그대로
+        //   따른다 — 과거엔 정렬 뒤 select(-1,-1)+scrollIntoView(0,0) 가 그리드를 맨 앞으로 끌어당겨
+        //   드릴다운 dblclick hitTest 를 깨뜨려 여기서 강제로 껐지만, 공용 dataGridUtils 가 동적 컬럼
+        //   정렬 시 그 리셋을 건너뛰고 invalidate 만 하도록 고쳐져(2026-09) 더 이상 깨지지 않는다.
         const base = summarySet.has(b) ? sumYn : drillSet.has(b) ? false : true;
         const want = drillVisRef.current.get(b) ?? base;
         if (col.visible !== want) {
@@ -1773,6 +2043,8 @@ export const ForecastPriceGrid = ({
       gridRef={gridRef}
       gridFilterRef={gridFilterRef}
       itemsSource={data}
+      // 열고정은 공용 DataGrid 가 컬럼 메타의 fixed(=Y)를 읽어 산출한다(마지막 fixed 컬럼까지 고정).
+      //   이 화면은 MEASURE 가 fixed=Y 라 Div~Measure 가 고정된다. staticColumns 를 그대로 넘긴다.
       staticColumns={staticColumns}
       dynamicColumns={dynamicColumns}
       // ⭐ 메타 셀 콤보의 @토큰 해소 (정본 mkt-fcst MktFcstGrid — 2026-07-20 measure 코드 표시 사고 대응).
@@ -1788,6 +2060,14 @@ export const ForecastPriceGrid = ({
       //       PlantByDivisionCompany 45→12 / FcstTypeByUserGroupDMF0082 14→4 / CELL_PROD_SITE_ID 4→1
       //     나머지 14종(Measure·Incoterms·CurrencyList 등)은 토큰이 없어 무영향.
       comboParams={{ mnuId: `'${MENU_ID}'`, divisionId: q(searchParams.divisionId) }}
+      // ⭐ [E20260901-CPSDISP] Cell Prod Site 표시 콤보는 **파라미터 없이**(전체 목록) 조회한다.
+      //   이 콤보는 division 을 받으면 AS-IS BIZ_TYPE 분기로 '-'(Common) 1행만 반환해(실측: 무파라미터
+      //   5행 / divisionId 전달 1행), 그 축소본이 dataMap 이 되면 원장 코드(HQ06-A 등)가 CODE→NAME
+      //   매핑을 잃고 raw 코드로 표시된다(사용자 신고 2026-09-01). 편집 후보 제한은 행별
+      //   applyCellProdSites(division+item)가 계속 담당 — "표시용 ↔ 편집용 이원화" 규약.
+      comboParamExcludes={['CELL_PROD_SITE_ID']}
+      // 이 그리드의 셀 콤보에 시트 스코프 sheetName 을 함께 실어 @sheetName 을 해소한다(mnuId 와 짝).
+      sheetName={SHEETS.FCST_N_PRICE_40}
       selectionMode={SelectionMode.MultiRange}
       allowMerging={AllowMerging.All}
       alternatingRowStep={1}

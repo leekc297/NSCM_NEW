@@ -64,7 +64,7 @@ export const ErpEdiMasterRepairGrid = ({
   };
 
   // 셀 시각 (hook #95 grid-cell-backcolor-standard):
-  //   base — 클래스 없음 = White + 홀짝 zebra (공용 DataGrid 자동). ⚠ 조회 grid 통째 회색칠 금지(blanket gray 제거).
+  //   base — 클래스 없음 = White (공용 DataGrid 자동). ⚠ 조회 grid 통째 회색칠 금지(blanket gray 제거).
   //   override — 값=='확인필요' & 컬럼 ∈ REPAIR_STATUS_COLUMNS → ForeColor=Red, BackColor=Azure (특수 상태 강조)
   //   tooltip — '확인필요' 셀 hover 시 AS-IS .cs L1350/L1370 안내(MSG00445 SALES_SITE / MSG00446 SSPM).
   const handleFormatItem = (

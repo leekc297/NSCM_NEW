@@ -44,12 +44,27 @@ export interface OlapPivotGridProps {
    * 사용자가 레일/드래그로 축 구성을 바꿨을 때(engine.viewDefinitionChanged) 각 축의 필드 **헤더** 목록을 통지.
    * 화면이 버킷 필드 이동 → 조회조건 bucket 갱신 같은 후속 처리를 한다. props 재적용으로 인한 변경은 통지하지 않는다.
    */
-  onLayoutChange?: (layout: { rows: string[]; columns: string[]; filters: string[]; values: string[] }) => void;
+  onLayoutChange?: (layout: {
+    rows: string[];
+    columns: string[];
+    filters: string[];
+    values: string[];
+  }) => void;
   /**
    * 내부 PivotGrid(FlexGrid 파생) 인스턴스가 준비된 직후 통지 — 화면이 formatItem/헤더 높이/필터 등 그리드 후처리를
    * 붙일 때 ref 폴링 대신 이 시점을 deps 로 쓴다 (ref 만 보면 마운트 전 effect 가 빈손으로 끝난다).
    */
   onGridInit?: (grid: unknown) => void;
+  /**
+   * ⭐ [E20260902-PIVOTCOUNT] **피벗 후 행수**(= 그리드·Excel 에 실제로 그려지는 행수) 통지.
+   *   사용자 지시 2026-09-02: DMF0035 건수 표기를 원천 행수가 아니라 피벗 결과 기준으로 바꾼다.
+   *   배경 — 원천(SP O_RC1) 행수와 피벗 행수는 다르다. PivotEngine 은 `rowFields` 조합으로 그룹핑하므로
+   *   축에 없는 컬럼으로만 갈리는 원천 행들은 **한 행으로 병합**된다
+   *   (SALES div81 실사고: UI 1,150건 표기 vs Excel 1,144행 = 병합 6행).
+   *   그리드의 `updatedLayout`(행·열 재생성 완료) 시점에 **`grid.rows.length`** 를 전달한다.
+   *   (⛔ `engine.pivotView.items.length` 는 그리드 행수와 다르다 — 본문 구현부 주석 참조)
+   */
+  onPivotRowCountChange?: (rowCount: number) => void;
   /** 소계/총계 표시 (waterfall 은 기본 미표시 — AS-IS footer SUM 은 열 총계로 대체 가능). */
   showRowTotals?: 'None' | 'Subtotals' | 'GrandTotals';
   showColumnTotals?: 'None' | 'Subtotals' | 'GrandTotals';
@@ -107,6 +122,7 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
       extraFields,
       onLayoutChange,
       onGridInit,
+      onPivotRowCountChange,
       showRowTotals = 'None',
       showColumnTotals = 'None',
       height,
@@ -189,6 +205,25 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
     const gridInstanceRef = useRef<unknown>(null);
     const onGridInitRef = useRef(onGridInit);
     onGridInitRef.current = onGridInit;
+
+    // ⭐ [E20260902-PIVOTCOUNT] 피벗 후 행수 통지 — **그리드가 실제로 그리는 행**을 센다.
+    //
+    // ⛔ 쓰면 안 되는 것 2가지 (2026-09-02 실측 반증):
+    //   1) 화면의 원천 배열 길이(`data.length`) — 피벗과 무관해 축을 바꿔도 안 변한다.
+    //      실측: Rows 를 DIVISION·MEASURE 2개로 줄여 **그리드가 5행**이 됐는데도 표기는 1,150 유지.
+    //   2) `engine.pivotView.items.length` — 엔진 출력 뷰 항목 수이지 그리드 행수가 아니다.
+    // ✅ `grid.rows.length` = 화면에 그려지는 행이자 `FlexGridXlsxConverter` 가 내보내는 바로 그 집합
+    //    ⇒ 표기 = 그리드 = Excel 이 정의상 일치한다 (SALES div81 UI 1,150 vs Excel 1,144 불일치 해소).
+    //
+    // 트리거는 그리드의 **`updatedLayout`**(행·열 재생성 완료). `engine.updatedView` 시점에는 그리드가
+    // 아직 행을 다시 만들기 전이라 직전 행수를 집는다 — 폭 자동맞춤이 같은 이유로 updatedLayout 을 쓴다.
+    const countCbRef = useRef(onPivotRowCountChange);
+    countCbRef.current = onPivotRowCountChange;
+    const notifyRowCount = useRef<() => void>(() => {});
+    notifyRowCount.current = () => {
+      const g = gridInstanceRef.current as { rows?: { length: number } } | null;
+      countCbRef.current?.(g?.rows?.length ?? 0);
+    };
     // 언마운트(= 내부 PivotGrid dispose) 통지 — 화면이 dispose 된 인스턴스를 붙들고 columnHeaders 등에 접근하지 않게
     useEffect(
       () => () => {
@@ -278,9 +313,24 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
         void import('@mescius/wijmo.grid.xlsx').then(({ FlexGridXlsxConverter }) => {
           const grid = gridInstanceRef.current;
           if (grid) {
+            // ⭐ [E20260902-OLAPXLSALL] includeRowHeaders 필수 — PivotGrid 는 **행 축 필드(rowFields)를
+            //   rowHeaders 패널**에 렌더하고(wijmo.olap `showRowFieldHeaders` = "top-left panel"),
+            //   IFlexGridXlsxOptions.includeRowHeaders 기본값은 **false** 다. 따라서 이 옵션이 없으면
+            //   xlsx 에는 columnFields 로 만들어진 **동적(기간) 컬럼만** 담기고 고정 행축 컬럼
+            //   (VERSION_NO / MEASURE / ITEM_ID …)이 통째로 빠진다 (사용자 신고 2026-09-02
+            //   "동적 COLUMN만 다운로드"). 두 패널을 모두 켜야 화면과 동일한 전체 표가 나온다.
+            // ⭐ [E20260902-OLAPXLSALLCOL] includeColumns 로 **숨김 컬럼까지 전량 포함**한다.
+            //   기본 동작은 `column.visible === false` 를 내보내지 않는다. PivotGrid 는 값 필드가
+            //   1개일 때 값 헤더 열을 숨기거나(showValueFieldHeaders) 폭 계산 중 일부 열을
+            //   숨김 상태로 두는 경우가 있어, 화면에 보이는 표와 xlsx 가 달라진다.
+            //   사용자 요구 2026-09-02 "OLAP COLUMN 전체 보이도록 DOWNLOAD".
             FlexGridXlsxConverter.saveAsync(
               grid as never,
-              { includeColumnHeaders: true },
+              {
+                includeColumnHeaders: true,
+                includeRowHeaders: true,
+                includeColumns: () => true,
+              },
               fileName
             );
           }
@@ -308,7 +358,11 @@ export const OlapPivotGrid = forwardRef<OlapPivotGridRef, OlapPivotGridProps>(
             });
             // 컬럼 재생성이 끝난 뒤(레이아웃 갱신 완료)에 폭을 잡는다 — §autoFitColumns 참조.
             //   사용자 리사이즈의 updatedLayout 은 pending 이 없어 통과(폭 유지) — [FITONCE]
-            grid.updatedLayout?.addHandler(() => fitColumns.current());
+            grid.updatedLayout?.addHandler(() => {
+              fitColumns.current();
+              // [E20260902-PIVOTCOUNT] 행 재생성이 끝난 이 시점의 grid.rows.length 가 곧 화면·Excel 행수
+              notifyRowCount.current();
+            });
           }}
           style={{ height: '100%' }}
         />

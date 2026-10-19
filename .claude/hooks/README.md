@@ -1,23 +1,28 @@
-# `.claude/hooks/` — Claude Code 강제 실행 Hook (2026-06-18 동기화, R-7/R-8)
+# `.claude/hooks/` — Claude Code 강제 실행 Hook (2026-10-12 동기화 — 실측 9 스크립트 / 10 wiring)
 
 ## 목적
 
 룰 문서(`Doc/_rules_v2/hooks/*.md`)는 **AI 가 읽고 지키는 가이드("문서 hook")**.
 이 폴더의 스크립트는 **harness 가 자동 실행하는 차단/주입("실행 hook")** — AI 의지와 무관, `exit 2` 시 도구 호출 차단.
 
-> ⚠️ **용어(R-8)**: 문서 hook 69종 vs 실행 hook 5종은 **별개**. 단일 진입·전체 카탈로그 = `Doc/_rules_consolidation/RULESET_MASTER.md`.
+> ⚠️ **용어(R-8)**: 문서 hook **153종**(`Doc/_rules_v2/hooks/*.md` 2026-10-12 실측) vs 실행 hook **9 스크립트**는 **별개**. 단일 진입·전체 카탈로그 = `Doc/_rules_consolidation/RULESET_MASTER.md`.
 
-## 파일 구성 (실제 wiring = `../settings.json` 기준, 5 스크립트)
+## 파일 구성 (실제 wiring = `../settings.json` 기준, 9 스크립트 / 10 wiring)
 
 | 파일 | 이벤트 | 차단/동작 | 위반 exit |
 |---|---|---|:---:|
+| `attach-context.{ps1,sh}` | **UserPromptSubmit** | (차단 없음) **v3 2026-10-12**: `!lite`/`!full` 또는 질의 판별 → **LITE** 는 1줄 안내만 / **FULL** 은 anti-simplification + `TRIGGER_ROUTER.md`(MASTER §2 추출본) + 키워드별 진입 hook 첨부, T01/T01M 은 `UI_MANDATORY_CHECKLIST.md`(§3 추출본) 추가, 합계 120KB 상한(초과분은 경로 안내). RULESET_MASTER 전문(159KB) 첨부 **중단**. ⚠ `.sh` 는 구 v2 로직(미동기) | 0 |
 | `block-dev-commands.{ps1,sh}` | **PreToolUse (Bash)** | local `pnpm/turbo/eslint` 차단 (`ALLOW_PNPM=1` 우회) | deny |
+| `check-rules-read.ps1` | **PreToolUse (Write/Edit/MultiEdit)** | **2026-10-12 신설** — 대상 경로별 필수 룰 hook 을 이 세션에서 읽었는지(Read 호출 또는 attach 첨부) transcript 로 검사, 미열람 시 차단 + Read 경로 안내. FE pages / FE packages / BE / `_artifacts` SQL·PY 4분류. 우회 `NSCM_SKIP_RULE_READ=1`(보고 의무) | 2 |
 | `check-dbeaver-sql.{ps1,sh}` | **PostToolUse (Write/Edit/MultiEdit)** | `*_DBeaver*.sql` SQL*Plus 토큰 | 2 |
-| `check-notnull-insert.{ps1,sh}` | **PostToolUse (Write/Edit/MultiEdit)** | `**/sql/*.sql` INSERT NOT NULL 누락 (하드코딩 6 테이블) | 2 |
-| `check-fe-import.{ps1,sh}` | **PostToolUse (Write/Edit/MultiEdit)** | `.tsx` 금지 import + `as unknown as` 경고 | 2 / 1 |
-| `attach-context.{ps1,sh}` | **UserPromptSubmit** | (차단 없음) 키워드 매칭 → 룰 문서 stdout 첨부 | 0 |
+| `check-notnull-insert.{ps1,sh}` | **PostToolUse** | `**/sql/*.sql` INSERT NOT NULL 누락 (하드코딩 6 테이블) | 2 |
+| `check-fe-import.{ps1,sh}` | **PostToolUse** | `.tsx` 금지 import + `as unknown as` 경고 | 2 / 1 |
+| `check-ui-gates.ps1` | **PostToolUse** | 페이지 ts/tsx G-A~G-G (자체 행상태 / call-proc 무판정 / 감사키 빈값 / util 미배선 / 모달 확정버튼 / 콤보 빈 catch / 콤보 quoting) | 2 / 1 |
+| `check-meta-sql.ps1` | **PostToolUse** | `SHEET_COLUMNS` INSERT/UPDATE 값 단언 (CTRL 화이트리스트 / INPUT_TP_CD / 전면 IM) | 2 / 1 |
+| `check-db-fresh-source.ps1` | **PostToolUse** | `_artifacts/**/*.sql` DDL `SOURCE-FRESH` 24h / `*.py` DB 재조회+`FRESH-GATE` (hook #152) | 2 |
 
-> 정정 (구 README 오류): ① "8 스크립트"가 아니라 **5종**(각 ps1+sh) ② `attach-context` 는 PostToolUse 가 아니라 **UserPromptSubmit**.
+> 정정 (구 README 오류): "5 스크립트" → **9 스크립트** (check-ui-gates / check-meta-sql / check-db-fresh-source / check-rules-read 누락 표기). `.sh` parity 는 attach-context·block-dev-commands·check-dbeaver-sql·check-notnull-insert·check-fe-import 5종만 존재 — 나머지 4종 Linux 미지원.
+> 검증 일괄 실행: `powershell -File scripts\rules\verify_hooks.ps1` (구문·LITE/FULL 판별·rules-read 차단·추출본 drift·상시 컨텍스트 크기).
 
 ## OS 환경 (R-7)
 

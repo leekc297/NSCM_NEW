@@ -265,44 +265,59 @@ export const MEASURE_4 = ['RTF', 'KRW', 'USD', 'LOC'] as const;
 export type Measure4 = (typeof MEASURE_4)[number];
 
 // ============================================================================
-// ⭐ Grid cascade (hook #59 — AS-IS spdMain_ComboSelChange L2612~2757 1:1, 2026-07-03)
+// Grid cascade (AS-IS spdMain_ComboSelChange L2612~2757 1:1, 2026-07-03)
 // ============================================================================
 
-// combo 셀 cascade 필터 — 편집 시작 셀(binding)별 "행의 상위 셀 값 → 콤보 row 필터 키" 매핑.
-//   콤보 응답 필터 키 실측: TeambyDivision=DIVISION_ID / EndCustomerByDivisionDept=DIVISION_ID
-//   / SiteByEndCustomer=DIVISION_ID+END_CUSTOMER. 관대 통과: 콤보 row 에 필터 키 컬럼이 없거나(NULL)
-//   행의 상위 값이 비어 있으면 통과 (searchFields toOptions 관용구 + 사내 SITE.DEPT_ID 미이관 —
-//   EndCustomer 의 team 필터는 데이터 적재 시 자동 활성. __asis-mapping__ §cascade 근거).
-export const GRID_CASCADE_FILTERS: Record<string, { rowKey: string; comboKey: string }[]> = {
-  DEPT_ID: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
-  END_CUSTOMER: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'DEPT_ID', comboKey: 'DEPT_ID' },
-  ],
-  SCM_SITE_ID: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'END_CUSTOMER', comboKey: 'END_CUSTOMER' },
-  ],
-};
+// 셀 콤보 후보 좁히기는 화면 코드가 아니라 관리자 컬럼 메타가 전담한다 (2026-09-01 사용자 확정).
+//   PARAM10='D'  : 그 행의 값을 콤보 SQL 파라미터로 실어 조합마다 재조회 (PARAM2 오른쪽 = 바인드명).
+//   PARAM10 미지정: 콤보 전량을 받아 행 값으로 필터 (PARAM2 오른쪽 = 콤보 결과 컬럼명).
+//   양쪽 다 공용 DataGrid(useRowParamCombos + foundation columnMapping)가 처리하므로 여기에
+//   화면 전용 cascade 표를 두지 않는다. 구 GRID_CASCADE_FILTERS (DEPT_ID / END_CUSTOMER /
+//   SCM_SITE_ID 3건) 는 그 메타로 대체돼 제거됨 — 되살리지 말 것. 좁힘 조건이 틀리면 admin
+//   컬럼 메타의 PARAM2/PARAM10 을 고친다.
 
-// 상위 combo 변경 시 하위 셀 계단식 clear — AS-IS L2666~2679 / 2706~2717 / 2727~2736 / 2740~2747 1:1.
-//   AS-IS clear 대상(PROJECT_CODE/PROJECT_NAME/ITEM_ID/ITEM_CLASS_NAME) + TO-BE 팝업 파생 필드
-//   (PROJECT_STATUS/BIZ_TYPE_NAME/ITEM_NAME/NICK_NAME — 팝업이 채우는 값의 일관성) 동반 clear.
+// ============================================================================
+// Team / End Customer 자동 매핑 (2026-09-08 — 사용자 요구: 직접 입력 불가 + 기준정보 파생)
+// ============================================================================
+//   기준 = Business Plan(DMF0042) 의 "입력 불가 컬럼 + 파생 채움" 패턴 재사용:
+//     · business-plan.editLock.ts insertStaticEditable → DEPT_ID40/END_CUSTOMER40 = false 반환
+//     · BusinessPlanModals ITEM 콜백이 SCM_MST_SITE_ITEM.DEPT_ID 를 그룹에 채움
+//     · business-plan.constants.ts GRID_CASCADE_CLEAR.SCM_SITE_ID40 이 파생 필드 동반 clear
+//   Sales Price 매핑 기준 (Business Plan 과 방향이 다름 — 사용자 확정):
+//     · End Customer : Sales Site           → SCM_MST_SITE.END_CUSTOMER
+//                      (기존 콤보 'SiteEndCustomerMapDMF0082' 재사용 — division→SCM_SITE_ID:END_CUSTOMER,
+//                       (DIV,SITE) 1:1 실측 0중복. Sales Site 콤보 변경 즉시 파생)
+//     · Team        : Sales Site + Project + Item(Model) → SCM_MST_SITE_ITEM.DEPT_ID
+//                      (Model 팝업 COM0008(ItemByDivisionModal) 반환 DEPT_ID 재사용 — 팝업이
+//                       클릭 행의 Sales Site + Project 로 이미 필터되어 있어 (Site+Project+Item) 기준 팀)
+//   신규 API/SP/SQL 없음. FE 전용.
+export const SITE_EC_COMBO_ID = 'SiteEndCustomerMapDMF0082' as const;
+
+// 사용자가 직접 입력할 수 없는 자동 매핑 컬럼 — Grid beginningEdit/pastingCell 차단 + formatItem 노랑 제외.
+export const AUTO_MAPPED_COLUMNS = ['DEPT_ID', 'END_CUSTOMER'] as const;
+
+// 상위 값 변경 시 하위 셀 계단식 clear.
+//   2026-09-08 cascade 방향 반전: Team/End Customer 가 사용자 입력 콤보였으나 자동 파생 leaf 로 전환.
+//   입력 체인 = Division → Sales Site → Project → Model. End Customer 는 Sales Site 에서,
+//   Team 은 (Sales Site + Project + Model) 에서 파생되므로 상위가 흔들리면 함께 비운다.
+//   (구 AS-IS spdMain_ComboSelChange 체인은 Team→EndCustomer→Site 순서였다 — 반전 전 이력.)
+const CLEAR_ITEM = ['ITEM_ID', 'ITEM_NAME', 'ITEM_CLASS_NAME', 'NICK_NAME'] as const;
 const CLEAR_PROJECT_ITEM = [
   'PROJECT_CODE',
   'PROJECT_NAME',
   'PROJECT_STATUS',
   'BIZ_TYPE_NAME',
-  'ITEM_ID',
-  'ITEM_NAME',
-  'ITEM_CLASS_NAME',
-  'NICK_NAME',
+  ...CLEAR_ITEM,
 ] as const;
 export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
-  DIVISION_ID: ['DEPT_ID', 'END_CUSTOMER', 'SCM_SITE_ID', ...CLEAR_PROJECT_ITEM],
-  DEPT_ID: ['END_CUSTOMER', 'SCM_SITE_ID', ...CLEAR_PROJECT_ITEM],
-  END_CUSTOMER: ['SCM_SITE_ID', ...CLEAR_PROJECT_ITEM],
-  SCM_SITE_ID: [...CLEAR_PROJECT_ITEM],
+  // Division 변경은 부모(SalesFuturePrice.tsx)가 신규행 전체 제거로 처리 — 방어적으로 유지.
+  DIVISION_ID: ['SCM_SITE_ID', 'END_CUSTOMER', ...CLEAR_PROJECT_ITEM, 'DEPT_ID'],
+  // Sales Site 변경 → End Customer 재파생(Grid cellEditEnded 핸들러) + Project/Model/Team 무효화.
+  SCM_SITE_ID: ['END_CUSTOMER', ...CLEAR_PROJECT_ITEM, 'DEPT_ID'],
+  // Project 변경 → Model·Team 무효화 (Project 팝업 콜백도 동일 처리 — 팝업은 cellEditEnded 미경유).
+  PROJECT_CODE: [...CLEAR_ITEM, 'DEPT_ID'],
+  // Model 변경 → Team 무효화 (Model 팝업이 반환 DEPT_ID 로 즉시 재매핑).
+  ITEM_ID: ['DEPT_ID'],
 };
 
 // ExchangeRate POPUP — AS-IS DMF0020_SalesFuturePricePopUp.cs L141~194 InitSpread() 정밀 매핑
@@ -379,10 +394,21 @@ export const MSG = {
   EDIT_MODE_LOCK: 'MSG00408',
   PRICE_EXIST_MISSING: 'MSG00412',
   SAVE_DIVISION_40: 'MSG00414',
+  // 통화 미설정 행의 가격 편집 차단 안내 — TO-BE 전용(AS-IS 는 안내 없이 셀만 되돌린다, .cs L3007~3012).
+  //   DB 문구 = 'Currency 가 비어 있습니다.' (AS-IS 의 MSG00447 과는 뜻이 다르다 — 아래 참조).
   CURRENCY_EMPTY: 'MSG00447',
+  // 기존 행 Currency 변경 범위 안내 — AS-IS spdMain_CellClick(.cs L3686~3691) 의 MSG00447 문구.
+  //   TO-BE 는 MSG00447 이 위 용도로 먼저 쓰여 MSG01429 로 따로 채번했다(DB 등록 2026-09-15, 사용자 지정 2026-10-13).
+  CURRENCY_CHANGE_SCOPE: 'MSG01429',
   EDIT_NOT_CURRENT_VER: 'MSG00448',
   INSERT_ONLY_BUCKET: 'MSG00227',
   NO_CHANGES: 'MSG00004',
+  // 편집제약 사업부(40 등)에서 셀 편집을 시도했을 때 안내 (2026-10-08 통합테스트 지적 — 종전엔 조용히 차단).
+  //   AS-IS EditButton(.cs L870~876) 은 DM_UI_EDITABLE_DIVISION EDIT_YN='N' 이면 MSG00448
+  //   "해당 사업부 편집은 Demand - Demand Plan - FcstPrice MGMT 에서 할 수 있습니다." 를 띄웠다.
+  //   TO-BE DB 의 MSG00448 은 "현재 버전이 아닙니다." 로 뜻이 달라(위 EDIT_NOT_CURRENT_VER) 같은 번호를 쓸 수 없고,
+  //   AS-IS 문구는 MSG01430 으로 이미 등록돼 있다(2026-10-08 개발 DB 실측, admin 2026-09-15 등록, KO/EN/CN 모두 한글 문구).
+  EDIT_DIVISION_DELEGATED: 'MSG01430',
 } as const;
 
 // ====================================================================================

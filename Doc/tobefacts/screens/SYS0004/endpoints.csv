@@ -1,0 +1,7 @@
+﻿"page_key","menu_id","file","line","in_function","kind","callee","menu","sheet","action","url","resolved","args","commented"
+"admin/ui-catrgory-setup","SYS0004","features/admin/src/pages/ui-catrgory-setup/components/UICategorySetupForm.tsx","17","UICategorySetupForm","hook","useTabComboQueries","SYS0004","","","(useTabComboQueries)","Y","['YesOrNo']","0"
+"admin/ui-catrgory-setup","SYS0004","features/admin/src/pages/ui-catrgory-setup/UICategorySetup.tsx","44","UICategorySetup","hook","useTabProcQuery","SYS0004","column","","SYS0004/column//call-proc","Y","filters","0"
+"admin/ui-catrgory-setup","SYS0004","features/admin/src/pages/ui-catrgory-setup/useUICategorySetupSave.ts","46","mutationFn","http","apiClient.post","","","","SYS0004//SAVE/call-proc","Y","{ data }","0"
+"admin/ui-catrgory-setup","SYS0004","features/admin/src/pages/ui-catrgory-setup/useUICategorySetupStore.ts","70","fetchStaticColumns","http","apiClient.post","","","","/admin/menu/SYS0004/column","Y","{ sheetNm: SHEETS.COLUMN, }","0"
+"admin/ui-catrgory-setup","SYS0004","features/admin/src/pages/ui-catrgory-setup/useUICategorySetupStore.ts","73","fetchStaticColumns","http","apiClient.post","","","","/admin/menu/SYS0004/column","Y","{ sheetNm: SHEETS.MEASURE, }","0"
+"admin/ui-catrgory-setup","SYS0004","features/admin/src/pages/ui-catrgory-setup/useUICategorySetupStore.ts","85","fetchStaticColumns","http","apiClient.get","","","","/admin/menu/SYS0004/search-conditions","Y","","0"

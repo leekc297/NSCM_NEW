@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"shipping/shipment-working-day","SSP0005","features/shipping/src/pages/shipment-working-day/components/ShipmentWorkingDayGrid.tsx","41","code","편집 가능 셀 <=> /^D_\d{8}$/.test(binding) AND canEdit (03 §3-a)."
+"shipping/shipment-working-day","SSP0005","features/shipping/src/pages/shipment-working-day/ShipmentWorkingDay.tsx","413","code","가드 #5 — 요일 미선택이면 조용히 return(cs:703-706). 요일 콤보는 빈값이 될 수 없어"
+"shipping/shipment-working-day","SSP0005","features/shipping/src/pages/shipment-working-day/ShipmentWorkingDay.tsx","441","code","() => undefined 로 배선한다 — false 면 버튼이 숨겨지고(AS-IS 는 보인다), 키를 생략하면"
+"shipping/shipment-working-day","SSP0005","features/shipping/src/pages/shipment-working-day/useShipmentWorkingDayStore.ts","177","endpoint","admin SCM_MST_SHEET_COLUMNS 동적 fetch(mount + Search 마다). 실측 2행 등록돼 있다."

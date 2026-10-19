@@ -16,6 +16,7 @@ interface MailCategoryGridProps {
   gridFilterRef: MutableRefObject<FlexGridFilter | undefined>;
   data: CategoryRow[];
   onOpenSqlDialog: (row: CategoryRow) => void;
+  onFocus?: () => void;
 }
 
 export const MailCategoryGrid = ({
@@ -23,6 +24,7 @@ export const MailCategoryGrid = ({
   gridFilterRef,
   data,
   onOpenSqlDialog,
+  onFocus,
 }: MailCategoryGridProps) => {
   const { t } = useTranslation();
 
@@ -134,6 +136,7 @@ export const MailCategoryGrid = ({
           useSummaryTooltip={false}
           click={handleClick}
           dblClick={handleDoubleClick}
+          gotFocus={onFocus}
         />
       </div>
     </div>

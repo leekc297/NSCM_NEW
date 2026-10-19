@@ -1,0 +1,3099 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONT_VIEW_VERSIONPOPUP","1590348780","1","---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/***************************************************************************************************
+ Program ID  : DMF0043_GET_CONT_VIEW_VERSIONPOPUP                                                 
+ Description : Procedure 작성 가이드                                                              
+ Usage       : Procedure 작성 시 참조하세요!                                                      
+ Parameter   :                                                                                    
+                                                                                                  
+--------------------------------------------------------------------------------------------------
+ Date        In Charge    Description                                                             
+--------------------------------------------------------------------------------------------------
+ 2019/08/19  JYE       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트    
+ 2020/01/28  P.C.I     [CSR ID:prepare] Report Plan List 조회로 변경                              
+ 2020/06/12  HWI1993	[C20200605-000077] GSCM 해외법인 기여율 매출 버전 리스트 정리 요청의 건 
+ 2021/07/03	HWI1993		하반기과제 속도개선 - 데이터 이동보관 처리       
+**************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0043_GET_CONT_VIEW_VERSIONPOPUP]
+    @p_start_yyyymmdd  NVARCHAR(8),
+    @p_end_yyyymmdd    NVARCHAR(8),
+	--@p_created_by	   NVARCHAR(50),
+	@p_division_id	   NVARCHAR(MAX),
+	@p_version_type	   NVARCHAR(MAX),
+	--@p_version_no	   NVARCHAR(MAX),
+	@p_description	   NVARCHAR(1000)
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+	/*
+	   SELECT VERSION_NO AS CODE, VERSION_NO, VERSION_DESCRIPTION, VERSION_TYPE, VER_CRE_SEQ, YYYYMMDD, MAX(CREATED_BY), MAX(CREATION_DATE)
+		 FROM [dbo].[DM_MST_VERSION]  WITH(NOLOCK)
+	   WHERE (YYYYMMDD >= @p_start_yyyymmdd and YYYYMMDD <= @p_end_yyyymmdd)  
+		  AND DIVISION_ID IN (SELECT token FROM dbo.String_Split(@p_division_id	,','))  		
+		  AND VERSION_TYPE IN (SELECT token FROM dbo.String_Split(@p_version_type	,','))    
+		  AND Exists (Select * from dbo.UF_FX_String_Split (@p_version_no,',') as P Where [VERSION_NO] LIKE P.token +'%')
+	   GROUP BY VERSION_NO , VERSION_NO, VERSION_DESCRIPTION, VERSION_TYPE, VER_CRE_SEQ, YYYYMMDD
+	   ORDER BY CODE DESC, VERSION_NO DESC*/
+
+	    
+		SELECT VERSION_NO AS CODE, VERSION_NO, VERSION_DESCRIPTION, VERSION_TYPE, VER_CRE_SEQ, YYYYMMDD, MAX(CREATED_BY), MAX(CREATION_DATE)
+		FROM DM_MDF_VERSION
+		WHERE 
+			DIVISION_ID = @p_division_id
+			AND YYYYMMDD BETWEEN @p_start_yyyymmdd AND @p_end_yyyymmdd
+			AND VERSION_TYPE = @p_version_type
+			AND VERSION_DESCRIPTION LIKE '%' + @p_description + '%'
+			AND SEND_YN <> 'D'
+			AND ISNULL(ATTRIBUTE1,'') <> 'MOVE'
+	   GROUP BY VERSION_NO , VERSION_NO, VERSION_DESCRIPTION, VERSION_TYPE, VER_CRE_SEQ, YYYYMMDD
+	   ORDER BY CODE DESC, VERSION_NO DESC
+		 
+END
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTE_MAIN_DATA","1606348837","1","
+/****************************************************************************************************/
+/* Program ID  : DMF0043_GET_CONTRIBUTE_MAIN_DATA                                                   */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2019/07/18     JYE        해외법인 기여율 등록 조회                                              */
+/* 2019/08/02     JYE        설계 변경 및 로직 분기.                                                */
+/* 2019/08/27     YJS        불일치조회 쿼리 분기.                                                  */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0043_GET_CONTRIBUTE_MAIN_DATA]
+    @p_yyyy             NVARCHAR(10),
+    @p_ver_seq          NVARCHAR(10),
+    @p_dis              NVARCHAR(10),
+    @p_his              NVARCHAR(1),
+    @p_created_by       NVARCHAR(50),
+    @p_user_group       NVARCHAR(50)
+AS
+BEGIN
+
+    SET NOCOUNT ON;
+
+    DECLARE @sdt NVARCHAR(10)=@p_yyyy + '01'
+    DECLARE @edt NVARCHAR(10)= @p_yyyy + '12'
+    DECLARE @thismm NVARCHAR(10)
+    DECLARE @ColumnData NVARCHAR(MAX)=''
+    DECLARE @ColumnData2 NVARCHAR(MAX)=''
+    DECLARE @Query NVARCHAR(MAX)=''
+
+    IF (MONTH(GETDATE()) < 10) BEGIN
+        SET @thismm = @p_yyyy + '0' + CAST(MONTH(GETDATE()) AS NVARCHAR)
+    END ELSE BEGIN
+        SET @thismm = @p_yyyy + CAST(MONTH(GETDATE()) AS NVARCHAR)
+    END
+
+    IF OBJECT_ID (N'tempdb..#temp', N'U') IS NOT NULL
+        DROP TABLE #temp
+    IF OBJECT_ID (N'tempdb..#temp2', N'U') IS NOT NULL
+        DROP TABLE #temp2
+    IF OBJECT_ID (N'tempdb..#temp3', N'U') IS NOT NULL
+        DROP TABLE #temp3
+    IF OBJECT_ID (N'tempdb..#Title', N'U') IS NOT NULL
+        DROP TABLE #Title
+
+    -- ######################## 해더 칼럼 데이터 ########################
+    CREATE TABLE #Title (
+        PROGRAM_ID NVARCHAR(100)
+        , SHEET_NAME NVARCHAR(100)
+        , COLUMN_NAME NVARCHAR(100)
+        , COLUMN_LABEL_NAME NVARCHAR(100)
+        , SORT_ORDER_NO NVARCHAR(100)
+        , DATA_SORT_METHOD_CODE NVARCHAR(100)
+        , SMALL_CLASS_LABEL_NAME NVARCHAR(100)
+        , LARGE_CLASS_LABEL_NAME NVARCHAR(100)
+        , DAY_CODE NVARCHAR(100)
+        , FIXED_FLAG NVARCHAR(100)
+        , COLUMN_WIDTH NVARCHAR(100)
+        , CELL_CONTROL_OBJECT_TYPE_CODE NVARCHAR(100)
+        , CELL_COMBO_DATA_TYPE NVARCHAR(100)
+        , DATA_SCALE_NUMBER NVARCHAR(100)
+        , DATA_MAX_LENGTH NVARCHAR(100)
+        , HORIZONTAL_ALIGN_CODE NVARCHAR(100)
+        , UPPERCASE_APPLY_FLAG NVARCHAR(100)
+        , VISIBLE_FLAG NVARCHAR(100)
+        , DEFAULT_FLAG NVARCHAR(100)
+        , USER_SELECTABLE_FLAG NVARCHAR(100)
+        , VALID_YN NVARCHAR(100)
+        , DIVISION_ID NVARCHAR(100)
+    );
+
+    insert #Title exec DMF0043_GET_MAIN_SPREAD_TITLE '40',@p_yyyy,@p_created_by
+
+    SELECT @ColumnData = @ColumnData + '[' + COLUMN_NAME + '],'
+    FROM #Title
+    WHERE CAST(SORT_ORDER_NO AS INT) > (SELECT CAST(SORT_ORDER_NO AS INT) FROM #Title WHERE COLUMN_NAME = 'EDIT_FLAG')
+    SET @ColumnData = LEFT(@ColumnData, LEN(@ColumnData)-1)
+    --select @ColumnData
+
+    SELECT @ColumnData2 = @ColumnData2 +
+        CASE WHEN CHARINDEX('999', COLUMN_NAME) <> 0 THEN '[' + COLUMN_NAME + '],'
+            ELSE 'CAST([' + COLUMN_NAME + '] AS NUM"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTE_MAIN_DATA","1606348837","2","ERIC(5,2)) AS [' + COLUMN_NAME + '],' END
+    FROM #Title
+    WHERE CAST(SORT_ORDER_NO AS INT) > (SELECT CAST(SORT_ORDER_NO AS INT) FROM #Title WHERE COLUMN_NAME = 'EDIT_FLAG')
+    SET @ColumnData2 = LEFT(@ColumnData2, LEN(@ColumnData2)-1)
+    --select @ColumnData2
+    -- ######################## 해더 칼럼 데이터 ########################
+
+    IF (@p_his = 'N') BEGIN
+        -- ######################## DM_MST_CONTRIBUTE_RATIO 데이터 ########################
+        -- 연도 데이터
+        SELECT VER_SEQ
+             , DEPARTMENT_ID
+             , DEPT_ID
+             , END_CUST_REPORT
+             , SOLDTO_CUST_REPORT
+             , PRODUCT_GROUP
+             , DM_BIZ_TYPE
+             , CAST(CONTRIBUTION_RATIO AS NVARCHAR) AS RATIO
+             , 'Y#' + @p_yyyy + '#' + OS_CORP_CD AS COLUMN_NAME
+          INTO #temp
+          FROM (SELECT MA.VER_SEQ
+                     , MA.DEPARTMENT_ID
+                     , MA.DEPT_ID
+                     , MA.END_CUST_REPORT
+                     , MA.SOLDTO_CUST_REPORT
+                     , MA.PRODUCT_GROUP
+                     , MA.DM_BIZ_TYPE
+                     , DT.YYYYMM
+                     , DT.OS_CORP_CD
+                     , DT.CONTRIBUTION_TYPE
+                     , DT.CONTRIBUTION_RATIO
+                  FROM dbo.DM_MST_CONTRIBUTE_RATIO_MST AS MA WITH (NOLOCK)
+                       INNER JOIN dbo.DM_MST_CONTRIBUTE_RATIO_DTL AS DT WITH (NOLOCK)
+                          ON MA.VER_SEQ = DT.VER_SEQ
+                         AND MA.DEPARTMENT_ID = DT.DEPARTMENT_ID
+                         AND MA.DEPT_ID = DT.DEPT_ID
+                         AND MA.END_CUST_REPORT= DT.END_CUST_REPORT
+                         AND MA.SOLDTO_CUST_REPORT = DT.SOLDTO_CUST_REPORT
+                         AND MA.PRODUCT_GROUP = DT.PRODUCT_GROUP
+                         AND MA.DM_BIZ_TYPE = DT.DM_BIZ_TYPE
+               ) AS MA
+         WHERE YYYYMM = @thismm
+           AND VER_SEQ = @p_ver_seq
+
+        UNION ALL
+
+        SELECT VER_SEQ
+             , DEPARTMENT_ID
+             , DEPT_ID
+             , END_CUST_REPORT
+             , SOLDTO_CUST_REPORT
+             , PRODUCT_GROUP
+             , DM_BIZ_TYPE
+             , CAST(CONTRIBUTION_TYPE AS NVARCHAR) AS RATIO
+             , 'Y#' + @p_yyyy + '#RBU_0999' AS COLUMN_NAME
+          FROM (SELECT MA.VER_SEQ
+                     , MA.DEPARTMENT_ID
+                     , MA.DEPT_ID
+                     , MA.END_CUST_REPORT
+                     , MA.SOLDTO_CUST_REPORT
+                     , MA.PRODUCT_GROUP
+                     , MA.DM_BIZ_TYPE
+                     , DT.YYYYMM
+                     , DT.OS_CORP_CD
+                     , DT.CONTRIBUTION_TYPE
+                     , DT.CONTRIBUTION_RATIO
+                  FROM dbo.DM_MST_CONTRIBUTE_RATIO_MST AS MA WITH (NOLOCK)
+                       INNER JOIN dbo.DM_MST_CONTRIBUTE_RATIO_DTL AS DT
+                          ON MA.VER_SEQ = DT.VER_SEQ
+                         AND MA.DEPARTMENT_ID = DT.DEPARTMENT_ID
+                         AND MA.DEPT_ID = DT.DEPT_ID
+                         AND MA.END_CUST_REPORT= DT.END_CUST_REPORT
+                         AND MA.SOLDTO_CUST_REPORT = DT.SOLDTO_CUST_REPORT
+                         AND MA.PRODUCT_GROUP = DT.PRODUCT_GROUP
+                         AND MA.DM_BIZ_TYPE = DT.DM_BIZ_TYPE
+               ) AS MA
+         WHERE YYYYMM  = @thismm
+           AND VER_SEQ = @p_ver_seq
+
+        UNION ALL
+
+        -- 월 데이터
+        SELECT VER_SEQ
+             , DEPARTMENT_ID
+             , DEPT_ID
+             , END_CUST_REPORT
+             , SOLDTO_CUST_REPORT
+             , PRODUCT_GROUP
+             , DM_BIZ_TYPE
+             , CAST(CONTRIBUTION_RATIO AS NVARCHAR) AS RATIO
+             , 'M#' + YYYYMM + '#' + OS_CORP_CD AS COLUMN_NAME
+          FROM (SELECT MA.VER_SEQ
+                     , MA.DEPARTMENT_ID
+                     , MA.DEPT_ID
+                     , MA.END_CUST_REPORT
+                 "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTE_MAIN_DATA","1606348837","3","    , MA.SOLDTO_CUST_REPORT
+                     , MA.PRODUCT_GROUP
+                     , MA.DM_BIZ_TYPE
+                     , DT.YYYYMM
+                     , DT.OS_CORP_CD
+                     , DT.CONTRIBUTION_TYPE
+                     , DT.CONTRIBUTION_RATIO
+                  FROM dbo.DM_MST_CONTRIBUTE_RATIO_MST AS MA
+                       INNER JOIN dbo.DM_MST_CONTRIBUTE_RATIO_DTL AS DT
+                          ON MA.VER_SEQ = DT.VER_SEQ
+                         AND MA.DEPARTMENT_ID = DT.DEPARTMENT_ID
+                         AND MA.DEPT_ID = DT.DEPT_ID
+                         AND MA.END_CUST_REPORT= DT.END_CUST_REPORT
+                         AND MA.SOLDTO_CUST_REPORT = DT.SOLDTO_CUST_REPORT
+                         AND MA.PRODUCT_GROUP = DT.PRODUCT_GROUP
+                         AND MA.DM_BIZ_TYPE = DT.DM_BIZ_TYPE
+               ) AS MA
+         WHERE YYYYMM >= @sdt AND YYYYMM <= @edt
+           AND VER_SEQ = @p_ver_seq
+
+        UNION ALL
+
+        SELECT VER_SEQ
+             , DEPARTMENT_ID
+             , DEPT_ID
+             , END_CUST_REPORT
+             , SOLDTO_CUST_REPORT
+             , PRODUCT_GROUP
+             , DM_BIZ_TYPE
+             , CAST(CONTRIBUTION_TYPE AS NVARCHAR) AS RATIO
+             , 'M#' + YYYYMM + '#RBU_0999' AS COLUMN_NAME
+          FROM (SELECT MA.VER_SEQ
+                     , MA.DEPARTMENT_ID
+                     , MA.DEPT_ID
+                     , MA.END_CUST_REPORT
+                     , MA.SOLDTO_CUST_REPORT
+                     , MA.PRODUCT_GROUP
+                     , MA.DM_BIZ_TYPE
+                     , DT.YYYYMM
+                     , DT.OS_CORP_CD
+                     , DT.CONTRIBUTION_TYPE
+                     , DT.CONTRIBUTION_RATIO
+                  FROM dbo.DM_MST_CONTRIBUTE_RATIO_MST AS MA
+                       INNER JOIN dbo.DM_MST_CONTRIBUTE_RATIO_DTL AS DT
+                          ON MA.VER_SEQ = DT.VER_SEQ
+                         AND MA.DEPARTMENT_ID = DT.DEPARTMENT_ID
+                         AND MA.DEPT_ID = DT.DEPT_ID
+                         AND MA.END_CUST_REPORT= DT.END_CUST_REPORT
+                         AND MA.SOLDTO_CUST_REPORT = DT.SOLDTO_CUST_REPORT
+                         AND MA.PRODUCT_GROUP = DT.PRODUCT_GROUP
+                         AND MA.DM_BIZ_TYPE = DT.DM_BIZ_TYPE
+               ) AS MA
+         WHERE YYYYMM >= @sdt AND YYYYMM <= @edt
+           AND VER_SEQ = @p_ver_seq
+
+        IF (@p_dis = 'ALL') --2019/08/27
+            BEGIN
+                -- 불일치 조회 관련 칼럼 추가
+                SELECT MAIN.*
+                     , DISCARD.DISCARD
+                  INTO #temp2
+                  FROM #temp AS MAIN
+                       INNER JOIN (SELECT VER_SEQ
+                                        , DEPARTMENT_ID
+                                        , DEPT_ID
+                                        , END_CUST_REPORT
+                                        , SOLDTO_CUST_REPORT
+                                        , PRODUCT_GROUP
+                                        , DM_BIZ_TYPE
+                                        , CASE WHEN SUM(CONTRIBUTION_RATIO) = 1200 THEN 'Y' ELSE 'N' END AS DISCARD
+                                     FROM (SELECT MA.VER_SEQ
+                                                , MA.DEPARTMENT_ID
+                                                , MA.DEPT_ID
+                                                , MA.END_CUST_REPORT
+                                                , MA.SOLDTO_CUST_REPORT
+                                                , MA.PRODUCT_GROUP
+                                                , MA.DM_BIZ_TYPE
+                                                , DT.YYYYMM
+                                                , DT.OS_CORP_CD
+                                                , DT.CONTRIBUTION_TYPE
+                                                , DT.CONTRIBUTION_RATIO
+                                             FROM dbo.DM_MST_CONT"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTE_MAIN_DATA","1606348837","4","RIBUTE_RATIO_MST AS MA
+                                                  INNER JOIN dbo.DM_MST_CONTRIBUTE_RATIO_DTL AS DT
+                                                     ON MA.VER_SEQ = DT.VER_SEQ
+                                                    AND MA.DEPARTMENT_ID = DT.DEPARTMENT_ID
+                                                    AND MA.DEPT_ID = DT.DEPT_ID
+                                                    AND MA.END_CUST_REPORT= DT.END_CUST_REPORT
+                                                    AND MA.SOLDTO_CUST_REPORT = DT.SOLDTO_CUST_REPORT
+                                                    AND MA.PRODUCT_GROUP = DT.PRODUCT_GROUP
+                                                    AND MA.DM_BIZ_TYPE = DT.DM_BIZ_TYPE
+                                          ) AS MA
+                                    WHERE YYYYMM >= @sdt AND YYYYMM <= @edt
+                                      AND VER_SEQ = @p_ver_seq
+                                    GROUP BY VER_SEQ
+                                        , DEPARTMENT_ID
+                                        , DEPT_ID
+                                        , END_CUST_REPORT
+                                        , SOLDTO_CUST_REPORT
+                                        , PRODUCT_GROUP
+                                        , DM_BIZ_TYPE
+                                  ) AS DISCARD
+                          ON MAIN.VER_SEQ = DISCARD.VER_SEQ
+                         AND MAIN.DEPARTMENT_ID = DISCARD.DEPARTMENT_ID
+                         AND MAIN.DEPT_ID = DISCARD.DEPT_ID
+                         AND MAIN.END_CUST_REPORT = DISCARD.END_CUST_REPORT
+                         AND MAIN.SOLDTO_CUST_REPORT = DISCARD.SOLDTO_CUST_REPORT
+                         AND MAIN.PRODUCT_GROUP = DISCARD.PRODUCT_GROUP
+                         AND MAIN.DM_BIZ_TYPE = DISCARD.DM_BIZ_TYPE
+                -- ######################## DM_MST_CONTRIBUTE_RATIO 데이터 ########################
+
+
+                SET @Query = '
+SELECT *
+  FROM (SELECT SITE_ITEM.*
+             , RATIO.VER_SEQ
+             , CASE WHEN RATIO.DISCARD = ''Y'' THEN RATIO.DISCARD ELSE ''N'' END DISCARD
+             , CASE WHEN ((SITE_ITEM.department_id != '''')
+                           AND (SITE_ITEM.dept_id != '''')
+                           AND (SITE_ITEM.end_cust_report != '''')
+                           AND (SITE_ITEM.SOLDTO_CUST_REPORT != '''')
+                           AND (SITE_ITEM.PRODUCT_GROUP != '''')
+                           AND (SITE_ITEM.dm_biz_type != ''''))
+                          THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG
+             , ' + @ColumnData2 + '
+          FROM (SELECT DISTINCT A.DIVISION_ID
+                     , TEAM.DEPARTMENT_ID
+                     , TEAM.DEPARTMENT_NAME
+                     , TEAM.DEPT_ID AS DEPT_ID
+                     , TEAM.DEPT_NAME_KO AS DEPT_NAME
+                     , ISNULL(A.ATTRIBUTE2,'''') AS END_CUST_REPORT
+                     , ISNULL(A.ATTRIBUTE1,'''') AS SOLDTO_CUST_REPORT
+                     , ISNULL(A.REPORT_GROUP3,'''') AS PRODUCT_GROUP --PRODUCT_GR
+                     , ISNULL(C.FORECAST_INFO_BIZ_TYPE,'''') AS DM_BIZ_TYPE
+                  FROM SCM_MST_SITE_ITEM A WITH (NOLOCK)
+                       INNER JOIN SCM_MST_SITE B WITH (NOLOCK)
+                          ON A.DIVISION_ID = B.DIVISION_ID
+                         AND A.SCM_SITE_ID = B.SCM_SITE_ID
+                        LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL SAM WITH (NOLOCK)
+                          ON SAM.SEGMENT1 = B.COMPANY_ID
+                         AND SAM.LOOKUP_TYPE = ''INTERNAL_TXN''
+                       INNER JOIN DM_MST_ITEM_SINGLE_V C WITH (NOLOCK)
+                          ON A.DIVISION_ID = C.DIVISION_ID
+                         AND A.ITEM_ID = C.ITEM_ID
+                        LEFT OUTER JOIN (SELECT B.USER_ID
+                                              , B.USER_NAME
+                          "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTE_MAIN_DATA","1606348837","5","                    , B.USER_NAME_EN
+                                              , B.DEPT_ID
+                                              , C.DEPT_NAME_KO
+                                              , D.DEPT_ID AS DEPARTMENT_ID
+                                              , D.DEPT_NAME_KO AS DEPARTMENT_NAME
+                                           FROM SCM_MST_SSO_USER_INFO AS B WITH (NOLOCK)
+                                                INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH (NOLOCK)
+                                                   ON B.DEPT_ID = C.DEPT_ID
+                                                INNER JOIN SCM_MST_SSO_DEPT_INFO AS D WITH (NOLOCK)
+                                                   ON C.UPPER_DEPT_ID = D.DEPT_ID
+                                        ) AS TEAM
+                          ON TEAM.USER_ID IN (SELECT TOP 1 token FROM dbo.String_Split(A.OWNER, '',''))
+                 WHERE A.DIVISION_ID = ''40''
+                   AND B.SITE_TYPE = ''SALES''
+                   --AND ISNULL(C.FORECAST_INFO_BIZ_TYPE,'''') <> ''''
+                   --AND ISNULL(A.ATTRIBUTE2,'''') <> ''''
+                   --AND ISNULL(A.ATTRIBUTE1,'''') <> ''''
+                   --AND ISNULL(A.REPORT_GROUP3,'''') <> ''''
+                 GROUP BY A.DIVISION_ID
+                     , TEAM.DEPARTMENT_ID
+                     , TEAM.DEPARTMENT_NAME
+                     , TEAM.DEPT_ID
+                     , TEAM.DEPT_NAME_KO
+                     , ISNULL(SAM.SEGMENT3,'''')
+                     , ISNULL(A.ATTRIBUTE2,'''')
+                     , ISNULL(A.ATTRIBUTE1,'''')
+                     , ISNULL(A.REPORT_GROUP3,'''')
+                     , ISNULL(C.FORECAST_INFO_BIZ_TYPE,'''')
+
+               ) AS SITE_ITEM
+               LEFT JOIN (SELECT VER_SEQ
+                               , DEPARTMENT_ID
+                               , DEPT_ID
+                               , END_CUST_REPORT
+                               , SOLDTO_CUST_REPORT
+                               , PRODUCT_GROUP
+                               , DM_BIZ_TYPE
+                               , DISCARD
+                               , ' + @ColumnData + '
+                            FROM (SELECT *
+                                    FROM #temp2) MA
+                                 PIVOT (MAX(RATIO) FOR COLUMN_NAME IN (' + @ColumnData + ')) AS PVT
+                          ) AS RATIO
+                 ON SITE_ITEM.DEPARTMENT_ID   = RATIO.DEPARTMENT_ID
+                AND SITE_ITEM.DEPT_ID         = RATIO.DEPT_ID
+                AND SITE_ITEM.END_CUST_REPORT = RATIO.END_CUST_REPORT
+                AND SITE_ITEM.SOLDTO_CUST_REPORT  = RATIO.SOLDTO_CUST_REPORT
+                AND SITE_ITEM.PRODUCT_GROUP   = RATIO.PRODUCT_GROUP
+                AND SITE_ITEM.DM_BIZ_TYPE     = RATIO.DM_BIZ_TYPE
+       ) MA
+ WHERE DISCARD = CASE WHEN ''' + @p_dis + ''' = ''ALL'' THEN DISCARD ELSE ''' + @p_dis + ''' END
+'
+
+            END
+        ELSE  -- 2019/08/27 (@p_dis = 'Y') 추가
+            BEGIN
+                IF OBJECT_ID (N'tempdb..#master_list', N'U') IS NOT NULL
+                    DROP TABLE #master_list
+                IF OBJECT_ID (N'tempdb..#dis_list', N'U') IS NOT NULL
+                    DROP TABLE #dis_list
+                IF OBJECT_ID (N'tempdb..#temp_list', N'U') IS NOT NULL
+                    DROP TABLE #temp_list
+
+                SELECT A.DIVISION_ID
+                     , TEAM.DEPARTMENT_ID
+                     , TEAM.DEPARTMENT_NAME
+                     , TEAM.DEPT_ID AS DEPT_ID
+                     , TEAM.DEPT_NAME_KO AS DEPT_NAME
+                     , ISNULL(A.ATTRIBUTE2,'') AS END_CUST_REPORT
+                     , ISNULL(A.ATTRIBUTE1,'') AS SOLDTO_CUST_REPORT
+                     , ISNULL(A.REPORT_GROUP3,'') AS PRODUCT_GROUP --PRODUCT_GR
+                     , ISNULL(C.FORECAST_INFO_BIZ_TYPE,'') AS DM_BIZ_TYPE
+                  INTO #master_list
+                  FROM SCM_MST_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTE_MAIN_DATA","1606348837","6","SITE_ITEM A WITH (NOLOCK)
+                       INNER JOIN SCM_MST_SITE B WITH (NOLOCK)
+                          ON A.DIVISION_ID = B.DIVISION_ID
+                         AND A.SCM_SITE_ID = B.SCM_SITE_ID
+                       INNER JOIN DM_MST_ITEM_SINGLE_V C WITH (NOLOCK)
+                          ON A.DIVISION_ID = C.DIVISION_ID
+                         AND A.ITEM_ID = C.ITEM_ID
+                        LEFT JOIN (SELECT B.USER_ID
+                                        , B.USER_NAME
+                                        , B.USER_NAME_EN
+                                        , B.DEPT_ID
+                                        , C.DEPT_NAME_KO
+                                        , D.DEPT_ID AS DEPARTMENT_ID
+                                        , D.DEPT_NAME_KO AS DEPARTMENT_NAME
+                                     FROM SCM_MST_SSO_USER_INFO AS B WITH (NOLOCK)
+                                          INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH (NOLOCK)
+                                             ON B.DEPT_ID = C.DEPT_ID
+                                          INNER JOIN SCM_MST_SSO_DEPT_INFO AS D WITH (NOLOCK)
+                                             ON C.UPPER_DEPT_ID = D.DEPT_ID
+                                   ) AS TEAM
+                          ON TEAM.USER_ID IN (SELECT TOP 1 token FROM dbo.String_Split(A.OWNER, ','))
+                 WHERE A.DIVISION_ID = '40'
+                   AND B.SITE_TYPE = 'SALES'
+                 GROUP BY A.DIVISION_ID
+                     , TEAM.DEPARTMENT_ID
+                     , TEAM.DEPARTMENT_NAME
+                     , TEAM.DEPT_ID
+                     , TEAM.DEPT_NAME_KO
+                     , ISNULL(A.ATTRIBUTE2,'')
+                     , ISNULL(A.ATTRIBUTE1,'')
+                     , ISNULL(A.REPORT_GROUP3,'')
+                     , ISNULL(C.FORECAST_INFO_BIZ_TYPE,'')
+                ;
+
+                SELECT MAIN.*
+                     , DISCARD.DISCARD
+                  INTO #temp_list
+                  FROM #temp AS MAIN
+                       INNER JOIN (SELECT VER_SEQ
+                                        , DEPARTMENT_ID
+                                        , DEPT_ID
+                                        , END_CUST_REPORT
+                                        , SOLDTO_CUST_REPORT
+                                        , PRODUCT_GROUP
+                                        , DM_BIZ_TYPE
+                                        , CASE WHEN SUM(CASE WHEN RATIO = 100 THEN 0 ELSE 1 END) > 0 THEN 'Y' ELSE 'N' END AS DISCARD
+                                     FROM (SELECT MA.VER_SEQ
+                                                , MA.DEPARTMENT_ID
+                                                , MA.DEPT_ID
+                                                , MA.END_CUST_REPORT
+                                                , MA.SOLDTO_CUST_REPORT
+                                                , MA.PRODUCT_GROUP
+                                                , MA.DM_BIZ_TYPE
+                                                , DT.YYYYMM
+                                                , DT.OS_CORP_CD
+                                                , DT.CONTRIBUTION_TYPE
+                                                , DT.CONTRIBUTION_RATIO
+                                                , SUM(CONTRIBUTION_RATIO) OVER(PARTITION BY MA.VER_SEQ
+                                                                                          , MA.DEPARTMENT_ID
+                                                                                          , MA.DEPT_ID
+                                                                                          , MA.END_CUST_REPORT
+                                                                                          , MA.SOLDTO_CUST_REPORT
+                                                                                          , MA.PRODUCT_GROUP
+                 "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTE_MAIN_DATA","1606348837","7","                                                                         , MA.DM_BIZ_TYPE
+                                                                                          , DT.YYYYMM) AS RATIO
+                                             FROM DM_MST_CONTRIBUTE_RATIO_MST AS MA WITH (NOLOCK)
+                                                  INNER JOIN DM_MST_CONTRIBUTE_RATIO_DTL AS DT WITH (NOLOCK)
+                                                     ON MA.VER_SEQ = DT.VER_SEQ
+                                                    AND MA.DEPARTMENT_ID = DT.DEPARTMENT_ID
+                                                    AND MA.DEPT_ID = DT.DEPT_ID
+                                                    AND MA.END_CUST_REPORT= DT.END_CUST_REPORT
+                                                    AND MA.SOLDTO_CUST_REPORT = DT.SOLDTO_CUST_REPORT
+                                                    AND MA.PRODUCT_GROUP = DT.PRODUCT_GROUP
+                                                    AND MA.DM_BIZ_TYPE = DT.DM_BIZ_TYPE
+                                            WHERE MA.VER_SEQ = @p_ver_seq
+                                              AND DT.YYYYMM >= @sdt
+                                              AND DT.YYYYMM <= @edt
+                                          ) AS MA
+                                    GROUP BY VER_SEQ
+                                           , DEPARTMENT_ID
+                                           , DEPT_ID
+                                           , END_CUST_REPORT
+                                           , SOLDTO_CUST_REPORT
+                                           , PRODUCT_GROUP
+                                           , DM_BIZ_TYPE
+                                  ) AS DISCARD
+                          ON MAIN.VER_SEQ         = DISCARD.VER_SEQ
+                         AND MAIN.DEPARTMENT_ID   = DISCARD.DEPARTMENT_ID
+                         AND MAIN.DEPT_ID         = DISCARD.DEPT_ID
+                         AND MAIN.END_CUST_REPORT = DISCARD.END_CUST_REPORT
+                         AND MAIN.SOLDTO_CUST_REPORT  = DISCARD.SOLDTO_CUST_REPORT
+                         AND MAIN.PRODUCT_GROUP   = DISCARD.PRODUCT_GROUP
+                         AND MAIN.DM_BIZ_TYPE     = DISCARD.DM_BIZ_TYPE
+                 WHERE DISCARD.DISCARD = 'Y'
+
+                SET @Query = '
+SELECT *
+  FROM (SELECT SITE_ITEM.*
+             , RATIO.VER_SEQ
+             , CASE WHEN RATIO.DISCARD = ''Y'' THEN RATIO.DISCARD ELSE ''N'' END DISCARD
+             , CASE WHEN ((SITE_ITEM.department_id != '''')
+                           AND (SITE_ITEM.dept_id != '''')
+                           AND (SITE_ITEM.end_cust_report != '''')
+                           AND (SITE_ITEM.SOLDTO_CUST_REPORT != '''')
+                           AND (SITE_ITEM.PRODUCT_GROUP != '''')
+                           AND (SITE_ITEM.dm_biz_type != ''''))
+                         THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG
+             ,' + @ColumnData2 + '
+          FROM #master_list AS SITE_ITEM
+               INNER JOIN (SELECT VER_SEQ
+                                , DEPARTMENT_ID
+                                , DEPT_ID
+                                , END_CUST_REPORT
+                                , SOLDTO_CUST_REPORT
+                                , PRODUCT_GROUP
+                                , DM_BIZ_TYPE
+                                , DISCARD
+                                , ' + @ColumnData + '
+
+                             FROM (SELECT *
+                                     FROM #temp_list
+                                    WHERE DISCARD = ''Y'') MA
+                            PIVOT (MAX(RATIO) FOR COLUMN_NAME IN (' + @ColumnData + ')) AS PVT
+                          ) AS RATIO
+                  ON  SITE_ITEM.DEPARTMENT_ID = RATIO.DEPARTMENT_ID
+                 AND SITE_ITEM.DEPT_ID = RATIO.DEPT_ID
+                 AND SITE_ITEM.END_CUST_REPORT = RATIO.END_CUST_REPORT
+   "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTE_MAIN_DATA","1606348837","8","              AND SITE_ITEM.SOLDTO_CUST_REPORT = RATIO.SOLDTO_CUST_REPORT
+                 AND SITE_ITEM.PRODUCT_GROUP = RATIO.PRODUCT_GROUP
+                 AND SITE_ITEM.DM_BIZ_TYPE = RATIO.DM_BIZ_TYPE
+
+        UNION ALL
+        SELECT SITE_ITEM.*
+             , RATIO.VER_SEQ
+             , ''Y'' AS DISCARD
+             , CASE WHEN ((SITE_ITEM.department_id != '''')
+                           AND (SITE_ITEM.dept_id != '''')
+                           AND (SITE_ITEM.end_cust_report != '''')
+                           AND (SITE_ITEM.SOLDTO_CUST_REPORT != '''')
+                           AND (SITE_ITEM.PRODUCT_GROUP != '''')
+                           AND (SITE_ITEM.dm_biz_type != ''''))
+                         THEN ''Y'' ELSE ''N'' END AS EDIT_FLAG
+             , ' + @ColumnData2 + '
+          FROM #master_list AS SITE_ITEM
+               LEFT OUTER JOIN (SELECT VER_SEQ
+                                     , DEPARTMENT_ID
+                                     , DEPT_ID
+                                     , END_CUST_REPORT
+                                     , SOLDTO_CUST_REPORT
+                                     , PRODUCT_GROUP
+                                     , DM_BIZ_TYPE
+                                     , ' + @ColumnData + '
+
+                                  FROM (SELECT * FROM #temp) MA
+                                 PIVOT (MAX(RATIO) FOR COLUMN_NAME IN (' + @ColumnData + ')) AS PVT
+                               ) AS RATIO
+                 ON SITE_ITEM.DEPARTMENT_ID = RATIO.DEPARTMENT_ID
+                AND SITE_ITEM.DEPT_ID = RATIO.DEPT_ID
+                AND SITE_ITEM.END_CUST_REPORT = RATIO.END_CUST_REPORT
+                AND SITE_ITEM.SOLDTO_CUST_REPORT = RATIO.SOLDTO_CUST_REPORT
+                AND SITE_ITEM.PRODUCT_GROUP = RATIO.PRODUCT_GROUP
+                AND SITE_ITEM.DM_BIZ_TYPE = RATIO.DM_BIZ_TYPE
+         WHERE RATIO.VER_SEQ IS NULL
+       ) MA
+'
+
+            END
+    END
+
+    ELSE BEGIN   -- (@p_his = 'Y')
+        -- ######################## 데이터 ########################
+        SELECT CONTRIBUTE.*
+             , SITE_ITEM.DIVISION_ID
+          INTO #DataTable
+          FROM (SELECT MA.VER_SEQ
+                     , MA.DEPARTMENT_ID
+                     , MA.DEPT_ID
+                     , MA.END_CUST_REPORT
+                     , MA.SOLDTO_CUST_REPORT
+                     , MA.PRODUCT_GROUP
+                     , MA.DM_BIZ_TYPE
+                  FROM dbo.DM_MST_CONTRIBUTE_RATIO_MST AS MA WITH (NOLOCK)
+               ) AS CONTRIBUTE
+               LEFT OUTER JOIN (
+                    SELECT DISTINCT
+                           A.DIVISION_ID
+                         , TEAM.DEPARTMENT_ID
+                         , TEAM.DEPARTMENT_NAME
+                         , TEAM.DEPT_ID AS DEPT_ID
+                         , TEAM.DEPT_NAME_KO AS DEPT_NAME
+                         , ISNULL(A.ATTRIBUTE2,'') AS END_CUST_REPORT
+                         , ISNULL(A.ATTRIBUTE1,'') AS SOLDTO_CUST_REPORT
+                         , ISNULL(A.REPORT_GROUP3,'') AS PRODUCT_GROUP
+                         , ISNULL(C.FORECAST_INFO_BIZ_TYPE,'') AS DM_BIZ_TYPE
+                      FROM SCM_MST_SITE_ITEM A WITH (NOLOCK)
+                           INNER JOIN SCM_MST_SITE B WITH (NOLOCK)
+                              ON A.DIVISION_ID = B.DIVISION_ID
+                             AND A.SCM_SITE_ID = B.SCM_SITE_ID
+                            LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL SAM WITH (NOLOCK)
+                              ON SAM.SEGMENT1 = B.COMPANY_ID
+                             AND SAM.LOOKUP_TYPE = 'INTERNAL_TXN'
+                           INNER JOIN DM_MST_ITEM_SINGLE_V C WITH (NOLOCK)
+                              ON A.DIVISION_ID = C.DIVISION_ID
+                             AND A.ITEM_ID = C.ITEM_ID
+                            LEFT JOIN (SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN
+                                            , B.DEPT_ID, C."
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTE_MAIN_DATA","1606348837","10","          , MA.DEPT_ID
+             , MA.END_CUST_REPORT
+             , MA.SOLDTO_CUST_REPORT
+             , MA.PRODUCT_GROUP
+             , MA.DM_BIZ_TYPE
+             , CAST(DTL.CONTRIBUTION_RATIO AS NVARCHAR) AS RATIO
+             , 'M#' + YYYYMM + '#' + OS_CORP_CD AS COLUMN_NAME
+          FROM #DataTable AS MA
+               INNER JOIN DM_MST_CONTRIBUTE_RATIO_DTL AS DTL
+                  ON MA.DEPARTMENT_ID = DTL.DEPARTMENT_ID
+                 AND MA.DEPT_ID = DTL.DEPT_ID
+                 AND MA.END_CUST_REPORT = DTL.END_CUST_REPORT
+                 AND MA.SOLDTO_CUST_REPORT = DTL.SOLDTO_CUST_REPORT
+                 AND MA.PRODUCT_GROUP = DTL.PRODUCT_GROUP
+                 AND MA.DM_BIZ_TYPE = DTL.DM_BIZ_TYPE
+         WHERE YYYYMM >= @sdt AND YYYYMM <= @edt
+           AND MA.VER_SEQ = @p_ver_seq
+
+        UNION ALL
+
+        SELECT MA.VER_SEQ
+             , MA.DEPARTMENT_ID
+             , MA.DEPT_ID
+             , MA.END_CUST_REPORT
+             , MA.SOLDTO_CUST_REPORT
+             , MA.PRODUCT_GROUP
+             , MA.DM_BIZ_TYPE
+             , CAST(DTL.CONTRIBUTION_TYPE AS NVARCHAR) AS RATIO
+             , 'M#' + YYYYMM + '#RBU_0999' AS COLUMN_NAME
+          FROM #DataTable AS MA
+               INNER JOIN DM_MST_CONTRIBUTE_RATIO_DTL AS DTL
+                  ON MA.DEPARTMENT_ID = DTL.DEPARTMENT_ID
+                 AND MA.DEPT_ID = DTL.DEPT_ID
+                 AND MA.END_CUST_REPORT = DTL.END_CUST_REPORT
+                 AND MA.SOLDTO_CUST_REPORT = DTL.SOLDTO_CUST_REPORT
+                 AND MA.PRODUCT_GROUP = DTL.PRODUCT_GROUP
+                 AND MA.DM_BIZ_TYPE = DTL.DM_BIZ_TYPE
+         WHERE YYYYMM >= @sdt AND YYYYMM <= @edt
+           AND MA.VER_SEQ = @p_ver_seq
+        -- select * from #temp
+        -- ######################## 데이터 ########################
+
+        SET @Query = '
+SELECT VER_SEQ
+     , DEPARTMENT_ID
+     , DEPT_ID
+     , END_CUST_REPORT
+     , SOLDTO_CUST_REPORT
+     , PRODUCT_GROUP
+     , DM_BIZ_TYPE
+     , ''N'' AS EDIT_FLAG
+     , ' + @ColumnData + '
+  FROM (SELECT *
+          FROM #temp3) MA
+ PIVOT (MAX(RATIO) FOR COLUMN_NAME IN (' + @ColumnData + ')) AS PVT
+'
+    END
+
+    --SELECT CONVERT(TEXT, @Query)
+    --FOR XML PATH('')--,ROOT('x')
+
+    EXECUTE dbo.SP_EXECUTESQL @Query
+	
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTE_RATE_POPUP","1622348894","1","
+/*
+ **************************************************************************************************
+ * Program ID  :  [DMF0043_GET_CONTRIBUTE_RATE_POPUP]
+ * Description : DMF0043 > 기여율 관리 팝업
+ * Usage       : Procedure 작성 시 참조하세요!                                                      
+ * Parameter   :                                                                                    
+ *                                                                                                  
+ *--------------------------------------------------------------------------------------------------
+ * Date        In Charge    Description                                                             
+ *--------------------------------------------------------------------------------------------------
+ * 2019/05/09  JYE       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ **************************************************************************************************
+*/
+CREATE PROC [dbo].[DMF0043_GET_CONTRIBUTE_RATE_POPUP]
+(
+	@p_yyyy              NVARCHAR(10)
+)
+AS
+BEGIN
+	SELECT 
+		VER_SEQ
+		,YYYY
+		,VERSION_NM
+		,DESCRIPTION
+		,VALID_YN
+	FROM [dbo].[DM_MST_CONTRIBUTE_VER]
+	WHERE YYYY = CASE WHEN @p_yyyy IS NULL OR @p_yyyy = 'ALL' THEN YYYY ELSE @p_yyyy END
+    ORDER BY YYYY DESC
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTE_YEAR_POPUP","1638348951","1","
+/*
+ **************************************************************************************************
+ * Program ID  :  [[DMF0043_GET_CONTRIBUTE_YEAR_POPUP]]
+ * Description : DMF0043 > 검색 연도
+ * Usage       : Procedure 작성 시 참조하세요!                                                      
+ * Parameter   :                                                                                    
+ *                                                                                                  
+ *--------------------------------------------------------------------------------------------------
+ * Date        In Charge    Description                                                             
+ *--------------------------------------------------------------------------------------------------
+ * 2019/05/09  JYE       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ **************************************************************************************************
+*/
+CREATE PROC [dbo].[DMF0043_GET_CONTRIBUTE_YEAR_POPUP]
+AS
+BEGIN
+
+	SELECT CODE, NAME FROM
+	(
+		SELECT 
+			'ALL' AS CODE
+			,'ALL' AS NAME
+			,0 AS SORTORDER
+		UNION ALL
+
+		SELECT 
+			YYYY AS CODE
+			,YYYY AS NAME
+			,ROW_NUMBER() OVER (ORDER BY YYYY) SORTORDER
+		FROM [dbo].[DM_MST_CONTRIBUTE_VER]
+		GROUP BY YYYY
+	) AS MA
+	ORDER BY SORTORDER
+
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTION_SALES_LIST","1654349008","1","---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+/****************************************************************************************************/
+/* Program ID  : DMF0043_GET_CONTRIBUTION_SALES_LIST                                                */
+/* Description : 해외법인 기여매출 목록                                                             */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2019/06/20     JSYOUN    [CSR ID:3948994] GSCM 해외법인기여율 화면 개발 요청의 건 - 해외법인 기여매출 목록 */
+/* 2019/11/25     hwi1993   합계컬럼 추가, FORECAST_INFO_BIZ_TYPE 조건 제외																		*/
+/* 2019/11/27     hwi1993   하단합계 추가																		*/
+/* 2019/12/12	  hwi1993   컬럼변수 정리, 컬럼합계를 commission/markup 구분없이 통합 ( Total 컬럼 ) */
+/* 2020/01/28	  P.C.I     Sales Report의 테이블로 변경 */
+/* 2020/02/07	  P.C.I     #tmp_sales_list_c 생성시 INNER JOIN 을 OUTER JOIN 으로 변경함 */
+/* 2020/02/07	  HWI1993   마지막 유효성검사에 로직 추가 */
+/* 2020/03/24	  HWI1993   DM_PLN_SALES_REPORT_C 에 BP 를 임시로 넣었는데, 이 데이터가 양쪽 테이블에 들어가있는 관계로 조회시 2배로 표시됨. --> 원천테이블에서 데이터 집계하는 로직 변경 */
+/* 20200427       KHSONG    C20200305-000035 매출 쿼리 수정 요청의 건 (COMPANY정보 실시간 현행화)   */
+/****************************************************************************************************/
+
+CREATE PROCEDURE [dbo].[DMF0043_GET_CONTRIBUTION_SALES_LIST]
+    @p_division_id      NVARCHAR(30),
+    @p_ver_seq          NVARCHAR(MAX),
+    @p_version_no       NVARCHAR(MAX),
+    @p_end_cust_report  NVARCHAR(MAX),
+    @p_product_group    NVARCHAR(MAX),
+    @p_biz_type         NVARCHAR(MAX),
+    @p_million_yn       NVARCHAR(MAX),
+    @p_compatibility_yn NVARCHAR(MAX),
+    @p_created_by       NVARCHAR(50)
+AS
+
+BEGIN
+    SET NOCOUNT ON;
+	
+    DECLARE @v_sql_text          AS NVARCHAR(MAX);
+    DECLARE @v_code              AS NVARCHAR(MAX);
+    DECLARE @v_large_code        AS NVARCHAR(MAX);
+    DECLARE @v_small_code        AS NVARCHAR(MAX);
+    DECLARE @v_groupby           AS NVARCHAR(MAX);
+    DECLARE @v_orderby           AS NVARCHAR(MAX);
+    DECLARE @v_col_name			 AS NVARCHAR(50);
+    DECLARE @v_sort_order_no     AS NVARCHAR(50);
+    DECLARE @v_program_id        AS NVARCHAR(10);
+    DECLARE @v_sheet_name        AS NVARCHAR(100);
+    DECLARE @v_user_col_cnt      AS INT;
+	DECLARE @v_seq				 AS INT;
+	
+	-- 동적쿼리에사용하는 컬럼 관련 ( CTE 문을 이용한 마지막 Select 문에서 사용 )
+	DECLARE @v_col				 AS NVARCHAR(MAX);		-- 일반 로우의 일반 컬럼
+	DECLARE @v_col_Sum			 AS NVARCHAR(MAX) = ''; -- 일반로우의 합계컬럼 ( 국가별, commision/markup 구분별)    
+	DECLARE @v_bottom			 AS NVARCHAR(MAX);		-- 합계로우의 일반컬럼
+    DECLARE @v_bottom_Sum        AS NVARCHAR(MAX) = ''; -- 합계로우의 합계컬럼 ( 국가별, commision/markup 구분별)    
+	DECLARE @v_col_Total		 AS NVARCHAR(MAX) = ''; -- Total 컬럼 ( 로우 구분 없음"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTION_SALES_LIST","1654349008","2"," - 수식이 동일해서 )
+	
+
+    DECLARE @nsql2 nvarchar(max); -- order by 정보
+
+    DECLARE @va_program_id     NVARCHAR(MAX)
+    DECLARE @va_sheet_name     NVARCHAR(MAX)
+    SET @va_program_id = 'DMF0043'
+    SET @va_sheet_name = 'ContributeSalesList'
+
+    SET @v_col_name = '';
+    SET @v_col = '';
+    SET @v_groupby = '';
+    SET @v_user_col_cnt = 0;
+
+    SELECT @v_user_col_cnt = COUNT(*)
+    FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+    WHERE  1 = 1
+    AND  U.PROGRAM_ID = @va_program_id
+    AND    U.SHEET_NAME = @va_sheet_name
+    AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+    AND    U.USER_ID    = @p_created_by;
+
+    IF @v_user_col_cnt = 0
+    BEGIN
+        INSERT INTO [dbo].[SCM_MST_TITLESET_USER]
+        ( USER_ID
+        , PROGRAM_ID
+        , SHEET_NAME
+        , USER_INQUIRY_COLUMN_TYPE_CODE
+        , COLUMN_NAME
+        , SORT_ORDER_NO
+        , SUB_TOTAL_FLAG
+        , DATA_SORT_METHOD_CODE
+        , CREATED_BY
+        , CREATION_DATE
+        , LAST_UPDATED_BY
+        , LAST_UPDATE_DATE
+        )
+        SELECT @p_created_by
+             , C.PROGRAM_ID
+      , C.SHEET_NAME
+             , 'C'
+             , C.COLUMN_NAME
+             , C.SORT_ORDER_NO
+             , 'N'
+             , ''
+             , @p_created_by
+             , CONVERT(varchar(19), GETDATE(), 121)
+             , @p_created_by
+             , CONVERT(varchar(19), GETDATE(), 121)
+        FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+        WHERE  1 = 1
+        AND    C.PROGRAM_ID  = @va_program_id
+        AND    C.SHEET_NAME  = @va_sheet_name
+        AND    C.DEFAULT_FLAG = 'Y'
+        AND    C.VALID_YN     = 'Y' ;
+    END;
+
+    --정렬 정보 쿼리 add son young suk 20180727
+    SET  @nsql2 = 'SELECT U.PROGRAM_ID
+             , U.SHEET_NAME
+             , U.COLUMN_NAME
+             , U.SORT_ORDER_NO
+             , U.DATA_SORT_METHOD_CODE
+        FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+             , [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+        WHERE  1 = 1
+        AND    U.PROGRAM_ID  = C.PROGRAM_ID
+        AND    U.SHEET_NAME  = C.SHEET_NAME
+        AND    U.COLUMN_NAME = C.COLUMN_NAME
+        AND    U.PROGRAM_ID  = ''' + @va_program_id +'''
+        AND    U.SHEET_NAME  = ''' + @va_sheet_name +'''
+        AND    U.USER_ID     = ''' + @p_created_by + '''
+        AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = ''C''
+        AND    C.VALID_YN = ''Y''
+        AND  ''' + @p_division_id + ''' IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,'','') )  -- 20190214
+        UNION ALL
+        SELECT C.PROGRAM_ID
+             , C.SHEET_NAME
+             , C.COLUMN_NAME
+             , C.SORT_ORDER_NO
+             , C.DATA_SORT_METHOD_CODE
+        FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+        WHERE  1 = 1
+        AND    C.PROGRAM_ID  = ''' + @va_program_id +'''
+        AND    C.SHEET_NAME  = ''' + @va_sheet_name +'''
+        AND    C.DEFAULT_FLAG = ''''
+        AND    C.VALID_YN     = ''Y''
+        ORDER BY SORT_ORDER_NO';
+
+    DECLARE c_title CURSOR FAST_FORWARD FOR
+        SELECT U.PROGRAM_ID
+             , U.SHEET_NAME
+             , U.COLUMN_NAME
+             , U.SORT_ORDER_NO
+        FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+             , [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+        WHERE  1 = 1
+        AND    U.PROGRAM_ID  = C.PROGRAM_ID
+        AND    U.SHEET_NAME  = C.SHEET_NAME
+        AND    U.COLUMN_NAME = C.COLUMN_NAME
+        AND    U.PROGRAM_ID  = @va_program_id
+        AND    U.SHEET_NAME  = @va_sheet_name
+        AND    U.USER_ID     = @p_created_by
+        AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+        UNION ALL
+        SELECT C.PROGRAM_ID
+             , C.SHEET_NAME
+             , C.COLUMN_NAME
+             , C.SORT_ORDER_NO
+        FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+        WHERE  1 = 1
+        AND    C.PROGRAM_ID  = @va_program_id
+        AND    C.SHEET_NAME  = "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTION_SALES_LIST","1654349008","3","@va_sheet_name
+        AND    C.DEFAULT_FLAG = ''
+        AND    C.VALID_YN     = 'Y'
+        ORDER BY SORT_ORDER_NO ;
+
+    OPEN c_title;
+    FETCH NEXT FROM c_title INTO @v_program_id, @v_sheet_name, @v_col_name, @v_sort_order_no
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+      IF @v_col = ''
+          BEGIN
+			  SET @v_col =  'A.' + @v_col_name;
+			  SET @v_groupby = ' GROUP BY A.' + @v_col_name;
+			  SET @v_orderby = ' ORDER BY A.' + @v_col_name;
+			  -- 합계로우용
+			  SET @v_bottom = N'''Total'''
+          END;
+      ELSE
+           BEGIN
+              SET @v_col = @v_col + ', A.' + @v_col_name;
+              SET @v_groupby = @v_groupby + ', A.' + @v_col_name;
+              SET @v_orderby = @v_orderby + ', A.' + @v_col_name;
+			  -- 합계 로우 용
+			  SET @v_bottom = @v_bottom + ', null';
+          END;
+    
+      FETCH NEXT FROM c_title INTO @v_program_id, @v_sheet_name, @v_col_name, @v_sort_order_no
+    END;
+    
+    CLOSE c_title;
+    DEALLOCATE c_title;
+	
+    IF OBJECT_ID (N'tempdb..#tmp_plan_report_c', N'U') IS NOT NULL
+        DROP TABLE #tmp_plan_report_c;
+    /*IF OBJECT_ID (N'tempdb..#tmp_sales_plan_c', N'U') IS NOT NULL
+        DROP TABLE #tmp_sales_plan_c;
+    IF OBJECT_ID (N'tempdb..#tmp_sales_result_c', N'U') IS NOT NULL
+        DROP TABLE #tmp_sales_result_c;*/
+    IF OBJECT_ID (N'tempdb..#tmp_sales_list_c', N'U') IS NOT NULL
+        DROP TABLE #tmp_sales_list_c;
+
+		
+	/*
+	
+    SELECT DIVISION_ID 
+         , VERSION_NO
+		 , PROJECT_CODE
+         , SCM_SITE_ID
+         , ITEM_ID
+         , YYYYMMDD
+         , QTY
+      INTO #tmp_sales_plan_c
+      FROM DM_PLN_SALES_PLAN_C WITH (NOLOCK)
+     WHERE DIVISION_ID = @p_division_id
+       AND VERSION_NO = @p_version_no
+       AND MEASURE = 'SalesAmt_USD'
+       AND SCM_SITE_ID NOT IN (SELECT SEGMENT1
+                                 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH (NOLOCK)
+                       WHERE LOOKUP_TYPE = 'INTERNAL_TXN')  -- 20190906 소거매출 제외
+       AND YYYYMMDD LIKE (SELECT YYYY FROM DM_MST_CONTRIBUTE_VER WITH (NOLOCK) WHERE VER_SEQ = @p_ver_seq)+'%'
+    ;
+
+
+
+
+    SELECT PR.DIVISION_ID 
+         , PR.VERSION_NO
+         , PR.PROJECT_CODE
+         , PR.SCM_SITE_ID
+         , PR.ITEM_ID
+         , PR.YYYYMMDD
+         , CASE WHEN ISNULL(FP.EXCHANGE_PRICE,0) = 0 THEN 0
+                ELSE PR.QTY/ISNULL(FP.EXCHANGE_PRICE,0)
+           END AS QTY
+      INTO #tmp_sales_result_c
+      FROM DM_PLN_SALES_PLAN_RESULT_C PR WITH (NOLOCK)
+           LEFT OUTER JOIN DM_MST_EXCHANGE_RATE_C FP WITH (NOLOCK)
+             ON PR.DIVISION_ID = FP.DIVISION_ID
+            AND PR.VERSION_NO = FP.VERSION_NO
+            AND SUBSTRING(PR.YYYYMMDD,1,6)+'01' = FP.YYYYMMDD
+            AND FP.UNIT_CURRENCY = 'USD'
+     WHERE PR.DIVISION_ID = @p_division_id
+       AND PR.VERSION_NO = @p_version_no
+       AND PR.MEASURE = 'SalesAmt_KRW'
+       AND PR.SCM_SITE_ID NOT IN (SELECT SEGMENT1
+                                    FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH (NOLOCK)
+                                   WHERE LOOKUP_TYPE = 'INTERNAL_TXN')  -- 20190906 소거매출 제외
+       AND PR.YYYYMMDD LIKE (SELECT YYYY FROM DM_MST_CONTRIBUTE_VER WITH (NOLOCK) WHERE VER_SEQ = @p_ver_seq)+'%'
+    ;
+	*/
+
+	CREATE TABLE #tmp_plan_report_c (
+	DIVISION_ID		nvarchar(5)
+	, VERSION_NO	nvarchar(30)
+	, PROJECT_CODE	nvarchar(30)
+	, SCM_SITE_ID	nvarchar(30)
+	, ITEM_ID		nvarchar(50)
+	, YYYYMMDD		nvarchar(8)
+	, QTY			NUMERIC(30,10)
+	)
+
+	IF ( @p_version_no LIKE 'BP%')
+	BEGIN
+		INSERT INTO #tmp_plan_report_c	  
+		SELECT DIVISION_ID 
+			 , VERSION_NO
+			 , PROJECT_CODE
+			 , SCM_SITE_ID
+			 , ITEM_ID
+			 , YYYYMMDD
+			 , QTY
+		 FROM ( 
+				   SELECT DIVISION_ID 
+					 , VERSION_NO
+					 , PROJECT_CODE
+					 , SCM_SITE_ID
+					 , ITEM_ID
+					 , YYYYMM AS YYYYMMDD
+					 , QTY
+				  FROM DM_PLN_BP_FCST_REPORT_C WITH (NOLOCK)
+				 WHERE DIVISION_ID = @p_division_id
+				   AND VERSION_NO = @p_version_no
+				   AND MEAS"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTION_SALES_LIST","1654349008","4","URE = 'SalesAmt_USD'
+				   AND SCM_SITE_ID NOT IN (
+											--SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH (NOLOCK) WHERE LOOKUP_TYPE = 'INTERNAL_TXN'  -- 20190906 소거매출 제외 -- 20200427 KHSONG 주석처리
+											SELECT COMPANY_ID FROM SCM_MST_COMPANY_SN WITH(NOLOCK)  -- 20200427 KHSONG C20200305-000035 매출 쿼리 수정 요청의 건 (COMPANY정보 실시간 현행화)
+											)
+				   AND YYYYMM LIKE (SELECT YYYY FROM DM_MST_CONTRIBUTE_VER WITH (NOLOCK) WHERE VER_SEQ = @p_ver_seq)+'%'
+				   ) A
+	END
+	ELSE
+	BEGIN
+		INSERT INTO #tmp_plan_report_c	  
+		SELECT DIVISION_ID 
+			 , VERSION_NO
+			 , PROJECT_CODE
+			 , SCM_SITE_ID
+			 , ITEM_ID
+			 , YYYYMMDD
+			 , QTY
+		 FROM ( SELECT DIVISION_ID 
+					 , VERSION_NO
+					 , PROJECT_CODE
+					 , SCM_SITE_ID
+					 , ITEM_ID
+					 , YYYYMMDD
+					 , QTY
+				  FROM DM_PLN_SALES_PLAN_REPORT_C WITH (NOLOCK)
+				 WHERE DIVISION_ID = @p_division_id
+				   AND VERSION_NO = @p_version_no
+				   AND MEASURE = 'SalesAmt_USD'
+				   AND SCM_SITE_ID NOT IN (
+											--SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH (NOLOCK) WHERE LOOKUP_TYPE = 'INTERNAL_TXN'  -- 20190906 소거매출 제외 -- 20200427 KHSONG 주석처리
+											SELECT COMPANY_ID FROM SCM_MST_COMPANY_SN WITH(NOLOCK)  -- 20200427 KHSONG C20200305-000035 매출 쿼리 수정 요청의 건 (COMPANY정보 실시간 현행화)
+											)
+				   AND YYYYMMDD LIKE (SELECT YYYY FROM DM_MST_CONTRIBUTE_VER WITH (NOLOCK) WHERE VER_SEQ = @p_ver_seq)+'%'
+				) A
+	END
+   
+    SELECT *
+      INTO #tmp_sales_list_c
+      FROM
+          (SELECT SUBSTRING(A.YYYYMMDD,1,6) AS YYYYMM
+             , TEAM.DEPARTMENT_ID
+             , TEAM.DEPARTMENT_NAME
+             , TEAM.DEPT_ID
+             , TEAM.DEPT_NAME_KO AS DEPT_NAME
+             , ISNULL(I.REPORT_GROUP2,'') AS CUST_REPORT
+             , ISNULL(I.ATTRIBUTE2,'') AS END_CUST_REPORT
+             , ISNULL(I.ATTRIBUTE1,'') AS SOLDTO_CUST_REPORT
+             , ISNULL(SC.SHIPTO_CODE,'') AS SHIPTO_CODE
+             , ISNULL(I.REPORT_GROUP3,'') AS PRODUCT_GROUP
+             , ISNULL(C.FORECAST_INFO_BIZ_TYPE,'') AS DM_BIZ_TYPE
+             , CASE WHEN ISNULL(@p_million_yn,'N') = 'Y' THEN SUM(QTY)/1000000 ELSE SUM(QTY) END AS AMT
+			 , 'Y' AS EDIT_FLAG
+          FROM #tmp_plan_report_c A WITH (NOLOCK) --Inner join에서 Left join 으로 변경
+                LEFT JOIN SCM_MST_SITE_ITEM I WITH (NOLOCK)
+                  ON A.DIVISION_ID = I.DIVISION_ID
+                 AND A.PROJECT_CODE = I.PROJECT_CODE
+                 AND A.SCM_SITE_ID = I.SCM_SITE_ID
+                 AND A.ITEM_ID = I.ITEM_ID
+                LEFT JOIN SCM_MST_SITE_CUSTOMER SC WITH (NOLOCK)
+                  ON SC.DIVISION_ID = I.DIVISION_ID
+                 AND SC.SCM_SITE_ID = I.SCM_SITE_ID
+                 AND SC.REP_YN      = 'Y'
+                LEFT JOIN SCM_MST_SITE B WITH (NOLOCK)
+                  ON A.DIVISION_ID = B.DIVISION_ID
+				 AND A.SCM_SITE_ID = B.SCM_SITE_ID
+                LEFT JOIN DM_MST_ITEM_SINGLE_V C WITH (NOLOCK)
+                  ON A.DIVISION_ID = C.DIVISION_ID
+                 AND A.ITEM_ID = C.ITEM_ID
+                 --AND ISNULL(C.FORECAST_INFO_BIZ_TYPE,'') <> ''
+                LEFT JOIN (
+                        SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO , D.DEPT_ID AS DEPARTMENT_ID, D.DEPT_NAME_KO AS DEPARTMENT_NAME
+                        FROM [SCM_MST_SSO_USER_INFO] AS B WITH (NOLOCK)
+                        INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH (NOLOCK)
+                        ON B.DEPT_ID = C.DEPT_ID
+                        INNER JOIN SCM_MST_SSO_DEPT_INFO AS D WITH (NOLOCK)
+                        ON C.UPPER_DEPT_ID = D.DEPT_ID
+                    ) AS TEAM
+      ON TEAM.USER_ID IN (SELECT TOP 1 TOKEN FROM [DBO].[STRING_SPLIT](I.OWNER, ','))
+         WHERE A.DIVISION_ID = @p_division_id
+           AND A.VERSION_NO = @p_version_no
+           AND A.YYYYMMDD LIKE (SELECT YYYY FROM DM_MST_CONTRIBUTE_VER WITH (NOLOCK) WHERE VER_SEQ = @p_ver_seq)+'%'
+       "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTION_SALES_LIST","1654349008","5","  GROUP BY SUBSTRING(A.YYYYMMDD,1,6)
+             , TEAM.DEPARTMENT_ID
+             , TEAM.DEPARTMENT_NAME
+             , TEAM.DEPT_ID
+             , TEAM.DEPT_NAME_KO
+             , ISNULL(I.REPORT_GROUP2,'')
+             , ISNULL(I.ATTRIBUTE2,'')
+             , ISNULL(I.ATTRIBUTE1,'')
+             , ISNULL(SC.SHIPTO_CODE,'')
+             , ISNULL(I.REPORT_GROUP3,'')
+             , ISNULL(C.FORECAST_INFO_BIZ_TYPE,'')
+			 /*
+        UNION ALL
+
+        SELECT SUBSTRING(A.YYYYMMDD,1,6) AS YYYYMM
+             , TEAM.DEPARTMENT_ID
+             , TEAM.DEPARTMENT_NAME
+             , TEAM.DEPT_ID
+             , TEAM.DEPT_NAME_KO AS DEPT_NAME
+             , ISNULL(I.REPORT_GROUP2,'') AS CUST_REPORT
+             , ISNULL(I.ATTRIBUTE2,'') AS END_CUST_REPORT
+             , ISNULL(I.ATTRIBUTE1,'') AS SOLDTO_CUST_REPORT
+             , ISNULL(SC.SHIPTO_CODE,'') AS SHIPTO_CODE
+             , ISNULL(I.REPORT_GROUP3,'') AS PRODUCT_GROUP
+             , ISNULL(C.FORECAST_INFO_BIZ_TYPE,'') AS DM_BIZ_TYPE
+             , CASE WHEN ISNULL(@p_million_yn,'N') = 'Y' THEN SUM(QTY)/1000000 ELSE SUM(QTY) END AS AMT
+			 , 'Y' AS EDIT_FLAG
+          FROM #tmp_sales_result_c A WITH (NOLOCK)
+               INNER JOIN SCM_MST_SITE_ITEM I WITH (NOLOCK)
+ON A.DIVISION_ID = I.DIVISION_ID
+                 AND A.PROJECT_CODE = I.PROJECT_CODE
+                 AND A.SCM_SITE_ID = I.SCM_SITE_ID
+                 AND A.ITEM_ID = I.ITEM_ID
+               INNER JOIN SCM_MST_SITE_CUSTOMER SC WITH (NOLOCK)
+                  ON SC.DIVISION_ID = I.DIVISION_ID
+            AND SC.SCM_SITE_ID = I.SCM_SITE_ID
+                 AND SC.REP_YN      = 'Y'
+               INNER JOIN SCM_MST_SITE B WITH (NOLOCK)
+                  ON A.DIVISION_ID = B.DIVISION_ID
+                 AND A.SCM_SITE_ID = B.SCM_SITE_ID
+               INNER JOIN DM_MST_ITEM_SINGLE_V C WITH (NOLOCK)
+ON A.DIVISION_ID = C.DIVISION_ID
+                 AND A.ITEM_ID = C.ITEM_ID
+                 --AND ISNULL(C.FORECAST_INFO_BIZ_TYPE,'') <> ''
+               LEFT JOIN (
+                        SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO , D.DEPT_ID AS DEPARTMENT_ID, D.DEPT_NAME_KO AS DEPARTMENT_NAME
+                        FROM [SCM_MST_SSO_USER_INFO] AS B WITH (NOLOCK)
+                        INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH (NOLOCK)
+                        ON B.DEPT_ID = C.DEPT_ID
+                        INNER JOIN SCM_MST_SSO_DEPT_INFO AS D WITH (NOLOCK)
+                        ON C.UPPER_DEPT_ID = D.DEPT_ID
+                    ) AS TEAM
+                    ON TEAM.USER_ID IN (SELECT TOP 1 TOKEN FROM [DBO].[STRING_SPLIT](I.OWNER, ','))
+         WHERE A.DIVISION_ID = @p_division_id
+           AND A.VERSION_NO = @p_version_no
+           AND A.YYYYMMDD LIKE (SELECT YYYY FROM DM_MST_CONTRIBUTE_VER WITH (NOLOCK) WHERE VER_SEQ = @p_ver_seq)+'%'
+         GROUP BY SUBSTRING(A.YYYYMMDD,1,6)
+             , TEAM.DEPARTMENT_ID
+             , TEAM.DEPARTMENT_NAME
+             , TEAM.DEPT_ID
+             , TEAM.DEPT_NAME_KO
+             , ISNULL(I.REPORT_GROUP2,'')
+             , ISNULL(I.ATTRIBUTE2,'')
+             , ISNULL(I.ATTRIBUTE1,'')
+             , ISNULL(SC.SHIPTO_CODE,'')
+             , ISNULL(I.REPORT_GROUP3,'')
+             , ISNULL(C.FORECAST_INFO_BIZ_TYPE,'')*/
+             ) A
+
+    
+    DECLARE c_code CURSOR FAST_FORWARD FOR
+	SELECT DISTINCT CODE, LARGE_CODE, SMALL_CODE, SEQ
+	FROM (
+		SELECT 
+			  L.SEGMENT1 + '#' + CASE WHEN L.SEGMENT4 = 'Y' THEN '' ELSE M.SEGMENT1 END AS CODE
+			, L.SEGMENT1  AS LARGE_CODE
+			, CASE WHEN L.SEGMENT4 = 'Y' THEN L.SEGMENT1 ELSE M.SEGMENT1 END AS SMALL_CODE
+			, RANK() OVER ( ORDER BY L.DISPLAY_SEQ, CASE WHEN L.SEGMENT4 = 'Y' THEN 0 ELSE M.DISPLAY_SEQ END ) AS SEQ
+		FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L  WITH(NOLOCK)
+			,  [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] M  WITH(NOLOCK)
+		WHERE  1 = 1
+		AND    L.LOOKUP_TYPE = 'DM_OS_CORP_CD'
+		AND    M.LOOKUP_TYPE = 'DM"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTION_SALES_LIST","1654349008","6","_CONTRIBUTION_TYPE_CD'
+		AND    L.VALID_YN    = 'Y'
+		AND    L.SEGMENT3    = 'Y'
+		AND    M.VALID_YN    = 'Y'
+		) A
+    ORDER BY A.SEQ
+
+
+    SET @v_sql_text = '
+WITH SALES_LIST AS (
+    SELECT A.YYYYMM
+         , A.DEPARTMENT_NAME
+         , A.DEPT_NAME
+         , A.DEPARTMENT_ID
+         , A.DEPT_ID
+       , A.CUST_REPORT
+         , A.END_CUST_REPORT
+         , A.SOLDTO_CUST_REPORT
+         , A.SHIPTO_CODE
+         , A.PRODUCT_GROUP
+         , A.DM_BIZ_TYPE
+		 , A.EDIT_FLAG ';
+
+    OPEN c_code;
+    FETCH NEXT FROM c_code INTO @v_code, @v_large_code, @v_small_code, @v_seq -- @v_seq 는 사용하지 않음. 커서문에서 distinct 를 넣기 위해 사용
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        SET @v_sql_text = @v_sql_text + '
+         , SUM(CASE WHEN ISNULL(B.CONTRIBUTION_RATIO,0) > 0 AND B.CONTRIBUTION_TYPE = ''' + @v_small_code + ''' AND B.OS_CORP_CD = ''' + @v_large_code + '''
+                         THEN B.CONTRIBUTION_RATIO/100*A.AMT
+                    ELSE 0
+               END) AS ' + @v_code + ' ';
+
+--select @v_code
+
+		-- 행별합계
+		IF @v_code NOT LIKE '%Total%'
+		BEGIN
+			SET @v_col_Sum = @v_col_Sum + ', SUM('+@v_code+') AS ' + @v_code;
+			SET @v_bottom_Sum = @v_bottom_Sum + ', SUM('+@v_code+') AS ' + @v_code;
+		END
+
+		---- 컬럼합계 ( Total )
+		IF @v_code NOT LIKE '%Total%'	-- Total 이 아닌 컬럼에서는 SUM 을 구성하고
+			SET @v_col_Total = @v_col_Total +  CASE WHEN @v_col_Total = '' THEN '' ELSE ' +' END + 'ISNULL(SUM(' + @v_code + '), 0)'
+		ELSE							-- Total 컬럼에서는 AS 를 붙여서 마무리
+			SET @v_col_Total = @v_col_Total + ' AS ' + @v_code
+
+-- select @v_col_Sum as v_sum_column, @v_code as v_code, @v_col_Total, @v_ttsum_column_com
+
+        FETCH NEXT FROM c_code INTO @v_code, @v_large_code, @v_small_code, @v_seq
+    END
+
+    CLOSE c_code;
+    DEALLOCATE c_code;
+
+	
+    SET @v_sql_text = @v_sql_text + '
+      FROM #tmp_sales_list_c A
+INNER JOIN DM_MST_CONTRIBUTE_RATIO_DTL B WITH (NOLOCK)
+              ON A.DEPARTMENT_ID = B.DEPARTMENT_ID
+             AND A.DEPT_ID = B.DEPT_ID
+             AND A.END_CUST_REPORT = B.END_CUST_REPORT
+             AND A.SOLDTO_CUST_REPORT = B.SOLDTO_CUST_REPORT
+             AND A.PRODUCT_GROUP = B.PRODUCT_GROUP
+             AND A.DM_BIZ_TYPE = B.DM_BIZ_TYPE
+             AND A.YYYYMM = B.YYYYMM
+     WHERE B.VER_SEQ = ' + @p_ver_seq + '
+     [@v_end_cust_report]
+     [@v_product_group]
+     [@v_biz_type]
+     ';
+
+     SET @v_sql_text = @v_sql_text + '
+     GROUP BY A.YYYYMM
+         , A.DEPARTMENT_NAME
+         , A.DEPT_NAME
+         , A.DEPARTMENT_ID
+         , A.DEPT_ID
+         , A.CUST_REPORT
+         , A.END_CUST_REPORT
+         , A.SOLDTO_CUST_REPORT
+         , A.SHIPTO_CODE
+         , A.PRODUCT_GROUP
+         , A.DM_BIZ_TYPE
+		 , A.EDIT_FLAG
+)
+
+SELECT [@v_col]  [@v_col_Sum],' + @v_col_Total + '
+FROM   SALES_LIST A
+[@v_groupby]
+UNION ALL	--합계행
+SELECT [@v_bottom] [@v_bottom_Sum],' + @v_col_Total + '
+FROM   SALES_LIST A
+[@v_orderby]
+';
+
+
+--    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_cust_report]'  , [dbo].[FN_SCM_GET_WHERE_SQL]('A.END_CUST_REPORT'  , 'IN', @p_end_cust_report));
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_cust_report]'  , ' AND A.END_CUST_REPORT LIKE N''%' + @p_end_cust_report + '%'' ');
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_product_group]'  , [dbo].[FN_SCM_GET_WHERE_SQL]('A.PRODUCT_GROUP'  , 'IN', @p_product_group));
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_biz_type]'  , [dbo].[FN_SCM_GET_WHERE_SQL]('A.DM_BIZ_TYPE'  , 'IN', @p_biz_type));
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_col]'  , @v_col);
+	SET @v_sql_text = REPLACE(@v_sql_text,'[@v_bottom]'  , @v_bottom);
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_col_Sum]'  , @v_col_Sum);
+ --   SET @v_sql_text = REPLACE(@v_sql_text,'[@v_col_Sum]'  , @v_col_Sum);
+ --   SET @v_sql_text = REPLACE(@v_sql_text,'[@v_col_Sum]'  , @v_col_Sum);
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_bottom_Sum]'  , @v_bottom_Sum);
+    SET @v_sql_text = REPLACE("
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTION_SALES_LIST","1654349008","7","@v_sql_text,'[@v_groupby]'  , @v_groupby);
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_orderby]'  , @v_orderby);
+
+    --select @v_col;
+    --select @v_sql_text;
+    --return;
+    EXEC SP_EXECUTESQL @v_sql_text;
+    EXEC SP_EXECUTESQL @nsql2;
+
+    IF ISNULL(@p_compatibility_yn,'N') = 'Y'
+    BEGIN
+        SELECT
+            -- 등록이 안된 건 count
+            (SELECT COUNT(*)
+              FROM (SELECT TEAM.DEPARTMENT_ID
+                         , TEAM.DEPT_ID AS DEPT_ID
+                         , ISNULL(A.ATTRIBUTE2,'') AS END_CUST_REPORT
+                         , ISNULL(A.ATTRIBUTE1,'') AS SOLDTO_CUST_REPORT
+                         , ISNULL(A.REPORT_GROUP3,'') AS PRODUCT_GROUP
+                         , ISNULL(C.FORECAST_INFO_BIZ_TYPE,'') AS DM_BIZ_TYPE
+                      FROM SCM_MST_SITE_ITEM A WITH (NOLOCK)
+                           INNER JOIN SCM_MST_SITE B WITH (NOLOCK)
+                              ON A.DIVISION_ID = B.DIVISION_ID
+                             AND A.SCM_SITE_ID = B.SCM_SITE_ID
+                           INNER JOIN DM_MST_ITEM_SINGLE_V C WITH (NOLOCK)
+                              ON A.DIVISION_ID = C.DIVISION_ID
+                             AND A.ITEM_ID = C.ITEM_ID
+                           LEFT JOIN (
+                                    SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO 
+                                         , D.DEPT_ID AS DEPARTMENT_ID, D.DEPT_NAME_KO AS DEPARTMENT_NAME
+                                      FROM [SCM_MST_SSO_USER_INFO] AS B WITH (NOLOCK)
+                                           INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH (NOLOCK)
+                                              ON B.DEPT_ID = C.DEPT_ID
+                                           INNER JOIN SCM_MST_SSO_DEPT_INFO AS D WITH (NOLOCK)
+                  ON C.UPPER_DEPT_ID = D.DEPT_ID
+                                     ) AS TEAM
+                              ON TEAM.USER_ID IN (SELECT TOP 1 TOKEN FROM [DBO].[STRING_SPLIT](A.OWNER, ','))
+                     WHERE A.DIVISION_ID = @p_division_id
+                       AND B.SITE_TYPE = 'SALES'
+                       AND ISNULL(C.FORECAST_INFO_BIZ_TYPE,'') <> ''
+                       AND ISNULL(A.ATTRIBUTE2,'') <> ''
+                       AND ISNULL(A.ATTRIBUTE1,'') <> ''
+                       AND ISNULL(A.REPORT_GROUP3,'') <> ''
+                     GROUP BY A.DIVISION_ID
+                         , TEAM.DEPARTMENT_ID
+                         , TEAM.DEPT_ID
+                         , ISNULL(A.ATTRIBUTE2,'')
+                         , ISNULL(A.ATTRIBUTE1,'')
+                         , ISNULL(A.REPORT_GROUP3,'')
+                         , ISNULL(C.FORECAST_INFO_BIZ_TYPE,'')
+                   ) LIST
+                  LEFT OUTER JOIN DM_MST_CONTRIBUTE_RATIO_MST RATIO WITH (NOLOCK)
+                    ON LIST.DEPARTMENT_ID = RATIO.DEPARTMENT_ID
+                   AND LIST.DEPT_ID = RATIO.DEPT_ID
+                   AND LIST.END_CUST_REPORT = RATIO.END_CUST_REPORT
+                   AND LIST.SOLDTO_CUST_REPORT = RATIO.SOLDTO_CUST_REPORT
+                   AND LIST.PRODUCT_GROUP = RATIO.PRODUCT_GROUP
+                   AND LIST.DM_BIZ_TYPE = RATIO.DM_BIZ_TYPE
+             WHERE RATIO.DEPARTMENT_ID IS NULL
+               AND RATIO.VER_SEQ = @p_ver_seq)
+               +
+            -- 100%가 안되는 건 COUNT
+            (SELECT COUNT(*)
+              FROM (SELECT SUM(A.CONTRIBUTION_RATIO) AS RATIO
+                      FROM DM_MST_CONTRIBUTE_RATIO_MST M WITH (NOLOCK)
+                           INNER JOIN DM_MST_CONTRIBUTE_RATIO_DTL A WITH (NOLOCK)
+                              ON M.VER_SEQ = A.VER_SEQ
+                             AND M.DEPARTMENT_ID = A.DEPARTMENT_ID
+                             AND M.DEPT_ID = A.DEPT_ID
+                             AND M.END_CUST_REPORT = A.END_CUST_REPORT
+                             AND M.SOLDTO_CUST_REPORT = A.SOLDTO_CUST_REPORT
+         "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTION_SALES_LIST","1654349008","8","                    AND M.PRODUCT_GROUP = A.PRODUCT_GROUP
+                             AND M.DM_BIZ_TYPE = A.DM_BIZ_TYPE
+                     WHERE A.VER_SEQ = @p_ver_seq
+                     GROUP BY A.DEPARTMENT_ID
+                            , A.DEPT_ID
+                            , A.END_CUST_REPORT
+                            , A.SOLDTO_CUST_REPORT
+                            , A.PRODUCT_GROUP
+                            , A.DM_BIZ_TYPE
+                            , A.YYYYMM
+                   ) R
+             WHERE R.RATIO <> 100) 
+			+ 
+			(			
+			 SELECT COUNT(*)
+			  FROM #tmp_sales_list_c A
+			left outer JOIN DM_MST_CONTRIBUTE_RATIO_DTL B WITH (NOLOCK)
+						  ON A.DEPARTMENT_ID = B.DEPARTMENT_ID
+						 AND A.DEPT_ID = B.DEPT_ID
+						 AND A.END_CUST_REPORT = B.END_CUST_REPORT
+						 AND A.SOLDTO_CUST_REPORT = B.SOLDTO_CUST_REPORT
+						 AND A.PRODUCT_GROUP = B.PRODUCT_GROUP
+						 AND A.DM_BIZ_TYPE = B.DM_BIZ_TYPE
+						 AND A.YYYYMM = B.YYYYMM
+						 and B.VER_SEQ = 2
+				 WHERE A.END_CUST_REPORT LIKE N'%%' 
+				  and b.dept_id is null
+				) AS CNT;
+    END
+    ELSE
+    BEGIN
+        SELECT 0 AS CNT;
+    END
+
+-- --xml확인할경우
+--SELECT CONVERT(TEXT, @v_sql_text)
+--FOR XML PATH('')--,ROOT('x')
+
+
+ /*
+select max(version_no) from dm_pln_sales_plan_c with (nolock);
+
+select * from DM_MST_CONTRIBUTE_VER where version_no = 'SP_W_20190905_V001'
+
+
+EXEC DMF0043_GET_CONTRIBUTION_SALES_LIST 
+@p_division_id='40', 
+@p_ver_seq='19', 
+@p_version_no='SP_W_20190905_V001', 
+@p_end_cust_report='', 
+@p_product_group='ALL', 
+@p_biz_type='ALL', 
+@p_million_yn='N', 
+@p_compatibility_yn='N', 
+@p_created_by='hwi1993'
+
+
+EXEC [dbo].[DMF0043_GET_CONTRIBUTION_SALES_LIST]
+    @p_division_id = '40',
+    @p_ver_seq = 1,
+    @p_version_no = 'SP_W_20190905_V001',
+    @p_end_cust_report = '',
+    @p_product_group   = '',
+    @p_biz_type         = '',
+    @p_million_yn       = 'N',
+    @p_compatibility_yn = 'Y',
+    @p_created_by       = 'hwi1993'
+
+ */
+
+ END
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_MAIN_SPREAD_TITLE","1670349065","1","
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/****************************************************************************************************/
+/* Program ID  : [DMF0043_GET_SPREAD_TITLE]                                                             */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2019/06/20     JYE		기여율 해더                    */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0043_GET_MAIN_SPREAD_TITLE]
+    @p_division_id		NVARCHAR(10),
+	@p_yyyy				NVARCHAR(10),
+	@p_created_by		NVARCHAR(50)
+AS
+BEGIN
+	
+    SET NOCOUNT ON;  
+
+	DECLARE @v_program_id	   NVARCHAR(MAX) = 'DMF0043'
+	DECLARE @v_sheet_name	   NVARCHAR(MAX) = 'ContributeMain'
+
+
+	IF OBJECT_ID (N'tempdb..#temp', N'U') IS NOT NULL 
+		DROP TABLE #temp
+	IF OBJECT_ID (N'tempdb..#temp2', N'U') IS NOT NULL 
+		DROP TABLE #temp2
+
+	DECLARE @CODEList NVARCHAR(1000)='';
+	DECLARE @NAMEList NVARCHAR(1000)='';	
+	DECLARE @nsql NVARCHAR(max)='';
+	DECLARE @i INT = 0;
+	DECLARE @v_user_col_cnt   AS INT = 0;
+
+	-- ############### OS_CORP 반복 start ###############
+	SELECT
+		L.SEGMENT1  AS CODE
+		, L.SEGMENT2  AS NAME
+		, DISPLAY_SEQ AS DISPLAY_SEQ
+	INTO #temp
+	FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L  WITH(NOLOCK)
+	WHERE  1 = 1
+	AND    L.LOOKUP_TYPE = 'DM_OS_CORP_CD'
+	AND    L.VALID_YN    = 'Y'
+	AND    L.SEGMENT4 = 'N'
+	ORDER BY DISPLAY_SEQ;	
+
+	--INSERT #temp VALUES ('RBU_0099', N'구분', 99)
+
+	SELECT -- 연도만
+		@p_yyyy+ '  ' AS YYYYMM, 'Y' AS FLAG, CODE, NAME, DISPLAY_SEQ
+	INTO #temp2
+	FROM #temp
+	--ORDER BY DISPLAY_SEQ;
+
+	WHILE(@i < 12)	-- 연도 + 월
+	BEGIN
+		SET @i = @i + 1
+		IF (LEN(@i) >= 2)
+		BEGIN
+			INSERT #temp2
+			--SELECT @p_yyyy + '-' + CAST(@i AS VARCHAR) AS YYYYMM, 'M' AS FLAG, CODE, NAME, DISPLAY_SEQ
+			SELECT @p_yyyy + CAST(@i AS VARCHAR) AS YYYYMM, 'M' AS FLAG, CODE, NAME, DISPLAY_SEQ
+			FROM #temp
+		END ELSE BEGIN
+			INSERT #temp2
+			SELECT @p_yyyy + '0' + CAST(@i AS VARCHAR) AS YYYYMM, 'M' AS FLAG, CODE, NAME, DISPLAY_SEQ
+			FROM #temp
+		END;
+	END;
+
+	-- ############### OS_CORP 반복 end ###############
+
+	SELECT @v_user_col_cnt = COUNT(*)
+	FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+	WHERE  1 = 1
+	AND    U.PROGRAM_ID = @v_program_id
+    AND    U.SHEET_NAME = @v_sheet_name
+    AND    U.USER_ID    = @p_created_by;
+
+	--select @v_user_col_cnt
+
+	IF @v_user_col_cnt = 0	 
+	BEGIN
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, C.COLUMN_LABEL_NAME
+				, C.SORT_ORDER_NO
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, C.COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, C.DATA_SCALE_NUMBER
+				, C.DATA_MAX_LENGTH
+				, C.HORIZON"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_MAIN_SPREAD_TITLE","1670349065","2","TAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+		FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+		WHERE  1 = 1    
+		AND    C.PROGRAM_ID  = @v_program_id
+		AND    C.SHEET_NAME  = @v_sheet_name
+		AND    C.DEFAULT_FLAG = 'Y'
+		AND    C.VALID_YN     = 'Y'
+		AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )	
+
+		UNION ALL
+
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, C.COLUMN_LABEL_NAME
+				, C.SORT_ORDER_NO
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, C.COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, C.DATA_SCALE_NUMBER
+				, C.DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+		FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+		WHERE  1 = 1    
+		AND    C.PROGRAM_ID  = @v_program_id
+		AND    C.SHEET_NAME  = @v_sheet_name
+		AND    C.VISIBLE_FLAG = 'N'
+		AND    C.DEFAULT_FLAG = ''			
+		AND    C.VALID_YN     = 'Y'
+		AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )	
+
+		UNION ALL
+
+		SELECT @v_program_id   AS PROGRAM_ID
+					, @v_sheet_name AS SHEET_NAME
+					, T.FLAG + '#' + T.YYYYMM + '#' + CODE AS COLUMN_NAME
+					, T.NAME AS COLUMN_LABEL_NAME
+					, DISPLAY_SEQ AS SORT_ORDER_NO
+					, '' AS DATA_SORT_METHOD_CODE
+					--, T.YYYYMM AS SMALL_CLASS_LABEL_NAME
+					, T.NAME AS SMALL_CLASS_LABEL_NAME
+					, CASE WHEN LEN(T.YYYYMM) = 4 THEN T.YYYYMM ELSE 
+						SUBSTRING(T.YYYYMM, 1, 4) + '-' + SUBSTRING(T.YYYYMM, 5, 2) END AS LARGE_CLASS_LABEL_NAME					
+					--, @p_yyyy AS LARGE_CLASS_LABEL_NAME
+					, '' AS DAY_CODE
+					, ''         AS FIXED_FLAG
+					, 80         AS COLUMN_WIDTH
+					, '' AS CELL_CONTROL_OBJECT_TYPE_CODE
+					, ''         AS CELL_COMBO_DATA_TYPE
+					, '2'         AS DATA_SCALE_NUMBER
+					, ''         AS DATA_MAX_LENGTH
+					, 'R'        AS HORIZONTAL_ALIGN_CODE
+					, 'Y'        AS UPPERCASE_APPLY_FLAG
+					, 'Y'        AS VISIBLE_FLAG
+					, ''         AS DEFAULT_FLAG
+					, ''         AS USER_SELECTABLE_FLAG
+					, ''         AS VALID_YN
+					, ''			AS DIVISION_ID
+			FROM  (
+				SELECT 
+					REPLACE(YYYYMM, ' ', '') AS YYYYMM, FLAG, CODE, NAME, 
+					CAST(REPLACE(REPLACE(YYYYMM, ' ', ''), '-', '') AS VARCHAR) + CAST(DISPLAY_SEQ AS VARCHAR) AS DISPLAY_SEQ
+				FROM #temp2
+			) T
+			ORDER BY SORT_ORDER_NO  ;
+	END
+
+	IF OBJECT_ID (N'tempdb..#temp', N'U') IS NOT NULL 
+		DROP TABLE #temp
+	IF OBJECT_ID (N'tempdb..#temp2', N'U') IS NOT NULL 
+		DROP TABLE #temp2
+
+END
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_MAIN_VARSION_DATA","1686349122","1","
+/****************************************************************************************************/
+/* Program ID  : [[DMF0043_GET_MAIN_VARSION_DATA]]                                                             */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2019/07/18     JYE		기여율 등록화면 Version 바인딩 데이터                    */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0043_GET_MAIN_VARSION_DATA]
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SELECT 
+		VER_SEQ AS CODE
+		,VERSION_NM AS NAME
+		,[VER_SEQ]
+		,[YYYY]
+		,[VERSION_NM]
+		,[DESCRIPTION]
+		,[YYYY] + '(' + [VERSION_NM] + ')' AS NAME2
+	FROM [dbo].[DM_MST_CONTRIBUTE_VER]
+	WHERE VALID_YN = 'Y'
+    ORDER BY YYYY DESC
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_SALES_LIST_SPREAD_TITLE","1702349179","1","
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+/****************************************************************************************************/
+/* Program ID  : DMF0043_GET_SALES_LIST_SPREAD_TITLE                                                */
+/* Description : 해외법인 기여매출 헤더                                                             */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2019/06/20     JSYOUN	[CSR ID:3948994] GSCM 해외법인기여율 화면 개발 요청의 건 - 기여매출 해더 */
+/* 2019/12/12     HWI1993	합계컬럼 로직 추가 */
+/* 2019/12/12     HWI1993	합계컬럼 로직 추가 */
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0043_GET_SALES_LIST_SPREAD_TITLE]
+    @p_division_id		NVARCHAR(10), 
+	@p_created_by		NVARCHAR(50)
+AS
+BEGIN
+	
+    SET NOCOUNT ON;  
+
+	DECLARE @v_program_id	   NVARCHAR(MAX) = 'DMF0043'
+	DECLARE @v_sheet_name	   NVARCHAR(MAX) = 'ContributeSalesList'
+
+
+	IF OBJECT_ID (N'tempdb..#temp', N'U') IS NOT NULL 
+		DROP TABLE #temp
+
+	DECLARE @CODEList NVARCHAR(1000)='';
+	DECLARE @NAMEList NVARCHAR(1000)='';	
+	DECLARE @nsql NVARCHAR(max)='';
+	DECLARE @i INT = 0;
+	DECLARE @v_user_col_cnt   AS INT = 0;
+
+	-- ############### OS_CORP 반복 start ###############
+	/*
+	SELECT
+		  L.SEGMENT1 + '#' + M.SEGMENT1  AS CODE
+		, L.SEGMENT2  AS NAME
+		, L.SEGMENT2  AS LARGE_NAME
+		, M.SEGMENT2  AS SMALL_NAME
+		, 1000+L.DISPLAY_SEQ+M.DISPLAY_SEQ AS DISPLAY_SEQ
+    INTO  #temp
+	FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L  WITH(NOLOCK)
+        ,  [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] M  WITH(NOLOCK)
+	WHERE  1 = 1
+	AND    L.LOOKUP_TYPE = 'DM_OS_CORP_CD'
+	AND    M.LOOKUP_TYPE = 'DM_CONTRIBUTION_TYPE_CD'
+	AND    L.VALID_YN    = 'Y'
+    AND    L.SEGMENT3    = 'Y'
+    AND    M.VALID_YN    = 'Y'
+	ORDER BY L.DISPLAY_SEQ, M.DISPLAY_SEQ
+	;
+	*/
+	SELECT DISTINCT
+		  L.SEGMENT1 + '#' + CASE WHEN L.SEGMENT4 = 'Y' THEN '' ELSE M.SEGMENT1 END AS CODE
+		, L.SEGMENT2  AS NAME
+		, L.SEGMENT2  AS LARGE_NAME
+		, CASE WHEN L.SEGMENT4 = 'Y' THEN L.SEGMENT1 ELSE M.SEGMENT2 END AS SMALL_NAME
+		, 1000+L.DISPLAY_SEQ + CASE WHEN L.SEGMENT4 = 'Y' THEN '0' ELSE M.DISPLAY_SEQ END AS DISPLAY_SEQ
+	INTO  #temp
+	FROM   [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] L  WITH(NOLOCK)
+        ,  [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] M  WITH(NOLOCK)
+	WHERE  1 = 1
+	AND    L.LOOKUP_TYPE = 'DM_OS_CORP_CD'
+	AND    M.LOOKUP_TYPE = 'DM_CONTRIBUTION_TYPE_CD'
+	AND    L.VALID_YN    = 'Y'
+    AND    L.SEGMENT3    = 'Y'
+    AND    M.VALID_YN    = 'Y'
+	--AND	   L.SEGMENT4	 = 'N'
+    ;
+
+	-- ############### OS_CORP 반복 end ###############
+
+	SELECT @v_user_col_cnt = COUNT(*)
+	FROM   [dbo].[SCM_MST_TITLESET_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_SALES_LIST_SPREAD_TITLE","1702349179","2","USER] U WITH(NOLOCK)
+	WHERE  1 = 1
+	AND    U.PROGRAM_ID = @v_program_id
+    AND    U.SHEET_NAME = @v_sheet_name
+    AND    U.USER_ID    = @p_created_by;
+
+	--select @v_user_col_cnt
+
+	IF @v_user_col_cnt > 0
+    BEGIN
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, C.COLUMN_LABEL_NAME
+				, C.SORT_ORDER_NO
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, C.COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, C.DATA_SCALE_NUMBER
+				, C.DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+		FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+				,[dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+		WHERE  1 = 1
+		AND    U.PROGRAM_ID  = C.PROGRAM_ID
+		AND    U.SHEET_NAME  = C.SHEET_NAME
+		AND    U.COLUMN_NAME = C.COLUMN_NAME
+        AND    U.PROGRAM_ID  = @v_program_id
+		AND    U.SHEET_NAME  = @v_sheet_name
+		AND    U.USER_ID     = @p_created_by
+		AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+		AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )	
+
+		UNION ALL
+
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, C.COLUMN_LABEL_NAME
+				, C.SORT_ORDER_NO
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, C.COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, C.DATA_SCALE_NUMBER
+				, C.DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+		FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+		WHERE  1 = 1    
+		AND    C.PROGRAM_ID  = @v_program_id
+		AND    C.SHEET_NAME  = @v_sheet_name
+		AND    C.VISIBLE_FLAG = 'N'
+		AND    C.DEFAULT_FLAG = ''			
+		AND    C.VALID_YN     = 'Y'
+		AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )	
+
+		UNION ALL
+
+		SELECT @v_program_id   AS PROGRAM_ID
+					, @v_sheet_name AS SHEET_NAME
+					, CODE AS COLUMN_NAME
+					, T.NAME AS COLUMN_LABEL_NAME
+					, DISPLAY_SEQ AS SORT_ORDER_NO
+					, '' AS DATA_SORT_METHOD_CODE
+					--, T.YYYYMM AS SMALL_CLASS_LABEL_NAME
+					, T.SMALL_NAME AS SMALL_CLASS_LABEL_NAME
+					, T.LARGE_NAME AS LARGE_CLASS_LABEL_NAME					
+					--, @p_yyyy AS LARGE_CLASS_LABEL_NAME
+					, '' AS DAY_CODE
+					, ''         AS FIXED_FLAG
+					, 80         AS COLUMN_WIDTH
+					, 'FPNumber' AS CELL_CONTROL_OBJECT_TYPE_CODE
+					, ''         AS CELL_COMBO_DATA_TYPE
+					, ''         AS DATA_SCALE_NUMBER
+					, ''         AS DATA_MAX_LENGTH
+					, 'R'        AS HORIZONTAL_ALIGN_CODE
+					, 'Y'        AS UPPERCASE_APPLY_FLAG
+					, 'Y'        AS VISIBLE_FLAG
+					, ''         AS DEFAULT_FLAG
+					, ''         AS USER_SELECTABLE_FLAG
+					, ''         AS VALID_YN
+					, ''			AS DIVISION_ID
+			FROM  (
+				SELECT 
+					CODE, NAME, LARGE_NAME, SMALL_NAME, DISPLAY_SEQ
+				FROM #temp
+			) T
+			ORDER BY SORT_ORDER_NO  ;
+    END
+    
+    ELSE	 
+
+	BEGIN
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, C.COLUMN_LABEL_NAME
+				, C.SORT_ORDER_NO
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, C.COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, C.DATA_SCALE_NUMBER
+				, C.DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+		FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+		WHERE  1 = 1    
+		AND    C.PROGRAM_ID  = @v_progra"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_SALES_LIST_SPREAD_TITLE","1702349179","3","m_id
+		AND    C.SHEET_NAME  = @v_sheet_name
+		AND    C.DEFAULT_FLAG = 'Y'
+		AND    C.VALID_YN     = 'Y'
+		AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )	
+
+		UNION ALL
+
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, C.COLUMN_LABEL_NAME
+				, C.SORT_ORDER_NO
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, C.COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, C.DATA_SCALE_NUMBER
+				, C.DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+		FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+		WHERE  1 = 1    
+		AND    C.PROGRAM_ID  = @v_program_id
+		AND    C.SHEET_NAME  = @v_sheet_name
+		AND    C.VISIBLE_FLAG = 'N'
+		AND    C.DEFAULT_FLAG = ''			
+		AND    C.VALID_YN     = 'Y'
+		AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )	
+
+		UNION ALL
+
+		SELECT @v_program_id   AS PROGRAM_ID
+					, @v_sheet_name AS SHEET_NAME
+					, CODE AS COLUMN_NAME
+					, T.NAME AS COLUMN_LABEL_NAME
+					, DISPLAY_SEQ AS SORT_ORDER_NO
+					, '' AS DATA_SORT_METHOD_CODE
+					--, T.YYYYMM AS SMALL_CLASS_LABEL_NAME
+					, T.SMALL_NAME AS SMALL_CLASS_LABEL_NAME
+					, T.LARGE_NAME AS LARGE_CLASS_LABEL_NAME					
+					--, @p_yyyy AS LARGE_CLASS_LABEL_NAME
+					, '' AS DAY_CODE
+					, ''         AS FIXED_FLAG
+					, 80         AS COLUMN_WIDTH
+					, 'FPNumber' AS CELL_CONTROL_OBJECT_TYPE_CODE
+					, ''         AS CELL_COMBO_DATA_TYPE
+					, ''         AS DATA_SCALE_NUMBER
+					, ''         AS DATA_MAX_LENGTH
+					, 'R'        AS HORIZONTAL_ALIGN_CODE
+					, 'Y'        AS UPPERCASE_APPLY_FLAG
+					, 'Y'        AS VISIBLE_FLAG
+					, ''         AS DEFAULT_FLAG
+					, ''         AS USER_SELECTABLE_FLAG
+					, ''         AS VALID_YN
+					, ''			AS DIVISION_ID
+			FROM  (
+				SELECT 
+					CODE, NAME, LARGE_NAME, SMALL_NAME, DISPLAY_SEQ
+				FROM #temp
+			) T
+			ORDER BY SORT_ORDER_NO  ;
+	END
+
+	IF OBJECT_ID (N'tempdb..#temp', N'U') IS NOT NULL 
+		DROP TABLE #temp
+
+END
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO","1718349236","1","
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+/*
+ * Program ID   : DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO
+ * Description  : 'DM_MST_CONTRIBUTE_RATIO' TABLE INSERT/UPDATE/DELETE
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 20190730  KHSONG  Initial Release [PJ20189106] 전지.GSCM 고도화 이행, DM 시스템
+ 2020/09/09     P.C.I		[C20200909-000203] LOG 표준화 적용
+ * 
+ */
+
+CREATE PROCEDURE [dbo].[DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO]
+
+	-- Add the parameters for the stored procedure here
+     @p_active_flag				NVARCHAR(MAX)
+    ,@p_ver_seq					NVARCHAR(MAX)
+    ,@p_department_id			NVARCHAR(MAX)
+    ,@p_dept_id					NVARCHAR(MAX)
+    ,@p_end_cust_report			NVARCHAR(MAX)
+    ,@p_soldto_cust_report		NVARCHAR(MAX)
+    ,@p_product_group			NVARCHAR(MAX)
+    ,@p_dm_biz_type				NVARCHAR(MAX)
+    ,@p_yyyymm					NVARCHAR(MAX)
+    ,@p_os_corp_cd				NVARCHAR(MAX)
+    ,@p_contribution_type		NVARCHAR(MAX)
+    ,@p_contribution_ratio		NVARCHAR(MAX)
+    ,@p_created_by				NVARCHAR(MAX)
+
+AS
+
+BEGIN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET NOCOUNT ON; 
+    SET XACT_ABORT ON;
+
+	-- 스플릿관련 변수
+
+    DECLARE  @v_active_flag					NVARCHAR(MAX);
+    DECLARE  @v_ver_seq						NVARCHAR(MAX);
+    DECLARE  @v_department_id				NVARCHAR(MAX);
+    DECLARE  @v_dept_id						NVARCHAR(MAX);
+    DECLARE  @v_end_cust_report				NVARCHAR(MAX);
+    DECLARE  @v_soldto_cust_report			NVARCHAR(MAX);
+    DECLARE  @v_product_group				NVARCHAR(MAX);
+    DECLARE  @v_dm_biz_type					NVARCHAR(MAX);
+    DECLARE  @v_yyyymm						NVARCHAR(MAX);
+    DECLARE  @v_os_corp_cd					NVARCHAR(MAX);
+    DECLARE  @v_contribution_type			NVARCHAR(MAX);
+    DECLARE  @v_contribution_ratio			NVARCHAR(MAX);
+    DECLARE  @v_created_by					NVARCHAR(MAX);
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^'  -- 데이터 구분자
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	DECLARE @max_ver_seq	 	NVARCHAR(MAX);
+    
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name		NVARCHAR(150) = 'DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO';
+    DECLARE @v_log_type			NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count		INTEGER = 0;
+    DECLARE @v_log_message		NVARCHAR(1000);
+    DECLARE @v_log_description  NVARCHAR(500);
+    DECLARE @d_event_date		DATETIME;
+    DECLARE @n_delete_count		INTEGER = 0;
+    DECLARE @n_insert_count		INTEGER = 0;
+    DECLARE @n_input_count		INTEGER = 0;
+    DECLARE @n_logo_count		INTEGER = 0;
+
+
+
+	-- 마지막 데이터 처리를 위한 구분자 추가
+	SET @p_active_flag					= RTRIM(@p_active_flag				    ) + '^';
+	SET @p_ver_seq						= RTRIM(@p_ver_seq					    ) + '^';
+	SET @p_department_id				= RTRIM(@p_department_id			    ) + '^';
+	SET @p_dept_id						= RTRIM(@p_dept_id					    ) + '^';
+	SET @p_end_cust_report				= RTRIM(@p_end_cust_report			    ) + '^';
+	SET @p_soldto_cust_report			= RTRIM(@p_soldto_cust_report			) + '^';
+	SET @p_product_group				= RTRIM(@p_product_group			    ) + '^';
+	SET @p_dm_biz_type					= RTRIM(@p_dm_biz_type				    ) + '^';
+	SET @p_yyyymm						= RTRIM(@p_yyyymm					    ) + '^';
+	SET @p_os_corp_cd					= RTRIM(@p_os_corp_cd				    ) + '^';
+	SET @p_contribution_type			= RTRIM(@p_contribution_type		    ) + '^';
+	SET @p_contribution_ratio			= RTRIM(@p_contribution_ratio		    ) + '^';
+	SET @p_created_by					= RTRIM(@p_c"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO","1718349236","2","reated_by				    ) + '^';
+
+	-- #results_MST TEMP TABLE
+	CREATE TABLE #results_MST  (
+								 active_flag		NVARCHAR(max)
+								,ver_seq			NVARCHAR(max)
+								,department_id		NVARCHAR(max)
+								,dept_id			NVARCHAR(max)
+								,end_cust_report	NVARCHAR(max)
+								,soldto_cust_report	NVARCHAR(max)
+								,product_group		NVARCHAR(max)
+								,dm_biz_type		NVARCHAR(max)
+								,yyyymm				NVARCHAR(max)
+								,os_corp_cd			NVARCHAR(max)
+								,contribution_type	NVARCHAR(max)
+								,contribution_ratio	NVARCHAR(max)
+								,created_by			NVARCHAR(max)
+							    )
+
+	-- 시작 LOG  (START)
+	SET @v_log_type = 'START';
+	SET @v_log_message = '########## Start of procedure @@@##########';
+	SET @v_log_description = '';
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date;
+	SET @v_log_message = NULL      /*-- <- 변수 재사용을 위하여 초기화해야함 --*/ 
+	-- 시작 LOG  (END)
+
+	-- 트랜잭션 (START)
+	BEGIN TRANSACTION SAVE_DM_MST_CONTRIBUTE_RATIO;
+
+	--------------------------------------------------------------------------------------------	
+	BEGIN TRY
+	--------------------------------------------------------------------------------------------
+
+	--===================================================================================== #results_MST 테이블에 split후 insert start
+	--###############################################  #results_MST 테이블에 split후 insert (START)
+	WHILE LEN(@p_ver_seq) > 0
+	BEGIN
+		DECLARE @index_active_flag				INT
+		DECLARE @index_ver_seq					INT
+		DECLARE @index_department_id			INT
+		DECLARE @index_dept_id					INT
+		DECLARE @index_end_cust_report			INT
+		DECLARE @index_soldto_cust_report		INT
+		DECLARE @index_product_group			INT
+		DECLARE @index_dm_biz_type				INT
+		DECLARE @index_yyyymm					INT
+		DECLARE @index_os_corp_cd				INT
+		DECLARE @index_contribution_type		INT
+		DECLARE @index_contribution_ratio		INT
+		DECLARE @index_created_by				INT
+
+		SET @index_active_flag					= PATINDEX('%' + '^' + '%', @p_active_flag				)
+		SET @index_ver_seq						= PATINDEX('%' + '^' + '%', @p_ver_seq					)
+		SET @index_department_id				= PATINDEX('%' + '^' + '%', @p_department_id			)
+		SET @index_dept_id						= PATINDEX('%' + '^' + '%', @p_dept_id					)
+		SET @index_end_cust_report				= PATINDEX('%' + '^' + '%', @p_end_cust_report			)
+		SET @index_soldto_cust_report			= PATINDEX('%' + '^' + '%', @p_soldto_cust_report		)
+		SET @index_product_group				= PATINDEX('%' + '^' + '%', @p_product_group			)
+		SET @index_dm_biz_type					= PATINDEX('%' + '^' + '%', @p_dm_biz_type				)
+		SET @index_yyyymm						= PATINDEX('%' + '^' + '%', @p_yyyymm					)
+		SET @index_os_corp_cd					= PATINDEX('%' + '^' + '%', @p_os_corp_cd				)
+		SET @index_contribution_type			= PATINDEX('%' + '^' + '%', @p_contribution_type		)
+		SET @index_contribution_ratio			= PATINDEX('%' + '^' + '%', @p_contribution_ratio		)
+		SET @index_created_by					= PATINDEX('%' + '^' + '%', @p_created_by				)
+
+		IF @p_ver_seq is not null
+			BEGIN
+
+				set @v_active_flag			 = substring(@p_active_flag			, 0, @index_active_flag			)
+				set @v_ver_seq				 = substring(@p_ver_seq				, 0, @index_ver_seq				)
+				set @v_department_id		 = substring(@p_department_id		, 0, @index_department_id		)
+				set @v_dept_id				 = substring(@p_dept_id				, 0, @index_dept_id				)
+				set @v_end_cust_report		 = substring(@p_end_cust_report		, 0, @index_end_cust_report		)
+				set @v_soldto_cust_report	 = substring(@p_soldto_cust_report	, 0, @index_soldto_cust_report	)
+				set @v_product_group		 = substring(@p_product_group		, 0, @index_product_group		)
+				set @v_dm_biz_type			 = substring(@p_dm_biz_type			, 0, @index_dm_biz_type			)
+				set @v_yyyymm				 = substring(@p_yyyymm				, 0, @index_yyyymm				)
+				set @v_os_corp_cd			 = substring(@p_os_corp_cd			, 0, @index_os_corp_cd			)
+				set @v_contribution_type	 = substring(@p_contribution_type	, 0, @in"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO","1718349236","3","dex_contribution_type	)
+				set @v_contribution_ratio	 = substring(@p_contribution_ratio	, 0, @index_contribution_ratio	)
+				set @v_created_by			 = substring(@p_created_by			, 0, @index_created_by			)
+
+				set @p_active_flag			 = substring(@p_active_flag			, len(@v_active_flag			+ '^') + 1, len(@p_active_flag			))
+				set @p_ver_seq				 = substring(@p_ver_seq				, len(@v_ver_seq				+ '^') + 1, len(@p_ver_seq				))
+				set @p_department_id		 = substring(@p_department_id		, len(@v_department_id			+ '^') + 1, len(@p_department_id		))
+				set @p_dept_id				 = substring(@p_dept_id				, len(@v_dept_id				+ '^') + 1, len(@p_dept_id				))
+				set @p_end_cust_report		 = substring(@p_end_cust_report		, len(@v_end_cust_report		+ '^') + 1, len(@p_end_cust_report		))
+				set @p_soldto_cust_report	 = substring(@p_soldto_cust_report	, len(@v_soldto_cust_report		+ '^') + 1, len(@p_soldto_cust_report	))
+				set @p_product_group		 = substring(@p_product_group		, len(@v_product_group			+ '^') + 1, len(@p_product_group		))
+				set @p_dm_biz_type			 = substring(@p_dm_biz_type			, len(@v_dm_biz_type			+ '^') + 1, len(@p_dm_biz_type			))
+				set @p_yyyymm				 = substring(@p_yyyymm				, len(@v_yyyymm					+ '^') + 1, len(@p_yyyymm				))
+				set @p_os_corp_cd			 = substring(@p_os_corp_cd			, len(@v_os_corp_cd				+ '^') + 1, len(@p_os_corp_cd			))
+				set @p_contribution_type	 = substring(@p_contribution_type	, len(@v_contribution_type		+ '^') + 1, len(@p_contribution_type	))
+				set @p_contribution_ratio	 = substring(@p_contribution_ratio	, len(@v_contribution_ratio		+ '^') + 1, len(@p_contribution_ratio	))
+				set @p_created_by			 = substring(@p_created_by			, len(@v_created_by				+ '^') + 1, len(@p_created_by			))
+ 
+				--공백제거
+				set @v_active_flag			   				= rtrim(ltrim(@v_active_flag					))
+				set @v_ver_seq				   				= rtrim(ltrim(@v_ver_seq						))
+				set @v_department_id		   				= rtrim(ltrim(@v_department_id					))
+				set @v_dept_id				   				= rtrim(ltrim(@v_dept_id						))
+				set @v_end_cust_report		   				= rtrim(ltrim(@v_end_cust_report				))
+				set @v_soldto_cust_report		   			= rtrim(ltrim(@v_soldto_cust_report				))
+				set @v_product_group		   				= rtrim(ltrim(@v_product_group					))
+				set @v_dm_biz_type			   				= rtrim(ltrim(@v_dm_biz_type					))
+				set @v_yyyymm				   				= rtrim(ltrim(@v_yyyymm							))
+				set @v_os_corp_cd			   				= rtrim(ltrim(@v_os_corp_cd						))
+				set @v_contribution_type	   				= rtrim(ltrim(@v_contribution_type				))
+				set @v_contribution_ratio	   				= rtrim(ltrim(@v_contribution_ratio				))
+				set @v_created_by			   				= rtrim(ltrim(@v_created_by						))
+				--공백제거
+
+				-------------------------------------- 월모드인경우 INPUT 값을 그대로 INSERT하고 년모드 인경우 12개월로 늘려서 INSERT함 (BEGIN)
+				IF LEN(@v_yyyymm) > 4
+
+					-- 월모드인 경우
+					BEGIN
+							INSERT INTO #results_MST ( 
+													 active_flag				 
+													,ver_seq				
+													,department_id		
+													,dept_id				
+													,end_cust_report		
+													,soldto_cust_report		
+													,product_group		
+													,dm_biz_type			
+													,yyyymm				
+													,os_corp_cd			
+													,contribution_type	
+													,contribution_ratio	
+													,created_by			
+							) VALUES ( 
+													 @v_active_flag		
+													,@v_ver_seq			
+													,@v_department_id		
+													,@v_dept_id			
+													,@v_end_cust_report	
+													,@v_soldto_cust_report		
+													,@v_product_group		
+													,@v_dm_biz_type		
+													,@v_yyyymm				
+													,@v_os_corp_cd			
+													,@v_contribution_type	
+													,@v_contribution_ratio	
+													,@v_created_by			
+							)
+					END
+				ELSE
+					-- 년모드인 경우 (12개월을 INSERT함)
+					BEGIN
+							INSERT INTO #results_MST ( 
+													 active_flag				 
+													,ver_seq				
+													,department_id		
+													,dept_id				
+													,end_cust_report		
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO","1718349236","4","													,soldto_cust_report		
+													,product_group		
+													,dm_biz_type			
+													,yyyymm				
+													,os_corp_cd			
+													,contribution_type	
+													,contribution_ratio	
+													,created_by			
+							) 
+							select  
+									 @v_active_flag		
+									,@v_ver_seq			
+									,@v_department_id		
+									,@v_dept_id			
+									,@v_end_cust_report	
+									,@v_soldto_cust_report		
+									,@v_product_group		
+									,@v_dm_biz_type		
+									,basis_yyyymm 
+									,@v_os_corp_cd			
+									,@v_contribution_type	
+									,@v_contribution_ratio	
+									,@v_created_by			
+							from [dbo].[SCM_SYS_CALENDAR_M] with(nolock) where SUBSTRING(basis_yyyymm,1,4) = @v_yyyymm GROUP BY basis_yyyymm
+					END
+				-------------------------------------- 월모드인경우 INPUT 값을 그대로 INSERT하고 년모드 인경우 12개월로 늘려서 INSERT함 (END)
+
+			END
+		ELSE
+			BEGIN
+				SET @v_ver_seq = @p_ver_seq
+				SET @p_ver_seq = NULL
+ 
+				--공백제거
+				set @v_active_flag			   				= rtrim(ltrim(@v_active_flag					))
+				set @v_ver_seq				   				= rtrim(ltrim(@v_ver_seq						))
+				set @v_department_id		   				= rtrim(ltrim(@v_department_id					))
+				set @v_dept_id				   				= rtrim(ltrim(@v_dept_id						))
+				set @v_end_cust_report		   				= rtrim(ltrim(@v_end_cust_report				))
+				set @v_soldto_cust_report		   			= rtrim(ltrim(@v_soldto_cust_report				))
+				set @v_product_group		   				= rtrim(ltrim(@v_product_group					))
+				set @v_dm_biz_type			   				= rtrim(ltrim(@v_dm_biz_type					))
+				set @v_yyyymm				   				= rtrim(ltrim(@v_yyyymm							))
+				set @v_os_corp_cd			   				= rtrim(ltrim(@v_os_corp_cd						))
+				set @v_contribution_type	   				= rtrim(ltrim(@v_contribution_type				))
+				set @v_contribution_ratio	   				= rtrim(ltrim(@v_contribution_ratio				))
+				set @v_created_by			   				= rtrim(ltrim(@v_created_by						))
+				--공백제거
+
+				-------------------------------------- 월모드인경우 INPUT 값을 그대로 INSERT하고 년모드 인경우 12개월로 늘려서 INSERT함 (BEGIN)
+				IF LEN(@v_yyyymm) > 4
+
+					-- 월모드인 경우
+					BEGIN
+							INSERT INTO #results_MST ( 
+													 active_flag				 
+													,ver_seq				
+													,department_id		
+													,dept_id				
+													,end_cust_report		
+													,soldto_cust_report		
+													,product_group		
+													,dm_biz_type			
+													,yyyymm				
+													,os_corp_cd			
+													,contribution_type	
+													,contribution_ratio	
+													,created_by			
+							) VALUES ( 
+													 @v_active_flag		
+													,@v_ver_seq			
+													,@v_department_id		
+													,@v_dept_id			
+													,@v_end_cust_report	
+													,@v_soldto_cust_report		
+													,@v_product_group		
+													,@v_dm_biz_type		
+													,@v_yyyymm				
+													,@v_os_corp_cd			
+													,@v_contribution_type	
+													,@v_contribution_ratio	
+													,@v_created_by			
+							)
+					END
+				ELSE
+					-- 년모드인 경우 (12개월을 INSERT함)
+					BEGIN
+							INSERT INTO #results_MST ( 
+													 active_flag				 
+													,ver_seq				
+													,department_id		
+													,dept_id				
+													,end_cust_report		
+													,soldto_cust_report		
+													,product_group		
+													,dm_biz_type			
+													,yyyymm				
+													,os_corp_cd			
+													,contribution_type	
+													,contribution_ratio	
+													,created_by			
+							) 
+							select  
+									 @v_active_flag		
+									,@v_ver_seq			
+									,@v_department_id		
+									,@v_dept_id			
+									,@v_end_cust_report	
+									,@v_soldto_cust_report		
+									,@v_product_group		
+									,@v_dm_biz_type		
+									,basis_yyyymm 
+									,@v_os_corp_cd			
+									,@v_contribution_type	
+									,@v_contribution_ratio	
+									,@v_created_by			
+							from [dbo].[SCM_SYS_CALENDAR_M] with(nolock) where SUBSTRING(basis_yyyymm,1,4) = @v_yyyymm "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO","1718349236","5","GROUP BY basis_yyyymm
+					END
+				-------------------------------------- 월모드인경우 INPUT 값을 그대로 INSERT하고 년모드 인경우 12개월로 늘려서 INSERT함 (END)
+			END
+	END
+
+	--===================================================================================== #results_MST 테이블에 split후 insert end
+--select department_id		
+--		,dept_id				
+--		,end_cust_report		
+--		,soldto_cust_report		
+--		,product_group		
+--		,dm_biz_type
+--		, Contribution_Type
+--		, SUM(CAST (Contribution_Ratio AS NUMERIC(5,2)))
+--from #results_MST
+--GROUP BY department_id		
+--		,dept_id				
+--		,end_cust_report		
+--		,soldto_cust_report		
+--		,product_group		
+--		,dm_biz_type
+--		, Contribution_Type
+
+--raiserror( 'sdf', 16, 1)
+
+	-- INPUT COUNT 확인
+	SET @n_input_count = ( SELECT count(ver_seq) 
+								FROM #results_MST)
+
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                          DM_MST_CONTRIBUTE_RATIO_MST 테이블 DELETE,INSERT (START)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	BEGIN
+		-- INSERT COUNT 확인
+		SET @n_insert_count = ( SELECT count(M.ver_seq) 
+									FROM #results_MST M
+										where 1=1 )
+					
+		-- MST INSERT전 DELETE수행 (BEGIN)
+		DELETE 
+		FROM [dbo].DM_MST_CONTRIBUTE_RATIO_MST
+		WHERE (
+				SELECT count(1) 
+					FROM #results_MST M
+					where 1=1
+						and DM_MST_CONTRIBUTE_RATIO_MST.ver_seq				= M.ver_seq			
+						and DM_MST_CONTRIBUTE_RATIO_MST.department_id		= M.department_id		
+						and DM_MST_CONTRIBUTE_RATIO_MST.dept_id				= M.dept_id			
+						and DM_MST_CONTRIBUTE_RATIO_MST.end_cust_report		= M.end_cust_report	
+						and DM_MST_CONTRIBUTE_RATIO_MST.soldto_cust_report	= M.soldto_cust_report		
+						and DM_MST_CONTRIBUTE_RATIO_MST.product_group		= M.product_group		
+						and DM_MST_CONTRIBUTE_RATIO_MST.dm_biz_type			= M.dm_biz_type		
+				) > 0;
+		-- MST INSERT전 DELETE수행 (END)
+
+		-- MST INSERT수행 (BEGIN)
+		INSERT INTO [dbo].DM_MST_CONTRIBUTE_RATIO_MST
+			(VER_SEQ,DEPARTMENT_ID,DEPT_ID,END_CUST_REPORT,SOLDTO_CUST_REPORT,PRODUCT_GROUP,DM_BIZ_TYPE,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE)
+		SELECT VER_SEQ,DEPARTMENT_ID,DEPT_ID,END_CUST_REPORT,SOLDTO_CUST_REPORT,PRODUCT_GROUP,DM_BIZ_TYPE,MAX(CREATED_BY),GETDATE(),MAX(CREATED_BY) AS LAST_UPDATED_BY,GETDATE()
+			FROM #results_MST
+				WHERE 1=1
+		GROUP BY VER_SEQ,DEPARTMENT_ID,DEPT_ID,END_CUST_REPORT,SOLDTO_CUST_REPORT,PRODUCT_GROUP,DM_BIZ_TYPE
+		-- MST INSERT수행 (END)
+
+	END
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                          DM_MST_CONTRIBUTE_RATIO_MST 테이블 DELETE,INSERT (END)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                          DM_MST_CONTRIBUTE_RATIO_DTL 테이블 DELETE,INSERT (START)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	BEGIN
+		-- DTL INSERT전 DELETE수행 (BEGIN)
+		DELETE 
+		FROM [dbo].DM_MST_CONTRIBUTE_RATIO_DTL
+		WHERE (
+				SELECT count(1) 
+					FROM #results_MST M
+					where 1=1
+						and DM_MST_CONTRIBUTE_RATIO_DTL.ver_seq				= M.ver_seq			
+						and DM_MST_CONTRIBUTE_RATIO_DTL.department_id		= M.department_id		
+						and DM_MST_CONTRIBUTE_RATIO_DTL.dept_id				= M.dept_id			
+						and DM_MST_CONTRIBUTE_RATIO_DTL.end_cust_report		= M.end_cust_report	
+						and DM_MST_CONTRIBUTE_RATIO_DTL.soldto_cust_report	= M.soldto_cust_report		
+						and DM_MST_CONTRIBUTE_RATIO_DTL.product_group		= M.product_group		
+						and DM_MST_CONTRIBUTE_RATIO_DTL.dm_biz_type			= M.dm_biz_type		
+				) > 0;
+		-- DTL INSERT전 DELETE수행 (END)
+
+		-- DTL INSERT수행 (BEGIN)
+		INSERT INTO [dbo].DM_MST_CONTRIBUTE_RATIO_DTL
+			(VER_SEQ,DEPARTMENT_ID,DEPT_ID,END_CUST_REPORT,SOLDTO_CU"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO","1718349236","6","ST_REPORT,PRODUCT_GROUP,DM_BIZ_TYPE
+			,YYYYMM,OS_CORP_CD,CONTRIBUTION_TYPE,CONTRIBUTION_RATIO
+			,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE)
+		SELECT VER_SEQ,DEPARTMENT_ID,DEPT_ID,END_CUST_REPORT,SOLDTO_CUST_REPORT,PRODUCT_GROUP,DM_BIZ_TYPE
+			,YYYYMM,OS_CORP_CD,CONTRIBUTION_TYPE,CONTRIBUTION_RATIO
+			,CREATED_BY,GETDATE(),CREATED_BY AS LAST_UPDATED_BY,GETDATE()
+			FROM #results_MST
+				WHERE 1=1
+		-- DTL INSERT수행 (END)
+
+	END
+
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                          DM_MST_CONTRIBUTE_RATIO_DTL 테이블 DELETE,INSERT (END)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+
+  	-- 트랜잭션 (COMMIT)
+        COMMIT TRANSACTION SAVE_DM_MST_CONTRIBUTE_RATIO;
+	--------------------------------------------------------------------------------------------	
+		END TRY
+	--------------------------------------------------------------------------------------------	
+
+	--------------------------------------------------------------	
+    BEGIN CATCH
+	--------------------------------------------------------------	
+		--[C20200909-000203] LOG 표준화 적용
+		-- 트랜잭션 (END)
+		ROLLBACK TRANSACTION SAVE_DM_MST_CONTRIBUTE_RATIO;
+
+		SET @v_log_type = 'ERROR';
+		SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+		SET @v_log_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+		SET @d_event_date = SYSDATETIME();
+
+		SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();  /*-- 에러메시지 DISPLAY --*/
+		
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date;
+
+	--------------------------------------------------------------	
+    END CATCH;
+	--------------------------------------------------------------	
+
+	-- 수행결과 성공여부 DISPLAY
+     IF @v_log_message IS NULL
+	  SELECT 'success'
+	;
+    -- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure @@@##########';
+    SET @v_log_description = 'input_count: ' + (Convert(NVARCHAR(10), @n_input_count)) + ' / ' + 'delete_count: ' + (Convert(NVARCHAR(10), @n_delete_count)) + ' / ' + 'merge_count: ' + (Convert(NVARCHAR(10), @n_insert_count));
+    SET @d_event_date = SYSDATETIME();
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date;
+
+  END;
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_SAVE_DM_MST_CONTRIBUTE_VER","1734349293","1","
+
+/*
+ * Program ID   : DMF0043_SAVE_DM_MST_CONTRIBUTE_VER
+ * Description  : 'DM_MST_CONTRIBUTE_VER' TABLE INSERT/UPDATE/DELETE
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 20190508  KHSONG  Initial Release [PJ20189106] 전지.GSCM 고도화 이행, DM 시스템
+ 2020/09/09     P.C.I		[C20200909-000203] LOG 표준화 적용
+ * 
+ */
+
+CREATE PROCEDURE [dbo].[DMF0043_SAVE_DM_MST_CONTRIBUTE_VER]
+
+	-- Add the parameters for the stored procedure here
+    @p_active_flag	NVARCHAR(MAX),
+    @p_ver_seq		NVARCHAR(MAX),
+    @p_yyyy			NVARCHAR(MAX),
+    @p_version_nm	NVARCHAR(MAX),
+    @p_description	NVARCHAR(MAX),
+    @p_valid_yn		NVARCHAR(MAX),
+    @p_created_by	NVARCHAR(MAX)
+
+AS
+
+BEGIN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET NOCOUNT ON; 
+    SET XACT_ABORT ON;
+
+	-- 스플릿관련 변수
+
+    DECLARE  @v_active_flag		NVARCHAR(MAX);
+    DECLARE  @v_ver_seq			NVARCHAR(MAX);
+    DECLARE  @v_yyyy			NVARCHAR(MAX);
+    DECLARE  @v_version_nm		NVARCHAR(MAX);
+    DECLARE  @v_description		NVARCHAR(MAX);
+    DECLARE  @v_valid_yn		NVARCHAR(MAX);
+    DECLARE  @v_created_by		NVARCHAR(MAX);
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^'  -- 데이터 구분자
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	DECLARE @max_ver_seq	 	NVARCHAR(MAX);
+    
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'DMF0043_SAVE_DM_MST_CONTRIBUTE_VER';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_log_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+    DECLARE @n_delete_count    INTEGER = 0;
+    DECLARE @n_insert_count    INTEGER = 0;
+    DECLARE @n_input_count     INTEGER = 0;
+    DECLARE @n_logo_count      INTEGER = 0;
+
+
+
+	-- 마지막 데이터 처리를 위한 구분자 추가
+	SET @p_active_flag		= RTRIM(@p_active_flag	    ) + '^';
+	SET @p_ver_seq			= RTRIM(@p_ver_seq		    ) + '^';
+	SET @p_yyyy				= RTRIM(@p_yyyy			    ) + '^';
+	SET @p_version_nm		= RTRIM(@p_version_nm	    ) + '^';
+	SET @p_description		= RTRIM(@p_description	    ) + '^';
+	SET @p_valid_yn			= RTRIM(@p_valid_yn		    ) + '^';
+	SET @p_created_by		= RTRIM(@p_created_by	    ) + '^';
+
+	-- #results_MST TEMP TABLE
+	CREATE TABLE #results_MST  (
+								 active_flag		NVARCHAR(max)
+								,ver_seq			NVARCHAR(max)
+								,yyyy				NVARCHAR(max)
+								,version_nm			NVARCHAR(max)
+								,description		NVARCHAR(max)
+								,valid_yn			NVARCHAR(max)
+								,created_by			NVARCHAR(max)
+							    )
+
+	-- 시작 LOG  (START)
+	SET @v_log_type = 'START';
+	SET @v_log_message = '########## Start of procedure @@@##########';
+	SET @v_log_description = '';
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date;
+	SET @v_log_message = NULL      /*-- <- 변수 재사용을 위하여 초기화해야함 --*/ 
+	-- 시작 LOG  (END)
+
+	-- 트랜잭션 (START)
+	BEGIN TRANSACTION DM_MST_CONTRIBUTE_VER_ALL;
+
+	--------------------------------------------------------------------------------------------	
+	BEGIN TRY
+	--------------------------------------------------------------------------------------------
+
+	--===================================================================================== #results_MST 테이블에 split후 insert start
+	--###############################################  #results_MST 테이블에 split후 insert (START)
+	WHILE LEN(@p_yyyy) > 0
+	BEGIN
+		DECLARE @index_active_flag		INT
+		DECLARE @index_ver_seq			INT
+		DECLARE @index_yyyy				INT
+		DECLARE @index_version_nm		INT
+		DECLARE @index_description		INT
+		DECLARE @index_valid_yn			INT
+		DECLARE @index_created_by		INT
+
+		SET @index_active_flag		= PATINDEX('%' + '^' + '%', @p_a"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_SAVE_DM_MST_CONTRIBUTE_VER","1734349293","2","ctive_flag	)
+		SET @index_ver_seq			= PATINDEX('%' + '^' + '%', @p_ver_seq		)
+		SET @index_yyyy				= PATINDEX('%' + '^' + '%', @p_yyyy			)
+		SET @index_version_nm		= PATINDEX('%' + '^' + '%', @p_version_nm	)
+		SET @index_description		= PATINDEX('%' + '^' + '%', @p_description	)
+		SET @index_valid_yn			= PATINDEX('%' + '^' + '%', @p_valid_yn		)
+		SET @index_created_by		= PATINDEX('%' + '^' + '%', @p_created_by	)
+
+		IF @index_yyyy > 0
+			BEGIN
+
+				set @v_active_flag = substring(@p_active_flag, 0, @index_active_flag)
+				set @p_active_flag = substring(@p_active_flag, len(@v_active_flag + '^') + 1, len(@p_active_flag))
+
+	
+				set @v_ver_seq = substring(@p_ver_seq, 0, @index_ver_seq)
+				set @p_ver_seq = substring(@p_ver_seq, len(@v_ver_seq + '^') + 1, len(@p_ver_seq))
+
+				set @v_yyyy = substring(@p_yyyy, 0, @index_yyyy)
+				set @p_yyyy = substring(@p_yyyy, len(@v_yyyy + '^') + 1, len(@p_yyyy))
+
+				set @v_version_nm = substring(@p_version_nm, 0, @index_version_nm)
+				set @p_version_nm = substring(@p_version_nm, len(@v_version_nm + '^') + 1, len(@p_version_nm))
+
+				set @v_description = substring(@p_description, 0, @index_description)
+				set @p_description = substring(@p_description, len(@v_description + '^') + 1, len(@p_description))
+
+				set @v_valid_yn = substring(@p_valid_yn, 0, @index_valid_yn)
+				set @p_valid_yn = substring(@p_valid_yn, len(@v_valid_yn + '^') + 1, len(@p_valid_yn))
+
+				set @v_created_by = substring(@p_created_by, 0, @index_created_by)
+				set @p_created_by = substring(@p_created_by, len(@v_created_by + '^') + 1, len(@p_created_by))
+
+ 
+				--공백제거
+				set @v_active_flag	    				= rtrim(ltrim(@v_active_flag			))
+				set @v_ver_seq		    				= rtrim(ltrim(@v_ver_seq		))
+				set @v_yyyy			    				= rtrim(ltrim(@v_yyyy			))
+				set @v_version_nm	    				= rtrim(ltrim(@v_version_nm		))
+				set @v_description	    				= rtrim(ltrim(@v_description	))
+				set @v_valid_yn		    				= rtrim(ltrim(@v_valid_yn		))
+				set @v_created_by	    				= rtrim(ltrim(@v_created_by		))
+				--공백제거
+
+				INSERT INTO #results_MST ( 
+										 active_flag			 
+										,ver_seq	 
+										,yyyy	 
+										,version_nm	 
+										,description	 
+										,valid_yn		 
+										,created_by	 
+				) VALUES ( 
+										 @v_active_flag			
+										,@v_ver_seq	
+										,@v_yyyy	
+										,@v_version_nm	
+										,@v_description	
+										,@v_valid_yn		
+										,@v_created_by	
+				)
+
+			END
+		ELSE
+			BEGIN
+				SET @v_yyyy = @p_yyyy
+				SET @p_yyyy = NULL
+ 
+				--공백제거
+				set @v_active_flag	    				= rtrim(ltrim(@v_active_flag	))
+				set @v_ver_seq		    				= rtrim(ltrim(@v_ver_seq		))
+				set @v_yyyy			    				= rtrim(ltrim(@v_yyyy			))
+				set @v_version_nm	    				= rtrim(ltrim(@v_version_nm		))
+				set @v_description	    				= rtrim(ltrim(@v_description	))
+				set @v_valid_yn		    				= rtrim(ltrim(@v_valid_yn		))
+				set @v_created_by	    				= rtrim(ltrim(@v_created_by		))
+				--공백제거
+
+				INSERT INTO #results_MST ( 
+										 active_flag
+										,ver_seq	 
+										,yyyy	 
+										,version_nm	 
+										,description	 
+										,valid_yn		 
+										,created_by	 
+				) VALUES ( 
+										 @v_active_flag			
+										,@v_ver_seq	
+										,@v_yyyy	
+										,@v_version_nm	
+										,@v_description	
+										,@v_valid_yn		
+										,@v_created_by	
+				)
+			END
+	END
+
+	--===================================================================================== #results_MST 테이블에 split후 insert end
+
+
+	-- INPUT COUNT 확인
+	SET @n_input_count = ( SELECT count(yyyy) 
+								FROM #results_MST)
+
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                                  DM_MST_CONTRIBUTE_VER 테이블 DELETE (START)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	BEGIN
+		
+		-- DELETE COUNT 확인
+		SET @n_de"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_SAVE_DM_MST_CONTRIBUTE_VER","1734349293","3","lete_count =  (SELECT COUNT(YYYY)  FROM [dbo].DM_MST_CONTRIBUTE_VER A
+								WHERE (
+										SELECT count(1) 
+											FROM #results_MST M
+											where M.active_flag		= 'D'
+												and A.VER_SEQ	= M.VER_SEQ	
+										) > 0)
+
+		--  select * from #results_MST
+		DELETE 
+		FROM [dbo].DM_MST_CONTRIBUTE_VER
+		WHERE (
+				SELECT count(1) 
+					FROM #results_MST M
+					where M.active_flag		= 'D'
+						and DM_MST_CONTRIBUTE_VER.VER_SEQ	= M.VER_SEQ	
+				) > 0;
+	END
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                                  DM_MST_CONTRIBUTE_VER 테이블 DELETE (END)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                          DM_MST_CONTRIBUTE_VER 테이블 UPDATE, INSERT (START)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	BEGIN
+		-- INSERT COUNT 확인
+		SET @n_insert_count = ( SELECT count(M.yyyy) 
+									FROM #results_MST M
+										where M.active_flag      <> 'D' )
+					
+					MERGE INTO [dbo].[DM_MST_CONTRIBUTE_VER] A
+					USING (
+							SELECT *
+								FROM #results_MST M
+									where M.active_flag      <> 'D'
+						  ) B
+					ON(
+							    A.VER_SEQ = B.VER_SEQ
+					  )
+					WHEN MATCHED THEN
+						 UPDATE SET 
+									 A.YYYY				= B.YYYY
+									,A.VERSION_NM		= B.VERSION_NM
+									,A.DESCRIPTION		= B.DESCRIPTION
+									,A.VALID_YN			= B.VALID_YN
+								    ,A.last_updated_by	= B.CREATED_BY
+								    ,A.last_update_date	= GETDATE()
+					                
+					WHEN NOT MATCHED THEN
+
+						 INSERT ( -- VER_SEQ
+								   YYYY
+								  ,VERSION_NM
+								  ,DESCRIPTION
+								  ,VALID_YN
+								  ,CREATED_BY
+								  ,CREATION_DATE
+								  ,LAST_UPDATED_BY
+								  ,LAST_UPDATE_DATE
+								  ,ATTRIBUTE1
+								  ,ATTRIBUTE2
+								  ,ATTRIBUTE3
+								  ,ATTRIBUTE4
+								  ,ATTRIBUTE5
+								)
+						 VALUES (   B.YYYY
+								   ,B.VERSION_NM
+								   ,B.DESCRIPTION
+								   ,B.VALID_YN
+								   ,B.CREATED_BY
+								   ,GETDATE()
+								   ,B.CREATED_BY
+								   ,GETDATE()
+								   ,NULL,NULL,NULL,NULL,NULL
+								);
+
+
+        -- 기여율 copy
+        SET @max_ver_seq = (SELECT MAX(VER_SEQ) FROM [dbo].[DM_MST_CONTRIBUTE_VER] WITH (NOLOCK));
+        IF (SELECT COUNT(1)
+              FROM [dbo].[DM_MST_CONTRIBUTE_RATIO_MST] WITH (NOLOCK)
+             WHERE VER_SEQ = @max_ver_seq
+            ) = 0
+            BEGIN
+                INSERT INTO [dbo].[DM_MST_CONTRIBUTE_RATIO_DTL]
+                     ( VER_SEQ
+                     , DEPARTMENT_ID
+                     , DEPT_ID
+                     , END_CUST_REPORT
+                     , SOLDTO_CUST_REPORT
+                     , PRODUCT_GROUP
+                     , DM_BIZ_TYPE
+                     , YYYYMM
+                     , OS_CORP_CD
+                     , CONTRIBUTION_TYPE
+                     , CONTRIBUTION_RATIO
+					 , CREATED_BY
+					 , CREATION_DATE
+					 , LAST_UPDATED_BY
+					 , LAST_UPDATE_DATE
+					 , ATTRIBUTE1
+					 , ATTRIBUTE2
+					 , ATTRIBUTE3
+					 , ATTRIBUTE4
+					 , ATTRIBUTE5 )
+                SELECT @max_ver_seq AS VER_SEQ
+                     , DEPARTMENT_ID
+                     , DEPT_ID
+                     , END_CUST_REPORT
+                     , SOLDTO_CUST_REPORT
+                     , PRODUCT_GROUP
+                     , DM_BIZ_TYPE
+                     , (SELECT YYYY 
+                          FROM [dbo].[DM_MST_CONTRIBUTE_VER] WITH (NOLOCK)
+                         WHERE VER_SEQ = @max_ver_seq) + SUBSTRING(YYYYMM,5,2)
+                     , OS_CORP_CD
+                     , CONTRIBUTION_TYPE
+                     , CONTRIBUTION_RATIO
+                     , @p_created_by
+      "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_SAVE_DM_MST_CONTRIBUTE_VER","1734349293","4","               , GETDATE()
+                     , @p_created_by
+                     , GETDATE()
+				     , NULL,NULL,NULL,NULL,NULL
+                  FROM [dbo].[DM_MST_CONTRIBUTE_RATIO_DTL] WITH (NOLOCK)
+                 WHERE VER_SEQ = (SELECT MAX(VER_SEQ) FROM [dbo].[DM_MST_CONTRIBUTE_RATIO_MST] WITH (NOLOCK))
+                ;
+
+                INSERT INTO [dbo].[DM_MST_CONTRIBUTE_RATIO_MST]
+                     ( VER_SEQ
+                     , DEPARTMENT_ID
+                     , DEPT_ID
+                     , END_CUST_REPORT
+                     , SOLDTO_CUST_REPORT
+                     , PRODUCT_GROUP
+                     , DM_BIZ_TYPE
+					 , CREATED_BY
+					 , CREATION_DATE
+					 , LAST_UPDATED_BY
+					 , LAST_UPDATE_DATE
+					 , ATTRIBUTE1
+					 , ATTRIBUTE2
+					 , ATTRIBUTE3
+					 , ATTRIBUTE4
+					 , ATTRIBUTE5 )
+                SELECT @max_ver_seq AS VER_SEQ
+                     , DEPARTMENT_ID
+                     , DEPT_ID
+                     , END_CUST_REPORT
+                     , SOLDTO_CUST_REPORT
+                     , PRODUCT_GROUP
+                     , DM_BIZ_TYPE
+                     , @p_created_by
+                     , GETDATE()
+                     , @p_created_by
+                     , GETDATE()
+				     , NULL,NULL,NULL,NULL,NULL
+                  FROM [dbo].[DM_MST_CONTRIBUTE_RATIO_MST] WITH (NOLOCK)
+                 WHERE VER_SEQ = (SELECT MAX(VER_SEQ) FROM [dbo].[DM_MST_CONTRIBUTE_RATIO_MST] WITH (NOLOCK))
+                ;
+
+            END
+END
+	--------------------------------------------------------------------------------------------◇◇◇◇
+	--                                          DM_MST_CONTRIBUTE_VER 테이블 UPDATE, INSERT (END)
+	--------------------------------------------------------------------------------------------◇◇◇◇
+
+  	-- 트랜잭션 (COMMIT)
+        COMMIT TRANSACTION DM_MST_CONTRIBUTE_VER_ALL;  -- sss
+	--------------------------------------------------------------------------------------------	
+		END TRY
+	--------------------------------------------------------------------------------------------	
+
+	--------------------------------------------------------------	
+    BEGIN CATCH
+	--------------------------------------------------------------	
+	
+		--[C20200909-000203] LOG 표준화 적용
+		-- 트랜잭션 (END)
+		ROLLBACK TRANSACTION DM_MST_CONTRIBUTE_VER_ALL;  -- sss
+
+		SET @v_log_type = 'ERROR';
+		SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+		SET @v_log_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+		SET @d_event_date = SYSDATETIME();
+
+		SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();  /*-- 에러메시지 DISPLAY --*/
+		
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date;
+
+	--------------------------------------------------------------	
+    END CATCH;
+	--------------------------------------------------------------	
+
+	-- 수행결과 성공여부 DISPLAY
+     IF @v_log_message IS NULL
+	  SELECT 'success'
+	;
+    -- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure @@@##########';
+    SET @v_log_description = 'input_count: ' + Convert(NVARCHAR(10), @n_input_count) ;
+    SET @d_event_date = SYSDATETIME();
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date;
+
+  END;
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","DMF0043_GET_CONTRIBUTE_MAIN_DATA","1606348837","9","DEPT_NAME_KO, D.DEPT_ID AS DEPARTMENT_ID
+                                            , D.DEPT_NAME_KO AS DEPARTMENT_NAME
+                                         FROM SCM_MST_SSO_USER_INFO AS B WITH (NOLOCK)
+                                              INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH (NOLOCK)
+                                                 ON B.DEPT_ID = C.DEPT_ID
+                                              INNER JOIN SCM_MST_SSO_DEPT_INFO AS D WITH (NOLOCK)
+                                                 ON C.UPPER_DEPT_ID = D.DEPT_ID
+                                      ) AS TEAM
+                              ON TEAM.USER_ID IN (SELECT TOP 1 TOKEN FROM DBO.STRING_SPLIT(A.OWNER, ','))
+                     WHERE A.DIVISION_ID = '40'
+                       AND B.SITE_TYPE = 'SALES'
+                       AND ISNULL(C.FORECAST_INFO_BIZ_TYPE,'') <> ''
+                       AND ISNULL(A.ATTRIBUTE2,'') <> ''
+                       AND ISNULL(A.ATTRIBUTE1,'') <> ''
+                       AND ISNULL(A.REPORT_GROUP3,'') <> ''
+                     GROUP BY A.DIVISION_ID
+                         , TEAM.DEPARTMENT_ID
+                         , TEAM.DEPARTMENT_NAME
+                         , TEAM.DEPT_ID
+                         , TEAM.DEPT_NAME_KO
+                         , ISNULL(SAM.SEGMENT3,'')
+                         , ISNULL(A.ATTRIBUTE2,'')
+                         , ISNULL(A.ATTRIBUTE1,'')
+                         , ISNULL(A.REPORT_GROUP3,'')
+                         , ISNULL(C.FORECAST_INFO_BIZ_TYPE,'')
+                   ) AS SITE_ITEM
+                 ON SITE_ITEM.DEPARTMENT_ID = CONTRIBUTE.DEPARTMENT_ID
+                AND SITE_ITEM.DEPT_ID = CONTRIBUTE.DEPT_ID
+                AND SITE_ITEM.END_CUST_REPORT = CONTRIBUTE.END_CUST_REPORT
+                AND SITE_ITEM.SOLDTO_CUST_REPORT = CONTRIBUTE.SOLDTO_CUST_REPORT
+                AND SITE_ITEM.PRODUCT_GROUP = CONTRIBUTE.PRODUCT_GROUP
+                AND SITE_ITEM.DM_BIZ_TYPE = CONTRIBUTE.DM_BIZ_TYPE
+         WHERE SITE_ITEM.DIVISION_ID IS NULL
+
+        -- 연도 데이터
+        SELECT MA.VER_SEQ
+             , MA.DEPARTMENT_ID
+             , MA.DEPT_ID
+             , MA.END_CUST_REPORT
+             , MA.SOLDTO_CUST_REPORT
+             , MA.PRODUCT_GROUP
+             , MA.DM_BIZ_TYPE
+             , CAST(DTL.CONTRIBUTION_RATIO AS NVARCHAR) AS RATIO
+             , 'Y#' + @p_yyyy + '#' + DTL.OS_CORP_CD AS COLUMN_NAME
+          INTO #temp3
+          FROM #DataTable AS MA
+               INNER JOIN DM_MST_CONTRIBUTE_RATIO_DTL AS DTL
+                  ON MA.DEPARTMENT_ID = DTL.DEPARTMENT_ID
+                 AND MA.DEPT_ID = DTL.DEPT_ID
+                 AND MA.END_CUST_REPORT = DTL.END_CUST_REPORT
+                 AND MA.SOLDTO_CUST_REPORT = DTL.SOLDTO_CUST_REPORT
+                 AND MA.PRODUCT_GROUP = DTL.PRODUCT_GROUP
+                 AND MA.DM_BIZ_TYPE = DTL.DM_BIZ_TYPE
+         WHERE YYYYMM = @thismm
+           AND MA.VER_SEQ = @p_ver_seq
+
+        UNION ALL
+
+        SELECT MA.VER_SEQ
+             , MA.DEPARTMENT_ID
+             , MA.DEPT_ID
+             , MA.END_CUST_REPORT
+             , MA.SOLDTO_CUST_REPORT
+             , MA.PRODUCT_GROUP
+             , MA.DM_BIZ_TYPE
+             , CAST(DTL.CONTRIBUTION_TYPE AS NVARCHAR) AS RATIO
+             , 'Y#' + @p_yyyy + '#RBU_0999' AS COLUMN_NAME
+          FROM #DataTable AS MA
+               INNER JOIN DM_MST_CONTRIBUTE_RATIO_DTL AS DTL
+                  ON MA.DEPARTMENT_ID = DTL.DEPARTMENT_ID
+                 AND MA.DEPT_ID = DTL.DEPT_ID
+                 AND MA.END_CUST_REPORT = DTL.END_CUST_REPORT
+                 AND MA.SOLDTO_CUST_REPORT = DTL.SOLDTO_CUST_REPORT
+                 AND MA.PRODUCT_GROUP = DTL.PRODUCT_GROUP
+                 AND MA.DM_BIZ_TYPE = DTL.DM_BIZ_TYPE
+         WHERE YYYYMM = @thismm
+           AND MA.VER_SEQ = @p_ver_seq
+
+        UNION ALL
+
+        -- 월 데이터
+        SELECT MA.VER_SEQ
+             , MA.DEPARTMENT_ID
+   "

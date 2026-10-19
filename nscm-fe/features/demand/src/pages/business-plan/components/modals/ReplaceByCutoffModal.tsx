@@ -3,13 +3,14 @@ import {
   type FlexGrid as FlexGridType,
   type FormatItemEventArgs,
 } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { PeriodField } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { CELL_INPUT_EDIT_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { CustomDialog, DataGrid, SearchArea } from '@shared/components';
+import { CustomDialog, DataGrid, ResultArea, SearchArea } from '@shared/components';
 import { useTabProcQuery } from '@shared/hooks';
 import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { Grid } from '@shared/mui';
@@ -65,6 +66,8 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
   const { t } = useTranslation();
   const setAlert = useMessageStore.getState().setAlert;
   const gridRef = useRef<FlexGridType<MdfVersionRow>>(undefined);
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   // ⭐ range 미전달 방어 + dep 를 문자열로 (매 렌더 새 객체 → 재설정 루프 차단)
   const rangeFrom = range?.from ?? '';
@@ -96,7 +99,7 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
     }),
     [divisionId, yyyymmFrom, yyyymmTo, sesUserId]
   );
-  const { data, refetch } = useTabProcQuery<MENU_ID, SHEETS.MDF_VERSION>({
+  const { data, refetch, isLoading, isFetching } = useTabProcQuery<MENU_ID, SHEETS.MDF_VERSION>({
     menuId: MENU_ID,
     sheetName: SHEETS.MDF_VERSION,
     tabId: MENU_ID,
@@ -107,6 +110,7 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
     () => (data as { data?: MdfVersionRow[] } | undefined)?.data ?? [],
     [data]
   );
+  const loading = isLoading || isFetching;
 
   const gridStaticColumns = useMemo<RawFlexGridColumnConfig[]>(
     () =>
@@ -203,6 +207,10 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
       position='basic'
       size={1200}
       handleClose={() => modalClose(appliedAny)}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       disableButtonCancel
       customHeaderTitle={
         <div className='headerContainer'>
@@ -227,7 +235,7 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
               <>
                 <Grid size={4}>
                   <FormItem
-                    label={t('LBL00663', 'Div')}
+                    label={t('LBL00001', 'Div')}
                     labelAlign='right'
                     render={() => <InputField value={divisionId} disabled />}
                   />
@@ -245,14 +253,29 @@ export const ReplaceByCutoffModal = ({ open, modalClose, divisionId, range }: Pr
           />
 
           <div className={styles.modalGridWrapper}>
-            <DataGrid<MdfVersionRow>
-              gridRef={gridRef}
-              itemsSource={versionRows}
-              staticColumns={gridStaticColumns}
-              autoGenerateColumns={false}
-              allowSorting={false}
-              selectionMode='Row'
+            {/* 검색조회 로딩 스피너 — 위 Replace 실행(running) 스피너와 별개. */}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea
+              title=''
+              count={versionRows.length}
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<MdfVersionRow>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                itemsSource={versionRows}
+                staticColumns={gridStaticColumns}
+                autoGenerateColumns={false}
+                allowSorting={false}
+                selectionMode='Row'
+              />
+            </ResultArea>
           </div>
 
           <div className={styles.modalButtonWrapper}>

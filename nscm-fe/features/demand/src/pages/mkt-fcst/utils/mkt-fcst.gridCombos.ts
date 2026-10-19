@@ -8,23 +8,16 @@
 // [컬럼]  조회 표시 콤보  →  신규행(INSERT) 편집 콤보  [전송 파라미터]  + 클라 필터
 //
 //  TEAM_ID          메타 cellCboDataTp('DeptId')            → TeambyDivisionAuth            [@sesUserId]
-//  END_CUSTOMER     메타('EndCustomerByDivisionDept')       → EndCustomerByDivisionDeptAuth [@sesUserId]
-//                     + cascade 행.DIVISION_ID=DIVISION_ID / 행.TEAM_ID=DEPT_ID
-//  END_CUSTOMER40   메타('EndCustomerByDivision40Team')     → EndCustomerByDivision40       [없음]
-//                     + cascade 행.DIVISION_ID=DIVISION_ID
-//  SCM_SITE_ID      메타('SiteByEndCustomer') [@divisionId] → SiteByEndCustomerAuth [@divisionId,@sesUserId]
-//                     ※ 행.END_CUSTOMER 가 채워진 뒤에만 스왑(whenRowFilled)
-//                     + cascade 행.DIVISION_ID=DIVISION_ID / 행.END_CUSTOMER=END_CUSTOMER(strict)
-//  SCM_SITE_ID40    메타('SiteByEndCustomer') [@divisionId] → (편집 스왑 없음)
-//                     + cascade 행.DIVISION_ID=DIVISION_ID / 행.END_CUSTOMER40=END_CUSTOMER
-//  INCOTERMS        메타('INCOTERMS')                       → AS_INCOTERMS [@division,@salesSite = 그 행 값]
-//                     ※ 행 Sales site 가 채워진 뒤에만 (ready)
+//  END_CUSTOMER     ┐
+//  END_CUSTOMER40   │ 공용 DataGrid columnMapping 메타 구동으로 이관 (META_DRIVEN_COMBO_COLUMNS).
+//  SCM_SITE_ID      ├ 편집 후보(PARAM9) · 좁힘(PARAM2) · 행 재조회(PARAM10='D') 전부 컬럼 메타가 갖는다.
+//  SCM_SITE_ID40    │ 이 파일과 MktFcstGrid 는 이 5개 컬럼의 콤보를 일절 건드리지 않는다 — 상세는
+//  INCOTERMS        ┘ 아래 META_DRIVEN_COMBO_COLUMNS 주석. (INCOTERMS: PARAM9='AS_INCOTERMS' 스위치)
 //  MEASURE          메타('Measure')                         → MktFcstEditMeasure
 //                     [@divisionId·@scmSiteId·@projectCode = 그 행 값, @sesUserId]
-//                     + filterMeasureEditRows(AS 사이트행 → AS_In_Req 1종 / 일반 사이트행 →
-//                       MKT_FCST_RP 1종 / 사이트 미선택은 비W/S 면 AS_In_Req 제거, W/S 면 응답 그대로)
-//  FCST_TYPE        메타('FCST_TYPE_NOT_ETC' = ETC 제외)     → FCST_TYPE [@sesUserId, @editModeYn='Y']
-//  AS_FROM_SITE     메타('AS_FROM_SITE')                    → AS_FROM_SITE [@param1 = 그 행 Div]
+//                     → 편집 후보 화면단 강제 없음(메타 그대로 — 2026-09-15 UI 하드코딩 제거)
+//  FCST_TYPE        메타('FCST_TYPE_DM' = ETC 제외)     → 편집 스왑 없음(메타 그대로)
+//  AS_FROM_SITE     메타('AS_FROM_SITE')                    → AS_FROM_SITE [@divisionId = 그 행 Div]
 //                     ※ 편집 허용 판정은 MktFcstGrid.isAsFromSiteEditable (4축)
 //  그 외 콤보 컬럼   메타 cellCboDataTp 그대로               → 조회 콤보 그대로 편집
 //
@@ -50,7 +43,7 @@
 //   · SQL 에 없는 토큰은 BE 가 무시(존재 토큰만 치환) → 잉여 파라미터는 무해(회귀 0).
 import { DataMap } from '@mescius/wijmo.grid';
 
-import { AS_SITE_MEASURE, DIVISION, INSERT_DEFAULT_MEASURE, MENU_ID } from '../mkt-fcst.constants';
+import { MENU_ID } from '../mkt-fcst.constants';
 
 import { toCellStr } from './mkt-fcst.prContext';
 
@@ -77,6 +70,9 @@ export const asComboRows = (rows: readonly unknown[] | undefined): Record<string
 //   ⚠️ Sales site 컬럼만 @divisionId 를 추가로 싣는다: SiteByEndCustomer SQL 이
 //     `LEFT JOIN … ON (@divisionId = '40' AND …)` 로 division 40 에서만 품목 조인을 켠다.
 //     대상은 comboId 가 아니라 binding 으로 고른다 (조회 콤보 comboId 하드코딩 금지 규약 유지).
+//   주의: Sales site 2개 컬럼은 META_DRIVEN_COMBO_COLUMNS 로 넘어가 이 빌더를 더 타지 않는다.
+//     그 @divisionId 는 이제 공용 DataGrid 의 comboParams 가 싣는다(MktFcstGrid). 여기 집합은
+//     되돌릴 때를 위한 기록으로 남긴다 — 이관 컬럼이 줄어들면 다시 유효해진다.
 const DISPLAY_DIVISION_PARAM = new Set(['SCM_SITE_ID', 'SCM_SITE_ID40']);
 
 export const buildGridComboFilter = (
@@ -117,31 +113,14 @@ export interface EditComboConfig {
 }
 
 export const GRID_EDIT_COMBO: Record<string, EditComboConfig> = {
-  // Auth 계열 3종 — SQL 이 @sesUserId 로 UNIT_AUTH/ADMIN/PM_TEAM_MAPPING 을 판정한다.
-  //   @divisionId 토큰은 없고, 행의 Div·Team 좁히기는 GRID_CASCADE_FILTERS 가 클라에서 담당한다.
+  // TEAM_ID — SQL 이 @sesUserId 로 UNIT_AUTH/ADMIN/PM_TEAM_MAPPING 을 판정한다(@divisionId 토큰 없음).
+  //   화면 division 은 이미 조회조건으로 갈려 있어 클라 cascade 규칙은 두지 않는다.
+  //   주의: END_CUSTOMER / END_CUSTOMER40 / SCM_SITE_ID 의 편집 후보는 컬럼 메타 PARAM9 로 이관했다
+  //   (META_DRIVEN_COMBO_COLUMNS). 여기에 다시 넣으면 공용 DataGrid 와 이중 구동이 된다.
   TEAM_ID: { comboId: 'TeambyDivisionAuth', sesUserIdParam: true },
-  END_CUSTOMER: { comboId: 'EndCustomerByDivisionDeptAuth', sesUserIdParam: true },
-  // Div40 — DIVISION_ID='40' 하드코딩 + 파라미터 토큰 없음. 조회 콤보(팀 조인 축소판)와 달리
-  //   편집 후보는 팀 제약 없는 전체 목록이다. CODE/NAME 만 반환 → cascade 는 관대 통과.
-  END_CUSTOMER40: { comboId: 'EndCustomerByDivision40' },
-  // ⚠️ SiteByEndCustomerAuth SQL 에는 @divisionId·@endCustomer 토큰이 없다 — divisionParam 은
-  //   요구대로 싣되 BE 가 무시하고, 실제 좁히기는 GRID_CASCADE_FILTERS.SCM_SITE_ID 가 한다.
-  SCM_SITE_ID: {
-    comboId: 'SiteByEndCustomerAuth',
-    divisionParam: true,
-    sesUserIdParam: true,
-    whenRowFilled: 'END_CUSTOMER',
-  },
-  // 조회는 메타('FCST_TYPE_NOT_ETC' = ETC 제외 목록), 신규행 편집만 'FCST_TYPE'.
-  //   FCST_TYPE SQL 은 WT_INPUT 에서 @sesUserId 의 USER_GR_ID 가 'DM Planner (W/S)' 인지 보고,
-  //   @editModeYn 이 'Y' 일 때만 EDIT_MODE 분기를 켠다(NVL(@editModeYn,'N')='Y').
-  //   여기는 편집 후보 전용 조회라 editModeYn 은 항상 'Y' 로 고정한다 — W/S 여부 판정은 SQL 이
-  //   @sesUserId 로 직접 하므로 wsOnly 게이트는 걸지 않는다(비W/S 는 SQL 이 알아서 일반 목록 반환).
-  FCST_TYPE: {
-    comboId: 'FCST_TYPE',
-    sesUserIdParam: true,
-    fixedParams: { editModeYn: 'Y' },
-  },
+  // FCST_TYPE 은 편집 콤보 스왑을 두지 않는다 — 조회/편집 모두 컬럼 메타(cellCboDataTp =
+  //   'FCST_TYPE_DM')가 준 목록 그대로 쓴다(2026-09-11 요구: "메타대로만"). 신규행 편집을
+  //   'FCST_TYPE'(@sesUserId 권한 판정) 으로 바꿔치기하던 항목을 제거했다.
 };
 
 /**
@@ -149,7 +128,7 @@ export const GRID_EDIT_COMBO: Record<string, EditComboConfig> = {
  * · divisionParam=true → @divisionId (검색 division. 행 Div 가 필요한 콤보는 2-B).
  * · sesUserIdParam=true → @sesUserId. BE(LookupServiceImpl.retrieveCombo)도 세션에서 채워주지만
  *   화면에서 명시적으로 싣는다 — 어느 쪽이 먼저 치환돼도 따옴표 포함이라 문자열 비교가 성립한다.
- * · fixedParams → 고정 토큰(예: FCST_TYPE 의 editModeYn='Y'). 값은 quoteParam 을 거친다.
+ * · fixedParams → 고정 토큰. 값은 quoteParam 을 거친다.
  * · @mnuId 는 조회 콤보와 동일하게 일괄 주입.
  */
 export const buildEditComboFilter = (
@@ -243,22 +222,52 @@ const rowProjectCode = (row?: Record<string, unknown>): string => {
 const rowDivision = (row: Record<string, unknown> | undefined, division: string): string =>
   toCellStr(row?.DIVISION_ID).trim() || division;
 
+// VMI 자동 세팅 — Division 82(ESS) 에서 Sales Site(SCM_SITE_ID) 변경 시 DM_VMI_YN 조회로
+//   VMI_YN / VMI_STD_DIO 를 그 행에 세팅한다 (AS-IS DMF0003_MktFcst.cs L3056~3078
+//   [C20201103-000114]). 등록 SQL(SCM_ADM_CMBO_SQL_M.DM_VMI_YN):
+//     SELECT RTRIM(A.VMI_YN) || '^' || LTRIM(A.ATTRIBUTE5) AS VMI_VAL
+//     FROM SCM_MST_SITE A WHERE A.DIVISION_ID = @PARAM1 AND A.SCM_SITE_ID = @PARAM2
+//   → 응답 VMI_VAL 을 '^' 로 split: [0] = VMI_YN, 전체 문자열 = VMI_STD_DIO (AS-IS 와 동일).
+//   필수: 토큰명은 등록 SQL 실측 그대로 대문자 PARAM1/PARAM2 다 (makeComboQuery 가 @키 를
+//     대소문자 구분 매칭). 소문자로 보내면 '' 치환 → 전건 미매칭.
+export const VMI_LOOKUP_COMBO_ID = 'DM_VMI_YN';
+const VMI_LOOKUP_DIVISIONS: readonly string[] = ['82'];
+
+/** 행의 Division 이 VMI 자동 세팅 대상(82)인가 — AS-IS 는 이 경우에만 VMI 컬럼을 건드린다. */
+export const isVmiLookupDivision = (
+  row: Record<string, unknown> | undefined,
+  division: string
+): boolean => VMI_LOOKUP_DIVISIONS.includes(rowDivision(row, division));
+
+/** VMI 조회 트리거 — Division 이 VMI 대상이고 Sales Site 가 채워졌는지(조회 파라미터 성립). */
+export const isVmiLookupRow = (
+  row: Record<string, unknown> | undefined,
+  division: string
+): boolean => isVmiLookupDivision(row, division) && rowSalesSite(row) !== '';
+
+/** DM_VMI_YN 조회 파라미터 — @PARAM1=Division / @PARAM2=Sales Site. */
+export const buildVmiLookupParam = (
+  row: Record<string, unknown> | undefined,
+  division: string
+): ComboParamMap => ({
+  comboId: VMI_LOOKUP_COMBO_ID,
+  PARAM1: quoteParam(rowDivision(row, division)),
+  PARAM2: quoteParam(rowSalesSite(row)),
+});
+
+/** DM_VMI_YN 응답(VMI_VAL='VMI_YN^STD_DIO') → 세팅할 두 값. 미조회/0건이면 'N'/''. */
+export const parseVmiVal = (vmiVal: string | undefined): { vmiYn: string; stdDio: string } => {
+  const raw = toCellStr(vmiVal);
+  if (raw === '') return { vmiYn: 'N', stdDio: '' };
+  return { vmiYn: raw.split('^')[0], stdDio: raw };
+};
+
 export const ROW_PARAM_EDIT_COMBO: Record<string, RowParamComboConfig> = {
-  // AS_INCOTERMS 는 (division, salesSite) 가 AS_SITE_PLANT 에 있으면 AS 목록, 없으면 일반
-  //   INCOTERMS 목록을 주는 "스위치" 쿼리다. 반환은 CODE/NAME/DISPLAY_SEQ 뿐 — 사이트 구분 컬럼이
-  //   없어 클라 cascade 로는 대체 불가하므로 반드시 파라미터로 보내야 한다.
-  // ⚠️ 토큰명은 SQL 실측 그대로 `division` / `salesSite` (다른 콤보의 divisionId 아님).
-  INCOTERMS: {
-    comboId: 'AS_INCOTERMS',
-    refreshOn: ['DIVISION_ID', ...SALES_SITE_BINDINGS],
-    ready: row => !!rowSalesSite(row),
-    buildParam: (row, division) => ({
-      comboId: 'AS_INCOTERMS',
-      mnuId: quoteParam(MENU_ID),
-      division: quoteParam(rowDivision(row, division)),
-      salesSite: quoteParam(rowSalesSite(row)),
-    }),
-  },
+  // INCOTERMS 는 공용 DataGrid columnMapping 메타 구동으로 이관했다(META_DRIVEN_COMBO_COLUMNS).
+  //   AS_INCOTERMS 스위치 쿼리(그 행의 Div·Sales site 가 AS_SITE_PLANT 에 있으면 AS 목록,
+  //   없으면 일반 목록)는 컬럼 메타 PARAM9='AS_INCOTERMS' + PARAM10='D' +
+  //   PARAM2='DIVISION_ID:divisionId,SCM_SITE_ID:salesSite' 가 그대로 재현한다 —
+  //   여기 있던 buildParam 과 같은 파라미터다. 화면 코드는 이 컬럼 콤보를 일절 건드리지 않는다.
   // MktFcstEditMeasure = MKT_FCST_MEASURE lookup 중 VALID + TMM 제외.
   //   SQL 바인드 실측(2026-08-14): @divisionId / @measure / @scmSiteId / @projectCode / @sesUserId.
   //   division 뿐 아니라 사이트·프로젝트도 "그 행의 값" 이라 행 단위 콤보다.
@@ -284,35 +293,27 @@ export const ROW_PARAM_EDIT_COMBO: Record<string, RowParamComboConfig> = {
   // AS_FROM_SITE = SCM_ADM_LOOKUP_MASTER_DETAIL(LOOKUP_TYPE='AS_SITE_PLANT') 의 AS(비축)향 사이트.
   //   SQL 이 CODE(SEGMENT2)/NAME(SEGMENT1) 만 반환하고 division 은 SEGMENT3 조건으로만 쓴다 —
   //   응답에 division 컬럼이 없어 클라 cascade 로는 못 좁힌다 = 반드시 파라미터로 보내야 한다.
-  //   조건은 `NVL(TRIM(@param1),'-') = '-' OR SEGMENT3 = @param1` 이라 미전송 시 전체 목록이다.
+  //   조건은 `NVL(TRIM(@divisionId),'-') = '-' OR SEGMENT3 = @divisionId` 이라 미전송 시 전체 목록이다.
   //   화면 division 이 아니라 그 행의 Div 를 싣는다 (Div 컬럼이 행 단위 편집 대상이라서).
+  //   주의: 토큰명은 등록 SQL 실측 그대로 `divisionId` 다. param1 로 보내면 SQL 이 @divisionId 를
+  //   '' 로 치환해 필터가 풀리고 전체(-82/-81/-40)가 반환된다(2026-09-03 신규행 전체노출 사고).
   AS_FROM_SITE: {
     comboId: 'AS_FROM_SITE',
     refreshOn: ['DIVISION_ID'],
     buildParam: (row, division) => ({
       comboId: 'AS_FROM_SITE',
       mnuId: quoteParam(MENU_ID),
-      param1: quoteParam(rowDivision(row, division)),
-    }),
-  },
-  // ⭐ [2026-08-15] Sales Site(Div40) — AS-IS spdMain_ComboSelChange L3403·L3419 는 그 행의
-  //   Div40·Customer40 을 실어 `Data.UserSiteByEndCustomer(...)`(= CMBO 'SiteByEndCustomer')를
-  //   다시 호출한다. SQL 의 40 분기는 END_CUSTOMER 가 아니라 `SCM_MST_SITE_ITEM.PROJECT_CODE`
-  //   로 매칭하는데(40 의 Customer40 값 = PROJECT_CODE) **응답에는 PROJECT_CODE 컬럼이 없다**
-  //   = 클라 cascade 로는 대체 불가 → 반드시 파라미터로 보내야 한다.
-  //   (종전: 화면 단위 divisionId 만 싣고 END_CUSTOMER40 ↔ 응답 END_CUSTOMER 로 클라 필터 →
-  //    코드 체계가 달라 END_CUSTOMER 가 빈 사이트만 남는 조용한 축소. 2026-08-15 정정)
-  //   미선택(공란)이면 '' 가 나가고 SQL 이 전체 목록을 준다(`@endCustomer IS NULL OR = ''`).
-  SCM_SITE_ID40: {
-    comboId: 'SiteByEndCustomer',
-    refreshOn: ['DIVISION_ID', 'END_CUSTOMER40'],
-    buildParam: (row, division) => ({
-      comboId: 'SiteByEndCustomer',
-      mnuId: quoteParam(MENU_ID),
       divisionId: quoteParam(rowDivision(row, division)),
-      endCustomer: quoteParam(toCellStr(row.END_CUSTOMER40).trim()),
     }),
   },
+  // Sales Site(Div40 = SCM_SITE_ID40)는 컬럼 메타 PARAM10='D' 재조회형으로 이관했다
+  //   (META_DRIVEN_COMBO_COLUMNS). 공용 DataGrid 의 useRowParamCombos 가 PARAM2
+  //   `DIVISION_ID:divisionId,END_CUSTOMER40:endCustomer` 를 행 값으로 실어 SiteByEndCustomer 를
+  //   행 조합마다 재조회한다 — 여기 있던 buildParam 과 같은 파라미터다(DMF0042 동형).
+  //   AS-IS 근거는 그대로다: spdMain_ComboSelChange L3403·L3419 가 그 행의 Div40·Customer40 을 실어
+  //   `Data.UserSiteByEndCustomer(...)` 를 다시 호출한다. SQL 의 40 분기는 END_CUSTOMER 가 아니라
+  //   `SCM_MST_SITE_ITEM.PROJECT_CODE` 로 매칭하는데 응답에 PROJECT_CODE 가 없어 클라 필터로는
+  //   대체 불가 = 반드시 파라미터로 보내야 한다.
   // ⭐ [2026-08-15] Plant Site(81 전용) — AS-IS `spdMain_CellClick` L6605~6616 [C20200525-000296]
   //   "Plant Site 에 Division, Project, Item 조건 추가" 는 셀에 들어가는 순간 그 행의
   //   Div·Project·Item 으로 `Data.Common(PlantSiteByItem, …)` 를 다시 걸어 후보를 만든다
@@ -344,13 +345,27 @@ export const rowParamComboKey = (binding: string, param: ComboParamMap): string 
 // 3. W/S 분기 보조 콤보 — 편집 후보 필터 / 조건부 편집 판정의 입력
 // ============================================================================
 //   [E20260402-001736] FcstTypeWs = W/S FcstType 4종(SALES_TYPE_CODE2),
-//   AS_FROM_SITE = AS(비축)향 사이트 목록(NAME=사이트, @param1=division).
+//   AS_FROM_SITE = AS(비축)향 사이트 목록(NAME=사이트, @divisionId=division).
 //   용도: MEASURE 편집 후보 필터(§5) / AS_FROM_SITE 조건부 편집.
 //   MktFcst.tsx 도 같은 2종을 조회한다 — 파라미터 규약을 한 곳으로 묶으려 여기서 빌드한다.
+//   주의: 토큰명은 등록 SQL 실측 그대로 `divisionId` 다(param1 아님 — 위 ROW_PARAM_EDIT_COMBO 주석 참조).
 export const buildWsSupportComboFilters = (division: string): ComboFilter[] => [
   { comboId: 'FcstTypeWs', mnuId: quoteParam(MENU_ID) },
-  { comboId: 'AS_FROM_SITE', mnuId: quoteParam(MENU_ID), param1: quoteParam(division) },
+  { comboId: 'AS_FROM_SITE', mnuId: quoteParam(MENU_ID), divisionId: quoteParam(division) },
 ];
+
+// 기본 배분요일(sDefaultDay) 콤보 필터 — AS-IS Data.Common(Type.DefaultBucketDay, division, bucketType).
+//   행 BUCKET 이 비었을 때 주/월→일 분배가 떨어질 요일의 원천(마스터 DEFAULT_BUCKET_DAY).
+//   토큰은 forecast-price 정본과 동일 — divisionId(quoteParam) + bucketType('M'/'W', quoteParam).
+//   @mnuId 는 싣지 않는다(등록 SQL 이 PROGRAM_ID 를 안 쓴다 — forecast-price 실측).
+export const buildDefaultBucketDayFilter = (
+  division: string,
+  bucketType: string
+): ComboFilter => ({
+  comboId: 'DefaultBucketDay',
+  divisionId: quoteParam(division),
+  bucketType: quoteParam(bucketType),
+});
 
 // ============================================================================
 // 4. Grid 내 cascade (hook #59 §5-G — DMF0020 표준 이식)
@@ -372,34 +387,58 @@ export interface CascadeRule {
   strict?: boolean;
 }
 
-export const GRID_CASCADE_FILTERS: Record<string, CascadeRule[]> = {
-  // 편집 콤보(EndCustomerByDivisionDeptAuth)가 DEPT_ID 를 반환 → Div + Team 두 단계로 좁힌다.
-  //   Team 미선택이면 관대 통과 = Div 만 적용.
-  END_CUSTOMER: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'TEAM_ID', comboKey: 'DEPT_ID' },
-  ],
-  // 조회 콤보(SiteByEndCustomer)·편집 콤보(SiteByEndCustomerAuth) 둘 다 DIVISION_ID/END_CUSTOMER
-  //   를 반환해 규칙이 양쪽에 그대로 먹는다. 행 End Customer 공란(신규행 첫 상태)이면 Div 만 적용.
-  SCM_SITE_ID: [
-    { rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' },
-    { rowKey: 'END_CUSTOMER', comboKey: 'END_CUSTOMER', strict: true },
-  ],
-  // Div40 변형 — END_CUSTOMER40(값=PROJECT_CODE) / SCM_SITE_ID40. 콤보에 키 없으면 관대 통과.
-  END_CUSTOMER40: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
-  // ⚠️ [2026-08-15] SCM_SITE_ID40 의 고객 좁히기는 **서버(@endCustomer)** 가 한다
-  //   (ROW_PARAM_EDIT_COMBO.SCM_SITE_ID40 — SQL 40 분기는 SITE_ITEM.PROJECT_CODE 매칭).
-  //   여기에 END_CUSTOMER40 ↔ 응답 END_CUSTOMER 규칙을 두면 코드 체계가 달라 정상 후보까지
-  //   지워진다(조용한 축소). Div 규칙만 남긴다.
-  SCM_SITE_ID40: [{ rowKey: 'DIVISION_ID', comboKey: 'DIVISION_ID' }],
-};
+/**
+ * 화면 코드가 드는 cascade 표. 현재 등록 컬럼 없음 — 4개 컬럼(END_CUSTOMER / END_CUSTOMER40 /
+ * SCM_SITE_ID / SCM_SITE_ID40) 의 좁힘을 컬럼 메타 PARAM2 로 이관했기 때문이다
+ * (META_DRIVEN_COMBO_COLUMNS). 비어 있어도 지우지 않는다 — 메타로 표현할 수 없는 cascade
+ * (콤보 응답 컬럼명 ≠ 행 컬럼명 / 콤보 쪽 공란 관대 통과 / strict 구분)가 다시 필요해지면
+ * 여기 한 줄로 되살린다. 소비처는 MktFcstGrid 의 beginningEdit·cellEditEnded 와 comboDebug.
+ *
+ * 메타 PARAM2 와 규칙이 다르다는 점에 주의 — filterComboRowsByRowItem(메타)은 "콤보 쪽 값이
+ * 비면 통과" 가 없고 strict 구분도 없다. 이 표로 되돌릴 때 그 차이를 먼저 확인할 것.
+ */
+export const GRID_CASCADE_FILTERS: Record<string, CascadeRule[]> = {};
+
+/**
+ * 공용 DataGrid columnMapping 메타(PARAM2/9/10)가 콤보를 전담하는 컬럼 (2026-09-03 이관).
+ *
+ * 이 집합의 컬럼은 화면 커스텀 콤보 machinery 를 **한 곳도** 타지 않는다 — MktFcstGrid 의
+ * comboColumns(조회 dataMap 생성) · formatItem 재포맷 · beginningEdit 스왑 · cellEditEnded 원복 ·
+ * 붙여넣기 dataMap 재부착이 전부 이 집합을 제외한다. 부분 제외(설정 표에서만 빼기)로는
+ * 화면과 공용 DataGrid 가 같은 col.dataMap 을 번갈아 쓰는 이중 구동이 남는다(2026-09-03 회귀 원인).
+ *
+ * 컬럼 메타 등록값 (SCM_MST_SHEET_COLUMNS, PROGRAM_ID='DMF0003'):
+ *   END_CUSTOMER    PARAM9='EndCustomerByDivisionDeptAuth'
+ *                   PARAM2='DIVISION_ID:DIVISION_ID,TEAM_ID:DEPT_ID'
+ *   END_CUSTOMER40  PARAM9='EndCustomerByDivision40'  (편집 콤보가 CODE/NAME 만 반환 → PARAM2 없음)
+ *   SCM_SITE_ID     PARAM9='SiteByEndCustomerAuth'
+ *                   PARAM2='DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER'
+ *   SCM_SITE_ID40   PARAM10='D' + PARAM2='DIVISION_ID:divisionId,END_CUSTOMER40:endCustomer'
+ *   INCOTERMS       PARAM9='AS_INCOTERMS' + PARAM10='D'
+ *                   PARAM2='DIVISION_ID:divisionId,SCM_SITE_ID:salesSite'  (그 행의 Div·Sales site)
+ *
+ * INCOTERMS 는 2026-09-29 이관 — AS_INCOTERMS 는 (division, salesSite) 가 AS_SITE_PLANT 에 있으면
+ *   AS 목록, 없으면 일반 INCOTERMS 목록을 주는 "스위치" 쿼리다. 그 행의 Div·Sales site 를 PARAM2 로
+ *   실어 재조회(PARAM10='D')하므로 예전 ROW_PARAM_EDIT_COMBO.INCOTERMS 의 행 파라미터를 그대로 재현한다.
+ *
+ * 하위 셀 clear(GRID_CASCADE_CLEAR)는 이관 대상이 아니다 — 모달 컬럼(Project/Model)까지 비워야
+ * 해서 콤보 메타가 표현할 수 있는 범위를 넘는다. 그대로 화면 코드가 갖는다(INCOTERMS 도 Sales site
+ * 변경 시 clear 되므로 GRID_CASCADE_CLEAR 에 남는다 — 콤보 구동과 별개 축이다).
+ */
+export const META_DRIVEN_COMBO_COLUMNS: ReadonlySet<string> = new Set([
+  'END_CUSTOMER',
+  'END_CUSTOMER40',
+  'SCM_SITE_ID',
+  'SCM_SITE_ID40',
+  'INCOTERMS',
+]);
 
 /**
  * 상위 콤보 값 변경 시 하위 셀 clear 체인 (같은 INSERT_GROUP 형제 행 포함 — DMF0020 동일).
  * 신규행에서 상위 값을 바꾸면 그 값에 종속된 하위 값은 유효하지 않게 되므로 비운다.
  * 목록은 2026-08-14 사용자 확정 스펙 그대로다 — 전이(transitive) 전파를 하지 않는다.
  *   End Customer 변경 -> Sales Site / Project Code / Model
- *   Sales Site  변경 -> Project Code / Model / Fcst Type / AS From Site
+ *   Sales Site  변경 -> Project Code / Model / Fcst Type / AS From Site / Incoterms
  *   Project Code 변경 -> Model
  * 즉 End Customer 를 바꿔도 Fcst Type 은 남는다(Sales Site 의 하위이지만 스펙에 없다).
  * 다만 AS_FROM_SITE 만은 예외로, 값이 남으면 잠긴 셀에 못 지우는 값이 갇히므로
@@ -408,10 +447,10 @@ export const GRID_CASCADE_FILTERS: Record<string, CascadeRule[]> = {
  */
 export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
   END_CUSTOMER: ['SCM_SITE_ID', 'PROJECT_CODE', 'ITEM_ID'],
-  SCM_SITE_ID: ['PROJECT_CODE', 'ITEM_ID', 'FCST_TYPE', 'AS_FROM_SITE'],
+  SCM_SITE_ID: ['PROJECT_CODE', 'ITEM_ID', 'FCST_TYPE', 'AS_FROM_SITE', 'INCOTERMS'],
   PROJECT_CODE: ['ITEM_ID'],
   END_CUSTOMER40: ['SCM_SITE_ID40', 'ITEM_ID40'],
-  SCM_SITE_ID40: ['ITEM_ID40', 'FCST_TYPE', 'AS_FROM_SITE'],
+  SCM_SITE_ID40: ['ITEM_ID40', 'FCST_TYPE', 'AS_FROM_SITE', 'INCOTERMS'],
 };
 
 /**
@@ -421,7 +460,7 @@ export const GRID_CASCADE_CLEAR: Record<string, readonly string[]> = {
 const CASCADE_COMPANION_COLS: Record<string, readonly string[]> = {
   ITEM_ID: ['ITEM_NAME', 'ITEM_TYPE', 'NICK_NAME'],
   ITEM_ID40: ['ITEM_NAME', 'ITEM_TYPE', 'NICK_NAME'],
-  PROJECT_CODE: ['PROJECT_NAME', 'PROJECT_OWNER'],
+  PROJECT_CODE: ['PROJECT_NAME', 'PROJECT_STATUS', 'PROJECT_OWNER'],
 };
 
 /**
@@ -430,16 +469,27 @@ const CASCADE_COMPANION_COLS: Record<string, readonly string[]> = {
  * 호출 측이 "값이 실제로 바뀌었는지" 를 먼저 판정한다 — 같은 값 재선택으로 하위가 날아가면 안 된다.
  * keepCols = 지우지 않을 컬럼. 붙여넣기처럼 상위와 하위 값이 한 번에 들어오는 경로에서
  * 방금 붙여넣은 하위 값을 도로 지우지 않도록 호출 측이 넘긴다.
+ * binding 자신의 동반 표시 컬럼(CASCADE_COMPANION_COLS[binding])도 함께 지운다 — Project Code 를
+ * 비우거나 바꾸면 그 코드가 채웠던 Project Name/Status/Owner 가 옛 값으로 남으면 안 된다
+ * (팝업 선택 경로는 방금 세팅한 값을 keepCols 로 보호한다). AS-IS 는 코드 변경 시 동반값을 재세팅한다.
  */
 export const applyCascadeClear = (
   rec: Record<string, unknown>,
   binding: string,
   keepCols: readonly string[] = []
 ): void => {
+  // binding 자신의 동반 표시 컬럼 clear (코드 자체가 바뀐 경우).
+  for (const c of CASCADE_COMPANION_COLS[binding] ?? []) {
+    if (keepCols.includes(c)) continue;
+    rec[c] = '';
+  }
   for (const k of GRID_CASCADE_CLEAR[binding] ?? []) {
     if (keepCols.includes(k)) continue;
     rec[k] = '';
-    for (const c of CASCADE_COMPANION_COLS[k] ?? []) rec[c] = '';
+    for (const c of CASCADE_COMPANION_COLS[k] ?? []) {
+      if (keepCols.includes(c)) continue;
+      rec[c] = '';
+    }
   }
 };
 
@@ -503,104 +553,16 @@ export const filterComboRowsByRow = (
 };
 
 // ============================================================================
-// 5. MEASURE 편집 후보 필터 (행 Sales site 축 우선 / W/S 권한 축은 사이트 미선택 행에서만)
+// 5. MEASURE / FCST Type — 화면단 강제 없음 (메타대로만)
 // ============================================================================
-//   좁히는 축은 두 개뿐이다 — 그 행의 Sales site 가 무엇인지(미선택 / AS(비축)향 / 일반)와
-//   로그인 계정의 W/S Planner 여부(store wsPlannerYn). 나머지는 콤보(MktFcstEditMeasure)
-//   응답 그대로 다 보여준다 — 후보 축소는 이미 SQL 이 그 행의 division·사이트·프로젝트로 하고 있다.
+//   MEASURE 신규행 편집 후보는 화면단 강제(Sales site·W/S 권한에 따른 1종 고정 / AS_In_Req 제거)를
+//     두지 않는다 — 조회/편집 모두 콤보(MktFcstEditMeasure)가 그 행의 division·사이트·프로젝트로
+//     좁혀 준 목록 그대로 쓴다(2026-09-15 요구: "measure 컬럼 신규행은 메타대로 진행 — UI 하드코딩 제거").
+//     이전의 filterMeasureEditRows(규칙표 2·3·4열: 사이트 축 1종 고정 + 비W/S AS_In_Req 제거)와
+//     짝이던 값 강제(cellEditEnded)까지 함께 제거했다. FCST_TYPE 을 메타대로만 정리한 것과 같은 방향.
 //
-//   2026-08-17~18 사용자 규칙표(사용자 그룹 x Measure 목록) 기준 — 사이트 축이 권한 축보다 우선:
-//     · AS 사이트 행 (그룹 무관)   -> AS_In_Req 1종    (규칙표 3열. .cs 1-c)
-//     · 일반 사이트 행 (그룹 무관) -> MKT_FCST_RP 1종  (규칙표 4열. .cs 1-c)
-//     · 사이트 미선택 + W/S        -> 콤보 응답 그대로  (AS_In_Req 를 제거하지 않는 유일한 그룹)
-//     · 사이트 미선택 + 비W/S      -> AS_In_Req 제거    (규칙표 2열. .cs 1-a/1-b)
-//
-//   권한 축(wsPlanner)이 결과를 가르는 자리는 "사이트를 아직 안 고른 행" 하나뿐이다 — 곧 규칙표
-//     2열 "신규 행 최초 Measure 목록"이다. 사이트를 고르는 순간 DM Planner / DM ADMIN /
-//     SCP Planner / 그 외 전부 같은 1종이 된다(규칙표 비고 "Site 변경 후 필터에는 그룹 조건 없음").
-//
-//   이력 — .cs 1-c(사이트로 measure 1종 고정)는 2026-08-10 요구로 전면 제거했다가("사이트를 고르는
-//     순간 다른 measure 를 못 쓰게 되는 게 현행 업무와 맞지 않는다") 2026-08-14 에 AS 사이트 쪽
-//     절반만 W/S 한정으로 복원, 2026-08-17 에 그 W/S 한정 조건 해제, 2026-08-18 에 규칙표 4열대로
-//     일반 사이트 쪽 절반까지 되살렸다 — 2026-08-10 결정은 사용자 지시로 뒤집혔고 .cs 1-c 는 전체가
-//     다시 살아 있다.
-//   1-a/1-b(비W/S 후보에서 AS_In_Req 제외)는 2026-08-14 제거 -> 2026-08-17 재적용. 걷어냈던 계기는
-//     "비W/S 로 82 AS 사이트 행을 열었더니 후보가 1건으로 줄더라"였는데, 규칙표는 그 케이스를
-//     AS_In_Req 1건으로 규정한다 — 줄어드는 것 자체가 아니라 남는 값이 MKT_FCST_RP 였던 게 문제였다.
-const MEASURE_AS_IN_REQ = AS_SITE_MEASURE;
-const MEASURE_GENERAL_SITE = INSERT_DEFAULT_MEASURE;
-
-export const filterMeasureEditRows = ({
-  src,
-  wsPlanner,
-  asBoundRow = false,
-  siteSelected = false,
-}: {
-  src: Record<string, unknown>[];
-  wsPlanner: boolean;
-  /** 행의 Sales site 가 비축향(AS) 사이트인가 — MktFcstGrid.isAsBoundRow 판정 결과. */
-  asBoundRow?: boolean;
-  /** 행의 Sales site 가 입력되어 있는가 — 미입력(신규행 첫 상태)과 일반 사이트를 가른다. */
-  siteSelected?: boolean;
-}): Record<string, unknown>[] => {
-  // 아래 어느 분기든 결과가 0건이면 호출 측(swapEditCandidates)이 필터 전 목록으로 되돌린다
-  //   (선택지 전무 방지). 콤보 응답에 해당 measure 가 없으면 잠금이 조용히 풀린다는 뜻이므로,
-  //   1종으로 안 잠기면 콤보 응답부터 확인할 것.
-  //   필수: 값 셋팅(MktFcstGrid.cellEditEnded)이 같은 조건으로 MEASURE 값도 바꾼다. 두 곳의 조건은
-  //   항상 같이 움직여야 한다 — 값만 강제하고 목록을 열어 두면 곧바로 다른 값으로 되돌릴 수 있다.
-
-  // 규칙표 3열(AS Site 선택 후) — 그룹 무관, AS 사이트 행은 후보를 AS_In_Req 1종으로 고정한다(.cs 1-c).
-  //   사이트 축이 권한 축보다 먼저다: 비W/S 라도 AS 사이트를 고르면 아래 분기로 내려가지 않는다.
-  if (asBoundRow) {
-    return src.filter(cr => toCellStr(cr.CODE).trim() === MEASURE_AS_IN_REQ);
-  }
-  // 규칙표 4열(비-AS Site 선택 후) — 그룹 무관, 일반 사이트 행은 MKT_FCST_RP 1종으로 고정한다(.cs 1-c).
-  //   2026-08-18 재적용. AS 사이트 행은 위 분기가 이미 가져갔으므로 여기 오는 "사이트가 채워진 행"은
-  //   전부 일반(고객향) 사이트다.
-  if (siteSelected) {
-    return src.filter(cr => toCellStr(cr.CODE).trim() === MEASURE_GENERAL_SITE);
-  }
-  // 규칙표 2열(신규 행 최초 목록 = 사이트 미선택) — W/S Planner 가 아닌 그룹(DM Planner / DM ADMIN /
-  //   SCP Planner / 그 외)은 AS_In_Req 를 후보에서 뺀다. AS_In_Req 는 비축향 업무 전용 measure 라
-  //   사이트를 고르기 전 목록에 노출되면 안 된다.
-  //   신규행은 Insert 직후 Sales site 가 공란이라 이 분기가 곧 "최초 목록"이다.
-  //   주의: 콤보 응답이 AS_In_Req 하나뿐이면 제거 후 0건이 되어 위 폴백이 원본을 되살린다.
-  //   그 경우 제거가 안 걸린 것처럼 보이는 게 정상이다.
-  if (!wsPlanner) {
-    return src.filter(cr => toCellStr(cr.CODE).trim() !== MEASURE_AS_IN_REQ);
-  }
-  return src;
-};
-
-// ============================================================================
-// 5-B. FCST Type division 제약 (Div82 W/S 제외 — W/S Planner 는 예외)
-// ============================================================================
-//   통합테스트 1st No.54 — AS-IS 에는 없던 신규 제약. 82(ESS)는 W/S 판매 개념이 없어 WS·WSF 를
-//   고를 수 없어야 한다. 81* 은 영향 없음(콤보 응답 그대로).
-//   콤보 SQL(FCST_TYPE / FCST_TYPE_NOT_ETC)을 고치면 이 화면 밖까지 영향이 가므로 화면단 필터로 둔다.
-//   2026-08-17 요구: W/S 권한 계정(store wsPlannerYn = 'DM Planner (W/S)' 그룹)은 82 에서도
-//     WS·WSF 를 본다. 제약의 취지가 "82 에 W/S 가 없다"가 아니라 "W/S 를 다루지 않는 사용자에게
-//     안 보인다"이므로, 권한 축이 division 축보다 우선한다.
-const FCST_TYPE_DIV82_BLOCKED: readonly string[] = ['WS', 'WSF'];
-
-/**
- * FCST Type 후보에서 division 제약분 제거 — 조회 표시 dataMap 과 편집 후보 양쪽이 같은 함수를 쓴다.
- * 한쪽만 걸면 편집에서는 못 고르는데 조회 표시에는 남거나(그 반대) 하는 불일치가 생긴다.
- * wsPlanner=true 면 division 무관하게 원본 그대로 — 82 에서도 WS·WSF 를 고를 수 있다.
- * 대상 컬럼/division 이 아니면 원본 배열을 그대로 돌려준다(참조 유지 — dataMap 재생성 억제).
- * 필수: wsPlanner 는 store 적재가 늦으면 false 로 먼저 읽힌다 — 호출 측은 이 값이 바뀌면
- *   dataMap 을 다시 만들어야 한다(MktFcstGrid comboSig 에 wsPlannerYn 포함).
- */
-export const filterFcstTypeRows = (
-  src: Record<string, unknown>[],
-  binding: string,
-  division: string,
-  wsPlanner: boolean
-): Record<string, unknown>[] => {
-  if (wsPlanner) return src;
-  if (binding !== 'FCST_TYPE' || division.trim() !== DIVISION.ESS) return src;
-  return src.filter(cr => !FCST_TYPE_DIV82_BLOCKED.includes(toCellStr(cr.CODE).trim()));
-};
+//   FCST Type 은 화면단 강제(편집 콤보 스왑 / Div82 WS·WSF 제외)를 두지 않는다 — 조회/편집 모두
+//     컬럼 메타가 준 목록(FCST_TYPE_DM) 그대로 쓴다(2026-09-11 요구: "메타대로만").
 
 // ============================================================================
 // 6. dataMap / 재생성 시그니처 헬퍼

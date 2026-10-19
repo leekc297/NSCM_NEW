@@ -30,6 +30,10 @@ export enum SHEETS {
   //   화면 코드가 직접 참조하진 않지만 BTN_MPG(titleSet SEARCH/SAVE) 배선의 소유 시트이므로 등재한다
   //   (미등재 시 배선 체커 L7 이 "FE SHEETS 미사용" 으로 잡는다. sales-plan/sales-reports 등 동일 규약).
   TITLE_SET = 'titleSet',
+  // 버튼 활성화 권한 — PKG_DMF0082.P_DMF0082_GET_BUTTON_AUTH (3 IN + buttonAuth/measureAuth 커서).
+  //   화면 오픈·Division 변경 시 조회해 Insert/Delete/Save/Price Batch/Excel 버튼 노출을 정한다.
+  //   DB 배선 = BTN_MPG(buttonAuth SEARCH) / API_M(DMF0082_buttonAuth_SEARCH) / PROC_M (2026-10-02).
+  BUTTON_AUTH = 'buttonAuth',
 }
 
 /**
@@ -48,22 +52,57 @@ export enum RESPONSE_SET {
 
 /**
  * Excel 업로드 — SCM_ADM_EXCEL_COLUMNS PROGRAM_ID='DMF0082' SHEET_NAME='FcstNPrice' 실측
- * (HEADER_CONTENT '|' 구분 23 헤더 — Error Detail grid 라벨. 기이관 확인 2026-07-12).
+ * (HEADER_CONTENT '|' 구분 19 토큰 — Error Detail grid 라벨. 사내 실측 2026-09-23).
+ *
+ * ⚠ [E20260923-XLSUPHDR] 이 배열은 **HEADER_CONTENT 와 1:1 순서로 정확히 일치**해야 한다.
+ *   FcstUploadModal 은 `ATTRIBUTE{n}` → `UPLOAD_HEADERS[n-1]` 로만 라벨을 붙이므로,
+ *   어긋나면 Error Detail 에 **양식에 없는 컬럼명**이 뜨고(구 10컬럼 잔존 사고 2026-09-23 —
+ *   Sales Site/Incoterms/FCST Type/Customs Handbook/Cell Prod Site/Measure 가 표시됨),
+ *   라벨이 모자란 뒤쪽 속성은 `ATTRIBUTE11` 같은 원시 키로 노출된다.
+ *   2026-09-21 [E20260921-XLSFORMASIS] 로 양식이 AS-IS DMF0020 파리티(19컬럼)로 바뀌었는데
+ *   이 상수만 구 판본(10컬럼)으로 남아 있었다.
+ *   HEADER_CONTENT 변경 시 이 배열도 **반드시 동시 개정**한다.
  */
 export const UPLOAD_SHEET = 'FcstNPrice' as const;
+// export const UPLOAD_HEADERS = [
+//   'Div',
+//   'End Customer',
+//   'Sales Site',
+//   'Model',
+//   'Incoterms',
+//   'FCST Type',
+//   'Customs Handbook',
+//   'Cell Prod Site',
+//   'Currency',
+//   'Measure',
+//   // [E20260820-XLSWEEKLY] 기간 토큰 M4~M16 제거 — 기간 컬럼 = 주 시작일(YYYYMMDD) 동적 헤더
+//   //   (BE FileServiceImpl 1단 날짜헤더 인식 · EXCEL_COLUMNS HEADER_CONTENT 동기 개정 20260820).
+// ] as const;
+
+// Error Detail 라벨을 Excel Form(Sales Price Template) 헤더와 동일하게 맞춘다.
+// 순서는 HEADER_CONTENT 와 같아야 한다 (ATTRIBUTEn 과 1:1).
 export const UPLOAD_HEADERS = [
+  // 식별 6컬럼 — P_DMF0082_EXCEL_UPLOAD 의 ATTRIBUTE1~6
   'Div',
+  'Team',
   'End Customer',
-  'Sales Site',
-  'Model',
-  'Incoterms',
-  'FCST Type',
-  'Customs Handbook',
-  'Cell Prod Site',
+  'Project Code',
   'Currency',
-  'Measure',
-  // [E20260820-XLSWEEKLY] 기간 토큰 M4~M16 제거 — 기간 컬럼 = 주 시작일(YYYYMMDD) 동적 헤더
-  //   (BE FileServiceImpl 1단 날짜헤더 인식 · EXCEL_COLUMNS HEADER_CONTENT 동기 개정 20260820).
+  'Model',
+  // 기간 13컬럼 — ATTRIBUTE7~19 (M0 = 당월, M12 = 당월+12)
+  'M0',
+  'M1',
+  'M2',
+  'M3',
+  'M4',
+  'M5',
+  'M6',
+  'M7',
+  'M8',
+  'M9',
+  'M10',
+  'M11',
+  'M12',
 ] as const;
 
 export const TEMPLATE_EXCEL_PREFIX = 'DMF0082_Template';
@@ -89,8 +128,11 @@ export const BUCKET_FALLBACK = [
  * - `INCOTERMS`  : AS-IS `GetLookupValues("INCOTERMS","ALL","Y")` = `ATTRIBUTE2='Y'`(EDIT_YN) 한정.
  *                  표시용 `Incoterms` 는 VALID 16종 전부라 폐지 6종까지 선택 가능했다
  *                  (AS-IS 수정건 [E20250919-001699] 회귀분).
- * - `DOM_EXP`    : AS-IS `UP_FX_GetCommonDataList_DM @Code='DM_CUSTOMS_HANDBOOK'` = lookup
- *                  `DM_CUSTOMS_HANDBOOK_40`. 표시용 `DOM_EXP`(lookup 'DOM/EXP')는 코드 도메인이 더 넓다.
+ * - `DOM_EXP`    : ⭐ [2026-09-16 사용자 지정] div 40 전용 `CustomsHandbook`(lookup
+ *                  `DM_CUSTOMS_HANDBOOK_40` = 'E' 단독) 스왑을 **제거**했다. AS-IS 는 40 을 'E' 로만
+ *                  큐레이션했으나(§divisions 문단 참고), 재발 버그 확인 후 division 40 도 D·E 둘 다
+ *                  보이도록 권한/큐레이션을 무시하기로 결정 — 이 맵에서 빠지면 81/82 와 동일하게
+ *                  표시용 `DOM_EXP`(lookup 'DOM/EXP' = D·E 전체, division 무관)만 쓴다.
  *
  * ⛔ `TEAM_ID` 는 **대상 아님**(2026-08-08 판정). AS-IS 는 `Data.UserTeamByDivisionAuth`(권한 4분기)로
  *   셀 콤보를 구성하지만, TO-BE 는 TEAM_ID 를 저장하지 않는다 — `PKG_DMF0082.P_DMF0082_SAVE_MAIN_DATA`
@@ -100,12 +142,12 @@ export const BUCKET_FALLBACK = [
  *   빈 콤보가 된다. → 표시용 `DeptId` 유지.
  *
  * ⭐ `divisions` — **AS-IS 가 적용하던 범위에만 적용한다**(2026-08-08 원장 실측 근거).
- *   AS-IS DMF0082 는 division 40 전용 화면이었고, INCOTERMS EDIT_YN / DM_CUSTOMS_HANDBOOK_40 은
- *   40 을 전제로 큐레이션된 목록이다. TO-BE 확장분(81/82)에 그대로 걸면 **실제로 쓰는 코드가 막힌다**:
+ *   AS-IS DMF0082 는 division 40 전용 화면이었고, INCOTERMS EDIT_YN 은 40 을 전제로 큐레이션된
+ *   목록이다. TO-BE 확장분(81/82)에 그대로 걸면 **실제로 쓰는 코드가 막힌다**:
  *     · 81 원장 INCOTERMS 76.9만 행 중 14.9만(19%)이 EDIT_YN='N' (Z02 14.4만 · Z01 · Z04 · A01 · DAT)
- *     · DOM_EXP: 40 은 'E' 뿐이지만 81 은 'D' 1.7만 행, 82 는 'D' 2,034 행 보유
  *   → 40 만 AS-IS 큐레이션 적용, 81/82 는 표시용 전체 목록 유지(확장 영역 = AS-IS 규칙 부재).
  *   권한 필터(TEAM_ID)는 코드 큐레이션이 아니라 사용자 권한이므로 전 division 적용.
+ *   DOM_EXP 는 위 사유로 2026-09-16 이 맵에서 제거 — division 무관 표시용 목록(D·E)을 그대로 쓴다.
  */
 /**
  * ⭐ [2026-08-21 사용자 지정] **편집 콤보 ID 의 원천은 메타 `ATTRIBUTE9`** 다.
@@ -133,7 +175,8 @@ export const GRID_EDIT_COMBO: Record<
   { divisionParam?: boolean; rowFilterKey?: string; divisions?: string[] }
 > = {
   INCOTERMS: { divisions: ['40'] },
-  DOM_EXP: { divisions: ['40'] },
+  // DOM_EXP(Customs Handbook) — [2026-09-16] div 40 전용 'E' 단독 큐레이션 제거 (사용자 지정,
+  //   권한/AS-IS 큐레이션 무시하고 D·E 둘 다 노출). 맵에서 빠지면 표시용 콤보(D·E, division 무관)로 대체.
   // [No.64 2026-08-14] End Customer — 표시용 메타 콤보는 **전 division 합집합**(CODE→NAME 매핑 보존)이라
   //   그대로 두면 81 로 조회해도 40 의 End Customer(예: 'AJ상사')를 고를 수 있다.
   //   ⚠ 원인은 FE 가 아니라 메타였다: `FcstNPrice.END_CUSTOMER` 가 CMBO `EndCustomerByDivision40`
@@ -215,8 +258,11 @@ export const MSG = {
   VERSION_MAX: 'MSG00255', // 버전은 최대 2개까지 선택 가능합니다. (metal-link/DMF0020 동일 키 재사용)
   EDIT_AFTER_SEARCH: 'MSG00662', // 조회 후 수정모드로 가능합니다. (AS-IS MSG00259)
   DIVISION_NO_AUTH: 'MSG00667', // [신규] 권한을 가진 Division 이 없습니다. (AS-IS MSG00097)
-  EDIT_MODE_NO_ACTION: 'MSG00668', // [신규] Edit Mode 에서는 수행할 수 없습니다. (AS-IS MSG00142)
-  EDIT_MODE_NO_INPUT: 'MSG00669', // [신규] 수정모드에서는 입력할 수 없습니다. (AS-IS MSG00408)
+  // pending(미저장 변경분) 차단 문구 통일 (2026-09-03 사용자 지시) — 변경 중인 데이터가 있어
+  //   팝업 진입/일괄입력이 안 되는 상황을 한 코드로. sales-reports/business-plan 선례(PENDING_BLOCK)와 동일.
+  //   MSG00680: 변경 중인 데이터가 있어 수행할 수 없습니다. 저장 또는 취소 후 다시 시도해 주세요.
+  EDIT_MODE_NO_ACTION: 'MSG00680', // (구 MSG00668, AS-IS MSG00142) pending 차단으로 통일
+  EDIT_MODE_NO_INPUT: 'MSG00680', // (구 MSG00669, AS-IS MSG00408) pending 차단으로 통일
   QTY_PRICE_REQUIRED: 'MSG00670', // [신규] 추가된 행에 수량/가격 미입력 (AS-IS MSG00449)
   MEASURE_NOT_EDITABLE: 'MSG00671', // [신규] 수정할 수 없는 메져입니다. (AS-IS MSG00464)
   // [E20260826-AUTHVIEW] SCP Planner 시간창 밖 편집 시도 안내 — AS-IS DMF0003 EditButton L856 동코드 재사용
@@ -259,3 +305,16 @@ export const EXCHANGE_RATE_COLUMNS: ExchangeRateColumnMeta[] = [
   { key: 'CURRENCY', header: 'Currency', width: 70, align: 'C' },
   { key: 'UNIT_CURRENCY', header: 'Unit', width: 50, align: 'C' },
 ];
+
+/**
+ * ExchangeRateModal 맨 오른쪽(월 컬럼 뒤) 조회 전용 컬럼.
+ * 행(Div/Currency/Unit)의 월 데이터 중 가장 최근에 수정된 월의 수정자/수정일시를 보여준다.
+ * 틀고정 대상이 아니므로 EXCHANGE_RATE_COLUMNS 와 분리한다.
+ */
+export const EXCHANGE_RATE_TRAILING_COLUMNS: ExchangeRateColumnMeta[] = [
+  { key: 'LAST_UPDATED_BY', header: 'Updated By', width: 90, align: 'C' },
+  { key: 'LAST_UPDATE_DATE', header: 'Update Date', width: 130, align: 'C' },
+];
+
+/** Excel Form 전용 컬럼 메타 시트. */
+export const TEMPLATE_META_SHEET = 'Sales Price Template';

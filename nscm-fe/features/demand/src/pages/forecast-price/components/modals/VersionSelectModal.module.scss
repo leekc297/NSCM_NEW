@@ -11,6 +11,8 @@
 }
 
 .gridWrapper {
+  display: flex;
+  flex-direction: column;
   position: relative;
   // min-height:0 = flex 자식 축소 허용 → wijmo grid bounded viewport → 세로 스크롤바
   flex: 1 1 auto;
@@ -31,4 +33,12 @@
   justify-content: flex-end;
   gap: 8px;
   flex: 0 0 auto;
+}
+
+// Div 필드 전용 — commonStyles.formItem 의 라벨 칼럼(minmax(70px,140px))을 "Div." 텍스트가
+//   겨우 들어가는 44px 까지 좁혀 드롭다운 박스(auto 칼럼) 쪽에 폭을 최대한 돌려준다. 그리드 칸수
+//   (Grid size)는 그대로 — Period/Day·Week/Description 배분·안전폭에는 영향 없음, 라벨만 더 좁힘.
+//   body 접두 — common-styles.module.scss 의 `body .formItem` 과 동일 특이도로 맞춰 확실히 덮어쓴다.
+body .divFormItem {
+  grid-template-columns: 60px auto;
 }

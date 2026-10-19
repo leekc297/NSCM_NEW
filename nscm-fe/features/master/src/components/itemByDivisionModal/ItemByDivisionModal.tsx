@@ -1,11 +1,22 @@
-import { CellType, type FlexGrid } from '@mescius/wijmo.grid';
+/**
+ * Model/Item by Division 공용 팝업 (AS-IS DM0002_ItembyDivisionPopup(Ex), 20+ 화면 공용).
+ *
+ * 주의: MaterialByDivisionModal 과 서로 바꿔 쓰지 말 것. 겉모습은 같은 "Division 스코프 선택 팝업"
+ *   이지만 호출 SP·조회조건·그리드 컬럼이 다르다. 잘못 쓰면 에러 없이 다른 목록이 나온다.
+ *   화면 변환 시 필드명(txtItemId)·모양으로 추정하지 말고 AS-IS 버튼 핸들러가 실제로 new 하는
+ *   팝업 클래스명으로 고른다:
+ *     new DM0002_ItembyDivisionPopup(Ex)  -> ItemByDivisionModal     (menuId COM0008)  [이 파일]
+ *     new SCM0002_MaterialByDivisionPopup -> MaterialByDivisionModal (menuId COM0013)
+ */
+import { CellType, HeadersVisibility, type FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { ComboResponse, RawFlexGridColumnConfig } from '@foundation/models';
-import { GridUtils } from '@foundation/utils';
-import { CustomDropdown, SearchArea, DataGrid, CustomDialog } from '@shared/components';
+import { GridUtils, buildNoColumn, withRowNo } from '@foundation/utils';
+import { CustomDropdown, SearchArea, DataGrid, CustomDialog, ResultArea } from '@shared/components';
 import { useTabComboQueries, useTabProcQuery } from '@shared/hooks';
-import { Button, FormItem, InputField } from '@shared/lges';
+import { Button, FormItem, InputField, ProgressIndicator } from '@shared/lges';
 import { ControlConfirmIcon } from '@shared/lges-icons';
 import { Grid } from '@shared/mui';
 
@@ -22,6 +33,8 @@ import {
   ITEM_TYPE_ALL,
   MODAL_ITEM_BY_DIVISION,
   MODAL_SHEET_ITEM_BY_DIVISION,
+  MODAL_SHEET_ITEM_BY_SMALL_DIVISION,
+  SMALL_DIVISION_WILDCARD,
   type ItemModalColumn,
   type ItemModalCondition,
 } from './item-by-division-modal.constants';
@@ -41,9 +54,20 @@ interface ItemByDivisionModalProps {
     // DMF0021 (2026-08-14, 통합테스트 1st No.61-④): Team 자동 채움 — Team 은 입력 불가 컬럼이라
     //   선택한 마스터 행의 팀을 그대로 내려줘야 화면에 표시된다. 미사용 호출부는 무시 → 회귀 0.
     deptId?: string,
-    deptName?: string
+    deptName?: string,
+    // DMF0042 Division 40 신규행 End Customer 자동 채움.
+    // endCustomer = SCM_MST_SITE_ITEM.PROJECT_CODE. additive → 미사용 호출부 회귀 없음.
+    endCustomer?: string,
+    // SCP0048 (2026-09-25) div=81 Sales Site 반환 — AS-IS SCP0048_ItembyDivisionPopupEx 는
+    //   ScmSiteId/Project getter 로 SCM_SITE_ID/PROJECT_CODE 한 쌍을 돌려준다. COM0008 응답(o_rc1)에
+    //   두 컬럼이 실려 있어 별도 Ex 팝업 없이 이 두 인자로 전달한다. additive → 미사용 호출부 회귀 없음.
+    scmSiteId?: string,
+    projectCode?: string,
+    // DMF0020 (2026-10-07) 신규 행 Currency 자동 채움 — AS-IS DMF0020 spdMain_CellClick 은 팝업의
+    //   popItem.currency 를 묶음(메저) 4행 CURRENCY 에 넣었다(.cs L2735~2736). COM0008 응답(o_rc1)에
+    //   CURRENCY 가 실려 있어 단건 선택일 때 그 값을 전달한다. additive → 미사용 호출부 회귀 없음.
+    currency?: string
   ) => void;
-  /** 팝업 조회조건 초기값. activeFlag='Y' 면 MDM 사용중지 모델을 뺀다(AS-IS p_mdmActive_Sw). */
   preSearchParams: ProcRequest<MODAL_ITEM_BY_DIVISION, MODAL_SHEET_ITEM_BY_DIVISION>;
   callFromCell: boolean;
   // 호출 화면별 헤더 title 커스터마이즈 (옵션). 기본값: LBL00343 '_ItemByDivisionPopup'
@@ -80,6 +104,23 @@ interface ItemByDivisionModalProps {
    * 검색조건/컬럼을 줄여 연 화면에서 폭까지 좁히라고 둔 opt-in.
    */
   dialogSize?: number;
+  /**
+   * 좁은 조회(itemBySmallDivision) 사용 opt-in. 미지정이면 기존 itemByDivision 그대로(회귀 0).
+   *
+   * 넓은 쪽은 team/end customer/site 축까지 펼친 목록이라, visibleColumns 로 컬럼을 좁혀 연
+   * 화면에서는 같은 Model 이 여러 줄로 보인다. AS-IS 는 그리드 셀 팝업만 별도 SP 를 썼고
+   * (DM0002_ItembySmallDivPopup), 이 prop 이 그 갈래다.
+   *
+   * menuId: SP 의 P_MENU_ID 자리. 호출 화면의 메뉴 ID 를 넘긴다.
+   * itemType: SP 의 P_ITEM_TYPE 자리를 고정하고 싶을 때만 준다. 미지정이면 화면 Item Type
+   *   드롭다운의 현재 값(콤보 CODE)을 싣는다 - AS-IS 가 clbItemType.ControlValues 를 넘기던 것과 같다.
+   *
+   * 필수: division 40 은 이 값이 반드시 있어야 한다. SP 의 40 분기가
+   *   (CASE WHEN P_ITEM_TYPE IS NULL THEN '' ELSE T.ITEM_TYPE END) = P.TOKEN
+   *   으로 등호 비교하므로 빈 값이면 토큰이 0개가 되어 결과가 통째로 빈다.
+   *   와일드카드도 안 통한다 - 실제 코드값이어야 한다(P/H/Q/R).
+   */
+  smallDivision?: { menuId: string; itemType?: string };
 }
 
 /** dialogSize 미지정 시 폭 — 기존 하드코딩 값 그대로. */
@@ -96,6 +137,7 @@ export const ItemByDivisionModal = ({
   visibleConditions = DEFAULT_ITEM_MODAL_CONDITIONS,
   visibleColumns,
   dialogSize = DEFAULT_DIALOG_SIZE,
+  smallDivision,
 }: ItemByDivisionModalProps) => {
   const { t } = useTranslation();
 
@@ -115,6 +157,8 @@ export const ItemByDivisionModal = ({
 
   const gridRef =
     useRef<FlexGrid<ResponseData<MODAL_ITEM_BY_DIVISION, MODAL_SHEET_ITEM_BY_DIVISION, 'o_rc1'>>>();
+  // ResultArea 가 F4/헤더 필터 적용 후 실제 표시 건수를 "총 N건"에 반영하려면 이 ref 가 필요하다.
+  const gridFilterRef = useRef<FlexGridFilter | undefined>();
 
   const initialized = useItemByDivisionModalStore(state => state.initialized);
   const staticColumns = useItemByDivisionModalStore(state => state.staticColumns);
@@ -157,38 +201,83 @@ export const ItemByDivisionModal = ({
   });
   const [itemId, setItemId] = useState<string>();
 
-  const [modalFilters, setModalFilters] = useState<{
-    itemId: string;
-  }>({
-    itemId: '',
-  });
+  // 조회 원천 - smallDivision 을 준 호출처만 좁은 시트를 쓴다. 시트명이 쿼리키에 들어가므로
+  //   같은 tabId 를 써도 두 조회가 서로 캐시를 덮지 않는다(useCustomQueryClient buildTabQueryKey).
+  // 필수: prop 객체를 그대로 의존성에 두지 말 것. 호출처가 인라인 객체로 넘기면 렌더마다
+  //   새 참조가 되고, useTabProcQuery 가 filters 를 참조 비교하므로(useCustomQueryClient.ts:95)
+  //   매 렌더 invalidateQueries 가 돈다. 원시값으로 풀어서 잡는다.
+  const smallMenuId = smallDivision?.menuId;
+  const smallItemType = smallDivision?.itemType;
 
-  const { data: itemData } = useTabProcQuery<MODAL_ITEM_BY_DIVISION>({
+  const sheetName = smallMenuId ? MODAL_SHEET_ITEM_BY_SMALL_DIVISION : MODAL_SHEET_ITEM_BY_DIVISION;
+
+  // 좁은 시트에 실을 Item Type - 호출처 고정값이 없으면 화면 드롭다운의 현재 값(콤보 CODE).
+  //   AS-IS 가 clbItemType.ControlValues 를 넘기던 자리다.
+  const smallEffectiveItemType = smallItemType ?? itemType;
+
+  const queryFilters = useMemo(() => {
+    if (!smallMenuId) return searchParam;
+    // 좁은 시트는 요청 키도 호출 규약도 넓은 쪽과 다르다.
+    //   - activeFlag 가 없고 itemType/menuId 가 있다.
+    //   - 등록 순서상 projectCode 가 salesSite 보다 앞이다(SP 인자 위치 4/5).
+    //   - project/item 조건이 EXISTS + 접두 LIKE 라 빈 값이면 토큰이 0개가 되어 결과가 통째로
+    //     빈다. 그래서 '조건 없음'을 빈 문자열이 아니라 와일드카드로 표현한다.
+    //     ('ALL' 도 안 된다 - LIKE 'ALL%' 가 되어 매칭이 없다.)
+    //   - itemType 은 40 분기가 등호로 비교하므로 실제 코드값이어야 한다(P/H/Q/R).
+    return {
+      divisionId: searchParam.divisionId,
+      // 필수: dept / end customer / sales site 는 호출처 값을 따라가지 않는다.
+      //   AS-IS 좁은 팝업이 자기 조회에서 이 셋과 project 를 "ALL" 로 박아 보낸다
+      //   (DM0002_ItembySmallDivPopup.cs L376~379). 호출처가 무엇을 넘기든 서버에 닿지 않으므로,
+      //   화면마다 다른 값을 실으면 AS-IS 와 목록이 갈린다. DMF0005 는 호출처가 마침 'ALL' 을
+      //   넘겨 티가 안 났지만 DMF0008 은 클릭한 행의 cascade 값을 넘긴다.
+      deptId: 'ALL',
+      endCustomer: 'ALL',
+      salesSite: 'ALL',
+      // project 만 'ALL' 이 아니라 와일드카드다 - 이 자리는 접두 LIKE 라 'ALL' 이 LIKE 'ALL%' 가 된다.
+      projectCode: SMALL_DIVISION_WILDCARD,
+      // Model 검색어(열 때 받은 셀 값 또는 Search 입력값)를 서버로 보낸다. 비어 있을 때만
+      //   와일드카드다 - 이 자리도 접두 LIKE 라 빈 문자열이면 토큰이 0개가 되어 결과가 통째로 빈다.
+      //   종전에는 항상 와일드카드만 보내 이미 Model 이 채워진 행에서 다시 열어도 전체 목록이
+      //   나왔고 Search 버튼도 서버에 닿지 않았다(사용자 지시 2026-10-12). AS-IS 좁은 팝업도
+      //   txtItemID.Text 를 그대로 p_item_id 로 보낸다(DM0002_ItembySmallDivPopup.cs L381).
+      //   주의: 서버 LIKE 는 대소문자를 가린다. 소문자로 입력하면 비는 것은 AS-IS 와 같다.
+      itemId: searchParam.itemId || SMALL_DIVISION_WILDCARD,
+      itemType: smallEffectiveItemType,
+      menuId: smallMenuId,
+    } satisfies ProcRequest<MODAL_ITEM_BY_DIVISION, MODAL_SHEET_ITEM_BY_SMALL_DIVISION>;
+  }, [smallMenuId, smallEffectiveItemType, searchParam]);
+
+  const {
+    data: itemData,
+    isLoading,
+    isFetching,
+  } = useTabProcQuery<MODAL_ITEM_BY_DIVISION>({
     menuId: MODAL_ITEM_BY_DIVISION,
-    sheetName: MODAL_SHEET_ITEM_BY_DIVISION,
+    sheetName,
     tabId: 'ItemByDivisionModal',
-    filters: searchParam,
-    enabled: open,
+    filters: queryFilters,
+    // 좁은 시트는 itemType 이 비면 40 에서 0건이 된다. Item Type 콤보 응답이 늦게 오는 동안
+    //   빈 값으로 한 번 던지지 않도록, 값이 정해진 뒤에 조회한다.
+    enabled: open && (!smallMenuId || !!smallEffectiveItemType),
   });
+  const loading = isLoading || isFetching;
 
   // useMemo — 매 렌더 새 배열이면 그리드가 re-bind 되어 체크박스 선택(row.isSelected)이 풀림.
   //   itemData/필터 변경 시에만 재계산 → 체크 후 OK 까지 선택 유지.
   const itemsSource = useMemo(
     () =>
       (itemData?.o_rc1 ?? []).filter(item => {
-        const keyword = modalFilters.itemId.toLowerCase();
-        const matchesKeyword =
-          (item.ITEM_ID ?? '').toLowerCase().includes(keyword) ||
-          (item.ITEM_NAME ?? '').toLowerCase().includes(keyword) ||
-          (item.NICK_NAME ?? '').toLowerCase().includes(keyword);
-        if (!matchesKeyword) return false;
-
         if (!useItemTypeFilter || itemType === ITEM_TYPE_ALL) return true;
         // 콤보 CODE 가 코드(ITEM_TYPE)인지 명칭(ITEM_TYPE_NAME)인지는 admin 메타에 달렸다 — 둘 다 본다.
         return item.ITEM_TYPE === itemType || item.ITEM_TYPE_NAME === itemType;
       }),
-    [itemData, modalFilters, useItemTypeFilter, itemType]
+    [itemData, useItemTypeFilter, itemType]
   );
+
+  // itemsSource 와 같은 이유로 useMemo — withRowNo 가 매 렌더 새 배열/새 행 객체를 만들면
+  //   위 itemsSource useMemo 가 무의미해져 체크박스 선택이 똑같이 풀린다.
+  const rows = useMemo(() => withRowNo(itemsSource), [itemsSource]);
 
   // 호출처가 컬럼을 지정하면 그 목록·순서만 남긴다.
   //   'A|B' 처럼 후보를 나열하면 먼저 잡히는 쪽 하나만 쓴다 — 코드/명칭 컬럼(ITEM_TYPE vs
@@ -198,13 +287,13 @@ export const ItemByDivisionModal = ({
   //   ⚠ 메타에 아예 없는 컬럼(admin 미등록)은 객체 지정({colNm, colLblNm})일 때만 살린다 —
   //     응답 행에 값이 실제로 들어 있는 후보를 골라 컬럼을 만들어 낸다.
   const gridStaticColumns = useMemo(() => {
-    if (!visibleColumns) return staticColumns;
+    if (!visibleColumns) return [buildNoColumn(t('LBL00674', 'No')), ...staticColumns];
 
     const rows = itemData?.o_rc1 ?? [];
     const hasValue = (colNm: string) =>
       rows.some(row => !!(row as unknown as Record<string, unknown>)[colNm]);
 
-    return visibleColumns
+    const columns = visibleColumns
       .map((entry): RawFlexGridColumnConfig | undefined => {
         const spec = typeof entry === 'string' ? { colNm: entry } : entry;
         const candidates = spec.colNm.split('|');
@@ -229,17 +318,17 @@ export const ItemByDivisionModal = ({
         };
       })
       .filter((column): column is RawFlexGridColumnConfig => !!column);
-  }, [staticColumns, visibleColumns, itemData]);
+
+    return [buildNoColumn(t('LBL00674', 'No')), ...columns];
+  }, [staticColumns, visibleColumns, itemData, t]);
 
   // Search 버튼/Enter = 프로시저 재조회 (사용자 요구 2026-08-11).
   //   구: 입력값을 client-side 필터로만 썼다 → 팝업이 열릴 때 받아 온 행 안에서만 찾을 수 있었고,
   //   그 범위 밖의 Model 은 아무리 검색해도 안 나왔다. 이제 조회 파라미터에 실어 다시 조회한다.
-  //   화면 필터도 같은 키워드로 유지 — SP 가 파라미터를 무시하거나 넓게 내려줘도 결과가 좁혀 보인다.
+  //   SP(COM0008)가 콤마로 나눈 여러 키워드를 이미 처리하므로 화면에서 다시 거르지 않는다.
   //   Item Type 은 COM0008 request 에 없는 조건이라 종전대로 client-side 필터다.
   const handleSearch = () => {
-    const keyword = itemId ?? '';
-    setSearchParam(prev => ({ ...prev, itemId: keyword }));
-    setModalFilters({ itemId: keyword });
+    setSearchParam(prev => ({ ...prev, itemId: itemId ?? '' }));
   };
 
   const handleSubmit = () => {
@@ -275,9 +364,15 @@ export const ItemByDivisionModal = ({
       first?.ITEM_CLASS_NAME,
       first?.NICK_NAME,
       undefined,
-      // 단건 선택일 때만 팀을 넘긴다 — 다건은 어느 팀인지 확정할 수 없다.
+      // 단건 선택일 때만 Team/End Customer를 넘긴다 — 다건은 어느 행 기준인지 확정할 수 없다.
       selections.length === 1 ? first?.DEPT_ID : undefined,
-      selections.length === 1 ? first?.DEPT_NAME_KO : undefined
+      selections.length === 1 ? first?.DEPT_NAME_KO : undefined,
+      selections.length === 1 ? first?.END_CUSTOMER : undefined,
+      // SCP0048 Sales Site 반환 — 단건 선택일 때만(다건은 기준행 불명).
+      selections.length === 1 ? first?.SCM_SITE_ID : undefined,
+      selections.length === 1 ? first?.PROJECT_CODE : undefined,
+      // DMF0020 Currency 반환 — 단건 선택일 때만.
+      selections.length === 1 ? first?.CURRENCY : undefined
     );
     modalClose();
   };
@@ -304,7 +399,13 @@ export const ItemByDivisionModal = ({
       dataItem.NICK_NAME,
       undefined,
       dataItem.DEPT_ID,
-      dataItem.DEPT_NAME_KO
+      dataItem.DEPT_NAME_KO,
+      dataItem.END_CUSTOMER,
+      // SCP0048 Sales Site 반환.
+      dataItem.SCM_SITE_ID,
+      dataItem.PROJECT_CODE,
+      // DMF0020 Currency 반환.
+      dataItem.CURRENCY
     );
     modalClose();
   };
@@ -320,11 +421,12 @@ export const ItemByDivisionModal = ({
       endCustomer: preSearchParams.endCustomer ?? 'ALL',
       salesSite: preSearchParams.salesSite ?? 'ALL',
       projectCode: preSearchParams.projectCode ?? '',
-      itemId: '',
+      // 받은 값으로 바로 조회한다 - 열자마자 필터된 목록이 보여야 한다 (사용자 지정 2026-09-07).
+      //   종전에는 빈값으로 조회하고 입력창(setItemId)에만 값을 채워, Search 를 눌러야 좁혀졌다.
+      itemId: preSearchParams.itemId ?? '',
       // 값을 준 호출처만 조건에 싣는다 — 빈값이면 키를 만들지 않아 기존 요청 본문이 그대로다.
       ...(preSearchParams.activeFlag ? { activeFlag: preSearchParams.activeFlag } : {}),
     });
-    setModalFilters({ itemId: preSearchParams.itemId ?? '' });
     setItemId(preSearchParams.itemId);
     // 매번 기본값(Product)으로 열린다 — 직전 호출의 선택이 남아 다른 행에 따라붙지 않도록.
     setSelectedItemType(undefined);
@@ -339,6 +441,10 @@ export const ItemByDivisionModal = ({
       position='basic'
       open={open}
       handleClose={modalClose}
+      // 컬럼 필터 팝업(FlexGridFilter)이 MuiDialog-container 밖에 append 돼 MUI FocusTrap 과
+      // 충돌한다 — 필터 팝업의 Search 입력이 클릭/타이핑해도 반응 없어 보이는 원인. CustomDialog.tsx
+      // 상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인.
+      disableEnforceFocus
       customHeaderTitle={
         <div className='headerContainer'>
           <div className='headerDot' />
@@ -450,7 +556,7 @@ export const ItemByDivisionModal = ({
                 {showProject && searchParam.divisionId !== '40' && (
                   <Grid size={4}>
                     <FormItem
-                      label={t('LBL00327', '_Project')}
+                      label={t('LBL00012', '_Project')}
                       labelAlign='right'
                       render={() => (
                         <InputField fullWidth disabled value={searchParam.projectCode ?? ''} />
@@ -461,7 +567,7 @@ export const ItemByDivisionModal = ({
                 {showModel && (
                   <Grid size={4}>
                     <FormItem
-                      label={t('LBL00003', '_Model/Nickname')}
+                      label={t('LBL00618', '_Model/Nickname')}
                       labelAlign='right'
                       render={() => (
                         <InputField
@@ -494,14 +600,33 @@ export const ItemByDivisionModal = ({
             }
           />
           <div className={styles.gridWrapper}>
-            <DataGrid<ResponseData<MODAL_ITEM_BY_DIVISION, MODAL_SHEET_ITEM_BY_DIVISION>>
-              gridRef={gridRef}
-              isReadOnly
-              useCheckbox={multiCheckbox}
-              staticColumns={gridStaticColumns}
-              itemsSource={itemsSource}
-              dblClick={handleDblClick}
+            <ProgressIndicator
+              shape='circular'
+              apprearance='infinite'
+              open={loading}
+              placement='parent'
             />
+            <ResultArea
+              title=''
+              count={rows.length}
+              gridRef={gridRef}
+              gridFilterRef={gridFilterRef}
+            >
+              <DataGrid<ResponseData<MODAL_ITEM_BY_DIVISION, MODAL_SHEET_ITEM_BY_DIVISION>>
+                gridRef={gridRef}
+                gridFilterRef={gridFilterRef}
+                isReadOnly
+                useCheckbox={multiCheckbox}
+                // No 는 ROW_NO 데이터 컬럼(buildNoColumn)이 전담한다. rowHeader 를 그대로 두면
+                //   체크박스가 없는 단일선택 모드에서 공통 formatEditableColumns 가 rowHeader col 0
+                //   에도 행번호를 찍어 No 가 두 개로 보인다. 체크박스 모드는 rowHeader 에 wijmo
+                //   Selector 가 살아야 하므로 그때만 rowHeader 를 남긴다.
+                headersVisibility={multiCheckbox ? HeadersVisibility.All : HeadersVisibility.Column}
+                staticColumns={gridStaticColumns}
+                itemsSource={rows}
+                dblClick={handleDblClick}
+              />
+            </ResultArea>
           </div>
           <div className={styles.buttonWrapper}>
             <Button

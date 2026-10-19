@@ -1,0 +1,97 @@
+// SCM0016 Batch Log — 3분할 레이아웃(AS-IS splitContainer1/2 이식).
+//   상(Batch Log) / 하(Step Info 좌 | Batch Run Log 우). lookup / dynamic-query 패널 패턴 참조.
+.outerModule {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  gap: 4px;
+  min-width: 0;
+  min-height: 0;
+}
+
+// 상하 분할 그룹(orientation='vertical'). Panel 콘텐츠 래퍼(> div > div)를 flex 로 만들어
+//   FlexGrid 가 Panel 높이를 정확히 채우게 한다(lookup .tableWrapper 처방 동일).
+.tableWrapper {
+  flex: 1 1 0;
+  min-height: 0;
+
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+
+  > div > div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+// 하단 좌우 분할 그룹(orientation='horizontal').
+.bottomRow {
+  height: 100%;
+  min-height: 0;
+}
+
+// 각 패널 콘텐츠 — 제목줄 + 그리드 세로 배치, Panel 높이 채움.
+.paneModule {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 4px;
+  min-width: 0;
+  min-height: 0;
+
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+}
+
+// 상하 드래그 바(Separator, row-resize). react-resizable-panels Separator 는 기본 높이 0 +
+//   커서 없음이라 여기서 두께/커서/중앙선을 부여해야 드래그가 동작한다.
+.rowSplitBar {
+  height: 16px;
+  cursor: row-resize;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
+}
+
+// 좌우 드래그 바(Separator, col-resize).
+.colSplitBar {
+  width: 16px;
+  cursor: col-resize;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
+}

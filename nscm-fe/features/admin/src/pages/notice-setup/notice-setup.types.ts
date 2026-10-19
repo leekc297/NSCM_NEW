@@ -13,4 +13,10 @@ export interface NoticeImageUploadResult {
   fileName: string;
 }
 
+export interface ComboOption {
+  CODE: string;
+  NAME: string;
+  PARENT_CODE?: string;
+}
+
 export type NoticeDialogMode = 'create' | 'edit';

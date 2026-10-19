@@ -1,0 +1,35 @@
+asis_target_pattern,asis_event,tobe_slot,tobe_pattern,note
+^btn,Click,handler,"onClick → handleXxx (SubTitle customButtons 또는 필드 아이콘)",버튼 클릭
+^(cbo|cmb|clb|rgrp|rdo),SelectedIndexChanged,handler,"CustomDropdown onChange → setSearchParams + cascade(useCascadeFields) / 필요 시 handleXxxChange",콤보 변경. Division 변경은 하위 콤보 초기화 cascade
+^chk,CheckedChanged,handler,"Checkbox onChange → setSearchParams / 그리드 표시 토글이면 applyDynVisibility",
+^txt,(TextChanged|KeyDown|KeyPress|Leave),handler,"InputField onChange / onKeyDown(Enter → setFilters)",
+^drp|^dCalendar|^mrp,(ValueChanged|DateChanged|SelectedIndexChanged),handler,"PeriodField onChange → setSearchParams",
+^spd,CellDoubleClick,grid-event,"DataGrid dblClick → handleDblClick(hitTest → binding 분기 → 모달/드릴다운)",
+^spd,CellClick,grid-event,"DataGrid click → handleClick(hitTest)",
+^spd,ButtonClicked,grid-event,"DataGrid click + formatItem(버튼 셀 렌더)",셀 버튼
+^spd,ComboSelChange,grid-event,"cellEditEnded → 콤보 셀 편집 확정 처리",
+^spd,(Change|EditChange|EditModeOff|CellChanged),grid-event,"cellEditEnded → 재계산/CRUD_TYPE 갱신(EditTracker)",
+^spd,(EditModeOn|EditModeStarting),grid-event,"beginningEdit → 편집 가능 판정(e.cancel) / LockRange 재현",
+^spd,ClipboardPasted,grid-event,"pastingCell/pastedCell → 붙여넣기 검증·CRUD_TYPE",
+^spd,ClipboardPasting,grid-event,"pastingCell",
+^spd,KeyUp,grid-event,"Wijmo autoClipboard + pastingCell/pastedCell (Ctrl+C/V)",As-is KeyUp 복사·붙여넣기 재현
+^spd,KeyDown,grid-event,"keyDown → 단축키 / Enter 이동",
+^spd,TopChange,grid-event,"scrollPositionChanged (고정 머지 재적용)",
+^spd,(ActiveSheetChanged|ActiveSheetChanging|SheetTabClick),state,"activeSheet 상태 변경(store) → 시트별 DataGrid/TabWrapper",
+^spd,ColumnWidthChanged,grid-event,"resizedColumn → 컬럼 레이아웃 저장(ColumnLayout)",
+^spd,(SelectionChanged|LeaveCell|EnterCell),grid-event,"selectionChanged",
+^this$,Load,lifecycle,"useEffect([tabId]) → fetchStaticColumns + 초기 콤보/권한 조회",Form_Load
+^this$,(Shown|Activated),lifecycle,"useEffect 1회 — 기본값 세팅",
+^this$,(FormClosing|FormClosed),lifecycle,"useDirtyCheck / 탭 닫기 가드",
+^(tab|tc),(SelectedIndexChanged|Selected),state,"TabWrapper onChange → activeTab",
+.*,(Changed|ValueChanged),handler,"onChange",
+^(button|usrButton|btm|btn)[A-Za-z0-9_]*,(Click|UsrButtonList_Click_Detected),handler,"onClick → handleXxx (SubTitle customButtons / 버튼 그룹)",버튼 이름 변형(button*, usrButton*, 오타 btm*) 및 UsrButtonList 묶음 클릭
+^(rd|rdo|rb|rgrp|radio)[A-Za-z0-9_]*,(CheckedChanged|SelectedIndexChanged),handler,"RadioGroup onChange → setSearchParams",라디오
+^(umlt|txt|usrText)[A-Za-z0-9_]*,(KeyDown|KeyPress|KeyUp),handler,"InputField onKeyDown (Enter → setFilters, 콤마 다중값은 split)",텍스트 키 입력
+^cbo[A-Za-z0-9_]*,Click,handler,"CustomDropdown onOpen/onClick — 지연 로딩 콤보면 enabled 토글",콤보 클릭(지연 로딩)
+^spd,(KeyPress|KeyDown),grid-event,"keyDown → 단축키 / Enter 이동 / 숫자 입력 제한은 beginningEdit+cellEditEnding",
+^spd,(TextChanged|EditChange),grid-event,"cellEditEnding → 입력값 검증(e.cancel)",
+^(form|frm)[A-Za-z0-9_]*,Click,handler,"onClick → 파일 다운로드/업로드 (FileExceldownloadIcon / FileUploader)",formDown 류 = 양식 다운로드 버튼
+^(timer|tmr)[A-Za-z0-9_]*,Tick,lifecycle,"useEffect + setInterval 또는 React Query refetchInterval",타이머
+^(chk|check)[A-Za-z0-9_]*,(CheckedChanged|CheckStateChanged),handler,"Checkbox onChange → setSearchParams / 표시 토글",
+^(dsdm|dtm|ds)[A-Za-z0-9_]*,Changed,grid-event,"cellEditEnded → 데이터 변경 추적(EditTracker, CRUD_TYPE)",스프레드 데이터모델 Changed

@@ -1,0 +1,1080 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_GET_RECIPIENT_ASSIGN","2097494601","1","
+
+/*
+ * Program ID   : SCM0006_GET_RECIPIENT_ASSIGN
+ * Description  : 카테고리별 수신자 리스트 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/02/20   ygkim   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/10/15	hwyoon	메일링 분단위 발송 추가
+ */
+
+CREATE PROCEDURE [dbo].[SCM0006_GET_RECIPIENT_ASSIGN]
+  @p_use_type		NVARCHAR(MAX),
+  @p_categoryID		NVARCHAR(MAX)
+AS
+BEGIN
+		
+		SELECT a.use_type_code
+			  ,a.category_id
+			  ,b.category_desc
+			  ,a.user_id userid
+			  ,E.user_name username
+			  ,CASE C.Language
+						WHEN 'KO' THEN D.DEPT_NAME_KO
+						WHEN 'EN' THEN D.DEPT_NAME_EN
+						WHEN 'CN' THEN D.DEPT_NAME_CN
+						ELSE D.DEPT_NAME_KO
+					END	 dept_name
+			   ,c.email
+			   ,c.cellphonenum
+			   ,c.language
+		FROM SCM_ADM_RECIPIENT_ASSIGN A WITH(NOLOCK)
+		INNER JOIN SCM_ADM_RECIPIENT_LIST B WITH(NOLOCK) ON a.category_id = b.category_id
+		LEFT JOIN SCM_MST_SSO_USER_INFO E WITH(NOLOCK) ON E.USER_ID=a.user_id
+		LEFT JOIN TB_FX_User C WITH(NOLOCK) ON c.userid = a.user_id
+		LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO D WITH(NOLOCK) ON E.Dept_ID = D.DEPT_ID
+		WHERE a.use_type_code = @p_use_type
+		  AND a.category_id   = @p_categoryID
+		  ORDER BY C.Dept_ID, A.USER_ID
+
+		/*
+		SELECT a.use_type_code
+			  ,a.category_id
+			  ,b.category_desc
+			  ,a.user_id userid
+			  ,c.username username
+			  ,CASE C.Language
+						WHEN 'KO' THEN D.DEPT_NAME_KO
+						WHEN 'EN' THEN D.DEPT_NAME_EN
+						WHEN 'CN' THEN D.DEPT_NAME_CN
+					END	 dept_name
+			   ,c.email
+			   ,c.cellphonenum
+			   ,c.language
+		FROM SCM_ADM_RECIPIENT_ASSIGN A WITH(NOLOCK)
+		INNER JOIN SCM_ADM_RECIPIENT_LIST B WITH(NOLOCK) ON a.category_id = b.category_id
+		INNER JOIN TB_FX_User C WITH(NOLOCK) ON c.userid = a.user_id
+		LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO D WITH(NOLOCK) ON C.Dept_ID = D.DEPT_ID
+		WHERE a.use_type_code = @p_use_type
+		  AND a.category_id   = @p_categoryID
+		  ORDER BY C.Dept_ID, A.USER_ID
+		*/
+   ;
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_GET_RECIPIENT_MASTER","2113494658","1","
+
+/*
+ * Program ID   : SCM0006_GET_RECIPIENT_MASTER
+ * Description  : MAIL SET MASTER 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2017/12/05   ygkim   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/10/15	hwyoon	메일링 분단위 발송 추가
+ */
+
+CREATE PROCEDURE [dbo].[SCM0006_GET_RECIPIENT_MASTER]
+  @p_use_type		NVARCHAR(MAX),
+  @p_module			NVARCHAR(MAX),
+  @p_submodule		NVARCHAR(MAX),    
+  @p_active			NVARCHAR(MAX)
+AS
+BEGIN
+	
+		SELECT
+               m.use_type_code
+              ,m.module_code
+              ,m.sub_module_code
+              ,m.category_id
+              ,m.category_desc
+              ,m.cycle_class_code
+              ,m.detail_class_code
+              ,m.send_time_text
+			  ,m.SEND_MIN_TIME_TEXT
+              ,m.valid_yn active_flag
+        FROM
+              scm_adm_recipient_list m
+        WHERE  1 = 1
+        AND m.use_type_code = @p_use_type
+		AND (@p_module IS NULL OR m.Module_Code IN 
+				(SELECT t.c.value('.', 'NVARCHAR(4000)')
+                FROM   (SELECT x = CAST('<t>' + REPLACE(@p_module, ',', '</t><t>') + '</t>' AS xml)) b
+                CROSS APPLY x.nodes('/t') t(c)
+	           )   
+		)
+		AND (@p_submodule IS NULL OR m.sub_module_code IN 
+				(SELECT t.c.value('.', 'NVARCHAR(4000)')
+                FROM   (SELECT x = CAST('<t>' + REPLACE(@p_submodule, ',', '</t><t>') + '</t>' AS xml)) b
+                CROSS APPLY x.nodes('/t') t(c)
+	           )   
+		)
+		AND (@p_active IS NULL OR m.valid_yn IN 
+				(SELECT t.c.value('.', 'NVARCHAR(4000)')
+                FROM   (SELECT x = CAST('<t>' + REPLACE(@p_active, ',', '</t><t>') + '</t>' AS xml)) b
+                CROSS APPLY x.nodes('/t') t(c)
+	           )   
+		)
+        ORDER BY m.use_type_code
+              ,m.module_code
+              ,m.sub_module_code
+              ,m.category_desc
+              ,m.cycle_class_code
+              ,m.detail_class_code
+              ,m.send_time_text
+			  ,m.SEND_MIN_TIME_TEXT
+              ,m.valid_yn
+   ;
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_GET_RECIPIENT_MESSAGE","2129494715","1","
+
+/*
+ * Program ID   : SCM0006_GET_RECIPIENT_MESSAGE
+ * Description  : MAIL SET MESSAGE 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/02/19   ygkim   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ */
+
+CREATE PROCEDURE [dbo].[SCM0006_GET_RECIPIENT_MESSAGE]
+  @p_use_type		NVARCHAR(MAX),
+  @p_categoryID		NVARCHAR(MAX)
+AS
+BEGIN
+	
+		SELECT
+              m.use_type_code
+              ,m.category_id
+              ,r.CATEGORY_DESC as category_desc
+              ,m.language_code
+			  ,ld.segment2 language
+              ,m.mail_title
+              ,m.message_content
+        FROM
+              scm_adm_recipient_message m WITH(NOLOCK)
+			  INNER JOIN scm_adm_recipient_list r WITH(NOLOCK) on r.category_id = m.category_id
+			  INNER JOIN scm_adm_lookup_master lm WITH(NOLOCK) ON lm.lookup_type = 'LANGUAGE' AND lm.valid_yn = 'Y'
+			  INNER JOIN scm_adm_lookup_master_detail ld WITH(NOLOCK) ON ld.lookup_type = lm.lookup_type and ld.segment1 = m.language_code and  ld.valid_yn = 'Y'
+        WHERE  1 = 1
+        AND    m.use_type_code = @p_use_type
+        AND    m.category_id   = @p_categoryID
+   ;
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_GET_SQL_LONG_TEXT","2145494772","1","
+/*
+ * Program ID   : SCM0006_GET_SQL_LONG_TEXT
+ * Description  : 등록된 Query를 새창에 보여준다.
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/01/30   ygkim   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ */
+
+CREATE PROCEDURE [dbo].[SCM0006_GET_SQL_LONG_TEXT]
+  @p_use_type		NVARCHAR(MAX),
+  @p_module			NVARCHAR(MAX),
+  @p_submodule		NVARCHAR(MAX),    
+  @p_category_id	NVARCHAR(MAX)
+AS
+BEGIN
+	
+		SELECT
+               [dbo].[FN_GET_SOURCE_CODE](@p_use_type, @p_module, @p_submodule, @p_category_id, 1) as text1
+			  ,[dbo].[FN_GET_SOURCE_CODE](@p_use_type, @p_module, @p_submodule, @p_category_id, 2) as text2
+			  ,[dbo].[FN_GET_SOURCE_CODE](@p_use_type, @p_module, @p_submodule, @p_category_id, 3) as text3
+			  ,[dbo].[FN_GET_SOURCE_CODE](@p_use_type, @p_module, @p_submodule, @p_category_id, 4) as text4
+			  ,[dbo].[FN_GET_SOURCE_CODE](@p_use_type, @p_module, @p_submodule, @p_category_id, 5) as text5
+			  ,[dbo].[FN_GET_SOURCE_CODE](@p_use_type, @p_module, @p_submodule, @p_category_id, 6) as text6
+			  ,[dbo].[FN_GET_SOURCE_CODE](@p_use_type, @p_module, @p_submodule, @p_category_id, 7) as text7
+			  ,[dbo].[FN_GET_SOURCE_CODE](@p_use_type, @p_module, @p_submodule, @p_category_id, 8) as text8
+   ;
+END
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_GET_USERINFO_LIST","14011181","1","/*
+ * Program ID   : SCM0006_GET_USERINFO_LIST
+ * Description  : 사용자 목록
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/02/21   ygkim   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/10/15	hwyoon	SSO 사용자 조회로 변경
+ *
+ */
+CREATE PROCEDURE [dbo].[SCM0006_GET_USERINFO_LIST]
+
+	-- Add the parameters for the stored procedure here
+	@p_user				NVARCHAR(MAX),
+	@p_dept				NVARCHAR(MAX)
+
+AS
+
+BEGIN
+	SELECT *
+	FROM(
+		SELECT	A.USER_ID UserID			
+			,	A.USER_NAME UserName
+			,	A.USER_NAME_EN UserName_E
+			,	A.USER_ID+'@lgensol.com' Email			
+			,	A.Dept_ID
+			,	Dept_Name =
+				CASE B.Language
+				WHEN 'KO' THEN (SELECT DEPT_NAME_KO FROM SCM_MST_SSO_DEPT_INFO WHERE DEPT_ID = A.DEPT_ID)
+				WHEN 'EN' THEN (SELECT DEPT_NAME_EN FROM SCM_MST_SSO_DEPT_INFO WHERE DEPT_ID = A.DEPT_ID)
+				WHEN 'CN' THEN (SELECT DEPT_NAME_CN FROM SCM_MST_SSO_DEPT_INFO WHERE DEPT_ID = A.DEPT_ID)
+				ELSE (SELECT DEPT_NAME_KO FROM SCM_MST_SSO_DEPT_INFO WHERE DEPT_ID = A.DEPT_ID)
+				END	
+			,	B.CellPhoneNum
+			,	B.Language
+			,   B.UseYN
+		FROM dbo.SCM_MST_SSO_USER_INFO				AS A WITH(NOLOCK)
+		LEFT JOIN TB_FX_User B WITH(NOLOCK) ON A.USER_ID=B.UserID
+	) A
+	WHERE 1=1
+	  --AND A.UseYN = 'Y'
+	  AND ((@p_user IS NULL OR @p_user='' OR A.UserID LIKE '%' + @p_user + '%')
+		OR (@p_user IS NULL OR @p_user='' OR  A.UserName LIKE '%' + @p_user + '%')
+		OR (@p_user IS NULL OR @p_user='' OR  A.UserName_E LIKE '%' + @p_user + '%'))
+	  AND ((@p_dept IS NULL OR @p_dept='' OR  A.Dept_ID LIKE '%' + @p_dept + '%')
+		OR (@p_dept IS NULL OR @p_dept='' OR  A.Dept_Name LIKE '%' + @p_dept + '%'))
+	 ORDER BY A.Dept_ID, A.UserID
+	;
+
+	/*
+	SELECT *
+	FROM(
+		SELECT	A.UserID			
+			,	A.UserName
+			,	A.UserName_E
+			,	A.Email			
+			,	A.Dept_ID
+			,	Dept_Name =
+				CASE A.Language
+				WHEN 'KO' THEN (SELECT DEPT_NAME_KO FROM SCM_MST_SSO_DEPT_INFO WHERE DEPT_ID = A.DEPT_ID)
+				WHEN 'EN' THEN (SELECT DEPT_NAME_EN FROM SCM_MST_SSO_DEPT_INFO WHERE DEPT_ID = A.DEPT_ID)
+				WHEN 'CN' THEN (SELECT DEPT_NAME_CN FROM SCM_MST_SSO_DEPT_INFO WHERE DEPT_ID = A.DEPT_ID)
+				END	
+			,	A.CellPhoneNum
+			,	A.Language
+			,   A.UseYN
+		FROM dbo.TB_FX_User				AS A WITH(NOLOCK)
+	) A
+	WHERE 1=1
+	  AND A.UseYN = 'Y'
+	  AND ((@p_user IS NULL OR A.UserID LIKE '%' + @p_user + '%')
+		OR (@p_user IS NULL OR A.UserName LIKE '%' + @p_user + '%')
+		OR (@p_user IS NULL OR A.UserName_E LIKE '%' + @p_user + '%'))
+	  AND ((@p_dept IS NULL OR A.Dept_ID LIKE '%' + @p_dept + '%')
+		OR (@p_dept IS NULL OR A.Dept_Name LIKE '%' + @p_dept + '%'))
+	 ORDER BY A.Dept_ID, A.UserID
+	*/
+	;
+END
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_SAVE_RECIPIENT_ASSIGN","30011238","1","/*
+ * Program ID   : SCM0006_SAVE_RECIPIENT_ASSIGN
+ * Description  : SMS/MAIL별 Category_ID별 수신자 리스트 저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/02/20   ygkim   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+CREATE PROCEDURE [dbo].[SCM0006_SAVE_RECIPIENT_ASSIGN]
+
+	-- Add the parameters for the stored procedure here
+	@p_active_flag			NVARCHAR(MAX),
+	@p_use_type				NVARCHAR(MAX),
+	@p_category_id			NVARCHAR(MAX),
+	@p_user_id	 			NVARCHAR(MAX),
+	@p_created_by			NVARCHAR(MAX),
+	@p_creation_date		NVARCHAR(MAX),
+	@p_last_updated_by		NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_use_type				NVARCHAR(MAX);
+	DECLARE @v_category_id			NVARCHAR(MAX);
+	DECLARE @v_user_id			    NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+    DECLARE @v_creation_date		NVARCHAR(MAX);
+    DECLARE @v_last_updated_by      NVARCHAR(MAX); 
+		
+	SET @v_active_flag = NULL;
+	SET @v_use_type = NULL;
+	SET @v_category_id = NULL;
+	SET @v_user_id = NULL;
+	SET @v_created_by		= NULL;
+    SET @v_creation_date    = NULL;
+    SET @v_last_updated_by  = NULL; 
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCM0006_SAVE_RECIPIENT_ASSIGN';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	
+		BEGIN TRY
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		--SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_use_type = [dbo].[SCM_ARR_SPL_VAL](@p_use_type, @v_delimiter , @mst_loop_cnt) ; 		
+				SET @v_category_id = [dbo].[SCM_ARR_SPL_VAL](@p_category_id, @v_delimiter , @mst_loop_cnt) ; 					
+				SET @v_user_id = [dbo].[SCM_ARR_SPL_VAL](@p_user_id, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_created_by        = [dbo].[SCM_ARR_SPL_VAL](@p_created_by, @v_delimiter , @mst_loop_cnt) ; 
+			    SET @v_creation_date     = [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter , @mst_loop_cnt) ; 
+                SET @v_last_updated_by   = [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter , @mst_loop_cnt) ; 
+					
+			END
+			
+			--HISTORY INSERT
+			EXEC PR_SCM_ADM_RECIPIENT_ASSIGN_HIST
+								 @v_use_type 
+								,@v_category_id
+								,@v_user_id 
+								,@v_created_by
+								,@v_creation_date
+								,@v_last_updated_by				
+			 ;
+			
+			IF @mst_loop_cnt > 0 
+				IF @v_active_flag != 'D'				
+					BEGIN  
+						MERGE INTO [SCM_ADM_RECIPIENT_ASSIGN] A
+						USING (
+								SELECT 
+									 @v_use_type as use_type_code
+									,@v_category_id as category_id	
+									,@v_user_id as "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_SAVE_RECIPIENT_ASSIGN","30011238","2","userid					
+							  ) B
+						ON(
+									A.use_type_code  = B.use_type_code
+								AND A.category_id = B.category_id
+								AND A.user_id = B.userid				
+						  )
+						WHEN MATCHED THEN
+							 UPDATE SET 
+								    last_updated_by		= @v_last_updated_by
+								   ,last_update_date	= sysdatetime()
+					                
+						WHEN NOT MATCHED THEN
+
+							INSERT	(									   
+									 use_type_code,category_id,user_id
+									,created_by,creation_date,last_updated_by,last_update_date
+									)
+							VALUES  
+									(
+									 @v_use_type ,@v_category_id , @v_user_id
+									,@v_created_by,SYSDATETIME(),@v_last_updated_by,SYSDATETIME()
+									);
+			
+					END
+				ELSE IF @v_active_flag = 'D'
+					BEGIN
+						DELETE FROM [SCM_ADM_RECIPIENT_ASSIGN]
+						WHERE use_type_code = @v_use_type
+						  AND category_id = @v_category_id
+						  AND user_id = @v_user_id;
+					END
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_SAVE_RECIPIENT_MASTER","46011295","1","
+/*
+ * Program ID   : SCM0006_SAVE_RECIPIENT_MASTER
+ * Description  : SMS/MAIL 수신자 Master 저장(CATEGORY_ID는 채번으로 저장)
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/01/29   ygkim   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/05/14   ygkim   Mail, SMS 구분 추가 
+ * 2018/10/15	hwyoon	메일링 분단위 발송 추가
+ */
+CREATE PROCEDURE [dbo].[SCM0006_SAVE_RECIPIENT_MASTER]
+
+	-- Add the parameters for the stored procedure here
+	@p_active_flag			NVARCHAR(MAX),
+	@p_use_type				NVARCHAR(MAX),
+	@p_module 				NVARCHAR(MAX),
+	@p_submodule 			NVARCHAR(MAX),
+	@p_category_id			NVARCHAR(MAX),
+    @p_category_desc 		NVARCHAR(MAX),
+	@p_cycle_class_code 	NVARCHAR(MAX),
+	@p_detail_class_code	NVARCHAR(MAX),
+	@p_send_time_text		NVARCHAR(MAX),
+	@p_send_min_time_text	NVARCHAR(MAX),
+    @p_active			    NVARCHAR(MAX),
+	@p_created_by			NVARCHAR(MAX),
+	@p_creation_date		NVARCHAR(MAX),
+	@p_last_updated_by		NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_use_type				NVARCHAR(MAX);
+	DECLARE @v_module			    NVARCHAR(MAX);
+	DECLARE @v_submodule			NVARCHAR(MAX);
+	DECLARE @v_category_id			NVARCHAR(MAX);
+	DECLARE @v_category_desc		NVARCHAR(MAX);
+	DECLARE @v_cycle_class_code		NVARCHAR(MAX);
+	DECLARE @v_detail_class_code	NVARCHAR(MAX);
+	DECLARE @v_send_time_text		NVARCHAR(MAX);
+	DECLARE @v_send_min_time_text	NVARCHAR(MAX);
+	DECLARE @v_active				NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+    DECLARE @v_creation_date		NVARCHAR(MAX);
+    DECLARE @v_last_updated_by      NVARCHAR(MAX); 
+	DECLARE @V_sql_long_text		NVARCHAR(MAX); 
+		
+	SET @v_active_flag = NULL;
+	SET @v_use_type = NULL;
+	SET @v_module = NULL;
+	SET @v_submodule = NULL;
+	SET @v_category_id = NULL;
+	SET @v_category_desc = NULL;	 
+	SET @v_cycle_class_code = NULL;	 
+	SET @v_detail_class_code = NULL;	 
+	SET @v_send_time_text = NULL;	
+	SET @v_send_min_time_text = NULL;	
+	SET @v_active = NULL;
+	SET @v_created_by		= NULL;
+    SET @v_creation_date    = NULL;
+    SET @v_last_updated_by  = NULL; 
+	SET @V_sql_long_text	= NULL;
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCM0006_SAVE_RECIPIENT_MASTER';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	DECLARE @n_history_seq	INTEGER;
+
+		BEGIN TRY
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		--SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_use_type = [dbo].[SCM_ARR_SPL_VAL](@p_use_type, @v_delimiter , @mst_loop_cnt) ; 			
+				SET @v_module = [dbo].[SCM_ARR_SPL_VAL](@p_modul"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_SAVE_RECIPIENT_MASTER","46011295","2","e, @v_delimiter , @mst_loop_cnt) ;    				
+				SET @v_submodule = [dbo].[SCM_ARR_SPL_VAL](@p_submodule, @v_delimiter , @mst_loop_cnt) ;    				
+				SET @v_category_id = [dbo].[SCM_ARR_SPL_VAL](@p_category_id, @v_delimiter , @mst_loop_cnt) ; 				
+				SET @v_category_desc = [dbo].[SCM_ARR_SPL_VAL](@p_category_desc, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_cycle_class_code = [dbo].[SCM_ARR_SPL_VAL](@p_cycle_class_code, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_detail_class_code = [dbo].[SCM_ARR_SPL_VAL](@p_detail_class_code, @v_delimiter, @mst_loop_cnt) ; 				
+				SET @v_send_time_text = [dbo].[SCM_ARR_SPL_VAL](@p_send_time_text, @v_delimiter, @mst_loop_cnt) ; 	
+				SET @v_send_min_time_text = [dbo].[SCM_ARR_SPL_VAL](@p_send_min_time_text, @v_delimiter, @mst_loop_cnt) ; 	
+				SET @v_active = [dbo].[SCM_ARR_SPL_VAL](@p_active, @v_delimiter, @mst_loop_cnt) ; 	
+				SET @v_created_by        = [dbo].[SCM_ARR_SPL_VAL](@p_created_by, @v_delimiter , @mst_loop_cnt) ; 
+			    SET @v_creation_date     = [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter , @mst_loop_cnt) ; 
+                SET @v_last_updated_by   = [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter , @mst_loop_cnt) ; 
+					
+			END
+			
+			IF (ISNULL(@v_category_id,'') = '')
+				SET @n_history_seq = NEXT VALUE FOR SEQ1_SCM_ADM_RECIPIENT_LIST
+			ELSE
+				SET @n_history_seq = @v_category_id
+
+			--HISTORY INSERT
+			EXEC [PR_SCM_ADM_RECIPIENT_LIST_HIST]
+								 @v_use_type 
+								,@v_module 
+								,@v_submodule
+								,@v_category_id
+								,@v_category_desc
+								,@v_cycle_class_code 
+								,@v_detail_class_code 
+								,@v_send_time_text 
+								,@v_send_min_time_text
+								,@v_active
+								,@V_sql_long_text
+								,@v_created_by
+								,@v_creation_date
+								,@v_last_updated_by										
+																
+			 ;
+			
+			IF @mst_loop_cnt > 0 				
+				IF @v_active_flag != 'D'
+					BEGIN
+						BEGIN       
+			 
+							MERGE INTO [SCM_ADM_RECIPIENT_LIST] A
+							USING (
+									SELECT 
+										 @v_use_type as use_type_code
+										,@n_history_seq as category_id	
+										,@v_module as module_code
+										,@v_submodule as sub_module_code						
+								  ) B
+							ON(
+										A.use_type_code  = B.use_type_code
+									AND A.category_id = B.category_id
+									AND A.module_code = B.module_code
+									AND A.sub_module_code = B.sub_module_code						
+							  )
+							WHEN MATCHED THEN
+								 UPDATE SET 
+										category_desc		= @v_category_desc
+									   ,cycle_class_code	= @v_cycle_class_code
+									   ,detail_class_code	= @v_detail_class_code
+									   ,send_time_text		= @v_send_time_text
+									   ,send_min_time_text	= @v_send_min_time_text
+									   ,valid_yn			= @v_active
+									   ,last_updated_by		= @v_last_updated_by
+									   ,last_update_date	= sysdatetime()
+					                
+							WHEN NOT MATCHED THEN
+
+								INSERT	(									   
+										 use_type_code,category_id,sub_module_code,module_code
+										,category_desc,cycle_class_code,detail_class_code,send_time_text,send_min_time_text,valid_yn
+										,created_by,creation_date,last_updated_by,last_update_date
+										)
+								VALUES  
+										(
+										 @v_use_type ,@n_history_seq , @v_submodule, @v_module
+										,@v_category_desc ,@v_cycle_class_code ,@v_detail_class_code ,@v_send_time_text ,@v_send_min_time_text, @v_active
+										,@v_created_by,SYSDATETIME(),@v_last_updated_by,SYSDATETIME()
+										);
+			
+						END
+					END
+				ELSE IF @v_active_flag = 'D'
+					BEGIN
+						DELETE FROM SCM_ADM_RECIPIENT_LIST
+						WHERE use_type_code = @v_use_type
+						  AND module_code = @v_module
+						  AND sub_module_code = @v_submodule
+						  AND category_id = @n_history_seq;
+
+						/*해당 MAIL/SMS의 Category_ID로 등록되어 있는 메세지와 수신자를 같이 삭제한다.*/
+						DELETE FROM [dbo].[SCM_ADM_RECIPIENT_MESSAGE]
+						WHERE use_type_code = @v_use_type
+						  AND c"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_SAVE_RECIPIENT_MASTER","46011295","3","ategory_id = @n_history_seq;
+
+						/*수신자삭제 : MAIL/SMS 분기처리*/
+						IF @v_use_type = 'SMS'
+							BEGIN
+								DELETE FROM [dbo].[SCM_ADM_RECIPIENT_SMS_ASSIGN]
+								WHERE category_id = @n_history_seq; 
+							END
+						ELSE 
+							BEGIN
+								DELETE FROM [dbo].[SCM_ADM_RECIPIENT_ASSIGN]
+								WHERE use_type_code = @v_use_type
+								  AND category_id = @n_history_seq; 
+							END
+					END
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_SAVE_RECIPIENT_MASTER_U","62011352","1","
+
+/*
+ * Program ID   : SCM0006_SAVE_RECIPIENT_MASTER_U
+ * Description  : MAIL SET MASTER SQL LONG TEXT UPDATE
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/01/30   ygkim   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ */
+
+CREATE PROCEDURE [dbo].[SCM0006_SAVE_RECIPIENT_MASTER_U]
+  @p_use_type			NVARCHAR(MAX),
+  @p_module				NVARCHAR(MAX),
+  @p_submodule			NVARCHAR(MAX),    
+  @p_category_id		NVARCHAR(MAX),
+  @p_sql				NVARCHAR(MAX),
+  @p_last_updated_by	NVARCHAR(MAX)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCM0006_SAVE_RECIPIENT_MASTER_U';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	BEGIN TRY
+	-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		UPDATE SCM_ADM_RECIPIENT_LIST
+		   SET SQL_LONG_TEXT = @p_sql
+		      ,LAST_UPDATED_BY = @p_last_updated_by
+			  ,LAST_UPDATE_DATE = GETDATE()
+	    WHERE USE_TYPE_CODE = @p_use_type
+		  AND MODULE_CODE = @p_module
+		  AND SUB_MODULE_CODE = @p_submodule
+		  AND CATEGORY_ID = @p_category_id
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  1 AS result_cnt ;
+	END TRY
+
+	BEGIN CATCH
+		BEGIN
+		INSERT INTO scm_sys_log_batch (program_name
+										,log_type
+										,log_count
+										,log_message
+										,description
+										,event_date
+										,creation_date
+										,created_by
+										,last_update_date
+										,last_updated_by)
+		VALUES (ERROR_PROCEDURE()
+				,'ERROR'
+				,NULL
+				,ERROR_MESSAGE()
+				,NULL
+				,SYSDATETIME()
+				,SYSDATETIME()
+				,ERROR_PROCEDURE()
+				,SYSDATETIME()
+				,ERROR_PROCEDURE());
+
+		IF @@TRANCOUNT > 0
+			COMMIT WORK;
+		END;		
+
+		-- error코드, errror 메시지 반환
+		SELECT 'F' AS result_code;
+		SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+   ;
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_SAVE_RECIPIENT_MESSAGE","78011409","1","/*
+ * Program ID   : SCM0006_SAVE_RECIPIENT_MESSAGE
+ * Description  : SMS/MAIL별 Category_ID별 메세지 저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/02/20   ygkim   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+CREATE PROCEDURE [dbo].[SCM0006_SAVE_RECIPIENT_MESSAGE]
+
+	-- Add the parameters for the stored procedure here
+	@p_active_flag			NVARCHAR(MAX),
+	@p_use_type				NVARCHAR(MAX),
+	@p_category_id			NVARCHAR(MAX),
+	@p_language 			NVARCHAR(MAX),
+	@p_title 				NVARCHAR(MAX),
+    @p_content 				NVARCHAR(MAX),
+	@p_created_by			NVARCHAR(MAX),
+	@p_creation_date		NVARCHAR(MAX),
+	@p_last_updated_by		NVARCHAR(MAX)
+
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_use_type				NVARCHAR(MAX);
+	DECLARE @v_category_id			NVARCHAR(MAX);
+	DECLARE @v_language			    NVARCHAR(MAX);
+	DECLARE @v_title				NVARCHAR(MAX);	
+	DECLARE @v_content				NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+    DECLARE @v_creation_date		NVARCHAR(MAX);
+    DECLARE @v_last_updated_by      NVARCHAR(MAX); 
+		
+	SET @v_active_flag = NULL;
+	SET @v_use_type = NULL;
+	SET @v_category_id = NULL;
+	SET @v_language = NULL;
+	SET @v_content = NULL;
+	SET @v_created_by		= NULL;
+    SET @v_creation_date    = NULL;
+    SET @v_last_updated_by  = NULL; 
+
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCM0006_SAVE_RECIPIMENT_MESSAGE';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+	
+		BEGIN TRY
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+		--SELECT    @max_loop_cnt;
+		--	WHILE LEN(@p_active_flag) > 0
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		BEGIN    
+			
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;
+			--SELECT @mst_loop_cnt,'@mst_loop_cnt'		
+
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+
+				SET @v_active_flag = [dbo].[SCM_ARR_SPL_VAL](@p_active_flag, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_use_type = [dbo].[SCM_ARR_SPL_VAL](@p_use_type, @v_delimiter , @mst_loop_cnt) ; 		
+				SET @v_category_id = [dbo].[SCM_ARR_SPL_VAL](@p_category_id, @v_delimiter , @mst_loop_cnt) ; 					
+				SET @v_language = [dbo].[SCM_ARR_SPL_VAL](@p_language, @v_delimiter , @mst_loop_cnt) ;    				
+				SET @v_title = [dbo].[SCM_ARR_SPL_VAL](@p_title, @v_delimiter , @mst_loop_cnt) ;  
+				SET @v_content = [dbo].[SCM_ARR_SPL_VAL](@p_content, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_created_by        = [dbo].[SCM_ARR_SPL_VAL](@p_created_by, @v_delimiter , @mst_loop_cnt) ; 
+			    SET @v_creation_date     = [dbo].[SCM_ARR_SPL_VAL](@p_creation_date, @v_delimiter , @mst_loop_cnt) ; 
+                SET @v_last_updated_by   = [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter , @mst_loop_cnt) ; 
+					
+			END
+			
+			--HISTORY INSERT
+			EXEC [PR_SCM_ADM_RECIPIENT_MESSAGE_HIST]
+								 @v_use_type 
+								,@v_category_id
+								,@v_langu"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCM0006_SAVE_RECIPIENT_MESSAGE","78011409","2","age 
+								,@v_title
+								,@v_content
+								,@v_created_by
+								,@v_creation_date
+								,@v_last_updated_by				
+			 ;
+			
+			IF @mst_loop_cnt > 0 
+				IF @v_active_flag != 'D'				
+					BEGIN  
+						MERGE INTO [SCM_ADM_RECIPIENT_MESSAGE] A
+						USING (
+								SELECT 
+									 @v_use_type as use_type_code
+									,@v_category_id as category_id	
+									,@v_language as language					
+							  ) B
+						ON(
+									A.use_type_code  = B.use_type_code
+								AND A.category_id = B.category_id
+								AND A.language_code = B.language				
+						  )
+						WHEN MATCHED THEN
+							 UPDATE SET 
+									MAIL_TITLE		= @v_title
+								   ,MESSAGE_CONTENT	= @v_content
+								   ,last_updated_by		= @v_last_updated_by
+								   ,last_update_date	= sysdatetime()
+					                
+						WHEN NOT MATCHED THEN
+
+							INSERT	(									   
+									 use_type_code,category_id,language_code,mail_title,message_content
+									,created_by,creation_date,last_updated_by,last_update_date
+									)
+							VALUES  
+									(
+									 @v_use_type ,@v_category_id , @v_language, @v_title,@v_content
+									,@v_created_by,SYSDATETIME(),@v_last_updated_by,SYSDATETIME()
+									);
+			
+					END
+				ELSE IF @v_active_flag = 'D'
+					BEGIN
+						DELETE FROM SCM_ADM_RECIPIENT_MESSAGE
+						WHERE use_type_code = @v_use_type
+						  AND category_id = @v_category_id
+						  AND language_code = @v_language;
+					END
+			END
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_description = '';
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+			-- 결과코드, 결과 카운트 반환
+			SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+		END TRY
+
+		BEGIN CATCH
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name
+										  ,log_type
+										  ,log_count
+										  ,log_message
+										  ,description
+										  ,event_date
+										  ,creation_date
+										  ,created_by
+										  ,last_update_date
+										  ,last_updated_by)
+			VALUES (ERROR_PROCEDURE()
+				   ,'ERROR'
+				   ,NULL
+				   ,ERROR_MESSAGE()
+				   ,NULL
+				   ,SYSDATETIME()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE()
+				   ,SYSDATETIME()
+				   ,ERROR_PROCEDURE());
+
+			IF @@TRANCOUNT > 0
+			  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+
+
+
+
+
+
+"

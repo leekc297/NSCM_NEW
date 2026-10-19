@@ -20,7 +20,7 @@ import { DataGrid } from '@shared/components';
 import { useMessageStore } from '@shared/stores';
 
 import { SHEETS } from '../contribute-main.constants';
-import type { MainRow } from '../types';
+import type { MainRow, SpreadTitleRow } from '../types';
 import { useContributeMainStore } from '../useContributeMainStore';
 
 interface Props {
@@ -28,11 +28,17 @@ interface Props {
   gridFilterRef?: MutableRefObject<FlexGridFilter | undefined>;
   editTrackerRef?: MutableRefObject<EditTracker<MainRow> | undefined>;
   data: MainRow[];
+  /** 칸 제목 SP(mainTitle) 행 — 동적 칸의 원천. 비어 있으면 data 의 키로 폴백한다. */
+  titleRows: SpreadTitleRow[];
 }
 
 // AS-IS analysis.md §10 — 다단 헤더 (period 라벨 + RBU 한글명 leaf) + Y#/M# 동적 PIVOT.
 // BASE 6 컬럼: admin SHEET_COLUMNS (staticColumns) 로 동적 fetch — 하드코딩 0.
-// PIVOT 컬럼: SP 응답 row[k] 에서 derive — dynamicColumns prop 으로 DataGrid 전달.
+// PIVOT 컬럼: 칸 제목 SP(mainTitle o_rc1)의 M#/Y# 행으로 만든다 — dynamicColumns prop 으로 DataGrid 전달.
+//   종전에는 데이터 행의 키(row[k])에서 뽑았는데, BE 가 NULL 셀의 키를 응답에서 빼므로 값이 한 건도
+//   없는 달·연도는 칸 자체가 사라져 기여율을 등록할 수 없었다(2026-10-06 실측: 2025 버전 117칸 전부
+//   NULL → 칸 0개). 데이터 SP 는 제목 SP 와 같은 117칸으로 PIVOT 하므로 제목 기준이 정본이다.
+//   제목이 비어 있으면(조회 실패 등) 종전처럼 데이터 키로 폴백하고, 둘은 합집합으로 둔다.
 // chkYear: true → Y# (연도총계) / false → M# (월별).
 const RBU_NAME_MAP: Record<string, string> = {
   RBU_0001: '대만',
@@ -81,27 +87,75 @@ interface DynColLeaf {
   rbuCode: string;
 }
 
+/** 동적 칸 키(M#YYYYMM#RBU_xxxx / Y#YYYY#RBU_xxxx)인가. */
+const isDynamicKey = (key: string, prefix: string) =>
+  key.startsWith(prefix) && key.split('#').length === 3;
+
+/** 기여율(숫자) 칸인가 — 동적 칸 중 구분(RBU_0999) 문자 컬럼을 뺀 것. 빈 칸 '0' 채움(emptyCellAsZero) 대상. */
+const isRatioBinding = (binding: string): boolean =>
+  (isDynamicKey(binding, 'M#') || isDynamicKey(binding, 'Y#')) && !binding.endsWith(RBU_DIVISION);
+
+/**
+ * 동적 칸의 법인 코드 목록 — 저장 시 "입력한 기간의 법인 전부"를 채우는 기준.
+ *   제목 행이 있으면 거기서, 없으면 데이터 행의 키에서 뽑는다. 구분(RBU_0999)은 기여율이 아니라 제외.
+ */
+// eslint-disable-next-line react-refresh/only-export-components
+export const collectRbuCodes = (
+  titleRows: readonly SpreadTitleRow[],
+  data: readonly MainRow[],
+  chkYear: boolean
+): string[] => {
+  const prefix = chkYear ? 'Y#' : 'M#';
+  const codes = new Set<string>();
+  const addKey = (key: string) => {
+    if (!isDynamicKey(key, prefix)) return;
+    const corp = key.split('#')[2] ?? '';
+    if (corp && corp !== RBU_DIVISION) codes.add(corp);
+  };
+  titleRows.forEach(row => addKey(String(row.COLUMN_NAME ?? '')));
+  if (codes.size === 0) data.forEach(row => Object.keys(row).forEach(addKey));
+  return [...codes].sort(
+    (a, b) => RBU_ORDER.indexOf(a) - RBU_ORDER.indexOf(b) || a.localeCompare(b)
+  );
+};
+
 // export 는 테스트 전용 — 구분(RBU_0999) 컬럼의 dataType 회귀를 잡는 단위 테스트가 참조한다.
 //   (별도 파일로 빼지 않는 대신 fast-refresh 경고만 국소 해제)
 // eslint-disable-next-line react-refresh/only-export-components
-export const buildDynamicColumns = (data: MainRow[], chkYear: boolean): FlexGridColumnConfig[] => {
-  if (!data || data.length === 0) return [];
+export const buildDynamicColumns = (
+  titleRows: readonly SpreadTitleRow[],
+  data: readonly MainRow[],
+  chkYear: boolean
+): FlexGridColumnConfig[] => {
   const prefix = chkYear ? 'Y#' : 'M#';
-  const allKeys = new Set<string>();
+  // 키 → 제목 행. 제목 SP 가 준 기간 표기(LARGE_CLASS_LABEL_NAME)와 법인명(COLUMN_LABEL_NAME)을 쓴다.
+  const titleByKey = new Map<string, SpreadTitleRow>();
+  for (const row of titleRows) {
+    const key = String(row.COLUMN_NAME ?? '');
+    if (isDynamicKey(key, prefix)) titleByKey.set(key, row);
+  }
+  // 합집합 — 제목이 정본이고, 제목에 없는 키가 데이터에 있으면 그 칸도 잃지 않는다.
+  const allKeys = new Set<string>(titleByKey.keys());
   for (const row of data) {
     for (const k of Object.keys(row)) {
-      if (k.startsWith(prefix)) allKeys.add(k);
+      if (isDynamicKey(k, prefix)) allKeys.add(k);
     }
   }
+  if (allKeys.size === 0) return [];
   const leaves: DynColLeaf[] = Array.from(allKeys)
     .map(k => {
       const [, period, corp] = k.split('#');
+      const title = titleByKey.get(k);
+      const periodLabel =
+        String(title?.LARGE_CLASS_LABEL_NAME ?? '').trim() ||
+        (period?.length === 6 ? `${period.slice(0, 4)}-${period.slice(4)}` : (period ?? ''));
+      const leafLabel =
+        String(title?.COLUMN_LABEL_NAME ?? '').trim() || RBU_NAME_MAP[corp ?? ''] || corp || '';
       return {
         binding: k,
         period: period ?? '',
-        periodLabel:
-          period?.length === 6 ? `${period.slice(0, 4)}-${period.slice(4)}` : (period ?? ''),
-        leafLabel: RBU_NAME_MAP[corp ?? ''] ?? corp ?? '',
+        periodLabel,
+        leafLabel,
         rbuCode: corp ?? '',
       };
     })
@@ -155,7 +209,13 @@ export const buildDynamicColumns = (data: MainRow[], chkYear: boolean): FlexGrid
   }) as FlexGridColumnConfig[];
 };
 
-export const ContributeMainGrid = ({ gridRef, gridFilterRef, editTrackerRef, data }: Props) => {
+export const ContributeMainGrid = ({
+  gridRef,
+  gridFilterRef,
+  editTrackerRef,
+  data,
+  titleRows,
+}: Props) => {
   const internalRef = useRef<FlexGridType<MainRow> | undefined>();
   const { t } = useTranslation();
   const setAlert = useMessageStore(s => s.setAlert);
@@ -163,8 +223,8 @@ export const ContributeMainGrid = ({ gridRef, gridFilterRef, editTrackerRef, dat
   const staticColumns = useContributeMainStore(s => s.staticColumns[SHEETS.MAIN]);
 
   const dynamicColumns = useMemo<FlexGridColumnConfig[]>(
-    () => buildDynamicColumns(data, chkYear),
-    [data, chkYear]
+    () => buildDynamicColumns(titleRows, data, chkYear),
+    [titleRows, data, chkYear]
   );
 
   const fixedBindings = ['DEPARTMENT_ID', 'DEPT_ID', 'END_CUST_REPORT', 'SOLDTO_CUST_REPORT'];
@@ -386,6 +446,11 @@ export const ContributeMainGrid = ({ gridRef, gridFilterRef, editTrackerRef, dat
       //   걸려 있는데도 고정선이 제품군에서 끊겼다.
       dynamicColumns={dynamicColumns}
       itemsSource={data}
+      // 편집으로 지운 기여율 칸은 '0' 으로 채운다 (AS-IS spdMain_Changed .cs L881~895: M 행의 빈 칸 → "0").
+      //   그래야 저장 시 "값이 있는 칸만 전송" 규칙에서도 지운 칸이 0 으로 저장된다(빈 채로 두면 전송에서
+      //   빠져 저장 SP 의 키 단위 DELETE 로 사라진다 — 결과는 같지만 사용자가 0 을 보지 못한다).
+      //   구분(RBU_0999) 컬럼은 문자 컬럼이라 제외. 화면 cellEditEnded 에 직접 붙이지 않는 이유는 DataGrid prop 주석 참조.
+      emptyCellAsZero={isRatioBinding}
       allowMerging={AllowMerging.All}
       mergeManager={new HierarchicalMergeManager()}
       alternatingRowStep={0}

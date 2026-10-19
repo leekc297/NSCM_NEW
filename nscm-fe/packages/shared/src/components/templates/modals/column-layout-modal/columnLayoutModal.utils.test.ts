@@ -10,6 +10,7 @@ import {
   overrideRows,
   parseWidth,
   reorderRows,
+  serializeSavePayload,
   toColumnLayoutSettings,
   toggleDisplay,
   toHiddenColumnSet,
@@ -262,6 +263,45 @@ describe('columnLayoutModal.utils', () => {
       { colNm: 'F', display: false, colWth: 80 },
     ]);
     expect([...hidden].sort()).toEqual(['A', 'B', 'C']);
+  });
+
+  it('serializeSavePayload: 값(표시/순서/폭/색) 같으면 배열 순서 달라도 동일 문자열 (무변경 판정)', () => {
+    // buildSavePayload 를 거친 두 payload — 배열 순서만 다르고 값은 같다 → 저장할 변경 없음.
+    const a = buildSavePayload(
+      [
+        mk({ COLUMN_NAME: 'A', USER_FLAG: 'Y', SORT_ORDER_NO: 1 }),
+        mk({ COLUMN_NAME: 'B', USER_FLAG: 'Y', SORT_ORDER_NO: 2 }),
+        mk({ COLUMN_NAME: 'C', USER_FLAG: 'N', SORT_ORDER_NO: 0 }),
+      ],
+      new Set()
+    );
+    const b = buildSavePayload(
+      [
+        mk({ COLUMN_NAME: 'C', USER_FLAG: 'N', SORT_ORDER_NO: 0 }),
+        mk({ COLUMN_NAME: 'B', USER_FLAG: 'Y', SORT_ORDER_NO: 2 }),
+        mk({ COLUMN_NAME: 'A', USER_FLAG: 'Y', SORT_ORDER_NO: 1 }),
+      ],
+      new Set()
+    );
+    expect(serializeSavePayload(a)).toBe(serializeSavePayload(b));
+  });
+
+  it('serializeSavePayload: 표시 순서/폭/색 중 하나라도 바뀌면 다른 문자열 (변경 판정)', () => {
+    const base = [
+      mk({ COLUMN_NAME: 'A', USER_FLAG: 'Y', SORT_ORDER_NO: 1, COL_WIDTH: 100 }),
+      mk({ COLUMN_NAME: 'B', USER_FLAG: 'Y', SORT_ORDER_NO: 2 }),
+    ];
+    const s0 = serializeSavePayload(buildSavePayload(base, new Set()));
+    // 순서 바꿈
+    expect(serializeSavePayload(buildSavePayload(reorderRows(base, ['B', 'A']), new Set()))).not.toBe(
+      s0
+    );
+    // 폭 바꿈
+    expect(
+      serializeSavePayload(buildSavePayload(changeCellColor(base, 'A', '#FF0000'), new Set()))
+    ).not.toBe(s0);
+    // 표시 토글
+    expect(serializeSavePayload(buildSavePayload(toggleDisplay(base, 'B'), new Set()))).not.toBe(s0);
   });
 
   it('reorderRows: orderedKeys 순서대로 SORT_ORDER_NO 재부여', () => {

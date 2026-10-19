@@ -445,7 +445,7 @@ export const SalesPlanWaterfallForm = ({ onSubmit }: SalesPlanWaterfallFormProps
             <Grid size={3}>
               <FormItem
                 className={commonStyles.formItem}
-                label={t('LBL00003', '_Model/Nickname')}
+                label={t('LBL00618', '_Model/Nickname')}
                 labelAlign='right'
                 render={() => (
                   <InputField

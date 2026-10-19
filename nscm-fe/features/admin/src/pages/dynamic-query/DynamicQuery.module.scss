@@ -71,6 +71,8 @@
 
 // 섹션 내 grid/viewer 영역 — 남은 공간 채움
 .gridFill {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-height: 0;
 }

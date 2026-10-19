@@ -38,7 +38,7 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
 
   const STATUS_OPTIONS = [
     { label: t('LBL00632', 'All'), value: 'ALL' },
-    { label: t('LBL00633', 'Request'), value: 'REQUEST' },
+    { label: t('LBL00620', 'Request'), value: 'REQUEST' },
     { label: t('LBL00634', 'Approved'), value: 'APPROVED' },
     { label: t('LBL00635', 'Rejected'), value: 'REJECTED' },
   ];
@@ -52,7 +52,7 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
         <>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00675', 'Div')}
+              label={t('LBL00001', 'Div')}
               labelAlign='right'
               className={commonStyles.formItem}
               render={() => (
@@ -84,7 +84,7 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
           </Grid>
           <Grid size={3}>
             <FormItem
-              label={t('LBL00676', 'Department')}
+              label={t('LBL00615', 'Department')}
               labelAlign='right'
               className={commonStyles.formItem}
               render={() => (
@@ -117,7 +117,7 @@ export const AuthApprovalForm = ({ onSearch }: Props) => {
           {/* 공용 카탈로그 PeriodField(@master/searchFields) — 라벨만 'Request Date'로 오버라이드. */}
           <PeriodField
             gridSize={3}
-            label={t('LBL00677', 'Request Date')}
+            label={t('LBL00747', 'Request Date')}
             start={sc.startDate}
             end={sc.endDate}
             onChange={(start, end) => setSc({ startDate: start, endDate: end })}

@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","screen_ids","sp_names","cs_lines","tables","comment"
+"master/components/ownerByDivisionModal","","features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx","28","DMF0008","","","","DMF0008 (2026-07-08): cell dblClick 시 OWNER(코드) + USER_NM(이름) 자동 채움 의무 — optional 추가 인자"
+"master/components/ownerByDivisionModal","","features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx","106","COM0006","P_OWNER_ID","","","Search 버튼/Enter — SP(COM0006)의 P_OWNER_ID 는 현재 죽은 파라미터라 결과가 안 좁혀진다."
+"master/components/ownerByDivisionModal","","features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx","165","DMF0005","","","","ownerId 가 undefined 일 때 preSearchParams.owner fallback — DMF0005 가 prop 생략해도"
+"master/components/ownerByDivisionModal","","features/master/src/components/ownerByDivisionModal/OwnerByDivisionModal.tsx","186","DMF0082","","","","상단 주석(DMF0082 ExchangeRateModal) 과 동일 원인."

@@ -2,7 +2,7 @@ import type { Control } from '@mescius/wijmo';
 import { DataType } from '@mescius/wijmo';
 import { LinearGauge } from '@mescius/wijmo.gauge';
 import { DataMap } from '@mescius/wijmo.grid';
-import { InputDate, InputDateTime } from '@mescius/wijmo.input';
+import { InputDate, InputDateTime, InputNumber } from '@mescius/wijmo.input';
 
 import { CELL_CONTROL_TYPE } from '@foundation/constants';
 import type {
@@ -11,6 +11,8 @@ import type {
   RawFlexGridColumnConfig,
 } from '@foundation/models';
 
+// 신규행 판정은 mergeManager 의 공용 가드를 그대로 쓴다 - 같은 CRUD_TYPE='I' 기준이다.
+import { isInsertRow } from './mergeManager';
 import { safeString } from './string';
 
 const alignMap = {
@@ -36,6 +38,12 @@ const getDataType = (ctrlType: CELL_CONTROL_TYPE): DataType | undefined => {
     case CELL_CONTROL_TYPE.NUMBER:
     case CELL_CONTROL_TYPE.NUMBER_TEXT:
       return DataType.Number;
+    // 텍스트 셀(AS-IS FarPoint FpText/FpTextBox)은 문자열로 못박는다. dataType 을 비워 두면
+    //   Wijmo 가 첫 행 값으로 컬럼 타입을 추론해(FlexGrid._updateColumnTypes → items[0]),
+    //   ROUTE_ID 처럼 원본이 NUMBER 인 값이 내려오면 텍스트로 지정해도 숫자로 렌더된다.
+    case CELL_CONTROL_TYPE.TEXT:
+    case CELL_CONTROL_TYPE.TEXT_BOX:
+      return DataType.String;
     case CELL_CONTROL_TYPE.CHECKBOX:
       // TODO: 체크박스 디자인 조절 필요
       // 'Y'/'N' 원본값과 boolean 커밋값의 동치 판정은 EditTracker.isSameValue 에서 처리(값 매핑 해결).
@@ -66,8 +74,31 @@ const getFormat = (
   return undefined;
 };
 
-const getEditor = (ctrlType: CELL_CONTROL_TYPE): Control | undefined => {
+// 편집 입력 마스크. FPDateText = 날짜를 마스크 텍스트로 입력(AS-IS ####-##-##, 달력 피커 없음).
+//   Wijmo Column.mask '0' = 필수 숫자 → 8자리 입력이 'YYYY-MM-DD' 로 자동 정형된다.
+const getMask = (ctrlType: CELL_CONTROL_TYPE | undefined): string | undefined => {
+  if (ctrlType === CELL_CONTROL_TYPE.DATE_TEXT) return '0000-00-00';
+  return undefined;
+};
+
+const getEditor = (
+  ctrlType: CELL_CONTROL_TYPE,
+  scale: number | undefined
+): Control | undefined => {
   switch (ctrlType) {
+    // 숫자 셀 입력 자릿수 제한 — 메타 scale(DATA_SCALE_NUMBER)을 편집기에 건다. Wijmo
+    //   InputNumber(format=n{scale})는 소수 {scale}자리를 넘는 입력을 막는다(scale=0 → 정수, 소수 입력 불가).
+    //   scale 미지정(NULL)은 제한 없는 기본 텍스트 편집기를 그대로 둔다 — 0(정수)과 NULL(미지정)은 다르다.
+    //   AS-IS 는 MKT FCST/Elec.Demand CHG_QTY 를 정수(int), STOCK 계열을 소수 2자리(double)로 다룬다
+    //   (SCP0125_Workbench.cs L1059·1357). API 는 미지정 컬럼을 scale:null 로 내려준다(실측).
+    case CELL_CONTROL_TYPE.NUMBER:
+      if (scale == null) return undefined;
+      return new InputNumber(document.createElement('div'), {
+        format: `n${scale}`,
+        isRequired: false,
+        step: null,
+        showSpinner: false, // 셀 편집기에 -/+ 스피너 버튼 숨김(step:null 만으로는 DOM 에 남는다)
+      });
     // TODO: 테스트 필요, 투머치면 빼기
     case CELL_CONTROL_TYPE.PERCENT:
       return new LinearGauge(document.createElement('div'), {
@@ -84,11 +115,12 @@ const getEditor = (ctrlType: CELL_CONTROL_TYPE): Control | undefined => {
       });
     case CELL_CONTROL_TYPE.DATE:
     case CELL_CONTROL_TYPE.DATE_MONTH:
-    case CELL_CONTROL_TYPE.DATE_TEXT:
       return new InputDate(document.createElement('div'), {
         format: 'yyyy-MM-dd',
         isReadOnly: false,
       });
+    // DATE_TEXT(FPDateText) 는 달력 피커가 아니라 마스크 텍스트 입력(AS-IS ####-##-##)이다.
+    //   편집기를 주지 않고(기본 텍스트 편집) getMask 로 '0000-00-00' 마스크만 건다.
     default:
       break;
   }
@@ -127,6 +159,38 @@ export const parseComboFilterBindings = (bindingString?: string): Record<string,
 };
 
 /**
+ * 신규행 전용 콤보 ID — 컬럼 메타 PARAM9(ATTRIBUTE9).
+ *
+ * 값이 있으면 신규행(CRUD_TYPE='I')에서만 cellCboDataTp 대신 이 콤보를 본다. 조회로 내려온
+ * 행은 종전대로 cellCboDataTp 다. 방식(필터/재조회)은 양쪽 다 PARAM10 을 따르고 PARAM2 도
+ * 공유한다 - 두 콤보가 같은 바인드명/결과 컬럼명을 쓴다는 뜻이다(2026-08-31 사용자 확정).
+ *
+ * 비면 '' 를 돌려준다 - 호출부는 그때 종전 경로와 완전히 같게 동작해야 한다.
+ */
+export const insertComboId = (column: RawFlexGridColumnConfig): string =>
+  (column.attribute9 ?? '').trim();
+
+/**
+ * 콤보 lookupType — 컬럼 메타 PARAM1(ATTRIBUTE1). 범용 콤보(LookupCommon/LookupCommon3 등 SQL 이
+ * `WHERE LOOKUP_TYPE=@lookupType`)의 코드셋을 지정한다(예: SHIPMENT_STATUS·MES_CHANGE_STATUS·
+ * SALES_TYPE_CODE). 비면 ''.
+ */
+export const comboLookupType = (column: RawFlexGridColumnConfig): string =>
+  (column.attribute1 ?? '').trim();
+
+/**
+ * 콤보 캐시/조회 키 — 같은 comboId 라도 lookupType(PARAM1) 이 다르면 서로 다른 코드셋이므로 별개로
+ * 캐시해야 한다(한 그리드에 LookupCommon 을 Status·Change Status 가 각자 쓰는 경우). lookupType 이
+ * 없으면 comboId 그대로라 기존 콤보는 동작 불변. comboId 는 trim(메타에 후행 공백이 섞여 있음).
+ */
+export const comboCacheKey = (comboId: string, lookupType: string): string =>
+  lookupType ? `${comboId}__${lookupType}` : comboId;
+
+/** 컬럼의 콤보 캐시 키(cellCboDataTp + PARAM1). DataGrid 콤보 조회/적용이 같은 키를 쓴다. */
+export const comboKeyOfColumn = (column: RawFlexGridColumnConfig): string =>
+  comboCacheKey((column.cellCboDataTp ?? '').trim(), comboLookupType(column));
+
+/**
  * 행 파라미터 콤보 판정 — 컬럼 메타 PARAM10(ATTRIBUTE10) 이 'D' 인 콤보 컬럼.
  *
  * D 면 PARAM2 오른쪽이 "콤보 결과 컬럼명" 이 아니라 "콤보 SQL 바인드명" 으로 해석된다.
@@ -145,6 +209,32 @@ export const isRowParamCombo = (column: RawFlexGridColumnConfig): boolean =>
 /** 행 파라미터 값 정규화 — 조회 파라미터와 조합 키가 같은 규칙을 쓰도록 한 곳에 둔다. */
 export const rowParamValue = (rowItem: WijmoRowItem | undefined, binding: string): string =>
   safeString(rowItem?.[binding]).trim();
+
+/**
+ * 행 파라미터 콤보의 SQL 바인드 값 — PARAM2 의 `행컬럼:바인드명` 을 바인드명 기준으로 접는다.
+ *
+ * 한 바인드명에 행 컬럼을 여러 개 걸 수 있다. 같은 뜻의 값이 division 에 따라 다른 컬럼으로
+ * 내려오는 경우가 있어서다 — End Customer 는 비40 이 END_CUSTOMER, 40 이 END_CUSTOMER40 이다.
+ * 그때 PARAM2 를 `END_CUSTOMER:endCustomer,END_CUSTOMER40:endCustomer` 로 적으면 된다.
+ *
+ * 선언 순서대로 보다가 처음 채워진 값을 쓴다. 필수: 뒤 컬럼이 무조건 이기게 두면 그 컬럼이 빈
+ * 행에서 바인드가 공란으로 나가 콤보가 통째로 비어 버린다(비40 행의 END_CUSTOMER40 이 그 경우다).
+ * 전부 공란이면 '' 를 남긴다 — 키를 빼면 BE 가 어차피 '' 로 치환하는데 캐시 키만 갈라진다.
+ *
+ * Map 으로 접는 이유는 바인드명이 'constructor' 같은 Object 프로토타입 키일 때 plain object
+ * 인덱싱이 값이 아니라 프로토타입 체인을 집기 때문이다.
+ */
+export const rowParamValues = (
+  bindings: Record<string, string>,
+  rowItem: WijmoRowItem | undefined
+): Record<string, string> => {
+  const values = new Map<string, string>();
+  for (const [binding, bindName] of Object.entries(bindings)) {
+    if (values.get(bindName)) continue;
+    values.set(bindName, rowParamValue(rowItem, binding));
+  }
+  return Object.fromEntries(values);
+};
 
 // 구분자: 데이터에 나타나지 않는 제어문자(Unit Separator, \x1F). '|' 같은 문자를 쓰면
 // ('A','BC') 와 ('AB','C') 가 같은 키로 뭉개진다.
@@ -304,7 +394,7 @@ export const findStaleComboCells = (
 
     // 아직 콤보가 안 실린 컬럼은 판정 불가 — 미도착을 "후보 0건" 으로 오인해 지우면
     // 조회 직후 멀쩡한 값이 통째로 날아간다.
-    const comboRows = comboRowsByComboId[column.cellCboDataTp as string];
+    const comboRows = comboRowsByComboId[comboKeyOfColumn(column)];
     if (!comboRows) continue;
 
     const candidates = filterComboRowsByRowItem(comboRows, column.attribute2, context);
@@ -315,6 +405,74 @@ export const findStaleComboCells = (
   }
 
   return stale;
+};
+
+/** findStaleRowParamComboCells 결과 — 지금 비울 셀과, 아직 판정 못 한(재조회 미도착) 하위 binding. */
+export interface RowParamStaleResult {
+  /** 새 후보에 없어 비울 하위 셀. */
+  stale: StaleComboCell[];
+  /** 재조회 결과가 아직 안 실려 판정을 미룬 하위 binding — 호출부는 다음 도착까지 대기한다. */
+  awaiting: string[];
+}
+
+/**
+ * 재조회형(PARAM10='D') 상위 콤보를 바꾼 뒤, 새 후보 밖으로 밀려난 하위 셀을 찾는다.
+ *
+ * findStaleComboCells 의 재조회형 대응판이다. 그쪽은 콤보 결과 컬럼과 행 값을 클라에서 비교하는
+ * 필터형만 판정하고 행 파라미터 콤보는 제외한다 — 재조회형은 좁힘 기준이 콤보 결과 컬럼이 아니라
+ * SQL 바인드라 그 비교가 성립하지 않기 때문이다. 여기서는 그 대신 실제 재조회 결과(rowParamRows)를
+ * 후보로 삼는다.
+ *
+ * 후보 선정은 드롭다운(getRowParamDataMap.pickRowParamCandidates)과 **완전히 같은 규칙**이어야
+ * "드롭다운에 뜨는 값 = 셀에 남을 수 있는 값" 불변식이 유지된다 — 조합 키는 rowParamKey, 버킷은
+ * 신규행+PARAM9 후보가 있으면 insert 버킷, 아니면 기본 버킷.
+ *
+ * 재조회는 비동기다. 부모를 바꾼 직후엔 새 조합의 후보가 아직 안 왔을 수 있다(그 조합 키가 버킷에
+ * 없음 = undefined). 그때는 비우지 않고 awaiting 으로 돌려, 호출부가 후보 도착 후 다시 부르게 한다.
+ * 미도착을 "후보 0건"으로 오인해 비우면 방금 고른 값이 조회 사이에 날아간다.
+ *
+ * 값을 직접 지우지는 않는다. 호출부(DataGrid)가 EditTracker 기록과 함께 반영한다.
+ */
+export const findStaleRowParamComboCells = (
+  columns: RawFlexGridColumnConfig[],
+  /** 콤보 binding -> 행조합 키 -> 후보 (useRowParamCombos.rowParamRows). */
+  rowParamByBinding: Record<string, Record<string, ComboResponse[]> | undefined>,
+  /** PARAM9 신규행 버킷 (useRowParamCombos.insertRowParamRows). */
+  insertRowParamByBinding: Record<string, Record<string, ComboResponse[]> | undefined>,
+  /** 부모 셀을 바꾼 행 (이미 새 값이 반영된 상태). */
+  row: WijmoRowItem,
+  /** 방금 바뀐 셀의 binding. */
+  changedBinding: string
+): RowParamStaleResult => {
+  const stale: StaleComboCell[] = [];
+  const awaiting: string[] = [];
+
+  for (const column of columns) {
+    if (!isRowParamCombo(column)) continue;
+    const binding = column.colNm;
+    // 방금 바뀐 셀에 종속된 하위만 대상 — 자기 자신은 비우지 않는다.
+    const bindings = parseComboFilterBindings(column.attribute2);
+    if (binding === changedBinding || !(changedBinding in bindings)) continue;
+
+    const previousValue = row[binding];
+    if (isBlankRowValue(previousValue)) continue;
+
+    // 드롭다운과 같은 버킷 선정: 신규행이고 PARAM9 후보가 실렸으면 insert 버킷, 아니면 기본 버킷.
+    const insertBucket = insertRowParamByBinding[binding];
+    const useInsert = isInsertRow(row) && !!insertBucket && Object.keys(insertBucket).length > 0;
+    const bucket = useInsert ? insertBucket : rowParamByBinding[binding];
+
+    const candidates = bucket?.[rowParamKey(bindings, row)];
+    if (candidates === undefined) {
+      awaiting.push(binding); // 재조회 결과 미도착 — 판정 보류
+      continue;
+    }
+    if (candidates.some(candidate => candidate.CODE === previousValue)) continue;
+
+    stale.push({ binding, previousValue });
+  }
+
+  return { stale, awaiting };
 };
 
 /**
@@ -352,11 +510,12 @@ const displayNameGroup = (name: string): number => {
 /**
  * 표시 목록 정렬 — 숫자 -> 영어 -> 한글 -> 그 외, 같은 갈래 안에서는 사전순.
  *
- * 주의: 콤보 SQL 의 ORDER BY 를 덮어쓴다. 등록 순서 그대로 보여야 하는 콤보가 생기면 컬럼 메타
- * dataSortMthdCd(현재 미사용)를 조건으로 걸어 화면별로 가른다.
- * 순서만 바꿀 뿐 후보 집합은 그대로라, findStaleComboCells 의 값 유효성 판정과 어긋나지 않는다.
+ * 주의: 공용 콤보(getDataMap/getRowParamDataMap)는 더 이상 이 정렬을 쓰지 않는다. AS-IS 처럼
+ *   콤보 SQL/서버 응답 순서를 그대로 보존하도록 orderComboDisplayNames 를 원본 순서 반환으로
+ *   되돌렸다. 이 함수는 그 순서를 명시적으로 원하는 화면(sales-site salesCompanyGuard 의
+ *   "첫 값" 판정 등)에서만 직접 호출한다.
  */
-const sortComboDisplayNames = (names: string[]): string[] =>
+export const sortComboDisplayNames = (names: string[]): string[] =>
   [...names].sort((a, b) => {
     const groupGap = displayNameGroup(a) - displayNameGroup(b);
     if (groupGap !== 0) return groupGap;
@@ -365,25 +524,48 @@ const sortComboDisplayNames = (names: string[]): string[] =>
     return a.localeCompare(b, 'ko', { numeric: true, sensitivity: 'base' });
   });
 
-const getDataMap = (dataMap: ComboResponse[] | undefined, bindingString?: string) => {
-  if (!dataMap || dataMap.length === 0) return undefined;
+/**
+ * 콤보 표시 순서 — 콤보 SQL 의 ORDER BY(= 서버 응답) 순서를 그대로 둔다. 클라 재정렬은 하지 않는다.
+ *   AS-IS 는 SP/콤보 SQL 이 내려준 순서를 그대로 셀 콤보에 꽂으므로(SCP0128 PlanGroup 등 순서가
+ *   깨진다는 신고), 공용 기본값을 '원본 순서 보존'으로 되돌린다.
+ */
+export const orderComboDisplayNames = (names: string[]): string[] => [...names];
 
-  const wjDataMap = new DataMap(dataMap, 'CODE', 'NAME');
+/**
+ * 필터 방식(PARAM10 이 'D' 가 아님) 콤보의 DataMap.
+ *
+ * PARAM9 가 있으면 신규행만 그 콤보를 본다. 색인(CODE<->NAME)에는 두 콤보를 다 넣는다 -
+ * 색인은 셀이 아니라 컬럼 단위라, 한쪽만 넣으면 다른 쪽 코드가 라벨 대신 코드 원문으로 뜨고
+ * 고른 라벨을 코드로 되돌리지 못해 빈 값으로 커밋된다(getRowParamDataMap 과 같은 사정).
+ * 기본 콤보를 앞에 둬 같은 CODE 의 표시명이 기본 기준으로 고정되게 한다.
+ */
+const getDataMap = (
+  dataMap: ComboResponse[] | undefined,
+  insertDataMap: ComboResponse[] | undefined,
+  bindingString?: string
+) => {
+  const baseRows = dataMap ?? [];
+  const insertRows = insertDataMap ?? [];
+  const allRows = insertRows.length > 0 ? [...baseRows, ...insertRows] : baseRows;
+  if (allRows.length === 0) return undefined;
+
+  const wjDataMap = new DataMap(allRows, 'CODE', 'NAME');
   const hasRowFilter = Object.keys(parseComboFilterBindings(bindingString)).length > 0;
 
   // 손대는 것은 표시 목록뿐이다. 원본 행(collectionView.items)은 그대로 둬야 행별 좁힘 기준과
   //   부가 컬럼으로 CODE 를 되찾는 경로(sales-site resolveComboCodeByDivision)가 산다.
   // 필수 순서: 좁힘 -> 중복 제거 -> 정렬. 중복 제거를 좁힘보다 앞에 두면 부가 컬럼별 행이 사라져
   //   cascade 가 깨진다 (CustomDropdown dedupeOptions 와 같은 사정).
-  wjDataMap.getDisplayValues = (rowItem?: WijmoRowItem) =>
-    sortComboDisplayNames(
+  wjDataMap.getDisplayValues = (rowItem?: WijmoRowItem) => {
+    // rowItem 없이 부르는 경로(컬럼 필터 등)는 행을 모르므로 종전대로 기본 콤보 전량을 준다.
+    //   PARAM9 후보가 그 목록으로 새면 안 된다 - 드롭다운은 항상 rowItem 과 함께 온다.
+    const source = insertRows.length > 0 && isInsertRow(rowItem) ? insertRows : baseRows;
+    return orderComboDisplayNames(
       dedupeComboRowsByCode(
-        // rowItem 없이 부르는 경로(컬럼 필터 등)는 좁힐 근거가 없으므로 전량을 대상으로 둔다.
-        hasRowFilter && rowItem
-          ? filterComboRowsByRowItem(dataMap, bindingString, rowItem)
-          : dataMap
+        hasRowFilter && rowItem ? filterComboRowsByRowItem(source, bindingString, rowItem) : source
       ).map(item => item.NAME)
     );
+  };
 
   return wjDataMap;
 };
@@ -415,23 +597,48 @@ const getRowParamDataMap = (column: RawFlexGridColumnConfig): DataMap | undefine
   //   없어 행 값이 그대로 키가 되는데, 그 값이 'constructor' 면 프로토타입 체인이 걸려 후보
   //   자리에 함수가 온다.
   const rowsByKey = new Map(Object.entries(column.rowParamRows ?? {}));
-  const allRows = [...metaRows, ...[...rowsByKey.values()].flat()];
+  // PARAM9 가 있으면 신규행은 이쪽 버킷에서만 후보를 뽑는다. 색인에는 양쪽을 다 넣는다.
+  const insertRowsByKey = new Map(Object.entries(column.insertRowParamRows ?? {}));
+  const allRows = [
+    ...metaRows,
+    ...[...rowsByKey.values()].flat(),
+    ...[...insertRowsByKey.values()].flat(),
+  ];
   if (allRows.length === 0) return undefined;
 
   const wjDataMap = new DataMap(allRows, 'CODE', 'NAME');
 
+  // 신규행은 PARAM9 버킷에서만 후보를 뽑는다. 아직 안 실렸으면 기본 버킷이다.
+  const pickRowParamCandidates = (rowItem: WijmoRowItem): ComboResponse[] => {
+    const bucket = isInsertRow(rowItem) && insertRowsByKey.size > 0 ? insertRowsByKey : rowsByKey;
+    return bucket.get(rowParamKey(bindings, rowItem)) ?? [];
+  };
+
   wjDataMap.getDisplayValues = (rowItem?: WijmoRowItem) =>
-    sortComboDisplayNames(
+    orderComboDisplayNames(
       dedupeComboRowsByCode(
         // rowItem 없이 부르는 경로(컬럼 필터 등)는 좁힐 근거가 없으므로 전량을 준다 -
         //   F 경로(getDataMap)와 같은 규칙이다. 드롭다운은 항상 rowItem 과 함께 오므로
         //   "후보에 전체 목록이 새면 안 된다" 규칙과 충돌하지 않는다.
-        rowItem ? (rowsByKey.get(rowParamKey(bindings, rowItem)) ?? []) : allRows
+        rowItem ? pickRowParamCandidates(rowItem) : allRows
       ).map(item => wjDataMap.getDisplayValue(item.CODE))
     );
 
   return wjDataMap;
 };
+
+/**
+ * 콤보 컬럼의 DataMap 을 만든다 — 행 파라미터(PARAM10='D')면 getRowParamDataMap, 아니면 getDataMap.
+ *
+ * toLeafColumn 이 컬럼 config 에 dataMap 을 굽는 것과 같은 판정이다. 공용 DataGrid 는 columnGroups
+ * 재대입(= Wijmo 전 컬럼 재생성 → 다단 헤더 흔들림)을 피하려고 구조는 columnGroups 로 한 번만 넘기고,
+ * 콤보 데이터가 도착하면 이 함수로 만든 DataMap 을 `col.dataMap =` 로만 갈아끼운다. 그래서 같은 판정을
+ * 컴포넌트에서도 쓸 수 있게 밖으로 뺀다.
+ */
+export const buildLeafColumnDataMap = (column: RawFlexGridColumnConfig): DataMap | undefined =>
+  isRowParamCombo(column)
+    ? getRowParamDataMap(column)
+    : getDataMap(column.dataMap, column.insertDataMap, column.attribute2);
 
 // ⭐ 라벨 끝 필수표시(`*`) 정규화 — AS-IS 잔재로 관리자 컬럼 메타의 라벨(colLblNm)에 `*` 가 그대로
 //   박혀 있는 화면(DMF0082 등)이 있다. 디자인 표준은 헤더 라벨 앞 빨간점(`is-required`, _grid.scss)이라
@@ -495,6 +702,9 @@ const toLeafColumn = (column: NormalizedRawColumn): FlexGridColumnConfig => ({
   allowSorting: false,
   // TODO: 숫자 외의 다른 format 필요 시 추가 - 강민재
   format: getFormat(column.cellCtrlObjTpCd, column.scale),
+  mask: getMask(column.cellCtrlObjTpCd),
+  // admin DATA_MAX_LENGTH -> Wijmo Column.maxLength (편집기 입력 글자수 제한). 미설정이면 무제한.
+  maxLength: column.dataMaxLength,
   width: column.colWth,
   visible: column.visible,
   _inputEditType: column.inputTpCd,
@@ -507,11 +717,9 @@ const toLeafColumn = (column: NormalizedRawColumn): FlexGridColumnConfig => ({
   _personalizable: column.personalizable,
   _sClsLblNm: column.sClsLblNm,
   _lClsLblNm: column.lClsLblNm,
-  dataMap: isRowParamCombo(column)
-    ? getRowParamDataMap(column)
-    : getDataMap(column.dataMap, column.attribute2),
+  dataMap: buildLeafColumnDataMap(column),
   isRequired: false, // TODO: 논의 필요..? -강민재
-  editor: column.cellCtrlObjTpCd ? getEditor(column.cellCtrlObjTpCd) : undefined,
+  editor: column.cellCtrlObjTpCd ? getEditor(column.cellCtrlObjTpCd, column.scale) : undefined,
   dataType: column.cellCtrlObjTpCd ? getDataType(column.cellCtrlObjTpCd) : undefined,
   multiLine: column.cellCtrlObjTpCd === CELL_CONTROL_TYPE.MULTILINE_TEXT,
   wordWrap: column.cellCtrlObjTpCd === CELL_CONTROL_TYPE.MULTILINE_TEXT,

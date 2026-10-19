@@ -3,7 +3,6 @@ import {
   CellType,
   type FlexGrid,
   type CellRangeEventArgs,
-  CellRange,
 } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useMemo, useRef, useState, type MutableRefObject } from 'react';
@@ -37,6 +36,7 @@ export const SalesSiteGrid = ({
 
   const staticColumns = useSalesSiteStore(state => state.staticColumns);
   const setDetailFilters = useSalesSiteStore(state => state.setDetailFilters);
+  const activeFlag = useSalesSiteStore(state => state.searchParams.activeFlag);
 
   const [clickedRow, setClickedRow] = useState<number>(-1);
   const [openRegionModal, setOpenRegionModal] = useState<boolean>(false);
@@ -86,7 +86,7 @@ export const SalesSiteGrid = ({
     dataItem.CITY = cityCode;
     dataItem.CITY_NAME = cityName;
     applySalesSite(dataItem, editTrackerRef.current, getSoldToCustomerCode(dataItem));
-    gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
+    GridUtils.refreshRow(gridRef.current, clickedRow);
   };
 
   const handleFocus = () => {
@@ -106,7 +106,7 @@ export const SalesSiteGrid = ({
     if (!['SOLDTO_CUSTOMER', 'COUNTRY', 'CITY'].includes(binding)) return;
 
     applySalesSite(dataItem, editTrackerRef.current, getSoldToCustomerCode(dataItem));
-    grid.refreshRange(new CellRange(row, 0, row, -1));
+    GridUtils.refreshRow(grid, row);
   };
 
   const handleGridDblClick = (mouseEvent: MouseEvent) => {
@@ -130,10 +130,14 @@ export const SalesSiteGrid = ({
 
     if (GridUtils.isEditableCell(grid, ht.row, ht.col)) return;
 
+    // 하단 Customer/Location 의 Active 는 조회조건 Active 값(더블클릭 시점의 콤보값)을 보낸다.
+    //   AS-IS 는 cboActive 전달값으로 하단을 거른다(ALL·빈값 = 전체). 종전처럼 클릭한 윗 행의
+    //   VALID_YN 을 보내면 ALL 로 조회한 뒤 사용 중지 사이트를 열 때 하단에 N 행만 남는다.
+    //   SP(P_DMF0004_GET_SALES_SITE_DETAIL_DATA)의 Active 조건은 2026-10-06 복원분과 짝이다.
     setDetailFilters({
       divisionId: dataItem?.DIVISION_ID,
       salesSite: dataItem?.SCM_SITE_ID,
-      activeFlag: dataItem?.VALID_YN,
+      activeFlag,
     });
   };
 

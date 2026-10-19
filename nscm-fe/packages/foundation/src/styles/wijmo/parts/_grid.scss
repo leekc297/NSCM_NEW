@@ -113,6 +113,15 @@
         color: #000000;
       }
     }
+
+    // F3 로 정렬 기능을 끈(allowSorting=false) 컬럼 — 실제 정렬(행 순서)은 유지하되
+    //   Wijmo 기본 정렬 화살표(allowSorting과 무관하게 그려짐, wj-glyph-up/wj-glyph-down)만
+    //   숨겨 "정렬 기능이 꺼졌다"는 걸 시각적으로 알려준다. 필터/핀 아이콘도 같은 wj-glyph
+    //   베이스 클래스를 쓰므로 up/down 만 콕 집어 지정 — .wj-glyph 전체를 숨기면 안 된다.
+    &.is-sort-disabled .wj-glyph-up,
+    &.is-sort-disabled .wj-glyph-down {
+      display: none;
+    }
   }
 
   .wj-rowheaders .wj-header {
@@ -307,6 +316,19 @@
       .wj-btn.wj-btn-glyph.wj-elem-dropdown {
         display: inline-block;
         opacity: 1;
+      }
+    }
+
+    // InputNumber 등 컨트롤 편집기(columnMapping getEditor — 소수 scale 입력 제한용)는 자체 흰 배경을
+    //   가져, 편집 중 편집가능 셀 배경(노란색 #fff8cd = $wj-editable-cell)을 덮어 흰색으로 보인다.
+    //   기본 텍스트 편집기(.wj-grid-editor: background inherit)와 동일하게 컨트롤·내부 input 배경을
+    //   투명 상속시켜 편집 중에도 셀 색이 유지되게 한다.
+    .wj-inputnumber {
+      &,
+      .wj-input,
+      .wj-input-group,
+      .wj-form-control {
+        background: inherit;
       }
     }
 
@@ -687,6 +709,9 @@
   //   공급해 그 화면을 연 세션에서만 커서가 바뀌었다. 누수를 제거하며 표준 계약으로 여기에 옮겼다.
   &.wj-cell-popup {
     cursor: pointer;
+    // 우측 OpenInNew 아이콘(::after, right:5px + 16px)과 셀 텍스트가 겹치지 않도록
+    //   아이콘 폭만큼 우측 패딩을 확보한다. 텍스트는 ellipsis 로 아이콘 앞에서 끊긴다.
+    padding-right: 24px;
   }
 
   &.wj-cell-popup::after {
@@ -742,4 +767,22 @@
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   pointer-events: auto; // 툴팁 위로 마우스 이동 가능하게
+}
+
+/* 그리드 콤보 셀 - 한글 조합 중 자동완성 미리보기 (DataGrid.tsx showComposingPreview).
+   조합 중에는 편집기 value 를 바꿀 수 없어(조합이 취소되고 영문 raw 로 확정된다) 값 대신
+   화면에 겹쳐 그린다. 친 글자 뒤에 붙을 부분만 선택색으로 표시한다. */
+.wj-composing-preview {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  white-space: pre;
+
+  /* 배경(선택색)은 바깥 div 가 아니라 안쪽 span 이 갖는다. 바깥은 편집기 높이만큼 line-height 를
+     받아 글자를 세로 중앙에 맞추는 역할만 하므로, 배경을 여기에 주면 셀 높이만큼 블록이 커진다. */
+  > span {
+    background: Highlight;
+    color: HighlightText;
+    line-height: normal;
+  }
 }

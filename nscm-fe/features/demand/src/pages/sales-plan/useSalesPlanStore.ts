@@ -6,12 +6,13 @@ import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 import {
   BUCKET_TYPE,
   BUCKET_WORD,
-  DIVISION,
+  // DIVISION, // 미사용 (divisionId 초기값을 '' 로 변경하며 제거)
   MENU_ID,
   SHEETS,
   TITLESET_COLUMN_TYPE,
 } from './sales-plan.constants';
 import type { CalendarInfo, EditAuthInfo, SearchCondition } from './sales-plan.types';
+import type { PlantSiteSource, SearchComboTrigger } from './utils/sales-plan.searchCombos';
 
 // SP filter 로 변환된 payload — useTabProcQuery enabled 가드
 //   MAIN = P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX / SPREAD_TITLE = P_DMF0021_GET_SPREAD_TITLE
@@ -45,6 +46,12 @@ interface State {
   initialized: boolean;
   filters: FiltersBySheet;
   searchCondition: SearchCondition;
+  // 조회조건 콤보를 다시 만든 계기. AS-IS 는 같은 콤보라도 무엇을 바꿨느냐로 축이 달라진다 -
+  //   근거와 라인은 utils/sales-plan.searchCombos 참조. searchCondition 밖에 두는 이유:
+  //   setFilter 가 조회조건을 프로시저 파라미터로 옮겨 담아 화면 상태가 새어 나가면 안 된다.
+  comboTrigger: SearchComboTrigger;
+  // Plant Site 원천 - 진입은 고객 기준, Division 을 한 번이라도 바꾸면 사업부 기준으로 굳는다.
+  plantSiteSource: PlantSiteSource;
   openSearchArea: boolean;
   staticColumns: RawFlexGridColumnConfig[];
   // 개인화 적용 전 admin 메타 원본 — 팝업 Default 버튼의 원복 기준.
@@ -71,7 +78,7 @@ interface State {
 
 interface Action {
   reset: () => void;
-  setSearchCondition: (p: Partial<SearchCondition>) => void;
+  setSearchCondition: (p: Partial<SearchCondition>, comboTrigger?: SearchComboTrigger) => void;
   setFilter: () => void;
   clearFilters: () => void;
   /**
@@ -146,7 +153,9 @@ export const resolveNowYyyymmdd = (
 };
 
 const initSearch: SearchCondition = {
-  divisionId: useSessionStore.getState().session.div || DIVISION.MOBILITY,
+  // 빈 값으로 시작 — 화면(SalesPlan.tsx)의 division 자동선택 effect 가 세션/콤보 데이터로 채운다
+  // (DMF0003/DMF0020/DMF0040/DMF0053 정본과 동일).
+  divisionId: '',
   deptIds: [],
   endCustomers: [],
   scmSiteIds: [],
@@ -177,6 +186,8 @@ const initState: State = {
   initialized: false,
   filters: {},
   searchCondition: initSearch,
+  comboTrigger: 'entry',
+  plantSiteSource: 'entry',
   openSearchArea: true,
   staticColumns: [],
   originalStaticColumns: [],
@@ -306,9 +317,13 @@ export const useSalesPlanStore = createPersistedStoreWithTab<State & Action>(
       set(state => {
         state.userDeptId = deptId;
       }),
-    setSearchCondition: p =>
+    setSearchCondition: (p, comboTrigger) =>
       set(state => {
         state.searchCondition = { ...get().searchCondition, ...p };
+        if (comboTrigger) state.comboTrigger = comboTrigger;
+        // Plant Site 원천은 Division 을 바꾼 뒤로 고정이다 - AS-IS 는 Team·End Customer 변경
+        //   핸들러에서 Plant Site 를 다시 만들지 않으므로 직전 목록이 그대로 남는다.
+        if (comboTrigger === 'division') state.plantSiteSource = 'division';
       }),
     setFilter: () => {
       // BE makeProcedure (BaseService.java) 가 SCM_ADM_PROC_M.COL_NM 기준 positional 매핑.

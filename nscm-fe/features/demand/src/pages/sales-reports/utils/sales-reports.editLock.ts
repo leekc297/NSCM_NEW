@@ -1,6 +1,10 @@
 // ⭐ DMF0044 — 편집/잠금 규칙 엔진 (제약매트릭스 §3 4변수 매트릭스 + InsertRow 잠금 12컬럼 전수).
 //   근거(라인 = AS-IS 신정본 DMF0044_Sales_Reports.cs 1,483행):
 //   [게이트0] Data Type=='ALL' → 편집·저장 전면 차단 (EditButton L272~276 MSG00321→MSG00681)
+//   [시점경계] Report Type=='REPORT_BP_M'(Biz Plan) → iCurCol=iStartCol 로 실적구간이 시작열로
+//     붕괴(L294~299) → 과거구간이 사라져 전 구간이 계획구간이 된다. 아래 isPast 를 접어 재현한다.
+//     이 축이 빠지면 BP_M 에서 LOC 가 과거구간 잠긴 채 남고 기타 measure 가 과거구간 열린 채 남는다
+//     (2026-09-11 버그 수정 — 입력 가능 Measure = Business Plan/Unit Price(LOC), 실적/계획 동일).
 //   [게이트1] 행 EDIT_FLAG × Measure × Division × 시점 — EditButton L270~372 매트릭스:
 //     EDIT_FLAG=='Y'                          → 키영역만 잠금, 수량 전 구간 편집 (L327)
 //     ≠Y & MEASURE=='LOC'                     → 계획구간(현재월~)만 편집 (L333/337 — 과거 잠금)
@@ -10,7 +14,7 @@
 //     ≠Y & 기타 & 비40                        → 편집 불가 (L363)
 //   [InsertRow] 메타컬럼 잠금 12 (L997~1023) + MEASURE 강제 세팅 (L1021~1025)
 //   순수 함수 — Grid formatItem(3색 hook #95) + beginningEdit cancel 공유.
-import { DATA_TYPE } from '../sales-reports.constants';
+import { DATA_TYPE, REPORT_TYPE } from '../sales-reports.constants';
 import type { SalesReportRow } from '../sales-reports.types';
 
 import { isDiv40 } from './sales-reports.division';
@@ -37,12 +41,16 @@ export const evalSalesReportCell = (params: {
   row: SalesReportRow | undefined;
   divisionId: string;
   dataType: string;
+  reportType: string; // Report Type — BP_M 이면 실적구간 붕괴 (AS-IS L294~299)
   thisMonth: string; // yyyymm — iCurCol 경계 (AS-IS 현재월 산정 L306~318)
 }): SalesReportCellState => {
-  const { binding, row, divisionId, dataType, thisMonth } = params;
+  const { binding, row, divisionId, dataType, reportType, thisMonth } = params;
   if (dynKindOf(binding) !== 'M') return LOCKED;
   const ym = binding.slice(2);
-  const isPast = ym < thisMonth;
+  // Report Type=BP_M(Biz Plan) → iCurCol=iStartCol 붕괴로 과거구간이 사라진다(위 [시점경계]).
+  //   isPast 를 접으면 LOC 는 전 구간 개방(!isPast), 기타 measure 는 전 구간 잠금(d40 && isPast)이
+  //   되어 AS-IS 와 맞는다. SP_W(Sales Plan)는 종전대로 현재월 기준.
+  const isPast = reportType !== REPORT_TYPE.BP_M && ym < thisMonth;
 
   // 게이트0 — Data Type ALL = 전면 차단 (L272~276)
   if (dataType === DATA_TYPE.ALL) return { editable: false, isPast };

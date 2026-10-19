@@ -1,0 +1,24 @@
+.summaryBar {
+  display: flex;
+  gap: 12px;
+  padding: 0 8px;
+
+  span {
+    font-size: 12px;
+    color: #333;
+  }
+}
+
+// 저장 진행 스피너 — 조회 로딩과 동일한 딤 오버레이 + 중앙 원형(기준: shipment-change-request-plan actionSpinner).
+.actionSpinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  cursor: not-allowed;
+}

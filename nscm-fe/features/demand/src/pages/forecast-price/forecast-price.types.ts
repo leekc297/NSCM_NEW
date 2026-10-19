@@ -51,6 +51,33 @@ export interface MeasureAuthRow {
 }
 
 /**
+ * 버튼 활성화 권한 row — buttonAuth 시트(P_DMF0082_GET_BUTTON_AUTH O_RC1) 1행.
+ *   SP 가 메저 편집권한(GET_MAIN_DATA drop3 와 같은 산출)을 버튼 단위 Y/N 으로 접어 내려준다.
+ *   조회(Search) 와 무관하게 화면 오픈·Division 변경 시 받는다.
+ */
+export interface ButtonAuthRow {
+  DIVISION_ID?: string;
+  INSERT_YN?: string;
+  DELETE_YN?: string;
+  SAVE_YN?: string;
+  PRICE_BATCH_YN?: string;
+  EXCEL_FORM_YN?: string;
+  EXCEL_UPLOAD_YN?: string;
+  EDIT_AUTH_YN?: string;
+}
+
+/** ButtonAuthRow 를 boolean 으로 정규화한 버튼 게이트 — store.buttonAuth. */
+export interface ButtonAuthFlags {
+  insert: boolean;
+  delete: boolean;
+  save: boolean;
+  priceBatch: boolean;
+  excelForm: boolean;
+  excelUpload: boolean;
+  editAuth: boolean;
+}
+
+/**
  * GET drop4 (= O_RC5 실측) 배분 캘린더 row — 월(M_) 수량 일별 배분(#1)·M+4 규칙 입력.
  *   MONTH_DAY_CNT = 소속 월 전체 일수 / WEEK_DAY_CNT = 소속 ISO 주 일수 (AS-IS dtCalendarDetail Tables[4]).
  */

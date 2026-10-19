@@ -1,13 +1,20 @@
+import type { CollectionView } from '@mescius/wijmo';
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { apiClient } from '@foundation/apis';
 import { IcGridColumnSetup } from '@foundation/assets';
 import { BUTTON_TYPE, CRUD_TYPE } from '@foundation/constants';
 import dayjs from '@foundation/dayjs';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
 import { useQueryClient } from '@foundation/query-client';
-import { GridAction, GridUtils } from '@foundation/utils';
+import {
+  CustomMergeManager,
+  GridAction,
+  GridUtils,
+  keepRowVisibleUnderFilter,
+} from '@foundation/utils';
 import {
   ColumnLayoutModal,
   MainTitle,
@@ -20,17 +27,20 @@ import {
 import { useProcMutation, useSaveWithValidation, useTabProcQuery } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
 
+import { parseCallProcResult } from '../../lib/call-proc';
+
 import { MyProjectGrid } from './components/MyProjectGrid';
 import { ProjectGrid } from './components/ProjectGrid';
+// import { ProjectProcessFlow } from './components/ProjectProcessFlow';
 import { ProjectRegistrationForm } from './components/ProjectRegistrationForm';
 import { MENU_ID, RESPONSE_SET, SHEET_INDEX, SHEETS } from './project-registration.constants';
 import {
   buildProjectActionPayload,
+  buildProjectRequestPayload,
   buildProjectSavePayload,
-  collectCheckedRows,
   createProjectIdentifiers,
 } from './project-registration.grid-utils';
-import { isDraftRegStatus, isPendingRegStatus, REG_STATUS } from './project-registration.types';
+import { isDraftRegStatus, REG_STATUS } from './project-registration.types';
 import type { MyProjectRow, ProjectRow } from './project-registration.types';
 import styles from './ProjectRegistration.module.scss';
 import { useProjectRegistrationStore } from './useProjectRegistrationStore';
@@ -92,45 +102,66 @@ export const ProjectRegistration = ({ tabId, title }: PageProps<MENU_ID>) => {
     menuId: MENU_ID,
     sheetName: SHEETS.PROJECT,
     tabId,
-  });
-  const { mutate: requestProject } = useProcMutation<MENU_ID, SHEETS.PROJECT>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.PROJECT,
-    procedureAction: BUTTON_TYPE.REQUEST,
-    tabId,
+    // 저장 성공 시 그리드 재조회 — refetch 직접 호출은 stale closure 로 무반응일 수 있어
+    // 조회 표준대로 filters 를 새 참조로 확정해(setProjectFilters) 쿼리를 다시 태운다.
     onSuccess: () => {
-      setToast({ type: 'success', message: t('MSG00712', '_성공적으로 등록요청 되었습니다.') });
-      void refetchProject();
+      setToast({ type: 'success', message: t('MSG00002', '_성공적으로 저장되었습니다!') });
+      setProjectFilters();
     },
-    onError: error => {
+  });
+  // 등록요청(REQUEST)/요청취소(CANCEL) — SPMS 표준 판정(lib/call-proc parseCallProcResult):
+  //   결과커서 CODE '0' + EVENT 처리건수 > 0 만 성공. 공용 useProcMutation 은 HTTP 200 이면 무조건
+  //   onSuccess 라 SP 가 커서로 돌려주는 CODE '-1'(ERR_RTN Validation Check, EVENT='MSG00060^…')도
+  //   성공 토스트가 떴다 — SDM5010 승인/반려(project-master.api.ts)와 같은 직접 호출 경로로 맞춘다.
+  //   요청 본문은 useProcMutation(callMutationProc)과 동일한 { data: [...] } 형태를 유지한다.
+  const runProjectAction = async (
+    action: BUTTON_TYPE.REQUEST | BUTTON_TYPE.CANCEL,
+    row: ProjectRow,
+    successMessage: string,
+    failMessageId: string,
+    failMessage: string
+  ) => {
+    // REQUEST = P_SDM1010_BTN_REQ_PJT_REG_MAIN — SP 가 저장(신규/변경 반영)까지 수행하므로
+    //   SAVE 와 동일 13종 파라미터(buildProjectRequestPayload)를 전달한다 (2026-09-02 확정. 필수값 검증도
+    //   SP 몫 — 에러는 결과커서 messageId(MSG00060 계열)를 아래 실패 분기가 다국어로 alert 표기).
+    //   CANCEL 은 기존 키 2종 그대로.
+    const payload =
+      action === BUTTON_TYPE.REQUEST
+        ? buildProjectRequestPayload([row])
+        : buildProjectActionPayload([row]);
+    const res = await apiClient.post<Record<string, unknown>>(
+      `${MENU_ID}/${SHEETS.PROJECT}/${action}/call-proc`,
+      { data: payload }
+    );
+    const r = parseCallProcResult(res.status, res.data);
+    if (!r.ok || r.event === 0) {
       void setAlert({
         type: 'alert',
-        content: error?.message ?? t('MSG00711', '_등록요청에 실패하였습니다.'),
+        content: t(!r.ok && r.messageId ? r.messageId : failMessageId, failMessage),
       });
-    },
-  });
-  const { mutate: cancelProjectRequest } = useProcMutation<MENU_ID, SHEETS.PROJECT>({
-    menuId: MENU_ID,
-    sheetName: SHEETS.PROJECT,
-    procedureAction: BUTTON_TYPE.CANCEL,
-    tabId,
-    onSuccess: () => {
-      setToast({ type: 'success', message: t('MSG00002', '_Successfully saved!') });
-      void refetchProject();
-    },
-    onError: error => {
-      void setAlert({
-        type: 'alert',
-        content: error?.message ?? t('MSG00003', '_Failed to save.'),
-      });
-    },
-  });
+      return;
+    }
+    setToast({ type: 'success', message: successMessage });
+    void refetchProject();
+  };
 
   // RESPONSE_SET enum 값을 그대로 bracket-index 하면 문자열 리터럴 키 타입과 어긋날 수 있어
   // (procedures.d.ts 에 SDM1010 등록 후 엄격 타입이 됨) 실제 키 이름으로 직접 접근한다.
-  const projectRows = (projectData?.projectList as unknown as ProjectRow[] | undefined) ?? [];
-  const myProjectRows =
-    (myProjectData?.myProjectList as unknown as MyProjectRow[] | undefined) ?? [];
+  // "작성중"이 아닌 행(승인대기/등록완료)은 EDIT_FLAG='N' — 공용 isEditableCell 이 편집 차단과
+  // 셀 색(Gray)을 함께 판정한다(편집 색과 편집 판정은 같은 함수 규칙). beginningEdit 의
+  // preventLockedRowEdit 와 동일 축.
+  const projectRows = useMemo(
+    () =>
+      ((projectData?.projectList as unknown as ProjectRow[] | undefined) ?? []).map(row =>
+        isDraftRegStatus(row.DPJT_REG_STATUS) ? row : { ...row, EDIT_FLAG: 'N' }
+      ),
+    [projectData]
+  );
+  // 참조 고정 — 매 렌더 새 배열이면 DataGrid 가 컬렉션을 리로드해 깜빡인다 (datagrid-rerender-flicker)
+  const myProjectRows = useMemo<MyProjectRow[]>(
+    () => (myProjectData?.myProjectList as unknown as MyProjectRow[] | undefined) ?? [],
+    [myProjectData]
+  );
 
   const dataCountByTab: Record<SHEET_INDEX, number> = {
     [SHEET_INDEX.PROJECT]: projectRows.length,
@@ -189,15 +220,33 @@ export const ProjectRegistration = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (!grid) return;
     // 요청 1: 신규 행 생성 시 DPJT_CODE/SEQ/KEY를 함께 채워 SAVE SP IN 파라미터로 보낸다.
     const identifiers = createProjectIdentifiers();
-    GridAction.addRow(grid, {
+    // 유형(DPJT_CLASS) 기본값 = "개발". 코드값은 DB lookup(SPMS_DPJT_CLASS) 관리라 FE에
+    // 하드코딩하지 않고 콤보 dataMap(NAME→CODE)에서 역변환한다 — 표시명이 없으면 빈 값 유지.
+    const dpjtClassDefault = grid.getColumn('DPJT_CLASS')?.dataMap?.getKeyValue('개발');
+    const newRow = {
       ...identifiers,
+      DPJT_CLASS: dpjtClassDefault == null ? '' : String(dpjtClassDefault),
       DIVISION_ID: searchParams.divisionId,
       DIVISION_NAME: searchParams.divisionId,
       DPJT_REG_STATUS: REG_STATUS.WRITING,
       DPJT_REG_STATUS_NAME: t('LBL00876', '_Draft'),
       // 신규 row도 DPJT_KEY(TEMP_...)는 이미 있어 팝업을 열 수 있지만 링크 텍스트가 비어 안 보였다.
       DPJT_ATUH_REG_STR: t('LBL00875', '_Authority Registration'),
-    });
+      CRUD_TYPE: CRUD_TYPE.INSERT,
+    } as unknown as ProjectRow;
+    // GridAction.addRow 를 쓰지 않는다 — 공용 addRow 는 조회행이 전부 EDIT_FLAG='N' 이면 조용히
+    // 빠진다(gridAction.ts). 이 화면은 승인대기/등록완료 행에 EDIT_FLAG='N' 을 찍으므로(projectRows)
+    // "작성중" 행이 하나도 없는 조회 결과에서 Insert 버튼/F8 이 무반응이 됐다. 그 잠금은 기존 행
+    // 편집 차단일 뿐 신규 입력과는 무관하니, addRow 의 삽입 절차(위치 계산·필터 예외·머지·refresh)만
+    // 그대로 밟고 가드는 건너뛴다. (@foundation 수정 금지 — 공용 동작은 화면에서 감싼다)
+    const view = grid.collectionView as CollectionView<ProjectRow>;
+    const source = view.sourceCollection as ProjectRow[];
+    source.splice(GridAction.resolveInsertIndex(grid, source), 0, newRow);
+    view.itemsAdded.push(newRow);
+    keepRowVisibleUnderFilter(grid, newRow);
+    grid.mergeManager = new CustomMergeManager(grid);
+    view.refresh();
+    grid.invalidate();
   };
 
   // 삭제(F9) — 화면설계서 TAB1 §확인사항 4.1: 신규 입력 또는 "작성중" 상태만 삭제 가능.
@@ -220,13 +269,7 @@ export const ProjectRegistration = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
       return;
     }
-    void (async () => {
-      const confirmed = await setAlert({
-        type: 'confirm',
-        content: t('MSG00710', '_프로젝트를 삭제 하시겠습니까?'),
-      });
-      if (confirmed) GridAction.removeRow(grid);
-    })();
+    GridAction.removeRow(grid);
   };
 
   // 저장(F7) — 변경된(CRUD_TYPE 마킹된) row 만 모아 필수값 검증 후 저장한다.
@@ -250,55 +293,42 @@ export const ProjectRegistration = ({ tabId, title }: PageProps<MENU_ID>) => {
     })();
   };
 
-  // 등록요청(커스텀 버튼) — 체크박스로 고른 row 중 "작성중" + 이미 저장된(DPJT_CODE 존재) 것만
-  // 대상이다(화면설계서 TAB1 §확인사항 5.1, §메시지 코드 B46).
-  // REQUEST 액션도 useProcMutation으로 처리해 공통 프로시저 호출 흐름을 유지한다.
-  const handleRequest = () => {
-    const checked = collectCheckedRows(gridRefs[SHEET_INDEX.PROJECT].current);
-    const targets = checked.filter(row => row.DPJT_KEY && isDraftRegStatus(row.DPJT_REG_STATUS));
-    if (checked.length === 0) {
-      void setAlert({ type: 'alert', content: t('MSG00709', '_선택한 항목이 존재하지 않습니다.') });
-      return;
-    }
-    if (targets.length < checked.length) {
-      void setAlert({
-        type: 'alert',
-        content: t('MSG00708', '_승인대기, 등록완료 상태의 프로젝트는 등록요청할 수 없습니다.'),
-      });
-      return;
-    }
+  // 등록요청(행 버튼) — 버튼은 "작성중" 행(미저장 신규 행 포함)에만 그려지므로(ProjectGrid)
+  // 상태 검증은 없다(화면설계서 TAB1 §확인사항 5.1).
+  // 저장·필수값 검증은 REQUEST SP 내부에서 함께 처리한다(2026-09-02 확정) — FE 는 SAVE 파라미터
+  // 세트를 그대로 전달하고(runProjectAction), SP 검증 에러는 messageId 다국어 alert 로 표기만 한다.
+  const handleRequest = (row: ProjectRow) => {
     void (async () => {
       const confirmed = await setAlert({
         type: 'confirm',
         content: t('MSG00709', '_프로젝트를 등록/변경 하시겠습니까?'),
       });
       if (!confirmed) return;
-      requestProject(buildProjectActionPayload(targets));
+      await runProjectAction(
+        BUTTON_TYPE.REQUEST,
+        row,
+        t('MSG00712', '_성공적으로 등록요청 되었습니다.'),
+        'MSG00711',
+        '_등록요청에 실패하였습니다.'
+      );
     })();
   };
 
-  // 요청취소(커스텀 버튼) — "승인대기" 상태만 대상이다(화면설계서 TAB1 §메시지 코드 B51).
-  const handleCancelRequest = () => {
-    const checked = collectCheckedRows(gridRefs[SHEET_INDEX.PROJECT].current);
-    const targets = checked.filter(row => isPendingRegStatus(row.DPJT_REG_STATUS));
-    if (checked.length === 0) {
-      void setAlert({ type: 'alert', content: t('MSG00902', '_선택한 항목이 존재하지 않습니다.') });
-      return;
-    }
-    if (targets.length < checked.length) {
-      void setAlert({
-        type: 'alert',
-        content: t('MSG00707', '_작성중, 등록완료 상태의 프로젝트는 요청취소할 수 없습니다.'),
-      });
-      return;
-    }
+  // 요청취소(행 버튼) — "승인대기"/"변경요청" 행에만 버튼이 그려진다(화면설계서 TAB1 §메시지 코드 B51).
+  const handleCancelRequest = (row: ProjectRow) => {
     void (async () => {
       const confirmed = await setAlert({
         type: 'confirm',
         content: t('MSG00713', '_프로젝트 등록요청을 취소 하시겠습니까?'),
       });
       if (!confirmed) return;
-      cancelProjectRequest(buildProjectActionPayload(targets));
+      await runProjectAction(
+        BUTTON_TYPE.CANCEL,
+        row,
+        t('MSG00002', '_Successfully saved!'),
+        'MSG00003',
+        '_Failed to save.'
+      );
     })();
   };
 
@@ -312,6 +342,15 @@ export const ProjectRegistration = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   // [6] hotkeyConfig — PROJECT(TAB1) 는 편집 가능, MY_PROJECT(TAB2) 는 조회 전용
   //   (TAB2 §프로시저: 저장/삭제 <해당없음> → SubTitle 버튼 자체를 숨긴다).
+  //   Sort/Filter/Condition/Reset Condition 버튼은 이 화면에서 쓰지 않아 숨긴다.
+  const hiddenButtons = {
+    sort: false,
+    filter: false,
+    condition: false,
+    resetCondition: false,
+    manual: false,
+    upload: false,
+  } as const;
   const hotkeyConfig: HotkeyConfig =
     activeTab === SHEET_INDEX.PROJECT
       ? {
@@ -319,16 +358,14 @@ export const ProjectRegistration = ({ tabId, title }: PageProps<MENU_ID>) => {
           delete: handleDelete,
           save: handleSave,
           search: handleSearch,
-          manual: false,
-          upload: false,
+          ...hiddenButtons,
         }
       : {
           insert: false,
           delete: false,
           save: false,
           search: handleSearch,
-          manual: false,
-          upload: false,
+          ...hiddenButtons,
         };
 
   // Column Setting(다른 화면과 동일 — sales-plan/mkt-fcst 등의 ColumnLayoutModal 패턴) 대상 시트.
@@ -344,17 +381,9 @@ export const ProjectRegistration = ({ tabId, title }: PageProps<MENU_ID>) => {
     buttonLabel: '',
   };
 
-  // 등록요청/요청취소는 표준 hotkey 세트에 없는 이 화면 전용 버튼이라 SubTitle 의 customButtons 로
-  // 얹는다 — PROJECT(TAB1) 탭에서만 보인다(MY_PROJECT 는 조회 전용이라 대상 자체가 없음).
+  // 등록요청/요청취소는 TAB1 그리드의 행 버튼(REG_ACTION 컬럼, ProjectGrid)으로 옮겼다.
   // Column Setting 은 두 탭 모두에서 쓸 수 있다(조회 전용 그리드도 컬럼 표시/순서 개인화는 가능).
-  const customButtons =
-    activeTab === SHEET_INDEX.PROJECT
-      ? [
-          columnSettingButton,
-          { label: t('LBL00865', '_등록요청'), action: handleRequest },
-          { label: t('LBL00422', '_요청취소'), action: handleCancelRequest },
-        ]
-      : [columnSettingButton];
+  const customButtons = [columnSettingButton];
 
   // [7] JSX — MainTitle → Form(조회조건) → SubTitle(버튼바) → TabWrapper(PROJECT/MY_PROJECT)
   return (
@@ -371,6 +400,8 @@ export const ProjectRegistration = ({ tabId, title }: PageProps<MENU_ID>) => {
           hidden={activeTab === SHEET_INDEX.PROJECT}
           onSearch={handleSearch}
         />
+        {/* 프로세스 흐름 바 — 설계서 프로세스 영역. SP 연동 전이라 기본 건수(설계서 캡처 값) 표시 */}
+        {/* <ProjectProcessFlow /> */}
         <SubTitle
           menuId={MENU_ID}
           grid={gridRefs[activeTab]}
@@ -470,6 +501,8 @@ export const ProjectRegistration = ({ tabId, title }: PageProps<MENU_ID>) => {
               gridFilterRef={gridFilterRefs[SHEET_INDEX.PROJECT]}
               data={projectRows}
               setActiveTab={setActiveTab}
+              onRequest={handleRequest}
+              onCancelRequest={handleCancelRequest}
               // MY_PROJECT(TAB2) 조회 중엔 이 그리드를 dirty 집계에서 뺀다 — 둘은 조회조건만 공유하는
               // peer 탭이라 TAB2 조회가 TAB1 의 미저장 편집까지 물어 confirm 을 띄우면 안 된다.
               excludeFromDirtyCheck={activeTab !== SHEET_INDEX.PROJECT}

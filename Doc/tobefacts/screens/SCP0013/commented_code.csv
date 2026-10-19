@@ -1,0 +1,6 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/production-plan-line","SCP0013","features/supply/src/pages/production-plan-line/components/modals/ProductionPlanFixReasonModal.tsx","12","code","사유 확정(OK) 콜백 — 취소(onClose)는 저장을 중단한다(design 01 R6 — 취소 시 return)."
+"supply/production-plan-line","SCP0013","features/supply/src/pages/production-plan-line/components/ProductionPlanLineGrid.tsx","168","jsx","DataGrid 가 넘겨준 자기 그리드라 캐스팅 안전(CustomMergeManager<WijmoRowItem> 기대 타입과 동일 인스턴스)."
+"supply/production-plan-line","SCP0013","features/supply/src/pages/production-plan-line/ProductionPlanLine.tsx","333","code","여기 silent return 은 방어적 2차 가드(AS-IS BtnNew_Click 의 무메시지 early return 과 동일 성격)."
+"supply/production-plan-line","SCP0013","features/supply/src/pages/production-plan-line/useProductionPlanLineStore.ts","27","endpoint","admin SCM_MST_SHEET_COLUMNS 동적 fetch (ui-dynamic-property-management §2.3). SCP0013 'Line' 27행 등록"
+"supply/production-plan-line","SCP0013","features/supply/src/pages/production-plan-line/useProductionPlanLineStore.ts","51","endpoint","Measure 설정 팝업용 measure 메타 fetch (SCM_MST_SHEET_MEASURE SHEET_NAME='LINE')."

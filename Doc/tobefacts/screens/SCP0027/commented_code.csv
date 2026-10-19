@@ -1,0 +1,6 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/project-route-electrode","SCP0027","features/supply/src/pages/project-route-electrode/project-route-electrode.constants.ts","28","endpoint","컬럼 메타 fetch(/admin/menu/SCP0027/column)의 sheetNm 은 SCM_MST_SHEET_COLUMNS.SHEET_NAME 과 정확히 일치해야 한다(BE 문자열 매칭). SCP0027 은 단일 시트(AS-IS spdMain)이며 DB SHEET_NAME 이 'Main'(31컬럼)으로 배포됨(design/03 §1, 2026-09-26 ora.py 실측)."
+"supply/project-route-electrode","SCP0027","features/supply/src/pages/project-route-electrode/project-route-electrode.constants.ts","41","code","TODO — AS-IS 도 메시지 없이 return). 전극(E) 전용 화면."
+"supply/project-route-electrode","SCP0027","features/supply/src/pages/project-route-electrode/project-route-electrode.constants.ts","101","endpoint","useTabLookupQueries({ lookupType }) 규격(자매 working-time DAY_WEEK_LOOKUP 패턴)."
+"supply/project-route-electrode","SCP0027","features/supply/src/pages/project-route-electrode/ProjectRouteElectrode.tsx","73","endpoint","mount 1회 컬럼 메타 fetch(admin 즉시반영 baseline)."
+"supply/project-route-electrode","SCP0027","features/supply/src/pages/project-route-electrode/useProjectRouteElectrodeStore.ts","96","endpoint","컬럼 메타는 admin(SCM_MST_SHEET_COLUMNS)에서 동적 fetch(ui-category hook, 하드코딩 금지)."

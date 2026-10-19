@@ -1,0 +1,6 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"shipping/shipment-plan-electrode","SSP0023","features/shipping/src/pages/shipment-plan-electrode/shipment-plan-electrode.constants.ts","12","code","- 툴바: Find/Insert/Save = 실동작, Delete = NO-OP `() => undefined`(03 §3.5 — 노출 유지·행삭제 불가), Edit = SwitchLock 미이식(edit default ON)."
+"shipping/shipment-plan-electrode","SSP0023","features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx","45","code","툴바: Find/Save/Insert = 실동작, Delete = NO-OP `() => undefined`(03 §3.5 — 노출 유지, false 숨김 금지),"
+"shipping/shipment-plan-electrode","SSP0023","features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx","173","endpoint","SP 배포 시 useProcMutation<MENU_ID, SHEETS.PLAN_DETAIL>({ onSuccess: clearChanges+toast+refetch }) 을"
+"shipping/shipment-plan-electrode","SSP0023","features/shipping/src/pages/shipment-plan-electrode/ShipmentPlanElectrode.tsx","184","endpoint","── mount — keep-alive 잔여 filters 무효화 + 컬럼/measure 메타 1회 fetch (np §5-7) ──"
+"shipping/shipment-plan-electrode","SSP0023","features/shipping/src/pages/shipment-plan-electrode/useShipmentPlanElectrodeStore.ts","408","endpoint","admin SCM_MST_SHEET_COLUMNS fetch (mount + Search — ui-dynamic-property-management §2.3)."

@@ -3,14 +3,16 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useRef, useState } from 'react';
 
 import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { GridAction } from '@foundation/utils';
 import { MainTitle, SubTitle, TabItem, TabWrapper } from '@shared/components';
-import { useTabProcQuery, useProcMutation, useSaveWithValidation } from '@shared/hooks';
+import { useTabProcQuery, useSaveWithValidation } from '@shared/hooks';
 
 import { UICategoryColumnGrid } from './components/UICategoryColumnGrid';
 import { UICategoryMeasureGrid } from './components/UICategoryMeasureGrid';
 import { UICategorySetupForm } from './components/UICategorySetupForm';
 import type { RESPONSE_SET } from './ui-category-setup.constants';
 import { MENU_ID, SHEET_INDEX, SHEETS } from './ui-category-setup.constants';
+import { useUICategorySetupSave } from './useUICategorySetupSave';
 import { useUICategorySetupStore } from './useUICategorySetupStore';
 
 export const UICategorySetup = ({ tabId, title }: PageProps<MENU_ID>) => {
@@ -46,13 +48,13 @@ export const UICategorySetup = ({ tabId, title }: PageProps<MENU_ID>) => {
     filters,
     enabled: !!filters,
   });
-  const { mutate: mutateColumn } = useProcMutation<MENU_ID, SHEETS, RESPONSE_SET.COLUMN>({
-    menuId: MENU_ID,
+  // 저장 실패(HTTP 500)를 성공으로 처리하던 공통 useProcMutation 대신 화면 전용 훅을 쓴다 —
+  //   사유 전문은 useUICategorySetupSave 주석 참조(정본 = sales-site-project-model).
+  const { mutate: mutateColumn } = useUICategorySetupSave<SHEETS.COLUMN, RESPONSE_SET.COLUMN>({
     sheetName: SHEETS.COLUMN,
     tabId,
   });
-  const { mutate: mutateMeasure } = useProcMutation<MENU_ID, SHEETS, RESPONSE_SET.MEASURE>({
-    menuId: MENU_ID,
+  const { mutate: mutateMeasure } = useUICategorySetupSave<SHEETS.MEASURE, RESPONSE_SET.MEASURE>({
     sheetName: SHEETS.MEASURE,
     tabId,
   });
@@ -60,6 +62,14 @@ export const UICategorySetup = ({ tabId, title }: PageProps<MENU_ID>) => {
   useEffect(() => {
     if (!initialized) void fetchStaticColumns();
   }, [tabId]);
+
+  // VALID_YN 으로 사용 여부를 관리하는 그리드라 삭제는 신규행 제거 전용으로만 쓴다.
+  // removeRow 두 번째 인자 deleteOnlyNew=true 로 기존행에 D flag 를 찍지 않는다
+  //   (기존 항목 비활성은 VALID_YN='N' 으로 처리). activeIndex 기준이라 Column/Measure 탭 공통 적용된다.
+  const handleDelete = () => {
+    if (!gridRef[activeIndex].current) return;
+    GridAction.removeRow(gridRef[activeIndex].current, true);
+  };
 
   const handleSave = () => {
     if (activeIndex === SHEET_INDEX.COLUMN) {
@@ -73,6 +83,7 @@ export const UICategorySetup = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const hotkeyConfig: HotkeyConfig = {
     save: handleSave,
+    delete: handleDelete,
     search: setFilters,
     manual: false,
     upload: false,

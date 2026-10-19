@@ -1,7 +1,6 @@
 import { toggleClass } from '@mescius/wijmo';
 import {
   AllowMerging,
-  CellRange,
   CellType,
   type FlexGrid,
   type FormatItemEventArgs,
@@ -10,18 +9,21 @@ import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import { useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 
 import type { EditTracker } from '@foundation/utils';
-import { GridUtils } from '@foundation/utils';
+import { clearCellValue, GridUtils } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 
 import { ItemByDivisionModal, ProjectByDivisionModal } from '../../../components';
 import {
+  CASCADE_CLEAR_MAP,
   CONVERT_QTY_BINDINGS,
   DIVISION_BINDING,
   getConvertQtyEditable,
+  isConvertQtyBinding,
   isDivisionAllowed,
   MODEL_TYPE_BINDING,
   PROJECT_CODE_BINDING,
+  PROJECT_SELECT_CLEAR,
   TEAM_BINDING,
   type MENU_ID,
   type SHEETS,
@@ -178,6 +180,37 @@ export const CustomerModelMappingGrid = ({
     };
   }, [gridRef, data]);
 
+  // 상위 조회 콤보 변경 시 하위 셀 cascade 비우기 (AS-IS spdMain_ComboSelChange L876~997).
+  //   Team -> End Customer/Sales Site/PJT/Model, End Customer -> Sales Site 이하, Sales Site -> PJT/Model.
+  //   공용 DataGrid 의 clearStaleComboCellsHandler 는 "후보 밖 COMBO 셀" 만 비우므로(팝업 PJT/Model
+  //   미포함 + 유효 후보는 유지) AS-IS 의 무조건 비우기를 대신하지 못한다 — 화면에서 직접 건다.
+  //   EditTracker 는 DataGrid 가 initialized 에 먼저 걸고, 이 핸들러는 mount 후라 뒤에 실행된다 →
+  //   clearCellValue 가 이미 기록된 원본을 기준으로 M 을 정확히 재판정한다(값 되돌리면 M 해제).
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+
+    const cascadeClearHandler = (
+      s: FlexGrid<CustomerModelMappingRow>,
+      e: { row: number; col: number }
+    ) => {
+      const changedBinding = s.columns[e.col]?.binding ?? '';
+      const targets = CASCADE_CLEAR_MAP[changedBinding];
+      if (!targets) return;
+      const row = s.rows[e.row]?.dataItem as CustomerModelMappingRow | undefined;
+      if (!row) return;
+      targets.forEach(binding => clearCellValue(row, binding, editTrackerRef.current));
+      s.invalidate();
+    };
+    g.cellEditEnded.addHandler(cascadeClearHandler as never);
+    g.pastedCell.addHandler(cascadeClearHandler as never);
+
+    return () => {
+      g.cellEditEnded?.removeHandler(cascadeClearHandler as never);
+      g.pastedCell?.removeHandler(cascadeClearHandler as never);
+    };
+  }, [gridRef, data]);
+
   // Division 별 PJT Code 편집제어 — 허용 Division 은 컬럼 메타 Param1 에서 읽는다(코드 하드코딩 금지).
   //   Convert Qty 제어와 같은 구성: beginningEdit(lock) + formatItem(gray). 팝업 차단은 handleGridDblclick.
   useEffect(() => {
@@ -239,7 +272,13 @@ export const CustomerModelMappingGrid = ({
     clickedDataItem.PROJECT_CODE = projectCode;
     clickedDataItem.PROJECT_NAME = projectsName;
 
-    gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
+    // PJT 팝업 선택 시 하위 Model 관련 셀 비우기 (AS-IS CellDoubleClick L1052~1053).
+    //   ITEM_ID/ITEM_CLASS_NAME(+ITEM_NAME) 를 함께 비워 이전 모델이 남지 않게 한다.
+    PROJECT_SELECT_CLEAR.forEach(binding =>
+      clearCellValue(clickedDataItem, binding, editTrackerRef.current)
+    );
+
+    GridUtils.refreshRow(gridRef.current, clickedRow);
   };
 
   const handleItemSelected = (itemCode: string, itemName?: string, itemType?: string) => {
@@ -268,7 +307,7 @@ export const CustomerModelMappingGrid = ({
     clickedDataItem.ITEM_CLASS_NAME = itemType ?? '';
     clickedDataItem.ITEM_NAME = itemName ?? '';
 
-    gridRef.current?.refreshRange(new CellRange(clickedRow, 0, clickedRow, -1));
+    GridUtils.refreshRow(gridRef.current, clickedRow);
   };
 
   const handleGridDblclick = (mouseEvent: MouseEvent) => {
@@ -302,6 +341,7 @@ export const CustomerModelMappingGrid = ({
         itemsSource={data}
         staticColumns={staticColumn ?? []}
         comboParams={{ divisionId: `'${divisionId}'` }}
+        negativeCellAsZero={isConvertQtyBinding}
         allowMerging={AllowMerging.All}
         dblClick={handleGridDblclick}
       />

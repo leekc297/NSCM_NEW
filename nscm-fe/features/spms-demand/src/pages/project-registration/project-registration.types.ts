@@ -58,12 +58,15 @@ export interface ProjectRow {
 export const REG_STATUS = {
   WRITING: 'WRITING',
   WAITING: 'WAITING',
+  REQ_MOD: 'REQ_MOD',
   COMPLETE: 'COMPLETE',
 } as const;
 
 export const isDraftRegStatus = (status: string) => status === REG_STATUS.WRITING;
 
-export const isPendingRegStatus = (status: string) => status === REG_STATUS.WAITING;
+// 요청취소 대상 — 승인대기(WAITING) + 변경요청(REQ_MOD)
+export const isPendingRegStatus = (status: string) =>
+  status === REG_STATUS.WAITING || status === REG_STATUS.REQ_MOD;
 
 // 화면설계서 TAB2 "나의 프로젝트 현황" 그리드 1행 ("UI컬럼 및 Measure정의" D=TAB2, 29개 컬럼).
 // ProjectRow 와 프로젝트 기본 정보(사업부/구분/고객/이름/셀유형/Stack공법/BizType/SOP)는 같은

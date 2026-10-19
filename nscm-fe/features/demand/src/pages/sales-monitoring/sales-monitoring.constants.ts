@@ -4,7 +4,6 @@ export type MENU_ID = typeof MENU_ID;
 // AS-IS DMF0048_SalesMonitoring.cs (Demand > Demand Plan > Sales Monitoring / 판매 모니터링):
 //   - 메인 그리드 : PIVOT wide format (좌측 고정 식별 컬럼 + 기간 동적 M_/W_/D_ 컬럼) — read-only
 //   - 분석서      : Doc/_analysis/domain_DM/screens/DMF0048_SalesMonitoring/ (validation 23 / expressions 7 / events 21)
-//   - 디자인      : Doc/_figma/DMF0048/DMF0048.png
 //   - AS-IS 는 FindButton/ExcelButton 만 override — 저장 스택(InitSaveDataTable 등)은 주석 처리된
 //     데드코드 (사용자 확정 2026-07-04: read-only, Insert/Delete/Save 미지원)
 export enum SHEETS {
@@ -41,6 +40,13 @@ export const BUCKET_PREFIX: Record<BUCKET_TYPE, 'M' | 'W' | 'D'> = {
   [BUCKET_TYPE.WEEKLY]: 'W',
   [BUCKET_TYPE.DAILY]: 'D',
 };
+
+// 하단 합계(footer) 줄 — AS-IS InitSpreadFooterSum(.cs L408~425) 1:1:
+//   기간 컬럼(M_/W_/D_)만 SumIgnoreHidden 집계, 서식 {0:#,##0.###}, LightGray 배경, 좌측 라벨 "Sum".
+//   필터로 숨긴 행 제외는 Wijmo CollectionView.getAggregate 가 필터 적용 뷰(_view)로 계산해 자연 보장.
+export const FOOTER_LABEL = 'Sum';
+export const FOOTER_FORMAT = 'n3';
+export const FOOTER_BG_COLOR = '#d3d3d3';
 
 // Division 분기 (AS-IS validation — 40 / 81* / 82)
 export const DIVISION = {

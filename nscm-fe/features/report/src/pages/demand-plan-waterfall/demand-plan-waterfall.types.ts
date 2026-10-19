@@ -1,8 +1,5 @@
 import type { Gubun } from './demand-plan-waterfall.constants';
 
-/** OLAP Subtotal 표기 모드 — wijmo ShowTotals 매핑 (OlapPivotGrid showRowTotals prop) */
-export type RowTotalsMode = 'None' | 'GrandTotals' | 'Subtotals';
-
 /**
  * 3 GUBUN 조회조건 합집합 — GUBUN별 표시/전달 여부는 통합분석 MD §4.3 설계표 준수.
  * 멀티 항목은 카탈로그 필드(@master searchFields) 규약대로 string[] 보관,
@@ -38,6 +35,4 @@ export interface SearchParams {
   usd: string;
   loc: string;
   qty: string;
-  /** OLAP Subtotal 표기 (Layout 모달 — SP 미전달, 표시 설정) */
-  rowTotals: RowTotalsMode;
 }

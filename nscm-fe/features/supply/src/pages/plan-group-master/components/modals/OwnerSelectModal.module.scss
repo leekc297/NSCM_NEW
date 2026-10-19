@@ -1,0 +1,55 @@
+// OwnerSelectModal — AS-IS SCP0121_OwnerPopup(850x400) 좌/우 2그리드 셔틀 + 중앙 이동버튼.
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+// splMain 재현 — 좌 Base / 중앙 이동버튼 / 우 User 3분할(고정 flex). AS-IS SplitterDistance 동적계산은
+// dead 경로라 미이식(design/01_layout.md §2 R8/§5-1) — 좌우 그리드 균등(1:1).
+.transferBody {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.gridPane {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+}
+
+// pnlCenter/pnlCenterButton — 세로 중앙정렬(AS-IS SizeChanged 재계산은 CSS 로 대체, R9).
+.moveButtons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.grid {
+  height: 100%;
+  width: 100%;
+}
+
+// pnlBottom — 액션(OK) 먼저, Cancel 최우측(flex-end DOM 순서, CommonCheckList 팝업).
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
+}

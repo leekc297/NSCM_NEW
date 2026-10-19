@@ -1,0 +1,22 @@
+kind,pattern,reason,note
+control_type,"^(LayoutControlItem|LayoutControlGroup|EmptySpaceItem|UsrLayoutControl|SplitContainer|Splitter|Panel|TableLayoutPanel|FlowLayoutPanel|Container|ImageList|ToolTip|Timer|BackgroundWorker|UsrLabel|Label|LabelControl|SimpleLabelItem|SizeF|Size|Padding|ProgressBar)$",WinForms/DevExpress 레이아웃·디자이너 아티팩트 — React JSX/SCSS·FormItem label·공용 인디케이터로 흡수,To-Be 대응 없음이 정상
+control_type,^SheetView$,FpSpread 디자이너 SheetView — DataGrid 1개 + SHEETS enum/activeSheet 상태로 흡수,
+control_name,^(btnSearch|btnFind|FindButton|btnQuery|btnInquiry)$,SearchArea 내장 조회 버튼으로 흡수,
+control_name,^btnExcel(Down|Download|Export)?$,SubTitle 내장 엑셀 다운로드로 흡수,
+control_name,^btn(Close|Cancel|Exit)$,CustomDialog 내장 닫기,
+event,^this\.components,디자이너 컴포넌트 컨테이너,
+event,KeyUp,As-is Ctrl+C/V 복사·붙여넣기 → Wijmo autoClipboard + pastingCell/pastedCell,
+endpoint,_SPREAD_TITLE$,그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP),To-Be 는 메타 조회로 대체 — register 대상은 spreadTitle 시트
+endpoint,^UP_FX_GetCommonDataList,공통 콤보 조회 → useTabComboQueries(콤보ID 등록),
+endpoint,_GET_BUTTON_AUTH$,버튼 권한 → useTabBtnPermissions(SYS 권한 메타),
+property,readOnly 기간 선택,As-is drpPeriod readOnly 는 To-Be 표준 PeriodField(편집 가능) 로 대체 — 사용자 결정,
+endpoint,^biz:CommonData,공통 데이터(BIZ CommonDataList) → useTabComboQueries / useTabLookupQueries,
+endpoint,_GET_(BUCKET_TYPE_CODE|BIZ_TYPE_BY_DIVISION|CODE_LIST|LOOKUP)$,공통코드 콤보 → 등록 콤보ID(useTabComboQueries),
+event,^(timer|tmr)[A-Za-z0-9_]*\s+Tick,타이머 → React Query refetchInterval / useEffect setInterval,
+control_type,^(ToolStripMenuItem|ContextMenuStrip)$,그리드 우클릭 메뉴 — To-Be 표준은 SubTitle 버튼/셀 더블클릭. 필요 시 화면별 결정(룰 보완 후보),
+event,^backgroundWorker\w*\s+(DoWork|ProgressChanged|RunWorkerCompleted),백그라운드 작업 → React Query mutation/useStreamProcQuery (진행률은 ProgressIndicator),
+event,^this\s+(Resize|SizeChanged|Paint),WinForms 레이아웃 이벤트 — CSS/Wijmo 자동 레이아웃,
+event,^splitContainer\w*\s+,분할 컨테이너 이벤트 — PanelGroup 레이아웃,
+endpoint,^SCM0001_GET_(DIVISION|LOOKUP_VALUES|SITE_BY_DIVISION|TEAM_BY_DIVISION|CUSTOMER_BY_DIVISION|PLANT_SITE_BY_END_CUSTOMER|[A-Z_]+_BY_DIVISION)$,공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries,
+endpoint,^PR_SCM_SYS_LOG_BATCH$,화면 사용 로그 → BE 공통(Aspect/LogController) — 화면 코드 대응 없음,
+endpoint,_GET_SEARCH_INFO$|GetSearchCondition|SaveSearchCondition|ResetSearchCondition,사용자별 조회조건 저장/복원(G1) → /admin/menu/{MENU}/search-conditions (store fetchStaticColumns 내장),

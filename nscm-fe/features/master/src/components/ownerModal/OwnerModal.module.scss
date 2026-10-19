@@ -10,6 +10,34 @@
   display: flex;
   align-items: center;
 }
+.candidateGridWrapper{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1 1 0%;
+  min-height: 0;
+  height: 100%;
+}
+.selectedGridWrapper{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1 1 0%;
+  min-height: 0;
+  height: 100%;
+}
+
+// ResultArea 헤더(TitleArea)는 건수 0건이면 "총 N건" 배지가 사라져 높이가 줄어든다.
+// 좌우 두 그리드 중 한쪽만 비면 헤더 높이가 달라져 그리드 상단 정렬이 어긋나므로,
+// 양쪽 ResultArea 헤더에 동일한 최소 높이를 주어 빈 줄을 확보한다.
+// (공용 ResultArea/TitleArea 는 건드리지 않고 이 팝업에서만 국소 처리)
+// 주의: candidateGridWrapper 는 앞에 ProgressIndicator div 가 있어 자식이 둘이고,
+//   selectedGridWrapper 는 ResultArea 하나뿐이다 - ResultArea 는 양쪽 다 마지막 자식이므로
+//   :last-child 로 ResultArea 루트를 지목하고 그 첫 자식(TitleArea 헤더)에만 적용한다.
+.candidateGridWrapper > div:last-child > :first-child,
+.selectedGridWrapper > div:last-child > :first-child {
+  min-height: 24px;
+}
 .arrowButtonWrapper{
   display: flex;
   flex-direction: column;

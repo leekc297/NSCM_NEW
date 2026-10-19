@@ -229,8 +229,3 @@ export const TagLayer = forwardRef<TagLayerHandle>((_props, ref) => {
 });
 
 TagLayer.displayName = 'TagLayer';
-
-// ⭐ TAG pill 색 컬럼 관례 — `X_NAME` 표시 컬럼의 색은 `X_COLOR_TYPE` 커서 컬럼이 준다
-//   (SDM1010 승계 관례. 커서 실명이 관례와 다른 컬럼은 화면별 TAG_SOURCE 맵이 우선한다)
-export const colorTypeColumnOf = (binding: string): string =>
-  `${binding.replace(/_NAME$/, '')}_COLOR_TYPE`;

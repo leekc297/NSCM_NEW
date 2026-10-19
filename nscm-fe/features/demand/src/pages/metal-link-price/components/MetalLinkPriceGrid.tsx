@@ -158,7 +158,7 @@ export const MetalLinkPriceGrid = ({
     [visibleColumns]
   );
 
-  // grid 핸들러 — #108 No. 코너 + 헤더 중앙 + zebra (#95: 조회전용 = White+zebra, 전체회색 금지)
+  // grid 핸들러 — #108 No. 코너 + 헤더 중앙 (#95: 조회전용 = White, 전체회색 금지)
   useEffect(() => {
     const g = gridRef.current;
     if (!g || !g.columnHeaders || !g.columnHeaders.rows) return;
@@ -242,7 +242,7 @@ export const MetalLinkPriceGrid = ({
     };
   }, [gridRef]);
 
-  // ⭐ F4 Filter — 피처 소유 FlexGridFilter (메탈 PIVOT 컬럼 필터 제외 — DMF0014 패턴)
+  // ⭐ F4 Filter — 피처 소유 FlexGridFilter
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
@@ -253,10 +253,19 @@ export const MetalLinkPriceGrid = ({
     if (!f || f.grid !== g) {
       f = new FlexGridFilter(g);
       f.filterColumns = [''];
+      // wijmo 컬럼필터 팝업의 Clear 버튼은 편집기만 비우고 실제 필터에는 반영하지 않는다
+      // (clearEditor 문서: "without applying changes to the filter"). 편집기가 비워지면
+      // (isEditorClear) 그 즉시 apply() 를 호출해 실제 필터에도 반영한다. DataGrid.tsx 의
+      // FlexGridFilter 생성 옵션과 동일한 보정 — 이 화면은 필터를 직접 생성해 그 옵션을 못 받는다.
+      f.filterChanging.addHandler((s: FlexGridFilter) => {
+        const editor = s.activeEditor as unknown as { isEditorClear?: boolean } | null;
+        if (!editor) return;
+        s.activeEditor.buttonClicked.addHandler(() => {
+          if (editor.isEditorClear) s.apply();
+        });
+      });
       gridFilterRef.current = f;
     }
-    const cleaned = f.filterColumns.filter(b => !metalBindings.has(b));
-    if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
     f.filterApplied.addHandler(onFilterApplied);
 
     // ⭐ [공통 UC-07, hook #133 §5] 재조회해도 사용자가 걸어둔 **필터가 유지**되어야 한다.
@@ -273,7 +282,7 @@ export const MetalLinkPriceGrid = ({
         /* unmount race */
       }
     };
-  }, [metalBindings, visibleColumns, gridRef, gridFilterRef]);
+  }, [visibleColumns, gridRef, gridFilterRef]);
 
   return (
     <DataGrid<MetalLinkPriceRow>
@@ -283,7 +292,9 @@ export const MetalLinkPriceGrid = ({
       dynamicColumns={dynamicColumns}
       itemsSource={data}
       autoGenerateColumns={false}
-      allowSorting={true}
+      // allowSorting prop 은 넘기지 않는다 - grid.allowSorting 이 truthy 면 wijmo
+      //   _MouseHandler._mousedown 이 헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다.
+      //   공용 정렬(F3 스위치 + 헤더 클릭 + 아이콘)은 이 prop 없이도 그대로 동작한다.
       allowMerging='All'
       isReadOnly={true}
     />

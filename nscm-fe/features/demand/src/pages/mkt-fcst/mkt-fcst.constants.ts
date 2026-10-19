@@ -4,7 +4,6 @@ export type MENU_ID = typeof MENU_ID;
 // AS-IS DMF0003_MktFcst.cs (Demand > Demand Plan > MKT FCST / 시장예측):
 //   - 메인 그리드 : PIVOT wide format (좌측 고정 10 + 기간 동적 PIVOT 2단 헤더)
 //   - 분석서      : Doc/_analysis/domain_DM/screens/DMF0003_MktFcst/ (validation 152 / expressions 130)
-//   - 디자인      : Doc/_figma/screens/DMF0003_MktFcst_LAYOUT.md
 //   ⚠️ Phase 2 미검증 — SP 실제 응답 shape/메타는 BE 적재 후 확정 (DMF0020 구조 가정).
 export enum SHEETS {
   MAIN = 'Mkt Fcst', // 메인 그리드 — wide format (동적 M_/W_/D_ 컬럼). 등록명 그대로(룰 #91 sheet-name-asis-preserve). corp handoff 42~45 가 BTN_MPG SHT_NM / SHEET_COLUMNS / SHEET_MEASURE / SP 를 'Mkt Fcst' 로 마이그레이션.
@@ -26,7 +25,7 @@ export enum SHEETS {
 export const PR_MEASURE = 'BNPIn' as const;
 
 // ⭐ 우클릭 PR 메뉴 4항목 — 표시명 i18n (격차④, LBL00740~743. AS-IS contextMenuStrip Text 1:1).
-//   ⚠ 채번은 사내 SCM_ADM_MSG_M MAX(LBL) 실측 기준 (LBL00728~739 는 타 화면 선점 — 2026-07-03 충돌 회피).
+//   ⚠ 채번은 사내 SCM_ADM_MSG_M MAX(LBL) 실측 기준 (LBL00645~739 는 타 화면 선점 — 2026-07-03 충돌 회피).
 export const PR_MENU_LABELS = [
   { name: 'Request_PR', lblKey: 'LBL00740', fallback: 'Request PR' },
   { name: 'View_PR', lblKey: 'LBL00741', fallback: 'View PR' },
@@ -179,7 +178,7 @@ export const MAIN_COLUMNS: MainColumnMeta[] = [
     align: 'C',
     _ctrlType: 'FPComboBox',
     _inputEditType: 'IM',
-    // 조회 표시 = ETC 제외 목록. 편집(신규행)은 gridCombos GRID_EDIT_COMBO.FCST_TYPE 이 스왑한다.
+    // 조회/편집 모두 이 메타 목록(ETC 제외) 그대로 쓴다 — 편집 콤보 스왑·화면단 강제 제거(2026-09-11).
     //   실제 값은 admin UI Category Setup 의 cellCboDataTp 가 우선이고 이건 미등록 시 fallback.
     _comboKey: 'FCST_TYPE_NOT_ETC',
   },
@@ -358,8 +357,18 @@ export const GROUP = {
   WS_PLANNER: 'DM Planner (W/S)',
   DM_PLANNER: 'DM Planner',
   DM_ADMIN: 'DM ADMIN',
+  ADMIN: 'ADMIN',
   SCP_PLANNER: 'SCP Planner',
 } as const;
+
+// SCP Planner 편집 차단을 무력화하는 겸직 그룹 — 이 중 하나라도 보유하면 SCP 게이트 예외(허용).
+//   운영 요구: ADMIN / DM ADMIN / DM Planner / DM Planner(W/S) 겸직 계정은 82·40·81 편집·Insert 허용.
+export const SCP_EDIT_ALLOW_GROUPS = [
+  GROUP.ADMIN,
+  GROUP.DM_ADMIN,
+  GROUP.DM_PLANNER,
+  GROUP.WS_PLANNER,
+] as const;
 
 // (PSI 고객수요분석 상수 블록 제거 — 2026-07-03 사용자 결정. DMF0003_PSI_20260703 패키지 보존.)
 
@@ -379,28 +388,11 @@ export const MEASURE_MODEL_CLEAR_COLS: readonly string[] = [
   'NICK_NAME',
 ];
 
-// Division - Team - End Customer - Sales Site 조회조건이 읽는 조인 콤보 ID (SCM_ADM_CMBO_SQL_M).
-// 4단이 한 SQL 로 조인돼 내려오므로 단계별 콤보를 각자 조회하고 클라이언트에서 서로 필터링할
-// 필요가 없다. 특히 EndCustomer 콤보의 DEPT_ID 공란 행 때문에 strict / 관대 판단이 필요했던
-// 문제가 사라진다 (2026-08-18 원복 건). useCascadeFields 가 이 ID 하나만 조회한다.
-export const SEARCH_CASCADE_COMBO_ID = 'SalesSite';
-
-// Plant Site 조회조건이 읽는 조인 콤보 ID. 위 콤보와 컬럼 규약은 같지만(DIVISION_CODE /
-// TEAM_CODE / END_CUSTOMER / PLANT_SITE_CODE) 마지막 단계가 Plant Site 인 별개 SQL 이다.
-// Plant Site 는 Sales Site 의 하위가 아니라 End Customer 에서 나란히 갈라진다.
-// 주의: 이 SQL_ID 는 카탈로그 PlantSiteField 도 쓰고 있고, 그쪽은 아직 개정 전 컬럼명
-// (DIVISION_ID / END_CUSTOMER)을 읽는다. 조인 형태로 갈아끼울 때 같은 ID 를 덮어썼다면
-// PlantSiteField 를 쓰는 다른 화면들이 조용히 빈 목록이 된다 - 아래 목록 확인 필요.
-export const PLANT_SITE_CASCADE_COMBO_ID = 'PlantSite';
-
-// Sender Code 조회조건이 읽는 조인 콤보 ID. Div - Team - Sender 3단이고 컬럼은 표준 규약
-// (DIVISION_CODE / DIVISION_NAME / TEAM_CODE / TEAM_NAME / SENDER_CODE / SENDER_NAME)이다.
-// 주의: 이 SQL_ID 는 ForecastPriceForm 의 Sender Code 콤보도 쓰고 있고, 그쪽은 아직 개정 전
-// 컬럼명(DIVISION_ID / CODE / NAME)을 읽는다.
-export const SENDER_CASCADE_COMBO_ID = 'SenderCode';
-
-// Biz Type 조회조건이 읽는 조인 콤보 ID. Div - Biz Type 2단이고 컬럼은 표준 규약
-// (DIVISION_CODE / DIVISION_NAME / BIZ_TYPE_CODE / BIZ_TYPE_NAME)이다.
-// 종전 'BizTypebyDivision' 을 카탈로그 BizTypeField 로 조회하고 DIVISION_ID 를 클라이언트에서
-// 걸던 것을 cascade 단계로 옮긴 것이다 (동작은 같다 - Division 으로만 좁힌다).
-export const BIZ_TYPE_CASCADE_COMBO_ID = 'DivBizType';
+// 조회조건 콤보 ID 는 utils/mkt-fcst.searchCombos 의 SEARCH_COMBO 에 모아 뒀다.
+// 2026-08-28 콤보 재정비 - Div/Team/End Customer/Sales Site/Biz Type/Plant Site/Sender Code 를
+//   조인 콤보 cascade('SalesSite'/'PlantSite'/'SenderCode'/'DivBizType')에서 필터(Filter 접두)로
+//   되돌렸다. 문서 DMF0003_콤보구성 §1 이 이 8종을 전부 BigFilter 로 규정하고, AS-IS 는 같은 칸이
+//   조작 경로 x 사업부 조합마다 원천이 갈려(Sales Site 다섯 갈래) cascade 의 단일 규칙으로는
+//   재현이 안 된다.
+//   주의: 'SenderCode' SQL_ID 는 ForecastPriceForm 이 아직 쓰고 있고 개정 전 컬럼명
+//   (DIVISION_ID / CODE / NAME)을 읽는다. 그 ID 를 조인 형태로 덮어썼다면 그쪽이 조용히 빈다.

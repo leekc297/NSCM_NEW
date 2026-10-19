@@ -138,7 +138,9 @@ const MKT_FCST_INIT_PERIOD = {
 const { start: today, end: sixMonthsAhead } = MKT_FCST_INIT_PERIOD;
 
 const initSearch: SearchCondition = {
-  divisionId: useSessionStore.getState().session.div ?? DIVISION.MOBILITY,
+  // 빈 값으로 시작 — 화면(MktFcst.tsx)의 division 자동선택 effect 가 세션/콤보 데이터로 채운다
+  // (DMF0040/DMF0053 정본과 동일).
+  divisionId: '',
   deptIds: [],
   endCustomers: [],
   scmSiteIds: [],
@@ -293,7 +295,8 @@ export const useMktFcstStore = createPersistedStoreWithTab<State & Action>(
             // ⭐ 2026-07-03 오배선 교정: invalidExec 는 별도 체크박스(Invalid — AS-IS checkInvalidExec,
             //   'MKT FCST 미등록 제외', Div82 전용 기본 checked). qtyOverZero 연동은 잘못 — 실측 div82
             //   Y=175행 vs N=1,165행 (극적 차이 — Sales Price 미등록 조합 제외 필터).
-            invalidExec: c.invalidYn ? 'Y' : 'N', // 17
+            //   Division 82 는 체크박스와 무관하게 항상 'Y' 강제(사용자 요구).
+            invalidExec: c.divisionId === DIVISION.ESS ? 'Y' : c.invalidYn ? 'Y' : 'N', // 17
             // ⭐ P1-③ — AS-IS L1679: W/S Planner 그룹이면 asYn 'Y' 강제(체크박스 무관). 그 외 체크박스 값.
             asYn: c.asYn || get().wsPlannerYn ? 'Y' : 'N', // 18
             userDeptId: '', // 19 BE 세션 부서 자동

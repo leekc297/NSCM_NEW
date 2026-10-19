@@ -1,15 +1,24 @@
 import type { FlexGrid as FlexGridType, FormatItemEventArgs } from '@mescius/wijmo.grid';
 import { CellType } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { type MutableRefObject, type Ref, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  type MutableRefObject,
+  type Ref,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 
 import type { RawFlexGridColumnConfig } from '@foundation/models';
 import type { EditTracker } from '@foundation/utils';
-import { DataGrid } from '@shared/components';
 import { Button } from '@shared/lges';
 
 import { colorTypeColumnOf, TagLayer, type TagLayerHandle } from '../../../components/tag-layer';
+import { attachComboCascadeAutoFill } from '../../../lib/comboCascadeAutoFill';
+import { DataGrid, keepDivisionCodeDisplay, keepServerComboOrder } from '../../../lib/grid';
 import { MODAL_ATTR, REG_ACTION_ATTR, TAG_ATTR, TAG_SOURCE } from '../project-master.constants';
 import type { Tab1Row } from '../project-master.types';
 import styles from '../ProjectMaster.module.scss';
@@ -50,13 +59,6 @@ interface Props {
   onAuthRegCellClick?: (row: Tab1Row) => void;
 }
 
-// SDM1010과 동일한 DataGrid 행 단위 콤보 필터. DB 메타 반영 전까지만 빈 ATTRIBUTE2를 보완한다.
-const COMBO_ROW_FILTER_BY_COLNM: Record<string, string> = {
-  END_CUSTOMER: 'DIVISION_ID:DIVISION_ID',
-  CELL_TYPE: 'DIVISION_ID:DIVISION_ID',
-  STACK_METHOD: 'DIVISION_ID:DIVISION_ID,CELL_TYPE:CELL_TYPE',
-};
-
 export const ProjectMasterTab1Grid = ({
   rows,
   gridRef,
@@ -77,47 +79,58 @@ export const ProjectMasterTab1Grid = ({
   const actionPortalsRef = useRef<Map<string, HTMLDivElement>>(new Map());
   const [, setPortalTick] = useState(0);
 
-  const actionKey = (row: Tab1Row) => String(row.DPJT_KEY ?? '');
-
-  // ⭐ 정적 컬럼 — admin 메타 100% 주도 (visible/display 2 boolean 만. FALLBACK 금지)
+  // ⭐ wijmo react 는 initialized 를 setTimeout 으로 비동기 호출한다 — 컬럼 메타 도착으로 key 가
+  //   바뀌어 그리드가 재생성된 렌더에서는 gridRef.current 가 아직 비어 있다(구 DataGrid cleanup 이
+  //   ref 를 undefined 로 되돌리기까지 함). ref 만 보는 effect 는 그 렌더에서 조용히 skip 되는데,
+  //   TAB1 자동조회(E01-3)처럼 메타 도착이 마지막 재렌더면 핸들러(편집색/TAG/클릭)가 영영 안 걸린다.
+  //   initialized 를 state 로 받아 등록 effect 를 그 뒤에 다시 태운다 (공용 formatEditableColumns
+  //   등록 완료 후 호출되므로 "본 판정이 최종" 순서도 그대로 보장).
+  // ⭐ 정적 컬럼 — admin 메타 100% 주도 (visible/display 2 boolean 만. FALLBACK 금지.
+  //   콤보 행 필터 ATTRIBUTE2 도 admin Column param2 단일 원천 — FE patch 없음)
   const visibleColumns = useMemo<RawFlexGridColumnConfig[]>(
-    () =>
-      (staticColumns ?? [])
-        .filter(c => c.visible !== false && c.display !== false)
-        .map(column =>
-          COMBO_ROW_FILTER_BY_COLNM[column.colNm] && !column.attribute2
-            ? { ...column, attribute2: COMBO_ROW_FILTER_BY_COLNM[column.colNm] }
-            : column
-        ),
+    () => (staticColumns ?? []).filter(c => c.visible !== false && c.display !== false),
     [staticColumns]
   );
+  // ⭐ 메타 ref 미러 — initialized 1회 등록 핸들러(keepServerComboOrder)도 최신 ATTRIBUTE2 를 본다
+  const colMetaRef = useRef<Map<string, RawFlexGridColumnConfig>>(new Map());
+  colMetaRef.current = new Map(visibleColumns.map(c => [c.colNm, c]));
+
+  const [gridControl, setGridControl] = useState<FlexGridType<Tab1Row> | null>(null);
+  const handleGridInitialized = useCallback((grid: FlexGridType) => {
+    // 행 필터(ATTRIBUTE2) 콤보는 그 행으로 좁힌 서버 순서로 복원 (사업부 중복 NAME 섞임 방지)
+    keepServerComboOrder(grid, binding => colMetaRef.current.get(binding)?.attribute2);
+    keepDivisionCodeDisplay(grid);
+    setGridControl(grid as FlexGridType<Tab1Row>);
+  }, []);
+
+  // ⭐ 페이지 콜백 ref 미러 — effect 의존성에서 빼 클릭→페이지 리렌더마다 핸들러 재등록 +
+  //   invalidate(true) 전체 재그리기(깜빡임)가 나는 것을 막는다 (datagrid-rerender-flicker)
+  const onAuthRegCellClickRef = useRef(onAuthRegCellClick);
+  onAuthRegCellClickRef.current = onAuthRegCellClick;
+
+  const actionKey = (row: Tab1Row) => String(row.DPJT_KEY ?? '');
   const staticBindingSet = useMemo(
     () => new Set(visibleColumns.map(c => c.colNm)),
     [visibleColumns]
   );
 
   // ===== Grid 콤보 — 메타(FPComboBox + cellCboDataTp) 기반. division 종속 콤보는 따옴표 전달
-  //   (BE makeComboQuery raw 치환 — @divisionId 토큰 없는 콤보는 전달해도 무해).
-  //   StackMethodByCellType 은 @cellType 토큰 필수 — 기본 map 은 빈 값(전체 반환 NVL 가드) =====
-  const comboParams = useMemo(
-    () => ({ divisionId: `'${divisionId || 'ALL'}'`, cellType: '\'\'' }),
-    [divisionId]
-  );
+  //   (BE makeComboQuery raw 치환 — @divisionId 토큰 없는 콤보는 전달해도 무해.
+  //   CELL_TYPE 좁힘은 ATTRIBUTE2 행 필터 담당) =====
+  const comboParams = useMemo(() => ({ divisionId: `'${divisionId || 'ALL'}'` }), [divisionId]);
 
   // ⭐ 메타 ref 미러 — 핸들러가 effect 안에서 등록되므로 최신 메타를 ref 로 본다
   const inputTpRef = useRef<Map<string, string | undefined>>(new Map());
   inputTpRef.current = new Map(
     visibleColumns.map(c => [c.colNm, c.inputTpCd as string | undefined])
   );
-  const colMetaRef = useRef<Map<string, RawFlexGridColumnConfig>>(new Map());
-  colMetaRef.current = new Map(visibleColumns.map(c => [c.colNm, c]));
 
   // ===== grid 핸들러 =====
   useEffect(() => {
-    const g = (gridRef as { current: FlexGridType<Tab1Row> | null } | null)?.current;
-    if (!g || !g.columnHeaders || !g.columnHeaders.rows) return;
+    const g = gridControl;
+    if (!g || !g.hostElement?.isConnected || !g.columnHeaders || !g.columnHeaders.rows) return;
 
-    if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1; // zebra (#95)
+    if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1;
 
     const toggleClass = (el: HTMLElement, cls: string, on: boolean) => {
       if (on) el.classList.add(cls);
@@ -200,7 +213,7 @@ export const ProjectMasterTab1Grid = ({
       // ⭐ 편집 색 — 편집 게이트와 **같은 함수**(isCellEditableTab1) 사용 (#95 — 편집 Yellow /
       //   잠금 Gray). 공용 formatEditableColumns 보다 뒤에 걸려 본 판정이 최종
       toggleClass(e.cell, 'wj-cell-editable', editable);
-      // TAB1의 수정 불가 셀은 별도 배경색 없이 기본 White+zebra를 유지한다.
+      // TAB1의 수정 불가 셀은 별도 배경색 없이 기본 White를 유지한다.
       toggleClass(e.cell, 'wj-cell-non-editable', false);
     };
     g.formatItem.addHandler(formatHandler);
@@ -236,7 +249,7 @@ export const ProjectMasterTab1Grid = ({
       if (!row) return;
       const ctrlType = (meta.cellCtrlObjTpCd as unknown as string) ?? '';
       if (ctrlType === 'FPModal' && meta.attribute1 === MODAL_ATTR.AUTH_REG) {
-        onAuthRegCellClick?.(row);
+        onAuthRegCellClickRef.current?.(row);
         return;
       }
       if (meta.attribute1 === REG_ACTION_ATTR) {
@@ -265,22 +278,27 @@ export const ProjectMasterTab1Grid = ({
         /* unmount race */
       }
     };
+    // ⭐ 콜백/라벨은 effect 본문 미사용(포탈 JSX 소비) 또는 ref 미러 — 의존성에서 제외해
+    //   페이지 리렌더마다 재등록 + invalidate(깜빡임)가 나지 않게 한다
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    visibleColumns,
-    canConfirm,
-    canCancel,
-    approveLabel,
-    rejectLabel,
-    onConfirmClick,
-    onCancelClick,
-    onAuthRegCellClick,
-  ]);
+  }, [gridControl, visibleColumns]);
+
+  // ⭐ SDM 공통 — 상위 셀 변경 시 종속 콤보(ATTRIBUTE2) 첫 후보 자동 입력
+  //   (CF-15 CELL_TYPE→STACK_METHOD: 공용 stale clear 가 비운 자리를 새 후보 첫 값으로 채움)
+  useEffect(() => {
+    const g = gridControl;
+    if (!g || !g.hostElement?.isConnected) return;
+    return attachComboCascadeAutoFill({
+      grid: g,
+      getColumns: () => [...colMetaRef.current.values()],
+      getEditTracker: () => editTrackerRef?.current,
+    });
+  }, [gridControl, editTrackerRef]);
 
   // ⭐ hook #93 — 헤더 총 48px (n단 = 48/n 자동 분배) + combo dataMap 재적용 (UC-05 Excel NAME 승계)
   useEffect(() => {
-    const g = (gridRef as { current: FlexGridType<Tab1Row> | null } | null)?.current;
-    if (!g) return;
+    const g = gridControl;
+    if (!g || !g.hostElement?.isConnected) return;
     const applyHeaderHeight = () => {
       const headerRows = g.columnHeaders?.rows;
       if (!headerRows || headerRows.length === 0) return;
@@ -303,7 +321,7 @@ export const ProjectMasterTab1Grid = ({
         /* unmount race */
       }
     };
-  }, [visibleColumns, gridRef]);
+  }, [visibleColumns, gridControl]);
 
   useEffect(() => {
     const validKeys = new Set(rows.map(row => String(row.DPJT_KEY ?? '')));
@@ -327,6 +345,7 @@ export const ProjectMasterTab1Grid = ({
         gridFilterRef={gridFilterRef}
         editTrackerRef={editTrackerRef as never}
         excludeFromDirtyCheck={excludeFromDirtyCheck}
+        initialized={handleGridInitialized}
         staticColumns={visibleColumns}
         comboParams={comboParams}
         itemsSource={rows as unknown as WijmoRowItem[]}

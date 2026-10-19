@@ -44,7 +44,7 @@ export const CASCADE_LEVELS = {
   endCustomer: {
     code: 'END_CUSTOMER_CODE',
     name: 'END_CUSTOMER_NAME',
-    labelCode: 'LBL00503',
+    labelCode: 'LBL00080',
     labelEn: 'End Customer',
     multiple: true,
     allOption: true,
@@ -74,7 +74,7 @@ export const CASCADE_LEVELS = {
   plantSite: {
     code: 'PLANT_SITE_CODE',
     name: 'PLANT_SITE_NAME',
-    labelCode: 'LBL00509',
+    labelCode: 'LBL00005',
     labelEn: 'Plant Site',
     multiple: true,
     allOption: true,
@@ -83,7 +83,7 @@ export const CASCADE_LEVELS = {
   bizType: {
     code: 'BIZ_TYPE_CODE',
     name: 'BIZ_TYPE_NAME',
-    labelCode: 'LBL00504',
+    labelCode: 'LBL00085',
     labelEn: 'Biz.Type',
     multiple: true,
     allOption: true,

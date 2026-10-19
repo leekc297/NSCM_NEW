@@ -1,0 +1,6 @@
+﻿"page_key","menu_id","file","line","in_function","kind","callee","menu","sheet","action","url","resolved","args","commented"
+"admin/message-management","SYS0001","features/admin/src/pages/message-management/components/MessageManagementForm.tsx","17","MessageManagementForm","hook","useTabComboQueries","SYS0001","","","(useTabComboQueries)","Y","['MessageType', 'YesOrNo']","0"
+"admin/message-management","SYS0001","features/admin/src/pages/message-management/MessageManagement.tsx","31","MessageManagement","hook","useTabProcQuery","SYS0001","msgMgmt","","SYS0001/msgMgmt//call-proc","Y","filters","0"
+"admin/message-management","SYS0001","features/admin/src/pages/message-management/MessageManagement.tsx","39","MessageManagement","hook","useProcMutation","SYS0001","msgMgmt","","SYS0001/msgMgmt//call-proc","Y","","0"
+"admin/message-management","SYS0001","features/admin/src/pages/message-management/useMessageManagementStore.ts","71","fetchStaticColumns","http","apiClient.post","","","","/admin/menu/SYS0001/column","Y","{ sheetNm: SHEETS.MSG_MGMT, }","0"
+"admin/message-management","SYS0001","features/admin/src/pages/message-management/useMessageManagementStore.ts","81","fetchStaticColumns","http","apiClient.get","","","","/admin/menu/SYS0001/search-conditions","Y","","0"

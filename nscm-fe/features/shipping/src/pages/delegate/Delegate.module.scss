@@ -1,0 +1,7 @@
+// 그리드 영역 — 시트탭(Delegate / Delegated List) 컨테이너.
+.gridWrapper {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}

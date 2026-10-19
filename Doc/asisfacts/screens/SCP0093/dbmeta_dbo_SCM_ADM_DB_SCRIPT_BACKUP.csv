@@ -1,0 +1,4273 @@
+﻿"backup_dt","fp_db_name","type","script_nm","object_id","colid","text"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","3","
+						AND FI.ITEM_ID	   = I.ITEM_ID
+				  LEFT JOIN SCM_MST_ITEM_SN C WITH(NOLOCK)
+						 ON C.DIVISION_ID = FI.DIVISION_ID
+						AND C.ITEM_ID     = CASE WHEN FI.OPERATION_GROUP = 'P'
+												 THEN FI.ATTRIBUTE1
+												 ELSE FI.ITEM_ID
+											END
+						AND C.DOE IS NOT NULL
+				  LEFT JOIN SCP_MST_FINAL_ITEM BC WITH(NOLOCK)
+						 ON BC.DIVISION_ID = C.DIVISION_ID
+						AND BC.ITEM_ID	   = C.DOE
+			WHERE 1=1
+			  AND I.DIVISION_ID			= @P_DIVISION_ID
+			  AND I.SCP_OPERATION_GROUP IN ('A', 'P')
+			GROUP BY I.DIVISION_ID
+					,I.ITEM_ID
+	)
+	SELECT CASE WHEN @P_AGGR_DV = 'MD'
+				THEN Y.ITEM_ID
+				ELSE ISNULL(C.CELL_GROUP, Y.ITEM_ID)
+			END					AS ITEM_ID
+		  ,MAX(YIELD) AS YIELD
+	  INTO #YIELD_INFO
+	  FROM SCM_MST_YIELD_SN Y WITH(NOLOCK)
+		   LEFT JOIN CELL_GROUP_INFO C
+				  ON C.DIVISION_ID = Y.DIVISION_ID
+				 AND C.ITEM_ID	   = Y.ITEM_ID
+	WHERE 1=1
+	  AND Y.DIVISION_ID = @P_DIVISION_ID
+	  AND Y.MONTH = SUBSTRING(@P_PLAN_START_YYYYMMDD, 1, 6)
+	  AND Y.YIELD > 0
+	GROUP BY CASE WHEN @P_AGGR_DV = 'MD'
+				  THEN Y.ITEM_ID
+				  ELSE ISNULL(C.CELL_GROUP, Y.ITEM_ID)
+			 END
+
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'1.4 월별 일수 정보'
+	-----------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#TMP_MM_DAYS_INFO') IS NOT NULL
+		DROP TABLE #TMP_MM_DAYS_INFO;
+
+	;WITH DAYS_INFO AS (
+		SELECT YYYYMM
+			 , MIN(YYYYMMDD) AS FIRST_YMD
+			 , MAX(YYYYMMDD) AS LAST_YMD
+			 , COUNT(*)		 AS MM_DAYS
+		 FROM SCM_MST_BUCKET B WITH(NOLOCK)
+		WHERE 1=1
+		  AND YYYYMM  BETWEEN CONVERT(NVARCHAR(6), DATEADD(MONTH, -5, CONVERT(DATE, @p_from_yyyymm+'01', 112)), 112)
+						  AND CONVERT(NVARCHAR(6), DATEADD(MONTH, +5, CONVERT(DATE, @p_to_yyyymm+'01'  , 112)), 112)
+		GROUP BY YYYYMM
+	)
+	SELECT DI.YYYYMM
+		  ,DI.FIRST_YMD
+		  ,DI.LAST_YMD
+		  ,DI.MM_DAYS
+		  ,CONVERT(NVARCHAR(6), DATEADD(MONTH, 1, CONVERT(DATE, DI.FIRST_YMD, 112)), 112) AS FROM_MONTH
+		  ,CONVERT(NVARCHAR(6), DATEADD(MONTH, 5, CONVERT(DATE, DI.FIRST_YMD, 112)), 112) AS TO_MONTH
+		  ,MAX(CASE WHEN DATEADD(MONTH, 1, CONVERT(DATE, DI.FIRST_YMD,112)) = AD.FIRST_YMD THEN AD.MM_DAYS ELSE 0 END) AS DAYS_NEXT_1
+		  ,MAX(CASE WHEN DATEADD(MONTH, 2, CONVERT(DATE, DI.FIRST_YMD,112)) = AD.FIRST_YMD THEN AD.MM_DAYS ELSE 0 END) AS DAYS_NEXT_2
+		  ,MAX(CASE WHEN DATEADD(MONTH, 3, CONVERT(DATE, DI.FIRST_YMD,112)) = AD.FIRST_YMD THEN AD.MM_DAYS ELSE 0 END) AS DAYS_NEXT_3
+		  ,MAX(CASE WHEN DATEADD(MONTH, 4, CONVERT(DATE, DI.FIRST_YMD,112)) = AD.FIRST_YMD THEN AD.MM_DAYS ELSE 0 END) AS DAYS_NEXT_4
+		  ,MAX(CASE WHEN DATEADD(MONTH, 5, CONVERT(DATE, DI.FIRST_YMD,112)) = AD.FIRST_YMD THEN AD.MM_DAYS ELSE 0 END) AS DAYS_NEXT_5
+		  ,SUM(CASE WHEN DATEDIFF(MONTH, CONVERT(DATE, DI.FIRST_YMD,112), CONVERT(DATE, AD.FIRST_YMD,112)) <= 1 THEN AD.MM_DAYS ELSE 0 END) AS ACC_DAYS_1
+		  ,SUM(CASE WHEN DATEDIFF(MONTH, CONVERT(DATE, DI.FIRST_YMD,112), CONVERT(DATE, AD.FIRST_YMD,112)) <= 2 THEN AD.MM_DAYS ELSE 0 END) AS ACC_DAYS_2
+		  ,SUM(CASE WHEN DATEDIFF(MONTH, CONVERT(DATE, DI.FIRST_YMD,112), CONVERT(DATE, AD.FIRST_YMD,112)) <= 3 THEN AD.MM_DAYS ELSE 0 END) AS ACC_DAYS_3
+		  ,SUM(CASE WHEN DATEDIFF(MONTH, CONVERT(DATE, DI.FIRST_YMD,112), CONVERT(DATE, AD.FIRST_YMD,112)) <= 4 THEN AD.MM_DAYS ELSE 0 END) AS ACC_DAYS_4
+		  ,SUM(CASE WHEN DATEDIFF(MONTH, CONVERT(DATE, DI.FIRST_YMD,112), CONVERT(DATE, AD.FIRST_YMD,112)) <= 5 THEN AD.MM_DAYS ELSE 0 END) AS ACC_DAYS_5
+	 INTO #TMP_MM_DAYS_INFO
+	 FROM DAYS_INFO DI
+		  LEFT JOIN DAYS_INFO AD
+				 ON AD.YYYYMM BETWEEN CONVERT(NVARCHAR(6), DATEADD(MONTH, 1, CONVERT(DATE, DI.FIRST_YMD, 112)), 112)
+								  AND CONVERT(NVARCHAR(6), DATEADD(MONTH, 5, CONVERT(DATE, DI.FIRST_YMD, 112)), 112)
+	WHERE 1=1
+	GROUP BY
+		   DI.YYYYMM
+		  ,DI.FIRST_YMD
+		  ,DI.LAST_YMD
+		  ,DI.MM_DAYS
+		  ,CONVERT(NVARCHAR(6), DATEADD"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","4","(MONTH, 1, CONVERT(DATE, DI.FIRST_YMD, 112)), 112)
+		  ,CONVERT(NVARCHAR(6), DATEADD(MONTH, 5, CONVERT(DATE, DI.FIRST_YMD, 112)), 112)
+	;
+
+	--------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N' 1.5 품질 이슈 수량'
+	--------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#QUALITY_ISSUES') IS NOT NULL
+		DROP TABLE #QUALITY_ISSUES;
+
+	SELECT R.YYYYMM
+		  ,R.CELL_GROUP
+		  ,R.CATEGORY_DV
+		  ,R.AGGR_DV
+		  ,SUM(R.QUANTITY)		AS ISSUE_QTY
+	 INTO #QUALITY_ISSUES
+	 FROM SCP_RPT_DIO_TREND_MM_REASON R WITH(NOLOCK) -- DIO 초과 사유   --- YYYYMM, CATEGORY_DV, DIO_REASON, AGGR_DV, DIVISION_ID, ITEM_ID, CELL_GROUP
+	WHERE R.YYYYMM BETWEEN CASE WHEN @p_from_yyyymm > SUBSTRING(@P_PLAN_START_YYYYMMDD, 1, 6)
+							  THEN SUBSTRING(@P_PLAN_START_YYYYMMDD, 1, 6)
+							  ELSE @p_from_yyyymm
+						 END
+					 AND @p_to_yyyymm
+	  AND R.CATEGORY_DV = 'C'								-- 셀환산
+	  AND R.DIO_REASON IN ('QUALITY_ISSUES_REPORT'		    -- 품질 이슈(보고)
+					     , 'QUALITY_ISSUES_REPORT_OTHER')   -- 품질 이슈(보고 외)
+	  AND R.AGGR_DV		= 'CG'								-- 셀그룹별 집계
+	  AND R.ITEM_ID		= '*'
+	  AND R.DIVISION_ID = @p_division_id
+	  AND R.QUANTITY IS NOT NULL
+	  AND R.QUANTITY   != 0
+	GROUP BY
+		   R.YYYYMM
+		  ,R.CELL_GROUP
+		  ,R.CATEGORY_DV
+		  ,R.AGGR_DV
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'2.1 #SCP_RPT_DIO_TREND_MM 조회 대상 데이터'
+	-----------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#SCP_RPT_DIO_TREND_MM') IS NOT NULL
+		DROP TABLE #SCP_RPT_DIO_TREND_MM;
+
+	SELECT DT.*
+		  ,TC.CATEGORY
+		  ,ISNULL(NI.NICK_NAME,'') AS NICK_NAME
+	INTO #SCP_RPT_DIO_TREND_MM
+	FROM SCP_RPT_DIO_TREND_MM DT WITH(NOLOCK)
+		 INNER JOIN #TARGET_CATEGORY TC
+				 ON TC.CATEGORY_DV = DT.CATEGORY_DV
+		 LEFT  JOIN #ITEM_NICK_NAME_INFO NI
+				 ON NI.DIVISION_ID = DT.DIVISION_ID
+				AND NI.ITEM_ID     = DT.ITEM_ID
+	WHERE 1=1
+	  AND DT.PLAN_START_YYYYMMDD = @P_PLAN_START_YYYYMMDD
+	  AND DT.DIVISION_ID		 = @P_DIVISION_ID
+	  AND DT.AGGR_DV			 = @P_AGGR_DV
+	  AND DT.YYYYMM		BETWEEN @P_FROM_YYYYMM
+							AND @P_TO_YYYYMM
+	  AND DT.MEASURE NOT IN ('AVAILABLE', 'OP-LT-EXCPT')
+	  AND DT.CELL_GROUP			 = CASE WHEN ISNULL(@P_CELL_GROUP,'') = ''	THEN DT.CELL_GROUP	ELSE  @P_CELL_GROUP END
+
+	-----------------------------------------------------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'2.2 #SCP_RPT_DIO_TREND_MM 조회 대상 데이터 - Model/Nick_name 필터링 (MKT FCST Waterfall 참조)'
+	-----------------------------------------------------------------------------------------------------------------------------------------------------
+	IF ( @P_AGGR_DV = 'MD' AND ISNULL(@p_item_id, '')  <> '')
+		BEGIN
+			DELETE A
+			FROM #SCP_RPT_DIO_TREND_MM A
+			LEFT OUTER JOIN (	SELECT DISTINCT token
+								FROM dbo.String_Split(@p_item_id,',')
+							) C	ON A.ITEM_ID LIKE '%' + C.TOKEN + '%'
+			LEFT OUTER JOIN (	SELECT DISTINCT token
+								FROM dbo.String_Split(@p_item_id,',')
+							) D	ON A.NICK_NAME LIKE '%' + D.TOKEN + '%'
+			WHERE C.TOKEN IS NULL  AND D.TOKEN IS NULL
+		END
+
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'3. 양품 및 OP L/T Except'
+	-----------------------------------------------------------------------------------------------------------
+	IF EXISTS (SELECT TOP 1 *
+				FROM #TARGET_MEASURES
+			   WHERE 1=1
+				 AND MEASURE_DB IN ('AVAILABLE', 'OP-LT-EXCPT'))
+	BEGIN
+
+			----------------------------------------------------------
+			print convert(varchar(30), getdate(), 121) + N'3.1 RTF'
+			----------------------------------------------------------
+			IF OBJECT_ID('tempdb"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","5","..#TMP_RTF') IS NOT NULL
+				DROP TABLE #TMP_RTF;
+
+			SELECT DT.CATEGORY
+				  ,DT.AGGR_DV
+				  ,DT.YYYYMM
+				  ,DT.ITEM_ID
+				  ,DT.CATEGORY_DV
+				  ,DT.QUANTITY										 AS RTF
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE1,0))  AS RTF_NEXT_1
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE2,0))  AS RTF_NEXT_2
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE3,0))  AS RTF_NEXT_3
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE4,0))  AS RTF_NEXT_4
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE5,0))  AS RTF_NEXT_5
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE6,0))  AS ACC_RTF_1
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE7,0))  AS ACC_RTF_2
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE8,0))  AS ACC_RTF_3
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE9,0))  AS ACC_RTF_4
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE10,0)) AS ACC_RTF_5
+			 INTO #TMP_RTF
+			 FROM #SCP_RPT_DIO_TREND_MM DT
+			WHERE 1=1
+			  AND DT.MEASURE = 'RTF'
+
+			------------------------------------------------------------------------
+			print convert(varchar(30), getdate(), 121) + N'3.2 양품 재고 수량'
+			------------------------------------------------------------------------
+			IF OBJECT_ID('tempdb..#TMP_AVAILABLE_QTY') IS NOT NULL
+				DROP TABLE #TMP_AVAILABLE_QTY;
+
+			SELECT I.CATEGORY_DV
+				  ,I.CATEGORY
+				  ,I.YYYYMM
+				  ,I.AGGR_DV
+				  ,I.ITEM_ID
+				  ,I.NICK_NAME
+				  ,I.CELL_GROUP
+				  , I.QUANTITY - ISNULL(Q.ISSUE_QTY, 0) 				AS AVAILABLE_QTY
+				  ,(I.QUANTITY - ISNULL(Q.ISSUE_QTY, 0)) * I.UNIT_PRICE	AS AVAILABLE_AMT
+				  ,I.PIC_ID
+				  ,I.DEPT_ID
+				  ,I.PROJECT_CODE
+				  ,I.UNIT_PRICE
+				  ,I.TARGET_CELL
+				  ,I.CELL_CF
+				  ,I.PRODUCTION_CYCLE
+				  ,I.SAFETY_STOCK
+				  ,I.PRE_INSPECTION
+			  INTO #TMP_AVAILABLE_QTY
+			  FROM #SCP_RPT_DIO_TREND_MM I
+				   LEFT JOIN #QUALITY_ISSUES Q
+						  ON Q.YYYYMM		=  CASE WHEN I.YYYYMM  >= SUBSTRING(@P_PLAN_START_YYYYMMDD, 1,6)
+													THEN SUBSTRING(@P_PLAN_START_YYYYMMDD, 1, 6) -- 당월 포함 미래구간은 모두 당월(Plan 해당월) 품질이슈 수량 반영
+													ELSE I.YYYYMM
+												END
+						 AND Q.CATEGORY_DV	= I.CATEGORY_DV
+						 AND Q.AGGR_DV		= I.AGGR_DV
+						 AND Q.CELL_GROUP	= I.CELL_GROUP
+		     WHERE 1=1
+			   AND I.MEASURE = 'INV'
+
+			--------------------------------------------------------------------------------
+			print convert(varchar(30), getdate(), 121) + N'3.3 양품 재고 DIO'
+			--------------------------------------------------------------------------------
+			IF OBJECT_ID('tempdb..#TMP_AVAILABLE_DIO') IS NOT NULL
+				DROP TABLE #TMP_AVAILABLE_DIO;
+
+			SELECT I.CATEGORY
+				  ,I.AGGR_DV
+				  ,I.YYYYMM
+				  ,I.ITEM_ID
+				  ,I.NICK_NAME
+				  ,I.CATEGORY_DV
+				  ,I.AVAILABLE_QTY
+				  ,I.AVAILABLE_AMT
+				  ,CASE WHEN I.AVAILABLE_QTY <= 0 THEN
+							 0
+						WHEN R.ITEM_ID IS NULL THEN
+							 180
+						WHEN I.AVAILABLE_QTY - R.RTF_NEXT_1 < 0 THEN
+							 ISNULL(CONVERT(NUMERIC(20,10), I.AVAILABLE_QTY)				 / CASE WHEN R.RTF_NEXT_1 = 0 THEN NULL ELSE R.RTF_NEXT_1   END, 0) * D.DAYS_NEXT_1
+						WHEN I.AVAILABLE_QTY	 - R.RTF_NEXT_1 = 0 THEN
+							 D.ACC_DAYS_1
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_2 < 0  THEN
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_1)) / CASE WHEN R.RTF_NEXT_2 = 0  THEN NULL ELSE R.RTF_NEXT_2  END, 0) * D.DAYS_NEXT_2 + D.ACC_DAYS_1
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_2 = 0  THEN
+							 D.ACC_DAYS_2
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_3 < 0  THEN
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_2)) / CASE WHEN R.RTF_NEXT_3 = 0  THEN NULL ELSE R.RTF_NEXT_3  END, 0) * D.DAYS_NEXT_3 + D.ACC_DAYS_2
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_3 = 0  THEN
+							 D.ACC_DAYS_3
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_4 < 0  THEN
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_3)) / CASE WHEN R.RTF_NEXT_4 = 0  THEN NULL ELSE R.RTF_NEXT_4  END, 0) * D.DAYS_NEXT_4 + D.ACC_DAYS_3
+						W"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","6","HEN I.AVAILABLE_QTY	 - R.ACC_RTF_4 = 0  THEN
+							 D.ACC_DAYS_4
+						WHEN I.AVAILABLE_QTY - R.ACC_RTF_5 < 0  THEN
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_4)) / CASE WHEN R.RTF_NEXT_5 = 0  THEN NULL ELSE R.RTF_NEXT_5  END, 0) * D.DAYS_NEXT_5 + D.ACC_DAYS_4
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_5 = 0  THEN
+							 D.ACC_DAYS_5
+						ELSE 180
+					END	AS AVAILABLE_DIO
+				  ,I.CELL_GROUP
+				  ,I.PIC_ID
+				  ,I.DEPT_ID
+				  ,I.PROJECT_CODE
+				  ,I.UNIT_PRICE
+				  ,I.TARGET_CELL
+				  ,I.CELL_CF
+				  ,I.PRODUCTION_CYCLE
+				  ,I.SAFETY_STOCK
+				  ,I.PRE_INSPECTION
+			 INTO #TMP_AVAILABLE_DIO
+			 FROM #TMP_AVAILABLE_QTY I
+				   INNER JOIN #TMP_MM_DAYS_INFO D
+						  ON D.YYYYMM			 = I.YYYYMM
+				   LEFT JOIN #TMP_RTF R
+						  ON R.AGGR_DV			 = I.AGGR_DV
+						 AND R.YYYYMM			 = I.YYYYMM
+						 AND R.ITEM_ID			 = I.ITEM_ID
+						 AND R.CATEGORY_DV		 = I.CATEGORY_DV
+						 AND R.CATEGORY          = I.CATEGORY
+			WHERE 1=1
+
+			------------------------------------------------------------------------------------------------
+			print convert(varchar(30), getdate(), 121) + N'3.4 #SCP_RPT_DIO_TREND_MM - 양품 MEASURE 추가'
+			------------------------------------------------------------------------------------------------
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,AMOUNT
+						,DIO
+						,CELL_GROUP
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,UNIT_PRICE
+						,UNIT_PRICE_LAST
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+			SELECT @P_PLAN_START_YYYYMMDD
+				  ,@P_DIVISION_ID
+				  ,@P_AGGR_DV
+				  ,CASE WHEN I.CATEGORY_DV = 'C'
+						THEN 'Cell Convert'
+						WHEN I.CATEGORY_DV = 'P'
+						THEN 'Pack'
+						WHEN I.CATEGORY_DV = 'A'
+						THEN 'Cell'
+						ELSE ''
+				   END			AS CATEGORY
+				  ,I.YYYYMM
+				  ,I.ITEM_ID
+				  ,I.NICK_NAME
+				  ,I.CATEGORY_DV
+				  ,'AVAILABLE'	AS MEASURE
+				  ,I.AVAILABLE_QTY
+				  ,I.AVAILABLE_AMT
+				  ,I.AVAILABLE_DIO
+				  ,I.CELL_GROUP
+				  ,I.PIC_ID
+				  ,I.DEPT_ID
+				  ,I.PROJECT_CODE
+				  ,I.UNIT_PRICE
+				  ,DT.UNIT_PRICE_LAST
+				  ,I.TARGET_CELL
+				  ,I.CELL_CF
+				  ,I.PRODUCTION_CYCLE
+				  ,I.SAFETY_STOCK
+				  ,I.PRE_INSPECTION
+				  ,@P_USER_ID	AS CREATED_BY
+				  ,GETDATE()	AS CREATION_DATE
+				  ,@P_USER_ID	AS LAST_UPDATED_BY
+				  ,GETDATE()	AS LAST_UPDATE_DATE
+			 FROM #TMP_AVAILABLE_DIO I
+				  LEFT JOIN #SCP_RPT_DIO_TREND_MM DT
+						 ON DT.YYYYMM		= I.YYYYMM
+						AND DT.ITEM_ID		= I.ITEM_ID
+						AND DT.CATEGORY_DV	= I.CATEGORY_DV
+						AND DT.MEASURE		= 'INV'
+						AND DT.AGGR_DV		= I.AGGR_DV
+
+			--------------------------------------------------------------------------------------------------------------
+			print convert(varchar(30), getdate(), 121) + N'3.5 #SCP_RPT_DIO_TREND_MM - OP L/T Except Measure'
+			--------------------------------------------------------------------------------------------------------------
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,DIO
+						,CELL_GROUP
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,UNIT_PRICE
+						,UNIT_PRICE_LAST
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+			SELECT @P_PLAN_START_YYYYMMDD
+				  ,@P_DIVISION_ID
+				  ,@P_AGGR_DV
+				  ,CASE WHEN ISNULL(I.CATEGORY_DV, DT.CATEGORY_DV)  = 'C'
+						THEN"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","7"," 'Cell Convert'
+						WHEN ISNULL(I.CATEGORY_DV, DT.CATEGORY_DV) = 'P'
+						THEN 'Pack'
+						WHEN ISNULL(I.CATEGORY_DV, DT.CATEGORY_DV) = 'A'
+						THEN 'Cell'
+						ELSE ''
+				   END			AS CATEGORY
+				  ,ISNULL(I.YYYYMM				  ,DT.YYYYMM			) AS YYYYMM
+				  ,ISNULL(I.ITEM_ID				  ,DT.ITEM_ID			) AS ITEM_ID
+				  ,ISNULL(I.NICK_NAME			  ,DT.NICK_NAME			) AS NICK_NAME
+				  ,ISNULL(I.CATEGORY_DV			  ,DT.CATEGORY_DV		) AS CATEGORY_DV
+				  ,'OP-LT-EXCPT'											AS MEASURE
+				  ,ISNULL(I.AVAILABLE_QTY, 0.0) - ISNULL(DT.QUANTITY, 0.0)	AS QUANTITY 	-- 양품 수량  - OP L/T 수량
+				  ,ISNULL(I.AVAILABLE_DIO, 0.0) - ISNULL(DT.DIO     , 0.0) 	AS DIO 			-- 양품 DIO   - OP L/T DIO
+				  ,ISNULL(I.CELL_GROUP			  ,DT.CELL_GROUP		) AS CELL_GROUP
+				  ,ISNULL(I.PIC_ID				  ,DT.PIC_ID			) AS PIC_ID
+				  ,ISNULL(I.DEPT_ID				  ,DT.DEPT_ID			) AS DEPT_ID
+				  ,ISNULL(I.PROJECT_CODE		  ,DT.PROJECT_CODE		) AS PROJECT_CODE
+				  ,ISNULL(I.UNIT_PRICE			  ,DT.UNIT_PRICE		) AS UNIT_PRICE
+				  ,DT.UNIT_PRICE_LAST									  AS UNIT_PRICE_LAST
+				  ,ISNULL(I.TARGET_CELL			  ,DT.TARGET_CELL		) AS TARGET_CELL
+				  ,ISNULL(I.CELL_CF				  ,DT.CELL_CF			) AS CELL_CF
+				  ,ISNULL(I.PRODUCTION_CYCLE	  ,DT.PRODUCTION_CYCLE	) AS PRODUCTION_CYCLE
+				  ,ISNULL(I.SAFETY_STOCK		  ,DT.SAFETY_STOCK		) AS SAFETY_STOCK
+				  ,ISNULL(I.PRE_INSPECTION		  ,DT.PRE_INSPECTION	) AS PRE_INSPECTION
+				  ,@P_USER_ID	AS CREATED_BY
+				  ,GETDATE()	AS CREATION_DATE
+				  ,@P_USER_ID	AS LAST_UPDATED_BY
+				  ,GETDATE()	AS LAST_UPDATE_DATE
+			 FROM #TMP_AVAILABLE_DIO I
+				  FULL OUTER JOIN #SCP_RPT_DIO_TREND_MM DT
+						 ON DT.YYYYMM		= I.YYYYMM
+						AND DT.ITEM_ID		= I.ITEM_ID
+						AND DT.CATEGORY_DV	= I.CATEGORY_DV
+						AND DT.AGGR_DV		= I.AGGR_DV
+			WHERE 1=1
+			  AND DT.MEASURE = 'OP-LT'
+	END;
+
+	--------------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'4. Category별 기타충당금 추가 (#SCP_RPT_DIO_TREND_MM)'
+	--------------------------------------------------------------------------------------------------------------
+	INSERT INTO #SCP_RPT_DIO_TREND_MM (
+				 PLAN_START_YYYYMMDD
+				,DIVISION_ID
+				,AGGR_DV
+				,CATEGORY
+				,YYYYMM
+				,ITEM_ID
+				,NICK_NAME
+				,CELL_GROUP
+				,CATEGORY_DV
+				,MEASURE
+				,QUANTITY
+				,AMOUNT
+				,DIO
+				,CREATED_BY
+				,CREATION_DATE
+				,LAST_UPDATED_BY
+				,LAST_UPDATE_DATE
+				)
+	SELECT DT.PLAN_START_YYYYMMDD
+		  ,DT.DIVISION_ID
+		  ,DT.AGGR_DV
+		  ,TC.CATEGORY
+		  ,DT.YYYYMM
+		  ,DT.ITEM_ID
+		  ,N'기타충당금' AS NICK_NAME
+		  ,DT.CELL_GROUP
+		  ,DT.CATEGORY_DV
+		  ,DT.MEASURE
+		  ,DT.QUANTITY
+		  ,DT.AMOUNT
+		  ,DT.DIO
+		  ,@P_USER_ID	AS CREATED_BY
+		  ,GETDATE()	AS CREATION_DATE
+		  ,@P_USER_ID	AS LAST_UPDATED_BY
+		  ,GETDATE()	AS LAST_UPDATE_DATE
+	 FROM SCP_RPT_DIO_TREND_MM DT WITH(NOLOCK)
+		  INNER JOIN #TARGET_CATEGORY TC
+				  ON TC.CATEGORY_DV = DT.CATEGORY_DV
+	WHERE 1=1
+	  AND DT.PLAN_START_YYYYMMDD = @P_PLAN_START_YYYYMMDD
+	  AND DT.DIVISION_ID		 = @P_DIVISION_ID
+	  AND DT.AGGR_DV			 = 'ET'
+	  AND DT.YYYYMM		BETWEEN @P_FROM_YYYYMM
+							AND @P_TO_YYYYMM
+
+	-----------------------------------------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'5.1. Category별 MEASURE 합계 추가 (조회 조건에 대한 합계가 아님) - #SCP_RPT_DIO_TREND_MM'
+	-----------------------------------------------------------------------------------------------------------------------------------------
+	INSERT INTO #SCP_RPT_DIO_TREND_MM (
+				 PLAN_START_YYYYMMDD
+				,DIVISION_ID
+				,AGGR_DV
+				,CATEGORY
+				,YYYYMM
+				,ITEM_ID
+				,NICK_NAME
+				,CELL_GROUP
+				,CATEGORY_DV
+				,MEASURE
+				,QUANTITY
+				,AMOUNT
+				,DIO
+				,UNIT_PRICE_LAST
+				,CREATED_BY
+				,CREATION_DATE
+				,LAST_UPDATED_BY
+				,LAST_UPDATE_DATE
+				)
+	SELECT DT.PLAN_START_YYYYMMDD
+		  ,DT.DIVISION_ID"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","8","
+		  ,'TT'				AS AGGR_DV
+		  ,TC.CATEGORY
+		  ,DT.YYYYMM
+		  ,N'합계'			AS ITEM_ID
+		  ,N'합계'			AS NICK_NAME
+		  ,N'합계'			AS CELL_GROUP
+		  ,DT.CATEGORY_DV
+		  ,DT.MEASURE
+		  ,SUM(DT.QUANTITY)	AS QUANTITY
+		  ,CASE WHEN DT.MEASURE != 'STANDARD'
+				THEN SUM(DT.AMOUNT)
+				ELSE SUM(DT.QUANTITY) -- 기준수량 * 최종단가 (기타충당금 반영된 금액의 단가)
+					*
+					MAX(CASE WHEN DT.YYYYMM = @V_LAST_YYYYMM AND DT.MEASURE = 'INV'  AND SUM(DT.QUANTITY) != 0
+							 THEN CONVERT(NUMERIC(20,0), SUM(DT.AMOUNT) / SUM(DT.QUANTITY))
+							 ELSE NULL
+						END)	OVER	(PARTITION BY DT.PLAN_START_YYYYMMDD
+												 ,DT.DIVISION_ID
+												 ,DT.CATEGORY_DV)
+		   END AS AMOUNT
+		  ,MAX(DT.DIO)		AS DIO
+		  ,MAX(CASE WHEN DT.YYYYMM = @V_LAST_YYYYMM AND DT.MEASURE = 'INV'  AND SUM(DT.QUANTITY) != 0
+					THEN CONVERT(NUMERIC(20,0), SUM(DT.AMOUNT) / SUM(DT.QUANTITY))
+					ELSE NULL
+			   END)	OVER	(PARTITION BY DT.PLAN_START_YYYYMMDD
+										 ,DT.DIVISION_ID
+										 ,DT.CATEGORY_DV)
+							AS UNIT_PRICE_LAST
+		  ,@P_USER_ID		AS CREATED_BY
+		  ,GETDATE()		AS CREATION_DATE
+		  ,@P_USER_ID		AS LAST_UPDATED_BY
+		  ,GETDATE()		AS LAST_UPDATE_DATE
+	 FROM SCP_RPT_DIO_TREND_MM DT WITH(NOLOCK)
+		  INNER JOIN #TARGET_CATEGORY TC
+				  ON TC.CATEGORY_DV = DT.CATEGORY_DV
+	WHERE 1=1
+	  AND DT.PLAN_START_YYYYMMDD = @P_PLAN_START_YYYYMMDD
+	  AND DT.DIVISION_ID		 = @P_DIVISION_ID
+	  AND DT.AGGR_DV			 IN ('TT', 'ET')
+	  AND DT.YYYYMM		BETWEEN @P_FROM_YYYYMM
+							AND @P_TO_YYYYMM
+	  AND DT.MEASURE            != 'GAP'   -- 기타충당금(TT) 반영 재고 및 기준재고 정보로 재계산 필요
+	GROUP BY DT.PLAN_START_YYYYMMDD
+			,DT.DIVISION_ID
+			,DT.YYYYMM
+			,DT.CATEGORY_DV
+			,TC.CATEGORY
+			,DT.MEASURE
+
+	--------------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'5.2. Category별 합계 - GAP Measure 추가'
+	--------------------------------------------------------------------------------------------------------------
+	INSERT INTO #SCP_RPT_DIO_TREND_MM (
+				 PLAN_START_YYYYMMDD
+				,DIVISION_ID
+				,AGGR_DV
+				,CATEGORY
+				,YYYYMM
+				,ITEM_ID
+				,NICK_NAME
+				,CELL_GROUP
+				,CATEGORY_DV
+				,MEASURE
+				,QUANTITY
+				,AMOUNT
+				,DIO
+				,UNIT_PRICE_LAST
+				,CREATED_BY
+				,CREATION_DATE
+				,LAST_UPDATED_BY
+				,LAST_UPDATE_DATE
+				)
+	SELECT D.PLAN_START_YYYYMMDD
+		  ,D.DIVISION_ID
+		  ,D.AGGR_DV
+		  ,D.CATEGORY
+		  ,D.YYYYMM
+		  ,MAX(D.ITEM_ID	 )		AS ITEM_ID
+		  ,MAX(D.NICK_NAME	 )		AS NICK_NAME
+		  ,MAX(D.CELL_GROUP	 )		AS CELL_GROUP
+		  ,D.CATEGORY_DV
+		  ,'GAP'																		 AS MEASURE
+		  ,SUM(CASE WHEN D.MEASURE = 'INV' THEN D.QUANTITY	ELSE (-1) * D.QUANTITY	END) AS QUANTITY
+		  ,SUM(CASE WHEN D.MEASURE = 'INV' THEN D.AMOUNT	ELSE (-1) * D.AMOUNT	END) AS AMOUNT
+		  ,SUM(CASE WHEN D.MEASURE = 'INV' THEN D.DIO		ELSE (-1) * D.DIO		END) AS DIO
+		  ,MAX(D.UNIT_PRICE_LAST)	AS UNIT_PRICE_LAST
+		  ,@P_USER_ID				AS CREATED_BY
+		  ,GETDATE()				AS CREATION_DATE
+		  ,@P_USER_ID				AS LAST_UPDATED_BY
+		  ,GETDATE()				AS LAST_UPDATE_DATE
+	 FROM #SCP_RPT_DIO_TREND_MM D
+	WHERE 1=1
+	  AND AGGR_DV = 'TT'
+	  AND MEASURE IN ('INV', 'STANDARD')
+	GROUP BY D.PLAN_START_YYYYMMDD
+			,D.DIVISION_ID
+			,D.AGGR_DV
+			,D.CATEGORY
+			,D.YYYYMM
+			,D.CATEGORY_DV
+
+
+	--------------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'6. 합계 - 양품/OP L/T Except measure  추가 - #SCP_RPT_DIO_TREND_MM'
+	--------------------------------------------------------------------------------------------------------------
+	IF EXISTS (SELECT TOP 1 *
+				FROM #TARGET_MEASURES
+			   WHERE 1=1
+				 AND MEASURE_DB IN ('AVAILABLE', 'OP-LT-EXCPT'))
+	BEGIN
+
+			print convert(varchar(30), getdate(), 121) + N'6.1 합계 RTF '
+			------------------------------------------
+			-- 6.1 합계 RTF
+			------------------------------------------
+			IF OBJECT_ID('tempdb..#TMP_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","9","TOT_RTF') IS NOT NULL
+				DROP TABLE #TMP_TOT_RTF;
+
+			SELECT DT.AGGR_DV
+				  ,DT.YYYYMM
+				  ,DT.CATEGORY_DV
+				  ,SUM(DT.QUANTITY										 ) AS RTF
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE1,0))  ) AS RTF_NEXT_1
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE2,0))  ) AS RTF_NEXT_2
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE3,0))  ) AS RTF_NEXT_3
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE4,0))  ) AS RTF_NEXT_4
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE5,0))  ) AS RTF_NEXT_5
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE6,0))  ) AS ACC_RTF_1
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE7,0))  ) AS ACC_RTF_2
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE8,0))  ) AS ACC_RTF_3
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE9,0))  ) AS ACC_RTF_4
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE10,0)) ) AS ACC_RTF_5
+			 INTO #TMP_TOT_RTF
+			 FROM SCP_RPT_DIO_TREND_MM DT WITH(NOLOCK)
+			WHERE 1=1
+			  AND DT.PLAN_START_YYYYMMDD = @P_PLAN_START_YYYYMMDD
+			  AND DT.DIVISION_ID		 = @P_DIVISION_ID
+			  AND DT.AGGR_DV			 = 'TT'
+			  AND DT.YYYYMM	BETWEEN @P_FROM_YYYYMM AND @P_TO_YYYYMM
+			  AND DT.MEASURE			 = 'RTF'
+			GROUP BY DT.AGGR_DV
+					,DT.YYYYMM
+					,DT.CATEGORY_DV
+
+			print convert(varchar(30), getdate(), 121) + N'6.2 합계 양품재고 '
+			------------------------------------------
+			-- 6.2 합계 양품재고
+			------------------------------------------
+			IF OBJECT_ID('tempdb..#TMP_TOT_AVAILABLE_QTY') IS NOT NULL
+				DROP TABLE #TMP_TOT_AVAILABLE_QTY;
+
+			;WITH QUALITY_ISSUES AS (
+				SELECT QI.CATEGORY_DV
+					  ,QI.YYYYMM
+					  ,SUM(QI.ISSUE_QTY) AS ISSUE_QTY
+				 FROM #QUALITY_ISSUES QI
+				WHERE 1=1
+				GROUP BY QI.CATEGORY_DV
+					    ,QI.YYYYMM
+			)
+			SELECT DT.AGGR_DV
+				  ,DT.CATEGORY
+				  ,DT.YYYYMM
+				  ,DT.ITEM_ID
+				  ,DT.NICK_NAME
+				  ,DT.CELL_GROUP
+				  ,DT.CATEGORY_DV
+				  ,DT.QUANTITY - ISNULL(QI.ISSUE_QTY, 0)	AS AVAILABLE_QTY  -- 양품수량
+				  ,DT.UNIT_PRICE_LAST -- 11/21
+			 INTO #TMP_TOT_AVAILABLE_QTY
+			 FROM #SCP_RPT_DIO_TREND_MM  DT
+				  LEFT JOIN QUALITY_ISSUES QI
+						 ON QI.YYYYMM   = CASE WHEN DT.YYYYMM  >= SUBSTRING(@P_PLAN_START_YYYYMMDD, 1,6)
+											   THEN SUBSTRING(@P_PLAN_START_YYYYMMDD, 1,6) -- 당월 포함 미래구간은 모두 당월(Plan 해당월) 품질이슈 수량 반영
+											   ELSE DT.YYYYMM
+										  END
+						AND QI.CATEGORY_DV = DT.CATEGORY_DV
+			WHERE 1=1
+			  AND AGGR_DV = 'TT'	-- TOTAL
+			  AND MEASURE = 'INV'	-- 재고
+
+			print convert(varchar(30), getdate(), 121) + N'6.3 합계 양품재고 DIO '
+			------------------------------------------
+			-- 6.3 합계 양품재고 DIO
+			------------------------------------------
+			IF OBJECT_ID('tempdb..#TMP_TOT_AVAILABLE_DIO') IS NOT NULL
+				DROP TABLE #TMP_TOT_AVAILABLE_DIO;
+
+			SELECT I.CATEGORY
+				  ,I.AGGR_DV
+				  ,I.YYYYMM
+				  ,I.ITEM_ID
+				  ,I.NICK_NAME
+				  ,I.CELL_GROUP
+				  ,I.CATEGORY_DV
+				  ,I.AVAILABLE_QTY
+				  ,CASE WHEN I.AVAILABLE_QTY <= 0 THEN
+							 0
+						WHEN R.YYYYMM IS NULL THEN
+							 180
+						WHEN I.AVAILABLE_QTY - R.RTF_NEXT_1 < 0 THEN
+							 ISNULL(CONVERT(NUMERIC(20,10), I.AVAILABLE_QTY)				 / CASE WHEN R.RTF_NEXT_1 = 0  THEN NULL ELSE R.RTF_NEXT_1  END, 0) * D.DAYS_NEXT_1
+						WHEN I.AVAILABLE_QTY	 - R.RTF_NEXT_1 = 0 THEN
+							 D.ACC_DAYS_1
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_2 < 0  THEN
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_1)) / CASE WHEN R.RTF_NEXT_2 = 0  THEN NULL ELSE R.RTF_NEXT_2  END, 0) * D.DAYS_NEXT_2 + D.ACC_DAYS_1
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_2 = 0  THEN
+							 D.ACC_DAYS_2
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_3 < 0  THEN
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_2)) / CASE WHEN R.RTF_NEXT_3 = 0  THEN NULL ELSE R.RTF_NEXT_3  END, 0) * D.DAYS_NEXT_3 + D.ACC_DAYS_2
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_3 = 0  THEN
+							 D.ACC_DAYS_3
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_4 < 0  T"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","10","HEN
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_3)) / CASE WHEN R.RTF_NEXT_4 = 0  THEN NULL ELSE R.RTF_NEXT_4  END, 0) * D.DAYS_NEXT_4 + D.ACC_DAYS_3
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_4 = 0  THEN
+							 D.ACC_DAYS_4
+						WHEN I.AVAILABLE_QTY - R.ACC_RTF_5 < 0  THEN
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_4)) / CASE WHEN R.RTF_NEXT_5 = 0  THEN NULL ELSE R.RTF_NEXT_5  END, 0) * D.DAYS_NEXT_5 + D.ACC_DAYS_4
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_5 = 0  THEN
+							 D.ACC_DAYS_5
+						ELSE 180
+					END	AS AVAILABLE_DIO
+				  ,I.UNIT_PRICE_LAST -- 11/21
+			 INTO #TMP_TOT_AVAILABLE_DIO
+			 FROM #TMP_TOT_AVAILABLE_QTY I
+				   INNER JOIN #TMP_MM_DAYS_INFO D
+						  ON D.YYYYMM			 = I.YYYYMM
+				   LEFT JOIN #TMP_TOT_RTF R
+						  ON R.AGGR_DV			 = I.AGGR_DV
+						 AND R.YYYYMM			 = I.YYYYMM
+						 AND R.CATEGORY_DV		 = I.CATEGORY_DV
+			WHERE 1=1
+
+			print convert(varchar(30), getdate(), 121) + N'6.4 합계 양품 수량/DIO  MEASURE 추가 '
+			------------------------------------------
+			-- 6.4 합계 양품 수량/DIO  MEASURE 추가
+			------------------------------------------
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,AMOUNT
+						,DIO
+						,UNIT_PRICE_LAST
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+			SELECT @P_PLAN_START_YYYYMMDD
+				  ,@P_DIVISION_ID
+				  ,I.AGGR_DV
+				  ,CASE WHEN I.CATEGORY_DV = 'C'
+						THEN 'Cell Convert'
+						WHEN I.CATEGORY_DV = 'P'
+						THEN 'Pack'
+						WHEN I.CATEGORY_DV = 'A'
+						THEN 'Cell'
+						ELSE ''
+				   END			AS CATEGORY
+				  ,I.YYYYMM
+				  ,I.ITEM_ID
+				  ,I.NICK_NAME
+				  ,I.CELL_GROUP
+				  ,I.CATEGORY_DV
+				  ,'AVAILABLE'	AS MEASURE
+				  ,I.AVAILABLE_QTY
+				  ,0.0			AS AVAILABLE_AMT
+				  ,AVAILABLE_DIO
+				  ,UNIT_PRICE_LAST
+				  ,@P_USER_ID	AS CREATED_BY
+				  ,GETDATE()	AS CREATION_DATE
+				  ,@P_USER_ID	AS LAST_UPDATED_BY
+				  ,GETDATE()	AS LAST_UPDATE_DATE
+			 FROM #TMP_TOT_AVAILABLE_DIO I
+
+			print convert(varchar(30), getdate(), 121) + N'6.5 합계 OP L/T Except Measure  '
+			------------------------------------------
+			-- 6.5 합계 OP L/T Except Measure
+			------------------------------------------
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,DIO
+						,UNIT_PRICE_LAST
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+			SELECT @P_PLAN_START_YYYYMMDD
+				  ,@P_DIVISION_ID
+				  ,ISNULL(I.AGGR_DV				  ,DT.AGGR_DV			)  AS AGGR_DV
+				  ,CASE WHEN ISNULL(I.CATEGORY_DV, DT.CATEGORY_DV)  = 'C'
+						THEN 'Cell Convert'
+						WHEN ISNULL(I.CATEGORY_DV, DT.CATEGORY_DV) = 'P'
+						THEN 'Pack'
+						WHEN ISNULL(I.CATEGORY_DV, DT.CATEGORY_DV) = 'A'
+						THEN 'Cell'
+						ELSE ''
+				   END													  AS CATEGORY
+				  ,ISNULL(I.YYYYMM				  ,DT.YYYYMM			) AS YYYYMM
+				  ,ISNULL(I.ITEM_ID				  ,DT.ITEM_ID			) AS ITEM_ID
+				  ,ISNULL(I.NICK_NAME			  ,DT.NICK_NAME			) AS NICK_NAME
+				  ,ISNULL(I.CELL_GROUP			  ,DT.CELL_GROUP		) AS CELL_GROUP
+				  ,ISNULL(I.CATEGORY_DV			  ,DT.CATEGORY_DV		) AS CATEGORY_DV
+				  ,'OP-LT-EXCPT'											AS MEASURE
+				  ,ISNULL(I.AVAILABLE_QTY, 0.0) - ISNULL(DT.QUANTITY, 0.0)	AS QUANTITY 	-- 양품 수량  - OP L/T 수량
+				  ,ISNULL(I.AVAILABLE_DIO, 0.0) - ISNULL(DT.DIO     , 0.0) 	AS DIO 			-- 양품 DIO   - OP L/T DIO
+				  ,ISNULL(I.UNIT_PRICE_LAST		  ,DT.UNIT_PRICE_LAST	)   AS UNIT_PRICE_LAST
+				  ,@P_USER_ID	AS CREATED_BY
+				  ,GETDATE()	AS CREATION_DATE
+				  ,@P_USER_ID	AS LAST_UPDATED_BY
+				  ,GETDATE()	AS LAST_UPDATE_DATE
+	"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","11","		 FROM #TMP_TOT_AVAILABLE_DIO I
+				  FULL OUTER JOIN #SCP_RPT_DIO_TREND_MM DT
+						 ON DT.YYYYMM			= I.YYYYMM
+						AND DT.CATEGORY_DV		= I.CATEGORY_DV
+						AND DT.AGGR_DV			= 'TT'
+			WHERE 1=1
+			  AND DT.MEASURE = 'OP-LT'
+
+	END
+
+
+	------------------------------------------------------------------------------------------
+	-- 2023.01.11
+	-- 당월 포함 미래 구간
+	-- 모델별(Aggr_dv='MD') Pack 수율 반영 전 생산 계획 수량 measure 추가
+	------------------------------------------------------------------------------------------
+	IF @p_aggr_dv = 'MD' AND @P_CATEGORY LIKE '%P%' -- 모델별 Pack 조회시
+		AND  EXISTS (SELECT TOP 1 *
+				  	  FROM #TARGET_MEASURES
+				     WHERE 1=1
+				  	   AND MEASURE_DB = 'PROD-BEFORE-PACK')
+	BEGIN
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,AMOUNT
+						,DIO
+						,UNIT_PRICE_LAST
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+				SELECT
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,'PROD-BEFORE-PACK'									AS MEASURE
+						,CONVERT(NUMERIC(20,10), ISNULL(ATTRIBUTE1, '0'))	AS QUANTITY
+						,0
+						,0
+						,UNIT_PRICE_LAST
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+				 FROM #SCP_RPT_DIO_TREND_MM
+				WHERE AGGR_DV		= 'MD'
+				  AND CATEGORY_DV	= 'P'
+				  AND MEASURE		= 'PROD'
+				  AND YYYYMM		>= SUBSTRING(@p_plan_start_yyyymmdd, 1, 6)
+
+	END
+
+	------------------------------------------------------------------------------------------
+	-- 2023.01.11
+	-- 당월 포함 미래 구간
+	-- 모델별(Aggr_dv='MD') 팩 생산에 소요된 셀수량  및 수율 반영 후 셀수량 measure 추가
+	------------------------------------------------------------------------------------------
+	IF @p_aggr_dv = 'MD' AND @P_CATEGORY LIKE '%A%' -- 모델별 Cell 조회시
+	BEGIN
+			 -- Pack 생산에 소요된 셀 수량
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,AMOUNT
+						,DIO
+						,UNIT_PRICE_LAST
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+				SELECT
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,'CELL-USED'										AS MEASURE
+						,CONVERT(NUMERIC(20,10), ISNULL(ATTRIBUTE1, '0'))	AS QUANTITY
+						,0
+						,0
+						,UNIT_PRICE_LAST
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+				 FROM #SCP_RPT_DIO_TREND_MM
+				WHERE AGGR_DV		= 'MD'
+				  AND CATEGORY_DV	= 'A'
+				  AND MEASURE		= 'PROD'
+				  AND YYYYMM		>= SUBSTRING(@p_plan_start_yyyymmdd, 1, 6)
+				  AND EXISTS (SELECT TOP 1 *
+				  			  FROM #TARGET_MEASURES
+							 WHERE 1=1
+				  			   AND MEASURE_DB = 'CELL-USED')
+
+
+			 -- 수율 반영 후 셀 생산 계획 수량
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","12",",AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,AMOUNT
+						,DIO
+						,UNIT_PRICE_LAST
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+				SELECT
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,'PROD-AFTER-CELL'	AS MEASURE
+						,DIO				AS QUANTITY
+						,0
+						,0
+						,UNIT_PRICE_LAST
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+				 FROM #SCP_RPT_DIO_TREND_MM
+				WHERE AGGR_DV		= 'MD'
+				  AND CATEGORY_DV	= 'A'
+				  AND MEASURE		= 'PROD'
+				  AND YYYYMM		>= SUBSTRING(@p_plan_start_yyyymmdd, 1, 6)
+				  AND EXISTS (SELECT TOP 1 *
+				  			  FROM #TARGET_MEASURES
+							 WHERE 1=1
+				  			   AND MEASURE_DB = 'PROD-AFTER-CELL')
+
+	END
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'7.1 Insert #fdata 최종 조회 대상 데이터'
+	-----------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#fdata') IS NOT NULL
+		DROP TABLE #fdata;
+
+	;WITH DIO_REASON AS (
+		SELECT DISTINCT
+		       R.YYYYMM
+			  ,CELL_GROUP
+			  ,'Y' AS EXISTS_REASON
+		FROM SCP_RPT_DIO_TREND_MM_REASON R WITH(NOLOCK) -- DIO 초과 사유
+	   WHERE R.DIVISION_ID = @p_division_id
+	     AND R.AGGR_DV	   = 'CG'
+		 AND R.CATEGORY_DV = 'C'
+		 AND R.ITEM_ID     = '*'
+	     AND R.YYYYMM BETWEEN @p_from_yyyymm
+						  AND @p_to_yyyymm
+		 AND R.QUANTITY IS NOT NULL
+		 AND R.QUANTITY != 0
+	)
+	select dt.plan_start_yyyymmdd
+		  ,dt.division_id
+		  ,dt.aggr_dv
+		  ,dt.yyyymm
+		  ,dt.item_id
+		  ,dt.nick_name
+		  ,dt.CATEGORY_DV
+		  ,dt.cell_cf
+		  ,case when dt.CATEGORY_DV = 'C' AND AGGR_DV != 'MD'
+				then '-'
+				else dt.target_cell
+			end as target_cell
+		  ,max(case when dt.CATEGORY_DV = 'C' AND AGGR_DV != 'MD'
+					then '-'
+					else dt.cell_group_target
+				end)	over (partition by case when dt.CATEGORY_DV = 'C' AND AGGR_DV != 'MD'
+												then '-'
+												else dt.target_cell
+											end)	as cell_group_target
+		  ,dt.cell_group
+		  ,dt.dept_id
+		  ,di.dept_name_ko
+		  ,dt.pic_id
+		  ,ui.user_name as pic_name
+		  ,dt.project_code
+		  ,pj.project_name
+		  ,dt.unit_price_last
+		  ,dt.PRODUCTION_CYCLE
+		  ,dt.SAFETY_STOCK
+		  ,dt.PRE_INSPECTION
+		  ,ti.measure_db
+		  ,ti.measure_ui
+		  ,ti.measure_name
+		  ,ti.sort_order_no
+		  ,dt.category
+		  ,case when ti.col_div = 'QTY' then dt.quantity / @P_UNIT_QTY
+				when ti.col_div = 'DIO' then dt.dio
+				when ti.col_div = 'AMT' then dt.amount  / @P_UNIT_AMOUNT
+				else null   -- else case는 있을 수 없음 !!!  (있으면 안됨!!)
+			end as value
+		  ,y.yield
+		  ,dr.EXISTS_REASON
+	into #fdata
+	from #SCP_RPT_DIO_TREND_MM dt
+		 inner join #TARGET_MEASURES TI   --- select * from #TARGET_MEASURES
+				 on dt.measure = TI.MEASURE_DB
+		 left join scm_mst_sso_dept_info di with(nolock)
+				on di.dept_id = dt.dept_id
+		 left join scm_mst_sso_user_info ui with(nolock)
+				on ui.user_id = dt.pic_id
+		 left join scm_mst_project pj with(nolock)
+				on pj.division_id = dt.division_id
+			   and pj.project_code = dt.project_code
+		 left join #YIELD_INFO Y
+				on Y.item_id = dt.item_id
+	     left join DIO_REASON dr
+				on dr.yyyymm	 = dt.yyyymm
+			   and dr.cell_group = dt.cell_group
+	WHERE 1=1
+
+
+	-----------------------------------------------------------------"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","13","------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'7.2 delete #fdata (기타충당금 수량/DIO)'
+	-----------------------------------------------------------------------------------------------------------
+	DELETE FROM #fdata
+	 WHERE AGGR_DV		= 'ET'
+	   AND MEASURE_UI IN ('INV_QTY', 'INV_DIO')
+
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'8.1. Select @v_query_mm_case 쿼리 조합'
+	-----------------------------------------------------------------------------------------------------------
+	;with mm_list as (
+		SELECT DISTINCT ' CASE WHEN  FD.MEASURE_UI LIKE ''%DIO'' THEN  FORMAT( ISNULL(MAX(CASE WHEN FD.YYYYMM = '''+ B.YYYYMM   + ''' THEN value ELSE NUll END), 0) , ''##0.0'')    ELSE   FORMAT( ISNULL(MAX(CASE WHEN FD.YYYYMM = '''+ B.YYYYMM   + ''' THEN value ELSE NUll END), 0) , ''##0'')        END  AS ""'+  concat('M_',B.YYYYMM) + '"" ' + CHAR(10)
+					   +',ISNULL(MAX(MAX(CASE WHEN FD.YYYYMM = '''   + B.YYYYMM   + ''' THEN FD.EXISTS_REASON ELSE NULL END)) OVER (PARTITION BY FD.PLAN_START_YYYYMMDD),''N'')   AS ""'  +  concat('EXISTS_REASON_',B.YYYYMM) + '"" '
+					   as col
+		  FROM SCM_MST_BUCKET B WITH(NOLOCK)
+		 WHERE B.YYYYMM BETWEEN @P_FROM_YYYYMM
+							AND @P_TO_YYYYMM
+	 )
+	select @v_query_mm_case = STUFF(( SELECT ',' +  col
+										FROM MM_LIST
+									   WHERE 1=1
+										FOR XML PATH('')), 1, 1,'')
+	;
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'8.2. Select #fdata 쿼리 조합'
+	-----------------------------------------------------------------------------------------------------------
+	set @v_query = N'select
+						   PLAN_START_YYYYMMDD
+						  ,DIVISION_ID
+						  ,AGGR_DV
+						  ,Category					AS CATEGORY
+						  ,CATEGORY_DV
+						  ,item_id					as MODEL
+						  ,max(nick_name)			as NICK_NAME
+						  ,max(cell_group)			as CELL_GROUP
+						  ,measure_db				as MEASURE_DB   -- db테이블 measure 컬럼값
+						  ,measure_ui				as MEASURE_UI	--구분코드
+						  ,measure_name				as MEASURE_NAME	--구분
+						  '
+		  +',' + @v_query_mm_case
+
+		  +N'			  ,max(cell_cf		)		as	CELL_CF				-- CELL환산계수
+						  ,max(target_cell  )		as	TARGET_CELL			-- TARGET_CELL (환산된 경우 SRC ITEM 중 택1)
+						  ,max(cell_group_target  )	as	CELL_GROUP_TARGET	-- TARGET_CELL CELL GROUP
+						  ,max(pic_name		)		as	PIC_NAME			-- 담당자
+						  ,max(dept_name_ko	)		as	DEPT_NAME_KO		-- 팀
+						  ,max(project_name	)		as	PROJECT_NAME		-- 프로젝트
+						  ,FORMAT(max(unit_price_last)		, ''##0''			) AS UNIT_PRICE_LAST	-- 단가
+						  ,FORMAT(max(production_cycle)		, ''##0.0''			) AS PRODUCTION_CYCLE	-- 주기재고
+						  ,FORMAT(max(safety_stock)			, ''##0.0''			) AS SAFETY_STOCK		-- 안전재고
+						  ,FORMAT(max(pre_inspection)		, ''##0.0''			) AS PRE_INSPECTION		-- 전진검사
+						  ,FORMAT(max(yield)				, ''##0.00000000''	) AS YIELD				-- 수율
+		   from #fdata fd
+		  where 1=1
+			 group by PLAN_START_YYYYMMDD
+					 ,DIVISION_ID
+					 ,AGGR_DV
+					 ,category
+					 ,CATEGORY_DV
+					 ,item_id
+					 ,measure_db
+					 ,measure_ui
+					 ,measure_name
+					 ,sort_order_no
+			order by case when category = ''Cell Convert''	then 1
+						  when category = ''Cell''			then 2
+						  when category = ''Pack''			then 3
+						  else 9
+					 end
+					,case when aggr_dv = ''CG'' then 1
+						  when aggr_dv = ''MD'' then 2
+						  when aggr_dv = ''ET'' then 7
+						  when aggr_dv = ''TT'' then 8
+						  else 9
+					 end
+					,item_id
+				    ,sort_order_no
+			'
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'8.3, 최종 결과 조회 쿼리 실행 '
+	-----------------------------------------------------------------------------------------------------------
+
+	--PRINT @v_query;
+	
+	exec sp_executesql @v_qu"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","14","ery;
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'8.3, 최종 결과 조회 쿼리 실행 end'
+	-----------------------------------------------------------------------------------------------------------
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","1","
+/*
+ * Program ID   : SCP0093_GET_DIO_TREND_DATA_MM
+ * Description  : SCP0093 DIO TREND Report 화면의 월별 조회
+ * Program History
+ *========================================================================================================
+ *   Date       In Charge		Description
+ *========================================================================================================
+ * 2022/09/26   hrkim			Query
+ * 2022/09/26   vadabi3			최초생성
+ * 2022/10/04   vadabi3			조회조건 추가 및 수정
+ * 2022/10/21   hrkim			양품 및 OP L/T Except measure 계산 로직 추가
+ * 2022/10/28   hrkim			당월포함~미래 조회기간 PROD 수량에 대한 수율 정보 추가
+ * 2022/11/02   hrkim		    model/nick_name 다중 필터링 적용
+ * 2022/11/10   hrkim			수율 참조 변경
+ *						         - 변경전 : 미래구간(조회기간) 재고 생성시 적용된 수율
+ *							     - 변경후 : 모델별/셀그룹별 수율 master정보의 max값
+ * 2022/11/16	hrkim			합계 및 기타충당금 추가
+ * 2022/11/18   hrkim			Category별 합계 - GAP Measure 추가 (기타충당금 반영된 값으로 계산 필요)
+ * 2022/11/21   hrkim			UI 기타충당금 수정시 필요한 SCP_RPT_DIO_TREND_MM테이블 pk컬럼 정보 값 추가 조회
+ * 2022/11/23	hrkim			테이블 컬럼 변경 (CATEGORY_DV)
+ * 2022/11/30	hrkim			모델별 조회 양품 Nick Name/모델 필터링 위치 변경 (셀환산 데이터 추가 이후 필터링)
+ * 2022/12/05   hrkim			Category 순서 변경 (Cell Convert, Cell, Pack 순서로)
+ * 2023/01/04	hrkim			Cell Convert 미래구간 양품수량 계산 로직 변경
+ * 2023/01/05	hrkim			월별 DIO 초과 사유 유무 항목 추가
+ * 2023/01/11	hrkim			미래구간 Pack 모델 수율 적용 전 생산 계획 수량 (Pack 생산계획은 수율이 적용된 수량임) measure 추가
+ *								미래구간 Cell 모델 Pack 생산에 소요된 수량 measure 추가
+ * 2023/02/01	hrkim			품질이슈 수량 반영시 셀환산수량 적용 로직 보완 및 cell_group_target 항목 추가
+ * 2023/02/06   hrkim			SCP_RPT_DIO_TREND_MM_REASON 테이블 참조 조건 추가
+ * 2023/03/21   hrkim			양품재고 - DIO 초과 사유 품질이슈 수량 (셀환산)Cell Group 기준 적용
+ * 2023.04.27   hrkim			PJ20230691 LGES SCM 역량 강화 위한 SCP 개선과제 이행 : Cell Group 기준 변경
+ *													- 변경전 : SCP_MST_FINAL_ITEM.GROUP_CODE5 (Product Level4 - Group Code Management - 81)
+ *													- 변경후 : SCP_MST_FINAL_ITEM.GROUP_CODE1 (Product Level1 - Group Code Management - 81)
+----------------------------------------------------------------------------------------------------------
+-- 재고 Trend Measure 정의
+-- db measure에 '_' 포함되지 않도록 한다.
+-- ui measure는 = db measure + '_' + 컬럼구분값 (QTY : QUANTITY, AMT : AMOUNT, DIO : DIO)
+----------------------------------------------------------------------------------------------------------
+*/
+CREATE PROCEDURE [dbo].[SCP0093_GET_DIO_TREND_DATA_MM_NEW]
+  @p_division_id            NVARCHAR(30)	-- division
+, @p_plan_start_yyyymmdd	NVARCHAR(8)		-- Plan Date
+, @p_item_id				NVARCHAR(150)	-- 모델
+, @p_from_yyyymm			NVARCHAR(6)		-- Monthly bucket 조회 기간
+, @p_to_yyyymm		        NVARCHAR(6)		-- Monthly bucket 조회 기간
+, @P_AGGR_DV				NVARCHAR(10)	-- 집계구분 [MD : 모델(Item), CG: 셀그룹(Level4)]
+, @P_CATEGORY				NVARCHAR(50)    -- Category 조건  = [Pack, Cell, Cell Convert]
+, @P_UNIT_QTY				NUMERIC(20,10)  -- 수량 단위
+, @P_UNIT_AMOUNT			NUMERIC(20,10)  -- 금액 단위
+, @p_cell_group				NVARCHAR(30)    -- 셀그룹(닉네임.Level4)
+, @p_graph_type				NVARCHAR(30)    -- 수량 /금액 선택
+, @p_bucket_type		    NVARCHAR(30)    -- MONTHLY (WEEKLY는 프로시저 분리 필요)
+, @p_user_id				NVARCHAR(30)    -- MEASURE 개인별 선택
+, @debug_mode				NVARCHAR(1) = 'T'
+AS
+BEGIN
+
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON;
+
+	DECLARE @v_program_id		NVARCHAR(10) = 'SCP0093';
+	DECLARE @v_sheet_name		NVARCHAR(20) = 'MAIN';
+
+	-- Plan date 기준 전월
+	DECLARE @V_LAST_YYYYMM NVARCHAR(6) = CONVERT(NVARCHAR(6), DATEADD(MONTH, -1, CONVERT(DATE, @p_plan_start_yyyymmdd, 112)), 112)
+
+	-- 행으로 되어 있는 월을 조회기간 만큼 가변적으로 열로 만들기 위한 다이나믹 쿼리 변수
+	DECLARE @v_query			NVARCHAR(MAX) = '';
+	DECLARE @v_query_mm_case	NVARCHAR(MAX) = '';
+
+	IF ISNULL(@P_UNIT_QTY, 0) = 0
+	   SET @P_UNIT_QTY = 1;
+
+	IF ISNULL(@P_UNIT_AMOUNT, 0) = 0
+	   SET @P_UNIT_AMOUNT = 1;
+
+	-----------------------------------------------------------------------------------------------------------
+	-- 0. category 조건
+	-----------------------------------------------------------------------------------------------------------
+	IF ISNULL(@P_CATEGORY, '') = ''
+		SET @"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM_NEW","159196","2","P_CATEGORY = 'C, P, A'  -- C:Cell Convert, P:Pack, C:Cell
+
+	IF OBJECT_ID('tempdb..#TARGET_CATEGORY') IS NOT NULL
+		DROP TABLE #TARGET_CATEGORY;
+
+	SELECT CASE WHEN TOKEN = 'C' THEN 'Cell Convert'
+		        WHEN TOKEN = 'P' THEN 'Pack'
+		   		WHEN TOKEN = 'A' THEN 'Cell'
+		   		ELSE ''
+		   END		AS CATEGORY
+		  ,TOKEN	AS CATEGORY_DV
+	INTO #TARGET_CATEGORY
+	FROM String_split( @P_CATEGORY, ',')
+
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'1.1 #TARGET_MEASURES 조회 대상 Measure 정보 (사용자 설정 Measures)'
+	-----------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#TARGET_MEASURES') IS NOT NULL
+		DROP TABLE #TARGET_MEASURES;
+
+	;WITH USER_MEASURES AS (
+			--- user별 설정한 조회 대상 measure
+			SELECT UM.COLUMN_NAME		AS MEASURE_UI
+				  ,M.COLUMN_LABEL_NAME	AS MEASURE_NAME
+				  ,UM.SORT_ORDER_NO
+			 FROM SCM_MST_TITLESET_USER UM WITH(NOLOCK)
+				  INNER JOIN SCM_MST_SHEET_MEASURE M WITH(NOLOCK)
+						  ON M.PROGRAM_ID = @v_program_id
+						 AND M.SHEET_NAME =@v_sheet_name
+						 AND M.VALID_YN = 'Y'
+						 AND M.COLUMN_NAME = UM.COLUMN_NAME
+			WHERE 1=1
+			  AND UM.USER_ID = @P_USER_ID
+			  AND UM.PROGRAM_ID = @v_program_id
+			  AND UM.SHEET_NAME = @v_sheet_name
+	)
+	,TARGET_MEASURES AS (
+			--- user별 설정한 조회 대상 measure
+			SELECT UM.MEASURE_UI
+				  ,UM.MEASURE_NAME
+				  ,UM.SORT_ORDER_NO
+			  FROM USER_MEASURES UM
+			UNION ALL
+			--- user별 설정한 measure정보가 없을 경우 default measure를 보여준다.
+			SELECT M.COLUMN_NAME		AS MEASURE_UI
+				  ,M.COLUMN_LABEL_NAME	AS MEASURE_NAME
+				  ,M.SORT_ORDER_NO
+			 FROM SCM_MST_SHEET_MEASURE M WITH(NOLOCK)
+			WHERE 1=1
+			  AND M.PROGRAM_ID = @v_program_id
+			  AND M.SHEET_NAME = @v_sheet_name
+			  AND M.VALID_YN   = 'Y'
+			  AND M.DEFAULT_FLAG = 'Y'
+			  AND NOT EXISTS (SELECT 1
+							   FROM USER_MEASURES
+							  WHERE 1=1
+							  )
+	)
+	SELECT TM.MEASURE_UI
+		  ,TM.MEASURE_NAME
+		  ,SUBSTRING(TM.MEASURE_UI, 1, CHARINDEX('_', TM.MEASURE_UI)-1)						AS MEASURE_DB
+		  ,SUBSTRING(TM.MEASURE_UI, CHARINDEX('_', TM.MEASURE_UI)+1, LEN(TM.MEASURE_UI) )	AS COL_DIV
+		  ,TM.SORT_ORDER_NO
+	 INTO #TARGET_MEASURES
+	 FROM TARGET_MEASURES TM
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'1.2  #ITEM NICK_NAME INFO 모델 닉네임 정보'
+	-----------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#ITEM_NICK_NAME_INFO') IS NOT NULL
+		DROP TABLE #ITEM_NICK_NAME_INFO;
+
+	SELECT IM.DIVISION_ID
+		  ,IM.ITEM_ID
+		  ,MAX(IM.NICK_NAME)	AS NICK_NAME
+	  INTO #ITEM_NICK_NAME_INFO
+	  FROM SCM_MST_ITEM_SN IM WITH(NOLOCK)
+	 WHERE IM.DIVISION_ID = @p_division_id
+	GROUP BY IM.DIVISION_ID
+			,IM.ITEM_ID
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'1.3 Insert #YIELD_INFO 수율'
+	-----------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#YIELD_INFO') IS NOT NULL
+		DROP TABLE #YIELD_INFO;
+
+	;WITH CELL_GROUP_INFO AS (
+			SELECT I.DIVISION_ID
+				  ,I.ITEM_ID
+				  ,CASE -- 2023.04.27 Cell Group 기준 변경 WHEN ISNULL(MAX(FI.GROUP_CODE5),'') != '' THEN MAX(FI.GROUP_CODE5) -- 1순위 Level4
+						WHEN ISNULL(MAX(FI.GROUP_CODE1),'') != '' THEN MAX(FI.GROUP_CODE1) -- 2순위 Cell Group
+						WHEN ISNULL(MAX(BC.NICK_NAME)  ,'') != '' THEN MAX(BC.NICK_NAME)   -- 3순위 Basic Cell의 NickName
+						WHEN ISNULL(MAX(FI.NICK_NAME)  ,'') != '' THEN MAX(FI.NICK_NAME)   -- 4순위 Nick_name
+						ELSE I.ITEM_ID
+					END							AS CELL_GROUP
+			 FROM SCM_MST_ITEM_SN I WITH(NOLOCK)
+				  LEFT JOIN SCP_MST_FINAL_ITEM FI WITH(NOLOCK)
+						 ON FI.DIVISION_ID = I.DIVISION_ID"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA","295060187","1","
+
+
+
+
+
+/*
+ * Program ID   : SCP0093_GET_DIO_TREND_DATA
+ * Description  : SCP0093 DIO TREND Report 화면의 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/11/16   vadabi3/hrkim	최초생성
+ ----------------------------------------------------------------------------------------------------
+
+ */
+CREATE PROCEDURE [dbo].[SCP0093_GET_DIO_TREND_DATA]
+  @p_division_id            NVARCHAR(30)	-- division
+, @p_plan_start_yyyymmdd	NVARCHAR(8)		-- Plan Date
+, @p_item_id				NVARCHAR(150)	-- 모델 
+, @p_from_yyyymm			NVARCHAR(6)		-- Monthly bucket 조회 기간
+, @p_to_yyyymm		        NVARCHAR(6)		-- Monthly bucket 조회 기간
+, @P_AGGR_DV				NVARCHAR(10)	-- 집계구분 [MD : 모델(Item), CG: 셀그룹(Level4)]
+, @P_CATEGORY				NVARCHAR(50)    -- Category 조건  = [Pack, Cell, Cell Convert]
+, @P_UNIT_QTY				NUMERIC(20,10)  -- 수량 단위
+, @P_UNIT_AMOUNT			NUMERIC(20,10)  -- 금액 단위
+, @p_cell_group				NVARCHAR(30)    -- 셀그룹(닉네임.Level4) 
+, @p_graph_type				NVARCHAR(30)    -- 수량 /금액 선택
+, @p_bucket_type		    NVARCHAR(30)    -- MONTHLY (WEEKLY는 프로시저 분리 필요) 
+, @p_user_id				NVARCHAR(30)    -- MEASURE 개인별 선택
+, @debug_mode				NVARCHAR(1) = 'T'
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+	
+	IF @p_bucket_type = 'MONTHLY'
+		BEGIN 
+			print N'월별'
+			EXEC  dbo.SCP0093_GET_DIO_TREND_DATA_MM 
+					  @p_division_id 
+					, @p_plan_start_yyyymmdd
+					, @p_item_id			
+					, @p_from_yyyymm		
+					, @p_to_yyyymm		    
+					, @P_AGGR_DV			
+					, @P_CATEGORY			
+					, @P_UNIT_QTY			
+					, @P_UNIT_AMOUNT		
+					, @p_cell_group			
+					, @p_graph_type			
+					, @p_bucket_type		
+					, @p_user_id			
+					, @debug_mode		
+		END
+	ELSE IF @p_bucket_type = 'WEEKLY'
+		BEGIN
+			print N'주별'
+		END
+	ELSE
+		BEGIN
+			print N'지원되지 않는 bucket입니다.'
+		END 
+
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","1","
+
+/*
+ * Program ID   : SCP0093_GET_DIO_TREND_DATA_MM
+ * Description  : SCP0093 DIO TREND Report 화면의 월별 조회
+ * Program History
+ *===================================================================================================
+ * Date         In Charge		Description
+ *===================================================================================================
+ * 2022/09/26   hrkim			          Query
+ * 2022/09/26   vadabi3			          최초생성
+ * 2022/10/04   vadabi3			          조회조건 추가 및 수정
+ * 2022/10/21   hrkim			          양품 및 OP L/T Except measure 계산 로직 추가
+ * 2022/10/28   hrkim			          당월포함~미래 조회기간 PROD 수량에 대한 수율 정보 추가 
+ * 2022/11/02   hrkim		              model/nick_name 다중 필터링 적용
+ * 2022/11/10   hrkim			          수율 참조 변경
+ *						                  - 변경전 : 미래구간(조회기간) 재고 생성시 적용된 수율 
+ *							              - 변경후 : 모델별/셀그룹별 수율 master정보의 max값 
+ * 2022/11/16	hrkim			          합계 및 기타충당금 추가 
+ * 2022/11/18   hrkim			          Category별 합계 - GAP Measure 추가 (기타충당금 반영된 값으로 계산 필요) 
+ * 2022/11/21   hrkim			          UI 기타충당금 수정시 필요한 SCP_RPT_DIO_TREND_MM테이블 pk컬럼 정보 값 추가 조회 
+ * 2022/11/23	hrkim			          테이블 컬럼 변경 (CATEGORY_DV)
+ * 2022/11/30	hrkim			          모델별 조회 양품 Nick Name/모델 필터링 위치 변경 (셀환산 데이터 추가 이후 필터링) 
+ * 2022/12/05   hrkim			          Category 순서 변경 (Cell Convert, Cell, Pack 순서로) 
+ * 2023/01/04	hrkim			          Cell Convert 미래구간 양품수량 계산 로직 변경
+ * 2023/01/05	hrkim			          월별 DIO 초과 사유 유무 항목 추가
+ * 2023/01/11	hrkim			          미래구간 Pack 모델 수율 적용 전 생산 계획 수량 (Pack 생산계획은 수율이 적용된 수량임) measure 추가 
+ *								          미래구간 Cell 모델 Pack 생산에 소요된 수량 measure 추가 
+ * 2023/02/01	hrkim			          품질이슈 수량 반영시 셀환산수량 적용 로직 보완 및 cell_group_target 항목 추가
+ * 2023/02/06   hrkim			          SCP_RPT_DIO_TREND_MM_REASON 테이블 참조 조건 추가 
+ * 2023/03/21   hrkim			          양품재고 - DIO 초과 사유 품질이슈 수량 (셀환산)Cell Group 기준 적용
+ * 2023.04.27   hrkim			          PJ20230691 LGES SCM 역량 강화 위한 SCP 개선과제 이행 : Cell Group 기준 변경 
+ *											- 변경전 : SCP_MST_FINAL_ITEM.GROUP_CODE5 (Product Level4 - Group Code Management - 81)
+ *											- 변경후 : SCP_MST_FINAL_ITEM.GROUP_CODE1 (Product Level1 - Group Code Management - 81)
+ * 2024-01-08   chaan                     PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - UI성능개선 - 조회조건 속도 개선
+----------------------------------------------------------------------------------------------------------
+-- 재고 Trend Measure 정의 
+-- db measure에 '_' 포함되지 않도록 한다.
+-- ui measure는 = db measure + '_' + 컬럼구분값 (QTY : QUANTITY, AMT : AMOUNT, DIO : DIO) 
+----------------------------------------------------------------------------------------------------------
+*/
+CREATE PROCEDURE [dbo].[SCP0093_GET_DIO_TREND_DATA_MM]
+--CREATE PROCEDURE [dbo].[SCP0093_GET_DIO_TREND_DATA_MM]
+  @p_division_id            NVARCHAR(30)	-- division
+, @p_plan_start_yyyymmdd	NVARCHAR(8)		-- Plan Date
+, @p_item_id				NVARCHAR(150)	-- 모델 
+, @p_from_yyyymm			NVARCHAR(6)		-- Monthly bucket 조회 기간
+, @p_to_yyyymm		        NVARCHAR(6)		-- Monthly bucket 조회 기간
+, @P_AGGR_DV				NVARCHAR(10)	-- 집계구분 [MD : 모델(Item), CG: 셀그룹(Level4)]
+, @P_CATEGORY				NVARCHAR(50)    -- Category 조건  = [Pack, Cell, Cell Convert]
+, @P_UNIT_QTY				NUMERIC(20,10)  -- 수량 단위
+, @P_UNIT_AMOUNT			NUMERIC(20,10)  -- 금액 단위
+, @p_cell_group				NVARCHAR(30)    -- 셀그룹(닉네임.Level4) 
+, @p_graph_type				NVARCHAR(30)    -- 수량 /금액 선택
+, @p_bucket_type		    NVARCHAR(30)    -- MONTHLY (WEEKLY는 프로시저 분리 필요) 
+, @p_user_id				NVARCHAR(30)    -- MEASURE 개인별 선택
+, @debug_mode				NVARCHAR(1) = 'T'
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+    --DECLARE @p_division_id				NVARCHAR(30)	= N'81';
+    --DECLARE @p_plan_start_yyyymmdd		NVARCHAR(8)		= N'20231211';
+    --DECLARE @p_item_id					NVARCHAR(150)	= N'';
+    --DECLARE @p_from_yyyymm				NVARCHAR(6)		= N'202312';
+    --DECLARE @p_to_yyyymm		        NVARCHAR(6)		= N'202406';
+    --DECLARE @P_AGGR_DV					NVARCHAR(10)	= N'MD';
+    --DECLARE @P_CATEGORY					NVARCHAR(50)	= N'C"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","2","';
+    --DECLARE @P_UNIT_QTY					NUMERIC(20,10)	= 1;
+    --DECLARE @P_UNIT_AMOUNT				NUMERIC(20,10)	= 1;
+    --DECLARE @p_cell_group				NVARCHAR(30)	= N'';
+    --DECLARE @p_graph_type				NVARCHAR(30)	= N'COUNT';
+    --DECLARE @p_bucket_type				NVARCHAR(30)	= N'MONTHLY';
+    --DECLARE @p_user_id					NVARCHAR(30)	= N'iamarock';
+    --DECLARE @debug_mode					NVARCHAR(1)		= N'F';
+    
+
+	DECLARE @v_program_id		NVARCHAR(10) = 'SCP0093';
+	DECLARE @v_sheet_name		NVARCHAR(20) = 'MAIN';
+
+	-- Plan date 기준 전월
+	DECLARE @V_LAST_YYYYMM NVARCHAR(6) = CONVERT(NVARCHAR(6), DATEADD(MONTH, -1, CONVERT(DATE, @p_plan_start_yyyymmdd, 112)), 112) 
+
+	-- 행으로 되어 있는 월을 조회기간 만큼 가변적으로 열로 만들기 위한 다이나믹 쿼리 변수
+	DECLARE @v_query			NVARCHAR(MAX) = '';
+	DECLARE @v_query_mm_case	NVARCHAR(MAX) = '';
+
+	IF ISNULL(@P_UNIT_QTY, 0) = 0 
+	   SET @P_UNIT_QTY = 1;
+
+	IF ISNULL(@P_UNIT_AMOUNT, 0) = 0 
+	   SET @P_UNIT_AMOUNT = 1;
+
+	-----------------------------------------------------------------------------------------------------------
+	-- 0. category 조건
+	-----------------------------------------------------------------------------------------------------------
+	IF ISNULL(@P_CATEGORY, '') = ''
+		SET @P_CATEGORY = 'C, P, A'  -- C:Cell Convert, P:Pack, C:Cell
+
+	IF OBJECT_ID('tempdb..#TARGET_CATEGORY') IS NOT NULL	
+		DROP TABLE #TARGET_CATEGORY;
+
+	SELECT CASE WHEN TOKEN = 'C' THEN 'Cell Convert'
+		        WHEN TOKEN = 'P' THEN 'Pack'
+		   		WHEN TOKEN = 'A' THEN 'Cell'
+		   		ELSE ''
+		   END		AS CATEGORY
+		  ,TOKEN	AS CATEGORY_DV
+	INTO #TARGET_CATEGORY
+	FROM String_split( @P_CATEGORY, ',')
+
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'1.1 #TARGET_MEASURES 조회 대상 Measure 정보 (사용자 설정 Measures)' 
+	-----------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#TARGET_MEASURES') IS NOT NULL	
+		DROP TABLE #TARGET_MEASURES;
+
+	;WITH USER_MEASURES AS (
+			--- user별 설정한 조회 대상 measure 
+			SELECT UM.COLUMN_NAME		AS MEASURE_UI 
+				  ,M.COLUMN_LABEL_NAME	AS MEASURE_NAME 
+				  ,UM.SORT_ORDER_NO
+			 FROM SCM_MST_TITLESET_USER UM WITH(NOLOCK) 
+				  INNER JOIN SCM_MST_SHEET_MEASURE M WITH(NOLOCK)
+						  ON M.PROGRAM_ID = @v_program_id
+						 AND M.SHEET_NAME =@v_sheet_name
+						 AND M.VALID_YN = 'Y'
+						 AND M.COLUMN_NAME = UM.COLUMN_NAME 
+			WHERE 1=1
+			  AND UM.USER_ID = @P_USER_ID
+			  AND UM.PROGRAM_ID = @v_program_id
+			  AND UM.SHEET_NAME = @v_sheet_name
+	)
+	,TARGET_MEASURES AS (
+			--- user별 설정한 조회 대상 measure 
+			SELECT UM.MEASURE_UI
+				  ,UM.MEASURE_NAME 
+				  ,UM.SORT_ORDER_NO
+			  FROM USER_MEASURES UM
+			UNION ALL
+			--- user별 설정한 measure정보가 없을 경우 default measure를 보여준다. 
+			SELECT M.COLUMN_NAME		AS MEASURE_UI
+				  ,M.COLUMN_LABEL_NAME	AS MEASURE_NAME 
+				  ,M.SORT_ORDER_NO
+			 FROM SCM_MST_SHEET_MEASURE M WITH(NOLOCK)
+			WHERE 1=1
+			  AND M.PROGRAM_ID = @v_program_id
+			  AND M.SHEET_NAME = @v_sheet_name
+			  AND M.VALID_YN   = 'Y'
+			  AND M.DEFAULT_FLAG = 'Y'
+			  AND NOT EXISTS (SELECT 1
+							   FROM USER_MEASURES 
+							  WHERE 1=1
+							  )
+	)
+	SELECT TM.MEASURE_UI
+		  ,TM.MEASURE_NAME 
+		  ,SUBSTRING(TM.MEASURE_UI, 1, CHARINDEX('_', TM.MEASURE_UI)-1)						AS MEASURE_DB 
+		  ,SUBSTRING(TM.MEASURE_UI, CHARINDEX('_', TM.MEASURE_UI)+1, LEN(TM.MEASURE_UI) )	AS COL_DIV
+		  ,TM.SORT_ORDER_NO
+	 INTO #TARGET_MEASURES 
+	 FROM TARGET_MEASURES TM
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'1.2  #ITEM NICK_NAME INFO 모델 닉네임 정보' 
+	-----------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#ITEM_NICK_NAME_INFO') IS NOT NULL	
+		DROP TABLE #ITEM_NICK_NAME_INFO;
+
+	SELECT IM.DIVISION_ID
+		  ,IM.ITEM_ID
+		  ,MAX(IM.NICK"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","3","_NAME)	AS NICK_NAME
+	  INTO #ITEM_NICK_NAME_INFO
+	  FROM SCM_MST_ITEM_SN IM WITH(NOLOCK)
+	 WHERE IM.DIVISION_ID = @p_division_id
+	GROUP BY IM.DIVISION_ID
+			,IM.ITEM_ID
+
+-- 2023.12.13 천승호
+CREATE CLUSTERED INDEX PK_ITEM_NICK_NAME_INFO ON [dbo].[#ITEM_NICK_NAME_INFO] ([DIVISION_ID],[ITEM_ID],[NICK_NAME])
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'1.3 Insert #YIELD_INFO 수율' 
+	-----------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#YIELD_INFO') IS NOT NULL	
+		DROP TABLE #YIELD_INFO;
+
+	;WITH CELL_GROUP_INFO AS (
+			SELECT I.DIVISION_ID
+				  ,I.ITEM_ID
+				  ,CASE -- 2023.04.27 Cell Group 기준 변경 WHEN ISNULL(MAX(FI.GROUP_CODE5),'') != '' THEN MAX(FI.GROUP_CODE5) -- 1순위 Level4
+						WHEN ISNULL(MAX(FI.GROUP_CODE1),'') != '' THEN MAX(FI.GROUP_CODE1) -- 2순위 Cell Group
+						WHEN ISNULL(MAX(BC.NICK_NAME)  ,'') != '' THEN MAX(BC.NICK_NAME)   -- 3순위 Basic Cell의 NickName
+						WHEN ISNULL(MAX(FI.NICK_NAME)  ,'') != '' THEN MAX(FI.NICK_NAME)   -- 4순위 Nick_name
+						ELSE I.ITEM_ID
+					END							AS CELL_GROUP 
+			 FROM SCM_MST_ITEM_SN I WITH(NOLOCK)
+				  LEFT JOIN SCP_MST_FINAL_ITEM FI WITH(NOLOCK)
+						 ON FI.DIVISION_ID = I.DIVISION_ID
+						AND FI.ITEM_ID	   = I.ITEM_ID
+				  LEFT JOIN SCM_MST_ITEM_SN C WITH(NOLOCK)
+						 ON C.DIVISION_ID = FI.DIVISION_ID
+						AND C.ITEM_ID     = CASE WHEN FI.OPERATION_GROUP = 'P'
+												 THEN FI.ATTRIBUTE1
+												 ELSE FI.ITEM_ID
+											END
+						AND C.DOE IS NOT NULL
+				  LEFT JOIN SCP_MST_FINAL_ITEM BC WITH(NOLOCK)
+						 ON BC.DIVISION_ID = C.DIVISION_ID
+						AND BC.ITEM_ID	   = C.DOE
+			WHERE 1=1
+			  AND I.DIVISION_ID			= @P_DIVISION_ID
+			  AND I.SCP_OPERATION_GROUP IN ('A', 'P') 
+			GROUP BY I.DIVISION_ID
+					,I.ITEM_ID   
+	)
+	SELECT CASE WHEN @P_AGGR_DV = 'MD' 
+				THEN Y.ITEM_ID
+				ELSE ISNULL(C.CELL_GROUP, Y.ITEM_ID)
+			END					AS ITEM_ID 
+		  ,MAX(YIELD) AS YIELD
+	  INTO #YIELD_INFO
+	  FROM SCM_MST_YIELD_SN Y WITH(NOLOCK)
+		   LEFT JOIN CELL_GROUP_INFO C 
+				  ON C.DIVISION_ID = Y.DIVISION_ID
+				 AND C.ITEM_ID	   = Y.ITEM_ID
+	WHERE 1=1
+	  AND Y.DIVISION_ID = @P_DIVISION_ID
+	  AND Y.MONTH = SUBSTRING(@P_PLAN_START_YYYYMMDD, 1, 6) 
+	  AND Y.YIELD > 0
+	GROUP BY CASE WHEN @P_AGGR_DV = 'MD' 
+				  THEN Y.ITEM_ID
+				  ELSE ISNULL(C.CELL_GROUP, Y.ITEM_ID)
+			 END
+
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'1.4 월별 일수 정보' 
+	-----------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#TMP_MM_DAYS_INFO') IS NOT NULL	
+		DROP TABLE #TMP_MM_DAYS_INFO;
+
+	;WITH DAYS_INFO AS (
+		SELECT YYYYMM
+			 , MIN(YYYYMMDD) AS FIRST_YMD
+			 , MAX(YYYYMMDD) AS LAST_YMD
+			 , COUNT(*)		 AS MM_DAYS
+		 FROM SCM_MST_BUCKET B WITH(NOLOCK) 
+		WHERE 1=1
+		  AND YYYYMM  BETWEEN CONVERT(NVARCHAR(6), DATEADD(MONTH, -5, CONVERT(DATE, @p_from_yyyymm+'01', 112)), 112)
+						  AND CONVERT(NVARCHAR(6), DATEADD(MONTH, +5, CONVERT(DATE, @p_to_yyyymm+'01'  , 112)), 112)
+		GROUP BY YYYYMM
+	)
+	SELECT DI.YYYYMM
+		  ,DI.FIRST_YMD
+		  ,DI.LAST_YMD
+		  ,DI.MM_DAYS
+		  ,CONVERT(NVARCHAR(6), DATEADD(MONTH, 1, CONVERT(DATE, DI.FIRST_YMD, 112)), 112) AS FROM_MONTH
+		  ,CONVERT(NVARCHAR(6), DATEADD(MONTH, 5, CONVERT(DATE, DI.FIRST_YMD, 112)), 112) AS TO_MONTH
+		  ,MAX(CASE WHEN DATEADD(MONTH, 1, CONVERT(DATE, DI.FIRST_YMD,112)) = AD.FIRST_YMD THEN AD.MM_DAYS ELSE 0 END) AS DAYS_NEXT_1 
+		  ,MAX(CASE WHEN DATEADD(MONTH, 2, CONVERT(DATE, DI.FIRST_YMD,112)) = AD.FIRST_YMD THEN AD.MM_DAYS ELSE 0 END) AS DAYS_NEXT_2 
+		  ,MAX(CASE WHEN DATEADD(MONTH, 3, CONVERT(DATE, DI.FIRST_YMD,112)) = AD.FIRST_YMD THEN AD.MM_DAYS ELSE 0 END) AS DAYS_NEXT_3 
+		  ,MAX(CASE WHEN DATEADD(MO"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","4","NTH, 4, CONVERT(DATE, DI.FIRST_YMD,112)) = AD.FIRST_YMD THEN AD.MM_DAYS ELSE 0 END) AS DAYS_NEXT_4 
+		  ,MAX(CASE WHEN DATEADD(MONTH, 5, CONVERT(DATE, DI.FIRST_YMD,112)) = AD.FIRST_YMD THEN AD.MM_DAYS ELSE 0 END) AS DAYS_NEXT_5 
+		  ,SUM(CASE WHEN DATEDIFF(MONTH, CONVERT(DATE, DI.FIRST_YMD,112), CONVERT(DATE, AD.FIRST_YMD,112)) <= 1 THEN AD.MM_DAYS ELSE 0 END) AS ACC_DAYS_1 
+		  ,SUM(CASE WHEN DATEDIFF(MONTH, CONVERT(DATE, DI.FIRST_YMD,112), CONVERT(DATE, AD.FIRST_YMD,112)) <= 2 THEN AD.MM_DAYS ELSE 0 END) AS ACC_DAYS_2 
+		  ,SUM(CASE WHEN DATEDIFF(MONTH, CONVERT(DATE, DI.FIRST_YMD,112), CONVERT(DATE, AD.FIRST_YMD,112)) <= 3 THEN AD.MM_DAYS ELSE 0 END) AS ACC_DAYS_3 
+		  ,SUM(CASE WHEN DATEDIFF(MONTH, CONVERT(DATE, DI.FIRST_YMD,112), CONVERT(DATE, AD.FIRST_YMD,112)) <= 4 THEN AD.MM_DAYS ELSE 0 END) AS ACC_DAYS_4 
+		  ,SUM(CASE WHEN DATEDIFF(MONTH, CONVERT(DATE, DI.FIRST_YMD,112), CONVERT(DATE, AD.FIRST_YMD,112)) <= 5 THEN AD.MM_DAYS ELSE 0 END) AS ACC_DAYS_5 
+	 INTO #TMP_MM_DAYS_INFO
+	 FROM DAYS_INFO DI
+		  LEFT JOIN DAYS_INFO AD
+				 ON AD.YYYYMM BETWEEN CONVERT(NVARCHAR(6), DATEADD(MONTH, 1, CONVERT(DATE, DI.FIRST_YMD, 112)), 112) 
+								  AND CONVERT(NVARCHAR(6), DATEADD(MONTH, 5, CONVERT(DATE, DI.FIRST_YMD, 112)), 112) 
+	WHERE 1=1
+	GROUP BY
+		   DI.YYYYMM
+		  ,DI.FIRST_YMD
+		  ,DI.LAST_YMD
+		  ,DI.MM_DAYS
+		  ,CONVERT(NVARCHAR(6), DATEADD(MONTH, 1, CONVERT(DATE, DI.FIRST_YMD, 112)), 112)
+		  ,CONVERT(NVARCHAR(6), DATEADD(MONTH, 5, CONVERT(DATE, DI.FIRST_YMD, 112)), 112)
+	;
+
+	--------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N' 1.5 품질 이슈 수량' 
+	--------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#QUALITY_ISSUES') IS NOT NULL	
+		DROP TABLE #QUALITY_ISSUES;
+
+	SELECT R.YYYYMM
+		  ,R.CELL_GROUP
+		  ,R.CATEGORY_DV
+		  ,R.AGGR_DV
+		  ,SUM(R.QUANTITY)		AS ISSUE_QTY
+	 INTO #QUALITY_ISSUES
+	 FROM SCP_RPT_DIO_TREND_MM_REASON R WITH(NOLOCK) -- DIO 초과 사유   --- YYYYMM, CATEGORY_DV, DIO_REASON, AGGR_DV, DIVISION_ID, ITEM_ID, CELL_GROUP 
+	WHERE R.YYYYMM BETWEEN CASE WHEN @p_from_yyyymm > SUBSTRING(@P_PLAN_START_YYYYMMDD, 1, 6) 
+							  THEN SUBSTRING(@P_PLAN_START_YYYYMMDD, 1, 6) 
+							  ELSE @p_from_yyyymm
+						 END 
+					 AND @p_to_yyyymm
+	  AND R.CATEGORY_DV = 'C'								-- 셀환산 
+	  AND R.DIO_REASON IN ('QUALITY_ISSUES_REPORT'		    -- 품질 이슈(보고)
+					     , 'QUALITY_ISSUES_REPORT_OTHER')   -- 품질 이슈(보고 외)
+	  AND R.AGGR_DV		= 'CG'								-- 셀그룹별 집계 
+	  AND R.ITEM_ID		= '*'
+	  AND R.DIVISION_ID = @p_division_id
+	  AND R.QUANTITY IS NOT NULL
+	  AND R.QUANTITY   != 0 
+	GROUP BY 
+		   R.YYYYMM
+		  ,R.CELL_GROUP
+		  ,R.CATEGORY_DV
+		  ,R.AGGR_DV
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'2.1 #SCP_RPT_DIO_TREND_MM 조회 대상 데이터' 
+	-----------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#SCP_RPT_DIO_TREND_MM') IS NOT NULL	
+		DROP TABLE #SCP_RPT_DIO_TREND_MM;
+
+	SELECT DT.*
+		  ,TC.CATEGORY
+		  ,ISNULL(NI.NICK_NAME,'') AS NICK_NAME
+	INTO #SCP_RPT_DIO_TREND_MM 
+	FROM SCP_RPT_DIO_TREND_MM DT WITH(NOLOCK)
+		 INNER JOIN #TARGET_CATEGORY TC
+				 ON TC.CATEGORY_DV = DT.CATEGORY_DV
+		 LEFT  JOIN #ITEM_NICK_NAME_INFO NI
+				 ON NI.DIVISION_ID = DT.DIVISION_ID
+				AND NI.ITEM_ID     = DT.ITEM_ID
+	WHERE 1=1
+	  AND DT.PLAN_START_YYYYMMDD = @P_PLAN_START_YYYYMMDD
+	  AND DT.DIVISION_ID		 = @P_DIVISION_ID
+	  AND DT.AGGR_DV			 = @P_AGGR_DV 
+	  AND DT.YYYYMM		BETWEEN @P_FROM_YYYYMM 
+							AND @P_TO_YYYYMM
+	  AND DT.MEASURE NOT IN ('AVAILABLE', 'OP-LT-EXCPT') 
+	  AND DT.CELL_GROUP			 = CASE WHEN ISNULL(@P_CELL_GROUP,'') = ''	THEN DT.CELL_GROUP	ELSE  @P_CELL_GROUP END
+
+
+--2023.12.13 천승호
+CREATE CLUSTERED INDEX PK_SCP_RPT_DIO_TREND_MM 
+ON [dbo].[#SCP_RPT_DIO_TREND_MM] ([AGGR_DV],[MEASURE],[PLAN_S"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","5","TART_YYYYMMDD],[DIVISION_ID],[YYYYMM],[CATEGORY_DV],[ITEM_ID],[QUANTITY],[AMOUNT],[DIO],[CELL_GROUP],[UNIT_PRICE_LAST],[CATEGORY],[NICK_NAME])
+
+CREATE NONCLUSTERED INDEX IDX01_SCP_RPT_DIO_TREND_MM
+ON [dbo].[#SCP_RPT_DIO_TREND_MM] ([MEASURE])
+INCLUDE ([AGGR_DV],[YYYYMM],[CATEGORY_DV],[ITEM_ID],[QUANTITY],[DIO],[CELL_GROUP],[PIC_ID],[DEPT_ID],[PROJECT_CODE],[UNIT_PRICE],[UNIT_PRICE_LAST],[TARGET_CELL],[CELL_CF],[PRODUCTION_CYCLE],[SAFETY_STOCK],[PRE_INSPECTION],[NICK_NAME])
+
+CREATE NONCLUSTERED INDEX IDX02_SCP_RPT_DIO_TREND_MM 
+ON [dbo].[#SCP_RPT_DIO_TREND_MM] ([MEASURE])
+INCLUDE ([AGGR_DV],[YYYYMM],[CATEGORY_DV],[ITEM_ID],[QUANTITY],[CELL_GROUP],[PIC_ID],[DEPT_ID],[PROJECT_CODE],[UNIT_PRICE],[TARGET_CELL],[CELL_CF],[PRODUCTION_CYCLE],[SAFETY_STOCK],[PRE_INSPECTION],[CATEGORY],[NICK_NAME])
+
+CREATE NONCLUSTERED INDEX IDX03_SCP_RPT_DIO_TREND_MM 
+ON [dbo].[#SCP_RPT_DIO_TREND_MM] ([MEASURE])
+INCLUDE ([AGGR_DV],[YYYYMM],[CATEGORY_DV],[ITEM_ID],[QUANTITY],[DIO],[CELL_GROUP],[UNIT_PRICE_LAST],[NICK_NAME])
+
+CREATE NONCLUSTERED INDEX IDX04_SCP_RPT_DIO_TREND_MM 
+ON [dbo].[#SCP_RPT_DIO_TREND_MM] ([AGGR_DV],[MEASURE])
+INCLUDE ([YYYYMM],[CATEGORY_DV],[ITEM_ID],[QUANTITY],[CELL_GROUP],[UNIT_PRICE_LAST],[CATEGORY],[NICK_NAME])
+
+CREATE NONCLUSTERED INDEX IDX05_SCP_RPT_DIO_TREND_MM 
+ON [dbo].[#SCP_RPT_DIO_TREND_MM] ([MEASURE])
+INCLUDE ([AGGR_DV],[YYYYMM],[CATEGORY_DV],[ITEM_ID],[UNIT_PRICE_LAST])
+
+
+
+	-----------------------------------------------------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'2.2 #SCP_RPT_DIO_TREND_MM 조회 대상 데이터 - Model/Nick_name 필터링 (MKT FCST Waterfall 참조)' 
+	-----------------------------------------------------------------------------------------------------------------------------------------------------
+	IF ( @P_AGGR_DV = 'MD' AND ISNULL(@p_item_id, '')  <> '')
+		BEGIN
+			DELETE A
+			FROM #SCP_RPT_DIO_TREND_MM A
+			LEFT OUTER JOIN (	SELECT DISTINCT token 
+								FROM dbo.String_Split(@p_item_id,',') 
+							) C	ON A.ITEM_ID LIKE '%' + C.TOKEN + '%'
+			LEFT OUTER JOIN (	SELECT DISTINCT token 
+								FROM dbo.String_Split(@p_item_id,',') 
+							) D	ON A.NICK_NAME LIKE '%' + D.TOKEN + '%'
+			WHERE C.TOKEN IS NULL  AND D.TOKEN IS NULL
+		END
+
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'3. 양품 및 OP L/T Except' 
+	-----------------------------------------------------------------------------------------------------------
+	IF EXISTS (SELECT TOP 1 *  
+				FROM #TARGET_MEASURES
+			   WHERE 1=1
+				 AND MEASURE_DB IN ('AVAILABLE', 'OP-LT-EXCPT'))
+	BEGIN
+
+			----------------------------------------------------------
+			print convert(varchar(30), getdate(), 121) + N'3.1 RTF' 
+			----------------------------------------------------------
+			IF OBJECT_ID('tempdb..#TMP_RTF') IS NOT NULL	
+				DROP TABLE #TMP_RTF;
+
+			SELECT DT.CATEGORY
+				  ,DT.AGGR_DV
+				  ,DT.YYYYMM
+				  ,DT.ITEM_ID
+				  ,DT.CATEGORY_DV
+				  ,DT.QUANTITY										 AS RTF
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE1,0))  AS RTF_NEXT_1
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE2,0))  AS RTF_NEXT_2
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE3,0))  AS RTF_NEXT_3
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE4,0))  AS RTF_NEXT_4
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE5,0))  AS RTF_NEXT_5
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE6,0))  AS ACC_RTF_1
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE7,0))  AS ACC_RTF_2
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE8,0))  AS ACC_RTF_3
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE9,0))  AS ACC_RTF_4
+				  ,CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE10,0)) AS ACC_RTF_5
+			 INTO #TMP_RTF
+			 FROM #SCP_RPT_DIO_TREND_MM DT
+			WHERE 1=1
+			  AND DT.MEASURE = 'RTF'
+
+			----------------------"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","6","--------------------------------------------------
+			print convert(varchar(30), getdate(), 121) + N'3.2 양품 재고 수량' 
+			------------------------------------------------------------------------
+			IF OBJECT_ID('tempdb..#TMP_AVAILABLE_QTY') IS NOT NULL	
+				DROP TABLE #TMP_AVAILABLE_QTY;
+
+			SELECT I.CATEGORY_DV
+				  ,I.CATEGORY
+				  ,I.YYYYMM
+				  ,I.AGGR_DV
+				  ,I.ITEM_ID
+				  ,I.NICK_NAME
+				  ,I.CELL_GROUP
+				  , I.QUANTITY - ISNULL(Q.ISSUE_QTY, 0) 				AS AVAILABLE_QTY
+				  ,(I.QUANTITY - ISNULL(Q.ISSUE_QTY, 0)) * I.UNIT_PRICE	AS AVAILABLE_AMT
+				  ,I.PIC_ID
+				  ,I.DEPT_ID
+				  ,I.PROJECT_CODE
+				  ,I.UNIT_PRICE
+				  ,I.TARGET_CELL
+				  ,I.CELL_CF
+				  ,I.PRODUCTION_CYCLE
+				  ,I.SAFETY_STOCK
+				  ,I.PRE_INSPECTION
+			  INTO #TMP_AVAILABLE_QTY
+			  FROM #SCP_RPT_DIO_TREND_MM I
+				   LEFT JOIN #QUALITY_ISSUES Q
+						  ON Q.YYYYMM		=  CASE WHEN I.YYYYMM  >= SUBSTRING(@P_PLAN_START_YYYYMMDD, 1,6) 
+													THEN SUBSTRING(@P_PLAN_START_YYYYMMDD, 1, 6) -- 당월 포함 미래구간은 모두 당월(Plan 해당월) 품질이슈 수량 반영 
+													ELSE I.YYYYMM 
+												END 
+						 AND Q.CATEGORY_DV	= I.CATEGORY_DV
+						 AND Q.AGGR_DV		= I.AGGR_DV
+						 AND Q.CELL_GROUP	= I.CELL_GROUP
+		     WHERE 1=1
+			   AND I.MEASURE = 'INV'
+
+			--------------------------------------------------------------------------------
+			print convert(varchar(30), getdate(), 121) + N'3.3 양품 재고 DIO' 
+			--------------------------------------------------------------------------------
+			IF OBJECT_ID('tempdb..#TMP_AVAILABLE_DIO') IS NOT NULL	
+				DROP TABLE #TMP_AVAILABLE_DIO;
+
+			SELECT I.CATEGORY
+				  ,I.AGGR_DV
+				  ,I.YYYYMM
+				  ,I.ITEM_ID
+				  ,I.NICK_NAME
+				  ,I.CATEGORY_DV
+				  ,I.AVAILABLE_QTY 
+				  ,I.AVAILABLE_AMT
+				  ,CASE WHEN I.AVAILABLE_QTY <= 0 THEN 
+							 0
+						WHEN R.ITEM_ID IS NULL THEN 
+							 180 
+						WHEN I.AVAILABLE_QTY - R.RTF_NEXT_1 < 0 THEN 
+							 ISNULL(CONVERT(NUMERIC(20,10), I.AVAILABLE_QTY)				 / CASE WHEN R.RTF_NEXT_1 = 0 THEN NULL ELSE R.RTF_NEXT_1   END, 0) * D.DAYS_NEXT_1  
+						WHEN I.AVAILABLE_QTY	 - R.RTF_NEXT_1 = 0 THEN 
+							 D.ACC_DAYS_1
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_2 < 0  THEN 
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_1)) / CASE WHEN R.RTF_NEXT_2 = 0  THEN NULL ELSE R.RTF_NEXT_2  END, 0) * D.DAYS_NEXT_2 + D.ACC_DAYS_1
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_2 = 0  THEN 
+							 D.ACC_DAYS_2
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_3 < 0  THEN 
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_2)) / CASE WHEN R.RTF_NEXT_3 = 0  THEN NULL ELSE R.RTF_NEXT_3  END, 0) * D.DAYS_NEXT_3 + D.ACC_DAYS_2
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_3 = 0  THEN 
+							 D.ACC_DAYS_3
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_4 < 0  THEN 
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_3)) / CASE WHEN R.RTF_NEXT_4 = 0  THEN NULL ELSE R.RTF_NEXT_4  END, 0) * D.DAYS_NEXT_4 + D.ACC_DAYS_3
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_4 = 0  THEN 
+							 D.ACC_DAYS_4
+						WHEN I.AVAILABLE_QTY - R.ACC_RTF_5 < 0  THEN 
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_4)) / CASE WHEN R.RTF_NEXT_5 = 0  THEN NULL ELSE R.RTF_NEXT_5  END, 0) * D.DAYS_NEXT_5 + D.ACC_DAYS_4
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_5 = 0  THEN 
+							 D.ACC_DAYS_5
+						ELSE 180
+					END	AS AVAILABLE_DIO 		  
+				  ,I.CELL_GROUP
+				  ,I.PIC_ID
+				  ,I.DEPT_ID
+				  ,I.PROJECT_CODE
+				  ,I.UNIT_PRICE
+				  ,I.TARGET_CELL
+				  ,I.CELL_CF
+				  ,I.PRODUCTION_CYCLE
+				  ,I.SAFETY_STOCK
+				  ,I.PRE_INSPECTION
+			 INTO #TMP_AVAILABLE_DIO 
+			 FROM #TMP_AVAILABLE_QTY I
+				   INNER JOIN #TMP_MM_DAYS_INFO D
+						  ON D.YYYYMM			 = I.YYYYMM
+				   LEFT JOIN #TMP_RTF R
+						  ON R.AGGR_DV			 = I.AGGR_DV
+						 AND R.YYYYMM			 = I.YYYYMM
+						 AND R.ITEM_ID			 = I.ITEM_ID
+						 AND R.CATEGORY_DV		 = I.CATEGORY_DV
+						 AND R.CATEGORY          = I.CATEGORY 
+			WHERE 1=1		
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","7","
+			------------------------------------------------------------------------------------------------
+			print convert(varchar(30), getdate(), 121) + N'3.4 #SCP_RPT_DIO_TREND_MM - 양품 MEASURE 추가' 
+			------------------------------------------------------------------------------------------------
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,AMOUNT
+						,DIO
+						,CELL_GROUP
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,UNIT_PRICE
+						,UNIT_PRICE_LAST
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+			SELECT @P_PLAN_START_YYYYMMDD
+				  ,@P_DIVISION_ID
+				  ,@P_AGGR_DV
+				  ,CASE WHEN I.CATEGORY_DV = 'C'
+						THEN 'Cell Convert'
+						WHEN I.CATEGORY_DV = 'P'
+						THEN 'Pack'
+						WHEN I.CATEGORY_DV = 'A'
+						THEN 'Cell'
+						ELSE ''
+				   END			AS CATEGORY
+				  ,I.YYYYMM
+				  ,I.ITEM_ID
+				  ,I.NICK_NAME
+				  ,I.CATEGORY_DV
+				  ,'AVAILABLE'	AS MEASURE 
+				  ,I.AVAILABLE_QTY 
+				  ,I.AVAILABLE_AMT
+				  ,I.AVAILABLE_DIO 		  
+				  ,I.CELL_GROUP
+				  ,I.PIC_ID
+				  ,I.DEPT_ID
+				  ,I.PROJECT_CODE
+				  ,I.UNIT_PRICE
+				  ,DT.UNIT_PRICE_LAST
+				  ,I.TARGET_CELL
+				  ,I.CELL_CF
+				  ,I.PRODUCTION_CYCLE
+				  ,I.SAFETY_STOCK
+				  ,I.PRE_INSPECTION
+				  ,@P_USER_ID	AS CREATED_BY
+				  ,GETDATE()	AS CREATION_DATE
+				  ,@P_USER_ID	AS LAST_UPDATED_BY
+				  ,GETDATE()	AS LAST_UPDATE_DATE
+			 FROM #TMP_AVAILABLE_DIO I
+				  LEFT JOIN #SCP_RPT_DIO_TREND_MM DT
+						 ON DT.YYYYMM		= I.YYYYMM
+						AND DT.ITEM_ID		= I.ITEM_ID
+						AND DT.CATEGORY_DV	= I.CATEGORY_DV
+						AND DT.MEASURE		= 'INV'
+						AND DT.AGGR_DV		= I.AGGR_DV 
+
+			--------------------------------------------------------------------------------------------------------------
+			print convert(varchar(30), getdate(), 121) + N'3.5 #SCP_RPT_DIO_TREND_MM - OP L/T Except Measure' 
+			--------------------------------------------------------------------------------------------------------------
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,DIO
+						,CELL_GROUP
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,UNIT_PRICE
+						,UNIT_PRICE_LAST
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+			SELECT @P_PLAN_START_YYYYMMDD
+				  ,@P_DIVISION_ID
+				  ,@P_AGGR_DV
+				  ,CASE WHEN ISNULL(I.CATEGORY_DV, DT.CATEGORY_DV)  = 'C'
+						THEN 'Cell Convert'
+						WHEN ISNULL(I.CATEGORY_DV, DT.CATEGORY_DV) = 'P'
+						THEN 'Pack'
+						WHEN ISNULL(I.CATEGORY_DV, DT.CATEGORY_DV) = 'A'
+						THEN 'Cell'
+						ELSE ''
+				   END			AS CATEGORY
+				  ,ISNULL(I.YYYYMM				  ,DT.YYYYMM			) AS YYYYMM			
+				  ,ISNULL(I.ITEM_ID				  ,DT.ITEM_ID			) AS ITEM_ID			
+				  ,ISNULL(I.NICK_NAME			  ,DT.NICK_NAME			) AS NICK_NAME			
+				  ,ISNULL(I.CATEGORY_DV			  ,DT.CATEGORY_DV		) AS CATEGORY_DV	
+				  ,'OP-LT-EXCPT'											AS MEASURE			
+				  ,ISNULL(I.AVAILABLE_QTY, 0.0) - ISNULL(DT.QUANTITY, 0.0)	AS QUANTITY 	-- 양품 수량  - OP L/T 수량 		
+				  ,ISNULL(I.AVAILABLE_DIO, 0.0) - ISNULL(DT.DIO     , 0.0) 	AS DIO 			-- 양품 DIO   - OP L/T DIO 		
+				  ,ISNULL(I.CELL_GROUP			  ,DT.CELL_GROUP		) AS CELL_GROUP		
+				  ,ISNULL(I.PIC_ID				  ,DT.PIC_ID			) AS PIC_ID			
+				  ,ISNULL(I.DEPT_ID				  ,DT.DEPT_ID			) AS DEPT_ID			
+				  ,ISNULL(I.PROJECT_CODE		  ,DT.PROJECT_CODE		) AS PROJECT_CODE		
+				  ,ISNULL(I.UNIT_PRICE"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","8","			  ,DT.UNIT_PRICE		) AS UNIT_PRICE		
+				  ,DT.UNIT_PRICE_LAST									  AS UNIT_PRICE_LAST	
+				  ,ISNULL(I.TARGET_CELL			  ,DT.TARGET_CELL		) AS TARGET_CELL		
+				  ,ISNULL(I.CELL_CF				  ,DT.CELL_CF			) AS CELL_CF			
+				  ,ISNULL(I.PRODUCTION_CYCLE	  ,DT.PRODUCTION_CYCLE	) AS PRODUCTION_CYCLE	
+				  ,ISNULL(I.SAFETY_STOCK		  ,DT.SAFETY_STOCK		) AS SAFETY_STOCK		
+				  ,ISNULL(I.PRE_INSPECTION		  ,DT.PRE_INSPECTION	) AS PRE_INSPECTION	
+				  ,@P_USER_ID	AS CREATED_BY
+				  ,GETDATE()	AS CREATION_DATE
+				  ,@P_USER_ID	AS LAST_UPDATED_BY
+				  ,GETDATE()	AS LAST_UPDATE_DATE
+			 FROM #TMP_AVAILABLE_DIO I
+				  FULL OUTER JOIN #SCP_RPT_DIO_TREND_MM DT
+						 ON DT.YYYYMM		= I.YYYYMM
+						AND DT.ITEM_ID		= I.ITEM_ID
+						AND DT.CATEGORY_DV	= I.CATEGORY_DV
+						AND DT.AGGR_DV		= I.AGGR_DV
+			WHERE 1=1
+			  AND DT.MEASURE = 'OP-LT'
+	END;
+
+	--------------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'4. Category별 기타충당금 추가 (#SCP_RPT_DIO_TREND_MM)' 
+	--------------------------------------------------------------------------------------------------------------
+	INSERT INTO #SCP_RPT_DIO_TREND_MM (
+				 PLAN_START_YYYYMMDD
+				,DIVISION_ID
+				,AGGR_DV
+				,CATEGORY
+				,YYYYMM
+				,ITEM_ID
+				,NICK_NAME
+				,CELL_GROUP
+				,CATEGORY_DV
+				,MEASURE
+				,QUANTITY
+				,AMOUNT
+				,DIO
+				,CREATED_BY
+				,CREATION_DATE
+				,LAST_UPDATED_BY
+				,LAST_UPDATE_DATE
+				)
+	SELECT DT.PLAN_START_YYYYMMDD
+		  ,DT.DIVISION_ID
+		  ,DT.AGGR_DV
+		  ,TC.CATEGORY
+		  ,DT.YYYYMM
+		  ,DT.ITEM_ID
+		  ,N'기타충당금' AS NICK_NAME 
+		  ,DT.CELL_GROUP
+		  ,DT.CATEGORY_DV
+		  ,DT.MEASURE
+		  ,DT.QUANTITY
+		  ,DT.AMOUNT
+		  ,DT.DIO
+		  ,@P_USER_ID	AS CREATED_BY
+		  ,GETDATE()	AS CREATION_DATE
+		  ,@P_USER_ID	AS LAST_UPDATED_BY
+		  ,GETDATE()	AS LAST_UPDATE_DATE
+	 FROM SCP_RPT_DIO_TREND_MM DT WITH(NOLOCK)
+		  INNER JOIN #TARGET_CATEGORY TC
+				  ON TC.CATEGORY_DV = DT.CATEGORY_DV
+	WHERE 1=1
+	  AND DT.PLAN_START_YYYYMMDD = @P_PLAN_START_YYYYMMDD
+	  AND DT.DIVISION_ID		 = @P_DIVISION_ID
+	  AND DT.AGGR_DV			 = 'ET' 
+	  AND DT.YYYYMM		BETWEEN @P_FROM_YYYYMM 
+							AND @P_TO_YYYYMM
+
+	-----------------------------------------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'5.1. Category별 MEASURE 합계 추가 (조회 조건에 대한 합계가 아님) - #SCP_RPT_DIO_TREND_MM' 
+	-----------------------------------------------------------------------------------------------------------------------------------------
+	INSERT INTO #SCP_RPT_DIO_TREND_MM (
+				 PLAN_START_YYYYMMDD
+				,DIVISION_ID
+				,AGGR_DV
+				,CATEGORY
+				,YYYYMM
+				,ITEM_ID
+				,NICK_NAME
+				,CELL_GROUP
+				,CATEGORY_DV
+				,MEASURE
+				,QUANTITY
+				,AMOUNT
+				,DIO
+				,UNIT_PRICE_LAST
+				,CREATED_BY
+				,CREATION_DATE
+				,LAST_UPDATED_BY
+				,LAST_UPDATE_DATE
+				)
+	SELECT DT.PLAN_START_YYYYMMDD
+		  ,DT.DIVISION_ID
+		  ,'TT'				AS AGGR_DV
+		  ,TC.CATEGORY
+		  ,DT.YYYYMM
+		  ,N'합계'			AS ITEM_ID
+		  ,N'합계'			AS NICK_NAME 
+		  ,N'합계'			AS CELL_GROUP
+		  ,DT.CATEGORY_DV
+		  ,DT.MEASURE
+		  ,SUM(DT.QUANTITY)	AS QUANTITY
+		  ,CASE WHEN DT.MEASURE != 'STANDARD'
+				THEN SUM(DT.AMOUNT)	
+				ELSE SUM(DT.QUANTITY) -- 기준수량 * 최종단가 (기타충당금 반영된 금액의 단가)
+					*
+					MAX(CASE WHEN DT.YYYYMM = @V_LAST_YYYYMM AND DT.MEASURE = 'INV'  AND SUM(DT.QUANTITY) != 0 
+							 THEN CONVERT(NUMERIC(20,0), SUM(DT.AMOUNT) / SUM(DT.QUANTITY))
+							 ELSE NULL
+						END)	OVER	(PARTITION BY DT.PLAN_START_YYYYMMDD
+												 ,DT.DIVISION_ID
+												 ,DT.CATEGORY_DV)
+		   END AS AMOUNT
+		  ,MAX(DT.DIO)		AS DIO
+		  ,MAX(CASE WHEN DT.YYYYMM = @V_LAST_YYYYMM AND DT.MEASURE = 'INV'  AND SUM(DT.QUANTITY) != 0 
+					THEN CONVERT(NUMERIC(20,0), SUM(DT.AMOUNT) / SUM(DT.QUANTITY))
+					ELSE NULL
+			   END)	OVER	(PARTITION BY DT.PLAN_START_YYYYMMDD
+					"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","9","					 ,DT.DIVISION_ID
+										 ,DT.CATEGORY_DV)
+							AS UNIT_PRICE_LAST 
+		  ,@P_USER_ID		AS CREATED_BY
+		  ,GETDATE()		AS CREATION_DATE
+		  ,@P_USER_ID		AS LAST_UPDATED_BY
+		  ,GETDATE()		AS LAST_UPDATE_DATE
+	 FROM SCP_RPT_DIO_TREND_MM DT WITH(NOLOCK)
+		  INNER JOIN #TARGET_CATEGORY TC
+				  ON TC.CATEGORY_DV = DT.CATEGORY_DV
+	WHERE 1=1
+	  AND DT.PLAN_START_YYYYMMDD = @P_PLAN_START_YYYYMMDD
+	  AND DT.DIVISION_ID		 = @P_DIVISION_ID
+	  AND DT.AGGR_DV			 IN ('TT', 'ET')
+	  AND DT.YYYYMM		BETWEEN @P_FROM_YYYYMM 
+							AND @P_TO_YYYYMM
+	  AND DT.MEASURE            != 'GAP'   -- 기타충당금(TT) 반영 재고 및 기준재고 정보로 재계산 필요  
+	GROUP BY DT.PLAN_START_YYYYMMDD
+			,DT.DIVISION_ID
+			,DT.YYYYMM
+			,DT.CATEGORY_DV
+			,TC.CATEGORY
+			,DT.MEASURE
+
+	--------------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'5.2. Category별 합계 - GAP Measure 추가' 
+	--------------------------------------------------------------------------------------------------------------
+	INSERT INTO #SCP_RPT_DIO_TREND_MM (
+				 PLAN_START_YYYYMMDD
+				,DIVISION_ID
+				,AGGR_DV
+				,CATEGORY
+				,YYYYMM
+				,ITEM_ID
+				,NICK_NAME
+				,CELL_GROUP
+				,CATEGORY_DV
+				,MEASURE
+				,QUANTITY
+				,AMOUNT
+				,DIO
+				,UNIT_PRICE_LAST
+				,CREATED_BY
+				,CREATION_DATE
+				,LAST_UPDATED_BY
+				,LAST_UPDATE_DATE
+				)
+	SELECT D.PLAN_START_YYYYMMDD
+		  ,D.DIVISION_ID
+		  ,D.AGGR_DV
+		  ,D.CATEGORY
+		  ,D.YYYYMM
+		  ,MAX(D.ITEM_ID	 )		AS ITEM_ID	
+		  ,MAX(D.NICK_NAME	 )		AS NICK_NAME	
+		  ,MAX(D.CELL_GROUP	 )		AS CELL_GROUP
+		  ,D.CATEGORY_DV
+		  ,'GAP'																		 AS MEASURE 
+		  ,SUM(CASE WHEN D.MEASURE = 'INV' THEN D.QUANTITY	ELSE (-1) * D.QUANTITY	END) AS QUANTITY
+		  ,SUM(CASE WHEN D.MEASURE = 'INV' THEN D.AMOUNT	ELSE (-1) * D.AMOUNT	END) AS AMOUNT
+		  ,SUM(CASE WHEN D.MEASURE = 'INV' THEN D.DIO		ELSE (-1) * D.DIO		END) AS DIO
+		  ,MAX(D.UNIT_PRICE_LAST)	AS UNIT_PRICE_LAST
+		  ,@P_USER_ID				AS CREATED_BY
+		  ,GETDATE()				AS CREATION_DATE
+		  ,@P_USER_ID				AS LAST_UPDATED_BY
+		  ,GETDATE()				AS LAST_UPDATE_DATE
+	 FROM #SCP_RPT_DIO_TREND_MM D
+	WHERE 1=1
+	  AND AGGR_DV = 'TT'
+	  AND MEASURE IN ('INV', 'STANDARD')
+	GROUP BY D.PLAN_START_YYYYMMDD
+			,D.DIVISION_ID
+			,D.AGGR_DV
+			,D.CATEGORY
+			,D.YYYYMM
+			,D.CATEGORY_DV
+
+
+	--------------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'6. 합계 - 양품/OP L/T Except measure  추가 - #SCP_RPT_DIO_TREND_MM' 
+	--------------------------------------------------------------------------------------------------------------
+	IF EXISTS (SELECT TOP 1 *  
+				FROM #TARGET_MEASURES
+			   WHERE 1=1
+				 AND MEASURE_DB IN ('AVAILABLE', 'OP-LT-EXCPT'))
+	BEGIN
+
+			print convert(varchar(30), getdate(), 121) + N'6.1 합계 RTF ' 
+			------------------------------------------
+			-- 6.1 합계 RTF 
+			------------------------------------------
+			IF OBJECT_ID('tempdb..#TMP_TOT_RTF') IS NOT NULL	
+				DROP TABLE #TMP_TOT_RTF;
+
+			SELECT DT.AGGR_DV
+				  ,DT.YYYYMM
+				  ,DT.CATEGORY_DV
+				  ,SUM(DT.QUANTITY										 ) AS RTF
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE1,0))  ) AS RTF_NEXT_1
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE2,0))  ) AS RTF_NEXT_2
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE3,0))  ) AS RTF_NEXT_3
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE4,0))  ) AS RTF_NEXT_4
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE5,0))  ) AS RTF_NEXT_5
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE6,0))  ) AS ACC_RTF_1
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE7,0))  ) AS ACC_RTF_2
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE8,0))  ) AS ACC_RTF_3
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE9,0))  ) AS ACC_RTF_4
+				  ,SUM(CONVERT(NUMERIC(30,10), ISNULL(DT.ATTRIBUTE10,0)) ) AS "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","10","ACC_RTF_5
+			 INTO #TMP_TOT_RTF
+			 FROM SCP_RPT_DIO_TREND_MM DT WITH(NOLOCK)
+			WHERE 1=1
+			  AND DT.PLAN_START_YYYYMMDD = @P_PLAN_START_YYYYMMDD
+			  AND DT.DIVISION_ID		 = @P_DIVISION_ID
+			  AND DT.AGGR_DV			 = 'TT'
+			  AND DT.YYYYMM	BETWEEN @P_FROM_YYYYMM AND @P_TO_YYYYMM
+			  AND DT.MEASURE			 = 'RTF'
+			GROUP BY DT.AGGR_DV
+					,DT.YYYYMM
+					,DT.CATEGORY_DV
+
+			print convert(varchar(30), getdate(), 121) + N'6.2 합계 양품재고 ' 
+			------------------------------------------
+			-- 6.2 합계 양품재고   
+			------------------------------------------
+			IF OBJECT_ID('tempdb..#TMP_TOT_AVAILABLE_QTY') IS NOT NULL	
+				DROP TABLE #TMP_TOT_AVAILABLE_QTY;
+
+			;WITH QUALITY_ISSUES AS (
+				SELECT QI.CATEGORY_DV
+					  ,QI.YYYYMM
+					  ,SUM(QI.ISSUE_QTY) AS ISSUE_QTY
+				 FROM #QUALITY_ISSUES QI
+				WHERE 1=1
+				GROUP BY QI.CATEGORY_DV
+					    ,QI.YYYYMM
+			)
+			SELECT DT.AGGR_DV
+				  ,DT.CATEGORY
+				  ,DT.YYYYMM
+				  ,DT.ITEM_ID
+				  ,DT.NICK_NAME
+				  ,DT.CELL_GROUP
+				  ,DT.CATEGORY_DV
+				  ,DT.QUANTITY - ISNULL(QI.ISSUE_QTY, 0)	AS AVAILABLE_QTY  -- 양품수량
+				  ,DT.UNIT_PRICE_LAST -- 11/21 
+			 INTO #TMP_TOT_AVAILABLE_QTY
+			 FROM #SCP_RPT_DIO_TREND_MM  DT
+				  LEFT JOIN QUALITY_ISSUES QI 
+						 ON QI.YYYYMM   = CASE WHEN DT.YYYYMM  >= SUBSTRING(@P_PLAN_START_YYYYMMDD, 1,6) 
+											   THEN SUBSTRING(@P_PLAN_START_YYYYMMDD, 1,6) -- 당월 포함 미래구간은 모두 당월(Plan 해당월) 품질이슈 수량 반영 
+											   ELSE DT.YYYYMM 
+										  END 
+						AND QI.CATEGORY_DV = DT.CATEGORY_DV
+			WHERE 1=1
+			  AND AGGR_DV = 'TT'	-- TOTAL
+			  AND MEASURE = 'INV'	-- 재고 
+
+			print convert(varchar(30), getdate(), 121) + N'6.3 합계 양품재고 DIO ' 
+			------------------------------------------
+			-- 6.3 합계 양품재고 DIO   
+			------------------------------------------
+			IF OBJECT_ID('tempdb..#TMP_TOT_AVAILABLE_DIO') IS NOT NULL	
+				DROP TABLE #TMP_TOT_AVAILABLE_DIO;
+
+			SELECT I.CATEGORY 
+				  ,I.AGGR_DV
+				  ,I.YYYYMM
+				  ,I.ITEM_ID
+				  ,I.NICK_NAME
+				  ,I.CELL_GROUP
+				  ,I.CATEGORY_DV
+				  ,I.AVAILABLE_QTY 
+				  ,CASE WHEN I.AVAILABLE_QTY <= 0 THEN 
+							 0
+						WHEN R.YYYYMM IS NULL THEN 
+							 180 
+						WHEN I.AVAILABLE_QTY - R.RTF_NEXT_1 < 0 THEN 
+							 ISNULL(CONVERT(NUMERIC(20,10), I.AVAILABLE_QTY)				 / CASE WHEN R.RTF_NEXT_1 = 0  THEN NULL ELSE R.RTF_NEXT_1  END, 0) * D.DAYS_NEXT_1  
+						WHEN I.AVAILABLE_QTY	 - R.RTF_NEXT_1 = 0 THEN 
+							 D.ACC_DAYS_1
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_2 < 0  THEN 
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_1)) / CASE WHEN R.RTF_NEXT_2 = 0  THEN NULL ELSE R.RTF_NEXT_2  END, 0) * D.DAYS_NEXT_2 + D.ACC_DAYS_1
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_2 = 0  THEN 
+							 D.ACC_DAYS_2
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_3 < 0  THEN 
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_2)) / CASE WHEN R.RTF_NEXT_3 = 0  THEN NULL ELSE R.RTF_NEXT_3  END, 0) * D.DAYS_NEXT_3 + D.ACC_DAYS_2
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_3 = 0  THEN 
+							 D.ACC_DAYS_3
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_4 < 0  THEN 
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_3)) / CASE WHEN R.RTF_NEXT_4 = 0  THEN NULL ELSE R.RTF_NEXT_4  END, 0) * D.DAYS_NEXT_4 + D.ACC_DAYS_3
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_4 = 0  THEN 
+							 D.ACC_DAYS_4
+						WHEN I.AVAILABLE_QTY - R.ACC_RTF_5 < 0  THEN 
+							 ISNULL(CONVERT(NUMERIC(20,10), (I.AVAILABLE_QTY - R.ACC_RTF_4)) / CASE WHEN R.RTF_NEXT_5 = 0  THEN NULL ELSE R.RTF_NEXT_5  END, 0) * D.DAYS_NEXT_5 + D.ACC_DAYS_4
+						WHEN I.AVAILABLE_QTY	 - R.ACC_RTF_5 = 0  THEN 
+							 D.ACC_DAYS_5
+						ELSE 180
+					END	AS AVAILABLE_DIO
+				  ,I.UNIT_PRICE_LAST -- 11/21 
+			 INTO #TMP_TOT_AVAILABLE_DIO 
+			 FROM #TMP_TOT_AVAILABLE_QTY I
+				   INNER JOIN #TMP_MM_DAYS_INFO D
+						  ON D.YYYYMM			 = I.YYYYMM
+				   LEFT JOIN #TMP_TOT_RTF R
+						  ON R.AGGR_DV			 = I.AGGR_DV
+						 AND R.YYYYMM			 = I.YYYYMM
+						 AND R.CA"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","11","TEGORY_DV		 = I.CATEGORY_DV
+			WHERE 1=1
+
+			print convert(varchar(30), getdate(), 121) + N'6.4 합계 양품 수량/DIO  MEASURE 추가 ' 
+			------------------------------------------
+			-- 6.4 합계 양품 수량/DIO  MEASURE 추가 
+			------------------------------------------
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME 
+						,CELL_GROUP
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,AMOUNT
+						,DIO
+						,UNIT_PRICE_LAST
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+			SELECT @P_PLAN_START_YYYYMMDD
+				  ,@P_DIVISION_ID
+				  ,I.AGGR_DV
+				  ,CASE WHEN I.CATEGORY_DV = 'C'
+						THEN 'Cell Convert'
+						WHEN I.CATEGORY_DV = 'P'
+						THEN 'Pack'
+						WHEN I.CATEGORY_DV = 'A'
+						THEN 'Cell'
+						ELSE ''
+				   END			AS CATEGORY
+				  ,I.YYYYMM
+				  ,I.ITEM_ID 
+				  ,I.NICK_NAME 
+				  ,I.CELL_GROUP 
+				  ,I.CATEGORY_DV
+				  ,'AVAILABLE'	AS MEASURE 
+				  ,I.AVAILABLE_QTY 
+				  ,0.0			AS AVAILABLE_AMT
+				  ,AVAILABLE_DIO 
+				  ,UNIT_PRICE_LAST 
+				  ,@P_USER_ID	AS CREATED_BY
+				  ,GETDATE()	AS CREATION_DATE
+				  ,@P_USER_ID	AS LAST_UPDATED_BY
+				  ,GETDATE()	AS LAST_UPDATE_DATE
+			 FROM #TMP_TOT_AVAILABLE_DIO I
+
+			print convert(varchar(30), getdate(), 121) + N'6.5 합계 OP L/T Except Measure  ' 
+			------------------------------------------
+			-- 6.5 합계 OP L/T Except Measure  
+			------------------------------------------
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,DIO
+						,UNIT_PRICE_LAST 
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+			SELECT @P_PLAN_START_YYYYMMDD
+				  ,@P_DIVISION_ID
+				  ,ISNULL(I.AGGR_DV				  ,DT.AGGR_DV			)  AS AGGR_DV
+				  ,CASE WHEN ISNULL(I.CATEGORY_DV, DT.CATEGORY_DV)  = 'C'
+						THEN 'Cell Convert'
+						WHEN ISNULL(I.CATEGORY_DV, DT.CATEGORY_DV) = 'P'
+						THEN 'Pack'
+						WHEN ISNULL(I.CATEGORY_DV, DT.CATEGORY_DV) = 'A'
+						THEN 'Cell'
+						ELSE ''
+				   END													  AS CATEGORY
+				  ,ISNULL(I.YYYYMM				  ,DT.YYYYMM			) AS YYYYMM			
+				  ,ISNULL(I.ITEM_ID				  ,DT.ITEM_ID			) AS ITEM_ID			
+				  ,ISNULL(I.NICK_NAME			  ,DT.NICK_NAME			) AS NICK_NAME			
+				  ,ISNULL(I.CELL_GROUP			  ,DT.CELL_GROUP		) AS CELL_GROUP			
+				  ,ISNULL(I.CATEGORY_DV			  ,DT.CATEGORY_DV		) AS CATEGORY_DV	
+				  ,'OP-LT-EXCPT'											AS MEASURE			
+				  ,ISNULL(I.AVAILABLE_QTY, 0.0) - ISNULL(DT.QUANTITY, 0.0)	AS QUANTITY 	-- 양품 수량  - OP L/T 수량 		
+				  ,ISNULL(I.AVAILABLE_DIO, 0.0) - ISNULL(DT.DIO     , 0.0) 	AS DIO 			-- 양품 DIO   - OP L/T DIO 		
+				  ,ISNULL(I.UNIT_PRICE_LAST		  ,DT.UNIT_PRICE_LAST	)   AS UNIT_PRICE_LAST	
+				  ,@P_USER_ID	AS CREATED_BY
+				  ,GETDATE()	AS CREATION_DATE
+				  ,@P_USER_ID	AS LAST_UPDATED_BY
+				  ,GETDATE()	AS LAST_UPDATE_DATE
+			 FROM #TMP_TOT_AVAILABLE_DIO I
+				  FULL OUTER JOIN #SCP_RPT_DIO_TREND_MM DT
+						 ON DT.YYYYMM			= I.YYYYMM
+						AND DT.CATEGORY_DV		= I.CATEGORY_DV
+						AND DT.AGGR_DV			= 'TT'
+			WHERE 1=1
+			  AND DT.MEASURE = 'OP-LT'
+
+	END 
+
+
+	------------------------------------------------------------------------------------------
+	-- 2023.01.11  
+	-- 당월 포함 미래 구간 
+	-- 모델별(Aggr_dv='MD') Pack 수율 반영 전 생산 계획 수량 measure 추가  
+	------------------------------------------------------------------------------------------
+	IF @p_aggr_dv = 'MD' AND @P_CATEGORY LIKE '%P%' -- 모델별 Pack 조회시
+		AND  EXISTS (SELECT TOP 1 *  
+				  	  FROM #TARGET_MEASURES
+				     WHERE 1=1
+				  	   AND MEASURE_DB = 'PROD-BEFORE-PACK')
+	BEGIN
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGO"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","12","RY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,AMOUNT
+						,DIO
+						,UNIT_PRICE_LAST
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+				SELECT 
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,'PROD-BEFORE-PACK'									AS MEASURE
+						,CONVERT(NUMERIC(20,10), ISNULL(ATTRIBUTE1, '0'))	AS QUANTITY
+						,0
+						,0
+						,UNIT_PRICE_LAST
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+				 FROM #SCP_RPT_DIO_TREND_MM
+				WHERE AGGR_DV		= 'MD'
+				  AND CATEGORY_DV	= 'P'
+				  AND MEASURE		= 'PROD'
+				  AND YYYYMM		>= SUBSTRING(@p_plan_start_yyyymmdd, 1, 6) 
+
+	END
+
+	------------------------------------------------------------------------------------------
+	-- 2023.01.11  
+	-- 당월 포함 미래 구간 
+	-- 모델별(Aggr_dv='MD') 팩 생산에 소요된 셀수량  및 수율 반영 후 셀수량 measure 추가 
+	------------------------------------------------------------------------------------------
+	IF @p_aggr_dv = 'MD' AND @P_CATEGORY LIKE '%A%' -- 모델별 Cell 조회시  
+	BEGIN
+			 -- Pack 생산에 소요된 셀 수량 
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,AMOUNT
+						,DIO
+						,UNIT_PRICE_LAST
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+				SELECT 
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,'CELL-USED'										AS MEASURE
+						,CONVERT(NUMERIC(20,10), ISNULL(ATTRIBUTE1, '0'))	AS QUANTITY
+						,0
+						,0
+						,UNIT_PRICE_LAST
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+				 FROM #SCP_RPT_DIO_TREND_MM
+				WHERE AGGR_DV		= 'MD'
+				  AND CATEGORY_DV	= 'A' 
+				  AND MEASURE		= 'PROD'
+				  AND YYYYMM		>= SUBSTRING(@p_plan_start_yyyymmdd, 1, 6) 
+				  AND EXISTS (SELECT TOP 1 *  
+				  			  FROM #TARGET_MEASURES
+							 WHERE 1=1
+				  			   AND MEASURE_DB = 'CELL-USED')
+
+
+			 -- 수율 반영 후 셀 생산 계획 수량 
+			INSERT INTO #SCP_RPT_DIO_TREND_MM (
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,MEASURE
+						,QUANTITY
+						,AMOUNT
+						,DIO
+						,UNIT_PRICE_LAST
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,TARGET_CELL
+						,CELL_CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+						)
+				SELECT 
+						 PLAN_START_YYYYMMDD
+						,DIVISION_ID
+						,AGGR_DV
+						,CATEGORY
+						,YYYYMM
+						,ITEM_ID
+						,NICK_NAME
+						,CELL_GROUP
+						,CATEGORY_DV
+						,'PROD-AFTER-CELL'	AS MEASURE
+						,DIO				AS QUANTITY
+						,0
+						,0
+						,UNIT_PRICE_LAST
+						,PIC_ID
+						,DEPT_ID
+						,PROJECT_CODE
+						,TARGET_CELL
+						,CELL_"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","13","CF
+						,PRODUCTION_CYCLE
+						,SAFETY_STOCK
+						,PRE_INSPECTION
+						,CREATED_BY
+						,CREATION_DATE
+						,LAST_UPDATED_BY
+						,LAST_UPDATE_DATE
+				 FROM #SCP_RPT_DIO_TREND_MM
+				WHERE AGGR_DV		= 'MD'
+				  AND CATEGORY_DV	= 'A' 
+				  AND MEASURE		= 'PROD'
+				  AND YYYYMM		>= SUBSTRING(@p_plan_start_yyyymmdd, 1, 6) 
+				  AND EXISTS (SELECT TOP 1 *  
+				  			  FROM #TARGET_MEASURES
+							 WHERE 1=1
+				  			   AND MEASURE_DB = 'PROD-AFTER-CELL')
+
+	END
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'7.1 Insert #fdata 최종 조회 대상 데이터' 
+	-----------------------------------------------------------------------------------------------------------
+	IF OBJECT_ID('tempdb..#fdata') IS NOT NULL	
+		DROP TABLE #fdata;
+
+	;WITH DIO_REASON AS (
+		SELECT DISTINCT 
+		       R.YYYYMM
+			  ,CELL_GROUP
+			  ,'Y' AS EXISTS_REASON
+		FROM SCP_RPT_DIO_TREND_MM_REASON R WITH(NOLOCK) -- DIO 초과 사유 
+	   WHERE R.DIVISION_ID = @p_division_id
+	     AND R.AGGR_DV	   = 'CG'
+		 AND R.CATEGORY_DV = 'C'
+		 AND R.ITEM_ID     = '*'
+	     AND R.YYYYMM BETWEEN @p_from_yyyymm
+						  AND @p_to_yyyymm
+		 AND R.QUANTITY IS NOT NULL
+		 AND R.QUANTITY != 0 
+	)
+	select dt.plan_start_yyyymmdd
+		  ,dt.division_id
+		  ,dt.aggr_dv
+		  ,dt.yyyymm
+		  ,dt.item_id
+		  ,dt.nick_name
+		  ,dt.CATEGORY_DV
+		  ,dt.cell_cf
+		  ,case when dt.CATEGORY_DV = 'C' AND AGGR_DV != 'MD'
+				then '-'
+				else dt.target_cell
+			end as target_cell
+		  ,max(case when dt.CATEGORY_DV = 'C' AND AGGR_DV != 'MD'
+					then '-'
+					else dt.cell_group_target 
+				end)	over (partition by case when dt.CATEGORY_DV = 'C' AND AGGR_DV != 'MD'
+												then '-'
+												else dt.target_cell
+											end)	as cell_group_target
+		  ,dt.cell_group
+		  ,dt.dept_id
+		  ,di.dept_name_ko
+		  ,dt.pic_id
+		  ,ui.user_name as pic_name
+		  ,dt.project_code
+		  ,pj.project_name
+		  ,dt.unit_price_last 
+		  ,dt.PRODUCTION_CYCLE
+		  ,dt.SAFETY_STOCK    
+		  ,dt.PRE_INSPECTION 
+		  ,ti.measure_db 
+		  ,ti.measure_ui
+		  ,ti.measure_name
+		  ,ti.sort_order_no
+		  ,dt.category
+		  ,case when ti.col_div = 'QTY' then dt.quantity / @P_UNIT_QTY
+				when ti.col_div = 'DIO' then dt.dio
+				when ti.col_div = 'AMT' then dt.amount  / @P_UNIT_AMOUNT
+				else null   -- else case는 있을 수 없음 !!!  (있으면 안됨!!) 
+			end as value 
+		  ,y.yield
+		  ,dr.EXISTS_REASON
+	into #fdata 
+	from #SCP_RPT_DIO_TREND_MM dt 
+		 inner join #TARGET_MEASURES TI   --- select * from #TARGET_MEASURES
+				 on dt.measure = TI.MEASURE_DB
+		 left join scm_mst_sso_dept_info di with(nolock)    
+				on di.dept_id = dt.dept_id
+		 left join scm_mst_sso_user_info ui with(nolock) 
+				on ui.user_id = dt.pic_id 
+		 left join scm_mst_project pj with(nolock)
+				on pj.division_id = dt.division_id
+			   and pj.project_code = dt.project_code
+		 left join #YIELD_INFO Y
+				on Y.item_id = dt.item_id
+	     left join DIO_REASON dr
+				on dr.yyyymm	 = dt.yyyymm
+			   and dr.cell_group = dt.cell_group
+	WHERE 1=1
+
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'7.2 delete #fdata (기타충당금 수량/DIO)' 
+	-----------------------------------------------------------------------------------------------------------
+	DELETE FROM #fdata
+	 WHERE AGGR_DV		= 'ET'
+	   AND MEASURE_UI IN ('INV_QTY', 'INV_DIO')  
+	
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'8.1. Select @v_query_mm_case 쿼리 조합' 
+	-----------------------------------------------------------------------------------------------------------
+	;with mm_list as (
+		SELECT DISTINCT ' CASE WHEN  FD.MEASURE_UI LIKE ''%DIO'' THEN  FORMAT( ISNULL(MAX(CASE WHEN FD.YYYYMM = '''+ B.YYYYMM   + ''' THEN valu"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_MM","311060244","14","e ELSE NUll END), 0) , ''##0.0'')    ELSE   FORMAT( ISNULL(MAX(CASE WHEN FD.YYYYMM = '''+ B.YYYYMM   + ''' THEN value ELSE NUll END), 0) , ''##0'')        END  AS ""'+  concat('M_',B.YYYYMM) + '"" ' + CHAR(10)
+					   +',ISNULL(MAX(MAX(CASE WHEN FD.YYYYMM = '''   + B.YYYYMM   + ''' THEN FD.EXISTS_REASON ELSE NULL END)) OVER (PARTITION BY FD.PLAN_START_YYYYMMDD),''N'')   AS ""'  +  concat('EXISTS_REASON_',B.YYYYMM) + '"" '  
+					   as col
+		  FROM SCM_MST_BUCKET B WITH(NOLOCK)
+		 WHERE B.YYYYMM BETWEEN @P_FROM_YYYYMM 
+							AND @P_TO_YYYYMM
+	 )
+	select @v_query_mm_case = STUFF(( SELECT ',' +  col
+										FROM MM_LIST 
+									   WHERE 1=1
+										FOR XML PATH('')), 1, 1,'')
+	;
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'8.2. Select #fdata 쿼리 조합' 
+	-----------------------------------------------------------------------------------------------------------
+	set @v_query = N'select 
+						   PLAN_START_YYYYMMDD
+						  ,DIVISION_ID
+						  ,AGGR_DV
+						  ,Category					AS CATEGORY
+						  ,CATEGORY_DV
+						  ,item_id					as MODEL
+						  ,max(nick_name)			as NICK_NAME
+						  ,max(cell_group)			as CELL_GROUP
+						  ,measure_db				as MEASURE_DB   -- db테이블 measure 컬럼값
+						  ,measure_ui				as MEASURE_UI	--구분코드
+						  ,measure_name				as MEASURE_NAME	--구분
+						  '
+		  +',' + @v_query_mm_case
+
+		  +N'			  ,max(cell_cf		)		as	CELL_CF				-- CELL환산계수
+						  ,max(target_cell  )		as	TARGET_CELL			-- TARGET_CELL (환산된 경우 SRC ITEM 중 택1)
+						  ,max(cell_group_target  )	as	CELL_GROUP_TARGET	-- TARGET_CELL CELL GROUP 
+						  ,max(pic_name		)		as	PIC_NAME			-- 담당자          
+						  ,max(dept_name_ko	)		as	DEPT_NAME_KO		-- 팀          
+						  ,max(project_name	)		as	PROJECT_NAME		-- 프로젝트    
+						  ,FORMAT(max(unit_price_last)		, ''##0''			) AS UNIT_PRICE_LAST	-- 단가    
+						  ,FORMAT(max(production_cycle)		, ''##0.0''			) AS PRODUCTION_CYCLE	-- 주기재고
+						  ,FORMAT(max(safety_stock)			, ''##0.0''			) AS SAFETY_STOCK		-- 안전재고
+						  ,FORMAT(max(pre_inspection)		, ''##0.0''			) AS PRE_INSPECTION		-- 전진검사
+						  ,FORMAT(max(yield)				, ''##0.00000000''	) AS YIELD				-- 수율
+		   from #fdata fd
+		  where 1=1
+			 group by PLAN_START_YYYYMMDD
+					 ,DIVISION_ID
+					 ,AGGR_DV
+					 ,category
+					 ,CATEGORY_DV
+					 ,item_id
+					 ,measure_db
+					 ,measure_ui
+					 ,measure_name
+					 ,sort_order_no
+			order by case when category = ''Cell Convert''	then 1
+						  when category = ''Cell''			then 2
+						  when category = ''Pack''			then 3
+						  else 9
+					 end 
+					,case when aggr_dv = ''CG'' then 1
+						  when aggr_dv = ''MD'' then 2
+						  when aggr_dv = ''ET'' then 7
+						  when aggr_dv = ''TT'' then 8
+						  else 9
+					 end 
+					,item_id
+				    ,sort_order_no
+			'
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'8.3, 최종 결과 조회 쿼리 실행 ' 
+	-----------------------------------------------------------------------------------------------------------
+	print @v_query
+	EXEC SP_EXECUTESQL @v_query; 
+
+	-----------------------------------------------------------------------------------------------------------
+	print convert(varchar(30), getdate(), 121) + N'8.3, 최종 결과 조회 쿼리 실행 end' 
+	-----------------------------------------------------------------------------------------------------------
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_PRICE","327060301","1","
+
+
+
+
+
+/*
+ * Program ID   : SCP0093_GET_DIO_TREND_DATA_PRICE
+ * Description  : SCP0093 DIO TREND Report 화면의 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2024/03/24   vadabi3/hrkim	최초생성
+ ----------------------------------------------------------------------------------------------------
+ 		SELECT UNIT_PRICE,  *
+		FROM SCP_RPT_DIO_TREND_MM WITH(NOLOCK)
+		WHERE 1=1
+		AND AGGR_DV = 'CG'
+		AND CATEGORY_DV = 'C'
+		AND PLAN_START_YYYYMMDD = '20230313' -- PLAN DATE
+		AND MEASURE = 'INV'   -- 재고
+		AND YYYYMM = '202301' --- 해당 년월
+		AND CELL_GROUP = '' -- 해당 셀그룹	
+
+exec SCP0093_GET_DIO_TREND_DATA_PRICE
+  @p_division_id             = ''
+, @p_plan_start_yyyymmdd	 = '20230320'
+, @p_yyyymmdd				 = '202301'
+, @p_from_yyyymm			 = ''
+, @p_to_yyyymm		         = ''
+, @p_cell_group				 = 'E78'
+, @p_item_id				 = ''
+, @P_AGGR_DV				 = ''
+, @P_CATEGORY				 = ''
+, @p_user_id				 = ''
+, @debug_mode				 = ''
+
+
+ */
+CREATE PROCEDURE [dbo].[SCP0093_GET_DIO_TREND_DATA_PRICE]
+  @p_plan_start_yyyymmdd	NVARCHAR(8)		-- Plan Date
+, @p_yyyymm				    NVARCHAR(8)		-- Plan Date
+, @p_from_yyyymm			NVARCHAR(6)		-- Monthly bucket 조회 기간
+, @p_to_yyyymm		        NVARCHAR(6)		-- Monthly bucket 조회 기간
+, @p_division_id            NVARCHAR(30)	-- division
+, @p_cell_group				NVARCHAR(30)	-- 모델 
+, @p_item_id				NVARCHAR(150)	-- 모델 
+, @P_AGGR_DV				NVARCHAR(10)	-- 집계구분 [MD : 모델(Item), CG: 셀그룹(Level4)]
+, @P_CATEGORY				NVARCHAR(50)    -- Category 조건  = [Pack, Cell, Cell Convert]
+, @p_user_id				NVARCHAR(30)    -- MEASURE 개인별 선택
+, @debug_mode				NVARCHAR(1) = 'T'
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+	
+	DECLARE @SEARCH_COUNT int = 0;
+	DECLARE @SEARCH_yyyymmdd nvarchar(max);
+
+	IF EXISTS (
+				SELECT 1
+				FROM SCP_RPT_DIO_TREND_MM A WITH(NOLOCK)
+				WHERE 1=1
+				AND PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd
+				AND ( ISNULL(@p_yyyymm, '')			= '' OR A.YYYYMM		IN (SELECT token FROM dbo.String_Split(@p_yyyymm,',')) )
+				AND ( ISNULL(@p_cell_group, '')		= '' OR A.CELL_GROUP	IN (SELECT token FROM dbo.String_Split(@p_cell_group,',')) )
+				AND ( ISNULL(@p_division_id, '')	= '' OR A.division_id	IN (SELECT token FROM dbo.String_Split(@p_division_id,',')) )
+				AND MEASURE = 'INV'   -- 재고
+				AND A.AGGR_DV = 'CG'
+				AND A.CATEGORY_DV = 'C'
+	          )
+		BEGIN
+				SELECT  CELL_GROUP, UNIT_PRICE, UNIT_PRICE_LAST
+				FROM SCP_RPT_DIO_TREND_MM A WITH(NOLOCK)
+				WHERE 1=1
+				AND PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd
+				AND ( ISNULL(@p_yyyymm, '')			= '' OR A.YYYYMM		IN (SELECT token FROM dbo.String_Split(@p_yyyymm,',')) )
+				AND ( ISNULL(@p_cell_group, '')		= '' OR A.CELL_GROUP	IN (SELECT token FROM dbo.String_Split(@p_cell_group,',')) )
+				AND ( ISNULL(@p_division_id, '')	= '' OR A.division_id	IN (SELECT token FROM dbo.String_Split(@p_division_id,',')) )
+				AND MEASURE = 'INV'   -- 재고
+				AND A.AGGR_DV = 'CG'
+				AND A.CATEGORY_DV = 'C'
+				ORDER BY CELL_GROUP
+		END
+
+	ELSE 
+		BEGIN
+				SELECT @SEARCH_yyyymmdd = A.yyyymm
+				FROM SCP_RPT_DIO_TREND_MM A WITH(NOLOCK)
+				WHERE 1=1
+				AND PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd
+				AND ( ISNULL(@p_cell_group, '')		= '' OR A.CELL_GROUP	IN (SELECT token FROM dbo.String_Split(@p_cell_group,',')) )
+				AND ( ISNULL(@p_division_id, '')	= '' OR A.division_id	IN (SELECT token FROM dbo.String_Split(@p_division_id,',')) )
+				AND MEASURE = 'INV'   -- 재고
+				AND A.AGGR_DV = 'CG'
+				AND A.CATEGORY_DV = 'C'
+
+
+
+				SELECT   CELL_GROUP, UNIT_PRICE, UNIT_PRICE_LAST
+				FROM SCP_RPT_DIO_TREND_MM A WITH(NOLOCK)
+				WHERE 1=1
+				AND PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd
+				AND ( ISNULL(@p_cell_group, '')		= '' OR A.CELL_GROUP	IN (SELECT token FROM dbo.String_Split(@p"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_PRICE","327060301","2","_cell_group,',')) )
+				AND ( ISNULL(@p_division_id, '')	= '' OR A.division_id	IN (SELECT token FROM dbo.String_Split(@p_division_id,',')) )
+				AND MEASURE = 'INV'   -- 재고
+				AND A.AGGR_DV = 'CG'
+				AND A.CATEGORY_DV = 'C'
+				ORDER BY CELL_GROUP
+		END
+
+
+
+
+
+
+END
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_REASON","343060358","1","
+/*
+ * Program ID   : SCP0093_GET_DIO_TREND_DATA_REASON
+ * Description  : SCP0093 DIO TREND Report 팝업 화면의 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/10/06   vadabi3			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - 최초생성
+ * 2023/01/10   vadabi3			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - 모델 = aggr_dv -> MD 모델별 + category_dv가 A또는 P인 것
+ * 2023/01/11   vadabi3			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - 모델 대상 @p_plan_start_yyyymmdd 일치로 제한
+ * 2023/01/11   vadabi3			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - p_category_dv 추가
+ * 2023/01/25   vadabi3			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - Plan Date 관랸 이슈 조치
+ * 2023/02/02   vadabi3			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - Cell Convert가 체크되어 있으면 Pack/Cell 둘다 체크된것과 동일
+ * 2023/02/02   vadabi3			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - Target Cell 적용
+ * 2023/03/20   vadabi3			PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제  - [MODEL -> CELL] 기준으로 수정
+ ----------------------------------------------------------------------------------------------------
+ EXEC SCP0093_GET_DIO_TREND_DATA_REASON 
+ @p_plan_start_yyyymmdd = '20230313'
+ , @p_yyyymm = '202303'	
+ , @p_category_dv = 'C'
+ , @p_division_id    = '81' 
+ , @p_item_id		 = '' 	
+ , @P_AGGR_DV		 = 'CG' 
+ , @p_cell_group	 = '' 	
+ , @p_dio_reason	 = '' 	
+ , @debug_mode		 = '' 
+
+ */
+CREATE PROCEDURE [dbo].[SCP0093_GET_DIO_TREND_DATA_REASON]
+  @p_plan_start_yyyymmdd    NVARCHAR(8)	
+, @p_yyyymm			        NVARCHAR(6)		-- Monthly bucket 조회 기간
+, @p_category_dv			NVARCHAR(MAX)	-- Category 조건  = [P, A, C]
+, @p_division_id            NVARCHAR(30)	-- division
+, @p_item_id				NVARCHAR(150)	-- 모델/셀그룹(닉네임.Level4) 조건  -- NULL이면 전체 
+, @P_AGGR_DV				NVARCHAR(10)	-- 집계구분 [MD : 모델(Item), CG: 셀그룹(Level4)]
+, @p_cell_group				NVARCHAR(30)    -- Cell GRoup 사용자 직접 입력
+, @p_dio_reason				NVARCHAR(30)    -- DIO 초과 사유
+, @debug_mode				NVARCHAR(1) = 'T'
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	-- 2023/03/20 CELL 기준으로 적용
+	DECLARE @CELL_CNT INT = 0;
+	SET @p_category_dv = 'C';
+	SET @P_AGGR_DV = 'CG';
+	
+
+	----------------------------------------------------------------------------------------------------------
+	-- #T_CELL_GROUP_INFO
+	----------------------------------------------------------------------------------------------------------
+    IF (OBJECT_ID('tempdb..#T_CELL_GROUP_INFO') IS NOT NULL)
+    BEGIN    
+        DROP TABLE #T_CELL_GROUP_INFO;
+    END
+    
+    CREATE TABLE #T_CELL_GROUP_INFO
+	(
+    	[DIVISION_ID] [nvarchar](120),
+    	[CELL_GROUP] [nvarchar](300),
+    	[AGGR_DV] [nvarchar](20),
+    	[CATEGORY_DV] CHAR(1)
+    );
+
+	SELECT @CELL_CNT = COUNT(*)
+	  FROM SCP_RPT_DIO_TREND_MM WITH (NOLOCK)
+	 WHERE 1 = 1
+	   AND yyyymm  = @p_yyyymm 
+	   AND plan_start_yyyymmdd = @p_plan_start_yyyymmdd
+	   AND CATEGORY_DV	= 'C'	 
+	   AND AGGR_DV		= 'CG'      
+  GROUP BY DIVISION_ID
+		 , CELL_GROUP
+		 , AGGR_DV
+		 , CATEGORY_DV
+
+
+	IF @CELL_CNT > 0 
+		BEGIN
+			   INSERT INTO #T_CELL_GROUP_INFO
+					(
+					  DIVISION_ID
+					, CELL_GROUP
+					, AGGR_DV
+					, CATEGORY_DV
+					)
+			   SELECT DIVISION_ID
+					, CELL_GROUP
+					, AGGR_DV
+					, CATEGORY_DV
+				 FROM SCP_RPT_DIO_TREND_MM WITH (NOLOCK)
+				WHERE 1 = 1
+				  AND yyyymm  = @p_yyyymm
+				  AND plan_start_yyyymmdd = @p_plan_start_yyyymmdd
+				  AND CATEGORY_DV	= 'C'	 
+				  AND AGGR_DV		= 'CG'      
+			 GROUP BY DIVISION_ID
+					, CELL_GROUP
+					, AGGR_DV
+					, CATEGORY_DV
+		END
+	ELSE
+		BEGIN
+			   INSERT INTO #T_CELL_GROUP_INFO
+					(
+					  DIVISION_ID
+					, CELL_GROUP
+					, AGGR_DV
+					, CATEGORY_DV
+					)
+			   SELECT "
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_REASON","343060358","2","DIVISION_ID
+					, CELL_GROUP
+					, AGGR_DV
+					, CATEGORY_DV
+				 FROM SCP_RPT_DIO_TREND_MM WITH (NOLOCK)
+				WHERE 1 = 1
+				  AND CATEGORY_DV	= 'C'	 
+				  AND AGGR_DV		= 'CG'      
+			 GROUP BY DIVISION_ID
+					, CELL_GROUP
+					, AGGR_DV
+					, CATEGORY_DV
+		END
+
+	----------------------------------------------------------------------------------------------------------
+	-- SEARCH
+	----------------------------------------------------------------------------------------------------------
+    ;WITH W_REASON_LIST AS
+	(
+			SELECT C.*
+				 , REASON_LIST.*
+			  FROM #T_CELL_GROUP_INFO C
+		CROSS JOIN 
+			(
+				SELECT COLUMN_NAME		 AS REASON_ID
+					 , COLUMN_LABEL_NAME AS REASON
+					 , SORT_ORDER_NO     AS REASON_SORT
+				  FROM SCM_MST_SHEET_MEASURE WITH(NOLOCK)	
+				 WHERE PROGRAM_ID = 'SCP0093' 
+				   AND SHEET_NAME ='POP_DIO_REASON'
+			) REASON_LIST
+			INNER JOIN SCM_MST_DIVISION AS D WITH(NOLOCK) ON C.DIVISION_ID = D.DIVISION_ID
+	)
+
+	,W_DATA AS
+	(
+			SELECT yyyymm
+			     , DIVISION_ID	
+				 , cell_group		
+				 , AGGR_DV		
+				 , CATEGORY_DV	
+				 , DIO_REASON	
+			     , QUANTITY
+				 , AMOUNT
+				 , REMARK
+			  FROM SCP_RPT_DIO_TREND_MM_REASON  WITH (NOLOCK)
+             WHERE yyyymm = @p_yyyymm
+				AND AGGR_DV = 'CG'
+				AND CATEGORY_DV = 'C'
+	)
+	,W_GAP AS
+	(
+	   select PLAN_START_YYYYMMDD
+			, YYYYMM
+			, DIVISION_ID
+			, cell_group
+			, AGGR_DV
+			, CATEGORY_DV
+			, MEASURE AS REASON
+			, 'gap' AS REASON_NAME
+			, SUM(QUANTITY) AS QUANTITY
+			, SUM(AMOUNT) AS AMOUNT
+			, SUM(DIO) AS DIO
+			, 120 AS REASON_SORT
+		 from SCP_RPT_DIO_TREND_MM  WITH (NOLOCK)
+		where plan_start_yyyymmdd  = @p_plan_start_yyyymmdd 
+		  and yyyymm = @p_yyyymm
+		  and DIVISION_ID = @p_division_id
+		  and MEASURE='GAP'
+		  AND CATEGORY_DV = 'C'	 
+		  AND AGGR_DV = 'CG'     
+	 GROUP BY PLAN_START_YYYYMMDD
+			, YYYYMM
+			, DIVISION_ID
+			, cell_group
+			, AGGR_DV
+		    , CATEGORY_DV
+			, MEASURE
+	)
+	,W_SUM AS
+	(
+	   select YYYYMM
+			, DIVISION_ID
+			, cell_group
+			, AGGR_DV
+		    , CATEGORY_DV
+			, SUM(QUANTITY) AS QUANTITY
+			, SUM(AMOUNT) AS AMOUNT
+		 from SCP_RPT_DIO_TREND_MM_REASON  WITH (NOLOCK)
+		where yyyymm = @P_YYYYMM
+	      and DIVISION_ID = @p_division_id
+		  and DIO_REASON='SUM'
+		  AND CATEGORY_DV = 'C'	 
+		  AND AGGR_DV = 'CG'  
+	 group by YYYYMM
+			, DIVISION_ID
+			, cell_group
+			, AGGR_DV
+			, CATEGORY_DV
+	)
+	 SELECT *
+	 FROM
+	 (
+			--------------------------------------------------------------------------------------------------------------------------------
+			-- W_REASON_LIST
+			--------------------------------------------------------------------------------------------------------------------------------
+			SELECT @P_YYYYMM as YYYYMM
+			     , R.DIVISION_ID
+				 , R.cell_group
+				 , R.AGGR_DV
+				 , R.CATEGORY_DV
+				 , R.REASON_ID
+				 , R.REASON
+				 , R.REASON_SORT
+			     , DATA.QUANTITY
+				 , DATA.AMOUNT
+				 , DATA.REMARK
+			  FROM W_REASON_LIST R
+		 LEFT JOIN W_DATA DATA   ON R.DIVISION_ID	= DATA.DIVISION_ID	
+								AND R.cell_group	= DATA.cell_group		
+								AND R.AGGR_DV		= DATA.AGGR_DV		
+								AND R.CATEGORY_DV	= DATA.CATEGORY_DV	
+								AND R.REASON_ID	    = DATA.DIO_REASON	
+									         
+			  WHERE 1 = 1 
+				AND ( ISNULL(@p_division_id, '')		= '' OR R.DIVISION_ID	IN (SELECT token FROM dbo.String_Split(@p_division_id,',')) )
+				AND ( ISNULL(@p_dio_reason, '')	        = '' OR R.REASON_ID	    IN (SELECT token FROM dbo.String_Split(@p_dio_reason,',')) )
+				AND ( ISNULL(@p_cell_group, '')		    = '' OR R.CELL_GROUP	IN (SELECT token FROM dbo.String_Split(@p_cell_group,',')) )
+				AND ( ISNULL(@P_AGGR_DV, '')			= '' OR R.AGGR_DV		IN (SELECT token FROM dbo.String_Split(@P_AGGR_DV,',')) )
+				AND ( ISNULL(@p_category_dv, '')		= '' OR R.CATEGORY_DV	IN (SELECT token FROM dbo.String_Split(@p_category_dv,',')) )
+				AND R.REASON_ID != 'GAP'
+
+		---------------------------------------"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_DATA_REASON","343060358","3","-----------------------------------------------------------------------------------------
+		-- GAP  = GAP - SUM
+		--------------------------------------------------------------------------------------------------------------------------------
+		UNION ALL
+			SELECT     @P_YYYYMM as YYYYMM
+					 , R.DIVISION_ID
+					 , R.cell_group
+					 , R.AGGR_DV
+					 , R.CATEGORY_DV
+					 , R.REASON_ID
+					 , R.REASON
+					 , R.REASON_SORT
+					 , ISNULL(A.QUANTITY,0) - isnull(B.QUANTITY,0) AS QUANTITY
+					 , ISNULL(A.AMOUNT,0) - isnull(B.AMOUNT,0) AS AMOUNT
+					 , null AS REMARK
+				FROM W_REASON_LIST R
+		   LEFT JOIN W_GAP A WITH(NOLOCK) 
+				  ON A.DIVISION_ID		= R.DIVISION_ID 
+				 AND A.cell_group		= R.cell_group  
+				 AND A.AGGR_DV			= R.AGGR_DV   
+				 and A.REASON		    = 'GAP' 
+		   LEFT JOIN W_SUM B WITH(NOLOCK) 
+				  ON B.DIVISION_ID		= R.DIVISION_ID 
+				 AND B.cell_group		= R.cell_group  
+				 AND B.AGGR_DV			= R.AGGR_DV 
+			   WHERE  1 = 1 
+			   	 AND ( ISNULL(@p_division_id, '')		= '' OR R.DIVISION_ID	IN (SELECT token FROM dbo.String_Split(@p_division_id,',')) )
+			   	 AND ( ISNULL(@p_dio_reason, '')	    = '' OR R.REASON_ID	    IN (SELECT token FROM dbo.String_Split(@p_dio_reason,',')) )
+			   	 AND ( ISNULL(@p_cell_group, '')		= '' OR R.CELL_GROUP	IN (SELECT token FROM dbo.String_Split(@p_cell_group,',')) )
+			   	 AND ( ISNULL(@P_AGGR_DV, '')			= '' OR R.AGGR_DV		IN (SELECT token FROM dbo.String_Split(@P_AGGR_DV,',')) )
+			   	 AND ( ISNULL(@p_category_dv, '')		= '' OR R.CATEGORY_DV	IN (SELECT token FROM dbo.String_Split(@p_category_dv,',')) )
+			   	 AND R.REASON_ID = 'GAP'
+		) LIST	
+	   where 1 = 1
+	Order by DIVISION_ID
+			,CELL_GROUP
+			,AGGR_DV
+			,CATEGORY_DV
+		    ,REASON_SORT
+				
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_REPORT_CHART_MODEL","359060415","1","
+
+
+/*
+ * Program ID   : SCP0093_GET_DIO_TREND_REPORT_CHART_MODEL
+ * Description  : SCP0093 DIO TREND Report 화면의 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/09/26   hyerakim	    Query
+ * 2022/09/26   vadabi3			최초생성
+ * 2022/10/04   vadabi3			조회조건 추가 및 수정
+ * 2022/10/14   vadabi3			Model / Cell Group 선택 시 차트 표시
+ ----------------------------------------------------------------------------------------------------
+ EXEC SCP0093_GET_DIO_TREND_REPORT_CHART_MODEL 
+ @p_division_id='81'
+ , @p_plan_start_yyyymmdd='20221107'
+ , @p_item_id='AMAAGPL65-A1'
+ , @p_from_yyyymm='202201'
+ , @p_to_yyyymm='202306'
+ , @P_AGGR_DV='MD'
+ , @P_CATEGORY_DV='P'
+ , @P_UNIT_QTY='1'
+ , @P_UNIT_AMOUNT='1'
+ , @p_cell_group='A5-C'
+ , @p_graph_type='COUNT'
+ , @p_bucket_type='MONTHLY'
+ , @debug_mode='F'
+
+
+  EXEC SCP0093_GET_DIO_TREND_REPORT_CHART_MODEL 
+ @p_division_id='81'
+ , @p_plan_start_yyyymmdd='20221107'
+ , @p_item_id='합계'
+ , @p_from_yyyymm='202201'
+ , @p_to_yyyymm='202306'
+ , @P_AGGR_DV='TT'
+ , @P_CATEGORY_DV='P'
+ , @P_UNIT_QTY='1'
+ , @P_UNIT_AMOUNT='1'
+ , @p_cell_group='A5-C'
+ , @p_graph_type='합계'
+ , @p_bucket_type='MONTHLY'
+ , @debug_mode='F'
+
+EXEC SCP0093_GET_DIO_TREND_REPORT_CHART_MODEL
+   @p_division_id='81'
+   , @p_plan_start_yyyymmdd='20221107'
+   , @p_item_id='합계'
+   , @p_from_yyyymm='202201'
+   , @p_to_yyyymm='202306'
+   , @P_AGGR_DV='TT' -- 'CG'  --> 'TT'
+   , @p_category_dv='P'
+   , @P_UNIT_QTY='1'
+   , @P_UNIT_AMOUNT='1'
+   , @p_cell_group='합계'
+   , @p_graph_type='COUNT'
+   , @p_bucket_type='MONTHLY'
+   , @debug_mode='F'
+
+
+
+ */
+CREATE PROCEDURE [dbo].[SCP0093_GET_DIO_TREND_REPORT_CHART_MODEL]
+  @p_division_id            NVARCHAR(30)	-- division
+, @p_plan_start_yyyymmdd	NVARCHAR(8)		-- Plan Date
+, @p_item_id				NVARCHAR(150)	-- 모델  
+, @p_from_yyyymm			NVARCHAR(6)		-- Monthly bucket 조회 기간
+, @p_to_yyyymm		        NVARCHAR(6)		-- Monthly bucket 조회 기간
+, @P_AGGR_DV				NVARCHAR(10)	-- 집계구분 [MD : 모델(Item), CG: 셀그룹(Level4)]
+, @p_category_dv			NVARCHAR(50)    -- Category 구분  = [P:Pack, A:Cell, C:Cell Convert]
+, @P_UNIT_QTY				NUMERIC(20,10) = 1  -- 금액 단위 (default 1 ) / 엑셀 원본은 10만단위... (ui에서 조회시 선택....)  
+, @P_UNIT_AMOUNT			NUMERIC(20,10) = 1  -- 금액 단위 (default 1 ) / 엑셀 원본은 10만단위... (ui에서 조회시 선택....)  
+                                            -- p_graph_type = 수량이면 수량의 단위
+											-- p_graph_type = 금액이면 금액의 단위
+, @p_cell_group				NVARCHAR(30)    -- 셀그룹(닉네임.Level4) 
+, @p_graph_type				NVARCHAR(30)    -- 수량 /금액 선택
+, @p_bucket_type		    NVARCHAR(30)    -- MONTHLY< WEEKLY, DAILY 중 선택
+, @debug_mode				NVARCHAR(1) = 'T'
+AS
+BEGIN
+    
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+/*
+-----------------------------------------------------------------------------------------------------------
+-- 재고 Trend Measure 정의 
+-- db measure에 '_' 포함되지 않도록 한다.
+-- ui measure는 = db measure + '_' + 컬럼구분값 (QTY : QUANTITY, AMT : AMOUNT, DIO : DIO) 
+-----------------------------------------------------------------------------------------------------------
+*/
+IF ISNULL(@P_UNIT_QTY, 0) = 0 
+   SET @P_UNIT_QTY = 1;
+
+IF ISNULL(@P_UNIT_AMOUNT, 0) = 0 
+   SET @P_UNIT_AMOUNT = 1;
+
+
+select @p_from_yyyymm = substring(@p_from_yyyymm,1,6) 
+select @p_to_yyyymm = substring(@p_to_yyyymm,1,6)  	
+
+
+	--#######################################################################
+	-- Chart TMP_MONTH
+	--#######################################################################
+		IF OBJECT_ID('tempdb..#TMP_MONTH') IS NOT NULL	
+		DROP TABLE #TMP_MONTH;
+
+			SELECT DISTINCT B.YYYYMM  
+			  INTO #TMP_MONTH 
+			  FROM SCM_MST_BUCKET B WITH(NOLOCK) 
+			 WHERE B.YYYYMM  BETWEEN @P_FROM_YYYYMM AND  @P_TO_YYYYMM
+
+
+	--#########################################"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_REPORT_CHART_MODEL","359060415","2","##############################
+	-- #TMP_DATA
+	--#######################################################################
+	IF OBJECT_ID('tempdb..#TMP_DATA') IS NOT NULL	
+		DROP TABLE #TMP_DATA;
+
+
+
+	--#######################################################################
+	-- Chart Data Create
+	--#######################################################################
+;with selected_measures as (
+					select column_name as measure_ui 
+						  ,case when  column_name = 'INV_DIO' then 1
+								when  column_name = 'STANDARD_DIO' then 2
+								when  column_name = 'RTF_QTY' then 3
+								when  column_name = 'PROD_QTY' then 4
+								when  column_name = 'INV_QTY' then 5
+								else 10
+						        end as   sort_order_no
+						  , ROW_NUMBER() OVER (PARTITION BY column_name ORDER BY sort_order_no DESC) AS RankNo
+					from scm_mst_titleset_user with(nolock) 
+					where 1=1
+					  and program_id = 'SCP0093'
+					  and sheet_name = 'MAIN'
+					  and column_name in ('INV_QTY','PROD_QTY','RTF_QTY','STANDARD_DIO', 'INV_DIO')
+				)
+, target_info as ( 
+					--- user별 설정한 조회 대상 measure , sample_data와 조인하기 전 1차 가공 
+					select sm.measure_ui
+						  , substring(sm.measure_ui, 1, charindex('_', sm.measure_ui)-1)  as measure_db 
+						  , substring(sm.measure_ui, charindex('_', sm.measure_ui)+1, len(sm.measure_ui) )  as col_div
+						  ,sm.sort_order_no
+					 from selected_measures sm
+					 where RankNo = 1
+				)
+, measures as (
+				-- UI Category Measure 등록시 주의 필요 -  상단 코멘트 참조.
+				SELECT M.COLUMN_NAME																	AS MEASURE_UI
+					  ,M.COLUMN_LABEL_NAME																AS MEASURE_NAME
+					  ,SUBSTRING(M.COLUMN_NAME, 1, CHARINDEX('_', M.COLUMN_NAME)-1)						AS MEASURE_DB
+					  ,SUBSTRING(M.COLUMN_NAME, CHARINDEX('_', M.COLUMN_NAME)+1, LEN(M.COLUMN_NAME) )	AS COL_DIV
+				 FROM SCM_MST_SHEET_MEASURE M WITH(NOLOCK)
+				WHERE 1=1
+				  AND M.PROGRAM_ID = 'SCP0093'
+				  AND M.SHEET_NAME = 'MAIN'
+				  AND M.VALID_YN = 'Y'	 
+			)
+select  max(measure_ui) as measure_ui
+       ,yyyymm
+	   /*
+		  ,case when max(col_div) = 'QTY' or max(col_div) = 'AMT' 
+		        then FORMAT(ROUND(sum(value) / 1, 0), '##0')
+				when max(col_div) = 'DIO' 
+				then FORMAT(ROUND(sum(dio), 1), '##0.0')
+			    else null   -- else case는 있을 수 없음 !!!  (있으면 안됨!!) 
+			end as value
+		*/
+	   , CASE 
+		 WHEN MAX(col_div) LIKE '%DIO' THEN  ROUND(ISNULL(MAX(value), 0),1)
+		 ELSE ROUND(ISNULL(MAX(value), 0),0)     
+		 END  AS value
+	   , CASE 
+		 WHEN  MAX(col_div) LIKE '%DIO' THEN  FORMAT(ISNULL(MAX(value), 0) , '##0.0')   
+		 ELSE  FORMAT( ISNULL(MAX(value), 0) , '##0')        
+		 END  AS value_format
+
+	  INTO #TMP_DATA
+from
+(
+	select dt.yyyymm
+		  ,dt.item_id
+		  ,dt.cell_group
+		  ,dt.quantity
+		  ,dt.dio
+		  ,dt.amount
+		  ,ti.measure_ui
+		  ,ti.col_div
+		  ,ti.sort_order_no
+		  ,m.measure_name
+		  ,case when ti.col_div = 'QTY' then dt.quantity / @P_UNIT_QTY
+				when ti.col_div = 'DIO' then dt.dio
+				when ti.col_div = 'AMT' then dt.amount  / @P_UNIT_AMOUNT
+			    else null   -- else case는 있을 수 없음 !!!  (있으면 안됨!!) 
+			end as value 
+	from SCP_RPT_DIO_TREND_MM dt 
+		 inner join target_info ti on dt.measure = ti.measure_db 
+		 inner join measures m  on m.measure_ui = ti.measure_ui
+
+		 left join scm_mst_sso_dept_info di with(nolock)    
+			    on di.dept_id = dt.dept_id
+		 left join scm_mst_sso_user_info ui with(nolock) 
+			    on ui.user_id = dt.pic_id 
+		 left join scm_mst_project pj with(nolock)
+				on pj.division_id = dt.division_id
+			   and pj.project_code = dt.project_code
+
+	where 1=1
+	  and dt.plan_starT_yyyymmdd = @P_PLAN_START_YYYYMMDD
+	  and dt.division_id		 = @P_DIVISION_ID
+	  and dt.aggr_dv			 = @P_AGGR_DV 
+	  and dt.yyyymm		BETWEEN @P_FROM_YYYYMM 
+	                        AND @P_TO_YYYYMM
+	  and dt.category_dv         = @p_category_dv						
+	  and dt.item_id			 = @P_ITEM_ID
+) as data
+group by yyyymm, measure_ui
+order by yyyymm;
+
+
+
+	--########################"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_GET_DIO_TREND_REPORT_CHART_MODEL","359060415","3","###############################################
+	-- 결과 Return 
+	--#######################################################################
+		SELECT  'INV_DIO' AS DATA_TYPE
+		        ,m.yyyymm
+		        ,isnull(t.value,0) as value 
+		from #TMP_MONTH m
+		left outer join (select * from #TMP_DATA where measure_ui = 'INV_DIO') t on m.yyyymm = t.yyyymm
+		order by m.yyyymm;
+
+		SELECT  'STANDARD_DIO' AS DATA_TYPE
+		        ,m.yyyymm
+		        ,isnull(t.value,0) as value 
+		from #TMP_MONTH m
+		left outer join (select * from #TMP_DATA where measure_ui = 'STANDARD_DIO') t on m.yyyymm = t.yyyymm
+		order by m.yyyymm;
+
+		SELECT  'RTF_QTY' AS DATA_TYPE
+		        ,m.yyyymm
+		        ,isnull(t.value,0) as value 
+		from #TMP_MONTH m
+		left outer join (select * from #TMP_DATA where measure_ui = 'RTF_QTY') t on m.yyyymm = t.yyyymm
+		order by m.yyyymm;
+	
+		SELECT  'PROD_QTY' AS DATA_TYPE
+		        ,m.yyyymm
+		        ,isnull(t.value,0) as value 
+		from #TMP_MONTH m
+		left outer join (select * from #TMP_DATA where measure_ui = 'PROD_QTY') t on m.yyyymm = t.yyyymm
+		order by m.yyyymm;
+
+		SELECT  'INV_QTY' AS DATA_TYPE
+		        ,m.yyyymm
+		        ,isnull(t.value,0) as value 
+		from #TMP_MONTH m
+		left outer join (select * from #TMP_DATA where measure_ui = 'INV_QTY') t on m.yyyymm = t.yyyymm
+		order by m.yyyymm;
+
+	--#######################################################################
+	-- Range Return
+	--#######################################################################
+		SELECT SORT
+		      ,GUBUN
+			  ,DATA_MIN AS DATA_MIN
+		      ,DATA_MAX AS DATA_MAX
+			  ,SPACING AS SPACING
+			  ,d_min
+			  ,d_max
+		FROM
+		(
+		  SELECT  0 AS SORT
+		         ,'CHART_BASE' AS GUBUN
+				 , min(CONVERT(NUMERIC,value)) AS d_min
+				 , max(CONVERT(NUMERIC,value)) AS d_max
+				 , abs(min(CONVERT(NUMERIC,value))) * -1 as DATA_MIN
+		         , abs(max(CONVERT(NUMERIC,value))) * 2 as DATA_MAX
+				 , 600 AS SPACING
+			FROM #TMP_DATA 
+			WHERE measure_ui IN ( N'RTF_QTY')
+
+		  --------------------------------------------------------------------
+		  Union  
+		  SELECT  1 AS SORT
+		         ,'CHART_DOWN' AS GUBUN
+				 , min(CONVERT(NUMERIC,value)) AS d_min
+				 , max(CONVERT(NUMERIC,value)) AS d_max
+				 , -100 as DATA_MIN
+		         , abs(max(CONVERT(NUMERIC,value))) * 2 
+				 , 100 AS SPACING
+			FROM #TMP_DATA 
+		   WHERE measure_ui IN ( N'PROD_QTY', N'INV_QTY')
+			--WHERE DATA_TYPE IN ( N'조립')
+			--WHERE DATA_TYPE IN ( N'조립', N'재고')
+			--WHERE DATA_TYPE IN ( N'재고')
+			--------------------------------------------------------------------
+			Union
+		    SELECT 2 AS SORT
+			     , 'CHART_UP' AS GUBUN
+				 , min(CONVERT(NUMERIC,value)) AS d_min
+				 , max(CONVERT(NUMERIC,value)) AS d_max
+				 , max(CONVERT(NUMERIC,value)) * -1 as DATA_MIN
+				 , max(CONVERT(NUMERIC,value)) as DATA_MAX
+				 --, abs(min(CONVERT(NUMERIC,value))) * -2 as DATA_MIN
+		         --, abs(max(CONVERT(NUMERIC,value))) + 5 as DATA_MAX
+				 , 2 AS SPACING
+			FROM #TMP_DATA 
+			WHERE measure_ui IN ( N'INV_DIO', 'STANDARD_DIO')
+
+	    ) AS chart2;
+
+
+
+
+
+
+IF OBJECT_ID('tempdb..#TMP_DATA') IS NOT NULL	
+	DROP TABLE #TMP_DATA;
+
+
+END
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_SAVE_DIO_REPORT_REASON","375060472","1","
+
+
+/*
+ * Program ID   : SCP0093_SAVE_DIO_REPORT_REASON
+ * Description  : DIO Report REASON 저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/10/27   vadabi3			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - 최초생성
+ * 2023/01/11   vadabi3			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - 모델 대상 @p_plan_start_yyyymmdd 일치로 제한
+ * 2023/01/11   vadabi3			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - p_category_dv 추가
+ * 2023/01/25   vadabi3			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - Plan Date 관랸 이슈 조치
+ * 2023/03/20   vadabi3			PJ20230691R  LGES SCM 역량 강화 위한 SCP 개선과제  - [MODEL -> CELL] 기준으로 수정
+ ----------------------------------------------------------------------------------------------------
+  EXEC SCP0093_SAVE_DIO_REPORT_REASON 
+  @p_active_flag='M'
+  , @p_yyyymm='202302'
+  , @p_division_id='81'
+  , @p_cell_group='????'
+  , @p_aggr_dv='*'
+  , @p_item_id='ACEH1057I-A1'
+  , @p_dio_reason='QUALITY_ISSUES_REPORT'
+  , @p_quantity='1'
+  , @p_amount=null
+  , @p_remark='test'
+  , @p_user_id='vadabi3'
+
+ EXEC SCP0093_SAVE_DIO_REPORT_REASON 
+ @p_active_flag='M^M'
+ , @p_yyyymm='202301^202301'
+ , @p_division_id='81^81'
+ , @p_cell_group='????^????'
+ , @p_aggr_dv='*^*'
+ , @p_item_id='ACEH1057I-A1^ACEH1057I-A1'
+ , @p_dio_reason='ETC1^ETC2'
+ , @p_quantity='1^0'
+ , @p_amount='0^2'
+ , @p_remark='^'
+ , @p_user_id='vadabi3'
+
+ */
+
+CREATE PROCEDURE [dbo].[SCP0093_SAVE_DIO_REPORT_REASON]
+ @p_active_flag             NVARCHAR(MAX) , 
+ @p_plan_start_yyyymmdd     NVARCHAR(8)	  , 
+ @p_yyyymm             		NVARCHAR(MAX) ,  
+ @p_category_dv			    NVARCHAR(MAX),
+ @p_division_id             NVARCHAR(MAX) ,       
+ @p_cell_group             	NVARCHAR(MAX) , 
+ @p_aggr_dv             	NVARCHAR(MAX) , 
+ @p_item_id             	NVARCHAR(MAX) ,    
+ @p_dio_reason             	NVARCHAR(MAX) ,      
+ @p_quantity             	NVARCHAR(MAX) ,  
+ @p_amount             		NVARCHAR(MAX) ,  
+ @p_remark             		NVARCHAR(MAX) ,
+ @p_user_id             	NVARCHAR(MAX) 
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+
+	DECLARE @v_active_flag               	   	   NVARCHAR(MAX) ;    
+	DECLARE @v_plan_start_yyyymmdd                 NVARCHAR(MAX) ;   
+	DECLARE @v_yyyymm                    	   	   NVARCHAR(MAX) ;  
+	DECLARE @v_division_id               	   	   NVARCHAR(MAX) ;      
+	DECLARE @v_cell_group                	   	   NVARCHAR(MAX) ; 
+	DECLARE @v_aggr_dv                	   	       NVARCHAR(MAX) ; 
+	DECLARE @v_item_id                   	   	   NVARCHAR(MAX) = '*';  
+	DECLARE @v_dio_reason                	   	   NVARCHAR(MAX) ;     
+	DECLARE @v_quantity                  	   	   NVARCHAR(MAX) ;     
+	DECLARE @v_amount                    	   	   NVARCHAR(MAX) ;  
+	DECLARE @v_remark                    	   	   NVARCHAR(MAX) ;   
+	DECLARE @v_category_dv	                       NVARCHAR(MAX) ; 
+
+	DECLARE @n_quantity                  	   	   numeric;     
+	DECLARE @n_amount                    	   	   numeric;  
+	DECLARE @n_quantity_sum                  	   numeric;     
+	DECLARE @n_amount_sum                   	   numeric ; 
+
+
+	SET @v_active_flag           	 = NULL;  
+	SET @v_plan_start_yyyymmdd       = NULL;  
+	SET @v_yyyymm                	 = NULL;  
+	SET @v_division_id           	 = NULL;  
+	SET @v_cell_group            	 = NULL;  
+	SET @v_aggr_dv            	     = NULL;  
+  --SET @v_item_id               	 = NULL;  
+	SET @v_dio_reaso"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_SAVE_DIO_REPORT_REASON","375060472","2","n             	 = NULL;  
+	SET @v_quantity              	 = NULL;  
+	SET @v_amount                	 = NULL;  
+	SET @v_remark                	 = NULL; 
+	SET @v_category_dv               = NULL; 
+	SET @n_quantity					 = 0;  
+	SET @n_amount					 = 0;  
+	SET @n_quantity_sum              = 0;  
+	SET @n_amount_sum                = 0;  
+
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0093_SAVE_DIO_REPORT_REASON';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+	BEGIN TRY
+
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);   
+
+		WHILE LEN(@p_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN   
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;	
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			SET @v_active_flag 			= [dbo].[SCM_ARR_SPL_VAL](@p_active_flag			, @v_delimiter , @mst_loop_cnt) ; 
+			SET @v_plan_start_yyyymmdd	= [dbo].[SCM_ARR_SPL_VAL](@p_plan_start_yyyymmdd    , @v_delimiter , @mst_loop_cnt) ;    
+			SET @v_yyyymm      			= [dbo].[SCM_ARR_SPL_VAL](@p_yyyymm     			, @v_delimiter , @mst_loop_cnt) ;   
+			SET @v_division_id 			= [dbo].[SCM_ARR_SPL_VAL](@p_division_id			, @v_delimiter , @mst_loop_cnt) ;    
+			SET @v_cell_group  			= [dbo].[SCM_ARR_SPL_VAL](@p_cell_group 			, @v_delimiter , @mst_loop_cnt) ;    
+			SET @v_aggr_dv  			= [dbo].[SCM_ARR_SPL_VAL](@p_aggr_dv 				, @v_delimiter , @mst_loop_cnt) ;   
+		  --SET @v_item_id     			= [dbo].[SCM_ARR_SPL_VAL](@p_item_id    			, @v_delimiter , @mst_loop_cnt) ;   
+			SET @v_dio_reason  			= [dbo].[SCM_ARR_SPL_VAL](@p_dio_reason  			, @v_delimiter , @mst_loop_cnt) ;     
+			SET @v_quantity    			= [dbo].[SCM_ARR_SPL_VAL](@p_quantity   			, @v_delimiter , @mst_loop_cnt) ;    
+			SET @v_amount      			= [dbo].[SCM_ARR_SPL_VAL](@p_amount     			, @v_delimiter , @mst_loop_cnt) ;   
+			SET @v_remark      			= [dbo].[SCM_ARR_SPL_VAL](@p_remark     			, @v_delimiter , @mst_loop_cnt) ;    
+			SET @v_category_dv      	= [dbo].[SCM_ARR_SPL_VAL](@p_category_dv     		, @v_delimiter , @mst_loop_cnt) ;  
+			-----------------------------------------------------------------------
+			if @v_quantity = '' or @v_quantity is null
+				begin
+				SET @v_quantity = null;
+				SET @n_quantity = 0;
+				end
+			else
+				begin
+				SET @n_quantity = CONVERT(numeric, @v_quantity);
+				end
+
+			-----------------------------------------------------------------------
+			if @v_amount = '' or @v_amount is null
+				begin
+				SET @v_amount = null;
+				SET @n_amount = 0;
+				end
+			else
+				begin
+				SET @n_amount = CONVERT(numeric, @v_amount);
+				end
+
+			-----------------------------------------------------------------------
+			--SET @n_quantity_sum     += @n_quantity;
+			--SET @n_amount_sum		+= @n_amount;
+
+			-----------------------------------------------------------------------
+			-- @v_remark not null
+			if @v_remark = '' or @v_remark is null
+				begin
+				SET @v_remark = ' ';
+				end
+
+
+			---------------------------------------------------------------------------------------------------------------------
+			-- 각 ROW
+			---------------------------------------------------------------------------------------------------------------------
+			MERGE INTO SCP_RPT_DIO_TREND_MM_REASON A		
+					USING (
+					 		  SELECT 
+									@v_active_flag        AS ACTIVE_FLAG    
+								   ,@v_yyyymm             AS YYYYMM       
+								   ,@v_division_id        AS DIVISION_ID  
+								   ,@v_cell_group         AS CELL_GROUP   
+								   ,@v_aggr_dv            AS AGGR_DV      
+								   ,@v_item_id            AS ITEM_ID      
+								   ,@v_dio_reason         AS DIO_RE"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_SAVE_DIO_REPORT_REASON","375060472","3","ASON    
+								   ,@v_quantity           AS QUANTITY     
+								   ,@v_amount             AS AMOUNT       
+								   ,@v_remark             AS REMARK       
+								   ,@v_category_dv        AS CATEGORY_DV    
+									--,WEEK_NO			
+									--,PLAN_DATE		
+									--,ATTRIBUTE1		
+									--,ATTRIBUTE2		
+									--,ATTRIBUTE3		
+									--,ATTRIBUTE4		
+									--,ATTRIBUTE5		
+									--,ATTRIBUTE6		
+									--,ATTRIBUTE7		
+									--,ATTRIBUTE8		
+									--,ATTRIBUTE9		
+									--,ATTRIBUTE10		
+						) B
+				  ON(     
+							  A.YYYYMM			=  B.YYYYMM
+						  AND A.DIVISION_ID		=  B.DIVISION_ID
+						  AND A.ITEM_ID			=  B.ITEM_ID
+						  AND A.CELL_GROUP		=  B.CELL_GROUP
+						  AND A.AGGR_DV		    =  B.AGGR_DV
+						  AND A.DIO_REASON		=  B.DIO_REASON
+						  AND A.CATEGORY_DV		=  B.CATEGORY_DV 
+					)
+				  WHEN MATCHED THEN
+					 UPDATE SET 
+								 A.QUANTITY          = B.QUANTITY        
+								,A.AMOUNT			 = B.AMOUNT
+								,A.REMARK			 = B.REMARK
+								,A.LAST_UPDATED_BY	 = @p_user_id
+								,A.LAST_UPDATE_DATE	 = GETDATE()
+							 	
+				  WHEN NOT MATCHED THEN
+						INSERT  
+								   (
+									YYYYMM
+								   ,CATEGORY_DV
+								   ,DIVISION_ID			
+								   ,ITEM_ID				
+								   ,CELL_GROUP	
+								   ,AGGR_DV													
+								   ,DIO_REASON			
+								   ,QUANTITY				
+								   ,AMOUNT				
+								   ,CREATED_BY
+								   ,CREATION_DATE
+								   ,LAST_UPDATED_BY
+								   ,LAST_UPDATE_DATE
+								   ,REMARK
+
+						)
+					VALUES
+						( 
+									B.YYYYMM
+								   ,B.CATEGORY_DV
+								   ,B.DIVISION_ID			
+								   ,B.ITEM_ID				
+								   ,B.CELL_GROUP	
+								   ,B.AGGR_DV													
+								   ,B.DIO_REASON			
+								   ,B.QUANTITY				
+								   ,B.AMOUNT						
+								   ,@p_user_id				
+								   ,GETDATE()	
+								   ,@p_user_id
+								   ,GETDATE()		
+								   ,REMARK			
+						);
+		END;
+
+		COMMIT TRAN;			
+		
+		SELECT  'S' AS result_code,  @mst_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+	    if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+		BEGIN
+	 
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message     
+			; 
+		END;
+	END CATCH;
+END
+
+
+
+
+"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_SAVE_DIO_TREND_DATA","391060529","1","/* =============================================================================
+프로그램ID	: SCP0093_SAVE_DIO_TREND_DATA
+프로그램명	: Packer 보류 재고 > 기타충담금 저장
+*===================================================================================================      
+*   Date       In Charge	Description      
+*===================================================================================================      
+* 2022.02.09   vadabi3		Create   
+============================================================================= */
+/*
+
+ EXEC SCP0093_SAVE_DIO_TREND_DATA 
+ @p_active_flag='M'
+ , @p_plan_start_yyyymmdd='20221107^20221107'
+ , @p_division_id='81^81'
+ , @p_aggr_dv='ET^ET'
+ , @p_item_id='??????????^??????????'
+ , @p_cell_convert_yn='^'
+ , @p_operation_group='^'
+ , @p_category_dv='P^P'
+ , @p_measure='INV^INV'
+ , @p_yyyymm='202201^202202'
+ , @p_yyyymmValue='11^22'
+ , @p_request_user_id='vadabi3'
+*/
+
+
+--CREATE PROCEDURE dbo.SCP0093_SAVE_DIO_TREND_DATA
+CREATE PROCEDURE [dbo].[SCP0093_SAVE_DIO_TREND_DATA]
+ @p_active_flag                NVARCHAR(MAX) ,
+ @p_plan_start_yyyymmdd  	   NVARCHAR(MAX) ,  
+ @p_division_id           	   NVARCHAR(MAX) ,  
+ @p_aggr_dv               	   NVARCHAR(MAX) , 	
+ @p_item_id               	   NVARCHAR(MAX) , 	
+ @p_cell_convert_yn       	   NVARCHAR(MAX) ,	
+ @p_operation_group       	   NVARCHAR(MAX) ,	
+ @p_category_dv       	       NVARCHAR(MAX) ,	
+ @p_measure               	   NVARCHAR(MAX) ,	
+ @p_yyyymm                	   NVARCHAR(MAX) ,	
+ @p_yyyymmValue                NVARCHAR(max) ,	
+ @p_request_user_id      	   NVARCHAR(MAX) 	
+
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	SET @v_active_flag = NULL;
+
+	DECLARE @v_plan_start_yyyymmdd    	   NVARCHAR(MAX) ;      
+	DECLARE @v_division_id             	   NVARCHAR(MAX) ;   
+	DECLARE @v_aggr_dv                 	   NVARCHAR(MAX) ; 
+	DECLARE @v_item_id                 	   NVARCHAR(MAX) ; 
+	DECLARE @v_cell_convert_yn         	   NVARCHAR(MAX) ;
+	DECLARE @v_operation_group         	   NVARCHAR(MAX) ;
+	DECLARE @v_category_dv         	       NVARCHAR(MAX) ;
+	DECLARE @v_measure                 	   NVARCHAR(MAX) ;
+	DECLARE @v_yyyymm                  	   NVARCHAR(MAX) ;
+	DECLARE @v_yyyymmValue                 NVARCHAR(max) ;	
+
+	SET @v_plan_start_yyyymmdd     	 = NULL;
+	SET @v_division_id               = NULL;
+	SET @v_aggr_dv                   = NULL;
+	SET @v_item_id                   = NULL;
+	SET @v_cell_convert_yn           = NULL;
+	SET @v_operation_group           = NULL;
+	SET @v_category_dv				 = NULL;
+	SET @v_measure                   = NULL;
+	SET @v_yyyymm                    = NULL;
+	SET @v_yyyymmValue               = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0093_SAVE_DIO_TREND_DATA';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_yyyymm, @v_delimiter);   
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN   
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;	
+
+
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				SET @v_active_flag"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_SAVE_DIO_TREND_DATA","391060529","2","				= [dbo].[SCM_ARR_SPL_VAL](@p_active_flag			    , @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_plan_start_yyyymmdd  	= [dbo].[SCM_ARR_SPL_VAL](@p_plan_start_yyyymmdd        , @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_division_id          	= [dbo].[SCM_ARR_SPL_VAL](@p_division_id             	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_aggr_dv              	= [dbo].[SCM_ARR_SPL_VAL](@p_aggr_dv                 	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_item_id              	= [dbo].[SCM_ARR_SPL_VAL](@p_item_id                 	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_cell_convert_yn      	= [dbo].[SCM_ARR_SPL_VAL](@p_cell_convert_yn         	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_operation_group      	= [dbo].[SCM_ARR_SPL_VAL](@p_operation_group         	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_category_dv      	    = [dbo].[SCM_ARR_SPL_VAL](@p_category_dv        	    , @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_measure              	= [dbo].[SCM_ARR_SPL_VAL](@p_measure                 	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_yyyymm               	= [dbo].[SCM_ARR_SPL_VAL](@p_yyyymm                  	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_yyyymmValue          	= [dbo].[SCM_ARR_SPL_VAL](@p_yyyymmValue             	, @v_delimiter , @mst_loop_cnt) ; 
+			END
+
+			IF @mst_loop_cnt > 0 			
+				BEGIN		
+
+					IF( @p_active_flag ='M') 
+						BEGIN
+							
+
+
+							/********************************************************************************
+							-- UPDATE
+							********************************************************************************/
+							UPDATE SCP_RPT_DIO_TREND_MM
+							SET AMOUNT			=	@v_yyyymmValue,
+							   --QUANTITY		=	@v_yyyymmValue,
+							   -- DIO			=	@v_yyyymmValue,
+								LAST_UPDATED_BY =   @p_request_user_id,
+								LAST_UPDATE_DATE= getdate()
+							WHERE PLAN_START_YYYYMMDD = @v_plan_start_yyyymmdd
+							  AND DIVISION_ID = @v_division_id 
+							  AND AGGR_DV = @v_aggr_dv 
+							  AND YYYYMM = @v_yyyymm 
+							  AND CATEGORY_DV = @v_category_dv
+							  AND MEASURE = @v_measure 
+							  AND ITEM_ID = N'기타충당금'
+							  --AND ITEM_ID = @v_item_id 
+							;
+							
+
+							/********************************************************************************
+							-- CHECK
+							
+							SELECT @v_plan_start_yyyymmdd 
+							+ ',' + @v_division_id 
+							+ ',' + @v_aggr_dv 
+							+ ',' + @v_yyyymm
+							+ ',' + @v_category_dv
+							+ ',' + @v_measure
+							+ ',' + @v_yyyymmValue
+							+ ',' + @p_request_user_id
+
+							SELECT AMOUNT, LAST_UPDATE_DATE
+							FROM SCP_RPT_DIO_TREND_MM
+							WHERE PLAN_START_YYYYMMDD = @v_plan_start_yyyymmdd
+							  AND DIVISION_ID = @v_division_id 
+							  AND AGGR_DV = @v_aggr_dv 
+							  AND YYYYMM = @v_yyyymm 
+							  AND CATEGORY_DV = @v_category_dv
+							  AND MEASURE = @v_measure 
+							  AND ITEM_ID = N'기타충당금'
+							  --AND ITEM_ID = @v_item_id 
+							;
+							********************************************************************************/
+
+							
+
+						END
+				END 		
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+
+
+
+
+	END TRY
+
+	BEGIN CATCH 
+
+		  if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERR"
+"2025-03-01 00:00:01.020","LGCE_SCMDEV","P ","SCP0093_SAVE_DIO_TREND_DATA","391060529","3","OR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+END
+"

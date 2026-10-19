@@ -63,6 +63,33 @@
   -webkit-mask-size: contain;
 }
 
+// Ver. Cutoff Div/Type/Description 라벨 — commonStyles.formItem(140px 통일)이 짧은 라벨에는
+//   너무 넓어 labelAlign='right' 로 라벨 앞(왼쪽)에 빈 여백이 생긴다. 이 조회조건 3필드만 좁힌다.
+body .shortLabel {
+  grid-template-columns: 50px auto;
+
+  & > div:first-of-type {
+    width: 50px;
+  }
+}
+
+// Ver. Cutoff Period 라벨 — PeriodField 는 30여개 화면이 쓰는 카탈로그 컴포넌트라 className prop 이
+//   없어 위 shortLabel 을 직접 못 넘긴다(공용 컴포넌트를 이 화면 하나 때문에 고치지 않는다).
+//   display:contents wrapper 로 SearchArea 그리드 배치(12칸 배분)는 그대로 두고, 안쪽 FormItem
+//   루트(그리드 아이템의 유일한 자식)만 구조 선택자로 좁힌다 — !important 는 commonStyles.formItem
+//   의 140px 규칙을 이겨야 해서다 (2026-09-21, Div/Type/Description 과 간격을 맞춰달라는 요청).
+.periodShortLabelWrap {
+  display: contents;
+
+  & > div > div {
+    grid-template-columns: 50px auto !important;
+
+    & > div:first-of-type {
+      width: 50px !important;
+    }
+  }
+}
+
 // ⭐ Ver. Cutoff / Replace 모달 공통 — SearchArea → grid → 하단 버튼 (ExchangeRateModal 정본 레이아웃)
 .modalContentWrapper {
   display: flex;
@@ -72,6 +99,8 @@
 }
 
 .modalGridWrapper {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-height: 260px;
   border: 1px solid #e0e4e9;

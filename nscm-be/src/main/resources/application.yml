@@ -31,6 +31,12 @@ spring:
   aop:
     proxy-target-class: true
 
+  # [E20261015-STREAMPROC] 스트리밍 응답(StreamingResponseBody)은 MVC 비동기 처리 — 기본 타임아웃(서버 기본 30초 내외)이면
+  #   대량 조회 전송 중 끊긴다. tomcat connection-timeout 과 같은 30분으로 맞춘다.
+  mvc:
+    async:
+      request-timeout: 1800000
+
 
 
 server:
@@ -46,7 +52,8 @@ server:
   #   min-response-size 미만(작은 응답)은 압축하지 않으므로 소형 API 에 부담이 없다.
   compression:
     enabled: true
-    mime-types: application/json,application/json;charset=UTF-8,text/plain,text/css,text/html,application/javascript
+    # [E20261015-STREAMPROC] application/x-ndjson = 대량 조회 스트리밍(call-proc-stream) 응답
+    mime-types: application/json,application/json;charset=UTF-8,text/plain,text/css,text/html,application/javascript,application/x-ndjson
     min-response-size: 2KB
 
 config:

@@ -1,0 +1,5 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"supply/production-plan","SCP0011","features/supply/src/pages/production-plan/ProductionPlan.tsx","40","code","Insert/Delete = NO-OP(버튼 노출 + () => undefined, design 01 R-A3/R-A4). btnCal=Amend, btnMeasure=TitleSet."
+"supply/production-plan","SCP0011","features/supply/src/pages/production-plan/ProductionPlan.tsx","269","endpoint","DATA_TP_CD='CLOB' 이라 공용 useProcMutation({data:[rows]})로는 키 불일치로 조용히 no-op 된다(react-gap-audit H2)."
+"supply/production-plan","SCP0011","features/supply/src/pages/production-plan/utils/productionPlanColumns.ts","106","code","const weekGroups = [...month.weeks.values()];"
+"supply/production-plan","SCP0011","features/supply/src/pages/production-plan/utils/productionPlanLineSave.ts","6","endpoint","공용 useProcMutation({data:[rows]}) 로는 top-level 에 activeFlag/divisionId... 키가 없어 전부 null 바인딩되고"

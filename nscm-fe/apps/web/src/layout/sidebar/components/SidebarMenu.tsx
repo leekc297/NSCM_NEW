@@ -38,9 +38,20 @@ export const SidebarMenu = ({ menu }: SidebarMenuProps) => {
     openTab(menu);
   };
 
+  // 메뉴 오픈은 마우스 클릭으로만 — a 태그는 포커스 후 Enter 시 네이티브 클릭이 재발생해
+  // 탭이 계속 추가되므로 keydown 단계에서 막는다.
+  const blockEnterActivation = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') e.preventDefault();
+  };
+
   return (
     <div className={styles.menuWrapper} key={menu.mnuId}>
-      <Link to='#' className={styles.menuLink} onClick={() => handleMenuClick(menu, true)}>
+      <Link
+        to='#'
+        className={styles.menuLink}
+        onClick={() => handleMenuClick(menu, true)}
+        onKeyDown={blockEnterActivation}
+      >
         {menu.children ? (
           <>
             <p className={clsx(styles.title, { [styles.isOpen]: isOpen })}>
@@ -61,6 +72,7 @@ export const SidebarMenu = ({ menu }: SidebarMenuProps) => {
           to='#'
           className={clsx(styles.subMenuLink, { [styles.isOpen]: isOpen })}
           onClick={() => handleMenuClick(subMenu)}
+          onKeyDown={blockEnterActivation}
           key={subMenu.mnuId}
         >
           <p className={styles.subTitle}>{t(subMenu.mnuMsgId, subMenu.mnuDesc)}</p>

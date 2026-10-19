@@ -20,7 +20,12 @@ import { DynamicQueryResultGrid } from './components/DynamicQueryResultGrid';
 import { DynamicQuerySQLViewer } from './components/DynamicQuerySQLViewer';
 import type { RESPONSE_SET } from './dynamic-query.constants';
 import { MENU_ID, SHEET_INDEX, SHEETS } from './dynamic-query.constants';
-import { replaceParamToken, toAtToken } from './dynamic-query.utils';
+import {
+  isYyyymmdd,
+  monthsBetweenYyyymmdd,
+  replaceParamToken,
+  toAtToken,
+} from './dynamic-query.utils';
 import styles from './DynamicQuery.module.scss';
 import { useDynamicQueryStore, type ResultGridColumn } from './useDynamicQueryStore';
 
@@ -30,6 +35,28 @@ interface ParamAndValue {
   isUse: boolean;
   operation: string;
 }
+
+// 특정 리포트는 값이 비어있어도 실행이 되지만 결과가 무의미/과도한 범위 조회가 되므로, 해당 리포트에서는
+// 지정된 Condition 값을 필수로 강제한다. 리포트명(DQ_NAME) 기준 매칭 (사용자 지정, 2026-09-16/2026-09-22).
+const REQUIRED_PARAMS_BY_REPORT: Record<string, string[]> = {
+  'Sales Result Query Detail': ['PARAM_DIVSION_ID', 'PARAM_SALES_YYYYMM'],
+  'MKT_FCST 수정이력 조회': ['PARAM_DIVSION_ID', 'PARAM_FROM_DATE', 'PARAM_TO_DATE'],
+  '메뉴 접속이력': ['PARAM_YEAR'],
+  'User Menu Access Count_Period': ['PARAM_FROMDATE', 'PARAM_TODATE'],
+};
+
+// 조회기간이 넓을수록 접속이력 원본 테이블 전체 스캔이 되므로, 해당 리포트는 FROM~TO 기간을 상한 개월수로
+// 제한한다(초과 시 실행 차단). 값 형식은 YYYYMMDD 전제 (사용자 지정, 2026-09-22).
+const MAX_PERIOD_MONTHS_BY_REPORT: Record<
+  string,
+  { fromParam: string; toParam: string; maxMonths: number }
+> = {
+  'User Menu Access Count_Period': {
+    fromParam: 'PARAM_FROMDATE',
+    toParam: 'PARAM_TODATE',
+    maxMonths: 3,
+  },
+};
 
 export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
   // i18n
@@ -224,6 +251,69 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
       });
     }
 
+    // 리포트별 필수 Condition 값 체크 — REQUIRED_PARAMS_BY_REPORT 에 등록된 리포트만 대상.
+    const reportName = (dynamicQueryMeta?.reportName ?? '').trim();
+    const normalize = (id: string) => id.replace(/^[@:]/, '').toUpperCase();
+    const valueByParam = new Map(
+      parameters.map(item => [normalize(item.param), item.value.trim()])
+    );
+
+    const requiredParams = REQUIRED_PARAMS_BY_REPORT[reportName];
+    if (requiredParams) {
+      const missing = requiredParams.filter(name => !valueByParam.get(name.toUpperCase()));
+
+      if (missing.length > 0) {
+        void setAlert({
+          type: 'alert',
+          content: t(
+            'MSG00150',
+            `${missing.map(name => `@${name}`).join(', ')} 는 필수값이니 값을 입력하세요.`
+          ),
+        });
+        return;
+      }
+    }
+
+    // 리포트별 조회기간 상한 체크 — MAX_PERIOD_MONTHS_BY_REPORT 에 등록된 리포트만 대상.
+    const periodLimit = MAX_PERIOD_MONTHS_BY_REPORT[reportName];
+    if (periodLimit) {
+      const fromValue = valueByParam.get(periodLimit.fromParam.toUpperCase());
+      const toValue = valueByParam.get(periodLimit.toParam.toUpperCase());
+
+      if (fromValue && toValue) {
+        // 값은 있으나 형식이 YYYYMMDD 8자리가 아니면 SQL(TO_DATE 등)까지 보내 원시 에러를 받기 전에 차단.
+        if (!isYyyymmdd(fromValue) || !isYyyymmdd(toValue)) {
+          void setAlert({
+            type: 'alert',
+            content: t(
+              'MSG00150',
+              `@${periodLimit.fromParam}, @${periodLimit.toParam} 는 YYYYMMDD 8자리로 입력하세요.`
+            ),
+          });
+          return;
+        }
+
+        const months = monthsBetweenYyyymmdd(fromValue, toValue);
+        if (months > periodLimit.maxMonths) {
+          void setAlert({
+            type: 'alert',
+            content: t(
+              'MSG00150',
+              `조회기간은 최대 ${periodLimit.maxMonths}개월까지만 조회 가능합니다.`
+            ),
+          });
+          return;
+        }
+      }
+    }
+
+    // USE(VALID_YN='Y') 인 Condition 만 값이 필수 — 하나라도 비어있으면 실행 차단.
+    // const missingValue = parameters.some(item => item.isUse && !item.value.trim());
+    // if (missingValue) {
+    //   void setAlert({ type: 'alert', content: t('MSG00150', 'CONDITION에 해당하는 VALUE를 입력해 주세요.') });
+    //   return;
+    // }
+
     let sql = sqlText;
     for (const item of parameters) {
       const param = item.param.replace('@', '').replace(':', '');
@@ -251,7 +341,7 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
 
   const customButtons =
     hasButton('EXECUTE') && activePage === SHEET_INDEX.DESIGNER
-      ? [{ label: t('LBL00729', 'Execute'), action: excuteQuery }]
+      ? [{ label: t('LBL00649', 'Execute'), action: excuteQuery }]
       : [];
 
   const handleSearch = () => {
@@ -534,6 +624,11 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // View 탭 3 그리드(Columns/Condition/Result) 건수 — 각 영역 제목 줄에 따로 표시한다.
+  const columnsCount = columnsData?.o_rc1?.length ?? 0;
+  const parametersCount = parametersData?.o_rc1?.length ?? 0;
+  const resultCount = resultData?.o_rc1?.length ?? 0;
+
   return (
     <>
       <MainTitle
@@ -550,6 +645,9 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
         grid={gridRef}
         gridFilter={gridFilterRef}
         dataCount={getCount()}
+        // Register 탭은 상단 건수가 곧 이 그리드 건수라 그대로 두고, View 탭(Columns/Condition/
+        // Result 4 그리드 동시 표시)에서는 Register 건수와 무관해지므로 숨기고 각 영역에서 표시한다.
+        hideTotalCases={activePage !== SHEET_INDEX.REGISTER}
         excelFileName='DynamicQuery'
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
@@ -574,7 +672,12 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
                 <PanelGroup className={styles.leftPane} orientation='vertical'>
                   <Panel defaultSize={40} minSize={15} style={{ overflow: 'hidden' }}>
                     <div className={styles.leftSection}>
-                      <TitleArea isSubTitle title={t('LBL00725', 'Columns')} depth='h4' />
+                      <TitleArea
+                        isSubTitle
+                        title={t('LBL00646', 'Columns')}
+                        depth='h4'
+                        totalCases={columnsCount === 0 ? undefined : columnsCount}
+                      />
                       {/* <div className={styles.gridFill}> */}
                       <DynamicQueryColumnsGrid
                         gridRef={columnsGridRef}
@@ -588,7 +691,12 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
 
                   <Panel defaultSize={20} minSize={10} style={{ overflow: 'hidden' }}>
                     <div className={styles.leftSection}>
-                      <TitleArea isSubTitle title={t('LBL00726', 'Condition')} depth='h4' />
+                      <TitleArea
+                        isSubTitle
+                        title={t('LBL00726', 'Condition')}
+                        depth='h4'
+                        totalCases={parametersCount === 0 ? undefined : parametersCount}
+                      />
                       {/* <div className={styles.gridFill}> */}
                       <DynamicQueryParametersGrid
                         gridRef={parametersGridRef}
@@ -602,7 +710,7 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
 
                   <Panel defaultSize={40} minSize={15} style={{ overflow: 'hidden' }}>
                     <div className={styles.leftSection}>
-                      <TitleArea isSubTitle title={t('LBL00727', 'SQL')} depth='h4' />
+                      <TitleArea isSubTitle title={t('LBL00652', 'SQL')} depth='h4' />
                       {/* <div className={styles.gridFill}> */}
                       <DynamicQuerySQLViewer />
                       {/* </div>   */}
@@ -615,7 +723,12 @@ export const DynamicQuery = ({ tabId, title }: PageProps<MENU_ID>) => {
 
               <Panel defaultSize={45}>
                 <div className={styles.rightPane}>
-                  <TitleArea isSubTitle title={t('LBL00728', 'Result')} depth='h4' />
+                  <TitleArea
+                    isSubTitle
+                    title={t('LBL00645', 'Result')}
+                    depth='h4'
+                    totalCases={resultCount === 0 ? undefined : resultCount}
+                  />
                   <DynamicQueryResultGrid gridRef={resultGridRef} data={resultData?.o_rc1 ?? []} />
                 </div>
               </Panel>

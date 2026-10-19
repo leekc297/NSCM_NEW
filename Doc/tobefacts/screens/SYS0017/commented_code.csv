@@ -1,0 +1,8 @@
+﻿"page_key","menu_id","file","line","kind","snippet"
+"admin/mail-setup","SYS0017","features/admin/src/pages/mail-setup/components/MailSetupForm.tsx","35","code","const subModuleOptions = (subModules as ComboOption[] | undefined) ?.filter(item => !selectedModules || selectedModules.includes(item.PARENT_CODE ?? '')).map(item => ({ label: item.NAME, value: item.CODE }));"
+"admin/mail-setup","SYS0017","features/admin/src/pages/mail-setup/mail-setup.util.ts","73","code","PopSQL 8분할 텍스트 결합 (AS-IS TEXT1~TEXT8) -> CLOB — SP가 VARCHAR2 4000자 제한으로 sql_text 커럼 하나로 반환하도록 변경 export const joinSqlText = (row?: Record<string, string>) => { if (!row) return ''; return [1, 2, 3, 4, 5, 6, 7, 8].map(index => row[`TEXT${ind"
+"admin/mail-setup","SYS0017","features/admin/src/pages/mail-setup/MailSetup.tsx","150","code","});"
+"admin/mail-setup","SYS0017","features/admin/src/pages/mail-setup/MailSetup.tsx","331","code","const handleDeleteCategory = () => {"
+"admin/mail-setup","SYS0017","features/admin/src/pages/mail-setup/MailSetup.tsx","332","code","if (!categoryGridRef.current) return;"
+"admin/mail-setup","SYS0017","features/admin/src/pages/mail-setup/MailSetup.tsx","333","code","GridAction.removeRow(categoryGridRef.current, true);"
+"admin/mail-setup","SYS0017","features/admin/src/pages/mail-setup/MailSetup.tsx","334","code","};"

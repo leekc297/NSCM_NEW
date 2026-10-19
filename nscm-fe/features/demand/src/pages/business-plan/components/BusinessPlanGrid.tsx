@@ -19,7 +19,7 @@ import {
 } from 'react';
 
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
-import { type EditTracker, keepRowVisibleUnderFilter } from '@foundation/utils';
+import { type EditTracker, isRowParamCombo, keepRowVisibleUnderFilter } from '@foundation/utils';
 import { DataGrid } from '@shared/components';
 import { useTabComboQueries } from '@shared/hooks';
 import { useMessageStore } from '@shared/stores';
@@ -113,14 +113,27 @@ export const BusinessPlanGrid = ({
     return m;
   }, [staticColumns]);
 
+  // Sales Site(SCM_SITE_ID40) 는 Model 선택으로 End Customer/Team 이 채워진 뒤에도 전체 후보를
+  //   보여야 한다 (2026-09-03 사용자 확정). admin 컬럼 메타가 ATTRIBUTE2 에
+  //   'DIVISION_ID:divisionId,END_CUSTOMER40:endCustomer' 를 실어(ATTRIBUTE10='D' 재조회 콤보)
+  //   행의 End Customer 로 SiteByEndCustomer 를 좁히는데, 이 화면에 한해 endCustomer/deptId 바인딩만
+  //   떼어 divisionId 만 남긴다. 그러면 재조회는 @divisionId 만 실어(권한 절 @sesUserId 는 SQL 에
+  //   그대로) division 범위 전체 사이트를 주고, findStaleRowParamComboCells 감지 키도 DIVISION_ID
+  //   하나가 되어 End Customer 변경이 Sales Site 를 지우지 않는다. Site 변경 시 파생 필드 정리는
+  //   GRID_CASCADE_CLEAR.SCM_SITE_ID40 이 담당한다. 공용 DataGrid/columnMapping 은 건드리지 않는다.
+  const DROP_SITE_BINDS = useMemo(() => new Set(['endCustomer', 'deptId']), []);
   const mainStaticColumns = useMemo<RawFlexGridColumnConfig[]>(
     () =>
-      visibleColumns.map(c => ({
-        ...c,
-        visible: true,
-        display: true,
-      })),
-    [visibleColumns]
+      visibleColumns.map(c => {
+        const base = { ...c, visible: true, display: true };
+        if (c.colNm !== 'SCM_SITE_ID40' || !c.attribute2) return base;
+        const kept = c.attribute2
+          .split(',')
+          .map(tok => tok.trim())
+          .filter(tok => tok.length > 0 && !DROP_SITE_BINDS.has(tok.split(':')[1]?.trim() ?? ''));
+        return { ...base, attribute2: kept.join(',') };
+      }),
+    [visibleColumns, DROP_SITE_BINDS]
   );
 
   // ===== Grid 내 combo column dropdown — UI Category 메타(cellCboDataTp) 기반 (DMF0020/0003 표준) =====
@@ -128,10 +141,19 @@ export const BusinessPlanGrid = ({
   //   END_CUSTOMER40=EndCustomerByDivision40 / SCM_SITE_ID40=SiteByEndCustomer / INCOTERMS=IncotermsEdit /
   //   INCOTERMS82=Incoterms / FCST_TYPE=DM_LOOKUP_DIV / PLANT_SITE_ID=FromSiteByDivision /
   //   MEASURE=DMF0042_BP_Measure (SHEET_COLUMNS 2026-07-15 실측).
+  // 금지: PARAM10='D' 컬럼을 이 목록에 넣지 말 것. 이 화면은 자체 콤보 계층을 돌리는데,
+  //   D 컬럼은 공용 DataGrid 가 행 조합별로 재조회해 col.dataMap 을 만든다. 두 계층이 같은
+  //   col.dataMap 한 자리를 쓰므로 여기 들어오면 아래 dataMaps 가 그 결과를 덮어쓴다
+  //   (applyHeaderHeight 0-b 재부착 + cellEditEnded 원복 두 곳). 겸해서 파라미터 없이 같은
+  //   콤보를 한 번 더 부르게 되는데, BE makeComboQuery 가 없는 @토큰을 '' 로 치환하므로 그
+  //   목록은 행과 무관한 고정 목록이다 — 그게 드롭다운에 뜨던 값이다(2026-09-01 실측).
   const comboColumns = useMemo(
     () =>
       visibleColumns.filter(
-        c => (c.cellCtrlObjTpCd as unknown as string) === 'FPComboBox' && !!c.cellCboDataTp
+        c =>
+          (c.cellCtrlObjTpCd as unknown as string) === 'FPComboBox' &&
+          !!c.cellCboDataTp &&
+          !isRowParamCombo(c)
       ),
     [visibleColumns]
   );
@@ -220,7 +242,8 @@ export const BusinessPlanGrid = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comboSig, dataMaps]);
 
-  // ⭐ 편집 전용 콤보 (hook #59 §5-G) — CURRENCY = 'CurrencyList' (AS-IS InsertRow L1184)
+  // ⭐ 편집 전용 콤보 (hook #59 §5-G) — CELL_PROD_SITE(유효건만). CURRENCY 는 admin 메타
+  //   FPComboBox 전환으로 공용 경로 이관, 여기서 제외 (2026-09-04).
   const editComboEntries = useMemo(() => Object.entries(GRID_EDIT_COMBO), []);
   const editComboResults = useTabComboQueries({
     filters: editComboEntries.map(([, cfg]) => cfg.comboId),
@@ -428,7 +451,6 @@ export const BusinessPlanGrid = ({
     const g = (gridRef as { current: FlexGridType<BusinessPlanRow> | null } | null)?.current;
     if (!g || !g.columnHeaders || !g.columnHeaders.rows) return;
 
-    // 홀짝 zebra (#95)
     if (g.alternatingRowStep !== 1) g.alternatingRowStep = 1;
 
     // footer Sum 미표시 — AS-IS SUM 은 footer 아닌 그룹 선두 컬럼 (플랜 §A)
@@ -439,7 +461,11 @@ export const BusinessPlanGrid = ({
     const formatHandler = (_s: FlexGridType<BusinessPlanRow>, e: FormatItemEventArgs) => {
       // #108 — No. 코너 헤더 (TopLeft 단일 라벨)
       if (e.panel.cellType === CellType.TopLeft) {
-        if (e.cell.textContent !== 'No.') e.cell.textContent = 'No.';
+        // 편집 그리드는 순번/상태 row header가 각각 존재하므로 첫 번째 열에만 표시한다.
+        //   (DataGrid 가 !isReadOnly 일 때 상태 컬럼을 push — 그 코너까지 No. 로 채우면 flag 컬럼
+        //    헤더에 No. 가 중복 노출된다. sales-plan SalesPlanGrid 정본과 동일.)
+        const label = e.col === 0 ? 'No.' : '';
+        if (e.cell.textContent !== label) e.cell.textContent = label;
         e.cell.style.textAlign = 'center';
         return;
       }
@@ -557,16 +583,30 @@ export const BusinessPlanGrid = ({
       const row = s.rows[e.row].dataItem as BusinessPlanRow | undefined;
 
       if (staticBindingSet.has(binding)) {
+        // 모달 셀(Model ITEM_ID/ITEM_ID40 · Project PROJECT_CODE/PROJECT_CODE82) — 신규행에서
+        //   팝업과 함께 직접 타이핑도 허용 (FPTextModal 동작, 2026-10-01 사용자 지시).
+        //   insertStaticEditable 은 이 셀들에 '직접 입력 차단'으로 false 를 주므로 여기서 따로 타이핑을
+        //   연다. 더블클릭 팝업 경로(dblclickHandler)와 파생 채움 로직은 건드리지 않는다.
+        //   판정은 dblclickHandler 의 division별 바인딩 분기와 1:1.
+        const isTypablePopupCell =
+          !!row &&
+          row.CRUD_TYPE === 'I' &&
+          ((binding === 'ITEM_ID' && !isDiv40(division)) ||
+            (binding === 'ITEM_ID40' && isDiv40(division)) ||
+            (binding === 'PROJECT_CODE' && !isDiv40(division) && !isDiv82(division)) ||
+            (binding === 'PROJECT_CODE82' && isDiv82(division)));
         // 정적 셀 — Insert 행 화이트리스트만. 기존행 = 전량 잠금 (G2 — 신정본 L649/L651~667 주석 파리티)
         const allowed =
-          !!row && row.CRUD_TYPE === 'I' && insertStaticEditable(binding, row, division);
+          !!row &&
+          row.CRUD_TYPE === 'I' &&
+          (insertStaticEditable(binding, row, division) || isTypablePopupCell);
         if (!allowed) {
           e.cancel = true;
           return;
         }
         e.cancel = false;
         editingCellRef.current = { binding, oldVal: (row as Record<string, unknown>)[binding] };
-        // ⭐ 편집 전용 콤보 스왑 — CURRENCY(CurrencyList)
+        // ⭐ 편집 전용 콤보 스왑 — CELL_PROD_SITE(유효건 콤보)
         if (GRID_EDIT_COMBO[binding] && editDataMapsRef.current[binding]) {
           col.dataMap = editDataMapsRef.current[binding];
           return;
@@ -814,7 +854,40 @@ export const BusinessPlanGrid = ({
         onPopupCellDblClick?.('ITEM', row);
       }
     };
-    g.hostElement.addEventListener('dblclick', dblclickHandler);
+    // ⭐ 더블클릭 — 네이티브 'dblclick' 대신 click 2회를 직접 판정한다 (2026-09-02).
+    //   증상: 신규행 셀을 더블클릭해도 Model/Project 팝업이 안 뜬다. 원인은 팝업 로직이 아니라
+    //     브라우저가 'dblclick' 을 아예 발생시키지 않는 것 — 첫 클릭이 그리드 재렌더/refresh 를
+    //     유발해(행-파라미터 콤보 registerTouchedRow → 재조회/invalidate, 공용 DataGrid) 셀 DOM 이
+    //     두 클릭 사이에 새로 그려지고, 그러면 두 클릭이 서로 다른 요소에 떨어져 dblclick 이 합쳐지지
+    //     않는다(브라우저 규약). 실측: click 은 9번 와도 dblclick 은 0번.
+    //   대응: click 은 DOM 재생성과 무관하게 매번 발생하므로, 같은 논리 셀(hitTest row/col)을 임계시간
+    //     안에 두 번 클릭하면 더블클릭으로 본다. DOM 요소 동일성에 의존하지 않아 재렌더에 안전하다.
+    const DBLCLICK_MS = 400;
+    let lastClickTs = 0;
+    let lastClickRow = -1;
+    let lastClickCol = -1;
+    let lastClickType: CellType | -1 = -1;
+    const clickAsDblHandler = (ev: MouseEvent) => {
+      const ht = g.hitTest(ev);
+      const now = ev.timeStamp;
+      // 헤더/데이터는 row·col 인덱스가 겹치므로 cellType 까지 같아야 같은 셀로 본다.
+      const sameCell =
+        ht.row === lastClickRow && ht.col === lastClickCol && ht.cellType === lastClickType;
+      if (sameCell && now - lastClickTs > 0 && now - lastClickTs < DBLCLICK_MS) {
+        // 3연속 클릭이 계속 더블로 잡히지 않도록 리셋.
+        lastClickTs = 0;
+        lastClickRow = -1;
+        lastClickCol = -1;
+        lastClickType = -1;
+        dblclickHandler(ev);
+        return;
+      }
+      lastClickTs = now;
+      lastClickRow = ht.row;
+      lastClickCol = ht.col;
+      lastClickType = ht.cellType;
+    };
+    g.hostElement.addEventListener('click', clickAsDblHandler);
 
     // Scroll 시 머지 그룹 재계산 (viewport sticky — AS-IS TopChange SmartColMerge L2736~2741)
     const handleScrollInvalidate = () => g.invalidate();
@@ -858,7 +931,7 @@ export const BusinessPlanGrid = ({
         /* unmount race */
       }
       try {
-        g.hostElement?.removeEventListener('dblclick', dblclickHandler);
+        g.hostElement?.removeEventListener('click', clickAsDblHandler);
       } catch {
         /* unmount race */
       }
@@ -885,18 +958,12 @@ export const BusinessPlanGrid = ({
   // 마지막으로 확인한 헤더 단수 — 위 applyHeaderHeight 의 1회성 재드로우 판정에 쓴다.
   const headerRowCountRef = useRef(0);
 
-  // ⭐ hook #93 — 다단 헤더 총높이 48px 고정 (3단=16×3) + combo dataMap 재적용 + Filter sanitize.
+  // ⭐ hook #93 — 다단 헤더 총높이 48px 고정 (3단=16×3) + combo dataMap 재적용.
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<BusinessPlanRow> | null } | null)?.current;
     if (!g) return;
 
     const applyHeaderHeight = () => {
-      // (0-a) Filter sanitize — 동적(Y_/Q_/M_) binding 제거 (머지헤더 충돌 방지)
-      const f = gridFilterRef?.current;
-      if (f) {
-        const cleaned = f.filterColumns.filter(b => !/^[YQM]_/.test(b));
-        if (cleaned.length !== f.filterColumns.length) f.filterColumns = cleaned;
-      }
       // (0-b) combo dataMap 재적용 — wrapper columnGroups 재적용이 col.dataMap 을 덮으므로 재부착(guard)
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];
@@ -937,7 +1004,7 @@ export const BusinessPlanGrid = ({
         /* unmount race */
       }
     };
-  }, [dynBindings, visibleColumns, dataMaps, gridRef, gridFilterRef, gridEpoch]);
+  }, [dynBindings, visibleColumns, dataMaps, gridRef, gridEpoch]);
 
   // ⭐ Sum 체크박스 + 헤더 드릴다운 — 동적 컬럼 visible 통합 적용 (AS-IS SetSpreadColumn L466~498 +
   //   헤더 더블클릭 1:1). 규칙: 활성 bucket=표시 / 상위 SUM=sumYn / 하위=숨김 — 드릴 오버라이드 우선.
@@ -950,11 +1017,23 @@ export const BusinessPlanGrid = ({
     const drillSet = new Set(drillBindings);
     const dynSet = new Set(dynBindings);
     const applyDynVisibility = () => {
+      // 우클릭 Hide Column 으로 숨긴 컬럼(공용 DataGrid 가 grid 인스턴스에 얹어 준다 — Column
+      //   객체의 커스텀 플래그는 wijmo 생성자가 `_` 로 시작하는 키를 무시해 전달되지 않는다).
+      const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+        ._userHiddenColumns;
       let changed = false;
       for (let i = 0; i < g.columns.length; i++) {
         const col = g.columns[i];
         const b = col.binding ?? '';
         if (!dynSet.has(b)) continue;
+        // Hide Column 으로 숨긴 컬럼은 sum/드릴 재계산 대상에서 제외 — 숨김 유지.
+        if (userHiddenColumns?.has(b)) {
+          if (col.visible !== false) {
+            col.visible = false;
+            changed = true;
+          }
+          continue;
+        }
         const base = summarySet.has(b) ? sumYn : drillSet.has(b) ? false : true;
         const want = drillVisRef.current.get(b) ?? base;
         if (col.visible !== want) {
@@ -978,12 +1057,11 @@ export const BusinessPlanGrid = ({
   }, [sumYn, summaryBindings, drillBindings, dynBindings, gridRef, gridEpoch]);
 
   // ⭐ 필터 상태에서 Insert — 값이 빈 신규행은 필터 조건에 걸려 CollectionView 에서 빠진다.
-  //   공용 keepRowVisibleUnderFilter 로 wijmo 예외 집합(grid._newAddedRowsSet)에 등록해 보이게 한다.
-  //   필터 자체의 보존은 공용 DataGrid 가 담당한다(itemsSourceChanged 의 capture -> clear -> restore).
-  //   ⚠ 등록은 **한 번으로 끝나지 않는다**. FlexGridFilter.apply() 가 그 Set 을 null 로 비우는데
-  //     (gridAction.ts keepRowVisibleUnderFilter 주석), DataGrid 의 필터 복원이 곧 apply() 라
-  //     Insert 마다 예외가 날아가 신규행이 다시 숨는다 (2026-08-21 실측).
-  //     ⇒ rows 변경 시 + filterApplied 시 **양쪽에서** 재등록한다.
+  //   GridAction.addRowSet 이 삽입 시점에 이미 keepRowVisibleUnderFilter 로 등록하므로, 여기서는
+  //   사용자가 필터 팝업에서 직접 Apply 를 눌러 그 등록이 지워지는 경우만 재등록하면 된다 —
+  //   FlexGridFilter.apply() 가 예외 집합(grid._newAddedRowsSet)을 무조건 비우기 때문이다
+  //   (gridAction.ts keepRowVisibleUnderFilter 주석). 필터 자체의 보존은 공용 DataGrid 가 담당한다
+  //   (itemsSourceChanged 의 capture -> clear -> restore).
   const reapplyInsertRowVisibility = useCallback((): boolean => {
     const g = (gridRef as { current: FlexGridType<BusinessPlanRow> | null } | null)?.current;
     // 컬럼이 없는 그리드에 refresh 를 걸면 wijmo 가 컬럼 인덱스 -1 로 계산하다 예외를 던진다.
@@ -994,24 +1072,11 @@ export const BusinessPlanGrid = ({
     return true;
   }, [gridRef]);
 
-  useEffect(() => {
-    const g = (gridRef as { current: FlexGridType<BusinessPlanRow> | null } | null)?.current;
-    if (reapplyInsertRowVisibility()) g?.collectionView?.refresh();
-  }, [gridRef, rows, reapplyInsertRowVisibility, gridEpoch]);
-
-  // ⭐ F4 Filter — 피처 소유 FlexGridFilter (동적 컬럼 필터 제외 + 필터후 머지/높이 재적용)
+  // ⭐ F4 Filter — 피처 소유 FlexGridFilter (필터후 머지/높이 재적용)
   useEffect(() => {
     const g = (gridRef as { current: FlexGridType<BusinessPlanRow> | null } | null)?.current;
     if (!g || !gridFilterRef) return;
 
-    const isDynamic = (binding: string | null | undefined): boolean =>
-      /^[YQM]_/.test(binding ?? '');
-    const onFilterChanging = (
-      _s: FlexGridFilter,
-      e: { cancel: boolean; getColumn: () => { binding?: string | null } }
-    ) => {
-      if (isDynamic(e.getColumn()?.binding)) e.cancel = true;
-    };
     // 필터가 적용될 때마다 정의(JSON)를 떠 둔다. Insert 로 itemsSource 가 갈리면 FlexGridFilter 가
     //   스스로 clear() 하므로, 아래 복원 effect 가 이 값으로 되살린다.
     //   ⚠ 이 등록은 **FlexGridFilter 를 만드는 이 effect 안에서** 해야 한다. 별도 effect 로 빼면
@@ -1042,19 +1107,17 @@ export const BusinessPlanGrid = ({
         g.collectionView?.refresh();
       });
     };
-    f.filterChanging.addHandler(onFilterChanging as never);
     f.filterApplied.addHandler(onFilterApplied);
 
     return () => {
       window.cancelAnimationFrame(raf);
       try {
-        f?.filterChanging.removeHandler(onFilterChanging as never);
         f?.filterApplied.removeHandler(onFilterApplied);
       } catch {
         /* unmount race */
       }
     };
-  }, [dynBindings, visibleColumns, gridRef, gridFilterRef, reapplyInsertRowVisibility, gridEpoch]);
+  }, [visibleColumns, gridRef, gridFilterRef, reapplyInsertRowVisibility, gridEpoch]);
 
   return (
     // <div className={styles.gridContainer}>
@@ -1068,7 +1131,9 @@ export const BusinessPlanGrid = ({
       dynamicColumns={mainDynamicColumns}
       itemsSource={rows as unknown as WijmoRowItem[]}
       autoGenerateColumns={false}
-      allowSorting={true}
+      // allowSorting prop 은 넘기지 않는다 - grid.allowSorting 이 truthy 면 wijmo
+      //   _MouseHandler._mousedown 이 헤더 클릭 시 열 전체 선택(_mouseSelect)을 건너뛴다.
+      //   공용 정렬(F3 스위치 + 헤더 클릭 + 아이콘)은 이 prop 없이도 그대로 동작한다.
       allowMerging={AllowMerging.All}
     />
     // </div>

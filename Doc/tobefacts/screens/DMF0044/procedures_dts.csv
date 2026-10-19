@@ -1,0 +1,8 @@
+﻿"menu_id","sheet","request_keys","response_cursors","response_keys","sp_hints","line"
+"DMF0044","MDF Reports","divisionId mdfType yyyy spVersionNo dataType userGroup userId mnuId","data","data.DIVISION_ID data.DEPARTMENT_ID data.DEPARTMENT_NAME data.DEPT_ID data.DEPT_NAME data.END_CUST_REPORT data.CUST_REPORT data.PRODUCT_GROUP data.ITEM_ID data.NICK_NAME data.MEASURE data.CURRENCY data.COMPANY_ID data.CUTOFF_TYPE data.CUTOFF_YYYYMMDD data.SCM_SITE_ID data.PROJECT_CODE data.FCST_TYPE data.INCOTERMS data.EDIT_FLAG","","3975"
+"DMF0044","spreadTitle","divisionId startDt endDt","data","data.COLUMN_NAME data.COLUMN_LABEL_NAME data.SMALL_CLASS_LABEL_NAME data.LARGE_CLASS_LABEL_NAME data.SORT_ORDER_NO data.FIXED_FLAG data.VISIBLE_FLAG","","4014"
+"DMF0044","measure","dataType userId mnuId","data","data.CODE data.NAME","","4034"
+"DMF0044","unitedVersion","divisionId sdt edt versionType description userId mnuId","data","data.VERSION_NO data.VERSION_TYPE data.VERSION_DESCRIPTION data.SEND_YN data.YYYYMMDD","","4045"
+"DMF0044","exchangeRate","divisionId year versionNo userId mnuId","data","data.DIVISION_ID data.CURRENCY data.UNIT_CURRENCY","","4067"
+"DMF0044","textbox","versionNo userId mnuId","data rc2 rc3","data.YYYYMM rc2.MONDAY","","4085"
+"DMF0044","titleSet","programId sheetName columnType divisionId","o_rc1","o_rc1.COLUMN_NAME o_rc1.COLUMN_LABEL","","4098"

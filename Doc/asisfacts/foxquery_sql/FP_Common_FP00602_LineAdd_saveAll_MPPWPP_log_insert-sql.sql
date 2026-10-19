@@ -1,0 +1,36 @@
+﻿INSERT INTO HIS_AMEND_PLAN_CELL_R (
+             INSTANCE_ID, FP_PLAN_ID
+            ,COMPANY_ID, DIVISION_ID
+            ,CATEGORY_ID
+            ,SITE_ID, PLANT_ID,ITEM_ID, OPERATION_ID, FACTORY_ID
+            ,LOCATION, PRODUCTION_TYPE, MARKET
+            ,LINE_ID, ELECTRODE_TYPE
+            ,PLAN_DATE
+            ,TOP_ITEM_ID
+            ,ITEM_TYPE
+            ,PLM_EC_NO
+            ,VERSION
+            ,@CELL_OUT_QTY
+            ,INSERT_ID, INSERT_TIME
+            ,UPDATE_ID, UPDATE_TIME
+            ,DATE_SEQ
+            ,JOB_USER_ID, JOB_TIME, JOB_TYPE
+      )
+      VALUES (
+         @INSTANCE_ID, @FP_PLAN_ID
+        ,(SELECT DISTINCT COMPANY_ID FROM SCM_FACTORY_M WHERE DIVISION_ID = @DIVISION_ID AND SITE_ID = @SITE_ID AND PLANT_ID = @PLANT_ID AND ACTIVE_FLAG = 'Y'), @DIVISION_ID
+        ,'PLAN'
+        ,@SITE_ID, @PLANT_ID, @ITEM_ID, @OPERATION_ID, @FACTORY_ID
+        ,@LOCATION, UPPER(@PRODUCTION_TYPE), @MARKET
+        ,@LINE_ID, @ELECTRODE_TYPE
+        ,CONVERT(DATE,@DATE)
+        ,@TOP_ITEM_ID
+        ,@ITEM_TYPE
+        ,@PLM_EC_NO
+        ,@VERSION
+        ,@QTY
+        ,@USER_ID, dbo.FN_SITE_TIME(@SITE_ID)
+        ,@USER_ID, dbo.FN_SITE_TIME(@SITE_ID)
+        ,1
+        ,@USER_ID , GETDATE() , 'INSERT'
+      )

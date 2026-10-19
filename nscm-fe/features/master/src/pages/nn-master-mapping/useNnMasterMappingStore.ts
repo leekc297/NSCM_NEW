@@ -1,9 +1,10 @@
 import { apiClient } from '@foundation/apis';
 import type { RawFlexGridColumnConfig } from '@foundation/models';
-import { createPersistedStoreWithTab } from '@shared/stores';
+import { createPersistedStoreWithTab, useSessionStore } from '@shared/stores';
 
 import { MENU_ID, SHEETS } from './nn-master-mapping.constants';
 import type { SearchCondition } from './nn-master-mapping.types';
+import type { SearchComboTrigger } from './utils/searchCombos';
 
 type FiltersBySheet = { [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN> };
 
@@ -11,6 +12,13 @@ interface State {
   initialized: boolean;
   filters: FiltersBySheet;
   searchCondition: SearchCondition;
+  /**
+   * End Customer / Sales Site 콤보 원천을 정하는 "마지막에 바뀐 항목".
+   *
+   * searchCondition 바깥에 둔다 - setFilter 가 그 객체를 통째로 proc 요청에 실으므로 안에 두면
+   * 서버가 모르는 필드가 조회 파라미터로 새어 나간다. 초기값은 진입 경로와 같은 필터 쪽이다.
+   */
+  comboTrigger: SearchComboTrigger;
   openSearchArea: boolean;
   // BE 메타 SHEET_COLUMNS 동적 fetch (admin UI Category Setup 즉시 반영, 룰 #65)
   staticColumns: { main: RawFlexGridColumnConfig[] };
@@ -21,16 +29,19 @@ interface State {
 
 interface Action {
   reset: () => void;
-  setSearchCondition: (p: Partial<SearchCondition>) => void;
+  setSearchCondition: (p: Partial<SearchCondition>, comboTrigger?: SearchComboTrigger) => void;
   setFilter: () => void;
   setOpenSearchArea: (open?: boolean) => void;
   fetchStaticColumns: () => Promise<void>;
 }
 
 // AS-IS .cs L479-485 의 7개 search param + 'ALL' sentinel
+// divisionId 초기값 = 세션 division (없으면 '' — 콤보 로드 후 화면이 첫 값으로 보정).
+//   AS-IS InitControls L153~155 는 권한필터 MyDivision 목록의 첫 값을 자동선택(clbDivisions.ControlValues)
+//   한다 — 특정 사업부('81') 하드코딩이 아니다(설계 07 §S6 "81 보장 아님, 하드코딩 금지" 확정).
 const initSearch: SearchCondition = {
   dataTypeCode: 'ALL',
-  divisionId: '81',
+  divisionId: useSessionStore.getState().session.div ?? '',
   deptId: 'ALL',
   endCustomer: 'ALL',
   scmSiteId: 'ALL',
@@ -42,6 +53,7 @@ const initState: State = {
   initialized: false,
   filters: {},
   searchCondition: initSearch,
+  comboTrigger: 'team',
   openSearchArea: true,
   staticColumns: { main: [] },
   noFilters: {},
@@ -51,9 +63,10 @@ export const useNnMasterMappingStore = createPersistedStoreWithTab<State & Actio
   (set, get) => ({
     ...initState,
     reset: () => set(initState),
-    setSearchCondition: p =>
+    setSearchCondition: (p: Partial<SearchCondition>, comboTrigger?: SearchComboTrigger) =>
       set(state => {
         state.searchCondition = { ...get().searchCondition, ...p };
+        if (comboTrigger) state.comboTrigger = comboTrigger;
         if (p.divisionId) {
           state.filters = initState.filters;
           void state.fetchStaticColumns();

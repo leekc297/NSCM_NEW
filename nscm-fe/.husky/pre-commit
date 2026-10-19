@@ -1,3 +1,4 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npx lint-staged
+node ../tools/Harness/pre-commit.js || exit 1   # Harness: 변경된 화면 폴더 게이트

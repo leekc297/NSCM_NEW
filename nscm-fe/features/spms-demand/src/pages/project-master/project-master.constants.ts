@@ -68,7 +68,7 @@ export const LBL = {
   DIV: 'LBL00001',
   CUSTOMER: 'LBL01003',
   CELL_TYPE: 'LBL01005',
-  BIZ_TYPE: 'LBL00607',
+  BIZ_TYPE: 'LBL00085',
   DEVELOP_STATUS: 'LBL01007', // 신규 (Development Status)
   REG_COMP_DATE: 'LBL01006',
   APPROVE: 'LBL01004', // TAB1 승인 버튼
@@ -103,9 +103,9 @@ export const CELLTYPE_SCOPED_COMBO = 'StackMethodByCellType' as const;
 export const CELL_TYPE_BINDING = 'CELL_TYPE' as const;
 export const STACK_METHOD_BINDING = 'STACK_METHOD' as const;
 
-// TAB1 D-PJT Code 바인딩 (P-06/P-08 — DPJT_CODE_MOD_YN 편집 게이트 + 승인 시 6자리 FE 선검증 D12)
+// TAB1 D-PJT Code 바인딩 (P-06/P-08 — DPJT_CODE_MOD_YN 편집 게이트 + 승인 시 9자리 FE 선검증 D12)
 export const DPJT_CODE_BINDING = 'DPJT_CODE' as const;
-export const DPJT_CODE_LENGTH = 6 as const;
+export const DPJT_CODE_LENGTH = 9 as const;
 
 // TAB2 비활성 체크 바인딩 (계약 ⑥ — FPCheckBox 클릭 토글 + CRUD_TYPE 'M' 마킹)
 export const DISABLE_YN_BINDING = 'DISABLE_YN' as const;

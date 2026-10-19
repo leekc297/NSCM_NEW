@@ -1,0 +1,5 @@
+// SSP0012 레이아웃 — 단일 상세 그리드(조회영역 하단 Fill). AS-IS spdMain Dock=Fill(design 01 §1).
+.grid {
+  height: calc(100% - 8px);
+  min-height: 320px;
+}

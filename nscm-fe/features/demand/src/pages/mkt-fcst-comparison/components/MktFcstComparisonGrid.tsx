@@ -1,12 +1,6 @@
 import { Aggregate, Globalize } from '@mescius/wijmo';
 import type { GridPanel } from '@mescius/wijmo.grid';
-import {
-  type FlexGrid,
-  AllowMerging,
-  CellRange,
-  CellType,
-  GroupRow,
-} from '@mescius/wijmo.grid';
+import { type FlexGrid, AllowMerging, CellRange, CellType, GroupRow } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
 import type { MutableRefObject } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -49,6 +43,11 @@ class ComparisonHeaderMergeManager extends CustomMergeManager<ComparisonRow> {
     private readonly getOnlyWeekly: () => boolean
   ) {
     super(grid);
+  }
+
+    // DMF0040 그리드 - 앞의 컬럼이 셀병합 되어있으면 모두 셀병합 되도록 수정
+  protected override allowEmptyCellMerge(panel: GridPanel): boolean {
+    return panel.cellType === CellType.Cell;
   }
 
   getMergedRange(panel: GridPanel, r: number, c: number): CellRange | null {
@@ -111,7 +110,10 @@ const thisWeekMondayYmd = (): string => {
 const lastWeekSundayYmd = (yyyymmdd: string): string => {
   const d = dayjs(yyyymmdd, 'YYYYMMDD');
   if (!d.isValid()) return '';
-  return d.subtract((d.day() + 6) % 7, 'day').subtract(1, 'day').format('YYYYMMDD');
+  return d
+    .subtract((d.day() + 6) % 7, 'day')
+    .subtract(1, 'day')
+    .format('YYYYMMDD');
 };
 
 /** 동적 binding 의 대표 구간 [시작일, 종료일] — 실적 회색 경계 비교용 */
@@ -202,7 +204,10 @@ export const MktFcstComparisonGrid = ({
   }, [spreadTitle, data]);
 
   // ── 활성 bucket / 요약(Sum 토글) / 드릴(헤더 더블클릭) 분류 (AS-IS SetSpreadColumn L1370~1415) ──
-  const bucketPrefix = (isOnlyWeekly ? 'W' : bucket.trim().charAt(0).toUpperCase()) as 'M' | 'W' | 'D';
+  const bucketPrefix = (isOnlyWeekly ? 'W' : bucket.trim().charAt(0).toUpperCase()) as
+    | 'M'
+    | 'W'
+    | 'D';
   const { hasDaily, summaryBindings, drillBindings } = useMemo(() => {
     const daily = dynColMetas.some(m => m.kind === 'D');
     const active = DYN_RANK[bucketPrefix] ?? DYN_RANK.M;
@@ -238,7 +243,10 @@ export const MktFcstComparisonGrid = ({
   const dynamicColumns = useMemo<FlexGridColumnConfig[]>(() => {
     if (dynColMetas.length === 0) return [];
     type LeafCol = FlexGridColumnConfig & { binding: string };
-    const largeMap = new Map<string, { label: string; subs: Map<string, LeafCol[]>; order: number }>();
+    const largeMap = new Map<
+      string,
+      { label: string; subs: Map<string, LeafCol[]>; order: number }
+    >();
     const kindRank = { M: 0, W: 1, D: 2 } as const;
     dynColMetas.forEach((m, idx) => {
       const ymKey = m.binding.slice(2, 8);
@@ -251,7 +259,13 @@ export const MktFcstComparisonGrid = ({
       if (!group.subs.has(subKey)) group.subs.set(subKey, []);
       group.subs.get(subKey)?.push({
         binding: m.binding,
-        header: isOnlyWeekly ? 'SUM' : dailyVisible ? (m.kind === 'D' ? m.leaf || 'SUM' : 'SUM') : subKey,
+        header: isOnlyWeekly
+          ? 'SUM'
+          : dailyVisible
+            ? m.kind === 'D'
+              ? m.leaf || 'SUM'
+              : 'SUM'
+            : subKey,
         align: 'right',
         width: m.width, // UM-04 — SP COLUMN_WIDTH (ONLY_WEEKLY 100 / 그 외 50 계열)
         format: `n${m.scale}`, // UM-04 — SP DATA_SCALE_NUMBER = AS-IS NumberCellType.DecimalPlaces
@@ -275,7 +289,9 @@ export const MktFcstComparisonGrid = ({
     //   같은 월끼리 그룹을 합치지 않는다 — AS-IS 는 병합 없이 컬럼마다 월 텍스트를 반복 표시(주차:날짜 1:1).
     if (isOnlyWeekly) {
       const leafByBinding = new Map<string, LeafCol>();
-      largeMap.forEach(g => g.subs.forEach(cols => cols.forEach(col => leafByBinding.set(col.binding, col))));
+      largeMap.forEach(g =>
+        g.subs.forEach(cols => cols.forEach(col => leafByBinding.set(col.binding, col)))
+      );
       return dynColMetas.flatMap(m => {
         const leaf = leafByBinding.get(m.binding);
         if (!leaf) return [];
@@ -325,10 +341,21 @@ export const MktFcstComparisonGrid = ({
               }))
           : [...group.subs.entries()]
               .sort(([a], [b]) => subOrder(a) - subOrder(b))
-              .flatMap(([, leafCols]) => leafCols.sort((a, b) => a.binding.localeCompare(b.binding))),
+              .flatMap(([, leafCols]) =>
+                leafCols.sort((a, b) => a.binding.localeCompare(b.binding))
+              ),
       }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dynColMetas, dailyVisible, isOnlyWeekly, tierH, summaryBindings, drillBindings, isSumChecked, drillVis]);
+  }, [
+    dynColMetas,
+    dailyVisible,
+    isOnlyWeekly,
+    tierH,
+    summaryBindings,
+    drillBindings,
+    isSumChecked,
+    drillVis,
+  ]);
 
   // ── 헤더 머지 키 + 매니저 (1회 설치 — ref 로 최신 맵) ──
   const headerKeyMap = useMemo<Map<string, HeaderKey>>(() => {
@@ -350,9 +377,49 @@ export const MktFcstComparisonGrid = ({
     const g = gridRef.current;
     if (!g) return;
     if (g.mergeManager instanceof ComparisonHeaderMergeManager) return;
-    g.mergeManager = new ComparisonHeaderMergeManager(g, () => headerKeyRef.current, () => onlyWeeklyRef.current);
+    g.mergeManager = new ComparisonHeaderMergeManager(
+      g,
+      () => headerKeyRef.current,
+      () => onlyWeeklyRef.current
+    );
     g.invalidate(true);
   }, [gridRef, staticColumns, dynamicColumns]);
+
+  // 헤더 높이 자급 (#93 총 48px) — 실제 렌더된 tier 수로 나눠 전 헤더 row 에 강제 (형제 DemandPlanWaterfallGrid 동형).
+  //   공용 mapRawColumnsToWijmoColumns 는 정적 컬럼(1단)에 명시 height:48 을 박고, 그 명시값이
+  //   rows.defaultSize 를 무시한다 — 공용 DataGrid 의 headerRowHeight 는 defaultSize 만 세팅하므로
+  //   조회 후 2~3단이 되면 48×tier 로 헤더가 벌어진다(조회 시 헤더 커짐, 2026-09-17 리포트).
+  //   예측 tierH 가 아니라 실제 rows.length 로 나눈다 — 전이 중 빈 tier 잔존과 무관하게 총 48px 를 지킨다.
+  useEffect(() => {
+    const g = gridRef.current;
+    if (!g) return;
+    const applyHeaderHeight = () => {
+      const rows = g.columnHeaders?.rows;
+      if (!rows || rows.length === 0) return;
+      const targetHeight = 48 / rows.length;
+      let changed = false;
+      for (let i = 0; i < rows.length; i += 1) {
+        if (Math.round(rows[i].height ?? rows.defaultSize) !== Math.round(targetHeight)) {
+          rows[i].height = targetHeight;
+          changed = true;
+        }
+      }
+      if (Math.round(rows.defaultSize) !== Math.round(targetHeight)) {
+        rows.defaultSize = targetHeight;
+        changed = true;
+      }
+      if (changed) g.invalidate(true);
+    };
+    applyHeaderHeight();
+    g.updatedLayout.addHandler(applyHeaderHeight);
+    return () => {
+      try {
+        g.updatedLayout?.removeHandler(applyHeaderHeight);
+      } catch {
+        /* unmount race */
+      }
+    };
+  }, [gridRef, staticColumns, dynamicColumns, tierH]);
 
   // ── D_ binding → DAY_CODE (SAT=Blue/SUN=Red 헤더 글자색 — SetSpreadHeaderSpan L517) ──
   const dayCodeRef = useRef<Map<string, string>>(new Map());
@@ -370,7 +437,9 @@ export const MktFcstComparisonGrid = ({
   boundaryRef.current = useMemo(() => {
     const m = new Map<string, { ymd: string; unlockMonth: string }>();
     const periodTo = searchParams.endYyyymmdd;
-    const currentSunday = dayjs(thisWeekMondayYmd(), 'YYYYMMDD').subtract(1, 'day').format('YYYYMMDD');
+    const currentSunday = dayjs(thisWeekMondayYmd(), 'YYYYMMDD')
+      .subtract(1, 'day')
+      .format('YYYYMMDD');
     const versions = new Set(gridRows.map(r => String(r.VERSION_NO ?? '')));
     versions.forEach(v => {
       let ref: string;
@@ -394,9 +463,18 @@ export const MktFcstComparisonGrid = ({
   const applyDynVisibility = () => {
     const g = gridRef.current;
     if (!g) return;
+    // 우클릭 Hide Column 으로 숨긴 컬럼(공용 DataGrid 가 grid 인스턴스에 얹어 준다 — Column 객체의
+    //   커스텀 플래그는 wijmo 생성자가 `_` 로 시작하는 키를 무시해 전달되지 않는다).
+    const userHiddenColumns = (g as unknown as { _userHiddenColumns?: ReadonlySet<string> })
+      ._userHiddenColumns;
     g.columns.forEach(col => {
       const b = col.binding ?? '';
       if (!kindOf(b)) return;
+      // Hide Column 으로 숨긴 컬럼은 sum/드릴 재계산 대상에서 제외 — 숨김 유지.
+      if (userHiddenColumns?.has(b)) {
+        col.visible = false;
+        return;
+      }
       if (summaryBindings.includes(b)) {
         col.visible = searchParams.isSumChecked;
       } else if (drillBindings.includes(b)) {
@@ -410,12 +488,26 @@ export const MktFcstComparisonGrid = ({
   applyDynVisibilityRef.current = applyDynVisibility;
   useEffect(() => {
     applyDynVisibilityRef.current();
-  }, [gridRef, dynamicColumns, summaryBindings, drillBindings, searchParams.isSumChecked, gridRows]);
+  }, [
+    gridRef,
+    dynamicColumns,
+    summaryBindings,
+    drillBindings,
+    searchParams.isSumChecked,
+    gridRows,
+  ]);
 
   // ── footer 합계 (InitSpreadFooterSum — Sum, 숨김 컬럼 제외는 visible 토글이 담당) ──
   useEffect(() => {
     const g = gridRef.current;
     if (!g) return;
+    // 조회 결과가 없으면 Sum footer 를 숨긴다 — 빈 그리드에 헤더만 남긴다 (사용자 요청 2026-09-17).
+    //   데이터 없이 무조건 footer 를 넣으면 헤더+Sum 2줄로 보인다. 형제 DemandPlanWaterfallGrid 동일 처리.
+    const hasData = gridRows.length > 0;
+    if (!hasData) {
+      if (g.columnFooters.rows.length > 0) g.columnFooters.rows.clear();
+      return;
+    }
     if (g.columnFooters.rows.length === 0) {
       g.columnFooters.rows.push(new GroupRow());
     }
@@ -423,7 +515,7 @@ export const MktFcstComparisonGrid = ({
       const b = col.binding ?? '';
       col.aggregate = kindOf(b) ? Aggregate.Sum : Aggregate.None;
     });
-    // UM-11 — footer 는 bucket 무관 항상 표시 (AS-IS InitSpread() 말미 InitSpreadFooterSum 무조건 — ONLY_WEEKLY 포함)
+    // UM-11 — footer 는 bucket 무관 항상 표시(데이터 있을 때) (AS-IS InitSpread() 말미 InitSpreadFooterSum — ONLY_WEEKLY 포함)
     // footer 좌측 라벨 'Sum' (AS-IS ColumnFooter.Cells[0,1]="Sum")
     const first = g.columns[0]?.binding;
     if (first && g.columnFooters.rows.length > 0) {

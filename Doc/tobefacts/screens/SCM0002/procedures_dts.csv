@@ -1,0 +1,5 @@
+﻿"menu_id","sheet","request_keys","response_cursors","response_keys","sp_hints","line"
+"SCM0002","ModelPopup","divisionId projectCode scmSiteId itemId","o_rc1","o_rc1.DIVISION_ID o_rc1.DIVISION_NAME o_rc1.PROJECT_CODE o_rc1.PROJECT_NAME o_rc1.SCM_SITE_ID o_rc1.SITE_DESCRIPTION o_rc1.ITEM_ID o_rc1.ITEM_NAME o_rc1.ITEM_TYPE o_rc1.NICK_NAME o_rc1.ITEM_CLASS_NAME","","3233"
+"SCM0002","ElecPopup","divisionId companyId itemId","o_rc1","o_rc1.DIVISION_ID o_rc1.DIVISION_NAME o_rc1.PROJECT_CODE o_rc1.PROJECT_NAME o_rc1.COMPANY_ID o_rc1.ITEM_ID o_rc1.ITEM_NAME o_rc1.NICK_NAME o_rc1.ITEM_CLASS_NAME","P_SCM0002_GET_ITEM_ELEC","3258"
+"SCM0002","ProjectByDivPopup","divisionId projectCode","o_rc1","o_rc1.DIVISION_ID o_rc1.DIVISION_NAME o_rc1.PROJECT_CODE o_rc1.PROJECT_NAME o_rc1.PROJECT_STATUS o_rc1.BIZ_TYPE o_rc1.CURRENCY o_rc1.PROJECT_VER_SEQ o_rc1.PROJECT_OWNER","P_SCM0002_GET_PROJECT_BY_DIVISION_POPUP","3279"
+"SCM0002","CapaItemPopup","divisionId itemId","o_rc1","o_rc1.DIVISION_ID o_rc1.OPERATION_GROUP o_rc1.OPERATION_ID o_rc1.ITEM_ID o_rc1.ITEM_NAME o_rc1.NICK_NAME","PKG_SCM0002 P_SCM0002_GET_CAPA_ITEM_POPUP","3299"

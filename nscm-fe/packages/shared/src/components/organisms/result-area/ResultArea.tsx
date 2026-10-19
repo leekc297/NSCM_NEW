@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { Children, Fragment, isValidElement, type ReactNode } from 'react';
 
+import { useFilteredGridCount } from '@shared/hooks';
 import { TitleArea } from '@shared/lges';
 import { Panel, PanelGroup, PanelSeparator } from '@shared/panel';
 
@@ -33,13 +34,13 @@ const toFlex = (flex: number | string | undefined): string | undefined => {
  * </ResultArea>
  *
  * ex) 제목 + 건수 + 전용 버튼
- * <ResultArea title={t('LBL00636', 'Lookup Type')} count={rows.length} rightButtons={<Button ... />}>
+ * <ResultArea title={t('LBL00057', 'Lookup Type')} count={rows.length} rightButtons={<Button ... />}>
  *   <MasterGrid ... />
  * </ResultArea>
  *
  * ex) master(위 6) / detail(아래 4) 세로 분할 — 비율은 합이 10 이 되게
  * <ResultArea.Group>
- *   <ResultArea title={t('LBL00636', 'Lookup Type')} flex={6}>
+ *   <ResultArea title={t('LBL00057', 'Lookup Type')} flex={6}>
  *     <MasterGrid ... />
  *   </ResultArea>
  *   <ResultArea title={t('LBL00637', 'Lookup Values')} flex={4}>
@@ -49,7 +50,7 @@ const toFlex = (flex: number | string | undefined): string | undefined => {
  *
  * ex) 사용자가 경계를 드래그해 조절하는 분할 — split 만 추가하면 된다(초기 비율은 그대로 flex)
  * <ResultArea.Group split>
- *   <ResultArea title={t('LBL00636', 'Lookup Type')} flex={7}>
+ *   <ResultArea title={t('LBL00057', 'Lookup Type')} flex={7}>
  *     <MasterGrid ... />
  *   </ResultArea>
  *   <ResultArea title={t('LBL00637', 'Lookup Values')} flex={3}>
@@ -68,6 +69,8 @@ const ResultAreaRoot = ({
   title,
   depth = 'h4',
   count,
+  gridRef,
+  gridFilterRef,
   rightButtons,
   flex,
   gap = 4,
@@ -75,6 +78,9 @@ const ResultAreaRoot = ({
   className,
   style,
 }: ResultAreaProps) => {
+  // gridRef/gridFilterRef 미지정 시 종전과 동일하게 count 그대로(0/undefined 면 미표시) 반환.
+  const totalCases = useFilteredGridCount(gridRef, gridFilterRef, count ?? 0);
+
   return (
     <div
       className={clsx(styles.resultArea, className)}
@@ -86,7 +92,7 @@ const ResultAreaRoot = ({
           isSubTitle
           depth={depth}
           title={title ?? ''}
-          totalCases={count ? count : undefined}
+          totalCases={totalCases}
           rightButtons={rightButtons}
         />
       )}

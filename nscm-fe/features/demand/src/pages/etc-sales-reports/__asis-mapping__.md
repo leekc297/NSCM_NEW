@@ -9,7 +9,7 @@
 |---|---|---|---|---|
 | E00 | §0 정본 vs 변형(GSCM.DM.Plan.UIL 평면본) 차이 — git diff --no-index 실측 |  | 정본 선택 근거 — `GSCM.DM.Forms.UIL/Plan/DMF0049_Sales_ETC_Reports/`(1,727행) 폴더단위 유일본. 평면본 `GSCM.DM.Plan.UIL/DMF0049_Sales_ETC_Reports.cs` 는 구본. TO-BE 구현 산출물이 아니라 **분석 메타** 항목 | 제외 |
 | E01 | §1 초기화 체인 (Form_Load, L146~154) | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx:126~133 (useEffect 초기화 — fetchStaticColumns/fetchStaticMeasures) |  | 구현 |
-| E01-1 | §1.1 InitControls (L191~226) — 콤보 로딩 순서·기본값 | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsForm.tsx:37~39 (MDF_TYPE·CALENDAR_YYYY) + features/demand/src/pages/etc-sales-reports/useEtcSalesReportsStore.ts:100~116 (initSearch 기본값) |  | 구현 |
+| E01-1 | §1.1 InitControls (L191~226) — 콤보 로딩 순서·기본값 | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsForm.tsx (MDF_TYPE 콤보 + YearField) + features/demand/src/pages/etc-sales-reports/useEtcSalesReportsStore.ts:100~116 (initSearch 기본값) |  | 구현 |
 | E01-2 | §1.2 CreateSpread (L240~247) / InitSpread (L249~268) — 시트 구성 | features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx:76~120 (정적 컬럼 메타 + 셀 콤보 dataMap) + features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.merge.ts:15 (**1단 헤더** MergeManager — 2026-08-11 전환) |  | 구현 |
 | E01-3 | §1.3 DefineProperty (L227~238) |  | AS-IS FarPoint `DefineProperty` = Spread 내부 속성 선언. TO-BE 는 Wijmo + SHEET_COLUMNS 메타가 동일 역할을 하며 대응 코드 단위가 없다(hook #113 메타 주도) | 해당없음 |
 | E02 | §2 FindData — 조회 (FindButton L274~277 → FindData L522~627) | features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx:142~155 (handleSearch) + features/demand/src/pages/etc-sales-reports/useEtcSalesReportsStore.ts:121~165 (setFilter — thisMonth/resultMonth 스냅샷) + features/demand/src/pages/etc-sales-reports/EtcSalesReports.tsx:83~90 (useTabProcQuery MAIN) |  | 구현 |
@@ -124,7 +124,7 @@
 | REQ:CHAT-20260820-17 | 저장 시 msg 표준화 | 성공=Toast 전환(hook #132 §3 위반 해소), 실패·검증은 Alert 유지 + saving 가드로 연타 차단·버튼 비활성·스피너 |  | 구현 |
 | REQ:CHAT-20260820-18 | 조회 후 Department/Team/Cust(report) 병합 상태에서 수정할 line 클릭 시 병합이 풀리고 편집 가능 | selectionChanged 로 클릭 세트키(INSERT_GROUP_ID ?? DATA_SEQ) 세팅 → 그 세트만 광역 병합에서 분리 |  | 구현 |
 | REQ:CHAT-20260820-19 | 편집 시 같은 group 값만 병합된 상태로 입력 (같은 group 만 해당 내역 수정) | 병합 단위=measure 세트(setKeyOf) 도입 + 동반 결함 정정: 정적 컬럼만 수정한 세트를 skip 해 MSG00676('저장할 대상 없음')이 뜨던  |  | 구현 |
-| REQ:CHAT-20260820-20 | Excel 다운로드 숫자 서식 = AS-IS #,##0.000;[Red]-#,##0.000 (DMF0044 .cs:396 / DMF0049 .cs:487 — 두 화면 모두 3자리 고정+음수 빨강). TO-BE 는 e |  | USER-DECISION 보류 — Excel 서식은 공용 gridAction.ts 변경 필요(전 화면 영향), 범위 사용자 확정 대기 | 제외 |
+| REQ:CHAT-20260820-20 | Excel 다운로드 숫자 서식 = AS-IS #,##0.000;[Red]-#,##0.000 (DMF0044 .cs:396 / DMF0049 .cs:487 — 두 화면 모두 3자리 고정+음수 빨강) | components/EtcSalesReportsGrid.tsx 동적 컬럼 `format: n{scale}` + `dataType: Number` + `_ctrlType: NUMBER` + `_excelFormat: excelNumberFormat(scale)` (2026-10-06). 공용 `GridAction.excelDownload` 가 `_excelFormat`(opt-in) 을 읽어 엑셀 셀 서식을 덮어쓴다(`packages/foundation` column-config.ts·gridAction.ts, 미지정 컬럼 무변화). 편집 커밋값은 문자열(toFixed) 대신 숫자로 보관해 저장 전 칸도 숫자 셀 |  | 구현 |
 
 ## 0. 원본 결함 교정 이력 (2026-07-22 채택)
 | # | 결함 | 처리 |
@@ -149,7 +149,10 @@
 - 정적 42 = admin 'MDF Reports' 메타 100%(hook #113) / 동적 M_yyyymm **1단 평면 헤더**(라벨 `2025-01`, 2026-08-11 전환 — 아래 H-1) ✅
 - **세트행**: 40=3(SalesAmt_LOC→KRW→RTF_SYS_RP)/81(startsWith)=2/82=1 — Insert/Delete 블록 단위(INSERT_GROUP_ID), 저장 = 세트×채택월×행 emit ✅
 - **G0**: DM Planner && Div≠82 → MSG00096 (Insert/Save 진입 + 셀 전면 잠금 — L341~345) ✅
-- **시점축**: baseYm = BP '201801' / SP_W 당월. Plan: 과거년도 전체 잠금[C20201223]·과거 구간 잠금·창 내 = 40 무관 개방·비40 = MEASURE===sEditMeasure(DM_LOOKUP_DIV×DM_SR_ETC_CURRENCY — 82='SalesAmt_KRW'뿐·81 빈값=전잠금). Result: 미래 잠금·과거 = 동일 개방·BP=전체 잠금(보수 확정) ✅
+- **시점축**: baseYm = BP '201801' / SP_W 당월. Plan: 과거년도 전체 잠금[C20201223]·과거 구간 잠금·창 내 = 40 무관 개방·비40 = MEASURE===sEditMeasure(DM_LOOKUP_DIV×DM_SR_ETC_CURRENCY — 82='SalesAmt_KRW'뿐·81 빈값=전잠금). Result: 미래 잠금·과거 = 동일 개방 ✅
+  - ⭐ [2026-09-22 정정 — 사용자 지적] 구 "BP Result = 전체 잠금(보수 확정 D-6)" 폐기. AS-IS 잠금은 전부 `GetColumnIndex("M_"+기준월) > 0`
+    조건부라, 기준월 컬럼이 그리드에 없으면(BP 기준월 201801 을 2018 외 연도로 조회 / SP_W 를 당해 외 연도로 조회) 잠금이 걸리지 않는다.
+    → BP×Result = 전 구간·전 메저 편집, BP×Plan = 과거년도만 전체 잠금·그 외 전 구간 편집. `etc-sales-reports.editLock.ts` evalEtcReportCell 이 L414~460 을 1:1 재현.
 - ⚠ **EDIT_FLAG 동적 셀 미사용** (EditButton 루프 값 비교 없음 — DMF0044와 정반대. §2.3 비대칭 실측) ✅
 - 정적 컬럼 편집 = **UI Category Setup `INPUT_TP_CD` 단일 원천**(2026-08-11 전환 — 아래 H-5). AS-IS 신규행 division 분기 잠금(공통 7 + 81: FCST_TYPE·CELL_MODEL_INFO / 82: ITEM_ID·CELL_MODEL_INFO / 40: SCM_SITE_ID)·기존행 전량 잠금은 **메타 값('S')으로 보존**한다 ✅
 - cascade 3종: C1 40 DEPARTMENT_ID→DEPT_ID(CMBO DMF0049_DEPARTMENT_TEAM — SEGMENT3 cascade)+하위 clear / C2 DEPT_ID→END_CUST_REPORT·ReportGroup3·DMF0005_REPORT_GROUP2(GRID_EDIT_COMBO) / C3 END_CUSTOMER→SiteByEndCustomer ✅

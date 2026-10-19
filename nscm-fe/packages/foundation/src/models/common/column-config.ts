@@ -11,6 +11,8 @@ export interface RawFlexGridColumnConfig {
   cellCtrlObjTpCd?: CELL_CONTROL_TYPE;
   cellCboDataTp?: string;
   scale?: number;
+  // 입력 최대 글자수 (admin SCM_MST_SHEET_COLUMNS.DATA_MAX_LENGTH). 편집기 입력을 N자로 제한.
+  dataMaxLength?: number;
   inputTpCd?: CELL_INPUT_EDIT_TYPE;
   colWth?: number;
   fixed?: boolean;
@@ -31,6 +33,16 @@ export interface RawFlexGridColumnConfig {
    * 키가 없으면 아직 조회 전, 빈 배열이면 0건이다. 둘을 구분해서 다뤄야 한다.
    */
   rowParamRows?: Record<string, ComboResponse[]>;
+  /**
+   * 신규행(CRUD_TYPE='I') 전용 콤보(PARAM9) 조회 결과 — 필터 방식(PARAM10 이 'D' 가 아님)일 때.
+   * dataMap 과 같은 성격이라 DataGrid 가 조회 후 주입한다. PARAM9 가 비면 undefined 다.
+   */
+  insertDataMap?: ComboResponse[];
+  /**
+   * 신규행 전용 콤보(PARAM9) 의 행 값 조합별 후보 — 재조회 방식(PARAM10='D')일 때.
+   * rowParamRows 와 같은 규약(키 없음 = 조회 전, 빈 배열 = 0건)이다.
+   */
+  insertRowParamRows?: Record<string, ComboResponse[]>;
   allowMerging?: boolean;
   attribute1?: string;
   attribute2?: string;
@@ -54,6 +66,14 @@ export interface FlexGridColumnConfig {
   allowResizing?: boolean;
   allowSorting?: boolean;
   format?: string; // .NET Globalization lib
+  /** 편집 시 입력 마스크(Wijmo Column.mask). 예: 날짜 텍스트 '0000-00-00' → ####-##-##. */
+  mask?: string;
+  /** 편집 시 입력 최대 글자수(Wijmo Column.maxLength). admin DATA_MAX_LENGTH 에서 온다. */
+  maxLength?: number;
+  /** 동적 컬럼 전용 숫자 입력 제한. 정적 컬럼은 DataGrid `numberRules` prop 으로 준다. 의미는 NumberInputRule 참고. */
+  positiveOnly?: boolean;
+  integerOnly?: boolean;
+  decimalPlaces?: number;
   isReadOnly?: boolean;
   isRequired?: boolean;
   visible?: boolean;
@@ -68,6 +88,13 @@ export interface FlexGridColumnConfig {
   /** 관리자 메타 라벨 끝에 `*` 가 박혀 있던 컬럼 — 라벨에서 떼어내고 헤더 빨간점으로 표시한다. */
   _requiredMark?: boolean;
   _ctrlType?: CELL_CONTROL_TYPE;
+  /**
+   * 엑셀 내려받기(GridAction.excelDownload) 전용 셀 서식 — Excel 숫자 서식 문자열 그대로
+   * (예 `#,##0.000;[Red]-#,##0.000`). 지정한 컬럼만 변환기 기본 서식(`format` 변환값)을 덮어쓴다.
+   * 화면 표시 `format` 과 분리한 이유: wijmo 는 `;[Red]` 같은 구간 서식을 화면에서 2자리로 해석해
+   * 편집기 표시가 깨진다. 미지정(기본) 컬럼은 종전과 완전히 같다.
+   */
+  _excelFormat?: string;
   _ctrlData?: string;
   _fixed?: boolean;
   _uppercase?: boolean;

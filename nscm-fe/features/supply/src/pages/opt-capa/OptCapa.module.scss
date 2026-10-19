@@ -1,0 +1,8 @@
+// 탭 영역이 남은 세로 공간을 전부 쓰도록 — 그리드 높이 0 방지(inline style 금지, Top11 #5).
+//   탭과 DataGrid 사이에 래퍼 div 를 **추가로** 끼우지 않는다(flex 계약, hook #132).
+.tabArea {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  flex-direction: column;
+}
