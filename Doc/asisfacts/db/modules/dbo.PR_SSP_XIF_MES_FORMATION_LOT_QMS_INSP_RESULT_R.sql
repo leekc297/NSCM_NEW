@@ -1,0 +1,1602 @@
+﻿
+/*
+ * Program ID   : PR_SSP_XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R 
+ * Description  : MES 활성화 조립 LOT QMS 검사 결과 I/F 수신 반영(Every 10 min) 
+ * OutTable     : XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN --> SSP_DNM_MES_STOCK_40 
+ * Execute      : 
+ * Program History
+ *===================================================================================================
+ *   Date         In Charge      Description
+ *===================================================================================================
+ * 2019.10.24     LJH            Initial Release [PJ20189106] 전지.GSCM 고도화 이행
+ * 2020.01.14     LJH            [] QMS_HOLD_YN 로직 변경 MAX(JUDG_VLD_DATE)가 과거일자가 있으면 Y 
+                                 (변경전: 과거일자가 하나라도 있으면 QMS_HOLD_YN =Y)
+ * 2020.03.10     LJH            [C20200305-000407] 특정공정(A2000,A3000,A4000)은 제외 
+                                 제외공정은 LOOKUP(TYPE:MES_STOCK_EXCEPT_OPERATION)에 등록 관리
+ * 2020.03.17     KIMYONGHO      [C20200303-000163] LONGTERM_HOLD_YN 컬럼 추가	
+ * 2020.09.22	  KIM BOK KI     OPERATION_NAME 추가
+ * 2020.09.25     KIM BOK KI     JOIN SCM_ADM_LOOKUP_MASTER_DETAIL -> LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL 로 변경
+ * 2020.10.15     KIM BOK KI     POUCH WH_IN DAY LOOKUP 생성 추가
+ * 2021.01.26     KIM BOK KI     ATTRIBUTE2 정보 추가 수신으로 인한 재고 수량 분할로 SSP_DNM_MES_STOCK_40 저장 시 집계
+                                 로직 추가
+ * 2021.02.04     KIMBK          COMPANY 별 재고 수신정보 체크 추가
+ * 2021.07.27     SSP Pjt.       attribute4 불량수량 적용
+ * 2024.10.01     KHJ            NERP_SSP
+ */
+
+CREATE  PROCEDURE [dbo].[PR_SSP_XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R]
+AS
+  BEGIN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+    SET ANSI_WARNINGS ON;
+
+    -- LOG 용 변수 설정
+    DECLARE @v_batch_user   NVARCHAR(150) = N'ssp_batch';  
+--    SET     @v_batch_user = @p_user_id
+    DECLARE @v_program_name NVARCHAR(150) = N'PR_SSP_XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);      -- ▶ 상세설명 
+    DECLARE @v_table_id     NVARCHAR(150) = N'SSP_DNM_MES_STOCK_40 '; -- ▶ 테이블 필수
+    DECLARE @d_event_date   DATETIME;
+
+    -- 임시 실행시간 확인용
+    DECLARE @v_start_time   DATETIME     = SYSDATETIME();
+    DECLARE @v_exec_time    NVARCHAR(10) = ''--'[00:00]';
+
+	DECLARE @v_count          INT  = 0 ;
+	DECLARE @v_cnt            INT  = 0 ;
+
+	-- NERP 매핑코드
+	DECLARE @v_C100 NVARCHAR(10);
+	SET @v_C100 = dbo.FN_GET_LOOKUP_VALUE('PR_SSP_XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R'  ,'ESOC');	--C100
+
+    -- 시작 LOG
+    SET @v_log_type = N'START';
+    SET @v_log_message = N'########## Start of procedure ##########';
+    SET @v_description = @v_program_name + ':' + N' SSP_DNM_MES_STOCK_40 INSERT LOGIC';
+    SET @d_event_date = SYSDATETIME();
+    EXEC PR_SCP_SYS_LOG_BATCH  @p_program_name  =@v_program_name
+                              ,@p_log_type      =@v_log_type
+                              ,@p_log_count     =@n_log_count 
+                              ,@p_log_message   =@v_log_message 
+                              ,@p_description   =@v_description 
+                              ,@p_event_date    =@d_event_date 
+                              ,@p_user_id       =@v_batch_user
+                              ;
+
+    BEGIN TRY
+      BEGIN
+       BEGIN TRAN TX_SH
+
+/*
+		-- 2020.08.27  현업 요구사항으로 LOGIC 추가
+		INSERT INTO SCM_ADM_LOOKUP_MASTER_DETAIL
+				(
+				 LOOKUP_TYPE
+				,SEGMENT1     -- CELL_TYPE   
+				,SEGMENT2     -- OPERATION_ID
+				,SEGMENT3
+				,SEGMENT4
+				,SEGMENT5
+				,ATTRIBUTE1
+				,DISPLAY_SEQ
+				,VALID_YN
+				,DESCRIPTION
+				,CREATED_BY
+				,CREATION_DATE
+				,LAST_UPDATED_BY
+				,LAST_UPDATE_DATE
+				)
+		SELECT 'MES_POUCH_OPERATION'   AS LOOKUP_TYPE
+			 , ISNULL(D.SEGMENT3, '')  AS CELL_TYPE
+			 , A.ATTRIBUTE1                        AS OPERATION_ID
+			 , E.OPERATION_NAME
+			 , '-'
+			 , '-'
+			 , '-'
+			 , 10   AS DISPLAY_SEQ
+			 , 'Y'  AS VALID_YN
+			 , 'System Auto Create'   AS DESCRIPTION
+			 , @v_batch_user    AS CREATED_BY   --@v_batch_user
+			 , GETDATE()        AS CREATION_DATE
+			 , @v_batch_user    AS LAST_UPDATED_BY  --@v_batch_user
+			 , GETDATE()        AS LAST_UPDATE_DATE
+		FROM   XIF_MES_ISS_WAIT_PALLET_R_SN  A WITH(NOLOCK)
+				LEFT OUTER JOIN SCM_MST_FACTORY_SN  B WITH(NOLOCK)
+				ON   B.PLANT_ID   = A.PLANT_ID
+				AND  B.FACTORY_ID = A.AREAID 
+				LEFT OUTER JOIN SCP_MST_FINAL_ITEM  C WITH(NOLOCK)
+				ON   C.DIVISION_ID = B.DIVISION_ID
+				AND  C.ITEM_ID = A.PRODID
+				JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D WITH(NOLOCK) 
+				ON  D.SEGMENT3 <> 'P'
+				AND D.LOOKUP_TYPE = 'CELL_TYPE_CODE' 
+				AND D.VALID_YN    = 'Y' 
+				AND D.SEGMENT1    = C.CELL_TYPE_GROUP_CODE
+				JOIN SCM_MST_OPERATION_SN  E WITH(NOLOCK)
+				ON    E.OPERATION_ID = A.ATTRIBUTE1
+		WHERE  1 = 1
+		AND    A.PROC_FLAG = 'N'
+		AND    A.PLANT_ID IS NOT NULL
+		AND    B.DIVISION_ID = '40'
+		AND   ISNULL(C.CELL_TYPE_GROUP_CODE, '') = 'P'
+		AND    NOT EXISTS (
+							SELECT 1
+							FROM   SCM_ADM_LOOKUP_MASTER_DETAIL  B WITH(NOLOCK)
+							WHERE  1 = 1
+							AND    B.LOOKUP_TYPE = 'MES_STOCK_EXCEPT_OPERATION'
+							AND    B.VALID_YN    = 'Y' 
+							AND    B.SEGMENT1    =  A.ATTRIBUTE1 
+						  )
+		AND    NOT EXISTS (
+							SELECT 1
+							FROM   SCM_ADM_LOOKUP_MASTER_DETAIL  B WITH(NOLOCK)
+							WHERE  1 = 1
+							AND    B.LOOKUP_TYPE = 'MES_POUCH_OPERATION'
+							--AND    B.VALID_YN    = 'Y' 
+							AND    B.SEGMENT1    =  ISNULL(C.CELL_TYPE_GROUP_CODE, '')
+							AND    B.SEGMENT2    = A.ATTRIBUTE1 
+							AND    B.SEGMENT3    = '-'
+							AND    B.SEGMENT4    = '-'
+							AND    B.SEGMENT5    = '-'
+		                  )
+		GROUP BY ISNULL(D.SEGMENT3, '')
+			 , A.ATTRIBUTE1
+			 , E.OPERATION_NAME
+		;
+
+
+		-- 2020.09.28  현업 요구사항으로 LOGIC 추가 (Pouch Item Group 별 WH_IN 합산 일수 관리)
+		INSERT INTO SCM_ADM_LOOKUP_MASTER_DETAIL
+				(
+				 LOOKUP_TYPE
+				,SEGMENT1     -- CELL_TYPE   
+				,SEGMENT2     -- OPERATION_ID
+				,SEGMENT3
+				,SEGMENT4
+				,SEGMENT5
+				,DISPLAY_SEQ
+				,VALID_YN
+				,DESCRIPTION
+				,CREATED_BY
+				,CREATION_DATE
+				,LAST_UPDATED_BY
+				,LAST_UPDATE_DATE
+				)
+		SELECT 'POUCH_WH_IN_DAY'       AS LOOKUP_TYPE
+			 , SUBSTRING(A.PRODID, 1, 3)  AS SEGMENT1 -- POUCH_ITEM_GROUP
+			 , CASE WHEN (SUBSTRING(A.PRODID, 1, 3) = 'MDP' OR SUBSTRING(A.PRODID, 1, 3) = 'MIP' OR SUBSTRING(A.PRODID, 1, 3) = 'MTP') THEN '3'
+			   ELSE '2' END            AS SEGMENT2  -- WH_IN_DAY
+			 , '-'   AS SEGMENT3
+			 , '-'   AS SEGMENT4
+			 , '-'   AS SEGMENT5
+			 , 10    AS DISPLAY_SEQ
+			 , 'Y'   AS VALID_YN
+			 , 'System Auto Create'   AS DESCRIPTION
+			 , 'System'
+			 , GETDATE()        AS CREATION_DATE
+			 , 'System'
+			 , GETDATE()        AS LAST_UPDATE_DATE
+		FROM   XIF_MES_ISS_WAIT_PALLET_R_SN  A WITH(NOLOCK)
+				LEFT OUTER JOIN SCM_MST_FACTORY_SN  B WITH(NOLOCK)
+				ON   B.PLANT_ID   = A.PLANT_ID
+				AND  B.FACTORY_ID = A.AREAID 
+				LEFT OUTER JOIN SCP_MST_FINAL_ITEM  C WITH(NOLOCK)
+				ON   C.DIVISION_ID = B.DIVISION_ID
+				AND  C.ITEM_ID = A.PRODID
+				JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D WITH(NOLOCK) 
+				ON  D.SEGMENT3 = 'P'
+				AND D.LOOKUP_TYPE = 'CELL_TYPE_CODE' 
+				AND D.VALID_YN    = 'Y' 
+				AND D.SEGMENT1    = C.CELL_TYPE_GROUP_CODE
+				JOIN SCM_MST_OPERATION_SN  E WITH(NOLOCK)
+				ON    E.OPERATION_ID = A.ATTRIBUTE1
+		WHERE  1 = 1
+		AND    A.PROC_FLAG = 'N'
+		AND    A.PLANT_ID IS NOT NULL
+		AND    B.DIVISION_ID = '40'
+		AND    NOT EXISTS (
+							SELECT 1
+							FROM   SCM_ADM_LOOKUP_MASTER_DETAIL  B WITH(NOLOCK)
+							WHERE  1 = 1
+							AND    B.LOOKUP_TYPE = 'POUCH_WH_IN_DAY'
+							AND    B.VALID_YN    = 'Y' 
+							AND    B.SEGMENT1    =  SUBSTRING(A.PRODID, 1, 3)
+							--AND    B.SEGMENT2    = A.ATTRIBUTE1 
+							AND    B.SEGMENT3    = '-'
+							AND    B.SEGMENT4    = '-'
+							AND    B.SEGMENT5    = '-'
+		                  )
+		GROUP BY SUBSTRING(A.PRODID, 1, 3)
+		;
+
+*/
+		DECLARE @stock_cnt INTEGER, 
+			    @company_id VARCHAR(30),  
+				@group_seq VARCHAR(30)
+
+		DECLARE @idx INT     SET     @idx = 0  
+ 
+
+		-- COMPANY 별 I/F 건수와 전송 대상 건수 체크 : 2021.02,04
+/* INF-R 적용 이전
+		DECLARE CUR_MES_STOCK CURSOR FOR  
+		SELECT SUM(STOCK_CNT) AS STOCK_CNT
+		     , A.COMPANY_ID
+			 , A.GROUP_SEQ
+		FROM   (
+				SELECT SUM(A.CHECK_CNT) AS STOCK_CNT
+				     , A.COMPANY_ID
+					 , A.GROUP_SEQ
+				FROM   (
+						SELECT CASE WHEN B.IF_CNT = 0 THEN 0
+									WHEN B.IF_CNT IS NULL THEN 1
+								ELSE 
+									CASE WHEN A.IF_CNT <> B.IF_CNT THEN 1
+									ELSE 0 END 
+								END   AS CHECK_CNT
+								, A.COMPANY_ID
+								, A.COMPANY_ID + SUBSTRING(A.GROUP_SEQ, 1, 8) AS GROUP_SEQ
+						FROM   (
+								SELECT A.ATTRIBUTE5  AS COMPANY_ID
+									 , ISNULL(A.ATTRIBUTE7, CONVERT(CHAR(8), GETDATE(), 112))  AS GROUP_SEQ
+									 , COUNT(*)  AS IF_CNT
+								--FROM   [10.34.220.88,7433].[LGCE_INF].[dbo].[XIF_MES_ISS_WAIT_PALLET_R]  A WITH(NOLOCK)
+								FROM   XIF_MES_ISS_WAIT_PALLET_R_SN  A WITH(NOLOCK)
+								WHERE  1 = 1
+								--AND    ISNULL(A.PROC_FLAG,'N') = 'N'
+								AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+								GROUP BY A.ATTRIBUTE5
+									   , A.ATTRIBUTE7
+								) A
+								LEFT OUTER JOIN (
+								SELECT A.COMPANY_ID, A.GROUP_SEQ, SUM(IF_CNT) AS IF_CNT
+								FROM   (
+										SELECT A.ATTRIBUTE5  AS COMPANY_ID
+											 , ISNULL(A.ATTRIBUTE7, CONVERT(CHAR(8), GETDATE(), 112))  AS GROUP_SEQ
+											 , CONVERT(INT, A.ATTRIBUTE6)  AS IF_CNT
+										--FROM   [10.34.220.88,7433].[LGCE_INF].[dbo].[XIF_MES_ISS_WAIT_PALLET_R]  A WITH(NOLOCK)
+										FROM   XIF_MES_ISS_WAIT_PALLET_R_SN  A WITH(NOLOCK)
+										WHERE  1 = 1
+										--AND    ISNULL(A.PROC_FLAG,'N') = 'N'
+										AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+										GROUP BY A.ATTRIBUTE5
+												, A.ATTRIBUTE6
+												, A.ATTRIBUTE7
+										) A
+								WHERE  1 = 1
+								GROUP BY A.COMPANY_ID
+									   , A.GROUP_SEQ
+								) B
+								ON   A.COMPANY_ID = B.COMPANY_ID
+								AND  A.GROUP_SEQ  = B.GROUP_SEQ
+						WHERE  1 = 1
+					   ) A
+				WHERE  1 = 1
+				GROUP BY A.COMPANY_ID
+					 , A.GROUP_SEQ
+
+				UNION ALL
+
+				SELECT SUM(CHECK_CNT) AS STOCK_CNT
+				     , A.COMPANY_ID
+					 , A.GROUP_SEQ
+				FROM   (
+						SELECT CASE WHEN B.IF_CNT = 0 THEN 0
+									WHEN B.IF_CNT IS NULL THEN 1
+								ELSE 
+									CASE WHEN A.IF_CNT <> B.IF_CNT THEN 1
+									ELSE 0 END 
+								END   AS CHECK_CNT
+								, A.COMPANY_ID
+								, A.COMPANY_ID + SUBSTRING(A.GROUP_SEQ, 1, 8) AS GROUP_SEQ
+						FROM   (
+								SELECT A.ATTRIBUTE5  AS COMPANY_ID
+									 , ISNULL(A.ATTRIBUTE7, CONVERT(CHAR(8), GETDATE(), 112))  AS GROUP_SEQ
+									  , COUNT(*)  AS IF_CNT
+								--FROM   [10.34.220.88,7433].[LGCE_INF].[dbo].[XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R]  A WITH(NOLOCK)
+								FROM   XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN  A WITH(NOLOCK)
+								WHERE  1 = 1
+								AND    ISNULL(A.PROC_FLAG,'N') = 'N'
+								AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+								GROUP BY A.ATTRIBUTE5
+									   , A.ATTRIBUTE7
+								) A
+								LEFT OUTER JOIN (
+								SELECT A.COMPANY_ID, A.GROUP_SEQ, SUM(IF_CNT) AS IF_CNT
+								FROM   (
+										SELECT A.ATTRIBUTE5  AS COMPANY_ID
+											 , ISNULL(A.ATTRIBUTE7, CONVERT(CHAR(8), GETDATE(), 112))  AS GROUP_SEQ
+												, CONVERT(INT, A.ATTRIBUTE6)  AS IF_CNT
+										--FROM   [10.34.220.88,7433].[LGCE_INF].[dbo].[XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R]  A WITH(NOLOCK)
+										FROM   XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN  A WITH(NOLOCK)
+										WHERE  1 = 1
+										AND    ISNULL(A.PROC_FLAG,'N') = 'N'
+										AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+										GROUP BY A.ATTRIBUTE5
+												, A.ATTRIBUTE6
+												, A.ATTRIBUTE7
+										) A
+								WHERE  1 = 1
+								GROUP BY A.COMPANY_ID
+									   , A.GROUP_SEQ
+								) B
+								ON   A.COMPANY_ID = B.COMPANY_ID
+								AND  A.GROUP_SEQ  = B.GROUP_SEQ
+					   ) A
+				WHERE  1 = 1
+				GROUP BY A.COMPANY_ID
+					 , A.GROUP_SEQ
+			   ) A
+		WHERE  1 = 1
+		GROUP BY A.COMPANY_ID
+				, A.GROUP_SEQ
+		;
+*/
+/* INF-R 적용 후 */
+		DECLARE CUR_MES_STOCK CURSOR FOR  
+		SELECT SUM(STOCK_CNT) AS STOCK_CNT
+		     , A.COMPANY_ID
+			 , A.GROUP_SEQ
+		FROM   (
+				SELECT SUM(A.CHECK_CNT) AS STOCK_CNT
+				     , A.COMPANY_ID
+					 , A.GROUP_SEQ
+				FROM   (
+						SELECT CASE WHEN B.IF_CNT = 0 THEN 0
+									WHEN B.IF_CNT IS NULL THEN 1
+								ELSE 
+									CASE WHEN A.IF_CNT <> B.IF_CNT THEN 1
+									ELSE 0 END 
+								END   AS CHECK_CNT
+								, A.COMPANY_ID
+								, A.COMPANY_ID + SUBSTRING(A.GROUP_SEQ, 1, 8) AS GROUP_SEQ
+						FROM   (
+								SELECT ISNULL( X1.NEW_VALUE1, A.ATTRIBUTE5)  AS COMPANY_ID
+									 , ISNULL(A.ATTRIBUTE7, CONVERT(CHAR(8), GETDATE(), 112))  AS GROUP_SEQ
+									 , COUNT(*)  AS IF_CNT
+								--FROM   [10.34.220.88,7433].[LGCE_INF].[dbo].[XIF_MES_ISS_WAIT_PALLET_R]  A WITH(NOLOCK)
+								FROM   XIF_MES_ISS_WAIT_PALLET_R_SN  A WITH(NOLOCK)
+								LEFT OUTER JOIN  NERP_CONV_MASTER X1 WITH(NOLOCK)
+								ON  X1.CODETYPE = 'COMPANY_ID'
+								AND A.ATTRIBUTE5 = X1.OLD_VALUE1 
+								AND X1.ATTRIBUTE5 = '1ST'
+								WHERE  1 = 1
+								--AND    ISNULL(A.PROC_FLAG,'N') = 'N'
+								AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+								GROUP BY A.ATTRIBUTE5, A.ATTRIBUTE7, X1.NEW_VALUE1
+								) A
+								LEFT OUTER JOIN (
+								SELECT A.COMPANY_ID, A.GROUP_SEQ, SUM(IF_CNT) AS IF_CNT
+								FROM   (
+										SELECT ISNULL( X1.NEW_VALUE1, A.ATTRIBUTE5)  AS COMPANY_ID
+											 , ISNULL(A.ATTRIBUTE7, CONVERT(CHAR(8), GETDATE(), 112))  AS GROUP_SEQ
+											 , CONVERT(INT, A.ATTRIBUTE6)  AS IF_CNT
+										--FROM   [10.34.220.88,7433].[LGCE_INF].[dbo].[XIF_MES_ISS_WAIT_PALLET_R]  A WITH(NOLOCK)
+										FROM   XIF_MES_ISS_WAIT_PALLET_R_SN  A WITH(NOLOCK)
+										LEFT OUTER JOIN  NERP_CONV_MASTER X1 WITH(NOLOCK)
+										ON  X1.CODETYPE = 'COMPANY_ID'
+										AND A.ATTRIBUTE5 = X1.OLD_VALUE1 
+										AND X1.ATTRIBUTE5 = '1ST'
+										WHERE  1 = 1
+										--AND    ISNULL(A.PROC_FLAG,'N') = 'N'
+										AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+										GROUP BY A.ATTRIBUTE5, A.ATTRIBUTE6, A.ATTRIBUTE7, X1.NEW_VALUE1
+										) A
+								WHERE  1 = 1
+								GROUP BY A.COMPANY_ID
+									   , A.GROUP_SEQ
+								) B
+								ON   A.COMPANY_ID = B.COMPANY_ID
+								AND  A.GROUP_SEQ  = B.GROUP_SEQ
+						WHERE  1 = 1
+					   ) A
+				WHERE  1 = 1
+				GROUP BY A.COMPANY_ID
+					 , A.GROUP_SEQ
+
+				UNION ALL
+
+				SELECT SUM(CHECK_CNT) AS STOCK_CNT
+				     , A.COMPANY_ID
+					 , A.GROUP_SEQ
+				FROM   (
+						SELECT CASE WHEN B.IF_CNT = 0 THEN 0
+									WHEN B.IF_CNT IS NULL THEN 1
+								ELSE 
+									CASE WHEN A.IF_CNT <> B.IF_CNT THEN 1
+									ELSE 0 END 
+								END   AS CHECK_CNT
+								, A.COMPANY_ID
+								, A.COMPANY_ID + SUBSTRING(A.GROUP_SEQ, 1, 8) AS GROUP_SEQ
+						FROM   (
+								SELECT ISNULL( X1.NEW_VALUE1, A.ATTRIBUTE5)  AS COMPANY_ID
+									 , ISNULL(A.ATTRIBUTE7, CONVERT(CHAR(8), GETDATE(), 112))  AS GROUP_SEQ
+									  , COUNT(*)  AS IF_CNT
+								--FROM   [10.34.220.88,7433].[LGCE_INF].[dbo].[XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R]  A WITH(NOLOCK)
+								FROM   XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN  A WITH(NOLOCK)
+								LEFT OUTER JOIN  NERP_CONV_MASTER X1 WITH(NOLOCK)
+								ON  X1.CODETYPE = 'COMPANY_ID'
+								AND A.ATTRIBUTE5 = X1.OLD_VALUE1 
+								AND X1.ATTRIBUTE5 = '1ST'
+								WHERE  1 = 1
+								AND    ISNULL(A.PROC_FLAG,'N') = 'N'
+								AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+								GROUP BY A.ATTRIBUTE5, A.ATTRIBUTE7, X1.NEW_VALUE1
+								) A
+								LEFT OUTER JOIN (
+								SELECT A.COMPANY_ID, A.GROUP_SEQ, SUM(IF_CNT) AS IF_CNT
+								FROM   (
+										SELECT ISNULL( X1.NEW_VALUE1, A.ATTRIBUTE5)  AS COMPANY_ID
+											 , ISNULL(A.ATTRIBUTE7, CONVERT(CHAR(8), GETDATE(), 112))  AS GROUP_SEQ
+												, CONVERT(INT, A.ATTRIBUTE6)  AS IF_CNT
+										--FROM   [10.34.220.88,7433].[LGCE_INF].[dbo].[XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R]  A WITH(NOLOCK)
+										FROM   XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN  A WITH(NOLOCK)
+										LEFT OUTER JOIN  NERP_CONV_MASTER X1 WITH(NOLOCK)
+										ON  X1.CODETYPE = 'COMPANY_ID'
+										AND A.ATTRIBUTE5 = X1.OLD_VALUE1 
+										AND X1.ATTRIBUTE5 = '1ST'
+										WHERE  1 = 1
+										AND    ISNULL(A.PROC_FLAG,'N') = 'N'
+										AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+										GROUP BY A.ATTRIBUTE5, A.ATTRIBUTE6, A.ATTRIBUTE7, X1.NEW_VALUE1
+										) A
+								WHERE  1 = 1
+								GROUP BY A.COMPANY_ID
+									   , A.GROUP_SEQ
+								) B
+								ON   A.COMPANY_ID = B.COMPANY_ID
+								AND  A.GROUP_SEQ  = B.GROUP_SEQ
+					   ) A
+				WHERE  1 = 1
+				GROUP BY A.COMPANY_ID
+					 , A.GROUP_SEQ
+			   ) A
+		WHERE  1 = 1
+		GROUP BY A.COMPANY_ID
+				, A.GROUP_SEQ
+		;
+
+
+		OPEN CUR_MES_STOCK; 
+
+		FETCH NEXT FROM CUR_MES_STOCK INTO @stock_cnt, 
+			                            @company_id,
+										@group_seq
+
+		WHILE(@@FETCH_STATUS = 0) 
+		BEGIN
+			-- COMPANY별 수행여부 체크
+			SELECT @v_count = COUNT(*)
+			FROM   SCM_ADM_LOOKUP_MASTER_DETAIL  A WITH(NOLOCK)
+			WHERE  1 = 1
+			AND    A.LOOKUP_TYPE = 'SSP_IF_STOCK_CHECK'
+			AND    A.SEGMENT1 = 'PLAN_40'
+			AND    A.SEGMENT2 IN ('MES_W', 'MES_F')
+			AND    A.SEGMENT3 = '40'
+			AND    A.SEGMENT4 = @company_id
+			AND    A.SEGMENT5 = CONVERT(CHAR(8), GETDATE(), 112)
+			AND    A.ATTRIBUTE1 = 'Y'
+			;
+
+/* INF-R 적용 이전 
+
+			-- DIVISION 40 POUCH DATA 존재여부 체크 (C100 은 POUCH 가 없음 : 김진억차장 확인)
+			SELECT @v_cnt = (CASE WHEN @company_id = 'C100' THEN 0
+			                 ELSE 
+							      CASE WHEN COUNT(*) = 0 THEN 1 ELSE 0 END
+							 END)
+			FROM   XIF_MES_ISS_WAIT_PALLET_R_SN  A WITH(NOLOCK)
+					LEFT OUTER JOIN SCM_MST_FACTORY_SN  B WITH(NOLOCK)
+					ON   B.PLANT_ID   = A.PLANT_ID
+					AND  B.FACTORY_ID = A.AREAID 
+			WHERE  ISNULL(A.PROC_FLAG,'N') = 'N'
+			AND    SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+			AND    ATTRIBUTE5 = @company_id
+			--AND    A.IF_RCV_DATE > '2020-08-31 00:00:00.000'
+			AND    B.DIVISION_ID = '40'
+			;
+*/
+
+/* INF-R 적용 이후*/ 
+			-- DIVISION 40 POUCH DATA 존재여부 체크 (C100 은 POUCH 가 없음 : 김진억차장 확인)
+--			SELECT @v_cnt = (CASE WHEN @company_id = 'C100' THEN 0
+			SELECT @v_cnt = (CASE WHEN @company_id = @v_C100 THEN 0
+			                 ELSE 
+							      CASE WHEN COUNT(*) = 0 THEN 1 ELSE 0 END
+							 END)
+			FROM    (
+						SELECT ISNULL(X1.NEW_VALUE1, A.PLANT_ID) AS PLANT_ID
+							 , AREAID, PROC_FLAG, SUM_DATE
+							 , ISNULL(X2.NEW_VALUE1, A.ATTRIBUTE5) AS ATTRIBUTE5
+						FROM XIF_MES_ISS_WAIT_PALLET_R_SN  A WITH(NOLOCK)
+						LEFT OUTER JOIN  NERP_CONV_MASTER X1 WITH(NOLOCK)
+						ON  X1.CODETYPE = 'PLANT_ID'
+						AND A.PLANT_ID = X1.OLD_VALUE1 
+						AND X1.ATTRIBUTE5 = '1ST'
+						LEFT OUTER JOIN  NERP_CONV_MASTER X2 WITH(NOLOCK)
+						ON  X2.CODETYPE = 'COMPANY_ID'
+						AND A.ATTRIBUTE5 = X2.OLD_VALUE1
+						AND X2.ATTRIBUTE5 = '1ST'
+					) A 
+					LEFT OUTER JOIN SCM_MST_FACTORY_SN  B WITH(NOLOCK)
+					ON   B.PLANT_ID   = A.PLANT_ID
+					AND  B.FACTORY_ID = A.AREAID 
+			WHERE  ISNULL(A.PROC_FLAG,'N') = 'N'
+			AND    SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+			AND    ATTRIBUTE5 = @company_id
+			--AND    A.IF_RCV_DATE > '2020-08-31 00:00:00.000'
+			AND    B.DIVISION_ID = '40'
+			;
+
+
+			IF @stock_cnt = 0 AND @v_count = 0 AND @v_cnt = 0
+			BEGIN
+				UPDATE SCM_ADM_LOOKUP_MASTER_DETAIL
+				SET    SEGMENT5 = CONVERT(CHAR(8), GETDATE(), 112)
+					 , ATTRIBUTE1 = 'N'
+				WHERE  1 = 1
+				AND    LOOKUP_TYPE = 'SSP_IF_STOCK_CHECK'
+				AND    SEGMENT1 = 'PLAN_40'
+				AND    SEGMENT2 IN ('MES_W', 'MES_F')
+				AND    SEGMENT3 = '40'
+				AND    SEGMENT4 = @company_id
+				--AND    SEGMENT5 = CONVERT(CHAR(8), GETDATE(), 112)
+				--AND    ATTRIBUTE1 = 'N'
+				;
+
+/* INF-R 적용 이전
+				-- 인터페이스 테이블 처리 ROW UPDATE
+				UPDATE XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN 
+				SET    PROC_FLAG             = 'P'
+				WHERE  ISNULL(PROC_FLAG,'N') = 'N'
+				AND    SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+				AND    ATTRIBUTE5 = @company_id
+				--AND    IF_RCV_DATE > '2020-08-31 00:00:00.000'
+				;
+*/
+
+/* INF-R 적용 이후*/ 
+
+				MERGE INTO XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN A 
+				USING (
+					SELECT A.IF_SEQ, ISNULL(X1.NEW_VALUE1, A.ATTRIBUTE5) AS ATTRIBUTE5
+					FROM XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN A WITH(NOLOCK)
+					LEFT OUTER JOIN  NERP_CONV_MASTER X1 WITH(NOLOCK)
+					ON  X1.CODETYPE = 'COMPANY_ID'
+					AND A.ATTRIBUTE5 = X1.OLD_VALUE1
+					AND X1.ATTRIBUTE5 = '1ST'
+				) B
+				ON (
+						   ISNULL(A.PROC_FLAG,'N') = 'N'
+					AND    A.IF_SEQ   = B.IF_SEQ
+					AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+					AND    B.ATTRIBUTE5 = @company_id
+				)
+				WHEN MATCHED THEN
+					UPDATE 
+					   SET A.PROC_FLAG = 'P'
+				;
+
+/* INF-R 적용 이전
+				-- 2020.08.27  현업 요구사항으로 LOGIC 추가
+				UPDATE A
+				SET    A.PROC_FLAG             = 'P'
+				FROM   XIF_MES_ISS_WAIT_PALLET_R_SN  A WITH(NOLOCK)
+					   LEFT OUTER JOIN SCM_MST_FACTORY_SN  B WITH(NOLOCK)
+					   ON   B.PLANT_ID   = A.PLANT_ID
+					   AND  B.FACTORY_ID = A.AREAID 
+				WHERE  ISNULL(A.PROC_FLAG,'N') = 'N'
+				AND    SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+				AND    ATTRIBUTE5 = @company_id
+				--AND    A.IF_RCV_DATE > '2020-08-31 00:00:00.000'
+				AND    B.DIVISION_ID = '40'
+				;
+*/
+
+/* INF-R 적용 이후*/ 
+
+				MERGE INTO XIF_MES_ISS_WAIT_PALLET_R_SN A 
+				USING (
+					SELECT A.IF_SEQ, A.PLANT_ID, A.AREAID, A.ATTRIBUTE5, B.DIVISION_ID 
+					FROM (
+							SELECT A.IF_SEQ
+								 , ISNULL(X1.NEW_VALUE1, PLANT_ID) AS PLANT_ID
+								 , A.AREAID
+								 , ISNULL(X2.NEW_VALUE1, A.ATTRIBUTE5) AS ATTRIBUTE5
+							FROM XIF_MES_ISS_WAIT_PALLET_R_SN A WITH(NOLOCK)
+							LEFT OUTER JOIN  NERP_CONV_MASTER X1 WITH(NOLOCK)
+							ON  X1.CODETYPE = 'PLANT_ID'
+							AND A.PLANT_ID = X1.OLD_VALUE1 
+							AND X1.ATTRIBUTE5 = '1ST'
+							LEFT OUTER JOIN  NERP_CONV_MASTER X2 WITH(NOLOCK)
+							ON  X2.CODETYPE = 'COMPANY_ID'
+							AND A.ATTRIBUTE5 = X2.OLD_VALUE1
+							AND X2.ATTRIBUTE5 = '1ST'
+						) A
+					LEFT OUTER JOIN SCM_MST_FACTORY_SN  B WITH(NOLOCK)
+					ON   B.PLANT_ID   = A.PLANT_ID
+					AND  B.FACTORY_ID = A.AREAID
+				) B
+				ON (
+						   ISNULL(A.PROC_FLAG,'N') = 'N'
+					AND    A.IF_SEQ   = B.IF_SEQ
+					AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+					AND    B.ATTRIBUTE5 = @company_id
+					AND    B.DIVISION_ID = '40'
+				)
+				WHEN MATCHED THEN
+					UPDATE 
+					   SET A.PROC_FLAG = 'P'
+				;
+
+				------------------------------------------------------------------------------------------------------------- 
+				-- 0. temp 테이블 생성 : 
+				------------------------------------------------------------------------------------------------------------- 
+				IF OBJECT_ID('tempdb..#tmp_SSP_DNM_MES_STOCK_40') IS NOT NULL
+					DROP TABLE #tmp_SSP_DNM_MES_STOCK_40
+
+				CREATE TABLE #tmp_SSP_DNM_MES_STOCK_40 (
+							 DIVISION_ID        NVARCHAR(020)
+							,COMPANY_ID         NVARCHAR(020)
+							,FROM_SITE          NVARCHAR(020)
+							,SUM_DATE           NVARCHAR(008)                                   
+							,PLANT_ID           NVARCHAR(030)   
+							,AREID              NVARCHAR(050)   
+							,PRODID             NVARCHAR(050)   
+							,PRJT_NAME          NVARCHAR(050)   -- NICK_NAME						 
+							,LOTID              NVARCHAR(050)   
+							,LOTTYPE            NVARCHAR(050)   
+							,LOTQTY             NUMERIC(20,10)
+							,AVAILABLE_YN       NVARCHAR(001) 
+							,MES_HOLD_YN        NVARCHAR(001) 
+							,QMS_HOLD_YN        NVARCHAR(001) 
+							,LONGTERM_HOLD_YN	NVARCHAR(001) 	-- [C20200303-000163] 신규추가
+							,JUDG_VLD_DATE      NVARCHAR(008)
+							,HOLD_DATE          NVARCHAR(008)
+							,MES_HOLD_RELEASE   NVARCHAR(008)
+							,QMS_HOLD_RELEASE   NVARCHAR(008)
+							,ATTRIBUTE2         NVARCHAR(100)
+							,ATTRIBUTE4         NVARCHAR(100)
+					);
+
+				/*------------------------------------------------------------------------------------------------------------- 
+				#tmp_SSP_DNM_MES_STOCK_40 생성 
+				-------------------------------------------------------------------------------------------------------------- 
+				INSP_NAME = 'GMES HOLD' 와 아닌것으로 구분함 
+
+				- MES_HOLD_YN
+					INSP_NAME =  'GMES HOLD' , MES_HOLD_FLAG = 'Y'(Hold) 1개이상 경우 ==> AVAILABLE_YN : N 
+			
+				- QMS_HOLD_YN
+					INSP_NAME <> 'GMES HOLD' , MES_HOLD_FLAG = 'HOLD'(Hold) 1개이상 경우 ==> AVAILABLE_YN : N  	                            
+										
+
+				- LONGTERM_HOLD_YN
+					INSP_NAME <> 'GMES HOLD' ,  MAX(JUDG_VLD_DATE)가 과거이면 ==> AVAILABLE_YN : N 
+			
+				- JUDG_VLD_DATE
+					INSP_NAME <> 'GMES HOLD' ==> MIN(JUDG_VLD_DATE)  
+				------------------------------------------------------------------------------------------------------------- */
+
+				WITH MES AS (
+/* INF-R 적용 이전
+				SELECT 
+					 S.IF_SEQ
+					,S.IF_TYPE
+					,S.IF_ID
+					,S.IF_RCV_DATE
+					,S.PROC_FLAG
+					,S.PROC_DATE
+					,S.PROC_MSG
+					,S.SUM_DATE
+					,S.PLANT_ID
+					,S.AREID
+					,S.LOTID
+					,S.LOTQTY
+					,S.RESULT_YN
+					,S.RESULT
+					,S.PRJT_NAME
+					,S.PRODID
+					,S.LOTTYPE
+					,S.INSP_MED_CLASS_CODE
+					,S.INSP_NAME
+					,S.QMS_INSP_SPEC
+					,S.INSP_ID
+					,S.INSP_REQ_ID
+					,S.ELTR_LOTID
+					,S.CHRT_LOTID
+					,S.JUDG_FLAG
+					,S.JUDG_FLAG_NAME
+					,S.JUDG_USERNAME
+					,S.JUDG_DATE
+					--,CASE WHEN ISNULL(S.JUDG_VLD_DATE, '') = '' THEN NULL ELSE S.JUDG_VLD_DATE END   AS JUDG_VLD_DATE
+					,CASE WHEN S.JUDG_VLD_DATE ='' THEN NULL ELSE S.JUDG_VLD_DATE END   AS JUDG_VLD_DATE
+					,S.MES_HOLD_FLAG
+					,S.HOLD_USERNAME
+					,CONVERT(VARCHAR(8), S.HOLD_DATE,112) AS HOLD_DATE
+					,CONVERT(VARCHAR(8), S.UNHOLD_SCHD_DATE,112) AS UNHOLD_SCHD_DATE
+					,S.NCR_CNT
+					,S.MES_UNHOLD_USERNAME
+					,S.MES_UNHOLD_DATE
+					,S.NOTE
+					,S.ATTRIBUTE1 --MES공정
+					,S.ATTRIBUTE2
+					,S.ATTRIBUTE3
+					,S.ATTRIBUTE4 --불량수량
+					,S.ATTRIBUTE5
+					,S.ATTRIBUTE6
+					,S.ATTRIBUTE7
+					,S.ATTRIBUTE8
+					,S.ATTRIBUTE9
+					,S.ATTRIBUTE10
+				--FROM [10.34.220.88,7433].[LGCE_INF].[dbo].[XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R] S  WITH(NOLOCK) 
+				FROM XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN S  WITH(NOLOCK) 
+				   LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L WITH(NOLOCK)  
+				   ON L.LOOKUP_TYPE = 'MES_STOCK_EXCEPT_OPERATION' 
+				   AND L.VALID_YN    = 'Y' 
+				   AND L.SEGMENT1    =  S.ATTRIBUTE1 
+
+				   -- 2020.08.27  현업 요구사항으로 LOGIC 추가
+				   LEFT OUTER JOIN SCM_MST_FACTORY_SN  A WITH(NOLOCK)
+				   ON   A.PLANT_ID   = S.PLANT_ID
+				   AND  A.FACTORY_ID = S.AREID 
+				   LEFT OUTER JOIN SCP_MST_FINAL_ITEM  B WITH(NOLOCK)
+				   ON   B.DIVISION_ID = A.DIVISION_ID
+				   AND  B.CELL_ITEM_ID = S.PRODID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D WITH(NOLOCK) 
+					ON  D.SEGMENT3 <> 'P'
+					AND D.LOOKUP_TYPE = 'CELL_TYPE_CODE' 
+					AND D.VALID_YN    = 'Y' 
+					AND D.SEGMENT1    = B.CELL_TYPE_GROUP_CODE
+				WHERE 1=1 
+				AND   S.PROC_FLAG = 'P'
+				AND   S.SUM_DATE  = CONVERT(CHAR(8), GETDATE(), 112)
+				AND   S.ATTRIBUTE5 = @company_id
+				AND   S.ATTRIBUTE6 <> '0'
+				AND   S.PLANT_ID IS NOT NULL 
+				AND   L.SEGMENT1 IS NULL -- [C20200305-000407] MES_STOCK_EXCEPT_OPERATION에 등록된 공정은 제외(A2000,A3000,A4000) 
+
+				-- 2020.08.27  현업 요구사항으로 LOGIC 추가
+				UNION ALL
+
+				SELECT A.IF_SEQ
+					  ,A.IF_TYPE
+					  ,A.IF_ID
+					  ,A.IF_RCV_DATE
+					  ,A.PROC_FLAG
+					  ,A.PROC_DATE
+					  ,A.PROC_MSG
+					  ,A.SUM_DATE
+					  ,A.PLANT_ID
+					  ,A.AREAID   AS AREID
+					  ,A.LOTID
+					  ,A.LOT_QTY  AS LOTQTY
+					  ,A.PROD_INSP_RESULT AS RESULT_YN
+					  ,NULL       AS RESULT
+					  ,NULL       AS PRJT_NAME
+					  ,A.PRODID
+					  ,NULL       AS LOTTYPE
+					  ,NULL       AS INSP_MED_CLASS_CODE
+					  ,NULL       AS INSP_NAME
+					  ,NULL       AS QMS_INSP_SPEC
+					  ,NULL       AS INSP_ID
+					  ,NULL       AS INSP_REQ_ID
+					  ,NULL       AS ELTR_LOTID
+					  ,NULL       AS CHRT_LOTID
+					  ,A.EXP_INSP_RESULT  AS JUDG_FLAG
+					  ,NULL       AS JUDG_FLAG_NAME
+					  ,NULL       AS JUDG_USERNAME
+					  ,A.EXP_INSP_JUDGE_DATE AS JUDG_DATE
+					  ,CASE WHEN ISNULL(A.EXP_INSP_VALID_DATE, '-') = '-' AND A.MES_HOLD_YN = 'N' THEN A.SUM_DATE 
+							WHEN ISNULL(A.EXP_INSP_VALID_DATE, '-') = '-' AND A.MES_HOLD_YN = 'Y' THEN NULL
+					   ELSE A.EXP_INSP_VALID_DATE END   AS JUDG_VLD_DATE
+					  ,CASE WHEN A.MES_HOLD_YN = 'Y' THEN N'HOLD' ELSE N'UNHOLD' END AS MES_HOLD_FLAG
+					  ,NULL       AS HOLD_USERNAME
+					  ,NULL       AS HOLD_DATE
+					  ,CONVERT(VARCHAR(8), ISNULL(A.MES_HOLD_RELEASE, A.QMS_HOLD_RELEASE),112) AS UNHOLD_SCHD_DATE
+					  ,NULL       AS NCR_CNT
+					  ,NULL       AS MES_UNHOLD_USERNAME
+					  ,A.MES_HOLD_RELEASE AS MES_UNHOLD_DATE
+					  ,NULL         AS NOTE
+					  ,A.ATTRIBUTE1 --MES공정
+					  ,A.ATTRIBUTE2
+					  ,A.ATTRIBUTE3
+					  ,A.ATTRIBUTE4 --불량수량
+					  ,A.ATTRIBUTE5
+					  ,A.ATTRIBUTE6
+					  ,A.ATTRIBUTE7
+					  ,A.ATTRIBUTE8
+					  ,A.ATTRIBUTE9
+					  ,A.ATTRIBUTE10
+				--FROM   [10.34.220.88,7433].[LGCE_INF].[dbo].[XIF_MES_ISS_WAIT_PALLET_R]  A WITH(NOLOCK)
+				FROM   XIF_MES_ISS_WAIT_PALLET_R_SN  A WITH(NOLOCK)
+					   LEFT OUTER JOIN SCM_MST_FACTORY_SN  B WITH(NOLOCK)
+					   ON   B.PLANT_ID   = A.PLANT_ID
+					   AND  B.FACTORY_ID = A.AREAID 
+					   LEFT OUTER JOIN SCP_MST_FINAL_ITEM  C WITH(NOLOCK)
+					   ON   C.DIVISION_ID = B.DIVISION_ID
+					   AND  C.ITEM_ID = A.PRODID
+						JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D WITH(NOLOCK) 
+						ON  D.SEGMENT3 = 'P'
+						AND D.LOOKUP_TYPE = 'CELL_TYPE_CODE' 
+						AND D.VALID_YN    = 'Y' 
+						AND D.SEGMENT1    = C.CELL_TYPE_GROUP_CODE
+				WHERE  1 = 1
+				AND    A.PROC_FLAG = 'P'
+				AND    A.SUM_DATE  = CONVERT(CHAR(8), GETDATE(), 112)
+				AND    A.ATTRIBUTE5 = @company_id
+				AND    A.ATTRIBUTE6 <> '0'
+				AND    A.PLANT_ID IS NOT NULL
+				AND    B.DIVISION_ID = '40'
+				--AND   ISNULL(D.SEGMENT3, '') = 'P'
+				AND    NOT EXISTS (
+								   SELECT 1
+								   FROM   SCM_ADM_LOOKUP_MASTER_DETAIL  B WITH(NOLOCK)
+								   WHERE  1 = 1
+								   AND    B.LOOKUP_TYPE = 'MES_STOCK_EXCEPT_OPERATION'
+								   AND    B.VALID_YN    = 'Y' 
+								   AND    B.SEGMENT1    =  A.ATTRIBUTE1 
+								  )
+				AND    EXISTS (
+								SELECT 1
+								FROM   SCM_ADM_LOOKUP_MASTER_DETAIL  B WITH(NOLOCK)
+								WHERE  1 = 1
+								AND    B.LOOKUP_TYPE = 'MES_POUCH_OPERATION'
+								AND    B.VALID_YN    = 'Y' 
+								AND    B.SEGMENT1    =  ISNULL(D.SEGMENT3, '')
+								AND    B.SEGMENT2    = A.ATTRIBUTE1 
+							  )
+*/
+
+/* INF-R 적용 후 */
+				SELECT 
+					 S.IF_SEQ
+					,S.IF_TYPE
+					,S.IF_ID
+					,S.IF_RCV_DATE
+					,S.PROC_FLAG
+					,S.PROC_DATE
+					,S.PROC_MSG
+					,S.SUM_DATE
+					,S.PLANT_ID
+					,S.AREID
+					,S.LOTID
+					,S.LOTQTY
+					,S.RESULT_YN
+					,S.RESULT
+					,S.PRJT_NAME
+					,S.PRODID
+					,S.LOTTYPE
+					,S.INSP_MED_CLASS_CODE
+					,S.INSP_NAME
+					,S.QMS_INSP_SPEC
+					,S.INSP_ID
+					,S.INSP_REQ_ID
+					,S.ELTR_LOTID
+					,S.CHRT_LOTID
+					,S.JUDG_FLAG
+					,S.JUDG_FLAG_NAME
+					,S.JUDG_USERNAME
+					,S.JUDG_DATE
+					--,CASE WHEN ISNULL(S.JUDG_VLD_DATE, '') = '' THEN NULL ELSE S.JUDG_VLD_DATE END   AS JUDG_VLD_DATE
+					,CASE WHEN S.JUDG_VLD_DATE ='' THEN NULL ELSE S.JUDG_VLD_DATE END   AS JUDG_VLD_DATE
+					,S.MES_HOLD_FLAG
+					,S.HOLD_USERNAME
+					,CONVERT(VARCHAR(8), S.HOLD_DATE,112) AS HOLD_DATE
+					,CONVERT(VARCHAR(8), S.UNHOLD_SCHD_DATE,112) AS UNHOLD_SCHD_DATE
+					,S.NCR_CNT
+					,S.MES_UNHOLD_USERNAME
+					,S.MES_UNHOLD_DATE
+					,S.NOTE
+					,S.ATTRIBUTE1 --MES공정
+					,S.ATTRIBUTE2
+					,S.ATTRIBUTE3
+					,S.ATTRIBUTE4 --불량수량
+					,S.ATTRIBUTE5
+					,S.ATTRIBUTE6
+					,S.ATTRIBUTE7
+					,S.ATTRIBUTE8
+					,S.ATTRIBUTE9
+					,S.ATTRIBUTE10
+				--FROM [10.34.220.88,7433].[LGCE_INF].[dbo].[XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R] S  WITH(NOLOCK) 
+				FROM 
+					(		
+						SELECT   IF_SEQ,IF_TYPE,IF_ID,IF_RCV_DATE
+								,PROC_FLAG,PROC_DATE,PROC_MSG,SUM_DATE
+								,ISNULL(X1.NEW_VALUE1, PLANT_ID) AS PLANT_ID
+								,AREID,LOTID,LOTQTY,RESULT_YN,RESULT,PRJT_NAME,PRODID
+								,LOTTYPE,INSP_MED_CLASS_CODE,INSP_NAME,QMS_INSP_SPEC,INSP_ID,INSP_REQ_ID,ELTR_LOTID,CHRT_LOTID,JUDG_FLAG,JUDG_FLAG_NAME
+								,JUDG_USERNAME,JUDG_DATE,JUDG_VLD_DATE,MES_HOLD_FLAG,HOLD_USERNAME,HOLD_DATE,UNHOLD_SCHD_DATE,NCR_CNT,MES_UNHOLD_USERNAME,MES_UNHOLD_DATE
+								,NOTE,A.ATTRIBUTE1,A.ATTRIBUTE2,A.ATTRIBUTE3,A.ATTRIBUTE4
+								,ISNULL(X2.NEW_VALUE1, A.ATTRIBUTE5) AS ATTRIBUTE5 
+								,A.ATTRIBUTE6,A.ATTRIBUTE7,A.ATTRIBUTE8,A.ATTRIBUTE9,A.ATTRIBUTE10
+						FROM XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN A WITH(NOLOCK) 
+						LEFT OUTER JOIN  NERP_CONV_MASTER X1 WITH(NOLOCK)
+						ON  X1.CODETYPE = 'PLANT_ID'
+						AND A.PLANT_ID = X1.OLD_VALUE1 
+						AND X1.ATTRIBUTE5 = '1ST'
+						LEFT OUTER JOIN  NERP_CONV_MASTER X2 WITH(NOLOCK)
+						ON  X2.CODETYPE = 'COMPANY_ID'
+						AND A.ATTRIBUTE5 = X2.OLD_VALUE1
+						AND X2.ATTRIBUTE5 = '1ST'
+					) S  
+				   LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L WITH(NOLOCK)  
+				   ON L.LOOKUP_TYPE = 'MES_STOCK_EXCEPT_OPERATION' 
+				   AND L.VALID_YN    = 'Y' 
+				   AND L.SEGMENT1    =  S.ATTRIBUTE1 
+
+				   -- 2020.08.27  현업 요구사항으로 LOGIC 추가
+				   LEFT OUTER JOIN SCM_MST_FACTORY_SN  A WITH(NOLOCK)
+				   ON   A.PLANT_ID   = S.PLANT_ID
+				   AND  A.FACTORY_ID = S.AREID 
+				   LEFT OUTER JOIN SCP_MST_FINAL_ITEM  B WITH(NOLOCK)
+				   ON   B.DIVISION_ID = A.DIVISION_ID
+				   AND  B.CELL_ITEM_ID = S.PRODID
+					LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D WITH(NOLOCK) 
+					ON  D.SEGMENT3 <> 'P'
+					AND D.LOOKUP_TYPE = 'CELL_TYPE_CODE' 
+					AND D.VALID_YN    = 'Y' 
+					AND D.SEGMENT1    = B.CELL_TYPE_GROUP_CODE
+				WHERE 1=1 
+				AND   S.PROC_FLAG = 'P'
+				AND   S.SUM_DATE  = CONVERT(CHAR(8), GETDATE(), 112)
+				AND   S.ATTRIBUTE5 = @company_id
+				AND   S.ATTRIBUTE6 <> '0'
+				AND   S.PLANT_ID IS NOT NULL 
+				AND   L.SEGMENT1 IS NULL -- [C20200305-000407] MES_STOCK_EXCEPT_OPERATION에 등록된 공정은 제외(A2000,A3000,A4000) 
+
+				-- 2020.08.27  현업 요구사항으로 LOGIC 추가
+				UNION ALL
+
+				SELECT A.IF_SEQ
+					  ,A.IF_TYPE
+					  ,A.IF_ID
+					  ,A.IF_RCV_DATE
+					  ,A.PROC_FLAG
+					  ,A.PROC_DATE
+					  ,A.PROC_MSG
+					  ,A.SUM_DATE
+					  ,A.PLANT_ID
+					  ,A.AREAID   AS AREID
+					  ,A.LOTID
+					  ,A.LOT_QTY  AS LOTQTY
+					  ,A.PROD_INSP_RESULT AS RESULT_YN
+					  ,NULL       AS RESULT
+					  ,NULL       AS PRJT_NAME
+					  ,A.PRODID
+					  ,NULL       AS LOTTYPE
+					  ,NULL       AS INSP_MED_CLASS_CODE
+					  ,NULL       AS INSP_NAME
+					  ,NULL       AS QMS_INSP_SPEC
+					  ,NULL       AS INSP_ID
+					  ,NULL       AS INSP_REQ_ID
+					  ,NULL       AS ELTR_LOTID
+					  ,NULL       AS CHRT_LOTID
+					  ,A.EXP_INSP_RESULT  AS JUDG_FLAG
+					  ,NULL       AS JUDG_FLAG_NAME
+					  ,NULL       AS JUDG_USERNAME
+					  ,A.EXP_INSP_JUDGE_DATE AS JUDG_DATE
+					  ,CASE WHEN ISNULL(A.EXP_INSP_VALID_DATE, '-') = '-' AND A.MES_HOLD_YN = 'N' THEN A.SUM_DATE 
+							WHEN ISNULL(A.EXP_INSP_VALID_DATE, '-') = '-' AND A.MES_HOLD_YN = 'Y' THEN NULL
+					   ELSE A.EXP_INSP_VALID_DATE END   AS JUDG_VLD_DATE
+					  ,CASE WHEN A.MES_HOLD_YN = 'Y' THEN N'HOLD' ELSE N'UNHOLD' END AS MES_HOLD_FLAG
+					  ,NULL       AS HOLD_USERNAME
+					  ,NULL       AS HOLD_DATE
+					  ,CONVERT(VARCHAR(8), ISNULL(A.MES_HOLD_RELEASE, A.QMS_HOLD_RELEASE),112) AS UNHOLD_SCHD_DATE
+					  ,NULL       AS NCR_CNT
+					  ,NULL       AS MES_UNHOLD_USERNAME
+					  ,A.MES_HOLD_RELEASE AS MES_UNHOLD_DATE
+					  ,NULL         AS NOTE
+					  ,A.ATTRIBUTE1 --MES공정
+					  ,A.ATTRIBUTE2
+					  ,A.ATTRIBUTE3
+					  ,A.ATTRIBUTE4 --불량수량
+					  ,A.ATTRIBUTE5
+					  ,A.ATTRIBUTE6
+					  ,A.ATTRIBUTE7
+					  ,A.ATTRIBUTE8
+					  ,A.ATTRIBUTE9
+					  ,A.ATTRIBUTE10
+				--FROM   [10.34.220.88,7433].[LGCE_INF].[dbo].[XIF_MES_ISS_WAIT_PALLET_R]  A WITH(NOLOCK)
+				FROM   (
+							SELECT   A.IF_SEQ,A.IF_TYPE,A.IF_ID,A.IF_RCV_DATE,A.PROC_FLAG,A.PROC_DATE,A.PROC_MSG,A.SUM_DATE
+									,ISNULL(X1.NEW_VALUE1, PLANT_ID) AS PLANT_ID
+									,A.AREAID,A.LOTID,A.LOT_QTY,A.PROD_INSP_RESULT,A.PRODID
+									,A.EXP_INSP_RESULT,A.EXP_INSP_JUDGE_DATE,A.EXP_INSP_VALID_DATE
+									,A.MES_HOLD_YN,A.MES_HOLD_RELEASE ,A.QMS_HOLD_RELEASE
+									,A.ATTRIBUTE1,A.ATTRIBUTE2,A.ATTRIBUTE3,A.ATTRIBUTE4
+									,ISNULL(X2.NEW_VALUE1, A.ATTRIBUTE5) AS ATTRIBUTE5 
+									,A.ATTRIBUTE6,A.ATTRIBUTE7,A.ATTRIBUTE8,A.ATTRIBUTE9,A.ATTRIBUTE10							
+							FROM XIF_MES_ISS_WAIT_PALLET_R_SN A WITH(NOLOCK) 
+							LEFT OUTER JOIN  NERP_CONV_MASTER X1 WITH(NOLOCK)
+							ON  X1.CODETYPE = 'PLANT_ID'
+							AND A.PLANT_ID = X1.OLD_VALUE1 
+							AND X1.ATTRIBUTE5 = '1ST'
+							LEFT OUTER JOIN  NERP_CONV_MASTER X2 WITH(NOLOCK)
+							ON  X2.CODETYPE = 'COMPANY_ID'
+							AND A.ATTRIBUTE5 = X2.OLD_VALUE1
+							AND X2.ATTRIBUTE5 = '1ST'
+					   ) A 
+					   LEFT OUTER JOIN SCM_MST_FACTORY_SN  B WITH(NOLOCK)
+					   ON   B.PLANT_ID   = A.PLANT_ID
+					   AND  B.FACTORY_ID = A.AREAID 
+					   LEFT OUTER JOIN SCP_MST_FINAL_ITEM  C WITH(NOLOCK)
+					   ON   C.DIVISION_ID = B.DIVISION_ID
+					   AND  C.ITEM_ID = A.PRODID
+						JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D WITH(NOLOCK) 
+						ON  D.SEGMENT3 = 'P'
+						AND D.LOOKUP_TYPE = 'CELL_TYPE_CODE' 
+						AND D.VALID_YN    = 'Y' 
+						AND D.SEGMENT1    = C.CELL_TYPE_GROUP_CODE
+				WHERE  1 = 1
+				AND    A.PROC_FLAG = 'P'
+				AND    A.SUM_DATE  = CONVERT(CHAR(8), GETDATE(), 112)
+				AND    A.ATTRIBUTE5 = @company_id
+				AND    A.ATTRIBUTE6 <> '0'
+				AND    A.PLANT_ID IS NOT NULL
+				AND    B.DIVISION_ID = '40'
+				--AND   ISNULL(D.SEGMENT3, '') = 'P'
+				AND    NOT EXISTS (
+								   SELECT 1
+								   FROM   SCM_ADM_LOOKUP_MASTER_DETAIL  B WITH(NOLOCK)
+								   WHERE  1 = 1
+								   AND    B.LOOKUP_TYPE = 'MES_STOCK_EXCEPT_OPERATION'
+								   AND    B.VALID_YN    = 'Y' 
+								   AND    B.SEGMENT1    =  A.ATTRIBUTE1 
+								  )
+				AND    EXISTS (
+								SELECT 1
+								FROM   SCM_ADM_LOOKUP_MASTER_DETAIL  B WITH(NOLOCK)
+								WHERE  1 = 1
+								AND    B.LOOKUP_TYPE = 'MES_POUCH_OPERATION'
+								AND    B.VALID_YN    = 'Y' 
+								AND    B.SEGMENT1    =  ISNULL(D.SEGMENT3, '')
+								AND    B.SEGMENT2    = A.ATTRIBUTE1 
+							  )
+				)
+
+				INSERT INTO #tmp_SSP_DNM_MES_STOCK_40 
+				     ( DIVISION_ID
+					 , COMPANY_ID
+					 , FROM_SITE  
+					 , SUM_DATE                 
+					 , PLANT_ID 
+					 , PRODID   
+					 , PRJT_NAME				 
+					 , LOTID    
+					 , LOTTYPE  
+					 , LOTQTY  
+					 , AVAILABLE_YN        
+					 , MES_HOLD_YN         
+					 , QMS_HOLD_YN
+					 , LONGTERM_HOLD_YN  -- [C20200303-000163] 신규추가
+					 , JUDG_VLD_DATE 
+					 , HOLD_DATE     
+					 , MES_HOLD_RELEASE   
+					 , QMS_HOLD_RELEASE   
+					 , ATTRIBUTE2
+					 , ATTRIBUTE4
+					 )
+				SELECT XX.DIVISION_ID
+				     , XX.COMPANY_ID
+				     , XX.FROM_SITE 
+				     , XX.SUM_DATE
+				     , XX.PLANT_ID
+				     , XX.ITEM_ID
+				     , XX.PRJT_NAME
+				     , XX.LOTID
+				     , XX.LOTTYPE
+				     , SUM(XX.LOTQTY )		AS LOTQTY 
+				     , XX.AVAILABLE_YN
+				     , XX.MES_HOLD_YN
+				     , XX.QMS_HOLD_YN
+				     , XX.LONGTERM_HOLD_YN -- [C20200303-000163] 신규추가				
+				     , XX.JUDG_VLD_DATE
+				     , XX.HOLD_DATE
+				     , XX.MES_HOLD_RELEASE 
+				     , XX.QMS_HOLD_RELEASE 
+				     , XX.ATTRIBUTE2   
+				     , SUM(CONVERT(decimal, XX.ATTRIBUTE4))	AS ATTRIBUTE4  --BAD_QTY
+				  FROM (
+					   SELECT   F.DIVISION_ID      AS DIVISION_ID
+         			   ,        F.COMPANY_ID		AS COMPANY_ID
+					   ,        [dbo].[FN_GET_SCM_SITE_ID_PLANT](F.PLANT_ID, [dbo].[FN_GET_ITEM_OPERATION_GROUP](F.DIVISION_ID, X.PRODID)) AS FROM_SITE 
+					   ,        X.SUM_DATE         
+					   ,        X.PLANT_ID       
+					   ,        X.AREID           
+					   ,        X.PRODID                                                    AS ITEM_ID
+					   ,        MAX(X.PRJT_NAME)                                            AS PRJT_NAME
+					   ,        X.LOTID                                                     AS LOTID
+					   ,        MAX(X.LOTTYPE)                                              AS LOTTYPE
+					   ,        MAX(X.LOTQTY)                                               AS LOTQTY
+					   ,        CASE WHEN SUM(X.MES_HOLD_CNT + X.QMS_HOLD_CNT+ X.LONGTERM_HOLD_CNT) > 0 THEN 'N'  ELSE 'Y' END AS AVAILABLE_YN  		
+					   ,        CASE WHEN SUM(X.MES_HOLD_CNT) > 0 THEN 'Y' ELSE 'N' END     AS MES_HOLD_YN
+					   ,        CASE WHEN SUM(X.QMS_HOLD_CNT) > 0 THEN 'Y' ELSE 'N' END     AS QMS_HOLD_YN
+					   ,        CASE WHEN SUM(X.LONGTERM_HOLD_CNT) > 0 THEN 'Y' ELSE 'N' END     AS LONGTERM_HOLD_YN -- [C20200303-000163] 신규추가
+					   ,        MIN(X.JUDG_VLD_DATE ) 		                                AS JUDG_VLD_DATE
+					   ,        MIN(X.HOLD_DATE)										    AS HOLD_DATE
+					   ,        MAX(X.MES_HOLD_RELEASE)                                     AS MES_HOLD_RELEASE
+					   ,        MAX(X.QMS_HOLD_RELEASE)                                     AS QMS_HOLD_RELEASE
+					   ,        X.ATTRIBUTE2											     
+					   ,        MAX(X.ATTRIBUTE4)											AS ATTRIBUTE4
+					   FROM (
+					   		-- INSP_NAME = 'GMES HOLD'
+					   		SELECT   'GMES HOLD'									 AS TYPE
+					   		,        N.SUM_DATE                                      AS SUM_DATE
+					   		,        N.PLANT_ID                                      AS PLANT_ID
+					   		,        N.AREID                                         AS AREID
+					   		,        N.PRODID                                        AS PRODID
+					   		,        MAX(N.PRJT_NAME)                                AS PRJT_NAME
+					   		,        N.LOTID                                         AS LOTID
+					   		,        MAX(N.LOTTYPE)                                  AS LOTTYPE
+					   		,        MAX(N.LOTQTY)                                   AS LOTQTY 
+					   		-------------------------------------------------------
+					   		,        SUM(CASE WHEN N.MES_HOLD_FLAG = 'Y' THEN 1 
+					   							ELSE 0 END)                          AS MES_HOLD_CNT
+					   		,        0                                               AS QMS_HOLD_CNT
+					   		,        0                                               AS LONGTERM_HOLD_CNT -- [C20200303-000163] 신규추가
+					   		,	     MIN(N.JUDG_VLD_DATE)                            AS JUDG_VLD_DATE
+					   		,        MIN(CASE WHEN N.MES_HOLD_FLAG = 'Y' THEN N.HOLD_DATE 
+					   							ELSE NULL END)                       AS HOLD_DATE
+					   		,        MAX(CASE WHEN N.MES_HOLD_FLAG = 'Y' THEN N.UNHOLD_SCHD_DATE 
+					   							ELSE NULL END)                       AS MES_HOLD_RELEASE
+					   		,		 NULL                                            AS QMS_HOLD_RELEASE
+					   		,        N.ATTRIBUTE1                                    AS MES_OPER
+					   		,        N.ATTRIBUTE2
+					   		,        MAX(N.ATTRIBUTE4)                               AS ATTRIBUTE4
+					   		FROM MES N WITH(NOLOCK) 
+					   		WHERE 1=1 
+					   		AND   ISNULL(N.INSP_NAME, '') = 'GMES HOLD' 
+					   		GROUP BY N.SUM_DATE
+					   		,        N.PLANT_ID
+					   		,        N.AREID 
+					   		,        N.PRODID  
+					   		,        N.LOTID
+					   		,        N.ATTRIBUTE1
+					   		,        N.ATTRIBUTE2
+					   
+					   		UNION ALL 
+					   		-- INSP_NAME <> 'GMES HOLD'
+					   		SELECT   'N-GMES HOLD'                                   AS TYPE
+					   		,        N.SUM_DATE                                      AS SUM_DATE
+					   		,        N.PLANT_ID                                      AS PLANT_ID
+					   		,        N.AREID                                         AS AREID
+					   		,        N.PRODID                                        AS PRODID
+					   		,        MAX(N.PRJT_NAME)                                AS PRJT_NAME
+					   		,        N.LOTID                                         AS LOTID
+					   		,        MAX(N.LOTTYPE)                                  AS LOTTYPE
+					   		,        MAX(N.LOTQTY)                                   AS LOTQTY 
+					   		,        0                                               AS MES_HOLD_CNT
+					   		------------------------------------------------------------------------
+					   		,        SUM(CASE WHEN N.MES_HOLD_FLAG = 'HOLD' THEN 1 ELSE 0 END )		  AS QMS_HOLD_CNT                              
+					   		,        CASE WHEN MAX(ISNULL(N.JUDG_VLD_DATE, '')) <  N.SUM_DATE THEN 1 ELSE 0 END AS LONGTERM_HOLD_CNT --검사항목중 MAX(JUDG_VLD_DATE)가 과거이면 HOLD  --[C20200303-000163] 신규추가
+					   		------------------------------------------------------------------------
+					   		,        MAX(ISNULL(N.JUDG_VLD_DATE, ''))                           AS JUDG_VLD_DATE  
+					   		------------------------------------------------------------------------
+					   		,        MAX(CASE WHEN N.MES_HOLD_FLAG = 'HOLD' THEN N.HOLD_DATE
+					   						ELSE NULL END )                          AS HOLD_DATE
+					   		------------------------------------------------------------------------
+					   		,		 NULL					                         AS MES_HOLD_RELEASE
+					   		,		 MAX(CASE WHEN N.MES_HOLD_FLAG = 'HOLD' THEN N.UNHOLD_SCHD_DATE 
+					   						ELSE NULL END)                           AS QMS_HOLD_RELEASE
+					   		,        N.ATTRIBUTE1                                    AS MES_OPER
+					   		,        N.ATTRIBUTE2
+					   		,        MAX(N.ATTRIBUTE4)                               AS ATTRIBUTE4
+					   		FROM MES N WITH(NOLOCK) 
+					   		WHERE 1=1 
+					   		AND   ISNULL(N.INSP_NAME, '') <> 'GMES HOLD' 
+					   		GROUP BY N.SUM_DATE
+					   		,        N.PLANT_ID
+					   		,        N.AREID 
+					   		,        N.PRODID  
+					   		,        N.LOTID
+					   		,        N.ATTRIBUTE1 
+					   		,        N.ATTRIBUTE2
+					   
+					   		) X
+					   		JOIN SCM_MST_FACTORY_SN F WITH(NOLOCK) 
+					   		ON F.PLANT_ID   = X.PLANT_ID
+					   		AND F.FACTORY_ID = X.AREID 
+					   WHERE    X.PLANT_ID IS NOT NULL 
+					   GROUP BY X.SUM_DATE
+					   ,        X.PLANT_ID
+					   ,        X.AREID 
+					   ,        X.PRODID  
+					   ,        X.LOTID
+					   ,        F.DIVISION_ID  
+					   ,        F.COMPANY_ID
+					   ,        F.PLANT_ID
+					   ,        X.MES_OPER 
+					   ,        X.ATTRIBUTE2
+				) XX
+				GROUP BY 
+						XX.DIVISION_ID
+				,      XX.COMPANY_ID
+				,      XX.FROM_SITE 
+				,      XX.SUM_DATE
+				,      XX.PLANT_ID
+				,      XX.ITEM_ID
+				,      XX.PRJT_NAME
+				,      XX.LOTID
+				,      XX.LOTTYPE
+				,      XX.AVAILABLE_YN
+				,      XX.MES_HOLD_YN
+				,      XX.QMS_HOLD_YN
+				,      XX.LONGTERM_HOLD_YN
+				,      XX.JUDG_VLD_DATE
+				,      XX.HOLD_DATE
+				,      XX.MES_HOLD_RELEASE 
+				,      XX.QMS_HOLD_RELEASE  		
+				,      XX.ATTRIBUTE2
+				;						 
+
+
+			   ------------------------------------------------------------------------------------------------------------- 
+			   -- SSP_DNM_MES_STOCK_40 생성 
+			   -------------------------------------------------------------------------------------------------------------- 
+				MERGE INTO SSP_DNM_MES_STOCK_40 M
+				USING
+				(
+					SELECT 		 
+						   T.DIVISION_ID				AS DIVISION_ID 
+						 , T.COMPANY_ID					AS COMPANY_ID 
+						 , T.FROM_SITE					AS FROM_SITE 
+						 , T.SUM_DATE					AS YYYYMMDD
+						 , T.AVAILABLE_YN				AS AVAILABLE_YN 
+						 , MAX(T.PLANT_ID)				AS PLANT_ID 
+						 , T.PRODID						AS ITEM_ID
+						 , MAX(T.PRJT_NAME)				AS NICK_NAME
+						 , T.LOTID						AS LOTID
+						 , MAX(T.LOTTYPE)				AS LOTTYPE
+						 , SUM(T.LOTQTY)				AS LOTQTY
+						 , MAX(T.MES_HOLD_YN)			AS MES_HOLD_YN
+						 , MAX(T.QMS_HOLD_YN)			AS QMS_HOLD_YN
+						 , MAX(T.LONGTERM_HOLD_YN)		AS LONGTERM_HOLD_YN  --[C20200303-000163] 신규추가
+						 , MAX(T.JUDG_VLD_DATE)			AS JUDG_VLD_DATE
+						 , MAX(T.HOLD_DATE)				AS HOLD_DATE
+						 , MAX(T.MES_HOLD_RELEASE)		AS MES_HOLD_RELEASE
+						 , MAX(T.QMS_HOLD_RELEASE)		AS QMS_HOLD_RELEASE 
+						 , @v_batch_user				AS CREATED_BY                       
+						 , GETDATE()					AS CREATION_DATE                     
+						 , @v_batch_user				AS LAST_UPDATED_BY                   
+						 , GETDATE()					AS LAST_UPDATE_DATE                  
+						 , NULL							AS ATTRIBUTE1                       
+						 , NULL							AS ATTRIBUTE2                       
+						 , NULL							AS ATTRIBUTE3                       
+						 , SUM(CONVERT(decimal, T.ATTRIBUTE4)) 	AS ATTRIBUTE4                       
+						 , NULL							AS ATTRIBUTE5                       
+						 , NULL							AS ATTRIBUTE6                       
+						 , NULL							AS ATTRIBUTE7                       
+						 , NULL							AS ATTRIBUTE8                       
+						 , NULL							AS ATTRIBUTE9                       
+						 , NULL							AS ATTRIBUTE10        
+					  FROM #tmp_SSP_DNM_MES_STOCK_40 T WITH(NOLOCK) 
+					 WHERE T.FROM_SITE IS NOT NULL 
+					 GROUP BY 
+					       T.DIVISION_ID
+					     , T.COMPANY_ID		
+					     , T.FROM_SITE        
+					     , T.SUM_DATE			
+					     , T.AVAILABLE_YN		
+					     , T.PRODID			
+					     , T.LOTID
+				) N
+				  ON M.DIVISION_ID	= N.DIVISION_ID
+				 AND M.COMPANY_ID	= N.COMPANY_ID 
+				 AND M.FROM_SITE	= N.FROM_SITE  
+				 AND M.YYYYMMDD		= N.YYYYMMDD   
+				 AND M.ITEM_ID		= N.ITEM_ID    
+				 AND M.LOT_ID		= N.LOTID      
+				WHEN MATCHED THEN
+				UPDATE
+					SET M.AVAILABLE_YN     = N.AVAILABLE_YN     
+					,	M.PLANT_ID         = N.PLANT_ID         
+					,	M.NICK_NAME        = N.NICK_NAME        
+					,	M.LOT_TYPE         = N.LOTTYPE          
+					,	M.LOT_QTY          = N.LOTQTY           
+					,	M.MES_HOLD_YN      = N.MES_HOLD_YN      
+					,	M.QMS_HOLD_YN      = N.QMS_HOLD_YN      
+					,	M.LONGTERM_HOLD_YN = N.LONGTERM_HOLD_YN   --[C20200303-000163] 신규추가      
+					,	M.JUDG_VLD_DATE    = N.JUDG_VLD_DATE   
+					,   M.HOLD_DATE        = N.HOLD_DATE 
+					,	M.MES_HOLD_RELEASE = N.MES_HOLD_RELEASE 
+					,	M.QMS_HOLD_RELEASE = N.QMS_HOLD_RELEASE 
+					,	M.LAST_UPDATED_BY  = N.LAST_UPDATED_BY  
+					,	M.LAST_UPDATE_DATE = N.LAST_UPDATE_DATE   
+					,	M.ATTRIBUTE1       = N.ATTRIBUTE1        
+					,	M.ATTRIBUTE2       = N.ATTRIBUTE2        
+					,	M.ATTRIBUTE3       = N.ATTRIBUTE3        
+					,	M.ATTRIBUTE4       = N.ATTRIBUTE4        
+					,	M.ATTRIBUTE5       = N.ATTRIBUTE5        
+					,	M.ATTRIBUTE6       = N.ATTRIBUTE6        
+					,	M.ATTRIBUTE7       = N.ATTRIBUTE7        
+					,	M.ATTRIBUTE8       = N.ATTRIBUTE8        
+					,	M.ATTRIBUTE9       = N.ATTRIBUTE9        
+					,	M.ATTRIBUTE10      = N.ATTRIBUTE10        
+
+				WHEN NOT MATCHED THEN
+				INSERT ( 	 DIVISION_ID
+							,COMPANY_ID
+							,FROM_SITE
+							,YYYYMMDD
+							,AVAILABLE_YN
+							,PLANT_ID
+							,ITEM_ID
+							,NICK_NAME
+							,LOT_ID
+							,LOT_TYPE
+							,LOT_QTY
+							,MES_HOLD_YN
+							,QMS_HOLD_YN
+							,LONGTERM_HOLD_YN   --[C20200303-000163] 신규추가      
+							,JUDG_VLD_DATE
+							,HOLD_DATE
+							,MES_HOLD_RELEASE
+							,QMS_HOLD_RELEASE
+							,CREATED_BY                       
+							,CREATION_DATE                     
+							,LAST_UPDATED_BY                   
+							,LAST_UPDATE_DATE                  
+							,ATTRIBUTE1                       
+							,ATTRIBUTE2                       
+							,ATTRIBUTE3                       
+							,ATTRIBUTE4                       
+							,ATTRIBUTE5                       
+							,ATTRIBUTE6                       
+							,ATTRIBUTE7                       
+							,ATTRIBUTE8                       
+							,ATTRIBUTE9                       
+							,ATTRIBUTE10      
+					   )
+				 VALUES (
+							 N.DIVISION_ID
+							,N.COMPANY_ID
+							,N.FROM_SITE
+							,N.YYYYMMDD
+							,N.AVAILABLE_YN
+							,N.PLANT_ID
+							,N.ITEM_ID
+							,N.NICK_NAME
+							,N.LOTID
+							,N.LOTTYPE
+							,N.LOTQTY
+							,N.MES_HOLD_YN
+							,N.QMS_HOLD_YN
+							,N.LONGTERM_HOLD_YN   --[C20200303-000163] 신규추가      
+							,N.JUDG_VLD_DATE
+							,N.HOLD_DATE
+							,N.MES_HOLD_RELEASE
+							,N.QMS_HOLD_RELEASE
+							,N.CREATED_BY                       
+							,N.CREATION_DATE                     
+							,N.LAST_UPDATED_BY                   
+							,N.LAST_UPDATE_DATE                  
+							,N.ATTRIBUTE1                       
+							,N.ATTRIBUTE2                       
+							,N.ATTRIBUTE3                       
+							,N.ATTRIBUTE4                       
+							,N.ATTRIBUTE5                       
+							,N.ATTRIBUTE6                       
+							,N.ATTRIBUTE7                       
+							,N.ATTRIBUTE8                       
+							,N.ATTRIBUTE9                       
+							,N.ATTRIBUTE10  
+				 );
+
+/* INF-R 적용 전 
+
+				-- 인터페이스 테이블 처리 완료 UPDATE
+				UPDATE XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN 
+				SET    PROC_FLAG             = 'Y'
+				,      PROC_DATE             = GETDATE()   
+				,      PROC_MSG              = 'S'
+				WHERE  ISNULL(PROC_FLAG,'N') = 'P'
+				AND    SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+				AND    ATTRIBUTE5 = @company_id
+				;
+*/ 
+/* INF-R 적용 후 */
+
+				MERGE INTO XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN A 
+				USING (
+					SELECT A.IF_SEQ, ISNULL(X1.NEW_VALUE1, A.ATTRIBUTE5) AS ATTRIBUTE5
+					FROM XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN A WITH(NOLOCK)
+					LEFT OUTER JOIN  NERP_CONV_MASTER X1 WITH(NOLOCK)
+					ON  X1.CODETYPE = 'COMPANY_ID'
+					AND A.ATTRIBUTE5 = X1.OLD_VALUE1 
+					AND X1.ATTRIBUTE5 = '1ST'
+				) B
+				ON (
+						   ISNULL(A.PROC_FLAG,'N') = 'P'
+					AND    A.IF_SEQ   = B.IF_SEQ
+					AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+					AND    B.ATTRIBUTE5 = @company_id
+				)
+				WHEN MATCHED THEN
+					UPDATE 
+					   SET A.PROC_FLAG             = 'Y'
+						 , A.PROC_DATE             = GETDATE()   
+						 , A.PROC_MSG              = 'S'
+				;
+
+
+/* INF-R 적용 전 
+				-- 2020.08.27  현업 요구사항으로 LOGIC 추가
+				UPDATE A
+				SET    A.PROC_FLAG             = 'Y'
+				,      A.PROC_DATE             = GETDATE()   
+				,      A.PROC_MSG              = 'S'
+				FROM   XIF_MES_ISS_WAIT_PALLET_R_SN  A WITH(NOLOCK)
+					   LEFT OUTER JOIN SCM_MST_FACTORY_SN  B WITH(NOLOCK)
+					   ON   B.PLANT_ID   = A.PLANT_ID
+					   AND  B.FACTORY_ID = A.AREAID 
+				WHERE  ISNULL(A.PROC_FLAG,'N') = 'P'
+				AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+				AND    A.ATTRIBUTE5 = @company_id
+				AND    B.DIVISION_ID = '40'
+				;
+*/
+/* INF-R 적용 후 */
+				MERGE INTO XIF_MES_ISS_WAIT_PALLET_R_SN A 
+				USING (
+					SELECT A.IF_SEQ, A.PLANT_ID, A.AREAID, ATTRIBUTE5, B.DIVISION_ID
+					FROM (
+							SELECT A.IF_SEQ
+								 , ISNULL(X1.NEW_VALUE1, PLANT_ID) AS PLANT_ID
+								 , A.AREAID
+								 , ISNULL(X2.NEW_VALUE1, A.ATTRIBUTE5) AS ATTRIBUTE5
+							FROM XIF_MES_ISS_WAIT_PALLET_R_SN A WITH(NOLOCK)
+							LEFT OUTER JOIN  NERP_CONV_MASTER X1 WITH(NOLOCK)
+							ON  X1.CODETYPE = 'PLANT_ID'
+							AND A.PLANT_ID = X1.OLD_VALUE1
+							AND X1.ATTRIBUTE5 = '1ST'
+							LEFT OUTER JOIN  NERP_CONV_MASTER X2 WITH(NOLOCK)
+							ON  X2.CODETYPE = 'COMPANY_ID'
+							AND A.ATTRIBUTE5 = X2.OLD_VALUE1
+							AND X2.ATTRIBUTE5 = '1ST'
+						) A
+					LEFT OUTER JOIN SCM_MST_FACTORY_SN  B WITH(NOLOCK)
+					ON   B.PLANT_ID   = A.PLANT_ID
+					AND  B.FACTORY_ID = A.AREAID
+				) B
+				ON (
+						   ISNULL(A.PROC_FLAG,'N') = 'P'
+					AND    A.IF_SEQ   = B.IF_SEQ
+					AND    A.SUM_DATE = CONVERT(CHAR(8), GETDATE(), 112)
+					AND    B.ATTRIBUTE5 = @company_id
+					AND    B.DIVISION_ID = '40'
+
+				)
+				WHEN MATCHED THEN
+					UPDATE 
+					   SET	 A.PROC_FLAG             = 'Y'
+							,A.PROC_DATE             = GETDATE()   
+							,A.PROC_MSG              = 'S'
+				;
+
+
+
+
+				UPDATE SCM_ADM_LOOKUP_MASTER_DETAIL
+				SET    SEGMENT5 = CONVERT(CHAR(8), GETDATE(), 112)
+					 , ATTRIBUTE1 = 'Y'
+					 , LAST_UPDATED_BY = @v_batch_user
+					 , LAST_UPDATE_DATE = GETDATE()
+				WHERE  1 = 1
+				AND    LOOKUP_TYPE = 'SSP_IF_STOCK_CHECK'
+				AND    SEGMENT1 = 'PLAN_40'
+				AND    SEGMENT2 IN ('MES_W', 'MES_F')
+				AND    SEGMENT3 = '40'
+				AND    SEGMENT4 = @company_id
+				--AND    SEGMENT5 = CONVERT(CHAR(8), GETDATE(), 112)
+				AND    ATTRIBUTE1 = 'N'
+				;
+
+			END;
+
+			FETCH NEXT FROM CUR_MES_STOCK INTO @stock_cnt, 
+											@company_id,
+											@group_seq
+		END; 
+
+		CLOSE CUR_MES_STOCK; 
+		DEALLOCATE CUR_MES_STOCK;
+		
+		-- IF data  삭제 (30일 이전 데이터 삭제) 
+		DELETE 
+		FROM  XIF_MES_FORMATION_LOT_QMS_INSP_RESULT_R_SN 
+		WHERE IF_RCV_DATE < GETDATE() - 30
+		;
+
+		-- data  삭제 (3개월  이전 데이터 삭제) 
+		DELETE 
+		FROM  SSP_DNM_MES_STOCK_40 
+		WHERE YYYYMMDD < CONVERT(VARCHAR, DATEADD(M, -3, GETDATE()) ,112)
+		;
+
+        -----------------------------------------------------------
+        -- 실행 Logic END --
+        -----------------------------------------------------------
+        IF @@TRANCOUNT > 0
+          BEGIN
+            COMMIT TRAN TX_SH;
+          END;       
+
+
+        -- TXN LOG
+        SET @v_log_type = N'TXN';    -- ▶ 로그타입
+        SET @n_log_count = @@ROWCOUNT;
+        SET @v_log_message = N'INSERT INTO '+@v_table_id;
+        SET @v_description = N'Process Complete...' + ':' + CONVERT(CHAR(8), @d_event_date, 112);
+        SET @d_event_date = SYSDATETIME();
+
+        EXEC PR_SCP_SYS_LOG_BATCH  @p_program_name  =@v_program_name
+                                  ,@p_log_type      =@v_log_type
+                                  ,@p_log_count     =@n_log_count 
+                                  ,@p_log_message   =@v_log_message 
+                                  ,@p_description   =@v_description 
+                                  ,@p_event_date    =@d_event_date 
+                                  ,@p_user_id       =@v_batch_user
+                                  ;      
+
+    END
+    END TRY
+
+    BEGIN CATCH
+      IF @@TRANCOUNT > 0
+        BEGIN
+          ROLLBACK TRAN TX_SH
+
+			IF EXISTS (SELECT 1 FROM SYS.SYSCURSORS WITH(NOLOCK) WHERE CURSOR_NAME = 'CUR_MES_STOCK')
+				BEGIN
+				   CLOSE CUR_MES_STOCK ;
+				   DEALLOCATE CUR_MES_STOCK ;
+				END
+
+
+        END;
+      
+      -- ERROR LOG
+      SET @v_log_type = N'ERROR';
+      SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+      SET @v_description = @v_program_name + N'ERROR_LINE : ' + STR(ERROR_LINE());
+      SET @d_event_date = SYSDATETIME();
+      EXEC PR_SCP_SYS_LOG_BATCH  @p_program_name  =@v_program_name
+                                ,@p_log_type      =@v_log_type
+                                ,@p_log_count     =@n_log_count 
+                                ,@p_log_message   =@v_log_message 
+                                ,@p_description   =@v_description 
+                                ,@p_event_date    =@d_event_date 
+                                ,@p_user_id       =@v_batch_user
+                                ;
+--      PRINT @@ERROR
+      return -1
+    END CATCH;
+
+     --임시 운영반영시에 주석처리 할것.
+     SET @v_exec_time  =  REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME())/ 60))) + ':' + 
+                          REPLICATE('0', 2 - LEN((convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60)) )) + (convert(varchar, (DATEDIFF(second,       @v_start_time, SYSDATETIME()))% 60)) 
+
+
+    -- 종료 LOG
+    SET @v_log_type = N'END';
+    SET @v_log_message = N'########## END of procedure ##########';
+    SET @v_description = N'['+@v_program_name+'][' + @v_exec_time + ']';  
+    SET @d_event_date = SYSDATETIME()  ;
+    EXEC PR_SCP_SYS_LOG_BATCH  @p_program_name  =@v_program_name
+                              ,@p_log_type      =@v_log_type
+                              ,@p_log_count     =@n_log_count 
+                              ,@p_log_message   =@v_log_message 
+                              ,@p_description   =@v_description 
+                              ,@p_event_date    =@d_event_date 
+                              ,@p_user_id       =@v_batch_user
+                              ;
+   
+    return 1  
+
+  END; 

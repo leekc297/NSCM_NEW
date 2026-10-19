@@ -1,0 +1,283 @@
+﻿/****************************************************************************************************/
+/* Program ID  : [DMF0006_GET_CUSTOMERMODELMAPPING]                                                           */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2018/03/12  SeungJae.Hwnag      Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/* 2018/05/30  JYE			복수 팀 권한 관련  수정  
+** 20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리
+/* 2024/08/14	KJJ			[PJ2024-50461] Team Mapping*/
+*/
+/****************************************************************************************************/
+CREATE PROCEDURE [dbo].[DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA]
+    @p_division_id				NVARCHAR(30),
+	@p_dept_id					NVARCHAR(4000),	--Department
+    @p_end_customer				NVARCHAR(4000),	--Endcustomer
+	@p_scm_site_id				NVARCHAR(30),
+    @p_project_code				NVARCHAR(50),
+	@p_item_id					NVARCHAR(50),
+	@p_customer_project_code	NVARCHAR(50),
+	@p_customer_model			NVARCHAR(100),
+	@p_valid_yn					NVARCHAR(10),
+	@p_created_by				NVARCHAR(50),
+	@p_userinfo					NVARCHAR(50)
+
+AS  
+   -- EXEC DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA @p_division_id='40,81,82', @p_dept_id='ALL', @p_end_customer='ALL', @p_scm_site_id='ALL', @p_project_code='', @p_item_id='', @p_customer_project_code='', @p_customer_model=''
+  
+
+  --exec DMF0006_GET_CUSTOMER_MODEL_MAPPING_DATA @p_division_id=N'82',@p_dept_id=N'ALL',@p_end_customer=N'ALL',@p_scm_site_id=N'ALL',@p_project_code=N'',@p_item_id=N'',@p_customer_project_code=N'',@p_customer_model=N'',@p_valid_yn=N'Y',@p_created_by=N'kjj0070',@p_userinfo=N'ADMIN'
+
+BEGIN
+  SET NOCOUNT ON;
+
+	DECLARE @v_group_id nvarchar(50)='';
+
+	--IF @p_userinfo = 'ADMIN' OR @p_userinfo = 'DM ADMIN'
+	--	SET @v_group_id = 'ADMIN'
+
+	---------------------------------------------------------------------------------
+	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (BEGIN)
+	---------------------------------------------------------------------------------
+	IF ISNULL((
+				SELECT COUNT(1) FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+					where LOOKUP_TYPE = 'GET_ADMIN_GROUP' 
+						AND VALID_YN = 'Y'
+						AND SEGMENT2 = 'ALL'  -- 'ALL'인경우 DM Planner (W/S) 제외 / 주석처리인경우 DM Planner (W/S) 포함 
+						AND SEGMENT1 = @p_userinfo
+			  ),0) > 0
+		BEGIN
+			SET @v_group_id = 'ADMIN'
+		END
+	---------------------------------------------------------------------------------
+	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (END)
+	---------------------------------------------------------------------------------
+
+
+--[PJ2024-50461] Team Mapping(전체 수정)
+
+
+	SELECT  
+	   A.DIVISION_ID,
+	   B.DIVISION_NAME,
+	   A.CUSTOMER_PROJECT_CODE,
+	   A.CUSTOMER_MODEL,
+	   A.SCM_SITE_ID,
+	   C.SITE_DESCRIPTION,
+	   DEPRTMENT.DEPT_ID AS UPPER_DEPT_ID,
+	   TEAM.DEPT_ID, 
+
+	   /*
+		CASE WHEN isnull(TEAM.DEPT_NAME_KO,'') = '' THEN '' ELSE RIGHT(isnull(TEAM.DEPT_NAME_KO,''), CHARINDEX('.',REVERSE(isnull(TEAM.DEPT_NAME_KO,''))) -1) 
+		END AS TEAM_INCHARGE,
+		*/
+
+	  CASE WHEN isnull(TEAM.DEPT_ID, '') = '' OR CHARINDEX('.',REVERSE(isnull(TEAM.DEPT_NAME_KO,''))) = 0 THEN ''
+	   ELSE
+		CASE WHEN isnull(TEAM.DEPT_NAME_KO,'') = '' THEN '' ELSE RIGHT(isnull(TEAM.DEPT_NAME_KO,''), CHARINDEX('.',REVERSE(isnull(TEAM.DEPT_NAME_KO,''))) -1) END
+		END AS TEAM_INCHARGE,
+		
+	   isnull(C.END_CUSTOMER,'') AS END_CUSTOMER,
+	   A.PROJECT_CODE,
+	   PJT.PROJECT_NAME,
+	   A.ITEM_ID,
+	   ITEM.ITEM_CLASS_NAME,
+	   isnull(ITEM.ITEM_NAME,'')AS ITEM_NAME,
+	   '0' AS CAPACITY, 
+	   A.CONVERT_QTY_PACK,
+	   A.CONVERT_QTY_MODULE,
+	   A.CONVERT_QTY_CELL,   
+  
+	   A.VALID_YN,
+	   A.LAST_UPDATED_BY,
+	   A.LAST_UPDATE_DATE,
+	   CASE WHEN (([dbo].[FN_GET_DEPT_LIST](@p_created_by, TEAM.DEPT_ID) = 'Y') OR @v_group_id ='ADMIN') THEN 'Y' ELSE 'N' END AS AUTHORITY_YN
+	FROM  DM_MST_CUSTOMER_MODEL AS A WITH(NOLOCK)
+	LEFT JOIN (SELECT * FROM SCM_MST_DIVISION WITH(NOLOCK) WHERE VALID_YN = 'Y') AS B 
+	ON A.DIVISION_ID = B.DIVISION_ID
+	INNER JOIN (SELECT * FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+	ON A.DIVISION_ID = C.DIVISION_ID AND A.SCM_SITE_ID = C.SCM_SITE_ID AND C.SITE_TYPE = 'SALES'
+
+
+	LEFT OUTER JOIN
+	(
+		SELECT * FROM SCM_MST_SITE_ITEM WITH(NOLOCK)
+	) AS SITE_ITEM
+	ON A.DIVISION_ID = SITE_ITEM.DIVISION_ID
+	AND A.PROJECT_CODE = SITE_ITEM.PROJECT_CODE
+	AND A.SCM_SITE_ID = SITE_ITEM.SCM_SITE_ID
+	AND A.ITEM_ID = SITE_ITEM.ITEM_ID
+	LEFT JOIN (
+		SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID 
+		FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+		INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+		ON B.DEPT_ID = C.DEPT_ID
+	) AS TEAM
+	ON      
+	TEAM.USER_ID   IN (SELECT top 1 token FROM [dbo].[String_Split](SITE_ITEM.owner, ','))
+
+	LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y') AS DEPRTMENT			       
+		ON TEAM.UPPER_DEPT_ID = DEPRTMENT.DEPT_ID
+	LEFT JOIN   
+	(
+	  SELECT * FROM DM_MST_ITEM_SINGLE_V  WITH(NOLOCK)
+	)
+	 AS ITEM 
+	ON   A.DIVISION_ID = ITEM.DIVISION_ID AND A.ITEM_ID  = ITEM.ITEM_ID
+	LEFT JOIN 
+	(
+	SELECT PJTS.DIVISION_ID, PJTS.PROJECT_CODE, PJTS.PROJECT_NAME, PJTS.PROJECT_VER_SEQ, PJTS.CAPACITY
+	FROM SCM_MST_PROJECT PJTS WITH(NOLOCK)
+	INNER JOIN 
+	(
+	SELECT DIVISION_ID, PROJECT_CODE, MAX(PROJECT_VER_SEQ) AS PROJECT_VER_SEQ
+	FROM SCM_MST_PROJECT WITH(NOLOCK)
+	GROUP BY DIVISION_ID, PROJECT_CODE
+	) PJTSG 
+	ON PJTSG.DIVISION_ID = PJTS.DIVISION_ID AND PJTSG.PROJECT_CODE = PJTS.PROJECT_CODE AND PJTSG.PROJECT_VER_SEQ = PJTS.PROJECT_VER_SEQ
+	)
+	AS PJT 
+	ON   A.DIVISION_ID = PJT.DIVISION_ID AND A.PROJECT_CODE = PJT.PROJECT_CODE
+	WHERE  1=1        
+			AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   			 ELSE A.DIVISION_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+						(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE A.DIVISION_ID END) = P.data
+					   )
+			AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   			 ELSE TEAM.DEPT_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+						(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+					   )
+			AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   			 ELSE isnull(C.END_CUSTOMER,'')			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+						(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+					   )				   
+			AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   			 ELSE A.SCM_SITE_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+						(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE A.SCM_SITE_ID END) = P.data
+					   )	
+			AND CASE WHEN @p_project_code = '' THEN ''
+		   			 ELSE A.PROJECT_CODE			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_project_code,',') as P Where 
+						(CASE WHEN @p_project_code = '' THEN '' ELSE A.PROJECT_CODE END) = P.data
+					   )
+			AND CASE WHEN @p_valid_yn = 'ALL' THEN 'ALL'
+						ELSE A.VALID_YN
+				   END = @p_valid_yn
+
+		   AND Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where A.ITEM_ID LIKE N'%' + P.token +'%')
+		   AND Exists (Select * from dbo.UF_FX_String_Split (@p_customer_project_code,',') as P Where A.CUSTOMER_PROJECT_CODE LIKE N'%' + P.token +'%')
+		   AND Exists (Select * from dbo.UF_FX_String_Split (@p_customer_model,',') as P Where A.CUSTOMER_MODEL LIKE N'%' + P.token +'%')
+		   ORDER BY A.DIVISION_ID, DEPRTMENT.DEPT_ID, C.END_CUSTOMER, A.SCM_SITE_ID, A.PROJECT_CODE, A.CUSTOMER_PROJECT_CODE, A.CUSTOMER_MODEL, A.ITEM_ID, ITEM.ITEM_CLASS_NAME
+
+/*
+	SELECT  
+	   A.DIVISION_ID,
+	   B.DIVISION_NAME,
+	   A.CUSTOMER_PROJECT_CODE,
+	   A.CUSTOMER_MODEL,
+	   A.SCM_SITE_ID,
+	   C.SITE_DESCRIPTION,
+	   DEPRTMENT.DEPT_ID AS UPPER_DEPT_ID,
+	   TEAM.DEPT_ID, 
+	   CASE WHEN isnull(TEAM.DEPT_NAME_KO,'') = '' THEN '' ELSE RIGHT(isnull(TEAM.DEPT_NAME_KO,''), CHARINDEX('.',REVERSE(isnull(TEAM.DEPT_NAME_KO,''))) -1) END AS TEAM_INCHARGE,
+	   isnull(C.END_CUSTOMER,'') AS END_CUSTOMER,
+	   A.PROJECT_CODE,
+	   PJT.PROJECT_NAME,
+	   A.ITEM_ID,
+	   ITEM.ITEM_CLASS_NAME,
+	   isnull(ITEM.ITEM_NAME,'')AS ITEM_NAME,
+	   '0' AS CAPACITY, 
+	   A.CONVERT_QTY_PACK,
+	   A.CONVERT_QTY_MODULE,
+	   A.CONVERT_QTY_CELL,   
+  
+	   A.VALID_YN,
+	   A.LAST_UPDATED_BY,
+	   A.LAST_UPDATE_DATE,
+	   CASE WHEN (([dbo].[FN_GET_DEPT_LIST](@p_created_by, TEAM.DEPT_ID) = 'Y') OR @v_group_id ='ADMIN') THEN 'Y' ELSE 'N' END AS AUTHORITY_YN
+	FROM  DM_MST_CUSTOMER_MODEL AS A WITH(NOLOCK)
+	LEFT JOIN (SELECT * FROM SCM_MST_DIVISION WITH(NOLOCK) WHERE VALID_YN = 'Y') AS B 
+	ON A.DIVISION_ID = B.DIVISION_ID
+	INNER JOIN (SELECT * FROM SCM_MST_SITE WITH(NOLOCK) WHERE VALID_YN = 'Y') AS C 
+	ON A.DIVISION_ID = C.DIVISION_ID AND A.SCM_SITE_ID = C.SCM_SITE_ID AND C.SITE_TYPE = 'SALES'
+	LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y')       AS TEAM			       
+					   ON C.DEPT_ID = TEAM.DEPT_ID
+	LEFT JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y') AS DEPRTMENT			       
+		ON TEAM.UPPER_DEPT_ID = DEPRTMENT.DEPT_ID
+	LEFT JOIN   
+	(
+	  SELECT * FROM DM_MST_ITEM_SINGLE_V  WITH(NOLOCK)
+	)
+	 AS ITEM 
+	ON   A.DIVISION_ID = ITEM.DIVISION_ID AND A.ITEM_ID  = ITEM.ITEM_ID
+	LEFT JOIN 
+	(
+	SELECT PJTS.DIVISION_ID, PJTS.PROJECT_CODE, PJTS.PROJECT_NAME, PJTS.PROJECT_VER_SEQ, PJTS.CAPACITY
+	FROM SCM_MST_PROJECT PJTS WITH(NOLOCK)
+	INNER JOIN 
+	(
+	SELECT DIVISION_ID, PROJECT_CODE, MAX(PROJECT_VER_SEQ) AS PROJECT_VER_SEQ
+	FROM SCM_MST_PROJECT WITH(NOLOCK)
+	GROUP BY DIVISION_ID, PROJECT_CODE
+	) PJTSG 
+	ON PJTSG.DIVISION_ID = PJTS.DIVISION_ID AND PJTSG.PROJECT_CODE = PJTS.PROJECT_CODE AND PJTSG.PROJECT_VER_SEQ = PJTS.PROJECT_VER_SEQ
+	)
+	AS PJT 
+	ON   A.DIVISION_ID = PJT.DIVISION_ID AND A.PROJECT_CODE = PJT.PROJECT_CODE
+	WHERE  1=1        
+			AND CASE WHEN @p_division_id = 'ALL' THEN 'ALL'
+		   			 ELSE A.DIVISION_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_division_id,',') as P Where 
+						(CASE WHEN @p_division_id = 'ALL' THEN 'ALL' ELSE A.DIVISION_ID END) = P.data
+					   )
+			AND CASE WHEN @p_dept_id = 'ALL' THEN 'ALL'
+		   			 ELSE TEAM.DEPT_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_dept_id,',') as P Where 
+						(CASE WHEN @p_dept_id = 'ALL' THEN 'ALL' ELSE TEAM.DEPT_ID END) = P.data
+					   )
+			AND CASE WHEN @p_end_customer = 'ALL' THEN 'ALL'
+		   			 ELSE isnull(C.END_CUSTOMER,'')			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_end_customer,',') as P Where 
+						(CASE WHEN @p_end_customer = 'ALL' THEN 'ALL' ELSE isnull(C.END_CUSTOMER,'') END) = P.data
+					   )				   
+			AND CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL'
+		   			 ELSE A.SCM_SITE_ID			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_scm_site_id,',') as P Where 
+						(CASE WHEN @p_scm_site_id = 'ALL' THEN 'ALL' ELSE A.SCM_SITE_ID END) = P.data
+					   )	
+			AND CASE WHEN @p_project_code = '' THEN ''
+		   			 ELSE A.PROJECT_CODE			
+				END IN (
+						Select * from dbo.UF_FX_String_SplitForIN (@p_project_code,',') as P Where 
+						(CASE WHEN @p_project_code = '' THEN '' ELSE A.PROJECT_CODE END) = P.data
+					   )
+			AND CASE WHEN @p_valid_yn = 'ALL' THEN 'ALL'
+						ELSE A.VALID_YN
+				   END = @p_valid_yn
+
+		   AND Exists (Select * from dbo.UF_FX_String_Split (@p_item_id,',') as P Where A.ITEM_ID LIKE N'%' + P.token +'%')
+		   AND Exists (Select * from dbo.UF_FX_String_Split (@p_customer_project_code,',') as P Where A.CUSTOMER_PROJECT_CODE LIKE N'%' + P.token +'%')
+		   AND Exists (Select * from dbo.UF_FX_String_Split (@p_customer_model,',') as P Where A.CUSTOMER_MODEL LIKE N'%' + P.token +'%')
+		   ORDER BY A.DIVISION_ID, DEPRTMENT.DEPT_ID, C.END_CUSTOMER, A.SCM_SITE_ID, A.PROJECT_CODE, A.CUSTOMER_PROJECT_CODE, A.CUSTOMER_MODEL, A.ITEM_ID, ITEM.ITEM_CLASS_NAME
+
+*/
+
+END
+

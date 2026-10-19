@@ -1,0 +1,213 @@
+﻿
+/*
+ * Program ID   : [SCP0026_SAVE_DEMAND_GROUPING]
+ * Description  : Demand Grouping 수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/06/18   PJS            Initial Release  전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ *
+ */
+CREATE PROCEDURE [dbo].[SCP0026_SAVE_DEMAND_GROUPING]
+	 @p_active_flag		    NVARCHAR(MAX)   
+	,@p_division_id          NVARCHAR(MAX)
+	,@p_item_id              NVARCHAR(MAX)
+	,@p_nick_name            NVARCHAR(MAX)
+	,@p_item_class           NVARCHAR(MAX)
+	,@p_operation_group      NVARCHAR(MAX)
+	,@p_operation_group_id   NVARCHAR(MAX)
+	,@p_electrode_type       NVARCHAR(MAX)
+	,@p_flow_id              NVARCHAR(MAX)
+	,@p_demand_grouping_days NVARCHAR(MAX)
+	,@p_user_id              NVARCHAR(MAX)    -- 1번만 들어옴
+	,@debug_mode			 NVARCHAR(1) ='F' -- 1번만 들어옴
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	DECLARE @v_active_flag		    NVARCHAR(MAX);
+	DECLARE @v_division_id          NVARCHAR(MAX);
+	DECLARE @v_item_id              NVARCHAR(MAX);
+	DECLARE @v_nick_name            NVARCHAR(MAX);
+	DECLARE @v_item_class           NVARCHAR(MAX);
+	DECLARE @v_operation_group      NVARCHAR(MAX);
+	DECLARE @v_operation_group_id   NVARCHAR(MAX);
+	DECLARE @v_electrode_type       NVARCHAR(MAX);
+	DECLARE @v_flow_id              NVARCHAR(MAX);
+	DECLARE @v_demand_grouping_days NVARCHAR(MAX);
+	DECLARE @v_created_by           NVARCHAR(MAX);
+	DECLARE @v_creation_date        datetime;
+	DECLARE @v_last_updated_by      NVARCHAR(MAX);
+	DECLARE @v_last_update_date	    datetime;
+
+
+
+	SET @v_division_id          = NULL ;
+	SET @v_item_id              = NULL ;
+	SET @v_nick_name            = NULL ;
+	SET @v_item_class           = NULL ;
+	SET @v_operation_group      = NULL ;
+	SET @v_operation_group_id   = NULL ;
+	SET @v_electrode_type       = NULL ;
+	SET @v_flow_id              = NULL ;
+	SET @v_demand_grouping_days = NULL ;
+	SET @v_created_by           = @p_user_id ;
+	SET @v_creation_date        = SYSDATETIME() ;
+	SET @v_last_updated_by      = @p_user_id ;
+	SET @v_last_update_date	    = SYSDATETIME() ;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = '[SCP0026_SAVE_DEMAND_GROUPING]';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	DECLARE @v_data_dup_cnt  INT=0;
+	
+	-- 예외처리 변수 설정
+	DECLARE @v_err_code  INTEGER;
+	DECLARE @v_err_message  NVARCHAR(4000)='';
+	
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		--PRINT '1';
+
+			-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);   		
+		
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+				
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				SET @v_active_flag          = dbo.SCM_ARR_SPL_VAL( @p_active_flag         , @v_delimiter, @mst_loop_cnt);
+				SET @v_division_id          = dbo.SCM_ARR_SPL_VAL( @p_division_id         , @v_delimiter, @mst_loop_cnt);
+				SET @v_item_id              = dbo.SCM_ARR_SPL_VAL( @p_item_id             , @v_delimiter, @mst_loop_cnt);
+				SET @v_nick_name            = dbo.SCM_ARR_SPL_VAL( @p_nick_name           , @v_delimiter, @mst_loop_cnt);
+				SET @v_item_class           = dbo.SCM_ARR_SPL_VAL( @p_item_class          , @v_delimiter, @mst_loop_cnt);
+				SET @v_operation_group      = dbo.SCM_ARR_SPL_VAL( @p_operation_group     , @v_delimiter, @mst_loop_cnt);
+				SET @v_operation_group_id   = dbo.SCM_ARR_SPL_VAL( @p_operation_group_id  , @v_delimiter, @mst_loop_cnt);
+				SET @v_electrode_type       = dbo.SCM_ARR_SPL_VAL( @p_electrode_type      , @v_delimiter, @mst_loop_cnt);
+				SET @v_flow_id              = dbo.SCM_ARR_SPL_VAL( @p_flow_id             , @v_delimiter, @mst_loop_cnt);
+				SET @v_demand_grouping_days = dbo.SCM_ARR_SPL_VAL( @p_demand_grouping_days, @v_delimiter, @mst_loop_cnt);
+
+				if isnull(@v_demand_grouping_days ,'') = ''
+					SET @v_demand_grouping_days =NULL;
+				
+			END;
+
+			-- LOOP 파라미터 출력 DEBUG용			
+			IF (@debug_mode ='T') 
+			BEGIN		
+				PRINT '===============================================';			
+				PRINT ' @v_division_id          = ' + @v_division_id          ;
+				PRINT ' @v_item_id              = ' + @v_item_id              ;
+				PRINT ' @v_nick_name            = ' + @v_nick_name            ;
+				PRINT ' @v_item_class           = ' + @v_item_class           ;
+				PRINT ' @v_operation_group      = ' + @v_operation_group      ;
+				PRINT ' @v_operation_group_id   = ' + @v_operation_group_id   ;
+				PRINT ' @v_electrode_type       = ' + @v_electrode_type       ;
+				PRINT ' @v_flow_id              = ' + @v_flow_id              ;
+				PRINT ' @v_demand_grouping_days = ' + @v_demand_grouping_days ;
+			END;
+
+			--이력저장
+			EXEC [dbo].[PR_SCP_MST_FINAL_ITEM_HIST]
+				 @v_division_id
+				,@v_item_id
+				,@v_nick_name
+				,@v_item_class
+				,@v_operation_group
+				,@v_operation_group_id
+				,@v_electrode_type
+				,@v_flow_id
+				,@v_demand_grouping_days
+				,@v_last_updated_by
+				,@v_creation_date
+				,@v_last_updated_by
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+				BEGIN		
+					-- 수정
+					UPDATE dbo.SCP_MST_FINAL_ITEM
+					   SET demand_grouping_days = @v_demand_grouping_days    
+						  ,last_updated_by      = @v_last_updated_by         
+						  ,last_update_date     = @v_last_update_date        
+					 WHERE division_id          = @v_division_id             
+					   AND item_id              = @v_item_id                 
+				END  -- END OF STMT. IF( @mst_loop_cnt > 0 )			
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH_CALL_TRAN @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		COMMIT TRAN;			
+		
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @mst_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+		BEGIN
+			if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+						
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+					  
+
+			-- error코드, errror 메시지 반환
+			SELECT 'F' AS result_code;
+
+			IF( @v_err_code IS NULL OR @v_err_code ='')
+				SET @v_err_code= ERROR_NUMBER() ;
+			IF( @v_err_message IS NULL OR @v_err_message ='') 
+				SET @v_err_message=  ERROR_MESSAGE();
+						
+			/* 에러 메시지, 에러 데이터  반환   */	
+			SELECT  @v_err_code			AS err_code
+				   ,@v_err_message		AS err_message
+				     
+			; 
+		END;
+	END CATCH;
+END
+

@@ -1,0 +1,366 @@
+﻿
+/*
+ * Program ID   : SSP0030_GET_LOGISTICS_SIMULATION_DETAIL
+ * Description  : Simulation
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2022/11/02   PARKTAEHAK		신규추가
+*/
+
+CREATE PROCEDURE [dbo].[SSP0030_GET_LOGISTICS_SIMULATION_DETAIL]
+	@p_division_id nvarchar(10),
+	@p_plan_start_yyyymmdd nvarchar(8),
+	@p_from_yyyymmdd nvarchar(8),
+	@p_to_yyyymmdd nvarchar(8),
+	@p_operation_group nvarchar(10),
+	@p_plan_type nvarchar(10),
+	@p_seq nvarchar(2),
+	@p_from_company nvarchar(MAX),
+	@p_incoterms nvarchar(MAX),
+	@p_transport_code        nvarchar(MAX),
+	@p_exchange_rate         nvarchar(MAX),
+	@p_type                  nvarchar(MAX),
+	@p_pod_area              nvarchar(MAX),
+	@p_Condition nvarchar(2) 
+AS
+BEGIN
+
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_operation_group		NVARCHAR(MAX);
+	DECLARE @v_from_company			NVARCHAR(MAX);
+	DECLARE @v_transport_code		NVARCHAR(MAX);
+	DECLARE @v_incoterms			NVARCHAR(MAX);
+
+	DECLARE @v_plan_start_yyyymmdd	nvarchar(max);
+	DECLARE @v_plan_type			nvarchar(max); 
+	DECLARE @v_seq					bigint;
+	DECLARE @v_from_yyyymmdd		nvarchar(8);
+	DECLARE @v_to_yyyymmdd			nvarchar(8);
+	DECLARE @v_exchange_rate		nvarchar(max);
+	DECLARE @v_type					nvarchar(max);
+	DECLARE @v_pod_area             nvarchar(max);
+	DECLARE @v_Condition			nvarchar(2);
+
+	DECLARE @mDQry1 NVARCHAR(MAX)	= '';
+
+	SET @v_division_id = @p_division_id;
+	SET @v_operation_group = @p_operation_group;
+	SET @v_from_company = @p_from_company;
+	SET @v_transport_code = @p_transport_code;
+	SET @v_incoterms = @p_incoterms	
+
+	SET @v_plan_start_yyyymmdd	= @p_plan_start_yyyymmdd;
+	SET @v_plan_type			= @p_plan_type;
+	SET @v_seq					= @p_seq
+	SET @v_from_yyyymmdd		= @p_from_yyyymmdd
+	SET @v_to_yyyymmdd          = @p_to_yyyymmdd
+	SET @v_exchange_rate        = @p_exchange_rate
+	SET @v_type                 = @p_type
+	SET @v_pod_area             = @p_pod_area
+	SET @v_Condition            = @p_Condition
+
+	/********************************************************************************
+	* 임시테이블만들기
+	********************************************************************************/
+	
+	-- SHIPMENT BOH
+	IF OBJECT_ID('tempdb..#Tmp_LOGISTICS_SIMULATION_DETAIL') IS NOT NULL	
+		DROP TABLE #Tmp_LOGISTICS_SIMULATION_DETAIL;
+
+	SELECT  * INTO #Tmp_LOGISTICS_SIMULATION_DETAIL
+	FROM (
+			--FG
+			SELECT 'FG' AS TYPE, 'FG' AS TYPE2
+			, A.DIVISION_ID, A.BIZ_TYPE AS OPERATION_GROUP, A.ITEM_ID, FS.COMPANY_ID AS COMPANY, A.FROM_SITE, A.TO_SITE
+			, R1.D_PORT_CODE AS POL, R1.A_PORT_CODE AS POD, ISNULL(P.ATTRIBUTE1,'-') AS POD_AREA, ISNULL(P.ATTRIBUTE1,'-') AS POD_AREA_V
+			, A.INCOTERMS, R1.TRANSPORT_MODE, A.BOD_ID, R1.ROUTE_ID, A.ELECTRODE_TYPE
+			, A.YYYYMMDD, [dbo].[FN_GET_SSP_ETA_DATE](A.DIVISION_ID, A.BOD_ID, A.YYYYMMDD) AS ETA_YYYYMMDD
+			, A.QTY, L.LOT_SIZE
+			, IIF(L.LOT_SIZE = 0, 0, ROUND(A.QTY/L.LOT_SIZE, 3)) AS CONTAINER_QTY
+			, CASE WHEN LK.ATTRIBUTE1 = 'F' THEN CONVERT(INT, R2.ATTRIBUTE1)
+					WHEN LK.ATTRIBUTE1 = 'C' THEN CONVERT(INT, R2.ATTRIBUTE1) + CONVERT(INT, R2.ATTRIBUTE2)
+					WHEN LK.ATTRIBUTE1 = 'D' THEN CONVERT(INT, R2.ATTRIBUTE1) + CONVERT(INT, R2.ATTRIBUTE2) + CONVERT(INT, R2.ATTRIBUTE3)
+					ELSE 0
+			END AS INCOTERMS_COST
+			, CASE WHEN LK.ATTRIBUTE1 IN ('F', 'C', 'D') THEN CONVERT(INT, R2.ATTRIBUTE1) ELSE 0 END AS EX_COST
+			, CASE WHEN FS.COMPANY_ID != IIF(ISNULL(TS.COMPANY_ID, '') = '', FS.COMPANY_ID, TS.COMPANY_ID) THEN 'Y' ELSE 'N' END AS FG_EX_YN
+			, TS.COMPANY_ID AS TO_COMPANY
+			FROM SCP_ANL_SHIPMENT_PLAN_FG A WITH(NOLOCK)
+			JOIN SCP_ANL_BOD_N_V_PLAN_H AS R1 WITH(NOLOCK)
+			ON A.DIVISION_ID = R1.DIVISION_ID
+			AND A.PLAN_START_YYYYMMDD = R1.PLAN_NAME
+			AND A.PLAN_TYPE = R1.PLAN_TYPE
+			AND A.SEQ = R1.PLAN_SEQ
+			AND A.BOD_ID = R1.BOD_ID
+			JOIN SCP_MST_DISTRIBUTION_ROUTE AS R2 with(nolock)
+			ON R1.ROUTE_ID = R2.ROUTE_ID
+			JOIN  SCM_MST_SITE AS FS WITH(NOLOCK)
+			ON A.DIVISION_ID = FS.DIVISION_ID
+			AND A.FROM_SITE = FS.SCM_SITE_ID
+			JOIN  SCM_MST_SITE AS TS WITH(NOLOCK)
+			ON A.DIVISION_ID = TS.DIVISION_ID
+			AND A.TO_SITE = TS.SCM_SITE_ID
+			LEFT OUTER JOIN SCP_MST_SHIPMENT_LOT_SIZE AS L with(nolock)
+			ON L.DIVISION_ID = A.DIVISION_ID
+			AND L.OPERATION_GROUP = A.BIZ_TYPE
+			AND L.FROM_SITE = A.FROM_SITE 
+			AND L.TO_SITE = A.TO_SITE
+			AND L.ITEM_ID = A.ITEM_ID
+			AND L.TRANSPORT_MODE = R1.TRANSPORT_MODE
+			AND L.VALID_YN = 'Y'
+			LEFT OUTER JOIN  SCM_MST_PORT AS P with(NOLOCK)
+			ON R1.A_COUNTRY = P.COUNTRY
+			AND R1.A_PORT_CODE = P.PORT_CODE
+			AND P.VALID_YN = 'Y'
+			LEFT OUTER JOIN DBO.SCM_ADM_LOOKUP_MASTER_DETAIL AS LK WITH(NOLOCK)
+			ON LK.SEGMENT1 = R1.INCOTERMS
+			AND LK.LOOKUP_TYPE = 'INCOTERMS'
+			AND LK.VALID_YN = 'Y'
+			WHERE 1=1
+			AND A.MEASURE				= 'SHIP_PLAN_AMEND'
+			AND A.DIVISION_ID			= @v_division_id
+			AND A.PLAN_START_YYYYMMDD	=  @v_plan_start_yyyymmdd
+			AND A.PLAN_TYPE				= @v_plan_type
+			AND A.SEQ					= @v_seq
+			AND A.YYYYMMDD				>= @v_from_yyyymmdd
+			AND A.YYYYMMDD				<= @v_to_yyyymmdd
+			AND FS.COMPANY_ID			= @v_from_company
+			AND A.BIZ_TYPE				= @v_operation_group 
+			AND A.QTY > 0
+			AND ((@v_transport_code IS NULL OR @v_transport_code ='') OR R1.TRANSPORT_MODE IN (SELECT token FROM dbo.String_Split(@v_transport_code, ','))) 
+			AND ((@v_incoterms IS NULL OR @v_incoterms ='') OR A.INCOTERMS IN (SELECT token FROM dbo.String_Split(@v_incoterms, ','))) 
+
+			UNION ALL
+
+			--FG_EX : 3rd Party
+			SELECT 'FG' AS TYPE, 'FG_EX' AS TYPE2
+			, A.DIVISION_ID, A.BIZ_TYPE AS OPERATION_GROUP, A.ITEM_ID, TS.COMPANY_ID AS COMPANY, A.FROM_SITE, A.TO_SITE
+			, R1.D_PORT_CODE AS POL, R1.A_PORT_CODE AS POD, ISNULL(P.ATTRIBUTE1,'-') AS POD_AREA, N'삼국간' AS POD_AREA_V
+			, A.INCOTERMS, R1.TRANSPORT_MODE, A.BOD_ID, R1.ROUTE_ID, A.ELECTRODE_TYPE
+			, A.YYYYMMDD, [dbo].[FN_GET_SSP_ETA_DATE](A.DIVISION_ID, A.BOD_ID, A.YYYYMMDD) AS ETA_YYYYMMDD
+			, A.QTY, L.LOT_SIZE
+			, IIF(L.LOT_SIZE = 0, 0, ROUND(A.QTY/L.LOT_SIZE, 3)) AS CONTAINER_QTY
+			, CASE WHEN LK.ATTRIBUTE1 = 'F' THEN CONVERT(INT, R2.ATTRIBUTE1)   --
+					WHEN LK.ATTRIBUTE1 = 'C' THEN CONVERT(INT, R2.ATTRIBUTE1) + CONVERT(INT, R2.ATTRIBUTE2)
+					WHEN LK.ATTRIBUTE1 = 'D' THEN CONVERT(INT, R2.ATTRIBUTE1) + CONVERT(INT, R2.ATTRIBUTE2) + CONVERT(INT, R2.ATTRIBUTE3)
+					ELSE 0
+				END AS INCOTERMS_COST
+			, CASE WHEN LK.ATTRIBUTE1 IN ('F', 'C', 'D') THEN CONVERT(INT, R2.ATTRIBUTE1) ELSE 0 END AS EX_COST
+			--, CASE WHEN FS.COMPANY_ID != IIF(ISNULL(TS.COMPANY_ID, '') = '', FS.COMPANY_ID, TS.COMPANY_ID) THEN 'Y' ELSE 'N' END AS FG_EX_YN
+			, 'Y' AS FG_EX_YN
+			, TS.COMPANY_ID AS TO_COMPANY
+			FROM    SCP_ANL_SHIPMENT_PLAN_FG A WITH(NOLOCK)
+					JOIN SCP_ANL_BOD_N_V_PLAN_H AS R1 WITH(NOLOCK)
+					ON A.DIVISION_ID = R1.DIVISION_ID
+					AND A.PLAN_START_YYYYMMDD = R1.PLAN_NAME
+					AND A.PLAN_TYPE = R1.PLAN_TYPE
+					AND A.SEQ = R1.PLAN_SEQ
+					AND A.BOD_ID = R1.BOD_ID
+					JOIN SCP_MST_DISTRIBUTION_ROUTE AS R2 with(nolock)
+					ON R1.ROUTE_ID = R2.ROUTE_ID
+					JOIN  SCM_MST_SITE AS FS WITH(NOLOCK)
+					ON A.DIVISION_ID = FS.DIVISION_ID
+					AND A.FROM_SITE = FS.SCM_SITE_ID
+					JOIN  SCM_MST_SITE AS TS WITH(NOLOCK)
+					ON A.DIVISION_ID = TS.DIVISION_ID
+					AND A.TO_SITE = TS.SCM_SITE_ID
+					LEFT OUTER JOIN SCP_MST_SHIPMENT_LOT_SIZE AS L with(nolock)
+					ON L.DIVISION_ID = A.DIVISION_ID
+					AND L.OPERATION_GROUP = A.BIZ_TYPE
+					AND L.FROM_SITE = A.FROM_SITE 
+					AND L.TO_SITE = A.TO_SITE
+					AND L.ITEM_ID = A.ITEM_ID
+					AND L.TRANSPORT_MODE = R1.TRANSPORT_MODE
+					AND L.VALID_YN = 'Y'
+					LEFT OUTER JOIN  SCM_MST_PORT AS P with(NOLOCK)
+					ON R1.A_COUNTRY = P.COUNTRY
+					AND R1.A_PORT_CODE = P.PORT_CODE
+					AND P.VALID_YN = 'Y'
+					LEFT OUTER JOIN DBO.SCM_ADM_LOOKUP_MASTER_DETAIL AS LK WITH(NOLOCK)
+					ON LK.SEGMENT1 = R1.INCOTERMS
+					AND LK.LOOKUP_TYPE = 'INCOTERMS'
+					AND LK.VALID_YN = 'Y'
+			WHERE 1=1
+					AND A.MEASURE				= 'SHIP_PLAN_AMEND'
+					AND FS.COMPANY_ID			!= IIF(ISNULL(TS.COMPANY_ID, '') = '', FS.COMPANY_ID, TS.COMPANY_ID)	
+					AND A.DIVISION_ID			= @v_division_id
+					AND A.PLAN_START_YYYYMMDD	=  @v_plan_start_yyyymmdd
+					AND A.PLAN_TYPE				= @v_plan_type
+					AND A.SEQ					= @v_seq
+					AND A.YYYYMMDD				>= @v_from_yyyymmdd
+					AND A.YYYYMMDD				<= @v_to_yyyymmdd
+					AND TS.COMPANY_ID			= @v_from_company
+					AND A.BIZ_TYPE				= @v_operation_group 
+					AND A.QTY					> 0
+					AND ((@v_transport_code IS NULL OR @v_transport_code ='') OR R1.TRANSPORT_MODE IN (SELECT token FROM dbo.String_Split(@v_transport_code, ',')))
+					AND ((@v_incoterms IS NULL OR @v_incoterms ='') OR A.INCOTERMS IN (SELECT token FROM dbo.String_Split(@v_incoterms, ','))) 
+
+			UNION ALL
+			--SEMI
+			SELECT 'SEMI' AS TYPE, 'SEMI' AS TYPE2
+			, A.DIVISION_ID, A.OPERATION_GROUP, A.ITEM_ID, FS.COMPANY_ID AS COMPANY, A.FROM_SITE, A.TO_SITE
+			, R1.D_PORT_CODE AS POL, R1.A_PORT_CODE AS POD, ISNULL(P.ATTRIBUTE1,'-') AS POD_AREA, ISNULL(P.ATTRIBUTE1,'-') AS POD_AREA_V
+			, R1.INCOTERMS, R1.TRANSPORT_MODE, A.BOD_ID, R1.ROUTE_ID, A.ELECTRODE_TYPE
+			, A.YYYYMMDD, [dbo].[FN_GET_SSP_ETA_DATE](A.DIVISION_ID, A.BOD_ID, A.YYYYMMDD) AS ETA_YYYYMMDD
+			, A.QTY, L.LOT_SIZE
+			, IIF(L.LOT_SIZE = 0, 0, ROUND(A.QTY/L.LOT_SIZE, 3)) AS CONTAINER_QTY
+
+			, CASE WHEN LK.ATTRIBUTE1 = 'F' THEN CONVERT(INT, R2.ATTRIBUTE1)
+					WHEN LK.ATTRIBUTE1 = 'C' THEN CONVERT(INT, R2.ATTRIBUTE1) + CONVERT(INT, R2.ATTRIBUTE2)
+					WHEN LK.ATTRIBUTE1 = 'D' THEN CONVERT(INT, R2.ATTRIBUTE1) + CONVERT(INT, R2.ATTRIBUTE2) + CONVERT(INT, R2.ATTRIBUTE3)
+					ELSE 0
+				END AS INCOTERMS_COST
+			, CASE WHEN LK.ATTRIBUTE1 IN ('F', 'C', 'D') THEN CONVERT(INT, R2.ATTRIBUTE1) + CONVERT(INT, R2.ATTRIBUTE2) + CONVERT(INT, R2.ATTRIBUTE3) ELSE 0 END AS EX_COST
+			, 'N'  AS FG_EX_YN
+			, TS.COMPANY_ID AS TO_COMPANY
+			FROM SCP_ANL_SHIPMENT_PLAN_SEMI A WITH(NOLOCK)
+			JOIN SCP_ANL_BOD_N_V_PLAN_H AS R1 WITH(NOLOCK)
+			ON A.DIVISION_ID = R1.DIVISION_ID
+			AND A.PLAN_START_YYYYMMDD = R1.PLAN_NAME
+			AND A.PLAN_TYPE = R1.PLAN_TYPE
+			AND A.SEQ = R1.PLAN_SEQ
+			AND A.BOD_ID = R1.BOD_ID
+			JOIN SCP_MST_DISTRIBUTION_ROUTE AS R2 with(nolock)
+			ON R1.ROUTE_ID = R2.ROUTE_ID
+			JOIN  SCM_MST_SITE AS FS WITH(NOLOCK)
+			ON A.DIVISION_ID = FS.DIVISION_ID
+			AND A.FROM_SITE = FS.SCM_SITE_ID
+			JOIN  SCM_MST_SITE AS TS WITH(NOLOCK)
+			ON A.DIVISION_ID = TS.DIVISION_ID
+			AND A.TO_SITE = TS.SCM_SITE_ID
+			LEFT OUTER JOIN SCP_MST_SHIPMENT_LOT_SIZE AS L with(nolock)
+			ON L.DIVISION_ID = A.DIVISION_ID
+			AND L.OPERATION_GROUP = A.OPERATION_GROUP
+			AND L.FROM_SITE = A.FROM_SITE 
+			AND L.TO_SITE = A.TO_SITE
+			AND L.ITEM_ID = A.ITEM_ID
+			AND L.TRANSPORT_MODE = R1.TRANSPORT_MODE
+			AND L.VALID_YN = 'Y'
+			LEFT OUTER JOIN  SCM_MST_PORT AS P with(NOLOCK)
+			ON R1.A_COUNTRY = P.COUNTRY
+			AND R1.A_PORT_CODE = P.PORT_CODE
+			AND P.VALID_YN = 'Y'
+			LEFT OUTER JOIN DBO.SCM_ADM_LOOKUP_MASTER_DETAIL AS LK WITH(NOLOCK)
+			ON LK.SEGMENT1 = R1.INCOTERMS
+			AND LK.LOOKUP_TYPE = 'INCOTERMS'
+			AND LK.VALID_YN = 'Y'
+			WHERE 1=1
+			AND A.MEASURE				= 'SHIP_PLAN_AMEND'
+			AND A.DIVISION_ID			= @v_division_id
+			AND A.PLAN_START_YYYYMMDD	=  @v_plan_start_yyyymmdd
+			AND A.PLAN_TYPE				= @v_plan_type
+			AND A.SEQ					= @v_seq
+			AND A.YYYYMMDD				>= @v_from_yyyymmdd
+			AND A.YYYYMMDD				<= @v_to_yyyymmdd
+			AND FS.COMPANY_ID			= @v_from_company
+			AND A.OPERATION_GROUP		= @v_operation_group 
+			AND A.QTY					> 0
+			AND ((@v_transport_code IS NULL OR @v_transport_code ='') OR R1.TRANSPORT_MODE IN (SELECT token FROM dbo.String_Split(@v_transport_code, ','))) 
+			AND ((@v_incoterms IS NULL OR @v_incoterms ='') OR R1.INCOTERMS IN (SELECT token FROM dbo.String_Split(@v_incoterms, ','))) 
+
+			UNION ALL
+
+			--SEMI_EX : 도착지 비용
+			SELECT 'SEMI' AS TYPE, 'SEMI_EX' AS TYPE2
+			, A.DIVISION_ID, A.OPERATION_GROUP, A.ITEM_ID, TS.COMPANY_ID AS COMPANY, A.FROM_SITE, A.TO_SITE
+			, R1.D_PORT_CODE AS POL, R1.A_PORT_CODE AS POD, ISNULL(P.ATTRIBUTE1,'-') AS POD_AREA, N'도착지비용' AS POD_AREA_V
+			, R1.INCOTERMS, R1.TRANSPORT_MODE, A.BOD_ID, R1.ROUTE_ID, A.ELECTRODE_TYPE
+			, A.YYYYMMDD, [dbo].[FN_GET_SSP_ETA_DATE](A.DIVISION_ID, A.BOD_ID, A.YYYYMMDD) AS ETA_YYYYMMDD
+			, A.QTY, L.LOT_SIZE
+			, IIF(L.LOT_SIZE = 0, 0, ROUND(A.QTY/L.LOT_SIZE, 3)) AS CONTAINER_QTY
+			, CASE WHEN LK.ATTRIBUTE1 = 'F' THEN CONVERT(INT, R2.ATTRIBUTE1)
+					WHEN LK.ATTRIBUTE1 = 'C' THEN CONVERT(INT, R2.ATTRIBUTE1) + CONVERT(INT, R2.ATTRIBUTE2)
+					WHEN LK.ATTRIBUTE1 = 'D' THEN CONVERT(INT, R2.ATTRIBUTE1) + CONVERT(INT, R2.ATTRIBUTE2) + CONVERT(INT, R2.ATTRIBUTE3)
+					ELSE 0
+				END AS INCOTERMS_COST
+			, CASE WHEN LK.ATTRIBUTE1 IN ('F', 'C', 'D') THEN CONVERT(INT, R2.ATTRIBUTE1) + CONVERT(INT, R2.ATTRIBUTE2) + CONVERT(INT, R2.ATTRIBUTE3) ELSE 0 END AS EX_COST
+			, 'N' AS FG_EX_YN
+			, TS.COMPANY_ID AS TO_COMPANY
+			FROM    SCP_ANL_SHIPMENT_PLAN_SEMI A WITH(NOLOCK)
+					JOIN SCP_ANL_BOD_N_V_PLAN_H AS R1 WITH(NOLOCK)
+					ON A.DIVISION_ID = R1.DIVISION_ID
+					AND A.PLAN_START_YYYYMMDD = R1.PLAN_NAME
+					AND A.PLAN_TYPE = R1.PLAN_TYPE
+					AND A.SEQ = R1.PLAN_SEQ
+					AND A.BOD_ID = R1.BOD_ID
+					JOIN SCP_MST_DISTRIBUTION_ROUTE AS R2 with(nolock)
+					ON R1.ROUTE_ID = R2.ROUTE_ID
+					JOIN  SCM_MST_SITE AS FS WITH(NOLOCK)
+					ON A.DIVISION_ID = FS.DIVISION_ID
+					AND A.FROM_SITE = FS.SCM_SITE_ID
+					JOIN  SCM_MST_SITE AS TS WITH(NOLOCK)
+					ON A.DIVISION_ID = TS.DIVISION_ID
+					AND A.TO_SITE = TS.SCM_SITE_ID
+					LEFT OUTER JOIN SCP_MST_SHIPMENT_LOT_SIZE AS L with(nolock)
+					ON L.DIVISION_ID = A.DIVISION_ID
+					AND L.OPERATION_GROUP = A.OPERATION_GROUP
+					AND L.FROM_SITE = A.FROM_SITE 
+					AND L.TO_SITE = A.TO_SITE
+					AND L.ITEM_ID = A.ITEM_ID
+					AND L.TRANSPORT_MODE = R1.TRANSPORT_MODE
+					AND L.VALID_YN = 'Y'
+					LEFT OUTER JOIN  SCM_MST_PORT AS P with(NOLOCK)
+					ON R1.A_COUNTRY = P.COUNTRY
+					AND R1.A_PORT_CODE = P.PORT_CODE
+					AND P.VALID_YN = 'Y'
+					LEFT OUTER JOIN DBO.SCM_ADM_LOOKUP_MASTER_DETAIL AS LK WITH(NOLOCK)
+					ON LK.SEGMENT1 = R1.INCOTERMS
+					AND LK.LOOKUP_TYPE = 'INCOTERMS'
+					AND LK.VALID_YN = 'Y'
+			WHERE 1=1
+					AND A.MEASURE				= 'SHIP_PLAN_AMEND'
+					AND A.DIVISION_ID			= @v_division_id
+					AND A.PLAN_START_YYYYMMDD	=  @v_plan_start_yyyymmdd
+					AND A.PLAN_TYPE				= @v_plan_type
+					AND A.SEQ					= @v_seq
+					AND A.YYYYMMDD				>= @v_from_yyyymmdd
+					AND A.YYYYMMDD				<= @v_to_yyyymmdd
+					AND TS.COMPANY_ID			= @v_from_company
+					AND A.OPERATION_GROUP		= @v_operation_group 
+					AND A.QTY					> 0
+					AND ((@v_transport_code IS NULL OR @v_transport_code ='') OR R1.TRANSPORT_MODE IN (SELECT token FROM dbo.String_Split(@v_transport_code, ','))) 								
+					AND ((@v_incoterms IS NULL OR @v_incoterms ='') OR R1.INCOTERMS IN (SELECT token FROM dbo.String_Split(@v_incoterms, ','))) 
+	) AS LDa
+
+	SET @mDqry1 = @mDqry1 + '	  SELECT  ' + char(10);
+	--SET @mDqry1 = @mDqry1 + '	  X.TYPE, X.TYPE2  ' + char(10);
+	SET @mDqry1 = @mDqry1 + '	 X.DIVISION_ID, X.OPERATION_GROUP, X.ITEM_ID, X.COMPANY, X.FROM_SITE, X.TO_SITE, X.POL, X.POD, X.POD_AREA  ' + char(10);
+	SET @mDqry1 = @mDqry1 + '	, X.INCOTERMS, X.TRANSPORT_MODE, X.BOD_ID, X.ROUTE_ID  ' + char(10);
+	SET @mDqry1 = @mDqry1 + '	, X.YYYYMMDD, LEFT(X.YYYYMMDD,6) AS YYYYMM, X.ETA_YYYYMMDD AS SALES_YYYYMMDD, LEFT(X.ETA_YYYYMMDD,6) AS SALES_YYYYMM  ' + char(10);
+		
+	SET @mDqry1 = @mDqry1 + '	, X.QTY , X.LOT_SIZE,       CAST(X.CONTAINER_QTY AS CHAR(50)) AS CONTAINER_QTY      ' + char(10);
+
+	SET @mDqry1 = @mDqry1 + '	, CASE WHEN TYPE = ''FG'' AND FG_EX_YN = ''Y'' THEN EX_COST ELSE X.INCOTERMS_COST END AS INCOTERMS_COST  ' + char(10);
+
+	SET @mDqry1 = @mDqry1 + '	, CAST(ROUND(X.CONTAINER_QTY * (CASE WHEN TYPE = ''FG'' AND FG_EX_YN = ''Y'' THEN EX_COST ELSE X.INCOTERMS_COST END) , 1) AS CHAR(50)) AS CONTAINER_COST  ' + char(10);
+
+	SET @mDqry1 = @mDqry1 + '	, CASE WHEN TYPE = ''SEMI'' THEN     CAST(ROUND(X.CONTAINER_QTY * (EX_COST - INCOTERMS_COST) , 1) AS CHAR(50)) ELSE  NULL   END AS SEMI_EX_COST  ' + char(10);
+		
+	SET @mDqry1 = @mDqry1 + '	, CASE WHEN TYPE = ''FG'' AND FG_EX_YN = ''Y'' THEN TO_COMPANY ELSE NULL END AS FG_EX_COMPANY  ' + char(10);
+
+
+	SET @mDqry1 = @mDqry1 + '	, CASE WHEN TYPE = ''FG'' AND FG_EX_YN = ''Y'' THEN CAST(ROUND(X.CONTAINER_QTY * (INCOTERMS_COST - EX_COST) , 1) AS CHAR(50)) ELSE NULL END AS FG_EX_COST  ' + char(10);
+
+
+	SET @mDqry1 = @mDqry1 + '	FROM #Tmp_LOGISTICS_SIMULATION_DETAIL AS X  ' + char(10);
+	SET @mDqry1 = @mDqry1 + '   WHERE 1 = 1  ' + char(10);
+	IF ( @v_Condition ='0') SET @mDqry1 = @mDqry1 + ' 					and X.TYPE = '''+@v_type+'''    '+char(10);     --상단 Main grid Click시 사용 하단 No Master조회시 미사용
+	IF ( @v_Condition ='0') SET @mDqry1 = @mDqry1 + ' 					and X.POD_AREA_V = N'''+@v_pod_area+'''    '+char(10);     --상단 Main grid Click시 사용 하단 No Master조회시 미사용
+	IF ( @v_Condition ='1') SET @mDqry1 = @mDqry1 + ' 					and (X.LOT_SIZE IS NULL OR X.INCOTERMS_COST IS NULL)    '+char(10);     --상단조회시 미사용 하단 No Master조회시에 사용
+
+	SET @mDqry1 = @mDqry1 + '	  ORDER BY   ' + char(10);
+	SET @mDqry1 = @mDqry1 + '	  X.DIVISION_ID, X.OPERATION_GROUP, X.ITEM_ID,X.FROM_SITE, X.TO_SITE, X.POL, X.POD  ' + char(10);
+	SET @mDqry1 = @mDqry1 + '	  , X.POD_AREA, X.INCOTERMS, X.TRANSPORT_MODE, X.BOD_ID, X.ROUTE_ID, X.YYYYMMDD  ' + char(10);
+
+	print @mDqry1
+
+	EXEC (@mDQry1);
+
+	IF OBJECT_ID('tempdb..#Tmp_LOGISTICS_SIMULATION_DETAIL') IS NOT NULL	
+		DROP TABLE #Tmp_LOGISTICS_SIMULATION_DETAIL;
+END

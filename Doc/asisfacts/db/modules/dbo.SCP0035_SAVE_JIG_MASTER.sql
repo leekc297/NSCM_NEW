@@ -1,0 +1,208 @@
+﻿
+
+/*
+ * Program ID   : SCP0035_SAVE_JIG_MASTER
+ * Description  : Jig Master 등록/수정
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2018/10/18   YHW				Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/11/01	YHW				Operation ID 조회 추가
+ */
+CREATE PROCEDURE [dbo].[SCP0035_SAVE_JIG_MASTER]
+	 @p_active_flag			NVARCHAR(MAX)
+	,@p_jig_seq				NVARCHAR(MAX)
+	,@p_division_id			NVARCHAR(MAX)
+	,@p_scm_site_id 		NVARCHAR(MAX)
+	,@p_operation_id 		NVARCHAR(MAX)
+	,@p_jig_name 			NVARCHAR(MAX)
+	,@p_valid_yn			NVARCHAR(MAX)
+	,@p_s_valid_yn			NVARCHAR(MAX)
+	,@p_created_by			NVARCHAR(MAX)
+	,@p_creation_date		NVARCHAR(MAX)
+	,@p_last_updated_by		NVARCHAR(MAX)
+	,@debug_mode            NVARCHAR(20) ='F'
+AS
+
+BEGIN
+
+	SET NOCOUNT ON;
+
+
+	--SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+	
+	--DECLARE @DEBUG_MODE NVARCHAR(20) ='FALSE';
+	--DECLARE @DEBUG_MODE NVARCHAR(20) ='TRUE';
+
+	DECLARE @recv_active_flag		NVARCHAR(MAX);
+	SET @recv_active_flag = NULL;		
+	SET @recv_active_flag = @p_active_flag;
+
+	
+	DECLARE @v_active_flag			NVARCHAR(MAX);
+	DECLARE @v_jig_seq				NVARCHAR(MAX);
+	DECLARE @v_division_id			NVARCHAR(MAX);
+	DECLARE @v_scm_site_id 			NVARCHAR(MAX);
+	DECLARE @v_operation_id 		NVARCHAR(MAX);
+	DECLARE @v_jig_name				NVARCHAR(MAX);
+	DECLARE @v_valid_yn				NVARCHAR(MAX);
+	DECLARE @v_s_valid_yn			NVARCHAR(MAX);
+	DECLARE @v_created_by			NVARCHAR(MAX);
+	DECLARE @v_creation_date		DATETIME;
+	DECLARE @v_last_updated_by		NVARCHAR(MAX);
+
+	SET @v_active_flag = NULL;
+	SET @v_jig_seq= NULL;
+	SET @v_division_id = NULL;
+	SET @v_scm_site_id = NULL;
+	SET @v_operation_id = NULL;
+	SET @v_jig_name = NULL;
+	SET @v_valid_yn = NULL;
+	SET @v_s_valid_yn = NULL;
+	SET @v_created_by = NULL;	  
+	SET @v_creation_date = NULL;
+	SET @v_last_updated_by = NULL;
+
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^' 
+	DECLARE @max_loop_cnt		INTEGER = 0; 
+	DECLARE @mst_loop_cnt		INTEGER = 0;
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0035_SAVE_JIG_MASTER';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		PRINT '1';
+
+		-- 시작 LOG
+		SET @v_log_type = 'START';
+		SET @v_log_message = '########## Start of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+		--PRINT '2';
+		-- 프로시저 LOOP 길이를 판단
+		SET @max_loop_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_active_flag, @v_delimiter);    
+
+		WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+		BEGIN    
+			--PRINT '3';	
+			-- @mst_loop_cnt 1증가
+			SET @mst_loop_cnt = @mst_loop_cnt + 1;			
+
+			-- 각 컬럼들에 대한 스플릿처리로직 스타트
+			BEGIN
+				--PRINT '4';
+				SET @v_jig_seq		= [dbo].[SCM_ARR_SPL_VAL](@p_jig_seq	, @v_delimiter , @mst_loop_cnt) ;    
+				IF(ISNULL(@v_jig_seq,'') ='')
+					SET @v_jig_seq = NEXT VALUE FOR SEQ1_SCP_MST_JIG;
+				--PRINT '5';
+
+				SET @v_active_flag		= [dbo].[SCM_ARR_SPL_VAL](@p_active_flag	, @v_delimiter , @mst_loop_cnt) ;    
+				SET @v_division_id		= [dbo].[SCM_ARR_SPL_VAL](@p_division_id	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_scm_site_id		= [dbo].[SCM_ARR_SPL_VAL](@p_scm_site_id	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_operation_id		= [dbo].[SCM_ARR_SPL_VAL](@p_operation_id	, @v_delimiter , @mst_loop_cnt) ; 
+				SET @v_jig_name			= [dbo].[SCM_ARR_SPL_VAL](@p_jig_name 		, @v_delimiter , @mst_loop_cnt) ;
+				SET @v_valid_yn			= [dbo].[SCM_ARR_SPL_VAL](@p_valid_yn		, @v_delimiter, @mst_loop_cnt) ;  	
+				SET @v_s_valid_yn		= [dbo].[SCM_ARR_SPL_VAL](@p_s_valid_yn		, @v_delimiter, @mst_loop_cnt) ;  	
+				SET @v_created_by		= [dbo].[SCM_ARR_SPL_VAL](@p_created_by		, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_creation_date	= [dbo].[SCM_ARR_SPL_VAL](@p_creation_date	, @v_delimiter, @mst_loop_cnt) ; 
+				SET @v_last_updated_by	= [dbo].[SCM_ARR_SPL_VAL](@p_last_updated_by, @v_delimiter, @mst_loop_cnt) ; 
+				--PRINT '6';
+			END
+
+			-- LOOP 파라미터 출력 DEBUG용			
+			IF (@debug_mode ='T') 
+			BEGIN		
+				PRINT '===============================================';			
+				PRINT '@v_active_flag     = ''' +@v_active_flag +'''';
+				PRINT '@v_jig_seq		  = ''' +@v_jig_seq +'''';
+				PRINT '@v_division_id     = ''' +@v_division_id +'''';
+				PRINT '@v_scm_site_id     = ''' +@v_scm_site_id +'''';
+				PRINT '@v_operation_id    = ''' +@v_operation_id +'''';
+				PRINT '@v_jig_name		  = ''' +@v_jig_name +'''';				
+				PRINT '@v_valid_yn        = ''' +@v_valid_yn +'''';
+				PRINT '@v_s_valid_yn      = ''' +@v_s_valid_yn +'''';
+				PRINT '@v_last_updated_by = ''' +@v_last_updated_by +'''';				
+				PRINT '@mst_loop_cnt      = ''' +CONVERT(VARCHAR(10), @mst_loop_cnt) +'''';				
+
+
+			END;
+
+		   --이력저장
+		   EXEC [PR_SCP_MST_JIG_HIST] @v_jig_seq,@v_division_id,@v_scm_site_id,@v_operation_id,@v_jig_name,@v_s_valid_yn,@v_created_by,@v_creation_date,@v_last_updated_by; 
+
+			--데이터 저장
+			IF @mst_loop_cnt > 0 			
+				BEGIN		
+
+					-- SCP_MST_JIG입력/수정
+					IF( @v_active_flag ='M') 
+						BEGIN
+							UPDATE SCP_MST_JIG
+							SET  JIG_NAME			= @v_jig_name
+								,VALID_YN			= @v_valid_yn
+								,last_updated_by	= @v_last_updated_by
+								,last_update_date	= sysdatetime()
+							WHERE JIG_SEQ   = @v_jig_seq
+							;
+							  
+						END
+					ELSE IF(@v_active_flag ='I') 
+						BEGIN
+							INSERT INTO SCP_MST_JIG(		
+									 JIG_SEQ, DIVISION_ID, SCM_SITE_ID, OPERATION_ID, JIG_NAME, VALID_YN
+									,created_by, creation_date, last_updated_by, last_update_date
+								)
+							VALUES  (
+					 				 @v_jig_seq, @v_division_id, @v_scm_site_id, @v_operation_id, @v_jig_name, @v_valid_yn
+									,@v_created_by, SYSDATETIME(), @v_created_by, SYSDATETIME()
+								);
+	
+						END
+				END  -- END OF STMT. IF( @mst_loop_cnt > 0 )			
+			
+		END -- END OF STMT. WHILE LEN(@recv_active_flag) > 0 AND @mst_loop_cnt < @max_loop_cnt
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+			
+		COMMIT TRAN;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @max_loop_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+
+		  if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+		END CATCH;
+	END
+

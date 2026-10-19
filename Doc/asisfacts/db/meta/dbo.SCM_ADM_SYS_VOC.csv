@@ -1,0 +1,32 @@
+﻿"VOC_NO","VOC_TYPE","VOC_NAME","VOC_DETAIL","REQUEST_DATE","REQUEST_USER_ID","CLASSIFY_STATUS","CLASSIFY_DATE","CLASSIFY_USER_ID","RECEIPT_STATUS","RECEIPT_DATE","RECEIPT_USER_ID","REVIEW_STATUS","REVIEW_DATE","REVIEW_USER_ID","PRIORITY_STATUS","PRIORITY_DATE","PRIORITY_USER_ID","DEV_STATUS","DEV_DATE","DEV_USER_ID","TEST_STATUS","TEST_DATE","TEST_USER_ID","FINISH_STATUS","FINISH_DATE","FINISH_USER_ID","SCM_PI_USER_ID","SCM_SOLUTION_USER_ID","CSR_NO","REMARK","USE_YN","ATTRIBUTE1","ATTRIBUTE2","ATTRIBUTE3","ATTRIBUTE4","ATTRIBUTE5","ATTRIBUTE6","ATTRIBUTE7","ATTRIBUTE8","ATTRIBUTE9","ATTRIBUTE10","BENEFIT_QUANTITATIVE","BENEFIT_QUALITATIVE","CONFIRM_STATUS","CONFIRM_DATE","CONFIRM_USER_ID","CONFIRM_OPINION","MAN_MONTH_PLAN","MAN_MONTH_REAL","CLASSIFY_START_DATE","PRIORITY_START_DATE","DEV_START_DATE"
+"1000000152","","외주 기초재고 시스템 자동 반영요청(구미 전력망)","매주 월요일마다 남경, 구미 피플웍스의 Cell, Pack 기초재고를 GSCM - Stock OSP에서 엑셀로 업로드 하고 있으나,
+
+
+
+수기 입력에 따른 오류발생 가능으로 매주 시스템에서 기초재고 자동 업로드 요청함","2024-05-29 00:00:00.000","guminkim","HD","2023-04-30
+2023-04-30","ohsun","","","ohsun","","","ohsun","","","ohsun","","","ohsun","","","ohsun","","","ohsun","","","","생산PI팀에서 진행 건으로 SCP과제에서 제외","Y","82","","","","","","","","","","","","","","","","","","2023-04-18 오전 12:00:00","",""
+"1000000155","","외주 기초재고 시스템 자동 반영요청(남경 전력망)","매주 월요일마다 남경, 구미 피플웍스의 Cell, Pack 기초재고를 GSCM - Stock OSP에서 엑셀로 업로드 하고 있으나,
+
+수기 입력에 따른 오류발생 가능으로 매주 시스템에서 기초재고 자동 업로드 요청함","2024-05-29 00:00:00.000","guminkim","HD","2023-04-30
+2023-04-30","ohsun","","","ohsun","","","ohsun","","","ohsun","","","ohsun","","","ohsun","","","ohsun","","","","생산PI팀에서 진행 건으로 SCP과제에서 제외","Y","82","","","","","","","","","","","","","","","","","","2023-04-18 오전 12:00:00","",""
+"1000000156","","외주 기초재고 시스템 자동 반영요청(남경 주택용)","매주 월요일마다 남경, 구미 피플웍스의 Cell, Pack 기초재고를 GSCM - Stock OSP에서 엑셀로 업로드 하고 있으나,
+
+수기 입력에 따른 오류발생 가능으로 매주 시스템에서 기초재고 자동 업로드 요청함","2024-05-29 00:00:00.000","guminkim","HD","2023-04-30
+2023-04-30","ohsun","","","ohsun","","","ohsun","","","ohsun","","","ohsun","","","ohsun","","","ohsun","","","","생산PI팀에서 진행 건으로 SCP과제에서 제외","Y","82","","","","","","","","","","","","","","","","","","2023-04-18 오전 12:00:00","",""
+"1000000157","","Ending Invtory Report A000(OC Common) Plant 추가건","ERP에서 GSCM Ending Inv. I/F 시 
+오창 공통 Plant(A000) 누락되어 재고 마감 실적에 오류가 있습니다
+4월 마감 재고 실적에 반영 될 수 있도록 지급으로 검토 및 반영 부탁드립니다.","2024-05-29 00:00:00.000","yunho_2053","FH","2023-04-28
+2023-04-28
+2023-04-28","yongseokyoon","","","yongseokyoon","","","yongseokyoon","FH","2023-04-28
+2023-04-28
+2023-04-28","yongseokyoon","FH","2023-05-03
+2023-05-03
+2023-05-03","yongseokyoon","FH","2023-05-03
+2023-05-03
+2023-05-03","yongseokyoon","FH","2023-05-03
+2023-05-03
+2023-05-03","yongseokyoon","yongseokyoon","kilho.yoo","","긴급으로 윤용석님이 대응하여 종료한 건입니다.","Y","0","","","","","","","","","","","","","","","","","","2023-04-28 오전 12:00:00","2023-04-28 오전 12:00:00","2023-04-28 오전 12:00:00"
+"1000000158","","DIO Trend Report 생성","자동차전지 DIO Trend Report ESS전지 확산전개 요청
+- 각 Cell별 총 생산량/판매량을 셀 수량으로 환산하여 P, S, I 표현
+- 해당 PSI에 따른 DIO 산출","2024-05-29 00:00:00.000","hyelin.jung","HD","2023-08-25
+2023-08-25","ohsun","","","ohsun","","","ohsun","","","ohsun","","","ohsun","","","ohsun","","","ohsun","","","","","Y","82","","","","","","","","","","","","","","","","","","2023-08-25 오전 12:00:00","",""

@@ -1,0 +1,608 @@
+﻿
+/*
+ * Program ID   : SCP0052_GET_CAPA_REPORT_TOTAL_YIELD
+ * Description  : 
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2021/02/02   khj79          [PJ20199555] 공급 대응력 향상을 위한 자재재공 수급 점검 체계 개선 - 최초작성
+ * 2021/03/10   khj79          부동 소수점 오류 개선
+ * 2021/03/11   khj79          수율 값 %(*100) 로 변경
+ 
+ex>	DECLARE @p_today_yyyymmdd		NVARCHAR(8) = '20210203'
+	,@p_from_yyyymm			NVARCHAR(6) = '202101'
+	,@p_to_yyyymm			NVARCHAR(6) = '202112'
+	,@p_division_id			NVARCHAR(20) = '81'
+	,@p_group				NVARCHAR(1) = 'A'
+	,@p_plant_id			NVARCHAR(MAX) = 'A040'
+	,@p_factory_id			NVARCHAR(MAX) = 'A1'
+	,@p_version_id			NVARCHAR(20) = 'Current'
+	,@p_line_id				NVARCHAR(MAX) = 'A1A02'
+	,@p_operation_id		NVARCHAR(MAX) = ''
+	,@p_model_id			NVARCHAR(30) = ''
+	,@p_item_id				NVARCHAR(30) = ''
+	,@p_nick_name			NVARCHAR(30) = ''
+	,@p_user_id				NVARCHAR(30) = 'khj79'
+	,@debug_mode			CHAR(1) = ''
+ */
+
+
+CREATE PROCEDURE [dbo].[SCP0052_GET_CAPA_REPORT_TOTAL_YIELD_0729_ORG]
+	 @p_today_yyyymmdd		NVARCHAR(8)
+	,@p_from_yyyymm			NVARCHAR(6)
+	,@p_to_yyyymm			NVARCHAR(6)
+	,@p_division_id			NVARCHAR(20)
+	,@p_group				NVARCHAR(10)
+	,@p_plant_id			NVARCHAR(MAX)
+	,@p_factory_id			NVARCHAR(MAX)
+	,@p_line_id				NVARCHAR(MAX)
+	,@p_model_id			NVARCHAR(30)
+	,@p_item_id				NVARCHAR(30)
+	,@p_nick_name			NVARCHAR(30)
+	,@p_user_id				NVARCHAR(30)
+	,@debug_mode			CHAR(1)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	-- 부동 소수점 오류(0이나 NULL값을 무시한 연산을 수행) 
+	SET ANSI_WARNINGS OFF
+	SET ARITHIGNORE ON
+	SET ARITHABORT OFF
+
+	-- 날짜 조건용 변수 설정
+	DECLARE @v_start_month		NVARCHAR(6);	--시작 월(현재월 +1 년)
+	DECLARE @v_end_month		NVARCHAR(6);	--마지막 월
+
+	SET @v_start_month = @p_from_yyyymm ;
+	SET @v_end_month= @p_to_yyyymm;
+
+	-- 버전별 division, op group 설정
+	DECLARE @v_ver_division_id	NVARCHAR(20);
+	DECLARE @v_ver_group		NVARCHAR(MAX);
+
+	-- GROUP ID 설정
+	DECLARE @v_group_id			NVARCHAR(10);
+	SET @v_group_id = @p_group;
+	
+	-- 쿼리 실행용 변수
+	DECLARE @MEXEC		NVARCHAR(MAX);
+	DECLARE @MQRY_SUM	NVARCHAR(MAX);
+
+	-- //////////////////////////////////////////////////////////////
+	-- 임시 테이블 생성
+	-- //////////////////////////////////////////////////////////////
+	BEGIN
+		-- STD(기준) 테이블 기준으로 LOSS 저장
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_TARGET_ITEM') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_TARGET_ITEM;
+	
+		CREATE TABLE #TMP_SCP0052_TARGET_ITEM
+		(
+			  DIVISION_ID		NVARCHAR(030)
+			, COMPANY_ID		NVARCHAR(030)
+			, SITE_ID			NVARCHAR(030)
+			, PLANT_ID			NVARCHAR(030)
+			, FACTORY_ID		NVARCHAR(030)
+			, LINE_ID			NVARCHAR(030)
+			, ELECTRODE_TYPE	NVARCHAR(030)
+			, OPERATION_ID		NVARCHAR(030)
+			, MODEL_ID			NVARCHAR(030)
+			, MODEL_NICK_NAME	NVARCHAR(030)
+			, YYYYMM			NVARCHAR(006)
+		)
+
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_MODEL_COMP') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_MODEL_COMP;
+
+		CREATE TABLE #TMP_SCP0052_MODEL_COMP
+		(
+			  DIVISION_ID		NVARCHAR(030)
+			, COMPANY_ID		NVARCHAR(030)
+			, SITE_ID			NVARCHAR(030)
+			, PLANT_ID			NVARCHAR(030)
+			, OPERATION_ID		NVARCHAR(030)
+			, ITEM_ID			NVARCHAR(030)
+			, MODEL_ID			NVARCHAR(030)
+			--, NICK_NAME			NVARCHAR(100)
+		)
+
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_MODEL_ITEM_LINE') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_MODEL_ITEM_LINE;
+	
+		CREATE TABLE #TMP_SCP0052_MODEL_ITEM_LINE
+		(
+			  DIVISION_ID		NVARCHAR(030)
+			, COMPANY_ID		NVARCHAR(030)
+			, SITE_ID			NVARCHAR(030)
+			, PLANT_ID			NVARCHAR(030)
+			, FACTORY_ID		NVARCHAR(030)
+			, ITEM_ID			NVARCHAR(030)
+			, MODEL_ID			NVARCHAR(030)
+			, MODEL_NICK_NAME	NVARCHAR(100)
+			, LINE_ID			NVARCHAR(030)
+			, ELECTRODE_TYPE	NVARCHAR(030)
+			, OPERATION_ID		NVARCHAR(030)
+			, YYYYMM			NVARCHAR(006)
+		)
+
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_ITEM_LINE_YIELD') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_ITEM_LINE_YIELD;
+
+		CREATE TABLE #TMP_SCP0052_ITEM_LINE_YIELD
+		( 
+			  DIVISION_ID		NVARCHAR(030)
+			, COMPANY_ID		NVARCHAR(030)
+			, SITE_ID			NVARCHAR(030)
+			, PLANT_ID			NVARCHAR(030)
+			, FACTORY_ID		NVARCHAR(030)
+			, ITEM_ID			NVARCHAR(030)
+			, MODEL_ID			NVARCHAR(030)
+			, MODEL_NICK_NAME	NVARCHAR(100)
+			, LINE_ID			NVARCHAR(030)
+			, ELECTRODE_TYPE	NVARCHAR(030)
+			, OPERATION_ID		NVARCHAR(030)
+			, YYYYMM			NVARCHAR(006)
+			, YIELD				NUMERIC(20,4)
+		)
+
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_MODEL_ITEM_LINE_OP_MIN_YIELD') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_MODEL_ITEM_LINE_OP_MIN_YIELD;
+
+		CREATE TABLE #TMP_SCP0052_MODEL_ITEM_LINE_OP_MIN_YIELD
+		( 
+			  DIVISION_ID		NVARCHAR(030)
+			, COMPANY_ID		NVARCHAR(030)
+			, SITE_ID			NVARCHAR(030)
+			, PLANT_ID			NVARCHAR(030)
+			, FACTORY_ID		NVARCHAR(030)
+			, MODEL_ID			NVARCHAR(030)
+			, MODEL_NICK_NAME	NVARCHAR(100)
+			, ITEM_ID			NVARCHAR(030)
+			, LINE_ID			NVARCHAR(030)
+			, OPERATION_ID		NVARCHAR(030)
+			, YYYYMM			NVARCHAR(006)
+			, YIELD				NUMERIC(20,4)
+		)
+	END
+
+	-- ///////////////////////////////////////////////////////////////////////////////////
+	-- ///////////////////////////////////////////////////////////////////////////////////
+	BEGIN
+		INSERT INTO #TMP_SCP0052_TARGET_ITEM
+		(
+			  COMPANY_ID
+			, DIVISION_ID
+			, SITE_ID
+			, PLANT_ID
+			, FACTORY_ID
+			, MODEL_ID
+			, MODEL_NICK_NAME
+			, LINE_ID
+			, ELECTRODE_TYPE
+			, OPERATION_ID
+			, YYYYMM
+		)
+		SELECT DISTINCT
+			   A.COMPANY_ID
+			 , A.DIVISION_ID
+			 , A.SITE_ID
+			 , B.PLANT_ID
+			 , B.FACTORY_ID
+			 , A.ITEM_ID	AS MODEL_ID
+			 , A.NICK_NAME	AS MODEL_NICK_NAME
+			 , B.LINE_ID
+			 , B.ELECTRODE_TYPE
+			 , LEFT(A.FLOW_ID, 5) AS OPERATION_ID
+			 , C.YYYYMM
+		  FROM SCM_ITEM_M_SN  A WITH(NOLOCK)
+			 , SCM_MST_ITEM_LINE_ASSIGN_SN B WITH(NOLOCK)  -- 테이블 변경(SCM_ITEM_LINE_ASSIGN_M)
+			 , (SELECT DISTINCT BASIS_YYYYMM AS YYYYMM
+				  FROM SCM_SYS_CALENDAR_M WITH(NOLOCK)  -- 테이블 변경
+				 WHERE BASIS_YYYYMM	>= @v_start_month
+				   AND BASIS_YYYYMM	<= @v_end_month
+				) C
+		 WHERE A.ACTIVE_FLAG = 'Y'
+		   AND LEFT(A.FLOW_ID, 1)	 = CASE WHEN @v_group_id IN ('A','F') THEN 'A'
+											WHEN @v_group_id = 'P'		  THEN 'P'
+									   END
+		   AND A.FLOW_ID IN ('A9000','A3000','P9500','P5500')
+		   AND A.DIVISION_ID = @p_division_id
+		   AND (( @p_plant_id		IS NULL OR @p_plant_id		='') OR B.PLANT_ID     	IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_plant_id	, ',')))
+		   AND (( @p_factory_id		IS NULL OR @p_factory_id	='') OR B.FACTORY_ID	IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_factory_id, ',')))
+		   AND (( @p_line_id		IS NULL OR @p_line_id		='') OR B.LINE_ID      	IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_line_id	, ',')))
+		   AND (( @p_model_id		IS NULL OR @p_model_id		='') OR A.ITEM_ID			LIKE '%' + @p_model_id		+'%')
+		   
+		   AND (( @p_nick_name		IS NULL OR @p_nick_name		='') OR NICK_NAME			LIKE '%' + @p_nick_name		+'%')
+		   AND A.COMPANY_ID		= B.COMPANY_ID
+		   AND A.DIVISION_ID	= B.DIVISION_ID
+		   AND A.SITE_ID		= B.SITE_ID
+		   AND A.ITEM_ID		= B.ITEM_ID
+		   AND B.MONTH			>= @v_start_month
+		   AND B.MONTH			<= @v_end_month
+		   AND B.PRIORITY		!= 9.00
+		   AND LEFT(A.FLOW_ID, 5) = B.OPERATION_ID
+	END
+
+	BEGIN
+		INSERT INTO #TMP_SCP0052_MODEL_COMP
+		(
+			  COMPANY_ID
+			, DIVISION_ID
+			, SITE_ID
+			, PLANT_ID
+			, ITEM_ID
+			, MODEL_ID
+			, OPERATION_ID
+		)
+		SELECT DISTINCT
+			   A.COMPANY_ID
+			 , A.DIVISION_ID
+			 , A.SITE_ID
+			 , A.PLANT_ID
+			 , A.CHILD_ITEM_ID AS ITEM_ID
+			 , A.MODEL_ID
+			 , LEFT(C.FLOW_ID, 5) AS OPERATION_ID
+		  FROM SCM_MST_BOM_SN A WITH(NOLOCK)    -- SCM_MODEL_COMP_TEMP
+			 , (SELECT DISTINCT COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID
+				  FROM SCM_FACTORY_M_SN WITH(NOLOCK)
+				 WHERE ACTIVE_FLAG = 'Y'
+				) B
+			 , SCM_ITEM_M_SN C WITH(NOLOCK)
+		 WHERE A.COMPANY_ID		= B.COMPANY_ID 
+		   AND A.DIVISION_ID	= B.DIVISION_ID 
+		   AND A.SITE_ID		= B.SITE_ID 
+		   AND A.PLANT_ID		= B.PLANT_ID
+		   AND A.COMPANY_ID		= A.CHILD_COMPANY_ID
+		   AND A.DIVISION_ID	= A.CHILD_DIVISION_ID
+		   AND A.SITE_ID		= A.CHILD_SITE_ID
+		   AND A.PLANT_ID		= A.CHILD_PLANT_ID
+		   AND A.COMPANY_ID		= C.COMPANY_ID 
+		   AND A.DIVISION_ID	= C.DIVISION_ID 
+		   AND A.SITE_ID		= C.SITE_ID
+		   AND A.CHILD_ITEM_ID	= C.ITEM_ID 
+		   AND C.ACTIVE_FLAG	= 'Y'
+		   AND C.FLOW_ID		IS NOT NULL
+		   AND LEFT(C.FLOW_ID, 1) = CASE WHEN @v_group_id = 'A' THEN 'A' 
+										 WHEN @v_group_id = 'F' THEN 'F'
+										 WHEN @v_group_id = 'P' THEN 'P'
+									END
+		   AND A.DIVISION_ID = @p_division_id
+		   AND (( @p_plant_id	IS NULL OR @p_plant_id	='') OR A.PLANT_ID IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_plant_id, ',')))
+		   AND (( @p_item_id	IS NULL OR @p_item_id	='') OR A.CHILD_ITEM_ID			LIKE '%' + @p_item_id		+'%')
+
+	END
+
+	BEGIN
+		INSERT INTO #TMP_SCP0052_MODEL_ITEM_LINE
+		(
+			  COMPANY_ID
+			, DIVISION_ID
+			, SITE_ID
+			, PLANT_ID
+			, FACTORY_ID
+			, ITEM_ID
+			, MODEL_ID
+			, MODEL_NICK_NAME
+			, LINE_ID
+			, ELECTRODE_TYPE
+			, OPERATION_ID
+			, YYYYMM
+		)
+		SELECT A.COMPANY_ID
+			 , A.DIVISION_ID
+			 , A.SITE_ID
+			 , A.PLANT_ID
+			 , A.FACTORY_ID
+			 , B.ITEM_ID
+			 , A.MODEL_ID
+			 , A.MODEL_NICK_NAME
+			 , A.LINE_ID
+			 , A.ELECTRODE_TYPE
+			 , B.OPERATION_ID
+			 , A.YYYYMM
+		  FROM #TMP_SCP0052_TARGET_ITEM A
+			 , #TMP_SCP0052_MODEL_COMP B
+		 WHERE A.COMPANY_ID		= B.COMPANY_ID
+		   AND A.DIVISION_ID	= B.DIVISION_ID
+		   AND A.SITE_ID		= B.SITE_ID
+		   AND A.MODEL_ID		= B.MODEL_ID
+	END
+
+	BEGIN
+		INSERT INTO #TMP_SCP0052_ITEM_LINE_YIELD
+		(
+			  COMPANY_ID
+			, DIVISION_ID
+			, SITE_ID
+			, PLANT_ID
+			, FACTORY_ID
+			, MODEL_ID
+			, MODEL_NICK_NAME
+			, ITEM_ID
+			, LINE_ID
+			, ELECTRODE_TYPE
+			, OPERATION_ID
+			, YYYYMM
+			, YIELD
+		)
+		SELECT A.COMPANY_ID
+			 , A.DIVISION_ID
+			 , A.SITE_ID
+			 , A.PLANT_ID
+			 , A.FACTORY_ID
+			 , A.MODEL_ID
+			 , A.MODEL_NICK_NAME
+			 , A.ITEM_ID
+			 , A.LINE_ID
+			 , A.ELECTRODE_TYPE
+			 , A.OPERATION_ID
+			 , A.YYYYMM
+			 , CASE WHEN B.YIELD = 0 THEN 1 ELSE ISNULL(B.YIELD,1) END AS YIELD
+		  FROM #TMP_SCP0052_MODEL_ITEM_LINE A
+		  LEFT OUTER JOIN SCM_MST_YIELD_SN B WITH(NOLOCK)  -- 테이블 변경 ( SCM_YIELD_M ) 
+		    ON 1=1
+		   AND A.COMPANY_ID		= B.COMPANY_ID
+		   AND A.DIVISION_ID	= B.DIVISION_ID
+		   AND A.SITE_ID		= B.SITE_ID
+		   AND A.PLANT_ID		= B.PLANT_ID
+		   AND A.ITEM_ID		= B.ITEM_ID
+		   AND A.LINE_ID		= B.LINE_ID
+		   AND A.OPERATION_ID	= B.OPERATION_ID
+		   AND A.YYYYMM			= B.MONTH
+	END
+
+	BEGIN
+		INSERT INTO #TMP_SCP0052_MODEL_ITEM_LINE_OP_MIN_YIELD
+		(
+			  COMPANY_ID
+			, DIVISION_ID
+			, SITE_ID
+			, PLANT_ID
+			, FACTORY_ID
+			, MODEL_ID
+			, MODEL_NICK_NAME
+			, ITEM_ID
+			, LINE_ID
+			, OPERATION_ID
+			, YYYYMM
+			, YIELD
+		)
+		SELECT COMPANY_ID
+			 , DIVISION_ID
+			 , SITE_ID
+			 , PLANT_ID
+			 , FACTORY_ID
+			 , MODEL_ID
+			 , MODEL_NICK_NAME
+			 , ITEM_ID
+			 , LINE_ID
+			 , OPERATION_ID
+			 , YYYYMM
+			 , MIN(YIELD)	AS YIELD
+		  FROM #TMP_SCP0052_ITEM_LINE_YIELD
+		 GROUP BY COMPANY_ID
+				, DIVISION_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, MODEL_ID
+				, MODEL_NICK_NAME
+				, ITEM_ID
+				, LINE_ID
+				, OPERATION_ID
+				, YYYYMM
+	END
+
+	BEGIN
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_TOTAL_YIELD_RESULT') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_TOTAL_YIELD_RESULT;
+
+		SELECT A.COMPANY_ID
+			 , A.DIVISION_ID
+			 , A.SITE_ID
+			 , B.SITE_NAME
+			 , B.OPERATION_GROUP AS OPERATION_GROUP_NAME
+			 , A.PLANT_ID
+			 , B.PLANT_NAME
+			 , A.FACTORY_ID
+			 , B.FACTORY_NAME
+			 , A.MODEL_ID
+			 , A.MODEL_NICK_NAME
+			 , A.LINE_ID
+			 , B.LINE_NAME
+			 , A.OPERATION_ID
+			 , B.OPERATION_NAME
+			 , A.ITEM_ID
+			 , 'M_' + A.YYYYMM  AS YYYYMM
+			 , A.YIELD * 100	AS YIELD
+		  INTO #TMP_SCP0052_TOTAL_YIELD_RESULT
+		  FROM #TMP_SCP0052_ITEM_LINE_YIELD A
+		  JOIN ( SELECT DISTINCT
+						COMPANY_ID
+					  , DIVISION_ID
+					  , SITE_ID
+					  , SITE_NAME
+					  , PLANT_ID
+					  , PLANT_NAME
+					  , OPERATION_GROUP
+					  , FACTORY_ID
+					  , FACTORY_NAME
+					  , LINE_ID
+					  , LINE_NAME
+					  , OPERATION_ID
+					  , OPERATION_NAME
+				   FROM SCM_LINE_HIERARCHY_V_SN WITH(NOLOCK)
+				  WHERE OPERATION_GROUP_ID = @v_group_id
+				) B
+			ON A.COMPANY_ID		= B.COMPANY_ID
+		   AND A.DIVISION_ID	= B.DIVISION_ID
+		   AND A.SITE_ID		= B.SITE_ID
+		   AND A.PLANT_ID		= B.PLANT_ID
+		   AND A.FACTORY_ID		= B.FACTORY_ID
+		   AND A.LINE_ID		= B.LINE_ID
+		   AND A.OPERATION_ID	= B.OPERATION_ID
+
+		 UNION ALL
+
+		SELECT A.COMPANY_ID
+			 , A.DIVISION_ID
+			 , A.SITE_ID
+			 , B.SITE_NAME
+			 , B.OPERATION_GROUP AS OPERATION_GROUP_NAME
+			 , A.PLANT_ID
+			 , B.PLANT_NAME
+			 , A.FACTORY_ID
+			 , B.FACTORY_NAME
+			 , A.MODEL_ID
+			 , A.MODEL_NICK_NAME
+			 , A.LINE_ID
+			 , B.LINE_NAME
+			 , 'TOTAL'		AS OPERATION_ID
+			 , 'TOTAL'		AS OPERATION_NAME
+			 , 'TOTAL'		AS ITEM_ID
+			 , 'M_' + A.YYYYMM				AS YYYYMM
+			 , EXP(SUM(LOG(A.YIELD))) * 100 AS YIELD
+		  FROM #TMP_SCP0052_MODEL_ITEM_LINE_OP_MIN_YIELD A
+		  JOIN ( SELECT DISTINCT
+						COMPANY_ID
+					  , DIVISION_ID
+					  , SITE_ID
+					  , SITE_NAME
+					  , PLANT_ID
+					  , PLANT_NAME
+					  , OPERATION_GROUP
+					  , FACTORY_ID
+					  , FACTORY_NAME
+					  , LINE_ID
+					  , LINE_NAME
+				   FROM SCM_LINE_HIERARCHY_V_SN WITH(NOLOCK)
+				  WHERE OPERATION_GROUP_ID = @v_group_id
+				) B
+			ON A.COMPANY_ID		= B.COMPANY_ID
+		   AND A.DIVISION_ID	= B.DIVISION_ID
+		   AND A.SITE_ID		= B.SITE_ID
+		   AND A.PLANT_ID		= B.PLANT_ID
+		   AND A.FACTORY_ID		= B.FACTORY_ID
+		   AND A.LINE_ID		= B.LINE_ID
+		 GROUP BY A.COMPANY_ID
+				 , A.DIVISION_ID
+				 , A.SITE_ID
+				 , B.SITE_NAME
+				 , B.OPERATION_GROUP
+				 , A.PLANT_ID
+				 , B.PLANT_NAME
+				 , A.FACTORY_ID
+				 , B.FACTORY_NAME
+				 , A.MODEL_ID
+				 , A.MODEL_NICK_NAME
+				 , A.LINE_ID
+				 , B.LINE_NAME
+				 , A.YYYYMM
+	END
+
+	-- /////////////////////////// PIVOT 처리를 위한 SUM QUERY 생성
+	BEGIN
+		SET @MQRY_SUM = '';
+			
+		SELECT @MQRY_SUM = @MQRY_SUM+','+  CASE WHEN CHARINDEX('D_', YYYYMMDD) =1 THEN 'SUM(CASE WHEN R.YYYYMM = RIGHT('''+YYYYMMDD+''',10) THEN CONVERT(NUMERIC(20,4), ISNULL(R.YIELD, 0)) ELSE 0 END ) AS ' + YYYYMMDD
+												WHEN CHARINDEX('M_', YYYYMMDD) =1 THEN 'SUM(CASE WHEN R.YYYYMM = RIGHT('''+YYYYMMDD+''',8)  THEN CONVERT(NUMERIC(20,4), ISNULL(R.YIELD, 0)) ELSE 0 END ) AS ' + YYYYMMDD
+												--WHEN CHARINDEX('Y_', YYYYMMDD) =1 THEN 'SUM(CASE WHEN R.YYYYMM = RIGHT('''+YYYYMMDD+''',6)  THEN CONVERT(NUMERIC(20,4), ISNULL(R.YIELD, 0)) ELSE 0 END ) AS ' + YYYYMMDD
+									END +''+  CHAR(10)
+			FROM ( 
+				SELECT 'D_'+A.BASIS_YYYYMMDD   AS YYYYMMDD
+						,  CONVERT(CHAR(2), '10') + A.BASIS_YYYYMMDD  AS SORT_ORDER_NO
+					FROM [DBO].[SCM_SYS_CALENDAR_M] A 
+					WHERE A.BASIS_YYYYMMDD  >= '19990101'
+					AND A.BASIS_YYYYMMDD  <= '19990101'
+					GROUP BY A.BASIS_YYYYMMDD
+
+					UNION ALL
+
+				SELECT 'M_'+A.BASIS_YYYYMM  AS YYYYMMDD
+						, CONVERT(CHAR(2), '20') + MIN(A.BASIS_START_DATE)  AS SORT_ORDER_NO
+					FROM [DBO].[SCM_SYS_CALENDAR_M] A
+					WHERE A.BASIS_YYYYMM  >= @v_start_month
+					AND A.BASIS_YYYYMM  <= @v_end_month
+					GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME
+				) AS A
+		ORDER BY SORT_ORDER_NO;
+	END
+
+	--IF OBJECT_ID('TEMPDB..##TMP_SCP0052_TOTAL_YIELD_LAST') IS NOT NULL
+	--	DROP TABLE ##TMP_SCP0052_TOTAL_YIELD_LAST;
+
+	SET @MEXEC = '';
+	SET @MEXEC = @MEXEC+'	SELECT														' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			  R.DIVISION_ID										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, R.COMPANY_ID										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, R.SITE_ID											' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, R.SITE_NAME										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, R.PLANT_ID										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, R.FACTORY_ID 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, R.FACTORY_NAME  									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, R.LINE_ID 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, R.LINE_NAME 										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, R.OPERATION_GROUP_NAME 							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, R.OPERATION_ID									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, R.OPERATION_NAME									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, ISNULL(R.MODEL_ID,''-'')	AS MODEL_ID 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, R.MODEL_NICK_NAME 								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, ISNULL(R.ITEM_ID,''-'')	AS ITEM_ID 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			, ''%''						AS UOM					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			' + @MQRY_SUM										  + CHAR(10);
+	--SET @MEXEC = @MEXEC+'		 INTO ##TMP_SCP0052_TOTAL_YIELD_LAST					' + CHAR(10); -- 결과 테이블 저장
+	SET @MEXEC = @MEXEC+'		 FROM #TMP_SCP0052_TOTAL_YIELD_RESULT	R				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		GROUP BY  R.DIVISION_ID									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.COMPANY_ID									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.SITE_ID										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.SITE_NAME									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.PLANT_ID									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.FACTORY_ID									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.FACTORY_NAME								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.LINE_ID										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.LINE_NAME									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.OPERATION_GROUP_NAME 						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.OPERATION_ID								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.OPERATION_NAME								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.ITEM_ID 									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.MODEL_ID 									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.MODEL_NICK_NAME 							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		ORDER BY  R.DIVISION_ID									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.COMPANY_ID									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.SITE_ID										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.PLANT_ID									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.FACTORY_ID									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.MODEL_ID									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.LINE_ID										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, CASE WHEN R.OPERATION_ID = ''TOTAL'' THEN ''1''	ELSE R.OPERATION_ID END DESC	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				, R.ITEM_ID										' + CHAR(10);
+
+
+	-----------------------------------------------------------	
+	IF( @debug_mode ='T')
+		BEGIN				
+			DECLARE @POS INT =1;
+			DECLARE @LEN INT =LEN(@MEXEC);
+			WHILE @POS <= @LEN
+				BEGIN
+					PRINT SUBSTRING(@MEXEC,@POS,4000);
+					SET @POS = @POS+4000;
+				END;
+		END;
+
+		EXEC(@MEXEC);
+
+END
+
+
+
+/* ============================ 테이블 확인 ============================== */
+--SELECT * FROM #TMP_SCP0052_TARGET_ITEM
+
+--SELECT * FROM #TMP_SCP0052_MODEL_COMP;
+
+-- 결과 테이블 
+

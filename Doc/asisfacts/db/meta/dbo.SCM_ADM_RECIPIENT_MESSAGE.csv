@@ -1,0 +1,169 @@
+﻿"CATEGORY_ID","USE_TYPE_CODE","LANGUAGE_CODE","MAIL_TITLE","MESSAGE_CONTENT","CREATED_BY","CREATION_DATE","LAST_UPDATED_BY","LAST_UPDATE_DATE"
+"1","MAIL","KO","[GSCM] Authorization request approval result","The requested GSCM system authorization has been approved.
+Please check after connecting the system.","20140001","2018-03-26 09:11:10.400","sjoonkim","2018-05-17 17:33:39.360"
+"2","MAIL","KO","[GSCM] Authorization request approval result","The requested GSCM system authorization has been approved.
+Please check after connecting the system.","20140001","2018-03-27 09:11:06.197","sjoonkim","2018-05-17 17:33:54.533"
+"3","MAIL","KO","Weekly Cutoff Result","Weekly Cutoff Result
+
+※ 확인결과 기록대장
+\\10.32.192.112\5Mega\06.DM_SCP\60.안정화\6030.모니터링\GSCM_DM_정기작업 체크리스트.xlsx","zytchoi","2018-04-30 18:03:53.017","songkeeho","2020-01-10 08:35:23.123"
+"4","MAIL","KO","[GSCM] Authorization acknowledge alarm","The GSCM system Authorization request mail.","addio777","2018-05-11 12:14:10.097","addio777","2018-05-11 12:14:10.097"
+"5","MAIL","KO","Daily Cutoff 결과 검증","Daily Cutoff Result
+
+해당날짜의 Row_count 와 Qty or Price 의 값이 최근 작업결과와 비슷하게 정상 생성되었는지 확인한다.
+
+※ 확인결과 기록대장
+\\10.32.192.112\5Mega\06.DM_SCP\60.안정화\6030.모니터링\GSCM_DM_정기작업 체크리스트.xlsx","songkeeho","2018-05-16 14:06:33.707","songkeeho","2020-01-10 08:36:25.300"
+"7","MAIL","KO","Stored Procedure Execute Result","Stored Procedure Execute Result
+
+'비정상 종료 실행횟수'  값 > 0 인경우 START - END 짝이 안맞는 건으로 세부 확인필요
+
+※ 확인결과 기록대장
+\\10.32.192.112\5Mega\06.DM_SCP\60.안정화\6030.모니터링\GSCM_DM_정기작업 체크리스트.xlsx","songkeeho","2018-05-16 14:12:26.783","songkeeho","2020-01-10 08:35:57.817"
+"8","MAIL","KO","test","test","addio777","2018-05-16 17:57:40.780","addio777","2018-05-16 17:57:40.780"
+"9","MAIL","KO","출하계획 ERP 오류 메일","해당 계획에 대한 ERP 오류 회신으로 인해 SSP 계획 변경 불가합니다","jungilsetup","2024-04-22 09:17:07.880","jungilsetup","2024-04-22 09:17:07.880"
+"10","MAIL","KO","[SSP] Shipment Change request Partial Approved","The requested shipment plan change request is partially approved.
+After accessing the SCM system, check the path below.
+
+* SCM > Shipping > Shipping Schedule > Shipment Change Requet Confirm","jungilsetup","2024-05-21 16:58:04.197","jungilsetup","2024-05-21 16:58:04.197"
+"11","MAIL","KO","출하계획 변경 D/O 생성 반려 메일","해당 계획에 대한 ERP D/O(Delivery Order)생성되어 SSP 계획 변경 불가합니다","jungilsetup","2024-01-15 14:37:26.647","jungilsetup","2024-01-15 14:37:26.647"
+"12","MAIL","KO","[SSP] Shipment Change request  approved","테스트-출하계획 변경 승인","addio777","2018-05-17 16:06:31.223","addio777","2018-05-17 16:06:31.223"
+"12","SMS","KO","TEST SMS","TEST문자 발송입니다. 80byte로 제한됩니다.","hwwoonins","2018-05-17 10:15:25.540","hwwoonins","2018-05-17 10:15:25.540"
+"13","MAIL","KO","[SSP] Shipment Change request Self-Rejected","The requested shipment plan change request has been self-rejected.
+After accessing the GSCM system, check the path below.
+
+* GSCM > Shipping > Shipping Schedule > Shipment Change Requet Confirm","addio777","2018-05-17 16:07:53.480","juhlee","2018-05-23 11:41:34.367"
+"14","MAIL","KO","[SSP] Shipment Change request Requested","Shipment plan change requested. 
+After accessing the GSCM system, check the path below. 
+
+* GSCM > Shipping > Shipping Schedule > Shipment Change Requet Confirm","addio777","2018-05-17 16:06:17.517","juhlee","2018-05-23 11:41:14.660"
+"15","MAIL","KO","[SSP] Shipment Change request  approved","The requested shipment plan change request has been approved.
+After accessing the GSCM system, check the path below.
+
+* GSCM > Shipping > Shipping Schedule > Shipment Change Requet Confirm","addio777","2018-05-17 16:07:27.383","juhlee","2018-05-23 11:40:44.343"
+"16","SMS","KO","OPT_ENGINE_HEALTH_MONITOR","최적화엔진_헬스체크_알림","yanbn82","2026-09-10 13:38:05.327","yanbn82","2026-09-10 13:38:05.327"
+"16","MAIL","KO","[SSP] Shipment Change request Rejected","The requested shipment plan change request has been rejected.
+After accessing the GSCM system, check the path below.
+
+* GSCM > Shipping > Shipping Schedule > Shipment Change Requet Confirm","addio777","2018-05-17 16:07:11.100","juhlee","2018-05-23 11:39:49.323"
+"17","SMS","KO","Plan Mng Start Message","Plan Start","hwwoonins","2018-05-17 16:12:16.617","hwwoonins","2018-05-21 10:39:23.867"
+"18","SMS","KO","Plan Mng End Message","Plan End","hwwoonins","2018-05-17 16:14:55.257","hwwoonins","2018-05-21 10:39:47.163"
+"19","MAIL","KO","Mail Send Test2","Mail Send Test2","addio777","2018-05-17 18:42:40.790","addio777","2018-05-17 18:42:40.790"
+"20","SMS","KO","Plan Mng Err Message","Plan Error","hwwoonins","2018-05-21 10:24:30.007","hwwoonins","2018-05-21 10:39:36.193"
+"21","SMS","KO","Batch Job Error","Batch Job Error 발생","addio777","2018-07-13 17:04:49.967","addio777","2018-07-13 17:04:49.967"
+"23","MAIL","KO","BOD registration request","Check the list that requires BOD registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > BOD","hwwoonins","2018-07-17 14:27:43.467","hwwoonins","2018-07-17 14:27:43.467"
+"24","MAIL","KO","Project Route registration request(40)","Check the list that requires Project Route registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > Project Route","hwwoonins","2018-07-17 14:30:30.437","hwwoonins","2018-07-19 09:48:23.230"
+"25","MAIL","KO","BOM registration request(40)","Check the list that requires BOM registration.
+Please check the BOM management system and register as required.","hwwoonins","2018-07-17 14:33:11.017","hwwoonins","2018-07-19 09:45:07.383"
+"26","MAIL","KO","BOM registration request(81)","Check the list that requires BOM registration.
+Please check the BOM management system and register as required.","hwwoonins","2018-07-19 09:50:20.413","hwwoonins","2018-07-19 09:50:20.413"
+"27","MAIL","KO","BOM registration request(82)","Check the list that requires BOM registration.
+Please check the BOM management system and register as required.","hwwoonins","2018-07-19 09:51:23.733","hwwoonins","2018-07-19 09:51:23.733"
+"28","MAIL","KO","Project Route registration request(81)","Check the list that requires Project Route registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > Project Route","hwwoonins","2018-07-19 09:55:15.337","hwwoonins","2018-07-19 09:55:15.337"
+"29","MAIL","KO","Project Route registration request(82)","Check the list that requires Project Route registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > Project Route","hwwoonins","2018-07-19 09:57:41.447","hwwoonins","2018-07-19 09:57:41.447"
+"30","MAIL","KO","Outsourcing Capacity registration request(40)","Check the list that requires Outsourcing Capacity registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > Outsourcing Capacity","hwwoonins","2018-07-26 13:40:09.947","hwwoonins","2018-07-26 13:40:09.947"
+"31","MAIL","KO","Outsourcing Capacity registration request(81)","Check the list that requires Outsourcing Capacity registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > Outsourcing Capacity","hwwoonins","2018-07-26 13:42:25.200","hwwoonins","2018-07-26 13:42:25.200"
+"32","MAIL","KO","Outsourcing Capacity registration request(82)","Check the list that requires Outsourcing Capacity registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > Outsourcing Capacity","hwwoonins","2018-07-26 13:44:50.323","hwwoonins","2018-07-26 13:44:50.323"
+"33","MAIL","KO","Tact Time registration request(40)","Check the list that requires Tact Time registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > CAPA","hwwoonins","2018-07-26 13:47:02.307","yongseokyoon","2023-03-24 13:40:24.957"
+"34","MAIL","KO","Tact Time registration request(81)","Check the list that requires Tact Time registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > CAPA","hwwoonins","2018-07-26 13:48:57.587","yongseokyoon","2023-03-24 13:40:48.837"
+"35","MAIL","KO","Tact Time registration request(82)","Check the list that requires Tact Time registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > CAPA","hwwoonins","2018-07-26 13:50:43.183","yongseokyoon","2023-03-24 13:41:07.233"
+"36","MAIL","KO","Project Route registration request(EE)","Check the list that requires Project Route registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > Project Route(Electrode)","hwwoonins","2018-08-09 17:47:17.347","hwwoonins","2018-08-09 17:47:17.347"
+"37","SMS","KO","TEST","TEST","addio777","2018-09-28 13:37:11.863","addio777","2018-09-28 13:37:11.863"
+"79","SMS","KO","VMI 실적 BATCH ERROR","정상 처리 되지 않았습니다.","rosia27","2021-11-09 12:49:47.500","rosia27","2021-11-09 12:49:47.500"
+"80","MAIL","KO","Storage Location add list","Storage Location add list","sclee.lee","2022-07-04 13:51:12.467","sclee.lee","2022-07-04 13:51:12.467"
+"40","MAIL","KO","Tact Time registration request(EE)","Check the list that requires Tact Time registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > CAPA","hwwoonins","2018-10-05 11:03:40.280","yongseokyoon","2023-03-24 13:41:22.283"
+"44","SMS","KO","Daily Confrim Batch Start Message","Daily Confirm Start","juhlee","2018-10-16 14:04:12.960","juhlee","2018-10-16 14:04:12.960"
+"45","SMS","KO","Daily Confrim Batch Error Message","Daily Confirm Error","juhlee","2018-10-16 14:03:31.727","juhlee","2018-10-16 14:03:31.727"
+"46","SMS","KO","Daily Confrim Batch End Message","Daily Confirm End","juhlee","2018-10-16 14:03:16.580","juhlee","2018-10-16 14:03:16.580"
+"48","MAIL","KO","BOD registration request","Check the list that requires BOD registration.
+Please register following the below route after connecting to the GSCM system.
+* GSCM > Master > Supply Master > BOD","hwwoonins","2018-12-18 09:25:35.767","hwwoonins","2018-12-18 09:25:35.767"
+"49","MAIL","KO","NET DEMAND 결과 검증","NET DEMAND 결과 검증
+
+except 비교 결과값이 없는경우가 정상임.
+
+만약 item_id 가 추출된다면 정밀 검증이 필요함.","songkeeho","2018-12-28 10:20:18.767","songkeeho","2018-12-28 10:54:24.953"
+"50","SMS","KO","Daily Plan Start Message","Daily Plan Start","juhlee","2019-04-10 17:13:02.630","juhlee","2019-04-10 17:13:02.630"
+"51","SMS","KO","Daily Plan End Message","Daily Plan End","juhlee","2019-04-10 17:26:09.867","juhlee","2019-04-10 17:26:09.867"
+"52","SMS","KO","Daily Plan Error Message","Daily Plan Error","juhlee","2019-04-10 17:25:45.193","juhlee","2019-04-10 17:25:45.193"
+"53","SMS","KO","Create Shipment Request Start Message","Create Shipment Request Start","juhlee","2019-06-19 11:01:56.953","juhlee","2019-06-19 11:01:56.953"
+"54","SMS","KO","Create Shipment Request Error Message","Create Shipment Request Error","juhlee","2019-06-19 14:35:04.703","juhlee","2019-06-19 14:35:04.703"
+"55","SMS","KO","Create Shipment Request End Message","Create Shipment Request End","juhlee","2019-06-19 11:00:58.870","juhlee","2019-06-19 11:00:58.870"
+"56","SMS","KO","Daily Plan Cutoff Start Message","Daily Plan Cutoff Start","juhlee","2019-09-27 16:54:57.623","juhlee","2019-09-27 16:54:57.623"
+"57","SMS","KO","Daily Plan Cutoff Error Message","Daily Plan Cutoff Error","juhlee","2019-09-27 16:55:47.493","juhlee","2019-09-27 16:55:47.493"
+"58","SMS","KO","Daily Plan Cutoff End Message","Daily Plan Cutoff End","juhlee","2019-09-27 16:56:38.283","juhlee","2019-09-27 16:56:38.283"
+"59","MAIL","KO","BOM registration request(EE)","Check the list that requires BOM registration.
+Please check the BOM management system and register as required.","hwwoonins","2019-11-26 15:24:01.213","hwwoonins","2019-11-26 15:24:01.213"
+"60","SMS","KO","SCP-ERP,FP I/F Data Check","정상 처리 되지 않았습니다.","hwwoonins","2020-02-24 11:13:34.790","hwwoonins","2020-02-24 11:13:34.790"
+"61","SMS","KO","Project Master Batch Error","Project Master Batch Error","choiya2","2020-02-27 11:05:30.047","choiya2","2020-02-27 11:05:30.047"
+"62","SMS","KO","Project DV Batch Error","Project DV Batch Error","choiya2","2020-02-27 11:05:05.907","choiya2","2020-02-27 11:05:05.907"
+"63","SMS","KO","Project Item Mapping Batch Error","Project Item Mapping Batch Error","choiya2","2020-02-27 11:05:18.970","choiya2","2020-02-27 11:05:18.970"
+"64","SMS","KO","Customer Master Batch Error","Customer Master Batch Error","choiya2","2020-02-27 11:04:51.737","choiya2","2020-02-27 11:04:51.737"
+"65","SMS","KO","SD0069 EDI Call off Batch Error","SD0069 EDI Call off Batch Error","choiya2","2020-02-27 11:05:51.250","choiya2","2020-02-27 11:05:51.250"
+"66","SMS","KO","Sales Result Batch Error","Sales Result Batch Error","choiya2","2020-02-27 11:05:41.377","choiya2","2020-02-27 11:05:41.377"
+"67","SMS","KO","I/F Data Check","수신 데이터가 없습니다.","kimyh8848","2020-03-24 17:49:34.387","kimyh8848","2020-03-24 17:49:34.387"
+"69","SMS","KO","Error Process Message","오류종료 프로세스 확인요망","muk777","2020-08-24 09:00:29.307","muk777","2020-08-24 09:00:29.307"
+"70","SMS","KO","Long Time Process Message","장기수행 프로세스 확인요망","muk777","2020-08-24 09:04:37.637","muk777","2020-08-24 09:04:37.637"
+"71","MAIL","KO","Mailing Test","Test Content","choiya2","2021-01-22 11:24:02.987","choiya2","2021-01-22 11:24:02.987"
+"73","SMS","KO","Stock Sales Batch Error","Stock Sales Batch Error","choiya2","2021-02-04 15:58:10.253","choiya2","2021-02-04 15:58:10.253"
+"74","MAIL","KO","[GSCM] Authority requested","하기 인원에 대해서 권한신청되었습니다. 요청 내역 확인 후 권한 승인 OR 반려 부탁드립니다.","kimyh8848","2021-03-16 14:04:16.113","kimyh8848","2021-03-16 14:04:16.113"
+"75","MAIL","KO","Product BNP In BOD registration request","Check the list that requires Product BNP In BOD registration.
+Please register following the below route after connecting to the SCM system.
+In the case of product materials, registration is required by directly inserting the BOD
+
+* SCM > Master > Supply Master > BOD","kimyh8848","2021-06-18 15:28:00.780","jungilsetup","2024-04-29 09:40:40.137"
+"76","MAIL","KO","[SCM] PR Confirm","영업 담당자는 하기와 같이 PR 발행 되었으니 참고해 주시기 바랍니다.
+
+Pantos 담당자는 하기 이력 중 Allo된 자재의 수량 대해서는 출고 예약 진행 바랍니다. (Request Date : 출하 예정일)","kimyh8848","2021-06-24 15:54:40.010","jungilsetup","2023-07-19 10:07:42.470"
+"78","MAIL","KO","[SSP_Early Warning] Deleting unused shipment confirm plan","Almost 30 days have been passed without creating an ERP order for the Shipment Confirm Plan.
+If the Shipment plan is not adjusted within 2days, the plan will be deleted.
+Please change the shipping date if necessary.","kimyh8848","2021-10-27 09:44:38.840","kimyh8848","2021-10-27 09:44:38.840"
+"81","MAIL","KO","GSCM SCP VOC 지연 알림","GSCM SCP VOC 지연 알림","vadabi3","2022-03-10 09:39:57.077","vadabi3","2022-03-10 09:39:57.077"
+"93","MAIL","KO","Model Code Master check request","Check the below list that production models are named by Prototype and Discontinuation of SCP.
+The production models were planned through the latest sales and production plan.
+
+Please check the information such as Prototype, Discontinuation of SCP and Product levels, etc.","iamarock","2023-07-12 17:50:49.650","iamarock","2023-07-14 11:09:43.433"
+"94","MAIL","KO","Storage Location add list (40)","The ERP storage location has been newly registered or changed.												
+If it is necessary to apply the stock storage location (S.loc) below in SCM system, please contact the SCM PI Team.												
+Contact person : SCM PI Team Hyeong-seon Oh (ohsun@lgensol.com)","vadabi3","2023-10-17 13:38:16.177","ohsun","2023-10-27 09:35:38.540"
+"95","MAIL","KO","Storage Location add list (81)","""The ERP storage location has been newly registered or changed.												
+If it is necessary to apply the stock storage location (S.loc) below in SCM system, please contact the SCM PI Team.												
+Contact person : SCM PI Team Hyeong-seon Oh (ohsun@lgensol.com)""","vadabi3","2023-10-17 13:38:31.237","ohsun","2023-10-27 09:35:55.047"
+"96","MAIL","KO","Storage Location add list (82)","""The ERP storage location has been newly registered or changed.												
+If it is necessary to apply the stock storage location (S.loc) below in SCM system, please contact the SCM PI Team.												
+Contact person : SCM PI Team Hyeong-seon Oh (ohsun@lgensol.com)""","vadabi3","2023-10-17 13:38:44.300","ohsun","2023-10-27 09:36:05.647"
+"97","MAIL","KO","Storage Location add list (EE)","""The ERP storage location has been newly registered or changed.												
+If it is necessary to apply the stock storage location (S.loc) below in SCM system, please contact the SCM PI Team.												
+Contact person : SCM PI Team Hyeong-seon Oh (ohsun@lgensol.com)""","vadabi3","2023-10-17 13:38:58.593","ohsun","2023-10-27 09:36:11.263"
+"98","SMS","KO","MDF To DM Batch Error","정상 처리 되지 않았습니다.","jssbae","2024-03-22 13:38:58.593","jssbae","2024-03-22 13:38:58.593"
+"99","MAIL","KO","Storage Location add list Test","The ERP storage location has been newly registered or changed.","vadabi5","2024-04-09 14:29:09.183","vadabi5","2024-04-09 14:29:09.183"
+"102","SMS","KO","DM Checked Beforehand","★배치미실행★","jssbae","2024-07-30 09:25:28.600","jssbae","2024-07-30 09:25:28.600"
+"103","SMS","KO","DM JOB ERROR Checked","★배치오류★","jssbae","2025-06-09 22:25:25.567","jssbae","2025-06-09 22:25:25.567"
+"104","SMS","KO","NPP0220 Not Running Message","NPP0220 Web Service 미실행","jungyu9.kim","2025-07-01 15:40:08.347","jungyu9.kim","2025-07-01 17:03:00.423"
+"105","SMS","KO","MKT FCST WEEKLY CUTOFF","MKT FCST WEEKLY CUTOFF","jssbae","2025-08-28 07:50:41.250","jssbae","2025-08-28 07:50:41.250"
+"106","SMS","KO","Daily Plan Delay Message","Daily Plan Delay","jooyong026","2026-07-23 19:00:06.687","jooyong026","2026-07-23 19:00:06.687"
+"107","SMS","KO","OPT_ENGINE_HEALTH_MONITOR","SCP최적화엔진 헬스체크 미갱신","yanbn82","2026-09-10 13:48:27.640","yanbn82","2026-09-10 16:03:12.740"

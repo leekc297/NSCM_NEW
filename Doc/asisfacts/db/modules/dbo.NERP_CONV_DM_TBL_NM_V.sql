@@ -1,0 +1,59 @@
+﻿
+
+
+CREATE   VIEW [dbo].[NERP_CONV_DM_TBL_NM_V] AS
+/*
+ * Program ID   : NERP_CONV_DM_TBL_NM_V
+ * Description  : NERP_CONV 대상중 DM 처리 항목별 테이블 이름
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2025.05.07   김준규         Initial Release : NERP_CONV 대상중 DM 처리 항목별 테이블 이름
+ * 2025.05.25   김준규         NERP) 컨버전 프로시저 컬럼 추가
+ *
+ */
+
+  SELECT DISTINCT 1 AS SORT_SEQ
+       , 'LOOKUP'   AS RTYPE
+       , 'SCM_ADM_LOOKUP_MASTER_DETAIL' AS TABLE_NAME
+       , 'PR_TMP_NERP_LOOKUP_CONVERTER_UPDATE_DM' AS CONV_PR_NAME
+
+  UNION ALL
+  SELECT DISTINCT 2 AS SORT_SEQ
+       , 'CODE_LOOKUP'   AS RTYPE
+       , 'SCM_CODE_LOOKUP_VALUE' AS TABLE_NAME
+       , 'PR_TMP_NERP_LOOKUP_CODE_CONVERTER_UPDATE_DM' AS CONV_PR_NAME
+  UNION ALL
+  SELECT DISTINCT 3 AS SORT_SEQ
+       , 'TABLES'   AS RTYPE
+       , TABLE_NAME AS TABLE_NAME
+       , 'PR_TMP_NERP_COLUMN_CONVERTER_UPDATE_DM' AS CONV_PR_NAME
+   FROM ZNERP_TARGET_INFO_DM WITH (NOLOCK)
+  WHERE CONVERSION_FLAG <> '-'
+  UNION ALL
+  SELECT DISTINCT 4 AS SORT_SEQ
+       , 'CUTOFF_MASTER' AS RTYPE
+       , M.TABLE_NAME AS TABLE_NAME
+       , 'PR_TMP_NERP_COLUMN_CONVERTER_UPDATE_DM_BIG' AS CONV_PR_NAME
+  FROM   NERP_CONV_DM_CUTOFF_MASTER M  WITH (NOLOCK)
+  WHERE  M.MAPPING_USE = 'Y'
+  UNION ALL
+  SELECT DISTINCT 5 AS SORT_SEQ
+       , 'LOOKUP_TYPE' AS RTYPE
+       , LID.LOOKUP_TYPE AS TABLE_NAME
+       , 'PR_TMP_NERP_LOOKUP_CONVERTER_UPDATE_DM' AS CONV_PR_NAME
+   FROM ZNERP_LOOKUP_INFO_DM LID  WITH (NOLOCK)
+  UNION ALL
+  SELECT DISTINCT 6 AS SORT_SEQ
+       , 'CODE_LOOKUP_TYPE' AS RTYPE
+       , LID.LOOKUP_TYPE AS TABLE_NAME
+       , 'PR_TMP_NERP_LOOKUP_CODE_CONVERTER_UPDATE_DM' AS CONV_PR_NAME
+   FROM ZNERP_LOOKUP_CODE_INFO_DM LID  WITH (NOLOCK)
+  WHERE 1=1
+    AND LID.LOOKUP_VALID_YN = 'Y'
+  ;
+
+
+
+

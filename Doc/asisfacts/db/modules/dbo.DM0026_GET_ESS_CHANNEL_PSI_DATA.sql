@@ -1,0 +1,237 @@
+﻿/****************************************************************************************************/
+/* Program ID  : DM0026_GET_ESS_CHANNEL_PSI_DATA                                                    */
+/* Description : Procedure 작성 가이드                                                              */
+/* Usage       : Procedure 작성 시 참조하세요!                                                      */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2017/11/24  SongDH       Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트 */
+/*                                                                                                  */
+/****************************************************************************************************/
+CREATE procedure [dbo].[DM0026_GET_ESS_CHANNEL_PSI_DATA]
+    @p_division_id    NVARCHAR(MAX),
+    @p_scm_site_id    NVARCHAR(MAX),
+	@p_item_id        NVARCHAR(MAX),
+	@p_start_yyyymmdd NVARCHAR(8),
+	@p_end_yyyymmdd   NVARCHAR(8),
+	@p_created_by	  NVARCHAR(50)
+AS
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	DECLARE @v_sql_text       AS NVARCHAR(MAX);
+	DECLARE @v_iteration      AS NVARCHAR(MAX);
+    DECLARE @v_start_yyyymmdd AS NVARCHAR(8);
+    DECLARE @v_end_yyyymmdd   AS NVARCHAR(8);
+	DECLARE @v_column_name    AS NVARCHAR(MAX);
+	DECLARE @v_column_date    AS NVARCHAR(MAX);
+	DECLARE @v_column_text    AS NVARCHAR(MAX);
+	DECLARE @v_column_type    AS NVARCHAR(MAX);
+	DECLARE @v_column_value   AS NVARCHAR(MAX);
+	DECLARE @v_sort_order_no  AS NVARCHAR(MAX);
+	
+	SET @v_sql_text = '';
+	SET @v_iteration = '';
+    SET @v_start_yyyymmdd = '';
+    SET @v_end_yyyymmdd = '';
+	SET @v_column_text = '';
+
+	DECLARE c_bucket CURSOR FAST_FORWARD FOR 
+	    SELECT 'D_' + BASIS_YYYYMMDD         AS COLUMN_NAME
+		     , C.BASIS_YYYYMMDD              AS COLUMN_DATE
+			 , 'ECP.BASIS_YYYYMMDD'          AS COLUMN_TYPE
+			 , 'ECP.WEEK_VALUE'              AS COLUMN_VALUE
+	         , C.BASIS_YYYYMM + C.WEEK_NAME  AS SORT_ORDER_NO
+        FROM   [dbo].[SCM_SYS_CALENDAR_M] C WITH(NOLOCK) 
+        WHERE  1 = 1
+        AND    C.BASIS_YYYYMMDD >= @p_start_yyyymmdd
+        AND    C.BASIS_YYYYMMDD <= @p_end_yyyymmdd
+        UNION ALL
+		SELECT 'W_' + BASIS_YYYYMM + WEEK_NAME  AS COLUMN_NAME
+		     , C.BASIS_YYYYMM + C.ISO_YYYYWW    AS COLUMN_DATE
+			 , 'ECP.ISO_YYYYWW'                 AS COLUMN_TYPE
+			 , 'ECP.WEEK_VALUE'                 AS COLUMN_VALUE
+	         , C.BASIS_YYYYMM + C.WEEK_NAME     AS SORT_ORDER_NO
+        FROM   [dbo].[SCM_SYS_CALENDAR_M] C WITH(NOLOCK) 
+        WHERE  1 = 1
+        AND    C.BASIS_YYYYMMDD >= @p_start_yyyymmdd
+        AND    C.BASIS_YYYYMMDD <= @p_end_yyyymmdd
+        GROUP BY C.BASIS_YYYYMM
+               , C.MONTH_NAME
+               , C.ISO_YYYYWW
+               , C.WEEK_NAME
+        UNION ALL
+        SELECT 'M_' + BASIS_YYYYMM    AS COLUMN_NAME
+		     , C.BASIS_YYYYMM         AS COLUMN_DATE
+			 , 'ECP.BASIS_YYYYMM'     AS COLUMN_TYPE
+			 , 'ECP.WEEK_VALUE'       AS COLUMN_VALUE
+        	 , C.BASIS_YYYYMM + '00'  AS SORT_ORDER_NO
+        FROM   [dbo].[SCM_SYS_CALENDAR_M] C WITH(NOLOCK) 
+        WHERE  1 = 1
+        AND    C.BASIS_YYYYMMDD >= @p_start_yyyymmdd
+        AND    C.BASIS_YYYYMMDD <= @p_end_yyyymmdd
+        GROUP BY C.BASIS_YYYYMM
+               , C.MONTH_NAME
+        ORDER BY SORT_ORDER_NO ;
+
+    OPEN c_bucket;
+	FETCH NEXT FROM c_bucket INTO @v_column_name, @v_column_date, @v_column_type, @v_column_value, @v_sort_order_no
+		WHILE @@FETCH_STATUS = 0   
+			BEGIN  				
+			 --   SET @v_column_text = ', SUM(CASE WHEN [@v_column_type] = [@v_column_date] THEN [@v_column_value] ELSE NULL END) AS [@v_column_name] ';
+
+			    IF  @v_column_type = 'ECP.ISO_YYYYWW'
+					BEGIN
+						SET @v_column_text = ', SUM(CASE WHEN [@v_column_type] = [@v_column_date] AND ECP.MEASURE <> ''I''  THEN [@v_column_value]  WHEN [@v_column_type] = [@v_column_date] AND ECP.MEASURE = ''I''  AND  ECP.dayofweek =''MON'' THEN ECP.WEEK_VALUE  WHEN [@v_column_type] = [@v_column_date] AND ECP.MEASURE = ''I''  AND  ECP.CALENDAR_DAY =''01'' THEN ECP.WEEK_VALUE  ELSE NULL END) AS [@v_column_name] ';
+					END
+                ELSE IF @v_column_type = 'ECP.BASIS_YYYYMM'
+					BEGIN
+						SET @v_column_text = ', SUM(CASE WHEN [@v_column_type] = [@v_column_date] AND ECP.MEASURE <> ''I''  THEN [@v_column_value]  WHEN [@v_column_type] = [@v_column_date] AND ECP.MEASURE = ''I'' AND  ECP.CALENDAR_DAY =''01'' THEN ECP.WEEK_VALUE ELSE NULL END) AS [@v_column_name] ';
+					END
+				ELSE
+					BEGIN
+						SET @v_column_text = ', SUM(CASE WHEN [@v_column_type] = [@v_column_date] THEN [@v_column_value] ELSE NULL END) AS [@v_column_name] ';
+					END
+
+				SET @v_column_text = REPLACE(@v_column_text,'[@v_column_type]' , @v_column_type );
+				SET @v_column_text = REPLACE(@v_column_text,'[@v_column_date]' , @v_column_date );
+				SET @v_column_text = REPLACE(@v_column_text,'[@v_column_value]', @v_column_value);
+				SET @v_column_text = REPLACE(@v_column_text,'[@v_column_name]' , @v_column_name );
+
+				SELECT @v_iteration = @v_iteration + @v_column_text;	
+    
+				FETCH NEXT FROM c_Bucket INTO @v_column_name, @v_column_date, @v_column_type, @v_column_value, @v_sort_order_no
+			END;
+  
+  --SELECT @v_iteration AS xxxx;
+
+    CLOSE c_bucket;  
+    DEALLOCATE c_bucket;
+
+	SET @v_sql_text = '
+	    WITH ESS_CHANNEL_PSI AS 
+        (
+		
+			SELECT EC.DIVISION_ID
+				 , EC.SCM_SITE_ID
+				 , EC.ITEM_ID
+				 , I.ITEM_NAME
+				 , EC.MEASURE  AS MEASURE
+				 , C.BASIS_YYYYMM
+				 , C.BASIS_YYYYMM + C.ISO_YYYYWW AS ISO_YYYYWW
+				 , C.BASIS_YYYYMMDD
+				 ---------------------
+				 , c.dayofweek -- MON
+				 , c.CALENDAR_DAY -- 01
+				 ---------------------
+				 , CAST(EC.VALUE AS NUMERIC(10)) AS WEEK_VALUE
+			FROM   [dbo].[DM_PLN_ESS_CHANNEL_PSI] EC WITH(NOLOCK) 
+			     , DM_MST_ITEM_SINGLE_V           I  
+				 , [dbo].[SCM_SYS_CALENDAR_M]     C  WITH(NOLOCK) 				 
+			WHERE  1 = 1
+			AND    EC.DIVISION_ID = I.DIVISION_ID
+			AND    EC.ITEM_ID     = I.ITEM_ID
+			AND    EC.YYYYMMDD    = C.BASIS_YYYYMMDD
+			AND    MEASURE <> ''I''
+			AND    C.BASIS_YYYYMMDD >= [@v_start_yyyymmdd]
+			AND    C.BASIS_YYYYMMDD <= [@v_end_yyyymmdd]
+			AND    CASE WHEN N''[@v_division_id]'' = ''ALL'' THEN ''ALL''
+	 	     			ELSE EC.DIVISION_ID
+	 			   END  IN (SELECT t.c.value(''.'', ''NVARCHAR(4000)'')
+	 	     				FROM   (SELECT x = CAST(''<t>'' + REPLACE(N''[@v_division_id]'', '','', ''</t><t>'') + ''</t>'' AS xml)) b
+	 	     				CROSS APPLY x.nodes(''/t'') t(c)
+	 	     			   )   
+            AND    CASE WHEN N''[@v_scm_site_id]'' = ''ALL'' THEN ''ALL''
+	 	     		    ELSE EC.SCM_SITE_ID
+	 	     	   END  IN (SELECT t.c.value(''.'', ''NVARCHAR(4000)'')
+	 	     			    FROM   (SELECT x = CAST(''<t>'' + REPLACE(N''[@v_scm_site_id]'', '','', ''</t><t>'') + ''</t>'' AS xml)) b
+	 	     				CROSS APPLY x.nodes(''/t'') t(c)
+	 	     			   ) 
+		    AND    CASE WHEN N''[@v_item_id]'' = '''' THEN ''''
+	 	     	        ELSE EC.ITEM_ID
+	 	     	   END  IN (SELECT t.c.value(''.'', ''NVARCHAR(4000)'')
+	 	     	     	    FROM   (SELECT x = CAST(''<t>'' + REPLACE(N''[@v_item_id]'', '','', ''</t><t>'') + ''</t>'' AS xml)) b
+	 	     	     		CROSS APPLY x.nodes(''/t'') t(c)
+							)
+
+            UNION
+
+			SELECT EC.DIVISION_ID
+				 , EC.SCM_SITE_ID
+				 , EC.ITEM_ID
+				 , I.ITEM_NAME
+				 , ''I'' AS MEASURE
+				 , C.BASIS_YYYYMM
+				 , C.BASIS_YYYYMM + C.ISO_YYYYWW AS ISO_YYYYWW
+				 , C.BASIS_YYYYMMDD
+				 ---------------------
+				 , c.dayofweek -- MON
+				 , c.CALENDAR_DAY -- 01
+				 ---------------------
+				 , CAST(EC.VALUE AS NUMERIC(10)) AS WEEK_VALUE
+			FROM   [dbo].[DM_PLN_ESS_CHANNEL_PSI] EC WITH(NOLOCK) 
+			     , DM_MST_ITEM_SINGLE_V           I 
+				 , [dbo].[SCM_SYS_CALENDAR_M]     C  WITH(NOLOCK) 
+			WHERE  1 = 1
+			AND    EC.DIVISION_ID = I.DIVISION_ID
+			AND    EC.ITEM_ID     = I.ITEM_ID
+			AND    EC.YYYYMMDD = C.BASIS_YYYYMMDD 
+			AND    MEASURE = ''I''
+			AND    C.BASIS_YYYYMMDD >= [@v_start_yyyymmdd]
+			AND    C.BASIS_YYYYMMDD <= [@v_end_yyyymmdd]
+			AND    CASE WHEN N''[@v_division_id]'' = ''ALL'' THEN ''ALL''
+	 	     			ELSE EC.DIVISION_ID
+	 			   END  IN (SELECT t.c.value(''.'', ''NVARCHAR(4000)'')
+	 	     				FROM   (SELECT x = CAST(''<t>'' + REPLACE(N''[@v_division_id]'', '','', ''</t><t>'') + ''</t>'' AS xml)) b
+	 	     				CROSS APPLY x.nodes(''/t'') t(c)
+	 	     			   )   
+            AND    CASE WHEN N''[@v_scm_site_id]'' = ''ALL'' THEN ''ALL''
+	 	     		    ELSE EC.SCM_SITE_ID
+	 	     	   END  IN (SELECT t.c.value(''.'', ''NVARCHAR(4000)'')
+	 	     			    FROM   (SELECT x = CAST(''<t>'' + REPLACE(N''[@v_scm_site_id]'', '','', ''</t><t>'') + ''</t>'' AS xml)) b
+	 	     				CROSS APPLY x.nodes(''/t'') t(c)
+	 	     			   ) 
+		    AND    CASE WHEN N''[@v_item_id]'' = '''' THEN ''''
+	 	     	        ELSE EC.ITEM_ID
+	 	     	   END  IN (SELECT t.c.value(''.'', ''NVARCHAR(4000)'')
+	 	     	     	    FROM   (SELECT x = CAST(''<t>'' + REPLACE(N''[@v_item_id]'', '','', ''</t><t>'') + ''</t>'' AS xml)) b
+	 	     	     		CROSS APPLY x.nodes(''/t'') t(c)
+
+	 	     	     	   )   
+        )
+        SELECT ECP.DIVISION_ID
+             , ECP.SCM_SITE_ID
+             , ECP.ITEM_ID
+			 , ECP.ITEM_NAME
+             , ECP.MEASURE
+	         [@v_iteration]
+        FROM   ESS_CHANNEL_PSI ECP
+        WHERE  1 = 1
+        GROUP BY ECP.DIVISION_ID
+               , ECP.SCM_SITE_ID
+               , ECP.ITEM_ID
+			   , ECP.ITEM_NAME
+               , ECP.MEASURE
+		ORDER BY ECP.DIVISION_ID
+               , ECP.SCM_SITE_ID
+               , ECP.ITEM_ID
+			   , ECP.ITEM_NAME
+               , ECP.MEASURE
+	';
+
+	SET @v_sql_text = REPLACE(@v_sql_text,'[@v_iteration]'     , @v_iteration     );
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_division_id]'   , @p_division_id   );
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_scm_site_id]'   , @p_scm_site_id   ); 
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_item_id]'       , @p_item_id       ); 
+	SET @v_sql_text = REPLACE(@v_sql_text,'[@v_start_yyyymmdd]', @p_start_yyyymmdd);
+    SET @v_sql_text = REPLACE(@v_sql_text,'[@v_end_yyyymmdd]'  , @p_end_yyyymmdd  );
+
+
+	--select @v_sql_text
+
+	EXEC SP_EXECUTESQL @v_sql_text; 
+
+END

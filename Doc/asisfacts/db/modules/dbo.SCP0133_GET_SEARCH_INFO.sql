@@ -1,0 +1,133 @@
+﻿
+
+
+/*
+ * Program ID   : SCP0133_GET_SEARCH_INFO
+ * Description  : Warehouse Capacity 화면 조회 및 콤보박스 정보
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/11/11   mrchois    		PJ20257329 최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0133_GET_SEARCH_INFO]
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+	--1. Plan Group 정보 
+	SELECT OPMZ_PLAN_GR_ID	AS CODE
+		 , OPMZ_PLAN_GR_NAME	AS NAME
+		 , DIVISION_ID
+	  FROM SCP_OPMZ_PLAN_GR_M WITH(NOLOCK)
+	 WHERE 1=1
+	   AND VALID_YN='Y'
+     ORDER BY OPMZ_PLAN_GR_NAME
+	
+
+	--2. 재고 SCM SITE ID 
+	IF OBJECT_ID('TEMPDB..#SCM_SITE') IS NOT NULL DROP TABLE #SCM_SITE
+	SELECT A.DIVISION_ID
+	     , A.CODE
+		 , A.NAME
+		 , A.SITE_TYPE
+      INTO #SCM_SITE
+	  FROM (
+			SELECT DISTINCT A.DIVISION_ID
+				 , SCM_SITE_ID AS CODE 
+				 , SCM_SITE_ID AS NAME
+				 , SITE_TYPE
+			  FROM SCM_MST_SITE A WITH(NOLOCK) 
+			 WHERE  1 = 1
+			   AND A.SITE_TYPE = 'SALES'	
+			   AND A.DIVISION_ID != '40'
+			   AND A.VALID_YN = 'Y'	
+			 UNION ALL
+			SELECT DISTINCT A.DIVISION_ID
+				 , A.SCM_SITE_ID AS CODE 
+				 , A.SCM_SITE_ID AS NAME
+				 , A.SITE_TYPE
+			  FROM SCM_MST_SITE AS A WITH(NOLOCK) 
+			  LEFT JOIN SCM_MST_SITE_ITEM AS B WITH(NOLOCK) 
+				ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+			 WHERE  1 = 1
+			   AND A.SITE_TYPE = 'SALES'
+			   AND A.DIVISION_ID = '40'
+			   AND A.VALID_YN = 'Y'
+			 UNION ALL
+			SELECT DISTINCT A.DIVISION_ID
+				 , SCM_SITE_ID AS CODE 
+				 , SCM_SITE_ID AS NAME
+				 , SITE_TYPE
+			  FROM [dbo].[SCM_MST_SITE] A
+			 WHERE 1 = 1
+			   AND A.SITE_TYPE = 'PLANT'
+		 ) A
+	 ORDER BY A.DIVISION_ID,A.SITE_TYPE,A.NAME
+
+	SELECT  A.DIVISION_ID ,A.CODE ,A.NAME
+	  FROM  #SCM_SITE A
+	
+	-- 3. SITE  BY PLAN GROUP
+    SELECT DIVISION_ID
+         , CODE
+		 , NAME
+      FROM (
+			SELECT DISTINCT A.DIVISION_ID
+				 , a.CODE 
+				 , a.NAME 
+				 , b.opmz_plan_gr_id
+				 , A.SITE_TYPE
+			  FROM   #SCM_SITE  A WITH(NOLOCK) 
+			  LEFT OUTER JOIN SCP_OPMZ_WAREHOUSE_CAPACITY B WITH(NOLOCK) 
+	   			ON A.CODE = B.SCM_SITE_ID
+			   AND A.DIVISION_ID = B.DIVISION_ID
+			   AND B.VALID_YN  = 'Y'
+			 WHERE 1 = 1
+		 ) A
+     ORDER BY A.DIVISION_ID, A.SITE_TYPE, A.NAME
+
+	IF OBJECT_ID('TEMPDB..#SCM_SITE') IS NOT NULL DROP TABLE #SCM_SITE
+
+    -- 4. STAGE 최적화 (전체 표시)
+	SELECT M.SEGMENT1	AS DIVISION_ID
+         , M.SEGMENT3	AS CODE
+         , M.ATTRIBUTE1 AS NAME
+      FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL M WITH(NOLOCK)
+     WHERE M.LOOKUP_TYPE LIKE 'OPMZ_STAGE_CD'
+       AND M.VALID_YN='Y'
+
+   -- 5. Warehouse Name
+   SELECT DISTINCT A.DIVISION_ID  
+         ,A.WH_NM   AS CODE
+		 ,A.WH_NM   AS NAME
+		 ,A.DIVISION_ID 
+		 ,A.OPMZ_PLAN_GR_ID
+		 ,A.SCM_SITE_ID
+		 ,A.STAGE
+     FROM dbo.SCP_OPMZ_WAREHOUSE_CAPACITY a  WITH(NOLOCK)
+	 ORDER BY A.WH_NM
+
+      --6.ITEM_ID 조회
+   	  SELECT distinct
+		     I.DIVISION_ID
+		   , I.ITEM_ID	 
+	    FROM SCP_MST_FINAL_ITEM I WITH(NOLOCK)	
+	   WHERE 1=1
+
+  	-- 7.WAREHOUSE_CAPACITY등록된 PLAN Group
+	SELECT DISTINCT
+           a.OPMZ_PLAN_GR_ID	  AS CODE
+		 , b.OPMZ_PLAN_GR_NAME  AS NAME
+		 , a.DIVISION_ID
+      FROM SCP_OPMZ_WAREHOUSE_CAPACITY a  with(nolock)
+	     , SCP_OPMZ_PLAN_GR_M  b with(nolock)
+	 WHERE a.OPMZ_PLAN_GR_ID = b.OPMZ_PLAN_GR_ID
+	   AND a.DIVISION_ID = b.DIVISION_ID
+
+END
+

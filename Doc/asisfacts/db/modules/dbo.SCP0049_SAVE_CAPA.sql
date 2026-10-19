@@ -1,0 +1,2000 @@
+﻿
+
+
+/*
+ * Program ID   : SCP0049_SAVE_CAPA
+ * Description  : CAPA 저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2020/07/29   khj79          [PJ20199555] 공급 대응력 향상을 위한 자재재공 수급 점검 체계 개선 - 최초작성
+ * 2020/11/19   khj79          TACT TIME 데이터 유형(TACT TIME, DAILY CAPA)에 따른 데이터 저장 수정
+ * 2021/02/18   khj79          [PJ20209642] LGES Digital SCM Level.3 달성을 위한 개선 - CAPA 산출 로직 추가(TACT TIME, DAILY CAPA)
+ * 2021/03/16   khj79          CALENDAR ,  LINE ASSIGN , DAILY CAPA  INT 로 저장
+ * 2021/03/17   khj79          LOSS_UTIL 계산 로직 변경 ROUND(SUM(ISNULL(A.LOSS_RATE,0)),4)
+ * 2021/08/23   khj79          [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - 이력저장(LINE ASSIGN, TACT_TIME, YIELD) 및 line assign 삭제
+ * 2023/03/13   leejsthira2    전극 line assign 저장시 없는 환산자 use 정보 추가 저장
+ * 2023/03/31   leejsthira2    line assign, lane 저장시 pancake master 정보 동기화 처리
+ * 2024/09/30   leejsthira2    [E20240927-001617]Daily Yield 삭제 기능 추가
+ * 2025/01/22   leejsthira2    [E20250122-000782]lane 저장 오류 수정
+ * 2025/10/15   hrkim		   [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : JV 셀생산 Real Line 기준으로 ESS Virtual Line Capa정보 동기화 저장
+ * 2025/12/26   hrkim		   [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : 전극 수율 저장안되는 문제 수정
+ *									- 원인: 파라미터로 넘어오는 electrode type와 line master electrode type 불일치로 가상 라인 제외하기 위해 line master join시 제외됨. (수율은 전극 유형정보가 없음)
+ *									- 조치: 파라미터로 받은 데이터에서 가상 라인 제외 쿼리 변경 : inner join구문 -> not exists sub query로 변경 
+ */
+
+ 
+
+CREATE PROCEDURE [dbo].[SCP0049_SAVE_CAPA]
+	 @SCP0049			AS DBO.SCP0049       READONLY
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SET ANSI_WARNINGS OFF
+	SET ARITHIGNORE ON
+	SET ARITHABORT OFF
+
+	-- 수정 결과 카운트
+	DECLARE @v_mod_cnt	INTEGER = 0;
+	
+	DECLARE @v_delimiter NVARCHAR(1)
+	SET @v_delimiter = '^'
+	
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'SCP0049_SAVE_CAPA';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+	-- 이력용 변수 설정
+	DECLARE @v_job_type		NVARCHAR(10) = 'MERGE';
+
+	-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : @SCP0049 + virtual line 데이터용 테이블 type 변수 선언
+	DECLARE @SCP0049_INC_VIRTAUL_LINE AS DBO.SCP0049;
+
+	-- LOSS 변경 시 TACT 에 TACT TIME 과 DAILY CAPA 를 변경하기 위한 임시 테이블 생성
+	IF OBJECT_ID('TEMPDB..#TMP_SCP0049_SAVE_DATA') IS NOT NULL
+		DROP TABLE #TMP_SCP0049_SAVE_DATA;
+
+	CREATE TABLE #TMP_SCP0049_SAVE_DATA
+	(
+		DATA_TABLE			NVARCHAR(030)
+	  , DATA_TYPE			NVARCHAR(030)
+	  , COMPANY_ID			NVARCHAR(030)
+	  , DIVISION_ID			NVARCHAR(030)
+	  , SITE_ID				NVARCHAR(030)
+	  , PLANT_ID			NVARCHAR(030)
+	  , FACTORY_ID			NVARCHAR(030)
+	  , LINE_ID				NVARCHAR(030)
+	  , ELECTRODE_TYPE		NVARCHAR(030)
+	  , OPERATION_ID		NVARCHAR(030)
+	  , LOSS_CODE			NVARCHAR(030)
+	  , ITEM_ID				NVARCHAR(030)
+	  , LANE_QTY			NVARCHAR(030)
+	  , DAY_NAME			NVARCHAR(030)
+	  , DAY_QTY				NVARCHAR(030)
+	  , CONFIRM_FLAG		CHAR(1)
+	  , UPDATE_ID			NVARCHAR(030)
+	  , RV_FLAG				CHAR(1)			-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : R(Real)/Virtaul(Virtual) 라인 구분 컬럼 추가 
+	)
+
+	-- LOSS 변경 시 TACT 에 TACT TIME 과 DAILY CAPA 를 변경하기 위한 임시 테이블 생성
+	-- 년도별 , 월별 , 일자별 데이터 생성
+	IF OBJECT_ID('TEMPDB..#TMP_SCP0049_SAVE_LOSS_UTIL_TACT') IS NOT NULL
+		DROP TABLE #TMP_SCP0049_SAVE_LOSS_UTIL_TACT;
+
+	CREATE TABLE #TMP_SCP0049_SAVE_LOSS_UTIL_TACT
+	(
+		COMPANY_ID			NVARCHAR(030)
+	  , DIVISION_ID			NVARCHAR(030)
+	  , SITE_ID				NVARCHAR(030)
+	  , PLANT_ID			NVARCHAR(030)
+	  , FACTORY_ID			NVARCHAR(030)
+	  , LINE_ID				NVARCHAR(030)
+	  , ELECTRODE_TYPE		NVARCHAR(030)
+	  , OPERATION_ID		NVARCHAR(030)
+	  , WORK_MONTH			NVARCHAR(008)
+	  , TACT_DATA_TYPE		NVARCHAR(010)
+	  , LOSS_UTIL			NVARCHAR(030)
+	)
+
+
+	IF OBJECT_ID('TEMPDB..#TMP_SCP0049_SAVE_LOSS_UTIL_LOSS') IS NOT NULL
+		DROP TABLE #TMP_SCP0049_SAVE_LOSS_UTIL_LOSS;
+
+	CREATE TABLE #TMP_SCP0049_SAVE_LOSS_UTIL_LOSS
+	(
+		COMPANY_ID			NVARCHAR(030)
+	  , DIVISION_ID			NVARCHAR(030)
+	  , SITE_ID				NVARCHAR(030)
+	  , PLANT_ID			NVARCHAR(030)
+	  , FACTORY_ID			NVARCHAR(030)
+	  , LINE_ID				NVARCHAR(030)
+	  , ELECTRODE_TYPE		NVARCHAR(030)
+	  , OPERATION_ID		NVARCHAR(030)
+	  , WORK_MONTH			NVARCHAR(008)
+	  , TACT_DATA_TYPE		NVARCHAR(010)
+	  , LOSS_UTIL			NVARCHAR(030)
+	  , UPDATE_ID			NVARCHAR(100)
+	)
+
+
+	-- 시작 LOG
+	SET @v_log_type = 'START';
+	SET @v_log_message = '########## Start of procedure ##########';
+	SET @v_description = '';
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+
+		-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : Start -----------------------------------/
+		/* ############################################################ */
+		-- 00. Real Line 데이터를 기준으로 가상 Line 데이터를 추출
+		-- @SCP0049_INC_VIRTAUL_LINE : Virtual Line 데이터만 존재  
+		-- (임시테이블 변수에 저장후 Real Line 데이터 추가 예정)
+		/* ############################################################ */
+		INSERT INTO @SCP0049_INC_VIRTAUL_LINE
+		SELECT VL.DIVISION_ID
+			  ,VL.COMPANY_ID
+			  ,VL.SITE_ID
+			  ,VL.PLANT_ID
+			  ,VL.FACTORY_ID
+			  ,VL.LINE_ID
+			  ,VL.OPERATION_ID
+			  ,VL.ELECTRODE_TYPE
+			  ,PP.P_ITEM_ID 
+			  ,PP.P_LOSS_CODE
+			  ,PP.P_DATA_TABLE
+			  ,PP.P_DATA_TYPE
+			  ,PP.P_DAY_NAME
+			  ,PP.P_DAY_QTY
+			  ,PP.P_LANE_QTY
+			  ,PP.P_CONFIRM_FLAG
+			  ,PP.P_UPDATE_ID
+		 FROM @SCP0049 PP 
+			  INNER JOIN SCM_MST_LINE_SN RL WITH(NOLOCK)	-- JV Real Line		-- COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, FACTORY_ID, OPERATION_ID, LINE_ID, ELECTRODE_TYPE
+					  ON RL.COMPANY_ID		= PP.P_COMPANY_ID
+					 AND RL.DIVISION_ID		= PP.P_DIVISION_ID
+					 AND RL.SITE_ID			= PP.P_SITE_ID
+					 AND RL.PLANT_ID		= PP.P_PLANT_ID
+					 AND RL.FACTORY_ID		= PP.P_FACTORY_ID
+					 AND RL.OPERATION_ID	= PP.P_OPERATION_ID
+					 AND RL.LINE_ID			= PP.P_LINE_ID
+					 AND RL.ELECTRODE_TYPE	= PP.P_ELECTRODE_TYPE
+					 AND ISNULL(RL.VIRTUAL_LINE_YN, 'N')	= 'N'	-- Real Line (가상 라인이 포함되었을수 있어서 필터링) 
+			  INNER JOIN SCM_MST_LINE_SN VL WITH(NOLOCK)	-- ESS Virtual Line 
+					  ON VL.OPERATION_ID	= PP.P_OPERATION_ID 
+					 AND VL.LINK_LINE_ID	= PP.P_LINE_ID	-- JV Real Line 
+					 AND VL.ELECTRODE_TYPE	= PP.P_ELECTRODE_TYPE
+					 AND VL.VIRTUAL_LINE_YN	= 'Y'			-- Virtual Line
+					 AND VL.ACTIVE_FLAG		= 'Y'
+		-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : End -----------------------------------/
+
+		/* ############################################################ */
+		-- 0. 임시 변수를 테이블에 저장한다.
+		-- 속도 문제로 WHILE 문을 사용하지 않고 FUNCTION 을 사용한다.
+		/* ############################################################ */
+		BEGIN
+			INSERT INTO #TMP_SCP0049_SAVE_DATA
+			(
+				  DATA_TABLE
+				, DATA_TYPE
+				, LOSS_CODE
+				, DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, ITEM_ID
+				, LANE_QTY
+				, DAY_NAME
+				, DAY_QTY
+				, CONFIRM_FLAG
+				, UPDATE_ID
+				, RV_FLAG		-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : R(Real)/Virtaul(Virtual) 라인 구분 컬럼 추가
+			)
+			SELECT P_DATA_TABLE
+				 , P_DATA_TYPE
+				 , P_LOSS_CODE
+				 , P_DIVISION_ID
+				 , P_COMPANY_ID
+				 , P_SITE_ID
+				 , P_PLANT_ID
+				 , P_FACTORY_ID
+				 , P_LINE_ID
+				 , P_ELECTRODE_TYPE
+				 , P_OPERATION_ID
+				 , P_ITEM_ID
+				 , P_LANE_QTY
+				 , P_DAY_NAME
+				 , P_DAY_QTY
+				 , P_CONFIRM_FLAG
+				 , P_UPDATE_ID
+				 , 'R'		AS RV_FLAG		-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : R(Real)/Virtaul(Virtual) 라인 구분 컬럼 추가
+			  FROM @SCP0049 PP
+			-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 Start --------------------------------------------------------
+			-- 2025.12.26 Start [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : 전극 Yield 저장 안되는 오류 수정
+			  WHERE NOT EXISTS (SELECT 'X'
+								 FROM SCM_MST_LINE_SN RL WITH(NOLOCK)
+								WHERE RL.COMPANY_ID		= PP.P_COMPANY_ID
+								  AND RL.DIVISION_ID	= PP.P_DIVISION_ID
+								  AND RL.SITE_ID		= PP.P_SITE_ID
+								  AND RL.PLANT_ID		= PP.P_PLANT_ID
+								  AND RL.FACTORY_ID		= PP.P_FACTORY_ID
+								  AND RL.OPERATION_ID	= PP.P_OPERATION_ID
+								  AND RL.LINE_ID		= PP.P_LINE_ID
+								  AND ISNULL(RL.VIRTUAL_LINE_YN, 'N') = 'Y'	--virtual line 제외) 
+								 ) 
+				-- 2025.12.26 변경전   INNER JOIN SCM_MST_LINE_SN RL WITH(NOLOCK)
+				-- 2025.12.26 변경전 		  ON RL.COMPANY_ID		= PP.P_COMPANY_ID
+				-- 2025.12.26 변경전 		 AND RL.DIVISION_ID		= PP.P_DIVISION_ID
+				-- 2025.12.26 변경전 		 AND RL.SITE_ID			= PP.P_SITE_ID
+				-- 2025.12.26 변경전 		 AND RL.PLANT_ID		= PP.P_PLANT_ID
+				-- 2025.12.26 변경전 		 AND RL.FACTORY_ID		= PP.P_FACTORY_ID
+				-- 2025.12.26 변경전 		 AND RL.OPERATION_ID	= PP.P_OPERATION_ID
+				-- 2025.12.26 변경전 		 AND RL.LINE_ID			= PP.P_LINE_ID
+				-- 2025.12.26 변경전 		 AND RL.ELECTRODE_TYPE	= PP.P_ELECTRODE_TYPE  --- 
+				-- 2025.12.26 변경전 		 AND ISNULL(RL.VIRTUAL_LINE_YN, 'N') = 'N'	-- Real Line (가상 라인이 포함되었을수 있어서 필터링)
+			-- 2025.12.26 End [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : 전극 Yield 저장 안되는 오류 수정
+			UNION ALL
+			SELECT P_DATA_TABLE
+				 , P_DATA_TYPE
+				 , P_LOSS_CODE
+				 , P_DIVISION_ID
+				 , P_COMPANY_ID
+				 , P_SITE_ID
+				 , P_PLANT_ID
+				 , P_FACTORY_ID
+				 , P_LINE_ID
+				 , P_ELECTRODE_TYPE
+				 , P_OPERATION_ID
+				 , P_ITEM_ID
+				 , P_LANE_QTY
+				 , P_DAY_NAME
+				 , P_DAY_QTY
+				 , P_CONFIRM_FLAG
+				 , P_UPDATE_ID
+				 , 'V'		AS RV_FLAG		
+			  FROM @SCP0049_INC_VIRTAUL_LINE 
+			 ;
+			-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 End --------------------------------------------------------
+		END
+
+		-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 Start ----------------------------------------------------------
+		-- @SCP0049_INC_VIRTAUL_LINE 테이블 타입에 Real Line 정보 추가 
+		INSERT INTO @SCP0049_INC_VIRTAUL_LINE
+		SELECT PP.*
+		  FROM @SCP0049 PP
+			  INNER JOIN SCM_MST_LINE_SN RL WITH(NOLOCK)
+					  ON RL.COMPANY_ID		= PP.P_COMPANY_ID
+					 AND RL.DIVISION_ID		= PP.P_DIVISION_ID
+					 AND RL.SITE_ID			= PP.P_SITE_ID
+					 AND RL.PLANT_ID		= PP.P_PLANT_ID
+					 AND RL.FACTORY_ID		= PP.P_FACTORY_ID
+					 AND RL.OPERATION_ID	= PP.P_OPERATION_ID
+					 AND RL.LINE_ID			= PP.P_LINE_ID
+					 AND RL.ELECTRODE_TYPE	= PP.P_ELECTRODE_TYPE
+					 AND ISNULL(RL.VIRTUAL_LINE_YN, 'N')	= 'N'	-- Real Line (가상 라인이 포함되었을수 있어서 필터링) 
+		-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 End   ----------------------------------------------------------
+
+		-- LINE ASSIGN 데이터 삭제
+		DELETE X
+		  FROM #TMP_SCP0049_SAVE_DATA X
+		  JOIN @SCP0049_INC_VIRTAUL_LINE A		-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : @SCP0049를 @SCP0049_INC_VIRTAUL_LINE로 변경 적용 (Real+Virtual) 
+		    ON X.FACTORY_ID		= A.P_FACTORY_ID
+		   AND X.LINE_ID		= A.P_LINE_ID
+		   AND X.OPERATION_ID	= A.P_OPERATION_ID
+		   AND X.ELECTRODE_TYPE	= A.P_ELECTRODE_TYPE
+		   AND X.ITEM_ID		= A.P_ITEM_ID
+		   AND X.DAY_NAME		= A.P_DAY_NAME
+		   AND X.DATA_TABLE		= A.P_DATA_TABLE
+		   AND A.P_DATA_TABLE	= 'LA'
+		   AND ISNULL(CONVERT(INT,CONVERT(NUMERIC(20,10),P_DAY_QTY)),0) = 9
+		  ;
+
+		  DELETE X
+		  FROM #TMP_SCP0049_SAVE_DATA X
+		  JOIN @SCP0049_INC_VIRTAUL_LINE A		-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : @SCP0049를 @SCP0049_INC_VIRTAUL_LINE로 변경 적용 (Real+Virtual) 
+		    ON X.FACTORY_ID		= A.P_FACTORY_ID
+		   AND X.LINE_ID		= A.P_LINE_ID
+		   AND X.OPERATION_ID	= A.P_OPERATION_ID
+		   AND X.ELECTRODE_TYPE	= A.P_ELECTRODE_TYPE
+		   AND X.ITEM_ID		= A.P_ITEM_ID
+		   AND X.DAY_NAME		= A.P_DAY_NAME
+		   AND X.DATA_TABLE		= 'T'
+		   AND A.P_DATA_TABLE	= 'LA'
+		   AND ISNULL(CONVERT(INT,CONVERT(NUMERIC(20,10),P_DAY_QTY)),0) = 9
+		  ;
+
+
+		  DELETE X
+		  FROM #TMP_SCP0049_SAVE_DATA X
+		  JOIN @SCP0049_INC_VIRTAUL_LINE A		-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : @SCP0049를 @SCP0049_INC_VIRTAUL_LINE로 변경 적용 (Real+Virtual) 
+		    ON X.FACTORY_ID		= A.P_FACTORY_ID
+		   AND X.LINE_ID		= A.P_LINE_ID
+		   AND X.OPERATION_ID	= A.P_OPERATION_ID
+		   AND X.ITEM_ID		= A.P_ITEM_ID
+		   AND X.DAY_NAME		= A.P_DAY_NAME
+		   AND X.DATA_TABLE		= 'Y'
+		   AND A.P_DATA_TABLE	= 'LA'
+		   AND ISNULL(CONVERT(INT,CONVERT(NUMERIC(20,10),P_DAY_QTY)),0) = 9
+		  ;
+
+
+		/* ############################################################ */
+		-- 1. CONFIRM 정보를 수정 한다.
+		/* ############################################################ */
+		--IF @v_cf_cnt > 0
+		BEGIN
+			UPDATE SCM_MASTER_MANAGER_M_SN
+			   SET CONFIRM_FLAG = A.CONFIRM_FLAG
+				 , CONFIRM_ID	= A.UPDATE_ID
+				 , CONFIRM_TIME = sysdatetime()
+				 , UPDATE_ID	= A.UPDATE_ID
+				 , UPDATE_TIME	= sysdatetime()
+			  FROM SCM_MASTER_MANAGER_M_SN M
+			  JOIN #TMP_SCP0049_SAVE_DATA A
+				ON M.COMPANY_ID		= A.COMPANY_ID
+			   AND M.DIVISION_ID	= A.DIVISION_ID
+			   AND M.SITE_ID		= A.SITE_ID
+			   AND M.PLANT_ID		= A.PLANT_ID
+			   AND M.FACTORY_ID		= A.FACTORY_ID
+			   AND M.OPERATION_ID	= A.OPERATION_ID
+			   AND M.LINE_ID		= A.LINE_ID
+			   AND M.ELECTRODE_TYPE	= A.ELECTRODE_TYPE
+			   AND M.LOSS_CODE		= A.LOSS_CODE
+			 WHERE A.DATA_TYPE = 'CF'
+		END
+
+		
+		/* ############################################################ */
+		-- 이력저장
+		/* ############################################################ */
+		EXEC [dbo].[PR_SCP_CAPA_HIST_DATASET] @SCP0049_INC_VIRTAUL_LINE; -- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : @SCP0049를 @SCP0049_INC_VIRTAUL_LINE로 변경 적용 (Real+Virtual) 
+
+
+		/* ############################################################ */
+		-- 1. LOSS 정보의 Not-Available , No-Load , No-Run 의 PM  데이터를 추가/수정 한다.
+		-- 3. 년도 수정은 1월 1일 날짜에 데이터를 추가/수정 한다.
+		/* ############################################################ */
+		--IF @v_cal_cnt > 0
+		BEGIN
+			MERGE INTO SCM_WORK_CALENDAR_M_SN M
+			USING (
+					SELECT COMPANY_ID
+						, DIVISION_ID
+						, SITE_ID
+						, PLANT_ID
+						, FACTORY_ID
+						, OPERATION_ID
+						, LINE_ID
+						, ELECTRODE_TYPE
+						, (CASE WHEN DATA_TYPE = 'Y' THEN DAY_NAME + '0101' ELSE DAY_NAME END ) AS WORK_DATE
+						, LOSS_CODE
+						, CONVERT(INT,CONVERT(NUMERIC(10,2),DAY_QTY)) AS DAY_QTY
+						, UPDATE_ID
+					 FROM #TMP_SCP0049_SAVE_DATA
+					 WHERE DATA_TABLE = 'C'   --SCM_WORK_CALENDAR_M
+					   AND DATA_TYPE IN ('D','Y')
+					) B
+						ON M.COMPANY_ID		= B.COMPANY_ID
+					AND M.DIVISION_ID		= B.DIVISION_ID
+					AND M.SITE_ID			= B.SITE_ID
+					AND M.PLANT_ID			= B.PLANT_ID
+					AND M.FACTORY_ID		= B.FACTORY_ID
+					AND M.OPERATION_ID		= B.OPERATION_ID
+					AND M.LINE_ID			= B.LINE_ID
+					AND M.ELECTRODE_TYPE	= B.ELECTRODE_TYPE
+					AND M.LOSS_CODE			= B.LOSS_CODE
+					AND CONVERT(VARCHAR(8),M.WORK_DATE,112)	= B.WORK_DATE
+
+			WHEN MATCHED THEN
+				UPDATE SET
+					  TIME_TERM		= B.DAY_QTY
+					, UPDATE_ID		= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+
+			WHEN NOT MATCHED THEN
+				INSERT (
+						  COMPANY_ID	, DIVISION_ID	, SITE_ID			, PLANT_ID	, FACTORY_ID
+						, OPERATION_ID	, LINE_ID		, ELECTRODE_TYPE	, WORK_DATE	, LOSS_CODE
+						, TIME_TERM		, INSERT_ID		, INSERT_TIME		, UPDATE_ID , UPDATE_TIME
+						)
+				VALUES  (
+					 	  B.COMPANY_ID	, B.DIVISION_ID	, B.SITE_ID			, B.PLANT_ID	, B.FACTORY_ID
+						, B.OPERATION_ID, B.LINE_ID		, B.ELECTRODE_TYPE	, B.WORK_DATE	, B.LOSS_CODE
+						, B.DAY_QTY		, B.UPDATE_ID	, SYSDATETIME()		, B.UPDATE_ID	, SYSDATETIME()
+						);
+		END
+
+		/* ############################################################ */
+		-- 1. LOSS 정보의 Not-Available , No-Load , No-Run 의 PM  데이터를 추가/수정 한다.
+		-- 2. 월별 데이터를 입력 받아 일별 데이터에 분배 한다.
+		-- 3. 0 값은 제외 한다
+		-- 4. 기존 데이터는 삭제
+		/* ############################################################ */
+		BEGIN
+
+			-- 기존 데이터 삭제
+			DELETE FROM SCM_WORK_CALENDAR_M_SN
+			  FROM SCM_WORK_CALENDAR_M_SN M
+			  JOIN #TMP_SCP0049_SAVE_DATA B
+			    ON M.COMPANY_ID		= B.COMPANY_ID
+			   AND M.DIVISION_ID	= B.DIVISION_ID
+			   AND M.SITE_ID		= B.SITE_ID
+			   AND M.PLANT_ID		= B.PLANT_ID
+			   AND M.FACTORY_ID		= B.FACTORY_ID
+			   AND M.OPERATION_ID	= B.OPERATION_ID
+			   AND M.LINE_ID		= B.LINE_ID
+			   AND M.ELECTRODE_TYPE	= B.ELECTRODE_TYPE
+			   AND M.LOSS_CODE		= B.LOSS_CODE
+			WHERE CONVERT(VARCHAR(6),M.WORK_DATE,112)	= B.DAY_NAME
+			;
+
+			MERGE INTO SCM_WORK_CALENDAR_M_SN M
+			USING (
+					SELECT COMPANY_ID
+						, DIVISION_ID
+						, SITE_ID
+						, PLANT_ID
+						, FACTORY_ID
+						, OPERATION_ID
+						, LINE_ID
+						, ELECTRODE_TYPE
+						, WORK_DATE
+						, LOSS_CODE
+						, OFF_TIME
+						, UPDATE_ID
+					 FROM ( SELECT COMPANY_ID
+								, DIVISION_ID
+								, SITE_ID
+								, PLANT_ID
+								, FACTORY_ID
+								, OPERATION_ID
+								, LINE_ID
+								, ELECTRODE_TYPE
+								, C.BASIS_YYYYMMDD	AS WORK_DATE
+								, LOSS_CODE
+								, CASE WHEN C.CALENDAR_DAY  = '01' THEN CONVERT(INT,CONVERT(NUMERIC(20,10),X.DAY_QTY)) / MAX_DAY + CONVERT(INT,CONVERT(NUMERIC(20,10),X.DAY_QTY)) % MAX_DAY
+									   WHEN C.CALENDAR_DAY != '01' THEN CONVERT(INT,CONVERT(NUMERIC(20,10),X.DAY_QTY)) / MAX_DAY
+									   ELSE 0 END AS OFF_TIME
+								, UPDATE_ID
+							 FROM #TMP_SCP0049_SAVE_DATA X
+							 JOIN (SELECT BASIS_YYYYMM , BASIS_YYYYMMDD , CALENDAR_DAY , MAX(CALENDAR_DAY) OVER(PARTITION BY BASIS_YYYYMM) AS MAX_DAY
+									 FROM SCM_SYS_CALENDAR_M WITH(NOLOCK)
+									 ) C
+							   ON X.DAY_NAME = C.BASIS_YYYYMM
+							WHERE X.DATA_TABLE = 'C'   --SCM_WORK_CALENDAR_M
+							  AND X.DATA_TYPE = 'M'   -- 월별
+							  ) T
+						 WHERE T.OFF_TIME > 0  -- 0 값 제외
+					) B
+				 ON M.COMPANY_ID		= B.COMPANY_ID
+				AND M.DIVISION_ID		= B.DIVISION_ID
+				AND M.SITE_ID			= B.SITE_ID
+				AND M.PLANT_ID			= B.PLANT_ID
+				AND M.FACTORY_ID		= B.FACTORY_ID
+				AND M.OPERATION_ID		= B.OPERATION_ID
+				AND M.LINE_ID			= B.LINE_ID
+				AND M.ELECTRODE_TYPE	= B.ELECTRODE_TYPE
+				AND M.LOSS_CODE			= B.LOSS_CODE
+				AND CONVERT(VARCHAR(8),M.WORK_DATE,112)	= B.WORK_DATE
+
+			WHEN MATCHED THEN
+				UPDATE SET
+					  TIME_TERM		= CONVERT(NUMERIC(20,2),B.OFF_TIME)
+					, UPDATE_ID		= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+
+			WHEN NOT MATCHED THEN
+				INSERT (
+						  COMPANY_ID	, DIVISION_ID	, SITE_ID			, PLANT_ID	, FACTORY_ID
+						, OPERATION_ID	, LINE_ID		, ELECTRODE_TYPE	, WORK_DATE	, LOSS_CODE
+						, TIME_TERM		, INSERT_ID		, INSERT_TIME		, UPDATE_ID , UPDATE_TIME
+						)
+				VALUES  (
+					 	  B.COMPANY_ID						, B.DIVISION_ID	, B.SITE_ID			, B.PLANT_ID	, B.FACTORY_ID
+						, B.OPERATION_ID					, B.LINE_ID		, B.ELECTRODE_TYPE	, B.WORK_DATE	, B.LOSS_CODE
+						, CONVERT(NUMERIC(10,2),B.OFF_TIME)	, B.UPDATE_ID	, SYSDATETIME()		, B.UPDATE_ID	, SYSDATETIME()
+						);
+		END
+
+		/* ############################################################ */
+		-- 1. LOSS 정보의 'No-Run' 데이터를 추가/수정 한다.
+		-- 2. 'No-Run' 의 PM 데이터를 'SCM_WORK_CALENDAR_M' 에서 추가/수정 한다
+		-- 2. 월, 년도 데이터만 수정한다.
+		-- 2. 일별 데이터 수정은 없다
+		-- 3. LOSS 정보가 변경되면 TACT TIME 과 DAILY CAPA 의 산출 정보가 변경되었기 때문에
+		--       LOSS 정보저장 후 TACT 정보를 일괄 수정한다
+		/* ############################################################ */
+		--IF @v_loss_cnt > 0
+		BEGIN
+			MERGE INTO SCM_LOSS_M_SN M
+			USING (
+					SELECT COMPANY_ID
+						 , DIVISION_ID
+						 , SITE_ID
+						 , PLANT_ID
+						 , FACTORY_ID
+						 , OPERATION_ID
+						 , LINE_ID
+						 , ELECTRODE_TYPE
+						 , LOSS_CODE
+						 , C.BASIS_YYYYMM
+						 , DAY_QTY
+						 , UPDATE_ID
+					  FROM (SELECT COMPANY_ID
+								 , DIVISION_ID
+								 , SITE_ID
+								 , PLANT_ID
+								 , FACTORY_ID
+								 , OPERATION_ID
+								 , LINE_ID
+								 , ELECTRODE_TYPE
+								 , LOSS_CODE
+								 , DAY_NAME
+								 , DAY_QTY
+								 , DATA_TYPE
+								 , UPDATE_ID
+							  FROM #TMP_SCP0049_SAVE_DATA
+							 WHERE DATA_TABLE = 'L'  -- SCM_LOSS_M
+							   AND DATA_TYPE IN ( 'M' , 'Y')
+							) X
+						   JOIN (SELECT DISTINCT BASIS_YYYYMM , CALENDAR_YYYY
+								  FROM SCM_SYS_CALENDAR_M  WITH(NOLOCK)
+								  ) C
+							  ON  CASE WHEN DATA_TYPE = 'Y' THEN CALENDAR_YYYY
+									   WHEN DATA_TYPE = 'M' THEN BASIS_YYYYMM 
+								   END = X.DAY_NAME
+					 ) B
+				 ON M.COMPANY_ID		= B.COMPANY_ID
+				AND M.DIVISION_ID		= B.DIVISION_ID
+				AND M.SITE_ID			= B.SITE_ID
+				AND M.PLANT_ID			= B.PLANT_ID
+				AND M.FACTORY_ID		= B.FACTORY_ID
+				AND M.OPERATION_ID		= B.OPERATION_ID
+				AND M.LINE_ID			= B.LINE_ID
+				AND M.ELECTRODE_TYPE	= B.ELECTRODE_TYPE
+				AND M.LOSS_CODE			= B.LOSS_CODE
+				AND M.WORK_MONTH		= B.BASIS_YYYYMM
+
+			WHEN MATCHED THEN
+				UPDATE SET
+				  LOSS_RATE		= CONVERT(NUMERIC(20,10),B.DAY_QTY) / 100
+				, UPDATE_ID		= B.UPDATE_ID
+				, UPDATE_TIME	= sysdatetime()
+
+			WHEN NOT MATCHED THEN
+				INSERT (
+						  COMPANY_ID	, DIVISION_ID	, SITE_ID			, PLANT_ID		, FACTORY_ID
+						, OPERATION_ID	, LINE_ID		, ELECTRODE_TYPE	, WORK_MONTH	, LOSS_CODE
+						, LOSS_RATE		, INSERT_ID		, INSERT_TIME		, UPDATE_ID		, UPDATE_TIME
+						)
+				VALUES  (
+			 			  B.COMPANY_ID							, B.DIVISION_ID	, B.SITE_ID			, B.PLANT_ID	, B.FACTORY_ID
+						, B.OPERATION_ID						, B.LINE_ID		, B.ELECTRODE_TYPE	, B.BASIS_YYYYMM, B.LOSS_CODE
+						, CONVERT(NUMERIC(20,10),B.DAY_QTY)/100	, B.UPDATE_ID	, SYSDATETIME()		, B.UPDATE_ID	, SYSDATETIME()
+						);
+		END
+
+		/* ############################################################ */
+		-- 1. LANE QTY 정보를 수정 한다.
+		-- 2. LINE 정보를 수정전 수행을 해야 함 (오류 발생 안됨)
+		/* ############################################################ */
+		--IF @v_lq_cnt > 0
+		BEGIN
+			-- 월별 LANE QTY 수정
+				UPDATE SCM_MST_ITEM_LINE_ASSIGN_SN
+				   SET LANE_QTY		= B.LANE_QTY
+					 , UPDATE_ID	= B.UPDATE_ID
+					 , UPDATE_TIME	= sysdatetime()
+				  FROM SCM_MST_ITEM_LINE_ASSIGN_SN M
+				  JOIN #TMP_SCP0049_SAVE_DATA B
+				    ON M.COMPANY_ID		= B.COMPANY_ID
+				   AND M.DIVISION_ID	= B.DIVISION_ID
+				   AND M.SITE_ID		= B.SITE_ID
+				   AND M.PLANT_ID		= B.PLANT_ID
+				   AND M.FACTORY_ID		= B.FACTORY_ID
+				   AND M.ITEM_ID		= B.ITEM_ID
+				   AND M.OPERATION_ID	= B.OPERATION_ID
+				   AND M.LINE_ID		= B.LINE_ID
+				   AND M.ELECTRODE_TYPE	= B.ELECTRODE_TYPE
+				   AND M.MONTH			>= CONVERT(NVARCHAR(6), GETDATE() , 112) 
+				 WHERE DATA_TYPE = 'LQ'
+				 ;
+
+			-- 일별 LANE QTY 수정
+				UPDATE SCM_MST_ITEM_LINE_ASSIGN_EXCEPT_SN
+				   SET LANE_QTY		= B.LANE_QTY
+					 , UPDATE_ID	= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+				  FROM SCM_MST_ITEM_LINE_ASSIGN_EXCEPT_SN M
+				  JOIN #TMP_SCP0049_SAVE_DATA B
+					ON M.COMPANY_ID		= B.COMPANY_ID
+				   AND M.DIVISION_ID	= B.DIVISION_ID
+				   AND M.SITE_ID		= B.SITE_ID
+				   AND M.PLANT_ID		= B.PLANT_ID
+				   AND M.FACTORY_ID		= B.FACTORY_ID
+				   AND M.ITEM_ID		= B.ITEM_ID
+				   AND M.OPERATION_ID	= B.OPERATION_ID
+				   AND M.LINE_ID		= B.LINE_ID
+				   AND M.ELECTRODE_TYPE	= B.ELECTRODE_TYPE
+				   AND CONVERT(NVARCHAR(6),M.START_TIME,112) >= CONVERT(NVARCHAR(6), GETDATE() , 112) 
+				 WHERE DATA_TYPE = 'LQ' ;
+
+
+				-- pancake master 에 lane 값 동기화...기존 lane 삭제 ... 20230331
+				DELETE [dbo].[SCM_ITEM_LANE_M_SN]
+				FROM [dbo].[SCM_ITEM_LANE_M_SN] A
+				JOIN (
+					SELECT DISTINCT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.ITEM_ID
+						 , (
+							SELECT ISNULL(B.PROD_VERSION_TYPE, 'GENERAL')
+							FROM   SCM_LINE_M_SN B WITH(NOLOCK)
+							WHERE  B.FACTORY_ID     = A.FACTORY_ID
+							AND    B.OPERATION_ID   = A.OPERATION_ID
+							AND    B.LINE_ID        = A.LINE_ID
+							AND    B.ELECTRODE_TYPE = A.ELECTRODE_TYPE
+						 ) AS PROD_VERSION_TYPE
+						 , A.LANE_QTY
+						 , A.UPDATE_ID AS UPDATE_ID
+					FROM  #TMP_SCP0049_SAVE_DATA A
+					WHERE A.DATA_TYPE = 'LQ'
+				) B
+				ON	  A.COMPANY_ID        = B.COMPANY_ID
+				AND   A.DIVISION_ID       = B.DIVISION_ID
+				AND   A.SITE_ID           = B.SITE_ID
+				AND   A.PLANT_ID          = B.PLANT_ID
+				AND   A.ITEM_ID           = B.ITEM_ID
+				AND   A.FACTORY_ID        = B.FACTORY_ID
+				AND   A.PROD_VERSION_TYPE = B.PROD_VERSION_TYPE 
+				AND   A.LANE_QTY <> B.LANE_QTY -- 저장할 LANE 과 같지 않은 lane 삭제
+				WHERE 1=1
+				;
+
+				-- pancake master 에 lane 값 동기화... 20230331
+				MERGE INTO [dbo].[SCM_ITEM_LANE_M_SN] A
+				USING (
+					--[E20250122-000782]lane 저장 오류 수정
+					SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.ITEM_ID, A.PROD_VERSION_TYPE
+					     , MAX(A.LANE_QTY) AS LANE_QTY, MAX(A.UPDATE_ID) AS UPDATE_ID
+					FROM (
+						SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.ITEM_ID
+							 , A.LANE_QTY
+							 , (
+								SELECT ISNULL(B.PROD_VERSION_TYPE, 'GENERAL')
+								FROM   SCM_LINE_M_SN B WITH(NOLOCK)
+								WHERE  B.FACTORY_ID     = A.FACTORY_ID
+								AND    B.OPERATION_ID   = A.OPERATION_ID
+								AND    B.LINE_ID        = A.LINE_ID
+								AND    B.ELECTRODE_TYPE = A.ELECTRODE_TYPE
+							 ) AS PROD_VERSION_TYPE
+							 , A.UPDATE_ID AS UPDATE_ID
+						FROM  #TMP_SCP0049_SAVE_DATA A
+						WHERE A.DATA_TYPE = 'LQ'
+					) A
+					GROUP BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.ITEM_ID, A.PROD_VERSION_TYPE
+				) B
+				ON  (
+						A.COMPANY_ID        = B.COMPANY_ID
+					AND A.DIVISION_ID       = B.DIVISION_ID
+					AND A.SITE_ID           = B.SITE_ID
+					AND A.PLANT_ID          = B.PLANT_ID
+					AND A.ITEM_ID           = B.ITEM_ID
+					AND A.FACTORY_ID        = B.FACTORY_ID
+					AND A.PROD_VERSION_TYPE = B.PROD_VERSION_TYPE 
+					AND A.LANE_QTY          = B.LANE_QTY 
+				)
+				WHEN MATCHED THEN
+					UPDATE SET A.ACTIVE_FLAG = 'Y'
+							 , A.UPDATE_ID   = B.UPDATE_ID
+							 , A.UPDATE_TIME = GETDATE()
+				WHEN NOT MATCHED THEN
+					INSERT (
+						  COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, FACTORY_ID
+						, ITEM_ID, LANE_QTY
+						, SLIT_WIDTH
+						, MAIN_LANE_QTY, SUB_LANE_QTY, PATTERN_QTY
+						, HALF_SLIT_FLAG, FOIL_ID, ACTIVE_FLAG
+						, DESCRIPTION
+						, INSERT_ID, INSERT_TIME
+						, UPDATE_ID, UPDATE_TIME
+						, PC_ROLL_LENGTH, PC_ROLL_LENGTH_UOM
+						, GPLM_LANE_QTY, GPLM_MAIN_LANE_QTY, GPLM_SUB_LANE_QTY
+						, PROD_VERSION_TYPE
+						, JUMBO_ROLL_LENGTH
+						, GPLM_PC_ROLL_LENGTH, GPLM_JUMBO_ROLL_LENGTH
+					)
+					VALUES (
+						  B.COMPANY_ID, B.DIVISION_ID, B.SITE_ID, B.PLANT_ID, B.FACTORY_ID
+						, B.ITEM_ID, B.LANE_QTY
+						, 0
+						, B.LANE_QTY, 0, 1
+						, 'N', NULL, 'Y'
+						, ''
+						, B.UPDATE_ID, GETDATE()
+						, B.UPDATE_ID, GETDATE()
+						, NULL, ''
+						, NULL, NULL, NULL
+						, B.PROD_VERSION_TYPE
+						, NULL
+						, NULL, NULL
+					)
+					;
+
+		END
+
+		/* ############################################################ */
+		-- 1. LINE ASSIGN 정보의 월,년도 데이터를 추가/수정 한다.
+		-- 2. 일별 데이터 수정은 별도의 테이블에 저장한다.
+		-- 3. LINE ASSIGN 은 LANE QTY 때문에 OPERATION 분리하여 수정한다.
+		/* ############################################################ */
+
+		-- LANE QTY 가 존재하는 공정(E2000, E3000, E4000)
+		BEGIN
+			MERGE INTO SCM_MST_ITEM_LINE_ASSIGN_SN M
+			USING (
+					SELECT COMPANY_ID
+						 , DIVISION_ID
+						 , SITE_ID
+						 , PLANT_ID
+						 , FACTORY_ID
+						 , ITEM_ID
+						 , OPERATION_ID
+						 , LINE_ID
+						 , ELECTRODE_TYPE
+						 , LANE_QTY
+						 , C.BASIS_YYYYMM AS WORK_MONTH
+						 , DAY_QTY
+						 , UPDATE_ID
+					  FROM (SELECT COMPANY_ID
+								 , DIVISION_ID
+								 , SITE_ID
+								 , PLANT_ID
+								 , FACTORY_ID
+								 , ITEM_ID
+								 , OPERATION_ID
+								 , LINE_ID
+								 , ELECTRODE_TYPE
+								 , ISNULL((CASE WHEN LANE_QTY  = '' THEN 0.0 ELSE CONVERT(NUMERIC(20,10) , LANE_QTY) END ),0) AS LANE_QTY
+								 , DAY_NAME
+								 , ISNULL(CONVERT(INT,CONVERT(NUMERIC(20,10),DAY_QTY)),0) AS DAY_QTY
+								 , UPDATE_ID
+								 , DATA_TYPE
+							  FROM #TMP_SCP0049_SAVE_DATA
+							 WHERE DATA_TABLE = 'LA'  -- SCM_ITEM_LINE_ASSIGN_M
+							   AND DATA_TYPE IN ( 'M' , 'Y')
+							   AND OPERATION_ID IN ('E2000')
+							) X
+					 JOIN (SELECT DISTINCT BASIS_YYYYMM , CALENDAR_YYYY
+							  FROM SCM_SYS_CALENDAR_M  WITH(NOLOCK)
+							  ) C
+						  ON  CASE WHEN DATA_TYPE = 'Y' THEN CALENDAR_YYYY
+								   WHEN DATA_TYPE = 'M' THEN BASIS_YYYYMM 
+							   END = X.DAY_NAME
+					)B
+				 ON M.COMPANY_ID			= B.COMPANY_ID
+				AND M.DIVISION_ID			= B.DIVISION_ID
+				AND M.SITE_ID				= B.SITE_ID
+				AND M.PLANT_ID				= B.PLANT_ID
+				AND M.FACTORY_ID			= B.FACTORY_ID
+				AND M.ITEM_ID				= B.ITEM_ID
+				AND M.OPERATION_ID			= B.OPERATION_ID
+				AND M.LINE_ID				= B.LINE_ID
+				AND M.ELECTRODE_TYPE		= B.ELECTRODE_TYPE
+				AND ISNULL(M.LANE_QTY,0)	= ISNULL(B.LANE_QTY,0)
+				AND M.MONTH					= B.WORK_MONTH
+
+			WHEN MATCHED THEN
+				UPDATE SET
+					  PRIORITY		= B.DAY_QTY
+					--, LANE_QTY		= B.LANE_QTY
+					, UPDATE_ID		= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+
+			WHEN NOT MATCHED THEN
+				INSERT(
+					  COMPANY_ID	, DIVISION_ID	, SITE_ID	, PLANT_ID		, FACTORY_ID
+					, ITEM_ID		, OPERATION_ID	, LINE_ID	, ELECTRODE_TYPE, MONTH
+					, PRIORITY		, LANE_QTY		, INSERT_ID	, INSERT_TIME	, UPDATE_ID
+					, UPDATE_TIME
+					)
+				VALUES  (
+					  B.COMPANY_ID	, B.DIVISION_ID	, B.SITE_ID		, B.PLANT_ID		, B.FACTORY_ID
+					, B.ITEM_ID		, B.OPERATION_ID, B.LINE_ID		, B.ELECTRODE_TYPE	, B.WORK_MONTH
+					, B.DAY_QTY		, B.LANE_QTY	, B.UPDATE_ID	, SYSDATETIME()		, B.UPDATE_ID
+					, SYSDATETIME()
+					);
+
+
+			-- 전극 line assign 저장시 없는 환산자 use 정보 추가 저장... 20230313
+			MERGE INTO SCM_MST_ITEM_CONV_CALC_USE_SN A
+			USING (
+				SELECT DISTINCT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.OPERATION_ID, B.MODEL_ID, A.ITEM_ID, A.LINE_ID, A.ELECTRODE_TYPE, B.VERSION, A.UPDATE_ID
+				FROM ( 
+					SELECT DISTINCT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.OPERATION_ID, A.ITEM_ID, A.LINE_ID, A.ELECTRODE_TYPE, B.UPDATE_ID
+					FROM   SCM_MST_ITEM_LINE_ASSIGN_SN A WITH(NOLOCK), #TMP_SCP0049_SAVE_DATA B WITH(NOLOCK)
+					WHERE  1=1 
+					AND    A.COMPANY_ID     = B.COMPANY_ID
+					AND    A.DIVISION_ID    = B.DIVISION_ID
+					AND    A.SITE_ID        = B.SITE_ID
+					AND    A.PLANT_ID       = B.PLANT_ID
+					AND    A.FACTORY_ID     = B.FACTORY_ID
+					AND    A.ITEM_ID        = B.ITEM_ID
+					AND    A.OPERATION_ID   = B.OPERATION_ID
+					AND    A.LINE_ID        = B.LINE_ID
+					AND    A.ELECTRODE_TYPE = B.ELECTRODE_TYPE
+					AND    A.MONTH = CONVERT(VARCHAR(6), GETDATE(), 112) 
+					AND    A.ACTIVE_FLAG = 'Y' 
+					AND    A.PRIORITY IN (1,2,3,4,5,6,7,8) 
+					AND    A.OPERATION_ID = 'E2000'
+					AND    B.DATA_TABLE = 'LA'  -- SCM_ITEM_LINE_ASSIGN_M
+					AND    B.DATA_TYPE IN ( 'M' , 'Y')
+				) A 
+				INNER JOIN ( 
+					SELECT DISTINCT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.OPERATION AS OPERATION_ID 
+						 , A.MODEL_ID, A.ITEM_ID, A.VERSION, A.PROD_VERSION_TYPE, A.MAX_VER_FLAG, A.VERSION_TYPE  
+					FROM   SCM_MST_ITEM_CONV_CALC_SN A WITH(NOLOCK), #TMP_SCP0049_SAVE_DATA B WITH(NOLOCK)
+					WHERE  1=1 
+					AND    A.COMPANY_ID     = B.COMPANY_ID
+					AND    A.FACTORY_ID     = B.FACTORY_ID
+					AND    A.OPERATION      = B.OPERATION_ID
+					AND    A.ITEM_ID        = B.ITEM_ID
+					AND    A.OPERATION = 'E2000' 
+					AND    A.CATEGORY IN ( 'cell/batch', 'Jumbo Roll (cell/m)', 'Jumbo Roll (m/batch)', 'Lane Number', 'Pancake (cell/m)', 'Pancake (m/batch)' ) 
+					AND    B.DATA_TABLE = 'LA'  -- SCM_ITEM_LINE_ASSIGN_M
+					AND    B.DATA_TYPE IN ( 'M' , 'Y')
+				) B 
+				ON  1=1 
+				AND A.COMPANY_ID   = B.COMPANY_ID 
+				AND A.DIVISION_ID  = B.DIVISION_ID 
+				AND A.SITE_ID      = B.SITE_ID 
+				AND A.PLANT_ID     = B.PLANT_ID 
+				AND A.FACTORY_ID   = B.FACTORY_ID 
+				AND A.OPERATION_ID = B.OPERATION_ID 
+				AND A.ITEM_ID      = B.ITEM_ID 
+				INNER JOIN SCM_LINE_M_SN D WITH(NOLOCK) 
+				ON  1=1 
+				AND A.COMPANY_ID        = D.COMPANY_ID 
+				AND A.DIVISION_ID       = D.DIVISION_ID 
+				AND A.SITE_ID           = D.SITE_ID 
+				AND A.PLANT_ID          = D.PLANT_ID 
+				AND A.FACTORY_ID        = D.FACTORY_ID 
+				AND A.OPERATION_ID      = D.OPERATION_ID 
+				AND A.LINE_ID           = D.LINE_ID 
+				AND A.ELECTRODE_TYPE    = D.ELECTRODE_TYPE 
+				AND B.PROD_VERSION_TYPE = D.PROD_VERSION_TYPE 
+			) B
+			ON  A.FACTORY_ID = B.FACTORY_ID
+			AND A.MODEL_ID   = B.MODEL_ID
+			AND A.ITEM_ID    = B.ITEM_ID
+			AND A.LINE_ID    = B.LINE_ID
+			AND A.ELECTRODE_TYPE = B.ELECTRODE_TYPE
+			AND A.VERSION    = B.VERSION
+			WHEN NOT MATCHED THEN
+				INSERT (
+					COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, FACTORY_ID
+				  , OPERATION_ID, MODEL_ID, ITEM_ID
+				  , LINE_ID, ELECTRODE_TYPE
+				  , VERSION
+				  , ACTIVE_FLAG, DESCRIPTION
+				  , INSERT_ID, INSERT_TIME
+				  , UPDATE_ID, UPDATE_TIME
+				)
+				VALUES (
+					B.COMPANY_ID, B.DIVISION_ID, B.SITE_ID, B.PLANT_ID, B.FACTORY_ID
+				  , B.OPERATION_ID, B.MODEL_ID, B.ITEM_ID
+				  , B.LINE_ID, B.ELECTRODE_TYPE
+				  , B.VERSION
+				  , 'Y', NULL
+				  , B.UPDATE_ID, GETDATE()
+				  , B.UPDATE_ID, GETDATE()
+				)
+				;
+
+			
+			-- pancake master 에 lane 값 동기화...기존 lane 삭제 ... 20230331
+			DELETE [dbo].[SCM_ITEM_LANE_M_SN]
+			FROM [dbo].[SCM_ITEM_LANE_M_SN] A
+			JOIN (
+				SELECT DISTINCT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.ITEM_ID
+					 , ISNULL(B.PROD_VERSION_TYPE, 'GENERAL') AS PROD_VERSION_TYPE
+					 , A.LANE_QTY
+					 , A.UPDATE_ID
+				FROM #TMP_SCP0049_SAVE_DATA A, SCM_LINE_M_SN B WITH(NOLOCK)
+				WHERE 1=1
+				AND A.COMPANY_ID     = B.COMPANY_ID
+				AND A.DIVISION_ID    = B.DIVISION_ID
+				AND A.SITE_ID        = B.SITE_ID
+				AND A.PLANT_ID       = B.PLANT_ID
+				AND A.FACTORY_ID     = B.FACTORY_ID
+				AND A.OPERATION_ID   = B.OPERATION_ID
+				AND A.LINE_ID        = B.LINE_ID
+				AND A.ELECTRODE_TYPE = B.ELECTRODE_TYPE
+				AND A.DATA_TABLE = 'LA'  -- SCM_ITEM_LINE_ASSIGN_M
+				AND A.DATA_TYPE IN ( 'M' , 'Y')
+				AND A.OPERATION_ID IN ('E2000','E3000','E4000')
+			) B
+			ON	  A.COMPANY_ID        = B.COMPANY_ID
+			AND   A.DIVISION_ID       = B.DIVISION_ID
+			AND   A.SITE_ID           = B.SITE_ID
+			AND   A.PLANT_ID          = B.PLANT_ID
+			AND   A.ITEM_ID           = B.ITEM_ID
+			AND   A.FACTORY_ID        = B.FACTORY_ID
+			AND   A.PROD_VERSION_TYPE = B.PROD_VERSION_TYPE 
+			AND   A.LANE_QTY <> B.LANE_QTY -- 저장할 LANE 과 같지 않은 lane 삭제
+			WHERE 1=1
+			;
+			
+			-- pancake master 에 lane 값 동기화... 20230331
+			MERGE INTO [dbo].[SCM_ITEM_LANE_M_SN] A
+			USING (
+				--[E20250122-000782]lane 저장 오류 수정
+				SELECT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.ITEM_ID, A.PROD_VERSION_TYPE
+				     , MAX(A.LANE_QTY) AS LANE_QTY, MAX(A.UPDATE_ID) AS UPDATE_ID
+				FROM (
+					SELECT DISTINCT A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.ITEM_ID
+						 , ISNULL((CASE WHEN A.LANE_QTY  = '' THEN 0.0 ELSE CONVERT(NUMERIC(20,10) , A.LANE_QTY) END ),0) AS LANE_QTY
+						 , ISNULL(B.PROD_VERSION_TYPE, 'GENERAL') AS PROD_VERSION_TYPE
+						 , A.UPDATE_ID
+					FROM #TMP_SCP0049_SAVE_DATA A, SCM_LINE_M_SN B WITH(NOLOCK)
+					WHERE 1=1
+					AND A.COMPANY_ID     = B.COMPANY_ID
+					AND A.DIVISION_ID    = B.DIVISION_ID
+					AND A.SITE_ID        = B.SITE_ID
+					AND A.PLANT_ID       = B.PLANT_ID
+					AND A.FACTORY_ID     = B.FACTORY_ID
+					AND A.OPERATION_ID   = B.OPERATION_ID
+					AND A.LINE_ID        = B.LINE_ID
+					AND A.ELECTRODE_TYPE = B.ELECTRODE_TYPE
+					AND A.DATA_TABLE = 'LA'  -- SCM_ITEM_LINE_ASSIGN_M
+					AND A.DATA_TYPE IN ( 'M' , 'Y')
+					AND A.OPERATION_ID IN ('E2000','E3000','E4000')
+				) A
+				GROUP BY A.COMPANY_ID, A.DIVISION_ID, A.SITE_ID, A.PLANT_ID, A.FACTORY_ID, A.ITEM_ID, A.PROD_VERSION_TYPE
+			) B
+			ON  (
+					A.COMPANY_ID        = B.COMPANY_ID
+				AND A.DIVISION_ID       = B.DIVISION_ID
+				AND A.SITE_ID           = B.SITE_ID
+				AND A.PLANT_ID          = B.PLANT_ID
+				AND A.ITEM_ID           = B.ITEM_ID
+				AND A.FACTORY_ID        = B.FACTORY_ID
+				AND A.PROD_VERSION_TYPE = B.PROD_VERSION_TYPE 
+				AND A.LANE_QTY          = B.LANE_QTY 
+			)
+			WHEN MATCHED THEN
+				UPDATE SET A.ACTIVE_FLAG = 'Y'
+							, A.UPDATE_ID   = B.UPDATE_ID
+							, A.UPDATE_TIME = GETDATE()
+			WHEN NOT MATCHED THEN
+				INSERT (
+						COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, FACTORY_ID
+					, ITEM_ID, LANE_QTY
+					, SLIT_WIDTH
+					, MAIN_LANE_QTY, SUB_LANE_QTY, PATTERN_QTY
+					, HALF_SLIT_FLAG, FOIL_ID, ACTIVE_FLAG
+					, DESCRIPTION
+					, INSERT_ID, INSERT_TIME
+					, UPDATE_ID, UPDATE_TIME
+					, PC_ROLL_LENGTH, PC_ROLL_LENGTH_UOM
+					, GPLM_LANE_QTY, GPLM_MAIN_LANE_QTY, GPLM_SUB_LANE_QTY
+					, PROD_VERSION_TYPE
+					, JUMBO_ROLL_LENGTH
+					, GPLM_PC_ROLL_LENGTH, GPLM_JUMBO_ROLL_LENGTH
+				)
+				VALUES (
+						B.COMPANY_ID, B.DIVISION_ID, B.SITE_ID, B.PLANT_ID, B.FACTORY_ID
+					, B.ITEM_ID, B.LANE_QTY
+					, 0
+					, B.LANE_QTY, 0, 1
+					, 'N', NULL, 'Y'
+					, ''
+					, B.UPDATE_ID, GETDATE()
+					, B.UPDATE_ID, GETDATE()
+					, NULL, ''
+					, NULL, NULL, NULL
+					, B.PROD_VERSION_TYPE
+					, NULL
+					, NULL, NULL
+				)
+				;
+
+		END
+
+		-- LANE QTY 가 존재하지 않는 공정(E2000, E3000, E4000)
+		BEGIN
+			MERGE INTO SCM_MST_ITEM_LINE_ASSIGN_SN M
+			USING (
+					SELECT COMPANY_ID
+						 , DIVISION_ID
+						 , SITE_ID
+						 , PLANT_ID
+						 , FACTORY_ID
+						 , ITEM_ID
+						 , OPERATION_ID
+						 , LINE_ID
+						 , ELECTRODE_TYPE
+						 , (CASE WHEN LANE_QTY  = '' THEN 0.0 ELSE CONVERT(NUMERIC(20,10) , LANE_QTY) END ) AS LANE_QTY
+						 , C.BASIS_YYYYMM AS WORK_MONTH
+						 , DAY_QTY
+						 , UPDATE_ID
+					  FROM (SELECT COMPANY_ID
+								 , DIVISION_ID
+								 , SITE_ID
+								 , PLANT_ID
+								 , FACTORY_ID
+								 , ITEM_ID
+								 , OPERATION_ID
+								 , LINE_ID
+								 , ELECTRODE_TYPE
+								 , 0				AS LANE_QTY  -- 0으로 입력
+								 , DAY_NAME
+								 , ISNULL(CONVERT(INT,CONVERT(NUMERIC(20,10),DAY_QTY)),0) AS DAY_QTY
+								 , UPDATE_ID
+								 , DATA_TYPE
+							  FROM #TMP_SCP0049_SAVE_DATA
+							 WHERE DATA_TABLE = 'LA'  -- SCM_ITEM_LINE_ASSIGN_M
+							   AND DATA_TYPE IN ( 'M' , 'Y')
+							   AND OPERATION_ID NOT IN ('E2000')
+							   
+							) X
+					 JOIN (SELECT DISTINCT BASIS_YYYYMM , CALENDAR_YYYY
+							  FROM SCM_SYS_CALENDAR_M  WITH(NOLOCK)
+							  ) C
+						  ON  CASE WHEN DATA_TYPE = 'Y' THEN CALENDAR_YYYY
+								   WHEN DATA_TYPE = 'M' THEN BASIS_YYYYMM 
+							   END = X.DAY_NAME
+					)B
+				 ON M.COMPANY_ID			= B.COMPANY_ID
+				AND M.DIVISION_ID			= B.DIVISION_ID
+				AND M.SITE_ID				= B.SITE_ID
+				AND M.PLANT_ID				= B.PLANT_ID
+				AND M.FACTORY_ID			= B.FACTORY_ID
+				AND M.ITEM_ID				= B.ITEM_ID
+				AND M.OPERATION_ID			= B.OPERATION_ID
+				AND M.LINE_ID				= B.LINE_ID
+				AND M.ELECTRODE_TYPE		= B.ELECTRODE_TYPE
+				AND M.MONTH					= B.WORK_MONTH
+
+			WHEN MATCHED THEN
+				UPDATE SET
+					  PRIORITY		= B.DAY_QTY
+					, LANE_QTY		= B.LANE_QTY
+					, UPDATE_ID		= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+
+			WHEN NOT MATCHED THEN
+				INSERT(
+					  COMPANY_ID	, DIVISION_ID	, SITE_ID	, PLANT_ID		, FACTORY_ID
+					, ITEM_ID		, OPERATION_ID	, LINE_ID	, ELECTRODE_TYPE, MONTH
+					, PRIORITY		, LANE_QTY		, INSERT_ID	, INSERT_TIME	, UPDATE_ID
+					, UPDATE_TIME
+					)
+				VALUES  (
+					  B.COMPANY_ID	, B.DIVISION_ID	, B.SITE_ID		, B.PLANT_ID		, B.FACTORY_ID
+					, B.ITEM_ID		, B.OPERATION_ID, B.LINE_ID		, B.ELECTRODE_TYPE	, B.WORK_MONTH
+					, B.DAY_QTY		, B.LANE_QTY	, B.UPDATE_ID	, SYSDATETIME()		, B.UPDATE_ID
+					, SYSDATETIME()
+					);
+		END
+
+		
+		/* ############################################################ */
+		-- 1. LINE ASSIGN 정보의 일별 데이터를 추가/수정 한다.
+		-- 2. 월,년 데이터 수정은 별도의 테이블에 저장한다.
+		-- 3. LINE ASSIGN 은 LANE QTY 때문에 OPERATION 분리하여 수정한다.
+		/* ############################################################ */
+		--IF @v_line_cnt > 0
+		-- LANE QTY 가 존재하는 공정(E2000, E3000, E4000)
+
+		BEGIN
+			MERGE INTO SCM_MST_ITEM_LINE_ASSIGN_EXCEPT_SN M
+			USING (
+					SELECT COMPANY_ID
+						 , DIVISION_ID
+						 , SITE_ID
+						 , PLANT_ID
+						 , FACTORY_ID
+						 , ITEM_ID
+						 , OPERATION_ID
+						 , LINE_ID
+						 , ELECTRODE_TYPE
+						 , ISNULL((CASE WHEN LANE_QTY  = '' THEN 0.0 ELSE CONVERT(NUMERIC(20,10) , LANE_QTY) END ),0) AS LANE_QTY
+						 , DAY_NAME
+						 , ISNULL(CONVERT(INT,CONVERT(NUMERIC(20,10),DAY_QTY)),0) AS DAY_QTY
+						 , UPDATE_ID
+					  FROM #TMP_SCP0049_SAVE_DATA
+					 WHERE DATA_TABLE = 'LA'   -- SCM_ITEM_LINE_ASSIGN_M
+					   AND DATA_TYPE = 'D'   -- DAY
+					   AND OPERATION_ID IN ('E2000')
+					   
+					) B
+			 ON M.COMPANY_ID			= B.COMPANY_ID
+			AND M.DIVISION_ID			= B.DIVISION_ID
+			AND M.SITE_ID				= B.SITE_ID
+			AND M.PLANT_ID				= B.PLANT_ID
+			AND M.FACTORY_ID			= B.FACTORY_ID
+			AND M.ITEM_ID				= B.ITEM_ID
+			AND M.OPERATION_ID			= B.OPERATION_ID
+			AND M.LINE_ID				= B.LINE_ID
+			AND M.ELECTRODE_TYPE		= B.ELECTRODE_TYPE
+			AND ISNULL(M.LANE_QTY,0)	= ISNULL(B.LANE_QTY,0)
+			AND CONVERT(NVARCHAR(8),M.START_TIME,112)	= B.DAY_NAME
+
+			WHEN MATCHED THEN
+				UPDATE SET
+					  PRIORITY		= B.DAY_QTY
+					, UPDATE_ID		= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+
+			WHEN NOT MATCHED THEN
+				INSERT	(
+					  COMPANY_ID	, DIVISION_ID	, SITE_ID	, PLANT_ID			, FACTORY_ID
+					, ITEM_ID		, OPERATION_ID	, LINE_ID	, ELECTRODE_TYPE	, LANE_QTY
+					, START_TIME	, END_TIME
+					, PRIORITY		, INSERT_ID		, INSERT_TIME	, UPDATE_ID	, UPDATE_TIME
+					)
+				VALUES  (
+					  B.COMPANY_ID	, B.DIVISION_ID	, B.SITE_ID	, B.PLANT_ID		, B.FACTORY_ID
+					, B.ITEM_ID		, B.OPERATION_ID, B.LINE_ID	, B.ELECTRODE_TYPE	, B.LANE_QTY
+					, CONVERT(DATETIME,B.DAY_NAME)	, CONVERT(DATETIME,B.DAY_NAME)
+					, B.DAY_QTY		, B.UPDATE_ID	, SYSDATETIME()	, B.UPDATE_ID	, SYSDATETIME()
+				);
+		END
+
+		-- LANE QTY 가 존재하지 않는 공정(E2000, E3000, E4000)
+		BEGIN
+			MERGE INTO SCM_MST_ITEM_LINE_ASSIGN_EXCEPT_SN M
+			USING (
+					SELECT COMPANY_ID
+						 , DIVISION_ID
+						 , SITE_ID
+						 , PLANT_ID
+						 , FACTORY_ID
+						 , ITEM_ID
+						 , OPERATION_ID
+						 , LINE_ID
+						 , ELECTRODE_TYPE
+						 , 0					AS LANE_QTY
+						 , DAY_NAME
+						 , ISNULL(CONVERT(INT,CONVERT(NUMERIC(20,10),DAY_QTY)),0) AS DAY_QTY
+						 , UPDATE_ID
+					  FROM #TMP_SCP0049_SAVE_DATA
+					 WHERE DATA_TABLE = 'LA'   -- SCM_ITEM_LINE_ASSIGN_M
+					   AND DATA_TYPE = 'D'   -- DAY
+					   AND OPERATION_ID NOT IN ('E2000')
+					   
+					) B
+			 ON M.COMPANY_ID			= B.COMPANY_ID
+			AND M.DIVISION_ID			= B.DIVISION_ID
+			AND M.SITE_ID				= B.SITE_ID
+			AND M.PLANT_ID				= B.PLANT_ID
+			AND M.FACTORY_ID			= B.FACTORY_ID
+			AND M.ITEM_ID				= B.ITEM_ID
+			AND M.OPERATION_ID			= B.OPERATION_ID
+			AND M.LINE_ID				= B.LINE_ID
+			AND M.ELECTRODE_TYPE		= B.ELECTRODE_TYPE
+			AND CONVERT(NVARCHAR(8),M.START_TIME,112)	= B.DAY_NAME
+
+			WHEN MATCHED THEN
+				UPDATE SET
+					  PRIORITY		= B.DAY_QTY
+					, LANE_QTY		= B.LANE_QTY
+					, UPDATE_ID		= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+
+			WHEN NOT MATCHED THEN
+				INSERT	(
+					  COMPANY_ID	, DIVISION_ID	, SITE_ID	, PLANT_ID			, FACTORY_ID
+					, ITEM_ID		, OPERATION_ID	, LINE_ID	, ELECTRODE_TYPE	, LANE_QTY
+					, START_TIME	, END_TIME
+					, PRIORITY		, INSERT_ID		, INSERT_TIME	, UPDATE_ID	, UPDATE_TIME
+					)
+				VALUES  (
+					  B.COMPANY_ID	, B.DIVISION_ID	, B.SITE_ID	, B.PLANT_ID		, B.FACTORY_ID
+					, B.ITEM_ID		, B.OPERATION_ID, B.LINE_ID	, B.ELECTRODE_TYPE	, B.LANE_QTY
+					, CONVERT(DATETIME,B.DAY_NAME)	, CONVERT(DATETIME,B.DAY_NAME)
+					, B.DAY_QTY		, B.UPDATE_ID	, SYSDATETIME()	, B.UPDATE_ID	, SYSDATETIME()
+				);
+		END
+
+		/* ############################################################ */
+		-- 1. TACT TIME, DAILY CAPA  정보의 월,년도 데이터를 추가/저장 한다.
+		-- 2. 일별 데이터 수정은 별도의 테이블에 저장한다.
+		-- 3. TACT TIME 정보를 수정 했을 때 DAILY CAPA 값을 산출해서 저장한다.
+		-- 4. DAILY CAPA 정보를 수정 했을 때 TACT TIME 값을 산출해서 저장한다.
+		-- 5. TACT TIME 과 DAILY CAPA 데이터 산출을 위해 LOSS 테이블의 조회 후 임시 테이블에 저장한다.
+		/* ############################################################ */
+		--IF @v_tact_cnt > 0
+
+		BEGIN
+			-- LOSS UTIL 산출 임시 테이블 저장
+			INSERT INTO #TMP_SCP0049_SAVE_LOSS_UTIL_TACT
+			(
+				  COMPANY_ID
+				, DIVISION_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, OPERATION_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, WORK_MONTH
+				, LOSS_UTIL
+			)
+			SELECT A.COMPANY_ID
+				 , A.DIVISION_ID
+				 , A.SITE_ID
+				 , A.PLANT_ID
+				 , A.FACTORY_ID
+				 , A.OPERATION_ID
+				 , A.LINE_ID
+				 , A.ELECTRODE_TYPE
+				 , A.WORK_MONTH
+				 --, ROUND(EXP(SUM(ROUND(LOG(1-ISNULL(L.LOSS_RATE,0)),4))),4) AS LOSS_UTIL
+				 , 1-ROUND(SUM(ISNULL(LOSS_RATE,0)),4) AS UTIL
+			  FROM (SELECT DISTINCT
+						   T1.COMPANY_ID
+						 , T1.DIVISION_ID
+						 , T1.SITE_ID
+						 , T1.PLANT_ID
+						 , T1.FACTORY_ID
+						 , T1.OPERATION_ID
+						 , T1.LINE_ID
+						 , T1.ELECTRODE_TYPE
+						 , C.BASIS_YYYYMM		AS WORK_MONTH
+			          FROM #TMP_SCP0049_SAVE_DATA T1
+					  JOIN (SELECT BASIS_YYYYMM , CALENDAR_YYYY , BASIS_YYYYMMDD
+							  FROM SCM_SYS_CALENDAR_M  WITH(NOLOCK)
+							) C
+						ON CASE WHEN T1.DATA_TYPE = 'Y'	THEN CALENDAR_YYYY
+								WHEN T1.DATA_TYPE = 'M' THEN BASIS_YYYYMM
+								WHEN T1.DATA_TYPE = 'D'	THEN BASIS_YYYYMMDD
+							END = T1.DAY_NAME
+
+					  WHERE DATA_TABLE = 'T'   --  SCM_TACT_TIME_M
+					    AND DATA_TYPE IN ('Y','M','D')   -- YEAR , MONTH , DAY
+					) A
+
+			  JOIN SCM_LOSS_M_SN L WITH(NOLOCK)
+				ON L.COMPANY_ID		= A.COMPANY_ID
+			   AND L.DIVISION_ID	= A.DIVISION_ID
+			   AND L.SITE_ID		= A.SITE_ID
+			   AND L.PLANT_ID		= A.PLANT_ID
+			   AND L.FACTORY_ID		= A.FACTORY_ID
+			   AND L.OPERATION_ID	= A.OPERATION_ID
+			   AND L.LINE_ID		= A.LINE_ID
+			   AND L.ELECTRODE_TYPE	= A.ELECTRODE_TYPE
+			   AND L.WORK_MONTH		= A.WORK_MONTH
+
+			  JOIN (SELECT SEGMENT1	AS LOSS_CODE
+					  FROM SCM_SYS_LOOKUP_VALUE_SN  SSLV WITH(NOLOCK)
+					 WHERE LOOKUP_TYPE_CODE = 'CAPA_UI_LOSS_TYPE_DEFINIT'
+					   AND ATTRIBUTE5 = 'Y'
+					) B
+				ON L.LOSS_CODE	= B.LOSS_CODE
+
+			GROUP BY A.COMPANY_ID
+					, A.DIVISION_ID
+					, A.SITE_ID
+					, A.PLANT_ID
+					, A.FACTORY_ID
+					, A.OPERATION_ID
+					, A.LINE_ID
+					, A.ELECTRODE_TYPE
+					, A.WORK_MONTH
+					;
+
+			-- 데이터 추가/수정
+			MERGE INTO SCM_MST_TACT_TIME_SN M
+			USING (
+					SELECT COMPANY_ID
+						 , DIVISION_ID
+						 , SITE_ID
+						 , PLANT_ID
+						 , FACTORY_ID
+						 , ITEM_ID
+						 , OPERATION_ID
+						 , LINE_ID
+						 , ELECTRODE_TYPE
+						 , WORK_MONTH
+						 , UPDATE_ID
+						 , CASE WHEN TACT_DATA_TYPE = 'DAILY CAPA' AND ISNULL(CONVERT(NUMERIC(20,10),DAY_QTY),0) = 0 THEN 0
+								WHEN TACT_DATA_TYPE = 'DAILY CAPA' THEN 86400/CONVERT(NUMERIC(20,10),DAY_QTY) * ISNULL(LOSS_UTIL,1)
+								ELSE CONVERT(NUMERIC(20,10),DAY_QTY) END AS QTY_TACT
+						 , CASE WHEN TACT_DATA_TYPE = 'TACT TIME' AND ISNULL(CONVERT(NUMERIC(20,10),DAY_QTY),0) = 0 THEN 0
+								WHEN TACT_DATA_TYPE = 'TACT TIME' AND ISNULL(CONVERT(NUMERIC(20,10),DAY_QTY),0) > 0 THEN ROUND(86400/CONVERT(NUMERIC(20,10),DAY_QTY) * ISNULL(LOSS_UTIL,1), 0)
+								ELSE CONVERT(NUMERIC(20,10),DAY_QTY) END AS QTY_DAILY
+					  FROM (SELECT A.COMPANY_ID
+								 , A.DIVISION_ID
+								 , A.SITE_ID
+								 , A.PLANT_ID
+								 , A.FACTORY_ID
+								 , A.ITEM_ID
+								 , A.OPERATION_ID
+								 , A.LINE_ID
+								 , A.ELECTRODE_TYPE
+								 , C.BASIS_YYYYMM		AS WORK_MONTH
+								 , A.DAY_QTY
+								 , A.UPDATE_ID
+								 , X.LOSS_UTIL
+								 , LV.TACT_DATA_TYPE
+							  FROM #TMP_SCP0049_SAVE_DATA A
+							  JOIN (SELECT DISTINCT BASIS_YYYYMM , CALENDAR_YYYY
+									  FROM SCM_SYS_CALENDAR_M  WITH(NOLOCK)
+									) C
+								ON CASE WHEN DATA_TYPE = 'Y' THEN CALENDAR_YYYY
+										WHEN DATA_TYPE = 'M' THEN BASIS_YYYYMM
+								   END = A.DAY_NAME
+
+							  JOIN (SELECT LV.ATTRIBUTE1	AS TACT_DATA_TYPE
+										 , LV.SEGMENT2		AS PLANT_ID
+										 , LV.SEGMENT3		AS OPERATION_ID
+									  FROM SCM_SYS_LOOKUP_VALUE_SN LV WITH(NOLOCK)
+									 WHERE LV.LOOKUP_TYPE_CODE 	= 'CAPA_UI_CAPA_DEFINIT'
+									   AND LV.SEGMENT1 			= 'LA002'
+									   AND LV.ACTIVE_FLAG		= 'Y'
+									) LV
+								ON A.PLANT_ID		= LV.PLANT_ID
+							   AND A.OPERATION_ID	= LV.OPERATION_ID
+
+							  LEFT JOIN #TMP_SCP0049_SAVE_LOSS_UTIL_TACT X
+								ON A.COMPANY_ID		= X.COMPANY_ID
+							   AND A.DIVISION_ID	= X.DIVISION_ID
+							   AND A.SITE_ID		= X.SITE_ID
+							   AND A.PLANT_ID		= X.PLANT_ID
+							   AND A.FACTORY_ID		= X.FACTORY_ID
+							   AND A.OPERATION_ID	= X.OPERATION_ID
+							   AND A.LINE_ID		= X.LINE_ID
+							   AND A.ELECTRODE_TYPE	= X.ELECTRODE_TYPE
+							   AND A.DAY_NAME		= X.WORK_MONTH
+
+							 WHERE DATA_TABLE = 'T'   -- SCM_TACT_TIME_M
+							   AND DATA_TYPE IN ( 'M' , 'Y') 
+							) T
+					)B
+				 ON M.COMPANY_ID		= B.COMPANY_ID
+				AND M.DIVISION_ID		= B.DIVISION_ID
+				AND M.SITE_ID			= B.SITE_ID
+				AND M.PLANT_ID			= B.PLANT_ID
+				AND M.FACTORY_ID		= B.FACTORY_ID
+				AND M.ITEM_ID			= B.ITEM_ID
+				AND M.OPERATION_ID		= B.OPERATION_ID
+				AND M.LINE_ID			= B.LINE_ID
+				AND M.ELECTRODE_TYPE	= B.ELECTRODE_TYPE
+				AND M.MONTH				= B.WORK_MONTH
+
+			WHEN MATCHED THEN
+					UPDATE SET
+					  TACT_TIME		= B.QTY_TACT
+					, DAILY_CAPA	= CONVERT(INT,B.QTY_DAILY)
+					, UPDATE_ID		= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+
+			WHEN NOT MATCHED THEN
+			INSERT	(		
+					  COMPANY_ID, DIVISION_ID	, SITE_ID	, PLANT_ID		, FACTORY_ID
+					, ITEM_ID	, OPERATION_ID	, LINE_ID	, ELECTRODE_TYPE, MONTH
+					, TACT_TIME	, DAILY_CAPA
+					, INSERT_ID	, INSERT_TIME	, UPDATE_ID	, UPDATE_TIME
+					)
+			VALUES  (
+					  B.COMPANY_ID	, B.DIVISION_ID	, B.SITE_ID		, B.PLANT_ID		, B.FACTORY_ID
+					, B.ITEM_ID		, B.OPERATION_ID, B.LINE_ID		, B.ELECTRODE_TYPE	, B.WORK_MONTH
+					, B.QTY_TACT	, CONVERT(INT,B.QTY_DAILY)
+					, B.UPDATE_ID	, SYSDATETIME()	, B.UPDATE_ID	, SYSDATETIME()
+					);
+		END
+
+		/* ############################################################ */
+		-- 1. TACT TIME, DAILY CAPA  정보의 일별 데이터를 추가/저장 한다.
+		-- 2. 월별 년도별 데이터 수정은 별도의 테이블에 저장한다.
+		-- 3. TACT TIME 정보를 수정 했을 때 DAILY CAPA 값을 산출해서 저장한다.
+		-- 4. DAILY CAPA 정보를 수정 했을 때 TACT TIME 값을 산출해서 저장한다.
+		-- 5. TACT TIME 과 DAILY CAPA 데이터 산출을 위해 LOSS 테이블의 조회 후 임시 테이블에 저장한다.
+		/* ############################################################ */
+		--IF @v_tact_cnt > 0
+
+		BEGIN
+			-- 데이터 저장
+			MERGE INTO SCM_MST_TACT_TIME_EXCEPT_SN M
+			USING (
+					SELECT COMPANY_ID
+						 , DIVISION_ID
+						 , SITE_ID
+						 , PLANT_ID
+						 , FACTORY_ID
+						 , ITEM_ID
+						 , OPERATION_ID
+						 , LINE_ID
+						 , ELECTRODE_TYPE
+						 , DAY_NAME
+						 , UPDATE_ID
+						 , CASE WHEN TACT_DATA_TYPE = 'DAILY CAPA' AND ISNULL(CONVERT(NUMERIC(20,10),DAY_QTY),0) = 0 THEN 0
+								WHEN TACT_DATA_TYPE = 'DAILY CAPA' THEN 86400/CONVERT(NUMERIC(20,10),DAY_QTY) * ISNULL(LOSS_UTIL,1)
+								ELSE CONVERT(NUMERIC(20,10),DAY_QTY) END AS QTY_TACT
+						 , CASE WHEN TACT_DATA_TYPE = 'TACT TIME' AND ISNULL(CONVERT(NUMERIC(20,10),DAY_QTY),0) = 0 THEN 0
+								WHEN TACT_DATA_TYPE = 'TACT TIME' AND ISNULL(CONVERT(NUMERIC(20,10),DAY_QTY),0) > 0 THEN ROUND(86400/CONVERT(NUMERIC(20,10),DAY_QTY) * ISNULL(LOSS_UTIL,1), 0)
+								ELSE CONVERT(NUMERIC(20,10),DAY_QTY) END AS QTY_DAILY
+					  FROM (SELECT A.COMPANY_ID
+								 , A.DIVISION_ID
+								 , A.SITE_ID
+								 , A.PLANT_ID
+								 , A.FACTORY_ID
+								 , A.ITEM_ID
+								 , A.OPERATION_ID
+								 , A.LINE_ID
+								 , A.ELECTRODE_TYPE
+								 , A.DAY_NAME
+								 , A.DAY_QTY
+								 , A.UPDATE_ID
+								 , X.LOSS_UTIL
+								 , LV.TACT_DATA_TYPE
+							  FROM #TMP_SCP0049_SAVE_DATA A
+
+							  JOIN (SELECT LV.ATTRIBUTE1 AS TACT_DATA_TYPE
+										 , LV.SEGMENT2		AS PLANT_ID
+										 , LV.SEGMENT3		AS OPERATION_ID
+									  FROM SCM_SYS_LOOKUP_VALUE_SN LV WITH(NOLOCK)    -- 2020/11/18, khj79
+									 WHERE LV.LOOKUP_TYPE_CODE 	= 'CAPA_UI_CAPA_DEFINIT'
+									   AND LV.SEGMENT1 			= 'LA002'
+									   AND LV.ACTIVE_FLAG		= 'Y'
+									) LV
+								ON A.PLANT_ID		= LV.PLANT_ID
+							   AND A.OPERATION_ID	= LV.OPERATION_ID
+
+							  LEFT JOIN #TMP_SCP0049_SAVE_LOSS_UTIL_TACT X
+								ON A.COMPANY_ID				= X.COMPANY_ID
+							   AND A.DIVISION_ID			= X.DIVISION_ID
+							   AND A.SITE_ID				= X.SITE_ID
+							   AND A.PLANT_ID				= X.PLANT_ID
+							   AND A.FACTORY_ID				= X.FACTORY_ID
+							   AND A.OPERATION_ID			= X.OPERATION_ID
+							   AND A.LINE_ID				= X.LINE_ID
+							   AND A.ELECTRODE_TYPE			= X.ELECTRODE_TYPE
+							   AND SUBSTRING(A.DAY_NAME,1,6)= X.WORK_MONTH
+
+							 WHERE DATA_TABLE = 'T'   -- SCM_TACT_TIME_M
+							   AND DATA_TYPE = 'D'
+						) T
+					) B
+				 ON M.COMPANY_ID							= B.COMPANY_ID
+				AND M.DIVISION_ID							= B.DIVISION_ID
+				AND M.SITE_ID								= B.SITE_ID
+				AND M.PLANT_ID								= B.PLANT_ID
+				AND M.FACTORY_ID							= B.FACTORY_ID
+				AND M.ITEM_ID								= B.ITEM_ID
+				AND M.OPERATION_ID							= B.OPERATION_ID
+				AND M.LINE_ID								= B.LINE_ID
+				AND M.ELECTRODE_TYPE						= B.ELECTRODE_TYPE
+				AND CONVERT(NVARCHAR(8),M.START_TIME,112)	= B.DAY_NAME
+
+			WHEN MATCHED THEN
+				UPDATE SET
+					  TACT_TIME		= B.QTY_TACT
+					, DAILY_CAPA	= CONVERT(INT,B.QTY_DAILY)
+					, UPDATE_ID		= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+
+			WHEN NOT MATCHED THEN
+				INSERT	(		
+							  COMPANY_ID, DIVISION_ID	, SITE_ID	, PLANT_ID			, FACTORY_ID
+							, ITEM_ID	, OPERATION_ID	, LINE_ID	, ELECTRODE_TYPE	, START_TIME
+							, END_TIME	, TACT_TIME		, DAILY_CAPA
+							, INSERT_ID	, INSERT_TIME	, UPDATE_ID	, UPDATE_TIME
+						)
+				VALUES  (
+							  B.COMPANY_ID					, B.DIVISION_ID	, B.SITE_ID		, B.PLANT_ID		, B.FACTORY_ID
+							, B.ITEM_ID						, B.OPERATION_ID, B.LINE_ID		, B.ELECTRODE_TYPE	, CONVERT(DATETIME,B.DAY_NAME)
+							, CONVERT(DATETIME,B.DAY_NAME)	, B.QTY_TACT	, CONVERT(INT,B.QTY_DAILY)
+							, B.UPDATE_ID					, SYSDATETIME()	, B.UPDATE_ID	, SYSDATETIME()
+						)
+			;
+		END
+
+		/* ############################################################ */
+		-- 1. YIELD 정보의 월,년도 데이터를 추가/수정 한다.
+		-- 2. 일별 데이터 수정은 별도의 테이블에 저장한다.
+		/* ############################################################ */
+		--IF @v_yield_cnt > 0
+		BEGIN
+			MERGE INTO SCM_MST_YIELD_SN M
+			USING (
+					SELECT COMPANY_ID
+						 , DIVISION_ID
+						 , SITE_ID
+						 , PLANT_ID
+						 , FACTORY_ID
+						 , ITEM_ID
+						 , OPERATION_ID
+						 , LINE_ID
+						 , C.BASIS_YYYYMM	AS WORK_MONTH
+						 , X.DAY_QTY
+						 , X.UPDATE_ID
+					  FROM (SELECT COMPANY_ID
+								 , DIVISION_ID
+								 , SITE_ID
+								 , PLANT_ID
+								 , FACTORY_ID
+								 , ITEM_ID
+								 , OPERATION_ID
+								 , LINE_ID
+								 , DAY_NAME
+								 , DAY_QTY
+								 , DATA_TYPE
+								 , UPDATE_ID
+							  FROM #TMP_SCP0049_SAVE_DATA
+							 WHERE DATA_TABLE = 'Y'   -- SCM_YIELD_M
+							   AND DATA_TYPE IN ( 'M' , 'Y')
+								) X
+					    JOIN (SELECT DISTINCT BASIS_YYYYMM , CALENDAR_YYYY
+							  FROM SCM_SYS_CALENDAR_M WITH(NOLOCK)
+							  ) C
+						  ON  CASE WHEN DATA_TYPE = 'Y' THEN CALENDAR_YYYY
+								   WHEN DATA_TYPE = 'M' THEN BASIS_YYYYMM 
+							   END = X.DAY_NAME
+					) B
+				 ON M.COMPANY_ID	= B.COMPANY_ID
+				AND M.DIVISION_ID	= B.DIVISION_ID
+				AND M.SITE_ID		= B.SITE_ID
+				AND M.PLANT_ID		= B.PLANT_ID
+				AND M.FACTORY_ID	= B.FACTORY_ID
+				AND M.ITEM_ID		= B.ITEM_ID
+				AND M.OPERATION_ID	= B.OPERATION_ID
+				AND M.LINE_ID		= B.LINE_ID
+				AND M.MONTH			= B.WORK_MONTH
+
+			WHEN MATCHED THEN
+				UPDATE SET
+					  YIELD			= CONVERT(NUMERIC(10,6),B.DAY_QTY) / 100
+					, UPDATE_ID		= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+
+			WHEN NOT MATCHED THEN
+				INSERT (
+					  COMPANY_ID	, DIVISION_ID	, SITE_ID	, PLANT_ID	, FACTORY_ID
+					, ITEM_ID		, OPERATION_ID	, LINE_ID	, MONTH		, YIELD
+					, INSERT_ID		, INSERT_TIME	, UPDATE_ID	, UPDATE_TIME
+					)
+				VALUES  (
+					  B.COMPANY_ID	, B.DIVISION_ID	, B.SITE_ID	, B.PLANT_ID	, B.FACTORY_ID
+					, B.ITEM_iD		, B.OPERATION_ID, B.LINE_ID	, B.WORK_MONTH	, CONVERT(NUMERIC(10,6),B.DAY_QTY) /100
+					, B.UPDATE_ID	, SYSDATETIME()	, B.UPDATE_ID	, SYSDATETIME()
+					);
+		END
+
+		/* ############################################################ */
+		-- 1. YIELD 정보의 일별 데이터를 추가/수정 한다.
+		-- 2. 월,년 데이터 수정은 별도의 테이블에 저장한다.
+		/* ############################################################ */
+		--IF @v_yield_cnt > 0
+
+		BEGIN
+			MERGE INTO SCM_MST_YIELD_EXCEPT_SN M
+			USING (
+					SELECT COMPANY_ID
+						 , DIVISION_ID
+						 , SITE_ID
+						 , PLANT_ID
+						 , FACTORY_ID
+						 , ITEM_ID
+						 , OPERATION_ID
+						 , LINE_ID
+						 , DAY_NAME
+						 , DAY_QTY
+						 , UPDATE_ID
+					  FROM #TMP_SCP0049_SAVE_DATA
+					 WHERE DATA_TABLE = 'Y'   -- SCM_YIELD_M
+					   AND DATA_TYPE  = 'D'
+					   AND (CASE WHEN (DAY_QTY IS NULL OR DAY_QTY IN ('','0')) THEN 0 ELSE CONVERT(NUMERIC(20,10),DAY_QTY) END) > 0 -- [E20240927-001617]Daily Yield 삭제 기능 추가
+					) B
+			   ON M.COMPANY_ID		= B.COMPANY_ID
+			  AND M.DIVISION_ID		= B.DIVISION_ID
+			  AND M.SITE_ID			= B.SITE_ID
+			  AND M.PLANT_ID		= B.PLANT_ID
+			  AND M.FACTORY_ID		= B.FACTORY_ID
+			  AND M.ITEM_ID			= B.ITEM_ID
+			  AND M.OPERATION_ID	= B.OPERATION_ID
+			  AND M.LINE_ID			= B.LINE_ID
+			  AND CONVERT(NVARCHAR(8),M.START_TIME,112)	= B.DAY_NAME
+
+			WHEN MATCHED THEN
+				UPDATE SET
+					  YIELD			= CONVERT(NUMERIC(20,10),B.DAY_QTY) /100
+					, UPDATE_ID		= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+
+			WHEN NOT MATCHED THEN
+				INSERT(
+					  COMPANY_ID, DIVISION_ID	, SITE_ID	, PLANT_ID	, FACTORY_ID
+					, ITEM_ID	, OPERATION_ID	, LINE_ID	, START_TIME, END_TIME
+					, YIELD
+					, INSERT_ID	, INSERT_TIME	, UPDATE_ID	, UPDATE_TIME
+					)
+				VALUES  (
+					  B.COMPANY_ID	, B.DIVISION_ID	, B.SITE_ID		, B.PLANT_ID					, B.FACTORY_ID
+					, B.ITEM_iD		, B.OPERATION_ID, B.LINE_ID		,  CONVERT(DATETIME,B.DAY_NAME)	, CONVERT(DATETIME,B.DAY_NAME)
+					, CONVERT(NUMERIC(20,10),B.DAY_QTY) / 100
+					, B.UPDATE_ID	, SYSDATETIME()	, B.UPDATE_ID	, SYSDATETIME()
+					);
+
+			
+			-- [E20240927-001617]Daily Yield 삭제 기능 추가
+			DELETE FROM SCM_MST_YIELD_EXCEPT_SN
+			FROM SCM_MST_YIELD_EXCEPT_SN M
+			JOIN #TMP_SCP0049_SAVE_DATA B
+			   ON M.COMPANY_ID		= B.COMPANY_ID
+			  AND M.DIVISION_ID		= B.DIVISION_ID
+			  AND M.SITE_ID			= B.SITE_ID
+			  AND M.PLANT_ID		= B.PLANT_ID
+			  AND M.FACTORY_ID		= B.FACTORY_ID
+			  AND M.ITEM_ID			= B.ITEM_ID
+			  AND M.OPERATION_ID	= B.OPERATION_ID
+			  AND M.LINE_ID			= B.LINE_ID
+			  AND CONVERT(NVARCHAR(8),M.START_TIME,112)	= B.DAY_NAME
+			  WHERE 1=1
+			  AND B.DATA_TABLE = 'Y'   -- SCM_YIELD_M
+			  AND B.DATA_TYPE  = 'D'
+			  AND (CASE WHEN (DAY_QTY IS NULL OR DAY_QTY IN ('','0')) THEN 0 ELSE CONVERT(NUMERIC(20,10),DAY_QTY) END) = 0
+			  ;
+
+		END
+		
+		
+		/* ############################################################ */
+		-- LINE ASSIGN 삭제(TACT TIME , YIELD 삭제 동기화)
+		/* ############################################################ */
+		DECLARE @SCP0049_DELETE AS DBO.SCP0049;
+
+		INSERT INTO @SCP0049_DELETE
+		SELECT *
+		  FROM @SCP0049_INC_VIRTAUL_LINE T	-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : @SCP0049를 @SCP0049_INC_VIRTAUL_LINE로 변경 적용 (Real+Virtual) 
+		 WHERE T.P_DATA_TABLE = 'LA'
+		   AND T.P_DATA_TYPE  <> 'LQ'
+		   AND ISNULL(CONVERT(INT,CONVERT(NUMERIC(20,10),P_DAY_QTY)),0) = 9
+		;
+
+
+		EXEC [dbo].[PR_SCP_CAPA_LINE_ASSIGN_DELETE_DATASET] @SCP0049_DELETE ;
+
+		/* ############################################################ */
+		-- 1. LOSS 'No-Run' 데이터가 수정되면 TACT TIME 과 DAILY CAPA 산출 값이 달라진다.
+		-- 2. SCM_MST_TACT_TIME_SN , SCM_MST_TACT_TIME_EXCEPT_SN 값을 수정한다.
+		/* ############################################################ */
+		--IF @v_loss_cnt > 0
+		BEGIN
+			SELECT @v_mod_cnt = COUNT(1)
+			  FROM #TMP_SCP0049_SAVE_DATA 
+			 WHERE DATA_TABLE = 'L'   -- SCM_LOSS_M
+			   AND DATA_TYPE NOT IN ('CF','LQ')
+			   AND LOSS_CODE <> 'EL009'  -- No-Run < Model Change 제외
+
+			IF @v_mod_cnt > 0
+			BEGIN
+				/* ############################################################ */
+				-- 1. TACT TIME, DAILY CAPA  정보의 일별 데이터를 추가/저장 한다.
+				-- 2. 월별 년도별 데이터 수정은 별도의 테이블에 저장한다.
+				-- 3. TACT TIME 정보를 수정 했을 때 DAILY CAPA 값을 산출해서 저장한다.
+				-- 4. DAILY CAPA 정보를 수정 했을 때 TACT TIME 값을 산출해서 저장한다.
+				-- 5. TACT TIME 과 DAILY CAPA 데이터 산출을 위해 LOSS 테이블의 조회 후 임시 테이블에 저장한다.
+				/* ############################################################ */
+			
+				-- LOSS UTIL 임시 테이블 저장
+				INSERT INTO #TMP_SCP0049_SAVE_LOSS_UTIL_LOSS
+				(
+					  COMPANY_ID
+					, DIVISION_ID
+					, SITE_ID
+					, PLANT_ID
+					, FACTORY_ID
+					, OPERATION_ID
+					, LINE_ID
+					, ELECTRODE_TYPE
+					, WORK_MONTH
+					, TACT_DATA_TYPE
+					, LOSS_UTIL
+					, UPDATE_ID
+				)
+				SELECT A.COMPANY_ID
+					 , A.DIVISION_ID
+					 , A.SITE_ID
+					 , A.PLANT_ID
+					 , A.FACTORY_ID
+					 , A.OPERATION_ID
+					 , A.LINE_ID
+					 , A.ELECTRODE_TYPE
+					 , A.WORK_MONTH
+					 , LV.TACT_DATA_TYPE
+					 --, ROUND(EXP(SUM(ROUND(LOG(1-ISNULL(L.LOSS_RATE,0)),4))),4) AS LOSS_UTIL
+					 , 1-ROUND(SUM(ISNULL(LOSS_RATE,0)),4) AS UTIL
+					 , A.UPDATE_ID
+				  FROM (SELECT DISTINCT 
+							  COMPANY_ID
+							, DIVISION_ID
+							, SITE_ID
+							, PLANT_ID
+							, FACTORY_ID
+							, OPERATION_ID
+							, LINE_ID
+							, ELECTRODE_TYPE
+							, BASIS_YYYYMM	 AS WORK_MONTH
+							, UPDATE_ID
+						  FROM #TMP_SCP0049_SAVE_DATA X
+							 
+						  JOIN (SELECT DISTINCT BASIS_YYYYMM , CALENDAR_YYYY
+								  FROM SCM_SYS_CALENDAR_M  WITH(NOLOCK)
+							  ) C
+						    ON  CASE WHEN X.DATA_TYPE = 'Y' THEN CALENDAR_YYYY
+									 WHEN X.DATA_TYPE = 'M' THEN BASIS_YYYYMM 
+								END = X.DAY_NAME
+						WHERE X.DATA_TABLE = 'L'   -- SCM_LOSS_M
+						  AND DATA_TYPE NOT IN ('CF','LQ')
+						  AND X.LOSS_CODE <> 'EL009'  -- No-Run < Model Change 제외
+						) A
+
+				  JOIN SCM_LOSS_M_SN L WITH(NOLOCK)     -- LOSS UTIL 값 조회
+					ON L.COMPANY_ID		= A.COMPANY_ID
+				   AND L.DIVISION_ID	= A.DIVISION_ID
+				   AND L.SITE_ID		= A.SITE_ID
+				   AND L.PLANT_ID		= A.PLANT_ID
+				   AND L.FACTORY_ID		= A.FACTORY_ID
+				   AND L.OPERATION_ID	= A.OPERATION_ID
+				   AND L.LINE_ID		= A.LINE_ID
+				   AND L.ELECTRODE_TYPE	= A.ELECTRODE_TYPE
+				   AND L.WORK_MONTH		= A.WORK_MONTH
+
+				  JOIN (SELECT SEGMENT1	AS LOSS_CODE
+						  FROM SCM_SYS_LOOKUP_VALUE_SN  SSLV WITH(NOLOCK)
+						 WHERE LOOKUP_TYPE_CODE = 'CAPA_UI_LOSS_TYPE_DEFINIT'
+						   AND ATTRIBUTE5 = 'Y'
+						) B
+					ON L.LOSS_CODE	= B.LOSS_CODE
+
+				  JOIN (SELECT LV.ATTRIBUTE1	AS TACT_DATA_TYPE
+							 , LV.SEGMENT2		AS PLANT_ID
+							 , LV.SEGMENT3		AS OPERATION_ID
+						  FROM SCM_SYS_LOOKUP_VALUE_SN LV WITH(NOLOCK)   -- TACT TIME , DAILY CAPA 조회
+						 WHERE LV.LOOKUP_TYPE_CODE 	= 'CAPA_UI_CAPA_DEFINIT'
+						   AND LV.SEGMENT1 			= 'LA002'
+						   AND LV.ACTIVE_FLAG		= 'Y'
+						) LV
+					ON A.PLANT_ID		= LV.PLANT_ID
+				   AND A.OPERATION_ID	= LV.OPERATION_ID
+
+				GROUP BY A.COMPANY_ID
+						, A.DIVISION_ID
+						, A.SITE_ID
+						, A.PLANT_ID
+						, A.FACTORY_ID
+						, A.OPERATION_ID
+						, A.LINE_ID
+						, A.ELECTRODE_TYPE
+						, A.WORK_MONTH
+						, LV.TACT_DATA_TYPE
+						, A.UPDATE_ID;
+
+			/* ############################################################ */
+			-- 이력저장
+			/* ############################################################ */
+			DECLARE @SCP0049_LOSS AS DBO.SCP0049 ;
+
+			INSERT INTO @SCP0049_LOSS
+			(
+				  P_DATA_TABLE
+				, P_DATA_TYPE
+				, P_DIVISION_ID
+				, P_COMPANY_ID
+				, P_SITE_ID
+				, P_PLANT_ID
+				, P_FACTORY_ID
+				, P_LINE_ID
+				, P_ELECTRODE_TYPE
+				, P_OPERATION_ID
+				, P_ITEM_ID
+				, P_DAY_NAME
+				, P_UPDATE_ID
+			)
+			SELECT 'T'				AS DATA_TABLE
+				 , 'M'				AS DATA_TYPE
+				 , M.DIVISION_ID
+				 , M.COMPANY_ID
+				 , M.SITE_ID
+				 , M.PLANT_ID
+				 , M.FACTORY_ID
+				 , M.LINE_ID
+				 , M.ELECTRODE_TYPE
+				 , M.OPERATION_ID
+				 , M.ITEM_ID		AS ITEM_ID
+				 , B.WORK_MONTH		AS DAY_NAME
+				 , B.UPDATE_ID
+			  FROM #TMP_SCP0049_SAVE_LOSS_UTIL_LOSS B
+			  JOIN SCM_MST_TACT_TIME_SN M WITH(NOLOCK)
+			    ON M.COMPANY_ID		= B.COMPANY_ID
+				AND M.DIVISION_ID		= B.DIVISION_ID
+				AND M.SITE_ID			= B.SITE_ID
+				AND M.PLANT_ID			= B.PLANT_ID
+				AND M.FACTORY_ID		= B.FACTORY_ID
+				AND M.OPERATION_ID		= B.OPERATION_ID
+				AND M.LINE_ID			= B.LINE_ID
+				AND M.ELECTRODE_TYPE	= B.ELECTRODE_TYPE
+				AND M.MONTH				= B.WORK_MONTH
+			;
+
+
+			INSERT INTO @SCP0049_LOSS
+			(
+				  P_DATA_TABLE
+				, P_DATA_TYPE
+				, P_DIVISION_ID
+				, P_COMPANY_ID
+				, P_SITE_ID
+				, P_PLANT_ID
+				, P_FACTORY_ID
+				, P_LINE_ID
+				, P_ELECTRODE_TYPE
+				, P_OPERATION_ID
+				, P_ITEM_ID
+				, P_DAY_NAME
+				, P_UPDATE_ID
+			)
+			SELECT 'T'				AS DATA_TABLE
+				 , 'D'				AS DATA_TYPE
+				 , M.DIVISION_ID
+				 , M.COMPANY_ID
+				 , M.SITE_ID
+				 , M.PLANT_ID
+				 , M.FACTORY_ID
+				 , M.LINE_ID
+				 , M.ELECTRODE_TYPE
+				 , M.OPERATION_ID
+				 , M.ITEM_ID								AS ITEM_ID
+				 , CONVERT(VARCHAR(8),M.START_TIME,112)		AS DAY_NAME
+				 , B.UPDATE_ID
+			  FROM #TMP_SCP0049_SAVE_LOSS_UTIL_LOSS B
+			  JOIN SCM_MST_TACT_TIME_EXCEPT_SN M WITH(NOLOCK)
+			    ON M.COMPANY_ID							= B.COMPANY_ID
+			   AND M.DIVISION_ID						= B.DIVISION_ID
+			   AND M.SITE_ID							= B.SITE_ID
+			   AND M.PLANT_ID							= B.PLANT_ID
+			   AND M.FACTORY_ID							= B.FACTORY_ID
+			   AND M.OPERATION_ID						= B.OPERATION_ID
+			   AND M.LINE_ID							= B.LINE_ID
+			   AND M.ELECTRODE_TYPE						= B.ELECTRODE_TYPE
+			   AND CONVERT(VARCHAR(6),M.START_TIME,112)	= B.WORK_MONTH
+			;
+
+			EXEC [dbo].[PR_SCP_CAPA_HIST_DATASET] @SCP0049_LOSS;
+				
+						
+			-- 데이터 추가/수정
+			MERGE INTO SCM_MST_TACT_TIME_SN M
+			USING (
+					SELECT COMPANY_ID
+						 , DIVISION_ID
+						 , SITE_ID
+						 , PLANT_ID
+						 , FACTORY_ID
+						 , OPERATION_ID
+						 , LINE_ID
+						 , ELECTRODE_TYPE
+						 , WORK_MONTH
+						 , LOSS_UTIL
+						 , TACT_DATA_TYPE
+						 , UPDATE_ID
+					  FROM #TMP_SCP0049_SAVE_LOSS_UTIL_LOSS
+					)B
+				 ON M.COMPANY_ID		= B.COMPANY_ID
+				AND M.DIVISION_ID		= B.DIVISION_ID
+				AND M.SITE_ID			= B.SITE_ID
+				AND M.PLANT_ID			= B.PLANT_ID
+				AND M.FACTORY_ID		= B.FACTORY_ID
+				AND M.OPERATION_ID		= B.OPERATION_ID
+				AND M.LINE_ID			= B.LINE_ID
+				AND M.ELECTRODE_TYPE	= B.ELECTRODE_TYPE
+				AND M.MONTH				= B.WORK_MONTH
+
+				WHEN MATCHED THEN
+					UPDATE SET
+					  TACT_TIME		=  CASE WHEN B.TACT_DATA_TYPE = 'DAILY CAPA' AND ISNULL(M.DAILY_CAPA,0) = 0 THEN 0
+											WHEN B.TACT_DATA_TYPE = 'DAILY CAPA' THEN 86400/M.DAILY_CAPA * ISNULL(B.LOSS_UTIL,1)
+											ELSE M.TACT_TIME END
+					, DAILY_CAPA	=  CONVERT(INT,(CASE WHEN B.TACT_DATA_TYPE = 'TACT TIME' AND ISNULL(M.TACT_TIME,0) = 0 THEN 0
+														WHEN B.TACT_DATA_TYPE = 'TACT TIME' AND ISNULL(M.TACT_TIME,0) > 0 THEN ROUND(86400/M.TACT_TIME * ISNULL(B.LOSS_UTIL,1), 0)
+														ELSE M.DAILY_CAPA END
+														))
+					, UPDATE_ID		= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+			;
+
+
+			-- 데이터 저장
+			MERGE INTO SCM_MST_TACT_TIME_EXCEPT_SN M
+			USING (
+					SELECT COMPANY_ID
+						 , DIVISION_ID
+						 , SITE_ID
+						 , PLANT_ID
+						 , FACTORY_ID
+						 , OPERATION_ID
+						 , LINE_ID
+						 , ELECTRODE_TYPE
+						 , WORK_MONTH
+						 , LOSS_UTIL
+						 , TACT_DATA_TYPE
+						 , UPDATE_ID
+					  FROM #TMP_SCP0049_SAVE_LOSS_UTIL_LOSS
+					) B
+				 ON M.COMPANY_ID							= B.COMPANY_ID
+				AND M.DIVISION_ID							= B.DIVISION_ID
+				AND M.SITE_ID								= B.SITE_ID
+				AND M.PLANT_ID								= B.PLANT_ID
+				AND M.FACTORY_ID							= B.FACTORY_ID
+				AND M.OPERATION_ID							= B.OPERATION_ID
+				AND M.LINE_ID								= B.LINE_ID
+				AND M.ELECTRODE_TYPE						= B.ELECTRODE_TYPE
+				AND CONVERT(VARCHAR(6),M.START_TIME,112)	= B.WORK_MONTH
+
+			WHEN MATCHED THEN
+				UPDATE SET
+					  TACT_TIME		=  CASE WHEN B.TACT_DATA_TYPE = 'DAILY CAPA' AND ISNULL(M.DAILY_CAPA,0) = 0 THEN 0
+											WHEN B.TACT_DATA_TYPE = 'DAILY CAPA' THEN 86400/M.DAILY_CAPA * ISNULL(B.LOSS_UTIL,1)
+											ELSE M.TACT_TIME END
+					, DAILY_CAPA	=  CONVERT(INT , (CASE WHEN B.TACT_DATA_TYPE = 'TACT TIME' AND ISNULL(M.TACT_TIME,0) = 0 THEN 0
+															WHEN B.TACT_DATA_TYPE = 'TACT TIME' AND ISNULL(M.TACT_TIME,0) > 0 THEN ROUND(86400/M.TACT_TIME * ISNULL(B.LOSS_UTIL,1), 0)
+															ELSE M.DAILY_CAPA END
+													 ))
+					, UPDATE_ID		= B.UPDATE_ID
+					, UPDATE_TIME	= sysdatetime()
+					;
+			END
+
+		END
+			
+		COMMIT TRAN;
+
+		SELECT @v_mod_cnt = COUNT(1)
+		  FROM #TMP_SCP0049_SAVE_DATA  -- 2025.12.26 End [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : 적용 건수 오류 수정 :  @SCP0049_INC_VIRTAUL_LINE	-- [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선 : @SCP0049를 @SCP0049_INC_VIRTAUL_LINE로 변경 적용 (Real+Virtual) 
+		;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @v_mod_cnt AS result_cnt ;
+
+	END TRY
+
+	BEGIN CATCH 
+
+		  if (xact_state() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+
+		  BEGIN
+			INSERT INTO scm_sys_log_batch (program_name,log_type,log_count,log_message,description,event_date,creation_date,created_by,last_update_date,last_updated_by)
+			VALUES (ERROR_PROCEDURE(),'ERROR',NULL,ERROR_MESSAGE(),NULL,SYSDATETIME(),SYSDATETIME(),ERROR_PROCEDURE(),SYSDATETIME(),ERROR_PROCEDURE());
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code
+		  ,'[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE() as err_message;
+		END CATCH;
+
+		SET @v_log_type = 'END';
+		SET @v_log_message = '########## END of procedure ##########';
+		SET @v_description = '';
+		SET @d_event_date = SYSDATETIME();
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+	END
+

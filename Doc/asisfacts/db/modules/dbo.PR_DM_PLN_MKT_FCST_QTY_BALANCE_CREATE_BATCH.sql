@@ -1,0 +1,686 @@
+﻿
+
+
+
+
+
+
+
+/*
+ * Program ID   : PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE_BATCH
+ * Description  : DMF0003_SAVE_MKT_FCST 저장후수행되는 vmi, BALANCE등 생성 로직만 별도프로시져로 1시간단위 배치작업으로 수행하기 위함
+ *                
+ *                ** 실행파라메터 **
+ *                @p_division_id = '40'   <= 하나의 DIVISION_ID 만 수행됨
+ *                @p_division_id = 'ALL'  <= 3개의 DIVISION_ID가 CURSOR로 순차적으로 수행됨
+ *
+ * Program History
+ *============================================================================================================
+ *   Date       In Charge              Description
+ *============================================================================================================
+ * 2018.07.30   KHSONG   Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * -----------------------------------------------------------------------------------------------------------
+ * 20180805  KHSONG 작업대상을 현재시간기준 2시간내 수정된 데이터를 기준으로함
+ * 20180806  KHSONG 2018년 10월 scp오픈전까지 vmi값이 존재하지않아 주석처리함 (ui에서 vmi RTF를 수동으로 입력가능하도록함)
+ * 20180807  KHSONG item_id 단위로 LOOP수행되도록 로직 수정
+ * 20181002  KHSONG PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE 프로시져 호출전용으로 대상만 전달하는 방식으로 수정
+ * 2020/09/09     P.C.I		[C20200909-000203] LOG 표준화 적용
+ * 2022.12.02		hwi1993		[C20221104-000430] UC법인 MKT FCST화면의 'Balance' Measure 로직 변경 요청의 件
+ * 2023-01-17   chano0612   [E20230112-000310] GSCM 자동차사업부 시스템 상 MKT FCST 입력을 위한 기능변경 건 - 선박BIZ건
+ * 2025-01-21   KANG.H.J    [PJ2024-50611] DM_PLN_RTF_ALLOCATION 동기화 - 선박BIZ건
+ * 2025-04-08	KANG.H.J	[PJ2025-50017] 소형 매출계획 동기화 개선 - DM_PLN_RTF_ALLOCATION 삭제처리
+ * 2025-05-21   KANG.H.J	[PJ2025-50188] CELL_PROD_SITE_ID 추가 - RTF_BALANCE 계산시 40 사업부와 통일 필요 (40 : CELL_PROD_SITE_ID / 그 외 : '-' )
+ */
+
+CREATE PROCEDURE [dbo].[PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE_BATCH]
+
+	--Add the parameters for the stored procedure here
+	@p_division_id				NVARCHAR(MAX)
+    --,@p_plan_id                  NVARCHAR(MAX)	
+
+AS
+
+BEGIN
+    SET NOCOUNT ON; 
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET XACT_ABORT ON;
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150) = 'PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE_BATCH';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER = 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+    DECLARE @c_division_id                NVARCHAR(MAX);
+    DECLARE @plan_start_yyyymmdd          NVARCHAR(MAX);
+    DECLARE @c_target_date				  DATETIME;
+
+	set @c_target_date = DATEADD(hour,-2,GETDATE())  -- 20180805 KHSONG 작업대상을 현재시간기준 2시간내 수정된 데이터를 기준으로함
+	SET @plan_start_yyyymmdd = CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)  -- 월요일 변수설정
+
+	-- 시작 LOG  (START)
+	SET @v_log_type = 'START';
+	SET @v_log_message = '########## Start of procedure ##########';
+	SET @v_description = '';
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+	SET @v_log_message = NULL      /*-- <- 변수 재사용을 위하여 초기화해야함 --*/
+	-- 시작 LOG  (END)
+
+	-- input division save table
+	DECLARE @division TABLE (division_id			NVARCHAR(MAX))  
+
+	-----------------------------------------------------------------------------------------------------------------------------  대상 DIVISION
+	IF  UPPER(@p_division_id) = 'ALL'  -- 데이터가 존재하는 대상 DIVISION_ID 만 추출
+		BEGIN
+			--INSERT INTO @division (division_id) 
+			--			select '40'
+			--		union
+			--			select '81'
+			--		union
+			--			select '82'
+
+			INSERT @division
+			SELECT DISTINCT DIVISION_ID 
+			  FROM DM_PLN_CFM_MKT_DEMAND_PLAN  WITH(NOLOCK)
+			   WHERE	1=1
+				and	YYYYMMDD BETWEEN @plan_start_yyyymmdd AND CONVERT(CHAR(8), DATEADD(WW, 52, @plan_start_yyyymmdd),112)  -- SCP PLANNING 구간이 52주
+				AND	MEASURE			 IN ('MKT_FCST','RTF_SCP')
+				AND LAST_UPDATE_DATE > @c_target_date -- 20180805 KHSONG 작업대상을 현재시간기준 2시간내 수정된 데이터를 기준으로함
+			UNION 	
+			SELECT DISTINCT DIVISION_ID 
+			  FROM DM_PLN_MKT_FCST  WITH(NOLOCK)
+			   WHERE	1=1
+				and	YYYYMMDD BETWEEN @plan_start_yyyymmdd AND CONVERT(CHAR(8), DATEADD(WW, 52, @plan_start_yyyymmdd),112)  -- SCP PLANNING 구간이 52주
+				AND	MEASURE			 IN ('MKT_FCST','RTF_SCP')
+				AND LAST_UPDATE_DATE > @c_target_date -- 20180805 KHSONG 작업대상을 현재시간기준 2시간내 수정된 데이터를 기준으로함
+
+
+		END
+	ELSE
+		BEGIN
+			INSERT INTO @division (division_id) 
+						select @p_division_id
+		END
+	-----------------------------------------------------------------------------------------------------------------------------  대상 DIVISION
+
+	-- 트랜잭션 (START)
+	BEGIN TRANSACTION BALANCE_CREATE_BATCH;
+
+	--------------------------------------------------------------------------------------------	
+	BEGIN TRY
+	--------------------------------------------------------------------------------------------	
+
+	--
+	IF EXISTS (SELECT 1 FROM SYS.SYSCURSORS WHERE CURSOR_NAME = 'CURSOR1_PLAN')
+		BEGIN
+			CLOSE CURSOR1_PLAN
+			DEALLOCATE CURSOR1_PLAN
+		END;
+
+	DECLARE CURSOR1_PLAN CURSOR FAST_FORWARD FOR
+	SELECT 	  division_id    
+		FROM  @division	ORDER BY division_id
+
+	BEGIN
+		OPEN CURSOR1_PLAN;
+		FETCH NEXT FROM CURSOR1_PLAN INTO 
+									@c_division_id    
+	END
+
+	----------------------------------------------------------------------------------------
+	--①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①① CURSOR1_PLAN DIVISION별 LOOP START
+	WHILE @@FETCH_STATUS = 0
+	----------------------------------------------------------------------------------------
+	BEGIN
+	----------------------------------------------------------------------------------------
+	--PRINT '@c_division_id  =>  ' + @c_division_id + ' : ' + CONVERT(VARCHAR(8), GETDATE(), 108)
+
+	------------------------------------------------------------- TEMP 추가 20180730 (s)
+	BEGIN
+	-- TEMP TABLE 확인후 삭제
+	IF OBJECT_ID (N'tempdb..#SEND_TARGET_DATA', N'U') IS NOT NULL 
+		DROP TABLE #SEND_TARGET_DATA
+
+	CREATE TABLE #SEND_TARGET_DATA  (
+			 division_id      NVARCHAR(30) NOT NULL
+			,project_code     NVARCHAR(50) NOT NULL
+			,scm_site_id      NVARCHAR(30) NOT NULL
+			,item_id          NVARCHAR(50) NOT NULL
+			,dom_exp          NVARCHAR(03) NOT NULL
+			,fcst_type        NVARCHAR(20) NOT NULL
+			,incoterms        NVARCHAR(10) NOT NULL
+			,plant_site_id    NVARCHAR(30) NOT NULL
+			,cell_prod_site_id  NVARCHAR(30)	NULL				--	[PJ2025-50188] (40 : CELL_PROD_SITE_ID / 그 외 : '-' )
+			,vmi_yn           NVARCHAR(01) NULL
+									)
+
+	CREATE CLUSTERED INDEX [IDX_SEND_TARGET_DATA_N1] ON [#SEND_TARGET_DATA]
+	(
+		 DIVISION_ID ASC
+		,PROJECT_CODE ASC
+		,SCM_SITE_ID ASC
+		,ITEM_ID ASC
+		,DOM_EXP ASC
+		,FCST_TYPE ASC
+		,INCOTERMS ASC
+		--,v_MEASURE ASC
+		,PLANT_SITE_ID ASC
+	--	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = ON, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	)WITH (PAD_INDEX = ON, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	;
+	END
+
+	BEGIN
+		IF (@c_division_id = '40') 
+		BEGIN
+
+			--PRINT '#SEND_TARGET_DATA INSERT START                          =>  ' + CONVERT(VARCHAR(8), GETDATE(), 108)
+			----------------------------------------------------------------- 대상추출
+			INSERT  INTO  #SEND_TARGET_DATA
+						(division_id   
+						,project_code  
+						,scm_site_id   
+						,item_id       
+						,dom_exp       
+						,fcst_type     
+						,incoterms   
+						,plant_site_id 
+						,cell_prod_site_id					--	[PJ2025-50188] (40 : CELL_PROD_SITE_ID / 그 외 : '-' )
+						,vmi_yn
+						)
+			SELECT		  
+						 DIVISION_ID
+						,PROJECT_CODE
+						,SCM_SITE_ID
+						,ITEM_ID
+						,DOM_EXP
+						,FCST_TYPE
+						,INCOTERMS
+						--,MEASURE
+						,PLANT_SITE_ID
+						,CELL_PROD_SITE_ID					--	[PJ2025-50188] (40 : CELL_PROD_SITE_ID / 그 외 : '-' )
+						,'N'	AS vmi_yn					-- vmi_yn 초기값
+				FROM DM_PLN_CFM_MKT_DEMAND_PLAN  WITH(NOLOCK)
+				  WHERE	1=1
+					and	YYYYMMDD BETWEEN @plan_start_yyyymmdd AND CONVERT(CHAR(8), DATEADD(WW, 52, @plan_start_yyyymmdd),112)  -- SCP PLANNING 구간이 52주
+					AND	MEASURE			 = 'MKT_FCST'
+					AND DIVISION_ID		 = @c_division_id
+					AND LAST_UPDATE_DATE > @c_target_date -- 20180805 KHSONG 작업대상을 현재시간기준 2시간내 수정된 데이터를 기준으로함
+				group by division_id, project_code, scm_site_id,item_id, dom_exp, fcst_type, incoterms, plant_site_id, CELL_PROD_SITE_ID		--	[PJ2025-50188] CELL_PROD_SITE_ID 추가
+
+		END
+
+		ELSE
+		BEGIN
+			--PRINT '#SEND_TARGET_DATA INSERT START                          =>  ' + CONVERT(VARCHAR(8), GETDATE(), 108)
+			----------------------------------------------------------------- 대상추출
+			INSERT  INTO  #SEND_TARGET_DATA
+						(division_id   
+						,project_code  
+						,scm_site_id   
+						,item_id       
+						,dom_exp       
+						,fcst_type     
+						,incoterms   
+						,plant_site_id 
+						,cell_prod_site_id					--	[PJ2025-50188] (40 : CELL_PROD_SITE_ID / 그 외 : '-' )
+						,vmi_yn
+						)
+			SELECT		  
+						 DIVISION_ID
+						,PROJECT_CODE
+						,SCM_SITE_ID
+						,ITEM_ID
+						,DOM_EXP
+						,FCST_TYPE
+						,INCOTERMS
+						--,MEASURE
+						,PLANT_SITE_ID
+						,'-'	AS cell_prod_site_id		--	[PJ2025-50188] (40 : CELL_PROD_SITE_ID / 그 외 : '-' )
+						,'N'	AS vmi_yn					-- vmi_yn 초기값
+				FROM DM_PLN_MKT_FCST  WITH(NOLOCK)
+				  WHERE	1=1
+					and	YYYYMMDD BETWEEN @plan_start_yyyymmdd AND CONVERT(CHAR(8), DATEADD(WW, 52, @plan_start_yyyymmdd),112)  -- SCP PLANNING 구간이 52주
+					AND	MEASURE			 = 'MKT_FCST'
+					AND DIVISION_ID		 = @c_division_id
+					AND LAST_UPDATE_DATE > @c_target_date -- 20180805 KHSONG 작업대상을 현재시간기준 2시간내 수정된 데이터를 기준으로함
+				group by division_id, project_code, scm_site_id,item_id, dom_exp, fcst_type, incoterms, plant_site_id
+
+		END
+
+
+		--PRINT N'BALANCE_CREATE CALL START  Division => ' + @c_division_id + N'              '+ CONVERT(VARCHAR(8), GETDATE(), 108)
+
+		-- 선박biz사업부 BALANCE MEASURE 배제 [E20230112-000310] GSCM 자동차사업부 시스템 상 MKT FCST 입력을 위한 기능변경 건 [START]
+	   DELETE FROM #SEND_TARGET_DATA 
+	   WHERE DIVISION_ID IN (SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+	   AND SCM_SITE_ID IN (SELECT SEGMENT2 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+   		-- 선박biz사업부 BALANCE MEASURE 배제 [E20230112-000310] GSCM 자동차사업부 시스템 상 MKT FCST 입력을 위한 기능변경 건 [END]
+
+   
+
+
+		---------------------------------------------------------------------------------------- PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE 호출 (START)
+		EXEC PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE 
+													  @c_division_id
+													, @p_plan_id = 'CALL'
+		---------------------------------------------------------------------------------------- PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE 호출 (END)
+
+		--PRINT N'BALANCE_CREATE CALL END    Division => ' + @c_division_id + N'              '+ CONVERT(VARCHAR(8), GETDATE(), 108)
+
+
+	-- 선박biz사업부 BALANCE MEASURE 배제 [E20230112-000310] GSCM 자동차사업부 시스템 상 MKT FCST 입력을 위한 기능변경 건 [START]
+
+	BEGIN
+	
+	DECLARE @CNT INT, @i_COUNT INT, @i INT, @MKT_FCST_CNT INT, @RTF_SCP_CNT INT, @RTF_CNT INT
+	DECLARE @PROJECT_CODE VARCHAR(30),  @SCM_SITE_ID  VARCHAR(50),  @ITEM_ID  VARCHAR(30), @DOM_EXP  VARCHAR(2), @FCST_TYPE  VARCHAR(30), @INCOTERMS  VARCHAR(30)
+		  , @MEASURE VARCHAR(30), @PLANT_SITE_ID VARCHAR(30), @YYYYMMDD VARCHAR(8)
+
+	BEGIN
+	SELECT @MKT_FCST_CNT = COUNT(*)
+	FROM DM_PLN_MKT_FCST  WITH(NOLOCK)
+	  WHERE	1=1
+		AND	YYYYMMDD BETWEEN @plan_start_yyyymmdd AND CONVERT(CHAR(8), DATEADD(WW, 52, @plan_start_yyyymmdd),112)  -- SCP PLANNING 구간이 52주
+		AND	MEASURE			 = 'MKT_FCST'
+		AND DIVISION_ID IN (SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+		AND SCM_SITE_ID IN (SELECT SEGMENT2 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+	END
+
+	BEGIN
+	SELECT @RTF_SCP_CNT = COUNT(*)
+	FROM DM_PLN_MKT_FCST  WITH(NOLOCK)
+	  WHERE	1=1
+		AND	YYYYMMDD BETWEEN @plan_start_yyyymmdd AND CONVERT(CHAR(8), DATEADD(WW, 52, @plan_start_yyyymmdd),112)  -- SCP PLANNING 구간이 52주
+		AND	MEASURE			 = 'RTF_SCP'
+		AND DIVISION_ID IN (SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+		AND SCM_SITE_ID IN (SELECT SEGMENT2 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+	END
+
+--PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE_BATCH '81'
+	IF (@MKT_FCST_CNT <> @RTF_SCP_CNT)
+	BEGIN
+
+		DECLARE @MKT_FCST INT, @RTF_SCP INT, @RTF_SYS_RP INT, @RTF INT
+		PRINT(@MKT_FCST_CNT)
+		SET @i = 0
+		 WHILE @i <= @MKT_FCST_CNT
+		 BEGIN
+		 SELECT 
+		  @PROJECT_CODE = A.PROJECT_CODE,
+		  @SCM_SITE_ID = A.SCM_SITE_ID,
+		  @ITEM_ID = A.ITEM_ID,
+		  @DOM_EXP = A.DOM_EXP,
+		  @FCST_TYPE = A.FCST_TYPE	,
+		  @INCOTERMS = A.INCOTERMS,
+		  @MEASURE = A.MEASURE,
+		  @PLANT_SITE_ID = A.PLANT_SITE_ID,
+		  @YYYYMMDD = A.YYYYMMDD
+		 FROM
+		 (
+		  SELECT ROW_NUMBER() OVER(ORDER BY (SELECT 1)) AS ROWNUM, *
+		  FROM DM_PLN_MKT_FCST  WITH(NOLOCK)
+		  WHERE	1=1
+			AND	YYYYMMDD BETWEEN @plan_start_yyyymmdd AND CONVERT(CHAR(8), DATEADD(WW, 52, @plan_start_yyyymmdd),112)  -- SCP PLANNING 구간이 52주
+			AND	MEASURE			 = 'MKT_FCST'
+			AND DIVISION_ID IN (SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+			AND SCM_SITE_ID IN (SELECT SEGMENT2 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+		) A WHERE A.ROWNUM = @i
+         
+	     BEGIN
+		SELECT  @RTF_SCP = COUNT(*) FROM DM_PLN_MKT_FCST A WITH(NOLOCK) 
+		WHERE 1 = 1
+		  AND A.PROJECT_CODE = @PROJECT_CODE
+		  AND A.SCM_SITE_ID = @SCM_SITE_ID
+		  AND A.ITEM_ID = @ITEM_ID
+		  AND A.DOM_EXP = @DOM_EXP
+		  AND A.FCST_TYPE = @FCST_TYPE
+		  AND A.INCOTERMS = @INCOTERMS
+		  AND A.MEASURE = 'RTF_SCP'
+		  AND A.PLANT_SITE_ID= @PLANT_SITE_ID
+		  AND A.YYYYMMDD = @YYYYMMDD
+
+		  IF (@RTF_SCP = 0)
+		  BEGIN
+			INSERT INTO DM_PLN_MKT_FCST(
+			DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,PLANT_SITE_ID,YYYYMMDD,QTY,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,
+			LAST_UPDATE_DATE,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+			)
+			SELECT 
+			DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,'RTF_SCP',PLANT_SITE_ID,YYYYMMDD,QTY,'SYSTEM',GETDATE(),'SYSTEM',
+			GETDATE(),ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+			FROM DM_PLN_MKT_FCST
+			WHERE 1 = 1
+			AND PROJECT_CODE = @PROJECT_CODE
+			AND SCM_SITE_ID = @SCM_SITE_ID
+			AND ITEM_ID = @ITEM_ID
+			AND DOM_EXP = @DOM_EXP
+			AND FCST_TYPE = @FCST_TYPE
+			AND INCOTERMS = @INCOTERMS
+			AND MEASURE = 'MKT_FCST'
+			AND PLANT_SITE_ID= @PLANT_SITE_ID
+			AND YYYYMMDD = @YYYYMMDD
+		  END
+		END
+         
+	    BEGIN
+		SELECT  @RTF_SYS_RP = COUNT(*) FROM DM_PLN_MKT_FCST A WITH(NOLOCK) 
+		WHERE 1 = 1
+		  AND A.PROJECT_CODE = @PROJECT_CODE
+		  AND A.SCM_SITE_ID = @SCM_SITE_ID
+		  AND A.ITEM_ID = @ITEM_ID
+		  AND A.DOM_EXP = @DOM_EXP
+		  AND A.FCST_TYPE = @FCST_TYPE
+		  AND A.INCOTERMS = @INCOTERMS
+		  AND A.MEASURE = 'RTF_SYS_RP'
+		  AND A.PLANT_SITE_ID= @PLANT_SITE_ID
+		  AND A.YYYYMMDD = @YYYYMMDD
+
+		  IF (@RTF_SYS_RP = 0)
+		  BEGIN
+			INSERT INTO DM_PLN_MKT_FCST(
+			DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,PLANT_SITE_ID,YYYYMMDD,QTY,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,
+			LAST_UPDATE_DATE,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+			)
+			SELECT 
+			DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,'RTF_SYS_RP',PLANT_SITE_ID,YYYYMMDD,QTY,'SYSTEM',GETDATE(),'SYSTEM',
+			GETDATE(),ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+			FROM DM_PLN_MKT_FCST
+			WHERE 1 = 1
+			AND PROJECT_CODE = @PROJECT_CODE
+			AND SCM_SITE_ID = @SCM_SITE_ID
+			AND ITEM_ID = @ITEM_ID
+			AND DOM_EXP = @DOM_EXP
+			AND FCST_TYPE = @FCST_TYPE
+			AND INCOTERMS = @INCOTERMS
+			AND MEASURE = 'MKT_FCST'
+			AND PLANT_SITE_ID= @PLANT_SITE_ID
+			AND YYYYMMDD = @YYYYMMDD
+		  END
+		END
+         
+      BEGIN
+		SELECT  @RTF = COUNT(*) FROM DM_PLN_MKT_FCST A WITH(NOLOCK) 
+		WHERE 1 = 1
+		  AND A.PROJECT_CODE = @PROJECT_CODE
+		  AND A.SCM_SITE_ID = @SCM_SITE_ID
+		  AND A.ITEM_ID = @ITEM_ID
+		  AND A.DOM_EXP = @DOM_EXP
+		  AND A.FCST_TYPE = @FCST_TYPE
+		  AND A.INCOTERMS = @INCOTERMS
+		  AND A.MEASURE = 'RTF'
+		  AND A.PLANT_SITE_ID= @PLANT_SITE_ID
+		  AND A.YYYYMMDD = @YYYYMMDD
+
+		  IF (@RTF = 0)
+		  BEGIN
+			INSERT INTO DM_PLN_MKT_FCST(
+			DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,PLANT_SITE_ID,YYYYMMDD,QTY,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,
+			LAST_UPDATE_DATE,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+			)
+			SELECT 
+			DIVISION_ID,PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,'RTF',PLANT_SITE_ID,YYYYMMDD,QTY,'SYSTEM',GETDATE(),'SYSTEM',
+			GETDATE(),ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+			FROM DM_PLN_MKT_FCST
+			WHERE 1 = 1
+			AND PROJECT_CODE = @PROJECT_CODE
+			AND SCM_SITE_ID = @SCM_SITE_ID
+			AND ITEM_ID = @ITEM_ID
+			AND DOM_EXP = @DOM_EXP
+			AND FCST_TYPE = @FCST_TYPE
+			AND INCOTERMS = @INCOTERMS
+			AND MEASURE = 'MKT_FCST'
+			AND PLANT_SITE_ID= @PLANT_SITE_ID
+			AND YYYYMMDD = @YYYYMMDD
+		  END
+		END
+
+
+		 PRINT(@i)
+
+		 SET @i = @i + 1
+		 END
+
+	END
+
+		/*	[PJ2025-50017] 소형 매출계획 동기화 개선 Start */
+		/*	EXCEPTION_DEMAND의 MKT_FCST(MKT_FCST)의 갯수와 RTF_ALLOCATION(RTF_SYS_RP)의 갯수 비교*/
+
+		BEGIN
+			SELECT @MKT_FCST_CNT = COUNT(*)
+			FROM DM_PLN_MKT_FCST  WITH(NOLOCK)
+			WHERE	1=1
+			AND	YYYYMMDD BETWEEN @plan_start_yyyymmdd AND CONVERT(CHAR(8), DATEADD(WW, 52, @plan_start_yyyymmdd),112)  -- SCP PLANNING 구간이 52주
+			AND	MEASURE			 = 'MKT_FCST'
+			AND DIVISION_ID IN (SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+			AND SCM_SITE_ID IN (SELECT SEGMENT2 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+		END
+
+		BEGIN
+			SELECT @RTF_SCP_CNT = COUNT(*)
+			FROM DM_PLN_CFM_MKT_DEMAND_PLAN  WITH(NOLOCK)
+			WHERE	1=1
+			AND	YYYYMMDD BETWEEN @plan_start_yyyymmdd AND CONVERT(CHAR(8), DATEADD(WW, 52, @plan_start_yyyymmdd),112)  -- SCP PLANNING 구간이 52주
+			AND	MEASURE			 = 'RTF_SYS_RP'
+			AND DIVISION_ID IN (SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+			AND SCM_SITE_ID IN (SELECT SEGMENT2 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+		END
+
+		IF (@MKT_FCST_CNT <> @RTF_SCP_CNT)
+		BEGIN
+
+			SET @i = 0
+
+			WHILE @i <= @MKT_FCST_CNT
+			BEGIN
+				SELECT 
+					@PROJECT_CODE = A.PROJECT_CODE,
+					@SCM_SITE_ID = A.SCM_SITE_ID,
+					@ITEM_ID = A.ITEM_ID,
+					@DOM_EXP = A.DOM_EXP,
+					@FCST_TYPE = A.FCST_TYPE	,
+					@INCOTERMS = A.INCOTERMS,
+					@MEASURE = A.MEASURE,
+					@PLANT_SITE_ID = A.PLANT_SITE_ID,
+					@YYYYMMDD = A.YYYYMMDD
+					FROM
+					(
+						SELECT ROW_NUMBER() OVER(ORDER BY (SELECT 1)) AS ROWNUM, *
+						FROM DM_PLN_MKT_FCST  WITH(NOLOCK)
+						WHERE	1=1
+						AND	YYYYMMDD BETWEEN @plan_start_yyyymmdd AND CONVERT(CHAR(8), DATEADD(WW, 52, @plan_start_yyyymmdd),112)  -- SCP PLANNING 구간이 52주
+						AND	MEASURE	= 'MKT_FCST'
+						AND DIVISION_ID IN (SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+						AND SCM_SITE_ID IN (SELECT SEGMENT2 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y')
+					) A 
+					WHERE A.ROWNUM = @i
+         
+				BEGIN
+					SELECT  @RTF_SCP = COUNT(*) FROM DM_PLN_CFM_MKT_DEMAND_PLAN A WITH(NOLOCK) 
+					WHERE 1 = 1
+						AND A.PROJECT_CODE = @PROJECT_CODE
+						AND A.SCM_SITE_ID = @SCM_SITE_ID
+						AND A.ITEM_ID = @ITEM_ID
+						AND A.DOM_EXP = @DOM_EXP
+						AND A.FCST_TYPE = @FCST_TYPE
+						AND A.INCOTERMS = @INCOTERMS
+						AND A.MEASURE = 'RTF_SCP'
+						AND A.PLANT_SITE_ID= @PLANT_SITE_ID
+						AND A.YYYYMMDD = @YYYYMMDD
+
+					IF (@RTF_SCP = 0)
+					BEGIN
+						INSERT INTO DM_PLN_CFM_MKT_DEMAND_PLAN(
+							 DIVISION_ID,PROJECT_CODE,END_CUSTOMER,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,PLANT_SITE_ID,CELL_PROD_SITE_ID,YYYYMMDD,QTY
+							,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE
+							,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+						)
+						SELECT 
+							 DIVISION_ID,PROJECT_CODE
+							,CASE WHEN DIVISION_ID = '40' THEN PROJECT_CODE ELSE '' END			AS END_CUSTOMER
+							,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,'RTF_SCP',PLANT_SITE_ID,'',YYYYMMDD,QTY
+							,'SYSTEM',GETDATE(),'SYSTEM',GETDATE()
+							,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+						FROM DM_PLN_MKT_FCST
+						WHERE 1 = 1
+						AND PROJECT_CODE = @PROJECT_CODE
+						AND SCM_SITE_ID = @SCM_SITE_ID
+						AND ITEM_ID = @ITEM_ID
+						AND DOM_EXP = @DOM_EXP
+						AND FCST_TYPE = @FCST_TYPE
+						AND INCOTERMS = @INCOTERMS
+						AND MEASURE = 'MKT_FCST'
+						AND PLANT_SITE_ID= @PLANT_SITE_ID
+						AND YYYYMMDD = @YYYYMMDD
+					END
+				END
+         
+				BEGIN
+					SELECT  @RTF_SYS_RP = COUNT(*) FROM DM_PLN_CFM_MKT_DEMAND_PLAN A WITH(NOLOCK) 
+					WHERE 1 = 1
+						AND A.PROJECT_CODE = @PROJECT_CODE
+						AND A.SCM_SITE_ID = @SCM_SITE_ID
+						AND A.ITEM_ID = @ITEM_ID
+						AND A.DOM_EXP = @DOM_EXP
+						AND A.FCST_TYPE = @FCST_TYPE
+						AND A.INCOTERMS = @INCOTERMS
+						AND A.MEASURE = 'RTF_SYS_RP'
+						AND A.PLANT_SITE_ID= @PLANT_SITE_ID
+						AND A.YYYYMMDD = @YYYYMMDD
+
+					IF (@RTF_SYS_RP = 0)
+					BEGIN
+						INSERT INTO DM_PLN_CFM_MKT_DEMAND_PLAN(
+							 DIVISION_ID,PROJECT_CODE,END_CUSTOMER,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,PLANT_SITE_ID,CELL_PROD_SITE_ID,YYYYMMDD,QTY
+							,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE
+							,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+						)
+						SELECT 
+							 DIVISION_ID,PROJECT_CODE
+							,CASE WHEN DIVISION_ID = '40' THEN PROJECT_CODE ELSE '' END			AS END_CUSTOMER
+							,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,'RTF_SYS_RP',PLANT_SITE_ID,'',YYYYMMDD,QTY
+							,'SYSTEM',GETDATE(),'SYSTEM',GETDATE()
+							,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+						FROM DM_PLN_MKT_FCST
+						WHERE 1 = 1
+						AND PROJECT_CODE = @PROJECT_CODE
+						AND SCM_SITE_ID = @SCM_SITE_ID
+						AND ITEM_ID = @ITEM_ID
+						AND DOM_EXP = @DOM_EXP
+						AND FCST_TYPE = @FCST_TYPE
+						AND INCOTERMS = @INCOTERMS
+						AND MEASURE = 'MKT_FCST'
+						AND PLANT_SITE_ID= @PLANT_SITE_ID
+						AND YYYYMMDD = @YYYYMMDD
+					END
+				END
+         
+				BEGIN
+					SELECT  @RTF = COUNT(*) FROM DM_PLN_CFM_MKT_DEMAND_PLAN A WITH(NOLOCK) 
+					WHERE 1 = 1
+					AND A.PROJECT_CODE = @PROJECT_CODE
+					AND A.SCM_SITE_ID = @SCM_SITE_ID
+					AND A.ITEM_ID = @ITEM_ID
+					AND A.DOM_EXP = @DOM_EXP
+					AND A.FCST_TYPE = @FCST_TYPE
+					AND A.INCOTERMS = @INCOTERMS
+					AND A.MEASURE = 'RTF'
+					AND A.PLANT_SITE_ID= @PLANT_SITE_ID
+					AND A.YYYYMMDD = @YYYYMMDD
+
+					IF (@RTF = 0)
+					BEGIN
+						INSERT INTO DM_PLN_CFM_MKT_DEMAND_PLAN(
+							 DIVISION_ID,PROJECT_CODE,END_CUSTOMER,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,MEASURE,PLANT_SITE_ID,CELL_PROD_SITE_ID,YYYYMMDD,QTY
+							,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE
+							,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+						)
+						SELECT 
+							 DIVISION_ID,PROJECT_CODE
+							,CASE WHEN DIVISION_ID = '40' THEN PROJECT_CODE ELSE '' END			AS END_CUSTOMER
+							,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_TYPE,INCOTERMS,'RTF',PLANT_SITE_ID,'',YYYYMMDD,QTY
+							,'SYSTEM',GETDATE(),'SYSTEM',GETDATE()
+							,ATTRIBUTE1,ATTRIBUTE2,ATTRIBUTE3,ATTRIBUTE4,ATTRIBUTE5,ATTRIBUTE6,ATTRIBUTE7,ATTRIBUTE8,ATTRIBUTE9,ATTRIBUTE10
+						FROM DM_PLN_MKT_FCST
+						WHERE 1 = 1
+						AND PROJECT_CODE = @PROJECT_CODE
+						AND SCM_SITE_ID = @SCM_SITE_ID
+						AND ITEM_ID = @ITEM_ID
+						AND DOM_EXP = @DOM_EXP
+						AND FCST_TYPE = @FCST_TYPE
+						AND INCOTERMS = @INCOTERMS
+						AND MEASURE = 'MKT_FCST'
+						AND PLANT_SITE_ID= @PLANT_SITE_ID
+						AND YYYYMMDD = @YYYYMMDD
+					END
+				END
+
+
+				PRINT(@i)
+
+				SET @i = @i + 1
+			END
+		END
+		/*	[PJ2025-50017] 소형 매출계획 동기화 개선 END */
+
+	END
+	
+
+
+
+	-- 선박biz사업부 BALANCE MEASURE 배제 [E20230112-000310] GSCM 자동차사업부 시스템 상 MKT FCST 입력을 위한 기능변경 건 [END]
+
+	END
+
+		
+
+	FETCH NEXT FROM CURSOR1_PLAN INTO 
+								        @c_division_id    
+
+	END
+	---------------------------------------------------------------------------------------- 
+	--①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①①① CURSOR1_PLAN DIVISION별 LOOP END
+	
+	CLOSE CURSOR1_PLAN;  
+    DEALLOCATE CURSOR1_PLAN;
+
+	-- 트랜잭션 (COMMIT)
+	COMMIT TRANSACTION BALANCE_CREATE_BATCH
+
+	--------------------------------------------------------------------------------------------	
+	END TRY
+	--------------------------------------------------------------------------------------------	
+
+	--------------------------------------------------------------	
+    BEGIN CATCH
+	--------------------------------------------------------------	
+	-- 트랜잭션 (END)
+	ROLLBACK TRANSACTION BALANCE_CREATE_BATCH
+
+      -- ERROR LOG VALUE SAVE
+      SET @v_log_type = 'ERROR';
+      SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+      SET @v_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+      SET @d_event_date = SYSDATETIME();
+
+	  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();  /*-- 에러메시지 DISPLAY --*/
+	  
+		--[C20200909-000203] LOG 표준화 적용
+		EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+		
+
+	--------------------------------------------------------------	
+    END CATCH;
+	--------------------------------------------------------------	
+
+    -- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure ##########';
+    SET @v_description = '';
+    SET @d_event_date = SYSDATETIME();
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+  END;

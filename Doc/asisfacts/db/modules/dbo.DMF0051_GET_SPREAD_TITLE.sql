@@ -1,0 +1,383 @@
+﻿/*
+ * Program ID   : DMF0051_GET_SPREAD_TITLE     
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 20220603		kdw2819			Initial Release [PJ20216891R]	
+ * 20221116		kdw2819			[C20221107-000343]BP Waterfall 오류 수정 요청의 건
+ */
+
+CREATE PROCEDURE [dbo].[DMF0051_GET_SPREAD_TITLE]
+    @p_start_yyyymmdd		NVARCHAR(8),
+    @p_end_yyyymmdd			NVARCHAR(8),
+	@p_created_by			NVARCHAR(50),
+	@p_division_id			NVARCHAR(50),
+	@p_bucket				NVARCHAR(10)
+
+AS
+
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	Declare @i_Count int=0;
+	Declare @v_program_id	    NVARCHAR(50)='DMF0051'
+	Declare @v_sheet_name		NVARCHAR(50)='Biz Plan Waterfall'
+
+    SELECT  @i_Count = Count(*)
+    FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+    
+    WHERE  1 = 1
+    AND    U.PROGRAM_ID  = @v_program_id
+    AND    U.SHEET_NAME  = @v_sheet_name
+    AND    U.USER_ID     = @p_created_by
+    AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+
+	
+
+	IF @i_Count > 0	   
+	BEGIN
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME				
+				, CASE WHEN @P_DIVISION_ID LIKE '81%' 
+							THEN (CASE WHEN C.ATTRIBUTE4 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','') + '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END)
+					   WHEN @P_DIVISION_ID = '82' 
+							THEN (CASE WHEN C.ATTRIBUTE5 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','') + '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END) 
+					   ELSE C.COLUMN_LABEL_NAME END		 AS COLUMN_LABEL_NAME
+				-- [C20221107-000343]BP Waterfall 오류 수정 요청의 건
+				, U.SORT_ORDER_NO
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, C.COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, C.DATA_SCALE_NUMBER
+				, C.DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+				, @p_division_id as ATTRIBUTE1
+				, CASE WHEN CELL_COMBO_DATA_TYPE = 'DM_LOOKUP_DIV' THEN C.ATTRIBUTE1 ELSE '' END AS ATTRIBUTE2
+				, '' as ATTRIBUTE3
+				, C.ATTRIBUTE4
+				, C.ATTRIBUTE5
+		FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+				, [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+		WHERE  1 = 1
+		AND    U.PROGRAM_ID  = C.PROGRAM_ID
+		AND    U.SHEET_NAME  = C.SHEET_NAME
+		AND    U.COLUMN_NAME = C.COLUMN_NAME
+		AND    U.PROGRAM_ID  = @v_program_id
+		AND    U.SHEET_NAME  = @v_sheet_name
+		AND    U.USER_ID     = @p_created_by
+		AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+		AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )		
+		UNION ALL
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, CASE WHEN @P_DIVISION_ID LIKE '81%' 
+							THEN (CASE WHEN C.ATTRIBUTE4 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','') + '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END)
+					   WHEN @P_DIVISION_ID = '82' 
+							THEN (CASE WHEN C.ATTRIBUTE5 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','') + '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END) 
+					   ELSE C.COLUMN_LABEL_NAME END		 AS COLUMN_LABEL_NAME 
+				, C.SORT_ORDER_NO
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, C.COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, C.DATA_SCALE_NUMBER
+				, C.DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+				, @p_division_id as ATTRIBUTE1	
+				, C.ATTRIBUTE2
+				, C.ATTRIBUTE3
+				, C.ATTRIBUTE4
+				, C.ATTRIBUTE5
+		FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+		WHERE  1 = 1    
+		AND    C.PROGRAM_ID  = @v_program_id
+		AND    C.SHEET_NAME  = @v_sheet_name
+		AND    C.VISIBLE_FLAG = 'N'
+		AND    C.DEFAULT_FLAG = ''
+		AND    C.VALID_YN     = 'Y'
+		AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )		-- 20180620 division 추가
+
+		UNION ALL
+
+		SELECT @v_program_id   AS PROGRAM_ID
+				, @v_sheet_name AS SHEET_NAME
+				, T.COLUMN_NAME
+				, T.COLUMN_LABEL_NAME
+				, T.SORT_ORDER_NO
+				, ''         AS DATA_SORT_METHOD_CODE
+				, T.SMALL_CLASS_LABEL_NAME
+				, T.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, ''         AS FIXED_FLAG
+				, 50         AS COLUMN_WIDTH
+				, 'FPNumber' AS CELL_CONTROL_OBJECT_TYPE_CODE
+				, ''         AS CELL_COMBO_DATA_TYPE
+				, '3'        AS DATA_SCALE_NUMBER
+				, ''         AS DATA_MAX_LENGTH
+				, 'R'        AS HORIZONTAL_ALIGN_CODE
+				, 'Y'        AS UPPERCASE_APPLY_FLAG
+				, 'Y'        AS VISIBLE_FLAG
+				, ''         AS DEFAULT_FLAG
+				, ''         AS USER_SELECTABLE_FLAG
+				, ''         AS VALID_YN
+				, ''		 AS DIVISION_ID
+				, '' AS ATTRIBUTE1
+				, '' AS ATTRIBUTE2
+				, '' AS ATTRIBUTE3
+				, '' AS ATTRIBUTE4
+				, '' AS ATTRIBUTE5
+		FROM  (
+			SELECT * FROM (
+				-- Monthly
+				SELECT 		
+						'M_' + A.BASIS_YYYYMM  AS COLUMN_NAME
+						, A.MONTH_NAME          AS COLUMN_LABEL_NAME
+						, 'Q' + CONVERT(VARCHAR, DATEPART(QUARTER, A.BASIS_YYYYMM + '01'))          AS SMALL_CLASS_LABEL_NAME
+						, A.CALENDAR_YYYY          AS LARGE_CLASS_LABEL_NAME
+						, BASIS_YYYYMM + '01' AS SORT_ORDER_NO
+				FROM    [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+				WHERE  A.BASIS_YYYYMMDD >= @p_start_yyyymmdd
+				AND    A.BASIS_YYYYMMDD <= @p_end_yyyymmdd
+				GROUP BY 
+						CALENDAR_YYYY
+						, A.BASIS_YYYYMM
+						, A.MONTH_NAME
+				UNION ALL
+				-- Quarterly
+				SELECT 
+					DISTINCT
+					'Q_' + CALENDAR_YYYY + '_' + CONVERT(VARCHAR, DATEPART(QUARTER, A.BASIS_YYYYMM + '01')) AS COLUMN_NAME
+					, 'Q' + CONVERT(VARCHAR, DATEPART(QUARTER, A.BASIS_YYYYMM + '01')) AS COLUMN_LABEL_NAME
+					, 'Q' + CONVERT(VARCHAR, DATEPART(QUARTER, A.BASIS_YYYYMM + '01')) AS SMALL_CLASS_LABEL_NAME
+					, CALENDAR_YYYY AS LARGE_CLASS_LABEL_NAME					
+					, CASE 
+						WHEN DATEPART(QUARTER, A.BASIS_YYYYMM + '01') = 1 THEN CALENDAR_YYYY + '0100'
+						WHEN DATEPART(QUARTER, A.BASIS_YYYYMM + '01') = 2 THEN CALENDAR_YYYY + '0400'
+						WHEN DATEPART(QUARTER, A.BASIS_YYYYMM + '01') = 3 THEN CALENDAR_YYYY + '0700'
+						ELSE CALENDAR_YYYY + '1000' END AS SORT_ORDER_NO
+				FROM    [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+				WHERE  A.BASIS_YYYYMMDD >= @p_start_yyyymmdd
+				AND    A.BASIS_YYYYMMDD <= @p_end_yyyymmdd
+
+				UNION ALL
+				-- Yearly
+				SELECT 
+					DISTINCT
+					'Y_' + CALENDAR_YYYY AS COLUMN_NAME
+					, CALENDAR_YYYY	AS COLUMN_LABEL_NAME
+					, CALENDAR_YYYY	AS SMALL_CLASS_LABEL_NAME
+					, CALENDAR_YYYY	AS LARGE_CLASS_LABEL_NAME
+					, CALENDAR_YYYY + '0000' AS SORT_ORDER_NO
+				FROM    [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+				WHERE  A.BASIS_YYYYMMDD >= @p_start_yyyymmdd
+				AND    A.BASIS_YYYYMMDD <= @p_end_yyyymmdd
+			) MA 
+		) T
+		ORDER BY SORT_ORDER_NO   ;
+		
+	    END;
+
+	ELSE
+		BEGIN		
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, CASE WHEN @P_DIVISION_ID LIKE '81%' 
+							THEN (CASE WHEN C.ATTRIBUTE4 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','') + '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END)
+					   WHEN @P_DIVISION_ID = '82' 
+							THEN (CASE WHEN C.ATTRIBUTE5 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','') + '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END) 
+					   ELSE C.COLUMN_LABEL_NAME END		 AS COLUMN_LABEL_NAME
+				, C.SORT_ORDER_NO
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, C.COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, C.DATA_SCALE_NUMBER
+				, C.DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+				, @p_division_id as ATTRIBUTE1	
+				, CASE WHEN CELL_COMBO_DATA_TYPE = 'DM_LOOKUP_DIV' THEN C.ATTRIBUTE1 ELSE '' END AS ATTRIBUTE2
+				, '' as ATTRIBUTE3
+				, C.ATTRIBUTE4
+				, C.ATTRIBUTE5
+		FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+		WHERE  1 = 1    
+		AND    C.PROGRAM_ID  = @v_program_id
+		AND    C.SHEET_NAME  = @v_sheet_name
+		AND    C.DEFAULT_FLAG = 'Y'
+		AND    C.VALID_YN     = 'Y'
+		AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )	
+
+		UNION ALL
+
+		SELECT C.PROGRAM_ID
+				, C.SHEET_NAME
+				, C.COLUMN_NAME
+				, CASE WHEN @P_DIVISION_ID LIKE '81%' 
+							THEN (CASE WHEN C.ATTRIBUTE4 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','') + '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END)
+					   WHEN @P_DIVISION_ID = '82' 
+							THEN (CASE WHEN C.ATTRIBUTE5 = 'Y' THEN REPLACE(C.COLUMN_LABEL_NAME,'*','') + '*'
+									   ELSE REPLACE(C.COLUMN_LABEL_NAME,'*','')
+								   END) 
+					   ELSE C.COLUMN_LABEL_NAME END		 AS COLUMN_LABEL_NAME 
+				, C.SORT_ORDER_NO
+				, C.DATA_SORT_METHOD_CODE
+				, C.SMALL_CLASS_LABEL_NAME
+				, C.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, C.FIXED_FLAG
+				, C.COLUMN_WIDTH
+				, C.CELL_CONTROL_OBJECT_TYPE_CODE
+				, C.CELL_COMBO_DATA_TYPE
+				, C.DATA_SCALE_NUMBER
+				, C.DATA_MAX_LENGTH
+				, C.HORIZONTAL_ALIGN_CODE
+				, C.UPPERCASE_APPLY_FLAG
+				, C.VISIBLE_FLAG
+				, C.DEFAULT_FLAG
+				, C.USER_SELECTABLE_FLAG
+				, C.VALID_YN
+				, C.DIVISION_ID
+				, @p_division_id as ATTRIBUTE1
+				, CASE WHEN CELL_COMBO_DATA_TYPE = 'DM_LOOKUP_DIV' THEN C.ATTRIBUTE1 ELSE C.ATTRIBUTE1 END AS ATTRIBUTE2
+				, C.ATTRIBUTE3
+				, C.ATTRIBUTE4
+				, C.ATTRIBUTE5
+		FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+		WHERE  1 = 1    
+		AND    C.PROGRAM_ID  = @v_program_id
+		AND    C.SHEET_NAME  = @v_sheet_name
+		AND    C.VISIBLE_FLAG = 'N'
+		AND    C.DEFAULT_FLAG = ''			
+		AND    C.VALID_YN     = 'Y'
+		AND	 @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )		-- 20180620 division 추가
+
+		UNION ALL
+
+		SELECT @v_program_id  AS PROGRAM_ID
+				, @v_sheet_name AS SHEET_NAME
+				, T.COLUMN_NAME
+				, T.COLUMN_LABEL_NAME
+				, T.SORT_ORDER_NO
+				, ''         AS DATA_SORT_METHOD_CODE
+				, T.SMALL_CLASS_LABEL_NAME
+				, T.LARGE_CLASS_LABEL_NAME
+				, '' AS DAY_CODE
+				, ''         AS FIXED_FLAG
+				, 50         AS COLUMN_WIDTH
+				, 'FPNumber' AS CELL_CONTROL_OBJECT_TYPE_CODE
+				, ''         AS CELL_COMBO_DATA_TYPE
+				, '3'         AS DATA_SCALE_NUMBER
+				, ''         AS DATA_MAX_LENGTH
+				, 'R'        AS HORIZONTAL_ALIGN_CODE
+				, 'Y'        AS UPPERCASE_APPLY_FLAG
+				, 'Y'        AS VISIBLE_FLAG
+				, ''         AS DEFAULT_FLAG
+				, ''         AS USER_SELECTABLE_FLAG
+				, ''         AS VALID_YN
+				, ''		 AS DIVISION_ID
+				, '' AS ATTRIBUTE1
+				, '' AS ATTRIBUTE2
+				, '' AS ATTRIBUTE3
+				, '' AS ATTRIBUTE4
+				, '' AS ATTRIBUTE5
+		FROM  (
+			SELECT * FROM (
+				-- Monthly
+				SELECT 		
+						'M_' + A.BASIS_YYYYMM  AS COLUMN_NAME
+						, A.MONTH_NAME          AS COLUMN_LABEL_NAME
+						, 'Q' + CONVERT(VARCHAR, DATEPART(QUARTER, A.BASIS_YYYYMM + '01'))          AS SMALL_CLASS_LABEL_NAME
+						, A.CALENDAR_YYYY          AS LARGE_CLASS_LABEL_NAME
+						, BASIS_YYYYMM + '01' AS SORT_ORDER_NO
+				FROM    [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+				WHERE  A.BASIS_YYYYMMDD >= @p_start_yyyymmdd
+				AND    A.BASIS_YYYYMMDD <= @p_end_yyyymmdd
+				GROUP BY 
+						CALENDAR_YYYY
+						, A.BASIS_YYYYMM
+						, A.MONTH_NAME
+				UNION ALL
+				-- Quarterly
+				SELECT 
+					DISTINCT
+					'Q_' + CALENDAR_YYYY + '_' + CONVERT(VARCHAR, DATEPART(QUARTER, A.BASIS_YYYYMM + '01')) AS COLUMN_NAME
+					, 'Q' + CONVERT(VARCHAR, DATEPART(QUARTER, A.BASIS_YYYYMM + '01')) AS COLUMN_LABEL_NAME
+					, 'Q' + CONVERT(VARCHAR, DATEPART(QUARTER, A.BASIS_YYYYMM + '01')) AS SMALL_CLASS_LABEL_NAME
+					, CALENDAR_YYYY AS LARGE_CLASS_LABEL_NAME					
+					, CASE 
+						WHEN DATEPART(QUARTER, A.BASIS_YYYYMM + '01') = 1 THEN CALENDAR_YYYY + '0100'
+						WHEN DATEPART(QUARTER, A.BASIS_YYYYMM + '01') = 2 THEN CALENDAR_YYYY + '0400'
+						WHEN DATEPART(QUARTER, A.BASIS_YYYYMM + '01') = 3 THEN CALENDAR_YYYY + '0700'
+						ELSE CALENDAR_YYYY + '1000' END
+				FROM    [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+				WHERE  A.BASIS_YYYYMMDD >= @p_start_yyyymmdd
+				AND    A.BASIS_YYYYMMDD <= @p_end_yyyymmdd
+
+				UNION ALL
+				-- Yearly
+				SELECT 
+					DISTINCT
+					'Y_' + CALENDAR_YYYY AS COLUMN_NAME
+					, CALENDAR_YYYY	AS COLUMN_LABEL_NAME
+					, CALENDAR_YYYY	AS SMALL_CLASS_LABEL_NAME
+					, CALENDAR_YYYY	AS LARGE_CLASS_LABEL_NAME
+					, CALENDAR_YYYY + '0000' AS SORT_ORDER_NO
+				FROM    [dbo].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+				WHERE  A.BASIS_YYYYMMDD >= @p_start_yyyymmdd
+				AND    A.BASIS_YYYYMMDD <= @p_end_yyyymmdd
+			) MA 
+		) T
+		ORDER BY SORT_ORDER_NO   ;
+		END;
+END

@@ -1,0 +1,129 @@
+﻿
+
+
+
+CREATE VIEW [dbo].[SCP_MST_CELL_TCO_RELATION_V] AS
+/*
+ * Program ID   : SCP_MST_CELL_TCO_RELATION_V
+ * Description  : 소형전지사업부 CELL TO TCO CELL RELATION VIEW
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019.03.05  yydok     Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2021.07.08  sclee     [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) : SCP_MST_BOD_V에서 SCP_MST_BOD_N_V로 변경
+                         기존에는 시율레이션 실행일자와 무관하게 ISNULL(MAX(ISNULL(LT_TOTAL,0)),0)를 읽어왔으나
+                         CONVERT(VARCHAR,GETDATE(),112) BETWEEN V.FROM_YYYYMMDD AND V.TO_YYYYMMDD 라는 조건을 추가하여
+                         시뮬레이션 날짜를 고려한 ISNULL(MAX(ISNULL(LT_TOTAL,0)),0)를 읽어오도록 처리
+ *
+ */
+WITH SUB AS
+(
+SELECT C.ITEM_ID AS CELL_ITEM_ID,
+       S1.PLANT_SITE_ID AS CELL_PLANT_SITE_ID,
+/*
+       (
+       SELECT TOP 1 PLANT_SITE_ID
+         FROM [dbo].[SCM_MST_SITE_ITEM_PRIORITY_V] V
+        WHERE 1=1 --V.ITEM_ID='MTR666180C12'
+          AND V.DIVISION_ID='40'
+          AND CONVERT(VARCHAR,GETDATE(),112) BETWEEN V.FROM_YYYYMMDD AND V.TO_YYYYMMDD
+          AND V.DIVISION_ID =C.DIVISION_ID
+          AND V.ITEM_ID = C.ITEM_ID
+        ) AS CELL_PLANT_SITE_ID,
+*/
+       T.ITEM_ID AS TCO_CELL_ITEM_ID,
+       (
+       SELECT TOP 1 PLANT_SITE_ID
+         FROM [dbo].[SCM_MST_SITE_ITEM_PRIORITY_V] V
+        WHERE 1=1 --V.ITEM_ID='MTR666180C12'
+          AND V.DIVISION_ID='40'
+          AND CONVERT(VARCHAR,GETDATE(),112) BETWEEN V.FROM_YYYYMMDD AND V.TO_YYYYMMDD
+          AND V.DIVISION_ID =C.DIVISION_ID
+          AND V.ITEM_ID = T.ITEM_ID
+        ) AS TCO_PLANT_SITE_ID
+FROM
+(
+SELECT A.DIVISION_ID,A.ITEM_ID --,A.ATTRIBUTE1
+  FROM SCP_MST_FINAL_ITEM A WITH(NOLOCK)
+ WHERE A.DIVISION_ID     = '40'
+   AND A.OPERATION_GROUP = 'A'
+   --AND A.FCST_YN         = 'Y'
+   AND A.TCO_CELL_YN     = 'N'
+) C
+LEFT OUTER JOIN
+(
+SELECT A.DIVISION_ID,A.ITEM_ID,A.ATTRIBUTE1
+  FROM SCP_MST_FINAL_ITEM A WITH(NOLOCK)
+ WHERE A.DIVISION_ID     = '40'
+   AND A.OPERATION_GROUP = 'A'
+   --AND A.FCST_YN         = 'Y'
+   AND A.TCO_CELL_YN     = 'Y'
+) T
+  ON  C.DIVISION_ID = T.DIVISION_ID
+  AND C.ITEM_ID     = T.ATTRIBUTE1
+LEFT OUTER JOIN
+       (
+       SELECT DIVISION_ID,ITEM_ID,PLANT_SITE_ID
+         FROM [dbo].[SCM_MST_SITE_ITEM_PRIORITY_V] V
+        WHERE 1=1 --V.ITEM_ID='MTR666180C12'
+          AND V.DIVISION_ID='40'
+          AND CONVERT(VARCHAR,GETDATE(),112) BETWEEN V.FROM_YYYYMMDD AND V.TO_YYYYMMDD
+         -- AND V.DIVISION_ID =C.DIVISION_ID
+         -- AND V.ITEM_ID = C.ITEM_ID
+        ) S1
+  ON  C.DIVISION_ID = S1.DIVISION_ID
+  AND C.ITEM_ID     = S1.ITEM_ID
+
+WHERE 1=1
+ -- AND C.ITEM_ID ='MCP34A3A0A10'
+--ORDER BY 1,2
+) 
+
+SELECT CELL_ITEM_ID,
+       CELL_PLANT_SITE_ID,
+       TCO_CELL_ITEM_ID,
+       TCO_PLANT_SITE_ID,
+       ( SELECT ISNULL(MAX(ISNULL(LT_TOTAL,0)),0)
+           FROM [dbo].[SCP_MST_BOD_N_V] B -- 20210708 PJ20209643 SCP_MST_BOD_V 에서 SCP_MST_BOD_N_V로 변경
+          WHERE B.DIVISION_ID    ='40'
+            AND B.TO_SITE        = SUB.TCO_PLANT_SITE_ID 
+            AND B.BOD_VALID_YN   ='Y'
+            AND B.ROUTE_VALID_YN ='Y'
+            AND B.FROM_SITE      = SUB.CELL_PLANT_SITE_ID 
+            AND CONVERT(VARCHAR,GETDATE(),112) BETWEEN B.FROM_YYYYMMDD AND B.TO_YYYYMMDD -- 20210708 PJ20209643 시뮬레이션 날짜를 고려한 ISNULL(MAX(ISNULL(LT_TOTAL,0)),0)를 읽어오도록 처리
+        ) AS CELL_TO_TCO_BOD_LT,
+       ( SELECT ISNULL(MAX(ISNULL(LT_TOTAL,0)),0)
+           FROM [dbo].[SCP_MST_BOD_N_V] B -- 20210708 PJ20209643 SCP_MST_BOD_V 에서 SCP_MST_BOD_N_V로 변경
+          WHERE B.DIVISION_ID    ='40'
+            AND B.TO_SITE        = SUB.CELL_PLANT_SITE_ID
+            AND B.BOD_VALID_YN   ='Y'
+            AND B.ROUTE_VALID_YN ='Y'
+            AND B.FROM_SITE      = SUB.TCO_PLANT_SITE_ID 
+            AND CONVERT(VARCHAR,GETDATE(),112) BETWEEN B.FROM_YYYYMMDD AND B.TO_YYYYMMDD -- 20210708 PJ20209643 시뮬레이션 날짜를 고려한 ISNULL(MAX(ISNULL(LT_TOTAL,0)),0)를 읽어오도록 처리
+        ) AS TCO_TO_CELL_BOD_LT,
+       (
+        ( SELECT ISNULL(MAX(ISNULL(LT_TOTAL,0)),0)
+           FROM [dbo].[SCP_MST_BOD_N_V] B -- 20210708 PJ20209643 SCP_MST_BOD_V 에서 SCP_MST_BOD_N_V로 변경
+          WHERE B.DIVISION_ID    ='40'
+            AND B.TO_SITE        = SUB.TCO_PLANT_SITE_ID 
+            AND B.BOD_VALID_YN   ='Y'
+            AND B.ROUTE_VALID_YN ='Y'
+            AND B.FROM_SITE      = SUB.CELL_PLANT_SITE_ID 
+            AND CONVERT(VARCHAR,GETDATE(),112) BETWEEN B.FROM_YYYYMMDD AND B.TO_YYYYMMDD -- 20210708 PJ20209643 시뮬레이션 날짜를 고려한 ISNULL(MAX(ISNULL(LT_TOTAL,0)),0)를 읽어오도록 처리
+         ) +
+        ( SELECT ISNULL(MAX(ISNULL(LT_TOTAL,0)),0)
+           FROM [dbo].[SCP_MST_BOD_N_V] B -- 20210708 PJ20209643 SCP_MST_BOD_V 에서 SCP_MST_BOD_N_V로 변경
+          WHERE B.DIVISION_ID    ='40'
+            AND B.TO_SITE        = SUB.CELL_PLANT_SITE_ID
+            AND B.BOD_VALID_YN   ='Y'
+            AND B.ROUTE_VALID_YN ='Y'
+            AND B.FROM_SITE      = SUB.TCO_PLANT_SITE_ID 
+            AND CONVERT(VARCHAR,GETDATE(),112) BETWEEN B.FROM_YYYYMMDD AND B.TO_YYYYMMDD -- 20210708 PJ20209643 시뮬레이션 날짜를 고려한 ISNULL(MAX(ISNULL(LT_TOTAL,0)),0)를 읽어오도록 처리
+         )
+        ) AS CELL_TO_TCO_TOTAL_BOD_LT
+  FROM SUB
+--ORDER BY CELL_ITEM_ID,TCO_CELL_ITEM_ID
+
+
+

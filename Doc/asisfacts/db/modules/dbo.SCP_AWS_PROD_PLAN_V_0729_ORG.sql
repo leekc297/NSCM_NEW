@@ -1,0 +1,93 @@
+﻿
+
+
+
+CREATE VIEW [dbo].[SCP_AWS_PROD_PLAN_V_0729_ORG] AS
+/*
+ * Program ID   : SCP_AWS_PROD_PLAN_V
+ * Description  : AWS 향 생산계획 정보
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2024.03.08   KSG            Initial Release E20240307-001294 생산계획/실적/재고 View 생성 요청
+ * 
+ */
+-- DIVISION_ID, PLAN_DATE 조건으로 조회
+SELECT A.DIVISION_ID
+     , A.PLAN_START_YYYYMMDD         AS PLAN_DATE
+     , buc.YYYY                      AS PLAN_YYYY
+     , SUBSTRING(buc.yyyymm, 5,2)    AS PLAN_MM
+     , SUBSTRING(buc.yyyymmdd, 7, 2) AS PLAN_DD
+     , SUBSTRING(buc.yyyyww, 5, 2)   AS PLAN_WEEK
+     , A.OPERATION_GROUP
+     , A.OPERATION_ID
+     , A.LINE_ID
+     , A.SCM_SITE_ID
+     , CASE WHEN A.OPERATION_GROUP != 'A' THEN A.ITEM_ID ELSE D.ITEM_ID_PROD END AS ITEM_ID_CELL
+     , A.ITEM_ID                                                                 AS ITEM_ID
+     , SUBSTRING(A.ITEM_ID, 1, 12)                                               AS MODEL_CODE
+     , C.NICK_NAME
+     , CASE WHEN a.division_id = '40' THEN (
+                                            SELECT B.SEGMENT2 NAME
+                                            FROM   SCM_ADM_LOOKUP_MASTER A WITH(NOLOCK)
+                                              JOIN SCM_ADM_LOOKUP_MASTER_DETAIL B WITH(NOLOCK)
+                                              ON  A.LOOKUP_TYPE = B.LOOKUP_TYPE
+                                              AND B.VALID_YN    = 'Y'
+                                            WHERE 1=1
+                                            AND   A.LOOKUP_TYPE   = 'CELL_TYPE_ITEM_GROUP'
+                                            AND   A.VALID_YN      = 'Y'
+                                            AND   B.SEGMENT1      = f.cell_type_group_code
+                                           )
+		ELSE f.group_code6
+		END AS PRODUCT_LEVEL1
+     , A.YYYYMMDD
+     , cal.BASIS_YYYYMM AS YYYYMM, cal.ISO_YYYYWW
+     , A.QTY
+		 
+FROM   hist_scp_anl_production_plan A WITH(NOLOCK)
+    CROSS APPLY ( SELECT d.division_id
+					, p.plan_name
+					, d.plan_id
+					, d.plan_type
+					, MAX(d.plan_seq) AS plan_seq
+					FROM SCM_MST_PLAN p WITH(NOLOCK)
+				INNER JOIN SCM_MST_PLAN_DETAIL d WITH(NOLOCK) ON p.division_id = d.division_id AND p.plan_id = d.plan_id
+				WHERE 1=1
+					AND d.division_id = A.division_id
+					AND p.plan_name = A.plan_start_yyyymmdd
+					AND d.plan_type = A.plan_type
+					AND d.plan_status = '1' 
+					AND d.confirm_flag = 'Y' 
+					AND d.PLAN_TYPE = 'FN'
+				group by d.division_id, p.plan_name, d.plan_id, d.plan_type
+				) b
+    OUTER APPLY ( SELECT TOP 1 ( CASE WHEN X.NICK_NAME IS NULL OR X.NICK_NAME = '' THEN '-' ELSE X.NICK_NAME END ) NICK_NAME
+                    FROM DBO.SCM_MST_ITEM_SN X WITH(NOLOCK)
+                WHERE X.ITEM_ID  = A.ITEM_ID
+				) C
+    OUTER APPLY ( SELECT TOP 1 ISNULL(ITEM_ID_PROD, A.ITEM_ID) ITEM_ID_PROD
+					FROM DBO.SCP_MST_CELL_PROD_ASSY_MAP WITH(NOLOCK)
+				WHERE 1=1
+					AND DIVISION_ID          = A.DIVISION_ID
+					AND ITEM_ID_ASSY         = A.ITEM_ID
+				) D
+
+    LEFT JOIN SCP_MST_FINAL_ITEM f with(nolock)
+    ON  a.division_id  = f.division_id
+    AND a.item_id  = f.item_id
+    AND a.OPERATION_ID IN ('A3000', 'A9000', 'P5500', 'P9500', 'P5200')
+
+    INNER JOIN SCM_MST_BUCKET buc with(nolock)
+    ON a.plan_start_yyyymmdd  = buc.yyyymmdd
+
+    INNER JOIN SCM_SYS_CALENDAR_M cal with(nolock)
+    ON a.yyyymmdd             = cal.basis_yyyymmdd
+
+WHERE  1=1
+AND    A.seq = b.plan_seq
+AND    A.OPERATION_GROUP IN ('A', 'P')
+AND    A.measure = 'PROD_PLAN_ENGINE'
+AND    A.QTY <> 0
+--OPTION (MAXDOP 1)
+

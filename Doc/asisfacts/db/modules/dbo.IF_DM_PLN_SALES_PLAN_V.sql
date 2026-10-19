@@ -1,0 +1,72 @@
+﻿
+
+
+CREATE VIEW [dbo].[IF_DM_PLN_SALES_PLAN_V] 
+AS
+/*
+ * Program ID   : IF_DM_PLN_SALES_PLAN_V
+ * Description  : DW 용
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2022.05.03   HWI1993 Initial Release : PJ20216891 Digital SCM 3 Level 가속화를 위한 개선 : GM JV
+ * 2025.04.15	P.C.I		[PJ2025-50017] 소형 매출계획 동기화 개선 - CELL_PROD_SITE 추가되면서 IF_DM_PLN_SALES_PLAN_V 에서 Group by 처리
+ * 
+ */
+
+
+SELECT
+	 CASE WHEN DIVISION_ID LIKE '81%' THEN '81' ELSE DIVISION_ID END AS DIVISION_ID
+	, PROJECT_CODE
+	, SCM_SITE_ID
+	, ITEM_ID
+	, DOM_EXP
+	, FCST_TYPE
+	, INCOTERMS
+	, MEASURE
+	, PLANT_SITE_ID
+	, YYYYMMDD
+	, CURRENCY
+	, SUM(QTY) AS QTY
+	, MIN(CREATED_BY) AS CREATED_BY
+	, MIN(CREATION_DATE) AS CREATION_DATE
+	, MIN(LAST_UPDATED_BY) AS  LAST_UPDATED_BY
+	, MIN(LAST_UPDATE_DATE) AS LAST_UPDATE_DATE
+	, ATTRIBUTE1
+	, ATTRIBUTE2
+	, ATTRIBUTE3
+	, ATTRIBUTE4
+	, ATTRIBUTE5
+	, ATTRIBUTE6
+	, ATTRIBUTE7
+	, ATTRIBUTE8
+	, ATTRIBUTE9
+	, ATTRIBUTE10
+	, DIVISION_ID AS SCM_DIVISION_ID
+FROM DM_PLN_SALES_PLAN
+--[PJ2025-50017] 소형 매출계획 동기화 개선 - CELL_PROD_SITE 추가되면서 IF_DM_PLN_SALES_PLAN_V 에서 Group by 처리 Start
+GROUP BY 
+	 CASE WHEN DIVISION_ID LIKE '81%' THEN '81' ELSE DIVISION_ID END
+	, PROJECT_CODE
+	, SCM_SITE_ID
+	, ITEM_ID
+	, DOM_EXP
+	, FCST_TYPE
+	, INCOTERMS
+	, MEASURE
+	, PLANT_SITE_ID
+	, YYYYMMDD
+	, CURRENCY
+	, ATTRIBUTE1
+	, ATTRIBUTE2
+	, ATTRIBUTE3
+	, ATTRIBUTE4
+	, ATTRIBUTE5
+	, ATTRIBUTE6
+	, ATTRIBUTE7
+	, ATTRIBUTE8
+	, ATTRIBUTE9
+	, ATTRIBUTE10
+	, DIVISION_ID	
+--[PJ2025-50017] 소형 매출계획 동기화 개선 - CELL_PROD_SITE 추가되면서 IF_DM_PLN_SALES_PLAN_V 에서 Group by 처리 End

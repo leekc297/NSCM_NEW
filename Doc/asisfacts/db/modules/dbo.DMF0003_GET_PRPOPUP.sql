@@ -1,0 +1,323 @@
+﻿
+
+
+
+/*************************************************************************************************
+* Program ID  : DMF0003_GET_PRPOPUP                                               
+* Description : Procedure 작성 가이드                                                             
+* Usage       : PR POPUP 을 열 때 사용. REUEST 를 생성할 때에는 REQ_NO 를 공백으로 하고, 생성된 REQUEST 를 조회할 때에는 REQ_NO 만 받음.
+* Parameter   :                                                                                  
+*                                                                                                
+*------------------------------------------------------------------------------------------------
+* Date        In Charge    Description                                                           
+*------------------------------------------------------------------------------------------------
+* 2021-04-01   HWI1993		[과제] PR POPUP
+* 2021-06-23	hwi1993		nick name --> item Name
+* 2021-08-27	hwi1993		[C20210813-000004] [SCM PI] GSCM 상품 자재 PR 발행 시, 서비스 플랜트 추가 요청의 건
+* 2021-09-07	rosia27		[C20210827-000411] GSCM 시스템의 효율성을 위한 개선방안 기능 변경의 건
+
+***************************************************************************************************/
+
+/*
+
+EXEC DMF0003_GET_PRPOPUP
+@p_division_id = N'82'
+, @p_REQUEST_NO = ''
+, @p_Project_code = 'G-20-206'
+, @p_scm_site_id = N'Terra-Gen_US_ENL^Terra-Gen_US_ENL^Terra-Gen_US_ENL^Terra-Gen_US_ENL^'
+, @p_ITEM_ID = 'EAOT00015AA^EAOT00015AA^EBA01784AA^EBA01784AA^'
+, @p_DOM_EXP = 'E^E^E^E^'
+, @p_FCST_TYPE = 'Mass^Mass^Mass^Mass^'
+, @p_INCOTERMS = 'CIP^CIP^CIP^CIP^'
+, @p_PLANT_SITE_ID = '^^^^'
+, @P_YYYYMMDD = '20210405'
+, @P_PLAN_Qty = '10^20^30^40'
+
+*/
+CREATE PROCEDURE [dbo].[DMF0003_GET_PRPOPUP]
+	@p_POPUP_TYPE		nvarchar(30),
+    @p_division_id		NVARCHAR(30),
+	@p_REQUEST_NO		NVARCHAR(30),
+    @p_PROJECT_CODE		NVARCHAR(50),
+    @p_SCM_SITE_ID		NVARCHAR(4000),
+    @p_ITEM_ID	        NVARCHAR(4000),
+	@p_DOM_EXP			NVARCHAR(4000),
+	@p_FCST_TYPE		NVARCHAR(4000),
+	@p_INCOTERMS		NVARCHAR(4000),
+	@p_PLANT_SITE_ID	NVARCHAR(4000),
+	@p_YYYYMMDD			NVARCHAR(4000), --[C20210827-000411] GSCM 시스템의 효율성을 위한 개선방안 기능 변경의 건
+	@P_PLAN_QTY			NVARCHAR(4000),
+	@p_CREATED_BY		NVARCHAR(100)
+AS  
+  
+BEGIN
+    SET NOCOUNT ON;
+
+	DECLARE @V_PUCH_MGR				NVARCHAR(150)
+			, @V_PUCH_GROUP			NVARCHAR(150)
+			, @V_STORAGE_PLANT_ID	NVARCHAR(60)
+			, @V_ERR_MSG			NVARCHAR(1000)
+			, @v_ERR_CNT			NVARCHAR(10)
+			, @v_USER_NAME			NVARCHAR(150)
+
+	-- 신규 REQUEST 일 경우 기존재하는 REQUEST 가 하나라도 있으면 에러처리한다.
+	IF ( @p_POPUP_TYPE = 'Request_PR')
+	BEGIN
+		SELECT
+			@P_DIVISION_ID AS DIVISION_ID
+			, B8.TOKEN AS YYYYMMDD
+			, @P_PROJECT_CODE AS PROJECT_CODE 
+			, B1.TOKEN AS ITEM_ID, B2.TOKEN AS PLAN_QTY
+			, B3.TOKEN AS DOM_EXP, B4.TOKEN AS FCST_TYPE
+			, B5.TOKEN AS INCOTERMS, B6.TOKEN AS PLANT_SITE_ID
+			, B7.TOKEN AS SCM_SITE_ID
+		INTO #T
+		FROM DBO.UF_FX_String_Split(@p_ITEM_ID, '^') B1
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@P_PLAN_QTY			, '^') B2  ON B1.NR = B2.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_DOM_EXP			, '^') B3  ON B1.NR = B3.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_FCST_TYPE			, '^') B4  ON B1.NR = B4.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_INCOTERMS				, '^') B5  ON B1.NR = B5.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_PLANT_SITE_ID			, '^') B6  ON B1.NR = B6.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@P_SCM_SITE_ID			, '^') B7  ON B1.NR = B7.NR
+		-- [C20210827-000411] GSCM 시스템의 효율성을 위한 개선방안 기능 변경의 건
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_YYYYMMDD				, '^') B8  ON B1.NR = B8.NR
+		LEFT OUTER JOIN DM_MST_ITEM_SINGLE_V C ON B1.TOKEN = C.ITEM_ID
+		WHERE ISNULL(B1.TOKEN,'') <> ''
+
+		
+		SELECT DISTINCT A.SCM_SITE_ID, A.ITEM_ID, A.FCST_TYPE, A.YYYYMMDD
+		INTO #T_ERR
+		FROM #T A
+		JOIN DM_PLN_PR_DETAIL B ON 
+				A.DIVISION_ID	= B.DIVISION_ID		
+			AND A.PROJECT_CODE	= B.PROJECT_CODE	
+			AND A.SCM_SITE_ID	= B.SCM_SITE_ID	
+			AND A.ITEM_ID		= B.ITEM_ID		
+			AND A.DOM_EXP		= B.DOM_EXP		
+			AND A.FCST_TYPE		= B.FCST_TYPE		
+			AND A.INCOTERMS		= B.INCOTERMS		
+			AND A.PLANT_SITE_ID	= B.PLANT_SITE_ID	
+			AND A.YYYYMMDD		= B.YYYYMMDD	
+			
+		IF EXISTS ( SELECT * FROM #T_ERR )
+		BEGIN
+			SELECT @V_ERR_CNT = COUNT(*)
+			FROM #T_ERR
+
+			SELECT TOP 1 @V_ERR_MSG = 
+				N'[Sales Site:' + RTRIM(SCM_SITE_ID) + N']'
+				+ N'[Model :' + RTRIM(ITEM_ID) + N']'
+				+ N'[FCST Type :' + RTRIM(FCST_TYPE) + N']'
+				+ N'[YYYYMMDd :' + RTRIM(YYYYMMDD) + N']'
+				+ N'외 ' + @V_ERR_CNT + N'건은 기 Request 가 생성된 건입니다. '
+			FROM #T_ERR
+
+			SELECT @V_ERR_MSG AS ERR_MSG
+			RETURN;
+
+		END
+
+		IF NOT EXISTS ( 
+			SELECT DISTINCT A.SCM_SITE_ID, A.ITEM_ID, A.FCST_TYPE, A.YYYYMMDD
+			FROM #T A
+			JOIN DM_PLN_MKT_FCST B ON 
+					A.DIVISION_ID	= B.DIVISION_ID		
+				AND A.PROJECT_CODE	= B.PROJECT_CODE	
+				AND A.SCM_SITE_ID	= B.SCM_SITE_ID	
+				AND A.ITEM_ID		= B.ITEM_ID		
+				AND A.DOM_EXP		= B.DOM_EXP		
+				AND A.FCST_TYPE		= B.FCST_TYPE		
+				AND A.INCOTERMS		= B.INCOTERMS		
+				AND A.PLANT_SITE_ID	= B.PLANT_SITE_ID	
+				AND A.YYYYMMDD		= B.YYYYMMDD	
+				AND A.PLAN_QTY		= B.QTY				-- 수량까지 일치해야 한다.
+			WHERE B.DIVISION_ID = @P_DIVISION_ID
+				AND B.MEASURE = 'BNPIn'
+				)
+		BEGIN
+			SELECT N'BNP In 메저의 수량이 아직 등록되지 않았습니다.'  AS ERR_MSG
+			RETURN;
+		END
+
+			
+	END
+
+
+	-- POPUP_TYPE = View_PR 일 경우 MKT FCST 의 값을 이용해서 REQUEST_NO 를 찾아준다.
+	IF ( @p_POPUP_TYPE = 'View_PR' AND @p_REQUEST_NO = '')
+	BEGIN
+
+
+		SELECT @p_REQUEST_NO = MAX(REQUEST_NO)
+		FROM DM_PLN_PR_DETAIL A
+		WHERE DIVISION_ID = @P_DIVISION_ID
+			AND PROJECT_CODE	= @P_PROJECT_CODE
+			AND SCM_SITE_ID		= @P_SCM_SITE_ID
+			AND ITEM_ID			= @P_ITEM_ID
+			AND DOM_EXP			= @P_DOM_EXP
+			AND FCST_TYPE		= @P_FCST_TYPE
+			AND INCOTERMS		= @P_INCOTERMS
+			AND ISNULL(PLANT_SITE_ID,'')	= ISNULL(@P_PLANT_SITE_ID,'')
+			AND YYYYMMDD		= @P_YYYYMMDD
+
+		IF ISNULL(@p_REQUEST_NO, '') = ''
+		BEGIN
+			SELECT N'PR 이 존재하지 않습니다.' AS ERR_MSG
+			RETURN;
+		END
+
+	END
+
+	IF ISNULL(@P_REQUEST_NO, '') <> ''
+	BEGIN
+
+		-- DETAIL
+		SELECT A.ITEM_SEQ
+			, A.STORAGE_PLANT_ID
+			, DBO.FN_CHAR_TO_DATE(A.YYYYMMDD) AS YYYYMMDD
+			, A.PROJECT_CODE
+			, A.ITEM_ID
+			, B.ITEM_NAME AS ITEM_NAME
+			, B.ITEM_UOM AS ITEM_UOM
+			, A.PLAN_QTY AS QTY
+			, A.DOM_EXP
+			, A.FCST_TYPE
+			, A.INCOTERMS
+			, A.PLANT_SITE_ID
+			, A.SCM_SITE_ID
+			, A.STORAGE_ID AS SLOC
+			, A.PR_ITEM_DETAIL AS ITEM_DETAIL
+		FROM DM_PLN_PR_DETAIL A
+		LEFT OUTER JOIN DM_MST_ITEM_SINGLE_V B ON A.ITEM_ID = B.ITEM_ID AND A.DIVISION_ID = B.DIVISION_ID
+		WHERE A.DIVISION_ID = @P_DIVISION_ID
+			AND A.REQUEST_NO = @P_REQUEST_NO
+
+		-- HEADER
+		SELECT A.REQUEST_NO
+			, dbo.FN_GET_DIVISION_NAME(A.DIVISION_ID) AS DIVISION_NAME
+			, A.PUCH_MGR
+			, A.PUCH_GROUP
+			, dbo.SCM_ARR_SPL_VAL(A.LAST_UPDATED_BY, '^', 1) AS REQUESTED_BY
+			, A.LAST_UPDATE_DATE AS REQUEST_DATE
+			, A.PR_HEADER
+		FROM DM_PLN_PR_DETAIL A
+		WHERE DIVISION_ID = @P_DIVISION_ID
+			AND REQUEST_NO = @P_REQUEST_NO
+			
+	END
+	ELSE	-- 신규 또는 ADD
+	BEGIN
+
+		-- ADD HISTORY 일 경우 기존 데이터가 없으면 에러처리한다.
+		IF ( @p_POPUP_TYPE = 'ADD_HISTORY' )
+		BEGIN
+			IF NOT EXISTS ( 
+				SELECT *
+				FROM DM_PLN_PR_DETAIL A
+				WHERE DIVISION_ID = @P_DIVISION_ID
+					AND PROJECT_CODE	= @P_PROJECT_CODE
+					AND SCM_SITE_ID		= @P_SCM_SITE_ID
+					AND ITEM_ID			= @P_ITEM_ID
+					AND DOM_EXP			= @P_DOM_EXP
+					AND FCST_TYPE		= @P_FCST_TYPE
+					AND INCOTERMS		= @P_INCOTERMS
+					AND ISNULL(PLANT_SITE_ID,'')	= ISNULL(@P_PLANT_SITE_ID,'')
+					AND YYYYMMDD		= @P_YYYYMMDD
+					)
+			BEGIN
+				SELECT N'기존 PR 이 존재하지 않습니다.\r\n Request PR 을 이용해주세요.' AS ERR_MSG
+				RETURN;
+			END
+		END
+
+		SELECT TOP 1 @V_PUCH_MGR = SEGMENT1
+				, @V_PUCH_GROUP = SEGMENT2
+		FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+		WHERE LOOKUP_TYPE = 'DM_PR_PUCH'
+				
+		-- [C20210813-000004] 기본 plant 와 sloc 처리
+		DECLARE @V_DEPT_ID NVARCHAR(50)
+			, @V_DEFAULT_PLANT NVARCHAR(50)
+			, @V_DEFAULT_SLOC	NVARCHAR(50)
+
+		SELECT @V_DEPT_ID = DEPT_ID
+			, @v_USER_NAME = UserName
+		FROM TB_FX_USER 
+		WHERE USERID = @p_CREATED_BY
+
+
+
+		-- DEPT 가 걸리면 W/S PLANT, 없으면 일반
+		SELECT TOP 1
+			 @V_DEFAULT_PLANT = SEGMENT1
+			, @V_DEFAULT_SLOC = SEGMENT2 
+		FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+		WHERE LOOKUP_TYPE = 'DM_PR_SLOC'
+			AND ATTRIBUTE2 LIKE '%' + @V_DEPT_ID + '%'
+
+		IF @V_DEFAULT_PLANT IS NULL
+		BEGIN
+			SELECT TOP 1
+				 @V_DEFAULT_PLANT = SEGMENT1
+				, @V_DEFAULT_SLOC = SEGMENT2 
+			FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+			WHERE LOOKUP_TYPE = 'DM_PR_SLOC'
+				AND ATTRIBUTE2 = ''
+			ORDER BY DISPLAY_SEQ
+
+		END
+
+
+		-- DETAIL
+		SELECT
+			ROW_NUMBER() OVER ( ORDER BY B1.TOKEN ) AS ITEM_SEQ
+			, @V_DEFAULT_PLANT AS STORAGE_PLANT_ID
+			-- [C20210827-000411] GSCM 시스템의 효율성을 위한 개선방안 기능 변경의 건
+			, DBO.FN_CHAR_TO_DATE(B8.TOKEN) AS YYYYMMDD
+			, @P_PROJECT_CODE AS PROJECT_CODE 
+			, B1.TOKEN AS ITEM_ID
+			, C.ITEM_NAME, C.ITEM_UOM
+			, CASE WHEN @p_POPUP_TYPE = 'ADD_HISTORY' THEN '' ELSE B2.TOKEN END AS QTY
+			, B3.TOKEN AS DOM_EXP, B4.TOKEN AS FCST_TYPE
+			, B5.TOKEN AS INCOTERMS, B6.TOKEN AS PLANT_SITE_ID
+			, B7.TOKEN AS SCM_SITE_ID
+			, @V_DEFAULT_SLOC AS SLOC
+			, '' AS ITEM_DETAIL	
+			, GETDATE() AS CREATION_DATE		
+		FROM DBO.UF_FX_String_Split(@p_ITEM_ID, '^') B1
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@P_PLAN_QTY			, '^') B2  ON B1.NR = B2.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_DOM_EXP			, '^') B3  ON B1.NR = B3.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_FCST_TYPE			, '^') B4  ON B1.NR = B4.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_INCOTERMS				, '^') B5  ON B1.NR = B5.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_PLANT_SITE_ID			, '^') B6  ON B1.NR = B6.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@P_SCM_SITE_ID			, '^') B7  ON B1.NR = B7.NR
+		-- [C20210827-000411] GSCM 시스템의 효율성을 위한 개선방안 기능 변경의 건
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_YYYYMMDD				, '^') B8  ON B1.NR = B8.NR
+		LEFT OUTER JOIN DM_MST_ITEM_SINGLE_V C ON B1.TOKEN = C.ITEM_ID AND C.DIVISION_ID = @P_DIVISION_ID
+		WHERE ISNULL(B1.TOKEN,'') <> ''
+
+
+
+		-- HEADER
+		SELECT NULL AS REQUEST_NO
+			, dbo.FN_GET_DIVISION_NAME(@P_DIVISION_ID) AS DIVISION_NAME
+			, @V_PUCH_MGR AS PUCH_MGR
+			, @V_PUCH_GROUP AS PUCH_GROUP
+			--, @p_CREATED_BY AS REQUESTED_BY
+			, @v_USER_NAME AS REQUESTED_BY
+			, CONVERT(NVARCHAR(30), GETDATE(), 120) AS REQUEST_DATE
+			, '' AS PR_HEADER
+			 
+	END
+
+END
+
+
+
+
+
+
+
+
+
+

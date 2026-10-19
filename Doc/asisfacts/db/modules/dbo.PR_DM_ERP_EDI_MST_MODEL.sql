@@ -1,0 +1,336 @@
+﻿/*
+ * Program ID   : PR_DM_ERP_EDI_MST_MODEL
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ 2023.04.06	   chano0612		  []  ERP, EDI MASTER DATA 정비 I/F
+  
+ */
+
+ -- EXEC PR_DM_ERP_EDI_MST_MODEL
+----------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[PR_DM_ERP_EDI_MST_MODEL]	
+AS
+
+BEGIN
+
+    SET NOCOUNT ON;
+
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET NOCOUNT ON; 
+    SET XACT_ABORT ON;
+
+    DECLARE @v_log_type					NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count				INTEGER = 0;
+    DECLARE @v_log_message			NVARCHAR(1000);
+    DECLARE @v_description				NVARCHAR(500);
+    DECLARE @d_event_date				DATETIME;
+	DECLARE @n_history_seq				BIGINT;
+	DECLARE @V_DIVISION_ID			NVARCHAR(30);
+
+	-- LOG 용 변수 설정
+    DECLARE @v_batch_user				NVARCHAR(150) = 'scm_batch';
+	DECLARE @v_program_name			NVARCHAR(150) = 'PR_DM_ERP_EDI_MST_MODEL';
+	DECLARE @V_BATCH_CHK_MSG	NVARCHAR(150) = N' '
+
+	-- 시작 LOG
+    SET @v_log_type = 'START';
+    SET @v_log_message = '########## Start of procedure ##########';
+    SET @v_description = '';
+    SET @d_event_date = SYSDATETIME();
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+
+BEGIN TRY   
+    
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_DNM_EDI_CALLOFF_STATUS', N'U')		IS NOT NULL DROP TABLE #TEMP_DM_DNM_EDI_CALLOFF_STATUS  
+	IF OBJECT_ID (N'tempdb..#TEMP_MST_MODEL_SOLDTO', N'U')					IS NOT NULL DROP TABLE #TEMP_MST_MODEL_SOLDTO  
+	IF OBJECT_ID (N'tempdb..#TEMP_MST_MODEL_SHIPTO', N'U')						IS NOT NULL DROP TABLE #TEMP_MST_MODEL_SHIPTO  
+	IF OBJECT_ID (N'tempdb..#TEMP_MST_MODEL_SALES_SITE', N'U')					IS NOT NULL DROP TABLE #TEMP_MST_MODEL_SALES_SITE  
+	IF OBJECT_ID (N'tempdb..#TEMP_MST_MODEL_UPDATE', N'U')					IS NOT NULL DROP TABLE #TEMP_MST_MODEL_UPDATE  
+  
+	CREATE TABLE #TEMP_DM_DNM_EDI_CALLOFF_STATUS (  
+			  SEQ								INT  
+			, DIVISION_ID					NVARCHAR(100)  
+			, COMPANY_ID				NVARCHAR(100)  
+			, SENDER_CODE				NVARCHAR(100)  
+			, SENDER_NAME				NVARCHAR(100)  
+			, SOLDTO_CODE				NVARCHAR(100)  
+			, SHIPTO_CODE				NVARCHAR(100)  
+			, UNLOADING_POINT		NVARCHAR(100)  
+			, SALES_PLANT				NVARCHAR(100)  
+			, SCM_SITE_ID					NVARCHAR(100)  
+			, PROJECT_CODE				NVARCHAR(100)  
+			, ITEM_ID						NVARCHAR(100)  
+			, CUST_MATERIAL_CODE	NVARCHAR(100)  
+			)  
+  
+	CREATE TABLE #TEMP_MST_MODEL_SALES_SITE (  
+			  CUSTOMER_CODE			NVARCHAR(100)  
+			, SCM_SITE_ID					NVARCHAR(100)  
+			, SOLDTO_CODE				NVARCHAR(100)  
+			, SHIPTO_CODE				NVARCHAR(100)  
+			, SOURCE						NVARCHAR(100)  
+			)  
+  
+  CREATE TABLE #TEMP_MST_MODEL_UPDATE (  
+			  SALES_ORG					NVARCHAR(100)  
+			, CUSTOMER_CODE			NVARCHAR(100)  
+			, ITEM_ID						NVARCHAR(100)  
+			, CUSTOMER_ITEM_ID		NVARCHAR(100)  
+			)  
+    
+  
+  DECLARE @V_CNT						INT = 0  
+  DECLARE @V_CNT1					INT = 0  
+  DECLARE @V_CNT2					INT = 0  
+  DECLARE @i								INT = 1  
+  DECLARE @i1							INT = 1  
+  DECLARE @i2							INT = 1  
+  
+  DECLARE @M_SALES_ORG					NVARCHAR(50)  
+  DECLARE @M_CUSTOMER_CODE        NVARCHAR(50)  
+  DECLARE @M_DESC1_SP					NVARCHAR(50)  
+  DECLARE @M_DESC1_SH					NVARCHAR(50)  
+  DECLARE @M_COMPANY_ID				NVARCHAR(50)  
+  DECLARE @M_SCM_SITE_ID				NVARCHAR(50)  
+  DECLARE @M_SENDER_CODE				NVARCHAR(50)  
+  DECLARE @M_SOLDTO_CODE				NVARCHAR(50)  
+  DECLARE @M_SHIPTO_CODE				NVARCHAR(50)  
+  DECLARE @M_ITEM_ID						NVARCHAR(50)  
+  DECLARE @M_CUST_MATERIAL_CODE	NVARCHAR(50)  
+  DECLARE @M_UNLOADING_POINT		NVARCHAR(50)  
+  DECLARE @M_SALES_PLANT				NVARCHAR(50)  
+  DECLARE @M_PROJECT_CODE			NVARCHAR(50)  
+  
+  DECLARE @V_COMPANY_ID				NVARCHAR(50)  
+  DECLARE @V_SCM_SITE_ID					NVARCHAR(50)  
+  DECLARE @V_SENDER_CODE				NVARCHAR(50)  
+  DECLARE @V_SOLDTO_CODE				NVARCHAR(50)  
+  DECLARE @V_SHIPTO_CODE				NVARCHAR(50)  
+  DECLARE @V_ITEM_ID						NVARCHAR(50)  
+  DECLARE @V_CUST_MATERIAL_CODE	NVARCHAR(50)  
+  DECLARE @V_UNLOADING_POINT		NVARCHAR(50)  
+  DECLARE @V_SALES_PLANT				NVARCHAR(50)  
+  DECLARE @V_PROJECT_CODE				NVARCHAR(50)  
+  
+    
+  INSERT INTO #TEMP_DM_DNM_EDI_CALLOFF_STATUS  
+  SELECT  ROW_NUMBER() OVER(ORDER BY SEQ ) AS SEQ  
+			, DIVISION_ID   
+ 			, COMPANY_ID   
+ 			, SENDER_CODE   
+ 			, SENDER_NAME  
+ 			, SOLDTO_CODE   
+ 			, SHIPTO_CODE   
+ 			, UNLOADING_POINT   
+ 			, SALES_PLANT   
+ 			, SCM_SITE_ID   
+ 			, PROJECT_CODE   
+ 			, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(ITEM_ID, ' ', ''), '-', ''), '.', ''), '/', ''), ',', ''), ':', ''), ';', ''), '+', ''), '_', ''), '(', ''), ')', ''), '*', ''), '^', ''), '$', ''), '#', '')      
+ 			, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(CUST_MATERIAL_CODE, ' ', ''), '-', ''), '.', ''), '/', ''), ',', ''), ':', ''), ';', ''), '+', ''), '_', ''), '(', ''), ')', ''), '*', ''), '^', ''), '$', ''), '#', '')
+  FROM DM_DNM_EDI_CALLOFF_STATUS WITH(NOLOCK)  
+  WHERE ERP_STATUS = 'ING_ERP'   
+
+  SELECT @V_CNT = COUNT(1) FROM #TEMP_DM_DNM_EDI_CALLOFF_STATUS WITH(NOLOCK)
+  
+  PRINT @V_CNT  
+  SET @i = 1  
+  
+  WHILE @i <= @V_CNT  
+  BEGIN  
+  
+    SET @V_COMPANY_ID					=  ''  
+    SET @V_SENDER_CODE				=  ''  
+    SET @V_SOLDTO_CODE				=  ''  
+    SET @V_SHIPTO_CODE					=  ''  
+    SET @V_UNLOADING_POINT			=  ''  
+    SET @V_SALES_PLANT					=  ''  
+    SET @V_SCM_SITE_ID					=  ''  
+    SET @V_PROJECT_CODE				=  ''  
+    SET @V_ITEM_ID							=  ''  
+    SET @V_CUST_MATERIAL_CODE	=  ''  
+    
+    SET @M_SALES_ORG					= ''  
+    SET @M_CUSTOMER_CODE			= ''  
+    SET @M_ITEM_ID							= ''  
+    SET @M_CUST_MATERIAL_CODE	= ''   
+  
+  
+   SELECT @V_DIVISION_ID				= DIVISION_ID  
+			 , @V_COMPANY_ID				= COMPANY_ID  
+			 , @V_SENDER_CODE			= SENDER_CODE  
+			 , @V_SOLDTO_CODE			= SOLDTO_CODE  
+			 , @V_SHIPTO_CODE			= SHIPTO_CODE  
+			 , @V_UNLOADING_POINT	= UNLOADING_POINT  
+			 , @V_SALES_PLANT				= SALES_PLANT  
+			 , @V_SCM_SITE_ID				= ISNULL(SCM_SITE_ID, '')  
+			 , @V_PROJECT_CODE			= PROJECT_CODE  
+			 , @V_ITEM_ID						= ITEM_ID
+			 , @V_CUST_MATERIAL_CODE = CUST_MATERIAL_CODE  
+	FROM #TEMP_DM_DNM_EDI_CALLOFF_STATUS WITH(NOLOCK)
+	WHERE SEQ = @i  
+  
+   -- SOLDTO_CODE, @V_SHIPTO_CODE 는 있으나   
+	IF (@V_SOLDTO_CODE <> '' AND @V_SHIPTO_CODE <> '' AND @V_SCM_SITE_ID = '' )  
+	BEGIN  
+		SELECT @M_SCM_SITE_ID =  SCM_SITE_ID   
+		FROM SCM_MST_SITE_CUSTOMER   
+		WHERE DIVISION_ID = @V_DIVISION_ID   
+		AND SOLDTO_CODE = @V_SOLDTO_CODE   
+		AND SHIPTO_CODE = @V_SHIPTO_CODE   
+		AND VALID_YN = 'Y' 
+      
+		BEGIN  
+			UPDATE DM_DNM_EDI_CALLOFF_ITEM   
+			SET SCM_SITE_ID = @M_SCM_SITE_ID  
+				, ATTRIBUTE10 = 'C'   
+				, LAST_UPDATE_DATE = GETDATE()  
+				, LAST_UPDATED_BY = 'scm_batch'  
+			WHERE DIVISION_ID = @V_DIVISION_ID   
+			AND SOLDTO_CODE = @V_SOLDTO_CODE   
+			AND SHIPTO_CODE = @V_SHIPTO_CODE
+			AND STATUS_CODE <> 'S'
+			--AND ERP_STATUS = 'ING_ERP'  
+     
+			BEGIN  
+				INSERT INTO DM_DNM_ERP_EDI_MST_LOG (COMPANY_ID, SOLDTO_CODE, SHIPTO_CODE, SCM_SITE_ID, ITEM_ID, ORIGIN_DATA, COOKED_DATA, CONDITION, CREATE_DATE)   
+				VALUES (@M_SALES_ORG, @V_SOLDTO_CODE, @V_SHIPTO_CODE, '', '', '', '', '' , GETDATE())  
+			END  
+  
+		END  
+  
+	END   
+  
+   -- SOLDTO_CODE, @V_SHIPTO_CODE, @V_CUST_MATERIAL_CODE 는 있으나 @V_ITEM_ID 없는 경우  
+	IF (@V_SOLDTO_CODE <> '' AND @V_SHIPTO_CODE <> '' AND @V_CUST_MATERIAL_CODE <> '' AND @V_ITEM_ID = '')  
+	BEGIN
+		SELECT @M_SALES_ORG = SALES_ORG  
+				 , @M_CUSTOMER_CODE = CUSTOMER_CODE   
+				 , @M_ITEM_ID = ITEM_ID  
+				 , @M_CUST_MATERIAL_CODE = CUSTOMER_ITEM_ID  
+		FROM DM_DNM_ERP_EDI_MST_CUST_MATERIAL WITH(NOLOCK)  
+		WHERE SALES_ORG = @V_COMPANY_ID   
+		AND CUSTOMER_CODE = @V_SOLDTO_CODE    
+		AND CUSTOMER_ITEM_ID = @V_CUST_MATERIAL_CODE     
+		GROUP BY SALES_ORG, CUSTOMER_CODE, ITEM_ID, CUSTOMER_ITEM_ID  
+
+		IF @V_ITEM_ID = '' AND @V_COMPANY_ID = @M_SALES_ORG AND @V_SOLDTO_CODE = @M_CUSTOMER_CODE AND @V_CUST_MATERIAL_CODE = @M_CUST_MATERIAL_CODE  
+		BEGIN  
+			UPDATE DM_DNM_EDI_CALLOFF_ITEM   
+			SET ITEM_ID = @M_ITEM_ID  
+				, ATTRIBUTE10 = 'C'   
+				, LAST_UPDATE_DATE = GETDATE()  
+				, LAST_UPDATED_BY = 'scm_batch'  
+			WHERE COMPANY_ID = @M_SALES_ORG   
+			AND SOLDTO_CODE = @M_CUSTOMER_CODE   
+			AND REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(CUST_MATERIAL_CODE, ' ', ''), '-', ''), '.', ''), '/', ''), ',', ''), ':', ''), ';', ''), '+', ''), '_', ''), '(', ''), ')', ''), '*', ''), '^', ''), '$', ''), '#', '') = @M_CUST_MATERIAL_CODE
+			AND STATUS_CODE <> 'S'
+			--AND ISNULL(ATTRIBUTE10, '') <> 'C'  
+  
+			BEGIN  
+				INSERT INTO DM_DNM_ERP_EDI_MST_LOG (COMPANY_ID, SOLDTO_CODE, SHIPTO_CODE, SCM_SITE_ID, ITEM_ID, ORIGIN_DATA, COOKED_DATA, CONDITION, CREATE_DATE)   
+				VALUES (@M_SALES_ORG, @M_CUSTOMER_CODE, '', '', @M_ITEM_ID, @V_CUST_MATERIAL_CODE, @M_ITEM_ID,  '>>' + @M_ITEM_ID , GETDATE())  
+			END  
+		END  
+  
+	END  
+  
+	--CUST_MATERIAL_CODE = ITEM가 동일한 경우 ITEM_ID 정비
+	IF (@V_SOLDTO_CODE <> '' AND @V_ITEM_ID <> '' AND @V_ITEM_ID = @V_CUST_MATERIAL_CODE)
+	BEGIN  
+		SELECT @M_SALES_ORG   = SALES_ORG  
+					, @M_CUSTOMER_CODE = CUSTOMER_CODE   
+					, @M_ITEM_ID    = ITEM_ID  
+					, @M_CUST_MATERIAL_CODE = CUSTOMER_ITEM_ID  
+		FROM DM_DNM_ERP_EDI_MST_CUST_MATERIAL WITH(NOLOCK)  
+		WHERE SALES_ORG = @V_COMPANY_ID   
+		AND CUSTOMER_CODE = @V_SOLDTO_CODE    
+		AND CUSTOMER_ITEM_ID = @V_CUST_MATERIAL_CODE  
+		GROUP BY SALES_ORG, CUSTOMER_CODE, ITEM_ID, CUSTOMER_ITEM_ID  
+
+		IF @V_COMPANY_ID = @M_SALES_ORG AND @V_SOLDTO_CODE = @M_CUSTOMER_CODE
+		BEGIN  
+			UPDATE DM_DNM_EDI_CALLOFF_ITEM   
+			SET ITEM_ID = @M_ITEM_ID   
+			WHERE COMPANY_ID = @M_SALES_ORG   
+			AND SOLDTO_CODE = @M_CUSTOMER_CODE   
+			AND REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(ITEM_ID, ' ', ''), '-', ''), '.', ''), '/', ''), ',', ''), ':', ''), ';', ''), '+', ''), '_', ''), '(', ''), ')', ''), '*', ''), '^', ''), '$', ''), '#', '') = @M_CUST_MATERIAL_CODE
+			AND STATUS_CODE <> 'S'
+			--AND ISNULL(ATTRIBUTE10, '') <> 'C'  
+  
+			BEGIN  
+				INSERT INTO DM_DNM_ERP_EDI_MST_LOG (COMPANY_ID, SOLDTO_CODE, SHIPTO_CODE, SCM_SITE_ID, ITEM_ID, ORIGIN_DATA, COOKED_DATA, CONDITION, CREATE_DATE)   
+				VALUES (@M_SALES_ORG, @M_CUSTOMER_CODE, '', '', @M_ITEM_ID, @V_CUST_MATERIAL_CODE, @M_ITEM_ID,  '>>' + @M_ITEM_ID , GETDATE())  
+			END  
+		END  
+
+	END  
+
+	IF (@V_SHIPTO_CODE <> '' AND @V_ITEM_ID <> '' AND @V_ITEM_ID = @V_CUST_MATERIAL_CODE  )  
+	BEGIN 
+		SELECT @M_SALES_ORG   = SALES_ORG  
+					, @M_CUSTOMER_CODE = CUSTOMER_CODE   
+					, @M_ITEM_ID    = ITEM_ID  
+					, @M_CUST_MATERIAL_CODE = CUSTOMER_ITEM_ID  
+		FROM DM_DNM_ERP_EDI_MST_CUST_MATERIAL WITH(NOLOCK)  
+		WHERE SALES_ORG = @V_COMPANY_ID   
+		AND CUSTOMER_CODE = @V_SHIPTO_CODE
+		AND CUSTOMER_ITEM_ID = @V_CUST_MATERIAL_CODE  
+		GROUP BY SALES_ORG, CUSTOMER_CODE, ITEM_ID, CUSTOMER_ITEM_ID  
+
+		IF @V_COMPANY_ID = @M_SALES_ORG AND @V_SHIPTO_CODE = @M_CUSTOMER_CODE
+		BEGIN  
+			UPDATE DM_DNM_EDI_CALLOFF_ITEM   
+			SET ITEM_ID = @M_ITEM_ID   
+			WHERE COMPANY_ID = @M_SALES_ORG   
+			AND SHIPTO_CODE = @M_CUSTOMER_CODE   
+			AND REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(ITEM_ID, ' ', ''), '-', ''), '.', ''), '/', ''), ',', ''), ':', ''), ';', ''), '+', ''), '_', ''), '(', ''), ')', ''), '*', ''), '^', ''), '$', ''), '#', '') = @M_CUST_MATERIAL_CODE
+			AND STATUS_CODE <> 'S'
+			--AND ISNULL(ATTRIBUTE10, '') <> 'C'  
+  
+			BEGIN  
+				INSERT INTO DM_DNM_ERP_EDI_MST_LOG (COMPANY_ID, SOLDTO_CODE, SHIPTO_CODE, SCM_SITE_ID, ITEM_ID, ORIGIN_DATA, COOKED_DATA, CONDITION, CREATE_DATE)   
+				VALUES (@M_SALES_ORG, @M_CUSTOMER_CODE, '', '', @M_ITEM_ID, @V_CUST_MATERIAL_CODE, @M_ITEM_ID, '>>' + @M_ITEM_ID , GETDATE())  
+			END  
+		END  
+	END
+  
+	SET @i = @i + 1  
+
+  END  
+  
+  --EDI STATUS 정비
+  BEGIN
+	EXEC PR_DM_DNM_EDI_CALLOFF_STATUS  
+  END
+
+  --EDI 소급적용 데이터 생성(배치JOB에서 1시간 간격으로 실행)
+ -- BEGIN
+	--EXEC PR_DM_DNM_EDI_CALLOFF_MKT_FCST_EDI
+ -- END
+
+END TRY  
+------------------------------------------------------------------------------------------------------------------- ◇◇◇◇◇  
+  
+BEGIN CATCH  
+	SET @v_log_type = 'E';  
+    SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));  
+    SET @v_description = 'ERROR_LINE : ' + CAST(ERROR_LINE() AS nvarchar(10));  
+    SET @d_event_date = SYSDATETIME();  
+	SELECT @v_log_message  
+  
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;  
+    END CATCH;  
+  
+    -- 종료 LOG  
+    SET @v_log_type = 'END';  
+    SET @v_log_message = '########## END of procedure ##########';  
+    SET @d_event_date = SYSDATETIME();  
+    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;  
+  
+ERR_RTN:  
+   
+  
+END

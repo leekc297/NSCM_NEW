@@ -1,0 +1,44 @@
+﻿/****************************************************************************************************/
+/* Program ID  : [SSP0300_GET_ORDER_DETAIL]			                                                 */
+/* Description : Procedure 작성 가이드                                                               */
+/* Usage       : Procedure 작성 시 참조하세요!                                                       */
+/* Parameter   :                                                                                    */
+/*                                                                                                  */
+/*--------------------------------------------------------------------------------------------------*/
+/* Date        In Charge    Description                                                             */
+/*--------------------------------------------------------------------------------------------------*/
+/* 2022/04/05  KIMYONGHO    신규추가																	*/
+/****************************************************************************************************/
+
+CREATE PROCEDURE [dbo].[SSP0300_GET_ORDER_DETAIL]  
+  @p_division_id    NVARCHAR(MAX),
+  @p_erp_so_no		NVARCHAR(MAX),
+  @p_confirm_id     NVARCHAR(MAX),
+  @p_item_id        NVARCHAR(MAX)
+AS
+BEGIN
+	
+  SET NOCOUNT ON;
+    
+  
+	SELECT 
+		S.CONFIRM_ID
+		, S.SO_NO
+		, CEILING(S.SO_ITEM_QTY) AS SO_ITEM_QTY
+		, S.SO_ITEM_NO
+		, D.DO_NO
+		, D.DO_ITEM_NO
+		, CEILING(D.DO_ITEM_QTY) AS DO_ITEM_QTY
+	FROM [DBO].[SSP_ANL_SHIP_ERP_SO] AS S WITH(NOLOCK)
+	LEFT OUTER JOIN [DBO].[SSP_ANL_SHIP_ERP_DO] AS D WITH(NOLOCK)
+		ON S.CONFIRM_ID = D.CONFIRM_ID
+		AND S.SO_NO		= D.SO_NO
+		AND S.SO_ITEM_NO	= D.SO_ITEM_NO
+		AND S.SO_VALID_YN = 'Y'
+		AND D.DO_VALID_YN = 'Y'
+	WHERE 1=1
+	  AND S.CONFIRM_ID = (SELECT DISTINCT CONFIRM_ID FROM SSP_ANL_SHIP_ERP_SO (NOLOCK) WHERE SO_NO = @p_erp_so_no)
+	ORDER BY S.SO_NO, D.DO_NO, S.CONFIRM_ID
+	;
+
+END

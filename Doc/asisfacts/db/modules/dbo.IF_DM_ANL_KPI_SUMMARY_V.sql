@@ -1,0 +1,68 @@
+﻿
+CREATE VIEW [dbo].[IF_DM_ANL_KPI_SUMMARY_V] 
+AS
+/*
+ * Program ID   : IF_DM_ANL_KPI_SUMMARY_V
+ * Description  : KPI VIEW  : DW용
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2022.05.03   HWI1993 Initial Release : PJ20216891 Digital SCM 3 Level 가속화를 위한 개선 : GM JV
+ * 
+ */
+
+
+SELECT
+	
+	  WORK_YYYYMMDD
+	, CASE WHEN DIVISION_ID LIKE '81%' THEN '81' ELSE DIVISION_ID END AS DIVISION_ID
+	, DEPT_ID
+	, END_CUSTOMER
+	, SCM_SITE_ID
+	, PROJECT_CODE
+	, ITEM_ID
+	, FCST_TYPE
+	, ISO_YYYYWW
+	, PARTIAL_WEEK_NAME
+	, YYYYMMDD
+	, RESULT_QTY
+	, MEASURE
+	, WEIGHT
+	, KPI_RATE
+	, W1_BEFORE_VALUE
+	, W2_BEFORE_VALUE
+	, W3_BEFORE_VALUE
+	, W4_BEFORE_VALUE
+	, W5_BEFORE_VALUE
+	, W6_BEFORE_VALUE
+	, W7_BEFORE_VALUE
+	, W8_BEFORE_VALUE
+	, W9_BEFORE_VALUE
+	, W10_BEFORE_VALUE
+	, W11_BEFORE_VALUE
+	, W12_BEFORE_VALUE
+	, W13_BEFORE_VALUE
+	, W14_BEFORE_VALUE
+	, W15_BEFORE_VALUE
+	, W16_BEFORE_VALUE
+	, W17_BEFORE_VALUE
+	, W18_BEFORE_VALUE
+	, W19_BEFORE_VALUE
+	, W20_BEFORE_VALUE
+	, CREATED_BY
+	, CREATION_DATE
+	, LAST_UPDATED_BY
+	, LAST_UPDATE_DATE
+	, ATTRIBUTE1
+	, ATTRIBUTE2
+	, ATTRIBUTE3
+	, ATTRIBUTE4
+	, ATTRIBUTE5
+	, ATTRIBUTE6
+	, ATTRIBUTE7
+	, ATTRIBUTE8
+	, ATTRIBUTE9
+	, ATTRIBUTE10
+	, DIVISION_ID AS SCM_DIVISION_ID
+FROM DM_ANL_KPI_SUMMARY

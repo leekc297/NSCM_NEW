@@ -1,0 +1,1658 @@
+﻿/*
+ * Program ID   : SCP0052
+ * Description  : CAPA Report
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2021/02/02   khj79          [PJ20199555] 공급 대응력 향상을 위한 자재재공 수급 점검 체계 개선 - 최초작성
+ * 2021/03/10   khj79          부동 소수점 오류 개선
+ * 2021/10/07	khj79	       [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - M11 => M12 로 변경
+ 
+ex>	DECLARE @p_today_yyyymmdd		NVARCHAR(8) = '20210203'
+	,@p_from_yyyymm			NVARCHAR(6) = '202101'
+	,@p_to_yyyymm			NVARCHAR(6) = '202112'
+	,@p_division_id			NVARCHAR(20) = '81'
+	,@p_group				NVARCHAR(1) = 'A'
+	,@p_plant_id			NVARCHAR(MAX) = 'A040'
+	,@p_factory_id			NVARCHAR(MAX) = 'A1'
+	,@p_version_id			NVARCHAR(MAX) = '202110_001,202107_002'
+	,@p_line_id				NVARCHAR(MAX) = 'A1A02'
+	,@p_operation_id		NVARCHAR(MAX) = 'A8000'
+	,@p_model_id			NVARCHAR(30) = ''
+	,@p_item_id				NVARCHAR(30) = ''
+	,@p_nick_name			NVARCHAR(30) = ''
+	,@p_check_loss			CHAR(1) = 'Y'
+	,@p_check_line			CHAR(1) = 'Y'
+	,@p_check_tact			CHAR(1) = 'Y'
+	,@p_check_yield			CHAR(1) = 'Y'
+	,@p_user_id				NVARCHAR(30) = 'khj79'
+	,@debug_mode			CHAR(1) = ''
+ */
+
+CREATE PROCEDURE [dbo].[SCP0052_GET_CAPA_REPORT]
+	 @p_today_yyyymmdd		NVARCHAR(8)
+	,@p_from_yyyymm			NVARCHAR(6)
+	,@p_to_yyyymm			NVARCHAR(6)
+	,@p_division_id			NVARCHAR(20)
+	,@p_group				NVARCHAR(MAX)
+	,@p_plant_id			NVARCHAR(MAX)
+	,@p_factory_id			NVARCHAR(MAX)
+	,@p_version_id			NVARCHAR(MAX)
+	,@p_line_id				NVARCHAR(MAX)
+	,@p_operation_id		NVARCHAR(MAX)
+	,@p_model_id			NVARCHAR(30)
+	,@p_item_id				NVARCHAR(30)
+	,@p_nick_name			NVARCHAR(30)
+	,@p_check_loss			CHAR(1)
+	,@p_check_line			CHAR(1)
+	,@p_check_tact			CHAR(1)
+	,@p_check_yield			CHAR(1)
+	,@p_user_id				NVARCHAR(30)
+	,@debug_mode			CHAR(1)
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	-- 부동 소수점 오류(0이나 NULL값을 무시한 연산을 수행) 
+	SET ANSI_WARNINGS OFF
+	SET ARITHIGNORE ON
+	SET ARITHABORT OFF
+
+	-- 날짜 조건용 변수 설정
+	DECLARE @v_start_month		NVARCHAR(6);	--시작 월(현재월 +1 년)
+	DECLARE @v_end_month		NVARCHAR(6);	--마지막 월
+
+	SET @v_start_month = @p_from_yyyymm ;
+	SET @v_end_month= @p_to_yyyymm;
+
+	-- VERSION_ID 설정
+	DECLARE @v_version_id		NVARCHAR(MAX);
+	SET @v_version_id = @p_version_id;
+
+	-- 버전별 division, op group 설정
+	DECLARE @v_ver_division_id	NVARCHAR(20);
+	DECLARE @v_ver_group		NVARCHAR(MAX);
+	
+	-- 쿼리 실행용 변수
+	DECLARE @MEXEC		NVARCHAR(MAX);
+	DECLARE @MQRY_SUM	NVARCHAR(MAX);
+
+	-- LOSS LOOKUP 정보 조회
+	BEGIN
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_LOOKUP') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_LOOKUP;
+		
+		SELECT SEGMENT1		AS LOSS_CODE
+			 , ATTRIBUTE1	AS CATEGORY_ID
+			 , ATTRIBUTE2	AS KEY_ID
+			 , ATTRIBUTE3	AS DATA_TABLE
+			 , CONVERT(NUMERIC(20,10),ATTRIBUTE8) AS CATEGORY_ORDER
+			 , ATTRIBUTE9	AS UOM
+			 , SORT_ORDER
+		 INTO #TMP_SCP0052_LOOKUP
+		 FROM SCM_SYS_LOOKUP_VALUE_SN LV WITH(NOLOCK)
+		WHERE 1=1
+		  AND LOOKUP_TYPE_CODE = 'CAPA_UI_LOSS_TYPE_DEFINIT'
+		  AND ACTIVE_FLAG = 'Y'
+	END
+
+	-- //////////////////////////////////////////////////////////////
+	-- 임시 테이블 생성
+	-- //////////////////////////////////////////////////////////////
+	BEGIN
+		-- STD(기준) 테이블 기준으로 LOSS 저장
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_ADD_STD') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_ADD_STD;
+	
+		CREATE TABLE #TMP_SCP0052_ADD_STD
+		(
+			  DIVISION_ID		NVARCHAR(030)
+			, COMPANY_ID		NVARCHAR(030)
+			, SITE_ID			NVARCHAR(030)
+			, PLANT_ID			NVARCHAR(030)
+			, FACTORY_ID		NVARCHAR(030)
+			, LINE_ID			NVARCHAR(030)
+			, ELECTRODE_TYPE	NVARCHAR(030)
+			, OPERATION_ID		NVARCHAR(030)
+			, LOSS_CODE			NVARCHAR(030)
+			, ITEM_ID			NVARCHAR(030)
+			, LANE_QTY			INT
+			, YYYYMM			NVARCHAR(006)
+			, ITEM_VALUE		NUMERIC(20,4)
+		)
+
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_MM') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_MM;
+
+		CREATE TABLE #TMP_SCP0052_MM
+		(
+			  VERSION_ID		NVARCHAR(030)
+			, DIVISION_ID		NVARCHAR(030)
+			, COMPANY_ID		NVARCHAR(030)
+			, SITE_ID			NVARCHAR(030)
+			, PLANT_ID			NVARCHAR(030)
+			, FACTORY_ID		NVARCHAR(030)
+			, LINE_ID			NVARCHAR(030)
+			, ELECTRODE_TYPE	NVARCHAR(030)
+			, OPERATION_ID		NVARCHAR(030)
+			, LOSS_CODE			NVARCHAR(030)
+			, ITEM_ID			NVARCHAR(030)
+			, LANE_QTY			INT
+			, YYYYMM			NVARCHAR(006)
+			, ITEM_VALUE		NUMERIC(20,4)
+		)
+
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_LTY_MM') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_LTY_MM;
+	
+		CREATE TABLE #TMP_SCP0052_LTY_MM
+		(
+			  VERSION_ID		NVARCHAR(030)
+			, DIVISION_ID		NVARCHAR(030)
+			, COMPANY_ID		NVARCHAR(030)
+			, SITE_ID			NVARCHAR(030)
+			, PLANT_ID			NVARCHAR(030)
+			, FACTORY_ID		NVARCHAR(030)
+			, LINE_ID			NVARCHAR(030)
+			, ELECTRODE_TYPE	NVARCHAR(030)
+			, OPERATION_ID		NVARCHAR(030)
+			, LOSS_CODE			NVARCHAR(030)
+			, ITEM_ID			NVARCHAR(030)
+			, LANE_QTY			INT
+			, YYYYMM			NVARCHAR(006)
+			, ITEM_VALUE		NUMERIC(20,4)
+			, TACT_DAILY_TYPE	NVARCHAR(030)
+		)
+
+		-- Current 와 Version 데이터 저장
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_ALL') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_ALL;
+
+		CREATE TABLE #TMP_SCP0052_ALL
+		( 
+			  VERSION_ID			NVARCHAR(100)
+			, DIVISION_ID			NVARCHAR(030)
+			, COMPANY_ID			NVARCHAR(030)
+			, SITE_ID				NVARCHAR(030)
+			, SITE_NAME				NVARCHAR(150)
+			, PLANT_ID				NVARCHAR(030)
+			, FACTORY_ID			NVARCHAR(030)
+			, FACTORY_NAME			NVARCHAR(150)
+			, LINE_ID				NVARCHAR(030)
+			, LINE_NAME				NVARCHAR(150)
+			, ELECTRODE_TYPE		NVARCHAR(030)
+			, OPERATION_GROUP_NAME	NVARCHAR(100)
+			, OPERATION_ID			NVARCHAR(030)
+			, OPERATION_NAME		NVARCHAR(150)
+			, LOSS_CODE				NVARCHAR(030)
+			, ITEM_ID				NVARCHAR(030)
+			, NICK_NAME				NVARCHAR(100)
+			, LANE_QTY				INT
+			, YYYYMM				NVARCHAR(006)
+			, ITEM_VALUE			NUMERIC(20,4)
+		)
+
+		-- ////////////////////////////////////////// SUM 임시 테이블 //////////////////////////////////////////////////////
+		BEGIN
+			-- 월별 날짜 저장
+			-- 날짜별 시간을 곱한 값 ( 일수 * 1440) 
+			IF OBJECT_ID('TEMPDB..#TMP_SCP0052_DAY_OF_MONTH') IS NOT NULL
+				DROP TABLE #TMP_SCP0052_DAY_OF_MONTH;
+
+				SELECT BASIS_YYYYMM AS YYYYMM 
+					 , CONVERT(INT,MAX(CALENDAR_DAY))         AS WORKING_DAY
+					 , CONVERT(INT,MAX(CALENDAR_DAY)) * 1440  AS WORKING_TIME
+				  INTO #TMP_SCP0052_DAY_OF_MONTH
+				  FROM SCM_SYS_CALENDAR_M
+				 WHERE BASIS_YYYYMM >= @v_start_month
+				   AND BASIS_YYYYMM <= @v_end_month
+				 GROUP BY BASIS_YYYYMM
+
+
+			IF OBJECT_ID('TEMPDB..#TMP_SCP0052_STD_SUM') IS NOT NULL
+				DROP TABLE #TMP_SCP0052_STD_SUM;
+
+			CREATE TABLE #TMP_SCP0052_STD_SUM
+			( 
+				  DIVISION_ID			NVARCHAR(030)
+				, COMPANY_ID			NVARCHAR(030)
+				, SITE_ID				NVARCHAR(030)
+				, PLANT_ID				NVARCHAR(030)
+				, FACTORY_ID			NVARCHAR(030)
+				, LINE_ID				NVARCHAR(030)
+				, ELECTRODE_TYPE		NVARCHAR(030)
+				, OPERATION_ID			NVARCHAR(030)
+				, LOSS_CODE				NVARCHAR(030)
+				, YYYYMM				NVARCHAR(006)
+				, NON_OPERATION_VALUE	NUMERIC(20,4)
+				, NO_LOAD_VALUE			NUMERIC(20,4)
+				, NO_RUN_NOT_PM_VALUE	NUMERIC(20,4)
+				, NO_RUN_PM_VALUE		NUMERIC(20,4)
+			)
+
+			IF OBJECT_ID('TEMPDB..#TMP_SCP0052_STD_CAL') IS NOT NULL
+				DROP TABLE #TMP_SCP0052_STD_CAL;
+
+			CREATE TABLE #TMP_SCP0052_STD_CAL
+			( 
+				  DIVISION_ID			NVARCHAR(030)
+				, COMPANY_ID			NVARCHAR(030)
+				, SITE_ID				NVARCHAR(030)
+				, PLANT_ID				NVARCHAR(030)
+				, FACTORY_ID			NVARCHAR(030)
+				, LINE_ID				NVARCHAR(030)
+				, ELECTRODE_TYPE		NVARCHAR(030)
+				, OPERATION_ID			NVARCHAR(030)
+				, LOSS_CODE				NVARCHAR(030)
+				, YYYYMM				NVARCHAR(006)
+				, ITEM_VALUE			NUMERIC(20,4)
+			)
+		END
+	END
+
+	-- ///////////////////////////////////////////////////////////////////////////////////
+	-- 기준 테이블 생성
+	-- LINE ASSIGN 기준 테이블 생성
+	-- TACT TIME 기준 테이블 생성
+	-- YIELD 기준 테이블 생성
+	-- ///////////////////////////////////////////////////////////////////////////////////
+	BEGIN
+		-- ////////////////////////////
+		-- 기준 테이블 생성
+		-- ////////////////////////////
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_STD') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_STD;
+
+		SELECT DISTINCT
+			   DIVISION_ID
+			 , COMPANY_ID
+			 , SITE_ID
+			 , SITE_NAME
+			 , PLANT_ID
+			 , OPERATION_GROUP_ID
+			 , OPERATION_GROUP AS OPERATION_GROUP_NAME 
+			 , FACTORY_ID
+			 , FACTORY_NAME
+			 , OPERATION_ID
+			 , OPERATION_NAME
+			 , LINE_ID
+			 , LINE_NAME
+			 , ELECTRODE_TYPE
+		  INTO #TMP_SCP0052_STD
+		  FROM SCM_LINE_HIERARCHY_V_SN A
+		 WHERE 1=1
+		   AND (( @p_division_id		IS NULL OR @p_division_id		='') OR A.DIVISION_ID  			IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_division_id		, ',')))
+		   AND (( @p_plant_id			IS NULL OR @p_plant_id			='') OR A.PLANT_ID     			IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_plant_id			, ',')))
+		   AND (( @p_factory_id			IS NULL OR @p_factory_id		='') OR A.FACTORY_ID   			IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_factory_id		, ',')))
+		   AND (( @p_line_id			IS NULL OR @p_line_id			='') OR A.LINE_ID      			IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_line_id			, ',')))
+		   AND (( @p_operation_id		IS NULL OR @p_operation_id		='') OR A.OPERATION_ID 			IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_operation_id		, ',')))
+		   AND (( @p_group				IS NULL OR @p_group				='') OR A.OPERATION_GROUP_ID    IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@p_group				, ',')))
+		;
+
+		-- ////////////////////////////
+		-- LINE ASSIGN 기준 테이블 생성
+		-- ////////////////////////////
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_STD_ITEM') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_STD_ITEM;
+
+		SELECT DISTINCT
+			   A.DIVISION_ID
+			 , A.COMPANY_ID
+			 , A.SITE_ID
+			 , A.SITE_NAME
+			 , A.PLANT_ID
+			 , A.OPERATION_GROUP_ID
+			 , A.OPERATION_GROUP_NAME
+			 , A.FACTORY_ID
+			 , A.FACTORY_NAME
+			 , A.OPERATION_ID
+			 , A.OPERATION_NAME
+			 , A.LINE_ID
+			 , A.LINE_NAME
+			 , A.ELECTRODE_TYPE
+			 , C.NICK_NAME
+			 , B.ITEM_ID
+			 , B.LANE_QTY
+		INTO #TMP_SCP0052_STD_ITEM
+		FROM #TMP_SCP0052_STD A
+			 LEFT OUTER JOIN SCM_MST_ITEM_LINE_ASSIGN_SN B
+			 ON  1=1
+			 AND A.DIVISION_ID 						= B.DIVISION_ID
+			 AND A.SITE_ID 							= B.SITE_ID
+			 AND A.PLANT_ID 						= B.PLANT_ID
+			 AND A.FACTORY_ID 						= B.FACTORY_ID
+			 AND A.LINE_ID 							= B.LINE_ID
+			 AND A.OPERATION_ID 					= B.OPERATION_ID
+			 AND A.ELECTRODE_TYPE 					= B.ELECTRODE_TYPE
+			 AND B.MONTH 							>= @v_start_month
+			 AND CONVERT(VARCHAR(4), B.MONTH,112) 	<= @v_end_month
+			 AND B.PRIORITY NOT IN ('0','9')
+			 LEFT OUTER JOIN SCM_ITEM_M_SN C
+			 ON 	1=1
+			 AND B.COMPANY_ID 						= C.COMPANY_ID
+			 AND B.DIVISION_ID 						= C.DIVISION_ID
+			 AND B.SITE_ID 							= C.SITE_ID
+			 AND B.ITEM_ID 							= C.ITEM_ID
+			 AND C.ACTIVE_FLAG 						= 'Y'
+		WHERE 	1=1
+		AND 	CASE WHEN @p_check_line = 'Y' OR @p_check_tact = 'Y' OR @p_check_yield = 'Y' THEN 'Y' ELSE 'N' END = 'Y'
+		AND 	(( @p_model_id     IS NULL OR @p_model_id     ='') OR ISNULL(C.APPLIED_MODEL,C.ITEM_ID) LIKE '%' + @p_model_id    +'%')
+		AND 	(( @p_item_id      IS NULL OR @p_item_id      ='') OR B.ITEM_ID      					LIKE '%' + @p_item_id     +'%')
+		AND 	(( @p_nick_name    IS NULL OR @p_nick_name    ='') OR C.NICK_NAME     					LIKE '%' + @p_nick_name   +'%')
+		;
+
+		-- ////////////////////////////////////////////
+		-- TACT TIME 기준 테이블 생성(LANE QTY 컬럼 없음)
+		-- ////////////////////////////////////////////
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_STD_ITEM_TACT') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_STD_ITEM_TACT;
+
+		SELECT DISTINCT
+			   A.DIVISION_ID
+			 , A.COMPANY_ID
+			 , A.SITE_ID
+			 , A.SITE_NAME
+			 , A.PLANT_ID
+			 , A.OPERATION_GROUP_ID
+			 , A.OPERATION_GROUP_NAME
+			 , A.FACTORY_ID
+			 , A.FACTORY_NAME
+			 , A.OPERATION_ID
+			 , A.OPERATION_NAME
+			 , A.LINE_ID
+			 , A.LINE_NAME
+			 , A.ELECTRODE_TYPE
+			 , A.NICK_NAME
+			 , A.ITEM_ID
+		INTO #TMP_SCP0052_STD_ITEM_TACT
+		FROM #TMP_SCP0052_STD_ITEM A
+		;
+
+		-- //////////////////////////////////////////////////////////
+		-- YIELD 기준 테이블 생성(LANE QTY , ELECTRODE_TYPE 컬럼 없음)
+		-- //////////////////////////////////////////////////////////
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_STD_ITEM_YIELD') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_STD_ITEM_YIELD;
+
+		SELECT DISTINCT
+			   A.DIVISION_ID
+			 , A.COMPANY_ID
+			 , A.SITE_ID
+			 , A.SITE_NAME
+			 , A.PLANT_ID
+			 , A.OPERATION_GROUP_ID
+			 , A.OPERATION_GROUP_NAME
+			 , A.FACTORY_ID
+			 , A.FACTORY_NAME
+			 , A.OPERATION_ID
+			 , A.OPERATION_NAME
+			 , A.LINE_ID
+			 , A.LINE_NAME
+			 , A.NICK_NAME
+			 , A.ITEM_ID
+		INTO #TMP_SCP0052_STD_ITEM_YIELD
+		FROM #TMP_SCP0052_STD_ITEM A
+	END
+	
+	-- ///////////////////////////////////////////////////////////////////////////////////
+	-- // 현재 데이터 조회
+	-- ///////////////////////////////////////////////////////////////////////////////////
+	BEGIN
+		-- LOSS 월별 데이터(CALENDAR, LOSS )
+		IF @p_check_loss = 'Y'
+		BEGIN
+			INSERT INTO #TMP_SCP0052_MM
+			(
+				  DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, LOSS_CODE
+				, YYYYMM
+				, ITEM_VALUE
+			)
+			SELECT CM.DIVISION_ID
+				 , CM.COMPANY_ID
+				 , CM.SITE_ID
+				 , CM.PLANT_ID
+				 , CM.FACTORY_ID
+				 , CM.LINE_ID
+				 , CM.ELECTRODE_TYPE
+				 , CM.OPERATION_ID
+				 , CM.LOSS_CODE
+				 , CONVERT(VARCHAR(6), CM.WORK_DATE,112)	AS YYYYMM
+				 , SUM(CM.TIME_TERM)						AS ITEM_VALUE
+			  FROM #TMP_SCP0052_LOOKUP LU
+
+			  JOIN SCM_WORK_CALENDAR_M_SN CM WITH(NOLOCK)
+				ON CM.LOSS_CODE		= LU.LOSS_CODE
+
+			  JOIN #TMP_SCP0052_STD L WITH(NOLOCK)
+				ON CM.DIVISION_ID		= L.DIVISION_ID
+			   AND CM.COMPANY_ID		= L.COMPANY_ID
+			   AND CM.SITE_ID			= L.SITE_ID
+			   AND CM.PLANT_ID			= L.PLANT_ID
+			   AND CM.FACTORY_ID		= L.FACTORY_ID
+			   AND CM.OPERATION_ID		= L.OPERATION_ID
+			   AND CM.LINE_ID			= L.LINE_ID
+			   AND CM.ELECTRODE_TYPE	= L.ELECTRODE_TYPE
+
+			 WHERE 1 = 1
+			   AND LU.DATA_TABLE  = 'SCM_WORK_CALENDAR_M'
+			   AND CONVERT(VARCHAR(6),CM.WORK_DATE ,112) >= @v_start_month -- '202008'
+			   AND CONVERT(VARCHAR(6),CM.WORK_DATE ,112) <= @v_end_month   -- '202106'
+			   AND CHARINDEX('Current' , @v_version_id , 0 ) > 0			-- current 정보가 있으면 실행
+
+			 GROUP BY CM.COMPANY_ID
+					, CM.DIVISION_ID
+					, CM.SITE_ID
+					, CM.PLANT_ID
+					, CM.FACTORY_ID
+					, CM.OPERATION_ID
+					, CM.LINE_ID
+					, CM.ELECTRODE_TYPE
+					, CM.LOSS_CODE
+					, CONVERT(VARCHAR(6), CM.WORK_DATE,112)
+
+			UNION ALL
+
+			-- SCM_LOSS_M_SN
+			SELECT LM.DIVISION_ID
+				 , LM.COMPANY_ID				AS COMPANY_ID
+				 , LM.SITE_ID					AS SITE_ID
+				 , LM.PLANT_ID					AS PLANT_ID
+				 , LM.FACTORY_ID				AS FACTORY_ID
+				 , LM.LINE_ID					AS LINE_ID
+				 , LM.ELECTRODE_TYPE			AS ELECTRODE_TYPE
+				 , LM.OPERATION_ID				AS OPERATION_ID
+				 , LU.LOSS_CODE					AS LOSS_CODE
+				 , WORK_MONTH					AS YYYYMM
+				 , ISNULL(ROUND(LOSS_RATE * 100 , 2),0)	AS ITEM_VALUE
+			  FROM #TMP_SCP0052_LOOKUP LU
+			  JOIN SCM_LOSS_M_SN LM WITH(NOLOCK)
+				ON LM.LOSS_CODE		= LU.LOSS_CODE
+
+			  JOIN #TMP_SCP0052_STD L WITH(NOLOCK)
+				ON LM.DIVISION_ID		= L.DIVISION_ID
+			   AND LM.COMPANY_ID		= L.COMPANY_ID
+			   AND LM.SITE_ID			= L.SITE_ID
+			   AND LM.PLANT_ID			= L.PLANT_ID
+			   AND LM.FACTORY_ID		= L.FACTORY_ID
+			   AND LM.OPERATION_ID		= L.OPERATION_ID
+			   AND LM.LINE_ID			= L.LINE_ID
+			   AND LM.ELECTRODE_TYPE	= L.ELECTRODE_TYPE
+
+			 WHERE 1 = 1
+			   AND LU.LOSS_CODE <> 'M08'
+			   AND WORK_MONTH >=  @v_start_month
+			   AND WORK_MONTH <=  @v_end_month
+			   AND LU.DATA_TABLE  = 'SCM_LOSS_M'
+			   AND CHARINDEX('Current' , @v_version_id , 0 ) > 0			-- current 정보가 있으면 실행
+		END -- // 현재(Current) LOSS
+
+		-- // LINE , TACT TIME, YIELD 월별 CURRENT 조회
+		IF @p_check_line = 'Y'  -- Line Priority
+		BEGIN
+			INSERT INTO #TMP_SCP0052_LTY_MM
+			(
+				  VERSION_ID
+				, DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, LOSS_CODE
+				, ITEM_ID
+				, LANE_QTY
+				, YYYYMM
+				, ITEM_VALUE
+			)
+			SELECT 'Current'							AS VERSION_ID
+				 , LE.DIVISION_ID						AS DIVISION_ID
+				 , LE.COMPANY_ID						AS COMPANY_ID
+				 , LE.SITE_ID							AS SITE_ID
+				 , LE.PLANT_ID							AS PLANT_ID
+				 , LE.FACTORY_ID						AS FACTORY_ID
+				 , LE.LINE_ID							AS LINE_ID
+				 , LE.ELECTRODE_TYPE					AS ELECTRODE_TYPE
+				 , LE.OPERATION_ID						AS OPERATION_ID
+				 , 'LA001'								AS LOSS_CODE
+				 , LE.ITEM_ID							AS ITEM_ID
+				 , CONVERT(INT,LE.LANE_QTY)				AS LANE_QTY
+				 , LE.MONTH								AS YYYYMM
+				 , CONVERT(NUMERIC(10,4),LE.PRIORITY)	AS ITEM_VALUE
+			  FROM SCM_MST_ITEM_LINE_ASSIGN_SN LE WITH(NOLOCK)
+
+			  JOIN #TMP_SCP0052_STD_ITEM I WITH(NOLOCK)
+				ON LE.DIVISION_ID		= I.DIVISION_ID
+			   AND LE.COMPANY_ID		= I.COMPANY_ID
+			   AND LE.SITE_ID			= I.SITE_ID
+			   AND LE.PLANT_ID			= I.PLANT_ID
+			   AND LE.FACTORY_ID		= I.FACTORY_ID
+			   AND LE.OPERATION_ID		= I.OPERATION_ID
+			   AND LE.LINE_ID			= I.LINE_ID
+			   AND LE.ELECTRODE_TYPE	= I.ELECTRODE_TYPE
+			   AND LE.ITEM_ID			= I.ITEM_ID
+			   AND ISNULL(LE.LANE_QTY,0)= ISNULL(I.LANE_QTY,0)
+
+			 WHERE 1 = 1
+			   AND LE.MONTH >= @v_start_month
+			   AND LE.MONTH <= @v_end_month
+			   AND CHARINDEX('Current' , @v_version_id , 0 ) > 0	-- current 정보가 있으면 실행
+		END  --//LINE ASSIGN END
+
+		IF @p_check_tact = 'Y'
+		BEGIN
+			INSERT INTO #TMP_SCP0052_LTY_MM
+			(
+				  VERSION_ID
+				, DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, LOSS_CODE
+				, ITEM_ID
+				, LANE_QTY
+				, YYYYMM
+				, ITEM_VALUE
+				, TACT_DAILY_TYPE
+			)
+			SELECT 'Current'				AS VERSION_ID
+				 , TE.DIVISION_ID			AS DIVISION_ID
+				 , TE.COMPANY_ID			AS COMPANY_ID
+				 , TE.SITE_ID				AS SITE_ID
+				 , TE.PLANT_ID				AS PLANT_ID
+				 , TE.FACTORY_ID			AS FACTORY_ID
+				 , TE.LINE_ID				AS LINE_ID
+				 , TE.ELECTRODE_TYPE		AS ELECTRODE_TYPE
+				 , TE.OPERATION_ID			AS OPERATION_ID
+				 , 'LA002'					AS LOSS_CODE
+				 , TE.ITEM_ID				AS ITEM_ID
+				 , 0						AS LANE_QTY
+				 , TE.MONTH					AS YYYYMM
+				 , CASE WHEN LV.ATTRIBUTE1 = 'DAILY CAPA' THEN TE.DAILY_CAPA 
+						WHEN LV.ATTRIBUTE1 = 'TACT TIME' THEN TE.TACT_TIME END		AS ITEM_VALUE
+				 , LV.ATTRIBUTE1			AS TACT_DAILY_TYPE
+			  FROM SCM_MST_TACT_TIME_SN TE WITH(NOLOCK)
+
+			  JOIN #TMP_SCP0052_STD_ITEM_TACT I WITH(NOLOCK)
+				ON TE.DIVISION_ID		= I.DIVISION_ID
+			   AND TE.COMPANY_ID		= I.COMPANY_ID
+			   AND TE.SITE_ID			= I.SITE_ID
+			   AND TE.PLANT_ID			= I.PLANT_ID
+			   AND TE.FACTORY_ID		= I.FACTORY_ID
+			   AND TE.OPERATION_ID		= I.OPERATION_ID
+			   AND TE.LINE_ID			= I.LINE_ID
+			   AND TE.ELECTRODE_TYPE	= I.ELECTRODE_TYPE
+			   AND TE.ITEM_ID			= I.ITEM_ID
+
+			  JOIN SCM_SYS_LOOKUP_VALUE_SN LV WITH(NOLOCK)
+			    ON LV.LOOKUP_TYPE_CODE 	= 'CAPA_UI_CAPA_DEFINIT'
+			   AND LV.SEGMENT1 			= 'LA002'
+			   AND TE.PLANT_ID			= LV.SEGMENT2
+			   AND TE.OPERATION_ID		= LV.SEGMENT3
+			   AND LV.ACTIVE_FLAG		= 'Y'
+
+			 WHERE 1 = 1
+			   AND TE.MONTH >= @v_start_month
+			   AND TE.MONTH <= @v_end_month
+			   AND CHARINDEX('Current' , @v_version_id , 0 ) > 0			-- current 정보가 있으면 실행
+
+			UNION ALL
+
+			SELECT 'Current'				AS VERSION_ID
+				 , TE.DIVISION_ID			AS DIVISION_ID
+				 , TE.COMPANY_ID			AS COMPANY_ID
+				 , TE.SITE_ID				AS SITE_ID
+				 , TE.PLANT_ID				AS PLANT_ID
+				 , TE.FACTORY_ID			AS FACTORY_ID
+				 , TE.LINE_ID				AS LINE_ID
+				 , TE.ELECTRODE_TYPE		AS ELECTRODE_TYPE
+				 , TE.OPERATION_ID			AS OPERATION_ID
+				 , 'LA999'					AS LOSS_CODE
+				 , TE.ITEM_ID				AS ITEM_ID
+				 , 0						AS LANE_QTY
+				 , TE.MONTH					AS YYYYMM
+				 , ISNULL(TE.DAILY_CAPA, 0)	AS ITEM_VALUE
+				 , LV.ATTRIBUTE1			AS TACT_DAILY_TYPE
+			  FROM SCM_MST_TACT_TIME_SN TE WITH(NOLOCK)
+
+			  JOIN #TMP_SCP0052_STD_ITEM_TACT I WITH(NOLOCK)
+				ON TE.DIVISION_ID		= I.DIVISION_ID
+			   AND TE.COMPANY_ID		= I.COMPANY_ID
+			   AND TE.SITE_ID			= I.SITE_ID
+			   AND TE.PLANT_ID			= I.PLANT_ID
+			   AND TE.FACTORY_ID		= I.FACTORY_ID
+			   AND TE.OPERATION_ID		= I.OPERATION_ID
+			   AND TE.LINE_ID			= I.LINE_ID
+			   AND TE.ELECTRODE_TYPE	= I.ELECTRODE_TYPE
+			   AND TE.ITEM_ID			= I.ITEM_ID
+
+			  JOIN SCM_SYS_LOOKUP_VALUE_SN LV WITH(NOLOCK)
+			    ON LV.LOOKUP_TYPE_CODE 	= 'CAPA_UI_CAPA_DEFINIT'
+			   AND LV.SEGMENT1 			= 'LA002'
+			   AND TE.PLANT_ID			= LV.SEGMENT2
+			   AND TE.OPERATION_ID		= LV.SEGMENT3
+			   AND LV.ACTIVE_FLAG		= 'Y'
+			   AND LV.ATTRIBUTE1		= 'TACT TIME'
+
+			 WHERE 1 = 1
+			   AND TE.MONTH >= @v_start_month
+			   AND TE.MONTH <= @v_end_month
+			   AND CHARINDEX('Current' , @v_version_id , 0 ) > 0			-- current 정보가 있으면 실행
+		END --// TACT TIME END
+
+		IF @p_check_yield = 'Y'
+		BEGIN
+			INSERT INTO #TMP_SCP0052_LTY_MM
+			(
+				  VERSION_ID
+				, DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, LOSS_CODE
+				, ITEM_ID
+				, LANE_QTY
+				, YYYYMM
+				, ITEM_VALUE
+			)
+			SELECT 'Current'						AS VERSION_ID
+				 , YE.DIVISION_ID					AS DIVISION_ID
+				 , YE.COMPANY_ID					AS COMPANY_ID
+				 , YE.SITE_ID						AS SITE_ID
+				 , YE.PLANT_ID						AS PLANT_ID
+				 , YE.FACTORY_ID					AS FACTORY_ID
+				 , YE.LINE_ID						AS LINE_ID
+				 , '-'								AS ELECTRODE_TYPE
+				 , YE.OPERATION_ID					AS OPERATION_ID
+				 , 'LA003'							AS LOSS_CODE
+				 , YE.ITEM_ID						AS ITEM_ID
+				 , 0								AS LANE_QTY
+				 , YE.MONTH							AS YYYYMM 
+				 , ROUND(YE.YIELD * 100 , 2 )		AS ITEM_VALUE
+			  FROM SCM_MST_YIELD_SN YE WITH(NOLOCK)
+
+			  JOIN #TMP_SCP0052_STD_ITEM_YIELD I WITH(NOLOCK)
+				ON YE.DIVISION_ID		= I.DIVISION_ID
+			   AND YE.COMPANY_ID		= I.COMPANY_ID
+			   AND YE.SITE_ID			= I.SITE_ID
+			   AND YE.PLANT_ID			= I.PLANT_ID
+			   AND YE.FACTORY_ID		= I.FACTORY_ID
+			   AND YE.OPERATION_ID		= I.OPERATION_ID
+			   AND YE.LINE_ID			= I.LINE_ID
+			   AND YE.ITEM_ID			= I.ITEM_ID
+
+			 WHERE 1 = 1
+			   AND YE.MONTH >= @v_start_month
+			   AND YE.MONTH <= @v_end_month
+			   AND CHARINDEX('Current' , @v_version_id , 0 ) > 0			-- current 정보가 있으면 실행
+		END --// YIEDL END
+	END -- // 현재(Current) 데이터
+
+	-- /////////////////////////////////////////////////////////////////////////////////////
+	-- VERSION 데이터 조회 ( LINE ASSIGN , TACT TIME, YIELD )
+	-- /////////////////////////////////////////////////////////////////////////////////////
+	BEGIN
+		IF @p_check_line = 'Y'  -- Line Priority
+		BEGIN
+			INSERT INTO #TMP_SCP0052_LTY_MM
+			(
+				  VERSION_ID
+				, DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, LOSS_CODE
+				, ITEM_ID
+				, LANE_QTY
+				, YYYYMM
+				, ITEM_VALUE
+			)
+			SELECT LE.VERSION_ID
+				 , LE.DIVISION_ID
+				 , LE.COMPANY_ID
+				 , LE.SITE_ID
+				 , LE.PLANT_ID
+				 , LE.FACTORY_ID
+				 , LE.LINE_ID
+				 , LE.ELECTRODE_TYPE
+				 , LE.OPERATION_ID
+				 , 'LA001'								AS LOSS_CODE
+				 , LE.ITEM_ID
+				 , CONVERT(INT,LE.LANE_QTY)				AS LANE_QTY
+				 , LE.MONTH								AS YYYYMM
+				 , CONVERT(NUMERIC(10,4),LE.PRIORITY)	AS ITEM_VALUE
+			  FROM SCM_ITEM_LINE_ASSIGN_VER_H_SN LE WITH(NOLOCK)  -- VERSION 테이블
+
+			  JOIN #TMP_SCP0052_STD_ITEM I WITH(NOLOCK)
+				ON LE.DIVISION_ID		= I.DIVISION_ID
+			   AND LE.COMPANY_ID		= I.COMPANY_ID
+			   AND LE.SITE_ID			= I.SITE_ID
+			   AND LE.PLANT_ID			= I.PLANT_ID
+			   AND LE.FACTORY_ID		= I.FACTORY_ID
+			   AND LE.OPERATION_ID		= I.OPERATION_ID
+			   AND LE.LINE_ID			= I.LINE_ID
+			   AND LE.ELECTRODE_TYPE	= I.ELECTRODE_TYPE
+			   AND LE.ITEM_ID			= I.ITEM_ID
+			   AND ISNULL(LE.LANE_QTY,0)= ISNULL(I.LANE_QTY,0)
+
+			 WHERE 1 = 1
+			   AND LE.VERSION_ID  IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@v_version_id, ','))
+			   AND LE.MONTH >= @v_start_month
+			   AND LE.MONTH <= @v_end_month
+		END --//LINE END
+
+		IF @p_check_tact = 'Y'
+		BEGIN
+			INSERT INTO #TMP_SCP0052_LTY_MM
+			(
+				  VERSION_ID
+				, DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, LOSS_CODE
+				, ITEM_ID
+				, LANE_QTY
+				, YYYYMM
+				, ITEM_VALUE
+				, TACT_DAILY_TYPE
+			)
+			SELECT TE.VERSION_ID
+				 , TE.DIVISION_ID
+				 , TE.COMPANY_ID
+				 , TE.SITE_ID
+				 , TE.PLANT_ID
+				 , TE.FACTORY_ID
+				 , TE.LINE_ID
+				 , TE.ELECTRODE_TYPE
+				 , TE.OPERATION_ID
+				 , 'LA002'				AS LOSS_CODE
+				 , TE.ITEM_ID
+				 , 0					AS LANE_QTY
+				 , TE.MONTH				AS YYYYMM
+				 , CASE WHEN LV.ATTRIBUTE1 = 'DAILY CAPA' THEN TE.DAILY_CAPA 
+						WHEN LV.ATTRIBUTE1 = 'TACT TIME' THEN TE.TACT_TIME END		AS ITEM_VALUE
+				 , LV.ATTRIBUTE1		AS TACT_DAILY_TYPE
+			  FROM SCM_TACT_TIME_VER_H_SN TE WITH(NOLOCK)  -- VERSION 테이블
+
+			  JOIN #TMP_SCP0052_STD_ITEM_TACT I WITH(NOLOCK)
+				ON TE.DIVISION_ID		= I.DIVISION_ID
+			   AND TE.COMPANY_ID		= I.COMPANY_ID
+			   AND TE.SITE_ID			= I.SITE_ID
+			   AND TE.PLANT_ID			= I.PLANT_ID
+			   AND TE.FACTORY_ID		= I.FACTORY_ID
+			   AND TE.OPERATION_ID		= I.OPERATION_ID
+			   AND TE.LINE_ID			= I.LINE_ID
+			   AND TE.ELECTRODE_TYPE	= I.ELECTRODE_TYPE
+			   AND TE.ITEM_ID			= I.ITEM_ID
+
+			  JOIN SCM_SYS_LOOKUP_VALUE_SN LV WITH(NOLOCK)     -- 2020/11/18, khj79
+			    ON LV.LOOKUP_TYPE_CODE 	= 'CAPA_UI_CAPA_DEFINIT'
+			   AND LV.SEGMENT1 			= 'LA002'
+			   AND TE.PLANT_ID			= LV.SEGMENT2
+			   AND TE.OPERATION_ID		= LV.SEGMENT3
+			   AND LV.ACTIVE_FLAG		= 'Y'
+
+			 WHERE 1 = 1
+			   AND TE.VERSION_ID  IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@v_version_id, ','))
+			   AND TE.MONTH >= @v_start_month
+			   AND TE.MONTH <= @v_end_month
+
+
+			 UNION ALL
+
+			 SELECT TE.VERSION_ID
+				 , TE.DIVISION_ID
+				 , TE.COMPANY_ID
+				 , TE.SITE_ID
+				 , TE.PLANT_ID
+				 , TE.FACTORY_ID
+				 , TE.LINE_ID
+				 , TE.ELECTRODE_TYPE
+				 , TE.OPERATION_ID
+				 , 'LA999'				AS LOSS_CODE
+				 , TE.ITEM_ID
+				 , 0					AS LANE_QTY
+				 , TE.MONTH				AS YYYYMM
+				 , TE.DAILY_CAPA		AS ITEM_VALUE
+				 , LV.ATTRIBUTE1		AS TACT_DAILY_TYPE
+			  FROM SCM_TACT_TIME_VER_H_SN TE WITH(NOLOCK)  -- VERSION 테이블
+
+			  JOIN #TMP_SCP0052_STD_ITEM_TACT I WITH(NOLOCK)
+				ON TE.DIVISION_ID		= I.DIVISION_ID
+			   AND TE.COMPANY_ID		= I.COMPANY_ID
+			   AND TE.SITE_ID			= I.SITE_ID
+			   AND TE.PLANT_ID			= I.PLANT_ID
+			   AND TE.FACTORY_ID		= I.FACTORY_ID
+			   AND TE.OPERATION_ID		= I.OPERATION_ID
+			   AND TE.LINE_ID			= I.LINE_ID
+			   AND TE.ELECTRODE_TYPE	= I.ELECTRODE_TYPE
+			   AND TE.ITEM_ID			= I.ITEM_ID
+
+			  JOIN SCM_SYS_LOOKUP_VALUE_SN LV WITH(NOLOCK)     -- 2020/11/18, khj79
+			    ON LV.LOOKUP_TYPE_CODE 	= 'CAPA_UI_CAPA_DEFINIT'
+			   AND LV.SEGMENT1 			= 'LA002'
+			   AND TE.PLANT_ID			= LV.SEGMENT2
+			   AND TE.OPERATION_ID		= LV.SEGMENT3
+			   AND LV.ACTIVE_FLAG		= 'Y'
+			   AND LV.ATTRIBUTE1		= 'TACT TIME'
+
+			 WHERE 1 = 1
+			   AND TE.VERSION_ID  IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@v_version_id, ','))
+			   AND TE.MONTH >= @v_start_month
+			   AND TE.MONTH <= @v_end_month
+		END --// TACT TIME END
+
+		IF @p_check_yield = 'Y'
+		BEGIN
+			INSERT INTO #TMP_SCP0052_LTY_MM
+			(
+				  VERSION_ID
+				, DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, LOSS_CODE
+				, ITEM_ID
+				, LANE_QTY
+				, YYYYMM
+				, ITEM_VALUE
+			)
+			SELECT YE.VERSION_ID
+				 , YE.DIVISION_ID
+				 , YE.COMPANY_ID
+				 , YE.SITE_ID
+				 , YE.PLANT_ID
+				 , YE.FACTORY_ID
+				 , YE.LINE_ID
+				 , '-'								AS ELECTRODE_TYPE
+				 , YE.OPERATION_ID
+				 , 'LA003'							AS LOSS_CODE
+				 , YE.ITEM_ID
+				 , 0								AS LANE_QTY
+				 , YE.MONTH							AS YYYYMM
+				 , ROUND(YE.YIELD * 100 , 2 )		AS ITEM_VALUE
+			  FROM SCM_YIELD_VER_H_SN YE WITH(NOLOCK)  -- VERSION 테이블
+
+			  JOIN #TMP_SCP0052_STD_ITEM_YIELD I WITH(NOLOCK)
+				ON YE.DIVISION_ID		= I.DIVISION_ID
+			   AND YE.COMPANY_ID		= I.COMPANY_ID
+			   AND YE.SITE_ID			= I.SITE_ID
+			   AND YE.PLANT_ID			= I.PLANT_ID
+			   AND YE.FACTORY_ID		= I.FACTORY_ID
+			   AND YE.OPERATION_ID		= I.OPERATION_ID
+			   AND YE.LINE_ID			= I.LINE_ID
+			   AND YE.ITEM_ID			= I.ITEM_ID
+
+			 WHERE 1 = 1
+			   AND YE.VERSION_ID  IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@v_version_id, ','))
+			   AND YE.MONTH >= @v_start_month
+			   AND YE.MONTH <= @v_end_month
+		END -- // YIELD END
+	END --// VERSION 데이터 조회(LINE ASSIGN , TACT TIME, YIELD)
+
+
+
+	-- /////////////////////////////////////////////////////////////////////////////////////
+	-- 현재(Current) 를 계산
+	-- /////////////////////////////////////////////////////////////////////////////////////
+	BEGIN
+		IF @p_check_loss = 'Y'
+		BEGIN
+			-- 기준 SUM 값을 구한다.
+			-- NON OPERATION
+			-- NO_ROAD
+			-- NO_RUN_NOT_PM
+			-- NO_RUN_PM
+			INSERT INTO #TMP_SCP0052_STD_SUM
+			(
+				  DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, YYYYMM
+				, NON_OPERATION_VALUE
+				, NO_LOAD_VALUE
+				, NO_RUN_NOT_PM_VALUE
+				, NO_RUN_PM_VALUE
+			)
+			SELECT DIVISION_ID
+				 , COMPANY_ID
+				 , SITE_ID
+				 , PLANT_ID
+				 , FACTORY_ID
+				 , LINE_ID
+				 , ELECTRODE_TYPE
+				 , OPERATION_ID
+				 , YYYYMM
+				 , SUM(CASE WHEN LK.CATEGORY_ID = 'Not-Available'				THEN T.ITEM_VALUE ELSE 0 END ) AS NON_OPERATION_VALUE
+				 , SUM(CASE WHEN LK.CATEGORY_ID = 'No-Load'						THEN T.ITEM_VALUE ELSE 0 END ) AS NO_LOAD_VALUE
+				 , SUM(CASE WHEN LK.CATEGORY_ID = 'No-Run' AND KEY_ID <> 'PM'	THEN T.ITEM_VALUE ELSE 0 END ) AS NO_RUN_NOT_PM_VALUE
+				 , SUM(CASE WHEN LK.CATEGORY_ID = 'No-Run' AND KEY_ID =  'PM'	THEN T.ITEM_VALUE ELSE 0 END ) AS NO_RUN_PM_VALUE
+			  FROM #TMP_SCP0052_MM    T
+			  JOIN #TMP_SCP0052_LOOKUP LK
+				ON T.LOSS_CODE = LK.LOSS_CODE
+			   AND LK.LOSS_CODE NOT LIKE 'X%'
+			 GROUP BY DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, FACTORY_ID, LINE_ID, ELECTRODE_TYPE, OPERATION_ID, YYYYMM
+			  --, LK.CATEGORY_ID , LK.KEY_ID
+	
+			-- Available(%)
+			INSERT INTO #TMP_SCP0052_STD_CAL
+			(
+				  DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, YYYYMM
+				, ITEM_VALUE
+				, LOSS_CODE
+			)
+			SELECT DIVISION_ID
+				 , COMPANY_ID
+				 , SITE_ID
+				 , PLANT_ID
+				 , FACTORY_ID
+				 , LINE_ID
+				 , ELECTRODE_TYPE
+				 , OPERATION_ID
+				 , T.YYYYMM
+				 , (D.WORKING_TIME - T.NON_OPERATION_VALUE) /D.WORKING_TIME * 100  AS AVAILABLE
+				 , 'XB021'
+			  FROM #TMP_SCP0052_STD_SUM T
+			  JOIN #TMP_SCP0052_DAY_OF_MONTH D
+				ON T.YYYYMM = D.YYYYMM
+			  ;
+
+			-- Loading(%)
+			INSERT INTO #TMP_SCP0052_STD_CAL
+			(
+				  DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, YYYYMM
+				, ITEM_VALUE
+				, LOSS_CODE
+			)
+			SELECT DIVISION_ID
+				 , COMPANY_ID
+				 , SITE_ID
+				 , PLANT_ID
+				 , FACTORY_ID
+				 , LINE_ID
+				 , ELECTRODE_TYPE
+				 , OPERATION_ID
+				 , T.YYYYMM
+				 , ( (D.WORKING_TIME - ( T.NON_OPERATION_VALUE + T.NO_LOAD_VALUE) ) / (D.WORKING_TIME - T.NON_OPERATION_VALUE ) ) * 100 AS LOADING
+				 , 'XC042'
+			  FROM #TMP_SCP0052_STD_SUM T
+			  JOIN #TMP_SCP0052_DAY_OF_MONTH D
+				ON T.YYYYMM = D.YYYYMM
+
+			-- Operating(%)
+			INSERT INTO #TMP_SCP0052_STD_CAL
+			(
+				  DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, YYYYMM
+				, ITEM_VALUE
+				, LOSS_CODE
+			)
+			SELECT T.DIVISION_ID
+				 , T.COMPANY_ID
+				 , T.SITE_ID
+				 , T.PLANT_ID
+				 , T.FACTORY_ID
+				 , T.LINE_ID
+				 , T.ELECTRODE_TYPE
+				 , T.OPERATION_ID
+				 , T.YYYYMM
+				 , 100 - (T.NO_RUN_NOT_PM_VALUE + ( T.NO_RUN_PM_VALUE / ( D.WORKING_TIME - (T.NON_OPERATION_VALUE + T.NO_LOAD_VALUE) ) * 100) )  AS OPERATING
+				 , 'M08'
+			  FROM #TMP_SCP0052_STD_SUM T
+			  JOIN #TMP_SCP0052_DAY_OF_MONTH D
+				ON T.YYYYMM = D.YYYYMM
+			;
+		
+			-- OEE(%)
+			INSERT INTO #TMP_SCP0052_STD_CAL
+			(
+				  DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, YYYYMM
+				, ITEM_VALUE
+				, LOSS_CODE
+			)
+			SELECT T.DIVISION_ID
+				 , T.COMPANY_ID
+				 , T.SITE_ID
+				 , T.PLANT_ID
+				 , T.FACTORY_ID
+				 , T.LINE_ID
+				 , T.ELECTRODE_TYPE
+				 , T.OPERATION_ID
+				 , T.YYYYMM
+				 , (EXP(SUM(LOG(X.ITEM_VALUE))) * ISNULL(T.ITEM_VALUE,1) ) /10000 AS OEE
+				 , 'XD101'
+			  FROM #TMP_SCP0052_STD_CAL T
+
+			  LEFT JOIN #TMP_SCP0052_MM X
+				ON T.DIVISION_ID	= X.DIVISION_ID
+			   AND T.COMPANY_ID		= X.COMPANY_ID
+			   AND T.SITE_ID		= X.SITE_ID
+			   AND T.PLANT_ID		= X.PLANT_ID
+			   AND T.FACTORY_ID		= X.FACTORY_ID
+			   AND T.LINE_ID		= X.LINE_ID
+			   AND T.ELECTRODE_TYPE	= X.ELECTRODE_TYPE
+			   AND T.OPERATION_ID	= X.OPERATION_ID
+			   AND T.YYYYMM			= X.YYYYMM
+			   AND X.LOSS_CODE		IN ( 'M10','M12')  -- M11 => M12 변경
+
+			 WHERE T.LOSS_CODE	= 'M08'
+			GROUP BY T.DIVISION_ID, T.COMPANY_ID, T.SITE_ID, T.PLANT_ID	, T.FACTORY_ID, T.LINE_ID, T.ELECTRODE_TYPE, T.OPERATION_ID, T.YYYYMM , T.ITEM_VALUE
+		END --//Loss
+	END  -- 현재(Current) 데이터 계산
+
+	-- 기준테이블(STD) 를 기준으로 정보 조회
+	-- ///////////////////////////////////////////////////////////////////////////////
+	BEGIN
+		IF @p_check_loss = 'Y'
+		BEGIN
+			INSERT INTO #TMP_SCP0052_ADD_STD
+			(
+				  DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, PLANT_ID
+				, FACTORY_ID
+				, LINE_ID
+				, ELECTRODE_TYPE
+				, OPERATION_ID
+				, LOSS_CODE
+				, YYYYMM
+				, ITEM_VALUE
+			)
+			SELECT DISTINCT X1.DIVISION_ID -- 기준정보에 ITEM_VALUE 생성
+					, X1.COMPANY_ID
+					, X1.SITE_ID
+					, X1.PLANT_ID
+					, X1.FACTORY_ID
+					, X1.LINE_ID
+					, X1.ELECTRODE_TYPE
+					, X1.OPERATION_ID
+					, X1.LOSS_CODE
+					, ISNULL(X1.YYYYMM, @v_start_month)  AS YYYYMM
+					, ISNULL(R.ITEM_VALUE,0)  AS ITEM_VALUE
+					FROM (
+						SELECT DISTINCT  -- LOOK UP (LOSS_CODE) 생성
+								R.DIVISION_ID
+								, R.COMPANY_ID
+								, R.SITE_ID
+								, R.PLANT_ID
+								, R.FACTORY_ID
+								, R.LINE_ID
+								, R.ELECTRODE_TYPE
+								, R.OPERATION_ID
+								, LU.LOSS_CODE
+								, R.YYYYMM
+							FROM (SELECT DISTINCT  -- 기준 정보를 기준으로 데이터 생성
+									 	A.DIVISION_ID
+										, A.COMPANY_ID 
+										, A.SITE_ID
+										, A.PLANT_ID
+										, A.FACTORY_ID
+										, A.LINE_ID
+										, A.ELECTRODE_TYPE
+										, A.OPERATION_ID 
+										, B.YYYYMM
+									FROM #TMP_SCP0052_STD A
+									LEFT JOIN #TMP_SCP0052_STD_CAL B
+									  ON A.DIVISION_ID		= B.DIVISION_ID
+									 AND A.COMPANY_ID		= B.COMPANY_ID
+									 AND A.SITE_ID			= B.SITE_ID
+									 AND A.PLANT_ID			= B.PLANT_ID
+									 AND A.FACTORY_ID		= B.FACTORY_ID
+									 AND A.LINE_ID			= B.LINE_ID
+									 AND A.ELECTRODE_TYPE	= B.ELECTRODE_TYPE
+									 AND A.OPERATION_ID		= B.OPERATION_ID
+								) R
+							LEFT JOIN #TMP_SCP0052_LOOKUP LU
+							ON 1=1
+							WHERE 1=1
+							AND 	LU.LOSS_CODE IN  ( 'XB021' ,'XC042','XD101' ,  'M08')
+							) X1   -- LOOKUP 정보 추가
+					LEFT JOIN #TMP_SCP0052_STD_CAL R
+					ON R.DIVISION_ID		= X1.DIVISION_ID
+					AND R.COMPANY_ID		= X1.COMPANY_ID
+					AND R.SITE_ID			= X1.SITE_ID
+					AND R.PLANT_ID			= X1.PLANT_ID
+					AND R.FACTORY_ID		= X1.FACTORY_ID
+					AND R.LINE_ID			= X1.LINE_ID
+					AND R.ELECTRODE_TYPE	= X1.ELECTRODE_TYPE
+					AND R.OPERATION_ID		= X1.OPERATION_ID
+					AND R.LOSS_CODE			= X1.LOSS_CODE
+					AND ISNULL(R.YYYYMM,'-')= ISNULL(X1.YYYYMM,'-')
+		END
+	END
+
+	-- //////////////////////////////////////////////////////////////////////////////////////
+	-- Current 데이터와 Version 데이터 를 합친다.
+	-- SITE_NAME 등 부가 정보를 합친다
+	-- //////////////////////////////////////////////////////////////////////////////////////
+	BEGIN
+		IF @p_check_loss = 'Y'
+		BEGIN
+			INSERT INTO #TMP_SCP0052_ALL
+			(
+				  VERSION_ID
+				, DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, SITE_NAME
+				, PLANT_ID
+				, FACTORY_ID
+				, FACTORY_NAME
+				, LINE_ID
+				, LINE_NAME
+				, ELECTRODE_TYPE
+				, OPERATION_GROUP_NAME
+				, OPERATION_ID
+				, OPERATION_NAME
+				, LOSS_CODE
+				, YYYYMM
+				, ITEM_VALUE
+			)
+			SELECT X.VERSION_ID
+				 , X.DIVISION_ID
+				 , X.COMPANY_ID
+				 , X.SITE_ID
+				 , ST.SITE_NAME
+				 , X.PLANT_ID
+				 , X.FACTORY_ID
+				 , ST.FACTORY_NAME
+				 , X.LINE_ID
+				 , ST.LINE_NAME
+				 , X.ELECTRODE_TYPE
+				 , ST.OPERATION_GROUP_NAME
+				 , X.OPERATION_ID
+				 , ST.OPERATION_NAME
+				  ,X.LOSS_CODE
+				 , X.YYYYMM
+				 , X.ITEM_VALUE
+			  FROM (
+					SELECT 'Current'	AS VERSION_ID
+						 , LK.DIVISION_ID
+						 , LK.COMPANY_ID
+						 , LK.SITE_ID
+						 , LK.PLANT_ID
+						 , LK.FACTORY_ID
+						 , LK.LINE_ID
+						 , LK.ELECTRODE_TYPE
+						 , LK.OPERATION_ID
+						 , LK.LOSS_CODE
+						 , LK.YYYYMM
+						 , LK.ITEM_VALUE
+					  FROM #TMP_SCP0052_ADD_STD LK -- 실시간 데이터
+					 WHERE CHARINDEX('Current' , @v_version_id , 0 ) > 0			-- current 정보가 있으면 실행
+					 UNION ALL
+					SELECT R.VERSION_ID
+						 , R.DIVISION_ID
+						 , R.COMPANY_ID
+						 , R.SITE_ID
+						 , R.PLANT_ID
+						 , R.FACTORY_ID
+						 , R.LINE_ID
+						 , R.ELECTRODE_TYPE
+						 , R.OPERATION_ID
+						 , R.LOSS_CODE
+						 , R.WORK_MONTH
+						 , R.LOSS_RATE
+					  FROM SCM_LOSS_REPORT_VER_H_SN R WITH(NOLOCK) -- VERSION 데이터
+
+					  JOIN #TMP_SCP0052_STD L WITH(NOLOCK)
+						ON R.DIVISION_ID	= L.DIVISION_ID
+					   AND R.COMPANY_ID		= L.COMPANY_ID
+					   AND R.SITE_ID		= L.SITE_ID
+					   AND R.PLANT_ID		= L.PLANT_ID
+					   AND R.FACTORY_ID		= L.FACTORY_ID
+					   AND R.OPERATION_ID	= L.OPERATION_ID
+					   AND R.LINE_ID		= L.LINE_ID
+					   AND R.ELECTRODE_TYPE	= L.ELECTRODE_TYPE
+
+					 WHERE R.VERSION_ID IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@v_version_id, ','))
+					   
+					  ) X
+			LEFT JOIN #TMP_SCP0052_STD	ST WITH(NOLOCK) -- 기준 정보
+				ON X.COMPANY_ID		= ST.COMPANY_ID
+			   AND X.DIVISION_ID	= ST.DIVISION_ID
+			   AND X.SITE_ID		= ST.SITE_ID
+			   AND X.PLANT_ID		= ST.PLANT_ID
+			   AND X.FACTORY_ID		= ST.FACTORY_ID
+			   AND X.OPERATION_ID	= ST.OPERATION_ID
+			   AND X.LINE_ID		= ST.LINE_ID
+			   AND X.ELECTRODE_TYPE	= ST.ELECTRODE_TYPE
+		;
+		END
+
+		IF @p_check_line = 'Y'
+		BEGIN
+			INSERT INTO #TMP_SCP0052_ALL
+			(
+				  VERSION_ID
+				, DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, SITE_NAME
+				, PLANT_ID
+				, FACTORY_ID
+				, FACTORY_NAME
+				, LINE_ID
+				, LINE_NAME
+				, ELECTRODE_TYPE
+				, OPERATION_GROUP_NAME
+				, OPERATION_ID
+				, OPERATION_NAME
+				, ITEM_ID
+				, NICK_NAME
+				, LANE_QTY
+				, LOSS_CODE
+				, YYYYMM
+				, ITEM_VALUE
+			)
+			SELECT X.VERSION_ID
+				 , X.DIVISION_ID
+				 , X.COMPANY_ID
+				 , X.SITE_ID
+				 , ST.SITE_NAME
+				 , X.PLANT_ID
+				 , X.FACTORY_ID
+				 , ST.FACTORY_NAME
+				 , X.LINE_ID
+				 , ST.LINE_NAME
+				 , X.ELECTRODE_TYPE
+				 , ST.OPERATION_GROUP_NAME
+				 , X.OPERATION_ID
+				 , ST.OPERATION_NAME
+				 , X.ITEM_ID
+				 , ST.NICK_NAME
+				 , X.LANE_QTY
+				 , X.LOSS_CODE
+				 , X.YYYYMM
+				 , X.ITEM_VALUE
+			  FROM #TMP_SCP0052_LTY_MM X
+			  LEFT JOIN #TMP_SCP0052_STD_ITEM ST -- LINE ASSIGN 기준 정보
+			    ON X.COMPANY_ID			= ST.COMPANY_ID
+			   AND X.DIVISION_ID		= ST.DIVISION_ID
+			   AND X.SITE_ID			= ST.SITE_ID
+			   AND X.PLANT_ID			= ST.PLANT_ID
+			   AND X.FACTORY_ID			= ST.FACTORY_ID
+			   AND X.OPERATION_ID		= ST.OPERATION_ID
+			   AND X.LINE_ID			= ST.LINE_ID
+			   AND X.ELECTRODE_TYPE		= ST.ELECTRODE_TYPE
+			   AND X.ITEM_ID			= ST.ITEM_ID
+			   AND ISNULL(X.LANE_QTY,0)	= ISNULL(ST.LANE_QTY,0)
+			 WHERE LOSS_CODE = 'LA001'
+		END -- //LINE ASSIGN END
+
+		IF @p_check_tact = 'Y'
+		BEGIN
+			INSERT INTO #TMP_SCP0052_ALL
+			(
+				  VERSION_ID
+				, DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, SITE_NAME
+				, PLANT_ID
+				, FACTORY_ID
+				, FACTORY_NAME
+				, LINE_ID
+				, LINE_NAME
+				, ELECTRODE_TYPE
+				, OPERATION_GROUP_NAME
+				, OPERATION_ID
+				, OPERATION_NAME
+				, ITEM_ID
+				, NICK_NAME
+				, LANE_QTY
+				, LOSS_CODE
+				, YYYYMM
+				, ITEM_VALUE
+			)
+			SELECT X.VERSION_ID
+				 , X.DIVISION_ID
+				 , X.COMPANY_ID
+				 , X.SITE_ID
+				 , ST.SITE_NAME
+				 , X.PLANT_ID
+				 , X.FACTORY_ID
+				 , ST.FACTORY_NAME
+				 , X.LINE_ID
+				 , ST.LINE_NAME
+				 , X.ELECTRODE_TYPE
+				 , ST.OPERATION_GROUP_NAME
+				 , X.OPERATION_ID
+				 , ST.OPERATION_NAME
+				 , X.ITEM_ID
+				 , ST.NICK_NAME
+				 , X.LANE_QTY
+				 , X.LOSS_CODE
+				 , X.YYYYMM
+				 , X.ITEM_VALUE
+			  FROM #TMP_SCP0052_LTY_MM X
+			  LEFT JOIN #TMP_SCP0052_STD_ITEM_TACT ST -- TACT TIME 기준 정보
+			    ON X.COMPANY_ID			= ST.COMPANY_ID
+			   AND X.DIVISION_ID		= ST.DIVISION_ID
+			   AND X.SITE_ID			= ST.SITE_ID
+			   AND X.PLANT_ID			= ST.PLANT_ID
+			   AND X.FACTORY_ID			= ST.FACTORY_ID
+			   AND X.OPERATION_ID		= ST.OPERATION_ID
+			   AND X.LINE_ID			= ST.LINE_ID
+			   AND X.ELECTRODE_TYPE		= ST.ELECTRODE_TYPE
+			   AND X.ITEM_ID			= ST.ITEM_ID
+			 WHERE LOSS_CODE IN (  'LA002' , 'LA999')
+			   --AND TACT_DAILY_TYPE = 'TACT TIME'
+
+			
+		END --// TACT TIME END
+
+		IF @p_check_yield = 'Y'
+		BEGIN
+			INSERT INTO #TMP_SCP0052_ALL
+			(
+				  VERSION_ID
+				, DIVISION_ID
+				, COMPANY_ID
+				, SITE_ID
+				, SITE_NAME
+				, PLANT_ID
+				, FACTORY_ID
+				, FACTORY_NAME
+				, LINE_ID
+				, LINE_NAME
+				, ELECTRODE_TYPE
+				, OPERATION_GROUP_NAME
+				, OPERATION_ID
+				, OPERATION_NAME
+				, ITEM_ID
+				, NICK_NAME
+				, LANE_QTY
+				, LOSS_CODE
+				, YYYYMM
+				, ITEM_VALUE
+			)
+			SELECT X.VERSION_ID
+				 , X.DIVISION_ID
+				 , X.COMPANY_ID
+				 , X.SITE_ID
+				 , ST.SITE_NAME
+				 , X.PLANT_ID
+				 , X.FACTORY_ID
+				 , ST.FACTORY_NAME
+				 , X.LINE_ID
+				 , ST.LINE_NAME
+				 , X.ELECTRODE_TYPE
+				 , ST.OPERATION_GROUP_NAME
+				 , X.OPERATION_ID
+				 , ST.OPERATION_NAME
+				 , X.ITEM_ID
+				 , ST.NICK_NAME
+				 , X.LANE_QTY
+				 , X.LOSS_CODE
+				 , X.YYYYMM
+				 , X.ITEM_VALUE
+			  FROM #TMP_SCP0052_LTY_MM X
+			  LEFT JOIN #TMP_SCP0052_STD_ITEM_YIELD ST  -- YIELD 기준 정보
+			    ON X.COMPANY_ID			= ST.COMPANY_ID
+			   AND X.DIVISION_ID		= ST.DIVISION_ID
+			   AND X.SITE_ID			= ST.SITE_ID
+			   AND X.PLANT_ID			= ST.PLANT_ID
+			   AND X.FACTORY_ID			= ST.FACTORY_ID
+			   AND X.OPERATION_ID		= ST.OPERATION_ID
+			   AND X.LINE_ID			= ST.LINE_ID
+			   AND X.ITEM_ID			= ST.ITEM_ID
+			 WHERE LOSS_CODE = 'LA003'
+		END --// YIELD TIME END
+	END
+
+	-- //////////////////////////////////////////////////////////////////////////////////////
+	-- Current 데이터와 Version 데이터 를 합친다.
+	-- //////////////////////////////////////////////////////////////////////////////////////
+	BEGIN
+		IF OBJECT_ID('TEMPDB..#TMP_SCP0052_RESULT') IS NOT NULL
+			DROP TABLE #TMP_SCP0052_RESULT;
+
+		SELECT RL.VERSION_ID
+			 , RL.DIVISION_ID
+			 , RL.COMPANY_ID
+			 , RL.SITE_ID
+			 , RL.SITE_NAME
+			 , RL.PLANT_ID
+			 , RL.FACTORY_ID
+			 , RL.FACTORY_NAME
+			 , RL.LINE_ID
+			 , RL.LINE_NAME
+			 , RL.ELECTRODE_TYPE
+			 , RL.OPERATION_GROUP_NAME
+			 , RL.OPERATION_ID
+			 , RL.OPERATION_NAME
+			 , CASE WHEN RL.LOSS_CODE = 'LA999' THEN 'DAILY CAPA' ELSE ISNULL(LK.CATEGORY_2, LK.CATEGORY_ID) END AS CATEGORY_ID
+			 , CASE WHEN RL.LOSS_CODE IN ('LA001','LA002','LA003','LA999') THEN RL.NICK_NAME ELSE LK.KEY_ID END AS KEY_ID
+			 , RL.LOSS_CODE
+			 , RL.ITEM_ID
+			 , RL.LANE_QTY
+			 , 'M_' + CONVERT(NVARCHAR(6), RL.YYYYMM)	AS YYYYMM
+			 , RL.ITEM_VALUE
+			 , SORT_ORDER
+			 , CASE WHEN RL.LOSS_CODE = 'LA999' THEN 'EA'
+			        WHEN LK.CATEGORY_2 IS NULL OR LK.CATEGORY_2 = 'TACT TIME' THEN LK.UOM ELSE 'EA' END AS UOM
+		  INTO #TMP_SCP0052_RESULT
+		  FROM #TMP_SCP0052_ALL RL
+
+		  LEFT JOIN (SELECT LU.*
+						  , LV.SEGMENT2 	AS PLANT_ID
+						  , LV.SEGMENT3 	AS OPERATION_ID
+						  , LV.ATTRIBUTE1 	AS CATEGORY_2
+					   FROM #TMP_SCP0052_LOOKUP LU
+					   LEFT OUTER JOIN SCM_SYS_LOOKUP_VALUE_SN LV
+						 ON 1=1
+						AND LV.LOOKUP_TYPE_CODE = 'CAPA_UI_CAPA_DEFINIT'
+						AND LU.LOSS_CODE = LV.SEGMENT1
+						AND LV.ACTIVE_FLAG = 'Y') LK    -- 공정별 CAPA 보완
+			 ON RL.LOSS_CODE			= LK.LOSS_CODE
+			AND RL.PLANT_ID 		= CASE WHEN RL.LOSS_CODE = 'LA002' THEN LK.PLANT_ID ELSE RL.PLANT_ID END
+			AND RL.OPERATION_ID 	= CASE WHEN RL.LOSS_CODE = 'LA002' THEN LK.OPERATION_ID ELSE RL.OPERATION_ID END
+			;
+	END
+	
+	-- /////////////////////////// PIVOT 처리를 위한 SUM QUERY 생성
+	BEGIN
+		SET @MQRY_SUM = '';
+			
+		SELECT @MQRY_SUM = @MQRY_SUM+','+  CASE WHEN CHARINDEX('D_', YYYYMMDD) =1 THEN 'SUM(CASE WHEN R.YYYYMM = RIGHT('''+YYYYMMDD+''',10) THEN CONVERT(NUMERIC(20,4), ISNULL(R.ITEM_VALUE, 0)) ELSE 0 END ) AS ' + YYYYMMDD
+												WHEN CHARINDEX('M_', YYYYMMDD) =1 THEN 'SUM(CASE WHEN R.YYYYMM = RIGHT('''+YYYYMMDD+''',8)  THEN CONVERT(NUMERIC(20,4), ISNULL(R.ITEM_VALUE, 0)) ELSE 0 END ) AS ' + YYYYMMDD
+												WHEN CHARINDEX('Y_', YYYYMMDD) =1 THEN 'SUM(CASE WHEN R.YYYYMM = RIGHT('''+YYYYMMDD+''',6)  THEN CONVERT(NUMERIC(20,4), ISNULL(R.ITEM_VALUE, 0)) ELSE 0 END ) AS ' + YYYYMMDD
+									END +''+  CHAR(10)
+			FROM ( 
+				SELECT 'D_'+A.BASIS_YYYYMMDD   AS YYYYMMDD
+						,  CONVERT(CHAR(2), '10') + A.BASIS_YYYYMMDD  AS SORT_ORDER_NO
+					FROM [DBO].[SCM_SYS_CALENDAR_M] A 
+					WHERE A.BASIS_YYYYMMDD  >= '19990101'
+					AND A.BASIS_YYYYMMDD  <= '19990101'
+					GROUP BY A.BASIS_YYYYMMDD
+
+					UNION ALL
+
+				SELECT 'M_'+A.BASIS_YYYYMM  AS YYYYMMDD
+						, CONVERT(CHAR(2), '20') + MIN(A.BASIS_START_DATE)  AS SORT_ORDER_NO
+					FROM [DBO].[SCM_SYS_CALENDAR_M] A
+					WHERE A.BASIS_YYYYMM  >= @v_start_month
+					AND A.BASIS_YYYYMM  <= @v_end_month
+					GROUP BY A.BASIS_YYYYMM, A.MONTH_NAME
+				) AS A
+		ORDER BY SORT_ORDER_NO;
+	END
+
+		--IF OBJECT_ID('TEMPDB..##TMP_SCP0052_LAST') IS NOT NULL
+		--	DROP TABLE ##TMP_SCP0052_LAST;
+
+		SET @MEXEC = '';
+		SET @MEXEC = @MEXEC+'	SELECT														' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			  R.VERSION_ID										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.DIVISION_ID										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.COMPANY_ID										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.SITE_ID											' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.SITE_NAME										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.PLANT_ID										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.FACTORY_ID 										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.FACTORY_NAME  									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.LINE_ID 										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.LINE_NAME 										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.ELECTRODE_TYPE 									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.OPERATION_GROUP_NAME 							' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.OPERATION_ID									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.OPERATION_NAME									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.CATEGORY_ID 									' + CHAR(10);   -- Level1
+		SET @MEXEC = @MEXEC+'			, ISNULL(R.KEY_ID,''-'')	AS KEY_ID 				' + CHAR(10);   -- Level2
+		SET @MEXEC = @MEXEC+'			, R.LOSS_CODE 										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, ISNULL(R.ITEM_ID,''-'')	AS ITEM_ID 				' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, CASE WHEN R.LOSS_CODE = ''LA001'' THEN CONVERT(NVARCHAR(10),R.LANE_QTY) ELSE ''-'' END AS LANE_QTY	' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, R.UOM											' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, LK.DATA_TABLE										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, LK.CATEGORY_ORDER									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, LK.SORT_ORDER										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, RANK() OVER(PARTITION BY R.DIVISION_ID , R.COMPANY_ID , R.SITE_ID , R.PLANT_ID , R.FACTORY_ID	' + CHAR(10);
+		SET @MEXEC = @MEXEC+'									, R.LINE_ID , R.ELECTRODE_TYPE, R.OPERATION_ID,R.LOSS_CODE, R.ITEM_ID	' + CHAR(10);
+		SET @MEXEC = @MEXEC+'							ORDER BY R.VERSION_ID ) AS ROW_RANKING											' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, SUM(1) OVER(PARTITION BY R.DIVISION_ID , R.COMPANY_ID , R.SITE_ID , R.PLANT_ID , R.FACTORY_ID	' + CHAR(10);
+		SET @MEXEC = @MEXEC+'									, R.LINE_ID , R.ELECTRODE_TYPE, R.OPERATION_ID,R.LOSS_CODE, R.ITEM_ID	' + CHAR(10);
+		SET @MEXEC = @MEXEC+'							) AS SUM_COUNT																	' + CHAR(10);
+		SET @MEXEC = @MEXEC+'			, CASE WHEN R.ELECTRODE_TYPE =''-'' THEN ''ZZ'' ELSE R.ELECTRODE_TYPE END  AS ELECTRODE_ORDER	' + CHAR(10); --  YIELD 는 ELECTRODE_TYPE 이 없기 때문에 정열을 위한 컬럼
+		SET @MEXEC = @MEXEC+'			' + @MQRY_SUM										  + CHAR(10);
+		--SET @MEXEC = @MEXEC+'		 INTO ##TMP_SCP0052_LAST								' + CHAR(10); -- 결과 테이블 저장
+		SET @MEXEC = @MEXEC+'		 FROM #TMP_SCP0052_RESULT	R							' + CHAR(10);
+		SET @MEXEC = @MEXEC+'		 JOIN #TMP_SCP0052_LOOKUP	LK							' + CHAR(10);
+		--SET @MEXEC = @MEXEC+'		   ON R.LOSS_CODE	= LK.LOSS_CODE						' + CHAR(10);
+		SET @MEXEC = @MEXEC+'		   ON ( CASE WHEN R.LOSS_CODE = ''LA999'' THEN ''LA002'' ELSE R.LOSS_CODE END )	= LK.LOSS_CODE		' + CHAR(10);
+
+		SET @MEXEC = @MEXEC+'		GROUP BY  R.VERSION_ID									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.DIVISION_ID									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.COMPANY_ID									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.SITE_ID										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.SITE_NAME									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.PLANT_ID									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.FACTORY_ID									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.FACTORY_NAME								' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.LINE_ID										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.LINE_NAME									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.ELECTRODE_TYPE								' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.OPERATION_GROUP_NAME 						' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.OPERATION_ID								' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.OPERATION_NAME								' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.CATEGORY_ID									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.KEY_ID 										' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.ITEM_ID 									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.LOSS_CODE 									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.LANE_QTY 									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, R.UOM											' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, LK.DATA_TABLE									' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, LK.CATEGORY_ORDER								' + CHAR(10);
+		SET @MEXEC = @MEXEC+'				, LK.SORT_ORDER									' + CHAR(10);
+
+		-- [ 최소 행 크기가 내부 오버헤드 109바이트를 포함하여 13562이(가) ] 에러가 발생하여 화면에서 정열한다
+		--SET @MEXEC = @MEXEC+'		ORDER BY  R.DIVISION_ID									' + CHAR(10);
+		--SET @MEXEC = @MEXEC+'				, R.COMPANY_ID									' + CHAR(10);
+		--SET @MEXEC = @MEXEC+'				, R.SITE_ID										' + CHAR(10);
+		--SET @MEXEC = @MEXEC+'				, R.PLANT_ID									' + CHAR(10);
+		--SET @MEXEC = @MEXEC+'				, R.FACTORY_ID									' + CHAR(10);
+		--SET @MEXEC = @MEXEC+'				, R.LINE_ID										' + CHAR(10);
+		--SET @MEXEC = @MEXEC+'				, R.OPERATION_ID	DESC						' + CHAR(10);
+		--SET @MEXEC = @MEXEC+'             , CASE WHEN R.ELECTRODE_TYPE =''-'' THEN ''ZZ'' ELSE R.ELECTRODE_TYPE END 			' + CHAR(10);
+		--SET @MEXEC = @MEXEC+'				, R.ELECTRODE_TYPE								' + CHAR(10);
+		--SET @MEXEC = @MEXEC+'				, LK.CATEGORY_ORDER								' + CHAR(10);
+		--SET @MEXEC = @MEXEC+'				, LK.SORT_ORDER									' + CHAR(10);
+		--SET @MEXEC = @MEXEC+'		        , ITEM_ID ASC,  VERSION_ID DESC					' + CHAR(10);
+
+
+	  	-----------------------------------------------------------	
+		IF( @debug_mode ='T')
+			BEGIN				
+				DECLARE @POS INT =1;
+				DECLARE @LEN INT =LEN(@MEXEC);
+				WHILE @POS <= @LEN
+					BEGIN
+						PRINT SUBSTRING(@MEXEC,@POS,4000);
+						SET @POS = @POS+4000;
+					END;
+			END;
+
+			EXEC(@MEXEC);
+
+	END
+
+
+
+/* ============================ 테이블 확인 ============================== */
+-- 공통 LOOKUP 테이블
+--SELECT * FROM #TMP_SCP0052_LOOKUP
+
+-- 결과 테이블 
+--SELECT * FROM ##TMP_SCP0052_LAST WHERE LOSS_CODE = 'LA001'
+--SELECT * FROM ##TMP_SCP0052_LAST ORDER BY DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, FACTORY_ID, LINE_ID, ELECTRODE_TYPE, OPERATION_ID, CATEGORY_ORDER, SORT_ORDER
+
+

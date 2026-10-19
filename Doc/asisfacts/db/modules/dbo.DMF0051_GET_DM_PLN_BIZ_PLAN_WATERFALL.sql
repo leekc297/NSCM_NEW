@@ -1,0 +1,1295 @@
+﻿
+/*=====================================================================================================================================================
+ * Program ID   : DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL
+ * Description  : Business Plan Waterfall 조회
+ * Program History
+ *=====================================================================================================================================================
+ *   Date       In Charge      Description
+ *=====================================================================================================================================================
+ * 2022.06.10	rosia27		Initial Release [PJ20216891R] 
+ * 2022.10.31	rosia27		[C20221024-000510]DM UI 소스 정리 요청
+ * 2022.11.16	kdw2819		[C20221107-000343]BP Waterfall 오류 수정 요청의 건
+ * 2024/08/29	KJJ			[PJ2024-50461] Team Mapping
+ * 2024.09.12	JSSBAE		[E20240920-000300]_SCM.DM 화면 조회 속도 개선
+ *===================================================================================================================================================*/
+
+ 
+CREATE PROCEDURE [dbo].[DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL]
+
+     @p_division_id              NVARCHAR(30)
+	,@p_dept_id                  NVARCHAR(4000)
+    ,@p_end_customer             NVARCHAR(4000)
+	,@p_scm_site_id              NVARCHAR(4000)
+    ,@p_project_code             NVARCHAR(4000)
+	,@p_item_id                  NVARCHAR(4000)
+	,@p_item_type                NVARCHAR(4000)
+	,@p_from_yyyymmdd            NVARCHAR(8)
+	,@p_now_yyyymmdd             NVARCHAR(8)
+	,@p_to_yyyymmdd              NVARCHAR(8)
+	,@p_created_by               NVARCHAR(4000)
+	,@p_plant_site_id            NVARCHAR(4000)
+	,@p_biztype                  NVARCHAR(4000)
+	,@p_owner					 NVARCHAR(4000)
+    ,@p_version_type             NVARCHAR(4000)
+	,@p_cell_yn					 NVARCHAR(1)
+	,@p_qty_yn					 NVARCHAR(1)
+
+AS
+  
+BEGIN
+
+  SET NOCOUNT ON;
+  SET ANSI_NULLS ON
+  SET ANSI_WARNINGS ON; 
+
+  SET NOCOUNT ON;
+  SET ANSI_NULLS ON
+  SET ANSI_WARNINGS ON; 
+
+  DECLARE @ColList		NVARCHAR(MAX);
+  DECLARE @OrderList	NVARCHAR(MAX);
+  DECLARE @p_program_id	VARCHAR(50)= 'DMF0051'
+  DECLARE @p_sheet_name	VARCHAR(50)= 'Biz Plan Waterfall'
+
+
+  SET		@ColList		= '';
+  SET		@OrderList		= '';
+  DECLARE	@MEASURE	INT	= 0;
+  DECLARE	@i_count	int	= 0;
+
+
+	DECLARE @v_user_mea_cnt int =0;
+
+	------------------------------------------------------------------------------------------
+	--                                                       Temp Table 존재 여부 체크 (BEGIN)
+	------------------------------------------------------------------------------------------
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_V', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_V
+		;
+	IF OBJECT_ID (N'tempdb..#SELECT_MEASURE', N'U') IS NOT NULL 
+		DROP TABLE #SELECT_MEASURE
+		;
+	IF OBJECT_ID (N'tempdb..#RAW_DATA', N'U') IS NOT NULL 
+		DROP TABLE #RAW_DATA
+		;
+	IF OBJECT_ID (N'tempdb..#TEMP_SCM_MST_SSO_USER_INFO', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_SCM_MST_SSO_USER_INFO
+		;
+	IF OBJECT_ID (N'tempdb..#TEMP_SCM_MST_SITE_ITEM', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_SCM_MST_SITE_ITEM
+		;
+	IF OBJECT_ID (N'tempdb..#TEMP_SCM_CITY', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_SCM_CITY
+		;
+	IF OBJECT_ID (N'tempdb..#T_PRICE', N'U') IS NOT NULL 
+		DROP TABLE #T_PRICE
+		;
+	IF OBJECT_ID (N'tempdb..#T_COLUMN_SETUP', N'U') IS NOT NULL 
+		DROP TABLE #T_COLUMN_SETUP
+		;
+	IF OBJECT_ID (N'tempdb..#T', N'U') IS NOT NULL 
+		DROP TABLE #T
+		;
+
+	--[E20240920-000300]_SCM.DM 화면 조회 속도 개선 START
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_ORI_V', N'U') IS NOT NULL 	
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_ORI_V;
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_A_V', N'U') IS NOT NULL 	
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_A_V;
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_B_V', N'U') IS NOT NULL 	
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_B_V;
+	--[E20240920-000300]_SCM.DM 화면 조회 속도 개선 END
+
+		SELECT @v_user_mea_cnt = COUNT(*)
+			FROM   [DBO].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+				WHERE  1 = 1
+				AND    U.PROGRAM_ID						= @p_program_id
+				AND    U.SHEET_NAME						= @p_sheet_name
+				AND    U.USER_INQUIRY_COLUMN_TYPE_CODE	= 'M'
+				AND    U.USER_ID						= @p_created_by;
+
+		IF @v_user_mea_cnt = 0
+		BEGIN	    
+			INSERT INTO [dbo].[SCM_MST_TITLESET_USER]
+			( USER_ID
+			, PROGRAM_ID
+			, SHEET_NAME
+			, USER_INQUIRY_COLUMN_TYPE_CODE
+			, COLUMN_NAME
+			, SORT_ORDER_NO
+			, SUB_TOTAL_FLAG
+			, DATA_SORT_METHOD_CODE
+			, CREATED_BY
+			, CREATION_DATE
+			, LAST_UPDATED_BY
+			, LAST_UPDATE_DATE
+			)
+			SELECT @p_created_by
+					, C.PROGRAM_ID
+					, C.SHEET_NAME
+					, 'M'
+					, C.COLUMN_NAME
+					, C.SORT_ORDER_NO
+					, 'N'
+					, ''
+					, @p_created_by
+					, CONVERT(varchar(19), GETDATE(), 121)
+					, @p_created_by
+					, CONVERT(varchar(19), GETDATE(), 121)
+			FROM   [dbo].[SCM_MST_SHEET_MEASURE] C WITH(NOLOCK)
+			WHERE  1 = 1
+			AND    C.PROGRAM_ID  = @p_program_id
+			AND    C.SHEET_NAME  = @p_sheet_name
+			AND    C.DEFAULT_FLAG = 'Y'
+			AND    C.VALID_YN     = 'Y'	;
+		END;
+
+		SELECT DISTINCT
+				  U.PROGRAM_ID
+				, U.SHEET_NAME
+				, U.COLUMN_NAME AS MEASURE
+				, U.SORT_ORDER_NO
+		INTO #SELECT_MEASURE
+		FROM [dbo].[SCM_MST_TITLESET_USER] U  WITH(NOLOCK)
+			WHERE 1 = 1
+			AND U.USER_INQUIRY_COLUMN_TYPE_CODE = 'M'
+			AND U.PROGRAM_ID	= @p_program_id
+			AND U.SHEET_NAME	= @p_sheet_name
+			AND U.USER_ID		= @p_created_by
+
+
+		CREATE TABLE #RAW_DATA (
+		VERSION_NO			NVARCHAR(30)
+		, CUTOFF_YYYYMMDD	CHAR(8)
+		, DIVISION_ID		NVARCHAR(30)
+		, PROJECT_CODE		NVARCHAR(50)
+		, SCM_SITE_ID		NVARCHAR(30)
+		, PLANT_SITE_ID		NVARCHAR(30)
+		, ITEM_ID			NVARCHAR(50)
+		, INCOTERMS			NVARCHAR(10)
+		, CELL_PROD_SITE	NVARCHAR(30)
+		, FCST_TYPE			NVARCHAR(20)
+		, CURRENCY			NVARCHAR(3)
+		, COMPANY_ID		NVARCHAR(30)
+		, MEASURE			NVARCHAR(50)
+		, YYYYMM			CHAR(6)
+		, CAL_YYYYQQ		NVARCHAR(6)
+		, CAL_YYYY			NVARCHAR(4)
+		, QTY				NUMERIC(30,10)
+		, VALID_YN			CHAR(1)
+		, COLNAME			NVARCHAR(30)
+		, DEPT_ID			NVARCHAR(50)
+		, END_CUSTOMER		NVARCHAR(50)
+		, BIZ_TYPE			NVARCHAR(30)
+		, PROJECT_NAME		NVARCHAR(50)
+		,ITEM_USE			NVARCHAR(100)   
+        ,UNIT_ENERGY		NVARCHAR(100)
+		)
+
+		--CURRENT버전
+		IF ( @p_version_type LIKE '%CURRENT%' )
+		BEGIN 
+			--MONTHLY
+			INSERT INTO #RAW_DATA ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID
+									, INCOTERMS, CELL_PROD_SITE, FCST_TYPE, CURRENCY, MEASURE, YYYYMM, CAL_YYYYQQ, CAL_YYYY, QTY
+									, COLNAME, DEPT_ID, END_CUSTOMER, BIZ_TYPE, PROJECT_NAME, A.ITEM_USE, A.UNIT_ENERGY )
+			SELECT   'CURRENT' AS VERSION_NO
+					, NULL AS CUTOFF_YYYYMMDD
+					, A.DIVISION_ID 
+					,A.PROJECT_CODE 
+					,A.SCM_SITE_ID 
+					,PLANT_SITE_ID 
+					,A.ITEM_ID 
+					,A.INCOTERMS 
+					,A.CELL_PROD_SITE 
+					,A.FCST_TYPE 
+					,A.CURRENCY
+					,A.MEASURE
+					,A.YYYYMM
+					,CAL.CALENDAR_YYYYQQ AS CAL_YYYYQQ
+					,CAL.CALENDAR_YYYY AS CAL_YYYY
+					,A.QTY
+					,'M_' + A.YYYYMM AS COLNAME
+					,A.DEPT_ID
+					,A.END_CUSTOMER
+					,A.BIZ_TYPE
+					,A.PROJECT_NAME
+					,A.ITEM_USE
+					,A.UNIT_ENERGY
+			FROM [DM_PLN_BP_FCST] AS A WITH(NOLOCK)
+			JOIN #SELECT_MEASURE B ON A.MEASURE = B.MEASURE
+			INNER JOIN (SELECT CALENDAR_YYYY, CALENDAR_YYYYQQ, BASIS_YYYYMM 
+						FROM SCM_SYS_CALENDAR_M WITH(NOLOCK)
+						WHERE (BASIS_YYYYMM >= SUBSTRING(@p_from_yyyymmdd, 1,6) AND BASIS_YYYYMM <= SUBSTRING(@p_to_yyyymmdd, 1,6))
+						GROUP BY CALENDAR_YYYY, CALENDAR_YYYYQQ, BASIS_YYYYMM) AS CAL
+					ON CAL.BASIS_YYYYMM = A.YYYYMM
+			WHERE A.YYYYMM >= SUBSTRING(@p_from_yyyymmdd, 1,6) and A.YYYYMM <= SUBSTRING(@p_to_yyyymmdd, 1,6)
+				AND A.DIVISION_ID =@p_division_id
+					
+
+			--QUATERLY
+			INSERT INTO #RAW_DATA ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID
+									, INCOTERMS, CELL_PROD_SITE, FCST_TYPE, CURRENCY, MEASURE, YYYYMM, CAL_YYYYQQ, CAL_YYYY, QTY
+									, COLNAME, DEPT_ID, END_CUSTOMER, BIZ_TYPE, PROJECT_NAME, A.ITEM_USE, A.UNIT_ENERGY )
+			SELECT 'CURRENT' AS VERSION_NO
+					, NULL AS CUTOFF_YYYYMMDD
+					, A.DIVISION_ID 
+					, A.PROJECT_CODE 
+					, A.SCM_SITE_ID 
+					, A.PLANT_SITE_ID 
+					, A.ITEM_ID 
+					, A.INCOTERMS 
+					, A.CELL_PROD_SITE 
+					, A.FCST_TYPE 
+					, A.CURRENCY
+					, A.MEASURE
+					, A.CAL_YYYYQQ AS YYYYMM
+					, A.CAL_YYYYQQ AS CAL_YYYYQQ
+					, A.CAL_YYYY AS CAL_YYYY
+					, CASE WHEN MEASURE = 'SalesAmt_KRW' OR MEASURE = 'SalesAmt_LOC' OR MEASURE = 'SalesAmt_USD' OR MEASURE = 'Business_Plan'
+						THEN SUM(QTY)
+						ELSE MAX(QTY) 
+						END QTY
+					, 'Q_' + REPLACE(A.CAL_YYYYQQ, 'Q', '_') AS COLNAME
+					, A.DEPT_ID
+					, MAX(A.END_CUSTOMER)
+					, MAX(A.BIZ_TYPE)
+					, MAX(A.PROJECT_NAME)
+					, A.ITEM_USE
+					, A.UNIT_ENERGY
+			FROM #RAW_DATA AS A
+			GROUP BY A.DIVISION_ID 
+					, A.PROJECT_CODE 
+					, A.SCM_SITE_ID 
+					, PLANT_SITE_ID 
+					, A.ITEM_ID 
+					, A.INCOTERMS 
+					, A.CELL_PROD_SITE 
+					, A.FCST_TYPE 
+					, A.CURRENCY
+					, A.MEASURE
+					, A.YYYYMM
+					, A.CAL_YYYYQQ
+					, A.CAL_YYYY
+					, A.DEPT_ID
+					, A.ITEM_USE
+					, A.UNIT_ENERGY
+						
+
+			--YEARLY
+			INSERT INTO #RAW_DATA ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID
+									, INCOTERMS, CELL_PROD_SITE, FCST_TYPE, CURRENCY, MEASURE, YYYYMM, CAL_YYYYQQ, CAL_YYYY, QTY
+									, COLNAME, DEPT_ID, END_CUSTOMER, BIZ_TYPE, PROJECT_NAME, A.ITEM_USE, A.UNIT_ENERGY )
+			SELECT 'CURRENT' AS VERSION_NO
+					, NULL AS CUTOFF_YYYYMMDD
+					, A.DIVISION_ID 
+					, A.PROJECT_CODE 
+					, A.SCM_SITE_ID 
+					, PLANT_SITE_ID 
+					, A.ITEM_ID 
+					, A.INCOTERMS 
+					, A.CELL_PROD_SITE 
+					, A.FCST_TYPE 
+					, A.CURRENCY
+					, A.MEASURE
+					, A.CAL_YYYY AS YYYYMM
+					, A.CAL_YYYY AS CAL_YYYYQQ
+					, A.CAL_YYYY
+					, CASE WHEN MEASURE = 'SalesAmt_KRW' OR MEASURE = 'SalesAmt_LOC' OR MEASURE = 'SalesAmt_USD' OR MEASURE = 'Business_Plan'
+						THEN SUM(QTY)
+						ELSE MAX(QTY) 
+						END QTY
+					, 'Y_' + A.CAL_YYYY AS COLNAME
+					, A.DEPT_ID
+					, MAX(A.END_CUSTOMER)
+					, MAX(A.BIZ_TYPE)
+					, MAX(A.PROJECT_NAME)
+					, A.ITEM_USE
+					, A.UNIT_ENERGY
+			FROM #RAW_DATA AS A
+			WHERE COLNAME LIKE 'Q_%'
+			GROUP BY A.DIVISION_ID 
+					, A.PROJECT_CODE 
+					, A.SCM_SITE_ID 
+					, PLANT_SITE_ID 
+					, A.ITEM_ID 
+					, A.INCOTERMS 
+					, A.CELL_PROD_SITE 
+					, A.FCST_TYPE 
+					, A.CURRENCY
+					, A.MEASURE
+					, A.YYYYMM
+					, A.CAL_YYYYQQ
+					, A.CAL_YYYY
+					, A.DEPT_ID
+					, A.ITEM_USE
+					, A.UNIT_ENERGY
+		
+		END
+
+		-- CUTOFF버전
+		IF ( @p_version_type LIKE '%BP_%' )
+		BEGIN 
+			--MONTHLY
+			INSERT INTO #RAW_DATA ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID
+									, INCOTERMS, CELL_PROD_SITE, FCST_TYPE, CURRENCY, MEASURE, YYYYMM, CAL_YYYYQQ, CAL_YYYY, QTY
+									, COLNAME, DEPT_ID, END_CUSTOMER, BIZ_TYPE, PROJECT_NAME, A.ITEM_USE, A.UNIT_ENERGY )
+			SELECT   A.VERSION_NO
+					,A.CUTOFF_YYYYMMDD
+					,A.DIVISION_ID 
+					,A.PROJECT_CODE 
+					,A.SCM_SITE_ID 
+					,A.PLANT_SITE_ID 
+					,A.ITEM_ID 
+					,A.INCOTERMS 
+					,A.CELL_PROD_SITE 
+					,A.FCST_TYPE
+					,A.CURRENCY
+					,A.MEASURE
+					,A.YYYYMM 
+					,CAL.CALENDAR_YYYYQQ AS CAL_YYYYQQ
+					,CAL.CALENDAR_YYYY AS CAL_YYYY
+					,A.QTY
+					,'M_' + A.YYYYMM AS COLNAME
+					, A.DEPT_ID
+					, A.END_CUSTOMER
+					, A.BIZ_TYPE
+					, A.PROJECT_NAME
+					, A.ITEM_USE
+					, A.UNIT_ENERGY
+			FROM [DM_PLN_BP_FCST_C] AS A WITH(NOLOCK)
+			JOIN #SELECT_MEASURE B ON A.MEASURE = B.MEASURE 
+			INNER JOIN (SELECT CALENDAR_YYYY, CALENDAR_YYYYQQ, BASIS_YYYYMM 
+						FROM SCM_SYS_CALENDAR_M WITH(NOLOCK)
+						WHERE (BASIS_YYYYMM >= SUBSTRING(@p_from_yyyymmdd, 1,6) AND BASIS_YYYYMM <= SUBSTRING(@p_to_yyyymmdd, 1,6))
+						GROUP BY CALENDAR_YYYY, CALENDAR_YYYYQQ, BASIS_YYYYMM) AS CAL
+					ON CAL.BASIS_YYYYMM = A.YYYYMM
+			WHERE   A.YYYYMM >= SUBSTRING(@p_from_yyyymmdd, 1,6) and A.YYYYMM <= SUBSTRING(@p_to_yyyymmdd, 1,6)
+					AND A.DIVISION_ID = @p_division_id
+					AND A.VERSION_NO IN (SELECT LEFT(token,  CASE WHEN CHARINDEX('(',token) = 0 THEN LEN(token) ELSE CHARINDEX('(',token)-1 END ) FROM dbo.String_Split(@p_version_type ,',')) 
+
+
+			--QUATERLY
+			INSERT INTO #RAW_DATA ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID
+									, INCOTERMS, CELL_PROD_SITE, FCST_TYPE, CURRENCY, MEASURE, YYYYMM, CAL_YYYYQQ, CAL_YYYY, QTY
+									, COLNAME, DEPT_ID, END_CUSTOMER, BIZ_TYPE, PROJECT_NAME, A.ITEM_USE, A.UNIT_ENERGY )
+			SELECT    VERSION_NO
+					, A.CUTOFF_YYYYMMDD
+					, A.DIVISION_ID 
+					, A.PROJECT_CODE 
+					, A.SCM_SITE_ID 
+					, A.PLANT_SITE_ID 
+					, A.ITEM_ID 
+					, A.INCOTERMS 
+					, A.CELL_PROD_SITE 
+					, A.FCST_TYPE 
+					, A.CURRENCY
+					, A.MEASURE
+					, A.CAL_YYYYQQ AS YYYYMM
+					, A.CAL_YYYYQQ AS CAL_YYYYQQ
+					, A.CAL_YYYY AS CAL_YYYY
+					, CASE WHEN MEASURE = 'SalesAmt_KRW' OR MEASURE = 'SalesAmt_LOC' OR MEASURE = 'SalesAmt_USD' OR MEASURE = 'Business_Plan'
+						THEN SUM(QTY)
+						ELSE MAX(QTY) 
+						END QTY
+					, 'Q_' + REPLACE(A.CAL_YYYYQQ, 'Q', '_') AS COLNAME
+					, A.DEPT_ID
+					, MAX(A.END_CUSTOMER)
+					, MAX(A.BIZ_TYPE)
+					, MAX(A.PROJECT_NAME)
+					, A.ITEM_USE
+					, A.UNIT_ENERGY
+			FROM #RAW_DATA AS A
+			WHERE A.VERSION_NO IN (SELECT LEFT(token,  CASE WHEN CHARINDEX('(',token) = 0 THEN LEN(token) ELSE CHARINDEX('(',token)-1 END )  FROM dbo.String_Split(@p_version_type ,','))
+			AND NOT(A.VERSION_NO = 'CURRENT')
+			GROUP BY VERSION_NO
+					, A.DIVISION_ID 
+					, A.CUTOFF_YYYYMMDD
+					, A.PROJECT_CODE 
+					, A.SCM_SITE_ID 
+					, A.PLANT_SITE_ID 
+					, A.ITEM_ID 
+					, A.INCOTERMS 
+					, A.CELL_PROD_SITE 
+					, A.FCST_TYPE 
+					, A.CURRENCY
+					, A.MEASURE
+					, A.YYYYMM
+					, A.CAL_YYYYQQ
+					, A.CAL_YYYY
+					, A.DEPT_ID
+					, A.ITEM_USE
+					, A.UNIT_ENERGY
+
+
+			--YEARLY
+			INSERT INTO #RAW_DATA ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID
+									, INCOTERMS, CELL_PROD_SITE, FCST_TYPE, CURRENCY, MEASURE, YYYYMM, CAL_YYYYQQ, CAL_YYYY, QTY
+									, COLNAME, DEPT_ID, END_CUSTOMER, BIZ_TYPE, PROJECT_NAME, A.ITEM_USE, A.UNIT_ENERGY )
+			SELECT    VERSION_NO
+					, A.CUTOFF_YYYYMMDD
+					, A.DIVISION_ID 
+					, A.PROJECT_CODE 
+					, A.SCM_SITE_ID 
+					, A.PLANT_SITE_ID 
+					, A.ITEM_ID 
+					, A.INCOTERMS 
+					, A.CELL_PROD_SITE 
+					, A.FCST_TYPE 
+					, A.CURRENCY
+					, A.MEASURE
+					, A.CAL_YYYY AS YYYYMM
+					, A.CAL_YYYY AS CAL_YYYYQQ
+					, A.CAL_YYYY
+					, CASE WHEN MEASURE = 'SalesAmt_KRW' OR MEASURE = 'SalesAmt_LOC' OR MEASURE = 'SalesAmt_USD' OR MEASURE = 'Business_Plan'
+						THEN SUM(QTY)
+						ELSE MAX(QTY) 
+						END QTY
+					, 'Y_' + A.CAL_YYYY AS COLNAME
+					, A.DEPT_ID
+					, MAX(A.END_CUSTOMER)
+					, MAX(A.BIZ_TYPE)
+					, MAX(A.PROJECT_NAME)
+					, A.ITEM_USE
+					, A.UNIT_ENERGY
+			FROM #RAW_DATA AS A
+			WHERE A.VERSION_NO IN (SELECT LEFT(token,  CASE WHEN CHARINDEX('(',token) = 0 THEN LEN(token) ELSE CHARINDEX('(',token)-1 END )  FROM dbo.String_Split(@p_version_type ,','))
+			AND NOT(A.VERSION_NO = 'CURRENT')
+			AND A.COLNAME LIKE 'Q_%'
+			GROUP BY VERSION_NO
+					, A.DIVISION_ID 
+					, A.CUTOFF_YYYYMMDD
+					, A.PROJECT_CODE 
+					, A.SCM_SITE_ID 
+					, PLANT_SITE_ID 
+					, A.ITEM_ID 
+					, A.INCOTERMS 
+					, A.CELL_PROD_SITE 
+					, A.FCST_TYPE 
+					, A.CURRENCY
+					, A.MEASURE
+					, A.YYYYMM
+					, A.CAL_YYYYQQ
+					, A.CAL_YYYY
+					, A.DEPT_ID
+					, A.ITEM_USE
+					, A.UNIT_ENERGY
+		END
+		
+		
+		--[E20240920-000300]_SCM.DM 화면 조회 속도 개선 START
+		/* 원소스 주석처리 
+		--DM_MST_ITEM_SINGLE_V 임시테이블 생성
+		SELECT DIVISION_ID,ITEM_ID,ITEM_NAME,ITEM_CLASS,ITEM_CLASS_NAME,NICK_NAME,ITEM_TYPE,MATERIAL_CLASS_NAME
+			,ITEM_UOM,SPEC,MDM_PROJECT_NAME,MIN_CAPACITY,FORECAST_INFO_BIZ_TYPE,FORECAST_INFO_PRODUCT_GROUP
+			,FORECAST_INFO_CELL_MODEL,FORECAST_INFO_CELL_PACK_COUNT,FORECAST_INFO_SPEC,FORECAST_INFOR_VERSION
+			,ACTIVE_FLAG,CELL_TYPE
+		INTO #TEMP_DM_MST_ITEM_SINGLE_V
+		FROM (SELECT DIVISION_ID,ITEM_ID,ITEM_NAME,ITEM_CLASS,ITEM_CLASS_NAME,NICK_NAME,ITEM_TYPE,MATERIAL_CLASS_NAME
+					,ITEM_UOM,SPEC,MDM_PROJECT_NAME,MIN_CAPACITY,FORECAST_INFO_BIZ_TYPE,FORECAST_INFO_PRODUCT_GROUP
+					,FORECAST_INFO_CELL_MODEL,FORECAST_INFO_CELL_PACK_COUNT,FORECAST_INFO_SPEC,FORECAST_INFOR_VERSION
+					,ACTIVE_FLAG,CELL_TYPE
+			  FROM DM_MST_ITEM_SINGLE_V T2 WITH(NOLOCK)
+					INNER JOIN ( SELECT DISTINCT '%'+TOKEN+'%' TST FROM DBO.STRING_SPLIT(@p_item_id,',') ) B
+							ON	T2.ITEM_ID		LIKE  B.TST 
+							OR	T2.NICK_NAME	LIKE  B.TST 						
+			  WHERE DIVISION_ID = @p_division_id
+			) G
+		GROUP BY DIVISION_ID,ITEM_ID,ITEM_NAME,ITEM_CLASS,ITEM_CLASS_NAME,NICK_NAME,ITEM_TYPE,MATERIAL_CLASS_NAME
+			,ITEM_UOM,SPEC,MDM_PROJECT_NAME,MIN_CAPACITY,FORECAST_INFO_BIZ_TYPE,FORECAST_INFO_PRODUCT_GROUP
+			,FORECAST_INFO_CELL_MODEL,FORECAST_INFO_CELL_PACK_COUNT,FORECAST_INFO_SPEC,FORECAST_INFOR_VERSION
+			,ACTIVE_FLAG,CELL_TYPE	
+		*/
+		PRINT ( 'A--' + CONVERT(NVARCHAR(30), GETDATE(), 121))
+	
+		--> SCM_MST_ITEM_SN 테이블을 TEMP로 넣는다.
+		SELECT *
+		INTO #TEMP_DM_MST_ITEM_SINGLE_ORI_V
+		FROM SCM_MST_ITEM_SN WITH(NOLOCK)		
+		--FROM [10.34.221.78,7433].[LGCE_FP_TR].[dbo].[SCM_ITEM_M] WITH(NOLOCK)	
+		WHERE DIVISION_ID = @p_division_id		
+
+		--멈춤 현상이 발생하므로, 아예 모두 나눠서 INSERT 한다.
+		SELECT T1.DIVISION_ID
+			 , T1.ITEM_ID
+			 , MAX(T1.ITEM_NAME)						AS ITEM_NAME
+			 , MAX(T1.ITEM_CLASS)						AS ITEM_CLASS
+			 , MAX(T1.ITEM_CLASS_NAME)					AS ITEM_CLASS_NAME
+			 , MAX(T1.NICK_NAME)						AS NICK_NAME
+			 , CASE MIN( CASE WHEN T1.ITEM_TYPE = 'P' THEN 1	
+							  WHEN T1.ITEM_TYPE = 'H' THEN 2	
+							  WHEN T1.ITEM_TYPE = 'Q' THEN 3
+						 ELSE 4 END )  
+										WHEN 1 THEN 'P' 
+										WHEN 2 THEN 'H'
+										WHEN 3 THEN 'Q'
+										ELSE 'R' END	AS ITEM_TYPE
+			 , MAX(T1.MATERIAL_CLASS_NAME)				AS MATERIAL_CLASS_NAME
+			 , MAX(T1.ITEM_UOM)							AS ITEM_UOM
+			 , MAX(T1.SPEC)								AS SPEC
+			 , MAX(T1.MDM_PROJECT_NAME)					AS MDM_PROJECT_NAME
+			 , MAX(T1.MIN_CAPACITY)						AS MIN_CAPACITY
+			 , MAX(T1.ACTIVE_FLAG)						AS ACTIVE_FLAG
+			 , MAX(T1.ENERGE)							AS ENERGE
+			 , MAX(T1.CELL_QUANTITY)					AS CELL_QUANTITY
+			 , MAX(T1.SCP_EXTRA_SPEC)					AS SCP_EXTRA_SPEC		
+		INTO #TEMP_DM_MST_ITEM_SINGLE_A_V
+		FROM #TEMP_DM_MST_ITEM_SINGLE_ORI_V T1 WITH(NOLOCK)				
+		WHERE 1=1
+		GROUP BY T1.DIVISION_ID, T1.ITEM_ID
+
+		--멈춤 현상이 발생하므로, 아예 모두 나눠서 INSERT 한다.
+		SELECT DIVISION_ID
+			 , LEFT(ITEM_ID, 12) AS ITEM_ID
+			 , MAX(FORECAST_INFO_BIZ_TYPE) AS FORECAST_INFO_BIZ_TYPE
+			 , MAX(FORECAST_INFO_PRODUCT_GROUP) AS FORECAST_INFO_PRODUCT_GROUP
+			 , MAX(FORECAST_INFO_CELL_MODEL) AS FORECAST_INFO_CELL_MODEL
+			 , MAX(FORECAST_INFO_CELL_PACK_COUNT) AS FORECAST_INFO_CELL_PACK_COUNT
+			 , MAX(FORECAST_INFO_SPEC) AS FORECAST_INFO_SPEC
+			 , MAX(FORECAST_INFOR_VERSION) AS FORECAST_INFOR_VERSION
+			 , MAX(CELL_TYPE) AS CELL_TYPE
+		INTO #TEMP_DM_MST_ITEM_SINGLE_B_V
+		FROM #TEMP_DM_MST_ITEM_SINGLE_ORI_V T2 WITH(NOLOCK) 
+		GROUP BY DIVISION_ID, LEFT(ITEM_ID, 12)
+
+		--TEMP 테이블에 넣은 데이터를 JOIN 한다.
+		SELECT A.DIVISION_ID
+			 , A.ITEM_ID
+			 , A.ITEM_NAME
+			 , A.ITEM_CLASS 
+			 , A.ITEM_CLASS_NAME
+			 , A.NICK_NAME
+			 , A.ITEM_TYPE
+			 , A.MATERIAL_CLASS_NAME
+			 , A.ITEM_UOM
+			 , A.SPEC
+			 , A.MDM_PROJECT_NAME
+			 , A.MIN_CAPACITY
+			 , A.FORECAST_INFO_BIZ_TYPE
+			 , A.FORECAST_INFO_PRODUCT_GROUP
+			 , A.FORECAST_INFO_CELL_MODEL
+			 , A.FORECAST_INFO_CELL_PACK_COUNT
+			 , A.FORECAST_INFO_SPEC
+			 , A.FORECAST_INFOR_VERSION
+			 , A.ACTIVE_FLAG
+			 , A.CELL_TYPE
+			 , A.ENERGE
+			 , A.CELL_QUANTITY
+			 , A.SCP_EXTRA_SPEC 
+		INTO #TEMP_DM_MST_ITEM_SINGLE_V
+		FROM 
+		(
+			SELECT T1.DIVISION_ID
+				 , T1.ITEM_ID
+				 , T1.ITEM_NAME							AS ITEM_NAME
+				 , T1.ITEM_CLASS						AS ITEM_CLASS
+				 , T1.ITEM_CLASS_NAME					AS ITEM_CLASS_NAME
+				 , T1.NICK_NAME							AS NICK_NAME
+				 , T1.ITEM_TYPE							AS ITEM_TYPE				
+				 , T1.MATERIAL_CLASS_NAME				AS MATERIAL_CLASS_NAME
+				 , T1.ITEM_UOM							AS ITEM_UOM
+				 , T1.SPEC								AS SPEC
+				 , T1.MDM_PROJECT_NAME					AS MDM_PROJECT_NAME
+				 , T1.MIN_CAPACITY						AS MIN_CAPACITY
+				 , T2.FORECAST_INFO_BIZ_TYPE			AS FORECAST_INFO_BIZ_TYPE
+				 , T2.FORECAST_INFO_PRODUCT_GROUP		AS FORECAST_INFO_PRODUCT_GROUP
+				 , T2.FORECAST_INFO_CELL_MODEL			AS FORECAST_INFO_CELL_MODEL
+				 , T2.FORECAST_INFO_CELL_PACK_COUNT		AS FORECAST_INFO_CELL_PACK_COUNT
+				 , T2.FORECAST_INFO_SPEC				AS FORECAST_INFO_SPEC
+				 , T2.FORECAST_INFOR_VERSION			AS FORECAST_INFOR_VERSION
+				 , T1.ACTIVE_FLAG						AS ACTIVE_FLAG
+				 , T2.CELL_TYPE							AS CELL_TYPE
+				 , T1.ENERGE							AS ENERGE
+				 , T1.CELL_QUANTITY						AS CELL_QUANTITY
+				 , T1.SCP_EXTRA_SPEC					AS SCP_EXTRA_SPEC	
+			FROM #TEMP_DM_MST_ITEM_SINGLE_A_V T1 WITH(NOLOCK)					
+			INNER JOIN #TEMP_DM_MST_ITEM_SINGLE_B_V T2 
+					ON T1.DIVISION_ID = T2.DIVISION_ID
+				   AND SUBSTRING(T1.ITEM_ID,1,12) = T2.ITEM_ID
+			WHERE 1=1
+		) A			
+		GROUP BY A.DIVISION_ID, A.ITEM_ID, A.ITEM_NAME, A.ITEM_CLASS, A.ITEM_CLASS_NAME, A.NICK_NAME, A.ITEM_TYPE, A.MATERIAL_CLASS_NAME
+			   , A.ITEM_UOM, A.SPEC, A.MDM_PROJECT_NAME, A.MIN_CAPACITY, A.FORECAST_INFO_BIZ_TYPE, A.FORECAST_INFO_PRODUCT_GROUP
+			   , A.FORECAST_INFO_CELL_MODEL, A.FORECAST_INFO_CELL_PACK_COUNT, A.FORECAST_INFO_SPEC, A.FORECAST_INFOR_VERSION
+			   , A.ACTIVE_FLAG, A.CELL_TYPE, A.ENERGE, A.CELL_QUANTITY, A.SCP_EXTRA_SPEC 
+		
+		--[E20240920-000300]_SCM.DM 화면 조회 속도 개선 END
+	PRINT ( 'B--' + CONVERT(NVARCHAR(30), GETDATE(), 121))		
+
+
+
+		CREATE CLUSTERED INDEX [IDX1_TEMP_DM_MST_ITEM_SINGLE_V] ON #TEMP_DM_MST_ITEM_SINGLE_V
+		(division_id   ASC
+		,item_id       ASC
+		)WITH (PAD_INDEX = ON, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+		;
+
+		-- SCM_MST_SSO_USER_INFO 임시테이블 생성
+		SELECT DEPT_ID, USER_ID
+		INTO #TEMP_SCM_MST_SSO_USER_INFO
+		FROM SCM_MST_SSO_USER_INFO WITH(NOLOCK)
+		ORDER BY USER_ID 
+
+
+		-- SCM_MST_SITE_ITEM 임시테이블 생성
+		SELECT DIVISION_ID, SCM_SITE_ID, PROJECT_CODE, ITEM_ID, CURRENCY, CUST_GROUP
+			, CUST_GROUP_DTL, APPLICATION, ROUTE, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE5
+			, REPORT_GROUP1, REPORT_GROUP2, REPORT_GROUP3, REPORT_GROUP4, REPORT_GROUP5
+			, REPORT_GROUP6, OWNER, CELL_PER_CAR, CELL_PER_MODULE
+			, DBO.FN_GET_DM_MKT_OWNER_NAME (SMSI.OWNER, ',', 'EN' )                AS OWNER_NAME
+			, DBO.FN_GET_DM_MKT_OWNER_NAME (SMSI.OWNER, ',', 'KO' )                AS OWNER_NAME_KO
+			,( SELECT SU.DEPT_ID  
+			   FROM #TEMP_SCM_MST_SSO_USER_INFO SU WITH(NOLOCK) 
+			   WHERE SU.USER_ID = (SELECT top 1 token FROM [dbo].[String_Split](SMSI.owner, ',')) 
+			 ) AS DEPT_ID
+		INTO #TEMP_SCM_MST_SITE_ITEM
+		FROM SCM_MST_SITE_ITEM SMSI WITH(NOLOCK)
+		WHERE SMSI.Division_id = @p_division_id
+
+
+		-- CITY, COUNTRY 취득할 임시테이블 생성
+		SELECT  S.DIVISION_ID
+				, S.SOLDTO_CUSTOMER
+				, S.END_CUSTOMER
+				, S.DEPT_ID
+				, S.SCM_SITE_ID
+				, S.VMI_YN
+				, S.VALID_YN
+				, S.CITY_NAME
+				, S.COUNTRY_NAME 
+		INTO #TEMP_SCM_CITY
+		FROM DM_PLN_BP_FCST A
+		LEFT JOIN (SELECT X.DIVISION_ID
+						, X.SOLDTO_CUSTOMER
+						, X.END_CUSTOMER
+						, X.DEPT_ID
+						, X.SCM_SITE_ID
+						, X.VMI_YN
+						, X.VALID_YN
+						, Y.CITY_NAME
+						, Z.COUNTRY_NAME 
+					FROM SCM_MST_SITE		X WITH(NOLOCK)
+					   , SCM_MST_CITY		Y WITH(NOLOCK)
+					   , SCM_MST_COUNTRY	Z WITH(NOLOCK)
+					WHERE X.CITY = Y.CITY  AND X.COUNTRY = Z.COUNTRY
+				) S 
+			ON A.DIVISION_ID		= S.DIVISION_ID
+			AND A.SCM_SITE_ID		= S.SCM_SITE_ID
+		WHERE A.DIVISION_ID = @p_division_id
+
+		--------------------------------------------------------------------------------------------------------------------------------------------
+		-- 조회조건에 따른 필터링 처리 ( PRICE 계산시 부하문제로 필터링은 여기서 하고, 필요없는 메저는 PRICE 끝난 후 제거 )
+		--------------------------------------------------------------------------------------------------------------------------------------------
+		BEGIN -- 필터링 시작
+
+			IF ( @p_project_code <> '') -- 소형은 UI 에서 PROJECT DISABLE 됨
+			BEGIN
+				DELETE A
+				FROM #RAW_DATA A
+				JOIN SCM_MST_PROJECT B ON A.DIVISION_ID = B.DIVISION_ID AND A.PROJECT_CODE = B.PROJECT_CODE
+				LEFT OUTER JOIN (	SELECT DISTINCT token 
+									FROM dbo.String_Split(@p_project_code,',') 
+								) C	ON B.PROJECT_CODE LIKE '%' + C.TOKEN + '%'
+				LEFT OUTER JOIN (	SELECT DISTINCT token 
+									FROM dbo.String_Split(@p_project_code,',') 
+								) D	ON B.PROJECT_NAME LIKE '%' + D.TOKEN + '%'
+
+				WHERE C.TOKEN IS NULL AND D.TOKEN IS NULL
+			END
+
+			IF ( @p_item_id <> '')
+			BEGIN
+				DELETE A
+				FROM #RAW_DATA A
+				LEFT OUTER JOIN #TEMP_DM_MST_ITEM_SINGLE_V B ON A.ITEM_ID = B.ITEM_ID
+				LEFT OUTER JOIN (	SELECT DISTINCT token 
+									FROM dbo.String_Split(@p_item_id,',') 
+								) C	ON A.ITEM_ID LIKE '%' + C.TOKEN + '%'
+				LEFT OUTER JOIN (	SELECT DISTINCT token 
+									FROM dbo.String_Split(@p_item_id,',') 
+								) D	ON B.NICK_NAME LIKE '%' + D.TOKEN + '%'
+				WHERE C.TOKEN IS NULL  AND D.TOKEN IS NULL
+			END
+
+			IF ( @p_owner <> '')
+			BEGIN
+				DELETE A
+				FROM #RAW_DATA A
+				LEFT OUTER JOIN #TEMP_SCM_MST_SITE_ITEM B ON A.ITEM_ID = B.ITEM_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.PROJECT_CODE = B.PROJECT_CODE
+				LEFT OUTER JOIN (	SELECT DISTINCT token 
+									FROM dbo.String_Split(@p_owner,',') 
+								) C	ON B.OWNER LIKE '%' + C.TOKEN + '%'
+				LEFT OUTER JOIN (	SELECT DISTINCT token 
+									FROM dbo.String_Split(@p_owner,',') 
+								) D	ON B.OWNER_NAME LIKE '%' + D.TOKEN + '%'
+				LEFT OUTER JOIN (	SELECT DISTINCT token 
+									FROM dbo.String_Split(@p_owner,',') 
+								) E	ON B.OWNER_NAME_KO LIKE '%' + E.TOKEN + '%'
+				WHERE C.TOKEN IS NULL  AND D.TOKEN IS NULL  AND E.TOKEN IS NULL
+			END
+				
+			IF ( @p_dept_id <> 'ALL')
+			BEGIN
+			--[PJ2024-50461] Team Mapping------------------------------------
+				DELETE A
+				FROM #RAW_DATA A
+				LEFT OUTER JOIN #TEMP_SCM_MST_SITE_ITEM B ON A.ITEM_ID = B.ITEM_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.PROJECT_CODE = B.PROJECT_CODE
+				LEFT OUTER JOIN (	SELECT DISTINCT token 
+									FROM dbo.String_Split(@p_dept_id,',') 
+								) C	ON B.DEPT_ID = C.TOKEN
+				WHERE C.TOKEN IS NULL
+
+			/*
+				IF ( @P_DIVISION_ID = '40')
+				BEGIN
+					DELETE A
+					FROM #RAW_DATA A
+					LEFT OUTER JOIN #TEMP_SCM_MST_SITE_ITEM B ON A.ITEM_ID = B.ITEM_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID AND A.PROJECT_CODE = B.PROJECT_CODE
+					LEFT OUTER JOIN (	SELECT DISTINCT token 
+										FROM dbo.String_Split(@p_dept_id,',') 
+									) C	ON B.DEPT_ID = C.TOKEN
+					WHERE C.TOKEN IS NULL
+				END
+				ELSE
+				BEGIN
+					DELETE A
+					FROM #RAW_DATA A
+					LEFT OUTER JOIN SCM_MST_SITE B ON A.SCM_SITE_ID = B.SCM_SITE_ID AND B.DIVISION_ID = @P_DIVISION_ID
+					LEFT OUTER JOIN (	SELECT DISTINCT token 
+										FROM dbo.String_Split(@p_dept_id,',') 
+									) C	ON B.DEPT_ID = C.TOKEN
+					WHERE C.TOKEN IS NULL
+				END
+				*/
+			END
+				
+			IF ( @p_end_customer <> 'ALL')
+			BEGIN
+				IF ( @P_DIVISION_ID = '40')
+				BEGIN
+					DELETE A
+					FROM #RAW_DATA A
+					LEFT OUTER JOIN (	SELECT DISTINCT token 
+										FROM dbo.String_Split(@p_end_customer,',') 
+									) C	ON A.PROJECT_CODE = C.TOKEN
+					WHERE C.TOKEN IS NULL
+				END
+				ELSE
+				BEGIN
+					DELETE A
+					FROM #RAW_DATA A
+					LEFT OUTER JOIN SCM_MST_SITE B ON A.SCM_SITE_ID = B.SCM_SITE_ID AND B.DIVISION_ID = @P_DIVISION_ID
+					LEFT OUTER JOIN (	SELECT DISTINCT token 
+										FROM dbo.String_Split(@p_end_customer,',') 
+									) C	ON B.END_CUSTOMER = C.TOKEN
+					WHERE C.TOKEN IS NULL
+				END
+			END
+				
+			IF ( @p_scm_site_id <> 'ALL')
+			BEGIN
+				DELETE A
+				FROM #RAW_DATA A
+				LEFT OUTER JOIN (	SELECT DISTINCT token 
+									FROM dbo.String_Split(@p_scm_site_id,',') 
+								) C	ON A.SCM_SITE_ID = C.TOKEN
+				WHERE C.TOKEN IS NULL
+			END
+				
+			IF ( @p_plant_site_id <> 'ALL')
+			BEGIN
+				DELETE A
+				FROM #RAW_DATA A
+				LEFT OUTER JOIN (	SELECT DISTINCT token 
+									FROM dbo.String_Split(@p_plant_site_id,',') 
+								) C	ON A.PLANT_SITE_ID = C.TOKEN
+				WHERE C.TOKEN IS NULL
+			END
+
+			IF ( @p_item_type <> 'ALL')
+			BEGIN
+				DELETE A
+				FROM #RAW_DATA A
+				LEFT OUTER JOIN #TEMP_DM_MST_ITEM_SINGLE_V B ON A.ITEM_ID = B.ITEM_ID
+				LEFT OUTER JOIN (	SELECT DISTINCT token 
+									FROM dbo.String_Split(@p_item_type,',') 
+								) C	ON B.ITEM_TYPE = C.TOKEN
+				WHERE C.TOKEN IS NULL
+			END
+
+			IF ( @p_biztype <> 'ALL')
+			BEGIN
+				IF( @P_DIVISION_ID = '40' )
+				BEGIN
+					DELETE A
+					FROM #RAW_DATA A
+					LEFT OUTER JOIN #TEMP_DM_MST_ITEM_SINGLE_V B ON A.ITEM_ID = B.ITEM_ID
+					LEFT OUTER JOIN (	SELECT DISTINCT token 
+										FROM dbo.String_Split(@p_biztype,',') 
+									) C	ON B.FORECAST_INFO_BIZ_TYPE = C.TOKEN
+					WHERE C.TOKEN IS NULL
+				END
+				ELSE
+				BEGIN
+					DELETE A
+					FROM #RAW_DATA A
+					JOIN SCM_MST_PROJECT B ON A.DIVISION_ID = B.DIVISION_ID AND A.PROJECT_CODE = B.PROJECT_CODE
+					LEFT OUTER JOIN (	SELECT DISTINCT token 
+										FROM dbo.String_Split(@p_biztype,',') 
+									) C	ON B.BIZ_TYPE LIKE '%' + C.TOKEN + '%'
+					WHERE C.TOKEN IS NULL
+				END
+			END
+
+			IF @p_qty_yn = 'Y'
+			BEGIN
+				-- [C20221107-000343]BP Waterfall 오류 수정 요청의 건
+				DELETE A FROM #RAW_DATA A
+				INNER JOIN  (
+					SELECT VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID
+						, INCOTERMS, CELL_PROD_SITE, FCST_TYPE, CURRENCY, MEASURE
+						, DEPT_ID, END_CUSTOMER, BIZ_TYPE, PROJECT_NAME
+					FROM #RAW_DATA
+					WHERE MEASURE = 'Business_Plan'
+					GROUP BY VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID
+						, INCOTERMS, CELL_PROD_SITE, FCST_TYPE, CURRENCY, MEASURE
+						, DEPT_ID, END_CUSTOMER, BIZ_TYPE, PROJECT_NAME
+					HAVING SUM(QTY) = 0)  B
+						ON  A.VERSION_NO		= B.VERSION_NO
+						AND A.DIVISION_ID		= B.DIVISION_ID
+						AND A.PROJECT_CODE		= B.PROJECT_CODE
+						AND A.SCM_SITE_ID		= B.SCM_SITE_ID
+						AND A.ITEM_ID			= B.ITEM_ID
+						AND A.FCST_TYPE			= B.FCST_TYPE
+						AND A.PLANT_SITE_ID		= B.PLANT_SITE_ID
+						AND A.DEPT_ID			= B.DEPT_ID
+						AND A.END_CUSTOMER		= B.END_CUSTOMER
+						AND A.BIZ_TYPE			= B.BIZ_TYPE
+						AND A.CURRENCY			= B.CURRENCY
+						AND A.INCOTERMS			= B.INCOTERMS
+						AND A.CELL_PROD_SITE	= B.CELL_PROD_SITE
+
+						
+			END
+
+		END -- 필터링 끝
+
+		------------------------------------------------------------------------------------------
+		--	컬럼리스트 만들고, MKT FCST 와 비슷한 방식으로, CTE 로 데이터를 만들고, CTE SELECT 문에 컬럼리스트 삽입한다.
+		------------------------------------------------------------------------------------------
+
+
+		-- 컬럼리스트 생성
+		BEGIN
+			DECLARE @v_sql_text          AS NVARCHAR(MAX);
+			DECLARE @V_PV_LIST			 AS NVARCHAR(MAX);
+			DECLARE @V_PV_COL_LIST		 AS NVARCHAR(MAX);
+			DECLARE @v_column_name		 AS NVARCHAR(100)
+			DECLARE @v_column            AS NVARCHAR(1000);
+			DECLARE @v_orderby           AS NVARCHAR(1000);
+			DECLARE @v_column_text       AS NVARCHAR(1000);
+			DECLARE @v_PV_column_name    AS NVARCHAR(100);
+			DECLARE @v_PV_NAME			 AS NVARCHAR(50);
+			DECLARE @v_column_type       AS NVARCHAR(50);
+			DECLARE @v_column_value      AS NVARCHAR(50);
+			DECLARE @v_sort_order_no     AS NVARCHAR(50);
+    
+			-----	날짜컬럼 -----------------------------------------------------------------------------------------------------------
+			-- [C20221107-000343]BP Waterfall 오류 수정 요청의 건
+			SELECT @V_PV_LIST = '', @V_PV_COL_LIST = ''
+			DECLARE c_bucket CURSOR FAST_FORWARD FOR 
+				SELECT '[M_' + A.BASIS_YYYYMM + '] AS M_' + A.BASIS_YYYYMM  AS COLUMN_NAME
+					, '[M_' + A.BASIS_YYYYMM + ']' AS PV_NAME
+					, MIN(A.BASIS_START_DATE) + '_' + CONVERT(CHAR(2), 1) AS SORT_ORDER_NO
+				FROM    [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+				WHERE  A.BASIS_YYYYMMDD >= @p_from_yyyymmdd 
+				AND    A.BASIS_YYYYMMDD <= @p_to_yyyymmdd 
+				GROUP BY A.BASIS_YYYYMM
+				UNION ALL
+				SELECT '[Q_' + REPLACE(A.CALENDAR_YYYYQQ, 'Q', '_') + '] AS Q_' + REPLACE(A.CALENDAR_YYYYQQ, 'Q', '_')  AS COLUMN_NAME
+					, '[Q_' + REPLACE(A.CALENDAR_YYYYQQ, 'Q', '_') + ']' AS PV_NAME
+					, MIN(A.BASIS_START_DATE) + '_' + CONVERT(CHAR(2), 1) AS SORT_ORDER_NO
+				FROM    [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+				WHERE  A.BASIS_YYYYMMDD >= @p_from_yyyymmdd 
+				AND    A.BASIS_YYYYMMDD <= @p_to_yyyymmdd 
+				GROUP BY A.CALENDAR_YYYYQQ
+				UNION ALL
+				SELECT '[Y_' + A.CALENDAR_YYYY + '] AS Y_' + A.CALENDAR_YYYY  AS COLUMN_NAME
+						, '[Y_' + A.CALENDAR_YYYY + ']' AS PV_NAME
+						, MIN(A.BASIS_START_DATE) + '_' + CONVERT(CHAR(2), 1) AS SORT_ORDER_NO
+				FROM    [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+				WHERE  A.BASIS_YYYYMMDD >= @p_from_yyyymmdd 
+				AND    A.BASIS_YYYYMMDD <= @p_to_yyyymmdd 
+				GROUP BY A.CALENDAR_YYYY
+				;
+
+			OPEN c_bucket;
+			FETCH NEXT FROM c_bucket INTO @v_PV_column_name, @v_PV_name, @v_sort_order_no
+										WHILE @@FETCH_STATUS = 0   
+			BEGIN  
+				SELECT @V_PV_COL_LIST	= @V_PV_COL_LIST + CASE WHEN @V_PV_COL_LIST <> '' THEN ',' ELSE '' END + @v_PV_column_name
+					, @V_PV_LIST		= @V_PV_LIST + CASE WHEN @V_PV_LIST <> '' THEN ',' ELSE '' END + @v_PV_name
+    
+				FETCH NEXT FROM c_Bucket INTO @v_PV_column_name, @v_PV_name, @v_sort_order_no
+			END;
+
+			CLOSE c_bucket; 
+			DEALLOCATE c_bucket;
+
+
+			-----	일반 컬럼 -----------------------------------------------------------------------------------------------------------
+			SET @v_column_name = '';
+			SET @v_column = '';
+			SET @v_orderby = '';
+			
+			SELECT  @i_Count = Count(*)
+			FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+			WHERE  1 = 1
+			AND    U.PROGRAM_ID  = @p_Program_Id
+			AND    U.SHEET_NAME  = @p_sheet_name
+			AND    U.USER_ID     = @p_created_by
+			AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+	
+		
+			IF @i_Count = 0 
+			BEGIN
+				SELECT @ColList = @ColList + '[' + COLUMN_NAME + '],'
+					   , @OrderList = @OrderList + '[' + COLUMN_NAME + '] ' + DATA_SORT_METHOD_CODE + ','
+				FROM 
+				(
+					-- ★★ ORDER BY 가능하려면 컬럼정의 100개 넘지 않아야함
+					SELECT
+						C.SORT_ORDER_NO, 
+						C.COLUMN_NAME, C.DATA_SORT_METHOD_CODE   
+					FROM [SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+					WHERE 1 = 1
+						AND    C.PROGRAM_ID  = @p_Program_Id
+						AND    C.SHEET_NAME  = @p_sheet_name
+						AND    ( C.DEFAULT_FLAG = 'Y' OR 
+							(    C.VISIBLE_FLAG = 'N'
+							AND    C.DEFAULT_FLAG = ''
+							AND    C.VALID_YN     = 'Y'
+							)
+							)  
+				) tbColList	
+				ORDER BY SORT_ORDER_NO
+			END
+			ELSE 
+			BEGIN
+				SELECT @ColList = @ColList + '[' + COLUMN_NAME + '],'
+					   , @OrderList = @OrderList + '[' + COLUMN_NAME + '] ' + DATA_SORT_METHOD_CODE + ','
+				FROM 
+				(
+				SELECT
+					U.SORT_ORDER_NO, C.COLUMN_NAME, U.DATA_SORT_METHOD_CODE  
+				FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+					INNER JOIN [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+						ON     U.PROGRAM_ID  = C.PROGRAM_ID
+						AND    U.SHEET_NAME  = C.SHEET_NAME
+						AND    U.COLUMN_NAME = C.COLUMN_NAME
+						AND    U.PROGRAM_ID  = @p_Program_Id
+						AND    U.SHEET_NAME  = @p_sheet_name
+						AND    U.USER_ID     = @p_created_by
+						AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'   
+						-- [C20221107-000343]BP Waterfall 오류 수정 요청의 건
+						AND	   @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )	
+				---------
+				UNION ALL
+				---------
+				SELECT TOP 100 
+					C.SORT_ORDER_NO, C.COLUMN_NAME, C.DATA_SORT_METHOD_CODE   
+				FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+				WHERE  1 = 1
+						AND    C.PROGRAM_ID  = @p_Program_Id
+						AND    C.SHEET_NAME  = @p_sheet_name
+						AND    C.VISIBLE_FLAG = 'N'
+						AND    C.DEFAULT_FLAG = ''
+						AND    C.VALID_YN     = 'Y'
+				) tbColList	
+				ORDER BY SORT_ORDER_NO
+			END
+			SELECT @ColList = LEFT(@ColList, LEN(@ColList)-1)	
+			SELECT @OrderList = LEFT(@OrderList, LEN(@OrderList)-1)	
+			
+			SELECT @ColList = REPLACE(@ColList,'[VERSION_NO]','[VERSION_SORT],[VERSION_NO]')
+			SELECT @OrderList = REPLACE(@OrderList,'[VERSION_NO]','[VERSION_SORT] DESC,[VERSION_NO]')
+			SELECT @OrderList = REPLACE(@OrderList,'[MEASURE]','[SORT_ORDER_NO],[MEASURE]')
+
+		END	--	컬럼생성 끝	---------------------------------------------------------------------------------------------------------------------
+
+
+		BEGIN	-- CTE 에서 사용할 SELECT COLUMN 정리
+			
+			DECLARE @V_SQL_SELECT NVARCHAR(4000)
+
+			CREATE TABLE #T_COLUMN_SETUP (
+				TBL_ALIAS			NVARCHAR(10)
+			  , COLUMN_NAME			NVARCHAR(100)
+			  , COLUMN_STRING		NVARCHAR(1000)
+			  , SORT_KEY			INT
+			)
+
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'VERSION_NO', 'A.VERSION_NO', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'DIVISION_ID', 'A.DIVISION_ID', 1)
+
+			--[PJ2024-50461] Team Mapping------------------------------------
+			--INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'DEPT_ID', 'A.DEPT_ID', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'DEPT_ID', 'C.DEPT_ID', 1)
+			--[PJ2024-50461] Team Mapping------------------------------------
+
+
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'END_CUSTOMER40', 'A.PROJECT_CODE AS END_CUSTOMER40', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'END_CUSTOMER', 'A.END_CUSTOMER', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'SCM_SITE_ID40', 'A.SCM_SITE_ID AS SCM_SITE_ID40', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'SCM_SITE_ID81', 'A.SCM_SITE_ID AS SCM_SITE_ID81', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'SCM_SITE_ID82', 'A.SCM_SITE_ID AS SCM_SITE_ID82', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'PROJECT_CODE', 'A.PROJECT_CODE AS PROJECT_CODE', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'PROJECT_CODE82', 'A.PROJECT_CODE AS PROJECT_CODE82', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'BIZ_TYPE_NAME81', 'A.BIZ_TYPE AS BIZ_TYPE_NAME81', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'ITEM_ID', 'A.ITEM_ID AS ITEM_ID', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'ITEM_ID40', 'A.ITEM_ID AS ITEM_ID40', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'INCOTERMS', 'A.INCOTERMS', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'FCST_TYPE', 'A.FCST_TYPE', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'PLANT_SITE_ID', 'A.PLANT_SITE_ID', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'J', 'CELL_PROD_SITE', 'J.ATTRIBUTE1 as CELL_PROD_SITE', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'ITEM_USE', 'A.ITEM_USE', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'UNIT_ENERGY', 'A.UNIT_ENERGY', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'MEASURE', 'A.MEASURE', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'YYYYMMDD', 'A.YYYYMMDD', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'QTY', 'A.QTY', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'A', 'VERSION_SORT', 'CASE WHEN A.VERSION_NO = ''CURRENT'' THEN ''ZZZZZZZZZZZZZZZ'' ELSE A.VERSION_NO END AS VERSION_SORT', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'B', 'PRODUCT_GROUP_NAME', 'CASE WHEN A.DIVISION_ID = ''40'' THEN '''' ELSE B.PRODUCT_GROUP_NAME END AS PRODUCT_GROUP_NAME', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'AB', 'PROJECT_NAME', 'CASE WHEN A.DIVISION_ID = ''40'' THEN A.PROJECT_NAME 
+																			WHEN B.PROJECT_NAME = '''' OR B.PROJECT_NAME IS NULL THEN A.PROJECT_NAME 
+																			ELSE B.PROJECT_NAME END PROJECT_NAME', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'AC', 'CURRENCY', 'CASE WHEN A.CURRENCY = '''' THEN C.CURRENCY ELSE ISNULL(A.CURRENCY, C.CURRENCY) END AS CURRENCY ', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'DEPT_ID40', 'C.DEPT_ID AS DEPT_ID40', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'CUST_GROUP', 'C.CUST_GROUP', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'CUST_GROUP_DTL', 'C.CUST_GROUP_DTL', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'OWNER', 'CASE WHEN A.DIVISION_ID = ''40'' THEN C.OWNER_NAME ELSE LEFT(C.OWNER_NAME, 100) END AS OWNER', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'APPLICATION', 'C.APPLICATION', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'ROUTE', 'C.ROUTE', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'DMS_SALES', 'ISNULL(C.ATTRIBUTE1,'''')  AS DMS_SALES', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'DMS_CUSTOMER', 'ISNULL(C.ATTRIBUTE2,'''') AS DMS_CUSTOMER', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'REPORT_GROUP1', 'C.REPORT_GROUP1 AS REPORT_GROUP1', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'REPORT_GROUP2', 'C.REPORT_GROUP2 AS REPORT_GROUP2', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'REPORT_GROUP3', 'C.REPORT_GROUP3 AS REPORT_GROUP3', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'REPORT_GROUP4', 'C.REPORT_GROUP4 AS REPORT_GROUP4', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'REPORT_GROUP5', 'C.REPORT_GROUP5 AS REPORT_GROUP5', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'REPORT_GROUP6', 'C.REPORT_GROUP6 AS REPORT_GROUP6', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'C', 'FORECAST_INFO_CELL_MODEL', 'C.ATTRIBUTE5 AS FORECAST_INFO_CELL_MODEL', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'D', 'BIZ_TYPE_NAME40', 'D.FORECAST_INFO_BIZ_TYPE AS BIZ_TYPE_NAME40', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'D', 'ITEM_CLASS_NAME', 'ISNULL(D.ITEM_CLASS_NAME, '''') AS ITEM_CLASS_NAME', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'D', 'ITEM_NAME', 'ISNULL(D.ITEM_NAME, '''') AS ITEM_NAME', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'D', 'ITEM_TYPE', 'ISNULL(D.ITEM_TYPE, '''') AS ITEM_TYPE', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'D', 'NICK_NAME', 'ISNULL(D.NICK_NAME, '''') AS NICK_NAME', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'D', 'FORECAST_INFO_PRODUCT_GROUP', 'D.FORECAST_INFO_PRODUCT_GROUP', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'D', 'FORECAST_INFO_CELL_PACK_COUNT', 'D.FORECAST_INFO_CELL_PACK_COUNT', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'D', 'FORECAST_INFO_SPEC', 'D.FORECAST_INFO_SPEC', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'D', 'MDM_PROJECT_NAME', 'D.MDM_PROJECT_NAME', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'D', 'MIN_CAPACITY', 'D.MIN_CAPACITY', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'D', 'CELL_TYPE', '(SELECT LMD.SEGMENT2  AS NAME FROM [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] LMD WITH(NOLOCK) WHERE LOOKUP_TYPE = ''CELL_TYPE'' AND D.CELL_TYPE = LMD.SEGMENT1 ) AS CELL_TYPE', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'E', 'CELL_PER_CAR', 'CASE WHEN A.DIVISION_ID = ''40'' THEN 0 ELSE ISNULL(E.CELL_PER_CAR, 0) END AS CELL_PER_CAR', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'E', 'MODULE_PER_CAR', 'CASE WHEN A.DIVISION_ID = ''40'' THEN 0 
+																			ELSE CASE WHEN E.CELL_PER_MODULE  <> 0 THEN E.CELL_PER_CAR / E.CELL_PER_MODULE 
+																						ELSE 0 END END AS MODULE_PER_CAR', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'G', 'VMI_YN', 'G.VMI_YN', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'G', 'CITY_NAME', 'G.CITY_NAME', 1)
+			INSERT INTO #T_COLUMN_SETUP VALUES ( 'G', 'COUNTRY_NAME', 'G.COUNTRY_NAME', 1)
+
+
+			SELECT B.COLUMN_STRING, ROW_NUMBER() OVER ( ORDER BY B.SORT_KEY ) AS SEQ
+			INTO #T
+			FROM  DBO.UF_FX_String_Split(@ColList, ',') A
+			JOIN #T_COLUMN_SETUP B ON REPLACE(REPLACE(A.TOKEN, '[', ''), ']','') = B.COLUMN_NAME
+
+			DECLARE @I INT, @CNT INT
+
+			SELECT @I = 1, @CNT = COUNT(*), @V_SQL_SELECT = ''
+			FROM #T
+
+			WHILE ( @I <= @CNT )
+			BEGIN
+				SELECT @V_SQL_SELECT = @V_SQL_SELECT + CASE WHEN @I = 1 THEN '' ELSE ',' END + COLUMN_STRING
+				FROM #T 
+				WHERE SEQ = @I
+
+				SET @I += 1
+
+			END
+		END
+		
+
+		-- SQL실행문
+		IF @p_division_id = '40'
+		BEGIN
+			SET @v_sql_text = N'
+			SELECT'
+
+			IF @p_cell_yn = 'Y'
+			BEGIN
+				SET @v_sql_text = @v_sql_text + N' DBO.FN_GET_DM_SALES_PLAN_WATERFALL_QTY2(
+				A.MEASURE, ISNULL(D.ITEM_CLASS_NAME,'''')
+				, ISNULL(A.QTY,0)
+				, ISNULL(C.CELL_PER_CAR,0)
+				, ISNULL(C.CELL_PER_MODULE,0)
+				, ''Y''
+				, ISNULL(D.FORECAST_INFO_CELL_PACK_COUNT, 0)
+				, ''' + @P_DIVISION_ID + N''', ISNULL(D.FORECAST_INFO_BIZ_TYPE, '''')
+				) AS QTY '
+			END
+			ELSE
+			BEGIN
+				 SET @v_sql_text = @v_sql_text + N' A.QTY AS QTY '
+			END
+
+			SET @v_sql_text = @v_sql_text + N'
+				, A.COLNAME
+				, I.SORT_ORDER_NO
+				, ' + @V_SQL_SELECT + '
+			INTO #WF
+			FROM #RAW_DATA A
+			INNER JOIN SCM_MST_SITE					F WITH(NOLOCK) ON (A.DIVISION_ID = F.DIVISION_ID AND A.SCM_SITE_ID = F.SCM_SITE_ID)
+			LEFT JOIN SCM_MST_PROJECT				B WITH(NOLOCK) ON (A.DIVISION_ID = B.DIVISION_ID AND A.PROJECT_CODE = B.PROJECT_CODE)
+			LEFT JOIN #TEMP_SCM_MST_SITE_ITEM		C WITH(NOLOCK) ON (A.DIVISION_ID = C.DIVISION_ID AND A.SCM_SITE_ID = C.SCM_SITE_ID AND A.PROJECT_CODE = C.PROJECT_CODE AND A.ITEM_ID = C.ITEM_ID)
+			LEFT JOIN #TEMP_DM_MST_ITEM_SINGLE_V	D WITH(NOLOCK) ON (A.DIVISION_ID = D.DIVISION_ID AND A.ITEM_ID	= D.ITEM_ID)
+			LEFT JOIN SCM_MST_SITE_ITEM				E WITH(NOLOCK) ON (A.DIVISION_ID = E.DIVISION_ID AND A.PROJECT_CODE = E.PROJECT_CODE AND A.SCM_SITE_ID = E.SCM_SITE_ID AND A.ITEM_ID = E.ITEM_ID)
+			LEFT JOIN #TEMP_SCM_CITY				G WITH(NOLOCK) ON (A.DIVISION_ID = G.DIVISION_ID AND A.SCM_SITE_ID = G.SCM_SITE_ID 
+																	AND CASE WHEN A.DIVISION_ID = ''40'' THEN A.PROJECT_CODE ELSE A.END_CUSTOMER END = G.END_CUSTOMER 
+
+																	--[PJ2024-50461] Team Mapping------------------------------------
+																	--AND CASE WHEN A.DIVISION_ID = ''40'' THEN C.DEPT_ID ELSE A.DEPT_ID END = G.DEPT_ID )
+																	AND C.DEPT_ID = G.DEPT_ID )
+																	--[PJ2024-50461] Team Mapping------------------------------------
+
+			JOIN #SELECT_MEASURE					I ON (A.MEASURE = I.MEASURE)
+			LEFT JOIN SCM_ADM_LOOKUP_MASTER_DETAIL  J WITH(NOLOCK) ON A.CELL_PROD_SITE = J.SEGMENT1 AND J.LOOKUP_TYPE = ''DM_CELL_PROD_SITE''
+			;'
+		END
+		ELSE
+		BEGIN
+			SET @v_sql_text = N'
+			SELECT'
+
+			IF @p_cell_yn = 'Y'
+			BEGIN
+				SET @v_sql_text = @v_sql_text + N' DBO.FN_GET_DM_SALES_PLAN_WATERFALL_QTY2(
+				A.MEASURE, ISNULL(D.ITEM_CLASS_NAME,'''')
+				, ISNULL(A.QTY,0)
+				, ISNULL(C.CELL_PER_CAR,0)
+				, ISNULL(C.CELL_PER_MODULE,0)
+				, ''Y''
+				, ISNULL(D.FORECAST_INFO_CELL_PACK_COUNT, 0)
+				, ''' + @P_DIVISION_ID + N''', ISNULL(D.FORECAST_INFO_BIZ_TYPE, '''')
+				) AS QTY '
+			END
+			ELSE
+			BEGIN
+				 SET @v_sql_text = @v_sql_text + N' A.QTY AS QTY '
+			END
+
+			SET @v_sql_text = @v_sql_text + N'
+				, A.COLNAME
+				, I.SORT_ORDER_NO
+				, ' + @V_SQL_SELECT + '
+			INTO #WF
+			FROM #RAW_DATA A
+			LEFT JOIN SCM_MST_SITE					F WITH(NOLOCK) ON (A.DIVISION_ID = F.DIVISION_ID AND A.SCM_SITE_ID = F.SCM_SITE_ID)
+			LEFT JOIN SCM_MST_PROJECT				B WITH(NOLOCK) ON (A.DIVISION_ID = B.DIVISION_ID AND A.PROJECT_CODE = B.PROJECT_CODE)
+			LEFT JOIN #TEMP_SCM_MST_SITE_ITEM		C WITH(NOLOCK) ON (A.DIVISION_ID = C.DIVISION_ID AND A.SCM_SITE_ID = C.SCM_SITE_ID AND A.PROJECT_CODE = C.PROJECT_CODE AND A.ITEM_ID = C.ITEM_ID)
+			LEFT JOIN #TEMP_DM_MST_ITEM_SINGLE_V	D WITH(NOLOCK) ON (A.DIVISION_ID = D.DIVISION_ID AND A.ITEM_ID	= D.ITEM_ID)
+			LEFT JOIN SCM_MST_SITE_ITEM				E WITH(NOLOCK) ON (A.DIVISION_ID = E.DIVISION_ID AND A.PROJECT_CODE = E.PROJECT_CODE AND A.SCM_SITE_ID = E.SCM_SITE_ID AND A.ITEM_ID = E.ITEM_ID)
+			LEFT JOIN #TEMP_SCM_CITY				G WITH(NOLOCK) ON (A.DIVISION_ID = G.DIVISION_ID AND A.SCM_SITE_ID = G.SCM_SITE_ID 
+																	AND CASE WHEN A.DIVISION_ID = ''40'' THEN A.PROJECT_CODE ELSE A.END_CUSTOMER END = G.END_CUSTOMER 
+
+																	--[PJ2024-50461] Team Mapping------------------------------------
+																	--AND CASE WHEN A.DIVISION_ID = ''40'' THEN C.DEPT_ID ELSE A.DEPT_ID END = G.DEPT_ID )
+																	AND C.DEPT_ID = G.DEPT_ID )
+																	--[PJ2024-50461] Team Mapping------------------------------------
+
+			JOIN #SELECT_MEASURE					I ON (A.MEASURE = I.MEASURE)
+			;'
+		END
+		
+		SET @v_sql_text = @v_sql_text + N'
+			
+			SELECT ' + @ColList + '
+					, SORT_ORDER_NO
+					, ' + @V_PV_COL_LIST + '   
+			FROM (
+
+				SELECT ' + @ColList + '
+					, SORT_ORDER_NO
+					, COLNAME
+					, CASE WHEN MEASURE IN (''LOC'',''USD'',''KRW'') THEN MAX(QTY) 
+							ELSE SUM(QTY) 
+							END AS QTY
+				FROM #WF
+				GROUP BY ' + @ColList + ', SORT_ORDER_NO, COLNAME
+
+				) F
+			PIVOT (
+				SUM(F.QTY) FOR COLNAME IN ( ' + @v_PV_LIST + ' )
+				) AS PVT
+			ORDER BY ' + @OrderList + '
+				;';
+
+
+print 'K--' + convert(varchar(30), getdate(), 121)
+--print @v_sql_text
+		
+		EXECUTE dbo.SP_executesql @v_sql_text; 
+		
+		SELECT ISO_WEEK, BASIS_DATE 
+		FROM [dbo].[SCM_SYS_CALENDAR_M] 
+		WHERE BASIS_YYYYMMDD = CONVERT(VARCHAR(8),GETDATE(), 112) 
+		
+		-- xml확인할경우
+		SELECT CONVERT(TEXT, @v_sql_text)
+		FOR XML PATH('')--,ROOT('x') 
+
+
+	------------------------------------------------------------------------------------------
+	--                                                       Temp Table 존재 여부 체크 (BEGIN)
+	------------------------------------------------------------------------------------------
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_V', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_V
+		;
+	IF OBJECT_ID (N'tempdb..#SELECT_MEASURE', N'U') IS NOT NULL 
+		DROP TABLE #SELECT_MEASURE
+		;
+	IF OBJECT_ID (N'tempdb..#RAW_DATA', N'U') IS NOT NULL 
+		DROP TABLE #RAW_DATA
+		;
+	IF OBJECT_ID (N'tempdb..#TEMP_SCM_MST_SSO_USER_INFO', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_SCM_MST_SSO_USER_INFO
+		;
+	IF OBJECT_ID (N'tempdb..#TEMP_SCM_MST_SITE_ITEM', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_SCM_MST_SITE_ITEM
+		;
+	IF OBJECT_ID (N'tempdb..#TEMP_SCM_CITY', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_SCM_CITY
+		;
+	IF OBJECT_ID (N'tempdb..#T_PRICE', N'U') IS NOT NULL 
+		DROP TABLE #T_PRICE
+		;
+	IF OBJECT_ID (N'tempdb..#T_COLUMN_SETUP', N'U') IS NOT NULL 
+		DROP TABLE #T_COLUMN_SETUP
+		;
+	IF OBJECT_ID (N'tempdb..#T', N'U') IS NOT NULL 
+		DROP TABLE #T
+		;
+
+	--20240912 JSSBAE 속도개선 START
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_ORI_V', N'U') IS NOT NULL 	
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_ORI_V
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_A_V', N'U') IS NOT NULL 	
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_A_V
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_B_V', N'U') IS NOT NULL 	
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_B_V
+	--20240912 JSSBAE 속도개선 END
+	------------------------------------------------------------------------------------------
+	--                       Temp Table 존재 여부 체크 (END)
+	------------------------------------------------------------------------------------------
+
+END

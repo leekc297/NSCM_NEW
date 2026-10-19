@@ -1,0 +1,165 @@
+﻿
+/********************************************************************************************************************************************************/
+/* Program ID  : [DMF0020_GET_SALES_PRICE_TEMPLATE]																										*/
+/* Description : Procedure 작성 가이드																													*/
+/* Usage       : Procedure 작성 시 참조하세요!																												*/
+/* Parameter   :																																		*/
+/*																																						*/
+/*------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/* Date			In Charge			Description																											*/
+/*------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/* 2024.07.17		KJJ      최초 작성- [PJ2024-50611]Sales Price 템플릿 다운 기능추가*/
+
+--EXEC DMF0020_GET_SALES_PRICE_TEMPLATE '81'
+/*------------------------------------------------------------------------------------------------------------------------------------------------------*/ 		 
+
+CREATE PROCEDURE [dbo].[DMF0020_GET_SALES_PRICE_TEMPLATE]
+    @p_division_id				NVARCHAR(30)
+
+AS  
+
+BEGIN
+  SET NOCOUNT ON;
+  SET ANSI_WARNINGS OFF;
+
+	--DIV별 최신 버전(2024.10.04)---------------------
+	IF OBJECT_ID('TEMPDB..#TEMP_VERSION_NO') IS NOT NULL
+		DROP TABLE #TEMP_VERSION_NO;
+
+	SELECT A.*, B.BASIS_YYYYMM AS YYYYMM
+	INTO #TEMP_VERSION_NO
+	FROM
+	(
+		SELECT DIVISION_ID, MAX(VERSION_NO) VERSION_NO,  max(yyyymmdd) yyyymmdd
+					FROM DM_MST_VERSION WITH(NOLOCK)
+					WHERE DIVISION_ID = @p_division_id
+					AND VERSION_TYPE	= 'SP_W' 
+					--AND ISNULL(ATTRIBUTE7, 'N') = 'Y'
+		GROUP BY DIVISION_ID
+	) A
+	INNER JOIN SCM_SYS_CALENDAR_M B
+			ON B.BASIS_YYYYMMDD = A.yyyymmdd 
+
+	SELECT DISTINCT
+		A.DIVISION_ID
+		, A.DEPT_NAME_KO DEPT_NAME
+		,A.END_CUSTOMER
+		, A.PROJECT_CODE
+		, MAX(A.CURRENCY) CURRENCY -- Model별로 하나의 CURRENCY만 있어야 하므로 MAX값 취함
+		, A.ITEM_ID
+		,'' M0
+		,'' M1
+		,'' M2
+		,'' M3
+		,'' M4
+		,'' M5
+		,'' M6
+		,'' M7
+		,'' M8
+		,'' M9
+		,'' M10
+		,'' M11
+		,'' M12
+	FROM 
+	(
+		SELECT
+		SP.DIVISION_ID
+		,TEAM.DEPT_ID
+		, TEAM.DEPT_NAME_KO
+		,MS.END_CUSTOMER
+		, SP.PROJECT_CODE
+		,MP.PROJECT_NAME
+		, SP.ITEM_ID
+		, SP.SCM_SITE_ID
+		, CASE WHEN ISNULL(SP.CURRENCY, '') = '' THEN SI.CURRENCY ELSE SP.CURRENCY END CURRENCY--CURRENCY가 없을 경우 SSPM의 값을 가져옴
+		FROM DM_PLN_SALES_PLAN_C SP WITH(NOLOCK) 
+		INNER JOIN SCM_MST_SITE MS WITH(NOLOCK) 
+			ON MS.DIVISION_ID = SP.DIVISION_ID
+			AND MS.SCM_SITE_ID = SP.SCM_SITE_ID
+			AND MS.VALID_YN = 'Y'  
+		INNER JOIN SCM_MST_SSO_DEPT_INFO DI WITH(NOLOCK)
+			ON DI.DEPT_ID = MS.DEPT_ID
+			AND DI.VALID_YN = 'Y'
+		INNER JOIN SCM_MST_PROJECT MP WITH(NOLOCK)
+			ON MP.DIVISION_ID = SP.DIVISION_ID
+			AND MP.PROJECT_CODE = SP.PROJECT_CODE
+		INNER JOIN SCM_MST_SITE_ITEM SI WITH(NOLOCK)
+			ON SI.DIVISION_ID = SP.DIVISION_ID 
+			AND SI.PROJECT_CODE = SP.PROJECT_CODE 
+			AND SI.SCM_SITE_ID = SP.SCM_SITE_ID 
+			AND SI.ITEM_ID = SP.ITEM_ID 
+			AND SI.VALID_YN = 'Y'
+		INNER JOIN #TEMP_VERSION_NO T_VER--DIV별 최신버전(2024.10.04)
+			ON SP.DIVISION_ID = T_VER.DIVISION_ID
+			AND SP.VERSION_NO = T_VER.VERSION_NO
+			LEFT JOIN (
+				SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID 
+				FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+				INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+				ON B.DEPT_ID = C.DEPT_ID
+			) AS TEAM
+			ON      
+			TEAM.USER_ID   IN (SELECT top 1 token FROM [dbo].[String_Split](SI.owner, ','))
+		WHERE SP.DIVISION_ID = @p_division_id
+		AND SP.QTY <> 0
+		AND SP.MEASURE = 'RTF_SYS_RP'
+		--버전의 날짜로 처리(2024.10.04)
+		AND SP.YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY( T_VER.YYYYMMDD, 'MON')), 112)
+		AND SP.YYYYMMDD <= CONVERT(CHAR(8), DATEADD(DD, - 1, DATEADD(WW, 52, CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY( T_VER.YYYYMMDD, 'MON')), 112) )),  112) 
+		UNION ALL
+		SELECT
+		SP.DIVISION_ID
+		,TEAM.DEPT_ID
+		, TEAM.DEPT_NAME_KO
+		,MS.END_CUSTOMER
+		, SP.PROJECT_CODE
+		,MP.PROJECT_NAME
+		, SP.ITEM_ID
+		, SP.SCM_SITE_ID
+		, CASE WHEN ISNULL(SP.CURRENCY, '') = '' THEN SI.CURRENCY ELSE SP.CURRENCY END CURRENCY--CURRENCY가 없을 경우 SSPM의 값을 가져옴
+		FROM DM_PLN_SALES_PLAN_RESULT_C SP WITH(NOLOCK) 
+		INNER JOIN SCM_MST_SITE MS WITH(NOLOCK) 
+			ON MS.DIVISION_ID = SP.DIVISION_ID
+			AND MS.SCM_SITE_ID = SP.SCM_SITE_ID
+			AND MS.VALID_YN = 'Y'  
+		INNER JOIN SCM_MST_SSO_DEPT_INFO DI WITH(NOLOCK)
+			ON DI.DEPT_ID = MS.DEPT_ID
+			AND DI.VALID_YN = 'Y'
+		INNER JOIN SCM_MST_PROJECT MP WITH(NOLOCK)
+			ON MP.DIVISION_ID = SP.DIVISION_ID
+			AND MP.PROJECT_CODE = SP.PROJECT_CODE
+		INNER JOIN SCM_MST_SITE_ITEM SI WITH(NOLOCK)
+			ON SI.DIVISION_ID = SP.DIVISION_ID 
+			AND SI.PROJECT_CODE = SP.PROJECT_CODE 
+			AND SI.SCM_SITE_ID = SP.SCM_SITE_ID 
+			AND SI.ITEM_ID = SP.ITEM_ID
+			AND SI.VALID_YN = 'Y'
+		INNER JOIN #TEMP_VERSION_NO T_VER--DIV별 최신버전(2024.10.04)
+			ON SP.DIVISION_ID = T_VER.DIVISION_ID
+			AND SP.VERSION_NO = T_VER.VERSION_NO
+			LEFT JOIN (
+				SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO, C.UPPER_DEPT_ID 
+				FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+				INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+				ON B.DEPT_ID = C.DEPT_ID
+			) AS TEAM
+			ON      
+			TEAM.USER_ID   IN (SELECT top 1 token FROM [dbo].[String_Split](SI.owner, ','))
+		WHERE SP.DIVISION_ID = @p_division_id
+		AND SP.QTY <> 0
+		AND SP.MEASURE = 'RTF_SYS_RP'
+		AND SP.YYYYMMDD >= CONVERT(VARCHAR, T_VER.YYYYMM + '01', 112) 
+		AND SP.YYYYMMDD < CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY( T_VER.YYYYMMDD, 'MON')), 112)
+	) A
+	GROUP BY 
+	A.DIVISION_ID
+	,A.DEPT_ID
+	, A.DEPT_NAME_KO
+	,A.END_CUSTOMER
+	, A.PROJECT_CODE
+	, A.PROJECT_NAME
+	, A.ITEM_ID
+	, A.SCM_SITE_ID
+	--, A.CURRENCY
+	
+END

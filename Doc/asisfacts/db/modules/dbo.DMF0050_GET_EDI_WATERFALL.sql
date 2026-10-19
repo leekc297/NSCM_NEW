@@ -1,0 +1,631 @@
+﻿/*
+ * Program ID   : DMF0050_GET_EDI_WATERFALL
+ * Description  : EDI Waterfall 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+* 2021.12.06	hwi1993		최초작성
+* 2022.02.07	HWI1993		추가 요구사항 및 오류수정
+* 2022.04.25	HWI1993		GM JV 작업
+* 2022.06.23	kdw2819		[C20220620-000557] GSCM DM 영역내, Version에 주차표기
+* 2022.07.19	kdw2819		[C20220620-000567]GSCM DM 시스템의 수작업 LOSS 및 분석 용이하기 위한 기능 개선 ( Partail week의 경우 week만 표시)
+* 2022.09.27	kdw2819		[C20220927-000111]EDI Waterfall report 내 Backorder column 추가 요청
+ **************************************************************************************************
+ */
+ 
+CREATE PROCEDURE [dbo].[DMF0050_GET_EDI_WATERFALL]
+	@p_division_id		NVARCHAR(30)
+	,@p_end_customer	NVARCHAR(4000)
+	,@p_item_id			NVARCHAR(4000)
+	,@p_from_yyyymmdd	NVARCHAR(8)
+	,@p_to_yyyymmdd		NVARCHAR(8)
+	,@p_version_no		NVARCHAR(4000)
+	,@p_bucket			NVARCHAR(20)	-- 20211103 MKT FCST WATERFALL 속도 개선
+	,@p_created_by		NVARCHAR(4000)
+AS  
+  
+BEGIN
+
+  SET NOCOUNT ON;
+  --SET ANSI_WARNINGS OFF; 
+  SET ANSI_NULLS ON
+  SET ANSI_WARNINGS ON; 
+
+print 'A--' + convert(varchar(30), getdate(), 121)
+
+  DECLARE @Prod			NVARCHAR(MAX);
+  DECLARE @ColList		NVARCHAR(MAX);
+  DECLARE @OrderList	NVARCHAR(MAX);
+  DECLARE @nsql			NVARCHAR(MAX);
+  DECLARE @nsql2		NVARCHAR(MAX);
+  DECLARE @p_program_id	VARCHAR(50)='DMF0050'
+  DECLARE @p_sheet_name	VARCHAR(50)= 'EDI Waterfall'
+
+
+
+  SET		@ColList		= '';
+  SET		@OrderList		= '';
+  SET		@Prod			= '';
+  DECLARE	@MEASURE	INT	= 0;
+  DECLARE	@i_count	int	= 0;
+
+
+	-- 20200316 KHSONG C20200224-000109 (BEGIN)
+	DECLARE @v_user_mea_cnt int =0;
+	-- 20200316 KHSONG C20200224-000109 (END)
+
+	-- 20200306 KHSONG 조회시작기간이 START DATE가 아닌경우 PRICE값을 가져오지 못하여 변수추가사용
+	DECLARE @v_start_yyyymmdd NVARCHAR(8)
+	set @v_start_yyyymmdd = (select basis_start_date  from [dbo].[SCM_SYS_CALENDAR_M] with(nolock) where basis_yyyymmdd = @p_from_yyyymmdd)
+
+	
+
+	-- Waterfall은 Edit_Flag 사용하지 않으므로 주석처리
+
+
+	------------------------------------------------------------------------------------------
+	--                                                       Temp Table 존재 여부 체크 (BEGIN)
+	------------------------------------------------------------------------------------------
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_V', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_V
+		;
+	IF OBJECT_ID (N'tempdb..#SELECT_MEASURE', N'U') IS NOT NULL 
+		DROP TABLE #SELECT_MEASURE
+		;
+	IF OBJECT_ID (N'tempdb..#T_VERSION', N'U') IS NOT NULL 
+		DROP TABLE #T_VERSION
+		;
+	IF OBJECT_ID (N'tempdb..#RAW_DATA', N'U') IS NOT NULL 
+		DROP TABLE #RAW_DATA
+		;
+	IF OBJECT_ID (N'tempdb..#TEMP_SCM_MST_SITE_ITEM', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_SCM_MST_SITE_ITEM
+		;
+
+		
+	
+print 'B--' + convert(varchar(30), getdate(), 121)
+
+
+
+	CREATE TABLE #T_VERSION (
+		VERSION_NO		NVARCHAR(50)
+		, NOW_YYYYMMDD	NVARCHAR(8)
+	)
+
+	CREATE TABLE #RAW_DATA (
+		  EDI_IF_SEQ			NVARCHAR(35)
+		, SUB_NO				SMALLINT
+		, YYYYMMDD				CHAR(8)
+		, VERSION_NO			NVARCHAR(30)
+		, DIVISION_ID			NVARCHAR(30)
+		, CUTOFF_YYYYMMDD		CHAR(8)
+		, QTY					NUMERIC(30,10)
+		, COUNTRY_NAME			NVARCHAR(50)
+		, UNLOADING_POINT		NVARCHAR(35)
+		, CUST_MATERIAL_CODE	NVARCHAR(35)
+		, ITEM_ID				NVARCHAR(50)
+		, PHASE1				NVARCHAR(50)
+		, PHASE2				NVARCHAR(50)
+		, CREATION_DATE			NVARCHAR(8)
+		, CUSTOMER_PO_NO		NVARCHAR(35)
+		, CUSTOMER_CALL_OFF_NO	NVARCHAR(35)
+		, BACK_ORDER			NUMERIC(30,10)
+		, SCHEDULING_TYPE		NVARCHAR(3)
+	)
+
+
+	INSERT INTO #T_VERSION ( VERSION_NO, NOW_YYYYMMDD )
+	SELECT A.TOKEN, CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY( B.YYYYMMDD, 'MON')), 112)
+	FROM (SELECT  LEFT(token,  CASE WHEN CHARINDEX('(',token) = 0 THEN LEN(token) ELSE CHARINDEX('(',token)-1 END) AS  TOKEN
+	FROM dbo.String_Split(@p_version_no ,','))  AS A
+	JOIN DM_MST_VERSION B ON A.TOKEN = B.VERSION_NO AND B.DIVISION_ID = @p_division_id
+
+	SELECT a.DIVISION_ID, a.ITEM_ID, ITEM_CLASS
+			, ITEM_NAME, ITEM_CLASS_NAME, NICK_NAME, ITEM_TYPE, MIN_CAPACITY
+			, FORECAST_INFO_BIZ_TYPE, FORECAST_INFO_CELL_PACK_COUNT, FORECAST_INFO_PRODUCT_GROUP
+			, FORECAST_INFO_CELL_MODEL, FORECAST_INFO_SPEC, FORECAST_INFOR_VERSION
+			, ENERGE, CELL_QUANTITY
+			, MDM_PROJECT_NAME, CELL_TYPE, SCP_EXTRA_SPEC
+	 INTO #TEMP_DM_MST_ITEM_SINGLE_V
+	 FROM DM_MST_ITEM_SINGLE_V A
+	 join ( select distinct division_id, item_id from #raw_data ) b on a.division_id = b.division_id and a.item_id = b.item_id
+	WHERE A.DIVISION_ID = @p_division_id
+
+	
+
+
+				INSERT INTO #RAW_DATA ( EDI_IF_SEQ, SUB_NO, YYYYMMDD, VERSION_NO, DIVISION_ID, CUTOFF_YYYYMMDD, QTY
+										, COUNTRY_NAME, UNLOADING_POINT, CUST_MATERIAL_CODE, ITEM_ID, PHASE1, PHASE2
+										, CREATION_DATE, CUSTOMER_PO_NO, CUSTOMER_CALL_OFF_NO, BACK_ORDER, SCHEDULING_TYPE )
+				SELECT A.EDI_IF_SEQ, A.SUB_NO, A.YYYYMMDD, A.VERSION_NO, A.DIVISION_ID, A.CUTOFF_YYYYMMDD,  A.QTY
+						, D.COUNTRY_NAME, A.UNLOADING_POINT, A.CUST_MATERIAL_CODE AS CUST_MATERIAL_CODE, A.ITEM_ID, E.ATTRIBUTE2 AS PHASE1, E.ATTRIBUTE3 AS PHASE2 
+						, A.CREATE_DATE AS CREATION_DATE, A.CUSTOMER_PO_NO, A.CUSTOMER_CALL_OFF_NO, 0 AS BACK_ORDER , A.SCHEDULING_TYPE
+				FROM DM_DNM_EDI_CALLOFF_ITEM_C AS A WITH(NOLOCK)
+				JOIN #T_VERSION B ON A.VERSION_NO = B.VERSION_NO
+				LEFT OUTER JOIN SCM_MST_CUSTOMER C ON A.SOLDTO_CODE = C.SOLDTO_CODE AND A.SHIPTO_CODE = C.SHIPTO_CODE AND A.DIVISION_ID = C.DIVISION_ID
+				LEFT OUTER JOIN SCM_MST_COUNTRY D ON C.SHIPTO_COUNTRY  = D.COUNTRY 
+				LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL E ON A.DIVISION_ID = E.SEGMENT1 AND A.ITEM_ID = E.SEGMENT3 AND CASE WHEN @p_end_customer = 'ALL' THEN @p_end_customer ELSE E.SEGMENT2 END  IN ( SELECT token FROM dbo.String_Split(@p_end_customer,',') ) AND E.LOOKUP_TYPE = 'DM_EDI_CUST_MAT_CODE'
+				WHERE  A.YYYYMMDD >= @p_from_yyyymmdd 
+					and A.YYYYMMDD <= @P_TO_yyyymmdd
+					AND A.DIVISION_ID =@p_division_id
+					AND A.QTY <> 0
+	
+
+			--------------------------------------------------------------------------------------------------------------------------------------------
+			-- 조회조건에 따른 필터링 처리 ( PRICE 계산시 부하문제로 필터링은 여기서 하고, 필요없는 메저는 PRICE 끝난 후 제거 )
+			--------------------------------------------------------------------------------------------------------------------------------------------
+			BEGIN -- 필터링 시작
+
+
+
+				IF ( @p_item_id <> '')
+				BEGIN
+					DELETE A
+					FROM #RAW_DATA A
+					LEFT OUTER JOIN #TEMP_DM_MST_ITEM_SINGLE_V B ON A.ITEM_ID = B.ITEM_ID
+					LEFT OUTER JOIN (	SELECT DISTINCT token 
+										FROM dbo.String_Split(@p_item_id,',') 
+									) C	ON A.ITEM_ID LIKE '%' + C.TOKEN + '%'
+					LEFT OUTER JOIN (	SELECT DISTINCT token 
+										FROM dbo.String_Split(@p_item_id,',') 
+									) D	ON B.NICK_NAME LIKE '%' + D.TOKEN + '%'
+					WHERE C.TOKEN IS NULL  AND D.TOKEN IS NULL
+				END
+
+				
+				--IF ( @p_end_customer <> 'ALL')
+				--BEGIN
+				--	IF ( @P_DIVISION_ID = '40')
+				--	BEGIN
+				--		DELETE A
+				--		FROM #RAW_DATA A
+				--		LEFT OUTER JOIN (	SELECT DISTINCT token 
+				--							FROM dbo.String_Split(@p_end_customer,',') 
+				--						) C	ON A.PROJECT_CODE = C.TOKEN
+				--		WHERE C.TOKEN IS NULL
+				--	END
+				--	ELSE
+				--	BEGIN
+				--		DELETE A
+				--		FROM #RAW_DATA A
+				--		LEFT OUTER JOIN SCM_MST_SITE B ON A.SCM_SITE_ID = B.SCM_SITE_ID AND B.DIVISION_ID = @P_DIVISION_ID
+				--		LEFT OUTER JOIN (	SELECT DISTINCT token 
+				--							FROM dbo.String_Split(@p_end_customer,',') 
+				--						) C	ON B.END_CUSTOMER = C.TOKEN
+				--		WHERE C.TOKEN IS NULL
+				--	END
+				--END
+				
+
+			END -- 필터링 끝
+
+
+					
+
+print 'F--' + convert(varchar(30), getdate(), 121)
+
+		------------------------------------------------------------------------------------------
+		--	필요없는 메저 삭제 
+		------------------------------------------------------------------------------------------
+
+
+
+
+print 'G--' + convert(varchar(30), getdate(), 121)
+
+
+		------------------------------------------------------------------------------------------
+		--	컬럼리스트 만들고, MKT FCST 와 비슷한 방식으로, CTE 로 데이터를 만들고, CTE SELECT 문에 컬럼리스트 삽입한다.
+		------------------------------------------------------------------------------------------
+
+
+		-- 컬럼리스트 생성
+		BEGIN
+			DECLARE @v_sql_text          AS NVARCHAR(MAX);
+			DECLARE @V_PV_LIST			 AS NVARCHAR(MAX);
+			DECLARE @V_PV_COL_LIST		 AS NVARCHAR(MAX);
+			DECLARE @B_ORDER_COLUMN		 AS NVARCHAR(MAX);
+			DECLARE @v_column_name		 AS NVARCHAR(100)
+			DECLARE @v_column            AS NVARCHAR(1000);
+			DECLARE @v_orderby           AS NVARCHAR(1000);
+			DECLARE @v_column_text       AS NVARCHAR(1000);
+			DECLARE @v_PV_column_name    AS NVARCHAR(100);
+			DECLARE @v_PV_NAME			 AS NVARCHAR(50);
+			DECLARE @v_column_type       AS NVARCHAR(50);
+			DECLARE @v_column_value      AS NVARCHAR(50);
+			DECLARE @v_sort_order_no     AS NVARCHAR(50);
+    
+			-----	날짜컬럼 -----------------------------------------------------------------------------------------------------------
+			SELECT @V_PV_LIST = '', @V_PV_COL_LIST = ''
+			DECLARE c_bucket CURSOR FAST_FORWARD FOR 
+				SELECT 
+					 '[D_' + a.basis_yyyymmdd + '] AS D_' + A.BASIS_YYYYMMDD  AS column_name
+					 ,'[D_' + a.basis_yyyymmdd + ']' AS PV_name
+					 , a.basis_yyyymmdd + '_' + CONVERT(CHAR(2), 31) AS sort_order_no
+				FROM   [dbo].[SCM_SYS_CALENDAR_M] a WITH(NOLOCK)	
+				WHERE  a.basis_yyyymmdd >= @p_from_yyyymmdd -- '20171101'  CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)
+				AND    a.basis_yyyymmdd <= @p_to_yyyymmdd   --CONVERT(CHAR(8), DATEADD(YYYY, 1, CURRENT_TIMESTAMP), 112)
+				AND	   @p_bucket = 'DAILY'
+				UNION ALL
+				SELECT '[W_' + A.BASIS_YYYYMM + A.ISO_WEEK + '] AS W_' + a.basis_yyyymm + a.iso_week  AS column_name
+					 ,'[W_' + A.BASIS_YYYYMM + A.ISO_WEEK + ']' AS PV_name
+					 , a.basis_start_date + '_' + CONVERT(CHAR(2), 21) AS sort_order_no
+				FROM   [dbo].[SCM_SYS_CALENDAR_M] a WITH(NOLOCK)	
+				WHERE  a.basis_yyyymmdd >= @p_from_yyyymmdd --CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)
+				AND    a.basis_yyyymmdd <= @p_to_yyyymmdd --CONVERT(CHAR(8), DATEADD(YYYY, 1, CURRENT_TIMESTAMP), 112)
+				AND	   @p_bucket != 'ONLY_WEEKLY'
+				GROUP BY a.basis_yyyymm
+					   , a.iso_week    
+					   , a.basis_start_date
+				UNION ALL
+				SELECT '[M_' + A.BASIS_YYYYMM + '] AS M_' + a.basis_yyyymm  AS column_name
+					  , '[M_' + A.BASIS_YYYYMM + ']' AS PV_name
+					  , MIN(a.basis_start_date) + '_' + CONVERT(CHAR(2), 1) AS sort_order_no
+				FROM    [dbo].[SCM_SYS_CALENDAR_M] a WITH(NOLOCK)	
+				WHERE  a.basis_yyyymmdd >= @p_from_yyyymmdd --CONVERT(CHAR(8), CURRENT_TIMESTAMP, 112)
+				AND    a.basis_yyyymmdd <= @p_to_yyyymmdd --CONVERT(CHAR(8), DATEADD(YYYY, 1, CURRENT_TIMESTAMP), 112)
+				AND	   @p_bucket != 'ONLY_WEEKLY'
+				GROUP BY a.basis_yyyymm
+				-- [C20220620-000567]GSCM DM 시스템의 수작업 LOSS 및 분석 용이하기 위한 기능 개선 ( Partail week의 경우 week만 표시)
+				UNION ALL
+				SELECT '[W_' + SUBSTRING(MAX(BASIS_YYYYMMDD), 1, 6)+ISO_WEEK + '] AS W_' + SUBSTRING(MAX(BASIS_YYYYMMDD), 1, 6) + A.ISO_WEEK  AS COLUMN_NAME
+					, '[W_' + SUBSTRING(MAX(BASIS_YYYYMMDD), 1, 6)+ISO_WEEK + ']' AS PV_NAME 
+					, MAX(BASIS_YYYYMMDD)+ '_' +CONVERT(CHAR(2), 21) AS SORT_ORDER_NO
+				FROM   [DBO].[SCM_SYS_CALENDAR_M] A WITH(NOLOCK)	
+				WHERE  A.BASIS_YYYYMMDD >= @p_from_yyyymmdd 
+				AND    A.BASIS_YYYYMMDD <= @p_to_yyyymmdd
+				AND	   @p_bucket = 'ONLY_WEEKLY'
+				GROUP BY ISO_YYYYWW, ISO_WEEK, WEEK_NAME
+				ORDER BY sort_order_no  
+				;
+
+			OPEN c_bucket;
+			FETCH NEXT FROM c_bucket INTO @v_PV_column_name, @v_PV_name, @v_sort_order_no
+										WHILE @@FETCH_STATUS = 0   
+			BEGIN  
+				SELECT @V_PV_COL_LIST	= @V_PV_COL_LIST + CASE WHEN @V_PV_COL_LIST <> '' THEN ',' ELSE '' END + @v_PV_column_name
+					   , @V_PV_LIST		= @V_PV_LIST + CASE WHEN @V_PV_LIST <> '' THEN ',' ELSE '' END + @v_PV_name
+    
+				FETCH NEXT FROM c_Bucket INTO @v_PV_column_name, @v_PV_name, @v_sort_order_no
+			END;
+
+			CLOSE c_bucket;  
+			DEALLOCATE c_bucket;
+
+
+			-----	일반 컬럼 -----------------------------------------------------------------------------------------------------------
+			SET @v_column_name = '';
+			SET @v_column = '';
+			SET @v_orderby = '';
+			
+			SELECT  @i_Count = Count(*)
+			FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+			WHERE  1 = 1
+			AND    U.PROGRAM_ID  = @p_Program_Id
+			AND    U.SHEET_NAME  = @p_sheet_name
+			AND    U.USER_ID     = @p_created_by
+			AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+	
+
+			IF @i_Count = 0 
+			BEGIN
+				SELECT @ColList = @ColList + '[' + COLUMN_NAME + '],'
+					   , @OrderList = @OrderList + '[' + COLUMN_NAME + '] ' + DATA_SORT_METHOD_CODE + ','
+				FROM 
+				(
+					-- ★★ ORDER BY 가능하려면 컬럼정의 100개 넘지 않아야함
+					SELECT --TOP 100 
+						C.SORT_ORDER_NO, 
+						C.COLUMN_NAME, C.DATA_SORT_METHOD_CODE   
+					FROM [SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+					WHERE 1 = 1
+						AND    C.PROGRAM_ID  = @p_Program_Id
+						AND    C.SHEET_NAME  = @p_sheet_name
+						AND    ( C.DEFAULT_FLAG = 'Y' OR 
+							(    C.VISIBLE_FLAG = 'N'
+							AND    C.DEFAULT_FLAG = ''
+							AND    C.VALID_YN     = 'Y'
+							)
+							)  
+				) tbColList	
+				ORDER BY SORT_ORDER_NO
+			END
+			ELSE 
+			BEGIN
+				SELECT @ColList = @ColList + '[' + COLUMN_NAME + '],'
+					   , @OrderList = @OrderList + '[' + COLUMN_NAME + '] ' + DATA_SORT_METHOD_CODE + ','
+				FROM 
+				(
+					-- ★★ ORDER BY 가능하려면 컬럼정의 100개 넘지 않아야함
+				SELECT --TOP 100 
+					U.SORT_ORDER_NO, C.COLUMN_NAME, U.DATA_SORT_METHOD_CODE  
+				FROM   [dbo].[SCM_MST_TITLESET_USER] U WITH(NOLOCK)
+					INNER JOIN [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+						ON     U.PROGRAM_ID  = C.PROGRAM_ID
+						AND    U.SHEET_NAME  = C.SHEET_NAME
+						AND    U.COLUMN_NAME = C.COLUMN_NAME
+						AND    U.PROGRAM_ID  = @p_Program_Id
+						AND    U.SHEET_NAME  = @p_sheet_name
+						AND    U.USER_ID = @p_created_by
+						AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C' 
+						--AND	   U.COLUMN_NAME NOT IN ( 'VERSION_NO') 
+						--AND    @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )	-- 20190125 일단 주석처리 KHSONG
+				---------
+				UNION ALL
+				---------
+				SELECT TOP 100 
+					C.SORT_ORDER_NO, C.COLUMN_NAME, C.DATA_SORT_METHOD_CODE   
+				FROM   [dbo].[SCM_MST_SHEET_COLUMNS] C WITH(NOLOCK)
+				WHERE  1 = 1
+						AND    C.PROGRAM_ID  = @p_Program_Id
+						AND    C.SHEET_NAME  = @p_sheet_name
+						AND    C.VISIBLE_FLAG = 'N'
+						AND    C.DEFAULT_FLAG = ''
+						AND    C.VALID_YN     = 'Y'
+						--AND    @p_division_id IN (SELECT token FROM dbo.String_Split(C.DIVISION_ID ,',') )	 -- 20190125 일단 주석처리 KHSONG
+				) tbColList	
+				ORDER BY SORT_ORDER_NO
+			END
+			SELECT @ColList = LEFT(@ColList, LEN(@ColList)-1)	
+			SELECT @OrderList = LEFT(@OrderList, LEN(@OrderList)-1)	
+	
+			
+
+			--SELECT @ColList = REPLACE(@ColList,'[MEASURE]','[SORT_ORDER_NO],[MEASURE]')
+			--SELECT @OrderList = REPLACE(@OrderList,'[MEASURE]','[SORT_ORDER_NO],[MEASURE]')
+			
+			
+			
+		END	--	컬럼생성 끝	---------------------------------------------------------------------------------------------------------------------
+  
+
+
+		BEGIN	-- CTE 에서 사용할 SELECT COLUMN 정리
+			
+			DECLARE @V_SQL_SELECT NVARCHAR(4000)
+			DECLARE @V_SQL_GROUPBY	NVARCHAR(4000)
+
+			CREATE TABLE #T_COLUMN_SETUP (
+				TBL_ALIAS			NVARCHAR(10)
+			, COLUMN_NAME			NVARCHAR(100)
+			, COLUMN_STRING		NVARCHAR(1000)
+			, SORT_KEY			INT
+			)
+			
+				INSERT INTO #T_COLUMN_SETUP ( COLUMN_NAME, COLUMN_STRING ) VALUES ( 'COUNTRY_NAME', N'A.COUNTRY_NAME')
+				INSERT INTO #T_COLUMN_SETUP ( COLUMN_NAME, COLUMN_STRING ) VALUES ( 'UNLOADING_POINT', N'A.UNLOADING_POINT')
+				INSERT INTO #T_COLUMN_SETUP ( COLUMN_NAME, COLUMN_STRING ) VALUES ( 'CUST_MATERIAL_CODE', N'A.CUST_MATERIAL_CODE')
+				INSERT INTO #T_COLUMN_SETUP ( COLUMN_NAME, COLUMN_STRING ) VALUES ( 'ITEM_ID', N'A.ITEM_ID')
+				INSERT INTO #T_COLUMN_SETUP ( COLUMN_NAME, COLUMN_STRING ) VALUES ( 'PHASE1', N'A.PHASE1')
+				INSERT INTO #T_COLUMN_SETUP ( COLUMN_NAME, COLUMN_STRING ) VALUES ( 'PHASE2', N'A.PHASE2')
+				INSERT INTO #T_COLUMN_SETUP ( COLUMN_NAME, COLUMN_STRING ) VALUES ( 'VERSION_NO', N'A.VERSION_NO')
+				INSERT INTO #T_COLUMN_SETUP ( COLUMN_NAME, COLUMN_STRING ) VALUES ( 'EDI_IF_SEQ', N'A.EDI_IF_SEQ')
+				INSERT INTO #T_COLUMN_SETUP ( COLUMN_NAME, COLUMN_STRING ) VALUES ( 'CREATION_DATE', N'A.CREATION_DATE')
+				INSERT INTO #T_COLUMN_SETUP ( COLUMN_NAME, COLUMN_STRING ) VALUES ( 'CUSTOMER_PO_NO', N'A.CUSTOMER_PO_NO')
+				INSERT INTO #T_COLUMN_SETUP ( COLUMN_NAME, COLUMN_STRING ) VALUES ( 'CUSTOMER_CALL_OFF_NO', N'A.CUSTOMER_CALL_OFF_NO')
+				INSERT INTO #T_COLUMN_SETUP ( COLUMN_NAME, COLUMN_STRING ) VALUES ( 'BACK_ORDER', N'A.BACK_ORDER')  
+
+
+
+	
+			SELECT B.COLUMN_STRING, ROW_NUMBER() OVER ( ORDER BY B.SORT_KEY ) AS SEQ
+			INTO #T
+			FROM  DBO.UF_FX_String_Split(@ColList, ',') A
+			JOIN #T_COLUMN_SETUP B ON replace(replace(A.TOKEN, '[', ''), ']','') = B.COLUMN_NAME
+
+			DECLARE @I INT, @CNT INT
+
+			SELECT @I = 1, @CNT = COUNT(*), @V_SQL_SELECT = '', @V_SQL_GROUPBY = ''
+			FROM #T
+
+			WHILE ( @I <= @CNT )
+			BEGIN
+				SELECT @V_SQL_SELECT = @V_SQL_SELECT + CASE WHEN @I = 1 THEN '' ELSE ',' END + COLUMN_STRING
+					, @V_SQL_GROUPBY = @V_SQL_GROUPBY + CASE WHEN @I = 1 THEN '' ELSE ',' END 
+													+ CASE WHEN PATINDEX(N'% AS %', COLUMN_STRING) > 0
+																	THEN LEFT(COLUMN_STRING, PATINDEX(N'% AS %', COLUMN_STRING) -1)
+														ELSE COLUMN_STRING 
+														END
+				FROM #T 
+				WHERE SEQ = @I
+
+				SET @I += 1
+
+			END
+		END
+		
+
+		SET @v_sql_text = N'
+
+		SELECT A.BASIS_YYYYMMWW, A.ISO_YYYYWW, A.ISO_WEEK, B.BASIS_YYYYMMDD, B.END_FLAG, B.BASIS_YYYYMM
+		INTO #CALENDAR
+		FROM (
+			SELECT SUBSTRING(MAX(BASIS_YYYYMMDD),1,6) + ISO_WEEK AS BASIS_YYYYMMWW, ISO_YYYYWW, ISO_WEEK
+			FROM SCM_SYS_CALENDAR_M
+			WHERE BASIS_YYYYMMDD >= '''+@p_from_yyyymmdd +'''
+			AND	  BASIS_YYYYMMDD <= '''+@p_TO_yyyymmdd +'''
+			GROUP BY  ISO_YYYYWW, ISO_WEEK, WEEK_NAME
+		) AS A
+		JOIN SCM_SYS_CALENDAR_M AS B
+		ON A.ISO_YYYYWW = B.ISO_YYYYWW
+		AND A.ISO_WEEK = B.ISO_WEEK
+
+		-- BACK ORDER 합계 업데이트
+		UPDATE AA
+		SET AA.BACK_ORDER = BB.QTY
+		FROM #RAW_DATA AS AA 
+		JOIN (
+			SELECT [@b_order_column], SUM(QTY) AS QTY 
+			FROM #RAW_DATA AS A
+			WHERE SCHEDULING_TYPE = ''83''
+			GROUP BY [@b_order_column]
+		) AS BB
+		[@b_order_on]
+
+		-- BACK ORDER로 사용된 QTY 제거
+		UPDATE #RAW_DATA 
+		SET QTY = NULL
+		WHERE SCHEDULING_TYPE = ''83'';
+
+
+		SELECT SUM(A.QTY) AS QTY
+			 , CASE WHEN ''' + @P_BUCKET + ''' = ''DAILY'' THEN A.YYYYMMDD ELSE '''' END AS YYYYMMDD
+			 , CAL.BASIS_YYYYMM, CAL.ISO_WEEK, CAL.BASIS_YYYYMMWW
+			 , CAL.END_FLAG
+			 , [@SQL_SELECT]
+		INTO #WF
+		FROM #RAW_DATA A
+		JOIN #CALENDAR						CAL ON A.YYYYMMDD = CAL.BASIS_YYYYMMDD 
+		GROUP BY CASE WHEN ''' + @P_BUCKET + ''' = ''DAILY'' THEN A.YYYYMMDD ELSE '''' END, [@SQL_GROUPBY]
+				, CAL.BASIS_YYYYMM, CAL.ISO_WEEK, CAL.END_FLAG, CAL.BASIS_YYYYMMWW
+			
+		
+				SELECT [@V_COLUMN]
+						, [@V_PV_COL_LIST]    
+				FROM ( '
+		
+		IF @p_bucket = 'DAILY'
+		BEGIN
+			SET @v_sql_text = @v_sql_text + N'
+								SELECT [@V_COLUMN], ''D_'' + F.YYYYMMDD AS YYYYMMDD, F.QTY
+								FROM   #WF F
+					
+								UNION ALL '
+		END 
+
+		IF @p_bucket != 'ONLY_WEEKLY'
+		BEGIN
+			SET @v_sql_text = @v_sql_text + N'
+						SELECT [@V_COLUMN], ''W_'' + F.BASIS_YYYYMM + F.ISO_WEEK AS YYYYMMDD
+							, SUM(F.QTY) AS QTY
+						FROM #WF F
+						GROUP BY [@V_COLUMN], F.BASIS_YYYYMM, F.ISO_WEEK
+					
+						UNION ALL
+						SELECT [@V_COLUMN], ''M_'' + F.BASIS_YYYYMM AS YYYYMMDD
+							, SUM(F.QTY) AS QTY
+						FROM #WF F
+						GROUP BY [@V_COLUMN], F.BASIS_YYYYMM
+					
+						) F
+					PIVOT (
+						SUM(QTY) FOR YYYYMMDD IN ( [@V_PV_LIST] )
+						) AS PVT
+					ORDER BY [@V_ORDERBY]
+					  '; 
+		END
+		ELSE IF @p_bucket = 'ONLY_WEEKLY'
+		BEGIN
+			-- [C20220620-000567]GSCM DM 시스템의 수작업 LOSS 및 분석 용이하기 위한 기능 개선 ( Partail week의 경우 week만 표시)
+			SET @v_sql_text = @v_sql_text + N'
+						SELECT [@V_COLUMN], ''W_'' + F.BASIS_YYYYMMWW AS YYYYMMDD
+							, SUM(F.QTY) AS QTY
+						FROM #WF F
+						GROUP BY [@V_COLUMN], F.BASIS_YYYYMMWW, F.ISO_WEEK
+						) F
+					PIVOT (
+						SUM(QTY) FOR YYYYMMDD IN ( [@V_PV_LIST] )
+						) AS PVT
+					ORDER BY [@V_ORDERBY]
+					  '; 
+		END
+
+
+print 'H--' + convert(varchar(30), getdate(), 121)
+
+	    -- SELECT @v_sql_text;
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_PV_COL_LIST]'    , @v_PV_LIST    );
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_PV_LIST]'		, @v_PV_LIST    );
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_column]'			, @ColList       );
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@v_orderby]'		, @OrderList      );
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@SQL_SELECT]'		, @V_SQL_SELECT		);
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@SQL_GROUPBY]'		, @V_SQL_GROUPBY );
+
+
+		-- BACK ORDER 컬럼 생성 시작
+		SET @B_ORDER_COLUMN		= REPLACE(@V_SQL_SELECT,',A.BACK_ORDER' ,'')
+		SET @v_sql_text			= REPLACE(@v_sql_text,'[@b_order_column]'			, @B_ORDER_COLUMN );
+		-- BACK ORDER 컬럼 생성 종료
+		
+		-- BACK ORDER 조건문 생성 시작
+		DECLARE @B_ORDER_ON    NVARCHAR(4000);
+
+		-- @I, @CNT 위에서 사용하던거 재사용
+		SELECT @I = 1, @CNT = COUNT(*), @B_ORDER_ON = ''
+		FROM DBO.UF_FX_String_Split(REPLACE(@B_ORDER_COLUMN, 'A.',''), ',');
+
+		WHILE ( @I <= @CNT )
+		BEGIN
+			SELECT @B_ORDER_ON =  @B_ORDER_ON + CASE WHEN nr = 1 THEN ' ON ISNULL(AA.'+token + ','''')  = ISNULL(BB.'+token + ','''')' 
+													 ELSE  ' AND ISNULL(AA.'+token + ','''')  = ISNULL(BB.'+token + ','''')' END 
+			FROM DBO.UF_FX_String_Split(REPLACE(@B_ORDER_COLUMN, 'A.',''), ',')  
+			WHERE nr = @I 
+
+			SET @I += 1
+		END
+		SET @v_sql_text = REPLACE(@v_sql_text,'[@b_order_on]'			, @B_ORDER_ON );
+		-- BACK ORDER 조건문 생성 종료
+
+		EXEC SP_EXECUTESQL @v_sql_text; 
+
+		SELECT ISO_WEEK, BASIS_DATE 
+		FROM [dbo].[SCM_SYS_CALENDAR_M] 
+		WHERE BASIS_YYYYMMDD = CONVERT(VARCHAR(8),GETDATE(), 112) 
+
+		-- 20190711 정열 관련 추가
+		DECLARE @ORDER NVARCHAR(MAX)=''
+		SELECT @ORDER = @ORDER + COLUMN_NAME + ' ' + DATA_SORT_METHOD_CODE + ','
+		FROM   [dbo].[SCM_MST_TITLESET_USER] U  WITH(NOLOCK,INDEX (PK_SCM_MST_TITLESET_USER))
+		WHERE  1 = 1
+		AND    U.USER_INQUIRY_COLUMN_TYPE_CODE	= 'C'
+		AND    U.PROGRAM_ID						= 'DMF0050'
+		AND    U.SHEET_NAME						= 'EDI Waterfall'
+		AND    U.USER_ID						= @p_created_by
+		ORDER BY SORT_ORDER_NO  --20200508 KHSONG 팀이 그룹별 합산이 안되서 추가함
+		--SELECT SUBSTRING(@ORDER, 1, LEN(@ORDER) - 1) AS DATA_ORDER
+		
+
+
+		--select * from #SELECT_MEASURE
+		
+		-- xml확인할경우
+		-- SELECT CONVERT(TEXT, @v_sql_text)
+		--FOR XML PATH('')--,ROOT('x') 
+
+
+
+--SELECT COUNT(*) FROM #RAW_DATA
+
+
+
+
+--execute dbo.SP_executesql @NSQL2 
+
+print 'I--' + convert(varchar(30), getdate(), 121)
+
+
+	------------------------------------------------------------------------------------------
+	--                                                       Temp Table 존재 여부 체크 (BEGIN)
+	------------------------------------------------------------------------------------------
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_V', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_V
+		;
+	IF OBJECT_ID (N'tempdb..#SELECT_MEASURE', N'U') IS NOT NULL 
+		DROP TABLE #SELECT_MEASURE
+		;
+	IF OBJECT_ID (N'tempdb..#RAW_DATA', N'U') IS NOT NULL 
+		DROP TABLE #RAW_DATA
+		;
+	IF OBJECT_ID (N'tempdb..#TEMP_SCM_MST_SITE_ITEM', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_SCM_MST_SITE_ITEM
+		;
+	------------------------------------------------------------------------------------------
+	--                                                       Temp Table 존재 여부 체크 (END)
+	------------------------------------------------------------------------------------------
+
+
+print 'J--' + convert(varchar(30), getdate(), 121)
+
+END

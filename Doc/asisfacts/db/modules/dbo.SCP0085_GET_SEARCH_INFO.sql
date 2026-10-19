@@ -1,0 +1,47 @@
+﻿
+
+
+
+/*
+ * Program ID   : SCP0085_GET_SEARCH_INFO
+ * Description  : ENDING INVENTORY UI 조회조건 추가.
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/07/25   YMH    			E20260112-000418     ENDING INVENTORY UI 내 PROFIT CENTER DIV 추가 요청건
+ *
+ *
+ *
+ *
+ * [SCP0085_GET_SEARCH_INFO] '20251202'
+ */
+
+CREATE PROCEDURE [dbo].[SCP0085_GET_SEARCH_INFO]
+	@P_YYYYMMDD			NVARCHAR(MAX) 
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+ 
+	IF LEN(@P_YYYYMMDD) = 6
+	BEGIN
+		SELECT 
+			A.DIVISION_ID , A.PLANT_ID , A.ATTRIBUTE3 AS CODE, A.ATTRIBUTE3 + ' ' + A.ATTRIBUTE4 AS NAME
+		FROM SCP_ANL_MONTH_END_STOCK_R AS A
+		WHERE A.YYYYMM = @P_YYYYMMDD
+		AND A.DIVISION_ID IS NOT NULL
+		GROUP BY A.DIVISION_ID , A.PLANT_ID , A.ATTRIBUTE3 , A.ATTRIBUTE4
+	END
+	ELSE
+	BEGIN
+		SELECT 
+			A.DIVISION_ID , A.PLANT_ID , A.ATTRIBUTE3 AS CODE, A.ATTRIBUTE3 + ' ' + A.ATTRIBUTE4 AS NAME
+		FROM SCP_ANL_MONTH_END_STOCK_R_D AS A
+		WHERE A.CUTOFF_DATE = @P_YYYYMMDD
+		AND A.DIVISION_ID IS NOT NULL
+		GROUP BY A.DIVISION_ID , A.PLANT_ID , A.ATTRIBUTE3 , A.ATTRIBUTE4		
+	END
+	
+END

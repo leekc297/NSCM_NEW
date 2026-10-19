@@ -1,0 +1,595 @@
+﻿
+      
+/*      
+ * Program ID   : [SCP0070_GET_DEMAND_RTF_BALANCE_82]      
+ * Description  : ESS 수요 대비 RTF      
+ * Program History      
+ *===================================================================================================      
+ *   Date		In Charge	Description      
+ *===================================================================================================      
+ * 2021/07/12	HJ.LEE		Initial Release  [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) 
+ * 2022/04/29   chaan			81_UC, EE_UC 추가로 DIVSION 크기 확장
+ *
+USE [LGCE_SCMDEV]
+ GO
+
+DECLARE	@return_value int
+EXEC [dbo].[SCP0070_GET_DEMAND_RTF_BALANCE_82]
+		@p_from_yyyymmdd = N'20210607',
+		@p_to_yyyymmdd = N'20220607',
+		@p_division_id = N'81',
+		@p_plan_type = N'PR',
+		@p_plan_start_yyyymmdd = N'20210607',
+		@p_seq = N'1',
+		@p_program_id = N'SCP0070',
+		@p_sheet_name = N'Demand RTF Balance',
+		@p_user_id = N'leehongju',
+		@debug_mode = N'T'
+
+SELECT	'Return Value' = @return_value
+ */      
+CREATE PROCEDURE [dbo].[SCP0070_GET_DEMAND_RTF_BALANCE_82]      
+	@p_from_yyyymmdd			NVARCHAR(8),
+	@p_to_yyyymmdd				NVARCHAR(8),
+--chaan	@p_division_id          NVARCHAR(2)
+	@p_division_id              NVARCHAR(30),--chaan
+	@p_plan_start_yyyymmdd		NVARCHAR(8),
+	@p_plan_type				NVARCHAR(50),
+	@p_seq						NVARCHAR(50),
+	@p_program_id				NVARCHAR(MAX)='SCP0070',
+	@p_sheet_name				NVARCHAR(MAX)='Demand RTF Balance',
+	@p_user_id					NVARCHAR(MAX)='',
+	@debug_mode					NVARCHAR(1)='F'
+AS      
+BEGIN      
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	PRINT 'All Start. '+CONVERT(CHAR(23), GETDATE(), 21)
+
+	DECLARE @v_from_yyyymmdd     AS NVARCHAR(8)='';
+	DECLARE @v_to_yyyymmdd       AS NVARCHAR(8)='';
+	DECLARE @v_from_result       AS NVARCHAR(8)='';
+	DECLARE @v_to_result         AS NVARCHAR(8)='';
+	
+	SELECT @v_from_yyyymmdd = C.BASIS_START_DATE
+	FROM   [dbo].[SCM_SYS_CALENDAR_M]      C	
+	WHERE  1 = 1
+	AND    C.BASIS_YYYYMMDD = @p_plan_start_yyyymmdd
+
+	SELECT @v_from_result = C.BASIS_START_DATE
+	FROM   [dbo].[SCM_SYS_CALENDAR_M]      C	
+	WHERE  1 = 1
+	AND    C.BASIS_YYYYMMDD = @p_from_yyyymmdd; 
+
+	SELECT @v_to_result = C.BASIS_START_DATE
+	FROM   [dbo].[SCM_SYS_CALENDAR_M]      C	
+	WHERE  1 = 1
+	AND    C.BASIS_YYYYMMDD = @p_to_yyyymmdd; 
+  
+	IF @v_from_yyyymmdd > @v_from_result
+		BEGIN -- 실적 보여줌
+		SET @v_to_yyyymmdd   = @p_to_yyyymmdd;
+		SET @v_to_result     = @v_from_yyyymmdd;
+		END;
+	ELSE IF @v_from_yyyymmdd <= @v_from_result
+		BEGIN -- 실적 없음
+		SET @v_to_yyyymmdd   = @p_to_yyyymmdd;
+		SET @v_from_result = CONVERT(CHAR(8), DATEADD(MM, 6, convert(datetime,@p_plan_start_yyyymmdd)), 112);
+		SET @v_to_result = CONVERT(CHAR(8), DATEADD(MM, -6, convert(datetime,@p_plan_start_yyyymmdd)), 112)
+
+		END;
+	ELSE IF @v_from_yyyymmdd > @v_to_result
+		BEGIN
+		SET @v_from_yyyymmdd = CONVERT(CHAR(8), DATEADD(MM, -6,  convert(datetime,@p_plan_start_yyyymmdd)), 112);
+		SET @v_to_yyyymmdd = CONVERT(CHAR(8), DATEADD(MM, -6,  convert(datetime,@p_plan_start_yyyymmdd)), 112);
+		SET @v_from_result = @p_from_yyyymmdd;
+		SET @v_to_result = @p_to_yyyymmdd;
+		END;
+	ELSE IF @v_from_yyyymmdd = @v_to_result
+		BEGIN
+		SET @v_to_yyyymmdd = @v_from_yyyymmdd
+		SET @v_from_result = @p_from_yyyymmdd;
+		SET @v_to_result = @p_to_yyyymmdd;
+		END;
+
+	IF @debug_mode ='T'
+	BEGIN
+		PRINT '----------------------------------';
+		PRINT 'v_from_yyyymmdd =' +@v_from_yyyymmdd;
+		PRINT 'v_to_yyyymmdd =' +@v_to_yyyymmdd;
+		PRINT 'v_from_result =' +@v_from_result;
+		PRINT 'v_to_result =' +@v_to_result	;
+		PRINT '----------------------------------';
+	END;
+
+	/********************************************************************************      
+	 * 임시테이블만들기 - 조회조건 테이블      
+	 ********************************************************************************/      
+	--임시테이블 삭제      
+	IF OBJECT_ID('tempdb.dbo.#TblDynamicPivot_SCP0070_item') is not null       
+		DROP TABLE #TblDynamicPivot_SCP0070_item     
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_TEMP') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0070_TEMP
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_NICKITEM') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0070_NICKITEM
+
+	IF OBJECT_ID('tempdb.dbo.#TblDynamicPivot_SCP0070') is not null       
+		DROP TABLE #TblDynamicPivot_SCP0070
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_TEMP1') IS NOT NULL      
+	DROP TABLE #TblDynamicPivot_SCP0070_TEMP1;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_LAST') IS NOT NULL      
+	DROP TABLE #TblDynamicPivot_SCP0070_LAST;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_RANK') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0070_RANK
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_MEASURE') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0070_MEASURE
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_MODELNAME') IS NOT NULL      
+	DROP TABLE #TblDynamicPivot_SCP0070_MODELNAME;
+
+
+	/* NICK NAME 조회조건으로 ITEM 추출 */
+	SELECT distinct ITEM_ID 
+	INTO #TblDynamicPivot_SCP0070_NICKITEM
+	FROM SCM_MST_ITEM_SN 
+	WHERE 1=1
+	AND NICK_NAME IS NOT NULL
+
+	/* PSI CELL/PACK ITEM 세트 */
+	SELECT CELL_ITEM_ID, ITEM_ID, RANK() OVER(ORDER BY CELL_ITEM_ID ASC) AS 'RANK'
+	INTO #TblDynamicPivot_SCP0070_RANK
+	FROM SCP_ANL_PSI_GLOBAL WITH(NOLOCK)
+	WHERE DIVISION_ID = @p_division_id
+	AND PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd
+	AND PLAN_TYPE = @p_plan_type
+	AND SEQ = @p_seq
+	AND YYYYMMDD >= @p_from_yyyymmdd
+	AND YYYYMMDD <= @p_to_yyyymmdd
+	GROUP BY CELL_ITEM_ID, ITEM_ID
+	ORDER BY CELL_ITEM_ID
+
+	/* 조회조건에 해당하는 세트 모두 추출 */
+	SELECT A.CELL_ITEM_ID, A.ITEM_ID
+	INTO #TblDynamicPivot_SCP0070_item
+	FROM #TblDynamicPivot_SCP0070_RANK A
+	WHERE A.RANK IN 
+		(
+			SELECT B.RANK
+			FROM #TblDynamicPivot_SCP0070_RANK B
+			WHERE 1=1
+			AND ( 
+				(B.ITEM_ID IN (SELECT ITEM_ID FROM #TblDynamicPivot_SCP0070_NICKITEM))
+				OR 				
+				(B.CELL_ITEM_ID IN (SELECT ITEM_ID FROM #TblDynamicPivot_SCP0070_NICKITEM))
+				)
+		)
+	;
+
+	PRINT 'Search Item set End. '+CONVERT(CHAR(23), GETDATE(), 21)
+	
+	/* 유저 MEASURE 세팅값 추출 */ --로드율은 PRODUCTION과 동일한 SORT 값을 강제 셋팅
+	SELECT M.COLUMN_NAME
+		 , M.COLUMN_LABEL_NAME	AS MEASURE_LABEL
+		 , M.ATTRIBUTE3			AS MEASURE_COLOR	--MEASURE 별 COLOR RGB코드
+		 , M.SORT_ORDER_NO		AS SORT_ORDER_NO	-- KHJ79 : 정열을 위한 값
+	INTO #TblDynamicPivot_SCP0070_MEASURE
+	FROM SCM_MST_SHEET_MEASURE M WITH(NOLOCK)
+	-- khj78 : user 정보 없음 나중에 해달라고 하면 추가
+	--LEFT JOIN SCM_MST_TITLESET_USER U ON U.program_id  = M.program_id AND U.sheet_name  = M.sheet_name
+	--									AND U.column_name = M.column_name AND U.user_id = @p_user_id
+	--LEFT JOIN SCM_MST_SHEET_MEASURE P ON P.program_id  = M.program_id AND P.sheet_name  = M.sheet_name AND P.column_name = 'PRODUCTION'
+	--LEFT JOIN SCM_MST_SHEET_MEASURE S ON S.program_id  = M.program_id AND S.sheet_name  = M.sheet_name AND S.column_name = 'SHIP_REQ'
+	WHERE M.PROGRAM_ID='SCP0070'
+	AND M.VALID_YN='Y'
+	
+
+	/* MODEL명(NICK_NAME) 칼럼 추가 2021.07.12*/ 
+	SELECT DISTINCT A.ITEM_ID, A.CELL_ITEM_ID, MI.DOE, SMI.NICK_NAME
+	   INTO #TblDynamicPivot_SCP0070_MODELNAME
+	 FROM SCP_ANL_PSI_GLOBAL A WITH(NOLOCK)
+		 LEFT OUTER JOIN (SELECT DIVISION_ID, ITEM_ID, MAX(DOE) AS DOE
+						  FROM SCM_MST_ITEM_SN WITH(NOLOCK)
+						  WHERE DOE IS NOT NULL
+						  GROUP BY DIVISION_ID, ITEM_ID
+						 ) MI
+		 ON  A.DIVISION_ID  = MI.DIVISION_ID
+		 AND A.CELL_ITEM_ID = MI.ITEM_ID	 
+		 LEFT OUTER JOIN  SCM_MST_ITEM_SN SMI WITH(NOLOCK)
+		 ON  A.DIVISION_ID  = SMI.DIVISION_ID
+		 AND ISNULL(MI.DOE, A.CELL_ITEM_ID) = SMI.ITEM_ID
+	WHERE A.DIVISION_ID = '82' -- 40 : 소형 / 81 : 자동차 / 82 : ESS
+	AND A.PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd   
+	AND A.PLAN_TYPE =@p_plan_type
+	AND A.SEQ =@p_seq
+	AND A.MEASURE IN ('MKT_FCST', 'ALLOCATION')
+	AND A.QTY > 0
+
+
+	PRINT 'Search Measure set End. '+CONVERT(CHAR(23), GETDATE(), 21)
+
+	/********************************************************************************      
+	 * 임시테이블만들기 - 본 테이블      
+	 ********************************************************************************/      
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070') IS NOT NULL      
+	DROP TABLE #TblDynamicPivot_SCP0070;      
+
+	/********************************************************************************      
+	* 데이타조회, 임시테이블에 저장      
+	********************************************************************************/
+	DECLARE @mEXEC NVARCHAR(MAX);
+
+	CREATE TABLE #TblDynamicPivot_SCP0070 (
+		 DIVISION_ID		NVARCHAR(60)	
+		,OPERATION_GROUP	NVARCHAR(60)
+		,NICK_NAME         NVARCHAR(60)       --2021.07.12
+		,CELL_ITEM_ID		NVARCHAR(100)	
+		,ITEM_ID			NVARCHAR(100)
+		,MEASURE			NVARCHAR(100)
+		,MEASURE_LABEL		NVARCHAR(100)  -- KHJ79 MEARE 를 위한 값 
+		,SORT_ORDER_NO		NVARCHAR(100)  -- KHJ79 정열을 위한 값
+		,B_yyyymmdd			NVARCHAR(10)
+		,yyyymmdd			NVARCHAR(10)
+		,yyyymm				NVARCHAR(6)
+		,yyyyqq  	           NVARCHAR(6)
+		,yyyy                  NVARCHAR(4)
+		,qty				numeric(30,10)
+		,iso_week		NVARCHAR(30)
+	);
+
+
+	SET @mEXEC = '';
+	SET @mEXEC = @mEXEC + ' INSERT #TblDynamicPivot_SCP0070	 '+CHAR(10);
+	SET @mEXEC = @mEXEC + ' SELECT A.DIVISION_ID												'+CHAR(10);  -- KHJ79 : DISTINCT 제거 일자 조회기때문에 중복 없음
+	SET @mEXEC = @mEXEC + '			, A.OPERATION_GROUP											'+CHAR(10);
+	SET @mEXEC = @mEXEC + '			, MO.NICK_NAME						      					    '+CHAR(10);
+	SET @mEXEC = @mEXEC + '			, A.CELL_ITEM_ID											'+CHAR(10);
+	SET @mEXEC = @mEXEC + '			, A.ITEM_ID													'+CHAR(10);
+	-- KHJ79 : REPLACE 제거 및 MEASURE_LABEL, ORDER_NO 추가
+	--SET @mEXEC = @mEXEC + '			, REPLACE(A.MEASURE,''ALLOCATION'',''RTF'')	   		'+CHAR(10);
+	SET @mEXEC = @mEXEC + '			, A.MEASURE	   						           	   '+CHAR(10);   
+	SET @mEXEC = @mEXEC + '			, M.MEASURE_LABEL	   							'+CHAR(10);   
+	SET @mEXEC = @mEXEC + '			, M.SORT_ORDER_NO	   							'+CHAR(10);   
+	SET @mEXEC = @mEXEC + '			, A.yyyymmdd AS B_yyyymmdd									'+CHAR(10);
+	SET @mEXEC = @mEXEC + '			, ''D_''+ A.yyyymmdd AS yyyymmdd							'+CHAR(10);
+	SET @mEXEC = @mEXEC + '			, o.basis_yyyymm AS yyyymm									'+CHAR(10);
+	SET @mEXEC = @mEXEC + '			, o.CALENDAR_YYYYQQ AS yyyyqq 									'+CHAR(10);
+	SET @mEXEC = @mEXEC + '			, o.CALENDAR_YYYY AS yyyy   									'+CHAR(10);
+	SET @mEXEC = @mEXEC + '			, SUM(isnull(qty,0)) AS qty										'+CHAR(10);
+	SET @mEXEC = @mEXEC + '			, RIGHT(o.basis_yyyymm, 4)+o.iso_week AS iso_week			'+CHAR(10);
+	SET @mEXEC = @mEXEC + '	   FROM SCP_ANL_PSI_GLOBAL A WITH(NOLOCK)							'+CHAR(10);
+	SET @mEXEC = @mEXEC + '	   INNER JOIN SCM_SYS_CALENDAR_M (NOLOCK) o on A.yyyymmdd = o.basis_yyyymmdd				'+CHAR(10);
+	SET @mEXEC = @mEXEC + '	   INNER JOIN #TblDynamicPivot_SCP0070_MEASURE M (NOLOCK) ON M.COLUMN_NAME=A.MEASURE				'+CHAR(10);
+	SET @mEXEC = @mEXEC + '	   INNER JOIN #TblDynamicPivot_SCP0070_MODELNAME MO (NOLOCK) ON MO.ITEM_ID= A.ITEM_ID AND MO.CELL_ITEM_ID = A.CELL_ITEM_ID				'+CHAR(10);
+	SET @mEXEC = @mEXEC + '	  WHERE A.DIVISION_ID			= '''+@p_division_id+'''				'+CHAR(10);
+	SET @mEXEC = @mEXEC + '		AND A.PLAN_START_YYYYMMDD	= '''+@p_plan_start_yyyymmdd+'''		'+CHAR(10);
+	SET @mEXEC = @mEXEC + '		AND A.PLAN_TYPE				= '''+@p_plan_type+'''					'+CHAR(10);	
+	SET @mEXEC = @mEXEC + '		AND A.SEQ					= '''+@p_seq+'''						'+CHAR(10);
+	SET @mEXEC = @mEXEC + '		AND A.YYYYMMDD >= '''+@p_from_yyyymmdd+'''							'+CHAR(10);
+	SET @mEXEC = @mEXEC + '		AND A.YYYYMMDD <= '''+@p_to_yyyymmdd+'''							'+CHAR(10);
+	SET @mEXEC = @mEXEC + '		AND M.COLUMN_NAME IN (''MKT_FCST'', ''ALLOCATION'')		'+CHAR(10);
+	
+	SET @mEXEC = @mEXEC + '		GROUP BY A.DIVISION_ID,	A.OPERATION_GROUP,MO.NICK_NAME,A.CELL_ITEM_ID,A.ITEM_ID	,A.MEASURE,M.MEASURE_LABEL	,M.SORT_ORDER_NO	,A.yyyymmdd,''D_''+ A.yyyymmdd  ,o.basis_yyyymm,o.CALENDAR_YYYYQQ  ,o.CALENDAR_YYYY ,RIGHT(o.basis_yyyymm, 4)+o.iso_week  '+CHAR(10);
+		
+	-----------------------------------------------------------
+	-- DEBUG QRY 출력
+	-----------------------------------------------------------	
+	IF( @debug_mode ='T')
+		BEGIN				
+			DECLARE @POS INT =1;
+			DECLARE @LEN INT =LEN(@mEXEC);
+			WHILE @POS <= @LEN
+				BEGIN
+					PRINT SUBSTRING(@mEXEC,@POS,4000);
+					SET @POS = @POS+4000;
+				END;
+		END;
+
+	EXEC (@mEXEC);
+		
+	--------------과부족 (shortage) ROW Insert ----------------
+	INSERT #TblDynamicPivot_SCP0070
+	SELECT A.DIVISION_ID
+			, A.OPERATION_GROUP
+			, A.NICK_NAME
+			, A.CELL_ITEM_ID
+			, A.ITEM_ID
+			, M.COLUMN_NAME AS MEASURE
+			, M.MEASURE_LABEL
+			, M.SORT_ORDER_NO
+			, A.B_yyyymmdd
+			, A.yyyymmdd
+			, A.yyyymm
+			, A.yyyyqq
+			, A.yyyy
+			, 0	 AS QTY			-- qty
+			, A.iso_week
+	   FROM #TblDynamicPivot_SCP0070 A
+	  CROSS APPLY (SELECT COLUMN_NAME , MEASURE_COLOR , MEASURE_LABEL , SORT_ORDER_NO
+	                     FROM  #TblDynamicPivot_SCP0070_MEASURE M (NOLOCK) 
+						 WHERE COLUMN_NAME = 'BALANCE'
+						  ) M
+	 WHERE A.MEASURE = 'MKT_FCST'
+	 ;
+
+
+	 -------------- TOTAL ROW INSERT --------------
+      INSERT #TblDynamicPivot_SCP0070
+      SELECT @p_division_id AS DIVISION_ID
+				, '' AS OPERATION_GROUP
+				, '' AS NICK_NAME
+				, '' AS CELL_ITEM_ID
+				, '' AS ITEM_ID
+				, A.MEASURE
+				, A.MEASURE_LABEL
+				, A.SORT_ORDER_NO
+				, A.B_yyyymmdd
+				, A.yyyymmdd
+				, A.yyyymm
+				, A.yyyyqq
+				, A.yyyy
+				, 0 AS QTY				
+				, A.iso_week
+		FROM #TblDynamicPivot_SCP0070 A
+		 WHERE B_yyyymmdd = @p_plan_start_yyyymmdd
+
+ IF OBJECT_ID('tempdb.dbo.#TblDynamicPivot_SCP0070_TEMP1') is not null       
+		DROP TABLE #TblDynamicPivot_SCP0070_TEMP1; 
+
+	SELECT A.DIVISION_ID
+			, A.OPERATION_GROUP
+			, A.NICK_NAME
+			, A.CELL_ITEM_ID
+			, A.ITEM_ID
+			, A.MEASURE
+			, A.MEASURE_LABEL
+			, A.SORT_ORDER_NO
+			, A.B_yyyymmdd
+			, A.yyyymmdd
+			, A.yyyymm
+			, A.yyyyqq
+			, A.yyyy
+			, A.QTY
+			, A.iso_week
+			, isnull(NULLIF( 
+									( 
+									CASE WHEN A.OPERATION_GROUP ='A' THEN '1' 
+									            ELSE (SELECT TOP 1 convert(nvarchar(50), ceiling(V.ACCUMULATED_CHILD_QTY) ) 	
+ 												        	 FROM DBO.SCM_MST_MODEL_FINAL_ITEM_BOM_V V WITH (NOLOCK)					
+ 													       WHERE V.DIVISION_ID=A.DIVISION_ID
+													           AND V.OPERATION_GROUP_ID='A'		
+ 													           AND V.MODEL_ID  = A.ITEM_ID
+															   AND V.CHILD_ITEM_ID = A.CELL_ITEM_ID
+ 													      ) END
+									), '') , '1')  AS CELL_QTY
+		INTO #TblDynamicPivot_SCP0070_TEMP1
+	   FROM #TblDynamicPivot_SCP0070 A
+
+	   	 IF OBJECT_ID('tempdb.dbo.#TblDynamicPivot_SCP0070_LAST') is not null       
+		DROP TABLE #TblDynamicPivot_SCP0070_LAST; 
+
+	SELECT A.DIVISION_ID
+			, A.OPERATION_GROUP
+			, A.NICK_NAME
+			, A.CELL_ITEM_ID
+			, A.ITEM_ID
+			, A.MEASURE
+			, A.MEASURE_LABEL
+			, A.SORT_ORDER_NO
+			, A.B_yyyymmdd
+			, A.yyyymmdd
+			, A.yyyymm
+			, A.yyyyqq
+			, A.yyyy
+			, A.QTY
+			, A.QTY * A.CELL_QTY AS RESULT_QTY
+			, A.iso_week
+            , A.CELL_QTY
+		INTO #TblDynamicPivot_SCP0070_LAST
+	   FROM #TblDynamicPivot_SCP0070_TEMP1 A 
+	   
+	-----------------------------------------------------------
+	-- DEBUG QRY 출력
+	-----------------------------------------------------------	
+	IF( @debug_mode ='T')
+		BEGIN				
+			DECLARE @POS2 INT =1;
+			DECLARE @LEN2 INT =LEN(@mEXEC);
+			WHILE @POS2 <= @LEN2
+				BEGIN
+					PRINT SUBSTRING(@mEXEC,@POS2,4000);
+					SET @POS2 = @POS2+4000;
+				END;
+		END;
+
+	EXEC (@mEXEC);
+	
+	PRINT 'Search Rowdata set End. '+CONVERT(CHAR(23), GETDATE(), 21)
+
+	/********************************************************************************      
+	* PIVOIT처리      
+	********************************************************************************/   
+	begin   
+		DECLARE @mQry_sum NVARCHAR(MAX);      
+      
+	    PRINT 'PIVOIT Start '+CONVERT(CHAR(23), GETDATE(), 21)
+
+		-- PIVOIT 대상 날짜문자열 생성      
+		SET @mQry_sum = '';
+		
+		SELECT  @mQry_sum = @mQry_sum+','+ 
+		    CASE WHEN CHARINDEX('M_', yyyymmdd) =1 THEN  '  SUM(CASE WHEN yyyymmdd = '''+yyyymmdd+''' THEN RESULT_QTY WHEN  yyyymm   = RIGHT('''+yyyymmdd+''',6) THEN RESULT_QTY END )   AS ' + yyyymmdd      
+                     WHEN CHARINDEX('W_', yyyymmdd) =1 THEN  '  SUM(CASE WHEN yyyymmdd = '''+yyyymmdd+''' THEN RESULT_QTY WHEN  iso_week = RIGHT('''+yyyymmdd+''', 6) THEN RESULT_QTY END )    AS ' + yyyymmdd   
+				     WHEN CHARINDEX('Q_', yyyymmdd) =1 THEN  '  SUM(CASE WHEN yyyymmdd = '''+yyyymmdd+''' THEN RESULT_QTY WHEN  yyyyqq = RIGHT('''+yyyymmdd+''', 6) THEN RESULT_QTY END ) AS ' + yyyymmdd    
+				     WHEN CHARINDEX('Y_', yyyymmdd) =1 THEN  '  SUM(CASE WHEN yyyymmdd = '''+yyyymmdd+''' THEN RESULT_QTY WHEN  yyyy = RIGHT('''+yyyymmdd+''', 4) THEN RESULT_QTY END  )   AS ' + yyyymmdd  	   
+			END +''+CHAR(10) 
+		FROM (    
+			SELECT 'W_'+a.basis_yyyymm + a.iso_week AS yyyymmdd              
+				, a.basis_start_date + CONVERT(CHAR(2), 21) AS sort_order_no      
+			FROM [dbo].[scm_sys_calendar_m] a       
+			WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd      
+			GROUP BY a.basis_yyyymm, a.iso_week, a.basis_start_date      
+			UNION ALL      
+			SELECT 'M_'+a.basis_yyyymm  AS yyyymmdd
+			  ,MIN(a.basis_start_date) + CONVERT(CHAR(2), '02') AS sort_order_no      
+			FROM [dbo].[scm_sys_calendar_m] a       
+			WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd      
+			GROUP BY a.basis_yyyymm, a.month_name        
+			UNION ALL
+		  SELECT 'Q_'+a.CALENDAR_YYYYQQ  AS yyyymmdd
+			  ,MIN(a.basis_start_date) + CONVERT(CHAR(2), '01') AS sort_order_no      
+			FROM [dbo].[scm_sys_calendar_m] a       
+			WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd       
+			GROUP BY a.CALENDAR_YYYYQQ 
+			UNION ALL
+	      SELECT 'Y_'+a.CALENDAR_YYYY  AS yyyymmdd
+			  ,MIN(a.basis_start_date) + CONVERT(CHAR(2), '00') AS sort_order_no      
+			FROM [dbo].[scm_sys_calendar_m] a       
+			WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd            
+			GROUP BY a.CALENDAR_YYYY    
+		) AS A      
+		ORDER BY sort_order_no  ;      
+				
+		DECLARE @mQry2_sum NVARCHAR(MAX);      
+        
+		-- PIVOIT 대상 날짜문자열  생성      
+		SET @mQry2_sum = '';
+		
+		SELECT  @mQry2_sum = @mQry2_sum+','+       
+            CASE WHEN CHARINDEX('M_', yyyymmdd) =1 THEN  ' SUM('+yyyymmdd+') AS ' + yyyymmdd      
+			 	     WHEN CHARINDEX('W_', yyyymmdd) =1 THEN  ' SUM('+yyyymmdd+') AS ' + yyyymmdd      
+                     WHEN CHARINDEX('Q_', yyyymmdd) =1 THEN   ' SUM('+yyyymmdd+') AS ' + yyyymmdd      
+				     WHEN CHARINDEX('Y_', yyyymmdd) =1 THEN   ' SUM('+yyyymmdd+') AS ' + yyyymmdd      
+			END +''+CHAR(10)      
+		FROM (       --  Y_YYYY만  OPEN
+			SELECT 'W_'+a.basis_yyyymm + a.iso_week AS yyyymmdd              
+				, a.basis_start_date + CONVERT(CHAR(2), 21) AS sort_order_no      
+			FROM [dbo].[scm_sys_calendar_m] a       
+			WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd      
+			GROUP BY a.basis_yyyymm, a.iso_week, a.basis_start_date      
+			UNION ALL      
+			SELECT 'M_'+a.basis_yyyymm  AS yyyymmdd
+			  ,MIN(a.basis_start_date) + CONVERT(CHAR(2), '02') AS sort_order_no      
+			FROM [dbo].[scm_sys_calendar_m] a       
+			WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd      
+			GROUP BY a.basis_yyyymm, a.month_name        
+				UNION ALL
+		  SELECT 'Q_'+a.CALENDAR_YYYYQQ  AS yyyymmdd
+			  ,MIN(a.basis_start_date) + CONVERT(CHAR(2), '01') AS sort_order_no      
+			FROM [dbo].[scm_sys_calendar_m] a       
+			WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd       
+			GROUP BY a.CALENDAR_YYYYQQ 
+			UNION ALL
+	      SELECT 'Y_'+a.CALENDAR_YYYY  AS yyyymmdd
+			  ,MIN(a.basis_start_date) + CONVERT(CHAR(2), '00') AS sort_order_no      
+			FROM [dbo].[scm_sys_calendar_m] a       
+			WHERE a.basis_yyyymmdd  BETWEEN @p_from_yyyymmdd AND @p_to_yyyymmdd            
+			GROUP BY a.CALENDAR_YYYY    
+		) AS A      
+		ORDER BY sort_order_no;    
+
+		DECLARE @mQry3_sum NVARCHAR(MAX);      
+        
+		SET @mEXEC = '';
+
+		-- 주의 : 조회항목 변경 시 M_,W_, Q_,Y_ 컬럼이 항상 뒤에 나와야함
+		
+		SET @mEXEC = @mEXEC + 'SELECT A.* FROM (' ;
+		SET @mEXEC = @mEXEC + 'SELECT ' ;
+		SET @mEXEC = @mEXEC + '          A.DIVISION_ID												   					   '+CHAR(10);
+		SET @mEXEC = @mEXEC + '        , A.NICK_NAME															           '+CHAR(10);
+		SET @mEXEC = @mEXEC + '        , '''' AS TYPE    															           '+CHAR(10);
+		SET @mEXEC = @mEXEC + '        , A.CELL_ITEM_ID																   '+CHAR(10);
+		SET @mEXEC = @mEXEC + '        , A.MEASURE_LABEL																	       '+CHAR(10);
+		--SET @mEXEC = @mEXEC + ' 				,MAX(A.MEASURE_LABEL)	MEASURE_LABEL       '+CHAR(10);
+		SET @mEXEC = @mEXEC + '        , A.SORT_ORDER_NO														       '+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 		   ' + @mQry2_sum +'									                           '+CHAR(10);
+		SET @mEXEC = @mEXEC + '			,  '''' AS SUMMARY                                    					    	   '+CHAR(10);
+		SET @mEXEC = @mEXEC + ' FROM (																			               '+CHAR(10);
+		SET @mEXEC = @mEXEC + ' SELECT A.DIVISION_ID																   '+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				, A.OPERATION_GROUP													   '+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				, A.NICK_NAME								     				'+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				, A.CELL_ITEM_ID												'+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				, A.ITEM_ID														'+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				, A.MEASURE_LABEL												        '+CHAR(10);
+		--SET @mEXEC = @mEXEC + ' 				,MAX(A.MEASURE_LABEL)	MEASURE_LABEL       '+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				, A.SORT_ORDER_NO									        '+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				' + @mQry_sum +'									            '+CHAR(10);	
+		SET @mEXEC = @mEXEC + ' 		FROM #TblDynamicPivot_SCP0070_LAST A WITH(NOLOCK)	'+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 		GROUP BY A.DIVISION_ID										'+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				, A.OPERATION_GROUP									'+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				, A.NICK_NAME             						'+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				, A.CELL_ITEM_ID									'+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				, A.ITEM_ID											'+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				, A.MEASURE_LABEL											'+CHAR(10);
+		SET @mEXEC = @mEXEC + ' 				, A.SORT_ORDER_NO  							'+CHAR(10);
+		SET @mEXEC = @mEXEC + '      ) A															    '+CHAR(10);
+	    SET @mEXEC = @mEXEC+ 'GROUP BY A.DIVISION_ID, A.NICK_NAME, A.CELL_ITEM_ID, A.MEASURE_LABEL, A.SORT_ORDER_NO'     +CHAR(10);
+		SET @mEXEC = @mEXEC + '          ) A                                	    				   	'+CHAR(10); 	
+		SET @mEXEC = @mEXEC + ' 	 ORDER BY A.DIVISION_ID, A.NICK_NAME, A.CELL_ITEM_ID, A.SORT_ORDER_NO'  +CHAR(10);
+
+
+		IF( @debug_mode ='T')
+			BEGIN				
+				SET @POS =1;
+				SET @LEN =LEN(@mQry_sum);
+				WHILE @POS <= @LEN
+					BEGIN
+						PRINT SUBSTRING(@mQry_sum,@POS,4000);
+						SET @POS = @POS+4000;
+					END;
+			END;
+		EXEC (@mEXEC);
+
+		IF( @debug_mode ='T')
+			BEGIN				
+				SET @POS =1;
+				SET @LEN =LEN(@mEXEC);
+				WHILE @POS <= @LEN
+					BEGIN
+						PRINT SUBSTRING(@mEXEC,@POS,4000);
+						SET @POS = @POS+4000;
+					END;
+			END;
+
+
+		PRINT 'Input Pivot set End. '+CONVERT(CHAR(23), GETDATE(), 21)
+
+	end;
+	
+
+	--임시테이블 삭제      
+	IF OBJECT_ID('tempdb.dbo.#TblDynamicPivot_SCP0070_item') is not null       
+		DROP TABLE #TblDynamicPivot_SCP0070_item     
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_TEMP') IS NOT NULL
+		DROP TABLE #TblDynamicPivot_SCP0070_TEMP
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_NICKITEM') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0070_NICKITEM
+
+	IF OBJECT_ID('tempdb.dbo.#TblDynamicPivot_SCP0070') IS NOT NULL       
+		DROP TABLE #TblDynamicPivot_SCP0070
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_TEMP1') IS NOT NULL      
+	DROP TABLE #TblDynamicPivot_SCP0070_TEMP1;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_LAST') IS NOT NULL      
+	DROP TABLE #TblDynamicPivot_SCP0070_LAST;
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_RANK') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0070_RANK
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_MEASURE') IS NOT NULL	
+		DROP TABLE #TblDynamicPivot_SCP0070_MEASURE
+
+	IF OBJECT_ID('tempdb..#TblDynamicPivot_SCP0070_MODELNAME') IS NOT NULL      
+	DROP TABLE #TblDynamicPivot_SCP0070_MODELNAME;
+
+END 

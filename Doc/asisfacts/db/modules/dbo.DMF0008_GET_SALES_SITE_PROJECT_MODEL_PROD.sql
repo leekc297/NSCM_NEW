@@ -1,0 +1,359 @@
+﻿
+/*
+ * Program ID   : DMF0008_GET_SALES_SITE_PROJECT_MODEL_PROD
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ 2023.04.05	   kdmcc14		  []  ERP, EDI MASTER DATA 정비 SAELS_SITE_PROJECT_MODEL
+ 	
+EXEC DMF0008_GET_SALES_SITE_PROJECT_MODEL_PROD '81', 'EMCV00143AB', 'Audi_DE_NEM'
+ */
+----------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[DMF0008_GET_SALES_SITE_PROJECT_MODEL_PROD]	
+	  @p_division_id      NVARCHAR(20),
+	  @p_item_id		NVARCHAR(4000),
+	  @p_scm_site_id	NVARCHAR(30)
+
+AS
+
+BEGIN
+	
+    SET NOCOUNT ON;
+
+		DECLARE @v_group_id nvarchar(50)='';
+		
+	IF ISNULL((
+				SELECT COUNT(1) FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+					where LOOKUP_TYPE = 'GET_ADMIN_GROUP' 
+						AND VALID_YN = 'Y'
+						AND SEGMENT2 = 'ALL'  -- 'ALL'인경우 DM Planner (W/S) 제외 / 주석처리인경우 DM Planner (W/S) 포함 
+						--AND SEGMENT1 = @p_userinfo
+			  ),0) > 0
+		BEGIN
+			SET @v_group_id = 'ADMIN'
+		END
+
+		CREATE TABLE #T_SINGLE (
+			DIVISION_ID			NVARCHAR(30)
+			, ITEM_ID			NVARCHAR(150)
+			, ITEM_NAME			NVARCHAR(150)
+			, ITEM_TYPE			VARCHAR(1)
+			, ITEM_CLASS_NAME	NVARCHAR(300)
+			, NICK_NAME			NVARCHAR(50)
+			)
+
+
+		CREATE TABLE #SCM_MST_SITE_ITEM (
+			DIVISION_ID			NVARCHAR(30)
+			, SCM_SITE_ID		NVARCHAR(150)
+			, PROJECT_CODE		NVARCHAR(150)
+			, CNT				VARCHAR(5)			
+			)
+
+	
+		BEGIN
+			INSERT INTO #T_SINGLE ( DIVISION_ID, ITEM_ID, ITEM_NAME, ITEM_TYPE, ITEM_CLASS_NAME, NICK_NAME )
+			SELECT	T1.DIVISION_ID
+				, T1.ITEM_ID
+				, MAX(T1.ITEM_NAME)					AS ITEM_NAME
+				, case  min( case when T1.item_type = 'P' then 1	
+								when T1.item_type = 'H' then 2	
+								when T1.item_type = 'Q' then 3
+								else 4 end )  
+												when 1 then 'P' 
+												when 2 then 'H'
+												when 3 then 'Q'
+												else 'R' end	AS ITEM_TYPE
+				, MAX(T1.ITEM_CLASS_NAME)					AS ITEM_CLASS_NAME
+				, MAX(T1.NICK_NAME)						AS NICK_NAME
+			FROM SCM_MST_ITEM_SN T1 WITH(NOLOCK)					
+			WHERE 1=1
+				AND T1.DIVISION_ID = @p_division_id
+				AND T1.ITEM_ID = @p_item_id
+				AND T1.ITEM_TYPE IN ( 'H', 'P' ) --AND T1.ITEM_TYPE IN ( 'H', 'P' ) 
+			GROUP BY T1.DIVISION_ID, T1.ITEM_ID
+
+			INSERT INTO #SCM_MST_SITE_ITEM (DIVISION_ID, SCM_SITE_ID,  PROJECT_CODE, CNT)
+			SELECT A.DIVISION_ID, A.SCM_SITE_ID, A.PROJECT_CODE, SUM(CASE WHEN B.ITEM_TYPE IN ( 'H', 'P' ) THEN 1 ELSE 0 END )
+			FROM [10.34.221.78,7433].[LGCE_SCMPROD].[dbo].SCM_MST_SITE_ITEM A
+			LEFT OUTER JOIN #T_SINGLE B ON A.DIVISION_ID = B.DIVISION_ID AND A.ITEM_ID = B.ITEM_ID
+			WHERE A.DIVISION_ID = @p_division_id
+			GROUP BY A.DIVISION_ID, A.SCM_SITE_ID, A.PROJECT_CODE
+
+		END
+
+--EXEC DMF0008_GET_SALES_SITE_PROJECT_MODEL_PROD '81', 'EMCV00143AB'
+--SELECT * FROM #SCM_MST_SITE_ITEM
+
+		BEGIN
+			SELECT *								
+			FROM (SELECT		   SITE_PROJECT.DIVISION_ID,
+						   --TEAM.DEPT_ID, 
+						   --TEAM.DEPT_ID AS DEPT_ID2, 						   
+						   TEAM.DEPT_NAME_KO AS DEPT_ID,
+						   TEAM.DEPT_NAME_KO AS DEPT_ID2,
+						   TEAM.DEPT_NAME_KO AS TEAM_NAME_KO,
+						   SITE.END_CUSTOMER AS END_CUSTOMER,
+						   SITE.END_CUSTOMER AS END_CUSTOMER40,
+						   SITE_CUST.SOLDTO_CODE,
+	     				   CUST.SOLDTO_DESCRIPTION, --화면상에서는 일단 숨김처리
+						   SITE_CUST.SHIPTO_CODE,
+						   CUST.SHIPTO_DESCRIPTION, --화면상에서는 일단 숨김처리
+						   SITE_PROJECT.SCM_SITE_ID,
+						   SITE_PROJECT.SCM_SITE_ID AS SCM_SITE_ID40,
+						   SITE_PROJECT.PROJECT_CODE,
+						   PJT.PROJECT_NAME,
+						   PJT.PROJECT_STATUS,
+						   PJT.PROJECT_OWNER, -- 'SYSTEM' AS PROJECT_OWNER, --PJT.PROJECT_OWNWER      현재 컬럼이 없음.
+						   SITE_PROJECT.owner AS USER_ID,	--20180806
+						   SITE_ITEM.SALES_PLAN_ADJUST_YN,
+						   SITE_ITEM.ITEM_TYPE,
+						   --G.ITEM_TYPE,
+						   SITE_ITEM.ITEM_CLASS_NAME,
+						   SITE_ITEM.ITEM_ID,
+						   SITE_ITEM.ITEM_NAME,
+						   SITE_ITEM.CELL_PER_CAR,
+						   SITE_ITEM.CELL_PER_MODULE,
+						   CASE WHEN CONVERT(INT, SITE_ITEM.CELL_PER_MODULE) = 0 THEN 1 ELSE CONVERT(INT, SITE_ITEM.CELL_PER_CAR) / CONVERT(INT, SITE_ITEM.CELL_PER_MODULE) END  AS MODULE_PER_CAR,
+						   CUST_ITEM.CUSTOMER_MODEL,
+						   SITE_ITEM.NICK_NAME,
+						   SITE_ITEM.SALES_COMPANY,
+						   SITE_ITEM.SALES_PLANT,
+						   SITE_ITEM.BPMS_EXIST ,   --SITE_ITEM.BPMS_EXIST   현재 컬럼이 없음.
+						   SITE_ITEM.LIABILITY_PERIOD,
+						   SITE_ITEM.CURRENCY,
+						   CASE WHEN SITE_ITEM.ITEM_ID IS NULL THEN ISNULL(SITE_PROJECT.VALID_YN,SITE_ITEM.VALID_YN) ELSE SITE_ITEM.VALID_YN END AS VALID_YN,
+
+						   SITE_ITEM.LAST_UPDATE_DATE,
+						   SITE_ITEM.LAST_UPDATED_BY
+						   ,SITE_ITEM.CUST_GROUP
+						   ,SITE_ITEM.CUST_GROUP_DTL
+						   , dbo.FN_GET_MULTI_OWNER_NAME (SITE_ITEM.OWNER, ',', '1') AS OWNER  -- 20180803
+						   ,SITE_ITEM.APPLICATION
+						   ,SITE_ITEM.ROUTE 				   
+						   ,SITE_ITEM.EDI		-- C20200827-000257 테슬라 EDI
+						   ,SITE_ITEM.EDI_LT	-- C20200827-000257 테슬라 EDI
+						   ,SITE_ITEM.ATTRIBUTE1
+						   ,SITE_ITEM.ATTRIBUTE2
+						   ,SITE_ITEM.ATTRIBUTE4  --20180726
+						   ,SITE_ITEM.ATTRIBUTE5  --[C20211112-000213]
+						   ,SITE_ITEM.ATTRIBUTE9  AS PRODUCTION_PROCESS--[C20210722-000230] GSCM Sales Site Project Model 마케팅 입력 컬럼 추가 요청의 건
+						   --------------------------------
+						   ,SITE.SOLDTO_CUSTOMER
+						   ,REPORT_GROUP1
+						   ,REPORT_GROUP2
+						   ,REPORT_GROUP3
+						   ,REPORT_GROUP4
+						   ,REPORT_GROUP6
+						   ,REPORT_GROUP7
+						   ,REPORT_GROUP8
+						   ,SITE_ITEM.CELL_TYPE		-- 20190919
+						   , ISNULL(SITE_PROJECT.VMI_LT,0) AS VMI_LT
+			FROM		   (SELECT	DISTINCT
+									A.DIVISION_ID
+									,SCM_SITE_ID
+									,PROJECT_CODE
+									,ISNULL(MAX(VALID_YN),'Y') AS VALID_YN
+									,A.owner		--,'' owner
+									,A.ITEM_ID	--,'' ITEM_ID
+									,REPORT_GROUP1
+									,REPORT_GROUP2
+									,REPORT_GROUP3
+									,REPORT_GROUP4
+									,REPORT_GROUP6
+									,REPORT_GROUP7
+									,REPORT_GROUP8
+									, MAX(A.SCP_VMI_LT) AS VMI_LT
+							FROM	[10.34.221.78,7433].[LGCE_SCMPROD].[dbo].SCM_MST_SITE_ITEM A WITH(NOLOCK)
+								   ,SCM_MST_ITEM_SN B WITH(NOLOCK)
+							WHERE   A.ITEM_ID = @p_item_id	
+							  and   A.division_id <> '40'
+							  AND   A.SCM_SITE_ID = @p_scm_site_id
+							GROUP BY A.DIVISION_ID
+									,SCM_SITE_ID
+									,PROJECT_CODE
+									,A.ATTRIBUTE1
+									,A.ATTRIBUTE2
+									,A.OWNER
+									,A.ITEM_ID
+									,REPORT_GROUP1
+									,REPORT_GROUP2
+									,REPORT_GROUP3
+									,REPORT_GROUP4
+									,REPORT_GROUP6
+									,REPORT_GROUP7
+									,REPORT_GROUP8
+							 UNION
+							 SELECT	DISTINCT
+									A.DIVISION_ID,
+									SCM_SITE_ID,
+									PROJECT_CODE,
+									VALID_YN,
+									a.owner,
+									ITEM_ID
+									,REPORT_GROUP1
+									,REPORT_GROUP2
+									,REPORT_GROUP3
+									,REPORT_GROUP4
+									,REPORT_GROUP6
+									,REPORT_GROUP7
+									,REPORT_GROUP8
+									,A.SCP_VMI_LT
+							FROM	[10.34.221.78,7433].[LGCE_SCMPROD].[dbo].SCM_MST_SITE_ITEM A WITH(NOLOCK)
+							WHERE    A.division_id = '40'
+							AND   A.SCM_SITE_ID = @p_scm_site_id
+														)					AS SITE_PROJECT
+
+			LEFT JOIN		[10.34.221.78,7433].[LGCE_SCMPROD].[dbo].SCM_MST_PROJECT									AS PJT  WITH(NOLOCK)
+			ON				SITE_PROJECT.PROJECT_CODE = PJT.PROJECT_CODE
+			AND				SITE_PROJECT.DIVISION_ID  = PJT.DIVISION_ID
+
+			LEFT JOIN		[10.34.221.78,7433].[LGCE_SCMPROD].[dbo].SCM_MST_SITE									AS SITE  WITH(NOLOCK)
+			ON				SITE_PROJECT.DIVISION_ID = SITE.DIVISION_ID  
+			AND				SITE_PROJECT.SCM_SITE_ID = SITE.SCM_SITE_ID
+			AND             SITE.SITE_TYPE  = 'SALES'  
+
+
+			LEFT JOIN (
+				SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO 
+				FROM [10.34.221.78,7433].[LGCE_SCMPROD].[dbo].[SCM_MST_SSO_USER_INFO] AS B
+				INNER JOIN SCM_MST_SSO_DEPT_INFO AS C
+				ON B.DEPT_ID = C.DEPT_ID
+			) AS TEAM
+			ON              TEAM.USER_ID   IN (SELECT top 1 token FROM [dbo].[String_Split](SITE_PROJECT.owner, ','))
+
+			LEFT JOIN		(SELECT T1.DIVISION_ID,
+									T1.SCM_SITE_ID,
+									T1.PROJECT_CODE,
+									T1.ITEM_ID,
+									T1.CELL_PER_CAR,
+									T1.CELL_PER_MODULE,
+									T2.ITEM_NAME,
+									T2.ITEM_TYPE,
+									T2.ITEM_CLASS_NAME,
+									T1.SALES_PLAN_ADJUST_YN,
+									T2.NICK_NAME,
+									T1.BPMS_EXIST ,   --SITE_ITEM.BPMS_EXIST   현재 컬럼이 없음.
+									T1.LIABILITY_PERIOD,
+									T1.CURRENCY,
+									T1.VALID_YN,
+									T1.LAST_UPDATE_DATE,
+									T1.LAST_UPDATED_BY	
+									--20180601, LSH---------
+									,T1.CUST_GROUP
+									,T1.CUST_GROUP_DTL
+									,T1.OWNER
+									,T1.APPLICATION
+									,T1.ROUTE 
+									,T1.ATTRIBUTE6 AS EDI	--	C20200827-000257 테슬라 EDI
+									,T1.EDI_LT				--	C20200827-000257 테슬라 EDI
+									,T1.ATTRIBUTE1
+									,T1.ATTRIBUTE2
+									,T1.ATTRIBUTE5			--	[C20211112-000213]
+									--,T1.ATTRIBUTE4  --20180726  -> [CSR ID:3997942] 20190612 주석처리
+									,CO.COUNTRY_NAME AS ATTRIBUTE4 -- [CSR ID:3997942] 20190612 추가
+									,T1.ATTRIBUTE9    --[C20210722-000230] GSCM Sales Site Project Model 마케팅 입력 컬럼 추가 요청의 건
+									,(SELECT LMD.SEGMENT2  AS NAME 
+										FROM [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] LMD WITH(NOLOCK) 
+										WHERE LOOKUP_TYPE = 'CELL_TYPE' AND T2.CELL_TYPE = LMD.SEGMENT1 ) AS CELL_TYPE		-- 20190919								
+
+									,T1.SALES_COMPANY
+									,T1.SALES_PLANT
+									-----------------------			
+							  FROM	[10.34.221.78,7433].[LGCE_SCMPROD].[dbo].SCM_MST_SITE_ITEM		T1  WITH(NOLOCK)
+							  JOIN 	DM_MST_ITEM_SINGLE_V	T2  WITH(NOLOCK)
+							  ON	T1.DIVISION_ID = T2.DIVISION_ID
+							  AND	T1.ITEM_ID   = T2.ITEM_ID
+
+								INNER JOIN 	[10.34.221.78,7433].[LGCE_SCMPROD].[dbo].SCM_MST_SITE	T3  WITH(NOLOCK)
+								ON	T1.DIVISION_ID = T3.DIVISION_ID
+								AND	T1.SCM_SITE_ID   = T3.SCM_SITE_ID
+							  
+								LEFT JOIN [10.34.221.78,7433].[LGCE_SCMPROD].[dbo].SCM_MST_COUNTRY AS CO  WITH(NOLOCK)
+								ON T3.COUNTRY = CO.COUNTRY
+
+								WHERE (T1.ITEM_ID = @P_ITEM_ID AND T1.SCM_SITE_ID = @p_scm_site_id)
+							  --WHERE (T2.ITEM_TYPE  = CASE WHEN T1.DIVISION_ID = '40' THEN T2.ITEM_TYPE ELSE 'H' END 
+							  --OR	 T2.ITEM_TYPE  = CASE WHEN T1.DIVISION_ID = '40' THEN T2.ITEM_TYPE ELSE 'P' END)
+														)					AS SITE_ITEM
+			ON				SITE_PROJECT.DIVISION_ID = SITE_ITEM.DIVISION_ID
+			AND				SITE_PROJECT.SCM_SITE_ID = SITE_ITEM.SCM_SITE_ID
+			AND				SITE_PROJECT.PROJECT_CODE = SITE_ITEM.PROJECT_CODE
+			AND             CASE WHEN SITE_PROJECT.DIVISION_ID = '40' THEN SITE_PROJECT.ITEM_ID ELSE  SITE_ITEM.ITEM_ID END = SITE_ITEM.ITEM_ID
+
+			LEFT JOIN		[10.34.221.78,7433].[LGCE_SCMPROD].[dbo].SCM_MST_SITE_CUSTOMER							AS SITE_CUST  WITH(NOLOCK)
+			ON				SITE_PROJECT.SCM_SITE_ID = SITE_CUST.SCM_SITE_ID
+			AND				SITE_PROJECT.DIVISION_ID = SITE_CUST.DIVISION_ID
+			AND				SITE_CUST.REP_YN      = 'Y'
+
+			LEFT JOIN		[10.34.221.78,7433].[LGCE_SCMPROD].[dbo].SCM_MST_CUSTOMER								AS CUST  WITH(NOLOCK)
+			ON				SITE_CUST.SOLDTO_CODE = CUST.SOLDTO_CODE
+			AND				SITE_CUST.SHIPTO_CODE = CUST.SHIPTO_CODE
+			AND				SITE_CUST.DIVISION_ID = CUST.DIVISION_ID
+
+			--LEFT OUTER JOIN #T_SINGLE G WITH(NOLOCK) ON SITE_ITEM.DIVISION_ID = G.DIVISION_ID AND SITE_ITEM.ITEM_ID = G.ITEM_ID
+   
+			LEFT JOIN		(SELECT DIVISION_ID,
+									 MAX(CUSTOMER_MODEL) AS CUSTOMER_MODEL,
+									 SCM_SITE_ID,
+									 PROJECT_CODE,
+									 ITEM_ID
+							  FROM   DM_MST_CUSTOMER_MODEL  WITH(NOLOCK)
+							  WHERE  VALID_YN = 'Y'
+							  GROUP BY DIVISION_ID, 
+									   SCM_SITE_ID,
+									   PROJECT_CODE,
+										ITEM_ID			)					AS CUST_ITEM
+			ON				SITE_ITEM.ITEM_ID      = CUST_ITEM.ITEM_ID
+			AND				SITE_ITEM.PROJECT_CODE = CUST_ITEM.PROJECT_CODE
+			AND				SITE_ITEM.DIVISION_ID  = CUST_ITEM.DIVISION_ID
+			AND				SITE_ITEM.SCM_SITE_ID  = CUST_ITEM.SCM_SITE_ID
+			WHERE  1 = 1 
+			AND RIGHT(SITE_ITEM.SCM_SITE_ID , 3)  <> '-AS'
+			) T1
+
+			WHERE  1 = 1			
+			AND T1.DIVISION_ID = @p_division_id
+			AND T1.ITEM_ID = @p_item_id
+			AND T1.SCM_SITE_ID = @p_scm_site_id
+
+			ORDER BY DIVISION_ID,
+						   TEAM_NAME_KO,
+						   END_CUSTOMER,
+						   END_CUSTOMER40,
+						   SOLDTO_CODE,	     			   
+						   SHIPTO_CODE,					   
+						   SCM_SITE_ID,
+						   SCM_SITE_ID40,
+						   PROJECT_CODE,
+						   PROJECT_NAME,
+						   PROJECT_STATUS,
+						   PROJECT_OWNER, -- 'SYSTEM' AS PROJECT_OWNER, --PJT.PROJECT_OWNWER      현재 컬럼이 없음.
+						   SALES_PLAN_ADJUST_YN,
+						   ITEM_TYPE,
+						   ITEM_CLASS_NAME,
+						   ITEM_ID,
+						   ITEM_NAME,
+						   CUSTOMER_MODEL,
+						   --[C20200513-000276] Sales_Company, Sales_Plant 컬럼 추가
+						   SALES_COMPANY,
+						   SALES_PLANT,
+						   NICK_NAME,
+						   BPMS_EXIST ,   --SITE_ITEM.BPMS_EXIST   현재 컬럼이 없음.
+						   LIABILITY_PERIOD,
+						   CURRENCY,
+							-- 20190402
+							REPORT_GROUP1
+							,REPORT_GROUP2
+							,REPORT_GROUP3
+							,REPORT_GROUP4
+							--,REPORT_GROUP5
+							,REPORT_GROUP6
+							,REPORT_GROUP7
+							,REPORT_GROUP8
+		END
+
+
+END

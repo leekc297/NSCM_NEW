@@ -1,0 +1,168 @@
+﻿
+/*
+ * Program ID   : DMF0008_GET_SALES_SITE
+ * Description  :
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ 2023.04.05	   kdmcc14		  []  ERP, EDI MASTER DATA 정비 SALES_SITE
+ 2024.12.31    dsiol              [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선
+ 2025-01-21 dsiol          [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선 * 2차배포	
+--DE000161	DEH000086
+
+EXEC DMF0008_GET_SALES_SITE '81', 'DE000161', 'DEH000086'
+EXEC DMF0008_GET_SALES_SITE '81','A009SV 01', 'ITH000059', 'Porsche AS_DE_SSN'
+EXEC DMF0008_GET_SALES_SITE '81','DE000206', 'DEH000430', 'Porsche_DE_SHM'
+ */
+----------------------------------------------------------------------------------------------------------------------------------
+CREATE PROCEDURE [dbo].[DMF0008_GET_SALES_SITE]	
+	@p_division_id      NVARCHAR(20),
+	@p_soldto 	        NVARCHAR(20),
+	@p_shipto			NVARCHAR(20),
+	@p_scm_site_id		NVARCHAR(30)
+AS
+
+BEGIN
+	
+    SET NOCOUNT ON;
+
+	-- 테이블중복제거
+	IF OBJECT_ID(N'tempdb..#TEMP_DMF0008_RESULT_TABLE_1', N'U') IS NOT NULL
+		DROP TABLE #TEMP_DMF0008_RESULT_TABLE_1
+
+	-- 임시확인용테이블 중복제거
+	IF OBJECT_ID(N'dbo.#TEMP_DMF0008_RESULT_TABLE_1', N'U') IS NOT NULL
+		DROP TABLE #TEMP_DMF0008_RESULT_TABLE_1
+
+	-- 테이블중복제거
+	IF OBJECT_ID(N'tempdb..#TEMP_DMF0008_RESULT_TABLE_2', N'U') IS NOT NULL
+		DROP TABLE #TEMP_DMF0008_RESULT_TABLE_2
+
+	-- 임시확인용테이블 중복제거
+	IF OBJECT_ID(N'dbo.#TEMP_DMF0008_RESULT_TABLE_2', N'U') IS NOT NULL
+		DROP TABLE #TEMP_DMF0008_RESULT_TABLE_2
+
+	--[PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선
+	--Division, Sold to, Ship to, Sales Site 가 이미 있다면 아래조건으로 조회
+	BEGIN
+		SELECT
+		* 
+		INTO #TEMP_DMF0008_RESULT_TABLE_1
+		FROM
+		(  SELECT
+		   S.DIVISION_ID		  
+		 , CASE WHEN S.DIVISION_ID = '40' THEN 'XXX' ELSE S.DEPT_ID END   AS TEAM_ID
+		 , CASE WHEN S.DIVISION_ID = '40' THEN 'XXX' ELSE T.DEPT_NAME_KO END  AS TEAM_NAME	  
+		 , CASE WHEN S.DIVISION_ID = '40' THEN 'acer' ELSE S.END_CUSTOMER END AS END_CUSTOMER
+			 , S.SOLDTO_CUSTOMER AS SOLDTO_CUSTOMER
+			 , C.SOLDTO_CODE   AS REP_SOLDTO_CODE
+			 , C.SHIPTO_CODE   AS REP_SHIPTO_CODE
+			 , S.COUNTRY
+			 , CO.COUNTRY_NAME
+			 , S.CITY
+			 , CT.CITY_NAME
+			 , S.SCM_SITE_ID SSCM_SITE_ID
+			 , S.COMPANY_ID 
+			 , S.SITE_DESCRIPTION
+			 , S.ATTRIBUTE3   AS DISTRIBUTION_CHANNEL 
+			 , S.VMI_YN
+			 , S.VALID_YN SITE_VALID_YN
+			 , C.VALID_YN CUSTOMER_VALID_YN
+			 , C.REP_YN AS REP_YN
+			 , S.LAST_UPDATED_BY
+			 , S.LAST_UPDATE_DATE
+			 , S.ATTRIBUTE2 AS SHIP_PLAN_AUTO
+			 , CASE WHEN S.DIVISION_ID <> '40' AND (([dbo].[FN_GET_DEPT_LIST]('[@p_created_by]', S.DEPT_ID) = 'Y') OR '[@v_group_id]' ='ADMIN')  THEN 'Y'
+	            WHEN S.DIVISION_ID = '40' AND(([dbo].[FN_GET_DEPT_LIST2]('[@p_created_by]', S.SCM_SITE_ID) = 'Y') 
+						OR '[@v_group_id]' ='ADMIN' OR '[@p_created_by]' = S.LAST_UPDATED_BY) THEN 'Y' ELSE 'N' END AS EDIT_FLAG		 
+		 , (SELECT ISNULL(MAX(LU.VALID_YN) ,'N')
+			FROM   SCM_ADM_LOOKUP_MASTER_DETAIL AS LU WITH(NOLOCK)
+			WHERE  LU.LOOKUP_TYPE = 'SALES_MGMT_TEAM'
+			AND    LU.VALID_YN = 'Y'
+			AND  ( LU.SEGMENT1 = (SELECT MAX(Dept_ID)
+								  FROM   [dbo].[TB_FX_User] WITH(NOLOCK)
+								  WHERE UserID = '[@p_created_by]')
+			    OR LU.SEGMENT1 = '[@p_userinfo]' )
+			AND    '[@v_group_id]' ='ADMIN') AS TEAM_EDIT_FLAG
+			, S.ATTRIBUTE5
+		FROM  [dbo].[SCM_MST_SITE] S WITH(NOLOCK) 
+		LEFT OUTER JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y') AS T ON S.DEPT_ID = T.DEPT_ID
+		LEFT OUTER JOIN SCM_MST_SITE_CUSTOMER AS C  WITH(NOLOCK) ON S.DIVISION_ID = C.DIVISION_ID AND S.SCM_SITE_ID = C.SCM_SITE_ID
+		LEFT OUTER JOIN SCM_MST_COUNTRY AS CO  WITH(NOLOCK) ON S.COUNTRY = CO.COUNTRY
+		LEFT OUTER JOIN SCM_MST_CITY AS CT  WITH(NOLOCK) ON S.COUNTRY = CT.COUNTRY AND S.CITY = CT.CITY
+		WHERE 1=1
+		AND S.DIVISION_ID = @p_division_id
+		AND S.SCM_SITE_ID = @p_scm_site_id
+		AND C.SOLDTO_CODE = @p_soldto
+		AND C.SHIPTO_CODE = @p_shipto
+		) AS TEMP
+	END
+
+	--[PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선
+	--Division, Sold to, Ship to, Sales Site 으로 조회 했을 때 데이터가 없다면
+	--기존대로 Division, Sold to, Ship to 으로 조회
+	IF( @@ROWCOUNT = 0)
+	BEGIN
+		SELECT
+		* 
+		INTO #TEMP_DMF0008_RESULT_TABLE_2
+		FROM
+		(  SELECT
+		   S.DIVISION_ID		  
+		 , CASE WHEN S.DIVISION_ID = '40' THEN 'XXX' ELSE S.DEPT_ID END   AS TEAM_ID
+		 , CASE WHEN S.DIVISION_ID = '40' THEN 'XXX' ELSE T.DEPT_NAME_KO END  AS TEAM_NAME	  
+		 , CASE WHEN S.DIVISION_ID = '40' THEN 'acer' ELSE S.END_CUSTOMER END AS END_CUSTOMER
+			 , S.SOLDTO_CUSTOMER AS SOLDTO_CUSTOMER
+			 , C.SOLDTO_CODE   AS REP_SOLDTO_CODE
+			 , C.SHIPTO_CODE   AS REP_SHIPTO_CODE
+			 , S.COUNTRY
+			 , CO.COUNTRY_NAME
+			 , S.CITY
+			 , CT.CITY_NAME
+			 , S.SCM_SITE_ID SSCM_SITE_ID
+			 , S.COMPANY_ID 
+			 , S.SITE_DESCRIPTION
+			 , S.ATTRIBUTE3   AS DISTRIBUTION_CHANNEL 
+			 , S.VMI_YN
+			 , S.VALID_YN SITE_VALID_YN
+			 , C.VALID_YN CUSTOMER_VALID_YN
+			 , C.REP_YN AS REP_YN
+			 , S.LAST_UPDATED_BY
+			 , S.LAST_UPDATE_DATE
+			 , S.ATTRIBUTE2 AS SHIP_PLAN_AUTO
+			 , CASE WHEN S.DIVISION_ID <> '40' AND (([dbo].[FN_GET_DEPT_LIST]('[@p_created_by]', S.DEPT_ID) = 'Y') OR '[@v_group_id]' ='ADMIN')  THEN 'Y'
+	            WHEN S.DIVISION_ID = '40' AND(([dbo].[FN_GET_DEPT_LIST2]('[@p_created_by]', S.SCM_SITE_ID) = 'Y') 
+						OR '[@v_group_id]' ='ADMIN' OR '[@p_created_by]' = S.LAST_UPDATED_BY) THEN 'Y' ELSE 'N' END AS EDIT_FLAG		 
+		 , (SELECT ISNULL(MAX(LU.VALID_YN) ,'N')
+			FROM   SCM_ADM_LOOKUP_MASTER_DETAIL AS LU WITH(NOLOCK)
+			WHERE  LU.LOOKUP_TYPE = 'SALES_MGMT_TEAM'
+			AND    LU.VALID_YN = 'Y'
+			AND  ( LU.SEGMENT1 = (SELECT MAX(Dept_ID)
+								  FROM   [dbo].[TB_FX_User] WITH(NOLOCK)
+								  WHERE UserID = '[@p_created_by]')
+			    OR LU.SEGMENT1 = '[@p_userinfo]' )
+			AND    '[@v_group_id]' ='ADMIN') AS TEAM_EDIT_FLAG
+			, S.ATTRIBUTE5
+		FROM  [dbo].[SCM_MST_SITE] S WITH(NOLOCK) 
+		LEFT OUTER JOIN (SELECT * FROM SCM_MST_SSO_DEPT_INFO WITH(NOLOCK) WHERE VALID_YN = 'Y') AS T ON S.DEPT_ID = T.DEPT_ID
+		LEFT OUTER JOIN SCM_MST_SITE_CUSTOMER AS C  WITH(NOLOCK) ON S.DIVISION_ID = C.DIVISION_ID AND S.SCM_SITE_ID = C.SCM_SITE_ID
+		LEFT OUTER JOIN SCM_MST_COUNTRY AS CO  WITH(NOLOCK) ON S.COUNTRY = CO.COUNTRY
+		LEFT OUTER JOIN SCM_MST_CITY AS CT  WITH(NOLOCK) ON S.COUNTRY = CT.COUNTRY AND S.CITY = CT.CITY
+		WHERE 1=1
+		AND S.DIVISION_ID = @p_division_id
+		AND C.SOLDTO_CODE = @p_soldto
+		AND C.SHIPTO_CODE = @p_shipto
+		) AS TEMP
+	END
+
+	IF EXISTS(SELECT 1 FROM #TEMP_DMF0008_RESULT_TABLE_1)
+	BEGIN
+		SELECT '1' AS SearchType,* FROM #TEMP_DMF0008_RESULT_TABLE_1
+	END
+	ELSE
+	BEGIN
+		SELECT '2' AS SearchType,* FROM #TEMP_DMF0008_RESULT_TABLE_2
+	END
+
+END

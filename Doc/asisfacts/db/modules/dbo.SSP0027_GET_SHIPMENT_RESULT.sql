@@ -1,0 +1,482 @@
+﻿
+
+
+/*
+ * Program ID   : SSP0027_GET_SHIPMENT_RESULT
+ * Description  : Shipment Shipment Result
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021/04/14   KIMYONGHO	    최초작성
+ * 2021.11.15   KIMYONGHO       Confirm Data Plan Date 기준 조회 처리 
+ * 2024.10.01   KHJ             NERP_SSP
+*/
+
+CREATE PROCEDURE [dbo].[SSP0027_GET_SHIPMENT_RESULT]
+	 @p_division_id			NVARCHAR(MAX)
+	,@p_from_site			NVARCHAR(MAX)
+	,@p_item_id				NVARCHAR(MAX)
+	,@p_from_yyyymmdd		NVARCHAR(MAX)
+	,@p_to_yyyymmdd			NVARCHAR(MAX)
+	,@p_type				NVARCHAR(MAX)
+	,@p_user_id				NVARCHAR(MAX)
+	,@p_company_id			NVARCHAR(MAX)
+	,@p_myModelChk			NVARCHAR(MAX)
+	,@p_partLeaderChk		NVARCHAR(MAX)
+	,@p_teamLeaderChk		NVARCHAR(MAX)
+	,@p_delegateeChk		NVARCHAR(MAX)
+	,@p_nonChk				NVARCHAR(MAX)
+	,@p_real_flag			NVARCHAR(MAX)
+	,@p_plan_start_yyyymmdd	NVARCHAR(MAX)
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+		
+		
+		   
+	WITH RESULT_ERP_C_EXIST AS 
+	(
+		-- ERP 출하실적에서 CONFIRM_ID 존재, SSP_TYPE 대상 
+		SELECT  E.DIVISION_ID             AS DIVISION_ID
+		,       E.CONFIRM_ID              AS CONFIRM_ID
+		,       E.ORDER_NO				  AS ERP_SO_NO 
+		,       E.EXFACTORY_DATE          AS YYYYMMDD
+		,       E.TRANSPORT_MODE		  AS TRANSPORT_MODE
+		,       E.INCOTERMS				  AS INCOTERMS
+		,		E.ETA_DATE				  AS ETA_DATE
+		,		E.ETD_DATE				  AS ETD_DATE
+		,		E.FROM_SCM_SITE_ID		  AS FROM_SITE
+		,		E.TO_SCM_SITE_ID		  AS TO_SITE
+		,		E.ITEM_ID				  AS ITEM_ID
+		,       SUM(E.EXFACTORY_QTY )     AS RESULT_QTY 
+		FROM [DBO].[SCM_DNM_EXFACTORY_RESULT] E WITH(NOLOCK)
+		JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L WITH(NOLOCK)
+				ON L.LOOKUP_TYPE = 'ERP_SSP_TYPE' -- LOOKUP에 등록된 공정만 
+			AND L.VALID_YN = 'Y'
+			AND L.SEGMENT1    = E.SSP_TYPE
+		JOIN SCM_MST_SITE AS S WITH(NOLOCK)					 
+			ON E.FROM_SCM_SITE_ID	= S.SCM_SITE_ID				 
+		   AND E.DIVISION_ID	= S.DIVISION_ID				 
+		   AND S.SITE_TYPE		= 'PLANT'					 				 
+		JOIN SCM_MST_ITEM_SN AS T WITH(NOLOCK)				 
+			ON E.ITEM_ID		= T.ITEM_ID					 
+		   AND E.DIVISION_ID	= T.DIVISION_ID				 
+		   AND S.COMPANY_ID		= T.COMPANY_ID				 
+		   AND T.ITEM_TYPE		IN ('Q','R')
+		WHERE 1=1
+		AND   ISNULL(E.EXFACTORY_STATUS,'D90') NOT IN ('D90' ,'D10') -- D90: DO삭제 , D10:DO생성 
+		AND   E.CONFIRM_ID LIKE 'C%'
+		AND   E.EXFACTORY_DATE BETWEEN @p_from_yyyymmdd  AND @p_to_yyyymmdd 
+				
+		GROUP BY E.DIVISION_ID 
+		,        E.CONFIRM_ID
+		,        E.ORDER_NO
+		,        E.EXFACTORY_DATE
+		,        E.TRANSPORT_MODE
+		,        E.INCOTERMS		
+		,		 E.ETA_DATE		
+		,		 E.ETD_DATE
+		,		 E.FROM_SCM_SITE_ID	
+		,		 E.TO_SCM_SITE_ID	
+		,		 E.ITEM_ID			
+		
+		)
+	, RESULT_ERP_C_NON AS 
+	(
+		-- ERP 출하실적에서 CONFIRM_ID 없는 실적 
+		SELECT  E.DIVISION_ID             AS DIVISION_ID
+		,       '-'                       AS CONFIRM_ID
+		,       E.ORDER_NO				  AS ERP_SO_NO 
+		,       E.FROM_SCM_SITE_ID        AS FROM_SITE                                                                    
+        ,       ISNULL(L3.SEGMENT4, E.TO_SCM_SITE_ID)     AS TO_SITE   
+		,       E.ITEM_ID                 AS ITEM_ID
+		,       E.EXFACTORY_DATE          AS YYYYMMDD
+		,       E.TRANSPORT_MODE		  AS TRANSPORT_MODE
+		,       E.INCOTERMS				  AS INCOTERMS
+		,		E.ETA_DATE				  AS ETA_DATE
+		,		E.ETD_DATE				  AS ETD_DATE
+		,       SUM(E.EXFACTORY_QTY )     AS QTY  
+		FROM [DBO].[SCM_DNM_EXFACTORY_RESULT] E WITH(NOLOCK)
+		JOIN SCM_MST_SITE AS S WITH(NOLOCK)					 
+			ON E.FROM_SCM_SITE_ID	= S.SCM_SITE_ID				 
+		   AND E.DIVISION_ID	= S.DIVISION_ID				 
+		   AND S.SITE_TYPE		= 'PLANT'					 				 
+		JOIN SCM_MST_ITEM_SN AS T WITH(NOLOCK)				 
+			ON E.ITEM_ID		= T.ITEM_ID					 
+		   AND E.DIVISION_ID	= T.DIVISION_ID				 
+		   AND S.COMPANY_ID		= T.COMPANY_ID				 
+		   AND T.ITEM_TYPE		IN ('Q','R')
+		JOIN  SCP_MST_FINAL_ITEM F WITH(NOLOCK) -- SCP 대상 ITEM만 
+			ON F.ITEM_ID = E.ITEM_ID 
+			AND F.DIVISION_ID = E.DIVISION_ID
+		JOIN   SCM_MST_SITE FS WITH(NOLOCK)
+			ON FS.SCM_SITE_ID = E.FROM_SCM_SITE_ID 
+			AND FS.DIVISION_ID = E.DIVISION_ID 	
+			JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L WITH(NOLOCK)
+				ON L.LOOKUP_TYPE = 'ERP_ORDER_TYPE' -- LOOKUP에 등록된 ORDER_TYPE만 대상으로 함 
+			AND L.VALID_YN = 'Y'
+			AND L.SEGMENT1    = E.ORDER_TYPE_CODE 
+		LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L3 WITH(NOLOCK)
+				ON L3.LOOKUP_TYPE = 'SHIP_RESULT_TO_SITE_MAPPING' --SOLDTO, SHIPTO 과 MAPPING되는 TO_SITE 
+			AND L3.SEGMENT1    = E.DIVISION_ID 
+			AND L3.SEGMENT2    = E.SOLDTO_CODE
+			AND L3.SEGMENT3    = E.SHIPTO_CODE					    
+		WHERE 1=1
+		AND   ISNULL(E.EXFACTORY_STATUS,'D90') NOT IN ('D90' ,'D10') -- D90: DO삭제 , D10:DO생성 
+		AND   ISNULL(E.CONFIRM_ID,'') NOT LIKE  'C%'
+		AND   E.EXFACTORY_DATE BETWEEN  @p_from_yyyymmdd  AND @p_to_yyyymmdd 
+		--[C20210330-000402]
+		--AND   E.FROM_SCM_SITE_ID IS NOT NULL 
+		--AND   E.TO_SCM_SITE_ID IS NOT NULL 
+--		AND   E.STORAGE_ID NOT IN ('6000' ,'799A') --상품창고제외 
+		AND 	E.STORAGE_ID NOT IN (select CODE FROM dbo.FN_LIST_LOOKUP_VALUE('SSP0027_GET_SHIPMENT_RESULT','PRODUCT_STORAGE')) --상품창고제외
+		--[C20200403-000062]
+		AND   E.STORAGE_ID NOT IN (SELECT SEGMENT1 
+								FROM SCM_ADM_LOOKUP_MASTER_DETAIL 
+								WHERE LOOKUP_TYPE = 'SSP_SHIP_RESULT_EXCEPT_STORAGE'
+									AND VALID_YN = 'Y'
+								)	-- 사외 창고 제외 LOOKUP 관리
+		--AND   E.ORDER_TYPE_CODE  IN ('ZEF','ZEFC','ZEML','ZEMM','ZEX','ZFD','ZFR','ZKB','ZMM','ZOR','ZFDC','ZKM') -- 해당 ORDER_TYPE만 대상으로 함 
+		--AND E.ORDER_TYPE_CODE NOT IN (SELECT SEGMENT1 
+		--						FROM SCM_ADM_LOOKUP_MASTER_DETAIL 
+		--						WHERE LOOKUP_TYPE = 'SSP_SHIP_RESULT_EXCEPT_ERP_ORDER_TYPE'
+		--							AND VALID_YN = 'Y'
+		--						)	-- ERP오더타입 제외 LOOKUP 관리
+		GROUP BY E.DIVISION_ID
+		,        E.ORDER_NO
+		,        E.FROM_SCM_SITE_ID                                                                           
+		,        ISNULL(L3.SEGMENT4, E.TO_SCM_SITE_ID) 
+		,        E.ITEM_ID
+		,        E.EXFACTORY_DATE
+		,        E.TRANSPORT_MODE
+		,        E.INCOTERMS		
+		,		 E.ETA_DATE		
+		,		 E.ETD_DATE		
+	)
+	, PLAN_SSP AS  
+	(    -- SSP출하계획 ( confirm된 계획) - Current Version
+		SELECT C.DIVISION_ID    AS DIVISION_ID
+		,      C.ERP_SO_NO      AS ERP_SO_NO
+		,      C.CONFIRM_ID     AS CONFIRM_ID 
+		,      C.ITEM_ID        AS ITEM_ID 
+		,      C.FROM_SITE      AS FROM_SITE 
+		,      C.TO_SITE        AS TO_SITE 
+		,      CASE WHEN C.DIVISION_ID= '4O' THEN ISNULL(SI.PROJECT_CODE,'-')    
+					ELSE ISNULL(TS.END_CUSTOMER,'-')  END         AS END_CUSTOMER  
+		,      C.QTY            AS QTY 
+		,      C.YYYYMMDD       AS YYYYMMDD 
+		,      C.TRANSPORT_MODE AS TRANSPORT_MODE
+		,      C.INCOTERMS      AS INCOTERMS
+		,      C.ETD_DATE       AS ETD_DATE
+		,      C.ETA_DATE       AS ETA_DATE
+		,	   NULL				AS SHIP_TYPE
+		FROM [DBO].[SSP_ANL_SHIP_CONFIRM] C WITH(NOLOCK)	--SSP_ANL_SHIP_CONFIRM C WITH(NOLOCK)
+		JOIN SCM_MST_SITE AS S WITH(NOLOCK)					 
+			ON C.FROM_SITE		= S.SCM_SITE_ID				 
+		   AND C.DIVISION_ID	= S.DIVISION_ID				 
+		   AND S.SITE_TYPE		= 'PLANT'					 				 
+		JOIN SCM_MST_ITEM_SN AS T WITH(NOLOCK)				 
+			ON C.ITEM_ID		= T.ITEM_ID					 
+		   AND C.DIVISION_ID	= T.DIVISION_ID				 
+		   AND S.COMPANY_ID		= T.COMPANY_ID				 
+		   AND T.ITEM_TYPE		IN ('Q','R')
+		LEFT OUTER JOIN [dbo].[SCM_MST_SITE_ITEM] SI WITH(NOLOCK)	--SCM_MST_SITE_ITEM SI WITH(NOLOCK) 
+					ON SI.DIVISION_ID = C.DIVISION_ID
+					AND SI.ITEM_ID     = C.ITEM_ID 
+					AND SI.SCM_SITE_ID = C.TO_SITE
+					AND SI.PROJECT_CODE = C.PROJECT_CODE 
+ 		LEFT OUTER JOIN [dbo].[SCM_MST_SITE] TS WITH(NOLOCK)	--SCM_MST_SITE TS WITH(NOLOCK) 
+					ON TS.DIVISION_ID = C.DIVISION_ID
+					AND TS.SCM_SITE_ID = C.TO_SITE 
+		WHERE CHANGE_TYPE = 'C'
+		AND   QTY > 0 
+		 AND ( ( @p_real_flag  = 'Y'  AND 1=1) )
+
+		UNION ALL
+
+		-- SSP출하계획 ( confirm된 계획) - OLD Version
+		SELECT D.DIVISION_ID    AS DIVISION_ID
+		,      C.ERP_SO_NO      AS ERP_SO_NO
+		,      D.CONFIRM_ID     AS CONFIRM_ID 
+		,      D.ITEM_ID        AS ITEM_ID 
+		,      V.FROM_SITE      AS FROM_SITE 
+		,      V.TO_SITE        AS TO_SITE 
+		,      CASE WHEN D.DIVISION_ID= '4O' THEN ISNULL(SI.PROJECT_CODE,'-')    
+					ELSE ISNULL(TS.END_CUSTOMER,'-')  END         AS END_CUSTOMER  
+		,      D.QTY            AS QTY 
+		,      D.YYYYMMDD       AS YYYYMMDD 
+		,      V.TRANSPORT_MODE AS TRANSPORT_MODE
+		,      V.INCOTERMS      AS INCOTERMS
+		,      [dbo].[FN_GET_SSP_ETD_DATE](D.DIVISION_ID,C.BOD_ID, D.YYYYMMDD )			AS ETD_DATE
+		,      [dbo].[FN_GET_SSP_ETA_DATE](D.DIVISION_ID,C.BOD_ID, D.YYYYMMDD )			AS ETA_DATE
+		,	   NULL				AS SHIP_TYPE
+		FROM SSP_ANL_ESS_PLAN D WITH(NOLOCK)
+
+		LEFT OUTER JOIN SSP_ANL_SHIP_CONFIRM C WITH(NOLOCK)
+			ON D.CONFIRM_ID = C.CONFIRM_ID
+
+		LEFT OUTER JOIN SCP_MST_BOD_N_V V WITH(NOLOCK)
+			ON C.DIVISION_ID = V.DIVISION_ID
+			AND C.BOD_ID	= V.BOD_ID
+
+		LEFT OUTER JOIN SCM_MST_SITE_ITEM SI WITH(NOLOCK) 
+			ON SI.DIVISION_ID = D.DIVISION_ID
+			AND SI.ITEM_ID     = D.ITEM_ID 
+			AND SI.SCM_SITE_ID = V.TO_SITE
+			AND SI.PROJECT_CODE = D.PROJECT_CODE 
+
+ 		LEFT OUTER JOIN SCM_MST_SITE TS WITH(NOLOCK) 
+			ON TS.DIVISION_ID = D.DIVISION_ID
+			AND TS.SCM_SITE_ID = V.TO_SITE 
+		WHERE 1=1
+		AND	D.PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd
+		--AND D.SHIPMENT_STATUS = 'C'
+		AND D.QTY > 0 
+		AND D.YYYYMMDD BETWEEN  @p_from_yyyymmdd  AND @p_to_yyyymmdd
+		AND ( ( @p_real_flag  = 'N'  AND 1=1) )
+	) 
+	, RESULT_OWMS AS
+	(
+		-- owms 출하실적
+		SELECT A.DIVISION_ID       AS DIVISION_ID 
+		,      A.ITEM_ID           AS ITEM_ID 
+		,      A.FROM_SITE         AS FROM_SITE
+		,      CASE WHEN A.TO_SITE ='-' THEN A.CUSTOMER_CODE ELSE  A.TO_SITE END          AS TO_SITE
+		,      SUM(A.LOT_QTY)            AS QTY 
+		,      A.PLANT_ISSUE_DATE  AS YYYYMMDD
+		,	   A.SHIP_TYPE AS SHIP_TYPE
+		FROM SSP_DNM_SHIP_RESULT_OWMS A WITH(NOLOCK)
+		WHERE A.PLANT_ISSUE_DATE BETWEEN  @p_from_yyyymmdd  AND @p_to_yyyymmdd 
+		GROUP BY A.DIVISION_ID        
+		,        A.ITEM_ID      
+		,        A.FROM_SITE   
+		,        CASE WHEN A.TO_SITE ='-' THEN A.CUSTOMER_CODE ELSE A.TO_SITE  END  
+		,        A.PLANT_ISSUE_DATE  
+		,		 A.SHIP_TYPE
+	)
+
+	, RETURN_OWMS AS
+	(
+		-- owms 출하 반품
+		SELECT B.DIVISION_ID      AS DIVISION_ID 
+		,      B.ITEM_ID          AS ITEM_ID 
+		,      B.FROM_SITE        AS FROM_SITE
+		,      '*'                AS TO_SITE 
+		,      SUM(B.RECIEPT_QTY) AS QTY 
+		,      B.RECIEPT_DATE     AS YYYYMMDD 
+		,	   NULL AS SHIP_TYPE
+		FROM SSP_DNM_SHIP_RETURN_OWMS B WITH(NOLOCK) 
+		WHERE B.RECIEPT_DATE BETWEEN  @p_from_yyyymmdd  AND @p_to_yyyymmdd 
+		GROUP BY B.DIVISION_ID        
+		,        B.ITEM_ID      
+		,        B.FROM_SITE   
+		,        B.RECIEPT_DATE 
+		
+	)
+
+	SELECT X.DIVISION_ID
+	,      MS.COMPANY_ID AS COMPANY_ID
+	,      L.SEGMENT2  AS TYPE 
+	,	   X.ERP_SO_NO
+	,      X.CONFIRM_ID 
+	,      X.ITEM_ID 
+	--,      DBO.FN_GET_ITEM_NICKNAME(X.DIVISION_ID, X.ITEM_ID) AS NICK_NAME
+	,	   ISNULL(T.ITEM_NAME,'-') AS NICK_NAME
+	--,      X.FROM_SITE 
+	--,      X.TO_SITE
+	,      ISNULL(dbo.FN_GET_SCM_SITE_DESCRIPTION(X.DIVISION_ID,X.FROM_SITE),X.FROM_SITE)   AS FROM_SITE 
+	,      ISNULL(dbo.FN_GET_SCM_SITE_DESCRIPTION(X.DIVISION_ID,X.TO_SITE),X.TO_SITE)       AS TO_SITE 
+	,      X.END_CUSTOMER  
+	,      X.QTY 
+	,      CONVERT(VARCHAR(10),   CONVERT(DATETIME, X.YYYYMMDD,112), 23) AS YYYYMMDD 
+	,      X.TRANSPORT_MODE
+	,      X.INCOTERMS
+	,      CONVERT(VARCHAR(10),   CONVERT(DATETIME, X.ETD_DATE,112), 23) AS ETD_DATE
+	,      CONVERT(VARCHAR(10),   CONVERT(DATETIME, X.ETA_DATE,112), 23) AS ETA_DATE
+	,	   X.SHIP_TYPE
+	FROM (
+		--CONFIRM_ID ,날짜동일한 기준으로 계획정보의 FROM, TO SITE기준으로 실적 집계 
+		SELECT R.DIVISION_ID     AS DIVISION_ID
+		,     'E'				 AS TYPE 
+		,      R.ERP_SO_NO       AS ERP_SO_NO
+		,      R.CONFIRM_ID      AS CONFIRM_ID 
+		,      R.ITEM_ID         AS ITEM_ID 
+		,      R.FROM_SITE       AS FROM_SITE 
+		,      R.TO_SITE         AS TO_SITE 
+		,      NULL              AS END_CUSTOMER
+		,      SUM(R.RESULT_QTY) AS QTY 
+		,      R.YYYYMMDD        AS YYYYMMDD
+		,      R.TRANSPORT_MODE  AS TRANSPORT_MODE
+		,      R.INCOTERMS       AS INCOTERMS
+		,      R.ETD_DATE        AS ETD_DATE
+		,      R.ETA_DATE        AS ETA_DATE
+		,      NULL				 AS SHIP_TYPE
+		FROM  RESULT_ERP_C_EXIST R 
+
+		GROUP BY R.DIVISION_ID
+		,		 R.ERP_SO_NO
+		,        R.FROM_SITE                                                                           
+		,        R.TO_SITE 
+		,        R.ITEM_ID
+		,		 R.TRANSPORT_MODE			   
+		,		 R.INCOTERMS
+		,		 R.ETD_DATE
+		,		 R.ETA_DATE		   
+		,        R.YYYYMMDD 
+		,        R.CONFIRM_ID
+
+	--UNION ALL 
+
+	--	--CONFIRM_ID ,기준으로 날짜가 다른 계획정보의 FROM, TO SITE기준으로 실적 집계
+	--	SELECT P.DIVISION_ID     AS DIVISION_ID
+	--	,     'E'                AS TYPE 
+	--	,      R.ERP_SO_NO       AS ERP_SO_NO
+	--	,      R.CONFIRM_ID      AS CONFIRM_ID 
+	--	,      P.ITEM_ID         AS ITEM_ID 
+	--	,      P.FROM_SITE       AS FROM_SITE 
+	--	,      P.TO_SITE         AS TO_SITE 
+	--	,      NULL              AS END_CUSTOMER
+	--	,      SUM(R.RESULT_QTY) AS QTY 
+	--	,      R.YYYYMMDD        AS YYYYMMDD 
+	--	,      R.TRANSPORT_MODE  AS TRANSPORT_MODE
+	--	,      R.INCOTERMS       AS INCOTERMS
+	--	,      R.ETD_DATE        AS ETD_DATE
+	--	,      R.ETA_DATE        AS ETA_DATE
+	--	,      NULL				 AS SHIP_TYPE
+	--	FROM  PLAN_SSP P 
+	--			JOIN RESULT_ERP_C_EXIST R 
+	--			ON R.DIVISION_ID = P.DIVISION_ID 
+	--			AND R.CONFIRM_ID = P.CONFIRM_ID 
+	--			AND R.YYYYMMDD <> P.YYYYMMDD 
+	--	GROUP BY P.DIVISION_ID
+	--	,	     R.ERP_SO_NO
+	--	,        P.FROM_SITE                                                                           
+	--	,        P.TO_SITE 
+	--	,        P.ITEM_ID 
+	--	,		 R.TRANSPORT_MODE			   
+	--	,		 R.INCOTERMS
+	--	,		 R.ETD_DATE
+	--	,		 R.ETA_DATE			  
+	--	,        R.YYYYMMDD 
+	--	,        R.CONFIRM_ID
+
+	UNION ALL 
+
+		--CONFIRM_ID 없는 실적 
+		SELECT R.DIVISION_ID     AS DIVISION_ID
+		,     'E'                AS TYPE 
+		,      R.ERP_SO_NO       AS ERP_SO_NO
+		,      NULL              AS CONFIRM_ID 
+		,      R.ITEM_ID         AS ITEM_ID 
+		,      R.FROM_SITE       AS FROM_SITE 
+		,      R.TO_SITE         AS TO_SITE 
+		,      NULL              AS END_CUSTOMER
+		,      R.QTY             AS QTY 
+		,      R.YYYYMMDD        AS YYYYMMDD 
+		,      R.TRANSPORT_MODE  AS TRANSPORT_MODE
+		,      R.INCOTERMS       AS INCOTERMS
+		,      R.ETD_DATE        AS ETD_DATE
+		,      R.ETA_DATE        AS ETA_DATE
+		,      NULL              AS SHIP_TYPE
+		FROM  RESULT_ERP_C_NON R 
+
+	UNION ALL
+  
+		SELECT P.DIVISION_ID     AS DIVISION_ID
+		,     'P'                AS TYPE 
+		,      P.ERP_SO_NO       AS ERP_SO_NO
+		,      P.CONFIRM_ID      AS CONFIRM_ID 
+		,      P.ITEM_ID         AS ITEM_ID 
+		,      P.FROM_SITE       AS FROM_SITE 
+		,      P.TO_SITE         AS TO_SITE 
+		,      P.END_CUSTOMER    AS END_CUSTOMER
+		,      P.QTY             AS QTY 
+		,      P.YYYYMMDD        AS YYYYMMDD 
+		,      P.TRANSPORT_MODE  AS TRANSPORT_MODE
+		,      P.INCOTERMS       AS INCOTERMS
+		,      P.ETD_DATE        AS ETD_DATE
+		,      P.ETA_DATE        AS ETA_DATE
+		,      NULL              AS SHIP_TYPE
+		FROM  PLAN_SSP P 
+		WHERE P.YYYYMMDD BETWEEN  @p_from_yyyymmdd  AND @p_to_yyyymmdd 
+
+
+	UNION ALL 
+		-- OWMS 실적 
+		SELECT R.DIVISION_ID     AS DIVISION_ID
+		,      'O'				 AS TYPE 
+		,      NULL              AS ERP_SO_NO
+		,      NULL              AS CONFIRM_ID 
+		,      R.ITEM_ID         AS ITEM_ID 
+		,      R.FROM_SITE       AS FROM_SITE 
+		,      R.TO_SITE         AS TO_SITE 
+		,      NULL              AS END_CUSTOMER
+		,      R.QTY             AS QTY 
+		,      R.YYYYMMDD        AS YYYYMMDD 
+		,      NULL              AS TRANSPORT_MODE
+		,      NULL              AS INCOTERMS
+		,      NULL              AS ETD_DATE
+		,      NULL              AS ETA_DATE
+		,      R.SHIP_TYPE       AS SHIP_TYPE
+		FROM  RESULT_OWMS R
+
+	UNION ALL
+		-- OWMS 반품실적 
+		SELECT R.DIVISION_ID     AS DIVISION_ID
+		,      'R'		         AS TYPE 
+		,      NULL              AS ERP_SO_NO
+		,      NULL              AS CONFIRM_ID 
+		,      R.ITEM_ID         AS ITEM_ID 
+		,      R.FROM_SITE       AS FROM_SITE 
+		,      R.TO_SITE         AS TO_SITE 
+		,      NULL              AS END_CUSTOMER
+		,      R.QTY             AS QTY 
+		,      R.YYYYMMDD        AS YYYYMMDD 
+		,      NULL              AS TRANSPORT_MODE
+		,      NULL              AS INCOTERMS
+		,      NULL              AS ETD_DATE
+		,      NULL              AS ETA_DATE
+		,      R.SHIP_TYPE       AS SHIP_TYPE
+		FROM  RETURN_OWMS R
+	) X
+		JOIN SCM_MST_SITE MS WITH(NOLOCK) 
+		  ON MS.DIVISION_ID = X.DIVISION_ID 
+		 AND MS.SCM_SITE_ID = X.FROM_SITE  
+		 AND MS.OPERATION_GROUP <> 'E'
+		JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L WITH(NOLOCK)
+   		  ON L.LOOKUP_TYPE = 'SSP_SHIPMENT_RESULT_TYPE' -- LOOKUP에 등록된 공정만 
+		 AND L.SEGMENT1 = X.TYPE 
+		 AND L.VALID_YN = 'Y'
+		LEFT OUTER JOIN SSP_MST_MODEL_USER M WITH(NOLOCK) 
+		          ON  M.DIVISION_ID = X.DIVISION_ID 
+					and M.FROM_SITE = X.FROM_SITE 
+					and M.ITEM_ID = X.ITEM_ID 
+					and M.VALID_YN = 'Y'
+
+
+		LEFT OUTER JOIN SCM_MST_ITEM_SN T WITH(NOLOCK)		
+		ON  X.ITEM_ID		= T.ITEM_ID		
+	    AND X.DIVISION_ID	= T.DIVISION_ID	
+	    AND T.COMPANY_ID	= @p_company_id
+		--AND T.ITEM_TYPE		= 'Q'
+
+	WHERE 1=1
+	AND   X.DIVISION_ID = @p_division_id
+	AND ( ( @p_company_id   IS NULL OR @p_company_id ='')  OR MS.COMPANY_ID  = @p_company_id )
+	AND ( ( @p_from_site   IS NULL OR @p_from_site ='')  OR X.FROM_SITE IN (SELECT token FROM dbo.String_Split(@p_from_site,',')) )
+	AND ( ( @p_item_id   IS NULL OR @p_item_id ='')  OR X.ITEM_ID IN (SELECT token FROM dbo.String_Split(@p_item_id,',')) )
+	AND ( ( @p_type   IS NULL OR @p_type ='')  OR X.TYPE IN (SELECT token FROM dbo.String_Split(@p_type,',')) )
+
+	--체크박스 체크 여부 조회 시작(@p_nonChk = 'Y' : 체크박스 선택 안한 상태)
+	AND ((@p_nonChk = 'Y' AND 1 = 1 OR M.USER_ID IN (SELECT CASE WHEN @p_myModelChk = 'Y' THEN @p_user_id ELSE 'X' END 
+													UNION 
+													SELECT CASE WHEN @p_delegateeChk = 'Y' THEN USER_ID ELSE 'X' END 
+													FROM SSP_MST_DELEGATE WHERE VALID_YN = 'Y' AND DELEGATEE_ID = @p_user_id GROUP BY USER_ID)
+									OR M.PART_LEADER = CASE WHEN @p_partLeaderChk = 'Y' THEN @p_user_id  ELSE 'X' END	
+									OR M.TEAM_LEADER = CASE WHEN @p_teamLeaderChk = 'Y' THEN @p_user_id  ELSE 'X' END))
+	--체크박스 체크 여부 조회 끝
+	ORDER BY X.DIVISION_ID, X.FROM_SITE, X.YYYYMMDD, X.ITEM_ID, X.TO_SITE, L.DISPLAY_SEQ, X.CONFIRM_ID 
+
+END

@@ -1,0 +1,180 @@
+﻿
+
+
+
+
+
+ CREATE VIEW [dbo].[SCP_ANL_ENDING_INVENTORY_V] AS
+ /*
+ * Program ID   : SCP_ANL_ENDING_INVENTORY_V
+ * Description  : SCP 기말재고 조회 (EPSILON 시스템)    
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2022.05.25   vadabi3            Initial Release : C20220526-000300 EPSILON -> SCM 이관에 따른 기말재고 View 제공 요청
+ *                                                   SCP0085_GET_ENDING_INVENTORY 참고해 생성
+ * 2026.03.27	ymh					E20260316-000305 재고 데이터에 컬럼 추가 요청
+ -----------------------------------------------------------------------------------------------------
+ *  컬럼 정보 로직 변경 시 아래는 동일하게 처리 필요함
+ * SCP_ANL_ENDING_INVENTORY_V / SCP_ANL_ENDING_INVENTORY_D_V / SCP0085_GET_ENDING_INVENTORY_DAILY / SCP0085_GET_ENDING_INVENTORY
+ */
+
+WITH W_CELL_CF AS
+(
+	SELECT TARGET_CELL
+		    , ITEM_ID
+			, CELL_CF
+			, ROW_NUMBER() OVER (PARTITION BY ITEM_ID ORDER BY BOM_MODIFY_DATE DESC, ATTRIBUTE5 DESC) AS RankNo
+	FROM SCP_MST_ITEM_CELL_CF WITH(NOLOCK)
+)
+SELECT
+           YYYYMM_DATA
+         , YYYYMM		
+		 , DIVISION_ID
+		 , COMPANY_ID
+		 , PLANT_ID
+		 , PLANT_NAME
+		 , DATA.ITEM_ID
+		 , ITEM_DESCRIPTION
+		 , ITEM_UOM
+		 , STORAGE_LOCATION
+		 , STORAGE_DESC
+		 , QUANTITY
+		 , AMOUNT
+		 , CURRENCY
+		 , AMOUNT_KRW
+		 , UNIT_PRICE
+		 , UNIT_PRICE_KRW
+		 , VALUATION_CLASS
+		 , PURCHASE_PO
+		 , SUPPLIER_CODE
+		 , SUPPLIER_NAME
+		 , ITEM_TYPE		
+		 , PROCESS_GROUP	
+		 , MATERIAL_GROUP	
+		 , GPLM_CELL_MODEL
+		 , MDM_PROJECT_NICK_NAME
+		 , EXTRA_SPEC
+
+		 , ( CASE 
+		     WHEN PROCESS_GROUP = 'CELL' THEN '1.000000'			
+			 WHEN ITEM_TYPE IN (N'반제품',N'제품') THEN WCF.CELL_CF 
+			 ELSE NULL 
+			 END
+		   ) AS CELL_CONVER_FACTOR		
+		 , (
+		    CASE 
+			WHEN PROCESS_GROUP = 'CELL' THEN ISNULL(QUANTITY,0)										
+		    WHEN ITEM_TYPE IN (N'반제품',N'제품') THEN ISNULL(WCF.CELL_CF ,1) * ISNULL(QUANTITY,0) 
+			ELSE ISNULL(QUANTITY,0) 
+			END
+		   ) AS CELL_CONVER_QUANTITY	
+		 , LEVEL_1_NAME
+		 , LEVEL_2_NAME
+		 , LEVEL_3_NAME
+		 , LEVEL_4_NAME
+		 , CELL_GROUP
+		 , PACK_GROUP
+		 , PROFIT_CENTER_ID			-- 2026.03.27 E20260316-000305 재고 데이터에 컬럼 추가 요청
+		 , PROFIT_CENTER_NAME		-- 2026.03.27 E20260316-000305 재고 데이터에 컬럼 추가 요청
+
+FROM
+(
+	SELECT ('‘' + SUBSTRING(A.YYYYMM, 3, 2) + '.' + RIGHT(A.YYYYMM, 2)) AS YYYYMM	
+		 , A.YYYYMM AS YYYYMM_DATA
+		 , A.DIVISION_ID
+		 , A.COMPANY_ID
+		 , A.PLANT_ID
+		 --, P.PLANT_NAME-- 
+		 , ( SELECT X1.PLANT_NAME
+			  FROM ( SELECT DISTINCT PLANT_ID , PLANT_NAME
+					   FROM SCM_PLANT_M_SN WITH(NOLOCK)
+					) X1
+			 WHERE X1.PLANT_ID	= A.PLANT_ID
+			 ) AS PLANT_NAME
+		 , A.ITEM_ID AS ITEM_ID
+		 , A.ITEM_DESCRIPTION
+		 , A.ITEM_UOM
+		 , A.STORAGE_LOCATION
+		 , A.STORAGE_DESC
+		 , A.QUANTITY
+		 , A.AMOUNT
+		 , A.CURRENCY
+		 , A.AMOUNT_KRW
+		 , A.UNIT_PRICE
+		 , A.UNIT_PRICE_KRW
+		 , A.VALUATION_CLASS
+		 , A.PURCHASE_PO
+		 , A.SUPPLIER_CODE
+		 , A.SUPPLIER_NAME
+		 --, (CASE WHEN A.VALUATION_CLASS IN ('3020','3030','3040') THEN N'저장품' ELSE S1.ITEM_TYPE		END) AS ITEM_TYPE		
+		, (
+			CASE 
+			WHEN A.VALUATION_CLASS IN ('3020','3030','3040') THEN N'저장품' 
+			WHEN A.VALUATION_CLASS IN ('3100','3109') AND S1.ITEM_TYPE = N'원부자재'  THEN N'상품' 
+			ELSE S1.ITEM_TYPE		
+			END
+		) AS ITEM_TYPE		-- 원반제구분	
+		 , (CASE WHEN A.VALUATION_CLASS IN ('3020','3030','3040') THEN N'저장품' ELSE S1.PROCESS_GROUP	END) AS PROCESS_GROUP	
+		 , (CASE WHEN A.VALUATION_CLASS IN ('3020','3030','3040') THEN N'저장품' ELSE S1.PROCESS_DETAIL	END) AS MATERIAL_GROUP	
+		 , (CASE WHEN S1.ITEM_TYPE = N'반제품' AND MI.FORECAST_INFO_CELL_MODEL IS NULL THEN 
+																							(SELECT TOP 1 X2.APPLIED_MODEL
+																							   FROM SCM_MST_ITEM_SN X2 WITH(NOLOCK) 
+																							  WHERE X2.ITEM_ID = A.ITEM_ID
+																								AND X2.APPLIED_MODEL IS NOT NULL
+																							   )
+				 ELSE MI.FORECAST_INFO_CELL_MODEL
+			END)							AS GPLM_CELL_MODEL
+		 , MI.NICK_NAME						AS MDM_PROJECT_NICK_NAME
+		 , MI.SCP_EXTRA_SPEC				AS EXTRA_SPEC
+		 , S1.LEVEL_1_NAME
+		 , S1.LEVEL_2_NAME
+		 , S1.LEVEL_3_NAME
+		 , S1.LEVEL_4_NAME
+		 , FI.GROUP_CODE1			AS CELL_GROUP
+		 , FI.GROUP_CODE2			AS PACK_GROUP
+		 , A.ATTRIBUTE3				AS PROFIT_CENTER_ID			-- 2026.03.27 E20260316-000305 재고 데이터에 컬럼 추가 요청
+		 , A.ATTRIBUTE4				AS PROFIT_CENTER_NAME		-- 2026.03.27 E20260316-000305 재고 데이터에 컬럼 추가 요청
+		 
+	  FROM SCP_ANL_MONTH_END_STOCK_R A WITH(NOLOCK)
+	  LEFT JOIN SCM_MST_ITEM_SN MI WITH(NOLOCK)
+		ON A.COMPANY_ID		= MI.COMPANY_ID
+	   AND A.DIVISION_ID	= MI.DIVISION_ID
+	   AND A.ITEM_ID		= MI.ITEM_ID
+	  LEFT JOIN ( 
+	                  SELECT  T.ITEM_ID
+							, T.ITEM_TYPE
+							, T.PROCESS_GROUP
+							, T.PROCESS_DETAIL
+							, T.LEVEL_1_NAME
+							, T.LEVEL_2_NAME
+							, T.LEVEL_3_NAME
+							, T.LEVEL_4_NAME
+						from
+						(
+					   SELECT DISTINCT A.ITEM_ID
+							, B.ITEM_TYPE
+							, B.PROCESS_GROUP
+							, B.PROCESS_DETAIL
+							, B.LEVEL_1_NAME
+							, B.LEVEL_2_NAME
+							, B.LEVEL_3_NAME
+							, B.LEVEL_4_NAME
+							, ROW_NUMBER() OVER (PARTITION BY A.ITEM_ID ORDER BY A.ITEM_CLASS DESC) AS RankNo
+					  FROM SCM_MST_ITEM_SN A WITH(NOLOCK)
+						 , SCM_MST_ITEM_CLASS_M B WITH(NOLOCK)
+					 WHERE A.ITEM_CLASS = B.CLASS_ID
+						) T
+						where RankNo = 1
+					) S1
+           ON A.ITEM_ID = S1.ITEM_ID
+	  LEFT JOIN SCP_MST_FINAL_ITEM FI WITH(NOLOCK)
+		ON A.DIVISION_ID	= FI.DIVISION_ID
+	   AND A.ITEM_ID		= FI.ITEM_ID
+) AS DATA	
+LEFT JOIN W_CELL_CF WCF WITH(NOLOCK)
+  ON DATA.ITEM_ID		= WCF.ITEM_ID
+ AND WCF.RankNo = 1
+
+

@@ -1,0 +1,1663 @@
+﻿
+/*=====================================================================================================================================================
+ * Program ID   : DMF0005_GET_SALES_SITE_MODEL_PRODUCTION
+ * Description  :
+ * Program History
+ *=====================================================================================================================================================
+ *   Date       In Charge      Description
+ *=====================================================================================================================================================
+ * 2017/12/01	SJSHIN      Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/05/30	JYE			복수 팀 권한 관련  수정  
+ * 2018/07/20	KHSONG		주석처리 -> 다시 원복함 고민필요
+ * 2018/07/30	SonYoungSuk 검색조건 project(코드,네임 라이크 검색), model/item(코드,닉네임 라이크 검색)으로 수정 
+ * 2018/08/03	JYE			멀티 오너 수정
+ * 2018/09/03   JYE			VALID_YN 수정
+ * 2018/10/31   JYE			Attribute 칼럼 추가. 81만. 
+ * 2018/12/20	KHSONG		modify SITE_ITEM.SCM_SITE_ID -> SITE_PROJECT.SCM_SITE_ID
+ * 2019/04/02   JYE			칼럼 추가 
+ * 2019/05/27   JYE			수정권한(EDIT_FLAG2) 추가 
+ * 2019/06/12	KHSONG		[CSR ID:3997942] Destination Column의 값은 Sales Site상의 Country name 값을 자동으로 끌고 오도록 연동 요청
+ * 2019/09/19   JYE			칼럼 추가 
+ * 2019/10/11   JYE			CSR ID:4098705. 칼럼 추가 
+ * 2019/10/18   KYH			[CSR ID:4103445] 컬럼통합. REPORT_GROUP4, 5 --> REPORT_GROUP4 
+ * 2020/03/11	KHSONG		C20200103-000586 권한그룹을 LOOKUP관리
+ * 2020/03/17	hwi1993		[C20200311-000086] VMI_LT 추가
+ * 2020/04/22	KHSONG		C20200422-000123 소형사업부와과 같이 상품도 하나의 Grid에 다 보이도록함
+ * 2020/04/22	P.C.I 		[PJ20200138] 전지 공급 대응력 향상을 위한 RTF 적확도 개선-셀명 추가
+ * 2020/05/13	P.C.I 		[C20200513-000276] Chempion - GSCM I/F위한 Sales Plant 필수 컬럼 추가 (Sales_Company, Sales_Plant)
+ * 2020/06/02	P.C.I 		[C20200610-000265] ESS - Project 별 Ship Plan (Partial) Flag 추가
+ * 2020/11/03	hwi1993		[C20200827-000257] 테슬라 EDI 추가
+ * 2021/05/27	SJHAN		[C20210525-000374] 셀용량 및 팩 당 용량 추가
+ * 2021/06/24	SJHAN		[C20210624-000068] 자동차 중장기 계획 수립시 필요한 컬럼 추가
+ * 2021/08/18	hwi1993		조회속도가 너무 느려서 수정함.
+ * 2021/08/24	rosia27		[C20210722-000230] GSCM Sales Site Project Model 마케팅 입력 컬럼 추가 요청의 건
+ * 2021/11/18	kdw2819		[과제]	자동차 사업부 JV Planner 의 조회 권한 추가
+ * 2022/01/20	rosia27		[C20211112-000213]GSCM의 Cell Model 컬럼 관련 요청의 건
+ * 2022/02/16	kdw2819		[C20220210-000268]Sales site project model에 '양극재, Module Variant' 컬럼 추가
+ * 2022/04/19   kdw2819     [C20220419-000350]Sales Site Project Model 컬럼 동시 사용에 따른 오류 확인 요청의 件
+ * 2022/05/27	HWI1993		[과제] UI 속도개선
+ * 2022/09/14	KDW2819		[C20220905-000187]Sales Site Project Model 조회조건 추가의 건
+ * 2023/03/28	heesan91	81 사업부 속도개선 - TEMP 테이블 생성
+ * 2023/07/12   HMIN        [E20230706-001434] 81 자동차사업부 조회오류 개선 (CELL_PER_MODULE 값 0으로 들어오는 경우 MODULE_PER_CAR 연산 강제 NULL 처리)
+ * 2023/07/18   CHANO0612   [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선
+ * 2023/08/14	ilovu1      대체/유사모델 여부(ALT_SIM_YN) 컬럼 추가
+ * 2023/08/17	ilovu1      설명(DESCRIPTION) 컬럼 추가
+ * 2023/08/21	jssbae		PROJECT_INF0(소형프로젝트) 추가
+ * 2023/11/25	hmin        [E20231019-001234] DM시스템의 모델코드 사용중지 정보 제공 개선을 위한 Mkt Fcst UI 동작 변경 및 SSPM 마스터 정보 변경 요청 (MDM중지여부표출)
+                            - 참고: 81_UC의 MDM중지여부 데이터가 없는 경우 → 81의 MDM중지여부 데이터와 동일하게 반영하기를 요청 (오윤종PI님) 
+ * 2024/04/22	JSSBAE		[E20240411-001030]_Sales Site Project Model 화면 하단 저장 로직 오류 수정_SINGLE_VIEW 변경작업 진행
+ * 2024/08/26	JSSBAE		[E20240731-000852]_[공급 SCM PI팀] 소형사업부 용량(Wh) 관련 칼럼/메저 추가
+ * 2024/08/13	KJJ			[PJ2024-50461] Team Mapping
+ * 2024/09/12	JSSBAE		[E20240920-000300]_SCM.DM 화면 조회 속도 개선
+ * 2024/09/23	JSSBAE		[E20240826-000165]_SSPM 체크박스 추가 검토 요청의 건
+ * 2024/09/25	JSSBAE		[E20240904-001037]_DM > Master > Sales Site Project Model 수정 요청
+ * 2024/11/04	JSSBAE		[E20241028-000049]_[공급SCM PI팀] SCM Sales Site Project Model Master 내 소형사업부 S&OP Report 활용을 위한 신규 컬럼 개발 요청의 건 
+ * 2024/11/27   dsiol       [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)  
+ * 2024/11/28	JSSBAE		[E20241120-000817]_82사업부 SSPM 수정 요청 개발 요청의 건 
+ * 2026/01/23	JSSBAE		[E20260123-001715]_E20241015-000415 CSR 원복 요청
+ * 2026/06/17	JSSBAE		[E20260612-001708]_SSPM 데이터 중복 건 관련 수정
+ */
+ /*
+   EXEC DMF0005_GET_SALES_SITE_MODEL_PRODUCTION @p_division_id='82', @p_dept_id='ALL', @p_end_customer='ALL'
+   , @p_scm_site_id='LGCEG_DE_MWA', @p_project_code='', @p_item_id='', @p_valid_yn='ALL', @p_created_by='chano0612'
+   , @p_userinfo='ADMIN', @p_owner='', @p_user_dept_id='ICH', @p_end_cust_report_yn='N'
+ */
+ /*===================================================================================================================================================*/
+CREATE PROCEDURE [dbo].[DMF0005_GET_SALES_SITE_MODEL_PRODUCTION]
+	@p_division_id			NVARCHAR(50),	--Division
+	@p_dept_id				NVARCHAR(4000),	--Department
+	@p_end_customer			NVARCHAR(4000),	--Endcustomer
+	@p_scm_site_id			NVARCHAR(4000),	--FCST Type
+	@p_project_code			NVARCHAR(4000),
+	@p_item_id				NVARCHAR(4000),
+	@p_valid_yn				NVARCHAR(4000),
+	@p_created_by			NVARCHAR(50),
+	@p_userinfo				NVARCHAR(50),
+	@p_owner				NVARCHAR(4000),
+	@p_user_dept_id			NVARCHAR(50),   -- JV Planner 일때 USER 부서정보로 SALES SITE ID 정보를 얻기 위해추가 
+	@p_end_cust_report_yn 	NVARCHAR(1),
+	@p_project_info_yn 		NVARCHAR(1)		--[E20240826-000165]_PROJECT NULL YN 추가
+AS
+
+BEGIN
+	
+    SET NOCOUNT ON;
+
+		DECLARE @v_group_id nvarchar(50)='';
+
+		-- modified 181116 SCM PI ADMIN을 ADMIN으로 변경
+		--IF @p_userinfo = 'ADMIN' OR @p_userinfo = 'DM ADMIN'   OR @p_userinfo = 'SCM PI ADMIN'
+		--	SET @v_group_id = 'ADMIN'
+		
+	--[E20240411-001030]_TEMP 생성 후 DROP 구간이 없어 해당 부분 추가생성
+	IF OBJECT_ID('TEMPDB..#T_SINGLE') IS NOT NULL
+		DROP TABLE #T_SINGLE;
+	IF OBJECT_ID('TEMPDB..#SCM_MST_SITE_ITEM') IS NOT NULL
+		DROP TABLE #SCM_MST_SITE_ITEM;
+	IF OBJECT_ID('TEMPDB..#INVENTORY_SITE') IS NOT NULL
+		DROP TABLE #INVENTORY_SITE;
+	--[E20240731-000852]_ENERGE메져 KWH/WH계산하기 전 데이터 INSERT 하기위해 추가 START 
+	IF OBJECT_ID('TEMPDB..#DM_MST_ITEM_SINGLE_V_BEFORE') IS NOT NULL
+		DROP TABLE #DM_MST_ITEM_SINGLE_V_BEFORE;
+	--[E20240731-000852]_ENERGE메져 KWH/WH계산하기 전 데이터 INSERT 하기위해 추가END
+	IF OBJECT_ID('TEMPDB..#DM_MST_ITEM_SINGLE_V') IS NOT NULL
+		DROP TABLE #DM_MST_ITEM_SINGLE_V;
+	IF OBJECT_ID('TEMPDB..#ITEM_ACTIVE_FLAG_INFO') IS NOT NULL
+		DROP TABLE #ITEM_ACTIVE_FLAG_INFO;
+	IF OBJECT_ID('TEMPDB..#TMP_81_UC_EXCEPTION') IS NOT NULL
+		DROP TABLE #TMP_81_UC_EXCEPTION;		
+		
+	--[E20240920-000300]_SCM.DM 화면 조회 속도 개선 START
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_ORI_V', N'U') IS NOT NULL 	
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_ORI_V;
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_A_V', N'U') IS NOT NULL 	
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_A_V;
+	IF OBJECT_ID (N'tempdb..#TEMP_DM_MST_ITEM_SINGLE_B_V', N'U') IS NOT NULL 	
+		DROP TABLE #TEMP_DM_MST_ITEM_SINGLE_B_V;
+	--[E20240920-000300]_SCM.DM 화면 조회 속도 개선 END
+	
+	--[E20260123-001715]_소스원복으로 원요청내역 주석처리 START
+	/*
+	--[E20240904-001037]_81% 사업부인 경우에는 CELL/MODULE컬럼에 해당 데이터를 보여달라는 요청사항으로 TEMP테이블 신규생성 START 	
+	IF OBJECT_ID (N'tempdb..#TEMP_W_CELL_CF', N'U') IS NOT NULL 	
+		DROP TABLE #TEMP_W_CELL_CF;	
+	IF OBJECT_ID (N'tempdb..#SCM_MST_SITE_ITEM_CELL', N'U') IS NOT NULL 	
+		DROP TABLE #SCM_MST_SITE_ITEM_CELL;
+	--[E20240904-001037]_81% 사업부인 경우에는 CELL/MODULE컬럼에 해당 데이터를 보여달라는 요청사항으로 TEMP테이블 신규생성 END 
+	
+	--[E20241028-000049]_TEMP 테이블을 추가한다. START
+	IF OBJECT_ID (N'tempdb..#TEMP_W_CELL_CF_DATA ', N'U') IS NOT NULL 
+		DROP TABLE #TEMP_W_CELL_CF_DATA 	;   
+	--[E20241028-000049]_TEMP 테이블을 추가한다. END
+	*/
+	--[E20260123-001715]_소스원복으로 원요청내역 주석처리 END
+
+	---------------------------------------------------------------------------------
+	--      20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (BEGIN)
+	---------------------------------------------------------------------------------
+	IF ISNULL((
+				SELECT COUNT(1) FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) 
+					where LOOKUP_TYPE = 'GET_ADMIN_GROUP' 
+						AND VALID_YN = 'Y'
+						AND SEGMENT2 = 'ALL'  -- 'ALL'인경우 DM Planner (W/S) 제외 / 주석처리인경우 DM Planner (W/S) 포함 
+						AND SEGMENT1 = @p_userinfo
+			  ),0) > 0
+		BEGIN
+			SET @v_group_id = 'ADMIN'
+		END
+
+		CREATE TABLE #T_SINGLE (
+			DIVISION_ID			NVARCHAR(30)
+			, ITEM_ID			NVARCHAR(150)
+			, ITEM_NAME			NVARCHAR(150)
+			, ITEM_TYPE			VARCHAR(1)
+			, ITEM_CLASS_NAME	NVARCHAR(300)
+			, NICK_NAME			NVARCHAR(50)
+			)
+
+		---------------------------------------------------------------------------------
+		--      20230328 heesan91 속도개선
+		---------------------------------------------------------------------------------
+		CREATE TABLE #SCM_MST_SITE_ITEM (
+			DIVISION_ID			NVARCHAR(30)
+			, SCM_SITE_ID		NVARCHAR(150)
+			, PROJECT_CODE		NVARCHAR(150)
+			, CNT				VARCHAR(5)			
+			)
+
+		-- [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선 START
+		CREATE TABLE #INVENTORY_SITE (
+			  DIVISION_ID		NVARCHAR(30)
+			, SCM_SITE_ID		NVARCHAR(50)
+			, PROJECT_CODE		NVARCHAR(50)
+			, ITEM_ID			NVARCHAR(50)			
+			, CONSENSUS_MKT	    NVARCHAR(2)
+			, CONSENSUS_ESS	    NVARCHAR(2)
+			, CONSENSUS_SCM	    NVARCHAR(2)
+			, INVENTORY_DAY	    NVARCHAR(5)
+			, CHANGE_REASON     NVARCHAR(200)
+			)
+		
+PRINT ( 'A--' + CONVERT(NVARCHAR(30), GETDATE(), 121))
+	
+	--[E20240920-000300]_SCM.DM 화면 조회 속도 개선 START
+	
+	/* 원소스 주석처리
+		----------------------------------------------------------------------------------------------------------------
+		-- [E20240411-001030]_Sales Site Project Model 화면 하단 저장 로직 오류 수정_SINGLE_VIEW 변경작업 진행
+		----------------------------------------------------------------------------------------------------------------
+		SELECT	T1.DIVISION_ID,
+				T1.ITEM_ID, 
+				MAX(T1.ITEM_NAME)					AS ITEM_NAME,				--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+				MAX(T1.ITEM_CLASS)					AS ITEM_CLASS,				--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+				MAX(T1.ITEM_CLASS_NAME)					AS ITEM_CLASS_NAME,		--해당 컬럼이 NULL인 경우가 잇으므로 하나로 통일
+				MAX(T1.NICK_NAME)						AS NICK_NAME,			--닉네임이 NULL인 경우가 있으므로 하나로 통일
+				case  min( case when T1.item_type = 'P' then 1					--타입이 사이트와 사업부, 법인에 따라 다양하게 존재 하므로 하나로 통일
+								when T1.item_type = 'H' then 2					--또한 가장 완성된 상태의 자재 타입을 판매한다고 가정, 해당 자재타입을 사용함
+								when T1.item_type = 'Q' then 3
+								else 4 end )  
+												when 1 then 'P' 
+												when 2 then 'H'
+												when 3 then 'Q'
+												else 'R' end	AS ITEM_TYPE,
+				MAX(T1.MATERIAL_CLASS_NAME				)		AS MATERIAL_CLASS_NAME,
+				MAX(T1.ITEM_UOM							)		AS ITEM_UOM,
+				MAX(T1.SPEC								)		AS SPEC,
+				MAX(T1.MDM_PROJECT_NAME					)		AS MDM_PROJECT_NAME,
+				MAX(T1.MIN_CAPACITY						)		AS MIN_CAPACITY,
+				MAX(T2.FORECAST_INFO_BIZ_TYPE			)		AS FORECAST_INFO_BIZ_TYPE,
+				MAX(T2.FORECAST_INFO_PRODUCT_GROUP		)		AS FORECAST_INFO_PRODUCT_GROUP,
+				MAX(T2.FORECAST_INFO_CELL_MODEL			)		AS FORECAST_INFO_CELL_MODEL,
+				MAX(T2.FORECAST_INFO_CELL_PACK_COUNT	)		AS FORECAST_INFO_CELL_PACK_COUNT,
+				MAX(T2.FORECAST_INFO_SPEC				)		AS FORECAST_INFO_SPEC,
+				MAX(T2.FORECAST_INFOR_VERSION			)		AS FORECAST_INFOR_VERSION,
+				MAX(T1.ACTIVE_FLAG						)		AS ACTIVE_FLAG,  -- 20180720 ADD 'Y'대상중 1건 추출
+				MAX(T2.CELL_TYPE						)		AS CELL_TYPE,  -- 20180911 ADD cell_type
+				MAX(T1.ENERGE							)  	    AS ENERGE,			-- 20200116 khsong ADD ENERGE
+				MAX(T1.CELL_QUANTITY					)	    AS CELL_QUANTITY,	-- 20200116 khsong ADD CELL_QUANTITY
+				MAX(T1.SCP_EXTRA_SPEC)						    AS SCP_EXTRA_SPEC		-- [20210428 SJHAN / CSR ID:C20210323-000420]
+			INTO #DM_MST_ITEM_SINGLE_V_BEFORE
+			FROM SCM_MST_ITEM_SN T1 WITH(NOLOCK)					
+			INNER JOIN ( SELECT DIVISION_ID, LEFT(ITEM_ID, 12) AS ITEM_ID
+							, MAX(FORECAST_INFO_BIZ_TYPE) AS FORECAST_INFO_BIZ_TYPE
+							, MAX(FORECAST_INFO_PRODUCT_GROUP) AS FORECAST_INFO_PRODUCT_GROUP
+							, MAX(FORECAST_INFO_CELL_MODEL) AS FORECAST_INFO_CELL_MODEL
+							, MAX(FORECAST_INFO_CELL_PACK_COUNT) AS FORECAST_INFO_CELL_PACK_COUNT
+							, MAX(FORECAST_INFO_SPEC) AS FORECAST_INFO_SPEC
+							, MAX(FORECAST_INFOR_VERSION) AS FORECAST_INFOR_VERSION
+							, MAX(CELL_TYPE) AS CELL_TYPE
+						FROM  SCM_MST_ITEM_SN T2 WITH(NOLOCK) 
+						GROUP BY DIVISION_ID, LEFT(ITEM_ID, 12)
+					) T2 ON T1.DIVISION_ID = T2.DIVISION_ID
+						AND SUBSTRING(T1.ITEM_ID,1,12) = T2.ITEM_ID
+			WHERE 1=1
+			AND T1.DIVISION_ID = @P_DIVISION_ID
+			GROUP BY T1.DIVISION_ID, T1.ITEM_ID
+			
+	*/
+
+	--> SCM_MST_ITEM_SN 테이블을 TEMP로 넣는다.
+	SELECT *
+	INTO #TEMP_DM_MST_ITEM_SINGLE_ORI_V
+	FROM SCM_MST_ITEM_SN WITH(NOLOCK)		
+	--FROM [10.34.221.78,7433].[LGCE_FP_TR].[dbo].[SCM_ITEM_M] WITH(NOLOCK)	
+	WHERE DIVISION_ID = @p_division_id		
+
+	--멈춤 현상이 발생하므로, 아예 모두 나눠서 INSERT 한다.
+	SELECT T1.DIVISION_ID
+		 , T1.ITEM_ID
+		 , MAX(T1.ITEM_NAME)						AS ITEM_NAME
+		 , MAX(T1.ITEM_CLASS)						AS ITEM_CLASS
+		 , MAX(T1.ITEM_CLASS_NAME)					AS ITEM_CLASS_NAME
+		 , MAX(T1.NICK_NAME)						AS NICK_NAME
+		 , CASE MIN( CASE WHEN T1.ITEM_TYPE = 'P' THEN 1	
+						  WHEN T1.ITEM_TYPE = 'H' THEN 2	
+						  WHEN T1.ITEM_TYPE = 'Q' THEN 3
+					 ELSE 4 END )  
+									WHEN 1 THEN 'P' 
+									WHEN 2 THEN 'H'
+									WHEN 3 THEN 'Q'
+									ELSE 'R' END	AS ITEM_TYPE
+		 , MAX(T1.MATERIAL_CLASS_NAME)				AS MATERIAL_CLASS_NAME
+		 , MAX(T1.ITEM_UOM)							AS ITEM_UOM
+		 , MAX(T1.SPEC)								AS SPEC
+		 , MAX(T1.MDM_PROJECT_NAME)					AS MDM_PROJECT_NAME
+		 , MAX(T1.MIN_CAPACITY)						AS MIN_CAPACITY
+		 , MAX(T1.ACTIVE_FLAG)						AS ACTIVE_FLAG
+		 , MAX(T1.ENERGE)							AS ENERGE
+		 , MAX(T1.CELL_QUANTITY)					AS CELL_QUANTITY
+		 , MAX(T1.SCP_EXTRA_SPEC)					AS SCP_EXTRA_SPEC		
+	INTO #TEMP_DM_MST_ITEM_SINGLE_A_V
+	FROM #TEMP_DM_MST_ITEM_SINGLE_ORI_V T1 WITH(NOLOCK)				
+	WHERE 1=1
+	GROUP BY T1.DIVISION_ID, T1.ITEM_ID
+
+	--멈춤 현상이 발생하므로, 아예 모두 나눠서 INSERT 한다.
+	SELECT DIVISION_ID
+		 , LEFT(ITEM_ID, 12) AS ITEM_ID
+		 , MAX(FORECAST_INFO_BIZ_TYPE) AS FORECAST_INFO_BIZ_TYPE
+		 , MAX(FORECAST_INFO_PRODUCT_GROUP) AS FORECAST_INFO_PRODUCT_GROUP
+		 , MAX(FORECAST_INFO_CELL_MODEL) AS FORECAST_INFO_CELL_MODEL
+		 , MAX(FORECAST_INFO_CELL_PACK_COUNT) AS FORECAST_INFO_CELL_PACK_COUNT
+		 , MAX(FORECAST_INFO_SPEC) AS FORECAST_INFO_SPEC
+		 , MAX(FORECAST_INFOR_VERSION) AS FORECAST_INFOR_VERSION
+		 , MAX(CELL_TYPE) AS CELL_TYPE
+	INTO #TEMP_DM_MST_ITEM_SINGLE_B_V
+	FROM #TEMP_DM_MST_ITEM_SINGLE_ORI_V T2 WITH(NOLOCK) 
+	GROUP BY DIVISION_ID, LEFT(ITEM_ID, 12)
+
+	--TEMP 테이블에 넣은 데이터를 JOIN 한다.
+	SELECT DIVISION_ID
+		 , ITEM_ID
+		 , ITEM_NAME
+		 , ITEM_CLASS 
+		 , ITEM_CLASS_NAME
+		 , NICK_NAME
+		 , ITEM_TYPE
+		 , MATERIAL_CLASS_NAME
+		 , ITEM_UOM
+		 , SPEC
+		 , MDM_PROJECT_NAME
+		 , MIN_CAPACITY
+		 , FORECAST_INFO_BIZ_TYPE
+		 , FORECAST_INFO_PRODUCT_GROUP
+		 , FORECAST_INFO_CELL_MODEL
+		 , FORECAST_INFO_CELL_PACK_COUNT
+		 , FORECAST_INFO_SPEC
+		 , FORECAST_INFOR_VERSION
+		 , ACTIVE_FLAG
+		 , CELL_TYPE
+		 , ENERGE
+		 , CELL_QUANTITY
+		 , SCP_EXTRA_SPEC 
+	INTO #DM_MST_ITEM_SINGLE_V_BEFORE
+	FROM 
+	(
+		SELECT T1.DIVISION_ID
+			 , T1.ITEM_ID
+			 , T1.ITEM_NAME							AS ITEM_NAME
+			 , T1.ITEM_CLASS						AS ITEM_CLASS
+			 , T1.ITEM_CLASS_NAME					AS ITEM_CLASS_NAME
+			 , T1.NICK_NAME							AS NICK_NAME
+			 , T1.ITEM_TYPE							AS ITEM_TYPE				
+			 , T1.MATERIAL_CLASS_NAME				AS MATERIAL_CLASS_NAME
+			 , T1.ITEM_UOM							AS ITEM_UOM
+			 , T1.SPEC								AS SPEC
+			 , T1.MDM_PROJECT_NAME					AS MDM_PROJECT_NAME
+			 , T1.MIN_CAPACITY						AS MIN_CAPACITY
+			 , T2.FORECAST_INFO_BIZ_TYPE			AS FORECAST_INFO_BIZ_TYPE
+			 , T2.FORECAST_INFO_PRODUCT_GROUP		AS FORECAST_INFO_PRODUCT_GROUP
+			 , T2.FORECAST_INFO_CELL_MODEL			AS FORECAST_INFO_CELL_MODEL
+			 , T2.FORECAST_INFO_CELL_PACK_COUNT		AS FORECAST_INFO_CELL_PACK_COUNT
+			 , T2.FORECAST_INFO_SPEC				AS FORECAST_INFO_SPEC
+			 , T2.FORECAST_INFOR_VERSION			AS FORECAST_INFOR_VERSION
+			 , T1.ACTIVE_FLAG						AS ACTIVE_FLAG
+			 , T2.CELL_TYPE							AS CELL_TYPE
+			 , T1.ENERGE							AS ENERGE
+			 , T1.CELL_QUANTITY						AS CELL_QUANTITY
+			 , T1.SCP_EXTRA_SPEC					AS SCP_EXTRA_SPEC	
+		FROM #TEMP_DM_MST_ITEM_SINGLE_A_V T1 WITH(NOLOCK)					
+		INNER JOIN #TEMP_DM_MST_ITEM_SINGLE_B_V T2 
+				ON T1.DIVISION_ID = T2.DIVISION_ID
+			   AND SUBSTRING(T1.ITEM_ID,1,12) = T2.ITEM_ID
+		WHERE 1=1
+	) T2						
+	WHERE DIVISION_ID = @p_division_id					
+	GROUP BY DIVISION_ID, ITEM_ID, ITEM_NAME, ITEM_CLASS, ITEM_CLASS_NAME, NICK_NAME, ITEM_TYPE, MATERIAL_CLASS_NAME
+		   , ITEM_UOM, SPEC, MDM_PROJECT_NAME, MIN_CAPACITY, FORECAST_INFO_BIZ_TYPE, FORECAST_INFO_PRODUCT_GROUP
+		   , FORECAST_INFO_CELL_MODEL, FORECAST_INFO_CELL_PACK_COUNT, FORECAST_INFO_SPEC, FORECAST_INFOR_VERSION
+		   , ACTIVE_FLAG, CELL_TYPE, ENERGE, CELL_QUANTITY, SCP_EXTRA_SPEC 
+	
+	--[E20240920-000300]_SCM.DM 화면 조회 속도 개선 JSSBAE END
+PRINT ( 'B--' + CONVERT(NVARCHAR(30), GETDATE(), 121))
+
+			--[E20240731-000852]_[공급 SCM PI팀] 소형사업부 용량(Wh) 관련 칼럼/메저 추가 START 
+			SELECT A.DIVISION_ID, A.ITEM_ID, A.ITEM_NAME, A.ITEM_CLASS,	A.ITEM_CLASS_NAME, A.NICK_NAME,	
+				   A.ITEM_TYPE, A.MATERIAL_CLASS_NAME, A.ITEM_UOM, A.SPEC,A.MDM_PROJECT_NAME,
+				   A.MIN_CAPACITY, A.FORECAST_INFO_BIZ_TYPE, A.FORECAST_INFO_PRODUCT_GROUP, A.FORECAST_INFO_CELL_MODEL,
+				   A.FORECAST_INFO_CELL_PACK_COUNT, A.FORECAST_INFO_SPEC, A.FORECAST_INFOR_VERSION,
+				   A.ACTIVE_FLAG, A.CELL_TYPE, A.ENERGE, A.ENERGE AS ENERGE_WH,
+				   CASE WHEN ISNUMERIC(A.ENERGE) > 0 THEN (CONVERT(NUMERIC(15,3),ROUND((CONVERT(NUMERIC(15,3), A.ENERGE))/1000, 7))) ELSE NULL END AS ENERGE_KWH,
+				   A.CELL_QUANTITY, A.SCP_EXTRA_SPEC		
+			INTO #DM_MST_ITEM_SINGLE_V
+			FROM #DM_MST_ITEM_SINGLE_V_BEFORE A
+			--[E20240731-000852]_[공급 SCM PI팀] 소형사업부 용량(Wh) 관련 칼럼/메저 추가 END
+
+		IF ( @P_DIVISION_ID = '82' )
+		BEGIN
+			INSERT INTO #INVENTORY_SITE ( DIVISION_ID, SCM_SITE_ID, PROJECT_CODE, ITEM_ID, CONSENSUS_MKT, CONSENSUS_ESS, CONSENSUS_SCM, INVENTORY_DAY, CHANGE_REASON )
+			SELECT DIVISION_ID, SCM_SITE_ID, PROJECT_CODE, ITEM_ID, CONSENSUS_MKT, CONSENSUS_ESS, CONSENSUS_SCM, INVENTORY_DAY, CHANGE_REASON FROM SCM_MST_SITE_ITEM WITH(NOLOCK) 
+			WHERE 1=1 AND DIVISION_ID = @P_DIVISION_ID AND SCM_SITE_ID IN (SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) WHERE LOOKUP_TYPE = 'INVENTORY_DAYS_SETUP_SITE')
+		END
+
+PRINT ( 'C--' + CONVERT(NVARCHAR(30), GETDATE(), 121))
+
+		-- [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선 END
+		IF ( @P_DIVISION_ID = '81' )
+		BEGIN
+			INSERT INTO #T_SINGLE ( DIVISION_ID, ITEM_ID, ITEM_NAME, ITEM_TYPE, ITEM_CLASS_NAME, NICK_NAME )
+			SELECT	T1.DIVISION_ID
+				, T1.ITEM_ID
+				, MAX(T1.ITEM_NAME)					AS ITEM_NAME
+				, case  min( case when T1.item_type = 'P' then 1	
+								when T1.item_type = 'H' then 2	
+								when T1.item_type = 'Q' then 3
+								else 4 end )  
+												when 1 then 'P' 
+												when 2 then 'H'
+												when 3 then 'Q'
+												else 'R' end	AS ITEM_TYPE
+				, MAX(T1.ITEM_CLASS_NAME)					AS ITEM_CLASS_NAME
+				, MAX(T1.NICK_NAME)						AS NICK_NAME
+				--MAX(T1.ACTIVE_FLAG						)		AS ACTIVE_FLAG
+			--FROM SCM_MST_ITEM_SN T1 WITH(NOLOCK) --속도개선 작업 20240912 JSSBAE 					
+			FROM #TEMP_DM_MST_ITEM_SINGLE_ORI_V T1 WITH(NOLOCK)					
+			where 1=1
+				AND T1.DIVISION_ID = @P_DIVISION_ID
+				AND T1.ITEM_TYPE IN ( 'H', 'P' )
+			group by T1.DIVISION_ID, T1.ITEM_ID		
+
+		END
+		
+PRINT ( 'D--' + CONVERT(NVARCHAR(30), GETDATE(), 121))
+
+		INSERT INTO #SCM_MST_SITE_ITEM (DIVISION_ID, SCM_SITE_ID,  PROJECT_CODE, CNT)
+		SELECT A.DIVISION_ID, A.SCM_SITE_ID, A.PROJECT_CODE, SUM(CASE WHEN B.ITEM_TYPE IN ( 'H', 'P' ) THEN 1 ELSE 0 END )
+		FROM SCM_MST_SITE_ITEM A WITH (NOLOCK)
+		LEFT OUTER JOIN #T_SINGLE B ON A.DIVISION_ID = B.DIVISION_ID AND A.ITEM_ID = B.ITEM_ID
+		WHERE A.DIVISION_ID = @P_DIVISION_ID
+		GROUP BY A.DIVISION_ID, A.SCM_SITE_ID, A.PROJECT_CODE
+		
+		--[E20260123-001715]_[E20240904-001037] 소스 주석처리하고, 원소스로 복원 START
+		--[E20241028-000049]_쿼리문 전체 변경 진행 START	
+		--[E20241015-000415]_MKT FCST, MKT FCST Waterfall 화면 신규 환산자 컬럼 추가 요청 건 START		
+		--해당 쿼리 제공자: 업무혁신.SCM／품질PI.SCM분석팀 김도원선임
+		/*
+		CREATE TABLE #TEMP_W_CELL_CF_DATA
+		(	  DIVISION_ID			VARCHAR(8) NULL
+			, ITEM_ID				VARCHAR(200) NULL
+			, ACCUMULATED_CHILD_QTY VARCHAR(300) NULL  )
+
+		--조회시에 속도가 느려지는 부분이 있으므로, 81번 사업부가 아니라면 굳이 태우지 않는다.
+		IF ( @P_DIVISION_ID LIKE '81%' )		
+		BEGIN
+			SELECT CT.COMPANY_ID
+					, MAX(CT.DIVISION_ID) AS DIVISION_ID
+					, CT.SITE_ID 
+					, CT.PLANT_ID
+					, CT.MODEL_ID
+					, CT.CHILD_ITEM_ID
+					, SUM(CT.ACCUMULATED_CHILD_QTY) AS ACCUMULATED_CHILD_QTY
+					, MAX(CT.CHILD_UOM) AS CHILD_UOM
+			INTO #TEMP_CELL_CF
+			FROM  (	SELECT CT.COMPANY_ID
+							, CT.DIVISION_ID
+							, CT.SITE_ID 
+							, CT.PARENT_ITEM_ID
+							, CT.MODEL_ID
+							, CT.CHILD_ITEM_ID 
+							, CT.PLANT_ID
+							, CT.ACCUMULATED_CHILD_QTY
+							, CT.CHILD_UOM
+							, ALT_PRIORITY
+				FROM (  SELECT COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, MODEL_ID, 
+								PARENT_ITEM_ID, CHILD_ITEM_ID, CHILD_QTY, CHILD_UOM, 
+								ACCUMULATED_CHILD_QTY, ALT_PRIORITY 
+						FROM SCM_MODEL_COMP_TEMP_SN WITH (NOLOCK)
+						GROUP BY COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, MODEL_ID, 
+								PARENT_ITEM_ID, CHILD_ITEM_ID, CHILD_QTY, CHILD_UOM, 
+								ACCUMULATED_CHILD_QTY, ALT_PRIORITY 
+						) CT 
+					,( SELECT SIM.DIVISION_ID, SIM.COMPANY_ID, SIM.SITE_ID, SIM.ITEM_ID, SIM.FLOW_ID
+						FROM SCM_MST_ITEM_SN SIM WITH (NOLOCK)
+						INNER JOIN SCM_MST_ITEM_CLASS_SN ICM WITH (NOLOCK)
+								ON ICM.CLASS_ID = SIM.ITEM_CLASS
+						INNER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL B WITH (NOLOCK)
+								ON B.LOOKUP_TYPE = 'DM_CELL_ITEM_LEVEL_ID'
+								AND ICM.LEVEL_1_ID = B.SEGMENT1
+						GROUP BY SIM.DIVISION_ID, SIM.COMPANY_ID, SIM.SITE_ID, SIM.ITEM_ID, SIM.FLOW_ID
+						) CL
+				WHERE  CT.COMPANY_ID  = CL.COMPANY_ID
+				AND    CT.DIVISION_ID = CL.DIVISION_ID
+				AND    CT.SITE_ID     = CL.SITE_ID
+				AND    CT.CHILD_ITEM_ID = CL.ITEM_ID
+				AND ((CL.FLOW_ID IN (SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH (NOLOCK) WHERE LOOKUP_TYPE = 'DM_CELL_FLOW_ID')/*('P5500', 'P9500')*/
+						AND CT.PARENT_ITEM_ID <>  '*')
+						OR CL.FLOW_ID NOT IN (SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH (NOLOCK) WHERE LOOKUP_TYPE = 'DM_CELL_FLOW_ID'))
+				AND    CT.ALT_PRIORITY      = 'Y'
+			)  CT
+			GROUP BY CT.COMPANY_ID ,CT.SITE_ID ,CT.MODEL_ID ,CT.PLANT_ID ,CT.CHILD_ITEM_ID
+			
+			INSERT INTO #TEMP_W_CELL_CF_DATA
+			( DIVISION_ID, ITEM_ID, ACCUMULATED_CHILD_QTY )
+			SELECT T.DIVISION_ID, T.ITEM_ID, T.ACCUMULATED_CHILD_QTY
+			FROM
+			(  SELECT C.DIVISION_ID, C.ITEM_ID
+						, CASE WHEN D.ACCUMULATED_CHILD_QTY IS NULL THEN ( SELECT MAX(B.ACCUMULATED_CHILD_QTY)
+																		FROM #TEMP_CELL_CF B
+																		WHERE B.MODEL_ID LIKE CONCAT(SUBSTRING(C.ITEM_ID,1,10),'%'))
+							ELSE D.ACCUMULATED_CHILD_QTY END AS ACCUMULATED_CHILD_QTY
+				FROM (  SELECT	A.ITEM_ID, A.DIVISION_ID
+						FROM	SCM_MST_SITE_ITEM A WITH (NOLOCK),
+								(   SELECT	DIVISION_ID, ITEM_ID                      
+									FROM	SCM_MST_ITEM_SN WITH (NOLOCK)
+									GROUP BY DIVISION_ID, ITEM_ID   
+								) B    
+						WHERE	 1=1
+						AND		 A.DIVISION_ID = B.DIVISION_ID
+						AND		 A.ITEM_ID = B.ITEM_ID
+						GROUP BY A.ITEM_ID, A.DIVISION_ID
+				) C
+				LEFT OUTER JOIN ( SELECT MODEL_ID, MAX(ACCUMULATED_CHILD_QTY) AS ACCUMULATED_CHILD_QTY
+									FROM #TEMP_CELL_CF
+									GROUP BY MODEL_ID
+									) D
+								ON D.MODEL_ID = C.ITEM_ID
+			) T
+			GROUP BY T.DIVISION_ID, T.ITEM_ID, T.ACCUMULATED_CHILD_QTY
+		END
+
+		SELECT A.DIVISION_ID, A.SCM_SITE_ID, A.PROJECT_CODE, A.ITEM_ID, CELL.ACCUMULATED_CHILD_QTY
+		INTO #SCM_MST_SITE_ITEM_CELL
+		FROM SCM_MST_SITE_ITEM A WITH (NOLOCK)
+		LEFT OUTER JOIN ( SELECT DIVISION_ID, ITEM_ID, ACCUMULATED_CHILD_QTY
+							FROM #TEMP_W_CELL_CF_DATA 
+							GROUP BY DIVISION_ID, ITEM_ID, ACCUMULATED_CHILD_QTY
+						) CELL 
+						ON A.DIVISION_ID	= CELL.DIVISION_ID
+					AND A.ITEM_ID		= CELL.ITEM_ID
+		WHERE A.DIVISION_ID = @P_DIVISION_ID
+		GROUP BY A.DIVISION_ID, A.SCM_SITE_ID, A.PROJECT_CODE, A.ITEM_ID, CELL.ACCUMULATED_CHILD_QTY
+		--[E20241015-000415]_MKT FCST, MKT FCST Waterfall 화면 신규 환산자 컬럼 추가 요청 건 END
+		--[E20241028-000049]_쿼리문 전체 변경 진행 END	
+		*/
+		--[E20260123-001715]_[E20240904-001037] 소스 주석처리하고, 원소스로 복원 END
+
+
+		/* [E20231019-001234] MDM중지여부 정보 수집------------------------------------------------------------------------*/
+		DECLARE @V_EXCEPT_SW AS NVARCHAR(2);
+		SET @V_EXCEPT_SW = 'N';  --Default : N
+
+		CREATE TABLE #ITEM_ACTIVE_FLAG_INFO (
+			  DIVISION_ID		NVARCHAR(30)
+			, SCM_SITE_ID		NVARCHAR(150)
+			, PROJECT_CODE		NVARCHAR(150)
+			, ITEM_ID			NVARCHAR(50)
+			, ITEM_TYPE			NVARCHAR(50)
+			, ACTIVE_FLAG	    NVARCHAR(2)
+			)
+
+		CREATE TABLE #TMP_81_UC_EXCEPTION (
+			  DIVISION_ID		NVARCHAR(30)		
+			, ITEM_ID			NVARCHAR(50)			
+			, ACTIVE_FLAG	    NVARCHAR(2)
+			)
+
+			
+PRINT ( 'E--' + CONVERT(NVARCHAR(30), GETDATE(), 121))
+
+		--SSPM에 매칭되는 정보로만 처리
+		--모든사업부 LEFT OUTER JOIN 으로 공통화
+		INSERT INTO #ITEM_ACTIVE_FLAG_INFO (DIVISION_ID, SCM_SITE_ID, PROJECT_CODE, ITEM_ID, ITEM_TYPE, ACTIVE_FLAG)
+		SELECT V.DIVISION_ID, M.SCM_SITE_ID , M.PROJECT_CODE, V.ITEM_ID, V.ITEM_TYPE, V.ACTIVE_FLAG
+		-- [E20240411-001030]_Sales Site Project Model 화면 하단 저장 로직 오류 수정_SINGLE_VIEW 테이블명 변경작업 진행
+		--FROM DM_MST_ITEM_SINGLE_V V		WITH (NOLOCK)
+		FROM #DM_MST_ITEM_SINGLE_V V	WITH(NOLOCK)	
+		INNER JOIN SCM_MST_SITE_ITEM M  WITH (NOLOCK) ON M.DIVISION_ID = V.DIVISION_ID AND M.ITEM_ID = V.ITEM_ID
+		WHERE V.DIVISION_ID = @P_DIVISION_ID
+		GROUP BY V.DIVISION_ID, M.SCM_SITE_ID , M.PROJECT_CODE, V.ITEM_ID, V.ITEM_TYPE, V.ACTIVE_FLAG		
+			
+		--IF OBJECT_ID (N'tempdb..#TMP_81_UC_EXCEPTION', N'U') IS NOT NULL 
+		--DROP TABLE #TMP_81_UC_EXCEPTION;
+
+PRINT ( 'F--' + CONVERT(NVARCHAR(30), GETDATE(), 121))
+		
+		--81_UC의 MDM중지여부 데이터가 없는 경우 → 81의 MDM중지여부 데이터와 동일하게 반영하기를 요청 (오윤종PI님)		
+		IF ( @P_DIVISION_ID = '81_UC' )
+			BEGIN
+				SET @V_EXCEPT_SW = 'Y';
+			END 
+
+
+			/* exec DMF0005_GET_SALES_SITE_MODEL_PRODUCTION @p_division_id=N'81_UC',@p_dept_id=N'ALL',@p_end_customer=N'ALL',@p_scm_site_id=N'ALL',@p_project_code=N''
+				    ,@p_item_id=N'',@p_valid_yn=N'ALL',@p_created_by=N'hmyong',@p_userinfo=N'ADMIN',@p_owner=N'',@p_user_dept_id=N'HD',@p_end_cust_report_yn=N'N' 
+
+				exec DMF0005_GET_SALES_SITE_MODEL_PRODUCTION @p_division_id=N'81_HM',@p_dept_id=N'ALL',@p_end_customer=N'ALL',@p_scm_site_id=N'ALL',@p_project_code=N''
+				    ,@p_item_id=N'',@p_valid_yn=N'ALL',@p_created_by=N'hmyong',@p_userinfo=N'ADMIN',@p_owner=N'',@p_user_dept_id=N'HD',@p_end_cust_report_yn=N'N' 
+
+					--ACEN4101I-A1-C01  81_UC MDM정보에 없음 ,  81번 MDM정보로 처리
+			*/
+
+
+		INSERT INTO #TMP_81_UC_EXCEPTION (DIVISION_ID, ITEM_ID, ACTIVE_FLAG)				
+		SELECT @P_DIVISION_ID AS DIVISION_ID, V.ITEM_ID, V.ACTIVE_FLAG
+		FROM 
+		(
+			SELECT @P_DIVISION_ID AS DIVISION_ID,  V.ITEM_ID,  V.ACTIVE_FLAG
+			-- [E20240411-001030]_Sales Site Project Model 화면 하단 저장 로직 오류 수정_SINGLE_VIEW 테이블명 변경작업 진행
+			--FROM DM_MST_ITEM_SINGLE_V V WITH (NOLOCK)
+			FROM #DM_MST_ITEM_SINGLE_V V WITH(NOLOCK)
+			WHERE V.DIVISION_ID = '81'  --고정값사용 (81_UC의 경우 81번 값으로 대체 처리 , ACTIVE_FLAG 가 NULL인경우에 한함.)
+			GROUP BY V.ITEM_ID, V.ACTIVE_FLAG
+		) V
+		--LEFT OUTER JOIN 
+		INNER JOIN
+		(
+			SELECT S.DIVISION_ID, S.ITEM_ID
+			FROM SCM_MST_SITE_ITEM S WITH (NOLOCK)
+			WHERE S.DIVISION_ID = @P_DIVISION_ID
+			AND ISNULL(S.ITEM_ID, '') <> ''					
+			GROUP BY S.DIVISION_ID, S.ITEM_ID
+		)  S ON S.DIVISION_ID = V.DIVISION_ID AND S.ITEM_ID = V.ITEM_ID
+		WHERE 1=1
+		--AND ISNULL(S.ITEM_ID ,'') <> ''		
+		GROUP BY V.ITEM_ID, V.ACTIVE_FLAG
+		HAVING CASE WHEN ISNULL(@V_EXCEPT_SW,'N')  = @V_EXCEPT_SW THEN @V_EXCEPT_SW ELSE 'X' END = CASE WHEN ISNULL(@V_EXCEPT_SW,'N')  = 'Y' THEN @V_EXCEPT_SW ELSE 'XX' END
+			
+PRINT ( 'G--' + CONVERT(NVARCHAR(30), GETDATE(), 121))
+
+--SELECT * FROM #TMP_81_UC_EXCEPTION WITH (NOLOCK) 				
+--SELECT @V_EXCEPT_SW 
+--SELECT CASE WHEN ISNULL(@V_EXCEPT_SW,'N')  = @V_EXCEPT_SW THEN @V_EXCEPT_SW ELSE 'X' END , CASE WHEN ISNULL(@V_EXCEPT_SW,'N')  = 'Y' THEN @V_EXCEPT_SW ELSE 'XX' END RETURN;
+
+		/*--------------------------------------------------------------------------------------------------------------*/
+--select * from #SCM_MST_SITE_ITEM RETURN;
+--SELECT * FROM #ITEM_ACTIVE_FLAG_INFO RETURN;
+
+	---------------------------------------------------------------------------------
+	--            20200311 KHSONG C20200103-000586 권한그룹을 LOOKUP관리 (END)
+	---------------------------------------------------------------------------------
+
+
+		IF @p_division_id = '40'
+
+			------------------------------------------------------------------------------------------------------------------
+			-- 소형
+			------------------------------------------------------------------------------------------------------------------
+			SELECT *
+				
+				, CASE WHEN (([dbo].[FN_GET_DEPT_LIST](@p_created_by, DEPT_ID) = 'Y') OR @v_group_id ='ADMIN') 
+					THEN 'Y' ELSE 'N' END AS EDIT_FLAG
+				--, CASE WHEN (@p_userinfo ='DM ADMIN') OR (@p_userinfo ='ADMIN') THEN 'Y' ELSE 'N' END AS EDIT_FLAG2
+				, CASE WHEN (([dbo].[FN_GET_DEPT_LIST](@p_created_by, DEPT_ID) = 'Y') AND (@p_userinfo ='DM Planner')) THEN 'Y' ELSE 'N' END AS EDIT_FLAG3
+				/* DM Planner 수정 요청건이 들어와서 해당 부분으로 수정처리 진행했으나, DM Planner는 수정하면 안됨, 임광표 책임이 절대 수정하면 안된다고함. 20250609
+				--[E20250526-000252]_EDIT_FLAG 수정
+				, CASE WHEN @v_group_id ='ADMIN' THEN 'N'
+					   ELSE CASE WHEN (([dbo].[FN_GET_DEPT_LIST](@p_created_by, DEPT_ID) = 'Y') AND (@p_userinfo ='DM Planner')) THEN 'N' 
+								 ELSE 'Y' 
+							END END AS EDIT_FLAG3 
+				*/
+			FROM (SELECT	SITE_PROJECT.DIVISION_ID,
+						   --DEPT.DEPT_ID,
+						   --DEPT.DEPT_NAME_KO,
+						   SITE_PROJECT.CRGE_ORG_NM, -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+						   TEAM.DEPT_ID, 
+						   TEAM.DEPT_ID AS DEPT_ID2, 
+						   TEAM.DEPT_NAME_KO AS TEAM_NAME_KO,
+						   --SITE.END_CUSTOMER,
+						   --SITE_ITEM.PROJECT_CODE AS END_CUSTOMER
+						   SITE_ITEM.PROJECT_CODE AS END_CUSTOMER,
+						   SITE_ITEM.PROJECT_CODE AS END_CUSTOMER40,
+				           SITE_PROJECT.CUST_ENG_NM, -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+						   SITE_CUST.SOLDTO_CODE,
+	     				   CUST.SOLDTO_DESCRIPTION, --화면상에서는 일단 숨김처리
+						   SITE_CUST.SHIPTO_CODE,
+						   CUST.SHIPTO_DESCRIPTION, --화면상에서는 일단 숨김처리
+						   SITE_PROJECT.SCM_SITE_ID,
+						   SITE_PROJECT.SCM_SITE_ID AS SCM_SITE_ID40,
+						   SITE_PROJECT.PROJECT_CODE,
+						   PJT.PROJECT_NAME,
+						   PJT.PROJECT_STATUS,
+						   PJT.PROJECT_OWNER, -- 'SYSTEM' AS PROJECT_OWNER, --PJT.PROJECT_OWNWER      현재 컬럼이 없음.
+						   --SSO_USER.USER_ID,
+						   SITE_PROJECT.owner AS USER_ID,	--20180806
+						   SITE_ITEM.SALES_PLAN_ADJUST_YN,
+						   SITE_ITEM.ITEM_TYPE,
+						   SITE_ITEM.ITEM_CLASS_NAME,
+						   SITE_ITEM.ITEM_ID,
+						   SITE_ITEM.ITEM_NAME,
+						   SITE_ITEM.CELL_PER_CAR,
+						   SITE_ITEM.CELL_PER_MODULE,
+						   SITE_ITEM.CELL_PER_CAR / SITE_ITEM.CELL_PER_MODULE AS MODULE_PER_CAR,
+
+						   CUST_ITEM.CUSTOMER_MODEL,
+						   SITE_ITEM.NICK_NAME,
+						   --[C20200513-000276] Sales_Company, Sales_Plant 컬럼 추가
+						   SITE_ITEM.SALES_COMPANY,
+						   SITE_ITEM.SALES_PLANT,
+
+						   SITE_ITEM.BPMS_EXIST ,   --SITE_ITEM.BPMS_EXIST   현재 컬럼이 없음.
+						   SITE_ITEM.LIABILITY_PERIOD,
+						   SITE_ITEM.CURRENCY,
+						   --  Modified by ytchoi 180517
+						   -- ISNULL(SITE_PROJECT.VALID_YN,SITE_ITEM.VALID_YN) AS VALID_YN,
+						   CASE WHEN SITE_ITEM.ITEM_ID IS NULL THEN ISNULL(SITE_PROJECT.VALID_YN,SITE_ITEM.VALID_YN) ELSE SITE_ITEM.VALID_YN END AS VALID_YN,
+
+						   SITE_ITEM.LAST_UPDATE_DATE,
+						   SITE_ITEM.LAST_UPDATED_BY
+						   --20180601, LSH------------------
+						   ,SITE_ITEM.CUST_GROUP
+						   ,SITE_ITEM.CUST_GROUP_DTL
+						   --,SITE_ITEM.OWNER
+						   --,SSO_USER.USER_NAME_EN OWNER
+						   , dbo.FN_GET_MULTI_OWNER_NAME (SITE_ITEM.OWNER, ',', '1') AS OWNER  -- 20180803
+						   ,SITE_ITEM.APPLICATION
+						   ,SITE_ITEM.ROUTE 
+						   
+						   ,SITE_ITEM.EDI		-- C20200827-000257 테슬라 EDI
+						   ,SITE_ITEM.EDI_LT	-- C20200827-000257 테슬라 EDI
+
+						   ,SITE_ITEM.ATTRIBUTE1
+						   ,SITE_ITEM.ATTRIBUTE2
+						   ,SITE_ITEM.ATTRIBUTE4  --20180726
+						   ,SITE_ITEM.ATTRIBUTE5  --[C20211112-000213]
+						   ,SITE_ITEM.ATTRIBUTE9  AS PRODUCTION_PROCESS--[C20210722-000230] GSCM Sales Site Project Model 마케팅 입력 컬럼 추가 요청의 건
+						   --------------------------------
+						   ,SITE.SOLDTO_CUSTOMER
+						   -- 20190402
+						   ,REPORT_GROUP1
+						   ,REPORT_GROUP2
+						   ,REPORT_GROUP3
+						   ,REPORT_GROUP4
+						   --,REPORT_GROUP5
+						   ,REPORT_GROUP6
+						   ,REPORT_GROUP7
+						   ,REPORT_GROUP8
+						   ,SITE_ITEM.CELL_TYPE		-- 20190919
+						   , ISNULL(SITE_PROJECT.VMI_LT,0) AS VMI_LT
+						   , SITE_ITEM.ALT_SIM_YN			--20230814 대체/유사모델 여부(ALT_SIM_YN) 컬럼 추가
+						   , SITE_ITEM.DESCRIPTION			--20230817 설명(DESCRIPTION) 컬럼 추가
+						   , SITE_ITEM.PROJECT_INFO			--20230821 PROJECT_INF0(소형프로젝트) 추가
+						   , Z.ACTIVE_FLAG					--[E20231019-001234] MDM중지여부 추가 DM_MST_ITEM_SINGLE_V.ACTIVE_FLAG
+						   , SITE_ITEM.ENERGE_WH			--[E20240731-000852]_WH 단위 ENERGE 컬럼 추가
+						   , SITE_ITEM.ENERGE_KWH			--[E20240731-000852]_KWH 단위 ENERGE 컬럼 추가
+						   , SITE_ITEM.CELL_S_OP_REPORT		--[E20241028-000049]_[공급SCM PI팀] SCM Sales Site Project Model Master 내 소형사업부 S&OP Report 활용을 위한 신규 컬럼 개발 요청의 건 
+			FROM		   (SELECT	DISTINCT
+									A.DIVISION_ID,
+									SCM_SITE_ID,
+									PROJECT_CODE,
+									ISNULL(MAX(VALID_YN),'Y') AS VALID_YN,
+									'' owner,
+									'' ITEM_ID
+						--  Modified by ytchoi 180517
+						--	FROM	SCM_MST_SITE_ITEM  WITH(NOLOCK)
+						--	WHERE ISNULL(VALID_YN,'Y')	='Y'
+									-- 20190402
+									,REPORT_GROUP1
+									,REPORT_GROUP2
+									,REPORT_GROUP3
+									,REPORT_GROUP4
+									--,REPORT_GROUP5
+									,REPORT_GROUP6
+									,REPORT_GROUP7
+									,REPORT_GROUP8
+									, MAX(A.SCP_VMI_LT) AS VMI_LT
+									,A.CRGE_ORG_NM -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+									,A.CUST_ENG_NM -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+							FROM	SCM_MST_SITE_ITEM A WITH(NOLOCK)
+								   --,SCM_MST_ITEM_SN B WITH(NOLOCK) --속도개선 작업 20240912 JSSBAE 원소스주석처리	
+								   , #TEMP_DM_MST_ITEM_SINGLE_ORI_V B WITH(NOLOCK)	--속도개선 작업 20240912 JSSBAE
+						--	WHERE ISNULL(VALID_YN,'Y')	='Y'
+							WHERE   A.ITEM_ID = B.ITEM_ID 
+							  and   A.division_id <> '40'
+							GROUP BY A.DIVISION_ID,
+									 SCM_SITE_ID,
+									 PROJECT_CODE
+									,A.ATTRIBUTE1
+									,A.ATTRIBUTE2
+									-- 20190402
+									,REPORT_GROUP1
+									,REPORT_GROUP2
+									,REPORT_GROUP3
+									,REPORT_GROUP4
+									--,REPORT_GROUP5
+									,REPORT_GROUP6
+									,REPORT_GROUP7
+									,REPORT_GROUP8
+									,A.CRGE_ORG_NM -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+									,A.CUST_ENG_NM -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+							 UNION
+							 SELECT	DISTINCT
+									A.DIVISION_ID,
+									SCM_SITE_ID,
+									PROJECT_CODE,
+									VALID_YN,
+									a.owner,
+									ITEM_ID
+									-- 20190402
+									,REPORT_GROUP1
+									,REPORT_GROUP2
+									,REPORT_GROUP3
+									,REPORT_GROUP4
+									--,REPORT_GROUP5
+									,REPORT_GROUP6
+									,REPORT_GROUP7
+									,REPORT_GROUP8
+									,A.SCP_VMI_LT
+									,A.CRGE_ORG_NM -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+									,A.CUST_ENG_NM -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+						--  Modified by ytchoi 180517
+						--	FROM	SCM_MST_SITE_ITEM  WITH(NOLOCK)
+						--	WHERE ISNULL(VALID_YN,'Y')	='Y'
+							FROM	SCM_MST_SITE_ITEM A WITH(NOLOCK)
+						--	WHERE ISNULL(VALID_YN,'Y')	='Y'
+							WHERE    A.division_id = '40'
+														)					AS SITE_PROJECT
+
+			LEFT JOIN		SCM_MST_PROJECT									AS PJT  WITH(NOLOCK)
+			ON				SITE_PROJECT.PROJECT_CODE = PJT.PROJECT_CODE
+			AND				SITE_PROJECT.DIVISION_ID  = PJT.DIVISION_ID
+
+			LEFT JOIN		SCM_MST_SITE									AS SITE  WITH(NOLOCK)
+			ON				SITE_PROJECT.DIVISION_ID = SITE.DIVISION_ID  
+			AND				SITE_PROJECT.SCM_SITE_ID = SITE.SCM_SITE_ID
+			AND             SITE.SITE_TYPE  = 'SALES'  
+
+			-- 20180803 추가
+			LEFT JOIN (
+				SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO 
+				FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+				INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+				ON B.DEPT_ID = C.DEPT_ID
+			) AS TEAM
+			ON              TEAM.USER_ID   IN (SELECT top 1 token FROM [dbo].[String_Split](SITE_PROJECT.owner, ','))
+
+			/* 20180803 주석 처리
+			LEFT JOIN       [SCM_MST_SSO_USER_INFO]                         AS SSO_USER  WITH(NOLOCK)
+			ON              SSO_USER.USER_ID   = SITE_PROJECT.owner
+			LEFT JOIN		SCM_MST_SSO_DEPT_INFO							AS TEAM		  WITH(NOLOCK)	       
+			--ON				SITE.DEPT_ID = TEAM.DEPT_ID
+			ON				TEAM.DEPT_ID  = SSO_USER.DEPT_ID
+			*/
+			/*
+			LEFT JOIN		SCM_MST_SSO_DEPT_INFO							AS TEAM		  WITH(NOLOCK)	       
+			--ON				SITE.DEPT_ID = TEAM.DEPT_ID
+			ON				TEAM.DEPT_ID  = CASE WHEN SITE.DIVISION_ID <> '40' THEN SITE.DEPT_ID
+										   ELSE (
+												   SELECT su.DEPT_ID
+													 FROM [dbo].[SCM_MST_SSO_USER_INFO] su
+													WHERE su.user_id = SITE_PROJECT.owner
+												 ) 
+										   END
+            */
+			LEFT JOIN		(SELECT T1.DIVISION_ID,
+									T1.SCM_SITE_ID,
+									T1.PROJECT_CODE,
+									T1.ITEM_ID,
+									T1.CELL_PER_CAR,
+									T1.CELL_PER_MODULE,
+									T2.ITEM_NAME,
+									T2.ITEM_TYPE,
+									T2.ITEM_CLASS_NAME,
+									T1.SALES_PLAN_ADJUST_YN,
+									T2.NICK_NAME,
+									T1.BPMS_EXIST ,   --SITE_ITEM.BPMS_EXIST   현재 컬럼이 없음.
+									T1.LIABILITY_PERIOD,
+									T1.CURRENCY,
+									T1.VALID_YN,
+									T1.LAST_UPDATE_DATE,
+									T1.LAST_UPDATED_BY	
+									--20180601, LSH---------
+									,T1.CUST_GROUP
+									,T1.CUST_GROUP_DTL
+									,T1.OWNER
+									,T1.APPLICATION
+									,T1.ROUTE 
+									,T1.ATTRIBUTE6 AS EDI	--	C20200827-000257 테슬라 EDI
+									,T1.EDI_LT				--	C20200827-000257 테슬라 EDI
+									,T1.ATTRIBUTE1
+									,T1.ATTRIBUTE2
+									,T1.ATTRIBUTE5			--	[C20211112-000213]
+									--,T1.ATTRIBUTE4  --20180726  -> [CSR ID:3997942] 20190612 주석처리
+									,CO.COUNTRY_NAME AS ATTRIBUTE4 -- [CSR ID:3997942] 20190612 추가
+									,T1.ATTRIBUTE9    --[C20210722-000230] GSCM Sales Site Project Model 마케팅 입력 컬럼 추가 요청의 건
+									,(SELECT LMD.SEGMENT2  AS NAME 
+										FROM [dbo].[SCM_ADM_LOOKUP_MASTER_DETAIL] LMD WITH(NOLOCK) 
+										WHERE LOOKUP_TYPE = 'CELL_TYPE' AND T2.CELL_TYPE = LMD.SEGMENT1 ) AS CELL_TYPE		-- 20190919								
+									--[C20200513-000276] Sales_Company, Sales_Plant 컬럼 추가
+									,T1.SALES_COMPANY
+									,T1.SALES_PLANT
+									-----------------------	
+									,T1.ALT_SIM_YN	--20230814 대체/유사모델 여부(ALT_SIM_YN) 컬럼 추가
+									,T1.DESCRIPTION	--20230817 설명(DESCRIPTION) 컬럼 추가
+									,T1.PROJECT_INFO --20230821 PROJECT_INF0(소형프로젝트) 추가
+									,T2.ENERGE_WH	--[E20240731-000852]_WH 단위 ENERGE 컬럼 추가
+									,T2.ENERGE_KWH	--[E20240731-000852]_KWH 단위 ENERGE 컬럼 추가
+									,T1.CELL_S_OP_REPORT --[E20241028-000049]_[공급SCM PI팀] SCM Sales Site Project Model Master 내 소형사업부 S&OP Report 활용을 위한 신규 컬럼 개발 요청의 건 
+							  FROM	SCM_MST_SITE_ITEM		T1  WITH(NOLOCK)
+							  -- [E20240411-001030]_Sales Site Project Model 화면 하단 저장 로직 오류 수정_SINGLE_VIEW 테이블명 변경작업 진행
+							  --JOIN 	DM_MST_ITEM_SINGLE_V	T2  WITH(NOLOCK)
+							  JOIN 	#DM_MST_ITEM_SINGLE_V	T2  WITH(NOLOCK) 
+							  ON	T1.DIVISION_ID = T2.DIVISION_ID
+							  AND	T1.ITEM_ID   = T2.ITEM_ID
+
+								-- [CSR ID:3997942] 20190612 추가 (BEGIN)
+								INNER JOIN 	SCM_MST_SITE	T3  WITH(NOLOCK)
+								ON	T1.DIVISION_ID = T3.DIVISION_ID
+								AND	T1.SCM_SITE_ID   = T3.SCM_SITE_ID
+							  
+								LEFT JOIN SCM_MST_COUNTRY AS CO  WITH(NOLOCK)
+								ON T3.COUNTRY = CO.COUNTRY
+								-- [CSR ID:3997942] 20190612 추가 (END)
+
+							  -- 소형인 경우에는 상품도 하나의 Grid에 다 보여야 함.
+							  WHERE (T2.ITEM_TYPE  = CASE WHEN T1.DIVISION_ID = '40' THEN T2.ITEM_TYPE ELSE 'H' END 
+							  OR	 T2.ITEM_TYPE  = CASE WHEN T1.DIVISION_ID = '40' THEN T2.ITEM_TYPE ELSE 'P' END)
+														)					AS SITE_ITEM
+			ON				SITE_PROJECT.DIVISION_ID = SITE_ITEM.DIVISION_ID
+			AND				SITE_PROJECT.SCM_SITE_ID = SITE_ITEM.SCM_SITE_ID
+			AND				SITE_PROJECT.PROJECT_CODE = SITE_ITEM.PROJECT_CODE
+			AND             CASE WHEN SITE_PROJECT.DIVISION_ID = '40' THEN SITE_PROJECT.ITEM_ID ELSE  SITE_ITEM.ITEM_ID END = SITE_ITEM.ITEM_ID
+
+			LEFT JOIN		SCM_MST_SITE_CUSTOMER							AS SITE_CUST  WITH(NOLOCK)
+			ON				SITE_PROJECT.SCM_SITE_ID = SITE_CUST.SCM_SITE_ID
+			AND				SITE_PROJECT.DIVISION_ID = SITE_CUST.DIVISION_ID
+			AND				SITE_CUST.REP_YN      = 'Y'
+
+			LEFT JOIN		SCM_MST_CUSTOMER								AS CUST  WITH(NOLOCK)
+			ON				SITE_CUST.SOLDTO_CODE = CUST.SOLDTO_CODE
+			AND				SITE_CUST.SHIPTO_CODE = CUST.SHIPTO_CODE
+			AND				SITE_CUST.DIVISION_ID = CUST.DIVISION_ID
+			-------------------[E20231019-001234] MDM중지여부 추가 DM_MST_ITEM_SINGLE_V.ACTIVE_FLAG-------------------
+			LEFT OUTER JOIN #ITEM_ACTIVE_FLAG_INFO Z ON Z.DIVISION_ID = SITE_ITEM.DIVISION_ID AND Z.SCM_SITE_ID = SITE_ITEM.SCM_SITE_ID AND Z.PROJECT_CODE = SITE_ITEM.PROJECT_CODE AND Z.ITEM_ID = SITE_ITEM.ITEM_ID
+			--------------------------------------------------------------------------------------------------------				
+			LEFT JOIN		(SELECT DIVISION_ID,
+									 MAX(CUSTOMER_MODEL) AS CUSTOMER_MODEL,
+									 SCM_SITE_ID,
+									 PROJECT_CODE,
+									 ITEM_ID
+							  FROM   DM_MST_CUSTOMER_MODEL  WITH(NOLOCK)
+							  WHERE  VALID_YN = 'Y'
+							  GROUP BY DIVISION_ID, 
+									   SCM_SITE_ID,
+									   PROJECT_CODE,
+										ITEM_ID			)					AS CUST_ITEM
+			ON				SITE_ITEM.ITEM_ID      = CUST_ITEM.ITEM_ID
+			AND				SITE_ITEM.PROJECT_CODE = CUST_ITEM.PROJECT_CODE
+			AND				SITE_ITEM.DIVISION_ID  = CUST_ITEM.DIVISION_ID
+			AND				SITE_ITEM.SCM_SITE_ID  = CUST_ITEM.SCM_SITE_ID
+	
+	        -------------------------- Model/Item --------2018/07/30  Son Young Suk------------------------
+			  INNER JOIN ( SELECT '%'+token+'%' tst FROM dbo.String_Split(@p_item_id,',') ) b
+				ON      CASE WHEN @p_item_id = '' THEN @p_item_id			
+						ELSE SITE_ITEM.ITEM_ID  END like  b.tst 
+				OR      CASE WHEN @p_item_id = '' THEN @p_item_id			
+						ELSE SITE_ITEM.NICK_NAME  END like  b.tst 
+			-----------------------------------------------------------------------------------------------
+			------------  20180806  -------------------------------------------------------------------			
+			INNER JOIN (
+			               SELECT DISTINCT X.OWNER
+						      FROM SCM_MST_SITE_ITEM AS X WITH(NOLOCK)
+							  LEFT JOIN SCM_MST_SSO_USER_INFO AS UI WITH(NOLOCK)
+							  ON X.PROJECT_CODE = UI.USER_ID
+							  INNER JOIN ( SELECT '%'+token+'%' tst FROM dbo.String_Split(@p_owner,',') ) c
+									ON    (
+											CASE WHEN @p_owner = '' THEN @p_owner			
+											ELSE [dbo].[FN_GET_MULTI_OWNER_NAME](x.OWNER, ',', '1') END like  c.tst 
+											OR
+											CASE WHEN @p_owner = '' THEN @p_owner			
+											ELSE X.OWNER END like  c.tst 
+											OR
+											CASE WHEN @p_owner = '' THEN @p_owner			
+											ELSE [dbo].[FN_GET_MULTI_OWNER_NAME](X.OWNER, ',', '2') END like  c.tst 
+											)
+							where X.DIVISION_ID = @p_division_id
+							  AND @p_owner <> ''
+							 UNION all
+							 select '11'
+							   where @p_owner = ''
+                 ) X
+            ON  ISNULL(SITE_ITEM.OWNER,'xxxx') = CASE WHEN @p_owner = '' THEN  ISNULL(SITE_ITEM.OWNER,'xxxx') ELSE X.owner  END	
+			-----------------------------------------------------------------------------------------------
+
+			WHERE  1 = 1 -- R- RAW MATERIAL, H- HALF PRODUCT,  P- PRODUCT 제품만 조회함(RHP 모두 제품임).
+			AND    CASE WHEN @p_division_id = 'ALL' THEN @p_division_id			
+						ELSE SITE_PROJECT.DIVISION_ID
+ 				   END  IN ( SELECT token FROM dbo.String_Split(@p_division_id,',') )
+			AND    CASE WHEN @p_dept_id = 'ALL' THEN @p_dept_id			
+						ELSE TEAM.DEPT_ID
+ 				   END  IN ( SELECT token FROM dbo.String_Split(@p_dept_id,',') )
+		
+			AND    CASE WHEN @p_end_customer = 'ALL' THEN @p_end_customer			
+						ELSE SITE_ITEM.PROJECT_CODE
+ 				   END  IN ( SELECT token FROM dbo.String_Split(@p_end_customer,',') )
+			AND    CASE WHEN @p_scm_site_id = 'ALL' THEN @p_scm_site_id			
+						ELSE SITE_ITEM.SCM_SITE_ID
+ 				   END  IN ( SELECT token FROM dbo.String_Split(@p_scm_site_id,',') )
+
+			--AND    CASE WHEN @p_item_id = '' THEN @p_item_id			
+			--			ELSE SITE_ITEM.ITEM_ID
+ 		--		   END  IN ( SELECT token FROM dbo.String_Split(@p_item_id,',') )
+
+			AND    CASE WHEN @p_project_code = '' THEN @p_project_code			
+						ELSE SITE_PROJECT.PROJECT_CODE
+ 				   END  IN ( SELECT token FROM dbo.String_Split(@p_project_code,',') )
+			AND    SITE.SITE_TYPE <> 'PLANT'
+			--AND    
+				
+			--      CASE WHEN @p_owner = '' THEN @p_owner			
+			--			ELSE ( SELECT count(token) cnt FROM dbo.String_Split(TEAM.USER_ID,',') 
+ 		--					WHERE token IN ( SELECT token FROM dbo.String_Split(@p_owner,',') ) )
+			--		END <> CASE WHEN @p_owner = '' THEN @p_owner ELSE 0 END
+				  -- OR
+			   --   CASE WHEN @p_owner = '' THEN @p_owner			
+						--ELSE TEAM.USER_NAME
+ 				 --  END  IN ( SELECT token FROM dbo.String_Split(@p_owner,',') )
+				  -- OR
+			   --   CASE WHEN @p_owner = '' THEN @p_owner			
+						--ELSE TEAM.USER_NAME_EN
+ 				 --  END  IN ( SELECT token FROM dbo.String_Split(@p_owner,',') )
+				   --)
+
+			) T1
+
+			WHERE  1 = 1
+			AND    CASE WHEN @p_valid_yn = 'ALL' THEN @p_valid_yn			
+						ELSE T1.VALID_YN
+ 				   END  IN ( SELECT token FROM dbo.String_Split(@p_valid_yn,',') )
+			-- [C20220905-000187]Sales Site Project Model 조회조건 추가의 건
+			AND	(	( 
+						ISNULL(T1.ATTRIBUTE2,'') NOT IN (  SELECT SEGMENT1
+												FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK)
+												WHERE LOOKUP_TYPE= 'END_CUST_REPORT'
+												AND VALID_YN = 'Y' ) 
+						AND @p_end_cust_report_yn =  'Y' 
+					)  
+					OR 
+					( 
+						1=1 AND @p_end_cust_report_yn = 'N'
+					)
+				)
+			--[E20240826-000165]_SSPM 체크박스 추가 검토 요청의 건 START
+			AND	(	
+					( ISNULL(T1.PROJECT_INFO,'') ='' AND @p_project_info_yn =  'Y' )  
+					OR 
+					( 1=1 AND @p_project_info_yn = 'N' )
+				)
+			--[E20240826-000165]_SSPM 체크박스 추가 검토 요청의 건 END
+			ORDER BY DIVISION_ID,
+						   TEAM_NAME_KO,
+						   END_CUSTOMER,
+						   END_CUSTOMER40,
+						   SOLDTO_CODE,	     			   
+						   SHIPTO_CODE,					   
+						   SCM_SITE_ID,
+						   SCM_SITE_ID40,
+						   PROJECT_CODE,
+						   PROJECT_NAME,
+						   PROJECT_STATUS,
+						   PROJECT_OWNER, -- 'SYSTEM' AS PROJECT_OWNER, --PJT.PROJECT_OWNWER      현재 컬럼이 없음.
+						   SALES_PLAN_ADJUST_YN,
+						   ITEM_TYPE,
+						   ITEM_CLASS_NAME,
+						   ITEM_ID,
+						   ITEM_NAME,
+						   CUSTOMER_MODEL,
+						   --[C20200513-000276] Sales_Company, Sales_Plant 컬럼 추가
+						   SALES_COMPANY,
+						   SALES_PLANT,
+						   NICK_NAME,
+						   BPMS_EXIST ,   --SITE_ITEM.BPMS_EXIST   현재 컬럼이 없음.
+						   LIABILITY_PERIOD,
+						   CURRENCY,
+							-- 20190402
+							REPORT_GROUP1
+							,REPORT_GROUP2
+							,REPORT_GROUP3
+							,REPORT_GROUP4
+							--,REPORT_GROUP5
+							,REPORT_GROUP6
+							,REPORT_GROUP7
+							,REPORT_GROUP8
+
+
+		------------------------------------------------------------------------------------------------------------------
+		-- 자동차, ESS
+		------------------------------------------------------------------------------------------------------------------
+		ELSE IF @p_division_id = '82'
+			SELECT *
+				, CASE WHEN (([dbo].[FN_GET_DEPT_LIST](@p_created_by, DEPT_ID) = 'Y') OR @v_group_id ='ADMIN') 
+					THEN 'Y' ELSE 'N' END AS EDIT_FLAG
+			FROM (SELECT		   SITE_PROJECT.DIVISION_ID,
+							SITE_ITEM.CRGE_ORG_NM, -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+			--[PJ2024-50461]===============================================================================
+						   --DEPT.DEPT_ID,
+						   --DEPT.DEPT_NAME_KO,
+
+						   --[E20241120-000817]_82사업부 SSPM 수정 요청
+						   --TEAM MAPPING시 변경된 값으로 보여지는데, DEPT_ID 두개를 동일한 데이터를 보내고 있어서,
+						   --하나만 추가함
+						   TEAM.DEPT_ID, 
+						   --[E20241120-000817]_82사업부 SSPM 수정 요청 원소시 주석 처리 START
+						   --TEAM.DEPT_ID AS DEPT_ID2, 
+						   TEAM.DEPT_ID AS DEPT_ID_82, 
+						   --[E20241120-000817]_82사업부 SSPM 수정 요청 원소시 주석 처리 END
+						   TEAM.DEPT_NAME_KO AS TEAM_NAME_KO,
+			/*
+			===============================================================================
+			*/			  
+
+						   SITE.END_CUSTOMER,
+						   SITE.END_CUSTOMER AS END_CUSTOMER40,
+						   SITE_ITEM.CUST_ENG_NM, -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+						   SITE_CUST.SOLDTO_CODE,
+	     				   CUST.SOLDTO_DESCRIPTION, --화면상에서는 일단 숨김처리
+						   SITE_CUST.SHIPTO_CODE,
+						   CUST.SHIPTO_DESCRIPTION, --화면상에서는 일단 숨김처리
+						   SITE_PROJECT.SCM_SITE_ID,
+						   SITE_PROJECT.SCM_SITE_ID AS SCM_SITE_ID40,
+						   SITE_PROJECT.PROJECT_CODE,
+						   PJT.PROJECT_NAME,
+						   PJT.PROJECT_STATUS,
+						   PJT.PROJECT_OWNER, -- 'SYSTEM' AS PROJECT_OWNER, --PJT.PROJECT_OWNWER      현재 컬럼이 없음.
+						   --SU.USER_ID,
+						   --[E20241120-000817]_82만 다른 명칭으로 사용하는것으로 요청하여, UI CATEGORY에 동일한 COLUM이 들어가지 않아, 조회시 이름변경 STAT
+						   --SITE_ITEM.OWNER AS USER_ID,	--20180806
+						   SITE_ITEM.OWNER AS USER_ID_82,	--20180806
+						   SITE_ITEM.PRJ_OWNR_ID,			--[E20241120-000817]_신규 추가 컬럼
+						   --[E20241120-000817]_82만 다른 명칭으로 사용하는것으로 요청하여, UI CATEGORY에 동일한 COLUM이 들어가지 않아, 조회시 이름변경 END
+						   SITE_ITEM.SALES_PLAN_ADJUST_YN,
+						   SITE_ITEM.ITEM_TYPE,
+						   SITE_ITEM.ITEM_CLASS_NAME,
+						   SITE_ITEM.ITEM_ID,
+						   SITE_ITEM.ITEM_NAME,
+						   SITE_ITEM.ATTRIBUTE10 AS CELL_TYPE_81,	-- [C20210624-000068] 자동차 중장기 계획 수립시 필요한 컬럼 추가
+						   SITE_ITEM.ATTRIBUTE10 AS CELL_TYPE_82,	-- [C20210624-000068] 자동차 중장기 계획 수립시 필요한 컬럼 추가
+						   SITE_ITEM.ATTRIBUTE8 AS KWH,				-- [C20210525-000374] 셀용량 및 팩 당 용량 추가 - 20210527 SJHAN
+						   SITE_ITEM.CELL_PER_CAR,
+						   SITE_ITEM.CELL_PER_MODULE,
+						   SITE_ITEM.CELL_PER_CAR / SITE_ITEM.CELL_PER_MODULE AS MODULE_PER_CAR,
+
+						   CUST_ITEM.CUSTOMER_MODEL,
+						   
+						   --[C20200513-000276] Sales_Company, Sales_Plant 컬럼 추가
+						   SITE_ITEM.SALES_COMPANY,
+						   SITE_ITEM.SALES_PLANT,
+
+						   SITE_ITEM.NICK_NAME,
+						   SITE_ITEM.BPMS_EXIST ,   --SITE_ITEM.BPMS_EXIST   현재 컬럼이 없음.
+						   SITE_ITEM.LIABILITY_PERIOD,
+						   SITE_ITEM.CURRENCY,
+						   --  Modified by ytchoi 180517
+						   -- ISNULL(SITE_PROJECT.VALID_YN,SITE_ITEM.VALID_YN) AS VALID_YN,
+						   CASE WHEN SITE_ITEM.ITEM_ID IS NULL THEN ISNULL(SITE_PROJECT.VALID_YN,SITE_ITEM.VALID_YN) ELSE SITE_ITEM.VALID_YN END AS VALID_YN,
+
+						   SITE_ITEM.LAST_UPDATE_DATE,
+						   SITE_ITEM.LAST_UPDATED_BY
+						   --20180601, LSH------------------
+						   ,SITE_ITEM.CUST_GROUP
+						   ,SITE_ITEM.CUST_GROUP_DTL
+						   --,SITE_ITEM.OWNER  --2018.07.20
+						   --,SU.USER_NAME_EN OWNER  --2018.07.20 add son young suk
+						   , dbo.FN_GET_MULTI_OWNER_NAME (SITE_ITEM.OWNER, ',', '1') AS OWNER  -- 20180806
+						   --, SITE_ITEM.OWNER
+						   ,SITE_ITEM.APPLICATION
+						   ,SITE_ITEM.ROUTE 
+						   ,SITE_ITEM.ATTRIBUTE6 AS EDI  --20181031
+						   ,SITE_ITEM.EDI_LT  --20191011
+						   ,ISNULL(SITE_ITEM.VMI_LT, 0) AS VMI_LT
+						   ,SITE_ITEM.CELL_NAME --[PJ20200138] Cell Name 추가
+						   ,SITE_ITEM.PARTIAL_PLAN_YN --[C20200610-000265] ESS - Project 별 Ship Plan (Partial) Flag 추가
+						   --------------------------------
+						   -- [C20220210-000268]Sales site project model에 '양극재, Module Variant' 컬럼 추가
+						   	,SITE_ITEM.ATTRIBUTE1  -- 양극재
+							,SITE_ITEM.ATTRIBUTE2 AS MODULE_VARIANT -- MODULE_VARIANT
+
+							-- [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선 START
+							,(SELECT CONSENSUS_MKT FROM #INVENTORY_SITE WHERE SCM_SITE_ID = SITE_PROJECT.SCM_SITE_ID AND PROJECT_CODE = SITE_PROJECT.PROJECT_CODE AND ITEM_ID = SITE_ITEM.ITEM_ID) AS CONSENSUS_MKT
+							,(SELECT CONSENSUS_ESS FROM #INVENTORY_SITE WHERE SCM_SITE_ID = SITE_PROJECT.SCM_SITE_ID AND PROJECT_CODE = SITE_PROJECT.PROJECT_CODE AND ITEM_ID = SITE_ITEM.ITEM_ID) AS CONSENSUS_ESS
+							,(SELECT CONSENSUS_SCM FROM #INVENTORY_SITE WHERE SCM_SITE_ID = SITE_PROJECT.SCM_SITE_ID AND PROJECT_CODE = SITE_PROJECT.PROJECT_CODE AND ITEM_ID = SITE_ITEM.ITEM_ID) AS CONSENSUS_SCM
+							--,(SELECT ISNULL(INVENTORY_DAY, 0) FROM #INVENTORY_SITE WHERE SCM_SITE_ID = SITE_PROJECT.SCM_SITE_ID AND PROJECT_CODE = SITE_PROJECT.PROJECT_CODE AND ITEM_ID = SITE_ITEM.ITEM_ID) AS INVENTORY_DAY
+							--20230829 : ISNULL 처리 (SSPM에서 룩업에설정되지않은 SCM_SITE_ID 대상을 수정할경우에 NULL값으로 인식해서 강제로 오류 표출되어있음)
+							,ISNULL((SELECT ISNULL(INVENTORY_DAY, 0) FROM #INVENTORY_SITE WHERE SCM_SITE_ID = SITE_PROJECT.SCM_SITE_ID AND PROJECT_CODE = SITE_PROJECT.PROJECT_CODE AND ITEM_ID = SITE_ITEM.ITEM_ID),0) AS INVENTORY_DAY
+							,(SELECT CHANGE_REASON FROM #INVENTORY_SITE WHERE SCM_SITE_ID = SITE_PROJECT.SCM_SITE_ID AND PROJECT_CODE = SITE_PROJECT.PROJECT_CODE AND ITEM_ID = SITE_ITEM.ITEM_ID) AS CHANGE_REASON
+							-- [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선 END
+							, SITE_ITEM.ALT_SIM_YN	--20230814 대체/유사모델 여부(ALT_SIM_YN) 컬럼 추가
+							, SITE_ITEM.DESCRIPTION	--20230817 설명(DESCRIPTION) 컬럼 추가
+						   -- [과제] JV Planner
+						   , Z.ACTIVE_FLAG --[E20231019-001234] MDM중지여부 추가 DM_MST_ITEM_SINGLE_V.ACTIVE_FLAG
+						   , SITE_ITEM.ENERGE_WH			--[E20240731-000852]_WH 단위 ENERGE 컬럼 추가
+						   , SITE_ITEM.ENERGE_KWH			--[E20240731-000852]_KWH 단위 ENERGE 컬럼 추가
+			FROM		   (SELECT	DISTINCT
+									A.DIVISION_ID,
+									SCM_SITE_ID,
+									PROJECT_CODE,
+									ISNULL(MAX(VALID_YN),'Y') AS VALID_YN
+									-- [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선 START
+									--,CONSENSUS_MKT
+									--,CONSENSUS_ESS
+									--,CONSENSUS_SCM
+									--,INVENTORY_DAY
+									--,CHANGE_REASON
+									--20230829 : ISNULL 처리 
+									,ISNULL(CONSENSUS_MKT, '') AS CONSENSUS_MKT
+									,ISNULL(CONSENSUS_ESS, '') AS CONSENSUS_ESS
+									,ISNULL(CONSENSUS_SCM, '') AS CONSENSUS_SCM
+									,ISNULL(INVENTORY_DAY, 0 ) AS INVENTORY_DAY
+									,ISNULL(CHANGE_REASON, '') AS CHANGE_REASON								
+									-- [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선 END
+							FROM	SCM_MST_SITE_ITEM A WITH(NOLOCK)
+							--속도개선 작업 20240912 JSSBAE END
+							--INNER JOIN SCM_MST_ITEM_SN B WITH(NOLOCK) --속도개선 작업 20240912 JSSBAE 원소스주석처리
+							INNER JOIN #TEMP_DM_MST_ITEM_SINGLE_ORI_V B WITH(NOLOCK) --속도개선 작업 20240912 JSSBAE 
+									ON   A.ITEM_ID = B.ITEM_ID 
+							LEFT OUTER JOIN (SELECT SEGMENT1 AS SITE_ID , '1' AS NUM FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK)  WHERE LOOKUP_TYPE = 'GM_JV_SITE' AND VALID_YN = 'Y'
+										UNION ALL SELECT SCM_SITE_ID AS SITE_ID , '1' AS NUM FROM SCM_MST_SITE WITH(NOLOCK)  WHERE DEPT_ID = @p_user_dept_id) AS C 
+							ON	 A.SCM_SITE_ID = C.SITE_ID
+							WHERE ISNULL(C.NUM,'') = CASE WHEN '81' = @p_division_id AND @p_userinfo = 'JV Planner' THEN 1 ELSE ISNULL(C.NUM,'') END
+							AND A.DIVISION_ID = @p_division_id
+							GROUP BY A.DIVISION_ID,
+										SCM_SITE_ID,
+										PROJECT_CODE 
+										-- [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선 START
+										,CONSENSUS_MKT, CONSENSUS_ESS, CONSENSUS_SCM, INVENTORY_DAY, CHANGE_REASON	
+										-- [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선 END
+														)					AS SITE_PROJECT
+
+			LEFT JOIN		SCM_MST_PROJECT									AS PJT  WITH(NOLOCK)
+			ON				SITE_PROJECT.PROJECT_CODE = PJT.PROJECT_CODE
+			AND				SITE_PROJECT.DIVISION_ID  = PJT.DIVISION_ID
+
+			LEFT JOIN		SCM_MST_SITE									AS SITE  WITH(NOLOCK)
+			ON				SITE_PROJECT.DIVISION_ID = SITE.DIVISION_ID  
+			AND				SITE_PROJECT.SCM_SITE_ID = SITE.SCM_SITE_ID
+
+			--[PJ2024-50461] Team Mapping
+			/*
+			[PJ2024-50461] Team Mapping
+			*/
+			/*LEFT JOIN		SCM_MST_SSO_DEPT_INFO							AS TEAM		  WITH(NOLOCK)	       
+			ON				SITE.DEPT_ID = TEAM.DEPT_ID
+			*/
+
+			LEFT JOIN		(SELECT T1.DIVISION_ID,
+									T1.CRGE_ORG_NM, -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+									T1.CUST_ENG_NM, -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+									T1.SCM_SITE_ID,
+									T1.PROJECT_CODE,
+									T1.ITEM_ID,
+									T1.CELL_PER_CAR,
+									T1.CELL_PER_MODULE,
+									T2.ITEM_NAME,
+									T2.ITEM_TYPE,
+									T2.ITEM_CLASS_NAME,
+									T1.SALES_PLAN_ADJUST_YN,
+									T2.NICK_NAME,
+									T1.BPMS_EXIST ,   --SITE_ITEM.BPMS_EXIST   현재 컬럼이 없음.
+									T1.LIABILITY_PERIOD,
+									T1.CURRENCY,
+									T1.VALID_YN,
+									T1.LAST_UPDATE_DATE,
+									T1.LAST_UPDATED_BY	
+									--20180601, LSH---------
+									,T1.CUST_GROUP
+									,T1.CUST_GROUP_DTL
+									,T1.OWNER
+									,T1.APPLICATION
+									,T1.ROUTE 
+									,T1.ATTRIBUTE6		--20181031
+									,T1.EDI_LT		--20191011
+									,T1.SCP_VMI_LT AS VMI_LT
+									,T1.ATTRIBUTE9 AS CELL_NAME --[PJ20200138] Cell Name 추가									
+									--[C20200513-000276] Sales_Company, Sales_Plant 컬럼 추가
+									,T1.SALES_COMPANY
+									,T1.SALES_PLANT
+									,T1.PARTIAL_PLAN_YN --[C20200610-000265] ESS - Project 별 Ship Plan (Partial) Flag 추가
+									,T1.ATTRIBUTE10		-- [C20210624-000068] 자동차 중장기 계획 수립시 필요한 컬럼 추가
+									,T1.ATTRIBUTE8		-- [C20210525-000374] 셀용량 및 팩 당 용량 추가 - 20210527 SJHAN
+									-----------------------		
+									-- [C20220210-000268]Sales site project model에 '양극재, Module Variant' 컬럼 추가
+									,ISNULL(T1.ATTRIBUTE1,'')  ATTRIBUTE1 -- 양극재
+									,ISNULL(T1.ATTRIBUTE2,'')  ATTRIBUTE2 -- MODULE VARIANT	
+
+									-- [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선 START
+									,T1.CONSENSUS_MKT
+									,T1.CONSENSUS_ESS
+									,T1.CONSENSUS_SCM
+									,ISNULL(T1.INVENTORY_DAY,0) AS INVENTORY_DAY
+									,T1.CHANGE_REASON
+									-- [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선 END
+									,T1.ALT_SIM_YN	--20230814 대체/유사모델 여부(ALT_SIM_YN) 컬럼 추가
+									,T1.DESCRIPTION	--20230817 설명(DESCRIPTION) 컬럼 추가
+									,T2.ENERGE_WH	--[E20240731-000852]_WH 단위 ENERGE 컬럼 추가
+									,T2.ENERGE_KWH	--[E20240731-000852]_KWH 단위 ENERGE 컬럼 추가
+									,T1.PRJ_OWNR_ID	--[E20241120-000817]_신규 추가 컬럼
+							  FROM	SCM_MST_SITE_ITEM		T1  WITH(NOLOCK)
+							  -- [E20240411-001030]_Sales Site Project Model 화면 하단 저장 로직 오류 수정_SINGLE_VIEW 테이블명 변경작업 진행
+							  --JOIN 	DM_MST_ITEM_SINGLE_V	T2  WITH(NOLOCK)
+							  JOIN 	#DM_MST_ITEM_SINGLE_V	T2 WITH(NOLOCK)  
+							  ON	T1.DIVISION_ID = T2.DIVISION_ID
+							  AND	T1.ITEM_ID   = T2.ITEM_ID
+
+							  -- 20200422 KHSONG C20200422-000123 소형사업부와과 같이 상품도 하나의 Grid에 다 보이도록함
+							  WHERE (T2.ITEM_TYPE  = CASE WHEN T1.DIVISION_ID = '82' THEN T2.ITEM_TYPE ELSE 'H' END 
+							  OR	 T2.ITEM_TYPE  = CASE WHEN T1.DIVISION_ID = '82' THEN T2.ITEM_TYPE ELSE 'P' END)
+														)					AS SITE_ITEM
+							
+							  --WHERE (T2.ITEM_TYPE  = 'H'  OR  T2.ITEM_TYPE  = 'P'))	AS SITE_ITEM --20180720 KHSONG 주석처리  --20200422 KHSONG C20200422-000123 주석처리
+														
+							
+			ON				SITE_PROJECT.DIVISION_ID = SITE_ITEM.DIVISION_ID
+			AND				SITE_PROJECT.SCM_SITE_ID = SITE_ITEM.SCM_SITE_ID
+			AND				SITE_PROJECT.PROJECT_CODE = SITE_ITEM.PROJECT_CODE
+			-- [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선 START -- 연결하지 않으면 2개이상 나오는 현상이 있음
+			AND             ISNULL(SITE_PROJECT.CONSENSUS_MKT, '') = ISNULL(SITE_ITEM.CONSENSUS_MKT, '')
+			AND             ISNULL(SITE_PROJECT.CONSENSUS_ESS, '') = ISNULL(SITE_ITEM.CONSENSUS_ESS, '')
+			AND             ISNULL(SITE_PROJECT.CONSENSUS_SCM, '') = ISNULL(SITE_ITEM.CONSENSUS_SCM, '')
+			AND             ISNULL(SITE_PROJECT.INVENTORY_DAY, 0) = ISNULL(SITE_ITEM.INVENTORY_DAY, 0)
+			AND             ISNULL(SITE_PROJECT.CHANGE_REASON, '') = ISNULL(SITE_ITEM.CHANGE_REASON, '')
+			-- [E20230619-000273] ESS 법인향 Inventory Days 모델별 설정 개선 END 
+			-- [E20260612-001708]_위치변경 (START)
+			-- [PJ2024-50461] Team Mapping
+			LEFT JOIN (
+				SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO 
+				FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+				INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+				ON B.DEPT_ID = C.DEPT_ID
+			) AS TEAM
+			ON              TEAM.USER_ID   IN (SELECT top 1 token FROM [dbo].[String_Split](SITE_ITEM.owner, ','))
+			--[E20260612-001708]_위치변경 (END)
+			LEFT JOIN		SCM_MST_SITE_CUSTOMER							AS SITE_CUST  WITH(NOLOCK)
+			ON				SITE_PROJECT.SCM_SITE_ID = SITE_CUST.SCM_SITE_ID
+			AND				SITE_PROJECT.DIVISION_ID = SITE_CUST.DIVISION_ID
+			AND				SITE_CUST.REP_YN      = 'Y'
+
+			LEFT JOIN		SCM_MST_CUSTOMER								AS CUST  WITH(NOLOCK)
+			ON				SITE_CUST.SOLDTO_CODE = CUST.SOLDTO_CODE
+			AND				SITE_CUST.SHIPTO_CODE = CUST.SHIPTO_CODE
+			AND				SITE_CUST.DIVISION_ID = CUST.DIVISION_ID
+   
+			LEFT JOIN		(SELECT DIVISION_ID,
+									 MAX(CUSTOMER_MODEL) AS CUSTOMER_MODEL,
+									 SCM_SITE_ID,
+									 PROJECT_CODE,
+									 ITEM_ID
+							  FROM   DM_MST_CUSTOMER_MODEL  WITH(NOLOCK)
+							  WHERE  VALID_YN = 'Y'
+							  GROUP BY DIVISION_ID, 
+									   SCM_SITE_ID,
+									   PROJECT_CODE,
+										ITEM_ID			)					AS CUST_ITEM
+			ON				SITE_ITEM.ITEM_ID      = CUST_ITEM.ITEM_ID
+			AND				SITE_ITEM.PROJECT_CODE = CUST_ITEM.PROJECT_CODE
+			AND				SITE_ITEM.DIVISION_ID  = CUST_ITEM.DIVISION_ID
+			AND				SITE_ITEM.SCM_SITE_ID  = CUST_ITEM.SCM_SITE_ID
+	
+			LEFT JOIN SCM_MST_SSO_USER_INFO SU WITH(NOLOCK)
+			--2018.07.20 ON PJT.PROJECT_OWNER = SU.USER_ID		--LSH, 20180628					
+			ON SITE_ITEM.owner = SU.USER_ID -- 2018.07.20 add son young suk
+			-------------------[E20231019-001234] MDM중지여부 추가 DM_MST_ITEM_SINGLE_V.ACTIVE_FLAG-------------------
+			LEFT OUTER JOIN #ITEM_ACTIVE_FLAG_INFO Z ON Z.DIVISION_ID = SITE_ITEM.DIVISION_ID AND Z.SCM_SITE_ID = SITE_ITEM.SCM_SITE_ID AND Z.PROJECT_CODE = SITE_ITEM.PROJECT_CODE AND Z.ITEM_ID = SITE_ITEM.ITEM_ID
+			--------------------------------------------------------------------------------------------------------	
+			-------------------------- Model/Item -------------2018/07/30  Son Young Suk-------------------
+			  INNER JOIN ( SELECT '%'+token+'%' tst FROM dbo.String_Split(@p_item_id,',') ) b
+				ON      CASE WHEN @p_item_id = '' THEN @p_item_id			
+						ELSE SITE_ITEM.ITEM_ID  END like  b.tst 
+				OR      CASE WHEN @p_item_id = '' THEN @p_item_id			
+						ELSE SITE_ITEM.NICK_NAME  END like  b.tst 
+			-----------------------------------------------------------------------------------------------
+			-------------------------- Project ---------------2018/07/30  Son Young Suk--------------------
+			  INNER JOIN ( SELECT '%'+token+'%' tst FROM dbo.String_Split(@p_project_code,',') ) b1
+				ON      CASE WHEN @p_project_code = '' THEN @p_project_code			
+						ELSE PJT.PROJECT_CODE  END like  b1.tst 
+				OR      CASE WHEN @p_project_code = '' THEN @p_project_code			
+						ELSE PJT.PROJECT_NAME  END like  b1.tst 
+			-----------------------------------------------------------------------------------------------
+			------------  20180806  -------------------------------------------------------------------			
+			INNER JOIN (
+			               SELECT DISTINCT X.OWNER
+						      FROM SCM_MST_SITE_ITEM AS X WITH(NOLOCK)
+							  LEFT JOIN SCM_MST_SSO_USER_INFO AS UI WITH(NOLOCK)
+							  ON X.PROJECT_CODE = UI.USER_ID
+							  INNER JOIN ( SELECT '%'+token+'%' tst FROM dbo.String_Split(@p_owner,',') ) c
+									ON    (
+											CASE WHEN @p_owner = '' THEN @p_owner			
+											ELSE [dbo].[FN_GET_MULTI_OWNER_NAME](x.OWNER, ',', '1') END like  c.tst 
+											OR
+											CASE WHEN @p_owner = '' THEN @p_owner			
+											ELSE X.OWNER END like  c.tst 
+											OR
+											CASE WHEN @p_owner = '' THEN @p_owner			
+											ELSE [dbo].[FN_GET_MULTI_OWNER_NAME](X.OWNER, ',', '2') END like  c.tst 
+											)
+							where X.DIVISION_ID = @p_division_id
+							  AND @p_owner <> ''
+							 UNION all
+							 select '11'
+							   where @p_owner = ''
+                 ) X
+            ON  ISNULL(SITE_ITEM.OWNER,'xxxx') = CASE WHEN @p_owner = '' THEN  ISNULL(SITE_ITEM.OWNER,'xxxx') ELSE X.owner  END	
+			
+			-----------------------------------------------------------------------------------------------
+			WHERE  1 = 1 -- R- RAW MATERIAL, H- HALF PRODUCT,  P- PRODUCT 제품만 조회함(RHP 모두 제품임).
+			AND    CASE WHEN @p_division_id = 'ALL' THEN @p_division_id			
+						ELSE SITE_PROJECT.DIVISION_ID
+ 				   END  IN ( SELECT token FROM dbo.String_Split(@p_division_id,',') )
+			AND    CASE WHEN @p_dept_id = 'ALL' THEN @p_dept_id			
+						ELSE TEAM.DEPT_ID
+ 				   END  IN ( SELECT token FROM dbo.String_Split(@p_dept_id,',') )
+			AND    CASE WHEN @p_end_customer = 'ALL' THEN @p_end_customer			
+						ELSE SITE.END_CUSTOMER
+ 				   END  IN ( SELECT token FROM dbo.String_Split(@p_end_customer,',') )
+			AND    CASE WHEN @p_scm_site_id = 'ALL' THEN @p_scm_site_id			
+						--ELSE SITE_ITEM.SCM_SITE_ID
+						ELSE SITE_PROJECT.SCM_SITE_ID  -- 20181220 KHSONG modify SITE_ITEM.SCM_SITE_ID -> SITE_PROJECT.SCM_SITE_ID
+ 				   END  IN ( SELECT token FROM dbo.String_Split(@p_scm_site_id,',') )
+			--AND    CASE WHEN @p_item_id = '' THEN @p_item_id			
+			--			ELSE SITE_ITEM.ITEM_ID
+ 		--		   END  IN ( SELECT token FROM dbo.String_Split(@p_item_id,',') )
+			--AND    CASE WHEN @p_project_code = '' THEN @p_project_code			
+			--			ELSE SITE_PROJECT.PROJECT_CODE
+ 		--		   END  IN ( SELECT token FROM dbo.String_Split(@p_project_code,',') )
+			AND   SITE.SITE_TYPE <> 'PLANT'
+			--AND    (
+			--		CASE WHEN @p_owner = '' THEN @p_owner
+			--			ELSE SU.USER_ID
+			--		END  IN ( SELECT token FROM dbo.String_Split(@p_owner,',') )
+			--		OR
+			--			CASE WHEN @p_owner = '' THEN @p_owner
+			--			ELSE SU.USER_NAME
+			--		END  IN ( SELECT token FROM dbo.String_Split(@p_owner,',') )
+			--		OR
+			--			CASE WHEN @p_owner = '' THEN @p_owner
+			--			ELSE SU.USER_NAME_EN
+			--		END  IN ( SELECT token FROM dbo.String_Split(@p_owner,',') )
+			--   )
+
+			----AND    EXISTS (SELECT * FROM dbo.UF_FX_STRING_SPLIT (@p_owner,',') AS P WHERE PJT.PROJECT_OWNER LIKE N'%' + P.token +'%')
+
+			) T1
+			WHERE  1 = 1
+			AND    CASE WHEN @p_valid_yn = 'ALL' THEN @p_valid_yn			
+						ELSE T1.VALID_YN
+ 				   END  IN ( SELECT token FROM dbo.String_Split(@p_valid_yn,',') )
+			ORDER BY DIVISION_ID,
+						   TEAM_NAME_KO,
+						   END_CUSTOMER,
+						   END_CUSTOMER40,
+						   SOLDTO_CODE,	     			   
+						   SHIPTO_CODE,					   
+						   SCM_SITE_ID,
+						   SCM_SITE_ID40,
+						   PROJECT_CODE,
+						   PROJECT_NAME,
+						   PROJECT_STATUS,
+						   PROJECT_OWNER, -- 'SYSTEM' AS PROJECT_OWNER, --PJT.PROJECT_OWNWER      현재 컬럼이 없음.
+						   SALES_PLAN_ADJUST_YN,
+						   ITEM_TYPE,
+						   ITEM_CLASS_NAME,
+						   ITEM_ID,
+						   ITEM_NAME,
+						   CELL_TYPE_81,		-- [C20210624-000068] 자동차 중장기 계획 수립시 필요한 컬럼 추가
+						   CELL_TYPE_82,		-- [C20210624-000068] 자동차 중장기 계획 수립시 필요한 컬럼 추가
+						   KWH,					-- [C20210525-000374] 셀용량 및 팩 당 용량 추가 - 20210527 SJHAN
+						   CUSTOMER_MODEL,
+						   --[C20200513-000276] Sales_Company, Sales_Plant 컬럼 추가
+						   SALES_COMPANY,
+						   SALES_PLANT,
+						   NICK_NAME,
+						   BPMS_EXIST ,   --SITE_ITEM.BPMS_EXIST   현재 컬럼이 없음.
+						   LIABILITY_PERIOD,
+						   CURRENCY;
+        ELSE	
+		--select @p_division_id; return;
+		-- 81 번의 경우 
+		BEGIN
+			--[E20231019-001234] MDM중지여부 추가 DM_MST_ITEM_SINGLE_V.ACTIVE_FLAG
+            SELECT DISTINCT A.DIVISION_ID
+			    ,A.CRGE_ORG_NM -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+			--[PJ2024-50461] Team Mapping
+			/*
+			, B.DEPT_ID
+			, B.DEPT_ID AS DEPT_ID2
+			, C.DEPT_NAME_KO AS TEAM_NAME_KO
+			*/
+						   ,TEAM.DEPT_ID 
+						   ,TEAM.DEPT_ID AS DEPT_ID2
+						   ,TEAM.DEPT_NAME_KO AS TEAM_NAME_KO
+			/*
+			===============================================================================
+			*/	
+				, B.END_CUSTOMER, B.END_CUSTOMER AS END_CUSTOMER40
+				, A.CUST_ENG_NM -- [PJ2024-50647]자동차사업부 고객 수요 분석 기능 개선(으로 인한 CRGE_ORG_NM,CUST_ENG_NM 2개 컬럼 추가)
+				, D.SOLDTO_CODE, E.SOLDTO_DESCRIPTION
+				, D.SHIPTO_CODE, E.SHIPTO_DESCRIPTION
+				, A.SCM_SITE_ID, A.SCM_SITE_ID AS SCM_SITE_ID40
+				, A.PROJECT_CODE
+				, F.PROJECT_NAME, F.PROJECT_STATUS, F.PROJECT_OWNER
+				, A.OWNER AS USER_ID
+				, A.SALES_PLAN_ADJUST_YN
+				, G.ITEM_TYPE, G.ITEM_CLASS_NAME
+				, A.ITEM_ID, G.ITEM_NAME
+				, A.ATTRIBUTE10 AS CELL_TYPE_81
+				, A.ATTRIBUTE10 AS CELL_TYPE_82
+				, A.ATTRIBUTE8 AS KWH
+				, A.CELL_PER_CAR
+				--[E20260123-001715]_[E20240904-001037] 소스 주석처리하고, 원소스로 복원 START
+				/*
+				--[E20240904-001037]_81% 사업부인 경우에는 CELL/MODULE컬럼에 TEMP에 적재한 데이터를 보여준다 START 
+				--원소스 주석처리
+				--, A.CELL_PER_MODULE
+				, B2A.ACCUMULATED_CHILD_QTY AS CELL_PER_MODULE
+				--[E20240904-001037]_81% 사업부인 경우에는 CELL/MODULE컬럼에 TEMP에 적재한 데이터를 보여준다 END 
+				*/
+				, A.CELL_PER_MODULE
+				--[E20260123-001715]_[E20240904-001037] 소스 주석처리하고, 원소스로 복원 END
+				/* 2023.07.12   HMIN  [E20230706-001434] 81 자동차사업부 조회오류 개선 (CELL_PER_MODULE 값 0으로 들어오는 경우  MODULE_PER_CAR 연산 강제 NULL 처리) */
+				--, A.CELL_PER_CAR / A.CELL_PER_MODULE AS MODULE_PER_CAR
+				, CASE WHEN ISNULL(A.CELL_PER_MODULE, 0) = 0 THEN  NULL  ELSE  A.CELL_PER_CAR / A.CELL_PER_MODULE  END  AS MODULE_PER_CAR  /* E20230706-001434  */
+				, H.CUSTOMER_MODEL
+				, A.SALES_COMPANY, A.SALES_PLANT
+				, G.NICK_NAME
+				, A.BPMS_EXIST
+				, A.LIABILITY_PERIOD, A.CURRENCY
+				, A.VALID_YN
+				, A.LAST_UPDATE_DATE, A.LAST_UPDATED_BY
+				, A.CUST_GROUP, A.CUST_GROUP_DTL
+				, dbo.FN_GET_MULTI_OWNER_NAME (A.OWNER, ',', '1') AS OWNER
+				, A.APPLICATION, A.ROUTE
+				, A.ATTRIBUTE6 AS EDI, A.EDI_LT
+				, ISNULL(A.SCP_VMI_LT, 0) AS VMI_LT
+				, A.ATTRIBUTE9 AS CELL_NAME, A.PARTIAL_PLAN_YN
+				, A.ATTRIBUTE1 AS CATHODE_MATERIALS
+				, A.ATTRIBUTE2 AS MODULE_VARIANT
+				--[PJ2024-50461] Team Mapping------------------------------------
+				/*, CASE WHEN (([dbo].[FN_GET_DEPT_LIST](@p_created_by, B.DEPT_ID) = 'Y') OR @v_group_id ='ADMIN') 
+								THEN 'Y' ELSE 'N' END AS EDIT_FLAG*/
+				, CASE WHEN (([dbo].[FN_GET_DEPT_LIST](@p_created_by, TEAM.DEPT_ID) = 'Y') OR @v_group_id ='ADMIN') 
+								THEN 'Y' ELSE 'N' END AS EDIT_FLAG
+				--[PJ2024-50461] Team Mapping------------------------------------
+				, A.ALT_SIM_YN	--20230814 대체/유사모델 여부(ALT_SIM_YN) 컬럼 추가
+				, A.DESCRIPTION	--20230817 설명(DESCRIPTION) 컬럼 추가
+				--향후 예외처리 필요한 경우에 플래그로 구분하기 위해서 처리
+				--, Z.ACTIVE_FLAG AS ACTIVE_FLAG
+				, CASE WHEN @V_EXCEPT_SW = 'Y' 
+					   THEN CASE WHEN ISNULL(Z.ACTIVE_FLAG ,'') = '' 
+					             THEN ZZ.ACTIVE_FLAG ELSE Z.ACTIVE_FLAG END 
+				       ELSE Z.ACTIVE_FLAG END AS ACTIVE_FLAG --[E20231019-001234] MDM중지여부 추가 DM_MST_ITEM_SINGLE_V.ACTIVE_FLAG			
+				, A.PROJECT_S_OP_REPORT	--[E20240904-001037]_입력이 가능한 컬럼으로 추가 요청건으로 추가진행한다.
+			FROM SCM_MST_SITE_ITEM A WITH(NOLOCK)
+			JOIN SCM_MST_SITE B WITH(NOLOCK) ON A.DIVISION_ID = B.DIVISION_ID AND A.SCM_SITE_ID = B.SCM_SITE_ID
+			JOIN #SCM_MST_SITE_ITEM B2 ON A.DIVISION_ID = B2.DIVISION_ID AND A.SCM_SITE_ID = B2.SCM_SITE_ID AND A.PROJECT_CODE = B2.PROJECT_CODE --20230328 속도개선
+			--[E20260123-001715]_[E20240904-001037]_소스 주석처리 START
+			/*
+			JOIN #SCM_MST_SITE_ITEM_CELL B2A --[E20240904-001037]_TEMP에 담은 테이블의 데이터를 추가한다.
+			  ON A.DIVISION_ID = B2A.DIVISION_ID AND A.SCM_SITE_ID = B2A.SCM_SITE_ID AND A.PROJECT_CODE = B2A.PROJECT_CODE AND A.ITEM_ID = B2A.ITEM_ID
+			*/
+			--[E20260123-001715]_[E20240904-001037]_소스 주석처리 END
+			   --AND A.ITEM_ID = B2.ITEM_ID
+			 --AND A.SALES_COMPANY = B2.SALES_COMPANY AND A.SALES_PLANT = B2.SALES_PLANT
+			LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO C WITH(NOLOCK) ON B.DEPT_ID = C.DEPT_ID
+			LEFT OUTER JOIN SCM_MST_SITE_CUSTOMER D WITH(NOLOCK) ON B.DIVISION_ID = D.DIVISION_ID AND B.SCM_SITE_ID = D.SCM_SITE_ID AND D.REP_YN = 'Y'
+			LEFT OUTER JOIN SCM_MST_CUSTOMER E WITH(NOLOCK) ON D.DIVISION_ID = E.DIVISION_ID AND D.SOLDTO_CODE = E.SOLDTO_CODE AND D.SHIPTO_CODE = E.SHIPTO_CODE 
+			LEFT OUTER JOIN SCM_MST_PROJECT F WITH(NOLOCK) ON A.DIVISION_ID = F.DIVISION_ID AND A.PROJECT_CODE = F.PROJECT_CODE
+			LEFT OUTER JOIN #T_SINGLE G (NOLOCK) ON A.DIVISION_ID = G.DIVISION_ID AND A.ITEM_ID = G.ITEM_ID
+			-------------------[E20231019-001234] MDM중지여부 추가 DM_MST_ITEM_SINGLE_V.ACTIVE_FLAG-------------------
+			LEFT OUTER JOIN #ITEM_ACTIVE_FLAG_INFO Z ON Z.DIVISION_ID = A.DIVISION_ID AND Z.SCM_SITE_ID = A.SCM_SITE_ID AND Z.PROJECT_CODE = A.PROJECT_CODE AND Z.ITEM_ID = A.ITEM_ID --AND Z.ITEM_TYPE = B2.ITEM_TYPE
+			LEFT OUTER JOIN (
+							SELECT EX.DIVISION_ID, EX.ITEM_ID, EX.ACTIVE_FLAG
+							FROM #TMP_81_UC_EXCEPTION EX WITH (NOLOCK)
+							WHERE 1=1
+							AND EX.DIVISION_ID = @P_DIVISION_ID			  --'81_UC'  @V_EXCEPT_SW 로 처리해서 하드코딩 안해두댐				
+							GROUP BY EX.DIVISION_ID, EX.ITEM_ID, EX.ACTIVE_FLAG ) ZZ ON ZZ.DIVISION_ID = A.DIVISION_ID AND ZZ.ITEM_ID = A.ITEM_ID
+			--------------------------------------------------------------------------------------------------------
+			--[PJ2024-50461] Team Mapping
+			LEFT JOIN (
+				SELECT B.USER_ID, B.USER_NAME, B.USER_NAME_EN, B.DEPT_ID, C.DEPT_NAME_KO 
+				FROM [SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+				--FROM [10.34.221.78,7433][dbo].[SCM_MST_SSO_USER_INFO] AS B WITH(NOLOCK)
+				INNER JOIN SCM_MST_SSO_DEPT_INFO AS C WITH(NOLOCK)
+				--INNER JOIN [10.34.221.78,7433].[LGCE_SCMPROD].[dbo].[SCM_MST_SSO_DEPT_INFO] AS C WITH(NOLOCK)
+				ON B.DEPT_ID = C.DEPT_ID
+			) AS TEAM
+			ON              TEAM.USER_ID   IN (SELECT top 1 token FROM [dbo].[String_Split](A.owner, ','))
+-------------------------------------------------------------------------------------------------------------------------
+			LEFT OUTER JOIN	( SELECT DIVISION_ID
+									, MAX(CUSTOMER_MODEL) AS CUSTOMER_MODEL
+									, SCM_SITE_ID
+									, PROJECT_CODE
+									, ITEM_ID
+							FROM   DM_MST_CUSTOMER_MODEL  WITH(NOLOCK)
+							--FROM [10.34.221.78,7433].[LGCE_SCMPROD].[dbo].[DM_MST_CUSTOMER_MODEL] AS UI WITH(NOLOCK)
+							WHERE  VALID_YN = 'Y'
+								AND DIVISION_ID = @P_DIVISION_ID
+							GROUP BY DIVISION_ID 
+									, SCM_SITE_ID
+									, PROJECT_CODE
+									, ITEM_ID			
+							) AS H
+						ON	A.ITEM_ID      = H.ITEM_ID
+						AND	A.PROJECT_CODE = H.PROJECT_CODE
+						AND	A.DIVISION_ID  = H.DIVISION_ID
+						AND	A.SCM_SITE_ID  = H.SCM_SITE_ID	
+			-------------------------- Model/Item -------------2018/07/30  Son Young Suk-------------------
+			  INNER JOIN ( SELECT '%'+token+'%' tst FROM dbo.String_Split(@p_item_id,',') ) X1
+				ON      CASE WHEN @p_item_id = '' THEN @p_item_id			
+						ELSE A.ITEM_ID  END like  X1.tst 
+				OR      CASE WHEN @p_item_id = '' THEN @p_item_id			
+						ELSE ISNULL(G.NICK_NAME,'')  END like  X1.tst 
+			-----------------------------------------------------------------------------------------------
+			-------------------------- Project ---------------2018/07/30  Son Young Suk--------------------
+			  INNER JOIN ( SELECT '%'+token+'%' tst FROM dbo.String_Split(@p_project_code,',') ) b1
+				ON      CASE WHEN @p_project_code = '' THEN @p_project_code			
+						ELSE A.PROJECT_CODE  END like  b1.tst 
+				OR      CASE WHEN @p_project_code = '' THEN @p_project_code			
+						ELSE ISNULL(F.PROJECT_NAME, '')  END like  b1.tst 
+			-----------------------------------------------------------------------------------------------
+			INNER JOIN (
+			               SELECT DISTINCT X.OWNER
+						      FROM SCM_MST_SITE_ITEM AS X WITH(NOLOCK)
+							  LEFT JOIN SCM_MST_SSO_USER_INFO AS UI WITH(NOLOCK)
+							  --LEFT JOIN [10.34.221.78,7433].[LGCE_SCMPROD].[dbo].[SCM_MST_SSO_USER_INFO] AS UI WITH(NOLOCK)
+							  ON X.PROJECT_CODE = UI.USER_ID
+							  INNER JOIN ( SELECT '%'+token+'%' tst FROM dbo.String_Split(@p_owner,',') ) c
+									ON    (
+											CASE WHEN @p_owner = '' THEN @p_owner			
+											ELSE [dbo].[FN_GET_MULTI_OWNER_NAME](x.OWNER, ',', '1') END like  c.tst 
+											OR
+											CASE WHEN @p_owner = '' THEN @p_owner			
+											ELSE X.OWNER END like  c.tst 
+											OR
+											CASE WHEN @p_owner = '' THEN @p_owner			
+											ELSE [dbo].[FN_GET_MULTI_OWNER_NAME](X.OWNER, ',', '2') END like  c.tst 
+											)
+							where X.DIVISION_ID = @p_division_id
+							  AND @p_owner <> ''
+							 UNION all
+							 select '11'
+							   where @p_owner = ''
+                 ) X
+            ON  ISNULL(A.OWNER,'xxxx') = CASE WHEN @p_owner = '' THEN  ISNULL(A.OWNER,'xxxx') ELSE X.owner  END	
+			WHERE A.DIVISION_ID = @P_DIVISION_ID
+				-- H,P 가 없는 프로젝트도 한 줄은 나오도록 한다.
+				AND ( G.ITEM_TYPE IN ( 'H', 'P' )
+					OR B2.CNT = 0 )
+				AND    CASE WHEN @p_division_id = 'ALL' THEN @p_division_id			
+						ELSE A.DIVISION_ID
+ 					   END  IN ( SELECT token FROM dbo.String_Split(@p_division_id,',') )
+				AND    CASE WHEN @p_dept_id = 'ALL' THEN @p_dept_id			
+							--ELSE B.DEPT_ID
+							ELSE TEAM.DEPT_ID--[PJ2024-50461] Team Mapping
+ 					   END  IN ( SELECT token FROM dbo.String_Split(@p_dept_id,',') )
+				AND    CASE WHEN @p_end_customer = 'ALL' THEN @p_end_customer			
+							ELSE B.END_CUSTOMER
+ 					   END  IN ( SELECT token FROM dbo.String_Split(@p_end_customer,',') )
+				AND    CASE WHEN @p_scm_site_id = 'ALL' THEN @p_scm_site_id			
+							ELSE A.SCM_SITE_ID
+ 					   END  IN ( SELECT token FROM dbo.String_Split(@p_scm_site_id,',') )
+				AND    B.SITE_TYPE <> 'PLANT'
+				AND		CASE WHEN @p_valid_yn = 'ALL' THEN @p_valid_yn			
+							ELSE A.VALID_YN
+ 					   END  IN ( SELECT token FROM dbo.String_Split(@p_valid_yn,',') )
+			ORDER BY DIVISION_ID,
+					TEAM_NAME_KO,
+					END_CUSTOMER,
+					END_CUSTOMER40,
+					SOLDTO_CODE,	     			   
+					SHIPTO_CODE,					   
+					SCM_SITE_ID,
+					SCM_SITE_ID40,
+					PROJECT_CODE,
+					PROJECT_NAME,
+					PROJECT_STATUS,
+					PROJECT_OWNER, -- 'SYSTEM' AS PROJECT_OWNER, --PJT.PROJECT_OWNWER      현재 컬럼이 없음.
+					SALES_PLAN_ADJUST_YN,
+					ITEM_TYPE,
+					ITEM_CLASS_NAME,
+					ITEM_ID,
+					ITEM_NAME,
+					CELL_TYPE_81,		-- [C20210624-000068] 자동차 중장기 계획 수립시 필요한 컬럼 추가
+					CELL_TYPE_82,		-- [C20210624-000068] 자동차 중장기 계획 수립시 필요한 컬럼 추가
+					KWH,					-- [C20210525-000374] 셀용량 및 팩 당 용량 추가 - 20210527 SJHAN
+					CUSTOMER_MODEL,
+					--[C20200513-000276] Sales_Company, Sales_Plant 컬럼 추가
+					SALES_COMPANY,
+					SALES_PLANT,
+					NICK_NAME,
+					BPMS_EXIST ,   --SITE_ITEM.BPMS_EXIST   현재 컬럼이 없음.
+					LIABILITY_PERIOD,
+					CURRENCY;
+		END
+		
+PRINT ( 'H--' + CONVERT(NVARCHAR(30), GETDATE(), 121));
+END

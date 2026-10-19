@@ -1,0 +1,162 @@
+﻿
+
+
+
+
+
+CREATE  VIEW [dbo].[SSP_MAIL_SHIP_REQ_MINUS_BALANCE_V] AS
+/********************************************************************************************************************************
+* VIEW NAME     : [SSP_MAIL_SHIP_REQ_MINUS_BALANCE_V]
+* DESCRIPTION   : 소형 출하요청내역중 차월 음수 Balance 대상 Mail 발송대상자 및 Item 추출 
+               
+* PROGRAM HISTORY
+*-------------------------------------------------------------------------------------------------------------------------------
+*  DATE      IN CHARGE           DESCRIPTION
+*-------------------------------------------------------------------------------------------------------------------------------
+* 2019.06.14   juhlee     nitial Release [CSR ID:4016810] [요청] SSP Planning Horizen 연장에 따른 Shipment Request Logic 변경
+            
+********************************************************************************************************************************/
+WITH MAIL_RECEIVER 
+AS (
+
+			SELECT X.DIVISION_ID 
+			,      X.PLAN_START_YYYYMMDD
+			,      X.PLAN_TYPE
+			,      X.SEQ
+			,      X.MAIL_RECEIVER
+			,      X.FROM_SITE
+			,      X.ITEM_ID     
+			FROM (
+					SELECT R.DIVISION_ID
+					,      R.PLAN_START_YYYYMMDD
+					,      R.PLAN_TYPE
+					,      R.SEQ
+					,      R.CREATED_BY   AS MAIL_RECEIVER
+					,      R.FROM_SITE
+					,      R.ITEM_ID 
+					FROM SSP_ANL_SHIP_REQ R WITH(NOLOCK) 
+						 JOIN SSP_MST_SHIP_REQ M WITH(NOLOCK)  
+						   ON M.DIVISION_ID = R.DIVISION_ID
+						  AND M.PLAN_START_YYYYMMDD = R.PLAN_START_YYYYMMDD
+						  AND M.PLAN_TYPE = R.PLAN_TYPE 
+						  AND M.SEQ = R.SEQ 
+						    AND M.CUTOFF_FLAG  ='Y'
+							AND M.CONFIRM_FLAG ='N'
+					WHERE R.DIVISION_ID = '40'
+					AND   R.PLAN_START_YYYYMMDD = ( SELECT MAX(A.PLAN_START_YYYYMMDD) 
+													FROM   SSP_ANL_SHIP_REQ A WITH(NOLOCK) )
+					AND   R.MEASURE  in ( 'SHIP_REQ' ) 
+					AND   R.QTY > 0
+					AND   EXISTS ( SELECT 1 
+								   FROM SSP_ANL_SHIP_REQ B WITH(NOLOCK) 
+								   WHERE R.DIVISION_ID = B.DIVISION_ID 
+								   AND   R.PLAN_START_YYYYMMDD = B.PLAN_START_YYYYMMDD
+								   AND   R.PLAN_TYPE =   B.PLAN_TYPE
+								   AND   R.SEQ = B.SEQ
+								   AND   R.ITEM_ID = B.ITEM_ID 
+								   AND   R.FROM_SITE = B.FROM_SITE 
+								   AND   B.MEASURE = 'BALANCE'
+								   AND   B.YYYYMMDD BETWEEN M.CONFIRM_START_DATE AND M.CONFIRM_END_DATE
+								   AND   B.YYYYMMDD = R.YYYYMMDD
+								   AND   B.QTY < 0 )
+					AND  R.YYYYMMDD BETWEEN M.CONFIRM_START_DATE AND M.CONFIRM_END_DATE 
+					GROUP BY R.DIVISION_ID, R.PLAN_START_YYYYMMDD, R.PLAN_TYPE, R.SEQ, R.CREATED_BY, R.FROM_SITE, R.ITEM_ID  
+
+					UNION ALL 
+
+					SELECT R.DIVISION_ID
+					,      R.PLAN_START_YYYYMMDD
+					,      R.PLAN_TYPE
+					,      R.SEQ
+					,      L.SEGMENT2            AS MAIL_RECEIVER
+					,      R.FROM_SITE
+					,      R.ITEM_ID 
+					FROM SSP_ANL_SHIP_REQ R WITH(NOLOCK) 
+						 JOIN SSP_MST_SHIP_REQ M WITH(NOLOCK)  
+						   ON M.DIVISION_ID = R.DIVISION_ID
+						  AND M.PLAN_START_YYYYMMDD = R.PLAN_START_YYYYMMDD
+						  AND M.PLAN_TYPE = R.PLAN_TYPE 
+						  AND M.SEQ = R.SEQ 
+						  AND M.CUTOFF_FLAG  ='Y'
+						  AND M.CONFIRM_FLAG ='N'
+						  JOIN SCM_ADM_LOOKUP_MASTER_DETAIL L WITH(NOLOCK)  
+							ON  L.LOOKUP_TYPE ='NEGATIVE_MAIL_SEND'
+						   AND  L.VALID_YN    ='Y'
+						   AND  L.SEGMENT3    =  CASE WHEN L.SEGMENT3 = 'ALL' THEN 'ALL' ELSE R.FROM_SITE END  
+					WHERE R.DIVISION_ID = '40'
+					AND   R.PLAN_START_YYYYMMDD = ( SELECT MAX(A.PLAN_START_YYYYMMDD) 
+													FROM   SSP_ANL_SHIP_REQ A WITH(NOLOCK) )
+					AND   R.MEASURE  in ( 'SHIP_REQ' ) --  , 'BALANCE' ) 
+					AND   R.QTY > 0
+					AND   EXISTS ( SELECT 1 
+								   FROM SSP_ANL_SHIP_REQ B WITH(NOLOCK) 
+								   WHERE R.DIVISION_ID = B.DIVISION_ID 
+								   AND   R.PLAN_START_YYYYMMDD = B.PLAN_START_YYYYMMDD
+								   AND   R.PLAN_TYPE =   B.PLAN_TYPE
+								   AND   R.SEQ = B.SEQ
+								   AND   R.ITEM_ID = B.ITEM_ID 
+								   AND   R.FROM_SITE = B.FROM_SITE 
+								   AND   B.MEASURE = 'BALANCE'
+								   AND   B.YYYYMMDD BETWEEN M.CONFIRM_START_DATE AND M.CONFIRM_END_DATE
+								   AND   B.YYYYMMDD = R.YYYYMMDD
+								   AND   B.QTY < 0 )
+					AND  R.YYYYMMDD BETWEEN M.CONFIRM_START_DATE AND M.CONFIRM_END_DATE 
+					GROUP BY R.DIVISION_ID, R.PLAN_START_YYYYMMDD, R.PLAN_TYPE, R.SEQ, L.SEGMENT2, R.FROM_SITE, R.ITEM_ID  
+
+                 ) X
+   ) 
+
+SELECT V.MAIL_RECEIVER 
+,      R.DIVISION_ID
+,      R.FROM_SITE
+,      [dbo].[FN_GET_SCM_SITE_DESCRIPTION]( R.DIVISION_ID , R.FROM_SITE ) AS FROM_SITE_DESCRIPTION 
+,      R.ITEM_ID
+,      [DBO].[FN_GET_ITEM_NICKNAME](R.DIVISION_ID,R.ITEM_ID)  AS NICK_NAME
+,      U.USERNAME + '('+R.CREATED_BY +')'  AS REQUESTOR 
+,      R.TO_SITE 
+,      [dbo].[FN_GET_SCM_SITE_DESCRIPTION]( R.DIVISION_ID , R.TO_SITE ) AS TO_SITE_DESCRIPTION 
+,      R.PROJECT_CODE           AS END_CUSTOMER 
+,      R.FCST_TYPE
+,      R.INCOTERMS
+,      R.TRANSPORT_MODE
+,      R.YYYYMMDD 
+,      R.QTY 
+FROM SSP_ANL_SHIP_REQ R WITH(NOLOCK) 
+     JOIN MAIL_RECEIVER V  WITH(NOLOCK)
+	   ON V.DIVISION_ID = R.DIVISION_ID
+	  AND V.PLAN_START_YYYYMMDD = R.PLAN_START_YYYYMMDD
+	  AND V.PLAN_TYPE = R.PLAN_TYPE 
+	  AND V.SEQ = R.SEQ 
+	  AND V.FROM_SITE = R.FROM_SITE
+	  AND V.ITEM_ID   = R.ITEM_ID  
+     JOIN SSP_MST_SHIP_REQ M WITH(NOLOCK)  
+	   ON M.DIVISION_ID = R.DIVISION_ID
+	  AND M.PLAN_START_YYYYMMDD = R.PLAN_START_YYYYMMDD
+	  AND M.PLAN_TYPE = R.PLAN_TYPE 
+	  AND M.SEQ = R.SEQ 
+	  AND M.CUTOFF_FLAG  ='Y'
+	  AND M.CONFIRM_FLAG ='N'
+     JOIN TB_FX_USER U WITH(NOLOCK) 
+	   ON U.USERID = R.CREATED_BY
+
+WHERE R.DIVISION_ID = '40'
+AND   R.MEASURE  in ( 'SHIP_REQ' ) 
+AND   R.QTY > 0
+AND   EXISTS ( SELECT 1 
+               FROM SSP_ANL_SHIP_REQ B WITH(NOLOCK) 
+			   WHERE R.DIVISION_ID = B.DIVISION_ID 
+			   AND   R.PLAN_START_YYYYMMDD = B.PLAN_START_YYYYMMDD
+			   AND   R.PLAN_TYPE =   B.PLAN_TYPE
+			   AND   R.SEQ = B.SEQ
+			   AND   R.ITEM_ID = B.ITEM_ID 
+			   AND   R.FROM_SITE = B.FROM_SITE 
+			   AND   B.MEASURE = 'BALANCE'
+			   AND   B.YYYYMMDD BETWEEN M.CONFIRM_START_DATE AND M.CONFIRM_END_DATE
+			   AND   B.QTY < 0 )
+AND  R.YYYYMMDD BETWEEN M.CONFIRM_START_DATE AND M.CONFIRM_END_DATE 
+
+
+
+
+
+

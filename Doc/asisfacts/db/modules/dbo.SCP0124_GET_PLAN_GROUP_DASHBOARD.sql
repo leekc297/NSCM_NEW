@@ -1,0 +1,133 @@
+﻿
+
+
+/*
+ * Program ID   : SCP0124_GET_PLAN_GROUP_DASHBOARD
+ * Description  : Plan Group DASHBOARD 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/05/21   mrchois			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Initial Release
+ * 2025/06/16   mrchois			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Act. 를 하나도 완료하지 않은 Plan Group도 전부 표시, Plant 조회조건 추가
+ * 2025/07/04   mrchois			PJ2024A332R 독립적 Planning 체계 및 Master Validation UI 구축 - Owner 정보 변경
+ * 2025/08/20   mrchois			PJ20257329  최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Plan ID 표시할 때 ATTRIBUTE1 = 'A' 인 정보 제외
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0124_GET_PLAN_GROUP_DASHBOARD]
+	@p_division_id			NVARCHAR(50)
+	, @p_plan_group_id		NVARCHAR(50)
+	, @p_completed_yn		NVARCHAR(1)
+	, @p_start_date			NVARCHAR(8)
+	, @p_end_date			NVARCHAR(8)
+	, @p_plant_id			NVARCHAR(max)
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+
+	if object_id('tempdb..#opmz_last_actv_cd') is not null drop table #opmz_last_actv_cd;
+
+	--Plan Group의 마지막 단계 ACTV_SEQ
+	SELECT  am.OPMZ_PLAN_GR_ID
+	, MAX(am.OPMZ_ACTV_SEQ) AS OPMZ_ACTV_SEQ				
+	INTO #opmz_last_actv_cd
+	FROM SCP_OPMZ_PLAN_GR_ACTV_M am WITH(NOLOCK) 
+	INNER JOIN SCP_OPMZ_PLAN_GR_M pg WITH(NOLOCK)   
+		ON pg.OPMZ_PLAN_GR_ID = am.OPMZ_PLAN_GR_ID
+	WHERE 1=1
+	AND pg.DIVISION_ID = @p_division_id
+	AND ( ( @p_plan_group_id	IS NULL OR  @p_plan_group_id = '' ) OR (am.OPMZ_PLAN_GR_ID	IN (SELECT token FROM dbo.String_Split(@p_plan_group_id  ,','))) )
+	GROUP BY am.OPMZ_PRS_CD, am.OPMZ_PLAN_GR_ID
+
+
+	;WITH opmz_activity AS (
+		SELECT segment1							AS OPMZ_ACTV_CD
+				,attribute1						AS OPMZ_ACTV_NAME
+				,attribute3						AS OPMZ_PLAN_ID_INDP_YN  -- plan id 독립적 수행 activity 여부 
+		FROM scm_adm_lookup_master_detail WITH(NOLOCK)
+		WHERE 1=1
+			and lookup_type = 'OPMZ_ACTV_CD'
+			and valid_yn = 'Y'
+	)
+	SELECT CONVERT(char(10), dbo.FN_CHAR_TO_DATE(rm.PLAN_START_YYYYMMDD),121) + ' (' + B.WEEK_NAME + ')' AS PLAN_START_YYYYMMDD
+		 , pg.DIVISION_ID
+		 , rm.OPMZ_PRS_CD
+		 , rm.OPMZ_PLAN_GR_ID
+		 , pg.OPMZ_PLAN_GR_NAME
+		 , pg.OWNR_LST_CTN			AS OWNER	--Plan Group 정보에 등록된 Owner 정보​ (2025-07-04)
+		 , rm.OPMZ_ACTV_RUN_STAT_CD
+		 , rm.COMPLETED_YN 
+		 --, rm.OPMZ_ACTV_CD
+		 --, oa.OPMZ_ACTV_NAME
+		 , CASE WHEN ISNULL(fp.OPMZ_PLAN_GR_ID, '') != '' THEN 'Y' ELSE 'N' END AS FP_TARGET_YN		-- FP Target I/F 실행여부 판단
+		 , CASE WHEN rm.OPMZ_ACTV_RUN_STAT_CD IS NULL THEN '-' ELSE rm.OPMZ_ACTV_CD END AS OPMZ_ACTV_CD
+		 , CASE WHEN rm.OPMZ_ACTV_RUN_STAT_CD IS NULL THEN '-' ELSE oa.OPMZ_ACTV_NAME END AS OPMZ_ACTV_NAME	--Act.를 하나도 완료하지 않은 경우 Progress Status는 - 표시
+		 , rm.OPMZ_PLAN_ID
+		 , rm.LAST_UPDATED_BY
+		 , rm.LAST_UPDATE_DATE
+	FROM (
+		SELECT * 
+		FROM (
+			SELECT a.PLAN_START_YYYYMMDD
+				 , a.OPMZ_PRS_CD
+				 , a.OPMZ_PLAN_GR_ID
+				 , a.OPMZ_ACTV_CD		--완료된 Activity 중에서 순서가 가장 큰 단계 표시​
+				 , b.OPMZ_ACTV_RUN_STAT_CD
+				 , CASE WHEN a.OPMZ_ACTV_SEQ = ISNULL(ac.OPMZ_ACTV_SEQ, 0) AND b.OPMZ_ACTV_RUN_STAT_CD = 'C' THEN 'Y' ELSE 'N' END AS COMPLETED_YN	--Activity의 마지막 단계까지 완료됐으면 Y 그 외는 N​
+				 , b.OPMZ_PLAN_ID
+				 , b.LAST_UPDATED_BY
+				 , b.LAST_UPDATE_DATE
+				 --, row_number()  OVER (PARTITION BY b.PLAN_START_YYYYMMDD, b.OPMZ_PRS_CD, b.OPMZ_PLAN_GR_ID ORDER BY a.OPMZ_ACTV_SEQ desc, b.LAST_UPDATE_DATE desc) AS rn
+				 , row_number()  OVER (PARTITION BY a.PLAN_START_YYYYMMDD, a.OPMZ_PRS_CD, a.OPMZ_PLAN_GR_ID  ORDER BY CASE WHEN ISNULL(b.OPMZ_ACTV_RUN_STAT_CD, '') = '' THEN 'N' ELSE 'Y' END desc , a.OPMZ_ACTV_SEQ desc, b.LAST_UPDATE_DATE desc) AS rn
+			FROM SCP_OPMZ_PLAN_CTRL_ACTV_M a WITH(NOLOCK)
+			  --INNER JOIN SCP_OPMZ_PLAN_CTRL_ACTV_RUN_M b WITH(NOLOCK)
+			LEFT JOIN SCP_OPMZ_PLAN_CTRL_ACTV_RUN_M b WITH(NOLOCK)
+						ON b.plan_start_yyyymmdd = a.plan_start_yyyymmdd
+						and b.opmz_prs_cd			= a.opmz_prs_cd
+						and b.opmz_plan_gr_id		= a.opmz_plan_gr_id
+						and b.opmz_actv_cd			= a.opmz_actv_cd
+			INNER JOIN #opmz_last_actv_cd ac WITH(NOLOCK)   
+				ON ac.OPMZ_PLAN_GR_ID = a.OPMZ_PLAN_GR_ID
+			WHERE 1=1
+			--and b.OPMZ_ACTV_RUN_STAT_CD IS  NOT NULL	--Act. 를 하나도 완료하지 않은 Plan Group도 전부 표시
+			and ISNULL(b.ATTRIBUTE1, '') != 'M'	--수동으로 엔진 돌릴경우는 화면표시 대상제외
+			and ISNULL(b.ATTRIBUTE1, '') != 'A'	--[PJ20257329] Plan ID 표시할 때 ATTRIBUTE1 = 'A' 인 정보 제외(2025-08-20)
+		) a
+		WHERE rn = 1
+	) rm
+	INNER JOIN SCP_OPMZ_PLAN_GR_M pg WITH(NOLOCK)   
+		ON pg.OPMZ_PLAN_GR_ID = rm.OPMZ_PLAN_GR_ID
+	INNER JOIN opmz_activity oa WITH(NOLOCK)
+		ON oa.OPMZ_ACTV_CD = rm.OPMZ_ACTV_CD 
+  	INNER JOIN SCM_SYS_CALENDAR_M B WITH(NOLOCK) 
+		ON rm.plan_start_yyyymmdd = B.basis_yyyymmdd
+	LEFT JOIN (
+				SELECT distinct PLANT_ID, OPMZ_PLAN_GR_ID
+				FROM SCP_OPMZ_PLAN_GR_LINE_M WITH(NOLOCK) 
+				) p
+		ON p.OPMZ_PLAN_GR_ID = pg.OPMZ_PLAN_GR_ID
+	LEFT JOIN (
+				SELECT PLAN_START_YYYYMMDD, OPMZ_PRS_CD, OPMZ_PLAN_GR_ID, DIVISION_ID
+				FROM SCP_OPMZ_PLAN_CTRL_ACTV_RUN_M WITH(NOLOCK) 
+				WHERE OPMZ_ACTV_CD = 'A005'	-- FP Target I/F 실행여부 판단
+				AND PLAN_START_YYYYMMDD BETWEEN @p_start_date AND @p_end_date
+			) fp
+		ON fp.PLAN_START_YYYYMMDD = rm.PLAN_START_YYYYMMDD
+		AND fp.OPMZ_PLAN_GR_ID = rm.OPMZ_PLAN_GR_ID
+		AND fp.DIVISION_ID = pg.DIVISION_ID
+	WHERE pg.division_id = @p_division_id
+	--AND rm.OPMZ_PLAN_GR_ID = @p_plan_group_id
+	AND ( ( @p_plan_group_id	IS NULL OR  @p_plan_group_id = '' ) OR rm.OPMZ_PLAN_GR_ID	IN (SELECT token FROM dbo.String_Split(@p_plan_group_id  ,',')) )
+	AND ( ( @p_completed_yn	IS NULL OR  @p_completed_yn = '' ) OR rm.COMPLETED_YN	IN (SELECT token FROM dbo.String_Split(@p_completed_yn  ,',')) )
+	AND rm.PLAN_START_YYYYMMDD BETWEEN @p_start_date AND @p_end_date
+	AND ( ( @p_plant_id	IS NULL OR  @p_plant_id = '' ) OR p.PLANT_ID	IN (SELECT token FROM dbo.String_Split(@p_plant_id,',')) )
+	group by rm.PLAN_START_YYYYMMDD, B.WEEK_NAME, pg.DIVISION_ID, rm.OPMZ_PRS_CD, rm.OPMZ_PLAN_GR_ID, pg.OPMZ_PLAN_GR_NAME, pg.OWNR_LST_CTN, rm.OPMZ_ACTV_RUN_STAT_CD	--Owner 정보​ 변경(2025-07-04)
+				, rm.COMPLETED_YN, rm.OPMZ_ACTV_CD, oa.OPMZ_ACTV_NAME, rm.OPMZ_PLAN_ID, rm.LAST_UPDATED_BY, rm.LAST_UPDATE_DATE, fp.OPMZ_PLAN_GR_ID
+  
+END
+

@@ -1,0 +1,285 @@
+﻿
+/*
+ * Program ID   : SSP0019_GET_SHIPMENT_CHANGE_HISTORY
+ * Description  : Shipment Change History
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019/07/22	mcThej		   [CSR ID:4027888] 출하계획 변경 사유 Detail Report 개발 요청
+ * 2019/07/24	mcThej		   SEQ가 1인 경우 BEFORE Column 공백처리, SEQ가 1이고 QTY가 0이 아닌 경우만 출력
+ * 2019/07/25   mcTheJ		   CHANGE_TYPE In 'P' Change Request 추가
+ * 2021/07/22   KIMYONGHO	   [C20210722-000075][Shipment Change History] 조회 조건 Confirm ID 추가 
+ 
+	Ex) Exec SSP0019_GET_SHIPMENT_CHANGE_HISTORY @p_division_id = '40', @p_from_site = '', @p_to_site = '', @p_incoterms = '', @p_from_yyyymmdd = '20190628', @p_to_yyyymmdd = '20190730', @p_item_id = '', @p_sono = '', @p_trans_mode = '', @p_language = 'KO', @debug_mode = 'F';
+ */
+
+CREATE PROCEDURE [dbo].[SSP0019_GET_SHIPMENT_CHANGE_HISTORY]
+	 @p_division_id			NVARCHAR(MAX)
+	,@p_from_site			NVARCHAR(MAX)
+	,@p_to_site             NVARCHAR(MAX)
+	,@p_incoterms			NVARCHAR(MAX)
+	,@p_from_yyyymmdd		NVARCHAR(8)
+	,@p_to_yyyymmdd			NVARCHAR(8)
+	,@p_item_id				NVARCHAR(MAX)
+	,@p_sono				NVARCHAR(MAX)
+	,@p_trans_mode			NVARCHAR(MAX)
+	,@p_confirm_id			NVARCHAR(MAX)
+	,@p_language            NVARCHAR(MAX) = 'KO'
+	,@debug_mode			NVARCHAR(1)='F'		
+AS
+BEGIN
+	SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+
+	DECLARE  @v_division_id		NVARCHAR(MAX)='';
+	DECLARE  @v_from_site		NVARCHAR(MAX)='';
+	DECLARE  @v_to_site			NVARCHAR(MAX)='';
+	DECLARE  @v_incoterms		NVARCHAR(MAX)='';
+	DECLARE  @v_item_id			NVARCHAR(MAX)='';
+	DECLARE  @v_sono			NVARCHAR(MAX)='';
+	DECLARE  @v_trans_mode		NVARCHAR(MAX)='';
+	DECLARE  @v_confirm_id		NVARCHAR(MAX)='';
+	
+	--IN 조건으로 데이터를 가져옴
+	SET @v_division_id	= [dbo].FN_GET_IN_STR(@p_division_id);
+	SET @v_from_site	= [dbo].FN_GET_IN_STR(@p_from_site);
+	SET @v_to_site		= [dbo].FN_GET_IN_STR(@p_to_site);
+	SET @v_incoterms	= [dbo].FN_GET_IN_STR(@p_incoterms);
+	SET @v_item_id		= [dbo].FN_GET_IN_STR(@p_item_id);
+	SET @v_sono			= [dbo].FN_GET_IN_STR(@p_sono);
+	SET @v_trans_mode	= [dbo].FN_GET_IN_STR(@p_trans_mode);
+	SET @v_confirm_id	= [dbo].FN_GET_IN_STR(@p_confirm_id);
+	
+	DECLARE @mQuery NVARCHAR(MAX);
+
+	SET @mQuery = '' + CHAR(10);
+	SET @mQuery = @mQuery + ' WITH CONFIRM_LIST AS																																											' + CHAR(10);
+	SET @mQuery = @mQuery + ' (                                                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	SELECT                                                                                                                                                                                      ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		tt0.DIVISION_ID, tt0.CONFIRM_ID, MAX(SUBMAX_SEQ) AS MAX_SEQ, tt0.YYYYMMDD                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	FROM                                                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	(                                                                                                                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		SELECT                                                                                                                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 			a.DIVISION_ID, a.CONFIRM_ID, MAX(a.HISTORY_SEQ) AS SUBMAX_SEQ, a.YYYYMMDD                                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		FROM SSP_ANL_SHIP_CONFIRM_H a WITH(NOLOCK)                                                                                                                                              ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		WHERE 1 = 1                                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND a.YYYYMMDD >= ' + @p_from_yyyymmdd + ' AND a.YYYYMMDD <= ' + @p_to_yyyymmdd + '                                                                                                     ' + CHAR(10);
+	IF ( @v_division_id IS NOT NULL AND		@v_division_id  != '') SET @mQuery = @mQuery + ' AND a.DIVISION_ID				IN ('+ @v_division_id	+')																		' + CHAR(10);
+	IF ( @v_from_site	IS NOT NULL AND		@v_from_site	!= '') SET @mQuery = @mQuery + ' AND a.FROM_SITE				IN ('+ @v_from_site		+')																		' + CHAR(10);
+	IF ( @v_to_site		IS NOT NULL AND		@v_to_site		!= '') SET @mQuery = @mQuery + ' AND a.TO_SITE					IN ('+ @v_to_site		+')																		' + CHAR(10);
+	IF ( @v_incoterms   IS NOT NULL AND		@v_incoterms    != '') SET @mQuery = @mQuery + ' AND a.INCOTERMS    			IN ('+ @v_incoterms		+')																		' + CHAR(10);
+	IF ( @v_item_id     IS NOT NULL AND		@v_item_id		!= '') SET @mQuery = @mQuery + ' AND a.ITEM_ID					IN ('+ @v_item_id		+')																		' + CHAR(10);
+	IF ( @v_trans_mode  IS NOT NULL AND		@v_trans_mode   != '') SET @mQuery = @mQuery + ' AND a.TRANSPORT_MODE			IN ('+ @v_trans_mode	+')																		' + CHAR(10);
+	IF ( @v_sono	    IS NOT NULL AND		@v_sono			!= '') SET @mQuery = @mQuery + ' AND a.ERP_SO_NO				IN ('+ @v_sono			+')																		' + CHAR(10);
+	--[C20210722-000075] 조회 조건 추가
+	IF ( @v_confirm_id	IS NOT NULL AND		@v_confirm_id	!= '') SET @mQuery = @mQuery + ' AND a.CONFIRM_ID				IN ('+ @v_confirm_id	+')																		' + CHAR(10);
+
+	SET @mQuery = @mQuery + ' 		GROUP BY a.DIVISION_ID, a.CONFIRM_ID, a.YYYYMMDD                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	) tt0                                                                                                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	WHERE TT0.SUBMAX_SEQ = (SELECT MAX(T.HISTORY_SEQ) FROM SSP_ANL_SHIP_CONFIRM_H T WITH(NOLOCK) WHERE T.CONFIRM_ID = tt0.CONFIRM_ID )															' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	GROUP BY tt0.DIVISION_ID, tt0.CONFIRM_ID, tt0.YYYYMMDD                                                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' )                                                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' SELECT                                                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.DIVISION_ID,                                                                                                                                                                              ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.FROM_SITE,                                                                                                                                                                                ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.ITEM_ID,                                                                                                                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	DBO.FN_GET_ITEM_NICKNAME((CASE WHEN R.DIVISION_ID = ''EE'' THEN R.ORIGIN_FROM_DIVISION_ID ELSE R.DIVISION_ID END), R.ITEM_ID ) AS NICK_NAME,                                                ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.TO_SITE,                                                                                                                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	ISNULL( ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 			CASE WHEN R.DIVISION_ID = ''40'' THEN ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 				CASE WHEN R.PROJECT_CODE IS NOT NULL AND R.PROJECT_CODE != ''-'' THEN ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 					R.PROJECT_CODE ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 				ELSE ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 					SI.PROJECT_CODE ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 				END ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 				 WHEN R.DIVISION_ID = ''EE'' AND R.ORIGIN_TO_DIVISION_ID = ''40'' THEN ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 					SI.PROJECT_CODE ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 			ELSE ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 				MS.END_CUSTOMER ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 			END ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	, ''-'') AS END_CUSTOMER,                                                                                                                                                                      ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.CONFIRM_ID,                                                                                                                                                                               ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.H_SEQ AS SEQ,                                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.SHIPMENT_DATE,                                                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.QTY,                                                                                                                                                                                      ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.TRANSPORT_MODE,                                                                                                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.INCOTERMS,                                                                                                                                                                                ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.CUSTOMER_LT,                                                                                                                                                                              ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.ERP_SO_NO,																																													' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.TYPE,                                                                                                                                                                                     ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.CHANGE_TYPE,                                                                                                                                                                              ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.CHANGE_REASON_CODE,                                                                                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.CHANGE_REASON_DETAIL,                                                                                                                                                                     ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN R.REQUEST_USER IS NULL THEN '''' ELSE CASE ''' + @p_language + ''' WHEN ''KO'' THEN U.USERNAME ELSE U.USERNAME_E END + ''('' + R.REQUEST_USER + '')'' END AS REQUESTOR,                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE ''' + @p_language + ''' WHEN ''KO'' THEN DT.DEPT_NAME_KO ELSE DT.DEPT_NAME_EN END AS REQUESTOR_DEPT_NAME,                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.REQUEST_TIME AS REQUEST_DATE,                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN R.APPROVAL_USER IS NULL THEN '''' ELSE CASE ''' + @p_language + ''' WHEN ''KO'' THEN U2.USERNAME ELSE U2.USERNAME_E END + ''('' + R.APPROVAL_USER + '')'' END AS APPROVAL,                                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE ''' + @p_language + ''' WHEN ''KO'' THEN DT2.DEPT_NAME_KO ELSE DT2.DEPT_NAME_EN END AS APPROVAL_DEPT_NAME,                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.APPROVAL_TIME AS APPROVAL_DATE,                                                                                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.CHANGE_REQ_NO AS REQUEST_NO,                                                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.REMARKS2 AS BUILDING,                                                                                                                                                                     ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.REMARKS AS REMARKS,                                                                                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN R.REQUESTOR IS NULL THEN '''' ELSE CASE ''' + @p_language + ''' WHEN ''KO'' THEN U3.USERNAME ELSE U3.USERNAME_E END + ''('' + R.REQUESTOR + '')'' END AS SHIPMENT_REQUESTOR,                                                                                                                                                          ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.REMARKS3 AS CUSTOMER_REQUIRMENT,                                                                                                                                                          ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	(                                                                                                                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		SELECT TOP 1                                                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 			ISNULL(A.SOLDTO_DESCRIPTION, ''-'')                                                                                                                                                 ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		FROM SCM_MST_CUSTOMER A WITH(NOLOCK)                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		, SCM_MST_SITE_CUSTOMER B WITH(NOLOCK)                                                                                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		WHERE 1 = 1                                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND B.REP_YN         = ''Y''                                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND B.DIVISION_ID    = A.DIVISION_ID                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND B.SOLDTO_CODE	 = A.SOLDTO_CODE                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND B.SHIPTO_CODE    = A.SHIPTO_CODE                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND A.DIVISION_ID	 = R.DIVISION_ID                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND B.SCM_SITE_ID	 = R.TO_SITE                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	) AS SOLD_TO_PARTY,                                                                                                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	(                                                                                                                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		SELECT TOP 1                                                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 			ISNULL(A.SHIPTO_DESCRIPTION, ''-'')                                                                                                                                                 ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		FROM SCM_MST_CUSTOMER A WITH(NOLOCK)                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		, SCM_MST_SITE_CUSTOMER B WITH(NOLOCK)                                                                                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		WHERE 1 = 1                                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND B.REP_YN         = ''Y''                                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND B.DIVISION_ID    = A.DIVISION_ID                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND B.SOLDTO_CODE	 = A.SOLDTO_CODE                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND B.SHIPTO_CODE    = A.SHIPTO_CODE                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND A.DIVISION_ID	 = R.DIVISION_ID                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		AND B.SCM_SITE_ID	 = R.TO_SITE                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	) AS SHIP_TO_PARTY,                                                                                                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN MU.[USER_ID] IS NULL THEN '''' ELSE CASE ''' + @p_language + ''' WHEN ''KO'' THEN MU1.USERNAME ELSE MU1.USERNAME_E END + ''('' + MU.[USER_ID] + '')'' END AS MODEL_PIC,                                                                                                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN R.DIVISION_ID =''40'' THEN R.PROJECT_CODE ELSE DBO.FN_GET_PROJECT_NAME(R.DIVISION_ID, R.PROJECT_CODE) END AS PROJECT_NAME,                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.FCST_TYPE,                                                                                                                                                                                ' + CHAR(10);
+	--SET @mQuery = @mQuery + ' 	CASE @p_language WHEN ''KO'' THEN ISNULL(SU.USER_NAME, '''') ELSE ISNULL(SU.USER_NAME_EN, '''') END AS MTK_OWNER,                                                                                 ' + CHAR(10);
+	--SET @mQuery = @mQuery + ' 	CASE WHEN ISNULL(SI.OWNER, '''') = '''' THEN NULL                                                                                                                                           ' + CHAR(10);
+	--SET @mQuery = @mQuery + ' 	ELSE                                                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		  DBO.FN_GET_SSP_MKT_OWNER_NAME (SI.OWNER, '','', '''+@p_language+''') AS MTK_OWNER,                                                                                         ' + char(10);
+	SET @mQuery = @mQuery + ' 	R.LAST_UPDATE_DATE,                                                                                                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN R.H_SEQ = 1 THEN NULL ELSE CONVERT(DATE, R.BEFORE_SHIPMENT_DATE) END AS BEFORE_SHIPMENT_DATE,                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN R.H_SEQ = 1 THEN NULL ELSE ISNULL(R.BEFORE_QTY, 0) END AS BEFORE_QTY,                                                                                                                                                      ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN R.H_SEQ = 1 THEN NULL ELSE R.BEFORE_TRANSPORT_MODE END AS BEFORE_TRANSPORT_MODE,                                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN R.H_SEQ = 1 THEN NULL ELSE R.BEFORE_INCOTERMS END AS BEFORE_INCOTERMS,                                                                                                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN ISNULL(R.BEFORE_SHIPMENT_DATE,'''') <> ISNULL(R.NEW_YYYYMMDD,'''') THEN ''Y'' ELSE ''N'' END AS SHIPMENT_DATE_CHANGE,                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN ISNULL(R.BEFORE_SHIPMENT_DATE,'''') = '''' THEN ''-''                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		 WHEN ISNULL(R.NEW_YYYYMMDD,'''') = '''' THEN ''-''                                                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	ELSE                                                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		CASE WHEN ISNULL(R.BEFORE_SHIPMENT_DATE,'''') <> ISNULL(R.NEW_YYYYMMDD,'''') THEN                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 			CONVERT(NVARCHAR(MAX), DATEDIFF(DD, CONVERT(DATE, R.BEFORE_SHIPMENT_DATE), CONVERT(DATE, R.NEW_YYYYMMDD)))                                                                          ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		ELSE ''-''                                                                                                                                                                              ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		END                                                                                                                                                                                     ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	END AS VARIABLE_DATE,                                                                                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN ISNULL(R.BEFORE_QTY,0) <> ISNULL(R.NEW_QTY,0) THEN ''Y'' ELSE ''N'' END  AS QTY_CHANGE,                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	ABS(ISNULL(R.BEFORE_QTY,0) - ISNULL(R.NEW_QTY,0)) AS VARIABLE_QTY,                                                                                                                          ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN ISNULL(R.BEFORE_TRANSPORT_MODE,'''') <> ISNULL(R.NEW_TRANSPORT_MODE,'''') THEN ''Y'' ELSE ''N'' END  AS TRANS_MODE_CHANGE,                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	CASE WHEN (R.BEFORE_SHIPMENT_DATE = R.NEW_YYYYMMDD AND R.BEFORE_QTY = R.NEW_QTY AND R.BEFORE_TRANSPORT_MODE = R.NEW_TRANSPORT_MODE) THEN ''Y'' ELSE ''N'' END AS REMARKS_CHANGE,			' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	R.LAST_SEQ                                                                                                                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' FROM                                                                                                                                                                                          ' + CHAR(10);
+	SET @mQuery = @mQuery + ' (                                                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	SELECT                                                                                                                                                                                      ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T0.DIVISION_ID,                                                                                                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T0.ORIGIN_FROM_DIVISION_ID,                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T0.ORIGIN_TO_DIVISION_ID,                                                                                                                                                               ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T0.FROM_SITE,                                                                                                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T0.ITEM_ID,                                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T0.TO_SITE,                                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T0.CONFIRM_ID,                                                                                                                                                                          ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		ROW_NUMBER() OVER(PARTITION BY T2.CONFIRM_ID ORDER BY T2.HISTORY_SEQ) AS H_SEQ,                                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T1.YYYYMMDD, CONVERT(DATE, T2.YYYYMMDD) AS SHIPMENT_DATE,                                                                                                                     ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		ISNULL(T2.QTY, 0) AS QTY,                                                                                                                                                               ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T2.TRANSPORT_MODE,                                                                                                                                                                      ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T2.INCOTERMS,                                                                                                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T2.CUSTOMER_LT,                                                                                                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T2.ERP_SO_NO,																																											' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		CASE WHEN T2.CHANGE_REQ_NO IS NULL THEN ''New''                                                                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		ELSE                                                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 			CASE WHEN T4.NEW_YN = ''Y'' THEN ''New'' ELSE ''Change'' END                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		END AS TYPE,                                                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		CASE WHEN ISNULL(T3.CHANGE_TYPE, ''System Create'') = ''A'' THEN ''Adjustment''                                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 			 WHEN ISNULL(T3.CHANGE_TYPE, ''System Create'') IN(''N'', ''C'', ''P'') THEN ''Change Request''                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		ELSE ''System Create'' END AS CHANGE_TYPE,                                                                                                                                              ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T3.CHANGE_REASON_CODE,                                                                                                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T3.CHANGE_REASON_DETAIL,                                                                                                                                                                ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T3.REQUEST_USER,                                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T3.REQUEST_DEPT,                                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T3.REQUEST_TIME,                                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T3.APPROVAL_USER,                                                                                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T3.APPROVAL_DEPT,                                                                                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T3.APPROVAL_TIME,                                                                                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T2.CHANGE_REQ_NO,                                                                                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T2.REMARKS2,                                                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T2.REMARKS,                                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T0.REQUESTOR,                                                                                                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T2.REMARKS3,                                                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T0.PROJECT_CODE,                                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T0.FCST_TYPE,                                                                                                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		ISNULL(T3.APPROVAL_TIME, T0.CREATION_DATE ) AS LAST_UPDATE_DATE,                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T4.YYYYMMDD AS BEFORE_SHIPMENT_DATE,                                                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T4.QTY AS BEFORE_QTY,                                                                                                                                                                   ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T4.TRANSPORT_MODE AS BEFORE_TRANSPORT_MODE,                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T4.INCOTERMS AS BEFORE_INCOTERMS,                                                                                                                                                       ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T4.NEW_YYYYMMDD,                                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T4.NEW_QTY,                                                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		T4.NEW_TRANSPORT_MODE,                                                                                                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		CASE WHEN T2.HISTORY_SEQ = T1.MAX_SEQ THEN ''C'' ELSE ''H'' END AS LAST_SEQ                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	FROM SSP_ANL_SHIP_CONFIRM T0 WITH(NOLOCK)                                                                                                                                                   ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	INNER JOIN CONFIRM_LIST T1                                                                                                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		ON T0.DIVISION_ID = T1.DIVISION_ID AND T0.CONFIRM_ID = T1.CONFIRM_ID                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	INNER JOIN SSP_ANL_SHIP_CONFIRM_H T2 WITH(NOLOCK)                                                                                                                                           ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		ON T0.DIVISION_ID = T2.DIVISION_ID AND T0.CONFIRM_ID = T2.CONFIRM_ID                                                                                                                    ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	LEFT OUTER JOIN SSP_ANL_SHIP_CONFIRM_CHG_REQ T3 WITH(NOLOCK)																																' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		ON T2.CHANGE_REQ_NO = T3.CHANGE_REQ_NO AND T3.CHANGE_REQ_STATUS = ''A'' AND T3.VALID_YN = ''Y''                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	LEFT OUTER JOIN SSP_ANL_SHIP_CONFIRM_CHG_REQ_DE T4 WITH(NOLOCK)                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 		ON T2.CHANGE_REQ_NO = T4.CHANGE_REQ_NO AND T2.CONFIRM_ID = T4.CONFIRM_ID AND T4.VALID_YN = ''Y''                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	WHERE 1 = 1                                                                                                                                                                                 ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	  AND T0.CHANGE_TYPE = ''C''                                                                                                                                                                                 ' + CHAR(10);
+	IF ( @v_division_id IS NOT NULL AND		@v_division_id  != '') SET @mQuery = @mQuery + ' AND T0.DIVISION_ID				IN ('+ @v_division_id	+')																		' + CHAR(10);
+	IF ( @v_from_site	IS NOT NULL AND		@v_from_site	!= '') SET @mQuery = @mQuery + ' AND T0.FROM_SITE				IN ('+ @v_from_site		+')																		' + CHAR(10);
+	IF ( @v_to_site		IS NOT NULL AND		@v_to_site		!= '') SET @mQuery = @mQuery + ' AND T0.TO_SITE					IN ('+ @v_to_site		+')																		' + CHAR(10);
+	IF ( @v_incoterms   IS NOT NULL AND		@v_incoterms    != '') SET @mQuery = @mQuery + ' AND T0.INCOTERMS    			IN ('+ @v_incoterms		+')																		' + CHAR(10);
+	IF ( @v_item_id     IS NOT NULL AND		@v_item_id		!= '') SET @mQuery = @mQuery + ' AND T0.ITEM_ID					IN ('+ @v_item_id		+')																		' + CHAR(10);
+	IF ( @v_trans_mode  IS NOT NULL AND		@v_trans_mode   != '') SET @mQuery = @mQuery + ' AND T0.TRANSPORT_MODE			IN ('+ @v_trans_mode	+')																		' + CHAR(10);
+	IF ( @v_sono	    IS NOT NULL AND		@v_sono			!= '') SET @mQuery = @mQuery + ' AND T0.ERP_SO_NO				IN ('+ @v_sono			+')																		' + CHAR(10);
+	SET @mQuery = @mQuery + ' ) AS R                                                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' LEFT OUTER JOIN TB_FX_USER U WITH(NOLOCK)                                                                                                                                                                 ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	ON R.REQUEST_USER = U.USERID AND U.USEYN = ''Y''                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO DT WITH(NOLOCK)                                                                                                                                                      ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	ON R.REQUEST_DEPT = DT.DEPT_ID                                                                                                                                                              ' + CHAR(10);
+	SET @mQuery = @mQuery + ' LEFT OUTER JOIN TB_FX_USER U2 WITH(NOLOCK)                                                                                                                                                                 ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	ON R.APPROVAL_USER = U2.USERID AND U2.USEYN = ''Y''                                                                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' LEFT OUTER JOIN TB_FX_USER U3 WITH(NOLOCK)                                                                                                                                                                 ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	ON R.REQUESTOR = U3.USERID AND U3.USEYN = ''Y''                                                                                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO DT2 WITH(NOLOCK)                                                                                                                                                     ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	ON R.APPROVAL_DEPT = DT2.DEPT_ID                                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' LEFT OUTER JOIN SSP_MST_MODEL_USER MU WITH(NOLOCK)                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	ON MU.DIVISION_ID = R.DIVISION_ID AND MU.FROM_SITE = R.FROM_SITE AND MU.ITEM_ID = R.ITEM_ID AND MU.VALID_YN = ''Y''                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' LEFT OUTER JOIN TB_FX_USER MU1 WITH(NOLOCK)                                                                                                                                            ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	ON MU.USER_ID = MU1.USERID AND MU1.USEYN = ''Y''                                                                         ' + CHAR(10);
+	SET @mQuery = @mQuery + ' LEFT OUTER JOIN SCM_MST_SITE_ITEM SI WITH(NOLOCK)                                                                                                                                             ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	ON SI.DIVISION_ID = (CASE WHEN R.DIVISION_ID = ''EE'' THEN R.ORIGIN_TO_DIVISION_ID ELSE R.DIVISION_ID END)                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	AND SI.SCM_SITE_ID = R.TO_SITE                                                                                                                                                              ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	AND SI.ITEM_ID = R.ITEM_ID                                                                                                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' 	AND SI.PROJECT_CODE = R.PROJECT_CODE                                                                                                                                                        ' + CHAR(10);
+	SET @mQuery = @mQuery + ' LEFT OUTER JOIN SCM_MST_SITE MS ON MS.DIVISION_ID = R.ORIGIN_TO_DIVISION_ID AND MS.SCM_SITE_ID = R.TO_SITE																					' + CHAR(10);
+
+	--SET @mQuery = @mQuery + ' LEFT OUTER JOIN SCM_MST_SSO_USER_INFO SU                                                                                                                                                      ' + CHAR(10);
+	--SET @mQuery = @mQuery + ' 	ON SI.OWNER = SU.USER_ID                                                                                                                                                                  ' + CHAR(10);
+	SET @mQuery = @mQuery + ' WHERE 1 = 1                                                                                                                                                                                   ' + CHAR(10);
+	SET @mQuery = @mQuery + ' AND R.H_SEQ = (CASE WHEN R.H_SEQ = 1 AND R.QTY = 0 THEN 0 ELSE R.H_SEQ END)' + CHAR(10);
+	SET @mQuery = @mQuery + ' ORDER BY R.DIVISION_ID,	R.FROM_SITE, R.ITEM_ID, END_CUSTOMER, R.YYYYMMDD, R.CONFIRM_ID, R.H_SEQ DESC, SHIPMENT_DATE                                                                                                                  ' + CHAR(10);
+
+	EXEC(@mQuery);
+	--SELECT @mQuery;
+	
+	IF( @debug_mode ='T')
+	BEGIN				
+		DECLARE @POS INT =1;
+		DECLARE @LEN INT =LEN(@mQuery);
+		WHILE @POS <= @LEN
+			BEGIN
+				PRINT SUBSTRING(@mQuery,@POS,4000);
+				SET @POS = @POS+4000;
+			END;
+	END;
+	
+END

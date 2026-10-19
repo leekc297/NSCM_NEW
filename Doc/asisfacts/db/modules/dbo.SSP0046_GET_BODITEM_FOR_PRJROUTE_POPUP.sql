@@ -1,0 +1,73 @@
+﻿
+
+/*
+ * Program ID   : SSP0045_GET_BODITEM_FOR_PRJROUTE_POPUP 
+ * Description  : BOD ITEM(For Project Route) 조회 -- DMF0045 에서 사용함.
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2019/09/11   kyh			SCM0002_GET_BODITEM_FOR_PRJROUTE_POPUP 과 비슷한 역할 DM 용으로 생성
+ * 2020/03/04	hwi1993		CSR : C20200303-000235, SiteType = 'Sales' 를 제거하고, Dept_id 를 OUter join 으로 변경함
+ * 
+ */
+CREATE PROCEDURE [dbo].[SSP0046_GET_BODITEM_FOR_PRJROUTE_POPUP]
+   @p_division_id				NVARCHAR(30)
+  ,@p_item_id					NVARCHAR(50)
+  ,@p_from_site					NVARCHAR(30)
+AS  
+  
+BEGIN
+		SET NOCOUNT ON; 
+		SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;	
+
+		SELECT  distinct									
+				a.division_id							
+				,b.from_site							
+				,SF.division_id AS FROM_DIVISION_ID							
+				,SF.SITE_TYPE AS FROM_SITE_TYPE							
+				,SF.SITE_DESCRIPTION AS FROM_SITE_NAME							
+				,b.to_site							
+				,ST.division_id AS TO_DIVISION_ID							
+				,ST.SITE_TYPE AS TO_SITE_TYPE							
+				,ST.SITE_DESCRIPTION AS TO_SITE_NAME							
+				,a.item_id							
+				,a.priority							
+				,a.bod_id							
+				,b.incoterms							
+				,c.transport_mode 							
+				,(SELECT v.lt_total FROM scp_mst_bod_v v WHERE v.division_id = b.division_id  and v.bod_id = b.bod_id ) AS lead_time							
+				,a.valid_yn AS BOD_ITEM_VALID							
+				,c.route_id  							
+				,c.days_mon  							
+				,c.days_tue  							
+				,c.days_wed  							
+				,c.days_thu  							
+				,c.days_fri  							
+				,c.days_sat  							
+				,c.days_sun  							
+				,CONVERT(CHAR(8), DATEADD(DD, isnull(fs.ship_frozen,0)-1, GETDATE()), 112) frozen_yyyymmdd -- Ship Frozen구간 다음일자							
+				, ST.END_CUSTOMER
+				, DP.DEPT_NAME_KO
+		FROM scp_mst_bod_item a  									
+		INNER JOIN scp_mst_bod b  ON a.bod_id = b.bod_id									
+		INNER JOIN SCM_MST_SITE SF ON SF.SCM_SITE_ID=b.from_site and sf.SITE_TYPE='PLANT'									
+		INNER JOIN SCM_MST_SITE ST ON ST.SCM_SITE_ID=b.to_site -- AND ST.SITE_TYPE = 'SALES'									
+		INNER JOIN scp_mst_distribution_route c  ON b.route_id = c.route_id 									
+		INNER JOIN scm_mst_site fs	ON  a.division_id      = fs.division_id								
+									AND b.to_site    = fs.scm_site_id		
+									--AND fs.site_type       = 'SALES'  		
+									AND fs.valid_yn        = 'Y'	
+		LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO DP ON ST.DEPT_ID = DP.DEPT_ID 	
+		WHERE a.division_id = @p_division_id									
+			AND a.item_id   = @p_item_id								
+			AND B.FROM_SITE = case when isnull(@p_from_site, '') = '' then B.FROM_SITE ELSE @p_from_site END
+		ORDER BY a.valid_yn desc, a.division_id, b.from_site, b.to_site, a.priority, c.transport_mode									
+		;
+END
+
+
+
+
+
+

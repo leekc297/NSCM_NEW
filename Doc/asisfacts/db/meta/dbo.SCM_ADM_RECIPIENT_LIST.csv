@@ -1,0 +1,4073 @@
+﻿"USE_TYPE_CODE","CATEGORY_ID","SUB_MODULE_CODE","MODULE_CODE","CATEGORY_DESC","CYCLE_CLASS_CODE","DETAIL_CLASS_CODE","SEND_TIME_TEXT","VALID_YN","SQL_LONG_TEXT","CREATED_BY","CREATION_DATE","LAST_UPDATED_BY","LAST_UPDATE_DATE","SEND_MIN_TIME_TEXT"
+"SMS","45","SSP","SSP","Daily Confrim Batch Error Message","RT","R01","","Y","","juhlee","2018-10-16 14:02:14.437","juhlee","2018-10-16 14:02:14.437",""
+"SMS","46","SSP","SSP","Daily Confrim Batch End Message","RT","R01","","Y","","juhlee","2018-10-16 14:02:53.520","juhlee","2018-10-16 14:02:53.520",""
+"SMS","50","SSP","SSP","Daily Plan Start Message","RT","R01","","Y","","juhlee","2019-04-10 16:59:11.640","juhlee","2019-04-10 16:59:11.640",""
+"SMS","51","SSP","SSP","Daily Plan End Message","RT","R01","","Y","","juhlee","2019-04-10 16:59:11.657","juhlee","2019-04-10 16:59:11.657",""
+"SMS","52","SSP","SSP","Daily Plan Error Message","RT","R01","","Y","","juhlee","2019-04-10 16:59:11.670","juhlee","2019-04-10 16:59:11.670",""
+"MAIL","14","SSP","SSP","출하계획 변경 요청 메일","RT","R01","","Y","","addio777","2018-05-17 16:05:51.640","gosun0823","2023-08-09 11:01:34.490",""
+"MAIL","15","SSP","SSP","출하계획 변경 승인 메일","RT","R01","","Y","","addio777","2018-05-17 16:05:51.657","juhlee","2018-05-23 11:42:30.027",""
+"MAIL","16","SSP","SSP","출하계획 변경 반려 메일","RT","R01","","Y","","addio777","2018-05-17 16:05:51.657","juhlee","2018-05-23 11:42:29.997",""
+"SMS","66","DM","DM","Sales Result Batch Error","RT","R01","","Y","","choiya2","2020-02-27 11:04:13.453","choiya2","2020-02-27 11:04:13.453",""
+"SMS","67","SSP","SSP","I/F Data Check","RT","R01","","Y","","kimyh8848","2020-03-13 14:41:35.437","kimyh8848","2020-03-13 14:41:35.437",""
+"SMS","69","COMMON","COMMON","Error Process Message","RT","R01","","Y","","muk777","2020-08-24 08:59:42.370","muk777","2020-08-24 09:15:09.867",""
+"SMS","70","COMMON","COMMON","Long Time Process Message","RT","R01","","Y","","muk777","2020-08-24 08:59:42.370","muk777","2020-08-24 09:15:09.930",""
+"SMS","73","DM","DM","Stock Sales Batch Error","RT","R01","","Y","","choiya2","2021-02-04 15:53:13.330","choiya2","2021-02-04 15:53:13.330",""
+"SMS","79","DM","DM","VMI실적 BATCH ERROR","RT","R01","","Y","","rosia27","2021-11-09 12:49:47.500","rosia27","2021-11-10 13:32:33.453",""
+"SMS","98","DM","DM","MDF To DM Batch Error","RT","R01","","Y","","jssbae","2024-03-22 13:30:00.047","jssbae","2024-03-22 13:30:00.047",""
+"SMS","102","DM","DM","DM Checked Beforehand","RT","R01","","Y","","jssbae","2024-07-30 09:24:16.273","jssbae","2024-07-30 09:24:16.273",""
+"SMS","103","DM","DM","DM JOB ERROR Checked","RT","R01","","Y","","jssbae","2025-06-09 22:25:03.070","jssbae","2025-06-09 22:25:03.070",""
+"SMS","104","SCP","SCP","NPP0220 Not Running Message","RT","R01","","Y","","jungyu9.kim","2025-07-01 15:38:05.673","jungyu9.kim","2025-07-01 16:48:04.220",""
+"SMS","105","DM","DM","MKT FCST WEEKLY CUTOFF","RT","R01","","Y","","jssbae","2025-08-28 07:47:58.400","jssbae","2025-08-28 07:47:58.400",""
+"SMS","61","DM","DM","Project Master Batch (BPMS) Error","RT","R01","","Y","","choiya2","2020-02-27 11:01:37.547","songkeeho","2020-03-05 12:49:17.230",""
+"SMS","62","DM","DM","Project DV Master Batch Error","RT","R01","","Y","","choiya2","2020-02-27 11:03:11.627","songkeeho","2020-03-05 12:49:17.213",""
+"SMS","63","DM","DM","Project Item Mapping Batch Error","RT","R01","","Y","","choiya2","2020-02-27 11:03:27.627","choiya2","2020-02-27 11:03:27.627",""
+"SMS","64","DM","DM","Customer Master (Soldto, Shipto) Batch Error","RT","R01","","Y","","choiya2","2020-02-27 11:03:43.063","songkeeho","2020-03-05 12:49:17.183",""
+"SMS","65","DM","DM","SD0069 EDI Call off Batch Error","RT","R01","","Y","","choiya2","2020-02-27 11:03:59.767","choiya2","2020-02-27 11:03:59.767",""
+"SMS","56","SSP","SSP","Daily Plan Cutoff Start Message","RT","R01","","Y","","juhlee","2019-09-27 16:54:39.117","juhlee","2019-09-27 16:54:39.117",""
+"SMS","57","SSP","SSP","Daily Plan Cutoff Error Message","RT","R01","","Y","","juhlee","2019-09-27 16:55:27.557","juhlee","2019-09-27 16:55:27.557",""
+"SMS","58","SSP","SSP","Daily Plan Cutoff End Message","RT","R01","","Y","","juhlee","2019-09-27 16:56:14.223","juhlee","2019-09-27 16:56:14.223",""
+"SMS","60","SCP","SCP","SCP-ERP,FP I/F Data Check","RT","R01","","Y","","hwwoonins","2020-02-24 11:03:13.360","hwwoonins","2020-02-24 11:03:13.360",""
+"SMS","53","SSP","SSP","Create Shipment Request Start Message","RT","R01","","Y","","juhlee","2019-06-19 10:45:52.563","juhlee","2019-06-19 10:45:52.563",""
+"SMS","54","SSP","SSP","Create Shipment Request Error Message","RT","R01","","Y","","juhlee","2019-06-19 10:46:14.377","juhlee","2019-06-19 10:46:14.377",""
+"SMS","55","SSP","SSP","Create Shipment Request End Message","RT","R01","","Y","","juhlee","2019-06-19 10:46:32.397","juhlee","2019-06-19 10:46:32.397",""
+"SMS","107","SCP","SCP","OPT_ENGINE_HEALTH_MONITOR","RT","R01","","Y","","yanbn82","2026-09-10 13:36:52.083","yanbn82","2026-09-10 13:36:52.083",""
+"MAIL","75","SSP","SSP","상품 BNP In BOD 메일링","RT","R01","","Y","SELECT DISTINCT
+		a.created_by AS USER_ID
+		,'' AS USER_NAME		
+		,'' AS mobile_phone		
+		, '' AS email_addr		
+		, 'KO' language_code		
+		, A.DIVISION_ID		AS SEGMENT1
+		, A.customer		AS SEGMENT2
+		, A.from_site_code	AS SEGMENT3	
+		, A.to_site_code	AS SEGMENT4	
+		, A.INCOTERMS		AS SEGMENT5
+		, 'Division'		AS COLUMN1
+		, 'Customer'		AS COLUMN2
+		, 'From Site'		AS COLUMN3
+		, 'To Site'			AS COLUMN4
+		, 'Incoterms'			AS COLUMN5
+ FROM (
+SELECT DISTINCT T.*
+  FROM (
+        SELECT
+  		 ma.division_id		
+         ,bo.bod_id
+  		,dbo.fn_get_division_name (ma.division_id) AS division_name		
+  		,dbo.FN_GET_SITE_CUSTOMER_INFO(ma.division_id,ma.SCM_SITE_ID,'SHIPTO_DESCRIPTION') AS customer
+  		,ma.incoterms		
+  		,ma.PLANT_SITE_ID AS from_site_code		
+  		--,ISNULL(dbo.fn_get_scm_site_description (ma.division_id, ma.PLANT_SITE_ID) , '-') AS from_site_name		
+  		,ma.SCM_SITE_ID AS to_site_code		
+  		--,ISNULL(dbo.fn_get_scm_site_description (ma.division_id, ma.SCM_SITE_ID) , '-') AS to_site_name		
+  		,bo.safety_stock, bo.priority		
+  		,bo.valid_yn as bod_valid		
+  		,ro.valid_yn as route_valid		
+  		,ro.route_id		
+  		,ro.days_mon		
+  		,ro.days_tue		
+  		,ro.days_wed		
+  		,ro.days_thu		
+  		,ro.days_fri		
+  		,ro.days_sat		
+  		,ro.days_sun		
+  		,(select v.lt_total from scp_mst_bod_v v where v.division_id = ma.division_id  and v.BOD_ID = bo.bod_id ) AS lead_time		
+  		,ISNULL(bo.created_by,ma.created_by)  created_by		
+		
+  		FROM  (		
+		select [DIVISION_ID],[PROJECT_CODE],[SCM_SITE_ID] ,[ITEM_ID],[DOM_EXP] ,[FCST_TYPE] ,[INCOTERMS] ,[MEASURE],  [PLANT_SITE_ID] ,[YYYYMMDD] ,[PLAN_QTY] ,[BOD_ID] ,[CREATED_BY]          
+		 from (
+		   SELECT [DIVISION_ID] 
+			  ,[PROJECT_CODE] 
+			  ,[SCM_SITE_ID] 
+			  ,[ITEM_ID]  
+			  ,[DOM_EXP]  
+			  ,[FCST_TYPE]  
+			  ,[INCOTERMS]  
+			  ,[MEASURE]  
+			  ,CASE WHEN R.[PLANT_SITE_ID] IS NULL OR R.[PLANT_SITE_ID] = '' THEN 'KR012031-P' ELSE R.[PLANT_SITE_ID] END AS [PLANT_SITE_ID]
+			  ,[YYYYMMDD]  
+			  ,[QTY] AS PLAN_QTY
+			  ,(SELECT TOP 1 BOD_ID 
+			   FROM SCP_MST_BOD_V WITH(NOLOCK)
+			  WHERE DIVISION_ID = R.DIVISION_ID  
+				AND FROM_SITE = CASE WHEN R.PLANT_SITE_ID IS NULL OR R.PLANT_SITE_ID = '' THEN 'KR012031-P' ELSE  R.PLANT_SITE_ID END
+				AND TO_SITE  = R.SCM_SITE_ID
+                                                AND INCOTERMS = R.INCOTERMS
+			  ORDER BY 
+				 PRIORITY ASC
+			  )  AS BOD_ID  
+			  ,[CREATED_BY]
+			  ,[PLANT_SITE_ID] AS ORG_PLANT_SITE_ID
+			 FROM [dbo].DM_PLN_MKT_FCST R WITH(NOLOCK)
+			WHERE R.DIVISION_ID  = '82' 
+			  AND R.QTY    >= 1
+			  AND R.ATTRIBUTE9 IS NULL 
+			  AND R.YYYYMMDD   >= CONVERT(VARCHAR, getdate(), 112)
+			  AND R.MEASURE   = 'BNPIn'
+		 ) as X
+		 where x.BOD_ID is null
+
+ ) ma
+ LEFT OUTER JOIN ( SELECT a.*, b.transport_mode
+					    FROM scp_mst_bod a
+						INNER JOIN scp_mst_distribution_route b ON a.ROUTE_ID = b.ROUTE_ID				
+					) bo ON  bo.division_id   = ma.division_id
+ 				     AND bo.to_site       = ma.SCM_SITE_ID
+ 					 AND bo.incoterms     = ma.incoterms
+ 					 AND bo.from_site     = ma.PLANT_SITE_ID
+ LEFT OUTER JOIN scp_mst_distribution_route ro  ON bo.route_id = ro.route_id
+ WHERE 1=1
+ 		AND  bo.route_id IS NULL		
+ 		AND ma.division_id    IN ('40','81','82')		
+		AND ma.PLANT_SITE_ID in (		
+			SELECT	SCM_SITE_ID
+			FROM [dbo].[SCM_MST_SITE] AS A WITH(NOLOCK)	
+			WHERE SITE_TYPE = 'PLANT'	
+			AND    A.VALID_YN  = 'Y'	
+		)		
+		AND ma.SCM_SITE_ID in (		
+			SELECT	 SCM_SITE_ID
+			FROM [dbo].[SCM_MST_SITE] AS A WITH(NOLOCK)	
+			WHERE   A.VALID_YN  = 'Y'	
+		)		
+		AND ma.incoterms in (		
+			SELECT B.SEGMENT1	
+			FROM SCM_ADM_LOOKUP_MASTER A WITH(NOLOCK)	
+			INNER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL B WITH(NOLOCK) ON A.LOOKUP_TYPE = B.LOOKUP_TYPE  AND B.VALID_YN = 'Y'	
+			WHERE A.LOOKUP_TYPE = 'INCOTERMS'	
+			  AND A.VALID_YN = 'Y'	
+		)		
+ ) T
+WHERE NOT EXISTS (SELECT 1 FROM scm_mst_site s WHERE s.division_id = t.division_id AND s.scm_site_id = t.from_site_code AND s.valid_yn = 'Y' AND s.osp_yn = 'Y' AND s.operation_group = 'A')
+) A
+
+
+","kimyh8848","2021-06-18 15:27:16.657","jungilsetup","2024-04-29 09:39:46.700",""
+"MAIL","76","SSP","SSP","PR 발행 내역 메일링","RT","R01","","Y","","kimyh8848","2021-06-24 15:54:17.430","kimyh8848","2021-06-24 15:54:17.430",""
+"MAIL","78","SSP","SSP","출하계획 자동 삭제 메일링","RT","R01","","Y","","kimyh8848","2021-10-27 09:32:10.467","ohsun","2023-03-28 16:12:17.280",""
+"SMS","106","SSP","SSP","Daily Plan Delay Message","RT","R01","","Y","","jooyong026","2026-07-23 18:59:00.733","jooyong026","2026-07-23 18:59:00.733",""
+"MAIL","71","DM","DM","Mailing Test","DAY","D15","H20","N","select '' USER_ID, '' USER_NAME, '' mobile_phone, 'choiya2@lgespartner.com' email_addr, 'KO' language_code
+      ,Program_Name segment1, Execute_Date segment2, start_count segment3, VALID segment4, '' segment5, '' segment6, '' segment7, '' segment8, '' segment9, '' segment10
+      ,'Program_Name' column1, 'Execute_Date' column2, N'총 실행횟수' column3, N'비정상 종료 실행횟수' column4, '' column5, '' column6, '' column7, '' column8, '' column9, '' column10
+  from ( 
+    SELECT Program_Name
+		,CONVERT(CHAR(8), LAST_UPDATE_DATE,112) 'Execute_Date'
+		,isnull(sum(case when LOG_TYPE = 'START' then 1 end),0) as 'start_count'
+		,isnull(sum(case when LOG_TYPE = 'START' then 1 end),0) - isnull(sum(case when LOG_TYPE = 'END' then 1 end),0) - isnull(sum(case when LOG_TYPE = 'INVALID' then 1 end),0) as 'Valid'
+		, COUNT(1) % 2 AS 'Odd_Check'
+  FROM dbo.SCM_SYS_LOG_BATCH WITH(NOLOCK) 
+  WHERE 1=1 
+ AND PROGRAM_NAME LIKE '%DM%' AND PROGRAM_NAME NOT LIKE 'SCM%' AND PROGRAM_NAME NOT LIKE 'UP_%'
+ AND CONVERT(CHAR(8), LAST_UPDATE_DATE,112) >= CONVERT(CHAR(8), GETDATE()-1,112)
+ AND LAST_UPDATE_DATE < DATEADD(minute,-10,GETDATE())  /* 정시에 수행되는 작업의 종료를 Catch하지 못하여 10분전까지로 시간을 설정 */
+ AND LOG_TYPE in ('START','END','INVALID')  /* validation 으로 강제종료시킨 INVALID 도 추가*/
+GROUP BY PROGRAM_NAME,CONVERT(CHAR(8), LAST_UPDATE_DATE,112)
+having isnull(sum(case when LOG_TYPE = 'START' then 1 end),0) - isnull(sum(case when LOG_TYPE = 'END' then 1 end),0) - isnull(sum(case when LOG_TYPE = 'INVALID' then 1 end),0) > 0
+
+     ) z
+group by  Program_Name, Execute_Date, start_count, VALID
+
+
+","choiya2","2021-01-14 15:31:08.937","park.choyi","2024-11-04 15:47:05.353",""
+"MAIL","74","COMMON","COMMON","권한 요청 알림 메일","RT","R01","","Y","","kimyh8848","2021-03-16 14:03:37.160","kimyh8848","2021-03-16 14:03:37.160",""
+"MAIL","33","SCP","SCP","Tact Time(40)","DAY","D06","","Y","SELECT
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	,'' AS email_addr
+	,'KO' language_code
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.plant_site_id	AS SEGMENT2
+	,A.plant_site_name	AS SEGMENT3
+	,A.operation_group_id	AS SEGMENT4
+	,A.operation_id			AS SEGMENT5
+	,A.operation_name	AS SEGMENT6
+	,A.model_site		AS SEGMENT7
+	,A.item_id			AS SEGMENT8
+	,A.nick_name		AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Plant Site Id'	AS COLUMN2
+	,'Plant Site'		AS COLUMN3
+	,'Operation Group Id'	AS COLUMN4
+	,'Operation'			AS COLUMN5
+	,'Operation Name'		AS COLUMN6
+	,'Model Site'			AS COLUMN7
+	,'Model'				AS COLUMN8
+	,'Nick Name'			AS COLUMN9
+	,''					AS COLUMN10
+  FROM (
+-- 40
+SELECT distinct
+	   m.division_id
+      ,m.plant_site_id
+      ,dbo.FN_GET_SCM_SITE_DESCRIPTION (m.division_id, m.plant_site_id ) AS plant_site_name
+      ,m.operation_group_id
+      ,m.operation_id
+	  ,m.operation_id as operation_name
+	  ,m.model_site
+      ,m.item_id
+      ,isnull(m.nick_name,'-') as nick_name
+FROM(
+			-- Project Route 화면에 등록된 모델중 Tact Time Master에 없는 모델 조회
+			-- scp_mst_tact_time 에 등록되면 리스트에서 제외
+			SELECT DISTINCT
+				   a.division_id
+				  ,a.plant_site_id
+				  ,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id -- item_sn 테이블에 미등록된 site 경우 값을 가져올 수 없어 function을 통해 가져옴
+				  ,substring(i.scp_flow_id,1,5) AS operation_id
+				  ,i.site_id AS model_site
+				  ,a.item_id
+				  ,i.nick_name
+				  ,null AS line_id
+				  ,null AS priority
+				  ,null AS tact_time
+				  ,null AS yield
+				  ,null AS daily_capacity
+				  ,null AS valid_yn
+				  ,null AS created_by
+				  ,null AS creation_date
+				  ,null AS last_updated_by
+				  ,null AS last_update_date
+				  , 'I' as input_status
+			FROM scm_mst_site_item_priority a (NOLOCK)
+				LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a.division_id = i.division_id 
+														AND a.item_id = i.item_id 
+														AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+				JOIN SCM_MST_SITE b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id
+				inner join scp_mst_final_item fi with(nolock)  -- 20230710 활성화코드 대응 -- CP 제외
+					    on fi.division_id = a.division_id
+					   and fi.ITEM_ID     = a.item_id
+					   and isnull(fi.attribute8,'') != 'CP' -- 2023.07.19 활성화코드 분리 해외 오픈 대응
+			WHERE 1=1 
+			  AND a.valid_yn    = 'Y'
+			  AND b.osp_yn      = 'N' -- 외주 packer 제외
+			  AND b.operation_group <> 'W' -- 20230403 AS Plant 건 제외
+			  AND NOT EXISTS ( select 'X' from scp_mst_tact_time n (NOLOCK) 
+								JOIN SCM_MST_LINE_SN LS ON LS.COMPANY_ID=B.COMPANY_ID AND LS.DIVISION_ID=N.DIVISION_ID AND LS.SITE_ID=B.SITE_ID AND LS.PLANT_ID=B.PLANT_ID
+																		AND LS.OPERATION_ID=N.OPERATION_ID AND LS.LINE_ID=N.LINE_ID AND LS.ACTIVE_FLAG='Y'
+								where n.division_id = a.division_id 
+								and n.plant_site_id = a.plant_site_id 
+								and n.item_id = a.item_id )
+			  -- MKT FCST 존재하는 모델만 조회
+				AND EXISTS ( SELECT 'X'
+								   FROM scp_mst_final_item F WITH(NOLOCK)
+								  WHERE F.DIVISION_ID=A.DIVISION_ID
+								    AND F.ITEM_ID=A.ITEM_ID
+									AND F.FCST_YN = UPPER('Y') 
+									) 
+			  AND a.division_id = '40'
+			  AND i.flow_id not IN (SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WITH(NOLOCK) WHERE LOOKUP_TYPE = 'OPERATION_TCO')
+			 )m
+WHERE 1=1
+AND m.division_id = '40'
+AND m.operation_group_id <>'E'
+AND m.tact_time is null
+AND substring(m.item_id,2,1) = CASE WHEN m.operation_group_id = 'A' Then 'C' ELSE substring(m.item_id,2,1)  END  --TCO Cell조회불가
+) A
+
+","hwwoonins","2018-07-26 13:46:20.317","vadabi3","2023-10-17 13:32:04.417",""
+"MAIL","1","COMMON","COMMON","권한 요청 승인 메일(오전 08:00)","DAY","D08","","Y","SELECT A.USER_ID 
+      ,CASE WHEN U.Language = 'K0' THEN U.UserName ELSE U.UserName_E END USER_NAME
+	  ,U.CellPhoneNum mobile_phone
+	  ,U.Email email_addr
+	  ,'KO' language_code
+      ,A.GROUP_ID SEGMENT1 
+	  ,A.DIVISION_ID + ' : ' + DIV.DIVISION_NAME SEGMENT2
+	  ,CASE WHEN U.Language = 'KO' THEN LMD.SEGMENT2 ELSE LMD.SEGMENT3 END SEGMENT3
+	  ,CONVERT(NVARCHAR, A.LAST_UPDATE_DATE, 120) SEGMENT4
+	  ,A.REJECT_REASON SEGMENT5
+	  ,'' SEGMENT6
+	  ,'' SEGMENT7
+	  ,'' SEGMENT8
+	  ,'' SEGMENT9
+	  ,'' SEGMENT10
+	  ,'Authority' COLUMN1
+	  ,'Division' COLUMN2
+	  ,'Approval Result' COLUMN3
+	  ,'Approval Date' COLUMN4
+	  ,'Remark' COLUMN5
+	  ,'' COLUMN6
+	  ,'' COLUMN7
+	  ,'' COLUMN8
+	  ,'' COLUMN9
+	  ,'' COLUMN10, A.LAST_UPDATE_DATE
+FROM SCM_MST_AUTH_REQUEST A WITH(NOLOCK)
+INNER JOIN TB_FX_User U WITH(NOLOCK) ON A.USER_ID = U.UserID AND U.UseYN = 'Y'
+INNER JOIN TB_FX_GroupInfo G WITH(NOLOCK) ON A.GROUP_ID = G.GroupID AND G.UseYN = 'Y'
+LEFT OUTER JOIN SCM_MST_DIVISION DIV WITH(NOLOCK) ON A.DIVISION_ID = DIV.DIVISION_ID
+LEFT OUTER JOIN SCM_MST_PLANT_SN PS WITH(NOLOCK)  ON A.PLANT_ID = PS.PLANT_ID
+LEFT OUTER JOIN SCM_MST_VENDOR V WITH(NOLOCK) ON A.PLANT_ID = V.VENDOR_CODE
+LEFT OUTER JOIN TB_FX_UserGroupInfo GUER WITH(NOLOCK) ON A.GROUP_ID = GUER.GroupID AND A.USER_ID = GUER.UserID 
+INNER JOIN SCM_ADM_LOOKUP_MASTER LM WITH(NOLOCK) ON LM.LOOKUP_TYPE = 'AUTH_REPUEST_STATUS' AND LM.VALID_YN = 'Y'
+INNER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LMD WITH(NOLOCK) ON LM.LOOKUP_TYPE = LMD.LOOKUP_TYPE AND A.APPROVAL_RESULT = LMD.SEGMENT1 AND LMD.VALID_YN = 'Y'
+WHERE A.APPROVAL_RESULT IN ('APPROVED','REJECT')
+AND ((RIGHT(CONVERT(VARCHAR(20), GETDATE(), 100), 2) = 'AM' AND A.LAST_UPDATE_DATE >= (DATEADD(HOUR, -18, CONVERT(DATETIME, CONVERT(VARCHAR, GETDATE(), 23) + ' 08:00:00'))) AND A.LAST_UPDATE_DATE < CONVERT(DATETIME, CONVERT(VARCHAR, GETDATE(), 23) + ' 08:00:00'))
+      OR (RIGHT(CONVERT(VARCHAR(20), GETDATE(), 100), 2) = 'PM') AND A.LAST_UPDATE_DATE >= CONVERT(DATETIME, CONVERT(VARCHAR, GETDATE(), 23) + ' 08:00:00') AND A.LAST_UPDATE_DATE < DATEADD(HOUR, 6, CONVERT(DATETIME, CONVERT(VARCHAR, GETDATE(), 23) + ' 08:00:00')))","20140001","2018-03-26 09:09:00.763","kimcd","2025-07-18 14:18:06.913",""
+"MAIL","2","COMMON","COMMON","권한 요청 승인 메일(오후 14:00)","DAY","D14","","Y","SELECT A.USER_ID 
+      ,CASE WHEN U.Language = 'K0' THEN U.UserName ELSE U.UserName_E END USER_NAME
+	  ,U.CellPhoneNum mobile_phone
+	  ,U.Email email_addr
+	  ,'KO' language_code
+      ,A.GROUP_ID SEGMENT1 
+	  ,A.DIVISION_ID + ' : ' + DIV.DIVISION_NAME SEGMENT2
+	  ,CASE WHEN U.Language = 'KO' THEN LMD.SEGMENT2 ELSE LMD.SEGMENT3 END SEGMENT3
+	  ,CONVERT(NVARCHAR, A.LAST_UPDATE_DATE, 120) SEGMENT4
+	  ,A.REJECT_REASON SEGMENT5
+	  ,'' SEGMENT6
+	  ,'' SEGMENT7
+	  ,'' SEGMENT8
+	  ,'' SEGMENT9
+	  ,'' SEGMENT10
+	  ,'Authority' COLUMN1
+	  ,'Division' COLUMN2
+	  ,'Approval Result' COLUMN3
+	  ,'Approval Date' COLUMN4
+	  ,'Remark' COLUMN5
+	  ,'' COLUMN6
+	  ,'' COLUMN7
+	  ,'' COLUMN8
+	  ,'' COLUMN9
+	  ,'' COLUMN10, A.LAST_UPDATE_DATE
+FROM SCM_MST_AUTH_REQUEST A WITH(NOLOCK)
+INNER JOIN TB_FX_User U WITH(NOLOCK) ON A.USER_ID = U.UserID AND U.UseYN = 'Y'
+INNER JOIN TB_FX_GroupInfo G WITH(NOLOCK) ON A.GROUP_ID = G.GroupID AND G.UseYN = 'Y'
+LEFT OUTER JOIN SCM_MST_DIVISION DIV WITH(NOLOCK) ON A.DIVISION_ID = DIV.DIVISION_ID
+LEFT OUTER JOIN SCM_MST_PLANT_SN PS WITH(NOLOCK) ON A.PLANT_ID = PS.PLANT_ID
+LEFT OUTER JOIN SCM_MST_VENDOR V WITH(NOLOCK) ON A.PLANT_ID = V.VENDOR_CODE
+LEFT OUTER JOIN TB_FX_UserGroupInfo GUER WITH(NOLOCK) ON A.GROUP_ID = GUER.GroupID AND A.USER_ID = GUER.UserID 
+INNER JOIN SCM_ADM_LOOKUP_MASTER LM WITH(NOLOCK) ON LM.LOOKUP_TYPE = 'AUTH_REPUEST_STATUS' AND LM.VALID_YN = 'Y'
+INNER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LMD WITH(NOLOCK) ON LM.LOOKUP_TYPE = LMD.LOOKUP_TYPE AND A.APPROVAL_RESULT = LMD.SEGMENT1 AND LMD.VALID_YN = 'Y'
+WHERE A.APPROVAL_RESULT IN ('APPROVED','REJECT')
+AND ((RIGHT(CONVERT(VARCHAR(20), GETDATE(), 100), 2) = 'AM' AND A.LAST_UPDATE_DATE >= (DATEADD(HOUR, -18, CONVERT(DATETIME, CONVERT(VARCHAR, GETDATE(), 23) + ' 08:00:00'))) AND A.LAST_UPDATE_DATE < CONVERT(DATETIME, CONVERT(VARCHAR, GETDATE(), 23) + ' 08:00:00'))
+      OR (RIGHT(CONVERT(VARCHAR(20), GETDATE(), 100), 2) = 'PM') AND A.LAST_UPDATE_DATE >= CONVERT(DATETIME, CONVERT(VARCHAR, GETDATE(), 23) + ' 08:00:00') AND A.LAST_UPDATE_DATE < DATEADD(HOUR, 6, CONVERT(DATETIME, CONVERT(VARCHAR, GETDATE(), 23) + ' 08:00:00')))","20140001","2018-03-27 09:10:20.333","kimcd","2025-07-18 14:16:59.203",""
+"MAIL","3","DM","DM","Weekly Cutoff 결과 검증","WEEK","W03","D07","Y","select x.user_id USER_ID, x.user_id USER_NAME, '' mobile_phone, x.user_id email_addr, 'KO' language_code
+      ,type segment1, division_id segment2, max(version_no) segment3, sum(v_count) segment4, sum(v_sum) segment5, sum(c_count) segment6, sum(c_qty) segment7, '' segment8, '' segment9, '' segment10
+      ,'type' column1, 'division_id' column2, 'version_no' column3, 'original_count' column4, 'original_qty' column5, 'target_count' column6, 'target_qty' column7, '' column8, '' column9, '' column10
+
+  from ( 
+    select 'MKT_FCST' type, a.division_id, a.version_no, count(1) v_count, sum(qty)  v_sum, 0 c_count, 0 c_qty
+     from dm_pln_mkt_fcst_c a with(nolock)
+      ,(
+      select DIVISION_ID, max(version_no) max_version_no
+        from dm_pln_mkt_fcst_c  with(nolock)
+      where version_no like 'MF_W%' 
+      group by DIVISION_ID
+       )  b
+     where measure in ( 'MKT_FCST' /*,'CUST_FCST'*/) 
+    and a.version_no = b.max_version_no 
+    and a.DIVISION_ID = b.DIVISION_ID
+   group by  a.division_id , a.version_no
+   UNION ALL
+   select 'MKT_FCST' type, division_id, 'current',0 v_count, 0v_sum,   count(1), sum(qty)  
+     from dm_pln_mkt_fcst  with(nolock)
+    where [YYYYMMDD] >=  CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) 
+     and measure in ( 'MKT_FCST'/*,'CUST_FCST'*/) group by  division_id
+   UNION ALL
+    select 'SALES_PLAN' type, a.division_id, a.version_no, count(1) v_count, sum(qty)  v_sum, 0 c_count, 0 c_qty
+     from dm_pln_sales_plan_c a  with(nolock)
+      ,(
+      select DIVISION_ID, max(version_no) max_version_no
+        from dm_pln_sales_plan_c   with(nolock)
+      where version_no like 'SP_W%' 
+      group by DIVISION_ID
+       )  b
+     where measure in ( 'MKT_FCST'/*,'CUST_FCST'*/) 
+    and a.version_no = b.max_version_no 
+    and a.DIVISION_ID = b.DIVISION_ID
+   group by  a.division_id , a.version_no
+   UNION ALL
+   select 'SALES_PLAN' type, division_id, 'current',0 v_count, 0v_sum,   count(1), sum(qty)  
+     from dm_pln_sales_plan   with(nolock)
+    where [YYYYMMDD] >=  CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) 
+     and measure in ( 'MKT_FCST'/*,'CUST_FCST'*/) group by  division_id
+   UNION ALL
+    select 'MKT_FCST_RESULT' type, a.division_id, a.version_no, count(1) v_count, sum(qty)  v_sum, 0 c_count, 0 c_qty
+     from DM_PLN_MKT_FCST_RESULT_C a with(nolock)
+      ,(
+      select DIVISION_ID, max(version_no) max_version_no
+        from DM_PLN_MKT_FCST_RESULT_C  with(nolock)
+      where version_no like 'MF_W%' 
+      group by DIVISION_ID
+       )  b
+     where measure in ( 'MKT_FCST'/*,'CUST_FCST'*/) 
+    and a.version_no = b.max_version_no 
+    and a.DIVISION_ID = b.DIVISION_ID
+    and [YYYYMMDD] <  CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) 
+   group by  a.division_id , a.version_no
+   UNION ALL
+   select 'MKT_FCST_RESULT' type, division_id, 'current',0 v_count, 0v_sum,   count(1), sum(qty)  
+     from DM_PLN_MKT_FCST_RESULT  with(nolock)
+    where [YYYYMMDD] < CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) 
+     and measure in ( 'MKT_FCST'/*,'CUST_FCST'*/) group by  division_id
+   UNION ALL
+    select 'SALES_PLAN_RESULT' type, a.division_id, a.version_no, count(1) v_count, sum(qty)  v_sum, 0 c_count, 0 c_qty
+     from dm_pln_sales_plan_result_c a  with(nolock)
+      ,(
+      select DIVISION_ID, max(version_no) max_version_no
+        from dm_pln_sales_plan_result_c   with(nolock)
+      where version_no like 'SP_W%' 
+      group by DIVISION_ID
+       )  b
+     where measure in ( 'MKT_FCST'/*,'CUST_FCST'*/) 
+    and a.version_no = b.max_version_no 
+    and a.DIVISION_ID = b.DIVISION_ID
+    and [YYYYMMDD] <  CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) 
+   group by  a.division_id , a.version_no
+   UNION ALL
+   select 'SALES_PLAN_RESULT' type, division_id, 'current',0 v_count, 0v_sum,   count(1), sum(qty)  
+     from dm_pln_sales_plan_result   with(nolock)
+    where [YYYYMMDD] < CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) 
+     and measure in ( 'MKT_FCST'/*,'CUST_FCST'*/) group by  division_id
+   UNION ALL
+   select 'RCCP_MKT_FCST' Type, a.division_id, a.version_no, count(1) v_count, SUM(qty) v_qty , 0 c_count, 0 c_qty
+     from dm_pln_mkt_fcst_c a with(nolock)
+      ,(       select DIVISION_ID, max(version_no) max_version_no  from dm_pln_mkt_fcst_c  with(nolock) where version_no like 'MF_W%' group by DIVISION_ID ) b 
+   where version_no = b.max_version_no
+     and a.division_id = b.division_id
+     and a.division_id = '81'
+     and measure = 'MKT_FCST'
+   group by a.division_id, a.version_no
+   UNION 
+   SELECT 'RCCP_MKT_FCST' Type, '81', 'current', 0, 0, count(1) c_count, sum( [QTY] ) c_qty 
+     FROM [LGCE_SCMPROD].[dbo].[DMS_RCCP_DP_VIEW] with(nolock)
+       ,( select max(ver_cd) max_ver_cd from [LGCE_SCMPROD].[dbo].[DMS_RCCP_DP_VIEW] with(nolock) ) b
+    where ver_cd = b.max_ver_cd
+            UNION ALL
+   select 'NET_DEMAND' Type, a.division_id, a.version_no, count(1) v_count, SUM(qty) v_qty , 0 c_count, 0 c_qty
+     from dm_pln_mkt_fcst_c a with(nolock)
+      ,(  select DIVISION_ID, max(version_no) max_version_no  from dm_pln_mkt_fcst_c  with(nolock) where version_no like 'MF_W%' group by DIVISION_ID ) b 
+   where version_no = b.max_version_no
+     and a.division_id = b.division_id
+     and measure = 'MKT_FCST'
+   group by a.division_id, a.version_no
+   UNION 
+   SELECT 'NET_DEMAND' Type, a.DIVISION_ID, 'current', 0, 0, count(1) c_count, sum( [QTY] ) c_qty 
+     FROM [LGCE_SCMPROD].[dbo].[DM_PLN_NET_DEMAND] a with(nolock)
+       ,( select division_id, max(version_no) max_ver_cd from [LGCE_SCMPROD].[dbo].[DM_PLN_NET_DEMAND] with(nolock) group by division_id ) b
+    where a.version_no = b.max_ver_cd
+      and a.DIVISION_ID = b.DIVISION_ID
+            group by a.DIVISION_ID
+   UNION ALL
+   select 'DEMAND_PEGGING' Type, a.division_id, a.version_no, count(1) v_count, SUM(qty) v_qty , 0 c_count, 0 c_qty
+     from dm_pln_mkt_fcst_c a with(nolock)
+      ,(  select DIVISION_ID, max(version_no) max_version_no  from dm_pln_mkt_fcst_c  with(nolock) where version_no like 'MF_W%' group by DIVISION_ID ) b
+   where version_no = b.max_version_no
+     and a.division_id = b.division_id
+     and measure = 'MKT_FCST'
+     and [YYYYMMDD] <  CONVERT(CHAR(8), DATEADD(DD, 7*10, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) 
+   group by a.division_id, a.version_no
+   UNION 
+   SELECT 'DEMAND_PEGGING' Type, a.DIVISION_ID, a.version_no, 0, 0, count(1) c_count, sum( [QTY] ) c_qty 
+     FROM [LGCE_SCMPROD].[dbo].[DM_PLN_DEMANDID_PEGGING] a with(nolock)
+       ,(  select DIVISION_ID, max(version_no) max_version_no  from dm_pln_mkt_fcst_c  with(nolock) where version_no like 'MF_W%' group by DIVISION_ID ) b
+    where a.version_no = b.max_version_no
+      and a.DIVISION_ID = b.DIVISION_ID
+      and [YYYYMMDD] <  CONVERT(CHAR(8), DATEADD(DD, 7*10, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) 
+            group by a.DIVISION_ID, a.version_no
+
+     ) z
+   ,(
+       select 'choiya2' user_id
+	   union
+       select 'hwi1993' user_id	  
+               union
+       select 'sooykwon' user_id	   
+              union
+       select 'ggundoo31' user_id
+              union
+       select 'kuniid' user_id
+
+    ) x
+group by x.user_id, type, division_id","zytchoi","2018-04-30 17:50:33.080","choiya2","2020-12-01 15:24:15.610",""
+"MAIL","4","COMMON","COMMON","권한 승인 알람","DAY","D13","","Y","SELECT A.USER_ID 
+      ,CASE WHEN U.Language = 'KO' THEN U.UserName ELSE U.UserName_E END USER_NAME
+	  ,U.CellPhoneNum mobile_phone
+	  ,U.Email email_addr
+	  ,'KO' language_code
+	  ,CASE WHEN U.Language = 'KO' THEN U.UserName ELSE U.UserName_E END SEGMENT1
+	  ,CASE U.Language WHEN 'KO' THEN D.DEPT_NAME_KO
+					   WHEN 'EN' THEN D.DEPT_NAME_EN
+					   WHEN 'CN' THEN D.DEPT_NAME_CN END SEGMENT2
+      ,A.GROUP_ID SEGMENT3 
+	  ,A.DIVISION_ID + ' : ' + DIV.DIVISION_NAME SEGMENT4
+	  ,CONVERT(NVARCHAR, A.CREATION_DATE, 120) SEGMENT5
+	  ,'' SEGMENT6
+	  ,'' SEGMENT7
+	  ,'' SEGMENT8
+	  ,'' SEGMENT9
+	  ,'' SEGMENT10
+	  ,'Requestor' COLUMN1
+	  ,'Requestor Dept Name' COLUMN2
+	  ,'Authority' COLUMN3
+	  ,'Division' COLUMN4
+	  ,'Request Date' COLUMN5
+	  ,'' COLUMN6
+	  ,'' COLUMN7
+	  ,'' COLUMN8
+	  ,'' COLUMN9
+	  ,'' COLUMN10, A.LAST_UPDATE_DATE
+FROM SCM_MST_AUTH_REQUEST A
+INNER JOIN TB_FX_User U ON A.USER_ID = U.UserID AND U.UseYN = 'Y'
+LEFT OUTER JOIN SCM_MST_SSO_DEPT_INFO D ON U.Dept_ID = D.DEPT_ID
+INNER JOIN TB_FX_GroupInfo G ON A.GROUP_ID = G.GroupID AND G.UseYN = 'Y'
+LEFT OUTER JOIN SCM_MST_DIVISION DIV ON A.DIVISION_ID = DIV.DIVISION_ID
+LEFT OUTER JOIN SCM_MST_SITE PS ON A.PLANT_ID = PS.PLANT_ID
+LEFT OUTER JOIN TB_FX_UserGroupInfo GUER ON A.GROUP_ID = GUER.GroupID AND A.USER_ID = GUER.UserID 
+WHERE A.APPROVAL_RESULT IN ('REQUESTING')","addio777","2018-05-11 12:13:50.470","addio777","2018-06-06 16:50:51.260",""
+"MAIL","5","DM","DM","Daily Cutoff 결과 검증","DAY","D07","","Y","select x.user_id USER_ID, x.user_id USER_NAME, '' mobile_phone, x.user_id email_addr, 'KO' language_code
+      ,type segment1, sum(Division_40) segment2, sum(Division_81) segment3, sum(Division_82) segment4,max(version_no) segment5, sum(Row_count) segment6, sum(Qty_or_Price) segment7, '' segment8, '' segment9, '' segment10
+      ,'Type' column1, 'Division_40' column2, 'Division_81' column3, 'Division_82' column4, 'Version_no' column5, 'Row_count' column6, 'Total Qty or Price' column7, '' column8, '' column9, '' column10
+  from ( 
+select 'MKT_FCST_C' Type,
+       isnull(sum(case when division_id = '40' then QTY end),0) as ""Division_40"",
+       isnull(sum(case when division_id = '81' then QTY end),0) as ""Division_81"",
+       isnull(sum(case when division_id = '82' then QTY end),0) as ""Division_82"",
+		a.Version_no, count(1) 'Row_count', sum( QTY ) 'Qty_or_Price'
+from dbo.DM_PLN_MKT_FCST_C a with(nolock)  where 1=1
+	and version_no LIKE 'MF_D%'
+	AND  SUBSTRING(version_no, 6, 13) >= CONVERT(CHAR(8), GETDATE()-3,112) -- 최근 3일치
+	AND MEASURE NOT IN ('BALANCE')
+group by version_no
+
+union all
+select 'SALES_PLAN_C' Type,
+       isnull(sum(case when division_id = '40' then QTY end),0) as ""Division_40"",
+       isnull(sum(case when division_id = '81' then QTY end),0) as ""Division_81"",
+       isnull(sum(case when division_id = '82' then QTY end),0) as ""Division_82"",
+		a.Version_no, count(1) 'Row_count', sum( QTY ) 'Qty_or_Price'
+ from dbo.DM_PLN_SALES_PLAN_C a with(nolock) WHERE 1=1
+  AND  SUBSTRING(version_no, 6, 13) >= CONVERT(CHAR(8), GETDATE()-3,112) -- 최근 3일치
+  AND  version_no LIKE 'SP_D%'
+	AND MEASURE NOT IN ('BALANCE')
+group by version_no
+
+union all
+select 'FUTURE_PRICE_C' Type,
+       isnull(sum(case when division_id = '40' then PRICE end),0) as ""Division_40"",
+       isnull(sum(case when division_id = '81' then PRICE end),0) as ""Division_81"",
+       isnull(sum(case when division_id = '82' then PRICE end),0) as ""Division_82"",
+		a.Version_no, count(1) 'Row_count', sum( PRICE ) 'Qty_or_Price'
+ from dbo.SCM_MST_FUTURE_PRICE_C a with(nolock) WHERE 1=1
+  AND  SUBSTRING(version_no, 6, 13) >= CONVERT(CHAR(8), GETDATE()-3,112) -- 최근 3일치
+  AND  version_no LIKE 'SP_D%'
+	AND MEASURE NOT IN ('BALANCE')
+group by version_no
+
+     ) z
+   ,(
+select 'choiya2' user_id
+union
+select 'hwi1993' user_id
+               union
+       select 'sooykwon' user_id	   
+              union
+       select 'ggundoo31' user_id
+              union
+       select 'kuniid' user_id
+
+    ) x
+group by x.user_id, type, Version_no, Row_count, Qty_or_Price","songkeeho","2018-05-16 13:55:24.243","choiya2","2020-12-01 15:23:46.250",""
+"MAIL","7","DM","DM","Stored Procedure 실행결과 정상여부 검증","DAY","D07","","Y","select x.user_id USER_ID, x.user_id USER_NAME, '' mobile_phone, x.user_id email_addr, 'KO' language_code
+      ,Program_Name segment1, Execute_Date segment2, start_count segment3, VALID segment4, '' segment5, '' segment6, '' segment7, '' segment8, '' segment9, '' segment10
+      ,'Program_Name' column1, 'Execute_Date' column2, N'총 실행횟수' column3, N'비정상 종료 실행횟수' column4, '' column5, '' column6, '' column7, '' column8, '' column9, '' column10
+  from ( 
+    SELECT Program_Name
+		,CONVERT(CHAR(8), LAST_UPDATE_DATE,112) 'Execute_Date'
+		,isnull(sum(case when LOG_TYPE = 'START' then 1 end),0) as 'start_count'
+		,isnull(sum(case when LOG_TYPE = 'START' then 1 end),0) - isnull(sum(case when LOG_TYPE = 'END' then 1 end),0) - isnull(sum(case when LOG_TYPE = 'INVALID' then 1 end),0) as 'Valid'
+		, COUNT(1) % 2 AS 'Odd_Check'
+  FROM dbo.SCM_SYS_LOG_BATCH WITH(NOLOCK) 
+  WHERE 1=1 
+ AND PROGRAM_NAME LIKE '%DM%' AND PROGRAM_NAME NOT LIKE 'SCM%' AND PROGRAM_NAME NOT LIKE 'UP_%'
+ AND CONVERT(CHAR(8), LAST_UPDATE_DATE,112) >= CONVERT(CHAR(8), GETDATE()-1,112)
+ AND LAST_UPDATE_DATE < DATEADD(minute,-10,GETDATE())  /* 정시에 수행되는 작업의 종료를 Catch하지 못하여 10분전까지로 시간을 설정 */
+ AND LOG_TYPE in ('START','END','INVALID')  /* validation 으로 강제종료시킨 INVALID 도 추가*/
+GROUP BY PROGRAM_NAME,CONVERT(CHAR(8), LAST_UPDATE_DATE,112)
+having isnull(sum(case when LOG_TYPE = 'START' then 1 end),0) - isnull(sum(case when LOG_TYPE = 'END' then 1 end),0) - isnull(sum(case when LOG_TYPE = 'INVALID' then 1 end),0) > 0
+
+     ) z
+   ,(
+		select 'choiya2' user_id
+		union
+		select 'hwi1993' user_id
+               union
+       select 'sooykwon' user_id	   
+              union
+       select 'ggundoo31' user_id
+              union
+       select 'kuniid' user_id
+
+    ) x
+group by x.user_id, Program_Name, Execute_Date, start_count, VALID
+
+","songkeeho","2018-05-16 14:10:45.537","choiya2","2020-12-01 15:24:08.313",""
+"MAIL","8","SCP","SCP","TEST","DAY","D12","","N","select x.user_id USER_ID, x.user_id USER_NAME, '' mobile_phone, x.user_id email_addr, 'KO' language_code
+      ,type segment1, division_id segment2, max(version_no) segment3, sum(Row_count) segment4, sum(Qty_or_Price) segment5, '' segment6, '' segment7, '' segment8, '' segment9, '' segment10
+      ,'type' column1, 'division_id' column2, 'version_no' column3, 'Row_count' column4, 'Qty_or_Price' column5, '' column6, '' column7, '' column8, '' column9, '' column10
+
+  from ( 
+    select 'MKT_FCST_C' Type,a.DIVISION_ID, a.Version_no, count(1) 'Row_count', sum( [QTY] ) 'Qty_or_Price'
+ from [dbo].DM_PLN_MKT_FCST_C a with(nolock) WHERE 1=1
+  AND  SUBSTRING(version_no, 6, 13) >= CONVERT(CHAR(8), GETDATE()-7,112) -- 최근 일주일치
+  AND  version_no LIKE 'MF_D%'
+group by division_id,version_no
+union
+select 'SALES_PLAN_C' Type,a.DIVISION_ID, a.Version_no, count(1) 'Row_count', sum( [QTY] ) 'Qty_or_Price'
+ from [dbo].DM_PLN_SALES_PLAN_C a with(nolock) WHERE 1=1
+  AND  SUBSTRING(version_no, 6, 13) >= CONVERT(CHAR(8), GETDATE()-7,112) -- 최근 일주일치
+  AND  version_no LIKE 'SP_D%'
+group by division_id,version_no
+union
+select 'FUTURE_PRICE_C' Type,a.DIVISION_ID, a.Version_no, count(1) 'Row_count', sum( [PRICE] ) 'Qty_or_Price'
+ from [dbo].SCM_MST_FUTURE_PRICE_C a with(nolock) WHERE 1=1
+  AND  SUBSTRING(version_no, 6, 13) >= CONVERT(CHAR(8), GETDATE()-7,112) -- 최근 일주일치
+  AND  version_no LIKE 'FP_D%'
+group by division_id,version_no
+
+     ) z
+   ,(
+       select 'addio777' user_id
+	   union 
+	   select 'hwwoonins' user_id
+	   union 
+       select 'kaiser99' user_id
+       union
+         select 'pasun2' user_id
+    ) x
+group by x.user_id, type, division_id, Version_no, Row_count, Qty_or_Price","addio777","2018-05-16 17:57:24.857","addio777","2018-05-18 13:30:30.837",""
+"MAIL","9","SSP","SSP","출하계획 변경 ERP 오류 메일","RT","R01","","Y","","jungilsetup","2024-04-22 09:13:33.433","jungilsetup","2024-04-22 09:13:33.433",""
+"MAIL","10","SSP","SSP","출하계획 변경 부분 승인 메일","RT","R01","","Y","","jungilsetup","2024-05-21 16:55:07.927","jungilsetup","2024-05-21 16:55:07.927",""
+"MAIL","11","SSP","SSP","출하계획 변경 D/O 생성 반려 메일","RT","R01","","Y","","jungilsetup","2024-01-15 14:37:02.847","jungilsetup","2024-01-15 14:37:02.847",""
+"MAIL","13","SSP","SSP","출하계획 변경 자가반려 메일","RT","R01","","Y","","addio777","2018-05-17 16:05:51.640","juhlee","2018-05-23 11:42:30.120",""
+"MAIL","19","COMMON","COMMON","Mail Send Test","DAY","D13","","N","SELECT
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	,'' AS email_addr
+	,'KO' language_code
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.scm_site_id	AS SEGMENT2
+	,A.vendor_code		AS SEGMENT3
+	,A.vendor_name		AS SEGMENT4
+	,A.ITEM_ID			AS SEGMENT5
+	,A.daily_capa_qty	AS SEGMENT6
+	,A.capa_order		AS SEGMENT7
+	,''					AS SEGMENT8
+	,''					AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Plant Site Code'	AS COLUMN2
+	,'Vendor Code'		AS COLUMN3
+	,'Vendor Name'		AS COLUMN4
+	,'Model'			AS COLUMN5
+	,'Daily Capacity'	AS COLUMN6
+	,'capa_order'		AS COLUMN7
+	,''					AS COLUMN8
+	,''					AS COLUMN9
+	,''					AS COLUMN10
+  FROM (
+--40
+SELECT  
+		  t.division_id
+		, t.scm_site_id
+		, t.vendor_code
+		, (select  top 1 b.vendor_name from SCM_MST_VENDOR b where  b.vendor_code = t.vendor_code ) as vendor_name
+		, ( CASE WHEN t.item_id = '-' THEN 'Total' ELSE t.item_id END ) AS item_id
+		, t.daily_capa_qty
+		, (CASE WHEN t.daily_capa_qty IS NULL THEN '1' ELSE '2' END) AS capa_order
+		, t.valid_yn
+		, t.created_by
+		, t.creation_date
+		, t.last_updated_by
+		, t.last_update_date
+	FROM(
+		-- outsourcing 모델 조회
+		SELECT DISTINCT a.division_id, a.scm_site_id, b.vendor_code,  c.item_id, d.daily_capa_qty, d.valid_yn, d.created_by, d.creation_date, d.last_updated_by, d.last_update_date
+		FROM scm_mst_site a
+		JOIN SCM_MST_VENDOR b ON a.plant_id = b.vendor_code
+		JOIN SCM_MST_SITE_ITEM_PRIORITY c ON a.division_id = c.DIVISION_ID and a.scm_site_id = c.plant_site_id
+		LEFT OUTER JOIN SCP_MST_OUTSOURCING_CAPA d ON a.division_id = d.division_id and a.scm_site_id = d.plant_site_id and c.item_id = d.item_id
+		WHERE a.osp_yn ='Y'
+		AND a.valid_yn ='Y'
+		AND c.valid_yn ='Y'
+		UNION
+		-- 업체 Total 표시를 위해 '-' 로 추가 
+		SELECT  DISTINCT a.division_id, a.scm_site_id, b.vendor_code, d.item_id, d.daily_capa_qty, d.valid_yn, d.created_by, d.creation_date, d.last_updated_by, d.last_update_date
+		FROM scm_mst_site a
+		JOIN SCM_MST_VENDOR b ON a.plant_id = b.vendor_code
+		JOIN SCM_MST_SITE_ITEM_PRIORITY c ON a.division_id = c.DIVISION_ID and a.scm_site_id = c.plant_site_id
+		LEFT OUTER JOIN SCP_MST_OUTSOURCING_CAPA d ON a.division_id = d.division_id and a.scm_site_id = d.plant_site_id
+		WHERE a.osp_yn ='Y'
+		AND a.valid_yn ='Y'
+		AND c.valid_yn ='Y'
+		AND d.item_id = '-'
+		UNION
+		-- SCP_MST_OUTSOURCING_CAPA 에 없는 등록이 필요한 모델 조회
+		SELECT  DISTINCT a.division_id, a.scm_site_id, b.vendor_code, '-',null,null,null,null,null,null
+		FROM scm_mst_site a
+		JOIN SCM_MST_VENDOR b ON a.plant_id = b.vendor_code
+		JOIN SCM_MST_SITE_ITEM_PRIORITY c ON a.division_id = c.DIVISION_ID and a.scm_site_id = c.plant_site_id
+		WHERE a.osp_yn ='Y'
+		AND a.valid_yn ='Y'
+		AND c.valid_yn ='Y'
+		AND NOT EXISTS (SELECT 'X' FROM SCP_MST_OUTSOURCING_CAPA D WHERE a.division_id = d.division_id and a.scm_site_id = d.plant_site_id AND d.item_id ='-')
+		
+	) t 
+	WHERE 1=1
+	AND t.division_id = '40'
+	AND t.DAILY_CAPA_QTY is null
+) A	","addio777","2018-05-17 18:42:19.383","addio777","2018-10-05 10:36:21.867",""
+"MAIL","22","COMMON","COMMON","Batch Job Error 발생 메일","DAY","D09","","Y","","addio777","2018-07-13 17:05:42.310","addio777","2018-07-13 17:05:42.310",""
+"MAIL","23","SCP","SCP","BOD 메일링","DAY","D06","","Y","SELECT DISTINCT
+'' AS USER_ID
+		,'' AS USER_NAME		
+		,'' AS mobile_phone		
+		, '' AS email_addr		
+		, 'KO' language_code		
+		, A.DIVISION_ID		AS SEGMENT1
+		, A.customer		AS SEGMENT2
+		, A.from_site_code	AS SEGMENT3	
+		, A.from_city		AS SEGMENT4
+		, A.to_site_code	AS SEGMENT5	
+		, A.TO_CITY			AS SEGMENT6
+		, A.vmi_yn			AS SEGMENT7
+		, A.INCOTERMS		AS SEGMENT8
+		, A.route_cnt		AS SEGMENT9
+		, A.transport_mode	AS SEGMENT10	
+		, 'Division'		AS COLUMN1
+		, 'Customer'		AS COLUMN2
+		, 'From Site'		AS COLUMN3
+		, 'From City'		AS COLUMN4
+		, 'To Site'			AS COLUMN5
+		, 'To City'			AS COLUMN6
+		, 'To Site VMI'		AS COLUMN7
+		, 'Incoterms'		AS COLUMN8
+		, 'Route Count'		AS COLUMN9
+		, 'Trans Mode'		AS COLUMN10
+ FROM (
+SELECT DISTINCT T.*
+ ,(SELECT COUNT(*) AS route_cnt FROM scp_mst_distribution_route WHERE transport_mode=t.transport_mode_code AND from_city =t.from_city  AND to_city =t.to_city ) AS route_cnt
+ ,CASE WHEN RIGHT(t.from_site_code,1) = 'E' THEN (SELECT top 1 ISNULL(VMI_YN,'N') FROM scm_mst_site WHERE scm_site_id = t.to_site_code )
+  ELSE (SELECT ISNULL(VMI_YN,'N') FROM scm_mst_site WHERE division_id =t.division_id AND scm_site_id = t.to_site_code ) END vmi_yn
+  FROM (
+        SELECT
+  		 ma.division_id		
+         ,bo.bod_id
+  		,dbo.fn_get_division_name (ma.division_id) AS division_name		
+  		,ma.customer		
+  		,ma.incoterms		
+  		,ma.from_site AS from_site_code		
+  		,ISNULL(dbo.fn_get_scm_site_description (ma.division_id, ma.from_site) , '-') AS from_site_name		
+  		,ma.to_site AS to_site_code		
+  		,ISNULL(dbo.fn_get_scm_site_description (ma.division_id, ma.to_site) , '-') AS to_site_name		
+ 		,ma.from_country		
+ 		,ma.from_city		
+ 		,ma.to_country		
+ 		,ma.to_city		
+ 		,ma.transport_mode as transport_mode_code		
+         ,dbo.FN_GET_LOOKUP_CODE_DESC ('TRANSPORT_MODE_CODE' , ma.transport_mode ) AS transport_mode
+  		,bo.safety_stock, bo.priority		
+  		,bo.valid_yn as bod_valid		
+  		,ro.valid_yn as route_valid		
+  		,ro.route_id		
+  		,ro.days_mon		
+  		,ro.days_tue		
+  		,ro.days_wed		
+  		,ro.days_thu		
+  		,ro.days_fri		
+  		,ro.days_sat		
+  		,ro.days_sun		
+  		,(select v.lt_total from scp_mst_bod_v v where v.division_id = ma.division_id  and v.BOD_ID = bo.bod_id ) AS lead_time		
+  		,ISNULL(bo.created_by,ma.created_by)  created_by		
+  		,ISNULL(bo.creation_date,ma.creation_date)  creation_date		
+  		,ISNULL(bo.last_updated_by,ma.last_updated_by)  last_updated_by		
+  		,ISNULL(bo.last_update_date,ma.last_update_date)  last_update_date		
+  		,CASE WHEN (ro.FROM_CITY = ma.from_city) AND (ro.TO_CITY = ma.to_city) THEN 'Y' ELSE 'N' END route_chk		
+  		FROM  (		
+  				SELECT t.division_id, t.to_site, t.customer, t.incoterms, t.from_site, t.from_country, t.from_city, t.to_country, t.to_city,u.transport_mode
+ 					  ,null created_by, null creation_date, null last_updated_by, null last_update_date
+ 				FROM
+					(
+ 					SELECT DISTINCT de.division_id, de.scm_site_id as to_site,  de.customer, de.Incoterms, si.scm_site_id AS from_site 
+ 						, f_ci.country AS from_country				
+ 						, f_ci.city	   AS from_city			
+ 						, t_ci.country AS to_country				
+ 						, t_ci.city	   AS to_city			
+ 					  FROM
+  						( SELECT  f.division_id, f.scm_site_id, m.end_customer AS customer, f.incoterms, f.project_code, f.item_id				
+  							FROM  dm_pln_mkt_fcst f			
+  							JOIN  scm_mst_site m ON f.division_id = m.division_id AND f.scm_site_id = m.scm_site_id AND m.valid_yn = 'Y'		
+							LEFT JOIN scm_mst_site s ON s.DIVISION_ID=F.DIVISION_ID AND s.SCM_SITE_ID=F.SCM_SITE_ID AND (s.VMI_YN='Y' OR ( s.SITE_TYPE = 'SALES' AND s.OPERATION_GROUP = 'W'))
+  							WHERE 1=1			
+     						 AND  f.division_id IN ( '81')				
+  							 AND  F.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(f.attribute10, '') = '' THEN 'MKT_FCST' END
+  						) de				
+  						LEFT OUTER JOIN	(SELECT a.division_id, a.scm_site_id, b.item_id, b.project_code, c.priority ,c.sales_site_id, right(plant_site_id,1) plant_type			
+  										   FROM  scm_mst_site a
+  											   , scm_mst_site_item b													
+  											   , scm_mst_site_item_priority c													
+  										  WHERE    a.division_id  = b.division_id
+  										    AND    a.scm_site_id  = b.scm_site_id
+  										    AND    b.division_id  = c.division_id
+  										    AND    b.scm_site_id  = c.plant_site_id
+  										    AND    b.project_code = c.project_code
+  										    AND    b.item_id      = c.item_id
+  										    AND    a.valid_yn     = 'Y'
+  										    AND    b.valid_yn     = 'Y'
+  										    AND    c.valid_yn     = 'Y'
+  										    AND    a.site_type    = 'PLANT'
+  										    AND    a.division_id  IN ( '81')
+  									   ) si ON  de.division_id  = si.division_id	
+  										AND ((si.plant_type != 'E' AND de.project_code = si.project_code  AND de.SCM_SITE_ID  = si.sales_site_id)
+  											or (si.plant_type = 'E'))													
+  										    AND de.item_id      = si.item_id
+  						LEFT OUTER JOIN (SELECT	division_id, scm_site_id, country, city			
+  									      FROM scm_mst_site A where a.valid_yn = 'Y') f_ci ON de.division_id = f_ci.division_id AND si.scm_site_id = f_ci.scm_site_id	
+  						LEFT OUTER JOIN (SELECT division_id, scm_site_id,country,city				
+  									      FROM scm_mst_site A WHERE a.valid_yn = 'Y') t_ci ON de.division_id = t_ci.division_id AND de.scm_site_id = t_ci.scm_site_id	
+ 			    ) t LEFT JOIN ( SELECT DISTINCT from_country, from_city, to_country, to_city, transport_mode	
+ 								  FROM scp_mst_distribution_route		
+ 							     WHERE VALID_YN ='Y'			
+ 							  ) u ON t.from_country = u.from_country			
+ 							     AND t.from_city    = u.from_city			
+ 							     AND t.to_country   = u.to_country			
+ 					 		     AND t.to_city      = u.to_city			
+					UNION ALL
+  				SELECT t.division_id, t.to_site, t.customer, t.incoterms, t.from_site, t.from_country, t.from_city, t.to_country, t.to_city,u.transport_mode
+ 					  ,null created_by, null creation_date, null last_updated_by, null last_update_date
+ 				FROM
+					(
+ 					SELECT DISTINCT de.division_id, de.scm_site_id as to_site,  de.customer, de.Incoterms, si.scm_site_id AS from_site 
+ 						, f_ci.country AS from_country				
+ 						, f_ci.city	   AS from_city			
+ 						, t_ci.country AS to_country				
+ 						, t_ci.city	   AS to_city			
+ 					  FROM
+  						( SELECT  f.division_id, f.scm_site_id, m.end_customer AS customer, f.incoterms, f.project_code, f.item_id				
+  							FROM  dm_pln_mkt_fcst f			
+  							JOIN  scm_mst_site m ON f.division_id = m.division_id AND f.scm_site_id = m.scm_site_id AND m.valid_yn = 'Y'
+							LEFT JOIN scm_mst_site s ON s.DIVISION_ID=F.DIVISION_ID AND s.SCM_SITE_ID=F.SCM_SITE_ID AND (s.VMI_YN='Y' OR ( s.SITE_TYPE = 'SALES' AND s.OPERATION_GROUP = 'W'))
+  							WHERE 1=1			
+     						 AND  f.division_id IN ( '40','82')				
+  							 AND  F.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(f.attribute10, '') = '' THEN 'MKT_FCST' END
+  						) de				
+  						LEFT OUTER JOIN	(SELECT a.division_id, a.scm_site_id, b.item_id, b.project_code, c.priority ,c.sales_site_id, right(plant_site_id,1) plant_type			
+  										   FROM  scm_mst_site a
+  											   , scm_mst_site_item b													
+  											   , scm_mst_site_item_priority c													
+  										  WHERE    a.division_id  = b.division_id
+  										    AND    a.scm_site_id  = b.scm_site_id
+  										    AND    b.division_id  = c.division_id
+  										    AND    b.scm_site_id  = c.plant_site_id
+  										    AND    b.project_code = c.project_code
+  										    AND    b.item_id      = c.item_id
+  										    AND    a.valid_yn     = 'Y'
+  										    AND    b.valid_yn     = 'Y'
+  										    AND    c.valid_yn     = 'Y'
+  										    AND    a.site_type    = 'PLANT'
+  										    AND    a.division_id  IN ( '40','82')
+  									   ) si ON  de.division_id  = si.division_id	
+  										    AND de.item_id      = si.item_id
+  						LEFT OUTER JOIN (SELECT	division_id, scm_site_id, country, city			
+  									      FROM scm_mst_site A where a.valid_yn = 'Y') f_ci ON de.division_id = f_ci.division_id AND si.scm_site_id = f_ci.scm_site_id	
+  						LEFT OUTER JOIN (SELECT division_id, scm_site_id,country,city				
+  									      FROM scm_mst_site A WHERE a.valid_yn = 'Y') t_ci ON de.division_id = t_ci.division_id AND de.scm_site_id = t_ci.scm_site_id	
+ 			    ) t LEFT JOIN ( SELECT DISTINCT from_country, from_city, to_country, to_city, transport_mode	
+ 								  FROM scp_mst_distribution_route		
+ 							     WHERE VALID_YN ='Y'			
+ 							  ) u ON t.from_country = u.from_country			
+ 							     AND t.from_city    = u.from_city			
+ 							     AND t.to_country   = u.to_country			
+ 					 		     AND t.to_city      = u.to_city			
+					UNION ALL
+                 SELECT a.division_id, a.to_site, a.customer, 'DAP' incoterms, a.from_site, a.from_country, a.from_city, a.to_country, a.to_city,a.transport_mode
+	                      ,created_by, creation_date, last_updated_by, last_update_date			
+                 FROM(
+  					SELECT t.division_id, t.to_site, t.customer, t.incoterms, t.from_site, t.from_country, t.from_city, t.to_country, t.to_city,u.transport_mode
+ 						,null created_by, null creation_date, null last_updated_by, null last_update_date				
+ 					FROM(
+ 						SELECT DISTINCT de.division_id, de.scm_site_id as to_site,  de.customer, de.Incoterms, si.scm_site_id AS from_site 				
+
+ 							, f_ci.country  AS from_country			
+ 							, f_ci.city		AS from_city	
+ 							, t_ci.country	AS to_country		
+ 							, t_ci.city		AS to_city	
+ 						FROM				
+  						( SELECT  f.division_id, f.scm_site_id, m.end_customer AS customer, f.incoterms, f.project_code, f.item_id				
+  							FROM dm_pln_mkt_fcst f			
+  							JOIN scm_mst_site m ON f.division_id = m.division_id AND f.scm_site_id = m.scm_site_id AND m.valid_yn = 'Y' AND (m.VMI_YN='Y' OR ( m.SITE_TYPE = 'SALES' AND m.OPERATION_GROUP = 'W'))
+							LEFT JOIN scm_mst_site s ON s.DIVISION_ID=F.DIVISION_ID AND s.SCM_SITE_ID=F.SCM_SITE_ID AND (s.VMI_YN='Y' OR ( s.SITE_TYPE = 'SALES' AND s.OPERATION_GROUP = 'W'))
+  							WHERE  1=1			
+     						  AND  f.division_id IN ( '81' )				
+  							  AND  F.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(f.attribute10, '') = '' THEN 'MKT_FCST' END
+  						) de				
+  						LEFT OUTER JOIN	(SELECT a.division_id, a.scm_site_id, b.item_id, b.project_code, c.priority ,c.sales_site_id, right(plant_site_id,1) plant_type			
+  										   FROM   scm_mst_site a
+  											    , scm_mst_site_item b													
+  											    , scm_mst_site_item_priority c													
+  									      WHERE    a.division_id  = b.division_id	
+  										    AND    a.scm_site_id  = b.scm_site_id
+  										    AND    b.division_id  = c.division_id
+  										    AND    b.scm_site_id  = c.PLANT_SITE_ID
+  										    AND    b.project_code = c.project_code
+  										    AND    b.item_id      = c.item_id
+  										    AND    a.valid_yn     = 'Y'
+  										    AND    b.valid_yn     = 'Y'
+  										    AND    c.valid_yn     = 'Y'
+  										    AND    a.site_type    = 'PLANT'
+  										    AND    a.division_id  IN ( '81')
+  						                 ) si ON  de.division_id  = si.division_id				
+  											 AND ((si.plant_type  != 'E' AND de.project_code = si.project_code  AND de.scm_site_id  = si.sales_site_id)													
+  							                     OR (si.plant_type = 'E'))			
+  							                 AND de.item_id      = si.item_id			
+  						LEFT OUTER JOIN (SELECT	division_id, scm_site_id,country,city			
+  									     FROM scm_mst_site A WHERE a.valid_yn = 'Y') f_ci ON de.division_id = f_ci.division_id AND si.scm_site_id = f_ci.scm_site_id	
+  						LEFT OUTER JOIN (SELECT division_id, scm_site_id,country,city				
+  									     FROM scm_mst_site A WHERE a.valid_yn = 'Y') t_ci ON de.division_id = t_ci.division_id AND de.scm_site_id = t_ci.scm_site_id	
+ 			        ) t	
+ 		        LEFT JOIN ( SELECT DISTINCT from_country, from_city, to_country, to_city, transport_mode		
+ 		 		              FROM scp_mst_distribution_route
+ 					         WHERE valid_yn ='Y'
+ 					      ) u ON t.from_country = u.from_country
+ 						     AND t.from_city    = u.from_city				
+ 						     AND t.to_country   = u.to_country				
+ 						     AND t.to_city      = u.to_city				
+			        ) a	
+ 			    WHERE NOT EXISTS  ( SELECT 1	
+									      FROM	
+										     (SELECT DISTINCT a.division_id, a.from_site, a.to_site, b.transport_mode 
+                  					        FROM scp_mst_bod a
+                  					       INNER JOIN scp_mst_bod_v b  ON a.division_id = b.division_id
+ 		      AND a.bod_id = b.bod_id								
+ 		      AND a.from_site = b.from_site								
+ 		      AND a.to_site = b.to_site								
+ 		      AND a.incoterms = b.incoterms								
+                  				            WHERE a.incoterms = 'DAP'
+                  			              ) b	
+ 			                        WHERE a.division_id    =  b.division_id	
+ 			                          AND a.from_site      =  b.from_site	
+ 			                          AND a.to_site        =  b.to_site	
+ 			                          AND a.transport_mode =  b.transport_mode	
+                                    )
+				   UNION ALL
+                 SELECT a.division_id, a.to_site, a.customer, 'DAP' incoterms, a.from_site, a.from_country, a.from_city, a.to_country, a.to_city,a.transport_mode
+	                      ,created_by, creation_date, last_updated_by, last_update_date			
+                 FROM(
+  					SELECT t.division_id, t.to_site, t.customer, t.incoterms, t.from_site, t.from_country, t.from_city, t.to_country, t.to_city,u.transport_mode
+ 						,null created_by, null creation_date, null last_updated_by, null last_update_date				
+ 					FROM(
+ 						SELECT DISTINCT de.division_id, de.scm_site_id as to_site,  de.customer, de.Incoterms, si.scm_site_id AS from_site 				
+ 							, f_ci.country  AS from_country			
+ 							, f_ci.city		AS from_city	
+ 							, t_ci.country	AS to_country		
+ 							, t_ci.city		AS to_city	
+ 						FROM				
+  						( SELECT  f.division_id, f.scm_site_id, m.end_customer AS customer, f.incoterms, f.project_code, f.item_id				
+  							FROM dm_pln_mkt_fcst f			
+  							JOIN scm_mst_site m ON f.division_id = m.division_id AND f.scm_site_id = m.scm_site_id AND m.valid_yn = 'Y' AND (m.VMI_YN='Y' OR ( m.SITE_TYPE = 'SALES' AND m.OPERATION_GROUP = 'W'))
+							LEFT JOIN scm_mst_site s ON s.DIVISION_ID=F.DIVISION_ID AND s.SCM_SITE_ID=F.SCM_SITE_ID AND (s.VMI_YN='Y' OR ( s.SITE_TYPE = 'SALES' AND s.OPERATION_GROUP = 'W'))
+  							WHERE  1=1			
+     						  AND  f.division_id IN ( '40','82')				
+  							  AND  F.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(f.attribute10, '') = '' THEN 'MKT_FCST' END
+  						) de				
+  						LEFT OUTER JOIN	(SELECT a.division_id, a.scm_site_id, b.item_id, b.project_code, c.priority ,c.sales_site_id, right(plant_site_id,1) plant_type			
+  										   FROM   scm_mst_site a
+  											    , scm_mst_site_item b													
+  											    , scm_mst_site_item_priority c													
+  									      WHERE    a.division_id  = b.division_id	
+  										    AND    a.scm_site_id  = b.scm_site_id
+  										    AND    b.division_id  = c.division_id
+  										    AND    b.scm_site_id  = c.PLANT_SITE_ID
+  										    AND    b.project_code = c.project_code
+  										    AND    b.item_id      = c.item_id
+  										    AND    a.valid_yn     = 'Y'
+  										    AND    b.valid_yn     = 'Y'
+  										    AND    c.valid_yn     = 'Y'
+  										    AND    a.site_type    = 'PLANT'
+  										    AND    a.division_id  IN ( '40','82')
+  						                 ) si ON  de.division_id  = si.division_id				
+  							                 AND  de.item_id      = si.item_id			
+  						LEFT OUTER JOIN (SELECT	division_id, scm_site_id,country,city			
+  									     FROM scm_mst_site A WHERE a.valid_yn = 'Y') f_ci ON de.division_id = f_ci.division_id AND si.scm_site_id = f_ci.scm_site_id	
+  						LEFT OUTER JOIN (SELECT division_id, scm_site_id,country,city				
+  									     FROM scm_mst_site A WHERE a.valid_yn = 'Y') t_ci ON de.division_id = t_ci.division_id AND de.scm_site_id = t_ci.scm_site_id	
+ 			        ) t	
+ 		        LEFT JOIN ( SELECT DISTINCT from_country, from_city, to_country, to_city, transport_mode		
+ 		 		              FROM scp_mst_distribution_route
+ 					         WHERE valid_yn ='Y'
+ 					      ) u ON t.from_country = u.from_country
+ 						     AND t.from_city    = u.from_city				
+ 						     AND t.to_country   = u.to_country				
+ 						     AND t.to_city      = u.to_city				
+			        ) a	
+ 			    WHERE NOT EXISTS  ( SELECT 1	
+									      FROM	
+										     (SELECT DISTINCT a.division_id, a.from_site, a.to_site, b.transport_mode 
+                  					        FROM scp_mst_bod a
+                  					       INNER JOIN scp_mst_bod_v b  ON a.division_id = b.division_id
+ 		      AND a.bod_id = b.bod_id								
+ 		      AND a.from_site = b.from_site								
+ 		      AND a.to_site = b.to_site								
+ 		      AND a.incoterms = b.incoterms								
+                  				            WHERE a.incoterms = 'DAP'
+                  			              ) b	
+ 			                        WHERE a.division_id    =  b.division_id	
+ 			                          AND a.from_site      =  b.from_site	
+ 			                          AND a.to_site        =  b.to_site	
+ 			                          AND a.transport_mode =  b.transport_mode	
+                                    )
+		           UNION ALL		
+		           SELECT a.division_id, a.to_site		
+                      ,(SELECT end_customer FROM scm_mst_site WHERE division_id = a.division_id AND scm_site_id = a.to_site) AS customer
+				         ,a.incoterms, a.from_site
+				         ,f_ci.country AS from_country
+				         ,f_ci.city	   AS from_city
+				         ,t_ci.country AS to_country
+				         ,t_ci.city	   AS to_city
+				         ,ro.transport_mode
+				         ,a.created_by,a.creation_date, a.last_updated_by,a.last_update_date
+		             FROM scp_mst_bod a		
+			         INNER JOIN scp_mst_distribution_route ro  ON a.route_id = ro.route_id	
+ 	             LEFT OUTER JOIN scm_mst_site f_ci ON f_ci.division_id = a.division_id AND f_ci.scm_site_id = a.from_site AND f_ci.valid_yn = 'Y'			
+ 		         LEFT OUTER JOIN scm_mst_site t_ci ON t_ci.scm_site_id = a.to_site	   AND t_ci.valid_yn = 'Y'	
+                UNION ALL
+		             SELECT a.division_id, a.to_site		
+				           ,(SELECT end_customer FROM scm_mst_site WHERE division_id = a.division_id AND scm_site_id = a.to_site) AS customer
+				           ,'DAP' incoterms, a.from_site
+				           ,from_country
+				           ,from_city
+				           ,to_country
+				           ,to_city
+				           ,transport_mode
+				           ,null created_by,null creation_date, null last_updated_by,null last_update_date
+			           FROM (	
+					        SELECT  a.division_id, a.to_site
+                                ,(SELECT end_customer FROM scm_mst_site WHERE division_id = a.division_id AND scm_site_id = a.to_site) AS customer
+						           ,a.incoterms, a.from_site				
+						           ,f_ci.country AS from_country				
+						           ,f_ci.city	 AS from_city			
+						           ,t_ci.country AS to_country				
+						           ,t_ci.city    AS to_city				
+						           ,ro.transport_mode				
+						           ,a.created_by,a.creation_date, a.last_updated_by,a.last_update_date				
+					         FROM scp_mst_bod a
+					         INNER JOIN scp_mst_distribution_route ro  ON a.route_id = ro.route_id
+ 				         LEFT OUTER JOIN scm_mst_site f_ci ON f_ci.division_id = a.division_id AND f_ci.scm_site_id = a.from_site AND f_ci.valid_yn = 'Y'
+ 				         LEFT OUTER JOIN scm_mst_site t_ci ON t_ci.scm_site_id = a.to_site	  AND t_ci.VALID_YN = 'Y'
+				            ) a
+			          INNER JOIN SCM_MST_SITE c ON a.DIVISION_ID = c.DIVISION_ID AND a.to_site = c.SCM_SITE_ID	
+			          WHERE c.VMI_YN = 'Y'	
+			          AND INCOTERMS != 'DAP'	
+			          AND NOT EXISTS (SELECT 1	
+							            FROM (SELECT distinct a.division_id, a.from_site, a.to_site, b.transport_mode			
+				  					            FROM scp_mst_bod a	
+				  					            INNER JOIN scp_mst_bod_v b ON a.division_id = b.division_id	
+		          AND a.bod_id = b.bod_id								
+		          AND a.from_site = b.from_site								
+		          AND a.to_site = b.to_site								
+		          AND a.incoterms = b.incoterms								
+				  					            WHERE a.incoterms = 'DAP'	
+									         ) b	
+							            INNER JOIN scm_mst_site c ON a.division_id = c.division_id AND b.to_site = c.scm_site_id			
+							            WHERE c.vmi_yn       =  'Y'			
+							            AND a.from_site      =  b.from_site			
+							            AND a.to_site        =  b.to_site			
+							            AND a.transport_mode =  b.transport_mode			
+									  )	
+ ) ma
+ LEFT OUTER JOIN ( SELECT a.*, b.transport_mode
+					    FROM scp_mst_bod a
+						INNER JOIN scp_mst_distribution_route b ON a.ROUTE_ID = b.ROUTE_ID				
+					) bo ON  bo.division_id   = ma.division_id
+ 				     AND bo.to_site       = ma.to_site
+ 					 AND bo.incoterms     = ma.incoterms
+ 					 AND bo.from_site     = ma.from_site
+ 					 AND bo.transport_mode= ma.transport_mode
+ LEFT OUTER JOIN scp_mst_distribution_route ro  ON bo.route_id = ro.route_id
+ WHERE 1=1
+ 		AND  bo.route_id IS NULL		
+ 		AND ma.division_id    IN ('40','81','82')		
+		AND ma.from_site in (		
+			SELECT	SCM_SITE_ID
+			FROM [dbo].[SCM_MST_SITE] AS A WITH(NOLOCK)	
+			WHERE SITE_TYPE = 'PLANT'	
+			AND    A.VALID_YN  = 'Y'	
+		)		
+		AND ma.to_site in (		
+			SELECT	 SCM_SITE_ID
+			FROM [dbo].[SCM_MST_SITE] AS A WITH(NOLOCK)	
+			WHERE   A.VALID_YN  = 'Y'	
+		)		
+		AND ma.incoterms in (		
+			SELECT B.SEGMENT1	
+			FROM SCM_ADM_LOOKUP_MASTER A WITH(NOLOCK)	
+			INNER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL B WITH(NOLOCK) ON A.LOOKUP_TYPE = B.LOOKUP_TYPE  AND B.VALID_YN = 'Y'	
+			WHERE A.LOOKUP_TYPE = 'INCOTERMS'	
+			  AND A.VALID_YN = 'Y'	
+		)		
+ ) T
+WHERE NOT EXISTS (SELECT 1 FROM scm_mst_site s WHERE s.division_id = t.division_id AND s.scm_site_id = t.from_site_code AND s.valid_yn = 'Y' AND s.osp_yn = 'Y' AND s.operation_group = 'A')
+) A","hwwoonins","2018-07-17 14:26:59.480","blueeos","2022-11-01 11:29:09.333",""
+"MAIL","24","SCP","SCP","Project Route 메일링(40)","DAY","D07","","Y","SELECT
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	,'' AS email_addr
+	,'KO' language_code
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.division_name	AS SEGMENT2
+	,A.scm_site_id		AS SEGMENT3
+	,A.project_code		AS SEGMENT4
+	,A.ITEM_ID			AS SEGMENT5
+	,A.plant_per_item	AS SEGMENT6
+	,A.cmpltd_status	AS SEGMENT7
+	,''					AS SEGMENT8
+	,''					AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Division Name'	AS COLUMN2
+	,'Sales Site'		AS COLUMN3
+	,'Project'			AS COLUMN4
+	,'Model'			AS COLUMN5
+	,'Plant/Item'		AS COLUMN6
+	,'Complete State'	AS COLUMN7
+	,''					AS COLUMN8
+	,''					AS COLUMN9
+	,''					AS COLUMN10
+  FROM (
+  --40  사업부
+	SELECT distinct
+		 t.division_id
+        ,dbo.fn_get_division_name(t.division_id) AS division_name
+		,t.scm_site_id 
+		,t.project_code
+		,t.item_id 
+		,CASE WHEN  u.plant_per_item is null  THEN 'BOM Not Exists' ELSE  u.plant_per_item END AS plant_per_item 
+		,isnull(u.cmpltd_status,'N') AS cmpltd_status
+	FROM ( SELECT distinct a.division_id
+	             ,'-' AS project_code
+				 ,'-' AS scm_site_id
+	             ,a.item_id,dom_exp,fcst_type,incoterms,measure,plant_site_id,yyyymmdd,qty 
+	         FROM dm_pln_mkt_fcst a 
+			 JOIN scm_mst_item_sn b ON a.division_id = b.division_id and a.item_id= b.item_id
+			 LEFT JOIN scm_mst_site s ON s.DIVISION_ID=a.DIVISION_ID AND s.SCM_SITE_ID=a.SCM_SITE_ID AND (S.VMI_YN='Y' OR ( SITE_TYPE = 'SALES' AND OPERATION_GROUP = 'W'))
+	        WHERE 1=1 
+			  --AND a.measure ='MKT_FCST'
+			  AND a.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+			  AND b.scp_operation_group_id <> 'E'
+			  AND a.yyyymmdd >=  convert(varchar, getdate(),112) 
+			  AND a.yyyymmdd <=  convert(varchar,DATEADD(month,12,  getdate() ),112 )
+			  AND a.yyyymmdd != '' and a.yyyymmdd is not null		  	
+	     ) t  
+
+		 /*******************start of 수량 카운트 부분 ********************************************************************************/
+		 LEFT OUTER JOIN  (SELECT division_id
+								 ,scm_site_id
+		                         ,project_code								 
+								 ,model_id
+								 ,CONVERT(VARCHAR, SUM(plant_cnt) ) +'/'+ CONVERT(VARCHAR, tot_cnt) AS plant_per_item
+								 ,CASE WHEN SUM(plant_cnt) = tot_cnt THEN 'Y' ELSE 'N' END cmpltd_status
+							FROM (
+								SELECT division_id,'-' AS scm_site_id, '-' AS project_code, model_id, COUNT(*) OVER(PARTITION BY division_id,model_id) AS tot_cnt, CASE WHEN primary_plant IS NOT NULL THEN 1 ELSE 0 END AS plant_cnt
+								FROM (
+										SELECT DISTINCT	
+										         (CASE WHEN dbo.FN_GET_ITEM_OPERATION_GROUP(a.division_id, a.item_id) = 'E' THEN C.ITEM_ID
+														ELSE b.model_id	
+												  END ) AS model_id	
+											   , (CASE
+													  -- 전극 제외 20180517
+											          -- WHEN d.operation_group_id = 'E' THEN 'Electrode'
+													   WHEN d.operation_group_id = 'A' THEN 'Cell'
+												       WHEN d.operation_group_id = 'P' THEN 'Pack'
+												  END ) AS operation_group_id
+											   ,d.electrode_type
+											   ,b.child_item_id AS item_id
+											  ,(SELECT rownumber 
+												 FROM (		
+														SELECT ROW_NUMBER() OVER (ORDER BY from_yyyymmdd) AS rownumber
+												 		 FROM scm_mst_site_item_priority s 
+														WHERE s.division_id   = b.division_id
+														  AND s.item_id       = b.child_item_id 
+														  AND s.to_yyyymmdd  >= convert(varchar, getdate(),112) 
+														  AND s.valid_yn = 'Y'
+														  AND s.priority = '1'
+	 													) a 
+												 WHERE rownumber =1
+												) AS primary_plant
+											 ,b.division_id
+										FROM dm_pln_mkt_fcst     a 
+											JOIN SCM_MST_BOM_SN_V  b   ON a.division_id   = b.division_id
+											--JOIN scm_mst_bom_sn  b   ON a.division_id   = b.division_id
+																	AND a.item_id       = b.model_id 	
+											JOIN scm_mst_item_sn c   ON b.company_id    = c.company_id 
+																	AND b.division_id   = c.division_id	
+																	AND b.site_id       = c.site_id 
+																	AND b.child_item_id = c.item_id
+											JOIN scm_mst_final_item_v d  
+																	ON b.division_id = d.division_id  
+																   and b.child_item_id = d.item_id
+																   and d.cell_type not like 'CA%'  --  2023.07.11 활성화코드 분리 대응 : CA모델 확인 대상에서 제외
+											LEFT JOIN scm_mst_site s ON s.DIVISION_ID=a.DIVISION_ID AND s.SCM_SITE_ID=a.SCM_SITE_ID AND s.VMI_YN='Y'
+										WHERE 1=1
+										--Alternate Part 제외로직 추가
+										AND	b.alt_priority  = 'Y'
+										AND c.item_type		<> 'r'
+										--  실적(등록된 카운트)수량은 분기되기 이전 날짜 전체를 사용해야 카운트가 맞음
+										AND a.yyyymmdd >= convert(varchar, getdate(),112) 
+										AND a.yyyymmdd <=  convert(varchar,DATEADD(month,12,  getdate() ),112 )
+									 	--AND a.measure ='MKT_FCST'
+										AND a.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+			  							AND a.qty>0	
+										AND a.division_id in ('40')
+										--AND (( @p_item_id IS NULL OR  @p_item_id = '' ) OR b.model_id     IN (SELECT token FROM dbo.String_Split(@p_item_id		,',')) )
+										AND d.OPERATION_GROUP_ID <> 'E'
+										--ESS 팩모델 하위의 CELL중에서 일부가 자동차전지에만 BOM에서 모ITEM으로 존재하지만,PROJECT ROUTE화면에서 ESS에 생산지를 등록하도록 표기되는 오류수정
+										AND EXISTS (SELECT *
+													FROM [dbo].[SCM_MST_BOM_ENG_SN] WITH(NOLOCK)
+												   WHERE DIVISION_ID in ('40')
+													 AND PARENT_ITEM_ID= b.child_item_id
+													 --BOM을 제거모델 조회안되도록 수정
+													 AND EFF_END_DATE >= GETDATE()
+													 AND KEY_DATE = ( SELECT MAX(KEY_DATE)
+																	 FROM [dbo].[SCM_MST_BOM_ENG_SN] WITH(NOLOCK)
+																    WHERE PARENT_ITEM_ID= b.child_item_id --'ECE0315N1-01'
+																 	  AND DIVISION_ID in('40') )
+												   )
+									
+										) m
+									) n
+							GROUP BY division_id , scm_site_id,project_code
+							        ,model_id, tot_cnt
+						) u  ON t.division_id  = u.division_id
+						    AND t.SCM_SITE_ID  = u.SCM_SITE_ID
+						    AND t.project_code = u.project_code
+						    AND t.item_id      = u.model_id
+		/******************end of 수량카운트********************************************************************************************/
+
+         INNER JOIN  (SELECT division_id
+		   				    ,item_id
+		   				    ,nick_name
+		   					,item_type
+		   					,ROW_NUMBER() OVER ( PARTITION BY division_id, item_id ORDER BY  CASE item_type WHEN 'P' THEN 999 WHEN 'H' THEN 888 WHEN 'R' THEN 777  WHEN 'Q' THEN 666 ELSE 0 END  DESC ) nums
+					   FROM SCM_MST_ITEM_SN 
+					   ) i   ON t.division_id  = i.division_id
+						    AND t.item_id      = i.item_id
+							AND i.nums =1
+	WHERE 1=1
+	 AND i.item_type NOT IN ('Q','R')	
+     --AND t.measure ='MKT_FCST'
+	 AND t.measure in ('AS_In_Req', 'VMI_In_Req',  'MKT_FCST')
+	 AND t.qty>0	
+	 AND t.division_id in('40')
+	 AND cmpltd_status = 'N'
+) A","hwwoonins","2018-07-17 14:29:53.107","hyerakim","2023-07-11 10:20:57.157",""
+"MAIL","25","SCP","SCP","BOM 메일링(40)","WEEK","W02","D09","Y","SELECT 
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	, '' AS email_addr
+	, 'KO' language_code 
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.ITEM_ID			AS SEGMENT2
+	,A.nick_name		AS SEGMENT3
+	,A.plant_id			AS SEGMENT4
+	,A.sales_site_id	AS SEGMENT5
+	,A.project_code		AS SEGMENT6
+	,CONVERT(DATE, A.mkt_fcst_date,110) AS SEGMENT7
+	,A.validation_type		AS SEGMENT8
+	,''					AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Model'			AS COLUMN2
+	,'Nick Name'		AS COLUMN3
+	,'Plant Code'		AS COLUMN4
+	,'Sales Site'		AS COLUMN5
+	,'Project Code'		AS COLUMN6
+	,'MKT FCST Date'	AS COLUMN7
+	,'Validation Type'	AS COLUMN8
+	,''					AS COLUMN9
+	,''					AS COLUMN10
+FROM (
+-- 40 사업부
+SELECT 
+		  x.division_id
+		 ,x.item_id
+		 ,dbo.FN_GET_ITEM_NICKNAME( x.division_id, x.item_id ) AS nick_name	
+		 ,x.plant_id
+		 ,x.sales_site_id
+		 ,x.project_code
+		 ,CONVERT(DATETIME, x.yyyymmdd,112) AS mkt_fcst_date
+		 ,x.validation_type
+	FROM (
+			-- BOM Not Exists : Project Route 화면에서 표시된 40,82사업부 모델
+			SELECT  DISTINCT t.division_id 
+					, t.item_id 
+					, '-' AS plant_id 
+					, '-' AS sales_site_id 
+					, '-' AS project_code
+					, t.yyyymmdd
+					, 'BOM NOT EXISTS' AS validation_type
+				FROM ( SELECT a.division_id ,a.item_id ,MIN(yyyymmdd) AS yyyymmdd
+						 FROM (	SELECT a.division_id ,a.project_code ,a.scm_site_id ,a.item_id ,a.dom_exp ,a.fcst_type ,a.incoterms ,a.measure ,a.plant_site_id ,a.yyyymmdd ,a.qty 	
+										FROM DM_PLN_MKT_FCST a WITH(NOLOCK)
+										LEFT JOIN SCM_MST_SITE S ON S.DIVISION_ID=A.DIVISION_ID AND S.SCM_SITE_ID=A.SCM_SITE_ID AND (S.VMI_YN='Y' OR ( SITE_TYPE = 'SALES' AND OPERATION_GROUP = 'W'))
+										WHERE 1=1
+										AND a.measure   = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+										AND a.yyyymmdd != '' and a.yyyymmdd is not null
+										AND a.yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+										AND a.qty      >  0		
+							  ) a 
+						 JOIN scm_mst_item_sn b ON a.division_id = b.division_id and a.item_id= b.item_id
+						WHERE 1=1 
+						  AND a.division_id in ('40')
+						  AND b.scp_operation_group_id <> 'E'
+						  GROUP BY a.division_id  ,a.item_id
+					 ) t  
+				LEFT OUTER JOIN  (SELECT division_id ,model_id	,'-' AS scm_site_id ,'-' AS project_code ,tot_cnt
+								  FROM (
+										SELECT division_id ,model_id ,COUNT(*) OVER(PARTITION BY division_id,model_id) AS tot_cnt
+										FROM (
+												SELECT b.division_id ,b.model_id
+												FROM (	SELECT a.division_id ,a.project_code ,a.scm_site_id ,a.item_id ,a.dom_exp ,a.fcst_type ,a.incoterms ,a.measure ,a.plant_site_id ,a.yyyymmdd ,a.qty
+														FROM DM_PLN_MKT_FCST a WITH(NOLOCK)
+														LEFT JOIN SCM_MST_SITE S ON S.DIVISION_ID=A.DIVISION_ID AND S.SCM_SITE_ID=A.SCM_SITE_ID AND (S.VMI_YN='Y' OR ( SITE_TYPE = 'SALES' AND OPERATION_GROUP = 'W'))
+														WHERE 1=1
+														AND a.measure   = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+														AND a.yyyymmdd != '' and a.yyyymmdd is not null
+														AND a.yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+														AND a.qty      >  0		) a 
+												JOIN scm_mst_bom_sn b    ON a.division_id = b.division_id and a.item_id = b.model_id 	
+												JOIN scm_mst_item_sn c   ON b.company_id = c.company_id and b.division_id = c.division_id and b.site_id = c.site_id and b.child_item_id = c.item_id
+												JOIN scm_mst_final_item_v d  ON b.division_id = d.division_id  and b.child_item_id = d.item_id
+												WHERE 1=1
+												AND c.item_type	   <> 'r'
+												AND	b.alt_priority  = 'Y'
+												AND a.division_id  in ('40')
+												AND d.operation_group_id <> 'E'
+												AND EXISTS (SELECT 'X'
+															FROM SCM_MST_BOM_ENG_SN WITH(NOLOCK)
+															WHERE division_id in ('40')
+																AND parent_item_id= b.child_item_id )
+												) m
+										) n
+								  GROUP BY division_id, model_id, tot_cnt
+				                ) u  ON t.division_id = u.division_id	AND t.item_id = u.model_id
+				JOIN  (SELECT division_id ,item_id ,nick_name ,item_type 
+							  ,ROW_NUMBER() OVER ( PARTITION BY division_id, item_id ORDER BY  CASE item_type WHEN 'P' THEN 999 WHEN 'H' THEN 888 WHEN 'R' THEN 777  WHEN 'Q' THEN 666 ELSE 0 END  DESC ) nums
+					  FROM SCM_MST_ITEM_SN ) i  ON t.division_id  = i.division_id AND t.item_id = i.item_id AND i.nums =1
+				WHERE 1=1
+				  AND i.item_type NOT IN ('Q','R')	
+				  AND t.division_id  in ('40')
+				  AND u.tot_cnt is null
+	) X
+) A
+","hwwoonins","2018-07-17 14:31:23.833","blueeos","2022-11-01 11:41:18.967","H00"
+"MAIL","26","SCP","SCP","BOM 메일링(81)","WEEK","W02","D09","Y","SELECT 
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	, '' AS email_addr
+	, 'KO' language_code 
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.ITEM_ID			AS SEGMENT2
+	,A.nick_name		AS SEGMENT3
+	,A.plant_id			AS SEGMENT4
+	,A.sales_site_id	AS SEGMENT5
+	,A.project_code		AS SEGMENT6
+	,CONVERT(DATE, A.mkt_fcst_date,110) AS SEGMENT7
+	,A.validation_type		AS SEGMENT8
+	,''					AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Model'			AS COLUMN2
+	,'Nick Name'		AS COLUMN3
+	,'Plant Code'		AS COLUMN4
+	,'Sales Site'		AS COLUMN5
+	,'Project Code'		AS COLUMN6
+	,'MKT FCST Date'	AS COLUMN7
+	,'Validation Type'	AS COLUMN8
+	,''					AS COLUMN9
+	,''					AS COLUMN10
+FROM (
+--81
+	SELECT 
+		  x.division_id
+		 ,x.item_id
+		 ,dbo.FN_GET_ITEM_NICKNAME( x.division_id, x.item_id ) AS nick_name	
+		 ,x.plant_id
+		 ,x.sales_site_id
+		 ,x.project_code
+		 ,CONVERT(DATETIME, x.yyyymmdd,112) AS mkt_fcst_date
+		 ,x.validation_type
+	FROM (
+	   
+	    --  BOM NOT ASSIGN : Project Route 에 등록되어있으나 SCM_MST_BOM_ENG_SN 테이블에 없는 모델
+		SELECT   a.division_id 
+		       , a.item_id 
+			   , a.plant_id 
+			   , a.sales_site_id 
+			   , a.project_code
+			   , a.yyyymmdd
+			   , 'BOM NOT ASSIGN' AS validation_type
+			FROM (
+					SELECT b.division_id
+						  ,b.item_id
+						  ,dbo.FN_SCM_SPLIT(b.plant_site_id,1,'-') AS plant_id
+						  ,MAX(b.sales_site_id) AS sales_site_id
+						  ,MAX(b.project_code) AS project_code
+						  ,MIN(c.yyyymmdd) AS yyyymmdd
+					  FROM scm_mst_site_item_priority  b WITH(NOLOCK)
+					  LEFT OUTER JOIN (
+										SELECT a.division_id ,a.project_code ,a.scm_site_id ,a.item_id ,a.dom_exp ,a.fcst_type ,a.incoterms ,a.measure ,a.plant_site_id ,a.yyyymmdd ,a.qty
+										FROM DM_PLN_MKT_FCST a WITH(NOLOCK)
+										LEFT JOIN SCM_MST_SITE S ON S.DIVISION_ID=A.DIVISION_ID AND S.SCM_SITE_ID=A.SCM_SITE_ID AND (S.VMI_YN='Y' OR ( SITE_TYPE = 'SALES' AND OPERATION_GROUP = 'W'))
+										WHERE 1=1
+										AND a.measure   = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+										AND a.yyyymmdd != '' and a.yyyymmdd is not null
+										AND a.yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+										AND a.qty      >  0						  
+					  ) c ON b.division_id = c.division_id 
+																AND b.sales_site_id = c.scm_site_id 
+																AND b.project_code = c.project_code 
+																AND b.item_id = c.item_id 
+					 WHERE 1=1
+					   AND b.division_id IN ('81') 
+					   AND b.to_yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+					   AND LEN(DBO.FN_SCM_SPLIT(b.plant_site_id,1,'-') ) = 4
+					   AND b.valid_yn = 'Y'
+					 GROUP BY b.division_id, b.item_id, DBO.FN_SCM_SPLIT(b.plant_site_id,1,'-') 
+					) A
+			WHERE 1=1 
+			AND NOT EXISTS 
+			 (   SELECT 'X'
+				   FROM SCM_MST_BOM_ENG_SN c WITH(NOLOCK)
+				  WHERE c.division_id = a.division_id
+					AND c.plant_id    = a.plant_id
+					AND c.parent_item_id = a.item_id
+					AND c.eff_start_date <= GETDATE()
+					AND c.eff_end_date > GETDATE()
+			  )
+			UNION 
+
+			-- BOM Not Exists : Project Route 화면에서 표시된 81사업부 모델
+			SELECT  DISTINCT t.division_id 
+					, t.item_id 
+					, '-' AS plant_id 
+					, t.scm_site_id AS sales_site_id 
+					, t.project_code
+					, t.yyyymmdd
+					, 'BOM NOT EXISTS' AS validation_type		
+				FROM ( SELECT a.division_id ,a.project_code ,a.scm_site_id ,a.item_id ,MIN(yyyymmdd) AS yyyymmdd
+						 FROM (
+						 		SELECT a.division_id ,a.project_code ,a.scm_site_id ,a.item_id ,a.dom_exp ,a.fcst_type ,a.incoterms ,a.measure ,a.plant_site_id ,a.yyyymmdd ,a.qty
+								FROM DM_PLN_MKT_FCST a WITH(NOLOCK)
+								LEFT JOIN SCM_MST_SITE S ON S.DIVISION_ID=A.DIVISION_ID AND S.SCM_SITE_ID=A.SCM_SITE_ID AND (S.VMI_YN='Y' OR ( SITE_TYPE = 'SALES' AND OPERATION_GROUP = 'W'))
+								WHERE 1=1
+								AND a.measure   = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+								AND a.yyyymmdd != '' and a.yyyymmdd is not null
+								AND a.yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+								AND a.qty      >  0		
+						 ) a 
+						 JOIN scm_mst_item_sn b ON a.division_id = b.division_id and a.item_id= b.item_id
+						WHERE 1=1 
+						  AND a.division_id ='81'
+						  AND b.scp_operation_group_id <> 'E'
+						  GROUP BY a.division_id ,a.project_code ,a.scm_site_id ,a.item_id
+					 ) t  
+				LEFT OUTER JOIN  (SELECT division_id ,model_id	,scm_site_id ,project_code,tot_cnt
+								  FROM (
+										SELECT division_id ,model_id ,scm_site_id ,project_code ,COUNT(*) OVER(PARTITION BY division_id,SCM_SITE_ID,project_code,model_id) AS tot_cnt
+										FROM (
+												SELECT b.division_id ,b.model_id ,a.scm_site_id ,a.project_code												 
+												FROM (		
+														SELECT a.division_id ,a.project_code ,a.scm_site_id ,a.item_id ,a.dom_exp ,a.fcst_type ,a.incoterms ,a.measure ,a.plant_site_id ,a.yyyymmdd ,a.qty
+														FROM DM_PLN_MKT_FCST a WITH(NOLOCK)
+										                LEFT JOIN SCM_MST_SITE S ON S.DIVISION_ID=A.DIVISION_ID AND S.SCM_SITE_ID=A.SCM_SITE_ID AND (S.VMI_YN='Y' OR ( SITE_TYPE = 'SALES' AND OPERATION_GROUP = 'W'))
+														WHERE 1=1
+														AND a.measure   = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+														AND a.yyyymmdd != '' and a.yyyymmdd is not null
+														AND a.yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+														AND a.qty      >  0		) a 
+												JOIN scm_mst_bom_sn b    ON a.division_id = b.division_id and a.item_id = b.model_id 	
+												JOIN scm_mst_item_sn c   ON b.company_id = c.company_id and b.division_id = c.division_id and b.site_id = c.site_id and b.child_item_id = c.item_id
+												JOIN scm_mst_final_item_v d  ON b.division_id = d.division_id  and b.child_item_id = d.item_id
+												WHERE 1=1
+												AND c.item_type	   <> 'r'
+												AND	b.alt_priority  = 'Y'
+												AND a.division_id   = '81'
+												AND d.operation_group_id <> 'E'
+												AND EXISTS (SELECT 'X'
+															FROM SCM_MST_BOM_ENG_SN WITH(NOLOCK)
+															WHERE division_id = '81'
+															AND parent_item_id= b.child_item_id )
+												) m
+										) n
+								 GROUP BY division_id, scm_site_id, project_code, model_id, tot_cnt
+							) u  ON t.division_id  = u.division_id
+								AND t.scm_site_id  = u.scm_site_id
+								AND t.project_code = u.project_code
+								AND t.item_id      = u.model_id
+				JOIN  (SELECT division_id ,item_id ,nick_name ,item_type 
+						     ,ROW_NUMBER() OVER ( PARTITION BY division_id, item_id ORDER BY  CASE item_type WHEN 'P' THEN 999 WHEN 'H' THEN 888 WHEN 'R' THEN 777  WHEN 'Q' THEN 666 ELSE 0 END  DESC ) nums
+					   FROM SCM_MST_ITEM_SN ) i  ON t.division_id  = i.division_id AND t.item_id = i.item_id AND i.nums =1
+				JOIN  SCM_MST_SITE e ON t.division_id = e.division_id	AND t.scm_site_id = e.scm_site_id
+				WHERE 1=1
+				  AND i.item_type NOT IN ('Q','R')	
+				  AND t.division_id  = '81'
+				  AND u.tot_cnt is null
+				  AND e.SITE_TYPE    = 'SALES'
+				  AND e.VALID_YN     = 'Y'
+
+ ) x
+) A
+","hwwoonins","2018-07-19 09:49:44.970","blueeos","2022-11-01 11:43:46.210","H00"
+"MAIL","27","SCP","SCP","BOM 메일링(82)","WEEK","W02","D09","Y","SELECT 
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	, '' AS email_addr
+	, 'KO' language_code 
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.ITEM_ID			AS SEGMENT2
+	,A.nick_name		AS SEGMENT3
+	,A.plant_id			AS SEGMENT4
+	,A.sales_site_id	AS SEGMENT5
+	,A.project_code		AS SEGMENT6
+	,CONVERT(DATE, A.mkt_fcst_date,110) AS SEGMENT7
+	,A.validation_type		AS SEGMENT8
+	,''					AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Model'			AS COLUMN2
+	,'Nick Name'		AS COLUMN3
+	,'Plant Code'		AS COLUMN4
+	,'Sales Site'		AS COLUMN5
+	,'Project Code'		AS COLUMN6
+	,'MKT FCST Date'	AS COLUMN7
+	,'Validation Type'	AS COLUMN8
+	,''					AS COLUMN9
+	,''					AS COLUMN10
+FROM (
+-- 82 사업부
+SELECT 
+		  x.division_id
+		 ,x.item_id
+		 ,dbo.FN_GET_ITEM_NICKNAME( x.division_id, x.item_id ) AS nick_name	
+		 ,x.plant_id
+		 ,x.sales_site_id
+		 ,x.project_code
+		 ,CONVERT(DATETIME, x.yyyymmdd,112) AS mkt_fcst_date
+		 ,x.validation_type
+	FROM (
+			-- BOM Not Exists : Project Route 화면에서 표시된 40,82사업부 모델
+			SELECT  DISTINCT t.division_id 
+					, t.item_id 
+					, '-' AS plant_id 
+					, '-' AS sales_site_id 
+					, '-' AS project_code
+					, t.yyyymmdd
+					, 'BOM NOT EXISTS' AS validation_type
+				FROM ( SELECT a.division_id ,a.item_id ,MIN(yyyymmdd) AS yyyymmdd
+						 FROM (	SELECT a.division_id ,a.project_code ,a.scm_site_id ,a.item_id ,a.dom_exp ,a.fcst_type ,a.incoterms ,a.measure ,a.plant_site_id ,a.yyyymmdd ,a.qty
+										FROM DM_PLN_MKT_FCST a WITH(NOLOCK)
+										LEFT JOIN SCM_MST_SITE S ON S.DIVISION_ID=A.DIVISION_ID AND S.SCM_SITE_ID=A.SCM_SITE_ID AND (S.VMI_YN='Y' OR ( SITE_TYPE = 'SALES' AND OPERATION_GROUP = 'W'))
+										WHERE 1=1
+										AND a.measure   = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+										AND a.yyyymmdd != '' and a.yyyymmdd is not null
+										AND a.yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+										AND a.qty      >  0		
+							  ) a 
+						 JOIN scm_mst_item_sn b ON a.division_id = b.division_id and a.item_id= b.item_id
+						WHERE 1=1 
+						  AND a.division_id in ('82')
+						  AND b.scp_operation_group_id <> 'E'
+						  GROUP BY a.division_id  ,a.item_id
+					 ) t  
+				LEFT OUTER JOIN  (SELECT division_id ,model_id	,'-' AS scm_site_id ,'-' AS project_code ,tot_cnt
+								  FROM (
+										SELECT division_id ,model_id ,COUNT(*) OVER(PARTITION BY division_id,model_id) AS tot_cnt
+										FROM (
+												SELECT b.division_id ,b.model_id
+												FROM (	SELECT a.division_id ,a.project_code ,a.scm_site_id ,a.item_id ,a.dom_exp ,a.fcst_type ,a.incoterms ,a.measure ,a.plant_site_id ,a.yyyymmdd ,a.qty
+														FROM DM_PLN_MKT_FCST a WITH(NOLOCK)
+										                LEFT JOIN SCM_MST_SITE S ON S.DIVISION_ID=A.DIVISION_ID AND S.SCM_SITE_ID=A.SCM_SITE_ID AND (S.VMI_YN='Y' OR ( SITE_TYPE = 'SALES' AND OPERATION_GROUP = 'W'))
+														WHERE 1=1
+														AND a.measure   = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+														AND a.yyyymmdd != '' and a.yyyymmdd is not null
+														AND a.yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+														AND a.qty      >  0		) a 
+												JOIN scm_mst_bom_sn b    ON a.division_id = b.division_id and a.item_id = b.model_id 	
+												JOIN scm_mst_item_sn c   ON b.company_id = c.company_id and b.division_id = c.division_id and b.site_id = c.site_id and b.child_item_id = c.item_id
+												JOIN scm_mst_final_item_v d  ON b.division_id = d.division_id  and b.child_item_id = d.item_id
+												WHERE 1=1
+												AND c.item_type	   <> 'r'
+												AND	b.alt_priority  = 'Y'
+												AND a.division_id  in ('82')
+												AND d.operation_group_id <> 'E'
+												AND EXISTS (SELECT 'X'
+															FROM SCM_MST_BOM_ENG_SN WITH(NOLOCK)
+															WHERE division_id in ('82')
+																AND parent_item_id= b.child_item_id )
+												) m
+										) n
+								  GROUP BY division_id, model_id, tot_cnt
+				                ) u  ON t.division_id = u.division_id	AND t.item_id = u.model_id
+				JOIN  (SELECT division_id ,item_id ,nick_name ,item_type 
+							  ,ROW_NUMBER() OVER ( PARTITION BY division_id, item_id ORDER BY  CASE item_type WHEN 'P' THEN 999 WHEN 'H' THEN 888 WHEN 'R' THEN 777  WHEN 'Q' THEN 666 ELSE 0 END  DESC ) nums
+					  FROM SCM_MST_ITEM_SN ) i  ON t.division_id  = i.division_id AND t.item_id = i.item_id AND i.nums =1
+				WHERE 1=1
+				  AND i.item_type NOT IN ('Q','R')	
+				  AND t.division_id  in ('82')
+				  AND u.tot_cnt is null
+	) X
+) A	
+","hwwoonins","2018-07-19 09:51:05.217","blueeos","2022-11-01 11:45:45.473","H00"
+"MAIL","28","SCP","SCP","Project Route 메일링(81)","DAY","D07","","Y","SELECT
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	,'' AS email_addr
+	,'KO' language_code
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.division_name	AS SEGMENT2
+	,A.scm_site_id		AS SEGMENT3
+	,A.project_code		AS SEGMENT4
+	,A.ITEM_ID			AS SEGMENT5
+	,A.plant_per_item	AS SEGMENT6
+	,A.cmpltd_status	AS SEGMENT7
+	,''					AS SEGMENT8
+	,''					AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Division Name'	AS COLUMN2
+	,'Sales Site'		AS COLUMN3
+	,'Project'			AS COLUMN4
+	,'Model'			AS COLUMN5
+	,'Plant/Item'		AS COLUMN6
+	,'Complete State'	AS COLUMN7
+	,''					AS COLUMN8
+	,''					AS COLUMN9
+	,''					AS COLUMN10
+  FROM (
+-- 81사업부 
+SELECT  distinct 
+		 t.division_id
+        ,dbo.fn_get_division_name(t.division_id) AS division_name
+		,t.scm_site_id 
+		,t.project_code
+		,t.item_id 
+		,CASE WHEN  u.plant_per_item is null  THEN 'BOM Not Exists' ELSE  u.plant_per_item END AS plant_per_item 
+		,isnull(u.cmpltd_status,'N') AS cmpltd_status
+	
+	FROM ( select distinct a.division_id,project_code,a.scm_site_id,a.item_id,dom_exp,fcst_type,incoterms,measure,plant_site_id,yyyymmdd,qty 
+	         from dm_pln_mkt_fcst a 
+			 JOIN scm_mst_item_sn b ON a.division_id = b.division_id and a.item_id= b.item_id
+			 LEFT JOIN scm_mst_site s ON s.DIVISION_ID=a.DIVISION_ID AND s.SCM_SITE_ID=a.SCM_SITE_ID AND (S.VMI_YN='Y' OR ( SITE_TYPE = 'SALES' AND OPERATION_GROUP = 'W'))
+	        WHERE 1=1 
+			  --AND a.measure ='MKT_FCST'
+			  AND a.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+			  AND b.scp_operation_group_id <> 'E'
+			  AND a.yyyymmdd >= convert(varchar, getdate(),112) 
+			  AND a.yyyymmdd <=  convert(varchar,DATEADD(month,12,  getdate() ),112 )
+			  and a.yyyymmdd != '' and a.yyyymmdd is not null
+  	
+	     ) t  
+
+		 /*******************start of 수량 카운트 부분 ********************************************************************************/
+		 LEFT OUTER JOIN  (SELECT division_id
+								 ,SCM_SITE_ID
+		                         ,project_code								 
+								 ,model_id
+								 ,CONVERT(VARCHAR, SUM(plant_cnt) ) +'/'+ CONVERT(VARCHAR, tot_cnt) AS plant_per_item
+								 ,CASE WHEN SUM(plant_cnt) = tot_cnt THEN 'Y' ELSE 'N' END cmpltd_status
+							FROM (
+								SELECT division_id,SCM_SITE_ID, project_code, model_id, COUNT(*) OVER(PARTITION BY division_id,SCM_SITE_ID,project_code,model_id) AS tot_cnt, CASE WHEN primary_plant IS NOT NULL THEN 1 ELSE 0 END AS plant_cnt
+								FROM (
+										SELECT DISTINCT	
+										         (CASE 
+												  WHEN dbo.FN_GET_ITEM_OPERATION_GROUP(a.division_id, a.item_id) = 'E' THEN C.ITEM_ID
+												  ELSE b.model_id	
+												  END ) AS model_id	
+											   , (CASE 
+												  -- 전극 제외 20180517
+												  --WHEN d.operation_group_id = 'E' THEN 'Electrode'
+												  WHEN d.operation_group_id = 'A' THEN 'Cell'
+												  WHEN d.operation_group_id = 'P' THEN 'Pack'
+												  END ) AS operation_group_id
+											   ,d.electrode_type
+											   ,b.child_item_id AS item_id
+											  ,(SELECT rownumber 
+												 FROM (		
+														SELECT ROW_NUMBER() OVER (ORDER BY from_yyyymmdd) AS rownumber
+												 		 FROM scm_mst_site_item_priority s 
+														WHERE s.division_id   = b.division_id
+														  AND s.item_id       = b.child_item_id 
+														  AND s.project_code  = a.project_code
+														  AND s.SALES_SITE_ID = a.SCM_SITE_ID /* 20180326 sales site 추가부분 */
+														  AND s.to_yyyymmdd  >= convert(varchar, getdate(),112) 
+														  AND s.valid_yn = 'Y'
+														  AND s.priority = '1'
+	 													) a 
+												 WHERE rownumber =1
+												) AS primary_plant
+											 ,b.division_id
+											 ,a.SCM_SITE_ID
+											 ,a.project_code			
+										FROM dm_pln_mkt_fcst a 
+											JOIN SCM_MST_BOM_SN_V  b   ON a.division_id   = b.division_id
+											--JOIN scm_mst_bom_sn  b   ON a.division_id   = b.division_id
+																	and a.item_id       = b.model_id 	
+											JOIN scm_mst_item_sn c   ON b.company_id    = c.company_id 
+																	and b.division_id   = c.division_id	
+																	and b.site_id       = c.site_id 
+																	and b.child_item_id = c.item_id
+											JOIN scm_mst_final_item_v d  ON b.division_id = d.division_id  
+																	    and b.child_item_id = d.item_id
+																	    and d.cell_type not like 'CA%'  --  2023.07.11 활성화코드 분리 대응 : CA모델 확인 대상에서 제외
+											LEFT JOIN scm_mst_site s ON s.DIVISION_ID=a.DIVISION_ID AND s.SCM_SITE_ID=a.SCM_SITE_ID AND s.VMI_YN='Y'
+										WHERE 1=1
+										AND c.item_type		<> 'r'
+										--  실적(등록된 카운트)수량은 분기되기 이전 날짜 전체를 사용해야 카운트가 맞음
+										--Alternate Part 제외로직 추가
+										AND	b.alt_priority ='Y'
+										AND a.yyyymmdd >= convert(varchar, getdate(),112) 
+										AND a.yyyymmdd <= convert(varchar,DATEADD(month,12,  getdate() ),112 )
+									 	--AND a.measure ='MKT_FCST'
+										AND a.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+			  							AND a.qty>0	
+										AND a.division_id  = '81'
+										AND d.OPERATION_GROUP_ID <> 'E'
+										--팩모델 하위의 CELL중에서 일부가 자동차전지에만 BOM에서 모ITEM으로 존재하지만,PROJECT ROUTE화면에서 ESS에 생산지를 등록하도록 표기되는 오류수정
+										AND EXISTS (SELECT *
+													FROM [dbo].[SCM_MST_BOM_ENG_SN] WITH(NOLOCK)
+												   WHERE DIVISION_ID = '81'
+													 AND PARENT_ITEM_ID= b.child_item_id
+													--BOM을 제거모델 조회안되도록 수정
+													AND EFF_END_DATE >= GETDATE()
+													AND KEY_DATE = ( SELECT MAX(KEY_DATE)
+																	 FROM [dbo].[SCM_MST_BOM_ENG_SN] WITH(NOLOCK)
+																    WHERE PARENT_ITEM_ID= b.child_item_id --'ECE0315N1-01'
+																 	  AND DIVISION_ID = '81' )
+												   )
+
+									) m
+								) n
+							GROUP BY division_id, SCM_SITE_ID,project_code, model_id, tot_cnt
+						) u  ON t.division_id  = u.division_id
+						    AND t.SCM_SITE_ID  = u.SCM_SITE_ID
+						    AND t.project_code = u.project_code
+						    AND t.item_id      = u.model_id
+		/******************end of 수량카운트********************************************************************************************/
+
+		 INNER JOIN  scm_mst_site_item v  ON t.division_id  = v.division_id 
+										and t.item_id      = v.item_id
+										and t.scm_site_id  = v.scm_site_id 
+										and t.project_code = v.project_code
+         INNER JOIN  (SELECT division_id
+		   				    ,item_id
+		   				    ,nick_name
+		   					,item_type
+		   					,ROW_NUMBER() OVER ( PARTITION BY division_id, item_id ORDER BY  CASE item_type WHEN 'P' THEN 999 WHEN 'H' THEN 888 WHEN 'R' THEN 777  WHEN 'Q' THEN 666 ELSE 0 END  DESC ) nums
+					   FROM SCM_MST_ITEM_SN 
+					   ) i   ON t.division_id  = i.division_id
+						    AND t.item_id      = i.item_id
+							AND i.nums =1
+	WHERE 1=1
+	  AND i.item_type NOT IN ('Q','R')	
+	  --AND t.measure ='MKT_FCST'
+	  AND t.measure in ('AS_In_Req', 'VMI_In_Req',  'MKT_FCST')
+	  AND t.qty>0	
+	  AND t.division_id  = '81'
+	  AND cmpltd_status = 'N'
+) A","hwwoonins","2018-07-19 09:54:58.007","hyerakim","2023-07-11 10:22:09.340",""
+"MAIL","29","SCP","SCP","Project Route 메일링(82)","DAY","D07","","Y","SELECT
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	,'' AS email_addr
+	,'KO' language_code
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.division_name	AS SEGMENT2
+	,A.scm_site_id		AS SEGMENT3
+	,A.project_code		AS SEGMENT4
+	,A.ITEM_ID			AS SEGMENT5
+	,A.plant_per_item	AS SEGMENT6
+	,A.cmpltd_status	AS SEGMENT7
+	,''					AS SEGMENT8
+	,''					AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Division Name'	AS COLUMN2
+	,'Sales Site'		AS COLUMN3
+	,'Project'			AS COLUMN4
+	,'Model'			AS COLUMN5
+	,'Plant/Item'		AS COLUMN6
+	,'Complete State'	AS COLUMN7
+	,''					AS COLUMN8
+	,''					AS COLUMN9
+	,''					AS COLUMN10
+  FROM (
+  --82  사업부
+	SELECT distinct
+		 t.division_id
+        ,dbo.fn_get_division_name(t.division_id) AS division_name
+		,t.scm_site_id 
+		,t.project_code
+		,t.item_id 
+		,CASE WHEN  u.plant_per_item is null  THEN 'BOM Not Exists' ELSE  u.plant_per_item END AS plant_per_item 
+		,isnull(u.cmpltd_status,'N') AS cmpltd_status
+	FROM ( SELECT distinct a.division_id
+	             ,'-' AS project_code
+				 ,'-' AS scm_site_id
+	             ,a.item_id,dom_exp,fcst_type,incoterms,measure,plant_site_id,yyyymmdd,qty 
+	         FROM dm_pln_mkt_fcst a 
+			 JOIN scm_mst_item_sn b ON a.division_id = b.division_id and a.item_id= b.item_id
+			 LEFT JOIN scm_mst_site s ON s.DIVISION_ID=a.DIVISION_ID AND s.SCM_SITE_ID=a.SCM_SITE_ID AND (S.VMI_YN='Y' OR ( SITE_TYPE = 'SALES' AND OPERATION_GROUP = 'W'))
+	        WHERE 1=1 
+			  --AND a.measure ='MKT_FCST'
+			  AND a.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+			  AND b.scp_operation_group_id <> 'E'
+			  AND a.yyyymmdd >=  convert(varchar, getdate(),112) 
+			  AND a.yyyymmdd <=   convert(varchar,DATEADD(month,12,  getdate() ),112 )
+			  AND a.yyyymmdd != '' and a.yyyymmdd is not null		  	
+	     ) t  
+
+		 /*******************start of 수량 카운트 부분 ********************************************************************************/
+		 LEFT OUTER JOIN  (SELECT division_id
+								 ,scm_site_id
+		                         ,project_code								 
+								 ,model_id
+								 ,CONVERT(VARCHAR, SUM(plant_cnt) ) +'/'+ CONVERT(VARCHAR, tot_cnt) AS plant_per_item
+								 ,CASE WHEN SUM(plant_cnt) = tot_cnt THEN 'Y' ELSE 'N' END cmpltd_status
+							FROM (
+								SELECT division_id,'-' AS scm_site_id, '-' AS project_code, model_id, COUNT(*) OVER(PARTITION BY division_id,model_id) AS tot_cnt, CASE WHEN primary_plant IS NOT NULL THEN 1 ELSE 0 END AS plant_cnt
+								FROM (
+										SELECT DISTINCT	
+										         (CASE WHEN dbo.FN_GET_ITEM_OPERATION_GROUP(a.division_id, a.item_id) = 'E' THEN C.ITEM_ID
+														ELSE b.model_id	
+												  END ) AS model_id	
+											   , (CASE
+													  -- 전극 제외 20180517
+											          -- WHEN d.operation_group_id = 'E' THEN 'Electrode'
+													   WHEN d.operation_group_id = 'A' THEN 'Cell'
+												       WHEN d.operation_group_id = 'P' THEN 'Pack'
+												  END ) AS operation_group_id
+											   ,d.electrode_type
+											   ,b.child_item_id AS item_id
+											  ,(SELECT rownumber 
+												 FROM (		
+														SELECT ROW_NUMBER() OVER (ORDER BY from_yyyymmdd) AS rownumber
+												 		 FROM scm_mst_site_item_priority s 
+														WHERE s.division_id   = b.division_id
+														  AND s.item_id       = b.child_item_id 
+														  AND s.to_yyyymmdd  >= convert(varchar, getdate(),112) 
+														  AND s.valid_yn = 'Y'
+														  AND s.priority = '1'
+	 													) a 
+												 WHERE rownumber =1
+												) AS primary_plant
+											 ,b.division_id
+										FROM dm_pln_mkt_fcst     a 
+											JOIN SCM_MST_BOM_SN_V  b   ON a.division_id   = b.division_id
+											--JOIN scm_mst_bom_sn  b   ON a.division_id   = b.division_id
+																	AND a.item_id       = b.model_id 	
+											JOIN scm_mst_item_sn c   ON b.company_id    = c.company_id 
+																	AND b.division_id   = c.division_id	
+																	AND b.site_id       = c.site_id 
+																	AND b.child_item_id = c.item_id
+											JOIN scm_mst_final_item_v d  ON b.division_id = d.division_id  
+																		and b.child_item_id = d.item_id
+																	    and d.cell_type not like 'CA%'  --  2023.07.11 활성화코드 분리 대응 : CA모델 확인 대상에서 제외
+											LEFT JOIN scm_mst_site s ON s.DIVISION_ID=a.DIVISION_ID AND s.SCM_SITE_ID=a.SCM_SITE_ID AND s.VMI_YN='Y'
+										WHERE 1=1
+										--Alternate Part 제외로직 추가
+										AND	b.alt_priority  = 'Y'
+										AND c.item_type		<> 'r'
+										--  실적(등록된 카운트)수량은 분기되기 이전 날짜 전체를 사용해야 카운트가 맞음
+										AND a.yyyymmdd >= convert(varchar, getdate(),112) 
+										AND a.yyyymmdd <= convert(varchar,DATEADD(month,12,  getdate() ),112 )
+									 	--AND a.measure ='MKT_FCST'
+										AND a.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+			  							AND a.qty>0	
+										AND a.division_id in ( '82')
+										--AND (( @p_item_id IS NULL OR  @p_item_id = '' ) OR b.model_id     IN (SELECT token FROM dbo.String_Split(@p_item_id		,',')) )
+										AND d.OPERATION_GROUP_ID <> 'E'
+										--ESS 팩모델 하위의 CELL중에서 일부가 자동차전지에만 BOM에서 모ITEM으로 존재하지만,PROJECT ROUTE화면에서 ESS에 생산지를 등록하도록 표기되는 오류수정
+										AND EXISTS (SELECT *
+													FROM [dbo].[SCM_MST_BOM_ENG_SN] WITH(NOLOCK)
+												   WHERE DIVISION_ID in ( '82')
+													 AND PARENT_ITEM_ID= b.child_item_id
+													 --BOM을 제거모델 조회안되도록 수정
+													 AND EFF_END_DATE >= GETDATE()
+													 AND KEY_DATE = ( SELECT MAX(KEY_DATE)
+																	 FROM [dbo].[SCM_MST_BOM_ENG_SN] WITH(NOLOCK)
+																    WHERE PARENT_ITEM_ID= b.child_item_id --'ECE0315N1-01'
+																 	  AND DIVISION_ID in('82') )
+												   )
+									
+										) m
+									) n
+							GROUP BY division_id , scm_site_id,project_code
+							        ,model_id, tot_cnt
+						) u  ON t.division_id  = u.division_id
+						    AND t.SCM_SITE_ID  = u.SCM_SITE_ID
+						    AND t.project_code = u.project_code
+						    AND t.item_id      = u.model_id
+		/******************end of 수량카운트********************************************************************************************/
+
+         INNER JOIN  (SELECT division_id
+		   				    ,item_id
+		   				    ,nick_name
+		   					,item_type
+		   					,ROW_NUMBER() OVER ( PARTITION BY division_id, item_id ORDER BY  CASE item_type WHEN 'P' THEN 999 WHEN 'H' THEN 888 WHEN 'R' THEN 777  WHEN 'Q' THEN 666 ELSE 0 END  DESC ) nums
+					   FROM SCM_MST_ITEM_SN 
+					   ) i   ON t.division_id  = i.division_id
+						    AND t.item_id      = i.item_id
+							AND i.nums =1
+	WHERE 1=1
+	 AND i.item_type NOT IN ('Q','R')	
+     --AND t.measure ='MKT_FCST'
+	 AND t.measure in ('AS_In_Req', 'VMI_In_Req',  'MKT_FCST')
+	 AND t.qty>0	
+	 AND t.division_id in('82')
+	 AND cmpltd_status = 'N'
+) A","hwwoonins","2018-07-19 09:56:34.253","vadabi3","2023-10-25 09:40:57.473",""
+"MAIL","30","SCP","SCP","Outsourcing Capacity(40)","DAY","D07","","Y","SELECT
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	,'' AS email_addr
+	,'KO' language_code
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.scm_site_id	AS SEGMENT2
+	,A.vendor_code		AS SEGMENT3
+	,A.vendor_name		AS SEGMENT4
+	,A.ITEM_ID			AS SEGMENT5
+	,A.daily_capa_qty	AS SEGMENT6
+	,A.capa_order		AS SEGMENT7
+	,''					AS SEGMENT8
+	,''					AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Plant Site Code'	AS COLUMN2
+	,'Vendor Code'		AS COLUMN3
+	,'Vendor Name'		AS COLUMN4
+	,'Model'			AS COLUMN5
+	,'Daily Capacity'	AS COLUMN6
+	,'capa_order'		AS COLUMN7
+	,''					AS COLUMN8
+	,''					AS COLUMN9
+	,''					AS COLUMN10
+  FROM (
+--40
+SELECT  
+		  t.division_id
+		, t.scm_site_id
+		, t.vendor_code
+		, (select  top 1 b.vendor_name from SCM_MST_VENDOR b where  b.vendor_code = t.vendor_code ) as vendor_name
+		, ( CASE WHEN t.item_id = '-' THEN 'Total' ELSE t.item_id END ) AS item_id
+		, t.daily_capa_qty
+		, (CASE WHEN t.daily_capa_qty IS NULL THEN '1' ELSE '2' END) AS capa_order
+		, t.valid_yn
+		, t.created_by
+		, t.creation_date
+		, t.last_updated_by
+		, t.last_update_date
+	FROM(
+		-- outsourcing 모델 조회
+		SELECT DISTINCT a.division_id, a.scm_site_id, b.vendor_code,  c.item_id, d.daily_capa_qty, d.valid_yn, d.created_by, d.creation_date, d.last_updated_by, d.last_update_date
+		FROM scm_mst_site a
+		JOIN SCM_MST_VENDOR b ON a.plant_id = b.vendor_code
+		JOIN SCM_MST_SITE_ITEM_PRIORITY c ON a.division_id = c.DIVISION_ID and a.scm_site_id = c.plant_site_id
+		LEFT OUTER JOIN SCP_MST_OUTSOURCING_CAPA d ON a.division_id = d.division_id and a.scm_site_id = d.plant_site_id and c.item_id = d.item_id
+		WHERE a.osp_yn ='Y'
+		AND a.valid_yn ='Y'
+		AND c.valid_yn ='Y'
+		UNION
+		-- 업체 Total 표시를 위해 '-' 로 추가 
+		SELECT  DISTINCT a.division_id, a.scm_site_id, b.vendor_code, d.item_id, d.daily_capa_qty, d.valid_yn, d.created_by, d.creation_date, d.last_updated_by, d.last_update_date
+		FROM scm_mst_site a
+		JOIN SCM_MST_VENDOR b ON a.plant_id = b.vendor_code
+		JOIN SCM_MST_SITE_ITEM_PRIORITY c ON a.division_id = c.DIVISION_ID and a.scm_site_id = c.plant_site_id
+		LEFT OUTER JOIN SCP_MST_OUTSOURCING_CAPA d ON a.division_id = d.division_id and a.scm_site_id = d.plant_site_id
+		WHERE a.osp_yn ='Y'
+		AND a.valid_yn ='Y'
+		AND c.valid_yn ='Y'
+		AND d.item_id = '-'
+		UNION
+		-- SCP_MST_OUTSOURCING_CAPA 에 없는 등록이 필요한 모델 조회
+		SELECT  DISTINCT a.division_id, a.scm_site_id, b.vendor_code, '-',null,null,null,null,null,null
+		FROM scm_mst_site a
+		JOIN SCM_MST_VENDOR b ON a.plant_id = b.vendor_code
+		JOIN SCM_MST_SITE_ITEM_PRIORITY c ON a.division_id = c.DIVISION_ID and a.scm_site_id = c.plant_site_id
+		WHERE a.osp_yn ='Y'
+		AND a.valid_yn ='Y'
+		AND c.valid_yn ='Y'
+		AND NOT EXISTS (SELECT 'X' FROM SCP_MST_OUTSOURCING_CAPA D WHERE a.division_id = d.division_id and a.scm_site_id = d.plant_site_id AND d.item_id ='-')
+		
+	) t 
+	WHERE 1=1
+	AND t.division_id = '40'
+	AND t.DAILY_CAPA_QTY is null
+) A	
+","hwwoonins","2018-07-26 13:39:14.380","iamarock","2023-07-14 12:13:05.670",""
+"MAIL","31","SCP","SCP","Outsourcing Capacity(81)","DAY","D07","","Y","  SELECT
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	,'' AS email_addr
+	,'KO' language_code
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.scm_site_id	AS SEGMENT2
+	,A.vendor_code		AS SEGMENT3
+	,A.vendor_name		AS SEGMENT4
+	,A.ITEM_ID			AS SEGMENT5
+	,A.daily_capa_qty	AS SEGMENT6
+	,A.capa_order		AS SEGMENT7
+	,''					AS SEGMENT8
+	,''					AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Plant Site Code'	AS COLUMN2
+	,'Vendor Code'		AS COLUMN3
+	,'Vendor Name'		AS COLUMN4
+	,'Model'			AS COLUMN5
+	,'Daily Capacity'	AS COLUMN6
+	,'capa_order'		AS COLUMN7
+	,''					AS COLUMN8
+	,''					AS COLUMN9
+	,''					AS COLUMN10
+  FROM (
+--81
+SELECT  
+		  t.division_id
+		, t.scm_site_id
+		, t.vendor_code
+		, (select  top 1 b.vendor_name from SCM_MST_VENDOR b where  b.vendor_code = t.vendor_code ) as vendor_name
+		, ( CASE WHEN t.item_id = '-' THEN 'Total' ELSE t.item_id END ) AS item_id
+		, t.daily_capa_qty
+		, (CASE WHEN t.daily_capa_qty IS NULL THEN '1' ELSE '2' END) AS capa_order
+		, t.valid_yn
+		, t.created_by
+		, t.creation_date
+		, t.last_updated_by
+		, t.last_update_date
+	FROM(
+		-- outsourcing 모델 조회
+		SELECT DISTINCT a.division_id, a.scm_site_id, b.vendor_code,  c.item_id, d.daily_capa_qty, d.valid_yn, d.created_by, d.creation_date, d.last_updated_by, d.last_update_date
+		FROM scm_mst_site a
+		JOIN SCM_MST_VENDOR b ON a.plant_id = b.vendor_code
+		JOIN SCM_MST_SITE_ITEM_PRIORITY c ON a.division_id = c.DIVISION_ID and a.scm_site_id = c.plant_site_id
+		LEFT OUTER JOIN SCP_MST_OUTSOURCING_CAPA d ON a.division_id = d.division_id and a.scm_site_id = d.plant_site_id and c.item_id = d.item_id
+		WHERE a.osp_yn ='Y'
+		AND a.valid_yn ='Y'
+		AND c.valid_yn ='Y'
+		UNION
+		-- 업체 Total 표시를 위해 '-' 로 추가 
+		SELECT  DISTINCT a.division_id, a.scm_site_id, b.vendor_code, d.item_id, d.daily_capa_qty, d.valid_yn, d.created_by, d.creation_date, d.last_updated_by, d.last_update_date
+		FROM scm_mst_site a
+		JOIN SCM_MST_VENDOR b ON a.plant_id = b.vendor_code
+		JOIN SCM_MST_SITE_ITEM_PRIORITY c ON a.division_id = c.DIVISION_ID and a.scm_site_id = c.plant_site_id
+		LEFT OUTER JOIN SCP_MST_OUTSOURCING_CAPA d ON a.division_id = d.division_id and a.scm_site_id = d.plant_site_id
+		WHERE a.osp_yn ='Y'
+		AND a.valid_yn ='Y'
+		AND c.valid_yn ='Y'
+		AND d.item_id = '-'
+		UNION
+		-- SCP_MST_OUTSOURCING_CAPA 에 없는 등록이 필요한 모델 조회
+		SELECT  DISTINCT a.division_id, a.scm_site_id, b.vendor_code, '-',null,null,null,null,null,null
+		FROM scm_mst_site a
+		JOIN SCM_MST_VENDOR b ON a.plant_id = b.vendor_code
+		JOIN SCM_MST_SITE_ITEM_PRIORITY c ON a.division_id = c.DIVISION_ID and a.scm_site_id = c.plant_site_id
+		WHERE a.osp_yn ='Y'
+		AND a.valid_yn ='Y'
+		AND c.valid_yn ='Y'
+		AND NOT EXISTS (SELECT 'X' FROM SCP_MST_OUTSOURCING_CAPA D WHERE a.division_id = d.division_id and a.scm_site_id = d.plant_site_id AND d.item_id ='-')
+		
+	) t 
+	WHERE 1=1
+	AND t.division_id = '81'
+	AND t.DAILY_CAPA_QTY is null
+) A","hwwoonins","2018-07-26 13:41:40.380","hwwoonins","2018-10-08 13:29:09.023",""
+"MAIL","32","SCP","SCP","Outsourcing Capacity(82)","DAY","D07","","Y","SELECT
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	,'' AS email_addr
+	,'KO' language_code
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.scm_site_id	AS SEGMENT2
+	,A.vendor_code		AS SEGMENT3
+	,A.vendor_name		AS SEGMENT4
+	,A.ITEM_ID			AS SEGMENT5
+	,A.daily_capa_qty	AS SEGMENT6
+	,A.capa_order		AS SEGMENT7
+	,''					AS SEGMENT8
+	,''					AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Plant Site Code'	AS COLUMN2
+	,'Vendor Code'		AS COLUMN3
+	,'Vendor Name'		AS COLUMN4
+	,'Model'			AS COLUMN5
+	,'Daily Capacity'	AS COLUMN6
+	,'capa_order'		AS COLUMN7
+	,''					AS COLUMN8
+	,''					AS COLUMN9
+	,''					AS COLUMN10
+  FROM (
+--82
+SELECT  
+		  t.division_id
+		, t.scm_site_id
+		, t.vendor_code
+		, (select  top 1 b.vendor_name from SCM_MST_VENDOR b where  b.vendor_code = t.vendor_code ) as vendor_name
+		, ( CASE WHEN t.item_id = '-' THEN 'Total' ELSE t.item_id END ) AS item_id
+		, t.daily_capa_qty
+		, (CASE WHEN t.daily_capa_qty IS NULL THEN '1' ELSE '2' END) AS capa_order
+		, t.valid_yn
+		, t.created_by
+		, t.creation_date
+		, t.last_updated_by
+		, t.last_update_date
+	FROM(
+		-- outsourcing 모델 조회
+		SELECT DISTINCT a.division_id, a.scm_site_id, b.vendor_code,  c.item_id, d.daily_capa_qty, d.valid_yn, d.created_by, d.creation_date, d.last_updated_by, d.last_update_date
+		FROM scm_mst_site a
+		JOIN SCM_MST_VENDOR b ON a.plant_id = b.vendor_code
+		JOIN SCM_MST_SITE_ITEM_PRIORITY c ON a.division_id = c.DIVISION_ID and a.scm_site_id = c.plant_site_id
+		LEFT OUTER JOIN SCP_MST_OUTSOURCING_CAPA d ON a.division_id = d.division_id and a.scm_site_id = d.plant_site_id and c.item_id = d.item_id
+		WHERE a.osp_yn ='Y'
+		AND a.valid_yn ='Y'
+		AND c.valid_yn ='Y'
+		UNION
+		-- 업체 Total 표시를 위해 '-' 로 추가 
+		SELECT  DISTINCT a.division_id, a.scm_site_id, b.vendor_code, d.item_id, d.daily_capa_qty, d.valid_yn, d.created_by, d.creation_date, d.last_updated_by, d.last_update_date
+		FROM scm_mst_site a
+		JOIN SCM_MST_VENDOR b ON a.plant_id = b.vendor_code
+		JOIN SCM_MST_SITE_ITEM_PRIORITY c ON a.division_id = c.DIVISION_ID and a.scm_site_id = c.plant_site_id
+		LEFT OUTER JOIN SCP_MST_OUTSOURCING_CAPA d ON a.division_id = d.division_id and a.scm_site_id = d.plant_site_id
+		WHERE a.osp_yn ='Y'
+		AND a.valid_yn ='Y'
+		AND c.valid_yn ='Y'
+		AND d.item_id = '-'
+		UNION
+		-- SCP_MST_OUTSOURCING_CAPA 에 없는 등록이 필요한 모델 조회
+		SELECT  DISTINCT a.division_id, a.scm_site_id, b.vendor_code, '-',null,null,null,null,null,null
+		FROM scm_mst_site a
+		JOIN SCM_MST_VENDOR b ON a.plant_id = b.vendor_code
+		JOIN SCM_MST_SITE_ITEM_PRIORITY c ON a.division_id = c.DIVISION_ID and a.scm_site_id = c.plant_site_id
+		WHERE a.osp_yn ='Y'
+		AND a.valid_yn ='Y'
+		AND c.valid_yn ='Y'
+		AND NOT EXISTS (SELECT 'X' FROM SCP_MST_OUTSOURCING_CAPA D WHERE a.division_id = d.division_id and a.scm_site_id = d.plant_site_id AND d.item_id ='-')
+		
+	) t 
+	WHERE 1=1
+	AND t.division_id = '82'
+	AND t.DAILY_CAPA_QTY is null
+) A	","hwwoonins","2018-07-26 13:43:47.270","hwwoonins","2018-10-08 13:29:09.027",""
+"MAIL","34","SCP","SCP","Tact Time(81)","DAY","D06","","Y","	SELECT
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	,'' AS email_addr
+	,'KO' language_code
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.plant_site_id	AS SEGMENT2
+	,A.plant_site_name	AS SEGMENT3
+	,A.operation_group_id	AS SEGMENT4
+	,A.operation_id			AS SEGMENT5
+	,A.operation_name	AS SEGMENT6
+	,A.model_site		AS SEGMENT7
+	,A.item_id			AS SEGMENT8
+	,A.nick_name		AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Plant Site Id'	AS COLUMN2
+	,'Plant Site'		AS COLUMN3
+	,'Operation Group Id'	AS COLUMN4
+	,'Operation'			AS COLUMN5
+	,'Operation Name'		AS COLUMN6
+	,'Model Site'			AS COLUMN7
+	,'Model'				AS COLUMN8
+	,'Nick Name'			AS COLUMN9
+	,''					AS COLUMN10
+  FROM (
+-- 81
+SELECT distinct
+	   m.division_id
+      ,m.plant_site_id
+      ,dbo.FN_GET_SCM_SITE_DESCRIPTION (m.division_id, m.plant_site_id ) AS plant_site_name
+      ,m.operation_group_id
+      ,m.operation_id
+	  ,m.operation_id as operation_name
+	  ,m.model_site
+      ,m.item_id
+      ,isnull(m.nick_name,'-') as nick_name
+FROM(
+			-- Project Route 화면에 등록된 모델중 Tact Time Master에 없는 모델 조회
+			-- scp_mst_tact_time 에 등록되면 리스트에서 제외
+			SELECT DISTINCT
+				   a.division_id
+				  ,a.plant_site_id
+				  ,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id -- item_sn 테이블에 미등록된 site 경우 값을 가져올 수 없어 function을 통해 가져옴
+				  ,substring(i.scp_flow_id,1,5) AS operation_id
+				  ,i.site_id AS model_site
+				  ,a.item_id
+				  ,i.nick_name
+				  ,null AS line_id
+				  ,null AS priority
+				  ,null AS tact_time
+				  ,null AS yield
+				  ,null AS daily_capacity
+				  ,null AS valid_yn
+				  ,null AS created_by
+				  ,null AS creation_date
+				  ,null AS last_updated_by
+				  ,null AS last_update_date
+				  , 'I' as input_status
+			FROM scm_mst_site_item_priority a (NOLOCK)
+			LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a.division_id = i.division_id 
+														AND a.item_id = i.item_id 
+														AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+			JOIN SCM_MST_SITE b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id
+				inner join scp_mst_final_item fi with(nolock)  -- 20230710 활성화코드 대응 -- CP 제외
+					    on fi.division_id = a.division_id
+					   and fi.ITEM_ID     = a.item_id
+					   and isnull(fi.attribute8,'') != 'CP' -- 2023.07.19 활성화코드 분리 해외 오픈 대응
+			WHERE 1=1 
+			  AND a.valid_yn    = 'Y'
+			  AND b.osp_yn      = 'N' -- 외주 packer 제외
+			  AND b.operation_group <> 'W' -- 20230403 AS Plant 건 제외
+			  AND NOT EXISTS ( select 'X' from scp_mst_tact_time n (NOLOCK) 
+								JOIN SCM_MST_LINE_SN LS ON LS.COMPANY_ID=B.COMPANY_ID AND LS.DIVISION_ID=N.DIVISION_ID AND LS.SITE_ID=B.SITE_ID AND LS.PLANT_ID=B.PLANT_ID
+																		AND LS.OPERATION_ID=N.OPERATION_ID AND LS.LINE_ID=N.LINE_ID AND LS.ACTIVE_FLAG='Y'
+								where n.division_id = a.division_id 
+								and n.plant_site_id = a.plant_site_id 
+								and n.item_id = a.item_id )
+			  -- MKT FCST 존재하는 모델만 조회
+				AND EXISTS ( SELECT 'X'
+								   FROM scp_mst_final_item F WITH(NOLOCK)
+								  WHERE F.DIVISION_ID=A.DIVISION_ID
+								    AND F.ITEM_ID=A.ITEM_ID
+									AND F.FCST_YN = UPPER('Y') ) 
+						
+			  AND a.division_id = '81'
+			 )m
+WHERE 1=1
+AND m.division_id = '81'
+AND m.operation_group_id <>'E'
+AND m.tact_time is null
+AND substring(m.item_id,2,1) = CASE WHEN m.operation_group_id = 'A' Then 'C' ELSE substring(m.item_id,2,1)  END  --TCO Cell조회불가
+) A
+
+","hwwoonins","2018-07-26 13:48:16.597","blueeos","2023-08-02 09:03:03.207",""
+"MAIL","35","SCP","SCP","Tact Time(82)","DAY","D06","","Y","	SELECT
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	,'' AS email_addr
+	,'KO' language_code
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.plant_site_id	AS SEGMENT2
+	,A.plant_site_name	AS SEGMENT3
+	,A.operation_group_id	AS SEGMENT4
+	,A.operation_id			AS SEGMENT5
+	,A.operation_name	AS SEGMENT6
+	,A.model_site		AS SEGMENT7
+	,A.item_id			AS SEGMENT8
+	,A.nick_name		AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Plant Site Id'	AS COLUMN2
+	,'Plant Site'		AS COLUMN3
+	,'Operation Group Id'	AS COLUMN4
+	,'Operation'			AS COLUMN5
+	,'Operation Name'		AS COLUMN6
+	,'Model Site'			AS COLUMN7
+	,'Model'				AS COLUMN8
+	,'Nick Name'			AS COLUMN9
+	,''					AS COLUMN10
+  FROM (
+-- 82
+SELECT distinct
+	   m.division_id
+      ,m.plant_site_id
+      ,dbo.FN_GET_SCM_SITE_DESCRIPTION (m.division_id, m.plant_site_id ) AS plant_site_name
+      ,m.operation_group_id
+      ,m.operation_id
+	  ,m.operation_id as operation_name
+	  ,m.model_site
+      ,m.item_id
+      ,isnull(m.nick_name,'-') as nick_name
+FROM(
+			-- Project Route 화면에 등록된 모델중 Tact Time Master에 없는 모델 조회
+			-- scp_mst_tact_time 에 등록되면 리스트에서 제외
+			SELECT DISTINCT
+				   a.division_id
+				  ,a.plant_site_id
+				  ,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id -- item_sn 테이블에 미등록된 site 경우 값을 가져올 수 없어 function을 통해 가져옴
+				  ,substring(i.scp_flow_id,1,5) AS operation_id
+				  ,i.site_id AS model_site
+				  ,a.item_id
+				  ,i.nick_name
+				  ,null AS line_id
+				  ,null AS priority
+				  ,null AS tact_time
+				  ,null AS yield
+				  ,null AS daily_capacity
+				  ,null AS valid_yn
+				  ,null AS created_by
+				  ,null AS creation_date
+				  ,null AS last_updated_by
+				  ,null AS last_update_date
+				  , 'I' as input_status
+			FROM scm_mst_site_item_priority a (NOLOCK)
+			LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a.division_id = i.division_id 
+														AND a.item_id = i.item_id 
+														AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+			JOIN SCM_MST_SITE b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id
+				inner join scp_mst_final_item fi with(nolock)  -- 20230710 활성화코드 대응 -- CP 제외
+					    on fi.division_id = a.division_id
+					   and fi.ITEM_ID     = a.item_id
+					   and isnull(fi.attribute8,'') != 'CP' -- 2023.07.19 활성화코드 분리 해외 오픈 대응
+			WHERE 1=1 
+			  AND a.valid_yn    = 'Y'
+			  AND b.osp_yn      = 'N' -- 외주 packer 제외
+			  AND b.operation_group <> 'W' -- 20230403 AS Plant 건 제외
+			  AND NOT EXISTS ( select 'X' from scp_mst_tact_time n (NOLOCK) 
+								JOIN SCM_MST_LINE_SN LS ON LS.COMPANY_ID=B.COMPANY_ID AND LS.DIVISION_ID=N.DIVISION_ID AND LS.SITE_ID=B.SITE_ID AND LS.PLANT_ID=B.PLANT_ID
+																		AND LS.OPERATION_ID=N.OPERATION_ID AND LS.LINE_ID=N.LINE_ID AND LS.ACTIVE_FLAG='Y'
+								where n.division_id = a.division_id 
+								and n.plant_site_id = a.plant_site_id 
+								and n.item_id = a.item_id )
+			  -- MKT FCST 존재하는 모델만 조회
+				AND EXISTS ( SELECT 'X'
+								   FROM scp_mst_final_item F WITH(NOLOCK)
+								  WHERE F.DIVISION_ID=A.DIVISION_ID
+								    AND F.ITEM_ID=A.ITEM_ID
+									AND F.FCST_YN = UPPER('Y')
+								) 
+			  AND a.division_id = '82'
+			 )m
+WHERE 1=1
+AND m.division_id = '82'
+AND m.operation_group_id <>'E'
+AND m.tact_time is null
+AND substring(m.item_id,2,1) = CASE WHEN m.operation_group_id = 'A' Then 'C' ELSE substring(m.item_id,2,1)  END  --TCO Cell조회불가
+) A
+
+","hwwoonins","2018-07-26 13:50:06.587","vadabi3","2023-10-24 19:34:51.717",""
+"MAIL","36","SCP","SCP","Project Route 메일링(EE)","DAY","D07","","Y","	SELECT DISTINCT 		   
+        ''					AS USER_ID
+	,''					AS USER_NAME
+	,''					AS MOBILE_PHONE
+	,''					AS EMAIL_ADDR
+	,'KO'			    AS LANGUAGE_CODE
+	,B.DIVISION_ID		AS SEGMENT1
+	,E.DIVISION_NAME	AS SEGMENT2
+	,B.CHILD_ITEM_ID	AS SEGMENT3
+	,C.NICK_NAME		AS SEGMENT4
+	,D.SEGMENT2			AS SEGMENT5
+	,''					AS SEGMENT6
+	,''					AS SEGMENT7
+	,''					AS SEGMENT8
+	,''					AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Division Name'	AS COLUMN2
+	,'Item ID'			AS COLUMN3
+	,'Nick Name'		AS COLUMN4
+	,'Operation Group'	AS COLUMN5
+	,''					AS COLUMN6
+	,''					AS COLUMN7
+	,''					AS COLUMN8
+	,''					AS COLUMN9
+	,''					AS COLUMN10
+
+	FROM 
+	(SELECT DISTINCT DIVISION_ID,ITEM_ID
+	  FROM SCP_ANL_PRODUCTION_PLAN WITH(NOLOCK)
+	WHERE DIVISION_ID IN ('81','40') -- 82 사업부 제외
+	   AND PLAN_START_YYYYMMDD >=[dbo].[FN_GET_BUCKET_YYYYMMDD](-1)
+	   AND OPERATION_GROUP='A'
+	   AND MEASURE ='PROD_PLAN_AMEND'
+	) A
+	JOIN SCM_MST_MODEL_FINAL_ITEM_BOM_V B ON A.DIVISION_ID = B.DIVISION_ID AND A.ITEM_ID = B.MODEL_ID
+	JOIN SCM_MST_ITEM_SN C ON B.DIVISION_ID = C.DIVISION_ID AND B.MODEL_ID = C.ITEM_ID
+	JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D ON D.LOOKUP_TYPE='OPERATION_GROUP' AND D.VALID_YN='Y'  
+	JOIN SCM_MST_DIVISION E ON B.DIVISION_ID = E.DIVISION_ID		 
+	WHERE 1=1
+	  AND B.OPERATION_GROUP_ID ='E'
+	  AND D.SEGMENT1='E' -- B.OPERATION_GROUP_ID
+	  AND NOT EXISTS ( SELECT '*'
+						 FROM SCM_MST_SITE_ITEM_PRIORITY T WITH(NOLOCK)
+						WHERE T.DIVISION_ID = B.DIVISION_ID
+						  AND T.ITEM_ID     = B.CHILD_ITEM_ID
+						  AND T.VALID_YN ='Y' )
+
+
+","hwwoonins","2018-08-09 17:46:38.903","vadabi3","2023-10-24 18:57:31.927",""
+"MAIL","40","SCP","SCP","Tact Time(EE)","DAY","D06","","Y","SELECT
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	,'' AS email_addr
+	,'KO' language_code
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.plant_site_id	AS SEGMENT2
+	,A.plant_site_name	AS SEGMENT3
+	,A.operation_group_id	AS SEGMENT4
+	,A.operation_id			AS SEGMENT5
+	,A.operation_name	AS SEGMENT6
+	,A.model_site		AS SEGMENT7
+	,A.item_id			AS SEGMENT8
+	,A.nick_name		AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Plant Site Id'	AS COLUMN2
+	,'Plant Site'		AS COLUMN3
+	,'Operation Group Id'	AS COLUMN4
+	,'Operation'			AS COLUMN5
+	,'Operation Name'		AS COLUMN6
+	,'Model Site'			AS COLUMN7
+	,'Model'				AS COLUMN8
+	,'Nick Name'			AS COLUMN9
+	,''					AS COLUMN10
+  FROM (
+-- 전극
+SELECT distinct
+	   m.division_id
+      ,m.plant_site_id
+      ,dbo.FN_GET_SCM_SITE_DESCRIPTION (m.division_id, m.plant_site_id ) AS plant_site_name
+      ,m.operation_group_id
+      ,m.operation_id
+	  ,m.operation_id as operation_name
+	  ,m.model_site
+      ,m.item_id
+      ,isnull(m.nick_name,'-') as nick_name
+FROM(
+			-- Project Route 화면에 등록된 모델중 Tact Time Master에 없는 모델 조회
+			-- scp_mst_tact_time 에 등록되면 리스트에서 제외
+			SELECT DISTINCT
+				   a.division_id
+				  ,a.plant_site_id
+				  ,dbo.fn_get_item_operation_group(a.division_id, a.item_id) AS operation_group_id -- item_sn 테이블에 미등록된 site 경우 값을 가져올 수 없어 function을 통해 가져옴
+				  ,substring(i.scp_flow_id,1,5) AS operation_id
+				  ,i.site_id AS model_site
+				  ,a.item_id
+				  ,i.nick_name
+				  ,null AS line_id
+				  ,null AS priority
+				  ,null AS tact_time
+				  ,null AS yield
+				  ,null AS daily_capacity
+				  ,null AS valid_yn
+				  ,null AS created_by
+				  ,null AS creation_date
+				  ,null AS last_updated_by
+				  ,null AS last_update_date
+				  , 'I' as input_status
+			FROM scm_mst_site_item_priority a (NOLOCK)
+			LEFT OUTER JOIN scm_mst_item_sn i (NOLOCK) ON a.division_id = i.division_id 
+														AND a.item_id = i.item_id 
+														AND i.site_id = ( select site_id from scm_mst_plant_sn s (NOLOCK) where s.division_id = a.division_id and s.plant_id = dbo.fn_scm_split(a.plant_site_id,1,'-') )
+			JOIN SCM_MST_SITE b ON a.division_id = b.division_id AND a.plant_site_id = b.scm_site_id
+			INNER JOIN scp_mst_final_item f (NOLOCK) ON a.division_id = f.division_id and a.item_id = f.item_id and f.fcst_yn = upper('Y')
+			WHERE 1=1 
+			  AND a.valid_yn    = 'Y'
+			  AND b.osp_yn      = 'N' -- 외주 packer 제외
+			  AND b.operation_group <> 'W' -- 20230403 AS Plant 건 제외
+			  AND NOT EXISTS ( select 'X' from scp_mst_tact_time n (NOLOCK) 
+								JOIN SCM_MST_LINE_SN LS ON LS.COMPANY_ID=B.COMPANY_ID AND LS.DIVISION_ID=N.DIVISION_ID AND LS.SITE_ID=B.SITE_ID AND LS.PLANT_ID=B.PLANT_ID
+																		AND LS.OPERATION_ID=N.OPERATION_ID AND LS.LINE_ID=N.LINE_ID AND LS.ACTIVE_FLAG='Y'
+								where n.division_id = a.division_id 
+								and n.plant_site_id = a.plant_site_id 
+								and n.item_id = a.item_id )
+			 )m
+WHERE 1=1
+AND m.operation_group_id ='E'
+AND m.tact_time is null
+AND substring(m.item_id,2,1) = CASE WHEN m.operation_group_id = 'A' Then 'C' ELSE substring(m.item_id,2,1)  END  --TCO Cell조회불가
+) A
+
+","hwwoonins","2018-10-05 11:01:07.000","blueeos","2023-04-03 16:11:01.333",""
+"MAIL","48","SCP","SCP","BOD 메일링(오후)","DAY","D16","","Y","SELECT DISTINCT
+'' AS USER_ID
+		,'' AS USER_NAME		
+		,'' AS mobile_phone		
+		, '' AS email_addr		
+		, 'KO' language_code		
+		, A.DIVISION_ID		AS SEGMENT1
+		, A.customer		AS SEGMENT2
+		, A.from_site_code	AS SEGMENT3	
+		, A.from_city		AS SEGMENT4
+		, A.to_site_code	AS SEGMENT5	
+		, A.TO_CITY			AS SEGMENT6
+		, A.vmi_yn			AS SEGMENT7
+		, A.INCOTERMS		AS SEGMENT8
+		, A.route_cnt		AS SEGMENT9
+		, A.transport_mode	AS SEGMENT10	
+		, 'Division'		AS COLUMN1
+		, 'Customer'		AS COLUMN2
+		, 'From Site'		AS COLUMN3
+		, 'From City'		AS COLUMN4
+		, 'To Site'			AS COLUMN5
+		, 'To City'			AS COLUMN6
+		, 'To Site VMI'		AS COLUMN7
+		, 'Incoterms'		AS COLUMN8
+		, 'Route Count'		AS COLUMN9
+		, 'Trans Mode'		AS COLUMN10
+ FROM (
+SELECT DISTINCT T.*
+ ,(SELECT COUNT(*) AS route_cnt FROM scp_mst_distribution_route WHERE transport_mode=t.transport_mode_code AND from_city =t.from_city  AND to_city =t.to_city ) AS route_cnt
+ ,CASE WHEN RIGHT(t.from_site_code,1) = 'E' THEN (SELECT top 1 ISNULL(VMI_YN,'N') FROM scm_mst_site WHERE scm_site_id = t.to_site_code )
+  ELSE (SELECT ISNULL(VMI_YN,'N') FROM scm_mst_site WHERE division_id =t.division_id AND scm_site_id = t.to_site_code ) END vmi_yn
+  FROM (
+        SELECT
+  		 ma.division_id		
+         ,bo.bod_id
+  		,dbo.fn_get_division_name (ma.division_id) AS division_name		
+  		,ma.customer		
+  		,ma.incoterms		
+  		,ma.from_site AS from_site_code		
+  		,ISNULL(dbo.fn_get_scm_site_description (ma.division_id, ma.from_site) , '-') AS from_site_name		
+  		,ma.to_site AS to_site_code		
+  		,ISNULL(dbo.fn_get_scm_site_description (ma.division_id, ma.to_site) , '-') AS to_site_name		
+ 		,ma.from_country		
+ 		,ma.from_city		
+ 		,ma.to_country		
+ 		,ma.to_city		
+ 		,ma.transport_mode as transport_mode_code		
+         ,dbo.FN_GET_LOOKUP_CODE_DESC ('TRANSPORT_MODE_CODE' , ma.transport_mode ) AS transport_mode
+  		,bo.safety_stock, bo.priority		
+  		,bo.valid_yn as bod_valid		
+  		,ro.valid_yn as route_valid		
+  		,ro.route_id		
+  		,ro.days_mon		
+  		,ro.days_tue		
+  		,ro.days_wed		
+  		,ro.days_thu		
+  		,ro.days_fri		
+  		,ro.days_sat		
+  		,ro.days_sun		
+  		,(select v.lt_total from scp_mst_bod_v v where v.division_id = ma.division_id  and v.BOD_ID = bo.bod_id ) AS lead_time		
+  		,ISNULL(bo.created_by,ma.created_by)  created_by		
+  		,ISNULL(bo.creation_date,ma.creation_date)  creation_date		
+  		,ISNULL(bo.last_updated_by,ma.last_updated_by)  last_updated_by		
+  		,ISNULL(bo.last_update_date,ma.last_update_date)  last_update_date		
+  		,CASE WHEN (ro.FROM_CITY = ma.from_city) AND (ro.TO_CITY = ma.to_city) THEN 'Y' ELSE 'N' END route_chk		
+  		FROM  (		
+  				SELECT t.division_id, t.to_site, t.customer, t.incoterms, t.from_site, t.from_country, t.from_city, t.to_country, t.to_city,u.transport_mode
+ 					  ,null created_by, null creation_date, null last_updated_by, null last_update_date
+ 				FROM
+					(
+ 					SELECT DISTINCT de.division_id, de.scm_site_id as to_site,  de.customer, de.Incoterms, si.scm_site_id AS from_site 
+ 						, f_ci.country AS from_country				
+ 						, f_ci.city	   AS from_city			
+ 						, t_ci.country AS to_country				
+ 						, t_ci.city	   AS to_city			
+ 					  FROM
+  						( SELECT  f.division_id, f.scm_site_id, m.end_customer AS customer, f.incoterms, f.project_code, f.item_id				
+  							FROM  dm_pln_mkt_fcst f			
+  							JOIN scm_mst_site m ON f.division_id = m.division_id AND f.scm_site_id = m.scm_site_id AND m.valid_yn = 'Y'
+							LEFT JOIN scm_mst_site s ON s.DIVISION_ID=F.DIVISION_ID AND s.SCM_SITE_ID=F.SCM_SITE_ID AND (s.VMI_YN='Y' OR ( s.SITE_TYPE = 'SALES' AND s.OPERATION_GROUP = 'W'))
+  							WHERE 1=1			
+     						 AND  f.division_id IN ( '81')				
+  							 AND  F.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(f.attribute10, '') = '' THEN 'MKT_FCST' END
+  						) de				
+  						LEFT OUTER JOIN	(SELECT a.division_id, a.scm_site_id, b.item_id, b.project_code, c.priority ,c.sales_site_id, right(plant_site_id,1) plant_type			
+  										   FROM  scm_mst_site a
+  											   , scm_mst_site_item b													
+  											   , scm_mst_site_item_priority c													
+  										  WHERE    a.division_id  = b.division_id
+  										    AND    a.scm_site_id  = b.scm_site_id
+  										    AND    b.division_id  = c.division_id
+  										    AND    b.scm_site_id  = c.plant_site_id
+  										    AND    b.project_code = c.project_code
+  										    AND    b.item_id      = c.item_id
+  										    AND    a.valid_yn     = 'Y'
+  										    AND    b.valid_yn     = 'Y'
+  										    AND    c.valid_yn     = 'Y'
+  										    AND    a.site_type    = 'PLANT'
+  										    AND    a.division_id  IN ( '81')
+  									   ) si ON  de.division_id  = si.division_id	
+  										AND ((si.plant_type != 'E' AND de.project_code = si.project_code  AND de.SCM_SITE_ID  = si.sales_site_id)
+  											or (si.plant_type = 'E'))													
+  										    AND de.item_id      = si.item_id
+  						LEFT OUTER JOIN (SELECT	division_id, scm_site_id, country, city			
+  									      FROM scm_mst_site A where a.valid_yn = 'Y') f_ci ON de.division_id = f_ci.division_id AND si.scm_site_id = f_ci.scm_site_id	
+  						LEFT OUTER JOIN (SELECT division_id, scm_site_id,country,city				
+  									      FROM scm_mst_site A WHERE a.valid_yn = 'Y') t_ci ON de.division_id = t_ci.division_id AND de.scm_site_id = t_ci.scm_site_id	
+ 			    ) t LEFT JOIN ( SELECT DISTINCT from_country, from_city, to_country, to_city, transport_mode	
+ 								  FROM scp_mst_distribution_route		
+ 							     WHERE VALID_YN ='Y'			
+ 							  ) u ON t.from_country = u.from_country			
+ 							     AND t.from_city    = u.from_city			
+ 							     AND t.to_country   = u.to_country			
+ 					 		     AND t.to_city      = u.to_city			
+					UNION ALL
+  				SELECT t.division_id, t.to_site, t.customer, t.incoterms, t.from_site, t.from_country, t.from_city, t.to_country, t.to_city,u.transport_mode
+ 					  ,null created_by, null creation_date, null last_updated_by, null last_update_date
+ 				FROM
+					(
+ 					SELECT DISTINCT de.division_id, de.scm_site_id as to_site,  de.customer, de.Incoterms, si.scm_site_id AS from_site 
+ 						, f_ci.country AS from_country				
+ 						, f_ci.city	   AS from_city			
+ 						, t_ci.country AS to_country				
+ 						, t_ci.city	   AS to_city			
+ 					  FROM
+  						( SELECT  f.division_id, f.scm_site_id, m.end_customer AS customer, f.incoterms, f.project_code, f.item_id				
+  							FROM  dm_pln_mkt_fcst f
+  							JOIN scm_mst_site m ON f.division_id = m.division_id AND f.scm_site_id = m.scm_site_id AND m.valid_yn = 'Y'
+							LEFT JOIN scm_mst_site s ON s.DIVISION_ID=F.DIVISION_ID AND s.SCM_SITE_ID=F.SCM_SITE_ID AND (s.VMI_YN='Y' OR ( s.SITE_TYPE = 'SALES' AND s.OPERATION_GROUP = 'W'))
+  							WHERE 1=1			
+     						 AND  f.division_id IN ( '40','82')				
+  							 AND  F.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(f.attribute10, '') = '' THEN 'MKT_FCST' END
+  						) de				
+  						LEFT OUTER JOIN	(SELECT a.division_id, a.scm_site_id, b.item_id, b.project_code, c.priority ,c.sales_site_id, right(plant_site_id,1) plant_type			
+  										   FROM  scm_mst_site a
+  											   , scm_mst_site_item b													
+  											   , scm_mst_site_item_priority c													
+  										  WHERE    a.division_id  = b.division_id
+  										    AND    a.scm_site_id  = b.scm_site_id
+  										    AND    b.division_id  = c.division_id
+  										    AND    b.scm_site_id  = c.plant_site_id
+  										    AND    b.project_code = c.project_code
+  										    AND    b.item_id      = c.item_id
+  										    AND    a.valid_yn     = 'Y'
+  										    AND    b.valid_yn     = 'Y'
+  										    AND    c.valid_yn     = 'Y'
+  										    AND    a.site_type    = 'PLANT'
+  										    AND    a.division_id  IN ( '40','82')
+  									   ) si ON  de.division_id  = si.division_id	
+  										    AND de.item_id      = si.item_id
+  						LEFT OUTER JOIN (SELECT	division_id, scm_site_id, country, city			
+  									      FROM scm_mst_site A where a.valid_yn = 'Y') f_ci ON de.division_id = f_ci.division_id AND si.scm_site_id = f_ci.scm_site_id	
+  						LEFT OUTER JOIN (SELECT division_id, scm_site_id,country,city				
+  									      FROM scm_mst_site A WHERE a.valid_yn = 'Y') t_ci ON de.division_id = t_ci.division_id AND de.scm_site_id = t_ci.scm_site_id	
+ 			    ) t LEFT JOIN ( SELECT DISTINCT from_country, from_city, to_country, to_city, transport_mode	
+ 								  FROM scp_mst_distribution_route		
+ 							     WHERE VALID_YN ='Y'			
+ 							  ) u ON t.from_country = u.from_country			
+ 							     AND t.from_city    = u.from_city			
+ 							     AND t.to_country   = u.to_country			
+ 					 		     AND t.to_city      = u.to_city			
+					UNION ALL
+                 SELECT a.division_id, a.to_site, a.customer, 'DAP' incoterms, a.from_site, a.from_country, a.from_city, a.to_country, a.to_city,a.transport_mode
+	                      ,created_by, creation_date, last_updated_by, last_update_date			
+                 FROM(
+  					SELECT t.division_id, t.to_site, t.customer, t.incoterms, t.from_site, t.from_country, t.from_city, t.to_country, t.to_city,u.transport_mode
+ 						,null created_by, null creation_date, null last_updated_by, null last_update_date				
+ 					FROM(
+ 						SELECT DISTINCT de.division_id, de.scm_site_id as to_site,  de.customer, de.Incoterms, si.scm_site_id AS from_site 				
+
+ 							, f_ci.country  AS from_country			
+ 							, f_ci.city		AS from_city	
+ 							, t_ci.country	AS to_country		
+ 							, t_ci.city		AS to_city	
+ 						FROM				
+  						( SELECT  f.division_id, f.scm_site_id, m.end_customer AS customer, f.incoterms, f.project_code, f.item_id				
+  							FROM dm_pln_mkt_fcst f
+  							JOIN scm_mst_site m ON f.division_id = m.division_id AND f.scm_site_id = m.scm_site_id AND m.valid_yn = 'Y' AND (m.VMI_YN='Y' OR ( m.SITE_TYPE = 'SALES' AND m.OPERATION_GROUP = 'W'))
+							LEFT JOIN scm_mst_site s ON s.DIVISION_ID=F.DIVISION_ID AND s.SCM_SITE_ID=F.SCM_SITE_ID AND (s.VMI_YN='Y' OR ( s.SITE_TYPE = 'SALES' AND s.OPERATION_GROUP = 'W'))
+  							WHERE  1=1			
+     						  AND  f.division_id IN ( '81' )				
+  							  AND  F.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(f.attribute10, '') = '' THEN 'MKT_FCST' END
+  						) de				
+  						LEFT OUTER JOIN	(SELECT a.division_id, a.scm_site_id, b.item_id, b.project_code, c.priority ,c.sales_site_id, right(plant_site_id,1) plant_type			
+  										   FROM   scm_mst_site a
+  											    , scm_mst_site_item b													
+  											    , scm_mst_site_item_priority c													
+  									      WHERE    a.division_id  = b.division_id	
+  										    AND    a.scm_site_id  = b.scm_site_id
+  										    AND    b.division_id  = c.division_id
+  										    AND    b.scm_site_id  = c.PLANT_SITE_ID
+  										    AND    b.project_code = c.project_code
+  										    AND    b.item_id      = c.item_id
+  										    AND    a.valid_yn     = 'Y'
+  										    AND    b.valid_yn     = 'Y'
+  										    AND    c.valid_yn     = 'Y'
+  										    AND    a.site_type    = 'PLANT'
+  										    AND    a.division_id  IN ( '81')
+  						                 ) si ON  de.division_id  = si.division_id				
+  											 AND ((si.plant_type  != 'E' AND de.project_code = si.project_code  AND de.scm_site_id  = si.sales_site_id)													
+  							                     OR (si.plant_type = 'E'))			
+  							                 AND de.item_id      = si.item_id			
+  						LEFT OUTER JOIN (SELECT	division_id, scm_site_id,country,city			
+  									     FROM scm_mst_site A WHERE a.valid_yn = 'Y') f_ci ON de.division_id = f_ci.division_id AND si.scm_site_id = f_ci.scm_site_id	
+  						LEFT OUTER JOIN (SELECT division_id, scm_site_id,country,city				
+  									     FROM scm_mst_site A WHERE a.valid_yn = 'Y') t_ci ON de.division_id = t_ci.division_id AND de.scm_site_id = t_ci.scm_site_id	
+ 			        ) t	
+ 		        LEFT JOIN ( SELECT DISTINCT from_country, from_city, to_country, to_city, transport_mode		
+ 		 		              FROM scp_mst_distribution_route
+ 					         WHERE valid_yn ='Y'
+ 					      ) u ON t.from_country = u.from_country
+ 						     AND t.from_city    = u.from_city				
+ 						     AND t.to_country   = u.to_country				
+ 						     AND t.to_city      = u.to_city				
+			        ) a	
+ 			    WHERE NOT EXISTS  ( SELECT 1	
+									      FROM	
+										     (SELECT DISTINCT a.division_id, a.from_site, a.to_site, b.transport_mode 
+                  					        FROM scp_mst_bod a
+                  					       INNER JOIN scp_mst_bod_v b  ON a.division_id = b.division_id
+ 		      AND a.bod_id = b.bod_id								
+ 		      AND a.from_site = b.from_site								
+ 		      AND a.to_site = b.to_site								
+ 		      AND a.incoterms = b.incoterms								
+                  				            WHERE a.incoterms = 'DAP'
+                  			              ) b	
+ 			                        WHERE a.division_id    =  b.division_id	
+ 			                          AND a.from_site      =  b.from_site	
+ 			                          AND a.to_site        =  b.to_site	
+ 			                          AND a.transport_mode =  b.transport_mode	
+                                    )
+				   UNION ALL
+                 SELECT a.division_id, a.to_site, a.customer, 'DAP' incoterms, a.from_site, a.from_country, a.from_city, a.to_country, a.to_city,a.transport_mode
+	                      ,created_by, creation_date, last_updated_by, last_update_date			
+                 FROM(
+  					SELECT t.division_id, t.to_site, t.customer, t.incoterms, t.from_site, t.from_country, t.from_city, t.to_country, t.to_city,u.transport_mode
+ 						,null created_by, null creation_date, null last_updated_by, null last_update_date				
+ 					FROM(
+ 						SELECT DISTINCT de.division_id, de.scm_site_id as to_site,  de.customer, de.Incoterms, si.scm_site_id AS from_site 				
+ 							, f_ci.country  AS from_country			
+ 							, f_ci.city		AS from_city	
+ 							, t_ci.country	AS to_country		
+ 							, t_ci.city		AS to_city	
+ 						FROM				
+  						( SELECT  f.division_id, f.scm_site_id, m.end_customer AS customer, f.incoterms, f.project_code, f.item_id				
+  							FROM dm_pln_mkt_fcst f
+  							JOIN scm_mst_site m ON f.division_id = m.division_id AND f.scm_site_id = m.scm_site_id AND m.valid_yn = 'Y' AND (m.VMI_YN='Y' OR ( m.SITE_TYPE = 'SALES' AND m.OPERATION_GROUP = 'W'))
+							LEFT JOIN scm_mst_site s ON s.DIVISION_ID=F.DIVISION_ID AND s.SCM_SITE_ID=F.SCM_SITE_ID AND (s.VMI_YN='Y' OR ( s.SITE_TYPE = 'SALES' AND s.OPERATION_GROUP = 'W'))
+  							WHERE  1=1			
+     						  AND  f.division_id IN ( '40','82')				
+  							  AND  F.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(f.attribute10, '') = '' THEN 'MKT_FCST' END
+  						) de				
+  						LEFT OUTER JOIN	(SELECT a.division_id, a.scm_site_id, b.item_id, b.project_code, c.priority ,c.sales_site_id, right(plant_site_id,1) plant_type			
+  										   FROM   scm_mst_site a
+  											    , scm_mst_site_item b													
+  											    , scm_mst_site_item_priority c													
+  									      WHERE    a.division_id  = b.division_id	
+  										    AND    a.scm_site_id  = b.scm_site_id
+  										    AND    b.division_id  = c.division_id
+  										    AND    b.scm_site_id  = c.PLANT_SITE_ID
+  										    AND    b.project_code = c.project_code
+  										    AND    b.item_id      = c.item_id
+  										    AND    a.valid_yn     = 'Y'
+  										    AND    b.valid_yn     = 'Y'
+  										    AND    c.valid_yn     = 'Y'
+  										    AND    a.site_type    = 'PLANT'
+  										    AND    a.division_id  IN ( '40','82')
+  						                 ) si ON  de.division_id  = si.division_id				
+  							                 AND  de.item_id      = si.item_id			
+  						LEFT OUTER JOIN (SELECT	division_id, scm_site_id,country,city			
+  									     FROM scm_mst_site A WHERE a.valid_yn = 'Y') f_ci ON de.division_id = f_ci.division_id AND si.scm_site_id = f_ci.scm_site_id	
+  						LEFT OUTER JOIN (SELECT division_id, scm_site_id,country,city				
+  									     FROM scm_mst_site A WHERE a.valid_yn = 'Y') t_ci ON de.division_id = t_ci.division_id AND de.scm_site_id = t_ci.scm_site_id	
+ 			        ) t	
+ 		        LEFT JOIN ( SELECT DISTINCT from_country, from_city, to_country, to_city, transport_mode		
+ 		 		              FROM scp_mst_distribution_route
+ 					         WHERE valid_yn ='Y'
+ 					      ) u ON t.from_country = u.from_country
+ 						     AND t.from_city    = u.from_city				
+ 						     AND t.to_country   = u.to_country				
+ 						     AND t.to_city      = u.to_city				
+			        ) a	
+ 			    WHERE NOT EXISTS  ( SELECT 1	
+									      FROM	
+										     (SELECT DISTINCT a.division_id, a.from_site, a.to_site, b.transport_mode 
+                  					        FROM scp_mst_bod a
+                  					       INNER JOIN scp_mst_bod_v b  ON a.division_id = b.division_id
+ 		      AND a.bod_id = b.bod_id								
+ 		      AND a.from_site = b.from_site								
+ 		      AND a.to_site = b.to_site								
+ 		      AND a.incoterms = b.incoterms								
+                  				            WHERE a.incoterms = 'DAP'
+                  			              ) b	
+ 			                        WHERE a.division_id    =  b.division_id	
+ 			                          AND a.from_site      =  b.from_site	
+ 			                          AND a.to_site        =  b.to_site	
+ 			                          AND a.transport_mode =  b.transport_mode	
+                                    )
+		           UNION ALL		
+		           SELECT a.division_id, a.to_site		
+                      ,(SELECT end_customer FROM scm_mst_site WHERE division_id = a.division_id AND scm_site_id = a.to_site) AS customer
+				         ,a.incoterms, a.from_site
+				         ,f_ci.country AS from_country
+				         ,f_ci.city	   AS from_city
+				         ,t_ci.country AS to_country
+				         ,t_ci.city	   AS to_city
+				         ,ro.transport_mode
+				         ,a.created_by,a.creation_date, a.last_updated_by,a.last_update_date
+		             FROM scp_mst_bod a		
+			         INNER JOIN scp_mst_distribution_route ro  ON a.route_id = ro.route_id	
+ 	             LEFT OUTER JOIN scm_mst_site f_ci ON f_ci.division_id = a.division_id AND f_ci.scm_site_id = a.from_site AND f_ci.valid_yn = 'Y'			
+ 		         LEFT OUTER JOIN scm_mst_site t_ci ON t_ci.scm_site_id = a.to_site	   AND t_ci.valid_yn = 'Y'	
+                UNION ALL
+		             SELECT a.division_id, a.to_site		
+				           ,(SELECT end_customer FROM scm_mst_site WHERE division_id = a.division_id AND scm_site_id = a.to_site) AS customer
+				           ,'DAP' incoterms, a.from_site
+				           ,from_country
+				           ,from_city
+				           ,to_country
+				           ,to_city
+				           ,transport_mode
+				           ,null created_by,null creation_date, null last_updated_by,null last_update_date
+			           FROM (	
+					        SELECT  a.division_id, a.to_site
+                                ,(SELECT end_customer FROM scm_mst_site WHERE division_id = a.division_id AND scm_site_id = a.to_site) AS customer
+						           ,a.incoterms, a.from_site				
+						           ,f_ci.country AS from_country				
+						           ,f_ci.city	 AS from_city			
+						           ,t_ci.country AS to_country				
+						           ,t_ci.city    AS to_city				
+						           ,ro.transport_mode				
+						           ,a.created_by,a.creation_date, a.last_updated_by,a.last_update_date				
+					         FROM scp_mst_bod a
+					         INNER JOIN scp_mst_distribution_route ro  ON a.route_id = ro.route_id
+ 				         LEFT OUTER JOIN scm_mst_site f_ci ON f_ci.division_id = a.division_id AND f_ci.scm_site_id = a.from_site AND f_ci.valid_yn = 'Y'
+ 				         LEFT OUTER JOIN scm_mst_site t_ci ON t_ci.scm_site_id = a.to_site	  AND t_ci.VALID_YN = 'Y'
+				            ) a
+			          INNER JOIN SCM_MST_SITE c ON a.DIVISION_ID = c.DIVISION_ID AND a.to_site = c.SCM_SITE_ID	
+			          WHERE c.VMI_YN = 'Y'	
+			          AND INCOTERMS != 'DAP'	
+			          AND NOT EXISTS (SELECT 1	
+							            FROM (SELECT distinct a.division_id, a.from_site, a.to_site, b.transport_mode			
+				  					            FROM scp_mst_bod a	
+				  					            INNER JOIN scp_mst_bod_v b ON a.division_id = b.division_id	
+		          AND a.bod_id = b.bod_id								
+		          AND a.from_site = b.from_site								
+		          AND a.to_site = b.to_site								
+		          AND a.incoterms = b.incoterms								
+				  					            WHERE a.incoterms = 'DAP'	
+									         ) b	
+							            INNER JOIN scm_mst_site c ON a.division_id = c.division_id AND b.to_site = c.scm_site_id			
+							            WHERE c.vmi_yn       =  'Y'			
+							            AND a.from_site      =  b.from_site			
+							            AND a.to_site        =  b.to_site			
+							            AND a.transport_mode =  b.transport_mode			
+									  )	
+ ) ma
+ LEFT OUTER JOIN ( SELECT a.*, b.transport_mode
+					    FROM scp_mst_bod a
+						INNER JOIN scp_mst_distribution_route b ON a.ROUTE_ID = b.ROUTE_ID				
+					) bo ON  bo.division_id   = ma.division_id
+ 				     AND bo.to_site       = ma.to_site
+ 					 AND bo.incoterms     = ma.incoterms
+ 					 AND bo.from_site     = ma.from_site
+ 					 AND bo.transport_mode= ma.transport_mode
+ LEFT OUTER JOIN scp_mst_distribution_route ro  ON bo.route_id = ro.route_id
+ WHERE 1=1
+ 		AND  bo.route_id IS NULL		
+ 		AND ma.division_id    IN ('40','81','82')		
+		AND ma.from_site in (		
+			SELECT	SCM_SITE_ID
+			FROM [dbo].[SCM_MST_SITE] AS A WITH(NOLOCK)	
+			WHERE SITE_TYPE = 'PLANT'	
+			AND    A.VALID_YN  = 'Y'	
+		)		
+		AND ma.to_site in (		
+			SELECT	 SCM_SITE_ID
+			FROM [dbo].[SCM_MST_SITE] AS A WITH(NOLOCK)	
+			WHERE   A.VALID_YN  = 'Y'	
+		)		
+		AND ma.incoterms in (		
+			SELECT B.SEGMENT1	
+			FROM SCM_ADM_LOOKUP_MASTER A WITH(NOLOCK)	
+			INNER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL B WITH(NOLOCK) ON A.LOOKUP_TYPE = B.LOOKUP_TYPE  AND B.VALID_YN = 'Y'	
+			WHERE A.LOOKUP_TYPE = 'INCOTERMS'	
+			  AND A.VALID_YN = 'Y'	
+		)		
+ ) T
+WHERE NOT EXISTS (SELECT 1 FROM scm_mst_site s WHERE s.division_id = t.division_id AND s.scm_site_id = t.from_site_code AND s.valid_yn = 'Y' AND s.osp_yn = 'Y' AND s.operation_group = 'A')
+) A","hwwoonins","2018-12-18 09:25:03.443","blueeos","2022-11-01 11:33:56.807",""
+"MAIL","49","DM","DM","NET DEMAND 결과 검증","WEEK","W03","D06","Y","select x.user_id USER_ID, x.user_id USER_NAME, '' mobile_phone, x.user_id email_addr, 'KO' language_code
+      ,type segment1, DIVISION_ID segment2, scm_site_id segment3, item_id segment4,yyyymmdd segment5, qty segment6, '' segment7, '' segment8, '' segment9, '' segment10
+      ,'Type' column1, 'DIVISION_ID' column2, 'scm_site_id' column3, 'item_id' column4, 'yyyymmdd' column5, 'qty' column6, '' column7, '' column8, '' column9, '' column10
+  from ( 
+		select N'0. except처리 결과값이 없는경우가 정상임' TYPE, ' ' DIVISION_ID, ' ' scm_site_id, ' ' item_id, 0 yyyymmdd, 0 qty
+		UNION ALL 
+-- VMI 인경우 (FCST - DEMAND)
+		select N'1. VMI 인경우 (FCST - DEMAND)' TYPE, '-' DIVISION_ID, '-' scm_site_id, '-' item_id, 0 yyyymmdd, 0 qty
+		UNION ALL 
+		select N'1. VMI 인경우 (FCST - DEMAND)' TYPE, a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.yyyymmdd,1,6), sum(qty) 
+		  from DM_PLN_MKT_FCST_C a WITH(NOLOCK)
+			  INNER JOIN scm_mst_site s WITH(NOLOCK)
+				ON( a.DIVISION_ID       = s.DIVISION_ID
+				and a.scm_site_id		= s.scm_site_id
+				and s.vmi_yn			= 'Y'
+				and s.VALID_YN			= 'Y')
+			  INNER JOIN scm_mst_site_item m with(nolock)
+				ON( a.DIVISION_ID		= m.DIVISION_ID
+				and a.scm_site_id		= m.scm_site_id
+				and a.PROJECT_CODE		= m.PROJECT_CODE
+				and a.item_id			= m.item_id
+				and m.VALID_YN			= 'Y')
+			  INNER JOIN (SELECT  DIVISION_ID,MAX(VERSION_NO) AS VERSION_NO
+							FROM DM_MST_VERSION v WITH(NOLOCK)
+								where v.DIVISION_ID IN ('81','82','40')
+								and v.VERSION_TYPE      = 'MF_W'
+								AND v.YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DD, -7*1, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)    -- 당주 월요일부터
+								AND v.YYYYMMDD <= CONVERT(CHAR(8), DATEADD(DD, 0, dbo.FN_NEXT_DAY(getdate(), 'SUN')), 112)       -- 당주 일요일까지
+							group by DIVISION_ID
+					) vv
+					on (a.DIVISION_ID		= vv.DIVISION_ID
+					and a.VERSION_NO        = vv.VERSION_NO	)
+		 where 1=1 
+		AND A.DIVISION_ID  in ('81','82','40')   --input division_id
+		and a.yyyymmdd			>= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) -- 당주 월요일 YYYYMMDD
+		--and a.measure			= case when A.DIVISION_ID='82' then 'MKT_FCST' ELSE 'VMI_In_Req' END
+		and a.measure			= 'VMI_In_Req'  -- 20190820 ess Vmi Measure 적용됨
+		and a.qty				> 0
+		group by a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.yyyymmdd,1,6)
+
+		except
+
+		select N'1. VMI 인경우 (FCST - DEMAND)' TYPE, a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.attribute1,1,6), sum(qty)
+		  from DM_PLN_NET_DEMAND a  WITH(NOLOCK)
+			  INNER JOIN scm_mst_site s WITH(NOLOCK)
+				ON( a.DIVISION_ID       = s.DIVISION_ID
+				and a.scm_site_id		= s.scm_site_id
+				and s.vmi_yn			= 'Y'
+				and s.VALID_YN			= 'Y')
+			  INNER JOIN (SELECT  DIVISION_ID,MAX(VERSION_NO) AS VERSION_NO
+							FROM DM_MST_VERSION v WITH(NOLOCK)
+								where v.DIVISION_ID IN ('81','82','40')
+								and v.VERSION_TYPE      = 'MF_W'
+								AND v.YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DD, -7*1, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)    -- 당주 월요일부터
+								AND v.YYYYMMDD <= CONVERT(CHAR(8), DATEADD(DD, 0, dbo.FN_NEXT_DAY(getdate(), 'SUN')), 112)       -- 당주 일요일까지
+							group by DIVISION_ID
+					) vv
+					on (a.DIVISION_ID		= vv.DIVISION_ID
+					and a.VERSION_NO        = vv.VERSION_NO	)
+		 where 1=1 
+		AND A.DIVISION_ID  in ('81','82','40')   --input division_id
+		and a.attribute1		>= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) -- 당주 월요일 YYYYMMDD
+		group by a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.attribute1,1,6)
+		UNION ALL 
+
+-- VMI 인경우 (DEMAND - FCST)
+
+		select N'2. VMI 인경우 (DEMAND - FCST)' TYPE, '-'  DIVISION_ID, '-' scm_site_id, '-' item_id, 0 yyyymmdd, 0 qty
+		UNION ALL 
+		select N'2. VMI 인경우 (DEMAND - FCST)' TYPE, a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.attribute1,1,6), sum(qty)
+		  from DM_PLN_NET_DEMAND a  WITH(NOLOCK)
+			  INNER JOIN scm_mst_site s WITH(NOLOCK)
+				ON( a.DIVISION_ID       = s.DIVISION_ID
+				and a.scm_site_id		= s.scm_site_id
+				and s.vmi_yn			= 'Y'
+				and s.VALID_YN			= 'Y')
+			  INNER JOIN (SELECT  DIVISION_ID,MAX(VERSION_NO) AS VERSION_NO
+							FROM DM_MST_VERSION v WITH(NOLOCK)
+								where v.DIVISION_ID IN ('81','82','40')
+								and v.VERSION_TYPE      = 'MF_W'
+								AND v.YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DD, -7*1, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)    -- 당주 월요일부터
+								AND v.YYYYMMDD <= CONVERT(CHAR(8), DATEADD(DD, 0, dbo.FN_NEXT_DAY(getdate(), 'SUN')), 112)       -- 당주 일요일까지
+							group by DIVISION_ID
+					) vv
+					on (a.DIVISION_ID		= vv.DIVISION_ID
+					and a.VERSION_NO        = vv.VERSION_NO	)
+		 where 1=1 
+		AND A.DIVISION_ID  in ('81','82','40')   --input division_id
+		and a.attribute1		>= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) -- 당주 월요일 YYYYMMDD
+		group by a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.attribute1,1,6)
+
+		except 
+
+		select N'2. VMI 인경우 (DEMAND - FCST)' TYPE, a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.yyyymmdd,1,6), sum(qty) 
+		  from DM_PLN_MKT_FCST_C a  WITH(NOLOCK)
+			  INNER JOIN scm_mst_site s WITH(NOLOCK)
+				ON( a.DIVISION_ID       = s.DIVISION_ID
+				and a.scm_site_id		= s.scm_site_id
+				and s.vmi_yn			= 'Y'
+				and s.VALID_YN			= 'Y')
+			  INNER JOIN scm_mst_site_item m with(nolock)
+				ON( a.DIVISION_ID		= m.DIVISION_ID
+				and a.scm_site_id		= m.scm_site_id
+				and a.PROJECT_CODE		= m.PROJECT_CODE
+				and a.item_id			= m.item_id
+				and m.VALID_YN			= 'Y')
+			  INNER JOIN (SELECT  DIVISION_ID,MAX(VERSION_NO) AS VERSION_NO
+							FROM DM_MST_VERSION v WITH(NOLOCK)
+								where v.DIVISION_ID IN ('81','82','40')
+								and v.VERSION_TYPE      = 'MF_W'
+								AND v.YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DD, -7*1, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)    -- 당주 월요일부터
+								AND v.YYYYMMDD <= CONVERT(CHAR(8), DATEADD(DD, 0, dbo.FN_NEXT_DAY(getdate(), 'SUN')), 112)       -- 당주 일요일까지
+							group by DIVISION_ID
+					) vv
+					on (a.DIVISION_ID		= vv.DIVISION_ID
+					and a.VERSION_NO        = vv.VERSION_NO	)
+		 where 1=1 
+		AND A.DIVISION_ID  in ('81','82','40')   --input division_id
+		and a.yyyymmdd			>= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) -- 당주 월요일 YYYYMMDD
+		--and a.measure			= case when A.DIVISION_ID='82' then 'MKT_FCST' ELSE 'VMI_In_Req' END
+		and a.measure			= 'VMI_In_Req'  -- 20190820 ess Vmi Measure 적용됨
+		and a.qty				> 0
+		group by a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.yyyymmdd,1,6)
+		UNION ALL 
+
+
+-- VMI 가 아닌 경우 (FCST - DEMAND)
+		select N'3. VMI 가 아닌 경우 (FCST - DEMAND)' TYPE, '-'  DIVISION_ID, '-' scm_site_id, '-' item_id, 0 yyyymmdd, 0 qty
+		UNION ALL 
+		select N'3. VMI 가 아닌 경우 (FCST - DEMAND)' TYPE, a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.yyyymmdd,1,6), sum(qty) 
+		  from DM_PLN_MKT_FCST_C a  WITH(NOLOCK)
+			  INNER JOIN scm_mst_site s WITH(NOLOCK)
+				ON( a.DIVISION_ID       = s.DIVISION_ID
+				and a.scm_site_id		= s.scm_site_id
+				and s.vmi_yn			= 'N'
+				and s.VALID_YN			= 'Y')
+			  INNER JOIN scm_mst_site_item m with(nolock)
+				ON( a.DIVISION_ID		= m.DIVISION_ID
+				and a.scm_site_id		= m.scm_site_id
+				and a.PROJECT_CODE		= m.PROJECT_CODE
+				and a.item_id			= m.item_id
+				and m.VALID_YN			= 'Y')
+			  INNER JOIN (SELECT  DIVISION_ID,MAX(VERSION_NO) AS VERSION_NO
+							FROM DM_MST_VERSION v WITH(NOLOCK)
+								where v.DIVISION_ID IN ('81','82','40')
+								and v.VERSION_TYPE      = 'MF_W'
+								AND v.YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DD, -7*1, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)    -- 당주 월요일부터
+								AND v.YYYYMMDD <= CONVERT(CHAR(8), DATEADD(DD, 0, dbo.FN_NEXT_DAY(getdate(), 'SUN')), 112)       -- 당주 일요일까지
+							group by DIVISION_ID
+					) vv
+					on (a.DIVISION_ID		= vv.DIVISION_ID
+					and a.VERSION_NO        = vv.VERSION_NO	)
+		 where 1=1 
+		AND A.DIVISION_ID  in ('81','82','40')   --input division_id
+		and a.yyyymmdd		    >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) -- 당주 월요일 YYYYMMDD
+		and a.measure			= 'MKT_FCST'
+		and a.qty				> 0
+		group by a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.yyyymmdd,1,6)
+
+		except
+
+		select N'3. VMI 가 아닌 경우 (FCST - DEMAND)' TYPE, a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.attribute1,1,6), sum(qty)
+		  from DM_PLN_NET_DEMAND a  WITH(NOLOCK)
+			  ,scm_mst_site s WITH(NOLOCK)
+		 where 1=1 
+		AND A.DIVISION_ID  in ('81','82','40')   --input division_id
+		AND a.VERSION_NO		= (SELECT   MAX(VERSION_NO) AS VERSION_NO
+										FROM dbo.DM_MST_VERSION WITH(NOLOCK)
+										WHERE 1=1
+											AND VERSION_TYPE      = 'MF_W'
+											AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DD, -7*1, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)    -- 당주 월요일부터
+											AND YYYYMMDD <= CONVERT(CHAR(8), DATEADD(DD, 0, dbo.FN_NEXT_DAY(getdate(), 'SUN')), 112)       -- 당주 일요일까지
+											AND DIVISION_ID		IN ('81','82','40'))  -- MAX VERSION
+		and a.DIVISION_ID		= s.DIVISION_ID
+		and a.scm_site_id		= s.scm_site_id
+		and s.vmi_yn			= 'N'
+		and a.attribute1	    >= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) -- 당주 월요일 YYYYMMDD
+		--and a.scm_site_id = 'Google_US_NUQ'
+		--and a.item_id		= 'MPPACEAP161C' 
+		group by a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.attribute1,1,6)
+		--order by 1,2,3
+		UNION ALL 
+
+-- VMI 가 아닌 경우 (DEMAND - FCST)
+
+		select N'4. VMI 가 아닌 경우 (DEMAND - FCST)' TYPE, '-'  DIVISION_ID, '-' scm_site_id, '-' item_id, 0 yyyymmdd, 0 qty
+		UNION ALL 
+		select N'4. VMI 가 아닌 경우 (DEMAND - FCST)' TYPE, a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.attribute1,1,6), sum(qty)
+		  from DM_PLN_NET_DEMAND a  WITH(NOLOCK)
+			  INNER JOIN scm_mst_site s WITH(NOLOCK)
+				ON( a.DIVISION_ID       = s.DIVISION_ID
+				and a.scm_site_id		= s.scm_site_id
+				and s.vmi_yn			= 'N'
+				and s.VALID_YN			= 'Y')
+			  INNER JOIN (SELECT  DIVISION_ID,MAX(VERSION_NO) AS VERSION_NO
+							FROM DM_MST_VERSION v WITH(NOLOCK)
+								where v.DIVISION_ID IN ('81','82','40')
+								and v.VERSION_TYPE      = 'MF_W'
+								AND v.YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DD, -7*1, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)    -- 당주 월요일부터
+								AND v.YYYYMMDD <= CONVERT(CHAR(8), DATEADD(DD, 0, dbo.FN_NEXT_DAY(getdate(), 'SUN')), 112)       -- 당주 일요일까지
+							group by DIVISION_ID
+					) vv
+					on (a.DIVISION_ID		= vv.DIVISION_ID
+					and a.VERSION_NO        = vv.VERSION_NO	)
+		 where 1=1 
+		AND A.DIVISION_ID  in ('81','82','40')   --input division_id
+		and a.attribute1		>= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) -- 당주 월요일 YYYYMMDD
+		group by a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.attribute1,1,6)
+
+		except 
+
+		select N'4. VMI 가 아닌 경우 (DEMAND - FCST)' TYPE, a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.yyyymmdd,1,6), sum(qty) 
+		  from DM_PLN_MKT_FCST_C a  WITH(NOLOCK)
+			  INNER JOIN scm_mst_site s WITH(NOLOCK)
+				ON( a.DIVISION_ID       = s.DIVISION_ID
+				and a.scm_site_id		= s.scm_site_id
+				and s.vmi_yn			= 'N'
+				and s.VALID_YN			= 'Y')
+			  INNER JOIN scm_mst_site_item m with(nolock)
+				ON( a.DIVISION_ID		= m.DIVISION_ID
+				and a.scm_site_id		= m.scm_site_id
+				and a.PROJECT_CODE		= m.PROJECT_CODE
+				and a.item_id			= m.item_id
+				and m.VALID_YN			= 'Y')
+			  INNER JOIN (SELECT  DIVISION_ID,MAX(VERSION_NO) AS VERSION_NO
+							FROM DM_MST_VERSION v WITH(NOLOCK)
+								where v.DIVISION_ID IN ('81','82','40')
+								and v.VERSION_TYPE      = 'MF_W'
+								AND v.YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DD, -7*1, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)    -- 당주 월요일부터
+								AND v.YYYYMMDD <= CONVERT(CHAR(8), DATEADD(DD, 0, dbo.FN_NEXT_DAY(getdate(), 'SUN')), 112)       -- 당주 일요일까지
+							group by DIVISION_ID
+					) vv
+					on (a.DIVISION_ID		= vv.DIVISION_ID
+					and a.VERSION_NO        = vv.VERSION_NO	)
+		 where 1=1 
+		AND A.DIVISION_ID  in ('81','82','40')   --input division_id
+		and a.yyyymmdd			>= CONVERT(CHAR(8), DATEADD(DD, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112) -- 당주 월요일 YYYYMMDD
+		and a.measure			= 'MKT_FCST'
+		and a.qty				> 0
+		group by a.DIVISION_ID, a.scm_site_id, a.item_id, substring(a.yyyymmdd,1,6)
+     ) z
+   ,(
+select 'choiya2' user_id
+union
+select 'hwi1993' user_id
+               union
+       select 'sooykwon' user_id	   
+              union
+       select 'ggundoo31' user_id
+              union
+       select 'kuniid' user_id
+
+    ) x
+group by x.user_id, type, DIVISION_ID, scm_site_id, item_id, yyyymmdd, qty
+","songkeeho","2018-12-28 09:51:58.853","choiya2","2020-12-01 15:24:01.110",""
+"MAIL","59","SCP","SCP","BOM Validation 메일링(EE)","WEEK","W02","D09","Y","SELECT 
+	'' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	, '' AS email_addr
+	, 'KO' language_code 
+	,A.DIVISION_ID		AS SEGMENT1
+	,A.ITEM_ID			AS SEGMENT2
+	,dbo.FN_GET_ITEM_NICKNAME( A.DIVISION_ID, A.ITEM_ID ) AS SEGMENT3	
+	,A.PLANT_ID			AS SEGMENT4
+	,A.yyyymmdd			AS SEGMENT5
+	,A.validation_type	AS SEGMENT6
+	,''					AS SEGMENT7
+	,''					AS SEGMENT8
+	,''					AS SEGMENT9
+	,''					AS SEGMENT10
+	,'Division'			AS COLUMN1
+	,'Model'			AS COLUMN2
+	,'Nick Name'		AS COLUMN3
+	,'Plant Code'		AS COLUMN4
+	,'MKT FCST Date'	AS COLUMN5
+	,'Validation Type'	AS COLUMN6
+	,''					AS COLUMN7
+	,''					AS COLUMN8
+	,''					AS COLUMN9
+	,''					AS COLUMN10
+FROM (
+	SELECT   a.division_id 
+			, a.item_id 
+			, a.plant_id 
+			, a.sales_site_id 
+			, a.project_code
+			, a.yyyymmdd
+			, 'BOM NOT ASSIGN' AS validation_type
+	FROM (
+		SELECT b.division_id
+			,b.item_id
+			,dbo.FN_SCM_SPLIT(b.plant_site_id,1,'-') AS plant_id
+			,'-' as sales_site_id
+			,MAX(b.project_code) AS project_code
+			,MIN(c.yyyymmdd) AS yyyymmdd
+		FROM scm_mst_site_item_priority  b WITH(NOLOCK)
+		INNER JOIN (SELECT distinct t.division_id, t.item_id, t.yyyymmdd
+					FROM (
+							--FCST 있는 모델
+							SELECT DISTINCT a.division_id ,item_id ,yyyymmdd
+							FROM DM_PLN_MKT_FCST a WITH(NOLOCK)
+							LEFT JOIN scm_mst_site s ON s.DIVISION_ID=a.DIVISION_ID AND s.SCM_SITE_ID=a.SCM_SITE_ID AND s.VMI_YN='Y'
+							WHERE 1=1
+							AND a.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+							AND a.yyyymmdd != '' and a.yyyymmdd is not null
+							AND a.yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+							AND a.qty      >  0	
+							UNION ALL
+							-- FCST 있는 모델의 하위 전극
+							SELECt DISTINCT b.division_id, a.parent_item_id as item_id, b.yyyymmdd
+							FROM   SCM_MST_BOM_EFFECTIVE_SN a WITH(NOLOCK)
+								,(
+									SELECT A.* 
+									FROM (SELECT a.division_id ,project_code ,a.scm_site_id ,item_id ,dom_exp ,fcst_type ,incoterms ,measure ,plant_site_id ,yyyymmdd ,qty 
+										FROM DM_PLN_MKT_FCST a WITH(NOLOCK)
+										LEFT JOIN scm_mst_site s ON s.DIVISION_ID=a.DIVISION_ID AND s.SCM_SITE_ID=a.SCM_SITE_ID AND s.VMI_YN='Y'
+										WHERE 1=1
+										AND a.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+										AND a.yyyymmdd != '' and a.yyyymmdd is not null
+										AND a.yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+										AND a.qty      >  0	
+										) A
+								) b
+								, scm_mst_final_item_v c WITH(NOLOCK)
+							WHERE  a.division_id    = b.division_id
+							AND    a.model_id       = b.item_id
+							AND    a.division_id    = c.division_id
+							AND    a.parent_item_id = c.item_id
+							AND    c.OPERATION_GROUP_ID IN ('E')
+						) t ) c ON b.division_id = c.division_id AND b.item_id = c.item_id 
+		WHERE 1=1
+		AND b.division_id = '81'
+		AND b.to_yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+		AND LEN(DBO.FN_SCM_SPLIT(b.plant_site_id,1,'-') ) = 4
+		AND b.valid_yn = 'Y'
+		GROUP BY b.division_id, b.item_id, DBO.FN_SCM_SPLIT(b.plant_site_id,1,'-') -- 28초
+		union all
+		SELECT b.division_id
+			,b.item_id
+			,dbo.FN_SCM_SPLIT(b.plant_site_id,1,'-') AS plant_id
+			,'-' as sales_site_id
+			,MAX(b.project_code) AS project_code
+			,MIN(c.yyyymmdd) AS yyyymmdd
+		FROM scm_mst_site_item_priority  b WITH(NOLOCK)
+		INNER JOIN (SELECT distinct t.division_id, t.item_id, t.yyyymmdd
+					FROM (
+							--FCST 있는 모델
+							SELECT DISTINCT a.division_id ,item_id ,yyyymmdd
+							FROM DM_PLN_MKT_FCST a WITH(NOLOCK)
+							LEFT JOIN scm_mst_site s ON s.DIVISION_ID=a.DIVISION_ID AND s.SCM_SITE_ID=a.SCM_SITE_ID AND s.VMI_YN='Y'
+							WHERE 1=1
+							AND a.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+							AND a.yyyymmdd != '' and a.yyyymmdd is not null
+							AND a.yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+							AND a.qty      >  0	
+							UNION ALL
+							-- FCST 있는 모델의 하위 전극
+							SELECt DISTINCT b.division_id, a.parent_item_id as item_id, b.yyyymmdd
+							FROM   SCM_MST_BOM_EFFECTIVE_SN a WITH(NOLOCK)
+								,(
+									SELECT A.* 
+									FROM (SELECT a.division_id ,project_code ,a.scm_site_id ,item_id ,dom_exp ,fcst_type ,incoterms ,measure ,plant_site_id ,yyyymmdd ,qty 
+										FROM DM_PLN_MKT_FCST a WITH(NOLOCK)
+										LEFT JOIN scm_mst_site s ON s.DIVISION_ID=a.DIVISION_ID AND s.SCM_SITE_ID=a.SCM_SITE_ID AND s.VMI_YN='Y'
+										WHERE 1=1
+										AND a.MEASURE = CASE WHEN ISNULL(S.OPERATION_GROUP, '') = 'W' THEN 'AS_In_Req' WHEN S.vmi_yn = 'Y' THEN 'VMI_In_Req' WHEN ISNULL(a.attribute10, '') = '' THEN 'MKT_FCST' END
+										AND a.yyyymmdd != '' and a.yyyymmdd is not null
+										AND a.yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+										AND a.qty      >  0	
+										) A
+								) b
+								, scm_mst_final_item_v c WITH(NOLOCK)
+							WHERE  a.division_id    = b.division_id
+							AND    a.model_id       = b.item_id
+							AND    a.division_id    = c.division_id
+							AND    a.parent_item_id = c.item_id
+							AND    c.OPERATION_GROUP_ID IN ('E')
+						) t ) c ON b.division_id = c.division_id AND b.item_id = c.item_id 
+		WHERE 1=1
+		AND b.division_id in ('40','82')
+		AND b.to_yyyymmdd >= CONVERT(VARCHAR,GETDATE(),112)
+		AND LEN(DBO.FN_SCM_SPLIT(b.plant_site_id,1,'-') ) = 4
+		AND b.valid_yn = 'Y'
+		GROUP BY b.division_id, b.item_id, DBO.FN_SCM_SPLIT(b.plant_site_id,1,'-')
+	) A
+	JOIN scp_mst_final_item B (NOLOCK) ON a.division_id = B.division_id and a.item_id = B.item_id and B.fcst_yn = upper('Y') AND B.OPERATION_GROUP='E'
+	WHERE 1=1 
+	AND NOT EXISTS 
+		(   SELECT 'X'
+			FROM SCM_MST_BOM_ENG_SN c WITH(NOLOCK)
+			WHERE c.division_id = a.division_id
+			AND c.plant_id    = a.plant_id
+			AND c.parent_item_id = a.item_id
+			AND c.eff_start_date <= GETDATE()
+			AND c.eff_end_date > GETDATE()
+		)
+) A
+
+","hwwoonins","2019-11-26 15:23:09.757","blueeos","2022-11-01 11:36:37.833","H00"
+"MAIL","80","SCP","SCP","SLOC 메일","DAY","D08","H10","Y","SELECT ''						AS USER_ID
+      ,''						AS USER_NAME
+      ,''						AS MOBILE_PHONE
+      , ''						AS EMAIL_ADDR
+      , 'KO'					AS LANGUAGE_CODE
+      ,BD.DV					AS SEGMENT1
+      ,BD.DIVISION_ID			AS SEGMENT2
+      ,BD.STORAGE_ID			AS SEGMENT3
+      ,BD.STORAGE_DESCRIPTION	AS SEGMENT4	
+      ,BD.PLANT_ID				AS SEGMENT5
+      ,BD.VALID_YN				AS SEGMENT6
+      ,BD.CREATION_DATE			AS SEGMENT7
+      ,BD.UPDATE_DATE			AS SEGMENT8
+      ,BD.STORAGE_DESCRIPTION_OLD	AS SEGMENT9	
+      ,BD.VALID_YN_OLD				AS SEGMENT10
+      ,'Div'				 AS COLUMN1
+      ,'Division'            AS COLUMN2
+      ,'SLOC ID'             AS COLUMN3
+      ,'SLOC NAME'           AS COLUMN4
+      ,'Plant Code'          AS COLUMN5
+      ,'VALID_YN'            AS COLUMN6
+      ,'Creation Date'       AS COLUMN7
+      ,'Update Date'         AS COLUMN8
+      ,'(OLD)SLOC NAME'      AS COLUMN9
+      ,'(OLD)VALID_YN'       AS COLUMN10
+FROM (
+		--- 신규 
+		SELECT 'CREATE'										AS DV
+			 , CONVERT(VARCHAR(20), SL.CREATION_DATE, 120)	AS CREATION_DATE
+			 , ''											AS UPDATE_DATE
+			 , SL.DIVISION_ID
+			 , SL.PLANT_ID
+			 , SL.STORAGE_ID
+			 , SL.STORAGE_DESCRIPTION
+			 , SL.VALID_YN
+			 , ''			AS STORAGE_DESCRIPTION_OLD
+			 , '' 			AS VALID_YN_OLD 
+			 , 1			AS RN 
+			 , 0	        AS HISTORY_SEQ
+		 FROM SCM_MST_SLOC SL WITH(NOLOCK)  
+		WHERE 1=1
+		  AND EXISTS (SELECT TOP 1   1
+					   FROM dbo.SCM_MST_PLANT_SN P WITH(NOLOCK)
+					  WHERE P.DIVISION_ID = SL.DIVISION_ID)
+		  AND SL.CREATION_DATE	>= DATEADD(DAY, -1, CONVERT(DATE, CONVERT(NVARCHAR(8), GETDATE(),112), 112))  -- 어제 등록
+		UNION ALL
+		-- 변경 
+		SELECT 'MODIFY'					AS DV
+			 , CONVERT(VARCHAR(20), SL.CREATION_DATE		,120)	AS CREATION_DATE
+			 , CONVERT(VARCHAR(20), SH.HISTORY_CREATION_DATE,120)	AS UPDATE_DATE
+			 , SL.DIVISION_ID
+			 , SL.PLANT_ID
+			 , SL.STORAGE_ID
+			 , SL.STORAGE_DESCRIPTION
+			 , SL.VALID_YN
+			 , SH.STORAGE_DESCRIPTION	AS STORAGE_DESCRIPTION_OLD
+			 , SH.ATTRIBUTE1			AS VALID_YN_OLD 
+			 , ROW_NUMBER() OVER (PARTITION BY SL.creation_date
+											  ,SL.DIVISION_ID
+											  ,SL.PLANT_ID
+											  ,SL.STORAGE_ID
+											  ,CONVERT(VARCHAR(8), SH.HISTORY_CREATION_DATE, 112) -- 변경일자별 최종 변경건만 조회
+									 ORDER BY  SH.HISTORY_SEQ DESC) 
+										AS RN 
+			 , SH.HISTORY_SEQ
+		 FROM SCM_MST_SLOC_H SH WITH(NOLOCK)
+			  INNER JOIN SCM_MST_SLOC SL WITH(NOLOCK)
+					  ON SL.DIVISION_ID = SH.DIVISION_ID
+					 AND SL.STORAGE_ID  = SH.STORAGE_ID
+					 AND SL.PLANT_ID    = SH.PLANT_ID 
+		WHERE 1=1
+		  AND SH.HISTORY_CREATION_DATE >= DATEADD(DAY, -1, CONVERT(DATE, CONVERT(NVARCHAR(8), GETDATE(),112), 112))  -- 어제 변경(history생성일시)  
+		  AND EXISTS (SELECT TOP 1   1
+					   FROM dbo.SCM_MST_PLANT_SN P WITH(NOLOCK)
+					  WHERE P.DIVISION_ID = SH.DIVISION_ID)
+
+) BD
+WHERE 1=1
+  AND BD.RN = 1  
+","sclee.lee","2022-02-21 09:39:20.553","blueeos","2024-04-11 11:14:20.070",""
+"MAIL","81","SCP","SCP","GSCM system VOC 메일링 지연","DAY","D09","H00","N","SELECT
+	 '' AS USER_ID
+	,'' AS USER_NAME
+	,'' AS mobile_phone
+	,'' AS email_addr
+	,'KO' language_code
+	--,A.VOC_NO		            AS SEGMENT1
+	,A.VOC_NAME                           AS SEGMENT1
+	,A.REQUEST_DATE	            AS SEGMENT2
+	,A.REQUEST_USER_ID	            AS SEGMENT3
+	,A.DELAY_YN_CLASSIFY 	AS SEGMENT4
+	--,A.DELAY_YN_RECEIPT           AS SEGMENT5 -- 20220824 제외
+	--,A.DELAY_YN_REVIEW		AS SEGMENT6 -- 20220824 제외
+	,A.DELAY_YN_PRIORITY	            AS SEGMENT5
+	,A.DELAY_YN_DEV	            AS SEGMENT6
+	,A.DELAY_YN_TEST		AS SEGMENT7
+	,A.DELAY_YN_FINISH		AS SEGMENT8
+	,null		                        AS SEGMENT9
+	,null		                        AS SEGMENT10
+	-------------------------------------------------
+	--,N'VOC NO'		            AS COLUMN1
+	,N'과제명'		            AS COLUMN1
+	,N'요청일'			AS COLUMN2
+	,N'발의자'		            AS COLUMN3
+	,N'구체화'		            AS COLUMN4
+	--,N'과제 접수/협의'				AS COLUMN5  -- 20220824 제외
+	--,N'개발 검토'					AS COLUMN6  -- 20220824 제외
+	,N'개발 검토'	                                                AS COLUMN5  -- 20220824 우선순위/완료예정일 검토 -> 개발 검토
+	,N'개발'						AS COLUMN6
+	,N'Test'						AS COLUMN7
+	,N'완료'						AS COLUMN8
+	,null		                                                AS COLUMN9
+	,null		                                                AS COLUMN10
+  FROM 
+  (
+
+ 		            SELECT VOC_NO	
+ 						  ,VOC_TYPE	
+ 						  ,VOC_NAME	
+ 						  ,VOC_DETAIL
+						  ,'VIEW' AS VOC_DETAIL_BUTTON	
+ 						  ,CONVERT(CHAR(10), REQUEST_DATE, 23) AS  REQUEST_DATE	
+ 						--,REQUEST_USER_ID	
+ 						  ,D.USER_NAME AS REQUEST_USER_ID	
+ 						  ,CLASSIFY_STATUS	
+ 						  ,CLASSIFY_DATE
+ 						  ,CLASSIFY_USER_ID	
+ 						  ,RECEIPT_STATUS	
+ 						  ,RECEIPT_DATE
+ 						  ,RECEIPT_USER_ID	
+ 						  ,REVIEW_STATUS	
+ 						  ,REVIEW_DATE
+ 						  ,REVIEW_USER_ID	
+ 						  ,PRIORITY_STATUS	
+ 						  ,PRIORITY_DATE
+ 						  ,PRIORITY_USER_ID	
+ 						  ,DEV_STATUS	
+ 						  ,DEV_DATE
+ 						  ,DEV_USER_ID	
+ 						  ,TEST_STATUS	
+ 						  ,TEST_DATE
+ 						  ,TEST_USER_ID	
+ 						  ,FINISH_STATUS	
+ 						  ,FINISH_DATE
+ 					   -- ,SCM_PI_USER_ID	
+ 					   -- ,SCM_SOLUTION_USER_ID	
+ 						  ,E.USER_NAME AS SCM_PI_USER_ID	
+ 						  ,F.USER_NAME AS SCM_SOLUTION_USER_ID	
+ 						  ,CSR_NO	
+ 						  ,REMARK	
+						  ,CASE WHEN dbo.FN_GET_VOC_DELAY_YN(CLASSIFY_STATUS,	CLASSIFY_DATE)	= 'Y' THEN CLASSIFY_DATE	END	AS DELAY_YN_CLASSIFY
+						  ,CASE WHEN dbo.FN_GET_VOC_DELAY_YN(RECEIPT_STATUS,	RECEIPT_DATE)		= 'Y' THEN RECEIPT_DATE	END	AS DELAY_YN_RECEIPT
+						  ,CASE WHEN dbo.FN_GET_VOC_DELAY_YN(REVIEW_STATUS,	REVIEW_DATE)		= 'Y' THEN REVIEW_DATE	END	AS DELAY_YN_REVIEW
+						  ,CASE WHEN dbo.FN_GET_VOC_DELAY_YN(PRIORITY_STATUS,	PRIORITY_DATE)	= 'Y' THEN PRIORITY_DATE	END	AS DELAY_YN_PRIORITY
+						  ,CASE WHEN dbo.FN_GET_VOC_DELAY_YN(DEV_STATUS,	DEV_DATE)		= 'Y' THEN DEV_DATE		END	AS DELAY_YN_DEV
+						  ,CASE WHEN dbo.FN_GET_VOC_DELAY_YN(TEST_STATUS,	TEST_DATE)		= 'Y' THEN TEST_DATE		END	AS DELAY_YN_TEST
+						  ,CASE WHEN dbo.FN_GET_VOC_DELAY_YN(FINISH_STATUS,	FINISH_DATE)	 	= 'Y' THEN FINISH_DATE		END	AS DELAY_YN_FINISH
+ 			
+ 					  FROM dbo.SCM_ADM_SYS_VOC A WITH(NOLOCK) 	
+ 		   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO D WITH(NOLOCK) ON A.REQUEST_USER_ID          = D.USER_ID	
+ 		   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO E WITH(NOLOCK) ON A.SCM_PI_USER_ID             = E.USER_ID	
+ 		   LEFT OUTER JOIN SCM_MST_SSO_USER_INFO F WITH(NOLOCK) ON A.SCM_SOLUTION_USER_ID = F.USER_ID	
+ 			
+ 				  WHERE A.USE_YN LIKE N'%Y%' 
+						AND (
+								CLASSIFY_STATUS != 'DR' 
+							AND RECEIPT_STATUS	!= 'DR' 
+							AND REVIEW_STATUS	!= 'DR' 
+							AND PRIORITY_STATUS != 'DR' 
+							AND DEV_STATUS		!= 'DR' 
+							AND TEST_STATUS		!= 'DR' 
+							AND FINISH_STATUS	!= 'DR' 
+							)
+
+						AND (
+								dbo.FN_GET_VOC_DELAY_YN(CLASSIFY_STATUS, CLASSIFY_DATE) = 'Y' 
+							--OR dbo.FN_GET_VOC_DELAY_YN(RECEIPT_STATUS, RECEIPT_DATE) = 'Y'
+							--OR dbo.FN_GET_VOC_DELAY_YN(REVIEW_STATUS, REVIEW_DATE) = 'Y'
+							OR dbo.FN_GET_VOC_DELAY_YN(PRIORITY_STATUS, PRIORITY_DATE) = 'Y'
+							OR dbo.FN_GET_VOC_DELAY_YN(DEV_STATUS, DEV_DATE) = 'Y'
+							OR dbo.FN_GET_VOC_DELAY_YN(TEST_STATUS, TEST_DATE) = 'Y'
+							OR dbo.FN_GET_VOC_DELAY_YN(FINISH_STATUS, FINISH_DATE) = 'Y'
+							)
+                                                        
+			                     AND Exists (
+						   select basis_yyyymmdd
+						   from SCM_SYS_CALENDAR_M
+						   where dayofweek_no in (2,3,4,5,6)
+						   AND basis_yyyymmdd = CONVERT(CHAR(8), getdate(), 112) 
+						  )
+
+
+			
+  ) A
+  ORDER BY SEGMENT1 DESC","vadabi3","2022-02-22 11:19:47.670","jaeuk.shin","2023-12-29 10:37:26.950",""
+"MAIL","85","SCP","SCP","셀 조립계획 : 개발에서 배치로 수행 중","WEEK","W04","D06","N","-- 개발에서 배치로 실행됨","scp_batch","2022-08-16 13:45:02.890","blueeos","2024-11-14 10:01:24.320","H00"
+"MAIL","86","SCP","SCP","셀 조립계획 : 개발에서 배치로 수행 중","WEEK","W04","D13","N","-- 개발에서 배치로 실행됨","scp_batch","2022-08-16 13:45:02.890","blueeos","2024-11-14 10:01:24.397","H00"
+"MAIL","87","SCP","SCP","셀 조립계획 : 개발에서 배치로 수행 중","WEEK","W05","D06","N","-- 개발에서 배치로 실행됨","scp_batch","2022-08-16 13:45:02.890","blueeos","2024-11-14 10:01:24.573","H00"
+"MAIL","88","SCP","SCP","셀 조립계획 : 개발에서 배치로 수행 중","WEEK","W04","D18","N","-- 개발에서 배치로 실행됨","scp_batch","2022-08-16 13:45:02.890","blueeos","2024-11-14 10:01:24.487","H00"
+"MAIL","89","SCP","SCP","Long-term stock Report(8)","MONTH","M08","D08","Y","","scp_batch","2022-08-17 14:06:39.477","scp_batch","2022-09-20 14:22:43.217",""
+"MAIL","90","SCP","SCP","Long-term stock Report(20)","MONTH","M20","D08","Y","","scp_batch","2022-08-17 14:06:39.477","yongseokyoon","2023-02-08 09:47:09.787",""
+"MAIL","93","SCP","SCP","Model Code Master(81)","WEEK","W05","D13","Y","SELECT TOP 100 PERCENT
+          ''                                AS USER_ID
+        , ''                                AS USER_NAME
+        , ''                                AS MOBILE_PHONE
+        , ''                                AS EMAIL_ADDR
+        , 'KO'                              AS LANGUAGE_CODE
+        , ITEM_ID                           AS SEGMENT1
+        , GROUP_CODE1                       AS SEGMENT2
+        , LEVEL2_CODE                       AS SEGMENT3
+        , GROUP_CODE6                       AS SEGMENT4
+        , GROUP_CODE7                       AS SEGMENT5
+        , GROUP_CODE5                       AS SEGMENT6
+        , ATTRIBUTE7                        AS SEGMENT8
+        , STATUS_PROTOTYPE                  AS SEGMENT9
+        , BASIC_FINISHED_PRODUCT            AS SEGMENT10
+        , PIC_ID                            AS SEGMENT13
+        , PIC_NAME                          AS SEGMENT14
+        , 'Production Model'                AS COLUMN1
+        , 'Cell Nickname'                   AS COLUMN2
+        , 'Replacement  code'               AS COLUMN3
+        , 'Product level1'                  AS COLUMN4
+        , 'Product level2'                  AS COLUMN5
+        , 'Product level3'                  AS COLUMN6
+        , 'Discontinuation of SCP'          AS COLUMN8
+        , 'Prototype'                       AS COLUMN9
+        , 'Biz Type'                        AS COLUMN10
+        , 'ID'                              AS COLUMN13
+        , 'Name'                            AS COLUMN14
+FROM    dbo.FN_SCP0080_GET_GROUP_CODE_MANAGEMENT_TABLE
+        (
+              '81'
+            , ''
+            , ''
+            , ''
+            , 'N'
+            , 'N'
+            , 'N'
+            , 'N'
+            , ''
+            , 'F'
+        )
+WHERE   1=1
+    AND STATUS_MASS = 'Y'
+    AND GROUP_CODE1 = ''
+ORDER BY ITEM_ID
+†
+SELECT TOP 100 PERCENT
+          ''                                AS USER_ID
+        , ''                                AS USER_NAME
+        , ''                                AS MOBILE_PHONE
+        , ''                                AS EMAIL_ADDR
+        , 'KO'                              AS LANGUAGE_CODE
+        , ITEM_ID                           AS SEGMENT1
+        , GROUP_CODE1                       AS SEGMENT2
+        , LEVEL2_CODE                       AS SEGMENT3
+        , GROUP_CODE6                       AS SEGMENT4
+        , GROUP_CODE7                       AS SEGMENT5
+        , GROUP_CODE5                       AS SEGMENT6
+        , ATTRIBUTE7                        AS SEGMENT8
+        , STATUS_PROTOTYPE                  AS SEGMENT9
+        , BASIC_FINISHED_PRODUCT            AS SEGMENT10
+        , PIC_ID                            AS SEGMENT13
+        , PIC_NAME                          AS SEGMENT14
+        , 'Production Model'                AS COLUMN1
+        , 'Cell Nickname'                   AS COLUMN2
+        , 'Replacement  code'               AS COLUMN3
+        , 'Product level1'                  AS COLUMN4
+        , 'Product level2'                  AS COLUMN5
+        , 'Product level3'                  AS COLUMN6
+        , 'Discontinuation of SCP'          AS COLUMN8
+        , 'Prototype'                       AS COLUMN9
+        , 'Biz Type'                        AS COLUMN10
+        , 'ID'                              AS COLUMN13
+        , 'Name'                            AS COLUMN14
+FROM    dbo.FN_SCP0080_GET_GROUP_CODE_MANAGEMENT_TABLE
+        (
+              '81'
+            , ''
+            , ''
+            , ''
+            , 'N'
+            , 'N'
+            , 'N'
+            , 'N'
+            , ''
+            , 'F'
+        )
+WHERE   1=1
+    AND STATUS_MASS = 'Y'
+    AND ATTRIBUTE7  = 'V'","iamarock","2023-07-12 16:39:53.927","kimcd","2025-08-14 16:20:17.680","H30"
+"MAIL","94","SCP","SCP","SLOC 메일(40)","DAY","D08","H10","Y","SELECT ''						AS USER_ID
+      ,''						AS USER_NAME
+      ,''						AS MOBILE_PHONE
+      , ''						AS EMAIL_ADDR
+      , 'KO'					AS LANGUAGE_CODE
+      ,BD.DV					AS SEGMENT1
+      ,BD.DIVISION_ID			AS SEGMENT2
+      ,BD.STORAGE_ID			AS SEGMENT3
+      ,BD.STORAGE_DESCRIPTION	AS SEGMENT4	
+      ,BD.PLANT_ID				AS SEGMENT5
+      ,BD.VALID_YN				AS SEGMENT6
+      ,BD.REQ_USER				AS SEGMENT7	
+      ,BD.REQ_DEPT				AS SEGMENT8
+      ,BD.STOCK_USER				AS SEGMENT9	
+      ,BD.STOCK_DEPT				AS SEGMENT10
+
+
+
+      ,'Div'	          AS COLUMN1
+      ,'Division'              AS COLUMN2
+      ,'SLOC ID'             AS COLUMN3
+      ,'SLOC NAME'       AS COLUMN4
+      ,'Plant Code'          AS COLUMN5
+      ,'VALID_YN'           AS COLUMN6
+      ,'REQ User'         AS COLUMN7
+      ,'REQ Dept'         AS COLUMN8
+      ,'Stock User'       AS COLUMN9
+      ,'Stock Dept'       AS COLUMN10
+
+FROM (
+	--- 신규 -------------------------------------------------------------------- 
+	SELECT 'CREATE'										AS DV
+		 , CONVERT(VARCHAR(20), SL.CREATION_DATE, 120)	AS CREATION_DATE
+		 , ''											AS UPDATE_DATE
+		 , SL.DIVISION_ID
+		 , SL.PLANT_ID
+		 , SL.STORAGE_ID
+		 , SL.STORAGE_DESCRIPTION
+		 , SL.VALID_YN
+		 , ''			AS STORAGE_DESCRIPTION_OLD
+		 , '' 			AS VALID_YN_OLD 
+		 , 1			AS RN 
+		 , 0	        AS HISTORY_SEQ
+		 ---------------------------------------------
+		 , SL.ATTRIBUTE1 AS REQ_USER
+		 , SL.ATTRIBUTE2 AS REQ_DEPT
+		 , SL.ATTRIBUTE3 AS STOCK_USER
+		 , SL.ATTRIBUTE4 AS STOCK_DEPT
+	 FROM SCM_MST_SLOC SL WITH(NOLOCK)  
+	WHERE 1=1
+	  AND EXISTS (SELECT TOP 1   1
+				   FROM dbo.SCM_MST_PLANT_SN P WITH(NOLOCK)
+				  WHERE P.DIVISION_ID = SL.DIVISION_ID)
+	  AND SL.CREATION_DATE	>= DATEADD(DAY, -1, CONVERT(DATE, CONVERT(NVARCHAR(8), GETDATE(),112), 112))  -- 어제 등록
+	UNION ALL
+	-- 변경  -------------------------------------------------------------------- 
+	SELECT 'MODIFY'					AS DV
+		 , CONVERT(VARCHAR(20), SL.CREATION_DATE		,120)	AS CREATION_DATE
+		 , CONVERT(VARCHAR(20), SH.HISTORY_CREATION_DATE,120)	AS UPDATE_DATE
+		 , SL.DIVISION_ID
+		 , SL.PLANT_ID
+		 , SL.STORAGE_ID
+		 , SL.STORAGE_DESCRIPTION
+		 , SL.VALID_YN
+		 , SH.STORAGE_DESCRIPTION	AS STORAGE_DESCRIPTION_OLD
+		 , SH.ATTRIBUTE1			AS VALID_YN_OLD 
+		 , ROW_NUMBER() OVER (PARTITION BY SL.creation_date
+										  ,SL.DIVISION_ID
+										  ,SL.PLANT_ID
+										  ,SL.STORAGE_ID
+										  ,CONVERT(VARCHAR(8), SH.HISTORY_CREATION_DATE, 112) -- 변경일자별 최종 변경건만 조회
+								 ORDER BY  SH.HISTORY_SEQ DESC) 
+									AS RN 
+		 , SH.HISTORY_SEQ
+		 ---------------------------------------------
+		 , SH.ATTRIBUTE2 AS REQ_USER
+		 , SH.ATTRIBUTE3 AS REQ_DEPT
+		 , SH.ATTRIBUTE4 AS STOCK_USER
+		 , SH.ATTRIBUTE5 AS STOCK_DEPT
+	 FROM SCM_MST_SLOC_H SH WITH(NOLOCK)
+		  INNER JOIN SCM_MST_SLOC SL WITH(NOLOCK)
+				  ON SL.DIVISION_ID = SH.DIVISION_ID
+				 AND SL.STORAGE_ID  = SH.STORAGE_ID
+				 AND SL.PLANT_ID    = SH.PLANT_ID 
+	WHERE 1=1
+	  AND SH.HISTORY_CREATION_DATE >= DATEADD(DAY, -1, CONVERT(DATE, CONVERT(NVARCHAR(8), GETDATE(),112), 112))  -- 어제 변경(history생성일시)  
+	  AND EXISTS (SELECT TOP 1   1
+				   FROM dbo.SCM_MST_PLANT_SN P WITH(NOLOCK)
+				  WHERE P.DIVISION_ID = SH.DIVISION_ID)
+
+) BD
+WHERE 1=1
+  AND BD.RN = 1 
+  AND BD.DIVISION_ID = '40' 
+","vadabi3","2023-10-17 13:29:53.030","blueeos","2024-04-11 11:14:32.970",""
+"MAIL","95","SCP","SCP","SLOC 메일(81)","DAY","D08","H10","Y","SELECT ''						AS USER_ID
+      ,''						AS USER_NAME
+      ,''						AS MOBILE_PHONE
+      , ''						AS EMAIL_ADDR
+      , 'KO'					AS LANGUAGE_CODE
+      ,BD.DV					AS SEGMENT1
+      ,BD.DIVISION_ID			AS SEGMENT2
+      ,BD.STORAGE_ID			AS SEGMENT3
+      ,BD.STORAGE_DESCRIPTION	AS SEGMENT4	
+      ,BD.PLANT_ID				AS SEGMENT5
+      ,BD.VALID_YN				AS SEGMENT6
+      ,BD.REQ_USER				AS SEGMENT7	
+      ,BD.REQ_DEPT				AS SEGMENT8
+      ,BD.STOCK_USER				AS SEGMENT9	
+      ,BD.STOCK_DEPT				AS SEGMENT10
+
+
+
+      ,'Div'	          AS COLUMN1
+      ,'Division'              AS COLUMN2
+      ,'SLOC ID'             AS COLUMN3
+      ,'SLOC NAME'       AS COLUMN4
+      ,'Plant Code'          AS COLUMN5
+      ,'VALID_YN'           AS COLUMN6
+      ,'REQ User'         AS COLUMN7
+      ,'REQ Dept'         AS COLUMN8
+      ,'Stock User'       AS COLUMN9
+      ,'Stock Dept'       AS COLUMN10
+
+FROM (
+	--- 신규 -------------------------------------------------------------------- 
+	SELECT 'CREATE'										AS DV
+		 , CONVERT(VARCHAR(20), SL.CREATION_DATE, 120)	AS CREATION_DATE
+		 , ''											AS UPDATE_DATE
+		 , SL.DIVISION_ID
+		 , SL.PLANT_ID
+		 , SL.STORAGE_ID
+		 , SL.STORAGE_DESCRIPTION
+		 , SL.VALID_YN
+		 , ''			AS STORAGE_DESCRIPTION_OLD
+		 , '' 			AS VALID_YN_OLD 
+		 , 1			AS RN 
+		 , 0	        AS HISTORY_SEQ
+		 ---------------------------------------------
+		 , SL.ATTRIBUTE1 AS REQ_USER
+		 , SL.ATTRIBUTE2 AS REQ_DEPT
+		 , SL.ATTRIBUTE3 AS STOCK_USER
+		 , SL.ATTRIBUTE4 AS STOCK_DEPT
+	 FROM SCM_MST_SLOC SL WITH(NOLOCK)  
+	WHERE 1=1
+	  AND EXISTS (SELECT TOP 1   1
+				   FROM dbo.SCM_MST_PLANT_SN P WITH(NOLOCK)
+				  WHERE P.DIVISION_ID = SL.DIVISION_ID)
+	  AND SL.CREATION_DATE	>= DATEADD(DAY, -1, CONVERT(DATE, CONVERT(NVARCHAR(8), GETDATE(),112), 112))  -- 어제 등록
+	UNION ALL
+	-- 변경  -------------------------------------------------------------------- 
+	SELECT 'MODIFY'					AS DV
+		 , CONVERT(VARCHAR(20), SL.CREATION_DATE		,120)	AS CREATION_DATE
+		 , CONVERT(VARCHAR(20), SH.HISTORY_CREATION_DATE,120)	AS UPDATE_DATE
+		 , SL.DIVISION_ID
+		 , SL.PLANT_ID
+		 , SL.STORAGE_ID
+		 , SL.STORAGE_DESCRIPTION
+		 , SL.VALID_YN
+		 , SH.STORAGE_DESCRIPTION	AS STORAGE_DESCRIPTION_OLD
+		 , SH.ATTRIBUTE1			AS VALID_YN_OLD 
+		 , ROW_NUMBER() OVER (PARTITION BY SL.creation_date
+										  ,SL.DIVISION_ID
+										  ,SL.PLANT_ID
+										  ,SL.STORAGE_ID
+										  ,CONVERT(VARCHAR(8), SH.HISTORY_CREATION_DATE, 112) -- 변경일자별 최종 변경건만 조회
+								 ORDER BY  SH.HISTORY_SEQ DESC) 
+									AS RN 
+		 , SH.HISTORY_SEQ
+		 ---------------------------------------------
+		 , SH.ATTRIBUTE2 AS REQ_USER
+		 , SH.ATTRIBUTE3 AS REQ_DEPT
+		 , SH.ATTRIBUTE4 AS STOCK_USER
+		 , SH.ATTRIBUTE5 AS STOCK_DEPT
+	 FROM SCM_MST_SLOC_H SH WITH(NOLOCK)
+		  INNER JOIN SCM_MST_SLOC SL WITH(NOLOCK)
+				  ON SL.DIVISION_ID = SH.DIVISION_ID
+				 AND SL.STORAGE_ID  = SH.STORAGE_ID
+				 AND SL.PLANT_ID    = SH.PLANT_ID 
+	WHERE 1=1
+	  AND SH.HISTORY_CREATION_DATE >= DATEADD(DAY, -1, CONVERT(DATE, CONVERT(NVARCHAR(8), GETDATE(),112), 112))  -- 어제 변경(history생성일시)  
+	  AND EXISTS (SELECT TOP 1   1
+				   FROM dbo.SCM_MST_PLANT_SN P WITH(NOLOCK)
+				  WHERE P.DIVISION_ID = SH.DIVISION_ID)
+) BD
+WHERE 1=1
+  AND BD.RN = 1 
+  AND BD.DIVISION_ID = '81' 
+","vadabi3","2023-10-17 13:29:55.443","blueeos","2024-04-11 11:14:44.453",""
+"MAIL","96","SCP","SCP","SLOC 메일(82)","DAY","D08","H10","Y","SELECT ''						AS USER_ID
+      ,''						AS USER_NAME
+      ,''						AS MOBILE_PHONE
+      , ''						AS EMAIL_ADDR
+      , 'KO'					AS LANGUAGE_CODE
+      ,BD.DV					AS SEGMENT1
+      ,BD.DIVISION_ID			AS SEGMENT2
+      ,BD.STORAGE_ID			AS SEGMENT3
+      ,BD.STORAGE_DESCRIPTION	AS SEGMENT4	
+      ,BD.PLANT_ID				AS SEGMENT5
+      ,BD.VALID_YN				AS SEGMENT6
+      ,BD.REQ_USER				AS SEGMENT7	
+      ,BD.REQ_DEPT				AS SEGMENT8
+      ,BD.STOCK_USER				AS SEGMENT9	
+      ,BD.STOCK_DEPT				AS SEGMENT10
+
+
+
+      ,'Div'	          AS COLUMN1
+      ,'Division'              AS COLUMN2
+      ,'SLOC ID'             AS COLUMN3
+      ,'SLOC NAME'       AS COLUMN4
+      ,'Plant Code'          AS COLUMN5
+      ,'VALID_YN'           AS COLUMN6
+      ,'REQ User'         AS COLUMN7
+      ,'REQ Dept'         AS COLUMN8
+      ,'Stock User'       AS COLUMN9
+      ,'Stock Dept'       AS COLUMN10
+
+FROM (
+	--- 신규 -------------------------------------------------------------------- 
+	SELECT 'CREATE'										AS DV
+		 , CONVERT(VARCHAR(20), SL.CREATION_DATE, 120)	AS CREATION_DATE
+		 , ''											AS UPDATE_DATE
+		 , SL.DIVISION_ID
+		 , SL.PLANT_ID
+		 , SL.STORAGE_ID
+		 , SL.STORAGE_DESCRIPTION
+		 , SL.VALID_YN
+		 , ''			AS STORAGE_DESCRIPTION_OLD
+		 , '' 			AS VALID_YN_OLD 
+		 , 1			AS RN 
+		 , 0	        AS HISTORY_SEQ
+		 ---------------------------------------------
+		 , SL.ATTRIBUTE1 AS REQ_USER
+		 , SL.ATTRIBUTE2 AS REQ_DEPT
+		 , SL.ATTRIBUTE3 AS STOCK_USER
+		 , SL.ATTRIBUTE4 AS STOCK_DEPT
+	 FROM SCM_MST_SLOC SL WITH(NOLOCK)  
+	WHERE 1=1
+	  AND EXISTS (SELECT TOP 1   1
+				   FROM dbo.SCM_MST_PLANT_SN P WITH(NOLOCK)
+				  WHERE P.DIVISION_ID = SL.DIVISION_ID)
+	  AND SL.CREATION_DATE	>= DATEADD(DAY, -1, CONVERT(DATE, CONVERT(NVARCHAR(8), GETDATE(),112), 112))  -- 어제 등록
+	UNION ALL
+	-- 변경  -------------------------------------------------------------------- 
+	SELECT 'MODIFY'					AS DV
+		 , CONVERT(VARCHAR(20), SL.CREATION_DATE		,120)	AS CREATION_DATE
+		 , CONVERT(VARCHAR(20), SH.HISTORY_CREATION_DATE,120)	AS UPDATE_DATE
+		 , SL.DIVISION_ID
+		 , SL.PLANT_ID
+		 , SL.STORAGE_ID
+		 , SL.STORAGE_DESCRIPTION
+		 , SL.VALID_YN
+		 , SH.STORAGE_DESCRIPTION	AS STORAGE_DESCRIPTION_OLD
+		 , SH.ATTRIBUTE1			AS VALID_YN_OLD 
+		 , ROW_NUMBER() OVER (PARTITION BY SL.creation_date
+										  ,SL.DIVISION_ID
+										  ,SL.PLANT_ID
+										  ,SL.STORAGE_ID
+										  ,CONVERT(VARCHAR(8), SH.HISTORY_CREATION_DATE, 112) -- 변경일자별 최종 변경건만 조회
+								 ORDER BY  SH.HISTORY_SEQ DESC) 
+									AS RN 
+		 , SH.HISTORY_SEQ
+		 ---------------------------------------------
+		 , SH.ATTRIBUTE2 AS REQ_USER
+		 , SH.ATTRIBUTE3 AS REQ_DEPT
+		 , SH.ATTRIBUTE4 AS STOCK_USER
+		 , SH.ATTRIBUTE5 AS STOCK_DEPT
+	 FROM SCM_MST_SLOC_H SH WITH(NOLOCK)
+		  INNER JOIN SCM_MST_SLOC SL WITH(NOLOCK)
+				  ON SL.DIVISION_ID = SH.DIVISION_ID
+				 AND SL.STORAGE_ID  = SH.STORAGE_ID
+				 AND SL.PLANT_ID    = SH.PLANT_ID 
+	WHERE 1=1
+	  AND SH.HISTORY_CREATION_DATE >= DATEADD(DAY, -1, CONVERT(DATE, CONVERT(NVARCHAR(8), GETDATE(),112), 112))  -- 어제 변경(history생성일시)  
+	  AND EXISTS (SELECT TOP 1   1
+				   FROM dbo.SCM_MST_PLANT_SN P WITH(NOLOCK)
+				  WHERE P.DIVISION_ID = SH.DIVISION_ID)
+) BD
+WHERE 1=1
+  AND BD.RN = 1 
+  AND BD.DIVISION_ID = '82' 
+","vadabi3","2023-10-17 13:29:57.567","blueeos","2024-04-11 11:14:54.020",""
+"MAIL","97","SCP","SCP","SLOC 메일(EE)","DAY","D08","H10","Y","SELECT ''						AS USER_ID
+      ,''						AS USER_NAME
+      ,''						AS MOBILE_PHONE
+      , ''						AS EMAIL_ADDR
+      , 'KO'					AS LANGUAGE_CODE
+      ,BD.DV					AS SEGMENT1
+      ,BD.DIVISION_ID			AS SEGMENT2
+      ,BD.STORAGE_ID			AS SEGMENT3
+      ,BD.STORAGE_DESCRIPTION	AS SEGMENT4	
+      ,BD.PLANT_ID				AS SEGMENT5
+      ,BD.VALID_YN				AS SEGMENT6
+      ,BD.REQ_USER				AS SEGMENT7	
+      ,BD.REQ_DEPT				AS SEGMENT8
+      ,BD.STOCK_USER				AS SEGMENT9	
+      ,BD.STOCK_DEPT				AS SEGMENT10
+
+
+
+      ,'Div'	          AS COLUMN1
+      ,'Division'              AS COLUMN2
+      ,'SLOC ID'             AS COLUMN3
+      ,'SLOC NAME'       AS COLUMN4
+      ,'Plant Code'          AS COLUMN5
+      ,'VALID_YN'           AS COLUMN6
+      ,'REQ User'         AS COLUMN7
+      ,'REQ Dept'         AS COLUMN8
+      ,'Stock User'       AS COLUMN9
+      ,'Stock Dept'       AS COLUMN10
+
+FROM (
+	--- 신규 -------------------------------------------------------------------- 
+	SELECT 'CREATE'										AS DV
+		 , CONVERT(VARCHAR(20), SL.CREATION_DATE, 120)	AS CREATION_DATE
+		 , ''											AS UPDATE_DATE
+		 , SL.DIVISION_ID
+		 , SL.PLANT_ID
+		 , SL.STORAGE_ID
+		 , SL.STORAGE_DESCRIPTION
+		 , SL.VALID_YN
+		 , ''			AS STORAGE_DESCRIPTION_OLD
+		 , '' 			AS VALID_YN_OLD 
+		 , 1			AS RN 
+		 , 0	        AS HISTORY_SEQ
+		 ---------------------------------------------
+		 , SL.ATTRIBUTE1 AS REQ_USER
+		 , SL.ATTRIBUTE2 AS REQ_DEPT
+		 , SL.ATTRIBUTE3 AS STOCK_USER
+		 , SL.ATTRIBUTE4 AS STOCK_DEPT
+	 FROM SCM_MST_SLOC SL WITH(NOLOCK)  
+	WHERE 1=1
+	  AND EXISTS (SELECT TOP 1   1
+				   FROM dbo.SCM_MST_PLANT_SN P WITH(NOLOCK)
+				  WHERE P.DIVISION_ID = SL.DIVISION_ID)
+	  AND SL.CREATION_DATE	>= DATEADD(DAY, -1, CONVERT(DATE, CONVERT(NVARCHAR(8), GETDATE(),112), 112))  -- 어제 등록
+	UNION ALL
+	-- 변경  -------------------------------------------------------------------- 
+	SELECT 'MODIFY'					AS DV
+		 , CONVERT(VARCHAR(20), SL.CREATION_DATE		,120)	AS CREATION_DATE
+		 , CONVERT(VARCHAR(20), SH.HISTORY_CREATION_DATE,120)	AS UPDATE_DATE
+		 , SL.DIVISION_ID
+		 , SL.PLANT_ID
+		 , SL.STORAGE_ID
+		 , SL.STORAGE_DESCRIPTION
+		 , SL.VALID_YN
+		 , SH.STORAGE_DESCRIPTION	AS STORAGE_DESCRIPTION_OLD
+		 , SH.ATTRIBUTE1			AS VALID_YN_OLD 
+		 , ROW_NUMBER() OVER (PARTITION BY SL.creation_date
+										  ,SL.DIVISION_ID
+										  ,SL.PLANT_ID
+										  ,SL.STORAGE_ID
+										  ,CONVERT(VARCHAR(8), SH.HISTORY_CREATION_DATE, 112) -- 변경일자별 최종 변경건만 조회
+								 ORDER BY  SH.HISTORY_SEQ DESC) 
+									AS RN 
+		 , SH.HISTORY_SEQ
+		 ---------------------------------------------
+		 , SH.ATTRIBUTE2 AS REQ_USER
+		 , SH.ATTRIBUTE3 AS REQ_DEPT
+		 , SH.ATTRIBUTE4 AS STOCK_USER
+		 , SH.ATTRIBUTE5 AS STOCK_DEPT
+	 FROM SCM_MST_SLOC_H SH WITH(NOLOCK)
+		  INNER JOIN SCM_MST_SLOC SL WITH(NOLOCK)
+				  ON SL.DIVISION_ID = SH.DIVISION_ID
+				 AND SL.STORAGE_ID  = SH.STORAGE_ID
+				 AND SL.PLANT_ID    = SH.PLANT_ID 
+	WHERE 1=1
+	  AND SH.HISTORY_CREATION_DATE >= DATEADD(DAY, -1, CONVERT(DATE, CONVERT(NVARCHAR(8), GETDATE(),112), 112))  -- 어제 변경(history생성일시)  
+	  AND EXISTS (SELECT TOP 1   1
+				   FROM dbo.SCM_MST_PLANT_SN P WITH(NOLOCK)
+				  WHERE P.DIVISION_ID = SH.DIVISION_ID)
+) BD
+WHERE 1=1
+  AND BD.RN = 1 
+  AND PLANT_ID IN (
+                   SELECT PLANT_ID 
+                     FROM SCM_MST_SITE 
+	           WHERE OPERATION_GROUP= 'E'
+		       )","vadabi3","2023-10-17 13:30:00.047","blueeos","2024-04-11 11:15:02.233",""
+"MAIL","99","SCP","SCP","SLOC 메일 TEST","DAY","D12","H20","N","
+WITH BASE_DATA AS (
+	--- 신규 -------------------------------------------------------------------- 
+	SELECT 'CREATE'										AS DV
+		 , CONVERT(VARCHAR(20), SL.CREATION_DATE, 120)	AS CREATION_DATE
+		 , ''											AS UPDATE_DATE
+		 , SL.DIVISION_ID
+		 , SL.PLANT_ID
+		 , SL.STORAGE_ID
+		 , SL.STORAGE_DESCRIPTION
+		 , SL.VALID_YN
+		 , ''			AS STORAGE_DESCRIPTION_OLD
+		 , '' 			AS VALID_YN_OLD 
+		 , 1			AS RN 
+		 , 0	        AS HISTORY_SEQ
+		 ---------------------------------------------
+		 , SL.ATTRIBUTE1 AS REQ_USER
+		 , SL.ATTRIBUTE2 AS REQ_DEPT
+		 , SL.ATTRIBUTE3 AS STOCK_USER
+		 , SL.ATTRIBUTE4 AS STOCK_DEPT
+	 FROM SCM_MST_SLOC SL WITH(NOLOCK)  
+	WHERE 1=1
+	  AND EXISTS (SELECT TOP 1   1
+				   FROM dbo.SCM_MST_PLANT_SN P WITH(NOLOCK)
+				  WHERE P.DIVISION_ID = SL.DIVISION_ID)
+	  AND SL.CREATION_DATE	>= DATEADD(DAY, -10, CONVERT(DATE, CONVERT(NVARCHAR(8), GETDATE(),112), 112))  -- 어제 등록
+	UNION ALL
+	-- 변경  -------------------------------------------------------------------- 
+	SELECT 'MODIFY'					AS DV
+		 , CONVERT(VARCHAR(20), SL.CREATION_DATE		,120)	AS CREATION_DATE
+		 , CONVERT(VARCHAR(20), SH.HISTORY_CREATION_DATE,120)	AS UPDATE_DATE
+		 , SL.DIVISION_ID
+		 , SL.PLANT_ID
+		 , SL.STORAGE_ID
+		 , SL.STORAGE_DESCRIPTION
+		 , SL.VALID_YN
+		 , SH.STORAGE_DESCRIPTION	AS STORAGE_DESCRIPTION_OLD
+		 , SH.ATTRIBUTE1			AS VALID_YN_OLD 
+		 , ROW_NUMBER() OVER (PARTITION BY SL.creation_date
+										  ,SL.DIVISION_ID
+										  ,SL.PLANT_ID
+										  ,SL.STORAGE_ID
+										  ,CONVERT(VARCHAR(8), SH.HISTORY_CREATION_DATE, 112) -- 변경일자별 최종 변경건만 조회
+								 ORDER BY  SH.HISTORY_SEQ DESC) 
+									AS RN 
+		 , SH.HISTORY_SEQ
+		 ---------------------------------------------
+		 , SH.ATTRIBUTE2 AS REQ_USER
+		 , SH.ATTRIBUTE3 AS REQ_DEPT
+		 , SH.ATTRIBUTE4 AS STOCK_USER
+		 , SH.ATTRIBUTE5 AS STOCK_DEPT
+	 FROM SCM_MST_SLOC_H SH WITH(NOLOCK)
+		  INNER JOIN SCM_MST_SLOC SL WITH(NOLOCK)
+				  ON SL.DIVISION_ID = SH.DIVISION_ID
+				 AND SL.STORAGE_ID  = SH.STORAGE_ID
+				 AND SL.PLANT_ID    = SH.PLANT_ID 
+	WHERE 1=1
+	  AND SH.HISTORY_CREATION_DATE >= DATEADD(DAY, -10, CONVERT(DATE, CONVERT(NVARCHAR(8), GETDATE(),112), 112))  -- 어제 변경(history생성일시)  
+	  AND EXISTS (SELECT TOP 1   1
+				   FROM dbo.SCM_MST_PLANT_SN P WITH(NOLOCK)
+				  WHERE P.DIVISION_ID = SH.DIVISION_ID)
+)
+SELECT ''						AS USER_ID
+      ,''						AS USER_NAME
+      ,''						AS MOBILE_PHONE
+      , ''						AS EMAIL_ADDR
+      , 'KO'					AS LANGUAGE_CODE
+      ,BD.DV					AS SEGMENT1
+      ,BD.DIVISION_ID			AS SEGMENT2
+      ,BD.STORAGE_ID			AS SEGMENT3
+      ,BD.STORAGE_DESCRIPTION	AS SEGMENT4	
+      ,BD.PLANT_ID				AS SEGMENT5
+      ,BD.VALID_YN				AS SEGMENT6
+      ,BD.REQ_USER				AS SEGMENT7	
+      ,BD.REQ_DEPT				AS SEGMENT8
+      ,BD.STOCK_USER				AS SEGMENT9	
+      ,BD.STOCK_DEPT				AS SEGMENT10
+
+
+
+      ,'Div'	          AS COLUMN1
+      ,'Division'              AS COLUMN2
+      ,'SLOC ID'             AS COLUMN3
+      ,'SLOC NAME'       AS COLUMN4
+      ,'Plant Code'          AS COLUMN5
+      ,'VALID_YN'           AS COLUMN6
+      ,'REQ User'         AS COLUMN7
+      ,'REQ Dept'         AS COLUMN8
+      ,'Stock User'       AS COLUMN9
+      ,'Stock Dept'       AS COLUMN10
+
+
+
+
+FROM BASE_DATA BD
+WHERE 1=1
+  AND BD.RN = 1 
+  AND BD.DIVISION_ID = '40' 
+ORDER BY BD.DV	
+		,BD.DIVISION_ID
+		,BD.PLANT_ID
+		,BD.STORAGE_ID
+		,BD.HISTORY_SEQ DESC 
+
+
+
+
+","vadabi5","2024-04-09 11:48:40.497","vadabi5","2024-04-09 16:09:22.230",""
+"SMS","12","COMMON","COMMON","TEST SMS","WEEK","W05","D11","N","","hwwoonins","2018-05-17 10:14:43.257","hwwoonins","2018-05-17 16:22:01.203",""
+"SMS","17","SCP","SCP","Plan Mng start Message","RT","R01","","Y","","hwwoonins","2018-05-17 16:11:36.003","hwwoonins","2018-05-17 16:11:36.003",""
+"SMS","18","SCP","SCP","Plan Mng End Message","RT","R01","","Y","","hwwoonins","2018-05-17 16:14:25.817","hwwoonins","2018-05-17 16:14:25.817",""
+"SMS","20","SCP","SCP","Plan Mng Err Message","RT","R01","","Y","","hwwoonins","2018-05-21 10:24:09.863","hwwoonins","2018-05-21 10:24:09.863",""
+"SMS","21","COMMON","COMMON","Batch Job Error","DAY","D09","","Y","","addio777","2018-07-13 17:04:37.610","addio777","2018-07-13 17:04:37.610",""
+"SMS","37","SCP","SCP","TEST","RT","R01","","N","","addio777","2018-09-28 13:36:57.523","addio777","2018-09-28 13:44:09.023",""
+"SMS","44","SSP","SSP","Daily Confrim Batch Start Message","RT","R01","","Y","","juhlee","2018-10-16 14:01:16.640","juhlee","2018-10-16 14:01:16.640",""

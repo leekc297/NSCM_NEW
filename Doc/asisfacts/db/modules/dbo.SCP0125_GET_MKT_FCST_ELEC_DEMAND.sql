@@ -1,0 +1,80 @@
+﻿
+
+
+/*
+ * Program ID   : SCP0125_GET_MKT_FCST_ELEC_DEMAND
+ * Description  : Workbench - Elec. Demand 조회
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2025/09/22   mrchois			PJ20257329 최적화 Planning Input Constraint UI 개발 및 Master Validation 확산 - Initial Release
+ *
+ */
+
+CREATE PROCEDURE [dbo].[SCP0125_GET_MKT_FCST_ELEC_DEMAND]
+	@p_division_id				NVARCHAR(50)
+	, @p_plan_start_yyyymmdd	NVARCHAR(8)
+	, @p_version_no				NVARCHAR(50)
+	, @p_nick_name				NVARCHAR(200)
+	, @p_item_id				NVARCHAR(200)
+
+AS
+BEGIN
+	
+    SET NOCOUNT ON; 
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+
+
+	SELECT a.DIVISION_ID, a.PLAN_START_YYYYMMDD, a.PLAN_TYPE, a.SEQ, SCM_SITE_ID AS PLANT_SITE_ID, c.NICK_NAME, a.ITEM_ID, a.LINE_ID, a.OPERATION_ID, a.YYYYMMDD, a.QTY
+		 , b.CHG_QTY, b.CHG_RSN, b.CHG_TYPE, b.LAST_UPDATED_BY, b.LAST_UPDATE_DATE, CHG_QTY AS PRE_CHG_QTY, CHG_RSN AS PRE_CHG_RSN
+	  FROM (
+		SELECT DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, MAX(SEQ) AS SEQ, SCM_SITE_ID, ITEM_ID, LINE_ID, OPERATION_ID, YYYYMMDD, SUM(QTY) AS QTY
+			 , ROW_NUMBER() OVER(PARTITION BY DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SCM_SITE_ID, ITEM_ID, LINE_ID, OPERATION_ID, YYYYMMDD ORDER BY SEQ DESC) as rn
+		  FROM SCP_ANL_PRODUCTION_PLAN
+		 WHERE 1=1
+		   AND PLAN_TYPE = 'FN'
+		   AND MEASURE = 'PROD_PLAN_AMEND'
+		   AND OPERATION_GROUP = 'A'
+		   AND DIVISION_ID = @p_division_id
+		   AND PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd
+		 GROUP BY DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SCM_SITE_ID, ITEM_ID, LINE_ID, OPERATION_ID, YYYYMMDD, QTY, SEQ
+		HAVING SUM(QTY) > 0 
+	  ) a
+	  LEFT JOIN ( SELECT DIVISION_ID, ITEM_ID, MAX(NICK_NAME) AS NICK_NAME
+				    FROM SCM_MST_ITEM_SN WITH(NOLOCK)
+				   GROUP BY  DIVISION_ID, ITEM_ID
+			  ) c
+		ON c.DIVISION_ID = a.DIVISION_ID AND c.ITEM_ID = a.ITEM_ID
+
+	  LEFT JOIN SCP_OPMZ_DMD_ELEC b WITH(NOLOCK)
+		ON a.DIVISION_ID = b.DIVISION_ID AND  a.PLAN_START_YYYYMMDD = b.PLAN_START_YYYYMMDD AND a.PLAN_TYPE = b.PLAN_TYPE AND a.SCM_SITE_ID = b.PLANT_SITE_ID  
+	       AND a.ITEM_ID = b.ITEM_ID AND a.LINE_ID = b.LINE_ID AND a.OPERATION_ID = b.OPERATION_ID AND a.YYYYMMDD = b.YYYYMMDD
+	 WHERE rn = 1
+	   AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.ITEM_ID LIKE '%' + @p_item_id + '%' ) 
+	   AND ( ( @p_nick_name IS NULL OR  @p_nick_name = '' ) OR c.NICK_NAME LIKE '%' + @p_nick_name + '%' ) 
+
+		--Insert 된 정보
+	 UNION ALL
+	SELECT a.DIVISION_ID, a.PLAN_START_YYYYMMDD, a.PLAN_TYPE, a.SEQ, PLANT_SITE_ID, c.NICK_NAME, a.ITEM_ID, a.LINE_ID, a.OPERATION_ID 
+		 , CONVERT(date, a.YYYYMMDD, 112) AS YYYYMMDD, a.QTY , a.CHG_QTY, a.CHG_RSN, a.CHG_TYPE
+		 , ISNULL(a.LAST_UPDATED_BY, '') AS LAST_UPDATED_BY
+		 , ISNULL(a.LAST_UPDATE_DATE, NULL) AS LAST_UPDATE_DATE, CHG_QTY AS PRE_CHG_QTY, CHG_RSN AS PRE_CHG_RSN
+	  FROM SCP_OPMZ_DMD_ELEC a WITH(NOLOCK)
+	  LEFT JOIN (
+				SELECT DIVISION_ID, ITEM_ID, MAX(NICK_NAME) AS NICK_NAME
+				FROM SCM_MST_ITEM_SN WITH(NOLOCK)
+				GROUP BY  DIVISION_ID, ITEM_ID
+		 ) c
+		 ON c.DIVISION_ID = a.DIVISION_ID AND c.ITEM_ID = a.ITEM_ID
+	 WHERE 1=1
+	   AND a.CHG_TYPE = 'New'
+	   AND a.DIVISION_ID = @p_division_id
+	   AND a.PLAN_START_YYYYMMDD = @p_plan_start_yyyymmdd
+	   AND ( ( @p_item_id IS NULL OR  @p_item_id = '' ) OR a.ITEM_ID LIKE '%' + @p_item_id + '%' ) 
+	   AND ( ( @p_nick_name IS NULL OR  @p_nick_name = '' ) OR c.NICK_NAME LIKE '%' + @p_nick_name + '%' )
+	ORDER BY DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, PLANT_SITE_ID, NICK_NAME, ITEM_ID, LINE_ID, OPERATION_ID, YYYYMMDD
+
+  
+END
+

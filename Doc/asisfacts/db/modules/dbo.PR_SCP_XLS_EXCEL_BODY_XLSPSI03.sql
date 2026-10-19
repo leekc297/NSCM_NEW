@@ -1,0 +1,372 @@
+﻿
+
+
+
+
+
+/*
+ * Program ID   : PR_SCP_XLS_EXCEL_BODY_XLSPSI03
+ * Description  : SCP SIMULATION EXCEL SHEET BODY QUERY
+ * OutTable     :
+ * Execute      : 
+                 
+  EXEC PR_SCP_XLS_EXCEL_BODY_XLSPSI03  
+                                                   @P_DIVISION_ID   = 'EE'
+                                                  ,@p_pgm_code      = 'XLSPSI05'
+                                                  ,@P_CELL_TYPE_GROUP_CODE    =''
+                                                  ,@P_ITEM_LIST    =''
+
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2025.02.03   KSK        Initial Release (PR_SCP_XLS_EXCEL_BODY_QUERY에서 분리)
+ */
+
+CREATE PROCEDURE [dbo].[PR_SCP_XLS_EXCEL_BODY_XLSPSI03]
+(
+  @P_DIVISION_ID   VARCHAR(10),
+  @P_ITEM_LIST    VARCHAR(MAX)  =''  
+ )
+AS
+BEGIN
+
+	DECLARE @p_plan_start_yyyymmdd  NVARCHAR(0008) = NULL;
+	DECLARE @p_plan_type            NVARCHAR(4000) = 'MA';
+	DECLARE @p_seq                  NVARCHAR(0008) = NULL;
+	DECLARE @v_plan_id				NVARCHAR(0008) = NULL;
+	DECLARE @eng_plan_id			NVARCHAR(0015) = NULL;
+
+	DECLARE @v_plan_start_yyyymmdd  NVARCHAR(0008);
+	DECLARE @v_plan_end_yyyymmdd    NVARCHAR(0008);
+	DECLARE @v_plan_end_yyyymmdd_2    NVARCHAR(0008);
+	
+	DECLARE @v_seq                  NVARCHAR(0008)
+	DECLARE @v_cols                 NVARCHAR(MAX);
+	DECLARE @v_cols2                NVARCHAR(MAX);
+	DECLARE @v_cols3                NVARCHAR(MAX);
+	DECLARE @SQL                    NVARCHAR(MAX);
+
+	DECLARE @v_frozen_end_yyyymmdd  NVARCHAR(0008);
+	DECLARE @v_frozen_days          integer = 21;
+	DECLARE @v_wcols                NVARCHAR(MAX);
+	DECLARE @v_wcols2               NVARCHAR(MAX);
+	DECLARE @v_wcols3               NVARCHAR(MAX);
+
+	DECLARE @v_frozen_area_last_yyyymmdd NVARCHAR(0008) = '';
+	--  * 2021.03.23   KSW           'PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선' - XLSPSI22: ESS SHIPMENT PLAN 입력 SIMULATION 추가 - END
+
+	-- PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선' - 중장기 대응 - start
+	DECLARE @p_create_to_yyyymmdd_1 NVARCHAR(0008);
+	DECLARE @p_create_to_yyyymmdd_2 NVARCHAR(0008);
+
+	--  Plan End Date
+	DECLARE @v_pet_date		NVARCHAR(12) = '';
+	DECLARE @v_bp_flag		NVARCHAR(8) = '';
+	DECLARE @v_bp_days		INT = 0;
+	DECLARE @v_bp_plan_end_yyyymmdd NVARCHAR(0008) = '';
+
+	SELECT @v_pet_date = p.horizon_end_date,
+		   @v_bp_flag  = (case when DATEDIFF(DAY, p.plan_name, p.horizon_end_date) > 364 then 'Y' else 'N' end),
+		   @v_bp_days  = (case when DATEDIFF(DAY, p.plan_name, p.horizon_end_date) > 364 then DATEDIFF(DAY, p.plan_name, p.horizon_end_date) - 363 else 0 end)
+	FROM   dbo.scm_mst_plan p WITH(NOLOCK)
+	WHERE  p.division_id = @P_DIVISION_ID
+	AND    p.plan_id     = (SELECT max(plan_id) FROM dbo.scm_mst_plan p WITH(NOLOCK) WHERE division_id = @P_DIVISION_ID and plan_id < 9999)
+	;
+	-- PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선' - 중장기 대응 - end
+
+	DECLARE @v_2year_cnt INT
+
+      -- PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선' - 중장기 대응 - start
+	 SET @v_plan_start_yyyymmdd    = '';
+
+	 SELECT  DISTINCT 
+	          @v_plan_start_yyyymmdd = PLAN_START_YYYYMMDD
+		     ,@v_seq = SEQ
+	   FROM DBO.SCP_XLS_PSI_GLOBAL_SMALL_CELL WITH (NOLOCK)
+	  ;
+
+	 SET @p_create_to_yyyymmdd_1   = @v_plan_start_yyyymmdd;
+	 SET @p_create_to_yyyymmdd_2 = CONVERT(VARCHAR(8), DATEADD(day, 364, @p_create_to_yyyymmdd_1), 112);
+	 -- PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선' - 중장기 대응 - end
+
+	  -- 중장기 data 존재여부 (단기 --> 중장기로 전환시 조회안되는 문제방지 :: 2022.08.22 - start
+	  SELECT @v_2year_cnt = COUNT(*) FROM SCP_XLS_PSI_GLOBAL_SMALL_CELL Y WITH (NOLOCK) WHERE CREATE_FROM_YYYYMMDD = @p_create_to_yyyymmdd_2;
+
+	  IF @v_bp_flag = 'Y' AND @v_2year_cnt = 0
+	  BEGIN
+		 SET @v_bp_flag = 'N'
+	  END
+	  -- 중장기 data 존재여부 (단기 --> 중장기로 전환시 조회안되는 문제방지 :: 2022.08.22 - end
+
+
+      IF @v_bp_flag = 'N'
+	  BEGIN
+		  SELECT X.DIVISION_ID
+				,X.PLAN_START_YYYYMMDD
+				,X.PLAN_TYPE
+				,X.SEQ
+				,(SELECT TOP 1 Y.SEGMENT2 
+					FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL Y WITH (NOLOCK)  
+				   WHERE Y.LOOKUP_TYPE  = 'CELL_TYPE_GROUP_CODE'   
+					  AND Y.VALID_YN    = 'Y'  
+					  AND Y.SEGMENT1    = X.CELL_TYPE_GROUP_CODE
+				  ) AS CELL_TYPE_GROUP_CODE
+				,X.CELL_ITEM_ID
+				,X.NICK_NAME
+				,X.MEASURE
+				,X.MEASURE_LABEL
+				,X.SITE_ID
+				,X.SITE_DESCRIPTION
+				,X.PROD_LINE
+				 ,(SELECT TOP 1  Y.LINE_NAME 
+					FROM SCM_MST_LINE_V Y WITH (NOLOCK) 
+				   WHERE Y.LINE_ID    = X.PROD_LINE 
+					 AND Y.DIVISION_ID= X.DIVISION_ID
+					 AND Y.OPERATION_ID IN ('A3000','A9000')
+             
+				  ) AS PROD_LINE_NAME
+				,X.YIELD
+				,X.LT_WEEK
+				,X.ATTRIBUTE3 AS LT_DAY
+				,X.ATTRIBUTE4 AS GRO_STD_DIO  -- DIO 수정 관련 (기준 컬럼추가)
+				,X.ATTRIBUTE5 AS MIN_STD_DIO  -- DIO 수정 관련 (최소 컬럼추가)
+				,X.BOH
+				,X.XLS_KEY1
+				,X.SORT_ORDER_NO
+
+            
+				,X.WQTY01 ,X.WQTY02 ,X.WQTY03 ,X.WQTY04 ,X.WQTY05 ,X.WQTY06 ,X.WQTY07 ,X.WQTY08 ,X.WQTY09 ,X.WQTY10
+				,X.WQTY11 ,X.WQTY12 ,X.WQTY13 ,X.WQTY14 ,X.WQTY15 ,X.WQTY16 ,X.WQTY17 ,X.WQTY18 ,X.WQTY19 ,X.WQTY20
+				,X.WQTY21 ,X.WQTY22 ,X.WQTY23 ,X.WQTY24 ,X.WQTY25 ,X.WQTY26 ,X.WQTY27 ,X.WQTY28 ,X.WQTY29 ,X.WQTY30
+				,X.WQTY31 ,X.WQTY32 ,X.WQTY33 ,X.WQTY34 ,X.WQTY35 ,X.WQTY36 ,X.WQTY37 ,X.WQTY38 ,X.WQTY39 ,X.WQTY40
+				,X.WQTY41 ,X.WQTY42 ,X.WQTY43 ,X.WQTY44 ,X.WQTY45 ,X.WQTY46 ,X.WQTY47 ,X.WQTY48 ,X.WQTY49 ,X.WQTY50
+				,X.WQTY51 ,X.WQTY52
+				,X.CREATED_BY
+				,X.CREATION_DATE
+				,X.LAST_UPDATED_BY
+				,X.LAST_UPDATE_DATE
+				--,ATTRIBUTE1
+				--,ATTRIBUTE10
+			FROM DBO.SCP_XLS_PSI_GLOBAL_SMALL_CELL  X WITH (NOLOCK)
+		   WHERE 0 = 0 
+			  AND X.DIVISION_ID           = @P_DIVISION_ID
+			  AND X.CREATE_FROM_YYYYMMDD  = @p_create_to_yyyymmdd_1
+			  AND  X.CELL_ITEM_ID IN (SELECT Value FROM dbo.FN_SplitString(@P_ITEM_LIST,','))
+		  ORDER BY CONVERT(INT, XLS_KEY1)
+		  ;
+	  END
+
+      IF @v_bp_flag = 'Y'
+	  BEGIN
+		  SELECT X.DIVISION_ID
+				,X.PLAN_START_YYYYMMDD
+				,X.PLAN_TYPE
+				,X.SEQ
+				,X.CELL_TYPE_GROUP_CODE
+				,X.CELL_ITEM_ID
+				,X.NICK_NAME
+				,X.MEASURE
+				,X.MEASURE_LABEL
+				,X.SITE_ID
+				,X.SITE_DESCRIPTION
+				,X.PROD_LINE
+				,X.PROD_LINE_NAME
+				,X.YIELD
+				,X.LT_WEEK
+				,X.LT_DAY
+				,X.GRO_STD_DIO
+				,X.MIN_STD_DIO
+				,X.BOH
+				,X.XLS_KEY1
+				,X.SORT_ORDER_NO
+            
+				,X.WQTY01 ,X.WQTY02 ,X.WQTY03 ,X.WQTY04 ,X.WQTY05 ,X.WQTY06 ,X.WQTY07 ,X.WQTY08 ,X.WQTY09 ,X.WQTY10
+				,X.WQTY11 ,X.WQTY12 ,X.WQTY13 ,X.WQTY14 ,X.WQTY15 ,X.WQTY16 ,X.WQTY17 ,X.WQTY18 ,X.WQTY19 ,X.WQTY20
+				,X.WQTY21 ,X.WQTY22 ,X.WQTY23 ,X.WQTY24 ,X.WQTY25 ,X.WQTY26 ,X.WQTY27 ,X.WQTY28 ,X.WQTY29 ,X.WQTY30
+				,X.WQTY31 ,X.WQTY32 ,X.WQTY33 ,X.WQTY34 ,X.WQTY35 ,X.WQTY36 ,X.WQTY37 ,X.WQTY38 ,X.WQTY39 ,X.WQTY40
+				,X.WQTY41 ,X.WQTY42 ,X.WQTY43 ,X.WQTY44 ,X.WQTY45 ,X.WQTY46 ,X.WQTY47 ,X.WQTY48 ,X.WQTY49 ,X.WQTY50
+				,X.WQTY51 ,X.WQTY52
+
+				,X.WQTY53, X.WQTY54, X.WQTY55, X.WQTY56, X.WQTY57, X.WQTY58, X.WQTY59, X.WQTY60, X.WQTY61, X.WQTY62 
+				,X.WQTY63, X.WQTY64, X.WQTY65, X.WQTY66, X.WQTY67, X.WQTY68, X.WQTY69, X.WQTY70, X.WQTY71, X.WQTY72 
+				,X.WQTY73, X.WQTY74, X.WQTY75, X.WQTY76, X.WQTY77, X.WQTY78, X.WQTY79, X.WQTY80, X.WQTY81, X.WQTY82 
+				,X.WQTY83, X.WQTY84, X.WQTY85, X.WQTY86, X.WQTY87, X.WQTY88, X.WQTY89, X.WQTY90, X.WQTY91, X.WQTY92		-- 중장기 +1 Year 변경처리 :: 2022.08.11 컬럼활성화
+				,X.WQTY93, X.WQTY94, X.WQTY95, X.WQTY96, X.WQTY97, X.WQTY98, X.WQTY99, X.WQTY100, X.WQTY101,X.WQTY102
+				,X.WQTY103, X.WQTY104 
+
+				,X.CREATED_BY
+				,X.CREATION_DATE
+				,X.LAST_UPDATED_BY
+				,X.LAST_UPDATE_DATE
+			FROM (
+				  SELECT Y1.DIVISION_ID
+						,Y1.PLAN_START_YYYYMMDD
+						,Y1.PLAN_TYPE
+						,Y1.SEQ
+						,Y1.CELL_TYPE_GROUP_CODE
+						,Y1.CELL_ITEM_ID
+						,Y1.NICK_NAME
+						,Y1.MEASURE
+						,Y1.MEASURE_LABEL
+						,Y1.SITE_ID
+						,Y1.SITE_DESCRIPTION
+						,Y1.PROD_LINE
+						,Y1.PROD_LINE_NAME
+						,Y1.YIELD
+						,Y1.LT_WEEK
+						,Y1.LT_DAY
+						,Y1.GRO_STD_DIO
+						,Y1.MIN_STD_DIO
+						,Y1.BOH
+						,Y1.XLS_KEY1
+						,Y1.SORT_ORDER_NO
+            
+						,Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+						,Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+						,Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+						,Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+						,Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+						,Y1.WQTY51,Y1.WQTY52
+
+						,Y2.WQTY01 AS WQTY53, Y2.WQTY02 AS WQTY54, Y2.WQTY03 AS WQTY55, Y2.WQTY04 AS WQTY56, Y2.WQTY05 AS WQTY57, Y2.WQTY06 AS WQTY58, Y2.WQTY07 AS WQTY59, Y2.WQTY08 AS WQTY60, Y2.WQTY09 AS WQTY61, Y2.WQTY10 AS WQTY62
+						,Y2.WQTY11 AS WQTY63, Y2.WQTY12 AS WQTY64, Y2.WQTY13 AS WQTY65, Y2.WQTY14 AS WQTY66, Y2.WQTY15 AS WQTY67, Y2.WQTY16 AS WQTY68, Y2.WQTY17 AS WQTY69, Y2.WQTY18 AS WQTY70, Y2.WQTY19 AS WQTY71, Y2.WQTY20 AS WQTY72
+						,Y2.WQTY21 AS WQTY73, Y2.WQTY22 AS WQTY74, Y2.WQTY23 AS WQTY75, Y2.WQTY24 AS WQTY76, Y2.WQTY25 AS WQTY77, Y2.WQTY26 AS WQTY78, Y2.WQTY27 AS WQTY79, Y2.WQTY28 AS WQTY80, Y2.WQTY29 AS WQTY81, Y2.WQTY30 AS WQTY82
+						,Y2.WQTY31 AS WQTY83, Y2.WQTY32 AS WQTY84, Y2.WQTY33 AS WQTY85, Y2.WQTY34 AS WQTY86, Y2.WQTY35 AS WQTY87, Y2.WQTY36 AS WQTY88, Y2.WQTY37 AS WQTY89, Y2.WQTY38 AS WQTY90, Y2.WQTY39 AS WQTY91, Y2.WQTY40 AS WQTY92
+						,Y2.WQTY41 AS WQTY93, Y2.WQTY42 AS WQTY94, Y2.WQTY43 AS WQTY95, Y2.WQTY44 AS WQTY96, Y2.WQTY45 AS WQTY97, Y2.WQTY46 AS WQTY98, Y2.WQTY47 AS WQTY99, Y2.WQTY48 AS WQTY100,Y2.WQTY49 AS WQTY101,Y2.WQTY50 AS WQTY102
+						,Y2.WQTY51 AS WQTY103,Y2.WQTY52 AS WQTY104
+
+						,Y1.CREATED_BY
+						,Y1.CREATION_DATE
+						,Y1.LAST_UPDATED_BY
+						,Y1.LAST_UPDATE_DATE
+
+						,Y2.SORT_ORDER_NO AS SORT_ORDER_NO_2
+						,Y2.XLS_KEY1      AS XLS_KEY1_2
+					FROM (
+						  SELECT X.DIVISION_ID
+								,X.PLAN_START_YYYYMMDD
+								,X.PLAN_TYPE
+								,X.SEQ
+								,(
+									SELECT TOP 1 Y.SEGMENT2 
+									FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL Y WITH (NOLOCK)  
+								   WHERE Y.LOOKUP_TYPE  = 'CELL_TYPE_GROUP_CODE'   
+									  AND Y.VALID_YN    = 'Y'  
+									  AND Y.SEGMENT1    = X.CELL_TYPE_GROUP_CODE
+								  ) AS CELL_TYPE_GROUP_CODE
+								,X.CELL_ITEM_ID
+								,X.NICK_NAME
+								,X.MEASURE
+								,X.MEASURE_LABEL
+								,X.SITE_ID
+								,X.SITE_DESCRIPTION
+								,X.PROD_LINE
+								 ,(SELECT TOP 1  Y.LINE_NAME 
+									FROM SCM_MST_LINE_V Y WITH (NOLOCK) 
+								   WHERE Y.LINE_ID    = X.PROD_LINE 
+									 AND Y.DIVISION_ID= X.DIVISION_ID
+									 AND Y.OPERATION_ID IN ('A3000','A9000')
+             
+								  ) AS PROD_LINE_NAME
+								,X.YIELD
+								,X.LT_WEEK
+								,X.ATTRIBUTE3 AS LT_DAY
+								,X.ATTRIBUTE4 AS GRO_STD_DIO  -- DIO 수정 관련 (기준 컬럼추가)
+								,X.ATTRIBUTE5 AS MIN_STD_DIO  -- DIO 수정 관련 (최소 컬럼추가)
+								,X.BOH
+								,X.XLS_KEY1
+								,X.SORT_ORDER_NO
+
+            
+								,X.WQTY01 ,X.WQTY02 ,X.WQTY03 ,X.WQTY04 ,X.WQTY05 ,X.WQTY06 ,X.WQTY07 ,X.WQTY08 ,X.WQTY09 ,X.WQTY10
+								,X.WQTY11 ,X.WQTY12 ,X.WQTY13 ,X.WQTY14 ,X.WQTY15 ,X.WQTY16 ,X.WQTY17 ,X.WQTY18 ,X.WQTY19 ,X.WQTY20
+								,X.WQTY21 ,X.WQTY22 ,X.WQTY23 ,X.WQTY24 ,X.WQTY25 ,X.WQTY26 ,X.WQTY27 ,X.WQTY28 ,X.WQTY29 ,X.WQTY30
+								,X.WQTY31 ,X.WQTY32 ,X.WQTY33 ,X.WQTY34 ,X.WQTY35 ,X.WQTY36 ,X.WQTY37 ,X.WQTY38 ,X.WQTY39 ,X.WQTY40
+								,X.WQTY41 ,X.WQTY42 ,X.WQTY43 ,X.WQTY44 ,X.WQTY45 ,X.WQTY46 ,X.WQTY47 ,X.WQTY48 ,X.WQTY49 ,X.WQTY50
+								,X.WQTY51 ,X.WQTY52
+								,X.CREATED_BY
+								,X.CREATION_DATE
+								,X.LAST_UPDATED_BY
+								,X.LAST_UPDATE_DATE
+								--,ATTRIBUTE1
+								--,ATTRIBUTE10
+							FROM SCP_XLS_PSI_GLOBAL_SMALL_CELL  X WITH (NOLOCK)
+						   WHERE 0 = 0 
+							  AND X.DIVISION_ID           = @P_DIVISION_ID
+							  AND X.PLAN_START_YYYYMMDD     = @v_plan_start_yyyymmdd
+							  AND X.CREATE_FROM_YYYYMMDD    = @p_create_to_yyyymmdd_1
+							  AND  X.CELL_ITEM_ID IN (SELECT Value FROM dbo.FN_SplitString(@P_ITEM_LIST,','))
+						 ) Y1
+					INNER JOIN 
+						 (SELECT X.DIVISION_ID
+								,X.PLAN_START_YYYYMMDD
+								,X.PLAN_TYPE
+								,X.SEQ
+								,(SELECT TOP 1 Y.SEGMENT2 
+									FROM dbo.SCM_ADM_LOOKUP_MASTER_DETAIL Y WITH (NOLOCK)  
+								   WHERE Y.LOOKUP_TYPE  = 'CELL_TYPE_GROUP_CODE'   
+									  AND Y.VALID_YN    = 'Y'  
+									  AND Y.SEGMENT1    = X.CELL_TYPE_GROUP_CODE
+								  ) AS CELL_TYPE_GROUP_CODE
+								,X.CELL_ITEM_ID
+								,X.NICK_NAME
+								,X.MEASURE
+								,X.MEASURE_LABEL
+								,X.SITE_ID
+								,X.SITE_DESCRIPTION
+								,X.PROD_LINE
+								 ,(SELECT TOP 1  Y.LINE_NAME 
+									FROM SCM_MST_LINE_V Y WITH (NOLOCK) 
+								   WHERE Y.LINE_ID    = X.PROD_LINE 
+									 AND Y.DIVISION_ID= X.DIVISION_ID
+									 AND Y.OPERATION_ID IN ('A3000','A9000')
+             
+								  ) AS PROD_LINE_NAME
+								,X.YIELD
+								,X.LT_WEEK
+								,X.ATTRIBUTE3 AS LT_DAY
+								,X.ATTRIBUTE4 AS GRO_STD_DIO  -- DIO 수정 관련 (기준 컬럼추가)
+								,X.ATTRIBUTE5 AS MIN_STD_DIO  -- DIO 수정 관련 (최소 컬럼추가)
+								,X.BOH
+								,X.XLS_KEY1
+								,X.SORT_ORDER_NO
+
+            
+								,X.WQTY01 ,X.WQTY02 ,X.WQTY03 ,X.WQTY04 ,X.WQTY05 ,X.WQTY06 ,X.WQTY07 ,X.WQTY08 ,X.WQTY09 ,X.WQTY10
+								,X.WQTY11 ,X.WQTY12 ,X.WQTY13 ,X.WQTY14 ,X.WQTY15 ,X.WQTY16 ,X.WQTY17 ,X.WQTY18 ,X.WQTY19 ,X.WQTY20
+								,X.WQTY21 ,X.WQTY22 ,X.WQTY23 ,X.WQTY24 ,X.WQTY25 ,X.WQTY26 ,X.WQTY27 ,X.WQTY28 ,X.WQTY29 ,X.WQTY30
+								,X.WQTY31 ,X.WQTY32 ,X.WQTY33 ,X.WQTY34 ,X.WQTY35 ,X.WQTY36 ,X.WQTY37 ,X.WQTY38 ,X.WQTY39 ,X.WQTY40
+								,X.WQTY41 ,X.WQTY42 ,X.WQTY43 ,X.WQTY44 ,X.WQTY45 ,X.WQTY46 ,X.WQTY47 ,X.WQTY48 ,X.WQTY49 ,X.WQTY50
+								,X.WQTY51 ,X.WQTY52
+								,X.CREATED_BY
+								,X.CREATION_DATE
+								,X.LAST_UPDATED_BY
+								,X.LAST_UPDATE_DATE
+								--,ATTRIBUTE1
+								--,ATTRIBUTE10
+							FROM SCP_XLS_PSI_GLOBAL_SMALL_CELL  X WITH (NOLOCK)
+						   WHERE 0 = 0 
+							  AND X.DIVISION_ID           = @P_DIVISION_ID
+							  AND X.PLAN_START_YYYYMMDD     = @v_plan_start_yyyymmdd
+							  AND X.CREATE_FROM_YYYYMMDD    = @p_create_to_yyyymmdd_2
+							  AND X.CELL_ITEM_ID IN (SELECT Value FROM dbo.FN_SplitString(@P_ITEM_LIST,','))
+						 ) Y2
+					ON Y1.DIVISION_ID         = Y2.DIVISION_ID
+				   AND Y1.PLAN_START_YYYYMMDD = Y2.PLAN_START_YYYYMMDD
+				 --WHERE Y1.PLAN_START_YYYYMMDD = Y2.PLAN_START_YYYYMMDD
+				   AND Y1.PLAN_TYPE           = Y2.PLAN_TYPE
+				   AND Y1.SEQ                 = Y2.SEQ
+				   AND Y1.CELL_TYPE_GROUP_CODE = Y2.CELL_TYPE_GROUP_CODE
+				   AND Y1.CELL_ITEM_ID        = Y2.CELL_ITEM_ID
+				   AND Y1.MEASURE             = Y2.MEASURE
+				   AND Y1.SITE_ID             = Y2.SITE_ID
+				   AND Y1.PROD_LINE           = Y2.PROD_LINE			   
+				   AND Y1.SORT_ORDER_NO       = Y2.SORT_ORDER_NO
+			   ) X
+		  ORDER BY CONVERT(INT, XLS_KEY1)
+		  ;
+	  END
+	  -- PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선' - 중장기 대응 - 2021.05.27 - end
+
+END

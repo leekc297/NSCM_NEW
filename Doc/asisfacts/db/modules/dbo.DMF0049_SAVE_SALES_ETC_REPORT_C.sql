@@ -1,0 +1,1166 @@
+﻿
+/*========================================================================================================================
+ * Program ID   : DMF0049_SAVE_SALES_ETC_REPORT_C
+ * Description  : 'DM_PLN_SALES_ETC_REPORT_C' TABLE INSERT/UPDATE/DELETE
+ * Program History
+ *========================================================================================================================
+ *   Date       In Charge      Description
+ *========================================================================================================================
+ * 2020/04/08	HWI1993		Initial Release DMF0049_SAVE_SALES_PLAN_REPORT_C를 복사해서 새로 생성
+ * 2020/05/22	hwi1993		Save 이후에 Transfer 처리
+ * 2020/06/02	hwi1993		실적구간 일괄 업데이트 주석처리
+ * 2020/09/09   P.C.I		[C20200909-000203] LOG 표준화 적용
+ * 2021/01/26   P.C.I		[C20210125-000207] 40사업부 RTF Measure, CELL_MODEL_INFO 컬럼 추가
+ * 2021/08/16	hwi1993		[C20210811-000341] ETC Report - GDW 전송시 누락 컬럼 점검 요청의 건 -- ETC 누락 데이터 등 수정
+ * 2021/08/28	hwi1993		[C20210811-000341] 추가 수정
+ * 2022/01/14	rosia27		[C20220105-000064]ETC Report 구버전 조회시 조직 명칭 오류의 건
+ * 2022/01/21	rosia27		[C20211112-000213]GSCM의 Cell Model 컬럼 관련 요청의 건
+ * 2022/04/18   hwi1993		C20220418-000349 Sales Report 구버전 조회시 조직 명칭 오류 수정 요청의 건
+							GDW PK 오류 수정 - loc 메저 생성시 department_edit_flag, t_department_name 컬럼이 빠져서 Department_name 에 공백이 들어가는 현상 수정
+ * 2025/05/09	JSSBAE		[E20250418-001567]_40사업부 Sales Report, ETC Report 개선
+ * 2025/07/21	JSSBAE		[E20250522-001188]_Business Plan UI 데이터 저장 시 Trim 처리       
+ * 2026/02/03	JSSBAE		[E20260107-001542]_DM_COMPANY 룩업코드 로직 개선      
+ ========================================================================================================================*/
+
+CREATE PROCEDURE [dbo].[DMF0049_SAVE_SALES_ETC_REPORT_C]
+	  @p_active_flag				NVARCHAR(MAX)
+	, @p_result_month				NVARCHAR(MAX)
+    , @p_division_id				NVARCHAR(MAX)
+    , @p_version_no					NVARCHAR(MAX)
+	, @p_data_seq					NVARCHAR(MAX)
+    , @p_department_id				NVARCHAR(MAX)
+	, @p_department_edit_flag		NVARCHAR(MAX)
+	, @p_department_name			NVARCHAR(MAX)
+    , @p_dept_id					NVARCHAR(MAX)
+    , @p_cust_report				NVARCHAR(MAX)
+	 
+    , @p_end_cust_report			NVARCHAR(MAX)
+    , @p_soldto_code				NVARCHAR(MAX)
+	, @p_soldto_cust_report			NVARCHAR(MAX)
+    , @p_product_group				NVARCHAR(MAX)
+    , @p_item_id					NVARCHAR(MAX)
+    , @p_product_details			NVARCHAR(MAX)
+	, @p_currency					NVARCHAR(MAX)
+    , @p_company_id					NVARCHAR(MAX)
+    , @p_biz_type					NVARCHAR(MAX)
+    , @p_application_gr				NVARCHAR(MAX)
+	 
+    , @p_application				NVARCHAR(MAX)
+    , @p_country_code				NVARCHAR(MAX)
+	, @p_project_code				NVARCHAR(MAX)
+	, @p_scm_site_id				NVARCHAR(MAX)
+	, @p_fcst_type					NVARCHAR(MAX)
+	, @p_item_use					NVARCHAR(MAX)
+	, @p_soldto_country				NVARCHAR(MAX)
+	, @p_shipto_country				NVARCHAR(MAX)
+	, @p_end_customer				NVARCHAR(MAX)
+	, @p_etc_descr					NVARCHAR(MAX)
+	 
+	, @p_cell_model_info			NVARCHAR(MAX) --[C20210125-000207] 40사업부 CELL_MODEL_INFO 컬럼 추가
+	, @p_cell_model					NVARCHAR(MAX) --[C20211112-000213]
+	, @p_measure					NVARCHAR(MAX)
+    , @p_yyyymmdd					NVARCHAR(MAX)
+    , @p_qty						NVARCHAR(MAX)
+    , @p_created_by					NVARCHAR(MAX)
+
+AS
+
+BEGIN
+    SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+    SET NOCOUNT ON; 
+    SET XACT_ABORT ON;	
+	--------------------------------------------------------------------------------------------------------------------------
+	-- 스플릿관련 변수	
+	--------------------------------------------------------------------------------------------------------------------------
+    DECLARE	@v_active_flag				NVARCHAR(MAX);
+    DECLARE @v_result_month				NVARCHAR(MAX);
+    DECLARE @v_division_id				NVARCHAR(MAX);
+    DECLARE @v_version_no				NVARCHAR(MAX);
+	DECLARE @v_data_seq					NVARCHAR(MAX);
+    DECLARE @v_department_id			NVARCHAR(MAX);
+	DECLARE @v_department_edit_flag		NVARCHAR(MAX);
+	DECLARE @v_department_name			NVARCHAR(MAX);
+    DECLARE @v_dept_id					NVARCHAR(MAX);
+    DECLARE @v_cust_report				NVARCHAR(MAX);
+
+    DECLARE @v_end_cust_report			NVARCHAR(MAX);
+    DECLARE @v_soldto_code				NVARCHAR(MAX);
+	DECLARE @v_soldto_cust_report		NVARCHAR(MAX);
+    DECLARE @v_product_group			NVARCHAR(MAX);
+    DECLARE @v_item_id					NVARCHAR(MAX);
+    DECLARE @v_product_details			NVARCHAR(MAX);
+	DECLARE @v_currency					NVARCHAR(MAX);
+    DECLARE @v_company_id				NVARCHAR(MAX);
+    DECLARE @v_biz_type					NVARCHAR(MAX);
+    DECLARE @v_application_gr			NVARCHAR(MAX);
+
+    DECLARE @v_application				NVARCHAR(MAX);
+    DECLARE @v_country_code				NVARCHAR(MAX);
+	DECLARE @v_project_code				NVARCHAR(MAX);
+	DECLARE @v_scm_site_id				NVARCHAR(MAX);
+	DECLARE @v_fcst_type				NVARCHAR(MAX);
+	DECLARE @v_item_use					NVARCHAR(MAX);
+	DECLARE @v_cell_model_info			NVARCHAR(MAX); --[C20210125-000207] 40사업부 CELL_MODEL_INFO 컬럼 추가
+	DECLARE @v_cell_model				NVARCHAR(MAX); --[C20211112-000213]
+	DECLARE @v_measure					NVARCHAR(MAX);
+    DECLARE @v_yyyymmdd					NVARCHAR(MAX);
+
+    DECLARE @v_qty						NVARCHAR(MAX);
+    DECLARE @v_created_by				NVARCHAR(MAX);
+	
+	--[E20260107-001542]_저장하는 방식을 변경하므로 추가 변수 선언 (START)
+	DECLARE @v_soldto_country			NVARCHAR(MAX);
+	DECLARE @v_shipto_country			NVARCHAR(MAX);		
+	DECLARE @v_end_customer				NVARCHAR(MAX);	
+	--[E20260107-001542]_저장하는 방식을 변경하므로 추가 변수 선언 (END)
+
+	DECLARE @v_delimiter				NVARCHAR(1)
+	SET		@v_delimiter = '^'			-- 데이터 구분자
+	DECLARE @max_loop_cnt				INTEGER = 0; 
+	DECLARE @mst_loop_cnt				INTEGER = 0;
+	DECLARE @v_max_seq					INTEGER = 0;	-- Insert 시에 사용, 본테이블의 Max DATA_SEQ
+	DECLARE @v_cutoff_yyyymmdd			NVARCHAR(8)
+	DECLARE @V_CUTOFF_TYPE				NVARCHAR(20)
+	DECLARE @I							INT
+	DECLARE @CNT						INT
+	DECLARE @V_MONTH					CHAR(6)
+	--------------------------------------------------------------------------------------------------------------------------
+	-- LOG 용 변수 설정
+	--------------------------------------------------------------------------------------------------------------------------
+    DECLARE @v_program_name				NVARCHAR(150) = 'DMF0049_SAVE_SALES_ETC_REPORT_C'; --[C20200909-000203] LOG 표준화 적용
+    DECLARE @v_log_type					NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count				INTEGER = 0;
+    DECLARE @v_log_message				NVARCHAR(1000);
+    DECLARE @v_log_description			NVARCHAR(500);
+    DECLARE @d_event_date				DATETIME;
+    DECLARE @n_delete_count				INTEGER = 0;
+    DECLARE @n_insert_count				INTEGER = 0;
+    DECLARE @n_input_count				INTEGER = 0;
+    DECLARE @n_logo_count				INTEGER = 0;
+	
+	--[C20210125-000207] 임시테이블 삭제
+	IF OBJECT_ID (N'tempdb..#results_MST', N'U') IS NOT NULL 
+		DROP TABLE #results_MST;
+	IF OBJECT_ID (N'tempdb..#results_MST_price', N'U') IS NOT NULL 
+		DROP TABLE #results_MST_price;
+		
+PRINT @v_program_name + ' / 01 / ' + CONVERT(VARCHAR(30), GETDATE(), 121);
+
+	DECLARE @IDX_CREATE INT;
+	SET @IDX_CREATE  = PATINDEX('%^%', @P_created_by);
+	SELECT @v_created_by = CASE WHEN @IDX_CREATE  > 1 THEN LEFT(@P_created_by, PATINDEX('%^%', @P_created_by)-1) ELSE @P_created_by END;
+	
+	--------------------------------------------------------------------------------------------------------------------------
+	-- #results_MST TEMP TABLE
+	--------------------------------------------------------------------------------------------------------------------------
+	CREATE TABLE #results_MST  
+	( ACTIVE_FLAG		    NVARCHAR(MAX)
+	, RESULT_MONTH			NVARCHAR(MAX)
+	, DIVISION_ID			NVARCHAR(MAX)
+	, VERSION_NO			NVARCHAR(MAX)
+	, DATA_SEQ				NVARCHAR(MAX)
+	, DEPARTMENT_ID			NVARCHAR(MAX)
+	, DEPARTMENT_EDIT_FLAG	NVARCHAR(MAX)
+	, T_DEPARTMENT_NAME		NVARCHAR(MAX)
+	, DEPT_ID				NVARCHAR(MAX)
+	, CUST_REPORT			NVARCHAR(MAX)
+
+	, END_CUST_REPORT		NVARCHAR(MAX)
+	, SOLDTO_CODE			NVARCHAR(MAX)
+	, SOLDTO_CUST_REPORT	NVARCHAR(MAX)
+	, PRODUCT_GROUP			NVARCHAR(MAX)
+	, ITEM_ID				NVARCHAR(MAX)
+	, PRODUCT_DETAILS		NVARCHAR(MAX)
+	, CURRENCY				NVARCHAR(MAX)
+	, COMPANY_ID			NVARCHAR(MAX)
+	, BIZ_TYPE				NVARCHAR(MAX)
+	, APPLICATION_GR		NVARCHAR(MAX)
+
+	, APPLICATION			NVARCHAR(MAX)
+	, COUNTRY_CODE			NVARCHAR(MAX)
+	, PROJECT_CODE			NVARCHAR(MAX)
+	, SCM_SITE_ID			NVARCHAR(MAX)
+	, FCST_TYPE				NVARCHAR(MAX)
+	, ITEM_USE				NVARCHAR(MAX)
+	, SOLDTO_COUNTRY		NVARCHAR(MAX)
+	, SHIPTO_COUNTRY		NVARCHAR(MAX)
+	, END_CUSTOMER			NVARCHAR(MAX)
+	, CELL_MODEL_INFO		NVARCHAR(MAX) --[C20210125-000207] 40사업부 CELL_MODEL_INFO 컬럼 추가
+
+	, CELL_MODEL			NVARCHAR(MAX) --[C20211112-000213]
+	, MEASURE				NVARCHAR(MAX)
+	, YYYYMMDD				NVARCHAR(MAX)
+	, QTY					NVARCHAR(MAX)
+	, CREATED_BY			NVARCHAR(MAX)								
+	-- 2021.08.28
+	, OWNER_NAME			NVARCHAR(MAX)
+	, CUST_GROUP_DTL		NVARCHAR(MAX)
+	, FORECAST_INFO_SPEC	NVARCHAR(MAX)
+	, NICK_NAME				NVARCHAR(MAX)
+	, FORECAST_INFO_CELL_PACK_COUNT	NVARCHAR(MAX)
+
+	, COMPANY_NAME			NVARCHAR(MAX)
+	, COUNTRY_KR_NAME		NVARCHAR(MAX)
+	, ROUTE					NVARCHAR(MAX)
+	, DEPARTMENT_NAME		NVARCHAR(MAX)
+	, DEPT_NAME				NVARCHAR(MAX))
+	
+PRINT @v_program_name + ' / 02 / ' + CONVERT(VARCHAR(30), GETDATE(), 121);
+	-----------------------------------------------------------------------------------------------------------------------
+	-- 시작 LOG  (START)
+	-----------------------------------------------------------------------------------------------------------------------
+	SET @v_log_type = 'START';
+	SET @v_log_message = '########## Start of procedure @@@##########';
+	SET @v_log_description = '';
+	SET @d_event_date = SYSDATETIME();
+	EXEC PR_DM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date, @v_created_by;
+	SET @v_log_message = NULL      /*-- <- 변수 재사용을 위하여 초기화해야함 --*/ 
+	-----------------------------------------------------------------------------------------------------------------------
+	-- 시작 LOG  (END)
+	-----------------------------------------------------------------------------------------------------------------------
+	
+	-----------------------------------------------------------------------------------------------------------------------
+	-- 트랜잭션 (START)
+	-----------------------------------------------------------------------------------------------------------------------
+	BEGIN TRANSACTION DM_PLN_SALES_ETC_REPORT_C;
+	BEGIN TRY
+	
+PRINT @v_program_name + ' / 03 / ' + CONVERT(VARCHAR(30), GETDATE(), 121);
+		--[E20260107-001542]_해당 방식으로 저장하는 경우 속도가 너무 오래걸려서 방식을 변경한다. 하여 소스는 주석처리 (START)
+		/*
+		-----------------------------------------------------------------------------------------------------------------------
+		--첫 테이블은 공백이 없는 필수값으로 처리한다.	
+		--SPLIT 함수는 여러 개가 있어서 처음 사용시에는 마지막값, 공백처리 등의 특성을 확인한 후에 사용한다.
+		-----------------------------------------------------------------------------------------------------------------------
+		INSERT INTO #results_MST 
+		( ACTIVE_FLAG
+		, RESULT_MONTH
+		, DIVISION_ID
+		, VERSION_NO
+		, DATA_SEQ
+		, DEPARTMENT_ID
+		, DEPARTMENT_EDIT_FLAG
+		, T_DEPARTMENT_NAME
+		, DEPT_ID
+		, CUST_REPORT
+		, END_CUST_REPORT
+		, SOLDTO_CODE
+		, SOLDTO_CUST_REPORT
+		, PRODUCT_GROUP
+		, ITEM_ID
+		, PRODUCT_DETAILS
+		, CURRENCY
+		, COMPANY_ID
+		, BIZ_TYPE
+		, APPLICATION_GR
+		, APPLICATION
+		, COUNTRY_CODE
+		, PROJECT_CODE
+		, SCM_SITE_ID
+		, CELL_MODEL_INFO --[C20210125-000207] 40사업부 CELL_MODEL_INFO 컬럼 추가
+		, CELL_MODEL
+		, FCST_TYPE
+		, MEASURE
+		, YYYYMMDD
+		, QTY
+		, CREATED_BY
+		, ITEM_USE
+		, SOLDTO_COUNTRY
+		, SHIPTO_COUNTRY
+		, END_CUSTOMER )		
+		--------------------------------------------------------------------------------------------------
+		-- [E20250522-001188]_해당 화면에서도 TRIM처리가 전혀 안되어 있어서 TRIM 처리 (START)	
+		-- 나머지는 가운데에 공백이 존재할 수 있으므로, RTRIM, LTRIM 처리만 진행하고
+		-- ITEM의 경우 중간의 공백이 없으므로 RTRM, LTRM으로 지워지지 않는 건들이 있고, 특수 문자가 안지워지는 건도 있어서 어떻게든 지우겠다는 의지
+		SELECT RTRIM(LTRIM(B1.TOKEN)) AS ACTIVE_FLAG
+			 , RTRIM(LTRIM(B2.TOKEN)) AS RESULT_MONTH
+			 , RTRIM(LTRIM(B3.TOKEN)) AS DIVISION_ID
+			 , RTRIM(LTRIM(B4.TOKEN)) AS VERSION_NO
+			 , RTRIM(LTRIM(B5.TOKEN)) AS DATA_SEQ
+			 , RTRIM(LTRIM(B6.TOKEN)) AS DEPARTMENT_ID
+			 , RTRIM(LTRIM(B33.TOKEN)) AS DEPARTMENT_EDIT_FLAG
+			 , RTRIM(LTRIM(B34.TOKEN)) AS T_DEPARTMENT_NAME
+			 , RTRIM(LTRIM(B7.TOKEN)) AS DEPT_ID
+			 , RTRIM(LTRIM(B8.TOKEN)) AS CUST_REPORT			
+			 , RTRIM(LTRIM(B9.TOKEN)) AS END_CUST_REPORT
+			 , RTRIM(LTRIM(B10.TOKEN)) AS SOLDTO_CODE
+			 , RTRIM(LTRIM(B11.TOKEN)) AS SOLDTO_CUST_REPORT
+			 , RTRIM(LTRIM(B12.TOKEN)) AS PRODUCT_GROUP
+			 --1).CHAR(13): Carriage return / 2).CHAR(10): Line feed / 3).CHAR(9): TAB / 4).' ' 공백 '' 처리
+			 , REPLACE(REPLACE(REPLACE(REPLACE(RTRIM(LTRIM(B13.TOKEN)),CHAR(13),''),CHAR(10),''),CHAR(9),''), ' ', '') AS ITEM_ID
+			 , RTRIM(LTRIM(B14.TOKEN)) AS PRODUCT_DETAILS
+			 , RTRIM(LTRIM(B15.TOKEN)) AS CURRENCY
+			 , RTRIM(LTRIM(B16.TOKEN)) AS COMPANY_ID
+			 , RTRIM(LTRIM(B17.TOKEN)) AS BIZ_TYPE
+			 , RTRIM(LTRIM(B18.TOKEN)) AS APPLICATION_GR
+			 , RTRIM(LTRIM(B19.TOKEN)) AS APPLICATION
+			 , RTRIM(LTRIM(B20.TOKEN)) AS COUNTRY_CODE
+			 , RTRIM(LTRIM(B21.TOKEN)) AS PROJECT_CODE
+			 , RTRIM(LTRIM(B22.TOKEN)) AS SCM_SITE_ID
+			 , RTRIM(LTRIM(B32.TOKEN)) AS CELL_MODEL_INFO
+			 , RTRIM(LTRIM(B35.TOKEN)) AS CELL_MODEL
+			 , RTRIM(LTRIM(B23.TOKEN)) AS FCST_TYPE
+			 , RTRIM(LTRIM(B24.TOKEN)) AS MEASURE
+			 , RTRIM(LTRIM(B25.TOKEN)) AS YYYYMMDD
+			 , RTRIM(LTRIM(B26.TOKEN)) AS QTY
+			 , RTRIM(LTRIM(B27.TOKEN)) AS CREATED_BY
+			 , RTRIM(LTRIM(B28.TOKEN)) AS ITEM_USE
+			 , RTRIM(LTRIM(B29.TOKEN)) AS SOLDTO_COUNTRY
+			 , RTRIM(LTRIM(B30.TOKEN)) AS SHIPTO_COUNTRY
+			 , RTRIM(LTRIM(B31.TOKEN)) AS END_CUSTOMER
+		-- [E20250522-001188]_해당 화면에서도 TRIM처리가 전혀 안되어 있어서 TRIM 처리 (END)	
+		--------------------------------------------------------------------------------------------------
+		FROM DBO.UF_FX_String_Split(@P_ACTIVE_FLAG, '^') B1
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_result_month			, '^') B2  ON B1.NR = B2.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_division_id			, '^') B3  ON B1.NR = B3.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_version_no			, '^') B4  ON B1.NR = B4.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_data_seq				, '^') B5  ON B1.NR = B5.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_department_id			, '^') B6  ON B1.NR = B6.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_dept_id				, '^') B7  ON B1.NR = B7.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_cust_report			, '^') B8  ON B1.NR = B8.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_end_cust_report		, '^') B9  ON B1.NR = B9.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_soldto_code			, '^') B10 ON B1.NR = B10.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_soldto_cust_report	, '^') B11 ON B1.NR = B11.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_product_group			, '^') B12 ON B1.NR = B12.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_item_id				, '^') B13 ON B1.NR = B13.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_product_details		, '^') B14 ON B1.NR = B14.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_currency				, '^') B15 ON B1.NR = B15.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_company_id			, '^') B16 ON B1.NR = B16.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_biz_type				, '^') B17 ON B1.NR = B17.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_application_gr		, '^') B18 ON B1.NR = B18.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_application			, '^') B19 ON B1.NR = B19.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_country_code			, '^') B20 ON B1.NR = B20.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_project_code			, '^') B21 ON B1.NR = B21.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_scm_site_id			, '^') B22 ON B1.NR = B22.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_fcst_type				, '^') B23 ON B1.NR = B23.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_measure				, '^') B24 ON B1.NR = B24.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_yyyymmdd				, '^') B25 ON B1.NR = B25.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_qty					, '^') B26 ON B1.NR = B26.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_created_by			, '^') B27 ON B1.NR = B27.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_ITEM_USE				, '^') B28 ON B1.NR = B28.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_SOLDTO_COUNTRY		, '^') B29 ON B1.NR = B29.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_SHIPTO_COUNTRY		, '^') B30 ON B1.NR = B30.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_END_CUSTOMER			, '^') B31 ON B1.NR = B31.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_cell_model_info		, '^') B32 ON B1.NR = B32.NR  --[C20210125-000207] 40사업부 CELL_MODEL_INFO 컬럼 추가
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_department_edit_flag	, '^') B33 ON B1.NR = B33.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_department_name		, '^') B34 ON B1.NR = B34.NR
+		LEFT OUTER JOIN DBO.UF_FX_String_Split(@p_cell_model			, '^') B35 ON B1.NR = B35.NR  --[C20211112-000213]
+		*/
+		--[E20260107-001542]_해당 방식으로 저장하는 경우 속도가 너무 오래걸려서 방식을 변경한다. 하여 소스는 주석처리 (END)
+		SET	@v_active_flag				= NULL;
+		SET @v_result_month				= NULL;
+		SET @v_division_id				= NULL;
+		SET @v_version_no				= NULL;
+		SET @v_data_seq					= NULL;
+		SET @v_department_id			= NULL;
+		SET @v_dept_id					= NULL;
+		SET @v_cust_report				= NULL;
+		SET @v_end_cust_report			= NULL;
+		SET @v_soldto_code				= NULL;
+		
+		SET @v_soldto_cust_report		= NULL;
+		SET @v_product_group			= NULL;
+		SET @v_item_id					= NULL;
+		SET @v_product_details			= NULL;
+		SET @v_currency					= NULL;
+		SET @v_company_id				= NULL;
+		SET @v_biz_type					= NULL;
+		SET @v_application_gr			= NULL;
+		SET @v_application				= NULL;
+		SET @v_country_code				= NULL;
+		
+		SET @v_project_code				= NULL;
+		SET @v_scm_site_id				= NULL;
+		SET @v_fcst_type				= NULL;
+		SET @v_measure					= NULL;
+		SET @v_yyyymmdd					= NULL;
+		SET @v_qty						= NULL;
+		SET @v_created_by				= NULL;
+		SET @v_item_use					= NULL;
+		SET @v_soldto_country			= NULL;
+		SET @v_shipto_country			= NULL;
+		
+		SET @v_end_customer				= NULL;
+		SET @v_cell_model_info			= NULL;
+		SET @v_department_edit_flag		= NULL;
+		SET @v_department_name			= NULL;
+		SET @v_cell_model				= NULL;
+
+		SET @p_active_flag			= RTRIM(@p_active_flag			) + '^';
+		SET @p_result_month			= RTRIM(@p_result_month			) + '^';
+		SET @p_division_id			= RTRIM(@p_division_id			) + '^';
+		SET @p_version_no			= RTRIM(@p_version_no			) + '^';
+		SET @p_data_seq				= RTRIM(@p_data_seq				) + '^';
+		SET @p_department_id		= RTRIM(@p_department_id		) + '^';
+		SET @p_dept_id				= RTRIM(@p_dept_id				) + '^';
+		SET @p_cust_report			= RTRIM(@p_cust_report			) + '^';
+		SET @p_end_cust_report		= RTRIM(@p_end_cust_report		) + '^';
+		SET @p_soldto_code			= RTRIM(@p_soldto_code			) + '^';
+
+		SET @p_soldto_cust_report	= RTRIM(@p_soldto_cust_report	) + '^';
+		SET @p_product_group		= RTRIM(@p_product_group		) + '^';
+		SET @p_item_id				= RTRIM(@p_item_id				) + '^';
+		SET @p_product_details		= RTRIM(@p_product_details		) + '^';
+		SET @p_currency				= RTRIM(@p_currency				) + '^';
+		SET @p_company_id			= RTRIM(@p_company_id			) + '^';
+		SET @p_biz_type				= RTRIM(@p_biz_type				) + '^';
+		SET @p_application_gr		= RTRIM(@p_application_gr		) + '^';
+		SET @p_application			= RTRIM(@p_application			) + '^';
+		SET @p_country_code			= RTRIM(@p_country_code			) + '^';
+		
+		SET @p_project_code			= RTRIM(@p_project_code			) + '^';
+		SET @p_scm_site_id			= RTRIM(@p_scm_site_id			) + '^';
+		SET @p_fcst_type			= RTRIM(@p_fcst_type			) + '^';
+		SET @p_measure				= RTRIM(@p_measure				) + '^';
+		SET @p_yyyymmdd				= RTRIM(@p_yyyymmdd				) + '^';
+		SET @p_qty					= RTRIM(@p_qty					) + '^';
+		SET @p_created_by			= RTRIM(@p_created_by			) + '^';
+		SET @p_item_use				= RTRIM(@p_item_use				) + '^';
+		SET @p_soldto_country		= RTRIM(@p_soldto_country		) + '^';
+		SET @p_shipto_country		= RTRIM(@p_shipto_country		) + '^';
+		
+		SET @p_end_customer			= RTRIM(@p_end_customer			) + '^';
+		SET @p_cell_model_info		= RTRIM(@p_cell_model_info		) + '^';
+		SET @p_department_edit_flag = RTRIM(@p_department_edit_flag	) + '^';
+		SET @p_department_name		= RTRIM(@p_department_name		) + '^';
+		SET @p_cell_model			= RTRIM(@p_cell_model			) + '^';
+		
+		DECLARE @index_active_flag			INT
+		DECLARE @index_result_month			INT
+		DECLARE @index_division_id			INT
+		DECLARE @index_version_no			INT
+		DECLARE @index_data_seq				INT
+		DECLARE @index_department_id		INT
+		DECLARE @index_dept_id				INT
+		DECLARE @index_cust_report			INT
+		DECLARE @index_end_cust_report		INT
+		DECLARE @index_soldto_code			INT
+
+		DECLARE @index_soldto_cust_report	INT
+		DECLARE @index_product_group		INT
+		DECLARE @index_item_id				INT
+		DECLARE @index_product_details		INT
+		DECLARE @index_currency				INT
+		DECLARE @index_company_id			INT
+		DECLARE @index_biz_type				INT	 
+		DECLARE @index_application_gr		INT	 
+		DECLARE @index_application			INT	 
+		DECLARE @index_country_code			INT	 
+		
+		DECLARE @index_project_code			INT
+		DECLARE @index_scm_site_id			INT
+		DECLARE @index_fcst_type			INT
+		DECLARE @index_measure				INT
+		DECLARE @index_yyyymmdd				INT
+		DECLARE @index_qty					INT
+		DECLARE @index_created_by			INT	 
+		DECLARE @index_item_use				INT	 
+		DECLARE @index_soldto_country		INT	 
+		DECLARE @index_shipto_country		INT	
+		
+		DECLARE @index_end_customer			INT
+		DECLARE @index_cell_model_info		INT
+		DECLARE @index_department_edit_flag	INT
+		DECLARE @index_department_name		INT
+		DECLARE @index_cell_model			INT
+		
+		DECLARE @i_count INT;
+		SET		@i_count = 0
+		DECLARE @idx INT;
+		SET		@idx = 1
+		
+		--총 COUNT를 구한다. 
+		--하나라도 들어오면 수치가 1이 된다.
+		SET @i_count = LEN(@p_division_id) - LEN(REPLACE(@p_division_id, '^','')) 
+
+		IF @i_count > 0
+		BEGIN
+			WHILE @idx <= @i_count 
+			BEGIN
+				SET	@idx = @idx + 1		
+
+				SET @index_active_flag			= PATINDEX('%' + '^' + '%', @p_active_flag			)
+				SET @index_result_month			= PATINDEX('%' + '^' + '%', @p_result_month			)
+				SET @index_division_id			= PATINDEX('%' + '^' + '%', @p_division_id			)
+				SET @index_version_no			= PATINDEX('%' + '^' + '%', @p_version_no			)
+				SET @index_data_seq				= PATINDEX('%' + '^' + '%', @p_data_seq				)
+				SET @index_department_id		= PATINDEX('%' + '^' + '%', @p_department_id		)
+				SET @index_dept_id				= PATINDEX('%' + '^' + '%', @p_dept_id				)
+				SET @index_cust_report			= PATINDEX('%' + '^' + '%', @p_cust_report			)
+				SET @index_end_cust_report		= PATINDEX('%' + '^' + '%', @p_end_cust_report		)
+				SET @index_soldto_code			= PATINDEX('%' + '^' + '%', @p_soldto_code			)
+							   
+				SET @index_soldto_cust_report	= PATINDEX('%' + '^' + '%', @p_soldto_cust_report	)
+				SET @index_product_group		= PATINDEX('%' + '^' + '%', @p_product_group		)
+				SET @index_item_id				= PATINDEX('%' + '^' + '%', @p_item_id				)
+				SET @index_product_details		= PATINDEX('%' + '^' + '%', @p_product_details		)
+				SET @index_currency				= PATINDEX('%' + '^' + '%', @p_currency				)
+				SET @index_company_id			= PATINDEX('%' + '^' + '%', @p_company_id			)
+				SET @index_biz_type				= PATINDEX('%' + '^' + '%', @p_biz_type				)
+				SET @index_application_gr		= PATINDEX('%' + '^' + '%', @p_application_gr		)
+				SET @index_application			= PATINDEX('%' + '^' + '%', @p_application			)
+				SET @index_country_code			= PATINDEX('%' + '^' + '%', @p_country_code			)
+
+				SET @index_project_code			= PATINDEX('%' + '^' + '%', @p_project_code			)
+				SET @index_scm_site_id			= PATINDEX('%' + '^' + '%', @p_scm_site_id			)
+				SET @index_fcst_type			= PATINDEX('%' + '^' + '%', @p_fcst_type			)
+				SET @index_measure				= PATINDEX('%' + '^' + '%', @p_measure				)
+				SET @index_yyyymmdd				= PATINDEX('%' + '^' + '%', @p_yyyymmdd				)
+				SET @index_qty					= PATINDEX('%' + '^' + '%', @p_qty					)		
+				SET @index_created_by			= PATINDEX('%' + '^' + '%', @p_created_by			)
+				SET @index_item_use				= PATINDEX('%' + '^' + '%', @p_item_use				)
+				SET @index_soldto_country		= PATINDEX('%' + '^' + '%', @p_soldto_country		)
+				SET @index_shipto_country		= PATINDEX('%' + '^' + '%', @p_shipto_country		)		
+								
+				SET @index_end_customer			= PATINDEX('%' + '^' + '%', @p_end_customer			)
+				SET @index_cell_model_info		= PATINDEX('%' + '^' + '%', @p_cell_model_info		)
+				SET @index_department_edit_flag	= PATINDEX('%' + '^' + '%', @p_department_edit_flag	)
+				SET @index_department_name		= PATINDEX('%' + '^' + '%', @p_department_name		)
+				SET @index_cell_model			= PATINDEX('%' + '^' + '%', @p_cell_model			)	
+
+				SET @v_active_flag				= SUBSTRING(@p_active_flag			, 0, @index_active_flag			)
+				SET @v_result_month				= SUBSTRING(@p_result_month			, 0, @index_result_month		)
+				SET @v_division_id				= SUBSTRING(@p_division_id			, 0, @index_division_id			)
+				SET @v_version_no				= SUBSTRING(@p_version_no			, 0, @index_version_no			)
+				SET @v_data_seq					= SUBSTRING(@p_data_seq				, 0, @index_data_seq			)
+				SET @v_department_id			= SUBSTRING(@p_department_id		, 0, @index_department_id		)
+				SET @v_dept_id					= SUBSTRING(@p_dept_id				, 0, @index_dept_id				)
+				SET @v_cust_report				= SUBSTRING(@p_cust_report			, 0, @index_cust_report			)
+				SET @v_end_cust_report			= SUBSTRING(@p_end_cust_report		, 0, @index_end_cust_report		)
+				SET @v_soldto_code				= SUBSTRING(@p_soldto_code			, 0, @index_soldto_code			)	
+
+				SET @v_soldto_cust_report		= SUBSTRING(@p_soldto_cust_report	, 0, @index_soldto_cust_report	)
+				SET @v_product_group			= SUBSTRING(@p_product_group		, 0, @index_product_group		)
+				SET @v_item_id					= SUBSTRING(@p_item_id				, 0, @index_item_id				)
+				SET @v_product_details			= SUBSTRING(@p_product_details		, 0, @index_product_details		)
+				SET @v_currency					= SUBSTRING(@p_currency				, 0, @index_currency			)
+				SET @v_company_id				= SUBSTRING(@p_company_id			, 0, @index_company_id			)
+				SET @v_biz_type					= SUBSTRING(@p_biz_type				, 0, @index_biz_type			)
+				SET @v_application_gr			= SUBSTRING(@p_application_gr		, 0, @index_application_gr		)
+				SET @v_application				= SUBSTRING(@p_application			, 0, @index_application			)
+				SET @v_country_code				= SUBSTRING(@p_country_code			, 0, @index_country_code		)	
+				
+				SET @v_project_code				= SUBSTRING(@p_project_code			, 0, @index_project_code		)
+				SET @v_scm_site_id				= SUBSTRING(@p_scm_site_id			, 0, @index_scm_site_id			)
+				SET @v_fcst_type				= SUBSTRING(@p_fcst_type			, 0, @index_fcst_type			)
+				SET @v_measure					= SUBSTRING(@p_measure				, 0, @index_measure				)
+				SET @v_yyyymmdd					= SUBSTRING(@p_yyyymmdd				, 0, @index_yyyymmdd			)
+				SET @v_qty						= SUBSTRING(@p_qty					, 0, @index_qty					)
+				SET @v_created_by				= SUBSTRING(@p_created_by			, 0, @index_created_by			)
+				SET @v_item_use					= SUBSTRING(@p_item_use				, 0, @index_item_use			)
+				SET @v_soldto_country			= SUBSTRING(@p_soldto_country		, 0, @index_soldto_country		)
+				SET @v_shipto_country			= SUBSTRING(@p_shipto_country		, 0, @index_shipto_country		)
+				
+				SET @v_end_customer				= SUBSTRING(@p_end_customer			, 0, @index_end_customer		)
+				SET @v_cell_model_info			= SUBSTRING(@p_cell_model_info		, 0, @index_cell_model_info		)
+				SET @v_department_edit_flag		= SUBSTRING(@p_department_edit_flag	, 0, @index_department_edit_flag)
+				SET @v_department_name			= SUBSTRING(@p_department_name		, 0, @index_department_name		)
+				SET @v_cell_model				= SUBSTRING(@p_cell_model			, 0, @index_cell_model			)	
+								
+				SET @p_active_flag			= SUBSTRING(@p_active_flag			, LEN(@v_active_flag				+ '^') + 1, LEN(@p_active_flag			))
+				SET @p_result_month			= SUBSTRING(@p_result_month			, LEN(@v_result_month				+ '^') + 1, LEN(@p_result_month			))
+				SET @p_division_id			= SUBSTRING(@p_division_id			, LEN(@v_division_id				+ '^') + 1, LEN(@p_division_id			))
+				SET @p_version_no			= SUBSTRING(@p_version_no			, LEN(@v_version_no					+ '^') + 1, LEN(@p_version_no			))
+				SET @p_data_seq				= SUBSTRING(@p_data_seq				, LEN(@v_data_seq					+ '^') + 1, LEN(@p_data_seq				))
+				SET @p_department_id		= SUBSTRING(@p_department_id		, LEN(@v_department_id				+ '^') + 1, LEN(@p_department_id		))
+				SET @p_dept_id				= SUBSTRING(@p_dept_id				, LEN(@v_dept_id					+ '^') + 1, LEN(@p_dept_id				))
+				SET @p_cust_report			= SUBSTRING(@p_cust_report			, LEN(@v_cust_report				+ '^') + 1, LEN(@p_cust_report			))
+				SET @p_end_cust_report		= SUBSTRING(@p_end_cust_report		, LEN(@v_end_cust_report			+ '^') + 1, LEN(@p_end_cust_report		))
+				SET @p_soldto_code			= SUBSTRING(@p_soldto_code			, LEN(@v_soldto_code				+ '^') + 1, LEN(@p_soldto_code			))
+
+				SET @p_soldto_cust_report	= SUBSTRING(@p_soldto_cust_report	, LEN(@v_soldto_cust_report			+ '^') + 1, LEN(@p_soldto_cust_report	))
+				SET @p_product_group		= SUBSTRING(@p_product_group		, LEN(@v_product_group				+ '^') + 1, LEN(@p_product_group		))
+				SET @p_item_id				= SUBSTRING(@p_item_id				, LEN(@v_item_id					+ '^') + 1, LEN(@p_item_id				))
+				SET @p_product_details		= SUBSTRING(@p_product_details		, LEN(@v_product_details			+ '^') + 1, LEN(@p_product_details		))
+				SET @p_currency				= SUBSTRING(@p_currency				, LEN(@v_currency					+ '^') + 1, LEN(@p_currency				))
+				SET @p_company_id			= SUBSTRING(@p_company_id			, LEN(@v_company_id					+ '^') + 1, LEN(@p_company_id			))
+				SET @p_biz_type				= SUBSTRING(@p_biz_type				, LEN(@v_biz_type					+ '^') + 1, LEN(@p_biz_type				))
+				SET @p_application_gr		= SUBSTRING(@p_application_gr		, LEN(@v_application_gr				+ '^') + 1, LEN(@p_application_gr		))
+				SET @p_application			= SUBSTRING(@p_application			, LEN(@v_application				+ '^') + 1, LEN(@p_application			))
+				SET @p_country_code			= SUBSTRING(@p_country_code			, LEN(@v_country_code				+ '^') + 1, LEN(@p_country_code			))					
+
+				SET @p_project_code			= SUBSTRING(@p_project_code			, LEN(@v_project_code				+ '^') + 1, LEN(@p_project_code			))
+				SET @p_scm_site_id			= SUBSTRING(@p_scm_site_id			, LEN(@v_scm_site_id				+ '^') + 1, LEN(@p_scm_site_id			))
+				SET @p_fcst_type			= SUBSTRING(@p_fcst_type			, LEN(@v_fcst_type					+ '^') + 1, LEN(@p_fcst_type			))
+				SET @p_measure				= SUBSTRING(@p_measure				, LEN(@v_measure					+ '^') + 1, LEN(@p_measure				))
+				SET @p_yyyymmdd				= SUBSTRING(@p_yyyymmdd				, LEN(@v_yyyymmdd					+ '^') + 1, LEN(@p_yyyymmdd				))
+				SET @p_qty					= SUBSTRING(@p_qty					, LEN(@v_qty						+ '^') + 1, LEN(@p_qty					))
+				SET @p_created_by			= SUBSTRING(@p_created_by			, LEN(@v_created_by					+ '^') + 1, LEN(@p_created_by			))
+				SET @p_item_use				= SUBSTRING(@p_item_use				, LEN(@v_item_use					+ '^') + 1, LEN(@p_item_use				))
+				SET @p_soldto_country		= SUBSTRING(@p_soldto_country		, LEN(@v_soldto_country				+ '^') + 1, LEN(@p_soldto_country		))
+				SET @p_shipto_country		= SUBSTRING(@p_shipto_country		, LEN(@v_shipto_country				+ '^') + 1, LEN(@p_shipto_country		))					
+
+				SET @p_end_customer			= SUBSTRING(@p_end_customer			, LEN(@v_end_customer				+ '^') + 1, LEN(@p_end_customer			))
+				SET @p_cell_model_info		= SUBSTRING(@p_cell_model_info		, LEN(@v_cell_model_info			+ '^') + 1, LEN(@p_cell_model_info		))
+				SET @p_department_edit_flag	= SUBSTRING(@p_department_edit_flag	, LEN(@v_department_edit_flag		+ '^') + 1, LEN(@p_department_edit_flag	))
+				SET @p_department_name		= SUBSTRING(@p_department_name		, LEN(@v_department_name			+ '^') + 1, LEN(@p_department_name		))
+				SET @p_cell_model			= SUBSTRING(@p_cell_model			, LEN(@v_cell_model					+ '^') + 1, LEN(@p_cell_model			))		
+				
+				SET @v_active_flag			= RTRIM(LTRIM(@v_active_flag			))			
+				SET @v_result_month			= RTRIM(LTRIM(@v_result_month			))		
+				SET @v_division_id			= RTRIM(LTRIM(@v_division_id			))		
+				SET @v_version_no			= RTRIM(LTRIM(@v_version_no				))		
+				SET @v_data_seq				= RTRIM(LTRIM(@v_data_seq				))		
+				SET @v_department_id		= RTRIM(LTRIM(@v_department_id			))		
+				SET @v_dept_id				= RTRIM(LTRIM(@v_dept_id				))		
+				SET @v_cust_report			= RTRIM(LTRIM(@v_cust_report			))		
+				SET @v_end_cust_report		= RTRIM(LTRIM(@v_end_cust_report		))		
+				SET @v_soldto_code			= RTRIM(LTRIM(@v_soldto_code			))						
+
+				SET @v_soldto_cust_report	= RTRIM(LTRIM(@v_soldto_cust_report		))			
+				SET @v_product_group		= RTRIM(LTRIM(@v_product_group			))		
+				SET @v_item_id				= REPLACE(REPLACE(REPLACE(REPLACE(RTRIM(LTRIM(@v_item_id)),CHAR(13),''),CHAR(10),''),CHAR(9),''), ' ', '')	
+				SET @v_product_details		= RTRIM(LTRIM(@v_product_details		))		
+				SET @v_currency				= RTRIM(LTRIM(@v_currency				))		
+				SET @v_company_id			= RTRIM(LTRIM(@v_company_id				))		
+				SET @v_biz_type				= RTRIM(LTRIM(@v_biz_type				))		
+				SET @v_application_gr		= RTRIM(LTRIM(@v_application_gr			))		
+				SET @v_application			= RTRIM(LTRIM(@v_application			))		
+				SET @v_country_code			= RTRIM(LTRIM(@v_country_code			))		
+				
+				SET @v_project_code			= RTRIM(LTRIM(@v_project_code			))			
+				SET @v_scm_site_id			= RTRIM(LTRIM(@v_scm_site_id			))		
+				SET @v_fcst_type			= RTRIM(LTRIM(@v_fcst_type				))		
+				SET @v_measure				= RTRIM(LTRIM(@v_measure				))		
+				SET @v_yyyymmdd				= RTRIM(LTRIM(@v_yyyymmdd				))		
+				SET @v_qty					= RTRIM(LTRIM(@v_qty					))		
+				SET @v_created_by			= RTRIM(LTRIM(@v_created_by				))		
+				SET @v_item_use				= RTRIM(LTRIM(@v_item_use				))		
+				SET @v_soldto_country		= RTRIM(LTRIM(@v_soldto_country			))		
+				SET @v_shipto_country		= RTRIM(LTRIM(@v_shipto_country			))	
+				
+				SET @v_end_customer			= RTRIM(LTRIM(@v_end_customer			))			
+				SET @v_cell_model_info		= RTRIM(LTRIM(@v_cell_model_info		))		
+				SET @v_department_edit_flag	= RTRIM(LTRIM(@v_department_edit_flag	))		
+				SET @v_department_name		= RTRIM(LTRIM(@v_department_name		))		
+				SET @v_cell_model			= RTRIM(LTRIM(@v_cell_model				))	
+
+				INSERT INTO #results_MST 
+				( ACTIVE_FLAG, RESULT_MONTH, DIVISION_ID, VERSION_NO, DATA_SEQ
+				, DEPARTMENT_ID, DEPARTMENT_EDIT_FLAG, T_DEPARTMENT_NAME, DEPT_ID, CUST_REPORT
+				, END_CUST_REPORT, SOLDTO_CODE, SOLDTO_CUST_REPORT, PRODUCT_GROUP, ITEM_ID
+				, PRODUCT_DETAILS, CURRENCY, COMPANY_ID, BIZ_TYPE, APPLICATION_GR
+				, APPLICATION, COUNTRY_CODE, PROJECT_CODE, SCM_SITE_ID, CELL_MODEL_INFO --[C20210125-000207] 40사업부 CELL_MODEL_INFO 컬럼 추가
+				, CELL_MODEL, FCST_TYPE, MEASURE, YYYYMMDD, QTY
+				, CREATED_BY, ITEM_USE, SOLDTO_COUNTRY, SHIPTO_COUNTRY, END_CUSTOMER )	
+				VALUES 
+				( @v_active_flag, @v_result_month, @v_division_id, @v_version_no, @v_data_seq
+				, @v_department_id, @v_department_edit_flag, @v_department_name, @v_dept_id, @v_cust_report
+				, @v_end_cust_report, @v_soldto_code, @v_soldto_cust_report, @v_product_group, @v_item_id
+				, @v_product_details, @v_currency, @v_company_id, @v_biz_type, @v_application_gr
+				, @v_application, @v_country_code, @v_project_code, @v_scm_site_id, @v_cell_model_info
+				, @v_cell_model, @v_fcst_type, @v_measure, @v_yyyymmdd, @v_qty
+				, @v_created_by, @v_item_use, @v_soldto_country, @v_shipto_country, @v_end_customer )
+		
+			END
+		END
+		--[E20260107-001542]_저장하는 방식을 변경하여 속도 개선 (END)
+
+PRINT @v_program_name + ' / 04 / ' + CONVERT(VARCHAR(30), GETDATE(), 121);
+		--=============================================================================================
+		--[E20260107-001542]_DM_COMPANY 룩업코드 로직 개선 (START)  
+		--=============================================================================================
+		IF EXISTS ( SELECT * FROM #results_MST R WHERE R.company_id IN ( SELECT OLD_VALUE1 FROM [dbo].[NERP_CONV_MASTER] WITH(NOLOCK) WHERE CODETYPE = 'COMPANY_ID' GROUP BY OLD_VALUE1))
+		BEGIN
+PRINT @v_program_name + ' / 05 / ' + CONVERT(VARCHAR(30), GETDATE(), 121);
+			SET @v_log_type			= 'INVALID';
+			SET @v_log_description	=  N'구코드 COMPANY_ID는 저장할 수 없습니다.';		
+			GOTO ERR_RTN
+		END			
+		--=============================================================================================
+		--[E20260107-001542]_DM_COMPANY 룩업코드 로직 개선 (END)  
+		--=============================================================================================
+		
+PRINT @v_program_name + ' / 06 / ' + CONVERT(VARCHAR(30), GETDATE(), 121);
+
+		--RAISERROR('123', 16, 1)
+		---------------------------------------------------------------------------------------------------------------------------------
+		-- 가공처리
+		---------------------------------------------------------------------------------------------------------------------------------
+		-- 수량
+		UPDATE #results_MST
+		SET QTY = 0
+		WHERE QTY = ''	
+	
+		--[C20210125-000207] 40사업부 RTF Measure 없으면 Row 삭제	
+		DELETE
+		FROM   #results_MST
+		WHERE  DIVISION_ID = '40'
+		AND    MEASURE = 'RTF_SYS_RP'
+		AND    ACTIVE_FLAG = 'I'
+		AND    QTY = '0'
+	
+		UPDATE #results_MST
+		SET    QTY = ROUND(CAST(QTY AS NUMERIC(30,3) ),3)
+		WHERE  DIVISION_ID = '40'
+		AND    MEASURE = 'RTF_SYS_RP'
+		
+PRINT 'DMF0049_SAVE_1--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+
+		--Start [C20210125-000207] 40사업부 Unit Price Measure 추가
+		SELECT ACTIVE_FLAG, RESULT_MONTH, DIVISION_ID, VERSION_NO, DATA_SEQ
+			 , DEPARTMENT_ID, DEPT_ID, CUST_REPORT, END_CUST_REPORT, SOLDTO_CODE
+			 , SOLDTO_CUST_REPORT, PRODUCT_GROUP, ITEM_ID, PRODUCT_DETAILS, CURRENCY
+			 , COMPANY_ID, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE
+			 , PROJECT_CODE, SCM_SITE_ID, FCST_TYPE, CELL_MODEL_INFO, CELL_MODEL
+			 , 'LOC' AS MEASURE, YYYYMMDD
+			 , SUM(CASE WHEN MEASURE = 'SalesAmt_LOC' THEN CAST(QTY AS NUMERIC(30,3)) ELSE 0.0 END) AS SalesAmt_LOC
+			 , SUM(CASE WHEN MEASURE = 'RTF_SYS_RP' THEN CAST(QTY AS NUMERIC(30,3)) ELSE 0.0 END) AS RTF_SYS_RP
+			 , MAX(CREATED_BY) AS CREATED_BY, ITEM_USE, SOLDTO_COUNTRY, SHIPTO_COUNTRY, END_CUSTOMER
+			 , DEPARTMENT_EDIT_FLAG, T_DEPARTMENT_NAME
+		INTO   #results_MST_price
+		FROM   #results_MST 
+		WHERE  MEASURE IN ('SalesAmt_LOC','RTF_SYS_RP')
+		--AND    ACTIVE_FLAG = 'I'
+		AND    DIVISION_ID = '40'
+		GROUP BY ACTIVE_FLAG, RESULT_MONTH, DIVISION_ID, VERSION_NO, DATA_SEQ
+			 , DEPARTMENT_ID, DEPT_ID, CUST_REPORT, END_CUST_REPORT, SOLDTO_CODE	
+			 , SOLDTO_CUST_REPORT, PRODUCT_GROUP, ITEM_ID, PRODUCT_DETAILS, CURRENCY
+			 , COMPANY_ID, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE
+			 , PROJECT_CODE, SCM_SITE_ID, FCST_TYPE, CELL_MODEL_INFO, CELL_MODEL
+			 , YYYYMMDD, ITEM_USE, SOLDTO_COUNTRY, SHIPTO_COUNTRY, END_CUSTOMER
+			 , DEPARTMENT_EDIT_FLAG, T_DEPARTMENT_NAME 	
+			 
+PRINT 'DMF0049_SAVE_2--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+
+		INSERT INTO #results_MST 
+		( ACTIVE_FLAG, RESULT_MONTH, DIVISION_ID, VERSION_NO, DATA_SEQ
+		, DEPARTMENT_ID, DEPT_ID, CUST_REPORT, END_CUST_REPORT, SOLDTO_CODE
+		, SOLDTO_CUST_REPORT, PRODUCT_GROUP, ITEM_ID, PRODUCT_DETAILS, CURRENCY
+		, COMPANY_ID, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE
+		, PROJECT_CODE, SCM_SITE_ID, FCST_TYPE, CELL_MODEL_INFO, CELL_MODEL
+		, MEASURE, YYYYMMDD, QTY, CREATED_BY, ITEM_USE   
+		, SOLDTO_COUNTRY, SHIPTO_COUNTRY, END_CUSTOMER, DEPARTMENT_EDIT_FLAG, T_DEPARTMENT_NAME )
+		SELECT ACTIVE_FLAG, RESULT_MONTH, DIVISION_ID, VERSION_NO, DATA_SEQ
+			 , DEPARTMENT_ID, DEPT_ID, CUST_REPORT, END_CUST_REPORT, SOLDTO_CODE
+			 , SOLDTO_CUST_REPORT, PRODUCT_GROUP, ITEM_ID, PRODUCT_DETAILS, CURRENCY
+			 , COMPANY_ID, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE
+			 , PROJECT_CODE, SCM_SITE_ID, FCST_TYPE, CELL_MODEL_INFO, CELL_MODEL
+			 , MEASURE, YYYYMMDD, (CASE WHEN ISNULL(RTF_SYS_RP, 0) = 0 THEN 0 ELSE SalesAmt_LOC/RTF_SYS_RP END) AS QTY, CREATED_BY, ITEM_USE   
+			 , SOLDTO_COUNTRY, SHIPTO_COUNTRY, END_CUSTOMER, DEPARTMENT_EDIT_FLAG, T_DEPARTMENT_NAME 
+		FROM   #results_MST_price 
+		WHERE  ISNULL(RTF_SYS_RP, 0) != 0			
+		--End [C20210125-000207] 40사업부 Unit Price Measure 추가
+		
+PRINT 'DMF0049_SAVE_3--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+		-- yyyymm 값을 월별 첫 영업일(yyyymmdd)로 변환
+		UPDATE #results_MST
+		SET YYYYMMDD = ( SELECT MIN(BASIS_START_DATE) FROM SCM_SYS_CALENDAR_M WITH(NOLOCK)
+						 WHERE SUBSTRING(BASIS_YYYYMMDD,1,6) = SUBSTRING(YYYYMMDD,1,6)
+						 AND DAYOFWEEK IN ('MON','TUE','WED','THU','FRI'))
+
+		-----------------------------------------------------------------------------------------------------------------------
+		--#results_MST 테이블에 insert end
+		-----------------------------------------------------------------------------------------------------------------------
+		-- 폼에서 @P_result_month 는 실적을 편집할 때만 넘겨준다. 그 외에는 공백
+		SELECT TOP 1 @v_division_id = DIVISION_ID
+				   , @v_version_no = VERSION_NO
+				   , @V_result_month = RESULT_MONTH
+		FROM #results_MST
+			
+		---------------------------------------------------------------------------------------------------------------------------------
+		--[E20250418-001567]_저장 시 VALIDATION을 추가한다.START
+		--DM_PLN_SALES_ETC_REPORT_C는 DM_PLN_SALES_PLAN_REPORT_C 테이블과 합쳐져야 하기때문에, DM_PLN_SALES_PLAN_REPORT_C 테이블 기준으로
+		--데이터 VALIDATION을 검증한다.
+		---------------------------------------------------------------------------------------------------------------------------------
+		DECLARE @s_duplicate_validation  NVARCHAR(1000) = null;
+
+		SET @s_duplicate_validation = (	SELECT TOP 1 'VERSION_NO_ : '+ ISNULL(T.VERSION_NO ,'') 
+										+ CHAR(10) + 'DIVISION_ID_ : '+ ISNULL(T.DIVISION_ID ,'') 
+										+ CHAR(10) + 'DEPARTMENT_ID_ : '+ ISNULL(T.DEPARTMENT_ID ,'') 
+										+ CHAR(10) + 'DEPT_ID_ : '+ ISNULL(T.DEPT_ID ,'') 
+										+ CHAR(10) + 'ITEM_ID_ : '+ ISNULL(T.ITEM_ID ,'') 
+										+ CHAR(10) + 'MEASURE_ : '+ ISNULL(T.MEASURE ,'') 
+										+ CHAR(10) + 'YYYYMMDD_ : '+ ISNULL(T.YYYYMMDD ,'') 
+										+ CHAR(10) + 'CURRENCY_ : '+ ISNULL(T.CURRENCY ,'') 
+										+ CHAR(10) + 'COMPANY_ID_ : '+ ISNULL(T.COMPANY_ID ,'') 
+										+ CHAR(10) + 'END_CUST_REPORT_ : '+ ISNULL(T.END_CUST_REPORT ,'') 
+										+ CHAR(10) + 'CUST_REPORT_ : '+ ISNULL(T.CUST_REPORT ,'') 
+										+ CHAR(10) + 'PRODUCT_GROUP_ : '+ ISNULL(T.PRODUCT_GROUP ,'') 
+										+ CHAR(10) + 'COUNTRY_KR_NAME_ : '+ ISNULL(T.COUNTRY_KR_NAME ,'') 											
+										+ CHAR(10) + CHAR(10)
+										FROM (	SELECT A.VERSION_NO, A.DIVISION_ID, A.DEPARTMENT_ID, A.DEPT_ID, A.ITEM_ID
+													 , A.MEASURE, A.YYYYMMDD, A.CURRENCY, A.COMPANY_ID, A.END_CUST_REPORT
+													 , A.CUST_REPORT, A.PRODUCT_GROUP, DBO.FN_GET_COUNTRY_KR_NAME(A.COUNTRY_CODE) AS COUNTRY_KR_NAME, COUNT(*) AS CNT
+												FROM DM_PLN_SALES_ETC_REPORT_C A WITH(NOLOCK) 
+												INNER JOIN #results_MST B
+														ON A.VERSION_NO = B.VERSION_NO
+													   AND A.DIVISION_ID = B.DIVISION_ID
+													   AND A.DEPARTMENT_ID = B.DEPARTMENT_ID
+													   AND A.DEPT_ID = B.DEPT_ID
+													   AND A.ITEM_ID = B.ITEM_ID
+													   AND A.MEASURE = B.MEASURE
+													   AND A.YYYYMMDD = B.YYYYMMDD
+													   AND A.CURRENCY = B.CURRENCY
+													   AND A.COMPANY_ID = B.COMPANY_ID
+													   AND A.END_CUST_REPORT = B.END_CUST_REPORT		
+													   AND A.CUST_REPORT = B.CUST_REPORT	
+													   AND A.PRODUCT_GROUP = B.PRODUCT_GROUP	
+													   AND A.COUNTRY_CODE = B.COUNTRY_CODE
+												WHERE A.DIVISION_ID = @v_division_id
+												AND   A.VERSION_NO = @v_version_no
+												--AND   B.ACTIVE_FLAG = 'I' --20250722 원소스 주석처
+												AND   ((B.ACTIVE_FLAG != 'D') OR (ISNULL(CONVERT(NUMERIC(30, 10), B.QTY),0) > 0)) 
+												--20250722:I만 걸다보니, M인경우 다른 값을 수정하여, 문제가 발생하는 경우가 생김.												
+												GROUP BY A.VERSION_NO, A.DIVISION_ID, A.DEPARTMENT_ID, A.DEPT_ID, A.ITEM_ID
+													   , A.MEASURE, A.YYYYMMDD, A.CURRENCY, A.COMPANY_ID, A.END_CUST_REPORT
+													   , A.CUST_REPORT, A.PRODUCT_GROUP, DBO.FN_GET_COUNTRY_KR_NAME(A.COUNTRY_CODE)
+												HAVING  COUNT(*) > 1) T )
+		IF (@s_duplicate_validation IS NOT NULL)
+			BEGIN			
+PRINT 'DMF0049_SAVE_4--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+				SET @v_log_type = N'DUPICATION_INVALID'
+				GOTO ERR_RTN
+			END
+
+PRINT 'DMF0049_SAVE_5--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+		---------------------------------------------------------------------------------------------------------------------------------
+		--[E20250418-001567]_저장 시 VALIDATION을 추가한다.END
+		---------------------------------------------------------------------------------------------------------------------------------	
+
+		SELECT @v_cutoff_yyyymmdd = B.YYYYMMDD 
+			 , @V_CUTOFF_TYPE	  = A.VERSION_TYPE
+		FROM DM_MDF_VERSION A WITH(NOLOCK)
+		JOIN DM_MST_VERSION B WITH(NOLOCK) 
+		  ON  A.DIVISION_ID	= B.DIVISION_ID AND A.ORI_CUTOFF_VERSION_NO = B.VERSION_NO
+		WHERE A.VERSION_NO	= @v_version_no
+		AND   A.DIVISION_ID = @v_division_id
+
+		-- INPUT COUNT 확인
+		SET @n_input_count = ( SELECT count(ACTIVE_FLAG) FROM #results_MST)
+	
+		--------------------------------------------------------------------------------------------◇◇◇◇
+		--DM_PLN_SALES_ETC_REPORT_C 테이블 DELETE (START)
+		--------------------------------------------------------------------------------------------◇◇◇◇		
+		-- DELETE COUNT 확인
+		SET @n_delete_count = ( SELECT COUNT(DIVISION_ID) FROM DM_PLN_SALES_ETC_REPORT_C A WITH(NOLOCK)
+								WHERE ( SELECT count(1) 
+										FROM #results_MST M
+										WHERE M.ACTIVE_FLAG	= 'D' ) > 0)
+
+		DELETE A
+		FROM DM_PLN_SALES_ETC_REPORT_C A
+		JOIN #results_MST B 
+		  ON A.VERSION_NO	= B.VERSION_NO
+		 AND A.DIVISION_ID	= B.DIVISION_ID
+		 AND A.DATA_SEQ		= B.DATA_SEQ
+		 AND A.MEASURE		= B.MEASURE
+		 AND A.YYYYMMDD		= B.YYYYMMDD
+		WHERE B.ACTIVE_FLAG = 'D'
+
+		-- 아래서 다시 ACTIVE_FLAG 를 사용하지 않도록 지운다.
+		DELETE FROM #results_MST WHERE ACTIVE_FLAG = 'D'
+		-----------------------------------------------------------------------------------------------------------------------
+		-- DM_PLN_SALES_ETC_REPORT_C 테이블 DELETE (END)
+		-----------------------------------------------------------------------------------------------------------------------
+		-----------------------------------------------------------------------------------------------------------------------
+		-- DM_PLN_SALES_ETC_REPORT_C 테이블 UPDATE, INSERT (START)
+		-----------------------------------------------------------------------------------------------------------------------
+		-----------------------------------------------------------------------------------------------------------------------
+		--존재하는 건은 인서트하고, 신규건은 DATA_SEQ 를 새로 따서 UPDATE 한다.
+		-----------------------------------------------------------------------------------------------------------------------
+
+		-- 수량 외의 값들은 업데이트를 안하기때문에 수량만 업데이트 한다.
+		UPDATE A
+		SET QTY = B.QTY
+		FROM DM_PLN_SALES_ETC_REPORT_C A
+		JOIN #results_MST B 
+			ON A.VERSION_NO	= B.VERSION_NO
+		AND A.DIVISION_ID	= B.DIVISION_ID
+		AND A.DATA_SEQ		= B.DATA_SEQ
+		AND A.MEASURE		= B.MEASURE
+		AND A.YYYYMMDD		= B.YYYYMMDD
+
+PRINT 'DMF0049_SAVE_6--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+
+		-- 2021.8.28 추가된 컬럼 적용		-------------------------------------------------
+		SELECT DISTINCT ITEM_ID, ITEM_CLASS_NAME
+						, CASE WHEN ISNUMERIC(ENERGE) > 0 THEN CAST(ENERGE AS NUMERIC(30,10)) ELSE 0 END AS ENERGY
+						, CASE WHEN ISNUMERIC(CELL_QUANTITY) > 0 THEN CAST(CELL_QUANTITY AS NUMERIC(30,10)) ELSE 0 END AS CELL_QUANTITY
+						, FORECAST_INFO_BIZ_TYPE	-- 소형 BIZ_TYPE ( 부자재 매출 제거에 사용 )
+						, FORECAST_INFO_SPEC, NICK_NAME, FORECAST_INFO_CELL_MODEL, FORECAST_INFO_CELL_PACK_COUNT
+						--ITEM_ID,ITEM_NAME,ITEM_CLASS,ITEM_CLASS_NAME,NICK_NAME,ITEM_TYPE,MATERIAL_CLASS_NAME,ITEM_UOM,SPEC,MDM_PROJECT_NAME,MIN_CAPACITY
+						--,FORECAST_INFO_PRODUCT_GROUP,FORECAST_INFO_CELL_MODEL,FORECAST_INFO_CELL_PACK_COUNT,FORECAST_INFO_SPEC,FORECAST_INFOR_VERSION,ACTIVE_FLAG,CELL_TYPE
+		INTO #TEMP_DM_MST_ITEM_SINGLE_V
+		FROM ( SELECT ITEM_ID, ITEM_CLASS_NAME, ENERGE, CELL_QUANTITY, FORECAST_INFO_BIZ_TYPE
+					, FORECAST_INFO_SPEC, NICK_NAME, FORECAST_INFO_CELL_MODEL, FORECAST_INFO_CELL_PACK_COUNT
+					--, ITEM_NAME,ITEM_CLASS,ITEM_CLASS_NAME,ITEM_TYPE,MATERIAL_CLASS_NAME,ITEM_UOM,SPEC,MDM_PROJECT_NAME,MIN_CAPACITY
+					--, FORECAST_INFO_PRODUCT_GROUP,FORECAST_INFOR_VERSION,ACTIVE_FLAG,CELL_TYPE
+					--, ENERGE, CELL_QUANTITY
+				FROM DM_MST_ITEM_SINGLE_V T2 WITH(NOLOCK)
+				WHERE DIVISION_ID = @p_division_id ) G
+
+		-- 1~3 담당 외에는 기타로 묶기 위애서 기타 부서코드를 찾는다.
+		DECLARE @v_ETC_DEPARTMENT_ID	NVARCHAR(30)
+			  , @v_ETC_DEPARTMENT_NAME	NVARCHAR(100)
+
+		SELECT @V_ETC_DEPARTMENT_ID		= SEGMENT1
+			 , @v_ETC_DEPARTMENT_NAME	= SEGMENT2
+		FROM SCM_ADM_LOOKUP_MASTER_DETAIL A WITH(NOLOCK)
+		WHERE A.LOOKUP_TYPE = 'MDF_DEPARTMENT'
+		AND A.SEGMENT3 = N'Y'
+		AND A.ATTRIBUTE1 = 'Y'
+	
+PRINT 'DMF0049_SAVE_7--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+
+		UPDATE A
+		SET	OWNER_NAME						= DBO.FN_GET_DM_MKT_OWNER_NAME (B.OWNER, ',', 'KO' )
+			, CUST_GROUP_DTL				= B.CUST_GROUP_DTL
+			, FORECAST_INFO_SPEC			= C.FORECAST_INFO_SPEC
+			, NICK_NAME						= ISNULL(LK3.ATTRIBUTE1, C.NICK_NAME )
+			, FORECAST_INFO_CELL_PACK_COUNT	= ISNULL(CASE WHEN ISNUMERIC(LK3.ATTRIBUTE2) > 0 THEN LK3.ATTRIBUTE2 ELSE 0 END, C.FORECAST_INFO_CELL_PACK_COUNT )
+			, COMPANY_NAME					= D.SEGMENT2
+			, COUNTRY_KR_NAME				= F.COUNTRY_KR_NAME
+			, ROUTE							= B.ROUTE
+			, DEPARTMENT_NAME				= CASE WHEN @P_DIVISION_ID = '40' AND LK1.SEGMENT1 IS NULL	THEN @v_ETC_DEPARTMENT_NAME 
+												   WHEN A.DEPARTMENT_EDIT_FLAG = 'true'					THEN LK1.SEGMENT2 
+												   WHEN A.DEPARTMENT_EDIT_FLAG = 'false'				THEN A.T_DEPARTMENT_NAME
+												   WHEN A.DEPARTMENT_EDIT_FLAG IS NULL OR A.T_DEPARTMENT_NAME IS NULL THEN '' 
+											  END
+			, DEPT_NAME						= CASE WHEN @P_DIVISION_ID = '40' AND LK1.SEGMENT1 IS NULL	THEN @v_ETC_DEPARTMENT_NAME 
+												   ELSE LK2.SEGMENT2 END
+		FROM #results_MST A
+		LEFT OUTER JOIN SCM_MST_SITE_ITEM B WITH(NOLOCK) 
+					 ON A.DIVISION_ID	= B.DIVISION_ID 
+					AND A.PROJECT_CODE	= B.PROJECT_CODE 
+					AND A.SCM_SITE_ID	= B.SCM_SITE_ID 
+					AND A.ITEM_ID		= B.ITEM_ID
+		LEFT OUTER JOIN #TEMP_DM_MST_ITEM_SINGLE_V C 
+					 ON A.ITEM_ID = C.ITEM_ID
+		LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL D WITH(NOLOCK) 
+					 ON A.COMPANY_ID	= D.SEGMENT1 
+					AND D.LOOKUP_TYPE	= 'DM_COMPANY'
+		LEFT OUTER JOIN SCM_MST_SITE E WITH(NOLOCK) 
+					 ON A.DIVISION_ID = E.DIVISION_ID 
+					AND A.SCM_SITE_ID = E.SCM_SITE_ID
+		LEFT OUTER JOIN SCM_MST_COUNTRY F WITH(NOLOCK) 
+					 ON A.COUNTRY_CODE = F.COUNTRY
+		LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK1 WITH(NOLOCK) 
+					 ON A.DEPARTMENT_ID = LK1.SEGMENT1 
+					AND LK1.LOOKUP_TYPE = 'MDF_DEPARTMENT'+ CASE WHEN A.DIVISION_ID= '40' THEN '' ELSE '_' + A.DIVISION_ID END 
+					AND LK1.SEGMENT3 = 'Y'
+		LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK2 WITH(NOLOCK) 
+					 ON A.DEPT_ID = LK2.SEGMENT1 
+					AND LK2.LOOKUP_TYPE = 'DMF0044_DEPARTMENT_TEAM2'+ CASE WHEN A.DIVISION_ID= '40' THEN '' ELSE '_' + A.DIVISION_ID END
+		LEFT OUTER JOIN SCM_ADM_LOOKUP_MASTER_DETAIL LK3 WITH(NOLOCK) 
+					 ON A.DIVISION_ID = LK3.SEGMENT1 
+					AND A.ITEM_ID = LK3.SEGMENT2 
+					AND LK3.LOOKUP_TYPE = 'DM_SR_ETC_MODEL' 
+		
+		-----------------------------------------------------------------------------------------------------------------------	
+		-- UPDATE -- 동일한 년월/메저가 있으면 데이터를 지우고, #테이블의 데이터를 인서트한다.
+		-----------------------------------------------------------------------------------------------------------------------
+		IF EXISTS ( SELECT DATA_SEQ	FROM #results_MST WHERE DATA_SEQ <> ''	)
+		BEGIN
+PRINT 'DMF0049_SAVE_8--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+			DELETE A 
+			FROM DM_PLN_SALES_ETC_REPORT_C A
+			JOIN #results_MST B 
+			  ON A.DATA_SEQ		= B.DATA_SEQ			
+			 AND A.FCST_TYPE	= B.FCST_TYPE			
+			 AND A.MEASURE		= B.MEASURE			
+			 AND A.YYYYMMDD LIKE LEFT(B.YYYYMMDD, 6) + '%'
+			WHERE A.DIVISION_ID = @V_DIVISION_ID
+			AND   A.VERSION_NO	= @V_VERSION_NO
+			
+PRINT 'DMF0049_SAVE_9--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+
+			INSERT INTO DM_PLN_SALES_ETC_REPORT_C 
+			( VERSION_NO, DIVISION_ID, DATA_SEQ, CUTOFF_TYPE, CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, CUST_REPORT, SOLDTO_CODE
+			, SOLDTO_CUST_REPORT, PRODUCT_DETAILS, CELL_MODEL_INFO, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE, PRODUCT_GROUP, PROJECT_CODE, PROJECT_NAME
+			, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, ITEM_USE, SOLDTO_COUNTRY, SHIPTO_COUNTRY, END_CUSTOMER, INCOTERMS, MEASURE
+			, PLANT_SITE_ID, YYYYMMDD, CURRENCY, COMPANY_ID, QTY, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, ATTRIBUTE1
+			, ATTRIBUTE2
+			, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10, OWNER_NAME
+			, CUST_GROUP_DTL, FORECAST_INFO_SPEC, NICK_NAME, FORECAST_INFO_CELL_PACK_COUNT, COMPANY_NAME, COUNTRY_KR_NAME, ROUTE, DEPARTMENT_NAME, DEPT_NAME )
+			SELECT A.VERSION_NO, A.DIVISION_ID, A.DATA_SEQ, @V_CUTOFF_TYPE, @v_CUTOFF_YYYYMMDD, A.DEPARTMENT_ID, A.DEPT_ID, A.END_CUST_REPORT, A.CUST_REPORT, A.SOLDTO_CODE
+					, A.SOLDTO_CUST_REPORT, A.PRODUCT_DETAILS, CELL_MODEL_INFO AS CELL_MODEL_INFO, A.BIZ_TYPE, A.APPLICATION_GR, A.APPLICATION, A.COUNTRY_CODE, A.PRODUCT_GROUP, A.PROJECT_CODE, '' AS PROJECT_NAME
+					, A.SCM_SITE_ID, A.ITEM_ID, '' AS DOM_EXP, A.FCST_TYPE, A.ITEM_USE, A.SOLDTO_COUNTRY, A.SHIPTO_COUNTRY, A.END_CUSTOMER, '' AS INCOTERMS, A.MEASURE
+					, '' AS PLANT_SITE_ID, A.YYYYMMDD, A.CURRENCY, A.COMPANY_ID, A.QTY, @v_created_by AS CREATED_BY, GETDATE() AS CREATION_DATE, @v_created_by AS LAST_UPDATED_BY, GETDATE() AS LAST_UPDATE_DATE, '' AS ATTRIBUTE1
+					, '' AS ATTRIBUTE2 --[C20210125-000207] Attribute2에 40사업부 CELL_MODEL_INFO 컬럼 추가
+					, ISNULL(CELL_MODEL, '') AS ATTRIBUTE3, '' AS ATTRIBUTE4, '' AS ATTRIBUTE5, '' AS ATTRIBUTE6, '' AS ATTRIBUTE7, '' AS ATTRIBUTE8, '' AS ATTRIBUTE9, '' AS ATTRIBUTE10, A.OWNER_NAME
+					, A.CUST_GROUP_DTL, A.FORECAST_INFO_SPEC, A.NICK_NAME, A.FORECAST_INFO_CELL_PACK_COUNT, A.COMPANY_NAME, A.COUNTRY_KR_NAME, A.ROUTE, A.DEPARTMENT_NAME, A.DEPT_NAME
+			FROM #results_MST A
+			WHERE A.DATA_SEQ <> ''
+			AND A.active_flag <> 'D'
+		END
+		
+		-----------------------------------------------------------------------------------------------------------------------
+		-- INSERT
+		-----------------------------------------------------------------------------------------------------------------------
+		IF EXISTS ( SELECT DATA_SEQ FROM #results_MST WHERE DATA_SEQ = '' )
+		BEGIN	
+PRINT 'DMF0049_SAVE_10--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+			-- DATA_SEQ 채번
+			SELECT @v_max_seq = ISNULL(MAX(DATA_SEQ),1)
+			FROM DM_PLN_SALES_ETC_REPORT_C WITH(NOLOCK)
+			WHERE DIVISION_ID	= @v_division_id
+			AND VERSION_NO		= @v_version_no
+
+PRINT 'DMF0049_SAVE_11--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+
+			INSERT INTO DM_PLN_SALES_ETC_REPORT_C 
+			( VERSION_NO, DIVISION_ID
+			, DATA_SEQ
+			, CUTOFF_TYPE, CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, CUST_REPORT, SOLDTO_CODE
+			, SOLDTO_CUST_REPORT, PRODUCT_DETAILS, CELL_MODEL_INFO, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE, PRODUCT_GROUP, PROJECT_CODE, PROJECT_NAME
+			, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, ITEM_USE, SOLDTO_COUNTRY, SHIPTO_COUNTRY, END_CUSTOMER, INCOTERMS, MEASURE
+			, PLANT_SITE_ID, YYYYMMDD, CURRENCY, COMPANY_ID, QTY, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, ATTRIBUTE1
+			, ATTRIBUTE2
+			, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10, OWNER_NAME
+			, CUST_GROUP_DTL, FORECAST_INFO_SPEC, NICK_NAME, FORECAST_INFO_CELL_PACK_COUNT, COMPANY_NAME, COUNTRY_KR_NAME, ROUTE, DEPARTMENT_NAME, DEPT_NAME )
+			SELECT VERSION_NO, DIVISION_ID
+					, DENSE_RANK() OVER ( ORDER BY DEPARTMENT_ID, DEPT_ID, CUST_REPORT, END_CUST_REPORT
+												, SOLDTO_CODE, SOLDTO_CUST_REPORT,PRODUCT_GROUP, ITEM_ID, PRODUCT_DETAILS, CURRENCY
+												, COMPANY_ID, BIZ_TYPE, APPLICATION_GR,APPLICATION, COUNTRY_CODE, ITEM_USE, SOLDTO_COUNTRY, SHIPTO_COUNTRY, END_CUSTOMER) + @v_max_seq AS DATA_SEQ
+				, @V_CUTOFF_TYPE, @v_CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, CUST_REPORT, SOLDTO_CODE
+				, SOLDTO_CUST_REPORT, PRODUCT_DETAILS, CELL_MODEL_INFO AS CELL_MODEL_INFO, BIZ_TYPE, APPLICATION_GR, APPLICATION, COUNTRY_CODE, PRODUCT_GROUP, PROJECT_CODE, '' AS PROJECT_NAME
+				, SCM_SITE_ID, ITEM_ID, '' AS DOM_EXP, FCST_TYPE, ITEM_USE, SOLDTO_COUNTRY, SHIPTO_COUNTRY, END_CUSTOMER, '' AS INCOTERMS, MEASURE
+				, '' AS PLANT_SITE_ID, YYYYMMDD, CURRENCY, COMPANY_ID, QTY, @v_created_by AS CREATED_BY, GETDATE() AS CREATION_DATE, @v_created_by AS LAST_UPDATED_BY, GETDATE() AS LAST_UPDATE_DATE, '' AS ATTRIBUTE1
+				, '' AS ATTRIBUTE2 --[C20210125-000207] Attribute2에 40사업부 CELL_MODEL_INFO 컬럼 추가
+				, ISNULL(CELL_MODEL, '') AS ATTRIBUTE3, '' AS ATTRIBUTE4, '' AS ATTRIBUTE5, '' AS ATTRIBUTE6, '' AS ATTRIBUTE7, '' AS ATTRIBUTE8, '' AS ATTRIBUTE9, '' AS ATTRIBUTE10, A.OWNER_NAME
+				, A.CUST_GROUP_DTL, A.FORECAST_INFO_SPEC, A.NICK_NAME, A.FORECAST_INFO_CELL_PACK_COUNT, A.COMPANY_NAME, A.COUNTRY_KR_NAME, A.ROUTE, A.DEPARTMENT_NAME, A.DEPT_NAME
+			FROM #results_MST A
+			WHERE DATA_SEQ = ''
+		END
+			
+PRINT 'DMF0049_SAVE_12--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+
+		-- 실적구간을 수정하는 경우 해당 내역 일괄처리 -- 주석된 코드 있었으나 2021.8.28 삭제함
+		-----------------------------------------------------------------------------------------------------------------------
+		--DM_PLN_SALES_ETC_REPORT_C 테이블 UPDATE, INSERT (END)
+		-----------------------------------------------------------------------------------------------------------------------	
+		-----------------------------------------------------------------------------------------------------------------------
+		--[E20250418-001567]_HISTORY데이터를 적재한다.START
+		-----------------------------------------------------------------------------------------------------------------------
+		INSERT INTO DM_PLN_SALES_ETC_REPORT_H 
+		( VERSION_NO, DIVISION_ID, HISTORY_SEQ, DATA_SEQ, CUTOFF_TYPE
+		, CUTOFF_YYYYMMDD, DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, CUST_REPORT
+		, SOLDTO_CODE, SOLDTO_CUST_REPORT, PRODUCT_DETAILS, CELL_MODEL_INFO, BIZ_TYPE
+		, APPLICATION_GR, APPLICATION, COUNTRY_CODE, PRODUCT_GROUP, PROJECT_CODE
+		, PROJECT_NAME, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE
+		, SOLDTO_COUNTRY, SHIPTO_COUNTRY, END_CUSTOMER, INCOTERMS, MEASURE
+		, PLANT_SITE_ID, YYYYMMDD, CURRENCY, COMPANY_ID, ITEM_USE
+		, QTY, CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
+		, ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5
+		, ATTRIBUTE6, ATTRIBUTE7, ATTRIBUTE8, ATTRIBUTE9, ATTRIBUTE10, COMPANY_NAME
+		, COUNTRY_KR_NAME, CUST_GROUP_DTL, DEPARTMENT_NAME, DEPT_NAME, FORECAST_INFO_CELL_PACK_COUNT
+		, FORECAST_INFO_SPEC, NICK_NAME, OWNER_NAME, ROUTE )
+		SELECT A.VERSION_NO, A.DIVISION_ID, NEXT VALUE FOR SEQ1_DM_PLN_SALES_ETC_REPORT_H, A.DATA_SEQ, A.CUTOFF_TYPE
+			 , A.CUTOFF_YYYYMMDD, A.DEPARTMENT_ID, A.DEPT_ID, A.END_CUST_REPORT, A.CUST_REPORT
+			 , A.SOLDTO_CODE, A.SOLDTO_CUST_REPORT, A.PRODUCT_DETAILS, A.CELL_MODEL_INFO, A.BIZ_TYPE
+			 , A.APPLICATION_GR, A.APPLICATION, A.COUNTRY_CODE, A.PRODUCT_GROUP, A.PROJECT_CODE
+			 , A.PROJECT_NAME, A.SCM_SITE_ID, A.ITEM_ID, A.DOM_EXP, A.FCST_TYPE
+			 , A.SOLDTO_COUNTRY, A.SHIPTO_COUNTRY, A.END_CUSTOMER, A.INCOTERMS, A.MEASURE
+			 , A.PLANT_SITE_ID, A.YYYYMMDD, A.CURRENCY, A.COMPANY_ID, A.ITEM_USE
+			 , A.QTY, A.CREATED_BY,A.CREATION_DATE, A.LAST_UPDATED_BY, A.LAST_UPDATE_DATE
+			 , A.ATTRIBUTE1, A.ATTRIBUTE2, A.ATTRIBUTE3, A.ATTRIBUTE4, A.ATTRIBUTE5
+			 , A.ATTRIBUTE6, A.ATTRIBUTE7, A.ATTRIBUTE8, A.ATTRIBUTE9, A.ATTRIBUTE10
+			 , A.COMPANY_NAME, A.COUNTRY_KR_NAME, A.CUST_GROUP_DTL, A.DEPARTMENT_NAME, A.DEPT_NAME
+			 , A.FORECAST_INFO_CELL_PACK_COUNT, A.FORECAST_INFO_SPEC, A.NICK_NAME, A.OWNER_NAME, A.ROUTE
+		FROM DM_PLN_SALES_ETC_REPORT_C A
+		INNER JOIN #results_MST B 
+			   ON A.VERSION_NO	= B.VERSION_NO
+			  AND A.DIVISION_ID	= B.DIVISION_ID
+			  AND A.DATA_SEQ	= B.DATA_SEQ
+			  AND A.MEASURE		= B.MEASURE
+			  AND A.YYYYMMDD	= B.YYYYMMDD
+		-----------------------------------------------------------------------------------------------------------------------
+		--[E20250418-001567]_HISTORY데이터를 적재한다.END
+		-----------------------------------------------------------------------------------------------------------------------
+
+		-- UPDATE 후에 전송처리를 다시 한다.
+		IF EXISTS ( SELECT DIVISION_ID FROM DM_MDF_VERSION WITH(NOLOCK) 
+					WHERE DIVISION_ID = @V_DIVISION_ID 
+					AND VERSION_NO = @v_version_no 
+					AND SEND_YN = 'Y' )
+		BEGIN
+PRINT 'DMF0049_SAVE_13--' + CONVERT(VARCHAR(30), GETDATE(), 121)
+			EXEC DMF0044_MOBILE_REPORT_CREATE @V_DIVISION_ID, @v_version_no, @V_CUTOFF_TYPE, N'T', @v_created_by
+		END
+		
+	-----------------------------------------------------------------------------------------------------------------------
+  	-- 트랜잭션 (COMMIT)
+	-----------------------------------------------------------------------------------------------------------------------
+    COMMIT TRANSACTION DM_PLN_SALES_ETC_REPORT_C;  -- sss
+	END TRY
+	
+	-----------------------------------------------------------------------------------------------------------------------
+    BEGIN CATCH
+	-----------------------------------------------------------------------------------------------------------------------
+		--[C20200909-000203] LOG 표준화 적용
+		-- 트랜잭션 (END)
+		ROLLBACK TRANSACTION DM_PLN_SALES_ETC_REPORT_C;  -- sss
+
+		SET @v_log_type = 'ERROR';
+		SET @v_log_message = CAST(ERROR_MESSAGE() AS NVARCHAR(1000));
+		SET @v_log_description = 'ERROR_LINE : ' + STR(ERROR_LINE());
+		SET @d_event_date = SYSDATETIME();
+
+		SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();  /*-- 에러메시지 DISPLAY --*/
+		
+		EXEC PR_DM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date, @v_created_by;
+		
+	-----------------------------------------------------------------------------------------------------------------------
+    END CATCH;
+	-----------------------------------------------------------------------------------------------------------------------
+
+	-- 수행결과 성공여부 DISPLAY
+     IF @v_log_message IS NULL
+	  SELECT 'success'
+	;
+    -- 종료 LOG
+    SET @v_log_type = 'END';
+    SET @v_log_message = '########## END of procedure @@@##########';
+    SET @v_log_description = 'input_count: ' + Convert(NVARCHAR(10), @n_input_count) ;
+    SET @d_event_date = SYSDATETIME();
+    EXEC PR_DM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date, @v_created_by;
+	
+	ERR_RTN:
+PRINT @v_program_name + ' / 06 / ' + CONVERT(VARCHAR(30), GETDATE(), 121);
+	IF @v_log_type = 'DUPICATION_INVALID'
+		BEGIN
+			ROLLBACK TRANSACTION;
+			SET @v_log_message = N'데이터 저장 시 중복값이 발생했습니다. ';				
+			SET @v_log_description = '';
+			SET @d_event_date = SYSDATETIME();			
+			EXEC PR_DM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date, @p_CREATED_BY;	
+			SELECT N'GDW에 데이터를 전송할때는 Sales Report에 ETC Reort가 포함되어 전송됩니다. Sales Report 테이블 기준으로 중복되는 값이 발생했습니다.'
+				+ CHAR(10) + @s_duplicate_validation
+				+ CHAR(5)  + N'데이터 저장 시 중복되지 않아야하는 값은' 
+				+ CHAR(10) + N'Division, Department, Team, Model, Measure, YYYYMM, Currency, Company Id, End Cust.(Report), Cust. (Report), Product Gr.(Report), Country Name'
+				+ CHAR(10) + N'저장하시려는 데이터를 다시 한번 확인하시기 바랍니다.'
+
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_log_description = 'input_count: ' + Convert(NVARCHAR(10), @n_input_count) ;
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_DM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date, @p_CREATED_BY;	
+		END
+  	--============================================================================================================
+    -- [E20260107-001542]_INVALID, END 로그 (START)
+	--============================================================================================================
+    ELSE IF @v_log_type = 'INVALID'
+		BEGIN
+			ROLLBACK TRANSACTION;
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date;			
+			SELECT  N'구코드 COMPANY_ID는 저장할 수 없습니다.'	
+        
+			--============================================================================================================
+			-- 종료 LOG (START)
+			--============================================================================================================
+			SET @v_log_type = 'END';
+			SET @v_log_message = '########## END of procedure ##########';
+			SET @v_log_description = 'input_count: ' + Convert(NVARCHAR(10), @n_input_count) ;
+			SET @d_event_date = SYSDATETIME();
+			EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_log_description, @d_event_date;
+			--============================================================================================================
+			-- 종료 LOG (END)
+			--============================================================================================================
+		END
+	--============================================================================================================
+    -- [E20260107-001542]_INVALID, END 로그 (END)
+	--============================================================================================================
+
+  END;

@@ -1,0 +1,287 @@
+﻿
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/*
+ * Program ID   : SCP0109_SAVE_CAPA_VERSION
+ * Description  : CAPA LINE ASSING
+ * Program History
+ *================================================================================================================================================
+ * Date         In Charge                          Description
+ *================================================================================================================================================
+ * 2024/04/25   chaan        V1.1.1                PJ20230692  SCM 역량 강화 위한 SCP 개선과제 이행 Phase2     - Initial Release
+ */
+
+--CREATE PROCEDURE [dbo].[SCP0109_SAVE_CAPA_VERSION]
+CREATE PROCEDURE [dbo].[SCP0109_SAVE_CAPA_VERSION]
+	  @p_version							NVARCHAR(MAX)
+	, @p_version_seq						NVARCHAR(MAX)
+	, @p_division_id						NVARCHAR(MAX)
+	, @p_scp_fin_plan_id					NVARCHAR(MAX)
+	, @p_scp_prdn_plan_ref_st_ym			NVARCHAR(MAX)
+	, @p_scp_prdn_plan_ref_end_ym			NVARCHAR(MAX)
+	, @p_program_id							NVARCHAR(100)
+	, @p_sheet_name							NVARCHAR(100)
+	, @p_user_id							NVARCHAR(30)
+	, @debug_mode							NVARCHAR(1)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    --DECLARE @p_version							NVARCHAR(MAX)			= N'202404^';
+    --DECLARE @p_version_seq						NVARCHAR(MAX)			= N'1^';
+    --DECLARE @p_division_id						NVARCHAR(MAX)			= N'81^';
+    --DECLARE @p_scp_fin_plan_id					NVARCHAR(MAX)			= N'202403^';
+    --DECLARE @p_scp_prdn_plan_ref_st_ym			NVARCHAR(MAX)			= N'202312^';
+    --DECLARE @p_scp_prdn_plan_ref_end_ym			NVARCHAR(MAX)			= N'202402^';
+    --DECLARE @p_program_id						NVARCHAR(100)			= N'SCP0104';
+    --DECLARE @p_sheet_name						NVARCHAR(100)			= N'MAIN';
+    --DECLARE @p_user_id							NVARCHAR(30)			= N'iamarock';
+    --DECLARE @debug_mode							NVARCHAR(1)				= N'F';
+
+
+	DECLARE @test_mode                          NVARCHAR(20)		= N'F';
+	--DECLARE @test_mode                          NVARCHAR(20)	= N'T';
+
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name NVARCHAR(150)	= 'SCP0109_SAVE_CAPA_VERSION';
+    DECLARE @v_log_type     NVARCHAR(30); -- START/END/ERROR/...
+    DECLARE @n_log_count    INTEGER			= 0;
+    DECLARE @v_log_message  NVARCHAR(1000);
+    DECLARE @v_description  NVARCHAR(500);
+    DECLARE @d_event_date   DATETIME;
+
+
+	-- 트렌젝션 시작
+	BEGIN TRAN;
+
+	BEGIN TRY
+		-- 시작 LOG
+		SET @v_log_type						= 'START';
+		SET @v_log_message					= '########## Start of procedure ##########';
+		SET @v_description					= '';
+		SET @d_event_date					= SYSDATETIME();
+
+        IF @test_mode <> 'T'
+        BEGIN
+		    EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date;
+        END
+
+
+		DECLARE @v_delimiter				NVARCHAR(1) = '^'
+
+		DECLARE @v_all_cnt		        INTEGER		= 0;
+		DECLARE @v_cnt					INTEGER		= 0;
+
+		SET @v_all_cnt = [dbo].[SCM_ARR_SPL_CNT](@p_division_id, @v_delimiter);
+
+        PRINT CONCAT('@v_all_cnt : ', @v_all_cnt);
+
+		IF OBJECT_ID('tempdb..#T_SCP0109_RAW') IS NOT NULL
+			DROP TABLE #T_SCP0109_RAW;
+
+        --빈테이블 만들기
+		SELECT	  VER_ID
+				, VER_SEQ
+                , DIVISION_ID
+                , SCP_FIN_PLAN_ID
+                , SCP_PRDN_PLAN_REF_ST_YM
+                , SCP_PRDN_PLAN_REF_END_YM
+                , CREATED_BY
+                , CREATION_DATE
+                , LAST_UPDATED_BY
+                , LAST_UPDATE_DATE
+		INTO	#T_SCP0109_RAW
+		FROM	SCP_MST_CAPA_VERSION WITH(NOLOCK)
+		WHERE	1<>1;
+
+--TESTING : NOK
+--select * from #T_SCP0109_RAW;rollback tran;return;
+
+
+		WHILE @v_cnt < @v_all_cnt
+		BEGIN
+			SET @v_cnt = @v_cnt + 1;
+
+            PRINT CONCAT('@v_cnt : ', @v_cnt);
+
+
+			DECLARE @v_version							NVARCHAR(MAX)			= N'';
+			DECLARE @v_version_seq						NVARCHAR(MAX)			= N'';
+			DECLARE @v_division_id						NVARCHAR(MAX)			= N'';
+			DECLARE @v_scp_fin_plan_id					NVARCHAR(MAX)			= N'';
+			DECLARE @v_scp_prdn_plan_ref_st_ym			NVARCHAR(MAX)			= N'';
+			DECLARE @v_scp_prdn_plan_ref_end_ym			NVARCHAR(MAX)			= N'';
+
+
+			SET @v_version						= [dbo].[SCM_ARR_SPL_VAL](@p_version,					@v_delimiter, @v_cnt);
+			SET @v_version_seq					= [dbo].[SCM_ARR_SPL_VAL](@p_version_seq,				@v_delimiter, @v_cnt);
+			SET @v_division_id					= [dbo].[SCM_ARR_SPL_VAL](@p_division_id,				@v_delimiter, @v_cnt);
+			SET @v_scp_fin_plan_id				= [dbo].[SCM_ARR_SPL_VAL](@p_scp_fin_plan_id,			@v_delimiter, @v_cnt);
+			SET @v_scp_prdn_plan_ref_st_ym		= [dbo].[SCM_ARR_SPL_VAL](@p_scp_prdn_plan_ref_st_ym,	@v_delimiter, @v_cnt);
+			SET @v_scp_prdn_plan_ref_end_ym		= [dbo].[SCM_ARR_SPL_VAL](@p_scp_prdn_plan_ref_end_ym,	@v_delimiter, @v_cnt);
+
+			PRINT CONCAT('@v_version : ', @v_version);
+			PRINT CONCAT('@v_version_seq : ', @v_version_seq);
+			PRINT CONCAT('@v_division_id : ', @v_division_id);
+			PRINT CONCAT('@v_scp_fin_plan_id : ', @v_scp_fin_plan_id);
+			PRINT CONCAT('@v_scp_prdn_plan_ref_st_ym : ', @v_scp_prdn_plan_ref_st_ym);
+			PRINT CONCAT('@v_scp_prdn_plan_ref_end_ym : ', @v_scp_prdn_plan_ref_end_ym);
+            --rollback tran;return;
+
+
+            INSERT INTO #T_SCP0109_RAW
+            SELECT	  @v_version						AS VER_ID
+                    , @v_version_seq					AS VER_SEQ
+                    , @v_division_id					AS DIVISION_ID
+                    , @v_scp_fin_plan_id				AS SCP_FIN_PLAN_ID
+                    , @v_scp_prdn_plan_ref_st_ym		AS SCP_PRDN_PLAN_REF_ST_YM
+                    , @v_scp_prdn_plan_ref_end_ym		AS SCP_PRDN_PLAN_REF_END_YM
+					, @p_user_id						AS CREATED_BY
+					, SYSDATETIME()						AS CREATION_DATE
+                    , @p_user_id						AS LAST_UPDATED_BY
+                    , SYSDATETIME()						AS LAST_UPDATE_DATE;
+        END
+
+--TESTING : NOK
+--select * from #T_SCP0109_RAW;rollback tran;return;
+
+		--빈라인이 추가되어 삭제
+		DELETE FROM #T_SCP0109_RAW
+		WHERE  ISNULL(DIVISION_ID, '') = ''
+			OR ISNULL(VER_ID, '') = ''
+			OR ISNULL(VER_SEQ, '') = ''
+			OR ISNULL(DIVISION_ID, '') = ''
+			OR ISNULL(SCP_FIN_PLAN_ID, '') = ''
+			OR ISNULL(SCP_PRDN_PLAN_REF_ST_YM, '') = ''
+			OR ISNULL(SCP_PRDN_PLAN_REF_END_YM, '') = '';
+
+
+--TESTING : NOK
+select * from #T_SCP0109_RAW;rollback tran;return;
+
+        BEGIN --데이터 저장 - 마스터
+    		PRINT 'SAVE - SCP_MST_CAPA_VERISON - BEGIN';
+			MERGE INTO SCP_MST_CAPA_VERISON A
+			USING
+			(
+				SELECT	  @v_version						AS VER_ID
+						, @v_version_seq					AS VER_SEQ
+						, @v_division_id					AS DIVISION_ID
+						, @v_scp_fin_plan_id				AS SCP_FIN_PLAN_ID
+						, @v_scp_prdn_plan_ref_st_ym		AS SCP_PRDN_PLAN_REF_ST_YM
+						, @v_scp_prdn_plan_ref_end_ym		AS SCP_PRDN_PLAN_REF_END_YM
+						, @p_user_id				        AS CREATED_BY
+						, SYSDATETIME()				        AS CREATION_DATE
+						, @p_user_id				        AS LAST_UPDATED_BY
+						, SYSDATETIME()				        AS LAST_UPDATE_DATE
+                FROM    #T_SCP0109_RAW A
+			) B ON
+			(
+					A.VER_ID			= B.VER_ID
+				AND A.VER_SEQ			= B.VER_SEQ
+				AND A.DIVISION_ID		= B.DIVISION_ID
+			)
+			WHEN MATCHED THEN
+			UPDATE
+			SET
+				  SCP_FIN_PLAN_ID				= B.SCP_FIN_PLAN_ID
+				, SCP_PRDN_PLAN_REF_ST_YM		= B.SCP_PRDN_PLAN_REF_ST_YM
+				, SCP_PRDN_PLAN_REF_END_YM		= B.SCP_PRDN_PLAN_REF_END_YM
+				, LAST_UPDATED_BY		= B.LAST_UPDATED_BY
+				, LAST_UPDATE_DATE		= B.LAST_UPDATE_DATE
+			WHEN NOT MATCHED THEN
+			INSERT
+			(
+                  VER_ID
+                , VER_SEQ
+                , DIVISION_ID
+                , SCP_FIN_PLAN_ID
+                , SCP_PRDN_PLAN_REF_ST_YM
+                , SCP_PRDN_PLAN_REF_END_Y
+				, CREATED_BY
+				, CREATION_DATE
+				, LAST_UPDATED_BY
+				, LAST_UPDATE_DATE
+			)
+			VALUES
+			(
+                  B.VER_ID
+                , B.VER_SEQ
+                , B.DIVISION_ID
+                , B.SCP_FIN_PLAN_ID
+                , B.SCP_PRDN_PLAN_REF_ST_YM
+                , B.SCP_PRDN_PLAN_REF_END_Y
+				, B.CREATED_BY
+				, B.CREATION_DATE
+				, B.LAST_UPDATED_BY
+				, B.LAST_UPDATE_DATE
+			);
+
+    		PRINT 'SAVE - SCP_MST_CAPA_VERISON - END';
+        END
+
+--TESTING : NOK
+--select * from SCP_MST_CAPA_VERISON;rollback tran;return;
+
+        -- LOG end
+		SET @v_log_type     = 'END'
+		SET @v_log_message  = '########## END of procedure ##########'
+		SET @v_description  = ''
+		SET @d_event_date   = SYSDATETIME()
+
+        EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date
+
+
+		COMMIT TRAN;
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT  'S' AS result_code,  @v_all_cnt AS result_cnt;
+	END TRY
+	BEGIN CATCH
+		  IF (XACT_STATE() <> 0) ROLLBACK TRAN; --입력 데이타 롤백 처리
+		  BEGIN
+			INSERT INTO SCM_SYS_LOG_BATCH
+			(
+				  PROGRAM_NAME
+				, LOG_TYPE
+				, LOG_COUNT
+				, LOG_MESSAGE
+				, DESCRIPTION
+				, EVENT_DATE
+				, CREATION_DATE
+				, CREATED_BY
+				, LAST_UPDATE_DATE
+				, LAST_UPDATED_BY
+			)
+			VALUES
+			(
+				  ISNULL(ERROR_PROCEDURE(), 'SCP0006_SAVE_PROJECT_ROUTE_PLANT')
+	 			, 'ERROR'
+	 			, NULL
+	 			, ERROR_MESSAGE()
+	 			, NULL
+	 			, SYSDATETIME()
+	 			, SYSDATETIME()
+	 			, ERROR_PROCEDURE()
+	 			, SYSDATETIME()
+				, ERROR_PROCEDURE()
+			)
+
+			--IF @@TRANCOUNT > 0
+			--  COMMIT WORK;
+		  END;
+
+
+		  -- error코드, errror 메시지 반환
+		  SELECT 'F' AS result_code;
+
+		  SELECT '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE();
+	END CATCH;
+
+
+    BEGIN -- 커서 해제 & 임시테이블 삭제------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+		IF OBJECT_ID('tempdb..#T_SCP0109_RAW') IS NOT NULL
+			DROP TABLE #T_SCP0109_RAW;
+	END
+END
+

@@ -1,0 +1,74 @@
+﻿/*
+	FP 활성화 재고를 MI 법인 재고로 치환하여 정보 형성  (JV real을 ESS MI 가상으로 치환) 
+*/
+
+CREATE VIEW [dbo].[SCM_DNM_STOCK_AGING_SN_V] AS
+/*
+ * Program ID   : SCM_DNM_STOCK_AGING_SN_V
+ * Description  : 자동차 JV재고를 ESS 가상 plant 재고로 치환한 활성화 재고
+ *				  사용될 프로시저 : PR_SCP_RPT_GLOBAL_PSI_MD_MM/WW
+ *
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ *  2025.11.18	hrkim		   Initial Release [PJ2025F254] [LGES] JV법인 ESS 혼용 생산 시스템 개선
+ *								- FP 활성화 재고를 ESS MI 법인 가상 Plant 재고로 치환하여 정보 형성 
+ *								- 자동차 Global PSI New 데이터 생성 프로시저에서 참조하기 위한 뷰 
+ */
+
+ SELECT 
+      CASE WHEN VI.ITEM_ID	IS NOT NULL THEN MP.VL_COMPANY_ID	ELSE SA.COMPANY_ID		END		AS COMPANY_ID	
+	 ,CASE WHEN VI.ITEM_ID	IS NOT NULL THEN MP.VL_DIVISION_ID	ELSE SA.DIVISION_ID		END		AS DIVISION_ID	
+	 ,CASE WHEN VI.ITEM_ID	IS NOT NULL THEN MP.VL_SITE_ID		ELSE SA.SITE_ID			END		AS SITE_ID		
+	 ,CASE WHEN VI.ITEM_ID	IS NOT NULL THEN MP.VL_PLANT_ID		ELSE SA.PLANT_ID		END		AS PLANT_ID	
+	 ,CASE WHEN VI.ITEM_ID	IS NOT NULL THEN MP.VL_FACTORY_ID	ELSE SA.FACTORY_ID		END		AS FACTORY_ID	
+	 ,SA.ROUTE_ID
+	 ,CASE WHEN VI.ITEM_ID	IS NOT NULL THEN MP.VL_LINE_ID		ELSE SA.LINE_ID			END		AS LINE_ID	
+	 ,SA.CUTOFF_DATE
+	 ,SA.SEQ
+	 ,SA.ITEM_ID
+	 ,SA.PRODUCTION_TYPE
+	 ,SA.FCS_INPUT_DATE
+	 ,SA.AVAILABLE_DATE
+	 ,SA.REMAIN_LEAD_TIME
+	 ,SA.HOLDING_DATE
+	 ,SA.INPUT_QTY
+	 ,SA.QTY
+	 ,SA.QTY_UOM
+	 ,SA.STOCK_STATUS
+	 ,SA.OPERATION_ID
+	 ,SA.OPERATION_SEQ
+	 ,SA.OP_START_TIME
+	 ,SA.TRAY_OP_STATUS
+	 ,SA.INSERT_ID
+	 ,SA.INSERT_TIME
+	 ,SA.UPDATE_ID
+	 ,SA.UPDATE_TIME
+	 ,SA.STOCK_TYPE
+	 ,SA.WIPHOLD_YN
+	 ,SA.UNHOLD_EXP_DATE
+	 ,SA.SPECIAL_YN
+	 ,SA.LOT_ID
+	 ,SA.OCV2_END_TIME
+	 ,SA.SHIP_AVAILABLE_DATE
+	 ,SA.BEFORE_DEGAS
+	 ,SA.DEGAS_END_DATE
+	 ,SA.BASE_AVAILABLE_DATE
+	 ,SA.ORIGINAL_QTY
+ FROM SCM_DNM_STOCK_AGING_SN SA WITH(NOLOCK)   
+	  LEFT  JOIN FN_GET_JV_REAL_ESS_VIRTUAL_LINE_MAP() MP -- JV Real Line / ESS Virtual Line 매핑 정보 반환 함수 
+			  ON MP.RL_COMPANY_ID		= SA.COMPANY_ID
+			 AND MP.RL_DIVISION_ID		= SA.DIVISION_ID
+			 AND MP.RL_SITE_ID			= SA.SITE_ID
+			 AND MP.RL_PLANT_ID			= SA.PLANT_ID
+			 AND MP.RL_FACTORY_ID		= SA.FACTORY_ID
+			 AND MP.RL_LINE_ID			= SA.LINE_ID
+	  LEFT  JOIN SCM_MST_ITEM_SN VI WITH(NOLOCK)		-- ESS MI법인 Virtual 품목 
+			  ON VI.ITEM_ID				= SA.ITEM_ID
+			 AND VI.COMPANY_ID			= MP.VL_COMPANY_ID
+			 AND VI.DIVISION_ID			= MP.VL_DIVISION_ID
+			 AND VI.SITE_ID				= MP.VL_SITE_ID
+			 AND VI.SCP_OPERATION_GROUP = 'A'	-- Cell(조립)
+WHERE 1=1 
+

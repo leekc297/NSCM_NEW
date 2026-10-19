@@ -1,0 +1,108 @@
+﻿
+
+
+
+CREATE VIEW [dbo].[SSP_ANL_SHIP_CONFIRM_DW_V]
+AS
+/*
+ * Program ID   : SSP_ANL_SHIP_CONFIRM_DW_V
+ * Description  : SSP_ANL_SHIP_CONFIRM 조회
+                  소속 DIVISION_ID로 정보를 조회 하기 위해서
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2022.04.01   SSP Pjt.       Created
+ */
+
+	SELECT S.[CONFIRM_ID]
+		  ,S.[CHANGE_TYPE]
+		  ,S.[SHIPMENT_STATUS]
+		  ,D.ATTRIBUTE3			AS DIVISION_ID
+		  ,S.[PLAN_START_YYYYMMDD]
+		  ,S.[PLAN_TYPE]
+		  ,S.[SEQ]
+		  ,S.[ITEM_ID]
+		  ,S.[FROM_SITE]
+		  ,S.[TO_SITE]
+		  ,S.[YYYYMMDD]
+		  ,S.[PLANNED_QTY]
+		  ,S.[QTY]
+		  ,S.[BOD_ID]
+		  ,S.[ROUTE_ID]
+		  ,S.[BIZ_TYPE]
+		  ,S.[PROJECT_CODE]
+		  ,S.[FCST_TYPE]
+		  ,S.[FCST_ETD_DATE]
+		  ,S.[FCST_ETA_DATE]
+		  ,S.[ETD_DATE]
+		  ,S.[ETA_DATE]
+		  ,S.[INCOTERMS]
+		  ,S.[TRANSPORT_MODE]
+		  ,S.[D_COUNTRY]
+		  ,S.[D_PORT_CODE]
+		  ,S.[A_COUNTRY]
+		  ,S.[A_PORT_CODE]
+		  ,S.[CUSTOMER_LT]
+		  ,S.[TO_COUNTRY]
+		  ,S.[TO_CITY]
+		  ,S.[FROM_SITE_TYPE]
+		  ,S.[FROM_SITE_PLANT_ID]
+		  ,S.[FROM_SITE_VENDOR_ID]
+		  ,S.[FROM_SITE_SOLDTO_CODE]
+		  ,S.[FROM_SITE_SHIPTO_CODE]
+		  ,S.[FROM_SITE_COMPANY_ID]
+		  ,S.[TO_SITE_TYPE]
+		  ,S.[TO_SITE_PLANT_ID]
+		  ,S.[TO_SITE_VENDOR_ID]
+		  ,S.[TO_SITE_SOLDTO_CODE]
+		  ,S.[TO_SITE_SHIPTO_CODE]
+		  ,S.[TO_SITE_COMPANY_ID]
+		  ,S.[CHANGE_REQ_NO]
+		  ,S.[ERP_SO_NO]
+		  ,S.[ERP_SO_ITEM_NO]
+		  ,S.[ERP_DO_NO]
+		  ,S.[ERP_STATUS]
+		  ,S.[ELECTRODE_YN]
+		  ,S.[ELECTRODE_TYPE]
+		  ,FD.ATTRIBUTE3 AS ORIGIN_FROM_DIVISION_ID
+		  ,TD.ATTRIBUTE3 AS ORIGIN_TO_DIVISION_ID
+		  ,S.[PACKAGE_TYPE_CODE]
+		  ,S.[FACTORY_ID]
+		  ,S.[REQUESTOR]
+		  ,S.[BEFORE_QTY]
+		  ,S.[REMARKS]
+		  ,S.[REMARKS2]
+		  ,S.[REMARKS3]
+		  ,S.[CHECK_NEED_YN]
+		  ,S.[CREATED_BY]
+		  ,S.[CREATION_DATE]
+		  ,S.[LAST_UPDATED_BY]
+		  ,S.[LAST_UPDATE_DATE]
+		  ,S.[ATTRIBUTE1]
+		  ,S.[ATTRIBUTE2]
+		  ,S.[ATTRIBUTE3]
+		  ,S.[ATTRIBUTE4]
+		  ,S.[ATTRIBUTE5]
+		  ,S.[ATTRIBUTE6]
+		  ,S.[ATTRIBUTE7]
+		  ,S.[ATTRIBUTE8]
+		  ,S.[ATTRIBUTE9]
+		  ,S.[ATTRIBUTE10]
+		  ,S.[PACKAGE_QTY]
+		  ,S.[DOM_EXP]
+		  ,S.[ERP_ATTR1]
+		  ,S.[ERP_ATTR2]
+		  ,S.[ERP_ATTR3]
+		  ,S.[ERP_ATTR4]
+		  ,S.[ERP_ATTR5]
+		  ,S.DIVISION_ID				AS SCM_DIVISION_ID
+		  ,S.ORIGIN_FROM_DIVISION_ID    AS ORIGIN_FROM_SCM_DIVISION_ID
+		  ,S.ORIGIN_TO_DIVISION_ID		AS ORIGIN_TO_SCM_DIVISION_ID
+	  FROM [dbo].[SSP_ANL_SHIP_CONFIRM] AS S WITH(NOLOCK)
+	       JOIN SCM_MST_DIVISION AS D WITH(NOLOCK)
+		ON S.DIVISION_ID = D.DIVISION_ID
+	       JOIN SCM_MST_DIVISION AS FD WITH(NOLOCK)
+		ON S.ORIGIN_FROM_DIVISION_ID = FD.DIVISION_ID	       
+		   JOIN SCM_MST_DIVISION AS TD WITH(NOLOCK)
+		ON S.ORIGIN_TO_DIVISION_ID = TD.DIVISION_ID

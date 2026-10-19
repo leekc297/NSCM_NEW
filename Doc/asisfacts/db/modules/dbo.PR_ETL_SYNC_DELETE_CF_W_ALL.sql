@@ -1,0 +1,157 @@
+﻿/*
+CF_W 전체 삭제 SP — 입력 인수·지역변수 없음.
+2026-10-13: 실제 DB CF_W 기준 16개 DELETE와 사용자 지정 SALES_ETC_PLAN 81_HD/81_HG 추가.
+2026-10-13 후속 1안: DELETE_SEQ 2/3/4는 CF_W JOB 호출 6개 사업부만 포함(81_HD/81_HG 제외).
+이 파일 실행은 SP 생성/변경만 수행한다. 아래 실행 예시는 주석이며 자동 호출하지 않는다.
+설치 후 실행: EXEC dbo.PR_ETL_SYNC_DELETE_CF_W_ALL;
+관련 Oracle 처리 완료 후 삭제 범위 전량 재적재 직전에 1회 호출한다.
+직접 DELETE 참고본과 중복 실행하지 않는다. 성공 COMMIT / 오류 ROLLBACK, 백업 INSERT 없음.
+기존 사업부별 CF_W 및 _BK는 변경하지 않는다. 이 SP는 하위 CF_W 호출에 의존하지 않는다.
+*/
+CREATE   PROCEDURE dbo.PR_ETL_SYNC_DELETE_CF_W_ALL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF @@TRANCOUNT <> 0
+        THROW 50020, N'열린 트랜잭션이 없는 별도 연결에서 CF_W 전체 삭제를 실행하세요.', 1;
+    SET XACT_ABORT ON;
+    SET DATEFIRST 7;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        IF (SELECT COUNT(*) FROM dbo.SCM_SYS_CALENDAR_M
+            WHERE BASIS_YYYYMMDD = CONVERT(CHAR(8), GETDATE(), 112)) <> 1
+           OR (SELECT MIN(ISO_YYYYWW) FROM dbo.SCM_SYS_CALENDAR_M
+               WHERE BASIS_YYYYMMDD = CONVERT(CHAR(8), GETDATE(), 112)) IS NULL
+            THROW 50011, N'기준일 달력이 없거나 중복되거나 PLAN_WEEK가 없습니다.', 1;
+
+        /* DELETE_SEQ 1 / DM_MST_CUSTOMER_FCST */
+        DELETE
+        FROM dbo.DM_MST_CUSTOMER_FCST
+        WHERE DIVISION_ID IN ('40', '81', '81_HM', '81_ST', '81_HG', '81_UC', '81_HD', '82')
+        AND PLAN_WEEK <= (SELECT MIN(ISO_YYYYWW) FROM dbo.SCM_SYS_CALENDAR_M WHERE BASIS_YYYYMMDD = CONVERT(CHAR(8), GETDATE(), 112));
+
+        /* DELETE_SEQ 6 / DM_PLN_MKT_FCST */
+        DELETE
+        FROM dbo.DM_PLN_MKT_FCST
+        WHERE DIVISION_ID IN ('40')
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND MEASURE IN ('MKT_FCST', 'SCM_FCST', 'VMI_IN_REQ');
+
+        /* DELETE_SEQ 2 / DM_PLN_MKT_FCST — CF_W JOB 호출 6개 사업부(81_HD·81_HG 제외) */
+        DELETE
+        FROM dbo.DM_PLN_MKT_FCST
+        WHERE DIVISION_ID IN ('40', '81', '81_HM', '81_ST', '81_UC', '82')
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -14, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND QTY = 0;
+
+        /* DELETE_SEQ 7 / SCM_MST_FUTURE_PRICE */
+        DELETE
+        FROM dbo.SCM_MST_FUTURE_PRICE
+        WHERE DIVISION_ID IN ('40')
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112);
+
+        /* DELETE_SEQ 3 / DM_PLN_CFM_MKT_DEMAND_PLAN — CF_W JOB 호출 6개 사업부(81_HD·81_HG 제외) */
+        DELETE
+        FROM dbo.DM_PLN_CFM_MKT_DEMAND_PLAN
+        WHERE DIVISION_ID IN ('40', '81', '81_HM', '81_ST', '81_UC', '82')
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -14, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND QTY = 0;
+
+        /* DELETE_SEQ 4 / DM_PLN_MKT_FCST_RESULT — CF_W JOB 호출 6개 사업부(81_HD·81_HG 제외) */
+        DELETE
+        FROM dbo.DM_PLN_MKT_FCST_RESULT
+        WHERE DIVISION_ID IN ('40', '81', '81_HM', '81_ST', '81_UC', '82')
+        AND YYYYMMDD <  CONVERT(CHAR(8), DATEADD(DAY, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -14, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND MEASURE NOT IN
+        (
+        'RTF',
+        'BALANCE',
+        'VMI_In_Plan',
+        'VMI_In_Req',
+        'VMI_Inv'
+        );
+
+        /* DELETE_SEQ 5 / DM_PLN_SALES_PLAN_RESULT */
+        DELETE L
+        FROM dbo.DM_PLN_SALES_PLAN_RESULT L
+        WHERE (L.DIVISION_ID LIKE '40%' OR L.DIVISION_ID LIKE '81%' OR L.DIVISION_ID LIKE '82%')
+        AND L.YYYYMMDD <  CONVERT(CHAR(8), DATEADD(DAY, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND L.YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -14, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND L.MEASURE IN
+        (
+        'MKT_FCST',
+        'CUST_FCST',
+        'RTF_SYS_RP',
+        'TMM_FCST'
+        );
+
+        /* DELETE_SEQ 8 / DM_PLN_SALES_PLAN_RESULT */
+        DELETE L
+        FROM dbo.DM_PLN_SALES_PLAN_RESULT L
+        WHERE L.DIVISION_ID IN ('40')
+        AND L.MEASURE IN ('SalesAmt_KRW', 'MKT_AMT_KRW')
+        AND L.YYYYMMDD >= LEFT(CONVERT(CHAR(8), GETDATE(), 112), 6) + '01'
+        AND L.YYYYMMDD <  CONVERT(CHAR(8), GETDATE(), 112);
+
+        /* DELETE_SEQ 9 / DM_PLN_CFM_MKT_DEMAND_PLAN */
+        DELETE FROM dbo.DM_PLN_CFM_MKT_DEMAND_PLAN
+        WHERE DIVISION_ID IN ('40', '81', '81_HM', '81_ST', '81_UC', '82')
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND CREATED_BY = 'SYSTEM_WS'
+        AND MEASURE IN ('RTF_SYS_RP', 'RTF_SCP', 'RTF', 'AS_SHIP_PLAN', 'RTF_PR');
+
+        /* DELETE_SEQ 10 / DM_PLN_CFM_MKT_DEMAND_PLAN */
+        DELETE FROM dbo.DM_PLN_CFM_MKT_DEMAND_PLAN
+        WHERE DIVISION_ID IN ('82')
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND MEASURE = 'RTF' AND FCST_TYPE <> 'RMA';
+
+        /* DELETE_SEQ 11 / DM_PLN_CFM_MKT_DEMAND_PLAN */
+        DELETE FROM dbo.DM_PLN_CFM_MKT_DEMAND_PLAN
+        WHERE DIVISION_ID IN ('81', '81_HM', '81_ST', '81_UC')
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND MEASURE IN ('SS_LVL', 'SS_GAP');
+
+        /* DELETE_SEQ 12 / DM_PLN_MKT_FCST */
+        DELETE FROM dbo.DM_PLN_MKT_FCST
+        WHERE DIVISION_ID IN ('40', '81', '81_HM', '81_ST', '81_UC', '82')
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND CREATED_BY = 'SYSTEM_WS'
+        AND MEASURE IN ('RTF_SYS_RP', 'RTF_SCP', 'RTF', 'AS_SHIP_PLAN', 'RTF_PR');
+
+        /* DELETE_SEQ 13 / DM_PLN_MKT_FCST */
+        DELETE FROM dbo.DM_PLN_MKT_FCST
+        WHERE DIVISION_ID IN ('82')
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND MEASURE = 'RTF' AND FCST_TYPE <> 'RMA';
+
+        /* DELETE_SEQ 14 / DM_PLN_MKT_FCST */
+        DELETE FROM dbo.DM_PLN_MKT_FCST
+        WHERE DIVISION_ID IN ('81', '81_HM', '81_ST', '81_UC')
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND MEASURE IN ('SS_LVL', 'SS_GAP');
+
+        /* DELETE_SEQ 15 / DM_PLN_SALES_ETC_PLAN — 81_HD·81_HG 추가 */
+        DELETE FROM dbo.DM_PLN_SALES_ETC_PLAN
+        WHERE DIVISION_ID IN ('40', '81', '81_HM', '81_ST', '81_HG', '81_UC', '81_HD', '82')
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND MEASURE IN ('SalesAmt_KRW', 'SalesAmt_USD')
+        AND FCST_TYPE = 'ETC';
+
+        /* DELETE_SEQ 16 / DM_PLN_SALES_ETC_PLAN — 81_HD·81_HG 추가 */
+        DELETE FROM dbo.DM_PLN_SALES_ETC_PLAN
+        WHERE DIVISION_ID IN ('40', '81', '81_HM', '81_ST', '81_HG', '81_UC', '81_HD', '82')
+        AND YYYYMMDD >= CONVERT(CHAR(8), DATEADD(DAY, -7, dbo.FN_NEXT_DAY(GETDATE(), 'MON')), 112)
+        AND MEASURE IN ('SalesAmt_KRW_Catch_Up', 'SalesAmt_LOC_Catch_Up', 'SalesAmt_USD_Catch_Up');
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
+END;

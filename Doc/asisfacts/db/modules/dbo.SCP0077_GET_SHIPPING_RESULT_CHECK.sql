@@ -1,0 +1,1110 @@
+﻿
+/*
+ * Program ID   : SCP0077_GET_SHIPPING_RESULT_CHECK
+ * Description  : 출하실적 점검 Report
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2021.12.01   KDW			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - 최초작성
+ * 2022.04.25   lwy		    [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - Shipping Result Check VOC 개선
+ * 2022.07.07   vadabi3     항목추가 (Project Code, Project_name)
+ * 2022.07.21   vadabi3     FROM / TO 동일할 경우 조회 대상에서 제외
+ * 2022.08.31   sclee.lee	[PJ20216994] LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - 일별 계획/실적 추가
+ * 2022.09.01   lwy	        [PJ20216994] LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - 일별 계획/실적 추가 - SCP0077_GET_SHIPPING_RESULT_CHECK_DAILY 로 변경
+ * 2022.11.04   hrkim       [PJ20216994] LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - 소형 외주 Packer plant명 참조 테이블 변경 (SCM_MST_SITE.SITE_DESCRIPTION)
+ * 2023.01.30   vadabi3     [PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.3) - Reason 조회, Save 이슈 조치 (Div / To Site) 
+ ----------------------------------------------------------------------------------------------------
+ EXEC SCP0077_GET_SHIPPING_RESULT_CHECK
+ @p_plan_start_yyyymmdd='20220905'
+, @p_division_id=''
+, @p_plant_id=''
+, @p_user_id='vadabi3'
+, @debug_mode='F'
+ */
+CREATE PROCEDURE [dbo].[SCP0077_GET_SHIPPING_RESULT_CHECK]
+	 @p_plan_start_yyyymmdd		NVARCHAR(8)
+	,@p_division_id				NVARCHAR(20)
+	,@p_plant_id				NVARCHAR(MAX)
+	,@p_user_id					NVARCHAR(100)
+	,@debug_mode				CHAR(1) = ''
+AS
+BEGIN
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+	SET NOCOUNT ON; 
+
+	-- PARAMETER -> 변수 설정
+	DECLARE @v_plan_start_yyyymmdd	NVARCHAR(8)		= @p_plan_start_yyyymmdd;	
+	DECLARE @v_division_id			NVARCHAR(50)	= @p_division_id;
+	DECLARE @v_plant_id				NVARCHAR(4000)	= @p_plant_id;
+	DECLARE @v_user_id				NVARCHAR(100)	= @p_user_id;
+	DECLARE @v_debug_mode			NVARCHAR(1)		= @debug_mode;
+	
+	DECLARE @v_program_id			NVARCHAR(10)	= 'SCP0077';
+	DECLARE @v_sheet_name			NVARCHAR(50)	= 'ShippingResultCheck';
+
+	DECLARE @V_CNT_USR_COLUMN	int = 0;
+
+	DECLARE @POS INT = 0;
+	DECLARE @LEN INT = 0;
+
+	SET @V_CNT_USR_COLUMN = (
+								SELECT COUNT(1) 
+								FROM SCM_MST_TITLESET_USER WITH(NOLOCK) 
+								WHERE 1=1
+								 AND PROGRAM_ID  =  @v_program_id
+								 AND SHEET_NAME  =  @v_sheet_name
+								 AND USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+								 AND USER_ID     =  @v_user_id
+							  );
+	DECLARE @V_INDEX INT = 0;
+
+	DECLARE @mEXEC NVARCHAR(MAX);
+	
+	-- COLOMN 순서대로 조회
+	DECLARE @COL NVARCHAR(100) = '';
+	DECLARE @SORT_METHOD_CODE NVARCHAR(20) = '';
+
+	-- 날짜 정보 설정
+	DECLARE @v_bef4_week_yyyymmdd NVARCHAR(8) = CONVERT(NVARCHAR(8),DATEADD(DAY,- 7*4 , @p_plan_start_yyyymmdd ) ,112);
+	DECLARE @v_bef3_week_yyyymmdd NVARCHAR(8) = CONVERT(NVARCHAR(8),DATEADD(DAY,- 7*3 , @p_plan_start_yyyymmdd ) ,112);
+	DECLARE @v_bef2_week_yyyymmdd NVARCHAR(8) = CONVERT(NVARCHAR(8),DATEADD(DAY,- 7*2 , @p_plan_start_yyyymmdd ) ,112);
+	DECLARE @v_bef1_week_yyyymmdd NVARCHAR(8) = CONVERT(NVARCHAR(8),DATEADD(DAY,- 7*1 , @p_plan_start_yyyymmdd ) ,112);
+
+	DECLARE @v_plan_week_name	VARCHAR(10) = '';
+	SELECT @v_plan_week_name = CALENDAR_YYYY + '-' +  WEEK_NAME  
+	  FROM SCM_SYS_CALENDAR_M 
+	 WHERE BASIS_YYYYMMDD = @v_plan_start_yyyymmdd
+	;
+
+
+	/********************************************************************************
+	* 임시테이블만들기 - 조회 기준 데이터
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#tmp_SCP0077_STD') IS NOT NULL	
+		DROP TABLE #tmp_SCP0077_STD;
+
+	/*
+	SELECT DISTINCT
+		   DIVISION_ID
+		 , CELL_TYPE_GR
+		 , OPERATION_GROUP
+		 , PLANT_ID
+		 , MODEL_TYPE_GR
+		 , FROM_SCM_SITE_ID
+		 , TO_SCM_SITE_ID
+	  INTO #tmp_SCP0077_STD
+	  FROM SCP_RPT_SHIPMENT A WITH(NOLOCK)
+	 WHERE PLAN_START_YYYYMMDD = @v_plan_start_yyyymmdd
+	   AND (( @v_division_id	IS NULL OR @v_division_id	='') OR A.DIVISION_ID	IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@v_division_id	, ',')))
+	   AND (( @v_plant_id		IS NULL OR @v_plant_id		='') OR A.PLANT_ID  	IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@v_plant_id		, ',')))
+	*/
+
+	SELECT DISTINCT
+		   A.DIVISION_ID
+		 , A.CELL_TYPE_GR
+		 , A.OPERATION_GROUP
+		 , A.PLANT_ID
+		 , A.MODEL_TYPE_GR
+		 , A.FROM_SCM_SITE_ID
+	     , A.TO_SCM_SITE_ID
+	  --, (SELECT ISNULL(MAX(SITE_DESCRIPTION), A.TO_SCM_SITE_ID) FROM SCM_MST_SITE WHERE A.DIVISION_ID = DIVISION_ID AND A.TO_SCM_SITE_ID = SCM_SITE_ID) AS TO_SCM_SITE_ID
+		 , ISNULL((SELECT OSP_YN 
+				     FROM SCM_MST_SITE X1 WITH(NOLOCK)
+					WHERE X1.DIVISION_ID	= A.DIVISION_ID
+					  AND X1.PLANT_ID		= A.PLANT_ID
+					  AND X1.VALID_YN		= 'Y'
+					  AND X1.OSP_YN			= 'Y'
+				),'N') AS OSP_YN
+
+		, X1.COMPANY_ID
+		, V.ATTRIBUTE1 AS SCM_VENDOR_NAME
+		, A.PROJECT_CODE
+		, (SELECT MAX(PROJECT_NAME) FROM SCM_MST_PROJECT WHERE A.DIVISION_ID = DIVISION_ID AND A.PROJECT_CODE = PROJECT_CODE) AS PROJECT_NAME
+
+
+
+	  INTO #tmp_SCP0077_STD
+	  FROM SCP_RPT_SHIPMENT A WITH(NOLOCK)
+	  LEFT OUTER JOIN SCM_MST_SITE X1 WITH(NOLOCK)
+	  LEFT OUTER JOIN SCM_MST_VENDOR V WITH(NOLOCK) ON X1.PLANT_ID = V.VENDOR_CODE AND X1.COMPANY_ID = V.COMPANY_ID
+	  ON  X1.DIVISION_ID	= A.DIVISION_ID
+	  AND X1.PLANT_ID		= A.PLANT_ID
+	  AND X1.VALID_YN		= 'Y'
+	  AND X1.OSP_YN			= 'Y'
+	 WHERE PLAN_START_YYYYMMDD = @v_plan_start_yyyymmdd
+	   AND (( @v_division_id	IS NULL OR @v_division_id	='') OR A.DIVISION_ID	IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@v_division_id	, ',')))
+	   AND (( @v_plant_id		IS NULL OR @v_plant_id		='') OR A.PLANT_ID  	IN (SELECT TOKEN FROM DBO.STRING_SPLIT(@v_plant_id		, ',')))
+	   AND DBO.FN_GET_SCM_SITE_TO_PLANT(FROM_SCM_SITE_ID) !=  DBO.FN_GET_SCM_SITE_TO_PLANT(TO_SCM_SITE_ID) -- 20220721 FROM / TO 동일할 경우 조회 대상에서 제외
+	;
+
+
+	/********************************************************************************
+	* 임시테이블만들기 - DATA TABLE
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#tmp_SCP0077_DATA') IS NOT NULL	
+		DROP TABLE #tmp_SCP0077_DATA;
+
+	CREATE TABLE #tmp_SCP0077_DATA
+	(
+		  PLAN_START_YYYYMMDD			VARCHAR(8)
+		, PLAN_WEEK						VARCHAR(10)
+		, DIVISION_ID					VARCHAR(10)
+		, DIVISION_NAME					VARCHAR(100)
+		, CELL_TYPE_GR					VARCHAR(10)
+		, OPERATION_GROUP				VARCHAR(1)
+		, OPERATION_GROUP_NAME			NVARCHAR(200)
+		, PLANT_ID						NVARCHAR(30)
+		, PLANT_NAME					NVARCHAR(100)
+		, MODEL_TYPE_GR					NVARCHAR(100)
+		, FROM_SCM_SITE_ID				NVARCHAR(30)
+		, TO_SCM_SITE_ID				NVARCHAR(30)
+		, SHIP_PLAN_SCP					NUMERIC(20,10)
+		, SHIP_PLAN_SSP					NUMERIC(20,10)
+		, SHIP_RESULT					NUMERIC(20,10)
+		, SHIP_RESULT_TOT				NUMERIC(20,10)
+		, SHIP_PLAN_SCP_CELL			NUMERIC(20,10)
+		, SHIP_PLAN_SSP_CELL			NUMERIC(20,10)
+		, SHIP_RESULT_CELL				NUMERIC(20,10)
+		, SHIP_RESULT_TOT_CELL			NUMERIC(20,10)
+		, BEF4_SHIP_PLAN_SCP			NUMERIC(20,10)
+		, BEF4_SHIP_PLAN_SSP			NUMERIC(20,10)
+		, BEF4_SHIP_RESULT				NUMERIC(20,10)
+		, BEF4_SHIP_RESULT_TOT			NUMERIC(20,10)
+		, BEF4_SHIP_PLAN_SCP_CELL		NUMERIC(20,10)
+		, BEF4_SHIP_PLAN_SSP_CELL		NUMERIC(20,10)
+		, BEF4_SHIP_RESULT_CELL			NUMERIC(20,10)
+		, BEF4_SHIP_RESULT_TOT_CELL		NUMERIC(20,10)
+		, BEF3_SHIP_PLAN_SCP			NUMERIC(20,10)
+		, BEF3_SHIP_PLAN_SSP			NUMERIC(20,10)
+		, BEF3_SHIP_RESULT				NUMERIC(20,10)
+		, BEF3_SHIP_RESULT_TOT			NUMERIC(20,10)
+		, BEF3_SHIP_PLAN_SCP_CELL		NUMERIC(20,10)
+		, BEF3_SHIP_PLAN_SSP_CELL		NUMERIC(20,10)
+		, BEF3_SHIP_RESULT_CELL			NUMERIC(20,10)
+		, BEF3_SHIP_RESULT_TOT_CELL		NUMERIC(20,10)
+		, BEF2_SHIP_PLAN_SCP			NUMERIC(20,10)
+		, BEF2_SHIP_PLAN_SSP			NUMERIC(20,10)
+		, BEF2_SHIP_RESULT				NUMERIC(20,10)
+		, BEF2_SHIP_RESULT_TOT			NUMERIC(20,10)
+		, BEF2_SHIP_PLAN_SCP_CELL		NUMERIC(20,10)
+		, BEF2_SHIP_PLAN_SSP_CELL		NUMERIC(20,10)
+		, BEF2_SHIP_RESULT_CELL			NUMERIC(20,10)
+		, BEF2_SHIP_RESULT_TOT_CELL		NUMERIC(20,10)
+		, BEF1_SHIP_PLAN_SCP			NUMERIC(20,10)
+		, BEF1_SHIP_PLAN_SSP			NUMERIC(20,10)
+		, BEF1_SHIP_RESULT				NUMERIC(20,10)
+		, BEF1_SHIP_RESULT_TOT			NUMERIC(20,10)
+		, BEF1_SHIP_PLAN_SCP_CELL		NUMERIC(20,10)
+		, BEF1_SHIP_PLAN_SSP_CELL		NUMERIC(20,10)
+		, BEF1_SHIP_RESULT_CELL			NUMERIC(20,10)
+		, BEF1_SHIP_RESULT_TOT_CELL		NUMERIC(20,10)
+		, REASON_CODE					NVARCHAR(30)
+		, REASON_DESCRIPTION			NVARCHAR(300)
+		, PROJECT_CODE					NVARCHAR(MAX) -- 20220707 추가
+		, PROJECT_NAME           		NVARCHAR(MAX) -- 20220707 추가
+		, TO_SCM_SITE_ID_ORG			NVARCHAR(30)  -- 20230130 추가
+	)
+
+	/********************************************************************************
+	* 임시테이블만들기 - 선택 COLUMN
+	********************************************************************************/  
+ 	IF OBJECT_ID('tempdb..#tmp_SCP0077_COLUMN') IS NOT NULL	
+		DROP TABLE #tmp_SCP0077_COLUMN;
+
+		SELECT A.COLUMN_NAME								AS COL
+			 , ROW_NUMBER() OVER( ORDER BY ISNULL(B.SORT_ORDER_NO, A.SORT_ORDER_NO ) )	AS USER_SORT_ORDER_NO
+			 , ISNULL(B.DATA_SORT_METHOD_CODE , A.DATA_SORT_METHOD_CODE ) AS DATA_SORT_METHOD_CODE
+		  INTO #tmp_SCP0077_COLUMN
+		  FROM SCM_MST_SHEET_COLUMNS A WITH(NOLOCK) 
+		  
+		  LEFT JOIN  SCM_MST_TITLESET_USER B WITH(NOLOCK) 
+		    ON B.PROGRAM_ID  = A.PROGRAM_ID
+		   AND B.SHEET_NAME  = A.SHEET_NAME
+		   AND B.COLUMN_NAME = A.COLUMN_NAME
+		   AND B.USER_ID	 = @v_user_id
+		   AND B.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+
+		 WHERE A.PROGRAM_ID	= @v_program_id
+		   AND A.SHEET_NAME	= @v_sheet_name
+		   AND A.VALID_YN		= 'Y'
+		   AND A.VISIBLE_FLAG	= 'Y'
+		   AND ISNULL(NULLIF(A.USER_SELECTABLE_FLAG,''),'Y') = 'Y'  -- COLUMN 설정 창에 보이는 것들만 조회
+		   AND ( @V_CNT_USR_COLUMN = 0
+					OR EXISTS (SELECT 1
+							     FROM SCM_MST_TITLESET_USER WITH(NOLOCK)
+								WHERE PROGRAM_ID		= @v_program_id
+								  AND SHEET_NAME		= @v_sheet_name
+								  AND COLUMN_NAME		= A.COLUMN_NAME
+								  AND USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+								  AND USER_ID			= @v_user_id
+								)
+				  )
+			;	  
+
+
+
+
+	SET @V_CNT_USR_COLUMN = (SELECT COUNT(1) FROM #tmp_SCP0077_COLUMN);
+
+	SET @V_INDEX = 0;
+	DECLARE @V_COLUMN_INDEX INT = 0;
+	DECLARE @mEXEC_HEADER	NVARCHAR(4000) = '';
+	DECLARE @mEXEC_SELECT	NVARCHAR(4000) = '';
+	DECLARE @mEXEC_GROUP_BY NVARCHAR(4000) = '';
+	DECLARE @mEXEC_ORDER_BY NVARCHAR(4000) = '';
+	DECLARE @COL_HEADER		NVARCHAR(4000) = '';
+	DECLARE @COL_SELECT		NVARCHAR(4000) = '';
+	DECLARE @COL_GROUP_BY	NVARCHAR(4000) = '';
+	DECLARE @COL_ORDER_BY	NVARCHAR(4000) = '';
+
+	DECLARE @COL_PROJECT_CODE	NVARCHAR(4000) = 'N';
+	DECLARE @COL_PROJECT_NAME	NVARCHAR(4000) = 'N';
+
+
+	WHILE @v_cnt_usr_column > @V_INDEX
+	BEGIN
+
+		
+		SELECT @COL = COL
+		     , @SORT_METHOD_CODE = DATA_SORT_METHOD_CODE 
+		  FROM #tmp_SCP0077_COLUMN 
+		  WHERE USER_SORT_ORDER_NO = (@V_INDEX+1);
+		
+		IF @COL = 'OPERATION_GROUP_NAME'
+		BEGIN
+			SET @COL_HEADER =  'OPERATION_GROUP_NAME, OPERATION_GROUP ';
+			SET @COL_SELECT =  'IIF( A.OPERATION_GROUP_NAME = '''', ''-'', A.OPERATION_GROUP_NAME) AS OPERATION_GROUP_NAME, A.OPERATION_GROUP ';
+			SET @COL_GROUP_BY =  ' A.OPERATION_GROUP , A.OPERATION_GROUP_NAME';
+			SET @COL_ORDER_BY =  ' A.OPERATION_GROUP_NAME';
+		END
+		ELSE IF @COL = 'DIVISION_NAME'
+		BEGIN
+			SET @COL_HEADER = ' DIVISION_NAME , DIVISION_ID';
+			SET @COL_SELECT =  '( SELECT DIVISION_NAME
+									FROM SCM_MST_DIVISION D WITH(NOLOCK)
+								   WHERE A.DIVISION_ID = D.DIVISION_ID
+								 )  AS DIVISION_NAME , A.DIVISION_ID ';
+			SET @COL_GROUP_BY = 'A.DIVISION_ID'
+			SET @COL_ORDER_BY = 'A.DIVISION_ID'
+		END
+		ELSE IF @COL = 'PLANT_NAME'
+		BEGIN
+			SET @COL_HEADER = ' PLANT_NAME , PLANT_ID';
+			
+			--SET @COL_SELECT =  'ISNULL(( SELECT DESCRIPTION
+			--						FROM SCM_PLANT_M_SN P WITH(NOLOCK)
+			--					   WHERE A.PLANT_ID = P.PLANT_ID
+			--					 ),A.PLANT_ID)  AS PLANT_NAME , A.PLANT_ID';
+
+			SET @COL_SELECT =  ' (CASE WHEN B.OSP_YN = ''N'' THEN (SELECT MAX(DESCRIPTION) FROM SCM_PLANT_M_SN P WITH(NOLOCK) WHERE A.PLANT_ID = P.PLANT_ID)
+			                           WHEN B.OSP_YN = ''Y'' AND A.DIVISION_ID = ''40'' -- PJ20216994 11/4 소형 외주 packer plant명
+									   THEN (SELECT MAX(SITE_DESCRIPTION)  
+											  FROM SCM_MST_SITE FS WITH(NOLOCK)
+											 WHERE FS.DIVISION_ID     = A.DIVISION_ID 
+											   AND FS.PLANT_ID        = A.PLANT_ID 
+											   AND FS.OPERATION_GROUP = ''P'' )
+			                           ELSE B.SCM_VENDOR_NAME END ) AS PLANT_NAME , A.PLANT_ID';
+			
+			
+			SET @COL_GROUP_BY = 'A.PLANT_ID'
+			SET @COL_ORDER_BY = 'A.PLANT_ID'
+		END
+
+		ELSE IF @COL = 'PROJECT_NAME'
+		BEGIN
+			SET @COL_HEADER = @COL;
+			SET @COL_SELECT   = @COL;
+			SET @COL_GROUP_BY = @COL;
+			SET @COL_ORDER_BY = @COL;
+			SET @COL_PROJECT_NAME = 'Y';
+		END
+
+		ELSE IF @COL = 'PROJECT_CODE'
+		BEGIN
+			SET @COL_HEADER = @COL;
+			SET @COL_SELECT = 'B.'+@COL;
+			SET @COL_GROUP_BY = 'B.'+@COL;
+			SET @COL_ORDER_BY = @COL;
+			SET @COL_PROJECT_CODE = 'Y';
+		END
+
+		ELSE
+		BEGIN
+			SET @COL_HEADER = @COL;
+			SET @COL_SELECT = 'A.'+@COL;
+			SET @COL_GROUP_BY = 'A.'+@COL;
+			SET @COL_ORDER_BY = 'A.'+@COL;
+		END
+
+
+		IF (@V_INDEX = 0)
+		BEGIN
+
+			SET @mEXEC_HEADER	= @mEXEC_HEADER		+'	' + @COL_HEADER								+CHAR(10);
+			SET @mEXEC_SELECT   = @mEXEC_SELECT		+'	' + @COL_SELECT								+CHAR(10);
+			SET @mEXEC_GROUP_BY = @mEXEC_GROUP_BY	+'	' + @COL_GROUP_BY							+CHAR(10);
+			SET @mEXEC_ORDER_BY	= @mEXEC_ORDER_BY	+'	' + @COL_ORDER_BY + ' ' + @SORT_METHOD_CODE	+CHAR(10);
+
+			
+		END
+		ELSE
+		BEGIN
+			SET @mEXEC_HEADER	= @mEXEC_HEADER		+'	,' + @COL_HEADER								+CHAR(10);
+			SET @mEXEC_SELECT   = @mEXEC_SELECT		+'	,' + @COL_SELECT								+CHAR(10);
+			SET @mEXEC_GROUP_BY = @mEXEC_GROUP_BY	+'	,' + @COL_GROUP_BY								+CHAR(10);
+			SET @mEXEC_ORDER_BY = @mEXEC_ORDER_BY	+'	,' + @COL_ORDER_BY + ' ' + @SORT_METHOD_CODE	+CHAR(10);
+			
+		END
+
+		SET @V_INDEX = @V_INDEX + 1;
+	END;
+
+
+	---------------------------------------------------------
+	-- DEBUG QRY 출력
+	---------------------------------------------------------	
+	IF( @debug_mode ='T')
+	BEGIN				
+		SET @POS =1;
+		SET @LEN =LEN(@mEXEC_HEADER);
+		WHILE @POS <= @LEN
+			BEGIN
+				PRINT SUBSTRING(@mEXEC_HEADER,@POS,4000);
+				SET @POS = @POS+4000;
+			END;
+	END;
+
+
+	IF( @debug_mode ='T')
+	BEGIN				
+		SET @POS =1;
+		SET @LEN =LEN(@mEXEC_SELECT);
+		WHILE @POS <= @LEN
+			BEGIN
+				PRINT SUBSTRING(@mEXEC_SELECT,@POS,4000);
+				SET @POS = @POS+4000;
+			END;
+	END;
+	---------------------------------------------------------
+
+	/********************************************************************************
+	* 데이터 생성 - DATA TABLE
+	********************************************************************************/
+	DECLARE @mEXEC_HEADER_RESULT NVARCHAR(MAX) = '';
+	SET @mEXEC_HEADER_RESULT = 'PLAN_START_YYYYMMDD , PLAN_WEEK , ' + @mEXEC_HEADER;
+
+	SET @mEXEC = '';
+	SET @MEXEC = @MEXEC+'	INSERT INTO #tmp_SCP0077_DATA(			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		   ' + @mEXEC_HEADER				  + CHAR(10); -- 동적 컬럼 정의
+	SET @MEXEC = @MEXEC+'		 , SHIP_PLAN_SCP 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_PLAN_SSP 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_RESULT						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_RESULT_TOT					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_PLAN_SCP_CELL 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_PLAN_SSP_CELL 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_RESULT_CELL 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_RESULT_TOT_CELL				' + CHAR(10);
+	-- 과거 주차 W-1 주차
+	SET @MEXEC = @MEXEC+'		 , BEF1_SHIP_PLAN_SCP 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF1_SHIP_PLAN_SSP 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF1_SHIP_RESULT					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF1_SHIP_RESULT_TOT				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF1_SHIP_PLAN_SCP_CELL 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF1_SHIP_PLAN_SSP_CELL 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF1_SHIP_RESULT_CELL 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF1_SHIP_RESULT_TOT_CELL		' + CHAR(10);
+	-- 과거 주차 W-2 주차
+	SET @MEXEC = @MEXEC+'		 , BEF2_SHIP_PLAN_SCP 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF2_SHIP_PLAN_SSP 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF2_SHIP_RESULT					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF2_SHIP_RESULT_TOT				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF2_SHIP_PLAN_SCP_CELL 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF2_SHIP_PLAN_SSP_CELL 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF2_SHIP_RESULT_CELL 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF2_SHIP_RESULT_TOT_CELL		' + CHAR(10);
+	-- 과거 주차 W-3 주차
+	SET @MEXEC = @MEXEC+'		 , BEF3_SHIP_PLAN_SCP 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF3_SHIP_PLAN_SSP 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF3_SHIP_RESULT					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF3_SHIP_RESULT_TOT				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF3_SHIP_PLAN_SCP_CELL 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF3_SHIP_PLAN_SSP_CELL 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF3_SHIP_RESULT_CELL 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF3_SHIP_RESULT_TOT_CELL		' + CHAR(10);
+	-- 과거 주차 W-4 주차
+	SET @MEXEC = @MEXEC+'		 , BEF4_SHIP_PLAN_SCP 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF4_SHIP_PLAN_SSP 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF4_SHIP_RESULT					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF4_SHIP_RESULT_TOT				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF4_SHIP_PLAN_SCP_CELL 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF4_SHIP_PLAN_SSP_CELL 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF4_SHIP_RESULT_CELL 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , BEF4_SHIP_RESULT_TOT_CELL		' + CHAR(10);
+	--- REASON 추가
+	SET @MEXEC = @MEXEC+'		 , REASON_CODE						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , REASON_DESCRIPTION				' + CHAR(10);
+	--- 20220707 Project 추가 (@mEXEC_HEADER 에 이미 포함)
+	--SET @MEXEC = @MEXEC+'		 , PROJECT_CODE						' + CHAR(10);
+	--SET @MEXEC = @MEXEC+'		 , PROJECT_NAME						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , TO_SCM_SITE_ID_ORG				' + CHAR(10); -- 20230130 추가
+	SET @MEXEC = @MEXEC+'			)								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	SELECT									' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		   ' + @mEXEC_SELECT				  + CHAR(10);
+	-- 현재 주차
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_plan_start_yyyymmdd + ''' THEN SHIP_PLAN_SCP			ELSE 0 END) AS SHIP_PLAN_SCP		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_plan_start_yyyymmdd + ''' THEN SHIP_PLAN_SSP			ELSE 0 END) AS SHIP_PLAN_SSP		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_plan_start_yyyymmdd + ''' THEN SHIP_RESULT			ELSE 0 END) AS SHIP_RESULT			' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_plan_start_yyyymmdd + ''' THEN SHIP_RESULT_TOT		ELSE 0 END) AS SHIP_RESULT_TOT		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_plan_start_yyyymmdd + ''' THEN SHIP_PLAN_SCP_CELL	ELSE 0 END) AS SHIP_PLAN_SCP_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_plan_start_yyyymmdd + ''' THEN SHIP_PLAN_SSP_CELL	ELSE 0 END) AS SHIP_PLAN_SSP_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_plan_start_yyyymmdd + ''' THEN SHIP_RESULT_CELL		ELSE 0 END) AS SHIP_RESULT_CELL		' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_plan_start_yyyymmdd + ''' THEN SHIP_RESULT_TOT_CELL	ELSE 0 END) AS SHIP_RESULT_TOT_CELL	' + CHAR(10); --(Cell)
+	-- 과거 주차 W-1 주차
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef1_week_yyyymmdd + ''' THEN SHIP_PLAN_SCP			ELSE 0 END) AS BEF1_SHIP_PLAN_SCP		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef1_week_yyyymmdd + ''' THEN SHIP_PLAN_SSP			ELSE 0 END) AS BEF1_SHIP_PLAN_SSP		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef1_week_yyyymmdd + ''' THEN SHIP_RESULT			ELSE 0 END) AS BEF1_SHIP_RESULT			' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef1_week_yyyymmdd + ''' THEN SHIP_RESULT_TOT		ELSE 0 END) AS BEF1_SHIP_RESULT_TOT		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef1_week_yyyymmdd + ''' THEN SHIP_PLAN_SCP_CELL		ELSE 0 END) AS BEF1_SHIP_PLAN_SCP_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef1_week_yyyymmdd + ''' THEN SHIP_PLAN_SSP_CELL		ELSE 0 END) AS BEF1_SHIP_PLAN_SSP_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef1_week_yyyymmdd + ''' THEN SHIP_RESULT_CELL		ELSE 0 END) AS BEF1_SHIP_RESULT_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef1_week_yyyymmdd + ''' THEN SHIP_RESULT_TOT_CELL	ELSE 0 END) AS BEF1_SHIP_RESULT_TOT_CELL' + CHAR(10); --(Cell)
+	-- 과거 주차 W-2 주차
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef2_week_yyyymmdd + ''' THEN SHIP_PLAN_SCP			ELSE 0 END) AS BEF2_SHIP_PLAN_SCP		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef2_week_yyyymmdd + ''' THEN SHIP_PLAN_SSP			ELSE 0 END) AS BEF2_SHIP_PLAN_SSP		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef2_week_yyyymmdd + ''' THEN SHIP_RESULT			ELSE 0 END) AS BEF2_SHIP_RESULT			' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef2_week_yyyymmdd + ''' THEN SHIP_RESULT_TOT		ELSE 0 END) AS BEF2_SHIP_RESULT_TOT		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef2_week_yyyymmdd + ''' THEN SHIP_PLAN_SCP_CELL		ELSE 0 END) AS BEF2_SHIP_PLAN_SCP_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef2_week_yyyymmdd + ''' THEN SHIP_PLAN_SSP_CELL		ELSE 0 END) AS BEF2_SHIP_PLAN_SSP_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef2_week_yyyymmdd + ''' THEN SHIP_RESULT_CELL		ELSE 0 END) AS BEF2_SHIP_RESULT_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef2_week_yyyymmdd + ''' THEN SHIP_RESULT_TOT_CELL	ELSE 0 END) AS BEF2_SHIP_RESULT_TOT_CELL' + CHAR(10); --(Cell)
+	-- 과거 주차 W-3 주차
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef3_week_yyyymmdd + ''' THEN SHIP_PLAN_SCP			ELSE 0 END) AS BEF3_SHIP_PLAN_SCP		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef3_week_yyyymmdd + ''' THEN SHIP_PLAN_SSP			ELSE 0 END) AS BEF3_SHIP_PLAN_SSP		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef3_week_yyyymmdd + ''' THEN SHIP_RESULT			ELSE 0 END) AS BEF3_SHIP_RESULT			' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef3_week_yyyymmdd + ''' THEN SHIP_RESULT_TOT		ELSE 0 END) AS BEF3_SHIP_RESULT_TOT		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef3_week_yyyymmdd + ''' THEN SHIP_PLAN_SCP_CELL		ELSE 0 END) AS BEF3_SHIP_PLAN_SCP_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef3_week_yyyymmdd + ''' THEN SHIP_PLAN_SSP_CELL		ELSE 0 END) AS BEF3_SHIP_PLAN_SSP_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef3_week_yyyymmdd + ''' THEN SHIP_RESULT_CELL		ELSE 0 END) AS BEF3_SHIP_RESULT_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef3_week_yyyymmdd + ''' THEN SHIP_RESULT_TOT_CELL	ELSE 0 END) AS BEF3_SHIP_RESULT_TOT_CELL' + CHAR(10); --(Cell)
+	-- 과거 주차 W-4 주차
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef4_week_yyyymmdd + ''' THEN SHIP_PLAN_SCP			ELSE 0 END) AS BEF4_SHIP_PLAN_SCP		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef4_week_yyyymmdd + ''' THEN SHIP_PLAN_SSP			ELSE 0 END) AS BEF4_SHIP_PLAN_SSP		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef4_week_yyyymmdd + ''' THEN SHIP_RESULT			ELSE 0 END) AS BEF4_SHIP_RESULT			' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef4_week_yyyymmdd + ''' THEN SHIP_RESULT_TOT		ELSE 0 END) AS BEF4_SHIP_RESULT_TOT		' + CHAR(10); --(UOM)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef4_week_yyyymmdd + ''' THEN SHIP_PLAN_SCP_CELL		ELSE 0 END) AS BEF4_SHIP_PLAN_SCP_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef4_week_yyyymmdd + ''' THEN SHIP_PLAN_SSP_CELL		ELSE 0 END) AS BEF4_SHIP_PLAN_SSP_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef4_week_yyyymmdd + ''' THEN SHIP_RESULT_CELL		ELSE 0 END) AS BEF4_SHIP_RESULT_CELL	' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, SUM(CASE WHEN PLAN_START_YYYYMMDD = ''' + @v_bef4_week_yyyymmdd + ''' THEN SHIP_RESULT_TOT_CELL	ELSE 0 END) AS BEF4_SHIP_RESULT_TOT_CELL' + CHAR(10); --(Cell)
+	SET @MEXEC = @MEXEC+'		, ''-''						AS REASON_CODE						' + CHAR(10); -- 코드가 정의 되지 않아서 대쉬로 보여줌
+	SET @MEXEC = @MEXEC+'		, MAX(REASON_DESCRIPTION)	AS REASON_DESCRIPTION				' + CHAR(10);
+	--SET @MEXEC = @MEXEC+'		, MAX(''-'')				AS PROJECT_CODE						' + CHAR(10); -- 20220707 Project 추가
+	--SET @MEXEC = @MEXEC+'		, MAX(''-'')				AS PROJECT_NAME						' + CHAR(10); -- 20220707 Project 추가
+	SET @MEXEC = @MEXEC+'		, MAX(B.TO_SCM_SITE_ID )	AS TO_SCM_SITE_ID_ORG				' + CHAR(10); -- 20230130 추가
+	SET @MEXEC = @MEXEC+'	  FROM SCP_RPT_SHIPMENT A WITH(NOLOCK)								' + CHAR(10);
+	-----------------------------------------조회 주차 기준
+	SET @MEXEC = @MEXEC+'	  JOIN #tmp_SCP0077_STD	B							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	    ON A.DIVISION_ID		= B.DIVISION_ID 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	   AND A.CELL_TYPE_GR		= B.CELL_TYPE_GR 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	   AND A.OPERATION_GROUP	= B.OPERATION_GROUP 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	   AND A.PLANT_ID			= B.PLANT_ID 			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	   AND A.MODEL_TYPE_GR		= B.MODEL_TYPE_GR 		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	   AND A.FROM_SCM_SITE_ID	= B.FROM_SCM_SITE_ID 	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	   AND A.TO_SCM_SITE_ID		= B.TO_SCM_SITE_ID 		' + CHAR(10);
+
+	IF @COL_PROJECT_CODE = 'Y' OR @COL_PROJECT_NAME = 'Y'
+	begin
+	SET @MEXEC = @MEXEC+'	   AND A.PROJECT_CODE		= B.PROJECT_CODE 		' + CHAR(10); -- 20220711
+	end
+
+	-----------------------------------------조회 주차 기준
+	SET @MEXEC = @MEXEC+'	 WHERE PLAN_START_YYYYMMDD >= '''+ @v_bef4_week_yyyymmdd + '''		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	   AND PLAN_START_YYYYMMDD <= '''+ @v_plan_start_yyyymmdd + '''		' + CHAR(10);
+	-- 조건
+	IF NOT(@v_division_id IS NULL	OR  @v_division_id	='') 
+	BEGIN 
+		SET @mEXEC = @mEXEC+ [dbo].[FN_SCM_GET_WHERE_SQL]('A.DIVISION_ID', 'IN', @v_division_id) +CHAR(10);
+	END;
+	IF NOT(@v_plant_id IS NULL	OR  @v_plant_id	='')
+	BEGIN 
+		SET @mEXEC = @mEXEC+ [dbo].[FN_SCM_GET_WHERE_SQL]('A.PLANT_ID', 'IN', @v_plant_id) +CHAR(10);
+	END;
+
+	DECLARE @mEXEC_GROUP_BY_EX NVARCHAR(MAX);
+	SET @mEXEC_GROUP_BY_EX = @mEXEC_GROUP_BY + ',B.OSP_YN, B.SCM_VENDOR_NAME';
+	SET @MEXEC = @MEXEC+'	 GROUP BY  							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'			' + @mEXEC_GROUP_BY_EX		 	  + CHAR(10);
+	--SET @MEXEC = @MEXEC+'	 GROUP BY A.DIVISION_ID, A.CELL_TYPE_GR, A.OPERATION_GROUP, A.OPERATION_GROUP_NAME, A.PLANT_ID, A.MODEL_TYPE_GR, A.TO_SCM_SITE_ID, B.OSP_YN, B.SCM_VENDOR_NAME 	' + CHAR(10);
+
+	EXEC (@mEXEC);
+
+	-- DEBUG QRY 출력
+	---------------------------------------------------------	
+	IF( @debug_mode ='T')
+	BEGIN				
+		SET @POS =1;
+		SET @LEN =LEN(@MEXEC);
+		WHILE @POS <= @LEN
+			BEGIN
+				PRINT SUBSTRING(@MEXEC,@POS,4000);
+				SET @POS = @POS+4000;
+			END;
+	END;
+	---------------------------------------------------------
+		
+	/********************************************************************************
+	* 데이터 생성 - 과거 주차의 준수율 , 달성율
+	*              자동차 준수율			: 실적   / 계획(RESULT		/ SHIP_PLAN_SSP)
+	*              자동차 달성율			: 총실적 / 계획(RESULT_TOT	/ SHIP_PLAN_SSP)
+	*              소형,ESS,전극 준수율	: 실적   / 계획(RESULT		/ SHIP_PLAN_SCP)
+	*              소형,ESS,전극 달성율	: 총실적 / 계획(RESULT_TOT	/ SHIP_PLAN_SCP)
+	********************************************************************************/
+	SET @mEXEC_HEADER  = REPLACE(@mEXEC_HEADER ,'TO_SCM_SITE_ID'  , ' (SELECT ISNULL(MAX(SITE_DESCRIPTION), A.TO_SCM_SITE_ID) FROM SCM_MST_SITE WHERE A.DIVISION_ID = DIVISION_ID AND A.TO_SCM_SITE_ID = SCM_SITE_ID) AS TO_SCM_SITE_ID ');
+
+	SET @mEXEC = '';
+
+	/********************************************************************************
+	* 20230126 Reason 이슈 조치
+	********************************************************************************/
+	IF OBJECT_ID('tempdb..#tmp_SCP0077_REASON') IS NOT NULL	
+		DROP TABLE #tmp_SCP0077_REASON;
+
+	CREATE TABLE #tmp_SCP0077_REASON
+	(
+		  PLAN_START_YYYYMMDD			VARCHAR(8)
+		, PLAN_WEEK						VARCHAR(10)
+		, DIVISION_ID					VARCHAR(10)
+		, CELL_TYPE_GR					VARCHAR(10)
+		, OPERATION_GROUP				VARCHAR(1)
+		, PLANT_ID						NVARCHAR(30)
+		, MODEL_TYPE_GR					NVARCHAR(100)
+		, FROM_SCM_SITE_ID				NVARCHAR(30)
+		, TO_SCM_SITE_ID				NVARCHAR(30)
+		, PROJECT_CODE					NVARCHAR(MAX) -- 20220707 추가
+		, REASON_DESCRIPTION			NVARCHAR(300)
+	)
+
+
+	INSERT INTO #tmp_SCP0077_REASON
+	(
+		  PLAN_START_YYYYMMDD	
+		, PLAN_WEEK				
+		, DIVISION_ID			
+		, CELL_TYPE_GR			
+		, OPERATION_GROUP		
+		, PLANT_ID				
+		, MODEL_TYPE_GR			
+		, FROM_SCM_SITE_ID		
+		, TO_SCM_SITE_ID		
+		, PROJECT_CODE			
+		, REASON_DESCRIPTION	
+	)
+	SELECT                                
+		  PLAN_START_YYYYMMDD	  
+		, PLAN_WEEK				 
+		, DIVISION_ID			 
+		, CELL_TYPE_GR			  
+		, OPERATION_GROUP		  
+		, PLANT_ID				  
+		, MODEL_TYPE_GR			  
+		, FROM_SCM_SITE_ID		  
+		, TO_SCM_SITE_ID		 
+		, PROJECT_CODE			  
+		, REASON_DESCRIPTION	
+	FROM SCP_RPT_SHIPMENT                 
+	WHERE REASON_DESCRIPTION IS NOT NULL ;
+
+	-------------------------------------------------------------------------------
+	DECLARE @useCol_CELL_TYPE_GR	 NVARCHAR(2) ='N';
+	DECLARE @useCol_MODEL_TYPE_GR	 NVARCHAR(2) ='N';
+	DECLARE @useCol_PROJECT_CODE	 NVARCHAR(2) ='N';
+	DECLARE @useCol_TO_SCM_SITE_ID	 NVARCHAR(2) ='N';
+	DECLARE @useCol_OPERATION_GROUP	 NVARCHAR(2) ='N';
+	DECLARE @useCol_PLANT_ID		 NVARCHAR(2) ='N';
+	DECLARE @useCol_FROM_SITE		 NVARCHAR(2) ='N';
+	DECLARE @useCol_DIVISION_ID		 NVARCHAR(2) ='N';
+
+	SELECT @useCol_CELL_TYPE_GR		= CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END FROM #tmp_SCP0077_COLUMN WHERE COL = 'CELL_TYPE_GR';
+	SELECT @useCol_MODEL_TYPE_GR	= CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END FROM #tmp_SCP0077_COLUMN WHERE COL = 'MODEL_TYPE_GR';
+	SELECT @useCol_PROJECT_CODE		= CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END FROM #tmp_SCP0077_COLUMN WHERE COL = 'PROJECT_CODE';
+	SELECT @useCol_TO_SCM_SITE_ID	= CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END FROM #tmp_SCP0077_COLUMN WHERE COL = 'TO_SCM_SITE_ID';
+
+	SELECT @useCol_OPERATION_GROUP	= CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END FROM #tmp_SCP0077_COLUMN WHERE COL LIKE 'OPERATION%';
+	SELECT @useCol_PLANT_ID			= CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END FROM #tmp_SCP0077_COLUMN WHERE COL LIKE 'PLANT%';
+	SELECT @useCol_FROM_SITE		= CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END FROM #tmp_SCP0077_COLUMN WHERE COL LIKE 'FROM_SITE%';
+	SELECT @useCol_DIVISION_ID		= CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END FROM #tmp_SCP0077_COLUMN WHERE COL LIKE 'DIVISION%';
+	
+	--SELECT @useCol_CELL_TYPE_GR, @useCol_MODEL_TYPE_GR, @useCol_PROJECT_CODE, @useCol_TO_SCM_SITE_ID, @useCol_OPERATION_GROUP,@useCol_PLANT_ID ,@useCol_FROM_SITE,@useCol_DIVISION_ID ;
+
+
+
+
+
+
+	SET @MEXEC = @MEXEC+'	SELECT A.*, B.REASON_DESCRIPTION FROM (															' + CHAR(10);
+	-----------------------------------------------------------------------------------------------------------------------------------
+	SET @MEXEC = @MEXEC+'	SELECT															' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		  '''+ @v_plan_start_yyyymmdd+ '''	AS PLAN_START_YYYYMMDD ,' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		  '''+ @v_plan_week_name+ '''		AS PLAN_WEEK ,			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		   ' + @mEXEC_HEADER				  + CHAR(10); -- 동적 컬럼 정의
+	SET @MEXEC = @MEXEC+'		 , SHIP_PLAN_SCP 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_PLAN_SSP 					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_RESULT						' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_RESULT_TOT					' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_PLAN_SCP_CELL 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_PLAN_SSP_CELL 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_RESULT_CELL 				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , SHIP_RESULT_TOT_CELL				' + CHAR(10);
+	-- 당주 데이터(UOM) : 소수점 한자리에 반올림
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(SHIP_PLAN_SSP			= 0, 1 , SHIP_RESULT			/SHIP_PLAN_SSP		) * 100										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(SHIP_PLAN_SCP			= 0, 1 , SHIP_RESULT			/SHIP_PLAN_SCP		) * 100 END , 0 ) AS CO_RATE						' + CHAR(10); -- 준수율(UOM)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(SHIP_PLAN_SSP			= 0, 1 , SHIP_RESULT_TOT		/SHIP_PLAN_SSP		) * 100										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(SHIP_PLAN_SCP			= 0, 1 , SHIP_RESULT_TOT		/SHIP_PLAN_SCP		) * 100 END , 0 ) AS AC_RATE						' + CHAR(10); -- 달성율(UOM)
+	-- 당주 데이터(Cell)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(SHIP_PLAN_SSP_CELL		= 0, 1 , SHIP_RESULT_CELL		/SHIP_PLAN_SSP_CELL	) * 100										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(SHIP_PLAN_SCP_CELL		= 0, 1 , SHIP_RESULT_CELL		/SHIP_PLAN_SCP_CELL	) * 100 END , 0 ) AS CO_RATE_CELL					' + CHAR(10); -- 준수율(Cell)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(SHIP_PLAN_SSP_CELL		= 0, 1 , SHIP_RESULT_TOT_CELL	/SHIP_PLAN_SSP_CELL	) * 100										' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(SHIP_PLAN_SCP_CELL		= 0, 1 , SHIP_RESULT_TOT_CELL	/SHIP_PLAN_SCP_CELL	) * 100 END , 0 ) AS AC_RATE_CELL					' + CHAR(10); -- 달성율(Cell)
+	---------------------------------------------------------------------------------------------------------------
+	-- 과거 주차 W-1 주차(계획이 0 일 경우 100 으로 표시)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF1_SHIP_PLAN_SSP		= 0, 1 , BEF1_SHIP_RESULT			/BEF1_SHIP_PLAN_SSP		) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF1_SHIP_PLAN_SCP		= 0, 1 , BEF1_SHIP_RESULT			/BEF1_SHIP_PLAN_SCP		) * 100 END , 0 ) AS BEF1_CO_RATE			' + CHAR(10); -- 준수율(UOM)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF1_SHIP_PLAN_SSP		= 0, 1 , BEF1_SHIP_RESULT_TOT		/BEF1_SHIP_PLAN_SSP		) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF1_SHIP_PLAN_SCP		= 0, 1 , BEF1_SHIP_RESULT_TOT		/BEF1_SHIP_PLAN_SCP		) * 100 END , 0 ) AS BEF1_AC_RATE			' + CHAR(10); -- 달성율(UOM)
+	-- 과거 주차 W-1 주차(Cell)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF1_SHIP_PLAN_SSP_CELL	= 0, 1 , BEF1_SHIP_RESULT_CELL		/BEF1_SHIP_PLAN_SSP_CELL) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF1_SHIP_PLAN_SCP_CELL	= 0, 1 , BEF1_SHIP_RESULT_CELL		/BEF1_SHIP_PLAN_SCP_CELL) * 100 END , 0 ) AS BEF1_CO_RATE_CELL	' + CHAR(10); -- 준수율(Cell)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF1_SHIP_PLAN_SSP_CELL	= 0, 1 , BEF1_SHIP_RESULT_TOT_CELL	/BEF1_SHIP_PLAN_SSP_CELL) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF1_SHIP_PLAN_SCP_CELL	= 0, 1 , BEF1_SHIP_RESULT_TOT_CELL	/BEF1_SHIP_PLAN_SCP_CELL) * 100 END , 0 ) AS BEF1_AC_RATE_CELL	' + CHAR(10); -- 달성율(Cell)
+	-- 과거 주차 W-2 주차(계획이 0 일 경우 100 으로 표시)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF2_SHIP_PLAN_SSP		= 0, 1 , BEF2_SHIP_RESULT			/BEF2_SHIP_PLAN_SSP		) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF2_SHIP_PLAN_SCP		= 0, 1 , BEF2_SHIP_RESULT			/BEF2_SHIP_PLAN_SCP		) * 100 END , 0 ) AS BEF2_CO_RATE			' + CHAR(10); -- 준수율(UOM)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF2_SHIP_PLAN_SSP		= 0, 1 , BEF2_SHIP_RESULT_TOT		/BEF2_SHIP_PLAN_SSP		) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF2_SHIP_PLAN_SCP		= 0, 1 , BEF2_SHIP_RESULT_TOT		/BEF2_SHIP_PLAN_SCP		) * 100 END , 0 ) AS BEF2_AC_RATE			' + CHAR(10); -- 달성율(UOM)
+	-- 과거 주차 W-2 주차(Cell)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF2_SHIP_PLAN_SSP_CELL	= 0, 1 , BEF2_SHIP_RESULT_CELL		/BEF2_SHIP_PLAN_SSP_CELL) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF2_SHIP_PLAN_SCP_CELL	= 0, 1 , BEF2_SHIP_RESULT_CELL		/BEF2_SHIP_PLAN_SCP_CELL) * 100 END , 0 ) AS BEF2_CO_RATE_CELL	' + CHAR(10); -- 준수율(Cell)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF2_SHIP_PLAN_SSP_CELL	= 0, 1 , BEF2_SHIP_RESULT_TOT_CELL	/BEF2_SHIP_PLAN_SSP_CELL) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF2_SHIP_PLAN_SCP_CELL	= 0, 1 , BEF2_SHIP_RESULT_TOT_CELL	/BEF2_SHIP_PLAN_SCP_CELL) * 100 END , 0 ) AS BEF2_AC_RATE_CELL	' + CHAR(10); -- 달성율(Cell)
+	-- 과거 주차 W-3 주차(계획이 0 일 경우 100 으로 표시)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF3_SHIP_PLAN_SSP		= 0, 1 , BEF3_SHIP_RESULT			/BEF3_SHIP_PLAN_SSP		) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF3_SHIP_PLAN_SCP		= 0, 1 , BEF3_SHIP_RESULT			/BEF3_SHIP_PLAN_SCP		) * 100 END , 0 ) AS BEF3_CO_RATE			' + CHAR(10); -- 준수율(UOM)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF3_SHIP_PLAN_SSP		= 0, 1 , BEF3_SHIP_RESULT_TOT		/BEF3_SHIP_PLAN_SSP		) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF3_SHIP_PLAN_SCP		= 0, 1 , BEF3_SHIP_RESULT_TOT		/BEF3_SHIP_PLAN_SCP		) * 100 END , 0 ) AS BEF3_AC_RATE			' + CHAR(10); -- 달성율(UOM)
+	-- 과거 주차 W-3 주차(Cell)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF3_SHIP_PLAN_SSP_CELL	= 0, 1 , BEF3_SHIP_RESULT_CELL		/BEF3_SHIP_PLAN_SSP_CELL) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF3_SHIP_PLAN_SCP_CELL	= 0, 1 , BEF3_SHIP_RESULT_CELL		/BEF3_SHIP_PLAN_SCP_CELL) * 100 END , 0 ) AS BEF3_CO_RATE_CELL	' + CHAR(10); -- 준수율(Cell)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF3_SHIP_PLAN_SSP_CELL	= 0, 1 , BEF3_SHIP_RESULT_TOT_CELL	/BEF3_SHIP_PLAN_SSP_CELL) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF3_SHIP_PLAN_SCP_CELL	= 0, 1 , BEF3_SHIP_RESULT_TOT_CELL	/BEF3_SHIP_PLAN_SCP_CELL) * 100 END , 0 ) AS BEF3_AC_RATE_CELL	' + CHAR(10); -- 달성율(Cell)
+	-- 과거 주차 W-4 주차(계획이 0 일 경우 100 으로 표시)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF4_SHIP_PLAN_SSP		= 0, 1 , BEF4_SHIP_RESULT			/BEF4_SHIP_PLAN_SSP		) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF4_SHIP_PLAN_SCP		= 0, 1 , BEF4_SHIP_RESULT			/BEF4_SHIP_PLAN_SCP		) * 100 END , 0 ) AS BEF4_CO_RATE			' + CHAR(10); -- 준수율(UOM)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF4_SHIP_PLAN_SSP		= 0, 1 , BEF4_SHIP_RESULT_TOT		/BEF4_SHIP_PLAN_SSP		) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF4_SHIP_PLAN_SCP		= 0, 1 , BEF4_SHIP_RESULT_TOT		/BEF4_SHIP_PLAN_SCP		) * 100 END , 0 ) AS BEF4_AC_RATE			' + CHAR(10); -- 달성율(UOM)
+	-- 과거 주차 W-4 주차(Cell)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF4_SHIP_PLAN_SSP_CELL	= 0, 1 , BEF4_SHIP_RESULT_CELL		/BEF4_SHIP_PLAN_SSP_CELL) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF4_SHIP_PLAN_SCP_CELL	= 0, 1 , BEF4_SHIP_RESULT_CELL		/BEF4_SHIP_PLAN_SCP_CELL) * 100 END , 0 ) AS BEF4_CO_RATE_CELL	' + CHAR(10); -- 준수율(Cell)
+	SET @MEXEC = @MEXEC+'		 , ROUND(CASE WHEN DIVISION_ID = ''81'' THEN	IIF(BEF4_SHIP_PLAN_SSP_CELL	= 0, 1 , BEF4_SHIP_RESULT_TOT_CELL	/BEF4_SHIP_PLAN_SSP_CELL) * 100								' + CHAR(10);
+	SET @MEXEC = @MEXEC+'				ELSE							IIF(BEF4_SHIP_PLAN_SCP_CELL	= 0, 1 , BEF4_SHIP_RESULT_TOT_CELL	/BEF4_SHIP_PLAN_SCP_CELL) * 100 END , 0 ) AS BEF4_AC_RATE_CELL	' + CHAR(10); -- 달성율(Cell)
+	-- REASON
+	SET @MEXEC = @MEXEC+'		 , REASON_CODE							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , REASON_DESCRIPTION AS REASON_OLD		' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		 , TO_SCM_SITE_ID_ORG				    ' + CHAR(10); --20230130 추가
+	SET @MEXEC = @MEXEC+'	  FROM #tmp_SCP0077_DATA A			' + CHAR(10);
+	-----------------------------------------------------------------------------------------------------------------------------------
+	SET @MEXEC = @MEXEC+'	  ) A			' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	  LEFT JOIN #tmp_SCP0077_REASON B	' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	   ON A.PLAN_START_YYYYMMDD =  B.PLAN_START_YYYYMMDD    ' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	  AND A.PLAN_WEEK           =  B.PLAN_WEEK				' + CHAR(10);
+	SET @MEXEC = @MEXEC+'	  AND A.DIVISION_ID         =  B.DIVISION_ID            ' + CHAR(10); 	-- DIVISION ID는 필수 , 없을 시 오류발생
+	IF (@V_CNT_USR_COLUMN = 0 OR @useCol_OPERATION_GROUP = 'Y') SET @MEXEC = @MEXEC+'	  AND A.OPERATION_GROUP     =  B.OPERATION_GROUP        ' + CHAR(10);
+	IF (@V_CNT_USR_COLUMN = 0 OR @useCol_PLANT_ID	 = 'Y')     SET @MEXEC = @MEXEC+'	  AND A.PLANT_ID            =  B.PLANT_ID				' + CHAR(10);
+  --IF (@V_CNT_USR_COLUMN = 0 OR @useCol_DIVISION_ID = 'Y')     SET @MEXEC = @MEXEC+'	  AND A.FROM_SCM_SITE_ID    =  B.FROM_SITE				' + CHAR(10);
+	IF (@V_CNT_USR_COLUMN = 0 OR @useCol_CELL_TYPE_GR = 'Y')    SET @MEXEC = @MEXEC+'	  AND A.CELL_TYPE_GR        =  B.CELL_TYPE_GR			' + CHAR(10);
+	IF (@V_CNT_USR_COLUMN = 0 OR @useCol_MODEL_TYPE_GR = 'Y')   SET @MEXEC = @MEXEC+'	  AND A.MODEL_TYPE_GR       =  B.MODEL_TYPE_GR			' + CHAR(10);
+	IF (@V_CNT_USR_COLUMN = 0 OR @useCol_TO_SCM_SITE_ID	 = 'Y') SET @MEXEC = @MEXEC+'	  AND A.TO_SCM_SITE_ID_ORG  =  B.TO_SCM_SITE_ID			' + CHAR(10);
+	IF (@V_CNT_USR_COLUMN = 0 OR @useCol_PROJECT_CODE	 = 'Y') SET @MEXEC = @MEXEC+'	  AND A.PROJECT_CODE        =  B.PROJECT_CODE			' + CHAR(10);
+
+
+
+	-----------------------------------------------------------------------------------------------------------------------------------
+	SET @MEXEC = @MEXEC+'	  ORDER BY 							' + CHAR(10);
+	SET @MEXEC = @MEXEC+'		   ' + @mEXEC_ORDER_BY			  + CHAR(10);  -- 동적 ORDER BY 정의
+	
+	--select (@mEXEC);
+	EXEC (@mEXEC);
+
+	-- DEBUG QRY 출력
+	---------------------------------------------------------	
+	IF( @debug_mode ='T')
+	BEGIN				
+		SET @POS =1;
+		SET @LEN =LEN(@MEXEC);
+		WHILE @POS <= @LEN
+			BEGIN
+				PRINT SUBSTRING(@MEXEC,@POS,4000);
+				SET @POS = @POS+4000;
+			END;
+	END;
+
+	/********************************************************************************
+	* 수정 여부 조회(전체 컬럼 조회 시 수정 가능)
+	********************************************************************************/
+	SELECT ( CASE WHEN COUNT(1) > 0 THEN 'N' ELSE 'Y' END ) AS IS_EDITABLE
+	  FROM (
+			SELECT A.COLUMN_NAME
+			  FROM SCM_MST_SHEET_COLUMNS A WITH(NOLOCK) 
+			 WHERE A.PROGRAM_ID	= @v_program_id
+			   AND A.SHEET_NAME	= @v_sheet_name
+			   AND A.VALID_YN		= 'Y'
+			   AND A.VISIBLE_FLAG	= 'Y'
+			EXCEPT 
+			SELECT COL
+			  FROM #tmp_SCP0077_COLUMN
+			) A
+	;
+
+
+
+	/* by 이승찬C backup
+    -- PJ20216994 (2022.08.31)
+    ;WITH sub AS
+    (
+     SELECT PLAN_START_YYYYMMDD
+           ,PLAN_WEEK
+           ,DIVISION_ID
+           ,CELL_TYPE_GR
+           ,OPERATION_GROUP
+           ,PLANT_ID
+           ,MODEL_TYPE_GR
+           ,FROM_SCM_SITE_ID
+           ,TO_SCM_SITE_ID
+           ,PROJECT_CODE
+           ,PLAN_DAY
+           ,DATEPART(WEEKDAY, PLAN_DAY) DAY_NO
+           ,SUM(SHIP_PLAN_SCP) SHIP_PLAN_SCP
+           ,SUM(SHIP_PLAN_SSP) SHIP_PLAN_SSP
+           ,SUM(SHIP_RESULT) SHIP_RESULT
+           ,SUM(SHIP_RESULT_TOT) SHIP_RESULT_TOT
+           ,SUM(SHIP_PLAN_SCP_CELL) SHIP_PLAN_SCP_CELL
+           ,SUM(SHIP_PLAN_SSP_CELL) SHIP_PLAN_SSP_CELL
+           ,SUM(SHIP_RESULT_CELL) SHIP_RESULT_CELL
+           ,SUM(SHIP_RESULT_TOT_CELL) SHIP_RESULT_TOT_CELL
+           ,ROUND(CASE WHEN DIVISION_ID = '81' THEN IIF(SUM(SHIP_PLAN_SSP) = 0, 1, SUM(SHIP_RESULT)/SUM(SHIP_PLAN_SSP)) * 100
+                       ELSE IIF(SUM(SHIP_PLAN_SCP) = 0, 1, SUM(SHIP_RESULT)/SUM(SHIP_PLAN_SCP)) * 100 END, 0) CO_RATE
+           ,ROUND(CASE WHEN DIVISION_ID = '81' THEN IIF(SUM(SHIP_PLAN_SSP) = 0, 1, SUM(SHIP_RESULT_TOT)/SUM(SHIP_PLAN_SSP)) * 100
+                       ELSE IIF(SUM(SHIP_PLAN_SCP) = 0, 1, SUM(SHIP_RESULT_TOT)/SUM(SHIP_PLAN_SCP)) * 100 END, 0) AC_RATE
+           
+           ,ROUND(CASE WHEN DIVISION_ID = '81' THEN IIF(SUM(SHIP_PLAN_SSP_CELL) = 0, 1, SUM(SHIP_RESULT_CELL)/SUM(SHIP_PLAN_SSP_CELL)) * 100
+                       ELSE IIF(SUM(SHIP_PLAN_SCP_CELL) = 0, 1, SUM(SHIP_RESULT_CELL)/SUM(SHIP_PLAN_SCP_CELL)) * 100 END, 0) CO_RATE_CELL
+           ,ROUND(CASE WHEN DIVISION_ID = '81' THEN IIF(SUM(SHIP_PLAN_SSP_CELL) = 0, 1, SUM(SHIP_RESULT_TOT_CELL)/SUM(SHIP_PLAN_SSP_CELL)) * 100
+                       ELSE IIF(SUM(SHIP_PLAN_SCP_CELL) = 0, 1, SUM(SHIP_RESULT_TOT_CELL)/SUM(SHIP_PLAN_SCP_CELL)) * 100 END, 0) AC_RATE_CELL
+     FROM   dbo.SCP_RPT_SHIPMENT_DETAIL WITH(NOLOCK)
+     WHERE  PLAN_START_YYYYMMDD = @v_plan_start_yyyymmdd
+     GROUP BY PLAN_START_YYYYMMDD
+             ,PLAN_WEEK
+             ,DIVISION_ID
+             ,CELL_TYPE_GR
+             ,OPERATION_GROUP
+             ,PLANT_ID
+             ,MODEL_TYPE_GR
+             ,FROM_SCM_SITE_ID
+             ,TO_SCM_SITE_ID
+             ,PROJECT_CODE
+             ,PLAN_DAY
+    ),
+    sub1 AS
+    (
+     SELECT A.PLAN_START_YYYYMMDD
+           ,A.PLAN_WEEK
+           ,A.DIVISION_ID
+           ,A.CELL_TYPE_GR
+           ,A.OPERATION_GROUP
+           ,A.PLANT_ID
+           ,A.MODEL_TYPE_GR
+           ,A.FROM_SCM_SITE_ID
+           ,A.TO_SCM_SITE_ID
+           ,A.PROJECT_CODE
+           ,IIF(A.DAY_NO = 1, A1.SHIP_PLAN_SCP, 0) SHIP_PLAN_SCP_D1
+           ,IIF(A.DAY_NO = 1, A1.SHIP_PLAN_SSP, 0) SHIP_PLAN_SSP_D1
+           ,IIF(A.DAY_NO = 1, A1.SHIP_RESULT, 0) SHIP_RESULT_D1
+           ,IIF(A.DAY_NO = 1, A1.SHIP_RESULT_TOT, 0) SHIP_RESULT_TOT_D1
+           ,IIF(A.DAY_NO = 1, A1.SHIP_PLAN_SCP_CELL, 0) SHIP_PLAN_SCP_CELL_D1
+           ,IIF(A.DAY_NO = 1, A1.SHIP_PLAN_SSP_CELL, 0) SHIP_PLAN_SSP_CELL_D1
+           ,IIF(A.DAY_NO = 1, A1.SHIP_RESULT_CELL, 0) SHIP_RESULT_CELL_D1
+           ,IIF(A.DAY_NO = 1, A1.SHIP_RESULT_TOT_CELL, 0) SHIP_RESULT_TOT_CELL_D1
+           ,IIF(A.DAY_NO = 1, A1.CO_RATE, 0) CO_RATE_D1
+           ,IIF(A.DAY_NO = 1, A1.AC_RATE, 0) AC_RATE_D1
+           ,IIF(A.DAY_NO = 1, A1.CO_RATE_CELL, 0) CO_RATE_CELL_D1
+           ,IIF(A.DAY_NO = 1, A1.AC_RATE_CELL, 0) AC_RATE_CELL_D1
+           ,IIF(A.DAY_NO = 2, A2.SHIP_PLAN_SCP, 0) SHIP_PLAN_SCP_D2
+           ,IIF(A.DAY_NO = 2, A2.SHIP_PLAN_SSP, 0) SHIP_PLAN_SSP_D2
+           ,IIF(A.DAY_NO = 2, A2.SHIP_RESULT, 0) SHIP_RESULT_D2
+           ,IIF(A.DAY_NO = 2, A2.SHIP_RESULT_TOT, 0) SHIP_RESULT_TOT_D2
+           ,IIF(A.DAY_NO = 2, A2.SHIP_PLAN_SCP_CELL, 0) SHIP_PLAN_SCP_CELL_D2
+           ,IIF(A.DAY_NO = 2, A2.SHIP_PLAN_SSP_CELL, 0) SHIP_PLAN_SSP_CELL_D2
+           ,IIF(A.DAY_NO = 2, A2.SHIP_RESULT_CELL, 0) SHIP_RESULT_CELL_D2
+           ,IIF(A.DAY_NO = 2, A2.SHIP_RESULT_TOT_CELL, 0) SHIP_RESULT_TOT_CELL_D2
+           ,IIF(A.DAY_NO = 2, A2.CO_RATE, 0) CO_RATE_D2
+           ,IIF(A.DAY_NO = 2, A2.AC_RATE, 0) AC_RATE_D2
+           ,IIF(A.DAY_NO = 2, A2.CO_RATE_CELL, 0) CO_RATE_CELL_D2
+           ,IIF(A.DAY_NO = 2, A2.AC_RATE_CELL, 0) AC_RATE_CELL_D2
+           ,IIF(A.DAY_NO = 3, A3.SHIP_PLAN_SCP, 0) SHIP_PLAN_SCP_D3
+           ,IIF(A.DAY_NO = 3, A3.SHIP_PLAN_SSP, 0) SHIP_PLAN_SSP_D3
+           ,IIF(A.DAY_NO = 3, A3.SHIP_RESULT, 0) SHIP_RESULT_D3
+           ,IIF(A.DAY_NO = 3, A3.SHIP_RESULT_TOT, 0) SHIP_RESULT_TOT_D3
+           ,IIF(A.DAY_NO = 3, A3.SHIP_PLAN_SCP_CELL, 0) SHIP_PLAN_SCP_CELL_D3
+           ,IIF(A.DAY_NO = 3, A3.SHIP_PLAN_SSP_CELL, 0) SHIP_PLAN_SSP_CELL_D3
+           ,IIF(A.DAY_NO = 3, A3.SHIP_RESULT_CELL, 0) SHIP_RESULT_CELL_D3
+           ,IIF(A.DAY_NO = 3, A3.SHIP_RESULT_TOT_CELL, 0) SHIP_RESULT_TOT_CELL_D3
+           ,IIF(A.DAY_NO = 3, A3.CO_RATE, 0) CO_RATE_D3
+           ,IIF(A.DAY_NO = 3, A3.AC_RATE, 0) AC_RATE_D3
+           ,IIF(A.DAY_NO = 3, A3.CO_RATE_CELL, 0) CO_RATE_CELL_D3
+           ,IIF(A.DAY_NO = 3, A3.AC_RATE_CELL, 0) AC_RATE_CELL_D3
+           ,IIF(A.DAY_NO = 4, A4.SHIP_PLAN_SCP, 0) SHIP_PLAN_SCP_D4
+           ,IIF(A.DAY_NO = 4, A4.SHIP_PLAN_SSP, 0) SHIP_PLAN_SSP_D4
+           ,IIF(A.DAY_NO = 4, A4.SHIP_RESULT, 0) SHIP_RESULT_D4
+           ,IIF(A.DAY_NO = 4, A4.SHIP_RESULT_TOT, 0) SHIP_RESULT_TOT_D4
+           ,IIF(A.DAY_NO = 4, A4.SHIP_PLAN_SCP_CELL, 0) SHIP_PLAN_SCP_CELL_D4
+           ,IIF(A.DAY_NO = 4, A4.SHIP_PLAN_SSP_CELL, 0) SHIP_PLAN_SSP_CELL_D4
+           ,IIF(A.DAY_NO = 4, A4.SHIP_RESULT_CELL, 0) SHIP_RESULT_CELL_D4
+           ,IIF(A.DAY_NO = 4, A4.SHIP_RESULT_TOT_CELL, 0) SHIP_RESULT_TOT_CELL_D4
+           ,IIF(A.DAY_NO = 4, A4.CO_RATE, 0) CO_RATE_D4
+           ,IIF(A.DAY_NO = 4, A4.AC_RATE, 0) AC_RATE_D4
+           ,IIF(A.DAY_NO = 4, A4.CO_RATE_CELL, 0) CO_RATE_CELL_D4
+           ,IIF(A.DAY_NO = 4, A4.AC_RATE_CELL, 0) AC_RATE_CELL_D4
+           ,IIF(A.DAY_NO = 5, A5.SHIP_PLAN_SCP, 0) SHIP_PLAN_SCP_D5
+           ,IIF(A.DAY_NO = 5, A5.SHIP_PLAN_SSP, 0) SHIP_PLAN_SSP_D5
+           ,IIF(A.DAY_NO = 5, A5.SHIP_RESULT, 0) SHIP_RESULT_D5
+           ,IIF(A.DAY_NO = 5, A5.SHIP_RESULT_TOT, 0) SHIP_RESULT_TOT_D5
+           ,IIF(A.DAY_NO = 5, A5.SHIP_PLAN_SCP_CELL, 0) SHIP_PLAN_SCP_CELL_D5
+           ,IIF(A.DAY_NO = 5, A5.SHIP_PLAN_SSP_CELL, 0) SHIP_PLAN_SSP_CELL_D5
+           ,IIF(A.DAY_NO = 5, A5.SHIP_RESULT_CELL, 0) SHIP_RESULT_CELL_D5
+           ,IIF(A.DAY_NO = 5, A5.SHIP_RESULT_TOT_CELL, 0) SHIP_RESULT_TOT_CELL_D5
+           ,IIF(A.DAY_NO = 5, A5.CO_RATE, 0) CO_RATE_D5
+           ,IIF(A.DAY_NO = 5, A5.AC_RATE, 0) AC_RATE_D5
+           ,IIF(A.DAY_NO = 5, A5.CO_RATE_CELL, 0) CO_RATE_CELL_D5
+           ,IIF(A.DAY_NO = 5, A5.AC_RATE_CELL, 0) AC_RATE_CELL_D5
+           ,IIF(A.DAY_NO = 6, A6.SHIP_PLAN_SCP, 0) SHIP_PLAN_SCP_D6
+           ,IIF(A.DAY_NO = 6, A6.SHIP_PLAN_SSP, 0) SHIP_PLAN_SSP_D6
+           ,IIF(A.DAY_NO = 6, A6.SHIP_RESULT, 0) SHIP_RESULT_D6
+           ,IIF(A.DAY_NO = 6, A6.SHIP_RESULT_TOT, 0) SHIP_RESULT_TOT_D6
+           ,IIF(A.DAY_NO = 6, A6.SHIP_PLAN_SCP_CELL, 0) SHIP_PLAN_SCP_CELL_D6
+           ,IIF(A.DAY_NO = 6, A6.SHIP_PLAN_SSP_CELL, 0) SHIP_PLAN_SSP_CELL_D6
+           ,IIF(A.DAY_NO = 6, A6.SHIP_RESULT_CELL, 0) SHIP_RESULT_CELL_D6
+           ,IIF(A.DAY_NO = 6, A6.SHIP_RESULT_TOT_CELL, 0) SHIP_RESULT_TOT_CELL_D6
+           ,IIF(A.DAY_NO = 6, A6.CO_RATE, 0) CO_RATE_D6
+           ,IIF(A.DAY_NO = 6, A6.AC_RATE, 0) AC_RATE_D6
+           ,IIF(A.DAY_NO = 6, A6.CO_RATE_CELL, 0) CO_RATE_CELL_D6
+           ,IIF(A.DAY_NO = 6, A6.AC_RATE_CELL, 0) AC_RATE_CELL_D6
+           ,IIF(A.DAY_NO = 7, A7.SHIP_PLAN_SCP, 0) SHIP_PLAN_SCP_D7
+           ,IIF(A.DAY_NO = 7, A7.SHIP_PLAN_SSP, 0) SHIP_PLAN_SSP_D7
+           ,IIF(A.DAY_NO = 7, A7.SHIP_RESULT, 0) SHIP_RESULT_D7
+           ,IIF(A.DAY_NO = 7, A7.SHIP_RESULT_TOT, 0) SHIP_RESULT_TOT_D7
+           ,IIF(A.DAY_NO = 7, A7.SHIP_PLAN_SCP_CELL, 0) SHIP_PLAN_SCP_CELL_D7
+           ,IIF(A.DAY_NO = 7, A7.SHIP_PLAN_SSP_CELL, 0) SHIP_PLAN_SSP_CELL_D7
+           ,IIF(A.DAY_NO = 7, A7.SHIP_RESULT_CELL, 0) SHIP_RESULT_CELL_D7
+           ,IIF(A.DAY_NO = 7, A7.SHIP_RESULT_TOT_CELL, 0) SHIP_RESULT_TOT_CELL_D7
+           ,IIF(A.DAY_NO = 7, A7.CO_RATE, 0) CO_RATE_D7
+           ,IIF(A.DAY_NO = 7, A7.AC_RATE, 0) AC_RATE_D7
+           ,IIF(A.DAY_NO = 7, A7.CO_RATE_CELL, 0) CO_RATE_CELL_D7
+           ,IIF(A.DAY_NO = 7, A7.AC_RATE_CELL, 0) AC_RATE_CELL_D7
+     FROM   sub A
+     LEFT JOIN ( SELECT * FROM sub WHERE DAY_NO = 1 ) A1
+       ON A.PLAN_START_YYYYMMDD = A1.PLAN_START_YYYYMMDD
+      AND A.PLAN_WEEK = A1.PLAN_WEEK
+      AND A.DIVISION_ID = A1.DIVISION_ID
+      AND A.CELL_TYPE_GR = A1.CELL_TYPE_GR
+      AND A.OPERATION_GROUP = A1.OPERATION_GROUP
+      AND A.PLANT_ID = A1.PLANT_ID
+      AND A.MODEL_TYPE_GR = A1.MODEL_TYPE_GR
+      AND A.FROM_SCM_SITE_ID = A1.FROM_SCM_SITE_ID
+      AND A.TO_SCM_SITE_ID = A1.TO_SCM_SITE_ID
+      AND A.PROJECT_CODE = A1.PROJECT_CODE
+      AND A.DAY_NO = A1.DAY_NO
+     LEFT JOIN ( SELECT * FROM sub WHERE DAY_NO = 2 ) A2
+       ON A.PLAN_START_YYYYMMDD = A2.PLAN_START_YYYYMMDD
+      AND A.PLAN_WEEK = A2.PLAN_WEEK
+      AND A.DIVISION_ID = A2.DIVISION_ID
+      AND A.CELL_TYPE_GR = A2.CELL_TYPE_GR
+      AND A.OPERATION_GROUP = A2.OPERATION_GROUP
+      AND A.PLANT_ID = A2.PLANT_ID
+      AND A.MODEL_TYPE_GR = A2.MODEL_TYPE_GR
+      AND A.FROM_SCM_SITE_ID = A2.FROM_SCM_SITE_ID
+      AND A.TO_SCM_SITE_ID = A2.TO_SCM_SITE_ID
+      AND A.PROJECT_CODE = A2.PROJECT_CODE
+      AND A.DAY_NO = A2.DAY_NO
+     LEFT JOIN ( SELECT * FROM sub WHERE DAY_NO = 3 ) A3
+       ON A.PLAN_START_YYYYMMDD = A3.PLAN_START_YYYYMMDD
+      AND A.PLAN_WEEK = A3.PLAN_WEEK
+      AND A.DIVISION_ID = A3.DIVISION_ID
+      AND A.CELL_TYPE_GR = A3.CELL_TYPE_GR
+      AND A.OPERATION_GROUP = A3.OPERATION_GROUP
+      AND A.PLANT_ID = A3.PLANT_ID
+      AND A.MODEL_TYPE_GR = A3.MODEL_TYPE_GR
+      AND A.FROM_SCM_SITE_ID = A3.FROM_SCM_SITE_ID
+      AND A.TO_SCM_SITE_ID = A3.TO_SCM_SITE_ID
+      AND A.PROJECT_CODE = A3.PROJECT_CODE
+      AND A.DAY_NO = A3.DAY_NO
+     LEFT JOIN ( SELECT * FROM sub WHERE DAY_NO = 4 ) A4
+       ON A.PLAN_START_YYYYMMDD = A4.PLAN_START_YYYYMMDD
+      AND A.PLAN_WEEK = A4.PLAN_WEEK
+      AND A.DIVISION_ID = A4.DIVISION_ID
+      AND A.CELL_TYPE_GR = A4.CELL_TYPE_GR
+      AND A.OPERATION_GROUP = A4.OPERATION_GROUP
+      AND A.PLANT_ID = A4.PLANT_ID
+      AND A.MODEL_TYPE_GR = A4.MODEL_TYPE_GR
+      AND A.FROM_SCM_SITE_ID = A4.FROM_SCM_SITE_ID
+      AND A.TO_SCM_SITE_ID = A4.TO_SCM_SITE_ID
+      AND A.PROJECT_CODE = A4.PROJECT_CODE
+      AND A.DAY_NO = A4.DAY_NO
+     LEFT JOIN ( SELECT * FROM sub WHERE DAY_NO = 5 ) A5
+       ON A.PLAN_START_YYYYMMDD = A5.PLAN_START_YYYYMMDD
+      AND A.PLAN_WEEK = A5.PLAN_WEEK
+      AND A.DIVISION_ID = A5.DIVISION_ID
+      AND A.CELL_TYPE_GR = A5.CELL_TYPE_GR
+      AND A.OPERATION_GROUP = A5.OPERATION_GROUP
+      AND A.PLANT_ID = A5.PLANT_ID
+      AND A.MODEL_TYPE_GR = A5.MODEL_TYPE_GR
+      AND A.FROM_SCM_SITE_ID = A5.FROM_SCM_SITE_ID
+      AND A.TO_SCM_SITE_ID = A5.TO_SCM_SITE_ID
+      AND A.PROJECT_CODE = A5.PROJECT_CODE
+      AND A.DAY_NO = A5.DAY_NO
+     LEFT JOIN ( SELECT * FROM sub WHERE DAY_NO = 6 ) A6
+       ON A.PLAN_START_YYYYMMDD = A6.PLAN_START_YYYYMMDD
+      AND A.PLAN_WEEK = A6.PLAN_WEEK
+      AND A.DIVISION_ID = A6.DIVISION_ID
+      AND A.CELL_TYPE_GR = A6.CELL_TYPE_GR
+      AND A.OPERATION_GROUP = A6.OPERATION_GROUP
+      AND A.PLANT_ID = A6.PLANT_ID
+      AND A.MODEL_TYPE_GR = A6.MODEL_TYPE_GR
+      AND A.FROM_SCM_SITE_ID = A6.FROM_SCM_SITE_ID
+      AND A.TO_SCM_SITE_ID = A6.TO_SCM_SITE_ID
+      AND A.PROJECT_CODE = A6.PROJECT_CODE
+      AND A.DAY_NO = A6.DAY_NO
+     LEFT JOIN ( SELECT * FROM sub WHERE DAY_NO = 7 ) A7
+       ON A.PLAN_START_YYYYMMDD = A7.PLAN_START_YYYYMMDD
+      AND A.PLAN_WEEK = A7.PLAN_WEEK
+      AND A.DIVISION_ID = A7.DIVISION_ID
+      AND A.CELL_TYPE_GR = A7.CELL_TYPE_GR
+      AND A.OPERATION_GROUP = A7.OPERATION_GROUP
+      AND A.PLANT_ID = A7.PLANT_ID
+      AND A.MODEL_TYPE_GR = A7.MODEL_TYPE_GR
+      AND A.FROM_SCM_SITE_ID = A7.FROM_SCM_SITE_ID
+      AND A.TO_SCM_SITE_ID = A7.TO_SCM_SITE_ID
+      AND A.PROJECT_CODE = A7.PROJECT_CODE
+      AND A.DAY_NO = A7.DAY_NO
+    )
+    
+	--SELECT A.PLAN_START_YYYYMMDD
+	SELECT top 30 A.PLAN_START_YYYYMMDD  -- test 중...
+          ,A.PLAN_WEEK
+          ,A.DIVISION_ID
+          ,A.CELL_TYPE_GR
+          ,A.OPERATION_GROUP
+          ,A.PLANT_ID
+          ,A.MODEL_TYPE_GR
+          ,A.FROM_SCM_SITE_ID
+          ,A.TO_SCM_SITE_ID
+          ,A.PROJECT_CODE
+          ,SUM(SHIP_PLAN_SCP_D1) SHIP_PLAN_SCP_D1
+          ,SUM(SHIP_PLAN_SSP_D1) SHIP_PLAN_SSP_D1
+          ,SUM(SHIP_RESULT_D1) SHIP_RESULT_D1
+          ,SUM(SHIP_RESULT_TOT_D1) SHIP_RESULT_TOT_D1
+          ,SUM(SHIP_PLAN_SCP_CELL_D1) SHIP_PLAN_SCP_CELL_D1
+          ,SUM(SHIP_PLAN_SSP_CELL_D1) SHIP_PLAN_SSP_CELL_D1
+          ,SUM(SHIP_RESULT_CELL_D1) SHIP_RESULT_CELL_D1
+          ,SUM(SHIP_RESULT_TOT_CELL_D1) SHIP_RESULT_TOT_CELL_D1
+          ,SUM(CO_RATE_D1) CO_RATE_D1
+          ,SUM(AC_RATE_D1) AC_RATE_D1
+          ,SUM(CO_RATE_CELL_D1) CO_RATE_CELL_D1
+          ,SUM(AC_RATE_CELL_D1) AC_RATE_CELL_D1
+          ,SUM(SHIP_PLAN_SCP_D2) SHIP_PLAN_SCP_D2
+          ,SUM(SHIP_PLAN_SSP_D2) SHIP_PLAN_SSP_D2
+          ,SUM(SHIP_RESULT_D2) SHIP_RESULT_D2
+          ,SUM(SHIP_RESULT_TOT_D2) SHIP_RESULT_TOT_D2
+          ,SUM(SHIP_PLAN_SCP_CELL_D2) SHIP_PLAN_SCP_CELL_D2
+          ,SUM(SHIP_PLAN_SSP_CELL_D2) SHIP_PLAN_SSP_CELL_D2
+          ,SUM(SHIP_RESULT_CELL_D2) SHIP_RESULT_CELL_D2
+          ,SUM(SHIP_RESULT_TOT_CELL_D2) SHIP_RESULT_TOT_CELL_D2
+          ,SUM(CO_RATE_D2) CO_RATE_D2
+          ,SUM(AC_RATE_D2) AC_RATE_D2
+          ,SUM(CO_RATE_CELL_D2) CO_RATE_CELL_D2
+          ,SUM(AC_RATE_CELL_D2) AC_RATE_CELL_D2
+          ,SUM(SHIP_PLAN_SCP_D3) SHIP_PLAN_SCP_D3
+          ,SUM(SHIP_PLAN_SSP_D3) SHIP_PLAN_SSP_D3
+          ,SUM(SHIP_RESULT_D3) SHIP_RESULT_D3
+          ,SUM(SHIP_RESULT_TOT_D3) SHIP_RESULT_TOT_D3
+          ,SUM(SHIP_PLAN_SCP_CELL_D3) SHIP_PLAN_SCP_CELL_D3
+          ,SUM(SHIP_PLAN_SSP_CELL_D3) SHIP_PLAN_SSP_CELL_D3
+          ,SUM(SHIP_RESULT_CELL_D3) SHIP_RESULT_CELL_D3
+          ,SUM(SHIP_RESULT_TOT_CELL_D3) SHIP_RESULT_TOT_CELL_D3
+          ,SUM(CO_RATE_D3) CO_RATE_D3
+          ,SUM(AC_RATE_D3) AC_RATE_D3
+          ,SUM(CO_RATE_CELL_D3) CO_RATE_CELL_D3
+          ,SUM(AC_RATE_CELL_D3) AC_RATE_CELL_D3
+          ,SUM(SHIP_PLAN_SCP_D4) SHIP_PLAN_SCP_D4
+          ,SUM(SHIP_PLAN_SSP_D4) SHIP_PLAN_SSP_D4
+          ,SUM(SHIP_RESULT_D4) SHIP_RESULT_D4
+          ,SUM(SHIP_RESULT_TOT_D4) SHIP_RESULT_TOT_D4
+          ,SUM(SHIP_PLAN_SCP_CELL_D4) SHIP_PLAN_SCP_CELL_D4
+          ,SUM(SHIP_PLAN_SSP_CELL_D4) SHIP_PLAN_SSP_CELL_D4
+          ,SUM(SHIP_RESULT_CELL_D4) SHIP_RESULT_CELL_D4
+          ,SUM(SHIP_RESULT_TOT_CELL_D4) SHIP_RESULT_TOT_CELL_D4
+          ,SUM(CO_RATE_D4) CO_RATE_D4
+          ,SUM(AC_RATE_D4) AC_RATE_D4
+          ,SUM(CO_RATE_CELL_D4) CO_RATE_CELL_D4
+          ,SUM(AC_RATE_CELL_D4) AC_RATE_CELL_D4
+          ,SUM(SHIP_PLAN_SCP_D5) SHIP_PLAN_SCP_D5
+          ,SUM(SHIP_PLAN_SSP_D5) SHIP_PLAN_SSP_D5
+          ,SUM(SHIP_RESULT_D5) SHIP_RESULT_D5
+          ,SUM(SHIP_RESULT_TOT_D5) SHIP_RESULT_TOT_D5
+          ,SUM(SHIP_PLAN_SCP_CELL_D5) SHIP_PLAN_SCP_CELL_D5
+          ,SUM(SHIP_PLAN_SSP_CELL_D5) SHIP_PLAN_SSP_CELL_D5
+          ,SUM(SHIP_RESULT_CELL_D5) SHIP_RESULT_CELL_D5
+          ,SUM(SHIP_RESULT_TOT_CELL_D5) SHIP_RESULT_TOT_CELL_D5
+          ,SUM(CO_RATE_D5) CO_RATE_D5
+          ,SUM(AC_RATE_D5) AC_RATE_D5
+          ,SUM(CO_RATE_CELL_D5) CO_RATE_CELL_D5
+          ,SUM(AC_RATE_CELL_D5) AC_RATE_CELL_D5
+          ,SUM(SHIP_PLAN_SCP_D6) SHIP_PLAN_SCP_D6
+          ,SUM(SHIP_PLAN_SSP_D6) SHIP_PLAN_SSP_D6
+          ,SUM(SHIP_RESULT_D6) SHIP_RESULT_D6
+          ,SUM(SHIP_RESULT_TOT_D6) SHIP_RESULT_TOT_D6
+          ,SUM(SHIP_PLAN_SCP_CELL_D6) SHIP_PLAN_SCP_CELL_D6
+          ,SUM(SHIP_PLAN_SSP_CELL_D6) SHIP_PLAN_SSP_CELL_D6
+          ,SUM(SHIP_RESULT_CELL_D6) SHIP_RESULT_CELL_D6
+          ,SUM(SHIP_RESULT_TOT_CELL_D6) SHIP_RESULT_TOT_CELL_D6
+          ,SUM(CO_RATE_D6) CO_RATE_D6
+          ,SUM(AC_RATE_D6) AC_RATE_D6
+          ,SUM(CO_RATE_CELL_D6) CO_RATE_CELL_D6
+          ,SUM(AC_RATE_CELL_D6) AC_RATE_CELL_D6
+          ,SUM(SHIP_PLAN_SCP_D7) SHIP_PLAN_SCP_D7
+          ,SUM(SHIP_PLAN_SSP_D7) SHIP_PLAN_SSP_D7
+          ,SUM(SHIP_RESULT_D7) SHIP_RESULT_D7
+          ,SUM(SHIP_RESULT_TOT_D7) SHIP_RESULT_TOT_D7
+          ,SUM(SHIP_PLAN_SCP_CELL_D7) SHIP_PLAN_SCP_CELL_D7
+          ,SUM(SHIP_PLAN_SSP_CELL_D7) SHIP_PLAN_SSP_CELL_D7
+          ,SUM(SHIP_RESULT_CELL_D7) SHIP_RESULT_CELL_D7
+          ,SUM(SHIP_RESULT_TOT_CELL_D7) SHIP_RESULT_TOT_CELL_D7
+          ,SUM(CO_RATE_D7) CO_RATE_D7
+          ,SUM(AC_RATE_D7) AC_RATE_D7
+          ,SUM(CO_RATE_CELL_D7) CO_RATE_CELL_D7
+          ,SUM(AC_RATE_CELL_D7) AC_RATE_CELL_D7
+    FROM   sub1 A
+    GROUP BY A.PLAN_START_YYYYMMDD
+            ,A.PLAN_WEEK
+            ,A.DIVISION_ID
+            ,A.CELL_TYPE_GR
+            ,A.OPERATION_GROUP
+            ,A.PLANT_ID
+            ,A.MODEL_TYPE_GR
+            ,A.FROM_SCM_SITE_ID
+            ,A.TO_SCM_SITE_ID
+            ,A.PROJECT_CODE;
+
+	*/
+	
+
+END
+

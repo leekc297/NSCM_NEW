@@ -1,0 +1,215 @@
+﻿
+CREATE PROCEDURE [dbo].[PR_SCM_ADM_DB_TABLE_SCRIPT_BACKUP]
+AS
+
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @TABLE_NAME SYSNAME
+	DECLARE @SQL NVARCHAR(MAX) = ''
+ 
+	DECLARE @OBJECT_NAME SYSNAME, 
+			@OBJECT_ID INT
+
+	DECLARE @mmdd varchar(4)
+	SET @mmdd = right(convert(varchar(8),getdate(),112),4)
+
+/*
+	if (@mmdd = '0301')
+	begin
+		DECLARE c_obj CURSOR FAST_FORWARD FOR 
+			SELECT S.NAME + '.' + O.NAME,
+					'[' + S.NAME + '].[' + O.NAME + ']',
+					O.[OBJECT_ID]
+			FROM SYS.OBJECTS O WITH (NOLOCK)
+			JOIN SYS.SCHEMAS S WITH (NOLOCK) ON O.[SCHEMA_ID] = S.[SCHEMA_ID]
+			WHERE O.[TYPE] = 'U'
+			AND O.IS_MS_SHIPPED = 0
+			--AND o.modify_date between convert(varchar(8),DATEADD(DD, -1, GETDATE()),112) and convert(varchar(8),GETDATE(),112) 
+	end
+	else
+*/
+	begin
+		DECLARE c_obj CURSOR FAST_FORWARD FOR 
+			SELECT S.NAME + '.' + O.NAME,
+					'[' + S.NAME + '].[' + O.NAME + ']',
+					O.[OBJECT_ID]
+			FROM SYS.OBJECTS O WITH (NOLOCK)
+			JOIN SYS.SCHEMAS S WITH (NOLOCK) ON O.[SCHEMA_ID] = S.[SCHEMA_ID]
+			WHERE O.[TYPE] = 'U'
+			AND O.IS_MS_SHIPPED = 0
+			AND o.modify_date between convert(varchar(8),DATEADD(DD, -1, GETDATE()),112) and convert(varchar(8),GETDATE(),112) 
+	end
+
+	OPEN c_obj;
+	FETCH NEXT FROM c_obj INTO @TABLE_NAME, @OBJECT_NAME, @OBJECT_ID
+	WHILE @@FETCH_STATUS = 0 
+		begin
+
+			SET @SQL = ''
+ 
+			;WITH INDEX_COLUMN AS 
+			(
+				SELECT 
+					  IC.[OBJECT_ID]
+					, IC.INDEX_ID
+					, IC.IS_DESCENDING_KEY
+					, IC.IS_INCLUDED_COLUMN
+					, C.NAME
+				FROM SYS.INDEX_COLUMNS IC WITH (NOLOCK)
+				JOIN SYS.COLUMNS C WITH (NOLOCK) ON IC.[OBJECT_ID] = C.[OBJECT_ID] AND IC.COLUMN_ID = C.COLUMN_ID
+				WHERE IC.[OBJECT_ID] = @OBJECT_ID
+			),
+			FK_COLUMNS AS 
+			(
+				 SELECT 
+					  K.CONSTRAINT_OBJECT_ID
+					, CNAME = C.NAME
+					, RCNAME = RC.NAME
+				FROM SYS.FOREIGN_KEY_COLUMNS K WITH (NOLOCK)
+				JOIN SYS.COLUMNS RC WITH (NOLOCK) ON RC.[OBJECT_ID] = K.REFERENCED_OBJECT_ID AND RC.COLUMN_ID = K.REFERENCED_COLUMN_ID 
+				JOIN SYS.COLUMNS C WITH (NOLOCK) ON C.[OBJECT_ID] = K.PARENT_OBJECT_ID AND C.COLUMN_ID = K.PARENT_COLUMN_ID
+				WHERE K.PARENT_OBJECT_ID = @OBJECT_ID
+			)
+			SELECT @SQL = 'CREATE TABLE ' + @OBJECT_NAME + CHAR(13) + '(' + CHAR(13) + STUFF((
+				SELECT CHAR(9) + ', [' + C.NAME + '] ' + 
+					CASE WHEN C.IS_COMPUTED = 1
+						THEN 'AS ' + CC.[DEFINITION] 
+						ELSE UPPER(TP.NAME) + 
+							CASE WHEN TP.NAME IN ('VARCHAR', 'CHAR', 'VARBINARY', 'BINARY', 'TEXT')
+								   THEN '(' + CASE WHEN C.MAX_LENGTH = -1 THEN 'MAX' ELSE CAST(C.MAX_LENGTH AS VARCHAR(5)) END + ')'
+								 WHEN TP.NAME IN ('NVARCHAR', 'NCHAR', 'NTEXT')
+								   THEN '(' + CASE WHEN C.MAX_LENGTH = -1 THEN 'MAX' ELSE CAST(C.MAX_LENGTH / 2 AS VARCHAR(5)) END + ')'
+								 WHEN TP.NAME IN ('DATETIME2', 'TIME2', 'DATETIMEOFFSET') 
+								   THEN '(' + CAST(C.SCALE AS VARCHAR(5)) + ')'
+								 WHEN TP.NAME = 'DECIMAL' 
+								   THEN '(' + CAST(C.[PRECISION] AS VARCHAR(5)) + ',' + CAST(C.SCALE AS VARCHAR(5)) + ')'
+								ELSE ''
+							END +
+							CASE WHEN C.COLLATION_NAME IS NOT NULL THEN ' COLLATE ' + C.COLLATION_NAME ELSE '' END +
+							CASE WHEN C.IS_NULLABLE = 1 THEN ' NULL' ELSE ' NOT NULL' END +
+							CASE WHEN DC.[DEFINITION] IS NOT NULL THEN ' DEFAULT' + DC.[DEFINITION] ELSE '' END + 
+							CASE WHEN IC.IS_IDENTITY = 1 THEN ' IDENTITY(' + CAST(ISNULL(IC.SEED_value, '0') AS CHAR(1)) + ',' + CAST(ISNULL(IC.INCREMENT_value, '1') AS CHAR(1)) + ')' ELSE '' END 
+					END + CHAR(13)
+				FROM SYS.COLUMNS C WITH (NOLOCK)
+				JOIN SYS.TYPES TP WITH (NOLOCK) ON C.USER_TYPE_ID = TP.USER_TYPE_ID
+				LEFT JOIN SYS.COMPUTED_COLUMNS CC WITH (NOLOCK) ON C.[OBJECT_ID] = CC.[OBJECT_ID] AND C.COLUMN_ID = CC.COLUMN_ID
+				LEFT JOIN SYS.DEFAULT_CONSTRAINTS DC WITH (NOLOCK) ON C.DEFAULT_OBJECT_ID != 0 AND C.[OBJECT_ID] = DC.PARENT_OBJECT_ID AND C.COLUMN_ID = DC.PARENT_COLUMN_ID
+				LEFT JOIN SYS.IDENTITY_COLUMNS IC WITH (NOLOCK) ON C.IS_IDENTITY = 1 AND C.[OBJECT_ID] = IC.[OBJECT_ID] AND C.COLUMN_ID = IC.COLUMN_ID
+				WHERE C.[OBJECT_ID] = @OBJECT_ID
+				ORDER BY C.COLUMN_ID
+				FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, CHAR(9) + ' ')
+				+ ISNULL((SELECT CHAR(9) + ', CONSTRAINT [' + K.NAME + '] PRIMARY KEY (' + 
+								(SELECT STUFF((
+									 SELECT ', [' + C.NAME + '] ' + CASE WHEN IC.IS_DESCENDING_KEY = 1 THEN 'DESC' ELSE 'ASC' END
+									 FROM SYS.INDEX_COLUMNS IC WITH (NOLOCK)
+									 JOIN SYS.COLUMNS C WITH (NOLOCK) ON C.[OBJECT_ID] = IC.[OBJECT_ID] AND C.COLUMN_ID = IC.COLUMN_ID
+									 WHERE IC.IS_INCLUDED_COLUMN = 0
+										 AND IC.[OBJECT_ID] = K.PARENT_OBJECT_ID 
+										 AND IC.INDEX_ID = K.UNIQUE_INDEX_ID     
+									 FOR XML PATH(N''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, ''))
+						+ ')' + CHAR(13)
+						FROM SYS.KEY_CONSTRAINTS K WITH (NOLOCK)
+						WHERE K.PARENT_OBJECT_ID = @OBJECT_ID 
+							AND K.[TYPE] = 'PK'), '') + ')'  + CHAR(13)
+				+ ISNULL((SELECT (
+					SELECT CHAR(13) +
+						 'ALTER TABLE ' + @OBJECT_NAME + ' WITH' 
+						+ CASE WHEN FK.IS_NOT_TRUSTED = 1 
+							THEN ' NOCHECK' 
+							ELSE ' CHECK' 
+						  END + 
+						  ' ADD CONSTRAINT [' + FK.NAME  + '] FOREIGN KEY(' 
+						  + STUFF((
+							SELECT ', [' + K.CNAME + ']'
+							FROM FK_COLUMNS K
+							WHERE K.CONSTRAINT_OBJECT_ID = FK.[OBJECT_ID]
+							FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, '')
+						   + ')' +
+						  ' REFERENCES [' + SCHEMA_NAME(RO.[SCHEMA_ID]) + '].[' + RO.NAME + '] ('
+						  + STUFF((
+							SELECT ', [' + K.RCNAME + ']'
+							FROM FK_COLUMNS K
+							WHERE K.CONSTRAINT_OBJECT_ID = FK.[OBJECT_ID]
+							FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, '')
+						   + ')'
+						+ CASE 
+							WHEN FK.DELETE_REFERENTIAL_ACTION = 1 THEN ' ON DELETE CASCADE' 
+							WHEN FK.DELETE_REFERENTIAL_ACTION = 2 THEN ' ON DELETE SET NULL'
+							WHEN FK.DELETE_REFERENTIAL_ACTION = 3 THEN ' ON DELETE SET DEFAULT' 
+							ELSE '' 
+						  END
+						+ CASE 
+							WHEN FK.UPDATE_REFERENTIAL_ACTION = 1 THEN ' ON UPDATE CASCADE'
+							WHEN FK.UPDATE_REFERENTIAL_ACTION = 2 THEN ' ON UPDATE SET NULL'
+							WHEN FK.UPDATE_REFERENTIAL_ACTION = 3 THEN ' ON UPDATE SET DEFAULT'  
+							ELSE '' 
+						  END 
+						+ CHAR(13) + 'ALTER TABLE ' + @OBJECT_NAME + ' CHECK CONSTRAINT [' + FK.NAME  + ']' + CHAR(13)
+					FROM SYS.FOREIGN_KEYS FK WITH (NOLOCK)
+					JOIN SYS.OBJECTS RO WITH (NOLOCK) ON RO.[OBJECT_ID] = FK.REFERENCED_OBJECT_ID
+					WHERE FK.PARENT_OBJECT_ID = @OBJECT_ID
+					FOR XML PATH(N''), TYPE).value('.', 'NVARCHAR(MAX)')), '')
+				+ ISNULL(((SELECT
+					 CHAR(13) + 'CREATE' + CASE WHEN I.IS_UNIQUE = 1 THEN ' UNIQUE' ELSE '' END 
+							+ ' NONCLUSTERED INDEX [' + I.NAME + '] ON ' + @OBJECT_NAME + ' (' +
+							STUFF((
+							SELECT ', [' + C.NAME + ']' + CASE WHEN C.IS_DESCENDING_KEY = 1 THEN ' DESC' ELSE ' ASC' END
+							FROM INDEX_COLUMN C
+							WHERE C.IS_INCLUDED_COLUMN = 0
+								AND C.INDEX_ID = I.INDEX_ID
+							FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, '') + ')'  
+							+ ISNULL(CHAR(13) + 'INCLUDE (' + 
+								STUFF((
+								SELECT ', [' + C.NAME + ']'
+								FROM INDEX_COLUMN C
+								WHERE C.IS_INCLUDED_COLUMN = 1
+									AND C.INDEX_ID = I.INDEX_ID
+								FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, '') + ')', '')  + CHAR(13)
+					FROM SYS.INDEXES I WITH (NOLOCK)
+					WHERE I.[OBJECT_ID] = @OBJECT_ID
+						AND I.IS_PRIMARY_KEY = 0
+						AND I.[TYPE] = 2
+					FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)')
+				), '')
+
+				declare @cnt int = 1
+
+				if (len(@sql) > 4000 and len(@sql) < 100000) 
+				begin
+					
+					while(len(@sql) > 0)
+					begin
+
+						insert into LGCE_SCMDEV.dbo.SCM_ADM_DB_TABLE_SCRIPT_BACKUP
+						SELECT getdate() AS backup_dt, DB_NAME() AS fp_db_name, 'U' as type, @OBJECT_NAME AS script_nm, @OBJECT_ID object_id, @cnt as colid, substring(@SQL,1,4000) as text
+
+						if len(@sql) > 4000
+						begin
+							set @sql = substring(@SQL,4001,len(@sql))
+						end
+						else
+						begin
+							set @sql = ''
+						end
+
+						set @cnt = @cnt + 1
+
+					end
+
+				end
+				else
+				begin
+					insert into LGCE_SCMDEV.dbo.SCM_ADM_DB_TABLE_SCRIPT_BACKUP
+					SELECT getdate() AS backup_dt, DB_NAME() AS fp_db_name, 'U' as type, @OBJECT_NAME AS script_nm, @OBJECT_ID object_id, 1 as colid, substring(@SQL,1,4000) as text
+				end
+
+				SET @SQL = ''
+
+			FETCH NEXT FROM c_obj INTO @TABLE_NAME, @OBJECT_NAME, @OBJECT_ID
+		END
+	CLOSE c_obj;  
+    DEALLOCATE c_obj;
+
+END
+
+

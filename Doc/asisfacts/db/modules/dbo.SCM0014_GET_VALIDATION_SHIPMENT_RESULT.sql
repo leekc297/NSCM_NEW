@@ -1,0 +1,147 @@
+﻿
+/*
+ * Program ID   : SCM0014_GET_VALIDATION_SHIPMENT_RESULT
+ * Description  : 출하실적 Validation
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge		Description
+ *===================================================================================================
+ * 2018/02/08   byunghunjung	Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2018/09/20   Kim Jihye		법인간 운송중 재고(C), 출하실적 기반 운송중 재고(S) 로직 추가
+ * 2018/11/14   hwyoon			ITEM NICK_NAME 추가
+ * 2020/10/07   khj79			신규 코드가 조회되도록 수정 
+ 								customer_code : final_soldto_code 로 변경
+								incoterms     : final_incoterms 로 변경
+								. Shipment No 표시
+								result_type = 'C' 인 경우도 shipment_no 표시
+ * 2021/06/30   khj79			[PJ20209642] LGES Digital SCM Level.3 달성을 위한 개선 - BOD LT 2단계 개발 BOD 조건 FROM,TO 추가 , scp_mst_bod_v=> scp_mst_bod_n_v
+ * 2021/09/29   Kdw			    [PJ20209642] LGES Digital SCM Level.3 달성을 위한 개선 - ETA information정보 UI표시UI항목 변경 
+ * 2021/10/12   Kdw			    [PJ20209642] LGES Digital SCM Level.3 달성을 위한 개선 - ''경우에 1900년 1월1일로 표시하는 경우 대응
+ * 2021/10/15   Kdw			    [PJ20209642] LGES Digital SCM Level.3 달성을 위한 개선  f_dest_eta_date 컬럼 attribute3으로 변경및 f_dest_eta_date2추가 
+ * 2022/03/08	khj79			[PJ20216891] LGES Digital SCM 3 Level 가속화를 위한 개선 - incoterms 조건 수정
+ * 2022/09/28	vadabi3			Shipment_no 표시 개선 (= _1,_2 등 처리)
+ */
+
+CREATE PROCEDURE [dbo].[SCM0014_GET_VALIDATION_SHIPMENT_RESULT]
+  
+  @p_division_id     NVARCHAR(MAX),
+  @p_plant_site_id   NVARCHAR(MAX),    
+  @p_sales_site_id   NVARCHAR(MAX),    
+  @p_project_code    NVARCHAR(MAX),
+  @p_item_id		 NVARCHAR(MAX),
+  @p_from_yyyymmdd	 NVARCHAR(8),
+  @p_to_yyyymmdd	 NVARCHAR(8),
+  @p_result_type	 NVARCHAR(1)
+AS
+
+BEGIN
+	SELECT convert(char(10), convert(datetime, sdic.result_date), 23) result_date
+		  ,CASE sdic.result_type WHEN 'P' THEN 'Plant Issue' ELSE 'Intransit' END result_type
+		  ,sdic.division_id
+		  ,CASE sdic.result_type -- WHEN 'C' THEN '-' 2020/10/07
+		                         WHEN 'S' THEN '-'
+								 ELSE dbo.FN_GET_SHIPMENT_NO_DISPLAY(sdic.shipment_no, sdic.result_type )  -- 202209287
+								 END  shipment_no -- 2018/09/20
+		  ,CASE sdic.result_type WHEN 'C' THEN '-'
+		                         ELSE sdic.project_code 
+								 END  project_code -- 2018/09/20
+		  ,sdic.item_id
+		  ,(SELECT TOP 1 (CASE WHEN X.NICK_NAME IS NULL THEN '-' WHEN X.NICK_NAME='' THEN '-' ELSE X.NICK_NAME END) FROM DBO.SCM_MST_ITEM_SN X WITH (NOLOCK) WHERE X.ITEM_ID = sdic.item_id) AS nick_name
+		  ,sdic.plant_id as plant
+		  --,dbo.fn_get_scm_site_description(sdic.division_id,sdic.plant_id) as plant
+		  ,sdic.transport_mode as Trans_Mode
+		  ,dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) operation_group
+		  ,sdic.delivery_qty
+		  --,sdic.customer_code		2020/10/07
+		  ,sdic.final_soldto_code	AS customer_code
+		  ,sdic.shipto_code
+		  --,sdic.incoterms		2020/10/07
+		  ,sdic.final_incoterms		AS incoterms
+		  ,sdic.from_scm_site_id
+		  ,sdic.to_scm_site_id
+		  ,smbv.lt_total bod_lead_time
+		  --2021/10/12 start
+		  --,case when isnull(sdic.plant_issue_date,'') = '' then '' else convert(char(10), convert(datetime, sdic.plant_issue_date), 23) end plant_issue_date
+		  ,IIF(ISNULL(sdic.plant_issue_date,'')='','', convert(char(10), convert(datetime, sdic.plant_issue_date), 23)) as plant_issue_date
+		  --2021/10/12 end
+		  --2021/10/12 start
+		  --,case when isnull(sdic.pol_atd_date,'') = '' then '' else convert(char(10), convert(datetime, sdic.pol_atd_date), 23) end pol_atd_date
+		  ,case when isnull(sdic.pol_atd_date,'') = '' then '' 
+		   else IIF(ISNULL(sdic.pol_atd_date,'')='','', convert(char(10), convert(datetime, sdic.pol_atd_date), 23))
+		  end pol_atd_date
+		  --2021/10/12 end
+		  --2021/09/29 Start
+		  --,case when isnull(sdic.pod_ata_date,'') = '' then '' else convert(char(10), convert(datetime, sdic.pod_ata_date), 23) end pod_ata_date
+		  -- 1순위 POD ATA DATE 2순위 POT ETA DATE 
+		  --2021/10/12 start
+		  ,case when isnull(sdic.pod_ata_date,'') = '' 
+		  --      then convert(char(10), convert(datetime, sdic.pod_eta_date), 23) 
+		        then IIF(ISNULL(sdic.pod_eta_date,'')='','', convert(char(10), convert(datetime, sdic.pod_eta_date), 23))
+				when sdic.pod_ata_date = '' 
+				then IIF(ISNULL(sdic.pod_eta_date,'')='','', convert(char(10), convert(datetime, sdic.pod_eta_date), 23))
+		   else convert(char(10), convert(datetime, sdic.pod_ata_date), 23) 
+		   end pod_ata_date
+		   --2021/10/12 end
+		  --2021/09/29 End
+		  --,sdic.pod_atd_date
+		  --2021/10/12 start
+		  --,case when isnull(sdic.f_dest_ata_date,'') = '' then '' else convert(char(10), convert(datetime, sdic.f_dest_ata_date), 23) end f_dest_ata_date
+		  --2021/10/12 end
+		  --2021/09/29 Start
+		  --,case when isnull(sdic.pod_eta_date,'') = '' then '' else convert(char(10), convert(datetime, sdic.pod_eta_date), 23) end pod_eta_date
+		  -- 1순위 POD ATD DATE 2순위 POT ETD DATE 
+		  --2021/10/12 start
+		  ,case when isnull(sdic.pod_atd_date,'') = '' 
+		        --then  convert(char(10), convert(datetime, sdic.pod_etd_date), 23)
+				then IIF(ISNULL(sdic.pod_etd_date,'')='','', convert(char(10), convert(datetime, sdic.pod_etd_date), 23))
+				when sdic.pod_atd_date =''
+				then IIF(ISNULL(sdic.pod_etd_date,'')='','', convert(char(10), convert(datetime, sdic.pod_etd_date), 23))
+		   else convert(char(10), convert(datetime, sdic.pod_atd_date), 23) 
+		   end pod_atd_date
+		   --2021/10/12 end
+		  --2021/09/29 End
+		  --,sdic.pod_etd_date
+		  --2021/10/15 start
+		  ,case when isnull(sdic.ATTRIBUTE3,'')= '' then '' 
+		        when sdic.ATTRIBUTE3 ='' then ''
+		  else convert(char(10), convert(datetime, sdic.ATTRIBUTE3), 23) end f_dest_eta_date
+		  ,case when isnull(sdic.f_dest_eta_date,'')= '' then '' 
+		        when sdic.f_dest_eta_date ='' then ''
+		  else convert(char(10), convert(datetime, sdic.f_dest_eta_date), 23) end f_dest_eta_date2
+		  --2021/10/15 end
+	FROM  scm_dnm_intransit_c sdic
+	-- BOD 2단계 개발 
+	--LEFT JOIN  scp_mst_bod_v smbv
+	LEFT JOIN scp_mst_bod_n_v smbv
+		ON    sdic.division_id = smbv.division_id
+		AND   sdic.from_scm_site_id = smbv.from_site
+		--AND   sdic.pol = smbv.d_port_code
+		--AND   sdic.pod = smbv.a_port_code
+		AND   sdic.to_scm_site_id = smbv.to_site
+		-- 2022/03/08 : 조회 수정
+		--ANd   sdic.incoterms = smbv.incoterms
+		AND   ( CASE WHEN ISNULL(sdic.final_incoterms, '') = '' THEN sdic.incoterms
+				ELSE sdic.final_incoterms
+			   END ) = smbv.incoterms
+		AND   sdic.transport_mode = smbv.transport_mode
+		AND   smbv.bod_valid_yn = 'Y'
+		AND   smbv.route_valid_yn = 'Y'
+		--2021/06/30 : BOD LT 2단계 개발 FROM , TO 조건 추가
+		--AND smbv.to_yyyymmdd	>= @p_from_yyyymmdd
+		--AND smbv.from_yyyymmdd	<= @p_to_yyyymmdd
+		AND sdic.result_date >= smbv.from_yyyymmdd
+		AND sdic.result_date <= smbv.to_yyyymmdd
+
+	WHERE (isnull(@p_division_id,   '' ) = '' OR sdic.division_id   IN ( SELECT token FROM dbo.String_Split(@p_division_id	 ,',')) )
+	AND (isnull(@p_plant_site_id, '' ) = '' OR sdic.from_scm_site_id like '%' + @p_plant_site_id + '%') --sdic.from_scm_site_id   IN ( SELECT token FROM dbo.String_Split(@p_plant_site_id,',')) )
+	AND (isnull(@p_sales_site_id, '' ) = '' OR sdic.to_scm_site_id like '%' + @p_sales_site_id + '%') --sdic.to_scm_site_id   IN ( SELECT token FROM dbo.String_Split(@p_sales_site_id,',')) )
+	AND (isnull(@p_project_code,  '' ) = '' OR sdic.project_code  IN ( SELECT token FROM dbo.String_Split(@p_project_code ,',')) )
+	AND (isnull(@p_item_id,       '' ) = '' OR sdic.item_id       IN ( SELECT token FROM dbo.String_Split(@p_item_id		 ,',')) )
+	AND sdic.result_date >= @p_from_yyyymmdd
+	AND sdic.result_date <= @p_to_yyyymmdd
+	AND sdic.RESULT_TYPE = @p_result_type
+	AND dbo.fn_get_item_operation_group(sdic.division_id, sdic.item_id) != ''
+	ORDER BY sdic.result_date, sdic.result_type, sdic.division_id, sdic.shipment_no;
+
+END
+

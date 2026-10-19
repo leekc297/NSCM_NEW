@@ -1,0 +1,1035 @@
+﻿
+
+/*
+ * Program ID   : SCP0080_SAVE_GROUP_CODE_MANAGEMENT
+ * Description  : 전진검사용 GROUP CODE 관리 ITEM 저장
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2021/08/17   kmj			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) -          initial release
+ * 2021/09/28   kmj			[PJ20209643] LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) -          이력 저장 테이블, 개발/운영이 달라 오류-칼럼 삭제
+ * 2022/09/06   lwy         PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 -          PIC 컬럼(모델별 담당자) ID, NAME 추가
+ * 2022/09/21   chaan		PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - V1.1.1   Sales Model Master 추가
+ * 2023/01/25   jahn1501	PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 -          column 추가 (Level1 Group, Level2 Code, Status_Prototype, Status_Mass, Status_New)
+ * 2023/02/20   jahn1501	PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 -          column 추가 (Application, Cell type, Cell capacity, Total Capacity, End Customer, Finished product)
+ * 2023/03/14   chaan       PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - V1.1.2   column 추가 (DESCRIPTION)
+ * 2023/03/29   chaan       PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - V1.1.2   column 추가 (MKT_DEPT, GROUP_CODE6, GROUP_CODE7, GROUP_CODE8, GROUP_CODE9, GROUP_CODE10)
+ * 2023/04/05   chaan       PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - V1.1.4   저장오류 수정
+ * 2023/04/05   chaan       PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - V1.1.5   컬럼삭제 - STATUS_NEW
+ * 2023/04/13   chaan       PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - V1.1.6   Lookup-All_Y null 처리(null 로 넘어오면 '' 로 변경)
+ * 2023/05/10   chaan       PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - V1.1.7   대량 데이터 저장 오류 수정 및 속도 개선
+ * 2023/06/29   chaan       PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - V1.1.8   수정한 CP에 해당하는CA 의 모든 값을 CP 와 동기화
+ * 2023/06/29   chaan       PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - V1.1.9   자동차 - 'Replacement Y/N' 컬럼추가
+ * 2023/08/10   chaan       PJ20216994 / LGES Digital SCM 3 Level 가속화를 위한 개선 Phase 2 - V1.1.10  불필요한 컬럼 저장 대상에서 제외
+ *                                                                                                      
+ *
+ */
+ 
+
+CREATE PROCEDURE [dbo].[SCP0080_SAVE_GROUP_CODE_MANAGEMENT]
+      @p_division_id	    	NVARCHAR(MAX)
+    , @p_model_id			    NVARCHAR(MAX)
+    , @p_pic_id				    NVARCHAR(MAX)
+	, @p_sales_model			NVARCHAR(MAX)
+	, @p_sales_valid_yn			NVARCHAR(MAX)
+	, @p_sales_priority			NVARCHAR(MAX)
+	, @p_sales_from_yyyymmdd	NVARCHAR(MAX)
+	, @p_sales_to_yyyymmdd		NVARCHAR(MAX)
+    , @p_user_id				NVARCHAR(MAX)
+    , @p_level1_group			NVARCHAR(MAX)
+    , @p_level2_code			NVARCHAR(MAX)
+    , @p_status_prototype	    NVARCHAR(MAX)
+    , @p_status_mass		    NVARCHAR(MAX)
+    , @p_status_new			    NVARCHAR(MAX)
+    , @p_replacement			NVARCHAR(MAX)
+    , @p_basic_end_customer		NVARCHAR(MAX)
+    , @p_basic_finished_product	NVARCHAR(MAX)
+    , @p_mkt_dept         		NVARCHAR(MAX)
+    , @p_remark             	NVARCHAR(MAX)
+    , @p_group_code1			NVARCHAR(MAX)
+    , @p_group_code2			NVARCHAR(MAX)
+    , @p_group_code3			NVARCHAR(MAX)
+    , @p_group_code4			NVARCHAR(MAX)
+    , @p_group_code5			NVARCHAR(MAX)
+    , @p_group_code6			NVARCHAR(MAX)
+    , @p_group_code7			NVARCHAR(MAX)
+    , @p_group_code8			NVARCHAR(MAX)
+    , @p_group_code9			NVARCHAR(MAX)
+    , @p_group_code10   		NVARCHAR(MAX)
+    , @p_attribute1			    NVARCHAR(MAX)
+    , @p_attribute2			    NVARCHAR(MAX)
+    , @p_attribute3			    NVARCHAR(MAX)
+    , @p_attribute4			    NVARCHAR(MAX)
+    , @p_attribute5			    NVARCHAR(MAX)
+    , @p_attribute6			    NVARCHAR(MAX)
+    , @p_attribute7			    NVARCHAR(MAX)
+    , @p_attribute8			    NVARCHAR(MAX)
+    , @p_attribute9			    NVARCHAR(MAX)
+    , @p_attribute10   		    NVARCHAR(MAX)
+AS
+BEGIN
+    --DECLARE @p_division_id	    		NVARCHAR(MAX)		= '81';
+    --DECLARE @p_model_id					NVARCHAR(MAX)		= 'ACEN4069I-A1-010';
+    --DECLARE @p_pic_id					NVARCHAR(MAX)		= 'wsj7923';
+    --DECLARE @p_sales_model				NVARCHAR(MAX)		= '';
+    --DECLARE @p_sales_valid_yn			NVARCHAR(MAX)		= '';
+    --DECLARE @p_sales_priority			NVARCHAR(MAX)		= '';
+    --DECLARE @p_sales_from_yyyymmdd		NVARCHAR(MAX)		= '';
+    --DECLARE @p_sales_to_yyyymmdd		NVARCHAR(MAX)		= '';
+    --DECLARE @p_user_id					NVARCHAR(MAX)		= 'iamarock';
+    --DECLARE @p_level1_group				NVARCHAR(MAX)		= '';
+    --DECLARE @p_level2_code				NVARCHAR(MAX)		= 'E71A';
+    --DECLARE @p_status_prototype			NVARCHAR(MAX)		= '';
+    --DECLARE @p_status_mass				NVARCHAR(MAX)		= 'Y';
+    --DECLARE @p_status_new				NVARCHAR(MAX)		= '';
+    --DECLARE @p_replacement				NVARCHAR(MAX)		= 'Y';
+    --DECLARE @p_basic_end_customer		NVARCHAR(MAX)		= '';
+    --DECLARE @p_basic_finished_product	NVARCHAR(MAX)		= '';
+    --DECLARE @p_mkt_dept         		NVARCHAR(MAX)		= '';
+    --DECLARE @p_remark             		NVARCHAR(MAX)		= '';
+    --DECLARE @p_group_code1				NVARCHAR(MAX)		= 'E71A';
+    --DECLARE @p_group_code2				NVARCHAR(MAX)		= 'E71A';
+    --DECLARE @p_group_code3				NVARCHAR(MAX)		= 'E71A';
+    --DECLARE @p_group_code4				NVARCHAR(MAX)		= 'E71A';
+    --DECLARE @p_group_code5				NVARCHAR(MAX)		= 'E71A';
+    --DECLARE @p_group_code6				NVARCHAR(MAX)		= '';
+    --DECLARE @p_group_code7				NVARCHAR(MAX)		= '';
+    --DECLARE @p_group_code8				NVARCHAR(MAX)		= '';
+    --DECLARE @p_group_code9				NVARCHAR(MAX)		= '';
+    --DECLARE @p_group_code10   			NVARCHAR(MAX)		= '';
+    --DECLARE @p_attribute1				NVARCHAR(MAX)		= '';
+    --DECLARE @p_attribute2				NVARCHAR(MAX)		= '';
+    --DECLARE @p_attribute3				NVARCHAR(MAX)		= '';
+    --DECLARE @p_attribute4				NVARCHAR(MAX)		= '';
+    --DECLARE @p_attribute5				NVARCHAR(MAX)		= '';
+    --DECLARE @p_attribute6				NVARCHAR(MAX)		= '';
+    --DECLARE @p_attribute7				NVARCHAR(MAX)		= '';
+    --DECLARE @p_attribute8				NVARCHAR(MAX)		= '';
+    --DECLARE @p_attribute9				NVARCHAR(MAX)		= '';
+    --DECLARE @p_attribute10   			NVARCHAR(MAX)		= '';
+
+
+    SET @p_division_id					= REPLACE(@p_division_id,             'null', '');
+    SET @p_model_id						= REPLACE(@p_model_id,                'null', '');
+    SET @p_pic_id						= REPLACE(@p_pic_id,                  'null', '');
+    SET @p_sales_model					= REPLACE(@p_sales_model,             'null', '');
+    SET @p_sales_valid_yn				= REPLACE(@p_sales_valid_yn,          'null', '');
+    SET @p_sales_priority				= REPLACE(@p_sales_priority,          'null', '');
+    SET @p_sales_from_yyyymmdd			= REPLACE(@p_sales_from_yyyymmdd,     'null', '');
+    SET @p_sales_to_yyyymmdd			= REPLACE(@p_sales_to_yyyymmdd,       'null', '');
+    SET @p_user_id						= REPLACE(@p_user_id,                 'null', '');
+    SET @p_level1_group					= REPLACE(@p_level1_group,            'null', '');
+    SET @p_level2_code					= REPLACE(@p_level2_code,             'null', '');
+    SET @p_status_prototype				= REPLACE(@p_status_prototype,        'null', '');
+    SET @p_status_mass					= REPLACE(@p_status_mass,             'null', '');
+    SET @p_status_new					= REPLACE(@p_status_new,              'null', '');
+    SET @p_replacement					= REPLACE(@p_replacement,             'null', '');
+    SET @p_basic_end_customer			= REPLACE(@p_basic_end_customer,      'null', '');
+    SET @p_basic_finished_product		= REPLACE(@p_basic_finished_product,  'null', '');
+    SET @p_mkt_dept						= REPLACE(@p_mkt_dept,                'null', '');
+    SET @p_remark						= REPLACE(@p_remark,                  'null', '');
+    SET @p_group_code1					= REPLACE(@p_group_code1,             'null', '');
+    SET @p_group_code2					= REPLACE(@p_group_code2,             'null', '');
+    SET @p_group_code3					= REPLACE(@p_group_code3,             'null', '');
+    SET @p_group_code4					= REPLACE(@p_group_code4,             'null', '');
+    SET @p_group_code5					= REPLACE(@p_group_code5,             'null', '');
+    SET @p_group_code6					= REPLACE(@p_group_code6,             'null', '');
+    SET @p_group_code7					= REPLACE(@p_group_code7,             'null', '');
+    SET @p_group_code8					= REPLACE(@p_group_code8,             'null', '');
+    SET @p_group_code9					= REPLACE(@p_group_code9,             'null', '');
+    SET @p_group_code10					= REPLACE(@p_group_code10,            'null', '');
+    SET @p_attribute1					= REPLACE(@p_attribute1,              'null', '');
+    SET @p_attribute2					= REPLACE(@p_attribute2,              'null', '');
+    SET @p_attribute3					= REPLACE(@p_attribute3,              'null', '');
+    SET @p_attribute4					= REPLACE(@p_attribute4,              'null', '');
+    SET @p_attribute5					= REPLACE(@p_attribute5,              'null', '');
+    SET @p_attribute6					= REPLACE(@p_attribute6,              'null', '');
+    SET @p_attribute7					= REPLACE(@p_attribute7,              'null', '');
+    SET @p_attribute8					= REPLACE(@p_attribute8,              'null', '');
+    SET @p_attribute9					= REPLACE(@p_attribute9,              'null', '');
+    SET @p_attribute10					= REPLACE(@p_attribute10,             'null', '');
+
+
+	DECLARE @v_delimiter                    NVARCHAR(1)     = '^';
+
+	-- LOG 용 변수 설정
+    DECLARE @v_program_name     NVARCHAR(150)   = 'SCP0080_SAVE_GROUP_CODE_MANAGEMENT'
+    DECLARE @v_log_type         NVARCHAR(30)     -- START/END/ERROR/...
+    DECLARE @n_log_count        INTEGER         = 0
+    DECLARE @v_log_message      NVARCHAR(1000)
+    DECLARE @v_description      NVARCHAR(500)
+    DECLARE @d_event_date       DATETIME
+
+	-- 결과 반환 변수 설정
+	DECLARE @v_mod_cnt		    INTEGER         = 0;
+
+--	-- 트렌젝션 시작
+	BEGIN TRAN
+
+    BEGIN TRY
+		-- LOG start
+		SET @v_log_type         = 'START'
+		SET @v_log_message      = '########## Start of procedure ##########'
+		SET @v_description      = ''
+		SET @d_event_date       = SYSDATETIME()
+
+        EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date
+
+
+		-- 속도 문제가 있어 변경 => 가급적 10개 컬럼으로 쪼개서 조인할 것!! by chaan
+		IF OBJECT_ID('tempdb..#T_SCP0080_SAVE_SPLIT_DATA_A') IS NOT NULL
+			DROP TABLE #T_SCP0080_SAVE_SPLIT_DATA_A
+
+		SELECT    A1.NR
+			    , A1.TOKEN   AS DIVISION_ID
+                , A2.TOKEN   AS MODEL_ID
+                , A3.TOKEN   AS PIC_ID
+                , A4.TOKEN   AS SALES_MODEL
+                , A5.TOKEN   AS SALES_VALID_YN
+                , IIF(CONVERT(INT, ISNULL(A6.TOKEN, 0)) = 0, NULL, CONVERT(INT, A6.TOKEN))  AS SALES_PRIORITY
+                , A7.TOKEN   AS SALES_FROM_YYYYMMDD
+                , A8.TOKEN   AS SALES_TO_YYYYMMDD
+                , A9.TOKEN   AS USER_ID
+        INTO    #T_SCP0080_SAVE_SPLIT_DATA_A
+        FROM         dbo.UF_FX_String_Split(@p_division_id,                 @v_delimiter) A1
+                JOIN dbo.UF_FX_String_Split(@p_model_id,                    @v_delimiter) A2   ON A1.NR = A2.NR
+                JOIN dbo.UF_FX_String_Split(@p_pic_id,                      @v_delimiter) A3   ON A1.NR = A3.NR
+                JOIN dbo.UF_FX_String_Split(@p_sales_model,		            @v_delimiter) A4   ON A1.NR = A4.NR
+                JOIN dbo.UF_FX_String_Split(@p_sales_valid_yn,	            @v_delimiter) A5   ON A1.NR = A5.NR
+                JOIN dbo.UF_FX_String_Split(@p_sales_priority,              @v_delimiter) A6   ON A1.NR = A6.NR
+                JOIN dbo.UF_FX_String_Split(@p_sales_from_yyyymmdd,         @v_delimiter) A7   ON A1.NR = A7.NR
+                JOIN dbo.UF_FX_String_Split(@p_sales_to_yyyymmdd,           @v_delimiter) A8   ON A1.NR = A8.NR
+                JOIN dbo.UF_FX_String_Split(@p_user_id,                     @v_delimiter) A9   ON A1.NR = A9.NR
+
+        CREATE CLUSTERED INDEX IDX_T_SCP0080_SAVE_SPLIT_DATA_A ON #T_SCP0080_SAVE_SPLIT_DATA_A (NR);
+
+----TESTING : OK
+--select * from #T_SCP0080_SAVE_SPLIT_DATA_A;return;
+
+
+		IF OBJECT_ID('tempdb..#T_SCP0080_SAVE_SPLIT_DATA_B') IS NOT NULL
+			DROP TABLE #T_SCP0080_SAVE_SPLIT_DATA_B
+
+		SELECT    A1.NR
+			    , A1.TOKEN   AS LEVEL1_GROUP
+                , A2.TOKEN   AS LEVEL2_CODE
+                , A3.TOKEN   AS STATUS_PROTOTYPE
+                , A4.TOKEN   AS STATUS_MASS
+                , A5.TOKEN   AS STATUS_NEW
+                , A6.TOKEN   AS REPLACEMENT
+                , A7.TOKEN   AS END_CUSTOMER
+                , A8.TOKEN   AS FINISHED_PRODUCT
+                , A9.TOKEN   AS MKT_DEPT
+                , A10.TOKEN  AS REMARK
+        INTO    #T_SCP0080_SAVE_SPLIT_DATA_B
+        FROM         dbo.UF_FX_String_Split(@p_level1_group,                @v_delimiter) A1
+                JOIN dbo.UF_FX_String_Split(@p_level2_code,                 @v_delimiter) A2  ON A1.NR = A2.NR
+                JOIN dbo.UF_FX_String_Split(@p_status_prototype,            @v_delimiter) A3  ON A1.NR = A3.NR
+                JOIN dbo.UF_FX_String_Split(@p_status_mass,                 @v_delimiter) A4  ON A1.NR = A4.NR
+                JOIN dbo.UF_FX_String_Split(@p_status_new,                  @v_delimiter) A5  ON A1.NR = A5.NR
+                JOIN dbo.UF_FX_String_Split(@p_replacement,                 @v_delimiter) A6  ON A1.NR = A6.NR
+                JOIN dbo.UF_FX_String_Split(@p_basic_end_customer,          @v_delimiter) A7  ON A1.NR = A7.NR
+                JOIN dbo.UF_FX_String_Split(@p_basic_finished_product,      @v_delimiter) A8  ON A1.NR = A8.NR
+                JOIN dbo.UF_FX_String_Split(@p_mkt_dept,                    @v_delimiter) A9  ON A1.NR = A9.NR
+                JOIN dbo.UF_FX_String_Split(@p_remark,                      @v_delimiter) A10 ON A1.NR = A10.NR
+
+        CREATE CLUSTERED INDEX IDX_T_SCP0080_SAVE_SPLIT_DATA_B ON #T_SCP0080_SAVE_SPLIT_DATA_B (NR);
+
+----TESTING : OK
+--select * from #T_SCP0080_SAVE_SPLIT_DATA_B;return;
+
+		IF OBJECT_ID('tempdb..#T_SCP0080_SAVE_SPLIT_DATA_G') IS NOT NULL
+			DROP TABLE #T_SCP0080_SAVE_SPLIT_DATA_G
+
+		SELECT    G1.NR
+                , G1.TOKEN   AS GROUP_CODE1
+                , G2.TOKEN   AS GROUP_CODE2
+                , G3.TOKEN   AS GROUP_CODE3
+                , G4.TOKEN   AS GROUP_CODE4
+                , G5.TOKEN   AS GROUP_CODE5
+                , G6.TOKEN   AS GROUP_CODE6
+                , G7.TOKEN   AS GROUP_CODE7
+                , G8.TOKEN   AS GROUP_CODE8
+                , G9.TOKEN   AS GROUP_CODE9
+                , G10.TOKEN  AS GROUP_CODE10
+        INTO    #T_SCP0080_SAVE_SPLIT_DATA_G
+        FROM         dbo.UF_FX_String_Split(@p_group_code1,                 @v_delimiter) G1
+                JOIN dbo.UF_FX_String_Split(@p_group_code2,                 @v_delimiter) G2   ON G1.NR = G2.NR
+                JOIN dbo.UF_FX_String_Split(@p_group_code3,                 @v_delimiter) G3   ON G1.NR = G3.NR
+                JOIN dbo.UF_FX_String_Split(@p_group_code4,                 @v_delimiter) G4   ON G1.NR = G4.NR
+                JOIN dbo.UF_FX_String_Split(@p_group_code5,                 @v_delimiter) G5   ON G1.NR = G5.NR
+                JOIN dbo.UF_FX_String_Split(@p_group_code6,                 @v_delimiter) G6   ON G1.NR = G6.NR
+                JOIN dbo.UF_FX_String_Split(@p_group_code7,                 @v_delimiter) G7   ON G1.NR = G7.NR
+                JOIN dbo.UF_FX_String_Split(@p_group_code8,                 @v_delimiter) G8   ON G1.NR = G8.NR
+                JOIN dbo.UF_FX_String_Split(@p_group_code9,                 @v_delimiter) G9   ON G1.NR = G9.NR
+                JOIN dbo.UF_FX_String_Split(@p_group_code10,                @v_delimiter) G10  ON G1.NR = G10.NR
+
+        CREATE CLUSTERED INDEX IDX_T_SCP0080_SAVE_SPLIT_DATA_G ON #T_SCP0080_SAVE_SPLIT_DATA_G (NR);
+
+--TESTING : OK
+--select * from #T_SCP0080_SAVE_SPLIT_DATA_G;return;
+
+
+		IF OBJECT_ID('tempdb..#T_SCP0080_SAVE_SPLIT_DATA_T') IS NOT NULL
+			DROP TABLE #T_SCP0080_SAVE_SPLIT_DATA_T
+
+		SELECT    T1.NR
+                , T1.TOKEN   AS ATTRIBUTE1
+                , T2.TOKEN   AS ATTRIBUTE2
+                , T3.TOKEN   AS ATTRIBUTE3
+                , T4.TOKEN   AS ATTRIBUTE4
+                , T5.TOKEN   AS ATTRIBUTE5
+                , T6.TOKEN   AS ATTRIBUTE6
+                , T7.TOKEN   AS ATTRIBUTE7
+                , T8.TOKEN   AS ATTRIBUTE8
+                , T9.TOKEN   AS ATTRIBUTE9
+                , T10.TOKEN  AS ATTRIBUTE10
+        INTO    #T_SCP0080_SAVE_SPLIT_DATA_T
+        FROM         dbo.UF_FX_String_Split(@p_attribute1,                  @v_delimiter) T1
+                JOIN dbo.UF_FX_String_Split(@p_attribute2,                  @v_delimiter) T2   ON T1.NR = T2.NR
+                JOIN dbo.UF_FX_String_Split(@p_attribute3,                  @v_delimiter) T3   ON T1.NR = T3.NR
+                JOIN dbo.UF_FX_String_Split(@p_attribute4,                  @v_delimiter) T4   ON T1.NR = T4.NR
+                JOIN dbo.UF_FX_String_Split(@p_attribute5,                  @v_delimiter) T5   ON T1.NR = T5.NR
+                JOIN dbo.UF_FX_String_Split(@p_attribute6,                  @v_delimiter) T6   ON T1.NR = T6.NR
+                JOIN dbo.UF_FX_String_Split(@p_attribute7,                  @v_delimiter) T7   ON T1.NR = T7.NR
+                JOIN dbo.UF_FX_String_Split(@p_attribute8,                  @v_delimiter) T8   ON T1.NR = T8.NR
+                JOIN dbo.UF_FX_String_Split(@p_attribute9,                  @v_delimiter) T9   ON T1.NR = T9.NR
+                JOIN dbo.UF_FX_String_Split(@p_attribute10,                 @v_delimiter) T10  ON T1.NR = T10.NR
+
+        CREATE CLUSTERED INDEX IDX_T_SCP0080_SAVE_SPLIT_DATA_T ON #T_SCP0080_SAVE_SPLIT_DATA_T (NR);
+
+--TESTING : OK
+--select * from #T_SCP0080_SAVE_SPLIT_DATA_T;return;
+
+		IF OBJECT_ID('tempdb..#T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT') IS NOT NULL
+			DROP TABLE #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT
+
+		CREATE TABLE #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT
+		(
+			DIVISION_ID			NVARCHAR(30)
+		  , MODEL_ID			NVARCHAR(50)
+		  , PIC_ID				NVARCHAR(50)
+		  , USER_ID				NVARCHAR(30)
+          , SALES_MODEL			NVARCHAR(100)
+          , SALES_VALID_YN		NVARCHAR(1)
+          , SALES_PRIORITY		INT
+          , SALES_FROM_YYYYMMDD	NVARCHAR(100)
+          , SALES_TO_YYYYMMDD	NVARCHAR(100)
+		  , LEVEL1_GROUP		NVARCHAR(100)
+		  , LEVEL2_CODE			NVARCHAR(100)
+		  , STATUS_PROTOTYPE	NVARCHAR(1)
+		  , STATUS_MASS			NVARCHAR(1)
+		  --, STATUS_NEW			NVARCHAR(1)
+		  , REPLACEMENT			NVARCHAR(1)
+		  , END_CUSTOMER		NVARCHAR(150)
+		  , FINISHED_PRODUCT	NVARCHAR(1)
+		  , MKT_DEPT    		NVARCHAR(150)
+		  , REMARK          	NVARCHAR(3000)
+		  , GROUP_CODE1			NVARCHAR(200)
+		  , GROUP_CODE2			NVARCHAR(200)
+		  , GROUP_CODE3			NVARCHAR(200)
+		  , GROUP_CODE4			NVARCHAR(200)
+		  , GROUP_CODE5			NVARCHAR(200)
+		  , GROUP_CODE6			NVARCHAR(200)
+		  , GROUP_CODE7			NVARCHAR(200)
+		  , GROUP_CODE8			NVARCHAR(200)
+		  , GROUP_CODE9			NVARCHAR(200)
+		  , GROUP_CODE10		NVARCHAR(200)
+		  , ATTRIBUTE1			NVARCHAR(200)
+		  , ATTRIBUTE2			NVARCHAR(200)
+		  , ATTRIBUTE3			NVARCHAR(200)
+		  , ATTRIBUTE4			NVARCHAR(200)
+		  , ATTRIBUTE5			NVARCHAR(200)
+		  , ATTRIBUTE6			NVARCHAR(200)
+		  , ATTRIBUTE7			NVARCHAR(200)
+		  , ATTRIBUTE8			NVARCHAR(200)
+		  , ATTRIBUTE9			NVARCHAR(200)
+		  , ATTRIBUTE10		    NVARCHAR(200)
+		)
+
+        CREATE CLUSTERED INDEX IDX_T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT ON #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT (DIVISION_ID, MODEL_ID);
+
+        --CA 일괄 수정을 위한 빈 테이블 복사
+        IF OBJECT_ID('tempdb..#T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT_CA') IS NOT NULL	
+	        DROP TABLE #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT_CA;
+        
+        SELECT  * 
+        INTO    #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT_CA 
+        FROM    #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT;
+
+        CREATE CLUSTERED INDEX IDX_T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT_CA ON #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT_CA (DIVISION_ID, MODEL_ID);
+
+
+        -- CP 임시테이블에 값 저장 begin-----------------------------------------------------------------------------------------------------------------------
+        BEGIN
+            INSERT INTO #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT
+            (
+		          DIVISION_ID
+	            , MODEL_ID
+	            , PIC_ID
+                , SALES_MODEL
+                , SALES_VALID_YN
+                , SALES_PRIORITY
+                , SALES_FROM_YYYYMMDD
+                , SALES_TO_YYYYMMDD
+	            , USER_ID
+	            , LEVEL1_GROUP
+	            , LEVEL2_CODE
+	            , STATUS_PROTOTYPE
+	            , STATUS_MASS
+	            --, STATUS_NEW
+                , REPLACEMENT
+	            , END_CUSTOMER
+	            , FINISHED_PRODUCT
+                , MKT_DEPT
+                , REMARK
+	            , GROUP_CODE1
+	            , GROUP_CODE2
+	            , GROUP_CODE3
+	            , GROUP_CODE4
+	            , GROUP_CODE5
+	            , GROUP_CODE6
+	            , GROUP_CODE7
+	            , GROUP_CODE8
+	            , GROUP_CODE9
+	            , GROUP_CODE10
+	            , ATTRIBUTE1
+	            , ATTRIBUTE2
+	            , ATTRIBUTE3
+	            , ATTRIBUTE4
+	            , ATTRIBUTE5
+	            , ATTRIBUTE6
+	            , ATTRIBUTE7
+	            , ATTRIBUTE8
+	            , ATTRIBUTE9
+	            , ATTRIBUTE10
+            )
+            SELECT    A.DIVISION_ID
+	                , A.MODEL_ID
+	                , A.PIC_ID
+                    , A.SALES_MODEL
+                    , A.SALES_VALID_YN
+                    , A.SALES_PRIORITY
+                    , A.SALES_FROM_YYYYMMDD
+                    , A.SALES_TO_YYYYMMDD
+	                , A.USER_ID
+	                , B.LEVEL1_GROUP
+	                , B.LEVEL2_CODE
+	                , B.STATUS_PROTOTYPE
+	                , B.STATUS_MASS
+	                --, B.STATUS_NEW
+                    , B.REPLACEMENT
+	                , B.END_CUSTOMER
+	                , B.FINISHED_PRODUCT
+                    , B.MKT_DEPT
+	                , B.REMARK
+	                , G.GROUP_CODE1
+	                , G.GROUP_CODE2
+	                , G.GROUP_CODE3
+	                , G.GROUP_CODE4
+	                , G.GROUP_CODE5
+	                , G.GROUP_CODE6
+	                , G.GROUP_CODE7
+	                , G.GROUP_CODE8
+	                , G.GROUP_CODE9
+	                , G.GROUP_CODE10
+	                , T.ATTRIBUTE1
+	                , T.ATTRIBUTE2
+	                , T.ATTRIBUTE3
+	                , T.ATTRIBUTE4
+	                , T.ATTRIBUTE5
+	                , T.ATTRIBUTE6
+	                , T.ATTRIBUTE7
+	                , T.ATTRIBUTE8
+	                , T.ATTRIBUTE9
+	                , T.ATTRIBUTE10
+	        FROM    #T_SCP0080_SAVE_SPLIT_DATA_A A
+                    JOIN #T_SCP0080_SAVE_SPLIT_DATA_B B ON A.NR = B.NR
+                    JOIN #T_SCP0080_SAVE_SPLIT_DATA_G G ON A.NR = G.NR
+                    JOIN #T_SCP0080_SAVE_SPLIT_DATA_T T ON A.NR = T.NR
+            WHERE 1=1
+
+--TESTING : OK
+--select * from #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT;return;
+        END
+        -- CP 임시테이블에 값 저장 end-----------------------------------------------------------------------------------------------------------------------
+
+    
+        -- CA 임시테이블에 값 저장 begin-----------------------------------------------------------------------------------------------------------------------
+        BEGIN
+            INSERT INTO #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT_CA
+            SELECT    P.DIVISION_ID
+	                , A.ITEM_ID_ASSY        AS MODEL_ID  --CA 원래 컬럼값 유지
+	                , P.PIC_ID
+                    , P.SALES_MODEL
+                    , P.SALES_VALID_YN
+                    , P.SALES_PRIORITY
+                    , P.SALES_FROM_YYYYMMDD
+                    , P.SALES_TO_YYYYMMDD
+	                , P.USER_ID
+	                , P.LEVEL1_GROUP
+	                , P.LEVEL2_CODE
+	                , P.STATUS_PROTOTYPE
+	                , P.STATUS_MASS
+	                --, P.STATUS_NEW
+                    , P.REPLACEMENT
+	                , P.END_CUSTOMER
+	                , P.FINISHED_PRODUCT
+                    , P.MKT_DEPT
+	                , P.REMARK
+	                , P.GROUP_CODE1
+	                , P.GROUP_CODE2
+	                , P.GROUP_CODE3
+	                , P.GROUP_CODE4
+	                , P.GROUP_CODE5
+	                , P.GROUP_CODE6
+	                , P.GROUP_CODE7
+	                , P.GROUP_CODE8
+	                , P.GROUP_CODE9
+	                , P.GROUP_CODE10
+	                , P.ATTRIBUTE1
+	                , P.ATTRIBUTE2
+	                , P.ATTRIBUTE3
+	                , P.ATTRIBUTE4
+	                , P.ATTRIBUTE5
+	                , P.ATTRIBUTE6
+	                , P.ATTRIBUTE7
+	                , I.ATTRIBUTE8 --CA 원래 컬럼값 유지(Cell Type)
+	                , P.ATTRIBUTE9
+	                , P.ATTRIBUTE10
+            FROM    (
+                        SELECT DISTINCT
+                                  DIVISION_ID
+                                , ITEM_ID_PROD
+                                , ITEM_ID_ASSY
+                        FROM    SCP_MST_CELL_PROD_ASSY_MAP WITH(NOLOCK)
+                        WHERE   1=1
+                            AND VALID_YN      = 'Y'
+                    ) A
+                    JOIN #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT P ON
+                            A.DIVISION_ID  = P.DIVISION_ID
+                        AND A.ITEM_ID_PROD = P.MODEL_ID
+                    JOIN SCP_MST_FINAL_ITEM I ON
+                            A.DIVISION_ID  = I.DIVISION_ID
+                        AND A.ITEM_ID_ASSY = I.ITEM_ID
+
+--TESTING : OK
+--select * from #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT
+--UNION ALL
+--select * from #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT_CA;return;
+        END
+        -- CA 임시테이블에 값 저장 end-----------------------------------------------------------------------------------------------------------------------
+--SELECT    M.ITEM_ID
+--        , M.REPLACEMENT
+--FROM    dbo.SCP_MST_FINAL_ITEM M
+--WHERE   1=1
+--    AND M.ITEM_ID = 'AAEN4069I-A1-010'
+
+--SELECT    M.ITEM_ID
+--        , M.REPLACEMENT
+--FROM    dbo.SCP_MST_FINAL_ITEM M
+--    JOIN #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT A ON
+--                    M.DIVISION_ID = A.DIVISION_ID
+--		        AND M.ITEM_ID     = A.MODEL_ID
+----SELECT    A.MODEL_ID
+----        , A.REPLACEMENT
+----FROM    dbo.SCP_MST_FINAL_ITEM M
+----    JOIN #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT A ON
+----                    M.DIVISION_ID = A.DIVISION_ID
+----		        AND M.ITEM_ID     = A.MODEL_ID
+--RETURN;
+        -- CP 저장 begin-----------------------------------------------------------------------------------------------------------------------
+        BEGIN
+		    MERGE INTO SCP_MST_FINAL_ITEM M
+		    USING
+            (
+                SELECT    DIVISION_ID
+                        , MODEL_ID
+                        , PIC_ID
+                        , SALES_MODEL
+                        , SALES_VALID_YN
+                        , SALES_PRIORITY
+                        , SALES_FROM_YYYYMMDD
+                        , SALES_TO_YYYYMMDD
+                        , USER_ID
+					    , LEVEL1_GROUP
+					    , LEVEL2_CODE
+					    , STATUS_PROTOTYPE
+					    , STATUS_MASS
+					    --, STATUS_NEW
+                        , REPLACEMENT
+					    , END_CUSTOMER
+					    , FINISHED_PRODUCT
+                        , MKT_DEPT
+                        , REMARK
+	                    , GROUP_CODE1
+	                    , GROUP_CODE2
+	                    , GROUP_CODE3
+	                    , GROUP_CODE4
+	                    , GROUP_CODE5
+	                    , GROUP_CODE6
+	                    , GROUP_CODE7
+	                    , GROUP_CODE8
+	                    , GROUP_CODE9
+	                    , GROUP_CODE10
+	                    --수정불가, ATTRIBUTE1
+	                    --수정불가, ATTRIBUTE2
+	                    --수정불가, ATTRIBUTE3
+	                    --수정불가, ATTRIBUTE4
+	                    --수정불가, ATTRIBUTE5
+	                    --수정불가, ATTRIBUTE6
+	                    , ATTRIBUTE7
+	                    --수정불가, , ATTRIBUTE8
+	                    --수정불가, , ATTRIBUTE9
+	                    --수정불가, , ATTRIBUTE10
+                FROM    #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT
+            ) A ON
+                    M.DIVISION_ID = A.DIVISION_ID
+		        AND M.ITEM_ID     = A.MODEL_ID
+		    WHEN MATCHED THEN
+			    UPDATE 
+                SET
+                      ATTRIBUTE6            = A.PIC_ID
+				    , SALES_MODEL			= A.SALES_MODEL
+				    , SALES_VALID_YN		= A.SALES_VALID_YN
+				    , SALES_PRIORITY		= A.SALES_PRIORITY
+				    , SALES_FROM_YYYYMMDD	= A.SALES_FROM_YYYYMMDD
+				    , SALES_TO_YYYYMMDD		= A.SALES_TO_YYYYMMDD
+				    , LEVEL1_GROUP			= A.LEVEL1_GROUP
+				    , LEVEL2_CODE			= A.LEVEL2_CODE
+				    , STATUS_PROTOTYPE		= A.STATUS_PROTOTYPE
+				    , STATUS_MASS			= A.STATUS_MASS
+				    --, STATUS_NEW			= A.STATUS_NEW
+                    , REPLACEMENT           = A.REPLACEMENT
+				    , END_CUSTOMER			= A.END_CUSTOMER
+				    , FINISHED_PRODUCT		= A.FINISHED_PRODUCT
+                    , MKT_DEPT				= A.MKT_DEPT
+                    , REMARK                = A.REMARK
+				    , GROUP_CODE1			= A.GROUP_CODE1
+				    , GROUP_CODE2			= A.GROUP_CODE2
+				    , GROUP_CODE3			= A.GROUP_CODE3
+				    , GROUP_CODE4			= A.GROUP_CODE4
+				    , GROUP_CODE5			= A.GROUP_CODE5
+				    , GROUP_CODE6			= A.GROUP_CODE6
+				    , GROUP_CODE7			= A.GROUP_CODE7
+				    , GROUP_CODE8			= A.GROUP_CODE8
+				    , GROUP_CODE9			= A.GROUP_CODE9
+				    , GROUP_CODE10			= A.GROUP_CODE10
+				    --, ATTRIBUTE1			= A.ATTRIBUTE1
+				    --, ATTRIBUTE2			= A.ATTRIBUTE2
+				    --, ATTRIBUTE3			= A.ATTRIBUTE3
+				    --, ATTRIBUTE4			= A.ATTRIBUTE4
+				    --, ATTRIBUTE5			= A.ATTRIBUTE5
+				    --, ATTRIBUTE6			= A.ATTRIBUTE6
+				    , ATTRIBUTE7			= A.ATTRIBUTE7
+				    --, ATTRIBUTE8			= A.ATTRIBUTE8
+				    --, ATTRIBUTE9			= A.ATTRIBUTE9
+				    --, ATTRIBUTE10			= A.ATTRIBUTE10
+				    , LAST_UPDATED_BY	    = A.USER_ID
+				    , LAST_UPDATE_DATE	    = SYSDATETIME();
+        END
+        -- CP 저장 end-----------------------------------------------------------------------------------------------------------------------
+
+        -- CA 저장 begin-----------------------------------------------------------------------------------------------------------------------
+        BEGIN
+		    MERGE INTO SCP_MST_FINAL_ITEM M
+		    USING
+            (
+                SELECT    DIVISION_ID
+                        , MODEL_ID
+                        , PIC_ID
+                        , SALES_MODEL
+                        , SALES_VALID_YN
+                        , SALES_PRIORITY
+                        , SALES_FROM_YYYYMMDD
+                        , SALES_TO_YYYYMMDD
+                        , USER_ID
+					    , LEVEL1_GROUP
+					    , LEVEL2_CODE
+					    , STATUS_PROTOTYPE
+					    , STATUS_MASS
+					    --, STATUS_NEW
+                        , REPLACEMENT
+					    , END_CUSTOMER
+					    , FINISHED_PRODUCT
+                        , MKT_DEPT
+                        , REMARK
+	                    , GROUP_CODE1
+	                    , GROUP_CODE2
+	                    , GROUP_CODE3
+	                    , GROUP_CODE4
+	                    , GROUP_CODE5
+	                    , GROUP_CODE6
+	                    , GROUP_CODE7
+	                    , GROUP_CODE8
+	                    , GROUP_CODE9
+	                    , GROUP_CODE10
+	                    --수정불가, ATTRIBUTE1
+	                    --수정불가, ATTRIBUTE2
+	                    --수정불가, ATTRIBUTE3
+	                    --수정불가, ATTRIBUTE4
+	                    --수정불가, ATTRIBUTE5
+	                    --수정불가, ATTRIBUTE6
+	                    , ATTRIBUTE7
+	                    --수정불가, , ATTRIBUTE8
+	                    --수정불가, , ATTRIBUTE9
+	                    --수정불가, , ATTRIBUTE10
+                FROM    #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT_CA
+            ) A ON
+                    M.DIVISION_ID = A.DIVISION_ID
+		        AND M.ITEM_ID     = A.MODEL_ID
+		    WHEN MATCHED THEN
+			    UPDATE 
+                SET
+                      ATTRIBUTE6            = A.PIC_ID
+				    , SALES_MODEL			= A.SALES_MODEL
+				    , SALES_VALID_YN		= A.SALES_VALID_YN
+				    , SALES_PRIORITY		= A.SALES_PRIORITY
+				    , SALES_FROM_YYYYMMDD	= A.SALES_FROM_YYYYMMDD
+				    , SALES_TO_YYYYMMDD		= A.SALES_TO_YYYYMMDD
+				    , LEVEL1_GROUP			= A.LEVEL1_GROUP
+				    , LEVEL2_CODE			= A.LEVEL2_CODE
+				    , STATUS_PROTOTYPE		= A.STATUS_PROTOTYPE
+				    , STATUS_MASS			= A.STATUS_MASS
+				    --, STATUS_NEW			= A.STATUS_NEW
+                    , REPLACEMENT           = A.REPLACEMENT
+				    , END_CUSTOMER			= A.END_CUSTOMER
+				    , FINISHED_PRODUCT		= A.FINISHED_PRODUCT
+                    , MKT_DEPT				= A.MKT_DEPT
+                    , REMARK                = A.REMARK
+				    , GROUP_CODE1			= A.GROUP_CODE1
+				    , GROUP_CODE2			= A.GROUP_CODE2
+				    , GROUP_CODE3			= A.GROUP_CODE3
+				    , GROUP_CODE4			= A.GROUP_CODE4
+				    , GROUP_CODE5			= A.GROUP_CODE5
+				    , GROUP_CODE6			= A.GROUP_CODE6
+				    , GROUP_CODE7			= A.GROUP_CODE7
+				    , GROUP_CODE8			= A.GROUP_CODE8
+				    , GROUP_CODE9			= A.GROUP_CODE9
+				    , GROUP_CODE10			= A.GROUP_CODE10
+				    --, ATTRIBUTE1			= A.ATTRIBUTE1
+				    --, ATTRIBUTE2			= A.ATTRIBUTE2
+				    --, ATTRIBUTE3			= A.ATTRIBUTE3
+				    --, ATTRIBUTE4			= A.ATTRIBUTE4
+				    --, ATTRIBUTE5			= A.ATTRIBUTE5
+				    --, ATTRIBUTE6			= A.ATTRIBUTE6
+				    , ATTRIBUTE7			= A.ATTRIBUTE7
+				    --, ATTRIBUTE8			= A.ATTRIBUTE8
+				    --, ATTRIBUTE9			= A.ATTRIBUTE9
+				    --, ATTRIBUTE10			= A.ATTRIBUTE10
+				    , LAST_UPDATED_BY	    = A.USER_ID
+				    , LAST_UPDATE_DATE	    = SYSDATETIME();
+        END
+        -- CA 저장 end-----------------------------------------------------------------------------------------------------------------------
+
+
+		-- CP 이력 저장 begin-----------------------------------------------------------------------------------------------------------------------
+        BEGIN
+		    INSERT INTO SCP_MST_FINAL_ITEM_H
+		    (
+                  HISTORY_SEQ
+                , DIVISION_ID
+                , ITEM_ID
+                , NICK_NAME
+                , ITEM_CLASS
+                , OPERATION_GROUP
+                , OPERATION_GROUP_ID
+                , ELECTRODE_TYPE
+                , FLOW_ID
+                , DEMAND_GROUPING_DAYS
+                , CREATED_BY
+                , CREATION_DATE
+                , LAST_UPDATED_BY
+                , LAST_UPDATE_DATE
+                , HISTORY_CREATION_DATE
+                , TCO_CELL_YN
+                , SALES_MODEL
+                , SALES_VALID_YN
+                , SALES_PRIORITY
+                , SALES_FROM_YYYYMMDD
+                , SALES_TO_YYYYMMDD
+			    , LEVEL1_GROUP
+			    , LEVEL2_CODE
+			    , STATUS_PROTOTYPE
+			    , STATUS_MASS
+			    , STATUS_NEW
+                , REPLACEMENT
+			    , END_CUSTOMER
+			    , FINISHED_PRODUCT
+                , MKT_DEPT
+                , REMARK
+	            , GROUP_CODE1
+	            , GROUP_CODE2
+	            , GROUP_CODE3
+	            , GROUP_CODE4
+	            , GROUP_CODE5
+	            , GROUP_CODE6
+	            , GROUP_CODE7
+	            , GROUP_CODE8
+	            , GROUP_CODE9
+	            , GROUP_CODE10
+	            , ATTRIBUTE1
+	            , ATTRIBUTE2
+	            , ATTRIBUTE3
+	            , ATTRIBUTE4
+	            , ATTRIBUTE5
+	            , ATTRIBUTE6
+	            , ATTRIBUTE7
+	            , ATTRIBUTE8
+	            , ATTRIBUTE9
+	            , ATTRIBUTE10
+		    )
+		    SELECT    (NEXT VALUE FOR SEQ1_SCP_MST_FINAL_ITEM_H) AS HISTORY_SEQ
+			        , M.DIVISION_ID
+			        , M.ITEM_ID
+			        , M.NICK_NAME
+			        , M.ITEM_CLASS
+			        , M.OPERATION_GROUP
+			        , M.OPERATION_GROUP_ID
+			        , M.ELECTRODE_TYPE
+			        , M.FLOW_ID
+			        , M.DEMAND_GROUPING_DAYS
+			        , M.CREATED_BY
+			        , M.CREATION_DATE
+			        , M.LAST_UPDATED_BY
+			        , M.LAST_UPDATE_DATE
+			        , SYSDATETIME() AS HISTORY_CREATION_DATE
+			        , M.TCO_CELL_YN
+                    , M.SALES_MODEL
+                    , M.SALES_VALID_YN
+                    , M.SALES_PRIORITY
+                    , M.SALES_FROM_YYYYMMDD
+                    , M.SALES_TO_YYYYMMDD
+                    , M.LEVEL1_GROUP
+                    , M.LEVEL2_CODE
+                    , M.STATUS_PROTOTYPE
+                    , M.STATUS_MASS
+                    , M.STATUS_NEW
+                    , M.REPLACEMENT
+                    , M.END_CUSTOMER
+                    , M.FINISHED_PRODUCT
+                    , M.MKT_DEPT
+                    , M.REMARK
+				    , M.GROUP_CODE1
+				    , M.GROUP_CODE2
+				    , M.GROUP_CODE3
+				    , M.GROUP_CODE4
+				    , M.GROUP_CODE5
+				    , M.GROUP_CODE6
+				    , M.GROUP_CODE7
+				    , M.GROUP_CODE8
+				    , M.GROUP_CODE9
+				    , M.GROUP_CODE10
+				    , M.ATTRIBUTE1
+				    , M.ATTRIBUTE2
+				    , M.ATTRIBUTE3
+				    , M.ATTRIBUTE4
+				    , M.ATTRIBUTE5
+				    , M.ATTRIBUTE6
+				    , M.ATTRIBUTE7
+				    , M.ATTRIBUTE8
+				    , M.ATTRIBUTE9
+				    , M.ATTRIBUTE10
+            FROM    #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT T
+                    JOIN SCP_MST_FINAL_ITEM M WITH(NOLOCK) ON
+                            T.DIVISION_ID = M.DIVISION_ID
+                        AND T.MODEL_ID = M.ITEM_ID
+        END
+		-- CP 이력 저장 end-----------------------------------------------------------------------------------------------------------------------
+
+		
+        -- CA 이력 저장 begin-----------------------------------------------------------------------------------------------------------------------
+        BEGIN
+		    INSERT INTO SCP_MST_FINAL_ITEM_H
+		    (
+                  HISTORY_SEQ
+                , DIVISION_ID
+                , ITEM_ID
+                , NICK_NAME
+                , ITEM_CLASS
+                , OPERATION_GROUP
+                , OPERATION_GROUP_ID
+                , ELECTRODE_TYPE
+                , FLOW_ID
+                , DEMAND_GROUPING_DAYS
+                , CREATED_BY
+                , CREATION_DATE
+                , LAST_UPDATED_BY
+                , LAST_UPDATE_DATE
+                , HISTORY_CREATION_DATE
+                , TCO_CELL_YN
+                , SALES_MODEL
+                , SALES_VALID_YN
+                , SALES_PRIORITY
+                , SALES_FROM_YYYYMMDD
+                , SALES_TO_YYYYMMDD
+			    , LEVEL1_GROUP
+			    , LEVEL2_CODE
+			    , STATUS_PROTOTYPE
+			    , STATUS_MASS
+			    , STATUS_NEW
+                , REPLACEMENT
+			    , END_CUSTOMER
+			    , FINISHED_PRODUCT
+                , MKT_DEPT
+                , REMARK
+	            , GROUP_CODE1
+	            , GROUP_CODE2
+	            , GROUP_CODE3
+	            , GROUP_CODE4
+	            , GROUP_CODE5
+	            , GROUP_CODE6
+	            , GROUP_CODE7
+	            , GROUP_CODE8
+	            , GROUP_CODE9
+	            , GROUP_CODE10
+	            , ATTRIBUTE1
+	            , ATTRIBUTE2
+	            , ATTRIBUTE3
+	            , ATTRIBUTE4
+	            , ATTRIBUTE5
+	            , ATTRIBUTE6
+	            , ATTRIBUTE7
+	            , ATTRIBUTE8
+	            , ATTRIBUTE9
+	            , ATTRIBUTE10
+		    )
+		    SELECT    (NEXT VALUE FOR SEQ1_SCP_MST_FINAL_ITEM_H) AS HISTORY_SEQ
+			        , M.DIVISION_ID
+			        , M.ITEM_ID
+			        , M.NICK_NAME
+			        , M.ITEM_CLASS
+			        , M.OPERATION_GROUP
+			        , M.OPERATION_GROUP_ID
+			        , M.ELECTRODE_TYPE
+			        , M.FLOW_ID
+			        , M.DEMAND_GROUPING_DAYS
+			        , M.CREATED_BY
+			        , M.CREATION_DATE
+			        , M.LAST_UPDATED_BY
+			        , M.LAST_UPDATE_DATE
+			        , SYSDATETIME() AS HISTORY_CREATION_DATE
+			        , M.TCO_CELL_YN
+                    , M.SALES_MODEL
+                    , M.SALES_VALID_YN
+                    , M.SALES_PRIORITY
+                    , M.SALES_FROM_YYYYMMDD
+                    , M.SALES_TO_YYYYMMDD
+                    , M.LEVEL1_GROUP
+                    , M.LEVEL2_CODE
+                    , M.STATUS_PROTOTYPE
+                    , M.STATUS_MASS
+                    , M.STATUS_NEW
+                    , M.REPLACEMENT
+                    , M.END_CUSTOMER
+                    , M.FINISHED_PRODUCT
+                    , M.MKT_DEPT
+                    , M.REMARK
+				    , M.GROUP_CODE1
+				    , M.GROUP_CODE2
+				    , M.GROUP_CODE3
+				    , M.GROUP_CODE4
+				    , M.GROUP_CODE5
+				    , M.GROUP_CODE6
+				    , M.GROUP_CODE7
+				    , M.GROUP_CODE8
+				    , M.GROUP_CODE9
+				    , M.GROUP_CODE10
+				    , M.ATTRIBUTE1
+				    , M.ATTRIBUTE2
+				    , M.ATTRIBUTE3
+				    , M.ATTRIBUTE4
+				    , M.ATTRIBUTE5
+				    , M.ATTRIBUTE6
+				    , M.ATTRIBUTE7
+				    , M.ATTRIBUTE8
+				    , M.ATTRIBUTE9
+				    , M.ATTRIBUTE10
+            FROM    #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT_CA T
+                    JOIN SCP_MST_FINAL_ITEM M WITH(NOLOCK) ON
+                            T.DIVISION_ID = M.DIVISION_ID
+                        AND T.MODEL_ID = M.ITEM_ID
+        END
+		-- CA 이력 저장 end-----------------------------------------------------------------------------------------------------------------------
+
+
+		SELECT  @v_mod_cnt = COUNT(1)
+		FROM    #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT
+
+
+		-- LOG end
+		SET @v_log_type     = 'END'
+		SET @v_log_message  = '########## END of procedure ##########'
+		SET @v_description  = ''
+		SET @d_event_date   = SYSDATETIME()
+
+        EXEC PR_SCM_SYS_LOG_BATCH @v_program_name, @v_log_type, @n_log_count, @v_log_message, @v_description, @d_event_date
+
+        COMMIT TRAN
+
+		-- 결과코드, 결과 카운트 반환
+		SELECT    'S' AS result_code
+                , @v_mod_cnt AS result_cnt
+	END TRY
+	BEGIN CATCH
+		-- Test XACT_STATE:
+        -- If 1, the transaction is committable.
+        -- If -1, the transaction is uncommittable and should
+        --     be rolled back.
+        -- XACT_STATE = 0 means that there is no transaction and
+        --     a commit or rollback operation would generate an error.
+		BEGIN
+
+			IF (XACT_STATE() <> 0) ROLLBACK TRAN;
+
+            --print 'ERROR_PROCEDURE()' select ERROR_PROCEDURE();
+
+			INSERT INTO SCM_SYS_LOG_BATCH
+            (
+                  PROGRAM_NAME
+                , LOG_TYPE
+                , LOG_COUNT
+                , LOG_MESSAGE
+                , DESCRIPTION
+                , EVENT_DATE
+                , CREATION_DATE
+                , CREATED_BY
+                , LAST_UPDATE_DATE
+                , LAST_UPDATED_BY
+            )
+			VALUES
+            (
+                  ISNULL(ERROR_PROCEDURE(), @v_program_name)
+                , 'ERROR'
+                , NULL
+                , ERROR_MESSAGE()
+                , NULL
+                , SYSDATETIME()
+                , SYSDATETIME()
+                , ERROR_PROCEDURE()
+                , SYSDATETIME()
+                , ERROR_PROCEDURE()
+            )
+
+			-- error코드, errror 메시지 반환
+			SELECT  'F' AS result_code
+			SELECT  '[' + Convert(NVARCHAR(10), ERROR_NUMBER()) + ']' + ERROR_MESSAGE()
+		END
+	END CATCH
+
+	IF OBJECT_ID('tempdb..#T_SCP0080_SAVE_SPLIT_DATA_A') IS NOT NULL
+		DROP TABLE #T_SCP0080_SAVE_SPLIT_DATA_A
+
+	IF OBJECT_ID('tempdb..#T_SCP0080_SAVE_SPLIT_DATA_B') IS NOT NULL
+		DROP TABLE #T_SCP0080_SAVE_SPLIT_DATA_B
+
+	IF OBJECT_ID('tempdb..#T_SCP0080_SAVE_SPLIT_DATA_G') IS NOT NULL
+		DROP TABLE #T_SCP0080_SAVE_SPLIT_DATA_G
+
+	IF OBJECT_ID('tempdb..#T_SCP0080_SAVE_SPLIT_DATA_T') IS NOT NULL
+		DROP TABLE #T_SCP0080_SAVE_SPLIT_DATA_T
+
+	IF OBJECT_ID('tempdb..#T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT') IS NOT NULL
+		DROP TABLE #T_SCP0080_SAVE_GROUP_CODE_MANAGEMENT
+END
