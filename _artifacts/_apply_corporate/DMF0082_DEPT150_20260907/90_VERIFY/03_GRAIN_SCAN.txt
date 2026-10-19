@@ -1,0 +1,27 @@
+VERDICT    OBJECT                                           LINE JOINKEYS                                     SRC
+PARTIAL    PKG_DMF0082                                       609 DIVISION_ID                                  FROM SCM_MGR.SCM_MST_SITE_ITEM S
+PARTIAL    PKG_DMF0082                                       886 DIVISION_ID+ITEM_ID+SCM_SITE_ID              , NULL                                              AS PROJECT_S_OP_REPORT  -- Case: 202
+PARTIAL    PKG_DMF0082                                       887 DIVISION_ID+ITEM_ID+SCM_SITE_ID              FROM   SCM_MGR.SCM_MST_SITE_ITEM F
+PARTIAL    PKG_DMF0082                                      5074 DIVISION_ID+PROJECT_CODE                     FROM   SCM_MGR.SCM_MST_SITE_ITEM SI
+PARTIAL    PKG_DMF0082                                      5184 DIVISION_ID+PROJECT_CODE+SCM_SITE_ID         LEFT JOIN SCM_MGR.SCM_MST_SITE_ITEM SI
+PARTIAL    PKG_DMF0082                                      5212 DIVISION_ID+ITEM_ID+SCM_SITE_ID              FROM   SCM_MGR.SCM_MST_SITE_ITEM MS
+PK         PKG_DMF0082                                      5853 DIVISION_ID+ITEM_ID+PROJECT_CODE+SCM_SITE_ID INNER JOIN SCM_MGR.SCM_MST_SITE_ITEM Z
+PARTIAL    PKG_DMF0082                                      7415 DIVISION_ID+ITEM_ID+SCM_SITE_ID              FROM   SCM_MGR.SCM_MST_SITE_ITEM F
+PK         PKG_DMF0082                                     10290 DIVISION_ID+ITEM_ID+PROJECT_CODE+SCM_SITE_ID FROM SCM_MST_SITE_ITEM B
+PK         PKG_DMF0082                                     10362 DIVISION_ID+ITEM_ID+PROJECT_CODE+SCM_SITE_ID FROM SCM_MST_SITE_ITEM B
+PARTIAL    PKG_DMF0082                                     10404 DIVISION_ID                                  FROM SCM_MST_SITE_ITEM SI
+PK         PKG_DMF0082                                     10512 DIVISION_ID+ITEM_ID+PROJECT_CODE+SCM_SITE_ID LEFT JOIN (SELECT * FROM SCM_MST_SITE_ITEM  WHERE VALID_YN = 'Y') SITE_ITEM
+PARTIAL    PKG_DMF0082                                     10541 DIVISION_ID                                  FROM SCM_MST_SITE_ITEM X
+PK         PKG_DMF0082                                     11048 DIVISION_ID+ITEM_ID+PROJECT_CODE+SCM_SITE_ID FROM SCM_MST_SITE_ITEM A
+PK         PKG_DMF0082                                     11076 DIVISION_ID+ITEM_ID+PROJECT_CODE+SCM_SITE_ID FROM SCM_MST_SITE_ITEM		T1
+PARTIAL    PKG_DMF0082                                     11129 DIVISION_ID                                  FROM SCM_MST_SITE_ITEM X
+PARTIAL    PKG_DMF0082                                     12464 DIVISION_ID+ITEM_ID+SCM_SITE_ID              FROM SCM_MGR.SCM_MST_SITE_ITEM ITEM
+PK         PKG_DMF0082                                     12793 DIVISION_ID+ITEM_ID+PROJECT_CODE+SCM_SITE_ID INNER JOIN SCM_MGR.SCM_MST_SITE_ITEM Z
+PARTIAL    PKG_DMF0082                                     13121 DIVISION_ID+ITEM_ID+SCM_SITE_ID              LEFT OUTER JOIN SCM_MGR.SCM_MST_SITE_ITEM ITEM
+PK         PKG_DMF0082                                     13479 DIVISION_ID+ITEM_ID+PROJECT_CODE+SCM_SITE_ID LEFT   JOIN SCM_MGR.SCM_MST_SITE_ITEM F
+PK         PKG_DMF0082                                     13534 DIVISION_ID+ITEM_ID+PROJECT_CODE+SCM_SITE_ID JOIN SCM_MGR.SCM_MST_SITE_ITEM B
+PK         PKG_DMF0082                                     14777 DIVISION_ID+ITEM_ID+PROJECT_CODE+SCM_SITE_ID AND EXISTS (SELECT 1 FROM SCM_MGR.SCM_MST_SITE_ITEM B
+PK         PKG_DMF0082                                     14845 DIVISION_ID+ITEM_ID+PROJECT_CODE+SCM_SITE_ID INNER JOIN SCM_MGR.SCM_MST_SITE_ITEM SI
+
+대상 1 · LIVE 참조 23 — PARTIAL=12 / PK=11
+G150-3 : PASS (VIOLATION 0)  ※ PARTIAL 은 육안 확정 필요

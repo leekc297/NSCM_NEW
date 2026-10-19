@@ -1,0 +1,78 @@
+################ [U1] 스테이징 GTT vs 원장 — 키 컬럼 DEFAULT (사내: GTT '-' / 원장 '/') ################
+TABLE_NAME                 | COLUMN_NAME       | DEFAULT_ON_NULL
+---------------------------+-------------------+----------------
+DM_PLN_CFM_MKT_DEMAND_PLAN | CELL_PROD_SITE_ID | YES            
+DM_PLN_CFM_MKT_DEMAND_PLAN | DOM_EXP           | YES            
+DM_PLN_CFM_MKT_DEMAND_PLAN | END_CUSTOMER      | YES            
+DM_PLN_CFM_MKT_DEMAND_PLAN | FCST_TYPE         | YES            
+DM_PLN_CFM_MKT_DEMAND_PLAN | INCOTERMS         | YES            
+DM_PLN_CFM_MKT_DEMAND_PLAN | PLANT_SITE_ID     | YES            
+DM_PLN_CFM_SELLING_PRICE   | CELL_PROD_SITE_ID | YES            
+DM_PLN_CFM_SELLING_PRICE   | DOM_EXP           | YES            
+DM_PLN_CFM_SELLING_PRICE   | END_CUSTOMER      | YES            
+DM_PLN_CFM_SELLING_PRICE   | FCST_TYPE         | YES            
+DM_PLN_CFM_SELLING_PRICE   | INCOTERMS         | YES            
+DM_PLN_CFM_SELLING_PRICE   | PLANT_SITE_ID     | YES            
+DM_PLN_MKT_FCST            | DOM_EXP           | YES            
+DM_PLN_MKT_FCST            | FCST_TYPE         | YES            
+DM_PLN_MKT_FCST            | INCOTERMS         | YES            
+DM_PLN_MKT_FCST            | PLANT_SITE_ID     | YES            
+GT_PRDM1_T_MAIN            | CELL_PROD_SITE_ID | YES            
+GT_PRDM1_T_MAIN            | DOM_EXP           | YES            
+GT_PRDM1_T_MAIN            | END_CUSTOMER      | YES            
+GT_PRDM1_T_MAIN            | FCST_TYPE         | YES            
+GT_PRDM1_T_MAIN            | INCOTERMS         | YES            
+GT_PRDM1_T_MAIN            | PLANT_SITE_ID     | YES            
+SCM_MST_FUTURE_PRICE       | DOM_EXP           | YES            
+SCM_MST_FUTURE_PRICE       | FCST_TYPE         | YES            
+SCM_MST_FUTURE_PRICE       | INCOTERMS         | YES            
+SCM_MST_FUTURE_PRICE       | PLANT_SITE_ID     | YES            
+(26 rows)
+--  DATA_DEFAULT 는 LONG 이라 아래 XML 변환으로 값 표시 (권한 없으면 이 문장만 오류 — 무시)
+T                          | C                 | D   
+---------------------------+-------------------+-----
+DM_PLN_CFM_MKT_DEMAND_PLAN | CELL_PROD_SITE_ID | '/' 
+DM_PLN_CFM_MKT_DEMAND_PLAN | DOM_EXP           | '/' 
+DM_PLN_CFM_MKT_DEMAND_PLAN | END_CUSTOMER      | '/' 
+DM_PLN_CFM_MKT_DEMAND_PLAN | FCST_TYPE         | '/' 
+DM_PLN_CFM_MKT_DEMAND_PLAN | INCOTERMS         | '/' 
+DM_PLN_CFM_MKT_DEMAND_PLAN | PLANT_SITE_ID     | '/' 
+DM_PLN_CFM_SELLING_PRICE   | CELL_PROD_SITE_ID | '/' 
+DM_PLN_CFM_SELLING_PRICE   | DOM_EXP           | '/' 
+DM_PLN_CFM_SELLING_PRICE   | END_CUSTOMER      | '/' 
+DM_PLN_CFM_SELLING_PRICE   | FCST_TYPE         | '/' 
+DM_PLN_CFM_SELLING_PRICE   | INCOTERMS         | '/' 
+DM_PLN_CFM_SELLING_PRICE   | PLANT_SITE_ID     | '/' 
+GT_PRDM1_T_MAIN            | CELL_PROD_SITE_ID | '-' 
+GT_PRDM1_T_MAIN            | DOM_EXP           | '-' 
+GT_PRDM1_T_MAIN            | END_CUSTOMER      | '-' 
+GT_PRDM1_T_MAIN            | FCST_TYPE         | '-' 
+GT_PRDM1_T_MAIN            | INCOTERMS         | '-' 
+GT_PRDM1_T_MAIN            | PLANT_SITE_ID     | '-' 
+(18 rows)
+--  판정: GT_PRDM1_T_MAIN 이 '-' 이고 원장이 '/' 면 가설 성립
+################ [U2] 40 판가·수요 원장의 센티널 표기 분포 — 금주 이후 (사내: 전부 '-') ################
+TB     | C        | V | N     
+-------+----------+---+-------
+DEMAND | CELLPROD | - | 84042 
+DEMAND | PLANT    |   | 206861
+DEMAND | PLANT    | - | 257895
+PRICE  | CELLPROD | - | 63888 
+PRICE  | ENDCUST  | - | 522   
+PRICE  | PLANT    | - | 249852
+(6 rows)
+--  판정: 같은 컬럼에 '-' 와 '/' 가 함께 있으면, 전환 뒤 저장된 행이 '-' 로 다시 들어온 것 (스테이징 DEFAULT '-' 의 결과)
+################ [U3] 전환 뒤 '-' 로 새로 들어온 행 — 누가 언제 (최근 14일) ################
+TB     | D     | LAST_UPDATED_BY | N     
+-------+-------+-----------------+-------
+DEMAND | 10-09 | BALANCE_MAKE    | 256810
+DEMAND | 10-11 | CUTOFF          | 29374 
+DEMAND | 10-11 | SYSTEM          | 5841  
+PRICE  | 09-29 | minyonglee1     | 102   
+PRICE  | 09-30 | minyonglee1     | 96462 
+(5 rows)
+################ [U4] 실제 차단 이력 — 저장 SP 로그의 Unit Price Not Found (최근 14일, 메시지에 Plant/Cell Prod 값 표시) ################
+T | CREATED_BY | D
+--+------------+--
+(0 rows)
+--  판정: 메시지의 'Plant Site : -' 또는 'Cell Prod Site : -' 인데 원장([U2])은 '/' 이면 표기 불일치 오탐 확정

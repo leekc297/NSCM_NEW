@@ -1,0 +1,86 @@
+// 조회조건 표준 카탈로그 — Period DatePicker 높이 정합
+//   디자인 기준 높이 = 36px (표준 CustomDropdown/InputField 동일).
+//   design-system DatePicker small 본래 높이 = 28px → 다른 조회조건(36px)과 어긋남.
+//   구조(부모 체인): .datePickerFix(28) > MuiBox(28) > MuiBox(36) > MuiFormControl/TextField(36)
+//                    > MuiOutlinedInput-root(36) > input. 바깥 Box 가 28 이라 안쪽 36 이 overflow.
+//   → wrapper / Box / FormControl / OutlinedInput 모든 레벨을 36px 로 통일 (emotion 우선순위 !important).
+//   design-system 내부 emotion hash 클래스 비의존 — Mui* 부분 일치 셀렉터.
+.datePickerFix {
+  width: 100%;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  overflow: hidden;
+
+  :global {
+    [class*='MuiBox-root'],
+    [class*='MuiFormControl-root'],
+    [class*='MuiTextField-root'] {
+      height: 36px !important;
+      min-height: 36px !important;
+      box-sizing: border-box;
+    }
+
+    [class*='MuiOutlinedInput-root'],
+    [class*='MuiInputBase-root'] {
+      height: 36px !important;
+      min-height: 36px !important;
+      box-sizing: border-box;
+    }
+
+    [class*='MuiInputBase-input'],
+    input {
+      box-sizing: border-box;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+
+    // design-system 내부 버그(vendor 패키지, 이 저장소 소스 아님 — vendor/lges-design-system-*.tgz
+    //   라 직접 수정 불가) — 이 DatePicker 는 달력 아이콘을 positionStart 로 커스텀 배치하는데, MUI 가
+    //   남기는 빈 positionEnd adornment(자식 0개, 아이콘 없음)를 design-system 이
+    //   slotProps.inputAdornment.sx 로 숨기려 했으나 `diplay: 'none'` 오타라 적용되지 않는다.
+    //   내용 없는 껍데기라 안전하게 숨긴다.
+    [class*='MuiInputAdornment-positionEnd'] {
+      display: none !important;
+    }
+
+    // 진짜 원인 확정(사용자 DevTools 실측, 2026-09-22): elevation=true + disabled 조합에서
+    //   fieldset(NotchedOutline) 테두리 가운데가 사라지던 것은 서브픽셀도 컴포지팅 레이어도
+    //   아니라 `.MuiInputBase-root.Mui-disabled { background-color: #F1F4F3 }` 때문이었다 —
+    //   이 배경색을 DevTools 에서 끄니 테두리가 바로 정상 렌더링됨을 확인. 같은 요소에 불투명
+    //   background-color 와 (자식 fieldset 의) border 가 같이 있으면 Chromium 이 특정 상황에서
+    //   border 페인트를 배경에 덮인 것으로 오판해 일부 건너뛰는 것으로 추정. 이 배경색은 중복이라
+    //   지워도 무해하다 — 바깥 Box(l1 outer wrapper)가 이미 동일한 회색(inputBgDisabled)을
+    //   깔고 있어(모든 스크린샷에서 아이콘 주변까지 이미 이 회색으로 보였음) 시각적으로 그대로다.
+    [class*='MuiInputBase-root'].Mui-disabled {
+      background-color: transparent !important;
+    }
+  }
+}
+
+// 기간(시작일/종료일)을 각각 독립 달력(usecase='date') 2개로 분리 배치.
+//   dual-range 달력 대신 필드별로 각자 팝업이 뜨도록 구성.
+.periodSplit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  width: 100%;
+
+  // ⭐ Mui DatePicker(TextField)는 기본 고정 너비라, flex 로 늘리면(wrapper 만 커지고
+  //   입력창은 안 커져) 오른쪽에 큰 빈 공간이 생김 → 과도한 간격.
+  //   각 필드를 '자기 너비(auto)'로 두고 왼쪽에 붙여, gridSize 와 무관하게 간격을 일정하게 유지.
+  .datePickerFix {
+    flex: 1 1 70px;
+    width: auto;
+    min-width: 55px;
+    max-width: 110px;
+  }
+
+  .periodSep {
+    flex: 0 0 auto;
+    color: var(--gray-400, #98a2b3);
+    user-select: none;
+  }
+}

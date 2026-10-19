@@ -1,0 +1,30 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-15 18:47:00
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | LINES_N
+L0 | PACKAGE | VALID | 2026-10-09 13:38:30 | 168
+L0 | PACKAGE BODY | VALID | 2026-10-15 18:46:59 | 5969
+(2 rows)
+
+CHK | KIND | N | EXPECT | LINES | JUDGE
+L1 대상 | ① OR INCOTERMS IS NULL | 1 | 1 | 4808 | PASS
+L1 대상 | ① WHERE FCST_TYPE IS NULL | 1 | 1 | 4807 | PASS
+L1 대상 | ② IF V_CNT_1 > 0 THEN | 1 | 1 | 4809 | PASS
+L1 대상 | 구간 끝 GOTO END_PKUPDATE | 1 | 1 | 4843 | PASS
+L1 대상 | 시작 앵커 INTO V_CNT_1 | 1 | 1 | 4790 | PASS
+(5 rows)
+
+CHK | N | JUDGE
+L2 마커 | 0 | PASS (미적용)
+(1 rows)
+
+CHK | DIVISION_ID | FCST_TYPE | INCOTERMS | N | MIN_YM | MAX_YM
+L3 원장 | 40 | - | - | 71673 | 201808 | 202412
+L3 원장 | 81 | - | - | 3084 | 202001 | 202107
+L3 원장 | 82 | - | - | 368 | 202001 | 202512
+(3 rows)
+
+CHK | N
+L4 세션 | 0
+(1 rows)

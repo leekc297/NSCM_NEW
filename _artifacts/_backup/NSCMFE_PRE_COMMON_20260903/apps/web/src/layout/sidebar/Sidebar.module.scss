@@ -1,0 +1,51 @@
+.toggleButton {
+  z-index: 11;
+  position: absolute;
+  top: -52px;
+  left: 0;
+  width: 52px;
+  height: 52px;
+  padding: 16px 0;
+  text-align: center;
+  color: $navTopBgSwitchHolder;
+  border: 0;
+  outline: 0;
+  background-color: $commonBgPrimary;
+  cursor: pointer;
+  &:hover {
+    background-color: #3ab3bf;
+  }
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.sidebar {
+  position: relative;
+  z-index: 11;
+  height: calc(100vh - 52px);
+  width: 0px;
+  background-color: $commonBgDeep;
+  transition: 0.3s;
+  border-right: 1px solid $commonBorderBasic;
+  overflow-x: hidden;
+
+  &.isOpen {
+    width: 240px;
+  }
+}
+
+.nav {
+  width: 240px;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  .pateTitle {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 18px 14px;
+    border-bottom: 1px solid $commonBorderBasic;
+    color: $commonTextLight;
+  }
+}

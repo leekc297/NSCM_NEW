@@ -1,0 +1,47 @@
+// PanelGroup(orientation='vertical') — 상하 드래그 분할. Lookup .tableWrapper 패턴 참조.
+// gap 은 두지 않는다 — 사이 간격/드래그 영역은 아래 .splitBar(Separator) 가 담당.
+.tableWrapper {
+  flex: 1 1 0;
+  min-height: 0;
+
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+}
+
+// 상하 드래그 바(Separator). react-resizable-panels v4 Separator 는 기본 높이 0 + 커서 없음이라
+// 잡을 영역이 없다 → 여기서 두께/리사이즈 커서/중앙 구분선을 직접 부여해야 드래그가 동작한다.
+// (inline style 로 flexGrow/flexShrink:0 이 걸리므로 두께는 flex-basis 가 아닌 height 로 지정)
+.splitBar {
+  height: 16px;
+  cursor: row-resize;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
+}
+
+// Panel 직속 자식 — Panel 이 높이를 관리하므로 height:100% 로 채운다 (flex-grow 아님).
+.upperGrid,
+.lowerGrid {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}

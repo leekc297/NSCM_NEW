@@ -1,0 +1,310 @@
+[
+ {
+  "case": "B1 구코드(회사명 룩업 있음) 신규 저장",
+  "company": [
+   "C100"
+  ],
+  "TB": {
+   "kind": "TB",
+   "msg": "구코드 COMPANY_ID는 저장할 수 없습니다.",
+   "sec": 0.1,
+   "saved_rows": [],
+   "hist_rows": 0,
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true
+  },
+  "TA": {
+   "kind": "TA",
+   "msg": "success",
+   "sec": 2.6,
+   "saved_rows": [
+    [
+     "C100",
+     "LGESK",
+     "RTF_SYS_RP",
+     "20240101",
+     "0.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ],
+    [
+     "C100",
+     "LGESK",
+     "SalesAmt_KRW",
+     "20240101",
+     "1000.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ],
+    [
+     "C100",
+     "LGESK",
+     "SalesAmt_LOC",
+     "20240101",
+     "1.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ]
+   ],
+   "hist_rows": 0,
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true
+  },
+  "same_msg": false,
+  "same_rows": false
+ },
+ {
+  "case": "B2 구코드(회사명 룩업 없음) 신규 저장",
+  "company": [
+   "B100"
+  ],
+  "TB": {
+   "kind": "TB",
+   "msg": "구코드 COMPANY_ID는 저장할 수 없습니다.",
+   "sec": 0.0,
+   "saved_rows": [],
+   "hist_rows": 0,
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true
+  },
+  "TA": {
+   "kind": "TA",
+   "msg": "success",
+   "sec": 1.0,
+   "saved_rows": [
+    [
+     "B100",
+     null,
+     "RTF_SYS_RP",
+     "20240101",
+     "0.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ],
+    [
+     "B100",
+     null,
+     "SalesAmt_KRW",
+     "20240101",
+     "1000.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ],
+    [
+     "B100",
+     null,
+     "SalesAmt_LOC",
+     "20240101",
+     "1.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ]
+   ],
+   "hist_rows": 0,
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true
+  },
+  "same_msg": false,
+  "same_rows": false
+ },
+ {
+  "case": "B3 현행 코드 신규 저장 (회귀)",
+  "company": [
+   "AZ00"
+  ],
+  "TB": {
+   "kind": "TB",
+   "msg": "success",
+   "sec": 0.9,
+   "saved_rows": [
+    [
+     "AZ00",
+     "LGESAZ",
+     "RTF_SYS_RP",
+     "20240101",
+     "0.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ],
+    [
+     "AZ00",
+     "LGESAZ",
+     "SalesAmt_KRW",
+     "20240101",
+     "1000.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ],
+    [
+     "AZ00",
+     "LGESAZ",
+     "SalesAmt_LOC",
+     "20240101",
+     "1.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ]
+   ],
+   "hist_rows": 0,
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true
+  },
+  "TA": {
+   "kind": "TA",
+   "msg": "success",
+   "sec": 1.0,
+   "saved_rows": [
+    [
+     "AZ00",
+     "LGESAZ",
+     "RTF_SYS_RP",
+     "20240101",
+     "0.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ],
+    [
+     "AZ00",
+     "LGESAZ",
+     "SalesAmt_KRW",
+     "20240101",
+     "1000.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ],
+    [
+     "AZ00",
+     "LGESAZ",
+     "SalesAmt_LOC",
+     "20240101",
+     "1.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ]
+   ],
+   "hist_rows": 0,
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true
+  },
+  "same_msg": true,
+  "same_rows": true
+ },
+ {
+  "case": "B4 현행+구코드 2세트 한 번에 저장",
+  "company": [
+   "AZ00",
+   "C100"
+  ],
+  "TB": {
+   "kind": "TB",
+   "msg": "구코드 COMPANY_ID는 저장할 수 없습니다.",
+   "sec": 0.0,
+   "saved_rows": [],
+   "hist_rows": 0,
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true
+  },
+  "TA": {
+   "kind": "TA",
+   "msg": "success",
+   "sec": 1.1,
+   "saved_rows": [
+    [
+     "AZ00",
+     "LGESAZ",
+     "RTF_SYS_RP",
+     "20240101",
+     "0.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ],
+    [
+     "AZ00",
+     "LGESAZ",
+     "SalesAmt_KRW",
+     "20240101",
+     "1000.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ],
+    [
+     "AZ00",
+     "LGESAZ",
+     "SalesAmt_LOC",
+     "20240101",
+     "1.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "1"
+    ],
+    [
+     "C100",
+     "LGESK",
+     "RTF_SYS_RP",
+     "20240101",
+     "0.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "2"
+    ],
+    [
+     "C100",
+     "LGESK",
+     "SalesAmt_KRW",
+     "20240101",
+     "1000.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "2"
+    ],
+    [
+     "C100",
+     "LGESK",
+     "SalesAmt_LOC",
+     "20240101",
+     "1.0",
+     "마케팅.신시장",
+     "신시장1팀",
+     "minyonglee1",
+     "2"
+    ]
+   ],
+   "hist_rows": 0,
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true
+  },
+  "same_msg": false,
+  "same_rows": false
+ }
+]

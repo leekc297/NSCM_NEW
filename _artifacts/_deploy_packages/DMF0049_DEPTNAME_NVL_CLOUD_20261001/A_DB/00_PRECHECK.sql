@@ -1,0 +1,34 @@
+-- =====================================================================================================
+-- DMF0049 부서명 NVL 보완 — 클라우드 적용 전 점검 (읽기 전용 · QA / DEV 각각 SCM_MGR)
+--   01 은 사내 PKG_DMF0049 BODY 전체본이다. 클라우드 BODY 가 사내 변경 전 판본과 다르면
+--   (클라우드에만 있는 보완이 있으면) 통째로 덮어쓰지 말고 부서명 블록만 수동 반영할 것.
+-- =====================================================================================================
+
+-- [0] 접속 DB
+SELECT USER, SYS_CONTEXT('USERENV','DB_NAME') DB, SYS_CONTEXT('USERENV','SERVER_HOST') HOST FROM DUAL;
+
+-- [1] 현재 클라우드 BODY 판본
+--     사내 변경 전 기준: LAST_DDL 2026-09-30 20:00:38 / 1294줄 (BODY), 사내 변경 후: 1297줄 · HSUM 3006530029337
+SELECT O.OBJECT_TYPE, O.STATUS, TO_CHAR(O.LAST_DDL_TIME,'YYYY-MM-DD HH24:MI:SS') LAST_DDL,
+       COUNT(S.LINE) LINES, SUM(ORA_HASH(S.TEXT)) HSUM,
+       SUM(CASE WHEN S.TEXT LIKE '%A.DEPARTMENT_EDIT_FLAG IS NULL OR A.T_DEPARTMENT_NAME IS NULL THEN ''''%' THEN 1 ELSE 0 END) OLD_BLANK_BRANCH,  -- 1 = 보완 대상
+       SUM(CASE WHEN S.TEXT LIKE '%[E20261001-DEPTNAMEID]%' THEN 1 ELSE 0 END) NEW_MARKER                                                      -- 1 = 이미 반영
+  FROM ALL_OBJECTS O JOIN ALL_SOURCE S ON S.OWNER = O.OWNER AND S.NAME = O.OBJECT_NAME AND S.TYPE = O.OBJECT_TYPE
+ WHERE O.OWNER = 'SCM_MGR' AND O.OBJECT_NAME = 'PKG_DMF0049'
+ GROUP BY O.OBJECT_TYPE, O.STATUS, O.LAST_DDL_TIME;
+
+-- [2] 사내 변경 전과 다른 클라우드 전용 보완 여부 — 최근 보완 마커 존재 확인 (사내 변경 전 본에 있는 마커)
+--     사내 변경 전 본 기준값: DIVIDSCALAR 3 / SARGSWEEP 4 / PKGUARD 2 — 다르면 01 통째 적용 보류, 블록만 수동 반영
+SELECT SUM(CASE WHEN TEXT LIKE '%[E20260820-DIVIDSCALAR]%' THEN 1 ELSE 0 END) M_DIVIDSCALAR,
+       SUM(CASE WHEN TEXT LIKE '%[E20260828-SARGSWEEP]%'  THEN 1 ELSE 0 END) M_SARGSWEEP,
+       SUM(CASE WHEN TEXT LIKE '%[E20260812-PKGUARD]%'    THEN 1 ELSE 0 END) M_PKGUARD
+  FROM ALL_SOURCE WHERE OWNER = 'SCM_MGR' AND NAME = 'PKG_DMF0049' AND TYPE = 'PACKAGE BODY';
+
+-- [3] 현재 NULL 부서명 행 (보정 대상 — 02 실행 여부 판단)
+SELECT DIVISION_ID, VERSION_NO, COUNT(*) CNT,
+       SUM(CASE WHEN DEPARTMENT_NAME IS NULL THEN 1 ELSE 0 END) DEPARTMENT_NAME_NULL,
+       SUM(CASE WHEN DEPT_NAME IS NULL THEN 1 ELSE 0 END) DEPT_NAME_NULL
+  FROM DM_PLN_SALES_ETC_REPORT_C
+ WHERE DEPARTMENT_NAME IS NULL OR DEPT_NAME IS NULL
+ GROUP BY DIVISION_ID, VERSION_NO
+ ORDER BY 1, 2;

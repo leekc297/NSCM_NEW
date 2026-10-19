@@ -1,0 +1,38 @@
+{
+  "name": "@web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "local": "vite",
+    "dev": "vite --mode dev",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 3000",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --color",
+    "lint:fix": "eslint src --fix --color",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@admin": "workspace:*",
+    "@authority": "workspace:*",
+    "@demand": "workspace:*",
+    "@factory": "workspace:*",
+    "@foundation": "workspace:*",
+    "@master": "workspace:*",
+    "@report": "workspace:*",
+    "@shared": "workspace:*",
+    "@shipping": "workspace:*",
+    "@supply": "workspace:*",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "react-router-dom": "^6.28.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "rollup-plugin-visualizer": "^6.0.5",
+    "unplugin-auto-import": "^21.0.0",
+    "vite": "^6.0.3",
+    "vite-plugin-svgr": "^4.5.0"
+  }
+}

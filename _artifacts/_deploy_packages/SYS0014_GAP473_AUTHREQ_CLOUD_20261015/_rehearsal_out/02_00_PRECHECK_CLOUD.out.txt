@@ -1,0 +1,31 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-15 21:18:15
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | LINES_N
+L0 | PACKAGE | VALID | 2026-10-09 13:38:31 | 38
+L0 | PACKAGE BODY | VALID | 2026-10-15 21:18:15 | 344
+(2 rows)
+
+CHK | KIND | N | JUDGE
+L1 대상 | -- userInfo DELETE 줄 | 1 | PASS
+L1 대상 | -- unit_auth DELETE 줄 | 1 | PASS
+(2 rows)
+
+CHK | KIND | DATA_TYPE | NULLABLE
+L2 테이블 | DIVISION_ID | VARCHAR2 | N
+L2 테이블 | GROUP_ID | VARCHAR2 | N
+L2 테이블 | PLANT_ID | VARCHAR2 | N
+L2 테이블 | USER_ID | VARCHAR2 | N
+(4 rows)
+
+CHK | N | LINE | JUDGE
+L3 마커 | 0 |  | 미적용 (기대)
+(1 rows)
+
+CHK | TOTAL_REQ | NO_MAPPING_REQ
+L4 참고 | 25349 | 4411
+(1 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

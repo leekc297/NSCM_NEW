@@ -1,0 +1,176 @@
+﻿################ [C0] 시트 × 액션 인벤토리 — 최근 14 일 DMF0005 가 쏜 call-proc 전부 ################
+--  사내 30일: production SEARCH 348회(중앙 3초 · 최대 7,780초) · purchase SEARCH 218회(중앙 0초 · 최대 29초) · production SAVE 71회 · modelChange SAVE 7회
+SHT_NM      | ACT    | CALLS | USERS | FIRST_CALL  | LAST_CALL   | MED_DB_S | MAX_DB_S | GE2S_CALLS | ERR_OR_NOEND
+------------+--------+-------+-------+-------------+-------------+----------+----------+------------+-------------
+production  | SEARCH | 50    | 5     | 09-30 09:42 | 10-14 10:23 | 4        | 7780     | 37         | 0           
+purchase    | SEARCH | 23    | 2     | 09-30 09:42 | 10-08 16:52 | 0        | 2        | 1          | 0           
+production  | SAVE   | 23    | 4     | 09-30 11:00 | 10-08 14:08 | 1        | 4        | 8          | 0           
+modelChange | SAVE   | 7     | 1     | 10-01 11:23 | 10-01 11:34 | 0        | 1        | 0          | 0           
+(4 rows)
+################ [C1] ⭐⭐ 호출별 전수 상세 — 최근 14 일, 최신순 300건 ################
+--  JUDGE: '대상(>=2s)' = 튜닝 대상 / 'NO_END' = BE 가 종료를 못 남김(타임아웃 · 취소) / 'ERR' = 예외 / '-' = 2초 미만
+--  BE_POST_S 가 DB_S 와 비슷하거나 더 크면 SQL 이 아니라 BE 결과 처리 구간이다 (82 는 한 번에 3만 8천 행 × 53칸을 내려준다)
+--  FILTERS: 화면 기본값(dept · cust · site = ALL, pjt · item · owner = 빈칸, active = ALL)과 다른 조건만 표시
+ST             | SHT_NM      | ACT    | DIV  | USR         | FILTERS                                   | DB_S   | SERVER_S | TOTAL_S | PRE_DB_S | BE_POST_S | JUDGE                   | ERR 
+---------------+-------------+--------+------+-------------+-------------------------------------------+--------+----------+---------+----------+-----------+-------------------------+-----
+10-14 10:23:35 | production  | SEARCH | 82   | minyonglee1 |                                           | 4.44   | 12.53    | 12.63   | 0        | 8.09      | ⭐ 대상(>=2s)              |     
+10-14 10:20:33 | production  | SEARCH | 82   | minyonglee1 |                                           | 5.18   | 12.53    | 12.63   | 0.01     | 7.34      | ⭐ 대상(>=2s)              |     
+10-08 16:52:16 | purchase    | SEARCH | 82   | qjastar     | site=BYUCKSAN POWER pjt=C-18-014 active=Y | 0.56   | 0.56     | 0.58    | 0        | 0         | -                       |     
+10-08 16:50:51 | production  | SEARCH | 82   | qjastar     |                                           | 7.5    | 8.21     | 8.22    | 0        | 0.7       | ⭐ 대상(>=2s)              |     
+10-08 14:10:48 | production  | SEARCH | 82   | wonqthanq   | item=EABB00373AA                          | 0.82   | 0.82     | 0.84    | 0        | 0         | -                       |     
+10-08 14:10:27 | production  | SEARCH | 81   | jiwon.park  | item=ACEH1130I-A1-0                       | 1.07   | 1.07     | 1.08    | 0        | 0         | -                       |     
+10-08 14:08:53 | production  | SEARCH | 81   | jiwon.park  | item=APBMW48CL-A2-8                       | 0.89   | 0.89     | 0.92    | 0        | 0         | -                       |     
+10-08 14:08:49 | production  | SAVE   |      | jiwon.park  |                                           | 4.46   | 4.46     | 4.48    | 0        | 0         | ℹ 비조회 액션 >=2s (저장 — 별건) |     
+10-08 14:08:39 | production  | SEARCH | 81   | jiwon.park  | item=APBMW48CL-A2-8                       | 0.82   | 0.82     | 0.84    | 0        | 0         | -                       |     
+10-08 14:07:09 | production  | SEARCH | 81   | jiwon.park  | item=ACLT1010U-A1-C                       | 1.04   | 1.04     | 1.07    | 0        | 0         | -                       |     
+10-08 14:07:08 | production  | SAVE   |      | jiwon.park  |                                           | 0.83   | 0.83     | 0.86    | 0.01     | 0         | -                       |     
+10-08 14:06:58 | production  | SEARCH | 81   | jiwon.park  | item=ACLT1010U-A1-C                       | 1.63   | 1.63     | 1.65    | 0        | 0         | -                       |     
+10-08 14:06:02 | production  | SEARCH | 40   | hongjae.kim | item=MCP486586a10                         | 0.73   | 0.73     | 0.75    | 0        | 0         | -                       |     
+10-08 14:06:01 | production  | SAVE   |      | hongjae.kim |                                           | 1.04   | 1.04     | 1.05    | 0        | 0         | -                       |     
+10-08 14:05:45 | production  | SEARCH | 40   | hongjae.kim | item=MCP486586a10                         | 0.67   | 0.67     | 0.68    | 0        | 0         | -                       |     
+10-08 14:01:24 | production  | SEARCH | 40   | hongjae.kim | item=MPCPMIKSME1E                         | 1.03   | 1.03     | 1.05    | 0        | 0         | -                       |     
+10-08 14:01:23 | production  | SAVE   |      | hongjae.kim |                                           | 0.7    | 0.71     | 0.72    | 0        | 0         | -                       |     
+10-08 14:01:14 | production  | SEARCH | 40   | hongjae.kim | item=MPCPMIKSME1E                         | 1.03   | 1.03     | 1.05    | 0        | 0         | -                       |     
+10-08 13:59:34 | production  | SEARCH | 40   | hongjae.kim | item=MPCPMIKSME1E                         | 4.67   | 4.67     | 4.69    | 0        | 0         | ⭐ 대상(>=2s)              |     
+10-07 13:22:56 | production  | SEARCH | 40   | qjastar     |                                           | 27.97  | 28.26    | 29.78   | 0        | 0.29      | ⭐ 대상(>=2s)              |     
+10-07 11:09:41 | purchase    | SEARCH | 81   | qjastar     | site=MI00-81-AS pjt=A15CR7002 active=Y    | 2.11   | 2.11     | 2.12    | 0        | 0         | ⭐ 대상(>=2s)              |     
+10-07 11:07:36 | production  | SEARCH | 81   | qjastar     |                                           | 3.37   | 3.85     | 3.89    | 0        | 0.47      | ⭐ 대상(>=2s)              |     
+10-07 10:49:23 | production  | SEARCH | 81   | qjastar     |                                           | 4.2    | 4.65     | 4.68    | 0        | 0.45      | ⭐ 대상(>=2s)              |     
+10-07 10:49:23 | production  | SAVE   |      | qjastar     |                                           | 0.05   | 0.05     | 0.06    | 0        | 0         | -                       |     
+10-07 10:48:35 | production  | SEARCH | 81   | qjastar     |                                           | 3.66   | 4.25     | 4.26    | 0        | 0.59      | ⭐ 대상(>=2s)              |     
+10-07 10:48:35 | production  | SAVE   |      | qjastar     |                                           | 0.67   | 0.68     | 0.69    | 0.01     | 0         | -                       |     
+10-07 10:47:30 | production  | SEARCH | 81   | qjastar     |                                           | 17.51  | 18.03    | 18.04   | 0        | 0.52      | ⭐ 대상(>=2s)              |     
+10-07 10:43:31 | production  | SEARCH | 40   | qjastar     |                                           | 163.51 | 163.7    | 163.72  | 0        | 0.18      | ⭐ 대상(>=2s)              |     
+10-02 15:10:28 | production  | SEARCH | 40   | minyonglee1 |                                           | 27.08  | 27.55    | 29.85   | 0        | 0.47      | ⭐ 대상(>=2s)              |     
+10-01 11:46:30 | production  | SEARCH | 40   | minyonglee1 |                                           | 8.9    | 9.15     | 9.3     | 0        | 0.25      | ⭐ 대상(>=2s)              |     
+10-01 11:44:46 | production  | SEARCH | 40   | minyonglee1 |                                           | 16.05  | 16.36    | 16.66   | 0        | 0.3       | ⭐ 대상(>=2s)              |     
+10-01 11:34:00 | modelChange | SAVE   |      | qjastar     |                                           | 0.91   | 0.91     | 0.93    | 0        | 0         | -                       |     
+10-01 11:31:39 | modelChange | SAVE   |      | qjastar     |                                           | 0.02   | 0.02     | 0.04    | 0        | 0         | -                       |     
+10-01 11:24:22 | modelChange | SAVE   |      | qjastar     |                                           | 0.03   | 0.04     | 0.05    | 0        | 0         | -                       |     
+10-01 11:24:13 | modelChange | SAVE   |      | qjastar     |                                           | 0.02   | 0.03     | 0.06    | 0        | 0         | -                       |     
+10-01 11:23:53 | modelChange | SAVE   |      | qjastar     |                                           | 0.02   | 0.02     | 0.03    | 0        | 0         | -                       |     
+10-01 11:23:36 | modelChange | SAVE   |      | qjastar     |                                           | 0.14   | 0.14     | 0.16    | 0.01     | 0         | -                       |     
+10-01 11:23:07 | modelChange | SAVE   |      | qjastar     |                                           | 0.2    | 0.21     | 0.23    | 0.01     | 0         | -                       |     
+10-01 11:00:57 | production  | SEARCH | 40   | qjastar     |                                           | 14.13  | 14.26    | 14.29   | 0        | 0.14      | ⭐ 대상(>=2s)              |     
+10-01 10:56:51 | production  | SEARCH | 40   | qjastar     |                                           | 7.7    | 8.22     | 8.24    | 0        | 0.51      | ⭐ 대상(>=2s)              |     
+10-01 10:52:17 | production  | SEARCH | 40   | minyonglee1 |                                           | 3.74   | 3.95     | 3.99    | 0        | 0.2       | ⭐ 대상(>=2s)              |     
+09-30 19:33:59 | production  | SEARCH | 40   | minyonglee1 | item=ECE0074N5-01-A                       | 0.38   | 0.38     | 0.4     | 0        | 0         | -                       |     
+09-30 19:33:58 | production  | SAVE   |      | minyonglee1 |                                           | 0.19   | 0.19     | 0.21    | 0        | 0         | -                       |     
+09-30 19:32:30 | production  | SEARCH | 40   | minyonglee1 | item=ECE0074N5-01-A                       | 0.44   | 0.44     | 0.47    | 0        | 0         | -                       |     
+09-30 19:32:28 | production  | SAVE   |      | minyonglee1 |                                           | 1.42   | 1.43     | 1.44    | 0.01     | 0         | -                       |     
+09-30 19:31:48 | production  | SEARCH | 40   | minyonglee1 | item=ECE0074N5-01-A                       | 0.74   | 0.74     | 0.77    | 0        | 0         | -                       |     
+09-30 19:31:26 | production  | SEARCH | 40   | minyonglee1 | item=ECE0074N5-01                         | 0.62   | 0.63     | 0.64    | 0        | 0         | -                       |     
+09-30 19:31:08 | production  | SEARCH | 40   | minyonglee1 |                                           | 8.05   | 8.2      | 8.22    | 0        | 0.15      | ⭐ 대상(>=2s)              |     
+09-30 14:48:45 | purchase    | SEARCH | 81   | minyonglee1 | site=MI03-81-AS pjt=A21GM2001             | 0.37   | 0.38     | 0.38    | 0        | 0.01      | -                       |     
+09-30 14:48:45 | purchase    | SEARCH | 81   | minyonglee1 | site=MI03-81-AS pjt=A21GM2001 active=Y    | 0.24   | 0.25     | 0.25    | 0        | 0         | -                       |     
+09-30 14:48:44 | purchase    | SEARCH | 81   | minyonglee1 | site=GM AS_US_HZP pjt=A21GM2001           | 0.31   | 0.34     | 0.34    | 0.02     | 0.01      | -                       |     
+09-30 14:48:44 | purchase    | SEARCH | 81   | minyonglee1 | site=GM AS_US_HZP pjt=A21GM2001 active=Y  | 0.32   | 0.33     | 0.33    | 0        | 0.01      | -                       |     
+09-30 14:48:43 | purchase    | SEARCH | 81   | minyonglee1 | site=LGESWA_PL_WRO pjt=A21GM2001          | 0.33   | 0.33     | 0.33    | 0        | 0         | -                       |     
+09-30 14:48:43 | purchase    | SEARCH | 81   | minyonglee1 | site=LGESWA_PL_WRO pjt=A21GM2001 active=Y | 0.33   | 0.33     | 0.33    | 0.01     | 0         | -                       |     
+09-30 14:47:17 | purchase    | SEARCH | 82   | minyonglee1 |                                           | 0.02   | 0.02     | 0.02    | 0        | 0         | -                       |     
+09-30 14:47:17 | purchase    | SEARCH | 81   | minyonglee1 |                                           | 0.04   | 0.04     | 0.04    | 0.01     | 0         | -                       |     
+09-30 14:47:17 | purchase    | SEARCH | 81   | minyonglee1 | site=BMW_DE_DFG pjt=A15BW7002             | 0.31   | 0.33     | 0.33    | 0.02     | 0         | -                       |     
+09-30 14:47:17 | purchase    | SEARCH | 81   | minyonglee1 | site=BMW_DE_DFG                           | 0.03   | 0.03     | 0.03    | 0        | 0         | -                       |     
+09-30 14:47:17 | purchase    | SEARCH | 81   | minyonglee1 |                                           | 0.04   | 0.05     | 0.05    | 0        | 0         | -                       |     
+09-30 14:45:34 | production  | SAVE   |      | minyonglee1 |                                           | 0.04   | 0.05     | 0.05    | 0.02     | 0         | -                       |     
+09-30 14:45:34 | production  | SAVE   |      | minyonglee1 |                                           | 0.04   | 0.07     | 0.07    | 0.02     | 0.01      | -                       |     
+09-30 14:45:34 | purchase    | SEARCH | 81   | minyonglee1 |                                           | 0.06   | 0.11     | 0.11    | 0.01     | 0.05      | -                       |     
+09-30 14:45:24 | production  | SEARCH | 82   | minyonglee1 |                                           | 7.16   | 8.82     | 8.82    | 0.01     | 1.65      | ⭐ 대상(>=2s)              |     
+09-30 14:45:07 | production  | SEARCH | 81   | minyonglee1 |                                           | 14.74  | 16.74    | 16.74   | 0        | 2         | ⭐ 대상(>=2s)              |     
+09-30 14:44:58 | production  | SEARCH | 40   | minyonglee1 |                                           | 8.16   | 9.23     | 9.23    | 0.04     | 1.03      | ⭐ 대상(>=2s)              |     
+09-30 11:36:16 | production  | SAVE   |      | minyonglee1 |                                           | 1.92   | 1.96     | 1.96    | 0.03     | 0         | -                       |     
+09-30 11:36:14 | production  | SAVE   |      | minyonglee1 |                                           | 1.9    | 1.93     | 1.93    | 0.03     | 0         | -                       |     
+09-30 11:36:12 | production  | SAVE   |      | minyonglee1 |                                           | 1.86   | 1.9      | 1.9     | 0.04     | 0         | -                       |     
+09-30 11:36:10 | production  | SAVE   |      | minyonglee1 |                                           | 1.94   | 1.98     | 1.98    | 0.04     | 0         | -                       |     
+09-30 11:36:08 | production  | SAVE   |      | minyonglee1 |                                           | 1.87   | 1.94     | 1.94    | 0.07     | 0         | -                       |     
+09-30 11:36:01 | production  | SEARCH | 81   | minyonglee1 |                                           | 4.75   | 6.84     | 6.84    | 0.01     | 2.08      | ⭐ 대상(>=2s)              |     
+09-30 11:34:36 | production  | SAVE   |      | minyonglee1 |                                           | 1.55   | 1.62     | 1.62    | 0.07     | 0         | -                       |     
+09-30 11:34:35 | production  | SAVE   |      | minyonglee1 |                                           | 0.56   | 0.59     | 0.59    | 0.03     | 0         | -                       |     
+09-30 11:34:35 | production  | SAVE   |      | minyonglee1 |                                           | 0.76   | 0.78     | 0.78    | 0.01     | 0         | -                       |     
+09-30 11:34:34 | production  | SAVE   |      | minyonglee1 |                                           | 0.07   | 0.09     | 0.09    | 0.02     | 0         | -                       |     
+09-30 11:34:34 | production  | SAVE   |      | minyonglee1 |                                           | 0.03   | 0.08     | 0.08    | 0.04     | 0         | -                       |     
+09-30 11:34:26 | production  | SEARCH | 81   | minyonglee1 |                                           | 5.2    | 7.93     | 7.93    | 0        | 2.73      | ⭐ 대상(>=2s)              |     
+09-30 11:29:05 | production  | SAVE   |      | minyonglee1 |                                           | 0.03   | 0.1      | 0.1     | 0.07     | 0         | -                       |     
+09-30 11:21:09 | purchase    | SEARCH | 82   | qjastar     | site=BYUCKSAN POWER pjt=C-18-014 active=Y | 0.26   | 0.26     | 0.29    | 0        | 0         | -                       |     
+09-30 11:21:02 | production  | SEARCH | 82   | qjastar     |                                           | 2.4    | 3.04     | 3.06    | 0        | 0.63      | ⭐ 대상(>=2s)              |     
+09-30 11:20:48 | production  | SEARCH | 82   | qjastar     |                                           | 2.4    | 2.98     | 3.01    | 0        | 0.57      | ⭐ 대상(>=2s)              |     
+09-30 11:19:39 | purchase    | SEARCH | 82   | qjastar     | site=BYUCKSAN POWER pjt=C-18-014 active=Y | 1.53   | 1.53     | 1.55    | 0        | 0         | -                       |     
+09-30 11:19:05 | production  | SEARCH | 82   | qjastar     |                                           | 2.43   | 2.93     | 2.96    | 0        | 0.5       | ⭐ 대상(>=2s)              |     
+09-30 11:16:44 | purchase    | SEARCH | 82   | qjastar     | site=BYUCKSAN POWER pjt=C-18-014 active=Y | 0.25   | 0.25     | 0.27    | 0        | 0         | -                       |     
+09-30 11:16:32 | production  | SEARCH | 82   | qjastar     |                                           | 2.67   | 3.34     | 3.36    | 0        | 0.67      | ⭐ 대상(>=2s)              |     
+09-30 11:13:59 | production  | SEARCH | 40   | qjastar     |                                           | 1.93   | 2.21     | 2.24    | 0        | 0.28      | ⚠ BE 구간 >=2s (DB 는 미달)  |     
+09-30 11:11:49 | production  | SEARCH | 40   | qjastar     |                                           | 2.73   | 3.23     | 3.35    | 0        | 0.5       | ⭐ 대상(>=2s)              |     
+09-30 11:03:02 | production  | SEARCH | 82   | minyonglee1 |                                           | 3.38   | 4.71     | 4.71    | 0.01     | 1.33      | ⭐ 대상(>=2s)              |     
+09-30 11:02:55 | production  | SEARCH | 81   | minyonglee1 |                                           | 4.19   | 6.08     | 6.08    | 0.01     | 1.89      | ⭐ 대상(>=2s)              |     
+09-30 11:02:52 | production  | SEARCH | 40   | minyonglee1 |                                           | 1.61   | 2.6      | 2.6     | 0.02     | 0.98      | ⚠ BE 구간 >=2s (DB 는 미달)  |     
+09-30 11:01:38 | production  | SEARCH | 82   | minyonglee1 |                                           | 7780.1 | 4.9      | 4.9     | -7776.66 | 1.46      | ⭐ 대상(>=2s)              |     
+09-30 11:01:32 | production  | SEARCH | 81   | minyonglee1 |                                           | 3.78   | 5.48     | 5.48    | 0.01     | 1.69      | ⭐ 대상(>=2s)              |     
+09-30 11:01:30 | production  | SEARCH | 40   | minyonglee1 |                                           | 1.9    | 2.62     | 2.62    | 0.01     | 0.71      | ⚠ BE 구간 >=2s (DB 는 미달)  |     
+09-30 11:00:25 | production  | SAVE   |      | minyonglee1 |                                           | 0.03   | 0.03     | 0.03    | 0        | 0         | -                       |     
+09-30 11:00:25 | production  | SAVE   |      | minyonglee1 |                                           | 0.05   | 0.05     | 0.05    | 0        | 0         | -                       |     
+09-30 11:00:16 | production  | SEARCH | 81   | minyonglee1 |                                           | 5.87   | 7.78     | 7.78    | 0.07     | 1.84      | ⭐ 대상(>=2s)              |     
+09-30 09:42:38 | purchase    | SEARCH | 81   | minyonglee1 | site=MI00-81-AS pjt=A15CR7002 active=Y    | 0.26   | 0.26     | 0.31    | 0        | 0         | -                       |     
+09-30 09:42:36 | purchase    | SEARCH | 81   | minyonglee1 | site=MI00-81-AS pjt=A15CR7002 active=Y    | 0.29   | 0.29     | 0.34    | 0        | 0         | -                       |     
+09-30 09:42:35 | purchase    | SEARCH | 81   | minyonglee1 | site=MI00-81-AS pjt=A15CR7002 active=Y    | 0.27   | 0.27     | 0.32    | 0        | 0         | -                       |     
+09-30 09:42:34 | purchase    | SEARCH | 81   | minyonglee1 | site=MI00-81-AS pjt=A15CR7002 active=Y    | 0.27   | 0.27     | 0.31    | 0        | 0         | -                       |     
+09-30 09:42:33 | purchase    | SEARCH | 81   | minyonglee1 | site=MI00-81-AS pjt=A15CR7002 active=Y    | 0.28   | 0.29     | 0.34    | 0        | 0         | -                       |     
+09-30 09:42:24 | purchase    | SEARCH | 81   | minyonglee1 | site=MI00-81-AS pjt=A15CR7002 active=Y    | 0.41   | 0.42     | 0.92    | 0        | 0         | -                       |     
+09-30 09:42:09 | production  | SEARCH | 81   | minyonglee1 |                                           | 10.07  | 11.09    | 11.3    | 0        | 1.02      | ⭐ 대상(>=2s)              |     
+(103 rows)
+################ [C2] ⭐⭐ 시트 × 사업부 요약 (SEARCH 만) — 튜닝 대상 선정표 ################
+--  사내 30일 production: 중앙 3초. MED_BE_POST 가 MED_DB 보다 크면 BE 결과 처리 구간이 주범
+SHT_NM     | DIV | CALLS | MIN_DB | MED_DB | P90_DB | MAX_DB | MED_SERVER | MED_TOTAL | MED_BE_POST | MAX_BE_POST | GE2S | GE2S_PCT | NO_END | ERRS | JUDGE                              
+-----------+-----+-------+--------+--------+--------+--------+------------+-----------+-------------+-------------+------+----------+--------+------+------------------------------------
+production | 81  | 16    | 1      | 4      | 13     | 18     | 5.5        | 5.5       | 1           | 3           | 12   | 75       | 0      | 0    | ⭐ 대상 (중앙값 >=2s)                    
+production | 82  | 11    | 1      | 3      | 8      | 7780   | 5          | 5         | 1           | 8           | 10   | 91       | 0      | 0    | ❌ 타임아웃급 — 1순위 대상                   
+production | 40  | 23    | 0      | 2      | 24.8   | 164    | 4          | 4         | 0           | 1           | 15   | 65       | 0      | 0    | ❌ 타임아웃급 — 1순위 대상                   
+purchase   | 81  | 18    | 0      | 0      | 1      | 2      | 0          | 0         | 0           | 0           | 1    | 6        | 0      | 0    | ⚠ 간헐 대상 (일부 호출만 >=2s — [C4][C5] 확인)
+purchase   | 82  | 5     | 0      | 0      | 1      | 1      | 0          | 0         | 0           | 0           | 0    | 0        | 0      | 0    | - 제외 (<2s)                         
+(5 rows)
+################ [C3] ⭐⭐ 일자 × 사업부 추이 — production SEARCH : 어느 날부터 느려졌나 ################
+--  C01 [E2] 의 BODY LAST_DDL · [E2b] 마커(10-08 · 10-09 변경)가 들어온 날과 맞춘다. CALLS_LIST = 시:분:DB초
+D     | DIV | N  | MIN_S | MED_S | P90_S  | MAX_S | MED_BE_POST | ERR_OR_NOEND | CALLS_LIST                                                                     
+------+-----+----+-------+-------+--------+-------+-------------+--------------+--------------------------------------------------------------------------------
+09-30 | 40  | 10 | 0     | 2     | 8      | 8     | 0           | 0            | 11:01:2 11:02:2 11:11:2 11:13:2 14:44:8 19:31:8 19:31:0 19:31:1 19:32:1 19:33:0
+09-30 | 81  | 7  | 4     | 5     | 12.6   | 15    | 2           | 0            | 09:42:11 11:00:6 11:01:4 11:02:4 11:34:5 11:36:4 14:45:15                      
+09-30 | 82  | 7  | 2     | 2     | 3116.8 | 7780  | 1           | 0            | 11:01:7780 11:03:3 11:16:2 11:19:2 11:20:2 11:21:2 14:45:8                     
+10-01 | 40  | 5  | 4     | 9     | 15.2   | 16    | 0           | 0            | 10:52:4 10:56:8 11:00:14 11:44:16 11:46:9                                      
+10-02 | 40  | 1  | 27    | 27    | 27     | 27    | 1           | 0            | 15:10:27                                                                       
+10-07 | 40  | 2  | 28    | 96    | 150.4  | 164   | 0.5         | 0            | 10:43:164 13:22:28                                                             
+10-07 | 81  | 4  | 3     | 4     | 13.8   | 18    | 0.5         | 0            | 10:47:18 10:48:4 10:49:4 11:07:3                                               
+10-08 | 40  | 5  | 1     | 1     | 3.4    | 5     | 0           | 0            | 13:59:5 14:01:1 14:01:1 14:05:1 14:06:1                                        
+10-08 | 81  | 5  | 1     | 1     | 1.6    | 2     | 0           | 0            | 14:06:2 14:07:1 14:08:1 14:08:1 14:10:1                                        
+10-08 | 82  | 2  | 1     | 4     | 6.4    | 7     | 0.5         | 0            | 14:10:1 16:50:7                                                                
+10-14 | 82  | 2  | 4     | 4.5   | 4.9    | 5     | 8           | 0            | 10:20:5 10:23:4                                                                
+(11 rows)
+################ [C4] ⭐ 조회조건 유무별 — production SEARCH (조건 없는 전체 조회 vs 조건 있는 조회) ################
+--  조건 없는 전체 조회만 느리면 행 수 · 결과 처리 문제, 조건을 줘도 느리면 조인 · 접근경로 문제
+DIV | KIND      | ACTIVE | CALLS | MED_DB | MAX_DB | MED_BE_POST | MAX_BE_POST | MED_TOTAL | MAX_TOTAL
+----+-----------+--------+-------+--------+--------+-------------+-------------+-----------+----------
+40  | 조건 없음(전체) | ALL    | 14    | 8      | 164    | 0           | 1           | 9         | 164      
+40  | 조건 있음     | ALL    | 9     | 1      | 5      | 0           | 0           | 1         | 5        
+81  | 조건 없음(전체) | ALL    | 11    | 4      | 18     | 2           | 3           | 6         | 18       
+81  | 조건 있음     | ALL    | 5     | 1      | 2      | 0           | 0           | 1         | 2        
+82  | 조건 없음(전체) | ALL    | 10    | 3.5    | 7780   | 1           | 8           | 5         | 13       
+82  | 조건 있음     | ALL    | 1     | 1      | 1      | 0           | 0           | 1         | 1        
+(6 rows)
+################ [C5] 사용자 × 사업부 — production SEARCH (특정 사용자만 느린가) ################
+USR         | DIV | CALLS | MIN_DB | MED_DB | MAX_DB | MED_TOTAL | LAST_CALL  
+------------+-----+-------+--------+--------+--------+-----------+------------
+qjastar     | 40  | 6     | 2      | 11     | 164    | 11.5      | 10-07 13:22
+minyonglee1 | 81  | 7     | 4      | 5      | 15     | 8         | 09-30 14:45
+minyonglee1 | 82  | 5     | 3      | 5      | 7780   | 9         | 10-14 10:23
+qjastar     | 81  | 4     | 3      | 4      | 18     | 4.5       | 10-07 11:07
+minyonglee1 | 40  | 12    | 0      | 3      | 27     | 3.5       | 10-02 15:10
+qjastar     | 82  | 5     | 2      | 2      | 7      | 3         | 10-08 16:50
+hongjae.kim | 40  | 5     | 1      | 1      | 5      | 1         | 10-08 14:06
+jiwon.park  | 81  | 5     | 1      | 1      | 2      | 1         | 10-08 14:10
+wonqthanq   | 82  | 1     | 1      | 1      | 1      | 1         | 10-08 14:10
+(9 rows)
+################ [C6] 오류 · 종료 미기록 호출 — 최근 14 일 (타임아웃 흔적) ################
+ST | SHT_NM | ACT | USR | DIV | KIND | ERR
+---+--------+-----+-----+-----+------+----
+(0 rows)
+=============================================================================
+C02 완료 → C02_SCREEN_CALL_SESSIONS_OUT.txt 회신
+=============================================================================

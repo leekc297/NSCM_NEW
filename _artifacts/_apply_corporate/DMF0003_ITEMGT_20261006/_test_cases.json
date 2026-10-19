@@ -1,0 +1,91 @@
+{
+ "start": "2026-10-06 17:15:27",
+ "date": "20261012",
+ "ledger_rows_touched": 0,
+ "cases": [
+  {
+   "case": "BOM",
+   "div": "82",
+   "key": [
+    "82",
+    "U-16-007",
+    "NIDEC_DE_EEN",
+    "EM048128P6B4-GA"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [EM048128P6B4-GA] Sales Company/Plant does not exist !",
+    "0"
+   ],
+   "sec_before": 4.66,
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A15BW7001",
+    "MI00-81-AS",
+    "APBMW12VH-A1-0G0"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [APBMW12VH-A1-0G0] Cell/Car does not exist !",
+    "0"
+   ],
+   "sec_before": 15.34,
+   "target_hit": false
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "A15BW7001",
+    "MI00-81-AS",
+    "ACLT1010U-B1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [ACLT1010U-B1] Cell/Car does not exist !",
+    "0"
+   ],
+   "sec_before": 0.04,
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [ACLT1010U-B1] Cell/Car does not exist !",
+    "0"
+   ],
+   "sec_after": 1.17,
+   "same_result": true,
+   "ledger_same": true
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "A15BW7001",
+    "MI00-81-AS",
+    "APBMW12V0-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [APBMW12V0-A1] Cell/Car does not exist !",
+    "0"
+   ],
+   "sec_before": 0.13,
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [APBMW12V0-A1] Cell/Car does not exist !",
+    "0"
+   ],
+   "sec_after": 1.27,
+   "same_result": true,
+   "ledger_same": true
+  }
+ ]
+}

@@ -1,0 +1,31 @@
+﻿DB 59.19.252.148:2521/ZIOUI1 ('localhost', '2026-10-14 12:00:11')
+PKG_DMF0005      div 82 |   1.14s | 38621행 | auf0qn8xx5388/15 PHV 1366230996
+       24            VIEW                              VW_DCL_3DAD2387              starts      1       0s
+       25             TABLE ACCESS FULL                SCM_MST_SITE_CUSTOMER        starts      1       0s
+       49                INDEX RANGE SCAN              IDX01_SCM_MST_SITE_ITEM      starts      1       0s
+PKG_DMF0005      div 81 |   1.45s | 42088행 | auf0qn8xx5388/15 PHV 1366230996
+       24            VIEW                              VW_DCL_3DAD2387              starts      1       0s
+       25             TABLE ACCESS FULL                SCM_MST_SITE_CUSTOMER        starts      1       0s
+       49                INDEX RANGE SCAN              IDX01_SCM_MST_SITE_ITEM      starts      1       0s
+PKG_DMF0005      div 40 |   1.01s | 15569행 | auf0qn8xx5388/15 PHV 1366230996
+       24            VIEW                              VW_DCL_3DAD2387              starts      1       0s
+       25             TABLE ACCESS FULL                SCM_MST_SITE_CUSTOMER        starts      1       0s
+       49                INDEX RANGE SCAN              IDX01_SCM_MST_SITE_ITEM      starts      1       0s
+PKG_DMF0005_V2A  div 82 |   1.43s | 38621행 | 35jdwbu7gk362/0 PHV 4266025480
+       24             INDEX RANGE SCAN                 IDX01_SCM_MST_SITE_ITEM      starts      1       0s
+       28            TABLE ACCESS FULL                 SCM_MST_SITE_CUSTOMER        starts      1       0s
+PKG_DMF0005_V2A  div 81 |   2.52s | 42088행 | 35jdwbu7gk362/1 PHV 4266025480
+       24             INDEX RANGE SCAN                 IDX01_SCM_MST_SITE_ITEM      starts      1    0.02s
+       28            TABLE ACCESS FULL                 SCM_MST_SITE_CUSTOMER        starts      1       0s
+PKG_DMF0005_V2A  div 40 |   1.45s | 15569행 | 35jdwbu7gk362/1 PHV 4266025480
+       24             INDEX RANGE SCAN                 IDX01_SCM_MST_SITE_ITEM      starts      1       0s
+       28            TABLE ACCESS FULL                 SCM_MST_SITE_CUSTOMER        starts      1       0s
+PKG_DMF0005_V2B  div 82 |   1.39s | 38621행 | 8pa42h942w0mf/0 PHV 4266025480
+       24             INDEX RANGE SCAN                 IDX01_SCM_MST_SITE_ITEM      starts      1       0s
+       28            TABLE ACCESS FULL                 SCM_MST_SITE_CUSTOMER        starts      1       0s
+PKG_DMF0005_V2B  div 81 |   1.58s | 42088행 | 8pa42h942w0mf/1 PHV 4266025480
+       24             INDEX RANGE SCAN                 IDX01_SCM_MST_SITE_ITEM      starts      1       0s
+       28            TABLE ACCESS FULL                 SCM_MST_SITE_CUSTOMER        starts      1       0s
+PKG_DMF0005_V2B  div 40 |   1.30s | 15569행 | 8pa42h942w0mf/1 PHV 4266025480
+       24             INDEX RANGE SCAN                 IDX01_SCM_MST_SITE_ITEM      starts      1       0s
+       28            TABLE ACCESS FULL                 SCM_MST_SITE_CUSTOMER        starts      1       0s

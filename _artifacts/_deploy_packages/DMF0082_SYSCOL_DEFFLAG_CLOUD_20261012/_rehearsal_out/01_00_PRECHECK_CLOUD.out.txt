@@ -1,0 +1,31 @@
+CHK | DB_NAME | NOW                
+----+---------+--------------------
+P0  | ZIOUI1  | 2026-10-12 18:49:10
+(1 rows)
+CHK | COLUMN_NAME   | FLAG | FLAG_DUMP       | WHO   | UPD              | JUDGE   
+----+---------------+------+-----------------+-------+------------------+---------
+P1  | AS_YN         | [ ]  | Typ=1 Len=1: 32 | admin | 2026-08-07 15:07 | 정상 (빈 값)
+P1  | ATTR1         | [ ]  | Typ=1 Len=1: 32 | admin | 2026-08-07 15:07 | 정상 (빈 값)
+P1  | BUCKET        | [ ]  | Typ=1 Len=1: 32 | admin | 2026-08-07 15:07 | 정상 (빈 값)
+P1  | EDIT_FLAG     | [ ]  | Typ=1 Len=1: 32 | admin | 2026-08-07 15:07 | 정상 (빈 값)
+P1  | GROUP_ID      | [ ]  | Typ=1 Len=1: 32 | admin | 2026-08-21 21:28 | 정상 (빈 값)
+P1  | MEASURE_GROUP | [ ]  | Typ=1 Len=1: 32 | admin | 2026-08-07 15:07 | 정상 (빈 값)
+P1  | NEW_FLAG      | [ ]  | Typ=1 Len=1: 32 | admin | 2026-08-07 15:07 | 정상 (빈 값)
+P1  | SORT_KEY      | [ ]  | Typ=1 Len=1: 32 | admin | 2026-08-07 15:07 | 정상 (빈 값)
+P1  | VERSION_NO    | [ ]  | Typ=1 Len=1: 32 | admin | 2026-08-22 15:33 | 정상 (빈 값)
+P1  | VMI_STD_DIO   | [ ]  | Typ=1 Len=1: 32 | admin | 2026-08-07 15:07 | 정상 (빈 값)
+(10 rows)
+CHK | SENTINEL | SP_USES | SYS_COLS | JUDGE                        
+----+----------+---------+----------+------------------------------
+P2  | -        | 0       | 10       | (이 DB 의 SP 는 이 센티널을 쓰지 않음)   
+P2  | /        | 2       | 10       | PASS — SORT_KEY 가 잡힌다 (정상 상태)
+(2 rows)
+CHK | FLAG | CNT
+----+------+----
+P3  | [ ]  | 10 
+P3  | [N]  | 39 
+P3  | [Y]  | 16 
+(3 rows)
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+----+---------+-----+---------+----------+---------
+(0 rows)

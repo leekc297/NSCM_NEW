@@ -1,0 +1,71 @@
+.dialogWrapper {
+  @include flex-column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.dialogHeaderTitle {
+  @include flex-between;
+  cursor: move;
+  height: $space-xl;
+  margin-bottom: $space-md;
+  padding: 4.5px 0;
+  flex-shrink: 0;
+}
+
+.undraggable {
+  cursor: default !important;
+}
+
+.dialogHeaderActions {
+  display: flex;
+  align-items: center;
+  column-gap: $space-sm;
+}
+
+.dialogDefaultHeaderTitleWrapper {
+  @include flex-between;
+  column-gap: $space-sm;
+}
+
+.dialogDefaultHeaderCircle {
+  width: $space-sm;
+  height: $space-sm;
+  border-radius: 50%;
+  background-color: $commonTextPrimary;
+}
+
+.dialogSubTitle {
+  display: flex;
+  align-items: center;
+  column-gap: $space-xs;
+  margin-bottom: $space-md;
+}
+
+.dialogCustomContentAreaWrapper {
+  @include flex-column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.dialogDefaultContentAreaWrapper {
+  @include flex-column;
+  padding-bottom: $font-size-sm;
+  font-family: 'Spoqa Han Sans Neo', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: $font-weight-regular;
+  line-height: $line-height-normal;
+  white-space: pre-line;
+}
+
+.lowerButtonGroup {
+  display: flex;
+  justify-content: flex-end;
+  column-gap: $space-xs;
+}
+
+.lowerButton {
+  min-width: 56px;
+  height: 36px;
+  padding: $space-sm 12px;
+}

@@ -1,0 +1,29 @@
+-- ============================================================
+-- DMF0035 MEASURE 컬럼 → 시트 한정 콤보 배선 (3행)
+--   SHEET_NAME 은 기존 등록명 그대로. PROGRAM_ID 는 DMF0035 단일.
+-- ============================================================
+SET DEFINE OFF
+SET SQLBLANKLINES ON
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_COMBO_DATA_TYPE = 'DMF0035_MKT_Measure',
+       LAST_UPDATED_BY = 'admin', LAST_UPDATE_DATE = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0035'
+   AND SHEET_NAME  = 'Mkt Fcst Waterfall'
+   AND COLUMN_NAME = 'MEASURE';
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_COMBO_DATA_TYPE = 'DMF0035_SP_Measure',
+       LAST_UPDATED_BY = 'admin', LAST_UPDATE_DATE = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0035'
+   AND SHEET_NAME  = 'Sales Plan Waterfall'
+   AND COLUMN_NAME = 'MEASURE';
+
+UPDATE SCM_MST_SHEET_COLUMNS
+   SET CELL_COMBO_DATA_TYPE = 'DMF0035_BP_Measure',
+       LAST_UPDATED_BY = 'admin', LAST_UPDATE_DATE = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0035'
+   AND SHEET_NAME  = 'Biz Plan Waterfall'
+   AND COLUMN_NAME = 'MEASURE';
+
+COMMIT;

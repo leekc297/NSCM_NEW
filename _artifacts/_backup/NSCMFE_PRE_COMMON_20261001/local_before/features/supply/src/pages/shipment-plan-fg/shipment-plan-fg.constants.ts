@@ -1,0 +1,115 @@
+export const MENU_ID = 'SCP0009' as const;
+export type MENU_ID = typeof MENU_ID;
+
+// AS-IS GSCM.SCP.Analysis.UIL SCP0009_Shipment_Plan_FG (3 그리드 spdMain/spdPeggingInfo/spdPlanProblem):
+//   설계 근거: .atlas/gscm-design/SCP0009/design/00_checklist.md ~ 03_grid-columns.md
+//   - GET SP: PKG_SCP0009.P_SCP0009_GET_SHIPMENT_PLAN_FG (O_RC1 메인 + O_RC2 Plan상태 + O_RC3 Fix정보)
+//   - 서브 GET SP: P_SCP0009_GET_SHIPMENT_PLAN_FG_PEGGING / _PROBLEM (더블클릭 상세, 읽기전용)
+//   - 헤더구조 SP: PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN (D_/W_/M_ 전체, Bucket 무관)
+//   - 저장 SP(Weekly): P_SCP0009_SAVE_ANL_SHIP_PLAN_FG_WEEKLY — Daily 저장 SP 매핑은 확인 필요(design 03 §6#6)
+//   - 조회조건 cascade: cboDivision -> {cboBizType, clbFromSite/clbToSite, clbTeam, cboPlanDate->Type->Seq}
+//   - 그리드: 정보컬럼 80개(44+24+12, 전부 INPUT_TP_CD='S' 읽기전용) + 동적 D_/W_/M_ pivot(값만 SHIP_PLAN_AMEND 행 편집가능)
+export enum SHEETS {
+  MAIN = 'main', // spdMain — Shipment Request (44 정보컬럼 + 동적 pivot)
+  PEGGING = 'pegging', // spdPeggingInfo — Pegging Info (더블클릭 상세, 읽기전용)
+  PROBLEM = 'problem', // spdPlanProblem — Plan Problem (더블클릭 상세, 읽기전용)
+  // 헤더구조(3-span D_/W_/M_) 전용 SP — design 03 §2.1 은 PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN
+  //   이라 명시하나, 실측(ora.py all_procedures) 배포본은 PKG_SCP0009.P_SCP0009_GET_SHIP_PLAN_FG_TITLE_PARAL
+  //   이다 — 이름 불일치, 실제 배선은 convert-sp/PROC_M 등록 시 재확인 필요(확인 필요, __asis-mapping__.md).
+  CALENDAR = 'calendar',
+}
+
+// NSCM 단일 cursor 표준 — 단, MAIN 은 3-cursor 계약(o_rc1=데이터/o_rc2=Plan상태/o_rc3=Fix정보, design 03 §2.5)
+export const RESPONSE_SET = {
+  MAIN: 'o_rc1',
+  PEGGING: 'o_rc1',
+  PROBLEM: 'o_rc1',
+  CALENDAR: 'o_rc1',
+} as const;
+export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
+
+// admin UI Category Setup(SCM_MST_SHEET_COLUMNS) SHEET_NAME — DB 실측(design 03 §0) 그대로.
+//   Measure 레지스트리는 컬럼 sheetNm 과 별도 SHEET_NAME('Shipment Plan FG')이라 라우팅 SHEETS 에 없음(§1.D).
+export const ADMIN_SHEET_NAME: Partial<Record<SHEETS, string>> = {
+  [SHEETS.MAIN]: 'Shipment Request',
+  [SHEETS.PEGGING]: 'Pegging Info',
+  [SHEETS.PROBLEM]: 'Plan Problem',
+};
+// Measure 레지스트리 SHEET_NAME (btnMeasure_Click 이 여는 SCM0002_TitleSetForm_Popup 대상, design 03 §0)
+export const MEASURE_SHEET_NAME = 'Shipment Plan FG';
+// TitleSet 저장 columnType — 'C'=컬럼(ColumnLayoutModal 내부 고정), 'M'=Measure(sales-plan/mkt-fcst 등 동일 관례)
+export const TITLESET_MEASURE_TYPE = 'M';
+
+// Bucket — cboBucketType(Daily/Weekly/Monthly). 조회 SP P_BUCKET 파라미터 값 그대로 사용(design 02/03).
+export enum BUCKET_TYPE {
+  DAILY = 'DAILY',
+  WEEKLY = 'WEEKLY',
+  MONTHLY = 'MONTHLY',
+}
+
+// Measure 코드마스터 10종 (design 03 §1.D, DB 실측). 편집가능 = SHIP_PLAN_AMEND 유일(§3.1 R-K).
+export const MEASURE = {
+  MKT_FCST: 'MKT_FCST',
+  ALLOCATION: 'ALLOCATION',
+  BALANCE: 'BALANCE',
+  WH_IN_BALANCE: 'WH_IN_BALANCE',
+  WH_IN: 'WH_IN',
+  SHIP_REQ: 'SHIP_REQ',
+  SHIP_PLAN: 'SHIP_PLAN',
+  SHIP_PLAN_AMEND: 'SHIP_PLAN_AMEND',
+  SHIP_PLAN_ENERGY: 'SHIP_PLAN_ENERGY',
+  SHIP_PLAN_AMEND_ENERGY: 'SHIP_PLAN_AMEND_ENERGY',
+} as const;
+// 소수 3자리 표시 Measure(design 03 §2.2) — 나머지는 2자리
+export const ENERGY_MEASURES = new Set<string>([MEASURE.SHIP_PLAN_ENERGY, MEASURE.SHIP_PLAN_AMEND_ENERGY]);
+// 더블클릭 5-가드 중 하나 — MEASURE==='MKT_FCST' 행만 Pegging/PlanProblem 드릴다운 허용(design 03 §3 R-Q 발견분)
+export const DRILLDOWN_MEASURE = MEASURE.MKT_FCST;
+
+// ====================================================================================
+// 조회조건 콤보 ID — design 02 §2 DB 실측 확정(SCM_ADM_CMBO_SQL_M, 2026-09-23 PASS)
+// ====================================================================================
+export const COMBO = {
+  DIVISION: 'Division_SCP', // 무필터, EE 제외 없음 (design 02 §2.1 — GetDivisionWithoutEE 오적용 금지)
+  OPERATION_GROUP: 'OperationGroup_SCP', // division 비EE
+  OPERATION_GROUP_EE: 'OperationGroupEE_SCP', // division EE(EE/EE_UC)
+  FROM_SITE: 'AllPlantSiteDescription_SCP', // 전량 + division/operationGroup 클라 필터(design 02 §2.3)
+  TO_SITE_EE: 'ToSiteShipmentPlanFG1_SCP_ALL', // division EE* 전용(design 02 §2.4)
+  TO_SITE_EE_UC: 'SaleSiteByDivision1_SCP_ALL', // division==EE_UC 전용
+  // 그 외 division 은 FROM_SITE(AllPlantSiteDescription_SCP) 재사용(design 02 §2.4)
+  TEAM: 'TeambyDivision', // 도메인 접미사 없음(base Data.Common 경로) — division='40' 내부 UNION 분기
+  END_CUSTOMER_DEPT: 'EndCustomerByDivisionDept', // division IN (81,82)
+  END_CUSTOMER_40: 'EndCustomerByDivision40', // 그 외(40/EE/EE_UC 등) — DIVISION_ID='40' 하드코딩 비대칭 주의(design 02 §7#2)
+  SITE_BY_END_CUSTOMER: 'SiteByEndCustomer', // division IN (81,82)
+  SITE_BY_END_CUSTOMER_40: 'SiteByEndCustomer40', // 그 외
+  ELECTRODE: 'LookupCommon', // lookupType=ELECTRODE_TYPE, 초기 1회만
+  PLAN_DATE: 'DATE_WEEKLY1_SCP_ALL', // 전량 + division 클라 필터(design 02 §2.8)
+  PLAN_TYPE: 'PlanType1_SCP_ALL', // 전량 + division+planDate 클라 필터, 최신행 자동선택
+  PLAN_SEQ: 'PlanSeq1_SCP_ALL', // 전량 + division+planDate+planType 클라 필터
+} as const;
+export const ELECTRODE_LOOKUP_TYPE = 'ELECTRODE_TYPE';
+
+// 조회조건 저장/복원 제외 대상(design 02 §4 ConditionNotUseList) — Plan Date/Type/Seq
+export const CONDITION_NOT_USE_LIST = ['planStartYyyymmdd', 'planType', 'planSeq'] as const;
+
+// AS-IS Validation MSG ID — TO-BE SCM_ADM_MSG_M 실측 역매핑 필요(design 00/02/03 §6 다수 "TO-BE 미등록").
+//   design 문서가 실측을 완료하지 못한 항목은 영문 defaultValue fallback 유지(Hook #114 — 임의 매핑 금지).
+export const MSG = {
+  REQUIRED_FIELD: 'MSG00002', // 필수 입력사항입니다 — TO-BE 실측 필요(현재 AS-IS 번호 그대로, 확인 필요)
+  LOCKED_MODE: 'MSG00010', // 수정모드가 아니므로 저장할 수 없습니다 — TO-BE 실측 필요
+  CONFIRM_UNFIX: 'MSG00016', // Unfix 확인(Yes/No) — TO-BE 실측 필요
+  CONFIRM_RESEARCH: 'MSG00265', // New 팝업 OK 후 재조회 확인(Yes/No) — TO-BE 실측 필요
+  SAVE_SUCCESS: 'MSG00004', // 저장 성공 — TO-BE 실측 필요
+  SAVE_FAIL: 'MSG00003', // 저장 실패 — TO-BE 실측 필요
+  // MSG00084/MSG00317(AS-IS 원 코드)은 TO-BE 미등록(gap-resolve iter-1 NEW8, ora.py 실측 확정) —
+  //   자매 화면 `production-plan-line`이 동일 결함을 먼저 겪고 미러링한 실등록 대체 코드를 그대로
+  //   따른다(convert-core §2.3 — 신규 번역 금지, 기존 등록행 재사용만 허용).
+  QTY_NEGATIVE: 'MSG00225', // Quantity must be 0 or greater.(구 MSG00084 미등록 — production-plan-line 미러링)
+  QTY_MAX: 'MSG00165', // You have exceeded the number of digits you can enter.(구 MSG00317 미등록 — production-plan-line 미러링)
+  PERIOD_FROM_REQUIRED: 'MSG00171', // 기간 시작일 필수 — TO-BE 미등록(NEW8), 미러링 대상 없음 — 사용자 확인 대기
+  PERIOD_OVER_365: 'MSG00172', // 조회기간 365일 초과 — TO-BE 미등록(NEW8), 미러링 대상 없음 — 사용자 확인 대기
+  NO_CHANGE: 'MSG00004', // 변경사항 없음(공용) — useProcMutation 표준 경로 사용 시 해당없음
+} as const;
+
+// 저장(P_SCP0009_SAVE_ANL_SHIP_PLAN_FG_WEEKLY) 값 범위(design 03 §4.3)
+export const QTY_MIN = 0;
+export const QTY_MAX = 99999999;

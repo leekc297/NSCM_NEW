@@ -1,0 +1,578 @@
+{
+ "PROCEDURE|DMF0020_GET_SCM_MST_FUTURE_PRICE": {
+  "file": "DMF0020_GET_SCM_MST_FUTURE_PRICE.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:07",
+  "lines": 1197
+ },
+ "PROCEDURE|DMF0043_GET_CONTRIBUTION_SALES_LIST": {
+  "file": "DMF0043_GET_CONTRIBUTION_SALES_LIST.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:49:50",
+  "lines": 750
+ },
+ "PROCEDURE|P_SYS0012_APPROVE": {
+  "file": "P_SYS0012_APPROVE.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:17",
+  "lines": 119
+ },
+ "PROCEDURE|P_SYS0012_REJECT": {
+  "file": "P_SYS0012_REJECT.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:17",
+  "lines": 82
+ },
+ "PROCEDURE|P_SYS0014_SAVE_GROUP_USER_M": {
+  "file": "P_SYS0014_SAVE_GROUP_USER_M.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:17",
+  "lines": 186
+ },
+ "PACKAGE BODY|PKG_COM0000": {
+  "file": "PKG_COM0000.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:49:50",
+  "lines": 4100
+ },
+ "PACKAGE BODY|PKG_DMF0004": {
+  "file": "PKG_DMF0004.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:49:51",
+  "lines": 1605
+ },
+ "PACKAGE BODY|PKG_DMF0014": {
+  "file": "PKG_DMF0014.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:49:52",
+  "lines": 11483
+ },
+ "PACKAGE BODY|PKG_DMF0020": {
+  "file": "PKG_DMF0020.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-09 13:33:07",
+  "lines": 10166
+ },
+ "PACKAGE BODY|PKG_DMF0021": {
+  "file": "PKG_DMF0021.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 19:27:11",
+  "lines": 3941
+ },
+ "PACKAGE BODY|PKG_DMF0022": {
+  "file": "PKG_DMF0022.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 19:27:12",
+  "lines": 3792
+ },
+ "PACKAGE BODY|PKG_DMF0035": {
+  "file": "PKG_DMF0035.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 19:27:13",
+  "lines": 4533
+ },
+ "PACKAGE BODY|PKG_DMF0042": {
+  "file": "PKG_DMF0042.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:49:57",
+  "lines": 5968
+ },
+ "PACKAGE BODY|PKG_DMF0043": {
+  "file": "PKG_DMF0043.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:49:58",
+  "lines": 3452
+ },
+ "PACKAGE BODY|PKG_DMF0044": {
+  "file": "PKG_DMF0044.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:10",
+  "lines": 10488
+ },
+ "PACKAGE BODY|PKG_DMF0045": {
+  "file": "PKG_DMF0045.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:12",
+  "lines": 2379
+ },
+ "PACKAGE BODY|PKG_DMF0049": {
+  "file": "PKG_DMF0049.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:00",
+  "lines": 1297
+ },
+ "PACKAGE BODY|PKG_DMF0051": {
+  "file": "PKG_DMF0051.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:00",
+  "lines": 1851
+ },
+ "PACKAGE BODY|PKG_DMF0072": {
+  "file": "PKG_DMF0072.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:01",
+  "lines": 884
+ },
+ "PACKAGE BODY|PKG_DMF0074": {
+  "file": "PKG_DMF0074.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:01",
+  "lines": 4301
+ },
+ "PACKAGE BODY|PKG_DMF0082": {
+  "file": "PKG_DMF0082.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 19:27:16",
+  "lines": 17034
+ },
+ "PACKAGE BODY|PKG_NSCM_UI_COM_LOOKUP": {
+  "file": "PKG_NSCM_UI_COM_LOOKUP.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:03",
+  "lines": 162
+ },
+ "PACKAGE BODY|PKG_S39V2": {
+  "file": "PKG_S39V2.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:16",
+  "lines": 8112
+ },
+ "PACKAGE BODY|PKG_S39V3": {
+  "file": "PKG_S39V3.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:17",
+  "lines": 8255
+ },
+ "PACKAGE BODY|PKG_S39V4": {
+  "file": "PKG_S39V4.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:18",
+  "lines": 8255
+ },
+ "PACKAGE BODY|PKG_S39V5": {
+  "file": "PKG_S39V5.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:20",
+  "lines": 8374
+ },
+ "PACKAGE BODY|PKG_S39V6": {
+  "file": "PKG_S39V6.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:21",
+  "lines": 8374
+ },
+ "PACKAGE BODY|PKG_S39V7": {
+  "file": "PKG_S39V7.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:23",
+  "lines": 8392
+ },
+ "PACKAGE BODY|PKG_SCM0002": {
+  "file": "PKG_SCM0002.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 19:28:57",
+  "lines": 5974
+ },
+ "PACKAGE BODY|PKG_SCP0005": {
+  "file": "PKG_SCP0005.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 19:31:04",
+  "lines": 2163
+ },
+ "PACKAGE BODY|PKG_SCP0007": {
+  "file": "PKG_SCP0007.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 19:35:24",
+  "lines": 1140
+ },
+ "PACKAGE BODY|PKG_SCP0009": {
+  "file": "PKG_SCP0009.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:52",
+  "lines": 5920
+ },
+ "PACKAGE BODY|PKG_SCP0010": {
+  "file": "PKG_SCP0010.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:53",
+  "lines": 3025
+ },
+ "PACKAGE BODY|PKG_SCP0011": {
+  "file": "PKG_SCP0011.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:24",
+  "lines": 2471
+ },
+ "PACKAGE BODY|PKG_SCP0013": {
+  "file": "PKG_SCP0013.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:25",
+  "lines": 6253
+ },
+ "PACKAGE BODY|PKG_SCP0017": {
+  "file": "PKG_SCP0017.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:54",
+  "lines": 2368
+ },
+ "PACKAGE BODY|PKG_SCP0018": {
+  "file": "PKG_SCP0018.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:54",
+  "lines": 454
+ },
+ "PACKAGE BODY|PKG_SCP0020": {
+  "file": "PKG_SCP0020.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:55",
+  "lines": 1509
+ },
+ "PACKAGE BODY|PKG_SCP0025": {
+  "file": "PKG_SCP0025.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 17:12:08",
+  "lines": 850
+ },
+ "PACKAGE BODY|PKG_SCP0027": {
+  "file": "PKG_SCP0027.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:55",
+  "lines": 861
+ },
+ "PACKAGE BODY|PKG_SCP0030": {
+  "file": "PKG_SCP0030.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:55",
+  "lines": 974
+ },
+ "PACKAGE BODY|PKG_SCP0031": {
+  "file": "PKG_SCP0031.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:56",
+  "lines": 1422
+ },
+ "PACKAGE BODY|PKG_SCP0039": {
+  "file": "PKG_SCP0039.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:27",
+  "lines": 8423
+ },
+ "PACKAGE BODY|PKG_SCP0039_VF": {
+  "file": "PKG_SCP0039_VF.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:28",
+  "lines": 8156
+ },
+ "PACKAGE BODY|PKG_SCP0048": {
+  "file": "PKG_SCP0048.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:57",
+  "lines": 620
+ },
+ "PACKAGE BODY|PKG_SCP0049": {
+  "file": "PKG_SCP0049.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:50:58",
+  "lines": 21805
+ },
+ "PACKAGE BODY|PKG_SCP0055": {
+  "file": "PKG_SCP0055.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:01",
+  "lines": 987
+ },
+ "PACKAGE BODY|PKG_SCP0098": {
+  "file": "PKG_SCP0098.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:01",
+  "lines": 2833
+ },
+ "PACKAGE BODY|PKG_SCP0100": {
+  "file": "PKG_SCP0100.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:02",
+  "lines": 5091
+ },
+ "PACKAGE BODY|PKG_SCP0105": {
+  "file": "PKG_SCP0105.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:03",
+  "lines": 4591
+ },
+ "PACKAGE BODY|PKG_SDM1010": {
+  "file": "PKG_SDM1010.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:31",
+  "lines": 3308
+ },
+ "PACKAGE BODY|PKG_SSP0012": {
+  "file": "PKG_SSP0012.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:04",
+  "lines": 413
+ },
+ "PACKAGE BODY|PKG_SSP0015": {
+  "file": "PKG_SSP0015.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:32",
+  "lines": 11130
+ },
+ "PACKAGE BODY|PKG_SSP0019": {
+  "file": "PKG_SSP0019.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:05",
+  "lines": 615
+ },
+ "PACKAGE BODY|PKG_SSP0021": {
+  "file": "PKG_SSP0021.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:34",
+  "lines": 6561
+ },
+ "PACKAGE BODY|PKG_SSP0023_CHK": {
+  "file": "PKG_SSP0023_CHK.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:36",
+  "lines": 3674
+ },
+ "PACKAGE BODY|PKG_SSP0045": {
+  "file": "PKG_SSP0045.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:36",
+  "lines": 2140
+ },
+ "PACKAGE BODY|PKG_SSP0060": {
+  "file": "PKG_SSP0060.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:37",
+  "lines": 8281
+ },
+ "PACKAGE BODY|PKG_SSP0200": {
+  "file": "PKG_SSP0200.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:07",
+  "lines": 3293
+ },
+ "PACKAGE BODY|PKG_SYS0010": {
+  "file": "PKG_SYS0010.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:09",
+  "lines": 1606
+ },
+ "PACKAGE BODY|PKG_SYS0012": {
+  "file": "PKG_SYS0012.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:09",
+  "lines": 293
+ },
+ "PACKAGE BODY|PKG_SYS0013": {
+  "file": "PKG_SYS0013.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:09",
+  "lines": 1033
+ },
+ "PACKAGE BODY|PKG_SYS0014": {
+  "file": "PKG_SYS0014.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:09",
+  "lines": 343
+ },
+ "PACKAGE BODY|PKG_ZTMP_S015J": {
+  "file": "PKG_ZTMP_S015J.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:39",
+  "lines": 2671
+ },
+ "PACKAGE BODY|PKG_ZTMP_S015K": {
+  "file": "PKG_ZTMP_S015K.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:10",
+  "lines": 2120
+ },
+ "PACKAGE BODY|PKG_ZTMP_S200B": {
+  "file": "PKG_ZTMP_S200B.PACKAGE_BODY.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:10",
+  "lines": 806
+ },
+ "PROCEDURE|PR_DM_ANL_KPI_SALES_ACCURACY": {
+  "file": "PR_DM_ANL_KPI_SALES_ACCURACY.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:11",
+  "lines": 287
+ },
+ "PROCEDURE|PR_DM_ANL_KPI_SUMMARY": {
+  "file": "PR_DM_ANL_KPI_SUMMARY.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:11",
+  "lines": 1258
+ },
+ "PROCEDURE|PR_DM_ANL_MKT_PSI_DATA": {
+  "file": "PR_DM_ANL_MKT_PSI_DATA.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:11",
+  "lines": 919
+ },
+ "PROCEDURE|PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_MKT_FCST_SAVE": {
+  "file": "PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_MKT_FCST_SAVE.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:12",
+  "lines": 886
+ },
+ "PROCEDURE|PR_DM_CUST_ITEM_MAPPING": {
+  "file": "PR_DM_CUST_ITEM_MAPPING.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:12",
+  "lines": 623
+ },
+ "PROCEDURE|PR_DM_DNM_CREATE_C_WS_RTF": {
+  "file": "PR_DM_DNM_CREATE_C_WS_RTF.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 19:27:09",
+  "lines": 1244
+ },
+ "PROCEDURE|PR_DM_DNM_CREATE_WS_RTF": {
+  "file": "PR_DM_DNM_CREATE_WS_RTF.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 19:27:09",
+  "lines": 1207
+ },
+ "PROCEDURE|PR_DM_DNM_EDI_CALLOFF_DATA": {
+  "file": "PR_DM_DNM_EDI_CALLOFF_DATA.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:12",
+  "lines": 819
+ },
+ "PROCEDURE|PR_DM_DNM_EDI_CALLOFF_MKT_FCST": {
+  "file": "PR_DM_DNM_EDI_CALLOFF_MKT_FCST.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:13",
+  "lines": 1335
+ },
+ "PROCEDURE|PR_DM_PLN_CUST_FCST_RECORD": {
+  "file": "PR_DM_PLN_CUST_FCST_RECORD.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:41",
+  "lines": 947
+ },
+ "PROCEDURE|PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE": {
+  "file": "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 19:27:07",
+  "lines": 3216
+ },
+ "PROCEDURE|PR_DM_PLN_MKT_FCST_SALES_RESULT_MAPPING": {
+  "file": "PR_DM_PLN_MKT_FCST_SALES_RESULT_MAPPING.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 20:05:41",
+  "lines": 981
+ },
+ "PROCEDURE|PR_DM_PLN_MKT_FCST_TO_NET_DEMAND": {
+  "file": "PR_DM_PLN_MKT_FCST_TO_NET_DEMAND.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:42",
+  "lines": 818
+ },
+ "PROCEDURE|PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE": {
+  "file": "PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 19:27:08",
+  "lines": 1981
+ },
+ "PROCEDURE|PR_DM_PLN_SALES_PLAN_RESULT_MOVE": {
+  "file": "PR_DM_PLN_SALES_PLAN_RESULT_MOVE.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:14",
+  "lines": 170
+ },
+ "PROCEDURE|PR_SCM_ADM_DEPT_CHANGED_AUTH_SYNC": {
+  "file": "PR_SCM_ADM_DEPT_CHANGED_AUTH_SYNC.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:15",
+  "lines": 367
+ },
+ "PROCEDURE|PR_SCM_MST_PROJECT_SCHEDULE": {
+  "file": "PR_SCM_MST_PROJECT_SCHEDULE.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:15",
+  "lines": 442
+ },
+ "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL": {
+  "file": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:43",
+  "lines": 5567
+ },
+ "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_EE": {
+  "file": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_EE.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:44",
+  "lines": 5377
+ },
+ "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS": {
+  "file": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:44",
+  "lines": 5640
+ },
+ "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL": {
+  "file": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:45",
+  "lines": 7122
+ },
+ "PROCEDURE|PR_SSP_ANL_SHIP_UPDATE_BOH_VAL": {
+  "file": "PR_SSP_ANL_SHIP_UPDATE_BOH_VAL.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:16",
+  "lines": 286
+ },
+ "PROCEDURE|PR_SSP_ANL_SHIPMENT_PLAN_FG": {
+  "file": "PR_SSP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:16",
+  "lines": 1533
+ },
+ "VIEW|SCM_DNM_PRODUCT_RESULT_V": {
+  "file": "SCM_DNM_PRODUCT_RESULT_V.VIEW.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 18:44:38",
+  "lines": 117
+ },
+ "VIEW|SCP_XLS_PSI_GLOBAL_ELECTRODE_LOAD_RATIO_V": {
+  "file": "SCP_XLS_PSI_GLOBAL_ELECTRODE_LOAD_RATIO_V.VIEW.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:18",
+  "lines": 56
+ },
+ "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_CELL_V": {
+  "file": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_CELL_V.VIEW.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:19",
+  "lines": 56
+ },
+ "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_BP_V": {
+  "file": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_BP_V.VIEW.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:21",
+  "lines": 54
+ },
+ "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V": {
+  "file": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V.VIEW.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:23",
+  "lines": 54
+ },
+ "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V2": {
+  "file": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V2.VIEW.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:51:24",
+  "lines": 49
+ },
+ "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_V": {
+  "file": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_V.VIEW.sql",
+  "status": "VALID",
+  "last_ddl": "2026-10-08 16:52:49",
+  "lines": 63
+ }
+}

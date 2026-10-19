@@ -1,0 +1,72 @@
+{
+ "runs": [
+  {
+   "key": [
+    "82",
+    "G-19-172",
+    "Fluence_US_BSR",
+    "EAPJ00193AA"
+   ],
+   "attr": [
+    "E",
+    "MPS",
+    "CIF",
+    "-"
+   ],
+   "fcst_type_used": "MPS",
+   "old": [
+    "0",
+    "SUCCESS",
+    "0"
+   ],
+   "sec_old": 480.76,
+   "others_before": [
+    "123985",
+    "78711283075368.48",
+    "10"
+   ],
+   "new": [
+    "0",
+    "SUCCESS",
+    "0"
+   ],
+   "sec_new": 463.54,
+   "identical": true,
+   "mkt_fcst_old": {
+    "BALANCE": 568,
+    "MKT_FCST": 1,
+    "RTF_SYS_RP": 1
+   },
+   "mkt_fcst_new": {
+    "BALANCE": 568,
+    "MKT_FCST": 1,
+    "RTF_SYS_RP": 1
+   },
+   "sales_plan_old": {
+    "MKT_FCST": 1,
+    "RTF_SYS_RP": 1
+   },
+   "sales_plan_new": {
+    "MKT_FCST": 1,
+    "RTF_SYS_RP": 1
+   },
+   "others_after_old": [
+    "165387",
+    "109693962729651.62",
+    "10"
+   ],
+   "others_after_new": [
+    "165387",
+    "109693962729651.62",
+    "10"
+   ],
+   "left_after_cleanup": {
+    "DM_PLN_MKT_FCST": 0,
+    "DM_PLN_CFM_MKT_DEMAND_PLAN": 0,
+    "DM_PLN_SALES_PLAN": 0
+   }
+  }
+ ],
+ "start": "2026-10-06 17:52:55",
+ "date": "20261012"
+}

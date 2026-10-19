@@ -1,0 +1,28 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-14 11:50:03
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL
+L0 | PACKAGE | VALID | 2026-10-09 13:38:31
+L0 | PACKAGE BODY | VALID | 2026-10-14 11:50:01
+(2 rows)
+
+CHK | KIND | N | EXPECT | LINES | JUDGE
+L1 대상줄 | CURRNORM VMI 공백 강제 | 0 | 2 |  | FAIL — 건수 다름 → 10 실행 금지·결과 회신
+L1 대상줄 | 백필 VMI 제외(CURRENT 형) | 0 | 1 |  | FAIL — 건수 다름 → 10 실행 금지·결과 회신
+L1 대상줄 | 백필 VMI 제외(MAIN 형) | 0 | 3 |  | FAIL — 건수 다름 → 10 실행 금지·결과 회신
+(3 rows)
+
+CHK | N | JUDGE
+L2 마커 | 6 | 적용됨 — 10 재실행은 가드로 무동작
+(1 rows)
+
+CHK | DIVISION_ID | MEASURE | KEYS | ROWS_N | SAMPLE_SITE
+L3 대상 | 40 | VMI_In_Req | 1 | 4 | acer_CN_CKG
+L3 대상 | 81 | VMI_In_Req | 17 | 1933 | BMW_MX_MEX
+L3 대상 | 82 | VMI_DIO | 1 | 400 | DeltaX_KR_SEL
+L3 대상 | 82 | VMI_Inv | 1 | 400 | DeltaX_KR_SEL
+(4 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

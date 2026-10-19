@@ -1,0 +1,36 @@
+{
+ "before": {
+  "last_ddl": "2026-10-06 15:37:26",
+  "status": "VALID",
+  "md5": "9699801707df7a6deb4129e936c992e2"
+ },
+ "after": {
+  "last_ddl": "2026-10-06 16:03:12",
+  "status": "VALID",
+  "md5": "cb0ce9b554682d2e436ea3dc1dd53f78"
+ },
+ "errors": [],
+ "same_as_built": true,
+ "dependents": [
+  [
+   "PKG_DMF0003",
+   "PACKAGE BODY",
+   "VALID"
+  ],
+  [
+   "PKG_DMF0082",
+   "PACKAGE BODY",
+   "VALID"
+  ],
+  [
+   "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE_BATCH",
+   "PROCEDURE",
+   "VALID"
+  ],
+  [
+   "PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING",
+   "PROCEDURE",
+   "VALID"
+  ]
+ ]
+}

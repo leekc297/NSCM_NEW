@@ -1,0 +1,22 @@
+CHK | N | LINE | JUDGE
+V1 마커 | 1 | 1117 | PASS
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:31 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-14 16:34:07 | 0 | 0
+(2 rows)
+
+CHK | ANCHOR_LINE | MARK_LINE | FIRST_CONSUMER_LINE | JUDGE
+V3 위치 | 1114 | 1117 | 1258 | PASS
+(1 rows)
+
+CHK | KIND | N | EXPECT | LINES | JUDGE
+V4 유지 | Owner 필터 DELETE | 1 | 1 | 3736 | PASS
+V4 유지 | Project 필터 DELETE | 1 | 1 | 3729 | PASS
+V4 유지 | Team 필터 DELETE | 1 | 1 | 3761 | PASS
+V4 유지 | 앵커 GROUP BY 줄 | 1 | 1 | 1114 | PASS
+(4 rows)
+
+CHK | LINE | EX | SEC_PER_EX | ROWS_PER_EX | LAST_ACT | TXT
+(0 rows)

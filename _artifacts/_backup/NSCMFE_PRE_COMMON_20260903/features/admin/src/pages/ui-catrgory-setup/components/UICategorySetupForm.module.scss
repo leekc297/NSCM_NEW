@@ -1,0 +1,17 @@
+body .customForm {
+  @include respond-to('HD') {
+    grid-template-columns: 100px auto;
+
+    & > div:first-of-type {
+      width: 100px;
+    }
+  }
+
+  @include respond-to('FHD') {
+    grid-template-columns: 180px auto;
+
+    & > div:first-of-type {
+      width: 180px;
+    }
+  }
+}

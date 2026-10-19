@@ -1,0 +1,52 @@
+﻿DB 59.19.252.148:2521/ZIOUI1 ('localhost', '2026-10-14 10:45:04')
+site 조건 값: {'40': 'NJ01-A', '82': 'NIDEC_FR_ROC'}
+
+=== 새 파싱 #1 — 첫 호출(계획이 굳는 호출) = [82 전체]
+   첫 | 82 전체          |    1.35s | rows  38621 | 8pn2cpba1y5v8/9 PHV 1413870880
+   재 | 81 전체          |    1.43s | rows  42088 | 8pn2cpba1y5v8/10 PHV 2395779221
+   재 | 40 전체          |    1.18s | rows  15569 | 8pn2cpba1y5v8/11 PHV 3546196757
+   재 | 40 site 조건     |    0.61s | rows      0 | 8pn2cpba1y5v8/11 PHV 3546196757
+   재 | 82 site 조건     |    0.89s | rows   1063 | 8pn2cpba1y5v8/12 PHV 1413870880
+   재 | 40 item 조건     |    1.06s | rows   4859 | 8pn2cpba1y5v8/13 PHV 3806929389
+
+=== 새 파싱 #2 — 첫 호출(계획이 굳는 호출) = [81 전체]
+   첫 | 81 전체          |    1.73s | rows  42088 | 8pn2cpba1y5v8/14 PHV 2395779221
+   재 | 82 전체          |    1.28s | rows  38621 | 8pn2cpba1y5v8/15 PHV 2613897708
+   재 | 40 전체          |    0.76s | rows  15569 | 8pn2cpba1y5v8/15 PHV 2613897708
+   재 | 40 site 조건     |    1.03s | rows      0 | 8pn2cpba1y5v8/15 PHV 2613897708
+   재 | 82 site 조건     |    0.51s | rows   1063 | 8pn2cpba1y5v8/15 PHV 2613897708
+   재 | 40 item 조건     |    0.90s | rows   4859 | 8pn2cpba1y5v8/15 PHV 2613897708
+
+=== 새 파싱 #3 — 첫 호출(계획이 굳는 호출) = [40 전체]
+   첫 | 40 전체          |    1.86s | rows  15569 | 8pn2cpba1y5v8/16 PHV 3546196757
+   재 | 82 전체          |    1.85s | rows  38621 | 8pn2cpba1y5v8/17 PHV 2613897708
+   재 | 81 전체          |    2.06s | rows  42088 | 8pn2cpba1y5v8/18 PHV 2395779221
+   재 | 40 site 조건     |    0.99s | rows      0 | 8pn2cpba1y5v8/18 PHV 2395779221
+   재 | 82 site 조건     |    0.83s | rows   1063 | 8pn2cpba1y5v8/18 PHV 2395779221
+   재 | 40 item 조건     |    1.13s | rows   4859 | 8pn2cpba1y5v8/18 PHV 2395779221
+
+=== 새 파싱 #4 — 첫 호출(계획이 굳는 호출) = [40 site 조건]
+   첫 | 40 site 조건     |    1.63s | rows      0 | 8pn2cpba1y5v8/19 PHV 3546196757
+   재 | 82 전체          |    1.54s | rows  38621 | 8pn2cpba1y5v8/20 PHV 2613897708
+   재 | 81 전체          |    1.46s | rows  42088 | 8pn2cpba1y5v8/20 PHV 2613897708
+   재 | 40 전체          |    1.19s | rows  15569 | 8pn2cpba1y5v8/20 PHV 2613897708
+   재 | 82 site 조건     |    0.83s | rows   1063 | 8pn2cpba1y5v8/20 PHV 2613897708
+   재 | 40 item 조건     |    1.13s | rows   4859 | 8pn2cpba1y5v8/20 PHV 2613897708
+
+=== 새 파싱 #5 — 첫 호출(계획이 굳는 호출) = [82 site 조건]
+   첫 | 82 site 조건     |    1.45s | rows   1063 | 8pn2cpba1y5v8/21 PHV 1413870880
+   재 | 82 전체          |    1.27s | rows  38621 | 8pn2cpba1y5v8/22 PHV 2613897708
+   재 | 81 전체          |    1.53s | rows  42088 | 8pn2cpba1y5v8/22 PHV 2613897708
+   재 | 40 전체          |    1.22s | rows  15569 | 8pn2cpba1y5v8/22 PHV 2613897708
+   재 | 40 site 조건     |    0.99s | rows      0 | 8pn2cpba1y5v8/22 PHV 2613897708
+   재 | 40 item 조건     |    1.15s | rows   4859 | 8pn2cpba1y5v8/22 PHV 2613897708
+
+=== 새 파싱 #6 — 첫 호출(계획이 굳는 호출) = [40 item 조건]
+   첫 | 40 item 조건     |    1.77s | rows   4859 | 8pn2cpba1y5v8/23 PHV 3546196757
+   재 | 82 전체          |    1.45s | rows  38621 | 8pn2cpba1y5v8/24 PHV 2613897708
+   재 | 81 전체          |    1.53s | rows  42088 | 8pn2cpba1y5v8/24 PHV 2613897708
+   재 | 40 전체          |    1.33s | rows  15569 | 8pn2cpba1y5v8/24 PHV 2613897708
+   재 | 40 site 조건     |    0.98s | rows      0 | 8pn2cpba1y5v8/24 PHV 2613897708
+   재 | 82 site 조건     |    0.82s | rows   1063 | 8pn2cpba1y5v8/24 PHV 2613897708
+
+느린 조합: 0

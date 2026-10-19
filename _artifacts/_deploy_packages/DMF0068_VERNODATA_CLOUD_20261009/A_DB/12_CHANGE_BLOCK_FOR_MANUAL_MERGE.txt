@@ -1,0 +1,35 @@
+[E20261009-VERNODATA] 변경 블록 — 판본이 다르면 이 diff 를 클라우드 원문에 수동 반영. '-' 줄을 '+' 줄로. @@ 줄번호는 사내 기준.
+규칙: ① 헤더 History 에 1줄 추가(선택) ② L429~437 `SELECT ORI_CUTOFF_VERSION_NO INTO V_ORI_VERSION_NO ... FETCH FIRST 1 ROWS ONLY );` 9줄을 그대로 둔 채
+      앞에 주석 2줄 + `BEGIN`, 뒤에 `EXCEPTION / WHEN NO_DATA_FOUND THEN V_ORI_VERSION_NO := NULL; / END;` 를 넣는다 (+7줄)
+주의: P_DMF0068_GET_LOOKUPPROJECT 주석 블록 안의 MSSQL 원문(L268 `SET @V_ORI_VERSION_NO = (SELECT TOP 1 ...)`)은 대상 아님.
+
+--- cloud_before
++++ after
+@@ -364,6 +364,7 @@
+  *===================================================================================================
+  * 2023-09-26   KJJ       PJ20230691R  LGES SCM 역량 강화 위한 개선과제 이행 - 소형 수주관리 조회
+  * 2024-04-17 JSSBAE      소형수주 로직 전체수정 요청으로 로직 전체수정진행
++ * 2026-10-09   ZIONEX      [E20261009-VERNODATA] 버전 미존재 시 ORA-01403 → NULL (AS-IS SELECT TOP 1 동일, 클라우드 SQL ERROR 보완)
+  *
+ 
+ /*
+@@ -426,6 +427,9 @@
+         V_PROGRAM_NAME := $$PLSQL_UNIT || '.' || UTL_CALL_STACK.SUBPROGRAM(1)(2);
+     END IF;
+ 
++    /* [E20261009-VERNODATA] AS-IS `SET @V_ORI_VERSION_NO = (SELECT TOP 1 ...)` 는 버전이 없으면 NULL 로 넘어갔으나 Oracle SELECT INTO 는 ORA-01403 → 화면 SQL ERROR.
++       F6 저장조건 복원 등으로 DM_MDF_VERSION 에 없는 버전이 오면 NULL 로 두어 계획(PLAN) 구간만 0건 (AS-IS 동일 결과) */
++    BEGIN
+     SELECT ORI_CUTOFF_VERSION_NO
+     INTO V_ORI_VERSION_NO
+     FROM (
+@@ -435,6 +439,9 @@
+           AND VERSION_NO  = P_VERSION_NO
+         FETCH FIRST 1 ROWS ONLY
+     );
++    EXCEPTION
++        WHEN NO_DATA_FOUND THEN V_ORI_VERSION_NO := NULL;   /* [E20261009-VERNODATA] */
++    END;
+ 
+     DBMS_OUTPUT.PUT_LINE(V_ORI_VERSION_NO);
+ 

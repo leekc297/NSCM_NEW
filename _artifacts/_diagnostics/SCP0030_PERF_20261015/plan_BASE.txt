@@ -1,0 +1,260 @@
+SQL_ID  1304f0spf3u9w, child number 5
+-------------------------------------
+SELECT IA.SEQ , IA.DIVISION_ID , IA.CUSTOMER , IA.FROM_SITE_CODE , 
+IA.FROM_CITY , IA.TO_SITE_CODE , IA.TO_CITY , IA.INCOTERMS , 
+IA.SAFETY_STOCK , IA.TRANSPORT_MODE , IA.ITEM_ID , IA.NICK_NAME , 
+IA.FROM_YYYYMMDD , IA.TO_YYYYMMDD , IA.PRIORITY , IA.BOD_ITEM_VALID , 
+IA.BOD_VALID , IA.ROUTE_VALID , IA.ROUTE_ID , IA.DAYS_MON , IA.DAYS_TUE 
+, IA.DAYS_WED , IA.DAYS_THU , IA.DAYS_FRI , IA.DAYS_SAT , IA.DAYS_SUN , 
+IA.LEAD_TIME , IA.CREATED_BY , IA.CREATION_DATE , IA.LAST_UPDATED_BY , 
+IA.LAST_UPDATE_DATE , IA.BOD_ID , IA.ORG_FROM_YYYYMMDD , 
+IA.ORG_TO_YYYYMMDD , IA.MERGE_DATE , CAST(NULL AS VARCHAR2(1000 CHAR)) 
+AS Y , IA.COMPANY_ID FROM (SELECT DISTINCT A.SEQ , A.DIVISION_ID , 
+NVL(D.END_CUSTOMER, '-') AS CUSTOMER , B.FROM_SITE AS FROM_SITE_CODE , 
+XB.COMPANY_ID , E.CITY AS FROM_CITY , B.TO_SITE AS TO_SITE_CODE , 
+XA.CITY AS TO_CITY , B.INCOTERMS , A.SAFETY_STOCK , C.TRANSPORT_MODE , 
+A.ITEM_ID , NVL(XC.NICK_NAME, '-') AS NICK_NAME , 
+TO_DATE(A.FROM_YYYYMMDD, 'YYYYMMDD') AS FROM_YYYYMMDD , TO_DATE(A.TO
+ 
+Plan hash value: 2177587867
+ 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                                   | Name                            | Starts | E-Rows | A-Rows |   A-Time   | Buffers |  OMem |  1Mem | Used-Mem |
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                                            |                                 |      1 |        |    289K|00:00:04.82 |     129K|       |       |          |
+|   1 |  SORT ORDER BY                                              |                                 |      1 |  22635 |    289K|00:00:04.82 |     129K|   103M|  3467K|   91M (0)|
+|*  2 |   FILTER                                                    |                                 |      1 |        |    289K|00:00:03.95 |     129K|       |       |          |
+|*  3 |    HASH JOIN RIGHT OUTER                                    |                                 |      1 |  22635 |    312K|00:00:03.95 |     129K|  1695K|  1695K| 1686K (0)|
+|   4 |     VIEW                                                    |                                 |      1 |     22 |   3900 |00:00:00.29 |   29856 |       |       |          |
+|   5 |      HASH GROUP BY                                          |                                 |      1 |     22 |   3900 |00:00:00.29 |   29856 |  1323K|  1323K| 1574K (0)|
+|   6 |       VIEW                                                  |                                 |      1 |     22 |   5172 |00:00:00.29 |   29856 |       |       |          |
+|*  7 |        FILTER                                               |                                 |      1 |        |   5172 |00:00:00.29 |   29856 |       |       |          |
+|   8 |         HASH GROUP BY                                       |                                 |      1 |     22 |  86246 |00:00:00.29 |   29856 |  8060K|  2900K| 6849K (0)|
+|*  9 |          FILTER                                             |                                 |      1 |        |    123K|00:00:00.24 |   29856 |       |       |          |
+|* 10 |           FILTER                                            |                                 |      1 |        |    123K|00:00:00.23 |   29856 |       |       |          |
+|* 11 |            HASH JOIN                                        |                                 |      1 |    253K|    123K|00:00:00.22 |   29856 |  1995K|  1995K| 1700K (0)|
+|* 12 |             TABLE ACCESS FULL                               | SCM_ITEM_CLASS_M                |      1 |    325 |    325 |00:00:00.01 |      39 |       |       |          |
+|* 13 |             TABLE ACCESS FULL                               | SCM_ITEM_M                      |      1 |    749K|    749K|00:00:00.13 |   29817 |       |       |          |
+|* 14 |           COLLECTION ITERATOR PICKLER FETCH                 |                                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+|  15 |     VIEW                                                    |                                 |      1 |  22699 |    312K|00:00:03.65 |   99946 |       |       |          |
+|  16 |      HASH UNIQUE                                            |                                 |      1 |  22699 |    312K|00:00:03.64 |   99946 |   106M|  7861K|   88M (0)|
+|  17 |       CONCATENATION                                         |                                 |      1 |        |    382K|00:00:02.96 |   99946 |       |       |          |
+|* 18 |        FILTER                                               |                                 |      1 |        |      0 |00:00:01.40 |   49973 |       |       |          |
+|* 19 |         HASH JOIN RIGHT OUTER                               |                                 |      1 |   1811M|    382K|00:00:01.36 |   49973 |  1142K|  1142K| 1420K (0)|
+|  20 |          INDEX FAST FULL SCAN                               | IDX_SCM_MST_SITE_N1             |      1 |   3039 |   3039 |00:00:00.01 |      22 |       |       |          |
+|* 21 |          HASH JOIN RIGHT OUTER                              |                                 |      1 |     59M|    312K|00:00:01.25 |   49951 |  1423K|  1423K| 1713K (0)|
+|  22 |           VIEW                                              |                                 |      1 |   2960 |   2960 |00:00:00.01 |      75 |       |       |          |
+|  23 |            HASH GROUP BY                                    |                                 |      1 |   2960 |   2960 |00:00:00.01 |      75 |  1187K|  1055K| 1461K (0)|
+|  24 |             TABLE ACCESS FULL                               | SCM_MST_SITE                    |      1 |   3039 |   3039 |00:00:00.01 |      75 |       |       |          |
+|* 25 |           HASH JOIN RIGHT OUTER                             |                                 |      1 |   2013K|    312K|00:00:01.18 |   49876 |  1098K|  1098K| 1425K (0)|
+|  26 |            INDEX FAST FULL SCAN                             | IDX_SCM_MST_SITE_N1             |      1 |   3039 |   3039 |00:00:00.01 |      22 |       |       |          |
+|* 27 |            HASH JOIN RIGHT OUTER                            |                                 |      1 |    197K|    312K|00:00:01.09 |   49854 |  1106K|  1106K| 1423K (0)|
+|  28 |             INDEX FAST FULL SCAN                            | IDX04_SCM_MST_SITE              |      1 |   3039 |   3039 |00:00:00.01 |      31 |       |       |          |
+|* 29 |             HASH JOIN RIGHT OUTER                           |                                 |      1 |  19314 |    312K|00:00:00.98 |   49823 |  1562K|  1562K| 2210K (0)|
+|  30 |              TABLE ACCESS FULL                              | SCP_MST_DISTRIBUTION_ROUTE      |      1 |   7988 |   7988 |00:00:00.01 |     175 |       |       |          |
+|* 31 |              HASH JOIN RIGHT OUTER                          |                                 |      1 |  19314 |    312K|00:00:00.90 |   49648 |  2146K|  2146K| 2218K (0)|
+|  32 |               VIEW                                          |                                 |      1 |  16523 |  16232 |00:00:00.32 |   15113 |       |       |          |
+|  33 |                COUNT                                        |                                 |      1 |        |  16232 |00:00:00.32 |   15113 |       |       |          |
+|  34 |                 VIEW                                        | SCP_MST_BOD_N_V                 |      1 |  16523 |  16232 |00:00:00.32 |   15113 |       |       |          |
+|  35 |                  HASH UNIQUE                                |                                 |      1 |  16523 |  16232 |00:00:00.32 |   15113 |  5849K|  1993K| 5288K (0)|
+|  36 |                   UNION-ALL                                 |                                 |      1 |  16523 |  16232 |00:00:00.29 |   15113 |       |       |          |
+|* 37 |                    HASH JOIN                                |                                 |      1 |  15657 |  15906 |00:00:00.04 |   14212 |  1735K|  1207K| 1887K (0)|
+|  38 |                     TABLE ACCESS FULL                       | SCP_MST_DISTRIBUTION_ROUTE      |      1 |   7988 |   7988 |00:00:00.01 |     175 |       |       |          |
+|  39 |                     NESTED LOOPS                            |                                 |      1 |  15657 |  15909 |00:00:00.03 |   14037 |       |       |          |
+|* 40 |                      HASH JOIN RIGHT OUTER                  |                                 |      1 |  15657 |  15962 |00:00:00.02 |     430 |  1922K|  1922K| 1511K (0)|
+|* 41 |                       TABLE ACCESS BY INDEX ROWID BATCHED   | SCM_ADM_LOOKUP_MASTER_DETAIL    |      1 |     14 |     16 |00:00:00.01 |       4 |       |       |          |
+|* 42 |                        INDEX RANGE SCAN                     | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |      1 |     19 |     16 |00:00:00.01 |       3 |       |       |          |
+|* 43 |                       HASH JOIN RIGHT OUTER                 |                                 |      1 |  15657 |  15962 |00:00:00.01 |     426 |  1922K|  1922K| 1513K (0)|
+|* 44 |                        TABLE ACCESS BY INDEX ROWID BATCHED  | SCM_ADM_LOOKUP_MASTER_DETAIL    |      1 |     14 |     16 |00:00:00.01 |       4 |       |       |          |
+|* 45 |                         INDEX RANGE SCAN                    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |      1 |     19 |     16 |00:00:00.01 |       3 |       |       |          |
+|* 46 |                        HASH JOIN                            |                                 |      1 |  15657 |  15962 |00:00:00.01 |     422 |  1236K|  1236K| 1700K (0)|
+|* 47 |                         TABLE ACCESS FULL                   | SCM_MST_SITE                    |      1 |   2919 |   2919 |00:00:00.01 |      75 |       |       |          |
+|  48 |                         TABLE ACCESS FULL                   | SCP_MST_BOD                     |      1 |  16303 |  16303 |00:00:00.01 |     347 |       |       |          |
+|* 49 |                      INDEX UNIQUE SCAN                      | PK_SCM_MST_SITE                 |  15962 |      1 |  15909 |00:00:00.01 |   13607 |       |       |          |
+|* 50 |                    HASH JOIN                                |                                 |      1 |    866 |    326 |00:00:00.01 |     901 |   886K|   886K| 1383K (0)|
+|  51 |                     NESTED LOOPS                            |                                 |      1 |    866 |    326 |00:00:00.01 |     726 |       |       |          |
+|* 52 |                      HASH JOIN RIGHT OUTER                  |                                 |      1 |    866 |    329 |00:00:00.01 |     395 |  1922K|  1922K| 1505K (0)|
+|* 53 |                       TABLE ACCESS BY INDEX ROWID BATCHED   | SCM_ADM_LOOKUP_MASTER_DETAIL    |      1 |     14 |     16 |00:00:00.01 |       4 |       |       |          |
+|* 54 |                        INDEX RANGE SCAN                     | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |      1 |     19 |     16 |00:00:00.01 |       3 |       |       |          |
+|* 55 |                       HASH JOIN RIGHT OUTER                 |                                 |      1 |    866 |    329 |00:00:00.01 |     391 |  1922K|  1922K| 1513K (0)|
+|* 56 |                        TABLE ACCESS BY INDEX ROWID BATCHED  | SCM_ADM_LOOKUP_MASTER_DETAIL    |      1 |     14 |     16 |00:00:00.01 |       4 |       |       |          |
+|* 57 |                         INDEX RANGE SCAN                    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |      1 |     19 |     16 |00:00:00.01 |       3 |       |       |          |
+|* 58 |                        HASH JOIN                            |                                 |      1 |    866 |    329 |00:00:00.01 |     387 |  1423K|  1423K| 1697K (0)|
+|  59 |                         TABLE ACCESS BY INDEX ROWID BATCHED | SCM_MST_SITE                    |      1 |    114 |    114 |00:00:00.01 |      40 |       |       |          |
+|* 60 |                          INDEX RANGE SCAN                   | IDX02_SCM_MST_SITE              |      1 |    114 |    114 |00:00:00.01 |       2 |       |       |          |
+|  61 |                         TABLE ACCESS FULL                   | SCP_MST_BOD                     |      1 |  16303 |  16303 |00:00:00.01 |     347 |       |       |          |
+|* 62 |                      INDEX UNIQUE SCAN                      | PK_SCM_MST_SITE                 |    329 |      1 |    326 |00:00:00.01 |     331 |       |       |          |
+|  63 |                     TABLE ACCESS FULL                       | SCP_MST_DISTRIBUTION_ROUTE      |      1 |   7988 |   7988 |00:00:00.01 |     175 |       |       |          |
+|* 64 |               HASH JOIN                                     |                                 |      1 |  19314 |    312K|00:00:00.48 |   34535 |  2357K|  1398K| 2370K (0)|
+|  65 |                TABLE ACCESS FULL                            | SCP_MST_BOD                     |      1 |  16303 |  16303 |00:00:00.01 |     347 |       |       |          |
+|* 66 |                FILTER                                       |                                 |      1 |        |    324K|00:00:00.38 |   34188 |       |       |          |
+|* 67 |                 HASH JOIN OUTER                             |                                 |      1 |  19314 |    324K|00:00:00.35 |   34188 |    49M|  4644K|   59M (0)|
+|* 68 |                  TABLE ACCESS FULL                          | SCP_MST_BOD_ITEM                |      1 |  19314 |    324K|00:00:00.03 |    4371 |       |       |          |
+|  69 |                  VIEW                                       |                                 |      1 |  89826 |  61536 |00:00:00.12 |   29817 |       |       |          |
+|  70 |                   HASH GROUP BY                             |                                 |      1 |  89826 |  61536 |00:00:00.11 |   29817 |    17M|  4039K|   18M (0)|
+|* 71 |                    TABLE ACCESS FULL                        | SCM_ITEM_M                      |      1 |    107K|    107K|00:00:00.09 |   29817 |       |       |          |
+|* 72 |         COLLECTION ITERATOR PICKLER FETCH                   |                                 |  17064 |    796 |      0 |00:00:00.01 |       0 |       |       |          |
+|* 73 |         COLLECTION ITERATOR PICKLER FETCH                   |                                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+|* 74 |         COLLECTION ITERATOR PICKLER FETCH                   |                                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+|* 75 |         COLLECTION ITERATOR PICKLER FETCH                   |                                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+|* 76 |         COLLECTION ITERATOR PICKLER FETCH                   |                                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+|* 77 |         COLLECTION ITERATOR PICKLER FETCH                   |                                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+|* 78 |        FILTER                                               |                                 |      1 |        |    382K|00:00:01.53 |   49973 |       |       |          |
+|* 79 |         FILTER                                              |                                 |      1 |        |    382K|00:00:01.43 |   49973 |       |       |          |
+|* 80 |          HASH JOIN RIGHT OUTER                              |                                 |      1 |   1811M|    382K|00:00:01.40 |   49973 |  1142K|  1142K| 1401K (0)|
+|  81 |           INDEX FAST FULL SCAN                              | IDX_SCM_MST_SITE_N1             |      1 |   3039 |   3039 |00:00:00.01 |      22 |       |       |          |
+|* 82 |           HASH JOIN RIGHT OUTER                             |                                 |      1 |     59M|    312K|00:00:01.28 |   49951 |  1423K|  1423K| 1749K (0)|
+|  83 |            VIEW                                             |                                 |      1 |   2960 |   2960 |00:00:00.01 |      75 |       |       |          |
+|  84 |             HASH GROUP BY                                   |                                 |      1 |   2960 |   2960 |00:00:00.01 |      75 |  1187K|  1055K| 1513K (0)|
+|  85 |              TABLE ACCESS FULL                              | SCM_MST_SITE                    |      1 |   3039 |   3039 |00:00:00.01 |      75 |       |       |          |
+|* 86 |            HASH JOIN RIGHT OUTER                            |                                 |      1 |   2013K|    312K|00:00:01.20 |   49876 |  1106K|  1106K| 1430K (0)|
+|  87 |             INDEX FAST FULL SCAN                            | IDX04_SCM_MST_SITE              |      1 |   3039 |   3039 |00:00:00.01 |      31 |       |       |          |
+|* 88 |             HASH JOIN RIGHT OUTER                           |                                 |      1 |    197K|    312K|00:00:01.09 |   49845 |  1098K|  1098K| 1425K (0)|
+|  89 |              INDEX FAST FULL SCAN                           | IDX_SCM_MST_SITE_N1             |      1 |   3039 |   3039 |00:00:00.01 |      22 |       |       |          |
+|* 90 |              HASH JOIN RIGHT OUTER                          |                                 |      1 |  19314 |    312K|00:00:00.99 |   49823 |  1562K|  1562K| 2195K (0)|
+|  91 |               TABLE ACCESS FULL                             | SCP_MST_DISTRIBUTION_ROUTE      |      1 |   7988 |   7988 |00:00:00.01 |     175 |       |       |          |
+|* 92 |               HASH JOIN RIGHT OUTER                         |                                 |      1 |  19314 |    312K|00:00:00.90 |   49648 |  2146K|  2146K| 2211K (0)|
+|  93 |                VIEW                                         |                                 |      1 |  16523 |  16232 |00:00:00.32 |   15113 |       |       |          |
+|  94 |                 COUNT                                       |                                 |      1 |        |  16232 |00:00:00.32 |   15113 |       |       |          |
+|  95 |                  VIEW                                       | SCP_MST_BOD_N_V                 |      1 |  16523 |  16232 |00:00:00.32 |   15113 |       |       |          |
+|  96 |                   HASH UNIQUE                               |                                 |      1 |  16523 |  16232 |00:00:00.32 |   15113 |  5849K|  1993K| 5231K (0)|
+|  97 |                    UNION-ALL                                |                                 |      1 |  16523 |  16232 |00:00:00.29 |   15113 |       |       |          |
+|* 98 |                     HASH JOIN                               |                                 |      1 |  15657 |  15906 |00:00:00.04 |   14212 |  1735K|  1207K| 1896K (0)|
+|  99 |                      TABLE ACCESS FULL                      | SCP_MST_DISTRIBUTION_ROUTE      |      1 |   7988 |   7988 |00:00:00.01 |     175 |       |       |          |
+| 100 |                      NESTED LOOPS                           |                                 |      1 |  15657 |  15909 |00:00:00.03 |   14037 |       |       |          |
+|*101 |                       HASH JOIN RIGHT OUTER                 |                                 |      1 |  15657 |  15962 |00:00:00.02 |     430 |  1922K|  1922K| 1520K (0)|
+|*102 |                        TABLE ACCESS BY INDEX ROWID BATCHED  | SCM_ADM_LOOKUP_MASTER_DETAIL    |      1 |     14 |     16 |00:00:00.01 |       4 |       |       |          |
+|*103 |                         INDEX RANGE SCAN                    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |      1 |     19 |     16 |00:00:00.01 |       3 |       |       |          |
+|*104 |                        HASH JOIN RIGHT OUTER                |                                 |      1 |  15657 |  15962 |00:00:00.01 |     426 |  1922K|  1922K| 1512K (0)|
+|*105 |                         TABLE ACCESS BY INDEX ROWID BATCHED | SCM_ADM_LOOKUP_MASTER_DETAIL    |      1 |     14 |     16 |00:00:00.01 |       4 |       |       |          |
+|*106 |                          INDEX RANGE SCAN                   | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |      1 |     19 |     16 |00:00:00.01 |       3 |       |       |          |
+|*107 |                         HASH JOIN                           |                                 |      1 |  15657 |  15962 |00:00:00.01 |     422 |  1236K|  1236K| 1697K (0)|
+|*108 |                          TABLE ACCESS FULL                  | SCM_MST_SITE                    |      1 |   2919 |   2919 |00:00:00.01 |      75 |       |       |          |
+| 109 |                          TABLE ACCESS FULL                  | SCP_MST_BOD                     |      1 |  16303 |  16303 |00:00:00.01 |     347 |       |       |          |
+|*110 |                       INDEX UNIQUE SCAN                     | PK_SCM_MST_SITE                 |  15962 |      1 |  15909 |00:00:00.01 |   13607 |       |       |          |
+|*111 |                     HASH JOIN                               |                                 |      1 |    866 |    326 |00:00:00.01 |     901 |   886K|   886K| 1386K (0)|
+| 112 |                      NESTED LOOPS                           |                                 |      1 |    866 |    326 |00:00:00.01 |     726 |       |       |          |
+|*113 |                       HASH JOIN RIGHT OUTER                 |                                 |      1 |    866 |    329 |00:00:00.01 |     395 |  1922K|  1922K| 1520K (0)|
+|*114 |                        TABLE ACCESS BY INDEX ROWID BATCHED  | SCM_ADM_LOOKUP_MASTER_DETAIL    |      1 |     14 |     16 |00:00:00.01 |       4 |       |       |          |
+|*115 |                         INDEX RANGE SCAN                    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |      1 |     19 |     16 |00:00:00.01 |       3 |       |       |          |
+|*116 |                        HASH JOIN RIGHT OUTER                |                                 |      1 |    866 |    329 |00:00:00.01 |     391 |  1922K|  1922K| 1513K (0)|
+|*117 |                         TABLE ACCESS BY INDEX ROWID BATCHED | SCM_ADM_LOOKUP_MASTER_DETAIL    |      1 |     14 |     16 |00:00:00.01 |       4 |       |       |          |
+|*118 |                          INDEX RANGE SCAN                   | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |      1 |     19 |     16 |00:00:00.01 |       3 |       |       |          |
+|*119 |                         HASH JOIN                           |                                 |      1 |    866 |    329 |00:00:00.01 |     387 |  1423K|  1423K| 1700K (0)|
+| 120 |                          TABLE ACCESS BY INDEX ROWID BATCHED| SCM_MST_SITE                    |      1 |    114 |    114 |00:00:00.01 |      40 |       |       |          |
+|*121 |                           INDEX RANGE SCAN                  | IDX02_SCM_MST_SITE              |      1 |    114 |    114 |00:00:00.01 |       2 |       |       |          |
+| 122 |                          TABLE ACCESS FULL                  | SCP_MST_BOD                     |      1 |  16303 |  16303 |00:00:00.01 |     347 |       |       |          |
+|*123 |                       INDEX UNIQUE SCAN                     | PK_SCM_MST_SITE                 |    329 |      1 |    326 |00:00:00.01 |     331 |       |       |          |
+| 124 |                      TABLE ACCESS FULL                      | SCP_MST_DISTRIBUTION_ROUTE      |      1 |   7988 |   7988 |00:00:00.01 |     175 |       |       |          |
+|*125 |                HASH JOIN                                    |                                 |      1 |  19314 |    312K|00:00:00.48 |   34535 |  2357K|  1398K| 2391K (0)|
+| 126 |                 TABLE ACCESS FULL                           | SCP_MST_BOD                     |      1 |  16303 |  16303 |00:00:00.01 |     347 |       |       |          |
+|*127 |                 FILTER                                      |                                 |      1 |        |    324K|00:00:00.37 |   34188 |       |       |          |
+|*128 |                  HASH JOIN OUTER                            |                                 |      1 |  19314 |    324K|00:00:00.33 |   34188 |    49M|  4644K|   59M (0)|
+|*129 |                   TABLE ACCESS FULL                         | SCP_MST_BOD_ITEM                |      1 |  19314 |    324K|00:00:00.03 |    4371 |       |       |          |
+| 130 |                   VIEW                                      |                                 |      1 |  89826 |  61536 |00:00:00.11 |   29817 |       |       |          |
+| 131 |                    HASH GROUP BY                            |                                 |      1 |  89826 |  61536 |00:00:00.11 |   29817 |    17M|  4039K|   18M (0)|
+|*132 |                     TABLE ACCESS FULL                       | SCM_ITEM_M                      |      1 |    107K|    107K|00:00:00.08 |   29817 |       |       |          |
+|*133 |         COLLECTION ITERATOR PICKLER FETCH                   |                                 |  17064 |    796 |      0 |00:00:00.01 |       0 |       |       |          |
+|*134 |         COLLECTION ITERATOR PICKLER FETCH                   |                                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+|*135 |         COLLECTION ITERATOR PICKLER FETCH                   |                                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+|*136 |         COLLECTION ITERATOR PICKLER FETCH                   |                                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+|*137 |         COLLECTION ITERATOR PICKLER FETCH                   |                                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+|*138 |         COLLECTION ITERATOR PICKLER FETCH                   |                                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - filter("XE"."ITEM_ID" IS NULL)
+   3 - access("IA"."ITEM_ID"="XE"."ITEM_ID")
+   7 - filter((MAX(DECODE("SA"."ACTIVE_FLAG",'N',1,0))=1 AND MAX(DECODE("SA"."ACTIVE_FLAG",'Y',1,0))=0))
+   9 - filter((:B1='A' OR  IS NOT NULL))
+  10 - filter(:B1<>'N')
+  11 - access("SA"."ITEM_CLASS"="SB"."CLASS_ID")
+  12 - filter("SB"."USE_FLAG"='Y')
+  13 - filter("SA"."ITEM_CLASS" IS NOT NULL)
+  14 - filter(VALUE(KOKBF$)=:B1)
+  18 - filter(( IS NOT NULL AND (:B9='N' OR  IS NOT NULL) AND (:B8='N' OR  IS NOT NULL) AND (:B7='N' OR  IS NOT NULL) AND (:B6='N' OR  IS NOT NULL) AND (:B5='N' OR  IS NOT 
+              NULL)))
+  19 - access(UPPER("B"."TO_SITE")=UPPER("SCM_SITE_ID"))
+  21 - access("XB"."SITE_KEY"=UPPER("B"."FROM_SITE"))
+  25 - access("A"."DIVISION_ID"="E"."DIVISION_ID" AND UPPER("B"."FROM_SITE")=UPPER("E"."SCM_SITE_ID"))
+  27 - access("A"."DIVISION_ID"="D"."DIVISION_ID" AND UPPER("B"."TO_SITE")=UPPER("D"."SCM_SITE_ID"))
+  29 - access("B"."ROUTE_ID"="C"."ROUTE_ID")
+  31 - access("B"."DIVISION_ID"="XD"."DIVISION_ID" AND "B"."BOD_ID"="XD"."BOD_ID")
+  37 - access("B"."ROUTE_ID"="R"."ROUTE_ID")
+  40 - access("B"."ATTRIBUTE1"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  41 - filter("VALID_YN"='Y')
+  42 - access("LOOKUP_TYPE"='INCOTERMS')
+  43 - access("B"."INCOTERMS"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  44 - filter("VALID_YN"='Y')
+  45 - access("LOOKUP_TYPE"='INCOTERMS')
+  46 - access("B"."DIVISION_ID"="S"."DIVISION_ID" AND "B"."TO_SITE"="S"."SCM_SITE_ID")
+  47 - filter("S"."SITE_TYPE"='SALES')
+  49 - access("B"."DIVISION_ID"="FS"."DIVISION_ID" AND "B"."FROM_SITE"="FS"."SCM_SITE_ID")
+  50 - access("B"."ROUTE_ID"="R"."ROUTE_ID")
+  52 - access("B"."ATTRIBUTE1"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  53 - filter("VALID_YN"='Y')
+  54 - access("LOOKUP_TYPE"='INCOTERMS')
+  55 - access("B"."INCOTERMS"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+  56 - filter("VALID_YN"='Y')
+  57 - access("LOOKUP_TYPE"='INCOTERMS')
+  58 - access("B"."TO_SITE"="S"."SCM_SITE_ID")
+  60 - access("S"."SITE_TYPE"='PLANT')
+  62 - access("B"."DIVISION_ID"="FS"."DIVISION_ID" AND "B"."FROM_SITE"="FS"."SCM_SITE_ID")
+  64 - access("A"."BOD_ID"="B"."BOD_ID")
+  66 - filter((:B15 IS NULL OR UPPER(NVL("XC"."NICK_NAME",'-')) LIKE '%'||:B15||'%'))
+  67 - access("A"."ITEM_ID"="XC"."ITEM_ID")
+  68 - filter((:B3 IS NULL OR UPPER("A"."VALID_YN")=:B3))
+  71 - filter("NICK_NAME" IS NOT NULL)
+  72 - filter((UPPER(:B1) LIKE '%'||VALUE(KOKBF$)||'%' OR UPPER(:B2) LIKE '%'||VALUE(KOKBF$)||'%'))
+  73 - filter(VALUE(KOKBF$)=:B1)
+  74 - filter(VALUE(KOKBF$)=UPPER(:B1))
+  75 - filter(VALUE(KOKBF$)=UPPER(:B1))
+  76 - filter(VALUE(KOKBF$)=UPPER(:B1))
+  77 - filter(VALUE(KOKBF$)=UPPER(:B1))
+  78 - filter((LNNVL( IS NOT NULL) AND (:B9='N' OR  IS NOT NULL) AND (:B8='N' OR  IS NOT NULL) AND (:B7='N' OR  IS NOT NULL) AND (:B6='N' OR  IS NOT NULL) AND (:B5='N' OR  
+              IS NOT NULL)))
+  79 - filter(:B4='N')
+  80 - access(UPPER("B"."TO_SITE")=UPPER("SCM_SITE_ID"))
+  82 - access("XB"."SITE_KEY"=UPPER("B"."FROM_SITE"))
+  86 - access("A"."DIVISION_ID"="D"."DIVISION_ID" AND UPPER("B"."TO_SITE")=UPPER("D"."SCM_SITE_ID"))
+  88 - access("A"."DIVISION_ID"="E"."DIVISION_ID" AND UPPER("B"."FROM_SITE")=UPPER("E"."SCM_SITE_ID"))
+  90 - access("B"."ROUTE_ID"="C"."ROUTE_ID")
+  92 - access("B"."DIVISION_ID"="XD"."DIVISION_ID" AND "B"."BOD_ID"="XD"."BOD_ID")
+  98 - access("B"."ROUTE_ID"="R"."ROUTE_ID")
+ 101 - access("B"."ATTRIBUTE1"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+ 102 - filter("VALID_YN"='Y')
+ 103 - access("LOOKUP_TYPE"='INCOTERMS')
+ 104 - access("B"."INCOTERMS"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+ 105 - filter("VALID_YN"='Y')
+ 106 - access("LOOKUP_TYPE"='INCOTERMS')
+ 107 - access("B"."DIVISION_ID"="S"."DIVISION_ID" AND "B"."TO_SITE"="S"."SCM_SITE_ID")
+ 108 - filter("S"."SITE_TYPE"='SALES')
+ 110 - access("B"."DIVISION_ID"="FS"."DIVISION_ID" AND "B"."FROM_SITE"="FS"."SCM_SITE_ID")
+ 111 - access("B"."ROUTE_ID"="R"."ROUTE_ID")
+ 113 - access("B"."ATTRIBUTE1"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+ 114 - filter("VALID_YN"='Y')
+ 115 - access("LOOKUP_TYPE"='INCOTERMS')
+ 116 - access("B"."INCOTERMS"="SCM_ADM_LOOKUP_MASTER_DETAIL"."SEGMENT1")
+ 117 - filter("VALID_YN"='Y')
+ 118 - access("LOOKUP_TYPE"='INCOTERMS')
+ 119 - access("B"."TO_SITE"="S"."SCM_SITE_ID")
+ 121 - access("S"."SITE_TYPE"='PLANT')
+ 123 - access("B"."DIVISION_ID"="FS"."DIVISION_ID" AND "B"."FROM_SITE"="FS"."SCM_SITE_ID")
+ 125 - access("A"."BOD_ID"="B"."BOD_ID")
+ 127 - filter((:B15 IS NULL OR UPPER(NVL("XC"."NICK_NAME",'-')) LIKE '%'||:B15||'%'))
+ 128 - access("A"."ITEM_ID"="XC"."ITEM_ID")
+ 129 - filter((:B3 IS NULL OR UPPER("A"."VALID_YN")=:B3))
+ 132 - filter("NICK_NAME" IS NOT NULL)
+ 133 - filter((UPPER(:B1) LIKE '%'||VALUE(KOKBF$)||'%' OR UPPER(:B2) LIKE '%'||VALUE(KOKBF$)||'%'))
+ 134 - filter(VALUE(KOKBF$)=:B1)
+ 135 - filter(VALUE(KOKBF$)=UPPER(:B1))
+ 136 - filter(VALUE(KOKBF$)=UPPER(:B1))
+ 137 - filter(VALUE(KOKBF$)=UPPER(:B1))
+ 138 - filter(VALUE(KOKBF$)=UPPER(:B1))
+ 
+Note
+-----
+   - statistics feedback used for this statement
+ 

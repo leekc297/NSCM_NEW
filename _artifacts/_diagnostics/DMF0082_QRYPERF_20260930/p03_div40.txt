@@ -1,0 +1,85 @@
+warm : SP 7.15s fetch 0.83s rows=[2098, 6, 1, 5, 181, 1]
+trace: SP 9.74s fetch 0.88s rows=[2098, 6, 1, 5, 181, 1]
+
+div=40 group=ADMIN  SP 9.74s  | dep=1 SQL 합 7.82s  | 갭: DBMS_STATS 0.00s  PL/SQL·기타 1.91s
+
+    라인       초     비중  parse    exec  fetch    실행   하드         LIO         행  sqlid          문장
+     -   0.606   6.2%   0.00    0.61   0.00    13    0     192,746        13  gqdxrrudc0877  BEGIN dbms_stats_internal.ins_session_hg_stats(:cstats); END;
+     -   0.590   6.1%   0.00    0.59   0.00     1    2      25,317    49,725  5qjb73aqyhg7h  INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, 
+  1390   0.538   5.5%   0.00    0.54   0.00     1    2      58,502    99,434  631pzfvq8r0ut  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+     -   0.502   5.1%   0.02    0.00   0.48     2    2      19,650         2  8qcc0v8gna6ks  /* SQL Analyze(0) */ select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms
+  3372   0.319   3.3%   0.00    0.32   0.00     1    1      82,474    63,621  20xrvz802rfsy  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN ( SELECT B
+  3462   0.303   3.1%   0.01    0.29   0.00     1    1       6,571         0  1bjv8z58xd79d  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE WHERE ROWID IN (SELECT RID FROM
+  1381   0.243   2.5%   0.00    0.24   0.00     1    1      76,416    49,725  ggkupust9vjpj  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+     -   0.227   2.3%   0.00    0.23   0.00     1    1      65,913    49,725  8zj5nqpk4g3d6  DELETE FROM SCM_MGR.GT_DMF0082_MF_SP
+   849   0.220   2.3%   0.00    0.22   0.00     1    2      13,240    15,528  9xvpghd3tj06u  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJECT_CODE, S
+  1243   0.215   2.2%   0.00    0.21   0.00     1    2      35,912     6,303  4svg4dhnqxh8f  INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, PROJECT_COD
+  2954   0.207   2.1%   0.00    0.21   0.00     1    2      24,714    11,354  f6r0861xjw0h1  MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+     -   0.202   2.1%   0.00    0.20   0.00    13    0      27,812        13  f96vq4fb0xt44  BEGIN dbms_stats_internal.del_session_col_stats(:cstats); END;
+  4246   0.166   1.7%   0.00    0.17   0.00     1    2       7,681     1,253  3x9ardnmfczp0  MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT NVL(DIVISION_ID, '~') AS DI
+  2954   0.162   1.7%   0.00    0.16   0.00     1    2      13,062         0  gkn9tran5v9tb  MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+   599   0.149   1.5%   0.00    0.15   0.00     1    2      33,474    21,102  0rp3b1v236wwz  INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, ITEM_ID, ITE
+  2954   0.140   1.4%   0.00    0.14   0.00     1    2      13,062         0  cac9cbukwmudc  MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+  1390   0.134   1.4%   0.00    0.13   0.00     1    2      11,672    11,414  3gxrkw0pavxxx  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+     -   0.131   1.3%   0.01    0.00   0.12     1    1       6,382         1  f24h8pfhdmc8d  /* SQL Analyze(0) */ select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms
+  1390   0.118   1.2%   0.00    0.12   0.00     1    2      13,935     2,451  day2h1hdkc8y1  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+  1045   0.098   1.0%   0.01    0.09   0.00     1    1       4,832    15,528  63ar9rz0axr5p  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_S
+     -   0.085   0.9%   0.00    0.00   0.08     1    1         327    13,483  60s45n5h8bjqt  select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) po
+   656   0.084   0.9%   0.00    0.08   0.00     1    1       2,122    13,483  9wgfrws532db6  INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_A_V ( DIVISION_ID, ITEM_ID, ITEM_
+     -   0.079   0.8%   0.00    0.01   0.07   399    0      24,893         0  dp0vgyb1hsfjb  SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SU.NAME, SO.NAME,
+  1207   0.069   0.7%   0.00    0.07   0.00     1    2      10,985     2,705  7mrzdbpupw3b9  INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PROJECT_CODE
+     -   0.067   0.7%   0.00    0.00   0.06     1    1         510     7,223  dcky2r2ajgbp3  select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) po
+     -   0.064   0.7%   0.00    0.00   0.06     1    1         327     7,222  dd9f33sf4arzt  select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) po
+     -   0.064   0.7%   0.00    0.00   0.06     1    1         277     7,222  8ru1tpx5pkbrj  select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) po
+   846   0.059   0.6%   0.00    0.06   0.00     1    1      19,042    15,528  9pbzwq00mxuh3  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL
+   846   0.059   0.6%   0.00    0.06   0.00     1    1      19,044    15,528  7jg4wbat2mb66  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM
+   596   0.059   0.6%   0.00    0.06   0.00     1    1      23,852    21,102  13fk7wrwb8w4p  DELETE FROM SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V
+     -   0.050   0.5%   0.01    0.00   0.04     1    1       1,410         1  1g3ab8bnxs99f  /* SQL Analyze(0) */ select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms
+     -   0.049   0.5%   0.01    0.00   0.04     1    1       1,410         1  gsacnm2fnc5np  /* SQL Analyze(0) */ select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms
+   596   0.044   0.5%   0.00    0.04   0.00     1    1      15,238    13,483  93cz12p89r4sg  DELETE FROM SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_V
+  1390   0.043   0.4%   0.00    0.04   0.00     1    2         854        47  88z04sh7864v4  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+   596   0.043   0.4%   0.00    0.04   0.00     1    1      15,015    13,483  9p1t8xvr1d9qx  DELETE FROM SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_A_V
+     -   0.042   0.4%   0.00    0.00   0.04     1    1       1,018         1  4jd8m9v0t6pg2  /* SQL Analyze(0) */ select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms
+  1203   0.041   0.4%   0.00    0.04   0.00     1    1      19,725     6,303  cqcrfmc3a97jk  DELETE FROM SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE
+     -   0.041   0.4%   0.00    0.00   0.04    11    0           0     1,134  3qkhfbf2kyvhk  SELECT POS+1 POS, VAL, NONNULLS, NDV, SPLIT, RSIZE, ROWCNT, TOPNCNT, TOPN, NULL 
+     -   0.040   0.4%   0.04    0.00   0.00     1    1           0         0  fk3tvpkzsq2vx  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INC
+   729   0.039   0.4%   0.00    0.04   0.00     1    2       2,208    13,483  8ngcf5avm1q3q  INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_V ( DIVISION_ID, ITEM_ID, ITEM_NA
+     -   0.033   0.3%   0.00    0.00   0.03     1    1         650         1  054zvrxaumr3d  /* SQL Analyze(0) */ select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms
+     -   0.030   0.3%   0.00    0.00   0.03   243    0           0       243  5rurx5xtjwcu2  SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ KSPPCV.KSPPSTVL F
+     -   0.029   0.3%   0.00    0.00   0.03     1    1          31     4,331  fb428pg45vavv  select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) po
+     -   0.029   0.3%   0.00    0.00   0.03     1    1         706     3,432  bnv822d2kq7zt  select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) po
+     -   0.028   0.3%   0.00    0.00   0.02     1    1         551         1  9y1xkuvudgs8c  /* SQL Analyze(0) */ select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms
+     -   0.028   0.3%   0.00    0.02   0.00     1    1       5,730     5,559  292hu39nafryr  insert /*+ append */ into sys.ora_temp_1_ds_590301 SELECT /*+ no_parallel(t) no_
+     -   0.028   0.3%   0.00    0.02   0.00     1    1       5,709     5,435  ddvpsfmw9an02  insert /*+ append */ into sys.ora_temp_1_ds_590300 SELECT /*+ no_parallel(t) no_
+     -   0.026   0.3%   0.00    0.02   0.01   798    0       4,750       798  7azxftvubufnj  SELECT COUNT(UNQ) UNQ, COUNT(PFX) PFX FROM (SELECT /*+ first_rows(1) leading(cc)
+  3527   0.025   0.3%   0.00    0.02   0.00     1    1       6,564         0  6jkjp6q7k1aum  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE F WHERE F.MEASURE_GROUP = 'CUST
+     -   0.024   0.2%   0.00    0.00   0.02     1    1         706     1,615  fsrtn9zujgnbq  select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) po
+     -   0.024   0.2%   0.00    0.00   0.02     1    1         706     1,615  a550w89dwxp97  select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) po
+     -   0.023   0.2%   0.00    0.02   0.00     1    1         301         0  cmmr6uuks77fu  drop table sys.ora_temp_1_ds_590302 purge
+     -   0.023   0.2%   0.00    0.00   0.02     1    1         510     2,483  cp4h0pvwdb313  select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) po
+     -   0.022   0.2%   0.00    0.01   0.01   399    0       8,778         0  50kcsz2gh1w84  SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SU.NAME, SO.NAME,
+     -   0.021   0.2%   0.00    0.00   0.02     1    1         327     2,483  0n26pd71vmn9h  select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) po
+     -   0.021   0.2%   0.00    0.00   0.02     1    1         277     2,483  1q5xsafh062w3  select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) po
+
+[범주 합계 dep=1]
+  PKG 문장             3.705s  문장   78  하드파싱   53  PARSE콜 0.045s
+  STATS(통계수집)        3.235s  문장  214  하드파싱  268  PARSE콜 0.279s
+  기타(매칭불가)           0.877s  문장   20  하드파싱    4  PARSE콜 0.043s
+  전체 하드파싱 이벤트 328 (재귀 포함)
+
+[기타(매칭불가) 상위]
+   0.590s 5qjb73aqyhg7h INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS , MEASUR
+   0.227s 8zj5nqpk4g3d6 DELETE FROM SCM_MGR.GT_DMF0082_MF_SP
+   0.040s fk3tvpkzsq2vx SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, VERSION_NO, PROJECT_CO
+
+[갭 > 50ms]
+
+[대기 이벤트 합]
+    0.224s  SQL*Net message from client
+    0.082s  direct path write temp
+    0.030s  undo segment extension
+    0.008s  Free private memory to OS
+    0.006s  db file sequential read
+    0.006s  direct path sync
+    0.005s  log file sync
+    0.003s  direct path read temp

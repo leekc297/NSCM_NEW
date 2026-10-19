@@ -1,0 +1,50 @@
+################ [Y1] 화면 설정 차이 — M = 메저 선택 · C = 표시 컬럼 (숫자 = 순번, 빈칸 = 미선택) ################
+TP | COLUMN_NAME   | k0101 | minyonglee1 | DIFF               
+---+---------------+-------+-------------+--------------------
+M  | MKT_FCST      | 1     |             | << minyonglee1 에 없음
+M  | RTF_SYS_RP    | 2     |             | << minyonglee1 에 없음
+M  | CUST_FCST     | 3     |             | << minyonglee1 에 없음
+M  | AS_In_Req     | 4     |             | << minyonglee1 에 없음
+M  | AS_In_Plan    | 5     |             | << minyonglee1 에 없음
+M  | AS_Inv        | 6     |             | << minyonglee1 에 없음
+M  | KRW           | 7     |             | << minyonglee1 에 없음
+M  | USD           | 8     |             | << minyonglee1 에 없음
+M  | LOC           | 9     | 1           |                    
+C  | DIVISION_ID   | 1     | 1           |                    
+C  | TEAM_ID       | 2     | 14          |                    
+C  | END_CUSTOMER  | 3     | 2           |                    
+C  | SCM_SITE_ID   | 4     | 3           |                    
+C  | PROJECT_CODE  | 5     | 11          |                    
+C  | ITEM_ID       | 6     | 4           |                    
+C  | NICK_NAME     | 7     | 5           |                    
+C  | INCOTERMS     | 8     | 6           |                    
+C  | FCST_TYPE     | 9     | 7           |                    
+C  | DOM_EXP       | 10    | 8           |                    
+C  | VERSION_NO    |       | 10          | << k0101 에 없음      
+C  | CURRENCY      | 11    | 9           |                    
+C  | AS_FROM_SITE  |       | 12          | << k0101 에 없음      
+C  | PLANT_SITE_ID | 12    | 13          |                    
+C  | MEASURE       | 13    | 15          |                    
+(24 rows)
+################ [Y2][Y3][Y4] 사용자별 최근 조회 인자 → SP 실행 → 화면이 받는 결과의 대상 Site-Item 행 ################
+[Y0] ZIOUI1 · 2026-10-12 17:00:34
+================ 사용자 k0101 ================
+!! 최근 24시간 화면 조회 로그 없음 → 기본 인자 (division 40 · 당월 1일~+6개월 · Current · 그룹 ADMIN)
+[Y2] 조회 시각 (없음) · div[40] 20261001~20270331 team[ALL] cust[ALL] biz[ALL] site[ALL] item[]
+     ver[Current] qty[N] user[k0101] group[ADMIN] plant[ALL] project[ALL] owner[ALL] sender[ALL]
+[Y3] 결과 컬럼 413개 · 고정 컬럼 순서: DIVISION_ID,TEAM_ID,END_CUSTOMER,SCM_SITE_ID,PROJECT_CODE,GROUP_ID,ITEM_ID,NICK_NAME,INCOTERMS,FCST_TYPE,DOM_EXP,CURRENCY,PLANT_SITE_ID,MEASURE,VERSION_NO,MEASURE_GROUP,BUCKET,EDIT_FLAG,SORT_KEY,NEW_FLAG,ATTR1,VMI_STD_DIO,AS_YN,NOTATION,CELL_PROD_SITE_ID,QTY
+   (대상 Site-Item 행 없음)
+     전체 결과 6906 행 · 메저별: KRW=2099 LOC=2099 MKT_FCST=312 RTF_SYS_RP=297 USD=2099
+================ 사용자 minyonglee1 ================
+[Y2] 조회 시각 2026-10-12 16:52:43 · div[40] 20261001~20270331 team[ALL] cust[ALL] biz[ALL] site[ALL] item[]
+     ver[Current] qty[N] user[minyonglee1] group[ADMIN] plant[ALL] project[ALL] owner[ALL] sender[ALL]
+[Y3] 결과 컬럼 414개 · 고정 컬럼 순서: DIVISION_ID,END_CUSTOMER,SCM_SITE_ID,GROUP_ID,ITEM_ID,NICK_NAME,INCOTERMS,FCST_TYPE,DOM_EXP,CURRENCY,VERSION_NO,PROJECT_CODE,AS_FROM_SITE,PLANT_SITE_ID,TEAM_ID,MEASURE,MEASURE_GROUP,BUCKET,EDIT_FLAG,SORT_KEY,NEW_FLAG,ATTR1,VMI_STD_DIO,AS_YN,NOTATION,CELL_PROD_SITE_ID,QTY
+   (대상 Site-Item 행 없음)
+     전체 결과 2099 행 · 메저별: LOC=2099
+================ [Y4] 판정 ================
+   k0101    : 대상 행 0 · LOC 행 0
+   minyonglee1 : 대상 행 0 · LOC 행 0
+   두 사용자 모두 SP 결과에 LOC 없음 → [Y2] 인자(기간·버전) 확인
+=============================================================================
+V04 완료 → V04_LOC_USER_COMPARE_OUT.txt 회신
+=============================================================================

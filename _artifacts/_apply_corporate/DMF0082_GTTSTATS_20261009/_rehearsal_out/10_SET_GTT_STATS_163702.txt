@@ -1,0 +1,74 @@
+﻿!!! ERROR: ORA-06550: line 7, column 85:
+PLS-00103: Encountered the symbol "end-of-file" when expecting one of the following:
+
+   := . ( % ;
+Help: https://docs.oracle.com/error-help/db/ora-06550/
+--- stmt head: /* 10_SET_GTT_STATS — [E20261009-DMF0082GTTSTATS] DMF0082 조회 GTT 6본 대표 통계 고정 (SHARED). 멱등 · SP/힌트/데이터 변경 없음 · 원복 = 99
+ * NO_INVALIDATE => FALSE : 이 GTT 를 참조하는 모든 커서(10-09 타임아웃 계획 포함)를 즉시 무효화 → 다음 호출부터
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: DBMS_STATS.SET_TABLE_STATS(ownname => 'SCM_MGR', tabname => p_tab, numrows => p_rows, numblks => p_blks, avgrlen => p_avgrlen, no_invalidate => FALSE)
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: END
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: PROCEDURE c(p_tab VARCHAR2, p_col VARCHAR2, p_ndv NUMBER) IS
+  BEGIN
+    DBMS_STATS.SET_COLUMN_STATS(ownname => 'SCM_MGR', tabname => p_tab, colname => p_col, distcnt => p_ndv, density => 1 / p_ndv, n
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: END
+!!! ERROR: ORA-06550: line 2, column 3:
+PLS-00201: identifier 'T' must be declared
+ORA-06550: line 2, column 3:
+PL/SQL: Statement ignored
+ORA-06550: line 3, column 3:
+PLS-00201: identifier 'C' must be declared
+ORA-06550: line 3, column 3:
+PL/SQL: Statement ignored
+ORA-06550: line 3, column 55:
+PLS-00201: identifier 'C' must be declared
+ORA-06550: line 3, column 55:
+PL/SQL: Statement ignored
+ORA-06550: line 3, column 109:
+PLS-00201: identifier 'C' must be declared
+ORA-06550: line 3, column 109:
+PL/SQL: Statement ignored
+ORA-06550: line 4, column 3:
+PLS-00201: identifier 'C' must be declared
+ORA-06550: line 4, column 3:
+PL/SQL: Statement ignored
+ORA-06550: line 4, column 55:
+PLS-00201: identifier 'C' must be declared
+ORA-06550: line 4, column 55:
+PL/SQL: Statement ignored
+ORA-06550: line 4, column 109:
+PLS-00201: identifier 'C' must be declared
+ORA-06550: line 4, column 109:
+PL/SQL: Statement ignored
+ORA-06550: line 5, column 3:
+PLS-00201: identifier 'T' must be declared
+ORA-06550: line 5, column 3:
+PL/SQL: Statement ignored
+ORA-06550: line 6, column 3:
+PLS-00201: identifier 'C' must be declared
+ORA-06550: line 6, column 3:
+PL/SQL: Statement ignored
+ORA-06550: line 6, column 55:
+PLS-00201: identifier 'C' must be declared
+ORA-06550: line 6, column 55:
+PL/SQL: Statement ignored
+Help: https://docs.oracle.com/error-help/db/ora-06550/
+--- stmt head: BEGIN
+  t('GT_DMF0082_TEMP_SITE_ITEM', 39070, 2930, 600);
+  c('GT_DMF0082_TEMP_SITE_ITEM', 'DIVISION_ID', 1);   c('GT_DMF0082_TEMP_SITE_ITEM', 'PROJECT_CODE', 1456); c('GT_DMF0082_TEMP_SITE_ITEM', 'SC
+CHK     | TABLE_NAME                        | NUM_ROWS | BLOCKS | ANALYZED            | GTT_PREF
+--------+-----------------------------------+----------+--------+---------------------+---------
+APPLIED | GT_DMF0082_MF_SP                  | 72139    | 5410   | 2026-10-09 16:28:50 | SHARED  
+APPLIED | GT_DMF0082_TEMP_FCST_N_PRICE      | 72139    | 5410   | 2026-10-09 16:28:50 | SHARED  
+APPLIED | GT_DMF0082_TEMP_SELECT_MEASURE    | 8        | 8      | 2026-10-09 16:28:50 | SHARED  
+APPLIED | GT_DMF0082_TEMP_SITE_ITEM         | 39070    | 2930   | 2026-10-09 16:28:50 | SHARED  
+APPLIED | GT_DMF0082_T_LAST_DATA_SETUP_FCST | 2834     | 35     | 2026-10-09 16:28:50 | SHARED  
+APPLIED | GT_DMF0082_T_WS_FCST              | 14       | 8      | 2026-10-09 16:28:50 | SHARED  
+(6 rows)

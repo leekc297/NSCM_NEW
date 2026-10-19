@@ -1,0 +1,22 @@
+CHK | N | LINES | JUDGE
+V1 마커 | 4 | 1275,1313,1547,1942 | PASS
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:31 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-14 17:53:02 | 0 | 0
+(2 rows)
+
+CHK | KIND | N | EXPECT | LINES | JUDGE
+V3 대상줄 | 40 LD_FCST 적재 줄 | 1 | 1 | 1258 | PASS
+V3 대상줄 | 40 LD_PRICE 적재 줄 | 0 | 0 |  | PASS
+V3 대상줄 | 40 수요 원장 FROM | 0 | 0 |  | PASS
+V3 대상줄 | 40 판가 원장 FROM | 1 | 1 | 2013 | PASS
+V3 대상줄 | ONEREAD 끝(81·40판가) | 2 | 2 | 1928,2032 | PASS
+(5 rows)
+
+CHK | SQL_ID | EX | SEC_PER_EX | IO_PER_EX | BG_PER_EX | ROWS_PER_EX | LAST_ACT | KIND
+V4 실행 | 9c5f9hbzbuj8a | 9 | 0.16 | 0 | 10453 | 6488 | 10-14 17:43 | 신규 40 수요 INSERT ALL
+V4 실행 | cvcz8rcw9kvm7 | 1 | 0.17 | 0 | 28382 | 0 | 10-14 17:43 | 신규 40 판가 ONEREAD
+V4 실행 | cvcz8rcw9kvm7 | 8 | 0.67 | 0 | 53367 | 72876 | 10-14 17:43 | 신규 40 판가 ONEREAD
+(3 rows)

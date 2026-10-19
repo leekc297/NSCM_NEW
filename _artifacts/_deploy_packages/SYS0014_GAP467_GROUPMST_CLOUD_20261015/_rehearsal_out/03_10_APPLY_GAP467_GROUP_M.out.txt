@@ -1,0 +1,17 @@
+
+
+
+APPLIED [B] — 사용자 매핑 0건 추가 (이미 있던 키는 건너뜀)
+
+CHK | USER_GR_ID | USER_GR_NM | USE_YN | CREATED_BY
+POST 그룹 | - | - | / | admin
+POST 그룹 | CAPA Planner | CAPA Planner | Y | admin
+POST 그룹 | SSP ADMIN | SSP ADMIN | N | admin
+POST 그룹 | System Monitor | System Monitor | Y | admin
+(4 rows)
+
+CHK | USER_GR_ID | N
+POST 매핑 | - | 34
+POST 매핑 | CAPA Planner | 220
+POST 매핑 | System Monitor | 1
+(3 rows)

@@ -1,0 +1,56 @@
+CHK | SQL_ID                     | WHO   | UPD              | BYTES | APPLIED | ANCHOR1 | ANCHOR2 | JUDGE            
+----+----------------------------+-------+------------------+-------+---------+---------+---------+------------------
+P1  | FcstTypeByUserGroupDMF0082 | admin | 2026-10-12 23:35 | 2557  | Y       | 0       | 1       | 적용됨 — 10 재실행은 무동작
+P1  | FcstTypeEditDMF0082        | admin | 2026-10-12 23:35 | 2165  | Y       | 0       | 1       | 적용됨 — 10 재실행은 무동작
+(2 rows)
+CHK | USER_ID      | GROUPS                                                                                                        
+----+--------------+---------------------------------------------------------------------------------------------------------------
+P2  | akowalewska  | DM Planner | DM Planner (W/S) | FP Viewer | GUEST | SSP Planner | SSP Viewer                                  
+P2  | asan.kim     | DM Planner | DM Planner (W/S) | GUEST                                                                         
+P2  | changha_woo  | DM Planner | DM Planner (W/S) | DM Viewer | FP Viewer | GUEST | SCM Viewer                                    
+P2  | chano0612    | ADMIN | DM ADMIN | DM Planner | DM Planner (W/S)                                                              
+P2  | choe.sg      | DM Planner | DM Planner (W/S) | FP Viewer | GUEST | SCM Viewer | SCP Planner | SPMS Planner                   
+P2  | cykang71     | DM Planner | DM Planner (W/S) | FP Viewer | GUEST | SCM Viewer | SCP Planner | SPMS Planner | SSP Viewer      
+P2  | daehyun.kim  | DM Planner | DM Planner (W/S) | DM Viewer | FP Viewer | GUEST | SCM Viewer | SSP Planner | SSP Viewer         
+P2  | dlgpqls      | DM Planner | DM Planner (W/S) | DM Viewer | FP Viewer | GUEST | SCM Viewer | SSP Viewer                       
+P2  | double.jeong | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | SSP Planner | SSP Viewer                                  
+P2  | grace.jo     | DM Planner | DM Planner (W/S) | GUEST                                                                         
+P2  | happymjkim   | DM Planner | DM Planner (W/S) | DM Viewer | FP Viewer | GUEST | SCM Viewer | SCP Planner | SPMS Planner       
+P2  | hhchung      | DM Planner | DM Planner (W/S) | GUEST                                                                         
+P2  | hoon.kang    | DM Planner | DM Planner (W/S) | FP Viewer | GUEST | SCM Viewer | SSP Viewer                                   
+P2  | hpka22       | DM Planner | DM Planner (W/S) | FP Viewer | GUEST | SCM Viewer                                                
+P2  | hwangdongjin | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | SCM Viewer | SSP Viewer                                   
+P2  | hyungsookim  | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | SCM Viewer | SSP Planner | SSP Viewer                     
+P2  | jaehun_cho   | ADMIN | DM ADMIN | DM Planner | DM Planner (W/S) | SCM PI Admin | SCP Planner                                 
+P2  | jaehyeok     | DM Planner | DM Planner (W/S) | FP Planner | FP Viewer | GUEST | SCM Viewer                                   
+P2  | jminn        | DM Planner | DM Planner (W/S) | FP Viewer | GUEST | SCM Viewer                                                
+P2  | jssbae       | ADMIN | DM ADMIN | DM Planner | DM Planner (W/S) | DM Viewer | SCP Planner                                    
+P2  | k0101        | ADMIN | DM ADMIN | DM Planner | DM Planner (W/S) | FP Viewer | GUEST | JV Planner | SCM PI Admin | SCP Planner
+P2  | kcjung       | DM Planner | DM Planner (W/S) | DM Viewer | FP Viewer | GUEST | SCM Viewer | SCP Planner | SPMS Planner       
+P2  | kdh31001     | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | SCM Viewer                                                
+P2  | khryu        | DM Planner | DM Planner (W/S) | DM Viewer | FP Viewer | GUEST                                                 
+P2  | kkhjus52     | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | SCM Viewer | SSP Viewer                                   
+P2  | kwangpyo.j   | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | SCM Viewer | SSP Planner | SSP Viewer                     
+P2  | leejihoo     | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | SCM Viewer | SSP Planner | SSP Viewer                     
+P2  | lnk5595      | DM ADMIN | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | SCM Viewer | SSP Planner | SSP Viewer          
+P2  | lwg0721      | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | SCM Viewer                                                
+P2  | mburdka      | DM Planner | DM Planner (W/S) | DM Viewer | FP Viewer | GUEST | SCM Viewer | SSP Planner | SSP Viewer         
+P2  | minyonglee1  | ADMIN | DM ADMIN | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | JV Planner | SCM PI Admin | SCP Planner
+P2  | naomikim     | DM Planner | DM Planner (W/S) | DM Viewer | FP Viewer | GUEST                                                 
+P2  | park.choyi   | ADMIN | DM ADMIN | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | SCM Viewer | SCP Planner               
+P2  | park6151     | DM Planner | DM Planner (W/S) | DM Viewer | FP Viewer | GUEST                                                 
+P2  | regina28     | DM Planner | DM Planner (W/S) | GUEST | SCM Viewer                                                            
+P2  | royshim      | DM Planner | DM Planner (W/S) | GUEST | SCM Viewer                                                            
+P2  | ryolee       | DM ADMIN | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | SCM Viewer | SSP Viewer                        
+P2  | sean.an      | DM Planner | DM Planner (W/S) | FP Viewer | GUEST                                                             
+P2  | seungwook    | DM Planner | DM Planner (W/S) | FP Viewer | GUEST | SCM Viewer                                                
+P2  | solar        | DM Planner | DM Planner (W/S) | FP Viewer | GUEST                                                             
+P2  | sooykwon     | ADMIN | DM ADMIN | DM Planner | DM Planner (W/S) | GUEST | SCP Planner                                        
+P2  | wyhooon97    | DM Planner | DM Planner (W/S) | DM Viewer | GUEST | SCM Viewer | SSP Viewer                                   
+P2  | ymshin       | DM Planner | DM Planner (W/S) | FP Viewer | GUEST                                                             
+P2  | ys_cho       | DM Planner | DM Planner (W/S) | DM Viewer | FP Viewer | GUEST | SCM Viewer                                    
+(44 rows)
+CHK | WS_ONLY_USERS
+----+--------------
+P3  | 14           
+(1 rows)

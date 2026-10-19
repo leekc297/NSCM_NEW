@@ -1,0 +1,529 @@
+﻿################ [L0] 접속 DB · 시각 ################
+DB_NAME | CON_NAME | INST | HOST      | NOW                
+--------+----------+------+-----------+--------------------
+ZIOUI1  | ZIOUI1   | ZIO  | localhost | 2026-10-14 10:53:40
+(1 rows)
+################ [L1] ⭐ 패키지 상태 — INVALID 이거나 LAST_DDL 이 방금이면 교체 직후 ################
+OBJECT_TYPE  | STATUS | LAST_DDL            | LINES | CHARS 
+-------------+--------+---------------------+-------+-------
+PACKAGE      | VALID  | 2026-10-09 13:38:30 | 44    | 1731  
+PACKAGE BODY | VALID  | 2026-10-14 10:15:49 | 1992  | 103724
+(2 rows)
+--  사내 적용본(01_PKG_DMF0005_BODY.sql 전체본) = BODY 1,992줄 · 103,724자. 줄 수 · 글자 수가 이와 같으면 사내 전체본이 그대로 올라간 것
+################ [L1b] 컴파일 오류 (0행이 정상) ################
+TYPE | LINE | POS | ERR
+-----+------+-----+----
+(0 rows)
+################ [L1c] ⭐ BODY 판본 마커 — CNT = 이 DB, CORP = 사내 전체본 ################
+--  전부 CORP 와 같으면 사내 전체본이 올라간 것 = 클라우드에 없던 10-08 · 10-09 변경(대소문자 무시 연결 · Owner 한글 이름 · 40 국가명)까지 함께 들어왔다
+MARKER                         | CNT | CORP
+-------------------------------+-----+-----
+E20261014-DMF0005PARTIALGET    | 2   | 2   
+E20261013-DMF0005MCDUP         | 4   | 4   
+2026.10.09 POJ                 | 60  | 60  
+2026.10.08 POJ                 | 68  | 68  
+UNISTR('\3000')                | 16  | 16  
+OWNER_NAME_KO                  | 3   | 3   
+2026.09.30 AJS                 | 8   | 8   
+PERF-DMF0005 20260722          | 12  | 12  
+optimizer_dynamic_sampling = 2 | 3   | 3   
+(9 rows)
+################ [L1d] 패키지에 의존하는 · 패키지가 의존하는 객체 중 INVALID (0행이 정상) ################
+OBJECT_TYPE | OBJECT_NAME | STATUS | LAST_DDL
+------------+-------------+--------+---------
+(0 rows)
+################ [L2] ⭐⭐ 지금 실행 중인 세션 전부 (내 세션 제외) — 어느 문장에서 몇 초째, 무엇을 기다리나 ################
+--  PROG = 그 문장이 속한 패키지 · 함수. SEC = 그 문장 실행 시작 뒤 초. EVT 가 library cache … 이면 패키지 교체에 물린 것([L3])
+INST | SID | SER   | USR     | MACHINE     | MODULE           | STATUS | SEC  | CALL_SEC | EVT    | BLK_SID | SQL_ID        | CH | PROG        | LINE | ENTRY_OBJ | TXT                                                                                       
+-----+-----+-------+---------+-------------+------------------+--------+------+----------+--------+---------+---------------+----+-------------+------+-----------+-------------------------------------------------------------------------------------------
+1    | 387 | 57582 | SCM_MGR | P2605LN0024 | WarLauncher      | ACTIVE | 3964 | 3965     | ON CPU |         | 3997kc5g92x89 | 0  |             | 0    |           | SELECT DISTINCT A.OPERATION_ID AS CODE , (A.OPERATION_ID || ' ' || B.OPERATION_NAME) NAME,
+1    | 278 | 34066 | SCM_MGR | P2605LN0024 | WarLauncher      | ACTIVE | 3904 | 3904     | ON CPU |         | 3997kc5g92x89 | 0  |             | 0    |           | SELECT DISTINCT A.OPERATION_ID AS CODE , (A.OPERATION_ID || ' ' || B.OPERATION_NAME) NAME,
+1    | 507 | 21587 | SCM_MGR | P2605LN0024 | WarLauncher      | ACTIVE | 3764 | 3764     | ON CPU |         | 3997kc5g92x89 | 0  |             | 0    |           | SELECT DISTINCT A.OPERATION_ID AS CODE , (A.OPERATION_ID || ' ' || B.OPERATION_NAME) NAME,
+1    | 392 | 15802 | SCM_MGR | P2605LN0024 | JDBC Thin Client | ACTIVE | 25   | 24       | ON CPU |         | 75wj0fgd23f3m | 2  | PKG_SCP0049 | 4805 |           | SELECT CASE WHEN ROUND(CAST(TOT_CONFIRM AS BINARY_DOUBLE) / TOT_CNT * 100, 2) IS NULL THEN
+(4 rows)
+################ [L3] ⭐⭐ 대기 사슬 — 잠금 · 라이브러리 캐시 대기 (0행 = 막힌 세션 없음) ################
+--  패키지를 교체(CREATE OR REPLACE)하는 세션이 실행 중인 세션에 물려 끝나지 않으면, 그 뒤 모든 조회가 library cache lock / pin 으로 줄을 선다
+INST | SID | SER | USR | MACHINE | MODULE | STATUS | EVT | WAIT_SEC | BLK_INST | BLK_SID | FINAL_BLK_SID | JUDGE | SQL_ID
+-----+-----+-----+-----+---------+--------+--------+-----+----------+----------+---------+---------------+-------+-------
+(0 rows)
+################ [L4] ⭐ 지금 도는 문장의 실행계획 — PKG_DMF0005 · Owner 이름 함수 문장만 자동 (없으면 0행) ################
+PLAN_TABLE_OUTPUT
+-----------------
+(0 rows)
+################ [L4b] ⭐⭐ 조회 문장의 실행계획 — 지금 돌고 있지 않아도 출력 (가장 최근에 실행된 자식 커서 · 1회당 시간이 가장 긴 자식 커서) ################
+--  방금 멈춘 실행(C03 · 화면 조회)의 계획이 여기 나온다. Peeked Binds = 이 계획이 만들어질 때의 조회조건
+PLAN_TABLE_OUTPUT                                                                                             
+--------------------------------------------------------------------------------------------------------------
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  SQL_ID  8pn2cpba1y5v8, child number 24 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  -------------------------------------- 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  WITH ITEM_AGG AS ( SELECT T.DIVISION_ID
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  AS ITEM_NAME , MAX(T.ITEM_CLASS_NAME) A
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  MAX(T.NICK_NAME) AS NICK_NAME , CASE MI
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  THEN 1 WHEN T.ITEM_TYPE = 'H' THEN 2 WH
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  4 END) WHEN 1 THEN 'P' WHEN 2 THEN 'H' 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  ITEM_TYPE , MAX(T.ENERGE) AS ENERGE_WH 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  CELL_TYPE_CD , MAX(T.ACTIVE_FLAG) AS MD
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  SCM_MST_ITEM_SN T WHERE T.DIVISION_ID =
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  T.ITEM_ID ), CELL_TYPE_LKP AS ( SELECT 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  SEGMENT2 AS CELL_TYPE_NM FROM SCM_ADM_L
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  LOOKUP_TYPE = 'CELL_TYPE' AND VALID_YN 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  DIVISION_ID , SCM_SITE_ID , PROJECT_COD
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  MAX(CUSTOMER_MODEL) AS CUSTOMER_MODEL F
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  VALID_YN = 'Y' GROUP BY DIVISION_ID, SC
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  ), OWNER_NM AS ( SELECT O.OWNER , FN_GE
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  '                                      
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                                         
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  Plan hash value: 2613897708            
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                                         
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  ---------------------------------------
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  | Id  | Operation                      
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  ---------------------------------------
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |   0 | SELECT STATEMENT               
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |   1 |  TABLE ACCESS BY INDEX ROWID   
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |*  2 |   INDEX UNIQUE SCAN            
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |   3 |  TEMP TABLE TRANSFORMATION     
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |   4 |   LOAD AS SELECT (CURSOR DURATI
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |   5 |    SORT GROUP BY NOSORT        
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |*  6 |     FILTER                     
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |   7 |      TABLE ACCESS BY INDEX ROWI
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |*  8 |       INDEX FULL SCAN          
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |   9 |   SORT ORDER BY                
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 10 |    FILTER                      
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 11 |     HASH JOIN RIGHT OUTER      
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 12 |      TABLE ACCESS BY INDEX ROWI
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 13 |       INDEX RANGE SCAN         
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 14 |      HASH JOIN RIGHT OUTER     
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 15 |       TABLE ACCESS FULL        
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 16 |       FILTER                   
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 17 |        HASH JOIN RIGHT OUTER   
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 18 |         VIEW                   
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  19 |          TABLE ACCESS FULL     
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 20 |         HASH JOIN RIGHT OUTER  
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  21 |          TABLE ACCESS FULL     
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 22 |          HASH JOIN OUTER       
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 23 |           HASH JOIN RIGHT OUTER
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  24 |            TABLE ACCESS FULL   
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 25 |            HASH JOIN RIGHT OUTE
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  26 |             VIEW               
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  27 |              VIEW              
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  28 |               HASH UNIQUE      
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 29 |                INDEX FAST FULL 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 30 |             HASH JOIN RIGHT OUT
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  31 |              VIEW              
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 32 |               TABLE ACCESS FULL
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 33 |              HASH JOIN RIGHT OU
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  34 |               VIEW             
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  35 |                HASH GROUP BY   
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 36 |                 TABLE ACCESS BY
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 37 |                  INDEX RANGE SC
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 38 |               HASH JOIN RIGHT O
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  39 |                VIEW            
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  40 |                 HASH GROUP BY  
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  41 |                  VIEW          
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  42 |                   UNION-ALL    
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 43 |                    HASH JOIN   
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 44 |                     TABLE ACCES
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 45 |                     TABLE ACCES
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 46 |                      INDEX RANG
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 47 |                    TABLE ACCESS
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 48 |                HASH JOIN       
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 49 |                 INDEX RANGE SCA
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 50 |                 TABLE ACCESS FU
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  51 |           VIEW                 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  52 |            HASH GROUP BY       
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 53 |             FILTER             
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 54 |              HASH JOIN OUTER   
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 55 |               TABLE ACCESS FULL
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 56 |               VIEW             
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |  57 |                TABLE ACCESS FUL
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 58 |     TABLE ACCESS FULL          
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 59 |     TABLE ACCESS FULL          
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 60 |     TABLE ACCESS FULL          
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 61 |     TABLE ACCESS FULL          
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 62 |     TABLE ACCESS FULL          
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 63 |     TABLE ACCESS FULL          
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  |* 64 |     TABLE ACCESS FULL          
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  ---------------------------------------
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                                         
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  Peeked Binds (identified by position): 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  -------------------------------------- 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                                         
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21     1 - :B1 (VARCHAR2(30), CSID=873): '8
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21     2 - :B1 (VARCHAR2(30), CSID=873, Pri
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21     4 - :B1 (VARCHAR2(30), CSID=873, Pri
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    19 - :B1 (VARCHAR2(30), CSID=873, Pri
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                                         
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  Predicate Information (identified by op
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  ---------------------------------------
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                                         
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21     2 - access("CO"."COUNTRY"=:B1)      
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21     6 - filter((:B1=:B1 OR :B1=:B1))    
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21     8 - access("T"."DIVISION_ID"=:B1)   
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21         filter(("T"."DIVISION_ID"=:B1 AN
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    10 - filter(((:B9 IS NULL OR :B9='ALL
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                 IS NOT NULL) AND (:B6 IS
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                OR  IS NOT NULL) AND (NVL
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                '' THEN NULL ELSE TRIM(:B
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    11 - access("SEGMENT1"=NVL("IA"."CELL
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    12 - filter("VALID_YN"='Y')          
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    13 - access("LOOKUP_TYPE"='CELL_TYPE'
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    14 - access("PRJ"."DIVISION_ID"="SI".
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    15 - filter("PRJ"."DIVISION_ID"=:B1) 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    16 - filter((:B1='40' OR :B1='82' OR 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    17 - access("IA"."DIVISION_ID"="SI"."
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    18 - filter("IA"."DIVISION_ID"=:B1)  
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    20 - access("DI"."DEPT_ID"="SI"."DEPT
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    22 - access("SC"."DIVISION_ID"="SI"."
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                AND "SC"."DEPT_ID"=NVL("S
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    23 - access("CU"."DIVISION_ID"="ITEM_
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    25 - access("ONM"."OWNER"="SI"."OWNER
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    29 - filter(("SI0"."DIVISION_ID"=:B1 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    30 - access("ITEM_1"="SI"."DIVISION_I
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    32 - filter(("SC"."DIVISION_ID"=:B1 A
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    33 - access("CM"."DIVISION_ID"="SI"."
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                AND "CM"."ITEM_ID"="SI"."
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    36 - filter("VALID_YN"='Y')          
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    37 - access("DIVISION_ID"=:B1)       
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    38 - access("SI"."DEPT_ID"="D"."DEPT_
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    43 - access("USR"."DEPT_ID"="LOOK"."S
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    44 - filter(UPPER("USR"."USER_ID")=UP
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    45 - filter("LOOK"."VALID_YN"='Y')   
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    46 - access("LOOK"."LOOKUP_TYPE"='PM_
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    47 - filter(UPPER("USER_ID")=UPPER(:B
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    48 - access("ST"."DIVISION_ID"="SI"."
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    49 - access("ST"."DIVISION_ID"=:B1 AN
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    50 - filter("SI"."DIVISION_ID"=:B1)  
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    53 - filter(:B1=:B1)                 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    54 - access("IA9"."DIVISION_ID"="SI9"
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    55 - filter(("SI9"."DIVISION_ID"=:B1 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    56 - filter(("IA9"."DIVISION_ID"=:B1 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    58 - filter("X"."TOK"=:B1)           
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    59 - filter("X"."TOK"=CASE :B1 WHEN '
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    60 - filter("X"."TOK"=:B1)           
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    61 - filter("X"."TOK"=NVL(:B1,'Y'))  
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    62 - filter((NVL(UPPER(:B1),'') LIKE 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    63 - filter((NVL(UPPER(:B1),'') LIKE 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    64 - filter((NVL(UPPER(:B1),'') LIKE 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                NVL(UPPER(:B3),'') LIKE '
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                                         
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  Note                                   
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  -----                                  
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21     - dynamic statistics used: dynamic s
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21     - statistics feedback used for this 
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                                         
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  SQL Analysis Report (identified by oper
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21  ---------------------------------------
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                                         
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    44 -  SEL$3 / "USR"@"SEL$3"          
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21             -  The following columns hav
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                use as keys in index rang
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                predicates.              
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                  "USER_ID"              
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                                         
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21    47 -  SEL$4 / "SCM_ADM_USER_M"@"SEL$4
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21             -  The following columns hav
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                use as keys in index rang
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                predicates.              
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                  "USER_ID"              
+### 8pn2cpba1y5v8 child 24 phv 2613897708 ex 5 total 5s last 10:46:21                                         
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  SQL_ID  8pn2cpba1y5v8, child number 1    
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  -------------------------------------    
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  WITH ITEM_AGG AS ( SELECT T.DIVISION_ID ,
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  AS ITEM_NAME , MAX(T.ITEM_CLASS_NAME) AS 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  MAX(T.NICK_NAME) AS NICK_NAME , CASE MIN(
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  THEN 1 WHEN T.ITEM_TYPE = 'H' THEN 2 WHEN
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  4 END) WHEN 1 THEN 'P' WHEN 2 THEN 'H' WH
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  ITEM_TYPE , MAX(T.ENERGE) AS ENERGE_WH , 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  CELL_TYPE_CD , MAX(T.ACTIVE_FLAG) AS MDM_
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  SCM_MST_ITEM_SN T WHERE T.DIVISION_ID = :
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  T.ITEM_ID ), CELL_TYPE_LKP AS ( SELECT SE
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  SEGMENT2 AS CELL_TYPE_NM FROM SCM_ADM_LOO
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  LOOKUP_TYPE = 'CELL_TYPE' AND VALID_YN = 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  DIVISION_ID , SCM_SITE_ID , PROJECT_CODE 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  MAX(CUSTOMER_MODEL) AS CUSTOMER_MODEL FRO
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  VALID_YN = 'Y' GROUP BY DIVISION_ID, SCM_
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  ), OWNER_NM AS ( SELECT O.OWNER , FN_GET_
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  '                                        
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                                           
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  Plan hash value: 653845277               
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                                           
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  -----------------------------------------
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  | Id  | Operation                        
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  -----------------------------------------
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |   0 | SELECT STATEMENT                 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |   1 |  TABLE ACCESS BY INDEX ROWID     
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |*  2 |   INDEX UNIQUE SCAN              
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |   3 |  TEMP TABLE TRANSFORMATION       
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |   4 |   LOAD AS SELECT (CURSOR DURATION
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |   5 |    SORT GROUP BY NOSORT          
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |*  6 |     FILTER                       
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |   7 |      TABLE ACCESS BY INDEX ROWID 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |*  8 |       INDEX FULL SCAN            
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |   9 |   SORT ORDER BY                  
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 10 |    FILTER                        
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 11 |     HASH JOIN RIGHT OUTER        
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 12 |      TABLE ACCESS BY INDEX ROWID 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 13 |       INDEX RANGE SCAN           
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 14 |      HASH JOIN RIGHT OUTER       
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 15 |       TABLE ACCESS FULL          
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 16 |       FILTER                     
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 17 |        HASH JOIN RIGHT OUTER     
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 18 |         VIEW                     
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  19 |          TABLE ACCESS FULL       
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 20 |         HASH JOIN RIGHT OUTER    
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  21 |          TABLE ACCESS FULL       
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 22 |          HASH JOIN OUTER         
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 23 |           HASH JOIN RIGHT OUTER  
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  24 |            TABLE ACCESS FULL     
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 25 |            HASH JOIN RIGHT OUTER 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  26 |             VIEW                 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  27 |              VIEW                
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  28 |               HASH UNIQUE        
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 29 |                INDEX FAST FULL SC
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 30 |             HASH JOIN RIGHT OUTER
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  31 |              VIEW                
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 32 |               TABLE ACCESS FULL  
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 33 |              HASH JOIN RIGHT OUTE
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  34 |               VIEW               
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  35 |                HASH GROUP BY     
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 36 |                 TABLE ACCESS FULL
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 37 |               HASH JOIN RIGHT OUT
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  38 |                VIEW              
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  39 |                 HASH GROUP BY    
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  40 |                  VIEW            
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  41 |                   UNION-ALL      
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  42 |                    NESTED LOOPS  
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  43 |                     NESTED LOOPS 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 44 |                      TABLE ACCESS
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 45 |                      INDEX RANGE 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  46 |                     TABLE ACCESS 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 47 |                    TABLE ACCESS F
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 48 |                HASH JOIN         
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 49 |                 INDEX RANGE SCAN 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 50 |                 TABLE ACCESS FULL
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  51 |           VIEW                   
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  52 |            HASH GROUP BY         
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 53 |             FILTER               
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 54 |              HASH JOIN OUTER     
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 55 |               TABLE ACCESS FULL  
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 56 |               VIEW               
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |  57 |                TABLE ACCESS FULL 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 58 |     TABLE ACCESS FULL            
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 59 |     TABLE ACCESS FULL            
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 60 |     TABLE ACCESS FULL            
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 61 |     TABLE ACCESS FULL            
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 62 |     TABLE ACCESS FULL            
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 63 |     TABLE ACCESS FULL            
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  |* 64 |     TABLE ACCESS FULL            
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  -----------------------------------------
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                                           
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  Peeked Binds (identified by position):   
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  --------------------------------------   
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                                           
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06     1 - :B1 (VARCHAR2(30), CSID=873): '81'
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06     2 - :B1 (VARCHAR2(30), CSID=873, Prima
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06     4 - :B1 (VARCHAR2(30), CSID=873, Prima
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    19 - :B1 (VARCHAR2(30), CSID=873, Prima
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                                           
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  Predicate Information (identified by oper
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  -----------------------------------------
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                                           
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06     2 - access("CO"."COUNTRY"=:B1)        
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06     6 - filter((:B1=:B1 OR :B1=:B1))      
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06     8 - access("T"."DIVISION_ID"=:B1)     
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06         filter(("T"."DIVISION_ID"=:B1 AND 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    10 - filter(((:B9 IS NULL OR :B9='ALL' 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                :B7='ALL' OR  IS NOT NULL) 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                END ,'ALL')='ALL' OR  IS NO
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                (NVL(CASE TRIM(:B3) WHEN ''
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    11 - access("SEGMENT1"=NVL("IA"."CELL_T
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    12 - filter("VALID_YN"='Y')            
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    13 - access("LOOKUP_TYPE"='CELL_TYPE') 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    14 - access("PRJ"."DIVISION_ID"="SI"."D
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    15 - filter("PRJ"."DIVISION_ID"=:B1)   
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    16 - filter((:B1='40' OR :B1='82' OR (:
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    17 - access("IA"."DIVISION_ID"="SI"."DI
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    18 - filter("IA"."DIVISION_ID"=:B1)    
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    20 - access("DI"."DEPT_ID"="SI"."DEPT_I
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    22 - access("SC"."DIVISION_ID"="SI"."DI
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                "SC"."PROJECT_CODE"="SI"."P
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    23 - access("CU"."DIVISION_ID"="ITEM_1"
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    25 - access("ONM"."OWNER"="SI"."OWNER")
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    29 - filter(("SI0"."DIVISION_ID"=:B1 AN
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    30 - access("ITEM_1"="SI"."DIVISION_ID"
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    32 - filter(("SC"."DIVISION_ID"=:B1 AND
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    33 - access("CM"."DIVISION_ID"="SI"."DI
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                "CM"."PROJECT_CODE"="SI"."P
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    36 - filter(("DIVISION_ID"=:B1 AND "VAL
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    37 - access("SI"."DEPT_ID"="D"."DEPT_ID
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    44 - filter(UPPER("USR"."USER_ID")=UPPE
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    45 - access("USR"."DEPT_ID"="LOOK"."SEG
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    47 - filter(UPPER("USER_ID")=UPPER(:B2)
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    48 - access("ST"."DIVISION_ID"="SI"."DI
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    49 - access("ST"."DIVISION_ID"=:B1 AND 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    50 - filter("SI"."DIVISION_ID"=:B1)    
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    53 - filter(:B1=:B1)                   
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    54 - access("IA9"."DIVISION_ID"="SI9"."
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    55 - filter(("SI9"."DIVISION_ID"=:B1 AN
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    56 - filter(("IA9"."DIVISION_ID"=:B1 AN
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    58 - filter("X"."TOK"=:B1)             
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    59 - filter("X"."TOK"=CASE :B1 WHEN '40
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    60 - filter("X"."TOK"=:B1)             
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    61 - filter("X"."TOK"=NVL(:B1,'Y'))    
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    62 - filter((NVL(UPPER(:B1),'') LIKE '%
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    63 - filter((NVL(UPPER(:B1),'') LIKE '%
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    64 - filter((NVL(UPPER(:B1),'') LIKE '%
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                NVL(UPPER(:B3),'') LIKE '%'
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                                           
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  Note                                     
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  -----                                    
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06     - dynamic statistics used: dynamic sam
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06     - statistics feedback used for this st
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06     - this is an adaptive plan            
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                                           
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  SQL Analysis Report (identified by operat
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06  -----------------------------------------
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                                           
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    44 -  SEL$3 / "USR"@"SEL$3"            
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06             -  The following columns have 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                use as keys in index range 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                predicates.                
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                  "USER_ID"                
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                                           
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06    47 -  SEL$4 / "SCM_ADM_USER_M"@"SEL$4" 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06             -  The following columns have 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                use as keys in index range 
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                predicates.                
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                  "USER_ID"                
+### 8pn2cpba1y5v8 child 1 phv 653845277 ex 1 total 3s last 10:16:06                                           
+(342 rows)
+################ [L5] ⭐⭐ 조회 문장의 계획 줄별 실제 행 수 — 최근 2시간 실행분 전부 (SQL Monitor · 5초 넘게 돈 실행만 잡힌다 · 멈춘 실행 포함) ################
+--  STARTS 가 수만 이상인 줄 = 행마다 반복되는 구간. EST_ROWS(추정)와 OUT_ROWS(실제)가 크게 다른 줄 = 추정이 틀린 곳. STATUS EXECUTING = 지금 도는 중
+SID | EXEC_ST | STATUS | SQL_ID | PHV | LN | OP | OBJ | EST_ROWS | STARTS | OUT_ROWS | PHY_RD | TEMP_MB | LAST_CHG
+----+---------+--------+--------+-----+----+----+-----+----------+--------+----------+--------+---------+---------
+(0 rows)
+################ [L5b] 조회 문장 실행 목록 — 최근 2시간, 5초 넘게 돈 실행 (SQL Monitor) ################
+INST | SID | EXEC_ST | STATUS | SQL_ID | PHV | ELAPSED_S | CPU_S | IO_S | BG | DR | FETCHES | USR | MODULE
+-----+-----+---------+--------+--------+-----+-----------+-------+------+----+----+---------+-----+-------
+(0 rows)
+################ [L6] ⭐ 최근 2시간 화면 호출 이력 (BE 로그) — 사업부 · 소요 · 종료 여부 ################
+--  DB_S 빈칸 + NO_END = BE 가 프로시저 호출에서 아직 못 돌아옴(지금 도는 호출 또는 타임아웃). 교체 전 호출의 DB_S 와 비교
+ST             | SHT_NM     | ACT    | USR         | DIV | DB_S | SERVER_S | TOTAL_S | JUDGE | ERR 
+---------------+------------+--------+-------------+-----+------+----------+---------+-------+-----
+10-14 10:23:35 | production | SEARCH | minyonglee1 | 82  | 4    | 12       | 12      | ok    |     
+10-14 10:20:33 | production | SEARCH | minyonglee1 | 82  | 5    | 13       | 13      | ok    |     
+(2 rows)
+################ [L7] ⭐ 최근 2시간 ASH — PKG_DMF0005 · Owner 이름 함수 문장 × 대기 × 계획 줄 (표본 1 ≈ 1초) ################
+--  한 줄에 표본이 몰려 있으면 그 계획 줄이 병목. PROG 가 함수면 행마다 불리는 내부 SQL
+PROG             | LINE | SQL_ID        | PHV        | PLAN_LN | OP                                      | EVT                     | SAMPLES | SESSIONS | T_FROM   | T_TO    
+-----------------+------+---------------+------------+---------+-----------------------------------------+-------------------------+---------+----------+----------+---------
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2613897708 | 7       | TABLE ACCESS BY INDEX ROWID             | ON CPU                  | 7       | 1        | 10:45:18 | 10:46:17
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2613897708 | 5       | SORT GROUP BY NOSORT                    | ON CPU                  | 5       | 1        | 10:45:30 | 10:46:21
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3546196757 |         |                                         | ON CPU                  | 4       | 3        | 10:34:32 | 10:46:09
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 4       | LOAD AS SELECT (CURSOR DURATION MEMORY) | ON CPU                  | 4       | 3        | 10:34:19 | 10:42:50
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 9       | SORT ORDER BY                           | ON CPU                  | 3       | 3        | 10:16:09 | 10:43:04
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 7       | TABLE ACCESS BY INDEX ROWID             | ON CPU                  | 3       | 2        | 10:34:26 | 10:35:52
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2395779221 |         |                                         | ON CPU                  | 2       | 2        | 10:15:59 | 10:34:22
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 0          | 15      | HASH JOIN RIGHT OUTER                   | ON CPU                  | 2       | 2        | 10:16:08 | 10:42:21
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 18      | HASH JOIN OUTER                         | ON CPU                  | 2       | 2        | 10:34:09 | 10:35:55
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2613897708 |         |                                         | ON CPU                  | 2       | 2        | 10:23:35 | 10:45:44
+PKG_DMF0005      | 85   | 2zurcv8akt27v | 653845277  | 56      | HASH GROUP BY                           | ON CPU                  | 1       | 1        | 10:15:31 | 10:15:31
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 1413870880 |         |                                         | ON CPU                  | 1       | 1        | 10:34:12 | 10:34:12
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2395779221 | 54      | TABLE ACCESS FULL                       | ON CPU                  | 1       | 1        | 10:45:16 | 10:45:16
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 0          | 7       | TABLE ACCESS BY INDEX ROWID             | ON CPU                  | 1       | 1        | 10:15:52 | 10:15:52
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 0          | 4       | LOAD AS SELECT (CURSOR DURATION MEMORY) | ON CPU                  | 1       | 1        | 10:16:07 | 10:16:07
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 56      | TABLE ACCESS FULL                       | ON CPU                  | 1       | 1        | 10:35:49 | 10:35:49
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 575233701  | 9       | SORT ORDER BY                           | ON CPU                  | 1       | 1        | 10:34:13 | 10:34:13
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 653845277  | 22      | HASH JOIN OUTER                         | ON CPU                  | 1       | 1        | 10:16:01 | 10:16:01
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 575233701  | 22      | HASH JOIN OUTER                         | ON CPU                  | 1       | 1        | 10:15:53 | 10:15:53
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3546196757 | 28      | HASH JOIN RIGHT OUTER                   | ON CPU                  | 1       | 1        | 10:46:10 | 10:46:10
+PKG_DMF0005      | 85   | 2zurcv8akt27v | 1413870880 |         |                                         | db file sequential read | 1       | 1        | 10:15:22 | 10:15:22
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2395779221 | 23      | HASH JOIN RIGHT OUTER                   | ON CPU                  | 1       | 1        | 10:45:40 | 10:45:40
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 1240075511 | 0       | SELECT STATEMENT                        | ON CPU                  | 1       | 1        | 10:23:38 | 10:23:38
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2395779221 | 51      | HASH GROUP BY                           | ON CPU                  | 1       | 1        | 10:45:07 | 10:45:07
+PKG_DMF0005      | 85   | 2zurcv8akt27v | 3905882324 | 63      | TABLE ACCESS FULL                       | ON CPU                  | 1       | 1        | 10:15:38 | 10:15:38
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2395779221 | 9       | SORT ORDER BY                           | ON CPU                  | 1       | 1        | 10:45:34 | 10:45:34
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2613897708 | 4       | LOAD AS SELECT (CURSOR DURATION MEMORY) | ON CPU                  | 1       | 1        | 10:45:22 | 10:45:22
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 15      | HASH JOIN RIGHT OUTER                   | ON CPU                  | 1       | 1        | 10:35:40 | 10:35:40
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 653845277  | 58      | HASH JOIN OUTER                         | ON CPU                  | 1       | 1        | 10:34:23 | 10:34:23
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 63      | TABLE ACCESS FULL                       | ON CPU                  | 1       | 1        | 10:34:05 | 10:34:05
+PKG_DMF0005      | 85   | 2zurcv8akt27v | 0          | 5       | SORT GROUP BY NOSORT                    | ON CPU                  | 1       | 1        | 10:15:30 | 10:15:30
+PKG_DMF0005      | 85   | 2zurcv8akt27v | 2395779221 |         |                                         | ON CPU                  | 1       | 1        | 10:15:29 | 10:15:29
+PKG_DMF0005      | 85   | 2zurcv8akt27v | 575233701  | 57      | HASH GROUP BY                           | ON CPU                  | 1       | 1        | 10:15:24 | 10:15:24
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 1413870880 | 9       | SORT ORDER BY                           | ON CPU                  | 1       | 1        | 10:45:05 | 10:45:05
+FN_GET_DEPT_LIST | 28   | bw8qmsfvwavbx | 2940065872 | 4       | HASH JOIN                               | ON CPU                  | 1       | 1        | 09:56:10 | 09:56:10
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 0          | 8       | INDEX FULL SCAN                         | ON CPU                  | 1       | 1        | 10:20:34 | 10:20:34
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2395779221 | 5       | SORT GROUP BY NOSORT                    | ON CPU                  | 1       | 1        | 10:45:33 | 10:45:33
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 1413870880 | 19      | TABLE ACCESS FULL                       | ON CPU                  | 1       | 1        | 10:45:56 | 10:45:56
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2613897708 | 9       | SORT ORDER BY                           | ON CPU                  | 1       | 1        | 10:46:15 | 10:46:15
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3546196757 | 7       | TABLE ACCESS BY INDEX ROWID             | ON CPU                  | 1       | 1        | 10:45:42 | 10:45:42
+(40 rows)
+################ [L7b] 최근 2시간 ASH — 패키지 진입 세션의 대기 이벤트 전체 (라이브러리 캐시 · 잠금 대기 포함) ################
+EVT                     | WAIT_CLASS | SAMPLES | SESSIONS | T_FROM   | T_TO    
+------------------------+------------+---------+----------+----------+---------
+ON CPU                  |            | 40      | 10       | 10:15:29 | 10:46:21
+db file sequential read | User I/O   | 1       | 1        | 10:15:22 | 10:15:22
+(2 rows)
+################ [L8] ⭐ PKG_DMF0005 조회 문장의 자식 커서 — 1회당 시간 · 계획 · 올라온 시각 ################
+--  LOADED 가 패키지 LAST_DDL 뒤인 줄 = 교체 뒤 새로 만들어진 커서. NOW_RUN > 0 = 지금 실행 중. SEC_PER_EX 가 수백이면 그 계획이 문제
+INST | SQL_ID        | CH | LINE | PHV        | EX | NOW_RUN | SEC_PER_EX | CPU_PER_EX | BG_PER_EX | DR_PER_EX | ROWS_PER_EX | LOADED              | LAST_ACT       | TXT                                                         
+-----+---------------+----+------+------------+----+---------+------------+------------+-----------+-----------+-------------+---------------------+----------------+-------------------------------------------------------------
+1    | 8pn2cpba1y5v8 | 24 | 85   | 2613897708 | 5  | 0       | 1          | 1          | 42913     | 0         | 19468       | 2026-10-14/10:46:11 | 10-14 10:46:21 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 23 | 85   | 3546196757 | 1  | 0       | 1.6        | 1.6        | 75198     | 0         | 4859        | 2026-10-14/10:46:09 | 10-14 10:46:09 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 22 | 85   | 2613897708 | 5  | 0       | 1          | 1          | 49121     | 0         | 20227       | 2026-10-14/10:45:57 | 10-14 10:46:07 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 21 | 85   | 1413870880 | 1  | 0       | 1.4        | 1.4        | 43030     | 0         | 1063        | 2026-10-14/10:45:55 | 10-14 10:45:55 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 20 | 85   | 2613897708 | 5  | 0       | 1          | 1          | 48224     | 0         | 20440       | 2026-10-14/10:45:43 | 10-14 10:45:53 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 19 | 85   | 3546196757 | 1  | 0       | 1.5        | 1.5        | 46959     | 0         | 0           | 2026-10-14/10:45:41 | 10-14 10:45:42 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 18 | 85   | 2395779221 | 4  | 0       | 1.1        | 1.1        | 51996     | 0         | 12003       | 2026-10-14/10:45:32 | 10-14 10:45:39 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 17 | 85   | 2613897708 | 1  | 0       | 1.5        | 1.5        | 38956     | 0         | 38621       | 2026-10-14/10:45:29 | 10-14 10:45:30 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 16 | 85   | 3546196757 | 1  | 0       | 1.6        | 1.6        | 42681     | 0         | 15569       | 2026-10-14/10:45:26 | 10-14 10:45:27 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 15 | 85   | 2613897708 | 5  | 0       | 0.8        | 0.8        | 49193     | 0         | 12022       | 2026-10-14/10:45:17 | 10-14 10:45:24 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 14 | 85   | 2395779221 | 1  | 0       | 1.3        | 1.3        | 43592     | 25        | 42088       | 2026-10-14/10:45:15 | 10-14 10:45:16 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 13 | 85   | 3806929389 | 1  | 0       | 1          | 1          | 74696     | 0         | 4859        | 2026-10-14/10:45:13 | 10-14 10:45:13 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 11 | 85   | 3546196757 | 2  | 0       | 0.8        | 0.8        | 44482     | 0         | 7785        | 2026-10-14/10:45:08 | 10-14 10:45:11 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 12 | 85   | 1413870880 | 1  | 0       | 0.8        | 0.8        | 43014     | 0         | 1063        | 2026-10-14/10:45:11 | 10-14 10:45:11 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 10 | 85   | 2395779221 | 1  | 0       | 1.1        | 1          | 43002     | 0         | 42088       | 2026-10-14/10:45:05 | 10-14 10:45:07 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 9  | 85   | 1413870880 | 1  | 0       | 0.9        | 0.9        | 38471     | 0         | 38621       | 2026-10-14/10:45:04 | 10-14 10:45:04 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 8  | 85   | 3905882324 | 3  | 0       | 1.3        | 1.2        | 42045     | 0         | 15569       | 2026-10-14/10:42:20 | 10-14 10:43:04 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 7  | 85   | 3905882324 | 4  | 0       | 0.9        | 0.9        | 41210     | 0         | 27962       | 2026-10-14/10:34:32 | 10-14 10:35:58 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 2  | 85   | 3905882324 | 13 | 0       | 0.8        | 0.7        | 41001     | 0         | 30822       | 2026-10-14/10:16:06 | 10-14 10:35:55 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 6  | 85   | 653845277  | 1  | 0       | 1.5        | 1.5        | 42973     | 0         | 42088       | 2026-10-14/10:34:22 | 10-14 10:34:24 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 5  | 85   | 575233701  | 1  | 0       | 1.2        | 1.2        | 38437     | 0         | 38621       | 2026-10-14/10:34:12 | 10-14 10:34:14 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 4  | 85   | 1240075511 | 1  | 0       | 1.4        | 1.4        | 38439     | 0         | 38621       | 2026-10-14/10:23:35 | 10-14 10:23:38 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 3  | 85   | 575233701  | 1  | 0       | 2.2        | 1.5        | 38439     | 0         | 38621       | 2026-10-14/10:20:33 | 10-14 10:20:38 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 1  | 85   | 653845277  | 1  | 0       | 3.1        | 1.7        | 42973     | 0         | 42088       | 2026-10-14/10:15:58 | 10-14 10:16:06 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 0  | 85   | 575233701  | 1  | 0       | 2.3        | 1.5        | 38439     | 0         | 38621       | 2026-10-14/10:15:51 | 10-14 10:15:58 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 2zurcv8akt27v | 2  | 85   | 3905882324 | 1  | 0       | 2.4        | 1.6        | 42118     | 1         | 15569       | 2026-10-14/10:15:36 | 10-14 10:15:40 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 2zurcv8akt27v | 1  | 85   | 653845277  | 1  | 0       | 3.1        | 1.7        | 42973     | 3         | 42088       | 2026-10-14/10:15:28 | 10-14 10:15:36 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 2zurcv8akt27v | 0  | 85   | 575233701  | 1  | 0       | 2.8        | 1.6        | 38594     | 2         | 38621       | 2026-10-14/10:15:22 | 10-14 10:15:28 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+(28 rows)
+################ [L8b] Owner 이름 함수 내부 SQL — 실행 횟수 · 1회당 읽기량 (BG_PER_EX 가 수천이면 인덱스 없이 전체를 읽는 중) ################
+INST | SQL_ID        | CH | PHV        | EX   | TOTAL_SEC | MS_PER_EX | BG_PER_EX | LOADED              | LAST_ACT       | TXT                                                                             
+-----+---------------+----+------------+------+-----------+-----------+-----------+---------------------+----------------+---------------------------------------------------------------------------------
+1    | bw8qmsfvwavbx | 0  | 2940065872 | 93   | 0.2       | 2.19      | 301       | 2026-10-14/09:56:10 | 10-14 09:56:19 | SELECT COUNT(*) FROM ( SELECT LOOK.SEGMENT3 FROM SCM_ADM_USER_M USR , SCM_ADM_LO
+1    | 6yxcaghw1xvw4 | 0  | 474365068  | 3024 | 0.1       | 0.03      | 3         | 2026-10-14/10:15:23 | 10-14 10:35:55 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+1    | 400k7q5w83ntz | 1  | 474365068  | 1760 | 0         | 0.03      | 3         | 2026-10-14/10:15:23 | 10-14 10:35:55 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+1    | 80gwfp597xcay | 0  | 474365068  | 3024 | 0         | 0.02      | 3         | 2026-10-14/10:15:23 | 10-14 10:35:55 | SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(:B
+1    | 80qubpwgf1cga | 1  | 474365068  | 1760 | 0         | 0.01      | 3         | 2026-10-14/10:15:23 | 10-14 10:35:55 | SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(SU
+1    | 92h5nf23npzux | 2  | 474365068  | 12   | 0         | 1.23      | 3         | 2026-10-14/10:20:34 | 10-14 10:20:34 | SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+1    | 6yxcaghw1xvw4 | 5  | 474365068  | 866  | 0         | 0.01      | 3         | 2026-10-14/10:45:27 | 10-14 10:45:39 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+1    | 6yxcaghw1xvw4 | 8  | 474365068  | 866  | 0         | 0.01      | 3         | 2026-10-14/10:46:10 | 10-14 10:46:20 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+1    | 92h5nf23npzux | 1  | 474365068  | 1116 | 0         | 0.01      | 3         | 2026-10-14/10:15:23 | 10-14 10:35:55 | SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+1    | 6yxcaghw1xvw4 | 6  | 474365068  | 866  | 0         | 0.01      | 3         | 2026-10-14/10:45:42 | 10-14 10:45:52 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+1    | 6yxcaghw1xvw4 | 2  | 474365068  | 1008 | 0         | 0.01      | 3         | 2026-10-14/10:34:13 | 10-14 10:35:58 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+1    | 6yxcaghw1xvw4 | 7  | 474365068  | 866  | 0         | 0.01      | 3         | 2026-10-14/10:45:55 | 10-14 10:46:06 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+(12 rows)
+################ [L9] SCM_MST_SSO_USER_INFO 인덱스 — UPPER(USER_ID) 함수 기반 인덱스 유무 ################
+INDEX_NAME                  | INDEX_TYPE            | STATUS | VIS     | NUM_ROWS | TXT         
+----------------------------+-----------------------+--------+---------+----------+-------------
+IDX01_SCM_MST_SSO_USER_INFO | NORMAL                | VALID  | VISIBLE | 140128   | DEPT_ID     
+IDX02_SCM_MST_SSO_USER_INFO | FUNCTION-BASED NORMAL | VALID  | VISIBLE | 140185   | SYS_NC00026$
+PK_SCM_MST_SSO_USER_INFO    | NORMAL                | VALID  | VISIBLE | 140185   | USER_ID     
+(3 rows)
+INDEX_NAME                  | POS | COLUMN_EXPRESSION
+----------------------------+-----+------------------
+IDX02_SCM_MST_SSO_USER_INFO | 1   | UPPER("USER_ID") 
+(1 rows)
+=============================================================================
+C00 완료 → C00_LIVE_NOW_OUT.txt 회신
+=============================================================================

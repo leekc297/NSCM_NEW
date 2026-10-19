@@ -1,0 +1,241 @@
+{
+ "start": "2026-10-06 17:28:55",
+ "date": "20261012",
+ "ledger_rows_touched": 1,
+ "cases": [
+  {
+   "case": "BOM",
+   "div": "82",
+   "key": [
+    "82",
+    "G-25-113",
+    "SB Energy_US_BAM",
+    "ETD1551AFB3N"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [ETD1551AFB3N] BOM does not exist !",
+    "0"
+   ],
+   "sec_before": 7.84,
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [ETD1551AFB3N] BOM does not exist !",
+    "0"
+   ],
+   "sec_after": 2.45,
+   "same_result": true,
+   "ledger_same": true
+  },
+  {
+   "case": "BOM",
+   "div": "82",
+   "key": [
+    "82",
+    "G-25-113",
+    "SB Energy_US_BAM",
+    "ETD1551AFB3O"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [ETD1551AFB3O] BOM does not exist !",
+    "0"
+   ],
+   "sec_before": 4.82,
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [ETD1551AFB3O] BOM does not exist !",
+    "0"
+   ],
+   "sec_after": 2.1,
+   "same_result": true,
+   "ledger_same": true
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Audi",
+    "Audi_DE_ING",
+    "MCMM6365B0A1-000"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [MCMM6365B0A1-000] BOM does not exist !",
+    "0"
+   ],
+   "sec_before": 8.89,
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [MCMM6365B0A1-000] BOM does not exist !",
+    "0"
+   ],
+   "sec_after": 3.67,
+   "same_result": true,
+   "ledger_same": true
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "BMZ",
+    "BMZ_DE_KSN",
+    "MCCH340030A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Model : MCCH340030A1\nFCST INPUT BLOCK Model. contact 영업관리팀",
+    "0"
+   ],
+   "sec_before": 1.2,
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Ford",
+    "Ford_DE_222",
+    "MCMH9309U0A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [MCMH9309U0A1] BOM does not exist !",
+    "0"
+   ],
+   "sec_before": 6.01,
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [MCMH9309U0A1] BOM does not exist !",
+    "0"
+   ],
+   "sec_after": 3.55,
+   "same_result": true,
+   "ledger_same": true
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A15AI4002",
+    "Audi_DE_ING",
+    "AMDAU0145B"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [AMDAU0145B] BOM does not exist !",
+    "0"
+   ],
+   "sec_before": 4.04,
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [AMDAU0145B] BOM does not exist !",
+    "0"
+   ],
+   "sec_after": 1.79,
+   "same_result": true,
+   "ledger_same": true
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A15AI4002",
+    "Audi_BE_BRU",
+    "AMDAU0145B"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [AMDAU0145B] BOM does not exist !",
+    "0"
+   ],
+   "sec_before": 4.0,
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [AMDAU0145B] BOM does not exist !",
+    "0"
+   ],
+   "sec_after": 1.76,
+   "same_result": true,
+   "ledger_same": true
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15CS2006",
+    "CS Enertech_KR_OSN",
+    "ACEP1038I-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : 구코드 INCOTERMS는 저장할 수 없습니다.",
+    "0"
+   ],
+   "sec_before": 0.28,
+   "target_hit": false
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15VO7001",
+    "Volvo_FR_HRB",
+    "APVVC313H-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [APVVC313H-A1] Kwh/Cell does not exist !\nSales Site Project Model 에서 해당 항목을 채워주세요.",
+    "0"
+   ],
+   "sec_before": 0.3,
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [APVVC313H-A1] Kwh/Cell does not exist !\nSales Site Project Model 에서 해당 항목을 채워주세요.",
+    "0"
+   ],
+   "sec_after": 1.4,
+   "same_result": true,
+   "ledger_same": true
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15HC7001",
+    "MOBIS_KR_PTK",
+    "APCAN0834A"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [APCAN0834A] Kwh/Cell does not exist !\nSales Site Project Model 에서 해당 항목을 채워주세요.",
+    "0"
+   ],
+   "sec_before": 0.1,
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [APCAN0834A] Kwh/Cell does not exist !\nSales Site Project Model 에서 해당 항목을 채워주세요.",
+    "0"
+   ],
+   "sec_after": 1.47,
+   "same_result": true,
+   "ledger_same": true
+  }
+ ]
+}

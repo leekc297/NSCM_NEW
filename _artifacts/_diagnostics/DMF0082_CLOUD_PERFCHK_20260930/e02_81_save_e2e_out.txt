@@ -1,0 +1,46 @@
+키 {'DIVISION_ID': '81', 'PROJECT_CODE': 'A19VO6001', 'SCM_SITE_ID': 'Volvo AS_WA_SE_GOT', 'ITEM_ID': 'AMVCC519H-A1R000', 'DOM_EXP': 'E', 'FCST_TYPE': 'AS', 'INCOTERMS': 'FCA', 'PLANT_SITE_ID': 'WA00-P'}  셀 SCM_FCST 20261016=777  기준 당주월 20260928
+[전] SALES_PLAN 54행 (SCM_FCST 0) · MKT_FCST 원장 578행
+
+[저장] 68.29s  결과커서 [('0', 'SUCCESS', '1')]
+  SALES_PLAN SCM_FCST 행: {('SCM_FCST', '-', '20261016'): (777.0, 'USD', 'minyonglee1')}
+  MKT_FCST 원장 SCM_FCST: {('SCM_FCST', '20261016'): 777.0}
+  MKT_FCST 원장 (SCM_FCST 추가 외 변화 = BALANCE/RMA 재계산): 전 578 → 후 610 · 값 변경 576
+     ('BALANCE', '20260928'): -84.0 → None
+     ('BALANCE', '20260929'): -84.0 → None
+     ('BALANCE', '20260930'): -84.0 → None
+     ('BALANCE', '20261001'): -84.0 → None
+     ('BALANCE', '20261002'): -100.0 → -16.0
+     ('BALANCE', '20261003'): -100.0 → -16.0
+     ('BALANCE', '20261004'): -100.0 → -16.0
+     ('BALANCE', '20261005'): -100.0 → -16.0
+     ('BALANCE', '20261006'): -100.0 → -16.0
+     ('BALANCE', '20261007'): -100.0 → -16.0
+     ('BALANCE', '20261008'): -100.0 → -16.0
+     ('BALANCE', '20261009'): -116.0 → -32.0
+     ('BALANCE', '20261010'): -116.0 → -32.0
+     ('BALANCE', '20261011'): -116.0 → -32.0
+     ('BALANCE', '20261012'): -116.0 → -32.0
+  SALES_PLAN SCM_FCST 외 메저 (값 보존 여부): 전 54 → 후 54 · 값 변경 0
+
+판정: SALES_PLAN SCM_FCST 생성 PASS
+
+[정리] 'D' 저장 5.47s [('0', 'SUCCESS', '1')]
+  SALES_PLAN 테스트 SCM_FCST 행 삭제 1
+  MKT_FCST_H 테스트 이력 삭제 2
+  정리 후 MKT_FCST 원장 vs 전: 전 578 → 후 609 · 값 변경 575
+     ('BALANCE', '20260928'): -84.0 → None
+     ('BALANCE', '20260929'): -84.0 → None
+     ('BALANCE', '20260930'): -84.0 → None
+     ('BALANCE', '20261001'): -84.0 → None
+     ('BALANCE', '20261002'): -100.0 → -16.0
+     ('BALANCE', '20261003'): -100.0 → -16.0
+     ('BALANCE', '20261004'): -100.0 → -16.0
+     ('BALANCE', '20261005'): -100.0 → -16.0
+     ('BALANCE', '20261006'): -100.0 → -16.0
+     ('BALANCE', '20261007'): -100.0 → -16.0
+     ('BALANCE', '20261008'): -100.0 → -16.0
+     ('BALANCE', '20261009'): -116.0 → -32.0
+     ('BALANCE', '20261010'): -116.0 → -32.0
+     ('BALANCE', '20261011'): -116.0 → -32.0
+     ('BALANCE', '20261012'): -116.0 → -32.0
+  정리 후 SALES_PLAN vs 전 (수량·통화): 전 54 → 후 54 · 값 변경 0

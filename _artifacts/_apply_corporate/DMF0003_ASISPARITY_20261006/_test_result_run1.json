@@ -1,0 +1,711 @@
+{
+ "start": "2026-10-06 15:18:19",
+ "date": "20261012",
+ "ledger_rows_touched": 0,
+ "cases": [
+  {
+   "case": "BOM",
+   "div": "82",
+   "key": [
+    "82",
+    "G-26-142",
+    "Core Scientific_US_HUU",
+    "ETA1555BHB31"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [ETA1555BHB31] BOM does not exist !",
+    "0"
+   ],
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [Core Scientific_US_HUU] SITE SHIP-TO does not exist !",
+    "0"
+   ],
+   "ledger_before": [
+    18,
+    1890,
+    "2026-08-25 00:26:21"
+   ],
+   "ledger_after": [
+    18,
+    1890,
+    "2026-08-25 00:26:21"
+   ],
+   "ledger_same": true
+  },
+  {
+   "case": "BOM",
+   "div": "82",
+   "key": [
+    "82",
+    "G-26-142",
+    "Excelsior_US_EXZ",
+    "ETA1555BHB31"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [ETA1555BHB31] BOM does not exist !",
+    "0"
+   ],
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [Excelsior_US_EXZ] SITE SHIP-TO does not exist !",
+    "0"
+   ],
+   "ledger_before": [
+    2,
+    238,
+    "2026-08-25 00:26:21"
+   ],
+   "ledger_after": [
+    2,
+    238,
+    "2026-08-25 00:26:21"
+   ],
+   "ledger_same": true
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "BMZ",
+    "BMZ_DE_KSN",
+    "MCCH340030A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Model : MCCH340030A1\nFCST INPUT BLOCK Model. contact 영업관리팀",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Ford",
+    "Ford_DE_222",
+    "MCMH9309U0A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : End Customer : Ford\nSales site : Ford_DE_222\nModel : MCMH9309U0A1\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Audi",
+    "Audi_DE_ING",
+    "MCMM6365B0A1-000"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : End Customer : Audi\nSales site : Audi_DE_ING\nModel : MCMM6365B0A1-000\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Vinzo",
+    "Vinzo_CN_SZX",
+    "MCP265584A10-C"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : End Customer : Vinzo\nSales site : Vinzo_CN_SZX\nModel : MCP265584A10-C\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Vinzo",
+    "Vinzo_CN_SZX",
+    "MCP265584A10-D03-C"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : End Customer : Vinzo\nSales site : Vinzo_CN_SZX\nModel : MCP265584A10-D03-C\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Vinzo",
+    "Vinzo_CN_SZX",
+    "MCP344871A10-C"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : End Customer : Vinzo\nSales site : Vinzo_CN_SZX\nModel : MCP344871A10-C\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Vinzo",
+    "Vinzo_CN_SZX",
+    "MCP367088A10-M05-C"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : End Customer : Vinzo\nSales site : Vinzo_CN_SZX\nModel : MCP367088A10-M05-C\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Vinzo",
+    "Vinzo_CN_SZX",
+    "MCP466787A10-120-C"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : End Customer : Vinzo\nSales site : Vinzo_CN_SZX\nModel : MCP466787A10-120-C\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Vinzo",
+    "Vinzo_CN_SZX",
+    "MCP498170C10-M04-C"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : End Customer : Vinzo\nSales site : Vinzo_CN_SZX\nModel : MCP498170C10-M04-C\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Vinzo",
+    "Vinzo_CN_SZX",
+    "MCP526376A10-D45-C"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : End Customer : Vinzo\nSales site : Vinzo_CN_SZX\nModel : MCP526376A10-D45-C\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A21FC4001",
+    "MI00-81-AS",
+    "AAEH1131I-B1T029"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A21FC4001\nSales site : MI00-81-AS\nModel : AAEH1131I-B1T029\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A20HH4001",
+    "Skyworth_CN_XUZ",
+    "ACEH1082I-B1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [ACEH1082I-B1] Invalid Site Item ID !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A20HH4001",
+    "WATTPACK_CN_BJS",
+    "ACEH1082I-B1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A20HH4001\nSales site : WATTPACK_CN_BJS\nModel : ACEH1082I-B1\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A18VO4001",
+    "Volvo_SE_GOT",
+    "ACEH1147I-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A18VO4001\nSales site : Volvo_SE_GOT\nModel : ACEH1147I-A1\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A21VO4010",
+    "Volvo_SE_GOT",
+    "ACEH1147I-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A21VO4010\nSales site : Volvo_SE_GOT\nModel : ACEH1147I-A1\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A17VO4001",
+    "Volvo_SE_GOT",
+    "ACEN4067I-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A17VO4001\nSales site : Volvo_SE_GOT\nModel : ACEN4067I-A1\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A17VA4001",
+    "Honda Motor_KR_TJN",
+    "ACEN4077I-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A17VA4001\nSales site : Honda Motor_KR_TJN\nModel : ACEN4077I-A1\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A17VA4001",
+    "LGESWA_PL_INO",
+    "ACEN4077I-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A17VA4001\nSales site : LGESWA_PL_INO\nModel : ACEN4077I-A1\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A17VA4001",
+    "VW_DE_74D",
+    "ACEN4077I-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A17VA4001\nSales site : VW_DE_74D\nModel : ACEN4077I-A1\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A17VA4001",
+    "Honda Motor_KR_TJN",
+    "ACEN4077I-A1-300"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A17VA4001\nSales site : Honda Motor_KR_TJN\nModel : ACEN4077I-A1-300\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "-",
+    "MI02-A",
+    "EAE1592F1-01-E00"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check :  Check Mandatory Columns ( Fcst type or Incoterms or Customs Handbook ) !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "-",
+    "MI02-A",
+    "EAE1592F1-01-E01"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check :  Check Mandatory Columns ( Fcst type or Incoterms or Customs Handbook ) !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "-",
+    "MI02-A",
+    "EAE1592F1-01-E02"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check :  Check Mandatory Columns ( Fcst type or Incoterms or Customs Handbook ) !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "-",
+    "MI02-A",
+    "EAE1592F1-01-E04"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check :  Check Mandatory Columns ( Fcst type or Incoterms or Customs Handbook ) !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "-",
+    "MI02-A",
+    "EAE1592F1-01-E05"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check :  Check Mandatory Columns ( Fcst type or Incoterms or Customs Handbook ) !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "-",
+    "MI02-A",
+    "EAE1592F1-01-E06"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check :  Check Mandatory Columns ( Fcst type or Incoterms or Customs Handbook ) !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "-",
+    "MI02-A",
+    "EAE1592F1-01-E07"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check :  Check Mandatory Columns ( Fcst type or Incoterms or Customs Handbook ) !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "-",
+    "MI02-A",
+    "EAE1592F1-01-T01"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check :  Check Mandatory Columns ( Fcst type or Incoterms or Customs Handbook ) !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "-",
+    "MI02-A",
+    "EAE1592F1-01-T10"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check :  Check Mandatory Columns ( Fcst type or Incoterms or Customs Handbook ) !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "-",
+    "MI02-A",
+    "EAR3512F1-01-G02"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check :  Check Mandatory Columns ( Fcst type or Incoterms or Customs Handbook ) !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15CR7002",
+    "LGCMI_US_HLM",
+    "ACLN1010I-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [ACLN1010I-A1] Invalid Site Item ID !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15CS2006",
+    "CS Enertech_KR_OSN",
+    "ACEP1038I-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : 구코드 INCOTERMS는 저장할 수 없습니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15VO7001",
+    "Volvo_FR_HRB",
+    "APVVC313H-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A15VO7001\nSales site : Volvo_FR_HRB\nModel : APVVC313H-A1\nCustoms Handbook : D\nFcst Type : A/S(Chargeable)\nIncoterms : DAP\nPlant Site : HQ07-P\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15CR7002",
+    "LGCMI_US_HLM",
+    "APFCA48V0-A2"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [APFCA48V0-A2] Invalid Site Item ID !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15HC7001",
+    "MOBIS_KR_PTK",
+    "APCAN0834A"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A15HC7001\nSales site : MOBIS_KR_PTK\nModel : APCAN0834A\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15HC7001",
+    "MOBIS_KR_PTK",
+    "APHKMV410-A1-GG"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A15HC7001\nSales site : MOBIS_KR_PTK\nModel : APHKMV410-A1-GG\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15HC7001",
+    "MOBIS_KR_PTK",
+    "MPHV0502ANHDA-R0"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [MPHV0502ANHDA-R0] Invalid Site Item ID !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A17CR5001",
+    "MI00-81-AS",
+    "APFCAGSW0-A2-010"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A17CR5001\nSales site : MI00-81-AS\nModel : APFCAGSW0-A2-010\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A17CR5001",
+    "MI00-81-AS",
+    "APFCAGSW0-A2-020"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A17CR5001\nSales site : MI00-81-AS\nModel : APFCAGSW0-A2-020\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A17CR5001",
+    "MI00-81-AS",
+    "APFCAGSW0-A3"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Project : A17CR5001\nSales site : MI00-81-AS\nModel : APFCAGSW0-A3\nCustoms Handbook : E\nFcst Type : -\nIncoterms : FOB\nPlant Site : -\nYYYYMMDD : 20261005 ~ 20271001\n\nUnit Price Not Found !\n해당주차의 Sales Price 값을 입력하시기 바랍니다.\n미래구간 52주차까지 Sales Price 값이 모두 입력되어야 합니다.",
+    "0"
+   ],
+   "target_hit": false
+  }
+ ]
+}

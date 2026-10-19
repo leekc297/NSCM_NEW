@@ -1,0 +1,157 @@
+﻿CHK   | TABLE_NAME                        | NUM_ROWS | GTT_PREF | JUDGE
+------+-----------------------------------+----------+----------+------
+V1 통계 | GT_DMF0082_MF_SP                  | 72139    | SHARED   | PASS 
+V1 통계 | GT_DMF0082_TEMP_FCST_N_PRICE      | 72139    | SHARED   | PASS 
+V1 통계 | GT_DMF0082_TEMP_SELECT_MEASURE    | 8        | SHARED   | PASS 
+V1 통계 | GT_DMF0082_TEMP_SITE_ITEM         | 39070    | SHARED   | PASS 
+V1 통계 | GT_DMF0082_T_LAST_DATA_SETUP_FCST | 2834     | SHARED   | PASS 
+V1 통계 | GT_DMF0082_T_WS_FCST              | 14       | SHARED   | PASS 
+(6 rows)
+CHK     | TABLE_NAME                   | COLUMN_NAME   | NDV  | DENSITY             
+--------+------------------------------+---------------+------+---------------------
+V2 컬럼통계 | GT_DMF0082_TEMP_FCST_N_PRICE | DIVISION_ID   | 1    | 1                   
+V2 컬럼통계 | GT_DMF0082_TEMP_FCST_N_PRICE | ITEM_ID       | 656  | 0.00152439024390244 
+V2 컬럼통계 | GT_DMF0082_TEMP_FCST_N_PRICE | MEASURE       | 1    | 1                   
+V2 컬럼통계 | GT_DMF0082_TEMP_FCST_N_PRICE | PROJECT_CODE  | 271  | 0.003690036900369   
+V2 컬럼통계 | GT_DMF0082_TEMP_FCST_N_PRICE | SCM_SITE_ID   | 379  | 0.00263852242744063 
+V2 컬럼통계 | GT_DMF0082_TEMP_FCST_N_PRICE | YYYYMMDD      | 29   | 0.0344827586206897  
+V2 컬럼통계 | GT_DMF0082_TEMP_SITE_ITEM    | DIVISION_ID   | 1    | 1                   
+V2 컬럼통계 | GT_DMF0082_TEMP_SITE_ITEM    | ITEM_ID       | 3772 | 0.000265111346765642
+V2 컬럼통계 | GT_DMF0082_TEMP_SITE_ITEM    | ITEM_VALID_YN | 2    | 0.5                 
+V2 컬럼통계 | GT_DMF0082_TEMP_SITE_ITEM    | PROJECT_CODE  | 1456 | 0.000686813186813187
+V2 컬럼통계 | GT_DMF0082_TEMP_SITE_ITEM    | SCM_SITE_ID   | 1181 | 0.000846740050804403
+(11 rows)
+CHK        | LOCKED_CNT | JUDGE
+-----------+------------+------
+V3 LOCK 없음 | 0          | PASS 
+(1 rows)
+V4 div 81 OK  SP 5.11s  RC1 rows=2383
+V4 div 40 OK  SP 3.85s  RC1 rows=2099
+CHK | PLAN_TABLE_OUTPUT                                                                            
+----+----------------------------------------------------------------------------------------------
+V5  | EXPLAINED SQL STATEMENT:                                                                     
+V5  | ------------------------                                                                     
+V5  | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID,                              
+V5  | PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE,                        
+V5  | INCOTERMS , MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, YYYYMMDD, QTY,                        
+V5  | MEASURE_GROUP , CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER,                       
+V5  | DEPT_ID, DEPT_NAME_KO , FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE,                            
+V5  | PROJECT_NAME, PROJECT_OWNER, BIZ_TYPE , SOLDTO_CUSTOMER, COUNTRY_NAME,                       
+V5  | CITY_NAME, PROJECT_STATUS, ITEM_NAME, VMI_YN , CUST_GROUP,                                   
+V5  | CUST_GROUP_DTL, APPLICATION, ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY ,                         
+V5  | FORECAST_INFO_BIZ_TYPE, CELL_TYPE, FORECAST_INFO_ALL,                                        
+V5  | FORECAST_INFO_SPEC , FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME,                           
+V5  | CELL_PER_CAR, CELL_PER_MODULE , MODULE_PER_CAR, SORT_ORDER_NO, ENERGE,                       
+V5  | CELL_QUANTITY, AS_FROM_SITE , CREATE_DATE, LAST_UPDATED_BY,                                  
+V5  | SENDER_CODE, SENDER_NAME, PROJECT_S_OP_REPORT , CURRENCY, VERSION_NO,                        
+V5  | CUTOFF_YYYYMMDD, NOTATION) SELECT A.DIVISION_ID , A.PROJECT_CODE ,                           
+V5  | A.PROJECT_CODE AS END_CUSTOMER , A.SCM_SITE_ID , A.ITEM_ID , A.DOM_EXP                       
+V5  |                                                                                              
+V5  | Plan hash value: 294698915                                                                   
+V5  |                                                                                              
+V5  | ---------------------------------------------------------------------------------------      
+V5  | | Id  | Operation                         | Name                              | Rows  |      
+V5  | ---------------------------------------------------------------------------------------      
+V5  | |   0 | INSERT STATEMENT                  |                                   |       |      
+V5  | |   1 |  LOAD TABLE CONVENTIONAL          | GT_DMF0082_TEMP_FCST_N_PRICE      |       |      
+V5  | |   2 |   FILTER                          |                                   |       |      
+V5  | |   3 |    HASH JOIN                      |                                   | 19535 |      
+V5  | |   4 |     TABLE ACCESS FULL             | GT_DMF0082_T_WS_FCST              |    14 |      
+V5  | |   5 |     HASH JOIN RIGHT OUTER         |                                   | 19535 |      
+V5  | |   6 |      VIEW                         |                                   |  2834 |      
+V5  | |   7 |       SORT GROUP BY               |                                   |  2834 |      
+V5  | |   8 |        TABLE ACCESS FULL          | GT_DMF0082_T_LAST_DATA_SETUP_FCST |  2834 |      
+V5  | |   9 |      HASH JOIN                    |                                   | 19535 |      
+V5  | |  10 |       NESTED LOOPS                |                                   | 55733 |      
+V5  | |  11 |        NESTED LOOPS               |                                   | 55733 |      
+V5  | |  12 |         TABLE ACCESS FULL         | GT_DMF0082_TEMP_SELECT_MEASURE    |     8 |      
+V5  | |  13 |         INDEX RANGE SCAN          | IDX_DM_PLN_MKT_FCST_N1            |   970 |      
+V5  | |  14 |        TABLE ACCESS BY INDEX ROWID| DM_PLN_MKT_FCST                   |  6967 |      
+V5  | |  15 |       TABLE ACCESS FULL           | GT_DMF0082_TEMP_SITE_ITEM         | 19535 |      
+V5  | ---------------------------------------------------------------------------------------      
+V5  |                                                                                              
+V5  | EXPLAINED SQL STATEMENT:                                                                     
+V5  | ------------------------                                                                     
+V5  | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID,                              
+V5  | PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE,                        
+V5  | INCOTERMS , MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, YYYYMMDD, QTY,                        
+V5  | MEASURE_GROUP , CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER,                       
+V5  | DEPT_ID, DEPT_NAME_KO , FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE,                            
+V5  | PROJECT_NAME, PROJECT_OWNER, BIZ_TYPE , SOLDTO_CUSTOMER, COUNTRY_NAME,                       
+V5  | CITY_NAME, PROJECT_STATUS, ITEM_NAME, VMI_YN , CUST_GROUP,                                   
+V5  | CUST_GROUP_DTL, APPLICATION, ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY ,                         
+V5  | FORECAST_INFO_BIZ_TYPE, CELL_TYPE, FORECAST_INFO_ALL,                                        
+V5  | FORECAST_INFO_SPEC , FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME,                           
+V5  | CELL_PER_CAR, CELL_PER_MODULE , MODULE_PER_CAR, SORT_ORDER_NO, ENERGE,                       
+V5  | CELL_QUANTITY, AS_FROM_SITE , CREATE_DATE, LAST_UPDATED_BY,                                  
+V5  | SENDER_CODE, SENDER_NAME, PROJECT_S_OP_REPORT , CURRENCY, VERSION_NO,                        
+V5  | CUTOFF_YYYYMMDD, NOTATION) SELECT C01, C02, C03, C04, C05, C06, C07,                         
+V5  | C08, C09, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21,                        
+V5  |                                                                                              
+V5  | Plan hash value: 2054382907                                                                  
+V5  |                                                                                              
+V5  | ---------------------------------------------------------------------------------------------
+V5  | | Id  | Operation                                  | Name                           | Rows  |
+V5  | ---------------------------------------------------------------------------------------------
+V5  | |   0 | INSERT STATEMENT                           |                                |       |
+V5  | |   1 |  LOAD TABLE CONVENTIONAL                   | GT_DMF0082_TEMP_FCST_N_PRICE   |       |
+V5  | |   2 |   VIEW                                     |                                | 19535 |
+V5  | |   3 |    WINDOW SORT                             |                                | 19535 |
+V5  | |   4 |     FILTER                                 |                                |       |
+V5  | |   5 |      HASH JOIN                             |                                | 19535 |
+V5  | |   6 |       TABLE ACCESS FULL                    | GT_DMF0082_T_WS_FCST           |    14 |
+V5  | |   7 |       HASH JOIN                            |                                | 19535 |
+V5  | |   8 |        TABLE ACCESS FULL                   | GT_DMF0082_TEMP_SELECT_MEASURE |     8 |
+V5  | |   9 |        HASH JOIN                           |                                | 19535 |
+V5  | |  10 |         TABLE ACCESS BY INDEX ROWID BATCHED| SCM_MST_FUTURE_PRICE           |   112K|
+V5  | |  11 |          INDEX RANGE SCAN                  | PK_SCM_MST_FUTURE_PRICE        |   112K|
+V5  | |  12 |         TABLE ACCESS FULL                  | GT_DMF0082_TEMP_SITE_ITEM      | 19535 |
+V5  | ---------------------------------------------------------------------------------------------
+V5  |                                                                                              
+V5  | EXPLAINED SQL STATEMENT:                                                                     
+V5  | ------------------------                                                                     
+V5  | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID,                              
+V5  | PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE,                        
+V5  | INCOTERMS , MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, YYYYMMDD, QTY,                        
+V5  | MEASURE_GROUP , CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER,                       
+V5  | DEPT_ID, DEPT_NAME_KO , FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE,                            
+V5  | PROJECT_NAME, PROJECT_OWNER, BIZ_TYPE , SOLDTO_CUSTOMER, COUNTRY_NAME,                       
+V5  | CITY_NAME, PROJECT_STATUS, ITEM_NAME, VMI_YN , CUST_GROUP,                                   
+V5  | CUST_GROUP_DTL, APPLICATION, ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY ,                         
+V5  | FORECAST_INFO_BIZ_TYPE, CELL_TYPE, FORECAST_INFO_ALL,                                        
+V5  | FORECAST_INFO_SPEC , FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME,                           
+V5  | CELL_PER_CAR, CELL_PER_MODULE , MODULE_PER_CAR, SORT_ORDER_NO, ENERGE,                       
+V5  | CELL_QUANTITY, AS_FROM_SITE , CREATE_DATE, LAST_UPDATED_BY,                                  
+V5  | SENDER_CODE, SENDER_NAME, PROJECT_S_OP_REPORT , CURRENCY, VERSION_NO,                        
+V5  | CUTOFF_YYYYMMDD, NOTATION) SELECT A.DIVISION_ID , A.PROJECT_CODE ,                           
+V5  | A.END_CUSTOMER , A.SCM_SITE_ID , A.ITEM_ID , A.DOM_EXP , A.FCST_TYPE ,                       
+V5  |                                                                                              
+V5  | Plan hash value: 1088113275                                                                  
+V5  |                                                                                              
+V5  | -------------------------------------------------------------------------------              
+V5  | | Id  | Operation                 | Name                              | Rows  |              
+V5  | -------------------------------------------------------------------------------              
+V5  | |   0 | INSERT STATEMENT          |                                   |       |              
+V5  | |   1 |  LOAD TABLE CONVENTIONAL  | GT_DMF0082_TEMP_FCST_N_PRICE      |       |              
+V5  | |   2 |   FILTER                  |                                   |       |              
+V5  | |   3 |    HASH JOIN              |                                   | 19535 |              
+V5  | |   4 |     TABLE ACCESS FULL     | GT_DMF0082_T_WS_FCST              |    14 |              
+V5  | |   5 |     HASH JOIN             |                                   | 19535 |              
+V5  | |   6 |      TABLE ACCESS FULL    | GT_DMF0082_TEMP_SELECT_MEASURE    |     8 |              
+V5  | |   7 |      HASH JOIN RIGHT OUTER|                                   | 19535 |              
+V5  | |   8 |       VIEW                |                                   |  2834 |              
+V5  | |   9 |        SORT GROUP BY      |                                   |  2834 |              
+V5  | |  10 |         TABLE ACCESS FULL | GT_DMF0082_T_LAST_DATA_SETUP_FCST |  2834 |              
+V5  | |  11 |       HASH JOIN           |                                   | 19535 |              
+V5  | |  12 |        TABLE ACCESS FULL  | DM_PLN_CFM_MKT_DEMAND_PLAN        | 53891 |              
+V5  | |  13 |        TABLE ACCESS FULL  | GT_DMF0082_TEMP_SITE_ITEM         | 19535 |              
+V5  | -------------------------------------------------------------------------------              
+V5  |                                                                                              
+(118 rows)
+CHK    | INST_ID | SQL_ID        | CH | PHV        | EX | SEC_PER_EX | LOADED              | JUDGE
+-------+---------+---------------+----+------------+----+------------+---------------------+------
+V6 PHV | 1       | 18xg1y5298qgq | 0  | 3971101268 | 18 | 2.3        | 2026-10-09/16:28:53 | ok   
+V6 PHV | 1       | 6bucw2kzuc0nt | 0  | 1088113275 | 5  | 0.2        | 2026-10-09/16:28:51 | ok   
+V6 PHV | 1       | c3bg6q8n39195 | 0  | 294698915  | 13 | 0          | 2026-10-09/16:28:57 | ok   
+V6 PHV | 1       | d019r0hbb0muh | 0  | 2054382907 | 13 | 2          | 2026-10-09/16:28:57 | ok   
+(4 rows)

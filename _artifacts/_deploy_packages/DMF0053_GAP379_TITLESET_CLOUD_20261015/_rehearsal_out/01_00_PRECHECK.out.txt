@@ -1,0 +1,18 @@
+CHK | DB_NAME | NOW
+P0 | ZIOUI1 | 2026-10-15 20:57:51
+(1 rows)
+
+CHK | TP | N | USERS
+P1 현재 | C | 80 | 4
+P1 현재 | M | 8 | 4
+(2 rows)
+
+CHK | K | N
+P2 메타 | SHEET_COLUMNS | 66
+P2 메타 | SHEET_MEASURE(VALID) | 2
+(2 rows)
+
+CHK | TP | JUDGE | N | USERS
+P3 판정 | C | INSERT | 132 | 8
+P3 판정 | M | INSERT | 30 | 15
+(2 rows)

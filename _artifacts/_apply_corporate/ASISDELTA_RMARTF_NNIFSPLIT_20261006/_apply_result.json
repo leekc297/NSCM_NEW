@@ -1,0 +1,58 @@
+{
+ "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE": {
+  "before": {
+   "last_ddl": "2026-10-01 18:44:18",
+   "status": "VALID",
+   "md5": "5cb2fcf9a08067f216372b6ec7978fc2"
+  },
+  "after": {
+   "last_ddl": "2026-10-06 15:37:26",
+   "status": "VALID",
+   "md5": "9699801707df7a6deb4129e936c992e2"
+  },
+  "errors": [],
+  "same_as_built": true,
+  "dependents": [
+   [
+    "PKG_DMF0003",
+    "PACKAGE BODY",
+    "VALID"
+   ],
+   [
+    "PKG_DMF0003_TB",
+    "PACKAGE BODY",
+    "VALID"
+   ],
+   [
+    "PKG_DMF0082",
+    "PACKAGE BODY",
+    "VALID"
+   ],
+   [
+    "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE_BATCH",
+    "PROCEDURE",
+    "INVALID"
+   ],
+   [
+    "PR_DM_PLN_MKT_FCST_WEEKLY_ROLLING",
+    "PROCEDURE",
+    "INVALID"
+   ]
+  ]
+ },
+ "PR_DM_XIF_ERP_NSD0010_R": {
+  "before": {
+   "last_ddl": "2026-09-21 17:32:28",
+   "status": "INVALID",
+   "md5": "1ec9231e6cb716a720bd0d58093ed82b"
+  },
+  "after": {
+   "last_ddl": "2026-10-06 15:37:35",
+   "status": "VALID",
+   "md5": "12515b25e83871ddbcf8dcdfdc8e46ad"
+  },
+  "errors": [],
+  "same_as_built": true,
+  "dependents": []
+ }
+}

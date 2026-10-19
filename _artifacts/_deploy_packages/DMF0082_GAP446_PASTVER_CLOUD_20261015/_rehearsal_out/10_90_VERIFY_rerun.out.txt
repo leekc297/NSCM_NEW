@@ -1,0 +1,20 @@
+CHK | N | LINES | JUDGE
+V1 마커 | 9 | 509,2476,2582,2824,2880,2948,3056,3162,4114 | PASS
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:31 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-15 15:14:53 | 0 | 0
+(2 rows)
+
+CHK | KIND | N | EXPECT | JUDGE
+V3 신 줄 | C1 NOW 산식 | 1 | 1 | PASS
+V3 신 줄 | C2 MF·SF 계획 NOW (MF 2 + SF 2) | 4 | 4 | PASS
+V3 신 줄 | C3 MF 판가 NOW | 2 | 2 | PASS
+V3 신 줄 | C5 SP 3종 삭제 | 1 | 1 | PASS
+(4 rows)
+
+CHK | KIND | N | JUDGE
+V4 구 줄 | C1 구 NOW 산식 | 0 | PASS
+V4 구 줄 | C4 SF 실적 원장(구) | 0 | PASS
+(2 rows)

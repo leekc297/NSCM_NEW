@@ -1,0 +1,26 @@
+CHK | USER_GR_ID | USER_GR_NM | USE_YN
+(0 rows)
+
+CHK | TABLE_NAME | NUM_ROWS
+L2 사본 | TB_FX_GROUPINFO | 19
+L2 사본 | TB_FX_USERGROUPINFO | 13042
+(2 rows)
+
+L2 사본 행 [-] 34
+L2 사본 행 [CAPA Planner] 220
+L2 사본 행 [System Monitor] 1
+
+CHK | USER_GR_ID | N
+(0 rows)
+
+CHK | T | G | N
+L4 고아 | AUTH_REQ | - | 1
+L4 고아 | AUTH_REQ | CAPA Planner | 1754
+L4 고아 | UNIT_AUTH | CAPA Planner | 709
+L4 고아 | MNU_BTN | DEMAND_USER | 26
+L4 고아 | MNU_BTN | DM VIEWER | 5
+L4 고아 | UNIT_AUTH | Guest | 1
+L4 고아 | MNU | SCP ADMIN | 2
+L4 고아 | AUTH_REQ | SSP ADMIN | 5
+L4 고아 | UNIT_AUTH | System Monitor | 22
+(9 rows)

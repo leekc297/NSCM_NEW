@@ -1,0 +1,9 @@
+﻿DB 59.19.252.148:2521/ZIOUI1 ('localhost', '2026-10-15 21:13:25') label AFTER
+others before (25349, 13113, 25013)
+1 create    [('0', 'SUCCESS', '3')] {'req': [], 'map': 1, 'unit': ['81', '82']}
+2 requests  {'req': ['81', '82'], 'map': 1, 'unit': ['81', '82']}
+3 div D 81  [('0', 'SUCCESS', '1')] {'req': ['82'], 'map': 1, 'unit': ['82']}
+4 user D    [('0', 'SUCCESS', '1')] {'req': [], 'map': 0, 'unit': []}
+others after (25349, 13113, 25013) UNCHANGED
+RESULT PASS (요청 기록 함께 삭제)
+cleanup {'req': [], 'map': 0, 'unit': []} others (25349, 13113, 25013)

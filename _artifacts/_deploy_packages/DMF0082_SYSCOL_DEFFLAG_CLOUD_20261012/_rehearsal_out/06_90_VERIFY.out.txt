@@ -1,0 +1,19 @@
+CHK | COLUMN_NAME   | FLAG | JUDGE   
+----+---------------+------+---------
+V1  | AS_YN         | [ ]  | 정상 (빈 값)
+V1  | ATTR1         | [ ]  | 정상 (빈 값)
+V1  | BUCKET        | [ ]  | 정상 (빈 값)
+V1  | EDIT_FLAG     | [ ]  | 정상 (빈 값)
+V1  | GROUP_ID      | [ ]  | 정상 (빈 값)
+V1  | MEASURE_GROUP | [ ]  | 정상 (빈 값)
+V1  | NEW_FLAG      | [ ]  | 정상 (빈 값)
+V1  | SORT_KEY      | [ ]  | 정상 (빈 값)
+V1  | VERSION_NO    | [ ]  | 정상 (빈 값)
+V1  | VMI_STD_DIO   | [ ]  | 정상 (빈 값)
+(10 rows)
+CHK | SENTINEL | SYS_COLS | JUDGE                     
+----+----------+----------+---------------------------
+V2  | -        | 10       | (이 DB 의 SP 는 이 센티널을 쓰지 않음)
+V2  | /        | 10       | PASS — SORT_KEY 가 잡힌다     
+(2 rows)
+V3 div 40 OK — 그리드 2158 행 · 결과 컬럼 414개 · SORT_KEY 포함 Y

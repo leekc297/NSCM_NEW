@@ -1,0 +1,80 @@
+################ [V0] 접속 DB · 시각 · PKG 판본 ################
+DB_NAME | HOST   | USR     | NOW                
+--------+--------+---------+--------------------
+ZIOUI1  | ol9-db | SCM_MGR | 2026-10-12 16:32:30
+(1 rows)
+OBJECT_TYPE  | STATUS | LAST_DDL           
+-------------+--------+--------------------
+PACKAGE      | VALID  | 2026-10-02 17:59:16
+PACKAGE BODY | VALID  | 2026-10-12 16:31:39
+(2 rows)
+################ [V1] ⭐ 조건① 사용자 메저 선택 — k0101 의 DMF0082 메저(M) 목록 ################
+--  SP 는 USER_ID·PROGRAM_ID·SHEET_NAME 을 대소문자 그대로 비교한다. EXACT_MATCH=N 인 행은 SP 가 읽지 못한다.
+USER_ID | PROGRAM_ID | SHEET_NAME | COLUMN_NAME | SORT_ORDER_NO | UPD            | MEASURE_VALID | EXACT_MATCH
+--------+------------+------------+-------------+---------------+----------------+---------------+------------
+k0101   | DMF0082    | FcstNPrice | MKT_FCST    | 1             | 08-31 11:09:03 | Y             | Y          
+k0101   | DMF0082    | FcstNPrice | RTF_SYS_RP  | 2             | 08-31 11:09:03 | Y             | Y          
+k0101   | DMF0082    | FcstNPrice | CUST_FCST   | 3             | 08-31 11:09:03 | Y             | Y          
+k0101   | DMF0082    | FcstNPrice | AS_In_Req   | 4             | 08-31 11:09:03 | Y             | Y          
+k0101   | DMF0082    | FcstNPrice | AS_In_Plan  | 5             | 08-31 11:09:03 | Y             | Y          
+k0101   | DMF0082    | FcstNPrice | AS_Inv      | 6             | 08-31 11:09:03 | Y             | Y          
+k0101   | DMF0082    | FcstNPrice | KRW         | 7             | 08-31 11:09:03 | Y             | Y          
+k0101   | DMF0082    | FcstNPrice | USD         | 8             | 08-31 11:09:03 | Y             | Y          
+k0101   | DMF0082    | FcstNPrice | LOC         | 9             | 08-31 11:09:03 | Y             | Y          
+(9 rows)
+JUDGE                 
+----------------------
+PASS — LOC 선택 저장됨 (1행)
+(1 rows)
+################ [V2] 메저 마스터 — LOC/KRW/USD 등록 상태 (사내 기준: 3행 모두 SHEET_NAME='FcstNPrice' · VALID_YN='Y') ################
+PROGRAM_ID | SHEET_NAME | COLUMN_NAME | SORT_ORDER_NO | VALID_YN | USER_SELECTABLE_FLAG | DEFAULT_FLAG | DIVISION_ID                            | INPUT_TP_CD
+-----------+------------+-------------+---------------+----------+----------------------+--------------+----------------------------------------+------------
+DMF0082    | FcstNPrice | MKT_FCST    | 20            | Y        | Y                    | Y            | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | S          
+DMF0082    | FcstNPrice | KRW         | 100           | Y        | Y                    | Y            | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | S          
+DMF0082    | FcstNPrice | USD         | 110           | Y        | Y                    | Y            | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | S          
+DMF0082    | FcstNPrice | LOC         | 120           | Y        | Y                    | Y            | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | S          
+(4 rows)
+################ [V3] 조건③ 기준 — 실적/계획 경계 = 당주 월요일 (판가 LOC 는 이 날짜 이후 분만 조회된다) ################
+TODAY    | THIS_MONDAY
+---------+------------
+20261012 | 20261012   
+(1 rows)
+--  THIS_MONDAY 가 NULL = 캘린더에 오늘 없음. 조회 From 이 이번 주 이후면 경계는 19000101(전 기간 계획)로 바뀐다.
+################ [V4] ⭐ 조건②③ 판가 원장 — 메저·통화별 건수와 기간 (PLAN_ROWS = 당주 월요일 이후 행수) ################
+MEASURE | CURRENCY | ROWS_ALL | YMD_MIN | YMD_MAX | PLAN_ROWS | PLAN_NONZERO | LAST_UPD
+--------+----------+----------+---------+---------+-----------+--------------+---------
+(0 rows)
+--  MEASURE='LOC' 행이 없다 = 조건② 탈락 (원장에 KRW/USD 만 있음). LOC 의 PLAN_ROWS=0 = 조건③ 탈락 (과거 판가만 있음).
+--  0 rows = 이 Site-Item 판가 자체가 없음 (DEFINE 값의 공백·전각문자 확인)
+################ [V5] ⭐ 조건④ 키 대조 — 수요(MKT_FCST) 키 vs 판가(LOC) 키 · 값이 한 글자라도 다르면 다른 행으로 갈린다 ################
+--  SIDE: BOTH = 양쪽 일치 · FCST_ONLY = 수요만 · PRICE_ONLY = 판가만.  '-' 와 '/' 차이(빈값 표기) 도 불일치다.
+SIDE | PROJECT_CODE | DOM_EXP | FCST_TYPE | INCOTERMS | PLANT_SITE_ID | FCST_ROWS | FCST_FROM | FCST_TO | LOC_ROWS | LOC_FROM | LOC_TO | LOC_END_CUSTOMER | LOC_CELL_PROD_SITE
+-----+--------------+---------+-----------+-----------+---------------+-----------+-----------+---------+----------+----------+--------+------------------+-------------------
+(0 rows)
+--  BOTH 가 없고 FCST_ONLY / PRICE_ONLY 로 갈려 있으면 = 판가는 조회돼도 수요 행과 다른 줄로 나오거나('Qty >= 0' 체크 시) 삭제된다.
+################ [V6] 조건④ Site-Item 마스터 — 판가(LOC)·수요의 PROJECT_CODE 가 마스터에 있는가 ################
+SRC | PROJECT_CODE | VALID_YN | DEPT_ID | OWNER | JUDGE
+----+--------------+----------+---------+-------+------
+(0 rows)
+################ [V7] 조건⑤ 판가(LOC) 의 FCST_TYPE 이 판매유형 룩업(SALES_TYPE_CODE)에 있는가 ################
+FCST_TYPE | LOC_ROWS | JUDGE
+----------+----------+------
+(0 rows)
+################ [V8] ⭐⭐ 종합 판정 — 조건 ①~⑤ 한 줄 요약 (FAIL 이 나온 조건이 원인) ################
+C1_USER_MEASURE | C2_LOC_ROWS | C3_IN_PLAN_PERIOD | C4_SITE_ITEM_KEY | C5_FCST_TYPE | ALL_2_TO_5
+----------------+-------------+-------------------+------------------+--------------+-----------
+PASS            | FAIL        | FAIL              | FAIL             | FAIL         | FAIL      
+(1 rows)
+--  C1 FAIL                = 메저 선택이 DB 에 저장되지 않음 (화면 메저 팝업 저장 경로 확인)
+--  C2 FAIL                = 판가 원장에 LOC 메저 행 없음 (KRW/USD 만 존재 — [V4])
+--  C3 FAIL                = LOC 판가가 당주 월요일 이전 날짜뿐
+--  C4 FAIL                = 판가의 PROJECT_CODE 가 Site-Item 마스터와 불일치 ([V5][V6])
+--  전부 PASS 인데 안 보임 = DB 원인 아님 → [V9] 의 실제 조회 파라미터(기간·Qty 체크·버전) 와 화면 표시 쪽 확인
+--  ※ C4 는 마스터 원본(SCM_MST_SITE_ITEM) 존재만 본다. SP 는 여기에 품목 유효·조회조건 필터를 더 건다 — MKT_FCST 가 화면에 보이면 그 필터는 통과한 것.
+################ [V9] 최근 120 분 k0101 의 DMF0082 호출 이력 — 실제 전달된 조회 파라미터 ################
+ST | SHT_NM | SERVER_S | MSG | ERR
+---+--------+----------+-----+----
+(0 rows)
+=============================================================================
+V01 완료 → V01_LOC_NOSHOW_CHECK_OUT.txt 회신 ([V8] 한 줄이 핵심, FAIL 조건의 상세는 해당 [V#])
+=============================================================================

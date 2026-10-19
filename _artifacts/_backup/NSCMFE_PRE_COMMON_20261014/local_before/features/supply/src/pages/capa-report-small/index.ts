@@ -1,0 +1,1 @@
+export { CapaReportSmall } from './CapaReportSmall';

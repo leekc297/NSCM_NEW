@@ -1,0 +1,24 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-15 18:55:07
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | LINES_N
+L0 | PACKAGE | VALID | 2026-10-14 14:45:27 | 72
+L0 | PACKAGE BODY | VALID | 2026-10-14 14:45:28 | 10589
+(2 rows)
+
+CHK | KIND | N | JUDGE
+L1 대상 | CF TODO 주석 시작줄 | 1 | PASS
+L1 대상 | CF TODO 안 standalone 호출줄 | 1 | PASS
+(2 rows)
+
+CHK | N | JUDGE
+L2 호출대상 | 6 | PASS
+(1 rows)
+
+CHK | N | LINE | JUDGE
+L3 마커 | 0 |  | 미적용 (기대)
+(1 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

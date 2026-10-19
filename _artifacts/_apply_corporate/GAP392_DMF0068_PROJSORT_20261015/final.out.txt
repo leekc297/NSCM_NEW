@@ -1,0 +1,76 @@
+DB ('localhost', '2026-10-15 20:06:24') params {'div': '40', 'ver': 'R_S_20260823_V003', 'fr': '202501', 'to': '202712', 'user': 'minyonglee1', 'menu': 'DMF0068'}
+LOOKUP result=[('0', 'SUCCESS', None)] n=35
+ORDERLIST result=[('0', 'SUCCESS', None)] rows=72 project_runs=36 distinct=36
+== LOOKUP: n=35 AS-IS 대비 위치 다름 0건 → PASS
+   1   TOBE=ABS●EV●New Flyer 社 Transit bus/ Oshkosh 社 USPS mail truck ●M50L, M52V  |  ASIS=ABS●EV●New Flyer 社 Transit bus/ Oshkosh 社 USPS mail truck ●M50L, M52V
+   2   TOBE=BMW●예정  |  ASIS=BMW●예정
+   3   TOBE=Bosch●LEV●M58, M58T●M58, M58T  |  ASIS=Bosch●LEV●M58, M58T●M58, M58T
+   4   TOBE=Boston Dynamics●원통형 기타●JUNO●M50L  |  ASIS=Boston Dynamics●원통형 기타●JUNO●M50L
+   5   TOBE=BRP●LEV●Snowmobile●M50L  |  ASIS=BRP●LEV●Snowmobile●M50L
+   6   TOBE=DTAG●예정  |  ASIS=DTAG●예정
+   7   TOBE=Ford●EV●BEV●4695  |  ASIS=Ford●EV●BEV●4695
+   8   TOBE=Ford●예정  |  ASIS=Ford●예정
+   9   TOBE=HONDA●LEV●MPP2●M50U/M50L  |  ASIS=HONDA●LEV●MPP2●M50U/M50L
+  10   TOBE=Honda●예정●EVF  |  ASIS=Honda●예정●EVF
+  11   TOBE=HONDA●예정●Plug-in  |  ASIS=HONDA●예정●Plug-in
+  12   TOBE=IM●EV●5차PPA●M50F M53F  |  ASIS=IM●EV●5차PPA●M50F M53F
+  13   TOBE=IM●EV●E27F●E27F(오창)  |  ASIS=IM●EV●E27F●E27F(오창)
+  14   TOBE=IM●EV●IM 4680용 습식 양극●원통형 습식 양극(오창)  |  ASIS=IM●EV●IM 4680용 습식 양극●원통형 습식 양극(오창)
+  15   TOBE=ISUZU●EV●EV_LD PJT●M50L  |  ASIS=ISUZU●EV●EV_LD PJT●M50L
+  16   TOBE=Isuzu●EV●RG20●M50L  |  ASIS=Isuzu●EV●RG20●M50L
+  17   TOBE=Isuzu●예정  |  ASIS=Isuzu●예정
+  18   TOBE=ISUZU●예정●RS30  |  ASIS=ISUZU●예정●RS30
+  19   TOBE=John Deere●원통형 기타●eZTR (Zero Turn radius Mower)●M50L  |  ASIS=John Deere●원통형 기타●eZTR (Zero Turn radius Mower)●M50L
+  20   TOBE=KION Group●LEV●Warehouse Truck (Class III)●M50LT  |  ASIS=KION Group●LEV●Warehouse Truck (Class III)●M50LT
+  21   TOBE=Lion Electric●EV●Class 5 Ambulance●M50L  |  ASIS=Lion Electric●EV●Class 5 Ambulance●M50L
+  22   TOBE=Lithos Energy●LEV●Marine & Defense●M52V  |  ASIS=Lithos Energy●LEV●Marine & Defense●M52V
+  23   TOBE=Mahindra●예정  |  ASIS=Mahindra●예정
+  24   TOBE=Mazda●예정  |  ASIS=Mazda●예정
+  25   TOBE=MBAG●EB-L(46100 미국)●예정  |  ASIS=MBAG●EB-L(46100 미국)●예정
+  26   TOBE=MBAG●예정  |  ASIS=MBAG●예정
+  27   TOBE=Mercedes-Benz●EV●VAN.EA (미국)●4680  |  ASIS=Mercedes-Benz●EV●VAN.EA (미국)●4680
+  28   TOBE=N  |  ASIS=N
+  29   TOBE=Oshkosh●21700 M53L●예정  |  ASIS=Oshkosh●21700 M53L●예정
+  30   TOBE=Proterra●EV●ZX5 外●M52V  |  ASIS=Proterra●EV●ZX5 外●M52V
+  31   TOBE=Proterra●EV●ZX5 等●M48/M52V  |  ASIS=Proterra●EV●ZX5 等●M48/M52V
+  32   TOBE=Renault Korea Motors●예정  |  ASIS=Renault Korea Motors●예정
+  33   TOBE=Rivian Automotive, LLC●EV●R2/R3 Programs●4695  |  ASIS=Rivian Automotive, LLC●EV●R2/R3 Programs●4695
+  34   TOBE=Volvo Group●예정  |  ASIS=Volvo Group●예정
+  35   TOBE=체리기차●PV●예정  |  ASIS=체리기차●PV●예정
+== ORDERLIST: n=36 AS-IS 대비 위치 다름 0건 → PASS
+   1   TOBE=ABS●EV●New Flyer 社 Transit bus/ Oshkosh 社 USPS mail truck ●M50L, M52V  |  ASIS=ABS●EV●New Flyer 社 Transit bus/ Oshkosh 社 USPS mail truck ●M50L, M52V
+   2   TOBE=BMW●예정  |  ASIS=BMW●예정
+   3   TOBE=Bosch●예정  |  ASIS=Bosch●예정
+   4   TOBE=Boston Dynamics●원통형 기타●JUNO●M50L  |  ASIS=Boston Dynamics●원통형 기타●JUNO●M50L
+   5   TOBE=BRP●LEV●Snowmobile●M50L  |  ASIS=BRP●LEV●Snowmobile●M50L
+   6   TOBE=BW.Akasol●예정  |  ASIS=BW.Akasol●예정
+   7   TOBE=Ford●예정  |  ASIS=Ford●예정
+   8   TOBE=HONDA●LEV●MPP2●M50U/M50L  |  ASIS=HONDA●LEV●MPP2●M50U/M50L
+   9   TOBE=Honda●예정●EVF  |  ASIS=Honda●예정●EVF
+  10   TOBE=HONDA●예정●Plug-in  |  ASIS=HONDA●예정●Plug-in
+  11   TOBE=IM●EV●5차PPA●M50F M53F  |  ASIS=IM●EV●5차PPA●M50F M53F
+  12   TOBE=IM●EV●E27F●E27F  |  ASIS=IM●EV●E27F●E27F
+  13   TOBE=IM●EV●E27F●E27F(오창)  |  ASIS=IM●EV●E27F●E27F(오창)
+  14   TOBE=IM●EV●E27F●전극(오창)  |  ASIS=IM●EV●E27F●전극(오창)
+  15   TOBE=ISUZU●EV●EV_LD PJT●M50L  |  ASIS=ISUZU●EV●EV_LD PJT●M50L
+  16   TOBE=ISUZU●예정●650V EV-LD  |  ASIS=ISUZU●예정●650V EV-LD
+  17   TOBE=John Deere●원통형 기타●eZTR (Zero Turn radius Mower)●M50L  |  ASIS=John Deere●원통형 기타●eZTR (Zero Turn radius Mower)●M50L
+  18   TOBE=KGM●예정  |  ASIS=KGM●예정
+  19   TOBE=KION Group●LEV●Warehouse Truck (Class III)●M50LT  |  ASIS=KION Group●LEV●Warehouse Truck (Class III)●M50LT
+  20   TOBE=Lion Electric●EV●Class 5 Ambulance●M50L  |  ASIS=Lion Electric●EV●Class 5 Ambulance●M50L
+  21   TOBE=Lithos Energy●LEV●Marine & Defense●M52V  |  ASIS=Lithos Energy●LEV●Marine & Defense●M52V
+  22   TOBE=Lucid●EV●Lucid Air (오창 신규라인)●M52V  |  ASIS=Lucid●EV●Lucid Air (오창 신규라인)●M52V
+  23   TOBE=MBAG●EB-L(46100 미국)●예정  |  ASIS=MBAG●EB-L(46100 미국)●예정
+  24   TOBE=MBAG●예정  |  ASIS=MBAG●예정
+  25   TOBE=Mercedes-Benz●EV●VAN.EA (미국)●4680  |  ASIS=Mercedes-Benz●EV●VAN.EA (미국)●4680
+  26   TOBE=NIO●예정  |  ASIS=NIO●예정
+  27   TOBE=Oshkosh●21700 M53L●예정  |  ASIS=Oshkosh●21700 M53L●예정
+  28   TOBE=Proterra●EV●ZX5 外●M52V  |  ASIS=Proterra●EV●ZX5 外●M52V
+  29   TOBE=Proterra●EV●ZX5 等●M48/M52V  |  ASIS=Proterra●EV●ZX5 等●M48/M52V
+  30   TOBE=Rivian Automotive, LLC●EV●R2/R3 Programs●4695  |  ASIS=Rivian Automotive, LLC●EV●R2/R3 Programs●4695
+  31   TOBE=Stellantis●예정  |  ASIS=Stellantis●예정
+  32   TOBE=Volvo Group●예정  |  ASIS=Volvo Group●예정
+  33   TOBE=Zeekr●예정  |  ASIS=Zeekr●예정
+  34   TOBE=르노코리아●예정  |  ASIS=르노코리아●예정
+  35   TOBE=체리기차●CV●예정  |  ASIS=체리기차●CV●예정
+  36   TOBE=체리기차●PV●예정  |  ASIS=체리기차●PV●예정

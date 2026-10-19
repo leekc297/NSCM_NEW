@@ -1,0 +1,55 @@
+// Figma 5934:143433 — 좌 GROUP(전체높이) + 우상 USER + 우하 단위권한 (상단 조건 없음)
+.contents {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  min-width: 0; // 자식 grid 오버플로 방지 (flexbox min-width:auto → 우측 잘림 버그)
+  min-height: 0;
+  gap: 12px;
+}
+
+// 좌측: GROUP INFO (전체 높이) — Figma 5934:143433 실측 좌:우 = 389:1213 ≈ 24:76
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  width: 24%;
+  min-width: 320px;
+  min-height: 0;
+}
+
+// 우측: 상단 USER + 하단 단위권한
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0; // ⭐ grid 콘텐츠 너비로 부풀어 우측 잘리는 현상 방지
+  min-height: 0;
+  gap: 12px;
+}
+
+// 우상단 USER INFO — USER:DIVISION 높이 = 7:3 (사용자 지정)
+.rightTop {
+  display: flex;
+  flex-direction: column;
+  flex: 7;
+  min-width: 0; // ⭐ UserInfo 컬럼 → host 오버플로 방지
+  min-height: 0;
+}
+
+// 우하단 DIVISION — USER:DIVISION 높이 = 7:3
+.rightBottom {
+  display: flex;
+  flex-direction: row;
+  flex: 3;
+  min-width: 0; // ⭐
+  min-height: 0;
+  gap: 12px;
+}
+
+.module {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0; // ⭐
+  min-height: 0;
+}

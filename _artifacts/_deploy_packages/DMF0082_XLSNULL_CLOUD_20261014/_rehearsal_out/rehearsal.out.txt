@@ -1,0 +1,170 @@
+DB ('localhost', 'ZIOUI1', '2026-10-14 13:38:44')
+FRESH-GATE PASS (DB 원문 == 기준본)
+
+######## 00_PRECHECK_CLOUD.sql
+  CHK | DB_NAME | NOW
+  L0 | ZIOUI1 | 2026-10-14 13:38:46
+  CHK | OBJECT_TYPE | STATUS | LAST_DDL
+  L0 | PACKAGE | VALID | 2026-10-09 13:38:31
+  L0 | PACKAGE BODY | VALID | 2026-10-14 13:38:12
+  CHK | N | JUDGE
+  L1 표식 | 0 | 미적용 (기대)
+  CHK | NO | TOKEN | CORP_CNT | THIS_DB | JUDGE
+  L2 토큰 | 1 | CASE WHEN ATTRIBUTE7  = '' THEN | 1 | 1 | OK
+  L2 토큰 | 2 | CASE WHEN ATTRIBUTE8  = '' THEN | 1 | 1 | OK
+  L2 토큰 | 3 | CASE WHEN ATTRIBUTE9  = '' THEN | 1 | 1 | OK
+  L2 토큰 | 4 | CASE WHEN ATTRIBUTE10 = '' THEN | 1 | 1 | OK
+  L2 토큰 | 5 | CASE WHEN ATTRIBUTE11 = '' THEN | 1 | 1 | OK
+  L2 토큰 | 6 | CASE WHEN ATTRIBUTE12 = '' THEN | 1 | 1 | OK
+  L2 토큰 | 7 | CASE WHEN ATTRIBUTE13 = '' THEN | 1 | 1 | OK
+  L2 토큰 | 8 | CASE WHEN ATTRIBUTE14 = '' THEN | 1 | 1 | OK
+  L2 토큰 | 9 | CASE WHEN ATTRIBUTE15 = '' THEN | 1 | 1 | OK
+  L2 토큰 | 10 | CASE WHEN ATTRIBUTE16 = '' THEN | 1 | 1 | OK
+  L2 토큰 | 11 | CASE WHEN ATTRIBUTE17 = '' THEN | 1 | 1 | OK
+  L2 토큰 | 12 | CASE WHEN ATTRIBUTE18 = '' THEN | 1 | 1 | OK
+  L2 토큰 | 13 | CASE WHEN ATTRIBUTE19 = '' THEN | 1 | 1 | OK
+  L2 토큰 | 14 | NVL(EU.ATTRIBUTE7,  '') <> '' | 2 | 2 | OK
+  L2 토큰 | 15 | NVL(EU.ATTRIBUTE8,  '') <> '' | 2 | 2 | OK
+  L2 토큰 | 16 | NVL(EU.ATTRIBUTE9,  '') <> '' | 2 | 2 | OK
+  L2 토큰 | 17 | NVL(EU.ATTRIBUTE10, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 18 | NVL(EU.ATTRIBUTE11, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 19 | NVL(EU.ATTRIBUTE12, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 20 | NVL(EU.ATTRIBUTE13, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 21 | NVL(EU.ATTRIBUTE14, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 22 | NVL(EU.ATTRIBUTE15, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 23 | NVL(EU.ATTRIBUTE16, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 24 | NVL(EU.ATTRIBUTE17, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 25 | NVL(EU.ATTRIBUTE18, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 26 | NVL(EU.ATTRIBUTE19, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 27 | NVL(EU.ATTRIBUTE6, '') <> '' | 1 | 1 | OK
+  L2 토큰 | 28 | NVL(EU.ATTRIBUTE6, '') = '' | 1 | 1 | OK
+  L2 토큰 | 29 | NVL(ATTRIBUTE7,  '') <> '' | 2 | 2 | OK
+  L2 토큰 | 30 | NVL(ATTRIBUTE8,  '') <> '' | 2 | 2 | OK
+  L2 토큰 | 31 | NVL(ATTRIBUTE9,  '') <> '' | 2 | 2 | OK
+  L2 토큰 | 32 | NVL(ATTRIBUTE10, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 33 | NVL(ATTRIBUTE11, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 34 | NVL(ATTRIBUTE12, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 35 | NVL(ATTRIBUTE13, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 36 | NVL(ATTRIBUTE14, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 37 | NVL(ATTRIBUTE15, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 38 | NVL(ATTRIBUTE16, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 39 | NVL(ATTRIBUTE17, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 40 | NVL(ATTRIBUTE18, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 41 | NVL(ATTRIBUTE19, '') <> '' | 2 | 2 | OK
+  L2 토큰 | 42 | NVL(ATTRIBUTE6, '') <> '' | 1 | 1 | OK
+  L2 토큰 | 43 | NVL(ATTRIBUTE1, '') = '' | 2 | 2 | OK
+  L2 토큰 | 44 | NVL(ATTRIBUTE2, '') = '' | 2 | 2 | OK
+  L2 토큰 | 45 | NVL(ATTRIBUTE3, '') = '' | 2 | 2 | OK
+  L2 토큰 | 46 | NVL(ATTRIBUTE4, '') = '' | 2 | 2 | OK
+  L2 토큰 | 47 | NVL(ATTRIBUTE5, '') = '' | 2 | 2 | OK
+  L2 토큰 | 48 | NVL(TMP.MODEL, '') = '' | 2 | 2 | OK
+  CHK | CORP_TOTAL | THIS_TOTAL | DIFF_TOKENS | JUDGE
+  L2 합계 | 80 | 80 | 0 | PASS → 10 적용 가능
+  CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+
+######## 10_APPLY_XLSNULL_PATCH.sql
+  OUT: APPLIED — PKG_DMF0082 BODY VALID · 표식 80곳 · 2026-10-14 13:38:51
+  CHK | OBJECT_TYPE | STATUS | LAST_DDL
+  POST | PACKAGE | VALID | 2026-10-09 13:38:31
+  POST | PACKAGE BODY | VALID | 2026-10-14 13:38:48
+CHECK 1 PASS — PL/SQL 적용 결과 == Python 적용본 (바이트 동일)
+
+######## 10_APPLY_XLSNULL_PATCH.sql
+  OUT: SKIP — 이미 적용됨 (표식 81곳). 원문 무변경
+  CHK | OBJECT_TYPE | STATUS | LAST_DDL
+  POST | PACKAGE | VALID | 2026-10-09 13:38:31
+  POST | PACKAGE BODY | VALID | 2026-10-14 13:38:48
+CHECK 2 PASS — 재실행 무변경
+
+######## 90_VERIFY.sql
+  CHK | N | JUDGE
+  V1 표식 | 81 | PASS
+  CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+  V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:31 | 0 | 0
+  V2 상태 | PACKAGE BODY | VALID | 2026-10-14 13:38:48 | 0 | 0
+  CHK | N | JUDGE
+  V3 잔존 | 0 | PASS
+
+######## 99_ROLLBACK_XLSNULL_PATCH.sql
+  OUT: ROLLED BACK — PKG_DMF0082 BODY VALID · 표식 0 · 2026-10-14 13:38:58
+  CHK | OBJECT_TYPE | STATUS | LAST_DDL
+  POST | PACKAGE | VALID | 2026-10-09 13:38:31
+  POST | PACKAGE BODY | VALID | 2026-10-14 13:38:56
+CHECK 3 PASS — 원복 결과 == 기준본 (바이트 동일)
+
+######## 10_APPLY_XLSNULL_PATCH.sql
+  OUT: APPLIED — PKG_DMF0082 BODY VALID · 표식 80곳 · 2026-10-14 13:39:02
+  CHK | OBJECT_TYPE | STATUS | LAST_DDL
+  POST | PACKAGE | VALID | 2026-10-09 13:38:31
+  POST | PACKAGE BODY | VALID | 2026-10-14 13:39:00
+CHECK 4 PASS — 최종 적용 == Python 적용본
+
+######## 90_VERIFY.sql
+  CHK | N | JUDGE
+  V1 표식 | 81 | PASS
+  CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+  V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:31 | 0 | 0
+  V2 상태 | PACKAGE BODY | VALID | 2026-10-14 13:39:00 | 0 | 0
+  CHK | N | JUDGE
+  V3 잔존 | 0 | PASS
+
+######## 00_PRECHECK_CLOUD.sql
+  CHK | DB_NAME | NOW
+  L0 | ZIOUI1 | 2026-10-14 13:39:05
+  CHK | OBJECT_TYPE | STATUS | LAST_DDL
+  L0 | PACKAGE | VALID | 2026-10-09 13:38:31
+  L0 | PACKAGE BODY | VALID | 2026-10-14 13:39:00
+  CHK | N | JUDGE
+  L1 표식 | 81 | 적용됨 — 10 재실행은 가드로 무동작
+  CHK | NO | TOKEN | CORP_CNT | THIS_DB | JUDGE
+  L2 토큰 | 1 | CASE WHEN ATTRIBUTE7  = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 2 | CASE WHEN ATTRIBUTE8  = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 3 | CASE WHEN ATTRIBUTE9  = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 4 | CASE WHEN ATTRIBUTE10 = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 5 | CASE WHEN ATTRIBUTE11 = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 6 | CASE WHEN ATTRIBUTE12 = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 7 | CASE WHEN ATTRIBUTE13 = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 8 | CASE WHEN ATTRIBUTE14 = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 9 | CASE WHEN ATTRIBUTE15 = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 10 | CASE WHEN ATTRIBUTE16 = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 11 | CASE WHEN ATTRIBUTE17 = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 12 | CASE WHEN ATTRIBUTE18 = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 13 | CASE WHEN ATTRIBUTE19 = '' THEN | 1 | 0 | DIFF
+  L2 토큰 | 14 | NVL(EU.ATTRIBUTE7,  '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 15 | NVL(EU.ATTRIBUTE8,  '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 16 | NVL(EU.ATTRIBUTE9,  '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 17 | NVL(EU.ATTRIBUTE10, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 18 | NVL(EU.ATTRIBUTE11, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 19 | NVL(EU.ATTRIBUTE12, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 20 | NVL(EU.ATTRIBUTE13, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 21 | NVL(EU.ATTRIBUTE14, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 22 | NVL(EU.ATTRIBUTE15, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 23 | NVL(EU.ATTRIBUTE16, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 24 | NVL(EU.ATTRIBUTE17, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 25 | NVL(EU.ATTRIBUTE18, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 26 | NVL(EU.ATTRIBUTE19, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 27 | NVL(EU.ATTRIBUTE6, '') <> '' | 1 | 0 | DIFF
+  L2 토큰 | 28 | NVL(EU.ATTRIBUTE6, '') = '' | 1 | 0 | DIFF
+  L2 토큰 | 29 | NVL(ATTRIBUTE7,  '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 30 | NVL(ATTRIBUTE8,  '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 31 | NVL(ATTRIBUTE9,  '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 32 | NVL(ATTRIBUTE10, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 33 | NVL(ATTRIBUTE11, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 34 | NVL(ATTRIBUTE12, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 35 | NVL(ATTRIBUTE13, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 36 | NVL(ATTRIBUTE14, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 37 | NVL(ATTRIBUTE15, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 38 | NVL(ATTRIBUTE16, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 39 | NVL(ATTRIBUTE17, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 40 | NVL(ATTRIBUTE18, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 41 | NVL(ATTRIBUTE19, '') <> '' | 2 | 0 | DIFF
+  L2 토큰 | 42 | NVL(ATTRIBUTE6, '') <> '' | 1 | 0 | DIFF
+  L2 토큰 | 43 | NVL(ATTRIBUTE1, '') = '' | 2 | 0 | DIFF
+  L2 토큰 | 44 | NVL(ATTRIBUTE2, '') = '' | 2 | 0 | DIFF
+  L2 토큰 | 45 | NVL(ATTRIBUTE3, '') = '' | 2 | 0 | DIFF
+  L2 토큰 | 46 | NVL(ATTRIBUTE4, '') = '' | 2 | 0 | DIFF
+  L2 토큰 | 47 | NVL(ATTRIBUTE5, '') = '' | 2 | 0 | DIFF
+  L2 토큰 | 48 | NVL(TMP.MODEL, '') = '' | 2 | 0 | DIFF
+  CHK | CORP_TOTAL | THIS_TOTAL | DIFF_TOKENS | JUDGE
+  L2 합계 | 80 | 0 | 48 | FAIL — 회신
+  CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC

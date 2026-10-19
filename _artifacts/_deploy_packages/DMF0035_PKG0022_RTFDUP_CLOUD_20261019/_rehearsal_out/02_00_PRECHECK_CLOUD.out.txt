@@ -1,0 +1,18 @@
+CHK | DB_NAME | NOW | DB_CHARSET
+L0 | ZIOUI1 | 2026-10-19 12:03:54 | AL32UTF8
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | LINES_N
+L0 | PACKAGE | VALID | 2026-10-09 13:38:30 | 61
+L0 | PACKAGE BODY | VALID | 2026-10-19 12:03:10 | 3793
+(2 rows)
+
+L1 HEAD anchor 1 / TAIL anchor 1 -> PASS
+L1 block chars 23879 (corp 23879) / comment-open 8 / comment-close 8 / backslash tokens 0 -> PASS
+
+CHK | N | LINE | JUDGE
+L2 marker | 0 |  | not applied (expected)
+(1 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

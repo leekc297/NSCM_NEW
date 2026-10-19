@@ -1,0 +1,51 @@
+-- U02_CLOUD_FAIL_LOG.sql — DMF0082 저장 'Unit Price Not Found' 실제 차단 이력과 그 키의 판가 원장 대조 (READ-ONLY, 전체 F5, 값 입력 없음)
+--   계정: SCM_MGR · 클라우드 QA/DEV.
+--   U01 [U4] 정정본: 검증 실패는 LOG_TYPE='INVALID' 가 아니라 LOG_TYPE='END' + LOG_MESSAGE 'FAIL-2' 로 기록된다 (PKG_DMF0082 BODY 예외부 실측).
+SET LINESIZE 400 PAGESIZE 300
+PROMPT ################ [U5] 실제 차단 이력 — 최근 30일 (D = 화면에 뜬 메시지 · P = 저장 입력값 앞부분) ################
+SELECT TO_CHAR(EVENT_DATE,'MM-DD HH24:MI:SS') T, CREATED_BY
+     , REPLACE(SUBSTR(DESCRIPTION,1,330),CHR(10),' | ') D
+     , SUBSTR(IN_PARA_DATA,1,700) P
+  FROM SCM_SYS_LOG_BATCH
+ WHERE PROGRAM_NAME = 'PKG_DMF0082' AND LOG_TYPE = 'END' AND LOG_MESSAGE LIKE '%FAIL-2%'
+   AND DESCRIPTION LIKE '%Unit Price Not Found%' AND EVENT_DATE >= SYSDATE-30
+ ORDER BY EVENT_DATE DESC FETCH FIRST 40 ROWS ONLY;
+PROMPT --  판정: D 의 Plant Site / Cell Prod Site / End Customer / YYYYMMDD 값이 저장 시 실제로 비교된 값이다
+
+PROMPT ################ [U6] 차단된 Model·Sales Site·주차의 판가 원장(LOC) 실제 행 — 어느 컬럼이 어긋났는지 ################
+WITH F AS (
+    SELECT /*+ MATERIALIZE */ DISTINCT
+           TRIM(REGEXP_SUBSTR(DESCRIPTION,'Model_* : ([^'||CHR(10)||']*)',1,1,NULL,1))          AS ITEM_ID
+         , TRIM(REGEXP_SUBSTR(DESCRIPTION,'Sales site_* : ([^'||CHR(10)||']*)',1,1,NULL,1))     AS SCM_SITE_ID
+         , TRIM(REGEXP_SUBSTR(DESCRIPTION,'End Customer_* : ([^'||CHR(10)||']*)',1,1,NULL,1))   AS IN_END_CUSTOMER
+         , TRIM(REGEXP_SUBSTR(DESCRIPTION,'Customs Handbook_* : ([^'||CHR(10)||']*)',1,1,NULL,1)) AS IN_DOM_EXP
+         , TRIM(REGEXP_SUBSTR(DESCRIPTION,'Incoterms_* : ([^'||CHR(10)||']*)',1,1,NULL,1))      AS IN_INCOTERMS
+         , TRIM(REGEXP_SUBSTR(DESCRIPTION,'Plant Site_* : ([^'||CHR(10)||']*)',1,1,NULL,1))     AS IN_PLANT
+         , TRIM(REGEXP_SUBSTR(DESCRIPTION,'Cell Prod Site_* : ([^'||CHR(10)||']*)',1,1,NULL,1)) AS IN_CELL_PROD
+         , TRIM(REGEXP_SUBSTR(DESCRIPTION,'YYYYMMDD_* : ([0-9]{8})',1,1,NULL,1))                AS D_FROM
+         , TRIM(REGEXP_SUBSTR(DESCRIPTION,'YYYYMMDD_* : [0-9]{8} ~ ([0-9]{8})',1,1,NULL,1))     AS D_TO
+      FROM SCM_SYS_LOG_BATCH
+     WHERE PROGRAM_NAME = 'PKG_DMF0082' AND LOG_TYPE = 'END' AND LOG_MESSAGE LIKE '%FAIL-2%'
+       AND DESCRIPTION LIKE '%Unit Price Not Found%' AND EVENT_DATE >= SYSDATE-30
+)
+SELECT F.ITEM_ID, F.SCM_SITE_ID, F.D_FROM, F.D_TO
+     , F.IN_PLANT, P.PLANT_SITE_ID AS PR_PLANT
+     , F.IN_CELL_PROD, P.CELL_PROD_SITE_ID AS PR_CELL_PROD
+     , F.IN_END_CUSTOMER, P.END_CUSTOMER AS PR_END_CUSTOMER
+     , F.IN_DOM_EXP, P.DOM_EXP AS PR_DOM_EXP
+     , F.IN_INCOTERMS, P.INCOTERMS AS PR_INCOTERMS
+     , P.PROJECT_CODE AS PR_PROJECT, P.FCST_TYPE AS PR_FCST_TYPE
+     , P.YYYYMMDD AS PR_YYYYMMDD, P.PRICE AS PR_PRICE
+     , TO_CHAR(P.LAST_UPDATE_DATE,'MM-DD HH24:MI') AS PR_UPD, P.LAST_UPDATED_BY AS PR_BY
+  FROM F
+  LEFT JOIN DM_PLN_CFM_SELLING_PRICE P
+    ON P.DIVISION_ID = '40' AND P.MEASURE = 'LOC'
+   AND P.ITEM_ID = F.ITEM_ID AND P.SCM_SITE_ID = F.SCM_SITE_ID
+   AND P.YYYYMMDD BETWEEN TO_CHAR(TO_DATE(F.D_FROM,'YYYYMMDD')-6,'YYYYMMDD') AND TO_CHAR(TO_DATE(F.D_TO,'YYYYMMDD')+6,'YYYYMMDD')
+ WHERE F.D_FROM IS NOT NULL
+ ORDER BY F.ITEM_ID, F.SCM_SITE_ID, P.YYYYMMDD
+ FETCH FIRST 200 ROWS ONLY;
+PROMPT --  판정: IN_* (저장 입력) 와 PR_* (판가 원장) 를 나란히 본다
+PROMPT --    IN_PLANT '-' / PR_PLANT '/'                  → 임시 테이블 기본값 표기 불일치
+PROMPT --    PR_YYYYMMDD 가 D_FROM 과 다른 날(같은 주)     → 주 시작일 불일치 또는 월 경계 주
+PROMPT --    PR_* 가 전부 빈칸                              → 그 주 판가 없음 (정상 차단)

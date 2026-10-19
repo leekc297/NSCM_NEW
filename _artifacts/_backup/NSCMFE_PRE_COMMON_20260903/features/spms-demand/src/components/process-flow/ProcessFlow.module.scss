@@ -1,0 +1,7 @@
+/* LGES ProcessTabItem(Complex)은 "지연" 라벨/값을 끄는 prop이 없다.
+   진행도 설명 영역의 3·4번째 Typography(지연 라벨, 지연 값)를 숨긴다.
+   도넛/제목 영역에는 Typography가 2개뿐이라 이 셀렉터에 걸리지 않는다. */
+.processFlow :global(.MuiBox-root > .MuiTypography-root:nth-child(3)),
+.processFlow :global(.MuiBox-root > .MuiTypography-root:nth-child(4)) {
+  display: none;
+}

@@ -1,0 +1,178 @@
+################ [S1] ⭐ 화면 Search 1회의 구간 분해 (SCM_COM_SYS_LOG · BE 가 매 호출 기록) ################
+--  TOTAL = 브라우저 요청 ~ 응답 도착 / DB = SP 호출 + 결과 fetch + BE 결과 JSON 로그 직렬화 / BE = 그 외 서버 처리
+--  NET_FE = TOTAL - SERVER (네트워크 전송·프록시·FE 수신). ⚠ LOG_END 는 FE 가 응답 받은 뒤 갱신 — 미갱신이면 TOTAL=SERVER
+--  사내 기준(09-30, ADMIN, 당월~+6개월): 40 = DB 4.1 / SERVER 5.1 / TOTAL 5.3초 · 82 = DB 5.7 / SERVER 6.9 / TOTAL 7.0초
+ST             | SHT_NM      | DIV | USER_GROUP | VER     | PERIOD            | CREATED_BY  | DB_S | SERVER_S | TOTAL_S | PRE_DB_S | ERR 
+---------------+-------------+-----+------------+---------+-------------------+-------------+------+----------+---------+----------+-----
+09-30 08:54:20 | FcstNPrice  | 40  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 5.68 | 6.89     | 7.01    | 0        |     
+09-30 08:54:20 | spreadTitle | 40  |            |         | ~                 | minyonglee1 | 0.04 | 0.06     | 0.18    | 0        |     
+09-30 08:54:20 | FcstNPrice  | 40  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 4.07 | 5.15     | 5.25    | 0.01     |     
+09-30 08:53:53 | FcstNPrice  | 40  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 4.06 | 5.05     | 5.28    | 0        |     
+09-30 08:53:53 | spreadTitle | 40  |            |         | ~                 | minyonglee1 | 0.07 | 0.1      | 0.32    | 0        |     
+09-30 08:53:53 | FcstNPrice  | 40  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 4.08 | 5.24     | 5.44    | 0        |     
+09-30 08:05:43 | spreadTitle | 82  |            |         | ~                 | minyonglee1 | 0.03 | 0.04     | 0.04    | 0        |     
+09-30 08:05:37 | FcstNPrice  | 82  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 4.94 | 5.65     | 5.65    | 0        |     
+09-30 08:05:37 | spreadTitle | 82  |            |         | ~                 | minyonglee1 | 0.04 | 0.05     | 0.05    | 0        |     
+09-30 08:05:31 | FcstNPrice  | 82  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 5.06 | 5.68     | 5.68    | 0        |     
+09-30 08:05:31 | spreadTitle | 82  |            |         | ~                 | minyonglee1 | 0.03 | 0.05     | 0.05    | 0        |     
+09-30 08:05:23 | FcstNPrice  | 82  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 6.05 | 7.08     | 7.08    | 0        |     
+09-30 08:05:22 | spreadTitle | 81  |            |         | ~                 | minyonglee1 | 0.06 | 0.07     | 0.07    | 0        |     
+09-30 08:05:16 | FcstNPrice  | 81  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 4.78 | 5.32     | 5.32    | 0        |     
+09-30 08:05:16 | spreadTitle | 81  |            |         | ~                 | minyonglee1 | 0.06 | 0.07     | 0.07    | 0        |     
+09-30 08:05:11 | FcstNPrice  | 81  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 5.14 | 5.6      | 5.6     | 0        |     
+09-30 08:05:10 | spreadTitle | 81  |            |         | ~                 | minyonglee1 | 0.03 | 0.04     | 0.04    | 0        |     
+09-30 08:05:05 | FcstNPrice  | 81  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 4.95 | 5.53     | 5.53    | 0        |     
+09-30 08:05:03 | spreadTitle | 40  |            |         | ~                 | minyonglee1 | 0.03 | 0.04     | 0.04    | 0        |     
+09-30 08:04:58 | FcstNPrice  | 40  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 4.06 | 4.53     | 4.53    | 0        |     
+09-30 08:04:58 | spreadTitle | 40  |            |         | ~                 | minyonglee1 | 0.03 | 0.04     | 0.04    | 0        |     
+09-30 08:04:53 | FcstNPrice  | 40  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 3.97 | 4.44     | 4.44    | 0        |     
+09-30 08:04:53 | spreadTitle | 40  |            |         | ~                 | minyonglee1 | 0.03 | 0.04     | 0.04    | 0        |     
+09-30 08:04:48 | FcstNPrice  | 40  | ADMIN      | Current | 20260901~20270228 | minyonglee1 | 4.36 | 4.89     | 4.89    | 0        |     
+(24 rows)
+--  판정: DB_S 가 TOTAL_S 대부분 → DB 병목 (아래 S2~S6) / SERVER_S - DB_S 큼 → BE (JSON 매핑·로그) / TOTAL_S - SERVER_S 큼 → 네트워크·FE
+--        PRE_DB_S 큼 → 권한체크·커넥션 획득 대기(풀 고갈) / ERR 있음 → 타임아웃·오류
+################ [S2] ⭐ 병목 문장 — 실제 화면 세션(BE)의 ASH, PKG_DMF0082 진입분 (샘플 1개 ≈ 1초) ################
+--  같은 SQL_ID 를 사내 C03 기준값(README §4)과 대조: 사내 1초 미만인데 여기서 수십 샘플이면 그 문장이 범인
+SQL_ID        | LINE  | SAMPLES | PCT  | PHV_CNT | PHV        | TOP_EVT                 | HARD_PARSE | EXECS | TXT                                                                                       
+--------------+-------+---------+------+---------+------------+-------------------------+------------+-------+-------------------------------------------------------------------------------------------
+b6wn3kx02pryu | 1243  | 116     | 33.4 | 2       | 3899932091 | direct path read        | 0          | 9     | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, PROJECT_CODE, SCM_SIT
+9xvpghd3tj06u | 849   | 21      | 6.1  | 6       | 3798143635 | ON CPU                  | 4          | 18    | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID
+18xg1y5298qgq | 3899  | 13      | 3.7  | 2       | 3971101268 | ON CPU                  | 0          | 13    | INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_I
+b8q5haa5dk9hb | 0     | 13      | 3.7  | 1       | 0          | ON CPU                  | 0          | 12    | begin SCM_MGR.PKG_DMF0082.P_DMF0082_GET_MAIN_DATA(:1,:2,:3,:4,:5,:6,:7,:8,:9,:10,:11,:12,:
+g2f236ssg1rpu | 1294  | 9       | 2.6  | 1       | 4099738124 | db file sequential read | 0          | 4     | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST_C (DIVISION_ID, PROJECT_CODE, SCM_SI
+20xrvz802rfsy | 3372  | 9       | 2.6  | 1       | 1553021311 | ON CPU                  | 0          | 9     | DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN ( SELECT B.MEASURE F
+4kbmsfxybgdtu | 14779 | 9       | 2.6  | 1       | 1574867423 | ON CPU                  | 0          | 9     | INSERT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ INTO SYS.WRI$_OPTSTAT_HISTG
+br0qzg41fkcrf | 1313  | 8       | 2.3  | 1       | 1155451836 | db file sequential read | 0          | 3     | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST_C (DIVISION_ID, PROJECT_CODE, SCM_SI
+gfjpdh7fc1u59 | 1207  | 7       | 2    | 4       | 4011491034 | ON CPU                  | 0          | 6     | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PROJECT_CODE, SCM_SITE
+4gsksgxj0ft42 | 1354  | 7       | 2    | 1       | 1965437806 | db file sequential read | 0          | 5     | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C (DIVISION_ID, PROJECT_CODE, SCM_S
+1bjv8z58xd79d | 3462  | 6       | 1.7  | 1       | 1567419210 | direct path write temp  | 0          | 6     | DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE WHERE ROWID IN (SELECT RID FROM (SELECT R
+12v19yag54ut1 | 1593  | 6       | 1.7  | 2       | 3036190428 | ON CPU                  | 0          | 6     | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER
+gkn9tran5v9tb | 2994  | 6       | 1.7  | 1       | 633531915  | ON CPU                  | 0          | 6     | MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A USING ( SE
+9wgfrws532db6 | 656   | 6       | 1.7  | 1       | 3069957411 | ON CPU                  | 0          | 6     | INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_A_V ( DIVISION_ID, ITEM_ID, ITEM_NAME, ITEM
+5qjb73aqyhg7h | 3897  | 5       | 1.4  | 2       | 3884387329 | ON CPU                  | 2          | 4     | INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_I
+4svg4dhnqxh8f | 1260  | 5       | 1.4  | 1       | 3195295405 | ON CPU                  | 0          | 5     | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, PROJECT_CODE, SCM_SIT
+0rp3b1v236wwz | 599   | 4       | 1.2  | 1       | 4066606801 | ON CPU                  | 0          | 4     | INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, ITEM_ID, ITEM_NAME, IT
+day2h1hdkc8y1 | 3088  | 4       | 1.2  | 1       | 3484297769 | ON CPU                  | 0          | 4     | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER
+3x9ardnmfczp0 | 4246  | 4       | 1.2  | 2       | 2794617649 | ON CPU                  | 0          | 4     | MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT NVL(DIVISION_ID, '~') AS DIVISION_ID 
+631pzfvq8r0ut | 1701  | 4       | 1.2  | 1       | 620290878  | ON CPU                  | 0          | 4     | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER
+5xubgppak00bm | 1599  | 4       | 1.2  | 3       | 3408155172 | ON CPU                  | 0          | 4     | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER
+g5hah80xh2b8x | 14732 | 4       | 1.2  | 1       | 3441464239 | ON CPU                  | 0          | 4     | DELETE /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ FROM SYS.WRI$_OPTSTAT_HISTG
+cqcrfmc3a97jk | 1204  | 3       | 0.9  | 1       | 2855824848 | ON CPU                  | 0          | 3     | DELETE FROM SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE                                    
+ggkupust9vjpj | 1381  | 3       | 0.9  | 1       | 422164050  | ON CPU                  | 0          | 3     | DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE                                          
+8ru1tpx5pkbrj | 27090 | 3       | 0.9  | 1       | 839761099  | ON CPU                  | 0          | 3     | select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) popcnt, (sum
+(25 rows)
+--  0 rows = ASH 창 밖(너무 늦게 실행) 이거나 조회가 매우 빨랐음 → DEFINE MIN 늘리거나 화면 재조회 직후 재실행
+################ [S3] 대기 이벤트 구성 — 무엇을 기다렸나 (PKG_DMF0082 진입분 전체) ################
+--  ON CPU 지배 = 행별 연산·논리IO 과다(계획 비효율) / db file sequential read·cell single block = Nested Loop 랜덤IO(추정오류)
+--  direct path read = 풀스캔 / direct path write·read temp = PGA 부족 TEMP 유출 / library cache·cursor: pin = 하드파싱·경합
+--  PX Deq·enq: = 병렬 대기 / enq: TX·TM = 락 대기
+WAIT_CLASS    | EVT                     | SAMPLES | PCT 
+--------------+-------------------------+---------+-----
+CPU           | ON CPU                  | 204     | 58.8
+User I/O      | direct path read        | 107     | 30.8
+User I/O      | db file sequential read | 27      | 7.8 
+User I/O      | direct path write temp  | 4       | 1.2 
+User I/O      | db file parallel read   | 4       | 1.2 
+Configuration | undo segment extension  | 1       | 0.3 
+(6 rows)
+################ [S4] 상위 문장의 실행계획 라인별 핫스팟 (어느 오퍼레이션·어느 테이블에서 시간을 썼나) ################
+SQL_ID        | PHV        | PLAN_LINE | OP                       | OBJ                  | EVT              | SAMPLES
+--------------+------------+-----------+--------------------------+----------------------+------------------+--------
+18xg1y5298qgq | 3971101268 | 1         | LOAD TABLE CONVENTIONAL  |                      | ON CPU           | 7      
+18xg1y5298qgq | 3971101268 | 11        | MERGE JOIN OUTER         |                      | ON CPU           | 3      
+20xrvz802rfsy | 1553021311 | 1         | DELETE                   |                      | ON CPU           | 8      
+9xvpghd3tj06u | 2619118743 | 1         | LOAD TABLE CONVENTIONAL  |                      | ON CPU           | 3      
+9xvpghd3tj06u | 3798143635 |           |                          |                      | ON CPU           | 2      
+9xvpghd3tj06u | 2619118743 | 7         | VIEW                     |                      | ON CPU           | 2      
+b6wn3kx02pryu | 3899932091 | 6         | TABLE ACCESS FULL        | SCM_MST_FUTURE_PRICE | direct path read | 107    
+b6wn3kx02pryu | 3899932091 | 6         | TABLE ACCESS FULL        | SCM_MST_FUTURE_PRICE | ON CPU           | 4      
+b6wn3kx02pryu | 1596134027 | 7         | INDEX RANGE SCAN         |                      | ON CPU           | 2      
+b8q5haa5dk9hb | 0          |           |                          |                      | ON CPU           | 13     
+(10 rows)
+--  OBJ 가 SCM_/DM_ 영구 테이블 + TABLE ACCESS FULL 또는 INDEX RANGE SCAN 대량 = 접근경로 문제 → C04 로 계획 확인
+--  OBJ 가 GT_DMF0082_* + NESTED LOOPS / MERGE JOIN CARTESIAN = GTT 카디널리티 오추정 (07-31 유형)
+################ [S5] V$SQL 누적 — PKG_DMF0082 문장별 1회당 비용 (최근 활동분, 자식 커서 단위) ################
+SQL_ID        | CH | LINE | PHV        | EX | SEC_PER_EX | CPU_PER_EX | BG_PER_EX | DR_PER_EX | ROWS_PER_EX | IO_PER_EX | PX | LAST_ACT | TXT                                                                                       
+--------------+----+------+------------+----+------------+------------+-----------+-----------+-------------+-----------+----+----------+-------------------------------------------------------------------------------------------
+5xubgppak00bm | 0  | 1599 | 1118209380 | 1  | 1.09       | 1.08       | 222494    | 182728    | 131110      | 0.16      | 0  | 07:57:09 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER
+fk3tvpkzsq2vx | 9  | 4423 | 360512032  | 1  | 0.87       | 0.87       | 18360     | 0         | 2622        | 0         | 0  | 07:56:44 |  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, F
+fk3tvpkzsq2vx | 5  | 4423 | 360512032  | 1  | 0.68       | 0.68       | 16040     | 0         | 2394        | 0         | 0  | 07:55:31 |  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, F
+b6wn3kx02pryu | 10 | 1243 | 3899932091 | 1  | 0.65       | 0.65       | 201050    | 182728    | 7887        | 0.16      | 0  | 07:57:07 | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, PROJECT_CODE, SCM_SIT
+b6wn3kx02pryu | 11 | 1243 | 3899932091 | 1  | 0.64       | 0.64       | 201177    | 182728    | 7911        | 0.16      | 0  | 08:02:55 | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, PROJECT_CODE, SCM_SIT
+fk3tvpkzsq2vx | 0  | 4423 | 360512032  | 60 | 0.64       | 0.64       | 16751     | 0         | 2366        | 0         | 0  | 09:24:43 |  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, F
+fk3tvpkzsq2vx | 12 | 4423 | 360512032  | 13 | 0.63       | 0.63       | 16607     | 0         | 2287        | 0         | 0  | 08:54:25 |  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, F
+fk3tvpkzsq2vx | 3  | 4423 | 360512032  | 1  | 0.5        | 0.5        | 15825     | 0         | 2098        | 0         | 0  | 07:54:44 |  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, F
+7dqvb8mr91f5w | 4  | 4423 | 360512032  | 1  | 0.49       | 0.48       | 13980     | 0         | 2108        | 0         | 0  | 08:03:06 |  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, F
+631pzfvq8r0ut | 0  | 1701 | 620290878  | 21 | 0.44       | 0.44       | 62643     | 0         | 99434       | 0         | 0  | 09:24:23 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER
+631pzfvq8r0ut | 2  | 1701 | 620290878  | 7  | 0.42       | 0.42       | 62603     | 0         | 99434       | 0         | 0  | 08:54:21 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER
+9xvpghd3tj06u | 0  | 849  | 2619118743 | 60 | 0.28       | 0.27       | 36266     | 0         | 30542       | 0         | 0  | 09:24:39 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID
+20xrvz802rfsy | 0  | 3372 | 1553021311 | 60 | 0.27       | 0.27       | 85537     | 0         | 66046       | 0         | 0  | 09:24:41 | DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN ( SELECT B.MEASURE F
+1bjv8z58xd79d | 2  | 3462 | 1567419210 | 1  | 0.25       | 0.19       | 5769      | 2609      | 0           | 0.07      | 0  | 08:03:16 | DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE WHERE ROWID IN (SELECT RID FROM (SELECT R
+fk3tvpkzsq2vx | 10 | 4423 | 360512032  | 1  | 0.23       | 0.23       | 18625     | 0         | 611         | 0         | 0  | 07:56:57 |  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, F
+3s7qd1gtqy0d2 | 0  | 3483 | 1999652504 | 2  | 0.23       | 0.23       | 72187     | 0         | 44075       | 0         | 0  | 08:03:19 | DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE SP WHERE NOT EXISTS (SELECT 1 FROM (SELEC
+9xvpghd3tj06u | 2  | 849  | 2619118743 | 13 | 0.22       | 0.22       | 31320     | 0         | 26194       | 0         | 0  | 08:54:20 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID
+20xrvz802rfsy | 2  | 3372 | 1553021311 | 13 | 0.22       | 0.22       | 83564     | 0         | 65345       | 0         | 0  | 08:54:22 | DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN ( SELECT B.MEASURE F
+4svg4dhnqxh8f | 20 | 1260 | 3195295405 | 2  | 0.2        | 0.2        | 37805     | 0         | 6465        | 0         | 0  | 08:03:18 | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, PROJECT_CODE, SCM_SIT
+b6fpw9ffkdtf5 | 0  | 2709 | 2513552438 | 2  | 0.2        | 0.2        | 9516      | 0         | 17144       | 0         | 0  | 08:00:45 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER
+4svg4dhnqxh8f | 17 | 1260 | 3195295405 | 21 | 0.18       | 0.18       | 32762     | 0         | 6303        | 0         | 0  | 09:24:23 | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, PROJECT_CODE, SCM_SIT
+4svg4dhnqxh8f | 21 | 1260 | 3195295405 | 7  | 0.18       | 0.17       | 34546     | 0         | 6303        | 0         | 0  | 08:54:20 | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, PROJECT_CODE, SCM_SIT
+63ar9rz0axr5p | 0  | 1045 | 2395782385 | 60 | 0.17       | 0.17       | 8059      | 0         | 30542       | 0         | 0  | 09:24:39 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, IT
+63ar9rz0axr5p | 2  | 1045 | 2395782385 | 13 | 0.14       | 0.14       | 6565      | 0         | 26194       | 0         | 0  | 08:54:20 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, IT
+7mrr0z9q8kqgw | 0  | 2774 | 1892854748 | 2  | 0.13       | 0.13       | 7188      | 0         | 12452       | 0         | 0  | 07:56:34 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER
+f6r0861xjw0h1 | 0  | 2954 | 4237537377 | 65 | 0.13       | 0.13       | 18903     | 0         | 6195        | 0         | 0  | 09:24:40 | MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A USING ( SE
+7dqvb8mr91f5w | 0  | 4423 | 360512032  | 1  | 0.13       | 0.13       | 2915      | 0         | 425         | 0         | 0  | 08:00:20 |  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, F
+f6r0861xjw0h1 | 2  | 2954 | 4237537377 | 13 | 0.13       | 0.13       | 21043     | 0         | 7769        | 0         | 0  | 08:54:21 | MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A USING ( SE
+cyfzwssnp3rzc | 0  | 2296 | 1381843373 | 2  | 0.12       | 0.12       | 9385      | 0         | 17144       | 0         | 0  | 08:00:30 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER
+gkn9tran5v9tb | 0  | 2994 | 633531915  | 65 | 0.12       | 0.12       | 12544     | 0         | 0           | 0         | 0  | 09:24:40 | MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A USING ( SE
+(30 rows)
+--  사내 기준: 1회당 1초 넘는 문장 없음(최대 18xg1y5298qgq 0.8s · fk3tvpkzsq2vx 0.6s · 12v19yag54ut1 0.6s)
+################ [S6] 계획 불안정 — 같은 SQL_ID 에 실행계획이 여러 개 (나쁜 자식 커서 재사용 의심) ################
+SQL_ID        | LINE | CHILDREN | PHV_CNT | PHV_SEC_PER_EX                                                                                                 | TXT                                                                   
+--------------+------+----------+---------+----------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------
+b6wn3kx02pryu | 1243 | 12       | 2       | 1596134027:.3s / 1596134027:.4s / 3899932091:.6s / 3899932091:.7s / 3899932091:108.4s / 3899932091:121s / 3899 | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, P
+7mrzdbpupw3b9 | 1224 | 22       | 3       | 2137324030:.1s / 2137324030:0s / 2591175856:.1s / 2672194183:.9s / 2672194183:0s                               | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+gfjpdh7fc1u59 | 1207 | 15       | 4       | 982384402:.1s / 2485690796:.1s / 3770203077:.1s / 3829746740:.1s / 3829746740:.5s                              | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+4r5kugqqq6cuy | 1390 | 3        | 2       | 3388371019:.1s / 3995613941:0s                                                                                 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+2nysu9tbng9v4 | 1928 | 34       | 2       | 598563120:0s / 2726676676:0s                                                                                   | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+(5 rows)
+--  PHV 별 1회당 초가 크게 갈리면 → 느린 PHV 가 굳은 커서. 파싱 시점 GTT 빈 상태 추정(E-Rows=1) 유형
+################ [S7] ⭐ 커서가 어떤 옵티마이저 설정으로 만들어졌나 (dynamic_sampling 0 으로 굳은 커서 탐지) ################
+NAME                       | VALUE      | CURSORS | AVG_SEC_PER_EX | JUDGE
+---------------------------+------------+---------+----------------+------
+cursor_sharing             | exact      | 509     | 0.006          |      
+optimizer_dynamic_sampling | 2          | 509     | 0.006          |      
+optimizer_features_enable  | 23.1.0     | 509     | 0.006          |      
+optimizer_mode             | all_rows   | 509     | 0.006          |      
+parallel_degree_limit      | 65535      | 509     | 0.006          |      
+pga_aggregate_target       | 3145728 KB | 509     | 0.006          |      
+statistics_level           | typical    | 509     | 0.006          |      
+(7 rows)
+################ [S8] BE 커넥션 세션의 현재 optimizer_dynamic_sampling (풀에 남은 세션 설정) ################
+USERNAME | MACHINE         | PROGRAM                                     | DYN_SAMPLING | SESSIONS
+---------+-----------------+---------------------------------------------+--------------+---------
+SCM_MGR  | ZIO-NOTE-408    | JDBC Thin Client                            | 2            | 11      
+SCM_MGR  | BJKIM           | ScpApplication                              | 2            | 11      
+SCM_MGR  | ZIOSO-HEJ2      | JDBC Thin Client                            | 2            | 11      
+SCM_MGR  | DESKTOP-BMHBA84 | ScpApplication                              | 2            | 11      
+SCM_MGR  | ZIOSO-PYE       | JDBC Thin Client                            | 2            | 11      
+SCM_MGR  | P2605LN0024     | JDBC Thin Client                            | 2            | 11      
+SCM_MGR  | ZIOSO-KYJ       | JDBC Thin Client                            | 2            | 11      
+SCM_MGR  | DESKTOP-ELMPP0M | JDBC Thin Client                            | 2            | 11      
+SCM_MGR  | DESKTOP-K7F2T66 | ScpApplication                              | 2            | 11      
+SCMP_APP | P2605LN0006     | JDBC Thin Client                            | 2            | 10      
+SCM_MGR  | P2605LN0048     | ScpApplication                              | 2            | 8       
+SCM_MGR  | P2605LN0048     | JDBC Thin Client                            | 2            | 4       
+SCM_MGR  | BJKIM           | DBeaver 26?0?3 ? Metadata                   | 2            | 1       
+SCM_MGR  | BJKIM           | DBeaver 26?0?3 ? Main                       | 2            | 1       
+SCM_MGR  | ZIOSO-HEJ2      | DBeaver 26?2?1 ? Metadata                   | 2            | 1       
+SCM_MGR  | P2605LN0024     | DBeaver 26?0?4 ? Main                       | 2            | 1       
+SCM_MGR  | P2605LN0024     | DBeaver 26?0?4 ? Metadata                   | 2            | 1       
+SCM_MGR  | P2605LN0024     | DBeaver 26?0?4 ? SQLEditor ?Script?188?sql? | 2            | 1       
+SCM_MGR  | ZIOSO-HEJ2      | DBeaver 26?2?1 ? Main                       | 2            | 1       
+SCM_MGR  | P2605LN0024     | DBeaver 26?0?4 ? SQLEditor ?Script?144?sql? | 2            | 1       
+(20 rows)
+--  BE 계정(SCMD_APP/SCMP_APP 등) 세션이 0 이어도 SP 첫 줄이 2 로 바꾸므로 조회 SP 에는 무해. 참고용.
+=============================================================================
+C02 완료 → C02_SCREEN_LOG_ASH_OUT.txt 회신
+[S1] 로 DB/BE/네트워크 중 어디인지 → DB 면 [S2] 상위 SQL_ID 를 C04_PLAN_OF_SQLID.sql 에 넣어 계획 확인
+=============================================================================

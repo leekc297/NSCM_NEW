@@ -1,0 +1,15 @@
+CHK | N | LINES | JUDGE
+V1 마커 | 4 | 15098,15110,15166,15192 | PASS
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:31 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-15 13:18:04 | 0 | 0
+(2 rows)
+
+CHK | KIND | OLD_N | NEW_N | JUDGE
+V3 문장 | D1 Phase1 DELETE 대상 | 0 | 1 | PASS
+V3 문장 | D2 Phase1 DELETE 내부 | 0 | 1 | PASS
+V3 문장 | M1 MERGE 소스 | 0 | 1 | PASS
+V3 문장 | M2 MERGE INSERT 조건 | 0 | 1 | PASS
+(4 rows)

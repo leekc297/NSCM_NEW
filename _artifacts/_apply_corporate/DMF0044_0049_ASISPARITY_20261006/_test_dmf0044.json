@@ -1,0 +1,949 @@
+[
+ {
+  "case": "A1 DEPT_NAME NULL(임시 1행) → 문구",
+  "TB": {
+   "kind": "TB",
+   "version": "R_S_20260610_V001",
+   "action": "T",
+   "msg": "DEPT_NAME 정보가 존재하지 않아 저장할 수 없습니다.",
+   "sec": 0.2,
+   "in_session": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12559,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34521,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     0,
+     0
+    ]
+   },
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true,
+   "ledger": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12559,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34521,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     0,
+     0
+    ]
+   }
+  },
+  "TA": {
+   "kind": "TA",
+   "version": "R_S_20260610_V001",
+   "action": "T",
+   "msg": "TEAM정보가 존재하지 않아 저장할 수 없습니다.",
+   "sec": 0.0,
+   "in_session": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12559,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34521,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     0,
+     0
+    ]
+   },
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true,
+   "ledger": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12559,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34521,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     0,
+     0
+    ]
+   }
+  },
+  "same_msg": false,
+  "same_result": true
+ },
+ {
+  "case": "A2 DEPARTMENT_NAME NULL 버전 Transfer",
+  "TB": {
+   "kind": "TB",
+   "version": "R_S_20260604_V001",
+   "action": "T",
+   "msg": "DEPARTMENT_NAME 정보가 존재하지 않아 저장할 수 없습니다.",
+   "sec": 0.0,
+   "in_session": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12377,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34122,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     24,
+     0
+    ]
+   },
+   "inspect": {
+    "SEND_YN": "N",
+    "ETC_rows": 12377,
+    "ETC_DEPARTMENT_NAME_null": 24,
+    "RPT_type2_rows": 0,
+    "RPT_type2_DEPARTMENT_NAME_dash": 0,
+    "MOBILE_DEPT": 0,
+    "MOBILE_PRODUCT": 0,
+    "MOBILE_EXRATE": 0
+   },
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true,
+   "ledger": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12377,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34122,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     24,
+     0
+    ]
+   }
+  },
+  "TA": {
+   "kind": "TA",
+   "version": "R_S_20260604_V001",
+   "action": "T",
+   "msg": "success",
+   "sec": 6.3,
+   "in_session": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12377,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     46499,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     587,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     23,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     23,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     24,
+     0
+    ]
+   },
+   "inspect": {
+    "SEND_YN": "Y",
+    "ETC_rows": 12377,
+    "ETC_DEPARTMENT_NAME_null": 24,
+    "RPT_type2_rows": 12377,
+    "RPT_type2_DEPARTMENT_NAME_dash": 24,
+    "MOBILE_DEPT": 587,
+    "MOBILE_PRODUCT": 23,
+    "MOBILE_EXRATE": 23
+   },
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true,
+   "ledger": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12377,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34122,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     24,
+     0
+    ]
+   }
+  },
+  "same_msg": false,
+  "same_result": false
+ },
+ {
+  "case": "A3 정상 버전 Transfer (회귀)",
+  "TB": {
+   "kind": "TB",
+   "version": "R_S_20260610_V001",
+   "action": "T",
+   "msg": "success",
+   "sec": 5.7,
+   "in_session": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12559,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     47080,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     592,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     23,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     23,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     0,
+     0
+    ]
+   },
+   "inspect": {
+    "SEND_YN": "Y",
+    "ETC_rows": 12559,
+    "ETC_DEPARTMENT_NAME_null": 0,
+    "RPT_type2_rows": 12559,
+    "RPT_type2_DEPARTMENT_NAME_dash": 0,
+    "MOBILE_DEPT": 592,
+    "MOBILE_PRODUCT": 23,
+    "MOBILE_EXRATE": 23
+   },
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true,
+   "ledger": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12559,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34521,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     0,
+     0
+    ]
+   }
+  },
+  "TA": {
+   "kind": "TA",
+   "version": "R_S_20260610_V001",
+   "action": "T",
+   "msg": "success",
+   "sec": 1.4,
+   "in_session": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12559,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     47080,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     592,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     23,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     23,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     0,
+     0
+    ]
+   },
+   "inspect": {
+    "SEND_YN": "Y",
+    "ETC_rows": 12559,
+    "ETC_DEPARTMENT_NAME_null": 0,
+    "RPT_type2_rows": 12559,
+    "RPT_type2_DEPARTMENT_NAME_dash": 0,
+    "MOBILE_DEPT": 592,
+    "MOBILE_PRODUCT": 23,
+    "MOBILE_EXRATE": 23
+   },
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true,
+   "ledger": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12559,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34521,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     0,
+     0
+    ]
+   }
+  },
+  "same_msg": true,
+  "same_result": true
+ },
+ {
+  "case": "A4 정상 버전 Cancel 시도 (SEND_YN=N → 기존 검증 문구, 회귀)",
+  "TB": {
+   "kind": "TB",
+   "version": "R_S_20260610_V001",
+   "action": "C",
+   "msg": "Transfer Cancel은 SendYN 이 Y일 경우만 가능합니다.",
+   "sec": 0.0,
+   "in_session": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12559,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34521,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     0,
+     0
+    ]
+   },
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true,
+   "ledger": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12559,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34521,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     0,
+     0
+    ]
+   }
+  },
+  "TA": {
+   "kind": "TA",
+   "version": "R_S_20260610_V001",
+   "action": "C",
+   "msg": "Transfer Cancel은 SendYN 이 Y일 경우만 가능합니다.",
+   "sec": 0.0,
+   "in_session": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12559,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34521,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     0,
+     0
+    ]
+   },
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true,
+   "ledger": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12559,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     34521,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     0,
+     0
+    ]
+   }
+  },
+  "same_msg": true,
+  "same_result": true
+ },
+ {
+  "case": "A6 전송 완료 버전 Cancel (회귀)",
+  "TB": {
+   "kind": "TB",
+   "version": "R_S_20260604_V002_C",
+   "action": "C",
+   "msg": "success",
+   "sec": 166.2,
+   "in_session": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12447,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     221297,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     696,
+     0
+    ]
+   },
+   "inspect": {
+    "SEND_YN": "C",
+    "ETC_rows": 12447,
+    "ETC_DEPARTMENT_NAME_null": 0,
+    "RPT_type2_rows": 12447,
+    "RPT_type2_DEPARTMENT_NAME_dash": 0,
+    "MOBILE_DEPT": 0,
+    "MOBILE_PRODUCT": 0,
+    "MOBILE_EXRATE": 0
+   },
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true,
+   "ledger": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12447,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     221297,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     1206,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     23,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     23,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     696,
+     0
+    ]
+   }
+  },
+  "TA": {
+   "kind": "TA",
+   "version": "R_S_20260604_V002_C",
+   "action": "C",
+   "msg": "success",
+   "sec": 0.8,
+   "in_session": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12447,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     221297,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     0,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     0,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     696,
+     0
+    ]
+   },
+   "inspect": {
+    "SEND_YN": "C",
+    "ETC_rows": 12447,
+    "ETC_DEPARTMENT_NAME_null": 0,
+    "RPT_type2_rows": 12447,
+    "RPT_type2_DEPARTMENT_NAME_dash": 0,
+    "MOBILE_DEPT": 0,
+    "MOBILE_PRODUCT": 0,
+    "MOBILE_EXRATE": 0
+   },
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true,
+   "ledger": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12447,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     221297,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     1206,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     23,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     23,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     696,
+     0
+    ]
+   }
+  },
+  "same_msg": true,
+  "same_result": true
+ },
+ {
+  "case": "A7 전송 완료 버전 재 Transfer (회귀)",
+  "TB": {
+   "kind": "TB",
+   "version": "R_S_20260604_V002_C",
+   "action": "T",
+   "msg": "success",
+   "sec": 4.5,
+   "in_session": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12447,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     221297,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     1214,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     23,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     23,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     696,
+     0
+    ]
+   },
+   "inspect": {
+    "SEND_YN": "Y",
+    "ETC_rows": 12447,
+    "ETC_DEPARTMENT_NAME_null": 0,
+    "RPT_type2_rows": 12447,
+    "RPT_type2_DEPARTMENT_NAME_dash": 0,
+    "MOBILE_DEPT": 1214,
+    "MOBILE_PRODUCT": 23,
+    "MOBILE_EXRATE": 23
+   },
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true,
+   "ledger": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12447,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     221297,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     1206,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     23,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     23,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     696,
+     0
+    ]
+   }
+  },
+  "TA": {
+   "kind": "TA",
+   "version": "R_S_20260604_V002_C",
+   "action": "T",
+   "msg": "success",
+   "sec": 2.4,
+   "in_session": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12447,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     221297,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     1214,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     23,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     23,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     696,
+     0
+    ]
+   },
+   "inspect": {
+    "SEND_YN": "Y",
+    "ETC_rows": 12447,
+    "ETC_DEPARTMENT_NAME_null": 0,
+    "RPT_type2_rows": 12447,
+    "RPT_type2_DEPARTMENT_NAME_dash": 0,
+    "MOBILE_DEPT": 1214,
+    "MOBILE_PRODUCT": 23,
+    "MOBILE_EXRATE": 23
+   },
+   "no_commit_before_rollback": true,
+   "ledger_same_after": true,
+   "ledger": {
+    "DM_MDF_VERSION": [
+     1,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_C": [
+     12447,
+     0
+    ],
+    "DM_PLN_SALES_PLAN_REPORT_C": [
+     221297,
+     0
+    ],
+    "DM_MOBILE_REPORT_DEPT": [
+     1206,
+     0
+    ],
+    "DM_MOBILE_REPORT_PRODUCT": [
+     23,
+     0
+    ],
+    "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+     23,
+     0
+    ],
+    "DM_PLN_SALES_ETC_REPORT_H": [
+     696,
+     0
+    ]
+   }
+  },
+  "same_msg": true,
+  "same_result": true
+ },
+ {
+  "case": "A5 없는 버전",
+  "TB": {
+   "msg": "VERSION 값이 존재하지 않습니다."
+  },
+  "TA": {
+   "msg": "VERSION 값이 존재하지 않습니다."
+  }
+ }
+]

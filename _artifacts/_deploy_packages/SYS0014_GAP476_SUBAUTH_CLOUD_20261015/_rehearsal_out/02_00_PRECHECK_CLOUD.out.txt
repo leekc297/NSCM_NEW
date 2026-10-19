@@ -1,0 +1,27 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-15 21:29:27
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | LINES_N
+L0 | PACKAGE | VALID | 2026-10-09 13:38:31 | 38
+L0 | PACKAGE BODY | VALID | 2026-10-15 21:29:27 | 373
+(2 rows)
+
+CHK | KIND | N | JUDGE
+L1 대상 | unit_auth DELETE 4키 줄 | 1 | PASS
+(1 rows)
+
+CHK | KIND | DATA_TYPE | NULLABLE
+L2 컬럼 | UPPR_UNIT_ID | VARCHAR2 | N
+(1 rows)
+
+CHK | N | LINE | JUDGE
+L3 마커 | 0 |  | 미적용 (기대)
+(1 rows)
+
+CHK | UNIT_TP_CD | N | NO_PARENT_CODE | ORPHAN
+L4 참고 | P | 7 | 7 | 0
+(1 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

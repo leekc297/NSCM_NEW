@@ -1,0 +1,321 @@
+﻿================================================================================================
+ DMF0005 조회 프로시저 프로파일  DB=ZIOUI1/ZIOUI1  HOST=localhost  SID=400  2026-10-14 10:35:34
+ 인자: user=minyonglee1 · dept / cust / site = ALL · pjt / item / owner = 빈칸 · active = ALL (화면 기본 조회)
+ 사내SEC / 사내BG = 같은 SQL_ID 의 사내 1회 실측 · SEC_X = 이 DB ÷ 사내 · PHV비교 ≠ = 실행계획이 사내와 다름
+ 사내없음 = SQL_ID 가 사내와 다름(문장 원문이 다름 = BODY 판본 차이 — C01 [E2b] 참조)
+================================================================================================
+
+### div=82 run1 (하드파싱 포함)  (A) 프로시저 0.21s  + 커서 fetch 0.43s  = DB 합 0.64s   rows=38621 cols=53
+      사내 기준(ZIOUI1 2회차): 프로시저 0.29s + fetch 0.61s = 0.90s  rows=38621 cols=53 · 함수 내부 SQL 562회 0.01s
+  (B) 문장별 귀속 — V$SQL 차이 상위 15 (SEC = 경과 · BG = buffer gets · DR = disk reads · HP = 하드파싱 로드)
+      LINE  PROGRAM                         SEC      CPU    EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      85    PKG_DMF0005                   0.527    0.524       1       38130         0     38621   0  8pn2cpba1y5v8/2   3905882324     0.741    0.7     38126  same     WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.ITEM_NAME) AS ITEM_N
+      93    FN_GET_MULTI_OWNER_NAME       0.002    0.001     184         552         0       183   0  6yxcaghw1xvw4/0   474365068      0.002    0.8       551  same     SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      102   FN_GET_MULTI_OWNER_NAME       0.001    0.003     184         551         0       183   0  80gwfp597xcay/0   474365068      0.002    0.6       551  same     SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(:B
+      43    FN_GET_MULTI_OWNER_NAME       0.000    0.000      55         165         0        55   0  400k7q5w83ntz/1   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      52    FN_GET_MULTI_OWNER_NAME       0.000    0.000      55         165         0        55   0  80qubpwgf1cga/1   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(SU
+      71    FN_GET_MULTI_OWNER_NAME       0.000    0.000      42         126         0        42   0  92h5nf23npzux/1   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+      80    FN_GET_MULTI_OWNER_NAME       0.000    0.000      42         126         0        42   0  aha308f2r8ppa/1   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(
+      33    PKG_DMF0005                   0.000    0.000       1          15         0         1   0  11r27acrqd8nc/1   467930114          -      -         -  사내없음 SELECT CASE WHEN COUNT(*) > 0 THEN 'ADMIN' ELSE '' END FROM SCM_ADM_LOOKUP_MASTE
+      49    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  g0czpk3wr99fp/0   3755214712         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_TEAM_ID
+      50    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  6bp4rt74pxm7q/0   3181390163         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_CUSTOMER
+      53    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  90d6vh04jguqp/0   1424515730         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_ITEM_ID
+      52    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7qc0k6nm2ws4d/0   3966044219         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_VALID_YN
+      51    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7dgrsckw5kr69/0   2705552450         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_SCM_SITE_ID
+      54    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  dvx6j1xc3kru3/0   507538506          -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE
+      55    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  8uxubnvtczga0/0   1974473957         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_OWNER
+      합계: 패키지 문장 0.53s · 함수 내부 SQL 0.00s (562회 실행) · 동적 샘플링 재귀 0.00s (0문장)
+      ※ 패키지 문장의 SEC 에는 그 문장이 부른 함수 내부 SQL 시간이 포함된다 (함수 내부 SQL 은 따로 한 번 더 보인다)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 × 계획 줄 (표본 ≈ 초)
+      06y2cup476jbk       1  ON CPU                            1029869609  line 3    FIXED TABLE FULL                  -
+  (D) 세션 통계 차이
+      CPU used by this session                                     169
+      execute count                                                574
+      index range scans                                            713
+      parse count (total)                                           17
+      recursive calls                                            39252
+      session logical reads                                      53747
+      sorts (rows)                                               38621
+      table scan rows gotten                                    400066
+      → 문장 귀속 합 0.53s / DB 합 0.64s (차이 = PL/SQL 처리 · 행 전달 · 귀속 밖 재귀 SQL)
+
+### div=82 run2 (재사용 — 판단 기준)  (A) 프로시저 0.22s  + 커서 fetch 0.42s  = DB 합 0.64s   rows=38621 cols=53
+      사내 기준(ZIOUI1 2회차): 프로시저 0.29s + fetch 0.61s = 0.90s  rows=38621 cols=53 · 함수 내부 SQL 562회 0.01s
+  (B) 문장별 귀속 — V$SQL 차이 상위 15 (SEC = 경과 · BG = buffer gets · DR = disk reads · HP = 하드파싱 로드)
+      LINE  PROGRAM                         SEC      CPU    EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      85    PKG_DMF0005                   0.524    0.519       1       38126         0     38621   0  8pn2cpba1y5v8/2   3905882324     0.741    0.7     38126  same     WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.ITEM_NAME) AS ITEM_N
+      93    FN_GET_MULTI_OWNER_NAME       0.001    0.002     184         551         0       183   0  6yxcaghw1xvw4/0   474365068      0.002    0.7       551  same     SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      102   FN_GET_MULTI_OWNER_NAME       0.001    0.002     184         551         0       183   0  80gwfp597xcay/0   474365068      0.002    0.6       551  same     SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(:B
+      43    FN_GET_MULTI_OWNER_NAME       0.000    0.000      55         165         0        55   0  400k7q5w83ntz/1   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      52    FN_GET_MULTI_OWNER_NAME       0.000    0.000      55         165         0        55   0  80qubpwgf1cga/1   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(SU
+      71    FN_GET_MULTI_OWNER_NAME       0.000    0.000      42         126         0        42   0  92h5nf23npzux/1   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+      80    FN_GET_MULTI_OWNER_NAME       0.000    0.000      42         126         0        42   0  aha308f2r8ppa/1   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(
+      33    PKG_DMF0005                   0.000    0.000       1          15         0         1   0  11r27acrqd8nc/1   467930114          -      -         -  사내없음 SELECT CASE WHEN COUNT(*) > 0 THEN 'ADMIN' ELSE '' END FROM SCM_ADM_LOOKUP_MASTE
+      49    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  g0czpk3wr99fp/0   3755214712         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_TEAM_ID
+      53    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  90d6vh04jguqp/0   1424515730         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_ITEM_ID
+      50    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  6bp4rt74pxm7q/0   3181390163         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_CUSTOMER
+      54    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  dvx6j1xc3kru3/0   507538506          -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE
+      55    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  8uxubnvtczga0/0   1974473957         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_OWNER
+      51    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7dgrsckw5kr69/0   2705552450         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_SCM_SITE_ID
+      52    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7qc0k6nm2ws4d/0   3966044219         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_VALID_YN
+      합계: 패키지 문장 0.52s · 함수 내부 SQL 0.00s (562회 실행) · 동적 샘플링 재귀 0.00s (0문장)
+      ※ 패키지 문장의 SEC 에는 그 문장이 부른 함수 내부 SQL 시간이 포함된다 (함수 내부 SQL 은 따로 한 번 더 보인다)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 × 계획 줄 (표본 ≈ 초)
+      06y2cup476jbk       1  ON CPU                            1029869609  line 3    FIXED TABLE FULL                  -
+  (D) 세션 통계 차이
+      CPU used by this session                                     166
+      execute count                                                574
+      index range scans                                            713
+      parse count (total)                                            3
+      recursive calls                                            39223
+      session logical reads                                      53743
+      sorts (rows)                                               38621
+      table scan rows gotten                                    400066
+      → 문장 귀속 합 0.52s / DB 합 0.64s (차이 = PL/SQL 처리 · 행 전달 · 귀속 밖 재귀 SQL)
+
+### div=82 run3 (행 실측 켬 — 시간은 참고)  (A) 프로시저 0.26s  + 커서 fetch 0.56s  = DB 합 0.82s   rows=38621 cols=53
+      사내 기준(ZIOUI1 2회차): 프로시저 0.29s + fetch 0.61s = 0.90s  rows=38621 cols=53 · 함수 내부 SQL 562회 0.01s
+  (B) 문장별 귀속 — V$SQL 차이 상위 15 (SEC = 경과 · BG = buffer gets · DR = disk reads · HP = 하드파싱 로드)
+      LINE  PROGRAM                         SEC      CPU    EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      85    PKG_DMF0005                   0.685    0.684       1       38126         0     38621   0  8pn2cpba1y5v8/7   3905882324     0.741    0.9     38126  same     WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.ITEM_NAME) AS ITEM_N
+      93    FN_GET_MULTI_OWNER_NAME       0.002    0.001     184         551         0       183   0  6yxcaghw1xvw4/2   474365068      0.002    0.8       551  same     SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      102   FN_GET_MULTI_OWNER_NAME       0.001    0.003     184         551         0       183   0  80gwfp597xcay/2   474365068      0.002    0.6       551  same     SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(:B
+      43    FN_GET_MULTI_OWNER_NAME       0.000    0.000      55         165         0        55   0  400k7q5w83ntz/5   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      52    FN_GET_MULTI_OWNER_NAME       0.000    0.000      55         165         0        55   0  80qubpwgf1cga/5   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(SU
+      71    FN_GET_MULTI_OWNER_NAME       0.000    0.000      42         126         0        42   0  92h5nf23npzux/5   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+      80    FN_GET_MULTI_OWNER_NAME       0.000    0.000      42         126         0        42   0  aha308f2r8ppa/4   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(
+      33    PKG_DMF0005                   0.000    0.000       1          15         0         1   0  11r27acrqd8nc/2   467930114          -      -         -  사내없음 SELECT CASE WHEN COUNT(*) > 0 THEN 'ADMIN' ELSE '' END FROM SCM_ADM_LOOKUP_MASTE
+      49    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  g0czpk3wr99fp/1   3755214712         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_TEAM_ID
+      55    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  8uxubnvtczga0/1   1974473957         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_OWNER
+      50    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  6bp4rt74pxm7q/1   3181390163         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_CUSTOMER
+      53    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  90d6vh04jguqp/1   1424515730         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_ITEM_ID
+      54    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  dvx6j1xc3kru3/1   507538506          -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE
+      52    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7qc0k6nm2ws4d/1   3966044219         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_VALID_YN
+      51    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7dgrsckw5kr69/1   2705552450         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_SCM_SITE_ID
+      합계: 패키지 문장 0.69s · 함수 내부 SQL 0.00s (562회 실행) · 동적 샘플링 재귀 0.00s (0문장)
+      ※ 패키지 문장의 SEC 에는 그 문장이 부른 함수 내부 SQL 시간이 포함된다 (함수 내부 SQL 은 따로 한 번 더 보인다)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 × 계획 줄 (표본 ≈ 초)
+      06y2cup476jbk       1  ON CPU                            1029869609  line 3    FIXED TABLE FULL                  -
+      8pn2cpba1y5v8       1  ON CPU                            3905882324  line 15   HASH JOIN RIGHT OUTER             -
+  (D) 세션 통계 차이
+      CPU used by this session                                     187
+      execute count                                                574
+      index range scans                                            713
+      parse count (total)                                           17
+      recursive calls                                            39252
+      session logical reads                                      53743
+      sorts (rows)                                               38621
+      table scan rows gotten                                    400066
+      → 문장 귀속 합 0.69s / DB 합 0.82s (차이 = PL/SQL 처리 · 행 전달 · 귀속 밖 재귀 SQL)
+
+### div=81 run1 (하드파싱 포함)  (A) 프로시저 0.23s  + 커서 fetch 0.54s  = DB 합 0.77s   rows=42088 cols=53
+      사내 기준(ZIOUI1 2회차): 프로시저 0.35s + fetch 0.59s = 0.94s  rows=42088 cols=53 · 함수 내부 SQL 1218회 0.01s
+  (B) 문장별 귀속 — V$SQL 차이 상위 15 (SEC = 경과 · BG = buffer gets · DR = disk reads · HP = 하드파싱 로드)
+      LINE  PROGRAM                         SEC      CPU    EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      85    PKG_DMF0005                   0.648    0.646       1       42592         0     42088   0  8pn2cpba1y5v8/2   3905882324     0.791    0.8     42592  same     WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.ITEM_NAME) AS ITEM_N
+      93    FN_GET_MULTI_OWNER_NAME       0.002    0.001     231         693         0       230   0  6yxcaghw1xvw4/0   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      43    FN_GET_MULTI_OWNER_NAME       0.002    0.002     236         712         0       236   0  400k7q5w83ntz/1   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      52    FN_GET_MULTI_OWNER_NAME       0.002    0.001     236         712         0       236   0  80qubpwgf1cga/1   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(SU
+      102   FN_GET_MULTI_OWNER_NAME       0.001    0.002     231         693         0       230   0  80gwfp597xcay/0   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(:B
+      71    FN_GET_MULTI_OWNER_NAME       0.001    0.001     142         428         0       142   0  92h5nf23npzux/1   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+      80    FN_GET_MULTI_OWNER_NAME       0.001    0.002     142         428         0       142   0  aha308f2r8ppa/1   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(
+      33    PKG_DMF0005                   0.000    0.001       1          15         0         1   0  11r27acrqd8nc/1   467930114          -      -         -  사내없음 SELECT CASE WHEN COUNT(*) > 0 THEN 'ADMIN' ELSE '' END FROM SCM_ADM_LOOKUP_MASTE
+      49    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  g0czpk3wr99fp/0   3755214712         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_TEAM_ID
+      50    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  6bp4rt74pxm7q/0   3181390163         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_CUSTOMER
+      53    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  90d6vh04jguqp/0   1424515730         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_ITEM_ID
+      51    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7dgrsckw5kr69/0   2705552450         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_SCM_SITE_ID
+      55    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  8uxubnvtczga0/0   1974473957         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_OWNER
+      52    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7qc0k6nm2ws4d/0   3966044219         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_VALID_YN
+      54    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  dvx6j1xc3kru3/0   507538506          -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE
+      합계: 패키지 문장 0.65s · 함수 내부 SQL 0.01s (1218회 실행) · 동적 샘플링 재귀 0.00s (0문장)
+      ※ 패키지 문장의 SEC 에는 그 문장이 부른 함수 내부 SQL 시간이 포함된다 (함수 내부 SQL 은 따로 한 번 더 보인다)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 × 계획 줄 (표본 ≈ 초)
+      06y2cup476jbk       1  ON CPU                            1029869609  line 3    FIXED TABLE FULL                  -
+      8pn2cpba1y5v8       1  ON CPU                            3905882324  line 7    TABLE ACCESS BY INDEX ROWID       -
+  (D) 세션 통계 차이
+      CPU used by this session                                     183
+      execute count                                               1230
+      index range scans                                           1369
+      parse count (total)                                           17
+      recursive calls                                            43346
+      session logical reads                                      58209
+      sorts (rows)                                               42088
+      table scan rows gotten                                    400066
+      → 문장 귀속 합 0.65s / DB 합 0.77s (차이 = PL/SQL 처리 · 행 전달 · 귀속 밖 재귀 SQL)
+
+### div=81 run2 (재사용 — 판단 기준)  (A) 프로시저 0.24s  + 커서 fetch 0.52s  = DB 합 0.76s   rows=42088 cols=53
+      사내 기준(ZIOUI1 2회차): 프로시저 0.35s + fetch 0.59s = 0.94s  rows=42088 cols=53 · 함수 내부 SQL 1218회 0.01s
+  (B) 문장별 귀속 — V$SQL 차이 상위 15 (SEC = 경과 · BG = buffer gets · DR = disk reads · HP = 하드파싱 로드)
+      LINE  PROGRAM                         SEC      CPU    EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      85    PKG_DMF0005                   0.632    0.628       1       42592         0     42088   0  8pn2cpba1y5v8/2   3905882324     0.791    0.8     42592  same     WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.ITEM_NAME) AS ITEM_N
+      93    FN_GET_MULTI_OWNER_NAME       0.002    0.001     231         693         0       230   0  6yxcaghw1xvw4/0   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      43    FN_GET_MULTI_OWNER_NAME       0.002    0.001     236         712         0       236   0  400k7q5w83ntz/1   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      52    FN_GET_MULTI_OWNER_NAME       0.002    0.001     236         712         0       236   0  80qubpwgf1cga/1   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(SU
+      102   FN_GET_MULTI_OWNER_NAME       0.001    0.002     231         693         0       230   0  80gwfp597xcay/0   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(:B
+      71    FN_GET_MULTI_OWNER_NAME       0.001    0.001     142         428         0       142   0  92h5nf23npzux/1   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+      80    FN_GET_MULTI_OWNER_NAME       0.001    0.001     142         428         0       142   0  aha308f2r8ppa/1   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(
+      33    PKG_DMF0005                   0.000    0.000       1          15         0         1   0  11r27acrqd8nc/1   467930114          -      -         -  사내없음 SELECT CASE WHEN COUNT(*) > 0 THEN 'ADMIN' ELSE '' END FROM SCM_ADM_LOOKUP_MASTE
+      49    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  g0czpk3wr99fp/0   3755214712         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_TEAM_ID
+      54    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  dvx6j1xc3kru3/0   507538506          -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE
+      53    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  90d6vh04jguqp/0   1424515730         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_ITEM_ID
+      50    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  6bp4rt74pxm7q/0   3181390163         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_CUSTOMER
+      52    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7qc0k6nm2ws4d/0   3966044219         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_VALID_YN
+      51    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7dgrsckw5kr69/0   2705552450         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_SCM_SITE_ID
+      55    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  8uxubnvtczga0/0   1974473957         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_OWNER
+      합계: 패키지 문장 0.63s · 함수 내부 SQL 0.01s (1218회 실행) · 동적 샘플링 재귀 0.00s (0문장)
+      ※ 패키지 문장의 SEC 에는 그 문장이 부른 함수 내부 SQL 시간이 포함된다 (함수 내부 SQL 은 따로 한 번 더 보인다)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 × 계획 줄 (표본 ≈ 초)
+      06y2cup476jbk       1  ON CPU                            1029869609  line 3    FIXED TABLE FULL                  -
+      8pn2cpba1y5v8       1  ON CPU                            3905882324  line 4    LOAD AS SELECT (CURSOR DURATION ME-
+  (D) 세션 통계 차이
+      CPU used by this session                                     178
+      execute count                                               1230
+      index range scans                                           1369
+      parse count (total)                                            3
+      recursive calls                                            43346
+      session logical reads                                      58209
+      sorts (rows)                                               42088
+      table scan rows gotten                                    400066
+      → 문장 귀속 합 0.63s / DB 합 0.76s (차이 = PL/SQL 처리 · 행 전달 · 귀속 밖 재귀 SQL)
+
+### div=81 run3 (행 실측 켬 — 시간은 참고)  (A) 프로시저 0.30s  + 커서 fetch 0.94s  = DB 합 1.24s   rows=42088 cols=53
+      사내 기준(ZIOUI1 2회차): 프로시저 0.35s + fetch 0.59s = 0.94s  rows=42088 cols=53 · 함수 내부 SQL 1218회 0.01s
+  (B) 문장별 귀속 — V$SQL 차이 상위 15 (SEC = 경과 · BG = buffer gets · DR = disk reads · HP = 하드파싱 로드)
+      LINE  PROGRAM                         SEC      CPU    EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      85    PKG_DMF0005                   1.064    1.063       1       42592         0     42088   0  8pn2cpba1y5v8/7   3905882324     0.791    1.3     42592  same     WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.ITEM_NAME) AS ITEM_N
+      93    FN_GET_MULTI_OWNER_NAME       0.002    0.001     231         693         0       230   0  6yxcaghw1xvw4/2   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      43    FN_GET_MULTI_OWNER_NAME       0.002    0.003     236         712         0       236   0  400k7q5w83ntz/5   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      52    FN_GET_MULTI_OWNER_NAME       0.002    0.003     236         712         0       236   0  80qubpwgf1cga/5   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(SU
+      102   FN_GET_MULTI_OWNER_NAME       0.002    0.002     231         693         0       230   0  80gwfp597xcay/2   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(:B
+      71    FN_GET_MULTI_OWNER_NAME       0.001    0.001     142         428         0       142   0  92h5nf23npzux/5   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+      80    FN_GET_MULTI_OWNER_NAME       0.001    0.001     142         428         0       142   0  aha308f2r8ppa/4   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(
+      33    PKG_DMF0005                   0.000    0.000       1          15         0         1   0  11r27acrqd8nc/2   467930114          -      -         -  사내없음 SELECT CASE WHEN COUNT(*) > 0 THEN 'ADMIN' ELSE '' END FROM SCM_ADM_LOOKUP_MASTE
+      49    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  g0czpk3wr99fp/1   3755214712         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_TEAM_ID
+      50    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  6bp4rt74pxm7q/1   3181390163         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_CUSTOMER
+      52    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7qc0k6nm2ws4d/1   3966044219         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_VALID_YN
+      54    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  dvx6j1xc3kru3/1   507538506          -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE
+      53    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  90d6vh04jguqp/1   1424515730         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_ITEM_ID
+      55    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  8uxubnvtczga0/1   1974473957         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_OWNER
+      51    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7dgrsckw5kr69/1   2705552450         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_SCM_SITE_ID
+      합계: 패키지 문장 1.06s · 함수 내부 SQL 0.01s (1218회 실행) · 동적 샘플링 재귀 0.00s (0문장)
+      ※ 패키지 문장의 SEC 에는 그 문장이 부른 함수 내부 SQL 시간이 포함된다 (함수 내부 SQL 은 따로 한 번 더 보인다)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 × 계획 줄 (표본 ≈ 초)
+      06y2cup476jbk       1  ON CPU                            1029869609  line 3    FIXED TABLE FULL                  -
+      8pn2cpba1y5v8       1  ON CPU                            3905882324  line 56   TABLE ACCESS FULL                 SCM_MST_SITE_ITEM
+  (D) 세션 통계 차이
+      CPU used by this session                                     228
+      execute count                                               1230
+      index range scans                                           1369
+      parse count (total)                                           17
+      recursive calls                                            43346
+      session logical reads                                      58209
+      sorts (rows)                                               42088
+      table scan rows gotten                                    400066
+      → 문장 귀속 합 1.06s / DB 합 1.24s (차이 = PL/SQL 처리 · 행 전달 · 귀속 밖 재귀 SQL)
+
+### div=40 run1 (하드파싱 포함)  (A) 프로시저 0.29s  + 커서 fetch 0.31s  = DB 합 0.60s   rows=15569 cols=53
+      사내 기준(ZIOUI1 2회차): 프로시저 0.33s + fetch 0.41s = 0.74s  rows=15569 cols=53 · 함수 내부 SQL 196회 0.00s
+  (B) 문장별 귀속 — V$SQL 차이 상위 15 (SEC = 경과 · BG = buffer gets · DR = disk reads · HP = 하드파싱 로드)
+      LINE  PROGRAM                         SEC      CPU    EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      85    PKG_DMF0005                   0.556    0.558       1       42005         0     15569   0  8pn2cpba1y5v8/2   3905882324     0.681    0.8     42005  same     WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.ITEM_NAME) AS ITEM_N
+      93    FN_GET_MULTI_OWNER_NAME       0.001    0.002      89         267         0        89   0  6yxcaghw1xvw4/0   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      102   FN_GET_MULTI_OWNER_NAME       0.001    0.000      89         267         0        89   0  80gwfp597xcay/0   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(:B
+      33    PKG_DMF0005                   0.000    0.000       1          15         0         1   0  11r27acrqd8nc/1   467930114          -      -         -  사내없음 SELECT CASE WHEN COUNT(*) > 0 THEN 'ADMIN' ELSE '' END FROM SCM_ADM_LOOKUP_MASTE
+      43    FN_GET_MULTI_OWNER_NAME       0.000    0.000       5          15         0         5   0  400k7q5w83ntz/1   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      71    FN_GET_MULTI_OWNER_NAME       0.000    0.000       4          12         0         4   0  92h5nf23npzux/1   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+      52    FN_GET_MULTI_OWNER_NAME       0.000    0.000       5          15         0         5   0  80qubpwgf1cga/1   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(SU
+      49    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  g0czpk3wr99fp/0   3755214712         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_TEAM_ID
+      80    FN_GET_MULTI_OWNER_NAME       0.000    0.000       4          12         0         4   0  aha308f2r8ppa/1   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(
+      50    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  6bp4rt74pxm7q/0   3181390163         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_CUSTOMER
+      51    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7dgrsckw5kr69/0   2705552450         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_SCM_SITE_ID
+      54    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  dvx6j1xc3kru3/0   507538506          -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE
+      55    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  8uxubnvtczga0/0   1974473957         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_OWNER
+      53    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  90d6vh04jguqp/0   1424515730         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_ITEM_ID
+      52    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7qc0k6nm2ws4d/0   3966044219         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_VALID_YN
+      합계: 패키지 문장 0.56s · 함수 내부 SQL 0.00s (196회 실행) · 동적 샘플링 재귀 0.00s (0문장)
+      ※ 패키지 문장의 SEC 에는 그 문장이 부른 함수 내부 SQL 시간이 포함된다 (함수 내부 SQL 은 따로 한 번 더 보인다)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 × 계획 줄 (표본 ≈ 초)
+      06y2cup476jbk       1  ON CPU                            1029869609  line 3    FIXED TABLE FULL                  -
+      8pn2cpba1y5v8       1  ON CPU                            3905882324  line 7    TABLE ACCESS BY INDEX ROWID       -
+  (D) 세션 통계 차이
+      CPU used by this session                                     162
+      execute count                                                208
+      index range scans                                            347
+      parse count (total)                                           17
+      recursive calls                                            15803
+      session logical reads                                      57622
+      sorts (rows)                                               15569
+      table scan rows gotten                                    400066
+      → 문장 귀속 합 0.56s / DB 합 0.60s (차이 = PL/SQL 처리 · 행 전달 · 귀속 밖 재귀 SQL)
+
+### div=40 run2 (재사용 — 판단 기준)  (A) 프로시저 0.30s  + 커서 fetch 0.31s  = DB 합 0.61s   rows=15569 cols=53
+      사내 기준(ZIOUI1 2회차): 프로시저 0.33s + fetch 0.41s = 0.74s  rows=15569 cols=53 · 함수 내부 SQL 196회 0.00s
+  (B) 문장별 귀속 — V$SQL 차이 상위 15 (SEC = 경과 · BG = buffer gets · DR = disk reads · HP = 하드파싱 로드)
+      LINE  PROGRAM                         SEC      CPU    EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      85    PKG_DMF0005                   0.564    0.560       1       42005         0     15569   0  8pn2cpba1y5v8/2   3905882324     0.681    0.8     42005  same     WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.ITEM_NAME) AS ITEM_N
+      93    FN_GET_MULTI_OWNER_NAME       0.001    0.001      89         267         0        89   0  6yxcaghw1xvw4/0   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      102   FN_GET_MULTI_OWNER_NAME       0.001    0.000      89         267         0        89   0  80gwfp597xcay/0   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(:B
+      33    PKG_DMF0005                   0.000    0.000       1          15         0         1   0  11r27acrqd8nc/1   467930114          -      -         -  사내없음 SELECT CASE WHEN COUNT(*) > 0 THEN 'ADMIN' ELSE '' END FROM SCM_ADM_LOOKUP_MASTE
+      43    FN_GET_MULTI_OWNER_NAME       0.000    0.000       5          15         0         5   0  400k7q5w83ntz/1   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      52    FN_GET_MULTI_OWNER_NAME       0.000    0.000       5          15         0         5   0  80qubpwgf1cga/1   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(SU
+      71    FN_GET_MULTI_OWNER_NAME       0.000    0.000       4          12         0         4   0  92h5nf23npzux/1   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+      80    FN_GET_MULTI_OWNER_NAME       0.000    0.000       4          12         0         4   0  aha308f2r8ppa/1   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(
+      49    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  g0czpk3wr99fp/0   3755214712         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_TEAM_ID
+      55    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  8uxubnvtczga0/0   1974473957         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_OWNER
+      50    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  6bp4rt74pxm7q/0   3181390163         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_CUSTOMER
+      53    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  90d6vh04jguqp/0   1424515730         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_ITEM_ID
+      52    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7qc0k6nm2ws4d/0   3966044219         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_VALID_YN
+      54    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  dvx6j1xc3kru3/0   507538506          -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE
+      51    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7dgrsckw5kr69/0   2705552450         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_SCM_SITE_ID
+      합계: 패키지 문장 0.56s · 함수 내부 SQL 0.00s (196회 실행) · 동적 샘플링 재귀 0.00s (0문장)
+      ※ 패키지 문장의 SEC 에는 그 문장이 부른 함수 내부 SQL 시간이 포함된다 (함수 내부 SQL 은 따로 한 번 더 보인다)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 × 계획 줄 (표본 ≈ 초)
+      06y2cup476jbk       1  ON CPU                            1029869609  line 1    FILTER                            -
+      8pn2cpba1y5v8       1  ON CPU                            3905882324  line 18   HASH JOIN OUTER                   -
+  (D) 세션 통계 차이
+      CPU used by this session                                     164
+      execute count                                                208
+      index range scans                                            347
+      parse count (total)                                            3
+      recursive calls                                            15803
+      session logical reads                                      57622
+      sorts (rows)                                               15569
+      table scan rows gotten                                    400066
+      → 문장 귀속 합 0.56s / DB 합 0.61s (차이 = PL/SQL 처리 · 행 전달 · 귀속 밖 재귀 SQL)
+
+### div=40 run3 (행 실측 켬 — 시간은 참고)  (A) 프로시저 0.38s  + 커서 fetch 0.40s  = DB 합 0.78s   rows=15569 cols=53
+      사내 기준(ZIOUI1 2회차): 프로시저 0.33s + fetch 0.41s = 0.74s  rows=15569 cols=53 · 함수 내부 SQL 196회 0.00s
+  (B) 문장별 귀속 — V$SQL 차이 상위 15 (SEC = 경과 · BG = buffer gets · DR = disk reads · HP = 하드파싱 로드)
+      LINE  PROGRAM                         SEC      CPU    EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      85    PKG_DMF0005                   0.716    0.714       1       42004         0     15569   0  8pn2cpba1y5v8/7   3905882324     0.681    1.1     42005  same     WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.ITEM_NAME) AS ITEM_N
+      93    FN_GET_MULTI_OWNER_NAME       0.001    0.001      89         267         0        89   0  6yxcaghw1xvw4/2   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      102   FN_GET_MULTI_OWNER_NAME       0.001    0.000      89         267         0        89   0  80gwfp597xcay/2   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(:B
+      33    PKG_DMF0005                   0.000    0.000       1          15         0         1   0  11r27acrqd8nc/2   467930114          -      -         -  사내없음 SELECT CASE WHEN COUNT(*) > 0 THEN 'ADMIN' ELSE '' END FROM SCM_ADM_LOOKUP_MASTE
+      43    FN_GET_MULTI_OWNER_NAME       0.000    0.000       5          15         0         5   0  400k7q5w83ntz/5   474365068          -      -         -  사내없음 SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+      52    FN_GET_MULTI_OWNER_NAME       0.000    0.000       5          15         0         5   0  80qubpwgf1cga/5   474365068          -      -         -  사내없음 SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(SU
+      71    FN_GET_MULTI_OWNER_NAME       0.000    0.000       4          12         0         4   0  92h5nf23npzux/5   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+      80    FN_GET_MULTI_OWNER_NAME       0.000    0.000       4          12         0         4   0  aha308f2r8ppa/4   474365068          -      -         -  사내없음 SELECT :B2 || USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(
+      49    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  g0czpk3wr99fp/1   3755214712         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_TEAM_ID
+      54    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  dvx6j1xc3kru3/1   507538506          -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE
+      50    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  6bp4rt74pxm7q/1   3181390163         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_CUSTOMER
+      55    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  8uxubnvtczga0/1   1974473957         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_OWNER
+      52    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7qc0k6nm2ws4d/1   3966044219         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_VALID_YN
+      53    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  90d6vh04jguqp/1   1424515730         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_ITEM_ID
+      51    PKG_DMF0005                   0.000    0.000       1           0         0         0   0  7dgrsckw5kr69/1   2705552450         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_GGET_SPLIT_SCM_SITE_ID
+      합계: 패키지 문장 0.72s · 함수 내부 SQL 0.00s (196회 실행) · 동적 샘플링 재귀 0.00s (0문장)
+      ※ 패키지 문장의 SEC 에는 그 문장이 부른 함수 내부 SQL 시간이 포함된다 (함수 내부 SQL 은 따로 한 번 더 보인다)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 × 계획 줄 (표본 ≈ 초)
+      06y2cup476jbk       1  ON CPU                            1029869609  line 1    FILTER                            -
+      8pn2cpba1y5v8       1  ON CPU                            3905882324  line 9    SORT ORDER BY                     -
+  (D) 세션 통계 차이
+      CPU used by this session                                     184
+      execute count                                                208
+      index range scans                                            347
+      parse count (total)                                           17
+      recursive calls                                            15803
+      session logical reads                                      57621
+      sorts (rows)                                               15569
+      table scan rows gotten                                    400066
+      → 문장 귀속 합 0.72s / DB 합 0.78s (차이 = PL/SQL 처리 · 행 전달 · 귀속 밖 재귀 SQL)
+
+완료 — C03_SP_PROFILE_OUT.txt 회신

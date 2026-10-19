@@ -1,0 +1,1 @@
+export { UICategorySetup } from './UICategorySetup';

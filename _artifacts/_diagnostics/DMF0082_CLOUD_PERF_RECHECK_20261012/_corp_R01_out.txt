@@ -1,0 +1,211 @@
+################ [E0] 접속 DB 식별 (QA / DEV 구분 — BE datasource 와 대조) ################
+USR     | DB_NAME | CON_NAME | INST | SVC    | HOST   | NOW                
+--------+---------+----------+------+--------+--------+--------------------
+SCM_MGR | ZIOUI1  | ZIOUI1   | ZIO  | zioui1 | ol9-db | 2026-10-12 00:58:53
+(1 rows)
+################ [E1] ⭐ PKG_DMF0082 BODY 판본 — 사내 현재(2026-10-09 16:32, 지문 17034/885965)와 대조 ################
+OBJECT_TYPE  | STATUS | LAST_DDL            | ERR_CNT
+-------------+--------+---------------------+--------
+PACKAGE      | VALID  | 2026-10-02 17:59:16 | 0      
+PACKAGE BODY | VALID  | 2026-10-09 16:32:07 | 0      
+(2 rows)
+BODY_FP      | CORP_FP      | JUDGE                
+-------------+--------------+----------------------
+17034/885965 | 17034/885965 | PASS — 사내 현재와 동일 BODY
+(1 rows)
+--  마커 수로 판정. 조회 속도에 직접 관여: QRYPERF(NOSTATS 13 = GTT GATHER 제거) · CLOUDPERF(힌트 2) · ONEREAD(판가 1회 읽기) · 81MKTAMT(81 금액 arm)
+--  SLASH/DASH 리터럴 수 = '/' 객체 전환(SLASHOBJ) 반영 정도. 사내 71/65 와 다르면 전환 범위가 다른 BODY
+MARKER          | CLOUD | CORP | JUDGE | MEMO                                                                                                   
+----------------+-------+------+-------+--------------------------------------------------------------------------------------------------------
+81MKTAMT        | 10    | 10   | same  | 10-02 81 계획구간 MKT_AMT 금액 arm 3곳 (DM_PLN_SALES_PLAN GROUP BY)                                           
+81SP            | 2     | 2    | same  | 09-30 81 저장 후속처리                                                                                       
+AJS_1008        | 4     | 4    | same  | 10-08 AJS SCM_FCST 메저 추가 (저장 경로, 조회 무관)                                                                
+BTNAUTH         | 2     | 2    | same  | 10-02 버튼 권한 SP (buttonAuth 시트)                                                                         
+CLOUDPERF       | 3     | 3    | same  | 09-30 클라우드 병목 2문장 힌트 (L1232 LEADING/USE_HASH · L2089)                                                  
+CUSTEXCEL       | 6     | 6    | same  | 09-30 Customer FCST → EXCEL/RPA 표기                                                                     
+DASH_LITERAL    | 65    | 65   | same  | '-' 리터럴 잔존 줄 수 (사내 65 — 의도적 잔존 포함)                                                                     
+DS2_LINE        | 7     | 7    | same  | 진입점 dynamic_sampling=2 보정 줄                                                                            
+FXZERO          | 10    | 10   | same  | 09-30 환율 없는 기간 0 생성                                                                                    
+GATHER_ACT      | 0     | 0    | same  | GET_MAIN_DATA 안 활성 GATHER_TABLE_STATS (0 이어야 함)                                                        
+HINT_GETMAIN    | 7     | 7    | same  | GET_MAIN_DATA 안 힌트 줄 (사내 7: SELECT L1232·L1269·L1862·L2089 + MERGE L3225·L3265·L3319) — 더 많으면 임의 힌트 추가본
+HINT_LINES      | 17    | 17   | same  | BODY 전체 힌트 줄 (사내 17: GET_MAIN 4 + MERGE 3 + 업로드 PARALLEL 9 + MATERIALIZE 1)                            
+IDX02_HINT      | 0     | 0    | same  | ⛔ 0 이어야 함 — 1 이상이면 09-30 타임아웃 원인 힌트가 살아 있음                                                             
+ONEREAD         | 3     | 3    | same  | 09-30 81/82 판가 원장 1회 읽기 (IDX02 힌트 철회)                                                                  
+QRYPERF         | 1     | 1    | same  | 09-30 조회 속도개선 본 마커                                                                                     
+QRYPERF-NOSTATS | 13    | 13   | same  | 09-30 SP 내 GTT GATHER 제거 13곳 (하드파싱 폭증 방지)                                                              
+QRYPERF-VMI82   | 6     | 6    | same  | 09-30 82 후행 UPDATE → INSERT 흡수                                                                         
+SLASH_LITERAL   | 71    | 71   | same  | '/' 리터럴 줄 수 (SLASHOBJ 반영 정도 — 사내 71)                                                                   
+(18 rows)
+--  GET_MAIN_DATA 안 힌트 줄 원문 (사내 7줄 = SELECT 4 + MERGE 3) — 클라우드에 다른 줄이 있으면 그 줄이 임의 힌트
+LINE | SQL_HEAD                                                                                                      
+-----+---------------------------------------------------------------------------------------------------------------
+1232 | SELECT /*+ LEADING(A) USE_HASH(C) */ /*[E20260930-DMF0082CLOUDPERF] L1265 형제문장 동일 — TEMP_SITE_ITEM 1행 추정 NL 방지
+1269 | SELECT /*+ LEADING(A) USE_HASH(C) */ -- ④ [E20260815-PERF2] 계획 고정 (hook #129 ④)
+                              
+1862 | SELECT /*+ LEADING(A) USE_HASH(B) USE_HASH(C) */ -- ④ [E20260815-PERF] 계획 고정.
+                                
+2089 | SELECT /*+ LEADING(B A D C) USE_NL(A) INDEX(A IDX_DM_PLN_MKT_FCST_RESULT_N1) USE_HASH(D) USE_HASH(C) SWAP_JOIN
+3225 | MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A
+                              
+3265 | MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A
+                              
+3319 | MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A
+                              
+(7 rows)
+################ [E2] ⭐⭐ 이 DB 의 이벤트 시각표 — 느려진 시점과 대조할 기준점 ################
+--  사내 ZIOUI1: SLASHDEF 테이블 ALTER 10-08 16:00~16:05 · PKG_DMF0082 BODY 10-09 16:32 · GTTSTATS 통계 10-09 16:38 · 82 '/' 행 최초 10-11 17:24
+--  클라우드는 적용 시각이 다르다. 여기서 읽은 시각을 R02 [C4]/[C5] 의 일자 추이·R03 [D8] AWR 시각과 맞춘다
+--  (DATA_DEFAULT 는 LONG 이라 XMLTABLE 로 문자열화해 센다 — DBMS_XMLGEN EXECUTE 권한 없으면 이 문장만 오류, 무시)
+K                                                                                 | T                   | N    
+----------------------------------------------------------------------------------+---------------------+------
+SLASHDEF: DM_PLN_MKT_FCST 테이블 LAST_DDL (DEFAULT '/' 컬럼 수, 사내 10)                  | 2026-10-08 16:01:01 | 10   
+SLASHDEF: SCM_MST_FUTURE_PRICE 테이블 LAST_DDL (DEFAULT '/' 컬럼 수, 사내 11)             | 2026-10-08 16:02:00 | 11   
+SLASHDEF: DM_PLN_SALES_PLAN 테이블 LAST_DDL (DEFAULT '/' 컬럼 수, 사내 10)                | 2026-10-08 16:05:23 | 11   
+SLASHDEF: 전체 스키마 DEFAULT '/' 컬럼 수 (사내 2,005)                                      |                     | 2005 
+SLASHDEF: 전체 스키마 DEFAULT '-' 잔존 컬럼 수 (사내 87 — 전환 대상 밖 컬럼)                         |                     | 87   
+SLASHOBJ: PKG_DMF0082 BODY LAST_DDL                                               | 2026-10-09 16:32:07 |      
+SLASHOBJ: PKG_DMF0082 '/' 리터럴 줄 수 (사내 71)                                         |                     | 71   
+SLASHOBJ: PR_DM_DNM_CREATE_WS_RTF LAST_DDL (82 AS_Inv '/' 작성자 · ELSE '/' END 줄 수) | 2026-10-08 19:27:09 | 14   
+SLASHOBJ: 10-08 이후 재컴파일된 PACKAGE BODY 수 (전체 스키마)                                  |                     | 117  
+GTTSTATS: GT_DMF0082 6본 SHARED 통계 LAST_ANALYZED (사내 10-09 16:38)                  | 2026-10-09 16:38:28 | 6    
+데이터: 82 DM_PLN_MKT_FCST PLANT_SITE_ID='/' 행 수 · 최초 생성 ('/' 데이터 정리 시점)             | 2026-10-11 17:24:01 | 21275
+데이터: 40 DM_PLN_MKT_FCST PLANT_SITE_ID='/' 행 수 · 최초 생성                             |                     | 0    
+데이터: DM_PLN_MKT_FCST 최근 LAST_UPDATE_DATE (마지막 대량 갱신 시점)                           | 2026-10-11 17:44:19 |      
+(13 rows)
+--  판정: SLASHDEF ''/'' 컬럼 0 = DEFAULT 전환 미적용 DB · ''/'' 리터럴 0 = SLASHOBJ 미적용 · GTTSTATS 6 미만 = 통계 고정 미적용 (10-09 패키지)
+--        82 ''/'' 행 최초 생성 시각 = 데이터가 ''/'' 로 들어오기 시작한 때. R02 [C4] 에서 그 날 이후 소요가 뛰는지 본다
+################ [E3] ⭐ 옵티마이저·자원 파라미터 — 사내 대조 (DIFF 만 주목) ################
+--  optimizer_dynamic_sampling 0 = GTT 추정 붕괴(07-31 확정 원인). SP 가 세션에서 2 로 보정하지만 시스템값도 확인.
+NAME                             | CLOUD      | CORP       | JUDGE
+---------------------------------+------------+------------+------
+cpu_count                        | 8          | 8          | same 
+cursor_sharing                   | EXACT      | EXACT      | same 
+db_file_multiblock_read_count    | 128        | 128        | same 
+optimizer_adaptive_plans         | TRUE       | TRUE       | same 
+optimizer_adaptive_statistics    | FALSE      | FALSE      | same 
+optimizer_dynamic_sampling       | 2          | 2          | same 
+optimizer_features_enable        | 23.1.0     | 23.1.0     | same 
+optimizer_index_caching          | 0          | 0          | same 
+optimizer_index_cost_adj         | 100        | 100        | same 
+optimizer_mode                   | ALL_ROWS   | ALL_ROWS   | same 
+optimizer_use_sql_plan_baselines | TRUE       | TRUE       | same 
+parallel_degree_policy           | MANUAL     | MANUAL     | same 
+pga_aggregate_target             | 3221225472 | 3221225472 | same 
+statistics_level                 | TYPICAL    | TYPICAL    | same 
+(14 rows)
+################ [E4] ⭐ GT_DMF0082 GTT 통계 상태 — 10-09 GTTSTATS 패키지 적용 여부 (사내 적용본 값과 대조) ################
+--  사내: 6본 SHARED · NUM_ROWS = TEMP_SITE_ITEM 39070 · TEMP_SELECT_MEASURE 8 · T_WS_FCST 14 · TEMP_FCST_N_PRICE 72139 · T_LAST_DATA_SETUP_FCST 2834 · MF_SP 72139 · LOCK 없음
+T                                 | CLOUD_ROWS | CORP_ROWS | LOCKED | ANALYZED    | GTT_PREF | JUDGE            
+----------------------------------+------------+-----------+--------+-------------+----------+------------------
+GT_DMF0082_MF_SP                  | 72139      | 72139     |        | 10-09 16:38 | SHARED   | PASS — 사내 적용본과 동일
+GT_DMF0082_TEMP_FCST_N_PRICE      | 72139      | 72139     |        | 10-09 16:38 | SHARED   | PASS — 사내 적용본과 동일
+GT_DMF0082_TEMP_SELECT_MEASURE    | 8          | 8         |        | 10-09 16:38 | SHARED   | PASS — 사내 적용본과 동일
+GT_DMF0082_TEMP_SITE_ITEM         | 39070      | 39070     |        | 10-09 16:38 | SHARED   | PASS — 사내 적용본과 동일
+GT_DMF0082_T_LAST_DATA_SETUP_FCST | 2834       | 2834      |        | 10-09 16:38 | SHARED   | PASS — 사내 적용본과 동일
+GT_DMF0082_T_WS_FCST              | 14         | 14        |        | 10-09 16:38 | SHARED   | PASS — 사내 적용본과 동일
+(6 rows)
+--  그 외 GT_DMF0082 GTT(사내 34본) 중 통계 고정·잠금이 있는 것 (6본 밖에 있으면 다른 작업자의 조치)
+T | NUM_ROWS | STATTYPE_LOCKED | LAST_ANALYZED | GTT_PREF
+--+----------+-----------------+---------------+---------
+(0 rows)
+--  0 rows = 6본 밖 고정 통계 없음 (정상)
+################ [E5] ⭐⭐ '/' 전환 데이터 분포 — 조회 기간(당월~+6개월) 안 PLANT_SITE_ID 값 종류별 행수 · division 별 (사내 대조) ################
+--  '/' 작업이 속도에 미치는 경로 = ① 같은 키가 '-' 와 '/' 두 행으로 갈려 행수·조인 폭 증가 ② 결과 PIVOT 행 분열 ③ DEFAULT ON NULL 로 새 값 유입
+--  사내(10-12): DM_PLN_MKT_FCST 40 DASH 54,592 / VAL 46,862 · 81 VAL 46,878 · 82 DASH 19,152 / SLASH 6,586 / VAL 7,534
+--              SCM_MST_FUTURE_PRICE 40 DASH 155,631 · 81 VAL 190,287 · 82 DASH 224,965 · DM_PLN_SALES_PLAN 40 DASH 16,242 / VAL 5,834 · 81 VAL 34,735 · 82 DASH 2,437 / VAL 686
+T                    | DIV | PLANT_KIND | CLOUD_CNT | CORP_CNT | CNT_X | JUDGE
+---------------------+-----+------------+-----------+----------+-------+------
+DM_PLN_MKT_FCST      | 40  | DASH       | 54592     | 54592    | 1     | ok   
+DM_PLN_MKT_FCST      | 40  | VAL        | 46862     | 46862    | 1     | ok   
+DM_PLN_MKT_FCST      | 81  | VAL        | 46878     | 46878    | 1     | ok   
+DM_PLN_MKT_FCST      | 82  | DASH       | 19152     | 19152    | 1     | ok   
+DM_PLN_MKT_FCST      | 82  | SLASH      | 6586      | 6586     | 1     | ok   
+DM_PLN_MKT_FCST      | 82  | VAL        | 7534      | 7534     | 1     | ok   
+DM_PLN_SALES_PLAN    | 40  | DASH       | 16242     | 16242    | 1     | ok   
+DM_PLN_SALES_PLAN    | 40  | VAL        | 5834      | 5834     | 1     | ok   
+DM_PLN_SALES_PLAN    | 81  | VAL        | 34735     | 34735    | 1     | ok   
+DM_PLN_SALES_PLAN    | 82  | DASH       | 2437      | 2437     | 1     | ok   
+DM_PLN_SALES_PLAN    | 82  | VAL        | 686       | 686      | 1     | ok   
+SCM_MST_FUTURE_PRICE | 40  | DASH       | 155631    | 155631   | 1     | ok   
+SCM_MST_FUTURE_PRICE | 81  | VAL        | 190287    | 190287   | 1     | ok   
+SCM_MST_FUTURE_PRICE | 82  | DASH       | 224965    | 224965   | 1     | ok   
+(14 rows)
+--  판정: 같은 division 에 DASH 와 SLASH 가 공존 = 같은 키가 두 행으로 갈려 조회·PIVOT 폭이 늘어난 상태 (82 AS_Inv 27키 사례) → R04 (A) 행수·R03 문장 귀속과 함께 본다
+################ [E5b] ⭐ 같은 키의 '-' / '/' 중복 — DM_PLN_MKT_FCST 조회 기간, PLANT_SITE_ID 만 다른 키 쌍 수 (division 별) ################
+--  0 이면 '/' 전환이 행을 가르지 않았다. 수백~수천이면 '/' 데이터 정리(차주) 대상이자 PIVOT 행 분열·조인 폭 증가의 직접 원인
+DIV | SPLIT_KEYS | ROWS_INVOLVED | SAMPLE_MEASURE
+----+------------+---------------+---------------
+(0 rows)
+--  0 rows = 분리 키 없음 (정상). 사내 10-12 = 0 rows
+################ [E6] 원천 테이블 통계·크기 — 사내 대조 (ROWS_X = 클라우드÷사내 · 통계일 · STALE) ################
+T                          | CLOUD_ROWS | CORP_ROWS | ROWS_X | CLOUD_MB | CLOUD_ANALYZED | CORP_ANALYZED | STALE | LOCKED | JUDGE                                     
+---------------------------+------------+-----------+--------+----------+----------------+---------------+-------+--------+-------------------------------------------
+DM_PLN_CFM_MKT_DEMAND_PLAN | 420354     | 420354    | 1      | 105      | 2026-10-07     | 2026-10-07    | YES   |        | ⚠ 통계 노후(STALE) — '/' 대량 갱신 뒤 미수집이면 선택도 오추정
+DM_PLN_CFM_SELLING_PRICE   | 1574147    | 1574147   | 1      | 216      | 2026-10-07     | 2026-10-07    | NO    |        | ⚠ 통계가 테이블 ALTER(SLASHDEF) 이전 것            
+DM_PLN_MKT_FCST            | 2546477    | 2549812   | 1      | 344      | 2026-10-11     | 2026-10-09    | YES   |        | ⚠ 통계 노후(STALE) — '/' 대량 갱신 뒤 미수집이면 선택도 오추정
+DM_PLN_MKT_FCST_C          | 40123502   | 40123502  | 1      | 700      | 2026-10-08     | 2026-10-08    | YES   |        | ⚠ 통계 노후(STALE) — '/' 대량 갱신 뒤 미수집이면 선택도 오추정
+DM_PLN_MKT_FCST_RESULT     | 4280763    | 4280763   | 1      | 608      | 2026-10-07     | 2026-10-07    | NO    |        | ⚠ 통계가 테이블 ALTER(SLASHDEF) 이전 것            
+DM_PLN_SALES_PLAN          | 1417586    | 1417586   | 1      | 230      | 2026-10-07     | 2026-10-07    | YES   |        | ⚠ 통계 노후(STALE) — '/' 대량 갱신 뒤 미수집이면 선택도 오추정
+DM_PLN_SALES_PLAN_C        | 7538024    | 7538024   | 1      | 1459     | 2026-10-07     | 2026-10-07    | NO    |        | ⚠ 통계가 테이블 ALTER(SLASHDEF) 이전 것            
+DM_PLN_SALES_PLAN_RESULT   | 2232938    | 2232938   | 1      | 344      | 2026-10-07     | 2026-10-07    | NO    |        | ⚠ 통계가 테이블 ALTER(SLASHDEF) 이전 것            
+SCM_COM_SYS_LOG            | 285306     |           |        | 422      | 2026-10-07     |               | NO    |        | ⚠ 통계가 테이블 ALTER(SLASHDEF) 이전 것            
+SCM_MST_FUTURE_PRICE       | 11473160   | 11473160  | 1      | 1474     | 2026-10-07     | 2026-10-07    | YES   |        | ⚠ 통계 노후(STALE) — '/' 대량 갱신 뒤 미수집이면 선택도 오추정
+SCM_MST_SITE_ITEM          | 118139     | 118139    | 1      | 29       | 2026-10-07     | 2026-10-07    | NO    |        | ⚠ 통계가 테이블 ALTER(SLASHDEF) 이전 것            
+SCM_MST_TITLESET_USER      | 8088       | 8088      | 1      | 2        | 2026-10-07     | 2026-10-07    | YES   |        | ⚠ 통계 노후(STALE) — '/' 대량 갱신 뒤 미수집이면 선택도 오추정
+(12 rows)
+################ [E6b] 핵심 컬럼 통계 — PLANT_SITE_ID 가 포함되어야 '/' 유입 뒤 선택도 추정이 바뀐 것을 본다 ################
+T                        | COL           | NDV   | NULLS | HISTOGRAM | BKT | ANALYZED  
+-------------------------+---------------+-------+-------+-----------+-----+-----------
+DM_PLN_MKT_FCST          | DIVISION_ID   | 9     | 0     | FREQUENCY | 9   | 2026-10-11
+DM_PLN_MKT_FCST          | ITEM_ID       | 5758  | 0     | HYBRID    | 254 | 2026-10-11
+DM_PLN_MKT_FCST          | MEASURE       | 58    | 0     | FREQUENCY | 58  | 2026-10-11
+DM_PLN_MKT_FCST          | PLANT_SITE_ID | 42    | 0     | FREQUENCY | 42  | 2026-10-11
+DM_PLN_MKT_FCST          | PROJECT_CODE  | 1922  | 0     | HYBRID    | 254 | 2026-10-11
+DM_PLN_MKT_FCST          | YYYYMMDD      | 4168  | 0     | HYBRID    | 254 | 2026-10-11
+DM_PLN_MKT_FCST_RESULT   | DIVISION_ID   | 9     | 0     | FREQUENCY | 9   | 2026-10-07
+DM_PLN_MKT_FCST_RESULT   | ITEM_ID       | 9287  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_MKT_FCST_RESULT   | MEASURE       | 66    | 0     | FREQUENCY | 66  | 2026-10-07
+DM_PLN_MKT_FCST_RESULT   | PLANT_SITE_ID | 55    | 0     | FREQUENCY | 55  | 2026-10-07
+DM_PLN_MKT_FCST_RESULT   | PROJECT_CODE  | 2211  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_MKT_FCST_RESULT   | YYYYMMDD      | 3158  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_SALES_PLAN        | CURRENCY      | 8     | 29496 | FREQUENCY | 8   | 2026-09-29
+DM_PLN_SALES_PLAN        | DIVISION_ID   | 8     | 0     | FREQUENCY | 8   | 2026-10-07
+DM_PLN_SALES_PLAN        | ITEM_ID       | 5515  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_SALES_PLAN        | MEASURE       | 13    | 0     | FREQUENCY | 13  | 2026-10-07
+DM_PLN_SALES_PLAN        | PLANT_SITE_ID | 36    | 0     | FREQUENCY | 36  | 2026-10-07
+DM_PLN_SALES_PLAN        | PROJECT_CODE  | 1884  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_SALES_PLAN        | YYYYMMDD      | 4013  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_SALES_PLAN_RESULT | CURRENCY      | 12    | 0     | FREQUENCY | 12  | 2026-10-07
+DM_PLN_SALES_PLAN_RESULT | DIVISION_ID   | 9     | 0     | FREQUENCY | 9   | 2026-10-07
+DM_PLN_SALES_PLAN_RESULT | ITEM_ID       | 9389  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_SALES_PLAN_RESULT | MEASURE       | 14    | 0     | FREQUENCY | 14  | 2026-10-07
+DM_PLN_SALES_PLAN_RESULT | PLANT_SITE_ID | 51    | 0     | FREQUENCY | 51  | 2026-10-07
+DM_PLN_SALES_PLAN_RESULT | PROJECT_CODE  | 2217  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_SALES_PLAN_RESULT | YYYYMMDD      | 3171  | 0     | HYBRID    | 254 | 2026-10-07
+SCM_MST_FUTURE_PRICE     | CURRENCY      | 10    | 0     | FREQUENCY | 10  | 2026-10-07
+SCM_MST_FUTURE_PRICE     | DIVISION_ID   | 11    | 0     | FREQUENCY | 11  | 2026-10-07
+SCM_MST_FUTURE_PRICE     | ITEM_ID       | 4342  | 0     | HYBRID    | 254 | 2026-10-07
+SCM_MST_FUTURE_PRICE     | MEASURE       | 4     | 0     | FREQUENCY | 4   | 2026-10-07
+SCM_MST_FUTURE_PRICE     | PLANT_SITE_ID | 30    | 0     | FREQUENCY | 30  | 2026-10-07
+SCM_MST_FUTURE_PRICE     | PROJECT_CODE  | 1468  | 0     | HYBRID    | 254 | 2026-10-07
+SCM_MST_FUTURE_PRICE     | YYYYMMDD      | 573   | 0     | HYBRID    | 254 | 2026-10-07
+SCM_MST_SITE_ITEM        | CURRENCY      | 8     | 20396 | FREQUENCY | 8   | 2026-09-29
+SCM_MST_SITE_ITEM        | DIVISION_ID   | 8     | 0     | FREQUENCY | 8   | 2026-10-07
+SCM_MST_SITE_ITEM        | ITEM_ID       | 15692 | 0     | HYBRID    | 254 | 2026-10-07
+SCM_MST_SITE_ITEM        | PROJECT_CODE  | 2729  | 0     | HYBRID    | 254 | 2026-10-07
+SCM_MST_SITE_ITEM        | VALID_YN      | 2     | 0     | FREQUENCY | 2   | 2026-10-07
+(38 rows)
+################ [E7] 원천 7 테이블 인덱스 — 사내 대조 (결손·상이·UNUSABLE 만 출력) ################
+T | I | JUDGE | CLOUD_COLS | CORP_COLS
+--+---+-------+------------+----------
+(0 rows)
+--  0 rows = 인덱스 사내와 동일 (정상)
+################ [E8] 지금 60초 넘게 실행 중인 타 세션 (공유 DB 노이즈 판별) ################
+INST | SID | USERNAME | MODULE | SQL_ID | EVENT | SEC_RUNNING | SQL_HEAD
+-----+-----+----------+--------+--------+-------+-------------+---------
+(0 rows)
+--  여러 건이면 측정값이 요동한다 → 한가한 시간대에 R02~R04 재측정
+=============================================================================
+R01 완료 → R01_ENV_STATE_OUT.txt 회신 (QA·DEV 각각)
+판정 순서: [E1] 마커 ⚠/❌ → [E2] 이벤트 시각 → [E4] GTTSTATS 적용 여부 → [E5]/[E5b] '/' 데이터 분리 → [E6] 통계 노후
+=============================================================================

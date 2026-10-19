@@ -1,0 +1,14 @@
+// SSP0003 레이아웃 — splitContainer(상 마스터 그리드 / 하 디테일 폼 + 디테일 그리드), AS-IS 상하 분할(design 01 §1).
+.mainGrid {
+  height: 40%;
+  min-height: 200px;
+}
+
+.detailForm {
+  padding: 8px 12px;
+}
+
+.subGrid {
+  height: 30%;
+  min-height: 140px;
+}

@@ -1,0 +1,1419 @@
+-- SOURCE-FRESH: SCM_MGR.PKG_DMF0005 PACKAGE BODY LAST_DDL=2026-09-30 19:44:25 FETCHED=2026-10-01 10:49 DB=ZIOUI1
+CREATE OR REPLACE PACKAGE BODY         "PKG_DMF0005" IS
+ 
+PROCEDURE P_DMF0005_GET_SALES_SITE_MODEL_PRODUCTION (
+      P_DIVISION_ID         IN VARCHAR2
+    , P_DEPT_ID             IN VARCHAR2
+    , P_END_CUSTOMER        IN VARCHAR2
+    , P_SCM_SITE_ID         IN VARCHAR2
+    , P_PROJECT_CODE        IN VARCHAR2
+    , P_ITEM_ID             IN VARCHAR2
+    , P_VALID_YN            IN VARCHAR2
+    , P_OWNER               IN VARCHAR2
+    , P_USER_ID          IN VARCHAR2
+    , O_RC1              OUT SYS_REFCURSOR
+    , O_RESULT_CURSOR    OUT SYS_REFCURSOR
+)
+/*
+ * Program ID   : P_DMF0005_GET_SALES_SITE_MODEL_PRODUCTION
+ * Description  : P_DMF0005_GET_SALES_SITE_MODEL_PRODUCTION
+ * Program History
+ *===========================================================================================================
+ *   Date       In Charge      Description
+ *===========================================================================================================
+ * 2026.03.16   park.choyi     [PJ20264226] NextSCM Pilot 화면 및 메뉴 개발
+ */
+ 
+IS
+    V_GROUP_ID VARCHAR2(50) := '';
+ 
+    V_ROW_CNT  NUMBER := 0;
+ 
+BEGIN
+ 
+    --[2026-07-31 클라우드 대응] GTT 동적샘플링 강제 — 클라우드 세션 기본값 0(GTT 무통계 파국계획, 사내 12초/클라우드 16분+ 실증) 방지.
+    --  Oracle 기본값 2 복원. 트랜잭션 무관 세션 파라미터(ENABLE PARALLEL DML 계열 아님 — ORA-12841 리스크 없음).
+    EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 2';
+ 
+    SELECT CASE WHEN COUNT(*) > 0 THEN 'ADMIN' ELSE '' END
+      INTO V_GROUP_ID
+      FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+     WHERE LOOKUP_TYPE = 'GET_ADMIN_GROUP'
+       AND VALID_YN = 'Y'
+       AND SEGMENT2 = 'ALL'
+       AND SEGMENT1 IN ( SELECT DISTINCT USER_GR_ID
+                         FROM   SCM_ADM_USER_GR_UNIT_AUTH_MPG_M A
+                         WHERE  USER_ID = P_USER_ID
+                         AND    UNIT_TP_CD = 'D'
+                         AND    EDIT_YN = 'Y'
+                         AND    USE_YN = 'Y'
+                         AND    UNIT_ID = P_DIVISION_ID )
+     ;
+ 
+ 
+    -- [PERF-DMF0005 20260722] P1: 멀티선택 필터 GTT 사전적재 (FN_SPLITSTRING 인라인 제거)
+    --  값이 있을 때만 적재. 없음/'ALL' 이면 미적재 -> 쿼리 FILTER 가 GTT 접근 자체를 생략(runtime skip)
+    DELETE FROM SCM_MGR.GT_GGET_SPLIT_TEAM_ID;
+    DELETE FROM SCM_MGR.GT_GGET_SPLIT_CUSTOMER;
+    DELETE FROM SCM_MGR.GT_GGET_SPLIT_SCM_SITE_ID;
+    DELETE FROM SCM_MGR.GT_GGET_SPLIT_VALID_YN;
+    DELETE FROM SCM_MGR.GT_GGET_SPLIT_ITEM_ID;
+    DELETE FROM SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE;
+    DELETE FROM SCM_MGR.GT_GGET_SPLIT_OWNER;
+ 
+    IF P_DEPT_ID IS NOT NULL AND P_DEPT_ID <> 'ALL' THEN
+        INSERT INTO SCM_MGR.GT_GGET_SPLIT_TEAM_ID (TOK)
+        SELECT VALUE FROM TABLE(FN_SPLITSTRING(P_DEPT_ID, ',')) WHERE VALUE IS NOT NULL;
+    END IF;
+ 
+    IF P_END_CUSTOMER IS NOT NULL AND P_END_CUSTOMER <> 'ALL' THEN
+        INSERT INTO SCM_MGR.GT_GGET_SPLIT_CUSTOMER (TOK)
+        SELECT VALUE FROM TABLE(FN_SPLITSTRING(P_END_CUSTOMER, ',')) WHERE VALUE IS NOT NULL;
+    END IF;
+ 
+    IF P_SCM_SITE_ID IS NOT NULL AND P_SCM_SITE_ID <> 'ALL' THEN
+        INSERT INTO SCM_MGR.GT_GGET_SPLIT_SCM_SITE_ID (TOK)
+        SELECT VALUE FROM TABLE(FN_SPLITSTRING(P_SCM_SITE_ID, ',')) WHERE VALUE IS NOT NULL;
+    END IF;
+ 
+    IF P_VALID_YN IS NOT NULL AND P_VALID_YN <> 'ALL' THEN
+        INSERT INTO SCM_MGR.GT_GGET_SPLIT_VALID_YN (TOK)
+        SELECT VALUE FROM TABLE(FN_SPLITSTRING(P_VALID_YN, ',')) WHERE VALUE IS NOT NULL;
+    END IF;
+ 
+    IF NVL(NULLIF(TRIM(P_ITEM_ID), ''), 'ALL') <> 'ALL' THEN
+        INSERT INTO SCM_MGR.GT_GGET_SPLIT_ITEM_ID (TOK)
+        SELECT TRIM(VALUE) FROM TABLE(FN_SPLITSTRING(P_ITEM_ID, ',')) WHERE TRIM(VALUE) IS NOT NULL;
+    END IF;
+ 
+    IF NVL(NULLIF(TRIM(P_PROJECT_CODE), ''), 'ALL') <> 'ALL' THEN
+        INSERT INTO SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE (TOK)
+        SELECT TRIM(VALUE) FROM TABLE(FN_SPLITSTRING(P_PROJECT_CODE, ',')) WHERE TRIM(VALUE) IS NOT NULL;
+    END IF;
+ 
+    IF NVL(NULLIF(TRIM(P_OWNER), ''), 'ALL') <> 'ALL' THEN
+        INSERT INTO SCM_MGR.GT_GGET_SPLIT_OWNER (TOK)
+        SELECT TRIM(VALUE) FROM TABLE(FN_SPLITSTRING(P_OWNER, ',')) WHERE TRIM(VALUE) IS NOT NULL;
+    END IF;
+ 
+    OPEN O_RC1 FOR
+    WITH
+      ITEM_AGG AS (
+          SELECT
+                T.DIVISION_ID
+              , T.ITEM_ID
+              , MAX(T.ITEM_NAME) AS ITEM_NAME
+              , MAX(T.ITEM_CLASS_NAME) AS ITEM_CLASS_NAME
+              , MAX(T.NICK_NAME) AS NICK_NAME
+              , CASE MIN(CASE WHEN T.ITEM_TYPE = 'P' THEN 1
+                              WHEN T.ITEM_TYPE = 'H' THEN 2
+                              WHEN T.ITEM_TYPE = 'Q' THEN 3
+                              ELSE 4 END)
+                    WHEN 1 THEN 'P'
+                    WHEN 2 THEN 'H'
+                    WHEN 3 THEN 'Q'
+                    ELSE 'R'
+                END AS ITEM_TYPE
+              , MAX(T.ENERGE) AS ENERGE_WH
+              , MAX(T.CELL_TYPE) AS CELL_TYPE_CD
+              , MAX(T.ACTIVE_FLAG) AS MDM_ACTIVE_FLAG -- [PERF-DMF0005 20260722] P6a: ISV.ACTIVE_FLAG 등가
+          FROM SCM_MST_ITEM_SN T
+          WHERE T.DIVISION_ID = P_DIVISION_ID
+          GROUP BY T.DIVISION_ID, T.ITEM_ID
+      ),
+      CELL_TYPE_LKP AS (
+          SELECT SEGMENT1 AS CELL_TYPE_CD
+               , SEGMENT2 AS CELL_TYPE_NM
+          FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+          WHERE LOOKUP_TYPE = 'CELL_TYPE'
+            AND VALID_YN = 'Y'
+      ),
+      CUST_MODEL AS (
+          SELECT
+                DIVISION_ID
+              , SCM_SITE_ID
+              , PROJECT_CODE
+              , ITEM_ID
+              , MAX(CUSTOMER_MODEL) AS CUSTOMER_MODEL
+          FROM DM_MST_CUSTOMER_MODEL
+          WHERE VALID_YN = 'Y'
+          GROUP BY DIVISION_ID, SCM_SITE_ID, PROJECT_CODE, ITEM_ID
+      ),
+      /* [PERF-DMF0005 20260722] P2: F_ITEM/F_PROJECT/F_OWNER CTE 제거 (GT_GGET_SPLIT_* 사전적재로 대체)
+         + OWNER_NAME 은 행별(52,526회) 함수 호출 대신 DISTINCT OWNER(수백건)만 1회씩 호출 */
+      OWNER_NM AS (
+          SELECT O.OWNER
+               , FN_GET_MULTI_OWNER_NAME(O.OWNER, ',', '1') AS OWNER_NAME
+          FROM ( SELECT DISTINCT SI0.OWNER
+                 FROM SCM_MST_SITE_ITEM SI0
+                 WHERE SI0.DIVISION_ID = P_DIVISION_ID
+                   AND SI0.OWNER IS NOT NULL ) O
+      ),
+ 
+    /* 2) BASE */
+    BASE AS (
+        SELECT
+              SI.DIVISION_ID
+            , SI.SCM_SITE_ID
+            , SI.PROJECT_CODE
+            , SI.DEPT_ID AS DEPT_ID
+            , DI.DEPT_NAME_KO AS TEAM_NAME
+            , SI.ITEM_ID
+            , SI.CUST_GROUP
+            , CASE WHEN SI.DIVISION_ID = '40' THEN SI.PROJECT_CODE ELSE ST.END_CUSTOMER END AS END_CUSTOMER
+            , SC.SOLDTO_CODE
+            , CU.SOLDTO_DESCRIPTION                                                  -- 2026.09.11 AJS
+            , SC.SHIPTO_CODE
+            , CU.SHIPTO_DESCRIPTION                                                  -- 2026.09.11 AJS
+            , ST.SOLDTO_CUSTOMER
+            , SI.OWNER
+            , ONM.OWNER_NAME AS OWNER_NAME -- [PERF-DMF0005 20260722] P3: 행별 함수 -> OWNER_NM 조인
+            , SI.SALES_PLAN_ADJUST_YN
+            , IA.ITEM_TYPE -- [PERF-DMF0005 20260722] P6b
+            , IA.ITEM_CLASS_NAME -- [PERF-DMF0005 20260722] P6b
+            , IA.ITEM_NAME -- [PERF-DMF0005 20260722] P6b
+            , IA.NICK_NAME -- [PERF-DMF0005 20260722] P6b
+            , SI.SALES_COMPANY
+            , SI.SALES_PLANT
+            , SI.BPMS_EXIST
+            , SI.CELL_PER_CAR
+            , SI.CELL_PER_MODULE
+            , CASE
+                  WHEN NVL(SI.CELL_PER_MODULE, 0) = 0 THEN NULL
+                  ELSE SI.CELL_PER_CAR / SI.CELL_PER_MODULE
+              END AS MODULE_PER_CAR
+            , SI.ATTRIBUTE6
+            , SI.EDI_LT
+            , SI.SCP_VMI_LT AS VMI_LT
+ 
+            , CASE WHEN SI.DIVISION_ID LIKE '81%' THEN TO_NUMBER(SI.ATTRIBUTE8) ELSE 0 END AS KWH
+            --, TO_NUMBER(SI.ATTRIBUTE8) AS KWH
+            , SI.PROJECT_INFO
+            , PRJ.PROJECT_NAME
+            , PRJ.PROJECT_STATUS
+            , PRJ.PROJECT_OWNER
+            , SI.PRJ_OWNR_ID
+            , SI.ATTRIBUTE5
+            , NVL(SI.VALID_YN, 'Y') AS VALID_YN
+            , SI.LAST_UPDATE_DATE
+            , SI.LAST_UPDATED_BY
+            , IA.MDM_ACTIVE_FLAG AS MDM_ACTIVE -- [PERF-DMF0005 20260722] P6b
+            , IA.ENERGE_WH
+            , NVL(IA.CELL_TYPE_CD, SI.ATTRIBUTE10) AS CELL_TYPE_CD
+            , CT.CELL_TYPE_NM AS CELL_TYPE
+            , SI.ATTRIBUTE1 -- 2026.9.17 Sold-To Cust.(Report) 추가
+            , SI.ATTRIBUTE9
+            , SI.ATTRIBUTE4
+            , SI.CELL_S_OP_REPORT                                                    -- 2026.09.11 AJS
+            , CM.CUSTOMER_MODEL
+        FROM SCM_MST_SITE_ITEM SI
+        JOIN SCM_MST_SITE ST
+          ON ST.DIVISION_ID = SI.DIVISION_ID
+         AND ST.SCM_SITE_ID = SI.SCM_SITE_ID
+         AND ST.SITE_TYPE = 'SALES'
+        LEFT JOIN SCM_MST_SITE_CUSTOMER SC
+          ON SC.DIVISION_ID = SI.DIVISION_ID
+         AND SC.SCM_SITE_ID = SI.SCM_SITE_ID
+         AND SC.REP_YN = 'Y'
+         AND SC.VALID_YN = 'Y'
+         AND (P_DIVISION_ID = '82' OR NVL(SC.VALID_YN, 'Y') = 'Y')
+        /* [PERF-DMF0005 20260722] P6c: DM_MST_ITEM_SINGLE_V 조인 제거 — ITEM_AGG(IA) 등가 대체 */
+        LEFT JOIN SCM_MST_CUSTOMER CU                                                 -- 2026.09.11 AJS
+          ON CU.DIVISION_ID = SC.DIVISION_ID                                         -- 2026.09.11 AJS
+         AND CU.SOLDTO_CODE = SC.SOLDTO_CODE                                         -- 2026.09.11 AJS
+         AND CU.SHIPTO_CODE = SC.SHIPTO_CODE                                         -- 2026.09.11 AJS
+        LEFT JOIN SCM_MST_PROJECT PRJ
+          ON PRJ.DIVISION_ID = SI.DIVISION_ID
+         AND PRJ.PROJECT_CODE = SI.PROJECT_CODE
+        LEFT JOIN SCM_MST_SSO_DEPT_INFO DI
+          ON DI.DEPT_ID = SI.DEPT_ID
+        LEFT JOIN ITEM_AGG IA
+               ON IA.DIVISION_ID = SI.DIVISION_ID
+              AND IA.ITEM_ID = SI.ITEM_ID
+        LEFT JOIN CELL_TYPE_LKP CT                                      -- 추가
+               ON CT.CELL_TYPE_CD = NVL(IA.CELL_TYPE_CD, SI.ATTRIBUTE10)
+        LEFT JOIN CUST_MODEL CM
+          ON CM.DIVISION_ID = SI.DIVISION_ID
+         AND CM.SCM_SITE_ID = SI.SCM_SITE_ID
+         AND CM.PROJECT_CODE = SI.PROJECT_CODE
+         AND CM.ITEM_ID = SI.ITEM_ID
+        LEFT JOIN OWNER_NM ONM -- [PERF-DMF0005 20260722] P4
+          ON ONM.OWNER = SI.OWNER
+        WHERE SI.DIVISION_ID = P_DIVISION_ID
+        /*
+           , SCM_MST_SITE ST
+           , SCM_MST_SITE_CUSTOMER SC
+           , DM_MST_ITEM_SINGLE_V ISV
+           , SCM_MST_PROJECT PRJ
+           , SCM_MST_SSO_DEPT_INFO DI
+           , ITEM_AGG IA
+           , CELL_TYPE_LKP CT
+           , CUST_MODEL CM
+        WHERE SI.DIVISION_ID = P_DIVISION_ID
+          AND ST.DIVISION_ID = SI.DIVISION_ID
+          AND ST.SCM_SITE_ID = SI.SCM_SITE_ID
+          AND ST.SITE_TYPE = 'SALES'
+          AND SC.DIVISION_ID(+) = SI.DIVISION_ID
+          AND SC.SCM_SITE_ID(+) = SI.SCM_SITE_ID
+          AND SC.REP_YN(+) = 'Y'
+          AND SC.VALID_YN(+) = 'Y'
+          AND ISV.DIVISION_ID(+) = SI.DIVISION_ID
+          AND ISV.ITEM_ID(+) = SI.ITEM_ID
+          AND PRJ.DIVISION_ID(+) = SI.DIVISION_ID
+          AND PRJ.PROJECT_CODE(+) = SI.PROJECT_CODE
+          AND DI.DEPT_ID(+) = SI.DEPT_ID
+          AND IA.DIVISION_ID(+) = SI.DIVISION_ID
+          AND IA.ITEM_ID(+) = SI.ITEM_ID
+          AND CT.CELL_TYPE_CD(+) = NVL(IA.CELL_TYPE_CD, SI.ATTRIBUTE10)
+          AND CM.DIVISION_ID(+) = SI.DIVISION_ID
+          AND CM.SCM_SITE_ID(+) = SI.SCM_SITE_ID
+          AND CM.PROJECT_CODE(+) = SI.PROJECT_CODE
+          AND CM.ITEM_ID(+) = SI.ITEM_ID*/
+    ),
+ 
+    /* 3) COMMON FILTERED */
+    BF AS (
+        SELECT B.*
+             , CASE WHEN (NVL(D.DEPT_FLAG, 'N') = 'Y' OR V_GROUP_ID = 'ADMIN')
+                    THEN 'Y' ELSE 'N' END AS EDIT_FLAG
+        FROM BASE B         LEFT OUTER JOIN
+             (
+                SELECT MA.DEPT_ID, CASE WHEN COUNT(*) = 0 THEN 'N' ELSE 'Y' END DEPT_FLAG 
+                  FROM (
+                        /* 매핑 데이터가 있는 경우 */
+                        SELECT LOOK.SEGMENT3 DEPT_ID
+                          FROM SCM_ADM_USER_M                USR
+                             , SCM_ADM_LOOKUP_MASTER_DETAIL  LOOK
+                         WHERE USR.DEPT_ID = LOOK.SEGMENT1
+                           AND LOOK.LOOKUP_TYPE = 'PM_TEAM_MAPPING'
+                           AND LOOK.VALID_YN = 'Y'
+                           AND UPPER(USR.USER_ID) = UPPER(P_USER_ID)
+ 
+                        UNION ALL
+                        /* 매핑이 없는 경우 자기 부서 */
+                        SELECT DEPT_ID
+                          FROM SCM_ADM_USER_M
+                         WHERE UPPER(USER_ID) = UPPER(P_USER_ID)
+                       ) MA
+                 GROUP BY MA.DEPT_ID
+             ) D          ON B.DEPT_ID = D.DEPT_ID 
+        /* [PERF-DMF0005 20260722] P5: 인라인 FN_SPLITSTRING -> GT_GGET_SPLIT_* 사전적재 EXISTS.
+           없음(NULL)/'ALL' 이면 OR 단락으로 GTT 미접근 (PKG_DMF0003 선례 동일 패턴) */
+        WHERE (P_DEPT_ID IS NULL OR P_DEPT_ID = 'ALL'
+               OR EXISTS (SELECT 1 FROM SCM_MGR.GT_GGET_SPLIT_TEAM_ID X WHERE B.DEPT_ID = X.TOK))
+          AND (P_END_CUSTOMER IS NULL OR P_END_CUSTOMER = 'ALL'
+               OR EXISTS (SELECT 1 FROM SCM_MGR.GT_GGET_SPLIT_CUSTOMER X WHERE B.END_CUSTOMER = X.TOK))
+          AND (P_SCM_SITE_ID IS NULL OR P_SCM_SITE_ID = 'ALL'
+               OR EXISTS (SELECT 1 FROM SCM_MGR.GT_GGET_SPLIT_SCM_SITE_ID X WHERE B.SCM_SITE_ID = X.TOK))
+          AND (P_VALID_YN IS NULL OR P_VALID_YN = 'ALL'
+               OR EXISTS (SELECT 1 FROM SCM_MGR.GT_GGET_SPLIT_VALID_YN X WHERE B.VALID_YN = X.TOK))
+          AND (
+                NVL(NULLIF(TRIM(P_ITEM_ID), ''), 'ALL') = 'ALL'
+                OR EXISTS (
+                      SELECT 1
+                      FROM SCM_MGR.GT_GGET_SPLIT_ITEM_ID X
+                      WHERE NVL(UPPER(B.ITEM_ID), '')   LIKE '%' || UPPER(X.TOK) || '%'
+                         OR NVL(UPPER(B.NICK_NAME), '') LIKE '%' || UPPER(X.TOK) || '%'
+                ) --260820 조회조건 Upper 처리
+          )
+          AND (
+                NVL(NULLIF(TRIM(P_PROJECT_CODE), ''), 'ALL') = 'ALL'
+                OR EXISTS (
+                      SELECT 1
+                      FROM SCM_MGR.GT_GGET_SPLIT_PROJECT_CODE X
+                      WHERE NVL(UPPER(B.PROJECT_CODE), '') LIKE '%' || UPPER(X.TOK) || '%'
+                         OR NVL(UPPER(B.PROJECT_NAME), '') LIKE '%' || UPPER(X.TOK) || '%'
+                ) --260820 조회조건 Upper 처리
+          )
+          AND (
+                NVL(NULLIF(TRIM(P_OWNER), ''), 'ALL') = 'ALL'
+                OR EXISTS (
+                      SELECT 1
+                      FROM SCM_MGR.GT_GGET_SPLIT_OWNER X
+                      WHERE NVL(UPPER(B.OWNER), '')      LIKE '%' || UPPER(X.TOK) || '%'
+                         OR NVL(UPPER(B.OWNER_NAME), '') LIKE '%' || UPPER(X.TOK) || '%'
+                ) --260820 조회조건 Upper 처리
+          )
+    ),
+ 
+    /* 4) 81% 분기: ITEM_TYPE IN ('H','P') OR CNT=0 데이터만 결과 리스트에 포함 */
+    SITE_CNT AS (
+--        SELECT DIVISION_ID
+--             , SCM_SITE_ID
+--             , PROJECT_CODE
+--             , SUM(CASE WHEN ITEM_TYPE IN ('H', 'P') THEN 1 ELSE 0 END) AS CNT
+--        FROM BF
+--        GROUP BY DIVISION_ID, SCM_SITE_ID, PROJECT_CODE
+        SELECT   SI9.DIVISION_ID                                                     -- 2026.09.08 AJS
+               , SI9.SCM_SITE_ID                                                     -- 2026.09.08 AJS
+               , SI9.PROJECT_CODE                                                    -- 2026.09.08 AJS
+               , SI9.DEPT_ID                                                         -- 2026.09.08 AJS
+               , SUM(CASE WHEN IA9.ITEM_TYPE IN ('H', 'P') THEN 1 ELSE 0 END) AS CNT -- 2026.09.08 AJS
+          FROM   SCM_MST_SITE_ITEM SI9                                               -- 2026.09.08 AJS
+               , ITEM_AGG          IA9                                               -- 2026.09.08 AJS
+         WHERE   SI9.DIVISION_ID = P_DIVISION_ID                                     -- 2026.09.08 AJS
+           AND   IA9.DIVISION_ID (+) = SI9.DIVISION_ID                               -- 2026.09.08 AJS
+           AND   IA9.ITEM_ID (+) = SI9.ITEM_ID                                       -- 2026.09.08 AJS
+         GROUP BY SI9.DIVISION_ID , SI9.SCM_SITE_ID , SI9.PROJECT_CODE , SI9.DEPT_ID -- 2026.09.08 AJS
+    )
+ 
+    /* 5) BRANCH PROJECTION */
+   SELECT
+          BF.DIVISION_ID
+        , BF.SCM_SITE_ID
+        , BF.PROJECT_CODE
+        , BF.DEPT_ID
+        , BF.TEAM_NAME
+        , BF.ITEM_ID
+        , BF.CUST_GROUP
+        , BF.END_CUSTOMER
+        , BF.SOLDTO_CODE
+        , BF.SOLDTO_DESCRIPTION                                                      -- 2026.09.11 AJS
+        , BF.SHIPTO_CODE
+        , BF.SHIPTO_DESCRIPTION                                                      -- 2026.09.11 AJS
+        , BF.SOLDTO_CUSTOMER
+        , BF.OWNER
+        , BF.OWNER_NAME
+        , BF.SALES_PLAN_ADJUST_YN
+        , BF.ITEM_TYPE
+        , BF.ITEM_CLASS_NAME
+        , BF.ITEM_NAME
+        , BF.NICK_NAME
+        , BF.SALES_COMPANY
+        , BF.SALES_PLANT
+        , BF.BPMS_EXIST
+        , BF.CELL_PER_CAR
+        , BF.CELL_PER_MODULE
+        , BF.EDI_LT
+        , BF.VMI_LT
+        , BF.PROJECT_INFO
+        , BF.PROJECT_NAME
+        , BF.PROJECT_STATUS
+        , BF.PROJECT_OWNER
+        , BF.PRJ_OWNR_ID
+        , BF.VALID_YN
+        , BF.LAST_UPDATE_DATE
+        , BF.LAST_UPDATED_BY
+        , BF.MDM_ACTIVE
+        , BF.ATTRIBUTE5
+        , BF.ENERGE_WH
+        , BF.CELL_TYPE
+        , BF.ATTRIBUTE1 --2026.9.17 Sold-To Cust.(Report) 추가
+        , BF.ATTRIBUTE9
+        , BF.ATTRIBUTE4
+        , BF.MODULE_PER_CAR
+        , BF.ATTRIBUTE6
+        , BF.KWH
+        , BF.CUSTOMER_MODEL
+        , BF.CELL_S_OP_REPORT                                                        -- 2026.09.11 AJS
+        , BF.EDIT_FLAG
+    FROM (
+        SELECT
+              B.*
+            , NVL(SC.CNT, 0) AS SC_CNT
+        FROM BF B
+           , SITE_CNT SC
+        WHERE SC.DIVISION_ID(+) = B.DIVISION_ID
+          AND SC.SCM_SITE_ID(+) = B.SCM_SITE_ID
+          AND SC.PROJECT_CODE(+) = B.PROJECT_CODE
+          AND SC.DEPT_ID(+) = B.DEPT_ID                                              -- 2026.09.08 AJS
+    ) BF
+    WHERE (
+              P_DIVISION_ID IN ('40', '82')
+           OR (
+                  P_DIVISION_ID LIKE '81%'
+              AND (BF.ITEM_TYPE IN ('H', 'P') OR BF.SC_CNT = 0)
+              )
+          )
+    ORDER BY
+          BF.DIVISION_ID
+        , BF.TEAM_NAME
+        , BF.END_CUSTOMER
+        , BF.SOLDTO_CODE
+        , BF.SHIPTO_CODE
+        , BF.SOLDTO_CUSTOMER
+        , BF.SCM_SITE_ID
+        , BF.PROJECT_CODE
+        , BF.ITEM_ID
+    ;
+ 
+    V_ROW_CNT := V_ROW_CNT + SQL%ROWCOUNT;
+ 
+    OPEN O_RESULT_CURSOR FOR
+         SELECT '0' AS CODE, 'SUCCESS' AS MSG, TO_CHAR(V_ROW_CNT) AS EVENT FROM DUAL;
+ 
+EXCEPTION
+    WHEN OTHERS THEN
+ 
+        RAISE_APPLICATION_ERROR(-20001,
+        '[' || $$PLSQL_UNIT || '] SQLCODE=' || TO_CHAR(SQLCODE) ||
+        ' / SQLERRM=' || SQLERRM ||
+        ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE ||
+        ' / PARAMS=' || '-' );
+ 
+END P_DMF0005_GET_SALES_SITE_MODEL_PRODUCTION;
+ 
+ 
+PROCEDURE P_DMF0005_GET_SALES_SITE_MODEL_PURCHASE (
+      P_DIVISION_ID       IN VARCHAR2
+    , P_SCM_SITE_ID        IN VARCHAR2
+    , P_PROJECT_CODE   IN VARCHAR2
+    , P_ACTIVE_FLAG    IN VARCHAR2
+    , P_USER_ID     IN VARCHAR2
+    , O_RC1              OUT SYS_REFCURSOR
+    , O_RESULT_CURSOR    OUT SYS_REFCURSOR
+) IS
+    V_GROUP_ID   VARCHAR2(50) := '';
+ 
+    V_ROW_CNT	      NUMBER := 0;
+ 
+BEGIN
+    -- 2026.09.30 AJS 클라우드 동적샘플링 강제 — 상단 조회와 같은 조치 (START)
+    --  클라우드 세션 기본값 0 에서는 통계 없는 대상(JSON_TABLE · FN_SPLITSTRING)이
+    --  파국계획을 타 조회가 분 단위로 늘어난다(사내 12초 대 클라우드 16분+ 실증).
+    --  Oracle 기본값 2 복원. 암묵적 커밋이 없어 롤백에 영향 없다.
+    EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 2';
+    -- 2026.09.30 AJS 클라우드 동적샘플링 강제 — 상단 조회와 같은 조치 (END)
+ 
+    /* ADMIN 그룹 조회 */
+    SELECT CASE WHEN COUNT(1) > 0 THEN 'ADMIN' ELSE '' END
+      INTO V_GROUP_ID
+      FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+     WHERE LOOKUP_TYPE = 'GET_ADMIN_GROUP'
+       AND VALID_YN = 'Y'
+       AND SEGMENT2 = 'ALL'
+       AND SEGMENT1 IN ( SELECT DISTINCT USER_GR_ID
+                         FROM   SCM_ADM_USER_GR_UNIT_AUTH_MPG_M A
+                         WHERE  USER_ID = P_USER_ID
+                         AND    UNIT_TP_CD = 'D'
+                         AND    UNIT_ID = P_DIVISION_ID )
+     ;
+ 
+    OPEN O_RC1 FOR
+    WITH
+ 
+    ITEM_AGG AS (
+        SELECT
+              T.DIVISION_ID
+            , T.ITEM_ID
+            , MAX(T.ITEM_NAME) AS ITEM_NAME
+            , MAX(T.ITEM_CLASS_NAME) AS ITEM_CLASS_NAME
+            , MAX(T.NICK_NAME) AS NICK_NAME
+            , CASE MIN(CASE WHEN T.ITEM_TYPE = 'P' THEN 1
+                            WHEN T.ITEM_TYPE = 'H' THEN 2
+                            WHEN T.ITEM_TYPE = 'Q' THEN 3
+                            ELSE 4 END)
+                  WHEN 1 THEN 'P'
+                  WHEN 2 THEN 'H'
+                  WHEN 3 THEN 'Q'
+                  ELSE 'R'
+              END AS ITEM_TYPE
+        FROM SCM_MST_ITEM_SN T
+        WHERE T.DIVISION_ID = P_DIVISION_ID
+        GROUP BY T.DIVISION_ID, T.ITEM_ID
+    ),
+    CUST_ITEM AS (
+        SELECT
+              DIVISION_ID
+            , SCM_SITE_ID
+            , PROJECT_CODE
+            , ITEM_ID
+            , MAX(CUSTOMER_MODEL) AS CUSTOMER_MODEL
+        FROM DM_MST_CUSTOMER_MODEL
+        GROUP BY DIVISION_ID, SCM_SITE_ID, PROJECT_CODE, ITEM_ID
+    )
+    SELECT DISTINCT
+          SI.DIVISION_ID
+        , SI.SCM_SITE_ID
+        , SI.PROJECT_CODE
+        , PJ.PROJECT_NAME
+        , PJ.PROJECT_STATUS
+        , SI.SALES_PLAN_ADJUST_YN
+        , IA.ITEM_TYPE
+        , IA.ITEM_CLASS_NAME
+        , SI.ITEM_ID
+        , CASE WHEN SI.DIVISION_ID LIKE '81%' THEN TO_NUMBER(SI.ATTRIBUTE8) ELSE 0 END AS KWH
+        , CI.CUSTOMER_MODEL
+        , IA.NICK_NAME
+        , SI.BPMS_EXIST
+        , SI.OWNER
+        , FN_GET_MULTI_OWNER_NAME(SI.OWNER, ',', '1') AS OWNER_NAME
+        , SI.VALID_YN
+        , SI.CELL_PER_CAR
+        , SI.CELL_PER_MODULE
+        , CASE
+              WHEN NVL(SI.CELL_PER_MODULE, 0) = 0 THEN NULL
+              ELSE SI.CELL_PER_CAR / SI.CELL_PER_MODULE
+          END AS MODULE_PER_CAR
+        , SI.SALES_COMPANY
+        , SI.SALES_PLANT
+        , SI.LAST_UPDATE_DATE
+        , SI.LAST_UPDATED_BY
+        , CASE WHEN (FN_GET_DEPT_LIST(P_USER_ID, SI.DEPT_ID) = 'Y' OR V_GROUP_ID = 'ADMIN')
+               THEN 'Y' ELSE 'N' END AS EDIT_FLAG
+        , SI.ATTRIBUTE6
+        , SI.EDI_LT
+        FROM SCM_MST_SITE_ITEM SI
+    LEFT JOIN SCM_MST_PROJECT PJ
+           ON PJ.DIVISION_ID = SI.DIVISION_ID
+          AND PJ.PROJECT_CODE = SI.PROJECT_CODE
+    LEFT JOIN SCM_MST_SITE ST
+           ON ST.DIVISION_ID = SI.DIVISION_ID
+          AND ST.SCM_SITE_ID = SI.SCM_SITE_ID
+    LEFT JOIN ITEM_AGG IA
+           ON IA.DIVISION_ID = SI.DIVISION_ID
+          AND IA.ITEM_ID = SI.ITEM_ID
+    LEFT JOIN CUST_ITEM CI
+           ON CI.DIVISION_ID = SI.DIVISION_ID
+          AND CI.SCM_SITE_ID = SI.SCM_SITE_ID
+          AND CI.PROJECT_CODE = SI.PROJECT_CODE
+          AND CI.ITEM_ID = SI.ITEM_ID
+    WHERE IA.ITEM_TYPE IN ('R', 'Q')
+      AND SI.DIVISION_ID = P_DIVISION_ID
+      AND SI.PROJECT_CODE = P_PROJECT_CODE
+      AND SI.SCM_SITE_ID = P_SCM_SITE_ID
+      AND ( P_ACTIVE_FLAG IS NULL
+         OR P_ACTIVE_FLAG = 'ALL'
+         OR SI.VALID_YN = P_ACTIVE_FLAG )   /* AS-IS 는 'ALL'·빈값이면 조건 미적용 */
+    ORDER BY
+          SI.DIVISION_ID
+        , SI.SCM_SITE_ID
+        , SI.PROJECT_CODE
+        , SI.ITEM_ID
+    ;
+        /*
+       , SCM_MST_PROJECT PJ
+       , SCM_MST_SITE ST
+       , ITEM_AGG IA
+       , CUST_ITEM CI
+    WHERE IA.ITEM_TYPE IN ('R', 'Q')
+      AND SI.DIVISION_ID = P_DIVISION_ID
+      AND SI.PROJECT_CODE = P_PROJECT_CODE
+      AND SI.SCM_SITE_ID = P_SCM_SITE_ID
+      AND SI.VALID_YN  = P_ACTIVE_FLAG
+      AND PJ.DIVISION_ID(+) = SI.DIVISION_ID
+      AND PJ.PROJECT_CODE(+) = SI.PROJECT_CODE
+      AND ST.DIVISION_ID(+) = SI.DIVISION_ID
+      AND ST.SCM_SITE_ID(+) = SI.SCM_SITE_ID
+      AND IA.DIVISION_ID(+) = SI.DIVISION_ID
+      AND IA.ITEM_ID(+) = SI.ITEM_ID
+      AND CI.DIVISION_ID(+) = SI.DIVISION_ID
+      AND CI.SCM_SITE_ID(+) = SI.SCM_SITE_ID
+      AND CI.PROJECT_CODE(+) = SI.PROJECT_CODE
+      AND CI.ITEM_ID(+) = SI.ITEM_ID*/
+ 
+ 
+ 
+     V_ROW_CNT := V_ROW_CNT + SQL%ROWCOUNT;
+ 
+     OPEN O_RESULT_CURSOR FOR
+          SELECT '0' AS CODE, 'SUCCESS' AS MSG, TO_CHAR(V_ROW_CNT) AS EVENT FROM DUAL;
+ 
+EXCEPTION
+    WHEN OTHERS THEN
+ 
+        RAISE_APPLICATION_ERROR(-20001,
+        '[' || $$PLSQL_UNIT || '] SQLCODE=' || TO_CHAR(SQLCODE) ||
+        ' / SQLERRM=' || SQLERRM ||
+        ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE ||
+        ' / PARAMS=' || '-' );
+ 
+END P_DMF0005_GET_SALES_SITE_MODEL_PURCHASE;
+ 
+PROCEDURE P_DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION (
+      P_DATA            IN CLOB
+    , P_USER_ID         IN VARCHAR2
+    , O_RESULT_CURSOR   OUT SYS_REFCURSOR
+)
+AS
+    EX_BIZ_EX       EXCEPTION;
+    V_ERR_MSG       VARCHAR2(4000);
+    V_ROW_CNT       NUMBER := 0;
+    V_CNT           NUMBER := 0;
+    V_DUP_ITEM_ID   VARCHAR2(50);
+    V_DEPT_ID       VARCHAR2(50);                                   -- 2026.09.17 AJS
+    V_DEPT_ID_MAX   VARCHAR2(50);                                   -- 2026.09.17 AJS
+ 
+ 
+    PROCEDURE RAISE_INVALID(P_MSG IN VARCHAR2) IS
+    BEGIN
+        V_ERR_MSG := P_MSG;
+        RAISE EX_BIZ_EX;
+    END;
+ 
+BEGIN
+    -- 2026.09.30 AJS 클라우드 동적샘플링 강제 — 상단 조회와 같은 조치 (START)
+    --  클라우드 세션 기본값 0 에서는 통계 없는 대상(JSON_TABLE · FN_SPLITSTRING)이
+    --  파국계획을 타 저장이 분 단위로 늘어난다(사내 12초 대 클라우드 16분+ 실증).
+    --  Oracle 기본값 2 복원. 암묵적 커밋이 없어 롤백에 영향 없다.
+    EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 2';
+    -- 2026.09.30 AJS 클라우드 동적샘플링 강제 — 상단 조회와 같은 조치 (END)
+ 
+    FOR R IN (
+        SELECT
+              TRIM(J.CRUD_TYPE) AS CRUD_TYPE
+            , TRIM(J.DIVISION_ID) AS DIVISION_ID
+            , TRIM(J.PROJECT_CODE) AS PROJECT_CODE
+            , TRIM(J.SCM_SITE_ID) AS SCM_SITE_ID
+            , REGEXP_REPLACE(TRIM(J.ITEM_ID), '[[:space:]]+', '') AS ITEM_ID
+            , NVL(TRIM(J.SALES_PLAN_ADJUST_YN), 'N') AS SALES_PLAN_ADJUST_YN
+            , NVL(TRIM(J.BPMS_EXIST), 'N') AS BPMS_EXIST
+            , NVL(TRIM(J.VALID_YN), 'Y') AS VALID_YN
+            , TRIM(J.DEPT_ID) AS DEPT_ID
+            , TRIM(J.TEAM_NAME) AS TEAM_NAME                                           -- 2026.09.17 AJS
+            , TRIM(J.CUST_GROUP) AS CUST_GROUP
+            , REGEXP_REPLACE(
+                  REGEXP_REPLACE(NVL(TRIM(J.OWNER), ''), ',+', ','),
+                  '(^,|,$)',
+                  ''
+              ) AS OWNER
+            , P_USER_ID AS USER_ID
+            , J.EDI_LT AS EDI_LT
+            , CASE
+                  WHEN REGEXP_LIKE(NVL(TRIM(J.VMI_LT), '0'), '^-?\d+(\.\d+)?$') THEN TO_NUMBER(TRIM(J.VMI_LT))
+                  ELSE 0
+              END AS VMI_LT_NUM
+            , TRIM(J.SALES_COMPANY) AS SALES_COMPANY
+            , TRIM(J.SALES_PLANT) AS SALES_PLANT
+            , NVL(NULLIF(TRIM(J.PARTIAL_PLAN_YN), ''), 'N') AS PARTIAL_PLAN_YN
+            , TRIM(J.ENERGE_WH) AS ENERGE_WH
+            , TO_CHAR(TRIM(J.KWH), 'TM9', 'NLS_NUMERIC_CHARACTERS=.,') AS KWH -- number
+            , TRIM(J.ATTRIBUTE1) AS ATTRIBUTE1 --2026.9.17 Sold-To Cust.(Report) 추가
+            , TRIM(J.ATTRIBUTE6) AS ATTRIBUTE6
+            , TRIM(J.ATTRIBUTE9) AS ATTRIBUTE9
+            , TRIM(J.PROJECT_INFO) AS PROJECT_INFO
+            , J.CELL_PER_CAR AS CELL_PER_CAR
+            , J.CELL_PER_MODULE AS CELL_PER_MODULE
+            , TRIM(J.PRJ_OWNR_ID) AS PRJ_OWNR_ID
+        FROM JSON_TABLE(
+            P_DATA,
+            '$[*]'
+            COLUMNS (
+                  CRUD_TYPE             VARCHAR2(1)    PATH '$.CRUD_TYPE'
+                , DIVISION_ID           VARCHAR2(30)   PATH '$.DIVISION_ID'
+                , PROJECT_CODE          VARCHAR2(50)   PATH '$.PROJECT_CODE'
+                , SCM_SITE_ID           VARCHAR2(30)   PATH '$.SCM_SITE_ID'
+                , ITEM_ID               VARCHAR2(50)   PATH '$.ITEM_ID'
+                , SALES_PLAN_ADJUST_YN  VARCHAR2(1)    PATH '$.SALES_PLAN_ADJUST_YN'
+                , BPMS_EXIST            VARCHAR2(1)    PATH '$.BPMS_EXIST'
+                , VALID_YN              VARCHAR2(1)    PATH '$.VALID_YN'
+                , DEPT_ID               VARCHAR2(100)  PATH '$.DEPT_ID'
+                , TEAM_NAME             VARCHAR2(600)  PATH '$.TEAM_NAME'   NULL ON EMPTY -- 2026.09.17 AJS
+                , CUST_GROUP            VARCHAR2(100)  PATH '$.CUST_GROUP'
+                , OWNER                 VARCHAR2(1000) PATH '$.OWNER'
+                , EDI_LT                NUMBER         PATH '$.EDI_LT'
+                , VMI_LT                VARCHAR2(300)  PATH '$.VMI_LT'
+                , SALES_COMPANY         VARCHAR2(300)  PATH '$.SALES_COMPANY'
+                , SALES_PLANT           VARCHAR2(300)  PATH '$.SALES_PLANT'
+                , PARTIAL_PLAN_YN       VARCHAR2(1)    PATH '$.PARTIAL_PLAN_YN'
+                , ENERGE_WH             VARCHAR2(300)  PATH '$.ENERGE_WH'   NULL ON EMPTY
+                , KWH                   NUMBER         PATH '$.KWH'         NULL ON EMPTY
+                , ATTRIBUTE1            VARCHAR2(300)  PATH '$.ATTRIBUTE1'  NULL ON EMPTY --2026.9.17 Sold-To Cust.(Report) 추가
+                , ATTRIBUTE6            VARCHAR2(300)  PATH '$.ATTRIBUTE6'  NULL ON EMPTY
+                , ATTRIBUTE9            VARCHAR2(300)  PATH '$.ATTRIBUTE9'  NULL ON EMPTY
+                , PROJECT_INFO          VARCHAR2(300)  PATH '$.PROJECT_INFO' NULL ON EMPTY
+                , CELL_PER_CAR          NUMBER         PATH '$.CELL_PER_CAR' NULL ON EMPTY
+                , CELL_PER_MODULE       NUMBER         PATH '$.CELL_PER_MODULE' NULL ON EMPTY
+                , PRJ_OWNR_ID           VARCHAR2(200)  PATH '$.PRJ_OWNR_ID' NULL ON EMPTY
+            )
+        ) J
+    ) LOOP
+            /* =========================
+             필수값 검증 - 화면에서 처리
+             ========================= */
+             /*
+          IF R.DIVISION_ID = '40' THEN
+              IF TRIM(R.CUST_GROUP)   IS NULL THEN RAISE_INVALID('[40] CUST_GROUP is required.'); END IF;
+              IF TRIM(R.PROJECT_CODE) IS NULL THEN RAISE_INVALID('[40] PROJECT_CODE is required.'); END IF;
+              IF TRIM(R.OWNER)        IS NULL THEN RAISE_INVALID('[40] OWNER is required.'); END IF;
+              IF TRIM(R.SCM_SITE_ID)  IS NULL THEN RAISE_INVALID('[40] SCM_SITE_ID is required.'); END IF;
+              IF TRIM(R.SALES_COMPANY)IS NULL THEN RAISE_INVALID('[40] SALES_COMPANY is required.'); END IF;
+              IF TRIM(R.SALES_PLANT)  IS NULL THEN RAISE_INVALID('[40] SALES_PLANT is required.'); END IF;
+              IF TRIM(R.ITEM_ID)      IS NULL THEN RAISE_INVALID('[40] ITEM_ID is required.'); END IF;
+              IF TRIM(R.ATTRIBUTE9)   IS NULL THEN RAISE_INVALID('[40] ATTRIBUTE9(Production Process) is required.'); END IF;
+ 
+          ELSIF R.DIVISION_ID LIKE '81%' THEN
+              IF TRIM(R.OWNER)        IS NULL THEN RAISE_INVALID('[81] OWNER is required.'); END IF;
+              IF TRIM(R.SCM_SITE_ID)  IS NULL THEN RAISE_INVALID('[81] SCM_SITE_ID is required.'); END IF;
+              IF TRIM(R.SALES_COMPANY)IS NULL THEN RAISE_INVALID('[81] SALES_COMPANY is required.'); END IF;
+              IF TRIM(R.SALES_PLANT)  IS NULL THEN RAISE_INVALID('[81] SALES_PLANT is required.'); END IF;
+              IF TRIM(R.PROJECT_CODE) IS NULL THEN RAISE_INVALID('[81] PROJECT_CODE is required.'); END IF;
+              IF TRIM(R.KWH)          IS NULL THEN RAISE_INVALID('[81] KWH is required.'); END IF;
+              IF TRIM(R.VALID_YN)     IS NULL THEN RAISE_INVALID('[81] VALID_YN is required.'); END IF;
+ 
+          ELSIF R.DIVISION_ID = '82' THEN
+              IF TRIM(R.OWNER)        IS NULL THEN RAISE_INVALID('[82] OWNER(Sales) is required.'); END IF;
+              IF TRIM(R.PRJ_OWNR_ID)  IS NULL THEN RAISE_INVALID('[82] PRJ_OWNR_ID(Owner PM) is required.'); END IF;
+              IF TRIM(R.SALES_COMPANY)IS NULL THEN RAISE_INVALID('[82] SALES_COMPANY is required.'); END IF;
+              IF TRIM(R.SALES_PLANT)  IS NULL THEN RAISE_INVALID('[82] SALES_PLANT is required.'); END IF;
+              IF TRIM(R.PROJECT_CODE) IS NULL THEN RAISE_INVALID('[82] PROJECT_CODE is required.'); END IF;
+              IF TRIM(R.VALID_YN)     IS NULL THEN RAISE_INVALID('[82] VALID_YN is required.'); END IF;
+          END IF;
+          */
+          -- 2026.09.17 AJS Team 명으로 Team ID 확인 (START)
+          V_DEPT_ID := R.DEPT_ID;
+          IF R.TEAM_NAME IS NOT NULL THEN
+              /* 넘어온 Team ID 와 Team 명이 짝이면 그대로 사용 */
+              SELECT MAX(DEPT_ID)
+                INTO V_DEPT_ID
+                FROM SCM_MST_SSO_DEPT_INFO
+               WHERE DEPT_ID = R.DEPT_ID
+                 AND TRIM(DEPT_NAME_KO) = R.TEAM_NAME;
+              /* 짝이 아니면 Team 명으로 Team ID 확인 */
+              IF V_DEPT_ID IS NULL THEN
+                  SELECT MIN(DEPT_ID)
+                       , MAX(DEPT_ID)
+                    INTO V_DEPT_ID
+                       , V_DEPT_ID_MAX
+                    FROM SCM_MST_SSO_DEPT_INFO
+                   WHERE VALID_YN = 'Y'
+                     AND TRIM(DEPT_NAME_KO) = R.TEAM_NAME;
+                  IF V_DEPT_ID IS NULL THEN
+                      RAISE_INVALID('Team 정보가 존재하지 않습니다. Team 팝업에서 선택해 주세요. Team=' || R.TEAM_NAME);
+                  END IF;
+                  /* 같은 Team 명이 여럿이면 이 사업부에서 쓰는 Team ID 로 확인 */
+                  IF V_DEPT_ID <> V_DEPT_ID_MAX THEN
+                      SELECT MIN(A.DEPT_ID)
+                           , MAX(A.DEPT_ID)
+                        INTO V_DEPT_ID
+                           , V_DEPT_ID_MAX
+                        FROM SCM_MST_SSO_DEPT_INFO A
+                       WHERE EXISTS (SELECT 1
+                                       FROM SCM_MST_SITE_ITEM B
+                                      WHERE B.DIVISION_ID = R.DIVISION_ID
+                                        AND B.DEPT_ID = A.DEPT_ID)
+                         AND A.VALID_YN = 'Y'
+                         AND TRIM(A.DEPT_NAME_KO) = R.TEAM_NAME;
+                      IF V_DEPT_ID IS NULL OR V_DEPT_ID <> V_DEPT_ID_MAX THEN
+                          RAISE_INVALID('같은 이름의 Team 이 여럿입니다. Team 팝업에서 선택해 주세요. Team=' || R.TEAM_NAME);
+                      END IF;
+                  END IF;
+              END IF;
+          END IF;
+          -- 2026.09.17 AJS Team 명으로 Team ID 확인 (END)
+ 
+          /* =========================
+             OWNER 검증
+             ========================= */
+          IF TRIM(R.OWNER) IS NOT NULL THEN
+              SELECT COUNT(*)
+                INTO V_CNT
+                FROM (
+                      SELECT UPPER(TRIM(S.VALUE)) AS TOKEN
+                      FROM TABLE(FN_SPLITSTRING(R.OWNER, ',')) S
+                      WHERE TRIM(S.VALUE) IS NOT NULL
+                ) O
+               WHERE NOT EXISTS (
+                      SELECT 1
+                      FROM SCM_ADM_USER_M U
+                      WHERE UPPER(U.USER_ID) = O.TOKEN
+                        --AND U.USE_YN = 'Y'
+               );
+ 
+              IF V_CNT > 0 THEN
+                  RAISE_INVALID('Owner정보가 존재하지 않습니다. Owner=' || R.OWNER);
+              END IF;
+          END IF;
+ 
+          /* =========================
+             OWNER(PM) 검증
+             ========================= */
+          IF R.DIVISION_ID = '82'
+             AND TRIM(R.PRJ_OWNR_ID) IS NOT NULL
+          THEN
+              SELECT COUNT(*)
+                INTO V_CNT
+                FROM (
+                      SELECT UPPER(TRIM(S.VALUE)) AS TOKEN
+                      FROM TABLE(FN_SPLITSTRING(R.PRJ_OWNR_ID, ',')) S
+                      WHERE TRIM(S.VALUE) IS NOT NULL
+                ) O
+               WHERE NOT EXISTS (
+                      SELECT 1
+                      FROM SCM_ADM_USER_M U
+                      WHERE UPPER(U.USER_ID) = O.TOKEN
+                        --AND U.USE_YN = 'Y'
+               );
+ 
+              IF V_CNT > 0 THEN
+                  RAISE_INVALID('Owner(PM)정보가 존재하지 않습니다. Owner(PM)=' || R.PRJ_OWNR_ID);
+              END IF;
+          END IF;
+        /* 40 division: Active=N blocking validation */
+        IF R.DIVISION_ID = '40' AND R.VALID_YN = 'N' THEN
+            SELECT COUNT(*)
+              INTO V_CNT
+              FROM DM_PLN_MKT_FCST
+             WHERE YYYYMMDD >= TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7, 'YYYYMMDD')
+               AND DIVISION_ID = R.DIVISION_ID
+               AND PROJECT_CODE = R.PROJECT_CODE
+               AND SCM_SITE_ID = R.SCM_SITE_ID
+               AND ITEM_ID = R.ITEM_ID
+               AND QTY <> 0
+               AND MEASURE IN ('MKT_FCST', 'RTF_SCP', 'RTF', 'VMI_In_Req', 'VMI_In_Plan', 'AS_In_Req');
+ 
+            IF V_CNT > 0 THEN
+                RAISE_INVALID('당주 월요일 이후의 MKT FCST 정보가 존재하므로 Active=''N'' 처리가 불가합니다. Sales Site=' || R.SCM_SITE_ID || ', Model=' || R.ITEM_ID);
+            END IF;
+ 
+            SELECT COUNT(*)
+              INTO V_CNT
+              FROM DM_PLN_BP_FCST
+             WHERE YYYYMM >= TO_CHAR(SYSDATE, 'YYYYMM')
+               AND DIVISION_ID = R.DIVISION_ID
+               AND PROJECT_CODE = R.PROJECT_CODE
+               AND SCM_SITE_ID = R.SCM_SITE_ID
+               AND ITEM_ID = R.ITEM_ID
+               AND QTY <> 0;
+ 
+            IF V_CNT > 0 THEN
+                RAISE_INVALID('계획구간의 Business Plan 정보가 존재하므로 Active=''N'' 처리가 불가합니다. Sales Site=' || R.SCM_SITE_ID || ', Model=' || R.ITEM_ID);
+            END IF;
+        END IF;
+ 
+          /* ============================================================
+            DML
+            ============================================================ */
+        IF R.CRUD_TYPE = 'I' THEN
+            IF R.DIVISION_ID = '40' THEN
+                SELECT COUNT(*)
+                  INTO V_CNT
+                  FROM DM_MST_ITEM_SINGLE_V
+                 WHERE DIVISION_ID = R.DIVISION_ID
+                   AND ITEM_ID = R.ITEM_ID
+                   AND ACTIVE_FLAG = 'Y';
+ 
+                IF V_CNT = 0 THEN
+                    RAISE_INVALID('[' || R.ITEM_ID || '] Invalid Item ID !');
+                END IF;
+ 
+                BEGIN
+                    SELECT A.ITEM_ID
+                      INTO V_DUP_ITEM_ID
+                      FROM SCM_MST_SITE_ITEM A
+                      JOIN SCM_MST_SITE B
+                        ON A.DIVISION_ID = B.DIVISION_ID
+                       AND A.SCM_SITE_ID = B.SCM_SITE_ID
+                     WHERE A.DIVISION_ID = R.DIVISION_ID
+                       AND SUBSTR(UPPER(R.ITEM_ID), 1, 2) = 'MP'
+                       AND SUBSTR(A.ITEM_ID, 1, 12) = SUBSTR(R.ITEM_ID, 1, 12)   /* E20260325-001071 : 11 자리 -> 12 자리 */
+                       AND A.ITEM_ID <> R.ITEM_ID
+                       AND A.VALID_YN = 'Y'
+                       AND B.SITE_TYPE = 'SALES'
+                       AND ROWNUM = 1;
+                EXCEPTION
+                    WHEN NO_DATA_FOUND THEN
+                        V_DUP_ITEM_ID := NULL;
+                END;
+ 
+                IF V_DUP_ITEM_ID IS NOT NULL THEN
+                    RAISE_INVALID('동일 Pack Model이 존재합니다. Model=' || V_DUP_ITEM_ID);
+                END IF;
+ 
+                SELECT COUNT(*)
+                  INTO V_CNT
+                  FROM SCM_MST_SITE_ITEM
+                 WHERE DIVISION_ID = R.DIVISION_ID
+                   AND PROJECT_CODE = R.PROJECT_CODE
+                   AND SCM_SITE_ID = R.SCM_SITE_ID
+                   AND ITEM_ID = R.ITEM_ID;
+ 
+                IF V_CNT > 0 THEN
+                    RAISE_INVALID('동일한 EndCustomer, SalesSite, Model에 대하여 중복저장이 불가합니다.');
+                END IF;
+ 
+                INSERT INTO SCM_MST_SITE_ITEM (
+                    DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID,
+                    DEPT_ID,
+                    SALES_PLAN_ADJUST_YN, VALID_YN, BPMS_EXIST, CUST_GROUP, OWNER,
+                    CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE,
+                    EDI_LT, SCP_VMI_LT, SALES_COMPANY, SALES_PLANT, PARTIAL_PLAN_YN,
+                    ATTRIBUTE8, ATTRIBUTE9, PROJECT_INFO, PRJ_OWNR_ID, ATTRIBUTE1 --2026.9.17 Sold-To Cust.(Report) 추가
+                ) VALUES (
+                    R.DIVISION_ID, R.PROJECT_CODE, R.SCM_SITE_ID, R.ITEM_ID,
+--                  R.DEPT_ID,
+                    V_DEPT_ID,                                                             -- 2026.09.17 AJS
+                    R.SALES_PLAN_ADJUST_YN, 
+                    R.VALID_YN  --260828 : 'Y' Hard Coding 수정
+                    , R.BPMS_EXIST, R.CUST_GROUP, R.OWNER, 
+                    R.USER_ID, SYSDATE, R.USER_ID, SYSDATE,
+                    R.EDI_LT, R.VMI_LT_NUM, R.SALES_COMPANY, R.SALES_PLANT, R.PARTIAL_PLAN_YN,
+                    R.ENERGE_WH, R.ATTRIBUTE9, R.PROJECT_INFO, R.PRJ_OWNR_ID, R.ATTRIBUTE1 --2026.9.17 Sold-To Cust.(Report) 추가
+                );
+ 
+                V_ROW_CNT := V_ROW_CNT + SQL%ROWCOUNT;
+ 
+ 
+            ELSIF R.DIVISION_ID LIKE '81%' OR R.DIVISION_ID = '82' THEN
+                SELECT COUNT(*)
+                  INTO V_CNT
+                  FROM SCM_MST_PROJECT_ITEM
+                 WHERE DIVISION_ID = R.DIVISION_ID
+                   AND PROJECT_CODE = R.PROJECT_CODE
+                   AND VALID_YN = 'Y';
+ 
+                IF V_CNT = 0 THEN
+                    RAISE_INVALID('해당 프로젝트에 등록된 모델이 없습니다. 프로젝트 및 모델 정보를 확인해 주세요.');
+                END IF;
+ 
+                SELECT COUNT(*)
+                  INTO V_CNT
+                  FROM SCM_MST_SITE_ITEM
+                 WHERE DIVISION_ID = R.DIVISION_ID
+                   AND PROJECT_CODE = R.PROJECT_CODE
+                   AND SCM_SITE_ID = R.SCM_SITE_ID;
+ 
+                IF V_CNT > 0 THEN
+                    RAISE_INVALID('동일한 Sales Site, Project Code 가 이미 존재합니다.');
+                END IF;
+ 
+                FOR PI IN (
+                    SELECT DISTINCT ITEM_ID
+                    FROM SCM_MST_PROJECT_ITEM
+                    WHERE DIVISION_ID = R.DIVISION_ID
+                      AND PROJECT_CODE = R.PROJECT_CODE
+                      AND VALID_YN = 'Y'
+                ) LOOP
+                    INSERT INTO SCM_MST_SITE_ITEM (
+                        DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID,
+                        DEPT_ID,
+                        SALES_PLAN_ADJUST_YN, VALID_YN, BPMS_EXIST, CUST_GROUP, OWNER,
+                        CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE,
+                        EDI_LT, SCP_VMI_LT, SALES_COMPANY, SALES_PLANT, PARTIAL_PLAN_YN,
+                        ATTRIBUTE6, ATTRIBUTE8, CELL_PER_CAR, CELL_PER_MODULE, PRJ_OWNR_ID
+                    ) VALUES (
+                        R.DIVISION_ID, R.PROJECT_CODE, R.SCM_SITE_ID, PI.ITEM_ID,
+--                      R.DEPT_ID,
+                        V_DEPT_ID,                                                         -- 2026.09.17 AJS
+                        R.SALES_PLAN_ADJUST_YN, NVL(R.VALID_YN, 'Y'), R.BPMS_EXIST, R.CUST_GROUP, R.OWNER,
+                        R.USER_ID, SYSDATE, R.USER_ID, SYSDATE,
+                        R.EDI_LT, R.VMI_LT_NUM, R.SALES_COMPANY, R.SALES_PLANT, R.PARTIAL_PLAN_YN,
+                        CASE WHEN R.DIVISION_ID LIKE '81%' THEN R.ATTRIBUTE6 ELSE NULL END,
+                        CASE WHEN R.DIVISION_ID LIKE '81%' THEN R.KWH ELSE NULL END,
+                        CASE WHEN R.DIVISION_ID LIKE '81%' THEN R.CELL_PER_CAR ELSE NULL END,
+                        CASE WHEN R.DIVISION_ID LIKE '81%' THEN R.CELL_PER_MODULE ELSE NULL END,
+                        CASE WHEN R.DIVISION_ID = '82' THEN R.PRJ_OWNR_ID ELSE NULL END
+                    );
+ 
+                    V_ROW_CNT := V_ROW_CNT + SQL%ROWCOUNT;
+ 
+ 
+                END LOOP;
+            END IF;
+ 
+        ELSE
+          UPDATE SCM_MST_SITE_ITEM A
+             SET A.LAST_UPDATED_BY = R.USER_ID
+             , A.LAST_UPDATE_DATE = SYSDATE
+             , A.OWNER = NVL(R.OWNER, A.OWNER)
+--           , A.DEPT_ID = NVL(R.DEPT_ID, A.DEPT_ID)
+             , A.DEPT_ID = NVL(V_DEPT_ID, A.DEPT_ID)                                  -- 2026.09.17 AJS
+             , A.SALES_COMPANY = NVL(R.SALES_COMPANY, A.SALES_COMPANY)
+             , A.SALES_PLANT = NVL(R.SALES_PLANT, A.SALES_PLANT)
+             , A.PARTIAL_PLAN_YN = NVL(R.PARTIAL_PLAN_YN, A.PARTIAL_PLAN_YN)
+             , A.CUST_GROUP = NVL(R.CUST_GROUP, A.CUST_GROUP)
+             , A.SALES_PLAN_ADJUST_YN = NVL(R.SALES_PLAN_ADJUST_YN, A.SALES_PLAN_ADJUST_YN)
+             -- 2026.09.30 AJS F-24 40 사업부는 ATTRIBUTE8 을 기록하지 않는다 (START)
+             -- , A.ATTRIBUTE8 = CASE
+             --            WHEN R.DIVISION_ID = '40' THEN NVL(R.ENERGE_WH, A.ATTRIBUTE8)
+             --            WHEN R.DIVISION_ID LIKE '81%' THEN NVL(R.KWH, A.ATTRIBUTE8)
+             --            ELSE A.ATTRIBUTE8
+             --          END
+             , A.ATTRIBUTE8 = CASE
+                        WHEN R.DIVISION_ID LIKE '81%' THEN NVL(R.KWH, A.ATTRIBUTE8)
+                        ELSE A.ATTRIBUTE8
+                      END
+             -- 2026.09.30 AJS F-24 40 사업부는 ATTRIBUTE8 을 기록하지 않는다 (END)
+             , A.ATTRIBUTE9 = CASE WHEN R.DIVISION_ID = '40' THEN NVL(R.ATTRIBUTE9, A.ATTRIBUTE9) ELSE A.ATTRIBUTE9 END
+             , A.ATTRIBUTE1 = CASE WHEN R.DIVISION_ID = '40' THEN NVL(R.ATTRIBUTE1, A.ATTRIBUTE1) ELSE A.ATTRIBUTE1 END  --2026.9.17 Sold-To Cust.(Report) 추가
+             , A.PROJECT_INFO = CASE WHEN R.DIVISION_ID = '40' THEN NVL(R.PROJECT_INFO, A.PROJECT_INFO) ELSE A.PROJECT_INFO END
+             , A.ATTRIBUTE6 = CASE WHEN R.DIVISION_ID LIKE '81%' THEN NVL(R.ATTRIBUTE6, A.ATTRIBUTE6) ELSE A.ATTRIBUTE6 END
+             , A.EDI_LT = NVL(R.EDI_LT, A.EDI_LT)
+             , A.SCP_VMI_LT = NVL(R.VMI_LT_NUM, A.SCP_VMI_LT)
+             , A.CELL_PER_CAR = CASE WHEN R.DIVISION_ID LIKE '81%' THEN NVL(R.CELL_PER_CAR, A.CELL_PER_CAR) ELSE A.CELL_PER_CAR END
+             , A.CELL_PER_MODULE = CASE WHEN R.DIVISION_ID LIKE '81%' THEN NVL(R.CELL_PER_MODULE, A.CELL_PER_MODULE) ELSE A.CELL_PER_MODULE END
+             , A.PRJ_OWNR_ID = CASE WHEN R.DIVISION_ID = '82' THEN NVL(R.PRJ_OWNR_ID, A.PRJ_OWNR_ID) ELSE A.PRJ_OWNR_ID END
+             , A.VALID_YN = NVL(R.VALID_YN, A.VALID_YN)
+             , A.BPMS_EXIST = NVL(R.BPMS_EXIST, A.BPMS_EXIST)
+           WHERE A.DIVISION_ID = R.DIVISION_ID
+             AND A.PROJECT_CODE = R.PROJECT_CODE
+             AND A.SCM_SITE_ID = R.SCM_SITE_ID
+             AND A.ITEM_ID = R.ITEM_ID;
+ 
+ 
+          IF SQL%ROWCOUNT = 0 THEN
+            INSERT INTO SCM_MST_SITE_ITEM (
+              DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID,
+              DEPT_ID,
+              SALES_PLAN_ADJUST_YN, VALID_YN, BPMS_EXIST, CUST_GROUP, OWNER,
+              CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE,
+              EDI_LT, SCP_VMI_LT, SALES_COMPANY, SALES_PLANT, PARTIAL_PLAN_YN,
+              ATTRIBUTE6, ATTRIBUTE8, ATTRIBUTE9, PROJECT_INFO, ATTRIBUTE1, --2026.9.17 Sold-To Cust.(Report) 추가
+              CELL_PER_CAR, CELL_PER_MODULE, PRJ_OWNR_ID
+            ) VALUES (
+              R.DIVISION_ID, R.PROJECT_CODE, R.SCM_SITE_ID, R.ITEM_ID,
+--            R.DEPT_ID,
+              V_DEPT_ID,                                                               -- 2026.09.17 AJS
+              NVL(R.SALES_PLAN_ADJUST_YN, 'N'),
+              NVL(R.VALID_YN, 'Y'),
+              NVL(R.BPMS_EXIST, 'N'),
+              R.CUST_GROUP,
+              R.OWNER,
+              R.USER_ID, SYSDATE, R.USER_ID, SYSDATE,
+              R.EDI_LT, R.VMI_LT_NUM, R.SALES_COMPANY, R.SALES_PLANT, R.PARTIAL_PLAN_YN,
+              CASE WHEN R.DIVISION_ID LIKE '81%' THEN R.ATTRIBUTE6 ELSE NULL END,
+              -- 2026.09.30 AJS F-24 40 사업부는 ATTRIBUTE8 을 기록하지 않는다 (START)
+              -- CASE
+              --   WHEN R.DIVISION_ID = '40' THEN R.ENERGE_WH
+              --   WHEN R.DIVISION_ID LIKE '81%' THEN R.KWH
+              --   ELSE NULL
+              -- END,
+              CASE
+                WHEN R.DIVISION_ID LIKE '81%' THEN R.KWH
+                ELSE NULL
+              END,
+              -- 2026.09.30 AJS F-24 40 사업부는 ATTRIBUTE8 을 기록하지 않는다 (END)
+              CASE WHEN R.DIVISION_ID = '40' THEN R.ATTRIBUTE9 ELSE NULL END,
+              CASE WHEN R.DIVISION_ID = '40' THEN R.PROJECT_INFO ELSE NULL END,
+              CASE WHEN R.DIVISION_ID = '40' THEN R.ATTRIBUTE1 ELSE NULL END, --2026.9.17 Sold-To Cust.(Report) 추가
+              CASE WHEN R.DIVISION_ID LIKE '81%' THEN R.CELL_PER_CAR ELSE NULL END,
+              CASE WHEN R.DIVISION_ID LIKE '81%' THEN R.CELL_PER_MODULE ELSE NULL END,
+              CASE WHEN R.DIVISION_ID = '82' THEN R.PRJ_OWNR_ID ELSE NULL END
+            );
+          END IF;
+ 
+            V_ROW_CNT := V_ROW_CNT + SQL%ROWCOUNT;
+ 
+ 
+ 
+        END IF;
+    END LOOP; 
+ 
+    -- [2026-09-30 / POJ] 최종 부서를 SCM_MST_SITE.ETL_DEPT_ID 에 반영 — 이번 저장이 다룬 사이트만
+    UPDATE SCM_MST_SITE A
+       SET A.ETL_DEPT_ID      = ( SELECT MAX(B.DEPT_ID)
+                                    FROM SCM_MST_SITE_ITEM B
+                                   WHERE B.DIVISION_ID = A.DIVISION_ID
+                                     AND B.SCM_SITE_ID = A.SCM_SITE_ID
+                                     AND B.VALID_YN    = 'Y'
+                                     AND B.DEPT_ID IS NOT NULL )
+         , A.LAST_UPDATED_BY  = P_USER_ID
+         , A.LAST_UPDATE_DATE = SYSDATE
+     WHERE EXISTS ( SELECT 1
+                      FROM SCM_MST_SITE_ITEM B
+                     WHERE B.DIVISION_ID = A.DIVISION_ID
+                       AND B.SCM_SITE_ID = A.SCM_SITE_ID
+                       AND B.VALID_YN    = 'Y'
+                       AND B.DEPT_ID IS NOT NULL )
+       AND ( A.DIVISION_ID, A.SCM_SITE_ID ) IN
+           ( SELECT TRIM(C.DIVISION_ID), TRIM(C.SCM_SITE_ID)
+               FROM JSON_TABLE( P_DATA, '$[*]'
+                      COLUMNS ( DIVISION_ID VARCHAR2(30) PATH '$.DIVISION_ID'
+                              , SCM_SITE_ID VARCHAR2(30) PATH '$.SCM_SITE_ID' ) ) C );
+
+    COMMIT;
+ 
+ 
+    OPEN O_RESULT_CURSOR FOR
+        SELECT '0' AS CODE, 'SUCCESS' AS MSG, TO_CHAR(V_ROW_CNT) AS EVENT
+        FROM DUAL;
+ 
+EXCEPTION
+    WHEN EX_BIZ_EX THEN
+        ROLLBACK;
+        OPEN O_RESULT_CURSOR FOR
+            SELECT '-1' AS CODE, V_ERR_MSG AS MSG, '0' AS EVENT
+            FROM DUAL;
+ 
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(
+            -20001,
+            '[' || $$PLSQL_UNIT || '] SQLCODE=' || TO_CHAR(SQLCODE) ||
+            ' / SQLERRM=' || SQLERRM ||
+            ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE ||
+            ' / PARAMS=' || '-'
+        );
+END P_DMF0005_SAVE_SALES_SITE_MODEL_PRODUCTION;
+
+/*
+ * ==========================================================================================================
+ * P_DMF0005_SAVE_MODEL_CHANGE_POPUP — Model Code Change 팝업 저장 (40 사업부 ITEM_ID 일괄 변경)
+ * ----------------------------------------------------------------------------------------------------------
+ * AS-IS : LGCE_SCMDEV dbo.DMF0005_SAVE_MODEL_CHANGE_POPUP (1,502줄, modify 2023-08-23)
+ *         호출 = GSCM.DM.Plan.UIL.POPUP.DMF0005_ModelCodeChange.SaveData
+ *         [C20220103-000584] 소형 패커 코드 변경 관리 / [C20220121-000372] 소형사업부 Model Code Change
+ * 입력  : P_DATA = JSON 배열 [{ "ITEM_ID_BEFORE": "...", "ITEM_ID_AFTER": "..." }, ...]
+ *         (AS-IS '^' 구분 3배열 → PKG 형제 SAVE SP 의 JSON CLOB 관례로 통일. 키 = AS-IS 컬럼명)
+ *         P_USER_ID = LAST_UPDATED_BY / CREATED_BY
+ * 출력  : O_RESULT_CURSOR (CODE, MSG, EVENT)
+ *           성공   '0'  / 'SUCCESS' / 처리한 변경쌍 수 (AS-IS 화면 "{0}개의 데이터가 저장되었습니다" 의 {0})
+ *           검증   '-1' / AS-IS 검증 문구 원문 / '0'
+ *           예외   RAISE_APPLICATION_ERROR(-20001) — 전체 ROLLBACK
+ * 변환 메모
+ *   1) 검증 7종은 AS-IS 순서·문구 그대로 (검증 종류 순서대로, 종류 안에서는 입력 순서 첫 위반 1건)
+ *      - MSSQL LEN('')=0 → Oracle ''=NULL 이므로 NVL(LENGTH(x),0) 로 동등 처리
+ *      - MSSQL CI 비교 동등 — 입력값 UPPER(TRIM()) (DM_MST_ITEM_SINGLE_V 40 사업부 소문자 ITEM_ID 0건 실측 2026-10-01)
+ *   2) 38 테이블 갱신 = 테이블별 대상 ROWID 선수집 → ROWID UPDATE (AS-IS UPDATE..FROM JOIN 동시 평가와 동등 —
+ *      A→B, B→C 가 같은 배치여도 연쇄 변환되지 않음). 같은 BEFORE 가 여러 AFTER 면 MAX(AFTER) 로 결정화.
+ *      DIVISION_ID='40' 필터 = 37 테이블 / DM_MST_EDI_CUST_MATERIAL_INFO 1 테이블은 AS-IS 대로 필터 없음
+ *   3) 이력 DM_DNM_ITEM_CODE_CHANGE_HISTORY — (BEFORE,AFTER) 별 DATA_SEQ = 갱신 전 기존 MAX+1 (전 테이블 공통),
+ *      갱신 건수 > 0 인 (쌍, 테이블) 만 1행
+ *   4) 입력 중복 쌍은 DISTINCT (AS-IS 는 중복 쌍이 COUNT 를 배로 집계해 이력 건수가 부풀었다)
+ * 2026.10.01   Claude(Code)   [DMF0005] AS-IS DMF0005_SAVE_MODEL_CHANGE_POPUP 변환 신규
+ * ==========================================================================================================
+ */
+PROCEDURE P_DMF0005_SAVE_MODEL_CHANGE_POPUP (
+      P_DATA            IN CLOB
+    , P_USER_ID         IN VARCHAR2
+    , O_RESULT_CURSOR   OUT SYS_REFCURSOR
+)
+AS
+    EX_BIZ_EX       EXCEPTION;
+    V_ERR_MSG       VARCHAR2(4000);
+    V_CNT           NUMBER := 0;
+    V_TOT_ROWS      NUMBER := 0;
+
+    TYPE T_VC_TAB   IS TABLE OF VARCHAR2(200) INDEX BY PLS_INTEGER;
+    TYPE T_RID_TAB  IS TABLE OF UROWID        INDEX BY PLS_INTEGER;
+    TYPE T_SEQ_MAP  IS TABLE OF NUMBER        INDEX BY VARCHAR2(401);
+    TYPE T_STR_MAP  IS TABLE OF VARCHAR2(200) INDEX BY VARCHAR2(200);
+    TYPE T_CNT_MAP  IS TABLE OF NUMBER        INDEX BY VARCHAR2(200);
+    V_BEFORE        T_VC_TAB;      -- 변경 전 ITEM_ID (입력 순서, 중복 쌍 제거)
+    V_AFTER         T_VC_TAB;      -- 변경 후 ITEM_ID
+    V_SEQ           T_SEQ_MAP;     -- (BEFORE || CHR(1) || AFTER) → 이력 DATA_SEQ
+    V_MAP           T_STR_MAP;     -- BEFORE → AFTER (같은 BEFORE 가 여러 AFTER 면 MAX — AS-IS UPDATE..FROM 비결정 → 결정화)
+    V_BEF_LIST      SYS.ODCIVARCHAR2LIST := SYS.ODCIVARCHAR2LIST();   -- 갱신 대상 BEFORE 목록 (SQL 바인드용)
+
+    PROCEDURE RAISE_INVALID(P_MSG IN VARCHAR2) IS
+    BEGIN
+        V_ERR_MSG := P_MSG;
+        RAISE EX_BIZ_EX;
+    END;
+
+    -- 테이블 1개 갱신
+    --   ① 대상 ROWID 를 먼저 모두 수집 (BEFORE 목록 IN — 컬렉션 건수 힌트로 ITEM_ID 인덱스 사용 / 무인덱스 테이블은 1회 스캔)
+    --   ② 수집한 ROWID 로 UPDATE — 수집 후 갱신이라 AS-IS UPDATE..FROM 동시 평가와 같다 (A→B, B→C 연쇄 없음)
+    --   ③ BEFORE 별 건수(= AS-IS #RESULTS_INSERT COUNT) 로 이력 1행씩
+    --   [2026-10-01 성능] 1차본은 테이블마다 JSON_TABLE(:P_DATA) 를 조인 원천으로 써서 건수 오추정(8168)
+    --   → 대형 테이블에서 문장당 수 분. 변경쌍은 JSON 1회 파싱 후 컬렉션으로만 전달한다.
+    PROCEDURE CHANGE_TABLE(P_TABLE IN VARCHAR2, P_DIV40 IN BOOLEAN) IS
+        V_FILTER  VARCHAR2(100) := CASE WHEN P_DIV40 THEN ' AND X.DIVISION_ID = ''40''' END;
+        V_RIDS    T_RID_TAB;
+        V_ITEMS   T_VC_TAB;
+        V_NEWS    T_VC_TAB;
+        V_N       T_CNT_MAP;
+        V_K       VARCHAR2(200);
+    BEGIN
+        EXECUTE IMMEDIATE
+               'SELECT X.ROWID, X.ITEM_ID FROM ' || P_TABLE || ' X'
+            || ' WHERE X.ITEM_ID IN (SELECT /*+ CARDINALITY(L 10) */ L.COLUMN_VALUE FROM TABLE(:L) L)' || V_FILTER
+            BULK COLLECT INTO V_RIDS, V_ITEMS
+            USING V_BEF_LIST;
+
+        IF V_RIDS.COUNT = 0 THEN
+            RETURN;
+        END IF;
+
+        FOR I IN 1 .. V_RIDS.COUNT LOOP
+            V_NEWS(I) := V_MAP(V_ITEMS(I));
+            V_N(V_ITEMS(I)) := NVL(CASE WHEN V_N.EXISTS(V_ITEMS(I)) THEN V_N(V_ITEMS(I)) END, 0) + 1;
+        END LOOP;
+
+        FORALL I IN 1 .. V_RIDS.COUNT
+            EXECUTE IMMEDIATE
+                   'UPDATE ' || P_TABLE
+                || '   SET ITEM_ID = :A, LAST_UPDATED_BY = :U, LAST_UPDATE_DATE = SYSDATE'
+                || ' WHERE ROWID = :R'
+                USING V_NEWS(I), P_USER_ID, V_RIDS(I);
+
+        V_K := V_N.FIRST;
+        WHILE V_K IS NOT NULL LOOP
+            INSERT INTO DM_DNM_ITEM_CODE_CHANGE_HISTORY (
+                  BEFORE_CODE, AFTER_CODE, DATA_SEQ, TABLE_NAME, ROW_COUNT
+                , CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
+            ) VALUES (
+                  V_K, V_MAP(V_K), V_SEQ(V_K || CHR(1) || V_MAP(V_K)), P_TABLE, V_N(V_K)
+                , P_USER_ID, SYSDATE, P_USER_ID, SYSDATE
+            );
+            V_TOT_ROWS := V_TOT_ROWS + V_N(V_K);
+            V_K := V_N.NEXT(V_K);
+        END LOOP;
+    END CHANGE_TABLE;
+
+BEGIN
+    SCM_MGR.PR_SCM_SYS_LOG_BATCH($$PLSQL_UNIT, 'START', 0, '########## Start of procedure ##########', NULL, SYSDATE);
+
+    /* =========================
+       변경쌍 적재 (입력 순서 보존, 중복 쌍 제거)
+       ========================= */
+    SELECT B, A
+      BULK COLLECT INTO V_BEFORE, V_AFTER
+      FROM (
+            SELECT UPPER(TRIM(J.ITEM_ID_BEFORE)) AS B
+                 , UPPER(TRIM(J.ITEM_ID_AFTER))  AS A
+                 , MIN(J.RN)                     AS RN
+              FROM JSON_TABLE(P_DATA, '$[*]' COLUMNS (
+                         RN             FOR ORDINALITY
+                       , ITEM_ID_BEFORE VARCHAR2(200) PATH '$.ITEM_ID_BEFORE'
+                       , ITEM_ID_AFTER  VARCHAR2(200) PATH '$.ITEM_ID_AFTER')) J
+             GROUP BY UPPER(TRIM(J.ITEM_ID_BEFORE)), UPPER(TRIM(J.ITEM_ID_AFTER))
+           )
+     ORDER BY RN;
+
+    IF V_BEFORE.COUNT = 0 THEN
+        OPEN O_RESULT_CURSOR FOR
+            SELECT '0' AS CODE, 'SUCCESS' AS MSG, '0' AS EVENT FROM DUAL;
+        RETURN;
+    END IF;
+
+    /* =========================
+       VALIDATION (AS-IS 순서·문구 원문)
+       ========================= */
+    -- 문자 길이가 12자리인지 (BEFORE)
+    FOR I IN 1 .. V_BEFORE.COUNT LOOP
+        IF NVL(LENGTH(V_BEFORE(I)), 0) <> 12 THEN
+            RAISE_INVALID('Model 코드의 자리수가 12자리가 아니므로 변경할 수 없습니다.' || CHR(10) || 'MODEL : ' || V_BEFORE(I));
+        END IF;
+    END LOOP;
+    -- 문자 길이가 12자리인지 (AFTER)
+    FOR I IN 1 .. V_AFTER.COUNT LOOP
+        IF NVL(LENGTH(V_AFTER(I)), 0) <> 12 THEN
+            RAISE_INVALID('Model 코드의 자리수가 12자리가 아니므로 변경할 수 없습니다.' || CHR(10) || 'MODEL : ' || V_AFTER(I));
+        END IF;
+    END LOOP;
+    -- 앞의 11자리가 같은지
+    FOR I IN 1 .. V_BEFORE.COUNT LOOP
+        IF SUBSTR(V_BEFORE(I), 1, 11) <> SUBSTR(V_AFTER(I), 1, 11) THEN
+            RAISE_INVALID('Model 코드의 앞 11자리가 서로 다르므로 변경할 수 없습니다.' || 'MODEL : ' || V_BEFORE(I) || ', ' || V_AFTER(I));
+        END IF;
+    END LOOP;
+    -- 맨 앞 두 글자가 MP 인지 (BEFORE)
+    FOR I IN 1 .. V_BEFORE.COUNT LOOP
+        IF SUBSTR(V_BEFORE(I), 1, 2) <> 'MP' THEN
+            RAISE_INVALID('Model 코드가 ''MP''로 시작하지 않는 코드는 변경할 수 없습니다.' || 'MODEL : ' || V_BEFORE(I));
+        END IF;
+    END LOOP;
+    -- 맨 앞 두 글자가 MP 인지 (AFTER)
+    FOR I IN 1 .. V_AFTER.COUNT LOOP
+        IF SUBSTR(V_AFTER(I), 1, 2) <> 'MP' THEN
+            RAISE_INVALID('Model 코드가 ''MP''로 시작하지 않는 코드는 변경할 수 없습니다.' || 'MODEL : ' || V_AFTER(I));
+        END IF;
+    END LOOP;
+    -- 변경 전·후 모델코드가 동일한지 (12번째 글자가 다른지)
+    FOR I IN 1 .. V_BEFORE.COUNT LOOP
+        IF V_BEFORE(I) = V_AFTER(I) THEN
+            RAISE_INVALID('변경전 후의 모델코드가 동일합니다.' || 'MODEL : ' || V_BEFORE(I));
+        END IF;
+    END LOOP;
+    -- 40 사업부 품목 마스터 존재 여부 (BEFORE 우선 표기)
+    FOR I IN 1 .. V_BEFORE.COUNT LOOP
+        SELECT COUNT(*) INTO V_CNT FROM DM_MST_ITEM_SINGLE_V WHERE ITEM_ID = V_BEFORE(I) AND DIVISION_ID = '40';
+        IF V_CNT = 0 THEN
+            RAISE_INVALID(V_BEFORE(I) || '은 존재하지 않는 코드입니다.');
+        END IF;
+        SELECT COUNT(*) INTO V_CNT FROM DM_MST_ITEM_SINGLE_V WHERE ITEM_ID = V_AFTER(I) AND DIVISION_ID = '40';
+        IF V_CNT = 0 THEN
+            RAISE_INVALID(V_AFTER(I) || '은 존재하지 않는 코드입니다.');
+        END IF;
+    END LOOP;
+
+    /* =========================
+       BEFORE → AFTER 매핑 / 갱신 대상 BEFORE 목록 (같은 BEFORE 다중 AFTER = MAX 채택)
+       ========================= */
+    FOR I IN 1 .. V_BEFORE.COUNT LOOP
+        IF NOT V_MAP.EXISTS(V_BEFORE(I)) THEN
+            V_MAP(V_BEFORE(I)) := V_AFTER(I);
+            V_BEF_LIST.EXTEND;
+            V_BEF_LIST(V_BEF_LIST.COUNT) := V_BEFORE(I);
+        ELSIF V_AFTER(I) > V_MAP(V_BEFORE(I)) THEN
+            V_MAP(V_BEFORE(I)) := V_AFTER(I);
+        END IF;
+    END LOOP;
+
+    /* =========================
+       이력 DATA_SEQ — (BEFORE, AFTER) 별 기존 MAX + 1 (갱신 전 산정, 전 테이블 공통)
+       ========================= */
+    FOR I IN 1 .. V_BEFORE.COUNT LOOP
+        SELECT NVL(MAX(DATA_SEQ), 0) + 1
+          INTO V_CNT
+          FROM DM_DNM_ITEM_CODE_CHANGE_HISTORY
+         WHERE BEFORE_CODE = V_BEFORE(I)
+           AND AFTER_CODE  = V_AFTER(I);
+        V_SEQ(V_BEFORE(I) || CHR(1) || V_AFTER(I)) := V_CNT;
+    END LOOP;
+
+    /* =========================
+       TABLE UPDATE — AS-IS 38 테이블 (순서 동일)
+       ========================= */
+    CHANGE_TABLE('DM_ANL_KPI_RTF_DEMAND',            TRUE);
+    CHANGE_TABLE('DM_ANL_KPI_RTF_SALES',             TRUE);
+    CHANGE_TABLE('DM_ANL_KPI_SALES_ACCURACY',        TRUE);
+    CHANGE_TABLE('DM_ANL_KPI_SUMMARY',               TRUE);
+    CHANGE_TABLE('DM_DNM_EDI_CALLOFF_ITEM',          TRUE);
+    CHANGE_TABLE('DM_DNM_SALES_RESULT_IF',           TRUE);
+    CHANGE_TABLE('DM_HI_CUST_FCST_INPUT',            TRUE);
+    CHANGE_TABLE('DM_HI_MKT_FCST_CHANGE',            TRUE);
+    CHANGE_TABLE('DM_HI_SALES_INPUT',                TRUE);
+    CHANGE_TABLE('DM_HI_SITE_ITEM_MAPPING',          TRUE);
+    CHANGE_TABLE('DM_HI_SITE_ITEM_MAPPING_ROWDATA',  TRUE);
+    CHANGE_TABLE('DM_MST_BUCKET_CONVERSION',         TRUE);
+    CHANGE_TABLE('DM_MST_BUCKET_CONVERSION_H',       TRUE);
+    CHANGE_TABLE('DM_MST_CAPACITY_ALLOCATION',       TRUE);
+    CHANGE_TABLE('DM_MST_CAPACITY_ALLOCATION_H',     TRUE);
+    CHANGE_TABLE('DM_MST_CUSTOMER_MODEL',            TRUE);
+    CHANGE_TABLE('DM_MST_CUSTOMER_MODEL_H',          TRUE);
+    CHANGE_TABLE('DM_MST_EDI_CUST_MATERIAL_INFO',    FALSE);   -- AS-IS: DIVISION_ID 필터 없음 (원문 유지)
+    CHANGE_TABLE('DM_PLN_BP_FCST',                   TRUE);
+    CHANGE_TABLE('DM_PLN_BP_FCST_H',                 TRUE);
+    CHANGE_TABLE('DM_PLN_CUSTOMER_PSI',              TRUE);
+    CHANGE_TABLE('DM_PLN_CUSTOMER_PSI_H',            TRUE);
+    CHANGE_TABLE('DM_PLN_MKT_FCST',                  TRUE);
+    CHANGE_TABLE('DM_PLN_MKT_FCST_CONFIRM',          TRUE);
+    CHANGE_TABLE('DM_PLN_MKT_FCST_H',                TRUE);
+    CHANGE_TABLE('DM_PLN_MKT_FCST_PK_DATA_UPDATE_H', TRUE);
+    CHANGE_TABLE('DM_PLN_MKT_FCST_RESULT',           TRUE);
+    CHANGE_TABLE('DM_PLN_PR_DETAIL',                 TRUE);
+    CHANGE_TABLE('DM_PLN_SALES_PLAN',                TRUE);
+    CHANGE_TABLE('DM_PLN_SALES_PLAN_H',              TRUE);
+    CHANGE_TABLE('DM_PLN_SALES_PLAN_REPORT_H',       TRUE);
+    CHANGE_TABLE('DM_PLN_SALES_PLAN_RESULT',         TRUE);
+    CHANGE_TABLE('SCM_MST_FUTURE_PRICE',             TRUE);
+    CHANGE_TABLE('SCM_MST_FUTURE_PRICE_H',           TRUE);
+    CHANGE_TABLE('SCM_MST_SITE_ITEM',                TRUE);
+    CHANGE_TABLE('SCM_MST_SITE_ITEM_H',              TRUE);
+    CHANGE_TABLE('SCM_MST_SITE_ITEM_PRIORITY',       TRUE);
+    CHANGE_TABLE('SCM_MST_SITE_ITEM_PRIORITY_H',     TRUE);
+
+    COMMIT;
+
+    SCM_MGR.PR_SCM_SYS_LOG_BATCH($$PLSQL_UNIT, 'END', V_TOT_ROWS, '########## END of procedure ##########', NULL, SYSDATE);
+
+    V_CNT := V_BEFORE.COUNT;   -- 컬렉션 속성은 SQL 안에서 직접 참조 불가 (ORA-00904)
+    OPEN O_RESULT_CURSOR FOR
+        SELECT '0' AS CODE, 'SUCCESS' AS MSG, TO_CHAR(V_CNT) AS EVENT FROM DUAL;
+
+EXCEPTION
+    WHEN EX_BIZ_EX THEN
+        ROLLBACK;
+        SCM_MGR.PR_SCM_SYS_LOG_BATCH($$PLSQL_UNIT, 'INVALID', 0, '########## END of procedure ##########', SUBSTR(V_ERR_MSG, 1, 500), SYSDATE);
+        OPEN O_RESULT_CURSOR FOR
+            SELECT '-1' AS CODE, V_ERR_MSG AS MSG, '0' AS EVENT FROM DUAL;
+
+    WHEN OTHERS THEN
+        ROLLBACK;
+        SCM_MGR.PR_SCM_SYS_LOG_BATCH($$PLSQL_UNIT, 'ERROR', 0, SUBSTR(SQLERRM, 1, 1000)
+                                   , SUBSTR(DBMS_UTILITY.FORMAT_ERROR_BACKTRACE, 1, 500), SYSDATE);
+        RAISE_APPLICATION_ERROR(
+            -20001,
+            '[' || $$PLSQL_UNIT || '] SQLCODE=' || TO_CHAR(SQLCODE) ||
+            ' / SQLERRM=' || SQLERRM ||
+            ' / BACKTRACE=' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE ||
+            ' / PARAMS=' || '-'
+        );
+END P_DMF0005_SAVE_MODEL_CHANGE_POPUP;
+
+
+ 
+END PKG_DMF0005;
+/

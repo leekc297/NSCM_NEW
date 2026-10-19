@@ -1,0 +1,25 @@
+CHK   | N | JUDGE
+------+---+------
+V1 마커 | 2 | PASS 
+(1 rows)
+CHK   | OBJECT_TYPE  | STATUS | LAST_DDL            | ERR_CNT | DEP_INVALID
+------+--------------+--------+---------------------+---------+------------
+V2 상태 | PACKAGE      | VALID  | 2026-10-02 17:59:16 | 0       | 0          
+V2 상태 | PACKAGE BODY | VALID  | 2026-10-12 18:23:13 | 0       | 0          
+(2 rows)
+CHK   | LINE | TXT                                                                                         
+------+------+---------------------------------------------------------------------------------------------
+V3 블록 | 4530 |     --[E20261012-DMF0082MANDCOL] 필수 컬럼은 '숨긴 컬럼' 이 아니다 (사용자 신고 2026-10-12 · 승인 A안).          
+V3 블록 | 4531 |     --  화면은 사용자가 숨길 수 없는 필수 컬럼(메타 USER_SELECTABLE_FLAG='N' + VISIBLE_FLAG='Y')을 사용자 컬럼 저장 내역
+V3 블록 | 4539 |           FROM SCM_MGR.SCM_MST_SHEET_COLUMNS C                                              
+V3 블록 | 4542 |            AND C.COLUMN_NAME = 'CELL_PROD_SITE_ID'                                          
+V3 블록 | 4544 |            AND C.USER_SELECTABLE_FLAG = 'N'                                                 
+V3 블록 | 4615 |     --[E20261012-DMF0082MANDCOL] 필수 컬럼은 '숨긴 컬럼' 이 아니다 — 위 CELL_PROD_SITE_ID 와 같은 보정.        
+V3 블록 | 4619 |           FROM SCM_MGR.SCM_MST_SHEET_COLUMNS C                                              
+V3 블록 | 4622 |            AND C.COLUMN_NAME = 'PLANT_SITE_ID'                                              
+V3 블록 | 4624 |            AND C.USER_SELECTABLE_FLAG = 'N'                                                 
+(9 rows)
+V4 div 40 OK  SP 3.65s  RC1 rows=2158
+V4 div 81 OK  SP 4.94s  RC1 rows=2383
+V4 div 82 OK  SP 5.70s  RC1 rows=2608
+V5 user bottle div 40 — 원자료에서 Cell Prod Site 가 갈리는 묶음 189 · 출력 직전 자료 189 → PASS — 합치지 않음 (적용 상태)

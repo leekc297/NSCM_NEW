@@ -1,0 +1,73 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-13 15:38:48
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL
+L0 | PACKAGE | VALID | 2026-10-09 13:38:30
+L0 | PACKAGE BODY | VALID | 2026-10-13 15:38:46
+(2 rows)
+
+CHK | N | LINE_NO | JUDGE
+L1 앵커1 | 0 |  | FAIL — 없음 (이미 적용이면 L2 = 1) → 중단·회신
+L1 앵커2 | 0 |  | FAIL — 없음 (이미 적용이면 L2 = 1) → 중단·회신
+(2 rows)
+
+CHK | N | JUDGE
+L2 마커 | 1 | 적용됨 — 10 재실행은 가드로 무동작
+(1 rows)
+
+CHK | MEASURE | CREATED_BY | UPD_BY | CNT | LAST_AT
+L3 현황 | MKT_AMT_KRW | minyonglee1 | minyonglee1 | 11204 | 10-13 15:33:49
+L3 현황 | MKT_AMT_LOC | minyonglee1 | minyonglee1 | 11204 | 10-13 15:33:49
+L3 현황 | MKT_FCST | minyonglee1 | minyonglee1 | 9210 | 10-13 15:33:49
+L3 현황 | MKT_FCST | ys_cho | minyonglee1 | 205 | 10-13 15:33:49
+L3 현황 | MKT_FCST | hyukjin.boo | minyonglee1 | 203 | 10-13 15:33:49
+L3 현황 | MKT_FCST | palaina | minyonglee1 | 198 | 10-13 15:33:49
+L3 현황 | MKT_FCST | bryan.jeong | minyonglee1 | 168 | 10-13 15:33:49
+L3 현황 | MKT_FCST | andyryu | minyonglee1 | 155 | 10-13 15:33:49
+L3 현황 | MKT_FCST | truejin | minyonglee1 | 150 | 10-13 15:33:49
+L3 현황 | MKT_FCST | tjsung0219 | minyonglee1 | 101 | 10-13 15:33:49
+L3 현황 | MKT_FCST | nickchen | minyonglee1 | 97 | 10-13 15:33:49
+L3 현황 | MKT_FCST | cshwsfan | minyonglee1 | 86 | 10-13 15:33:49
+L3 현황 | MKT_FCST | yooonhye | minyonglee1 | 84 | 10-13 15:33:49
+L3 현황 | MKT_FCST | evan.i.hong | minyonglee1 | 79 | 10-13 15:33:49
+L3 현황 | MKT_FCST | yeojin.kim | minyonglee1 | 73 | 10-13 15:33:49
+L3 현황 | MKT_FCST | seungyeon.c | minyonglee1 | 66 | 10-13 15:33:49
+L3 현황 | MKT_FCST | sungjoon_lee | minyonglee1 | 62 | 10-13 15:33:49
+L3 현황 | MKT_FCST | bokyong.shin | minyonglee1 | 60 | 10-13 15:33:49
+L3 현황 | MKT_FCST | vera.jo | minyonglee1 | 53 | 10-13 15:33:49
+L3 현황 | MKT_FCST | downey.chung | minyonglee1 | 48 | 10-13 15:33:49
+L3 현황 | MKT_FCST | chloejeung | minyonglee1 | 47 | 10-13 15:33:49
+L3 현황 | MKT_FCST | ray.jw.han | minyonglee1 | 46 | 10-13 15:33:49
+L3 현황 | MKT_FCST | kwonhyokjun | minyonglee1 | 42 | 10-13 15:33:49
+L3 현황 | MKT_FCST | chaerin.yoon | minyonglee1 | 37 | 10-13 15:33:49
+L3 현황 | MKT_FCST | seoyeon.kwak | minyonglee1 | 31 | 10-13 15:33:49
+L3 현황 | MKT_FCST | shsongb | minyonglee1 | 29 | 10-13 15:33:49
+L3 현황 | MKT_FCST | mschoii | minyonglee1 | 28 | 10-13 15:33:49
+L3 현황 | MKT_FCST | bonsun.ku | minyonglee1 | 20 | 10-13 15:33:49
+L3 현황 | MKT_FCST | seoyeon09 | minyonglee1 | 16 | 10-13 15:33:49
+L3 현황 | MKT_FCST | ismile | minyonglee1 | 14 | 10-13 15:33:49
+L3 현황 | MKT_FCST | bonghee | minyonglee1 | 12 | 10-13 15:33:49
+L3 현황 | MKT_FCST | bakbc1231 | minyonglee1 | 9 | 10-13 15:33:49
+L3 현황 | MKT_FCST | laurus6111 | minyonglee1 | 9 | 10-13 15:33:49
+L3 현황 | MKT_FCST | stellamin | minyonglee1 | 8 | 10-13 15:33:49
+L3 현황 | MKT_FCST | jang.wj | minyonglee1 | 7 | 10-13 15:33:49
+L3 현황 | MKT_FCST | robert.choi | minyonglee1 | 5 | 10-13 15:33:49
+L3 현황 | MKT_FCST | seunghyeukim | minyonglee1 | 5 | 10-13 15:33:49
+L3 현황 | MKT_FCST | kjaemin | minyonglee1 | 4 | 10-13 15:33:49
+L3 현황 | MKT_FCST | yko16 | minyonglee1 | 3 | 10-13 15:33:49
+L3 현황 | MKT_FCST | hyelin.jung | minyonglee1 | 3 | 10-13 15:33:49
+L3 현황 | MKT_FCST | taeeunko | minyonglee1 | 2 | 10-13 15:33:49
+L3 현황 | MKT_FCST | park.ck | minyonglee1 | 2 | 10-13 15:33:49
+L3 현황 | MKT_FCST | sohcho | minyonglee1 | 1 | 10-13 15:33:49
+L3 현황 | MKT_FCST | tohyojin | minyonglee1 | 1 | 10-13 15:33:49
+L3 현황 | MKT_FCST | soomi | minyonglee1 | 1 | 10-13 15:33:49
+L3 현황 | RTF | SYSTEM | minyonglee1 | 1052 | 10-13 15:33:49
+L3 현황 | RTF_SYS_RP | SYSTEM | minyonglee1 | 1222 | 10-13 15:33:49
+L3 현황 | SalesAmt_KRW | minyonglee1 | minyonglee1 | 1196 | 10-13 15:33:49
+L3 현황 | SalesAmt_LOC | minyonglee1 | minyonglee1 | 1204 | 10-13 15:33:49
+L3 현황 | SalesAmt_USD | minyonglee1 | minyonglee1 | 1196 | 10-13 15:33:49
+(50 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

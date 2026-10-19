@@ -1,0 +1,22 @@
+CHK | USER_GR_ID | USER_GR_NM | USE_YN
+V1 그룹 | - | - | /
+V1 그룹 | CAPA Planner | CAPA Planner | Y
+V1 그룹 | SSP ADMIN | SSP ADMIN | N
+V1 그룹 | System Monitor | System Monitor | Y
+(4 rows)
+
+CHK | N | JUDGE
+V1 그룹 | 4 | PASS
+(1 rows)
+
+CHK | USER_GR_ID | N
+V2 매핑 | - | 34
+V2 매핑 | CAPA Planner | 220
+V2 매핑 | System Monitor | 1
+(3 rows)
+
+V2 사본 대비 미이관 0건 → PASS
+
+CHK | USER_GR_ID | N | JUDGE
+V3 고아 | Guest | 1 | 참고(유지 결정)
+(1 rows)

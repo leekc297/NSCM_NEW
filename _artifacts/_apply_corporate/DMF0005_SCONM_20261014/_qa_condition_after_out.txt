@@ -1,0 +1,10 @@
+﻿DB 59.19.252.148:2521/ZIOUI1 ('localhost', '2026-10-14 12:13:58')
+PKG_DMF0005      div 82 |   2.08s | 38621행 | 2bg66pz4yt4b7/15 PHV 4266025480
+       24             INDEX RANGE SCAN                 IDX01_SCM_MST_SITE_ITEM      starts      1    0.01s
+       28            TABLE ACCESS FULL                 SCM_MST_SITE_CUSTOMER        starts      1       0s
+PKG_DMF0005      div 81 |   1.82s | 42088행 | 2bg66pz4yt4b7/16 PHV 4266025480
+       24             INDEX RANGE SCAN                 IDX01_SCM_MST_SITE_ITEM      starts      1    0.01s
+       28            TABLE ACCESS FULL                 SCM_MST_SITE_CUSTOMER        starts      1       0s
+PKG_DMF0005      div 40 |   0.91s | 15569행 | 2bg66pz4yt4b7/16 PHV 4266025480
+       24             INDEX RANGE SCAN                 IDX01_SCM_MST_SITE_ITEM      starts      1       0s
+       28            TABLE ACCESS FULL                 SCM_MST_SITE_CUSTOMER        starts      1       0s

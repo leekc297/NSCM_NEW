@@ -1,0 +1,28 @@
+﻿CHK   | N | JUDGE
+------+---+------
+V1 마커 | 1 | PASS 
+(1 rows)
+CHK   | OBJECT_TYPE  | STATUS | LAST_DDL            | ERR_CNT | DEP_INVALID
+------+--------------+--------+---------------------+---------+------------
+V2 상태 | PACKAGE      | VALID  | 2026-10-02 17:59:16 | 0       | 0          
+V2 상태 | PACKAGE BODY | VALID  | 2026-10-13 10:05:12 | 0       | 0          
+(2 rows)
+CHK   | LINE  | TXT                                                                                                           
+------+-------+---------------------------------------------------------------------------------------------------------------
+V3 블록 | 13610 |           --[E20261013-DMF0082ADJYNALL] 사용자 요청(2026-10-13): 판매계획 조정 제외(SALES_PLAN_ADJUST_YN='N') 품목도 단가 검증 대상.
+V3 블록 | 13611 |           --  아래 제외조건 8줄 주석 처리 — 종전에는 이 품목이 판가 없이 수량 저장됐다(AS-IS 동일 예외 → 의도적 강화).                              
+V3 블록 | 13612 | --          AND NOT EXISTS (SELECT 1                                                                          
+V3 블록 | 13613 | --                            FROM SCM_MGR.SCM_MST_SITE_ITEM Z                                                
+V3 블록 | 13614 | --                           WHERE Z.DIVISION_ID  = A.DIVISION_ID                                             
+V3 블록 | 13615 | --                             AND Z.PROJECT_CODE = A.PROJECT_CODE                                            
+V3 블록 | 13616 | --                             AND Z.SCM_SITE_ID  = A.SCM_SITE_ID                                             
+V3 블록 | 13617 | --                             AND Z.ITEM_ID      = A.ITEM_ID                                                 
+V3 블록 | 13618 | --                             AND Z.VALID_YN     = 'Y'                                                       
+V3 블록 | 13619 | --                             AND Z.SALES_PLAN_ADJUST_YN = 'N')                                              
+(10 rows)
+V4 시도 1 = 40 / Peopleworks / Peopleworks_KR_KUM / ECE0074N5-01-A01 / 20261207 → F | 1. MDM에서 Biz Type을 입력하시기 바랍니다. / 2. MDM에 Biz Type이 입력된 상태면 SCM_FP에 CSR 요청하시기 바랍니다.
+V4 시도 2 = 40 / Peopleworks / Peopleworks_KR_KUM / ECE0074N5-01 / 20261207 → F | 1. MDM에서 Biz Type을 입력하시기 바랍니다. / 2. MDM에 Biz Type이 입력된 상태면 SCM_FP에 CSR 요청하시기 바랍니다.
+V4 시도 3 = 40 / Peopleworks / Peopleworks_KR_SEL / ECE0074N5-01 / 20261207 → F | 1. MDM에서 Biz Type을 입력하시기 바랍니다. / 2. MDM에 Biz Type이 입력된 상태면 SCM_FP에 CSR 요청하시기 바랍니다.
+V4 시도 4 = 40 / Peopleworks / Peopleworks_KR_SEL / 385665 / 20261207 → F | 1. MDM에서 Biz Type을 입력하시기 바랍니다. / 2. MDM에 Biz Type이 입력된 상태면 SCM_FP에 CSR 요청하시기 바랍니다.
+V4 시도 5 = 40 / Peopleworks / Peopleworks_KR_KUM / ACEF1047I-A1 / 20261207 → F | 1. MDM에서 Biz Type을 입력하시기 바랍니다. / 2. MDM에 Biz Type이 입력된 상태면 SCM_FP에 CSR 요청하시기 바랍니다.
+V4 N/A — 단가 검증까지 도달한 시험 품목 없음 (시도 5건 모두 앞 단계 검증에서 차단 또는 대상 품목 없음). V1~V3 으로 판정

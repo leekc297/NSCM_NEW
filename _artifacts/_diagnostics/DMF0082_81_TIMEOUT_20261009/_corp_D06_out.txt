@@ -1,0 +1,119 @@
+﻿################ [V1] ⭐ 조회 기간 안 원천 행수 — division 별 · 사내 대조 (CNT_X = 클라우드÷사내) ################
+--  81 분기가 읽는 표: DM_PLN_MKT_FCST(수요) · DM_PLN_SALES_PLAN(10-02 금액 arm, MKT_AMT 2메저만) · SCM_MST_FUTURE_PRICE(판가, 계획구간)
+--  40 분기가 읽는 표: DM_PLN_CFM_MKT_DEMAND_PLAN(수요) · DM_PLN_CFM_SELLING_PRICE(판가)
+T                          | DIV | CLOUD_CNT | CORP_CNT | CNT_X | CLOUD_MEASURES | JUDGE
+---------------------------+-----+-----------+----------+-------+----------------+------
+DM_PLN_CFM_MKT_DEMAND_PLAN | 40  | 105330    | 105330   | 1     | 12             | ok   
+DM_PLN_CFM_MKT_DEMAND_PLAN | 81  | 10497     | 10497    | 1     | 9              | ok   
+DM_PLN_CFM_MKT_DEMAND_PLAN | 82  | 10116     | 10116    | 1     | 6              | ok   
+DM_PLN_MKT_FCST            | 40  | 101454    | 101454   | 1     | 8              | ok   
+DM_PLN_MKT_FCST            | 81  | 46878     | 46878    | 1     | 15             | ok   
+DM_PLN_MKT_FCST            | 82  | 33272     | 33272    | 1     | 12             | ok   
+DM_PLN_SALES_PLAN          | 40  | 22076     | 22076    | 1     | 11             | ok   
+DM_PLN_SALES_PLAN          | 81  | 34735     | 34735    | 1     | 12             | ok   
+DM_PLN_SALES_PLAN          | 82  | 3123      | 3123     | 1     | 8              | ok   
+DM_PLN_SALES_PLAN MKT_AMT  | 40  | 6194      | 6194     | 1     | 2              | ok   
+DM_PLN_SALES_PLAN MKT_AMT  | 81  | 9488      | 9488     | 1     | 2              | ok   
+DM_PLN_SALES_PLAN MKT_AMT  | 82  | 1446      | 1446     | 1     | 2              | ok   
+SCM_MST_FUTURE_PRICE       | 40  | 155631    | 155631   | 1     | 3              | ok   
+SCM_MST_FUTURE_PRICE       | 81  | 190287    | 190287   | 1     | 3              | ok   
+SCM_MST_FUTURE_PRICE       | 82  | 224965    | 224965   | 1     | 3              | ok   
+SCM_MST_SITE_ITEM VALID    | 40  | 22651     | 22651    | 1     | 0              | ok   
+SCM_MST_SITE_ITEM VALID    | 81  | 51692     | 51692    | 1     | 0              | ok   
+SCM_MST_SITE_ITEM VALID    | 82  | 38341     | 38341    | 1     | 0              | ok   
+(18 rows)
+--  판정: 81 의 CNT_X 가 40 의 CNT_X 와 비슷하면 데이터량 아님(계획 문제) · 81 만 수십 배면 데이터량 (그래도 타임아웃 = 계획 동반)
+################ [V2] 81 판가 원장 전체 폭 — ONEREAD 통합 문장(L1771)이 읽는 범위: LEAST(실적끝, from) ~ GREATEST(계획끝, to) ################
+--  사내 81 190,287행(계획구간 6개월). 통합 문장은 윈도 MAX 를 위해 이 범위를 1회 읽고 PK/IDX02 로 접근 — 클라우드 행수가 수백만이면 이 문장이 1순위
+DIV | CNT    | DAYS | MIN_YMD  | MAX_YMD  | FROM_THIS_WEEK
+----+--------+------+----------+----------+---------------
+40  | 186966 | 35   | 20260901 | 20270329 | 149325        
+81  | 226062 | 35   | 20260901 | 20270329 | 183147        
+82  | 264259 | 35   | 20260901 | 20270329 | 217141        
+(3 rows)
+################ [V3] ⭐ 사용자별 선택 메저 수 (SCM_MST_TITLESET_USER) — 메저가 많을수록 arm 이 늘어난다 (09-30 k0101 사례) ################
+--  사내 상위: k0101 9메저(CUST 1) · 7메저 9명 · AMT(MKT_AMT) 선택 = eunah.koo 1명. 타임아웃을 본 사용자 ID 의 행을 찾아라
+USER_ID      | MEASURES | AMT_SEL | CUST_SEL | MEASURE_LIST                                                         
+-------------+----------+---------+----------+----------------------------------------------------------------------
+k0101        | 9        | 0       | 1        | MKT_FCST,RTF_SYS_RP,CUST_FCST,AS_In_Req,AS_In_Plan,AS_Inv,KRW,USD,LOC
+bottle       | 7        | 0       | 0        | MKT_FCST,RTF_SYS_RP,SCM_FCST,AS_In_Req,KRW,USD,LOC                   
+candoism     | 7        | 0       | 1        | MKT_FCST,RTF_SYS_RP,SCM_FCST,CUST_FCST,KRW,USD,LOC                   
+dodae        | 7        | 0       | 0        | MKT_FCST,RTF_SYS_RP,SCM_FCST,BALANCE,KRW,USD,LOC                     
+jaehun_cho   | 7        | 0       | 1        | MKT_FCST,RTF_SYS_RP,SCM_FCST,CUST_FCST,KRW,USD,LOC                   
+jaeuk.shin   | 7        | 0       | 1        | MKT_FCST,RTF_SYS_RP,SCM_FCST,CUST_FCST,KRW,USD,LOC                   
+loveidea     | 7        | 0       | 1        | MKT_FCST,RTF_SYS_RP,SCM_FCST,CUST_FCST,KRW,USD,LOC                   
+miyeong.lee  | 7        | 0       | 1        | MKT_FCST,RTF_SYS_RP,SCM_FCST,CUST_FCST,KRW,USD,LOC                   
+wonqthanq    | 7        | 0       | 1        | MKT_FCST,RTF_SYS_RP,SCM_FCST,CUST_FCST,KRW,USD,LOC                   
+ys_cho       | 7        | 0       | 1        | MKT_FCST,RTF_SYS_RP,SCM_FCST,CUST_FCST,KRW,USD,LOC                   
+eunah.koo    | 6        | 2       | 0        | MKT_FCST,SCM_FCST,MKT_AMT_KRW,MKT_AMT_LOC,LOC,FCST_GAP               
+hongjae.kim  | 6        | 0       | 0        | MKT_FCST,RTF_SYS_RP,SCM_FCST,KRW,USD,LOC                             
+park6151     | 6        | 0       | 1        | CUST_FCST,MKT_FCST,RTF_SYS_RP,AS_In_Req,AS_In_Plan,AS_Inv            
+yooah.chung  | 6        | 1       | 0        | MKT_FCST,RTF_SYS_RP,SCM_FCST,KRW,LOC,MKT_AMT_KRW                     
+donghoon.lee | 5        | 0       | 0        | MKT_FCST,RTF_SYS_RP,KRW,USD,LOC                                      
+bpark416     | 4        | 0       | 1        | MKT_FCST,RTF_SYS_RP,CUST_FCST,SCM_FCST                               
+jiwon.park   | 3        | 0       | 1        | CUST_FCST,MKT_FCST,RTF_SYS_RP                                        
+jaehyeok     | 2        | 0       | 0        | MKT_FCST,AS_In_Req                                                   
+qjastar      | 2        | 0       | 0        | MKT_FCST,AS_In_Req                                                   
+minyonglee1  | 1        | 0       | 0        | LOC                                                                  
+(20 rows)
+################ [V4] 메저 메타 — DMF0082 FcstNPrice 메저의 DIVISION 적용 범위 (81 에서 쓰이는 메저 집합) ################
+COLUMN_NAME      | DIVISION_ID                            | VALID_YN | USER_SELECTABLE_FLAG | DEFAULT_FLAG | LARGE_CLASS_LABEL_NAME | SMALL_CLASS_LABEL_NAME
+-----------------+----------------------------------------+----------+----------------------+--------------+------------------------+-----------------------
+MKT_AMT_KRW      | 40                                     | Y        | Y                    | N            |                        | MKT_KRW               
+MKT_AMT_LOC      | 40                                     | Y        | Y                    | N            |                        | MKT_LOC               
+VMI_In_Plan      | 40                                     | Y        | Y                    | N            |                        | VMI_In_Plan           
+VMI_In_Req       | 40                                     | Y        | Y                    | N            |                        | VMI_In_Req            
+VMI_Inv          | 40                                     | Y        | Y                    | N            |                        | VMI_Inv               
+FCST_GAP         | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG    | Y        | Y                    | N            |                        | Fcst Gap(MKT vs SCM)  
+SCM_FCST         | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG    | Y        | Y                    | Y            |                        | SCM FCST[R+P]         
+BALANCE          | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | Y        | Y                    | N            |                        | BALANCE               
+KRW              | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | Y        | Y                    | Y            |                        | KRW                   
+LOC              | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | Y        | Y                    | Y            |                        | LOC                   
+MKT_FCST         | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | Y        | Y                    | Y            |                        | MKT FCST[R+P]         
+MKT_FCST_PP      | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | Y        | Y                    | N            |                        | MKT FCST[P+P]         
+RTF_SYS_RP       | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | Y        | Y                    | Y            |                        | RTF                   
+USD              | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | Y        | Y                    | Y            |                        | USD                   
+AS_In_Plan       | 81,81_UC,81_HM,81_ST,81_HD,81_HG       | Y        | Y                    | N            |                        |                       
+AS_In_Req        | 81,81_UC,81_HM,81_ST,81_HD,81_HG       | Y        | Y                    | N            |                        |                       
+AS_Inv           | 81,81_UC,81_HM,81_ST,81_HD,81_HG       | Y        | Y                    | N            |                        |                       
+CUST_FCST        | 81,81_UC,81_HM,81_ST,81_HD,81_HG       | Y        | Y                    | Y            |                        |                       
+IN_TRANSIT       | 81,81_UC,81_HM,81_ST,81_HD,81_HG       | Y        | Y                    | N            |                        |                       
+MKT_FCST_RP_CAR  | 81,81_UC,81_HM,81_ST,81_HD,81_HG       | Y        | Y                    | N            |                        | MKT                   
+RTF_SCP          | 81,81_UC,81_HM,81_ST,81_HD,81_HG       | Y        | Y                    | N            |                        |                       
+RTF_SYS_RP_CAR   | 81,81_UC,81_HM,81_ST,81_HD,81_HG       | Y        | Y                    | N            |                        | RTF                   
+RTF_SYS_RP_CELL  | 81,81_UC,81_HM,81_ST,81_HD,81_HG       | Y        | Y                    | N            |                        | RTF                   
+MKT_FCST_RP_CELL | 82,81,81_UC,81_HM,81_ST,81_HD,81_HG    | Y        | Y                    | N            |                        | MKT                   
+(24 rows)
+################ [V5] 81 수요 원장 메저 분포 (계획구간) — 어느 메저가 몫을 차지하나 ################
+MEASURE              | CNT   | KEYS
+---------------------+-------+-----
+BALANCE              | 20766 | 162 
+MKT_FCST             | 4979  | 145 
+MKT_FCST_LATEST      | 4979  | 145 
+SCM_FCST             | 4979  | 145 
+RTF_SCP              | 3020  | 129 
+RTF_SYS_RP           | 3020  | 129 
+RTF_PR               | 3019  | 129 
+VMI_In_Req           | 721   | 17  
+CUST_FCST_LATEST     | 362   | 75  
+CUST_FCST            | 362   | 75  
+Commercial_Agreement | 305   | 62  
+CUST_FCST_EDI        | 305   | 62  
+Customer FCST        | 57    | 13  
+Cutomer FCST         | 3     | 1   
+RTF                  | 1     | 1   
+(15 rows)
+################ [V6] 81 실적 원장 (DM_PLN_MKT_FCST_RESULT · DM_PLN_SALES_PLAN_RESULT) 최근 13주 행수 — CUST 종속 실적 arm(L2089) 원천 ################
+T                        | DIV | CNT  | MEAS
+-------------------------+-----+------+-----
+DM_PLN_MKT_FCST_RESULT   | 40  | 4173 | 8   
+DM_PLN_MKT_FCST_RESULT   | 81  | 9707 | 17  
+DM_PLN_MKT_FCST_RESULT   | 82  | 3416 | 10  
+DM_PLN_SALES_PLAN_RESULT | 40  | 6357 | 10  
+DM_PLN_SALES_PLAN_RESULT | 81  | 7701 | 8   
+DM_PLN_SALES_PLAN_RESULT | 82  | 6997 | 7   
+(6 rows)
+=============================================================================
+D06 완료 → D06_81_DATA_PROFILE_OUT.txt 회신
+[V1] 81 CNT_X 가 40 과 비슷 = 데이터량 아님 → D02/D03 의 계획(PHV) 차이가 원인 · [V3] 타임아웃 사용자의 메저 수 확인
+=============================================================================

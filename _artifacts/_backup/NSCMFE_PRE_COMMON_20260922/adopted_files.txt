@@ -1,0 +1,87 @@
+ADOPT	apps/web/.env.prod
+ADOPT	apps/web/src/core/Providers.tsx
+ADOPT	apps/web/src/layout/sidebar/components/SidebarMenu.module.scss
+ADOPT	apps/web/src/layout/sidebar/components/SidebarMenu.tsx
+ADOPT	apps/web/src/pages/Templates.tsx
+ADOPT	features/admin/src/pages/dynamic-query/DynamicQuery.tsx
+ADOPT	features/admin/src/pages/dynamic-query/dynamic-query.utils.ts
+ADOPT	features/admin/src/pages/mail-setup/MailSetup.tsx
+ADOPT	features/admin/src/pages/mail-setup/components/MailReceiverPanel.tsx
+ADOPT	features/admin/src/pages/sms-setup/SmsSetup.tsx
+ADOPT	features/admin/src/pages/sms-setup/components/SmsReceiverPanel.tsx
+ADOPT	features/admin/src/pages/sms-setup/components/SmsSetupForm.tsx
+ADOPT	features/admin/src/pages/ui-catrgory-setup/UICategorySetup.tsx
+ADOPT	features/demand/src/pages/business-plan/BusinessPlan.module.scss
+ADOPT	features/demand/src/pages/business-plan/components/modals/VersionCutoffModal.tsx
+ADOPT	features/demand/src/pages/etc-sales-reports/components/EtcSalesReportsGrid.tsx
+KEEP-LOCAL(conflict)	features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.editLock.ts
+ADOPT	features/demand/src/pages/etc-sales-reports/utils/etc-sales-reports.merge.ts
+KEEP-LOCAL(conflict)	features/demand/src/pages/forecast-price/components/modals/ForecastTemplateModal.tsx
+ADOPT	features/demand/src/pages/forecast-price/forecast-price.constants.ts
+KEEP-LOCAL(conflict)	features/demand/src/pages/forecast-price/useForecastPriceStore.ts
+KEEP-LOCAL(conflict)	features/demand/src/pages/forecast-price/utils/forecast-price.excelForm.ts
+ADOPT	features/demand/src/pages/sales-plan/components/SalesPlanGrid.tsx
+ADOPT	features/demand/src/pages/sales-plan/components/SalesPlanModals.tsx
+ADOPT	features/demand/src/pages/sales-plan/utils/sales-plan.editLock.test.ts
+ADOPT	features/demand/src/pages/sales-plan/utils/sales-plan.editLock.ts
+NEW	features/master/src/components/capaNewModelPopup/CapaNewModelPopup.module.scss
+NEW	features/master/src/components/capaNewModelPopup/CapaNewModelPopup.tsx
+NEW	features/master/src/components/capaNewModelPopup/capa-new-model-popup.constants.ts
+NEW	features/master/src/components/capaNewModelPopup/capaNewModelPopup.calendar.ts
+ADOPT	features/master/src/components/index.ts
+NEW	features/master/src/components/modelByDivisionPopup/ModelByDivisionPopup.module.scss
+RENAME	features/supply/src/components/ModelByDivisionPopup.tsx -> features/master/src/components/modelByDivisionPopup/ModelByDivisionPopup.tsx
+RENAME	features/supply/src/components/modelByDivisionPopupStore.ts -> features/master/src/components/modelByDivisionPopup/modelByDivisionPopupStore.ts
+NEW	features/master/src/components/projectByDivisionPopup/ProjectByDivisionPopup.module.scss
+RENAME	features/supply/src/components/ProjectByDivisionPopup.tsx -> features/master/src/components/projectByDivisionPopup/ProjectByDivisionPopup.tsx
+RENAME	features/supply/src/components/projectByDivisionPopupStore.ts -> features/master/src/components/projectByDivisionPopup/projectByDivisionPopupStore.ts
+ADOPT	features/master/src/components/searchFields/SearchFields.module.scss
+ADOPT	features/master/src/components/searchFields/SearchFields.tsx
+ADOPT	features/supply/src/components/SupplyPopupGallery.tsx
+ADOPT	features/supply/src/components/index.ts
+NEW	features/supply/src/pages/bod/Bod.tsx
+NEW	features/supply/src/pages/bod/__asis-mapping__.md
+NEW	features/supply/src/pages/bod/bod.constants.ts
+NEW	features/supply/src/pages/bod/bod.types.ts
+NEW	features/supply/src/pages/bod/bod.util.ts
+NEW	features/supply/src/pages/bod/components/BodForm.tsx
+NEW	features/supply/src/pages/bod/components/BodGrid.tsx
+NEW	features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.module.scss
+NEW	features/supply/src/pages/bod/components/modals/BodDistributionRoutePopup.tsx
+NEW	features/supply/src/pages/bod/components/modals/bod-distribution-route-popup.constants.ts
+NEW	features/supply/src/pages/bod/components/modals/bodDistributionRoutePopupStore.ts
+NEW	features/supply/src/pages/bod/index.ts
+NEW	features/supply/src/pages/bod/useBodStore.ts
+NEW	features/supply/src/pages/outsourcing-capacity/OutsourcingCapacity.module.scss
+NEW	features/supply/src/pages/outsourcing-capacity/OutsourcingCapacity.tsx
+NEW	features/supply/src/pages/outsourcing-capacity/__asis-mapping__.md
+NEW	features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityForm.tsx
+NEW	features/supply/src/pages/outsourcing-capacity/components/OutsourcingCapacityGrid.tsx
+NEW	features/supply/src/pages/outsourcing-capacity/hooks/useOutsourcingCapacityValidation.ts
+NEW	features/supply/src/pages/outsourcing-capacity/index.ts
+NEW	features/supply/src/pages/outsourcing-capacity/outsourcing-capacity.constants.ts
+NEW	features/supply/src/pages/outsourcing-capacity/outsourcing-capacity.types.ts
+NEW	features/supply/src/pages/outsourcing-capacity/useOutsourcingCapacityStore.ts
+NEW	features/supply/src/pages/outsourcing-capacity/utils/outsourcingCapacityColumns.ts
+NEW	features/supply/src/pages/outsourcing-capacity/utils/outsourcingCapacityEditLock.ts
+ADOPT	features/supply/src/pages/project-route/ProjectRoute.module.scss
+ADOPT	features/supply/src/pages/project-route/ProjectRoute.tsx
+ADOPT	features/supply/src/pages/project-route/__asis-mapping__.md
+ADOPT	features/supply/src/pages/project-route/components/ProjectRouteBomGrid.tsx
+ADOPT	features/supply/src/pages/project-route/components/ProjectRouteForm.tsx
+ADOPT	features/supply/src/pages/project-route/components/ProjectRouteMainGrid.tsx
+ADOPT	features/supply/src/pages/project-route/components/ProjectRoutePlantGrid.tsx
+ADOPT	features/supply/src/pages/project-route/components/modals/ProjectRouteListSaveModal.tsx
+ADOPT	features/supply/src/pages/project-route/components/modals/project-route-list-save-modal.constants.ts
+ADOPT	features/supply/src/pages/project-route/hooks/useProjectRouteValidation.ts
+ADOPT	features/supply/src/pages/project-route/project-route.constants.ts
+ADOPT	features/supply/src/pages/project-route/useProjectRouteStore.ts
+ADOPT	packages/foundation/src/apis/axios-interceptors.ts
+3WAY-MERGED	packages/foundation/src/utils/gridAction.ts
+ADOPT	packages/shared/src/components/molecules/customDropdown/CustomDropdown.tsx
+ADOPT	packages/shared/src/components/molecules/periodRangePicker/PeriodRangePicker.module.scss
+ADOPT	packages/shared/src/components/molecules/periodRangePicker/PeriodRangePicker.tsx
+ADOPT	packages/shared/src/lib/lges-icons.ts
+LOCALE-KEYMERGE	public/locales/EN.json keys 999->1474 (로컬값 유지 70) base=aede220a
+LOCALE-KEYMERGE	public/locales/KO.json keys 1053->1525 (로컬값 유지 11) base=c6bd1624
+DTS-INSERT	SCP0023 35줄 (공통 원문 verbatim) after SCP0022 → 로컬 L5451

@@ -10,7 +10,16 @@ SQL_FILE="$1"
 LABEL="${2:-$(basename "$SQL_FILE" .sql)}"
 LOG_DIR="C:/Projects/NSCM/_artifacts/_apply_corporate/_logs"
 LOG_FILE="$LOG_DIR/$(date +%Y%m%d_%H%M%S)_${LABEL}.log"
-CONN='SCM_MGR/"!SCMroqkf2026"@100.65.143.121:1521/OCGSCMD_P01'
+# 현행 접속 (⭐ 2026-09-07 DB 명 변경 — 사용자 통보. SERVER_HOST=itx / DB_NAME=ZIOUI1)
+#   이전: 175.211.29.206:2521/AJS (2026-09-05~09-07) — DEPRECATED
+#   ⭐ 2026-10-13 IP 변경 — 222.110.191.243 → 59.19.252.148 (사용자 통보. PORT/서비스/계정 동일, 다른 인스턴스 SERVER_HOST=localhost)
+CONN='SCM_MGR/"zionex1!"@59.19.252.148:2521/ZIOUI1'
+# 2026-09-21~10-13 : CONN='SCM_MGR/"zionex1!"@222.110.191.243:2521/ZIOUI1'  (IP 변경 전)
+# 2026-09-07~09-21 : CONN='SCM_MGR/"zionex1!"@175.211.29.206:2521/ZIOUI1'  (IP 변경 전)
+# --- 이전 접속 정보 (보관 / DEPRECATED) ---
+# 2026-09-02~09-05 : CONN='SCM_MGR/"!SCMroqkf2026"@175.211.29.206:3521/OCGSCMD_P01'
+# 2026-07-27~09-02 : CONN='SCM_MGR/"!SCMroqkf2026"@100.65.143.121:1521/OCGSCMD_P01'
+# 2026-06-17~07-27 : CONN='SCM_MGR/"!SCMroqkf2026"@121.162.245.167:2521/OCGSCMD_P01'
 
 if [ ! -f "$SQL_FILE" ]; then
   echo "[FAIL] file not found: $SQL_FILE"

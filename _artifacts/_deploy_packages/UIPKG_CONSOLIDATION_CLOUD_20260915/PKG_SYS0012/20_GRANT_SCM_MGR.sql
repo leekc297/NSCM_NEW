@@ -1,0 +1,2 @@
+-- PKG_SYS0012 — 앱계정 실행 권한 (SCM_MGR · 멱등) · ⭐ 사내 이번 신규 부여
+GRANT EXECUTE ON SCM_MGR.PKG_SYS0012 TO SCMP_APP;

@@ -1,0 +1,20 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-15 20:59:54
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | LINES_N
+L0 | PACKAGE | VALID | 2026-10-09 13:38:31 | 98
+L0 | PACKAGE BODY | VALID | 2026-10-15 11:17:46 | 885
+(2 rows)
+
+CHK | KIND | N | JUDGE
+L1 대상 | IF V_EXISTS_CNT > 0 THEN 줄 | 1 | PASS
+L2 커서 | ACT_TYPE IN ('M', 'I') 줄 | 1 | PASS
+(2 rows)
+
+CHK | N | LINE | JUDGE
+L3 마커 | 0 |  | 미적용 (기대)
+(1 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

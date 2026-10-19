@@ -1,0 +1,775 @@
+@use '../misc/font-sizes' as *;
+@use '../misc/mixins' as *;
+@use '../misc/variables' as *;
+/*!
+    *
+    * Wijmo Library 5.20251.40
+    * https://developer.mescius.com/wijmo
+    *
+    * Copyright(c) MESCIUS inc. All rights reserved.
+    *
+    * Licensed under the End-User License Agreement For MESCIUS Wijmo Software.
+    * us.sales@mescius.com
+    * https://developer.mescius.com/wijmo/licensing
+    *
+    */
+
+// wijmo.grid
+.wj-flexgrid {
+  width: 100%;
+  cursor: default;
+  font-size: $wj-grid-font-size;
+  font-weight: 400 !important;
+
+  .wj-row {
+    position: absolute; // avoid flicker in Chrome: TFS 261344
+    top: 0;
+  }
+
+  .wj-colheaders .wj-header {
+    // column header 중앙 정렬
+    text-align: center !important;
+    justify-content: center !important;
+    font-weight: 400 !important;
+
+    .wj-btn.wj-btn-glyph.wj-elem-pin {
+      opacity: 0.9; // pinned
+
+      &:not(.wj-state-pinned) {
+        // un-pinned
+        opacity: 0.4;
+
+        .wj-glyph-pin {
+          transform: rotate(-45deg);
+        }
+      }
+    }
+
+    &.wj-state-multi-selected {
+      // selected column headers
+      border-bottom: 2px solid $wj-sel-bkg;
+    }
+
+    &.wj-colgroup {
+      // merged column headers
+      display: flex;
+      align-items: center; // vertical alignment
+
+      &.wj-align-right {
+        justify-content: flex-end;
+      }
+
+      &.wj-align-center {
+        justify-content: center;
+      }
+    }
+
+    &.wj-big-header:after {
+      // headers before zero-width columns
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 2px;
+      border-right: $wj-cell-bdr-vrt;
+      content: '';
+    }
+
+    // 필수컬럼 빨간점 스타일, 강민재 추가
+    &.is-required {
+      &::before {
+        content: '';
+        position: absolute;
+        left: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: $wj-required-column;
+        pointer-events: none; // 헤더 클릭 방해 방지
+      }
+    }
+
+    // 정렬 가능한 헤더 셀 스타일 - 강민재 추가
+    &.is-sortable {
+      .wj-sort-unsorted-icon {
+        cursor: pointer;
+        display: inline-block;
+        margin-left: 4px;
+        font-family: 'wj-glyph', sans-serif;
+        font-size: 12px;
+        opacity: 0.3;
+        transition: all 0.2s;
+        color: inherit;
+        pointer-events: auto;
+
+        &::before {
+          content: '\25c6'; // Wijmo 다이아몬드 유니코드
+        }
+      }
+
+      &:hover .wj-sort-unsorted-icon {
+        opacity: 1;
+        color: #000000;
+      }
+    }
+
+    // F3 로 정렬 기능을 끈(allowSorting=false) 컬럼 — 실제 정렬(행 순서)은 유지하되
+    //   Wijmo 기본 정렬 화살표(allowSorting과 무관하게 그려짐, wj-glyph-up/wj-glyph-down)만
+    //   숨겨 "정렬 기능이 꺼졌다"는 걸 시각적으로 알려준다. 필터/핀 아이콘도 같은 wj-glyph
+    //   베이스 클래스를 쓰므로 up/down 만 콕 집어 지정 — .wj-glyph 전체를 숨기면 안 된다.
+    &.is-sort-disabled .wj-glyph-up,
+    &.is-sort-disabled .wj-glyph-down {
+      display: none;
+    }
+  }
+
+  .wj-rowheaders .wj-header {
+    white-space: normal;
+    word-break:break-all;
+    font-weight: 400;
+    align-content: flex-start !important;
+    
+    .wj-glyph-pencil,
+    .wj-glyph-asterisk {
+      display: none !important;
+    }
+
+    // row의 crud type에 따른 rowheader - 강민재 추가
+    &[data-status] {
+      &::after {
+        content: attr(data-status);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-weight: bold;
+        font-size: 11px;
+      }
+
+      &[data-status='I'] {
+        color: #28a745;
+        &::after {
+          color: #28a745;
+        }
+      }
+      &[data-status='M'] {
+        color: #ffc107;
+        &::after {
+          color: #ffc107;
+        }
+      }
+      &[data-status='D'] {
+        color: #dc3545;
+        &::after {
+          color: #dc3545;
+        }
+      }
+    }
+
+    &.wj-state-multi-selected {
+      // selected row headers
+      border-right: 2px solid $wj-sel-bkg;
+    }
+
+    &.wj-big-header:after {
+      // headers before zero-height rows
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 2px;
+      border-bottom: $wj-cell-bdr-hrz;
+      content: '';
+    }
+  }
+
+  .wj-topleft .wj-header {
+    &.wj-big-header:after {
+      // headers before zero-width columns
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 2px;
+      border-right: $wj-cell-bdr-vrt;
+      content: '';
+    }
+  }
+
+  .wj-frozen-clone .wj-cell {
+    // frozen cell clones (in container with pointer-events:none)
+    pointer-events: auto; // TFS 367568
+
+    a {
+      //pointer-events: auto;
+      display: inline-block; // TFS 352484: https://coderwall.com/p/s8pjpg/reseting-pointer-events-on-ie11
+      // NOTE: position: relative; also works
+    }
+  }
+
+  .wj-marquee {
+    // selection marquee
+    position: absolute;
+    //border: 2px solid $wj-sel-bkg; // affects scrollbars (TFS 269673)
+    //outline: 3px solid $wj-sel-bkg; // no effect on scrollbars
+    //outline-offset: -1px; // not supported in IE (TFS 380448)
+    box-shadow:
+      0 0 0 1px $wj-sel-bkg,
+      inset 0 0 0 1px $wj-sel-bkg; // TFS 379342
+    pointer-events: none;
+  }
+
+  .wj-marker {
+    // resize row/col marker
+    position: absolute;
+    background: $wj-accent-bkg;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .wj-state-sticky .wj-header {
+    opacity: 0.8;
+  }
+
+  .wj-grid-editor {
+    width: 100%;
+    height: 100%;
+    border: none;
+    margin: 0;
+    padding: 0;
+    background: inherit;
+    color: inherit;
+    overflow: hidden;
+    resize: none;
+  }
+
+  &:focus-within .wj-header.wj-focus-header-cell {
+    // @extend .wj-marquee;
+    // pointer-events: auto;
+    box-shadow:
+      0px 0px 0px 0px $wj-sel-bkg,
+      inset 0px 0px 0px 1px $wj-sel-bkg;
+    //border-right: 1px solid $wj-sel-bkg;
+    //border-bottom: 1px solid $wj-sel-bkg;
+  }
+
+  @media (forced-colors: active) {
+    &:focus-within .wj-header.wj-focus-header-cell:focus {
+      outline: 2px solid Highlight;
+      outline-offset: -1px;
+      color: ActiveText;
+    }
+
+    .wj-marquee {
+      outline: 2px solid Highlight;
+      outline-offset: -1px;
+    }
+  }
+
+  .wj-cell {
+    .wj-btn.wj-btn-glyph {
+      &.wj-elem-dropdown {
+        display: none;
+      }
+      padding: 0 4px;
+      min-width: 1.5em;
+      color: #6b7280;
+      background: transparent;
+      opacity: 0.4;
+
+      &:hover,
+      &:focus {
+        display: inline-block;
+        opacity: 1;
+        transition-duration: $wj-tdn-focus;
+      }
+
+      &.wj-right {
+        float: right;
+        order: 2; // TFS 438977
+
+        &:nth-child(1) {
+          order: 5;
+        }
+
+        &:nth-child(2) {
+          order: 4;
+        }
+
+        &:nth-child(3) {
+          order: 3;
+        }
+      }
+
+      &.wj-elem-detail {
+        min-width: 1em; // TFS 352604
+        padding: 0;
+      }
+
+      > span {
+        opacity: 1;
+      }
+    }
+
+    // 편집모드 진입시 보이도록 - 강민재 추가
+    &:has(.wj-grid-editor) {
+      .wj-btn.wj-btn-glyph.wj-elem-dropdown {
+        display: inline-block;
+        opacity: 1;
+      }
+    }
+
+    // 팝업 셀 아이콘 - 강민재 추가
+    &.is-popup {
+      position: relative;
+      padding-right: 20px;
+
+      &::after {
+        content: '\e900'; // TOOD: 아이콘 유형 설정 필요
+        position: absolute;
+        top: 50%;
+        right: 6px;
+        transform: translateY(-50%);
+        font-family: 'wj-glyph';
+        font-size: 12px;
+        color: #6b7280;
+        opacity: 0.7;
+        pointer-events: none;
+      }
+
+      &:hover::after {
+        opacity: 1;
+        color: #000000;
+      }
+    }
+
+    &.wj-hasdropdown {
+      // TFS 430002
+      display: flex; // WJM-19430
+
+      & > div {
+        //WJM-234003
+        flex-grow: 1;
+      }
+
+      .wj-btn.wj-btn-glyph.wj-right {
+        height: 100%;
+      }
+    }
+
+    &.wj-radio-map label {
+      // dataMap radio buttons
+      display: inline-block;
+      font-weight: inherit;
+      margin: 0 1em 0 0; // space to click the cell between labels
+
+      input[type='radio'] {
+        margin: 0 4px 0 0;
+        outline: none;
+
+        &:not(:checked) {
+          opacity: 0.4;
+        }
+      }
+    }
+
+    // fix for 461333 (https://stackoverflow.com/questions/27536428/inline-block-element-height-issue)
+    &.wj-detail .wj-content.wj-flexgrid {
+      vertical-align: top;
+    }
+
+    &.wj-frozen-row.wj-detail {
+      z-index: 2;
+    }
+
+    &.wj-detail {
+      z-index: 0;
+    }
+
+    &.last-result-column {
+      border-right: 3px solid #006421 !important;
+    }
+
+    // fix for C1WEB-27716 (auto-size rows and boolean cells)
+    label {
+      display: inline-block;
+      max-width: 100%;
+      margin: 0;
+      font-weight: inherit;
+      line-height: 1em; // WJM-19514
+
+      input[type='checkbox'] {
+        // margin: 0px 6px 0px 0px;
+        // 강민재 수정 (header checkbox margin X)
+        margin: 0px 0px 0px 0px;
+      }
+    }
+
+    // Set display none for label with hidden attributes except when hidden is set to "until-found".
+    label[hidden]:not([hidden='until-found']) {
+      display: none; // WJM-34503
+    }
+  }
+
+  &.wj-rtl {
+    .wj-cell {
+      border-left: $wj-cell-bdr-vrt;
+      border-right: none;
+
+      .wj-btn.wj-btn-glyph.wj-right {
+        float: left;
+      }
+
+      &.wj-last-visible-col {
+        border-left: none;
+      }
+    }
+
+    .wj-frozen-col {
+      border-left: $wj-cell-frz-bdr-vrt;
+      border-right: none;
+    }
+
+    .wj-frozen-col-right-edge {
+      border-right: $wj-cell-frz-bdr-vrt;
+    }
+
+    .wj-colheaders .wj-header {
+      &.wj-filter-on,
+      &.wj-filter-off {
+        // workaround for IE11 bug: TFS 408397
+        white-space: normal;
+        word-break: break-all;
+      }
+
+      &.wj-big-header:after {
+        // headers before zero-width columns
+        left: 2px;
+        right: unset;
+      }
+
+      .wj-sort-index {
+        padding: 0 0.2em 0 0;
+      }
+    }
+
+    .wj-rowheaders .wj-header {
+      &.wj-state-multi-selected {
+        // selected row headers
+        border-left: 2px solid $wj-sel-bkg;
+        border-right: none;
+      }
+    }
+
+    .wj-topleft .wj-header {
+      &.wj-big-header:after {
+        // headers before zero-width columns
+        left: 2px;
+        right: unset;
+      }
+    }
+  }
+
+  // honor preserveWhiteSpace property (TFS 403505)
+  &.wj-whitespace-pre {
+    .wj-cell {
+      white-space: pre;
+    }
+
+    .wj-cell.wj-wrap {
+      white-space: pre-wrap;
+    }
+
+    .wj-cell.wj-multiline {
+      white-space: pre-wrap; //pre-line; // TFS 440414
+    }
+  }
+
+  // don't float buttons while measuring (TFS 418083)
+  [wj-state-measuring].wj-cell .wj-btn.wj-btn-glyph.wj-right {
+    float: none;
+  }
+}
+
+// moved to top level for backward compatibility
+.wj-cell {
+  position: absolute;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: $wj-cell-pdg;
+  border-right: $wj-cell-bdr-vrt;
+  border-bottom: $wj-cell-bdr-hrz;
+  background: $wj-cell;
+  outline: none;
+  align-content: center;
+
+  &:not(.wj-hasdropdown) {
+    text-overflow: ellipsis;
+  }
+
+  &.cell-changed {
+    color: #a50034 !important;
+    font-weight: 700;
+  }
+
+  &.wj-alt {
+    background: $wj-cell-alt; // alternate cell background
+
+    &.wj-frozen {
+      // frozen cell fore and backgrounds
+      @include backgradient($wj-cell-frz-alt, false);
+    }
+
+    &.cell-changed {
+      color: #a50034;
+      font-weight: 700;
+    }
+  }
+
+  &.wj-header {
+    @include backgradient($wj-hdr-bkg, $wj-hdr-grd);
+    color: $wj-hdr-txt;
+    font-weight: bold;
+    white-space: normal;
+
+    &.wj-state-multi-selected {
+      // selected headers
+      background: $wj-hdr-hvr;
+      color: $wj-hdr-txt;
+      font-weight: bold;
+    }
+
+    .wj-sort-index {
+      // sort index in multi-column sorts
+      display: inline-block; // TFS 400500
+      font-weight: normal;
+      font-size: $wj-sort-index-font-size; //80%;
+      vertical-align: top;
+      color: $wj-sort-index-txt;
+      padding: 0 0 0 0.2em;
+      opacity: 1;
+    }
+  }
+
+  &.wj-frozen {
+    // frozen cell fore and backgrounds
+    @include backgradient($wj-cell-frz, false);
+
+    @if $wj-cell-frz-txt !=$wj-txt {
+      // TFS 359692
+      color: $wj-cell-frz-txt;
+    }
+  }
+
+  &.wj-last-frozen-row {
+    // frozen row bottom edge
+    border-bottom: $wj-cell-frz-bdr-hrz;
+  }
+
+  &.wj-last-frozen-row-bottom {
+    // frozen row bottom edge
+    border-top: $wj-cell-frz-bdr-hrz;
+  }
+
+  &.wj-frozen-col {
+    // frozen column left edge
+    border-right: $wj-cell-frz-bdr-vrt;
+  }
+
+  &.wj-frozen-col-right-edge {
+    // frozen column right edge
+    border-left: $wj-cell-frz-bdr-vrt;
+  }
+
+  &.wj-group {
+    background: $wj-cell-grp-bkg;
+    color: $wj-cell-grp-txt;
+    display: flex;
+
+    .wj-elem-collapse-space::before {
+      content: '\0020'; // Space Unicode
+    }
+  }
+
+  &.wj-state-invalid {
+    border: 1.2px solid $wj-invalid;
+
+    &.wj-header {
+      background: rgba(255, 180, 180, 1); // TFS 306815
+    }
+
+    &:not(.wj-header):after {
+      position: absolute;
+      content: '';
+      width: 0;
+      right: 0;
+      top: -6px;
+      border: 6px solid transparent;
+      border-right-color: $wj-invalid;
+    }
+  }
+
+  &.wj-header.wj-state-dragsrc {
+    opacity: 0.5; // header cell being dragged
+  }
+
+  &.wj-wrap {
+    // soft breaks
+    white-space: normal;
+    text-overflow: clip;
+    word-wrap: break-word; // TFS 407942
+  }
+
+  &.wj-multiline {
+    // hard breaks
+    white-space: pre; // or pre-line?
+    text-overflow: clip;
+    word-wrap: break-word; // TFS 407942
+  }
+
+  &.wj-wrap.wj-multiline {
+    // soft and hard breaks
+    white-space: pre-wrap;
+    text-overflow: clip;
+  }
+
+  &.wj-align-left {
+    text-align: left;
+  }
+
+  &.wj-align-right {
+    text-align: right;
+  }
+
+  &.wj-align-center {
+    text-align: center;
+  }
+
+  &.wj-align-justify {
+    text-align: justify;
+  }
+
+  &.wj-align-justify-all {
+    text-align: justify;
+    text-align-last: justify;
+    text-justify: distribute; // required for IE11
+  }
+
+  &.wj-last-visible-col {
+    border-right: none;
+  }
+
+  &.wj-last-visible-row {
+    border-bottom: none;
+  }
+}
+
+.wj-cells .wj-cell {
+  // selection selector is stronger
+  &.wj-state-selected {
+    background: $wj-sel-bkg !important;
+    color: $wj-sel-txt !important;
+  }
+
+  &.wj-state-multi-selected {
+    background: $wj-msel-bkg !important;
+    color: $wj-msel-txt !important;
+  }
+
+  // 수정여부에 따른 색상 조절 - 강민재
+  &.wj-cell-editable {
+    background: $wj-editable-cell;
+  }
+
+  &.wj-cell-non-editable {
+    background: $wj-non-editable-cell;
+  }
+
+  // 마지막 실적 컬럼, 경계선 - 강민재
+  &.wj-zero-transparent {
+    color: transparent !important;
+  }
+
+  // 팝업 셀, MUI OpenInNew 아이콘 사용 - 강민재
+  // 커서는 셀에 직접 건다. `.wj-flexgrid` 의 cursor:default 는 상속값이라 특이도와 무관하게 진다.
+  //   이전에는 DMF0020 module scss 의 전역 누수(:global(.wj-cell-popup))가 이 pointer 를 대신
+  //   공급해 그 화면을 연 세션에서만 커서가 바뀌었다. 누수를 제거하며 표준 계약으로 여기에 옮겼다.
+  &.wj-cell-popup {
+    cursor: pointer;
+    // 우측 OpenInNew 아이콘(::after, right:5px + 16px)과 셀 텍스트가 겹치지 않도록
+    //   아이콘 폭만큼 우측 패딩을 확보한다. 텍스트는 ellipsis 로 아이콘 앞에서 끊긴다.
+    padding-right: 24px;
+  }
+
+  &.wj-cell-popup::after {
+    content: '';
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+
+    background-color:#5b5c5b;
+    $svg-path: "M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z";
+    -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="#{$svg-path}"/></svg>') no-repeat center;
+    mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="#{$svg-path}"/></svg>') no-repeat center;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+  }
+
+
+  @media (forced-colors: active) {
+    &.wj-state-selected {
+      background-color: Highlight;
+      color: ActiveText;
+
+      .wj-glyph-down,
+      .wj-glyph-right,
+      .wj-glyph-down-right {
+        background-color: Highlight;
+      }
+    }
+
+    &.wj-state-multi-selected {
+      background-color: Canvas;
+      color: ActiveText;
+    }
+  }
+}
+
+// 임시 추가, 삭제 필요 - 강민재
+/* Wijmo 기본 툴팁 스타일 오버라이드 (필요시) */
+.wj-tooltip {
+  padding: 0; // 템플릿 내부에서 여백을 관리할 경우
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* 기존에 쓰시던 클래스 유지 */
+.grid_summary_popup {
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  pointer-events: auto; // 툴팁 위로 마우스 이동 가능하게
+}
+
+/* 그리드 콤보 셀 - 한글 조합 중 자동완성 미리보기 (DataGrid.tsx showComposingPreview).
+   조합 중에는 편집기 value 를 바꿀 수 없어(조합이 취소되고 영문 raw 로 확정된다) 값 대신
+   화면에 겹쳐 그린다. 친 글자 뒤에 붙을 부분만 선택색으로 표시한다. */
+.wj-composing-preview {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  white-space: pre;
+
+  /* 배경(선택색)은 바깥 div 가 아니라 안쪽 span 이 갖는다. 바깥은 편집기 높이만큼 line-height 를
+     받아 글자를 세로 중앙에 맞추는 역할만 하므로, 배경을 여기에 주면 셀 높이만큼 블록이 커진다. */
+  > span {
+    background: Highlight;
+    color: HighlightText;
+    line-height: normal;
+  }
+}

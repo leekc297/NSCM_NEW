@@ -1,0 +1,28 @@
+CHK | N | JUDGE
+V1 마커 | 0 | FAIL (미적용)
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:31 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-13 17:48:50 | 0 | 0
+(2 rows)
+
+CHK | LINE | TXT
+(0 rows)
+
+CHK | COLUMN_NAME | DIVISIONS | JUDGE | USERS_WITH_SET | USERS_HAVING_COL
+V4 필수 | AS_FROM_SITE | 82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 이번 패치로 항상 반환 | 20 | 6
+V4 필수 | VERSION_NO | 40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 이번 패치로 항상 반환 | 20 | 5
+V4 필수 | CELL_PROD_SITE_ID | 40 | 저장 키 (종전부터 항상 반환) | 20 | 11
+V4 필수 | CURRENCY | 40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 20
+V4 필수 | DIVISION_ID | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | 저장 키 (종전부터 항상 반환) | 20 | 20
+V4 필수 | DOM_EXP | 40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 20
+V4 필수 | END_CUSTOMER | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | 저장 키 (종전부터 항상 반환) | 20 | 20
+V4 필수 | FCST_TYPE | 40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 20
+V4 필수 | INCOTERMS | 40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 20
+V4 필수 | ITEM_ID | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | 저장 키 (종전부터 항상 반환) | 20 | 20
+V4 필수 | MEASURE | 40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 20
+V4 필수 | PLANT_SITE_ID | 81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 16
+V4 필수 | PROJECT_CODE | 82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 17
+V4 필수 | SCM_SITE_ID | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | 저장 키 (종전부터 항상 반환) | 20 | 20
+(14 rows)

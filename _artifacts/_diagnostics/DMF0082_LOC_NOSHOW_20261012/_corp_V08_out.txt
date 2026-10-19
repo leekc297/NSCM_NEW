@@ -1,0 +1,65 @@
+################ [K1] ⭐ SP 원문의 '빈 값' 판정식 (주석 줄 포함 — 앞에 '--' 가 없는 줄이 실제 동작) ################
+CHK | LINE  | TXT                                                                                                           
+----+-------+---------------------------------------------------------------------------------------------------------------
+K1  | 196   |         -- [E20260907-DEFFLAG] AS-IS: AND    C.DEFAULT_FLAG = ' ' -- [FIX 2026-07-12] AS-IS "DEFAULT_FLAG = ''
+K1  | 197   | --        AND    NVL(TRIM(C.DEFAULT_FLAG), '-') = '-'  -- [E20260907-DEFFLAG] 구 "= ' '" → **센티널 정규화**. AS-IS 원
+K1  | 198   |         AND    NVL(TRIM(C.DEFAULT_FLAG), '/') = '/'  -- [E20260907-DEFFLAG] 구 "= ' '" → **센티널 정규화**. AS-IS 원문은
+K1  | 384   |         AND    C.DEFAULT_FLAG = 'Y'                                                                           
+K1  | 428   |         AND    C.DEFAULT_FLAG = 'Y'                                                                           
+K1  | 7511  |  *  - AS-IS C_TITLE 2번째 UNION 의 C.DEFAULT_FLAG = '' → C.DEFAULT_FLAG IS NULL (C-7. 사내 실측: DEFAULT_FLAG NULL 11
+K1  | 7663  |         -- [E20260907-DEFFLAG] AS-IS: AND    C.DEFAULT_FLAG = ' '  /* [UICATEGORY 2026-08-07 FIX] 구 "IS NULL" 
+K1  | 7665  | --        AND    NVL(TRIM(C.DEFAULT_FLAG), '-') = '-'  -- [E20260907-DEFFLAG] 구 "= ' '" → **센티널 정규화**. AS-IS 원
+K1  | 7666  |         AND    NVL(TRIM(C.DEFAULT_FLAG), '/') = '/'  -- [E20260907-DEFFLAG] 구 "= ' '" → **센티널 정규화**. AS-IS 원문은
+K1  | 7811  |         AND    C.DEFAULT_FLAG = 'Y'                                                                           
+K1  | 7838  |         AND    C.DEFAULT_FLAG = 'Y'                                                                           
+K1  | 10131 | 				, C.DEFAULT_FLAG                                                                                          
+K1  | 10165 | 				, C.DEFAULT_FLAG                                                                                          
+K1  | 10174 | 		AND    C.DEFAULT_FLAG IS NULL                                                                               
+K1  | 10322 | 					, C.DEFAULT_FLAG                                                                                         
+K1  | 10330 | 			AND    C.DEFAULT_FLAG = 'Y'                                                                                
+K1  | 10354 | 					, C.DEFAULT_FLAG                                                                                         
+K1  | 10363 | 			AND    C.DEFAULT_FLAG IS NULL                                                                              
+K1  | 12120 |          , C.DEFAULT_FLAG                                                                                     
+K1  | 12132 |     AND    ( C.DEFAULT_FLAG = 'Y' OR                                                                          
+K1  | 12134 |      AND    C.DEFAULT_FLAG IS NULL                                                                            
+K1  | 12222 |  --   , C.DEFAULT_FLAG                                                                                        
+K1  | 12259 |  --   , C.DEFAULT_FLAG                                                                                        
+K1  | 12268 |  -- AND    C.DEFAULT_FLAG IS NULL                                                                             
+(24 rows)
+################ [K2] ⭐ 메타 — 시스템 컬럼의 DEFAULT_FLAG 실제 값 ################
+--  FLAG 는 대괄호 안이 실제 값. FLAG_DUMP 로 공백(32)·'-'(45)·'/'(47) 를 구분한다
+CHK | COLUMN_NAME   | FLAG | FLAG_DUMP       | VAL | VIS | SEL | WHO   | AT              
+----+---------------+------+-----------------+-----+-----+-----+-------+-----------------
+K2  | AS_YN         | [ ]  | Typ=1 Len=1: 32 | Y   | N   | Y   | admin | 2026-08-07 15:07
+K2  | ATTR1         | [ ]  | Typ=1 Len=1: 32 | Y   | N   | Y   | admin | 2026-08-07 15:07
+K2  | BUCKET        | [ ]  | Typ=1 Len=1: 32 | Y   | N   | Y   | admin | 2026-08-07 15:07
+K2  | EDIT_FLAG     | [ ]  | Typ=1 Len=1: 32 | Y   | N   | Y   | admin | 2026-08-07 15:07
+K2  | GROUP_ID      | [ ]  | Typ=1 Len=1: 32 | Y   | N   | Y   | admin | 2026-08-21 21:28
+K2  | MEASURE_GROUP | [ ]  | Typ=1 Len=1: 32 | Y   | N   | Y   | admin | 2026-08-07 15:07
+K2  | NEW_FLAG      | [ ]  | Typ=1 Len=1: 32 | Y   | N   | Y   | admin | 2026-08-07 15:07
+K2  | SORT_KEY      | [ ]  | Typ=1 Len=1: 32 | Y   | N   | Y   | admin | 2026-08-07 15:07
+K2  | VERSION_NO    | [ ]  | Typ=1 Len=1: 32 | Y   | Y   | N   | admin | 2026-08-22 15:33
+K2  | VMI_STD_DIO   | [ ]  | Typ=1 Len=1: 32 | Y   | N   | N   | admin | 2026-08-07 15:07
+(10 rows)
+--  SORT_KEY 행이 없다 = 메타에서 행 자체가 사라짐
+################ [K3] ⭐⭐ 판정 — 센티널별로 ㉯ 에 잡히는 시스템 컬럼 수 · SORT_KEY 포함 여부 ################
+CHK | SENTINEL | SP_USES | COLS | SORT_KEY_IN | JUDGE                                        
+----+----------+---------+------+-------------+----------------------------------------------
+K3  | -        | 0       | 10   | 1           | (이 DB 의 SP 는 이 센티널을 쓰지 않음)                   
+K3  | /        | 2       | 10   | 1           | PASS — SP 가 쓰는 센티널로 SORT_KEY 가 잡힌다 (원인은 다른 곳)
+(2 rows)
+--  SP_USES = 그 센티널을 쓰는 실제 동작 줄 수(조회 SP 2종에 각 1줄씩이라 보통 2) · SORT_KEY_IN = 1 이어야 정상
+################ [K4] 오늘 바뀐 메타 행 (DMF0082 · FcstNPrice) ################
+CHK | COLUMN_NAME | FLAG | VAL | WHO | AT
+----+-------------+------+-----+-----+---
+(0 rows)
+################ [K5] DEFAULT_FLAG 값 분포 (DMF0082 · FcstNPrice) ################
+CHK | FLAG | FLAG_DUMP       | CNT | AT              
+----+------+-----------------+-----+-----------------
+K5  | [ ]  | Typ=1 Len=1: 32 | 10  | 2026-08-22 15:33
+K5  | [N]  | Typ=1 Len=1: 78 | 39  | 2026-09-16 20:38
+K5  | [Y]  | Typ=1 Len=1: 89 | 16  | 2026-09-16 11:48
+(3 rows)
+=============================================================================
+V08 완료 → V08_SORTKEY_904_CHECK_OUT.txt 회신 ([K1] 판정식 · [K2] 실제 값 · [K3] 판정이 핵심)
+=============================================================================

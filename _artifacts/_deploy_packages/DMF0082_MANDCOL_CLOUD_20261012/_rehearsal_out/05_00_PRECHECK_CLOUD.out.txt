@@ -1,0 +1,41 @@
+CHK | DB_NAME | INST | NOW                
+----+---------+------+--------------------
+L0  | ZIOUI1  | ZIO  | 2026-10-12 18:23:51
+(1 rows)
+CHK | OBJECT_TYPE  | STATUS | LAST_DDL           
+----+--------------+--------+--------------------
+L0  | PACKAGE      | VALID  | 2026-10-02 17:59:16
+L0  | PACKAGE BODY | VALID  | 2026-10-12 18:23:13
+(2 rows)
+CHK   | COL               | N | JUDGE                           
+------+-------------------+---+---------------------------------
+L1 앵커 | CELL_PROD_SITE_ID | 0 | FAIL — 앵커 없음 (이미 적용이면 L2=2) → 중단
+L1 앵커 | PLANT_SITE_ID     | 0 | FAIL — 앵커 없음 (이미 적용이면 L2=2) → 중단
+(2 rows)
+CHK   | N | JUDGE                
+------+---+----------------------
+L2 마커 | 2 | 적용됨 — 10 재실행은 가드로 무동작
+(1 rows)
+CHK   | COLUMN_NAME       | DIVISION_ID                      | USER_SELECTABLE_FLAG | VISIBLE_FLAG | VALID_YN | JUDGE                      
+------+-------------------+----------------------------------+----------------------+--------------+----------+----------------------------
+L3 메타 | CELL_PROD_SITE_ID | 40                               | N                    | Y            | Y        | 필수 컬럼 (이 division 은 합치지 않음)
+L3 메타 | PLANT_SITE_ID     | 81,81_UC,81_HM,81_ST,81_HD,81_HG | N                    | Y            | Y        | 필수 컬럼 (이 division 은 합치지 않음)
+(2 rows)
+CHK       | USER_ID     | HAS_CELL_PROD | HAS_PLANT | LAST_SAVED      
+----------+-------------+---------------+-----------+-----------------
+L4 영향 사용자 | bottle      | N             | Y         | 2026-08-26 16:49
+L4 영향 사용자 | bpark416    | N             | Y         | 2026-08-26 15:47
+L4 영향 사용자 | eunah.koo   | Y             | N         | 2026-08-25 10:59
+L4 영향 사용자 | hongjae.kim | Y             | N         | 2026-08-25 09:45
+L4 영향 사용자 | jaehyeok    | N             | Y         | 2026-08-26 16:35
+L4 영향 사용자 | jiwon.park  | N             | Y         | 2026-08-25 11:30
+L4 영향 사용자 | k0101       | N             | Y         | 2026-08-31 11:00
+L4 영향 사용자 | minyonglee1 | N             | Y         | 2026-09-28 13:56
+L4 영향 사용자 | miyeong.lee | N             | Y         | 2026-08-17 18:02
+L4 영향 사용자 | park6151    | N             | Y         | 2026-08-26 16:43
+L4 영향 사용자 | wonqthanq   | N             | N         | 2026-09-16 17:00
+L4 영향 사용자 | yooah.chung | Y             | N         | 2026-08-25 11:04
+(12 rows)
+CHK | INST_ID | SID | SERIAL# | USERNAME | MACHINE | CALL_SEC | SQL_ID
+----+---------+-----+---------+----------+---------+----------+-------
+(0 rows)

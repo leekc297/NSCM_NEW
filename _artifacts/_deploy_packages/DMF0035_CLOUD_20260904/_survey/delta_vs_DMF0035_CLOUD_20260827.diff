@@ -1,0 +1,65 @@
+--- 
++++ 
+@@ -645 +645 @@
+-    IF P_VERSION_NO LIKE '%CURRENT%'
++    IF UPPER(P_VERSION_NO) LIKE '%CURRENT%'  --[E20260831-VERCASE] MSSQL CI 콜레이션 1:1 — 'Current' 등 대소문자 변형 흡수
+@@ -1514 +1514 @@
+-    END IF; -- IF P_VERSION_NO LIKE '%CURRENT%'
++    END IF; -- IF UPPER(P_VERSION_NO) LIKE '%CURRENT%'  --[E20260831-VERCASE] MSSQL CI 콜레이션 1:1 — 'Current' 등 대소문자 변형 흡수
+@@ -2927 +2927 @@
+-    AND   U.SHEET_NAME                    = V_P_SHEET_NAME
++    AND   U.SHEET_NAME                    = V_P_COLS_SHEET  --[E20260904-TSCAXIS]
+@@ -2957 +2957 @@
+-                   AND U.SHEET_NAME  = V_P_SHEET_NAME
++                   AND U.SHEET_NAME  = V_P_COLS_SHEET  --[E20260904-TSCAXIS]
+@@ -2963 +2963 @@
+-                        AND TU.SHEET_NAME  = V_P_SHEET_NAME
++                        AND TU.SHEET_NAME  = V_P_COLS_SHEET  --[E20260904-TSCAXIS]
+@@ -2972,2 +2972,3 @@
+-            AND   C.VISIBLE_FLAG = 'N'
+-            AND   RTRIM(C.DEFAULT_FLAG, ' -') IS NULL  --[E20260806-WF] 숨은컬럼 빈값 판정(0051 동형)
++            AND   (   (C.VISIBLE_FLAG = 'N'
++            AND        RTRIM(C.DEFAULT_FLAG, ' -') IS NULL)  --[E20260806-WF] 숨은컬럼 빈값 판정(0051 동형)
++                  OR C.COLUMN_NAME IN ('MEASURE','VERSION_NO'))  --[E20260904-FORCEDAXIS] AS-IS 강제치환 규약: 두 축은 사용자 arm 에서도 무조건 SELECT
+@@ -3102,0 +3104,24 @@
++
++    --[E20260828-ALLCOLS] 사용자 지시(2026-08-28): UI CATEGORY 전체 컬럼 반환 — FE OLAP 은 DEFAULT/titleset 컬럼만 Rows 축에 두고
++    --   나머지는 필드 후보(드래그)로 쓴다. 사업부 매칭 VALID 컬럼 중 사전(GT_DM35_T_COLUMN_SETUP)에 있고 목록에 없는 것만 뒤에 덧붙임.
++    --   ORDER 는 기존 유지. MEASURE/VERSION_NO 계열·NOTATION 은 REPLACE 규약 보호를 위해, 감사 4컬럼은 집계 grain 보호를 위해 제외.
++    DECLARE
++        V_EXTRA_COLS VARCHAR2(32767 CHAR);
++    BEGIN
++        SELECT LISTAGG(',' || C.COLUMN_NAME, '') WITHIN GROUP (ORDER BY C.SORT_ORDER_NO)
++          INTO V_EXTRA_COLS
++          FROM SCM_MGR.SCM_MST_SHEET_COLUMNS C
++         WHERE C.PROGRAM_ID = V_P_PROGRAM_ID
++           AND C.SHEET_NAME = V_P_COLS_SHEET
++           AND C.VALID_YN   = 'Y'
++           AND P_DIVISION_ID IN (SELECT TOKEN FROM TABLE(SCM_MGR.UF_FX_STRING_SPLIT(C.DIVISION_ID, ',')))
++           AND C.COLUMN_NAME NOT LIKE '%MEASURE%'
++           AND C.COLUMN_NAME NOT LIKE '%VERSION_NO%'
++           AND C.COLUMN_NAME <> 'NOTATION'
++           AND C.COLUMN_NAME NOT IN ('CREATION_DATE','CREATED_BY','LAST_UPDATE_DATE','LAST_UPDATED_BY') -- 감사컬럼은 집계 grain 을 쪼갬(1차 적용 761→806행 실측)
++           AND EXISTS (SELECT 1 FROM SCM_MGR.GT_DM35_T_COLUMN_SETUP D WHERE D.COLUMN_NAME = C.COLUMN_NAME)
++           AND INSTR(',' || REPLACE(REPLACE(V_COL_LIST, ' ', ''), CHR(10), '') || ',', ',' || C.COLUMN_NAME || ',') = 0;
++        IF V_EXTRA_COLS IS NOT NULL THEN
++            V_COL_LIST := V_COL_LIST || V_EXTRA_COLS;
++        END IF;
++    END;
+@@ -3259 +3284 @@
+-        IF P_VERSION_NO LIKE '%CURRENT%'
++        IF UPPER(P_VERSION_NO) LIKE '%CURRENT%'  --[E20260831-VERCASE] MSSQL CI 콜레이션 1:1 — 'Current' 등 대소문자 변형 흡수
+@@ -3322 +3347 @@
+-        END IF; -- P_VERSION_NO LIKE '%CURRENT%' 내부
++        END IF; -- UPPER(P_VERSION_NO) LIKE '%CURRENT%' 내부  --[E20260831-VERCASE] MSSQL CI 콜레이션 1:1 — 'Current' 등 대소문자 변형 흡수
+@@ -3791 +3816 @@
+-    V_TITLESET_SHEET  VARCHAR2(50 CHAR) := 'mktFcstWaterfall';  --[E20260806-WF] TITLESET_USER 실등록명(FE)
++    V_TITLESET_SHEET  VARCHAR2(50 CHAR) := 'Mkt Fcst Waterfall';  --[E20260904-TSCAXIS] 컬럼 개인화('C') 축 = SHEET_COLUMNS 실등록명(AS-IS shtMain). 메저('M') 축은 V_P_SHEET_NAME 유지
+@@ -3902 +3927 @@
+-            AND    C.DEFAULT_FLAG = ''
++            AND    RTRIM(C.DEFAULT_FLAG, ' -') IS NULL  --[E20260831-W34] AS-IS DEFAULT_FLAG='' 숨은컬럼 arm — ''=NULL(' '/'-' 흡수) 정정
+@@ -4061 +4086 @@
+-            AND    C.DEFAULT_FLAG = ''
++            AND    RTRIM(C.DEFAULT_FLAG, ' -') IS NULL  --[E20260831-W34] AS-IS DEFAULT_FLAG='' 숨은컬럼 arm — ''=NULL(' '/'-' 흡수) 정정
+@@ -4211 +4235,0 @@
+-/

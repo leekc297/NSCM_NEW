@@ -1,0 +1,28 @@
+CHK | N | JUDGE
+V1 마커 | 2 | PASS
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:30 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-15 11:16:15 | 0 | 0
+(2 rows)
+
+CHK | LINE | TXT
+V3 판정줄 | 6419 | WHERE  LOOKUP_TYPE = 'GET_ADMIN_GROUP'
+V3 판정줄 | 6422 | AND    (SEGMENT1 = P_USERINFO  --[AUTHUNION 2026-10-15] 보유그룹 합집합 판정 (FE groupId 유령 → USER_ID 전달 대응)
+V3 판정줄 | 7230 | WHERE  LOOKUP_TYPE = 'GET_ADMIN_GROUP'
+V3 판정줄 | 7233 | AND    (SEGMENT1 = P_USERINFO  --[AUTHUNION 2026-10-15] 보유그룹 합집합 판정 (FE groupId 유령 → USER_ID 전달 대응)
+(4 rows)
+
+CHK | USER_ID | GRPS | BEFORE_CNT | AFTER_CNT
+V4 판정 | DM_A_TEST | DM ADMIN | 0 | 1
+V4 판정 | agabryelczyk | DM Planner | 0 | 1
+V4 판정 | ahn.hc | DM ADMIN,SCP Planner | 0 | 2
+V4 판정 | aidenlee | DM Planner,SCM PI Admin | 0 | 2
+V4 판정 | akacka | DM Planner | 0 | 1
+V4 판정 | akonieczna | DM Planner | 0 | 1
+V4 판정 | akostanska | DM Planner | 0 | 1
+V4 판정 | akowalewska | DM Planner | 0 | 1
+V4 판정 | akswls | SCP Planner | 0 | 1
+V4 판정 | alagoda | DM Planner | 0 | 1
+(10 rows)

@@ -1,0 +1,149 @@
+-- =============================================================================
+-- C01_ENV_STATE.sql — DMF0082 조회 클라우드 점검 ① 환경·적용상태·통계·인덱스 대조 (READ-ONLY)
+--   계정: SCM_MGR  ·  ⚠ 클라우드 QA / DEV 두 곳 모두 실행 (BE 가 어느 DB 를 보는지 [E0] 로 확인)
+--   실행: SQL Developer = 스크립트 실행(F5) / sqlplus = @C01_ENV_STATE.sql
+--   사내 기준값 = ZIOUI1 {{NOW}} 채취 (인라인 대조 — 결과의 JUDGE 열만 보면 됨)
+--   변경 없음: SELECT 만 수행
+-- =============================================================================
+SET LINESIZE 400
+SET PAGESIZE 500
+SET TRIMSPOOL ON
+SET FEEDBACK ON
+COLUMN JUDGE FORMAT A44
+COLUMN NAME FORMAT A40
+COLUMN CLOUD FORMAT A30
+COLUMN CORP FORMAT A30
+COLUMN T FORMAT A30
+COLUMN I FORMAT A44
+COLUMN CLOUD_COLS FORMAT A90
+COLUMN CORP_COLS FORMAT A90
+COLUMN SQL_HEAD FORMAT A90
+SPOOL C01_ENV_STATE_OUT.txt
+
+PROMPT ################ [E0] 접속 DB 식별 (QA / DEV 구분 — BE datasource 와 대조) ################
+SELECT USER USR, SYS_CONTEXT('USERENV','DB_NAME') DB_NAME, SYS_CONTEXT('USERENV','CON_NAME') CON_NAME,
+       SYS_CONTEXT('USERENV','SERVICE_NAME') SVC, SYS_CONTEXT('USERENV','SERVER_HOST') HOST,
+       TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS') NOW
+  FROM DUAL;
+
+PROMPT ################ [E1] ⭐ PKG_DMF0082 — 09-30 조회 속도개선(QRYPERF) 적용 여부 ################
+PROMPT --  사내(적용 후) 지문: SPEC 111/7173 · BODY 16176/830176 · QRYPERF 마커 22 · GET_MAIN_DATA 활성 GATHER 0 · IDX02 힌트 2
+SELECT O.OBJECT_TYPE, O.STATUS, TO_CHAR(O.LAST_DDL_TIME,'YYYY-MM-DD HH24:MI:SS') LAST_DDL,
+       (SELECT COUNT(*) FROM USER_ERRORS E WHERE E.NAME=O.OBJECT_NAME AND E.TYPE=O.OBJECT_TYPE) ERR_CNT
+  FROM USER_OBJECTS O WHERE O.OBJECT_NAME='PKG_DMF0082' ORDER BY O.OBJECT_TYPE;
+
+WITH S AS (SELECT LINE, TEXT FROM USER_SOURCE WHERE NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY'),
+     R AS (SELECT MIN(CASE WHEN REGEXP_LIKE(TEXT,'^PROCEDURE P_DMF0082_GET_MAIN_DATA\s*$') THEN LINE END) L0,
+                  MIN(CASE WHEN REGEXP_LIKE(TEXT,'^PROCEDURE P_DMF0082_POPUP_GET_FUTUREPRICE_INFO') THEN LINE END) L1 FROM S),
+     F AS (SELECT TYPE, COUNT(*) LN, SUM(LENGTH(RTRIM(TEXT, CHR(10)||CHR(13)))) CH
+             FROM USER_SOURCE WHERE NAME='PKG_DMF0082' AND TYPE IN ('PACKAGE','PACKAGE BODY') AND LINE > 1 GROUP BY TYPE)
+SELECT (SELECT LN||'/'||CH FROM F WHERE TYPE='PACKAGE') SPEC_FP,
+       (SELECT LN||'/'||CH FROM F WHERE TYPE='PACKAGE BODY') BODY_FP,
+       (SELECT COUNT(*) FROM S WHERE TEXT LIKE '%E20260930-DMF0082QRYPERF%') QRYPERF_MARK,
+       (SELECT COUNT(*) FROM S, R WHERE S.LINE BETWEEN R.L0 AND R.L1
+           AND REGEXP_LIKE(TEXT,'^\s*DBMS_STATS\.GATHER','i')) GATHER_ACTIVE,
+       (SELECT COUNT(*) FROM S, R WHERE S.LINE BETWEEN R.L0 AND R.L1
+           AND REGEXP_LIKE(TEXT,'^\s*EXECUTE IMMEDIATE .ALTER SESSION SET optimizer_dynamic_sampling','i')) DS2_LINE,
+       (SELECT COUNT(*) FROM S, R WHERE S.LINE BETWEEN R.L0 AND R.L1
+           AND REGEXP_LIKE(TEXT,'INDEX\s*\(\s*\w+\s+IDX02_SCM_MST_FUTURE_PRICE','i')) IDX02_HINT,
+       CASE WHEN (SELECT COUNT(*) FROM S WHERE TEXT LIKE '%E20260930-DMF0082QRYPERF%') = 0
+            THEN '❌ QRYPERF 미적용 → 패키지 적용이 1순위'
+            WHEN (SELECT LN||'/'||CH FROM F WHERE TYPE='PACKAGE BODY') <> '16176/830176'
+            THEN '⚠ QRYPERF 있음 · BODY 지문 사내와 상이'
+            ELSE 'PASS (사내와 동일 BODY)' END JUDGE
+  FROM DUAL;
+
+PROMPT ################ [E2] ⭐ 옵티마이저·자원 파라미터 — 사내 대조 (DIFF 만 주목) ################
+PROMPT --  optimizer_dynamic_sampling 0 = GTT 추정 붕괴(07-31 확정 원인). SP 가 세션에서 2 로 보정하지만 시스템값도 확인.
+WITH CORP AS (
+  {{PARAM}}
+)
+SELECT C.N NAME, P.VALUE CLOUD, C.V CORP,
+       CASE WHEN P.NAME IS NULL THEN '(클라우드 조회불가)'
+            WHEN NVL(P.VALUE,'~') = NVL(C.V,'~') THEN 'same'
+            WHEN C.N IN ('optimizer_dynamic_sampling','optimizer_index_cost_adj','optimizer_index_caching',
+                         'optimizer_mode','cursor_sharing','optimizer_features_enable','optimizer_adaptive_plans',
+                         'optimizer_adaptive_statistics','statistics_level','pga_aggregate_target',
+                         'optimizer_use_sql_plan_baselines','db_file_multiblock_read_count')
+            THEN '⚠ DIFF (계획 영향)' ELSE 'diff (참고)' END JUDGE
+  FROM CORP C LEFT JOIN V$PARAMETER P ON P.NAME = C.N
+ ORDER BY CASE WHEN NVL(P.VALUE,'~') = NVL(C.V,'~') THEN 1 ELSE 0 END, C.N;
+
+PROMPT ################ [E3] ⭐ 조회 관련 테이블 인덱스 — 사내 대조 (결손·상이·UNUSABLE 만 출력) ################
+PROMPT --  이관 패키지는 PKG 만 옮긴다. 튜닝 인덱스가 클라우드에 없으면 계획이 갈린다. (IDX02_SCM_MST_FUTURE_PRICE = 82 핵심)
+WITH CORP AS (
+  {{IDX}}
+),
+CL AS (
+  SELECT I.TABLE_NAME T, I.INDEX_NAME I, I.STATUS ST,
+         (SELECT LISTAGG(NVL2(E.COLUMN_EXPRESSION,'EXPR',C.COLUMN_NAME),',') WITHIN GROUP (ORDER BY C.COLUMN_POSITION)
+            FROM USER_IND_COLUMNS C LEFT JOIN USER_IND_EXPRESSIONS E
+              ON E.INDEX_NAME=C.INDEX_NAME AND E.COLUMN_POSITION=C.COLUMN_POSITION
+           WHERE C.INDEX_NAME=I.INDEX_NAME) C,
+         (SELECT COUNT(*) FROM USER_IND_PARTITIONS P WHERE P.INDEX_NAME=I.INDEX_NAME AND P.STATUS='UNUSABLE') UNUSABLE_PART
+    FROM USER_INDEXES I
+   WHERE I.TABLE_NAME IN ({{TABLES}})
+     AND I.INDEX_NAME NOT LIKE 'SYS\_IL%' ESCAPE '\'
+)
+SELECT NVL(CL.T, CORP.T) T, NVL(CL.I, CORP.I) I,
+       CASE WHEN CL.I IS NULL THEN '❌ 클라우드 결손 (사내에만 있음)'
+            WHEN CORP.I IS NULL THEN 'ℹ 클라우드에만 있음'
+            WHEN NVL(CL.C,'~') <> NVL(CORP.C,'~') THEN '⚠ 컬럼 구성 상이'
+            ELSE '❌ UNUSABLE (파티션 '||CL.UNUSABLE_PART||')'
+       END JUDGE,
+       CL.C CLOUD_COLS, CORP.C CORP_COLS
+  FROM CL FULL OUTER JOIN CORP ON CORP.T = CL.T AND CORP.I = CL.I
+ WHERE CL.I IS NULL OR CORP.I IS NULL OR NVL(CL.C,'~') <> NVL(CORP.C,'~')
+    OR CL.ST = 'UNUSABLE' OR CL.UNUSABLE_PART > 0
+ ORDER BY 1, 2;
+PROMPT --  0 rows = 인덱스 사내와 동일 (정상)
+
+PROMPT ################ [E4] ⭐ 테이블 통계·크기 — 사내 대조 (행수/용량 배율 · 통계 노후) ################
+PROMPT --  ROWS_X / MB_X = 클라우드 ÷ 사내. 5배↑ 면 데이터량이 시간 차이의 일부. NUM_ROWS NULL / STALE=YES = 통계 문제.
+WITH CORP AS (
+  {{STATS}}
+)
+SELECT C.T, T.NUM_ROWS CLOUD_ROWS, C.R CORP_ROWS,
+       ROUND(T.NUM_ROWS / NULLIF(C.R,0), 1) ROWS_X,
+       (SELECT ROUND(SUM(BYTES)/1048576) FROM USER_SEGMENTS S WHERE S.SEGMENT_NAME=C.T) CLOUD_MB, C.MB CORP_MB,
+       ROUND((SELECT SUM(BYTES)/1048576 FROM USER_SEGMENTS S WHERE S.SEGMENT_NAME=C.T) / NULLIF(C.MB,0), 1) MB_X,
+       TO_CHAR(T.LAST_ANALYZED,'YYYY-MM-DD') CLOUD_ANALYZED, C.LA CORP_ANALYZED,
+       (SELECT MAX(STALE_STATS) FROM USER_TAB_STATISTICS X WHERE X.TABLE_NAME=C.T AND X.OBJECT_TYPE='TABLE') STALE,
+       (SELECT MAX(STATTYPE_LOCKED) FROM USER_TAB_STATISTICS X WHERE X.TABLE_NAME=C.T AND X.OBJECT_TYPE='TABLE') LOCKED,
+       TRIM(T.DEGREE) DEG,
+       CASE WHEN T.TABLE_NAME IS NULL THEN '❌ 테이블 없음'
+            WHEN T.NUM_ROWS IS NULL OR T.LAST_ANALYZED IS NULL THEN '❌ 통계 없음'
+            WHEN (SELECT MAX(STALE_STATS) FROM USER_TAB_STATISTICS X WHERE X.TABLE_NAME=C.T AND X.OBJECT_TYPE='TABLE')='YES' THEN '⚠ 통계 노후(STALE)'
+            WHEN T.NUM_ROWS / NULLIF(C.R,0) >= 5 THEN '⚠ 데이터 5배↑'
+            WHEN TRIM(T.DEGREE) NOT IN ('1','DEFAULT') THEN 'ℹ 병렬도 설정'
+            ELSE 'ok' END JUDGE
+  FROM CORP C LEFT JOIN USER_TABLES T ON T.TABLE_NAME = C.T
+ ORDER BY CASE WHEN T.NUM_ROWS IS NULL THEN 0 ELSE 1 END, T.NUM_ROWS / NULLIF(C.R,0) DESC NULLS FIRST;
+
+PROMPT ################ [E5] GT_DMF0082 GTT 통계 잠금·고정값 (LOCK 있으면 위험 — 07-31 사고) ################
+SELECT X.TABLE_NAME T, X.NUM_ROWS, X.STATTYPE_LOCKED, TO_CHAR(X.LAST_ANALYZED,'YYYY-MM-DD HH24:MI') LAST_ANALYZED, X.SCOPE,
+       DBMS_STATS.GET_PREFS('GLOBAL_TEMP_TABLE_STATS', USER, X.TABLE_NAME) GTT_PREF,
+       CASE WHEN X.STATTYPE_LOCKED IS NOT NULL THEN '❌ LOCK — UNLOCK_TABLE_STATS 필요'
+            WHEN X.NUM_ROWS IS NOT NULL THEN '⚠ 고정 통계 존재 (추정 왜곡 가능)'
+            ELSE 'ℹ GTT_PREF SHARED' END JUDGE
+  FROM USER_TAB_STATISTICS X
+ WHERE X.TABLE_NAME LIKE 'GT\_DMF0082%' ESCAPE '\' AND X.OBJECT_TYPE = 'TABLE'
+   AND (X.STATTYPE_LOCKED IS NOT NULL OR X.NUM_ROWS IS NOT NULL
+        OR DBMS_STATS.GET_PREFS('GLOBAL_TEMP_TABLE_STATS', USER, X.TABLE_NAME) <> 'SESSION')
+ ORDER BY 1;
+PROMPT --  0 rows = 잠금·고정 통계 없음 (정상 — SP 가 세션 dynamic_sampling=2 로 추정)
+
+PROMPT ################ [E6] 지금 60초 넘게 실행 중인 타 세션 (공유 DB 노이즈 판별) ################
+SELECT S.SID, S.USERNAME, S.MODULE, S.SQL_ID, S.EVENT, S.LAST_CALL_ET SEC_RUNNING,
+       SUBSTR(REGEXP_REPLACE(Q.SQL_TEXT,'\s+',' '),1,90) SQL_HEAD
+  FROM V$SESSION S LEFT JOIN V$SQL Q ON Q.SQL_ID = S.SQL_ID AND Q.CHILD_NUMBER = S.SQL_CHILD_NUMBER
+ WHERE S.STATUS = 'ACTIVE' AND S.TYPE = 'USER' AND S.LAST_CALL_ET > 60 AND S.SID <> SYS_CONTEXT('USERENV','SID')
+ ORDER BY S.LAST_CALL_ET DESC FETCH FIRST 15 ROWS ONLY;
+PROMPT --  여러 건이면 측정값이 요동한다 → 한가한 시간대에 C02·C03 재측정
+
+SPOOL OFF
+PROMPT =============================================================================
+PROMPT  C01 완료 → C01_ENV_STATE_OUT.txt 회신
+PROMPT  판정: [E1] QRYPERF 미적용이면 먼저 DMF0082_QRYPERF_CLOUD_20260930 패키지 적용 후 C02·C03 측정
+PROMPT        [E2] dynamic_sampling DIFF · [E3] 결손 인덱스 · [E4] 통계 없음/STALE · [E5] LOCK = 즉시 조치 후보
+PROMPT =============================================================================

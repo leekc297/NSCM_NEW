@@ -1,0 +1,14 @@
+SA L1213~1226 · SB L1249~1262
+div=82 user=k0101 기간 20260901~20270228  SP 17.11s  TEMP_SITE_ITEM=38,206
+
+  SA 원본 [정상 파싱]                                    0.50s  BG        7,046  rows     855  sha 8e2cc73412b296aa  PHV 3004255002  NL 0
+  SB 원본 INDEX [정상 파싱]                              1.13s  BG       80,639  rows   7,887  sha 1d0f60a425482cde  PHV 143881840  NL 2
+  SA 힌트 LEADING(C A) USE_HASH(A) [빈GTT 파싱→재사용]     0.14s  BG        6,543  rows     855  sha 8e2cc73412b296aa  PHV 214135800  NL 0
+  SB 힌트 INDEX+HASH [빈GTT 파싱→재사용]                   0.97s  BG       80,285  rows   7,887  sha 1d0f60a425482cde  PHV 143881840  NL 0
+  SB 힌트 FULL+HASH [빈GTT 파싱→재사용]                  121.50s  BG      184,127  rows   7,887  sha 1d0f60a425482cde  PHV 3899932091  NL 0
+
+  SA 동등성: PASS
+  SB 동등성: PASS
+
+원본 고정계획 재현 (call_timeout 120s — 초과 = 타임아웃 재현)
+  SB 원본 INDEX                                    120.16s  ⚠ 중단 (DPY-4024: call timeout of 120000 ms exceeded)

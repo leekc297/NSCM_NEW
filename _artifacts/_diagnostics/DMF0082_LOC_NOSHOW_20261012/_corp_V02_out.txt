@@ -1,0 +1,73 @@
+################ [W0] 접속 DB · 시각 ################
+DB_NAME | USR     | NOW                
+--------+---------+--------------------
+ZIOUI1  | SCM_MGR | 2026-10-12 16:44:39
+(1 rows)
+################ [W1][W2] 최근 화면 조회 인자 → SP 직접 실행 ################
+!! 최근 24시간 k0101 의 화면 조회 로그 없음 → 기본 인자로 실행 (division 40 · 당월 1일~+6개월 · Current · 그룹 ADMIN)
+     p_division_id   = [40]
+     p_team_id       = [ALL]
+     p_customer      = [ALL]
+     p_biz_type      = [ALL]
+     p_from_yyyymmdd = [20261001]
+     p_to_yyyymmdd   = [20270331]
+     p_scm_site_id   = [ALL]
+     p_item_id       = []
+     p_version_type  = [Current]   ← Current 가 아니면 판가는 DM_PLN_CFM_SELLING_PRICE 가 아닌 버전 원장에서 읽는다
+     p_qty_yn        = [N]
+     p_created_by    = [k0101]
+     p_user_group    = [ADMIN]
+     p_plant_site_id = [ALL]
+     p_project_code  = [ALL]
+     p_owner         = [ALL]
+     p_sender_code   = [ALL]
+[W2] SP 실행 완료 4.7 초
+################ [W3] 선택 메저 목록 (SP 가 이번 실행에 쓴 값) — LOC 의 USER_ID 가 로그인 ID 여야 한다 ################
+--  LOC 의 USER_ID = 'DM_ADMIN' 이면 = 사용자 선택으로 인식 안 됨 → 최종 단계에서 LOC 삭제
+MEASURE                     | RESULT_MEASURE              | MEASURE_GROUP | SORT_ORDER_NO | USER_ID 
+----------------------------+-----------------------------+---------------+---------------+---------
+MKT_FCST                    | RTF_SYS_RP                  | MKT_FCST      | 1.0           | k0101   
+RTF_SYS_RP                  | RTF_SYS_RP                  | RTF_SYS_RP    | 2.0           | k0101   
+CUST_FCST                   | CUST_FCST                   | CUST_FCST     | 3.0           | k0101   
+CUST_FCST_EDI               | CUST_FCST_EDI               | CUST_FCST     | 3.11          | k0101   
+Backorder                   | Backorder                   | CUST_FCST     | 3.12          | k0101   
+Commercial_Agreement        | Commercial_Agreement        | CUST_FCST     | 3.13          | k0101   
+Firm_Temp                   | Firm_Temp                   | CUST_FCST     | 3.14          | k0101   
+Immidiate                   | Immidiate                   | CUST_FCST     | 3.15          | k0101   
+Manumacturing_Material_Temp | Manumacturing_Material_Temp | CUST_FCST     | 3.16          | k0101   
+Material_Temp               | Material_Temp               | CUST_FCST     | 3.17          | k0101   
+Planning_Forecast           | Planning_Forecast           | CUST_FCST     | 3.18          | k0101   
+AS_In_Req                   | AS_In_Req                   | AS_In_Req     | 4.0           | k0101   
+AS_In_Plan                  | AS_In_Plan                  | AS_In_Plan    | 5.0           | k0101   
+AS_Inv                      | AS_Inv                      | AS_Inv        | 6.0           | k0101   
+KRW                         | KRW                         | KRW           | 7.0           | k0101   
+USD                         | USD                         | USD           | 8.0           | k0101   
+LOC                         | LOC                         | LOC           | 9.0           | k0101   
+SCM_FCST                    | SCM_FCST                    | SCM_FCST      | 45.0          | DM_ADMIN
+FCST_GAP                    | FCST_GAP                    | FCST_GAP      | 46.0          | DM_ADMIN
+MKT_AMT_KRW                 | MKT_AMT_KRW                 | MKT_AMT_KRW   | 80.0          | DM_ADMIN
+MKT_AMT_LOC                 | MKT_AMT_LOC                 | MKT_AMT_LOC   | 90.0          | DM_ADMIN
+(21 rows)
+################ [W4] Site-Item 대상 목록 — 이번 조회에서 이 Site-Item 이 대상에 들어왔는가 ################
+--  0 rows = 권한·조회조건(팀/고객/Biz Type 등)에서 이 Site-Item 이 빠짐 → 어떤 메저도 안 나온다.  ITEM_VALID_YN <> 'Y' = 수요·판가 적재 제외
+PROJECT_CODE | END_CUSTOMER | PLANT_SITE_ID | ITEM_VALID_YN | DEPT_ID | OWNER | BIZ_TYPE | VMI_YN
+-------------+--------------+---------------+---------------+---------+-------+----------+-------
+(0 rows)
+################ [W5] ⭐ 적재·필터 후 원자료 — 대상 Site-Item 의 메저별 잔존 (키 값 포함) ################
+--  여기에 LOC 가 없다 = SP 안에서 탈락 (적재 또는 후속 삭제).  LOC 가 있다 = [W6] 로
+MEASURE | PROJECT_CODE | END_CUSTOMER | DOM_EXP | FCST_TYPE | INCOTERMS | PLANT_SITE_ID | CELL_PROD_SITE_ID | CURRENCY | VERSION_NO | ROW_CNT | YMD_MIN | YMD_MAX | NONZERO | QTY_SUM
+--------+--------------+--------------+---------+-----------+-----------+---------------+-------------------+----------+------------+---------+---------+---------+---------+--------
+(0 rows)
+################ [W6] ⭐ 화면 출력 직전 자료 — 대상 Site-Item 의 메저별 잔존 (이 자료가 그대로 화면 행이 된다) ################
+--  NONZERO = 0 인 메저는 화면에 안 나온다 (SCM_FCST·FCST_GAP 제외, 값 0 인 칸은 출력 대상에서 빠짐)
+MEASURE | PROJECT_CODE | END_CUSTOMER | DOM_EXP | FCST_TYPE | INCOTERMS | PLANT_SITE_ID | CELL_PROD_SITE_ID | CURRENCY | AS_FROM_SITE | SORT_NO | EDIT_FLAG | ROW_CNT | BKT_MIN | BKT_MAX | NONZERO | QTY_SUM
+--------+--------------+--------------+---------+-----------+-----------+---------------+-------------------+----------+--------------+---------+-----------+---------+---------+---------+---------+--------
+(0 rows)
+################ [W7] ⭐⭐ 판정 ################
+JUDGE                                                             
+------------------------------------------------------------------
+B — 이 Site-Item 이 조회 대상 목록에 없음 ([W4]) → 권한·조회조건 필터에서 탈락 (전 메저 미표시)
+(1 rows)
+=============================================================================
+V02 완료 → V02_LOC_STAGE_TRACE_OUT.txt 회신 ([W1] 인자 · [W5] · [W6] · [W7] 이 핵심)
+=============================================================================

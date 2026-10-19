@@ -1,0 +1,26 @@
+################ [V1] 10-08 ~ 현재 — 검증 실패 로그 전체 (화면 무관) ################
+T              | PROGRAM_NAME                                | LOG_TYPE | CREATED_BY | D                                                                                                          
+---------------+---------------------------------------------+----------+------------+------------------------------------------------------------------------------------------------------------
+10-11 16:39:08 | PR_DM_PLN_MKT_FCST_TO_NET_DEMAND            | INVALID  | scm_batch  | @p_division_id : 82 / 전주CUTOFF VERSION : NULL / 당주CUTOFF VERSION : NULL / @MAX_PLAN_ID : 1458              
+10-11 16:39:04 | PR_DM_PLN_MKT_FCST_TO_NET_DEMAND            | INVALID  | scm_batch  | @p_division_id : 81 / 전주CUTOFF VERSION : MF_W_20260930_V001 / 당주CUTOFF VERSION : NULL / @MAX_PLAN_ID : 1458
+10-11 16:38:44 | PR_DM_PLN_MKT_FCST_TO_NET_DEMAND            | INVALID  | scm_batch  | @p_division_id : 40 / 전주CUTOFF VERSION : NULL / 당주CUTOFF VERSION : NULL / @MAX_PLAN_ID : 1454              
+10-08 18:13:07 | PKG_DMF0007_T.P_DMF0007_SAVE_CUST_FCST_DATA | INVALID  | scm_batch  | ERR_RTN: INVALID - MSG00166                                                                                
+10-08 17:18:47 | PKG_DMF0007_T.P_DMF0007_SAVE_CUST_FCST_DATA | INVALID  | scm_batch  | ERR_RTN: INVALID - MSG00166                                                                                
+10-08 17:18:22 | PKG_DMF0007_O.P_DMF0007_SAVE_CUST_FCST_DATA | INVALID  | scm_batch  | ERR_RTN: INVALID - MSG00166                                                                                
+10-08 17:18:22 | PKG_DMF0007_T.P_DMF0007_SAVE_CUST_FCST_DATA | INVALID  | scm_batch  | ERR_RTN: INVALID - MSG00166                                                                                
+10-08 17:17:34 | PKG_DMF0007_O.P_DMF0007_SAVE_CUST_FCST_DATA | INVALID  | scm_batch  | ERR_RTN: INVALID - MSG00166                                                                                
+10-08 17:17:34 | PKG_DMF0007_T.P_DMF0007_SAVE_CUST_FCST_DATA | INVALID  | scm_batch  | ERR_RTN: INVALID - MSG00166                                                                                
+10-08 17:17:34 | PKG_DMF0007_T.P_DMF0007_SAVE_CUST_FCST_DATA | INVALID  | scm_batch  | ERR_RTN: INVALID - MSG00166                                                                                
+10-08 17:17:34 | PKG_DMF0007_T.P_DMF0007_SAVE_CUST_FCST_DATA | INVALID  | scm_batch  | ERR_RTN: INVALID - MSG00166                                                                                
+(11 rows)
+################ [V2] Sales Plan(PKG_DMF0021) 판가 검증 실패 — 최근 30일, 입력값 포함 ################
+T              | CREATED_BY | D                                                                                                              | P   
+---------------+------------+----------------------------------------------------------------------------------------------------------------+-----
+09-23 11:10:13 | scm_batch  | MSG00462^ | Project Code :  | Sales site : BYD Electronics_CN_SZX | Model : MCSS22561-C1 | Customs Handbook :  |     
+09-23 11:10:13 | scm_batch  | MSG00462^ | Project Code :  | Sales site : BYD Electronics_CN_SZX | Model : MCSS22561-C1 | Customs Handbook :  |     
+09-23 11:08:25 | scm_batch  | MSG00462^ | Project Code :  | Sales site : BYD Electronics_CN_SZX | Model : MCSS22561-C1 | Customs Handbook :  |     
+09-23 11:08:25 | scm_batch  | MSG00462^ | Project Code :  | Sales site : BYD Electronics_CN_SZX | Model : MCSS22561-C1 | Customs Handbook :  |     
+09-22 17:00:22 | scm_batch  | MSG00462^ | Project Code :  | Sales site : BYD Electronics_CN_SZX | Model : MCSS22561-C1 | Customs Handbook :  |     
+09-22 17:00:22 | scm_batch  | MSG00462^ | Project Code :  | Sales site : BYD Electronics_CN_SZX | Model : MCSS22561-C1 | Customs Handbook :  |     
+(6 rows)
+--  판정: D 의 Project Code / Plant Site / Cell Prod Site / Week 가 판가(LOC) 원장과 대조된 값이다

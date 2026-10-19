@@ -1,0 +1,51 @@
+-- ============================================================================
+-- DMF0082 FcstNPrice MEASURE 보완 (사용자 지시 2026-09-15)
+--   · 40 : VMI In Request / VMI In Plan / VMI Inv 3개 메저 추가  → AS-IS 행 값 그대로 (DIVISION_ID='40', VALID_YN='Y')
+--   · 81 · 81 JV(81_UC/81_HM/81_ST/81_HD/81_HG) : MKT FCST AMT(KRW)/(LOC) 삭제 → AS-IS 행 값 그대로 (DIVISION_ID='40')
+-- 원천: AS-IS LGCE_SCMDEV.dbo.SCM_MST_SHEET_MEASURE (PROGRAM_ID='DMF0082', SHEET_NAME='FcstNPrice') 2026-09-15 추출
+--   AS-IS vs 사내 TO-BE 차이 = DIVISION_ID · VALID_YN 2개 컬럼뿐 (라벨·SORT·DEFAULT·SELECTABLE·SMALL_CLASS 동일)
+--
+-- 방식: MERGE (클라우드에 VMI 3행 부재 — 사용자 확인 2026-09-15)
+--   · ON 키 = PROGRAM_ID + SHEET_NAME + COLUMN_NAME (테이블 PK 없음 — 메저 목록/조회 SP 가 행을 찾는 키와 동일)
+--   · 존재 → 목표값 UPDATE (DIVISION_ID · VALID_YN 만 — 기존 라벨·정렬 등은 보존)
+--   · 부재 → AS-IS 행 전 컬럼 INSERT (DEFAULT_FLAG 기본값 'Y' ≠ 실값 'N' 이므로 전 컬럼 명시)
+--   · 멱등 · 비파괴 (DELETE 없음) · 사내 사전값 WHERE 조건 없음
+-- ============================================================================
+/* [원복 — 사내 적용 전 TO-BE 값]
+   UPDATE SCM_MGR.SCM_MST_SHEET_MEASURE SET DIVISION_ID='40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82', VALID_YN='N'
+    WHERE PROGRAM_ID='DMF0082' AND SHEET_NAME='FcstNPrice' AND COLUMN_NAME IN ('VMI_In_Plan','VMI_In_Req','VMI_Inv')
+   UPDATE SCM_MGR.SCM_MST_SHEET_MEASURE SET DIVISION_ID='40,81,81_UC,81_HM,81_ST,81_HD,81_HG', VALID_YN='Y'
+    WHERE PROGRAM_ID='DMF0082' AND SHEET_NAME='FcstNPrice' AND COLUMN_NAME IN ('MKT_AMT_KRW','MKT_AMT_LOC')
+   [원복 — 클라우드에서 INSERT 된 VMI 행]
+   DELETE FROM SCM_MGR.SCM_MST_SHEET_MEASURE
+    WHERE PROGRAM_ID='DMF0082' AND SHEET_NAME='FcstNPrice' AND COLUMN_NAME IN ('VMI_In_Plan','VMI_In_Req','VMI_Inv')
+*/
+MERGE INTO SCM_MGR.SCM_MST_SHEET_MEASURE T
+USING (
+          SELECT 'DMF0082' AS PROGRAM_ID, 'FcstNPrice' AS SHEET_NAME, 'VMI_In_Plan' AS COLUMN_NAME
+               , 'VMI-In Plan[R+P]'    AS COLUMN_LABEL_NAME, 50 AS SORT_ORDER_NO, 'VMI_In_Plan' AS SMALL_CLASS_LABEL_NAME
+            FROM DUAL
+UNION ALL SELECT 'DMF0082', 'FcstNPrice', 'VMI_In_Req' , 'VMI-In Request[R+P]', 60, 'VMI_In_Req'  FROM DUAL
+UNION ALL SELECT 'DMF0082', 'FcstNPrice', 'VMI_Inv'    , 'VMI Inv.'           , 70, 'VMI_Inv'     FROM DUAL
+UNION ALL SELECT 'DMF0082', 'FcstNPrice', 'MKT_AMT_KRW', 'MKT FCST Amt.(KRW)' , 80, 'MKT_KRW'     FROM DUAL
+UNION ALL SELECT 'DMF0082', 'FcstNPrice', 'MKT_AMT_LOC', 'MKT FCST Amt.(LOC)' , 90, 'MKT_LOC'     FROM DUAL
+) S
+ON (    T.PROGRAM_ID  = S.PROGRAM_ID
+    AND T.SHEET_NAME  = S.SHEET_NAME
+    AND T.COLUMN_NAME = S.COLUMN_NAME )
+WHEN MATCHED THEN
+    UPDATE SET T.DIVISION_ID      = '40'
+             , T.VALID_YN         = 'Y'
+             , T.LAST_UPDATED_BY  = 'admin'
+             , T.LAST_UPDATE_DATE = SYSDATE
+WHEN NOT MATCHED THEN
+    INSERT ( PROGRAM_ID, SHEET_NAME, COLUMN_NAME, COLUMN_LABEL_NAME, SORT_ORDER_NO
+           , SMALL_CLASS_LABEL_NAME, LARGE_CLASS_LABEL_NAME, DEFAULT_FLAG, USER_SELECTABLE_FLAG
+           , DIVISION_ID, VALID_YN, INPUT_TP_CD
+           , CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE )
+    VALUES ( S.PROGRAM_ID, S.SHEET_NAME, S.COLUMN_NAME, S.COLUMN_LABEL_NAME, S.SORT_ORDER_NO
+           , S.SMALL_CLASS_LABEL_NAME, NULL, 'N', 'Y'
+           , '40', 'Y', 'S'
+           , 'admin', SYSDATE, 'admin', SYSDATE );
+
+COMMIT;

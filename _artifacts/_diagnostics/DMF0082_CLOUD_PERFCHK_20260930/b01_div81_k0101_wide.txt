@@ -1,0 +1,13 @@
+div=81 user=k0101 기간 20260901~20270228  SP 26.70s
+  GT_DMF0082_TEMP_SITE_ITEM = 39070
+  GT_DMF0082_TEMP_SELECT_MEASURE = 24
+  GT_DMF0082_T_WS_FCST = 14
+  CUST 종속 메저 = 11
+  V_TO_RESULT = 20260928
+
+S1 (2nysu9tbng9v4 · CUST 종속 메저 실적 arm) — 파싱 시점: 종속 메저 0행
+  S1 바인드 {'d': '81', 'f': '20250101', 'r': '20260928'}
+  원본 (고정계획 재사용)                23.29s  BG  7,171,565  rows  12,709  sha 01e837722aee2c08  PHV 598563120
+  힌트 (고정계획 재사용)                 3.89s  BG     14,943  rows  12,709  sha 01e837722aee2c08  PHV 1994303945
+  동등성: PASS
+

@@ -1,0 +1,2571 @@
+{
+ "at": "2026-10-08T16:51:25",
+ "db": "222.110.191.243:2521/ZIOUI1",
+ "stat": {
+  "skip_miss": 37,
+  "ok": 65,
+  "applied_lines": 499,
+  "skip_blocked": 7
+ },
+ "log": [
+  {
+   "object": "PROCEDURE|DMF0020_GET_SCM_MST_FUTURE_PRICE",
+   "result": "SKIP(patch-miss)",
+   "applied": 7,
+   "miss": [
+    {
+     "line": 255,
+     "n": 6,
+     "old": "      , CASE WHEN TRIM(A.PLANT_SITE_ID) IS NULL OR TRIM(A.PLANT_SITE_ID) IN ('-','--') THEN '-' ELSE A.PLANT_SITE_ID END"
+    },
+    {
+     "line": 292,
+     "n": 6,
+     "old": "      , CASE WHEN TRIM(A.PLANT_SITE_ID) IS NULL OR TRIM(A.PLANT_SITE_ID) IN ('-','--') THEN '-' ELSE A.PLANT_SITE_ID END"
+    },
+    {
+     "line": 319,
+     "n": 6,
+     "old": "      , CASE WHEN TRIM(A.PLANT_SITE_ID) IS NULL OR TRIM(A.PLANT_SITE_ID) IN ('-','--') THEN '-' ELSE A.PLANT_SITE_ID END"
+    },
+    {
+     "line": 354,
+     "n": 6,
+     "old": "      , CASE WHEN TRIM(A.PLANT_SITE_ID) IS NULL OR TRIM(A.PLANT_SITE_ID) IN ('-','--') THEN '-' ELSE A.PLANT_SITE_ID END"
+    },
+    {
+     "line": 406,
+     "n": 6,
+     "old": "      , CASE WHEN TRIM(A.PLANT_SITE_ID) IS NULL OR TRIM(A.PLANT_SITE_ID) IN ('-','--') THEN '-' ELSE A.PLANT_SITE_ID END"
+    },
+    {
+     "line": 443,
+     "n": 6,
+     "old": "      , CASE WHEN TRIM(A.PLANT_SITE_ID) IS NULL OR TRIM(A.PLANT_SITE_ID) IN ('-','--') THEN '-' ELSE A.PLANT_SITE_ID END"
+    }
+   ]
+  },
+  {
+   "object": "PROCEDURE|DMF0043_GET_CONTRIBUTION_SALES_LIST",
+   "result": "OK",
+   "applied": 2,
+   "lines_before": 751,
+   "lines_after": 751,
+   "same_line_count": true,
+   "sha_before": "061c24d24293ddc85a4fad4d472a43198b96d1df",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:49:50"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_COM0000",
+   "result": "OK",
+   "applied": 26,
+   "lines_before": 4101,
+   "lines_after": 4101,
+   "same_line_count": true,
+   "sha_before": "0fe5724da82d641682d03732b38e7b069d9db4dd",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:49:50"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0004",
+   "result": "OK",
+   "applied": 2,
+   "lines_before": 1606,
+   "lines_after": 1606,
+   "same_line_count": true,
+   "sha_before": "d7f6e6cd0cbed9f7ce21e57d05ee4ffcbe8daf0c",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:49:51"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0014",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 11484,
+   "lines_after": 11484,
+   "same_line_count": true,
+   "sha_before": "89e7fd8d98726d81d3a5a61b207c25a95cce7090",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:49:52"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0020",
+   "result": "OK",
+   "applied": 10,
+   "lines_before": 10166,
+   "lines_after": 10166,
+   "same_line_count": true,
+   "sha_before": "f5e622973ef04817c5713d4011c7bf481e2d9568",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:49:54"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0021",
+   "result": "OK",
+   "applied": 16,
+   "lines_before": 3935,
+   "lines_after": 3935,
+   "same_line_count": true,
+   "sha_before": "fde16d171fd9afdc70d1cda747c7a3aefe148ada",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:49:55"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0022",
+   "result": "OK",
+   "applied": 3,
+   "lines_before": 3791,
+   "lines_after": 3791,
+   "same_line_count": true,
+   "sha_before": "9aa8c883f85732ac5c905ac77df6c8ec74314763",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:49:56"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0035",
+   "result": "SKIP(patch-miss)",
+   "applied": 5,
+   "miss": [
+    {
+     "line": 747,
+     "n": 2,
+     "old": "             , NVL(B.SEGMENT4, '-') AS SCM_SITE_ID"
+    },
+    {
+     "line": 783,
+     "n": 2,
+     "old": "             , NVL(B.SEGMENT4, '-') AS SCM_SITE_ID"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0042",
+   "result": "OK",
+   "applied": 93,
+   "lines_before": 5969,
+   "lines_after": 5969,
+   "same_line_count": true,
+   "sha_before": "583812578807f795065ba72271698b51c81e824c",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:49:57"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0043",
+   "result": "OK",
+   "applied": 2,
+   "lines_before": 3453,
+   "lines_after": 3453,
+   "same_line_count": true,
+   "sha_before": "2c4f5f4d8be733c71e85341cfca3252166e8d1f2",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:49:58"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0044",
+   "result": "SKIP(patch-miss)",
+   "applied": 263,
+   "miss": [
+    {
+     "line": 3278,
+     "n": 2,
+     "old": "        SELECT '1' AS DATA_TYPE, NVL(A.DIVISION_ID, '-'), v_version_x AS VERSION_NO, 'REPORT_' || A.CUTOFF_TYPE AS CUTOF"
+    },
+    {
+     "line": 3279,
+     "n": 4,
+     "old": "               NVL(A.CUTOFF_YYYYMMDD, '-'), NVL(A.DEPARTMENT_ID, '-'), NVL(A.DEPARTMENT_NAME, '-'), NVL(A.DEPT_ID, '-'),"
+    },
+    {
+     "line": 3280,
+     "n": 4,
+     "old": "               NVL(A.DEPT_NAME, '-'), NVL(A.END_CUST_REPORT, '-'), NVL(A.CUST_REPORT, '-'), NVL(A.PRODUCT_GROUP, '-'),"
+    },
+    {
+     "line": 3305,
+     "n": 2,
+     "old": "        SELECT '1' AS DATA_TYPE, NVL(A.DIVISION_ID, '-'), v_version_x AS VERSION_NO, 'REPORT_' || A.CUTOFF_TYPE AS CUTOF"
+    },
+    {
+     "line": 3306,
+     "n": 4,
+     "old": "               NVL(A.CUTOFF_YYYYMMDD, '-'), NVL(A.DEPARTMENT_ID, '-'), NVL(A.DEPARTMENT_NAME, '-'), NVL(A.DEPT_ID, '-'),"
+    },
+    {
+     "line": 3307,
+     "n": 4,
+     "old": "               NVL(A.DEPT_NAME, '-'), NVL(A.END_CUST_REPORT, '-'), NVL(A.CUST_REPORT, '-'), NVL(A.PRODUCT_GROUP, '-'),"
+    },
+    {
+     "line": 3350,
+     "n": 2,
+     "old": "        SELECT NVL(A.DATA_TYPE, '-'), NVL(A.DIVISION_ID, '-'), v_version_x, NVL(A.CUTOFF_TYPE, '-'),"
+    },
+    {
+     "line": 3351,
+     "n": 4,
+     "old": "               NVL(A.CUTOFF_YYYYMMDD, '-'), NVL(A.DEPARTMENT_ID, '-'), NVL(A.DEPARTMENT_NAME, '-'), NVL(A.DEPT_ID, '-'),"
+    },
+    {
+     "line": 3352,
+     "n": 4,
+     "old": "               NVL(A.DEPT_NAME, '-'), NVL(A.END_CUST_REPORT, '-'), NVL(A.CUST_REPORT, '-'), NVL(A.PRODUCT_GROUP, '-'),"
+    },
+    {
+     "line": 3353,
+     "n": 2,
+     "old": "               NVL(A.PROJECT_CODE, '-'), NVL(MAX(A.PROJECT_NAME), '-'), NVL(MAX(A.SCM_SITE_ID), '-'), NVL(A.ITEM_ID, '-'"
+    },
+    {
+     "line": 3354,
+     "n": 2,
+     "old": "               NVL(MAX(A.FCST_TYPE), '-'), NVL(MAX(A.INCOTERMS), '-'), NVL(A.MEASURE, '-'), NVL(MAX(A.PLANT_SITE_ID), '-"
+    },
+    {
+     "line": 3355,
+     "n": 2,
+     "old": "               NVL(YYYYMM, '-'), NVL(CURRENCY, '-'), NVL(SUM(QTY), 0), NVL(MAX(A.CREATED_BY), '-'),"
+    },
+    {
+     "line": 3389,
+     "n": 2,
+     "old": "        SELECT NVL(A.DATA_TYPE, '-'), NVL(A.DIVISION_ID, '-'), v_version_x, NVL(A.CUTOFF_TYPE, '-'),"
+    },
+    {
+     "line": 3390,
+     "n": 4,
+     "old": "               NVL(A.CUTOFF_YYYYMMDD, '-'), NVL(A.DEPARTMENT_ID, '-'), NVL(A.DEPARTMENT_NAME, '-'), NVL(A.DEPT_ID, '-'),"
+    },
+    {
+     "line": 3391,
+     "n": 4,
+     "old": "               NVL(A.DEPT_NAME, '-'), NVL(A.END_CUST_REPORT, '-'), NVL(A.CUST_REPORT, '-'), NVL(A.PRODUCT_GROUP, '-'),"
+    },
+    {
+     "line": 3392,
+     "n": 2,
+     "old": "               NVL(A.PROJECT_CODE, '-'), NVL(MAX(A.PROJECT_NAME), '-'), NVL(MAX(A.SCM_SITE_ID), '-'), NVL(A.ITEM_ID, '-'"
+    },
+    {
+     "line": 3393,
+     "n": 2,
+     "old": "               NVL(MAX(A.FCST_TYPE), '-'), NVL(MAX(A.INCOTERMS), '-'), NVL(A.MEASURE, '-'), NVL(MAX(A.PLANT_SITE_ID), '-"
+    },
+    {
+     "line": 3394,
+     "n": 2,
+     "old": "               NVL(YYYYMM, '-'), NVL(CURRENCY, '-'), NVL(SUM(QTY), 0), NVL(MAX(A.CREATED_BY), '-'),"
+    },
+    {
+     "line": 6204,
+     "n": 3,
+     "old": "                SELECT SUB_A.DATA_TYPE, NVL(SUB_A.DIVISION_ID, '-'), NVL(SUB_A.VERSION_NO, '-'), SUB_A.CUTOFF_TYPE, SUB_"
+    },
+    {
+     "line": 6208,
+     "n": 3,
+     "old": "                     , NVL(SUB_A.COMPANY_ID, '-'), SUB_A.SOLDTO_CUST_REPORT, SUB_A.OWNER_NAME, SUB_A.CUST_GROUP_DTL, SUB"
+    },
+    {
+     "line": 6210,
+     "n": 3,
+     "old": "                     , SUB_A.COUNTRY_KR_NAME, SUB_A.ROUTE, NVL(SUB_A.CELL_PROD_SITE, '-')"
+    },
+    {
+     "line": 6234,
+     "n": 3,
+     "old": "                SELECT SUB_A.DATA_TYPE, NVL(SUB_A.DIVISION_ID, '-'), NVL(SUB_A.VERSION_NO, '-'), SUB_A.CUTOFF_TYPE, SUB_"
+    },
+    {
+     "line": 6240,
+     "n": 3,
+     "old": "                     , NVL(SUB_A.COMPANY_ID, '-'), SUB_A.SOLDTO_CUST_REPORT, SUB_A.OWNER_NAME, SUB_A.CUST_GROUP_DTL, SUB"
+    },
+    {
+     "line": 6242,
+     "n": 3,
+     "old": "                     , SUB_A.COUNTRY_KR_NAME, SUB_A.ROUTE, NVL(SUB_A.CELL_PROD_SITE, '-')"
+    },
+    {
+     "line": 6266,
+     "n": 3,
+     "old": "                SELECT SUB_A.DATA_TYPE, NVL(SUB_A.DIVISION_ID, '-'), NVL(SUB_A.VERSION_NO, '-'), SUB_A.CUTOFF_TYPE, SUB_"
+    },
+    {
+     "line": 6270,
+     "n": 3,
+     "old": "                     , NVL(SUB_A.COMPANY_ID, '-'), SUB_A.SOLDTO_CUST_REPORT, SUB_A.OWNER_NAME, SUB_A.CUST_GROUP_DTL, SUB"
+    },
+    {
+     "line": 6272,
+     "n": 3,
+     "old": "                     , SUB_A.COUNTRY_KR_NAME, SUB_A.ROUTE, NVL(SUB_A.CELL_PROD_SITE, '-')"
+    },
+    {
+     "line": 7758,
+     "n": 2,
+     "old": "\t\t\t\tAND A.YYYYMMDD >= NVL(d_Result_Date, '-')"
+    },
+    {
+     "line": 7794,
+     "n": 2,
+     "old": "\t\t\t\tAND A.YYYYMMDD >= NVL(d_Result_Date, '-')"
+    },
+    {
+     "line": 7935,
+     "n": 3,
+     "old": "\t\t\t\t\t\t\t, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-') AS CURRENCY, M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD"
+    },
+    {
+     "line": 7950,
+     "n": 2,
+     "old": "\t\t\t\t\t\tAND A.YYYYMMDD >= NVL(d_Result_Date, '-') -- 미래구간"
+    },
+    {
+     "line": 7970,
+     "n": 3,
+     "old": "\t\t\t\t\t\t\t, A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-') AS CURRENCY, M.O_MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD"
+    },
+    {
+     "line": 7985,
+     "n": 2,
+     "old": "\t\t\t\t\t\tAND A.YYYYMMDD >= NVL(d_Result_Date, '-') -- 미래구간"
+    },
+    {
+     "line": 8036,
+     "n": 2,
+     "old": "\t\t\t\t\t\t , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-') AS CURRENCY, 'SalesAmt_USD' AS Measure ,A.PLANT_SITE_"
+    },
+    {
+     "line": 8058,
+     "n": 2,
+     "old": "\t\t\t\t\t\t, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-'), A.MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUT"
+    },
+    {
+     "line": 8066,
+     "n": 2,
+     "old": "\t\t\t\t\t\t , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-') AS CURRENCY, 'SalesAmt_USD' AS Measure ,A.PLANT_SITE_"
+    },
+    {
+     "line": 8084,
+     "n": 2,
+     "old": "\t\t\t\t\t\t, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-'), A.MEASURE, A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUT"
+    },
+    {
+     "line": 8232,
+     "n": 2,
+     "old": "\t\t\t\t\t\t\t\t\tAND A.YYYYMMDD >= NVL(d_Result_Date, '-') -- 미래구간"
+    },
+    {
+     "line": 8251,
+     "n": 2,
+     "old": "\t\t\t\t\t\t\t\t\tAND A.YYYYMMDD >= NVL(d_Result_Date, '-') -- 미래구간"
+    },
+    {
+     "line": 8359,
+     "n": 2,
+     "old": "\t\t\t\t\t\tSELECT A.DATA_TYPE, NVL(A.DIVISION_ID, '-'), V_NEW_VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD"
+    },
+    {
+     "line": 8361,
+     "n": 2,
+     "old": "\t\t\t\t\t\t\t , NVL(A.CUST_REPORT, '-'), NVL(A.PRODUCT_GROUP, '-'), NVL(A.PROJECT_CODE, '-'), NVL(A.SCM_SITE_ID, '-'), NVL(A.I"
+    },
+    {
+     "line": 8362,
+     "n": 2,
+     "old": "\t\t\t\t\t\t\t , A.DOM_EXP, NVL(A.FCST_TYPE, '-'), NVL(A.INCOTERMS, '-'), NVL(M.O_MEASURE, '-'), NVL(A.PLANT_SITE_ID, '-')"
+    },
+    {
+     "line": 8363,
+     "n": 2,
+     "old": "\t\t\t\t\t\t\t , NVL(A.YYYYMMDD, '-'), NVL(A.CURRENCY, '-'), NVL(A.QTY, 0), p_created_by, SYSDATE"
+    },
+    {
+     "line": 8372,
+     "n": 10,
+     "old": " , '-')"
+    },
+    {
+     "line": 8395,
+     "n": 2,
+     "old": "\t\t\t\t\t\tSELECT A.DATA_TYPE, NVL(A.DIVISION_ID, '-'), V_NEW_VERSION_NO, A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD"
+    },
+    {
+     "line": 8399,
+     "n": 2,
+     "old": "\t\t\t\t\t\t\t , NVL(A.CUST_REPORT, '-'), NVL(A.PRODUCT_GROUP, '-'), NVL(A.PROJECT_CODE, '-'), NVL(A.SCM_SITE_ID, '-'), NVL(A.I"
+    },
+    {
+     "line": 8400,
+     "n": 2,
+     "old": "\t\t\t\t\t\t\t , A.DOM_EXP, NVL(A.FCST_TYPE, '-'), NVL(A.INCOTERMS, '-'), NVL(M.O_MEASURE, '-'), NVL(A.PLANT_SITE_ID, '-')"
+    },
+    {
+     "line": 8401,
+     "n": 2,
+     "old": "\t\t\t\t\t\t\t , NVL(A.YYYYMMDD, '-'), NVL(A.CURRENCY, '-'), NVL(A.QTY, 0), p_created_by, SYSDATE"
+    },
+    {
+     "line": 8415,
+     "n": 10,
+     "old": " , '-')"
+    },
+    {
+     "line": 8466,
+     "n": 4,
+     "old": "\t\t\t\t\t\t\t , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-') AS CURRENCY, 'SalesAmt_USD' AS MEASURE, A.PLANT_SITE"
+    },
+    {
+     "line": 8489,
+     "n": 4,
+     "old": "\t\t\t\t\t\t\t, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-'),  A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUTE1"
+    },
+    {
+     "line": 8495,
+     "n": 4,
+     "old": "\t\t\t\t\t\t\t , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-') AS CURRENCY, 'SalesAmt_USD' AS MEASURE, A.PLANT_SITE"
+    },
+    {
+     "line": 8514,
+     "n": 4,
+     "old": "\t\t\t\t\t\t\t, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-'),  A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUTE1"
+    },
+    {
+     "line": 8546,
+     "n": 4,
+     "old": "\t\t\t\t\t\t\t , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-') AS CURRENCY, 'SalesAmt_USD' AS MEASURE, A.PLANT_SITE"
+    },
+    {
+     "line": 8570,
+     "n": 4,
+     "old": "\t\t\t\t\t\t\t, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-'),  A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUTE1"
+    },
+    {
+     "line": 8576,
+     "n": 4,
+     "old": "\t\t\t\t\t\t\t , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-') AS CURRENCY, 'SalesAmt_USD' AS MEASURE, A.PLANT_SITE"
+    },
+    {
+     "line": 8599,
+     "n": 4,
+     "old": "\t\t\t\t\t\t\t, A.FCST_TYPE, A.INCOTERMS, NVL(A.CURRENCY, '-'),  A.PLANT_SITE_ID, A.YYYYMMDD, A.COMPANY_ID, B.ATTRIBUTE1"
+    },
+    {
+     "line": 9053,
+     "n": 2,
+     "old": "\t\t\t\t\t\t\t, NVL(B.PROJECT_CODE, '-'), NVL(A.FCST_TYPE, '-'), NVL(A.PLANT_SITE_ID, '-'), NVL(A.ITEM_ID, '-'), NVL(A.SCM_SITE"
+    },
+    {
+     "line": 9054,
+     "n": 2,
+     "old": "\t\t\t\t\t\t\t, NVL(A.INCOTERMS, '-'), NVL(A.CURRENCY, '-')"
+    },
+    {
+     "line": 9056,
+     "n": 3,
+     "old": "\t\t\t\t\t\t\t, NVL(A.DOM_EXP, '-'), NVL(A.COMPANY_ID, '-') AS COMPANY_ID"
+    },
+    {
+     "line": 9074,
+     "n": 2,
+     "old": "\t\t\t\t\t\t\t, NVL(B.PROJECT_CODE, '-'), NVL(A.FCST_TYPE, '-'), NVL(A.PLANT_SITE_ID, '-'), NVL(A.ITEM_ID, '-'), NVL(A.SCM_SITE"
+    },
+    {
+     "line": 9075,
+     "n": 2,
+     "old": "\t\t\t\t\t\t\t, NVL(A.INCOTERMS, '-'), NVL(A.CURRENCY, '-')"
+    },
+    {
+     "line": 9077,
+     "n": 3,
+     "old": "\t\t\t\t\t\t\t, NVL(A.DOM_EXP, '-'), NVL(A.COMPANY_ID, '-') AS COMPANY_ID"
+    },
+    {
+     "line": 9107,
+     "n": 3,
+     "old": "\t\t\t\t\t\t\t, NVL(A.DOM_EXP, '-'), NVL(A.COMPANY_ID, '-') AS COMPANY_ID"
+    },
+    {
+     "line": 9284,
+     "n": 4,
+     "old": "\t\t\t\tSELECT A.DATA_TYPE, NVL(A.DIVISION_ID, '-'), NVL(A.VERSION_NO, '-'), A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD"
+    },
+    {
+     "line": 9294,
+     "n": 6,
+     "old": " , '-')"
+    },
+    {
+     "line": 9325,
+     "n": 4,
+     "old": "\t\t\t\tSELECT A.DATA_TYPE, NVL(A.DIVISION_ID, '-'), NVL(A.VERSION_NO, '-'), A.CUTOFF_TYPE, A.CUTOFF_YYYYMMDD"
+    },
+    {
+     "line": 9336,
+     "n": 6,
+     "old": " , '-')"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0045",
+   "result": "SKIP(patch-miss)",
+   "applied": 31,
+   "miss": [
+    {
+     "line": 577,
+     "n": 4,
+     "old": "             , '-'                                                           AS END_CUSTOMER"
+    },
+    {
+     "line": 578,
+     "n": 4,
+     "old": "             , '-'                                                           AS PROJECT_CODE"
+    },
+    {
+     "line": 579,
+     "n": 4,
+     "old": "             , '-'                                                           AS INCOTERMS"
+    },
+    {
+     "line": 580,
+     "n": 4,
+     "old": "             , '-'                                                           AS FCST_TYPE"
+    },
+    {
+     "line": 621,
+     "n": 4,
+     "old": "             , '-'                                                           AS END_CUSTOMER"
+    },
+    {
+     "line": 622,
+     "n": 4,
+     "old": "             , '-'                                                           AS PROJECT_CODE"
+    },
+    {
+     "line": 623,
+     "n": 4,
+     "old": "             , '-'                                                           AS INCOTERMS"
+    },
+    {
+     "line": 624,
+     "n": 4,
+     "old": "             , '-'                                                           AS FCST_TYPE"
+    },
+    {
+     "line": 666,
+     "n": 4,
+     "old": "             , '-'                                                           AS END_CUSTOMER"
+    },
+    {
+     "line": 667,
+     "n": 4,
+     "old": "             , '-'                                                           AS PROJECT_CODE"
+    },
+    {
+     "line": 668,
+     "n": 4,
+     "old": "             , '-'                                                           AS INCOTERMS"
+    },
+    {
+     "line": 669,
+     "n": 4,
+     "old": "             , '-'                                                           AS FCST_TYPE"
+    },
+    {
+     "line": 799,
+     "n": 4,
+     "old": "         , '-'                                                               AS END_CUSTOMER"
+    },
+    {
+     "line": 800,
+     "n": 4,
+     "old": "         , '-'                                                               AS PROJECT_CODE"
+    },
+    {
+     "line": 801,
+     "n": 4,
+     "old": "         , '-'                                                               AS INCOTERMS"
+    },
+    {
+     "line": 802,
+     "n": 4,
+     "old": "         , '-'                                                               AS FCST_TYPE"
+    },
+    {
+     "line": 838,
+     "n": 4,
+     "old": "         , '-'                                                               AS END_CUSTOMER"
+    },
+    {
+     "line": 839,
+     "n": 4,
+     "old": "         , '-'                                                               AS PROJECT_CODE"
+    },
+    {
+     "line": 840,
+     "n": 4,
+     "old": "         , '-'                                                               AS INCOTERMS"
+    },
+    {
+     "line": 841,
+     "n": 4,
+     "old": "         , '-'                                                               AS FCST_TYPE"
+    },
+    {
+     "line": 896,
+     "n": 4,
+     "old": "                 , '-'                                                       AS END_CUSTOMER"
+    },
+    {
+     "line": 897,
+     "n": 4,
+     "old": "                 , '-'                                                       AS PROJECT_CODE"
+    },
+    {
+     "line": 898,
+     "n": 4,
+     "old": "                 , '-'                                                       AS INCOTERMS"
+    },
+    {
+     "line": 899,
+     "n": 4,
+     "old": "                 , '-'                                                       AS FCST_TYPE"
+    },
+    {
+     "line": 937,
+     "n": 4,
+     "old": "                 , '-'                                                       AS END_CUSTOMER"
+    },
+    {
+     "line": 938,
+     "n": 4,
+     "old": "                 , '-'                                                       AS PROJECT_CODE"
+    },
+    {
+     "line": 939,
+     "n": 4,
+     "old": "                 , '-'                                                       AS INCOTERMS"
+    },
+    {
+     "line": 940,
+     "n": 4,
+     "old": "                 , '-'                                                       AS FCST_TYPE"
+    },
+    {
+     "line": 974,
+     "n": 4,
+     "old": "                 , '-'                                                       AS END_CUSTOMER"
+    },
+    {
+     "line": 975,
+     "n": 4,
+     "old": "                 , '-'                                                       AS PROJECT_CODE"
+    },
+    {
+     "line": 976,
+     "n": 4,
+     "old": "                 , '-'                                                       AS INCOTERMS"
+    },
+    {
+     "line": 977,
+     "n": 4,
+     "old": "                 , '-'                                                       AS FCST_TYPE"
+    },
+    {
+     "line": 1709,
+     "n": 9,
+     "old": "         , '-'"
+    },
+    {
+     "line": 1713,
+     "n": 9,
+     "old": "         , '-'"
+    },
+    {
+     "line": 1714,
+     "n": 9,
+     "old": "         , '-'"
+    },
+    {
+     "line": 1715,
+     "n": 9,
+     "old": "         , '-'"
+    },
+    {
+     "line": 1716,
+     "n": 9,
+     "old": "         , '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0049",
+   "result": "OK",
+   "applied": 16,
+   "lines_before": 1298,
+   "lines_after": 1298,
+   "same_line_count": true,
+   "sha_before": "04c94324d51b79b36e2fa744cf0e5cc166a39fa0",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:00"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0051",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 1852,
+   "lines_after": 1852,
+   "same_line_count": true,
+   "sha_before": "7ca03c92095b8f1630b63e9ed5df1aba2740e4d4",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:00"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0072",
+   "result": "OK",
+   "applied": 3,
+   "lines_before": 885,
+   "lines_after": 885,
+   "same_line_count": true,
+   "sha_before": "df9744dbf95fd93d59878a9291939d715fd2dc6c",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:01"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0074",
+   "result": "OK",
+   "applied": 7,
+   "lines_before": 4302,
+   "lines_after": 4302,
+   "same_line_count": true,
+   "sha_before": "fa286a5bb76526231c0cdd0e898d922ea898e460",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:01"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0082",
+   "result": "SKIP(patch-miss)",
+   "applied": 43,
+   "miss": [
+    {
+     "line": 3274,
+     "n": 2,
+     "old": "                    , NVL(ITEM_ID, '-') AS ITEM_ID"
+    },
+    {
+     "line": 3276,
+     "n": 2,
+     "old": "                    , NVL(DOM_EXP, '-') AS DOM_EXP"
+    },
+    {
+     "line": 3277,
+     "n": 2,
+     "old": "                    , NVL(FCST_TYPE, '-') AS FCST_TYPE"
+    },
+    {
+     "line": 3283,
+     "n": 2,
+     "old": "               GROUP BY NVL(DIVISION_ID, '-')"
+    },
+    {
+     "line": 3285,
+     "n": 2,
+     "old": "                    , NVL(SCM_SITE_ID, '-')"
+    },
+    {
+     "line": 3287,
+     "n": 2,
+     "old": "                    , NVL(ITEM_ID, '-')"
+    },
+    {
+     "line": 3289,
+     "n": 2,
+     "old": "                    , NVL(DOM_EXP, '-')"
+    },
+    {
+     "line": 3290,
+     "n": 2,
+     "old": "                    , NVL(FCST_TYPE, '-')"
+    },
+    {
+     "line": 3293,
+     "n": 2,
+     "old": "    ON (    NVL(A.DIVISION_ID, '-') = B.DIVISION_ID"
+    },
+    {
+     "line": 3295,
+     "n": 2,
+     "old": "        AND NVL(A.SCM_SITE_ID, '-') = B.SCM_SITE_ID"
+    },
+    {
+     "line": 3297,
+     "n": 2,
+     "old": "        AND NVL(A.ITEM_ID, '-') = B.ITEM_ID"
+    },
+    {
+     "line": 3299,
+     "n": 2,
+     "old": "        AND NVL(A.DOM_EXP, '-') = B.DOM_EXP"
+    },
+    {
+     "line": 3300,
+     "n": 2,
+     "old": "        AND NVL(A.FCST_TYPE, '-') = B.FCST_TYPE )"
+    },
+    {
+     "line": 3324,
+     "n": 2,
+     "old": "                    , NVL(ITEM_ID, '-') AS ITEM_ID"
+    },
+    {
+     "line": 3325,
+     "n": 2,
+     "old": "                    , NVL(DOM_EXP, '-') AS DOM_EXP"
+    },
+    {
+     "line": 3326,
+     "n": 2,
+     "old": "                    , NVL(FCST_TYPE, '-') AS FCST_TYPE"
+    },
+    {
+     "line": 3332,
+     "n": 2,
+     "old": "               GROUP BY NVL(DIVISION_ID, '-')"
+    },
+    {
+     "line": 3333,
+     "n": 2,
+     "old": "                    , NVL(SCM_SITE_ID, '-')"
+    },
+    {
+     "line": 3334,
+     "n": 2,
+     "old": "                    , NVL(ITEM_ID, '-')"
+    },
+    {
+     "line": 3335,
+     "n": 2,
+     "old": "                    , NVL(DOM_EXP, '-')"
+    },
+    {
+     "line": 3336,
+     "n": 2,
+     "old": "                    , NVL(FCST_TYPE, '-')"
+    },
+    {
+     "line": 3339,
+     "n": 2,
+     "old": "    ON (    NVL(A.DIVISION_ID, '-') = B.DIVISION_ID"
+    },
+    {
+     "line": 3340,
+     "n": 2,
+     "old": "        AND NVL(A.SCM_SITE_ID, '-') = B.SCM_SITE_ID"
+    },
+    {
+     "line": 3341,
+     "n": 2,
+     "old": "        AND NVL(A.ITEM_ID, '-') = B.ITEM_ID"
+    },
+    {
+     "line": 3342,
+     "n": 2,
+     "old": "        AND NVL(A.DOM_EXP, '-') = B.DOM_EXP"
+    },
+    {
+     "line": 3343,
+     "n": 2,
+     "old": "        AND NVL(A.FCST_TYPE, '-') = B.FCST_TYPE )"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_NSCM_UI_COM_LOOKUP",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 163,
+   "lines_after": 163,
+   "same_line_count": true,
+   "sha_before": "061aacb05f49f4e69a4c8c75f3d6d059e360cce2",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:03"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_S39V2",
+   "result": "SKIP(patch-miss)",
+   "applied": 5,
+   "miss": [
+    {
+     "line": 2102,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 2689,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 4266,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 5516,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 6950,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7093,
+     "n": 4,
+     "old": "                    THEN '-'"
+    },
+    {
+     "line": 7133,
+     "n": 4,
+     "old": "                    THEN '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_S39V3",
+   "result": "SKIP(patch-miss)",
+   "applied": 5,
+   "miss": [
+    {
+     "line": 2152,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 2748,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 4348,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 5616,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7072,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7219,
+     "n": 4,
+     "old": "                    THEN '-'"
+    },
+    {
+     "line": 7259,
+     "n": 4,
+     "old": "                    THEN '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_S39V4",
+   "result": "SKIP(patch-miss)",
+   "applied": 5,
+   "miss": [
+    {
+     "line": 2152,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 2748,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 4348,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 5616,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7072,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7219,
+     "n": 4,
+     "old": "                    THEN '-'"
+    },
+    {
+     "line": 7259,
+     "n": 4,
+     "old": "                    THEN '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_S39V5",
+   "result": "SKIP(patch-miss)",
+   "applied": 5,
+   "miss": [
+    {
+     "line": 2167,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 2782,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 4411,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 5698,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7173,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7320,
+     "n": 4,
+     "old": "                    THEN '-'"
+    },
+    {
+     "line": 7360,
+     "n": 4,
+     "old": "                    THEN '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_S39V6",
+   "result": "SKIP(patch-miss)",
+   "applied": 5,
+   "miss": [
+    {
+     "line": 2167,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 2782,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 4411,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 5698,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7173,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7320,
+     "n": 4,
+     "old": "                    THEN '-'"
+    },
+    {
+     "line": 7360,
+     "n": 4,
+     "old": "                    THEN '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_S39V7",
+   "result": "SKIP(patch-miss)",
+   "applied": 5,
+   "miss": [
+    {
+     "line": 2167,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 2785,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 4417,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 5707,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7185,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7332,
+     "n": 4,
+     "old": "                    THEN '-'"
+    },
+    {
+     "line": 7372,
+     "n": 4,
+     "old": "                    THEN '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCM0002",
+   "result": "OK",
+   "applied": 12,
+   "lines_before": 5944,
+   "lines_after": 5944,
+   "same_line_count": true,
+   "sha_before": "6ac4247890420a6810c5384dcc2dde868126a043",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:05"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0005",
+   "result": "OK",
+   "applied": 6,
+   "lines_before": 2155,
+   "lines_after": 2155,
+   "same_line_count": true,
+   "sha_before": "a4a6961f533b4737f3e46c3644458af21a2b4802",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:51"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0007",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 1140,
+   "lines_after": 1140,
+   "same_line_count": true,
+   "sha_before": "d3f4e0a5a97a70e5e3e5a96ad229ffceb522b08e",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:52"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0009",
+   "result": "OK",
+   "applied": 41,
+   "lines_before": 5921,
+   "lines_after": 5921,
+   "same_line_count": true,
+   "sha_before": "a37356e5fb237e0a002b961618d01f4ea77e2ecc",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:52"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0010",
+   "result": "OK",
+   "applied": 6,
+   "lines_before": 3026,
+   "lines_after": 3026,
+   "same_line_count": true,
+   "sha_before": "6ca67b7d671f062f03239e7fd7a9ed7a0efb3f35",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:53"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0011",
+   "result": "SKIP(patch-miss)",
+   "applied": 1,
+   "miss": [
+    {
+     "line": 439,
+     "n": 2,
+     "old": "                 , NVL(A.ELECTRODE_TYPE, '-')                       AS ELECTRODE_TYPE"
+    },
+    {
+     "line": 480,
+     "n": 2,
+     "old": "                 , NVL(A.ELECTRODE_TYPE, '-')                       AS ELECTRODE_TYPE"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0013",
+   "result": "SKIP(patch-miss)",
+   "applied": 13,
+   "miss": [
+    {
+     "line": 2394,
+     "n": 2,
+     "old": "             , '-'"
+    },
+    {
+     "line": 2407,
+     "n": 2,
+     "old": "             , '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0017",
+   "result": "OK",
+   "applied": 5,
+   "lines_before": 2369,
+   "lines_after": 2369,
+   "same_line_count": true,
+   "sha_before": "124f904da6356114861e572fb16bd0301a8bb656",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:54"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0018",
+   "result": "OK",
+   "applied": 4,
+   "lines_before": 455,
+   "lines_after": 455,
+   "same_line_count": true,
+   "sha_before": "a08f2dc986a68876d9b36a5f7db6d180561d210d",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:54"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0020",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 1510,
+   "lines_after": 1510,
+   "same_line_count": true,
+   "sha_before": "c418190678c2561b3b69efd860c38d3e1e6e7454",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:55"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0025",
+   "result": "OK",
+   "applied": 4,
+   "lines_before": 831,
+   "lines_after": 831,
+   "same_line_count": true,
+   "sha_before": "8fdf451661912f4c36742f1c691005b319bb7292",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:55"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0027",
+   "result": "OK",
+   "applied": 4,
+   "lines_before": 862,
+   "lines_after": 862,
+   "same_line_count": true,
+   "sha_before": "a01f82dea5af507dd19cbfcf671311a0f268f176",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:55"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0030",
+   "result": "OK",
+   "applied": 6,
+   "lines_before": 975,
+   "lines_after": 975,
+   "same_line_count": true,
+   "sha_before": "75dea31b83e493478c4fe7d94ec7e893785b34da",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:55"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0031",
+   "result": "OK",
+   "applied": 15,
+   "lines_before": 1423,
+   "lines_after": 1423,
+   "same_line_count": true,
+   "sha_before": "41c1174422cefe8155a7c56198f94d1e29335f91",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:56"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0039",
+   "result": "SKIP(patch-miss)",
+   "applied": 5,
+   "miss": [
+    {
+     "line": 2190,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 2809,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 4444,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 5735,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7214,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7361,
+     "n": 4,
+     "old": "                    THEN '-'"
+    },
+    {
+     "line": 7401,
+     "n": 4,
+     "old": "                    THEN '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0039_VF",
+   "result": "SKIP(patch-miss)",
+   "applied": 5,
+   "miss": [
+    {
+     "line": 2114,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 2705,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 4294,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 5548,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 6986,
+     "n": 10,
+     "old": "                                                           THEN '-'"
+    },
+    {
+     "line": 7129,
+     "n": 4,
+     "old": "                    THEN '-'"
+    },
+    {
+     "line": 7169,
+     "n": 4,
+     "old": "                    THEN '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0048",
+   "result": "OK",
+   "applied": 4,
+   "lines_before": 621,
+   "lines_after": 621,
+   "same_line_count": true,
+   "sha_before": "fe72a393a6f622dfb73a8d34a018ef8ce860d527",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:57"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0049",
+   "result": "OK",
+   "applied": 37,
+   "lines_before": 21806,
+   "lines_after": 21806,
+   "same_line_count": true,
+   "sha_before": "33441eacd796e58674922a097002c82b3d51a725",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:50:58"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0055",
+   "result": "OK",
+   "applied": 4,
+   "lines_before": 988,
+   "lines_after": 988,
+   "same_line_count": true,
+   "sha_before": "514e2cfaaef78dc035507c7dec96b464ecc45f27",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:01"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0098",
+   "result": "OK",
+   "applied": 2,
+   "lines_before": 2834,
+   "lines_after": 2834,
+   "same_line_count": true,
+   "sha_before": "e47f50b73cdf1ace97d03ca3053511ee5fb6002f",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:01"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0100",
+   "result": "OK",
+   "applied": 4,
+   "lines_before": 5092,
+   "lines_after": 5092,
+   "same_line_count": true,
+   "sha_before": "75d6b172a04a8fdbc39a67721590186f6a121873",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:02"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0105",
+   "result": "OK",
+   "applied": 3,
+   "lines_before": 4592,
+   "lines_after": 4592,
+   "same_line_count": true,
+   "sha_before": "6b6bb9ed1cafe3bad49e9e4c700941b8cb487ae9",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:03"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0125",
+   "result": "SKIP(patch-miss)",
+   "applied": 26,
+   "miss": [
+    {
+     "line": 1004,
+     "n": 3,
+     "old": "             , '-'                                                      /* 뒤에서 별도 UPDATE */"
+    },
+    {
+     "line": 1004,
+     "n": 3,
+     "old": "             , '-'                                                      /* 뒤에서 별도 UPDATE */"
+    },
+    {
+     "line": 1261,
+     "n": 3,
+     "old": "             , '-'"
+    },
+    {
+     "line": 1272,
+     "n": 3,
+     "old": "             , '-'"
+    },
+    {
+     "line": 1520,
+     "n": 2,
+     "old": "           AND A.PROJECT_CODE = '-'"
+    },
+    {
+     "line": 1520,
+     "n": 2,
+     "old": "           AND A.PROJECT_CODE = '-'"
+    },
+    {
+     "line": 2037,
+     "n": 2,
+     "old": "                                             AND IE.LOCATION_CODE = '-'"
+    },
+    {
+     "line": 2047,
+     "n": 2,
+     "old": "                                             AND IE.LOCATION_CODE = '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SDM1010",
+   "result": "SKIP(patch-miss)",
+   "applied": 1,
+   "miss": [
+    {
+     "line": 1944,
+     "n": 2,
+     "old": "               AND USR.ACTIVE_FLAG NOT IN ('D', '-')"
+    },
+    {
+     "line": 1985,
+     "n": 2,
+     "old": "               AND USR.ACTIVE_FLAG NOT IN ('D', '-')"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0012",
+   "result": "OK",
+   "applied": 4,
+   "lines_before": 414,
+   "lines_after": 414,
+   "same_line_count": true,
+   "sha_before": "76570e0627c6ddf6b307ff6b28ac2505be116665",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:04"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0015",
+   "result": "SKIP(patch-miss)",
+   "applied": 14,
+   "miss": [
+    {
+     "line": 5465,
+     "n": 8,
+     "old": "                 , '-'"
+    },
+    {
+     "line": 5467,
+     "n": 8,
+     "old": "                 , '-'"
+    },
+    {
+     "line": 5468,
+     "n": 8,
+     "old": "                 , '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0019",
+   "result": "OK",
+   "applied": 2,
+   "lines_before": 616,
+   "lines_after": 616,
+   "same_line_count": true,
+   "sha_before": "e811ecdc828c148540268b82cc203b170af160c0",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:05"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0021",
+   "result": "SKIP(patch-miss)",
+   "applied": 1,
+   "miss": [
+    {
+     "line": 1696,
+     "n": 2,
+     "old": "                                 , CASE WHEN SA.DIVISION_ID = '4O' THEN NVL(SD.PROJECT_CODE, '-')"
+    },
+    {
+     "line": 1742,
+     "n": 2,
+     "old": "                                 , CASE WHEN SA.DIVISION_ID = '4O' THEN NVL(SD.PROJECT_CODE, '-')"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0022",
+   "result": "SKIP(patch-miss)",
+   "applied": 18,
+   "miss": [
+    {
+     "line": 1279,
+     "n": 5,
+     "old": "             , NVL(D.ELECTRODE_TYPE, '-')               AS ELECTRODE_TYPE"
+    },
+    {
+     "line": 1585,
+     "n": 4,
+     "old": "             , NVL(D.ELECTRODE_TYPE, '-')               AS ELECTRODE_TYPE"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0023",
+   "result": "SKIP(patch-miss)",
+   "applied": 6,
+   "miss": [
+    {
+     "line": 1071,
+     "n": 3,
+     "old": "                                 , NVL(A.SCM_SITE_ID, '-') AS FROM_SITE"
+    },
+    {
+     "line": 1023,
+     "n": 3,
+     "old": "                                 , NVL(A.SCM_SITE_ID, '-') AS FROM_SITE"
+    },
+    {
+     "line": 1023,
+     "n": 3,
+     "old": "                                 , NVL(A.SCM_SITE_ID, '-') AS FROM_SITE"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0023_CHK",
+   "result": "SKIP(patch-miss)",
+   "applied": 7,
+   "miss": [
+    {
+     "line": 972,
+     "n": 2,
+     "old": "                                 , NVL(A.SCM_SITE_ID, '-') AS FROM_SITE"
+    },
+    {
+     "line": 1017,
+     "n": 2,
+     "old": "                                 , NVL(A.SCM_SITE_ID, '-') AS FROM_SITE"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0026",
+   "result": "SKIP(patch-miss)",
+   "applied": 36,
+   "miss": [
+    {
+     "line": 1243,
+     "n": 9,
+     "old": "             , '-'                              AS FCST_TYPE"
+    },
+    {
+     "line": 1278,
+     "n": 8,
+     "old": "             , '-'                              AS INCOTERMS"
+    },
+    {
+     "line": 1280,
+     "n": 9,
+     "old": "             , '-'                              AS FCST_TYPE"
+    },
+    {
+     "line": 1328,
+     "n": 8,
+     "old": "             , '-'                              AS INCOTERMS"
+    },
+    {
+     "line": 1330,
+     "n": 9,
+     "old": "             , '-'                              AS FCST_TYPE"
+    },
+    {
+     "line": 1278,
+     "n": 8,
+     "old": "             , '-'                              AS INCOTERMS"
+    },
+    {
+     "line": 1376,
+     "n": 9,
+     "old": "             , '-'                              AS FCST_TYPE"
+    },
+    {
+     "line": 1374,
+     "n": 7,
+     "old": "             , '-'                              AS INCOTERMS"
+    },
+    {
+     "line": 1376,
+     "n": 8,
+     "old": "             , '-'                              AS FCST_TYPE"
+    },
+    {
+     "line": 2920,
+     "n": 2,
+     "old": "                      , NVL(T.FROM_SITE, '-')           AS FROM_SITE"
+    },
+    {
+     "line": 2921,
+     "n": 2,
+     "old": "                      , NVL(T.TO_SITE, '-')             AS TO_SITE"
+    },
+    {
+     "line": 2964,
+     "n": 2,
+     "old": "                      , NVL(T.FROM_SITE, '-')           AS FROM_SITE"
+    },
+    {
+     "line": 2965,
+     "n": 2,
+     "old": "                      , NVL(T.TO_SITE, '-')             AS TO_SITE"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0045",
+   "result": "SKIP(patch-miss)",
+   "applied": 13,
+   "miss": [
+    {
+     "line": 1561,
+     "n": 3,
+     "old": "             , '-'                                            AS INCOTERMS"
+    },
+    {
+     "line": 1567,
+     "n": 3,
+     "old": "             , '-'                                            AS PROJECT_CODE"
+    },
+    {
+     "line": 1568,
+     "n": 3,
+     "old": "             , '-'                                            AS FCST_TYPE"
+    },
+    {
+     "line": 1585,
+     "n": 3,
+     "old": "             , '-'                                            AS INCOTERMS"
+    },
+    {
+     "line": 1591,
+     "n": 3,
+     "old": "             , '-'                                            AS PROJECT_CODE"
+    },
+    {
+     "line": 1592,
+     "n": 3,
+     "old": "             , '-'                                            AS FCST_TYPE"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0060",
+   "result": "SKIP(patch-miss)",
+   "applied": 1,
+   "miss": [
+    {
+     "line": 1626,
+     "n": 2,
+     "old": "                                 , CASE WHEN SA.DIVISION_ID = '4O' THEN NVL(SD.PROJECT_CODE, '-')"
+    },
+    {
+     "line": 1672,
+     "n": 2,
+     "old": "                                 , CASE WHEN SA.DIVISION_ID = '4O' THEN NVL(SD.PROJECT_CODE, '-')"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0200",
+   "result": "OK",
+   "applied": 2,
+   "lines_before": 3294,
+   "lines_after": 3294,
+   "same_line_count": true,
+   "sha_before": "0fd01343ca450ddbf24b17920237128abe459ef8",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:07"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0201",
+   "result": "OK",
+   "applied": 2,
+   "lines_before": 3159,
+   "lines_after": 3159,
+   "same_line_count": true,
+   "sha_before": "452a7e62175be59e91929ac66df98481ffe58472",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:08"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SYS0010",
+   "result": "OK",
+   "applied": 20,
+   "lines_before": 1607,
+   "lines_after": 1607,
+   "same_line_count": true,
+   "sha_before": "29b64b40868bb54bbe91b7c9f8bde733dbd4995c",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:09"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SYS0012",
+   "result": "OK",
+   "applied": 4,
+   "lines_before": 294,
+   "lines_after": 294,
+   "same_line_count": true,
+   "sha_before": "251e2db97c0ce4d3c41b61b069122f600e45d5e2",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:09"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SYS0013",
+   "result": "OK",
+   "applied": 3,
+   "lines_before": 1034,
+   "lines_after": 1034,
+   "same_line_count": true,
+   "sha_before": "202357183a6cd852dd2b6f523a6a5674cdf5e8df",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:09"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SYS0014",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 344,
+   "lines_after": 344,
+   "same_line_count": true,
+   "sha_before": "4ece9ecd596433df389e8d3e08f956fe3aea5ac5",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:09"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_ZTMP_S015J",
+   "result": "SKIP(patch-miss)",
+   "applied": 7,
+   "miss": [
+    {
+     "line": 682,
+     "n": 8,
+     "old": "                 , '-'"
+    },
+    {
+     "line": 684,
+     "n": 8,
+     "old": "                 , '-'"
+    },
+    {
+     "line": 685,
+     "n": 8,
+     "old": "                 , '-'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_ZTMP_S015K",
+   "result": "OK",
+   "applied": 4,
+   "lines_before": 2121,
+   "lines_after": 2121,
+   "same_line_count": true,
+   "sha_before": "ceef1d198480f4d88b0a79f96976d51f495cfaad",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:10"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_ZTMP_S200B",
+   "result": "OK",
+   "applied": 2,
+   "lines_before": 807,
+   "lines_after": 807,
+   "same_line_count": true,
+   "sha_before": "8701024e54cfb65ba3cba5d0d040e044a8061b12",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:10"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_ANL_KPI_SALES_ACCURACY",
+   "result": "OK",
+   "applied": 2,
+   "lines_before": 288,
+   "lines_after": 288,
+   "same_line_count": true,
+   "sha_before": "ea47219f4c30bd63ff0841e4ae39dfa83efcc576",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:11"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_ANL_KPI_SUMMARY",
+   "result": "OK",
+   "applied": 6,
+   "lines_before": 1259,
+   "lines_after": 1259,
+   "same_line_count": true,
+   "sha_before": "ffcffae3cda909184c04baedbd833e58425646c7",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:11"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_ANL_MKT_PSI_DATA",
+   "result": "OK",
+   "applied": 4,
+   "lines_before": 920,
+   "lines_after": 920,
+   "same_line_count": true,
+   "sha_before": "16464cb584c4f2ae86acedb126db861ea3916b21",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:11"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_MKT_FCST_SAVE",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 887,
+   "lines_after": 887,
+   "same_line_count": true,
+   "sha_before": "2b40d9adf0e9501de75735dfa40694b28582d405",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:12"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_CUST_ITEM_MAPPING",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 624,
+   "lines_after": 624,
+   "same_line_count": true,
+   "sha_before": "22ce05a60c96054d0a6798c979e49029ec72fd7f",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:12"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_DNM_CREATE_C_WS_RTF",
+   "result": "SKIP(patch-miss)",
+   "applied": 12,
+   "miss": [
+    {
+     "line": 1151,
+     "n": 2,
+     "old": "             , CASE WHEN A.DIVISION_ID = '40' THEN A.PROJECT_CODE ELSE '-' END"
+    },
+    {
+     "line": 1176,
+     "n": 2,
+     "old": "             , CASE WHEN A.DIVISION_ID = '40' THEN A.PROJECT_CODE ELSE '-' END"
+    }
+   ]
+  },
+  {
+   "object": "PROCEDURE|PR_DM_DNM_CREATE_WS_RTF",
+   "result": "OK",
+   "applied": 14,
+   "lines_before": 1205,
+   "lines_after": 1205,
+   "same_line_count": true,
+   "sha_before": "c1d1a35c0bdef29b141adfb6e3990e3ffd2ae594",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:12"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_DNM_EDI_CALLOFF_DATA",
+   "result": "OK",
+   "applied": 7,
+   "lines_before": 820,
+   "lines_after": 820,
+   "same_line_count": true,
+   "sha_before": "f82c94bd6860dd7be91660cf81781db85b2d461d",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:12"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_DNM_EDI_CALLOFF_MKT_FCST",
+   "result": "OK",
+   "applied": 9,
+   "lines_before": 1336,
+   "lines_after": 1336,
+   "same_line_count": true,
+   "sha_before": "9f9beb3693c5277c7819aa1683094fb9ec3256bd",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:13"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_CUST_FCST_RECORD",
+   "result": "SKIP(patch-miss)",
+   "applied": 4,
+   "miss": [
+    {
+     "line": 175,
+     "n": 2,
+     "old": "                 , NVL(RTRIM(LTRIM(A.UNLOADING_POINT)), '-')"
+    },
+    {
+     "line": 176,
+     "n": 2,
+     "old": "                 , NVL(RTRIM(LTRIM(A.CUSTOMER_PLANT)), '-')"
+    },
+    {
+     "line": 184,
+     "n": 2,
+     "old": "                 , NVL(RTRIM(LTRIM(A.UNLOADING_POINT)), '-')"
+    },
+    {
+     "line": 185,
+     "n": 2,
+     "old": "                 , NVL(RTRIM(LTRIM(A.CUSTOMER_PLANT)), '-')"
+    }
+   ]
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_MKT_FCST_C_QTY_BALANCE_CREATE",
+   "result": "SKIP(patch-miss)",
+   "applied": 30,
+   "miss": [
+    {
+     "line": 2826,
+     "n": 0,
+     "old": "                       FROM ( SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLA"
+    },
+    {
+     "line": 2828,
+     "n": 0,
+     "old": "                              GROUP BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, P"
+    },
+    {
+     "line": 2837,
+     "n": 0,
+     "old": "                       AND   NVL(A.CELL_PROD_SITE_ID, '-') = NVL(B.CELL_PROD_SITE_ID, '-')  /* [E20260512-000502] 81도 해당"
+    }
+   ]
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE",
+   "result": "SKIP(patch-miss)",
+   "applied": 6,
+   "miss": [
+    {
+     "line": 1830,
+     "n": 2,
+     "old": "                                  AND CASE WHEN DM_PLN_CFM_MKT_DEMAND_PLAN.DIVISION_ID = '40' THEN NVL(DM_PLN_CFM_MKT_DE"
+    },
+    {
+     "line": 1859,
+     "n": 2,
+     "old": "                                  AND CASE WHEN DM_PLN_CFM_MKT_DEMAND_PLAN.DIVISION_ID = '40' THEN NVL(DM_PLN_CFM_MKT_DE"
+    },
+    {
+     "line": 2687,
+     "n": 3,
+     "old": "                 , NVL(CELL_PROD_SITE_ID,'-') AS CELL_PROD_SITE_ID, FROM_SITE_ID AS ATTRIBUTE2"
+    },
+    {
+     "line": 2694,
+     "n": 3,
+     "old": "                 , NVL(CELL_PROD_SITE_ID,'-') AS CELL_PROD_SITE_ID, FROM_SITE_ID AS ATTRIBUTE2"
+    }
+   ]
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_MKT_FCST_SALES_RESULT_MAPPING",
+   "result": "SKIP(patch-miss)",
+   "applied": 9,
+   "miss": [
+    {
+     "line": 347,
+     "n": 2,
+     "old": "              , CASE WHEN (A.DIVISION_ID = '40' AND A.FROM_COMPANY_ID IS NOT NULL AND A.ITEM_ID = NVL(C.ITEM_ID,'~')) TH"
+    },
+    {
+     "line": 349,
+     "n": 2,
+     "old": "                     ELSE '-' END AS CELL_PROD_SITE_ID"
+    },
+    {
+     "line": 376,
+     "n": 2,
+     "old": "              , CASE WHEN (A.DIVISION_ID = '40' AND A.FROM_COMPANY_ID IS NOT NULL AND A.ITEM_ID = NVL(C.ITEM_ID,'~')) TH"
+    },
+    {
+     "line": 378,
+     "n": 2,
+     "old": "                     ELSE '-' END AS CELL_PROD_SITE_ID"
+    },
+    {
+     "line": 381,
+     "n": 2,
+     "old": "                SELECT DIVISION_ID, COMPANY_ID, NVL(PROJECT_CODE,'-') AS PROJECT_CODE"
+    },
+    {
+     "line": 382,
+     "n": 2,
+     "old": "                     , NVL(CASE WHEN LENGTH(SOLDTO_CODE) = 4 AND C.SEGMENT4 IS NULL THEN CASE WHEN SOLDTO_CODE = 'B100' "
+    },
+    {
+     "line": 383,
+     "n": 2,
+     "old": "                     , NVL(PLANT_SITE_ID,'-') AS PLANT_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS"
+    },
+    {
+     "line": 398,
+     "n": 2,
+     "old": "                 GROUP BY DIVISION_ID, COMPANY_ID, NVL(PROJECT_CODE,'-')"
+    },
+    {
+     "line": 399,
+     "n": 2,
+     "old": "                        , NVL(CASE WHEN LENGTH(SOLDTO_CODE) = 4 AND C.SEGMENT4 IS NULL THEN CASE WHEN SOLDTO_CODE = 'B10"
+    },
+    {
+     "line": 400,
+     "n": 2,
+     "old": "                        , NVL(PLANT_SITE_ID,'-'), ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, A.MEASURE, YYYYMMDD, CURRENCY,"
+    },
+    {
+     "line": 403,
+     "n": 2,
+     "old": "                SELECT DIVISION_ID, COMPANY_ID, NVL(PROJECT_CODE,'-') AS PROJECT_CODE"
+    },
+    {
+     "line": 404,
+     "n": 2,
+     "old": "                     , NVL(CASE WHEN LENGTH(SOLDTO_CODE) = 4 AND C.SEGMENT4 IS NULL THEN CASE WHEN SOLDTO_CODE = 'B100' "
+    },
+    {
+     "line": 405,
+     "n": 2,
+     "old": "                     , NVL(PLANT_SITE_ID,'-') AS PLANT_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS"
+    },
+    {
+     "line": 420,
+     "n": 2,
+     "old": "                 GROUP BY DIVISION_ID, COMPANY_ID, NVL(PROJECT_CODE,'-')"
+    },
+    {
+     "line": 421,
+     "n": 2,
+     "old": "                        , NVL(CASE WHEN LENGTH(SOLDTO_CODE) = 4 AND C.SEGMENT4 IS NULL THEN CASE WHEN SOLDTO_CODE = 'B10"
+    },
+    {
+     "line": 422,
+     "n": 2,
+     "old": "                        , NVL(PLANT_SITE_ID,'-'), ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, A.MEASURE, YYYYMMDD, CURRENCY,"
+    }
+   ]
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_MKT_FCST_TO_NET_DEMAND",
+   "result": "SKIP(patch-miss)",
+   "applied": 3,
+   "miss": [
+    {
+     "line": 279,
+     "n": 2,
+     "old": "                    , CASE WHEN A.DIVISION_ID IN ('82', '40') THEN '-' ELSE A.PLANT_SITE_ID END"
+    },
+    {
+     "line": 323,
+     "n": 2,
+     "old": "                    , CASE WHEN A.DIVISION_ID IN ('82', '40') THEN '-' ELSE A.PLANT_SITE_ID END"
+    }
+   ]
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 1980,
+   "lines_after": 1980,
+   "same_line_count": true,
+   "sha_before": "1b3e9de0758c723a88fbe6220ad6141326630bdc",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:14"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_SALES_PLAN_RESULT_MOVE",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 171,
+   "lines_after": 171,
+   "same_line_count": true,
+   "sha_before": "97acafb1fded3477513274be7f2b770a5c1339d8",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:14"
+  },
+  {
+   "object": "PROCEDURE|PR_SCM_ADM_DEPT_CHANGED_AUTH_SYNC",
+   "result": "OK",
+   "applied": 2,
+   "lines_before": 368,
+   "lines_after": 368,
+   "same_line_count": true,
+   "sha_before": "0a08f0a9165393309b388d69cef1577844a2be85",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:15"
+  },
+  {
+   "object": "PROCEDURE|PR_SCM_MST_PROJECT_SCHEDULE",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 443,
+   "lines_after": 443,
+   "same_line_count": true,
+   "sha_before": "cec6d7d6ca0f999abc6139be19c1e00564773885",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:15"
+  },
+  {
+   "object": "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL",
+   "result": "SKIP(patch-miss)",
+   "applied": 13,
+   "miss": [
+    {
+     "line": 2134,
+     "n": 8,
+     "old": "             , '-'                     AS PROJECT_CODE"
+    },
+    {
+     "line": 2179,
+     "n": 8,
+     "old": "             , '-'                     AS PROJECT_CODE"
+    },
+    {
+     "line": 2224,
+     "n": 8,
+     "old": "             , '-'                     AS PROJECT_CODE"
+    },
+    {
+     "line": 2266,
+     "n": 8,
+     "old": "             , '-'                     AS PROJECT_CODE"
+    },
+    {
+     "line": 2529,
+     "n": 8,
+     "old": "             , '-'                     AS PROJECT_CODE"
+    },
+    {
+     "line": 2574,
+     "n": 8,
+     "old": "             , '-'                     AS PROJECT_CODE"
+    },
+    {
+     "line": 2619,
+     "n": 8,
+     "old": "             , '-'                     AS PROJECT_CODE"
+    },
+    {
+     "line": 2661,
+     "n": 8,
+     "old": "             , '-'                     AS PROJECT_CODE"
+    }
+   ]
+  },
+  {
+   "object": "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_EE",
+   "result": "SKIP(patch-miss)",
+   "applied": 0,
+   "miss": [
+    {
+     "line": 1978,
+     "n": 4,
+     "old": "             , '-'                     AS PROJECT_CODE"
+    },
+    {
+     "line": 2022,
+     "n": 4,
+     "old": "             , '-'                     AS PROJECT_CODE"
+    },
+    {
+     "line": 2066,
+     "n": 4,
+     "old": "             , '-'                     AS PROJECT_CODE"
+    },
+    {
+     "line": 2109,
+     "n": 4,
+     "old": "             , '-'                     AS PROJECT_CODE"
+    },
+    {
+     "line": 2341,
+     "n": 4,
+     "old": "             , '-'                       AS PROJECT_CODE"
+    },
+    {
+     "line": 2385,
+     "n": 4,
+     "old": "             , '-'                       AS PROJECT_CODE"
+    },
+    {
+     "line": 2429,
+     "n": 4,
+     "old": "             , '-'                       AS PROJECT_CODE"
+    },
+    {
+     "line": 2472,
+     "n": 4,
+     "old": "             , '-'                       AS PROJECT_CODE"
+    }
+   ]
+  },
+  {
+   "object": "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS",
+   "result": "SKIP(patch-miss)",
+   "applied": 13,
+   "miss": [
+    {
+     "line": 2185,
+     "n": 12,
+     "old": "             , '-'                             AS PROJECT_CODE"
+    },
+    {
+     "line": 2231,
+     "n": 12,
+     "old": "             , '-'                             AS PROJECT_CODE"
+    },
+    {
+     "line": 2277,
+     "n": 12,
+     "old": "             , '-'                             AS PROJECT_CODE"
+    },
+    {
+     "line": 2320,
+     "n": 12,
+     "old": "             , '-'                             AS PROJECT_CODE"
+    },
+    {
+     "line": 2584,
+     "n": 10,
+     "old": "             , '-'                             AS PROJECT_CODE"
+    },
+    {
+     "line": 2630,
+     "n": 10,
+     "old": "             , '-'                             AS PROJECT_CODE"
+    },
+    {
+     "line": 2676,
+     "n": 10,
+     "old": "             , '-'                             AS PROJECT_CODE"
+    },
+    {
+     "line": 2719,
+     "n": 10,
+     "old": "             , '-'                             AS PROJECT_CODE"
+    }
+   ]
+  },
+  {
+   "object": "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL",
+   "result": "SKIP(patch-miss)",
+   "applied": 13,
+   "miss": [
+    {
+     "line": 2205,
+     "n": 16,
+     "old": "              ,'-' AS PROJECT_CODE"
+    },
+    {
+     "line": 2250,
+     "n": 16,
+     "old": "              ,'-' AS PROJECT_CODE"
+    },
+    {
+     "line": 2295,
+     "n": 16,
+     "old": "              ,'-' AS PROJECT_CODE"
+    },
+    {
+     "line": 2337,
+     "n": 16,
+     "old": "              ,'-' AS PROJECT_CODE"
+    },
+    {
+     "line": 2581,
+     "n": 14,
+     "old": "              ,'-' AS PROJECT_CODE"
+    },
+    {
+     "line": 2624,
+     "n": 14,
+     "old": "              ,'-' AS PROJECT_CODE"
+    },
+    {
+     "line": 2681,
+     "n": 14,
+     "old": "              ,'-' AS PROJECT_CODE"
+    },
+    {
+     "line": 2726,
+     "n": 14,
+     "old": "              ,'-' AS PROJECT_CODE"
+    },
+    {
+     "line": 2771,
+     "n": 14,
+     "old": "              ,'-' AS PROJECT_CODE"
+    },
+    {
+     "line": 2813,
+     "n": 14,
+     "old": "              ,'-' AS PROJECT_CODE"
+    },
+    {
+     "line": 3057,
+     "n": 12,
+     "old": "              ,'-' AS PROJECT_CODE"
+    },
+    {
+     "line": 3100,
+     "n": 12,
+     "old": "              ,'-' AS PROJECT_CODE"
+    }
+   ]
+  },
+  {
+   "object": "PROCEDURE|PR_SSP_ANL_SHIPMENT_PLAN_FG",
+   "result": "OK",
+   "applied": 8,
+   "lines_before": 1534,
+   "lines_after": 1534,
+   "same_line_count": true,
+   "sha_before": "7c3537d8a4488489f829923208bfe3767122a971",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:16"
+  },
+  {
+   "object": "PROCEDURE|PR_SSP_ANL_SHIP_UPDATE_BOH_VAL",
+   "result": "OK",
+   "applied": 5,
+   "lines_before": 287,
+   "lines_after": 287,
+   "same_line_count": true,
+   "sha_before": "cb1e9048ea73c4d1fc7161af855edff81e029ace",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:16"
+  },
+  {
+   "object": "PROCEDURE|P_SYS0012_APPROVE",
+   "result": "OK",
+   "applied": 3,
+   "lines_before": 120,
+   "lines_after": 120,
+   "same_line_count": true,
+   "sha_before": "e3d478ecf0675525f8ea194023fc2af60b132e9f",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:17"
+  },
+  {
+   "object": "PROCEDURE|P_SYS0012_REJECT",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 83,
+   "lines_after": 83,
+   "same_line_count": true,
+   "sha_before": "330c3d4bfd4eb2cfb8ea39f660a3a4e5132cbc61",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:17"
+  },
+  {
+   "object": "PROCEDURE|P_SYS0014_SAVE_GROUP_USER_M",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 187,
+   "lines_after": 187,
+   "same_line_count": true,
+   "sha_before": "4d7aab2f21dc4b646baa61c5e78c7b5ef50fc507",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:17"
+  },
+  {
+   "object": "VIEW|SCM_DNM_PRODUCT_RESULT_V",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 259,
+   "lines_after": 259,
+   "same_line_count": true,
+   "sha_before": "3d2d7e612b9000e1996159ea8629b83be7ad74e4",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:17"
+  },
+  {
+   "object": "VIEW|SCP_XLS_PSI_GLOBAL_ELECTRODE_LOAD_RATIO_V",
+   "result": "OK",
+   "applied": 1,
+   "lines_before": 73,
+   "lines_after": 73,
+   "same_line_count": true,
+   "sha_before": "5c4dd17f476c9dcca3cb2b5ffb744ca61af296f5",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:18"
+  },
+  {
+   "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_CELL_V",
+   "result": "OK",
+   "applied": 3,
+   "lines_before": 282,
+   "lines_after": 282,
+   "same_line_count": true,
+   "sha_before": "3e1fa24a51c9795e34f34c1814b2a455bd4b5e83",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:19"
+  },
+  {
+   "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_BP_V",
+   "result": "OK",
+   "applied": 14,
+   "lines_before": 2249,
+   "lines_after": 2249,
+   "same_line_count": true,
+   "sha_before": "e1fc38b85cb1a6092038716a99a5c98596be46b4",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:21"
+  },
+  {
+   "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V",
+   "result": "OK",
+   "applied": 14,
+   "lines_before": 1758,
+   "lines_after": 1758,
+   "same_line_count": true,
+   "sha_before": "cfe6350049085cd46874457df306a117f615881d",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:23"
+  },
+  {
+   "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V2",
+   "result": "OK",
+   "applied": 13,
+   "lines_before": 1883,
+   "lines_after": 1883,
+   "same_line_count": true,
+   "sha_before": "56ae3716a6425dd54e13a56e32d7d0790c757364",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:51:24"
+  },
+  {
+   "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_V",
+   "result": "SKIP(patch-miss)",
+   "applied": 4,
+   "miss": [
+    {
+     "line": 115,
+     "n": 8,
+     "old": "            ,NVL((SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M   WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '-"
+    },
+    {
+     "line": 163,
+     "n": 8,
+     "old": "            ,NVL((SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M   WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '-"
+    },
+    {
+     "line": 197,
+     "n": 8,
+     "old": "            ,NVL((SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M   WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '-"
+    },
+    {
+     "line": 441,
+     "n": 5,
+     "old": "            ,NVL((SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M   WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '-"
+    },
+    {
+     "line": 483,
+     "n": 5,
+     "old": "            ,NVL((SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M   WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '-"
+    }
+   ]
+  }
+ ]
+}

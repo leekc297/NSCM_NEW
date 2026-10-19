@@ -1,0 +1,11 @@
+.gridToolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+}
+
+.bucketActive {
+  font-weight: bold;
+  text-decoration: underline;
+}

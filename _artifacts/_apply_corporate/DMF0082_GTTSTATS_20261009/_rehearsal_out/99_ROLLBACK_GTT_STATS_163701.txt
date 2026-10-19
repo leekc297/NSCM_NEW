@@ -1,0 +1,23 @@
+﻿!!! ERROR: ORA-06550: line 4, column 95:
+PLS-00103: Encountered the symbol "end-of-file" when expecting one of the following:
+
+   := . ( % ;
+Help: https://docs.oracle.com/error-help/db/ora-06550/
+--- stmt head: /* 99 ROLLBACK — [E20261009-DMF0082GTTSTATS] 고정 통계 삭제 + PREF SESSION 복원 (적용 전 상태). 커서 무효화 포함 */
+BEGIN
+  FOR r IN (SELECT COLUMN_VALUE t FROM TABLE(SYS.ODCIVARCHAR2LIST('GT_DMF0082_TEMP_SITE_ITEM','GT_
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: DBMS_STATS.SET_TABLE_PREFS('SCM_MGR', r.t, 'GLOBAL_TEMP_TABLE_STATS', 'SESSION')
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: END LOOP
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: END
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: /
+SELECT 'ROLLED' CHK, T.TABLE_NAME, T.NUM_ROWS, DBMS_STATS.GET_PREFS('GLOBAL_TEMP_TABLE_STATS', 'SCM_MGR', T.TABLE_NAME) GTT_PREF
+  FROM USER_TABLES T
+ WHERE T.TABLE_NAME IN ('GT_DMF0082_TEMP_SITE_IT

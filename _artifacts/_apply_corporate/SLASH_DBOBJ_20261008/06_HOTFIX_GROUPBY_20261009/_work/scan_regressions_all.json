@@ -1,0 +1,4135 @@
+[
+ {
+  "otype": "PROCEDURE",
+  "name": "DMF0020_GET_SCM_MST_FUTURE_PRICE",
+  "backup": true,
+  "old": 18,
+  "fresh": 18,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 255,
+    "group_by_line": 272,
+    "select_line": 250,
+    "item": "CASE WHEN TRIM ( A.PLANT_SITE_ID ) IS NULL OR TRIM ( A.PLANT_SITE_ID ) IN ( '-' , '--' , '/' ) THEN '/' ELSE A.PLANT_SITE_ID END",
+    "leftover": [
+     "A.PLANT_SITE_ID",
+     "A.PLANT_SITE_ID",
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 260,
+    "group_by_line": 272,
+    "select_line": 250,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 354,
+    "group_by_line": 380,
+    "select_line": 347,
+    "item": "CASE WHEN TRIM ( A.PLANT_SITE_ID ) IS NULL OR TRIM ( A.PLANT_SITE_ID ) IN ( '-' , '--' , '/' ) THEN '/' ELSE A.PLANT_SITE_ID END",
+    "leftover": [
+     "A.PLANT_SITE_ID",
+     "A.PLANT_SITE_ID",
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "CASEWHENP_DIVISION_ID='82'ANDE.DM_RTF_YN='N'THENA.VERSION_NO||'('||D.WEEK_NAME||') (NO PLAN)'WHENP_DIVISION_ID='82'THENA.VERSION_NO||'('||D.WEEK_NAME||')'ELSEA.VERSION_NOEND",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 359,
+    "group_by_line": 380,
+    "select_line": 347,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "CASEWHENP_DIVISION_ID='82'ANDE.DM_RTF_YN='N'THENA.VERSION_NO||'('||D.WEEK_NAME||') (NO PLAN)'WHENP_DIVISION_ID='82'THENA.VERSION_NO||'('||D.WEEK_NAME||')'ELSEA.VERSION_NOEND",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "CASE"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 255,
+    "group_by_line": 272,
+    "select_line": 250,
+    "item": "CASE WHEN TRIM ( A.PLANT_SITE_ID ) IS NULL OR TRIM ( A.PLANT_SITE_ID ) IN ( '-' , '--' , '/' ) THEN '/' ELSE A.PLANT_SITE_ID END",
+    "leftover": [
+     "A.PLANT_SITE_ID",
+     "A.PLANT_SITE_ID",
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 260,
+    "group_by_line": 272,
+    "select_line": 250,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 354,
+    "group_by_line": 380,
+    "select_line": 347,
+    "item": "CASE WHEN TRIM ( A.PLANT_SITE_ID ) IS NULL OR TRIM ( A.PLANT_SITE_ID ) IN ( '-' , '--' , '/' ) THEN '/' ELSE A.PLANT_SITE_ID END",
+    "leftover": [
+     "A.PLANT_SITE_ID",
+     "A.PLANT_SITE_ID",
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "CASEWHENP_DIVISION_ID='82'ANDE.DM_RTF_YN='N'THENA.VERSION_NO||'('||D.WEEK_NAME||') (NO PLAN)'WHENP_DIVISION_ID='82'THENA.VERSION_NO||'('||D.WEEK_NAME||')'ELSEA.VERSION_NOEND",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 359,
+    "group_by_line": 380,
+    "select_line": 347,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "CASEWHENP_DIVISION_ID='82'ANDE.DM_RTF_YN='N'THENA.VERSION_NO||'('||D.WEEK_NAME||') (NO PLAN)'WHENP_DIVISION_ID='82'THENA.VERSION_NO||'('||D.WEEK_NAME||')'ELSEA.VERSION_NOEND",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "CASE"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "DMF0043_GET_CONTRIBUTION_SALES_LIST",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "P_SYS0012_APPROVE",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "P_SYS0012_REJECT",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "P_SYS0014_SAVE_GROUP_USER_M",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_COM0000",
+  "backup": true,
+  "old": 1,
+  "fresh": 1,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0004",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0014",
+  "backup": true,
+  "old": 5,
+  "fresh": 5,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0020",
+  "backup": true,
+  "old": 9,
+  "fresh": 9,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0021",
+  "backup": true,
+  "old": 9,
+  "fresh": 9,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 3799,
+    "group_by_line": 3804,
+    "select_line": 3799,
+    "item": "CASE WHEN ( A.DIVISION_ID = '40' OR SUBSTR ( A.DIVISION_ID , 1 , 2 ) = '81' ) THEN NVL ( A.CELL_PROD_SITE_ID , '/' ) ELSE '-' END",
+    "leftover": [
+     "A.CELL_PROD_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "CASE"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 3792,
+    "group_by_line": 3797,
+    "select_line": 3792,
+    "item": "CASE WHEN ( A.DIVISION_ID = '40' OR SUBSTR ( A.DIVISION_ID , 1 , 2 ) = '81' ) THEN NVL ( A.CELL_PROD_SITE_ID , '/' ) ELSE '-' END",
+    "leftover": [
+     "A.CELL_PROD_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "CASE"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0022",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0035",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0042",
+  "backup": true,
+  "old": 6,
+  "fresh": 6,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0043",
+  "backup": true,
+  "old": 4,
+  "fresh": 4,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0044",
+  "backup": true,
+  "old": 99,
+  "fresh": 114,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 3355,
+    "group_by_line": 3369,
+    "select_line": 3350,
+    "item": "NVL ( NULLIF ( RTRIM ( YYYYMM ) , '' ) , '/' )",
+    "leftover": [
+     "YYYYMM"
+    ],
+    "group_keys": [
+     "A.DATA_TYPE",
+     "A.DIVISION_ID",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DEPARTMENT_ID",
+     "A.DEPARTMENT_NAME",
+     "A.DEPT_ID",
+     "A.DEPT_NAME",
+     "A.END_CUST_REPORT",
+     "A.CUST_REPORT",
+     "A.PRODUCT_GROUP",
+     "A.PROJECT_CODE",
+     "A.ITEM_ID",
+     "A.MEASURE",
+     "A.YYYYMM",
+     "A.CURRENCY",
+     "NVL(NVL(A.COMPANY_ID,B.COMPANY_ID),'/')"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 3355,
+    "group_by_line": 3369,
+    "select_line": 3350,
+    "item": "NVL ( NULLIF ( RTRIM ( CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "CURRENCY"
+    ],
+    "group_keys": [
+     "A.DATA_TYPE",
+     "A.DIVISION_ID",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DEPARTMENT_ID",
+     "A.DEPARTMENT_NAME",
+     "A.DEPT_ID",
+     "A.DEPT_NAME",
+     "A.END_CUST_REPORT",
+     "A.CUST_REPORT",
+     "A.PRODUCT_GROUP",
+     "A.PROJECT_CODE",
+     "A.ITEM_ID",
+     "A.MEASURE",
+     "A.YYYYMM",
+     "A.CURRENCY",
+     "NVL(NVL(A.COMPANY_ID,B.COMPANY_ID),'/')"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 3394,
+    "group_by_line": 3400,
+    "select_line": 3389,
+    "item": "NVL ( NULLIF ( RTRIM ( YYYYMM ) , '' ) , '/' )",
+    "leftover": [
+     "YYYYMM"
+    ],
+    "group_keys": [
+     "A.DATA_TYPE",
+     "A.DIVISION_ID",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DEPARTMENT_ID",
+     "A.DEPARTMENT_NAME",
+     "A.DEPT_ID",
+     "A.DEPT_NAME",
+     "A.END_CUST_REPORT",
+     "A.CUST_REPORT",
+     "A.PRODUCT_GROUP",
+     "A.PROJECT_CODE",
+     "A.ITEM_ID",
+     "A.MEASURE",
+     "A.YYYYMM",
+     "A.CURRENCY",
+     "A.COMPANY_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 3394,
+    "group_by_line": 3400,
+    "select_line": 3389,
+    "item": "NVL ( NULLIF ( RTRIM ( CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "CURRENCY"
+    ],
+    "group_keys": [
+     "A.DATA_TYPE",
+     "A.DIVISION_ID",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DEPARTMENT_ID",
+     "A.DEPARTMENT_NAME",
+     "A.DEPT_ID",
+     "A.DEPT_NAME",
+     "A.END_CUST_REPORT",
+     "A.CUST_REPORT",
+     "A.PRODUCT_GROUP",
+     "A.PROJECT_CODE",
+     "A.ITEM_ID",
+     "A.MEASURE",
+     "A.YYYYMM",
+     "A.CURRENCY",
+     "A.COMPANY_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 7935,
+    "group_by_line": 7961,
+    "select_line": 7932,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'-')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "B.SALES_COMPANY",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 7970,
+    "group_by_line": 7995,
+    "select_line": 7967,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'-')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "B.SALES_COMPANY",
+     "B.ATTRIBUTE1"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8006,
+    "group_by_line": 8026,
+    "select_line": 8002,
+    "item": "CASE WHEN ( NVL ( A.CURRENCY , '/' ) = '/' ) THEN '' ELSE NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' ) END",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8036,
+    "group_by_line": 8057,
+    "select_line": 8033,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8066,
+    "group_by_line": 8083,
+    "select_line": 8063,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8093,
+    "group_by_line": 8112,
+    "select_line": 8090,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'-')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "B.SALES_COMPANY",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8123,
+    "group_by_line": 8140,
+    "select_line": 8120,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8278,
+    "group_by_line": 8290,
+    "select_line": 8272,
+    "item": "NVL ( NULLIF ( RTRIM ( B.SALES_COMPANY ) , '' ) , '/' )",
+    "leftover": [
+     "B.SALES_COMPANY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.CURRENCY",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMM",
+     "B.ATTRIBUTE1",
+     "NVL(B.SALES_COMPANY,'-')",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8281,
+    "group_by_line": 8290,
+    "select_line": 8272,
+    "item": "NVL ( NULLIF ( RTRIM ( A.ITEM_USE ) , '' ) , '/' )",
+    "leftover": [
+     "A.ITEM_USE"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.CURRENCY",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMM",
+     "B.ATTRIBUTE1",
+     "NVL(B.SALES_COMPANY,'-')",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8281,
+    "group_by_line": 8290,
+    "select_line": 8272,
+    "item": "NVL ( NULLIF ( RTRIM ( A.END_CUSTOMER ) , '' ) , '/' )",
+    "leftover": [
+     "A.END_CUSTOMER"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.CURRENCY",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMM",
+     "B.ATTRIBUTE1",
+     "NVL(B.SALES_COMPANY,'-')",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8442,
+    "group_by_line": 8459,
+    "select_line": 8441,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8466,
+    "group_by_line": 8488,
+    "select_line": 8465,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8495,
+    "group_by_line": 8513,
+    "select_line": 8494,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8521,
+    "group_by_line": 8539,
+    "select_line": 8520,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8546,
+    "group_by_line": 8569,
+    "select_line": 8545,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8576,
+    "group_by_line": 8598,
+    "select_line": 8575,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 9205,
+    "group_by_line": 9266,
+    "select_line": 9197,
+    "item": "NVL ( NULLIF ( RTRIM ( A.COMPANY_ID ) , '' ) , '/' )",
+    "leftover": [
+     "A.COMPANY_ID"
+    ],
+    "group_keys": [
+     "A.DATA_TYPE",
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DEPARTMENT_ID",
+     "A.DEPARTMENT_NAME",
+     "A.DEPT_ID",
+     "A.DEPT_NAME",
+     "A.END_CUST_REPORT",
+     "A.CUST_REPORT",
+     "A.PRODUCT_GROUP",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.MEASURE",
+     "A.YYYYMM",
+     "A.CURRENCY",
+     "NVL(A.COMPANY_ID,'/')",
+     "A.COUNTRY_KR_NAME",
+     "A.CELL_PROD_SITE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 10373,
+    "group_by_line": 10423,
+    "select_line": 10343,
+    "item": "NVL ( OV.ORI_VERSION_NO , '/' )",
+    "leftover": [
+     "OV.ORI_VERSION_NO"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PRODUCT_GROUP",
+     "CASE"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 3355,
+    "group_by_line": 3369,
+    "select_line": 3350,
+    "item": "NVL ( NULLIF ( RTRIM ( YYYYMM ) , '' ) , '/' )",
+    "leftover": [
+     "YYYYMM"
+    ],
+    "group_keys": [
+     "A.DATA_TYPE",
+     "A.DIVISION_ID",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DEPARTMENT_ID",
+     "A.DEPARTMENT_NAME",
+     "A.DEPT_ID",
+     "A.DEPT_NAME",
+     "A.END_CUST_REPORT",
+     "A.CUST_REPORT",
+     "A.PRODUCT_GROUP",
+     "A.PROJECT_CODE",
+     "A.ITEM_ID",
+     "A.MEASURE",
+     "A.YYYYMM",
+     "A.CURRENCY",
+     "NVL(NVL(A.COMPANY_ID,B.COMPANY_ID),'/')"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 3355,
+    "group_by_line": 3369,
+    "select_line": 3350,
+    "item": "NVL ( NULLIF ( RTRIM ( CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "CURRENCY"
+    ],
+    "group_keys": [
+     "A.DATA_TYPE",
+     "A.DIVISION_ID",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DEPARTMENT_ID",
+     "A.DEPARTMENT_NAME",
+     "A.DEPT_ID",
+     "A.DEPT_NAME",
+     "A.END_CUST_REPORT",
+     "A.CUST_REPORT",
+     "A.PRODUCT_GROUP",
+     "A.PROJECT_CODE",
+     "A.ITEM_ID",
+     "A.MEASURE",
+     "A.YYYYMM",
+     "A.CURRENCY",
+     "NVL(NVL(A.COMPANY_ID,B.COMPANY_ID),'/')"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 3394,
+    "group_by_line": 3400,
+    "select_line": 3389,
+    "item": "NVL ( NULLIF ( RTRIM ( YYYYMM ) , '' ) , '/' )",
+    "leftover": [
+     "YYYYMM"
+    ],
+    "group_keys": [
+     "A.DATA_TYPE",
+     "A.DIVISION_ID",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DEPARTMENT_ID",
+     "A.DEPARTMENT_NAME",
+     "A.DEPT_ID",
+     "A.DEPT_NAME",
+     "A.END_CUST_REPORT",
+     "A.CUST_REPORT",
+     "A.PRODUCT_GROUP",
+     "A.PROJECT_CODE",
+     "A.ITEM_ID",
+     "A.MEASURE",
+     "A.YYYYMM",
+     "A.CURRENCY",
+     "A.COMPANY_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 3394,
+    "group_by_line": 3400,
+    "select_line": 3389,
+    "item": "NVL ( NULLIF ( RTRIM ( CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "CURRENCY"
+    ],
+    "group_keys": [
+     "A.DATA_TYPE",
+     "A.DIVISION_ID",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DEPARTMENT_ID",
+     "A.DEPARTMENT_NAME",
+     "A.DEPT_ID",
+     "A.DEPT_NAME",
+     "A.END_CUST_REPORT",
+     "A.CUST_REPORT",
+     "A.PRODUCT_GROUP",
+     "A.PROJECT_CODE",
+     "A.ITEM_ID",
+     "A.MEASURE",
+     "A.YYYYMM",
+     "A.CURRENCY",
+     "A.COMPANY_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 7935,
+    "group_by_line": 7961,
+    "select_line": 7932,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'-')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "B.SALES_COMPANY",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 7970,
+    "group_by_line": 7995,
+    "select_line": 7967,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'-')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "B.SALES_COMPANY",
+     "B.ATTRIBUTE1"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8006,
+    "group_by_line": 8026,
+    "select_line": 8002,
+    "item": "CASE WHEN ( NVL ( A.CURRENCY , '/' ) = '/' ) THEN '' ELSE NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' ) END",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8036,
+    "group_by_line": 8057,
+    "select_line": 8033,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8066,
+    "group_by_line": 8083,
+    "select_line": 8063,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8093,
+    "group_by_line": 8112,
+    "select_line": 8090,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'-')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "B.SALES_COMPANY",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8123,
+    "group_by_line": 8140,
+    "select_line": 8120,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "B.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8278,
+    "group_by_line": 8290,
+    "select_line": 8272,
+    "item": "NVL ( NULLIF ( RTRIM ( B.SALES_COMPANY ) , '' ) , '/' )",
+    "leftover": [
+     "B.SALES_COMPANY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.CURRENCY",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMM",
+     "B.ATTRIBUTE1",
+     "NVL(B.SALES_COMPANY,'-')",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8281,
+    "group_by_line": 8290,
+    "select_line": 8272,
+    "item": "NVL ( NULLIF ( RTRIM ( A.ITEM_USE ) , '' ) , '/' )",
+    "leftover": [
+     "A.ITEM_USE"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.CURRENCY",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMM",
+     "B.ATTRIBUTE1",
+     "NVL(B.SALES_COMPANY,'-')",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8281,
+    "group_by_line": 8290,
+    "select_line": 8272,
+    "item": "NVL ( NULLIF ( RTRIM ( A.END_CUSTOMER ) , '' ) , '/' )",
+    "leftover": [
+     "A.END_CUSTOMER"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.CURRENCY",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMM",
+     "B.ATTRIBUTE1",
+     "NVL(B.SALES_COMPANY,'-')",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8442,
+    "group_by_line": 8459,
+    "select_line": 8441,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8466,
+    "group_by_line": 8488,
+    "select_line": 8465,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8495,
+    "group_by_line": 8513,
+    "select_line": 8494,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8521,
+    "group_by_line": 8539,
+    "select_line": 8520,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "M.O_MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8546,
+    "group_by_line": 8569,
+    "select_line": 8545,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 8576,
+    "group_by_line": 8598,
+    "select_line": 8575,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "NVL(A.CURRENCY,'/')",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "A.COMPANY_ID",
+     "B.ATTRIBUTE1",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 9205,
+    "group_by_line": 9266,
+    "select_line": 9197,
+    "item": "NVL ( NULLIF ( RTRIM ( A.COMPANY_ID ) , '' ) , '/' )",
+    "leftover": [
+     "A.COMPANY_ID"
+    ],
+    "group_keys": [
+     "A.DATA_TYPE",
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.DEPARTMENT_ID",
+     "A.DEPARTMENT_NAME",
+     "A.DEPT_ID",
+     "A.DEPT_NAME",
+     "A.END_CUST_REPORT",
+     "A.CUST_REPORT",
+     "A.PRODUCT_GROUP",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.MEASURE",
+     "A.YYYYMM",
+     "A.CURRENCY",
+     "NVL(A.COMPANY_ID,'/')",
+     "A.COUNTRY_KR_NAME",
+     "A.CELL_PROD_SITE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 10373,
+    "group_by_line": 10423,
+    "select_line": 10343,
+    "item": "NVL ( OV.ORI_VERSION_NO , '/' )",
+    "leftover": [
+     "OV.ORI_VERSION_NO"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PRODUCT_GROUP",
+     "CASE"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0045",
+  "backup": true,
+  "old": 0,
+  "fresh": 1,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 321,
+    "group_by_line": 378,
+    "select_line": 316,
+    "item": "NVL ( NULLIF ( RTRIM ( PROJECT_CODE ) , '' ) , '/' )",
+    "leftover": [
+     "PROJECT_CODE"
+    ],
+    "group_keys": [
+     "DIVISION_ID",
+     "PLAN_START_YYYYMMDD",
+     "PLAN_TYPE",
+     "SEQ",
+     "NVL(PROJECT_CODE,'/')",
+     "FCST_TYPE",
+     "ITEM_ID",
+     "TO_SITE",
+     "INCOTERMS",
+     "FROM_SITE",
+     "TRANSPORT_MODE",
+     "BOD_ID",
+     "MEASURE",
+     "YYYYMMDD"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 321,
+    "group_by_line": 378,
+    "select_line": 316,
+    "item": "NVL ( NULLIF ( RTRIM ( PROJECT_CODE ) , '' ) , '/' )",
+    "leftover": [
+     "PROJECT_CODE"
+    ],
+    "group_keys": [
+     "DIVISION_ID",
+     "PLAN_START_YYYYMMDD",
+     "PLAN_TYPE",
+     "SEQ",
+     "NVL(PROJECT_CODE,'/')",
+     "FCST_TYPE",
+     "ITEM_ID",
+     "TO_SITE",
+     "INCOTERMS",
+     "FROM_SITE",
+     "TRANSPORT_MODE",
+     "BOD_ID",
+     "MEASURE",
+     "YYYYMMDD"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0049",
+  "backup": true,
+  "old": 10,
+  "fresh": 10,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0051",
+  "backup": true,
+  "old": 9,
+  "fresh": 9,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0072",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0074",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0082",
+  "backup": true,
+  "old": 20,
+  "fresh": 20,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_NSCM_UI_COM_LOOKUP",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_S39V2",
+  "backup": true,
+  "old": 3,
+  "fresh": 3,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_S39V3",
+  "backup": true,
+  "old": 3,
+  "fresh": 3,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_S39V4",
+  "backup": true,
+  "old": 3,
+  "fresh": 3,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_S39V5",
+  "backup": true,
+  "old": 3,
+  "fresh": 3,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_S39V6",
+  "backup": true,
+  "old": 3,
+  "fresh": 3,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_S39V7",
+  "backup": true,
+  "old": 3,
+  "fresh": 3,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCM0002",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0005",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0007",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0009",
+  "backup": true,
+  "old": 1,
+  "fresh": 1,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0010",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0011",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0013",
+  "backup": true,
+  "old": 11,
+  "fresh": 11,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 2649,
+    "group_by_line": 2690,
+    "select_line": 2627,
+    "item": "NVL ( NULLIF ( RTRIM ( R.ELECTRODE_TYPE ) , '' ) , '/' )",
+    "leftover": [
+     "R.ELECTRODE_TYPE"
+    ],
+    "group_keys": [
+     "R.SCP_OPERATION_GROUP",
+     "R.SCM_SITE_ID",
+     "R.ITEM_ID",
+     "R.OPERATION_ID",
+     "CASE"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 2649,
+    "group_by_line": 2690,
+    "select_line": 2627,
+    "item": "NVL ( NULLIF ( RTRIM ( R.ELECTRODE_TYPE ) , '' ) , '/' )",
+    "leftover": [
+     "R.ELECTRODE_TYPE"
+    ],
+    "group_keys": [
+     "R.SCP_OPERATION_GROUP",
+     "R.SCM_SITE_ID",
+     "R.ITEM_ID",
+     "R.OPERATION_ID",
+     "CASE"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0017",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0018",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0020",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0025",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0027",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0030",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0031",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0039",
+  "backup": true,
+  "old": 3,
+  "fresh": 3,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0039_VF",
+  "backup": true,
+  "old": 3,
+  "fresh": 3,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0048",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0049",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0055",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0098",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0100",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0105",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SDM1010",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0012",
+  "backup": true,
+  "old": 33,
+  "fresh": 33,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 231,
+    "group_by_line": 343,
+    "select_line": 185,
+    "item": "CASE WHEN SUBSTR ( A.CONFIRM_ID , 1 , 1 ) = 'P' THEN '/' ELSE A.CONFIRM_ID END",
+    "leftover": [
+     "A.CONFIRM_ID",
+     "A.CONFIRM_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PLAN_START_YYYYMMDD",
+     "A.PLAN_TYPE",
+     "A.ITEM_ID",
+     "A.FROM_SITE",
+     "A.TO_SITE",
+     "A.YYYYMMDD",
+     "A.BOD_ID",
+     "A.PROJECT_CODE",
+     "A.BIZ_TYPE",
+     "E.LT_TOTAL",
+     "E.SSP_INCOTERMS",
+     "E.TRANSPORT_MODE",
+     "E.LT_DEPARTURE_INLAND",
+     "E.LT_WAIT_SHIPPING",
+     "A.FCST_TYPE",
+     "CASE"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 231,
+    "group_by_line": 343,
+    "select_line": 185,
+    "item": "CASE WHEN SUBSTR ( A.CONFIRM_ID , 1 , 1 ) = 'P' THEN '/' ELSE A.CONFIRM_ID END",
+    "leftover": [
+     "A.CONFIRM_ID",
+     "A.CONFIRM_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PLAN_START_YYYYMMDD",
+     "A.PLAN_TYPE",
+     "A.ITEM_ID",
+     "A.FROM_SITE",
+     "A.TO_SITE",
+     "A.YYYYMMDD",
+     "A.BOD_ID",
+     "A.PROJECT_CODE",
+     "A.BIZ_TYPE",
+     "E.LT_TOTAL",
+     "E.SSP_INCOTERMS",
+     "E.TRANSPORT_MODE",
+     "E.LT_DEPARTURE_INLAND",
+     "E.LT_WAIT_SHIPPING",
+     "A.FCST_TYPE",
+     "CASE"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0015",
+  "backup": true,
+  "old": 10,
+  "fresh": 10,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0019",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0021",
+  "backup": true,
+  "old": 4,
+  "fresh": 4,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0023_CHK",
+  "backup": true,
+  "old": 3,
+  "fresh": 3,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0045",
+  "backup": true,
+  "old": 0,
+  "fresh": 1,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 322,
+    "group_by_line": 377,
+    "select_line": 317,
+    "item": "NVL ( NULLIF ( RTRIM ( PROJECT_CODE ) , '' ) , '/' )",
+    "leftover": [
+     "PROJECT_CODE"
+    ],
+    "group_keys": [
+     "DIVISION_ID",
+     "PLAN_START_YYYYMMDD",
+     "PLAN_TYPE",
+     "NVL(PROJECT_CODE,'/')",
+     "FCST_TYPE",
+     "ITEM_ID",
+     "TO_SITE",
+     "INCOTERMS",
+     "FROM_SITE",
+     "TRANSPORT_MODE",
+     "BOD_ID",
+     "MEASURE",
+     "YYYYMMDD"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 322,
+    "group_by_line": 377,
+    "select_line": 317,
+    "item": "NVL ( NULLIF ( RTRIM ( PROJECT_CODE ) , '' ) , '/' )",
+    "leftover": [
+     "PROJECT_CODE"
+    ],
+    "group_keys": [
+     "DIVISION_ID",
+     "PLAN_START_YYYYMMDD",
+     "PLAN_TYPE",
+     "NVL(PROJECT_CODE,'/')",
+     "FCST_TYPE",
+     "ITEM_ID",
+     "TO_SITE",
+     "INCOTERMS",
+     "FROM_SITE",
+     "TRANSPORT_MODE",
+     "BOD_ID",
+     "MEASURE",
+     "YYYYMMDD"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0060",
+  "backup": true,
+  "old": 4,
+  "fresh": 4,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0200",
+  "backup": true,
+  "old": 4,
+  "fresh": 4,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SYS0010",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SYS0012",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SYS0013",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SYS0014",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_ZTMP_S015J",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_ZTMP_S015K",
+  "backup": true,
+  "old": 10,
+  "fresh": 10,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_ZTMP_S200B",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_ANL_KPI_SALES_ACCURACY",
+  "backup": true,
+  "old": 8,
+  "fresh": 8,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 189,
+    "group_by_line": 233,
+    "select_line": 185,
+    "item": "CASE WHEN A.DIVISION_ID = '40' THEN NVL ( C.PROJECT_CODE , '/' ) ELSE NVL ( B.END_CUSTOMER , '-' ) END END_CUSTOMER",
+    "leftover": [
+     "C.PROJECT_CODE",
+     "B.END_CUSTOMER"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "C.DEPT_ID",
+     "CASE"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 189,
+    "group_by_line": 233,
+    "select_line": 185,
+    "item": "CASE WHEN A.DIVISION_ID = '40' THEN NVL ( C.PROJECT_CODE , '/' ) ELSE NVL ( B.END_CUSTOMER , '-' ) END END_CUSTOMER",
+    "leftover": [
+     "C.PROJECT_CODE",
+     "B.END_CUSTOMER"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "C.DEPT_ID",
+     "CASE"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_ANL_KPI_SUMMARY",
+  "backup": true,
+  "old": 126,
+  "fresh": 126,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_ANL_MKT_PSI_DATA",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_MKT_FCST_SAVE",
+  "backup": true,
+  "old": 1,
+  "fresh": 1,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_CUST_ITEM_MAPPING",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_DNM_CREATE_C_WS_RTF",
+  "backup": true,
+  "old": 15,
+  "fresh": 15,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 277,
+    "group_by_line": 282,
+    "select_line": 274,
+    "item": "CASE WHEN A.DIVISION_ID LIKE '81%' THEN A.PLANT_SITE_ID ELSE '/' END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1099,
+    "group_by_line": 1110,
+    "select_line": 1095,
+    "item": "CASE WHEN A.DIVISION_ID LIKE '81%' THEN A.PLANT_SITE_ID ELSE '/' END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "B.MEASURE",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1190,
+    "group_by_line": 1202,
+    "select_line": 1186,
+    "item": "CASE WHEN A.DIVISION_ID LIKE '81%' THEN A.PLANT_SITE_ID ELSE '/' END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "B.MEASURE",
+     "CASE"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 277,
+    "group_by_line": 282,
+    "select_line": 274,
+    "item": "CASE WHEN A.DIVISION_ID LIKE '81%' THEN A.PLANT_SITE_ID ELSE '/' END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1096,
+    "group_by_line": 1107,
+    "select_line": 1092,
+    "item": "CASE WHEN A.DIVISION_ID LIKE '81%' THEN A.PLANT_SITE_ID ELSE '/' END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "B.MEASURE",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1187,
+    "group_by_line": 1199,
+    "select_line": 1183,
+    "item": "CASE WHEN A.DIVISION_ID LIKE '81%' THEN A.PLANT_SITE_ID ELSE '/' END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "B.MEASURE",
+     "CASE"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_DNM_CREATE_WS_RTF",
+  "backup": true,
+  "old": 15,
+  "fresh": 15,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 259,
+    "group_by_line": 264,
+    "select_line": 256,
+    "item": "CASE WHEN A.DIVISION_ID LIKE '81%' THEN A.PLANT_SITE_ID ELSE '/' END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1075,
+    "group_by_line": 1086,
+    "select_line": 1072,
+    "item": "CASE WHEN A.DIVISION_ID LIKE '81%' THEN A.PLANT_SITE_ID ELSE '/' END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "B.MEASURE",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1158,
+    "group_by_line": 1170,
+    "select_line": 1150,
+    "item": "CASE WHEN A.DIVISION_ID LIKE '81%' THEN A.PLANT_SITE_ID ELSE '/' END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "B.MEASURE",
+     "CASE"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 259,
+    "group_by_line": 264,
+    "select_line": 256,
+    "item": "CASE WHEN A.DIVISION_ID LIKE '81%' THEN A.PLANT_SITE_ID ELSE '/' END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1072,
+    "group_by_line": 1083,
+    "select_line": 1069,
+    "item": "CASE WHEN A.DIVISION_ID LIKE '81%' THEN A.PLANT_SITE_ID ELSE '/' END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "B.MEASURE",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1155,
+    "group_by_line": 1167,
+    "select_line": 1147,
+    "item": "CASE WHEN A.DIVISION_ID LIKE '81%' THEN A.PLANT_SITE_ID ELSE '/' END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "B.MEASURE",
+     "CASE"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_DNM_EDI_CALLOFF_DATA",
+  "backup": true,
+  "old": 4,
+  "fresh": 4,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_DNM_EDI_CALLOFF_MKT_FCST",
+  "backup": true,
+  "old": 14,
+  "fresh": 18,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 457,
+    "group_by_line": 497,
+    "select_line": 449,
+    "item": "NVL ( NULLIF ( RTRIM ( A.SALES_PLANT_SITE_ID ) , '' ) , '/' )",
+    "leftover": [
+     "A.SALES_PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.ERP_FCST_TYPE",
+     "A.EDI_INCOTERMS",
+     "NVL(A.SALES_PLANT_SITE_ID,'-')",
+     "A.BASIS_YYYYMMDD"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 522,
+    "group_by_line": 562,
+    "select_line": 507,
+    "item": "NVL ( NULLIF ( RTRIM ( A.SALES_PLANT_SITE_ID ) , '' ) , '/' )",
+    "leftover": [
+     "A.SALES_PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.ERP_FCST_TYPE",
+     "A.EDI_INCOTERMS",
+     "A.SCHEDULING_TYPE",
+     "NVL(A.SALES_PLANT_SITE_ID,'-')",
+     "A.BASIS_YYYYMMDD"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1057,
+    "group_by_line": 1097,
+    "select_line": 1054,
+    "item": "NVL ( NULLIF ( RTRIM ( A.SALES_PLANT_SITE_ID ) , '' ) , '/' )",
+    "leftover": [
+     "A.SALES_PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.ERP_FCST_TYPE",
+     "A.EDI_INCOTERMS",
+     "NVL(A.SALES_PLANT_SITE_ID,'-')",
+     "A.BASIS_YYYYMMDD"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1122,
+    "group_by_line": 1162,
+    "select_line": 1107,
+    "item": "NVL ( NULLIF ( RTRIM ( A.SALES_PLANT_SITE_ID ) , '' ) , '/' )",
+    "leftover": [
+     "A.SALES_PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.SCHEDULING_TYPE",
+     "A.DOM_EXP",
+     "A.ERP_FCST_TYPE",
+     "A.EDI_INCOTERMS",
+     "NVL(A.SALES_PLANT_SITE_ID,'-')",
+     "A.BASIS_YYYYMMDD"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 457,
+    "group_by_line": 497,
+    "select_line": 449,
+    "item": "NVL ( NULLIF ( RTRIM ( A.SALES_PLANT_SITE_ID ) , '' ) , '/' )",
+    "leftover": [
+     "A.SALES_PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.ERP_FCST_TYPE",
+     "A.EDI_INCOTERMS",
+     "NVL(A.SALES_PLANT_SITE_ID,'-')",
+     "A.BASIS_YYYYMMDD"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 522,
+    "group_by_line": 562,
+    "select_line": 507,
+    "item": "NVL ( NULLIF ( RTRIM ( A.SALES_PLANT_SITE_ID ) , '' ) , '/' )",
+    "leftover": [
+     "A.SALES_PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.ERP_FCST_TYPE",
+     "A.EDI_INCOTERMS",
+     "A.SCHEDULING_TYPE",
+     "NVL(A.SALES_PLANT_SITE_ID,'-')",
+     "A.BASIS_YYYYMMDD"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1057,
+    "group_by_line": 1097,
+    "select_line": 1054,
+    "item": "NVL ( NULLIF ( RTRIM ( A.SALES_PLANT_SITE_ID ) , '' ) , '/' )",
+    "leftover": [
+     "A.SALES_PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.ERP_FCST_TYPE",
+     "A.EDI_INCOTERMS",
+     "NVL(A.SALES_PLANT_SITE_ID,'-')",
+     "A.BASIS_YYYYMMDD"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1122,
+    "group_by_line": 1162,
+    "select_line": 1107,
+    "item": "NVL ( NULLIF ( RTRIM ( A.SALES_PLANT_SITE_ID ) , '' ) , '/' )",
+    "leftover": [
+     "A.SALES_PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.SCHEDULING_TYPE",
+     "A.DOM_EXP",
+     "A.ERP_FCST_TYPE",
+     "A.EDI_INCOTERMS",
+     "NVL(A.SALES_PLANT_SITE_ID,'-')",
+     "A.BASIS_YYYYMMDD"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_PLN_CUST_FCST_RECORD",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE",
+  "backup": true,
+  "old": 28,
+  "fresh": 28,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1978,
+    "group_by_line": 1989,
+    "select_line": 1970,
+    "item": "NVL ( A.CELL_PROD_SITE_ID , '/' )",
+    "leftover": [
+     "A.CELL_PROD_SITE_ID"
+    ],
+    "group_keys": [
+     "A.ORIGIN_DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SALES_SITE_ID",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1979,
+    "group_by_line": 1989,
+    "select_line": 1970,
+    "item": "CASE WHEN ( A.ORIGIN_DIVISION_ID IN ( '40' ) AND NVL ( A.CELL_PROD_SITE_ID , '/' ) = '/' ) THEN A.FROM_SITE_ID ELSE NVL ( A.CELL_PROD_SITE_ID , '/' ) END",
+    "leftover": [
+     "A.CELL_PROD_SITE_ID",
+     "A.FROM_SITE_ID",
+     "A.CELL_PROD_SITE_ID"
+    ],
+    "group_keys": [
+     "A.ORIGIN_DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SALES_SITE_ID",
+     "CASE"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1976,
+    "group_by_line": 1987,
+    "select_line": 1968,
+    "item": "NVL ( A.CELL_PROD_SITE_ID , '/' )",
+    "leftover": [
+     "A.CELL_PROD_SITE_ID"
+    ],
+    "group_keys": [
+     "A.ORIGIN_DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SALES_SITE_ID",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1977,
+    "group_by_line": 1987,
+    "select_line": 1968,
+    "item": "CASE WHEN ( A.ORIGIN_DIVISION_ID IN ( '40' ) AND NVL ( A.CELL_PROD_SITE_ID , '/' ) = '/' ) THEN A.FROM_SITE_ID ELSE NVL ( A.CELL_PROD_SITE_ID , '/' ) END",
+    "leftover": [
+     "A.CELL_PROD_SITE_ID",
+     "A.FROM_SITE_ID",
+     "A.CELL_PROD_SITE_ID"
+    ],
+    "group_keys": [
+     "A.ORIGIN_DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SALES_SITE_ID",
+     "CASE"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_PLN_MKT_FCST_SALES_RESULT_MAPPING",
+  "backup": true,
+  "old": 18,
+  "fresh": 18,
+  "new_vs_backup": [],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 305,
+    "group_by_line": 320,
+    "select_line": 304,
+    "item": "NVL ( CASE WHEN LENGTH ( A.SOLDTO_CODE ) = 4 AND C.SEGMENT4 IS NULL THEN CASE WHEN A.SOLDTO_CODE = 'B100' THEN 'C100' ELSE A.SOLDTO_CODE END ELSE A.SALES_SITE_ID END , '/' )",
+    "leftover": [
+     "A.SOLDTO_CODE",
+     "C.SEGMENT4",
+     "A.SOLDTO_CODE",
+     "A.SOLDTO_CODE",
+     "A.SALES_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 306,
+    "group_by_line": 320,
+    "select_line": 304,
+    "item": "NVL ( NULLIF ( RTRIM ( A.PLANT_SITE_ID ) , '' ) , '/' )",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 347,
+    "group_by_line": 357,
+    "select_line": 329,
+    "item": "CASE WHEN ( A.DIVISION_ID = '40' AND A.FROM_COMPANY_ID IS NOT NULL AND A.ITEM_ID = NVL ( C.ITEM_ID , '~' ) ) THEN NVL ( NULLIF ( RTRIM ( B.SCM_SITE_ID ) , '' ) , '/' ) WHEN ( A.DIVISION_ID = '40' AND ",
+    "leftover": [
+     "A.FROM_COMPANY_ID",
+     "C.ITEM_ID",
+     "B.SCM_SITE_ID",
+     "A.FROM_COMPANY_ID",
+     "C.ITEM_ID",
+     "A.PLANT_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SALES_SITE_ID",
+     "A.PLANT_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "NVL(A.FCST_TYPE,'MASS')",
+     "A.INCOTERMS",
+     "A.YYYYMMDD",
+     "CASE"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_PLN_MKT_FCST_TO_NET_DEMAND",
+  "backup": true,
+  "old": 10,
+  "fresh": 10,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 239,
+    "group_by_line": 275,
+    "select_line": 236,
+    "item": "CASE WHEN A.DIVISION_ID IN ( '82' , '40' ) THEN '/' ELSE A.PLANT_SITE_ID END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 291,
+    "group_by_line": 320,
+    "select_line": 284,
+    "item": "CASE WHEN A.DIVISION_ID IN ( '82' , '40' ) THEN '/' ELSE A.PLANT_SITE_ID END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.SALES_SITE_ID",
+     "A.PROJECT_CODE",
+     "A.ITEM_ID",
+     "A.INCOTERMS",
+     "CASE"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 239,
+    "group_by_line": 275,
+    "select_line": 236,
+    "item": "CASE WHEN A.DIVISION_ID IN ( '82' , '40' ) THEN '/' ELSE A.PLANT_SITE_ID END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.VERSION_NO",
+     "A.CUTOFF_TYPE",
+     "A.CUTOFF_YYYYMMDD",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "CASE"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 291,
+    "group_by_line": 320,
+    "select_line": 284,
+    "item": "CASE WHEN A.DIVISION_ID IN ( '82' , '40' ) THEN '/' ELSE A.PLANT_SITE_ID END",
+    "leftover": [
+     "A.PLANT_SITE_ID"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.SALES_SITE_ID",
+     "A.PROJECT_CODE",
+     "A.ITEM_ID",
+     "A.INCOTERMS",
+     "CASE"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_PLN_SALES_PLAN_RESULT_MOVE",
+  "backup": true,
+  "old": 0,
+  "fresh": 1,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 100,
+    "group_by_line": 126,
+    "select_line": 90,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "NVL(A.CURRENCY,'-')",
+     "A.CREATED_BY",
+     "A.CREATION_DATE",
+     "A.LAST_UPDATED_BY",
+     "A.ATTRIBUTE1",
+     "A.ATTRIBUTE2",
+     "A.ATTRIBUTE3",
+     "A.ATTRIBUTE4",
+     "A.ATTRIBUTE5",
+     "A.ATTRIBUTE6",
+     "A.ATTRIBUTE7",
+     "A.ATTRIBUTE8",
+     "A.ATTRIBUTE9",
+     "A.ATTRIBUTE10",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 100,
+    "group_by_line": 126,
+    "select_line": 90,
+    "item": "NVL ( NULLIF ( RTRIM ( A.CURRENCY ) , '' ) , '/' )",
+    "leftover": [
+     "A.CURRENCY"
+    ],
+    "group_keys": [
+     "A.DIVISION_ID",
+     "A.PROJECT_CODE",
+     "A.SCM_SITE_ID",
+     "A.ITEM_ID",
+     "A.DOM_EXP",
+     "A.FCST_TYPE",
+     "A.INCOTERMS",
+     "A.MEASURE",
+     "A.PLANT_SITE_ID",
+     "A.YYYYMMDD",
+     "NVL(A.CURRENCY,'-')",
+     "A.CREATED_BY",
+     "A.CREATION_DATE",
+     "A.LAST_UPDATED_BY",
+     "A.ATTRIBUTE1",
+     "A.ATTRIBUTE2",
+     "A.ATTRIBUTE3",
+     "A.ATTRIBUTE4",
+     "A.ATTRIBUTE5",
+     "A.ATTRIBUTE6",
+     "A.ATTRIBUTE7",
+     "A.ATTRIBUTE8",
+     "A.ATTRIBUTE9",
+     "A.ATTRIBUTE10",
+     "A.CELL_PROD_SITE_ID"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SCM_ADM_DEPT_CHANGED_AUTH_SYNC",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SCM_MST_PROJECT_SCHEDULE",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_EE",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SSP_ANL_SHIP_UPDATE_BOH_VAL",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SSP_ANL_SHIPMENT_PLAN_FG",
+  "backup": true,
+  "old": 10,
+  "fresh": 12,
+  "new_vs_backup": [
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 256,
+    "group_by_line": 305,
+    "select_line": 251,
+    "item": "NVL ( NULLIF ( RTRIM ( PROJECT_CODE ) , '' ) , '/' )",
+    "leftover": [
+     "PROJECT_CODE"
+    ],
+    "group_keys": [
+     "DIVISION_ID",
+     "PLAN_START_YYYYMMDD",
+     "PLAN_TYPE",
+     "SEQ",
+     "NVL(PROJECT_CODE,'/')",
+     "ITEM_ID",
+     "TO_SITE",
+     "INCOTERMS",
+     "FROM_SITE",
+     "TRANSPORT_MODE",
+     "BOD_ID",
+     "MEASURE",
+     "YYYYMMDD"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 1415,
+    "group_by_line": 1437,
+    "select_line": 1410,
+    "item": "NVL ( NULLIF ( RTRIM ( OPERATION_GROUP ) , '' ) , '/' )",
+    "leftover": [
+     "OPERATION_GROUP"
+    ],
+    "group_keys": [
+     "DIVISION_ID",
+     "PLAN_START_YYYYMMDD",
+     "PLAN_TYPE",
+     "SEQ",
+     "NVL(OPERATION_GROUP,'/')",
+     "NVL(PROJECT_CODE,'-')",
+     "ITEM_ID",
+     "TO_SITE",
+     "NVL(INCOTERMS,'-')",
+     "NVL(FROM_SITE,'-')",
+     "NVL(BOD_ID,'-')",
+     "MEASURE",
+     "YYYYMMDD",
+     "ORIGIN_FROM_DIVISION_ID",
+     "ORIGIN_TO_DIVISION_ID",
+     "ELECTRODE_TYPE"
+    ]
+   }
+  ],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 256,
+    "group_by_line": 305,
+    "select_line": 251,
+    "item": "NVL ( NULLIF ( RTRIM ( PROJECT_CODE ) , '' ) , '/' )",
+    "leftover": [
+     "PROJECT_CODE"
+    ],
+    "group_keys": [
+     "DIVISION_ID",
+     "PLAN_START_YYYYMMDD",
+     "PLAN_TYPE",
+     "SEQ",
+     "NVL(PROJECT_CODE,'/')",
+     "ITEM_ID",
+     "TO_SITE",
+     "INCOTERMS",
+     "FROM_SITE",
+     "TRANSPORT_MODE",
+     "BOD_ID",
+     "MEASURE",
+     "YYYYMMDD"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "bare",
+    "line": 1415,
+    "group_by_line": 1437,
+    "select_line": 1410,
+    "item": "NVL ( NULLIF ( RTRIM ( OPERATION_GROUP ) , '' ) , '/' )",
+    "leftover": [
+     "OPERATION_GROUP"
+    ],
+    "group_keys": [
+     "DIVISION_ID",
+     "PLAN_START_YYYYMMDD",
+     "PLAN_TYPE",
+     "SEQ",
+     "NVL(OPERATION_GROUP,'/')",
+     "NVL(PROJECT_CODE,'-')",
+     "ITEM_ID",
+     "TO_SITE",
+     "NVL(INCOTERMS,'-')",
+     "NVL(FROM_SITE,'-')",
+     "NVL(BOD_ID,'-')",
+     "MEASURE",
+     "YYYYMMDD",
+     "ORIGIN_FROM_DIVISION_ID",
+     "ORIGIN_TO_DIVISION_ID",
+     "ELECTRODE_TYPE"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCM_DNM_PRODUCT_RESULT_V",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCP_XLS_PSI_GLOBAL_ELECTRODE_LOAD_RATIO_V",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_CELL_V",
+  "backup": true,
+  "old": 0,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": []
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_BP_V",
+  "backup": true,
+  "old": 17,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 562,
+    "group_by_line": 666,
+    "select_line": 555,
+    "item": "NVL ( ( SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "SA.SITE_DESCRIPTION",
+     "SA.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.PROD_LINE",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 694,
+    "group_by_line": 807,
+    "select_line": 687,
+    "item": "NVL ( ( SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "SA.SITE_DESCRIPTION",
+     "SA.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ITEM_ID",
+     "X.NICK_NAME",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 836,
+    "group_by_line": 950,
+    "select_line": 829,
+    "item": "NVL ( ( SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "SA.SITE_DESCRIPTION",
+     "SA.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 977,
+    "group_by_line": 1102,
+    "select_line": 970,
+    "item": "NVL ( ( SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "SA.SITE_DESCRIPTION",
+     "SA.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ITEM_ID",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.NICK_NAME",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1987,
+    "group_by_line": 2099,
+    "select_line": 1980,
+    "item": "NVL ( ( SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "SA.SITE_DESCRIPTION",
+     "SA.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ITEM_ID",
+     "X.NICK_NAME",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.CELL_QTY_PACK",
+     "X.TO_SITE",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.SORT_ORDER_NO",
+     "X.XLS_KEY1",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 2000,
+    "group_by_line": 2099,
+    "select_line": 1980,
+    "item": "NVL ( ( SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.TO_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "SA.SITE_DESCRIPTION",
+     "SA.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ITEM_ID",
+     "X.NICK_NAME",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.CELL_QTY_PACK",
+     "X.TO_SITE",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.SORT_ORDER_NO",
+     "X.XLS_KEY1",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V",
+  "backup": true,
+  "old": 17,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 417,
+    "group_by_line": 485,
+    "select_line": 410,
+    "item": "NVL ( ( SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "SA.SITE_DESCRIPTION",
+     "SA.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.PROD_LINE",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 513,
+    "group_by_line": 590,
+    "select_line": 506,
+    "item": "NVL ( ( SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "SA.SITE_DESCRIPTION",
+     "SA.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ITEM_ID",
+     "X.NICK_NAME",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 619,
+    "group_by_line": 697,
+    "select_line": 612,
+    "item": "NVL ( ( SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "SA.SITE_DESCRIPTION",
+     "SA.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 724,
+    "group_by_line": 830,
+    "select_line": 717,
+    "item": "NVL ( ( SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "SA.SITE_DESCRIPTION",
+     "SA.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ITEM_ID",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.NICK_NAME",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1559,
+    "group_by_line": 1635,
+    "select_line": 1552,
+    "item": "NVL ( ( SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "SA.SITE_DESCRIPTION",
+     "SA.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ITEM_ID",
+     "X.NICK_NAME",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.CELL_QTY_PACK",
+     "X.TO_SITE",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.SORT_ORDER_NO",
+     "X.XLS_KEY1",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1572,
+    "group_by_line": 1635,
+    "select_line": 1552,
+    "item": "NVL ( ( SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.TO_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "SA.SITE_DESCRIPTION",
+     "SA.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ITEM_ID",
+     "X.NICK_NAME",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.CELL_QTY_PACK",
+     "X.TO_SITE",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.SORT_ORDER_NO",
+     "X.XLS_KEY1",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V2",
+  "backup": true,
+  "old": 14,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 521,
+    "group_by_line": 614,
+    "select_line": 514,
+    "item": "NVL ( ( SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "M.SITE_DESCRIPTION",
+     "M.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.PROD_LINE",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 642,
+    "group_by_line": 744,
+    "select_line": 635,
+    "item": "NVL ( ( SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "M.SITE_DESCRIPTION",
+     "M.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ITEM_ID",
+     "X.NICK_NAME",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 773,
+    "group_by_line": 876,
+    "select_line": 766,
+    "item": "NVL ( ( SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "M.SITE_DESCRIPTION",
+     "M.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1640,
+    "group_by_line": 1741,
+    "select_line": 1633,
+    "item": "NVL ( ( SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "M.SITE_DESCRIPTION",
+     "M.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ITEM_ID",
+     "X.NICK_NAME",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.CELL_QTY_PACK",
+     "X.TO_SITE",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.SORT_ORDER_NO",
+     "X.XLS_KEY1",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 1653,
+    "group_by_line": 1741,
+    "select_line": 1633,
+    "item": "NVL ( ( SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M WHERE M.SCM_SITE_ID = X.TO_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "M.SITE_DESCRIPTION",
+     "M.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.CELL_ITEM_ID",
+     "X.ITEM_ID",
+     "X.NICK_NAME",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.CELL_QTY_PACK",
+     "X.TO_SITE",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.SORT_ORDER_NO",
+     "X.XLS_KEY1",
+     "X.ATTRIBUTE3",
+     "X.BOD_ID",
+     "X.ATTRIBUTE6"
+    ]
+   }
+  ]
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_V",
+  "backup": true,
+  "old": 4,
+  "fresh": 0,
+  "new_vs_backup": [],
+  "new_in_01NEW": [
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 197,
+    "group_by_line": 232,
+    "select_line": 190,
+    "item": "NVL ( ( SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "M.SITE_DESCRIPTION",
+     "M.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.PROD_LINE",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.MEASURE",
+     "X.MEASURE_LABEL"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 263,
+    "group_by_line": 297,
+    "select_line": 256,
+    "item": "NVL ( ( SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "M.SITE_DESCRIPTION",
+     "M.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.ITEM_ID",
+     "X.NICK_NAME",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.MEASURE",
+     "X.MEASURE_LABEL"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 323,
+    "group_by_line": 357,
+    "select_line": 316,
+    "item": "NVL ( ( SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "M.SITE_DESCRIPTION",
+     "M.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.MEASURE",
+     "X.MEASURE_LABEL",
+     "X.ATTRIBUTE9"
+    ]
+   },
+   {
+    "kind": "SELECT",
+    "sev": "dotted",
+    "line": 381,
+    "group_by_line": 415,
+    "select_line": 374,
+    "item": "NVL ( ( SELECT M.SITE_DESCRIPTION FROM SCM_MST_SITE M WHERE M.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1 ) , '/' )",
+    "leftover": [
+     "M.SITE_DESCRIPTION",
+     "M.SCM_SITE_ID"
+    ],
+    "group_keys": [
+     "X.DIVISION_ID",
+     "X.PLAN_START_YYYYMMDD",
+     "X.PLAN_TYPE",
+     "X.SEQ",
+     "X.OPERATION_GROUP",
+     "X.OPERATION_GROUP_NAME",
+     "X.FROM_SITE",
+     "X.ATTRIBUTE9",
+     "X.ITEM_ID",
+     "X.FROM_BOH_QTY",
+     "X.YIELD",
+     "X.LT_DAY",
+     "X.CELL_QTY_PACK",
+     "X.NICK_NAME",
+     "X.MEASURE",
+     "X.MEASURE_LABEL"
+    ]
+   }
+  ]
+ }
+]

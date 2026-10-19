@@ -1,0 +1,171 @@
+################ [S0] 접속 DB 식별 ################
+USR     | DB_NAME | CON_NAME | SVC    | HOST      | NOW                
+--------+---------+----------+--------+-----------+--------------------
+SCM_MGR | ZIOUI1  | ZIOUI1   | zioui1 | localhost | 2026-10-14 18:54:49
+(1 rows)
+PRODUCT                                     | VERSION   
+--------------------------------------------+-----------
+Oracle AI Database 26ai Enterprise Edition  | 23.0.0.0.0
+(1 rows)
+################ [S1] ⭐ 로깅 모드 — ARCHIVELOG / FORCE LOGGING 이면 direct path 적재도 Redo 전량 생성 ################
+--  사내: NOARCHIVELOG / FORCE_LOGGING=NO (direct path 시 Redo 최소). 클라우드가 ARCHIVELOG+FORCE YES 면 NOLOGGING 무효
+LOG_MODE     | FORCE_LOGGING | SUPP_MIN | FLASHBACK_ON | DATABASE_ROLE | PROTECTION_MODE     | OPEN_MODE  | JUDGE                
+-------------+---------------+----------+--------------+---------------+---------------------+------------+----------------------
+NOARCHIVELOG | NO            | NO       | NO           | PRIMARY       | MAXIMUM PERFORMANCE | READ WRITE | NOARCHIVELOG — 사내와 동일
+(1 rows)
+################ [S1b] Redo 전송 대상 (Data Guard/스탠바이) — SYNC 전송이면 커밋마다 원격 대기 ################
+INST_ID | DEST_ID | DEST_NAME          | STATUS | TARGET  | TRANSMIT_MODE | AFFIRM | DESTINATION                                    | JUDGE  
+--------+---------+--------------------+--------+---------+---------------+--------+------------------------------------------------+--------
+1       | 1       | LOG_ARCHIVE_DEST_1 | VALID  | PRIMARY | UNASSIGNED    | NO     | /u01/app/oracle/product/26ai/dbhome_1/dbs/arch | 로컬 아카이브
+(1 rows)
+################ [S2] ⭐ Redo 로그 구성 — 사내 2,048MB x 3그룹 x 1멤버 (1억 건 적재에 작음) ################
+INST_ID | THREAD# | GROUP# | MB   | MEMBERS | STATUS   | ARCHIVED | GROUPS_IN_THREAD
+--------+---------+--------+------+---------+----------+----------+-----------------
+1       | 1       | 1      | 2048 | 1       | INACTIVE | NO       | 3               
+1       | 1       | 2      | 2048 | 1       | INACTIVE | NO       | 3               
+1       | 1       | 3      | 2048 | 1       | CURRENT  | NO       | 3               
+(3 rows)
+################ [S2b] 로그 스위치 시간대별 (최근 3일, 시간당 4회 이상만) — 15분 미만 간격이면 Redo 과소 ################
+THREAD# | HR            | SWITCHES | AVG_GAP_MIN | JUDGE                                  
+--------+---------------+----------+-------------+----------------------------------------
+1       | 2026-10-14 14 | 13       | 4.6         | ⚠ 5분 이하 간격 — checkpoint incomplete 위험 큼
+1       | 2026-10-14 13 | 10       | 6           | ⚠ 15분 이하 간격                            
+1       | 2026-10-14 02 | 5        | 12          | ⚠ 15분 이하 간격                            
+(3 rows)
+################ [S2c] 아카이브 생성량 일별 (최근 7일) — NOARCHIVELOG 면 0행 ################
+DAY | LOGS | GB
+----+------+---
+(0 rows)
+################ [S3] 인스턴스 파라미터 — CORP = 사내 ZIOUI1 값 ################
+INST_ID | NAME                   | VALUE     | CORP     
+--------+------------------------+-----------+----------
+1       | archive_lag_target     | 0         | 0        
+1       | commit_logging         |           | (null)   
+1       | commit_wait            |           | (null)   
+1       | cpu_count              | 8         | 8        
+1       | db_block_size          | 8192      | 8192     
+1       | db_cache_size          | 0 MB      | 0 MB     
+1       | db_writer_processes    | 4         | 4        
+1       | disk_asynch_io         | TRUE      | TRUE     
+1       | fast_start_mttr_target | 0         | 0        
+1       | filesystemio_options   | none      | none     
+1       | log_buffer             | 64 MB     | 64 MB    
+1       | log_checkpoint_timeout | 1800      | 1800     
+1       | memory_target          | 0 MB      | 0 MB     
+1       | parallel_max_servers   | 160       | 160      
+1       | pga_aggregate_target   | 32768 MB  | 32768 MB 
+1       | resource_manager_plan  |           | (null)   
+1       | sga_max_size           | 131072 MB | 131072 MB
+1       | sga_target             | 0 MB      | 0 MB     
+1       | undo_retention         | 900       | 900      
+1       | undo_tablespace        | UNDOTBS1  | UNDOTBS1 
+(20 rows)
+################ [S3b] SGA 실제 크기 (사내: Buffer Cache 116,096MB / Redo Buffers 66MB) ################
+INST_ID | NAME              | MB    
+--------+-------------------+-------
+1       | Buffer Cache Size | 116096
+1       | Maximum SGA Size  | 131017
+1       | Redo Buffers      | 66    
+1       | Shared Pool Size  | 14400 
+(4 rows)
+################ [S3c] Resource Manager 현재 플랜 — 걸려 있으면 resmgr:cpu quantum 대기 가능 ################
+INST_ID | NAME          | IS_TOP_PLAN | CPU_MANAGED
+--------+---------------+-------------+------------
+1       | INTERNAL_PLAN | TRUE        | OFF        
+(1 rows)
+################ [S4] 테이블스페이스 용량 (대상 테이블·인덱스·UNDO·TEMP) — 사내 UNDO 7.7GB ################
+TABLESPACE_NAME | FILES | SIZE_GB | MAX_GB | AUTOEXT | FREE_GB
+----------------+-------+---------+--------+---------+--------
+TS_SCM_D01      | 1     | 286     | 32768  | YES     | 13.6   
+TS_SCM_X01      | 1     | 95      | 32768  | YES     | 18.6   
+UNDOTBS1        | 1     | 7.7     | 32768  | YES     | 7.1    
+(3 rows)
+TABLESPACE_NAME | SIZE_GB | FREE_GB
+----------------+---------+--------
+TEMP            | 68.8    | 68.8   
+(1 rows)
+TABLESPACE_NAME | BIGFILE | EXTENT_MANAGEMENT | ALLOCATION_TYPE | SEGMENT_SPACE_MANAGEMENT | LOGGING | FORCE_LOGGING
+----------------+---------+-------------------+-----------------+--------------------------+---------+--------------
+TS_SCM_D01      | YES     | LOCAL             | SYSTEM          | AUTO                     | LOGGING | NO           
+TS_SCM_X01      | YES     | LOCAL             | SYSTEM          | AUTO                     | LOGGING | NO           
+(2 rows)
+################ [S5] ⭐ 대상 테이블 구조 — 사내: SCM_MGR / 파티션 NO / LOGGING YES / 압축 없음 / 병렬 1 / 47,184,760행 / 행 197B ################
+OWNER   | TABLE_NAME                 | PARTITIONED | LOGGING | COMPRESSION | DEGREE | NUM_ROWS | BLOCKS  | AVG_ROW_LEN | LAST_ANALYZED    | TABLESPACE_NAME | PCT_FREE | INI_TRANS | ROW_MOVEMENT | IOT_TYPE | TEMPORARY | JUDGE           
+--------+----------------------------+-------------+---------+-------------+--------+----------+---------+-------------+------------------+-----------------+----------+-----------+--------------+----------+-----------+-----------------
+SCM_MGR | SCP_ANL_SHIPMENT_PLAN_FG_C | NO          | YES     | DISABLED    | 1      | 47184760 | 1350280 | 197         | 2026-10-10 02:25 | TS_SCM_D01      | 10       | 1         | DISABLED     |          | N         | ⚠ 파티션 없음 (사내 동일)
+(1 rows)
+################ [S5b] 파티션 정의 (사내 0행) ################
+OWNER | TABLE_NAME | PARTITIONING_TYPE | SUBPARTITIONING_TYPE | PARTITION_COUNT | INTERVAL
+------+------------+-------------------+----------------------+-----------------+---------
+(0 rows)
+K | OWNER | NAME | COLUMN_NAME | COLUMN_POSITION
+--+-------+------+-------------+----------------
+(0 rows)
+################ [S5c] 컬럼 수 · PK 컬럼 — 사내 40컬럼 / PK 12컬럼 ################
+OWNER   | COL_CNT | CORP | JUDGE             
+--------+---------+------+-------------------
+SCM_MGR | 40      | 40   | PASS — 사내와 컬럼 수 동일
+(1 rows)
+OWNER   | CONSTRAINT_NAME               | CONSTRAINT_TYPE | STATUS  | VALIDATED | INDEX_NAME                    | COLS                                                                                                           | JUDGE                
+--------+-------------------------------+-----------------+---------+-----------+-------------------------------+----------------------------------------------------------------------------------------------------------------+----------------------
+SCM_MGR | PK_SCP_ANL_SHIPMENT_PLAN_FG_C | P               | ENABLED | VALIDATED | PK_SCP_ANL_SHIPMENT_PLAN_FG_C | DIVISION_ID,VERSION_NO,CUTOFF_DATE,BIZ_TYPE,PROJECT_CODE,ITEM_ID,TO_SITE,INCOTERMS,FROM_SITE,BOD_ID,MEASURE,YY | PASS — 사내 PK 12컬럼과 동일
+(1 rows)
+OWNER   | CHECK_NN_CNT | CORP
+--------+--------------+-----
+SCM_MGR | 17           | 17  
+(1 rows)
+################ [S5d] ⭐ 인덱스 — 사내 3개 (PK 12컬럼 BLEVEL 4 / IX01 4컬럼 / IX02 1컬럼), 전부 비파티션 ################
+OWNER   | INDEX_NAME                      | UNIQUENESS | PARTITIONED | STATUS | LOGGING | VISIBILITY | DEGREE | BLEVEL | LEAF_BLOCKS | DISTINCT_KEYS | CLUSTERING_FACTOR | TABLESPACE_NAME | COLS                                                                                                          
+--------+---------------------------------+------------+-------------+--------+---------+------------+--------+--------+-------------+---------------+-------------------+-----------------+---------------------------------------------------------------------------------------------------------------
+SCM_MGR | IX01_SCP_ANL_SHIPMENT_PLAN_FG_C | NONUNIQUE  | NO          | VALID  | YES     | VISIBLE    | 1      | 3      | 228903      | 110069        | 47183424          | TS_SCM_X01      | MEASURE,DIVISION_ID,BIZ_TYPE,YYYYMMDD                                                                         
+SCM_MGR | IX02_SCP_ANL_SHIPMENT_PLAN_FG_C | NONUNIQUE  | NO          | VALID  | YES     | VISIBLE    | 1      | 2      | 127649      | 182           | 1545838           | TS_SCM_X01      | CUTOFF_DATE                                                                                                   
+SCM_MGR | PK_SCP_ANL_SHIPMENT_PLAN_FG_C   | UNIQUE     | NO          | VALID  | YES     | VISIBLE    | 1      | 4      | 692064      | 46528364      | 2377062           | TS_SCM_X01      | DIVISION_ID,VERSION_NO,CUTOFF_DATE,BIZ_TYPE,PROJECT_CODE,ITEM_ID,TO_SITE,INCOTERMS,FROM_SITE,BOD_ID,MEASURE,YY
+(3 rows)
+OWNER   | IDX_CNT | CORP | JUDGE      
+--------+---------+------+------------
+SCM_MGR | 3       | 3    | 사내와 동일 (3개)
+(1 rows)
+################ [S5e] 세그먼트 크기 — 사내 테이블 10.34GB / PK 5.52GB / IX01 1.85GB / IX02 0.97GB ################
+SEGMENT_NAME                    | SEGMENT_TYPE | GB    | EXTENTS
+--------------------------------+--------------+-------+--------
+IX01_SCP_ANL_SHIPMENT_PLAN_FG_C | INDEX        | 1.85  | 213    
+IX02_SCP_ANL_SHIPMENT_PLAN_FG_C | INDEX        | 0.97  | 195    
+PK_SCP_ANL_SHIPMENT_PLAN_FG_C   | INDEX        | 5.52  | 272    
+SCP_ANL_SHIPMENT_PLAN_FG_C      | TABLE        | 10.34 | 350    
+(4 rows)
+OWNER   | SEGMENT_NAME                    | SEGMENT_TYPE | PARTITION_NAME | GB    | EXTENTS
+--------+---------------------------------+--------------+----------------+-------+--------
+SCM_MGR | IX01_SCP_ANL_SHIPMENT_PLAN_FG_C | INDEX        |                | 1.85  | 213    
+SCM_MGR | IX02_SCP_ANL_SHIPMENT_PLAN_FG_C | INDEX        |                | 0.97  | 195    
+SCM_MGR | PK_SCP_ANL_SHIPMENT_PLAN_FG_C   | INDEX        |                | 5.52  | 272    
+SCM_MGR | SCP_ANL_SHIPMENT_PLAN_FG_C      | TABLE        |                | 10.34 | 350    
+(4 rows)
+################ [S5f] 행마다 추가 작업을 만드는 부속 객체 — 트리거 / FK / MV 로그 / 보조로그 그룹 (사내: 보조로그 그룹 1건(PK, ALWAYS) 외 0) ################
+KIND                   | OWNER   | NAME         | MEMO                | STATUS
+-----------------------+---------+--------------+---------------------+-------
+SUPPLEMENTAL LOG GROUP | SCM_MGR | SYS_C0029692 | PRIMARY KEY LOGGING | ALWAYS
+(1 rows)
+JUDGE                         
+------------------------------
+PASS — 트리거·FK·MV 로그 0건 (사내 동일)
+(1 rows)
+################ [S5g] 1억 건 추가 시 예상 데이터량 (현재 통계 기준 단순 비례 — 참고치) ################
+OWNER   | NUM_ROWS | AVG_ROW_LEN | TBL_BYTES_PER_ROW | IDX_BYTES_PER_ROW | ADD_TBL_GB_PER_1E8 | ADD_IDX_GB_PER_1E8 | CORP_NOTE                                           
+--------+----------+-------------+-------------------+-------------------+--------------------+--------------------+-----------------------------------------------------
+SCM_MGR | 47184760 | 197         | 234               | 182               | 21.8               | 17                 | 사내: 행당 테이블 약 234B + 인덱스 약 182B / 1억 건당 약 22GB + 17GB
+(1 rows)
+################ [S6] ⭐ Qlik Replicate 제어 테이블 (attrep_*) — Qlik 이 쓰는 스키마·작업 흔적 ################
+OWNER   | TABLE_NAME              | NUM_ROWS | LAST_ANALYZED    | CREATED             | LAST_DDL           
+--------+-------------------------+----------+------------------+---------------------+--------------------
+SCM_MGR | attrep_apply_exceptions | 0        | 2026-10-10 01:12 | 2026-10-09 10:25:41 | 2026-10-09 10:25:41
+(1 rows)
+--  [S6b] Qlik 상태·이력·중단 테이블 내용 (있는 것만 XML 로 출력 — 없으면 0행)
+OWNER   | TABLE_NAME              | XML 
+--------+-------------------------+-----
+SCM_MGR | attrep_apply_exceptions |     
+(1 rows)
+################ [S7] 대상 테이블 DML 누적 (마지막 통계 이후 — 적재량 확인용) ################
+TABLE_OWNER | TABLE_NAME | PARTITION_NAME | INSERTS | UPDATES | DELETES | TRUNCATED | TS
+------------+------------+----------------+---------+---------+---------+-----------+---
+(0 rows)
+################ 끝 — Q01_ENV_TABLE_STATIC_OUT.txt 회신 ################

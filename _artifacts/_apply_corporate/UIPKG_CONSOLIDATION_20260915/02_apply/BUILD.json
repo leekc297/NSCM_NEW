@@ -1,0 +1,431 @@
+{
+ "built": "2026-09-15 18:54:01",
+ "pkgs": {
+  "PKG_DMF0000": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "DMF0000_GET_UPDATE_HISTORY",
+     "member": "P_DMF0000_GET_UPDATE_HISTORY",
+     "action": "identical(no change)"
+    }
+   ],
+   "rewired": {},
+   "spec_changed": false,
+   "body_changed": false,
+   "diff_lines": 0
+  },
+  "PKG_DMF0003": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "SCM_ADM_MAIL_SEND",
+     "member": "P_SCM_ADM_MAIL_SEND",
+     "action": "add"
+    }
+   ],
+   "rewired": {
+    "SCM_ADM_MAIL_SEND": 1
+   },
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 125
+  },
+  "PKG_DMF0006": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "PR_DM_MST_CUSTOMER_MODEL_MAPPING_HIST",
+     "member": "P_PR_DM_MST_CUSTOMER_MODEL_MAPPING_HIST",
+     "action": "add"
+    }
+   ],
+   "rewired": {
+    "PR_DM_MST_CUSTOMER_MODEL_MAPPING_HIST": 1
+   },
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 207
+  },
+  "PKG_DMF0007": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "PR_DM_MST_CUSTOMER_FCST_HIST",
+     "member": "P_PR_DM_MST_CUSTOMER_FCST_HIST",
+     "action": "add"
+    }
+   ],
+   "rewired": {
+    "PR_DM_MST_CUSTOMER_FCST_HIST": 1
+   },
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 219
+  },
+  "PKG_DMF0008": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "DMF0008_GET_EDI_MST_REPAIR",
+     "member": "P_DMF0008_GET_EDI_MST_REPAIR",
+     "action": "replace(standalone body)"
+    },
+    {
+     "sp": "DMF0008_GET_EDI_MST_SUMMARY",
+     "member": "P_DMF0008_GET_EDI_MST_SUMMARY",
+     "action": "replace(standalone body)"
+    },
+    {
+     "sp": "DMF0008_GET_SALES_SITE",
+     "member": "P_DMF0008_GET_SALES_SITE",
+     "action": "replace(standalone body)"
+    },
+    {
+     "sp": "DMF0008_GET_SALES_SITE_PROJECT_MODEL",
+     "member": "P_DMF0008_GET_SALES_SITE_PROJECT_MODEL",
+     "action": "identical(no change)"
+    },
+    {
+     "sp": "DMF0008_GET_UPDATE_HISTORY",
+     "member": "P_DMF0008_GET_UPDATE_HISTORY",
+     "action": "replace(standalone body)"
+    },
+    {
+     "sp": "DMF0008_SAVE_SALES_SITE_EDI_REPAIR",
+     "member": "P_DMF0008_SAVE_SALES_SITE_EDI_REPAIR",
+     "action": "replace(standalone body)"
+    },
+    {
+     "sp": "DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR",
+     "member": "P_DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR",
+     "action": "replace(standalone body)"
+    }
+   ],
+   "rewired": {},
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 339
+  },
+  "PKG_DMF0014": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "PR_DM_CUST_ITEM_MAPPING",
+     "member": "P_PR_DM_CUST_ITEM_MAPPING",
+     "action": "add"
+    },
+    {
+     "sp": "PR_DM_PLN_CUST_FCST_TO_MKT_FCST",
+     "member": "P_PR_DM_PLN_CUST_FCST_TO_MKT_FCST",
+     "action": "add"
+    },
+    {
+     "sp": "PR_DM_PLN_CUST_FCST_TO_MKT_FCST_40",
+     "member": "P_PR_DM_PLN_CUST_FCST_TO_MKT_FCST_40",
+     "action": "add"
+    }
+   ],
+   "rewired": {
+    "PR_DM_PLN_CUST_FCST_TO_MKT_FCST_40": 2,
+    "PR_DM_PLN_CUST_FCST_TO_MKT_FCST": 2
+   },
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 4223
+  },
+  "PKG_DMF0020": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_SINGLE",
+     "member": "P_PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_SINGLE",
+     "action": "add"
+    }
+   ],
+   "rewired": {
+    "PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_SINGLE": 2
+   },
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 1005
+  },
+  "PKG_DMF0040": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "DMF0040_GET_SPREAD_TITLE",
+     "member": "P_DMF0040_GET_SPREAD_TITLE",
+     "action": "add"
+    }
+   ],
+   "rewired": {},
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 485
+  },
+  "PKG_DMF0043": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "DMF0043_GET_MAIN_SPREAD_TITLE",
+     "member": "P_DMF0043_GET_MAIN_SPREAD_TITLE",
+     "action": "wrapper(add + existing→_CORE)"
+    },
+    {
+     "sp": "DMF0043_GET_CONTRIBUTE_MAIN_DATA",
+     "member": "P_DMF0043_GET_CONTRIBUTE_MAIN_DATA",
+     "action": "add"
+    },
+    {
+     "sp": "DMF0043_GET_CONTRIBUTE_RATE_POPUP",
+     "member": "P_DMF0043_GET_CONTRIBUTE_RATE_POPUP",
+     "action": "replace(standalone body)"
+    },
+    {
+     "sp": "DMF0043_GET_CONTRIBUTE_YEAR_POPUP",
+     "member": "P_DMF0043_GET_CONTRIBUTE_YEAR_POPUP",
+     "action": "replace(standalone body)"
+    },
+    {
+     "sp": "DMF0043_GET_CONTRIBUTION_SALES_LIST",
+     "member": "P_DMF0043_GET_CONTRIBUTION_SALES_LIST",
+     "action": "add"
+    },
+    {
+     "sp": "DMF0043_GET_CONT_VIEW_VERSIONPOPUP",
+     "member": "P_DMF0043_GET_CONT_VIEW_VERSIONPOPUP",
+     "action": "replace(standalone body)"
+    },
+    {
+     "sp": "DMF0043_GET_MAIN_VARSION_DATA",
+     "member": "P_DMF0043_GET_MAIN_VARSION_DATA",
+     "action": "replace(standalone body)"
+    },
+    {
+     "sp": "DMF0043_GET_SALES_LIST_SPREAD_TITLE",
+     "member": "P_DMF0043_GET_SALES_LIST_SPREAD_TITLE",
+     "action": "replace(standalone body)"
+    },
+    {
+     "sp": "DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO",
+     "member": "P_DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO",
+     "action": "replace(standalone body)"
+    },
+    {
+     "sp": "DMF0043_SAVE_DM_MST_CONTRIBUTE_VER",
+     "member": "P_DMF0043_SAVE_DM_MST_CONTRIBUTE_VER",
+     "action": "replace(standalone body)"
+    }
+   ],
+   "rewired": {},
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 4971
+  },
+  "PKG_DMF0048": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "DMF0048_GET_SPREAD_TITLE",
+     "member": "P_DMF0048_GET_SPREAD_TITLE",
+     "action": "identical(no change)"
+    }
+   ],
+   "rewired": {},
+   "spec_changed": false,
+   "body_changed": false,
+   "diff_lines": 0
+  },
+  "PKG_DMF0072": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "DMF0072_GET_DATA_TYPE_LIST",
+     "member": "P_DMF0072_GET_DATA_TYPE_LIST",
+     "action": "add"
+    },
+    {
+     "sp": "DMF0072_GET_END_CUSTOMER_LIST",
+     "member": "P_DMF0072_GET_END_CUSTOMER_LIST",
+     "action": "add"
+    },
+    {
+     "sp": "DMF0072_GET_NNMASTER_MAPPING_WRAPPER",
+     "member": "P_DMF0072_GET_NNMASTER_MAPPING_WRAPPER",
+     "action": "add"
+    },
+    {
+     "sp": "DMF0072_GET_SALES_SITE_LIST",
+     "member": "P_DMF0072_GET_SALES_SITE_LIST",
+     "action": "add"
+    },
+    {
+     "sp": "DMF0072_GET_TEAM_LIST",
+     "member": "P_DMF0072_GET_TEAM_LIST",
+     "action": "add"
+    }
+   ],
+   "rewired": {},
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 199
+  },
+  "PKG_DMF0082": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "PR_DM_PLN_CFM_TO_MKT_FCST",
+     "member": "P_PR_DM_PLN_CFM_TO_MKT_FCST",
+     "action": "add"
+    },
+    {
+     "sp": "PR_SCM_MST_EXCHANGE_RATE",
+     "member": "P_PR_SCM_MST_EXCHANGE_RATE",
+     "action": "add"
+    },
+    {
+     "sp": "PR_SCM_MST_EXCHANGE_RATE_UI",
+     "member": "P_PR_SCM_MST_EXCHANGE_RATE_UI",
+     "action": "add"
+    }
+   ],
+   "rewired": {
+    "PR_DM_PLN_CFM_TO_MKT_FCST": 1
+   },
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 783
+  },
+  "PKG_SYS0012": {
+   "new_pkg": true,
+   "members": [
+    {
+     "sp": "P_SYS0012_APPROVE",
+     "member": "P_SYS0012_APPROVE",
+     "action": "add"
+    },
+    {
+     "sp": "P_SYS0012_GET_APPROVAL_LIST",
+     "member": "P_SYS0012_GET_APPROVAL_LIST",
+     "action": "add"
+    },
+    {
+     "sp": "P_SYS0012_REJECT",
+     "member": "P_SYS0012_REJECT",
+     "action": "add"
+    }
+   ],
+   "rewired": {
+    "P_SYS0012_APPROVE": 2,
+    "P_SYS0012_GET_APPROVAL_LIST": 2,
+    "P_SYS0012_REJECT": 2
+   },
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 325
+  },
+  "PKG_SYS0014": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "P_SYS0014_GET_AUTH_LIST_M",
+     "member": "P_SYS0014_GET_AUTH_LIST_M",
+     "action": "add"
+    },
+    {
+     "sp": "P_SYS0014_GET_GROUP_LIST_M",
+     "member": "P_SYS0014_GET_GROUP_LIST_M",
+     "action": "add"
+    },
+    {
+     "sp": "P_SYS0014_GET_USER_BY_GROUP_M",
+     "member": "P_SYS0014_GET_USER_BY_GROUP_M",
+     "action": "add"
+    },
+    {
+     "sp": "P_SYS0014_SAVE_GROUP_USER_M",
+     "member": "P_SYS0014_SAVE_GROUP_USER_M",
+     "action": "add"
+    }
+   ],
+   "rewired": {
+    "P_SYS0014_GET_AUTH_LIST_M": 2,
+    "P_SYS0014_GET_GROUP_LIST_M": 2,
+    "P_SYS0014_GET_USER_BY_GROUP_M": 2,
+    "P_SYS0014_SAVE_GROUP_USER_M": 2
+   },
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 344
+  },
+  "PKG_SYS0017": {
+   "new_pkg": false,
+   "members": [
+    {
+     "sp": "PR_SCM_ADM_RECIPIENT_ASSIGN_HIST",
+     "member": "P_PR_SCM_ADM_RECIPIENT_ASSIGN_HIST",
+     "action": "add"
+    }
+   ],
+   "rewired": {
+    "PR_SCM_ADM_RECIPIENT_ASSIGN_HIST": 1
+   },
+   "spec_changed": true,
+   "body_changed": true,
+   "diff_lines": 139
+  }
+ },
+ "callers": {
+  "DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL": {
+   "PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_SINGLE": 1
+  },
+  "DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP": {
+   "PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_SINGLE": 1
+  },
+  "PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA": {
+   "PR_DM_MST_CUSTOMER_MODEL_MAPPING_HIST": 1
+  },
+  "SCM_ADM_MAIL_SEND_BATCH": {
+   "SCM_ADM_MAIL_SEND": 3
+  },
+  "SCM_ADM_MAIL_SEND_DATA": {
+   "SCM_ADM_MAIL_SEND": 4
+  }
+ },
+ "string_refs": [
+  "PKG_DMF0000|PACKAGE BODY|DMF0000_GET_UPDATE_HISTORY|'/*******************************************************************************'",
+  "PKG_DMF0003|PACKAGE BODY|PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_SINGLE|\"-- 20180816 KHSONG DIVISION_ID = '40' PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_\"",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_GET_EDI_MST_SUMMARY|'/*\\n * Program ID   : DMF0008_GET_EDI_MST_SUMMARY\\n * Description  : ERP, EDI MAST'",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_GET_EDI_MST_REPAIR|'/*\\n * Program ID   : DMF0008_GET_EDI_MST_REPAIR\\n * Description  :\\n * Program His'",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_GET_EDI_MST_REPAIR|'/*\\n * Program ID   : DMF0008_GET_EDI_MST_REPAIR\\n * Description  :\\n * Program His'",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_GET_EDI_MST_REPAIR|'/*\\n * Program ID   : DMF0008_GET_EDI_MST_REPAIR\\n * Description  :\\n * Program His'",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_GET_EDI_MST_REPAIR|'/*\\n * Program ID   : DMF0008_GET_EDI_MST_REPAIR\\n * Description  :\\n * Program His'",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_GET_SALES_SITE|'/*\\n * Program ID   : DMF0008_GET_SALES_SITE\\n * Program History\\n *==============='",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_GET_SALES_SITE_PROJECT_MODEL|'/*\\n * Program ID   : DMF0008_GET_SALES_SITE_PROJECT_MODEL\\n * Description  :\\n * P'",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_GET_SALES_SITE_PROJECT_MODEL|'/*\\n * Program ID   : DMF0008_GET_SALES_SITE_PROJECT_MODEL\\n * Description  :\\n * P'",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_GET_SALES_SITE_PROJECT_MODEL|\"--DMF0008_GET_SALES_SITE_PROJECT_MODEL('81', 'EMCV00143AB');\"",
+  "PKG_DMF0008|PACKAGE BODY|DMF0000_GET_UPDATE_HISTORY|'--    SCM_MGR.DMF0000_GET_UPDATE_HISTORY(O_RC1, v_dummy);'",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_SAVE_SALES_SITE_EDI_REPAIR|\"--\\tv_program_name\\t\\tVARCHAR2(150 CHAR) := 'DMF0008_SAVE_SALES_SITE_EDI_REPAIR';\"",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_SAVE_SALES_SITE_EDI_REPAIR|\"/*\\n  EXEC DMF0008_SAVE_SALES_SITE_EDI_REPAIR @p_division_id='81', @p_end_custome\"",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_SAVE_SALES_SITE_EDI_REPAIR|\"/*\\n  EXEC DMF0008_SAVE_SALES_SITE_EDI_REPAIR @p_division_id='81', @p_end_custome\"",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR|\"/*\\n  DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR(p_division_id='81', p_project_co\"",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_SAVE_SALES_SITE_EDI_REPAIR|\"/*\\n  DMF0008_SAVE_SALES_SITE_EDI_REPAIR(p_division_id='81', p_end_customer='BMW'\"",
+  "PKG_DMF0008|PACKAGE BODY|DMF0008_SAVE_SALES_SITE_EDI_REPAIR|\"/*\\n  DMF0008_SAVE_SALES_SITE_EDI_REPAIR(p_division_id='81', p_end_customer='BMW'\"",
+  "PKG_DMF0014|PACKAGE BODY|PR_DM_PLN_CUST_FCST_TO_MKT_FCST|'/* [E20260915-DMF0014MSTCHK] ② Model 품목 마스터 — 저장 후 반영(PR_DM_PLN_CUST_FCST_TO_MKT'",
+  "PKG_DMF0020|PACKAGE BODY|PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_SINGLE|'-- #results TEMP TABLE (PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_SINGLE 로 전달할 대'",
+  "PKG_DMF0043|PACKAGE BODY|DMF0043_GET_CONTRIBUTE_RATE_POPUP|'/*\\n         ********************************************************************'",
+  "PKG_DMF0043|PACKAGE BODY|DMF0043_GET_CONTRIBUTE_YEAR_POPUP|'/*\\n                     ********************************************************'",
+  "PKG_DMF0043|PACKAGE BODY|DMF0043_GET_CONT_VIEW_VERSIONPOPUP|'/*******************************************************************************'",
+  "PKG_DMF0043|PACKAGE BODY|DMF0043_GET_SALES_LIST_SPREAD_TITLE|'/* Program ID  : DMF0043_GET_SALES_LIST_SPREAD_TITLE                            '",
+  "PKG_DMF0043|PACKAGE BODY|DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO|'/*\\n        * Program ID   : DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO\\n        * Descr'",
+  "PKG_DMF0043|PACKAGE BODY|DMF0043_SAVE_DM_MST_CONTRIBUTE_VER|'/*\\n        * Program ID   : DMF0043_SAVE_DM_MST_CONTRIBUTE_VER\\n        * Descrip'",
+  "PKG_DMF0082|PACKAGE BODY|PR_DM_PLN_CFM_TO_MKT_FCST|'/*=============================================================================='",
+  "PKG_DMF0082|PACKAGE BODY|PR_DM_PLN_CFM_TO_MKT_FCST|'-- PR_DM_PLN_CFM_TO_MKT_FCST 프로시져 실행 START (START)'",
+  "PKG_DMF0082|PACKAGE BODY|PR_DM_PLN_CFM_TO_MKT_FCST|\"'■ 9. PR_DM_PLN_CFM_TO_MKT_FCST START'\"",
+  "PKG_DMF0082|PACKAGE BODY|PR_DM_PLN_CFM_TO_MKT_FCST|'-- PR_DM_PLN_CFM_TO_MKT_FCST 프로시져 실행 START (END)'",
+  "PKG_DMF0082|PACKAGE BODY|PR_DM_PLN_CFM_TO_MKT_FCST|'-- PR_DM_PLN_CFM_TO_MKT_FCST 프로시져 실행 END (END)'",
+  "PKG_DMF0082|PACKAGE BODY|PR_DM_PLN_CFM_TO_MKT_FCST|\"'■ 10. PR_DM_PLN_CFM_TO_MKT_FCST END'\"",
+  "PKG_DMF0082|PACKAGE BODY|PR_DM_PLN_CFM_TO_MKT_FCST|'-- PR_DM_PLN_CFM_TO_MKT_FCST 프로시져 실행 END (END)'"
+ ]
+}

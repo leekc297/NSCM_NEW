@@ -1,0 +1,320 @@
+{
+ "fresh": {
+  "last_ddl": "2026-10-08 16:02:29",
+  "status": "VALID",
+  "md5": "61c8ea8fa713158eb0b5e12650241ce3",
+  "lines": 1475
+ },
+ "before": {
+  "R_S_20260902_V005": {
+   "ok": false,
+   "error": "ORA-20001: [PKG_DMF0068.P_DMF0068_GET_ORDERLIST] SQLCODE=100 / SQLERRM=ORA-01403: no data found / BACKTRACE=ORA-06512: at \"SCM_MGR.PKG_DMF0068\", line 429"
+  },
+  "R_S_20260903_V001_C": {
+   "ok": true,
+   "rows": 72,
+   "md5": "838f86a07d925ecd94465b3ee1f28daa",
+   "result": [
+    [
+     "0",
+     "SUCCESS",
+     "None"
+    ]
+   ]
+  },
+  "R_B_20260814_V001": {
+   "ok": true,
+   "rows": 72,
+   "md5": "aa1402bd684fc60747e8ac177ac447a2",
+   "result": [
+    [
+     "0",
+     "SUCCESS",
+     "None"
+    ]
+   ]
+  },
+  "R_S_00000000_V000": {
+   "ok": false,
+   "error": "ORA-20001: [PKG_DMF0068.P_DMF0068_GET_ORDERLIST] SQLCODE=100 / SQLERRM=ORA-01403: no data found / BACKTRACE=ORA-06512: at \"SCM_MGR.PKG_DMF0068\", line 429"
+  }
+ },
+ "rehearsal_05": [
+  {
+   "kind": "BLOCK",
+   "ok": true,
+   "head": "DECLARE n NUMBER; BEGIN SELECT COUNT(*) INTO n FROM all_tables WHERE owner = 'SCM_MGR' AND"
+  },
+  {
+   "kind": "SQL",
+   "ok": true,
+   "head": "SELECT COUNT(*) AS backed_lines, MAX(bak_dt) AS bak_dt FROM SCM_MGR.BAK_SRC_DMF0068_VERNOD",
+   "rows": [
+    [
+     "1476",
+     "2026-10-09 14:36:58"
+    ]
+   ]
+  }
+ ],
+ "applied": {
+  "last_ddl": "2026-10-09 14:36:58",
+  "status": "VALID",
+  "md5": "26854a305d223ae48b482d12a76ef328",
+  "lines": 1482,
+  "markers": 3,
+  "invalid_dependents": []
+ },
+ "after": {
+  "R_S_20260902_V005": {
+   "ok": true,
+   "rows": 72,
+   "md5": "8a8e111a9a4cf1fe7d1e24cbfbe36483",
+   "result": [
+    [
+     "0",
+     "SUCCESS",
+     "None"
+    ]
+   ]
+  },
+  "R_S_20260903_V001_C": {
+   "ok": true,
+   "rows": 72,
+   "md5": "838f86a07d925ecd94465b3ee1f28daa",
+   "result": [
+    [
+     "0",
+     "SUCCESS",
+     "None"
+    ]
+   ]
+  },
+  "R_B_20260814_V001": {
+   "ok": true,
+   "rows": 72,
+   "md5": "aa1402bd684fc60747e8ac177ac447a2",
+   "result": [
+    [
+     "0",
+     "SUCCESS",
+     "None"
+    ]
+   ]
+  },
+  "R_S_00000000_V000": {
+   "ok": true,
+   "rows": 72,
+   "md5": "8a8e111a9a4cf1fe7d1e24cbfbe36483",
+   "result": [
+    [
+     "0",
+     "SUCCESS",
+     "None"
+    ]
+   ]
+  }
+ },
+ "rehearsal_00": [
+  {
+   "kind": "SQL",
+   "ok": true,
+   "head": "SELECT 'H-APPLIED' AS chk, COUNT(*) AS cnt, CASE WHEN COUNT(*) > 0 THEN 'SKIP — 이미 적용됨' EL",
+   "rows": [
+    [
+     "H-APPLIED",
+     "3",
+     "SKIP — 이미 적용됨"
+    ],
+    [
+     "H-LINES",
+     "1483",
+     "⚠ 줄 수 다름 → 10 전체본 금지, 12 수동 반영"
+    ],
+    [
+     "H-LEN",
+     "68795",
+     "⚠ 길이 다름 → 12 수동 반영"
+    ],
+    [
+     "H-TARGET",
+     "0",
+     "⚠ 대상 문장 수 0 — 원문 확인"
+    ],
+    [
+     "H-GUARD",
+     "1",
+     "가드 있음"
+    ],
+    [
+     "H-DDL",
+     null,
+     "현재 LAST_DDL = 2026-10-09 14:36:58 / VALID"
+    ]
+   ]
+  }
+ ],
+ "rehearsal_13": [
+  {
+   "kind": "SQL",
+   "ok": true,
+   "head": "ALTER PACKAGE SCM_MGR.PKG_DMF0068 COMPILE BODY"
+  },
+  {
+   "kind": "SQL",
+   "ok": true,
+   "head": "SELECT object_name, object_type, status FROM all_objects WHERE owner = 'SCM_MGR' AND objec",
+   "rows": [
+    [
+     "PKG_DMF0068",
+     "PACKAGE",
+     "VALID"
+    ],
+    [
+     "PKG_DMF0068",
+     "PACKAGE BODY",
+     "VALID"
+    ]
+   ]
+  },
+  {
+   "kind": "SQL",
+   "ok": true,
+   "head": "SELECT line, position, text FROM all_errors WHERE owner = 'SCM_MGR' AND name = 'PKG_DMF006",
+   "rows": []
+  },
+  {
+   "kind": "BLOCK",
+   "ok": true,
+   "head": "BEGIN FOR r IN (SELECT owner, name, type FROM all_dependencies WHERE referenced_owner = 'S"
+  }
+ ],
+ "rehearsal_90": [
+  {
+   "kind": "SQL",
+   "ok": true,
+   "head": "SELECT 'V1 VALID' AS chk, status AS val FROM all_objects WHERE owner = 'SCM_MGR' AND objec",
+   "rows": [
+    [
+     "V1 VALID",
+     "VALID"
+    ],
+    [
+     "V2 마커 3",
+     "3"
+    ],
+    [
+     "V3 NO_DATA_FOUND 가드 1",
+     "1"
+    ],
+    [
+     "V4 줄 수 1483",
+     "1483"
+    ],
+    [
+     "V5 의존 INVALID 0",
+     "0"
+    ]
+   ]
+  },
+  {
+   "kind": "BLOCK",
+   "ok": true,
+   "head": "DECLARE rc1 SYS_REFCURSOR; rc2 SYS_REFCURSOR; rr SYS_REFCURSOR; v_code VARCHAR2(10); v_msg"
+  }
+ ],
+ "rehearsal_98": [
+  {
+   "kind": "BLOCK",
+   "ok": true,
+   "head": "DECLARE v CLOB; BEGIN DBMS_LOB.CREATETEMPORARY(v, TRUE); FOR r IN (SELECT text FROM SCM_MG"
+  },
+  {
+   "kind": "SQL",
+   "ok": true,
+   "head": "SELECT object_name, status, TO_CHAR(last_ddl_time, 'YYYY-MM-DD HH24:MI:SS') AS last_ddl FR",
+   "rows": [
+    [
+     "PKG_DMF0068",
+     "VALID",
+     "2026-10-09 14:37:45"
+    ]
+   ]
+  }
+ ],
+ "rollback_check": {
+  "md5": "61c8ea8fa713158eb0b5e12650241ce3",
+  "status": "VALID",
+  "missing_call": {
+   "ok": false,
+   "error": "ORA-20001: [PKG_DMF0068.P_DMF0068_GET_ORDERLIST] SQLCODE=100 / SQLERRM=ORA-01403: no data found / BACKTRACE=ORA-06512: at \"SCM_MGR.PKG_DMF0068\", line 429"
+  }
+ },
+ "rehearsal_10": [
+  {
+   "kind": "BLOCK",
+   "ok": true,
+   "head": "CREATE OR REPLACE PACKAGE BODY \"PKG_DMF0068\" IS /*****************************************"
+  }
+ ],
+ "final": {
+  "last_ddl": "2026-10-09 14:37:46",
+  "status": "VALID",
+  "md5": "26854a305d223ae48b482d12a76ef328",
+  "lines": 1482,
+  "markers": 3,
+  "invalid_dependents": [],
+  "calls": {
+   "R_S_20260902_V005": {
+    "ok": true,
+    "rows": 72,
+    "md5": "8a8e111a9a4cf1fe7d1e24cbfbe36483",
+    "result": [
+     [
+      "0",
+      "SUCCESS",
+      "None"
+     ]
+    ]
+   },
+   "R_S_20260903_V001_C": {
+    "ok": true,
+    "rows": 72,
+    "md5": "838f86a07d925ecd94465b3ee1f28daa",
+    "result": [
+     [
+      "0",
+      "SUCCESS",
+      "None"
+     ]
+    ]
+   },
+   "R_B_20260814_V001": {
+    "ok": true,
+    "rows": 72,
+    "md5": "aa1402bd684fc60747e8ac177ac447a2",
+    "result": [
+     [
+      "0",
+      "SUCCESS",
+      "None"
+     ]
+    ]
+   },
+   "R_S_00000000_V000": {
+    "ok": true,
+    "rows": 72,
+    "md5": "8a8e111a9a4cf1fe7d1e24cbfbe36483",
+    "result": [
+     [
+      "0",
+      "SUCCESS",
+      "None"
+     ]
+    ]
+   }
+  }
+ },
+ "bak_table_dropped_inhouse": true,
+ "applied_at": "2026-10-09 14:39:40.730825"
+}

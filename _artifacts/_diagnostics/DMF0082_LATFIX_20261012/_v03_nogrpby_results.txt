@@ -1,0 +1,135 @@
+=== div 40 minyonglee1 
+div=40 user=minyonglee1 기간 20261001~20270331  PKG_DMF0082 vs PKG_DMF0082_LFT  N=1
+PKG_DMF0082        SP 2.98s  (fetch 1.03s)
+    MF_SP INSERT 18xg1y5298qgq/0 PHV=3971101268 ex=27 sec/ex=3.12 cpu/ex=1.7 rows/ex=100463 line=4175 VW_LAT=1 ops6-9=[TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > SORT GROUP BY]
+    cur1: rows=  2099 cols= 414 sortedSHA=5b387997623a4947 orderSHA=dca240e627194336
+    cur2: rows=     6 cols=   3 sortedSHA=b6c09e38fa4283d2 orderSHA=b6c09e38fa4283d2
+    cur3: rows=     1 cols=   3 sortedSHA=6fd611d1167a3624 orderSHA=6fd611d1167a3624
+    cur4: rows=     5 cols=   4 sortedSHA=9a09f00c1004cd02 orderSHA=95973679df165478
+    cur5: rows=   182 cols=   7 sortedSHA=4707e5d3d403e9ac orderSHA=4707e5d3d403e9ac
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+PKG_DMF0082_LFT    SP 3.06s  (fetch 1.22s)
+    MF_SP INSERT 1zuxs4puwama6/0 PHV=1451232333 ex=2 sec/ex=0.32 cpu/ex=0.31 rows/ex=48757 line=4172 VW_LAT=0 ops6-9=[TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > FILTER ]
+    cur1: rows=  2099 cols= 414 sortedSHA=5b387997623a4947 orderSHA=dca240e627194336
+    cur2: rows=     6 cols=   3 sortedSHA=b6c09e38fa4283d2 orderSHA=b6c09e38fa4283d2
+    cur3: rows=     1 cols=   3 sortedSHA=6fd611d1167a3624 orderSHA=6fd611d1167a3624
+    cur4: rows=     5 cols=   4 sortedSHA=9a09f00c1004cd02 orderSHA=95973679df165478
+    cur5: rows=   182 cols=   7 sortedSHA=4707e5d3d403e9ac orderSHA=4707e5d3d403e9ac
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+
+결과 동등성(행수+정렬해시+컬럼수): PASS   행 순서까지: PASS
+=== div 81 minyonglee1 
+div=81 user=minyonglee1 기간 20261001~20270331  PKG_DMF0082 vs PKG_DMF0082_LFT  N=1
+PKG_DMF0082        SP 3.98s  (fetch 1.13s)
+    MF_SP INSERT 18xg1y5298qgq/0 PHV=3971101268 ex=27 sec/ex=3.12 cpu/ex=1.7 rows/ex=100463 line=4175 VW_LAT=1 ops6-9=[TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > SORT GROUP BY]
+    cur1: rows=  2383 cols= 414 sortedSHA=d90154c4bc7c77c7 orderSHA=d90154c4bc7c77c7
+    cur2: rows=     6 cols=   3 sortedSHA=b6c09e38fa4283d2 orderSHA=b6c09e38fa4283d2
+    cur3: rows=     1 cols=   3 sortedSHA=6fd611d1167a3624 orderSHA=6fd611d1167a3624
+    cur4: rows=     5 cols=   4 sortedSHA=f20776e13bfe57c4 orderSHA=afd8dd731e441700
+    cur5: rows=   182 cols=   7 sortedSHA=4707e5d3d403e9ac orderSHA=4707e5d3d403e9ac
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+PKG_DMF0082_LFT    SP 4.08s  (fetch 1.45s)
+    MF_SP INSERT 1zuxs4puwama6/0 PHV=1451232333 ex=4 sec/ex=0.33 cpu/ex=0.32 rows/ex=53719 line=4172 VW_LAT=0 ops6-9=[TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > FILTER ]
+    cur1: rows=  2383 cols= 414 sortedSHA=d90154c4bc7c77c7 orderSHA=d90154c4bc7c77c7
+    cur2: rows=     6 cols=   3 sortedSHA=b6c09e38fa4283d2 orderSHA=b6c09e38fa4283d2
+    cur3: rows=     1 cols=   3 sortedSHA=6fd611d1167a3624 orderSHA=6fd611d1167a3624
+    cur4: rows=     5 cols=   4 sortedSHA=f20776e13bfe57c4 orderSHA=afd8dd731e441700
+    cur5: rows=   182 cols=   7 sortedSHA=4707e5d3d403e9ac orderSHA=4707e5d3d403e9ac
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+
+결과 동등성(행수+정렬해시+컬럼수): PASS   행 순서까지: PASS
+=== div 82 minyonglee1 
+div=82 user=minyonglee1 기간 20261001~20270331  PKG_DMF0082 vs PKG_DMF0082_LFT  N=1
+PKG_DMF0082        SP 7.14s  (fetch 1.78s)
+    MF_SP INSERT 18xg1y5298qgq/0 PHV=3971101268 ex=27 sec/ex=3.12 cpu/ex=1.7 rows/ex=100463 line=4175 VW_LAT=1 ops6-9=[TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > SORT GROUP BY]
+    cur1: rows=  2608 cols= 414 sortedSHA=dfbd0419d5ce487a orderSHA=dfbd0419d5ce487a
+    cur2: rows=     6 cols=   3 sortedSHA=b6c09e38fa4283d2 orderSHA=b6c09e38fa4283d2
+    cur3: rows=     1 cols=   3 sortedSHA=6fd611d1167a3624 orderSHA=6fd611d1167a3624
+    cur4: rows=     5 cols=   4 sortedSHA=4d5d6c762d0f98ac orderSHA=75648356e4e6288e
+    cur5: rows=   182 cols=   7 sortedSHA=4707e5d3d403e9ac orderSHA=4707e5d3d403e9ac
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+PKG_DMF0082_LFT    SP 6.84s  (fetch 1.83s)
+    MF_SP INSERT 1zuxs4puwama6/0 PHV=1451232333 ex=6 sec/ex=0.4 cpu/ex=0.39 rows/ex=58993 line=4172 VW_LAT=0 ops6-9=[TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > FILTER ]
+    cur1: rows=  2608 cols= 414 sortedSHA=dfbd0419d5ce487a orderSHA=dfbd0419d5ce487a
+    cur2: rows=     6 cols=   3 sortedSHA=b6c09e38fa4283d2 orderSHA=b6c09e38fa4283d2
+    cur3: rows=     1 cols=   3 sortedSHA=0b95f3b540c5ed1b orderSHA=0b95f3b540c5ed1b
+    cur4: rows=     5 cols=   4 sortedSHA=4d5d6c762d0f98ac orderSHA=75648356e4e6288e
+    cur5: rows=   182 cols=   7 sortedSHA=4707e5d3d403e9ac orderSHA=4707e5d3d403e9ac
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+
+결과 동등성(행수+정렬해시+컬럼수): PASS   행 순서까지: PASS
+=== div 40 k0101 
+div=40 user=k0101 기간 20261001~20270331  PKG_DMF0082 vs PKG_DMF0082_LFT  N=1
+PKG_DMF0082        SP 8.35s  (fetch 4.43s)
+    MF_SP INSERT 18xg1y5298qgq/0 PHV=3971101268 ex=27 sec/ex=3.12 cpu/ex=1.7 rows/ex=100463 line=4175 VW_LAT=1 ops6-9=[TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > SORT GROUP BY]
+    cur1: rows=  6906 cols= 413 sortedSHA=d06d426a874e6919 orderSHA=bdb9761f3bc9cbe8
+    cur2: rows=     6 cols=   3 sortedSHA=b6c09e38fa4283d2 orderSHA=b6c09e38fa4283d2
+    cur3: rows=     1 cols=   3 sortedSHA=0b95f3b540c5ed1b orderSHA=0b95f3b540c5ed1b
+    cur4: rows=     5 cols=   4 sortedSHA=9a09f00c1004cd02 orderSHA=95973679df165478
+    cur5: rows=   182 cols=   7 sortedSHA=4707e5d3d403e9ac orderSHA=4707e5d3d403e9ac
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+PKG_DMF0082_LFT    SP 7.65s  (fetch 5.53s)
+    MF_SP INSERT 1zuxs4puwama6/0 PHV=1451232333 ex=8 sec/ex=0.65 cpu/ex=0.65 rows/ex=82342 line=4172 VW_LAT=0 ops6-9=[TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > FILTER ]
+    cur1: rows=  6906 cols= 413 sortedSHA=d06d426a874e6919 orderSHA=bdb9761f3bc9cbe8
+    cur2: rows=     6 cols=   3 sortedSHA=b6c09e38fa4283d2 orderSHA=b6c09e38fa4283d2
+    cur3: rows=     1 cols=   3 sortedSHA=043018905dcf91b8 orderSHA=043018905dcf91b8
+    cur4: rows=     5 cols=   4 sortedSHA=9a09f00c1004cd02 orderSHA=95973679df165478
+    cur5: rows=   182 cols=   7 sortedSHA=4707e5d3d403e9ac orderSHA=4707e5d3d403e9ac
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+
+결과 동등성(행수+정렬해시+컬럼수): PASS   행 순서까지: PASS
+=== div 81 k0101 
+div=81 user=k0101 기간 20261001~20270331  PKG_DMF0082 vs PKG_DMF0082_LFT  N=1
+PKG_DMF0082        SP 11.36s  (fetch 6.29s)
+    MF_SP INSERT 18xg1y5298qgq/0 PHV=3971101268 ex=27 sec/ex=3.12 cpu/ex=1.7 rows/ex=100463 line=4175 VW_LAT=1 ops6-9=[TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > SORT GROUP BY]
+    cur1: rows=  7628 cols= 413 sortedSHA=da14ddad5995fc15 orderSHA=88dd95c255d2afc3
+    cur2: rows=     6 cols=   3 sortedSHA=b6c09e38fa4283d2 orderSHA=b6c09e38fa4283d2
+    cur3: rows=     1 cols=   3 sortedSHA=043018905dcf91b8 orderSHA=043018905dcf91b8
+    cur4: rows=     5 cols=   4 sortedSHA=f20776e13bfe57c4 orderSHA=afd8dd731e441700
+    cur5: rows=   182 cols=   7 sortedSHA=4707e5d3d403e9ac orderSHA=4707e5d3d403e9ac
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+PKG_DMF0082_LFT    SP 11.66s  (fetch 8.84s)
+    MF_SP INSERT 1zuxs4puwama6/0 PHV=1451232333 ex=10 sec/ex=0.87 cpu/ex=0.87 rows/ex=102796 line=4172 VW_LAT=0 ops6-9=[TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > FILTER ]
+    cur1: rows=  7628 cols= 413 sortedSHA=da14ddad5995fc15 orderSHA=88dd95c255d2afc3
+    cur2: rows=     6 cols=   3 sortedSHA=b6c09e38fa4283d2 orderSHA=b6c09e38fa4283d2
+    cur3: rows=     1 cols=   3 sortedSHA=40ac42369be1621f orderSHA=40ac42369be1621f
+    cur4: rows=     5 cols=   4 sortedSHA=f20776e13bfe57c4 orderSHA=afd8dd731e441700
+    cur5: rows=   182 cols=   7 sortedSHA=4707e5d3d403e9ac orderSHA=4707e5d3d403e9ac
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+
+결과 동등성(행수+정렬해시+컬럼수): PASS   행 순서까지: PASS
+=== div 82 k0101 
+div=82 user=k0101 기간 20261001~20270331  PKG_DMF0082 vs PKG_DMF0082_LFT  N=1
+PKG_DMF0082        SP 16.36s  (fetch 9.72s)
+    MF_SP INSERT 18xg1y5298qgq/0 PHV=3971101268 ex=27 sec/ex=3.12 cpu/ex=1.7 rows/ex=100463 line=4175 VW_LAT=1 ops6-9=[TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > SORT GROUP BY]
+    cur1: rows=  8105 cols= 413 sortedSHA=dacf63be6318667a orderSHA=e3cc6b2c4130aabd
+    cur2: rows=     6 cols=   3 sortedSHA=b6c09e38fa4283d2 orderSHA=b6c09e38fa4283d2
+    cur3: rows=     1 cols=   3 sortedSHA=8e74540b63e37a52 orderSHA=8e74540b63e37a52
+    cur4: rows=     5 cols=   4 sortedSHA=4d5d6c762d0f98ac orderSHA=75648356e4e6288e
+    cur5: rows=   182 cols=   7 sortedSHA=4707e5d3d403e9ac orderSHA=4707e5d3d403e9ac
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+PKG_DMF0082_LFT    SP 9.07s  (fetch 5.65s)
+    MF_SP INSERT 1zuxs4puwama6/0 PHV=1451232333 ex=12 sec/ex=0.97 cpu/ex=0.97 rows/ex=121199 line=4172 VW_LAT=0 ops6-9=[TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > FILTER ]
+    cur1: rows=  8105 cols= 413 sortedSHA=dacf63be6318667a orderSHA=e3cc6b2c4130aabd
+    cur2: rows=     6 cols=   3 sortedSHA=b6c09e38fa4283d2 orderSHA=b6c09e38fa4283d2
+    cur3: rows=     1 cols=   3 sortedSHA=60217183866b8e31 orderSHA=60217183866b8e31
+    cur4: rows=     5 cols=   4 sortedSHA=4d5d6c762d0f98ac orderSHA=75648356e4e6288e
+    cur5: rows=   182 cols=   7 sortedSHA=4707e5d3d403e9ac orderSHA=4707e5d3d403e9ac
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+
+결과 동등성(행수+정렬해시+컬럼수): PASS   행 순서까지: PASS
+=== matrix k0101 
+user=k0101  PKG_DMF0082 vs PKG_DMF0082_LFT  기간 20261001~20270331
+div40 Cutoff MF_W_20260921_V001          PASS  rows=     3  원본  36.49s → 개선   3.13s
+div40 Cutoff SP_W_20260921_V001          PASS  rows=     0  원본  24.47s → 개선   2.86s  ⚠ 0행(미실증)
+div40 Cutoff SF_W_20260824_V001          PASS  rows=  1167  원본 897.68s → 개선 685.57s
+div40 Current,MF_W_20260921_V001         FAIL  rows=  6909  원본  45.02s → 개선   7.83s
+      cur1: 원본 (6909, '54cfcc9d12b77eb6', 413) / 개선 (6909, '30d5fea1fe0d3f89', 413)
+div40 Current site=IM_US_TXT             PASS  rows=    49  원본   1.81s → 개선   1.73s
+div40 Current item=APCCA3122A            PASS  rows=    10  원본   1.74s → 개선   1.65s
+div40 Current qtyYn=Y                    PASS  rows=  1498  원본   5.56s → 개선   5.49s
+div81 Cutoff MF_W_20260930_V001          PASS  rows=   974  원본 904.70s → 개선 1291.73s
+div81 Cutoff SP_W_20260923_V001          PASS  rows=     0  원본 330.40s → 개선 269.42s  ⚠ 0행(미실증)
+div81 Current,MF_W_20260930_V001         FAIL  rows=  7674  원본 1256.22s → 개선 1584.28s
+      cur1: 원본 (7674, '1205b5f740925567', 413) / 개선 (8602, '556434cad52b5ce1', 413)
+      cur3: 원본 (1, '35d13632c9c80af6', 3) / 개선 (1, '66c9566d1cdad890', 3)

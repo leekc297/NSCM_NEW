@@ -1,0 +1,92 @@
+{
+ "applied_at": "2026-10-09 15:14:29",
+ "log": [
+  {
+   "obj": "PROCEDURE|DMF0020_GET_SCM_MST_FUTURE_PRICE",
+   "result": "ALREADY_APPLIED",
+   "status": "VALID",
+   "last_ddl": "2026-10-09 14:42:53",
+   "errors": 0,
+   "ora979_before": 2,
+   "ora979_after": 0,
+   "markers": 3
+  },
+  {
+   "obj": "PACKAGE BODY|PKG_DMF0021",
+   "result": "ALREADY_APPLIED",
+   "status": "VALID",
+   "last_ddl": "2026-10-09 14:42:54",
+   "errors": 0,
+   "ora979_before": 1,
+   "ora979_after": 0,
+   "markers": 1
+  },
+  {
+   "obj": "PACKAGE BODY|PKG_DMF0044",
+   "result": "SKIP_FRESH_GATE",
+   "db_ddl": "2026-10-09 15:00:45",
+   "fetched_ddl": "2026-10-08 16:52:10"
+  },
+  {
+   "obj": "PACKAGE BODY|PKG_DMF0045",
+   "result": "ALREADY_APPLIED",
+   "status": "VALID",
+   "last_ddl": "2026-10-09 14:43:03",
+   "errors": 0,
+   "ora979_before": 1,
+   "ora979_after": 0,
+   "markers": 1
+  },
+  {
+   "obj": "PACKAGE BODY|PKG_SCP0013",
+   "result": "ALREADY_APPLIED",
+   "status": "VALID",
+   "last_ddl": "2026-10-09 14:43:05",
+   "errors": 0,
+   "ora979_before": 1,
+   "ora979_after": 0,
+   "markers": 1
+  },
+  {
+   "obj": "PACKAGE BODY|PKG_SSP0045",
+   "result": "ALREADY_APPLIED",
+   "status": "VALID",
+   "last_ddl": "2026-10-09 14:43:08",
+   "errors": 0,
+   "ora979_before": 1,
+   "ora979_after": 0,
+   "markers": 1
+  },
+  {
+   "obj": "PROCEDURE|PR_DM_DNM_EDI_CALLOFF_MKT_FCST",
+   "result": "ALREADY_APPLIED",
+   "status": "VALID",
+   "last_ddl": "2026-10-09 14:43:08",
+   "errors": 0,
+   "ora979_before": 4,
+   "ora979_after": 0,
+   "markers": 4
+  },
+  {
+   "obj": "PROCEDURE|PR_DM_PLN_SALES_PLAN_RESULT_MOVE",
+   "result": "APPLIED",
+   "status": "VALID",
+   "last_ddl": "2026-10-09 15:14:29",
+   "errors": 0,
+   "ora979_before": 1,
+   "ora979_after": 0,
+   "markers": 1
+  },
+  {
+   "obj": "PROCEDURE|PR_SSP_ANL_SHIPMENT_PLAN_FG",
+   "result": "ALREADY_APPLIED",
+   "status": "VALID",
+   "last_ddl": "2026-10-09 15:13:36",
+   "errors": 0,
+   "ora979_before": 2,
+   "ora979_after": 0,
+   "markers": 2
+  }
+ ],
+ "new_invalid": []
+}

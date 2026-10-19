@@ -1,0 +1,7 @@
+40 run1 8.1s rows 3065 [('0', 'SUCCESS', '0')]
+40 run2 9.2s rows 3065 [('0', 'SUCCESS', '0')]
+40 생성 SQL 새 조인 포함: False · 원래 CASE 조인 잔존: False
+40 원래 조인 SQL 36.9s rows 3065 · 결과 전체 동일=True
+82 60.8s rows 3875 [('0', 'SUCCESS', '0')] · 원래 조인 문구 그대로=True
+81 15.0s rows 1829 [('0', 'SUCCESS', '0')] · 원래 조인 문구 그대로=True
+cleanup 38

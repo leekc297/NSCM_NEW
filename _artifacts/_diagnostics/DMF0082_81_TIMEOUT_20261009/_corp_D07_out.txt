@@ -1,0 +1,171 @@
+﻿################ [X0] 접속 DB ################
+DB_NAME | INST | NOW                
+--------+------+--------------------
+ZIOUI1  | ZIO  | 2026-10-09 16:17:42
+(1 rows)
+################ [X1] ⭐ 이 DB 의 이벤트 시각 — '/' DEFAULT(테이블 ALTER) · '/' 객체 변경(PKG 줄 존재) · AJS 변경(마커) · PKG LAST_DDL ################
+K                                                        | T                   | N    
+---------------------------------------------------------+---------------------+------
+SLASHDEF: DM_PLN_MKT_FCST 테이블 LAST_DDL                   | 2026-10-08 16:01:01 | 10   
+SLASHDEF: SCM_MST_FUTURE_PRICE 테이블 LAST_DDL              | 2026-10-08 16:02:00 |      
+SLASHDEF: DM_PLN_SALES_PLAN 테이블 LAST_DDL                 | 2026-10-08 16:05:23 |      
+PKG_DMF0082 BODY LAST_DDL                                | 2026-10-08 19:27:16 |      
+SLASHOBJ 적용 여부: PKG_DMF0082 '/' 줄 수 (사내 69)              |                     | 23   
+AJS 10-08 적용 여부: PKG_DMF0082 '2026.10.08 AJS' 줄 수 (사내 4) |                     | 4    
+PR_DM_DNM_CREATE_WS_RTF LAST_DDL (82 AS_Inv '/' 작성자)     | 2026-10-08 19:27:09 | 14   
+82 DM_PLN_MKT_FCST PLANT_SITE_ID='/' 행 수 · 최초 생성         | 2026-10-09 14:25:40 | 21275
+(8 rows)
+--  '/' 줄 수 0 = SLASHOBJ 미적용 DB. AJS 줄 수 0 = AJS 10-08 미반영. 두 시각을 아래 [X2]~[X4] 의 날짜와 대조
+################ [X2] ⭐ 화면 호출 이력 14일 — 일자 × division: 호출수 · DB 초 최소/중앙/최대 · 호출별(시각:초) ################
+D     | DIV   | N  | MIN_S | MED_S | MAX_S | ERR_OR_NOEND | CALLS                                                                                                         
+------+-------+----+-------+-------+-------+--------------+---------------------------------------------------------------------------------------------------------------
+09-28 | 40    | 15 | 3     | 17    | 55    | 0            | 18:09:30 18:17:14 18:21:16 18:24:18 18:25:23 18:25:28 18:25:26 18:31:55 18:34:17 18:38:17 18:44:16 18:48:3 18:
+09-28 | 81    | 6  | 2     | 38.5  | 282   | 0            | 10:50:189 11:31:282 13:52:28 13:56:49 14:19:12 14:21:2                                                        
+09-28 | 81_HG | 3  | 0     | 1     | 3     | 0            | 09:50:3 10:11:1 10:11:0                                                                                       
+09-28 |       | 35 | 0     | 0     | 3     | 0            | 09:29:0 09:29:0 09:37:0 09:46:0 09:53:0 09:56:0 09:57:1 10:41:1 11:12:0 13:17:1 13:49:1 13:51:0 14:14:1 14:16:
+09-29 | 40    | 18 | 2     | 6     | 20    | 0            | 13:59:14 14:00:6 14:06:8 15:21:6 15:22:5 15:36:9 15:37:6 16:02:6 16:05:11 16:06:3 16:12:6 16:12:2 16:13:3 16:1
+09-29 | 81    | 1  | 18    | 18    | 18    | 0            | 14:05:18                                                                                                      
+09-29 |       | 2  | 373   | 620.5 | 868   | 0            | 21:26:373 21:37:868                                                                                           
+09-30 | 40    | 12 | 4     | 5.5   | 17    | 0            | 00:02:17 00:53:9 00:53:9 01:07:8 01:07:9 08:04:5 08:04:4 08:04:4 08:53:4 08:53:4 08:54:4 08:54:6              
+09-30 | 81    | 17 | 1     | 5     | 381   | 0            | 00:56:34 00:56:8 01:08:9 01:08:9 08:05:5 08:05:5 08:05:5 10:57:7 11:23:381 11:26:200 14:39:1 14:40:1 14:40:1 1
+09-30 | 82    | 6  | 5     | 7     | 245   | 0            | 00:57:245 01:01:237 08:05:6 08:05:5 08:05:5 10:54:8                                                           
+09-30 |       | 3  | 0     | 0     | 117   | 2            | 00:00:117 00:51:0 00:51:0                                                                                     
+10-01 | 40    | 4  | 85    | 315.5 | 445   | 0            | 09:12:200 09:13:431 09:16:445 09:18:85                                                                        
+10-02 | 40    | 1  | 14    | 14    | 14    | 0            | 16:14:14                                                                                                      
+10-06 | 40    | 6  | 14    | 56.5  | 793   | 0            | 09:15:41 11:20:793 14:34:71 14:40:213 14:41:14 15:31:42                                                       
+(14 rows)
+--  판정: MED_S 가 뛰는 첫 날짜가 [X1] 의 어느 시각 뒤인가. ERR_OR_NOEND = 타임아웃 호출(END 미기록)
+################ [X3] ⭐ AWR — 주요 문장 1회 소요(초) 시간대별 · PHV (10-01~) — 느려진 첫 시각과 계획 변경 시각 ################
+--  d019r0hbb0muh(81/82 판가 ONEREAD L1667) · c3bg6q8n39195(81/82 수요 L1397) · 6bucw2kzuc0nt(40 수요 L1500) · 18xg1y5298qgq(MF_SP L4175) · 4svg4dhnqxh8f(40 판가 L1267)
+--  631pzfvq8r0ut(40 판가 INSERT L1850) · 20xrvz802rfsy(DELETE dedup L3643) · 19mfxqb34sbky(SITE_ITEM_ALL L855) · 56fkh52zfndm7(결과 L4705) · 3d2xnx839ksnt(09-30 구 판가, ONEREAD 뒤 사라져야 정상)
+SNAP     | SQL_ID        | PHV        | EX | SEC_PER_EX | CPU_PER_EX | DR_PER_EX | BG_PER_EX | ROWS_PER_EX
+---------+---------------+------------+----+------------+------------+-----------+-----------+------------
+10-01 09 | 20xrvz802rfsy | 1553021311 | 4  | 137.7      | 3.3        | 10        | 926719    | 720072     
+10-01 09 | 631pzfvq8r0ut | 620290878  | 5  | 68.8       | 3.2        | 5489      | 266548    | 654211     
+10-01 16 | d019r0hbb0muh | 2027738766 | 1  | 5430.2     | 38         | 650490    | 984962    | 1172295    
+10-01 16 | c3bg6q8n39195 | 3995613941 | 2  | 1853.7     | 3.8        | 87        | 15398     | 13142      
+10-02 14 | d019r0hbb0muh | 2027738766 | 22 | 100        | 14.5       | 388569    | 662820    | 1653711    
+10-02 14 | 4svg4dhnqxh8f | 3195295405 | 6  | 8.1        | 0.3        | 10083     | 33551     | 6291       
+10-02 14 | 631pzfvq8r0ut | 620290878  | 6  | 4.7        | 4.6        | 2         | 408924    | 1120759    
+10-02 14 | 20xrvz802rfsy | 1553021311 | 28 | 2.9        | 2.9        | 7         | 833715    | 593890     
+10-02 14 | 18xg1y5298qgq | 3971101268 | 28 | 2.4        | 1.6        | 3378      | 170314    | 94594      
+10-02 15 | d019r0hbb0muh | 2027738766 | 12 | 105.6      | 13.3       | 367944    | 648250    | 1615229    
+10-02 15 | 631pzfvq8r0ut | 620290878  | 4  | 4.1        | 4.1        | 0         | 361284    | 960623     
+10-02 15 | 20xrvz802rfsy | 1553021311 | 20 | 2.1        | 2.1        | 0         | 664434    | 441552     
+10-02 15 | 18xg1y5298qgq | 3971101268 | 20 | 2.1        | 1.3        | 2848      | 172309    | 74503      
+10-02 16 | 631pzfvq8r0ut | 620290878  | 2  | 3.1        | 3.1        | 1         | 378678    | 960623     
+10-02 16 | 56fkh52zfndm7 | 360512032  | 2  | 0.7        | 0.7        | 0         | 17201     | 2099       
+10-02 17 | 4svg4dhnqxh8f | 3195295405 | 2  | 18.8       | 0.2        | 27438     | 33819     | 6282       
+10-02 17 | 631pzfvq8r0ut | 620290878  | 2  | 4.8        | 4.8        | 24848     | 518398    | 1346264    
+10-02 18 | d019r0hbb0muh | 2027738766 | 2  | 114        | 11.4       | 357578    | 700717    | 1639119    
+10-02 18 | 631pzfvq8r0ut | 620290878  | 2  | 4.8        | 4.8        | 0         | 518675    | 1346264    
+10-02 18 | 18xg1y5298qgq | 3971101268 | 6  | 1          | 1          | 1         | 104836    | 69103      
+10-06 09 | 4svg4dhnqxh8f | 3195295405 | 1  | 19.3       | 0.3        | 27470     | 34610     | 6291       
+10-06 14 | 4svg4dhnqxh8f | 3195295405 | 6  | 9.7        | 0.2        | 9156      | 34720     | 6291       
+10-08 23 | 4svg4dhnqxh8f | 3195295405 | 6  | 54.7       | 0.2        | 18297     | 27743     | 0          
+10-09 15 | d019r0hbb0muh | 2682586817 | 12 | 105        | 1.5        | 17794     | 88646     | 129482     
+10-09 15 | 4svg4dhnqxh8f | 3195295405 | 8  | 14.6       | 0.3        | 8819      | 33519     | 6291       
+10-09 15 | 18xg1y5298qgq | 3971101268 | 20 | 0.8        | 0.8        | 1         | 42578     | 59205      
+10-09 15 | 56fkh52zfndm7 | 360512032  | 20 | 0.7        | 0.7        | 0         | 17692     | 2314       
+(27 rows)
+--  판정: 같은 SQL_ID 의 SEC_PER_EX 가 뛰는 시각 / PHV 가 바뀌는 시각이 [X1] 이벤트 전인가 후인가. SQL_ID 가 같다 = 문장 텍스트가 '/' 변경과 무관
+################ [X4] AWR — PKG_DMF0082 전체 문장(GT_DMF0082 포함) 일자별 총 경과·실행·DR·CPU ################
+D     | SQLS | EX  | ELAP_S | DR       | CPU_S
+------+------+-----+--------+----------+------
+10-01 | 12   | 193 | 10407  | 680511   | 181  
+10-02 | 21   | 634 | 7808   | 15953820 | 3282 
+10-05 | 4    | 162 | 25     | 26737    | 1    
+10-06 | 4    | 21  | 553    | 85812    | 7    
+10-08 | 2    | 8   | 369    | 109786   | 42   
+10-09 | 11   | 74  | 3043   | 870724   | 255  
+(6 rows)
+################ [X5] AWR ASH — 일자 × SQL_ID: PKG_DMF0082 진입 샘플(≈10초 단위) 상위 — 어느 날부터 어느 문장이 시간을 먹었나 ################
+D     | SQL_ID        | PHV        | APPROX_SEC | TOP_EVT                 | TXT                                                                   
+------+---------------+------------+------------+-------------------------+-----------------------------------------------------------------------
+09-30 | 2p5mgsgt8gb2g | 4034737771 | 16940      | undo segment extension  | DELETE FROM GT_PRDM2_MF_BALANCE_MKT_FCST                              
+09-30 | d019r0hbb0muh | 2682586817 | 6940       | read by other session   | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+09-30 | gfjpdh7fc1u59 | 4011491034 | 6330       | read by other session   | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+09-30 | d019r0hbb0muh | 3633386171 | 1750       | ON CPU                  | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+09-30 | 3d2xnx839ksnt | 1224431149 | 1610       | db file parallel read   | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, P
+09-30 | 1nwrrz1tttfzx | 0          | 600        | write complete waits    | INSERT INTO SCM_SYS_LOG_BATCH ( PROGRAM_NAME, LOG_TYPE, LOG_COUNT, LOG
+09-30 | gfjpdh7fc1u59 | 982384402  | 530        | direct path read        | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+09-30 | 3d2xnx839ksnt | 3544159530 | 500        | db file parallel read   | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, P
+09-30 | dnfs2wbc1anhw | 3071587426 | 470        | free buffer waits       | INSERT INTO GT_PRDM2_MF_BALANCE_MKT_FCST ( DIVISION_ID, PROJECT_CODE, 
+09-30 | 2nysu9tbng9v4 | 598563120  | 270        | ON CPU                  | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+09-30 | c3bg6q8n39195 | 3995613941 | 240        | read by other session   | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+09-30 | ac561dnz1arup | 3299744269 | 230        | db file scattered read  | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+09-30 | 18xg1y5298qgq | 3971101268 | 230        | ON CPU                  | INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_
+09-30 | 074s0c6f87q75 | 3130327946 | 180        | free buffer waits       | MERGE INTO SCM_MGR.SCM_MST_FUTURE_PRICE A USING (SELECT * FROM ( SELEC
+09-30 | 4svg4dhnqxh8f | 3195295405 | 150        | direct path read        | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, P
+09-30 | gc6u3w8yda1a4 | 2901697395 | 150        | free buffer waits       | DELETE /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ FROM SY
+09-30 | c3bg6q8n39195 | 117092242  | 130        | direct path read        | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+09-30 | b6wn3kx02pryu | 3899932091 | 120        | direct path read        | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, P
+09-30 | bf40tzsw29h4h | 2527766944 | 100        | free buffer waits       | INSERT INTO SCM_MGR.SCM_MST_FUTURE_PRICE_H ( DIVISION_ID, HISTORY_SEQ,
+09-30 | d448fuwy0ss79 | 1706318946 | 80         | free buffer waits       | INSERT INTO GT_PRDM2_MST ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITE
+09-30 | 4kbmsfxybgdtu | 1574867423 | 80         | free buffer waits       | INSERT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ INTO SY
+09-30 | 9xvpghd3tj06u | 2619118743 | 80         | ON CPU                  | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJE
+09-30 | 9xvpghd3tj06u | 747864081  | 70         | db file sequential read | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJE
+09-30 | 70xvv1ktud7js | 1667501949 | 60         | ON CPU                  | SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PR
+09-30 | c8a7d4tuhr6st | 0          | 60         | free buffer waits       | INSERT INTO sys.wri$_optstat_histhead_history (obj#, intcol#, savtime,
+09-30 | 5vqx0853tks4h | 1931396592 | 60         | free buffer waits       | INSERT INTO SCM_MGR.GT_PRDM1_TEMP_EXCH ( DIVISION_ID, YYYYMMDD, CURREN
+09-30 | 2vpwdnsya90uw | 2016256539 | 60         | ON CPU                  | SELECT A.ITEM_ID FROM SCM_MGR.GT_PRDM1_T_MAIN A LEFT OUTER JOIN SCM_MG
+09-30 | cac9cbukwmudc | 633531915  | 40         | ON CPU                  | MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_
+09-30 | 8np92j5zqr6gk | 3354968067 | 40         | free buffer waits       | INSERT INTO SCM_MGR.GT_PRDM1_T_PRICE ( DIVISION_ID, PROJECT_CODE, END_
+09-30 | 653as8tkvnsg4 | 2529978778 | 40         | free buffer waits       | INSERT INTO GT_PRDM2_RESULTS ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID,
+09-30 | 872vsnfnj927p | 1879353244 | 30         | db file parallel read   | MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT DIVISION_ID, PROJ
+09-30 | 3x9ardnmfczp0 | 116174995  | 30         | ON CPU                  | MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT NVL(DIVISION_ID, 
+09-30 | 12v19yag54ut1 | 2467922982 | 30         | ON CPU                  | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+09-30 | cs2wkac8ycn35 | 3581701606 | 30         | ON CPU                  | SELECT A.ITEM_ID FROM SCM_MGR.GT_PRDM1_T_MAIN A INNER JOIN SCM_MGR.DM_
+10-01 | d019r0hbb0muh | 2027738766 | 4800       | free buffer waits       | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+10-01 | 20xrvz802rfsy | 1553021311 | 1580       | free buffer waits       | DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN 
+10-01 | 631pzfvq8r0ut | 620290878  | 700        | free buffer waits       | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+10-01 | 63ar9rz0axr5p | 2395782385 | 240        | free buffer waits       | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_C
+10-01 | 0rp3b1v236wwz | 4066606801 | 160        | free buffer waits       | INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, IT
+10-01 | dn68352qhs5nf | 1177924293 | 140        | free buffer waits       | INSERT INTO SCM_MGR.GT_DMF0082_PARAM_TOKEN (PARAM_NM, TOKEN) SELECT 'p
+10-01 | day2h1hdkc8y1 | 3484297769 | 100        | free buffer waits       | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+10-01 | 9wgfrws532db6 | 3069957411 | 60         | free buffer waits       | INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_A_V ( DIVISION_ID, ITEM
+10-01 | 9xvpghd3tj06u | 4145401064 | 60         | free buffer waits       | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJE
+10-01 | ac561dnz1arup | 3299744269 | 40         | free buffer waits       | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+10-01 | 4svg4dhnqxh8f | 3195295405 | 40         | direct path read        | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, P
+10-01 | 8ngcf5avm1q3q | 3642427876 | 40         | free buffer waits       | INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_V ( DIVISION_ID, ITEM_I
+10-02 | d019r0hbb0muh | 2027738766 | 3540       | direct path read        | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+10-02 | g2f236ssg1rpu | 2456431936 | 2180       | ON CPU                  | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST_C (DIVISION_ID, 
+10-02 | c9k3bxdjgsjr8 | 2151130842 | 700        | ON CPU                  | INSERT INTO SCM_MGR.GTT_TEMPSITEITEMALL ( DIVISION_ID, PROJECT_CODE, S
+10-02 | 70xvv1ktud7js | 1667501949 | 520        | direct path write temp  | SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PR
+10-02 | fp9f0d0pb2ngx | 529539910  | 340        | ON CPU                  | INSERT INTO SCM_MGR.GTT_TEMPFCSTNPRICE ( DIVISION_ID , PROJECT_CODE , 
+10-02 | gfjpdh7fc1u59 | 982384402  | 220        | db file scattered read  | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+10-02 | 0rp3b1v236wwz | 4066606801 | 180        | db file sequential read | INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, IT
+10-02 | bu2qpkdhnrfyy | 1273399238 | 160        | db file sequential read | INSERT INTO SCM_MGR.GTT_T_LAST_DATA_SETUP_PRICE ( DIVISION_ID, PROJECT
+10-02 | 1426dan73amg7 | 3323084331 | 140        | db file scattered read  | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+10-02 | 20xrvz802rfsy | 1553021311 | 140        | ON CPU                  | DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN 
+10-02 | 4svg4dhnqxh8f | 3195295405 | 120        | direct path read        | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, P
+10-02 | 18xg1y5298qgq | 3971101268 | 100        | ON CPU                  | INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_
+10-02 | 631pzfvq8r0ut | 620290878  | 100        | ON CPU                  | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+10-02 | gkn9tran5v9tb | 633531915  | 100        | ON CPU                  | MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_
+10-02 | 8kzbu46dc5arm | 2112400780 | 80         | db file sequential read | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C (DIVISION_ID,
+10-02 | 3yzv9923fcq5f | 2529036555 | 80         | db file scattered read  | INSERT INTO SCM_MGR.GTT_T_LAST_DATA_SETUP_PRICE ( DIVISION_ID, PROJECT
+10-02 | f6r0861xjw0h1 | 4237537377 | 80         | ON CPU                  | MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_
+10-02 | cac9cbukwmudc | 633531915  | 80         | ON CPU                  | MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_
+10-02 | 8u7w15y6zgtr2 | 3172760335 | 40         | db file scattered read  | INSERT INTO SCM_MGR.GTT_T_LAST_DATA_SETUP_FCST ( DIVISION_ID, PROJECT_
+10-02 | c3bg6q8n39195 | 3995613941 | 40         | db file sequential read | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+10-06 | 4svg4dhnqxh8f | 3195295405 | 600        | direct path read        | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, P
+10-06 | 631pzfvq8r0ut | 620290878  | 460        | db file scattered read  | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+10-06 | f6r0861xjw0h1 | 4237537377 | 400        | undo segment extension  | MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_
+10-06 | 872vsnfnj927p | 1879353244 | 360        | db file parallel read   | MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT DIVISION_ID, PROJ
+10-06 | ac561dnz1arup | 2591175856 | 140        | db file scattered read  | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+10-06 | 9xvpghd3tj06u | 4145401064 | 120        | db file scattered read  | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJE
+10-06 | 6bucw2kzuc0nt | 3737877804 | 100        | db file scattered read  | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+10-06 | 70xvv1ktud7js | 1667501949 | 40         | ON CPU                  | SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PR
+10-08 | 4svg4dhnqxh8f | 3195295405 | 300        | direct path read        | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, P
+10-08 | ac561dnz1arup | 2591175856 | 120        | db file scattered read  | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+10-08 | br0qzg41fkcrf | 2605627390 | 100        | db file sequential read | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST_C (DIVISION_ID, 
+10-08 | c18u2h3hsxt9z | 2341663126 | 60         | db file sequential read | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+10-08 | 4gsksgxj0ft42 | 89136042   | 40         | db file sequential read | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C (DIVISION_ID,
+10-08 | b6fpw9ffkdtf5 | 830283634  | 40         | db file sequential read | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+10-09 | d019r0hbb0muh | 2682586817 | 1240       | db file sequential read | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+10-09 | 4svg4dhnqxh8f | 3195295405 | 140        | db file sequential read | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, P
+10-09 | 18xg1y5298qgq | 3971101268 | 40         | ON CPU                  | INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_
+(83 rows)
+=============================================================================
+D07 완료 → D07_TIMELINE_OUT.txt 회신 (QA·DEV). [X1] 이벤트 시각과 [X2]/[X3] 의 첫 악화 시각을 대조하면 '/' 뒤인지 AJS 뒤인지 판정된다
+=============================================================================

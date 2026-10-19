@@ -1,0 +1,19 @@
+CHK | N | JUDGE
+V1 마커 | 0 | FAIL (미적용 또는 마커 수 불일치)
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-16 15:27:41 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-16 16:11:01 | 0 | 0
+(2 rows)
+
+V3 V1 적용 문구 0건 · 수정 전 문구 1건 → FAIL (1 / 0 기대)
+
+CHK | DIVISION_ID | SI_ROWS
+V4 대상 | 40 | 220
+V4 대상 | 81 | 90
+V4 대상 | 82 | 238
+(3 rows)
+
+CHK | DIVISION_ID | SITES | JUDGE
+(0 rows)

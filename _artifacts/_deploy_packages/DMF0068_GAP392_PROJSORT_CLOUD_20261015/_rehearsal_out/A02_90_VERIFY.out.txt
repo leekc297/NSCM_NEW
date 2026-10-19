@@ -1,0 +1,12 @@
+CHK | N | JUDGE
+V1 마커 | 3 | PASS
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:31 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-15 19:59:21 | 0 | 0
+(2 rows)
+
+V3 Project 콤보 행 35 · 순서 역전 0 → PASS
+V3 조회 결과 R_S 분기 행 72 · 순서 역전 0 → PASS
+V3 조회 결과 R_B 분기 행 72 · 순서 역전 0 → PASS

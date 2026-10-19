@@ -1,0 +1,14 @@
+CHK | N | JUDGE
+V1 마커 | 15 | PASS
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:31 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-15 16:35:32 | 0 | 0
+(2 rows)
+
+CHK | KIND | N | JUDGE
+V3 잔존 | COMMIT (실행문) | 0 | PASS
+V3 잔존 | DBMS_STATS (실행문) | 0 | PASS
+V3 잔존 | TRUNCATE (실행문) | 0 | PASS
+(3 rows)

@@ -1,0 +1,8 @@
+div=81 user=k0101 TEMP_FCST_N_PRICE=177,431  V_EXP=20270817 V_GROUP_ID='ADMIN'
+  SP 적재 MF_SP          rows 177,431  sha 26aece11799787cc
+  A0 원문                2.56s  rows 177,431  sha 2a8e20936ddf142c  ≠ SP
+  A1 GROUP BY 제거       1.39s  rows 177,431  sha 2a8e20936ddf142c  ≠ SP
+  A2 +LATERAL 제거       0.72s  rows 177,431  sha 2a8e20936ddf142c  ≠ SP
+  A0 원문(재)             2.75s  rows 177,431  sha 2a8e20936ddf142c  ≠ SP
+  A2 (재)               0.70s  rows 177,431  sha 2a8e20936ddf142c  ≠ SP
+  G  업무키 중복 점검        0.12s  중복그룹 0

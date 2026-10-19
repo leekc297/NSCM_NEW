@@ -1,0 +1,822 @@
+{
+ "DMF0020_GET_SCM_MST_FUTURE_PRICE|40": {
+  "elapsed": 63.3,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 8652,
+    "cols": 71,
+    "dept_distinct": 12,
+    "dept_null": 0,
+    "hash": "8f84acfa34c060e2ca5e5444e2f4dbaf"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "DMF0020_GET_SCM_MST_FUTURE_PRICE|81": {
+  "elapsed": 25.5,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 9956,
+    "cols": 71,
+    "dept_distinct": 31,
+    "dept_null": 0,
+    "hash": "d5beac47e32ef8f24f6b394964a2bf1b"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "DMF0020_GET_SCM_MST_FUTURE_PRICE|82": {
+  "elapsed": 25.1,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 10520,
+    "cols": 71,
+    "dept_distinct": 25,
+    "dept_null": 0,
+    "hash": "f7f72395106e0e9913e56362d2e93f3c"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|81": {
+  "elapsed": 13.3,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 2454,
+    "cols": 62,
+    "dept_distinct": 29,
+    "dept_null": 2,
+    "hash": "12eaba855a9d3f0775e433cbed68c6a1"
+   }
+  ]
+ },
+ "DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|82": {
+  "elapsed": 31.6,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 38672,
+    "cols": 62,
+    "dept_distinct": 63,
+    "dept_null": 3063,
+    "hash": "01a47ca914849fb809344119ef29e86f"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE|40": {
+  "elapsed": 2.5,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 0,
+    "cols": 20,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE|81": {
+  "elapsed": 0.9,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 121,
+    "cols": 20,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "e70baa4416b370d1a90532405fe31315"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE|82": {
+  "elapsed": 0.7,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 107,
+    "cols": 20,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "50358238da5370969ff5be9d626f509b"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_OWNER_DATA|40": {
+  "elapsed": 0.4,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 0,
+    "cols": 7,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_OWNER_DATA|81": {
+  "elapsed": 0.1,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 0,
+    "cols": 7,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_OWNER_DATA|82": {
+  "elapsed": 0.0,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 0,
+    "cols": 7,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE|40": {
+  "elapsed": 54.7,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 8652,
+    "cols": 71,
+    "dept_distinct": 12,
+    "dept_null": 0,
+    "hash": "8f84acfa34c060e2ca5e5444e2f4dbaf"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE|81": {
+  "elapsed": 18.8,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 9956,
+    "cols": 71,
+    "dept_distinct": 31,
+    "dept_null": 0,
+    "hash": "d5beac47e32ef8f24f6b394964a2bf1b"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE|82": {
+  "elapsed": 18.8,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 10520,
+    "cols": 71,
+    "dept_distinct": 25,
+    "dept_null": 0,
+    "hash": "f7f72395106e0e9913e56362d2e93f3c"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|40": {
+  "elapsed": 4.7,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 2152,
+    "cols": 62,
+    "dept_distinct": 12,
+    "dept_null": 0,
+    "hash": "a05035ab19ca40752b089c8dd2ff3d5b"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|81": {
+  "elapsed": 3.9,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 2454,
+    "cols": 62,
+    "dept_distinct": 29,
+    "dept_null": 2,
+    "hash": "246120b6c164b2bc55646635d67d192a"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|82": {
+  "elapsed": 20.4,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 38672,
+    "cols": 62,
+    "dept_distinct": 63,
+    "dept_null": 3063,
+    "hash": "05ee04922f94b0c42f3921c639474e9a"
+   }
+  ]
+ },
+ "PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL|40": {
+  "elapsed": 15.6,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 1679,
+    "cols": 96,
+    "dept_distinct": 13,
+    "dept_null": 15,
+    "hash": "9e50a15229ec27cfe2e1db29cd54beae"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 2,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "908a288e83ff641c766f442cd4f454c9"
+   },
+   {
+    "cursor": 3,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL|81": {
+  "elapsed": 8.4,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 1156,
+    "cols": 86,
+    "dept_distinct": 16,
+    "dept_null": 135,
+    "hash": "2be72319d5fee463d66584d27c56e5ab"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 2,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "908a288e83ff641c766f442cd4f454c9"
+   },
+   {
+    "cursor": 3,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL|82": {
+  "elapsed": 4.0,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 736,
+    "cols": 81,
+    "dept_distinct": 12,
+    "dept_null": 27,
+    "hash": "c246038bc8b7a9739f547f78fe6ca5a8"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 2,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "908a288e83ff641c766f442cd4f454c9"
+   },
+   {
+    "cursor": 3,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|40": {
+  "elapsed": 100.6,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 370,
+    "cols": 98,
+    "dept_distinct": 12,
+    "dept_null": 0,
+    "hash": "541a3b1fcde0de97c30331a6d7efd3b9"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 2,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "908a288e83ff641c766f442cd4f454c9"
+   },
+   {
+    "cursor": 3,
+    "rows": 1,
+    "cols": 1,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "c40b8b5926b14cf5e296172c8e69edff"
+   },
+   {
+    "cursor": 4,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|81": {
+  "elapsed": 54.4,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 517,
+    "cols": 92,
+    "dept_distinct": 14,
+    "dept_null": 0,
+    "hash": "9265d14117aa168fd73f7fb7e15e1bc1"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 2,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "908a288e83ff641c766f442cd4f454c9"
+   },
+   {
+    "cursor": 3,
+    "rows": 1,
+    "cols": 1,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "c40b8b5926b14cf5e296172c8e69edff"
+   },
+   {
+    "cursor": 4,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|82": {
+  "elapsed": 24.5,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 199,
+    "cols": 85,
+    "dept_distinct": 12,
+    "dept_null": 0,
+    "hash": "5eebcc16899e6305c17c23362a0f8e45"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 2,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "908a288e83ff641c766f442cd4f454c9"
+   },
+   {
+    "cursor": 3,
+    "rows": 1,
+    "cols": 1,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "c40b8b5926b14cf5e296172c8e69edff"
+   },
+   {
+    "cursor": 4,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON|40": {
+  "error": "DPY-4024: call timeout of 300000 ms exceeded"
+ },
+ "PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON|81": {
+  "elapsed": 196.4,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 394,
+    "cols": 268,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "f0c7a1f288a85870cfd9f16b6ac04ed7"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON|82": {
+  "elapsed": 132.0,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 476,
+    "cols": 268,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "cb4c429e4caaacbb2b7cc9d5c5aeda84"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL|40": {
+  "elapsed": 10.2,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 13076,
+    "cols": 63,
+    "dept_distinct": 13,
+    "dept_null": 0,
+    "hash": "6480e843491c6fb822a3d8eb8890e797"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 2,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "908a288e83ff641c766f442cd4f454c9"
+   },
+   {
+    "cursor": 3,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL|81": {
+  "elapsed": 5.3,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 0,
+    "cols": 42,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 2,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "908a288e83ff641c766f442cd4f454c9"
+   },
+   {
+    "cursor": 3,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL|82": {
+  "elapsed": 2.3,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 0,
+    "cols": 39,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 2,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "908a288e83ff641c766f442cd4f454c9"
+   },
+   {
+    "cursor": 3,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE|40": {
+  "elapsed": 0.3,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 0,
+    "cols": 59,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "d41d8cd98f00b204e9800998ecf8427e"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE|81": {
+  "elapsed": 2.3,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 4390,
+    "cols": 59,
+    "dept_distinct": 19,
+    "dept_null": 0,
+    "hash": "565d1c9b4e289247a95213f7e6351759"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE|82": {
+  "elapsed": 0.4,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 480,
+    "cols": 59,
+    "dept_distinct": 12,
+    "dept_null": 0,
+    "hash": "fd406d67512f085fc1ac1c91492ba401"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE|40": {
+  "elapsed": 2.4,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 342,
+    "cols": 57,
+    "dept_distinct": 12,
+    "dept_null": 0,
+    "hash": "90b1f0591ced9dc9f823579ff4f76061"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE|81": {
+  "elapsed": 3.3,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 145,
+    "cols": 57,
+    "dept_distinct": 12,
+    "dept_null": 0,
+    "hash": "ace204014ec2e4496995e8e523362733"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE|82": {
+  "elapsed": 2.9,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 74,
+    "cols": 57,
+    "dept_distinct": 9,
+    "dept_null": 0,
+    "hash": "dfafff923b4ad4f6d9507e232e06050a"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0082.P_DMF0082_GET_MAIN_DATA|40": {
+  "error": "ORA-20001: [PKG_DMF0082] ORA-00904: \"SORT_KEY\": invalid identifier"
+ },
+ "PKG_DMF0082.P_DMF0082_GET_MAIN_DATA|81": {
+  "error": "ORA-20001: [PKG_DMF0082] ORA-00904: \"SORT_KEY\": invalid identifier"
+ },
+ "PKG_DMF0082.P_DMF0082_GET_MAIN_DATA|82": {
+  "error": "ORA-20001: [PKG_DMF0082] ORA-00904: \"SORT_KEY\": invalid identifier"
+ },
+ "PKG_DMF0082.P_DMF0082_GET_MAIN_DATA_CURRENT|40": {
+  "error": "ORA-20001: [PKG_DMF0082] ORA-00904: \"SORT_KEY\": invalid identifier"
+ },
+ "PKG_DMF0082.P_DMF0082_GET_MAIN_DATA_CURRENT|81": {
+  "error": "ORA-20001: [PKG_DMF0082] ORA-00904: \"SORT_KEY\": invalid identifier"
+ },
+ "PKG_DMF0082.P_DMF0082_GET_MAIN_DATA_CURRENT|82": {
+  "error": "DPY-4024: call timeout of 300000 ms exceeded"
+ },
+ "PKG_DMF0082.P_DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|40": {
+  "elapsed": 200.4,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 2220,
+    "cols": 63,
+    "dept_distinct": 12,
+    "dept_null": 0,
+    "hash": "16d9504b1d27817af3746e500245a6fb"
+   }
+  ]
+ },
+ "PKG_DMF0082.P_DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|81": {
+  "elapsed": 154.1,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 2454,
+    "cols": 63,
+    "dept_distinct": 29,
+    "dept_null": 2,
+    "hash": "7460c470a0aadf1310559af09d831765"
+   }
+  ]
+ },
+ "PKG_DMF0082.P_DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|82": {
+  "error": "DPY-4024: call timeout of 300000 ms exceeded"
+ }
+}

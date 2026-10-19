@@ -1,0 +1,82 @@
+CHK | DB_NAME | NOW | SQL_LOG_FROM | SQL_LOG_TO | SQL_LOG_ROWS
+B0 | ZIOUI1 | 2026-10-19 14:15:27 | 2026-09-15 09:07 | 2026-10-19 14:15 | 1142188
+(1 rows)
+
+CHK | SCREEN | CALLS | MAX_ROWS | MAX_SEC | CALLS_GE_1000 | EXC_CALLS | MAX_SQL_LEN | FIRST_DAY | LAST_DAY
+B1 | DMF0003 | 45 | 14393 | 1642.5 | 10 | 5 | 1345163 | 2026-09-15 | 2026-10-16
+B1 | DMF0021 | 61 | 14 | 39.9 | 0 | 0 | 2071 | 2026-09-15 | 2026-10-15
+B1 | DMF0082 | 38 | 45882 | 865.1 | 3 | 0 | 4736060 | 2026-09-15 | 2026-10-15
+(3 rows)
+
+CHK | SCREEN | LOG_SEQ | CREATED | CREATED_BY | SAVE_ROWS | ELAPSED_MS | ELAPSED_SEC | MS_PER_ROW | SQL_LEN | RESULT
+B2 | DMF0003 | 1840792 | 2026-10-02 20:45:31 | minyonglee1 | 14393 | 115981 | 116 | 8.06 | 1345163 | OK
+B2 | DMF0003 | 1840776 | 2026-10-02 19:25:00 | minyonglee1 | 12324 | 110718 | 110.7 | 8.98 | 1152538 | OK
+B2 | DMF0003 | 1840717 | 2026-10-02 18:54:01 | minyonglee1 | 4059 | 74674 | 74.7 | 18.4 | 379501 | OK
+B2 | DMF0003 | 1840669 | 2026-10-02 18:39:37 | minyonglee1 | 4728 | 35946 | 35.9 | 7.6 | 441307 | OK
+B2 | DMF0003 | 1817211 | 2026-10-02 12:51:18 | minyonglee1 | 4813 | 32586 | 32.6 | 6.77 | 450571 | OK
+B2 | DMF0003 | 1817203 | 2026-10-02 12:48:48 | minyonglee1 | 4843 | 10465 | 10.5 | 2.16 | 453352 | OK
+B2 | DMF0003 | 1816878 | 2026-10-02 12:38:28 | minyonglee1 | 4873 | 19187 | 19.2 | 3.94 | 456013 | OK
+B2 | DMF0003 | 1815762 | 2026-10-02 12:12:06 | minyonglee1 | 4903 | 22618 | 22.6 | 4.61 | 458794 | OK
+B2 | DMF0003 | 1810666 | 2026-10-02 10:31:47 | minyonglee1 | 4903 | 147 | 0.1 | 0.03 | 458794 | EXCEPTION: InvocationTargetException: null
+B2 | DMF0003 | 1810668 | 2026-10-02 10:31:47 | minyonglee1 | 4903 | 103 | 0.1 | 0.02 | 458794 | EXCEPTION: InvocationTargetException: null
+B2 | DMF0082 | 1677565 | 2026-09-30 00:02:19 | minyonglee1 | 32206 | 114444 | 114.4 | 3.55 | 3369090 | OK
+B2 | DMF0082 | 1676830 | 2026-09-29 21:51:30 | minyonglee1 | 32240 | 865066 | 865.1 | 26.83 | 3372015 | OK
+B2 | DMF0082 | 1676794 | 2026-09-29 21:32:39 | minyonglee1 | 45882 | 370242 | 370.2 | 8.07 | 4736060 | OK
+(13 rows)
+
+CHK | MNU_ID | MNU_BTN_CD | SHT_NM | CREATED | CREATED_BY | ELAPSED_SEC | RESULT
+B3 | DMF0003 | SAVE | Mkt Fcst | 2026-10-01 17:55:16 | minyonglee1 | 271.8 | OK
+B3 | DMF0003 | SAVE | Mkt Fcst | 2026-09-29 16:45:09 | minyonglee1 | 253.3 | EXCEPTION: NCommonDAO.selectList: null
+GeneralController.callProc: ORA-20001: [PKG_DMF0003.P_DMF0003_SAVE_MKT_F
+B3 | DMF0003 | SAVE | Mkt Fcst | 2026-09-29 16:44:27 | minyonglee1 | 241.6 | OK
+B3 | DMF0003 | SAVE | Mkt Fcst | 2026-10-02 20:43:34 | minyonglee1 | 116.1 | OK
+B3 | DMF0003 | SAVE | Mkt Fcst | 2026-10-02 19:23:09 | minyonglee1 | 110.8 | OK
+B3 | DMF0003 | SAVE | Mkt Fcst | 2026-10-02 18:52:46 | minyonglee1 | 74.7 | OK
+B3 | DMF0003 | SAVE | Mkt Fcst | 2026-09-17 10:42:39 | minyonglee1 | 61.8 | OK
+B3 | DMF0003 | SAVE | Mkt Fcst | 2026-09-17 10:29:29 | minyonglee1 | 60.2 | OK
+B3 | DMF0003 | SAVE | Mkt Fcst | 2026-09-17 10:44:18 | minyonglee1 | 60 | OK
+B3 | DMF0003 | SAVE | Mkt Fcst | 2026-09-15 17:26:09 | minyonglee1 | 57.7 | OK
+B3 | DMF0021 | SAVE | Sales Plan | 2026-10-01 13:49:20 | minyonglee1 | 39.9 | OK
+B3 | DMF0021 | SAVE | Sales Plan | 2026-09-08 11:12:08 | minyonglee1 | 10 | OK
+B3 | DMF0021 | SAVE | Sales Plan | 2026-09-20 01:17:08 | hongjae.kim | 7.2 | OK
+B3 | DMF0021 | SAVE | Sales Plan | 2026-09-08 13:07:32 | minyonglee1 | 6.7 | OK
+B3 | DMF0021 | SAVE | Sales Plan | 2026-09-17 19:13:51 | minyonglee1 | 5.8 | OK
+B3 | DMF0021 | SAVE | Sales Plan | 2026-09-08 13:08:01 | minyonglee1 | 5 | OK
+B3 | DMF0021 | SAVE | Sales Plan | 2026-09-08 13:10:40 | minyonglee1 | 4.4 | OK
+B3 | DMF0021 | SAVE | Sales Plan | 2026-09-15 21:15:25 | minyonglee1 | 3.9 | OK
+B3 | DMF0021 | SAVE | Sales Plan | 2026-09-20 01:08:22 | bottle | 2.1 | OK
+B3 | DMF0021 | SAVE | Sales Plan | 2026-09-23 16:11:46 | minyonglee1 | 1.6 | OK
+B3 | DMF0082 | SAVE | FcstNPrice | 2026-09-29 21:37:03 | minyonglee1 | 868.2 | OK
+B3 | DMF0082 | SAVE | FcstNPrice | 2026-09-08 14:54:01 | minyonglee1 | 475.9 | OK
+B3 | DMF0082 | SAVE | FcstNPrice | 2026-09-29 21:26:27 | minyonglee1 | 373 | OK
+B3 | DMF0082 | SAVE | FcstNPrice | 2026-09-30 00:00:22 | minyonglee1 | 118.1 | OK
+B3 | DMF0082 | SAVE | FcstNPrice | 2026-09-22 11:13:16 | minyonglee1 | 57.3 | OK
+B3 | DMF0082 | SAVE | FcstNPrice | 2026-09-20 01:04:05 | hongjae.kim | 19 | OK
+B3 | DMF0082 | SAVE | FcstNPrice | 2026-09-08 13:34:49 | minyonglee1 | 16 | OK
+B3 | DMF0082 | SAVE | FcstNPrice | 2026-09-20 01:26:16 | hongjae.kim | 11.7 | OK
+B3 | DMF0082 | SAVE | FcstNPrice | 2026-09-20 01:33:11 | hongjae.kim | 8.5 | OK
+B3 | DMF0082 | SAVE | FcstNPrice | 2026-09-20 01:44:29 | hongjae.kim | 7.1 | OK
+B3 | DMF0082 | SAVE | futurePriceInfo | 2026-09-15 14:18:21 | qjastar | 453.3 | OK
+B3 | DMF0082 | SAVE | futurePriceInfo | 2026-09-15 14:24:45 | qjastar | 189.6 | OK
+B3 | DMF0082 | SAVE | futurePriceInfo | 2026-09-15 14:35:09 | qjastar | 126.1 | OK
+B3 | DMF0082 | SAVE | futurePriceInfo | 2026-09-15 14:16:55 | qjastar | 50.9 | OK
+B3 | DMF0082 | SAVE | futurePriceInfo | 2026-09-15 14:24:29 | qjastar | 0 | OK
+B3 | DMF0082 | SAVE | titleSet | 2026-09-08 13:55:25 | minyonglee1 | 1 | OK
+B3 | DMF0082 | SAVE | titleSet | 2026-09-15 15:24:26 | qjastar | 0.9 | OK
+B3 | DMF0082 | SAVE | titleSet | 2026-09-08 11:50:33 | minyonglee1 | 0.7 | OK
+B3 | DMF0082 | SAVE | titleSet | 2026-09-28 13:56:11 | minyonglee1 | 0.7 | OK
+B3 | DMF0082 | SAVE | titleSet | 2026-10-14 13:25:10 | minyonglee1 | 0.6 | OK
+B3 | DMF0082 | SAVE | titleSet | 2026-09-07 16:06:48 | minyonglee1 | 0.6 | OK
+B3 | DMF0082 | SAVE | titleSet | 2026-09-29 21:22:11 | minyonglee1 | 0.6 | OK
+B3 | DMF0082 | SAVE | titleSet | 2026-09-18 13:48:40 | minyonglee1 | 0.5 | OK
+B3 | DMF0082 | SAVE | titleSet | 2026-09-08 13:32:46 | minyonglee1 | 0.5 | OK
+B3 | DMF0082 | SAVE | titleSet | 2026-09-07 17:29:19 | minyonglee1 | 0.4 | OK
+B3 | DMF0082 | UPLOAD_SAVE | FcstNPrice | 2026-09-08 15:18:18 | minyonglee1 | 83.2 | OK
+B3 | DMF0082 | UPLOAD_SAVE | FcstNPrice | 2026-09-28 14:19:00 | minyonglee1 | 3.1 | OK
+B3 | DMF0082 | UPLOAD_SAVE | FcstNPrice | 2026-09-21 18:34:08 | minyonglee1 | 1.9 | OK
+B3 | DMF0082 | UPLOAD_SAVE | FcstNPrice | 2026-10-14 13:42:22 | minyonglee1 | 1.4 | OK
+B3 | DMF0082 | UPLOAD_SAVE | FcstNPrice | 2026-10-14 13:25:27 | minyonglee1 | 1.3 | OK
+B3 | DMF0082 | UPLOAD_SAVE | FcstNPrice | 2026-09-07 17:44:57 | minyonglee1 | 0.4 | OK
+B3 | DMF0082 | UPLOAD_SAVE | FcstNPrice | 2026-09-07 17:48:58 | minyonglee1 | 0.2 | OK
+B3 | DMF0082 | UPLOAD_SAVE | FcstNPrice | 2026-09-07 18:20:06 | minyonglee1 | 0.2 | OK
+(53 rows)

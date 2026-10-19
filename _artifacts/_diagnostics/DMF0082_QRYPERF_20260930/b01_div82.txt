@@ -1,0 +1,6 @@
+FULL   run1:   11.99s  rows=228,792 keys=7,899  PR=182,730  LIO=182,762  PR direct=182,728
+FULL   run2:    1.42s  rows=228,792 keys=7,899  PR=182,728  LIO=182,749  PR direct=182,728
+PK     run1:   11.22s  rows=228,792 keys=7,899  PR=84,946  LIO=85,777  PR direct=0
+PK     run2:    0.61s  rows=228,792 keys=7,899  PR=0  LIO=85,513  PR direct=0
+IDX02  run1:    0.28s  rows=228,792 keys=7,899  PR=1,989  LIO=78,910  PR direct=0
+IDX02  run2:    0.20s  rows=228,792 keys=7,899  PR=0  LIO=78,907  PR direct=0

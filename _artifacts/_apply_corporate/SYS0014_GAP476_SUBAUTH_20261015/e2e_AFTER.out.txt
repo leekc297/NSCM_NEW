@@ -1,0 +1,7 @@
+﻿DB 59.19.252.148:2521/ZIOUI1 ('localhost', '2026-10-15 21:26:32') label AFTER
+others before 25013
+1 create  [('0', 'SUCCESS', '5')] ['D:81</', 'D:82</', 'P:ZZP81<81', 'P:ZZP82<82']
+2 D 81 del [('0', 'SUCCESS', '1')] ['D:82</', 'P:ZZP82<82']
+others after 25013 UNCHANGED
+RESULT PASS (하위 권한 함께 삭제, 다른 사업부 유지)
+cleanup [] others 25013

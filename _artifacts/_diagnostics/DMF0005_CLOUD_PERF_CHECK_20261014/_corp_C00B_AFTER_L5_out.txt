@@ -1,0 +1,130 @@
+﻿################ [L5] ⭐⭐ 조회 문장의 계획 줄별 실제 행 수 — 최근 2시간 실행분 전부 (SQL Monitor · 5초 넘게 돈 실행만 잡힌다 · 멈춘 실행 포함) ################
+--  STARTS 가 수만 이상인 줄 = 행마다 반복되는 구간. EST_ROWS(추정)와 OUT_ROWS(실제)가 크게 다른 줄 = 추정이 틀린 곳. STATUS EXECUTING = 지금 도는 중
+SID | EXEC_ST | STATUS | SQL_ID | PHV | LN | OP | OBJ | EST_ROWS | STARTS | OUT_ROWS | PHY_RD | TEMP_MB | LAST_CHG
+----+---------+--------+--------+-----+----+----+-----+----------+--------+----------+--------+---------+---------
+(0 rows)
+################ [L5b] 조회 문장 실행 목록 — 최근 2시간, 5초 넘게 돈 실행 (SQL Monitor) ################
+INST | SID | EXEC_ST | STATUS | SQL_ID | PHV | ELAPSED_S | CPU_S | IO_S | BG | DR | FETCHES | USR | MODULE
+-----+-----+---------+--------+--------+-----+-----------+-------+------+----+----+---------+-----+-------
+(0 rows)
+################ [L6] ⭐ 최근 2시간 화면 호출 이력 (BE 로그) — 사업부 · 소요 · 종료 여부 ################
+--  DB_S 빈칸 + NO_END = BE 가 프로시저 호출에서 아직 못 돌아옴(지금 도는 호출 또는 타임아웃). 교체 전 호출의 DB_S 와 비교
+ST             | SHT_NM     | ACT    | USR         | DIV | DB_S | SERVER_S | TOTAL_S | JUDGE | ERR 
+---------------+------------+--------+-------------+-----+------+----------+---------+-------+-----
+10-14 10:23:35 | production | SEARCH | minyonglee1 | 82  | 4    | 12       | 12      | ok    |     
+10-14 10:20:33 | production | SEARCH | minyonglee1 | 82  | 5    | 13       | 13      | ok    |     
+(2 rows)
+################ [L7] ⭐ 최근 2시간 ASH — PKG_DMF0005 · Owner 이름 함수 문장 × 대기 × 계획 줄 (표본 1 ≈ 1초) ################
+--  한 줄에 표본이 몰려 있으면 그 계획 줄이 병목. PROG 가 함수면 행마다 불리는 내부 SQL
+PROG             | LINE | SQL_ID        | PHV        | PLAN_LN | OP                                      | EVT                     | SAMPLES | SESSIONS | T_FROM   | T_TO    
+-----------------+------+---------------+------------+---------+-----------------------------------------+-------------------------+---------+----------+----------+---------
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2613897708 | 7       | TABLE ACCESS BY INDEX ROWID             | ON CPU                  | 7       | 1        | 10:45:18 | 10:46:17
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2613897708 | 5       | SORT GROUP BY NOSORT                    | ON CPU                  | 5       | 1        | 10:45:30 | 10:46:21
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3546196757 |         |                                         | ON CPU                  | 4       | 3        | 10:34:32 | 10:46:09
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 4       | LOAD AS SELECT (CURSOR DURATION MEMORY) | ON CPU                  | 4       | 3        | 10:34:19 | 10:42:50
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 9       | SORT ORDER BY                           | ON CPU                  | 3       | 3        | 10:16:09 | 10:43:04
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 7       | TABLE ACCESS BY INDEX ROWID             | ON CPU                  | 3       | 2        | 10:34:26 | 10:35:52
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2395779221 |         |                                         | ON CPU                  | 2       | 2        | 10:15:59 | 10:34:22
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 0          | 15      | HASH JOIN RIGHT OUTER                   | ON CPU                  | 2       | 2        | 10:16:08 | 10:42:21
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 18      | HASH JOIN OUTER                         | ON CPU                  | 2       | 2        | 10:34:09 | 10:35:55
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2613897708 |         |                                         | ON CPU                  | 2       | 2        | 10:23:35 | 10:45:44
+PKG_DMF0005      | 85   | 2zurcv8akt27v | 653845277  | 56      | HASH GROUP BY                           | ON CPU                  | 1       | 1        | 10:15:31 | 10:15:31
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 1413870880 |         |                                         | ON CPU                  | 1       | 1        | 10:34:12 | 10:34:12
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2395779221 | 54      | TABLE ACCESS FULL                       | ON CPU                  | 1       | 1        | 10:45:16 | 10:45:16
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 0          | 7       | TABLE ACCESS BY INDEX ROWID             | ON CPU                  | 1       | 1        | 10:15:52 | 10:15:52
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 0          | 4       | LOAD AS SELECT (CURSOR DURATION MEMORY) | ON CPU                  | 1       | 1        | 10:16:07 | 10:16:07
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 56      | TABLE ACCESS FULL                       | ON CPU                  | 1       | 1        | 10:35:49 | 10:35:49
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 575233701  | 9       | SORT ORDER BY                           | ON CPU                  | 1       | 1        | 10:34:13 | 10:34:13
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 653845277  | 22      | HASH JOIN OUTER                         | ON CPU                  | 1       | 1        | 10:16:01 | 10:16:01
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 575233701  | 22      | HASH JOIN OUTER                         | ON CPU                  | 1       | 1        | 10:15:53 | 10:15:53
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3546196757 | 28      | HASH JOIN RIGHT OUTER                   | ON CPU                  | 1       | 1        | 10:46:10 | 10:46:10
+PKG_DMF0005      | 85   | 2zurcv8akt27v | 1413870880 |         |                                         | db file sequential read | 1       | 1        | 10:15:22 | 10:15:22
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2395779221 | 23      | HASH JOIN RIGHT OUTER                   | ON CPU                  | 1       | 1        | 10:45:40 | 10:45:40
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 1240075511 | 0       | SELECT STATEMENT                        | ON CPU                  | 1       | 1        | 10:23:38 | 10:23:38
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2395779221 | 51      | HASH GROUP BY                           | ON CPU                  | 1       | 1        | 10:45:07 | 10:45:07
+PKG_DMF0005      | 85   | 2zurcv8akt27v | 3905882324 | 63      | TABLE ACCESS FULL                       | ON CPU                  | 1       | 1        | 10:15:38 | 10:15:38
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2395779221 | 9       | SORT ORDER BY                           | ON CPU                  | 1       | 1        | 10:45:34 | 10:45:34
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2613897708 | 4       | LOAD AS SELECT (CURSOR DURATION MEMORY) | ON CPU                  | 1       | 1        | 10:45:22 | 10:45:22
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 15      | HASH JOIN RIGHT OUTER                   | ON CPU                  | 1       | 1        | 10:35:40 | 10:35:40
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 653845277  | 58      | HASH JOIN OUTER                         | ON CPU                  | 1       | 1        | 10:34:23 | 10:34:23
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3905882324 | 63      | TABLE ACCESS FULL                       | ON CPU                  | 1       | 1        | 10:34:05 | 10:34:05
+PKG_DMF0005      | 85   | 2zurcv8akt27v | 0          | 5       | SORT GROUP BY NOSORT                    | ON CPU                  | 1       | 1        | 10:15:30 | 10:15:30
+PKG_DMF0005      | 85   | 2zurcv8akt27v | 2395779221 |         |                                         | ON CPU                  | 1       | 1        | 10:15:29 | 10:15:29
+PKG_DMF0005      | 85   | 2zurcv8akt27v | 575233701  | 57      | HASH GROUP BY                           | ON CPU                  | 1       | 1        | 10:15:24 | 10:15:24
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 1413870880 | 9       | SORT ORDER BY                           | ON CPU                  | 1       | 1        | 10:45:05 | 10:45:05
+FN_GET_DEPT_LIST | 28   | bw8qmsfvwavbx | 2940065872 | 4       | HASH JOIN                               | ON CPU                  | 1       | 1        | 09:56:10 | 09:56:10
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 0          | 8       | INDEX FULL SCAN                         | ON CPU                  | 1       | 1        | 10:20:34 | 10:20:34
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2395779221 | 5       | SORT GROUP BY NOSORT                    | ON CPU                  | 1       | 1        | 10:45:33 | 10:45:33
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 1413870880 | 19      | TABLE ACCESS FULL                       | ON CPU                  | 1       | 1        | 10:45:56 | 10:45:56
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 2613897708 | 9       | SORT ORDER BY                           | ON CPU                  | 1       | 1        | 10:46:15 | 10:46:15
+PKG_DMF0005      | 85   | 8pn2cpba1y5v8 | 3546196757 | 7       | TABLE ACCESS BY INDEX ROWID             | ON CPU                  | 1       | 1        | 10:45:42 | 10:45:42
+(40 rows)
+################ [L7b] 최근 2시간 ASH — 패키지 진입 세션의 대기 이벤트 전체 (라이브러리 캐시 · 잠금 대기 포함) ################
+EVT                     | WAIT_CLASS | SAMPLES | SESSIONS | T_FROM   | T_TO    
+------------------------+------------+---------+----------+----------+---------
+ON CPU                  |            | 40      | 10       | 10:15:29 | 10:46:21
+db file sequential read | User I/O   | 1       | 1        | 10:15:22 | 10:15:22
+(2 rows)
+################ [L8] ⭐ PKG_DMF0005 조회 문장의 자식 커서 — 1회당 시간 · 계획 · 올라온 시각 ################
+--  LOADED 가 패키지 LAST_DDL 뒤인 줄 = 교체 뒤 새로 만들어진 커서. NOW_RUN > 0 = 지금 실행 중. SEC_PER_EX 가 수백이면 그 계획이 문제
+INST | SQL_ID        | CH | LINE | PHV        | EX | NOW_RUN | SEC_PER_EX | CPU_PER_EX | BG_PER_EX | DR_PER_EX | ROWS_PER_EX | LOADED              | LAST_ACT       | TXT                                                         
+-----+---------------+----+------+------------+----+---------+------------+------------+-----------+-----------+-------------+---------------------+----------------+-------------------------------------------------------------
+1    | 8pn2cpba1y5v8 | 24 | 85   | 2613897708 | 5  | 0       | 1          | 1          | 42913     | 0         | 19468       | 2026-10-14/10:46:11 | 10-14 10:46:21 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 23 | 85   | 3546196757 | 1  | 0       | 1.6        | 1.6        | 75198     | 0         | 4859        | 2026-10-14/10:46:09 | 10-14 10:46:09 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 22 | 85   | 2613897708 | 5  | 0       | 1          | 1          | 49121     | 0         | 20227       | 2026-10-14/10:45:57 | 10-14 10:46:07 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 21 | 85   | 1413870880 | 1  | 0       | 1.4        | 1.4        | 43030     | 0         | 1063        | 2026-10-14/10:45:55 | 10-14 10:45:55 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 20 | 85   | 2613897708 | 5  | 0       | 1          | 1          | 48224     | 0         | 20440       | 2026-10-14/10:45:43 | 10-14 10:45:53 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 19 | 85   | 3546196757 | 1  | 0       | 1.5        | 1.5        | 46959     | 0         | 0           | 2026-10-14/10:45:41 | 10-14 10:45:42 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 18 | 85   | 2395779221 | 4  | 0       | 1.1        | 1.1        | 51996     | 0         | 12003       | 2026-10-14/10:45:32 | 10-14 10:45:39 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 17 | 85   | 2613897708 | 1  | 0       | 1.5        | 1.5        | 38956     | 0         | 38621       | 2026-10-14/10:45:29 | 10-14 10:45:30 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 16 | 85   | 3546196757 | 1  | 0       | 1.6        | 1.6        | 42681     | 0         | 15569       | 2026-10-14/10:45:26 | 10-14 10:45:27 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 15 | 85   | 2613897708 | 5  | 0       | 0.8        | 0.8        | 49193     | 0         | 12022       | 2026-10-14/10:45:17 | 10-14 10:45:24 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 14 | 85   | 2395779221 | 1  | 0       | 1.3        | 1.3        | 43592     | 25        | 42088       | 2026-10-14/10:45:15 | 10-14 10:45:16 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 13 | 85   | 3806929389 | 1  | 0       | 1          | 1          | 74696     | 0         | 4859        | 2026-10-14/10:45:13 | 10-14 10:45:13 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 11 | 85   | 3546196757 | 2  | 0       | 0.8        | 0.8        | 44482     | 0         | 7785        | 2026-10-14/10:45:08 | 10-14 10:45:11 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 12 | 85   | 1413870880 | 1  | 0       | 0.8        | 0.8        | 43014     | 0         | 1063        | 2026-10-14/10:45:11 | 10-14 10:45:11 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 10 | 85   | 2395779221 | 1  | 0       | 1.1        | 1          | 43002     | 0         | 42088       | 2026-10-14/10:45:05 | 10-14 10:45:07 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 9  | 85   | 1413870880 | 1  | 0       | 0.9        | 0.9        | 38471     | 0         | 38621       | 2026-10-14/10:45:04 | 10-14 10:45:04 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 8  | 85   | 3905882324 | 3  | 0       | 1.3        | 1.2        | 42045     | 0         | 15569       | 2026-10-14/10:42:20 | 10-14 10:43:04 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 7  | 85   | 3905882324 | 4  | 0       | 0.9        | 0.9        | 41210     | 0         | 27962       | 2026-10-14/10:34:32 | 10-14 10:35:58 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 2  | 85   | 3905882324 | 13 | 0       | 0.8        | 0.7        | 41001     | 0         | 30822       | 2026-10-14/10:16:06 | 10-14 10:35:55 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 6  | 85   | 653845277  | 1  | 0       | 1.5        | 1.5        | 42973     | 0         | 42088       | 2026-10-14/10:34:22 | 10-14 10:34:24 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 5  | 85   | 575233701  | 1  | 0       | 1.2        | 1.2        | 38437     | 0         | 38621       | 2026-10-14/10:34:12 | 10-14 10:34:14 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 4  | 85   | 1240075511 | 1  | 0       | 1.4        | 1.4        | 38439     | 0         | 38621       | 2026-10-14/10:23:35 | 10-14 10:23:38 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 3  | 85   | 575233701  | 1  | 0       | 2.2        | 1.5        | 38439     | 0         | 38621       | 2026-10-14/10:20:33 | 10-14 10:20:38 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 1  | 85   | 653845277  | 1  | 0       | 3.1        | 1.7        | 42973     | 0         | 42088       | 2026-10-14/10:15:58 | 10-14 10:16:06 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 8pn2cpba1y5v8 | 0  | 85   | 575233701  | 1  | 0       | 2.3        | 1.5        | 38439     | 0         | 38621       | 2026-10-14/10:15:51 | 10-14 10:15:58 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 2zurcv8akt27v | 2  | 85   | 3905882324 | 1  | 0       | 2.4        | 1.6        | 42118     | 1         | 15569       | 2026-10-14/10:15:36 | 10-14 10:15:40 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 2zurcv8akt27v | 1  | 85   | 653845277  | 1  | 0       | 3.1        | 1.7        | 42973     | 3         | 42088       | 2026-10-14/10:15:28 | 10-14 10:15:36 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+1    | 2zurcv8akt27v | 0  | 85   | 575233701  | 1  | 0       | 2.8        | 1.6        | 38594     | 2         | 38621       | 2026-10-14/10:15:22 | 10-14 10:15:28 | WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.
+(28 rows)
+################ [L8b] Owner 이름 함수 내부 SQL — 실행 횟수 · 1회당 읽기량 (BG_PER_EX 가 수천이면 인덱스 없이 전체를 읽는 중) ################
+INST | SQL_ID        | CH | PHV        | EX   | TOTAL_SEC | MS_PER_EX | BG_PER_EX | LOADED              | LAST_ACT       | TXT                                                                             
+-----+---------------+----+------------+------+-----------+-----------+-----------+---------------------+----------------+---------------------------------------------------------------------------------
+1    | bw8qmsfvwavbx | 0  | 2940065872 | 93   | 0.2       | 2.19      | 301       | 2026-10-14/09:56:10 | 10-14 09:56:19 | SELECT COUNT(*) FROM ( SELECT LOOK.SEGMENT3 FROM SCM_ADM_USER_M USR , SCM_ADM_LO
+1    | 6yxcaghw1xvw4 | 0  | 474365068  | 3024 | 0.1       | 0.03      | 3         | 2026-10-14/10:15:23 | 10-14 10:35:55 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+1    | 400k7q5w83ntz | 1  | 474365068  | 1760 | 0         | 0.03      | 3         | 2026-10-14/10:15:23 | 10-14 10:35:55 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+1    | 80gwfp597xcay | 0  | 474365068  | 3024 | 0         | 0.02      | 3         | 2026-10-14/10:15:23 | 10-14 10:35:55 | SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(:B
+1    | 80qubpwgf1cga | 1  | 474365068  | 1760 | 0         | 0.01      | 3         | 2026-10-14/10:15:23 | 10-14 10:35:55 | SELECT USER_NAME FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(SU
+1    | 92h5nf23npzux | 2  | 474365068  | 12   | 0         | 1.23      | 3         | 2026-10-14/10:20:34 | 10-14 10:20:34 | SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+1    | 6yxcaghw1xvw4 | 5  | 474365068  | 866  | 0         | 0.01      | 3         | 2026-10-14/10:45:27 | 10-14 10:45:39 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+1    | 6yxcaghw1xvw4 | 8  | 474365068  | 866  | 0         | 0.01      | 3         | 2026-10-14/10:46:10 | 10-14 10:46:20 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+1    | 92h5nf23npzux | 1  | 474365068  | 1116 | 0         | 0.01      | 3         | 2026-10-14/10:15:23 | 10-14 10:35:55 | SELECT :B2 || USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPP
+1    | 6yxcaghw1xvw4 | 6  | 474365068  | 866  | 0         | 0.01      | 3         | 2026-10-14/10:45:42 | 10-14 10:45:52 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+1    | 6yxcaghw1xvw4 | 2  | 474365068  | 1008 | 0         | 0.01      | 3         | 2026-10-14/10:34:13 | 10-14 10:35:58 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+1    | 6yxcaghw1xvw4 | 7  | 474365068  | 866  | 0         | 0.01      | 3         | 2026-10-14/10:45:55 | 10-14 10:46:06 | SELECT USER_NAME_EN FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM
+(12 rows)
+################ [L9] SCM_MST_SSO_USER_INFO 인덱스 — UPPER(USER_ID) 함수 기반 인덱스 유무 ################
+INDEX_NAME                  | INDEX_TYPE            | STATUS | VIS     | NUM_ROWS | TXT         
+----------------------------+-----------------------+--------+---------+----------+-------------
+IDX01_SCM_MST_SSO_USER_INFO | NORMAL                | VALID  | VISIBLE | 140128   | DEPT_ID     
+IDX02_SCM_MST_SSO_USER_INFO | FUNCTION-BASED NORMAL | VALID  | VISIBLE | 140185   | SYS_NC00026$
+PK_SCM_MST_SSO_USER_INFO    | NORMAL                | VALID  | VISIBLE | 140185   | USER_ID     
+(3 rows)
+INDEX_NAME                  | POS | COLUMN_EXPRESSION
+----------------------------+-----+------------------
+IDX02_SCM_MST_SSO_USER_INFO | 1   | UPPER("USER_ID") 
+(1 rows)
+=============================================================================
+C00B 완료 → C00B_AFTER_L5_OUT.txt 회신
+=============================================================================

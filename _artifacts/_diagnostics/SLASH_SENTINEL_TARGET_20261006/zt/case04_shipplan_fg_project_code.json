@@ -1,0 +1,1021 @@
+{
+ "name": "CASE04_SHIPPLAN_FG_PROJECT_CODE",
+ "table": "SCP_ANL_SHIPMENT_PLAN_FG",
+ "map_cols": [
+  "PROJECT_CODE"
+ ],
+ "tables": [
+  "SCP_ANL_SHIPMENT_PLAN_FG",
+  "SCP_ANL_SHIPMENT_PLAN_FG_C",
+  "SCP_ANL_SHIPMENT_PLAN_FG_H"
+ ],
+ "packages": {
+  "PKG_DMF0021": {
+   "edits": []
+  },
+  "PKG_DMF0048": {
+   "edits": []
+  },
+  "PKG_S39V2": {
+   "edits": []
+  },
+  "PKG_S39V3": {
+   "edits": []
+  },
+  "PKG_S39V4": {
+   "edits": []
+  },
+  "PKG_S39V5": {
+   "edits": []
+  },
+  "PKG_S39V6": {
+   "edits": []
+  },
+  "PKG_S39V7": {
+   "edits": []
+  },
+  "PKG_SCM0002": {
+   "edits": []
+  },
+  "PKG_SCP0009": {
+   "edits": []
+  },
+  "PKG_SCP0016": {
+   "edits": []
+  },
+  "PKG_SCP0039": {
+   "edits": []
+  },
+  "PKG_SCP0039_VF": {
+   "edits": []
+  },
+  "PKG_SCP0055": {
+   "edits": []
+  },
+  "ZT_PKG_S39V2": {
+   "edits": []
+  },
+  "ZT_PKG_S39V3": {
+   "edits": []
+  },
+  "ZT_PKG_S39V4": {
+   "edits": []
+  },
+  "ZT_PKG_S39V5": {
+   "edits": []
+  },
+  "ZT_PKG_S39V6": {
+   "edits": []
+  },
+  "ZT_PKG_S39V7": {
+   "edits": []
+  },
+  "ZT_PKG_SCP0039": {
+   "edits": []
+  },
+  "ZT_PKG_SCP0039_VF": {
+   "edits": []
+  }
+ },
+ "calls": [
+  {
+   "pkg": "PKG_DMF0021",
+   "proc": "P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX",
+   "params": [
+    "40",
+    "ALL",
+    "ALL",
+    "NJ01-A",
+    "LGE",
+    "MCCM348014A3",
+    "ALL",
+    "20260629",
+    "",
+    "20260705",
+    "minyonglee1",
+    "ALL",
+    "",
+    "ALL",
+    "N",
+    "",
+    "MONTHLY",
+    ""
+   ],
+   "out": [
+    "P_CUR_RESULT",
+    "P_CUR_CALENDAR",
+    "P_CUR_EDIT_AUTH"
+   ]
+  },
+  {
+   "pkg": "PKG_DMF0021",
+   "proc": "P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX",
+   "params": [
+    "40",
+    "ALL",
+    "ALL",
+    "HQ06-A",
+    "NT",
+    "MCCM134010A1",
+    "ALL",
+    "20260629",
+    "",
+    "20260705",
+    "minyonglee1",
+    "ALL",
+    "",
+    "ALL",
+    "N",
+    "",
+    "MONTHLY",
+    ""
+   ],
+   "out": [
+    "P_CUR_RESULT",
+    "P_CUR_CALENDAR",
+    "P_CUR_EDIT_AUTH"
+   ]
+  },
+  {
+   "pkg": "PKG_DMF0048",
+   "proc": "P_DMF0048_GET_DM_PLN_SALES_MONITORING",
+   "params": [
+    "40",
+    "ALL",
+    "ALL",
+    "NJ01-A",
+    "LGE",
+    "MCCM348014A3",
+    "ALL",
+    "20260629",
+    "",
+    "20260705",
+    "minyonglee1",
+    "ALL",
+    "",
+    "ALL",
+    "N",
+    "",
+    "MONTHLY",
+    "",
+    "minyonglee1",
+    "DMF0048"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RC2",
+    "O_RESULT_CURSOR"
+   ]
+  },
+  {
+   "pkg": "PKG_DMF0048",
+   "proc": "P_DMF0048_GET_DM_PLN_SALES_MONITORING",
+   "params": [
+    "40",
+    "ALL",
+    "ALL",
+    "HQ06-A",
+    "NT",
+    "MCCM134010A1",
+    "ALL",
+    "20260629",
+    "",
+    "20260705",
+    "minyonglee1",
+    "ALL",
+    "",
+    "ALL",
+    "N",
+    "",
+    "MONTHLY",
+    "",
+    "minyonglee1",
+    "DMF0048"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RC2",
+    "O_RESULT_CURSOR"
+   ]
+  },
+  {
+   "pkg": "PKG_S39V2",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_S39V2",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_S39V3",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_S39V3",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_S39V4",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_S39V4",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_S39V5",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_S39V5",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_S39V6",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_S39V6",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_S39V7",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_S39V7",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_SCM0002",
+   "proc": "P_SCM0002_GET_SHIPMENT_PLAN_NEW_CHECK",
+   "params": [
+    "40",
+    "20260629",
+    "FN",
+    "1",
+    "ALL",
+    "LGE",
+    "MCCM348014A3",
+    "SCUD_CN_FOC",
+    "DAP",
+    "NJ01-A",
+    "-",
+    "",
+    ""
+   ],
+   "out": [
+    "O_RC1",
+    "O_RESULT_CURSOR"
+   ]
+  },
+  {
+   "pkg": "PKG_SCM0002",
+   "proc": "P_SCM0002_GET_SHIPMENT_PLAN_NEW_CHECK",
+   "params": [
+    "40",
+    "20260629",
+    "FN",
+    "1",
+    "ALL",
+    "NT",
+    "MCCM134010A1",
+    "Greenway_CN_DGG",
+    "CIF",
+    "HQ06-A",
+    "18961",
+    "",
+    ""
+   ],
+   "out": [
+    "O_RC1",
+    "O_RESULT_CURSOR"
+   ]
+  },
+  {
+   "pkg": "PKG_SCM0002",
+   "proc": "P_SCM0002_GET_BODITEM_FOR_SUPPLY_POPUP",
+   "params": [
+    "40",
+    "20260629",
+    "FN",
+    "1",
+    "ALL",
+    "40",
+    "40",
+    "MCCM348014A3",
+    ""
+   ],
+   "out": [
+    "O_RC1",
+    "O_RESULT_CURSOR"
+   ]
+  },
+  {
+   "pkg": "PKG_SCM0002",
+   "proc": "P_SCM0002_GET_BODITEM_FOR_SUPPLY_POPUP",
+   "params": [
+    "40",
+    "20260629",
+    "FN",
+    "1",
+    "ALL",
+    "40",
+    "40",
+    "MCCM134010A1",
+    ""
+   ],
+   "out": [
+    "O_RC1",
+    "O_RESULT_CURSOR"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0009",
+   "proc": "P_SCP0009_GET_SHIPMENT_PLAN_FG",
+   "params": [
+    "20260629",
+    "20260705",
+    "40",
+    "A",
+    "LGE",
+    "MCCM348014A3",
+    "",
+    "20260629",
+    "FN",
+    "1",
+    "",
+    "ALL",
+    "",
+    "MONTHLY",
+    "",
+    "",
+    "SCP0009",
+    "Shipment Request",
+    "minyonglee1",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RC2",
+    "O_RC3"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0009",
+   "proc": "P_SCP0009_GET_SHIPMENT_PLAN_FG",
+   "params": [
+    "20260629",
+    "20260705",
+    "40",
+    "P",
+    "NT",
+    "MCCM134010A1",
+    "",
+    "20260629",
+    "FN",
+    "1",
+    "",
+    "ALL",
+    "",
+    "MONTHLY",
+    "",
+    "",
+    "SCP0009",
+    "Shipment Request",
+    "minyonglee1",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RC2",
+    "O_RC3"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0009",
+   "proc": "P_SCP0009_GET_SHIP_PLAN_FG_TITLE_PARAL",
+   "params": [
+    "20260629",
+    "20260705",
+    "40",
+    "A",
+    "LGE",
+    "MCCM348014A3",
+    "",
+    "20260629",
+    "FN",
+    "1",
+    "",
+    "ALL",
+    "",
+    "MONTHLY",
+    "",
+    "SCP0009",
+    "Shipment Request",
+    "minyonglee1",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RC2",
+    "O_RC3"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0009",
+   "proc": "P_SCP0009_GET_SHIP_PLAN_FG_TITLE_PARAL",
+   "params": [
+    "20260629",
+    "20260705",
+    "40",
+    "P",
+    "NT",
+    "MCCM134010A1",
+    "",
+    "20260629",
+    "FN",
+    "1",
+    "",
+    "ALL",
+    "",
+    "MONTHLY",
+    "",
+    "SCP0009",
+    "Shipment Request",
+    "minyonglee1",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RC2",
+    "O_RC3"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0016",
+   "proc": "P_SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+   "params": [
+    "20260629",
+    "20260705",
+    "40",
+    "A",
+    "LGE",
+    "MCCM348014A3",
+    "",
+    "",
+    "SCP0016",
+    "Waterfall Shipment Plan",
+    "minyonglee1",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RESULT_CURSOR"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0016",
+   "proc": "P_SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL",
+   "params": [
+    "20260629",
+    "20260705",
+    "40",
+    "P",
+    "NT",
+    "MCCM134010A1",
+    "",
+    "",
+    "SCP0016",
+    "Waterfall Shipment Plan",
+    "minyonglee1",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RESULT_CURSOR"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0016",
+   "proc": "P_SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+   "params": [
+    "20260629",
+    "20260705",
+    "40",
+    "A",
+    "LGE",
+    "MCCM348014A3",
+    "",
+    "",
+    "",
+    "SCP0016",
+    "Waterfall Shipment Plan",
+    "minyonglee1",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RESULT_CURSOR"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0016",
+   "proc": "P_SCP0016_GET_SHIPMENT_PLAN_FG_WATERFALL_TITLE_PARAL",
+   "params": [
+    "20260629",
+    "20260705",
+    "40",
+    "P",
+    "NT",
+    "MCCM134010A1",
+    "",
+    "",
+    "",
+    "SCP0016",
+    "Waterfall Shipment Plan",
+    "minyonglee1",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RESULT_CURSOR"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0039",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0039",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0039_VF",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0039_VF",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0055",
+   "proc": "P_SCP0055_GET_SHIPMENT_ALLO_PLAN",
+   "params": [
+    "20260629",
+    "20260705",
+    "40",
+    "A",
+    "MCCM348014A3",
+    "",
+    "20260629",
+    "",
+    "ALL",
+    "",
+    "SCP0055",
+    "Shipment(Allo) Report",
+    "minyonglee1",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RC2",
+    "O_RC3",
+    "O_RC4",
+    "O_RESULT_CURSOR"
+   ]
+  },
+  {
+   "pkg": "PKG_SCP0055",
+   "proc": "P_SCP0055_GET_SHIPMENT_ALLO_PLAN",
+   "params": [
+    "20260629",
+    "20260705",
+    "40",
+    "P",
+    "MCCM134010A1",
+    "",
+    "20260629",
+    "",
+    "ALL",
+    "",
+    "SCP0055",
+    "Shipment(Allo) Report",
+    "minyonglee1",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RC2",
+    "O_RC3",
+    "O_RC4",
+    "O_RESULT_CURSOR"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_S39V2",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_S39V2",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_S39V3",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_S39V3",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_S39V4",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_S39V4",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_S39V5",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_S39V5",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_S39V6",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_S39V6",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_S39V7",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_S39V7",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_SCP0039",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_SCP0039",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_SCP0039_VF",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM348014A3"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "ZT_PKG_SCP0039_VF",
+   "proc": "P_SCP0039_GET_VALIDATION_BOD",
+   "params": [
+    "40",
+    "",
+    "",
+    "MCCM134010A1"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  }
+ ],
+ "notes": [
+  "PKG_SCM0002.F_HAS_TOKEN: 테이블 읽음 — 실행 비교 제외(OUT 커서 없음 또는 조회 SP 아님)",
+  "PKG_SCP0009.P_FG_HIST_DATASET: 테이블 읽음 — 실행 비교 제외(OUT 커서 없음 또는 조회 SP 아님)",
+  "PKG_SCP0009.P_SCP0009_SAVE_ANL_SHIP_FG_FIX_DATASET: 테이블 읽음 — 실행 비교 제외(OUT 커서 없음 또는 조회 SP 아님)",
+  "PKG_SCP0009.P_SCP0009_SAVE_ANL_SHIP_PLAN_FG_WEEKLY: 테이블 읽음 — 실행 비교 제외(OUT 커서 없음 또는 조회 SP 아님)",
+  "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL: PROCEDURE(배치) edits 2 — 실행 비교 제외",
+  "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS: PROCEDURE(배치) edits 2 — 실행 비교 제외",
+  "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL: PROCEDURE(배치) edits 2 — 실행 비교 제외"
+ ],
+ "proc_edits": {
+  "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL": [
+   [
+    1391,
+    56,
+    "'-'",
+    "'/'"
+   ],
+   [
+    1427,
+    41,
+    "'-'",
+    "'/'"
+   ]
+  ],
+  "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS": [
+   [
+    1442,
+    58,
+    "'-'",
+    "'/'"
+   ],
+   [
+    1478,
+    42,
+    "'-'",
+    "'/'"
+   ]
+  ],
+  "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL": [
+   [
+    1455,
+    56,
+    "'-'",
+    "'/'"
+   ],
+   [
+    1492,
+    41,
+    "'-'",
+    "'/'"
+   ]
+  ]
+ }
+}

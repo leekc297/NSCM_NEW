@@ -1,0 +1,159 @@
+################ [P1] 자식 커서 목록 — 계획별 1회당 비용 · 공유 사유 ################
+!!! ERROR: ORA-01722: unable to convert string value containing '-' to a number: 
+ORA-03302: (ORA-01722 details) invalid string value: 2026-09-30/00:57:02
+Help: https://docs.oracle.com/error-help/db/ora-01722/
+--- stmt head: SELECT S.CHILD_NUMBER CH, S.PLAN_HASH_VALUE PHV, S.EXECUTIONS EX,
+       ROUND(S.ELAPSED_TIME/1e6/GREATEST(S.EXECUTIONS,1), 2) SEC_PER_EX,
+       ROUND(S.BUFFER_GETS/GREATEST(S.EXECUTIONS,1)) BG_PER_E
+################ [P2] SQL 전문 (앞 4000자) ################
+SQL_TEXT                                                                                                      
+--------------------------------------------------------------------------------------------------------------
+INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_E
+(1 rows)
+################ [P3] ⭐ 실행계획 — 가장 최근 실행된 자식 (E-Rows vs A-Rows · 접근경로) ################
+--  확인 포인트:
+--   ① GT_DMF0082_* 의 E-Rows 가 1 인데 실제(A-Rows/ROWS_PER_EX)는 수만 = 파싱 시점 GTT 추정 붕괴 (07-31 DMF0003 유형)
+--   ② SCM_MST_FUTURE_PRICE / DM_PLN_* 에 TABLE ACCESS FULL = 인덱스 미사용 (IDX02 힌트 무시·인덱스 결손)
+--   ③ MERGE JOIN CARTESIAN / NESTED LOOPS 아래 대용량 = 조인 순서 오류
+--   ④ Note 절: dynamic statistics used: dynamic sampling (level=2) 표기 여부 — 없으면 DS=0 으로 파싱된 커서
+PLAN_TABLE_OUTPUT                                                                                             
+--------------------------------------------------------------------------------------------------------------
+SQL_ID  b6wn3kx02pryu, child number 11                                                                        
+--------------------------------------                                                                        
+INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID,                                          
+PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS,                                            
+MEASURE, CREATE_DATE, LAST_UPDATED_BY) SELECT A.DIVISION_ID,                                                  
+A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID , A.DOM_EXP, A.FCST_TYPE,                                            
+A.INCOTERMS, A.MEASURE , MAX(A.CREATION_DATE) AS CREATE_DATE ,                                                
+MAX(A.LAST_UPDATED_BY) AS LAST_UPDATED_BY FROM                                                                
+SCM_MGR.SCM_MST_FUTURE_PRICE A INNER JOIN                                                                     
+SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM C ON C.DIVISION_ID = A.DIVISION_ID                                          
+AND C.PROJECT_CODE = A.PROJECT_CODE AND C.SCM_SITE_ID = A.SCM_SITE_ID                                         
+AND C.ITEM_ID = A.ITEM_ID WHERE A.DIVISION_ID = :B3 AND A.YYYYMMDD                                            
+BETWEEN :B2 AND :B1 GROUP BY A.DIVISION_ID, A.PROJECT_CODE,                                                   
+A.SCM_SITE_ID, A.ITEM_ID , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS,                                               
+A.MEASURE                                                                                                     
+                                                                                                              
+Plan hash value: 3899932091                                                                                   
+                                                                                                              
+--------------------------------------------------------------------------------------------------------------
+| Id  | Operation                | Name                               | E-Rows | Cost (%CPU)|  OMem |  1Mem | 
+--------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |                                    |        | 52475 (100)|       |       | 
+|   1 |  LOAD TABLE CONVENTIONAL | GT_DMF0082_T_LAST_DATA_SETUP_PRICE |        |            |       |       | 
+|   2 |   HASH GROUP BY          |                                    |  38205 | 52475   (1)|  6779K|  1872K| 
+|*  3 |    FILTER                |                                    |        |            |       |       | 
+|*  4 |     HASH JOIN            |                                    |  38205 | 51418   (1)|  4113K|  1463K| 
+|*  5 |      TABLE ACCESS FULL   | GT_DMF0082_TEMP_SITE_ITEM          |  38206 |   394   (0)|       |       | 
+|*  6 |      TABLE ACCESS FULL   | SCM_MST_FUTURE_PRICE               |    409K| 51023   (1)|       |       | 
+--------------------------------------------------------------------------------------------------------------
+                                                                                                              
+Peeked Binds (identified by position):                                                                        
+--------------------------------------                                                                        
+                                                                                                              
+   1 - (VARCHAR2(30), CSID=873): '82'                                                                         
+   2 - (VARCHAR2(30), CSID=873): '20260801'                                                                   
+   3 - (VARCHAR2(30), CSID=873): '20270131'                                                                   
+                                                                                                              
+Predicate Information (identified by operation id):                                                           
+---------------------------------------------------                                                           
+                                                                                                              
+   3 - filter(:B1>=:B2)                                                                                       
+   4 - access("C"."DIVISION_ID"="A"."DIVISION_ID" AND "C"."PROJECT_CODE"="A"."PROJECT_CODE" AND               
+              "C"."SCM_SITE_ID"="A"."SCM_SITE_ID" AND "C"."ITEM_ID"="A"."ITEM_ID")                            
+   5 - filter("C"."DIVISION_ID"=:B3)                                                                          
+   6 - filter(("A"."YYYYMMDD">=:B2 AND "A"."DIVISION_ID"=:B3 AND "A"."YYYYMMDD"<=:B1))                        
+                                                                                                              
+Note                                                                                                          
+-----                                                                                                         
+   - Warning: basic plan statistics not available. These are only collected when:                             
+       * hint 'gather_plan_statistics' is used for the statement or                                           
+       * parameter 'statistics_level' is set to 'ALL', at session or system level                             
+   - Global temporary table session private statistics used                                                   
+                                                                                                              
+(53 rows)
+################ [P4] 다른 계획(PHV)의 자식이 있으면 그 계획도 (계획 간 비교) ################
+PLAN_TABLE_OUTPUT                                                                                             
+--------------------------------------------------------------------------------------------------------------
+SQL_ID  b6wn3kx02pryu, child number 8                                                                         
+-------------------------------------                                                                         
+INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID,                                          
+PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS,                                            
+MEASURE, CREATE_DATE, LAST_UPDATED_BY) SELECT A.DIVISION_ID,                                                  
+A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID , A.DOM_EXP, A.FCST_TYPE,                                            
+A.INCOTERMS, A.MEASURE , MAX(A.CREATION_DATE) AS CREATE_DATE ,                                                
+MAX(A.LAST_UPDATED_BY) AS LAST_UPDATED_BY FROM                                                                
+SCM_MGR.SCM_MST_FUTURE_PRICE A INNER JOIN                                                                     
+SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM C ON C.DIVISION_ID = A.DIVISION_ID                                          
+AND C.PROJECT_CODE = A.PROJECT_CODE AND C.SCM_SITE_ID = A.SCM_SITE_ID                                         
+AND C.ITEM_ID = A.ITEM_ID WHERE A.DIVISION_ID = :B3 AND A.YYYYMMDD                                            
+BETWEEN :B2 AND :B1 GROUP BY A.DIVISION_ID, A.PROJECT_CODE,                                                   
+A.SCM_SITE_ID, A.ITEM_ID , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS,                                               
+A.MEASURE                                                                                                     
+                                                                                                              
+Plan hash value: 1596134027                                                                                   
+                                                                                                              
+--------------------------------------------------------------------------------------------------------------
+| Id  | Operation                               | Name                               | Rows  | Bytes |TempSpc|
+--------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT                        |                                    |       |       |       |
+|   1 |  LOAD TABLE CONVENTIONAL                | GT_DMF0082_T_LAST_DATA_SETUP_PRICE |       |       |       |
+|   2 |   HASH GROUP BY                         |                                    |  2016 |   246K|       |
+|*  3 |    FILTER                               |                                    |       |       |       |
+|*  4 |     HASH JOIN                           |                                    | 39069 |  4769K|  2104K|
+|*  5 |      TABLE ACCESS FULL                  | GT_DMF0082_TEMP_SITE_ITEM          | 39070 |  1640K|       |
+|   6 |      TABLE ACCESS BY INDEX ROWID BATCHED| SCM_MST_FUTURE_PRICE               |   111K|  8905K|       |
+|*  7 |       INDEX RANGE SCAN                  | PK_SCM_MST_FUTURE_PRICE            |   111K|       |       |
+--------------------------------------------------------------------------------------------------------------
+                                                                                                              
+Predicate Information (identified by operation id):                                                           
+---------------------------------------------------                                                           
+                                                                                                              
+   3 - filter(:B1>=:B2)                                                                                       
+   4 - access("C"."DIVISION_ID"="A"."DIVISION_ID" AND "C"."PROJECT_CODE"="A"."PROJECT_CODE" AND               
+              "C"."SCM_SITE_ID"="A"."SCM_SITE_ID" AND "C"."ITEM_ID"="A"."ITEM_ID")                            
+   5 - filter("C"."DIVISION_ID"=:B3)                                                                          
+   7 - access("A"."DIVISION_ID"=:B3 AND "A"."YYYYMMDD">=:B2 AND "A"."YYYYMMDD"<=:B1)                          
+       filter(("A"."YYYYMMDD">=:B2 AND "A"."YYYYMMDD"<=:B1))                                                  
+                                                                                                              
+Note                                                                                                          
+-----                                                                                                         
+   - Global temporary table session private statistics used                                                   
+                                                                                                              
+(45 rows)
+--  (P3 와 PHV 가 같으면 동일 계획 — 무시)
+################ [P5] 계획에 등장하는 영구 테이블·인덱스 통계 (계획 안의 객체만) ################
+OBJECT_TYPE    | OBJECT_NAME                        | NUM_ROWS | BLOCKS_OR_LEAF | ANALYZED   | CLUF   | TMP  | IDX_STATUS
+---------------+------------------------------------+----------+----------------+------------+--------+------+-----------
+INDEX (UNIQUE) | PK_SCM_MST_FUTURE_PRICE            | 12211436 | 136076         | 2026-09-29 | 327398 |      | VALID     
+TABLE          | SCM_MST_FUTURE_PRICE               | 11463440 | 188000         | 2026-09-29 |        | N    | -         
+TABLE (TEMP)   | GT_DMF0082_TEMP_SITE_ITEM          |          |                |            |        | Y    | -         
+               | GT_DMF0082_T_LAST_DATA_SETUP_PRICE |          |                |            |        | Y    | -         
+(4 rows)
+################ [P6] AWR 과거 실행 이력 (Diagnostics Pack 미허용·권한 없음이면 오류 — 무시) ################
+SNAP_ID | SNAP        | PHV        | EX | SEC_PER_EX | BG_PER_EX
+--------+-------------+------------+----+------------+----------
+525     | 09-30 08:00 | 3899932091 | 1  | 0.64       | 201177   
+525     | 09-30 08:00 | 1596134027 | 0  | 0          | 0        
+524     | 09-30 07:00 | 3899932091 | 1  | 0.65       | 201050   
+524     | 09-30 07:00 | 1596134027 | 0  | 0          | 0        
+519     | 09-30 02:00 | 3899932091 | 1  | 0.6        | 193997   
+519     | 09-30 02:00 | 1596134027 | 1  | 0.27       | 34668    
+518     | 09-30 01:00 | 1596134027 | 3  | 0.33       | 38165    
+518     | 09-30 01:00 | 3899932091 | 4  | 72.43      | 195666   
+517     | 09-30 00:00 | 3899932091 | 1  | 108.44     | 197821   
+507     | 09-29 14:00 | 1596134027 | 1  | 12.38      | 36894    
+482     | 09-28 13:00 | 1596134027 | 2  | 8.47       | 36784    
+480     | 09-28 11:00 | 1596134027 | 1  | 74.05      | 36529    
+479     | 09-28 10:00 | 1596134027 | 1  | 159.12     | 36757    
+371     | 09-23 22:00 | 1596134027 | 2  | 128.71     | 36795    
+354     | 09-23 05:00 | 1596134027 | 0  | 0          | 0        
+354     | 09-23 05:00 | 3899932091 | 1  | 0.64       | 201177   
+354     | 09-30 08:00 | 1596134027 | 0  | 0          | 0        
+354     | 09-30 08:00 | 3899932091 | 1  | 0.64       | 201177   
+353     | 09-23 04:00 | 3899932091 | 1  | 0.65       | 201050   
+353     | 09-30 07:00 | 1596134027 | 0  | 0          | 0        
+(20 rows)
+=============================================================================
+C04 완료 → C04_PLAN_<SQL_ID>_OUT.txt 회신 (범인 SQL_ID 마다 1회)
+=============================================================================

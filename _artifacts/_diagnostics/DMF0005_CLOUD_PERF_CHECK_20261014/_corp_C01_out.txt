@@ -1,0 +1,266 @@
+﻿################ [E0] 접속 DB · 시각 ################
+DB_NAME | CON_NAME | INST | HOST      | USR     | NOW                 | VER                                                                        
+--------+----------+------+-----------+---------+---------------------+----------------------------------------------------------------------------
+ZIOUI1  | ZIOUI1   | ZIO  | localhost | SCM_MGR | 2026-10-14 10:32:39 | Oracle AI Database 26ai Enterprise Edition Release 23.26.1.0.0 - Production
+(1 rows)
+################ [E1] 옵티마이저 · 자원 설정 (CORP = 사내 값) ################
+--  optimizer_dynamic_sampling 이 0 이면 통계 없는 임시 테이블 추정이 무너진다. 조회 프로시저가 진입 시 2 로 맞추지만([E2] 마커) BODY 가 구판이면 빠져 있을 수 있다.
+NAME                          | VALUE       | CORP        | DFLT  | JUDGE
+------------------------------+-------------+-------------+-------+------
+cpu_count                     | 8           | 8           | TRUE  | (참고) 
+cursor_sharing                | EXACT       | EXACT       | TRUE  | same 
+db_file_multiblock_read_count | 128         | 128         | TRUE  | same 
+optimizer_adaptive_plans      | TRUE        | TRUE        | TRUE  | same 
+optimizer_adaptive_statistics | FALSE       | FALSE       | TRUE  | same 
+optimizer_dynamic_sampling    | 2           | 2           | TRUE  | same 
+optimizer_features_enable     | 23.1.0      | 23.1.0      | TRUE  | (참고) 
+optimizer_index_caching       | 0           | 0           | TRUE  | same 
+optimizer_index_cost_adj      | 100         | 100         | TRUE  | same 
+optimizer_mode                | ALL_ROWS    | ALL_ROWS    | TRUE  | same 
+parallel_degree_policy        | MANUAL      | MANUAL      | TRUE  | same 
+pga_aggregate_target          | 34359738368 | 34359738368 | FALSE | (참고) 
+result_cache_mode             | MANUAL      | MANUAL      | TRUE  | same 
+sga_target                    | 0           | 0           | FALSE | (참고) 
+statistics_level              | TYPICAL     | TYPICAL     | TRUE  | same 
+(15 rows)
+################ [E2] PKG_DMF0005 상태 · 판본 ################
+OBJECT_TYPE  | STATUS | LAST_DDL            | CREATED          | LINES | CHARS 
+-------------+--------+---------------------+------------------+-------+-------
+PACKAGE      | VALID  | 2026-10-09 13:38:30 | 2026-10-09 13:38 | 44    | 1731  
+PACKAGE BODY | VALID  | 2026-10-14 10:15:49 | 2026-10-09 13:38 | 1992  | 103724
+(2 rows)
+--  사내: PACKAGE BODY VALID · LAST_DDL 2026-10-14 10:15:49 · 1,992줄 · 103,724자
+################ [E2b] ⭐ BODY 판본 마커 — 출현 수 (CNT = 이 DB, CORP = 사내 10-14) ################
+--  CNT 가 CORP 와 다른 줄 = 그 변경이 이 DB 에 없거나(0) 일부만 있다. 속도와 직접 관련된 줄은 MEANING 에 ⭐
+MARKER                                      | CNT | CORP | JUDGE | MEANING                                                      
+--------------------------------------------+-----+------+-------+--------------------------------------------------------------
+optimizer_dynamic_sampling = 2              | 3   | 3    | same  | ⭐ 진입 시 동적 샘플링 2 고정 (조회 2 · 저장 1)                             
+PERF-DMF0005 20260722                       | 12  | 12   | same  | ⭐ 07-22 속도 개선(Owner 이름 1회 호출 · 멀티선택 임시 테이블 · 품목 뷰 조인 제거)     
+FN_GET_MULTI_OWNER_NAME(                    | 3   | 3    | same  | ⭐ Owner 이름 함수 호출 (조회 2 = Owner 종류당 1회 · 구매 조회 1 = 행마다)       
+GT_GGET_SPLIT_                              | 23  | 23   | same  | ⭐ 멀티선택 조회조건 임시 테이블 사용                                        
+FN_SPLITSTRING(                             | 9   | 9    | same  | 조회조건 분해 함수 (임시 테이블 적재 7 + 저장 2)                              
+DM_MST_ITEM_SINGLE_V                        | 6   | 6    | same  | 품목 뷰 참조 (조회 본문은 주석 · 저장 검증에서만 실사용)                           
+UNISTR('\3000')                             | 16  | 16   | same  | ⭐ 10-08 모델 대소문자 · 끝 공백 무시 연결 — 조인 컬럼을 함수로 감쌈(인덱스 사용 불가 후보)   
+2026.10.08 POJ                              | 68  | 68   | same  | ⭐ 10-08 변경(대소문자 무시 연결 · 40 Report 4칸)                        
+2026.10.09 POJ                              | 60  | 60   | same  | ⭐ 10-09 변경(Owner 한글 이름 = 함수 호출 2배 · 40 국가명 스칼라 서브쿼리 · 빈 팀 연결)
+OWNER_NAME_KO                               | 3   | 3    | same  | ⭐ 10-09 Owner 한글 이름(함수 2번째 호출)                               
+SELECT CO.COUNTRY_NAME FROM SCM_MST_COUNTRY | 1   | 1    | same  | ⭐ 10-09 40 Destination 국가명 — SELECT 목록 스칼라 서브쿼리              
+FN_GET_DEPT_LIST(                           | 1   | 1    | same  | 구매 조회 행별 권한 함수                                               
+2026.09.08 AJS                              | 9   | 9    | same  | 09-08 81 H · P 건수 원장 직접 집계                                   
+2026.09.11 AJS                              | 10  | 10   | same  | 09-11 Sold-To / Ship-To 이름 조인(SCM_MST_CUSTOMER)              
+2026.09.17 AJS                              | 10  | 10   | same  | 09-17 저장 Team 확인                                             
+2026.09.30 AJS                              | 8   | 8    | same  | 09-30 구매 조회 · 저장 동적 샘플링 2                                    
+E20261013-DMF0005MCDUP                      | 4   | 4    | same  | 10-13 Model Code Change 키 중복 검증                              
+E20261014-DMF0005PARTIALGET                 | 2   | 2    | same  | 10-14 Partial Plan YN 조회 추가(사내만 적용)                          
+(18 rows)
+################ [E2c] 조회 프로시저 진입부 20줄 — 동적 샘플링 설정 위치 확인 ################
+LINE | T                                                                                             
+-----+-----------------------------------------------------------------------------------------------
+28   |     V_ROW_CNT  NUMBER := 0;                                                                   
+29   | BEGIN                                                                                         
+30   |     --[2026-07-31 클라우드 대응] GTT 동적샘플링 강제 — 클라우드 세션 기본값 0(GTT 무통계 파국계획, 사내 12초/클라우드 16분+ 실증) 방지.
+31   |     --  Oracle 기본값 2 복원. 트랜잭션 무관 세션 파라미터(ENABLE PARALLEL DML 계열 아님 — ORA-12841 리스크 없음).       
+32   |     EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 2';                     
+33   |     SELECT CASE WHEN COUNT(*) > 0 THEN 'ADMIN' ELSE '' END                                    
+34   |       INTO V_GROUP_ID                                                                         
+35   |       FROM SCM_ADM_LOOKUP_MASTER_DETAIL                                                       
+36   |      WHERE LOOKUP_TYPE = 'GET_ADMIN_GROUP'                                                    
+37   |        AND VALID_YN = 'Y'                                                                     
+38   |        AND SEGMENT2 = 'ALL'                                                                   
+39   |        AND SEGMENT1 IN ( SELECT DISTINCT USER_GR_ID                                           
+40   |                          FROM   SCM_ADM_USER_GR_UNIT_AUTH_MPG_M A                             
+41   |                          WHERE  USER_ID = P_USER_ID                                           
+42   |                          AND    UNIT_TP_CD = 'D'                                              
+43   |                          AND    EDIT_YN = 'Y'                                                 
+44   |                          AND    USE_YN = 'Y'                                                  
+45   |                          AND    UNIT_ID = P_DIVISION_ID )                                     
+46   |      ;                                                                                        
+47   |     -- [PERF-DMF0005 20260722] P1: 멀티선택 필터 GTT 사전적재 (FN_SPLITSTRING 인라인 제거)                   
+48   |     --  값이 있을 때만 적재. 없음/'ALL' 이면 미적재 -> 쿼리 FILTER 가 GTT 접근 자체를 생략(runtime skip)               
+(21 rows)
+################ [E3] 의존 객체 상태 — 함수 · 임시 테이블 · 뷰 ################
+OBJECT_TYPE  | OBJECT_NAME                | STATUS | LAST_DDL         | GTT_DURATION | LINES
+-------------+----------------------------+--------+------------------+--------------+------
+FUNCTION     | FN_GET_DEPT_LIST           | VALID  | 2026-10-09 13:38 |              | 56   
+FUNCTION     | FN_GET_MULTI_OWNER_NAME    | VALID  | 2026-10-09 13:38 |              | 115  
+FUNCTION     | FN_SPLITSTRING             | VALID  | 2026-10-09 13:38 |              | 95   
+PACKAGE      | PKG_NSCM_UI_COM_MENU       | VALID  | 2026-10-09 13:38 |              | 35   
+PACKAGE BODY | PKG_NSCM_UI_COM_MENU       | VALID  | 2026-10-09 13:39 |              | 465  
+SYNONYM      | SCM_MST_ITEM_SN            | VALID  | 2026-10-09 10:24 |              | 0    
+TABLE        | GT_GGET_SPLIT_CUSTOMER     | VALID  | 2026-10-09 10:25 | SYS$SESSION  | 0    
+TABLE        | GT_GGET_SPLIT_ITEM_ID      | VALID  | 2026-10-09 10:24 | SYS$SESSION  | 0    
+TABLE        | GT_GGET_SPLIT_OWNER        | VALID  | 2026-10-09 10:24 | SYS$SESSION  | 0    
+TABLE        | GT_GGET_SPLIT_PROJECT_CODE | VALID  | 2026-10-09 10:25 | SYS$SESSION  | 0    
+TABLE        | GT_GGET_SPLIT_SCM_SITE_ID  | VALID  | 2026-10-09 10:25 | SYS$SESSION  | 0    
+TABLE        | GT_GGET_SPLIT_TEAM_ID      | VALID  | 2026-10-09 10:25 | SYS$SESSION  | 0    
+TABLE        | GT_GGET_SPLIT_VALID_YN     | VALID  | 2026-10-09 10:25 | SYS$SESSION  | 0    
+VIEW         | DM_MST_ITEM_SINGLE_V       | VALID  | 2026-10-09 13:38 |              | 0    
+(14 rows)
+--  사내: 함수 3 VALID(115 · 95 · 56줄) · GT_GGET_SPLIT_* 7본 SYS$SESSION · SCM_MST_ITEM_SN 은 SYNONYM
+SYNONYM_NAME    | TABLE_OWNER | TABLE_NAME | DB_LINK
+----------------+-------------+------------+--------
+SCM_MST_ITEM_SN | FP_MGR      | SCM_ITEM_M |        
+(1 rows)
+################ [E4] ⭐ 테이블 통계 — 조회가 읽는 원장 (NUM_ROWS 가 실제([E7])와 크게 다르거나 ANALYZED 가 오래면 계획 오류 후보) ################
+TABLE_NAME                      | NUM_ROWS | BLOCKS | AVG_ROW_LEN | ANALYZED         | STALE | PART | TMP | DEGREE    
+--------------------------------+----------+--------+-------------+------------------+-------+------+-----+-----------
+SCM_ITEM_M                      | 793445   | 30028  | 264         | 2026-10-13 14:02 | NO    | NO   | N   |          1
+DM_MST_CUSTOMER_MODEL           | 191      | 7      | 107         | 2026-10-13 14:00 | NO    | NO   | N   |          1
+SCM_ADM_LOOKUP_MASTER_DETAIL    | 65126    | 1480   | 152         | 2026-10-13 14:01 | NO    | NO   | N   |          1
+SCM_ADM_USER_GR_UNIT_AUTH_MPG_M | 25013    | 265    | 68          | 2026-10-13 14:01 | NO    | NO   | N   |          1
+SCM_ADM_USER_M                  | 9197     | 217    | 154         | 2026-10-13 14:00 | NO    | NO   | N   |          1
+SCM_COM_SYS_LOG                 | 298235   | 50176  | 1062        | 2026-10-13 14:03 | NO    | NO   | N   |          1
+SCM_MST_COUNTRY                 | 249      | 6      | 61          | 2026-10-13 14:00 | NO    | NO   | N   |          1
+SCM_MST_CUSTOMER                | 27229    | 940    | 231         | 2026-10-10 01:14 | NO    | NO   | N   |          1
+SCM_MST_PROJECT                 | 8468     | 212    | 161         | 2026-10-13 14:00 | NO    | NO   | N   |          1
+SCM_MST_SHEET_COLUMNS           | 16365    | 376    | 137         | 2026-10-13 14:00 | YES   | NO   | N   |          1
+SCM_MST_SITE                    | 3038     | 73     | 148         | 2026-10-13 14:00 | NO    | NO   | N   |          1
+SCM_MST_SITE_CUSTOMER           | 6586     | 103    | 90          | 2026-10-13 14:00 | NO    | NO   | N   |          1
+SCM_MST_SITE_ITEM               | 118139   | 3543   | 204         | 2026-10-13 14:01 | NO    | NO   | N   |          1
+SCM_MST_SSO_DEPT_INFO           | 21363    | 750    | 239         | 2026-10-13 14:01 | NO    | NO   | N   |          1
+SCM_MST_SSO_USER_INFO           | 140185   | 2604   | 134         | 2026-10-10 01:15 | NO    | NO   | N   |          1
+(15 rows)
+################ [E5] ⭐ 인덱스 — 조회가 읽는 원장 (COLS 의 SYS_NC… 는 함수 기반 컬럼 → [E5b] 식 참조) ################
+--  ⭐ SCM_MST_SSO_USER_INFO 에 UPPER(USER_ID) 함수 기반 인덱스가 없으면 Owner 이름 함수가 호출마다 전체를 읽는다 (07-22 사내 300초 → 5초 사례)
+TABLE_NAME                      | INDEX_NAME                              | UNIQ      | INDEX_TYPE            | STATUS | VIS     | NUM_ROWS | NDV    | LEAF | CLUF   | ANALYZED   | COLS                                                                                       
+--------------------------------+-----------------------------------------+-----------+-----------------------+--------+---------+----------+--------+------+--------+------------+--------------------------------------------------------------------------------------------
+DM_MST_CUSTOMER_MODEL           | PK_DM_MST_CUSTOMER_MODEL                | UNIQUE    | NORMAL                | VALID  | VISIBLE | 191      | 191    | 2    | 11     | 2026-10-13 | DIVISION_ID, CUSTOMER_PROJECT_CODE, CUSTOMER_MODEL, SCM_SITE_ID                            
+SCM_ADM_LOOKUP_MASTER_DETAIL    | IDX01_SCM_ADM_LOOKUP_MASTER_DETAIL      | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 65126    | 25561  | 446  | 13111  | 2026-10-13 | SEGMENT1, LOOKUP_TYPE, VALID_YN                                                            
+SCM_ADM_LOOKUP_MASTER_DETAIL    | PK_SCM_ADM_LOOKUP_MASTER_DETAIL         | UNIQUE    | NORMAL                | VALID  | VISIBLE | 65126    | 65126  | 654  | 3389   | 2026-10-13 | LOOKUP_TYPE, SEGMENT1, SEGMENT2, SEGMENT3, SEGMENT4, SEGMENT5                              
+SCM_ADM_USER_GR_UNIT_AUTH_MPG_M | IX01_TB_SCM_ADM_USER_GR_UNIT_AUTH_MPG_M | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 25013    | 2746   | 72   | 5115   | 2026-10-13 | USER_ID                                                                                    
+SCM_ADM_USER_GR_UNIT_AUTH_MPG_M | PK_TB_SCM_ADM_USER_GR_UNIT_AUTH_MPG_M   | UNIQUE    | NORMAL                | VALID  | VISIBLE | 25013    | 25013  | 136  | 1764   | 2026-10-13 | USER_GR_ID, USER_ID, UNIT_TP_CD, UNIT_ID, UPPR_UNIT_ID                                     
+SCM_ADM_USER_M                  | PK_SCM_ADM_USER_M                       | UNIQUE    | NORMAL                | VALID  | VISIBLE | 9197     | 9197   | 26   | 2134   | 2026-10-13 | USER_ID                                                                                    
+SCM_ITEM_M                      | IX01_SCM_ITEM_M                         | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 793445   | 40     | 1741 | 175643 | 2026-10-13 | DIVISION_ID, ITEM_TYPE                                                                     
+SCM_ITEM_M                      | IX02_SCM_ITEM_M                         | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 749878   | 45484  | 2175 | 69627  | 2026-10-13 | ITEM_CLASS, APPLIED_MODEL                                                                  
+SCM_ITEM_M                      | IX03_SCM_ITEM_M                         | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 793445   | 2      | 1438 | 50688  | 2026-10-13 | ACTIVE_FLAG                                                                                
+SCM_ITEM_M                      | IX_SCM_ITEM_M_FBI01                     | NONUNIQUE | FUNCTION-BASED NORMAL | VALID  | VISIBLE | 793445   | 369297 | 2828 | 161201 | 2026-10-13 | DIVISION_ID, SYS_NC00079$                                                                  
+SCM_ITEM_M                      | PK_SCM_ITEM_M                           | UNIQUE    | NORMAL                | VALID  | VISIBLE | 793445   | 793445 | 3865 | 29943  | 2026-10-13 | ITEM_ID, COMPANY_ID, DIVISION_ID, SITE_ID                                                  
+SCM_MST_COUNTRY                 | PK_SCM_MST_COUNTRY                      | UNIQUE    | NORMAL                | VALID  | VISIBLE | 249      | 249    | 1    | 3      | 2026-10-13 | COUNTRY                                                                                    
+SCM_MST_CUSTOMER                | PK_SCM_MST_CUSTOMER_1                   | UNIQUE    | NORMAL                | VALID  | VISIBLE | 27229    | 27229  | 133  | 2890   | 2026-10-10 | DIVISION_ID, SOLDTO_CODE, SHIPTO_CODE                                                      
+SCM_MST_PROJECT                 | IX01_SCM_MST_PROJECT                    | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 8468     | 8468   | 30   | 748    | 2026-10-13 | DIVISION_ID, PROJECT_CODE                                                                  
+SCM_MST_PROJECT                 | PK_SCM_MST_PROJECT                      | UNIQUE    | NORMAL                | VALID  | VISIBLE | 8468     | 8468   | 42   | 333    | 2026-10-13 | PROJECT_CODE, PROJECT_VER_SEQ, DIVISION_ID                                                 
+SCM_MST_SITE                    | IDX01_SCM_MST_SITE                      | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 3038     | 158    | 10   | 273    | 2026-10-13 | COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, OPERATION_GROUP                                
+SCM_MST_SITE                    | IDX02_SCM_MST_SITE                      | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 3038     | 5      | 9    | 172    | 2026-10-13 | SITE_TYPE, VALID_YN                                                                        
+SCM_MST_SITE                    | IDX03_SCM_MST_SITE                      | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 128      | 115    | 1    | 68     | 2026-10-13 | PLANT_ID, OPERATION_GROUP                                                                  
+SCM_MST_SITE                    | IDX04_SCM_MST_SITE                      | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 3038     | 3038   | 26   | 333    | 2026-10-13 | DIVISION_ID, SITE_TYPE, VALID_YN, SCM_SITE_ID, CITY, COUNTRY, END_CUSTOMER, SOLDTO_CUSTOMER
+SCM_MST_SITE                    | IDX_SCM_MST_SITE_N1                     | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 3038     | 3038   | 17   | 205    | 2026-10-13 | DIVISION_ID, SCM_SITE_ID, CITY, COUNTRY                                                    
+SCM_MST_SITE                    | PK_SCM_MST_SITE                         | UNIQUE    | NORMAL                | VALID  | VISIBLE | 3038     | 3038   | 12   | 205    | 2026-10-13 | DIVISION_ID, SCM_SITE_ID                                                                   
+SCM_MST_SITE_CUSTOMER           | PK_SCM_MST_SITE_CUSTOMER                | UNIQUE    | NORMAL                | VALID  | VISIBLE | 6586     | 6586   | 44   | 284    | 2026-10-13 | DIVISION_ID, SCM_SITE_ID, SOLDTO_CODE, SHIPTO_CODE                                         
+SCM_MST_SITE_ITEM               | IDX01_SCM_MST_SITE_ITEM                 | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 118139   | 731    | 381  | 16494  | 2026-10-13 | DIVISION_ID, OWNER                                                                         
+SCM_MST_SITE_ITEM               | IDX02_SCM_MST_SITE_ITEM                 | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 118139   | 16091  | 468  | 106683 | 2026-10-13 | ITEM_ID, DIVISION_ID                                                                       
+SCM_MST_SITE_ITEM               | IDX03_SCM_MST_SITE_ITEM                 | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 118139   | 70406  | 795  | 75773  | 2026-10-13 | DIVISION_ID, VALID_YN, OWNER, PROJECT_CODE, ITEM_ID                                        
+SCM_MST_SITE_ITEM               | IDX04_SCM_MST_SITE_ITEM                 | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 118139   | 97925  | 682  | 46243  | 2026-10-13 | DIVISION_ID, SCM_SITE_ID, ITEM_ID                                                          
+SCM_MST_SITE_ITEM               | IDX05_SCM_MST_SITE_ITEM                 | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 118139   | 2744   | 374  | 12875  | 2026-10-13 | DIVISION_ID, PROJECT_CODE                                                                  
+SCM_MST_SITE_ITEM               | PK_SCM_MST_SITE_ITEM                    | UNIQUE    | NORMAL                | VALID  | VISIBLE | 118139   | 118139 | 809  | 16232  | 2026-10-13 | DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID                                            
+SCM_MST_SSO_DEPT_INFO           | IDX_SCM_MST_SSO_DEPT_INFO_N1            | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 21363    | 5705   | 60   | 14740  | 2026-10-13 | UPPER_DEPT_ID                                                                              
+SCM_MST_SSO_DEPT_INFO           | PK_SCM_MST_SSO_DEPT_INFO                | UNIQUE    | NORMAL                | VALID  | VISIBLE | 21363    | 21363  | 57   | 1841   | 2026-10-13 | DEPT_ID                                                                                    
+SCM_MST_SSO_USER_INFO           | IDX01_SCM_MST_SSO_USER_INFO             | NONUNIQUE | NORMAL                | VALID  | VISIBLE | 140128   | 11596  | 366  | 113384 | 2026-10-10 | DEPT_ID                                                                                    
+SCM_MST_SSO_USER_INFO           | IDX02_SCM_MST_SSO_USER_INFO             | NONUNIQUE | FUNCTION-BASED NORMAL | VALID  | VISIBLE | 140185   | 140185 | 400  | 10662  | 2026-10-10 | SYS_NC00026$                                                                               
+SCM_MST_SSO_USER_INFO           | PK_SCM_MST_SSO_USER_INFO                | UNIQUE    | NORMAL                | VALID  | VISIBLE | 140185   | 140185 | 380  | 9265   | 2026-10-10 | USER_ID                                                                                    
+(33 rows)
+################ [E5b] 함수 기반 인덱스 식 ################
+TABLE_NAME            | INDEX_NAME                  | POS | COLUMN_EXPRESSION     
+----------------------+-----------------------------+-----+-----------------------
+SCM_ITEM_M            | IX_SCM_ITEM_M_FBI01         | 2   | SUBSTR("ITEM_ID",1,12)
+SCM_MST_SSO_USER_INFO | IDX02_SCM_MST_SSO_USER_INFO | 1   | UPPER("USER_ID")      
+(2 rows)
+################ [E6] Owner 이름 함수 원문 중 SQL 줄 — 어느 테이블을 어떤 조건으로 읽나 ################
+NAME                    | LINE | T                                                                                            
+------------------------+------+----------------------------------------------------------------------------------------------
+FN_GET_DEPT_LIST        | 30   |       FROM (                                                                                 
+FN_GET_DEPT_LIST        | 33   |               FROM SCM_ADM_USER_M                USR                                         
+FN_GET_DEPT_LIST        | 35   |              WHERE USR.DEPT_ID = LOOK.SEGMENT1                                               
+FN_GET_DEPT_LIST        | 36   |                AND LOOK.LOOKUP_TYPE = 'PM_TEAM_MAPPING'                                      
+FN_GET_DEPT_LIST        | 37   |                AND LOOK.VALID_YN = 'Y'                                                       
+FN_GET_DEPT_LIST        | 38   |                AND UPPER(USR.USER_ID) = UPPER(P_CREATED_BY)                                  
+FN_GET_DEPT_LIST        | 43   |               FROM SCM_ADM_USER_M                                                            
+FN_GET_DEPT_LIST        | 44   |              WHERE UPPER(USER_ID) = UPPER(P_CREATED_BY)                                      
+FN_GET_DEPT_LIST        | 46   |      WHERE MA.SEGMENT3 = P_DEPT_ID;                                                          
+FN_GET_MULTI_OWNER_NAME | 45   |                       FROM SCM_MST_SSO_USER_INFO                                             
+FN_GET_MULTI_OWNER_NAME | 46   |                      WHERE UPPER(USER_ID) = UPPER(TRIM(SUBSTR(V_OWNER, 1, V_FOUND_IDX - 1)));
+FN_GET_MULTI_OWNER_NAME | 54   |                       FROM SCM_MST_SSO_USER_INFO                                             
+FN_GET_MULTI_OWNER_NAME | 55   |                      WHERE UPPER(USER_ID) = UPPER(TRIM(SUBSTR(V_OWNER, 1, V_FOUND_IDX - 1)));
+FN_GET_MULTI_OWNER_NAME | 73   |                   FROM SCM_MST_SSO_USER_INFO                                                 
+FN_GET_MULTI_OWNER_NAME | 74   |                  WHERE UPPER(USER_ID) = UPPER(TRIM(V_OWNER));                                
+FN_GET_MULTI_OWNER_NAME | 82   |                   FROM SCM_MST_SSO_USER_INFO                                                 
+FN_GET_MULTI_OWNER_NAME | 83   |                  WHERE UPPER(USER_ID) = UPPER(TRIM(V_OWNER));                                
+FN_GET_MULTI_OWNER_NAME | 95   |                   FROM SCM_MST_SSO_USER_INFO                                                 
+FN_GET_MULTI_OWNER_NAME | 96   |                  WHERE UPPER(USER_ID) = UPPER(TRIM(V_OWNER));                                
+FN_GET_MULTI_OWNER_NAME | 104  |                   FROM SCM_MST_SSO_USER_INFO                                                 
+FN_GET_MULTI_OWNER_NAME | 105  |                  WHERE UPPER(USER_ID) = UPPER(TRIM(V_OWNER));                                
+(21 rows)
+--  사내 FN_GET_MULTI_OWNER_NAME: FROM SCM_MST_SSO_USER_INFO WHERE UPPER(USER_ID) = UPPER(TRIM(…)) — 6곳
+################ [E7] ⭐ 데이터량 — 사업부별 (사내 10-14: SITE_ITEM 82 39,573 · 81 / 40 은 아래 CORP) ################
+--  ROWS_ = 원장 행 · OWNERS = Owner 종류 수(함수 호출 횟수의 절반) · SITES / PROJECTS / ITEMS = 키 종류 수
+DIVISION_ID | ROWS_ | OWNERS | SITES | PROJECTS | ITEMS | DEPTS | ACTIVE_Y | DEPT_NULL
+------------+-------+--------+-------+----------+-------+-------+----------+----------
+81          | 53516 | 373    | 470   | 355      | 6027  | 108   | 51692    | 8496     
+82          | 39573 | 226    | 834   | 1458     | 1661  | 59    | 38341    | 7558     
+40          | 23214 | 93     | 1218  | 906      | 8006  | 16    | 22653    | 7645     
+81_UC       | 876   | 16     | 22    | 5        | 136   | 6     | 864      | 108      
+81_HD       | 471   | 4      | 10    | 6        | 101   | 3     | 471      | 58       
+81_ST       | 268   | 4      | 13    | 4        | 52    | 4     | 268      | 43       
+81_HG       | 135   | 2      | 8     | 7        | 88    | 2     | 135      | 20       
+81_HM       | 88    | 6      | 16    | 3        | 21    | 3     | 88       | 21       
+(8 rows)
+################ [E7b] 조인 상대 원장 행 수 — 사업부별 ################
+TABLE_NAME            | DIVISION_ID | ROWS_  | KEYS  
+----------------------+-------------+--------+-------
+DM_MST_CUSTOMER_MODEL | 40          | 5      | 5     
+DM_MST_CUSTOMER_MODEL | 81          | 158    | 155   
+DM_MST_CUSTOMER_MODEL | 81_ST       | 1      | 1     
+DM_MST_CUSTOMER_MODEL | 82          | 27     | 25    
+SCM_MST_CUSTOMER      | 40          | 4825   | 4825  
+SCM_MST_CUSTOMER      | 42          | 263    | 263   
+SCM_MST_CUSTOMER      | 44          | 87     | 87    
+SCM_MST_CUSTOMER      | 81          | 2990   | 2990  
+SCM_MST_CUSTOMER      | 81_HD       | 2990   | 2990  
+SCM_MST_CUSTOMER      | 81_HG       | 2240   | 2240  
+SCM_MST_CUSTOMER      | 81_HM       | 2990   | 2990  
+SCM_MST_CUSTOMER      | 81_ST       | 2990   | 2990  
+SCM_MST_CUSTOMER      | 81_UC       | 2990   | 2990  
+SCM_MST_CUSTOMER      | 82          | 4864   | 4864  
+SCM_MST_ITEM_SN       | 11          | 174    | 174   
+SCM_MST_ITEM_SN       | 40          | 243767 | 170337
+SCM_MST_ITEM_SN       | 81          | 221712 | 86469 
+SCM_MST_ITEM_SN       | 81_HD       | 20660  | 20660 
+SCM_MST_ITEM_SN       | 81_HG       | 20152  | 20152 
+SCM_MST_ITEM_SN       | 81_HM       | 20373  | 20373 
+SCM_MST_ITEM_SN       | 81_ST       | 20954  | 20954 
+SCM_MST_ITEM_SN       | 81_UC       | 21849  | 21849 
+SCM_MST_ITEM_SN       | 82          | 223804 | 52637 
+SCM_MST_PROJECT       | 81          | 1158   | 1158  
+SCM_MST_PROJECT       | 81_HD       | 303    | 303   
+SCM_MST_PROJECT       | 81_HG       | 249    | 249   
+SCM_MST_PROJECT       | 81_HM       | 434    | 434   
+SCM_MST_PROJECT       | 81_ST       | 390    | 390   
+SCM_MST_PROJECT       | 81_UC       | 1158   | 1158  
+SCM_MST_PROJECT       | 82          | 4776   | 4776  
+SCM_MST_SITE          | 40          | 1394   | 1352  
+SCM_MST_SITE          | 81          | 560    | 531   
+SCM_MST_SITE          | 81_HD       | 12     | 9     
+SCM_MST_SITE          | 81_HG       | 8      | 6     
+SCM_MST_SITE          | 81_HM       | 32     | 30    
+SCM_MST_SITE          | 81_ST       | 14     | 11    
+SCM_MST_SITE          | 81_UC       | 17     | 11    
+SCM_MST_SITE          | 82          | 1002   | 969   
+SCM_MST_SITE_CUSTOMER | 40          | 3098   | 1156  
+SCM_MST_SITE_CUSTOMER | 81          | 1330   | 395   
+SCM_MST_SITE_CUSTOMER | 81_HD       | 15     | 8     
+SCM_MST_SITE_CUSTOMER | 81_HG       | 12     | 8     
+SCM_MST_SITE_CUSTOMER | 81_HM       | 44     | 17    
+SCM_MST_SITE_CUSTOMER | 81_ST       | 28     | 12    
+SCM_MST_SITE_CUSTOMER | 81_UC       | 32     | 11    
+SCM_MST_SITE_CUSTOMER | 82          | 2027   | 632   
+SCM_MST_SSO_DEPT_INFO | -           | 21363  | 21363 
+SCM_MST_SSO_USER_INFO | -           | 140185 | 140185
+(48 rows)
+--  KEYS 열: ITEM_SN = 품목 종류 · SITE_CUSTOMER = 대표 · 유효 행 · SITE = SALES 사이트 · PROJECT = 프로젝트 종류 · CUSTOMER = Sold-To / Ship-To 쌍 · CUSTOMER_MODEL = 유효 행
+################ [E7c] ⭐ 조인 키 중복 — 결과 행을 불리는 조인이 있나 (0행이 정상에 가깝다) ################
+--  SITE_CUSTOMER 대표(REP_YN = Y · VALID_YN = Y)가 사이트당 2행 이상이면 그 사이트의 SITE_ITEM 행이 그만큼 불어난다
+CHK | DIVISION_ID | SITES | MAX_ROWS_PER_SITE | ROWS_
+----+-------------+-------+-------------------+------
+(0 rows)
+=============================================================================
+C01 완료 → C01_ENV_STATE_OUT.txt 회신
+=============================================================================

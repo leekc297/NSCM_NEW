@@ -1,0 +1,50 @@
+.tooltipWrapper {
+  background-color: white !important;
+  border: 1px solid #dde0df !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0px 20px 0 0 !important;
+}
+
+.button {
+  min-width: 60px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding-right: 0;
+  .label {
+    font-size: 13px;
+    color: $commonTextBasic;
+    font-weight: 400;
+  }
+}
+
+.tooltip {
+  // width: 100px;
+  background-color: $navTopBgSwitchHolder;
+  box-shadow: none;
+  padding: 5px 0;
+
+  .language {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    cursor: pointer;
+
+    p {
+      font-size: 13px;
+      color: $commonTextBasic;
+      padding: 0 8px;
+    }
+    &:hover {
+      background-color: $tableBgCellSelected;
+      p {
+        transition: 0.3s;
+      }
+    }
+  }
+}

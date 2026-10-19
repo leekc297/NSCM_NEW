@@ -1,0 +1,233 @@
+﻿################ [S0] 접속 DB · 시각 ################
+DB_NAME | INST | NOW                
+--------+------+--------------------
+ZIOUI1  | ZIO  | 2026-10-14 10:57:52
+(1 rows)
+################ [S1] ⭐ 조회 문장 커서 목록 — 교체 전 문장(다른 SQL_ID)의 커서가 남아 있나 ################
+--  8pn2cpba1y5v8 = 10-14 교체 뒤 문장. 2zurcv8akt27v = 교체 전 사내 문장(Partial Plan YN 2줄 없는 원문).
+--  다른 SQL_ID 가 SEC_PER_EX 몇 초로 남아 있으면 = 교체 전에는 빠른 계획이었고, 그 문장으로 되돌리면 그 커서를 다시 쓴다
+SQL_ID        | CH | PHV        | EX | NOW_RUN | SEC_PER_EX | BG_PER_EX | ROWS_PER_EX | FIRST_LOAD          | LOADED              | LAST_ACT       | OBJ_ST | BS | BA
+--------------+----+------------+----+---------+------------+-----------+-------------+---------------------+---------------------+----------------+--------+----+---
+8pn2cpba1y5v8 | 8  | 3905882324 | 5  | 0       | 1.2        | 42147     | 20873       | 2026-10-14/10:15:51 | 2026-10-14/10:42:20 | 10-14 10:57:01 | VALID  | N  | N 
+8pn2cpba1y5v8 | 24 | 2613897708 | 5  | 0       | 1          | 42913     | 19468       | 2026-10-14/10:15:51 | 2026-10-14/10:46:11 | 10-14 10:46:21 | VALID  | N  | N 
+8pn2cpba1y5v8 | 23 | 3546196757 | 1  | 0       | 1.6        | 75198     | 4859        | 2026-10-14/10:15:51 | 2026-10-14/10:46:09 | 10-14 10:46:09 | VALID  | N  | N 
+8pn2cpba1y5v8 | 22 | 2613897708 | 5  | 0       | 1          | 49121     | 20227       | 2026-10-14/10:15:51 | 2026-10-14/10:45:57 | 10-14 10:46:07 | VALID  | N  | N 
+8pn2cpba1y5v8 | 21 | 1413870880 | 1  | 0       | 1.4        | 43030     | 1063        | 2026-10-14/10:15:51 | 2026-10-14/10:45:55 | 10-14 10:45:55 | VALID  | N  | N 
+8pn2cpba1y5v8 | 20 | 2613897708 | 5  | 0       | 1          | 48224     | 20440       | 2026-10-14/10:15:51 | 2026-10-14/10:45:43 | 10-14 10:45:53 | VALID  | N  | N 
+8pn2cpba1y5v8 | 19 | 3546196757 | 1  | 0       | 1.5        | 46959     | 0           | 2026-10-14/10:15:51 | 2026-10-14/10:45:41 | 10-14 10:45:42 | VALID  | N  | N 
+8pn2cpba1y5v8 | 18 | 2395779221 | 4  | 0       | 1.1        | 51996     | 12003       | 2026-10-14/10:15:51 | 2026-10-14/10:45:32 | 10-14 10:45:39 | VALID  | N  | N 
+8pn2cpba1y5v8 | 17 | 2613897708 | 1  | 0       | 1.5        | 38956     | 38621       | 2026-10-14/10:15:51 | 2026-10-14/10:45:29 | 10-14 10:45:30 | VALID  | N  | N 
+8pn2cpba1y5v8 | 16 | 3546196757 | 1  | 0       | 1.6        | 42681     | 15569       | 2026-10-14/10:15:51 | 2026-10-14/10:45:26 | 10-14 10:45:27 | VALID  | N  | N 
+8pn2cpba1y5v8 | 15 | 2613897708 | 5  | 0       | 0.8        | 49193     | 12022       | 2026-10-14/10:15:51 | 2026-10-14/10:45:17 | 10-14 10:45:24 | VALID  | N  | N 
+8pn2cpba1y5v8 | 14 | 2395779221 | 1  | 0       | 1.3        | 43592     | 42088       | 2026-10-14/10:15:51 | 2026-10-14/10:45:15 | 10-14 10:45:16 | VALID  | N  | N 
+8pn2cpba1y5v8 | 13 | 3806929389 | 1  | 0       | 1          | 74696     | 4859        | 2026-10-14/10:15:51 | 2026-10-14/10:45:13 | 10-14 10:45:13 | VALID  | N  | N 
+8pn2cpba1y5v8 | 12 | 1413870880 | 1  | 0       | 0.8        | 43014     | 1063        | 2026-10-14/10:15:51 | 2026-10-14/10:45:11 | 10-14 10:45:11 | VALID  | N  | N 
+8pn2cpba1y5v8 | 11 | 3546196757 | 2  | 0       | 0.8        | 44482     | 7785        | 2026-10-14/10:15:51 | 2026-10-14/10:45:08 | 10-14 10:45:11 | VALID  | N  | N 
+8pn2cpba1y5v8 | 10 | 2395779221 | 1  | 0       | 1.1        | 43002     | 42088       | 2026-10-14/10:15:51 | 2026-10-14/10:45:05 | 10-14 10:45:07 | VALID  | N  | N 
+8pn2cpba1y5v8 | 9  | 1413870880 | 1  | 0       | 0.9        | 38471     | 38621       | 2026-10-14/10:15:51 | 2026-10-14/10:45:04 | 10-14 10:45:04 | VALID  | N  | N 
+8pn2cpba1y5v8 | 7  | 3905882324 | 4  | 0       | 0.9        | 41210     | 27962       | 2026-10-14/10:15:51 | 2026-10-14/10:34:32 | 10-14 10:35:58 | VALID  | N  | N 
+8pn2cpba1y5v8 | 2  | 3905882324 | 13 | 0       | 0.8        | 41001     | 30822       | 2026-10-14/10:15:51 | 2026-10-14/10:16:06 | 10-14 10:35:55 | VALID  | N  | N 
+8pn2cpba1y5v8 | 6  | 653845277  | 1  | 0       | 1.5        | 42973     | 42088       | 2026-10-14/10:15:51 | 2026-10-14/10:34:22 | 10-14 10:34:24 | VALID  | N  | N 
+8pn2cpba1y5v8 | 5  | 575233701  | 1  | 0       | 1.2        | 38437     | 38621       | 2026-10-14/10:15:51 | 2026-10-14/10:34:12 | 10-14 10:34:14 | VALID  | N  | N 
+8pn2cpba1y5v8 | 4  | 1240075511 | 1  | 0       | 1.4        | 38439     | 38621       | 2026-10-14/10:15:51 | 2026-10-14/10:23:35 | 10-14 10:23:38 | VALID  | N  | N 
+8pn2cpba1y5v8 | 3  | 575233701  | 1  | 0       | 2.2        | 38439     | 38621       | 2026-10-14/10:15:51 | 2026-10-14/10:20:33 | 10-14 10:20:38 | VALID  | N  | N 
+8pn2cpba1y5v8 | 1  | 653845277  | 1  | 0       | 3.1        | 42973     | 42088       | 2026-10-14/10:15:51 | 2026-10-14/10:15:58 | 10-14 10:16:06 | VALID  | N  | N 
+8pn2cpba1y5v8 | 0  | 575233701  | 1  | 0       | 2.3        | 38439     | 38621       | 2026-10-14/10:15:51 | 2026-10-14/10:15:51 | 10-14 10:15:58 | VALID  | N  | N 
+2zurcv8akt27v | 2  | 3905882324 | 1  | 0       | 2.4        | 42118     | 15569       | 2026-10-13/10:15:02 | 2026-10-14/10:15:36 | 10-14 10:15:40 | VALID  | N  | N 
+2zurcv8akt27v | 1  | 653845277  | 1  | 0       | 3.1        | 42973     | 42088       | 2026-10-13/10:15:02 | 2026-10-14/10:15:28 | 10-14 10:15:36 | VALID  | N  | N 
+2zurcv8akt27v | 0  | 575233701  | 1  | 0       | 2.8        | 38594     | 38621       | 2026-10-13/10:15:02 | 2026-10-14/10:15:22 | 10-14 10:15:28 | VALID  | N  | N 
+(28 rows)
+################ [S2] ⭐⭐ 컬럼 통계 — 히스토그램 유무 (CORP = 사내: 히스토그램 종류 / 버킷 수) ################
+--  HISTOGRAM 이 NONE 인데 CORP 가 FREQUENCY 인 줄 = 그 컬럼의 값 분포를 이 DB 는 모른다 (사업부별 행 수를 평균으로 추정)
+TABLE_NAME            | COLUMN_NAME  | NDV    | HISTOGRAM | BKT | NULLS  | SMP    | ANALYZED    | CORP            | JUDGE
+----------------------+--------------+--------+-----------+-----+--------+--------+-------------+-----------------+------
+SCM_MST_SITE_ITEM     | DEPT_ID      | 162    | FREQUENCY | 162 | 23949  | 94190  | 10-13 14:01 | FREQUENCY / 162 | same 
+SCM_MST_SITE_ITEM     | DIVISION_ID  | 8      | FREQUENCY | 8   | 0      | 118139 | 10-13 14:01 | FREQUENCY / 8   | same 
+SCM_MST_SITE_ITEM     | ITEM_ID      | 15692  | HYBRID    | 254 | 0      | 6694   | 10-13 14:01 | HYBRID / 254    | same 
+SCM_MST_SITE_ITEM     | OWNER        | 687    | HYBRID    | 254 | 19789  | 5565   | 10-13 14:01 | HYBRID / 254    | same 
+SCM_MST_SITE_ITEM     | PROJECT_CODE | 2729   | HYBRID    | 254 | 0      | 6694   | 10-13 14:01 | HYBRID / 254    | same 
+SCM_MST_SITE_ITEM     | SCM_SITE_ID  | 2526   | HYBRID    | 254 | 0      | 6695   | 10-13 14:01 | HYBRID / 254    | same 
+SCM_MST_SITE_ITEM     | VALID_YN     | 2      | FREQUENCY | 2   | 0      | 118139 | 10-13 14:01 | FREQUENCY / 2   | same 
+SCM_MST_SITE          | DIVISION_ID  | 8      | FREQUENCY | 8   | 0      | 3038   | 10-13 14:00 | FREQUENCY / 8   | same 
+SCM_MST_SITE          | SCM_SITE_ID  | 2962   | HYBRID    | 254 | 0      | 3038   | 10-13 14:00 | HYBRID / 254    | same 
+SCM_MST_SITE          | SITE_TYPE    | 3      | FREQUENCY | 3   | 0      | 3038   | 10-13 14:00 | FREQUENCY / 3   | same 
+SCM_MST_SITE          | VALID_YN     | 2      | FREQUENCY | 2   | 0      | 3038   | 10-13 14:00 | FREQUENCY / 2   | same 
+DM_MST_CUSTOMER_MODEL | DIVISION_ID  | 4      | FREQUENCY | 4   | 0      | 191    | 10-13 14:00 | FREQUENCY / 4   | same 
+DM_MST_CUSTOMER_MODEL | VALID_YN     | 2      | FREQUENCY | 2   | 0      | 191    | 10-13 14:00 | FREQUENCY / 2   | same 
+SCM_ITEM_M            | DIVISION_ID  | 9      | FREQUENCY | 9   | 0      | 793445 | 10-13 14:02 | FREQUENCY / 9   | same 
+SCM_ITEM_M            | ITEM_ID      | 218304 | HYBRID    | 254 | 0      | 6028   | 10-13 14:02 | HYBRID / 254    | same 
+SCM_ITEM_M            | ITEM_TYPE    | 4      | FREQUENCY | 4   | 527005 | 266440 | 10-13 14:02 | FREQUENCY / 4   | same 
+SCM_MST_PROJECT       | DIVISION_ID  | 7      | FREQUENCY | 7   | 0      | 8468   | 10-13 14:00 | FREQUENCY / 7   | same 
+SCM_MST_PROJECT       | PROJECT_CODE | 5934   | HYBRID    | 254 | 0      | 8468   | 10-13 14:00 | HYBRID / 254    | same 
+SCM_MST_SITE_CUSTOMER | DIVISION_ID  | 8      | FREQUENCY | 8   | 0      | 6586   | 10-13 14:00 | FREQUENCY / 8   | same 
+SCM_MST_SITE_CUSTOMER | REP_YN       | 2      | FREQUENCY | 2   | 0      | 6586   | 10-13 14:00 | FREQUENCY / 2   | same 
+SCM_MST_SITE_CUSTOMER | VALID_YN     | 2      | FREQUENCY | 2   | 0      | 6586   | 10-13 14:00 | FREQUENCY / 2   | same 
+(21 rows)
+################ [S2b] 테이블별 히스토그램 보유 컬럼 수 — 조회가 읽는 원장 전체 ################
+OWNER   | TABLE_NAME                   | COLS | HIST_COLS | ANALYZED   
+--------+------------------------------+------+-----------+------------
+FP_MGR  | SCM_ITEM_M                   | 79   | 13        | 10-13 14:02
+SCM_MGR | DM_MST_CUSTOMER_MODEL        | 25   | 5         | 10-13 14:00
+SCM_MGR | SCM_ADM_LOOKUP_MASTER_DETAIL | 28   | 10        | 10-13 14:01
+SCM_MGR | SCM_ADM_USER_M               | 29   | 2         | 10-13 14:00
+SCM_MGR | SCM_MST_CUSTOMER             | 32   | 3         | 10-10 01:14
+SCM_MGR | SCM_MST_PROJECT              | 33   | 4         | 10-13 14:00
+SCM_MGR | SCM_MST_SITE                 | 39   | 14        | 10-13 14:00
+SCM_MGR | SCM_MST_SITE_CUSTOMER        | 20   | 5         | 10-13 14:00
+SCM_MGR | SCM_MST_SITE_ITEM            | 58   | 10        | 10-13 14:01
+SCM_MGR | SCM_MST_SSO_DEPT_INFO        | 21   | 7         | 10-13 14:01
+SCM_MGR | SCM_MST_SSO_USER_INFO        | 26   | 3         | 10-10 01:15
+(11 rows)
+--  사내: SCM_MST_SITE_ITEM · SCM_MST_SITE · SCM_MST_PROJECT · SCM_MST_SITE_CUSTOMER · DM_MST_CUSTOMER_MODEL · SCM_ITEM_M 모두 히스토그램 보유
+################ [S3] 통계 수집 설정 — METHOD_OPT (히스토그램을 만들지 여부를 정한다) ################
+--  FOR ALL COLUMNS SIZE AUTO = 기본(필요한 컬럼에 히스토그램 생성). SIZE 1 = 히스토그램을 만들지 않음
+TABLE_NAME            | PREF                     
+----------------------+--------------------------
+(전역)                  | FOR ALL COLUMNS SIZE AUTO
+SCM_MST_SITE_ITEM     | FOR ALL COLUMNS SIZE AUTO
+SCM_MST_SITE          | FOR ALL COLUMNS SIZE AUTO
+SCM_MST_PROJECT       | FOR ALL COLUMNS SIZE AUTO
+SCM_MST_SITE_CUSTOMER | FOR ALL COLUMNS SIZE AUTO
+(5 rows)
+--  사내: 전부 FOR ALL COLUMNS SIZE AUTO
+################ [S4] 통계 수집 이력 — 최근 30일 (언제 통계가 바뀌었나) ################
+TABLE_NAME            | STATS_UPDATED      
+----------------------+--------------------
+SCM_MST_PROJECT       | 2026-10-13 14:00:59
+SCM_MST_PROJECT       | 2026-10-10 01:13:40
+SCM_MST_PROJECT       | 2026-10-09 21:25:09
+SCM_MST_PROJECT       | 2026-10-09 14:02:02
+SCM_MST_SITE          | 2026-10-13 14:00:55
+SCM_MST_SITE          | 2026-10-10 01:13:22
+SCM_MST_SITE          | 2026-10-09 21:24:53
+SCM_MST_SITE          | 2026-10-09 14:01:35
+SCM_MST_SITE_CUSTOMER | 2026-10-13 14:00:56
+SCM_MST_SITE_CUSTOMER | 2026-10-10 01:13:27
+SCM_MST_SITE_CUSTOMER | 2026-10-09 21:24:57
+SCM_MST_SITE_CUSTOMER | 2026-10-09 14:01:43
+SCM_MST_SITE_ITEM     | 2026-10-13 14:01:22
+SCM_MST_SITE_ITEM     | 2026-10-10 01:15:26
+SCM_MST_SITE_ITEM     | 2026-10-09 21:26:42
+SCM_MST_SITE_ITEM     | 2026-10-09 14:05:23
+(16 rows)
+################ [S4b] 컬럼 사용 기록 — 히스토그램 자동 생성의 근거 (등치 조건으로 쓰인 적이 있어야 만들어진다) ################
+TABLE_NAME        | COLUMN_NAME | NDV | DENSITY              | LOW_VALUE | HIGH_VALUE
+------------------+-------------+-----+----------------------+-----------+-----------
+SCM_MST_SITE      | DIVISION_ID | 8   | 0.000164581961816985 | b'40'     | b'82'     
+SCM_MST_SITE      | SITE_TYPE   | 3   | 0.000164581961816985 | b'CORP'   | b'SALES'  
+SCM_MST_SITE_ITEM | DIVISION_ID | 8   | 4.23230262656701e-06 | b'40'     | b'82'     
+SCM_MST_SITE_ITEM | VALID_YN    | 2   | 4.23230262656701e-06 | b'N'      | b'Y'      
+(4 rows)
+################ [S5] 느린 계획 원문 — 8pn2cpba1y5v8 (추정 행 수 · Peeked Binds · Note) ################
+PLAN_TABLE_OUTPUT                                                                                             
+--------------------------------------------------------------------------------------------------------------
+EXPLAINED SQL STATEMENT:                                                                                      
+------------------------                                                                                      
+WITH ITEM_AGG AS ( SELECT T.DIVISION_ID , T.ITEM_ID , MAX(T.ITEM_NAME)                                        
+AS ITEM_NAME , MAX(T.ITEM_CLASS_NAME) AS ITEM_CLASS_NAME ,                                                    
+MAX(T.NICK_NAME) AS NICK_NAME , CASE MIN(CASE WHEN T.ITEM_TYPE = 'P'                                          
+THEN 1 WHEN T.ITEM_TYPE = 'H' THEN 2 WHEN T.ITEM_TYPE = 'Q' THEN 3 ELSE                                       
+4 END) WHEN 1 THEN 'P' WHEN 2 THEN 'H' WHEN 3 THEN 'Q' ELSE 'R' END AS                                        
+ITEM_TYPE , MAX(T.ENERGE) AS ENERGE_WH , MAX(T.CELL_TYPE) AS                                                  
+CELL_TYPE_CD , MAX(T.ACTIVE_FLAG) AS MDM_ACTIVE_FLAG FROM                                                     
+SCM_MST_ITEM_SN T WHERE T.DIVISION_ID = :B1 GROUP BY T.DIVISION_ID,                                           
+T.ITEM_ID ), CELL_TYPE_LKP AS ( SELECT SEGMENT1 AS CELL_TYPE_CD ,                                             
+SEGMENT2 AS CELL_TYPE_NM FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE                                              
+LOOKUP_TYPE = 'CELL_TYPE' AND VALID_YN = 'Y' ), CUST_MODEL AS ( SELECT                                        
+DIVISION_ID , SCM_SITE_ID , PROJECT_CODE , ITEM_ID ,                                                          
+MAX(CUSTOMER_MODEL) AS CUSTOMER_MODEL FROM DM_MST_CUSTOMER_MODEL WHERE                                        
+VALID_YN = 'Y' GROUP BY DIVISION_ID, SCM_SITE_ID, PROJECT_CODE, ITEM_ID                                       
+), OWNER_NM AS ( SELECT O.OWNER , FN_GET_MULTI_OWNER_NAME(O.OWNER, ',',                                       
+'                                                                                                             
+                                                                                                              
+Plan hash value: 3905882324                                                                                   
+                                                                                                              
+--------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                          | Name                               | Rows  | Cost
+--------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT                                   |                                    |       |    4
+|   1 |  TABLE ACCESS BY INDEX ROWID                       | SCM_MST_COUNTRY                    |     1 |     
+|   2 |   INDEX UNIQUE SCAN                                | PK_SCM_MST_COUNTRY                 |     1 |     
+|   3 |  TEMP TABLE TRANSFORMATION                         |                                    |       |     
+|   4 |   LOAD AS SELECT (CURSOR DURATION MEMORY)          | SYS_TEMP_0FD9D68BB_49C63B          |       |     
+|   5 |    SORT GROUP BY NOSORT                            |                                    |   211K|  953
+|   6 |     FILTER                                         |                                    |       |     
+|   7 |      TABLE ACCESS BY INDEX ROWID                   | SCM_ITEM_M                         |   487K|  953
+|   8 |       INDEX FULL SCAN                              | PK_SCM_ITEM_M                      |   149K|  387
+|   9 |   SORT ORDER BY                                    |                                    |    28M|    4
+|  10 |    FILTER                                          |                                    |       |     
+|  11 |     HASH JOIN RIGHT OUTER                          |                                    |   222G|    2
+|  12 |      TABLE ACCESS BY INDEX ROWID BATCHED           | SCM_ADM_LOOKUP_MASTER_DETAIL       |    13 |     
+|  13 |       INDEX RANGE SCAN                             | PK_SCM_ADM_LOOKUP_MASTER_DETAIL    |    18 |     
+|  14 |      FILTER                                        |                                    |       |     
+|  15 |       HASH JOIN RIGHT OUTER                        |                                    |   222G|    2
+|  16 |        VIEW                                        |                                    |   211K|   64
+|  17 |         TABLE ACCESS FULL                          | SYS_TEMP_0FD9D68BB_49C63B          |   211K|   64
+|  18 |        HASH JOIN OUTER                             |                                    |   105M|  155
+|  19 |         HASH JOIN RIGHT OUTER                      |                                    |   755K|  829
+|  20 |          VIEW                                      |                                    |   687 |    7
+|  21 |           VIEW                                     |                                    |   687 |    7
+|  22 |            HASH UNIQUE                             |                                    |   687 |    7
+|  23 |             INDEX RANGE SCAN                       | IDX01_SCM_MST_SITE_ITEM            | 19324 |    7
+|  24 |          HASH JOIN RIGHT OUTER                     |                                    | 95741 |  474
+|  25 |           TABLE ACCESS FULL                        | SCM_MST_CUSTOMER                   | 27229 |   25
+|  26 |           HASH JOIN RIGHT OUTER                    |                                    | 95741 |  137
+|  27 |            TABLE ACCESS FULL                       | SCM_MST_SSO_DEPT_INFO              | 21363 |   20
+|  28 |            HASH JOIN RIGHT OUTER                   |                                    | 95741 |  116
+|  29 |             VIEW                                   | VW_DCL_3DAD2387                    |   815 |    3
+|  30 |              TABLE ACCESS FULL                     | SCM_MST_SITE_CUSTOMER              |   815 |    3
+|  31 |             HASH JOIN RIGHT OUTER                  |                                    | 11747 |  113
+|  32 |              VIEW                                  |                                    |   122 |   15
+|  33 |               HASH GROUP BY                        |                                    |   122 |   15
+|  34 |                VIEW                                |                                    |   122 |   15
+|  35 |                 UNION-ALL                          |                                    |   122 |     
+|  36 |                  NESTED LOOPS                      |                                    |    30 |    9
+|  37 |                   NESTED LOOPS                     |                                    |       |     
+|  38 |                    TABLE ACCESS FULL               | SCM_ADM_USER_M                     |    92 |    6
+|  39 |                    INDEX RANGE SCAN                | IDX01_SCM_ADM_LOOKUP_MASTER_DETAIL |   442 |     
+|  40 |                   TABLE ACCESS BY INDEX ROWID      | SCM_ADM_LOOKUP_MASTER_DETAIL       |     1 |    3
+|  41 |                  TABLE ACCESS FULL                 | SCM_ADM_USER_M                     |    92 |    6
+|  42 |              HASH JOIN RIGHT OUTER                 |                                    | 11747 |   98
+|  43 |               VIEW                                 |                                    |     5 |     
+|  44 |                HASH GROUP BY                       |                                    |     5 |     
+|  45 |                 TABLE ACCESS BY INDEX ROWID BATCHED| DM_MST_CUSTOMER_MODEL              |     5 |     
+|  46 |                  INDEX RANGE SCAN                  | PK_DM_MST_CUSTOMER_MODEL           |     5 |     
+|  47 |               HASH JOIN RIGHT OUTER                |                                    | 11747 |   97
+|  48 |                TABLE ACCESS BY INDEX ROWID BATCHED | SCM_MST_PROJECT                    |     1 |     
+|  49 |                 INDEX RANGE SCAN                   | IX01_SCM_MST_PROJECT               |     1 |     
+|  50 |                HASH JOIN                           |                                    | 11747 |   97
+|  51 |                 INDEX FAST FULL SCAN               | IDX04_SCM_MST_SITE                 |  1338 |    1
+|  52 |                 TABLE ACCESS FULL                  | SCM_MST_SITE_ITEM                  | 23212 |   96
+|  53 |         VIEW                                       |                                    |    49M|   79
+|  54 |          HASH GROUP BY                             |                                    |    49M|   79
+|  55 |           FILTER                                   |                                    |       |     
+|  56 |            HASH JOIN OUTER                         |                                    |    49M|  171
+|  57 |             TABLE ACCESS FULL                      | SCM_MST_SITE_ITEM                  | 23212 |   96
+|  58 |             VIEW                                   |                                    |   211K|   64
+|  59 |              TABLE ACCESS FULL                     | SYS_TEMP_0FD9D68BB_49C63B          |   211K|   64
+|  60 |     TABLE ACCESS FULL                              | GT_GGET_SPLIT_TEAM_ID              |     1 |     
+|  61 |     TABLE ACCESS FULL                              | GT_GGET_SPLIT_CUSTOMER             |     1 |     
+|  62 |     TABLE ACCESS FULL                              | GT_GGET_SPLIT_SCM_SITE_ID          |     1 |     
+|  63 |     TABLE ACCESS FULL                              | GT_GGET_SPLIT_VALID_YN             |     1 |     
+|  64 |     TABLE ACCESS FULL                              | GT_GGET_SPLIT_ITEM_ID              |     1 |     
+|  65 |     TABLE ACCESS FULL                              | GT_GGET_SPLIT_PROJECT_CODE         |     1 |     
+|  66 |     TABLE ACCESS FULL                              | GT_GGET_SPLIT_OWNER                |     1 |     
+--------------------------------------------------------------------------------------------------------------
+                                                                                                              
+Peeked Binds (identified by position):                                                                        
+--------------------------------------                                                                        
+                                                                                                              
+   1 - :B1 (VARCHAR2(30), CSID=873): '40'                                                                     
+   2 - :B1 (VARCHAR2(30), CSID=873, Primary=1)                                                                
+   4 - :B1 (VARCHAR2(30), CSID=873, Primary=1)                                                                
+  19 - :B1 (VARCHAR2(30), CSID=873, Primary=1)                                                                
+                                                                                                              
+Note                                                                                                          
+-----                                                                                                         
+   - dynamic statistics used: dynamic sampling (level=2)                                                      
+   - this is an adaptive plan                                                                                 
+                                                                                                              
+(106 rows)
+=============================================================================
+C05 완료 → C05_STATS_AND_PLAN_OUT.txt 파일 전달
+=============================================================================

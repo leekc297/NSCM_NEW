@@ -1,0 +1,118 @@
+-- ============================================================================
+-- DMF0082 Excel Form 건수 부족 — 2차 진단: "최신 SP_W 버전에 RTF_SYS_RP 가 없다" 확정용 (조회 전용)
+--   1차 결과(클라우드 2026-09-23): 최신 버전 SP_W_20260923_V001 총 42,321행 → MEASURE='RTF_SYS_RP' 적용 시 **8행**
+--   사내 기준 : 모든 SP_W 버전이 RTF_SYS_RP 5,700~8,400행 보유 (최신 SP_W_20260827_V001 = 5,709 / 총 68,463 = 8.3%)
+--   SP 는 MAX(VERSION_NO) = **가장 최신 버전 1개만** 보므로, 그 버전에 RTF_SYS_RP 가 없으면 양식이 비어 나온다.
+-- ============================================================================
+SET PAGESIZE 200 LINESIZE 200
+
+-- [1] 최근 SP_W 버전별 적재 현황 — RTF_RATIO 가 사내(약 8%)보다 현저히 낮은 버전이 원인
+--     기대: 어떤 버전은 RTF_ROWS 가 정상(수천)인데 **최신 버전만 0~한자리** → 최신 버전 배치 미완
+SELECT V.VERSION_NO, V.YYYYMMDD, TO_CHAR(V.CREATION_DATE,'YYYY-MM-DD HH24:MI') CREATED,
+       (SELECT COUNT(*) FROM DM_PLN_SALES_PLAN_C C WHERE C.DIVISION_ID='81' AND C.VERSION_NO=V.VERSION_NO) TOTAL_ROWS,
+       (SELECT COUNT(*) FROM DM_PLN_SALES_PLAN_C C WHERE C.DIVISION_ID='81' AND C.VERSION_NO=V.VERSION_NO AND C.MEASURE='RTF_SYS_RP') RTF_ROWS
+  FROM DM_MST_VERSION V
+ WHERE V.DIVISION_ID='81' AND V.VERSION_TYPE='SP_W'
+ ORDER BY V.VERSION_NO DESC FETCH FIRST 10 ROWS ONLY;
+
+-- [2] 최신 버전의 MEASURE 분포 — 사내 최신본은 MKT_FCST 11,207 / RTF_SCP·SalesAmt_*·RTF_SYS_RP 각 5,709 / RTF_PR 5,704
+--     클라우드에서 RTF_SYS_RP 만 빠져 있으면 그 measure 생성 단계(판매계획 금액 배치)가 안 돈 것
+SELECT MEASURE, COUNT(*) CNT
+  FROM DM_PLN_SALES_PLAN_C
+ WHERE DIVISION_ID='81'
+   AND VERSION_NO=(SELECT MAX(VERSION_NO) FROM DM_MST_VERSION WHERE DIVISION_ID='81' AND VERSION_TYPE='SP_W')
+ GROUP BY MEASURE ORDER BY 2 DESC;
+
+-- [3] RTF_SYS_RP 가 실제로 들어있는 버전 — 정상 적재된 최근 버전이 어느 것인지
+SELECT VERSION_NO, COUNT(*) CNT, MIN(YYYYMMDD) MIN_YMD, MAX(YYYYMMDD) MAX_YMD
+  FROM DM_PLN_SALES_PLAN_C
+ WHERE DIVISION_ID='81' AND MEASURE='RTF_SYS_RP'
+ GROUP BY VERSION_NO ORDER BY VERSION_NO DESC FETCH FIRST 10 ROWS ONLY;
+
+-- [4] 최신 버전의 RTF_SYS_RP 8행 실체 — 어떤 사이트/품목만 남았는지 (부분 적재 흔적 확인)
+SELECT SCM_SITE_ID, PROJECT_CODE, ITEM_ID, YYYYMMDD, QTY, CREATED_BY,
+       TO_CHAR(CREATION_DATE,'YYYY-MM-DD HH24:MI') CREATED
+  FROM DM_PLN_SALES_PLAN_C
+ WHERE DIVISION_ID='81' AND MEASURE='RTF_SYS_RP'
+   AND VERSION_NO=(SELECT MAX(VERSION_NO) FROM DM_MST_VERSION WHERE DIVISION_ID='81' AND VERSION_TYPE='SP_W')
+ ORDER BY SCM_SITE_ID, YYYYMMDD;
+
+-- [5] ⚠ 잠재 결함 확인 — SP 는 MAX(VERSION_NO) 와 MAX(YYYYMMDD) 를 **따로** 구한다.
+--     둘이 다른 행에서 나오면(아래 2행 값이 불일치) 버전과 기준일이 어긋나 52주 창이 엉뚱해진다.
+SELECT 'MAX(VERSION_NO) 의 YYYYMMDD' AS ITEM,
+       (SELECT MAX(YYYYMMDD) FROM DM_MST_VERSION WHERE DIVISION_ID='81' AND VERSION_TYPE='SP_W'
+         AND VERSION_NO=(SELECT MAX(VERSION_NO) FROM DM_MST_VERSION WHERE DIVISION_ID='81' AND VERSION_TYPE='SP_W')) AS VAL FROM DUAL
+UNION ALL
+SELECT 'MAX(YYYYMMDD) 단독',
+       (SELECT MAX(YYYYMMDD) FROM DM_MST_VERSION WHERE DIVISION_ID='81' AND VERSION_TYPE='SP_W') FROM DUAL;
+
+-- ============================================================================
+-- [6]~[9] 3차: 컷오프 **상류** 점검 — 컷오프 배치 PR_DM_PLN_SALES_PLAN_CUTOFF 는
+--   DM_PLN_SALES_PLAN(작업원장) → DM_PLN_SALES_PLAN_C(컷오프) 로 **그대로 복사**하고
+--   제외 필터 3개(FCST_TYPE / ITEM_ID / MEASURE 룩업)만 적용한다.
+--   ⇒ 컷오프에 RTF_SYS_RP 가 없으면 원인은 둘 중 하나다:
+--       (a) 컷오프 시점에 **작업원장 자체**에 RTF_SYS_RP 가 없었다  → [6][7]
+--       (b) 제외 룩업이 RTF_SYS_RP 를 걸러냈다                    → [8][9]
+-- ============================================================================
+
+-- [6] 작업원장 DM_PLN_SALES_PLAN 의 RTF_SYS_RP 보유량 (81)
+--     사내 실측 2026-09-23: TOTAL_RTF 78,109 / 컷오프범위(금주 월요일 이후) 5,614
+SELECT COUNT(*) AS TOTAL_RTF,
+       SUM(CASE WHEN YYYYMMDD >= TO_CHAR(FN_NEXT_DAY(SYSDATE,'MON')-7,'YYYYMMDD') THEN 1 ELSE 0 END) AS IN_CUTOFF_RANGE,
+       MIN(YYYYMMDD) MIN_YMD, MAX(YYYYMMDD) MAX_YMD
+  FROM DM_PLN_SALES_PLAN WHERE DIVISION_ID='81' AND MEASURE='RTF_SYS_RP';
+
+-- [7] 작업원장 MEASURE 분포 (81, 컷오프 범위내)
+--     사내 실측: MKT_FCST 10,471 / MKT_AMT_KRW·LOC 각 9,565 / RTF_PR·RTF_SYS_RP 각 5,614 / SalesAmt_* 각 5,334 / CUST_FCST 427
+--     ⇒ 여기서 RTF_SYS_RP 만 적으면 금액 생성 배치(PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW 계열) 미수행
+SELECT MEASURE, COUNT(*) CNT FROM DM_PLN_SALES_PLAN
+ WHERE DIVISION_ID='81' AND YYYYMMDD >= TO_CHAR(FN_NEXT_DAY(SYSDATE,'MON')-7,'YYYYMMDD')
+ GROUP BY MEASURE ORDER BY 2 DESC FETCH FIRST 12 ROWS ONLY;
+
+-- [8] 제외룩업 ① SALES_PLAN_CATCHUP — SEGMENT2 에 걸린 MEASURE 는 컷오프에서 **전량 제외**된다
+--     사내 실측: div 40 의 Catch_Up 계열 4건뿐 (RTF_SYS_RP 없음)
+--     ⚠ 여기에 'RTF_SYS_RP' 가 있으면 그게 원인 — 그 행 VALID_YN='N' 으로 내리면 해소
+SELECT SEGMENT1, SEGMENT2, SEGMENT3, VALID_YN FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+ WHERE LOOKUP_TYPE='SALES_PLAN_CATCHUP' ORDER BY SEGMENT1, SEGMENT2;
+
+-- [9] 제외룩업 ② DM_SALES_PLAN_WATERFALL_SP_W_ADD (81) — SEGMENT2=FCST_TYPE, SEGMENT3=ITEM_ID 제외
+--     사내 실측: 81 은 FCST_TYPE 'ETC' × (ETC / MDF / 물동보상금) 3건뿐
+SELECT SEGMENT1, SEGMENT2, SEGMENT3, VALID_YN FROM SCM_ADM_LOOKUP_MASTER_DETAIL
+ WHERE LOOKUP_TYPE='DM_SALES_PLAN_WATERFALL_SP_W_ADD' AND SEGMENT1='81' ORDER BY SEGMENT2, SEGMENT3;
+
+-- ============================================================================
+-- [10]~[12] 4차: 원장은 정상(6,152)인데 컷오프에만 8행 → **컷오프 실행 시점** 확정
+--   클라우드 실측 2026-09-23:
+--     원장 DM_PLN_SALES_PLAN  RTF_SYS_RP 컷오프범위 = 6,152  (RTF_PR 도 6,152 — 사내와 동형)
+--     컷오프 SP_W_20260923_V001 (13:12 생성) RTF_SYS_RP = 8, RTF_PR·SalesAmt_* = **0건(아예 없음)**
+--   ⇒ 컷오프가 **금액/RTF 계열 생성 배치보다 먼저** 실행된 것으로 보인다. [10] 으로 확정.
+-- ============================================================================
+
+-- [10] 원장 RTF_SYS_RP(컷오프 범위) 행의 생성·수정 시각 분포 — 컷오프 시각(09-23 13:12) 앞뒤로 갈리는지
+--      BEFORE_CUTOFF 가 6,000 대면 → 컷오프 로직/필터 문제 (데이터는 이미 있었음)
+--      AFTER_CUTOFF  가 6,000 대면 → **타이밍 문제** (컷오프가 먼저 돌았음) → 컷오프 재수행으로 해소
+SELECT COUNT(*) TOTAL,
+       SUM(CASE WHEN LAST_UPDATE_DATE <  TO_DATE('2026-09-23 13:12','YYYY-MM-DD HH24:MI') THEN 1 ELSE 0 END) AS UPD_BEFORE_CUTOFF,
+       SUM(CASE WHEN LAST_UPDATE_DATE >= TO_DATE('2026-09-23 13:12','YYYY-MM-DD HH24:MI') THEN 1 ELSE 0 END) AS UPD_AFTER_CUTOFF,
+       TO_CHAR(MIN(LAST_UPDATE_DATE),'YYYY-MM-DD HH24:MI') MIN_UPD,
+       TO_CHAR(MAX(LAST_UPDATE_DATE),'YYYY-MM-DD HH24:MI') MAX_UPD
+  FROM DM_PLN_SALES_PLAN
+ WHERE DIVISION_ID='81' AND MEASURE='RTF_SYS_RP'
+   AND YYYYMMDD >= TO_CHAR(FN_NEXT_DAY(SYSDATE,'MON')-7,'YYYYMMDD');
+
+-- [11] 컷오프에서 **통째로 빠진** measure 확인 — 원장에는 있는데 최신 컷오프에 0건인 measure
+--      기대: RTF_PR / SalesAmt_KRW / SalesAmt_USD / SalesAmt_LOC / RTF_SCP (금액·RTF 계열)
+SELECT S.MEASURE, COUNT(*) AS 원장_행수,
+       (SELECT COUNT(*) FROM DM_PLN_SALES_PLAN_C C
+         WHERE C.DIVISION_ID='81' AND C.MEASURE=S.MEASURE
+           AND C.VERSION_NO=(SELECT MAX(VERSION_NO) FROM DM_MST_VERSION WHERE DIVISION_ID='81' AND VERSION_TYPE='SP_W')) AS 컷오프_행수
+  FROM DM_PLN_SALES_PLAN S
+ WHERE S.DIVISION_ID='81' AND S.YYYYMMDD >= TO_CHAR(FN_NEXT_DAY(SYSDATE,'MON')-7,'YYYYMMDD')
+ GROUP BY S.MEASURE ORDER BY 2 DESC;
+
+-- [12] 최근 컷오프 실행 시각 vs 금액배치 실행 시각 (로그) — 순서 역전 확인
+SELECT PROGRAM_NAME, LOG_TYPE, TO_CHAR(EVENT_DATE,'MM-DD HH24:MI:SS') EVENT_DATE, DESCRIPTION
+  FROM SCM_COM_SYS_LOG
+ WHERE EVENT_DATE >= SYSDATE - 2
+   AND (PROGRAM_NAME LIKE '%SALES_PLAN_CUTOFF%' OR PROGRAM_NAME LIKE '%SALES_PLAN_AMT_CREATE%')
+ ORDER BY EVENT_DATE DESC FETCH FIRST 40 ROWS ONLY;

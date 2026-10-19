@@ -1,0 +1,47 @@
+################ [T1] ⭐ 판가 LOC 원장 — Cell Prod Site × 날짜 · 누가 언제 넣고 고쳤나 ################
+CELL | YYYYMMDD | CUR | PRICE | WHO | AT | UPD_WHO | UPD_AT | KEYS
+-----+----------+-----+-------+-----+----+---------+--------+-----
+(0 rows)
+################ [T2] ⭐ 수요 원장 — 검증 대상 메저만 · Cell Prod Site × 날짜 · 누가 언제 ################
+MEASURE | CELL | YYYYMMDD | QTY | WHO | AT | UPD_WHO | UPD_AT | KEYS
+--------+------+----------+-----+-----+----+---------+--------+-----
+(0 rows)
+################ [T3] ⭐ 판정 — 수요 행별 '그 주 · 같은 Cell Prod Site' 판가 유무 (검증 대상 메저만) ################
+--  SAME_CELL_PRICE 가 비어 있고 JUDGE 가 '없음' 인 행 = 지금 원장 기준으로는 단가 검증에 걸려야 하는 수요
+MEASURE | CELL | YYYYMMDD | WEEK_START | QTY | SAME_CELL_PRICE | OTHER_CELL_PRICE | JUDGE
+--------+------+----------+------------+-----+-----------------+------------------+------
+(0 rows)
+################ [T4] ⭐ 오늘 DMF0082 저장 SP 실행 이력 (최근 30건) ################
+--  START = 저장 시작(IN_PARA = 입력 앞부분) · END + 'FAIL-2' = 검증 차단(DESCRIPTION = 화면 메시지) · 그 외 END = 저장 완료
+AT | WHO | LOG_TYPE | CNT | LOG_MESSAGE
+---+-----+----------+-----+------------
+(0 rows)
+AT | DESCRIPTION
+---+------------
+(0 rows)
+################ [T5] ⭐ 오늘 화면 저장 호출 — 화면이 실제로 보낸 값 (최근 6건, 호출당 3줄) ################
+--  cellProdSiteId · measure · qtyPrice · yyyymmdd 가 줄바꿈('^' 또는 ',')으로 이어진다 — 오창A(HQ06-A)·남경A(NJ01-A) 가 어느 메저에 실렸는지 확인
+ST | WHO | PART | MSG
+---+-----+------+----
+(0 rows)
+################ [T6] 검증 대상/제외 룩업 · Site-Item 조정 제외 여부 ################
+SEGMENT1  | SEGMENT2   | VALID_YN
+----------+------------+---------
+FCST_TYPE | ASF        | Y       
+FCST_TYPE | SDF        | Y       
+FCST_TYPE | SMC        | N       
+FCST_TYPE | SMF        | Y       
+FCST_TYPE | SPF        | Y       
+FCST_TYPE | TST        | Y       
+FCST_TYPE | WSF        | Y       
+MEASURE   | MKT_FCST   | Y       
+MEASURE   | RTF        | Y       
+MEASURE   | SCM_FCST   | Y       
+MEASURE   | VMI_In_Req | Y       
+(11 rows)
+PROJECT_CODE | VALID_YN | SALES_PLAN_ADJUST_YN | JUDGE
+-------------+----------+----------------------+------
+(0 rows)
+=============================================================================
+V06 완료 → V06_SAVE_UNITPRICE_CHECK2_OUT.txt 회신
+=============================================================================

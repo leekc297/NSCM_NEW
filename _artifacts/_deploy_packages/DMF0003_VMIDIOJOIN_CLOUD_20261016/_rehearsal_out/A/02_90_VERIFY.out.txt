@@ -1,0 +1,10 @@
+CHK | N | JUDGE
+V1 마커 | 1 | PASS
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-14 14:06:17 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-16 15:31:54 | 0 | 0
+(2 rows)
+
+V3 J1 적용 문구 1건 · 수정 전 문구 0건 → PASS

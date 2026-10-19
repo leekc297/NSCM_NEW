@@ -1,0 +1,88 @@
+PROC|DIV                                                                           cursor   before    after      dept(b/a)  hash
+DMF0020_GET_SCM_MST_FUTURE_PRICE|40                                                c1         8652     8652          12/12     =  OK
+DMF0020_GET_SCM_MST_FUTURE_PRICE|40                                                c2            1        1              -     =  OK
+DMF0020_GET_SCM_MST_FUTURE_PRICE|81                                                c1         9956     9956          31/31     =  OK
+DMF0020_GET_SCM_MST_FUTURE_PRICE|81                                                c2            1        1              -     =  OK
+DMF0020_GET_SCM_MST_FUTURE_PRICE|82                                                c1        10520    10520          25/25     =  OK
+DMF0020_GET_SCM_MST_FUTURE_PRICE|82                                                c2            1        1              -     =  OK
+DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|81                               c1         2454     2454          13/29     ≠  OK
+DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|82                               c1        38659    38672          25/63     ≠  DIFF
+PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE|40                                  c1            0        0              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE|40                                  c2            1        1              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE|81                                  c1          121      121              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE|81                                  c2            1        1              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE|82                                  c1          107      107              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE|82                                  c2            1        1              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_OWNER_DATA|40                                            c1            0        0              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_OWNER_DATA|40                                            c2            1        1              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_OWNER_DATA|81                                            c1            0        0              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_OWNER_DATA|81                                            c2            1        1              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_OWNER_DATA|82                                            c1            0        0              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_OWNER_DATA|82                                            c2            1        1              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE|40                                  c1         8652     8652          12/12     =  OK
+PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE|40                                  c2            1        1              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE|81                                  c1         9956     9956          31/31     =  OK
+PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE|81                                  c2            1        1              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE|82                                  c1        10520    10520          25/25     =  OK
+PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE|82                                  c2            1        1              -     =  OK
+PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|40                 c1         2152     2152          12/12     ≠  OK
+PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|81                 c1         2454     2454          13/29     ≠  OK
+PKG_DMF0020.P_DMF0020_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|82                 c1        38659    38672          25/63     ≠  DIFF
+PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL|40                           c1         1679     1679          13/13     =  OK
+PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL|40                           c2            1        1              -     =  OK
+PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL|40                           c3            1        1              -     =  OK
+PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL|81                           c1         1156     1156          16/16     =  OK
+PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL|81                           c2            1        1              -     =  OK
+PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL|81                           c3            1        1              -     =  OK
+PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL|82                           c1          736      736          12/12     =  OK
+PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL|82                           c2            1        1              -     =  OK
+PKG_DMF0022.P_DMF0022_GET_DM_PLN_SALES_PLAN_WATERFALL|82                           c3            1        1              -     =  OK
+PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|40                                    c1          370      370          12/12     =  OK
+PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|40                                    c2            1        1              -     =  OK
+PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|40                                    c3            1        1              -     =  OK
+PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|40                                    c4            1        1              -     =  OK
+PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|81                                    c1          517      517          14/14     =  OK
+PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|81                                    c2            1        1              -     =  OK
+PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|81                                    c3            1        1              -     =  OK
+PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|81                                    c4            1        1              -     =  OK
+PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|82                                    c1          199      199          12/12     =  OK
+PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|82                                    c2            1        1              -     =  OK
+PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|82                                    c3            1        1              -     =  OK
+PKG_DMF0035.P_DMF0035_GET_MKT_FCST_WATERFALL|82                                    c4            1        1              -     =  OK
+PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON|40                                   ERR  before=DPY-4024: call timeout of 300000 ms exceeded after=DPY-4024: call timeout of 300000 ms exceeded
+PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON|81                                   c1          394      394              -     =  OK
+PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON|81                                   c2            1        1              -     =  OK
+PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON|82                                   c1          476      476              -     =  OK
+PKG_DMF0040.P_DMF0040_GET_MKT_FCST_COMPARISON|82                                   c2            1        1              -     =  OK
+PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL|40                             c1        13076    13076          13/13     =  OK
+PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL|40                             c2            1        1              -     =  OK
+PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL|40                             c3            1        1              -     =  OK
+PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL|81                             c1            0        0              -     =  OK
+PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL|81                             c2            1        1              -     =  OK
+PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL|81                             c3            1        1              -     =  OK
+PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL|82                             c1            0        0              -     =  OK
+PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL|82                             c2            1        1              -     =  OK
+PKG_DMF0051.P_DMF0051_GET_DM_PLN_BIZ_PLAN_WATERFALL|82                             c3            1        1              -     =  OK
+PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE|40                                      c1            0        0              -     =  OK
+PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE|40                                      c2            1        1              -     =  OK
+PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE|81                                      c1         4390     4390          19/19     =  OK
+PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE|81                                      c2            1        1              -     =  OK
+PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE|82                                      c1          480      480          12/12     =  OK
+PKG_DMF0074.P_DMF0074_GET_METAL_LINK_PRICE|82                                      c2            1        1              -     =  OK
+PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE|40                                   c1          342      342          12/12     =  OK
+PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE|40                                   c2            1        1              -     =  OK
+PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE|81                                   c1          145      145          12/12     =  OK
+PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE|81                                   c2            1        1              -     =  OK
+PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE|82                                   c1           74       74            9/9     =  OK
+PKG_DMF0074.P_DMF0074_GET_METAL_LINK_TEMPLATE|82                                   c2            1        1              -     =  OK
+PKG_DMF0082.P_DMF0082_GET_MAIN_DATA|40                                             ERR  before=ORA-20001: [PKG_DMF0082] ORA-00904: "SORT_KEY": invalid iden after=ORA-20001: [PKG_DMF0082] ORA-00904: "SORT_KEY": invalid iden
+PKG_DMF0082.P_DMF0082_GET_MAIN_DATA|81                                             ERR  before=ORA-20001: [PKG_DMF0082] ORA-00904: "SORT_KEY": invalid iden after=ORA-20001: [PKG_DMF0082] ORA-00904: "SORT_KEY": invalid iden
+PKG_DMF0082.P_DMF0082_GET_MAIN_DATA|82                                             ERR  before=ORA-20001: [PKG_DMF0082] ORA-00904: "SORT_KEY": invalid iden after=ORA-20001: [PKG_DMF0082] ORA-00904: "SORT_KEY": invalid iden
+PKG_DMF0082.P_DMF0082_GET_MAIN_DATA_CURRENT|40                                     ERR  before=ORA-20001: [PKG_DMF0082] ORA-00904: "SORT_KEY": invalid iden after=ORA-20001: [PKG_DMF0082] ORA-00904: "SORT_KEY": invalid iden
+PKG_DMF0082.P_DMF0082_GET_MAIN_DATA_CURRENT|81                                     ERR  before=ORA-20001: [PKG_DMF0082] ORA-00904: "SORT_KEY": invalid iden after=ORA-20001: [PKG_DMF0082] ORA-00904: "SORT_KEY": invalid iden
+PKG_DMF0082.P_DMF0082_GET_MAIN_DATA_CURRENT|82                                     ERR  before=ORA-20001: [PKG_DMF0082] ORA-00904: "SORT_KEY": invalid iden after=DPY-4024: call timeout of 300000 ms exceeded
+PKG_DMF0082.P_DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|40           c1         2220     2220          12/12     ≠  OK
+PKG_DMF0082.P_DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|81           c1         2454     2454          13/29     ≠  OK
+PKG_DMF0082.P_DMF0082_POPUP_GET_SCM_MST_FUTURE_PRICE_SAVE_PRICE_POPUP|82           ERR  before=- after=DPY-4024: call timeout of 300000 ms exceeded
+
+행수 동일 커서 = 75 / 상이 = 2

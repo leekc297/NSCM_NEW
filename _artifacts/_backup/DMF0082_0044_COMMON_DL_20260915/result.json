@@ -1,0 +1,339 @@
+{
+  "ref": "eb32123a",
+  "rows": [
+    {
+      "file": "features/demand/src/pages/forecast-price/ForecastPrice.tsx",
+      "cls": "ADOPT_RESOLVED",
+      "base": "dcbb2a54",
+      "local_vs_base": 27,
+      "result": "충돌 구간 = 공통 동일 구현 → 공통 HEAD 채택(잔여 = 주석·미사용 상수뿐)"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/__asis-mapping__.md",
+      "cls": "MERGE",
+      "base": "3f5138d2",
+      "local_vs_base": 258,
+      "result": "3-way 병합 유지(로컬 대사표 행 추가분) · BOM 제거"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/ForecastPriceForm.module.scss",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/ForecastPriceForm.tsx",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/ForecastPriceGrid.tsx",
+      "cls": "MERGE",
+      "base": "74dfa6c5",
+      "local_vs_base": 8,
+      "result": "공통 HEAD + [E20260901-CPSDISP] 1블록(공통 미반영 — 로컬 DataGrid comboParamExcludes 전제)"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/ForecastPriceGridUtils.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/ForecastPriceGridUtils.ts",
+      "cls": "ADOPT_RESOLVED",
+      "base": "aa32d17e",
+      "local_vs_base": 64,
+      "result": "충돌 구간 = 공통 동일 구현 → 공통 HEAD 채택(잔여 = 주석·미사용 상수뿐)"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.module.scss",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/modals/ExchangeRateModal.tsx",
+      "cls": "ADOPT_RESOLVED",
+      "base": "4dd8f82e",
+      "local_vs_base": 41,
+      "result": "충돌 구간 = 공통 동일 구현 → 공통 HEAD 채택(잔여 = 주석·미사용 상수뿐)"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/modals/ForecastTemplateModal.module.scss",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/modals/ForecastTemplateModal.tsx",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.module.scss",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx",
+      "cls": "ADOPT_RESOLVED",
+      "base": "03e57138",
+      "local_vs_base": 10,
+      "result": "충돌 구간 = 공통 동일 구현 → 공통 HEAD 채택(잔여 = 주석·미사용 상수뿐)"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.module.scss",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/modals/exchangeRateModalStore.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/modals/index.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/modals/savePricePeriodModalStore.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/components/modals/versionSelectModalStore.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/forecast-price.constants.ts",
+      "cls": "ADOPT_RESOLVED",
+      "base": "f8c3e9ae",
+      "local_vs_base": 18,
+      "result": "충돌 구간 = 공통 동일 구현 → 공통 HEAD 채택(잔여 = 주석·미사용 상수뿐)"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/forecast-price.types.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/index.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/useForecastPriceStore.test.tsx",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/useForecastPriceStore.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.api.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.asFromSite.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.asFromSite.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.combo.ts",
+      "cls": "ADOPT",
+      "why": "로컬 = 공통 4e9d39fc 판본"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.editLock.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.editLock.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.excelForm.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.excelForm.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.groupMeasure.test.ts",
+      "cls": "ADOPT_RESOLVED",
+      "base": "f5a28bf6",
+      "local_vs_base": 4,
+      "result": "로컬 잔여 = 공통에 이미 반영된 동일 기능의 구판(08-11~08-26)·따옴표 포맷 → 공통 HEAD 채택"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.groupMeasure.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.measureEdit.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.save.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.save.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.searchCombos.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.validate.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.validate.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.wsAuth.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/forecast-price/utils/forecast-price.wsAuth.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/SalesReports.module.scss",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/SalesReports.tsx",
+      "cls": "ADOPT_RESOLVED",
+      "base": "0234d2ca",
+      "local_vs_base": 9,
+      "result": "로컬 잔여 = 공통에 이미 반영된 동일 기능의 구판(08-11~08-26)·따옴표 포맷 → 공통 HEAD 채택"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/__asis-mapping__.md",
+      "cls": "SAME",
+      "result": "3-way 병합 유지(로컬 대사표 행 추가분) · BOM 제거"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/components/SalesReportsForm.module.scss",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/components/SalesReportsForm.tsx",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx",
+      "cls": "ADOPT_RESOLVED",
+      "base": "0234d2ca",
+      "local_vs_base": 2,
+      "result": "로컬 잔여 = 공통에 이미 반영된 동일 기능의 구판(08-11~08-26)·따옴표 포맷 → 공통 HEAD 채택"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/components/SalesReportsModals.tsx",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.module.scss",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/components/modals/TextboxModal.tsx",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/components/modals/exchangeRateModalStore.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/components/modals/index.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/components/modals/textboxModalStore.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/index.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/sales-reports.constants.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/sales-reports.types.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/useSalesReportsStore.test.tsx",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/useSalesReportsStore.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.api.test.ts",
+      "cls": "ADOPT_RESOLVED",
+      "base": "90cb98f5",
+      "local_vs_base": 4,
+      "result": "로컬 잔여 = 공통에 이미 반영된 동일 기능의 구판(08-11~08-26)·따옴표 포맷 → 공통 HEAD 채택"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.api.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.division.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.division.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.editLock.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.editLock.ts",
+      "cls": "ADOPT_RESOLVED",
+      "base": "0234d2ca",
+      "local_vs_base": 15,
+      "result": "로컬 잔여 = 공통에 이미 반영된 동일 기능의 구판(08-11~08-26)·따옴표 포맷 → 공통 HEAD 채택"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.gridCombos.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.gridCombos.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.merge.ts",
+      "cls": "ADOPT",
+      "why": "로컬 = 공통 2a5e4b20 판본"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.save.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.save.ts",
+      "cls": "ADOPT_RESOLVED",
+      "base": "0234d2ca",
+      "local_vs_base": 9,
+      "result": "로컬 잔여 = 공통에 이미 반영된 동일 기능의 구판(08-11~08-26)·따옴표 포맷 → 공통 HEAD 채택"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.validate.test.ts",
+      "cls": "SAME"
+    },
+    {
+      "file": "features/demand/src/pages/sales-reports/utils/sales-reports.validate.ts",
+      "cls": "SAME"
+    }
+  ]
+}

@@ -1,0 +1,172 @@
+﻿################ [P0] ⭐ 자동 — 최근 1 분 PKG_DMF0082 진입 ASH 상위 3 SQL_ID 의 계획 (ALLSTATS LAST) ################
+PLAN_TABLE_OUTPUT
+-----------------
+(0 rows)
+--  확인 포인트:
+--   ① GT_DMF0082_* 의 E-Rows 가 1 인데 실제(A-Rows/ROWS_PER_EX)는 수만 = 파싱 시점 GTT 추정 붕괴 (07-31 DMF0003 유형)
+--   ② SCM_MST_FUTURE_PRICE / DM_PLN_SALES_PLAN / DM_PLN_MKT_FCST 에 TABLE ACCESS FULL 또는 NESTED LOOPS 안쪽 INDEX RANGE SCAN 반복 = 접근경로 문제
+--   ③ MERGE JOIN CARTESIAN / NESTED LOOPS 아래 대용량 = 조인 순서 오류
+--   ④ Note 절: dynamic statistics used: dynamic sampling (level=2) 표기 여부 — 없으면 DS=0 으로 파싱된 커서
+--   ⑤ Peeked Binds: :B1 (p_division_id) 가 '82' 인데 81 조회가 이 커서를 재사용 중이면 82 기준 계획
+################ [P1] 지정 SQL_ID = 6bucw2kzuc0nt — 자식 커서 목록 (계획별 1회당 비용 · 공유 사유) ################
+CH | PHV        | EX | SEC_PER_EX | BG_PER_EX | DR_PER_EX | ROWS_PER_EX | COST  | LINE | NOW_RUN | LOADED              | LAST_ACT    | BS | SH | BASELINE | PROFILE
+---+------------+----+------------+-----------+-----------+-------------+-------+------+---------+---------------------+-------------+----+----+----------+--------
+0  | 3737877804 | 4  | 0.15       | 19383     | 0         | 15461       | 11910 | 1500 | 0       | 2026-10-09/15:07:21 | 10-09 15:25 | Y  | Y  |          |        
+(1 rows)
+################ [P2] SQL 전문 (앞 4000자) ################
+SQL_TEXT                                                                                                      
+--------------------------------------------------------------------------------------------------------------
+INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_
+(1 rows)
+################ [P3] ⭐ 실행계획 — 가장 최근 실행된 자식 (E-Rows vs A-Rows · 접근경로 · Peeked Binds) ################
+PLAN_TABLE_OUTPUT                                                                                             
+--------------------------------------------------------------------------------------------------------------
+SQL_ID  6bucw2kzuc0nt, child number 0                                                                         
+-------------------------------------                                                                         
+INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID,                                               
+PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE,                                         
+INCOTERMS , MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, YYYYMMDD, QTY,                                         
+MEASURE_GROUP , CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER,                                        
+DEPT_ID, DEPT_NAME_KO , FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE,                                             
+PROJECT_NAME, PROJECT_OWNER, BIZ_TYPE , SOLDTO_CUSTOMER, COUNTRY_NAME,                                        
+CITY_NAME, PROJECT_STATUS, ITEM_NAME, VMI_YN , CUST_GROUP,                                                    
+CUST_GROUP_DTL, APPLICATION, ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY ,                                          
+FORECAST_INFO_BIZ_TYPE, CELL_TYPE, FORECAST_INFO_ALL,                                                         
+FORECAST_INFO_SPEC , FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME,                                            
+CELL_PER_CAR, CELL_PER_MODULE , MODULE_PER_CAR, SORT_ORDER_NO, ENERGE,                                        
+CELL_QUANTITY, AS_FROM_SITE , CREATE_DATE, LAST_UPDATED_BY,                                                   
+SENDER_CODE, SENDER_NAME, PROJECT_S_OP_REPORT , CURRENCY, VERSION_NO,                                         
+CUTOFF_YYYYMMDD, NOTATION) SELECT A.DIVISION_ID , A.PROJECT_CODE ,                                            
+A.END_CUSTOMER , A.SCM_SITE_ID , A.ITEM_ID , A.DOM_EXP , A.FCST_TYPE ,                                        
+                                                                                                              
+Plan hash value: 3737877804                                                                                   
+                                                                                                              
+--------------------------------------------------------------------------------------------------------------
+| Id  | Operation                  | Name                              | E-Rows | Cost (%CPU)|  OMem |  1Mem |
+--------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT           |                                   |        | 11910 (100)|       |       |
+|   1 |  LOAD TABLE CONVENTIONAL   | GT_DMF0082_TEMP_FCST_N_PRICE      |        |            |       |       |
+|*  2 |   FILTER                   |                                   |        |            |       |       |
+|*  3 |    HASH JOIN               |                                   |   5624 | 11910   (1)|  2278K|  2278K|
+|   4 |     TABLE ACCESS FULL      | GT_DMF0082_T_WS_FCST              |     14 |     2   (0)|       |       |
+|*  5 |     HASH JOIN              |                                   |   5624 | 11908   (1)|  5264K|  2055K|
+|*  6 |      HASH JOIN             |                                   |  19597 |  2622   (1)|  1355K|  1355K|
+|   7 |       TABLE ACCESS FULL    | GT_DMF0082_TEMP_SELECT_MEASURE    |      8 |     2   (0)|       |       |
+|*  8 |       HASH JOIN RIGHT OUTER|                                   |  53891 |  2620   (1)|  1059K|  1059K|
+|   9 |        VIEW                |                                   |   2834 |    12   (9)|       |       |
+|  10 |         SORT GROUP BY      |                                   |   2834 |    12   (9)|  3029K|   773K|
+|* 11 |          TABLE ACCESS FULL | GT_DMF0082_T_LAST_DATA_SETUP_FCST |   2834 |    11   (0)|       |       |
+|* 12 |        TABLE ACCESS FULL   | DM_PLN_CFM_MKT_DEMAND_PLAN        |  53891 |  2152   (1)|       |       |
+|* 13 |      TABLE ACCESS FULL     | GT_DMF0082_TEMP_SITE_ITEM         |  15467 |   191   (0)|       |       |
+--------------------------------------------------------------------------------------------------------------
+                                                                                                              
+Peeked Binds (identified by position):                                                                        
+--------------------------------------                                                                        
+                                                                                                              
+   1 - (VARCHAR2(30), CSID=873): '40'                                                                         
+   2 - (VARCHAR2(30), CSID=873): '20261005'                                                                   
+   3 - (VARCHAR2(30), CSID=873): '20270331'                                                                   
+                                                                                                              
+Predicate Information (identified by operation id):                                                           
+---------------------------------------------------                                                           
+                                                                                                              
+   2 - filter(:B1>=:B2)                                                                                       
+   3 - access("D"."FCST_TYPE"="A"."FCST_TYPE")                                                                
+   5 - access("C"."DIVISION_ID"="A"."DIVISION_ID" AND "C"."PROJECT_CODE"="A"."PROJECT_CODE" AND               
+              "C"."SCM_SITE_ID"="A"."SCM_SITE_ID" AND "C"."ITEM_ID"="A"."ITEM_ID")                            
+   6 - access("B"."MEASURE"="A"."MEASURE")                                                                    
+   8 - access("LD"."DIVISION_ID"="A"."DIVISION_ID" AND "LD"."PROJECT_CODE"="A"."PROJECT_CODE" AND             
+              "LD"."SCM_SITE_ID"="A"."SCM_SITE_ID" AND "LD"."ITEM_ID"="A"."ITEM_ID" AND "LD"."DOM_EXP"="A"."DO
+              "LD"."FCST_TYPE"="A"."FCST_TYPE" AND "LD"."INCOTERMS"="A"."INCOTERMS" AND "LD"."MEASURE"="A"."ME
+  11 - filter("DIVISION_ID"=:B3)                                                                              
+  12 - filter(("A"."YYYYMMDD"<=:B1 AND "A"."YYYYMMDD">=:B2 AND "A"."DIVISION_ID"=:B3 AND "A"."QTY"<>0))       
+  13 - filter(("C"."ITEM_VALID_YN"='Y' AND "C"."DIVISION_ID"=:B3))                                            
+                                                                                                              
+Note                                                                                                          
+-----                                                                                                         
+   - dynamic statistics used: dynamic sampling (level=2)                                                      
+   - Warning: basic plan statistics not available. These are only collected when:                             
+       * hint 'gather_plan_statistics' is used for the statement or                                           
+       * parameter 'statistics_level' is set to 'ALL', at session or system level                             
+                                                                                                              
+(68 rows)
+################ [P4] 다른 계획(PHV)의 자식이 있으면 그 계획도 (가장 빠른 자식 — 계획 간 비교) ################
+PLAN_TABLE_OUTPUT                                                                                             
+--------------------------------------------------------------------------------------------------------------
+SQL_ID  6bucw2kzuc0nt, child number 0                                                                         
+-------------------------------------                                                                         
+INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID,                                               
+PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE,                                         
+INCOTERMS , MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, YYYYMMDD, QTY,                                         
+MEASURE_GROUP , CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER,                                        
+DEPT_ID, DEPT_NAME_KO , FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE,                                             
+PROJECT_NAME, PROJECT_OWNER, BIZ_TYPE , SOLDTO_CUSTOMER, COUNTRY_NAME,                                        
+CITY_NAME, PROJECT_STATUS, ITEM_NAME, VMI_YN , CUST_GROUP,                                                    
+CUST_GROUP_DTL, APPLICATION, ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY ,                                          
+FORECAST_INFO_BIZ_TYPE, CELL_TYPE, FORECAST_INFO_ALL,                                                         
+FORECAST_INFO_SPEC , FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME,                                            
+CELL_PER_CAR, CELL_PER_MODULE , MODULE_PER_CAR, SORT_ORDER_NO, ENERGE,                                        
+CELL_QUANTITY, AS_FROM_SITE , CREATE_DATE, LAST_UPDATED_BY,                                                   
+SENDER_CODE, SENDER_NAME, PROJECT_S_OP_REPORT , CURRENCY, VERSION_NO,                                         
+CUTOFF_YYYYMMDD, NOTATION) SELECT A.DIVISION_ID , A.PROJECT_CODE ,                                            
+A.END_CUSTOMER , A.SCM_SITE_ID , A.ITEM_ID , A.DOM_EXP , A.FCST_TYPE ,                                        
+                                                                                                              
+Plan hash value: 3737877804                                                                                   
+                                                                                                              
+--------------------------------------------------------------------------------------------------------------
+| Id  | Operation                  | Name                              | Rows  | Bytes |TempSpc| Cost (%CPU)| 
+--------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT           |                                   |       |       |       | 11910 (100)| 
+|   1 |  LOAD TABLE CONVENTIONAL   | GT_DMF0082_TEMP_FCST_N_PRICE      |       |       |       |            | 
+|*  2 |   FILTER                   |                                   |       |       |       |            | 
+|*  3 |    HASH JOIN               |                                   |  5624 |    64M|       | 11910   (1)| 
+|   4 |     TABLE ACCESS FULL      | GT_DMF0082_T_WS_FCST              |    14 |  1428 |       |     2   (0)| 
+|*  5 |     HASH JOIN              |                                   |  5624 |    64M|    31M| 11908   (1)| 
+|*  6 |      HASH JOIN             |                                   | 19597 |    31M|       |  2622   (1)| 
+|   7 |       TABLE ACCESS FULL    | GT_DMF0082_TEMP_SELECT_MEASURE    |     8 |  3336 |       |     2   (0)| 
+|*  8 |       HASH JOIN RIGHT OUTER|                                   | 53891 |    65M|  3264K|  2620   (1)| 
+|   9 |        VIEW                |                                   |  2834 |  3229K|       |    12   (9)| 
+|  10 |         SORT GROUP BY      |                                   |  2834 |  3229K|       |    12   (9)| 
+|* 11 |          TABLE ACCESS FULL | GT_DMF0082_T_LAST_DATA_SETUP_FCST |  2834 |  3229K|       |    11   (0)| 
+|* 12 |        TABLE ACCESS FULL   | DM_PLN_CFM_MKT_DEMAND_PLAN        | 53891 |  5525K|       |  2152   (1)| 
+|* 13 |      TABLE ACCESS FULL     | GT_DMF0082_TEMP_SITE_ITEM         | 15467 |   151M|       |   191   (0)| 
+--------------------------------------------------------------------------------------------------------------
+                                                                                                              
+Predicate Information (identified by operation id):                                                           
+---------------------------------------------------                                                           
+                                                                                                              
+   2 - filter(:B1>=:B2)                                                                                       
+   3 - access("D"."FCST_TYPE"="A"."FCST_TYPE")                                                                
+   5 - access("C"."DIVISION_ID"="A"."DIVISION_ID" AND "C"."PROJECT_CODE"="A"."PROJECT_CODE" AND               
+              "C"."SCM_SITE_ID"="A"."SCM_SITE_ID" AND "C"."ITEM_ID"="A"."ITEM_ID")                            
+   6 - access("B"."MEASURE"="A"."MEASURE")                                                                    
+   8 - access("LD"."DIVISION_ID"="A"."DIVISION_ID" AND "LD"."PROJECT_CODE"="A"."PROJECT_CODE" AND             
+              "LD"."SCM_SITE_ID"="A"."SCM_SITE_ID" AND "LD"."ITEM_ID"="A"."ITEM_ID" AND "LD"."DOM_EXP"="A"."DO
+              "LD"."FCST_TYPE"="A"."FCST_TYPE" AND "LD"."INCOTERMS"="A"."INCOTERMS" AND "LD"."MEASURE"="A"."ME
+  11 - filter("DIVISION_ID"=:B3)                                                                              
+  12 - filter(("A"."YYYYMMDD"<=:B1 AND "A"."YYYYMMDD">=:B2 AND "A"."DIVISION_ID"=:B3 AND "A"."QTY"<>0))       
+  13 - filter(("C"."ITEM_VALID_YN"='Y' AND "C"."DIVISION_ID"=:B3))                                            
+                                                                                                              
+Note                                                                                                          
+-----                                                                                                         
+   - dynamic statistics used: dynamic sampling (level=2)                                                      
+                                                                                                              
+(58 rows)
+--  (P3 와 PHV 가 같으면 동일 계획 — 무시)
+################ [P5] 계획에 등장하는 영구 테이블·인덱스 통계 (계획 안의 객체만) ################
+OBJECT_TYPE  | OBJECT_NAME                       | NUM_ROWS | BLOCKS_OR_LEAF | ANALYZED   | CLUF | TMP | IDX_STATUS
+-------------+-----------------------------------+----------+----------------+------------+------+-----+-----------
+TABLE        | DM_PLN_CFM_MKT_DEMAND_PLAN        | 420354   | 7918           | 2026-10-07 |      | N   | -         
+TABLE (TEMP) | GT_DMF0082_TEMP_SELECT_MEASURE    |          |                |            |      | Y   | -         
+TABLE (TEMP) | GT_DMF0082_TEMP_SITE_ITEM         |          |                |            |      | Y   | -         
+TABLE (TEMP) | GT_DMF0082_T_LAST_DATA_SETUP_FCST |          |                |            |      | Y   | -         
+TABLE (TEMP) | GT_DMF0082_T_WS_FCST              |          |                |            |      | Y   | -         
+             | GT_DMF0082_TEMP_FCST_N_PRICE      |          |                |            |      | Y   | -         
+(6 rows)
+################ [P6] AWR 14일 실행 이력 — PHV 변화 시점 (10-02 81MKTAMT · 10-08 재컴파일 전후) (권한 없으면 오류 — 무시) ################
+SNAP_ID | SNAP | PHV | EX | SEC_PER_EX | BG_PER_EX | ROWS_PER_EX
+--------+------+-----+----+------------+-----------+------------
+(0 rows)
+=============================================================================
+D04 완료 → D04_PLAN_OUT.txt 회신 ([P0] 자동 3건 + 지정 SQL_ID 가 있으면 [P1]~[P6])
+=============================================================================

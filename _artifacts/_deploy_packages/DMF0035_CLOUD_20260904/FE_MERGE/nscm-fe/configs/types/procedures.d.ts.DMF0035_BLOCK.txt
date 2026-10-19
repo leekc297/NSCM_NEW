@@ -1,0 +1,258 @@
+// procedures.d.ts — DMF0035 블록 **부분 교체용** (전체 파일 덮어쓰기 ⛔ hook #148).
+// 적용: nscm-fe/configs/types/procedures.d.ts 에서 `DMF0035: {` ~ 다음 MENU 블록 직전까지를 아래로 교체.
+// 이번 변경: 메인 3시트(mktFcstWaterfall/salesPlanWaterfall/bizPlanWaterfall)에 o_rc2(BASIS_DATE/ISO_WEEK) 선언 추가.
+// ⚠ 이 블록을 병합하지 않아도 화면은 빌드된다(o_rc2 를 구조적 접근으로 읽도록 방어) — 다만 계약 정합을 위해 병합 권장.
+  DMF0035: {
+    mktFcstWaterfall: {
+      request: {
+        divisionId: string;
+        deptId: string;
+        endCustomer: string;
+        scmSiteId: string;
+        projectCode: string;
+        itemId: string;
+        itemType: string;
+        fromYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        plantSiteId: string;
+        bizType: string;
+        owner: string;
+        versionNo: string;
+        bucket: string;
+        cellYn: string;
+        senderCode: string;
+        userDeptId: string;
+        groupId: string;
+        userId: string;
+        menuId: string;
+      };
+      response: {
+        o_rc1: {
+          VERSION_NO: string;
+          MEASURE: string;
+          [key: string]: string | number;
+        };
+        /**
+         * o_rc2 — 실적 경계 기준일 (AS-IS ds.Tables[1]): BASIS_DATE / ISO_WEEK.
+         *   당기(당월·당주) 버킷 헤더 강조의 기준. 비어 오면 화면이 오늘 날짜로 degrade 한다.
+         */
+        o_rc2: {
+          BASIS_DATE: string;
+          ISO_WEEK: string | number;
+          [key: string]: string | number;
+        };
+      };
+    };
+    salesPlanWaterfall: {
+      request: {
+        divisionId: string;
+        deptId: string;
+        endCustomer: string;
+        scmSiteId: string;
+        projectCode: string;
+        itemId: string;
+        itemType: string;
+        fromYyyymmdd: string;
+        nowYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        plantSiteId: string;
+        bizType: string;
+        owner: string;
+        internalYn: string;
+        cellYn: string;
+        versionType: string;
+        bucket: string;
+        userDeptId: string;
+        groupId: string;
+        userId: string;
+        menuId: string;
+      };
+      response: {
+        o_rc1: {
+          VERSION_NO: string;
+          MEASURE: string;
+          [key: string]: string | number;
+        };
+        /**
+         * o_rc2 — 실적 경계 기준일 (AS-IS ds.Tables[1]): BASIS_DATE / ISO_WEEK.
+         *   당기(당월·당주) 버킷 헤더 강조의 기준. 비어 오면 화면이 오늘 날짜로 degrade 한다.
+         */
+        o_rc2: {
+          BASIS_DATE: string;
+          ISO_WEEK: string | number;
+          [key: string]: string | number;
+        };
+      };
+    };
+    bizPlanWaterfall: {
+      request: {
+        divisionId: string;
+        deptId: string;
+        endCustomer: string;
+        scmSiteId: string;
+        projectCode: string;
+        itemId: string;
+        itemType: string;
+        fromYyyymmdd: string;
+        nowYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        plantSiteId: string;
+        bizType: string;
+        owner: string;
+        versionType: string;
+        cellYn: string;
+        qtyYn: string;
+        userId: string;
+        menuId: string;
+      };
+      response: {
+        o_rc1: {
+          VERSION_NO: string;
+          MEASURE: string;
+          [key: string]: string | number;
+        };
+        /**
+         * o_rc2 — 실적 경계 기준일 (AS-IS ds.Tables[1]): BASIS_DATE / ISO_WEEK.
+         *   당기(당월·당주) 버킷 헤더 강조의 기준. 비어 오면 화면이 오늘 날짜로 degrade 한다.
+         */
+        o_rc2: {
+          BASIS_DATE: string;
+          ISO_WEEK: string | number;
+          [key: string]: string | number;
+        };
+      };
+    };
+    mktFcstSpreadTitle: {
+      request: {
+        divisionId: string;
+        bucket: string;
+        fromYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        userId: string;
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          SORT_ORDER_NO: string;
+          COLUMN_WIDTH: string;
+          VISIBLE_FLAG: string;
+          HORIZONTAL_ALIGN_CODE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    salesPlanSpreadTitle: {
+      request: {
+        divisionId: string;
+        bucket: string;
+        fromYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        userId: string;
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          SORT_ORDER_NO: string;
+          COLUMN_WIDTH: string;
+          VISIBLE_FLAG: string;
+          HORIZONTAL_ALIGN_CODE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    bizPlanSpreadTitle: {
+      request: {
+        divisionId: string;
+        bucket: string;
+        fromYyyymmdd: string;
+        toYyyymmdd: string;
+        sesUserId: string;
+        userId: string;
+      };
+      response: {
+        o_rc1: {
+          COLUMN_NAME: string;
+          COLUMN_LABEL_NAME: string;
+          SMALL_CLASS_LABEL_NAME: string;
+          LARGE_CLASS_LABEL_NAME: string;
+          DAY_CODE: string;
+          SORT_ORDER_NO: string;
+          COLUMN_WIDTH: string;
+          VISIBLE_FLAG: string;
+          HORIZONTAL_ALIGN_CODE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    version: {
+      request: {
+        startYyyymmdd: string;
+        endYyyymmdd: string;
+        createdBy: string;
+        divisionId: string;
+        versionType: string;
+        description: string;
+      };
+      response: {
+        o_rc1: {
+          CODE: string;
+          VERSION_NO: string;
+          VERSION_DESCRIPTION: string;
+          VERSION_TYPE: string;
+          MONTHLY_ROLLING_FCST: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          EDIT_YN: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+    // MKT/BIZ Version 모달 — PKG_SCM0002.P_SCM0002_GET_VERSIONBYWATERFALLPOPUP
+    //   (versionNo = 설명 LIKE 검색어. 축 'MF_SF_*'/'BP_*' — SP 내부 분기. 2026-08-06 배선)
+    versionWf: {
+      request: {
+        startYyyymmdd: string;
+        endYyyymmdd: string;
+        createdBy: string;
+        divisionId: string;
+        versionType: string;
+        versionNo: string;
+      };
+      response: {
+        o_rc1: {
+          CODE: string;
+          VERSION_NO: string;
+          VERSION_DESCRIPTION: string;
+          VERSION_TYPE: string;
+          EDI_APPLY: string;
+          VER_CRE_SEQ: string | number;
+          YYYYMMDD: string;
+          CREATED_BY: string;
+          CREATION_DATE: string;
+          [key: string]: string | number;
+        };
+      };
+    };
+  };
+  /**
+   * ForecastPrice — DMF0082
+   *
+   * SHEETS:
+   * - `FcstNPrice` (메인 조회/저장 — Division 40/81계열/82. 82=조회 전용(V82-00). canonical PROC `PKG_DMF0082.P_DMF0082_GET_MAIN_DATA`)
+   * - `spreadTitle`   (동적 컬럼 SP `DMF0082_GET_SPREAD_TITLE` — Two-pass 2차)
+   *
+   * PROC IN 이름은 S1.db.md §4 PKG-prefixed canonical 따름.
+   */

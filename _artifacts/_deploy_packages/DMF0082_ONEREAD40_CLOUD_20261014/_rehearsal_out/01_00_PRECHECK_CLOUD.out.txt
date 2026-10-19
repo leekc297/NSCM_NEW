@@ -1,0 +1,23 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-14 17:52:45
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | LINES_N
+L0 | PACKAGE | VALID | 2026-10-09 13:38:31 | 124
+L0 | PACKAGE BODY | VALID | 2026-10-14 17:42:14 | 17319
+(2 rows)
+
+CHK | KIND | N | EXPECT | LINES | JUDGE
+L1 대상줄 | 40 LD_FCST 적재 줄 | 1 | 2 | 1258 | FAIL — 건수 다름 → 10 실행 금지·결과 회신
+L1 대상줄 | 40 LD_PRICE 적재 줄 | 0 | 1 |  | FAIL — 건수 다름 → 10 실행 금지·결과 회신
+L1 대상줄 | 40 수요 원장 FROM | 0 | 1 |  | FAIL — 건수 다름 → 10 실행 금지·결과 회신
+L1 대상줄 | 40 판가 원장 FROM | 1 | 1 | 2013 | PASS
+L1 대상줄 | ONEREAD 끝(81·40판가) | 2 | 1 | 1928,2032 | FAIL — 건수 다름 → 10 실행 금지·결과 회신
+(5 rows)
+
+CHK | N | LINES | JUDGE
+L2 마커 | 4 | 1275,1313,1547,1942 | 적용됨 — 10 재실행은 가드로 무동작
+(1 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

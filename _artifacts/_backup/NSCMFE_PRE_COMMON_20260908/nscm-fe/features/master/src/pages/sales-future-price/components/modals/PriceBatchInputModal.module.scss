@@ -1,0 +1,57 @@
+// PriceBatchInputModal — 표준 모달 레이아웃 (형제 ExchangeRateModal 동일)
+//   SearchArea → gridWrapper → 하단 buttonWrapper.
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+  // ⭐ bounded 컨테이너화 — CustomDialog 높이 안에서 flex 분배해야 grid viewport bounded → vscroll 생성.
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.gridWrapper {
+  position: relative;
+  // flex-basis:0 (flex:1) — 조회 후 grid 내용이 커져도 "남은 높이"만 차지(형제 ExchangeRateModal 동일).
+  //   basis:auto 로 두면 데이터 로드 시 content 높이가 커져 고정높이(50vh) 모달에서 형제(SearchArea,
+  //   overflow:hidden)를 flex 축소시켜 조회조건이 잘리고 grid 가 위로 올라온 것처럼 보임.
+  // min-height:0 = flex 자식 축소 허용 → wijmo grid 가 bounded viewport 확보 → 세로 스크롤바 생성.
+  flex: 1;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+}
+
+.grid {
+  height: 100%;
+  width: 100%;
+
+  // ⭐ 메인 그리드(SalesFuturePrice)와 동일 — 다단(3단) 헤더 셀이 16px row 안에 맞도록 타이포 보정.
+  //   행 높이 자체는 updatedLayout useEffect(48/rowCount)가 전담. CSS 는 텍스트 클리핑 방지만.
+  :global {
+    .wj-colheaders .wj-cell {
+      line-height: 14px;
+      padding: 1px 4px;
+      font-size: 11px;
+    }
+  }
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+// Project / Model popup 조회 — InputField(박스) + 우측 별도 조회 버튼 (catalog PopupSearchInput 동일).
+//   endAdornment(박스 안 버튼) 미사용 → flex 분리로 버튼이 input 우측 끝에 높이 정렬.
+.popupRow {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  width: 100%;
+}

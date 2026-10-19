@@ -1,0 +1,18 @@
+// Period 조회조건 — AS-IS "Period" 단일 라벨 아래 from/to 콤보를 "~" 로 묶는다(Designer layoutControlItem2/5).
+.periodField {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  width: 100%;
+
+  // 두 콤보가 셀 폭을 균등 분할하도록.
+  & > div {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+.periodSeparator {
+  flex: 0 0 auto;
+  padding: 0 2px;
+}

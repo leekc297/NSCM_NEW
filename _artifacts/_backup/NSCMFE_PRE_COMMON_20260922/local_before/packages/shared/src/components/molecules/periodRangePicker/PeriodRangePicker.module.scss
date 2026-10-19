@@ -1,0 +1,149 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+// PeriodField(features/master/src/components/searchFields)의 DatePickerCalendar
+// 입력 박스와 동일한 높이(36px)·아이콘+텍스트 구성.
+.dateBox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.periodSep {
+  flex: none;
+}
+
+.popper {
+  z-index: 1300;
+}
+
+.popup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.panels {
+  display: flex;
+  gap: 16px;
+}
+
+.monthPanel {
+  width: 300px;
+}
+
+.monthHeader {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.selectorButton {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+}
+
+.headerSpacer {
+  flex: 1;
+}
+
+.weekRow {
+  display: grid;
+  grid-template-columns: 44px repeat(7, 1fr);
+  align-items: center;
+}
+
+.weekCell {
+  font-size: 11px;
+  color: #d32f2f;
+  text-align: center;
+}
+
+.weekHeadCell {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 600;
+}
+
+// 기존 DatePickerCalendar(@lges/design-system, MUI DateCalendar 기반) 요일 헤더에서
+// 실측한 값 — 페이지에 임시로 그려 getComputedStyle 로 추출(2026-09-18).
+.dowCell {
+  font-size: 13.7px;
+  color: rgba(0, 0, 0, 0.6);
+  text-align: center;
+  padding: 4px 0;
+}
+
+// 아래 day cell 색상/크기는 기존 DatePickerCalendar 의 실제 렌더링(MuiPickersDay-root)에서
+// getComputedStyle 로 그대로 추출한 값이다 — 임의 색상 대신 기존 달력과 동일한 값을 쓴다.
+.dayCell {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.dayCellMuted {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.dayCellToday {
+  background: rgb(60, 62, 61);
+  color: #fff;
+}
+
+.dayCellSelected {
+  background: rgb(45, 155, 178);
+  color: #fff;
+}
+
+// From~To 사이(선택된 두 원 사이) 이어지는 배경 — 선택색과 같은 색조의 옅은 톤.
+.dayCellInRange {
+  background: rgba(45, 155, 178, 0.12);
+  border-radius: 0;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+}
+
+.quickButtons,
+.footerActions {
+  display: flex;
+  gap: 8px;
+}

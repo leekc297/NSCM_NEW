@@ -1,0 +1,30 @@
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.gridWrapper{
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+}
+.candidateGridWrapper{
+  position: relative;
+  flex: 1 1 0%;
+  min-height: 0;
+  height: 100%;
+}
+.arrowButtonWrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 8px;
+}
+.buttonWrapper{
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}

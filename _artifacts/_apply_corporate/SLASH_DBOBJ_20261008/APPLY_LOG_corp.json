@@ -1,0 +1,840 @@
+{
+ "at": "2026-10-08T16:52:49",
+ "db": "222.110.191.243:2521/ZIOUI1",
+ "stat": {
+  "ok": 32,
+  "applied_lines": 812,
+  "skip_fresh": 65,
+  "skip_blocked": 7,
+  "skip_miss": 5
+ },
+ "log": [
+  {
+   "object": "PROCEDURE|DMF0020_GET_SCM_MST_FUTURE_PRICE",
+   "result": "OK",
+   "applied": 13,
+   "lines_before": 1198,
+   "lines_after": 1198,
+   "same_line_count": true,
+   "sha_before": "553f3de47e03fa99da18d5c8ebecaf26edb21cb0",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:07"
+  },
+  {
+   "object": "PROCEDURE|DMF0043_GET_CONTRIBUTION_SALES_LIST",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "061c24d24293ddc85a4fad4d472a43198b96d1df",
+   "sha_now": "230568732064dda9b0122815300059dc86ac66fe"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_COM0000",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "0fe5724da82d641682d03732b38e7b069d9db4dd",
+   "sha_now": "e8bcfeca877701f8d4939353bf6b76877c319005"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0004",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "d7f6e6cd0cbed9f7ce21e57d05ee4ffcbe8daf0c",
+   "sha_now": "d3a3c7838a00a3e3507ea14045f1e7dedf8fccb6"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0014",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "89e7fd8d98726d81d3a5a61b207c25a95cce7090",
+   "sha_now": "932a9e4f545b01ec07df189b9b966a5dd06ff142"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0020",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "f5e622973ef04817c5713d4011c7bf481e2d9568",
+   "sha_now": "4128f2fc2cdf100c9aeb9883d6517b67d0c1e662"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0021",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "fde16d171fd9afdc70d1cda747c7a3aefe148ada",
+   "sha_now": "975481618b17d88355c70a6bb383e2998aff4030"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0022",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "9aa8c883f85732ac5c905ac77df6c8ec74314763",
+   "sha_now": "9b0998c5aaa8d5f7ca0f357c6621e60abbe12af0"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0035",
+   "result": "OK",
+   "applied": 7,
+   "lines_before": 4519,
+   "lines_after": 4519,
+   "same_line_count": true,
+   "sha_before": "8704581dffeb69453d2f5d3c9064c55af6b17dc0",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:08"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0042",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "583812578807f795065ba72271698b51c81e824c",
+   "sha_now": "dc38d5f948172a60c85d22378033687f733c8878"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0043",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "2c4f5f4d8be733c71e85341cfca3252166e8d1f2",
+   "sha_now": "ef5fc7181583416ca14b2e0abd95d97e31778a44"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0044",
+   "result": "OK",
+   "applied": 331,
+   "lines_before": 10489,
+   "lines_after": 10489,
+   "same_line_count": true,
+   "sha_before": "07db90176cb9b28210d6acbd81e03043cc396dfd",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:10"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0045",
+   "result": "OK",
+   "applied": 68,
+   "lines_before": 2380,
+   "lines_after": 2380,
+   "same_line_count": true,
+   "sha_before": "fe714eee850a61eec9efca70e690bf1f375f5282",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:12"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0049",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "04c94324d51b79b36e2fa744cf0e5cc166a39fa0",
+   "sha_now": "a325db08c544e03c24b940381a6959d5ec245178"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0051",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "7ca03c92095b8f1630b63e9ed5df1aba2740e4d4",
+   "sha_now": "533db8cdde69c30495a214f0915f40845a6d486f"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0072",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "df9744dbf95fd93d59878a9291939d715fd2dc6c",
+   "sha_now": "cb5b3332358a5e8fc847657bd3df2df9e0f4c64e"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0074",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "fa286a5bb76526231c0cdd0e898d922ea898e460",
+   "sha_now": "736580efd0ef55798a314160c13ca5de9a31d601"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_DMF0082",
+   "result": "OK",
+   "applied": 69,
+   "lines_before": 17033,
+   "lines_after": 17033,
+   "same_line_count": true,
+   "sha_before": "9c1273e3f233e6006b1682d27ff1c2f4df66d51f",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:13"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_NSCM_UI_COM_LOOKUP",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "061aacb05f49f4e69a4c8c75f3d6d059e360cce2",
+   "sha_now": "ee951f644a09289380c72f01d731ced9b256c05f"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_S39V2",
+   "result": "OK",
+   "applied": 12,
+   "lines_before": 8113,
+   "lines_after": 8113,
+   "same_line_count": true,
+   "sha_before": "96620238b80f5fcf383aba5a8d33b949e913642c",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:16"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_S39V3",
+   "result": "OK",
+   "applied": 12,
+   "lines_before": 8256,
+   "lines_after": 8256,
+   "same_line_count": true,
+   "sha_before": "22300d884bc620b3efd8481509a1b8ff8be0ecac",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:17"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_S39V4",
+   "result": "OK",
+   "applied": 12,
+   "lines_before": 8256,
+   "lines_after": 8256,
+   "same_line_count": true,
+   "sha_before": "2fea77365268072f43793463e1372b639944ea12",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:18"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_S39V5",
+   "result": "OK",
+   "applied": 12,
+   "lines_before": 8375,
+   "lines_after": 8375,
+   "same_line_count": true,
+   "sha_before": "1ea4d84a42ac0d40b76564c88aedfa7d8fec97ac",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:20"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_S39V6",
+   "result": "OK",
+   "applied": 12,
+   "lines_before": 8375,
+   "lines_after": 8375,
+   "same_line_count": true,
+   "sha_before": "bcae1cb49b3c7a477930ac94b79ca0a9193d2d9d",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:21"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_S39V7",
+   "result": "OK",
+   "applied": 12,
+   "lines_before": 8393,
+   "lines_after": 8393,
+   "same_line_count": true,
+   "sha_before": "5f440cb92433ca8910d981a55e4738ec9da80e60",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:23"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCM0002",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "6ac4247890420a6810c5384dcc2dde868126a043",
+   "sha_now": "f575f50efe5b7b00dfe9907e8f7cbae14492d47d"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0005",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "a4a6961f533b4737f3e46c3644458af21a2b4802",
+   "sha_now": "c31c185cd3e911e8a65ecac2baedb567516228a5"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0007",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "d3f4e0a5a97a70e5e3e5a96ad229ffceb522b08e",
+   "sha_now": "f8bd0518e1dd7c283a575cd9132ad627626132e3"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0009",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "a37356e5fb237e0a002b961618d01f4ea77e2ecc",
+   "sha_now": "46fa82d2c9799174b4ebffa1c3c7581ef0d40517"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0010",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "6ca67b7d671f062f03239e7fd7a9ed7a0efb3f35",
+   "sha_now": "5b758ad3dbfc6935dabb3c566b1f1c8aa352e04f"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0011",
+   "result": "OK",
+   "applied": 3,
+   "lines_before": 2472,
+   "lines_after": 2472,
+   "same_line_count": true,
+   "sha_before": "7351e1e3b7cd2c6226cee5f215d0b35c8df5d4c6",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:24"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0013",
+   "result": "OK",
+   "applied": 15,
+   "lines_before": 6254,
+   "lines_after": 6254,
+   "same_line_count": true,
+   "sha_before": "4657da1c6c35b25b99e6523c0bf6d7135e0472cf",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:25"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0017",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "124f904da6356114861e572fb16bd0301a8bb656",
+   "sha_now": "7ab50a465b78b6419712de3d69a6adffb95b17ab"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0018",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "a08f2dc986a68876d9b36a5f7db6d180561d210d",
+   "sha_now": "3d493a42a8c55ab77543f5c7bdccd2c27323e873"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0020",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "c418190678c2561b3b69efd860c38d3e1e6e7454",
+   "sha_now": "bd179e6929809b04f3272950ba9221b03c5df188"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0025",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "8fdf451661912f4c36742f1c691005b319bb7292",
+   "sha_now": "e790a2d06a2756043578b145f7fc6ac989ef19de"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0027",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "a01f82dea5af507dd19cbfcf671311a0f268f176",
+   "sha_now": "12a879ac263102e96d4009732165581c28c99272"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0030",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "75dea31b83e493478c4fe7d94ec7e893785b34da",
+   "sha_now": "20cdaddbb6316198d9814d48088f0eafe82db2d2"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0031",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "41c1174422cefe8155a7c56198f94d1e29335f91",
+   "sha_now": "aeb26427459cc97ecf13d54748752dfdbf86bfc8"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0039",
+   "result": "OK",
+   "applied": 12,
+   "lines_before": 8424,
+   "lines_after": 8424,
+   "same_line_count": true,
+   "sha_before": "86654aeb85327265b1efdd5fbf8c57ab8401b6ec",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:27"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0039_VF",
+   "result": "OK",
+   "applied": 12,
+   "lines_before": 8157,
+   "lines_after": 8157,
+   "same_line_count": true,
+   "sha_before": "d03723545f58382f3bacfe4f0ed4a78274a3a669",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:28"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0048",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "fe72a393a6f622dfb73a8d34a018ef8ce860d527",
+   "sha_now": "b97c79f88a4b19dbc811e9b2818a0328b1083cf2"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0049",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "33441eacd796e58674922a097002c82b3d51a725",
+   "sha_now": "54ade8e19bc36ecf15db949a64e7fd0b04833517"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0055",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "514e2cfaaef78dc035507c7dec96b464ecc45f27",
+   "sha_now": "f114ced51585835d76533a16c504aedb8e8bc63a"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0098",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "e47f50b73cdf1ace97d03ca3053511ee5fb6002f",
+   "sha_now": "116de55242ac00baddd0ad05dec5e2e8c7477cc9"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0100",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "75d6b172a04a8fdbc39a67721590186f6a121873",
+   "sha_now": "3d6cc5d2af2c0de2cc7d897ec0c853662a5ef5b7"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0105",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "6b6bb9ed1cafe3bad49e9e4c700941b8cb487ae9",
+   "sha_now": "3edaf43c79eb1142593bfb6d4844f644522867a7"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SCP0125",
+   "result": "SKIP(patch-miss)",
+   "applied": 32,
+   "miss": [
+    {
+     "line": 1004,
+     "old": "             , '-'                                                      /* 뒤에서 별도 UPDATE */",
+     "now": "             , '/'                                                      /* 뒤에서 별도 UPDATE */"
+    },
+    {
+     "line": 1520,
+     "old": "           AND A.PROJECT_CODE = '-'",
+     "now": "           AND A.PROJECT_CODE = '/'"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SDM1010",
+   "result": "OK",
+   "applied": 3,
+   "lines_before": 3309,
+   "lines_after": 3309,
+   "same_line_count": true,
+   "sha_before": "a6ab8285674b23a354891d8ffb0a3554389eef2c",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:31"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0012",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "76570e0627c6ddf6b307ff6b28ac2505be116665",
+   "sha_now": "d0535c400a527a8a88f35a37481d68cf2c251158"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0015",
+   "result": "OK",
+   "applied": 17,
+   "lines_before": 11131,
+   "lines_after": 11131,
+   "same_line_count": true,
+   "sha_before": "d5eb4daa0f9566f0501b3d3bb0f369ccdc4b313b",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:32"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0019",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "e811ecdc828c148540268b82cc203b170af160c0",
+   "sha_now": "aa2cacdb01ac75a6385ccacc836287245aaf846e"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0021",
+   "result": "OK",
+   "applied": 3,
+   "lines_before": 6562,
+   "lines_after": 6562,
+   "same_line_count": true,
+   "sha_before": "8abcd5d9fce4ac2a2ea3da9f45057dfb4edb837e",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:34"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0022",
+   "result": "SKIP(patch-miss)",
+   "applied": 18,
+   "miss": [
+    {
+     "line": 1279,
+     "old": "             , NVL(D.ELECTRODE_TYPE, '-')               AS ELECTRODE_TYPE",
+     "now": "             , NVL(NULLIF(RTRIM(D.ELECTRODE_TYPE),''), '/')               AS ELECTRODE_TYPE"
+    },
+    {
+     "line": 1585,
+     "old": "             , NVL(D.ELECTRODE_TYPE, '-')               AS ELECTRODE_TYPE",
+     "now": "             , NVL(NULLIF(RTRIM(D.ELECTRODE_TYPE),''), '/')               AS ELECTRODE_TYPE"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0023",
+   "result": "SKIP(patch-miss)",
+   "applied": 8,
+   "miss": [
+    {
+     "line": 1023,
+     "old": "                                 , NVL(A.SCM_SITE_ID, '-') AS FROM_SITE",
+     "now": "                                 , NVL(A.SCM_SITE_ID, '/') AS FROM_SITE"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0023_CHK",
+   "result": "OK",
+   "applied": 9,
+   "lines_before": 3675,
+   "lines_after": 3675,
+   "same_line_count": true,
+   "sha_before": "c164b91ed7abe5e4c6cf9e1f773ceedb4a163547",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:36"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0026",
+   "result": "SKIP(patch-miss)",
+   "applied": 47,
+   "miss": [
+    {
+     "line": 1278,
+     "old": "             , '-'                              AS INCOTERMS",
+     "now": "             , '/'                              AS INCOTERMS"
+    },
+    {
+     "line": 1376,
+     "old": "             , '-'                              AS FCST_TYPE",
+     "now": "             , '/'                              AS FCST_TYPE"
+    }
+   ]
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0045",
+   "result": "OK",
+   "applied": 19,
+   "lines_before": 2141,
+   "lines_after": 2141,
+   "same_line_count": true,
+   "sha_before": "8779ab4e1994c5632a949b34a284f9e9508977d7",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:36"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0060",
+   "result": "OK",
+   "applied": 3,
+   "lines_before": 8282,
+   "lines_after": 8282,
+   "same_line_count": true,
+   "sha_before": "5534172aed8af405bb8f934026479a6961c0c46e",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:37"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0200",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "0fd01343ca450ddbf24b17920237128abe459ef8",
+   "sha_now": "34c0c68e7def39ba55e789ee3ae419d61fa8875f"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SSP0201",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "452a7e62175be59e91929ac66df98481ffe58472",
+   "sha_now": "09f2f1db7a48c66861546ff22e07ac29b5492a08"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SYS0010",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "29b64b40868bb54bbe91b7c9f8bde733dbd4995c",
+   "sha_now": "314a7151d04cf8bd9c582d1b2db6ef37f21392fc"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SYS0012",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "251e2db97c0ce4d3c41b61b069122f600e45d5e2",
+   "sha_now": "c1cf21f692caa3e32e9d692dc65bf2452f339fc6"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SYS0013",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "202357183a6cd852dd2b6f523a6a5674cdf5e8df",
+   "sha_now": "500e288cbb9ed27d2faf597bc5d143baf68f1235"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_SYS0014",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "4ece9ecd596433df389e8d3e08f956fe3aea5ac5",
+   "sha_now": "2447d504d41deb1dff25577ffb6b3a3d22eb304d"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_ZTMP_S015J",
+   "result": "OK",
+   "applied": 10,
+   "lines_before": 2672,
+   "lines_after": 2672,
+   "same_line_count": true,
+   "sha_before": "3f4aea9332d8ae7c2eb950cfd56f6b3a13573729",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:39"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_ZTMP_S015K",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "ceef1d198480f4d88b0a79f96976d51f495cfaad",
+   "sha_now": "cd4843ef4b014a58cbe05ad58e638e4efa8969b1"
+  },
+  {
+   "object": "PACKAGE BODY|PKG_ZTMP_S200B",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "8701024e54cfb65ba3cba5d0d040e044a8061b12",
+   "sha_now": "7b73cc18511b6c3aa98b5ac0f9fdc08693c5c5c8"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_ANL_KPI_SALES_ACCURACY",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "ea47219f4c30bd63ff0841e4ae39dfa83efcc576",
+   "sha_now": "b7781bfb519296de413eb7ceab4c867f44125352"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_ANL_KPI_SUMMARY",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "ffcffae3cda909184c04baedbd833e58425646c7",
+   "sha_now": "58cee68e87154780627f258425dd00aeaff259e8"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_ANL_MKT_PSI_DATA",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "16464cb584c4f2ae86acedb126db861ea3916b21",
+   "sha_now": "7b8656496bf1b8cf5a6b5e00f39e57409f3beb93"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_MKT_FCST_SAVE",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "2b40d9adf0e9501de75735dfa40694b28582d405",
+   "sha_now": "68b1dec79bbf5d2a948af5d1c4056118a3a31874"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_CUST_ITEM_MAPPING",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "22ce05a60c96054d0a6798c979e49029ec72fd7f",
+   "sha_now": "55814ff6419ee3d4ba392876107d89d02247bdfb"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_DNM_CREATE_C_WS_RTF",
+   "result": "OK",
+   "applied": 14,
+   "lines_before": 1242,
+   "lines_after": 1242,
+   "same_line_count": true,
+   "sha_before": "0384fe2b4a1323ed03e2ee834476400a305df6f9",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:40"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_DNM_CREATE_WS_RTF",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "c1d1a35c0bdef29b141adfb6e3990e3ffd2ae594",
+   "sha_now": "567848f07ad14431bda42e1e842bfe6d47587da0"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_DNM_EDI_CALLOFF_DATA",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "f82c94bd6860dd7be91660cf81781db85b2d461d",
+   "sha_now": "07dcf029684b0295e9e113b9e0c65eac059fc49e"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_DNM_EDI_CALLOFF_MKT_FCST",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "9f9beb3693c5277c7819aa1683094fb9ec3256bd",
+   "sha_now": "6a2a5f008307fb40e3452ff3bd4e6a0bef8dd50e"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_CUST_FCST_RECORD",
+   "result": "OK",
+   "applied": 8,
+   "lines_before": 948,
+   "lines_after": 948,
+   "same_line_count": true,
+   "sha_before": "05afaa7cffa6a692681d2b577949b114027c38d7",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:41"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_MKT_FCST_C_QTY_BALANCE_CREATE",
+   "result": "SKIP(patch-miss)",
+   "applied": 30,
+   "miss": [
+    {
+     "line": 2764,
+     "old": "                       FROM ( SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLA",
+     "now": "                       FROM ( SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLA"
+    },
+    {
+     "line": 2766,
+     "old": "                              GROUP BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, P",
+     "now": "                              GROUP BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, P"
+    },
+    {
+     "line": 2775,
+     "old": "                       AND   NVL(A.CELL_PROD_SITE_ID, '-') = NVL(B.CELL_PROD_SITE_ID, '-')  /* [E20260512-000502] 81도 해당",
+     "now": "                       AND   NVL(A.CELL_PROD_SITE_ID, '/') = NVL(B.CELL_PROD_SITE_ID, '/')  /* [E20260512-000502] 81도 해당"
+    }
+   ]
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE",
+   "result": "OK",
+   "applied": 10,
+   "lines_before": 3201,
+   "lines_after": 3201,
+   "same_line_count": true,
+   "sha_before": "81bccba6cf759331ea4ff22567a9764fd8c6e857",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:41"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_MKT_FCST_SALES_RESULT_MAPPING",
+   "result": "OK",
+   "applied": 25,
+   "lines_before": 984,
+   "lines_after": 984,
+   "same_line_count": true,
+   "sha_before": "8819fc9b1d8b67da50e48e9409342540afc49b67",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:42"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_MKT_FCST_TO_NET_DEMAND",
+   "result": "OK",
+   "applied": 5,
+   "lines_before": 819,
+   "lines_after": 819,
+   "same_line_count": true,
+   "sha_before": "db80bcf63d20dec0da869ea88037a9e780fa2139",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:42"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "1b3e9de0758c723a88fbe6220ad6141326630bdc",
+   "sha_now": "edb5c7224e084e66c24b4ba10c433165818036b8"
+  },
+  {
+   "object": "PROCEDURE|PR_DM_PLN_SALES_PLAN_RESULT_MOVE",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "97acafb1fded3477513274be7f2b770a5c1339d8",
+   "sha_now": "543c0f6da1f63518feb102e1833727dd3b2d5c03"
+  },
+  {
+   "object": "PROCEDURE|PR_SCM_ADM_DEPT_CHANGED_AUTH_SYNC",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "0a08f0a9165393309b388d69cef1577844a2be85",
+   "sha_now": "937592ccc1469d3691d3af3c6b7a7d4d3d8b7217"
+  },
+  {
+   "object": "PROCEDURE|PR_SCM_MST_PROJECT_SCHEDULE",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "cec6d7d6ca0f999abc6139be19c1e00564773885",
+   "sha_now": "cc94097ab71fd76ebce6b5c693e4e720683ae5b6"
+  },
+  {
+   "object": "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL",
+   "result": "OK",
+   "applied": 21,
+   "lines_before": 5568,
+   "lines_after": 5568,
+   "same_line_count": true,
+   "sha_before": "97b0716a941a149ad98f21948f0998ac8ba66884",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:43"
+  },
+  {
+   "object": "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_EE",
+   "result": "OK",
+   "applied": 8,
+   "lines_before": 5378,
+   "lines_after": 5378,
+   "same_line_count": true,
+   "sha_before": "254e985302de88da4bfd9da6c8c490680feafe63",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:44"
+  },
+  {
+   "object": "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS",
+   "result": "OK",
+   "applied": 21,
+   "lines_before": 5641,
+   "lines_after": 5641,
+   "same_line_count": true,
+   "sha_before": "b9cab4747de61abeee6415f21b7a3a8fdeb74ffe",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:44"
+  },
+  {
+   "object": "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL",
+   "result": "OK",
+   "applied": 25,
+   "lines_before": 7123,
+   "lines_after": 7123,
+   "same_line_count": true,
+   "sha_before": "4d8bbfb999c99dfcc990d2273f2507bb0047656c",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:45"
+  },
+  {
+   "object": "PROCEDURE|PR_SSP_ANL_SHIPMENT_PLAN_FG",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "7c3537d8a4488489f829923208bfe3767122a971",
+   "sha_now": "e73e55d57a7835409c35b784334e7334b5480eee"
+  },
+  {
+   "object": "PROCEDURE|PR_SSP_ANL_SHIP_UPDATE_BOH_VAL",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "cb1e9048ea73c4d1fc7161af855edff81e029ace",
+   "sha_now": "0057c50a27325cefe8b34e2e4434dc7b488f7c50"
+  },
+  {
+   "object": "PROCEDURE|P_SYS0012_APPROVE",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "e3d478ecf0675525f8ea194023fc2af60b132e9f",
+   "sha_now": "8170411376570304f3c10b28badacd3ea9f7a2a8"
+  },
+  {
+   "object": "PROCEDURE|P_SYS0012_REJECT",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "330c3d4bfd4eb2cfb8ea39f660a3a4e5132cbc61",
+   "sha_now": "e9d7c01d8a13838e1e5df5035b51101c74c181e0"
+  },
+  {
+   "object": "PROCEDURE|P_SYS0014_SAVE_GROUP_USER_M",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "4d7aab2f21dc4b646baa61c5e78c7b5ef50fc507",
+   "sha_now": "c3e817f36ad697e4a0aa7af6e2ce09982f8e94d9"
+  },
+  {
+   "object": "VIEW|SCM_DNM_PRODUCT_RESULT_V",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "3d2d7e612b9000e1996159ea8629b83be7ad74e4",
+   "sha_now": "cbbbf8c621642a3c98f566334f7d13d96a3bc450"
+  },
+  {
+   "object": "VIEW|SCP_XLS_PSI_GLOBAL_ELECTRODE_LOAD_RATIO_V",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "5c4dd17f476c9dcca3cb2b5ffb744ca61af296f5",
+   "sha_now": "73b51db9c6fad7d7466742e22fb625d83de2a737"
+  },
+  {
+   "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_CELL_V",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "3e1fa24a51c9795e34f34c1814b2a455bd4b5e83",
+   "sha_now": "0d27dccc06d4144a7e2e96fc28096c2bbf431f2d"
+  },
+  {
+   "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_BP_V",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "e1fc38b85cb1a6092038716a99a5c98596be46b4",
+   "sha_now": "6dfc0efc7c48909385c7458fcd2b02c0318c72b1"
+  },
+  {
+   "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "cfe6350049085cd46874457df306a117f615881d",
+   "sha_now": "efb691c2b942c2d2778b741bbf3c437d778cafef"
+  },
+  {
+   "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V2",
+   "result": "SKIP(FRESH-GATE: source changed since plan)",
+   "sha_plan": "56ae3716a6425dd54e13a56e32d7d0790c757364",
+   "sha_now": "3f50898a403d6204daf7c62b6a3b2a597a41d7cf"
+  },
+  {
+   "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_V",
+   "result": "OK",
+   "applied": 9,
+   "lines_before": 514,
+   "lines_after": 514,
+   "same_line_count": true,
+   "sha_before": "c7266deea33e2546ecb780d2ad1b638989d3e482",
+   "status": "VALID",
+   "last_ddl": "2026-10-08 16:52:49"
+  }
+ ]
+}

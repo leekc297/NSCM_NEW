@@ -1,0 +1,16 @@
+CHK   | N | JUDGE   
+------+---+---------
+V1 마커 | 0 | FAIL (0)
+(1 rows)
+CHK   | OBJECT_TYPE  | STATUS | LAST_DDL            | ERR_CNT | DEP_INVALID
+------+--------------+--------+---------------------+---------+------------
+V2 상태 | PACKAGE      | VALID  | 2026-10-02 17:59:16 | 0       | 0          
+V2 상태 | PACKAGE BODY | VALID  | 2026-10-12 18:22:22 | 0       | 0          
+(2 rows)
+CHK | LINE | TXT
+----+------+----
+(0 rows)
+V4 div 40 OK  SP 4.77s  RC1 rows=2099
+V4 div 81 OK  SP 6.55s  RC1 rows=2383
+V4 div 82 OK  SP 23.24s  RC1 rows=2608
+V5 user bottle div 40 — 원자료에서 Cell Prod Site 가 갈리는 묶음 189 · 출력 직전 자료 0 → 합쳐짐 (적용 전 상태)

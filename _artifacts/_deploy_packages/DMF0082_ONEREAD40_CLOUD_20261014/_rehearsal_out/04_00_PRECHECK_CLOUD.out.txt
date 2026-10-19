@@ -1,0 +1,23 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-14 17:52:57
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | LINES_N
+L0 | PACKAGE | VALID | 2026-10-09 13:38:31 | 124
+L0 | PACKAGE BODY | VALID | 2026-10-14 17:52:56 | 17292
+(2 rows)
+
+CHK | KIND | N | EXPECT | LINES | JUDGE
+L1 대상줄 | 40 LD_FCST 적재 줄 | 2 | 2 | 1258,1275 | PASS
+L1 대상줄 | 40 LD_PRICE 적재 줄 | 1 | 1 | 1312 | PASS
+L1 대상줄 | 40 수요 원장 FROM | 1 | 1 | 1617 | PASS
+L1 대상줄 | 40 판가 원장 FROM | 1 | 1 | 1972 | PASS
+L1 대상줄 | ONEREAD 끝(81·40판가) | 1 | 1 | 1893 | PASS
+(5 rows)
+
+CHK | N | LINES | JUDGE
+L2 마커 | 0 |  | 미적용 (기대)
+(1 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

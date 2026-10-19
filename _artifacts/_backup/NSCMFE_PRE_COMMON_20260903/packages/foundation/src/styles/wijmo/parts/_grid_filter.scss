@@ -1,0 +1,221 @@
+@use '../misc/font-sizes' as *;
+@use '../misc/variables' as *;
+/*!
+    *
+    * Wijmo Library 5.20251.40
+    * https://developer.mescius.com/wijmo
+    *
+    * Copyright(c) MESCIUS inc. All rights reserved.
+    *
+    * Licensed under the End-User License Agreement For MESCIUS Wijmo Software.
+    * us.sales@mescius.com
+    * https://developer.mescius.com/wijmo/licensing
+    *
+    */
+
+// wijmo.grid.filter
+.wj-flexgrid {
+  .wj-cell.wj-filter-on .wj-elem-filter {
+    // show filter on
+    opacity: 0.9;
+  }
+
+  .wj-cell.wj-filter-off .wj-elem-filter {
+    // hide filter off
+    opacity: 0.5;
+  }
+}
+
+.wj-columnfiltereditor {
+  padding: 10px;
+  min-width: 240px !important; // TFS 435129
+  max-width: 400px;
+
+  .wj-filtertype {
+    text-align: center;
+    margin: 14px 0px;
+    font-size: $wj-filtertype-font-size//12px;
+  }
+
+  .wj-filter-header {
+    text-transform: unset !important;
+  }
+
+  .wj-control {
+    margin-bottom: 6px;
+    width: 100%;
+  }
+  .wj-tabpanel {
+    .wj-filter-tabPanel-top-border {
+      border-top: 1px solid transparent;
+    }
+
+    + div:has(button) {
+      display: flex;
+      justify-content: right;
+    }
+  }
+
+  .wj-valuefilter-editor,
+  .wj-conditionfilter-editor {
+    margin-top: 1em;
+  }
+
+  .wj-valuefilter-editor {
+    [wj-part='div-options'] {
+      margin-bottom: 6px;
+
+      label {
+        display: inline-block; //wjm-35117
+      }
+    }
+
+    label[wj-part='lbl-include-sel'],
+    label[wj-part='select-all-container'] {
+      * {
+        vertical-align: middle;
+      }
+      input {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
+  .wj-filter-options label:has(input:focus-visible) {
+    outline: 1px dotted $wj-txt;
+    outline-offset: -1px;
+  }
+
+  @media (forced-colors: active) {
+    .wj-filter-options label:has(input:focus-visible) {
+      outline: 1px dotted WindowText;
+      outline-offset: -1px;
+    }
+  }
+
+  .wj-conditionfilter-editor > div > label {
+    //WJM-25857
+    display: block;
+    margin-bottom: 0px;
+    font-weight: normal;
+  }
+  .wj-listbox {
+    height: 150px;
+
+    &:not(.wj-state-focused) {
+      .wj-listbox-item.wj-state-selected {
+        color: inherit;
+        background: transparent;
+
+        &:hover {
+          background: $wj-item-hvr;
+          transition-duration: $wj-tdn-focus;
+        }
+      }
+    }
+  }
+
+  label {
+    // TFS 399740
+    display: inline-block;
+    width: auto;
+  }
+
+  a {
+    color: inherit;
+    font-size: inherit;
+    font-weight: bold;
+
+    &.wj-state-disabled {
+      text-decoration: none;
+    }
+  }
+
+  .wj-sort-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    .wj-btn {
+      min-width: 95px;
+    }
+  }
+
+  // WJM-35279, combobox NVDA table read issue
+  .wj-combobox {
+    display: inline-flex;
+
+    .wj-template {
+      width: 100%;
+    }
+
+    .wj-input-group {
+      display: flex;
+
+      [wj-part='input'] {
+        width: auto;
+        display: inline-block;
+        flex: 1;
+      }
+
+      [wj-part='btn'] {
+        display: inline-block;
+        width: fit-content;
+      }
+    }
+  }
+
+  label:has(input[type='radio']:focus-visible) {
+    outline: 1px dotted $wj-txt;
+    border-radius: 4px;
+  }
+
+  @media (forced-colors: active) {
+    label:has(input[type='radio']:focus-visible) {
+      outline: 1px dotted WindowText;
+      border-radius: 4px;
+    }
+  }
+}
+
+//WJM-32950
+.wj-popup .wj-valuefilter-modal-footer {
+  border-top: none;
+  text-align: center;
+  padding-top: 0;
+}
+
+.wj-custom-modal-text p {
+  margin: 0;
+  text-align: center;
+}
+
+div[wj-part='div-exceeds'] {
+  font-size: $wj-filter-div-font-size; //12px;
+}
+
+.wj-columnfiltereditor .wj-tabpane [wj-part='div-exceeds']:focus-visible,
+.wj-columnfiltereditor .wj-filter-header:focus-visible {
+  outline: 1px dotted $wj-txt;
+  outline-offset: -1px;
+}
+@media (prefers-contrast: high), (forced-colors: active) {
+  .wj-columnfiltereditor {
+    .wj-tabpane [wj-part='div-exceeds']:focus-visible,
+    .wj-filter-header:focus-visible {
+      outline: 1px dotted WindowText;
+      outline-offset: -1px;
+    }
+
+    .wj-btn {
+      outline: 1px solid ButtonText;
+      outline-offset: -1px;
+      background-color: ButtonFace;
+      color: ButtonText;
+    }
+
+    .wj-btn:focus-visible,
+    .wj-btn.wj-state-active {
+      outline: 1px dotted ButtonText;
+      outline-offset: -1px;
+    }
+  }
+}

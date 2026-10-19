@@ -1,0 +1,58 @@
+trace: SP 256.74s fetch 0.97s rows=[2622, 6, 1, 5, 181, 1]
+
+div=82 group=ADMIN  SP 256.74s  | dep=1 SQL 합 255.61s  | 갭: DBMS_STATS 0.00s  PL/SQL·기타 1.12s
+
+    라인       초     비중  parse    exec  fetch    실행   하드         LIO         행  sqlid          문장
+  1243 130.843  51.0%   0.00  130.84   0.00     1    2     194,184     7,887  b6wn3kx02pryu  INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, PROJECT_COD
+  1390 119.326  46.5%   0.00  119.33   0.00     1    2     226,410   131,110  5xubgppak00bm  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+     -   0.606   0.2%   0.00    0.61   0.00     1    2      30,416    65,559  5qjb73aqyhg7h  INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, 
+  4155   0.477   0.2%   0.00    0.47   0.00     1    1     138,680    65,559  b3jdzfzz5wvu4  UPDATE SCM_MGR.GT_DMF0082_MF_SP T SET T.VMI_STD_DIO = ( SELECT MAX(A.VMI_YN || '
+     -   0.377   0.1%   0.00    0.38   0.00    13    0     138,520        13  gqdxrrudc0877  BEGIN dbms_stats_internal.ins_session_hg_stats(:cstats); END;
+     -   0.363   0.1%   0.01    0.00   0.35     2    2      19,771         2  8qcc0v8gna6ks  /* SQL Analyze(0) */ select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms
+   849   0.350   0.1%   0.00    0.35   0.00     1    2      18,235    38,206  9xvpghd3tj06u  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJECT_CODE, S
+  3462   0.322   0.1%   0.01    0.31   0.00     1    1       6,608         0  1bjv8z58xd79d  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE WHERE ROWID IN (SELECT RID FROM
+  3372   0.296   0.1%   0.00    0.29   0.00     1    1      84,207    67,182  20xrvz802rfsy  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN ( SELECT B
+  4165   0.244   0.1%   0.00    0.24   0.00     1    1      71,448    65,559  fw3wtf457pau8  UPDATE SCM_MGR.GT_DMF0082_MF_SP SET EDIT_FLAG = 'N'
+  1045   0.178   0.1%   0.00    0.17   0.00     1    1      10,293    38,206  63ar9rz0axr5p  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_S
+  4246   0.176   0.1%   0.00    0.18   0.00     1    2       7,336         2  3x9ardnmfczp0  MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT NVL(DIVISION_ID, '~') AS DI
+  2954   0.139   0.1%   0.00    0.14   0.00     1    2      13,421         0  gkn9tran5v9tb  MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+     -   0.128   0.0%   0.01    0.00   0.12     1    1       7,328         1  f24h8pfhdmc8d  /* SQL Analyze(0) */ select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms
+  2954   0.127   0.0%   0.00    0.13   0.00     1    2      14,393       946  f6r0861xjw0h1  MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+  2954   0.120   0.0%   0.00    0.12   0.00     1    2      13,421         0  cac9cbukwmudc  MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+   599   0.100   0.0%   0.00    0.10   0.00     1    2      31,009     4,227  0rp3b1v236wwz  INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, ITEM_ID, ITE
+  1207   0.075   0.0%   0.00    0.07   0.00     1    2       7,152       855  gfjpdh7fc1u59  INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PROJECT_CODE
+     -   0.068   0.0%   0.00    0.01   0.06   399    0      24,893         0  dp0vgyb1hsfjb  SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SU.NAME, SO.NAME,
+     -   0.066   0.0%   0.00    0.07   0.00    13    0       4,129        13  f96vq4fb0xt44  BEGIN dbms_stats_internal.del_session_col_stats(:cstats); END;
+  1390   0.063   0.0%   0.00    0.06   0.00     1    2      13,374       667  day2h1hdkc8y1  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+     -   0.050   0.0%   0.00    0.00   0.05     1    1       2,749         1  gsacnm2fnc5np  /* SQL Analyze(0) */ select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms
+     -   0.049   0.0%   0.00    0.00   0.04     1    1       2,750         1  1g3ab8bnxs99f  /* SQL Analyze(0) */ select /*+ full(t) no_parallel(t) no_parallel_index(t) dbms
+  1390   0.039   0.0%   0.00    0.04   0.00     1    2       1,461        11  88z04sh7864v4  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+     -   0.037   0.0%   0.00    0.00   0.03    11    0          12     1,134  3qkhfbf2kyvhk  SELECT POS+1 POS, VAL, NONNULLS, NDV, SPLIT, RSIZE, ROWCNT, TOPNCNT, TOPN, NULL 
+  1390   0.037   0.0%   0.00    0.04   0.00     1    2       2,773       953  4r5kugqqq6cuy  INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+     -   0.037   0.0%   0.04    0.00   0.00     1    1           0         0  fk3tvpkzsq2vx  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INC
+     -   0.025   0.0%   0.00    0.00   0.02   249    0           0       249  5rurx5xtjwcu2  SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ KSPPCV.KSPPSTVL F
+  3527   0.023   0.0%   0.00    0.02   0.00     1    1       6,604         0  6jkjp6q7k1aum  DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE F WHERE F.MEASURE_GROUP = 'CUST
+     -   0.021   0.0%   0.00    0.01   0.01   798    0       4,750       798  7azxftvubufnj  SELECT COUNT(UNQ) UNQ, COUNT(PFX) PFX FROM (SELECT /*+ first_rows(1) leading(cc)
+     -   0.020   0.0%   0.00    0.00   0.02     1    1       4,966       256  dtnq5bqjz2j45  select substrb(dump(val,16,0,64),1,240) ep, freq, cdn, ndv, (sum(pop) over()) po
+
+[범주 합계 dep=1]
+  PKG 문장           253.048s  문장   80  하드파싱   55  PARSE콜 0.048s
+  STATS(통계수집)        1.896s  문장  198  하드파싱  274  PARSE콜 0.160s
+  기타(매칭불가)           0.662s  문장   21  하드파싱    5  PARSE콜 0.041s
+  전체 하드파싱 이벤트 372 (재귀 포함)
+
+[기타(매칭불가) 상위]
+   0.606s 5qjb73aqyhg7h INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS , MEASUR
+   0.037s fk3tvpkzsq2vx SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, VERSION_NO, PROJECT_CO
+
+[갭 > 50ms]
+
+[대기 이벤트 합]
+  248.642s  direct path read
+    0.263s  SQL*Net message from client
+    0.094s  direct path write temp
+    0.020s  undo segment extension
+    0.007s  Free private memory to OS
+    0.006s  direct path sync
+    0.005s  log file sync
+    0.003s  direct path read temp

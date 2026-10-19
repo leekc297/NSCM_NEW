@@ -1,0 +1,148 @@
+﻿################ [D0] 접속 DB 식별 (QA / DEV) ################
+USR     | DB_NAME | CON_NAME | SVC    | NOW                
+--------+---------+----------+--------+--------------------
+SCM_MGR | ZIOUI1  | ZIOUI1   | zioui1 | 2026-10-12 10:13:32
+(1 rows)
+################ [D1] PKG_DMF0020 BODY 판본 — 오류 줄 7044 가 이력 INSERT 인지 확인 ################
+OBJECT_TYPE  | STATUS | LAST_DDL            | ERR_CNT
+-------------+--------+---------------------+--------
+PACKAGE      | VALID  | 2026-09-28 16:23:39 | 0      
+PACKAGE BODY | VALID  | 2026-10-12 08:57:55 | 0      
+(2 rows)
+BODY_FP      | JUDGE                                            
+-------------+--------------------------------------------------
+10200/491863 | 사내 10-12 08:57 본 (SLASHOBJ+GRPBYFIX+AJS 10-11 포함)
+(1 rows)
+--  오류 줄 7044 전후: INSERT INTO ... SCM_MST_FUTURE_PRICE_H 와 SEQ1_SCM_MST_FUTURE_PRICE_H.NEXTVAL 이 보여야 한다
+LINE | T                                                       
+-----+---------------------------------------------------------
+7041 |         FROM   SCM_MGR.GT_FCSV_RESULTS_MST              
+7067 |         INSERT INTO SCM_MGR.SCM_MST_FUTURE_PRICE_H      
+7070 |             ,HISTORY_SEQ                                
+7089 |             ,SCM_MGR.SEQ1_SCM_MST_FUTURE_PRICE_H.NEXTVAL
+(4 rows)
+MARKER    | CLOUD | CORP | JUDGE                       | MEMO                                               
+----------+-------+------+-----------------------------+----------------------------------------------------
+AJS_1011  | 34    | 0    | ℹ 사내와 다름 (이번 오류와 무관한 패치 차이) | 사내 10-11 AJS 변경 (참고)                               
+FXZERO    | 10    | 10   | same                        | 09-30 환율 없는 기간 KRW/USD 0 (클라우드 09-30 적용 확인분)       
+GRPBYFIX  | 2     | 2    | same                        | 10-09 ORA-00979 핫픽스 (클라우드 미적용 예상 = 0)              
+H_MAXPLUS | 0     | 0    | same                        | ⛔ 0 이어야 함 — MAX(HISTORY_SEQ)+1 식 채번이 있으면 시퀀스와 충돌 원인
+H_NEXTVAL | 3     | 3    | same                        | 이력 INSERT 3 경로(Excel·저장·Batch) 전부 시퀀스 사용 — 3 이어야 함 
+SLASHOBJ  | 0     | 2    | ℹ 사내와 다름 (이번 오류와 무관한 패치 차이) | 10-08 센티널 '/' 객체 변경 (클라우드 미적용 예상 = 0)              
+(6 rows)
+################ [D2] ⭐⭐ 원인 판정 — 시퀀스 SEQ1_SCM_MST_FUTURE_PRICE_H vs 테이블 MAX(HISTORY_SEQ) ################
+--  LAST_NUMBER = 디스크에 기록된 다음 캐시 구간 시작값(실제 다음 NEXTVAL 은 그보다 최대 CACHE_SIZE 작음). 정상 상태 = LAST_NUMBER > MAX (사내: 25,893,410 > 25,893,391, 차 19)
+--  LAST_NUMBER <= MAX  → 캐시 최댓값조차 이미 테이블에 있음 = 다음 NEXTVAL 충돌 확정(ORA-00001) → BEHIND_BY 만큼 뒤처짐
+SEQUENCE_NAME               | LAST_NUMBER | INCREMENT_BY | CACHE_SIZE | CYCLE_FLAG | H_ROWS  | H_MIN_SEQ | H_MAX_SEQ | LAST_INS            | BEHIND_BY | JUDGE                                                         
+----------------------------+-------------+--------------+------------+------------+---------+-----------+-----------+---------------------+-----------+---------------------------------------------------------------
+SEQ1_SCM_MST_FUTURE_PRICE_H | 25893410    | 1            | 20         | N          | 3239614 | 21798724  | 25893391  | 2026-10-07 18:19:15 | -18       | PASS — 시퀀스 정상(사내 동형). 오류가 계속되면 [D4]~[D6](시퀀스 우회 적재·타 채번) 결과 회신
+(1 rows)
+--  0 rows 또는 SEQUENCE_NAME 이 NULL = SCM_MGR 에 시퀀스가 없음 → [D3b] 전체 소유자 확인 (synonym 이 다른 소유자 시퀀스를 가리키는지)
+################ [D3] 이력 테이블 구조 — PK = HISTORY_SEQ 단일 · 트리거/IDENTITY/DEFAULT 없어야 사내와 동형 ################
+CONSTRAINT_NAME           | CONSTRAINT_TYPE | STATUS  | COLS        | JUDGE                        
+--------------------------+-----------------+---------+-------------+------------------------------
+PK_SCM_MST_FUTURE_PRICE_H | P               | ENABLED | HISTORY_SEQ | same (사내 PK = HISTORY_SEQ 단일)
+(1 rows)
+COLUMN_NAME | DATA_TYPE | NULLABLE | DATA_DEFAULT | DEFAULT_ON_NULL | IDENTITY_COLUMN | JUDGE
+------------+-----------+----------+--------------+-----------------+-----------------+------
+HISTORY_SEQ | NUMBER    | N        |              | NO              | NO              | same 
+(1 rows)
+TRIGGER_NAME | STATUS | TRIGGERING_EVENT | TRIGGER_TYPE | JUDGE
+-------------+--------+------------------+--------------+------
+(0 rows)
+--  (0 rows = 정상)
+################ [D3b] 시퀀스 소유자·시노님·권한 (SCMP_APP 가 SCM_MGR 시퀀스를 보는지) ################
+SEQUENCE_OWNER | SEQUENCE_NAME               | LAST_NUMBER | INCREMENT_BY | CACHE_SIZE | CYCLE_FLAG
+---------------+-----------------------------+-------------+--------------+------------+-----------
+SCM_MGR        | SEQ1_SCM_MST_FUTURE_PRICE_H | 25893410    | 1            | 20         | N         
+(1 rows)
+OWNER    | SYNONYM_NAME                | TABLE_OWNER | TABLE_NAME                 
+---------+-----------------------------+-------------+----------------------------
+SCMP_APP | SCM_MST_FUTURE_PRICE_H      | SCM_MGR     | SCM_MST_FUTURE_PRICE_H     
+SCMP_APP | SEQ1_SCM_MST_FUTURE_PRICE_H | SCM_MGR     | SEQ1_SCM_MST_FUTURE_PRICE_H
+(2 rows)
+GRANTEE  | PRIVILEGE
+---------+----------
+SCMP_APP | SELECT   
+(1 rows)
+--  사내: SCMP_APP SELECT 1건
+################ [D4] ⭐ 시퀀스보다 앞서 있는 이력 행 — 누가/언제 넣었나 (재발 여부 판정) ################
+--  시퀀스를 안 쓰고 들어온 행(데이터 복사·이관·타 경로)이 있으면 그 행들이 여기 나온다. 최근 날짜·반복 작업자면 01 뒤 재발 가능 → 복사 작업에 시퀀스 동기 포함 필요
+CREATED_BY | ATTR8 | N | MIN_SEQ | MAX_SEQ | T0 | T1 | DISTINCT_MINUTES
+-----------+-------+---+---------+---------+----+----+-----------------
+(0 rows)
+--  0 rows = 앞선 행 없음(D2 PASS 와 짝, 사내 0 rows) · DISTINCT_MINUTES 가 1~2 인데 N 이 수천~수백만 = 일괄 복사(이관) 행
+--  [D4b] 최근 30일 이력 적재 일자별 — 일괄 복사 시점 식별 (N 큰 날 · 같은 분에 몰린 날)
+D          | CREATED_BY  | N    | MIN_SEQ  | MAX_SEQ  | DISTINCT_MINUTES
+-----------+-------------+------+----------+----------+-----------------
+2026-10-07 | qjastar     | 42   | 25893350 | 25893391 | 3               
+2026-09-24 | wonqthanq   | 6    | 25893290 | 25893295 | 2               
+2026-09-21 | minyonglee1 | 1782 | 25891508 | 25893289 | 1               
+2026-09-15 | minyonglee1 | 84   | 25891424 | 25891507 | 1               
+(4 rows)
+--  [D4c] HISTORY_SEQ 최상위 10행 (사내 MAX 25,893,391 · qjastar 10-07 18:19 가 사내 마지막 — 같은 값이면 사내 데이터 복사본)
+HISTORY_SEQ | DIVISION_ID | CURRENCY | YYYYMMDD | CREATED_BY | CRE                 | HIST_CRE | ATTRIBUTE8
+------------+-------------+----------+----------+------------+---------------------+----------+-----------
+25893391    | 82          | USD      | 20261130 | qjastar    | 2026-10-07 18:19:15 |          |           
+25893390    | 82          | USD      | 20261130 | qjastar    | 2026-10-07 18:19:15 |          |           
+25893389    | 82          | USD      | 20261130 | qjastar    | 2026-10-07 18:19:15 |          |           
+25893388    | 82          | USD      | 20261123 | qjastar    | 2026-10-07 18:19:15 |          |           
+25893387    | 82          | USD      | 20261123 | qjastar    | 2026-10-07 18:19:15 |          |           
+25893386    | 82          | USD      | 20261123 | qjastar    | 2026-10-07 18:19:15 |          |           
+25893385    | 82          | USD      | 20261116 | qjastar    | 2026-10-07 18:19:15 |          |           
+25893384    | 82          | USD      | 20261116 | qjastar    | 2026-10-07 18:19:15 |          |           
+25893383    | 82          | USD      | 20261116 | qjastar    | 2026-10-07 18:19:15 |          |           
+25893382    | 82          | USD      | 20261109 | qjastar    | 2026-10-07 18:19:15 |          |           
+(10 rows)
+################ [D5] 오류 이력 — 화면 저장 호출(SCM_COM_SYS_LOG) · SP 자체 로그(SCM_SYS_LOG_BATCH) 최근 7일 ################
+ST             | SHT_NM | MNU_BTN_CD | CREATED_BY | ERR  | DIV                                                   | ACTIVE_FLAGS                        | CARET_CNT
+---------------+--------+------------+------------+------+-------------------------------------------------------+-------------------------------------+----------
+10-07 18:19:10 | main   | SAVE       | qjastar    |      | 82^82^82^82^82^82^82^82^82^82^82^82^82^82^82^82^82^82 | M^M^M^M^M^M^M^M^M^M^M^M^M^M^M^M^M^M | 289      
+10-07 18:08:32 | main   | SAVE       | qjastar    |      | 82^82^82^82^82^82^82^82^82^82^82^82                   | M^M^M^M^M^M^M^M^M^M^M^M             | 187      
+10-07 18:06:47 | main   | SAVE       | qjastar    |      | 82^82^82^82^82^82^82^82^82^82^82^82                   | M^M^M^M^M^M^M^M^M^M^M^M             | 187      
+(3 rows)
+--  ERR 에 ORA-00001 PK_SCM_MST_FUTURE_PRICE_H 가 있는 행 = 이번 증상. ACTIVE_FLAGS 의 I 개수 = 신규 행 수(이력 INSERT 행 수)
+T | PROGRAM_NAME | LOG_TYPE | SQL_ERR_CODE | ERR | BT | MSG
+--+--------------+----------+--------------+-----+----+----
+(0 rows)
+################ [D6] 이력 테이블에 INSERT 하는 모든 객체와 채번 방식 — 시퀀스 외 채번(MAX+1·리터럴) 경로 색출 ################
+NAME                                    | TYPE         | LINE  | T                                                                                                              | KIND  
+----------------------------------------+--------------+-------+----------------------------------------------------------------------------------------------------------------+-------
+DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL   | PROCEDURE    | 67    | V_ACTIVE_FLAG <> 'D' 인 행을 SEQ1_SCM_MST_FUTURE_PRICE_H.NEXTVAL 시퀀스와 함께 이력 보관
+                                   | seq   
+DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL   | PROCEDURE    | 908   | INSERT INTO SCM_MGR.SCM_MST_FUTURE_PRICE_H
+                                                                    | insert
+DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL   | PROCEDURE    | 930   | ,SCM_MGR.SEQ1_SCM_MST_FUTURE_PRICE_H.NEXTVAL
+                                                                  | seq   
+DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP | PROCEDURE    | 666   | 							INSERT INTO  SCM_MST_FUTURE_PRICE_H
+                                                                    | insert
+DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP | PROCEDURE    | 687   | 										,SEQ1_SCM_MST_FUTURE_PRICE_H.NEXTVAL
+                                                                | seq   
+PKG_DMF0020                             | PACKAGE BODY | 2217  | INSERT INTO SCM_MST_FUTURE_PRICE_H
+                                                                            | insert
+PKG_DMF0020                             | PACKAGE BODY | 2226  | SEQ1_SCM_MST_FUTURE_PRICE_H.NEXTVAL,
+                                                                          | seq   
+PKG_DMF0020                             | PACKAGE BODY | 7067  | INSERT INTO SCM_MGR.SCM_MST_FUTURE_PRICE_H
+                                                                    | insert
+PKG_DMF0020                             | PACKAGE BODY | 7089  | ,SCM_MGR.SEQ1_SCM_MST_FUTURE_PRICE_H.NEXTVAL
+                                                                  | seq   
+PKG_DMF0020                             | PACKAGE BODY | 7980  | 							INSERT INTO  SCM_MST_FUTURE_PRICE_H
+                                                                    | insert
+PKG_DMF0020                             | PACKAGE BODY | 8001  | 										,SEQ1_SCM_MST_FUTURE_PRICE_H.NEXTVAL
+                                                                | seq   
+PKG_DMF0082                             | PACKAGE BODY | 6565  | INSERT INTO SCM_MST_FUTURE_PRICE_H
+                                                                            | insert
+PKG_DMF0082                             | PACKAGE BODY | 6574  | SEQ1_SCM_MST_FUTURE_PRICE_H.NEXTVAL,
+                                                                          | seq   
+PKG_DMF0082                             | PACKAGE BODY | 15151 | INSERT INTO SCM_MGR.SCM_MST_FUTURE_PRICE_H
+                                                                    | insert
+PKG_DMF0082                             | PACKAGE BODY | 15155 | SELECT DIVISION_ID, SCM_MGR.SEQ1_SCM_MST_FUTURE_PRICE_H.NEXTVAL, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITE | seq   
+(15 rows)
+--  사내: PKG_DMF0020 3경로 + PKG_DMF0082 2경로 + 단독 래퍼 DMF0020_SAVE_*_ALL / _POPUP 2경로 = insert 7 · seq 7 · ❌ 0 (다른 이력 테이블의 HISTORY_SEQ 는 제외됨)
+################ [D7] 실패한 저장의 본 테이블 잔존 여부 — 최근 2일 SCM_MST_FUTURE_PRICE 생성 행 (SP 는 이력 INSERT 실패 시 RAISE → 트랜잭션 롤백이어야 함) ################
+CREATED_BY       | MINUTE_     | N      | DIV | Y0       | Y1      
+-----------------+-------------+--------+-----+----------+---------
+BATCH_CFM_TO_ALL | 10-11 17:28 | 250338 | 40  | 20261005 | 20311229
+(1 rows)
+--  실패 시각(D5 ST)과 같은 분에 행이 있으면 부분 반영 의심 → 회신 (이력만 빠진 상태)
+==== 끝. 판정표: 00_README.md §3 — [D2] ❌ 이면 시퀀스 MAX+1 전진(사용자 별도 진행, 01_FIX_SEQUENCE_REFERENCE.sql 참고) → 02_VERIFY_CLOUD.sql → 화면 재시도

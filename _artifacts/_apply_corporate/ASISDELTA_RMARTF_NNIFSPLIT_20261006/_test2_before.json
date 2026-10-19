@@ -1,0 +1,645 @@
+{
+ "checks": [
+  {
+   "check": "C 추가 전·후 원문 차이 = 삽입 3줄뿐",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "C 삭제 2문장 무변경",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "시험 데이터 실존",
+   "pass": true,
+   "detail": "키 3 · 상황 14"
+  },
+  {
+   "check": "S 모든 상황에서 생성 대상 행 집합 추가 전 == 추가 후",
+   "pass": true,
+   "detail": "28건"
+  },
+  {
+   "check": "S 모든 상황에서 삭제→생성 실행 결과(오류 여부·결과 원장) 추가 전 == 추가 후",
+   "pass": true,
+   "detail": "28건"
+  },
+  {
+   "check": "S 예외 없음: 두 테이블 모두 오류 없이 실행",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "Z 원장 DM_PLN_MKT_FCST (40 RMA 전 행·전 컬럼) 시험 전 == 시험 후",
+   "pass": true,
+   "detail": "123행"
+  },
+  {
+   "check": "Z 원장 DM_PLN_CFM_MKT_DEMAND_PLAN (40 RMA 전 행·전 컬럼) 시험 전 == 시험 후",
+   "pass": true,
+   "detail": "48행"
+  }
+ ],
+ "applied": false,
+ "db_last_ddl": "2026-10-06 15:37:26",
+ "db_status": "VALID",
+ "keys": [
+  [
+   "40",
+   "IM",
+   "IM_CN_NGG",
+   "MCCM349215A1",
+   "E",
+   "RMA",
+   "FCA",
+   "-",
+   "NJ01-A"
+  ],
+  [
+   "40",
+   "Kreisel Elec.",
+   "Kreisel Elec._AT_RIM",
+   "MCCM348018A2",
+   "E",
+   "RMA",
+   "CIF",
+   "-",
+   "NJ01-A"
+  ],
+  [
+   "40",
+   "Rivian Automotive(개발)",
+   "Rivian Automotive_US_TUN",
+   "MCMM9319V9A1-005",
+   "E",
+   "RMA",
+   "FCA",
+   "-",
+   "HQ10-A"
+  ]
+ ],
+ "scenarios": [
+  {
+   "scenario": "예외 없음",
+   "table": "MKT",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    16,
+    123,
+    null
+   ],
+   "run_after": [
+    16,
+    123,
+    null
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "예외 없음",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    16,
+    48,
+    null
+   ],
+   "run_after": [
+    16,
+    48,
+    null
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키1 RTF_SYS_RP",
+   "table": "MKT",
+   "select_rows": [
+    12,
+    12
+   ],
+   "select_same": true,
+   "run_before": [
+    12,
+    123,
+    null
+   ],
+   "run_after": [
+    12,
+    123,
+    null
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키1 RTF_SYS_RP",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    12,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_after": [
+    12,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키1 RTF_PR",
+   "table": "MKT",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    12,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_after": [
+    12,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키1 RTF_PR",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    12,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_after": [
+    12,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키1 RTF_SYS_RP+RTF_PR",
+   "table": "MKT",
+   "select_rows": [
+    12,
+    12
+   ],
+   "select_same": true,
+   "run_before": [
+    8,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_after": [
+    8,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키1 RTF_SYS_RP+RTF_PR",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    8,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_after": [
+    8,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키1 RTF+RTF_SCP",
+   "table": "MKT",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    16,
+    123,
+    null
+   ],
+   "run_after": [
+    16,
+    123,
+    null
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키1 RTF+RTF_SCP",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    16,
+    48,
+    null
+   ],
+   "run_after": [
+    16,
+    48,
+    null
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키2 RTF_SYS_RP",
+   "table": "MKT",
+   "select_rows": [
+    13,
+    13
+   ],
+   "select_same": true,
+   "run_before": [
+    13,
+    123,
+    null
+   ],
+   "run_after": [
+    13,
+    123,
+    null
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키2 RTF_SYS_RP",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    13,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_after": [
+    13,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키2 RTF_PR",
+   "table": "MKT",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    13,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_after": [
+    13,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키2 RTF_PR",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    13,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_after": [
+    13,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키2 RTF_SYS_RP+RTF_PR",
+   "table": "MKT",
+   "select_rows": [
+    13,
+    13
+   ],
+   "select_same": true,
+   "run_before": [
+    10,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_after": [
+    10,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키2 RTF_SYS_RP+RTF_PR",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    10,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_after": [
+    10,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키2 RTF+RTF_SCP",
+   "table": "MKT",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    16,
+    123,
+    null
+   ],
+   "run_after": [
+    16,
+    123,
+    null
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키2 RTF+RTF_SCP",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    16,
+    48,
+    null
+   ],
+   "run_after": [
+    16,
+    48,
+    null
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키3 RTF_SYS_RP",
+   "table": "MKT",
+   "select_rows": [
+    15,
+    15
+   ],
+   "select_same": true,
+   "run_before": [
+    15,
+    123,
+    null
+   ],
+   "run_after": [
+    15,
+    123,
+    null
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키3 RTF_SYS_RP",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    15,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_after": [
+    15,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키3 RTF_PR",
+   "table": "MKT",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    15,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_after": [
+    15,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키3 RTF_PR",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    15,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_after": [
+    15,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키3 RTF_SYS_RP+RTF_PR",
+   "table": "MKT",
+   "select_rows": [
+    15,
+    15
+   ],
+   "select_same": true,
+   "run_before": [
+    14,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_after": [
+    14,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키3 RTF_SYS_RP+RTF_PR",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    14,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_after": [
+    14,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키3 RTF+RTF_SCP",
+   "table": "MKT",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    16,
+    123,
+    null
+   ],
+   "run_after": [
+    16,
+    123,
+    null
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "키3 RTF+RTF_SCP",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    16,
+    48,
+    null
+   ],
+   "run_after": [
+    16,
+    48,
+    null
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "전 키 RTF_SYS_RP+RTF_PR",
+   "table": "MKT",
+   "select_rows": [
+    8,
+    8
+   ],
+   "select_same": true,
+   "run_before": [
+    0,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_after": [
+    0,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN"
+   ],
+   "run_same": true
+  },
+  {
+   "scenario": "전 키 RTF_SYS_RP+RTF_PR",
+   "table": "CFM",
+   "select_rows": [
+    16,
+    16
+   ],
+   "select_same": true,
+   "run_before": [
+    0,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_after": [
+    0,
+    null,
+    "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_CFM_MKT_DEMAND_PLAN) violated on table SCM"
+   ],
+   "run_same": true
+  }
+ ],
+ "all_pass": true
+}

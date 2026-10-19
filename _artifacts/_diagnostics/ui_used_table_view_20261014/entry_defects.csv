@@ -1,0 +1,4 @@
+﻿GROUP,SCREEN,VIA_MENU,SHEET,BTN,ISSUE,FE_EVIDENCE
+SYSTEM,SYS0008,SYS0008,group,SAVE,"FE 호출 (MNU_ID,SHT_NM,BTN) 이 SCM_ADM_MNU_BTN_MPG_M 에 없음 → 런타임 NO_DATA_FOUND(호출 불가)",features/admin/src/pages/group-menu/GroupMenuManagement.tsx:68
+DM,DMF0049,,,,그리드 콤보 SQL_ID 'DIVISION_ID:divisionId' 가 SCM_ADM_CMBO_SQL_M 에 없음,DMF0049/MDF Reports.DEPARTMENT_ID; DMF0049/MDF Reports.DEPT_ID
+DM,DMF0049,,,,"그리드 콤보 SQL_ID 'DIVISION_ID:divisionId,DEPT_ID:dept_id' 가 SCM_ADM_CMBO_SQL_M 에 없음",DMF0049/MDF Reports.END_CUSTOMER

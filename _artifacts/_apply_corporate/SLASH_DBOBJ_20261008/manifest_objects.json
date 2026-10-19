@@ -1,0 +1,875 @@
+[
+ {
+  "otype": "PROCEDURE",
+  "name": "DMF0020_GET_SCM_MST_FUTURE_PRICE",
+  "lines": 1198,
+  "dash_lines": 39,
+  "length": 69687,
+  "file": "DMF0020_GET_SCM_MST_FUTURE_PRICE.PROCEDURE.sql",
+  "edits": 13
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "DMF0043_GET_CONTRIBUTION_SALES_LIST",
+  "lines": 751,
+  "dash_lines": 26,
+  "length": 26380,
+  "file": "DMF0043_GET_CONTRIBUTION_SALES_LIST.PROCEDURE.sql",
+  "edits": 2
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "P_SYS0012_APPROVE",
+  "lines": 120,
+  "dash_lines": 4,
+  "length": 5366,
+  "file": "P_SYS0012_APPROVE.PROCEDURE.sql",
+  "edits": 3
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "P_SYS0012_REJECT",
+  "lines": 83,
+  "dash_lines": 2,
+  "length": 3341,
+  "file": "P_SYS0012_REJECT.PROCEDURE.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "P_SYS0014_SAVE_GROUP_USER_M",
+  "lines": 187,
+  "dash_lines": 1,
+  "length": 9296,
+  "file": "P_SYS0014_SAVE_GROUP_USER_M.PROCEDURE.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_COM0000",
+  "lines": 4101,
+  "dash_lines": 87,
+  "length": 173200,
+  "file": "PKG_COM0000.PACKAGE_BODY.sql",
+  "edits": 26
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0004",
+  "lines": 1606,
+  "dash_lines": 11,
+  "length": 71602,
+  "file": "PKG_DMF0004.PACKAGE_BODY.sql",
+  "edits": 2
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0014",
+  "lines": 11484,
+  "dash_lines": 3,
+  "length": 748114,
+  "file": "PKG_DMF0014.PACKAGE_BODY.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0020",
+  "lines": 10166,
+  "dash_lines": 119,
+  "length": 485686,
+  "file": "PKG_DMF0020.PACKAGE_BODY.sql",
+  "edits": 10
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0021",
+  "lines": 3935,
+  "dash_lines": 176,
+  "length": 257080,
+  "file": "PKG_DMF0021.PACKAGE_BODY.sql",
+  "edits": 16
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0022",
+  "lines": 3791,
+  "dash_lines": 21,
+  "length": 227830,
+  "file": "PKG_DMF0022.PACKAGE_BODY.sql",
+  "edits": 3
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0035",
+  "lines": 4519,
+  "dash_lines": 46,
+  "length": 268743,
+  "file": "PKG_DMF0035.PACKAGE_BODY.sql",
+  "edits": 7
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0042",
+  "lines": 5969,
+  "dash_lines": 109,
+  "length": 304945,
+  "file": "PKG_DMF0042.PACKAGE_BODY.sql",
+  "edits": 93
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0043",
+  "lines": 3453,
+  "dash_lines": 40,
+  "length": 126101,
+  "file": "PKG_DMF0043.PACKAGE_BODY.sql",
+  "edits": 2
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0044",
+  "lines": 10489,
+  "dash_lines": 446,
+  "length": 588455,
+  "file": "PKG_DMF0044.PACKAGE_BODY.sql",
+  "edits": 331
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0045",
+  "lines": 2380,
+  "dash_lines": 126,
+  "length": 118011,
+  "file": "PKG_DMF0045.PACKAGE_BODY.sql",
+  "edits": 68
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0049",
+  "lines": 1298,
+  "dash_lines": 22,
+  "length": 71778,
+  "file": "PKG_DMF0049.PACKAGE_BODY.sql",
+  "edits": 16
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0051",
+  "lines": 1852,
+  "dash_lines": 12,
+  "length": 105794,
+  "file": "PKG_DMF0051.PACKAGE_BODY.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0072",
+  "lines": 885,
+  "dash_lines": 7,
+  "length": 38913,
+  "file": "PKG_DMF0072.PACKAGE_BODY.sql",
+  "edits": 3
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0074",
+  "lines": 4302,
+  "dash_lines": 13,
+  "length": 250292,
+  "file": "PKG_DMF0074.PACKAGE_BODY.sql",
+  "edits": 7
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_DMF0082",
+  "lines": 17033,
+  "dash_lines": 157,
+  "length": 885375,
+  "file": "PKG_DMF0082.PACKAGE_BODY.sql",
+  "edits": 69
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_NSCM_UI_COM_LOOKUP",
+  "lines": 163,
+  "dash_lines": 21,
+  "length": 9747,
+  "file": "PKG_NSCM_UI_COM_LOOKUP.PACKAGE_BODY.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_S39V2",
+  "lines": 8113,
+  "dash_lines": 56,
+  "length": 362087,
+  "file": "PKG_S39V2.PACKAGE_BODY.sql",
+  "edits": 12
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_S39V3",
+  "lines": 8256,
+  "dash_lines": 56,
+  "length": 368255,
+  "file": "PKG_S39V3.PACKAGE_BODY.sql",
+  "edits": 12
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_S39V4",
+  "lines": 8256,
+  "dash_lines": 56,
+  "length": 368395,
+  "file": "PKG_S39V4.PACKAGE_BODY.sql",
+  "edits": 12
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_S39V5",
+  "lines": 8375,
+  "dash_lines": 56,
+  "length": 372583,
+  "file": "PKG_S39V5.PACKAGE_BODY.sql",
+  "edits": 12
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_S39V6",
+  "lines": 8375,
+  "dash_lines": 56,
+  "length": 372718,
+  "file": "PKG_S39V6.PACKAGE_BODY.sql",
+  "edits": 12
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_S39V7",
+  "lines": 8393,
+  "dash_lines": 56,
+  "length": 374032,
+  "file": "PKG_S39V7.PACKAGE_BODY.sql",
+  "edits": 12
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCM0002",
+  "lines": 5944,
+  "dash_lines": 61,
+  "length": 272793,
+  "file": "PKG_SCM0002.PACKAGE_BODY.sql",
+  "edits": 12
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0005",
+  "lines": 2155,
+  "dash_lines": 7,
+  "length": 95234,
+  "file": "PKG_SCP0005.PACKAGE_BODY.sql",
+  "edits": 6
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0007",
+  "lines": 1140,
+  "dash_lines": 9,
+  "length": 70871,
+  "file": "PKG_SCP0007.PACKAGE_BODY.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0009",
+  "lines": 5921,
+  "dash_lines": 109,
+  "length": 270488,
+  "file": "PKG_SCP0009.PACKAGE_BODY.sql",
+  "edits": 41
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0010",
+  "lines": 3026,
+  "dash_lines": 20,
+  "length": 135953,
+  "file": "PKG_SCP0010.PACKAGE_BODY.sql",
+  "edits": 6
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0011",
+  "lines": 2472,
+  "dash_lines": 27,
+  "length": 127311,
+  "file": "PKG_SCP0011.PACKAGE_BODY.sql",
+  "edits": 3
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0013",
+  "lines": 6254,
+  "dash_lines": 59,
+  "length": 284411,
+  "file": "PKG_SCP0013.PACKAGE_BODY.sql",
+  "edits": 15
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0017",
+  "lines": 2369,
+  "dash_lines": 14,
+  "length": 109632,
+  "file": "PKG_SCP0017.PACKAGE_BODY.sql",
+  "edits": 5
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0018",
+  "lines": 455,
+  "dash_lines": 8,
+  "length": 21827,
+  "file": "PKG_SCP0018.PACKAGE_BODY.sql",
+  "edits": 4
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0020",
+  "lines": 1510,
+  "dash_lines": 9,
+  "length": 89202,
+  "file": "PKG_SCP0020.PACKAGE_BODY.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0025",
+  "lines": 831,
+  "dash_lines": 31,
+  "length": 45584,
+  "file": "PKG_SCP0025.PACKAGE_BODY.sql",
+  "edits": 4
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0027",
+  "lines": 862,
+  "dash_lines": 11,
+  "length": 42582,
+  "file": "PKG_SCP0027.PACKAGE_BODY.sql",
+  "edits": 4
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0030",
+  "lines": 975,
+  "dash_lines": 14,
+  "length": 44366,
+  "file": "PKG_SCP0030.PACKAGE_BODY.sql",
+  "edits": 6
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0031",
+  "lines": 1423,
+  "dash_lines": 24,
+  "length": 58227,
+  "file": "PKG_SCP0031.PACKAGE_BODY.sql",
+  "edits": 15
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0039",
+  "lines": 8424,
+  "dash_lines": 56,
+  "length": 377098,
+  "file": "PKG_SCP0039.PACKAGE_BODY.sql",
+  "edits": 12
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0039_VF",
+  "lines": 8157,
+  "dash_lines": 56,
+  "length": 363703,
+  "file": "PKG_SCP0039_VF.PACKAGE_BODY.sql",
+  "edits": 12
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0048",
+  "lines": 621,
+  "dash_lines": 8,
+  "length": 28863,
+  "file": "PKG_SCP0048.PACKAGE_BODY.sql",
+  "edits": 4
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0049",
+  "lines": 21806,
+  "dash_lines": 98,
+  "length": 1057489,
+  "file": "PKG_SCP0049.PACKAGE_BODY.sql",
+  "edits": 37
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0055",
+  "lines": 988,
+  "dash_lines": 12,
+  "length": 48421,
+  "file": "PKG_SCP0055.PACKAGE_BODY.sql",
+  "edits": 4
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0098",
+  "lines": 2834,
+  "dash_lines": 31,
+  "length": 129577,
+  "file": "PKG_SCP0098.PACKAGE_BODY.sql",
+  "edits": 2
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0100",
+  "lines": 5092,
+  "dash_lines": 102,
+  "length": 232479,
+  "file": "PKG_SCP0100.PACKAGE_BODY.sql",
+  "edits": 4
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SCP0105",
+  "lines": 4592,
+  "dash_lines": 35,
+  "length": 232468,
+  "file": "PKG_SCP0105.PACKAGE_BODY.sql",
+  "edits": 3
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SDM1010",
+  "lines": 3309,
+  "dash_lines": 12,
+  "length": 141746,
+  "file": "PKG_SDM1010.PACKAGE_BODY.sql",
+  "edits": 3
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0012",
+  "lines": 414,
+  "dash_lines": 12,
+  "length": 22534,
+  "file": "PKG_SSP0012.PACKAGE_BODY.sql",
+  "edits": 4
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0015",
+  "lines": 11131,
+  "dash_lines": 273,
+  "length": 591438,
+  "file": "PKG_SSP0015.PACKAGE_BODY.sql",
+  "edits": 17
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0019",
+  "lines": 616,
+  "dash_lines": 9,
+  "length": 35123,
+  "file": "PKG_SSP0019.PACKAGE_BODY.sql",
+  "edits": 2
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0021",
+  "lines": 6562,
+  "dash_lines": 115,
+  "length": 347381,
+  "file": "PKG_SSP0021.PACKAGE_BODY.sql",
+  "edits": 3
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0023_CHK",
+  "lines": 3675,
+  "dash_lines": 125,
+  "length": 188744,
+  "file": "PKG_SSP0023_CHK.PACKAGE_BODY.sql",
+  "edits": 9
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0045",
+  "lines": 2141,
+  "dash_lines": 70,
+  "length": 117546,
+  "file": "PKG_SSP0045.PACKAGE_BODY.sql",
+  "edits": 19
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0060",
+  "lines": 8282,
+  "dash_lines": 136,
+  "length": 447180,
+  "file": "PKG_SSP0060.PACKAGE_BODY.sql",
+  "edits": 3
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0200",
+  "lines": 3294,
+  "dash_lines": 28,
+  "length": 156314,
+  "file": "PKG_SSP0200.PACKAGE_BODY.sql",
+  "edits": 2
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SSP0201",
+  "lines": 3159,
+  "dash_lines": 27,
+  "length": 148872,
+  "file": "PKG_SSP0201.PACKAGE_BODY.sql",
+  "edits": 2
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SYS0010",
+  "lines": 1607,
+  "dash_lines": 27,
+  "length": 71297,
+  "file": "PKG_SYS0010.PACKAGE_BODY.sql",
+  "edits": 20
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SYS0012",
+  "lines": 294,
+  "dash_lines": 6,
+  "length": 13356,
+  "file": "PKG_SYS0012.PACKAGE_BODY.sql",
+  "edits": 4
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SYS0013",
+  "lines": 1034,
+  "dash_lines": 14,
+  "length": 38460,
+  "file": "PKG_SYS0013.PACKAGE_BODY.sql",
+  "edits": 3
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_SYS0014",
+  "lines": 344,
+  "dash_lines": 3,
+  "length": 14948,
+  "file": "PKG_SYS0014.PACKAGE_BODY.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_ZTMP_S015J",
+  "lines": 2672,
+  "dash_lines": 123,
+  "length": 160956,
+  "file": "PKG_ZTMP_S015J.PACKAGE_BODY.sql",
+  "edits": 10
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_ZTMP_S015K",
+  "lines": 2121,
+  "dash_lines": 37,
+  "length": 117062,
+  "file": "PKG_ZTMP_S015K.PACKAGE_BODY.sql",
+  "edits": 4
+ },
+ {
+  "otype": "PACKAGE BODY",
+  "name": "PKG_ZTMP_S200B",
+  "lines": 807,
+  "dash_lines": 12,
+  "length": 44844,
+  "file": "PKG_ZTMP_S200B.PACKAGE_BODY.sql",
+  "edits": 2
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_ANL_KPI_SALES_ACCURACY",
+  "lines": 288,
+  "dash_lines": 2,
+  "length": 12959,
+  "file": "PR_DM_ANL_KPI_SALES_ACCURACY.PROCEDURE.sql",
+  "edits": 2
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_ANL_KPI_SUMMARY",
+  "lines": 1259,
+  "dash_lines": 12,
+  "length": 82985,
+  "file": "PR_DM_ANL_KPI_SUMMARY.PROCEDURE.sql",
+  "edits": 6
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_ANL_MKT_PSI_DATA",
+  "lines": 920,
+  "dash_lines": 7,
+  "length": 41028,
+  "file": "PR_DM_ANL_MKT_PSI_DATA.PROCEDURE.sql",
+  "edits": 4
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_MKT_FCST_SAVE",
+  "lines": 887,
+  "dash_lines": 7,
+  "length": 59849,
+  "file": "PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_MKT_FCST_SAVE.PROCEDURE.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_CUST_ITEM_MAPPING",
+  "lines": 624,
+  "dash_lines": 3,
+  "length": 23427,
+  "file": "PR_DM_CUST_ITEM_MAPPING.PROCEDURE.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_DNM_CREATE_C_WS_RTF",
+  "lines": 1242,
+  "dash_lines": 49,
+  "length": 75199,
+  "file": "PR_DM_DNM_CREATE_C_WS_RTF.PROCEDURE.sql",
+  "edits": 14
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_DNM_CREATE_WS_RTF",
+  "lines": 1205,
+  "dash_lines": 50,
+  "length": 73883,
+  "file": "PR_DM_DNM_CREATE_WS_RTF.PROCEDURE.sql",
+  "edits": 14
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_DNM_EDI_CALLOFF_DATA",
+  "lines": 820,
+  "dash_lines": 7,
+  "length": 36197,
+  "file": "PR_DM_DNM_EDI_CALLOFF_DATA.PROCEDURE.sql",
+  "edits": 7
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_DNM_EDI_CALLOFF_MKT_FCST",
+  "lines": 1336,
+  "dash_lines": 16,
+  "length": 85839,
+  "file": "PR_DM_DNM_EDI_CALLOFF_MKT_FCST.PROCEDURE.sql",
+  "edits": 9
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_PLN_CUST_FCST_RECORD",
+  "lines": 948,
+  "dash_lines": 10,
+  "length": 48549,
+  "file": "PR_DM_PLN_CUST_FCST_RECORD.PROCEDURE.sql",
+  "edits": 8
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE",
+  "lines": 3201,
+  "dash_lines": 40,
+  "length": 216268,
+  "file": "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE.PROCEDURE.sql",
+  "edits": 10
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_PLN_MKT_FCST_SALES_RESULT_MAPPING",
+  "lines": 984,
+  "dash_lines": 43,
+  "length": 77728,
+  "file": "PR_DM_PLN_MKT_FCST_SALES_RESULT_MAPPING.PROCEDURE.sql",
+  "edits": 25
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_PLN_MKT_FCST_TO_NET_DEMAND",
+  "lines": 819,
+  "dash_lines": 19,
+  "length": 52757,
+  "file": "PR_DM_PLN_MKT_FCST_TO_NET_DEMAND.PROCEDURE.sql",
+  "edits": 5
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE",
+  "lines": 1980,
+  "dash_lines": 12,
+  "length": 78163,
+  "file": "PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE.PROCEDURE.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_DM_PLN_SALES_PLAN_RESULT_MOVE",
+  "lines": 171,
+  "dash_lines": 2,
+  "length": 5711,
+  "file": "PR_DM_PLN_SALES_PLAN_RESULT_MOVE.PROCEDURE.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SCM_ADM_DEPT_CHANGED_AUTH_SYNC",
+  "lines": 368,
+  "dash_lines": 4,
+  "length": 13826,
+  "file": "PR_SCM_ADM_DEPT_CHANGED_AUTH_SYNC.PROCEDURE.sql",
+  "edits": 2
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SCM_MST_PROJECT_SCHEDULE",
+  "lines": 443,
+  "dash_lines": 1,
+  "length": 19310,
+  "file": "PR_SCM_MST_PROJECT_SCHEDULE.PROCEDURE.sql",
+  "edits": 1
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL",
+  "lines": 5568,
+  "dash_lines": 46,
+  "length": 226696,
+  "file": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL.PROCEDURE.sql",
+  "edits": 21
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_EE",
+  "lines": 5378,
+  "dash_lines": 40,
+  "length": 221667,
+  "file": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_EE.PROCEDURE.sql",
+  "edits": 8
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS",
+  "lines": 5641,
+  "dash_lines": 46,
+  "length": 227113,
+  "file": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS.PROCEDURE.sql",
+  "edits": 21
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL",
+  "lines": 7123,
+  "dash_lines": 54,
+  "length": 272882,
+  "file": "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL.PROCEDURE.sql",
+  "edits": 25
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SSP_ANL_SHIP_UPDATE_BOH_VAL",
+  "lines": 287,
+  "dash_lines": 15,
+  "length": 14167,
+  "file": "PR_SSP_ANL_SHIP_UPDATE_BOH_VAL.PROCEDURE.sql",
+  "edits": 5
+ },
+ {
+  "otype": "PROCEDURE",
+  "name": "PR_SSP_ANL_SHIPMENT_PLAN_FG",
+  "lines": 1534,
+  "dash_lines": 33,
+  "length": 70998,
+  "file": "PR_SSP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql",
+  "edits": 8
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCM_DNM_PRODUCT_RESULT_V",
+  "lines": 259,
+  "dash_lines": 18,
+  "length": 10647,
+  "file": "SCM_DNM_PRODUCT_RESULT_V.VIEW.sql",
+  "edits": 1
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCP_XLS_PSI_GLOBAL_ELECTRODE_LOAD_RATIO_V",
+  "lines": 73,
+  "dash_lines": 3,
+  "length": 11433,
+  "file": "SCP_XLS_PSI_GLOBAL_ELECTRODE_LOAD_RATIO_V.VIEW.sql",
+  "edits": 1
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_CELL_V",
+  "lines": 282,
+  "dash_lines": 5,
+  "length": 25131,
+  "file": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_CELL_V.VIEW.sql",
+  "edits": 3
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_BP_V",
+  "lines": 2249,
+  "dash_lines": 30,
+  "length": 133867,
+  "file": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_BP_V.VIEW.sql",
+  "edits": 14
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V",
+  "lines": 1758,
+  "dash_lines": 30,
+  "length": 93423,
+  "file": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V.VIEW.sql",
+  "edits": 14
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V2",
+  "lines": 1883,
+  "dash_lines": 26,
+  "length": 98243,
+  "file": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V2.VIEW.sql",
+  "edits": 13
+ },
+ {
+  "otype": "VIEW",
+  "name": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_V",
+  "lines": 514,
+  "dash_lines": 18,
+  "length": 24071,
+  "file": "SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_V.VIEW.sql",
+  "edits": 9
+ }
+]

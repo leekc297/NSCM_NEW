@@ -1,0 +1,36 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-13 17:48:55
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL
+L0 | PACKAGE | VALID | 2026-10-09 13:38:31
+L0 | PACKAGE BODY | VALID | 2026-10-13 17:48:50
+(2 rows)
+
+CHK | N | LINE_1 | LINE_2 | JUDGE
+L1 앵커 | 2 | 3867 | 9420 | PASS → 10 적용 가능 (최종 판정은 10 이 5줄 전체로 한다)
+(1 rows)
+
+CHK | N | JUDGE
+L2 마커 | 0 | 미적용 (기대)
+(1 rows)
+
+CHK | COLUMN_NAME | DIVISIONS | JUDGE | USERS_WITH_SET | USERS_HAVING_COL
+L3 필수 | AS_FROM_SITE | 82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 이번 패치로 항상 반환 | 20 | 6
+L3 필수 | VERSION_NO | 40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 이번 패치로 항상 반환 | 20 | 5
+L3 필수 | CELL_PROD_SITE_ID | 40 | 저장 키 (종전부터 항상 반환) | 20 | 11
+L3 필수 | CURRENCY | 40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 20
+L3 필수 | DIVISION_ID | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | 저장 키 (종전부터 항상 반환) | 20 | 20
+L3 필수 | DOM_EXP | 40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 20
+L3 필수 | END_CUSTOMER | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | 저장 키 (종전부터 항상 반환) | 20 | 20
+L3 필수 | FCST_TYPE | 40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 20
+L3 필수 | INCOTERMS | 40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 20
+L3 필수 | ITEM_ID | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | 저장 키 (종전부터 항상 반환) | 20 | 20
+L3 필수 | MEASURE | 40,82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 20
+L3 필수 | PLANT_SITE_ID | 81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 16
+L3 필수 | PROJECT_CODE | 82,81,81_UC,81_HM,81_ST,81_HD,81_HG | 저장 키 (종전부터 항상 반환) | 20 | 17
+L3 필수 | SCM_SITE_ID | 40,81,81_UC,81_HM,81_ST,81_HD,81_HG,82 | 저장 키 (종전부터 항상 반환) | 20 | 20
+(14 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

@@ -1,0 +1,14 @@
+// SSP0201 레이아웃 — splitContainer(상 메인 / 하 서브 + 요청정보), AS-IS 상하 분할(design 01 §1).
+.mainGrid {
+  height: 45%;
+  min-height: 200px;
+}
+
+.subGrid {
+  height: 30%;
+  min-height: 140px;
+}
+
+.requestInfo {
+  padding: 8px 12px;
+}

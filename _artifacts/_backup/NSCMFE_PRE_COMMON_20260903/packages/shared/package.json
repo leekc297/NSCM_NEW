@@ -1,0 +1,52 @@
+{
+  "name": "@shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ],
+  "exports": {
+    "./components": "./src/components/index.ts",
+    "./hooks": "./src/hooks/index.ts",
+    "./stores": "./src/stores/index.ts",
+    "./*": "./src/lib/*.ts"
+  },
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --color",
+    "lint:fix": "eslint src --fix --color",
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@foundation": "workspace:*",
+    "@lges/design-system": "^1.0.17",
+    "@mescius/wijmo.react.all": "^5.20252.44",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^7.3.7",
+    "clsx": "^2.0.0",
+    "immer": "^11.1.3",
+    "jszip": "^3.10.1",
+    "react-draggable": "^4.5.0",
+    "react-resizable-panels": "^4.7.1",
+    "react-window": "^2.2.6",
+    "zustand": "^5.0.0",
+    "@mescius/wijmo.olap": "5.20252.44",
+    "@mescius/wijmo.react.olap": "5.20252.44"
+  },
+  "devDependencies": {
+    "react-router-dom": "^6.28.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0",
+    "react-router-dom": ">=6.0.0"
+  }
+}

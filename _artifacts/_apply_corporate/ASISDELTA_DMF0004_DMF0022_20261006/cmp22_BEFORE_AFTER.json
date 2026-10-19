@@ -1,0 +1,81 @@
+{
+ "C1 div82 CURRENT": {
+  "rows_before": 206,
+  "rows_after": 206,
+  "identical": true
+ },
+ "C2 div81_UC CUR+SP_W": {
+  "rows_before": 47,
+  "rows_after": 49,
+  "identical": false,
+  "site_cols": [
+   "FROM_SITE_ID"
+  ],
+  "site_before": [
+   "N/A"
+  ],
+  "site_after": [
+   "GM00-A",
+   "N/A"
+  ],
+  "sum_diff_measures": [
+   "LOC"
+  ]
+ },
+ "C3 div81 CURRENT": {
+  "rows_before": 1360,
+  "rows_after": 1544,
+  "identical": false,
+  "site_cols": [
+   "FROM_SITE_ID"
+  ],
+  "site_before": [
+   "MI00-P",
+   "N/A",
+   "NB01-A",
+   "WA00-P"
+  ],
+  "site_after": [
+   "HQ07-A",
+   "MI00-P",
+   "MI02-A",
+   "N/A",
+   "NA00-A",
+   "NB01-A",
+   "WA00-A",
+   "WA00-P"
+  ],
+  "sum_diff_measures": [
+   "LOC",
+   "RTF_PR",
+   "RTF_SYS_RP",
+   "SalesAmt_KRW",
+   "SalesAmt_LOC"
+  ]
+ },
+ "C4 div81 SP_W": {
+  "rows_before": 1007,
+  "rows_after": 1143,
+  "identical": false,
+  "site_cols": [
+   "FROM_SITE_ID"
+  ],
+  "site_before": [
+   "N/A"
+  ],
+  "site_after": [
+   "HQ07-A",
+   "MI00-P",
+   "MI02-A",
+   "N/A",
+   "NA00-A",
+   "NB01-A",
+   "NB02-A",
+   "WA00-A",
+   "WA00-P"
+  ],
+  "sum_diff_measures": [
+   "LOC"
+  ]
+ }
+}

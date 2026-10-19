@@ -1,0 +1,208 @@
+﻿MNU_ID,UPPR_MNU_ID,MNU_URL,SYS_MNUL_URL,MNU_MSG_ID,MNU_DESC,SORT_ORD,MNU_LV_NO,MNU_TP_CD,UNIT_TP_CD,USE_YN,N01_ATR_CTN,N02_ATR_CTN,N03_ATR_CTN,N04_ATR_CTN,N05_ATR_CTN,N06_ATR_CTN,N07_ATR_CTN,N08_ATR_CTN,N09_ATR_CTN,N10_ATR_CTN,CREATED_BY,CREATION_DATE,LAST_UPDATED_BY,LAST_UPDATE_DATE,ROUTE_PATH
+SCP0121,Supply_OPT_Plan,plan-group-master,,MNU_SCP0121,Plan Group Master,121,3,SCREEN,S,Y,NSCM,,,,,,,,,,SYSADMIN,2026-10-13 15:10:27,SYSADMIN,2026-10-13 16:54:08,supply/plan-group-master
+SCP0134,Supply_Plan,plan-management,,MNU01015,Plan Management,1,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-10-14 13:12:20,minyonglee1,2026-10-14 16:03:40,supply/plan-management
+SCP0007,Supply_Master,bod,,MNU00072,BOD,7,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-11 09:05:17,minyonglee1,2026-10-14 09:44:42,supply/bod
+COM0013,CommonPopup,-,-,-,Material by Division Popup,13,3,POPUP,-,Y,COMMON,,,,,,,,,,SYSADMIN,2026-09-11 14:09:15,SYSADMIN,2026-09-11 14:09:15,-
+SCP0022,Supply_Master,formation,,MNU00076,Formation,22,3,SCREEN,S,Y,NSCM,,,,,,,,,,SYSADMIN,2026-09-09 13:42:28,minyonglee1,2026-09-10 10:33:22,supply/supply-master/formation
+Supply,,supply,,MNU00003,Supply,3,1,MENU,-,Y,NSCM,,,,,,,,,,minyonglee1,2026-09-09 13:57:41,minyonglee1,2026-09-09 13:57:41,
+TEST,Demand_Master,http://www.naver.com,,MNU_SDM_SampleReq,TEST,574,3,POPUP,-,Y,NSCM,,,,,,,,,,minyonglee1,2026-09-09 17:38:23,minyonglee1,2026-09-09 17:41:46,
+SupplyPopup,Popup,-,,-,SupplyPopup,2,2,MENU,-,Y,COMMON,,,,,,,,,,SYSTEM,2026-09-16 17:09:41,SYSTEM,2026-09-16 17:09:41,-/-
+Supply_OPT_Plan,Supply,opt-plan,,MNU00018,OPT Plan,6,2,MENU,-,Y,NSCM,,,,,,,,,,AJS,2026-09-17 18:38:38,CONVERT_SCP0125,2026-09-26 13:24:22,
+SCP0126,Supply_OPT_Plan,opt-capa,,MNU00121,OPT CAPA,7,3,SCREEN,S,Y,NSCM,,,,,,,,,,AJS,2026-09-17 18:38:38,CONVERT_SCP0126,2026-09-26 07:59:24,supply/opt-capa
+OPT_Plan,OPT,opt-plan,,MNU00018,OPT Plan,2,2,MENU,-,Y,NSCM,,,,,,,,,,SYSADMIN,2026-09-17 18:55:32,SYSADMIN,2026-09-17 18:55:32,OTP/opt-plan
+SCP0123,Supply_OPT_Plan,plan-control,,MNU00116,Plan Control,2,3,SCREEN,S,Y,NSCM,,,,,,,,,,SYSADMIN,2026-09-17 18:55:32,SCP0123_GAPRESOLVE,2026-09-29 11:08:24,supply/plan-control
+SCP0123_PLAN_ID,SupplyPopup,-,,-,Plan ID Create Popup (SCP0123),22,3,POPUP,-,Y,COMMON,,,,,,,,,,SYSADMIN,2026-09-17 18:55:32,SYSADMIN,2026-09-17 18:55:32,-/-/-
+SCP0110,Supply_Master,demand-group-master,,MNU00088,Demand Group Master,110,3,SCREEN,S,Y,NSCM,,,,,,,,,,AJS,2026-09-18 15:21:02,AJS,2026-09-18 15:21:02,supply/supply-master/demand-group-master
+SCP0005,Shipping_Master,distribution-route,,MNU_SCP0005,Distribution Route,5,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT,2026-09-21 17:37:51,CONVERT,2026-09-21 17:52:13,shipping/shipping-master/distribution-route
+SCP0033,Shipping_Master,shipment-semi-dept-day,,MNU_SCP0033,Shipment Semi Dept Day,11,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0033,2026-09-23 09:49:42,CONVERT_SCP0033,2026-09-23 13:34:52,shipping/shipment-semi-dept-day
+SCP0053,Supply_Master,scp-bom,,MNU_SCP0053,SCP BOM (Cell~Pack),53,3,SCREEN,S,Y,NSCM,,,,,,,,,,ZIONEX,2026-09-23 12:02:48,ZIONEX,2026-10-01 23:08:13,supply/supply-master/scp-bom
+SCP0105,Supply_Master,capa-speed-plan,,MNU_SCP0105,CAPA Speed Plan,105,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0105,2026-09-23 18:15:36,CONVERT_SCP0105,2026-09-23 18:15:36,supply/capa-speed-plan
+SCP0104,Supply_Master,capa-line-assign,,MNU_SCP0104,CAPA Line Assign,104,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0104,2026-09-23 18:17:39,CONVERT_SCP0104,2026-09-23 18:17:39,supply/capa-line-assign
+SSP0201,Shipping_Schedule,shipment-change-request,,MNU_SSP0201,Shipment Change Request(Packer),22,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT,2026-09-23 21:42:23,CONVERT,2026-10-07 17:05:28,shipping/shipment-change-request
+SCP0122,Supply_Master,plan-activity-mgmt,,MNU_SCP0122,Plan Activity Mgmt,122,3,SCREEN,S,Y,NSCM,,,,,,,,,,ADMIN,2026-09-24 00:44:04,ADMIN,2026-09-24 00:44:04,supply/plan-activity-mgmt
+SCM0014,Supply_Master,validation-shipment-result,,MNU00108,Intransit Inventory,14,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-24 12:29:44,SYSADMIN,2026-09-28 10:26:13,supply/validation-shipment-result
+SSP0012,Shipping_Schedule,shipment-plan-confirm-detail,,MNU_SSP0012,Shipment Plan Confirm Detail,5,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT,2026-09-24 13:38:53,CONVERT,2026-09-30 10:00:26,shipping/shipment-plan-confirm-detail
+SCP0108,Supply_Master,capa-lob-report,,MNU_SCP0108,LOB Report,108,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0108,2026-09-25 12:39:10,CONVERT_SCP0108,2026-09-25 12:39:10,supply/capa-lob-report
+SCP0098,Supply_Master,capa-mobility-it,,MNU_SCP0098,CAPA (Mobility IT),98,3,SCREEN,S,Y,NSCM,,,,,,,,,,SYSADMIN,2026-09-26 18:19:29,SYSADMIN,2026-10-08 16:56:27,supply/capa-mobility-it
+SSP0200,Shipping_Schedule,shipment-change-request-plan,,MNU_SSP0200,Shipment Change Request,10,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT,2026-09-27 20:59:44,CONVERT,2026-09-29 10:29:13,shipping/shipment-change-request-plan
+SCP0011,Supply_Master,production-plan,,MNU_SCP0011,Production Plan,11,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0011,2026-10-07 12:16:45,CONVERT_SCP0011,2026-10-07 12:16:45,supply/production-plan
+SCP0030,Supply_Master,bod-item,,MNU00073,BOD ITEM,30,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-11 09:01:32,minyonglee1,2026-10-14 09:44:42,supply/supply-master/bod-item
+Supply_Plan,Supply,supply-plan,,MNU00013,Supply Plan,2,2,MENU,-,Y,NSCM,,,,,,,,,,SYSADMIN,2026-09-17 18:26:33,ZIONEX,2026-09-23 15:26:35,
+SCP0025,Supply_Plan,shipment-plan-fix,,MNU00102,Shipment Plan Fix,25,3,SCREEN,S,Y,NSCM,,,,,,,,,,SYSADMIN,2026-09-17 18:26:33,minyonglee1,2026-09-30 14:54:11,supply/supply-plan/shipment-plan-fix
+Shipping,,,,MNU00004,Shipping,4,1,MENU,-,Y,NSCM,,,,,,,,,,minyonglee1,2026-09-18 15:10:56,minyonglee1,2026-09-18 15:10:56,
+SSP0003,Shipping_Schedule,shipment-change-request-confirm-ssp0003,,MNU_SSP0003,Shipment Change Request Confirm,11,3,SCREEN,S,Y,NSCM,,,,,,,,,,ZIONEX,2026-09-22 15:23:23,CONVERT,2026-09-30 09:54:52,shipping/shipment-change-request-confirm-ssp0003
+SSP0015,Shipping_Schedule,shipment-plan-mobility-it,,MNU_SSP0015,Shipment Plan(Mobility & IT),1,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-22 17:12:22,SYSADMIN,2026-09-28 10:26:18,shipping/shipment-plan-mobility-it
+SSP0020,Shipping_Master,delegate,,MNU00094,Delegate,8,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT,2026-09-22 20:00:45,minyonglee1,2026-10-14 09:38:58,shipping/shipping-master/delegate
+SCP0087,Supply_Master,mdm-class-master,,MNU_SCP0087,MDM Class Master,87,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-22 20:00:51,admin,2026-09-22 20:00:51,supply/supply-master/mdm-class-master
+SCP0037,Supply_Master,operation-lt,,MNU_SCP0037,Operation LT,120,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-22 20:03:11,admin,2026-09-22 20:03:11,supply/operation-lt
+SCP0019,Supply_Master,working-time,,MNU_SCP0019,Working Time,19,3,SCREEN,S,Y,NSCM,,,,,,,,,,ZIONEX,2026-09-23 18:10:24,ZIONEX,2026-09-23 18:10:24,supply/supply-master/working-time
+SCP0100,Supply_Plan,global-psi-report,,MNU_SCP0100,Global PSI New,100,3,SCREEN,S,Y,NSCM,,,,,,,,,,ZIONEX,2026-09-23 11:10:10,AJS,2026-09-30 20:30:14,supply/global-psi-report
+SCP0095,Supply_Plan,global-psi-elec,,MNU_SCP0095,Global PSI Elec,95,3,SCREEN,S,Y,NSCM,,,,,,,,,,ZIONEX,2026-09-23 15:27:40,CONVERT_SCP0095,2026-09-26 16:06:35,supply/global-psi-elec
+SCP0002,Supply_Master,line-master,,MNU_SCP0002,Line Master,2,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0002,2026-09-24 13:32:54,CONVERT_SCP0002,2026-09-24 13:32:54,supply/line-master
+SCP0010,Supply_Plan,shipment-plan-semi,,MNU_SCP0010,Shipment Plan SEMI,10,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0010,2026-09-24 14:19:49,CONVERT_SCP0010,2026-09-24 14:19:49,supply/shipment-plan-semi
+SCP0041,Supply_Master,stock-osp,,MNU_SCP0041,Stock OSP,41,3,SCREEN,S,Y,NSCM,,,,,,,,,,ZIONEX,2026-09-24 15:10:33,ZIONEX,2026-09-24 15:10:33,supply/supply-master/stock-osp
+SCP0024,Supply_Plan,production-plan-fix,,MNU00099,Production Plan Fix,24,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-24 17:19:31,minyonglee1,2026-10-14 09:44:51,supply/production-plan-fix
+SSP0019,Shipping_Schedule,shipment-change-history,,MNU_SSP0019,Shipment Change History,6,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT,2026-09-24 19:17:04,CONVERT,2026-09-30 10:00:26,shipping/shipment-change-history
+SCP0017,Supply_Waterfall,production-plan-waterfall,,MNU00149,Production Plan Waterfall,17,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-24 20:07:45,SYSADMIN,2026-09-28 10:26:14,supply/production-plan-waterfall
+SCP0027,Supply_Master,project-route-electrode,,MNU_SCP0027,ProjectRoute Electrode,42,3,SCREEN,S,Y,NSCM,,,,,,,,,,ZIONEX,2026-09-24 20:30:15,SYSADMIN,2026-09-28 10:26:15,
+SCP0125,Supply_OPT_Plan,workbench,,MNU00120,Workbench,8,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0125,2026-09-26 08:41:13,CONVERT_SCP0125,2026-09-26 13:24:22,supply/opt-plan/workbench
+SCP0132,Supply_OPT_Plan,constraint-of-shipment-qty,,MNU_SCP0132,Constraint Of Shipment Qty,132,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT,2026-09-26 09:06:32,ADMIN_MENU_FIX,2026-09-27 15:29:44,supply/constraint-of-shipment-qty
+SCP0133,Supply_OPT_Plan,warehouse-capacity,,MNU_SCP0133,Warehouse Capacity,133,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0133,2026-09-26 10:27:02,ADMIN_MENU_FIX,2026-09-27 15:29:44,supply/warehouse-capacity
+SCP0006,Supply_Master,project-route,-,MNU00070,Project Route,6,3,SCREEN,S,Y,NSCM,,,,,,,,,,SYSADMIN,2026-09-10 10:29:00,minyonglee1,2026-09-10 10:33:22,supply/supply-master/project-route
+SCP0114,Supply_Master,capa-line-master,,MNU_SCP0114,CAPA LineMaster,114,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0114,2026-09-23 12:18:39,CONVERT_SCP0114,2026-09-23 13:50:05,supply/capa-line-master
+Shipping_Schedule,Shipping,,,MNU00019,Shipping Schedule,2,2,MENU,-,Y,NSCM,,,,,,,,,,minyonglee1,2026-09-18 15:12:30,SYSADMIN,2026-09-28 10:37:09,
+Shipping_Master,Shipping,,,MNU00010,Shipping Master,1,2,MENU,-,Y,NSCM,,,,,,,,,,minyonglee1,2026-09-18 15:12:30,SYSADMIN,2026-09-28 10:36:50,
+SCP0049,Supply_Master,capa,,MNU00083,CAPA,49,3,SCREEN,S,Y,NSCM,,,,,,,,,,ZIONEX,2026-09-22 15:12:27,minyonglee1,2026-10-14 09:44:42,supply/supply-master/capa
+SSP0023,Shipping_Schedule,shipment-plan-electrode,,MNU_SSP0023,Shipment Plan(Electrode),4,3,SCREEN,S,Y,NSCM,,,,,,,,,,ZIONEX,2026-09-23 15:25:41,AJS,2026-09-30 20:30:14,shipping/shipping-schedule/shipment-plan-electrode
+SCP0096,Supply_Master,shipment-working-day-osp,,MNU_SCP0096,Shipment Working Day OSP,96,3,SCREEN,S,Y,NSCM,,,,,,,,,,ZIONEX,2026-09-24 10:40:35,ZIONEX,2026-09-24 10:40:35,supply/supply-master/shipment-working-day-osp
+SCP0085,SCM Supply,ending-inventory,,MNU00155,Ending Inventory,85,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-24 11:02:20,admin,2026-10-12 10:31:47,supply/ending-inventory
+SCP0124,Supply_OPT_Plan,plan-group-dashboard,,MNU_SCP0124,Plan Group Dashboard,124,3,SCREEN,S,Y,NSCM,,,,,,,,,,ADMIN,2026-09-24 15:31:56,ADMIN_MENU_FIX,2026-09-27 15:29:44,supply/plan-group-dashboard
+SCP0018,Supply_Waterfall,waterfall-shipment-plan-semi,,MNU_SCP0018,Shipment Plan Semi Waterfall,18,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0018,2026-09-24 15:50:29,SYSADMIN,2026-09-28 10:26:14,supply/waterfall-shipment-plan-semi
+SSP0045,Shipping_Schedule,shipment-request-semi,,MNU00103,Shipment Request SEMI,24,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SSP0045,2026-09-25 13:01:14,minyonglee1,2026-10-14 09:45:02,shipping/shipment-request-semi
+SCP0127,Supply_OPT_Plan,precede-safety-stock-day,,MNU_SCP0127,Precede/Safety Stock Day,127,3,SCREEN,S,Y,NSCM,,,,,,,,,,ADMIN,2026-09-25 14:45:01,ADMIN_MENU_FIX,2026-09-27 15:29:44,supply/precede-safety-stock-day
+SSP0060,Shipping_Schedule,shipment-plan,,MNU_SSP0060,Shipment Plan(Auto & ESS)-WA_UC,5,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT,2026-09-25 15:41:54,SYSADMIN,2026-09-28 10:26:21,shipping/shipment-plan
+SCP0120,Supply_OPT_Plan,constraint-mgmt,,MNU_SCP0120,Constraint Mgmt,120,3,SCREEN,S,Y,NSCM,,,,,,,,,,SYSADMIN,2026-09-26 08:09:17,SYSTEM,2026-10-13 15:36:51,supply/constraint-mgmt
+SCP0131,Supply_OPT_Plan,sales-site-priority,,MNU_SCP0131,Sales Site Priority,131,3,SCREEN,S,Y,NSCM,,,,,,,,,,SCM_MGR,2026-09-26 09:28:40,ADMIN_MENU_FIX,2026-09-27 15:29:44,supply/sales-site-priority
+SCP0055,SCM Supply,shipment-allo-report,,MNU_SCP0055,Shipment(Allo) Report,55,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0055,2026-09-26 14:47:03,admin,2026-10-12 10:31:47,supply/shipment-allo-report
+SSP0021,Shipping_Schedule,shipment-plan-auto-ess,,MNU_SSP0021,Shipment Plan(Auto & ESS),6,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SSP0021,2026-09-27 00:45:38,SYSADMIN,2026-09-28 10:28:58,shipping/shipment-plan-auto-ess
+SCP0031,Supply_Plan,global-psi,,MNU_SCP0031,Global PSI,31,3,SCREEN,S,Y,NSCM,,,,,,,,,,ZIONEX,2026-09-27 02:07:54,SYSADMIN,2026-09-28 10:26:15,supply/global-psi
+SSP0005,Shipping_Master,shipment-working-day,,MNU_SSP0005,Shipment Working Day,12,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SSP0005,2026-09-29 16:25:58,CONVERT_SSP0005,2026-09-29 16:25:58,shipping/shipment-working-day
+SCM Supply,Supply,,,MNU00021,SCM Supply,7,2,MENU,-,Y,NSCM,,,,,,,,,,minyonglee1,2026-10-12 10:25:58,minyonglee1,2026-10-12 10:25:58,
+Supply_Master,Supply,supply-master,,MNU00009,Supply Master,1,2,MENU,-,Y,NSCM,,,,,,,,,,minyonglee1,2026-09-09 13:59:00,minyonglee1,2026-09-09 13:59:00,
+SCP0020,Supply_Master,tact-time,,MNU00077,Tact Time,20,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-09 15:47:54,minyonglee1,2026-10-14 09:44:42,supply/supply-master/tact-time
+SCP0001,Supply_Master,plant-site,,MNU_SCP0001,Plant Site,10,3,SCREEN,-,Y,NSCM,,,,,,,,,,admin,2026-09-11 09:06:16,SYSADMIN,2026-09-28 10:11:12,supply/plant-site
+SCM0002_PROJECT_ROUTE_LIST_SAVE,SupplyPopup,-,-,-,Project Route List Save Popup,21,3,POPUP,-,Y,COMMON,,,,,,,,,,SYSADMIN,2026-09-17 16:22:45,SYSADMIN,2026-09-17 16:22:45,-/-/-
+SCP0028,Shipping_Master,shipment-lot-size,,MNU00091,Shipment Lot Size,7,3,SCREEN,S,Y,NSCM,,,,,,,,,,AJS,2026-09-22 16:53:37,minyonglee1,2026-10-14 09:38:58,shipping/shipping-master/shipment-lot-size
+SCP0039,Supply_Master,master-validation,,MNU_SCP0039,Master Validation,39,3,SCREEN,S,Y,NSCM,,,,,,,,,,ADMIN,2026-09-24 03:49:53,ADMIN,2026-09-24 03:49:53,supply/master-validation
+SSP0024,Shipping_Master,shipment-master-electrode,,MNU_SSP0024,Shipment Master(Electrode),9,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SSP0024,2026-09-22 23:34:49,CONVERT_SSP0024,2026-09-23 13:30:08,shipping/shipment-master-electrode
+SCP0009,Supply_Plan,shipment-plan-fg,,MNU_SCP0009,Shipment Plan FG,9,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0009,2026-09-24 11:30:49,CONVERT_SCP0009,2026-09-24 11:30:49,supply/shipment-plan-fg
+SCP0084,SCM Supply,long-term-stock,,MNU_SCP0084,Long-term stock,84,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-24 15:02:08,admin,2026-10-12 10:31:47,supply/long-term-stock
+SCP0101,SCM Supply,inventory-trend,,MNU00154,Inventory Trend,101,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-24 15:52:48,admin,2026-10-12 10:31:47,supply/inventory-trend
+SCP0080,Supply_Master,group-code-management,,MNU_SCP0080,Model Code Master,80,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-26 08:20:42,SYSADMIN,2026-09-28 10:28:58,supply/supply-master/group-code-management
+SSP0017,Shipping_Schedule,inventory-raw,,MNU_SSP0017,Inventory Raw(Mobility & IT),16,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SSP0017,2026-09-26 14:04:58,CONVERT,2026-09-30 10:00:26,shipping/inventory-raw
+SCP0097,Supply_Master,scp-bom-elec,,MNU_SCP0097,SCP BOM Elec,97,3,SCREEN,S,Y,NSCM,,,,,,,,,,SYSTEM,2026-09-26 14:05:16,SYSTEM,2026-09-26 14:05:16,supply/scp-bom-elec
+SSP0026,Shipping_Schedule,shipment-request-pack,,MNU_SSP0026,Shipment Request(Mobility & IT),6,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SSP0026,2026-09-26 16:41:01,SYSADMIN,2026-09-28 10:26:21,shipping/shipment-request-pack
+SSP0022,Shipping_Schedule,shipment-request-electrode,,MNU_SSP0022,Shipment Request(Electrode),7,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SSP0022,2026-09-27 15:19:23,SYSADMIN,2026-09-28 10:26:19,shipping/shipment-request-electrode
+Supply_Waterfall,Supply,waterfall,,MNU_Supply_Waterfall,Waterfall,3,2,MENU,-,Y,NSCM,,,,,,,,,,ADMIN_MENU_FIX,2026-09-27 15:29:44,SYSADMIN,2026-09-28 10:36:44,
+COM0014,CommonPopup,-,,-,ItemByPlantSite,14,3,POPUP,-,Y,,,,,,,,,,,admin,2026-10-12 15:57:02,admin,2026-10-12 15:57:02,-
+SCP0013,Supply_Master,production-plan-line,,MNU00098,Production Plan Line,13,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-11 10:49:09,minyonglee1,2026-10-14 09:44:42,supply/supply-master/production-plan-line
+SCP0023,Supply_Master,outsourcing-capacity,,MNU_SCP0023,Outsourcing Capacity,23,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-15 11:07:03,admin,2026-09-15 16:16:34,supply/supply-master/outsourcing-capacity
+SCM0002,CommonPopup,-,,-,ModelByDivision,20,3,POPUP,-,Y,COMMON,,,,,,,,,,SYSTEM,2026-09-16 10:53:38,SYSTEM,2026-09-21 17:47:37,-/-/-
+SSP0014,Shipping_Master,shipment-model-pic,,MNU_SSP0014,Shipment Model PIC,6,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT,2026-09-22 07:44:33,CONVERT,2026-09-22 07:44:33,shipping/shipping-master/shipment-model-pic
+SSP0202,Shipping_Schedule,shipment-change-request-confirm,,MNU_SSP0202,Shipment Change Request Confirm(Packer),23,3,SCREEN,S,Y,NSCM,,,,,,,,,,SYSTEM,2026-09-24 01:55:48,CONVERT,2026-09-30 10:00:26,shipping/shipment-change-request-confirm
+SSP0025,Shipping_Master,shipment-requestor-pic,,MNU_SSP0025,Shipment Requestor PIC,10,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SSP0025,2026-09-22 23:41:05,SYSADMIN,2026-09-28 10:26:20,shipping/shipment-requestor-pic
+SCP0106,Supply_Master,capa-loss-plan,,MNU_SCP0106,CAPA Loss Plan,106,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0106,2026-09-23 22:20:55,CONVERT_SCP0106,2026-09-23 22:20:55,supply/capa-loss-plan
+SCP0111,Supply_Plan,integration-psi,,MNU_SCP0111,Integration PSI,111,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0111,2026-09-23 23:17:02,CONVERT_SCP0111,2026-09-23 23:17:02,supply/integration-psi
+SCP0048,Supply_Master,project-route-warranty,,MNU_SCP0048,ProjectRoute Warranty,43,3,SCREEN,S,Y,NSCM,,,,,,,,,,ZIONEX,2026-09-24 21:18:39,SYSADMIN,2026-09-28 10:26:16,
+SCP0016,Supply_Waterfall,waterfall-shipment-plan-fg,,MNU00150,Shipment Plan FG Waterfall,16,3,SCREEN,S,Y,NSCM,,,,,,,,,,admin,2026-09-24 23:06:31,SYSADMIN,2026-09-28 10:26:14,supply/waterfall-shipment-plan-fg
+SCP0128,Supply_OPT_Plan,safety-stock,,MNU_SCP0128,Precede/Safety Stock Qty,128,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0128,2026-09-24 23:43:02,ADMIN_MENU_FIX,2026-09-27 15:32:53,supply/safety-stock
+SCP0129,Supply_OPT_Plan,demand-exception,,MNU_SCP0129,Demand Exception,129,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0129,2026-09-25 08:38:39,ADMIN_MENU_FIX,2026-09-27 15:29:44,supply/demand-exception
+SCP0130,Supply_OPT_Plan,scheduled-receipt-information,,MNU_SCP0130,Scheduled Receipt Information,130,3,SCREEN,S,Y,NSCM,,,,,,,,,,SYSTEM,2026-09-25 09:41:44,ADMIN_MENU_FIX,2026-09-27 15:29:44,supply/scheduled-receipt-information
+SCP0107,Supply_Master,capa-teep-report,,MNU_SCP0107,TEEP Report,107,3,SCREEN,S,Y,NSCM,,,,,,,,,,CONVERT_SCP0107,2026-09-25 13:43:50,CONVERT_SCP0107,2026-09-25 13:43:50,supply/capa-teep-report
+DMF0004,Demand_Master,sales-site,,MNU00026,Sales Site,1,3,SCREEN,D,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:26:52,minyonglee1,2026-09-17 15:43:16,demand/demand-master/sales-site
+DMF0005,Demand_Master,sales-site-project-model,,MNU00027,Sales Site Project Model,2,3,SCREEN,D,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:26:52,admin,2026-07-21 19:28:58,demand/demand-master/sales-site-project-model
+DMF0007,Demand_Master,customer-fcst-master,,MNU00029,Customer FCST Master,4,3,SCREEN,D,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:26:52,admin,2026-07-21 19:28:58,demand/demand-master/customer-fcst-master
+DMF0008,Demand_Master,erp-edi-master,,MNU00032,ERP EDI MASTER 정비,9,3,SCREEN,D,Y,NSCM,,,,,,,,,,chano0612,2023-05-03 21:37:06,admin,2026-07-21 19:28:58,demand/demand-master/erp-edi-master
+DMF0009,Demand_Master,dmf0009,,MNU00184,Biz Plan Price(Master),572,3,SCREEN,D,N,NSCM,,,,,,,,,,ilovu1,2023-08-28 10:10:23,admin,2026-07-21 19:28:58,demand/demand-master/dmf0009
+DMF0010,Demand_Master,dmf0010,,MNU00185,Biz Plan Price,573,3,SCREEN,D,N,NSCM,,,,,,,,,,ilovu1,2023-08-28 10:10:23,admin,2026-07-21 19:28:58,demand/demand-master/dmf0010
+DMF0013,Demand_Plan,dmf0013,,MNU00186,Customer PSI Upload,50,3,SCREEN,D,N,NSCM,,,,,,,,,,20140001,2018-03-13 13:35:00,admin,2026-07-21 19:28:58,demand/demand-plan/dmf0013
+DMF0021,Demand_Plan,sales-plan,,MNU00034,Sales Plan,32,3,SCREEN,D,Y,NSCM,,,,,,,,,,greenzun,2018-07-17 12:50:25,minyonglee1,2026-09-17 15:39:13,demand/demand-plan/sales-plan
+DMF0022,Waterfall,sales-plan-waterfall,,MNU00044,Sales Plan Waterfall,22,3,SCREEN,D,Y,NSCM,,,,,,,,,,greenzun,2018-07-17 12:54:01,admin,2026-07-21 19:28:58,report/waterfall/sales-plan-waterfall
+DMF0026,Demand_Plan,dmf0026,,MNU00188,ESS Channel PSI,60,3,SCREEN,D,N,NSCM,,,,,,,,,,20140001,2018-03-13 13:35:00,admin,2026-07-21 19:28:58,demand/demand-plan/dmf0026
+DMF0039,Demand_Master,dmf0039,,MNU00189,ESS Shipment Priority,570,3,SCREEN,D,N,NSCM,,,,,,,,,,greenzun,2018-12-10 11:58:00,admin,2026-07-21 19:28:58,demand/demand-master/dmf0039
+DMF0040,Demand_Waterfall,mkt-fcst-comparison,,MNU00046,MKT FCST Comparison,2,3,SCREEN,D,Y,NSCM,,,,,,,,,,greenzun,2018-12-10 11:58:35,admin,2026-08-26 23:52:29,demand/demand-waterfall/mkt-fcst-comparison
+DMF0041,Demand_Plan,dmf0041,,MNU00190,MDF Simulator,70,3,SCREEN,D,N,NSCM,,,,,,,,,,greenzun,2019-04-04 12:33:01,admin,2026-07-21 19:28:58,demand/demand-plan/dmf0041
+DMF0042,Demand_Plan,business-plan,,MNU00014,Business Plan,5,3,SCREEN,D,Y,NSCM,,,,,,,,,,hwi1993,2019-09-19 12:49:58,minyonglee1,2026-09-17 15:39:13,demand/business-plan
+DMF0044,Demand_Plan,sales-reports,,MNU00038,Sales Reports,6,3,SCREEN,D,Y,NSCM,,,,,,,,,,murim,2019-09-04 12:36:43,admin,2026-07-22 00:34:14,demand/demand-plan/sales-reports
+DMF0045,Shipping_Schedule,dmf0045,,MNU00097,Shipment Request,91,3,SCREEN,D,Y,NSCM,,,,,,,,,,hwi1993,2019-10-02 12:10:42,admin,2026-10-14 09:12:55,demand/demand-plan/dmf0045
+DMF0048,Demand_Plan,sales-monitoring,,MNU00035,Sales Monitoring,3,3,SCREEN,D,Y,NSCM,,,,,,,,,,hwi1993,2019-12-20 12:52:18,admin,2026-07-21 19:28:58,demand/demand-plan/sales-monitoring
+DMF0049,Demand_Plan,etc-sales-reports,,MNU00039,ETC Sales Reports,7,3,SCREEN,D,Y,NSCM,,,,,,,,,,hwi1993,2020-05-12 14:42:10,admin,2026-07-22 08:04:27,demand/demand-plan/etc-sales-reports
+DMF0050,Waterfall,dmf0050,,MNU00191,EDI Waterfall,92,3,SCREEN,D,N,NSCM,,,,,,,,,,kdw2819,2021-12-16 12:54:58,admin,2026-07-21 19:28:58,report/waterfall/dmf0050
+DMF0051,Waterfall,dmf0051,,MNU00045,Biz Plan Waterfall,94,3,SCREEN,D,N,NSCM,,,,,,,,,,rosia27,2022-07-05 10:00:57,admin,2026-07-21 19:28:58,report/waterfall/dmf0051
+DMF0051_1,Waterfall,dmf0051_1,,MNU00192,Business Plan Confirm,531,3,SCREEN,D,N,NSCM,,,,,,,,,,chano0612,2023-08-28 04:33:39,admin,2026-07-21 19:28:58,report/waterfall/dmf0051_1
+DMF0052,Customer_Forecast,dmf0052,,MNU00193,EDI Summary,1,3,SCREEN,D,N,NSCM,,,,,,,,,,rosia27,2022-12-06 13:10:59,admin,2026-07-21 19:28:58,report/customer-forecast/dmf0052
+DMF0053,Demand_Waterfall,cust-fcst-waterfall,,MNU00048,Customer FCST Waterfall,4,3,SCREEN,D,Y,NSCM,,,,,,,,,,chano0612,2023-05-03 21:41:47,admin,2026-08-27 10:15:02,demand/demand-waterfall/cust-fcst-waterfall
+DMF0066,Demand_JV_Plant,dmf0066,,MNU00194,Shipment Request JV,1,3,SCREEN,D,N,NSCM,,,,,,,,,,lgda106,2021-09-07 16:10:20,minyonglee1,2026-10-08 15:02:32,demand/demand-jv-plant/dmf0066
+DMF0068,Demand_Waterfall,demand-manager,,MNU00047,Demand Manager,3,3,SCREEN,D,Y,NSCM,,,,,,,,,,kjj0070,2023-12-12 13:14:54,admin,2026-07-30 10:38:11,demand/demand-waterfall/demand-manager
+DMF0069,Customer_Forecast,dmf0069,,MNU00195,History Data Managing Board,3,3,SCREEN,D,N,NSCM,,,,,,,,,,kcw3408,2023-11-29 09:31:56,admin,2026-07-21 19:28:58,report/customer-forecast/dmf0069
+DMF0070,Demand_Plan,dmf0070,,MNU00196,Auto PR Check,533,3,SCREEN,D,N,NSCM,,,,,,,,,,kjj0070,2024-03-26 14:25:00,admin,2026-07-21 19:28:58,demand/demand-plan/dmf0070
+DMF0074,Demand_Plan,metal-link-price,,MNU00041,Metal Link Price,8,3,SCREEN,D,Y,NSCM,,,,,,,,,,admin,2024-09-10 12:17:38,admin,2026-07-21 17:30:41,demand/demand-plan/metal-link-price
+DMF0081,Demand_Plan,dmf0081,,MNU00040,MKT FCST (Auto),532,3,SCREEN,D,N,NSCM,,,,,,,,,,dsiol,2024-12-20 09:42:21,admin,2026-07-21 19:28:58,demand/demand-plan/dmf0081
+DMF0082,Demand_Plan,forecast-price,,MNU00042,Fcst MGMT,9,3,SCREEN,D,Y,NSCM,,,,,,,,,,admin,2025-01-13 16:19:54,admin,2026-07-21 17:30:41,demand/demand-plan/forecast-price
+DMF0006,Demand_Master,customer-model-mapping,,MNU00028,Customer Model Mapping,3,3,SCREEN,D,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:26:52,admin,2026-07-21 19:28:58,demand/demand-master/customer-model-mapping
+Customer_Forecast,Report,customer-forecast,,MNU00022,Customer Forecast,3,2,MENU,-,N,NSCM,,,,,,,,,,kcw3408,2023-11-29 09:29:39,admin,2026-07-21 19:28:58,report/customer-forecast
+Demand_JV_Plant,Demand,demand-jv-plant,,MNU00012,Demand JV Plant,3,2,MENU,-,N,NSCM,,,,,,,,,,lgda106,2021-09-07 16:09:38,admin,2026-07-21 19:28:58,demand/demand-jv-plant
+DM0020,Demand_Master,dm0020,,MNU00200,Sales Price_bk,560,3,SCREEN,D,N,NSCM,,,,,,,,,,greenzun,2018-07-17 12:46:37,admin,2026-07-21 19:28:58,demand/demand-master/dm0020
+SYS0017,System,mail-setup,,MNU00058,Mail Setup,8,3,SCREEN,-,Y,COMMON,,,,,,,,,,admin,2026-07-30 09:08:05,minyonglee1,2026-10-14 10:36:50,admin/system/mail-setup
+Demand_Master,Demand,demand-master,,MNU00008,Demand Master,1,2,MENU,-,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:26:10,admin,2026-07-21 19:28:58,demand/demand-master
+Demand_Plan,Demand,demand-plan,,MNU00011,Demand Plan,2,2,MENU,-,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:34:25,admin,2026-07-21 19:28:58,demand/demand-plan
+SYS0004,System,ui-category,,MNU00065,UI Category Setup,6,3,SCREEN,-,Y,COMMON,,,,,,,,,,sysadm,2026-03-06 17:20:02,admin,2026-07-21 19:28:58,admin/system/ui-category
+SYS0005,System,procedure-management,,MNU00205,Procedure Setting,12,3,SCREEN,-,Y,COMMON,,,,,,,,,,story55,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,admin/system/procedure-management
+SYS0007,System,group-management,,MNU00054,Group,3,3,SCREEN,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,admin/system/group-management
+SYS0002,Admin_Menu,user-management,,MNU00066,User,1,3,SCREEN,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,admin/admin-menu/user-management
+SYS0003,System,menu-management,,MNU00059,Menu,2,3,SCREEN,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,ROUTE_PATH_TEST,2026-09-10 14:26:02,admin/system/menu-management
+KHK,OPT,OPT,,MNU00121,,1,2,MENU,-,Y,NSCM,,,,,,,,,,minyonglee1,2026-04-06 09:11:51,admin,2026-07-21 19:28:58,OTP/OPT
+Admin_Menu,Admin,admin-menu,,MNU00007,Admin Menu,2,2,MENU,-,Y,COMMON,,,,,,,,,,park.choyi,2026-04-09 16:10:54,admin,2026-07-21 19:28:58,admin/admin-menu
+Authority,,authority,,MNU00006,Authority,7,1,MENU,-,Y,COMMON,,,,,,,,,,park.choyi,2026-04-16 15:27:21,admin,2026-07-21 19:28:58,authority
+SYS0008,System,group-menu,,MNU00055,Group Menu,4,3,SCREEN,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,admin/system/group-menu
+SYS0012,Auth_Mgmt,auth-approval,,MNU00049,Auth Approval,2,3,SCREEN,-,Y,COMMON,,,,,,,,,,park.choyi,2026-04-16 15:30:53,admin,2026-07-21 19:28:58,authority/auth-mgmt/auth-approval
+SYS0009,System,menu-button-management,,MNU00209,Menu Button,14,3,SCREEN,-,Y,COMMON,,,,,,,,,,story55,2026-03-27 12:54:48,admin,2026-07-21 19:28:58,admin/system/menu-button-management
+DMF0020,Demand_Master,sales-future-price,,MNU_DMF0020,Sales Price,5,3,SCREEN,D,Y,NSCM,,,,,,,,,,admin,2026-05-22 16:47:50,admin,2026-07-21 17:30:41,demand/demand-master/sales-future-price
+SYS0014,Admin_Menu,group-user,,MNU_SYS0014,Group User,2,3,SCREEN,-,Y,COMMON,,,,,,,,,,system,2026-06-29 10:37:23,admin,2026-07-21 19:28:58,admin/admin-menu/group-user
+DMF0043,Demand_Master,contribute-main,,MNU00030,Contribution Rate Reg.,7,3,SCREEN,D,Y,NSCM,,,,,,,,,,murim,2019-09-04 12:35:12,k0101,2026-07-27 16:31:27,demand/demand-master/contribute-main
+DMF0043_01,Demand_Master,contribute-view,,MNU00031,Contribution Sales,8,3,SCREEN,D,Y,NSCM,,,,,,,,,,murim,2019-09-04 12:35:12,k0101,2026-07-27 16:31:27,demand/demand-master/contribute-view
+DMF0072,Demand_Master,nn-master-mapping,,MNU00033,N: N Master Mapping,10,3,SCREEN,D,Y,NSCM,,,,,,,,,,kjj0070,2024-05-09 10:34:39,admin,2026-07-21 19:28:58,demand/demand-master/nn-master-mapping
+SYS0016,System,notice-setup,,MNU00061,Notice Setup,7,3,SCREEN,-,Y,COMMON,,,,,,,,,,minyonglee1,2026-07-15 10:47:23,minyonglee1,2026-07-30 09:14:05,admin/system/notice-setup
+SYS0006,System,api-management,,MNU00204,Api Setting,13,3,SCREEN,-,Y,COMMON,,,,,,,,,,story55,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,admin/system/api-management
+OPT,,OTP,,MNU00018,OPT Plan,100,1,MENU,-,N,NSCM,,,,,,,,,,minyonglee1,2026-04-06 09:10:58,minyonglee1,2026-09-18 15:11:31,OTP
+Demand_Waterfall,Demand,demand-waterfall,,MNU00020,Demand Waterfall,4,2,MENU,-,Y,NSCM,,,,,,,,,,admin,2026-07-15 15:39:22,admin,2026-07-21 17:30:41,demand/demand-waterfall
+SYS0010,Admin_Menu,lookup,,MNU00057,Lookup,3,3,SCREEN,-,Y,COMMON,,,,,,,,,,park.choyi,2026-04-13 14:53:42,admin,2026-07-21 19:28:58,admin/admin-menu/lookup
+SCM0007,System,sms-setup,,MNU00063,SMS Setup,10,3,SCREEN,-,Y,COMMON,,,,,,,,,,minyonglee1,2026-07-15 15:59:54,admin,2026-07-21 19:28:58,admin/system/sms-setup
+SCM0019,System,scp-if-blocking,,MNU00156,SCP IF Blocking,11,3,SCREEN,-,Y,COMMON,,,,,,,,,,minyonglee1,2026-07-15 15:59:54,admin,2026-07-21 19:28:58,admin/system/scp-if-blocking
+SCM0016,System,batch-log,,MNU00051,Batch Log,9,3,SCREEN,-,Y,COMMON,,,,,,,,,,minyonglee1,2026-07-15 15:59:54,admin,2026-07-21 19:28:58,admin/system/batch-log
+Admin,,admin,,MNU00007,Admin,9,1,MENU,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,admin
+System,Admin,system,,MNU00024,System,3,2,MENU,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,admin/system
+SYS0001,System,message-management,,MNU00060,Message,5,3,SCREEN,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,admin/system/message-management
+COM0006,CommonPopup,-,,-,OwnerData,6,3,POPUP,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-/-/-
+COM0007,CommonPopup,-,,MNU00060,Message,7,3,POPUP,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-/-/-
+Auth_Mgmt,Authority,auth-mgmt,,MNU00023,Auth Mgmt,1,2,MENU,-,Y,COMMON,,,,,,,,,,park.choyi,2026-04-16 15:29:24,admin,2026-07-21 19:28:58,authority/auth-mgmt
+BusinessPopup,Popup,-,,MNU00210,BusinessPopup,2,2,MENU,-,Y,COMMON,,,,,,,,,,minyonglee1,2026-03-27 16:13:56,admin,2026-07-21 19:28:58,-/-
+KHK_TEST,KHK,OPT,,MNU00082,,1,3,SCREEN,-,Y,NSCM,,,,,,,,,,minyonglee1,2026-04-06 09:12:39,admin,2026-07-21 19:28:58,OTP/OPT/OPT
+SYS0011,Auth_Mgmt,auth-request,,MNU00050,Auth Request,1,3,SCREEN,-,Y,COMMON,,,,,,,,,,park.choyi,2026-04-16 15:30:12,admin,2026-07-21 19:28:58,authority/auth-mgmt/auth-request
+Popup,,-,,MNU00207,Popup,99,1,MENU,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-
+CommonPopup,Popup,-,,MNU00208,CommonPopup,1,2,MENU,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-/-
+COM0001,CommonPopup,-,,MNU00160,CityByCountry,1,3,POPUP,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-/-/-
+COM0002,CommonPopup,-,,MNU00161,CustomerByDivision,2,3,POPUP,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-/-/-
+COM0003,CommonPopup,-,,MNU00177,StorageByDivision,3,3,POPUP,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-/-/-
+COM0004,CommonPopup,-,,MNU00170,OwnerInfo,4,3,POPUP,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-/-/-
+COM0005,CommonPopup,-,,MNU00173,ProjectByDivision,5,3,POPUP,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-/-/-
+COM0008,CommonPopup,-,,-,ItemByDivision,8,3,POPUP,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-/-/-
+COM0009,CommonPopup,-,,-,Team,9,3,POPUP,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-/-/-
+COM0010,CommonPopup,-,,MNU00178,SsoUser,10,3,POPUP,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-/-/-
+COM0011,CommonPopup,-,,-,SsoDept,11,3,POPUP,-,Y,COMMON,,,,,,,,,,20140001,2018-03-13 13:25:35,admin,2026-07-21 19:28:58,-/-/-
+SYS0013,Admin_Menu,dynamic-query,,MNU00053,Dynamic Query List,4,3,SCREEN,D,Y,COMMON,,,,,,,,,,admin,2026-06-15 11:38:43,minyonglee1,2026-10-12 16:01:44,admin/admin-menu/dynamic-query
+SYS0015,System,program,,MNU_SYS0015,Program,1,3,SCREEN,-,N,COMMON,,,,,,,,,,admin,2026-06-12 17:23:28,admin,2026-07-21 19:28:58,admin/system/program
+Waterfall,Report,waterfall,,MNU00020,Waterfall,1,2,MENU,-,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:36:49,admin,2026-07-21 19:28:58,report/waterfall
+Demand,,demand,,MNU00002,Demand,2,1,MENU,-,Y,NSCM,,,,,,,,,,admin,2018-03-13 13:25:35,admin,2026-07-21 17:30:41,demand
+Master,,master,,MNU00001,Master,1,1,MENU,-,N,NSCM,,,,,,,,,,20140001,2018-03-13 13:25:35,minyonglee1,2026-09-22 14:12:19,master
+Report,,report,,MNU00005,Report,4,1,MENU,-,N,NSCM,,,,,,,,,,20140001,2018-03-13 13:25:35,minyonglee1,2026-09-09 13:57:41,report
+DM0003,Demand_Plan,dm0003,,MNU00197,MKT FCST_bk,510,3,SCREEN,D,N,NSCM,,,,,,,,,,greenzun,2018-07-17 12:31:56,admin,2026-07-21 19:28:58,demand/demand-plan/dm0003
+DM0004,Demand_Master,dm0004,,MNU00198,Sales Site_bk,510,3,SCREEN,D,N,NSCM,,,,,,,,,,greenzun,2018-07-17 12:34:53,admin,2026-07-21 19:28:58,demand/demand-master/dm0004
+DM0005,Demand_Master,dm0005,,MNU00199,Sales Site Project Model_bk,530,3,SCREEN,D,N,NSCM,,,,,,,,,,greenzun,2018-07-17 12:37:26,admin,2026-07-21 19:28:58,demand/demand-master/dm0005
+DM0021,Demand_Plan,dm0021,,MNU00201,Sales Plan_bk,530,3,SCREEN,D,N,NSCM,,,,,,,,,,greenzun,2018-07-17 12:50:25,admin,2026-07-21 19:28:58,demand/demand-plan/dm0021
+DM0022,Waterfall,dm0022,,MNU00202,Sales Plan Waterfall_bk,520,3,SCREEN,D,N,NSCM,,,,,,,,,,greenzun,2018-07-17 12:54:01,admin,2026-07-21 19:28:58,report/waterfall/dm0022
+DM0035,Waterfall,dm0035,,MNU00203,MKT FCST Waterfall_bk,510,3,SCREEN,D,N,NSCM,,,,,,,,,,greenzun,2018-07-17 12:40:01,admin,2026-07-21 19:28:58,report/waterfall/dm0035
+DM0036,Demand_Master,dm0036,,MNU00183,Capacity Allocation,561,3,SCREEN,D,N,NSCM,,,,,,,,,,hwwoonins,2018-09-04 12:56:44,admin,2026-07-21 19:28:58,demand/demand-master/dm0036
+SDM_Admin,Sample_Demand,sdm-admin,,MNU_SDM_Admin,SDM Administration,5,2,MENU,-,Y,SPMS,,,,,,,,,,SPMS,2026-08-21 10:40:11,admin,2026-08-21 10:40:11,
+SDM5010,SDM_Admin,project-master,,MNU_SDM5010,Project Master,1,3,SCREEN,D,Y,SPMS,,,,,,,,,,SPMS,2026-08-21 10:40:11,admin,2026-08-21 10:40:11,spms-demand/project-master
+Sample_Demand,,sample-demand,,MNU00692,Sample Demand,10,1,MENU,D,Y,SPMS,,,,,,,,,,SPMS,2026-08-07 13:28:21,minyonglee1,2026-08-18 13:48:16,
+Project_Mgmt,Sample_Demand,project-management,,MNU00693,Project Management,1,2,MENU,D,Y,SPMS,,,,,,,,,,SPMS,2026-08-07 13:28:21,loveidea,2026-08-25 14:26:05,
+SDM1010,Project_Mgmt,project-registration,,MNU00694,Project Registration,10,3,SCREEN,D,Y,SPMS,,,,,,,,,,SPMS,2026-08-07 13:28:21,admin,2026-08-10 12:49:31,spms-demand/project-registration
+SDM1020,Project_Mgmt,project-list,,MNU_SDM1020,Project List,11,3,SCREEN,D,Y,SPMS,,,,,,,,,,SPMS,2026-08-20 17:29:09,admin,2026-08-20 17:29:09,spms-demand/project-list
+SDM2020,SDM_SampleReq,plan-yield,,MNU_SDM2020,Plan Yield,2,3,SCREEN,D,Y,SPMS,,,,,,,,,,SPMS,2026-08-31 13:59:01,SPMS,2026-08-31 13:59:01,
+DMF0014,Demand_Plan,customer-fcst-upload,,MNU00036,Customer FCST Upload,4,3,SCREEN,D,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:35:00,admin,2026-07-21 17:30:41,demand/demand-plan/customer-fcst-upload
+DMF0003,Demand_Plan,mkt-fcst,,MNU00182,MKT FCST,1,3,SCREEN,D,Y,NSCM,,,,,,,,,,admin,2026-08-16 00:33:47,admin,2026-08-16 00:33:47,demand/demand-plan/mkt-fcst
+DMF0003_1,Demand_Plan,dmf0003_1,,MNU00040,MKT FCST (Auto),532,3,SCREEN,D,N,NSCM,,,,,,,,,,admin,2026-08-16 00:33:47,admin,2026-08-16 00:33:47,demand/demand-plan/dmf0003_1
+SDM_SampleReq,Sample_Demand,sdm-sample-req,,MNU_SDM_SampleReq,Sample Build Request,2,2,MENU,-,Y,SPMS,,,,,,,,,,SPMS,2026-08-27 17:48:11,SPMS,2026-08-27 17:48:11,
+SDM2010,SDM_SampleReq,production-request,,MNU_SDM2010,Production Request,1,3,SCREEN,D,Y,SPMS,,,,,,,,,,SPMS,2026-08-27 17:48:13,SPMS,2026-08-27 17:48:13,
+DMF0035,Demand_Waterfall,demand-plan-waterfall,,MNU00212,Demand Plan Waterfall,1,3,SCREEN,D,Y,NSCM,,,,,,,,,,20140001,2018-03-13 13:37:22,minyonglee1,2026-10-01 14:54:58,report/demand-plan-waterfall

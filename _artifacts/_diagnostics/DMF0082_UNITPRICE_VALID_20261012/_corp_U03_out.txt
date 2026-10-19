@@ -1,0 +1,65 @@
+################ [S1] 40 판가 마스터(KRW) 13주 구간 — Plant Site / DOM_EXP 표기 분포 ################
+C       | V | N     | FIRST_UPD   | LAST_UPD   
+--------+---+-------+-------------+------------
+DOM_EXP | E | 32179 | 10-11 17:28 | 10-11 17:28
+PLANT   | - | 32179 | 10-11 17:28 | 10-11 17:28
+(2 rows)
+--  판정: PLANT 에 '-' 와 '/' 가 함께 있으면 표기 혼재 (같은 키의 13주가 두 그룹으로 갈라질 수 있음)
+################ [S2] 13주가 다 있는데도 검사에서 탈락하는 키 (오탐) — 요약 ################
+VERDICT          | KEYS
+-----------------+-----
+1.통과             | 1461
+4.13주 미충족(정상 차단) | 641 
+(2 rows)
+################ [S3] 오탐 키 목록 (최대 60) — DETAIL = Plant:DOM_EXP=주 수 ################
+PROJECT_CODE | SCM_SITE_ID | ITEM_ID | FCST_TYPE | INCOTERMS | DETAIL
+-------------+-------------+---------+-----------+-----------+-------
+(0 rows)
+################ [S4] 당주에 판가(KRW)가 있으나 월요일 행이 아닌 키 — 주 중간일 저장 (최대 40) ################
+PROJECT_CODE | SCM_SITE_ID | ITEM_ID | FCST_TYPE | INCOTERMS | PLANT_SITE_ID | DAYS | UPD | UPD_BY
+-------------+-------------+---------+-----------+-----------+---------------+------+-----+-------
+(0 rows)
+################ [S5] SSP 출하 신규 저장 호출 이력 — 최근 7일 ################
+T              | PROGRAM_NAME                             | LOG_TYPE | M                                      | CREATED_BY
+---------------+------------------------------------------+----------+----------------------------------------+-----------
+10-12 09:59:26 | SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-12 09:59:22 | SSP0200_SAVE_SHIPMENT_CONFIRM_NEW        | END      | ########## END of procedure ########## | scm_batch 
+10-08 18:04:41 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 17:07:34 | SSP0201_SAVE_SHIPMENT_CONFIRM_NEW        | END      | ########## END of procedure ########## | scm_batch 
+10-08 17:07:32 | SSP0201_SAVE_SHIPMENT_CONFIRM_NEW        | END      | ########## END of procedure ########## | scm_batch 
+10-08 17:07:31 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 17:07:29 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 17:07:28 | SSP0201_SAVE_SHIPMENT_CONFIRM_NEW        | END      | ########## END of procedure ########## | scm_batch 
+10-08 17:07:28 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 16:58:50 | SSP0201_SAVE_SHIPMENT_CONFIRM_NEW        | END      | ########## END of procedure ########## | scm_batch 
+10-08 16:58:42 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 16:58:41 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 16:58:39 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 16:58:38 | SSP0201_SAVE_SHIPMENT_CONFIRM_NEW        | END      | ########## END of procedure ########## | scm_batch 
+10-08 16:58:19 | SSP0201_SAVE_SHIPMENT_CONFIRM_NEW        | END      | ########## END of procedure ########## | scm_batch 
+10-08 16:58:15 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 16:58:14 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 16:58:13 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 16:57:52 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 16:57:44 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 16:57:32 | SSP0201_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 13:24:37 | SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 13:24:15 | SSP0200_SAVE_SHIPMENT_CONFIRM_NEW        | END      | ########## END of procedure ########## | scm_batch 
+10-08 13:19:27 | SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE   | END      | ########## END of procedure ########## | scm_batch 
+10-08 13:07:04 | SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-08 13:06:33 | SSP0200_SAVE_SHIPMENT_CONFIRM_NEW        | END      | ########## END of procedure ########## | scm_batch 
+10-08 10:50:45 | SSP0200_SAVE_SHIPMENT_CONFIRM_NEW        | END      | ########## END of procedure ########## | scm_batch 
+10-08 09:27:09 | SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-07 14:11:54 | SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE   | END      | ########## END of procedure ########## | scm_batch 
+10-07 14:11:11 | SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-07 11:59:17 | SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE   | END      | ########## END of procedure ########## | scm_batch 
+10-06 15:26:02 | SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-06 15:24:33 | SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE   | END      | ########## END of procedure ########## | scm_batch 
+10-06 12:10:47 | SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-06 12:10:43 | SSP0200_SAVE_SHIPMENT_CONFIRM_NEW        | END      | ########## END of procedure ########## | scm_batch 
+10-06 12:07:39 | SSP0200_DELETE_SHIPMENT_REQUEST_DRAFTING | END      | ########## END of procedure ########## | scm_batch 
+10-06 12:01:30 | SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+10-06 12:01:26 | SSP0200_SAVE_SHIPMENT_CONFIRM_NEW        | END      | ########## END of procedure ########## | scm_batch 
+10-06 11:59:22 | SSP0200_SAVE_SHIPMENT_REQUEST_COMPLETE   | END      | ########## END of procedure ########## | scm_batch 
+10-06 11:58:54 | SSP0200_SAVE_SHIPMENT_REQUEST_DRAFTING   | END      | ########## END of procedure ########## | scm_batch 
+(40 rows)

@@ -1,0 +1,66 @@
+// Global Styles
+@forward './variables/colors-lges';
+@forward './variables/typography';
+@forward './variables/spacing';
+@forward './variables/z-indexs';
+@forward './mixins/flexbox';
+@forward './mixins/text';
+@forward './mixins/responsive';
+
+@use './variables/colors-lges' as *;
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100vh;
+  overflow-y: hidden;
+  overflow-x: auto;
+  font-family:
+    'Spoqa Han Sans Neo', '맑은 고딕', 'malgun gothic', 'AppleGothicNeoSD', 'Apple SD 산돌고딕 Neo',
+    'Microsoft NeoGothic', 'Droid sans', sans-serif;
+  margin: 0;
+}
+
+a {
+  vertical-align: middle;
+  text-decoration: none;
+  color: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+p {
+  color: $commonTextBasic;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.headerContainer {
+  display: flex;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  align-items: center;
+  column-gap: 8px;
+
+  .headerDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 0.5rem;
+    background-color: $commonTextPrimary;
+  }
+
+  .headerTitle {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.25;
+    font-weight: 700;
+    font-family: 'Spoqa Han Sans Neo';
+    color: $commonTextPrimaryExtreme;
+  }
+}

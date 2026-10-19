@@ -1,0 +1,592 @@
+import type { FlexGrid as FlexGridType } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
+import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQueryClient } from '@foundation/query-client';
+import { GridAction, type EditTracker } from '@foundation/utils';
+import { MainTitle, SubTitle } from '@shared/components';
+import { useTabBtnPermissions, useTabComboQueries, useTabProcQuery } from '@shared/hooks';
+import { useMessageStore, useSessionStore } from '@shared/stores';
+
+import { SalesPlanForm } from './components/SalesPlanForm';
+import { SalesPlanGrid } from './components/SalesPlanGrid';
+import { type SalesPlanModalKey, SalesPlanModals } from './components/SalesPlanModals';
+import { BUCKET_TYPE, INSERT_ROW_DEFAULTS, MENU_ID, MSG, SHEETS } from './sales-plan.constants';
+import type { MeasureInfoRow, SalesPlanRow, SpreadTitleRow } from './sales-plan.types';
+import { useSalesPlanStore } from './useSalesPlanStore';
+import { callSaveSalesPlan, formatSaveErrorText } from './utils/sales-plan.api';
+import { resolveSalesPlanAuthGroup } from './utils/sales-plan.auth';
+import { type GroupKeyColumn, groupKeyBindings } from './utils/sales-plan.insertAnchor';
+import { buildSavePayload, buildUnfoldRows } from './utils/sales-plan.save';
+import { SEARCH_COMBO } from './utils/sales-plan.searchCombos';
+import { useSalesPlanValidation } from './utils/sales-plan.validate';
+
+// AS-IS DMF0021_SalesPlan (Demand > Demand Plan > Sales Plan / 판매계획 — Forms.UIL 5,599줄 정본 1:1).
+//   Division 3종(40/81*/82) 단일 화면 — 조회 = PKG_DMF0021.P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX
+//   (17 IN + 커서 3: data/calendar/editAuth) / 저장 = P_DMF0021_SAVE_DM_PLN_SALES_PLAN_ALL(18키 '^' bulk —
+//   수량 배분(월→주→일)·중복검증·MERGE 는 SP 내장, FE 재구현 금지) / 동적 3단 헤더 = GET_SPREAD_TITLE.
+//   구조 골격 = forecast-price(DMF0082), 그리드·유틸 실체 = mkt-fcst(DMF0003) — 2026-07-14 플랜 확정.
+//   SubTitle 공통버튼: search/insert/delete/save + excel/filter/sort/condition/reset(자동, hook #64) +
+//   커스텀 2종(Column Setting / Measure Select icon-only). EDIT(F2)는 상시편집 + editLock 으로 대체.
+export const SalesPlan = ({ tabId, title }: PageProps<MENU_ID>) => {
+  const { t } = useTranslation();
+
+  const gridRef = useRef<FlexGridType<SalesPlanRow>>(null);
+  const gridFilterRef = useRef<FlexGridFilter>(undefined);
+  const editTrackerRef = useRef<EditTracker>(undefined);
+
+  const setAlert = useMessageStore.getState().setAlert;
+  const setToast = useMessageStore.getState().setToast;
+  const queryClient = useQueryClient();
+
+  const sc = useSalesPlanStore(s => s.searchCondition);
+  const setSearchCondition = useSalesPlanStore(s => s.setSearchCondition);
+  const filters = useSalesPlanStore(s => s.filters);
+  const setFilter = useSalesPlanStore(s => s.setFilter);
+  const clearFilters = useSalesPlanStore(s => s.clearFilters);
+  const openSearchArea = useSalesPlanStore(s => s.openSearchArea);
+  const setOpenSearchArea = useSalesPlanStore(s => s.setOpenSearchArea);
+  const staticColumns = useSalesPlanStore(s => s.staticColumns);
+  const fetchStaticColumns = useSalesPlanStore(s => s.fetchStaticColumns);
+  const clearUserColumnLayout = useSalesPlanStore(s => s.clearUserColumnLayout);
+  const fetchStaticMeasures = useSalesPlanStore(s => s.fetchStaticMeasures);
+  const setCalendarInfo = useSalesPlanStore(s => s.setCalendarInfo);
+  const calendarInfo = useSalesPlanStore(s => s.calendarInfo);
+  const editAuth = useSalesPlanStore(s => s.editAuth);
+  const dayRangeApplied = useSalesPlanStore(s => s.dayRangeApplied);
+  const applyDayRange = useSalesPlanStore(s => s.applyDayRange);
+
+  // ui-dynamic-property-management — Menu Button 권한 동적 fetch
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+
+  // Division 기본 선택 (DMF0003/DMF0020/DMF0040/DMF0053 정본 통일). 세션 division 이 FilterMyDivision
+  //   목록에 있으면 그것, 없으면 목록 첫 행 (AS-IS 진입 시 콤보 첫 항목 자동선택 파리티).
+  //   sc.divisionId 가 비어 있을 때만 채운다 — 기존 값(사용자 선택·복원값)은 덮지 않는다.
+  const session = useSessionStore(s => s.session);
+  const [divisionRows] = useTabComboQueries({ filters: [SEARCH_COMBO.division] });
+  useEffect(() => {
+    if (sc.divisionId) return;
+    const codes = (divisionRows ?? []).map(r => String(r.CODE ?? '')).filter(Boolean);
+    if (codes.length === 0) return;
+    const sessionDiv = String(session.div ?? '');
+    setSearchCondition({ divisionId: codes.includes(sessionDiv) ? sessionDiv : codes[0] });
+  }, [divisionRows, sc.divisionId, session.div, setSearchCondition]);
+
+  // ⭐ 명시 조회 게이트 (persist 안 됨 — 컴포넌트 로컬). 마운트 시 persist 된 stale filters 로
+  //   SP 가 자동 발사되어 NULL payload 사고 차단 (DMF0003 2026-06-29 계보). Search 클릭 후에만 enable.
+  const [hasSearched, setHasSearched] = useState(false);
+  const [isPending, setIsPending] = useState(false);
+
+  // GridAction.addRowSet/removeRow 는 itemsSource 배열을 직접 splice/remove 하고 setState 를
+  //   호출하지 않는다 — React 리렌더가 안 일어나면 이 컴포넌트가 파생하는 값(pendingRows 등)이
+  //   Insert/Delete 이후에도 그 이전 렌더 시점 값에 멈춰 있는다. handleInsert/handleDelete
+  //   끝에서 이 카운터를 올려 강제로 한 번 리렌더시킨다.
+  const [, forceGridRerender] = useState(0);
+
+  // ⭐ 기본 Period — PR_GET_DAY_RANGE o_rc2 (당월 1일~+6개월 말일. AS-IS drpPeriod.InitValue L511 1:1)
+  const dayRangeFilters = useMemo(() => ({ createdBy: '', month: '6' }), []);
+  const { data: dayRangeData } = useTabProcQuery<MENU_ID, SHEETS.DAY_RANGE>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.DAY_RANGE,
+    tabId,
+    filters: dayRangeFilters,
+    enabled: !dayRangeApplied,
+  });
+  //   Reset Condition(F10) 후 재적용 필수: F10 은 dayRangeApplied 를 false 로 되돌리지만, dayRange
+  //   쿼리는 staleTime=Infinity 캐시라 재활성화해도 dayRangeData 참조가 그대로다. deps 가
+  //   dayRangeData 뿐이면 effect 가 다시 돌지 않아 기간이 클라 기본값에 멈춘다. dayRangeApplied 를
+  //   deps 에 넣어 F10 직후 캐시된 서버 구간을 다시 적용한다(초기 진입·새로고침과 동일 경로).
+  useEffect(() => {
+    if (dayRangeApplied) return;
+    const range = (dayRangeData as { o_rc2?: { DAY_RANGE?: string }[] })?.o_rc2?.[0]?.DAY_RANGE;
+    if (range) applyDayRange(range);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayRangeData, dayRangeApplied]);
+
+  // 메인 그리드 SP — P_DMF0021_GET_DM_PLN_SALES_PLAN_DATAEX (17 IN + 커서 3). wide format.
+  const { data, refetch, isFetching } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.MAIN,
+    tabId,
+    filters: filters[SHEETS.MAIN],
+    enabled: hasSearched && !!filters[SHEETS.MAIN],
+  });
+
+  // 동적 3단 헤더 SP — P_DMF0021_GET_SPREAD_TITLE (4 IN). 기간 컬럼(M_/W_/D_) 구조의 1차 소스.
+  const { data: spreadTitleData, isFetching: isSpreadTitleFetching } = useTabProcQuery<
+    MENU_ID,
+    SHEETS.SPREAD_TITLE
+  >({
+    menuId: MENU_ID,
+    sheetName: SHEETS.SPREAD_TITLE,
+    tabId,
+    filters: filters[SHEETS.SPREAD_TITLE],
+    enabled: hasSearched && !!filters[SHEETS.SPREAD_TITLE],
+  });
+  // 참조 고정 필수: useMemo 없이 ?? [] 로 만들면 조회조건 타이핑/드롭다운마다 부모가 리렌더될 때
+  //   매번 새 배열이 되어 Grid spreadTitle prop 참조가 바뀐다 → dynColMetas useMemo(deps: spreadTitle)
+  //   재계산 → 동적 3단 헤더 재생성 → wijmo 헤더 재드로우(깜빡임). spreadTitleData(react-query 캐시,
+  //   staleTime=Infinity)가 실제로 바뀔 때만 새 참조가 되도록 고정한다.
+  const spreadTitleRows = useMemo<SpreadTitleRow[]>(
+    () => (spreadTitleData as { data?: SpreadTitleRow[] } | undefined)?.data ?? [],
+    [spreadTitleData],
+  );
+
+  // Insert 행 Measure 콤보 — P_DMF0021_GET_SALES_PLAN_MEASUREINFO (division 종속, 기본 SalesAmt_LOC).
+  const measureInfoFilters = useMemo(() => ({}), []);
+  const { data: measureInfoData } = useTabProcQuery<MENU_ID, SHEETS.MEASURE_INFO>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.MEASURE_INFO,
+    tabId,
+    filters: measureInfoFilters,
+    enabled: true,
+  });
+  const measureInfoRows = (measureInfoData as { data?: MeasureInfoRow[] } | undefined)?.data ?? [];
+
+  // P_USERINFO 권한 그룹 — AS-IS NowGroupID 등가. CMBO 'SalesPlanUserAuthGroup' 결과가 정본이며,
+  // session.groupId(유령 필드)는 참조하지 않는다 (UI분석서 v2.1 시트9 C29 — ghost field 사고 대응).
+  const [authGroupCombo] = useTabComboQueries({
+    filters: ['SalesPlanUserAuthGroup'],
+  });
+  const setAuthGroup = useSalesPlanStore(s => s.setAuthGroup);
+  const authGroup = useSalesPlanStore(s => s.authGroup);
+  const comboReady = authGroupCombo !== undefined;
+  useEffect(() => {
+    setAuthGroup(resolveSalesPlanAuthGroup(authGroupCombo));
+  }, [authGroupCombo, setAuthGroup]);
+  // ⭐ race 방어 (2026-07-15 — 40 RTF 편집불가 사고): 콤보 도착 전 Search(또는 persist filters 재사용)로
+  //   userGroup=사용자ID 조회가 이미 나갔으면 editAuth='N' 응답이 화면에 남는다 → 그룹 확정(변경) 시
+  //   filters 재생성(setFilter — 새 queryKey)으로 자동 재조회해 editAuth 를 갱신.
+  useEffect(() => {
+    if (comboReady && filters[SHEETS.MAIN]) setFilter();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [comboReady, authGroup]);
+
+  // ⭐ MAIN 커서 2/3 (calendar 기준일 / editAuth 편집권한) 을 store 에 보관 — editLock cutoff·Insert 게이트.
+  type Cal = NonNullable<typeof calendarInfo>;
+  type Auth = NonNullable<typeof editAuth>;
+  const mainData = data as
+    | { data?: SalesPlanRow[]; calendar?: Cal[] | Cal; editAuth?: Auth[] | Auth }
+    | undefined;
+  useEffect(() => {
+    if (!mainData) return;
+    const pick = <T,>(v: T[] | T | undefined): T | null =>
+      Array.isArray(v) ? (v[0] ?? null) : (v ?? null);
+    setCalendarInfo(pick(mainData.calendar), pick(mainData.editAuth));
+    // 재조회 = EditTracker clear (hook #97). 신규행은 grid.collectionView.sourceCollection
+    //   (=spRows) 에 직접 물려 있어 itemsSource 자체가 재조회로 교체되며 함께 사라진다.
+    editTrackerRef.current?.clearChanges();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mainData]);
+
+  const spRows = useMemo<SalesPlanRow[]>(() => mainData?.data ?? [], [mainData]);
+  // ⭐ measure 행 필터는 서버(TITLESET 'M') 단일 출처 — 모달 OK 의 saveTitleSet('M') + invalidate 재조회로
+  //   반영 (클라이언트 measure 행 필터 금지 — DMF0003 종속 메저 잘림 사고 계보).
+  // 신규행은 GridAction.addRowSet 이 spRows(=grid.collectionView.sourceCollection)에 직접
+  //   splice 하므로 별도 병합이 필요 없다 — rows 는 spRows 참조 그대로다(handleInsert 참고).
+  const rows: SalesPlanRow[] = spRows;
+  // 저장/검증 등 "행" 만 필요한 곳의 입력.
+  //   ⚠️ useMemo 로 [rows] 에 의존시키지 않는다 — addRowSet/removeRow 가 rows(=spRows) 를
+  //   같은 배열 참조에 splice/remove 하므로 배열 identity 가 절대 바뀌지 않고, [rows] 의존
+  //   메모는 최초 계산값에 영원히 고정된다(Insert/Delete 가 반영 안 됨 — 2026-09-17 리뷰 발견).
+  //   매 렌더 새로 거른다 — 행 수가 적어 비용 문제 없다.
+  const pendingRows = rows.filter(r => r.CRUD_TYPE === 'I');
+
+  // ⭐ mount 시 1회 admin 메타 fetch (#42/#65 동적 속성관리 baseline) + persist 된 이전 filters 무효화.
+  useEffect(() => {
+    clearFilters();
+    void fetchStaticColumns();
+    void fetchStaticMeasures();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabId]);
+
+  // 셀 모달 state (PROJECT 81·82 / ITEM 40+Catch_Up — AS-IS spdMain_CellDoubleClick L3834/3863,
+  //   TEAM(DEPT_ID) 신규행 Catch_Up 제외 — 2026-09-18 콤보→모달+키인 전환)
+  const [openProject, setOpenProject] = useState(false);
+  const [openItem, setOpenItem] = useState(false);
+  const [openTeam, setOpenTeam] = useState(false);
+  const [popupRow, setPopupRow] = useState<SalesPlanRow | null>(null);
+
+  // 참조 고정 필수: 인라인 함수로 넘기면 조회조건 타이핑/드롭다운마다 부모가 리렌더될 때 매번 새 함수
+  //   참조가 되어, Grid 의 wijmo 핸들러 설치 effect(deps 에 onPopupCellDblClick 포함 — 더블클릭
+  //   핸들러가 이를 참조)가 재실행된다. 그 effect 는 전 핸들러 재등록 + mergeManager 재생성 +
+  //   g.invalidate(true) 를 하므로 그리드 전체가 재드로우된다(통째 깜빡임). setter 는 전부 useState
+  //   참조 보장이라 deps 는 비운다.
+  const handlePopupCellDblClick = useCallback(
+    (modalKey: 'PROJECT' | 'ITEM' | 'TEAM', row: SalesPlanRow) => {
+      setPopupRow(row);
+      if (modalKey === 'ITEM') setOpenItem(true);
+      else if (modalKey === 'TEAM') setOpenTeam(true);
+      else setOpenProject(true);
+    },
+    [],
+  );
+
+  // Column / Measure 선택 모달 open state
+  const [openColumnSetting, setOpenColumnSetting] = useState(false);
+  const [openMeasureSelect, setOpenMeasureSelect] = useState(false);
+
+  // ----- validation (조회 V-S1~S3 / Bucket V-E3 / 저장 V-V1 — division 분기) -----
+  const validation = useSalesPlanValidation();
+  const isWorkInProgress = !comboReady || isFetching || isSpreadTitleFetching || isPending;
+  const blockIfWorking = (): boolean => {
+    if (!isWorkInProgress) return false;
+    void setAlert({
+      type: 'alert',
+      content: t(MSG.WORK_IN_PROGRESS, '_The previous operation is still in progress.'),
+    });
+    return true;
+  };
+
+  // 변경분 존재 여부 — Bucket 변경 가드(MSG00227) 입력 (신규 행 + EditTracker 변경 셀)
+  const hasPendingChanges = () =>
+    pendingRows.length > 0 || (editTrackerRef.current?.getOriginalValues()?.size ?? 0) > 0;
+
+  // F5 Search — AS-IS FindData(L1450~1632) 1:1 검증(V-S1~S3) 후 조회.
+  //   ⚠️ refetch?.() 직접 호출 금지 — stale closure filters 로 첫 호출 NULL payload 사고
+  //   (memory feedback_search_refetch_stale_closure). setFilter(queryKey 변경) + enabled 만으로 fetch.
+  //   [공통 C2 2026-08-14 정정] 수정 중 재조회 가드(확인 팝업)는 여기서 하지 않는다. 조회 진입점
+  //   두 곳(SearchArea 조회 버튼 · SubTitle F5)이 이미 공통 가드 confirmIfDirtyKey(..., 'search') 로
+  //   감싸 confirm + 편집분 되돌리기까지 수행한다. 화면이 같은 검사를 한 번 더 하면 팝업이 2연속으로
+  //   뜬다(2번째 팝업은 MSG00703 = 닫기 문구라 "이 화면을 닫으시겠습니까?" 로 뜬다). 신규행은
+  //   grid.collectionView.sourceCollection 에 직접 물려 있어 discardDirtyKey 의 그리드 되돌리기로
+  //   함께 사라지므로 화면이 별도로 정리할 state 가 없다.
+  const handleSearch = () => {
+    if (blockIfWorking()) return;
+    const vr = validation.validateFind(sc);
+    if (!vr.ok) {
+      // V-S3 — 3년 초과 시 종료일 = 시작일+3년 보정 (AS-IS L1481 Value2 보정 후 차단)
+      if (vr.adjustedEnd) setSearchCondition({ endYyyymmdd: vr.adjustedEnd });
+      return;
+    }
+    editTrackerRef.current?.clearChanges();
+    setHasSearched(true);
+    setFilter();
+    void fetchStaticColumns();
+    void fetchStaticMeasures();
+  };
+
+  // Column/Measure 설정 저장 = Grid 초기화 의무 (사용자 요구 2026-08-05).
+  //   저장 즉시 표시 컬럼/메저가 바뀌므로, 이전 설정으로 조회해 둔 rows 를 그대로 두면
+  //   화면의 컬럼 구성과 데이터가 어긋난다. 그리드를 공백으로 되돌리고 재조회는 Search 로만
+  //   (division 변경 초기화와 동일 정책, mkt-fcst MktFcst.tsx 정본).
+  //   필수: removeQueries([tabId]) — queryKey 는 filters '값' 기반이라 동일 조건으로 다시
+  //   Search 하면 전역 staleTime=Infinity 캐시가 이전 설정으로 받은 rows 를 그대로 돌려준다.
+  const clearGridOnSettingChange = () => {
+    editTrackerRef.current?.clearChanges();
+    setHasSearched(false);
+    clearFilters();
+    queryClient.removeQueries({ queryKey: [tabId] });
+  };
+
+  // ⭐ Division 변경 = Grid 초기화(비움) + CRUD reset 의무 (memory feedback_division_change_grid_reset —
+  //   재조회는 Search 버튼). filters 도 무효화해 stale payload 재사용 차단 + division 종속 메타 재fetch.
+  const handleDivisionChange = () => {
+    editTrackerRef.current?.clearChanges();
+    setHasSearched(false);
+    clearFilters();
+    // 컬럼 개인화 무효화 — TITLESET_USER 는 division 무관 1벌인데 컬럼 세트는 division 별로 다르다.
+    //   비우지 않으면 이전 division 레이아웃이 새 division 컬럼을 전부 숨긴다.
+    clearUserColumnLayout();
+    void fetchStaticColumns();
+    void fetchStaticMeasures();
+  };
+
+  /**
+   * 클릭한 셀 기준 병합 축 컬럼(keyBindings)으로 groupKey 함수를 만든다 — GridAction.addRowSet
+   * 의 groupKey 옵션에 그대로 넘긴다. 판정 축은 옛 groupTopRowOf 와 동일 규칙 — Sales Site 셀은
+   * 그 안의 여러 Model 블록을, Model 셀은 그 안의 Incoterms 블록을, Incoterms 셀은 measure
+   * 블록만 덮는다.
+   */
+  const buildGroupKeyOf = (g: FlexGridType<SalesPlanRow>): ((row: SalesPlanRow) => string) => {
+    const columns: GroupKeyColumn[] = [];
+    for (let i = 0; i < g.columns.length; i++) {
+      const column = g.columns[i];
+      // visible 미지정(undefined)은 표시로 본다 — 잘못 빼면 축이 통째로 폴백된다.
+      columns.push({ binding: column?.binding ?? '', visible: column?.visible !== false });
+    }
+    const keyBindings = groupKeyBindings(columns, g.selection.col);
+    return (row: SalesPlanRow) => {
+      if (keyBindings.length === 0) return '';
+      const rec = row as Record<string, string>;
+      // 값이 전부 빈 문자열이어도 key 가 falsy 로 접히지 않도록 접두사를 붙인다 —
+      //   resolveInsertAnchor 는 groupKey 가 falsy 면 walk 자체를 건너뛴다.
+      return `K:${keyBindings.map(binding => rec[binding] ?? '').join('')}`;
+    };
+  };
+
+  // F8 Insert — AS-IS InsertRow(L2831~3382) 1:1.
+  //   권한 게이트: EDIT_AUTH_SALESAMT_LOC='Y'(기타매출 편집권한자)만 — 무권한 silent 무시(L2854).
+  //   기본값: MEASURE=SalesAmt_LOC(L2926) + FCST_TYPE=ETC 고정(L2944). Daily 버킷 = 편집 불가(MSG00361).
+  const handleInsert = () => {
+    if (isPending) return;
+    if ((editAuth?.EDIT_AUTH_SALESAMT_LOC ?? '') !== 'Y') return; // silent (AS-IS L2854~2857)
+    if (sc.bucketType === BUCKET_TYPE.DAILY) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.DAILY_EDIT_BLOCK, '_Daily 버킷에서는 편집할 수 없습니다.'),
+      });
+      return;
+    }
+    const g = gridRef.current;
+    if (!g) return;
+    const newRow: SalesPlanRow = {
+      CRUD_TYPE: 'I',
+      INSERT_GROUP_ID: `I_${Date.now()}`,
+      DIVISION_ID: sc.divisionId,
+      ...INSERT_ROW_DEFAULTS,
+    };
+    // 앵커·정렬 고정·필터 예외 등록은 GridAction.addRowSet(groupKey=buildGroupKeyOf) 이 전부
+    //   처리한다 — 그룹 경계는 옛 groupTopRowOf 와 동일 규칙(누른 컬럼까지의 정적 값이 같은
+    //   연속 행). 배열 끝에 붙여 누른 순서를 유지한다 — 같은 앵커에 연속 Insert 시 누른 순서대로
+    //   쌓인다(resolveInsertAnchor 의 pin 체이스).
+    const added = GridAction.addRowSet(
+      g as unknown as FlexGridType<WijmoRowItem>,
+      [newRow] as unknown as Partial<WijmoRowItem>[],
+      'above',
+      {
+        groupKey: buildGroupKeyOf(g) as unknown as (row: WijmoRowItem) => string,
+        preserveMergeManager: true,
+      }
+    ) as unknown as SalesPlanRow[] | undefined;
+    const target = added?.[0];
+    if (!target) return;
+    for (let i = 0; i < g.rows.length; i++) {
+      if (g.rows[i]?.dataItem !== target) continue;
+      g.select(i, Math.max(0, g.selection.col));
+      g.scrollIntoView(i, -1);
+      break;
+    }
+    // addRowSet 이 setState 를 호출하지 않으므로 강제 리렌더 — pendingRows 를 최신 rows 로
+    //   다시 계산시킨다.
+    forceGridRerender(v => v + 1);
+  };
+
+  // F9 Delete — AS-IS DeleteButton(L673~679) 1:1 — Action='I'(신규 삽입행)만 즉시 제거.
+  //   DB 조회행은 무동작(silent) — 저장행 삭제는 셀 0 저장(SP 'D' 전환) 경로만 (DMF0082 와 상이).
+  //   ⚠ 드래그 다중 선택 · 삭제 대상이 다른 신규행의 앵커였던 경우의 앵커 승계는
+  //   GridAction.removeRow 가 처리한다 — 다중 선택은 grid.selectedRows 를 그대로 순회하고,
+  //   앵커 승계는 pin 이 grid 인스턴스의 WeakMap 에 걸려 있어(React state 가 아니다) 삭제된
+  //   행 객체가 참조로 남아 있는 한 다음 Insert 때 resolveInsertAnchor 의 pin 체이스가 그
+  //   행의 pin 을 타고 올라가 실제 앵커까지 자동으로 재해석한다.
+  const handleDelete = () => {
+    if (isPending) return;
+    const g = gridRef.current;
+    if (!g) return;
+    GridAction.removeRow(g as unknown as FlexGridType<WijmoRowItem>, true, true);
+    forceGridRerender(v => v + 1);
+  };
+
+  // F7 Save — AS-IS SaveData(L1922~2828) 1:1. ⚠ 저장확인 없음 — 즉시 저장 (MSG00012 부재, 사용자 확정).
+  //   검증(V-V1 필수 13종) → 18키 '^' bulk 조립(Catch_Up 음수/라인 변경 0건 조립 검증) →
+  //   apiClient.post 직접 → 결과 '^' 토큰 분해(MSG 코드 추출) → 성공 MSG00002 + 재조회(스크롤 복원).
+  const handleSave = async () => {
+    if (blockIfWorking()) return;
+    const savedScroll = gridRef.current?.scrollPosition ?? null;
+    const savedSelection = gridRef.current?.selection
+      ? { row: gridRef.current.selection.row, col: gridRef.current.selection.col }
+      : null;
+    const changedMap =
+      (editTrackerRef.current?.getOriginalValues() as
+        | Map<SalesPlanRow, Record<string, unknown>>
+        | undefined) ?? new Map<SalesPlanRow, Record<string, unknown>>();
+    const editedRows = [...changedMap.keys()].filter(r => r.CRUD_TYPE !== 'I');
+
+    // (0) 변경 0건 + 필수 13종 division×measure 분기 (MSG00004 / MSG00429 {0})
+    const vr = validation.validateSaveRows(
+      [...pendingRows, ...editedRows],
+      sc.divisionId,
+      staticColumns
+    );
+    if (!vr.ok) return;
+
+    // (1) (행 × 변경 기간셀) unfold — 활성 버킷 셀만, 빈값→'0'→'D', Catch_Up 음수/라인 무변경 검증
+    const build = buildUnfoldRows({
+      insertedRows: pendingRows,
+      editedChanges: changedMap,
+      divisionId: sc.divisionId,
+      bucketType: sc.bucketType,
+      msg: { catchupMinZero: MSG.CATCHUP_MIN_ZERO, lineNoChange: MSG.LINE_NO_CHANGE },
+    });
+    if (build.error) {
+      void setAlert({
+        type: 'alert',
+        content: t(build.error.msgId, `_${build.error.msgId}`).replace(
+          '{0}',
+          build.error.param ?? ''
+        ),
+      });
+      return;
+    }
+    const auditUserId = useSessionStore.getState().session.userId ?? '';
+    const payload = buildSavePayload(build.rows, auditUserId);
+    if (!payload) {
+      // 변경/신규 없음 → toast + 공통 문구 (DMF0003~0007/0020/0072 과 동일 규약).
+      setToast({ type: 'error', message: t(MSG.NO_CHANGES, '_수정한 내용이 없습니다.') });
+      return;
+    }
+
+    setIsPending(true);
+    try {
+      const res = await callSaveSalesPlan(payload);
+      if (!res.ok) {
+        // SP 반환 '^' 토큰 처리 — AS-IS L2776~2788 [E20250520-000572] 1:1.
+        //   코드 검출: MSG_M 다국어 변환 후 '^' 뒤 토큰을 {0} 자리에 치환 (formatSaveErrorText).
+        //   코드 미검출: SP 오류문 원문을 그대로 띄운다 (AS-IS else 분기 MessageBox.Show 대응).
+        const reason = res.msgCode
+          ? formatSaveErrorText(t(res.msgCode, res.msgCode), res.addMessage, res.msgCode)
+          : res.addMessage || t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
+        void setAlert({ type: 'alert', content: reason });
+        return;
+      }
+      void setToast({ message: t(MSG.SAVED, '_성공적으로 저장되었습니다.'), type: 'success' });
+      editTrackerRef.current?.clearChanges();
+      void queryClient.invalidateQueries({ queryKey: [MENU_ID] });
+      await (refetch?.() ?? Promise.resolve());
+      // 재조회 후 스크롤 위치 복원 (AS-IS FindData(false, updRow, actCol) 셀 위치 복원 — best-effort)
+      if (savedScroll || savedSelection) {
+        window.requestAnimationFrame(() => {
+          const g = gridRef.current;
+          if (!g) return;
+          if (savedScroll) g.scrollPosition = savedScroll;
+          if (savedSelection && g.rows.length > 0 && g.columns.length > 0) {
+            const row = Math.min(Math.max(savedSelection.row, 0), g.rows.length - 1);
+            const col = Math.min(Math.max(savedSelection.col, 0), g.columns.length - 1);
+            g.select(row, col);
+            g.scrollIntoView(row, col);
+          }
+        });
+      }
+    } catch (e) {
+      const msg =
+        e instanceof Error ? e.message : t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
+      void setAlert({ type: 'alert', content: msg });
+    } finally {
+      setIsPending(false);
+    }
+  };
+
+  // SubTitle 공통버튼 — 미명시(sort/filter/condition/resetCondition/excel)는 DefaultButtonActions 자동 (hook #64).
+  const hotkeyConfig: HotkeyConfig = {
+    search: hasButton('SEARCH') ? handleSearch : false,
+    insert: hasButton('INSERT') ? handleInsert : false,
+    delete: hasButton('DELETE') ? handleDelete : false,
+    save: hasButton('SAVE') ? () => void handleSave() : false,
+    manual: false,
+    upload: false,
+  };
+
+  // 커스텀 2종 — Column Setting / Measure Select (icon-only. AS-IS btnColumn L4427 / btnMeasure L4440)
+  const customButtons = [
+    ...(hasButton('COLUMN_SETUP')
+      ? [
+          {
+            label: t('LBL00605', 'Column Setting'),
+            title: t('LBL00605', 'Column Setting'),
+            action: () => setOpenColumnSetting(true),
+            iconComponent: <IcGridColumnSetup />,
+            buttonLabel: '',
+          },
+        ]
+      : []),
+    ...(hasButton('MEASURE_SELECT')
+      ? [
+          {
+            label: t('LBL00310', '_Measure'),
+            title: t('LBL00310', '_Measure'),
+            action: () => setOpenMeasureSelect(true),
+            iconComponent: <IcMeasureSelect />,
+            buttonLabel: '',
+          },
+        ]
+      : []),
+  ];
+
+  return (
+    <>
+      <MainTitle
+        title={title}
+        menuId={MENU_ID}
+        openSearchArea={openSearchArea}
+        toggleOpenSearchArea={setOpenSearchArea}
+      />
+
+      {openSearchArea && (
+        <SalesPlanForm
+          onSearch={handleSearch}
+          onDivisionChange={handleDivisionChange}
+          hasPendingChanges={hasPendingChanges}
+          validation={validation}
+        />
+      )}
+
+      <SubTitle
+        menuId={MENU_ID}
+        grid={gridRef}
+        gridFilter={gridFilterRef}
+        dataCount={rows.length}
+        excelFileName='SalesPlan'
+        useHotkey={true}
+        hotkeyConfig={hotkeyConfig}
+        searchParam={sc}
+        customButtons={customButtons}
+      />
+
+      <SalesPlanGrid
+        rows={rows}
+        gridRef={gridRef as never}
+        tabId={tabId}
+        gridFilterRef={gridFilterRef}
+        editTrackerRef={editTrackerRef}
+        divisionId={sc.divisionId}
+        bucketType={sc.bucketType}
+        sumYn={sc.sumYn}
+        currentYyyymmdd={filters[SHEETS.MAIN]?.nowYyyymmdd ?? ''}
+        startYyyymmdd={filters[SHEETS.SPREAD_TITLE]?.startYyyymmdd ?? ''}
+        endYyyymmdd={filters[SHEETS.SPREAD_TITLE]?.endYyyymmdd ?? ''}
+        staticColumns={staticColumns}
+        spreadTitle={spreadTitleRows}
+        calendarInfo={calendarInfo}
+        editAuth={editAuth}
+        measureInfoRows={measureInfoRows}
+        onPopupCellDblClick={handlePopupCellDblClick}
+      />
+
+      {/* 모달 5종 — 셀 PROJECT/ITEM/TEAM + Column/Measure Setting (components/SalesPlanModals — 진입 분리) */}
+      <SalesPlanModals
+        divisionId={sc.divisionId}
+        openProject={openProject}
+        openItem={openItem}
+        openTeam={openTeam}
+        openColumnSetting={openColumnSetting}
+        openMeasureSelect={openMeasureSelect}
+        popupRow={popupRow}
+        onClose={(key: SalesPlanModalKey) =>
+          ({
+            PROJECT: setOpenProject,
+            ITEM: setOpenItem,
+            TEAM: setOpenTeam,
+            COLUMN: setOpenColumnSetting,
+            MEASURE: setOpenMeasureSelect,
+          })[key](false)
+        }
+        applyToInsertRow={patch => {
+          const popupGroupId = popupRow?.INSERT_GROUP_ID;
+          if (!popupGroupId) return;
+          // 신규행은 grid.collectionView.sourceCollection(=spRows)에 직접 물려 있으므로 객체를
+          //   새로 만들지 않고 그 자리에서 갱신한다 — 새 객체로 바꾸면 그 행을 앵커로 삼은 다른
+          //   신규행의 pin(anchor 참조)이 끊긴다.
+          const target = spRows.find(r => r.INSERT_GROUP_ID === popupGroupId);
+          if (target) {
+            Object.assign(target as Record<string, unknown>, patch);
+            gridRef.current?.invalidate();
+          }
+          setPopupRow(null);
+        }}
+        onSettingChanged={clearGridOnSettingChange}
+      />
+    </>
+  );
+};

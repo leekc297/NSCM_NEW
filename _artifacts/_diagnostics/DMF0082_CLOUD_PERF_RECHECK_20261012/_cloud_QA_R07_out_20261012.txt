@@ -1,0 +1,26 @@
+사용자 전달 클라우드 QA(OCGSCMQ_P01) R07 실행 결과 — 2026-10-12 (채팅 붙여넣기, 열 패딩 축약)
+
+[M1] 메저별 CREATED/UPDATED (SEARCH 사용자 3명)
+jaeuk.shin  9개 09-29 18:07  SCM_FCST,MKT_FCST,RTF_SYS_RP,LOC,KRW,USD,VMI_In_Req,VMI_In_Plan,VMI_Inv
+k0101       9개 10-01 09:47  CUST_FCST,MKT_FCST,SCM_FCST,RTF_SYS_RP,LOC,KRW,USD,MKT_AMT_KRW,MKT_AMT_LOC
+minyonglee1 9개 10-09 15:11  MKT_FCST_PP,MKT_FCST,RTF_SYS_RP,SCM_FCST,KRW,USD,LOC,MKT_AMT_KRW,CUST_FCST
+
+[M2] 사용자별 요약 (24명)
+minyonglee1 9 CUST1 AMT1 10-09 15:11 | k0101 9 CUST1 AMT2 10-01 09:47 | jaeuk.shin 9 CUST0 AMT0 09-29 18:07
+CHANGE_ME_TO_REAL_ID 7 (09-21) · CHANGE_ME 7 (09-21) · jaehyeok 6 · bpark416 8 · eunah.koo 7 · jaehun_cho 8 · ys_cho 7 · <화면계정ID> 7 · SCM_MGR 7 · wonqthanq 7 · bh.lee 7 · daeho.son 7 · heesookim 7 · byeongsey_y 7 · bestjsl 7 · lwg0721 7 · jssbae 7 · jiwon.park 7 · dodae 3 · test001 7 · bottle 7
+→ 실사용자 대부분 7개 = 기본 세트 MKT_FCST,RTF_SYS_RP,SCM_FCST,CUST_FCST,KRW,USD,LOC (CUST_FCST 포함)
+
+[M3] titleSet SAVE 이력 14일 (sortOrderNo 토큰 수 = 저장된 메저 수)
+09-29 11:35 k0101 7 · 09-29 11:53 minyonglee1 1 · 12:15 minyonglee1 7 · 13:34 minyonglee1 1 · 13:41 minyonglee1 6 · 18:07 jaeuk.shin 9
+09-30 10:01 minyonglee1 7
+10-01 09:47 k0101 9 · 09:49 minyonglee1 9 · 11:38 k0101 16(토큰 16 — 다른 시트 포함 가능)
+10-02 13:45 minyonglee1 3 · 18:05 minyonglee1 1
+10-06 10:20 minyonglee1 6
+10-09 11:06 minyonglee1 7 · 13:35 minyonglee1 8 · 15:11 minyonglee1 9 (현재)
+
+[M4] 메저 메타 (VALID Y) — division 적용 범위
+40 전용: VMI_In_Plan · VMI_In_Req · VMI_Inv
+40+81계열: FCST_GAP · MKT_AMT_KRW · MKT_AMT_LOC · SCM_FCST(기본)
+40+81계열+82: BALANCE · KRW(기본) · LOC(기본) · MKT_FCST(기본) · MKT_FCST_PP · RTF_SYS_RP(기본) · USD(기본)
+81계열 전용: AS_In_Plan · AS_In_Req · AS_Inv · CUST_FCST(기본) · IN_TRANSIT · MKT_FCST_RP_CAR · RTF_SCP · RTF_SYS_RP_CAR · RTF_SYS_RP_CELL
+82+81계열: MKT_FCST_RP_CELL

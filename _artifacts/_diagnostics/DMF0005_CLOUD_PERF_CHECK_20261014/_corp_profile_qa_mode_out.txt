@@ -1,0 +1,95 @@
+﻿DB 59.19.252.148:2521/ZIOUI1 localhost 2026-10-14 11:42:11
+
+### div 81 | 2.57s | 42088행 | auf0qn8xx5388/14 | 함수 내부 SQL 1218회 0.03s BG 3667
+    Plan hash value: 1286034735
+     
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    | Id  | Operation                                             | Name                            | Starts | E-Rows | A-Rows |   A-Time   | Buffers |  OMem |  1Mem | Used-Mem |
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    |   0 | SELECT STATEMENT                                      |                                 |      1 |        |  42088 |00:00:01.60 |   42686 |       |       |          |
+    |   1 |  TABLE ACCESS BY INDEX ROWID                          | SCM_MST_COUNTRY                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+    |   2 |   INDEX UNIQUE SCAN                                   | PK_SCM_MST_COUNTRY              |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+    |   3 |  TEMP TABLE TRANSFORMATION                            |                                 |      1 |        |  42088 |00:00:01.60 |   42686 |       |       |          |
+    |   4 |   LOAD AS SELECT (CURSOR DURATION MEMORY)             | SYS_TEMP_0FD9D6948_49C63B       |      1 |        |      0 |00:00:00.52 |   29422 |  1024 |  1024 |          |
+    |   5 |    SORT GROUP BY NOSORT                               |                                 |      1 |    130K|  86469 |00:00:00.45 |   29421 |       |       |          |
+    |   6 |     FILTER                                            |                                 |      1 |        |    221K|00:00:00.30 |   29421 |       |       |          |
+    |   7 |      TABLE ACCESS BY INDEX ROWID                      | SCM_ITEM_M                      |      1 |    176K|    221K|00:00:00.28 |   29421 |       |       |          |
+    |   8 |       INDEX FULL SCAN                                 | PK_SCM_ITEM_M                   |      1 |  19591 |    221K|00:00:00.12 |    3867 |       |       |          |
+    |   9 |   SORT ORDER BY                                       |                                 |      1 |   3942K|  42088 |00:00:01.07 |   13263 |    21M|  1687K|   18M (0)|
+    |  10 |    FILTER                                             |                                 |      1 |        |  42088 |00:00:00.91 |   13263 |       |       |          |
+    |  11 |     HASH JOIN RIGHT OUTER                             |                                 |      1 |     30G|  42088 |00:00:00.89 |   13263 |  1106K|  1106K| 1055K (0)|
+    |  12 |      TABLE ACCESS BY INDEX ROWID BATCHED              | SCM_ADM_LOOKUP_MASTER_DETAIL    |      1 |     13 |     21 |00:00:00.01 |       4 |       |       |          |
+    |  13 |       INDEX RANGE SCAN                                | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |      1 |     18 |     21 |00:00:00.01 |       3 |       |       |          |
+    |  14 |      HASH JOIN RIGHT OUTER                            |                                 |      1 |     30G|  42088 |00:00:00.87 |   13259 |   966K|   966K| 1386K (0)|
+    |  15 |       TABLE ACCESS FULL                               | SCM_MST_PROJECT                 |      1 |   1210 |   1158 |00:00:00.01 |     203 |       |       |          |
+    |  16 |       FILTER                                          |                                 |      1 |        |  42088 |00:00:00.85 |   13056 |       |       |          |
+    |  17 |        HASH JOIN RIGHT OUTER                          |                                 |      1 |   2531M|  46854 |00:00:00.83 |   13056 |    13M|  2346K|   37M (0)|
+    |  18 |         VIEW                                          |                                 |      1 |    130K|  86469 |00:00:00.03 |       0 |       |       |          |
+    |  19 |          TABLE ACCESS FULL                            | SYS_TEMP_0FD9D6948_49C63B       |      1 |    130K|  86469 |00:00:00.01 |       0 |       |       |          |
+    |  20 |         HASH JOIN OUTER                               |                                 |      1 |   1936K|  46854 |00:00:00.67 |   13056 |    25M|  3840K|   51M (0)|
+    |  21 |          HASH JOIN RIGHT OUTER                        |                                 |      1 |  34926 |  46854 |00:00:00.31 |    9559 |  3919K|  1255K| 4867K (0)|
+    |  22 |           TABLE ACCESS FULL                           | SCM_MST_CUSTOMER                |      1 |  27229 |  27229 |00:00:00.01 |     921 |       |       |          |
+    |  23 |           HASH JOIN RIGHT OUTER                       |                                 |      1 |  34926 |  46854 |00:00:00.28 |    8638 |  1115K|  1115K| 1346K (0)|
+    |  24 |            VIEW                                       | VW_DCL_3DAD2387                 |      1 |    217 |    395 |00:00:00.01 |      97 |       |       |          |
+    |  25 |             TABLE ACCESS FULL                         | SCM_MST_SITE_CUSTOMER           |      1 |    217 |    395 |00:00:00.01 |      97 |       |       |          |
+    |  26 |            HASH JOIN OUTER                            |                                 |      1 |  16095 |  46854 |00:00:00.26 |    8541 |    17M|  3976K|   18M (0)|
+    |  27 |             HASH JOIN OUTER                           |                                 |      1 |   2040 |  46854 |00:00:00.13 |    4692 |    14M|  2027K|   16M (0)|
+    |  28 |              HASH JOIN RIGHT OUTER                    |                                 |      1 |   2040 |  46854 |00:00:00.06 |    3958 |  1797K|  1797K|  775K (0)|
+    |  29 |               VIEW                                    |                                 |      1 |    122 |      1 |00:00:00.01 |     449 |       |       |          |
+    |  30 |                HASH GROUP BY                          |                                 |      1 |    122 |      1 |00:00:00.01 |     449 |  1422K|  1422K|          |
+    |  31 |                 VIEW                                  |                                 |      1 |    122 |      1 |00:00:00.01 |     449 |       |       |          |
+    |  32 |                  UNION-ALL                            |                                 |      1 |    122 |      1 |00:00:00.01 |     449 |       |       |          |
+    |  33 |                   HASH JOIN                           |                                 |      1 |     30 |      0 |00:00:00.01 |     241 |  1423K|  1423K|  768K (0)|
+    |  34 |                    TABLE ACCESS FULL                  | SCM_ADM_USER_M                  |      1 |     92 |      1 |00:00:00.01 |     208 |       |       |          |
+    |  35 |                    TABLE ACCESS BY INDEX ROWID BATCHED| SCM_ADM_LOOKUP_MASTER_DETAIL    |      1 |    325 |    370 |00:00:00.01 |      33 |       |       |          |
+    |  36 |                     INDEX RANGE SCAN                  | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |      1 |    442 |    375 |00:00:00.01 |       9 |       |       |          |
+    |  37 |                   TABLE ACCESS FULL                   | SCM_ADM_USER_M                  |      1 |     92 |      1 |00:00:00.01 |     208 |       |       |          |
+    |  38 |               HASH JOIN RIGHT OUTER                   |                                 |      1 |   2040 |  46854 |00:00:00.05 |    3509 |  1009K|  1009K| 1388K (0)|
+    |  39 |                VIEW                                   |                                 |      1 |     46 |    153 |00:00:00.01 |       5 |       |       |          |
+    |  40 |                 HASH GROUP BY                         |                                 |      1 |     46 |    153 |00:00:00.01 |       5 |   715K|   715K| 2689K (0)|
+    |  41 |                  TABLE ACCESS FULL                    | DM_MST_CUSTOMER_MODEL           |      1 |     46 |    155 |00:00:00.01 |       5 |       |       |          |
+    |  42 |                HASH JOIN                              |                                 |      1 |   2040 |  46854 |00:00:00.04 |    3504 |  1005K|  1005K| 1388K (0)|
+    |  43 |                 INDEX RANGE SCAN                      | IDX04_SCM_MST_SITE              |      1 |    365 |    531 |00:00:00.01 |       6 |       |       |          |
+    |  44 |                 TABLE ACCESS FULL                     | SCM_MST_SITE_ITEM               |      1 |  14767 |  53516 |00:00:00.03 |    3498 |       |       |          |
+    |  45 |              TABLE ACCESS FULL                        | SCM_MST_SSO_DEPT_INFO           |      1 |  21363 |  21363 |00:00:00.01 |     734 |       |       |          |
+    |  46 |             VIEW                                      |                                 |      1 |    687 |    373 |00:00:00.06 |    3849 |       |       |          |
+    |  47 |              VIEW                                     |                                 |      1 |    687 |    373 |00:00:00.02 |     182 |       |       |          |
+    |  48 |               HASH UNIQUE                             |                                 |      1 |    687 |    373 |00:00:00.02 |     182 |   952K|   952K| 1489K (0)|
+    |  49 |                INDEX RANGE SCAN                       | IDX01_SCM_MST_SITE_ITEM         |      1 |  12294 |  45603 |00:00:00.01 |     182 |       |       |          |
+    |  50 |          VIEW                                         |                                 |      1 |     19M|   2517 |00:00:00.23 |    3497 |       |       |          |
+    |  51 |           HASH GROUP BY                               |                                 |      1 |     19M|   2517 |00:00:00.23 |    3497 |  1025K|  1025K|  302M (0)|
+    |  52 |            FILTER                                     |                                 |      1 |        |  53516 |00:00:00.09 |    3497 |       |       |          |
+    |  53 |             HASH JOIN OUTER                           |                                 |      1 |     19M|  53516 |00:00:00.09 |    3497 |  7472K|  2545K| 9958K (0)|
+    |  54 |              TABLE ACCESS FULL                        | SCM_MST_SITE_ITEM               |      1 |  14767 |  53516 |00:00:00.02 |    3497 |       |       |          |
+    |  55 |              VIEW                                     |                                 |      1 |    130K|  86469 |00:00:00.01 |       0 |       |       |          |
+    |  56 |               TABLE ACCESS FULL                       | SYS_TEMP_0FD9D6948_49C63B       |      1 |    130K|  86469 |00:00:00.01 |       0 |       |       |          |
+    |  57 |     TABLE ACCESS FULL                                 | GT_GGET_SPLIT_TEAM_ID           |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+    |  58 |     TABLE ACCESS FULL                                 | GT_GGET_SPLIT_CUSTOMER          |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+    |  59 |     TABLE ACCESS FULL                                 | GT_GGET_SPLIT_SCM_SITE_ID       |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+    |  60 |     TABLE ACCESS FULL                                 | GT_GGET_SPLIT_VALID_YN          |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+    |  61 |     TABLE ACCESS FULL                                 | GT_GGET_SPLIT_ITEM_ID           |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+    |  62 |     TABLE ACCESS FULL                                 | GT_GGET_SPLIT_PROJECT_CODE      |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+    |  63 |     TABLE ACCESS FULL                                 | GT_GGET_SPLIT_OWNER             |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+     
+
+### div 82 | 2.22s | 38621행 | auf0qn8xx5388/15 | 함수 내부 SQL 562회 0.01s BG 1684
+    Plan hash value: 1366230996
+     
+    -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    | Id  | Operation                                              | Name                            | Starts | E-Rows | A-Rows |   A-Time   | Buffers |  OMem |  1Mem | Used-Mem |
+    -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    |   0 | SELECT STATEMENT                                       |                                 |      1 |        |  38621 |00:00:01.34 |   38093 |       |       |          |
+    |   1 |  TABLE ACCESS BY INDEX ROWID                           | SCM_MST_COUNTRY                 |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+    |   2 |   INDEX UNIQUE SCAN                                    | PK_SCM_MST_COUNTRY              |      0 |      1 |      0 |00:00:00.01 |       0 |       |       |          |
+    |   3 |  TEMP TABLE TRANSFORMATION                             |                                 |      1 |        |  38621 |00:00:01.34 |   38093 |       |       |          |
+    |   4 |   LOAD AS SELECT (CURSOR DURATION MEMORY)              | SYS_TEMP_0FD9D694B_49C63B       |      1 |        |      0 |00:00:00.48 |   26861 |  1024 |  1024 |          |
+    |   5 |    SORT GROUP BY NOSORT                                |                                 |      1 |    130K|  52637 |00:00:00.43 |   26860 |       |       |          |
+    |   6 |     FILTER                                             |                                 |      1 |        |    223K|00:00:00.30 |   26860 |       |       |          |
+    |   7 |      TABLE ACCESS BY INDEX ROWID                       | SCM_ITEM_M                      |      1 |    176K|    223K|00:00:00.27 |   26860 |       |       |          |
+    |   8 |       INDEX FULL SCAN                                  | PK_SCM_ITEM_M                   |      1 |  19591 |    223K|00:00:00.12 |    3867 |       |       |          |
+    |   9 |   SORT ORDER BY                                        |                                 |      1 |   3942K|  38621 |00:00:00.85 |   11231 |    18M|  1593K|   16M (0)|
+    |  10 |    FILTER                                              |                                 |      1 |        |  38621 |00:00:00.72 |   11231 |       |       |          |
+    |  11 |     HASH JOIN RIGHT OUTER                              |                                 |      1 |     30G|  38621 |00:00:00.70 |   11231 |  1106K|  1106K| 1055K (0)|
+    |  12 |      TABLE ACCESS BY INDEX ROWID BATCHED               | SCM_ADM_LOOKUP_MASTER_DETAIL    |      1 |     13 |     21 |00:00:00.01 |       4 |       |       |          |
+    |  13 |       INDEX RANGE SCAN                                 | PK_SCM_ADM_LOOKUP_MASTER_DETAIL |      1 |     18 |     21 |00:00:00.01 |       3 |       |       |          |

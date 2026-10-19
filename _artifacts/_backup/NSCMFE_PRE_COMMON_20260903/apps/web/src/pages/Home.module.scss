@@ -1,0 +1,352 @@
+.homeWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  /* 패널은 각자 내용 높이대로 잡힌다(빈 패널이 억지로 커지거나 눌려서 스크롤이 생기지 않게).
+     전체 내용이 뷰 높이를 넘을 때만 페이지가 스크롤된다(내용 잘림 방지). */
+  overflow: auto;
+}
+
+.devLogin {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.welcome {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2220;
+}
+
+/* ---------- Layout ---------- */
+.panelGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  /* 단일 행이 그리드 높이를 채운다 → 하단 빈 공간 제거, 좌우 컬럼이 뷰 높이까지 확장 */
+  grid-template-rows: minmax(0, 1fr);
+  gap: 20px;
+  flex: 1 1 auto; /* topBar 아래 남은 세로 공간 전부 차지 */
+  min-height: 0;
+  align-items: stretch;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: none; /* 모바일: 자동 높이(세로 스택) */
+    flex: 0 0 auto;
+  }
+}
+
+/* 좌측 즐겨찾기 셀 — 우측 컬럼 높이에 고정하고 넘치면 패널 내부에서만 스크롤.
+   패널을 absolute 로 띄워 셀 높이(=우측 컬럼 높이) 이상으로 커지지 않게 한다. */
+.favoriteCell {
+  min-height: 0;
+
+  @media (min-width: 901px) {
+    position: relative;
+  }
+}
+
+/* 즐겨찾기 패널을 셀 높이(=우측 컬럼 높이)에 고정 → 넘치면 패널 내부에서만 스크롤 */
+@media (min-width: 901px) {
+  .favoritePanel {
+    position: absolute;
+    inset: 0;
+  }
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+  min-height: 0; /* 그리드 셀 높이에 갇혀 세 패널이 shrink → 각 패널 body 가 내부 스크롤 */
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 1px solid #dde0df;
+  border-radius: 6px;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.noticePanel {
+  min-height: 120px;
+}
+
+.authorityPanel {
+  min-height: 100px;
+}
+
+.adminPanel {
+  min-height: 120px;
+}
+
+/* 우측 컬럼 세로 배분 4 : 3 : 3 (공지 / 권한 / 관리자).
+   flex-basis 0 이라 남는 높이가 아니라 컬럼 전체가 비율대로 나뉜다.
+   각 패널은 배분된 높이에 갇히고, 내용이 넘치면 패널 body 에서만 스크롤된다.
+   모바일(≤900px)은 컬럼 높이가 내용 기준이라 비율을 적용하지 않고 세로로 쌓는다. */
+@media (min-width: 901px) {
+  .noticePanel {
+    flex: 4 1 0;
+  }
+
+  .authorityPanel {
+    flex: 3 1 0;
+  }
+
+  .adminPanel {
+    flex: 3 1 0;
+  }
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eef0ef;
+}
+
+.panelTitle {
+  font-weight: 700;
+  font-size: 15px;
+  color: #1f2220;
+}
+
+.panelBody {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* 공지 본문 — 패널(최소높이) 을 채우고 넘치면 내부 스크롤.
+   건별 카드(.noticeRow) 가 패널 테두리에 붙지 않도록 안쪽 여백을 준다. */
+.noticeBody {
+  flex: 1;
+  min-height: 0;
+  padding: 8px;
+  overflow-y: auto;
+}
+
+.emptyText {
+  grid-column: 1 / -1;
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 13px;
+  color: #979998;
+}
+
+/* ---------- Announcements ---------- */
+/* 한 건 = 모듈 배지 + 제목 / 내용 한 줄 요약 / 등록일(우측) 3단.
+   AS-IS 동일 — 건별 회색 카드 배경 + 카드 사이 흰 간격 (구분선 대신 배경으로 구분). */
+.noticeRow {
+  padding: 12px 14px;
+  border-radius: 4px;
+  background-color: #f1f3f2;
+  cursor: pointer;
+
+  & + & {
+    margin-top: 8px;
+  }
+
+  &:hover {
+    background-color: #e7eae9;
+  }
+}
+
+.noticeHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.noticeBadge {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background-color: #ddf1f4;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: #1a6e7a;
+}
+
+.noticeTitle {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2220;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 내용이 없는 공지도 같은 높이를 차지하도록 한 줄 높이를 확보한다 */
+.noticeSummary {
+  margin: 6px 0 0;
+  min-height: 1.5em;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b6f6d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.noticeRegDate {
+  display: block;
+  margin-top: 8px;
+  text-align: right;
+  font-size: 12px;
+  color: #a0a3a1;
+}
+
+/* ---------- Favorite Screens ---------- */
+.favoriteRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #f2f3f2;
+
+  &:hover {
+    background-color: #f7f8f7;
+
+    .favoriteDelete {
+      opacity: 1;
+    }
+  }
+}
+
+.favoriteLink {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.favoriteTitle {
+  font-size: 13px;
+  color: #1f2220;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  .favoriteLink:hover & {
+    color: #1976d2;
+    text-decoration: underline;
+  }
+}
+
+.favoritePath {
+  font-size: 11px;
+  color: #8a8d8b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.favoriteDelete {
+  flex-shrink: 0;
+  padding: 4px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+/* ---------- My Authorities ---------- */
+/* 2열 배치, 패널 높이를 넘으면 스크롤 */
+.authorityBody {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  gap: 6px 16px;
+  padding: 14px 16px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.authorityItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 13px;
+  color: #1f2220;
+}
+
+.authorityDot {
+  flex-shrink: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #1976d2;
+}
+
+.authorityName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- System Administrators ---------- */
+.adminTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+
+  th,
+  td {
+    padding: 9px 16px;
+    text-align: left;
+    border-bottom: 1px solid #f2f3f2;
+  }
+
+  /* 패널이 짧아 목록이 스크롤되므로 헤더는 고정 */
+  th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-weight: 600;
+    color: #6b6f6d;
+    background-color: #f6f7f6;
+  }
+
+  td {
+    color: #1f2220;
+  }
+}

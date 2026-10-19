@@ -1,0 +1,17 @@
+.dialogContentWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gridWrapper {
+  position: relative;
+  height: 380px;
+}
+
+.buttonWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 8px;
+}

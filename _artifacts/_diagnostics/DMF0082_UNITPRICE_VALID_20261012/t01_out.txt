@@ -1,0 +1,30 @@
+BODY LAST_DDL 2026-10-12 10:46:19
+기준 키(금주 LOC 실존): ('Anjin', 'Anjin', 'Anjin_CN_SHA', 'MCCE130705A4-E01-K', 'E', 'MPS', 'CIF', '-', 'HQ06-A', 'USD', 1)
+
+--- A. 금주 LOC 가 원장에 있는 키에 수량 신규 입력
+[A1 금주 월요일 1일, 키 전부 일치] T_PRICE=1행 → PASS(저장 진행)
+[A2 금주 수(10-14)·금(10-16) 입력, 키 일치] T_PRICE=1행 → PASS(저장 진행)
+[A3 금주 + 다음주(10-19 주, 원장 LOC 있음)] T_PRICE=2행 → PASS(저장 진행)
+[A4 Cell Prod Site 만 다름('-' Common 선택)] T_PRICE=0행 → BLOCK(Unit Price Not Found) End Customer : Anjin | Sales site : Anjin_CN_SHA | Model : MCCE130705A4-E01-K | Customs Handbook : E | Fcst Type : Mass | Incoterms : CIF | Plant Site : - | Cell Prod Site : - | YYYYMMDD : 20261012 ~ 20261012 |  | 
+[A5 Cell Prod Site 가 '/' (센티널 전환 표기)] T_PRICE=0행 → BLOCK(Unit Price Not Found) End Customer : Anjin | Sales site : Anjin_CN_SHA | Model : MCCE130705A4-E01-K | Customs Handbook : E | Fcst Type : Mass | Incoterms : CIF | Plant Site : - | Cell Prod Site : / | YYYYMMDD : 20261012 ~ 20261012 |  | 
+[A6 Plant Site 공란(''→NULL)] T_PRICE=1행 → PASS(저장 진행)
+[A7 Plant Site '/' (원장은 '-')] T_PRICE=0행 → BLOCK(Unit Price Not Found) End Customer : Anjin | Sales site : Anjin_CN_SHA | Model : MCCE130705A4-E01-K | Customs Handbook : E | Fcst Type : Mass | Incoterms : CIF | Plant Site : / | Cell Prod Site : HQ06-A | YYYYMMDD : 20261012 ~ 20261012 |  | 
+[A8 End Customer 다름] T_PRICE=0행 → BLOCK(Unit Price Not Found) End Customer : ZZ_TEST | Sales site : Anjin_CN_SHA | Model : MCCE130705A4-E01-K | Customs Handbook : E | Fcst Type : Mass | Incoterms : CIF | Plant Site : - | Cell Prod Site : HQ06-A | YYYYMMDD : 20261012 ~ 20261012 |  | 
+[A9 Incoterms 다름] T_PRICE=0행 → BLOCK(Unit Price Not Found) End Customer : Anjin | Sales site : Anjin_CN_SHA | Model : MCCE130705A4-E01-K | Customs Handbook : E | Fcst Type : Mass | Incoterms : ZZZ | Plant Site : - | Cell Prod Site : HQ06-A | YYYYMMDD : 20261012 ~ 20261012 |  | 
+[A10 Customs Handbook(DOM_EXP) 다름] T_PRICE=0행 → BLOCK(Unit Price Not Found) End Customer : Anjin | Sales site : Anjin_CN_SHA | Model : MCCE130705A4-E01-K | Customs Handbook : Z | Fcst Type : Mass | Incoterms : CIF | Plant Site : - | Cell Prod Site : HQ06-A | YYYYMMDD : 20261012 ~ 20261012 |  | 
+[A11 Fcst Type 을 명칭으로 전송] T_PRICE=0행 → BLOCK(Unit Price Not Found) End Customer : Anjin | Sales site : Anjin_CN_SHA | Model : MCCE130705A4-E01-K | Customs Handbook : E | Fcst Type :  | Incoterms : CIF | Plant Site : - | Cell Prod Site : HQ06-A | YYYYMMDD : 20261012 ~ 20261012 |  | 
+
+--- B. 원장에 판가가 없는 새 키(End Customer 를 가상값으로) — 같은 저장에 LOC 를 함께 입력
+[B1 수량 월 + LOC 월(주 시작일)] T_PRICE=1행 → PASS(저장 진행)
+[B2 수량 월 + LOC 수(10-14, 주 중간일)] T_PRICE=1행 → BLOCK(Unit Price Not Found) End Customer : ZZ_NEWKEY | Sales site : Anjin_CN_SHA | Model : MCCE130705A4-E01-K | Customs Handbook : E | Fcst Type : Mass | Incoterms : CIF | Plant Site : - | Cell Prod Site : HQ06-A | YYYYMMDD : 20261012 ~ 20261012 |  | 
+[B3 수량 수(10-14) + LOC 수(10-14)] T_PRICE=1행 → BLOCK(Unit Price Not Found) End Customer : ZZ_NEWKEY | Sales site : Anjin_CN_SHA | Model : MCCE130705A4-E01-K | Customs Handbook : E | Fcst Type : Mass | Incoterms : CIF | Plant Site : - | Cell Prod Site : HQ06-A | YYYYMMDD : 20261012 ~ 20261012 |  | 
+[B4 수량 월 + LOC 월, LOC 행만 Plant 공란] T_PRICE=1행 → PASS(저장 진행)
+[B5 수량 금주·다음주 + LOC 금주 월만] T_PRICE=1행 → BLOCK(Unit Price Not Found) End Customer : ZZ_NEWKEY | Sales site : Anjin_CN_SHA | Model : MCCE130705A4-E01-K | Customs Handbook : E | Fcst Type : Mass | Incoterms : CIF | Plant Site : - | Cell Prod Site : HQ06-A | YYYYMMDD : 20261019 ~ 20261019 |  | 
+
+--- C. 월경계 분할주 (2026-12-28 월 ~ 2027-01-03 일: 12-28~31 / 01-01~03 두 구간)
+   캘린더: [('20261228', '20261228'), ('20261231', '20261228'), ('20270101', '20270101'), ('20270103', '20270101')]
+[C1 수량 01-01(금) + LOC 12-28(월, ISO 주 시작)] T_PRICE=1행 → BLOCK(Unit Price Not Found) End Customer : ZZ_NEWKEY | Sales site : Anjin_CN_SHA | Model : MCCE130705A4-E01-K | Customs Handbook : E | Fcst Type : Mass | Incoterms : CIF | Plant Site : - | Cell Prod Site : HQ06-A | YYYYMMDD : 20270101 ~ 20270101 |  | 
+[C2 수량 01-01(금) + LOC 01-01(구간 시작)] T_PRICE=1행 → PASS(저장 진행)
+[C3 수량 12-30(수) + LOC 12-28(월)] T_PRICE=1행 → PASS(저장 진행)
+
+정리 완료 (GTT 비움 · ROLLBACK · 영구 테이블 변경 없음)

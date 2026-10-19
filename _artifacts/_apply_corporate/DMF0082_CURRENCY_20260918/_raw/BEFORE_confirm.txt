@@ -1,0 +1,341 @@
+RESULT: [('0', 'SUCCESS')]
+
+== 키 × MEASURE × CURRENCY (결손 키만) ==
+  ITEM               SCM_SITE                 CELLPROD   MEASURE           CNT   NULL CUR
+  MCCH350040A1T001   Archer_US_SJC            HQ06-A     KRW                52      0 USD
+  MCCH350040A1T001   Archer_US_SJC            HQ06-A     LOC                52      0 USD
+  MCCH350040A1T001   Archer_US_SJC            HQ06-A     MKT_FCST            2      0 USD
+  MCCH350040A1T001   Archer_US_SJC            HQ06-A     RTF_SYS_RP          2      0 USD
+  MCCH350040A1T001   Archer_US_SJC            HQ06-A     SCM_FCST            2      0 USD
+  MCCH350040A1T001   Archer_US_SJC            HQ06-A     USD                50      0 USD
+  MCCH350040A1T001   BAE Systems_US_ENC       HQ06-A     KRW                25      0 USD
+  MCCH350040A1T001   BAE Systems_US_ENC       HQ06-A     LOC                25      0 USD
+  MCCH350040A1T001   BAE Systems_US_ENC       HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   BAE Systems_US_ENC       HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   BAE Systems_US_ENC       HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   BAE Systems_US_ENC       HQ06-A     USD                24      0 USD
+  MCCH350040A1T001   Ferrari_IT_MAR           HQ06-A     KRW                55      0 USD
+  MCCH350040A1T001   Ferrari_IT_MAR           HQ06-A     LOC                55      0 USD
+  MCCH350040A1T001   Ferrari_IT_MAR           HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   Ferrari_IT_MAR           HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   Ferrari_IT_MAR           HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   Ferrari_IT_MAR           HQ06-A     USD                54      0 USD
+  MCCH350040A1T001   Gims_KR_SEL              HQ06-A     KRW                61      0 KRW
+  MCCH350040A1T001   Gims_KR_SEL              HQ06-A     LOC                61      0 KRW
+  MCCH350040A1T001   Gims_KR_SEL              HQ06-A     MKT_FCST            1      0 KRW
+  MCCH350040A1T001   Gims_KR_SEL              HQ06-A     RTF_SYS_RP          1      0 KRW
+  MCCH350040A1T001   Gims_KR_SEL              HQ06-A     SCM_FCST            1      0 KRW
+  MCCH350040A1T001   Gims_KR_SEL              HQ06-A     USD                60      0 KRW
+  MCCH350040A1T001   Globetools_CN_CZX        HQ06-A     KRW                29      0 USD
+  MCCH350040A1T001   Globetools_CN_CZX        HQ06-A     LOC                29      0 USD
+  MCCH350040A1T001   Globetools_CN_CZX        HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   Globetools_CN_CZX        HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   Globetools_CN_CZX        HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   Globetools_CN_CZX        HQ06-A     USD                28      0 USD
+  MCCH350040A1T001   Inventus Power_US_WOQ    HQ06-A     KRW                30      0 USD
+  MCCH350040A1T001   Inventus Power_US_WOQ    HQ06-A     LOC                30      0 USD
+  MCCH350040A1T001   Inventus Power_US_WOQ    HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   Inventus Power_US_WOQ    HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   Inventus Power_US_WOQ    HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   Inventus Power_US_WOQ    HQ06-A     USD                29      0 USD
+  MCCH350040A1T001   JJ Solstice_DE_ESC       HQ06-A     KRW                 1      0 USD
+  MCCH350040A1T001   JJ Solstice_DE_ESC       HQ06-A     LOC                 1      0 USD
+  MCCH350040A1T001   JJ Solstice_DE_ESC       HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   JJ Solstice_DE_ESC       HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   JJ Solstice_DE_ESC       HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   JRBS_KR_GUN              HQ06-A     KRW                35      0 KRW
+  MCCH350040A1T001   JRBS_KR_GUN              HQ06-A     LOC                35      0 KRW
+  MCCH350040A1T001   JRBS_KR_GUN              HQ06-A     MKT_FCST            2      0 KRW
+  MCCH350040A1T001   JRBS_KR_GUN              HQ06-A     RTF_SYS_RP          2      0 KRW
+  MCCH350040A1T001   JRBS_KR_GUN              HQ06-A     SCM_FCST            2      0 KRW
+  MCCH350040A1T001   JRBS_KR_GUN              HQ06-A     USD                33      0 KRW
+  MCCH350040A1T001   Jinle_KR_SEL             HQ06-A     KRW                20      0 USD
+  MCCH350040A1T001   Jinle_KR_SEL             HQ06-A     LOC                20      0 USD
+  MCCH350040A1T001   Jinle_KR_SEL             HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   Jinle_KR_SEL             HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   Jinle_KR_SEL             HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   Jinle_KR_SEL             HQ06-A     USD                19      0 USD
+  MCCH350040A1T001   KDP_KR_SEL               HQ06-A     KRW                55      0 KRW
+  MCCH350040A1T001   KDP_KR_SEL               HQ06-A     LOC                55      0 KRW
+  MCCH350040A1T001   KDP_KR_SEL               HQ06-A     MKT_FCST            6      0 KRW
+  MCCH350040A1T001   KDP_KR_SEL               HQ06-A     RTF_SYS_RP          6      0 KRW
+  MCCH350040A1T001   KDP_KR_SEL               HQ06-A     SCM_FCST            6      0 KRW
+  MCCH350040A1T001   KDP_KR_SEL               HQ06-A     USD                49      0 KRW
+  MCCH350040A1T001   KULR_US_WB3              HQ06-A     KRW                25      0 USD
+  MCCH350040A1T001   KULR_US_WB3              HQ06-A     LOC                25      0 USD
+  MCCH350040A1T001   KULR_US_WB3              HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   KULR_US_WB3              HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   KULR_US_WB3              HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   KULR_US_WB3              HQ06-A     USD                24      0 USD
+  MCCH350040A1T001   Lamborghini_IT_SBN       HQ06-A     KRW                 1      0 USD
+  MCCH350040A1T001   Lamborghini_IT_SBN       HQ06-A     LOC                 1      0 USD
+  MCCH350040A1T001   Lamborghini_IT_SBN       HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   Lamborghini_IT_SBN       HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   Lamborghini_IT_SBN       HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   ReBuild_US_NKP           HQ06-A     KRW                20      0 USD
+  MCCH350040A1T001   ReBuild_US_NKP           HQ06-A     LOC                20      0 USD
+  MCCH350040A1T001   ReBuild_US_NKP           HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   ReBuild_US_NKP           HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   ReBuild_US_NKP           HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   ReBuild_US_NKP           HQ06-A     USD                19      0 USD
+  MCCH350040A1T001   SCUD_CN_FOC              HQ06-A     KRW                80      0 USD
+  MCCH350040A1T001   SCUD_CN_FOC              HQ06-A     LOC                80      0 USD
+  MCCH350040A1T001   SCUD_CN_FOC              HQ06-A     MKT_FCST            2      0 USD
+  MCCH350040A1T001   SCUD_CN_FOC              HQ06-A     RTF_SYS_RP          2      0 USD
+  MCCH350040A1T001   SCUD_CN_FOC              HQ06-A     SCM_FCST            2      0 USD
+  MCCH350040A1T001   SCUD_CN_FOC              HQ06-A     USD                78      0 USD
+  MCCH350040A1T001   SCUD_US_ZTZ              HQ06-A     KRW                25      0 USD
+  MCCH350040A1T001   SCUD_US_ZTZ              HQ06-A     LOC                25      0 USD
+  MCCH350040A1T001   SCUD_US_ZTZ              HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   SCUD_US_ZTZ              HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   SCUD_US_ZTZ              HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   SCUD_US_ZTZ              HQ06-A     USD                24      0 USD
+  MCCH350040A1T001   SpaceX_US_HHR            HQ06-A     KRW                22      0 USD
+  MCCH350040A1T001   SpaceX_US_HHR            HQ06-A     LOC                22      0 USD
+  MCCH350040A1T001   SpaceX_US_HHR            HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   SpaceX_US_HHR            HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   SpaceX_US_HHR            HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   SpaceX_US_HHR            HQ06-A     USD                21      0 USD
+  MCCH350040A1T001   TTi(PDL)_US_XCH          HQ06-A     KRW                39      0 USD
+  MCCH350040A1T001   TTi(PDL)_US_XCH          HQ06-A     LOC                39      0 USD
+  MCCH350040A1T001   TTi(PDL)_US_XCH          HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   TTi(PDL)_US_XCH          HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   TTi(PDL)_US_XCH          HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   TTi(PDL)_US_XCH          HQ06-A     USD                38      0 USD
+  MCCH350040A1T001   Vertical Aerospace_GB_BR HQ06-A     KRW                25      0 USD
+  MCCH350040A1T001   Vertical Aerospace_GB_BR HQ06-A     LOC                25      0 USD
+  MCCH350040A1T001   Vertical Aerospace_GB_BR HQ06-A     MKT_FCST            1      0 USD
+  MCCH350040A1T001   Vertical Aerospace_GB_BR HQ06-A     RTF_SYS_RP          1      0 USD
+  MCCH350040A1T001   Vertical Aerospace_GB_BR HQ06-A     SCM_FCST            1      0 USD
+  MCCH350040A1T001   Vertical Aerospace_GB_BR HQ06-A     USD                24      0 USD
+  MCCM131012A1       BMZ_US_VAB               NJ01-A     KRW                38      0 USD
+  MCCM131012A1       BMZ_US_VAB               NJ01-A     LOC                38      0 USD
+  MCCM131012A1       BMZ_US_VAB               NJ01-A     MKT_FCST            5      0 USD
+  MCCM131012A1       BMZ_US_VAB               NJ01-A     RTF_SYS_RP          4      0 USD
+  MCCM131012A1       BMZ_US_VAB               NJ01-A     SCM_FCST            5      0 USD
+  MCCM131012A1       BMZ_US_VAB               NJ01-A     USD                38      0 USD
+  MCCM131012A1       BYD Group_CN_SZX         NJ01-A     KRW                77      0 CNY
+  MCCM131012A1       BYD Group_CN_SZX         NJ01-A     LOC                77      0 CNY
+  MCCM131012A1       BYD Group_CN_SZX         NJ01-A     MKT_FCST            7      0 CNY
+  MCCM131012A1       BYD Group_CN_SZX         NJ01-A     RTF_SYS_RP          7      0 CNY
+  MCCM131012A1       BYD Group_CN_SZX         NJ01-A     SCM_FCST            7      0 CNY
+  MCCM131012A1       BYD Group_CN_SZX         NJ01-A     USD                70      0 CNY
+  MCCM131012A1       China Effort_CN_SZX      NJ01-A     KRW                71      0 CNY
+  MCCM131012A1       China Effort_CN_SZX      NJ01-A     LOC                71      0 CNY
+  MCCM131012A1       China Effort_CN_SZX      NJ01-A     MKT_FCST            5      0 CNY
+  MCCM131012A1       China Effort_CN_SZX      NJ01-A     RTF_SYS_RP          5      0 CNY
+  MCCM131012A1       China Effort_CN_SZX      NJ01-A     SCM_FCST            5      0 CNY
+  MCCM131012A1       China Effort_CN_SZX      NJ01-A     USD                70      0 CNY
+  MCCM131012A1       China Effort_HK_HKG      NJ01-A     KRW                 1      0 CNY
+  MCCM131012A1       China Effort_HK_HKG      NJ01-A     LOC                 1      0 CNY
+  MCCM131012A1       China Effort_HK_HKG      NJ01-A     MKT_FCST            1      0 CNY
+  MCCM131012A1       China Effort_HK_HKG      NJ01-A     RTF_SYS_RP          1      0 CNY
+  MCCM131012A1       China Effort_HK_HKG      NJ01-A     SCM_FCST            1      0 CNY
+  MCCM131012A1       Darfon Energy_CN_SZH     NJ01-A     KRW                74      0 USD
+  MCCM131012A1       Darfon Energy_CN_SZH     NJ01-A     LOC                74      0 USD
+  MCCM131012A1       Darfon Energy_CN_SZH     NJ01-A     MKT_FCST            4      0 USD
+  MCCM131012A1       Darfon Energy_CN_SZH     NJ01-A     RTF_SYS_RP          4      0 USD
+  MCCM131012A1       Darfon Energy_CN_SZH     NJ01-A     SCM_FCST            4      0 USD
+  MCCM131012A1       Darfon Energy_CN_SZH     NJ01-A     USD                70      0 USD
+  MCCM131012A1       Elite Electronic_CN_SZX  NJ01-A     KRW                70      0 CNY
+  MCCM131012A1       Elite Electronic_CN_SZX  NJ01-A     LOC                70      0 CNY
+  MCCM131012A1       Elite Electronic_CN_SZX  NJ01-A     MKT_FCST            4      0 CNY
+  MCCM131012A1       Elite Electronic_CN_SZX  NJ01-A     RTF_SYS_RP          4      0 CNY
+  MCCM131012A1       Elite Electronic_CN_SZX  NJ01-A     SCM_FCST            4      0 CNY
+  MCCM131012A1       Elite Electronic_CN_SZX  NJ01-A     USD                70      0 CNY
+  MCCM131012A1       Elite Electronic_CN_YCG  NJ01-A     KRW                 3      0 CNY
+  MCCM131012A1       Elite Electronic_CN_YCG  NJ01-A     LOC                 3      0 CNY
+  MCCM131012A1       Elite Electronic_CN_YCG  NJ01-A     MKT_FCST            3      0 CNY
+  MCCM131012A1       Elite Electronic_CN_YCG  NJ01-A     RTF_SYS_RP          3      0 CNY
+  MCCM131012A1       Elite Electronic_CN_YCG  NJ01-A     SCM_FCST            3      0 CNY
+  MCCM131012A1       Fabricators_CN_QIN       NJ01-A     KRW                68      0 USD
+  MCCM131012A1       Fabricators_CN_QIN       NJ01-A     LOC                68      0 USD
+  MCCM131012A1       Fabricators_CN_QIN       NJ01-A     MKT_FCST           14      0 USD
+  MCCM131012A1       Fabricators_CN_QIN       NJ01-A     RTF_SYS_RP         18      0 USD
+  MCCM131012A1       Fabricators_CN_QIN       NJ01-A     SCM_FCST           14      0 USD
+  MCCM131012A1       Fabricators_CN_QIN       NJ01-A     USD                60      0 USD
+  MCCM131012A1       Genju_CN_SZX             NJ01-A     KRW                50      0 CNY
+  MCCM131012A1       Genju_CN_SZX             NJ01-A     LOC                50      0 CNY
+  MCCM131012A1       Genju_CN_SZX             NJ01-A     MKT_FCST            1      0 CNY
+  MCCM131012A1       Genju_CN_SZX             NJ01-A     RTF_SYS_RP          1      0 CNY
+  MCCM131012A1       Genju_CN_SZX             NJ01-A     SCM_FCST            1      0 CNY
+  MCCM131012A1       Genju_CN_SZX             NJ01-A     USD                49      0 CNY
+  MCCM131012A1       Gims_KR_SEL              NJ01-A     KRW                61      0 KRW
+  MCCM131012A1       Gims_KR_SEL              NJ01-A     LOC                61      0 KRW
+  MCCM131012A1       Gims_KR_SEL              NJ01-A     MKT_FCST            2      0 KRW
+  MCCM131012A1       Gims_KR_SEL              NJ01-A     RTF_SYS_RP          2      0 KRW
+  MCCM131012A1       Gims_KR_SEL              NJ01-A     SCM_FCST            2      0 KRW
+  MCCM131012A1       Gims_KR_SEL              NJ01-A     USD                60      0 KRW
+  MCCM131012A1       Greenway_CN_DGG          NJ01-A     KRW                76      0 CNY
+  MCCM131012A1       Greenway_CN_DGG          NJ01-A     LOC                76      0 CNY
+  MCCM131012A1       Greenway_CN_DGG          NJ01-A     MKT_FCST            9      0 CNY
+  MCCM131012A1       Greenway_CN_DGG          NJ01-A     RTF_SYS_RP          9      0 CNY
+  MCCM131012A1       Greenway_CN_DGG          NJ01-A     SCM_FCST            9      0 CNY
+  MCCM131012A1       Greenway_CN_DGG          NJ01-A     USD                70      0 CNY
+  MCCM131012A1       HUAYOU_CN_NKG            NJ01-A     KRW                77      0 CNY
+  MCCM131012A1       HUAYOU_CN_NKG            NJ01-A     LOC                77      0 CNY
+  MCCM131012A1       HUAYOU_CN_NKG            NJ01-A     MKT_FCST           65      0 CNY
+  MCCM131012A1       HUAYOU_CN_NKG            NJ01-A     RTF_SYS_RP         43      0 CNY
+  MCCM131012A1       HUAYOU_CN_NKG            NJ01-A     SCM_FCST           65      0 CNY
+  MCCM131012A1       HUAYOU_CN_NKG            NJ01-A     USD                70      0 CNY
+  MCCM131012A1       HUAYOU_HK_HKG            NJ01-A     KRW                30      0 USD
+  MCCM131012A1       HUAYOU_HK_HKG            NJ01-A     LOC                30      0 USD
+  MCCM131012A1       HUAYOU_HK_HKG            NJ01-A     MKT_FCST            2      0 USD
+  MCCM131012A1       HUAYOU_HK_HKG            NJ01-A     RTF_SYS_RP          2      0 USD
+  MCCM131012A1       HUAYOU_HK_HKG            NJ01-A     SCM_FCST            2      0 USD
+  MCCM131012A1       HUAYOU_HK_HKG            NJ01-A     USD                28      0 USD
+  MCCM131012A1       Highpower_CN_GUA         NJ01-A     KRW                78      0 CNY
+  MCCM131012A1       Highpower_CN_GUA         NJ01-A     LOC                78      0 CNY
+  MCCM131012A1       Highpower_CN_GUA         NJ01-A     MKT_FCST           12      0 CNY
+  MCCM131012A1       Highpower_CN_GUA         NJ01-A     RTF_SYS_RP         12      0 CNY
+  MCCM131012A1       Highpower_CN_GUA         NJ01-A     SCM_FCST           12      0 CNY
+  MCCM131012A1       Highpower_CN_GUA         NJ01-A     USD                70      0 CNY
+  MCCM131012A1       JJ Solstice_DE_ESC       NJ01-A     KRW                 2      0 USD
+  MCCM131012A1       JJ Solstice_DE_ESC       NJ01-A     LOC                 2      0 USD
+  MCCM131012A1       JJ Solstice_DE_ESC       NJ01-A     MKT_FCST            2      0 USD
+  MCCM131012A1       JJ Solstice_DE_ESC       NJ01-A     RTF_SYS_RP          2      0 USD
+  MCCM131012A1       JJ Solstice_DE_ESC       NJ01-A     SCM_FCST            2      0 USD
+  MCCM131012A1       JJ Solstice_DE_FRA       NJ01-A     KRW                60      0 USD
+  MCCM131012A1       JJ Solstice_DE_FRA       NJ01-A     LOC                60      0 USD
+  MCCM131012A1       JJ Solstice_DE_FRA       NJ01-A     MKT_FCST            4      0 USD
+  MCCM131012A1       JJ Solstice_DE_FRA       NJ01-A     RTF_SYS_RP          3      0 USD
+  MCCM131012A1       JJ Solstice_DE_FRA       NJ01-A     SCM_FCST            4      0 USD
+  MCCM131012A1       JJ Solstice_DE_FRA       NJ01-A     USD                60      0 USD
+  MCCM131012A1       Kayo_CN_DNN              NJ01-A     KRW                67      0 USD
+  MCCM131012A1       Kayo_CN_DNN              NJ01-A     LOC                67      0 USD
+  MCCM131012A1       Kayo_CN_DNN              NJ01-A     MKT_FCST           11      0 USD
+  MCCM131012A1       Kayo_CN_DNN              NJ01-A     RTF_SYS_RP         11      0 USD
+  MCCM131012A1       Kayo_CN_DNN              NJ01-A     SCM_FCST           11      0 USD
+  MCCM131012A1       Kayo_CN_DNN              NJ01-A     USD                60      0 USD
+  MCCM131012A1       Kayo_VN_BNH              NJ01-A     KRW                61      0 USD
+  MCCM131012A1       Kayo_VN_BNH              NJ01-A     LOC                61      0 USD
+  MCCM131012A1       Kayo_VN_BNH              NJ01-A     MKT_FCST            1      0 USD
+  MCCM131012A1       Kayo_VN_BNH              NJ01-A     RTF_SYS_RP          1      0 USD
+  MCCM131012A1       Kayo_VN_BNH              NJ01-A     SCM_FCST            1      0 USD
+  MCCM131012A1       Kayo_VN_BNH              NJ01-A     USD                60      0 USD
+  MCCM131012A1       Lianghan_CN_KUS          NJ01-A     KRW                70      0 CNY
+  MCCM131012A1       Lianghan_CN_KUS          NJ01-A     LOC                70      0 CNY
+  MCCM131012A1       Lianghan_CN_KUS          NJ01-A     MKT_FCST            4      0 CNY
+  MCCM131012A1       Lianghan_CN_KUS          NJ01-A     RTF_SYS_RP          4      0 CNY
+  MCCM131012A1       Lianghan_CN_KUS          NJ01-A     SCM_FCST            4      0 CNY
+  MCCM131012A1       Lianghan_CN_KUS          NJ01-A     USD                70      0 CNY
+  MCCM131012A1       Powtech_CN_DGG           NJ01-A     KRW                73      0 CNY
+  MCCM131012A1       Powtech_CN_DGG           NJ01-A     LOC                73      0 CNY
+  MCCM131012A1       Powtech_CN_DGG           NJ01-A     MKT_FCST           39      0 CNY
+  MCCM131012A1       Powtech_CN_DGG           NJ01-A     RTF_SYS_RP         24      0 CNY
+  MCCM131012A1       Powtech_CN_DGG           NJ01-A     SCM_FCST           39      0 CNY
+  MCCM131012A1       Powtech_CN_DGG           NJ01-A     USD                70      0 CNY
+  MCCM131012A1       Rihuida_CN_SZX           NJ01-A     KRW               151      0 CNY
+  MCCM131012A1       Rihuida_CN_SZX           NJ01-A     LOC               151      0 CNY
+  MCCM131012A1       Rihuida_CN_SZX           NJ01-A     MKT_FCST           11      0 CNY
+  MCCM131012A1       Rihuida_CN_SZX           NJ01-A     RTF_SYS_RP         11      0 CNY
+  MCCM131012A1       Rihuida_CN_SZX           NJ01-A     SCM_FCST           11      0 CNY
+  MCCM131012A1       Rihuida_CN_SZX           NJ01-A     USD               140      0 CNY
+  MCCM131012A1       Ruipu_CN_JYN             NJ01-A     KRW               143      0 CNY
+  MCCM131012A1       Ruipu_CN_JYN             NJ01-A     LOC               143      0 CNY
+  MCCM131012A1       Ruipu_CN_JYN             NJ01-A     MKT_FCST            8      0 CNY
+  MCCM131012A1       Ruipu_CN_JYN             NJ01-A     RTF_SYS_RP          8      0 CNY
+  MCCM131012A1       Ruipu_CN_JYN             NJ01-A     SCM_FCST            8      0 CNY
+  MCCM131012A1       Ruipu_CN_JYN             NJ01-A     USD               140      0 CNY
+  MCCM131012A1       SCUD_CN_FOC              NJ01-A     KRW               140      0 CNY
+  MCCM131012A1       SCUD_CN_FOC              NJ01-A     LOC               140      0 CNY
+  MCCM131012A1       SCUD_CN_FOC              NJ01-A     MKT_FCST           84      0 CNY
+  MCCM131012A1       SCUD_CN_FOC              NJ01-A     RTF_SYS_RP         54      0 CNY
+  MCCM131012A1       SCUD_CN_FOC              NJ01-A     SCM_FCST           84      0 CNY
+  MCCM131012A1       SCUD_CN_FOC              NJ01-A     USD               124      0 CNY
+  MCCM131012A1       Shandong PYTES_CN_SAD    NJ01-A     KRW                76      0 CNY
+  MCCM131012A1       Shandong PYTES_CN_SAD    NJ01-A     LOC                76      0 CNY
+  MCCM131012A1       Shandong PYTES_CN_SAD    NJ01-A     MKT_FCST           20      0 CNY
+  MCCM131012A1       Shandong PYTES_CN_SAD    NJ01-A     RTF_SYS_RP         20      0 CNY
+  MCCM131012A1       Shandong PYTES_CN_SAD    NJ01-A     SCM_FCST           20      0 CNY
+  MCCM131012A1       Shandong PYTES_CN_SAD    NJ01-A     USD                70      0 CNY
+  MCCM131012A1       TWS Liangshi_CN_CA0      NJ01-A     KRW               130      0 CNY
+  MCCM131012A1       TWS Liangshi_CN_CA0      NJ01-A     LOC               130      0 CNY
+  MCCM131012A1       TWS Liangshi_CN_CA0      NJ01-A     MKT_FCST           42      0 CNY
+  MCCM131012A1       TWS Liangshi_CN_CA0      NJ01-A     RTF_SYS_RP         27      0 CNY
+  MCCM131012A1       TWS Liangshi_CN_CA0      NJ01-A     SCM_FCST           42      0 CNY
+  MCCM131012A1       TWS Liangshi_CN_CA0      NJ01-A     USD               124      0 CNY
+  MCCM131012A1       Ugowork_CA_QUE           NJ01-A     KRW                62      0 USD
+  MCCM131012A1       Ugowork_CA_QUE           NJ01-A     LOC                62      0 USD
+  MCCM131012A1       Ugowork_CA_QUE           NJ01-A     MKT_FCST            4      0 USD
+  MCCM131012A1       Ugowork_CA_QUE           NJ01-A     RTF_SYS_RP          4      0 USD
+  MCCM131012A1       Ugowork_CA_QUE           NJ01-A     SCM_FCST            4      0 USD
+  MCCM131012A1       Ugowork_CA_QUE           NJ01-A     USD                60      0 USD
+  MCCM131012A1       Unit Pack Power_CN_SZH   NJ01-A     KRW                 1      0 CNY
+  MCCM131012A1       Unit Pack Power_CN_SZH   NJ01-A     LOC                 1      0 CNY
+  MCCM131012A1       Unit Pack Power_CN_SZH   NJ01-A     MKT_FCST            1      0 CNY
+  MCCM131012A1       Unit Pack Power_CN_SZH   NJ01-A     RTF_SYS_RP          1      0 CNY
+  MCCM131012A1       Unit Pack Power_CN_SZH   NJ01-A     SCM_FCST            1      0 CNY
+  MCCM131012A1       Varta RO_RO_OTP          NJ01-A     KRW                70      0 USD
+  MCCM131012A1       Varta RO_RO_OTP          NJ01-A     LOC                70      0 USD
+  MCCM131012A1       Varta RO_RO_OTP          NJ01-A     MKT_FCST           11      4 USD   <== 결손
+  MCCM131012A1       Varta RO_RO_OTP          NJ01-A     RTF_SYS_RP         10      2 USD   <== 결손
+  MCCM131012A1       Varta RO_RO_OTP          NJ01-A     SCM_FCST           11      4 USD   <== 결손
+  MCCM131012A1       Varta RO_RO_OTP          NJ01-A     USD                65      0 USD
+  MCCM131012A1       Veken_CN_NGB             NJ01-A     KRW                 1      0 CNY
+  MCCM131012A1       Veken_CN_NGB             NJ01-A     LOC                 1      0 CNY
+  MCCM131012A1       Veken_CN_NGB             NJ01-A     MKT_FCST            1      0 CNY
+  MCCM131012A1       Veken_CN_NGB             NJ01-A     RTF_SYS_RP          1      0 CNY
+  MCCM131012A1       Veken_CN_NGB             NJ01-A     SCM_FCST            1      0 CNY
+  MCCM131012A1       Volta_CN_NTG             NJ01-A     KRW                70      0 CNY
+  MCCM131012A1       Volta_CN_NTG             NJ01-A     LOC                70      0 CNY
+  MCCM131012A1       Volta_CN_NTG             NJ01-A     MKT_FCST            3      0 CNY
+  MCCM131012A1       Volta_CN_NTG             NJ01-A     RTF_SYS_RP          3      0 CNY
+  MCCM131012A1       Volta_CN_NTG             NJ01-A     SCM_FCST            3      0 CNY
+  MCCM131012A1       Volta_CN_NTG             NJ01-A     USD                70      0 CNY
+  MCCM131012A1       WOERTA_US_BUF            NJ01-A     KRW               112      0 USD
+  MCCM131012A1       WOERTA_US_BUF            NJ01-A     LOC               112      0 USD
+  MCCM131012A1       WOERTA_US_BUF            NJ01-A     MKT_FCST            9      0 USD
+  MCCM131012A1       WOERTA_US_BUF            NJ01-A     RTF_SYS_RP          9      0 USD
+  MCCM131012A1       WOERTA_US_BUF            NJ01-A     SCM_FCST            9      0 USD
+  MCCM131012A1       WOERTA_US_BUF            NJ01-A     USD               103      0 USD
+  MCCM131012A1       Wandadian_CN_KUS         NJ01-A     KRW                 1      0 CNY
+  MCCM131012A1       Wandadian_CN_KUS         NJ01-A     LOC                 1      0 CNY
+  MCCM131012A1       Wandadian_CN_KUS         NJ01-A     MKT_FCST            1      0 CNY
+  MCCM131012A1       Wandadian_CN_KUS         NJ01-A     RTF_SYS_RP          1      0 CNY
+  MCCM131012A1       Wandadian_CN_KUS         NJ01-A     SCM_FCST            1      0 CNY
+  MCCM131012A1       Wanghsing_CN_KUS         NJ01-A     KRW                85      0 USD
+  MCCM131012A1       Wanghsing_CN_KUS         NJ01-A     LOC                85      0 USD
+  MCCM131012A1       Wanghsing_CN_KUS         NJ01-A     MKT_FCST           61      0 USD
+  MCCM131012A1       Wanghsing_CN_KUS         NJ01-A     RTF_SYS_RP         39      0 USD
+  MCCM131012A1       Wanghsing_CN_KUS         NJ01-A     SCM_FCST           61      0 USD
+  MCCM131012A1       Wanghsing_CN_KUS         NJ01-A     USD                80      0 USD
+  MCCM131012A1       Wanghsing_TW_NTC         NJ01-A     KRW                72      0 USD
+  MCCM131012A1       Wanghsing_TW_NTC         NJ01-A     LOC                72      0 USD
+  MCCM131012A1       Wanghsing_TW_NTC         NJ01-A     MKT_FCST            2      0 USD
+  MCCM131012A1       Wanghsing_TW_NTC         NJ01-A     RTF_SYS_RP          2      0 USD
+  MCCM131012A1       Wanghsing_TW_NTC         NJ01-A     SCM_FCST            2      0 USD
+  MCCM131012A1       Wanghsing_TW_NTC         NJ01-A     USD                70      0 USD
+  MCCM131012A1       Welldone_CN_CZX          NJ01-A     KRW                53      0 USD
+  MCCM131012A1       Welldone_CN_CZX          NJ01-A     LOC                53      0 USD
+  MCCM131012A1       Welldone_CN_CZX          NJ01-A     MKT_FCST            4      0 USD
+  MCCM131012A1       Welldone_CN_CZX          NJ01-A     RTF_SYS_RP          4      0 USD
+  MCCM131012A1       Welldone_CN_CZX          NJ01-A     SCM_FCST            4      0 USD
+  MCCM131012A1       Welldone_CN_CZX          NJ01-A     USD                49      0 USD
+  MCCM131012A1       Welldone_TW_TPE          NJ01-A     KRW                 2      0 USD
+  MCCM131012A1       Welldone_TW_TPE          NJ01-A     LOC                 2      0 USD
+  MCCM131012A1       Welldone_TW_TPE          NJ01-A     MKT_FCST            2      0 USD
+  MCCM131012A1       Welldone_TW_TPE          NJ01-A     RTF_SYS_RP          2      0 USD
+  MCCM131012A1       Welldone_TW_TPE          NJ01-A     SCM_FCST            2      0 USD
+  MCCM131012A1       phisemi_CN_SZX           NJ01-A     KRW                80      0 CNY
+  MCCM131012A1       phisemi_CN_SZX           NJ01-A     LOC                80      0 CNY
+  MCCM131012A1       phisemi_CN_SZX           NJ01-A     MKT_FCST           46      0 CNY
+  MCCM131012A1       phisemi_CN_SZX           NJ01-A     RTF_SYS_RP         31      0 CNY
+  MCCM131012A1       phisemi_CN_SZX           NJ01-A     SCM_FCST           46      0 CNY
+  MCCM131012A1       phisemi_CN_SZX           NJ01-A     USD                70      0 CNY
+  MIF489266C11       NT_CN_SZX                NJ01-A     MKT_FCST            4      4 None   <== 결손
+  MIF489266C11       NT_CN_SZX                NJ01-A     RTF_SYS_RP          2      2 None   <== 결손
+  MIF489266C11       NT_CN_SZX                NJ01-A     SCM_FCST            4      4 None   <== 결손
+  MIF489266C11       Sunwoda_CN_SZX           HQ06-A     KRW                 2      0 USD
+  MIF489266C11       Sunwoda_CN_SZX           HQ06-A     LOC                 2      0 USD
+  MIF489266C11       Sunwoda_CN_SZX           HQ06-A     MKT_FCST            2      0 USD
+  MIF489266C11       Sunwoda_CN_SZX           HQ06-A     RTF_SYS_RP          2      0 USD
+  MIF489266C11       Sunwoda_CN_SZX           HQ06-A     SCM_FCST            2      0 USD
+  MIF489266C11       Sunwoda_CN_SZX           NJ01-A     KRW               102      0 USD
+  MIF489266C11       Sunwoda_CN_SZX           NJ01-A     LOC               102      0 USD
+  MIF489266C11       Sunwoda_CN_SZX           NJ01-A     MKT_FCST           81      0 USD
+  MIF489266C11       Sunwoda_CN_SZX           NJ01-A     RTF_SYS_RP         58      0 USD
+  MIF489266C11       Sunwoda_CN_SZX           NJ01-A     SCM_FCST           81      0 USD
+  MIF489266C11       Sunwoda_CN_SZX           NJ01-A     USD                80      0 USD
+
+[exited with code 0]

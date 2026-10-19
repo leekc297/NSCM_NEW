@@ -1,0 +1,263 @@
+{
+ "object": [
+  "VALID",
+  "2026-10-07 22:00:19"
+ ],
+ "markers": 14,
+ "func_predicates_left": 0,
+ "dependents": 0,
+ "invalid_objects": [
+  [
+   "FN_DM_SALES_REPORT_TO_GDW",
+   "FUNCTION"
+  ],
+  [
+   "FN_GET_MOBILE_PACKER_ITEM_ID",
+   "FUNCTION"
+  ],
+  [
+   "FN_GET_PACKER_SUFFIX",
+   "FUNCTION"
+  ],
+  [
+   "DMF0008_GET_EDI_MST_REPAIR",
+   "PROCEDURE"
+  ],
+  [
+   "DMF0008_GET_EDI_MST_SUMMARY",
+   "PROCEDURE"
+  ],
+  [
+   "DMF0008_GET_SALES_SITE",
+   "PROCEDURE"
+  ],
+  [
+   "DMF0008_GET_SALES_SITE_PROJECT_MODEL",
+   "PROCEDURE"
+  ],
+  [
+   "DMF0008_SAVE_SALES_SITE_EDI_REPAIR",
+   "PROCEDURE"
+  ],
+  [
+   "DMF0020_GET_SCM_MST_FUTURE_PRICE",
+   "PROCEDURE"
+  ],
+  [
+   "DMF0043_GET_CONTRIBUTE_MAIN_DATA",
+   "PROCEDURE"
+  ],
+  [
+   "DMF0043_GET_CONTRIBUTION_SALES_LIST",
+   "PROCEDURE"
+  ],
+  [
+   "DMF0072_GET_END_CUSTOMER_LIST",
+   "PROCEDURE"
+  ],
+  [
+   "DMF0072_GET_ITEM_POPUP_LIST",
+   "PROCEDURE"
+  ],
+  [
+   "DMF0072_GET_SALES_SITE_LIST",
+   "PROCEDURE"
+  ],
+  [
+   "PR_DM_ANL_KPI_SALES_ACCURACY",
+   "PROCEDURE"
+  ],
+  [
+   "PR_DM_ANL_KPI_SUMMARY",
+   "PROCEDURE"
+  ],
+  [
+   "PR_DM_ANL_MKT_PSI_DATA",
+   "PROCEDURE"
+  ],
+  [
+   "PR_DM_CUST_DEMAND_ANL_SUMMARY",
+   "PROCEDURE"
+  ],
+  [
+   "PR_DM_CUST_DEMAND_ANL_SUMMARY_SUB",
+   "PROCEDURE"
+  ],
+  [
+   "PR_DM_CUST_DEMAND_BY_ITM_SUMMARY",
+   "PROCEDURE"
+  ],
+  [
+   "PR_DM_CUST_ITEM_MAPPING",
+   "PROCEDURE"
+  ],
+  [
+   "PR_DM_LONGPLAN_40_DELETE_IMPORT",
+   "PROCEDURE"
+  ],
+  [
+   "PR_DM_PLN_CUST_FCST_TO_MKT_FCST",
+   "PROCEDURE"
+  ],
+  [
+   "PR_DM_PLN_CUST_FCST_TO_MKT_FCST_40",
+   "PROCEDURE"
+  ],
+  [
+   "PR_DM_PLN_ESS_VMI_REFRESH",
+   "PROCEDURE"
+  ],
+  [
+   "PR_SCM_MST_PROJECT",
+   "PROCEDURE"
+  ],
+  [
+   "PR_SCM_MST_PROJECT_DV_MASTER",
+   "PROCEDURE"
+  ],
+  [
+   "PKG_DMF0002",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_DMF0035",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_DMF0051",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_SDM2010",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_SPMS_SEND_MAIL",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_ZTMP_S015J",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_ZTMP_S200B",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_ZTMP_S015G",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_ZTMP_S200D",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_ZTMP_S015K",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_SDM2020",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_SDM2030",
+   "PACKAGE BODY"
+  ],
+  [
+   "FN_SCM0001_END_CUSTOMER_BY_DIV_DEPT",
+   "FUNCTION"
+  ],
+  [
+   "FN_SCM0001_PLANT_SITE_BY_END_CUST",
+   "FUNCTION"
+  ],
+  [
+   "FN_SCM0001_TEAM_BY_DIVISION",
+   "FUNCTION"
+  ],
+  [
+   "PKG_S39V2",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_S39V3",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_S39V4",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_S39V5",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_S39V6",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_S39V7",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_SSP0023_CHK",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_SCP0134",
+   "PACKAGE BODY"
+  ]
+ ],
+ "equiv_40": {
+  "func": [
+   191466,
+   -466925865884.0
+  ],
+  "var": [
+   191466,
+   -466925865884.0
+  ],
+  "same": true,
+  "sec_func": 58.9,
+  "sec_var": 0.8,
+  "v_from_1w": "20261005"
+ },
+ "equiv_81": {
+  "func": [
+   114236,
+   -6248802611.0
+  ],
+  "var": [
+   114236,
+   -6248802611.0
+  ],
+  "same": true,
+  "sec_func": 11.3,
+  "sec_var": 0.6,
+  "v_from_1w": "20261005"
+ },
+ "equiv_82": {
+  "func": [
+   131053,
+   -1168869381.0
+  ],
+  "var": [
+   131053,
+   -1168869381.0
+  ],
+  "same": true,
+  "sec_func": 5.1,
+  "sec_var": 0.5,
+  "v_from_1w": "20261005"
+ },
+ "stats_DM_PLN_MKT_FCST": {
+  "num_rows": 2255111,
+  "analyzed": "2026-10-07 22:01:39",
+  "sec": 284.5
+ },
+ "stats_DM_PLN_CFM_MKT_DEMAND_PLAN": {
+  "num_rows": 420354,
+  "analyzed": "2026-10-07 22:06:24",
+  "sec": 161.3
+ }
+}

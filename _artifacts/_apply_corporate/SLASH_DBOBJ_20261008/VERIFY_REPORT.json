@@ -1,0 +1,983 @@
+[
+ {
+  "object": "PROCEDURE|DMF0020_GET_SCM_MST_FUTURE_PRICE",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 34,
+  "keep_sheet_rows": 0,
+  "planned_edits": 13,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|DMF0043_GET_CONTRIBUTION_SALES_LIST",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 24,
+  "keep_sheet_rows": 0,
+  "planned_edits": 2,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_COM0000",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 64,
+  "keep_sheet_rows": 2,
+  "planned_edits": 26,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0003",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 176,
+  "keep_sheet_rows": 1,
+  "planned_edits": 29,
+  "result": "BLOCKED"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0004",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 8,
+  "keep_sheet_rows": 0,
+  "planned_edits": 2,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0014",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 0,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0020",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 104,
+  "keep_sheet_rows": 3,
+  "planned_edits": 10,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0021",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 123,
+  "keep_sheet_rows": 3,
+  "planned_edits": 16,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0022",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 9,
+  "keep_sheet_rows": 6,
+  "planned_edits": 3,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0035",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 33,
+  "keep_sheet_rows": 5,
+  "planned_edits": 7,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0042",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 13,
+  "keep_sheet_rows": 0,
+  "planned_edits": 93,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0043",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 33,
+  "keep_sheet_rows": 0,
+  "planned_edits": 2,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0044",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 124,
+  "keep_sheet_rows": 3,
+  "planned_edits": 331,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0045",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 58,
+  "keep_sheet_rows": 26,
+  "planned_edits": 68,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0049",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 8,
+  "keep_sheet_rows": 0,
+  "planned_edits": 16,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0051",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 5,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0072",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 4,
+  "keep_sheet_rows": 0,
+  "planned_edits": 3,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0074",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 2,
+  "keep_sheet_rows": 0,
+  "planned_edits": 7,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_DMF0082",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 65,
+  "keep_sheet_rows": 22,
+  "planned_edits": 69,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_NSCM_UI_COM_LOOKUP",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 20,
+  "keep_sheet_rows": 4,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_S39V2",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 44,
+  "keep_sheet_rows": 10,
+  "planned_edits": 12,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_S39V3",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 44,
+  "keep_sheet_rows": 10,
+  "planned_edits": 12,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_S39V4",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 44,
+  "keep_sheet_rows": 10,
+  "planned_edits": 12,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_S39V5",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 44,
+  "keep_sheet_rows": 10,
+  "planned_edits": 12,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_S39V6",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 44,
+  "keep_sheet_rows": 10,
+  "planned_edits": 12,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_S39V7",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 44,
+  "keep_sheet_rows": 10,
+  "planned_edits": 12,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCM0002",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 49,
+  "keep_sheet_rows": 1,
+  "planned_edits": 12,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0005",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 1,
+  "keep_sheet_rows": 0,
+  "planned_edits": 6,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0006",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 32,
+  "keep_sheet_rows": 0,
+  "planned_edits": 0,
+  "result": "BLOCKED"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0007",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 8,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0009",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 67,
+  "keep_sheet_rows": 2,
+  "planned_edits": 41,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0010",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 14,
+  "keep_sheet_rows": 0,
+  "planned_edits": 6,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0011",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 24,
+  "keep_sheet_rows": 0,
+  "planned_edits": 3,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0013",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 44,
+  "keep_sheet_rows": 9,
+  "planned_edits": 15,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0016",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 23,
+  "keep_sheet_rows": 0,
+  "planned_edits": 0,
+  "result": "BLOCKED"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0017",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 8,
+  "keep_sheet_rows": 0,
+  "planned_edits": 5,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0018",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 4,
+  "keep_sheet_rows": 0,
+  "planned_edits": 4,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0020",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 8,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0025",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 27,
+  "keep_sheet_rows": 0,
+  "planned_edits": 4,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0027",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 9,
+  "keep_sheet_rows": 0,
+  "planned_edits": 4,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0030",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 8,
+  "keep_sheet_rows": 0,
+  "planned_edits": 6,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0031",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 9,
+  "keep_sheet_rows": 1,
+  "planned_edits": 15,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0039",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 44,
+  "keep_sheet_rows": 10,
+  "planned_edits": 12,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0039_VF",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 44,
+  "keep_sheet_rows": 10,
+  "planned_edits": 12,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0048",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 6,
+  "keep_sheet_rows": 0,
+  "planned_edits": 4,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0049",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 60,
+  "keep_sheet_rows": 1,
+  "planned_edits": 37,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0055",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 8,
+  "keep_sheet_rows": 0,
+  "planned_edits": 4,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0098",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 29,
+  "keep_sheet_rows": 0,
+  "planned_edits": 2,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0100",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 98,
+  "keep_sheet_rows": 0,
+  "planned_edits": 4,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0104",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 30,
+  "keep_sheet_rows": 0,
+  "planned_edits": 6,
+  "result": "BLOCKED"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0105",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 32,
+  "keep_sheet_rows": 0,
+  "planned_edits": 3,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0106",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 51,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "BLOCKED"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SCP0125",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 64,
+  "keep_sheet_rows": 5,
+  "planned_edits": 34,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SDM1010",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 9,
+  "keep_sheet_rows": 0,
+  "planned_edits": 3,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SSP0012",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 6,
+  "keep_sheet_rows": 0,
+  "planned_edits": 4,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SSP0015",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 255,
+  "keep_sheet_rows": 5,
+  "planned_edits": 17,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SSP0019",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 7,
+  "keep_sheet_rows": 2,
+  "planned_edits": 2,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SSP0021",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 112,
+  "keep_sheet_rows": 1,
+  "planned_edits": 3,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SSP0022",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 104,
+  "keep_sheet_rows": 24,
+  "planned_edits": 20,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SSP0023",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 176,
+  "keep_sheet_rows": 2,
+  "planned_edits": 9,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SSP0023_CHK",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 116,
+  "keep_sheet_rows": 2,
+  "planned_edits": 9,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SSP0026",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 135,
+  "keep_sheet_rows": 29,
+  "planned_edits": 49,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SSP0045",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 51,
+  "keep_sheet_rows": 8,
+  "planned_edits": 19,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SSP0060",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 133,
+  "keep_sheet_rows": 6,
+  "planned_edits": 3,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SSP0200",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 22,
+  "keep_sheet_rows": 0,
+  "planned_edits": 2,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SSP0201",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 25,
+  "keep_sheet_rows": 0,
+  "planned_edits": 2,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SYS0010",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 7,
+  "keep_sheet_rows": 0,
+  "planned_edits": 20,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SYS0012",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 0,
+  "keep_sheet_rows": 0,
+  "planned_edits": 4,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SYS0013",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 11,
+  "keep_sheet_rows": 0,
+  "planned_edits": 3,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_SYS0014",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 2,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_ZTMP_S015J",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 109,
+  "keep_sheet_rows": 5,
+  "planned_edits": 10,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_ZTMP_S015K",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 33,
+  "keep_sheet_rows": 0,
+  "planned_edits": 4,
+  "result": "READY"
+ },
+ {
+  "object": "PACKAGE BODY|PKG_ZTMP_S200B",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 10,
+  "keep_sheet_rows": 0,
+  "planned_edits": 2,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_ANL_KPI_SALES_ACCURACY",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 2,
+  "keep_sheet_rows": 0,
+  "planned_edits": 2,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_ANL_KPI_SUMMARY",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 6,
+  "keep_sheet_rows": 6,
+  "planned_edits": 6,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_ANL_MKT_PSI_DATA",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 3,
+  "keep_sheet_rows": 0,
+  "planned_edits": 4,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_MKT_FCST_SAVE",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 6,
+  "keep_sheet_rows": 1,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_CUST_ITEM_MAPPING",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 0,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_CUST_MODEL_MAPPING_IF",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 0,
+  "keep_sheet_rows": 0,
+  "planned_edits": 0,
+  "result": "BLOCKED"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_DNM_CREATE_C_WS_RTF",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 7,
+  "keep_sheet_rows": 4,
+  "planned_edits": 14,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_DNM_CREATE_WS_RTF",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 8,
+  "keep_sheet_rows": 1,
+  "planned_edits": 14,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_DNM_EDI_CALLOFF_DATA",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 0,
+  "keep_sheet_rows": 0,
+  "planned_edits": 7,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_DNM_EDI_CALLOFF_MKT_FCST",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 7,
+  "keep_sheet_rows": 0,
+  "planned_edits": 9,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_PLN_CUST_FCST_RECORD",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 2,
+  "keep_sheet_rows": 0,
+  "planned_edits": 8,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_PLN_MKT_FCST_C_QTY_BALANCE_CREATE",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 48,
+  "keep_sheet_rows": 8,
+  "planned_edits": 33,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 35,
+  "keep_sheet_rows": 10,
+  "planned_edits": 10,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_PLN_MKT_FCST_SALES_RESULT_MAPPING",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 15,
+  "keep_sheet_rows": 1,
+  "planned_edits": 25,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_PLN_MKT_FCST_TO_NET_DEMAND",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 4,
+  "keep_sheet_rows": 1,
+  "planned_edits": 5,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 11,
+  "keep_sheet_rows": 9,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_DM_PLN_SALES_PLAN_RESULT_MOVE",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 1,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_SCM_ADM_DEPT_CHANGED_AUTH_SYNC",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 0,
+  "keep_sheet_rows": 0,
+  "planned_edits": 2,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_SCM_MST_PROJECT_SCHEDULE",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 0,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 23,
+  "keep_sheet_rows": 22,
+  "planned_edits": 21,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_EE",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 14,
+  "keep_sheet_rows": 8,
+  "planned_edits": 8,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 23,
+  "keep_sheet_rows": 22,
+  "planned_edits": 21,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 27,
+  "keep_sheet_rows": 26,
+  "planned_edits": 25,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_SSP_ANL_SHIPMENT_PLAN_FG",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 25,
+  "keep_sheet_rows": 12,
+  "planned_edits": 8,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|PR_SSP_ANL_SHIP_UPDATE_BOH_VAL",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 10,
+  "keep_sheet_rows": 4,
+  "planned_edits": 5,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|P_SYS0012_APPROVE",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 0,
+  "keep_sheet_rows": 0,
+  "planned_edits": 3,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|P_SYS0012_REJECT",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 0,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|P_SYS0014_SAVE_GROUP_USER_M",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 0,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "VIEW|SCM_DNM_PRODUCT_RESULT_V",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 17,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "PROCEDURE|SCM_SSP_MAIL_SEND",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 4,
+  "keep_sheet_rows": 0,
+  "planned_edits": 0,
+  "result": "BLOCKED"
+ },
+ {
+  "object": "VIEW|SCP_XLS_PSI_GLOBAL_ELECTRODE_LOAD_RATIO_V",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 2,
+  "keep_sheet_rows": 0,
+  "planned_edits": 1,
+  "result": "READY"
+ },
+ {
+  "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_CELL_V",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 2,
+  "keep_sheet_rows": 0,
+  "planned_edits": 3,
+  "result": "READY"
+ },
+ {
+  "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_BP_V",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 14,
+  "keep_sheet_rows": 0,
+  "planned_edits": 14,
+  "result": "READY"
+ },
+ {
+  "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 14,
+  "keep_sheet_rows": 0,
+  "planned_edits": 14,
+  "result": "READY"
+ },
+ {
+  "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V2",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 13,
+  "keep_sheet_rows": 0,
+  "planned_edits": 13,
+  "result": "READY"
+ },
+ {
+  "object": "VIEW|SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_V",
+  "status": "VALID",
+  "errors": 0,
+  "remaining_dash_lines": 9,
+  "keep_sheet_rows": 0,
+  "planned_edits": 9,
+  "result": "READY"
+ }
+]

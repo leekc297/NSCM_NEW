@@ -1,0 +1,24 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-15 13:05:38
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | LINES_N
+L0 | PACKAGE | VALID | 2026-10-09 13:38:31 | 124
+L0 | PACKAGE BODY | VALID | 2026-10-15 13:05:37 | 17328
+(2 rows)
+
+CHK | N | LINES | JUDGE
+L1 대상줄 | 1 | 4933 | PASS
+(1 rows)
+
+CHK | N | LINE | JUDGE
+L2 마커 | 0 |  | 미적용 (기대)
+(1 rows)
+
+CHK | COL | JUDGE
+L3 컬럼 | ISO_YYYYWW | PASS
+L3 컬럼 | PARTIAL_WEEK_NAME | PASS
+(2 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

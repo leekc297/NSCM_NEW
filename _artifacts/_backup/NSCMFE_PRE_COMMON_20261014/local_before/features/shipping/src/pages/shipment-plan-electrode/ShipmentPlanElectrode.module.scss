@@ -1,0 +1,52 @@
+/* splitContainer1 — Main(상) / Detail(하) 수직 분할 (design 01 §1). 비율 합 10 규약(6:4). */
+.gridArea {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.mainGrid {
+  flex: 6 1 0;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.detailArea {
+  flex: 4 1 0;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--color-border, #d9d9d9);
+}
+
+/* Main 상단 컨트롤바 — BOH 3-radio / bucket / chkSum / chkPastPeriod */
+.mainControlBar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 4px 8px;
+  flex-wrap: wrap;
+}
+
+.radioGroup {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* 2차 조회조건 (usrLayoutControl3) — Detail 그리드 상단 */
+.detailBar {
+  gap: 8px;
+  padding: 4px 8px;
+}
+
+.detailBarFields {
+  flex: 1;
+}
+
+.detailBarButtons {
+  gap: 4px;
+  align-items: center;
+}

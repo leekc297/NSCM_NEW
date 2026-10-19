@@ -1,0 +1,75 @@
+// SDM5010 Project Master — 화면 고유 스타일만 (폼 레이아웃은 공용 클래스 — hook #121)
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  flex-shrink: 0;
+  padding-bottom: 20px;
+}
+
+.mainContent {
+  flex-grow: 1;
+}
+
+.grid {
+  width: 100%;
+  height: 100%;
+
+  :global {
+    .wj-colheaders .wj-cell {
+      line-height: 14px;
+      padding: 1px 4px;
+      font-size: 11px;
+    }
+  }
+}
+
+// ⭐ TAB1 '수정'(DPJT_REG_CAT='MOD') 구분 행 색상 (P-05/F-10 — 행 단위. 색상 토큰 미기재(T-7)라
+//   공통 warning 계열 임시. 편집 Yellow(.wj-cell-editable — 후행 선언)가 편집 셀에선 최종 우선)
+.rowMod {
+  background: #fdf1e2 !important;
+}
+
+// 룰 #95 — cell coloring 3색 (편집 Yellow / 잠금 Gray / 기본 White+zebra)
+:global(.wj-cell-editable) {
+  background: #fff8cd !important;
+}
+
+:global(.wj-cell-non-editable) {
+  background: #f1f4f3 !important;
+  color: #5b6470 !important;
+}
+
+// ⭐ 링크 셀 (권한관리 E08 — SP '권한관리' 리터럴 렌더)
+.authRegistrationLink {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+// ⭐ TAB1 REG_COL 행 버튼 컨테이너 — 권한관리 요청그리드와 같은 LGES Button을 portal 렌더링.
+.regButtons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 100%;
+}
+
+// ⭐ TAB2 비활성 체크박스 (계약 ⑥ — CHECKED/UNCHECKED 서버 문자열. 클릭은 셀 핸들러가 처리 —
+//   자체 이벤트 차단)
+.disableCheckbox {
+  pointer-events: none;
+  margin: 0;
+  width: 14px;
+  height: 14px;
+}
+
+.disableCheckboxCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

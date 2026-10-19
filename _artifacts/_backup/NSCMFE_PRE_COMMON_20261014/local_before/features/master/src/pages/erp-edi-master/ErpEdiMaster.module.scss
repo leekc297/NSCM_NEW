@@ -1,0 +1,206 @@
+// AS-IS DMF0008_ErpEdiMaster — 3단 + 2 tab (룰 03 §5 SCSS Module, inline style 0)
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.gridSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-height: 0;
+}
+
+// 화면 설계 정합 (2026-06-28): Top(527h) = Summary(좌 400w) | Repair(우 1202w)
+//   2-컬럼 + 하단 Sub 탭(180h). Top:Sub = 527:180. Summary:Repair = 400:1202.
+// 2026-08-11: flex-grow 기반 고정 3단 → PanelGroup 드래그 분할로 교체 (sales-site/lookup 패턴).
+//   크기는 Panel 의 defaultSize(%) 가 관리하므로 여기서는 flex-grow 를 쓰지 않는다.
+//   gap 도 두지 않는다 — 사이 간격/드래그 영역은 .rowSplitBar / .colSplitBar 가 담당.
+.bodyPanelGroup {
+  flex: 1 1 0;
+  min-height: 0;
+
+  [class*='wj-flexgrid'] {
+    max-height: 100%;
+  }
+}
+
+// 상단 Panel 안의 좌우 분할 그룹 — Panel 이 높이를 관리하므로 height:100%.
+.topRow {
+  height: 100%;
+  min-height: 0;
+}
+
+// Panel 직속 자식 — Panel 이 크기를 관리하므로 100% 로 채운다 (flex-grow 아님).
+.summaryCol,
+.repairCol {
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.subSection {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+// 상하 드래그 바(Separator). react-resizable-panels v4 Separator 는 기본 높이 0 + 커서 없음이라
+// 잡을 영역이 없다 → 여기서 두께/리사이즈 커서/중앙 구분선을 직접 부여해야 드래그가 동작한다.
+// (inline style 로 flexGrow/flexShrink:0 이 걸리므로 두께는 flex-basis 가 아닌 height/width 로 지정)
+.rowSplitBar {
+  height: 16px;
+  cursor: row-resize;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
+}
+
+// 좌우 드래그 바 — .rowSplitBar 의 축만 바꾼 것. 폭 24px = Top 내부 Spacing 유지.
+.colSplitBar {
+  width: 24px;
+  cursor: col-resize;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    left: 50%;
+    width: 2px;
+    transform: translateX(-50%);
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
+}
+
+.sectionTitle {
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2b3a4a;
+  background: #f5f7fa;
+  border-left: 3px solid #1976d2;
+}
+
+// Summary/Repair 는 항상 동시에 보이는데 각자 건수가 없어 상단 SubTitle 배지(그 중 하나에만
+//   대응)만으로는 다른 쪽 건수를 알 수 없었다 — 영역 제목 옆에 각자 건수를 표시한다.
+.sectionCount {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1976d2;
+}
+
+.repairCount {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #c62828;
+}
+
+.gridContainer {
+  flex: 1;
+  overflow: hidden;
+  min-height: 100px;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  background: white;
+}
+
+.subTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.subTitleSlot {
+  flex: 1;
+  min-width: 0;
+}
+
+.updateHistoryBar {
+  display: flex;
+  gap: 12px;
+  padding: 6px 10px;
+  background: #fffbe6;
+  border: 1px solid #ffe58f;
+  border-radius: 4px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.historyItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.historyLabel {
+  font-size: 11px;
+  color: #6b7785;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.historyValue {
+  font-size: 11px;
+  color: #c62828;
+  font-weight: 500;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+.tabSection {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.grid {
+  height: 100%;
+  width: 100%;
+
+  // 룰 12 §11.7 (2026-06-02) — 조회 전용 grid 의 모든 cell 회색 (read-only 시각 강조)
+  :global(.wj-cells .wj-cell) {
+    &:global(.wj-cell-non-editable) {
+      background: #f1f4f3;
+    }
+  }
+}

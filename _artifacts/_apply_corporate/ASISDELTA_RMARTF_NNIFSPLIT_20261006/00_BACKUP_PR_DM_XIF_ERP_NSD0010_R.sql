@@ -1,0 +1,152 @@
+-- SOURCE-FRESH: SCM_MGR.PR_DM_XIF_ERP_NSD0010_R PROCEDURE LAST_DDL=2026-09-21 17:32:28 FETCHED=2026-10-06 15:30 DB=ZIOUI1
+CREATE OR REPLACE PROCEDURE           "PR_DM_XIF_ERP_NSD0010_R" 
+(
+    O_RESULT_CURSOR   OUT SYS_REFCURSOR
+)
+/*================================================================================================================================
+ * Program ID   : PR_DM_XIF_ERP_NSD0010_R
+ * Description  : NERP EDI Call Off 수신
+ * Program History
+ *================================================================================================================================
+ *   Date       In Charge      Description
+ *================================================================================================================================
+ * 2024.11.04   KANG.H.J        [PJ2024-50647] 자동차사업부 고객 수요 분석 기능 개선 - NERP 대응
+ * 2025.10.22   JSSBAE          [E20251016-001453]_ERP NN Mapping 데이터 반영 수행시간 단축 및 로그 보완
+ * 2026.07.06   ZIONEX          [PJ202650304] NextSCM Migration
+ *================================================================================================================================ */
+IS
+    V_E_TYPE          VARCHAR2(50 CHAR)   := 'S';  /* 메시지 유형: S 성공, E 오류 */
+    V_E_MESSAGE       VARCHAR2(100 CHAR)  := 'SUCCESS';
+    /* LOG 용 변수 설정 */
+    V_BATCH_USER      VARCHAR2(150 CHAR)  := 'scm_batch';
+    V_PROGRAM_NAME    VARCHAR2(150 CHAR)  := 'PR_DM_XIF_ERP_NSD0010_R';
+    V_LOG_TYPE        VARCHAR2(30 CHAR);
+    N_LOG_COUNT       NUMBER := 0;
+    V_LOG_MESSAGE     VARCHAR2(1000 CHAR);
+    V_DESCRIPTION     VARCHAR2(500 CHAR);
+    D_EVENT_DATE      DATE;
+    V_COUNT           NUMBER := 0;
+    V_SCM_IF_NR       VARCHAR2(200 CHAR);
+BEGIN
+    /* ============================================================================================================================ */
+    /* 시작 LOG (START) */
+    /* ============================================================================================================================ */
+    V_LOG_TYPE    := 'START';
+    V_LOG_MESSAGE := '########## Start of procedure ##########';
+    V_DESCRIPTION := '';
+    D_EVENT_DATE  := SYSDATE;
+    PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+
+    BEGIN
+        SELECT COUNT(*) INTO V_COUNT FROM GT_ET_CUST_DEMAND_MAPPING;
+
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        /* ET_CUST_DEMAND_MAPPING I/F COUNT LOG */
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        V_LOG_TYPE    := 'APPEND';
+        V_LOG_MESSAGE := 'ET_CUST_DEMAND_MAPPING I/F COUNT';
+        V_DESCRIPTION := 'ET_CUST_DEMAND_MAPPING I/F COUNT : ' || TO_CHAR(V_COUNT);
+        D_EVENT_DATE  := SYSDATE;
+        PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+
+        /* 원본 GROUP BY 단일 추출 (SCM_IF_NR 단일값) */
+        SELECT MAX(SCM_IF_NR) INTO V_SCM_IF_NR FROM GT_ET_CUST_DEMAND_MAPPING;
+
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        /* XIF_CUST_DEMAND_MAPPING_MST_R_SN SCM_IF_NR LOG */
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        V_LOG_TYPE    := 'APPEND';
+        V_LOG_MESSAGE := 'XIF_CUST_DEMAND_MAPPING_MST_R_SN 데이터 적재 START';
+        V_DESCRIPTION := 'SCM_IF_NR : ' || NVL(V_SCM_IF_NR, 'NO COUNT');
+        D_EVENT_DATE  := SYSDATE;
+        PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        /* XIF_CUST_DEMAND_MAPPING_MST_R_SN DATA INSERT */
+        /* ※ XIF_CUST_DEMAND_MAPPING_MST_R_SN = SCM_MGR 시노님 -> 실테이블 INF_MGR.XIF_CUST_DEMAND_MAPPING_MST_R */
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        INSERT INTO XIF_CUST_DEMAND_MAPPING_MST_R_SN
+        ( IF_SEQ, SEQ, ERP_SA_ORG_ID, DISTRB_CHNL_CD, DIVISION_ID, SOLDTO_CODE, SHIPTO_CODE, UNLOADING_POINT
+        , CUSTOMER_PLANT, CUST_MATERIAL_CODE, ITEM_ID, VALID_FROM_DATE, VALID_TO_DATE, TRANSFER_DATE, TRANSFER_FLAG )
+        SELECT DISTINCT
+               SCM_IF_NR              AS IF_SEQ
+             , SEQ                    AS SEQ
+             , VKORG                  AS ERP_SA_ORG_ID
+             , VTWEG                  AS DISTRB_CHNL_CD
+             , SPART                  AS DIVISION_ID
+             , KUNAG                  AS SOLDTO_CODE
+             , KUNWE                  AS SHIPTO_CODE
+             , ABLAD                  AS UNLOADING_POINT
+             , KNREF                  AS CUSTOMER_PLANT
+             , KDMAT                  AS CUST_MATERIAL_CODE
+             , MATNR                  AS ITEM_ID
+             , DATAB                  AS VALID_FROM_DATE
+             , DATBI                  AS VALID_TO_DATE
+             , SYSDATE                AS TRANSFER_DATE
+             , 'N'                    AS TRANSFER_FLAG
+        FROM   GT_ET_CUST_DEMAND_MAPPING;
+
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        /* APPEND LOG */
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        V_LOG_TYPE    := 'APPEND';
+        V_LOG_MESSAGE := 'XIF_CUST_DEMAND_MAPPING_MST_R_SN 데이터 적재';
+        V_DESCRIPTION := '[XIF_CUST_DEMAND_MAPPING_MST_R_SN] : ' || TO_CHAR(SQL%ROWCOUNT);
+        D_EVENT_DATE  := SYSDATE;
+        PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        /* PR_DM_CUST_MODEL_MAPPING_IF 호출 START LOG */
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        V_LOG_TYPE    := 'APPEND';
+        V_LOG_MESSAGE := 'PR_DM_CUST_MODEL_MAPPING_IF 호출 START';
+        V_DESCRIPTION := 'PR_DM_CUST_MODEL_MAPPING_IF 호출 START  ';
+        D_EVENT_DATE  := SYSDATE;
+        PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        /* ERP I/F -> SCM DATA INSERT */
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        PR_DM_CUST_MODEL_MAPPING_IF('ERP');
+
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        /* PR_DM_CUST_MODEL_MAPPING_IF 호출 END LOG */
+        /* ------------------------------------------------------------------------------------------------------------------------ */
+        V_LOG_TYPE    := 'APPEND';
+        V_LOG_MESSAGE := 'PR_DM_CUST_MODEL_MAPPING_IF 호출 END';
+        V_DESCRIPTION := 'PR_DM_CUST_MODEL_MAPPING_IF 호출 END  ';
+        D_EVENT_DATE  := SYSDATE;
+        PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+
+    EXCEPTION
+        WHEN OTHERS THEN
+
+            ROLLBACK;
+            V_E_TYPE    := 'E';
+            V_E_MESSAGE := SUBSTR(SQLERRM, 1, 100);
+            /* ------------------------------------------------------------------------------------------------------------------ */
+            /* ERROR LOG */
+            /* ------------------------------------------------------------------------------------------------------------------ */
+            V_LOG_TYPE    := 'ERROR';
+            V_LOG_MESSAGE := SUBSTR(SQLERRM, 1, 1000);
+            V_DESCRIPTION := 'ERROR_LINE : ' || DBMS_UTILITY.FORMAT_ERROR_BACKTRACE;
+            D_EVENT_DATE  := SYSDATE;
+            PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+    END;
+
+    /* ============================================================================================================================ */
+    /* 종료 LOG (END) */
+    /* ============================================================================================================================ */
+    V_LOG_TYPE    := 'END';
+    V_LOG_MESSAGE := '########## END of procedure ##########';
+    V_DESCRIPTION := 'I/F COUNT : ' || TO_CHAR(V_COUNT);
+    D_EVENT_DATE  := SYSDATE;
+    PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE);
+
+    /* ============================================================================================================================ */
+    /* 실패 메시지 전달 (결과셋 -> OUT SYS_REFCURSOR) */
+    /* ============================================================================================================================ */
+    OPEN O_RESULT_CURSOR FOR
+        SELECT V_E_TYPE AS E_TYPE, V_E_MESSAGE AS E_MESSAGE FROM DUAL;
+END;
+/

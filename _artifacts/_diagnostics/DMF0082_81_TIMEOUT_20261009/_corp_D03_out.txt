@@ -1,0 +1,310 @@
+﻿================================================================================================
+ DMF0082 SP 프로파일  DB=ZIOUI1/ZIOUI1  HOST=ol9-db  SID=617  2026-10-09 15:06:35
+ 인자: user=minyonglee1 group=ADMIN version=Current 기간 20261001~20270331 · 나머지 필터 ALL · itemId NULL · statistics_level=기본
+ 사내SEC/사내BG = 같은 SQL_ID 의 사내 1회 실측 · SEC_X = 클라우드÷사내 · PHV비교 ≠ = 실행계획이 사내와 다름 (최우선 의심)
+================================================================================================
+
+### div=40 run1  (A) SP 49.43s  + 커서 fetch 0.60s  = DB 합 50.03s   rows[RC1..5,RESULT]=2099,6,1,5,182,1
+      사내 기준(ZIOUI1 2회차): SP 2.50s + fetch 0.47s = 2.97s  rows=2098,6,1,5,181,1
+  (B) 문장별 귀속 — V$SQL 델타 상위 25 (초 = ELAPSED, BG = buffer gets, DR = disk reads, HP = 하드파싱 로드)
+      LINE  PROC                       SEC     CPU  EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      1267  GET_MAIN_DATA           39.427   0.355     1       34038      7800      6291   1  4svg4dhnqxh8f/0   3195295405     0.166  237.5     32343  same     INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, PROJECT_COD
+      855   GET_MAIN_DATA            5.118   0.283     1       20374      2650     15528   1  19mfxqb34sbky/0   4145401064         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJECT_CODE, S
+      605   GET_MAIN_DATA            0.945   0.155     1       33681       472     21108   1  0rp3b1v236wwz/0   4066606801     0.113    8.4     33409  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, ITEM_ID, ITE
+      4175  GET_MAIN_DATA            0.831   0.692     1       28627         7     50897   1  18xg1y5298qgq/0   3971101268     0.536    1.6     24962  same     INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, 
+      4705  GET_MAIN_DATA            0.633   0.631     1       16581         0      2099   1  56fkh52zfndm7/0   360512032          -      -         -  사내없음  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, IN
+      1850  GET_MAIN_DATA            0.462   0.461     1       66945         0    101794   1  631pzfvq8r0ut/0   620290878      0.403    1.1     61578  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      3643  GET_MAIN_DATA            0.289   0.289     1       90383         0     69480   1  20xrvz802rfsy/0   1553021311     0.219    1.3     82339  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN ( SELECT B
+      3924  GET_MAIN_DATA            0.217   0.006     1          87         4        12   1  fsb8nn1m1g1fs/0   1907037104     0.000        18  same     INSERT INTO SCM_MGR.GTT_TEMP_INTO_GROUP_MEASURE ( USER_GROUP, DIVISION_ID, MEASU
+      1500  GET_MAIN_DATA            0.161   0.161     1       20047         0     15461   1  6bucw2kzuc0nt/0   3737877804         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      3957  GET_MAIN_DATA            0.154   0.006     1         117         3         5   1  63880yuzqpbpc/0   172212249      0.000        62  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE (MEASURE, EDIT_AUTH_YN, 
+      1230  GET_MAIN_DATA            0.152   0.152     1       16403         0      2834   1  ac561dnz1arup/0   2591175856         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PROJECT_CODE
+      3225  GET_MAIN_DATA            0.144   0.145     1       26626         0     12458   1  f6r0861xjw0h1/0   4237537377     0.129    1.1     24718  same     MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      144   GET_MAIN_DATA            0.126   0.011     1         114         3        24   1  93djpd4h46mgu/0   98234997       0.000        70  same     SELECT * FROM ( SELECT U.PROGRAM_ID , U.SHEET_NAME , U.COLUMN_NAME , CASE WHEN U
+      3734  GET_MAIN_DATA            0.118   0.118     1        7103         0         1   1  70xvv1ktud7js/0   1667501949     0.112    1.1      6532  same     SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE GROUP 
+      3265  GET_MAIN_DATA            0.115   0.115     1       13819         0         0   1  c0muq7dr11ks5/0   633531915          -      -         -  사내없음 MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      3359  GET_MAIN_DATA            0.114   0.114     1       14839         0      3122   1  day2h1hdkc8y1/0   3484297769     0.086    1.3     13891  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      3319  GET_MAIN_DATA            0.111   0.111     1       16732         0      2839   1  fy9k6a9dk8uph/0   633531915          -      -         -  사내없음 MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      1051  GET_MAIN_DATA            0.103   0.102     1        5301         0     15528   1  63ar9rz0axr5p/0   2395782385     0.077    1.3      4765  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_S
+      4528  GET_MAIN_DATA            0.088   0.087     1        8076         0      1255   1  3x9ardnmfczp0/0   116174995      0.072    1.2      7607  same     MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT NVL(DIVISION_ID, '~') AS DI
+      4337  GET_MAIN_DATA            0.082   0.015     1        2989         1         0   1  872vsnfnj927p/0   1879353244     0.002   41.2      2301  same     MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT DIVISION_ID, PROJECT_CODE, 
+      662   GET_MAIN_DATA            0.081   0.081     1        2334         0     13489   1  9wgfrws532db6/0   3069957411     0.040    2.0      2082  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_A_V ( DIVISION_ID, ITEM_ID, ITEM_
+      1125  GET_MAIN_DATA            0.074   0.004     1          44         1         1   1  38gzagpuubjyc/0   2795996493     0.000         8  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SELECT_MEASURE (MEASURE, RESULT_MEASURE, MEA
+      735   GET_MAIN_DATA            0.058   0.058     1        2995         0     13489   1  8ngcf5avm1q3q/0   3642427876     0.027    2.1      2166  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_V ( DIVISION_ID, ITEM_ID, ITEM_NA
+      3893  GET_MAIN_DATA            0.046   0.006     1          63         1         1   1  69brgkhvcq70m/0   1923904587     0.000        13  same     SELECT COUNT(1) FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'G
+      1964  GET_MAIN_DATA            0.036   0.036     1         778         0         0   1  88z04sh7864v4/0   1759859575     0.005    7.1       799  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      합계: PKG 정적문장 49.96s · 동적/기타(GT_DMF0082) 0.00s · 동적샘플링 재귀 0.17s (89문장)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 (샘플 ≈ 초)
+      4svg4dhnqxh8f      29  db file scattered read                  3195295405  TABLE ACCESS FULL
+      4svg4dhnqxh8f      10  db file sequential read                 3195295405  TABLE ACCESS FULL
+      19mfxqb34sbky       3  db file sequential read                 4145401064  INDEX UNIQUE SCAN
+      19mfxqb34sbky       2  db file scattered read                  4145401064  TABLE ACCESS FULL
+      0rp3b1v236wwz       1  db file scattered read                  4066606801  INDEX FAST FULL SCAN
+      18xg1y5298qgq       1  ON CPU                                  0           TABLE ACCESS FULL
+      56fkh52zfndm7       1  ON CPU                                  360512032   SORT GROUP BY PIVOT
+      631pzfvq8r0ut       1  ON CPU                                  620290878   LOAD TABLE CONVENTIONAL 
+      70xvv1ktud7js       1  ON CPU                                  1667501949  HASH GROUP BY
+      ac561dnz1arup       1  ON CPU                                  2591175856  TABLE ACCESS FULL
+      bn2s2p20h4nnw       1  ON CPU                                  0            
+  (D) 세션 통계 델타
+      CPU used by this session                                     463
+      execute count                                                903
+      parse count (hard)                                           202
+      parse count (total)                                          478
+      parse time elapsed                                            15
+      physical reads                                             11052
+      recursive calls                                             5751
+      redo size                                                  75972
+      session logical reads                                     447932
+      sorts (rows)                                              364057
+      user I/O wait time                                          4568
+      → 문장 귀속 합 50.13s / DB 합 50.03s (차이 = PL/SQL 처리·귀속 밖 재귀SQL)
+
+### div=40 run2  (A) SP 3.34s  + 커서 fetch 0.61s  = DB 합 3.95s   rows[RC1..5,RESULT]=2099,6,1,5,182,1
+      사내 기준(ZIOUI1 2회차): SP 2.50s + fetch 0.47s = 2.97s  rows=2098,6,1,5,181,1
+  (B) 문장별 귀속 — V$SQL 델타 상위 25 (초 = ELAPSED, BG = buffer gets, DR = disk reads, HP = 하드파싱 로드)
+      LINE  PROC                       SEC     CPU  EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      4175  GET_MAIN_DATA            0.704   0.702     1       25794         0     50897   0  18xg1y5298qgq/0   3971101268     0.536    1.3     24962  same     INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, 
+      4705  GET_MAIN_DATA            0.602   0.597     1       16195         0      2099   0  56fkh52zfndm7/0   360512032          -      -         -  사내없음  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, IN
+      1850  GET_MAIN_DATA            0.516   0.514     1       62379         0    101794   0  631pzfvq8r0ut/0   620290878      0.403    1.3     61578  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      3643  GET_MAIN_DATA            0.339   0.338     1       89883         0     69480   0  20xrvz802rfsy/0   1553021311     0.219    1.5     82339  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN ( SELECT B
+      1267  GET_MAIN_DATA            0.185   0.184     1       32400         0      6291   0  4svg4dhnqxh8f/0   3195295405     0.166    1.1     32343  same     INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, PROJECT_COD
+      3225  GET_MAIN_DATA            0.180   0.179     1       26674         0     12458   0  f6r0861xjw0h1/0   4237537377     0.129    1.4     24718  same     MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      3734  GET_MAIN_DATA            0.151   0.151     1        6944         0         1   0  70xvv1ktud7js/0   1667501949     0.112    1.4      6532  same     SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE GROUP 
+      1500  GET_MAIN_DATA            0.145   0.144     1       18670         0     15461   0  6bucw2kzuc0nt/0   3737877804         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      855   GET_MAIN_DATA            0.133   0.133     1       18385         0     15528   0  19mfxqb34sbky/0   4145401064         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJECT_CODE, S
+      3265  GET_MAIN_DATA            0.133   0.133     1       13888         0         0   0  c0muq7dr11ks5/0   633531915          -      -         -  사내없음 MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      3319  GET_MAIN_DATA            0.129   0.128     1       16801         0      2839   0  fy9k6a9dk8uph/0   633531915          -      -         -  사내없음 MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      605   GET_MAIN_DATA            0.124   0.124     1       33345         0     21108   0  0rp3b1v236wwz/0   4066606801     0.113    1.1     33409  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, ITEM_ID, ITE
+      3359  GET_MAIN_DATA            0.121   0.122     1       14927         0      3122   0  day2h1hdkc8y1/0   3484297769     0.086    1.4     13891  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      1230  GET_MAIN_DATA            0.110   0.110     1       15527         0      2834   0  ac561dnz1arup/0   2591175856         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PROJECT_CODE
+      4528  GET_MAIN_DATA            0.098   0.099     1        7767         0      1255   0  3x9ardnmfczp0/0   116174995      0.072    1.4      7607  same     MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT NVL(DIVISION_ID, '~') AS DI
+      1051  GET_MAIN_DATA            0.092   0.092     1        4771         0     15528   0  63ar9rz0axr5p/0   2395782385     0.077    1.2      4765  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_S
+      662   GET_MAIN_DATA            0.044   0.044     1        2068         0     13489   0  9wgfrws532db6/0   3069957411     0.040    1.1      2082  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_A_V ( DIVISION_ID, ITEM_ID, ITEM_
+      735   GET_MAIN_DATA            0.035   0.035     1        2160         0     13489   0  8ngcf5avm1q3q/0   3642427876     0.027    1.3      2166  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_V ( DIVISION_ID, ITEM_ID, ITEM_NA
+      3805  GET_MAIN_DATA            0.019   0.019     1        6944         0         0   0  41tabk4sgrfsy/0   3273597457         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE F WHERE F.MEASURE_GROUP = 'CUST
+      706   GET_MAIN_DATA            0.015   0.014     1         659         0      4331   0  cct9d3wpufmjn/0   3069957411     0.012    1.2       667  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_B_V ( DIVISION_ID, ITEM_ID , FORE
+      2077  GET_MAIN_DATA            0.013   0.013     1         708         0         0   0  ar7u7g5yjbm65/0   1994303945         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      1388  GET_MAIN_DATA            0.012   0.012     1        6944         0         0   0  ggkupust9vjpj/0   422164050      0.013    0.9      6532  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+      4459  GET_MAIN_DATA            0.012   0.012     1        3239         0         0   0  67sysamdcxzmj/0   2351976090     0.010    1.2      3161  same     UPDATE SCM_MGR.GT_DMF0082_MF_SP SET AS_FROM_SITE = ' ' WHERE AS_FROM_SITE IS NUL
+      4469  GET_MAIN_DATA            0.007   0.007     1        3239         0         0   0  chnk6fsq0zmjw/0   2351976090         -      -         -  사내없음 UPDATE SCM_MGR.GT_DMF0082_MF_SP SET CURRENCY = ' ' WHERE MEASURE NOT IN ('LOC', 
+      4173  GET_MAIN_DATA            0.005   0.006     1        3239         0         0   0  8zj5nqpk4g3d6/0   4271728968     0.004    1.3      3161  same     DELETE FROM SCM_MGR.GT_DMF0082_MF_SP
+      합계: PKG 정적문장 3.94s · 동적/기타(GT_DMF0082) 0.00s · 동적샘플링 재귀 0.00s (0문장)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 (샘플 ≈ 초)
+      18xg1y5298qgq       1  ON CPU                                  3971101268  MERGE JOIN OUTER
+      4svg4dhnqxh8f       1  ON CPU                                  3195295405  HASH GROUP BY
+      56fkh52zfndm7       1  ON CPU                                  360512032   HASH GROUP BY
+      c0muq7dr11ks5       1  ON CPU                                  633531915   TABLE ACCESS FULL
+  (D) 세션 통계 델타
+      CPU used by this session                                     412
+      execute count                                                102
+      parse count (total)                                           93
+      recursive calls                                             3015
+      redo size                                                   5416
+      session logical reads                                     439498
+      sorts (rows)                                              362089
+      → 문장 귀속 합 3.94s / DB 합 3.95s (차이 = PL/SQL 처리·귀속 밖 재귀SQL)
+
+### div=81 run1  (A) SP 406.62s  + 커서 fetch 0.70s  = DB 합 407.32s   rows[RC1..5,RESULT]=2383,6,1,5,182,1
+      사내 기준(ZIOUI1 2회차): SP 3.04s + fetch 0.57s = 3.61s  rows=2394,6,1,5,181,1
+  (B) 문장별 귀속 — V$SQL 델타 상위 25 (초 = ELAPSED, BG = buffer gets, DR = disk reads, HP = 하드파싱 로드)
+      LINE  PROC                       SEC     CPU  EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      1667  GET_MAIN_DATA          397.898   1.906     1       68402     29948    122092   1  d019r0hbb0muh/0   2682586817         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      1397  GET_MAIN_DATA            3.892   0.106     1       14120        77     12759   1  c3bg6q8n39195/0   3995613941         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      855   GET_MAIN_DATA            2.143   0.428     1       54265       109     39070   0  19mfxqb34sbky/0   4145401064         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJECT_CODE, S
+      4175  GET_MAIN_DATA            0.798   0.796     1       27288         0     61046   0  18xg1y5298qgq/0   3971101268     0.583    1.4     25245  same     INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, 
+      4705  GET_MAIN_DATA            0.692   0.691     1       17260         0      2383   0  56fkh52zfndm7/0   360512032          -      -         -  사내없음  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, IN
+      3643  GET_MAIN_DATA            0.326   0.325     1      101504         0     78683   0  20xrvz802rfsy/0   1553021311     0.234    1.4     87559  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN ( SELECT B
+      1051  GET_MAIN_DATA            0.246   0.245     1       10223         0     39070   0  63ar9rz0axr5p/0   2395782385     0.197    1.2      9764  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_S
+      1213  GET_MAIN_DATA            0.179   0.178     1       52588         1      1342   1  gfjpdh7fc1u59/0   982384402      0.105    1.7     39647  same     INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PROJECT_CODE
+      3225  GET_MAIN_DATA            0.169   0.169     1       26458         0     12248   0  f6r0861xjw0h1/0   4237537377     0.113    1.5     19455  same     MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      3734  GET_MAIN_DATA            0.152   0.152     1        7019         0         1   0  70xvv1ktud7js/0   1667501949     0.121    1.3      6532  same     SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE GROUP 
+      3359  GET_MAIN_DATA            0.131   0.131     1       15428         0      4878   0  day2h1hdkc8y1/0   3484297769     0.088    1.5     14378  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      3265  GET_MAIN_DATA            0.126   0.126     1       13888         0         0   0  c0muq7dr11ks5/0   633531915          -      -         -  사내없음 MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      605   GET_MAIN_DATA            0.119   0.119     1       31859         0     13868   0  0rp3b1v236wwz/0   4066606801     0.096    1.2     31921  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, ITEM_ID, ITE
+      3319  GET_MAIN_DATA            0.105   0.105     1       13888         0         0   0  fy9k6a9dk8uph/0   633531915          -      -         -  사내없음 MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      4528  GET_MAIN_DATA            0.067   0.067     1        3452         0         0   0  3x9ardnmfczp0/0   116174995      0.078    0.9      6422  same     MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT NVL(DIVISION_ID, '~') AS DI
+      1964  GET_MAIN_DATA            0.058   0.001     1           9         2         0   0  88z04sh7864v4/0   1759859575     0.010    5.8      1560  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      1301  GET_MAIN_DATA            0.026   0.026     1         606         0         0   1  g2f236ssg1rpu/0   2456431936     0.000         0  same     INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST_C (DIVISION_ID, PROJECT_CO
+      1341  GET_MAIN_DATA            0.026   0.025     1         609         0         0   1  8kzbu46dc5arm/0   2112400780     0.000         0  same     INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C (DIVISION_ID, PROJECT_C
+      662   GET_MAIN_DATA            0.025   0.024     1        1178         0      7020   0  9wgfrws532db6/0   3069957411     0.020    1.3      1178  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_A_V ( DIVISION_ID, ITEM_ID, ITEM_
+      2077  GET_MAIN_DATA            0.025   0.025     1        1432         0         0   0  ar7u7g5yjbm65/0   1994303945         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      735   GET_MAIN_DATA            0.017   0.017     1        1041         0      7020   0  8ngcf5avm1q3q/0   3642427876     0.013    1.3      1030  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_V ( DIVISION_ID, ITEM_ID, ITEM_NA
+      3805  GET_MAIN_DATA            0.016   0.016     1        7019         0         0   0  41tabk4sgrfsy/0   3273597457         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE F WHERE F.MEASURE_GROUP = 'CUST
+      -     -                        0.016   0.017    10         750         0        10   1  0yy1vysbs3rca/0   235092075          -      -         -  사내없음 SELECT /* OPT_DYN_SAMP */ /*+ ALL_ROWS IGNORE_WHERE_CLAUSE RESULT_CACHE(SNAPSHOT
+      1612  GET_MAIN_DATA            0.016   0.016     1         276         0         0   1  gqk1z11svf3q3/0   2371698321         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      1388  GET_MAIN_DATA            0.013   0.013     1        6944         0         0   0  ggkupust9vjpj/0   422164050      0.014    0.9      6532  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+      합계: PKG 정적문장 407.31s · 동적/기타(GT_DMF0082) 0.00s · 동적샘플링 재귀 0.06s (32문장)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 (샘플 ≈ 초)
+      d019r0hbb0muh     376  db file sequential read                 2682586817  TABLE ACCESS BY INDEX ROWID BATCHED
+      d019r0hbb0muh      20  db file parallel read                   2682586817  TABLE ACCESS BY INDEX ROWID BATCHED
+      c3bg6q8n39195       4  db file sequential read                 3995613941  INDEX RANGE SCAN
+      19mfxqb34sbky       2  db file sequential read                 4145401064  INDEX UNIQUE SCAN
+      d019r0hbb0muh       2  ON CPU                                  2682586817  WINDOW SORT
+      18xg1y5298qgq       1  ON CPU                                  3971101268  MERGE JOIN OUTER
+      56fkh52zfndm7       1  ON CPU                                  360512032   HASH GROUP BY
+      fy9k6a9dk8uph       1  ON CPU                                  633531915   TABLE ACCESS FULL
+  (D) 세션 통계 델타
+      CPU used by this session                                     593
+      execute count                                                262
+      parse count (hard)                                            16
+      parse count (total)                                          184
+      physical reads                                             30137
+      recursive calls                                             3688
+      redo size                                                  51008
+      session logical reads                                     490556
+      sorts (rows)                                              615240
+      user I/O wait time                                         40197
+      → 문장 귀속 합 407.37s / DB 합 407.32s (차이 = PL/SQL 처리·귀속 밖 재귀SQL)
+
+### div=81 run2  (A) SP 4.15s  + 커서 fetch 0.74s  = DB 합 4.89s   rows[RC1..5,RESULT]=2383,6,1,5,182,1
+      사내 기준(ZIOUI1 2회차): SP 3.04s + fetch 0.57s = 3.61s  rows=2394,6,1,5,181,1
+  (B) 문장별 귀속 — V$SQL 델타 상위 25 (초 = ELAPSED, BG = buffer gets, DR = disk reads, HP = 하드파싱 로드)
+      LINE  PROC                       SEC     CPU  EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      1667  GET_MAIN_DATA            1.069   1.066     1       68062         0    122092   0  d019r0hbb0muh/0   2682586817         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      4175  GET_MAIN_DATA            0.815   0.814     1       27155         0     61046   0  18xg1y5298qgq/0   3971101268     0.583    1.4     25245  same     INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, 
+      4705  GET_MAIN_DATA            0.734   0.731     1       17260         0      2383   0  56fkh52zfndm7/0   360512032          -      -         -  사내없음  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, IN
+      855   GET_MAIN_DATA            0.400   0.399     1       53667         0     39070   0  19mfxqb34sbky/0   4145401064         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJECT_CODE, S
+      3643  GET_MAIN_DATA            0.341   0.340     1      101508         0     78683   0  20xrvz802rfsy/0   1553021311     0.234    1.5     87559  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN ( SELECT B
+      1051  GET_MAIN_DATA            0.235   0.233     1        9769         0     39070   0  63ar9rz0axr5p/0   2395782385     0.197    1.2      9764  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_S
+      3225  GET_MAIN_DATA            0.171   0.170     1       26610         0     12248   0  f6r0861xjw0h1/0   4237537377     0.113    1.5     19455  same     MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      3734  GET_MAIN_DATA            0.157   0.158     1        7019         0         1   0  70xvv1ktud7js/0   1667501949     0.121    1.3      6532  same     SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE GROUP 
+      3359  GET_MAIN_DATA            0.133   0.133     1       15528         0      4878   0  day2h1hdkc8y1/0   3484297769     0.088    1.5     14378  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      3265  GET_MAIN_DATA            0.128   0.128     1       14038         0         0   0  c0muq7dr11ks5/0   633531915          -      -         -  사내없음 MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      605   GET_MAIN_DATA            0.107   0.107     1       31859         0     13868   0  0rp3b1v236wwz/0   4066606801     0.096    1.1     31921  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, ITEM_ID, ITE
+      3319  GET_MAIN_DATA            0.106   0.106     1       14038         0         0   0  fy9k6a9dk8uph/0   633531915          -      -         -  사내없음 MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      4528  GET_MAIN_DATA            0.067   0.067     1        3452         0         0   0  3x9ardnmfczp0/0   116174995      0.078    0.9      6422  same     MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT NVL(DIVISION_ID, '~') AS DI
+      2077  GET_MAIN_DATA            0.026   0.026     1        1432         0         0   0  ar7u7g5yjbm65/0   1994303945         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      662   GET_MAIN_DATA            0.023   0.023     1        1176         0      7020   0  9wgfrws532db6/0   3069957411     0.020    1.2      1178  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_A_V ( DIVISION_ID, ITEM_ID, ITEM_
+      3805  GET_MAIN_DATA            0.017   0.017     1        7019         0         0   0  41tabk4sgrfsy/0   3273597457         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE F WHERE F.MEASURE_GROUP = 'CUST
+      735   GET_MAIN_DATA            0.015   0.015     1        1030         0      7020   0  8ngcf5avm1q3q/0   3642427876     0.013    1.2      1030  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_V ( DIVISION_ID, ITEM_ID, ITEM_NA
+      4459  GET_MAIN_DATA            0.012   0.012     1        3452         0         0   0  67sysamdcxzmj/0   2351976090     0.010    1.2      3209  same     UPDATE SCM_MGR.GT_DMF0082_MF_SP SET AS_FROM_SITE = ' ' WHERE AS_FROM_SITE IS NUL
+      1388  GET_MAIN_DATA            0.012   0.011     1        7019         0         0   0  ggkupust9vjpj/0   422164050      0.014    0.8      6532  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+      4469  GET_MAIN_DATA            0.007   0.007     1        3452         0         0   0  chnk6fsq0zmjw/0   2351976090         -      -         -  사내없음 UPDATE SCM_MGR.GT_DMF0082_MF_SP SET CURRENCY = ' ' WHERE MEASURE NOT IN ('LOC', 
+      706   GET_MAIN_DATA            0.007   0.007     1         548         0      2189   0  cct9d3wpufmjn/0   3069957411     0.006    1.2       548  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_B_V ( DIVISION_ID, ITEM_ID , FORE
+      -     -                        0.007   0.008     5         375         0         5   0  44vn8bsu0xuxu/0   235092075          -      -         -  사내없음 SELECT /* OPT_DYN_SAMP */ /*+ ALL_ROWS IGNORE_WHERE_CLAUSE RESULT_CACHE(SNAPSHOT
+      4173  GET_MAIN_DATA            0.005   0.005     1        3452         0         0   0  8zj5nqpk4g3d6/0   4271728968     0.004    1.3      3209  same     DELETE FROM SCM_MGR.GT_DMF0082_MF_SP
+      -     -                        0.003   0.003     2         150         0         2   0  0yy1vysbs3rca/0   235092075          -      -         -  사내없음 SELECT /* OPT_DYN_SAMP */ /*+ ALL_ROWS IGNORE_WHERE_CLAUSE RESULT_CACHE(SNAPSHOT
+      1048  GET_MAIN_DATA            0.002   0.003     1        1426         0         0   0  7jg4wbat2mb66/0   125332918      0.002    1.1      1426  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM
+      합계: PKG 정적문장 4.60s · 동적/기타(GT_DMF0082) 0.00s · 동적샘플링 재귀 0.02s (10문장)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 (샘플 ≈ 초)
+      0x2cvyr65f9nf       1  ON CPU                                  903671040   FIXED TABLE FULL
+      18xg1y5298qgq       1  ON CPU                                  3971101268  SORT GROUP BY
+      20xrvz802rfsy       1  ON CPU                                  1553021311  DELETE 
+      d019r0hbb0muh       1  ON CPU                                  2682586817  LOAD TABLE CONVENTIONAL 
+      gfjpdh7fc1u59       1  ON CPU                                  982384402   HASH JOIN 
+  (D) 세션 통계 델타
+      CPU used by this session                                     505
+      execute count                                                160
+      parse count (hard)                                             2
+      parse count (total)                                          127
+      recursive calls                                             3442
+      redo size                                                  13492
+      session logical reads                                     483742
+      sorts (rows)                                              615039
+      → 문장 귀속 합 4.62s / DB 합 4.89s (차이 = PL/SQL 처리·귀속 밖 재귀SQL)
+
+### div=82 run1  (A) SP 224.38s  + 커서 fetch 0.75s  = DB 합 225.13s   rows[RC1..5,RESULT]=2608,6,1,5,182,1
+      사내 기준(ZIOUI1 2회차): SP 3.54s + fetch 0.74s = 4.28s  rows=2622,6,1,5,181,1
+  (B) 문장별 귀속 — V$SQL 델타 상위 25 (초 = ELAPSED, BG = buffer gets, DR = disk reads, HP = 하드파싱 로드)
+      LINE  PROC                       SEC     CPU  EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      1667  GET_MAIN_DATA          219.480   2.523     1      127903     76003    144262   0  d019r0hbb0muh/0   2682586817         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      -     -                       22.360   3.850     1       80904     63427        28   1  6r45gx9w6pppz/0   2592385300         -      -         -  사내없음 SELECT S.SQL_ID, TO_CHAR(N.BEGIN_INTERVAL_TIME,'MM-DD HH24:MI') SNAP, S.PLAN_HAS
+      855   GET_MAIN_DATA            1.933   0.328     1       38865        64     38206   0  19mfxqb34sbky/0   4145401064         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJECT_CODE, S
+      10831 POPUP_GET_SCM_MST_FUTU   1.480   1.469     1       18610       750       923   0  avzy19hxu6gg4/0   1869011320         -      -         -  사내없음 SELECT VALUE(P) FROM TABLE(DBMS_SQLTUNE.SELECT_CURSOR_CACHE( BASIC_FILTER=> q'# 
+      4175  GET_MAIN_DATA            1.090   1.088     1      104533         0     72139   0  18xg1y5298qgq/0   3971101268     0.837    1.3     94788  same     INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, 
+      4705  GET_MAIN_DATA            0.737   0.739     1       20290         0      2608   0  56fkh52zfndm7/0   360512032          -      -         -  사내없음  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, IN
+      3643  GET_MAIN_DATA            0.312   0.310     1       95796         0     73971   0  20xrvz802rfsy/0   1553021311     0.251    1.2     86990  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN ( SELECT B
+      1051  GET_MAIN_DATA            0.241   0.240     1        9476         0     38206   0  63ar9rz0axr5p/0   2395782385     0.211    1.1      9465  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_S
+      3734  GET_MAIN_DATA            0.173   0.173     1        7270         0         1   0  70xvv1ktud7js/0   1667501949     0.156    1.1      6605  same     SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE GROUP 
+      -     -                        0.168   0.167     1          70         0        19   1  096vgymanjt51/0   4072134614         -      -         -  사내없음 WITH B AS (SELECT OBJECT_ID FROM USER_OBJECTS WHERE OBJECT_NAME='PKG_DMF0082' AN
+      1213  GET_MAIN_DATA            0.137   0.136     1       45810         0       821   0  gfjpdh7fc1u59/0   982384402      0.101    1.4     39372  same     INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PROJECT_CODE
+      3265  GET_MAIN_DATA            0.136   0.134     1       14470         0         0   0  c0muq7dr11ks5/0   633531915          -      -         -  사내없음 MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      4396  GET_MAIN_DATA            0.132   0.016     1         855       181         0   1  4ujdrrz9r655m/0   91901130       0.001  131.6       162  same     MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT DIVISION_ID, PROJECT_CODE, 
+      3225  GET_MAIN_DATA            0.115   0.116     1       15266         0       776   0  f6r0861xjw0h1/0   4237537377     0.110    1.0     14180  same     MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      3319  GET_MAIN_DATA            0.114   0.114     1       14821         0       343   0  fy9k6a9dk8uph/0   633531915          -      -         -  사내없음 MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      605   GET_MAIN_DATA            0.104   0.104     1       30867         0      4229   0  0rp3b1v236wwz/0   4066606801     0.103    1.0     30931  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, ITEM_ID, ITE
+      1964  GET_MAIN_DATA            0.091   0.001     1           9         2         0   0  88z04sh7864v4/0   1759859575     0.009   10.1      1480  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      4528  GET_MAIN_DATA            0.076   0.076     1        4058         0         0   0  3x9ardnmfczp0/0   116174995      0.097    0.8      7378  same     MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT NVL(DIVISION_ID, '~') AS DI
+      3359  GET_MAIN_DATA            0.073   0.073     1       14718         0       726   0  day2h1hdkc8y1/0   3484297769     0.076    1.0     13416  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      -     -                        0.067   0.066     1          64         0         2   1  2n4n0382v5mk1/0   1061889594         -      -         -  사내없음 SELECT S.SID, S.SERIAL#, S.USERNAME, S.MACHINE, S.MODULE, S.STATUS, S.LAST_CALL_
+      -     -                        0.042   0.038     1         554        21         5   1  979bjmgyru410/0   4243585182         -      -         -  사내없음 SELECT M.SID, M.SQL_ID, M.SQL_PLAN_HASH_VALUE PHV, M.STATUS, ROUND(M.ELAPSED_TIM
+      2077  GET_MAIN_DATA            0.024   0.023     1        1432         0         0   0  ar7u7g5yjbm65/0   1994303945         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      1397  GET_MAIN_DATA            0.019   0.020     1        3042         0      1122   0  c3bg6q8n39195/0   3995613941         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      3805  GET_MAIN_DATA            0.016   0.016     1        7270         0         0   0  41tabk4sgrfsy/0   3273597457         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE F WHERE F.MEASURE_GROUP = 'CUST
+      1388  GET_MAIN_DATA            0.014   0.015     1        7019         0         0   0  ggkupust9vjpj/0   422164050      0.017    0.8      6605  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+      합계: PKG 정적문장 226.55s · 동적/기타(GT_DMF0082) 22.64s · 동적샘플링 재귀 0.00s (2문장)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 (샘플 ≈ 초)
+      d019r0hbb0muh     200  db file sequential read                 2682586817  TABLE ACCESS BY INDEX ROWID BATCHED
+      d019r0hbb0muh      16  db file parallel read                   2682586817  TABLE ACCESS BY INDEX ROWID BATCHED
+      d019r0hbb0muh       3  ON CPU                                  2682586817  WINDOW SORT
+      19mfxqb34sbky       2  db file sequential read                 4145401064  INDEX UNIQUE SCAN
+      0x2cvyr65f9nf       1  ON CPU                                  903671040   FIXED TABLE FULL
+      18xg1y5298qgq       1  ON CPU                                  3971101268  SORT GROUP BY
+      4ujdrrz9r655m       1  db file scattered read                  91901130    INDEX FAST FULL SCAN
+      63ar9rz0axr5p       1  ON CPU                                  2395782385  SORT GROUP BY
+      c0muq7dr11ks5       1  ON CPU                                  633531915   HASH GROUP BY
+  (D) 세션 통계 델타
+      CPU used by this session                                     647
+      execute count                                                224
+      parse count (hard)                                             1
+      parse count (total)                                          121
+      physical reads                                             76251
+      recursive calls                                             3842
+      redo size                                                   9748
+      session logical reads                                     581605
+      sorts (rows)                                              821309
+      user I/O wait time                                         21923
+      → 문장 귀속 합 249.19s / DB 합 225.13s (차이 = PL/SQL 처리·귀속 밖 재귀SQL)
+
+### div=82 run2  (A) SP 13.93s  + 커서 fetch 0.89s  = DB 합 14.82s   rows[RC1..5,RESULT]=2608,6,1,5,182,1
+      사내 기준(ZIOUI1 2회차): SP 3.54s + fetch 0.74s = 4.28s  rows=2622,6,1,5,181,1
+  (B) 문장별 귀속 — V$SQL 델타 상위 25 (초 = ELAPSED, BG = buffer gets, DR = disk reads, HP = 하드파싱 로드)
+      LINE  PROC                       SEC     CPU  EXEC          BG        DR      ROWS  HP  SQL_ID/CHILD      PHV          사내SEC  SEC_X    사내BG  PHV비교  TEXT
+      1667  GET_MAIN_DATA            9.472   1.670     1      127563       814    144262   0  d019r0hbb0muh/0   2682586817         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      855   GET_MAIN_DATA            1.670   0.243     1       38824        64     38206   0  19mfxqb34sbky/0   4145401064         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJECT_CODE, S
+      4175  GET_MAIN_DATA            1.183   1.177     1      104149         0     72139   0  18xg1y5298qgq/0   3971101268     0.837    1.4     94788  same     INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, 
+      4705  GET_MAIN_DATA            0.880   0.876     1       20290         0      2608   0  56fkh52zfndm7/0   360512032          -      -         -  사내없음  SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, IN
+      3643  GET_MAIN_DATA            0.331   0.329     1       95792         0     73971   0  20xrvz802rfsy/0   1553021311     0.251    1.3     86990  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A WHERE A.MEASURE IN ( SELECT B
+      1051  GET_MAIN_DATA            0.195   0.194     1        9470         0     38206   0  63ar9rz0axr5p/0   2395782385     0.211    0.9      9465  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_CODE, SCM_S
+      3734  GET_MAIN_DATA            0.187   0.185     1        7270         0         1   0  70xvv1ktud7js/0   1667501949     0.156    1.2      6605  same     SELECT COUNT(*) FROM ( SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE GROUP 
+      3265  GET_MAIN_DATA            0.140   0.139     1       14540         0         0   0  c0muq7dr11ks5/0   633531915          -      -         -  사내없음 MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      3225  GET_MAIN_DATA            0.128   0.127     1       15338         0       776   0  f6r0861xjw0h1/0   4237537377     0.110    1.2     14180  same     MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      3319  GET_MAIN_DATA            0.117   0.115     1       14891         0       343   0  fy9k6a9dk8uph/0   633531915          -      -         -  사내없음 MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A 
+      1213  GET_MAIN_DATA            0.112   0.111     1       45481         0       821   0  gfjpdh7fc1u59/0   982384402      0.101    1.1     39372  same     INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PROJECT_CODE
+      605   GET_MAIN_DATA            0.089   0.089     1       30867         0      4229   0  0rp3b1v236wwz/0   4066606801     0.103    0.9     30931  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, ITEM_ID, ITE
+      3359  GET_MAIN_DATA            0.082   0.082     1       14766         0       726   0  day2h1hdkc8y1/0   3484297769     0.076    1.1     13416  same     INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      4528  GET_MAIN_DATA            0.082   0.082     1        4058         0         0   0  3x9ardnmfczp0/0   116174995      0.097    0.8      7378  same     MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T USING ( SELECT NVL(DIVISION_ID, '~') AS DI
+      2077  GET_MAIN_DATA            0.031   0.030     1        1432         0         0   0  ar7u7g5yjbm65/0   1994303945         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      3805  GET_MAIN_DATA            0.019   0.020     1        7270         0         0   0  41tabk4sgrfsy/0   3273597457         -      -         -  사내없음 DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE F WHERE F.MEASURE_GROUP = 'CUST
+      4459  GET_MAIN_DATA            0.015   0.015     1        4058         0         0   0  67sysamdcxzmj/0   2351976090     0.012    1.3      3688  same     UPDATE SCM_MGR.GT_DMF0082_MF_SP SET AS_FROM_SITE = ' ' WHERE AS_FROM_SITE IS NUL
+      1397  GET_MAIN_DATA            0.015   0.015     1        3040         0      1122   0  c3bg6q8n39195/0   3995613941         -      -         -  사내없음 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+      1388  GET_MAIN_DATA            0.011   0.011     1        7270         0         0   0  ggkupust9vjpj/0   422164050      0.017    0.6      6605  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE
+      4469  GET_MAIN_DATA            0.009   0.009     1        4058         0         0   0  chnk6fsq0zmjw/0   2351976090         -      -         -  사내없음 UPDATE SCM_MGR.GT_DMF0082_MF_SP SET CURRENCY = ' ' WHERE MEASURE NOT IN ('LOC', 
+      4173  GET_MAIN_DATA            0.008   0.007     1        4058         0         0   0  8zj5nqpk4g3d6/0   4271728968     0.005    1.5      3688  same     DELETE FROM SCM_MGR.GT_DMF0082_MF_SP
+      662   GET_MAIN_DATA            0.007   0.006     1         687         0      1944   0  9wgfrws532db6/0   3069957411     0.007    0.9       687  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_A_V ( DIVISION_ID, ITEM_ID, ITEM_
+      735   GET_MAIN_DATA            0.004   0.004     1         508         0      1944   0  8ngcf5avm1q3q/0   3642427876     0.005    0.9       504  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_V ( DIVISION_ID, ITEM_ID, ITEM_NA
+      706   GET_MAIN_DATA            0.003   0.003     1         530         0      1296   0  cct9d3wpufmjn/0   3069957411     0.003    1.1       530  same     INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_B_V ( DIVISION_ID, ITEM_ID , FORE
+      852   GET_MAIN_DATA            0.002   0.002     1        1431         0         0   0  9pbzwq00mxuh3/0   3123668380     0.002    1.0      1426  same     DELETE FROM SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL
+      합계: PKG 정적문장 14.80s · 동적/기타(GT_DMF0082) 0.00s · 동적샘플링 재귀 0.00s (0문장)
+  (C) 내 세션 ASH — SQL_ID × 이벤트 (샘플 ≈ 초)
+      d019r0hbb0muh       4  db file parallel read                   2682586817  TABLE ACCESS BY INDEX ROWID BATCHED
+      d019r0hbb0muh       4  db file sequential read                 2682586817  TABLE ACCESS BY INDEX ROWID BATCHED
+      19mfxqb34sbky       2  db file sequential read                 4145401064  INDEX UNIQUE SCAN
+      d019r0hbb0muh       2  ON CPU                                  2682586817  VIEW 
+      18xg1y5298qgq       1  ON CPU                                  3971101268  LOAD TABLE CONVENTIONAL 
+      56fkh52zfndm7       1  ON CPU                                  360512032   TABLE ACCESS FULL
+      70xvv1ktud7js       1  ON CPU                                  1667501949  TABLE ACCESS FULL
+  (D) 세션 통계 델타
+      CPU used by this session                                     576
+      execute count                                                101
+      parse count (total)                                           92
+      physical reads                                               878
+      recursive calls                                             3521
+      redo size                                                   3460
+      session logical reads                                     580921
+      sorts (rows)                                              820157
+      user I/O wait time                                           924
+      → 문장 귀속 합 14.80s / DB 합 14.82s (차이 = PL/SQL 처리·귀속 밖 재귀SQL)
+
+완료 — 상위 문장의 SQL_ID 를 C04_PLAN_OF_SQLID.sql 에 넣어 실행계획 확인

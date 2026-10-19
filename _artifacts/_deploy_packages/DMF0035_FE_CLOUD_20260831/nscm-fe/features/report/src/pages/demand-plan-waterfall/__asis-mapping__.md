@@ -149,6 +149,7 @@
 | REQ:CHAT-20260831-W41 | DMF0035 BIZ PLAN 조회 시 DIVISION 누락 — 선택된 조회조건 DIVISION 표시 | EV:_artifacts/_apply_corporate/DMF0035_W34_DEFAULTFLAG_20260831/03_PKG_DMF0051_BODY.sql::E20260831-W41 |  | 구현 |
 | REQ:CHAT-20260831-W43 | DMF0035 BIZ PLAN 건수 대사(AS-IS 9,330/클라우드 V002 9,310/로컬) + 로컬 CURRENT·버전 조회 0건 | EV:_artifacts/_apply_corporate/DMF0035_W34_DEFAULTFLAG_20260831/03_PKG_DMF0051_BODY.sql::E20260831-VERCASE |  | 구현 |
 | REQ:CHAT-20260831-W44 | DMF0035 메저 5개 선택했는데 건수 15,897 그대로 표시 | FE:E20260831-MEASCOUNT |  | 구현 |
+| REQ:CHAT-20260831-W45 | DMF0035 메저 COLUMN FIX 해제 | FE:E20260831-W45 |  | 구현 |
 | REQ:CHAT-20260831-W03 | div 선택 시 Biz.Type/Plant Site cascade 누락 |  |  | 미구현 |
 | REQ:CHAT-20260831-W04 | 82 선택 시 Plant Site 활성화 |  |  | 미구현 |
 | REQ:CHAT-20260831-W05 | 81 일때만 Sender Code 활성 (JV 비활성) |  |  | 미구현 |

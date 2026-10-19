@@ -1,0 +1,42 @@
+################ [A1] 관련 SP 세대 — 최종 컴파일 시각 · 상태 · 줄 수 ################
+OBJECT_NAME                                 | OBJECT_TYPE | LAST_DDL            | STATUS  | LINES | POJ_1011 | AJS_1012
+--------------------------------------------+-------------+---------------------+---------+-------+----------+---------
+PR_DM_LONGPLAN_40_DELETE_IMPORT             | PROCEDURE   | 2026-10-12 08:58:17 | VALID   | 268   | 0        | 0       
+PR_DM_PLN_CFM_TO_MKT_FCST_ALL               | PROCEDURE   | 2026-10-08 19:27:08 | VALID   | 138   | 0        | 0       
+PR_DM_PLN_MKT_FCST_C_QTY_BALANCE_CREATE     | PROCEDURE   | 2026-10-12 00:23:58 | VALID   | 3027  | 9        | 0       
+PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE       | PROCEDURE   | 2026-10-12 15:39:09 | VALID   | 3060  | 27       | 0       
+PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE_BATCH | PROCEDURE   | 2026-10-12 10:55:19 | INVALID | 330   | 0        | 12      
+PR_DM_PLN_MKT_FCST_TO_NET_DEMAND            | PROCEDURE   | 2026-10-12 09:49:49 | VALID   | 741   | 7        | 1       
+PR_DM_SSP_CONFIRM_SYNC                      | PROCEDURE   | 2026-10-08 16:02:24 | VALID   | 725   | 0        | 0       
+(7 rows)
+--  판정: PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE 의 POJ_1011 = 0 이면 ' ' 를 쓰는 구판
+################ [A2] 40/82 생산지를 ' '(공백) 상수로 넣는 문장 — 전 객체 ################
+NAME | TYPE | LINE | TEXT
+-----+------+------+-----
+(0 rows)
+--  판정: 행이 나오면 그 문장이 RTF 계열을 ' ' 로 적재한다 (사내는 0행)
+################ [A3] 생산지에 ' ' 또는 '' 를 직접 쓰는 그 밖의 문장 — 전 객체 ################
+NAME                              | TYPE         | LINE | TEXT                                                                                                          
+----------------------------------+--------------+------+---------------------------------------------------------------------------------------------------------------
+PKG_DMF0044                       | PACKAGE BODY | 9194 | 							, A.ITEM_USE AS PROJECT_CODE, '' AS FCST_TYPE, '' AS PLANT_SITE_ID, '' AS ITEM_ID, '' AS SCM_SITE_ID   
+PKG_SCM0002                       | PACKAGE BODY | 4558 | , '' AS PLANT_SITE_ID                                                                                         
+PKG_SCM0002                       | PACKAGE BODY | 4742 | , '' AS PLANT_SITE_ID                                                                                         
+PKG_SCP0027                       | PACKAGE BODY | 210  | , ''                                                       AS PLANT_SITE_ID_B                                 
+PKG_SCP0027                       | PACKAGE BODY | 211  | , ''                                                       AS PLANT_SITE_ID                                   
+PR_DM_SSP_CONFIRM_SYNC            | PROCEDURE    | 188  | , '' AS PLANT_SITE_ID                                                                                         
+PR_DM_SSP_CONFIRM_SYNC            | PROCEDURE    | 685  | , A.FCST_TYPE, A.INCOTERMS, 'MKT_FCST' AS MEASURE, '' AS PLANT_SITE_ID                                        
+PR_SCM_MST_PROJECT_MODEL_QUANTITY | PROCEDURE    | 247  | SELECT b.division_id, b.project_code, c.scm_site_id, a.model_id, 'E', 'MPS' fcst_type, CASE WHEN b.incoterms =
+(8 rows)
+################ [A4] 테이블 기본값 — PLANT_SITE_ID ################
+T                            | C             | D   
+-----------------------------+---------------+-----
+DM_PLN_CFM_MKT_DEMAND_PLAN   | PLANT_SITE_ID | '/' 
+DM_PLN_MKT_FCST              | PLANT_SITE_ID | '/' 
+GT_PRDM2_CFM_DEMAND_INSERT   | PLANT_SITE_ID |     
+GT_PRDM2_MF_BALANCE_MKT_FCST | PLANT_SITE_ID |     
+GT_PRDM2_MF_RTF_ALLOCATION   | PLANT_SITE_ID |     
+GT_PRDM2_MKT_FCST_INSERT     | PLANT_SITE_ID |     
+GT_PRDM2_MST                 | PLANT_SITE_ID |     
+GT_PRDM2_RESULTS             | PLANT_SITE_ID |     
+GT_PRDM2_TEMPX               | PLANT_SITE_ID |     
+(9 rows)

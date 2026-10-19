@@ -1,0 +1,320 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.headerDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e02020;
+}
+
+.headerTitle {
+  margin: 0;
+  color: #1c1f23;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.dialogContent {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.scrollArea {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  gap: 14px;
+  padding-right: 8px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+
+// 2026-09-11 사용자 요구 - 섹션 제목을 테두리 박스 밖으로 이동. sectionWrapper 가 제목 + section
+// 박스를 감싸고, section 은 더 이상 제목을 포함하지 않는다.
+.sectionWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section {
+  padding: 16px 18px;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: #292d32;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+}
+
+.fullRow {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.radioGroup {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.radioOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #34383e;
+  font-size: 13px;
+  cursor: pointer;
+
+  input {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    accent-color: #2f6fed;
+    cursor: pointer;
+  }
+}
+
+.dateRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.dateField {
+  display: flex;
+  width: 130px;
+  flex: 0 0 130px;
+  flex-direction: column;
+  gap: 6px;
+  color: #4f555d;
+  font-size: 12px;
+}
+
+.datePickerFix {
+  display: flex;
+  width: 100%;
+  height: 36px;
+  align-items: center;
+
+  :global {
+    [class*='MuiBox-root'],
+    [class*='MuiFormControl-root'],
+    [class*='MuiTextField-root'],
+    [class*='MuiOutlinedInput-root'],
+    [class*='MuiInputBase-root'] {
+      box-sizing: border-box;
+      height: 36px !important;
+      min-height: 36px !important;
+    }
+
+    [class*='MuiInputBase-input'],
+    input {
+      box-sizing: border-box;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+}
+
+.dateSeparator {
+  padding-bottom: 10px;
+  color: #747b84;
+}
+
+.messageFields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.imageField,
+.contentField {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  column-gap: 8px;
+  row-gap: 6px;
+}
+
+.imageLabel,
+.contentLabel {
+  grid-column: 1;
+  grid-row: 1;
+  color: #4f555d;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: right;
+}
+
+
+.editorField {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.imageUploadArea {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  grid-column: 2;
+  grid-row: 2;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 1.5px dashed #b8bec5;
+  border-radius: 8px;
+  background: #fafbfc;
+
+  &:focus-within {
+    border-color: #5c7cfa;
+    background: #f7f9ff;
+  }
+}
+
+.imageThumbnail {
+  display: flex;
+  width: 74px;
+  height: 74px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid #d8dde3;
+  border-radius: 4px;
+  background: #fff;
+  color: #8a929c;
+  font-size: 11px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.imageMeta {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.imageActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.fileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.fileSelectButton,
+.fileRemoveButton {
+  display: inline-flex;
+  box-sizing: border-box;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border: 1px solid #aeb4bb;
+  border-radius: 4px;
+  background: #fff;
+  color: #32363b;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.fileSelectButton[aria-disabled='true'],
+.fileRemoveButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.fileRemoveButton {
+  color: #b42318;
+}
+
+.fileName {
+  min-width: 0;
+  overflow: hidden;
+  color: #555c65;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.buttonRow {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 12px 0 2px;
+  border-top: 1px solid #e1e4e8;
+}
+
+@media (max-width: 900px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .fullRow {
+    grid-column: auto;
+  }
+  .imageField,
+  .contentField {
+    grid-template-columns: 1fr;
+  }
+
+  .imageLabel,
+  .contentLabel,
+  .imageUploadArea,
+  .editorField {
+    grid-column: 1;
+  }
+
+  .imageLabel,
+  .contentLabel {
+    text-align: left;
+  }
+
+
+}

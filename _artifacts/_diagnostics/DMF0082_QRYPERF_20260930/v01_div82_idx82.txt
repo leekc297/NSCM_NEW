@@ -1,0 +1,16 @@
+PKG_DMF0082_QPT    SP 7.10s  (fetch 1.17s)
+    cur1: rows=  2622 cols= 414 sortedSHA=deea7ea883dc29eb orderSHA=deea7ea883dc29eb
+    cur2: rows=     6 cols=   3 sortedSHA=191cd9f6c785fb03 orderSHA=191cd9f6c785fb03
+    cur3: rows=     1 cols=   3 sortedSHA=287b084ee54c1913 orderSHA=287b084ee54c1913
+    cur4: rows=     5 cols=   4 sortedSHA=4d5d6c762d0f98ac orderSHA=75648356e4e6288e
+    cur5: rows=   181 cols=   7 sortedSHA=e31b751f5d15d939 orderSHA=e31b751f5d15d939
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+PKG_DMF0082        SP 44.39s  (fetch 1.22s)
+    cur1: rows=  2622 cols= 414 sortedSHA=deea7ea883dc29eb orderSHA=deea7ea883dc29eb
+    cur2: rows=     6 cols=   3 sortedSHA=191cd9f6c785fb03 orderSHA=191cd9f6c785fb03
+    cur3: rows=     1 cols=   3 sortedSHA=e724d2d3737aed82 orderSHA=e724d2d3737aed82
+    cur4: rows=     5 cols=   4 sortedSHA=4d5d6c762d0f98ac orderSHA=75648356e4e6288e
+    cur5: rows=   181 cols=   7 sortedSHA=e31b751f5d15d939 orderSHA=e31b751f5d15d939
+    cur6: rows=     1 cols=   2 sortedSHA=83b3321894c58f58 orderSHA=83b3321894c58f58
+
+결과 동등성(행수+정렬해시+컬럼수): PASS   행 순서까지: PASS

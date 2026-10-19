@@ -1,0 +1,143 @@
+{
+ "ok": true,
+ "results": [
+  {
+   "case": "T1 신규 저장 결과",
+   "ok": true,
+   "got": "('0', 'SUCCESS')",
+   "want": "('0', 'SUCCESS')"
+  },
+  {
+   "case": "T1 신규: ATTRIBUTE3/5 TRIM 저장 · 기존 컬럼 정상",
+   "ok": true,
+   "got": "('50', '7', 'N', 'N', 'Y', 'ZZTEST', 'SALES', 'ZZTEST', 'ZZ999')",
+   "want": "('50', '7', 'N', 'N', 'Y', 'ZZTEST', 'SALES', 'ZZTEST', 'ZZ999')"
+  },
+  {
+   "case": "T2 키 없는 수정 결과",
+   "ok": true,
+   "got": "('0', 'SUCCESS')",
+   "want": "('0', 'SUCCESS')"
+  },
+  {
+   "case": "T2 키 없는 수정: ATTRIBUTE3/5 유지 · VMI 만 변경",
+   "ok": true,
+   "got": "('50', '7', 'N', 'Y')",
+   "want": "('50', '7', 'N', 'Y')"
+  },
+  {
+   "case": "T3 값 변경 결과",
+   "ok": true,
+   "got": "('0', 'SUCCESS')",
+   "want": "('0', 'SUCCESS')"
+  },
+  {
+   "case": "T3 값 변경: ATTRIBUTE3/5 갱신",
+   "ok": true,
+   "got": "('AB', '0')",
+   "want": "('AB', '0')"
+  },
+  {
+   "case": "T4 한쪽 키만: ATTRIBUTE3 유지 · ATTRIBUTE5 갱신",
+   "ok": true,
+   "got": "('AB', '15')",
+   "want": "('AB', '15')"
+  },
+  {
+   "case": "T5 null·빈값 결과",
+   "ok": true,
+   "got": "('0', 'SUCCESS')",
+   "want": "('0', 'SUCCESS')"
+  },
+  {
+   "case": "T5 null·빈값: ATTRIBUTE3/5 비움",
+   "ok": true,
+   "got": "(None, None)",
+   "want": "(None, None)"
+  },
+  {
+   "case": "T6 키 없는 신규 결과",
+   "ok": true,
+   "got": "('0', 'SUCCESS')",
+   "want": "('0', 'SUCCESS')"
+  },
+  {
+   "case": "T6 키 없는 신규: ATTRIBUTE3/5 NULL · 기존 컬럼 정상",
+   "ok": true,
+   "got": "(None, None, 'N', 'N', 'Y', 'ZZTEST', 'SALES', 'ZZTEST', 'ZZ999')",
+   "want": "(None, None, 'N', 'N', 'Y', 'ZZTEST', 'SALES', 'ZZTEST', 'ZZ999')"
+  },
+  {
+   "case": "T7 다건 결과(처리 행수)",
+   "ok": true,
+   "got": "('0', 'SUCCESS', '2')",
+   "want": "('0', 'SUCCESS', '2')"
+  },
+  {
+   "case": "T7 다건: 1행 갱신",
+   "ok": true,
+   "got": "('X1', '1')",
+   "want": "('X1', '1')"
+  },
+  {
+   "case": "T7 다건: 2행 유지",
+   "ok": true,
+   "got": "(None, None)",
+   "want": "(None, None)"
+  },
+  {
+   "case": "T8 필수 누락: 오류 코드",
+   "ok": true,
+   "got": "'-1'",
+   "want": "'-1'"
+  },
+  {
+   "case": "T8 필수 누락: 값 미변경",
+   "ok": true,
+   "got": "('X1', '1')",
+   "want": "('X1', '1')"
+  },
+  {
+   "case": "T9 중복 신규: 오류 코드",
+   "ok": true,
+   "got": "'-1'",
+   "want": "'-1'"
+  },
+  {
+   "case": "T10 길이 초과: 오류 발생",
+   "ok": true,
+   "got": "'ORA-12899'",
+   "want": "'ORA-12899'"
+  },
+  {
+   "case": "T10 길이 초과: 값 미변경",
+   "ok": true,
+   "got": "('X1', '1')",
+   "want": "('X1', '1')"
+  },
+  {
+   "case": "이력 건수",
+   "ok": true,
+   "got": "8",
+   "want": "8"
+  },
+  {
+   "case": "이력에 ATTRIBUTE3/5 기록(T1·T2 = 2건)",
+   "ok": true,
+   "got": "2",
+   "want": "2"
+  },
+  {
+   "case": "정리 후 시험 키 잔여 0",
+   "ok": true,
+   "got": "{'SCM_MST_SITE': 0, 'SCM_MST_SITE_H': 0, 'SCM_MST_SITE_CUSTOMER': 0}",
+   "want": "{'SCM_MST_SITE': 0, 'SCM_MST_SITE_H': 0, 'SCM_MST_SITE_CUSTOMER': 0}"
+  },
+  {
+   "case": "SCM_MST_SITE 전체 건수 불변",
+   "ok": true,
+   "got": "3037",
+   "want": "3037"
+  }
+ ]
+}

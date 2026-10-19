@@ -1,0 +1,195 @@
+{
+ "name": "CASE01_SSP_ANL_SHIP_PLAN_C",
+ "table": "SSP_ANL_SHIP_PLAN_C",
+ "map_cols": [
+  "CONFIRM_ID",
+  "FCST_TYPE",
+  "INCOTERMS",
+  "TRANSPORT_MODE",
+  "TO_SITE"
+ ],
+ "packages": {
+  "PKG_SSP0060": {
+   "edits": [
+    [
+     3729,
+     81,
+     "'-'",
+     "'/'"
+    ],
+    [
+     3730,
+     88,
+     "'-'",
+     "'/'"
+    ],
+    [
+     3731,
+     83,
+     "'-'",
+     "'/'"
+    ],
+    [
+     3732,
+     83,
+     "'-'",
+     "'/'"
+    ]
+   ]
+  },
+  "PKG_SSP0021": {
+   "edits": []
+  }
+ },
+ "calls": [
+  {
+   "pkg": "PKG_SSP0060",
+   "proc": "P_SSP0060_GET_SHIPMENT_PLAN",
+   "params": [
+    "82",
+    "HQ00",
+    "KR32625300_82-P",
+    "20260821",
+    "20260821",
+    "20261015",
+    "",
+    "",
+    "minyonglee1",
+    "SSP0060",
+    "Shipment Plan",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RC2"
+   ],
+   "zt_first": true
+  },
+  {
+   "pkg": "PKG_SSP0060",
+   "proc": "P_SSP0060_GET_SHIPMENT_PLAN",
+   "params": [
+    "82",
+    "HQ00",
+    "KR32625300_82-P",
+    "20260821",
+    "20260821",
+    "20261015",
+    "",
+    "",
+    "minyonglee1",
+    "SSP0060",
+    "Shipment Plan",
+    "Y"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RC2"
+   ]
+  },
+  {
+   "pkg": "PKG_SSP0060",
+   "proc": "P_SSP0060_GET_SHIPMENT_PLAN",
+   "params": [
+    "81",
+    "NA00",
+    "NA00-A",
+    "20260821",
+    "20260821",
+    "20261015",
+    "",
+    "",
+    "minyonglee1",
+    "SSP0060",
+    "Shipment Plan",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RC2"
+   ]
+  },
+  {
+   "pkg": "PKG_SSP0060",
+   "proc": "P_SSP0060_GET_SHIPMENT_PLAN",
+   "params": [
+    "81",
+    "NB00",
+    "NB01-E",
+    "20260821",
+    "20260821",
+    "20261015",
+    "",
+    "",
+    "minyonglee1",
+    "SSP0060",
+    "Shipment Plan",
+    "N"
+   ],
+   "out": [
+    "O_RC1",
+    "O_RC2"
+   ]
+  },
+  {
+   "pkg": "PKG_SSP0021",
+   "proc": "P_SSP0021_GET_SHIPMENT_PLAN",
+   "params": [
+    "82",
+    "HQ00",
+    "KR32625300_82-P",
+    "20260821",
+    "20260821",
+    "20261015",
+    "",
+    "minyonglee1",
+    "SSP0021",
+    "Shipment Plan",
+    "N"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_SSP0021",
+   "proc": "P_SSP0021_GET_SHIPMENT_PLAN",
+   "params": [
+    "81",
+    "NA00",
+    "NA00-A",
+    "20260821",
+    "20260821",
+    "20261015",
+    "",
+    "minyonglee1",
+    "SSP0021",
+    "Shipment Plan",
+    "N"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  },
+  {
+   "pkg": "PKG_SSP0021",
+   "proc": "P_SSP0021_GET_SHIPMENT_PLAN",
+   "params": [
+    "81",
+    "NB00",
+    "NB01-E",
+    "20260821",
+    "20260821",
+    "20261015",
+    "",
+    "minyonglee1",
+    "SSP0021",
+    "Shipment Plan",
+    "N"
+   ],
+   "out": [
+    "O_RC1"
+   ]
+  }
+ ]
+}

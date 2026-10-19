@@ -1,0 +1,122 @@
+# -*- coding: utf-8 -*-
+"""DMF0042_SETZERO_CLOUD_20260930 — 클라우드 이관 패키지 빌더 [E20260930-DMF0042SETZERO].
+
+원천 = 사내 ZIOUI1 PKG_DMF0042 BODY 를 지금 새로 읽은 원문 (hook #152). FRESH-GATE: 추출 전후 동일 + 마커 2 assert.
+⚠ BODY 전체본은 타 작업자 수정(AJS 08-24/08-26 · KBJ 09-30 17:07)을 포함한다. 클라우드 지문이 BEFORE(KBJ 17:07 본)와 다르면
+  11 을 적용하지 말고 12_INSERT_BLOCK_FOR_MANUAL_MERGE.sql 을 앵커 지점에 수동 삽입한다.
+사용: python _build.py
+"""
+import datetime, io, pathlib, shutil, sys
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+HERE = pathlib.Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE.parents[1] / "_diagnostics"))
+from ora import conn_info
+import oracledb
+
+TAG = "E20260930-DMF0042SETZERO"
+BEFORE = (5868, 298049)   # 사내 KBJ 09-30 17:07:11 본 (적용 직전 기준본)
+u, p, d = conn_info()
+cn = oracledb.connect(user=u, password=p, dsn=d)
+cur = cn.cursor()
+FP = "SELECT COUNT(*) LN, SUM(LENGTH(RTRIM(TEXT, CHR(10)||CHR(13)))) CH FROM USER_SOURCE WHERE NAME='PKG_DMF0042' AND TYPE='PACKAGE BODY' AND LINE > 1"
+
+
+def state():
+    cur.execute("SELECT TO_CHAR(LAST_DDL_TIME,'YYYY-MM-DD HH24:MI:SS'), STATUS FROM USER_OBJECTS WHERE OBJECT_NAME='PKG_DMF0042' AND OBJECT_TYPE='PACKAGE BODY'")
+    ddl, st = cur.fetchone()
+    cur.execute(FP)
+    return ddl, st, tuple(cur.fetchone())
+
+
+s0 = state()
+cur.execute("SELECT TEXT FROM USER_SOURCE WHERE NAME='PKG_DMF0042' AND TYPE='PACKAGE BODY' ORDER BY LINE")
+body = "".join(t or "" for (t,) in cur)
+assert state() == s0, "FRESH-GATE: 추출 도중 변경"
+assert s0[1] == "VALID" and body.count(TAG) == 2, (s0, body.count(TAG))
+AFTER = s0[2]
+now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+A = HERE / "A_DB"
+A.mkdir(exist_ok=True)
+
+(A / "00_PRECHECK_CLOUD.sql").write_text(f"""-- 00_PRECHECK_CLOUD.sql — READ-ONLY 선판정 [{TAG}] · 빌드 {now} · 원천 사내 ZIOUI1
+--  ⚠ QA · DEV 두 DB 모두 · JUDGE 가 '적용'/'SKIP' 이 아니면 11 을 적용하지 말고 12 수동 삽입(README §4)
+SET PAGESIZE 200 LINESIZE 250
+COLUMN JUDGE FORMAT A90
+PROMPT [E0] 접속 DB
+SELECT USER USR, SYS_CONTEXT('USERENV','DB_NAME') DB_NAME, SYS_CONTEXT('USERENV','SERVER_HOST') HOST FROM DUAL;
+PROMPT [H] PKG_DMF0042 BODY 지문 — 전 {BEFORE[0]}/{BEFORE[1]} (= 사내 KBJ 09-30 17:07 본) · 후 {AFTER[0]}/{AFTER[1]}
+SELECT LN || '/' || CH BODY_FP,
+       (SELECT COUNT(*) FROM USER_SOURCE WHERE NAME='PKG_DMF0042' AND TYPE='PACKAGE BODY' AND TEXT LIKE '%2026.08.24 AJS 수량만 와도%') MARK_0824,
+       (SELECT COUNT(*) FROM USER_SOURCE WHERE NAME='PKG_DMF0042' AND TYPE='PACKAGE BODY' AND TEXT LIKE '%{TAG}%') MARK_SETZERO,
+       CASE WHEN LN = {AFTER[0]} AND CH = {AFTER[1]} THEN 'SKIP — 이미 적용됨'
+            WHEN LN = {BEFORE[0]} AND CH = {BEFORE[1]} THEN '적용 — 05 → 11 → 90'
+            WHEN (SELECT COUNT(*) FROM USER_SOURCE WHERE NAME='PKG_DMF0042' AND TYPE='PACKAGE BODY' AND TEXT LIKE '%2026.08.24 AJS 수량만 와도%') = 0
+            THEN '⚠ 중단 — 08-24 AJS 보충 INSERT 없음(앵커 부재): 타 작업자 이관 먼저 · 결과 회신'
+            ELSE '⚠ 11 적용 금지 — 지문 상이(타 작업자 변경 미이관/추가). 12 를 앵커에 수동 삽입 (README §4)' END JUDGE
+  FROM ({FP});
+""", encoding="utf-8")
+
+(A / "05_BACKUP_CLOUD_SOURCE.sql").write_text(f"""-- 05_BACKUP_CLOUD_SOURCE.sql — 적용 직전 클라우드 BODY 원문 보관 (비파괴 · 멱등) [{TAG}]
+SET SERVEROUTPUT ON
+DECLARE
+  n NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO n FROM USER_TABLES WHERE TABLE_NAME='BAK_SRC_DMF0042_SETZERO';
+  IF n = 0 THEN
+    EXECUTE IMMEDIATE q'[CREATE TABLE BAK_SRC_DMF0042_SETZERO AS
+      SELECT NAME, TYPE, LINE, TEXT, SYSDATE AS BAK_DATE FROM USER_SOURCE WHERE NAME='PKG_DMF0042' AND TYPE='PACKAGE BODY']';
+    DBMS_OUTPUT.PUT_LINE('SOURCE BACKUP CREATED');
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('SOURCE BACKUP EXISTS - SKIP');
+  END IF;
+END;
+/
+SELECT TYPE, COUNT(*) LINES FROM BAK_SRC_DMF0042_SETZERO GROUP BY TYPE;
+""", encoding="utf-8")
+
+(A / "11_PKG_DMF0042_BODY.sql").write_text(
+    f"-- SOURCE-FRESH: SCM_MGR.PKG_DMF0042 PACKAGE BODY LAST_DDL={s0[0]} FETCHED={now} DB=ZIOUI1 STATUS=VALID\n"
+    f"-- [{TAG}] PKG_DMF0042 BODY 전체본 — KBJ 09-30 17:07 본 + SETZERO 삽입 98줄 (P_DMF0042_SAVE_DM_PLN_BP_FCST)\n"
+    "SET DEFINE OFF\nSET SQLBLANKLINES ON\nCREATE OR REPLACE " + body.rstrip() + "\n/\nSHOW ERRORS PACKAGE BODY SCM_MGR.PKG_DMF0042\n",
+    encoding="utf-8")
+shutil.copy(HERE.parents[1] / "_apply_corporate" / "DMF0042_SETZERO_20260930" / "_insert_preview.sql", A / "12_INSERT_BLOCK_FOR_MANUAL_MERGE.sql")
+
+(A / "90_VERIFY.sql").write_text(f"""-- 90_VERIFY.sql — 적용 후 단언 (조회 전용) [{TAG}]
+SET PAGESIZE 200 LINESIZE 250
+COLUMN JUDGE FORMAT A40
+PROMPT [V1] VALID · 오류 0
+SELECT O.OBJECT_TYPE, O.STATUS, TO_CHAR(O.LAST_DDL_TIME,'YYYY-MM-DD HH24:MI:SS') LAST_DDL,
+       (SELECT COUNT(*) FROM USER_ERRORS E WHERE E.NAME=O.OBJECT_NAME AND E.TYPE=O.OBJECT_TYPE) ERR_CNT,
+       CASE WHEN O.STATUS='VALID' AND (SELECT COUNT(*) FROM USER_ERRORS E WHERE E.NAME=O.OBJECT_NAME AND E.TYPE=O.OBJECT_TYPE)=0
+            THEN 'PASS' ELSE '❌ FAIL' END JUDGE
+  FROM USER_OBJECTS O WHERE O.OBJECT_NAME='PKG_DMF0042' ORDER BY O.OBJECT_TYPE;
+PROMPT [V2] 마커 SETZERO 2 (11 적용 시 지문 {AFTER[0]}/{AFTER[1]} · 12 수동 삽입 시 지문은 다를 수 있음 — 마커만 판정)
+SELECT LN || '/' || CH BODY_FP,
+       (SELECT COUNT(*) FROM USER_SOURCE WHERE NAME='PKG_DMF0042' AND TYPE='PACKAGE BODY' AND TEXT LIKE '%{TAG}%') MARK_SETZERO,
+       CASE WHEN (SELECT COUNT(*) FROM USER_SOURCE WHERE NAME='PKG_DMF0042' AND TYPE='PACKAGE BODY' AND TEXT LIKE '%{TAG}%') = 2 THEN 'PASS' ELSE '❌ FAIL' END JUDGE
+  FROM ({FP});
+PROMPT [V3] 앱 계정 실행 권한 유지
+SELECT GRANTEE, PRIVILEGE FROM USER_TAB_PRIVS WHERE TABLE_NAME='PKG_DMF0042' ORDER BY GRANTEE;
+""", encoding="utf-8")
+
+(A / "98_ROLLBACK_FROM_CLOUD_BACKUP.sql").write_text(f"""-- 98_ROLLBACK_FROM_CLOUD_BACKUP.sql — 05 보관본으로 BODY 복원 (롤백 전용) [{TAG}]
+SET SERVEROUTPUT ON
+DECLARE
+  v CLOB;
+BEGIN
+  DBMS_LOB.CREATETEMPORARY(v, TRUE);
+  FOR r IN (SELECT TEXT FROM BAK_SRC_DMF0042_SETZERO WHERE NAME='PKG_DMF0042' AND TYPE='PACKAGE BODY' ORDER BY LINE) LOOP
+    DBMS_LOB.APPEND(v, r.TEXT);
+  END LOOP;
+  IF DBMS_LOB.GETLENGTH(v) > 0 THEN
+    EXECUTE IMMEDIATE 'CREATE OR REPLACE ' || v;
+    DBMS_OUTPUT.PUT_LINE('REBUILT PACKAGE BODY');
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('SKIP (no backup)');
+  END IF;
+END;
+/
+SELECT OBJECT_NAME, OBJECT_TYPE, STATUS FROM USER_OBJECTS WHERE OBJECT_NAME='PKG_DMF0042';
+""", encoding="utf-8")
+print(f"빌드 완료  원천 LAST_DDL={s0[0]}  지문 {AFTER}")
+cn.close()

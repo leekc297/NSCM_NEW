@@ -1,0 +1,95 @@
+################ [L0] 실행 시각 / DB ################
+DB_NAME | CON_NAME | NOW                
+--------+----------+--------------------
+ZIOUI1  | ZIOUI1   | 2026-10-14 18:57:30
+(1 rows)
+################ [L1] ⭐ 후보 세션 (Qlik / 테이블 잠금 / 테이블 DML) — PROGRAM 열이 Qlik 프로그램명 ################
+INST_ID | SID | SERIAL# | USERNAME | PROGRAM | MODULE | MACHINE | STATUS | EVENT | WAIT_CLASS | SIW | SQL_ID | PREV_SQL_ID | LAST_CALL_ET | LOGON | BLK_BY | REASON
+--------+-----+---------+----------+---------+--------+---------+--------+-------+------------+-----+--------+-------------+--------------+-------+--------+-------
+(0 rows)
+################ [L2] ⭐ 테이블 잠금 모드 — 6(X)=direct path(테이블 독점, 병렬 세그먼트 직렬화) / 3(RX)=일반 INSERT ################
+INST_ID | SID | ORACLE_USERNAME | OS_USER_NAME | OWNER | OBJECT_NAME | LOCKED_MODE | JUDGE
+--------+-----+-----------------+--------------+-------+-------------+-------------+------
+(0 rows)
+################ [L3] ⭐⭐ 후보 세션 시간 분해 (유휴 포함, 접속 후 누적) — 가장 중요한 판정 ################
+--  'SQL*Net message from client' 비중이 크면 = DB 는 Qlik 이 다음 데이터를 보내주길 기다리는 중 → 원천 읽기·네트워크·Qlik 쪽 병목
+--  DB CPU / User I/O / Commit / Configuration(log file switch) / Concurrency 비중이 크면 = DB 쪽 병목
+INST_ID | SID | EVENT | WAIT_CLASS | TOTAL_WAITS | SEC | AVG_MS | PCT | JUDGE
+--------+-----+-------+------------+-------------+-----+--------+-----+------
+(0 rows)
+################ [L4] 후보 세션 작업량 (접속 후 누적) — 행당 Redo·커밋 간격·네트워크 왕복 ################
+INST_ID | SID | CONNECTED_SEC | REDO_BYTES | REDO_MB_PER_SEC | COMMITS | EXECS | BLOCK_CHANGES | LOGICAL_READS | PHY_READS | DIRECT_WRITES | UNDO_BYTES | NET_IN_BYTES | ROUNDTRIPS | CPU_SEC
+--------+-----+---------------+------------+-----------------+---------+-------+---------------+---------------+-----------+---------------+------------+--------------+------------+--------
+(0 rows)
+################ [L5] ⭐ 적재 SQL — 실행당 행수(=Qlik 배치 크기)·1만 행당 초·대기 구성 ################
+--  LOAD 열 'DIRECT(SYS_DL_CURSOR)' = OCI direct path 적재(실행 수·행 수가 0 으로 보일 수 있음 — [L3]·[L4] 로 판정)
+--  비어 있고 [L2] 가 모드 6 이면 direct path 적재 → [L3] 로 판정
+INST_ID | SQL_ID | CH | OP | EX | ROWS_P | ROWS_PER_EX | ELA_S | CPU_S | IO_S | CONC_S | APP_S | CLU_S | SEC_PER_10K_ROWS | BG | DW | LOAD | MODULE | LAST_ACT | SQL_HEAD
+--------+--------+----+----+----+--------+-------------+-------+-------+------+--------+-------+-------+------------------+----+----+------+--------+----------+---------
+(0 rows)
+################ [L6] 최근 30분 ASH — 후보 세션 대기 분포 (활성 시간만) ################
+PROGRAM | SQL_OPNAME | EVENT | WAIT_CLASS | SAMPLES | PCT
+--------+------------+-------+------------+---------+----
+(0 rows)
+################ [L6b] 최근 30분 ASH — 대기 중이던 객체 (PK/IX 비중이 크면 인덱스 유지가 병목) ################
+OBJECT_NAME | OBJECT_TYPE | EVENT | SAMPLES | PCT
+------------+-------------+-------+---------+----
+(0 rows)
+################ [L7] DB 전체 지표 (최근 60초) — Redo/초 · CPU · 쓰기량 (SRC=CDB/PDB 어느 뷰에서 왔는지) ################
+SRC           | INST_ID | METRIC_NAME                              | VALUE   | METRIC_UNIT             | END_TIME
+--------------+---------+------------------------------------------+---------+-------------------------+---------
+CON_SYSMETRIC | 1       | Average Active Sessions                  | 0.09    | Active Sessions         | 18:57:14
+CON_SYSMETRIC | 1       | CPU Usage Per Sec                        | 7.17    | CentiSeconds Per Second | 18:57:14
+CON_SYSMETRIC | 1       | Database Wait Time Ratio                 | 15.9    | % Wait/DB_Time          | 18:57:14
+CON_SYSMETRIC | 1       | Executions Per Sec                       | 11.56   | Executes Per Second     | 18:57:14
+CON_SYSMETRIC | 1       | Network Traffic Volume Per Sec           | 4759.57 | Bytes Per Second        | 18:57:14
+CON_SYSMETRIC | 1       | Physical Write Total Bytes Per Sec       | 0       | Bytes Per Second        | 18:57:14
+CON_SYSMETRIC | 1       | Physical Write Total IO Requests Per Sec | 0       | Requests Per Second     | 18:57:14
+CON_SYSMETRIC | 1       | Redo Generated Per Sec                   | 1291.8  | Bytes Per Second        | 18:57:14
+CON_SYSMETRIC | 1       | User Commits Per Sec                     | 0       | Commits Per Second      | 18:57:14
+(9 rows)
+################ [L8] ⭐ DB 전체 대기 — 최근 10분 ASH (모든 포그라운드 세션, 활성 시간 기준) ################
+EVENT                  | WAIT_CLASS | SAMPLES | PCT  | JUDGE
+-----------------------+------------+---------+------+------
+ON CPU                 | CPU        | 311     | 99.4 |      
+direct path write temp | User I/O   | 1       | 0.3  |      
+db file scattered read | User I/O   | 1       | 0.3  |      
+(3 rows)
+################ [L8b] 핵심 대기 이벤트 — 기동 후 누적 (사내: log file switch(checkpoint incomplete) 1회 평균 33,285ms / direct path write 26.7ms) ################
+EVENT                                             | WAIT_CLASS    | TOTAL_WAITS | SEC | AVG_MS   | JUDGE              
+--------------------------------------------------+---------------+-------------+-----+----------+--------------------
+log file switch (checkpoint incomplete)           | Configuration | 29          | 965 | 33285.48 | ⚠ 발생 자체가 Redo 과소 신호
+db file sequential read                           | User I/O      | 2420453     | 792 | 0.33     |                    
+direct path write                                 | User I/O      | 28211       | 747 | 26.48    | ⚠ 쓰기 10ms 초과 — 스토리지
+buffer busy waits                                 | Concurrency   | 433         | 318 | 735      |                    
+SQL*Net more data from client                     | Network       | 743438      | 300 | 0.4      |                    
+direct path write temp                            | User I/O      | 53701       | 170 | 3.16     |                    
+log file sync                                     | Commit        | 32269       | 107 | 3.31     |                    
+resmgr:cpu quantum                                | Scheduler     | 1847        | 15  | 8.17     |                    
+log buffer space                                  | Configuration | 69          | 3   | 44.23    |                    
+log file switch (private strand flush incomplete) | Configuration | 5           | 0   | 29.7     |                    
+enq: TX - index contention                        | Concurrency   | 2           | 0   | 3.01     |                    
+(11 rows)
+################ [L9] 로그 스위치 최근 3시간 (간격 분) — 사내 적재 시 시간당 10~13회 ################
+THREAD# | SEQUENCE# | FIRST_TIME     | GAP_MIN
+--------+-----------+----------------+--------
+1       | 53        | 10-14 16:03:49 |        
+(1 rows)
+INST_ID | THREAD# | STATUS   | GROUPS | JUDGE
+--------+---------+----------+--------+------
+1       | 1       | CURRENT  | 1      |      
+1       | 1       | INACTIVE | 2      |      
+(2 rows)
+################ [L10] 후보 세션 트랜잭션 크기 — UNDO 사용량이 크면 커밋 간격이 김 ################
+INST_ID | SID | PROGRAM | START_TIME | USED_UBLK | USED_UREC | UNDO_MB
+--------+-----+---------+------------+-----------+-----------+--------
+(0 rows)
+################ [L11] 블로킹 — 후보 세션이 막거나 막힌 관계 ################
+INST_ID | WAITER | WAITER_PROGRAM | EVENT | SIW | B_INST | BLOCKER | BLOCKER_PROGRAM
+--------+--------+----------------+-------+-----+--------+---------+----------------
+(0 rows)
+################ [L12] 같은 시각 다른 활성 세션 (CPU·I/O 경합 원인 후보) ################
+INST_ID | SID | USERNAME | PROGRAM | MACHINE | EVENT | WAIT_CLASS | SQL_ID | LAST_CALL_ET
+--------+-----+----------+---------+---------+-------+------------+--------+-------------
+(0 rows)
+################ 끝 — Q02_LIVE_DURING_LOAD_OUT.txt 회신 (2~3회 실행 시 파일명 뒤에 _1/_2 붙여 보관) ################

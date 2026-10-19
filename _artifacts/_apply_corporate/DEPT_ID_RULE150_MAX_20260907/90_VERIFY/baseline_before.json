@@ -1,0 +1,57 @@
+{
+ "PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE|40": {
+  "elapsed": 8.8,
+  "cursors": [
+   {
+    "cursor": 1,
+    "error": "DPY-4024: call timeout of 300000 ms exceeded"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE|81": {
+  "elapsed": 24.9,
+  "cursors": [
+   {
+    "cursor": 1,
+    "error": "DPY-4024: call timeout of 300000 ms exceeded"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ },
+ "PKG_DMF0020.P_DMF0020_GET_SALES_PRICE_TEMPLATE|82": {
+  "elapsed": 2.5,
+  "cursors": [
+   {
+    "cursor": 1,
+    "rows": 107,
+    "cols": 20,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "50358238da5370969ff5be9d626f509b"
+   },
+   {
+    "cursor": 2,
+    "rows": 1,
+    "cols": 3,
+    "dept_distinct": null,
+    "dept_null": null,
+    "hash": "629e625ae5c22bbca9edc5bcf556bba3"
+   }
+  ]
+ }
+}

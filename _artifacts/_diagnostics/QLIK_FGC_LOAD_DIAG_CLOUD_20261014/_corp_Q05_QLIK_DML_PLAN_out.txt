@@ -1,0 +1,58 @@
+################ [P1] ⭐ 문장 원문 (AWR) — DELETE 0zfz07pka9ysv / INSERT fr8a4mu383uwp ################
+SQL_ID | LEN | TXT_1 | TXT_2 | TXT_3
+-------+-----+-------+-------+------
+(0 rows)
+################ [P2] ⭐ 계획별 실적 (AWR 전체 보관분) — 같은 문장이 계획에 따라 시간이 달랐는지 ################
+SQL_ID | PHV | EX | RWS | ELA_S | CPU_S | IO_S | BG | PHY_RD_REQ | SEC_PER_EX | FIRST_SEEN | LAST_SEEN
+-------+-----+----+-----+-------+-------+------+----+------------+------------+------------+----------
+(0 rows)
+################ [P3] ⭐⭐ DELETE 0zfz07pka9ysv 실행계획 (AWR, 계획별) — FG_C 를 FULL 로 읽는지 / 조인 방식 ################
+PHV | ID | OP | OBJECT_NAME | CARD | COST | ACCESS_PRED | FILTER_PRED
+----+----+----+-------------+------+------+-------------+------------
+(0 rows)
+################ [P3b] DELETE 0zfz07pka9ysv 현재 커서 계획 (메모리에 남아 있을 때만) ################
+INST_ID | CH | PHV | ID | OP | OBJECT_NAME | CARD | COST | ACCESS_PRED | FILTER_PRED
+--------+----+-----+----+----+-------------+------+------+-------------+------------
+(0 rows)
+################ [P4] Full Load INSERT fr8a4mu383uwp 실행계획 (AWR) — 1행씩 VALUES 인지 확인 ################
+PHV | ID | OP | OBJECT_NAME
+----+----+----+------------
+(0 rows)
+################ [P5] DELETE 0zfz07pka9ysv 실행 시 대기 분포 (AWR ASH, 계획 라인별) ################
+PHV | LINE | OP | EVENT | SEC | PCT
+----+------+----+-------+-----+----
+(0 rows)
+################ [P6] ⭐ Qlik 변경분 테이블(attrep_changes*) 컬럼 형식 — FG_C 컬럼과 형식이 다르면 암묵 형변환으로 인덱스 미사용 ################
+TABLE_NAME | COLUMN_ID | COLUMN_NAME | DATA_TYPE | DATA_LENGTH | NULLABLE
+-----------+-----------+-------------+-----------+-------------+---------
+(0 rows)
+TABLE_NAME | NUM_ROWS | LAST_ANALYZED | TEMPORARY | LOGGING | IDX_CNT | COL_CNT
+-----------+----------+---------------+-----------+---------+---------+--------
+(0 rows)
+################ [P7] ⭐ FG_C 변경 이력 테이블(__ct, Qlik Store Changes) — 크기·인덱스 (CDC 마다 같은 양을 추가 적재) ################
+TABLE_NAME                     | NUM_ROWS | BLOCKS  | LAST_ANALYZED | PARTITIONED | TBL_GB | IDX_CNT
+-------------------------------+----------+---------+---------------+-------------+--------+--------
+SCP_ANL_SHIPMENT_PLAN_FG_C     | 47184760 | 1350280 | 10-10 02:25   | NO          | 10.34  | 3      
+SCP_ANL_SHIPMENT_PLAN_FG_C__ct | 0        | 0       | 10-10 01:12   | NO          |        | 1      
+(2 rows)
+################ [P8] FG_C 컬럼 형식 (P6 과 대조용) ################
+COLUMN_ID | COLUMN_NAME         | DATA_TYPE | DATA_LENGTH | NULLABLE
+----------+---------------------+-----------+-------------+---------
+1         | DIVISION_ID         | VARCHAR2  | 120         | N       
+2         | VERSION_NO          | VARCHAR2  | 200         | N       
+3         | CUTOFF_DATE         | DATE      | 7           | N       
+4         | PLAN_START_YYYYMMDD | VARCHAR2  | 32          | Y       
+5         | PLAN_TYPE           | VARCHAR2  | 200         | Y       
+6         | SEQ                 | NUMBER    | 22          | Y       
+7         | BIZ_TYPE            | VARCHAR2  | 120         | N       
+8         | PROJECT_CODE        | VARCHAR2  | 200         | N       
+9         | ITEM_ID             | VARCHAR2  | 200         | N       
+10        | TO_SITE             | VARCHAR2  | 120         | N       
+11        | INCOTERMS           | VARCHAR2  | 40          | N       
+12        | FROM_SITE           | VARCHAR2  | 120         | N       
+13        | BOD_ID              | VARCHAR2  | 600         | N       
+14        | MEASURE             | VARCHAR2  | 200         | N       
+15        | YYYYMMDD            | VARCHAR2  | 32          | N       
+16        | QTY                 | NUMBER    | 22          | N       
+(16 rows)
+################ 끝 — Q05_QLIK_DML_PLAN_OUT.txt 회신 ################

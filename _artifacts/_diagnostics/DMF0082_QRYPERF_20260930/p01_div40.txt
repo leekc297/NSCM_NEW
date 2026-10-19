@@ -1,0 +1,19 @@
+div=40 group=ADMIN 기간 20260901~20270228 SID=277
+  run1: SP   6.78s  fetch   0.65s  rows=[2098, 6, 1, 5, 181, 1]
+  run2: SP   6.84s  fetch   0.79s  rows=[2098, 6, 1, 5, 181, 1]
+
+    라인    샘플     비중 SQL_ID         상위라인(샘플)            이벤트          문장
+  (외부)     2  13.3% 4kbmsfxybgdtu  1:1,0:1                  ON CPU         INSERT /*+ OPT_PARAM('_PARALLEL_SYSPLS_OBEY_FORCE' 'FALSE') */ INTO SYS.WRI$_OPTSTAT_HISTG
+  (외부)     2  13.3% 6u5ha9znadc55  None:2                   ON CPU         BEGIN PKG_DMF0082.P_DMF0082_GET_MAIN_DATA(:1,:2,:3,:4,:5,:6,:7,:8,:9,:10,:11,:12,:13,:14,:
+  (외부)     2  13.3% 8qcc0v8gna6ks  1:2                      ON CPU         /* SQL ANALYZE(0) */ SELECT /*+ FULL(T) NO_PARALLEL(T) NO_PARALLEL_INDEX(T) DBMS_STATS CUR
+  2954     1   6.7% f6r0861xjw0h1  1:1                      ON CPU         MERGE /*+ LEADING(B) USE_HASH(A) */ INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A USING ( SE
+  (외부)     1   6.7% 5c4sr912n136n  0:1                      ON CPU         SELECT /*+ OPT_PARAM('_PARALLEL_SYSPLS_OBEY_FORCE' 'FALSE') */ SPARE4, SVAL1 FROM SYS.OPTS
+  (외부)     1   6.7% 8zj5nqpk4g3d6  1:1                      ON CPU         DELETE FROM SCM_MGR.GT_DMF0082_MF_SP
+  (외부)     1   6.7% fk3tvpkzsq2vx  4:1                      ON CPU         SELECT DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FC
+  (외부)     1   6.7% 5qjb73aqyhg7h  1:1                      ON CPU         INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_I
+  (외부)     1   6.7% fskuzhkbm68mz  5:1                      ON CPU         SELECT SUBSTRB(DUMP(VAL,16,0,64),1,240) EP, FREQ, CDN, NDV, (SUM(POP) OVER()) POPCNT, (SUM
+  (외부)     1   6.7% gfhmmyrnrpcgs  None:1                   db file sequen SELECT COUNT(*) FROM SCM_MGR.SCM_MST_TITLESET_USER U WHERE 1 = 1 AND U.PROGRAM_ID = :B3 AN
+  (외부)     1   6.7% 0r3aqp9k6uckq  None:1                   ON CPU         INSERT INTO SYS.WRI$_OPTSTAT_TAB_HISTORY (OBJ#, SAVTIME, FLAGS, ROWCNT, BLKCNT, AVGRLN, AN
+  1390     1   6.7% 631pzfvq8r0ut  None:1                   ON CPU         INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER
+
+총 ASH 샘플 15 (≈초) / 2회

@@ -1,0 +1,73 @@
+################ [G1] ⭐ minyonglee1 의 보유 그룹 ################
+CHK | USER_GR_ID       | USE_YN | WHO         | UPD              | NOTE                      
+----+------------------+--------+-------------+------------------+---------------------------
+G1  | ADMIN            | Y      | SYSADMIN    | 2026-02-09 17:00 |                           
+G1  | DM ADMIN         | Y      | SYSADMIN    | 2026-02-09 17:00 |                           
+G1  | DM Planner       | Y      | minyonglee1 | 2026-07-13 14:00 |                           
+G1  | DM Planner (W/S) | Y      | minyonglee1 | 2026-07-13 14:03 | << 81 에서 W/S 유형만 나오게 하는 그룹
+G1  | DM Viewer        | Y      | SYSADMIN    | 2026-02-09 17:00 |                           
+G1  | GUEST            | Y      | minyonglee1 | 2025-10-20 16:00 |                           
+G1  | JV Planner       | Y      | minyonglee1 | 2026-09-10 15:46 |                           
+G1  | SCM PI Admin     | Y      | imadei      | 2025-10-20 16:23 |                           
+G1  | SCP Planner      | Y      | minyonglee1 | 2026-09-09 18:04 |                           
+(9 rows)
+################ [G2] 콤보 등록 SQL 상태 ################
+CHK | SQL_ID                     | USE_YN | WHO | UPD              | LEN  | HAS_WS_BRANCH | HAS_ADMIN_BRANCH
+----+----------------------------+--------+-----+------------------+------+---------------+-----------------
+G2  | FcstTypeByUserGroupDMF0082 | Y      | AJS | 2026-10-12 17:59 | 1721 | Y             | N               
+G2  | FcstTypeEditDMF0082        | Y      | AJS | 2026-10-12 17:59 | 1373 | Y             | N               
+(2 rows)
+--  사내 기준: 두 SQL 모두 HAS_WS_BRANCH = Y · HAS_ADMIN_BRANCH = N (ADMIN 보유 여부를 보는 분기가 없다)
+################ [G3] ⭐ 재현 — minyonglee1 가 division 81 에서 받는 FCST Type 편집 후보 (사내 등록 SQL 과 같은 분기) ################
+CHK | BRANCH   | CODE   | NAME            | DISPLAY_SEQ
+----+----------+--------+-----------------+------------
+G3  | ㉮ W/S 유형 | WS     | WS(Chargeable)  | 1          
+G3  | ㉮ W/S 유형 | WSF    | WS(Free)        | 2          
+G3  | ㉮ W/S 유형 | AS     | A/S(Chargeable) | 3          
+G3  | ㉮ W/S 유형 | ASF    | A/S(Free)       | 4          
+G3  | ㉮ W/S 유형 | Recall | Recall          | 100        
+G3  | ㉮ W/S 유형 | RMA    | RMA             | 101        
+(6 rows)
+################ [G4] ⭐⭐ 판정 ################
+CHK | JUDGE                                                                                                         
+----+---------------------------------------------------------------------------------------------------------------
+G4  | 원인 확인 — minyonglee1 는 ADMIN 과 DM Planner (W/S) 를 둘 다 보유. 등록 SQL 은 81 에서 W/S 보유만 보고 W/S 유형만 준다 (ADMIN 은 판정에 없음)
+(1 rows)
+################ [G5] 원천 룩업 — 유형 목록 3종 ################
+CHK | LOOKUP_TYPE          | CODE   | NAME                    | DISPLAY_SEQ | WS_ONLY | VALID_YN
+----+----------------------+--------+-------------------------+-------------+---------+---------
+G5  | SALES_TYPE_CODE      | AS     | A/S(Chargeable)         | 1           |         | Y       
+G5  | SALES_TYPE_CODE      | ASF    | A/S(Free)               | 1           |         | Y       
+G5  | SALES_TYPE_CODE      | ETC    | ETC                     | 1           |         | Y       
+G5  | SALES_TYPE_CODE      | MPS    | Mass                    | 1           |         | Y       
+G5  | SALES_TYPE_CODE      | RMA    | RMA                     | 1           |         | Y       
+G5  | SALES_TYPE_CODE      | Recall | Recall                  | 1           |         | Y       
+G5  | SALES_TYPE_CODE      | SDC    | Sample(Dev/Chargeable)  | 1           |         | Y       
+G5  | SALES_TYPE_CODE      | SDF    | Sample(Dev/Free)        | 1           |         | Y       
+G5  | SALES_TYPE_CODE      | SMC    | Sample(Mass/Chargeable) | 1           |         | Y       
+G5  | SALES_TYPE_CODE      | SMF    | Sample(Mass/Free)       | 1           |         | Y       
+G5  | SALES_TYPE_CODE      | SPF    | Spare Parts(FREE)       | 1           |         | Y       
+G5  | SALES_TYPE_CODE      | TST    | Internal Test           | 1           |         | Y       
+G5  | SALES_TYPE_CODE      | WS     | WS(Chargeable)          | 1           | Y       | Y       
+G5  | SALES_TYPE_CODE      | WSF    | WS(Free)                | 1           | Y       | Y       
+G5  | SALES_TYPE_CODE2     | WS     | WS(Chargeable)          | 1           |         | Y       
+G5  | SALES_TYPE_CODE2     | WSF    | WS(Free)                | 2           |         | Y       
+G5  | SALES_TYPE_CODE2     | AS     | A/S(Chargeable)         | 3           |         | Y       
+G5  | SALES_TYPE_CODE2     | ASF    | A/S(Free)               | 4           |         | Y       
+G5  | SALES_TYPE_CODE2_ADD | Recall | Recall                  | 0           |         | Y       
+G5  | SALES_TYPE_CODE2_ADD | RMA    | RMA                     | 1           |         | Y       
+(20 rows)
+################ [G6] ADMIN 과 DM Planner (W/S) 를 함께 보유한 사용자 (같은 증상 대상) ################
+CHK | USER_ID    
+----+------------
+G6  | chano0612  
+G6  | jaehun_cho 
+G6  | jssbae     
+G6  | k0101      
+G6  | minyonglee1
+G6  | park.choyi 
+G6  | sooykwon   
+(7 rows)
+=============================================================================
+V09 완료 → V09_FCSTTYPE_COMBO_CHECK_OUT.txt 회신 ([G1] 보유 그룹 · [G3] 재현 목록 · [G4] 판정이 핵심)
+=============================================================================

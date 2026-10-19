@@ -1,0 +1,30 @@
+CHK   | N | JUDGE
+------+---+------
+V1 마커 | 1 | PASS 
+(1 rows)
+CHK   | OBJECT_TYPE  | STATUS | LAST_DDL            | ERR_CNT | DEP_INVALID
+------+--------------+--------+---------------------+---------+------------
+V2 상태 | PACKAGE      | VALID  | 2026-10-02 17:59:16 | 0       | 0          
+V2 상태 | PACKAGE BODY | VALID  | 2026-10-13 00:22:19 | 0       | 0          
+(2 rows)
+CHK   | LINE  | TXT                                                                                                   
+------+-------+-------------------------------------------------------------------------------------------------------
+V3 블록 | 13239 |             INTO   v_sspm_new                                                                         
+V3 블록 | 13240 |             FROM   SCM_MGR.GT_PRDM1_T_MAIN A                                                          
+V3 블록 | 13241 |             WHERE  A.ACTION = 'I'                                                                     
+V3 블록 | 13242 |               AND  NOT EXISTS (SELECT 1                                                               
+V3 블록 | 13243 |                                FROM   SCM_MGR.SCM_MST_SITE_ITEM Z                                     
+V3 블록 | 13244 |                                WHERE  Z.DIVISION_ID  = A.DIVISION_ID                                  
+V3 블록 | 13245 |                                  AND  Z.SCM_SITE_ID  = A.SCM_SITE_ID                                  
+V3 블록 | 13246 |                                  AND  Z.ITEM_ID      = A.ITEM_ID                                      
+V3 블록 | 13247 |                                  AND  Z.VALID_YN     = 'Y'                                            
+V3 블록 | 13248 |                                  -- Project 빈값 표기는 같은 값으로 본다: 마스터는 '-'(기존)·'/'(신규 기본값), 스테이징 기본값은 '-'.
+V3 블록 | 13249 |                                  --   표기만 다른 것을 미등록으로 막지 않기 위함 (실값끼리는 등호 그대로).                        
+V3 블록 | 13250 |                                  AND  (   Z.PROJECT_CODE = A.PROJECT_CODE                             
+V3 블록 | 13251 |                                        OR (    NVL(TRIM(Z.PROJECT_CODE), '/') IN ('-', '/')           
+V3 블록 | 13252 |                                            AND NVL(TRIM(A.PROJECT_CODE), '/') IN ('-', '/'))))        
+V3 블록 | 13253 |             ORDER  BY A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM_ID                                        
+(15 rows)
+V4 시험 키 = 40 / ZZ_SSPMNEW_TEST / 1X Technologies_US_PAO / MCCM351015B1-D01
+V4 결과 = F | Project : ZZ_SSPMNEW_TEST / Sales Site : 1X Technologies_US_PAO / Model : MCCM351015B1-D01 /  / Sales Site Project Model 에 등록되지 않은 조합입니다. / Sales Site Project Model 에 등록 후 입력하시기 바랍니다.
+V4 PASS — 5-1 검증으로 차단 · 원장 0 → 0

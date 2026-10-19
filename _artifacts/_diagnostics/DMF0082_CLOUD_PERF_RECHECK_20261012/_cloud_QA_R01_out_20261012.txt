@@ -1,0 +1,99 @@
+사용자 전달 클라우드 QA(OCGSCMQ_P01, lchddwexapob1) R01 실행 결과 — 2026-10-12 09:03 (채팅 붙여넣기 원문, 열 패딩만 축약)
+
+[E0] USR=SCM_MGR DB_NAME=OCGSCMQ_P01 CON_NAME=OCGSCMQ_P01 INST=OCGSCMQ1 SVC=ocgscmq_p01 HOST=lchddwexapob1 NOW=2026-10-12 09:03:03
+
+[E1]
+OBJECT_TYPE   STATUS LAST_DDL            ERR_CNT
+PACKAGE       VALID  2026-10-02 18:09:44 0
+PACKAGE BODY  VALID  2026-10-09 12:08:07 0
+BODY_FP 17032/885680 | CORP_FP 17034/885965 | ⚠ 사내와 다른 BODY
+MARKER            CLOUD CORP JUDGE
+AJS_1008          0     4    ⚠ 사내보다 적음 (10-08 AJS SCM_FCST 메저 추가 — 저장 경로, 조회 무관)
+81MKTAMT          10    10   same
+81SP              2     2    same
+BTNAUTH           2     2    same
+CLOUDPERF         3     3    same
+CUSTEXCEL         6     6    same
+DASH_LITERAL      65    65   same
+DS2_LINE          7     7    same
+FXZERO            10    10   same
+GATHER_ACT        0     0    same
+HINT_GETMAIN      7     7    same
+HINT_LINES        17    17   same
+IDX02_HINT        0     0    same
+ONEREAD           3     3    same
+QRYPERF           1     1    same
+QRYPERF-NOSTATS   13    13   same
+QRYPERF-VMI82     6     6    same
+SLASH_LITERAL     71    71   same
+GET_MAIN 힌트 줄 7: L1232 SELECT /*+ LEADING(A) USE_HASH(C) */ [CLOUDPERF] · L1269 SELECT /*+ LEADING(A) USE_HASH(C) */ [PERF2] · L1862 SELECT /*+ LEADING(A) USE_HASH(B) USE_HASH(C) */ [PERF]
+  · L2089 SELECT /*+ LEADING(B A D C) USE_NL(A) INDEX(A IDX_DM_PLN_MKT_FCST_RESULT_N1) USE_HASH(D) USE_HASH(C) SWAP_JOIN_INPUTS(D) · L3225/L3265/L3319 MERGE /*+ LEADING(B) USE_HASH(A) */  (사내와 동일)
+
+[E2]
+SLASHDEF: DM_PLN_MKT_FCST 테이블 LAST_DDL                 2026-10-10 19:40:21   N=10
+SLASHDEF: SCM_MST_FUTURE_PRICE 테이블 LAST_DDL            2026-10-10 20:13:28   N=11
+SLASHDEF: DM_PLN_SALES_PLAN 테이블 LAST_DDL               2026-10-10 19:41:42   N=11
+SLASHDEF: 전체 스키마 DEFAULT '/' 컬럼 수 (사내 2,005)                           N=1968
+SLASHDEF: 전체 스키마 DEFAULT '-' 잔존 컬럼 수 (사내 87)                          N=93
+SLASHOBJ: PKG_DMF0082 BODY LAST_DDL                      2026-10-09 12:08:07
+SLASHOBJ: PKG_DMF0082 '/' 리터럴 줄 수 (사내 71)                                 N=71
+SLASHOBJ: PR_DM_DNM_CREATE_WS_RTF LAST_DDL               2026-10-09 12:21:44   N=14
+SLASHOBJ: 10-08 이후 재컴파일된 PACKAGE BODY 수                                  N=102
+GTTSTATS: GT_DMF0082 6본 SHARED 통계 LAST_ANALYZED        2026-10-11 23:37:32   N=6
+데이터: 82 DM_PLN_MKT_FCST PLANT_SITE_ID='/' 행 수·최초 생성  2018-03-29 18:40:11   N=386174
+데이터: 40 DM_PLN_MKT_FCST PLANT_SITE_ID='/' 행 수·최초 생성  2018-08-07 17:03:04   N=966281
+데이터: DM_PLN_MKT_FCST 최근 LAST_UPDATE_DATE               2026-10-10 11:50:28
+
+[E3] (DIFF 만)
+cpu_count                 CLOUD 48          CORP 8           diff (참고)
+optimizer_adaptive_plans  CLOUD FALSE       CORP TRUE        ⚠ DIFF (계획 영향)
+pga_aggregate_target      CLOUD 4294967296  CORP 3221225472  diff (참고)
+그 외 11종 same (optimizer_dynamic_sampling 2 · cursor_sharing EXACT · features 23.1.0 · adaptive_statistics FALSE · index_caching 0 · index_cost_adj 100 · ALL_ROWS · baselines TRUE · parallel_degree_policy MANUAL · statistics_level TYPICAL · mbrc 128)
+
+[E4] 6본 모두 PASS — 사내 적용본과 동일 (MF_SP 72139 · TEMP_FCST_N_PRICE 72139 · TEMP_SELECT_MEASURE 8 · TEMP_SITE_ITEM 39070 · T_LAST_DATA_SETUP_FCST 2834 · T_WS_FCST 14), ANALYZED 10-11 23:37, SHARED, LOCK 없음. 6본 밖 고정 통계 0 rows.
+
+[E5] (조회 기간 당월~+6개월)
+T                     DIV PLANT  CLOUD_CNT  CORP_CNT  CNT_X
+DM_PLN_MKT_FCST       40  DASH   -          54592
+DM_PLN_MKT_FCST       40  SLASH  17127      -
+DM_PLN_MKT_FCST       40  VAL    -          46862
+DM_PLN_MKT_FCST       81  VAL    39360      46878     0.8
+DM_PLN_MKT_FCST       82  DASH   -          19152
+DM_PLN_MKT_FCST       82  SLASH  33610      6586      5.1
+DM_PLN_MKT_FCST       82  VAL    -          7534
+DM_PLN_SALES_PLAN     40  DASH   -          16242
+DM_PLN_SALES_PLAN     40  SLASH  15265      -
+DM_PLN_SALES_PLAN     40  VAL    -          5834
+DM_PLN_SALES_PLAN     81  VAL    43040      34735     1.2
+DM_PLN_SALES_PLAN     82  DASH   -          2437
+DM_PLN_SALES_PLAN     82  SLASH  7195       -
+DM_PLN_SALES_PLAN     82  VAL    -          686
+SCM_MST_FUTURE_PRICE  40  DASH   -          155631
+SCM_MST_FUTURE_PRICE  40  SLASH  155988     -
+SCM_MST_FUTURE_PRICE  81  VAL    203895     190287    1.1
+SCM_MST_FUTURE_PRICE  82  DASH   -          224965
+SCM_MST_FUTURE_PRICE  82  SLASH  465897     -
+→ 클라우드는 40/82 의 '-' 가 전부 '/' 로 전환 완료(DASH 0) · VAL 행 없음. 사내는 미전환('-').
+
+[E5b] 0 rows — 분리 키 없음
+
+[E6]
+T                           CLOUD_ROWS CORP_ROWS ROWS_X CLOUD_MB CLOUD_ANALYZED STALE JUDGE
+DM_PLN_CFM_MKT_DEMAND_PLAN  362557     420354    0.9    52       2026-10-10     NO    ok
+DM_PLN_CFM_SELLING_PRICE    1600526    1574147   1      221      2026-10-10     NO    ok
+DM_PLN_MKT_FCST             2210388    2549812   0.9    290      2026-10-10     NO    ok
+DM_PLN_MKT_FCST_C           39691475   40123502  1      7237     2026-10-11     NO    ok
+DM_PLN_MKT_FCST_RESULT      4299061    4280763   1      605      2026-10-10     NO    ok
+DM_PLN_SALES_PLAN           1412610    1417586   1      207      2026-10-10     NO    ok
+DM_PLN_SALES_PLAN_C         7137992    7538024   0.9    6344     2026-10-11     YES   ⚠ 통계 노후(STALE)
+DM_PLN_SALES_PLAN_RESULT    2258186    2232938   1      350      2026-10-10     NO    ok
+SCM_COM_SYS_LOG             741402     -         -      1011     2026-09-30     NO    ⚠ 통계가 테이블 ALTER 이전
+SCM_MST_FUTURE_PRICE        12550781   11473160  1.1    1606     2026-10-10     NO    ok
+SCM_MST_SITE_ITEM           127440     118139    1.1    30       2026-10-10     NO    ok
+SCM_MST_TITLESET_USER       3850       8088      0.5    1        2026-10-09     NO    ok
+
+[E6b] 전 컬럼 ANALYZED 2026-10-10 · PLANT_SITE_ID FREQUENCY 히스토그램 (MKT_FCST NDV 39 · SALES_PLAN 35 · FUTURE_PRICE 30 · RESULT 55/51) · DIVISION_ID FREQUENCY · YYYYMMDD HYBRID 254 · SALES_PLAN.CURRENCY NULLS 32736 NONE
+
+[E7] 클라우드에만 있음 7본 — ETL_IX49/51/58/59/61/73/86_* (각 LAST_UPDATE_DATE 단일 컬럼). 결손·상이·UNUSABLE 0.
+
+[E8] 0 rows

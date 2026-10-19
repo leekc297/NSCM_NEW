@@ -1,0 +1,690 @@
+{
+ "scope_menus": [
+  "COM0001",
+  "COM0002",
+  "COM0003",
+  "COM0004",
+  "COM0005",
+  "COM0006",
+  "COM0007",
+  "COM0008",
+  "COM0009",
+  "COM0010",
+  "COM0011",
+  "COM0012",
+  "COM0013",
+  "DMF0003",
+  "DMF0004",
+  "DMF0005",
+  "DMF0006",
+  "DMF0007",
+  "DMF0008",
+  "DMF0014",
+  "DMF0020",
+  "DMF0021",
+  "DMF0022",
+  "DMF0035",
+  "DMF0040",
+  "DMF0042",
+  "DMF0043",
+  "DMF0043_01",
+  "DMF0044",
+  "DMF0048",
+  "DMF0049",
+  "DMF0053",
+  "DMF0068",
+  "DMF0072",
+  "DMF0074",
+  "DMF0074_40",
+  "DMF0082",
+  "KHK_TEST",
+  "SCM0007",
+  "SCM0016",
+  "SCM0019",
+  "SCP0001",
+  "SCP0006",
+  "SCP0007",
+  "SCP0013",
+  "SCP0020",
+  "SCP0022",
+  "SCP0023",
+  "SCP0030",
+  "SYS0001",
+  "SYS0002",
+  "SYS0003",
+  "SYS0004",
+  "SYS0005",
+  "SYS0006",
+  "SYS0007",
+  "SYS0008",
+  "SYS0009",
+  "SYS0010",
+  "SYS0011",
+  "SYS0012",
+  "SYS0013",
+  "SYS0014",
+  "SYS0016",
+  "SYS0017"
+ ],
+ "menu_fe": {
+  "COM0001": {
+   "files": [
+    "features\\master\\src\\components\\regionModal\\region-modal.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\components\\regionModal"
+   ]
+  },
+  "COM0002": {
+   "files": [
+    "features\\master\\src\\components\\customerModal\\customer-modal.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\components\\customerModal"
+   ]
+  },
+  "COM0003": {
+   "files": [
+    "features\\master\\src\\components\\storageLocationModal\\storage-location-modal.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\components\\storageLocationModal"
+   ]
+  },
+  "COM0004": {
+   "files": [
+    "features\\master\\src\\components\\ownerModal\\owner-modal.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\components\\ownerModal"
+   ]
+  },
+  "COM0005": {
+   "files": [
+    "features\\master\\src\\components\\projectByDivisionModal\\project-by-division-modal.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\components\\projectByDivisionModal"
+   ]
+  },
+  "COM0006": {
+   "files": [
+    "features\\master\\src\\components\\ownerByDivisionModal\\owner-by-division-modal.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\components\\ownerByDivisionModal"
+   ]
+  },
+  "COM0007": {
+   "files": [
+    "packages\\shared\\src\\components\\templates\\modals\\message-modal\\message-modal.constants.ts"
+   ],
+   "roots": [
+    "packages\\shared\\src\\components\\templates\\modals\\message-modal"
+   ]
+  },
+  "COM0008": {
+   "files": [
+    "features\\master\\src\\components\\itemByDivisionModal\\item-by-division-modal.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\components\\itemByDivisionModal"
+   ]
+  },
+  "COM0009": {
+   "files": [
+    "features\\master\\src\\components\\teamModal\\team-modal.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\components\\teamModal"
+   ]
+  },
+  "COM0010": {
+   "files": [
+    "packages\\shared\\src\\components\\templates\\modals\\sso-user-modal\\sso-user-modal.constants.ts"
+   ],
+   "roots": [
+    "packages\\shared\\src\\components\\templates\\modals\\sso-user-modal"
+   ]
+  },
+  "COM0011": {
+   "files": [
+    "packages\\shared\\src\\components\\templates\\modals\\sso-dept-modal\\sso-dept-modal.constants.ts"
+   ],
+   "roots": [
+    "packages\\shared\\src\\components\\templates\\modals\\sso-dept-modal"
+   ]
+  },
+  "COM0012": {
+   "files": [
+    "features\\master\\src\\components\\projectModal\\project-modal-constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\components\\projectModal"
+   ]
+  },
+  "COM0013": {
+   "files": [
+    "features\\master\\src\\components\\materialByDivisionModal\\material-by-division-modal.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\components\\materialByDivisionModal"
+   ]
+  },
+  "DMF0003": {
+   "files": [
+    "features\\demand\\src\\pages\\mkt-fcst\\mkt-fcst.constants.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\pages\\mkt-fcst"
+   ]
+  },
+  "DMF0004": {
+   "files": [
+    "features\\master\\src\\pages\\sales-site\\sales-site.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\pages\\sales-site"
+   ]
+  },
+  "DMF0005": {
+   "files": [
+    "features\\master\\src\\pages\\sales-site-project-model\\sales-site-project-model.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\pages\\sales-site-project-model"
+   ]
+  },
+  "DMF0006": {
+   "files": [
+    "features\\master\\src\\pages\\customer-model-mapping\\customer-model-mapping.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\pages\\customer-model-mapping"
+   ]
+  },
+  "DMF0007": {
+   "files": [
+    "features\\master\\src\\pages\\customer-forecast-master\\customer-fcst-master.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\pages\\customer-forecast-master"
+   ]
+  },
+  "DMF0008": {
+   "files": [
+    "features\\master\\src\\pages\\erp-edi-master\\erp-edi-master.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\pages\\erp-edi-master"
+   ]
+  },
+  "DMF0013": {
+   "files": [
+    "features\\demand\\src\\pages\\cust-psi-upload\\cust-psi-upload.constant.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\pages\\cust-psi-upload"
+   ]
+  },
+  "DMF0014": {
+   "files": [
+    "features\\demand\\src\\components\\fcst-upload-modal\\FcstUploadModal.tsx",
+    "features\\demand\\src\\pages\\customer-fcst-upload\\customer-fcst-upload.constant.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\components\\fcst-upload-modal",
+    "features\\demand\\src\\pages\\customer-fcst-upload"
+   ]
+  },
+  "DMF0020": {
+   "files": [
+    "features\\master\\src\\pages\\sales-future-price\\sales-future-price.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\pages\\sales-future-price"
+   ]
+  },
+  "DMF0021": {
+   "files": [
+    "features\\demand\\src\\pages\\sales-plan\\sales-plan.constants.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\pages\\sales-plan"
+   ]
+  },
+  "DMF0022": {
+   "files": [
+    "features\\report\\src\\pages\\sales-plan-waterfall\\sales-plan-waterfall.constants.ts"
+   ],
+   "roots": [
+    "features\\report\\src\\pages\\sales-plan-waterfall"
+   ]
+  },
+  "DMF0035": {
+   "files": [
+    "features\\report\\src\\pages\\demand-plan-waterfall\\demand-plan-waterfall.constants.ts"
+   ],
+   "roots": [
+    "features\\report\\src\\pages\\demand-plan-waterfall"
+   ]
+  },
+  "DMF0040": {
+   "files": [
+    "features\\demand\\src\\pages\\mkt-fcst-comparison\\mkt-fcst-comparison.constants.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\pages\\mkt-fcst-comparison"
+   ]
+  },
+  "DMF0042": {
+   "files": [
+    "features\\demand\\src\\pages\\business-plan\\business-plan.constants.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\pages\\business-plan"
+   ]
+  },
+  "DMF0043": {
+   "files": [
+    "features\\master\\src\\components\\contributeRateModal\\contribute-rate-modal.constants.ts",
+    "features\\master\\src\\components\\contributeVersionModal\\contribute-version-modal.constants.ts",
+    "features\\master\\src\\pages\\contribute-main\\contribute-main.constants.ts",
+    "features\\master\\src\\pages\\contribute-view\\contribute-view.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\components\\contributeRateModal",
+    "features\\master\\src\\components\\contributeVersionModal",
+    "features\\master\\src\\pages\\contribute-main",
+    "features\\master\\src\\pages\\contribute-view"
+   ]
+  },
+  "DMF0043_01": {
+   "files": [],
+   "roots": [
+    "features\\master\\src\\pages\\contribute-view"
+   ]
+  },
+  "DMF0044": {
+   "files": [
+    "features\\demand\\src\\components\\versionModal\\VersionModal.tsx",
+    "features\\demand\\src\\components\\versionModal\\version-modal.constants.ts",
+    "features\\demand\\src\\pages\\sales-reports\\sales-reports.constants.ts",
+    "features\\master\\src\\components\\versionModal\\version-modal.constants.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\components\\versionModal",
+    "features\\demand\\src\\pages\\sales-reports",
+    "features\\master\\src\\components\\versionModal"
+   ]
+  },
+  "DMF0048": {
+   "files": [
+    "features\\demand\\src\\pages\\sales-monitoring\\sales-monitoring.constants.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\pages\\sales-monitoring"
+   ]
+  },
+  "DMF0049": {
+   "files": [
+    "features\\demand\\src\\components\\versionModal\\VersionModal.tsx",
+    "features\\demand\\src\\pages\\etc-sales-reports\\etc-sales-reports.constants.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\components\\versionModal",
+    "features\\demand\\src\\pages\\etc-sales-reports"
+   ]
+  },
+  "DMF0053": {
+   "files": [
+    "features\\demand\\src\\pages\\cust-fcst-waterfall\\components\\CustFcstWaterfallGrid.tsx",
+    "features\\demand\\src\\pages\\cust-fcst-waterfall\\cust-fcst-waterfall.constants.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\pages\\cust-fcst-waterfall"
+   ]
+  },
+  "DMF0068": {
+   "files": [
+    "features\\demand\\src\\pages\\demand-manager\\demand-manager.constants.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\pages\\demand-manager"
+   ]
+  },
+  "DMF0072": {
+   "files": [
+    "features\\master\\src\\pages\\nn-master-mapping\\nn-master-mapping.constants.ts"
+   ],
+   "roots": [
+    "features\\master\\src\\pages\\nn-master-mapping"
+   ]
+  },
+  "DMF0074": {
+   "files": [
+    "features\\demand\\src\\pages\\metal-link-price\\metal-link-price.constants.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\pages\\metal-link-price"
+   ]
+  },
+  "DMF0074_40": {
+   "files": [
+    "features\\demand\\src\\pages\\metal-link-price\\metal-link-price.constants.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\pages\\metal-link-price"
+   ]
+  },
+  "DMF0081": {
+   "files": [],
+   "roots": []
+  },
+  "DMF0082": {
+   "files": [
+    "features\\demand\\src\\pages\\forecast-price\\forecast-price.constants.ts",
+    "features\\demand\\src\\pages\\forecast-price\\utils\\forecast-price.api.ts"
+   ],
+   "roots": [
+    "features\\demand\\src\\pages\\forecast-price"
+   ]
+  },
+  "SCM0007": {
+   "files": [
+    "features\\admin\\src\\pages\\sms-setup\\sms-setup.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\sms-setup"
+   ]
+  },
+  "SCM0016": {
+   "files": [
+    "features\\admin\\src\\pages\\batch-log\\batch-log.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\batch-log"
+   ]
+  },
+  "SCP0001": {
+   "files": [],
+   "roots": []
+  },
+  "SCP0005": {
+   "files": [],
+   "roots": []
+  },
+  "SCP0006": {
+   "files": [
+    "features\\supply\\src\\pages\\project-route\\project-route.constants.ts"
+   ],
+   "roots": [
+    "features\\supply\\src\\pages\\project-route"
+   ]
+  },
+  "SCP0007": {
+   "files": [],
+   "roots": []
+  },
+  "SCP0020": {
+   "files": [
+    "features\\supply\\src\\pages\\tact-time\\tact-time.constants.ts"
+   ],
+   "roots": [
+    "features\\supply\\src\\pages\\tact-time"
+   ]
+  },
+  "SCP0022": {
+   "files": [
+    "features\\supply\\src\\pages\\formation\\formation.constants.ts"
+   ],
+   "roots": [
+    "features\\supply\\src\\pages\\formation"
+   ]
+  },
+  "SCP0030": {
+   "files": [],
+   "roots": []
+  },
+  "SCP0041": {
+   "files": [],
+   "roots": []
+  },
+  "SCP0049": {
+   "files": [],
+   "roots": []
+  },
+  "SCP0113": {
+   "files": [],
+   "roots": []
+  },
+  "SCP0115": {
+   "files": [],
+   "roots": []
+  },
+  "SCP0126": {
+   "files": [],
+   "roots": []
+  },
+  "SDM1010": {
+   "files": [
+    "features\\sdm\\src\\pages\\project-reg\\project-reg.constants.ts",
+    "features\\spms-demand\\src\\pages\\project-registration\\project-registration.constants.ts"
+   ],
+   "roots": [
+    "features\\sdm\\src\\pages\\project-reg",
+    "features\\spms-demand\\src\\pages\\project-registration"
+   ]
+  },
+  "SDM1020": {
+   "files": [
+    "features\\sdm\\src\\pages\\project-list\\project-list.constants.ts",
+    "features\\spms-demand\\src\\pages\\project-list\\project-list.constants.ts"
+   ],
+   "roots": [
+    "features\\sdm\\src\\pages\\project-list",
+    "features\\spms-demand\\src\\pages\\project-list"
+   ]
+  },
+  "SDM2010": {
+   "files": [
+    "features\\spms-demand\\src\\pages\\production-request\\production-request.constants.ts"
+   ],
+   "roots": [
+    "features\\spms-demand\\src\\pages\\production-request"
+   ]
+  },
+  "SDM2020": {
+   "files": [
+    "features\\spms-demand\\src\\pages\\plan-yield\\plan-yield.constants.ts"
+   ],
+   "roots": [
+    "features\\spms-demand\\src\\pages\\plan-yield"
+   ]
+  },
+  "SDM5010": {
+   "files": [
+    "features\\sdm\\src\\pages\\project-master\\project-master.constants.ts",
+    "features\\spms-demand\\src\\pages\\project-master\\project-master.constants.ts"
+   ],
+   "roots": [
+    "features\\sdm\\src\\pages\\project-master",
+    "features\\spms-demand\\src\\pages\\project-master"
+   ]
+  },
+  "SSP0018": {
+   "files": [],
+   "roots": []
+  },
+  "SSP0022": {
+   "files": [],
+   "roots": []
+  },
+  "SSP0023": {
+   "files": [],
+   "roots": []
+  },
+  "SSP0026": {
+   "files": [],
+   "roots": []
+  },
+  "SYS0001": {
+   "files": [
+    "apps\\web\\src\\pages\\Templates.tsx",
+    "features\\admin\\src\\pages\\message-management\\message-management.constants.ts"
+   ],
+   "roots": [
+    "apps\\web\\src\\pages\\Templates.tsx",
+    "features\\admin\\src\\pages\\message-management"
+   ]
+  },
+  "SYS0002": {
+   "files": [
+    "features\\admin\\src\\pages\\user-management\\user-management.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\user-management"
+   ]
+  },
+  "SYS0003": {
+   "files": [
+    "features\\admin\\src\\pages\\menu-management\\menu-management.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\menu-management"
+   ]
+  },
+  "SYS0004": {
+   "files": [
+    "features\\admin\\src\\pages\\ui-catrgory-setup\\ui-category-setup.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\ui-catrgory-setup"
+   ]
+  },
+  "SYS0005": {
+   "files": [
+    "features\\admin\\src\\pages\\procedure-management\\procedure-management.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\procedure-management"
+   ]
+  },
+  "SYS0006": {
+   "files": [
+    "features\\admin\\src\\pages\\api-management\\api-management.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\api-management"
+   ]
+  },
+  "SYS0007": {
+   "files": [
+    "features\\admin\\src\\pages\\group-management\\group-management.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\group-management"
+   ]
+  },
+  "SYS0008": {
+   "files": [
+    "features\\admin\\src\\pages\\group-menu\\group-menu.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\group-menu"
+   ]
+  },
+  "SYS0009": {
+   "files": [
+    "features\\admin\\src\\pages\\menu-button-management\\menu-button-management.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\menu-button-management"
+   ]
+  },
+  "SYS0010": {
+   "files": [
+    "features\\admin\\src\\pages\\lookup\\lookup.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\lookup"
+   ]
+  },
+  "SYS0011": {
+   "files": [
+    "features\\authority\\src\\pages\\auth-request\\auth-request.constants.ts"
+   ],
+   "roots": [
+    "features\\authority\\src\\pages\\auth-request"
+   ]
+  },
+  "SYS0012": {
+   "files": [
+    "features\\authority\\src\\pages\\auth-approval\\auth-approval.constants.ts"
+   ],
+   "roots": [
+    "features\\authority\\src\\pages\\auth-approval"
+   ]
+  },
+  "SYS0013": {
+   "files": [
+    "features\\admin\\src\\pages\\dynamic-query\\dynamic-query.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\dynamic-query"
+   ]
+  },
+  "SYS0014": {
+   "files": [
+    "features\\admin\\src\\pages\\group-user\\group-user.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\group-user"
+   ]
+  },
+  "SYS0015": {
+   "files": [
+    "features\\admin\\src\\pages\\program\\program.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\program"
+   ]
+  },
+  "SYS0016": {
+   "files": [
+    "features\\admin\\src\\pages\\notice-setup\\notice-setup.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\notice-setup"
+   ]
+  },
+  "SYS0017": {
+   "files": [
+    "features\\admin\\src\\pages\\mail-setup\\mail-setup.constants.ts"
+   ],
+   "roots": [
+    "features\\admin\\src\\pages\\mail-setup"
+   ]
+  },
+  "KHK_TEST": {
+   "files": [],
+   "roots": []
+  },
+  "SCM0019": {
+   "files": [],
+   "roots": []
+  },
+  "SCP0013": {
+   "files": [
+    "features\\supply\\src\\pages\\production-plan-line\\production-plan-line.constants.ts"
+   ],
+   "roots": [
+    "features\\supply\\src\\pages\\production-plan-line"
+   ]
+  },
+  "SCP0023": {
+   "files": [],
+   "roots": []
+  }
+ }
+}

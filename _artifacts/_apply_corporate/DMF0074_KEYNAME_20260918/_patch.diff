@@ -1,0 +1,275 @@
+--- before
++++ after
+@@ -1097,4 +1097,272 @@
+     ------------------------------------------------------------------------
+ 
++
++    /* #################################################### */
++    /* [E20260918-KEYNAMETOCODE] 광물 KEY 명칭 → 코드 정규화                     */
++    /*                                                                                      */
++    /* 조회 SP(P_DMF0074_GET_METAL_LINK_PRICE)는 METAL_KEY_*.SEGMENT4(명칭)를 내려주는데,     */
++    /* 업로드 검증(Invalid KEY CODE)·적재는 SEGMENT3(코드)만 받는다. 그래서 화면/엑셀        */
++    /* 다운로드에서 본 명칭(예: DIV 81 Ni = 'LME')을 그대로 올리면 전건이 반려된다.          */
++    /* AS-IS(dbo.DMF0074_EXCEL_UPLOAD L499)도 코드만 받아 동일 제약이었으나, 사용자가        */
++    /* 코드를 외워 입력할 수 없으므로 명칭 입력을 수용하도록 보완한다.                        */
++    /*                                                                                      */
++    /* 무손실 근거 (LOOKUP 'METAL_KEY_VALUE' 58건 실측, 2026-09-18)                          */
++    /*   - DIV+METAL 내 SEGMENT4(명칭) 유일  → 명칭→코드 매핑 모호 0건                       */
++    /*   - SEGMENT3(코드) 와 SEGMENT4(명칭) 의 값 충돌 0건 → 양쪽 수용 시 오인식 없음         */
++    /* 이미 코드로 입력된 값은 NOT EXISTS 가드로 그대로 두고(코드 우선),                      */
++    /* 명칭·코드 어느 쪽도 아닌 값은 손대지 않아 기존 'Invalid KEY CODE' 가 정상 발생한다.    */
++    /*                                                                                      */
++    /* 적재 위치 : 검증(P_MODE=0)은 여기서 GT_DM74_TMP_EXCEL_UPLOAD_RAW 로 복사되고,          */
++    /*             저장(P_MODE=1)은 SCM_ADM_EXCEL_UPLOAD 를 직접 읽으므로(본 BODY L2681),     */
++    /*             원본 스테이징 1곳만 정규화하면 검증·저장이 함께 코드 기준으로 정렬된다.    */
++    /* 컬럼 위치 : 40 사업부 = ATTRIBUTE12~18 / 그 외 = ATTRIBUTE14~20 (SCM_ADM_EXCEL_COLUMNS */
++    /*             DMF0074_40 53토큰 · DMF0074 55토큰 실측)                                  */
++    /* #################################################### */
++    --40 사업부 (Key_Ni~Key_Cu = ATTRIBUTE12~18)
++    UPDATE SCM_MGR.SCM_ADM_EXCEL_UPLOAD T
++       SET T.LAST_UPDATE_DATE = T.LAST_UPDATE_DATE
++           , T.ATTRIBUTE12 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'Ni'
++                              AND L.SEGMENT4    = T.ATTRIBUTE12                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE12)
++                            ), T.ATTRIBUTE12)
++           , T.ATTRIBUTE13 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'Co'
++                              AND L.SEGMENT4    = T.ATTRIBUTE13                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE13)
++                            ), T.ATTRIBUTE13)
++           , T.ATTRIBUTE14 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'Li2Co3'
++                              AND L.SEGMENT4    = T.ATTRIBUTE14                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE14)
++                            ), T.ATTRIBUTE14)
++           , T.ATTRIBUTE15 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'LIOH'
++                              AND L.SEGMENT4    = T.ATTRIBUTE15                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE15)
++                            ), T.ATTRIBUTE15)
++           , T.ATTRIBUTE16 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'Al'
++                              AND L.SEGMENT4    = T.ATTRIBUTE16                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE16)
++                            ), T.ATTRIBUTE16)
++           , T.ATTRIBUTE17 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'Mn'
++                              AND L.SEGMENT4    = T.ATTRIBUTE17                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE17)
++                            ), T.ATTRIBUTE17)
++           , T.ATTRIBUTE18 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'Cu'
++                              AND L.SEGMENT4    = T.ATTRIBUTE18                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE18)
++                            ), T.ATTRIBUTE18)
++     WHERE T.PROGRAM_ID   LIKE V_PROGRAM_ID || '%'
++       AND T.SHEET_NAME    = V_SHEET_NAME
++       AND T.CREATED_BY    = P_CREATED_BY
++       AND TO_CHAR(T.CREATION_DATE, 'YYYY-MM-DD HH24:MI:SS.FF3') = V_CREATION_DATE
++       AND NVL(T.UPLOAD_STATUS_CODE,'X') NOT IN ('@TITLE','SKIP')
++       AND T.ATTRIBUTE1 = '40';
++
++    ------------------------------------------------------------------------
++    N_LOG_COUNT   := SQL%ROWCOUNT;
++    V_LOG_TYPE    := 'B0';
++    V_LOG_MESSAGE := '########## [E20260918-KEYNAMETOCODE] KEY NAME -> CODE (DIV 40) ##########';
++    V_DESCRIPTION := '';
++    D_EVENT_DATE  := SYSDATE;
++    BEGIN SCM_MGR.PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE); END;
++    ------------------------------------------------------------------------
++    --그 외 사업부 (Key_Ni~Key_Cu = ATTRIBUTE14~20)
++    UPDATE SCM_MGR.SCM_ADM_EXCEL_UPLOAD T
++       SET T.LAST_UPDATE_DATE = T.LAST_UPDATE_DATE
++           , T.ATTRIBUTE14 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'Ni'
++                              AND L.SEGMENT4    = T.ATTRIBUTE14                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE14)
++                            ), T.ATTRIBUTE14)
++           , T.ATTRIBUTE15 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'Co'
++                              AND L.SEGMENT4    = T.ATTRIBUTE15                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE15)
++                            ), T.ATTRIBUTE15)
++           , T.ATTRIBUTE16 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'Li2Co3'
++                              AND L.SEGMENT4    = T.ATTRIBUTE16                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE16)
++                            ), T.ATTRIBUTE16)
++           , T.ATTRIBUTE17 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'LIOH'
++                              AND L.SEGMENT4    = T.ATTRIBUTE17                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE17)
++                            ), T.ATTRIBUTE17)
++           , T.ATTRIBUTE18 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'Al'
++                              AND L.SEGMENT4    = T.ATTRIBUTE18                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE18)
++                            ), T.ATTRIBUTE18)
++           , T.ATTRIBUTE19 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'Mn'
++                              AND L.SEGMENT4    = T.ATTRIBUTE19                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE19)
++                            ), T.ATTRIBUTE19)
++           , T.ATTRIBUTE20 = NVL( (SELECT MIN(L.SEGMENT3)
++                             FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L
++                            WHERE L.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                              AND L.VALID_YN    = 'Y'
++                              AND L.SEGMENT1    = SUBSTR(T.ATTRIBUTE1, 1, 2)
++                              AND L.SEGMENT2    = 'Cu'
++                              AND L.SEGMENT4    = T.ATTRIBUTE20                      --명칭(화면 표시값)
++                              AND NOT EXISTS (SELECT 1                       --이미 코드면 코드 우선
++                                                FROM SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL L2
++                                               WHERE L2.LOOKUP_TYPE = 'METAL_KEY_VALUE'
++                                                 AND L2.VALID_YN    = 'Y'
++                                                 AND L2.SEGMENT1    = L.SEGMENT1
++                                                 AND L2.SEGMENT2    = L.SEGMENT2
++                                                 AND L2.SEGMENT3    = T.ATTRIBUTE20)
++                            ), T.ATTRIBUTE20)
++     WHERE T.PROGRAM_ID   LIKE V_PROGRAM_ID || '%'
++       AND T.SHEET_NAME    = V_SHEET_NAME
++       AND T.CREATED_BY    = P_CREATED_BY
++       AND TO_CHAR(T.CREATION_DATE, 'YYYY-MM-DD HH24:MI:SS.FF3') = V_CREATION_DATE
++       AND NVL(T.UPLOAD_STATUS_CODE,'X') NOT IN ('@TITLE','SKIP')
++       AND T.ATTRIBUTE1 <> '40';
++
++    ------------------------------------------------------------------------
++    N_LOG_COUNT   := SQL%ROWCOUNT;
++    V_LOG_TYPE    := 'B0';
++    V_LOG_MESSAGE := '########## [E20260918-KEYNAMETOCODE] KEY NAME -> CODE (DIV NOT 40) ##########';
++    V_DESCRIPTION := '';
++    D_EVENT_DATE  := SYSDATE;
++    BEGIN SCM_MGR.PR_SCM_SYS_LOG_BATCH(V_PROGRAM_NAME, V_LOG_TYPE, N_LOG_COUNT, V_LOG_MESSAGE, V_DESCRIPTION, D_EVENT_DATE); END;
++    ------------------------------------------------------------------------
+     -- @p_mode = 0 이면 Validation
+     IF NVL(P_MODE, 0) = 0

@@ -1,0 +1,42 @@
+################ [P0] ⭐ 자동 — 최근 240 분 PKG_DMF0082 진입 ASH 상위 3 SQL_ID 의 계획 (ALLSTATS LAST) ################
+PLAN_TABLE_OUTPUT
+-----------------
+(0 rows)
+--  확인 포인트:
+--   ① GT_DMF0082_* 의 E-Rows 가 1 인데 실제(A-Rows/ROWS_PER_EX)는 수만 = 파싱 시점 GTT 추정 붕괴 (07-31 DMF0003 유형) — GTTSTATS 적용본이면 TEMP_SITE_ITEM E-Rows 39070 근처
+--   ② SCM_MST_FUTURE_PRICE / DM_PLN_SALES_PLAN / DM_PLN_MKT_FCST 에 TABLE ACCESS FULL 또는 NESTED LOOPS 안쪽 INDEX RANGE SCAN 반복 = 접근경로 문제
+--   ③ MERGE JOIN CARTESIAN / NESTED LOOPS 아래 대용량 = 조인 순서 오류
+--   ④ Note 절: dynamic statistics used: dynamic sampling (level=2) 표기 여부 — 없으면 DS=0 으로 파싱된 커서
+--   ⑤ Peeked Binds: :B1 (p_division_id) 가 '82' 인데 81 조회가 이 커서를 재사용 중이면 82 기준 계획
+################ [P1] 지정 SQL_ID = - — 자식 커서 목록 (계획별 1회당 비용 · 공유 사유) ################
+INST | CH | PHV | EX | SEC_PER_EX | BG_PER_EX | DR_PER_EX | ROWS_PER_EX | COST | LINE | NOW_RUN | LOADED | LAST_ACT | BS | SH | BASELINE | PROFILE
+-----+----+-----+----+------------+-----------+-----------+-------------+------+------+---------+--------+----------+----+----+----------+--------
+(0 rows)
+################ [P2] SQL 전문 (앞 4000자) ################
+SQL_TEXT
+--------
+(0 rows)
+################ [P3] ⭐ 실행계획 — 가장 최근 실행된 자식 (E-Rows vs A-Rows · 접근경로 · Peeked Binds) ################
+PLAN_TABLE_OUTPUT         
+--------------------------
+SQL_ID: - cannot be found 
+                          
+(2 rows)
+################ [P4] 다른 계획(PHV)의 자식이 있으면 그 계획도 (가장 빠른 자식 — 계획 간 비교) ################
+PLAN_TABLE_OUTPUT         
+--------------------------
+SQL_ID: - cannot be found 
+                          
+(2 rows)
+--  (P3 와 PHV 가 같으면 동일 계획 — 무시)
+################ [P5] 계획에 등장하는 영구 테이블·인덱스 통계 (계획 안의 객체만) ################
+OBJECT_TYPE | OBJECT_NAME | NUM_ROWS | BLOCKS_OR_LEAF | ANALYZED | CLUF | TMP | IDX_STATUS
+------------+-------------+----------+----------------+----------+------+-----+-----------
+(0 rows)
+################ [P6] AWR 14일 실행 이력 — PHV 변화 시점 ('/' 재컴파일 · GTTSTATS 전후) (권한 없으면 오류 — 무시) ################
+SNAP_ID | SNAP | PHV | EX | SEC_PER_EX | BG_PER_EX | ROWS_PER_EX
+--------+------+-----+----+------------+-----------+------------
+(0 rows)
+=============================================================================
+R05 완료 → R05_PLAN_OUT.txt 회신 ([P0] 자동 3건 + 지정 SQL_ID 가 있으면 [P1]~[P6])
+=============================================================================

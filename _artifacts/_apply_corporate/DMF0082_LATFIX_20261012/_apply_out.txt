@@ -1,0 +1,8 @@
+기준본 LAST_DDL=2026-10-12 09:52:19  패치 latfix:1  GET_MAIN_DATA 285,445B → 285,853B  (타 구간 불변)
+파일 생성 완료
+적용 결과 STATUS=VALID 오류=0  LAST_DDL=2026-10-12 10:31:26
+Traceback (most recent call last):
+  File "C:\Projects\NSCM\_artifacts\_apply_corporate\DMF0082_LATFIX_20261012\apply_latfix.py", line 88, in <module>
+    assert after.count(MARK) == 3 and after == new_src, "적용본 != DB 원문"
+                                      ^^^^^^^^^^^^^^^^
+AssertionError: 적용본 != DB 원문

@@ -1,0 +1,26 @@
+CHK | DB_NAME | NOW
+L0 | ZIOUI1 | 2026-10-15 13:29:58
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | LINES_N
+L0 | PACKAGE | VALID | 2026-10-09 13:38:31 | 124
+L0 | PACKAGE BODY | VALID | 2026-10-15 13:29:57 | 17330
+(2 rows)
+
+CHK | KIND | N | LINES | JUDGE
+L1 대상줄 | D1 Phase1 DELETE 대상 | 1 | 15098 | PASS
+L1 대상줄 | D2 Phase1 DELETE 내부 | 1 | 15108 | PASS
+L1 대상줄 | M1 MERGE 소스 | 1 | 15164 | PASS
+L1 대상줄 | M2 MERGE INSERT 조건 | 1 | 15189 | PASS
+(4 rows)
+
+CHK | N | LINE | JUDGE
+L2 마커 | 0 |  | 미적용 (기대)
+(1 rows)
+
+CHK | MEASURE | QTY0_ROWS
+L3 참고 | MKT_FCST | 9
+(1 rows)
+
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+(0 rows)

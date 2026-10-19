@@ -1,0 +1,16 @@
+﻿접속 대상: ('zioui1', 'ZIOUI1', 'ol9-db', '2026-09-14 14:10') | 모드: APPLY
+- 01_DMF0040_PKG_DMF0040_BODY.sql              SCM_MGR   APPLY(현재=적용 전 백업)        문장 1: CREATE
+- 02_DMF0053_PKG_DMF0053_BODY.sql              SCM_MGR   APPLY(현재=적용 전 백업)        문장 1: CREATE
+- 03_DMF0053_SYNONYM_SCMP_APP.sql              SCMP_APP  APPLY(멱등)                문장 1: BEGIN
+- 04_SYS0005_LOOKUP_UI_PKG_NM_MERGE.sql        SCM_MGR   APPLY(멱등)                문장 4: SELECT, MERGE, COMMIT, SELECT
+- 05_DMF0074_EXCEL_COLUMNS_HEADER_UPDATE.sql   SCM_MGR   APPLY(멱등)                문장 3: UPDATE, UPDATE, COMMIT
+- 06_DMF0074_PKG_NSCM_UI_EXCEL_BODY.sql        SCM_MGR   SKIP(이미 반영)              문장 1: CREATE
+  01_DMF0040_PKG_DMF0040_BODY.sql: PKG_DMF0040 BODY VALID / 오류 0
+  02_DMF0053_PKG_DMF0053_BODY.sql: PKG_DMF0053 BODY VALID / 오류 0
+  03_DMF0053_SYNONYM_SCMP_APP.sql: 완료
+     ('PKG_SYS0005', 'PKG_SYS0005', 'Y', None)
+     ('SCM_MGR', 'PKG_', 'Y', 'All UI Package')
+     ('PKG_SYS0005', 'PKG_SYS0005', 'Y', None)
+  04_SYS0005_LOOKUP_UI_PKG_NM_MERGE.sql: 완료
+  05_DMF0074_EXCEL_COLUMNS_HEADER_UPDATE.sql: 완료
+적용 완료 — 90_POSTCHECK.sql 실행해 검증

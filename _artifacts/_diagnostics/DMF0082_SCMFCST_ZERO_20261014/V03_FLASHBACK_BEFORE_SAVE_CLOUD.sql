@@ -1,0 +1,32 @@
+/* =====================================================================================================
+ * (선택) 저장 직전 시점의 원장 값 직접 조회 — Oracle 플래시백 (클라우드 · 조회 전용)
+ *  사용법: V02 P1 의 SAVED_AT_SEC 값을 아래 두 곳 '2026-10-14 00:00:00' 자리에 넣고 실행 (저장 1초 전 시점 조회)
+ *  ⚠ UNDO 보존시간(사내 undo_retention=900초)을 넘기면 ORA-01555 / ORA-08180 이 날 수 있다 → 그때는 이 파일 생략
+ *     (오류는 조회 불가일 뿐 데이터 영향 없음)
+ *  기대: 10/16 · 11/06 · 11/18 행이 0 이 아닌 값으로 존재 → CREATED_BY / LAST_UPDATED_BY 가 원천 경로
+ * ===================================================================================================== */
+
+/* F1. 확정 테이블 — 저장 1초 전 */
+SELECT 'CFM_BEFORE' AS SRC, C.YYYYMMDD
+     , TO_CHAR(TO_DATE(C.YYYYMMDD, 'YYYYMMDD'), 'DY', 'NLS_DATE_LANGUAGE=ENGLISH') AS DOW
+     , C.QTY, C.CREATED_BY, C.CREATION_DATE
+     , TO_CHAR(C.LAST_UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS LAST_UPD, C.LAST_UPDATED_BY
+FROM SCM_MGR.DM_PLN_CFM_MKT_DEMAND_PLAN
+     AS OF TIMESTAMP (TO_TIMESTAMP('2026-10-14 00:00:00', 'YYYY-MM-DD HH24:MI:SS') - INTERVAL '1' SECOND) C
+WHERE C.DIVISION_ID = '40' AND C.PROJECT_CODE = 'NT' AND C.SCM_SITE_ID = 'Foxlink_CN_DGG'
+  AND C.ITEM_ID = 'MCSS22531-B1' AND C.MEASURE = 'SCM_FCST' AND C.PLANT_SITE_ID = '/'
+  AND C.YYYYMMDD BETWEEN '20261012' AND '20261129'
+ORDER BY C.YYYYMMDD;
+
+/* F2. DM_PLN_MKT_FCST — 저장 1초 전 */
+SELECT 'MKT_FCST_BEFORE' AS SRC, F.YYYYMMDD
+     , TO_CHAR(TO_DATE(F.YYYYMMDD, 'YYYYMMDD'), 'DY', 'NLS_DATE_LANGUAGE=ENGLISH') AS DOW
+     , F.QTY, F.CREATED_BY, F.CREATION_DATE
+     , TO_CHAR(F.LAST_UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS LAST_UPD, F.LAST_UPDATED_BY
+FROM SCM_MGR.DM_PLN_MKT_FCST
+     AS OF TIMESTAMP (TO_TIMESTAMP('2026-10-14 00:00:00', 'YYYY-MM-DD HH24:MI:SS') - INTERVAL '1' SECOND) F
+WHERE F.DIVISION_ID = '40' AND F.PROJECT_CODE = 'NT' AND F.SCM_SITE_ID = 'Foxlink_CN_DGG'
+  AND F.ITEM_ID = 'MCSS22531-B1' AND F.DOM_EXP = 'E' AND F.FCST_TYPE = 'MPS' AND F.INCOTERMS = 'DAP'
+  AND F.MEASURE = 'SCM_FCST' AND F.PLANT_SITE_ID = '/'
+  AND F.YYYYMMDD BETWEEN '20261012' AND '20261129'
+ORDER BY F.YYYYMMDD;

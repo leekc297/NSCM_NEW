@@ -1,0 +1,6 @@
+﻿DB 59.19.252.148:2521/ZIOUI1 ('localhost', '2026-10-14 11:07:03') PKG PKG_DMF0005_PRE
+OK  ALTER SESSION SET "_optim_peek_user_binds" = FALSE
+OK  ALTER SESSION SET optimizer_adaptive_plans = FALSE
+div 40 |  120.98s | rows      0 | -/- PHV -  ❌ DPY-4024: call timeout of 120000 ms exceeded
+div 82 |  120.35s | rows      0 | -/- PHV -  ❌ DPY-4024: call timeout of 120000 ms exceeded
+div 81 |  120.47s | rows      0 | -/- PHV -  ❌ DPY-4024: call timeout of 120000 ms exceeded

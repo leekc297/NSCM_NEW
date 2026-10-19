@@ -1,0 +1,16 @@
+{
+ "merged": [
+  "features/demand/src/pages/forecast-price/components/modals/SavePricePeriodModal.tsx",
+  "features/demand/src/pages/forecast-price/components/modals/VersionSelectModal.tsx",
+  "features/demand/src/pages/metal-link-price/components/modals/MetalLinkVersionModal.tsx",
+  "features/demand/src/pages/sales-reports/components/modals/ExchangeRateModal.tsx",
+  "features/master/src/pages/sales-future-price/components/modals/PriceBatchInputModal.tsx",
+  "features/master/src/pages/sales-future-price/components/modals/SalesPriceVersionModal.tsx"
+ ],
+ "conflicts": [
+  "features/demand/src/pages/sales-reports/components/SalesReportsGrid.tsx",
+  "features/demand/src/pages/sales-reports/utils/sales-reports.gridCombos.ts",
+  "features/spms-demand/src/pages/project-list/components/ProjectListGrid.tsx",
+  "features/spms-demand/src/pages/project-master/components/ProjectMasterTab1Grid.tsx"
+ ]
+}

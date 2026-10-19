@@ -1,0 +1,30 @@
+CHK   | N | JUDGE
+------+---+------
+V1 마커 | 2 | PASS 
+(1 rows)
+CHK   | OBJECT_TYPE  | STATUS | LAST_DDL            | ERR_CNT | DEP_INVALID
+------+--------------+--------+---------------------+---------+------------
+V2 상태 | PACKAGE      | VALID  | 2026-10-02 17:59:16 | 0       | 0          
+V2 상태 | PACKAGE BODY | VALID  | 2026-10-12 10:46:19 | 0       | 0          
+(2 rows)
+CHK      | LINE | TXT                                                                                                           
+---------+------+---------------------------------------------------------------------------------------------------------------
+V3 VD 블록 | 4307 |         SELECT S.SCM_SITE_ID, MAX(S.VMI_YN || '^' || NVL(TO_CHAR(S.ATTRIBUTE5),'')) AS VMI_STD_DIO            
+V3 VD 블록 | 4308 |         FROM   SCM_MGR.SCM_MST_SITE S                                                                         
+V3 VD 블록 | 4309 |         WHERE  S.DIVISION_ID = '82'                                                                           
+V3 VD 블록 | 4310 |         AND    p_division_id = '82'  --[E20261012-DMF0082LATFIX] 구 ON 절 바인드 상수조건 → 뷰 안으로. ON 절에 두면 집계 뷰가 later
+V3 VD 블록 | 4311 |         GROUP BY S.SCM_SITE_ID                                                                                
+V3 VD 블록 | 4312 |     ) VD ON  VD.SCM_SITE_ID = F.SCM_SITE_ID                                                                   
+(6 rows)
+V4 div 40 OK  SP 36.58s  RC1 rows=2099
+V4 div 81 OK  SP 176.01s  RC1 rows=2383
+V4 div 82 OK  SP 32.17s  RC1 rows=2608
+CHK         | INST_ID | SQL_ID        | CH | PHV        | EX | SEC_PER_EX | CPU_PER_EX | ROWS_PER_EX | LOADED              | VW_LAT | MERGE_JOIN | OPS_6_9                                                                 | JUDGE            
+------------+---------+---------------+----+------------+----+------------+------------+-------------+---------------------+--------+------------+-------------------------------------------------------------------------+------------------
+V5 MF_SP 계획 | 1       | b9hn6zvmrhkhu | 2  | 4272580446 | 12 | 0.8        | 0.7        | 49552       | 2026-10-12/11:24:53 | 0      | 0          | TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > SORT GROUP BY | PASS — lateral 없음
+V5 MF_SP 계획 | 1       | 1zuxs4puwama6 | 1  | 1451232333 | 6  | 0.3        | 0.3        | 43852       | 2026-10-12/11:24:55 | 0      | 0          | TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > FILTER        | PASS — lateral 없음
+V5 MF_SP 계획 | 1       | 1zuxs4puwama6 | 0  | 1451232333 | 16 | 0.8        | 0.8        | 102494      | 2026-10-12/10:51:04 | 0      | 0          | TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > FILTER        | PASS — lateral 없음
+V5 MF_SP 계획 | 1       | b9hn6zvmrhkhu | 1  | 4272580446 | 24 | 1.8        | 1.7        | 97108       | 2026-10-12/10:39:10 | 0      | 0          | TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > SORT GROUP BY | PASS — lateral 없음
+V5 MF_SP 계획 | 1       | b9hn6zvmrhkhu | 0  | 4272580446 | 16 | 2.2        | 1.9        | 137052      | 2026-10-12/10:17:31 | 0      | 0          | TABLE ACCESS FULL > INDEX RANGE SCAN > INDEX RANGE SCAN > SORT GROUP BY | PASS — lateral 없음
+(5 rows)
+--  0 rows = V4 뒤에도 패치 문장 커서가 없음 → 10 미적용 또는 V4 실행 안 됨. 사내 실측: SQL_ID b9hn6zvmrhkhu PHV 4272580446 VW_LAT 0 MERGE_JOIN 0

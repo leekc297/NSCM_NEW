@@ -1,0 +1,1758 @@
+
+  CREATE OR REPLACE FORCE EDITIONABLE VIEW "SCM_MGR"."SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V" ("DIVISION_ID", "PLAN_START_YYYYMMDD", "PLAN_TYPE", "SEQ", "OPERATION_GROUP", "OPERATION_GROUP_NAME", "FROM_SITE", "FROM_SITE_DESCRIPTION", "OPERATION_ID", "CELL_ITEM_ID", "ITEM_ID", "NICK_NAME", "PROD_LINE", "DAILY_CAPA_QTY", "TACT_TIME", "FROM_BOH_QTY", "YIELD", "LT_DAY", "CELL_QTY_PACK", "TO_SITE", "TO_SITE_DESCRIPTION", "BOD_ID", "MEASURE", "MEASURE_LABEL", "SORT_ORDER_NO", "XLS_KEY1", "WQTY01", "WQTY02", "WQTY03", "WQTY04", "WQTY05", "WQTY06", "WQTY07", "WQTY08", "WQTY09", "WQTY10", "WQTY11", "WQTY12", "WQTY13", "WQTY14", "WQTY15", "WQTY16", "WQTY17", "WQTY18", "WQTY19", "WQTY20", "WQTY21", "WQTY22", "WQTY23", "WQTY24", "WQTY25", "WQTY26", "WQTY27", "WQTY28", "WQTY29", "WQTY30", "WQTY31", "WQTY32", "WQTY33", "WQTY34", "WQTY35", "WQTY36", "WQTY37", "WQTY38", "WQTY39", "WQTY40", "WQTY41", "WQTY42", "WQTY43", "WQTY44", "WQTY45", "WQTY46", "WQTY47", "WQTY48", "WQTY49", "WQTY50", "WQTY51", "WQTY52", "ATTRIBUTE3", "ATTRIBUTE6") AS 
+  WITH SUB AS
+   ( SELECT /*
+ * Program ID   : SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V
+ * Description  : ESS 시물레이션 가동율 계산을 위한 VIEW
+ * EXEC  :
+           SELECT *
+            FROM SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V WITH (NOLOCK)
+            ORDER BY OPERATION_GROUP DESC,FROM_SITE,OPERATION_ID,PROD_LINE, SORT_ORDER_NO, XLS_KEY1
+ * Program History
+ *===================================================================================================
+ *   Date       In Charge      Description
+ *===================================================================================================
+ * 2019.09.04  KTH      Initial Release [PJ20170278] 전지본부 자동차 GSCM(DM/SCP) 구축 프로젝트
+ * 2019.12.03  KTH      TACT_TIME 조건변경(TACT_TIME값이 NULL이 아닌 가장 최근일자 값)
+ * 2020.02.06  KTH      ESS 외주 Line별 생산 Target 관련 OSP_YN로직 수정
+ * 2020.02.21  KTH      PACK/CELL 분리 작업 반영으로 전체 로직 변경함.
+ * 2020.02.25  KTH      시물레이션 CELL,PACK 분리로 VIEW 이름 변경( SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_V --> SCP_XLS_PSI_GLOBAL_ESS_LOAD_RATIO_PACK_V)
+ * 2020.03.03  KTH      CELL_ITEM_ID 추가
+ * 2020.03.04  KTH      SEMI_PACK_PROD_CELL FROM_SITE로직 반영
+ * 2020.03.11  KTH      [C20200311-000042] ESS Pack Simulator 관련 개선 요청의 건 (SEMI_SHIP_PLAN에 TO_SITE 추가, 중복제거)
+ * 2020.04.23  KTH      SEMI_SHIP_PLAN. SUM(X.LT_DAY) --> MAX(X.LT_DAY) 변경
+ * 2020.06.24  KTH      [전지 공급 대응력 향상을 위한 RTF 적확도 개선] : GSCM 시스템의 보류재고 감안한 계획 수립을 위한 시뮬레이션 변경 요청(자동차, ESS)
+ * 2021.03.26  KSW      C20210323-000513 - GSCM 시뮬레이터의 라인 가동율 정확도 향상을 위한 로직 변경 건 - Model Change Measure 추가
+ * 2021.04.07  KSW      C20210323-000513 - GSCM 시뮬레이터의 라인 가동율 정확도 향상을 위한 로직 변경 건 - 원래 키값으로 복원 : 저장 안되는 문제해결
+ * 2021.06.07  KSW      PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 (단기버전)
+ * 2021.12.20  KSW      ESS 운송중 재고 반영
+ * 2021.12.27  KSW      DC LINK 적용
+ * 2021.04.01  KSW      DC LINK 공용모델 적용
+ * 2022.05.19  KSW      PACK_CELL_EOH_TOTAL_SUM		Cell Total measure 추가
+ * 2022.10.27  KSW	    dc link 복수건 적용
+ * 2022.11.16  KSW      쿼리튜닝(속도개선)
+ * 2023.09.06  DHJ      ESS Simulator 재고 계산 : 82주 계획 수립 시 DC Link item 재고 관련 Measure 안 보이는 현상 해결
+ * 2026.07.06  ZIONEX   [PJ202650304]  NextSCM Migration
+ */  'P' AS OPERATION_GROUP, 'PACK_TOTAL_TIME'   AS MEASURE, 'Total Time'    AS MEASURE_LABEL, '166' SORT_ORDER_NO FROM DUAL
+     UNION ALL
+     SELECT 'P' AS OPERATION_GROUP, 'PACK_PROD_LOAD'    AS MEASURE, 'Load Ratio(%)' AS MEASURE_LABEL, '170' SORT_ORDER_NO FROM DUAL
+     UNION ALL
+     SELECT 'A' AS OPERATION_GROUP, 'CELL_TOTAL_TIME'   AS MEASURE, 'Total Time'    AS MEASURE_LABEL, '496' SORT_ORDER_NO FROM DUAL
+     UNION ALL
+     SELECT 'A' AS OPERATION_GROUP, 'CELL_MODEL_CHANGE' AS MEASURE, 'Model Change'  AS MEASURE_LABEL, '497' SORT_ORDER_NO FROM DUAL   /* 2021.03.26  KSW      C20210323-000513 - GSCM 시뮬레이터의 라인 가동율 정확도 향상을 위한 로직 변경 건 - Model Change Measure 추가 */
+     UNION ALL
+     SELECT 'A' AS OPERATION_GROUP, 'CELL_PROD_LOAD'    AS MEASURE, 'Load Ratio(%)' AS MEASURE_LABEL, '500' SORT_ORDER_NO FROM DUAL
+   )
+, PLAN_NAME AS
+   ( SELECT PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WHERE ROWNUM = 1
+   )
+       /* OSP가 아닌거나, OSP 이면서 Line Capa 비대상 */
+       SELECT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.NICK_NAME
+            , X.PROD_LINE
+            , (CASE WHEN X.OPERATION_GROUP ='A' THEN 0 ELSE Y.DAILY_CAPA_QTY END) AS DAILY_CAPA_QTY
+            , (CASE WHEN X.OPERATION_GROUP ='P' THEN (1440*60.0) / NVL(Y.DAILY_CAPA_QTY,1)
+                   WHEN X.OPERATION_GROUP ='A' THEN (SELECT TACT_TIME
+                                                      FROM (
+                                                            SELECT E.TACT_TIME
+                                                                  , ROW_NUMBER() OVER (PARTITION BY DIVISION_ID,OPERATION_ID,SCM_SITE_ID,LINE_ID,ITEM_ID ORDER BY YYYYMMDD DESC) AS RN
+                                                                  , DIVISION_ID,OPERATION_ID,SCM_SITE_ID,LINE_ID,ITEM_ID
+                                                              FROM SCP_ANL_TACT_TIME E
+                                                             WHERE X.DIVISION_ID  = E.DIVISION_ID
+                                                               AND X.ATTRIBUTE9   = E.OPERATION_ID
+                                                               AND X.FROM_SITE    = E.SCM_SITE_ID
+                                                               AND X.PROD_LINE    = E.LINE_ID
+                                                               AND X.ITEM_ID      = E.ITEM_ID
+                                                               AND E.TACT_TIME    IS NOT NULL
+                                              ) Z
+                                                      WHERE Z.RN = 1 AND ROWNUM = 1
+                                                      )
+                  ELSE Y.DAILY_CAPA_QTY END) AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.SORT_ORDER_NO
+            , X.XLS_KEY1
+
+            , WQTY01,WQTY02,WQTY03,WQTY04,WQTY05,WQTY06,WQTY07,WQTY08,WQTY09,WQTY10
+            , WQTY11,WQTY12,WQTY13,WQTY14,WQTY15,WQTY16,WQTY17,WQTY18,WQTY19,WQTY20
+            , WQTY21,WQTY22,WQTY23,WQTY24,WQTY25,WQTY26,WQTY27,WQTY28,WQTY29,WQTY30
+            , WQTY31,WQTY32,WQTY33,WQTY34,WQTY35,WQTY36,WQTY37,WQTY38,WQTY39,WQTY40
+            , WQTY41,WQTY42,WQTY43,WQTY44,WQTY45,WQTY46,WQTY47,WQTY48,WQTY49,WQTY50
+            , WQTY51,WQTY52
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+            , SCP_MST_OUTSOURCING_CAPA Y
+            , SCM_MST_SITE S   /* ESS 외주 Line별 생산 Target 관련 OSP_YN로직 수정 */
+        WHERE X.DIVISION_ID = Y.DIVISION_ID(+)
+          AND X.ITEM_ID     = Y.ITEM_ID(+)
+          AND X.FROM_SITE   = Y.PLANT_SITE_ID(+)
+          /* AND X.PROD_LINE  = Y.LINE_ID */
+          AND S.DIVISION_ID = X.DIVISION_ID
+          AND S.SCM_SITE_ID = X.FROM_SITE
+          AND (S.OSP_YN = 'N'
+            OR (S.OSP_YN = 'Y' AND NVL(S.ATTRIBUTE1, 'N') IN ('N','')))
+          AND 0 = 0
+          AND X.MEASURE IN ('PACK_PROD'
+                           , 'CELL_BOH'
+                           , 'CELL_EOH'
+                           , 'CELL_FORM_HOLD_AFTER'
+                           , 'CELL_SHIP_PLAN_TOTAL'
+                           , 'CELL_CHAR_PLAN'
+                           , 'CELL_CHAR_AVAILABLE'
+                           , 'CELL_FORM_PROGRESS'
+                           , 'CELL_FORM_HOLD_UNDER'   /* 'CELL_FORM_HOLD' */
+                           , 'CELL_FORM_HOLD_UNDER_AVAILABLE'
+                           , 'CELL_FOR_FORM_END'
+                           , 'CELL_PROD_FORM_END'
+                           )
+       UNION
+       /* ESS 외주 Line별 생산 Target 관련 OSP_YN로직 수정 : OSP 이면서 Line Capa 대상 */
+       SELECT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.NICK_NAME
+            , X.PROD_LINE
+            , (CASE WHEN X.OPERATION_GROUP ='A' THEN 0 ELSE Y.DAILY_CAPACITY END) AS DAILY_CAPA_QTY
+            , (CASE WHEN X.OPERATION_GROUP ='P' THEN Y.TACT_TIME
+                   WHEN X.OPERATION_GROUP ='A' THEN Y.TACT_TIME
+                  ELSE Y.DAILY_CAPACITY END) AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.SORT_ORDER_NO
+            , X.XLS_KEY1
+
+            , WQTY01,WQTY02,WQTY03,WQTY04,WQTY05,WQTY06,WQTY07,WQTY08,WQTY09,WQTY10
+            , WQTY11,WQTY12,WQTY13,WQTY14,WQTY15,WQTY16,WQTY17,WQTY18,WQTY19,WQTY20
+            , WQTY21,WQTY22,WQTY23,WQTY24,WQTY25,WQTY26,WQTY27,WQTY28,WQTY29,WQTY30
+            , WQTY31,WQTY32,WQTY33,WQTY34,WQTY35,WQTY36,WQTY37,WQTY38,WQTY39,WQTY40
+            , WQTY41,WQTY42,WQTY43,WQTY44,WQTY45,WQTY46,WQTY47,WQTY48,WQTY49,WQTY50
+            , WQTY51,WQTY52
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+            , SCP_MST_TACT_TIME_OSP Y   /* ESS 외주 Line별 생산 Target 관련 OSP_YN로직 수정 */
+            , SCM_MST_SITE S
+        WHERE X.DIVISION_ID = Y.DIVISION_ID
+          AND X.ITEM_ID     = Y.ITEM_ID
+          AND X.FROM_SITE   = Y.PLANT_SITE_ID
+          AND X.PROD_LINE   = Y.LINE_ID
+          AND S.DIVISION_ID = X.DIVISION_ID
+          AND S.SCM_SITE_ID = X.FROM_SITE
+          AND S.OSP_YN      = 'Y'
+          AND NVL(S.ATTRIBUTE1, 'N') = 'Y'
+          AND 0 = 0
+          AND X.MEASURE IN ('PACK_PROD','PACK_TACT_TIME')
+       UNION
+       /* CELL_TACT_TIME */
+       /* 2021.03.26  KSW      C20210323-000513 - GSCM 시뮬레이터의 라인 가동율 정확도 향상을 위한 로직 변경 건 - CELL_TACT_TIME /7 추가로 인하여 CELL_PROD 와 분리 - start */
+       /*  */
+       SELECT DISTINCT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.NICK_NAME
+            , X.PROD_LINE
+            , 0 AS DAILY_CAPA_QTY
+            , 0 AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.SORT_ORDER_NO
+            , X.XLS_KEY1
+
+            , WQTY01/7, WQTY02/7, WQTY03/7, WQTY04/7, WQTY05/7, WQTY06/7, WQTY07/7, WQTY08/7, WQTY09/7, WQTY10/7
+            , WQTY11/7, WQTY12/7, WQTY13/7, WQTY14/7, WQTY15/7, WQTY16/7, WQTY17/7, WQTY18/7, WQTY19/7, WQTY20/7
+            , WQTY21/7, WQTY22/7, WQTY23/7, WQTY24/7 ,WQTY25/7, WQTY26/7, WQTY27/7, WQTY28/7, WQTY29/7, WQTY30/7
+            , WQTY31/7, WQTY32/7, WQTY33/7, WQTY34/7, WQTY35/7, WQTY36/7 ,WQTY37/7, WQTY38/7, WQTY39/7, WQTY40/7
+            , WQTY41/7, WQTY42/7, WQTY43/7, WQTY44/7, WQTY45/7, WQTY46/7, WQTY47/7, WQTY48/7, WQTY49/7, WQTY50/7
+            , WQTY51/7, WQTY52/7
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+        WHERE 0 = 0
+          AND X.MEASURE IN ('CELL_TACT_TIME')
+       UNION
+       SELECT DISTINCT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.NICK_NAME
+            , X.PROD_LINE
+            , 0 AS DAILY_CAPA_QTY
+            , 0 AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.SORT_ORDER_NO
+            , X.XLS_KEY1
+
+            , WQTY01,WQTY02,WQTY03,WQTY04,WQTY05,WQTY06,WQTY07,WQTY08,WQTY09,WQTY10
+            , WQTY11,WQTY12,WQTY13,WQTY14,WQTY15,WQTY16,WQTY17,WQTY18,WQTY19,WQTY20
+            , WQTY21,WQTY22,WQTY23,WQTY24,WQTY25,WQTY26,WQTY27,WQTY28,WQTY29,WQTY30
+            , WQTY31,WQTY32,WQTY33,WQTY34,WQTY35,WQTY36,WQTY37,WQTY38,WQTY39,WQTY40
+            , WQTY41,WQTY42,WQTY43,WQTY44,WQTY45,WQTY46,WQTY47,WQTY48,WQTY49,WQTY50
+            , WQTY51,WQTY52
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+        WHERE 0 = 0
+          AND X.MEASURE IN ('CELL_PROD')
+       /* 2021.03.26  KSW      C20210323-000513 - GSCM 시뮬레이터의 라인 가동율 정확도 향상을 위한 로직 변경 건 - CELL_TACT_TIME /7 추가로 인하여 CELL_PROD 와 분리 - end */
+       UNION
+       /* WORKING TIME */
+       SELECT DISTINCT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            , X.CELL_ITEM_ID
+            , '-' AS ITEM_ID
+            , '-' AS NICK_NAME
+            , X.PROD_LINE
+            , NULL AS DAILY_CAPA_QTY
+            , NULL AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , 0 AS CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , MAX(X.SORT_ORDER_NO)
+            , 88888888 AS XLS_KEY1
+
+            , MAX(WQTY01),MAX(WQTY02),MAX(WQTY03),MAX(WQTY04),MAX(WQTY05),MAX(WQTY06),MAX(WQTY07),MAX(WQTY08),MAX(WQTY09),MAX(WQTY10)
+            , MAX(WQTY11),MAX(WQTY12),MAX(WQTY13),MAX(WQTY14),MAX(WQTY15),MAX(WQTY16),MAX(WQTY17),MAX(WQTY18),MAX(WQTY19),MAX(WQTY20)
+            , MAX(WQTY21),MAX(WQTY22),MAX(WQTY23),MAX(WQTY24),MAX(WQTY25),MAX(WQTY26),MAX(WQTY27),MAX(WQTY28),MAX(WQTY29),MAX(WQTY30)
+            , MAX(WQTY31),MAX(WQTY32),MAX(WQTY33),MAX(WQTY34),MAX(WQTY35),MAX(WQTY36),MAX(WQTY37),MAX(WQTY38),MAX(WQTY39),MAX(WQTY40)
+            , MAX(WQTY41),MAX(WQTY42),MAX(WQTY43),MAX(WQTY44),MAX(WQTY45),MAX(WQTY46),MAX(WQTY47),MAX(WQTY48),MAX(WQTY49),MAX(WQTY50)
+            , MAX(WQTY51),MAX(WQTY52)
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , NULL AS ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+        WHERE 0 = 0
+          AND X.MEASURE IN ('PACK_WORKING_TIME','CELL_WORKING_TIME')
+       GROUP BY X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , X.ATTRIBUTE9
+            , X.CELL_ITEM_ID
+            , X.PROD_LINE
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+       UNION
+       /* PACK_PROD_TOTAL */
+       SELECT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.NICK_NAME
+            , 'Total' AS PROD_LINE
+            , NULL AS DAILY_CAPA_QTY
+            , NULL AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , MAX(X.SORT_ORDER_NO)
+            , MAX(X.XLS_KEY1)
+            , SUM(WQTY01),SUM(WQTY02),SUM(WQTY03),SUM(WQTY04),SUM(WQTY05),SUM(WQTY06),SUM(WQTY07),SUM(WQTY08),SUM(WQTY09),SUM(WQTY10)
+            , SUM(WQTY11),SUM(WQTY12),SUM(WQTY13),SUM(WQTY14),SUM(WQTY15),SUM(WQTY16),SUM(WQTY17),SUM(WQTY18),SUM(WQTY19),SUM(WQTY20)
+            , SUM(WQTY21),SUM(WQTY22),SUM(WQTY23),SUM(WQTY24),SUM(WQTY25),SUM(WQTY26),SUM(WQTY27),SUM(WQTY28),SUM(WQTY29),SUM(WQTY30)
+            , SUM(WQTY31),SUM(WQTY32),SUM(WQTY33),SUM(WQTY34),SUM(WQTY35),SUM(WQTY36),SUM(WQTY37),SUM(WQTY38),SUM(WQTY39),SUM(WQTY40)
+            , SUM(WQTY41),SUM(WQTY42),SUM(WQTY43),SUM(WQTY44),SUM(WQTY45),SUM(WQTY46),SUM(WQTY47),SUM(WQTY48),SUM(WQTY49),SUM(WQTY50)
+            , SUM(WQTY51),SUM(WQTY52)
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+            , SCP_MST_TACT_TIME_OSP Y   /* ESS 외주 Line별 생산 Target 관련 OSP_YN로직 수정 */
+            , SCM_MST_SITE S
+        WHERE X.DIVISION_ID = Y.DIVISION_ID
+          AND X.ITEM_ID     = Y.ITEM_ID
+          AND X.FROM_SITE   = Y.PLANT_SITE_ID
+          AND X.PROD_LINE   = Y.LINE_ID
+          AND S.DIVISION_ID = X.DIVISION_ID
+          AND S.SCM_SITE_ID = X.FROM_SITE
+          AND S.OSP_YN      = 'Y'
+          AND NVL(S.ATTRIBUTE1, 'N') = 'Y'
+          AND 0 = 0
+          AND X.MEASURE IN ('PACK_PROD_TOTAL')
+       GROUP BY X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , X.ATTRIBUTE9
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.NICK_NAME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+       UNION
+       /* PACK_PROD_LOAD_TOTAL */
+       SELECT DISTINCT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            /* ,X.CELL_ITEM_ID */
+            , (CASE WHEN X.MEASURE IN ('PACK_PROD_LOAD_TOTAL')  THEN '-' ELSE CELL_ITEM_ID END) AS CELL_ITEM_ID
+            , '-' AS ITEM_ID
+            , '-' AS NICK_NAME
+            , 'Total' AS PROD_LINE
+            , NULL AS DAILY_CAPA_QTY
+            , NULL AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , 0 AS CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , MAX(X.SORT_ORDER_NO)
+            , 8888888 AS XLS_KEY1
+            , SUM(WQTY01),SUM(WQTY02),SUM(WQTY03),SUM(WQTY04),SUM(WQTY05),SUM(WQTY06),SUM(WQTY07),SUM(WQTY08),SUM(WQTY09),SUM(WQTY10)
+            , SUM(WQTY11),SUM(WQTY12),SUM(WQTY13),SUM(WQTY14),SUM(WQTY15),SUM(WQTY16),SUM(WQTY17),SUM(WQTY18),SUM(WQTY19),SUM(WQTY20)
+            , SUM(WQTY21),SUM(WQTY22),SUM(WQTY23),SUM(WQTY24),SUM(WQTY25),SUM(WQTY26),SUM(WQTY27),SUM(WQTY28),SUM(WQTY29),SUM(WQTY30)
+            , SUM(WQTY31),SUM(WQTY32),SUM(WQTY33),SUM(WQTY34),SUM(WQTY35),SUM(WQTY36),SUM(WQTY37),SUM(WQTY38),SUM(WQTY39),SUM(WQTY40)
+            , SUM(WQTY41),SUM(WQTY42),SUM(WQTY43),SUM(WQTY44),SUM(WQTY45),SUM(WQTY46),SUM(WQTY47),SUM(WQTY48),SUM(WQTY49),SUM(WQTY50)
+            , SUM(WQTY51),SUM(WQTY52)
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , NULL AS ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+            , SCP_MST_TACT_TIME_OSP Y   /* ESS 외주 Line별 생산 Target 관련 OSP_YN로직 수정 */
+            , SCM_MST_SITE S
+        WHERE X.DIVISION_ID = Y.DIVISION_ID
+          AND X.ITEM_ID     = Y.ITEM_ID
+          AND X.FROM_SITE   = Y.PLANT_SITE_ID
+          AND X.PROD_LINE   = Y.LINE_ID
+          AND S.DIVISION_ID = X.DIVISION_ID
+          AND S.SCM_SITE_ID = X.FROM_SITE
+          AND S.OSP_YN      = 'Y'
+          AND NVL(S.ATTRIBUTE1, 'N') = 'Y'
+          AND 0 = 0
+          AND X.MEASURE IN ('PACK_PROD_LOAD_TOTAL')
+       GROUP BY X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.ATTRIBUTE9
+            , X.CELL_ITEM_ID
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+       UNION
+       /* 'PACK_BOH','PACK_EOH','PACK_DIO' */
+       SELECT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.NICK_NAME
+            , 'Total2' AS PROD_LINE
+            , NULL AS DAILY_CAPA_QTY
+            , NULL AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.MEASURE
+            , (CASE WHEN SUBSTR(X.ATTRIBUTE6, 1, 1) = 1 AND X.MEASURE = 'PACK_BOH' THEN 'DC Link BOH'
+                   WHEN SUBSTR(X.ATTRIBUTE6, 1, 1) = 1 AND X.MEASURE = 'PACK_EOH' THEN 'DC Link Inventory'
+                   ELSE X.MEASURE_LABEL END) AS MEASURE_LABEL   /* X.MEASURE_LABEL -- 2022.02.11 DC LINK 적용 */
+            , MAX(X.SORT_ORDER_NO)
+            , MAX(XLS_KEY1)
+            , SUM(WQTY01),SUM(WQTY02),SUM(WQTY03),SUM(WQTY04),SUM(WQTY05),SUM(WQTY06),SUM(WQTY07),SUM(WQTY08),SUM(WQTY09),SUM(WQTY10)
+            , SUM(WQTY11),SUM(WQTY12),SUM(WQTY13),SUM(WQTY14),SUM(WQTY15),SUM(WQTY16),SUM(WQTY17),SUM(WQTY18),SUM(WQTY19),SUM(WQTY20)
+            , SUM(WQTY21),SUM(WQTY22),SUM(WQTY23),SUM(WQTY24),SUM(WQTY25),SUM(WQTY26),SUM(WQTY27),SUM(WQTY28),SUM(WQTY29),SUM(WQTY30)
+            , SUM(WQTY31),SUM(WQTY32),SUM(WQTY33),SUM(WQTY34),SUM(WQTY35),SUM(WQTY36),SUM(WQTY37),SUM(WQTY38),SUM(WQTY39),SUM(WQTY40)
+            , SUM(WQTY41),SUM(WQTY42),SUM(WQTY43),SUM(WQTY44),SUM(WQTY45),SUM(WQTY46),SUM(WQTY47),SUM(WQTY48),SUM(WQTY49),SUM(WQTY50)
+            , SUM(WQTY51),SUM(WQTY52)
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                    , Y1.ITEM_ID || '|' || Y1.FROM_SITE AS ITEM_FROM
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+            , SCM_MST_SITE S
+        WHERE S.DIVISION_ID = X.DIVISION_ID
+          AND S.SCM_SITE_ID = X.FROM_SITE
+          AND S.OSP_YN      = 'Y'
+          AND NVL(S.ATTRIBUTE1, 'N') = 'Y'
+          /* ★아래 옛 MSSQL 죽은코드 블록(원문 verbatim 보존) — 중복으로 쿼리변경 :: 2022.12.06
+		-- 중복으로 쿼리변경 :: 2022.12.06
+		--INNER JOIN (SELECT DISTINCT ITEM_ID + '|' + TO_SITE AS ITEM_FROM
+		--									     FROM SCP_XLS_PSI_GLOBAL_ESS A WITH (NOLOCK)
+		--									    WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)	--(SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK))
+		--										  AND MEASURE = 'SEMI_SHIP_PLAN'
+		--										  AND ATTRIBUTE6 IS NOT NULL) SS
+		--  ON 1 = 1
+          */
+          AND 0 = 0
+          AND X.MEASURE IN ('PACK_BOH','PACK_EOH','PACK_DIO')
+          /* DC Link 사용 pack 모듈 제외 - 2022.04.11 */
+          /* AND X.ITEM_FROM <> SS.ITEM_FROM */
+          AND NOT X.ITEM_FROM IN (SELECT DISTINCT ITEM_ID || '|' || TO_SITE AS ITEM_FROM
+                                    FROM SCP_XLS_PSI_GLOBAL_ESS A
+                                   WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                                     AND MEASURE = 'SEMI_SHIP_PLAN'
+                                     AND ATTRIBUTE6 IS NOT NULL)
+
+          /* ★아래 옛 MSSQL 죽은코드 블록(원문 verbatim 보존)
+		 --(SELECT DISTINCT ITEM_ID + '|' + TO_SITE
+											   --  FROM SCP_XLS_PSI_GLOBAL_ESS A WITH (NOLOCK)
+											   -- WHERE CREATE_FROM_YYYYMMDD = X.PLAN_START_YYYYMMDD
+												  --AND MEASURE = 'SEMI_SHIP_PLAN'
+												  --AND ATTRIBUTE6 IS NOT NULL)
+		 --AND 'N' = (CASE WHEN X.ATTRIBUTE6 IS NULL OR LEFT(X.ATTRIBUTE6, 1) = '1' THEN 'N'
+			--		  	 WHEN NOT X.FROM_SITE IN (SELECT DISTINCT FROM_SITE
+			--				                  FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)
+			--								 WHERE ITEM_ID = (CASE WHEN CHARINDEX('|', ATTRIBUTE6) > 0 THEN SUBSTRING(ATTRIBUTE6, 4, CHARINDEX('|', ATTRIBUTE6) - 4)
+			--								 					   ELSE SUBSTRING(ATTRIBUTE6, 4, LEN(ATTRIBUTE6) - 3) END)
+			--								   AND MEASURE IN ('PACK_BOH','PACK_EOH')
+			--								   AND LEFT(ATTRIBUTE6, 1) = '1') THEN 'N' ELSE 'Y' END)
+          */
+       GROUP BY X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , X.ATTRIBUTE9
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , X.NICK_NAME
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+       /* 2022.02.11 DC link 추가 - start */
+       UNION
+       /* DC link Pack 'PACK_BOH','PACK_EOH','PACK_DIO' */
+       SELECT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , (SELECT TO_SITE FROM SCP_XLS_PSI_GLOBAL_ESS A WHERE CREATE_FROM_YYYYMMDD = X.PLAN_START_YYYYMMDD AND ITEM_ID = X.ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'SEMI_SHIP_PLAN' AND ROWNUM = 1) AS FROM_SITE   /* X.FROM_SITE */
+            /* ,(SELECT PLANT_SITE_ID FROM SCM_MST_SITE_ITEM_PRIORITY WITH (NOLOCK) WHERE ITEM_ID = X.ITEM_ID AND PLANT_SITE_ID = X.FROM_SITE) AS FROM_SITE */
+            , (SELECT TO_SITE_DESCRIPTION FROM SCP_XLS_PSI_GLOBAL_ESS A WHERE CREATE_FROM_YYYYMMDD = X.PLAN_START_YYYYMMDD AND ITEM_ID = X.ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'SEMI_SHIP_PLAN' AND ROWNUM = 1) AS FROM_SITE_DESCRIPTION   /* ISNULL((SELECT TOP 1 M.SITE_DESCRIPTION FROM SCM_MST_SITE M  WITH (NOLOCK) WHERE M.SCM_SITE_ID = X.FROM_SITE) , '-') AS FROM_SITE_DESCRIPTION */
+            /* ,(SELECT SITE_DESCRIPTION FROM SCM_MST_SITE WITH (NOLOCK) WHERE SCM_SITE_ID = (SELECT PLANT_SITE_ID FROM SCM_MST_SITE_ITEM_PRIORITY WITH (NOLOCK) WHERE ITEM_ID = X.ITEM_ID AND PLANT_SITE_ID = X.FROM_SITE)) AS FROM_SITE_DESCRIPTION */
+            , (SELECT ATTRIBUTE9 FROM SCP_XLS_PSI_GLOBAL_ESS A WHERE CREATE_FROM_YYYYMMDD = X.PLAN_START_YYYYMMDD AND ITEM_ID = SUBSTR(X.ATTRIBUTE6, 4, 12) AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'PACK_BOH') AS OPERATION_ID   /* X.ATTRIBUTE9 AS OPERATION_ID */
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.NICK_NAME
+            , 'Total2' AS PROD_LINE
+            , NULL AS DAILY_CAPA_QTY
+            , NULL AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , NULL AS TO_SITE   /* (SELECT TO_SITE FROM SCP_XLS_PSI_GLOBAL_ESS A WITH (NOLOCK) WHERE ITEM_ID = X.ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'SEMI_SHIP_PLAN') AS TO_SITE -- NULL AS TO_SITE */
+            , NULL AS TO_SITE_DESCRIPTION   /* (SELECT TO_SITE_DESCRIPTION FROM SCP_XLS_PSI_GLOBAL_ESS A WITH (NOLOCK) WHERE ITEM_ID = X.ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'SEMI_SHIP_PLAN') AS TO_SITE_DESCRIPTION -- NULL AS TO_SITE_DESCRIPTION */
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , 'DC_P_' || X.MEASURE AS MEASURE
+            , X.MEASURE_LABEL || '(to DC Link)' AS MEASURE_LABEL
+            , (CASE WHEN X.MEASURE = 'PACK_BOH' THEN 165 WHEN X.MEASURE = 'PACK_EOH' THEN 166 WHEN X.MEASURE = 'PACK_DIO' THEN 167 ELSE 168 END) AS SORT_ORDER_NO   /* MAX(X.SORT_ORDER_NO) */
+            , (SELECT MAX(XLS_KEY1) FROM SCP_XLS_PSI_GLOBAL_ESS A WHERE CREATE_FROM_YYYYMMDD = X.PLAN_START_YYYYMMDD AND ITEM_ID = X.ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'PACK_DIO') + 10 AS XLS_KEY1   /* MAX(XLS_KEY1) */
+            , SUM(WQTY01),SUM(WQTY02),SUM(WQTY03),SUM(WQTY04),SUM(WQTY05),SUM(WQTY06),SUM(WQTY07),SUM(WQTY08),SUM(WQTY09),SUM(WQTY10)
+            /* ,(CASE WHEN LEFT(X.ATTRIBUTE6, 1) = 2 AND X.MEASURE = 'PACK_BOH' THEN 0.0 ELSE SUM(WQTY01) END) AS WQTY01 */
+            /* ,SUM(WQTY02),SUM(WQTY03),SUM(WQTY04),SUM(WQTY05),SUM(WQTY06),SUM(WQTY07),SUM(WQTY08),SUM(WQTY09),SUM(WQTY10) */
+            , SUM(WQTY11),SUM(WQTY12),SUM(WQTY13),SUM(WQTY14),SUM(WQTY15),SUM(WQTY16),SUM(WQTY17),SUM(WQTY18),SUM(WQTY19),SUM(WQTY20)
+            , SUM(WQTY21),SUM(WQTY22),SUM(WQTY23),SUM(WQTY24),SUM(WQTY25),SUM(WQTY26),SUM(WQTY27),SUM(WQTY28),SUM(WQTY29),SUM(WQTY30)
+            , SUM(WQTY31),SUM(WQTY32),SUM(WQTY33),SUM(WQTY34),SUM(WQTY35),SUM(WQTY36),SUM(WQTY37),SUM(WQTY38),SUM(WQTY39),SUM(WQTY40)
+            , SUM(WQTY41),SUM(WQTY42),SUM(WQTY43),SUM(WQTY44),SUM(WQTY45),SUM(WQTY46),SUM(WQTY47),SUM(WQTY48),SUM(WQTY49),SUM(WQTY50)
+            , SUM(WQTY51),SUM(WQTY52)
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+            , SCM_MST_SITE S
+        WHERE S.DIVISION_ID = X.DIVISION_ID
+          AND S.SCM_SITE_ID = X.FROM_SITE
+          AND S.OSP_YN      = 'Y'
+          AND NVL(S.ATTRIBUTE1, 'N') = 'Y'
+          AND SUBSTR(X.ATTRIBUTE6, 1, 1) = '2'
+          AND 0 = 0
+          AND X.MEASURE IN ('PACK_BOH','PACK_EOH','PACK_DIO')
+          /* PACK_BOH (to DC Link) 에 첫주 BOH 를 표시할 경우 추가조건 */
+		 /*-----------------------------------------------------------------------DELETE DHJ...09/06/2023
+		 AND X.FROM_SITE = (CASE WHEN X.MEASURE IN ('PACK_BOH','PACK_EOH') THEN (SELECT TO_SITE FROM SCP_XLS_PSI_GLOBAL_ESS A WITH (NOLOCK) WHERE CREATE_FROM_YYYYMMDD = X.PLAN_START_YYYYMMDD AND ITEM_ID = X.ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'SEMI_SHIP_PLAN')
+		                         ELSE X.FROM_SITE END)
+								 */
+
+          /* AND X.FROM_SITE IN (SELECT PLANT_SITE_ID */
+             /* FROM SCM_MST_SITE_ITEM_PRIORITY P WITH (NOLOCK) */
+             /* WHERE ITEM_ID = X.ITEM_ID) */
+       GROUP BY X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , X.ATTRIBUTE9
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , X.NICK_NAME
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+       UNION
+       /* DC link Production(Pack) - Pack 소요량 */
+       SELECT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , (SELECT FROM_SITE FROM SCP_XLS_PSI_GLOBAL_ESS A WHERE CREATE_FROM_YYYYMMDD = X.PLAN_START_YYYYMMDD AND ITEM_ID = X.P_ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'PACK_BOH' AND ROWNUM = 1) AS FROM_SITE
+            , (SELECT FROM_SITE_DESCRIPTION FROM SCP_XLS_PSI_GLOBAL_ESS A WHERE CREATE_FROM_YYYYMMDD = X.PLAN_START_YYYYMMDD AND ITEM_ID = X.P_ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'PACK_BOH' AND ROWNUM = 1) AS FROM_SITE_DESCRIPTION
+            , (SELECT ATTRIBUTE9 FROM SCP_XLS_PSI_GLOBAL_ESS A WHERE CREATE_FROM_YYYYMMDD = X.PLAN_START_YYYYMMDD AND ITEM_ID = X.P_ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'PACK_BOH' AND ROWNUM = 1) AS OPERATION_ID
+            , X.CELL_ITEM_ID
+            , X.P_ITEM_ID AS ITEM_ID
+            , (SELECT NICK_NAME FROM SCP_XLS_PSI_GLOBAL_ESS A WHERE CREATE_FROM_YYYYMMDD = X.PLAN_START_YYYYMMDD AND CELL_ITEM_ID = X.CELL_ITEM_ID AND ITEM_ID = X.P_ITEM_ID AND MEASURE = 'PACK_BOH' AND ROWNUM = 1) AS NICK_NAME
+            , 'Total2' AS PROD_LINE
+            , NULL AS DAILY_CAPA_QTY
+            , NULL AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , (SELECT DISTINCT A.CHILD_QTY AS MODULE_QTY_PACK
+                 FROM SCM_MST_BOM_SN_V A
+                    , SCM_MST_ITEM_SN I
+                WHERE A.CHILD_DIVISION_ID = I.DIVISION_ID
+                  AND A.CHILD_ITEM_ID     = I.ITEM_ID
+                  AND A.CHILD_COMPANY_ID  = I.COMPANY_ID   /* A002 빈강 추가 따른 조건 추가 */
+                  AND A.CHILD_SITE_ID     = I.SITE_ID
+                  AND I.ACTIVE_FLAG       = 'Y'
+                  AND 1=1
+                  AND A.DIVISION_ID = '82'
+                  AND A.CHILD_ITEM_ID IN (SELECT DISTINCT ITEM_ID FROM SCP_XLS_PSI_GLOBAL_ESS WHERE SUBSTR(ATTRIBUTE6, 1, 1) = '2')
+                  AND A.MODEL_ID      = X.P_ITEM_ID   /* SUBSTRING(X.ATTRIBUTE6, 4, LEN(X.ATTRIBUTE6)-3) */
+              ) AS CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , 'DC_PACK_PROD_PACK'      AS MEASURE
+            , 'Production(Pack)'       AS MEASURE_LABEL
+            , 168 AS SORT_ORDER_NO   /* MAX(X.SORT_ORDER_NO) */
+            , (SELECT MAX(XLS_KEY1) FROM SCP_XLS_PSI_GLOBAL_ESS A WHERE ITEM_ID = X.ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'PACK_DIO') + 10 AS XLS_KEY1   /* MAX(XLS_KEY1) */
+            , SUM(WQTY01),SUM(WQTY02),SUM(WQTY03),SUM(WQTY04),SUM(WQTY05),SUM(WQTY06),SUM(WQTY07),SUM(WQTY08),SUM(WQTY09),SUM(WQTY10)
+            , SUM(WQTY11),SUM(WQTY12),SUM(WQTY13),SUM(WQTY14),SUM(WQTY15),SUM(WQTY16),SUM(WQTY17),SUM(WQTY18),SUM(WQTY19),SUM(WQTY20)
+            , SUM(WQTY21),SUM(WQTY22),SUM(WQTY23),SUM(WQTY24),SUM(WQTY25),SUM(WQTY26),SUM(WQTY27),SUM(WQTY28),SUM(WQTY29),SUM(WQTY30)
+            , SUM(WQTY31),SUM(WQTY32),SUM(WQTY33),SUM(WQTY34),SUM(WQTY35),SUM(WQTY36),SUM(WQTY37),SUM(WQTY38),SUM(WQTY39),SUM(WQTY40)
+            , SUM(WQTY41),SUM(WQTY42),SUM(WQTY43),SUM(WQTY44),SUM(WQTY45),SUM(WQTY46),SUM(WQTY47),SUM(WQTY48),SUM(WQTY49),SUM(WQTY50)
+            , SUM(WQTY51),SUM(WQTY52)
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                    , Y2.ITEM_ID AS P_ITEM_ID
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+                    , (SELECT ITEM_ID
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                          AND SUBSTR(ATTRIBUTE6, 1, 1) = '1'
+                      ) Y2   /* 동종 팩을 사용하는 DC LINK 적용 */
+                WHERE INSTR(Y1.ATTRIBUTE6, Y2.ITEM_ID) > 0
+              ) X
+            , SCM_MST_SITE S
+        WHERE S.DIVISION_ID = X.DIVISION_ID
+          AND S.SCM_SITE_ID = X.FROM_SITE
+          AND S.OSP_YN      = 'Y'
+          AND NVL(S.ATTRIBUTE1, 'N') = 'Y'
+          AND SUBSTR(X.ATTRIBUTE6, 1, 1) = '1'
+          AND 0 = 0
+          AND X.MEASURE IN ('PACK_DIO')
+       GROUP BY X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , X.ATTRIBUTE9
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            /* ,X.CELL_QTY_PACK */
+            /* ,X.NICK_NAME */
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+            , X.P_ITEM_ID
+
+/* ★아래 옛 MSSQL 죽은코드 블록(원문 verbatim 보존) — 변환표준: 대량 주석처리 죽은코드는 통째로 감싼다
+--        -- DC Link 팩모듈 'PACK_BOH' 2022.04.11
+--UNION
+--         SELECT  X.DIVISION_ID
+--            ,X.PLAN_START_YYYYMMDD
+--            ,X.PLAN_TYPE
+--            ,X.SEQ
+--            ,X.OPERATION_GROUP
+--            ,X.OPERATION_GROUP_NAME
+--            ,X.FROM_SITE
+--            ,ISNULL((SELECT TOP 1 M.SITE_DESCRIPTION FROM SCM_MST_SITE M  WITH (NOLOCK) WHERE M.SCM_SITE_ID = X.FROM_SITE) , '-') AS FROM_SITE_DESCRIPTION
+--            ,X.ATTRIBUTE9 AS OPERATION_ID
+--            ,X.CELL_ITEM_ID
+--            ,X.ITEM_ID
+--            ,X.NICK_NAME
+--            ,'Total2' AS PROD_LINE
+--            ,NULL AS DAILY_CAPA_QTY
+--            ,NULL AS TACT_TIME
+--            ,X.FROM_BOH_QTY
+--            ,X.YIELD
+--            ,X.LT_DAY
+--            ,X.CELL_QTY_PACK
+--            ,NULL AS TO_SITE
+--            ,NULL AS TO_SITE_DESCRIPTION
+--			,X.BOD_ID			-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계
+--            ,X.MEASURE
+--			,(CASE WHEN LEFT(X.ATTRIBUTE6, 1) = 1 AND X.MEASURE = 'PACK_BOH' THEN 'DC Link BOH'
+--			       WHEN LEFT(X.ATTRIBUTE6, 1) = 1 AND X.MEASURE = 'PACK_EOH' THEN 'DC Link Inventory'
+--			       ELSE X.MEASURE_LABEL END) AS MEASURE_LABEL		-- X.MEASURE_LABEL -- 2022.02.11 DC LINK 적용
+--            ,MAX(X.SORT_ORDER_NO)
+--            ,(SELECT MAX(XLS_KEY1) FROM SCP_XLS_PSI_GLOBAL_ESS A WITH (NOLOCK) WHERE ITEM_ID = X.ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'PACK_DIO') AS XLS_KEY1
+--            ,SUM(WQTY01),SUM(WQTY02),SUM(WQTY03),SUM(WQTY04),SUM(WQTY05),SUM(WQTY06),SUM(WQTY07),SUM(WQTY08),SUM(WQTY09),SUM(WQTY10)
+--            ,SUM(WQTY11),SUM(WQTY12),SUM(WQTY13),SUM(WQTY14),SUM(WQTY15),SUM(WQTY16),SUM(WQTY17),SUM(WQTY18),SUM(WQTY19),SUM(WQTY20)
+--            ,SUM(WQTY21),SUM(WQTY22),SUM(WQTY23),SUM(WQTY24),SUM(WQTY25),SUM(WQTY26),SUM(WQTY27),SUM(WQTY28),SUM(WQTY29),SUM(WQTY30)
+--            ,SUM(WQTY31),SUM(WQTY32),SUM(WQTY33),SUM(WQTY34),SUM(WQTY35),SUM(WQTY36),SUM(WQTY37),SUM(WQTY38),SUM(WQTY39),SUM(WQTY40)
+--            ,SUM(WQTY41),SUM(WQTY42),SUM(WQTY43),SUM(WQTY44),SUM(WQTY45),SUM(WQTY46),SUM(WQTY47),SUM(WQTY48),SUM(WQTY49),SUM(WQTY50)
+--            ,SUM(WQTY51),SUM(WQTY52)
+
+--			,X.ATTRIBUTE3		-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계
+--			,X.ATTRIBUTE6		-- DC LINK 적용
+--        FROM (
+--		      -- PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응
+--			  SELECT Y1.DIVISION_ID
+--					,Y1.PLAN_START_YYYYMMDD
+--					,Y1.PLAN_TYPE
+--					,Y1.SEQ
+--					,Y1.OPERATION_GROUP
+--					,Y1.OPERATION_GROUP_NAME
+--					,Y1.FROM_SITE
+--					,Y1.ATTRIBUTE9 AS OPERATION_ID
+--					,Y1.CELL_ITEM_ID
+--					,Y1.ITEM_ID
+--					,Y1.NICK_NAME
+--					,Y1.PROD_LINE
+--					,Y1.FROM_BOH_QTY
+--					,Y1.YIELD
+--					,Y1.LT_DAY
+--					,Y1.CELL_QTY_PACK
+--					,Y1.MEASURE
+--					,Y1.MEASURE_LABEL
+--					,Y1.SORT_ORDER_NO
+--					,Y1.XLS_KEY1
+--					,Y1.ATTRIBUTE9
+--					,Y1.ATTRIBUTE3		-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계
+--					,Y1.BOD_ID			-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계
+--					,Y1.ATTRIBUTE6
+
+--					,Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+--					,Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+--					,Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+--					,Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+--					,Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+--					,Y1.WQTY51,Y1.WQTY52
+--		        FROM (SELECT *
+--				        FROM SCP_XLS_PSI_GLOBAL_ESS AA WITH (NOLOCK)
+--					   WHERE CREATE_FROM_YYYYMMDD = (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK))
+--					 ) Y1
+--			 ) X
+--        INNER JOIN SCM_MST_SITE S WITH (NOLOCK)
+--                ON S.DIVISION_ID              = X.DIVISION_ID
+--               AND S.SCM_SITE_ID              = X.FROM_SITE
+--               AND S.OSP_YN                   = 'Y'
+--               AND ISNULL(S.ATTRIBUTE1, 'N')  = 'Y'
+--       WHERE 0 = 0
+--         AND X.MEASURE = 'PACK_BOH'
+--		 AND LEFT(X.ATTRIBUTE6, 1) = '2'
+--		 AND X.FROM_SITE = (SELECT DISTINCT FROM_SITE
+--						    FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)
+--							WHERE ITEM_ID = (CASE WHEN CHARINDEX('|', ATTRIBUTE6) > 0 THEN SUBSTRING(ATTRIBUTE6, 4, CHARINDEX('|', ATTRIBUTE6) - 4)
+--											 	ELSE SUBSTRING(ATTRIBUTE6, 4, LEN(ATTRIBUTE6) - 3) END)
+--							AND MEASURE = 'PACK_BOH'
+--							AND LEFT(ATTRIBUTE6, 1) = '1')
+--          GROUP BY X.DIVISION_ID
+--            ,X.PLAN_START_YYYYMMDD
+--            ,X.PLAN_TYPE
+--            ,X.SEQ
+--            ,X.OPERATION_GROUP
+--            ,X.OPERATION_GROUP_NAME
+--            ,X.FROM_SITE
+--            ,X.ATTRIBUTE9
+--            ,X.CELL_ITEM_ID
+--            ,X.ITEM_ID
+--            ,X.FROM_BOH_QTY
+--            ,X.YIELD
+--            ,X.LT_DAY
+--            ,X.CELL_QTY_PACK
+--            ,X.NICK_NAME
+--            ,X.MEASURE
+--            ,X.MEASURE_LABEL
+--			,X.ATTRIBUTE3		-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계
+--			,X.BOD_ID			-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계
+--			,X.ATTRIBUTE6		-- DC LINK 적용
+
+   --      SELECT  X.DIVISION_ID
+   --         ,X.PLAN_START_YYYYMMDD
+   --         ,X.PLAN_TYPE
+   --         ,X.SEQ
+   --         ,X.OPERATION_GROUP
+   --         ,X.OPERATION_GROUP_NAME
+   --         ,X.FROM_SITE
+   --         ,ISNULL((SELECT TOP 1 M.SITE_DESCRIPTION FROM SCM_MST_SITE M  WITH (NOLOCK) WHERE M.SCM_SITE_ID = X.FROM_SITE) , '-') AS FROM_SITE_DESCRIPTION
+   --         ,X.ATTRIBUTE9 AS OPERATION_ID
+   --         ,X.CELL_ITEM_ID
+   --         ,SUBSTRING(X.ATTRIBUTE6, 4, LEN(X.ATTRIBUTE6)-3) AS ITEM_ID
+   --         ,(SELECT NICK_NAME FROM SCP_XLS_PSI_GLOBAL_ESS A WITH (NOLOCK) WHERE CELL_ITEM_ID = X.CELL_ITEM_ID AND ITEM_ID = SUBSTRING(X.ATTRIBUTE6, 4, LEN(X.ATTRIBUTE6)-3) AND MEASURE = 'PACK_BOH') AS NICK_NAME
+   --         ,'Total2' AS PROD_LINE
+   --         ,NULL AS DAILY_CAPA_QTY
+   --         ,NULL AS TACT_TIME
+   --         ,X.FROM_BOH_QTY
+   --         ,X.YIELD
+   --         ,X.LT_DAY
+			--,(SELECT DISTINCT A.child_qty as module_qty_pack
+			--   FROM dbo.scm_mst_bom_sn_V A WITH(NOLOCK)
+			--		INNER JOIN dbo.scm_mst_item_sn i WITH(NOLOCK)
+			--		ON  A.child_division_id = i.division_id
+			--		AND A.child_item_id     = i.item_id
+			--		AND A.child_company_id  = i.company_id -- A002 빈강 추가 따른 조건 추가
+			--		AND A.child_site_id     = i.site_id
+			--		AND i.active_flag       = 'Y'
+			--  WHERE 1=1
+			--	AND A.DIVISION_ID = '82'
+			--	AND A.child_item_id = X.ITEM_ID
+			--	AND A.MODEL_ID = SUBSTRING(X.ATTRIBUTE6, 4, LEN(X.ATTRIBUTE6)-3)
+			--) AS CELL_QTY_PACK
+   --         ,(SELECT TO_SITE FROM SCP_XLS_PSI_GLOBAL_ESS A WITH (NOLOCK) WHERE ITEM_ID = X.ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'SEMI_SHIP_PLAN') AS TO_SITE -- NULL AS TO_SITE
+   --         ,(SELECT TO_SITE_DESCRIPTION FROM SCP_XLS_PSI_GLOBAL_ESS A WITH (NOLOCK) WHERE ITEM_ID = X.ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'SEMI_SHIP_PLAN') AS TO_SITE_DESCRIPTION -- NULL AS TO_SITE_DESCRIPTION
+			--,X.BOD_ID			-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계
+   --         ,'DC_PACK_PROD_PACK'      AS MEASURE
+   --         ,'Production(Pack)'       AS MEASURE_LABEL
+   --         ,'168' AS SORT_ORDER_NO	-- MAX(X.SORT_ORDER_NO)
+   --         ,(SELECT MAX(XLS_KEY1) FROM SCP_XLS_PSI_GLOBAL_ESS A WITH (NOLOCK) WHERE ITEM_ID = X.ITEM_ID AND CELL_ITEM_ID = X.CELL_ITEM_ID AND MEASURE = 'PACK_DIO') + 10 AS XLS_KEY1			-- MAX(XLS_KEY1)
+   --         ,SUM(WQTY01),SUM(WQTY02),SUM(WQTY03),SUM(WQTY04),SUM(WQTY05),SUM(WQTY06),SUM(WQTY07),SUM(WQTY08),SUM(WQTY09),SUM(WQTY10)
+   --         ,SUM(WQTY11),SUM(WQTY12),SUM(WQTY13),SUM(WQTY14),SUM(WQTY15),SUM(WQTY16),SUM(WQTY17),SUM(WQTY18),SUM(WQTY19),SUM(WQTY20)
+   --         ,SUM(WQTY21),SUM(WQTY22),SUM(WQTY23),SUM(WQTY24),SUM(WQTY25),SUM(WQTY26),SUM(WQTY27),SUM(WQTY28),SUM(WQTY29),SUM(WQTY30)
+   --         ,SUM(WQTY31),SUM(WQTY32),SUM(WQTY33),SUM(WQTY34),SUM(WQTY35),SUM(WQTY36),SUM(WQTY37),SUM(WQTY38),SUM(WQTY39),SUM(WQTY40)
+   --         ,SUM(WQTY41),SUM(WQTY42),SUM(WQTY43),SUM(WQTY44),SUM(WQTY45),SUM(WQTY46),SUM(WQTY47),SUM(WQTY48),SUM(WQTY49),SUM(WQTY50)
+   --         ,SUM(WQTY51),SUM(WQTY52)
+
+			--,X.ATTRIBUTE3		-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계
+			--,X.ATTRIBUTE6		-- DC LINK 적용
+   --     FROM (
+		 --     -- PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응
+			--  SELECT Y1.DIVISION_ID
+			--		,Y1.PLAN_START_YYYYMMDD
+			--		,Y1.PLAN_TYPE
+			--		,Y1.SEQ
+			--		,Y1.OPERATION_GROUP
+			--		,Y1.OPERATION_GROUP_NAME
+			--		,Y1.FROM_SITE
+			--		,Y1.ATTRIBUTE9 AS OPERATION_ID
+			--		,Y1.CELL_ITEM_ID
+			--		,Y1.ITEM_ID
+			--		,Y1.NICK_NAME
+			--		,Y1.PROD_LINE
+			--		,Y1.FROM_BOH_QTY
+			--		,Y1.YIELD
+			--		,Y1.LT_DAY
+			--		,Y1.CELL_QTY_PACK
+			--		,Y1.MEASURE
+			--		,Y1.MEASURE_LABEL
+			--		,Y1.SORT_ORDER_NO
+			--		,Y1.XLS_KEY1
+			--		,Y1.ATTRIBUTE9
+			--		,Y1.ATTRIBUTE3		-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계
+			--		,Y1.BOD_ID			-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계
+			--		,Y1.ATTRIBUTE6
+
+			--		,Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+			--		,Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+			--		,Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+			--		,Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+			--		,Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+			--		,Y1.WQTY51,Y1.WQTY52
+		 --       FROM (SELECT *
+			--	        FROM SCP_XLS_PSI_GLOBAL_ESS AA WITH (NOLOCK)
+			--		   WHERE CREATE_FROM_YYYYMMDD = (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK))
+			--		 ) Y1
+			-- ) X
+   --     INNER JOIN SCM_MST_SITE S WITH (NOLOCK)
+   --             ON S.DIVISION_ID              = X.DIVISION_ID
+   --            AND S.SCM_SITE_ID              = X.FROM_SITE
+   --            AND S.OSP_YN                   = 'Y'
+   --            AND ISNULL(S.ATTRIBUTE1, 'N')  = 'Y'
+			--   AND LEFT(X.ATTRIBUTE6, 1) = '2'
+   --    WHERE 0 = 0
+   --      AND X.MEASURE IN ('PACK_DIO')
+   --       GROUP BY X.DIVISION_ID
+   --         ,X.PLAN_START_YYYYMMDD
+   --         ,X.PLAN_TYPE
+   --         ,X.SEQ
+   --         ,X.OPERATION_GROUP
+   --         ,X.OPERATION_GROUP_NAME
+   --         ,X.FROM_SITE
+   --         ,X.ATTRIBUTE9
+   --         ,X.CELL_ITEM_ID
+   --         ,X.ITEM_ID
+   --         ,X.FROM_BOH_QTY
+   --         ,X.YIELD
+   --         ,X.LT_DAY
+   --         --,X.CELL_QTY_PACK
+   --         --,X.NICK_NAME
+   --         ,X.MEASURE
+   --         ,X.MEASURE_LABEL
+			--,X.ATTRIBUTE3		-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계
+			--,X.BOD_ID			-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계
+			--,X.ATTRIBUTE6		-- DC LINK 적용
+-- 2022.02.11 DC link 추가 - end
+*/
+       UNION
+       SELECT DISTINCT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            /* ,X.CELL_ITEM_ID */
+            , (CASE WHEN SUB.MEASURE IN ('PACK_PROD_LOAD','CELL_PROD_LOAD')  THEN '-' ELSE CELL_ITEM_ID END) AS CELL_ITEM_ID
+            , '-' AS ITEM_ID
+            , '-' AS NICK_NAME
+            , X.PROD_LINE
+            , 0 AS DAILY_CAPA_QTY
+            , 0 AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , NVL(X.YIELD, 1) AS YIELD   /* X.YIELD -- 2021-06-03 : PACK_PROD_LOAD 중복제거 */
+            , 0 AS LT_DAY
+            , 0 AS CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , SUB.MEASURE
+            , SUB.MEASURE_LABEL
+            , TO_NUMBER(SUB.SORT_ORDER_NO)
+            , 99999999 AS XLS_KEY1
+
+            , 0 AS WQTY01,0 AS WQTY02,0 AS WQTY03,0 AS WQTY04,0 AS WQTY05,0 AS WQTY06,0 AS WQTY07,0 AS WQTY08,0 AS WQTY09,0 AS WQTY10
+            , 0 AS WQTY11,0 AS WQTY12,0 AS WQTY13,0 AS WQTY14,0 AS WQTY15,0 AS WQTY16,0 AS WQTY17,0 AS WQTY18,0 AS WQTY19,0 AS WQTY20
+            , 0 AS WQTY21,0 AS WQTY22,0 AS WQTY23,0 AS WQTY24,0 AS WQTY25,0 AS WQTY26,0 AS WQTY27,0 AS WQTY28,0 AS WQTY29,0 AS WQTY30
+            , 0 AS WQTY31,0 AS WQTY32,0 AS WQTY33,0 AS WQTY34,0 AS WQTY35,0 AS WQTY36,0 AS WQTY37,0 AS WQTY38,0 AS WQTY39,0 AS WQTY40
+            , 0 AS WQTY41,0 AS WQTY42,0 AS WQTY43,0 AS WQTY44,0 AS WQTY45,0 AS WQTY46,0 AS WQTY47,0 AS WQTY48,0 AS WQTY49,0 AS WQTY50
+            , 0 AS WQTY51,0 AS WQTY52
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , (CASE WHEN SUB.MEASURE IN ('PACK_PROD_LOAD', 'PACK_TOTAL_TIME')  THEN NULL ELSE X.ATTRIBUTE6 END) AS ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+            , SUB
+        WHERE X.OPERATION_GROUP = SUB.OPERATION_GROUP
+          AND X.MEASURE IN ('PACK_PROD','CELL_PROD')
+       UNION
+       SELECT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.NICK_NAME
+            /* ,X.PROD_LINE */
+            , 'Total3' AS PROD_LINE
+            , NULL AS DAILY_CAPA_QTY
+            , NULL AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.SORT_ORDER_NO
+            /* ,'9999' AS XLS_KEY1 */
+            , (CASE  WHEN X.MEASURE = 'PACK_CELL_BOH'        THEN 6666666
+                    WHEN X.MEASURE = 'PACK_CELL_EOH'        THEN 7777777
+                    WHEN X.MEASURE = 'PACK_CELL_EOH_TOTAL'  THEN 8888888
+              ELSE 9999999 END ) AS XLS_KEY1
+            , WQTY01,WQTY02,WQTY03,WQTY04,WQTY05,WQTY06,WQTY07,WQTY08,WQTY09,WQTY10
+            , WQTY11,WQTY12,WQTY13,WQTY14,WQTY15,WQTY16,WQTY17,WQTY18,WQTY19,WQTY20
+            , WQTY21,WQTY22,WQTY23,WQTY24,WQTY25,WQTY26,WQTY27,WQTY28,WQTY29,WQTY30
+            , WQTY31,WQTY32,WQTY33,WQTY34,WQTY35,WQTY36,WQTY37,WQTY38,WQTY39,WQTY40
+            , WQTY41,WQTY42,WQTY43,WQTY44,WQTY45,WQTY46,WQTY47,WQTY48,WQTY49,WQTY50
+            , WQTY51,WQTY52
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+        WHERE 0 = 0
+          AND X.MEASURE IN ('PACK_CELL_BOH'
+                           , 'PACK_CELL_EOH_TOTAL'
+                           , 'PACK_CELL_EOH'
+                           )
+       /* PACK_CELL_EOH_TOTAL_SUM		Cell Total measure 추가 :: 2022.05.19 - start */
+       UNION
+       SELECT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            , '-'  AS CELL_ITEM_ID
+            , '-'  AS ITEM_ID
+            , '-'  AS NICK_NAME
+            , 'Total3' AS PROD_LINE
+            , NULL AS DAILY_CAPA_QTY
+            , NULL AS TACT_TIME
+            , 0    AS FROM_BOH_QTY
+            , 0    AS YIELD
+            , 0    AS LT_DAY
+            , 0    AS CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , '-'  AS BOD_ID
+            , 'PACK_CELL_EOH_TOTAL_SUM' AS MEASURE
+            , 'Cell Total'  AS MEASURE_LABEL
+            , 999 AS SORT_ORDER_NO
+            , 8888888	   AS XLS_KEY1
+
+            , 0 AS WQTY01,0 AS WQTY02,0 AS WQTY03,0 AS WQTY04,0 AS WQTY05,0 AS WQTY06,0 AS WQTY07,0 AS WQTY08,0 AS WQTY09,0 AS WQTY10
+            , 0 AS WQTY11,0 AS WQTY12,0 AS WQTY13,0 AS WQTY14,0 AS WQTY15,0 AS WQTY16,0 AS WQTY17,0 AS WQTY18,0 AS WQTY19,0 AS WQTY20
+            , 0 AS WQTY21,0 AS WQTY22,0 AS WQTY23,0 AS WQTY24,0 AS WQTY25,0 AS WQTY26,0 AS WQTY27,0 AS WQTY28,0 AS WQTY29,0 AS WQTY30
+            , 0 AS WQTY31,0 AS WQTY32,0 AS WQTY33,0 AS WQTY34,0 AS WQTY35,0 AS WQTY36,0 AS WQTY37,0 AS WQTY38,0 AS WQTY39,0 AS WQTY40
+            , 0 AS WQTY41,0 AS WQTY42,0 AS WQTY43,0 AS WQTY44,0 AS WQTY45,0 AS WQTY46,0 AS WQTY47,0 AS WQTY48,0 AS WQTY49,0 AS WQTY50
+            , 0 AS WQTY51,0 AS WQTY52
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT DISTINCT
+                      Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    /* ,Y1.ATTRIBUTE9 AS OPERATION_ID */
+                    /* ,Y1.CELL_ITEM_ID */
+                    /* ,Y1.ITEM_ID */
+                    /* ,Y1.NICK_NAME */
+                    , Y1.PROD_LINE
+                    /* ,Y1.FROM_BOH_QTY */
+                    /* ,Y1.YIELD */
+                    /* ,Y1.LT_DAY */
+                    /* ,Y1.CELL_QTY_PACK */
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    /* ,Y1.BOD_ID			-- PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                          AND MEASURE = 'PACK_CELL_EOH_TOTAL'
+                      ) Y1
+              ) X
+        WHERE 0 = 0
+          AND X.MEASURE = 'PACK_CELL_EOH_TOTAL'
+       /* PACK_CELL_EOH_TOTAL_SUM		Cell Total measure 추가 :: 2022.05.19 - end */
+       UNION
+       SELECT DISTINCT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.NICK_NAME
+            , 'Total3' AS PROD_LINE
+            , NULL AS DAILY_CAPA_QTY
+            , NULL AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , MAX(X.LT_DAY)
+            , X.CELL_QTY_PACK
+            , X.TO_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = X.TO_SITE AND ROWNUM = 1) , '/')  AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.SORT_ORDER_NO
+
+              /* 2021.04.07  KSW      C20210323-000513 - GSCM 시뮬레이터의 라인 가동율 정확도 향상을 위한 로직 변경 건 - start */
+              /* 원래 키값으로 복원 : 저장 안되는 문제해결 */
+            /* ,'9999999' AS XLS_KEY1 */
+            , X.XLS_KEY1
+              /* 2021.04.07  KSW      C20210323-000513 - GSCM 시뮬레이터의 라인 가동율 정확도 향상을 위한 로직 변경 건 - end */
+
+            , SUM(WQTY01),SUM(WQTY02),SUM(WQTY03),SUM(WQTY04),SUM(WQTY05),SUM(WQTY06),SUM(WQTY07),SUM(WQTY08),SUM(WQTY09),SUM(WQTY10)
+            , SUM(WQTY11),SUM(WQTY12),SUM(WQTY13),SUM(WQTY14),SUM(WQTY15),SUM(WQTY16),SUM(WQTY17),SUM(WQTY18),SUM(WQTY19),SUM(WQTY20)
+            , SUM(WQTY21),SUM(WQTY22),SUM(WQTY23),SUM(WQTY24),SUM(WQTY25),SUM(WQTY26),SUM(WQTY27),SUM(WQTY28),SUM(WQTY29),SUM(WQTY30)
+            , SUM(WQTY31),SUM(WQTY32),SUM(WQTY33),SUM(WQTY34),SUM(WQTY35),SUM(WQTY36),SUM(WQTY37),SUM(WQTY38),SUM(WQTY39),SUM(WQTY40)
+            , SUM(WQTY41),SUM(WQTY42),SUM(WQTY43),SUM(WQTY44),SUM(WQTY45),SUM(WQTY46),SUM(WQTY47),SUM(WQTY48),SUM(WQTY49),SUM(WQTY50)
+            , SUM(WQTY51),SUM(WQTY52)
+
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.TO_SITE
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6   /* DC LINK 적용 */
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+        WHERE 0 = 0
+          AND X.MEASURE IN ('SEMI_SHIP_PLAN', 'SEMI_WHIN', 'SEMI_INTRANSIT', 'SEMI_INTRANSIT_ETA', 'SEMI_SHIP_PLAN_ETA')   /* 2021.12.20 ESS 운송중 재고 반영 */
+          AND (CASE WHEN X.OPERATION_GROUP = 'P' AND X.ATTRIBUTE6 IS NOT NULL THEN 'Y'
+                   WHEN X.OPERATION_GROUP = 'A' THEN 'Y' ELSE 'N' END) = 'Y'   /* 2021.12.20 ESS 운송중 재고 반영 */
+       GROUP BY X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , X.FROM_SITE
+            , X.ATTRIBUTE9
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.NICK_NAME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.CELL_QTY_PACK
+            , X.TO_SITE
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.SORT_ORDER_NO
+
+              /* 2021.04.07  KSW      C20210323-000513 - GSCM 시뮬레이터의 라인 가동율 정확도 향상을 위한 로직 변경 건 - start */
+              /* 원래 키값으로 복원 : 저장 안되는 문제해결 */
+            , X.XLS_KEY1
+              /* 2021.04.07  KSW      C20210323-000513 - GSCM 시뮬레이터의 라인 가동율 정확도 향상을 위한 로직 변경 건 - end */
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+       UNION
+       SELECT DISTINCT X.DIVISION_ID
+            , X.PLAN_START_YYYYMMDD
+            , X.PLAN_TYPE
+            , X.SEQ
+            , X.OPERATION_GROUP
+            , X.OPERATION_GROUP_NAME
+            , Y.FROM_SITE
+            , NVL((SELECT SA.SITE_DESCRIPTION FROM SCM_MST_SITE SA WHERE SA.SCM_SITE_ID = Y.FROM_SITE AND ROWNUM = 1) , '/') AS FROM_SITE_DESCRIPTION
+            , X.ATTRIBUTE9 AS OPERATION_ID
+            , X.CELL_ITEM_ID
+            , X.ITEM_ID
+            , X.NICK_NAME
+            , X.PROD_LINE
+            , NULL AS DAILY_CAPA_QTY
+            , NULL AS TACT_TIME
+            , X.FROM_BOH_QTY
+            , X.YIELD
+            , X.LT_DAY
+            , X.CELL_QTY_PACK
+            , NULL AS TO_SITE
+            , NULL AS TO_SITE_DESCRIPTION
+            , X.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.MEASURE
+            , X.MEASURE_LABEL
+            , X.SORT_ORDER_NO
+            , 9999999 AS XLS_KEY1
+            , WQTY01,WQTY02,WQTY03,WQTY04,WQTY05,WQTY06,WQTY07,WQTY08,WQTY09,WQTY10
+            , WQTY11,WQTY12,WQTY13,WQTY14,WQTY15,WQTY16,WQTY17,WQTY18,WQTY19,WQTY20
+            , WQTY21,WQTY22,WQTY23,WQTY24,WQTY25,WQTY26,WQTY27,WQTY28,WQTY29,WQTY30
+            , WQTY31,WQTY32,WQTY33,WQTY34,WQTY35,WQTY36,WQTY37,WQTY38,WQTY39,WQTY40
+            , WQTY41,WQTY42,WQTY43,WQTY44,WQTY45,WQTY46,WQTY47,WQTY48,WQTY49,WQTY50
+            , WQTY51,WQTY52
+            , X.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+            , X.ATTRIBUTE6   /* DC LINK 적용 */
+              /* PJ20209642 LGES Digital SCM Level.3 달성을 위한 개선 - 중장기 플랜 대응 */
+         FROM (SELECT Y1.DIVISION_ID
+                    , Y1.PLAN_START_YYYYMMDD
+                    , Y1.PLAN_TYPE
+                    , Y1.SEQ
+                    , Y1.OPERATION_GROUP
+                    , Y1.OPERATION_GROUP_NAME
+                    , Y1.FROM_SITE
+                    , Y1.ATTRIBUTE9 AS OPERATION_ID
+                    , Y1.CELL_ITEM_ID
+                    , Y1.ITEM_ID
+                    , Y1.NICK_NAME
+                    , Y1.PROD_LINE
+                    , Y1.FROM_BOH_QTY
+                    , Y1.YIELD
+                    , Y1.LT_DAY
+                    , Y1.CELL_QTY_PACK
+                    , Y1.TO_SITE
+                    , Y1.MEASURE
+                    , Y1.MEASURE_LABEL
+                    , Y1.SORT_ORDER_NO
+                    , Y1.XLS_KEY1
+                    , Y1.ATTRIBUTE9
+                    , Y1.ATTRIBUTE3   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.BOD_ID   /* PJ20209643 LGES Digital SCM Level.3 달성을 위한 개선 (Phase.2) - BOD L/T 2단계 */
+                    , Y1.ATTRIBUTE6
+
+                    , Y1.WQTY01,Y1.WQTY02,Y1.WQTY03,Y1.WQTY04,Y1.WQTY05,Y1.WQTY06,Y1.WQTY07,Y1.WQTY08,Y1.WQTY09,Y1.WQTY10
+                    , Y1.WQTY11,Y1.WQTY12,Y1.WQTY13,Y1.WQTY14,Y1.WQTY15,Y1.WQTY16,Y1.WQTY17,Y1.WQTY18,Y1.WQTY19,Y1.WQTY20
+                    , Y1.WQTY21,Y1.WQTY22,Y1.WQTY23,Y1.WQTY24,Y1.WQTY25,Y1.WQTY26,Y1.WQTY27,Y1.WQTY28,Y1.WQTY29,Y1.WQTY30
+                    , Y1.WQTY31,Y1.WQTY32,Y1.WQTY33,Y1.WQTY34,Y1.WQTY35,Y1.WQTY36,Y1.WQTY37,Y1.WQTY38,Y1.WQTY39,Y1.WQTY40
+                    , Y1.WQTY41,Y1.WQTY42,Y1.WQTY43,Y1.WQTY44,Y1.WQTY45,Y1.WQTY46,Y1.WQTY47,Y1.WQTY48,Y1.WQTY49,Y1.WQTY50
+                    , Y1.WQTY51,Y1.WQTY52
+                 FROM (SELECT *
+                         FROM SCP_XLS_PSI_GLOBAL_ESS AA
+                        WHERE CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                      ) Y1
+              ) X
+            , (SELECT DISTINCT FROM_SITE, CELL_ITEM_ID
+                 FROM SCP_XLS_PSI_GLOBAL_ESS A1
+                    , (SELECT DISTINCT ITEM_ID
+                         FROM SCP_XLS_PSI_GLOBAL_ESS
+                        WHERE 0 = 0
+                          AND CREATE_FROM_YYYYMMDD = (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                          AND MEASURE ='SEMI_PACK_PROD_CELL'
+                      ) A2
+                WHERE A1.CELL_ITEM_ID = A2.ITEM_ID
+                  AND CREATE_FROM_YYYYMMDD =  (SELECT PLAN_START_YYYYMMDD FROM PLAN_NAME)   /* (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)) */
+                  AND OPERATION_GROUP ='P'
+                  /* ★아래 옛 MSSQL 죽은코드 블록(원문 verbatim 보존)
+            --             AND CELL_ITEM_ID IN (
+												--SELECT DISTINCT ITEM_ID
+												--FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK)
+												--WHERE 0 = 0
+												-- AND CREATE_FROM_YYYYMMDD =  (SELECT TOP 1 PLAN_START_YYYYMMDD FROM SCP_XLS_PSI_GLOBAL_ESS WITH (NOLOCK))
+												-- AND MEASURE ='SEMI_PACK_PROD_CELL'
+            --                                 )
+                  */
+                  AND FROM_SITE <> '-'
+              ) Y
+        WHERE 0 = 0
+          AND X.ITEM_ID = Y.CELL_ITEM_ID
+          AND X.MEASURE ='SEMI_PACK_PROD_CELL'

@@ -1,0 +1,122 @@
+﻿################ [E0] 접속 DB 식별 (QA / DEV 구분 — BE datasource 와 대조) ################
+USR     | DB_NAME | CON_NAME | SVC    | HOST   | NOW                
+--------+---------+----------+--------+--------+--------------------
+SCM_MGR | ZIOUI1  | ZIOUI1   | zioui1 | ol9-db | 2026-10-09 15:13:57
+(1 rows)
+################ [E1] ⭐ PKG_DMF0082 BODY 판본 — 사내 현재(2026-10-08 19:27, 지문 17034/885965)와 대조 ################
+--  어느 패치까지 들어 있는지 마커 수로 판정. 81 조회에 직접 관여: 81MKTAMT(10-02, DM_PLN_SALES_PLAN 금액 arm 3곳) · ONEREAD(09-30 판가 1회 읽기) · CLOUDPERF(힌트 2)
+OBJECT_TYPE  | STATUS | LAST_DDL            | ERR_CNT
+-------------+--------+---------------------+--------
+PACKAGE      | VALID  | 2026-10-02 17:59:16 | 0      
+PACKAGE BODY | VALID  | 2026-10-08 19:27:16 | 0      
+(2 rows)
+BODY_FP      | CORP_FP      | JUDGE                
+-------------+--------------+----------------------
+17034/885965 | 17034/885965 | PASS — 사내 현재와 동일 BODY
+(1 rows)
+MARKER     | CLOUD | CORP | JUDGE | MEMO                                                                        
+-----------+-------+------+-------+-----------------------------------------------------------------------------
+81MKTAMT   | 10    | 10   | same  | ⭐ 10-02 81 계획구간 MKT_AMT 금액 arm 3곳 (DM_PLN_SALES_PLAN GROUP BY) — 81 전용 신규 문장
+81SP       | 2     | 2    | same  | 09-30 81 저장 후속처리                                                            
+AJS_1008   | 4     | 4    | same  | 10-08 AJS SCM_FCST 메저 추가 (저장 경로 L13671·L13727, 조회 무관)                       
+BTNAUTH    | 2     | 2    | same  | 10-02 버튼 권한 SP 신설 (조회 무관)                                                   
+CLOUDPERF  | 3     | 3    | same  | 09-30 클라우드 병목 2문장 힌트 (L1232 LEADING/USE_HASH · L2089)                       
+CUSTEXCEL  | 6     | 6    | same  | 09-30 Customer FCST → EXCEL/RPA 표기                                          
+DS2_LINE   | 7     | 7    | same  | 진입점 dynamic_sampling=2 보정 줄                                                 
+FXZERO     | 10    | 10   | same  | 09-30 환율 없는 기간 0 생성                                                         
+GATHER_ACT | 0     | 0    | same  | GET_MAIN_DATA 안 활성 GATHER_TABLE_STATS (0 이어야 함)                             
+IDX02_HINT | 0     | 0    | same  | ⛔ 0 이어야 함 — 1 이상이면 09-30 타임아웃 원인 힌트가 살아 있음 (ONEREAD 미적용)                    
+ONEREAD    | 3     | 3    | same  | 09-30 81/82 판가 원장 1회 읽기 (타임아웃 3d2xnx839ksnt 제거·IDX02 힌트 철회)                 
+QRYPERF    | 22    | 22   | same  | 09-30 조회 속도개선 (GTT GATHER 제거·82 풀스캔 제거)                                     
+(12 rows)
+--  판정: 81MKTAMT=10 이면 10-02 금액 arm 이 들어 있다 → 81 만 느려진 시점(10-02 이후?)과 맞는지 D02 [S1] 이력으로 대조
+--        IDX02_HINT>0 또는 ONEREAD<3 = 09-30 타임아웃 원인 재현 상태 → DMF0082_CUSTEXCEL_CLOUD_20260930(누적본) 적용 여부 확인
+################ [E2] ⭐ 옵티마이저·자원 파라미터 — 사내 대조 (DIFF 만 주목) ################
+--  optimizer_dynamic_sampling 0 = GTT 추정 붕괴(07-31 확정 원인). SP 가 세션에서 2 로 보정하지만 시스템값도 확인.
+NAME                             | CLOUD      | CORP       | JUDGE
+---------------------------------+------------+------------+------
+cpu_count                        | 8          | 8          | same 
+cursor_sharing                   | EXACT      | EXACT      | same 
+db_file_multiblock_read_count    | 128        | 128        | same 
+optimizer_adaptive_plans         | TRUE       | TRUE       | same 
+optimizer_adaptive_statistics    | FALSE      | FALSE      | same 
+optimizer_dynamic_sampling       | 2          | 2          | same 
+optimizer_features_enable        | 23.1.0     | 23.1.0     | same 
+optimizer_index_caching          | 0          | 0          | same 
+optimizer_index_cost_adj         | 100        | 100        | same 
+optimizer_mode                   | ALL_ROWS   | ALL_ROWS   | same 
+optimizer_use_sql_plan_baselines | TRUE       | TRUE       | same 
+parallel_degree_policy           | MANUAL     | MANUAL     | same 
+pga_aggregate_target             | 3221225472 | 3221225472 | same 
+statistics_level                 | TYPICAL    | TYPICAL    | same 
+(14 rows)
+################ [E3] ⭐ 81 조회 원천 7 테이블 인덱스 — 사내 대조 (결손·상이·UNUSABLE 만 출력) ################
+--  81 분기 원천: DM_PLN_MKT_FCST(수요) · DM_PLN_SALES_PLAN(10-02 금액 arm) · SCM_MST_FUTURE_PRICE(판가) · DM_PLN_MKT_FCST_RESULT/SALES_PLAN_RESULT(실적) · SCM_MST_SITE_ITEM
+T | I | JUDGE | CLOUD_COLS | CORP_COLS
+--+---+-------+------------+----------
+(0 rows)
+--  0 rows = 인덱스 사내와 동일 (정상). DM_PLN_SALES_PLAN 은 사내도 (DIVISION_ID,YYYYMMDD) 1본 + PK 뿐 — 금액 arm 은 이 인덱스 범위스캔 또는 풀스캔
+################ [E4] ⭐ 81 원천 테이블 통계·크기 — 사내 대조 (ROWS_X = 클라우드÷사내 · 통계일 · STALE) ################
+T                          | CLOUD_ROWS | CORP_ROWS | ROWS_X | CLOUD_MB | CLOUD_ANALYZED | CORP_ANALYZED | STALE | LOCKED | DEG | JUDGE         
+---------------------------+------------+-----------+--------+----------+----------------+---------------+-------+--------+-----+---------------
+DM_PLN_CFM_MKT_DEMAND_PLAN | 420354     | 420354    | 1      | 105      | 2026-10-07     | 2026-10-07    | YES   |        | 1   | ⚠ 통계 노후(STALE)
+DM_PLN_CFM_SELLING_PRICE   | 1574147    | 1574147   | 1      | 216      | 2026-10-07     | 2026-10-07    | NO    |        | 1   | ok            
+DM_PLN_MKT_FCST            | 2546477    | 2549812   | 1      | 344      | 2026-10-09     | 2026-10-09    | NO    |        | 1   | ok            
+DM_PLN_MKT_FCST_C          | 40123502   | 40123502  | 1      | 7092     | 2026-10-08     | 2026-10-08    | NO    |        | 1   | ok            
+DM_PLN_MKT_FCST_RESULT     | 4280763    | 4280763   | 1      | 608      | 2026-10-07     | 2026-10-07    | NO    |        | 1   | ok            
+DM_PLN_SALES_PLAN          | 1417586    | 1417586   | 1      | 230      | 2026-10-07     | 2026-10-07    | YES   |        | 1   | ⚠ 통계 노후(STALE)
+DM_PLN_SALES_PLAN_C        | 7538024    | 7538024   | 1      | 1459     | 2026-10-07     | 2026-10-07    | NO    |        | 1   | ok            
+DM_PLN_SALES_PLAN_RESULT   | 2232938    | 2232938   | 1      | 344      | 2026-10-07     | 2026-10-07    | NO    |        | 1   | ok            
+SCM_MST_FUTURE_PRICE       | 11473160   | 11473160  | 1      | 1474     | 2026-10-07     | 2026-10-07    | NO    |        | 1   | ok            
+SCM_MST_SITE_ITEM          | 118139     | 118139    | 1      | 29       | 2026-10-07     | 2026-10-07    | NO    |        | 1   | ok            
+SCM_MST_TITLESET_USER      | 8088       | 8088      | 1      | 1        | 2026-10-07     | 2026-10-07    | NO    |        | 1   | ok            
+(11 rows)
+################ [E4b] 81 원천 핵심 컬럼 통계 (NDV·히스토그램) — DIVISION_ID 선택도 추정의 근거 ################
+--  DIVISION_ID NDV 가 작고 히스토그램 NONE 이면 81 행 수를 평균(전체/NDV)으로 추정 → 40 과 같은 계획을 81 에 재사용
+T                        | COL          | NDV   | NULLS | HISTOGRAM | BKT | ANALYZED  
+-------------------------+--------------+-------+-------+-----------+-----+-----------
+DM_PLN_MKT_FCST          | DIVISION_ID  | 9     | 0     | FREQUENCY | 9   | 2026-10-09
+DM_PLN_MKT_FCST          | ITEM_ID      | 5758  | 0     | HYBRID    | 254 | 2026-10-09
+DM_PLN_MKT_FCST          | MEASURE      | 58    | 0     | FREQUENCY | 58  | 2026-10-09
+DM_PLN_MKT_FCST          | PROJECT_CODE | 1922  | 0     | HYBRID    | 254 | 2026-10-09
+DM_PLN_MKT_FCST          | YYYYMMDD     | 4168  | 0     | HYBRID    | 254 | 2026-10-09
+DM_PLN_MKT_FCST_RESULT   | DIVISION_ID  | 9     | 0     | FREQUENCY | 9   | 2026-10-07
+DM_PLN_MKT_FCST_RESULT   | ITEM_ID      | 9287  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_MKT_FCST_RESULT   | MEASURE      | 66    | 0     | FREQUENCY | 66  | 2026-10-07
+DM_PLN_MKT_FCST_RESULT   | PROJECT_CODE | 2211  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_MKT_FCST_RESULT   | YYYYMMDD     | 3158  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_SALES_PLAN        | DIVISION_ID  | 8     | 0     | FREQUENCY | 8   | 2026-10-07
+DM_PLN_SALES_PLAN        | ITEM_ID      | 5515  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_SALES_PLAN        | MEASURE      | 13    | 0     | FREQUENCY | 13  | 2026-10-07
+DM_PLN_SALES_PLAN        | PROJECT_CODE | 1884  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_SALES_PLAN        | YYYYMMDD     | 4013  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_SALES_PLAN_RESULT | DIVISION_ID  | 9     | 0     | FREQUENCY | 9   | 2026-10-07
+DM_PLN_SALES_PLAN_RESULT | ITEM_ID      | 9389  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_SALES_PLAN_RESULT | MEASURE      | 14    | 0     | FREQUENCY | 14  | 2026-10-07
+DM_PLN_SALES_PLAN_RESULT | PROJECT_CODE | 2217  | 0     | HYBRID    | 254 | 2026-10-07
+DM_PLN_SALES_PLAN_RESULT | YYYYMMDD     | 3171  | 0     | HYBRID    | 254 | 2026-10-07
+SCM_MST_FUTURE_PRICE     | DIVISION_ID  | 11    | 0     | FREQUENCY | 11  | 2026-10-07
+SCM_MST_FUTURE_PRICE     | ITEM_ID      | 4342  | 0     | HYBRID    | 254 | 2026-10-07
+SCM_MST_FUTURE_PRICE     | MEASURE      | 4     | 0     | FREQUENCY | 4   | 2026-10-07
+SCM_MST_FUTURE_PRICE     | PROJECT_CODE | 1468  | 0     | HYBRID    | 254 | 2026-10-07
+SCM_MST_FUTURE_PRICE     | YYYYMMDD     | 573   | 0     | HYBRID    | 254 | 2026-10-07
+SCM_MST_SITE_ITEM        | DIVISION_ID  | 8     | 0     | FREQUENCY | 8   | 2026-10-07
+SCM_MST_SITE_ITEM        | ITEM_ID      | 15692 | 0     | HYBRID    | 254 | 2026-10-07
+SCM_MST_SITE_ITEM        | PROJECT_CODE | 2729  | 0     | HYBRID    | 254 | 2026-10-07
+SCM_MST_SITE_ITEM        | VALID_YN     | 2     | 0     | FREQUENCY | 2   | 2026-10-07
+(29 rows)
+################ [E5] GT_DMF0082 GTT 통계 잠금·고정값 (LOCK 있으면 위험 — 07-31 사고) ################
+T | NUM_ROWS | STATTYPE_LOCKED | LAST_ANALYZED | SCOPE | GTT_PREF | JUDGE
+--+----------+-----------------+---------------+-------+----------+------
+(0 rows)
+--  0 rows = 잠금·고정 통계 없음 (정상 — SP 가 세션 dynamic_sampling=2 로 추정). 사내 GT_DMF0082 GTT 34본
+################ [E6] 지금 60초 넘게 실행 중인 타 세션 (공유 DB 노이즈 판별) ################
+SID | USERNAME | MODULE                     | SQL_ID        | EVENT                   | SEC_RUNNING | SQL_HEAD                                                                                  
+----+----------+----------------------------+---------------+-------------------------+-------------+-------------------------------------------------------------------------------------------
+617 | SCM_MGR  | C:\Python3.11.5\python.exe | d019r0hbb0muh | db file sequential read | 476         | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER
+(1 rows)
+--  여러 건이면 측정값이 요동한다 → 한가한 시간대에 D02·D03 재측정
+=============================================================================
+D01 완료 → D01_ENV_BODY_STATE_OUT.txt 회신 (QA·DEV 각각)
+판정: [E1] 마커표에서 '⚠/❌' 가 있으면 그 패키지부터 · [E2] dynamic_sampling DIFF · [E3] 결손 인덱스 · [E4] 통계 없음/STALE · [E5] LOCK
+=============================================================================

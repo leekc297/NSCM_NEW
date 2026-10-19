@@ -1,0 +1,332 @@
+--- 10-01 원문(3092)
++++ E20261008-PERF v3(3128)
+@@ -78,4 +78,6 @@
+  * 2026.05.13   JSSBAE      [E20260512-000502]_자동차 사업부 Cell Prod Site ID
+  * 2026.07.06   ZIONEX        [PJ202650304] NextSCM Migration
++ * 2026.10.08   ZIONEX        [E20261008-PERF] (1) _C 테이블 비교 28곳에 파티션 키(가상컬럼 CUTOFF_YYYYMMDD_DATE) 조건 추가 — 전체 109 파티션 탐색 → 단일 파티션 (MEASURE IN GTT+NOT EXISTS DELETE 4곳은 플랜 퇴행으로 제외) (2) GT_DPMFCQB_CUTOFF_MST_ACCUM 사본 단계 제거(TEMPX 직접 적재) — 클라우드 14:04 1초 ASH 실측 기반, 결과 동치 사내 검증
++ * 2026.10.08   ZIONEX        [E20261008-PERF] (3) 진입점 ALTER SESSION optimizer_dynamic_sampling=2 (GTT 사용 SP 표준 규약 2026-08-06)
+  *=====================================================================================================================================================*/
+ IS
+@@ -90,4 +92,5 @@
+     C_PLAN_ID                   VARCHAR2(20 CHAR);
+     C_CUTOFF_YYYYMMDD           VARCHAR2(8 CHAR);
++    C_CUTOFF_DATE               DATE;  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키(가상컬럼 CUTOFF_YYYYMMDD_DATE) 비교용 */
+     C_CUTOFF_TYPE               VARCHAR2(4 CHAR);
+     C_SP_TYPE                   VARCHAR2(4 CHAR);
+@@ -109,9 +112,12 @@
+     V_AFTER_RTF_DATA_CNT        NUMBER;
+ BEGIN
++    /* 2026.10.08 ZIONEX [E20261008-PERF] 표준 규약(2026-08-06): GTT 사용 SP 진입점 — 클라우드 시스템값 optimizer_dynamic_sampling=0 방어
++       (무통계 GTT 22본의 카디널리티를 동적 샘플링으로 추정 · 사내 기본값 2 와 동일 조건). 멱등 · 트랜잭션 무관(ALTER SESSION 은 COMMIT 없음) */
++    EXECUTE IMMEDIATE 'ALTER SESSION SET optimizer_dynamic_sampling = 2';
+     /* ================================================================================================================ */
+     /* GTT 초기화 (ON COMMIT PRESERVE ROWS 이므로 세션 잔존 방지. 원본 DROP+CREATE 초기화 등가) */
+     /* ================================================================================================================ */
+     DELETE FROM GT_DPMFCQB_CUTOFF_MST;
+-    DELETE FROM GT_DPMFCQB_CUTOFF_MST_ACCUM;
++    /* 2026.10.08 ZIONEX [E20261008-PERF] GT_DPMFCQB_CUTOFF_MST_ACCUM 은 더 이상 적재하지 않음(아래 TEMPX 적재에 흡수) — 초기화 DELETE 제거 */
+     DELETE FROM GT_DPMFCQB_CUTOFF_TEMPX;
+     DELETE FROM GT_DPMFCQB_VMI_MST;
+@@ -147,4 +153,14 @@
+         C_CUTOFF_YYYYMMDD := NULL;
+     END;
++
++    /* 2026.10.08 ZIONEX [E20261008-PERF] (START) 파티션 키 조건용 DATE 값. DM_PLN_MKT_FCST_C / DM_PLN_CFM_MKT_DEMAND_PLAN_C 의 파티션 키는
++       가상컬럼 CUTOFF_YYYYMMDD_DATE = TO_DATE(CUTOFF_YYYYMMDD,'YYYYMMDD') 인데 원문은 문자 CUTOFF_YYYYMMDD 로만 비교해 전체 파티션을 탐색했다.
++       아래 변수를 각 비교에 함께 걸어 단일 파티션만 읽는다(가상컬럼 정의상 결과 집합 불변). 변환 불가 값이면 NULL → 원문과 같이 0건 매칭 */
++    BEGIN
++        C_CUTOFF_DATE := TO_DATE(C_CUTOFF_YYYYMMDD, 'YYYYMMDD');
++    EXCEPTION WHEN OTHERS THEN
++        C_CUTOFF_DATE := NULL;
++    END;
++    /* 2026.10.08 ZIONEX [E20261008-PERF] (END) */
+ 
+     V_PLAN_START_YYYYMMDD := TO_CHAR(FN_NEXT_DAY(TO_DATE(C_CUTOFF_YYYYMMDD, 'YYYYMMDD'), 'MON') - 7, 'YYYYMMDD');  /* 월요일 */
+@@ -504,5 +520,5 @@
+             AND    A.VERSION_NO      = P_CUT_OFF_VERSION
+             AND    A.CUTOFF_TYPE     = C_CUTOFF_TYPE
+-            AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 조건 의도적 제외 — 추가 시 NOT EXISTS 가 행별 FILTER 로 바뀌는 퇴행(클라우드 실측) */
+             AND    A.ITEM_ID NOT IN ( SELECT K.ITEM_ID FROM SCM_MST_ITEM_SN K
+                                       WHERE K.DIVISION_ID = A.DIVISION_ID AND K.SCP_OPERATION_GROUP = 'E' AND K.ACTIVE_FLAG = 'Y' AND K.DIVISION_ID = '40' )
+@@ -529,5 +545,5 @@
+             AND    A.VERSION_NO      = P_CUT_OFF_VERSION
+             AND    A.CUTOFF_TYPE     = C_CUTOFF_TYPE
+-            AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 조건 의도적 제외 — 추가 시 NOT EXISTS 가 행별 FILTER 로 바뀌는 퇴행(클라우드 실측) */
+             /* [E20260331-000648]_수정한 데이터가 존재하지 않는 경우에만 삭제를 진행한다. */
+             AND    NOT EXISTS ( SELECT 1
+@@ -554,4 +570,5 @@
+         AND    CUTOFF_TYPE     = C_CUTOFF_TYPE
+         AND    CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++        AND    CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+         AND    DIVISION_ID     = '82';
+ 
+@@ -563,4 +580,5 @@
+         AND    A.CUTOFF_TYPE     = C_CUTOFF_TYPE
+         AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++        AND    A.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+         AND    A.DIVISION_ID     = '81'
+         AND    A.DIVISION_ID IN ( SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y' )
+@@ -592,5 +610,5 @@
+             AND    A.VERSION_NO      = P_CUT_OFF_VERSION
+             AND    A.CUTOFF_TYPE     = C_CUTOFF_TYPE
+-            AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 조건 의도적 제외 — 추가 시 NOT EXISTS 가 행별 FILTER 로 바뀌는 퇴행(클라우드 실측) */
+             AND    A.ITEM_ID NOT IN ( SELECT K.ITEM_ID FROM SCM_MST_ITEM_SN K
+                                       WHERE K.DIVISION_ID = A.DIVISION_ID AND K.SCP_OPERATION_GROUP = 'E' AND K.ACTIVE_FLAG = 'Y' AND K.DIVISION_ID = '40' )
+@@ -619,5 +637,5 @@
+             AND    A.VERSION_NO      = P_CUT_OFF_VERSION
+             AND    A.CUTOFF_TYPE     = C_CUTOFF_TYPE
+-            AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 조건 의도적 제외 — 추가 시 NOT EXISTS 가 행별 FILTER 로 바뀌는 퇴행(클라우드 실측) */
+             /* [E20260331-000648]_수정한 데이터가 존재하지 않는 경우에만 삭제를 진행한다. */
+             AND    NOT EXISTS ( SELECT 1
+@@ -645,4 +663,5 @@
+         AND    CUTOFF_TYPE     = C_CUTOFF_TYPE
+         AND    CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++        AND    CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+         AND    DIVISION_ID     = '82';
+ 
+@@ -654,4 +673,5 @@
+         AND    A.CUTOFF_TYPE     = C_CUTOFF_TYPE
+         AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++        AND    A.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+         AND    A.DIVISION_ID     = '81'
+         AND    A.DIVISION_ID IN ( SELECT SEGMENT1 FROM SCM_ADM_LOOKUP_MASTER_DETAIL WHERE LOOKUP_TYPE = 'DM_NET_DEMAND_EXCEPTION' AND VALID_YN = 'Y' )
+@@ -828,4 +848,5 @@
+         AND    A.CUTOFF_TYPE     = C_CUTOFF_TYPE
+         AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++        AND    A.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+         AND    A.MEASURE         = CASE WHEN C.VMI_YN = 'Y' AND A.DIVISION_ID IN ( '82', '40' ) THEN 'VMI_In_Req'
+                                         WHEN C.OPERATION_GROUP = 'W' THEN 'AS_In_Req'
+@@ -864,4 +885,5 @@
+         AND    A.CUTOFF_TYPE     = C_CUTOFF_TYPE
+         AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++        AND    A.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+         AND    A.MEASURE         = V_MEASURE  /* [PJ2025-50188] 기준수요 (@v_measure : MKT_FCST / SCM_FCST) */
+         AND    A.FCST_TYPE = 'RMA';
+@@ -1014,4 +1036,5 @@
+         AND    A.CUTOFF_TYPE     = C_CUTOFF_TYPE
+         AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++        AND    A.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+         AND    A.MEASURE         = CASE WHEN C.VMI_YN = 'Y' AND A.DIVISION_ID IN ( '82', '40' ) THEN 'VMI_In_Req'
+                                         WHEN C.OPERATION_GROUP = 'W' THEN 'AS_In_Req'
+@@ -1051,4 +1074,5 @@
+         AND    A.CUTOFF_TYPE     = C_CUTOFF_TYPE
+         AND    A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++        AND    A.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+         AND    A.MEASURE         = V_MEASURE  /* [PJ2025-50188] 기준수요 (@v_measure : MKT_FCST / SCM_FCST) */
+         AND    A.FCST_TYPE = 'RMA'
+@@ -2196,4 +2220,5 @@
+                         AND W.CUTOFF_TYPE     = C_CUTOFF_TYPE
+                         AND W.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++                        AND W.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+                        WHERE W.YYYYMMDD BETWEEN V_PLAN_START_YYYYMMDD
+                          AND TO_CHAR(TO_DATE(V_PLAN_START_YYYYMMDD, 'YYYYMMDD') + V_PLAN_WEEK_CNT * 7, 'YYYYMMDD')  /* SCP PLANNING 구간이 52주 */
+@@ -2223,4 +2248,5 @@
+                     AND C.CUTOFF_TYPE     = C_CUTOFF_TYPE
+                     AND C.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++                    AND C.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+                 WHERE 1 = 1
+                 AND A.MEASURE IN (V_MEASURE, 'Vmi_In_Plan');  /* [PJ2025-50188] 기준수요 (@v_measure : MKT_FCST / SCM_FCST) */
+@@ -2262,4 +2288,5 @@
+                         AND W.CUTOFF_TYPE     = C_CUTOFF_TYPE
+                         AND W.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++                        AND W.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+                        WHERE W.YYYYMMDD BETWEEN V_PLAN_START_YYYYMMDD
+                          AND TO_CHAR(TO_DATE(V_PLAN_START_YYYYMMDD, 'YYYYMMDD') + V_PLAN_WEEK_CNT * 7, 'YYYYMMDD')  /* SCP PLANNING 구간이 52주 */
+@@ -2283,4 +2310,5 @@
+                     AND C.CUTOFF_TYPE     = C_CUTOFF_TYPE
+                     AND C.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++                    AND C.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+                 WHERE 1 = 1
+                 AND A.MEASURE IN (V_MEASURE, 'Vmi_In_Plan');  /* [PJ2025-50188] 기준수요 (@v_measure : MKT_FCST / SCM_FCST) */
+@@ -2411,4 +2439,5 @@
+             AND   CUTOFF_TYPE     = C_CUTOFF_TYPE
+             AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND   CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+             AND EXISTS (
+                     SELECT VM.DIVISION_ID
+@@ -2432,4 +2461,5 @@
+             AND   CUTOFF_TYPE     = C_CUTOFF_TYPE
+             AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND   CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+             AND EXISTS (
+                     SELECT VM.DIVISION_ID
+@@ -2477,4 +2507,5 @@
+             AND   CUTOFF_TYPE     = C_CUTOFF_TYPE
+             AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND   CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+             AND EXISTS (
+                     SELECT VM.DIVISION_ID
+@@ -2498,4 +2529,5 @@
+             AND   CUTOFF_TYPE     = C_CUTOFF_TYPE
+             AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND   CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+             AND EXISTS (
+                     SELECT VM.DIVISION_ID
+@@ -2634,4 +2666,5 @@
+             AND   CUTOFF_TYPE     = C_CUTOFF_TYPE
+             AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND   CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+             AND   YYYYMMDD       >= V_PLAN_START_YYYYMMDD
+             AND MEASURE IN ('MKT_FCST','RTF_SCP');  /* 해당 MEASURE로 국한하지 않으면, MKT_AMT_KRW로 인해 OVERFLOW 발생 가능함. */
+@@ -2649,4 +2682,5 @@
+             AND   CUTOFF_TYPE     = C_CUTOFF_TYPE
+             AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND   CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+             AND   YYYYMMDD       >= V_PLAN_START_YYYYMMDD
+             AND MEASURE IN ('MKT_FCST','RTF_SCP');  /* 해당 MEASURE로 국한하지 않으면, MKT_AMT_KRW로 인해 OVERFLOW 발생 가능함. */
+@@ -2749,35 +2783,8 @@
+         /* [E20230112-000310] GSCM 자동차사업부 시스템 상 MKT FCST 입력을 위한 기능변경 건 - 선박BIZ건--- END */
+ 
+-        INSERT INTO GT_DPMFCQB_CUTOFF_MST_ACCUM
+-        (       DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, YYYYMMDD
+-              , MEASURE, QTY
+-              , CELL_PROD_SITE_ID  /* [PJ2025-50188] 추가 */
+-              , ACCUM_SUM
+-        )
+-        SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, YYYYMMDD
+-              , MEASURE, QTY
+-              , CELL_PROD_SITE_ID  /* [PJ2025-50188] 추가 */
+-              , SUM(QTY) OVER ( PARTITION BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, MEASURE, CELL_PROD_SITE_ID ORDER BY YYYYMMDD ) AS ACCUM_SUM  /* [PJ2025-50188] CELL_PROD_SITE_ID 추가 */
+-        FROM GT_DPMFCQB_CUTOFF_MST;
+-
+-        /* ---------------------------------------------------------------------------------------------------------------- */
+-        /* [E20260331-000648]_사용자가 수정한 이력이 존재하는 데이터는 추가 작업을 진행하지 않는다. */
+-        /* ---------------------------------------------------------------------------------------------------------------- */
+-        DELETE FROM GT_DPMFCQB_CUTOFF_MST_ACCUM A
+-        WHERE EXISTS ( SELECT 1
+-                       FROM ( SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, NVL(CELL_PROD_SITE_ID, '-') AS CELL_PROD_SITE_ID
+-                              FROM GT_DPMFCQB_RTF_EXCEPTION_ITEM
+-                              GROUP BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, NVL(CELL_PROD_SITE_ID, '-') ) B
+-                       WHERE A.DIVISION_ID   = B.DIVISION_ID
+-                       AND   A.PROJECT_CODE  = B.PROJECT_CODE
+-                       AND   A.SCM_SITE_ID   = B.SCM_SITE_ID
+-                       AND   A.ITEM_ID       = B.ITEM_ID
+-                       AND   A.DOM_EXP       = B.DOM_EXP
+-                       AND   A.FCST_TYPE     = B.FCST_TYPE
+-                       AND   A.INCOTERMS     = B.INCOTERMS
+-                       AND   A.PLANT_SITE_ID = B.PLANT_SITE_ID
+-                       AND   NVL(A.CELL_PROD_SITE_ID, '-') = NVL(B.CELL_PROD_SITE_ID, '-')  /* [E20260512-000502] 81도 해당 부분을 비교하도록 수정한다. */
+-                       AND   A.YYYYMMDD     >= V_PLAN_START_YYYYMMDD /*-- 당주월요일*/ );
+-
++        /* 2026.10.08 ZIONEX [E20261008-PERF] (START) GT_DPMFCQB_CUTOFF_MST_ACCUM 사본 단계 제거
++           원문: ACCUM INSERT(CUTOFF_MST + 윈도 누적합 ACCUM_SUM) → ACCUM 에서 예외품목(GT_DPMFCQB_RTF_EXCEPTION_ITEM, 당주월요일 이후) 행 DELETE → ACCUM 집계로 TEMPX INSERT
++           변경: CUTOFF_MST 에서 같은 윈도 누적합을 인라인뷰로 계산하고, 같은 예외 조건을 NOT EXISTS 로 걸어 TEMPX 를 직접 적재 (집계 결과 동일 · ACCUM 적재/초기화/예외삭제 3단계 절감)
++           누적합은 예외 제거 "이전" 전 행으로 계산되어야 하므로(원문 순서) 인라인뷰 안에서 계산하고 NOT EXISTS 는 바깥 WHERE 에 둔다 */
+         INSERT INTO GT_DPMFCQB_CUTOFF_TEMPX
+         (
+@@ -2786,10 +2793,29 @@
+             , ACCUM_X
+         )
+-        SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, 'BALANCE' AS MEASURE, YYYYMMDD
+-              , CELL_PROD_SITE_ID  /* [PJ2025-50188] 추가 */
+-              , SUM( CASE WHEN MEASURE = 'MKT_FCST' THEN 0 ELSE ACCUM_SUM END ) - SUM( CASE WHEN MEASURE = 'MKT_FCST' THEN ACCUM_SUM ELSE 0 END ) AS ACCUM_X
+-        FROM GT_DPMFCQB_CUTOFF_MST_ACCUM
+-        GROUP BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, YYYYMMDD
+-              , CELL_PROD_SITE_ID;  /* [PJ2025-50188] 추가 */
++        SELECT X.DIVISION_ID, X.PROJECT_CODE, X.SCM_SITE_ID, X.ITEM_ID, X.DOM_EXP, X.FCST_TYPE, X.INCOTERMS, X.PLANT_SITE_ID, 'BALANCE' AS MEASURE, X.YYYYMMDD
++              , X.CELL_PROD_SITE_ID
++              , SUM( CASE WHEN X.MEASURE = 'MKT_FCST' THEN 0 ELSE X.ACCUM_SUM END ) - SUM( CASE WHEN X.MEASURE = 'MKT_FCST' THEN X.ACCUM_SUM ELSE 0 END ) AS ACCUM_X
++        FROM ( SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, YYYYMMDD
++                    , MEASURE, QTY
++                    , CELL_PROD_SITE_ID
++                    , SUM(QTY) OVER ( PARTITION BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, MEASURE, CELL_PROD_SITE_ID ORDER BY YYYYMMDD ) AS ACCUM_SUM
++               FROM GT_DPMFCQB_CUTOFF_MST ) X
++        WHERE NOT EXISTS ( SELECT 1
++                           FROM ( SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, NVL(CELL_PROD_SITE_ID, '-') AS CELL_PROD_SITE_ID
++                                  FROM GT_DPMFCQB_RTF_EXCEPTION_ITEM
++                                  GROUP BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS, PLANT_SITE_ID, NVL(CELL_PROD_SITE_ID, '-') ) B
++                           WHERE X.DIVISION_ID   = B.DIVISION_ID
++                           AND   X.PROJECT_CODE  = B.PROJECT_CODE
++                           AND   X.SCM_SITE_ID   = B.SCM_SITE_ID
++                           AND   X.ITEM_ID       = B.ITEM_ID
++                           AND   X.DOM_EXP       = B.DOM_EXP
++                           AND   X.FCST_TYPE     = B.FCST_TYPE
++                           AND   X.INCOTERMS     = B.INCOTERMS
++                           AND   X.PLANT_SITE_ID = B.PLANT_SITE_ID
++                           AND   NVL(X.CELL_PROD_SITE_ID, '-') = NVL(B.CELL_PROD_SITE_ID, '-')
++                           AND   X.YYYYMMDD     >= V_PLAN_START_YYYYMMDD )
++        GROUP BY X.DIVISION_ID, X.PROJECT_CODE, X.SCM_SITE_ID, X.ITEM_ID, X.DOM_EXP, X.FCST_TYPE, X.INCOTERMS, X.PLANT_SITE_ID, X.YYYYMMDD
++              , X.CELL_PROD_SITE_ID;
++        /* 2026.10.08 ZIONEX [E20261008-PERF] (END) */
+ 
+         /* ---------------------------------------------------------------------------------------------------------------- */
+@@ -2818,5 +2844,6 @@
+         AND   VERSION_NO      = P_CUT_OFF_VERSION
+         AND   CUTOFF_TYPE     = C_CUTOFF_TYPE
+-        AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD;
++        AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++        AND   CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */;
+         /* -------------------------------- 초기화 (END) */
+ 
+@@ -2844,5 +2871,6 @@
+             AND   VERSION_NO      = P_CUT_OFF_VERSION
+             AND   CUTOFF_TYPE     = C_CUTOFF_TYPE
+-            AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD;
++            AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND   CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */;
+             /* -------------------------------- 초기화 (END) */
+ 
+@@ -2876,5 +2904,6 @@
+             AND   VERSION_NO      = P_CUT_OFF_VERSION
+             AND   CUTOFF_TYPE     = C_CUTOFF_TYPE
+-            AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD;
++            AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND   CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */;
+ 
+             /* VMI_DIO INSERT */
+@@ -2917,4 +2946,5 @@
+                                        AND B.CUTOFF_TYPE     = C_CUTOFF_TYPE
+                                        AND B.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++                                       AND B.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+                                        AND ( SELECT SUM(C.QTY)
+                                              FROM DM_PLN_CFM_MKT_DEMAND_PLAN_C C
+@@ -2935,5 +2965,6 @@
+                                                AND C.VERSION_NO      = P_CUT_OFF_VERSION
+                                                AND C.CUTOFF_TYPE     = C_CUTOFF_TYPE
+-                                               AND C.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD ) >= A.QTY
++                                               AND C.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++                                               AND C.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */ ) >= A.QTY
+                                    ), 'YYYYMMDD')
+                           - TO_DATE(A.YYYYMMDD, 'YYYYMMDD'), 999 ) AS QTY
+@@ -2962,5 +2993,6 @@
+             AND A.VERSION_NO      = P_CUT_OFF_VERSION
+             AND A.CUTOFF_TYPE     = C_CUTOFF_TYPE
+-            AND A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD;
++            AND A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND A.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */;
+         ELSE
+             /* 수행전 삭제 */
+@@ -2970,5 +3002,6 @@
+             AND   VERSION_NO      = P_CUT_OFF_VERSION
+             AND   CUTOFF_TYPE     = C_CUTOFF_TYPE
+-            AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD;
++            AND   CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND   CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */;
+ 
+             /* VMI_DIO INSERT */
+@@ -3007,4 +3040,5 @@
+                                        AND B.CUTOFF_TYPE     = C_CUTOFF_TYPE
+                                        AND B.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++                                       AND B.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */
+                                        AND ( SELECT SUM(C.QTY)
+                                              FROM DM_PLN_MKT_FCST_C C
+@@ -3023,5 +3057,6 @@
+                                                AND C.VERSION_NO      = P_CUT_OFF_VERSION
+                                                AND C.CUTOFF_TYPE     = C_CUTOFF_TYPE
+-                                               AND C.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD ) >= A.QTY
++                                               AND C.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++                                               AND C.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */ ) >= A.QTY
+                                    ), 'YYYYMMDD')
+                           - TO_DATE(A.YYYYMMDD, 'YYYYMMDD'), 999 ) AS QTY
+@@ -3049,5 +3084,6 @@
+             AND A.VERSION_NO      = P_CUT_OFF_VERSION
+             AND A.CUTOFF_TYPE     = C_CUTOFF_TYPE
+-            AND A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD;
++            AND A.CUTOFF_YYYYMMDD = C_CUTOFF_YYYYMMDD
++            AND A.CUTOFF_YYYYMMDD_DATE = C_CUTOFF_DATE  /* 2026.10.08 ZIONEX [E20261008-PERF] 파티션 키 */;
+         END IF;
+         /* ------------------------------------------------------------------------------------------------------------------- VMI DIO 계산로직 (END) */

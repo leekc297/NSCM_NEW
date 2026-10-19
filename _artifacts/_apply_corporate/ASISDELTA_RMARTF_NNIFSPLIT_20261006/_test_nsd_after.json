@@ -1,0 +1,174 @@
+{
+ "checks": [
+  {
+   "check": "N0 상태 VALID · 컴파일 오류 0",
+   "pass": true,
+   "detail": "2026-10-06 15:37:35"
+  },
+  {
+   "check": "N0 실행 코드에 PR_DM_CUST_MODEL_MAPPING_IF 호출·'호출 START/END' 로그 없음",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "N0 의존 객체에서 PR_DM_CUST_MODEL_MAPPING_IF 빠짐",
+   "pass": true,
+   "detail": "['GT_ET_CUST_DEMAND_MAPPING', 'PR_SCM_SYS_LOG_BATCH', 'XIF_CUST_DEMAND_MAPPING_MST_R_SN']"
+  },
+  {
+   "check": "N0 인자 무변경 (O_RESULT_CURSOR OUT 1개)",
+   "pass": true,
+   "detail": "[('O_RESULT_CURSOR', 'OUT', 'REF CURSOR')]"
+  },
+  {
+   "check": "N1 수신 0건: 결과 S / SUCCESS",
+   "pass": true,
+   "detail": "[('S', 'SUCCESS')]"
+  },
+  {
+   "check": "N1 로그 5건 = START · I/F COUNT · 적재 START · 적재 · END (같은 초 기록이라 순서 무관 비교 · 호출 START/END 없음 · ERROR 없음)",
+   "pass": true,
+   "detail": "[('START', '########## Start of procedure ##########'), ('APPEND', 'ET_CUST_DEMAND_MAPPING I/F COUNT'), ('END', '########## END of procedure ##########'), ('APPEND', 'XIF_CUST_DEMAND_MAPPING_MST_R_SN 데이터 적재'), ('APPEND', 'XIF_CUST_DEMAND_MAPPING_MST_R_SN 데이터 적재 START')]"
+  },
+  {
+   "check": "N2 수신 1건: 결과 S / SUCCESS",
+   "pass": true,
+   "detail": "[('S', 'SUCCESS')]"
+  },
+  {
+   "check": "N2 I/F 테이블에 1행 적재 · TRANSFER_FLAG = 'N' (매핑 반영 미수행 = JOB 대기 상태)",
+   "pass": true,
+   "detail": "[('ZZ_TEST_ASISDELTA_20261006', 1.0, 'ZZZZ', '81', 'ZZ_TEST_MAT', 'ZZ_TEST_ITEM', '20260101', '99991231', 'N')]"
+  },
+  {
+   "check": "N2 호출 직후 매핑 마스터 무변경 (같은 트랜잭션 안)",
+   "pass": true,
+   "detail": "[(817, '20260914091442')]"
+  },
+  {
+   "check": "N2 로그: 적재 건수 1 · 호출 START/END 없음 · ERROR 없음",
+   "pass": true,
+   "detail": "[('########## Start of procedure ##########', None), ('ET_CUST_DEMAND_MAPPING I/F COUNT', 'ET_CUST_DEMAND_MAPPING I/F COUNT : 1'), ('########## END of procedure ##########', 'I/F COUNT : 1'), ('XIF_CUST_DEMAND_MAPPING_MST_R_SN 데이터 적재', '[XIF_CUST_DEMAND_MAPPING_MST_R_SN] : 1'), ('XIF_CUST_DEMAND_MAPPING_MST_R_SN 데이터 적재 START', 'SCM_IF_NR : ZZ_TEST_ASISDELTA_20261006')]"
+  },
+  {
+   "check": "N2 ROLLBACK 후 시험 행 0건 (SP 가 COMMIT 하지 않음)",
+   "pass": true,
+   "detail": "0"
+  },
+  {
+   "check": "Z 매핑 마스터 DM_CUST_MODEL_MAPPING_M 시험 전 == 시험 후",
+   "pass": true,
+   "detail": "[(817, '20260914091442')]"
+  },
+  {
+   "check": "Z I/F 테이블 XIF_CUST_DEMAND_MAPPING_MST_R 시험 전 == 시험 후",
+   "pass": true,
+   "detail": "[('X', 19498, '20250628110504'), ('Y', 59687, '20250628110504')]"
+  },
+  {
+   "check": "Z Call Off 품목 DM_DNM_EDI_CALLOFF_ITEM 시험 전 == 시험 후",
+   "pass": true,
+   "detail": "[(3465797,)]"
+  },
+  {
+   "check": "J 분리된 JOB 등록됨 (JOB_PR_DM_CUST_MODEL_MAPPING_IF → PR_DM_CUST_MODEL_MAPPING_IF('ERP'))",
+   "pass": true,
+   "detail": "[('JOB_PR_DM_CUST_MODEL_MAPPING_IF', 'FALSE', 'DISABLED', 'FREQ=DAILY;BYHOUR=11;BYMINUTE=10;BYSECOND=0', \"\\nBEGIN\\n  -- step 1 : PR_DM_CUST_MODEL_MAPPING_IF 'ERP'\\n  PR_DM_CUST_MODEL_MAPPING_IF('ERP');\\nEND;\")]"
+  }
+ ],
+ "N1": {
+  "result": [
+   [
+    "S",
+    "SUCCESS"
+   ]
+  ],
+  "log": [
+   [
+    "START",
+    "########## Start of procedure ##########",
+    null
+   ],
+   [
+    "APPEND",
+    "ET_CUST_DEMAND_MAPPING I/F COUNT",
+    "ET_CUST_DEMAND_MAPPING I/F COUNT : 0"
+   ],
+   [
+    "END",
+    "########## END of procedure ##########",
+    "I/F COUNT : 0"
+   ],
+   [
+    "APPEND",
+    "XIF_CUST_DEMAND_MAPPING_MST_R_SN 데이터 적재",
+    "[XIF_CUST_DEMAND_MAPPING_MST_R_SN] : 0"
+   ],
+   [
+    "APPEND",
+    "XIF_CUST_DEMAND_MAPPING_MST_R_SN 데이터 적재 START",
+    "SCM_IF_NR : NO COUNT"
+   ]
+  ]
+ },
+ "N2": {
+  "result": [
+   [
+    "S",
+    "SUCCESS"
+   ]
+  ],
+  "xif_row": [
+   [
+    "ZZ_TEST_ASISDELTA_20261006",
+    1.0,
+    "ZZZZ",
+    "81",
+    "ZZ_TEST_MAT",
+    "ZZ_TEST_ITEM",
+    "20260101",
+    "99991231",
+    "N"
+   ]
+  ],
+  "log": [
+   [
+    "START",
+    "########## Start of procedure ##########",
+    null
+   ],
+   [
+    "APPEND",
+    "ET_CUST_DEMAND_MAPPING I/F COUNT",
+    "ET_CUST_DEMAND_MAPPING I/F COUNT : 1"
+   ],
+   [
+    "END",
+    "########## END of procedure ##########",
+    "I/F COUNT : 1"
+   ],
+   [
+    "APPEND",
+    "XIF_CUST_DEMAND_MAPPING_MST_R_SN 데이터 적재",
+    "[XIF_CUST_DEMAND_MAPPING_MST_R_SN] : 1"
+   ],
+   [
+    "APPEND",
+    "XIF_CUST_DEMAND_MAPPING_MST_R_SN 데이터 적재 START",
+    "SCM_IF_NR : ZZ_TEST_ASISDELTA_20261006"
+   ]
+  ],
+  "left_after_rollback": 0
+ },
+ "log_rows_written": 10,
+ "job": [
+  [
+   "JOB_PR_DM_CUST_MODEL_MAPPING_IF",
+   "FALSE",
+   "DISABLED",
+   "FREQ=DAILY;BYHOUR=11;BYMINUTE=10;BYSECOND=0",
+   "\nBEGIN\n  -- step 1 : PR_DM_CUST_MODEL_MAPPING_IF 'ERP'\n  PR_DM_CUST_MODEL_MAPPING_IF('ERP');\nEND;"
+  ]
+ ],
+ "all_pass": true
+}

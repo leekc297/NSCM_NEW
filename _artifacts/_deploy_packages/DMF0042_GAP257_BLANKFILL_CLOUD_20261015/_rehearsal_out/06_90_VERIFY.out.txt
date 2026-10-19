@@ -1,0 +1,14 @@
+CHK | N | LINES | JUDGE
+V1 마커 | 5 | 4796,4810,4814,4817,4835 | PASS
+(1 rows)
+
+CHK | STATUS | ERRS | LAST_DDL | JUDGE
+V2 상태 | VALID | 0 | 2026-10-15 18:48:15 | PASS
+(1 rows)
+
+CHK | KIND | N | EXPECT | JUDGE
+V3 줄 | ① OR INCOTERMS IN | 1 | 1 | PASS
+V3 줄 | ① WHERE FCST_TYPE IN | 1 | 1 | PASS
+V3 줄 | ② IF ... 40 | 1 | 1 | PASS
+V3 줄 | ③ DEPT_ID 동치(count) | 1 | 1 | PASS
+(4 rows)

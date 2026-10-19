@@ -1,0 +1,94 @@
+[E20261007-DATEVAR] 변경 블록 — 판본이 다르면 이 diff 를 클라우드 원문에 수동 반영. '-' 줄을 '+' 줄로. @@ 줄번호는 사내 기준.
+규칙: ① 선언부 끝(V_DUMMY_CUR 다음) 선언 추가 ② V_DELIMITER := '^'; 다음 대입 2줄 ③ TO_CHAR(FN_NEXT_DAY(SYSDATE,'MON') - 7*54,'YYYYMMDD') 전부(2곳) → V_FROM_54W ④ … - 7, … 전부(9곳) → V_FROM_1W
+주의: 대입문 2줄 자체는 치환하지 않는다. MSSQL 주석 블록의 dbo.FN_NEXT_DAY(GETDATE()…) 는 대상 아님.
+
+--- cloud_before
++++ after
+@@ -79,4 +79,9 @@
+     /* PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE 의 필수 OUT SYS_REFCURSOR(3번째 인자, 호출측 미사용 → 즉시 CLOSE). all_arguments 로 확인 */
+     V_DUMMY_CUR          SYS_REFCURSOR;
++
++    /* [E20261007-DATEVAR] 날짜 경계를 시작 때 1회 계산해 바인드로 쓴다 — 술어 안 FN_NEXT_DAY(SYSDATE) 는 옵티마이저가 선택도를 못 보아
++       (추정 2,618행 vs 실제 423,068행, 클라우드 AWR 2026-10-05) 인덱스 ROWID 경로를 고르고, 81/82 로 파싱된 계획을 40 이 공유했다. 결과 행 동일 */
++    V_FROM_1W            VARCHAR2(8 CHAR);   /* 당주 월요일 = FN_NEXT_DAY(SYSDATE,'MON') - 7 */
++    V_FROM_54W           VARCHAR2(8 CHAR);   /* 54주 전 월요일 (최근 1년치) */
+ BEGIN
+     /* MSSQL 세션설정 SET NOCOUNT ON / SET TRANSACTION ISOLATION LEVEL READ COMMITTED / SET XACT_ABORT ON
+@@ -88,4 +93,6 @@
+     V_CREATED_BY      := NULL;
+     V_DELIMITER       := '^';
++    V_FROM_1W         := TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7,    'YYYYMMDD');  /* [E20261007-DATEVAR] */
++    V_FROM_54W        := TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7*54, 'YYYYMMDD');  /* [E20261007-DATEVAR] */
+ 
+     /*================================================================================================================
+@@ -249,5 +256,5 @@
+                       FROM DM_PLN_MKT_FCST
+                      WHERE DIVISION_ID = V_DIVISION_ID
+-                       AND YYYYMMDD >= TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7, 'YYYYMMDD')
++                       AND YYYYMMDD >= V_FROM_1W /* [E20261007-DATEVAR] */
+                        AND MEASURE = 'SCM_FCST';
+ 
+@@ -287,10 +294,10 @@
+                      WHERE A.DIVISION_ID = V_DIVISION_ID
+                        AND A.MEASURE     = 'MKT_FCST'
+-                       AND A.YYYYMMDD   >= TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7, 'YYYYMMDD');
++                       AND A.YYYYMMDD   >= V_FROM_1W /* [E20261007-DATEVAR] */;
+ 
+                     DELETE
+                       FROM DM_PLN_CFM_MKT_DEMAND_PLAN
+                      WHERE DIVISION_ID = V_DIVISION_ID
+-                       AND YYYYMMDD >= TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7, 'YYYYMMDD')
++                       AND YYYYMMDD >= V_FROM_1W /* [E20261007-DATEVAR] */
+                        AND MEASURE = 'SCM_FCST';
+ 
+@@ -334,5 +341,5 @@
+                      WHERE A.DIVISION_ID = V_DIVISION_ID
+                        AND A.MEASURE     = 'MKT_FCST'
+-                       AND A.YYYYMMDD   >= TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7, 'YYYYMMDD');
++                       AND A.YYYYMMDD   >= V_FROM_1W /* [E20261007-DATEVAR] */;
+                     -- AJS 20260902
+                 ELSIF ( SUBSTR(V_DIVISION_ID, 1, 2) = '81' AND P_VER_TYPE = 'MF_W' ) THEN  
+@@ -340,5 +347,5 @@
+                       FROM DM_PLN_MKT_FCST  
+                      WHERE DIVISION_ID = V_DIVISION_ID  
+-                       AND YYYYMMDD >= TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7, 'YYYYMMDD')  
++                       AND YYYYMMDD >= V_FROM_1W /* [E20261007-DATEVAR] */  
+                        AND MEASURE = 'SCM_FCST';  
+                     INSERT INTO DM_PLN_MKT_FCST  
+@@ -377,5 +384,5 @@
+                      WHERE A.DIVISION_ID = V_DIVISION_ID  
+                        AND A.MEASURE     = 'MKT_FCST'  
+-                       AND A.YYYYMMDD   >= TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7, 'YYYYMMDD');  
++                       AND A.YYYYMMDD   >= V_FROM_1W /* [E20261007-DATEVAR] */;  
+                 END IF;
+             END;
+@@ -473,5 +480,5 @@
+                             AND T2.VALID_YN    = 'Y'
+                             AND F.DIVISION_ID  = V_DIVISION_ID
+-                            AND F.YYYYMMDD    >= TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7, 'YYYYMMDD')
++                            AND F.YYYYMMDD    >= V_FROM_1W /* [E20261007-DATEVAR] */
+                             AND F.MEASURE NOT IN ('CUST_FCST_EDI_ORG', 'Immidiate[Org.]', 'Planning_Forecast[Org.]', 'Commercial_Agreement[Org.]', 'Firm_Temp[Org.]', 'Manumacturing_Material_Temp[Org.]', 'Material_Temp[Org.]', 'Backorder[Org.]')
+                          UNION ALL
+@@ -509,5 +516,5 @@
+                             AND T2.VALID_YN    = 'Y'
+                             AND F.DIVISION_ID  = V_DIVISION_ID
+-                            AND F.YYYYMMDD    >= TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7*54, 'YYYYMMDD') /* 최근 1년치 */
++                            AND F.YYYYMMDD    >= V_FROM_54W /* [E20261007-DATEVAR] */ /* 최근 1년치 */
+                             AND F.MEASURE IN ('CUST_FCST_EDI_ORG', 'Immidiate[Org.]', 'Planning_Forecast[Org.]', 'Commercial_Agreement[Org.]', 'Firm_Temp[Org.]', 'Manumacturing_Material_Temp[Org.]', 'Material_Temp[Org.]', 'Backorder[Org.]')
+                        ) A;
+@@ -603,6 +610,6 @@
+                            FROM DM_PLN_MKT_FCST_RESULT
+                           WHERE DIVISION_ID = V_DIVISION_ID
+-                            AND YYYYMMDD  <  TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7, 'YYYYMMDD')    /* [2018-03-28][추가][금주 월요일 이전] */
+-                            AND YYYYMMDD  >= TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7*54, 'YYYYMMDD') /* 최근 1년치 */
++                            AND YYYYMMDD  <  V_FROM_1W /* [E20261007-DATEVAR] */    /* [2018-03-28][추가][금주 월요일 이전] */
++                            AND YYYYMMDD  >= V_FROM_54W /* [E20261007-DATEVAR] */ /* 최근 1년치 */
+                        ) A;
+             END;
+@@ -695,5 +702,5 @@
+                AND B.VALID_YN     = 'Y'
+                AND A.DIVISION_ID  = V_DIVISION_ID
+-               AND A.YYYYMMDD    >= TO_CHAR(FN_NEXT_DAY(SYSDATE, 'MON') - 7, 'YYYYMMDD');
++               AND A.YYYYMMDD    >= V_FROM_1W /* [E20261007-DATEVAR] */;
+             /*----------------------------------------------------------------------------------------------------------
+               [PJ2025-50188] DM_PLN_CFM_MKT_DEMAND_PLAN CUTOFF (END)

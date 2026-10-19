@@ -1,0 +1,32 @@
+{
+ "40": {
+  "var_first_sec": 0.3,
+  "func_second_sec": 4.9,
+  "var_third_sec": 0.2,
+  "cnt": [
+   191466,
+   191466,
+   191466
+  ],
+  "plan_var": [
+   "|   0 | SELECT STATEMENT         |                         |     1 |",
+   "|   1 |  SORT AGGREGATE          |                         |     1 |",
+   "|   2 |   HASH JOIN              |                         | 22499 |",
+   "|   3 |    VIEW                  | index$_join$_002        | 22499 |",
+   "|   4 |     HASH JOIN            |                         |       |",
+   "|   5 |      INDEX RANGE SCAN    | IDX03_SCM_MST_SITE_ITEM | 22499 |",
+   "|   6 |      INDEX FAST FULL SCAN| IDX04_SCM_MST_SITE_ITEM | 22499 |",
+   "|   7 |    TABLE ACCESS FULL     | DM_PLN_MKT_FCST         |   207K|"
+  ],
+  "plan_func": [
+   "|   0 | SELECT STATEMENT         |                         |     1 |",
+   "|   1 |  SORT AGGREGATE          |                         |     1 |",
+   "|   2 |   HASH JOIN              |                         | 22499 |",
+   "|   3 |    VIEW                  | index$_join$_002        | 22499 |",
+   "|   4 |     HASH JOIN            |                         |       |",
+   "|   5 |      INDEX RANGE SCAN    | IDX03_SCM_MST_SITE_ITEM | 22499 |",
+   "|   6 |      INDEX FAST FULL SCAN| IDX04_SCM_MST_SITE_ITEM | 22499 |",
+   "|   7 |    TABLE ACCESS FULL     | DM_PLN_MKT_FCST         | 51524 |"
+  ]
+ }
+}

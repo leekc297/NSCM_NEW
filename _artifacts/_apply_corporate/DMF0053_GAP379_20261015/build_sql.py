@@ -1,0 +1,147 @@
+# GAP 379 — DMF0053 사용자별 칸(C)·Measure(M) 설정 이관 SQL 생성 (사내·클라우드 공용 단일본)
+#   원천 = analyze.py 가 AS-IS DEV(LGCE_SCMDEV) 에서 떠 둔 asis_rows.json (MIGRATE 판정 행 전부 — 실행 DB 에서 다시 판정)
+#   대상 DB 실행 시점 판정(사내 전값 WHERE 고정 없음):
+#     ① C = SCM_MST_SHEET_COLUMNS(DMF0053/CUST Fcst Waterfall) 에 칸 존재 / M = SCM_MST_SHEET_MEASURE(VALID_YN='Y') 에 존재
+#     ② PK 미존재  ③ 그 사용자가 같은 유형(C/M) TO-BE 설정을 아직 안 가짐(사용자가 TO-BE 에서 새로 만든 설정은 보존)
+#   INSERT … NOT EXISTS (멱등·비파괴) · 감사 4컬럼 = AS-IS 원값(사용자 개인 설정) · 날짜는 명시 형식 TO_DATE
+#   원복 = 이 SQL 이 넣은 값과 **지금도 같은** 행만 삭제(사용자가 그 뒤 화면에서 다시 저장한 행은 보존)
+import json, pathlib, datetime
+
+HERE = pathlib.Path(__file__).parent
+DEPLOY = pathlib.Path(r'C:\Projects\NSCM\_artifacts\_deploy_packages\DMF0053_GAP379_TITLESET_CLOUD_20261015\A_DB')
+src = json.loads((HERE / 'asis_rows.json').read_text(encoding='utf-8'))
+rows = [r for r in src['rows'] if r['_JUDGE'] == 'MIGRATE']
+TAG = '[E20261015-GAP379]'
+
+
+def s(v):
+    if v is None or v == '' or v == 'None':
+        return 'NULL'
+    return "'" + str(v).replace("'", "''") + "'"
+
+
+def dt(v):
+    return f"TO_DATE('{v[:19]}', 'YYYY-MM-DD HH24:MI:SS')"
+
+
+def n(v):
+    return 'NULL' if v in (None, '', 'None') else str(int(float(v)))
+
+
+ATTR = [f'ATTRIBUTE{i}' for i in range(1, 11)]
+sel = []
+for r in rows:
+    sel.append("SELECT " + ", ".join([
+        s(r['USER_ID']), s(r['PROGRAM_ID']), s(r['SHEET_NAME']), s(r['USER_INQUIRY_COLUMN_TYPE_CODE']), s(r['COLUMN_NAME']),
+        n(r['SORT_ORDER_NO']), s(r['SUB_TOTAL_FLAG']), s(r['DATA_SORT_METHOD_CODE']),
+        s(r['CREATED_BY']), dt(r['CREATION_DATE']), s(r['LAST_UPDATED_BY']), dt(r['LAST_UPDATE_DATE'])]
+        + [s(r[a]) for a in ATTR]) + " FROM DUAL")
+first = sel[0].replace("SELECT ", "SELECT ", 1)
+cols = ("USER_ID, PROGRAM_ID, SHEET_NAME, TP, COLUMN_NAME, SORT_ORDER_NO, SUB_TOTAL_FLAG, DATA_SORT_METHOD_CODE, "
+        "CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE, " + ", ".join(ATTR))
+# 첫 행에 별칭을 붙여 인라인 뷰 컬럼명을 고정
+alias = cols.split(', ')
+vals0 = rows[0]
+sel[0] = "SELECT " + ", ".join(f"{e} {a}" for e, a in zip(
+    [s(vals0['USER_ID']), s(vals0['PROGRAM_ID']), s(vals0['SHEET_NAME']), s(vals0['USER_INQUIRY_COLUMN_TYPE_CODE']), s(vals0['COLUMN_NAME']),
+     n(vals0['SORT_ORDER_NO']), s(vals0['SUB_TOTAL_FLAG']), s(vals0['DATA_SORT_METHOD_CODE']),
+     s(vals0['CREATED_BY']), dt(vals0['CREATION_DATE']), s(vals0['LAST_UPDATED_BY']), dt(vals0['LAST_UPDATE_DATE'])]
+    + [s(vals0[a]) for a in ATTR], alias)) + " FROM DUAL"
+SRC = "\n  UNION ALL ".join(sel)
+cnt_c = sum(1 for r in rows if r['USER_INQUIRY_COLUMN_TYPE_CODE'] == 'C')
+cnt_m = len(rows) - cnt_c
+users = sorted({r['USER_ID'] for r in rows})
+now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+
+HEAD = f"""-- {TAG} GAP 379 — DMF0053 Customer FCST Waterfall 사용자별 칸·Measure 화면 설정 이관 (SCM_MST_TITLESET_USER)
+-- 원천: AS-IS {src['source'][0]}/{src['source'][1]} 조회 {src['source'][2]} — PROGRAM_ID='DMF0053' {len(src['rows'])}행 중 이관 판정 {len(rows)}행 (C {cnt_c} · M {cnt_m}) · 사용자 {len(users)}명
+-- 생성: {now} · 실행 계정 SCM_MGR · 전체 F5 · 값 입력 없음 · 멱등(재실행 시 0행) · 비파괴(기존 행 변경·삭제 없음)
+-- 판정(실행 DB 기준): ① C=SCM_MST_SHEET_COLUMNS / M=SCM_MST_SHEET_MEASURE(VALID_YN='Y') 에 칸 존재 ② PK 미존재
+--                     ③ 그 사용자가 같은 유형(C/M) 설정을 이 DB 에서 아직 갖지 않음(TO-BE 에서 새로 만든 설정 보존)
+"""
+
+SRC_VIEW = f"""WITH S AS (
+  {SRC}
+)"""
+
+PRECHECK = HEAD + f"""-- 00_PRECHECK — 조회 전용
+SET LINESIZE 220 PAGESIZE 300
+SET DEFINE OFF
+SELECT 'P0' CHK, SYS_CONTEXT('USERENV','DB_NAME') DB_NAME, TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS') NOW FROM DUAL;
+SELECT 'P1 현재' CHK, USER_INQUIRY_COLUMN_TYPE_CODE TP, COUNT(*) N, COUNT(DISTINCT USER_ID) USERS
+  FROM SCM_MST_TITLESET_USER WHERE PROGRAM_ID = 'DMF0053' GROUP BY USER_INQUIRY_COLUMN_TYPE_CODE ORDER BY 2;
+SELECT 'P2 메타' CHK, 'SHEET_COLUMNS' K, COUNT(*) N FROM SCM_MST_SHEET_COLUMNS WHERE PROGRAM_ID='DMF0053' AND SHEET_NAME='CUST Fcst Waterfall'
+UNION ALL SELECT 'P2 메타', 'SHEET_MEASURE(VALID)', COUNT(*) FROM SCM_MST_SHEET_MEASURE WHERE PROGRAM_ID='DMF0053' AND SHEET_NAME='CUST Fcst Waterfall' AND VALID_YN='Y';
+-- P3 = 지금 실행하면 들어갈 행 / 빠지는 사유별 건수
+{SRC_VIEW}
+SELECT 'P3 판정' CHK, S.TP,
+       CASE WHEN S.TP = 'C' AND NOT EXISTS (SELECT 1 FROM SCM_MST_SHEET_COLUMNS C WHERE C.PROGRAM_ID = S.PROGRAM_ID AND C.SHEET_NAME = S.SHEET_NAME AND C.COLUMN_NAME = S.COLUMN_NAME) THEN 'SKIP 칸 메타 없음'
+            WHEN S.TP = 'M' AND NOT EXISTS (SELECT 1 FROM SCM_MST_SHEET_MEASURE M WHERE M.PROGRAM_ID = S.PROGRAM_ID AND M.SHEET_NAME = S.SHEET_NAME AND M.COLUMN_NAME = S.COLUMN_NAME AND M.VALID_YN = 'Y') THEN 'SKIP Measure 메타 없음'
+            WHEN EXISTS (SELECT 1 FROM SCM_MST_TITLESET_USER U WHERE U.USER_ID = S.USER_ID AND U.PROGRAM_ID = S.PROGRAM_ID AND U.SHEET_NAME = S.SHEET_NAME AND U.USER_INQUIRY_COLUMN_TYPE_CODE = S.TP AND U.COLUMN_NAME = S.COLUMN_NAME) THEN 'SKIP 이미 있음'
+            WHEN EXISTS (SELECT 1 FROM SCM_MST_TITLESET_USER U WHERE U.USER_ID = S.USER_ID AND U.PROGRAM_ID = S.PROGRAM_ID AND U.SHEET_NAME = S.SHEET_NAME AND U.USER_INQUIRY_COLUMN_TYPE_CODE = S.TP) THEN 'SKIP 사용자 TO-BE 설정 보유'
+            ELSE 'INSERT' END JUDGE,
+       COUNT(*) N, COUNT(DISTINCT S.USER_ID) USERS
+  FROM S GROUP BY S.TP,
+       CASE WHEN S.TP = 'C' AND NOT EXISTS (SELECT 1 FROM SCM_MST_SHEET_COLUMNS C WHERE C.PROGRAM_ID = S.PROGRAM_ID AND C.SHEET_NAME = S.SHEET_NAME AND C.COLUMN_NAME = S.COLUMN_NAME) THEN 'SKIP 칸 메타 없음'
+            WHEN S.TP = 'M' AND NOT EXISTS (SELECT 1 FROM SCM_MST_SHEET_MEASURE M WHERE M.PROGRAM_ID = S.PROGRAM_ID AND M.SHEET_NAME = S.SHEET_NAME AND M.COLUMN_NAME = S.COLUMN_NAME AND M.VALID_YN = 'Y') THEN 'SKIP Measure 메타 없음'
+            WHEN EXISTS (SELECT 1 FROM SCM_MST_TITLESET_USER U WHERE U.USER_ID = S.USER_ID AND U.PROGRAM_ID = S.PROGRAM_ID AND U.SHEET_NAME = S.SHEET_NAME AND U.USER_INQUIRY_COLUMN_TYPE_CODE = S.TP AND U.COLUMN_NAME = S.COLUMN_NAME) THEN 'SKIP 이미 있음'
+            WHEN EXISTS (SELECT 1 FROM SCM_MST_TITLESET_USER U WHERE U.USER_ID = S.USER_ID AND U.PROGRAM_ID = S.PROGRAM_ID AND U.SHEET_NAME = S.SHEET_NAME AND U.USER_INQUIRY_COLUMN_TYPE_CODE = S.TP) THEN 'SKIP 사용자 TO-BE 설정 보유'
+            ELSE 'INSERT' END
+ ORDER BY 2, 3;
+"""
+
+APPLY = HEAD + f"""-- 10_APPLY — INSERT … NOT EXISTS 1문장 + COMMIT
+SET DEFINE OFF
+INSERT INTO SCM_MST_TITLESET_USER
+     ( USER_ID, PROGRAM_ID, SHEET_NAME, USER_INQUIRY_COLUMN_TYPE_CODE, COLUMN_NAME, SORT_ORDER_NO, SUB_TOTAL_FLAG, DATA_SORT_METHOD_CODE
+     , CREATED_BY, CREATION_DATE, LAST_UPDATED_BY, LAST_UPDATE_DATE
+     , {', '.join(ATTR)} )
+{SRC_VIEW}
+SELECT S.USER_ID, S.PROGRAM_ID, S.SHEET_NAME, S.TP, S.COLUMN_NAME, S.SORT_ORDER_NO, NVL(S.SUB_TOTAL_FLAG, 'N'), S.DATA_SORT_METHOD_CODE
+     , S.CREATED_BY, S.CREATION_DATE, S.LAST_UPDATED_BY, S.LAST_UPDATE_DATE
+     , {', '.join('S.' + a for a in ATTR)}
+  FROM S
+ WHERE ( (S.TP = 'C' AND EXISTS (SELECT 1 FROM SCM_MST_SHEET_COLUMNS C WHERE C.PROGRAM_ID = S.PROGRAM_ID AND C.SHEET_NAME = S.SHEET_NAME AND C.COLUMN_NAME = S.COLUMN_NAME))
+      OR (S.TP = 'M' AND EXISTS (SELECT 1 FROM SCM_MST_SHEET_MEASURE M WHERE M.PROGRAM_ID = S.PROGRAM_ID AND M.SHEET_NAME = S.SHEET_NAME AND M.COLUMN_NAME = S.COLUMN_NAME AND M.VALID_YN = 'Y')) )
+   AND NOT EXISTS (SELECT 1 FROM SCM_MST_TITLESET_USER U
+                    WHERE U.USER_ID = S.USER_ID AND U.PROGRAM_ID = S.PROGRAM_ID AND U.SHEET_NAME = S.SHEET_NAME
+                      AND U.USER_INQUIRY_COLUMN_TYPE_CODE = S.TP);
+COMMIT;
+SELECT 'APPLY 후' CHK, USER_INQUIRY_COLUMN_TYPE_CODE TP, COUNT(*) N, COUNT(DISTINCT USER_ID) USERS
+  FROM SCM_MST_TITLESET_USER WHERE PROGRAM_ID = 'DMF0053' GROUP BY USER_INQUIRY_COLUMN_TYPE_CODE ORDER BY 2;
+"""
+
+VERIFY = HEAD + f"""-- 90_VERIFY — 조회 전용: 이관 원천 행 중 이 DB 에 같은 값으로 존재하는 행 수 · ORDER BY 에 쓰일 칸 이름 유효성
+SET LINESIZE 220 PAGESIZE 300
+SET DEFINE OFF
+{SRC_VIEW}
+SELECT 'V1 반영' CHK, S.TP, COUNT(*) SRC_N,
+       SUM(CASE WHEN EXISTS (SELECT 1 FROM SCM_MST_TITLESET_USER U WHERE U.USER_ID = S.USER_ID AND U.PROGRAM_ID = S.PROGRAM_ID AND U.SHEET_NAME = S.SHEET_NAME
+                              AND U.USER_INQUIRY_COLUMN_TYPE_CODE = S.TP AND U.COLUMN_NAME = S.COLUMN_NAME) THEN 1 ELSE 0 END) IN_DB
+  FROM S GROUP BY S.TP ORDER BY 2;
+SELECT 'V2 무효 칸' CHK, COUNT(*) N, CASE WHEN COUNT(*) = 0 THEN 'PASS' ELSE 'FAIL — 회신' END JUDGE
+  FROM SCM_MST_TITLESET_USER U
+ WHERE U.PROGRAM_ID = 'DMF0053' AND U.SHEET_NAME = 'CUST Fcst Waterfall' AND U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+   AND NOT EXISTS (SELECT 1 FROM SCM_MST_SHEET_COLUMNS C WHERE C.PROGRAM_ID = U.PROGRAM_ID AND C.SHEET_NAME = U.SHEET_NAME AND C.COLUMN_NAME = U.COLUMN_NAME);
+"""
+
+ROLLBACK = HEAD + f"""-- 99_ROLLBACK — 이 SQL 이 넣은 값과 지금도 같은 행만 삭제(감사 4컬럼·정렬값 일치). 사용자가 그 뒤 다시 저장한 행은 보존
+SET DEFINE OFF
+DELETE FROM SCM_MST_TITLESET_USER U
+ WHERE U.PROGRAM_ID = 'DMF0053'
+   AND EXISTS (
+       {SRC_VIEW.replace(chr(10), chr(10) + '       ')}
+       SELECT 1 FROM S
+        WHERE S.USER_ID = U.USER_ID AND S.PROGRAM_ID = U.PROGRAM_ID AND S.SHEET_NAME = U.SHEET_NAME
+          AND S.TP = U.USER_INQUIRY_COLUMN_TYPE_CODE AND S.COLUMN_NAME = U.COLUMN_NAME
+          AND S.CREATED_BY = U.CREATED_BY AND S.CREATION_DATE = U.CREATION_DATE
+          AND S.LAST_UPDATED_BY = U.LAST_UPDATED_BY AND S.LAST_UPDATE_DATE = U.LAST_UPDATE_DATE
+          AND NVL(S.SORT_ORDER_NO, -1) = NVL(U.SORT_ORDER_NO, -1));
+COMMIT;
+"""
+
+DEPLOY.mkdir(parents=True, exist_ok=True)
+files = {'00_PRECHECK.sql': PRECHECK, '10_APPLY_GAP379_TITLESET.sql': APPLY, '90_VERIFY.sql': VERIFY, '99_ROLLBACK_GAP379_TITLESET.sql': ROLLBACK}
+for name, text in files.items():
+    (DEPLOY / name).write_text(text, encoding='utf-8', newline='\n')
+print('rows', len(rows), 'C', cnt_c, 'M', cnt_m, 'users', len(users), '->', DEPLOY)

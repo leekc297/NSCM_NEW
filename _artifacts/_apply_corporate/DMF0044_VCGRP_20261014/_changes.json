@@ -1,0 +1,121 @@
+[
+ {
+  "line": 8045,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8046
+ },
+ {
+  "line": 8080,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8081
+ },
+ {
+  "line": 8111,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(A.CURRENCY, '/'), NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "덧붙임",
+  "line_after": 8112
+ },
+ {
+  "line": 8142,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8143
+ },
+ {
+  "line": 8168,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8169
+ },
+ {
+  "line": 8198,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8199
+ },
+ {
+  "line": 8226,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8227
+ },
+ {
+  "line": 8382,
+  "old": "NVL(B.SALES_COMPANY, '/')",
+  "new": "NVL(NULLIF(RTRIM(B.SALES_COMPANY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8383
+ },
+ {
+  "line": 8384,
+  "old": "NVL(A.END_CUSTOMER, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.END_CUSTOMER),''), '/')",
+  "how": "바꿈",
+  "line_after": 8385
+ },
+ {
+  "line": 8384,
+  "old": "NVL(A.ITEM_USE, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.ITEM_USE),''), '/')",
+  "how": "바꿈",
+  "line_after": 8385
+ },
+ {
+  "line": 8549,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8550
+ },
+ {
+  "line": 8578,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8579
+ },
+ {
+  "line": 8603,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8604
+ },
+ {
+  "line": 8629,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8630
+ },
+ {
+  "line": 8659,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8660
+ },
+ {
+  "line": 8688,
+  "old": "NVL(A.CURRENCY, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.CURRENCY),''), '/')",
+  "how": "바꿈",
+  "line_after": 8689
+ },
+ {
+  "line": 9357,
+  "old": "NVL(A.COMPANY_ID, '/')",
+  "new": "NVL(NULLIF(RTRIM(A.COMPANY_ID),''), '/')",
+  "how": "바꿈",
+  "line_after": 9358
+ }
+]

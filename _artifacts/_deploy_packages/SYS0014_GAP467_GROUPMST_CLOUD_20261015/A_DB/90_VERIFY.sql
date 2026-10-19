@@ -1,0 +1,35 @@
+-- 90 VERIFY — [GAP467 2026-10-15] 조회 전용 (전체 F5, 값 입력 없음)
+-- * V1 추가 4그룹 = 4 PASS (값: CAPA Planner Y · System Monitor Y · SSP ADMIN N · '-' '-'/'/')
+-- * V2 대상 3그룹 사용자 매핑 수 (사본 행 수와 같으면 PASS — 사본 없으면 참고)
+-- * V3 원장에 없는 그룹을 가리키는 사업부 권한 = Guest 1행만 (사용자 결정으로 유지) → 그 외 0 PASS
+SET DEFINE OFF
+SET LINESIZE 200 PAGESIZE 100
+SELECT 'V1 그룹' CHK, USER_GR_ID, USER_GR_NM, USE_YN FROM SCM_ADM_USER_GR_M
+ WHERE USER_GR_ID IN ('CAPA Planner','System Monitor','SSP ADMIN','-') ORDER BY USER_GR_ID;
+SELECT 'V1 그룹' CHK, COUNT(*) N, CASE WHEN COUNT(*) = 4 THEN 'PASS' ELSE 'FAIL — 회신' END JUDGE
+  FROM SCM_ADM_USER_GR_M WHERE USER_GR_ID IN ('CAPA Planner','System Monitor','SSP ADMIN','-');
+SELECT 'V2 매핑' CHK, USER_GR_ID, COUNT(*) N FROM SCM_ADM_USER_GR_MPG_M
+ WHERE USER_GR_ID IN ('CAPA Planner','System Monitor','-') GROUP BY USER_GR_ID ORDER BY USER_GR_ID;
+SET SERVEROUTPUT ON SIZE UNLIMITED
+DECLARE
+    n PLS_INTEGER;
+    v_miss PLS_INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO n FROM USER_TABLES WHERE TABLE_NAME = 'TB_FX_USERGROUPINFO';
+    IF n = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('V2 참고 — 사본 없음');
+        RETURN;
+    END IF;
+    EXECUTE IMMEDIATE
+        'SELECT COUNT(*) FROM TB_FX_USERGROUPINFO I
+          WHERE I.GROUPID IN (''CAPA Planner'',''System Monitor'',''-'')
+            AND NOT EXISTS (SELECT 1 FROM SCM_ADM_USER_GR_MPG_M M WHERE M.USER_GR_ID = I.GROUPID AND M.USER_ID = I.USERID)'
+        INTO v_miss;
+    DBMS_OUTPUT.PUT_LINE('V2 사본 대비 미이관 ' || v_miss || '건 → ' || CASE WHEN v_miss = 0 THEN 'PASS' ELSE 'FAIL — 회신' END);
+END;
+/
+SELECT 'V3 고아' CHK, U.USER_GR_ID, COUNT(*) N,
+       CASE WHEN U.USER_GR_ID = 'Guest' THEN '참고(유지 결정)' ELSE 'FAIL — 회신' END JUDGE
+  FROM SCM_ADM_USER_GR_UNIT_AUTH_MPG_M U
+ WHERE NOT EXISTS (SELECT 1 FROM SCM_ADM_USER_GR_M M WHERE M.USER_GR_ID = U.USER_GR_ID)
+ GROUP BY U.USER_GR_ID;

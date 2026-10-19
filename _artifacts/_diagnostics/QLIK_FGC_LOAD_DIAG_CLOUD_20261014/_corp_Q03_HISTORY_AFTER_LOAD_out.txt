@@ -1,0 +1,243 @@
+################ [H0] 실행 시각 / AWR 보관 범위 ################
+DB_NAME | CON_NAME | NOW                
+--------+----------+--------------------
+ZIOUI1  | ZIOUI1   | 2026-10-14 18:57:40
+(1 rows)
+AWR_FROM         | AWR_TO           | SNAPS
+-----------------+------------------+------
+2026-10-08 18:01 | 2026-10-14 18:00 | 288  
+(1 rows)
+################ [H1] ⭐ 최근 4시간 활성 프로그램 상위 — Qlik 프로그램명 식별용 (이름 패턴 무관 전체) ################
+PROGRAM                                                          | MODULE                                                           | MACHINE               | SAMPLES | FIRST_SEEN  | LAST_SEEN  
+-----------------------------------------------------------------+------------------------------------------------------------------+-----------------------+---------+-------------+------------
+C:\Python3.11.5\python.exe                                       | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 5128    | 10-14 15:06 | 10-14 18:57
+JDBC Thin Client                                                 | JDBC Thin Client                                                 | BJKIM                 | 354     | 10-14 15:32 | 10-14 18:20
+JDBC Thin Client                                                 | JDBC Thin Client                                                 | DESKTOP-QKES4AF       | 259     | 10-14 15:01 | 10-14 18:06
+oracle@localhost.localdomain (P001)                              | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 186     | 10-14 16:07 | 10-14 18:55
+oracle@localhost.localdomain (J000)                              | SYS_AUTO_STS_MODULE                                              | localhost.localdomain | 170     | 10-14 15:09 | 10-14 18:40
+JDBC Thin Client                                                 | JDBC Thin Client                                                 | ZIOSO-KYR             | 165     | 10-14 16:24 | 10-14 16:25
+JDBC Thin Client                                                 | JDBC Thin Client                                                 | DESKTOP-ELMPP0M       | 158     | 10-14 15:23 | 10-14 18:03
+JDBC Thin Client                                                 | JDBC Thin Client                                                 | ZIO-NOTE-408          | 158     | 10-14 15:17 | 10-14 17:36
+JDBC Thin Client                                                 | JDBC Thin Client                                                 | P2605LN0048           | 152     | 10-14 14:57 | 10-14 18:12
+JDBC Thin Client                                                 | JDBC Thin Client                                                 | P2605LN0024           | 147     | 10-14 15:10 | 10-14 15:37
+JDBC Thin Client                                                 | JDBC Thin Client                                                 | ZIOSO-KYJ             | 137     | 10-14 15:35 | 10-14 17:59
+C:\Users\POJ\AppData\Local\Programs\Python\Python312\python.exe  | C:\Users\POJ\AppData\Local\Programs\Python\Python312\python.exe  | DESKTOP-N00HD67       | 113     | 10-14 17:02 | 10-14 18:21
+JDBC Thin Client                                                 | JDBC Thin Client                                                 | ZIOSO-HEJ2            | 91      | 10-14 14:59 | 10-14 17:57
+oracle@localhost.localdomain (P000)                              | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 81      | 10-14 17:03 | 10-14 18:54
+ScpApplication                                                   | ScpApplication                                                   | DESKTOP-BMHBA84       | 62      | 10-14 16:49 | 10-14 18:39
+oracle@localhost.localdomain (J001)                              | SYS_AUTO_STS_MODULE                                              | localhost.localdomain | 60      | 10-14 16:24 | 10-14 18:54
+C:\Users\LGES\AppData\Local\Programs\Python\Python312\python.exe | C:\Users\LGES\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0024           | 59      | 10-14 15:37 | 10-14 18:31
+oracle@localhost.localdomain (P003)                              | C:\Users\POJ\AppData\Local\Programs\Python\Python312\python.exe  | DESKTOP-N00HD67       | 59      | 10-14 16:28 | 10-14 17:08
+C:\Users\LG15\AppData\Local\Programs\Python\Python312\python.exe | C:\Users\LG15\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0047           | 37      | 10-14 18:07 | 10-14 18:09
+ScpApplication                                                   | ScpApplication                                                   | ZIOSO-HEJ2            | 31      | 10-14 16:03 | 10-14 16:29
+(20 rows)
+################ [H2] 최근 4시간 — 대상 테이블 적재 세션 대기 분포 (Qlik 이름 패턴 / 테이블·인덱스 객체 / 테이블 DML SQL) ################
+PROGRAM | SQL_ID | SQL_OPNAME | EVENT | WAIT_CLASS | SAMPLES | PCT | FIRST_SEEN | LAST_SEEN
+--------+--------+------------+-------+------------+---------+-----+------------+----------
+(0 rows)
+################ [H3] AWR 8일 — 시간대별 활성 프로그램 상위 (Qlik 적재 시간대 식별) ################
+HR            | PROGRAM                                                          | MACHINE               | ACTIVE_SEC
+--------------+------------------------------------------------------------------+-----------------------+-----------
+2026-10-14 17 | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 780       
+2026-10-14 16 | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 2720      
+2026-10-14 16 | JDBC Thin Client                                                 | BJKIM                 | 360       
+2026-10-14 16 | JDBC Thin Client                                                 | ZIOSO-KYR             | 320       
+2026-10-14 15 | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 6180      
+2026-10-14 15 | JDBC Thin Client                                                 | P2605LN0024           | 340       
+2026-10-14 15 | JDBC Thin Client                                                 | BJKIM                 | 300       
+2026-10-14 15 | JDBC Thin Client                                                 | DESKTOP-ELMPP0M       | 300       
+2026-10-14 14 | WarLauncher                                                      | P2605LN0024           | 15920     
+2026-10-14 14 | oracle@localhost.localdomain (J000)                              | localhost.localdomain | 4120      
+2026-10-14 14 | JDBC Thin Client                                                 | ZIO-NOTE-408          | 3600      
+2026-10-14 14 | oracle@localhost.localdomain (J001)                              | localhost.localdomain | 3120      
+2026-10-14 14 | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 900       
+2026-10-14 14 | JDBC Thin Client                                                 | ZIOSO-PYE             | 300       
+2026-10-14 13 | WarLauncher                                                      | P2605LN0024           | 21300     
+2026-10-14 13 | ScpApplication                                                   | ZIO-NOTE-408          | 360       
+2026-10-14 12 | WarLauncher                                                      | P2605LN0024           | 21540     
+2026-10-14 12 | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 440       
+2026-10-14 11 | WarLauncher                                                      | P2605LN0024           | 21600     
+2026-10-14 11 | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 3540      
+2026-10-14 11 | C:\Users\LGES\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0024           | 900       
+2026-10-14 11 | JDBC Thin Client                                                 | P2605LN0024           | 540       
+2026-10-14 11 | JDBC Thin Client                                                 | ZIOSO-HYH             | 480       
+2026-10-14 11 | JDBC Thin Client                                                 | BJKIM                 | 300       
+2026-10-14 10 | WarLauncher                                                      | P2605LN0024           | 40140     
+2026-10-14 10 | JDBC Thin Client                                                 | ZIO-NOTE-408          | 2460      
+2026-10-14 10 | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 1200      
+2026-10-14 10 | JDBC Thin Client                                                 | P2605LN0024           | 940       
+2026-10-14 10 | C:\Users\POJ\AppData\Local\Programs\Python\Python312\python.exe  | DESKTOP-N00HD67       | 620       
+2026-10-14 10 | C:\Users\LGES\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0024           | 600       
+2026-10-14 10 | JDBC Thin Client                                                 | BJKIM                 | 380       
+2026-10-14 09 | WarLauncher                                                      | P2605LN0024           | 12920     
+2026-10-14 09 | ScpApplication                                                   | ZIO-NOTE-408          | 2780      
+2026-10-14 09 | JDBC Thin Client                                                 | ZIO-NOTE-408          | 1280      
+2026-10-14 09 | C:\Users\LGES\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0024           | 420       
+2026-10-14 07 | C:\Users\LG15\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0047           | 380       
+2026-10-14 05 | C:\Program?Files\Python313\python.exe                            | itx                   | 2180      
+2026-10-14 00 | C:\Users\LG15\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0047           | 1000      
+2026-10-13 22 | JDBC Thin Client                                                 | DESKTOP-QKES4AF       | 17380     
+2026-10-13 22 | oracle@localhost.localdomain (J002)                              | localhost.localdomain | 7200      
+2026-10-13 21 | JDBC Thin Client                                                 | DESKTOP-QKES4AF       | 28800     
+2026-10-13 20 | JDBC Thin Client                                                 | DESKTOP-QKES4AF       | 28800     
+2026-10-13 20 | C:\Users\LGES\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0024           | 520       
+2026-10-13 19 | JDBC Thin Client                                                 | DESKTOP-QKES4AF       | 28720     
+2026-10-13 19 | C:\Users\POJ\AppData\Local\Programs\Python\Python312\python.exe  | DESKTOP-N00HD67       | 920       
+2026-10-13 18 | JDBC Thin Client                                                 | DESKTOP-QKES4AF       | 35100     
+2026-10-13 18 | JDBC Thin Client                                                 | ZIOSO-KYR             | 24520     
+2026-10-13 18 | JDBC Thin Client                                                 | ZIO-NOTE-408          | 11040     
+2026-10-13 18 | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 640       
+2026-10-13 18 | JDBC Thin Client                                                 | BJKIM                 | 520       
+2026-10-13 17 | JDBC Thin Client                                                 | DESKTOP-QKES4AF       | 44880     
+2026-10-13 17 | JDBC Thin Client                                                 | ZIOSO-KYR             | 17340     
+2026-10-13 17 | JDBC Thin Client                                                 | ZIO-NOTE-408          | 3980      
+2026-10-13 17 | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 2840      
+2026-10-13 17 | C:\Users\LGES\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0024           | 1720      
+2026-10-13 17 | oracle@localhost.localdomain (J000)                              | localhost.localdomain | 320       
+2026-10-13 16 | JDBC Thin Client                                                 | DESKTOP-QKES4AF       | 11180     
+2026-10-13 16 | JDBC Thin Client                                                 | ZIOSO-KYR             | 4080      
+2026-10-13 16 | C:\Users\POJ\AppData\Local\Programs\Python\Python312\python.exe  | DESKTOP-N00HD67       | 2560      
+2026-10-13 16 | C:\Users\LGES\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0024           | 1560      
+2026-10-13 16 | C:\Users\LG15\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0047           | 300       
+2026-10-13 15 | JDBC Thin Client                                                 | ZIOSO-KYR             | 13560     
+2026-10-13 15 | C:\Users\LG15\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0047           | 360       
+2026-10-13 14 | oracle@localhost.localdomain (J000)                              | localhost.localdomain | 3800      
+2026-10-13 14 | WarLauncher                                                      | P2605LN0024           | 2920      
+2026-10-13 14 | JDBC Thin Client                                                 | ZIOSO-KYR             | 2420      
+2026-10-13 14 | oracle@localhost.localdomain (J001)                              | localhost.localdomain | 1980      
+2026-10-13 14 | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 1540      
+2026-10-13 14 | oracle@localhost.localdomain (P003)                              | DESKTOP-N00HD67       | 720       
+2026-10-13 14 | C:\Users\POJ\AppData\Local\Programs\Python\Python312\python.exe  | DESKTOP-N00HD67       | 580       
+2026-10-13 14 | C:\Users\LGES\AppData\Local\Programs\Python\Python312\python.exe | P2605LN0024           | 440       
+2026-10-13 14 | JDBC Thin Client                                                 | P2605LN0024           | 400       
+2026-10-13 13 | JDBC Thin Client                                                 | BJKIM                 | 10400     
+2026-10-13 13 | ScpApplication                                                   | DESKTOP-QKES4AF       | 1380      
+2026-10-13 13 | C:\Python3.11.5\python.exe                                       | P2605LN0006           | 780       
+2026-10-13 12 | JDBC Thin Client                                                 | BJKIM                 | 1540      
+2026-10-13 11 | JDBC Thin Client                                                 | P2605LN0048           | 7880      
+2026-10-13 11 | JDBC Thin Client                                                 | BJKIM                 | 7680      
+2026-10-13 10 | ScpApplication                                                   | ZIOSO-HEJ2            | 1520      
+2026-10-13 10 | ScpApplication                                                   | ZIOSO-KYR             | 1280      
+2026-10-13 10 | JDBC Thin Client                                                 | BJKIM                 | 500       
+2026-10-13 10 | C:\Python3.11.5\python.exe                                       | ZIOSO-KYR             | 440       
+2026-10-13 05 | C:\Program?Files\Python313\python.exe                            | itx                   | 1680      
+2026-10-11 22 | oracle@localhost.localdomain (J003)                              | localhost.localdomain | 520       
+2026-10-10 22 | oracle@localhost.localdomain (J001)                              | localhost.localdomain | 420       
+2026-10-10 14 | oracle@localhost.localdomain (J001)                              | localhost.localdomain | 1140      
+2026-10-10 06 | oracle@localhost.localdomain (J002)                              | localhost.localdomain | 300       
+2026-10-10 02 | /opt/anaconda/anaconda3/bin/python3                              | localhost.localdomain | 6000      
+2026-10-10 01 | /opt/anaconda/anaconda3/bin/python3                              | localhost.localdomain | 7160      
+2026-10-10 00 | /opt/anaconda/anaconda3/bin/python3                              | localhost.localdomain | 6860      
+2026-10-09 21 | /opt/anaconda/anaconda3/bin/python3                              | localhost.localdomain | 1100      
+2026-10-09 16 | oracle@localhost.localdomain (J000)                              | localhost.localdomain | 4680      
+2026-10-09 15 | oracle@localhost.localdomain (J000)                              | localhost.localdomain | 7200      
+2026-10-09 14 | oracle@localhost.localdomain (J000)                              | localhost.localdomain | 7180      
+2026-10-09 14 | oracle@localhost.localdomain (J001)                              | localhost.localdomain | 1160      
+2026-10-09 09 | sqlplus@localhost.localdomain (TNS V1-V3)                        | localhost.localdomain | 480       
+2026-10-08 18 | sqlplus@localhost.localdomain (TNS V1-V3)                        | localhost.localdomain | 8840      
+(97 rows)
+################ [H4] ⭐ AWR 8일 — 대상 테이블 적재 세션 대기 분포 (시간대별) ################
+HR            | PROGRAM                             | SQL_OPNAME   | EVENT                   | WAIT_CLASS | SEC
+--------------+-------------------------------------+--------------+-------------------------+------------+----
+2026-10-10 02 | /opt/anaconda/anaconda3/bin/python3 | SELECT       | ON CPU                  | CPU        | 60 
+2026-10-10 02 | /opt/anaconda/anaconda3/bin/python3 | INSERT       | db file scattered read  | User I/O   | 20 
+2026-10-10 02 | /opt/anaconda/anaconda3/bin/python3 | SELECT       | direct path read        | User I/O   | 20 
+2026-10-09 20 | oracle@localhost.localdomain (DW05) | CREATE INDEX | db file scattered read  | User I/O   | 80 
+2026-10-09 20 | oracle@localhost.localdomain (DW05) | CREATE INDEX | direct path read        | User I/O   | 60 
+2026-10-09 20 | oracle@localhost.localdomain (DW05) | CREATE INDEX | ON CPU                  | CPU        | 20 
+2026-10-09 15 | oracle@localhost.localdomain (J000) | SELECT       | direct path read        | User I/O   | 20 
+2026-10-09 14 | oracle@localhost.localdomain (J001) | INSERT       | db file sequential read | User I/O   | 20 
+(8 rows)
+################ [H5] AWR 8일 — 대상 테이블 DML 문장 실적 (일별) — 실행당 행수·1만 행당 초 ################
+--  'INSERT /*+ SYS_DL_CURSOR */ INTO RELATIONAL(...)' = direct path 적재(OCI·SQL*Loader·Data Pump) — 실행/행 수가 0 으로 집계될 수 있음
+DAY        | SQL_ID        | EX | RWS | ROWS_PER_EX | ELA_S | CPU_S | IO_S | CONC_S | APP_S | DW | SEC_PER_10K_ROWS | SQL_HEAD                                                                                                      
+-----------+---------------+----+-----+-------------+-------+-------+------+--------+-------+----+------------------+---------------------------------------------------------------------------------------------------------------
+2026-10-09 | g86vfna9539p8 | 0  | 0   |             | 0.6   | 0.5   | 0    | 0      | 0     | 0  |                  | INSERT /*+ SYS_DL_CURSOR */ INTO RELATIONAL("SCM_MGR"."SCP_ANL_SHIPMENT_PLAN_FG_C" NOT XMLTYPE) ("DIVISION_ID"
+2026-10-09 | g86vfna9539p8 | 0  | 0   |             | 0.6   | 0.5   | 0    | 0      | 0     | 0  |                  | INSERT /*+ SYS_DL_CURSOR */ INTO RELATIONAL("SCM_MGR"."SCP_ANL_SHIPMENT_PLAN_FG_C" NOT XMLTYPE) ("DIVISION_ID"
+(2 rows)
+################ [H6] AWR 8일 — 스냅샷별 Redo/초·CPU·쓰기량 (Redo 상위 30구간, SRC=CDB/PDB 뷰) ################
+SRC           | BEGIN_TIME       | REDO_MB_PER_SEC | REDO_MB_PER_SEC_MAX | HOST_CPU_PCT | WRITE_MB_PER_SEC | AAS 
+--------------+------------------+-----------------+---------------------+--------------+------------------+-----
+CON_SYSMETRIC | 2026-10-14 09:59 | 1.37            | 14.77               |              | 1.1              | 6.7 
+CON_SYSMETRIC | 2026-10-14 16:00 | 0.64            | 6.75                |              | 1.2              | 0.6 
+CON_SYSMETRIC | 2026-10-09 21:00 | 0.51            | 10.48               |              | 27.7             | 0.2 
+CON_SYSMETRIC | 2026-10-14 15:00 | 0.45            | 3.62                |              | 0.9              | 1.1 
+CON_SYSMETRIC | 2026-10-12 22:00 | 0.45            | 8.25                |              | 0.2              | 0   
+CON_SYSMETRIC | 2026-10-13 14:00 | 0.43            | 7.48                |              | 1.3              | 2.2 
+CON_SYSMETRIC | 2026-10-13 09:59 | 0.36            | 3.01                |              | 0.7              | 0.7 
+CON_SYSMETRIC | 2026-10-14 08:59 | 0.3             | 3.32                |              | 0.6              | 2.4 
+CON_SYSMETRIC | 2026-10-13 15:00 | 0.29            | 3.84                |              | 0.4              | 2.1 
+CON_SYSMETRIC | 2026-10-14 14:00 | 0.28            | 4.8                 |              | 0.9              | 4.1 
+CON_SYSMETRIC | 2026-10-13 18:00 | 0.27            | 3.46                |              | 0.6              | 10  
+CON_SYSMETRIC | 2026-10-14 13:00 | 0.27            | 4.69                |              | 0.3              | 3.2 
+CON_SYSMETRIC | 2026-10-09 07:59 | 0.27            | 4.99                |              | 7.3              | 0   
+CON_SYSMETRIC | 2026-10-14 11:00 | 0.24            | 3.42                |              | 0.3              | 3.9 
+CON_SYSMETRIC | 2026-10-09 08:59 | 0.23            | 5.63                |              | 116.4            | 0.1 
+CON_SYSMETRIC | 2026-10-10 00:59 | 0.23            | 2.68                |              | 0                | 1   
+CON_SYSMETRIC | 2026-10-09 12:59 | 0.21            | 5.57                |              | 34.1             | 0   
+CON_SYSMETRIC | 2026-10-09 09:59 | 0.18            | 5.39                |              | 34               | 0   
+CON_SYSMETRIC | 2026-10-09 20:00 | 0.15            | 5.4                 |              | 36.5             | 0   
+CON_SYSMETRIC | 2026-10-13 16:00 | 0.15            | 2.94                |              | 1.3              | 3   
+CON_SYSMETRIC | 2026-10-09 13:59 | 0.15            | 4.78                |              | 47.2             | 1.2 
+CON_SYSMETRIC | 2026-10-13 17:00 | 0.14            | 3.4                 |              | 0.8              | 10.2
+CON_SYSMETRIC | 2026-10-14 17:00 | 0.13            | 2.9                 |              | 0.6              | 0.3 
+CON_SYSMETRIC | 2026-10-13 10:59 | 0.12            | 2.06                |              | 0.3              | 2.2 
+CON_SYSMETRIC | 2026-10-13 22:00 | 0.12            | 5.02                |              | 0.1              | 2.5 
+CON_SYSMETRIC | 2026-10-13 19:00 | 0.12            | 3.42                |              | 0.2              | 4.2 
+CON_SYSMETRIC | 2026-10-13 20:00 | 0.1             | 1.15                |              | 0.1              | 4.2 
+CON_SYSMETRIC | 2026-10-13 23:00 | 0.08            | 4.68                |              | 0                | 0   
+CON_SYSMETRIC | 2026-10-09 10:59 | 0.06            | 0.17                |              | 34.1             | 0   
+CON_SYSMETRIC | 2026-10-09 14:59 | 0.05            | 1.09                |              | 24.8             | 1   
+(30 rows)
+################ [H7] ⭐ AWR 8일 — 스냅샷별 Redo·쓰기 관련 대기 증가분 (log file switch 정지 시간 확인) ################
+SNAP_BEGIN       | INST | EVENT                                   | WAITS   | SEC    | AVG_MS  
+-----------------+------+-----------------------------------------+---------+--------+---------
+2026-10-13 17:00 | 1    | resmgr:cpu quantum                      | 96900   | 12311  | 127.05  
+2026-10-09 20:00 | 1    | direct path write                       | 2472348 | 9697.4 | 3.92    
+2026-10-09 22:00 | 1    | direct path write                       | 2227188 | 8469.8 | 3.8     
+2026-10-09 21:00 | 1    | direct path write                       | 1994674 | 8071.2 | 4.05    
+2026-10-09 15:00 | 1    | direct path write                       | 1842108 | 7748.9 | 4.21    
+2026-10-09 12:00 | 1    | direct path write                       | 513360  | 7089.3 | 13.81   
+2026-10-09 16:00 | 1    | direct path write                       | 1600610 | 6507.8 | 4.07    
+2026-10-09 17:00 | 1    | direct path write                       | 1532556 | 6396.1 | 4.17    
+2026-10-09 14:00 | 1    | direct path write                       | 1396387 | 5829.7 | 4.17    
+2026-10-09 11:00 | 1    | direct path write                       | 477969  | 5802.9 | 12.14   
+2026-10-09 18:00 | 1    | direct path write                       | 1626189 | 5590.5 | 3.44    
+2026-10-09 19:00 | 1    | direct path write                       | 1720271 | 5079.3 | 2.95    
+2026-10-09 10:00 | 1    | direct path write                       | 688952  | 4347.8 | 6.31    
+2026-10-09 23:00 | 1    | direct path write                       | 1434469 | 3882.7 | 2.71    
+2026-10-09 13:00 | 1    | direct path write                       | 386222  | 3604.4 | 9.33    
+2026-10-09 09:00 | 1    | direct path write                       | 680237  | 1169.6 | 1.72    
+2026-10-14 14:00 | 1    | log file switch (checkpoint incomplete) | 23      | 922.8  | 40123.04
+2026-10-13 14:00 | 1    | direct path write                       | 11555   | 316.8  | 27.41   
+2026-10-14 00:00 | 1    | direct path write                       | 78619   | 293.2  | 3.73    
+2026-10-14 14:00 | 1    | direct path write                       | 8833    | 291.5  | 33.01   
+2026-10-09 08:00 | 1    | direct path write                       | 69434   | 122    | 1.76    
+2026-10-14 10:00 | 1    | direct path write                       | 3556    | 99.6   | 28      
+2026-10-13 17:00 | 1    | direct path write                       | 3233    | 81     | 25.06   
+2026-10-13 15:00 | 1    | direct path write                       | 3231    | 80     | 24.76   
+2026-10-13 10:00 | 1    | direct path write                       | 3011    | 73.3   | 24.36   
+2026-10-13 11:00 | 1    | direct path write                       | 2863    | 70.9   | 24.76   
+2026-10-14 13:00 | 1    | direct path write                       | 2116    | 68.8   | 32.52   
+2026-10-10 00:00 | 1    | direct path write                       | 36624   | 67.1   | 1.83    
+2026-10-14 16:00 | 1    | direct path write                       | 2359    | 63.7   | 26.99   
+2026-10-13 12:00 | 1    | direct path write                       | 2048    | 59.9   | 29.25   
+2026-10-13 13:00 | 1    | direct path write                       | 2203    | 59.6   | 27.07   
+2026-10-14 15:00 | 1    | direct path write                       | 2141    | 58.2   | 27.19   
+2026-10-13 16:00 | 1    | direct path write                       | 1970    | 55.4   | 28.13   
+2026-10-11 22:00 | 1    | direct path write                       | 9626    | 52.1   | 5.41    
+2026-10-14 17:00 | 1    | direct path write                       | 1800    | 44.9   | 24.94   
+2026-10-14 11:00 | 1    | direct path write                       | 1855    | 41.5   | 22.38   
+2026-10-14 09:00 | 1    | direct path write                       | 1666    | 41     | 24.63   
+2026-10-13 11:00 | 1    | log file sync                           | 14159   | 35.6   | 2.51    
+2026-10-10 14:00 | 1    | direct path write                       | 6866    | 31.1   | 4.53    
+2026-10-10 22:00 | 1    | direct path write                       | 7249    | 27.1   | 3.74    
+(40 rows)
+################ [H8] 로그 스위치 시간대별 (8일, 시간당 4회 이상) ################
+THREAD# | HR            | SWITCHES | AVG_GAP_MIN
+--------+---------------+----------+------------
+1       | 2026-10-14 14 | 13       | 4.6        
+1       | 2026-10-14 13 | 10       | 6          
+1       | 2026-10-14 02 | 5        | 12         
+(3 rows)
+################ 끝 — Q03_HISTORY_AFTER_LOAD_OUT.txt 회신 ################

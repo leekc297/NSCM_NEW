@@ -1,0 +1,2 @@
+-- PKG_DMF0008 — 앱계정 실행 권한 (SCM_MGR · 멱등) · ⭐ 사내 이번 신규 부여
+GRANT EXECUTE ON SCM_MGR.PKG_DMF0008 TO SCMP_APP;

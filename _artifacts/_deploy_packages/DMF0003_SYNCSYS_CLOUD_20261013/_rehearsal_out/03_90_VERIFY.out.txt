@@ -1,0 +1,24 @@
+CHK | N | JUDGE
+V1 마커 | 0 | FAIL (미적용)
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:30 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-13 15:38:44 | 0 | 0
+(2 rows)
+
+CHK | LINE | TXT
+(0 rows)
+
+CHK | MEASURE | IN_CREATED_BY | OUT_CREATED_BY | OUT_UPD_BY | JUDGE
+V4 식 | MKT_FCST | ledger_user | ledger_user | SYSTEM | PASS — 원장 생성자 유지
+V4 식 | CUST_FCST | ledger_user | ledger_user | SYSTEM | PASS — 원장 생성자 유지
+V4 식 | TMM_FCST | ledger_user | ledger_user | SYSTEM | PASS — 원장 생성자 유지
+V4 식 | RTF | ledger_user | ledger_user | SYSTEM | PASS — 원장 생성자 유지
+V4 식 | RTF_SYS_RP | ledger_user | ledger_user | SYSTEM | PASS — 원장 생성자 유지
+V4 식 | SalesAmt_KRW |  | SYSTEM | SYSTEM | PASS — 생성자 SYSTEM
+V4 식 | SalesAmt_LOC |  | SYSTEM | SYSTEM | PASS — 생성자 SYSTEM
+V4 식 | SalesAmt_USD |  | SYSTEM | SYSTEM | PASS — 생성자 SYSTEM
+V4 식 | MKT_AMT_KRW |  | SYSTEM | SYSTEM | PASS — 생성자 SYSTEM
+V4 식 | MKT_AMT_LOC |  | SYSTEM | SYSTEM | PASS — 생성자 SYSTEM
+(10 rows)

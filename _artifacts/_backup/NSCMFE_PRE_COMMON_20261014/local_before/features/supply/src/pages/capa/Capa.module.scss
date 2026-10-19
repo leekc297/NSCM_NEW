@@ -1,0 +1,11 @@
+.summaryBar {
+  display: flex;
+  gap: 12px;
+  padding: 4px 8px;
+  justify-content: flex-end;
+
+  span {
+    font-size: 12px;
+    color: #333;
+  }
+}

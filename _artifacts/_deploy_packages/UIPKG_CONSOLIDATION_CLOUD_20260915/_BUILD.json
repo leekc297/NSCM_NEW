@@ -1,0 +1,613 @@
+{
+ "built": "2026-09-15 21:03",
+ "gate_checked": [
+  "00_COMMON/00_RECOMPILE_INVALID_STANDALONE.sql",
+  "00_COMMON/90_RECOMPILE_DEPENDENTS.sql",
+  "PKG_DMF0003/10_SPEC.sql",
+  "PKG_DMF0003/11_BODY.sql",
+  "PKG_DMF0003/12_CALLER_SCM_ADM_MAIL_SEND_BATCH.sql",
+  "PKG_DMF0003/12_CALLER_SCM_ADM_MAIL_SEND_DATA.sql",
+  "PKG_DMF0006/10_SPEC.sql",
+  "PKG_DMF0006/11_BODY.sql",
+  "PKG_DMF0006/12_CALLER_PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA.sql",
+  "PKG_DMF0007/10_SPEC.sql",
+  "PKG_DMF0007/11_BODY.sql",
+  "PKG_DMF0008/10_SPEC.sql",
+  "PKG_DMF0008/11_BODY.sql",
+  "PKG_DMF0008/20_GRANT_SCM_MGR.sql",
+  "PKG_DMF0008/21_SYNONYM_SCMP_APP.sql",
+  "PKG_DMF0008/30_META_SWITCH.sql",
+  "PKG_DMF0014/10_SPEC.sql",
+  "PKG_DMF0014/11_BODY.sql",
+  "PKG_DMF0020/10_SPEC.sql",
+  "PKG_DMF0020/11_BODY.sql",
+  "PKG_DMF0020/12_CALLER_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL.sql",
+  "PKG_DMF0020/12_CALLER_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP.sql",
+  "PKG_DMF0040/10_SPEC.sql",
+  "PKG_DMF0040/11_BODY.sql",
+  "PKG_DMF0040/30_META_SWITCH.sql",
+  "PKG_DMF0043/10_SPEC.sql",
+  "PKG_DMF0043/11_BODY.sql",
+  "PKG_DMF0043/12_CALLER_DMF0043_GET_MAIN_SPREAD_TITLE.sql",
+  "PKG_DMF0043/30_META_SWITCH.sql",
+  "PKG_DMF0043/31_PROC_M_DATATYPE_FIX.sql",
+  "PKG_DMF0048/30_META_SWITCH.sql",
+  "PKG_DMF0072/10_SPEC.sql",
+  "PKG_DMF0072/11_BODY.sql",
+  "PKG_DMF0072/30_META_SWITCH.sql",
+  "PKG_DMF0082/10_SPEC.sql",
+  "PKG_DMF0082/11_BODY.sql",
+  "PKG_DMF0082/30_META_SWITCH.sql",
+  "PKG_SYS0012/10_SPEC.sql",
+  "PKG_SYS0012/11_BODY.sql",
+  "PKG_SYS0012/20_GRANT_SCM_MGR.sql",
+  "PKG_SYS0012/21_SYNONYM_SCMP_APP.sql",
+  "PKG_SYS0012/30_META_SWITCH.sql",
+  "PKG_SYS0014/10_SPEC.sql",
+  "PKG_SYS0014/11_BODY.sql",
+  "PKG_SYS0014/30_META_SWITCH.sql",
+  "PKG_SYS0017/10_SPEC.sql",
+  "PKG_SYS0017/11_BODY.sql"
+ ],
+ "packages": [
+  {
+   "pkg": "PKG_DMF0000",
+   "targets": [
+    "DMF0000_GET_UPDATE_HISTORY"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [],
+   "apis": []
+  },
+  {
+   "pkg": "PKG_DMF0003",
+   "targets": [
+    "SCM_ADM_MAIL_SEND"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "12_CALLER_SCM_ADM_MAIL_SEND_BATCH.sql",
+    "12_CALLER_SCM_ADM_MAIL_SEND_DATA.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_DMF0003",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_DMF0003",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ],
+    [
+     "SCM_ADM_MAIL_SEND_BATCH",
+     "PROCEDURE",
+     "12_CALLER_SCM_ADM_MAIL_SEND_BATCH.sql"
+    ],
+    [
+     "SCM_ADM_MAIL_SEND_DATA",
+     "PROCEDURE",
+     "12_CALLER_SCM_ADM_MAIL_SEND_DATA.sql"
+    ]
+   ],
+   "apis": []
+  },
+  {
+   "pkg": "PKG_DMF0006",
+   "targets": [
+    "PR_DM_MST_CUSTOMER_MODEL_MAPPING_HIST"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "12_CALLER_PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_DMF0006",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_DMF0006",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ],
+    [
+     "PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA",
+     "PROCEDURE",
+     "12_CALLER_PR_DM_MST_SAVE_CUSTOMER_MODEL_MAPPING_DATA.sql"
+    ]
+   ],
+   "apis": []
+  },
+  {
+   "pkg": "PKG_DMF0007",
+   "targets": [
+    "PR_DM_MST_CUSTOMER_FCST_HIST"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_DMF0007",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_DMF0007",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ]
+   ],
+   "apis": []
+  },
+  {
+   "pkg": "PKG_DMF0008",
+   "targets": [
+    "DMF0008_GET_EDI_MST_REPAIR",
+    "DMF0008_GET_EDI_MST_SUMMARY",
+    "DMF0008_GET_SALES_SITE",
+    "DMF0008_GET_SALES_SITE_PROJECT_MODEL",
+    "DMF0008_GET_UPDATE_HISTORY",
+    "DMF0008_SAVE_SALES_SITE_EDI_REPAIR",
+    "DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "30_META_SWITCH.sql",
+    "38_META_VERIFY.sql",
+    "39_META_ROLLBACK.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_DMF0008",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_DMF0008",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ]
+   ],
+   "apis": [
+    "P_DMF0008_PROJECT_GET",
+    "P_DMF0008_PROJECT_SAVE",
+    "P_DMF0008_REPAIR_GET",
+    "P_DMF0008_REPAIR_SAVE",
+    "P_DMF0008_SALES_SITE_GET",
+    "P_DMF0008_SALES_SITE_SAVE",
+    "P_DMF0008_SITE_GET",
+    "P_DMF0008_SSPM_GET",
+    "P_DMF0008_SSPM_SAVE",
+    "P_DMF0008_SUMMARY_GET",
+    "P_DMF0008_UPDATE_HISTORY",
+    "P_DMF0008_UPDATE_HISTORY_GET"
+   ]
+  },
+  {
+   "pkg": "PKG_DMF0014",
+   "targets": [
+    "PR_DM_CUST_ITEM_MAPPING",
+    "PR_DM_PLN_CUST_FCST_TO_MKT_FCST",
+    "PR_DM_PLN_CUST_FCST_TO_MKT_FCST_40"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_DMF0014",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_DMF0014",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ]
+   ],
+   "apis": []
+  },
+  {
+   "pkg": "PKG_DMF0020",
+   "targets": [
+    "PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_SINGLE"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "12_CALLER_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL.sql",
+    "12_CALLER_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_DMF0020",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_DMF0020",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ],
+    [
+     "DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL",
+     "PROCEDURE",
+     "12_CALLER_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_ALL.sql"
+    ],
+    [
+     "DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP",
+     "PROCEDURE",
+     "12_CALLER_DMF0020_SAVE_SCM_MST_FUTURE_PRICE_POPUP.sql"
+    ]
+   ],
+   "apis": []
+  },
+  {
+   "pkg": "PKG_DMF0040",
+   "targets": [
+    "DMF0040_GET_SPREAD_TITLE"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "30_META_SWITCH.sql",
+    "38_META_VERIFY.sql",
+    "39_META_ROLLBACK.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_DMF0040",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_DMF0040",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ]
+   ],
+   "apis": [
+    "DMF0040_spreadTitle_SEARCH"
+   ]
+  },
+  {
+   "pkg": "PKG_DMF0043",
+   "targets": [
+    "DMF0043_GET_CONTRIBUTE_MAIN_DATA",
+    "DMF0043_GET_CONTRIBUTE_RATE_POPUP",
+    "DMF0043_GET_CONTRIBUTE_YEAR_POPUP",
+    "DMF0043_GET_CONTRIBUTION_SALES_LIST",
+    "DMF0043_GET_CONT_VIEW_VERSIONPOPUP",
+    "DMF0043_GET_MAIN_SPREAD_TITLE",
+    "DMF0043_GET_MAIN_VARSION_DATA",
+    "DMF0043_GET_SALES_LIST_SPREAD_TITLE",
+    "DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO",
+    "DMF0043_SAVE_DM_MST_CONTRIBUTE_VER"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "12_CALLER_DMF0043_GET_MAIN_SPREAD_TITLE.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "30_META_SWITCH.sql",
+    "31_PROC_M_DATATYPE_FIX.sql",
+    "38_META_VERIFY.sql",
+    "39_META_ROLLBACK.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_DMF0043",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_DMF0043",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ],
+    [
+     "DMF0043_GET_MAIN_SPREAD_TITLE",
+     "PROCEDURE",
+     "12_CALLER_DMF0043_GET_MAIN_SPREAD_TITLE.sql"
+    ]
+   ],
+   "apis": [
+    "DMF0043_GET_CONT_VIEW_VERSIONPOPUP",
+    "P_DMF0043_MAIN_GET",
+    "P_DMF0043_MAIN_SAVE",
+    "P_DMF0043_MAIN_TITLE",
+    "P_DMF0043_RATE_POPUP",
+    "P_DMF0043_SALES_LIST_GET",
+    "P_DMF0043_SALES_LIST_TITLE",
+    "P_DMF0043_VERSION_GET",
+    "P_DMF0043_VERSION_POPUP",
+    "P_DMF0043_VERSION_SAVE",
+    "P_DMF0043_YEAR_POPUP"
+   ]
+  },
+  {
+   "pkg": "PKG_DMF0048",
+   "targets": [
+    "DMF0048_GET_SPREAD_TITLE"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "30_META_SWITCH.sql",
+    "38_META_VERIFY.sql",
+    "39_META_ROLLBACK.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [],
+   "apis": [
+    "DMF0048_spreadTitle_SEARCH"
+   ]
+  },
+  {
+   "pkg": "PKG_DMF0072",
+   "targets": [
+    "DMF0072_GET_DATA_TYPE_LIST",
+    "DMF0072_GET_END_CUSTOMER_LIST",
+    "DMF0072_GET_NNMASTER_MAPPING_WRAPPER",
+    "DMF0072_GET_SALES_SITE_LIST",
+    "DMF0072_GET_TEAM_LIST"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "30_META_SWITCH.sql",
+    "38_META_VERIFY.sql",
+    "39_META_ROLLBACK.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_DMF0072",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_DMF0072",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ]
+   ],
+   "apis": [
+    "DMF0072_MAIN_SEARCH",
+    "P_DMF0072_DATATYPE_GET",
+    "P_DMF0072_ENDCUST_GET",
+    "P_DMF0072_SALESSITE_GET",
+    "P_DMF0072_TEAM_GET"
+   ]
+  },
+  {
+   "pkg": "PKG_DMF0082",
+   "targets": [
+    "PR_SCM_MST_EXCHANGE_RATE_UI",
+    "PR_DM_PLN_CFM_TO_MKT_FCST",
+    "PR_SCM_MST_EXCHANGE_RATE"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "30_META_SWITCH.sql",
+    "38_META_VERIFY.sql",
+    "39_META_ROLLBACK.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_DMF0082",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_DMF0082",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ]
+   ],
+   "apis": [
+    "DMF0082_futurePriceInfo_IF"
+   ]
+  },
+  {
+   "pkg": "PKG_SYS0012",
+   "targets": [
+    "P_SYS0012_APPROVE",
+    "P_SYS0012_GET_APPROVAL_LIST",
+    "P_SYS0012_REJECT"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "30_META_SWITCH.sql",
+    "38_META_VERIFY.sql",
+    "39_META_ROLLBACK.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_SYS0012",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_SYS0012",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ]
+   ],
+   "apis": [
+    "API_SYS0012_APPROVE",
+    "API_SYS0012_GET_APPROVAL_LIST",
+    "API_SYS0012_REJECT"
+   ]
+  },
+  {
+   "pkg": "PKG_SYS0014",
+   "targets": [
+    "P_SYS0014_GET_AUTH_LIST_M",
+    "P_SYS0014_GET_GROUP_LIST_M",
+    "P_SYS0014_GET_USER_BY_GROUP_M",
+    "P_SYS0014_SAVE_GROUP_USER_M"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "30_META_SWITCH.sql",
+    "38_META_VERIFY.sql",
+    "39_META_ROLLBACK.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_SYS0014",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_SYS0014",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ]
+   ],
+   "apis": [
+    "API_SYS0014_GET_AUTH_LIST",
+    "API_SYS0014_GET_GROUP_LIST",
+    "API_SYS0014_GET_USER_BY_GROUP",
+    "API_SYS0014_SAVE_GROUP_USER"
+   ]
+  },
+  {
+   "pkg": "PKG_SYS0017",
+   "targets": [
+    "PR_SCM_ADM_RECIPIENT_ASSIGN_HIST"
+   ],
+   "files": [
+    "00_PRECHECK.sql",
+    "10_SPEC.sql",
+    "11_BODY.sql",
+    "20_GRANT_SCM_MGR.sql",
+    "21_SYNONYM_SCMP_APP.sql",
+    "40_DROP_STANDALONE_SCM_MGR.sql",
+    "41_DROP_SYNONYM_SCMP_APP.sql",
+    "49_RESTORE.sql",
+    "90_VERIFY.sql"
+   ],
+   "objs": [
+    [
+     "PKG_SYS0017",
+     "PACKAGE",
+     "10_SPEC.sql"
+    ],
+    [
+     "PKG_SYS0017",
+     "PACKAGE BODY",
+     "11_BODY.sql"
+    ]
+   ],
+   "apis": []
+  }
+ ]
+}

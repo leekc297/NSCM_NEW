@@ -1,0 +1,218 @@
+================================================================================================
+ DMF0082 SP 단계별 분해  DB=ZIOUI1  HOST=ol9-db  2026-09-30 10:46:42  단계 45개
+ 인자: group=ADMIN version=Current 기간 20260901~20270228 · 나머지 ALL
+================================================================================================
+    (user=minyonglee1 div=40 run1 SP 2.94s + fetch 0.51s — 워밍업)
+
+### user=minyonglee1 div=40 run2  SP 2.62s + 결과 fetch 0.51s = 3.13s   rows[RC1..5,RESULT]=2098,6,1,5,181,1
+  (1) 단계별 소요 (0.05초 이상) — 초 / 비중(SP+fetch 대비) / 문장수 / BG / 최대문장
+      시작L 단계                                                            초   비중 문장         BG  최대문장 SQL_ID     초       행  L
+      597   #TEMP_DM_MST_ITEM_SINGLE_ORI_V — SCM_ITEM_M_SN 에서 23컬럼    0.12     4%    2      33681  0rp3b1v236wwz     0.12    21102  599
+      847   #TempSiteItemAll — SCM_MST_SITE_ITEM + _V + 마스터 8테이블    0.13     4%    2      19024  9xvpghd3tj06u     0.13    15528  849
+      1043  #TempSiteItem — TempSiteItemAll GROUP BY + MAX dedup          0.08     3%    1       4767  63ar9rz0axr5p     0.08    15528  1045
+      1204  T_LAST_DATA_SETUP_FCST / PRICE (Current 버전 최신 데이터      0.23     7%    4      42744  4svg4dhnqxh8f     0.18     6303  1260
+      1388  Current 버전 데이터 INSERT                                    0.49    16%    4      75294  631pzfvq8r0ut     0.39    99434  1701
+      2953  CURRENCY 업데이트 (계획구간 통화코드 보완)                    0.15     5%    1      24718  f6r0861xjw0h1     0.15    11354  2954
+      2984  [E20260918-CURRCELLPROD] CURRENCY 2차 보완 — CELL_PROD_SIT    0.11     3%    1      13064  gkn9tran5v9tb     0.11        0  2994
+      3040  [E20260918-CURRSITEITEM] CURRENCY 3차 보완 — DIV+SITE+ITEM    0.08     3%    1      13064  cac9cbukwmudc     0.08        0  3048
+      3085  LOC/KRW Unit Price 계산 — MKT_AMT / RTF_SYS_RP                0.08     3%    1      13891  day2h1hdkc8y1     0.08     2451  3088
+      3367  [PJ2025-50188] Unit Price 계산에 사용된 보조 메저 삭제        0.23     7%    1      82339  20xrvz802rfsy     0.23    63621  3372
+      4237  [E20260918-KEYCOLGRAIN] 숨긴 저장키 컬럼이 행을 가르지 않     0.08     3%    2       7611  3x9ardnmfczp0     0.08     1253  4246
+      4371  [FIX 2026-07-22] 최종 동적 SQL — AS-IS(L5965~6085) 5분기      0.51    16%    2      15821  fk3tvpkzsq2vx     0.51     2098  4423
+      문장 합 2.43s (GET_MAIN_DATA 밖 0.00s) / SP 2.62s + fetch 0.51s — 차이 = PL/SQL·재귀SQL
+  (3) GTT 적재 행수 (SP 종료 직후 · 0행 제외)
+      GT_DMF0082_CAL_MONTH_END_DATE                          6
+      GT_DMF0082_CAL_WEEK_END_DATE                          30
+      GT_DMF0082_MF_SP                                   49725
+      GT_DMF0082_MST_ITEM_SINGLE_A_V                     13483
+      GT_DMF0082_MST_ITEM_SINGLE_B_V                      4331
+      GT_DMF0082_MST_ITEM_SINGLE_ORI_V                   21102
+      GT_DMF0082_MST_ITEM_SINGLE_V                       13483
+      GT_DMF0082_PARAM_TOKEN                                 9
+      GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE                    5
+      GT_DMF0082_TEMP_FCST_N_PRICE                       49725
+      GT_DMF0082_TEMP_SELECT_MEASURE                         8
+      GT_DMF0082_TEMP_SITE_ITEM                          15528
+      GT_DMF0082_TEMP_SITE_ITEM_ALL                      15528
+      GT_DMF0082_T_LAST_DATA_SETUP_FCST                   2705
+      GT_DMF0082_T_LAST_DATA_SETUP_PRICE                  6303
+      GT_DMF0082_T_WS_FCST                                  14
+    (user=minyonglee1 div=81 run1 SP 3.23s + fetch 0.55s — 워밍업)
+
+### user=minyonglee1 div=81 run2  SP 2.99s + 결과 fetch 0.56s = 3.55s   rows[RC1..5,RESULT]=2394,6,1,5,181,1
+  (1) 단계별 소요 (0.05초 이상) — 초 / 비중(SP+fetch 대비) / 문장수 / BG / 최대문장
+      시작L 단계                                                            초   비중 문장         BG  최대문장 SQL_ID     초       행  L
+      597   #TEMP_DM_MST_ITEM_SINGLE_ORI_V — SCM_ITEM_M_SN 에서 23컬럼    0.09     3%    2      32188  0rp3b1v236wwz     0.09    13865  599
+      847   #TempSiteItemAll — SCM_MST_SITE_ITEM + _V + 마스터 8테이블    0.35    10%    2      55082  9xvpghd3tj06u     0.35    39070  849
+      1043  #TempSiteItem — TempSiteItemAll GROUP BY + MAX dedup          0.20     6%    1       9764  63ar9rz0axr5p     0.20    39070  1045
+      1204  T_LAST_DATA_SETUP_FCST / PRICE (Current 버전 최신 데이터      0.10     3%    3      39751  gfjpdh7fc1u59     0.10     1407  1207
+      1388  Current 버전 데이터 INSERT                                    0.07     2%    3      12929  4r5kugqqq6cuy     0.03     6475  1390
+      2953  CURRENCY 업데이트 (계획구간 통화코드 보완)                    0.11     3%    1      19455  f6r0861xjw0h1     0.11     6227  2954
+      2984  [E20260918-CURRCELLPROD] CURRENCY 2차 보완 — CELL_PROD_SIT    0.10     3%    1      13064  gkn9tran5v9tb     0.10        0  2994
+      3040  [E20260918-CURRSITEITEM] CURRENCY 3차 보완 — DIV+SITE+ITEM    0.09     2%    1      13064  cac9cbukwmudc     0.09        0  3048
+      3085  LOC/KRW Unit Price 계산 — MKT_AMT / RTF_SYS_RP                0.08     2%    1      14380  day2h1hdkc8y1     0.08     4282  3088
+      3367  [PJ2025-50188] Unit Price 계산에 사용된 보조 메저 삭제        0.23     6%    1      87557  20xrvz802rfsy     0.23    67530  3372
+      4237  [E20260918-KEYCOLGRAIN] 숨긴 저장키 컬럼이 행을 가르지 않     0.08     2%    2       6424  3x9ardnmfczp0     0.08        4  4246
+      4371  [FIX 2026-07-22] 최종 동적 SQL — AS-IS(L5965~6085) 5분기      0.55    16%    2      16061  fk3tvpkzsq2vx     0.55     2394  4423
+      문장 합 2.13s (GET_MAIN_DATA 밖 0.00s) / SP 2.99s + fetch 0.56s — 차이 = PL/SQL·재귀SQL
+  (3) GTT 적재 행수 (SP 종료 직후 · 0행 제외)
+      GT_DMF0082_CAL_MONTH_END_DATE                          6
+      GT_DMF0082_CAL_WEEK_END_DATE                          30
+      GT_DMF0082_MF_SP                                   56619
+      GT_DMF0082_MST_ITEM_SINGLE_A_V                      7018
+      GT_DMF0082_MST_ITEM_SINGLE_B_V                      2189
+      GT_DMF0082_MST_ITEM_SINGLE_ORI_V                   13865
+      GT_DMF0082_MST_ITEM_SINGLE_V                        7018
+      GT_DMF0082_PARAM_TOKEN                                 9
+      GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE                    5
+      GT_DMF0082_TEMP_FCST_N_PRICE                       56619
+      GT_DMF0082_TEMP_SELECT_MEASURE                         8
+      GT_DMF0082_TEMP_SITE_ITEM                          39070
+      GT_DMF0082_TEMP_SITE_ITEM_ALL                      39070
+      GT_DMF0082_T_LAST_DATA_SETUP_FCST                   1407
+      GT_DMF0082_T_LAST_DATA_SETUP_PRICE                  6987
+      GT_DMF0082_T_WS_FCST                                  14
+    (user=minyonglee1 div=82 run1 SP 3.31s + fetch 0.78s — 워밍업)
+
+### user=minyonglee1 div=82 run2  SP 3.90s + 결과 fetch 0.80s = 4.70s   rows[RC1..5,RESULT]=2622,6,1,5,181,1
+  (1) 단계별 소요 (0.05초 이상) — 초 / 비중(SP+fetch 대비) / 문장수 / BG / 최대문장
+      시작L 단계                                                            초   비중 문장         BG  최대문장 SQL_ID     초       행  L
+      597   #TEMP_DM_MST_ITEM_SINGLE_ORI_V — SCM_ITEM_M_SN 에서 23컬럼    0.10     2%    2      31198  0rp3b1v236wwz     0.10     4227  599
+      847   #TempSiteItemAll — SCM_MST_SITE_ITEM + _V + 마스터 8테이블    0.31     7%    2      40193  9xvpghd3tj06u     0.31    38206  849
+      1043  #TempSiteItem — TempSiteItemAll GROUP BY + MAX dedup          0.22     5%    1       9465  63ar9rz0axr5p     0.22    38206  1045
+      1204  T_LAST_DATA_SETUP_FCST / PRICE (Current 버전 최신 데이터      0.10     2%    3      39462  gfjpdh7fc1u59     0.10      855  1207
+      1388  Current 버전 데이터 INSERT                                    0.05     1%    3       5623  5ck0tygtbyuxj     0.03        0  1932
+      2953  CURRENCY 업데이트 (계획구간 통화코드 보완)                    0.12     3%    1      14180  f6r0861xjw0h1     0.12      946  2954
+      2984  [E20260918-CURRCELLPROD] CURRENCY 2차 보완 — CELL_PROD_SIT    0.14     3%    1      13210  gkn9tran5v9tb     0.14        0  2994
+      3040  [E20260918-CURRSITEITEM] CURRENCY 3차 보완 — DIV+SITE+ITEM    0.11     2%    1      13210  cac9cbukwmudc     0.11        0  3048
+      3085  LOC/KRW Unit Price 계산 — MKT_AMT / RTF_SYS_RP                0.08     2%    1      13416  day2h1hdkc8y1     0.08      667  3088
+      3367  [PJ2025-50188] Unit Price 계산에 사용된 보조 메저 삭제        0.28     6%    1      86990  20xrvz802rfsy     0.28    67182  3372
+      4237  [E20260918-KEYCOLGRAIN] 숨긴 저장키 컬럼이 행을 가르지 않     0.11     2%    2       7380  3x9ardnmfczp0     0.11        2  4246
+      4371  [FIX 2026-07-22] 최종 동적 SQL — AS-IS(L5965~6085) 5분기      0.78    17%    2      18456  fk3tvpkzsq2vx     0.78     2622  4423
+      문장 합 2.50s (GET_MAIN_DATA 밖 0.00s) / SP 3.90s + fetch 0.80s — 차이 = PL/SQL·재귀SQL
+  (3) GTT 적재 행수 (SP 종료 직후 · 0행 제외)
+      GT_DMF0082_CAL_MONTH_END_DATE                          6
+      GT_DMF0082_CAL_WEEK_END_DATE                          30
+      GT_DMF0082_MF_SP                                   65559
+      GT_DMF0082_MST_ITEM_SINGLE_A_V                      1942
+      GT_DMF0082_MST_ITEM_SINGLE_B_V                      1296
+      GT_DMF0082_MST_ITEM_SINGLE_ORI_V                    4227
+      GT_DMF0082_MST_ITEM_SINGLE_V                        1942
+      GT_DMF0082_PARAM_TOKEN                                 9
+      GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE                    5
+      GT_DMF0082_TEMP_FCST_N_PRICE                       65559
+      GT_DMF0082_TEMP_SELECT_MEASURE                         8
+      GT_DMF0082_TEMP_SITE_ITEM                          38206
+      GT_DMF0082_TEMP_SITE_ITEM_ALL                      38206
+      GT_DMF0082_T_LAST_DATA_SETUP_FCST                    855
+      GT_DMF0082_T_LAST_DATA_SETUP_PRICE                  7887
+      GT_DMF0082_T_WS_FCST                                  14
+    (user=k0101 div=40 run1 SP 5.72s + fetch 2.11s — 워밍업)
+
+### user=k0101 div=40 run2  SP 5.30s + 결과 fetch 1.86s = 7.16s   rows[RC1..5,RESULT]=6827,6,1,5,181,1
+  (1) 단계별 소요 (0.05초 이상) — 초 / 비중(SP+fetch 대비) / 문장수 / BG / 최대문장
+      시작L 단계                                                            초   비중 문장         BG  최대문장 SQL_ID     초       행  L
+      597   #TEMP_DM_MST_ITEM_SINGLE_ORI_V — SCM_ITEM_M_SN 에서 23컬럼    0.13     2%    2      33681  0rp3b1v236wwz     0.13    21102  599
+      847   #TempSiteItemAll — SCM_MST_SITE_ITEM + _V + 마스터 8테이블    0.14     2%    2      19752  9xvpghd3tj06u     0.14    15528  849
+      1043  #TempSiteItem — TempSiteItemAll GROUP BY + MAX dedup          0.10     1%    1       5489  63ar9rz0axr5p     0.10    15528  1045
+      1204  T_LAST_DATA_SETUP_FCST / PRICE (Current 버전 최신 데이터      0.25     4%    4      46015  4svg4dhnqxh8f     0.19     6303  1260
+      1388  Current 버전 데이터 INSERT                                    0.76    11%    4      94924  631pzfvq8r0ut     0.66   149151  1701
+      2953  CURRENCY 업데이트 (계획구간 통화코드 보완)                    0.18     3%    1      30460  f6r0861xjw0h1     0.18    11354  2954
+      2984  [E20260918-CURRCELLPROD] CURRENCY 2차 보완 — CELL_PROD_SIT    0.15     2%    1      18806  gkn9tran5v9tb     0.15        0  2994
+      3040  [E20260918-CURRSITEITEM] CURRENCY 3차 보완 — DIV+SITE+ITEM    0.13     2%    1      18806  cac9cbukwmudc     0.13        0  3048
+      3085  LOC/KRW Unit Price 계산 — MKT_AMT / RTF_SYS_RP                0.13     2%    1      19627  day2h1hdkc8y1     0.13     2420  3088
+      3367  [PJ2025-50188] Unit Price 계산에 사용된 보조 메저 삭제        0.06     1%    1      21101  20xrvz802rfsy     0.06     9511  3372
+      4055  [UICATEGORY 2026-08-07] Tier3 파리티 컬럼 적재 (DMF0003 MF    0.06     1%    2      19637  67sysamdcxzmj     0.03        0  4177
+      4237  [E20260918-KEYCOLGRAIN] 숨긴 저장키 컬럼이 행을 가르지 않     0.27     4%    2      23494  3x9ardnmfczp0     0.27     3786  4246
+      4371  [FIX 2026-07-22] 최종 동적 SQL — AS-IS(L5965~6085) 5분기      1.84    26%    2      49026  5rfw1281hnb5b     1.84     6827  4437
+      문장 합 4.38s (GET_MAIN_DATA 밖 0.00s) / SP 5.30s + fetch 1.86s — 차이 = PL/SQL·재귀SQL
+  (3) GTT 적재 행수 (SP 종료 직후 · 0행 제외)
+      GT_DMF0082_CAL_MONTH_END_DATE                          6
+      GT_DMF0082_CAL_WEEK_END_DATE                          30
+      GT_DMF0082_MF_SP                                  153490
+      GT_DMF0082_MST_ITEM_SINGLE_A_V                     13483
+      GT_DMF0082_MST_ITEM_SINGLE_B_V                      4331
+      GT_DMF0082_MST_ITEM_SINGLE_ORI_V                   21102
+      GT_DMF0082_MST_ITEM_SINGLE_V                       13483
+      GT_DMF0082_PARAM_TOKEN                                 9
+      GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE                    5
+      GT_DMF0082_TEMP_FCST_N_PRICE                      153490
+      GT_DMF0082_TEMP_SELECT_MEASURE                        24
+      GT_DMF0082_TEMP_SITE_ITEM                          15528
+      GT_DMF0082_TEMP_SITE_ITEM_ALL                      15528
+      GT_DMF0082_T_LAST_DATA_SETUP_FCST                   2705
+      GT_DMF0082_T_LAST_DATA_SETUP_PRICE                  6303
+      GT_DMF0082_T_WS_FCST                                  14
+    (user=k0101 div=81 run1 SP 6.07s + fetch 2.15s — 워밍업)
+
+### user=k0101 div=81 run2  SP 6.11s + 결과 fetch 2.25s = 8.36s   rows[RC1..5,RESULT]=7685,6,1,5,181,1
+  (1) 단계별 소요 (0.05초 이상) — 초 / 비중(SP+fetch 대비) / 문장수 / BG / 최대문장
+      시작L 단계                                                            초   비중 문장         BG  최대문장 SQL_ID     초       행  L
+      597   #TEMP_DM_MST_ITEM_SINGLE_ORI_V — SCM_ITEM_M_SN 에서 23컬럼    0.11     1%    2      32188  0rp3b1v236wwz     0.11    13865  599
+      847   #TempSiteItemAll — SCM_MST_SITE_ITEM + _V + 마스터 8테이블    0.40     5%    2      55082  9xvpghd3tj06u     0.39    39070  849
+      1043  #TempSiteItem — TempSiteItemAll GROUP BY + MAX dedup          0.22     3%    1       9764  63ar9rz0axr5p     0.22    39070  1045
+      1204  T_LAST_DATA_SETUP_FCST / PRICE (Current 버전 최신 데이터      0.12     1%    3      39761  gfjpdh7fc1u59     0.12     1407  1207
+      1388  Current 버전 데이터 INSERT                                    0.08     1%    3      14085  4r5kugqqq6cuy     0.04     7552  1390
+      2953  CURRENCY 업데이트 (계획구간 통화코드 보완)                    0.16     2%    1      25870  f6r0861xjw0h1     0.16     6884  2954
+      2984  [E20260918-CURRCELLPROD] CURRENCY 2차 보완 — CELL_PROD_SIT    0.15     2%    1      18806  gkn9tran5v9tb     0.15        0  2994
+      3040  [E20260918-CURRSITEITEM] CURRENCY 3차 보완 — DIV+SITE+ITEM    0.13     2%    1      18806  cac9cbukwmudc     0.13        0  3048
+      3085  LOC/KRW Unit Price 계산 — MKT_AMT / RTF_SYS_RP                0.12     1%    1      20064  day2h1hdkc8y1     0.12     4128  3088
+      3443  [TEAMFILTER 2026-08-11] 조회조건 Team(deptId) 필터 — 통합     0.05     1%    3      18830  6jkjp6q7k1aum     0.05        3  3527
+      4055  [UICATEGORY 2026-08-07] Tier3 파리티 컬럼 적재 (DMF0003 MF    0.07     1%    2      20712  67sysamdcxzmj     0.03        0  4177
+      4237  [E20260918-KEYCOLGRAIN] 숨긴 저장키 컬럼이 행을 가르지 않     0.30     4%    2      20043  3x9ardnmfczp0     0.30       15  4246
+      4371  [FIX 2026-07-22] 최종 동적 SQL — AS-IS(L5965~6085) 5분기      2.23    27%    2      50081  5rfw1281hnb5b     2.23     7685  4437
+      문장 합 4.27s (GET_MAIN_DATA 밖 0.00s) / SP 6.11s + fetch 2.25s — 차이 = PL/SQL·재귀SQL
+  (3) GTT 적재 행수 (SP 종료 직후 · 0행 제외)
+      GT_DMF0082_CAL_MONTH_END_DATE                          6
+      GT_DMF0082_CAL_WEEK_END_DATE                          30
+      GT_DMF0082_MF_SP                                  177431
+      GT_DMF0082_MST_ITEM_SINGLE_A_V                      7018
+      GT_DMF0082_MST_ITEM_SINGLE_B_V                      2189
+      GT_DMF0082_MST_ITEM_SINGLE_ORI_V                   13865
+      GT_DMF0082_MST_ITEM_SINGLE_V                        7018
+      GT_DMF0082_PARAM_TOKEN                                 9
+      GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE                    5
+      GT_DMF0082_TEMP_FCST_N_PRICE                      177431
+      GT_DMF0082_TEMP_SELECT_MEASURE                        24
+      GT_DMF0082_TEMP_SITE_ITEM                          39070
+      GT_DMF0082_TEMP_SITE_ITEM_ALL                      39070
+      GT_DMF0082_T_LAST_DATA_SETUP_FCST                   1407
+      GT_DMF0082_T_LAST_DATA_SETUP_PRICE                  6987
+      GT_DMF0082_T_WS_FCST                                  14
+    (user=k0101 div=82 run1 SP 6.93s + fetch 2.83s — 워밍업)
+
+### user=k0101 div=82 run2  SP 6.82s + 결과 fetch 2.85s = 9.67s   rows[RC1..5,RESULT]=8165,6,1,5,181,1
+  (1) 단계별 소요 (0.05초 이상) — 초 / 비중(SP+fetch 대비) / 문장수 / BG / 최대문장
+      시작L 단계                                                            초   비중 문장         BG  최대문장 SQL_ID     초       행  L
+      597   #TEMP_DM_MST_ITEM_SINGLE_ORI_V — SCM_ITEM_M_SN 에서 23컬럼    0.10     1%    2      31198  0rp3b1v236wwz     0.09     4227  599
+      847   #TempSiteItemAll — SCM_MST_SITE_ITEM + _V + 마스터 8테이블    0.30     3%    2      40193  9xvpghd3tj06u     0.30    38206  849
+      1043  #TempSiteItem — TempSiteItemAll GROUP BY + MAX dedup          0.21     2%    1       9465  63ar9rz0axr5p     0.21    38206  1045
+      1204  T_LAST_DATA_SETUP_FCST / PRICE (Current 버전 최신 데이터      0.10     1%    3      39462  gfjpdh7fc1u59     0.10      855  1207
+      1388  Current 버전 데이터 INSERT                                    0.07     1%    3      12383  4r5kugqqq6cuy     0.03     5081  1390
+      2953  CURRENCY 업데이트 (계획구간 통화코드 보완)                    0.14     1%    1      21078  f6r0861xjw0h1     0.14      946  2954
+      2984  [E20260918-CURRCELLPROD] CURRENCY 2차 보완 — CELL_PROD_SIT    0.18     2%    1      20106  gkn9tran5v9tb     0.18        0  2994
+      3040  [E20260918-CURRSITEITEM] CURRENCY 3차 보완 — DIV+SITE+ITEM    0.14     1%    1      20106  cac9cbukwmudc     0.14        0  3048
+      3085  LOC/KRW Unit Price 계산 — MKT_AMT / RTF_SYS_RP                0.11     1%    1      20314  day2h1hdkc8y1     0.11      664  3088
+      4055  [UICATEGORY 2026-08-07] Tier3 파리티 컬럼 적재 (DMF0003 MF    0.08     1%    3      27006  6800d4bz18558     0.05     4137  4187
+      4237  [E20260918-KEYCOLGRAIN] 숨긴 저장키 컬럼이 행을 가르지 않     0.32     3%    2      22606  3x9ardnmfczp0     0.32        6  4246
+      4371  [FIX 2026-07-22] 최종 동적 SQL — AS-IS(L5965~6085) 5분기      2.83    29%    2      56514  5rfw1281hnb5b     2.83     8165  4437
+      문장 합 4.69s (GET_MAIN_DATA 밖 0.00s) / SP 6.82s + fetch 2.85s — 차이 = PL/SQL·재귀SQL
+  (3) GTT 적재 행수 (SP 종료 직후 · 0행 제외)
+      GT_DMF0082_CAL_MONTH_END_DATE                          6
+      GT_DMF0082_CAL_WEEK_END_DATE                          30
+      GT_DMF0082_MF_SP                                  201762
+      GT_DMF0082_MST_ITEM_SINGLE_A_V                      1942
+      GT_DMF0082_MST_ITEM_SINGLE_B_V                      1296
+      GT_DMF0082_MST_ITEM_SINGLE_ORI_V                    4227
+      GT_DMF0082_MST_ITEM_SINGLE_V                        1942
+      GT_DMF0082_PARAM_TOKEN                                 9
+      GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE                    5
+      GT_DMF0082_TEMP_FCST_N_PRICE                      201762
+      GT_DMF0082_TEMP_SELECT_MEASURE                        24
+      GT_DMF0082_TEMP_SITE_ITEM                          38206
+      GT_DMF0082_TEMP_SITE_ITEM_ALL                      38206
+      GT_DMF0082_T_LAST_DATA_SETUP_FCST                    855
+      GT_DMF0082_T_LAST_DATA_SETUP_PRICE                  7887
+      GT_DMF0082_T_WS_FCST                                  14
+
+완료 — C05_SP_STAGE_BREAKDOWN_OUT.txt 회신

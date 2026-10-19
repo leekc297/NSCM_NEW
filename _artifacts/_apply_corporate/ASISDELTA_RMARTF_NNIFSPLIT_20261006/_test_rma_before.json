@@ -1,0 +1,255 @@
+{
+ "plan_start_bind": "20250811",
+ "division": "40",
+ "measure": "SCM_FCST",
+ "checks": [
+  {
+   "check": "C0 DB 원문의 RMA 생성 문장 == 수정 전 문장",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "C0 수정 전·후 문장 차이 = 조건 1줄",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "C0 RTF_PR arm 문장 무변경",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A1 예외항목 0건: RTF_SYS_RP 생성 대상 수정 전 == 수정 후",
+   "pass": true,
+   "detail": "8행 / 8행 · 키 3"
+  },
+  {
+   "check": "A1 시험 데이터 실존 (생성 대상 > 0)",
+   "pass": true,
+   "detail": "8행"
+  },
+  {
+   "check": "A2 실제 수집 문장: 수정 후 결과 = 수정 전 − (RTF_SYS_RP 예외 키의 행), 추가 0",
+   "pass": true,
+   "detail": "수집 [('RTF', 'MPS', 97), ('RTF', 'SDC', 10), ('RTF', 'SMC', 4), ('RTF', 'SMF', 1), ('RTF_PR', 'MPS', 97), ('RTF_PR', 'SDC', 7), ('RTF_PR', 'SMC', 3), ('RTF_SCP', 'MPS', 97), ('RTF_SCP', 'SDC', 10), ('RTF_SCP', 'SMC', 4), ('RTF_SCP', 'SMF', 1), ('RTF_SYS_RP', 'MPS', 104), ('RTF_SYS_RP', 'SDC', 11), ('RTF_SYS_RP', 'SMC', 4), ('RTF_SYS_RP', 'SMF', 1)] · 수정 전 8행 → 수정 후 8행"
+  },
+  {
+   "check": "A3 수정 전: 예외 키도 그대로 생성 대상 (옛 조건은 항상 불일치)",
+   "pass": true,
+   "detail": "8행"
+  },
+  {
+   "check": "A3 수정 후: 예외 키 행만 제외, 나머지 동일",
+   "pass": true,
+   "detail": "8행 → 4행 (제외 4행)"
+  },
+  {
+   "check": "A3 RTF_PR arm: 수정 전 == 수정 후 == 예외 없을 때 (AS-IS 운영과 같이 무변경)",
+   "pass": true,
+   "detail": "8행"
+  },
+  {
+   "check": "A4 예외항목 MEASURE=RTF_PR 만: 수정 후 RTF_SYS_RP 생성 대상 변화 없음",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A4 예외항목 MEASURE=RTF/RTF_SCP 만: 수정 후 RTF_SYS_RP 생성 대상 변화 없음",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A5-a 예외항목 0건: 삭제→생성 오류 없음 · 수정 전/후 결과 원장 동일",
+   "pass": true,
+   "detail": "삭제 16 · 생성 16"
+  },
+  {
+   "check": "A5-b 예외 키(RTF_SYS_RP): 수정 전 = 보존된 행을 다시 INSERT → 오류",
+   "pass": true,
+   "detail": "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN_MKT_FCST columns (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DO"
+  },
+  {
+   "check": "A5-b 예외 키(RTF_SYS_RP): 수정 후 오류 없음 · 수정된 행 그대로 보존(감사 컬럼 포함)",
+   "pass": true,
+   "detail": "보존 4행 · 삭제 12 · 생성 12"
+  },
+  {
+   "check": "A5-b 예외 키 외 나머지 원장 = 예외 없을 때 결과와 동일",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A5-b 그 외 키의 RTF_SYS_RP 수량 == 기준수요 수량 (일자별)",
+   "pass": true,
+   "detail": "4행"
+  },
+  {
+   "check": "Z 원장(40 RMA 전 행·전 컬럼) 시험 전 == 시험 후",
+   "pass": true,
+   "detail": "123행"
+  }
+ ],
+ "db_last_ddl": "2026-10-01 18:44:18",
+ "db_status": "VALID",
+ "applied": false,
+ "ledger_rows_before": 123,
+ "candidates": {
+  "rows": 8,
+  "keys": [
+   [
+    "40",
+    "IM",
+    "IM_CN_NGG",
+    "MCCM349215A1",
+    "E",
+    "RMA",
+    "FCA",
+    "-"
+   ],
+   [
+    "40",
+    "Kreisel Elec.",
+    "Kreisel Elec._AT_RIM",
+    "MCCM348018A2",
+    "E",
+    "RMA",
+    "CIF",
+    "-"
+   ],
+   [
+    "40",
+    "Rivian Automotive(개발)",
+    "Rivian Automotive_US_TUN",
+    "MCMM9319V9A1-005",
+    "E",
+    "RMA",
+    "FCA",
+    "-"
+   ]
+  ]
+ },
+ "A2_collected": [
+  [
+   "RTF",
+   "MPS",
+   97
+  ],
+  [
+   "RTF",
+   "SDC",
+   10
+  ],
+  [
+   "RTF",
+   "SMC",
+   4
+  ],
+  [
+   "RTF",
+   "SMF",
+   1
+  ],
+  [
+   "RTF_PR",
+   "MPS",
+   97
+  ],
+  [
+   "RTF_PR",
+   "SDC",
+   7
+  ],
+  [
+   "RTF_PR",
+   "SMC",
+   3
+  ],
+  [
+   "RTF_SCP",
+   "MPS",
+   97
+  ],
+  [
+   "RTF_SCP",
+   "SDC",
+   10
+  ],
+  [
+   "RTF_SCP",
+   "SMC",
+   4
+  ],
+  [
+   "RTF_SCP",
+   "SMF",
+   1
+  ],
+  [
+   "RTF_SYS_RP",
+   "MPS",
+   104
+  ],
+  [
+   "RTF_SYS_RP",
+   "SDC",
+   11
+  ],
+  [
+   "RTF_SYS_RP",
+   "SMC",
+   4
+  ],
+  [
+   "RTF_SYS_RP",
+   "SMF",
+   1
+  ]
+ ],
+ "A3_key": [
+  "40",
+  "IM",
+  "IM_CN_NGG",
+  "MCCM349215A1",
+  "E",
+  "RMA",
+  "FCA",
+  "-"
+ ],
+ "A5_none": {
+  "old": {
+   "deleted": 16,
+   "inserted": 16,
+   "error": null
+  },
+  "new": {
+   "deleted": 16,
+   "inserted": 16,
+   "error": null
+  }
+ },
+ "A5_sysrp": {
+  "old": {
+   "deleted": 12,
+   "inserted": null,
+   "error": "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN_MKT_FCST columns (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DO"
+  },
+  "new": {
+   "deleted": 12,
+   "inserted": 12,
+   "error": null
+  }
+ },
+ "A5_sysrp_pr": {
+  "old": {
+   "deleted": 8,
+   "inserted": null,
+   "error": "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN_MKT_FCST columns (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DO"
+  },
+  "new": {
+   "deleted": 8,
+   "inserted": null,
+   "error": "ORA-00001: unique constraint (SCM_MGR.PK_DM_PLN_MKT_FCST) violated on table SCM_MGR.DM_PLN_MKT_FCST columns (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DO"
+  }
+ },
+ "all_pass": true
+}

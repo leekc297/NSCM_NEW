@@ -1,0 +1,90 @@
+.tableScroll {
+  height: 100%;
+  overflow: auto;
+  border: 1px solid #e0e0e0;
+}
+
+.table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  th,
+  td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: #f5f6f8;
+    font-weight: 600;
+    z-index: 1;
+  }
+
+  // 제어 컬럼 헤더·셀 가운데 정렬 — .table th/td(특정도 0,1,1) 를 이기도록 th/td.center(0,2,1) 로 지정.
+  th.center,
+  td.center {
+    text-align: center;
+  }
+}
+
+.center {
+  text-align: center;
+}
+
+.orderCol {
+  width: 60px;
+}
+
+.displayCol {
+  width: 84px;
+}
+
+.widthCol {
+  width: 84px;
+}
+
+.colorCol {
+  width: 104px;
+}
+
+.orderCell {
+  text-align: center;
+  color: #666;
+}
+
+// Columns 라벨 — 폭 초과 시 말줄임(한 줄 유지)
+.labelCell {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+// key 컬럼 (라벨 '*') — 빨간색
+.keyLabel {
+  color: #d32f2f;
+}
+
+.widthInput {
+  width: 56px;
+  padding: 2px 4px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.draggableRow {
+  cursor: move;
+}
+
+.dragOver {
+  border-top: 2px solid #17919b;
+}
+
+.dragging {
+  opacity: 0.5;
+}

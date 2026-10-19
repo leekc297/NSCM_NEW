@@ -1,0 +1,39 @@
+﻿CHK | DB_NAME | INST | NOW                
+----+---------+------+--------------------
+L0  | ZIOUI1  | ZIO  | 2026-10-14 12:13:42
+(1 rows)
+CHK | OBJECT_TYPE  | STATUS | LAST_DDL            | BODY_FP        
+----+--------------+--------+---------------------+----------------
+L0  | PACKAGE      | VALID  | 2026-10-09 13:38:30 | 44줄 / 1731자    
+L0  | PACKAGE BODY | VALID  | 2026-10-14 12:13:41 | 1992줄 / 103860자
+(2 rows)
+CHK          | N | JUDGE
+-------------+---+------
+L1 선행 NOPUSH | 1 | PASS 
+(1 rows)
+CHK         | N | LINE | JUDGE
+------------+---+------+------
+L2 앵커① BASE | 1 | 140  | PASS 
+(1 rows)
+CHK        | N | LINE | JUDGE
+-----------+---+------+------
+L2 앵커② ON절 | 1 | 212  | PASS 
+(1 rows)
+CHK       | LINE | TXT                                                                                              
+----------+------+--------------------------------------------------------------------------------------------------
+L2 앵커② 문맥 | 206  |         LEFT JOIN SCM_MST_SITE_CUSTOMER SC                                                       
+L2 앵커② 문맥 | 207  |           ON SC.DIVISION_ID = SI.DIVISION_ID                                                     
+L2 앵커② 문맥 | 208  |          --AND SC.SCM_SITE_ID = SI.SCM_SITE_ID                                                   
+L2 앵커② 문맥 | 209  |          AND UPPER(SC.SCM_SITE_ID) = UPPER(SI.SCM_SITE_ID)    -- 2026.10.08 POJ 사이트 코드 대소문자 무시 연결
+L2 앵커② 문맥 | 210  |          AND SC.REP_YN = 'Y'                                                                     
+L2 앵커② 문맥 | 211  |          AND SC.VALID_YN = 'Y'                                                                   
+L2 앵커② 문맥 | 212  |          AND (P_DIVISION_ID = '82' OR NVL(SC.VALID_YN, 'Y') = 'Y')                               
+L2 앵커② 문맥 | 213  |         /* [PERF-DMF0005 20260722] P6c: DM_MST_ITEM_SINGLE_V 조인 제거 — ITEM_AGG(IA) 등가 대체 */       
+(8 rows)
+CHK   | N | JUDGE   
+------+---+---------
+L3 마커 | 0 | 미적용 (기대)
+(1 rows)
+CHK | INST_ID | SID | SERIAL# | USERNAME | MACHINE | MODULE | CALL_SEC | SQL_ID
+----+---------+-----+---------+----------+---------+--------+----------+-------
+(0 rows)

@@ -1,0 +1,8 @@
+-- DMF0044 2배 저장 결함 정정 — 중간/스테이징 GTT 컬럼 추가
+--   원장 PK 16컬럼 중 저장 매칭에서 빠져 있던 컬럼을 실어 나르기 위한 그릇.
+--   마커: E20260911-CELLPRODKEY / 원장 REQ:CHAT-20260911-W66
+--   ⚠ 실행 전 BE 중지 권장 — 세션이 GTT 사용 중이면 ORA-14450.
+--   멱등: 이미 있으면 ORA-01430 → 무시 가능.
+ALTER TABLE SCM_MGR.GT_0044_RESULTS_MST_C ADD (CELL_PROD_SITE VARCHAR2(120));
+ALTER TABLE SCM_MGR.GT_0044_RESULTS_MST_C ADD (PLANT_SITE_ID  VARCHAR2(120));
+ALTER TABLE SCM_MGR.GT_F044_T             ADD (CELL_PROD_SITE_CD VARCHAR2(240));

@@ -1,0 +1,121 @@
+// SavePricePeriodModal — 표준 모달 레이아웃 (형제 ExchangeRateModal / DMF0020 PriceBatchInputModal 동일)
+//   SearchArea → gridWrapper → 하단 buttonWrapper.
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+  // bounded 컨테이너화 — CustomDialog 높이 안에서 flex 분배해야 grid viewport bounded → vscroll 생성.
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.gridWrapper {
+  position: relative;
+  // flex:1(=1 1 0) — basis 0 으로 잔여 공간만 차지(형제 ExchangeRateModal 정본 동일).
+  //   flex:1 1 auto 는 basis=그리드 콘텐츠 높이라, 데이터 많을 때 SearchArea 를 밀어내 조회영역이
+  //   사라지는 문제(사용자 확인 2026-07-23). min-height:0 = wijmo grid bounded viewport → 세로 스크롤.
+  flex: 1;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+}
+
+.grid {
+  height: 100%;
+  width: 100%;
+
+  // 다단(3단) 헤더 셀이 16px row 안에 맞도록 타이포 보정 (행 높이는 48px 정규화 효과가 전담).
+  :global {
+    .wj-colheaders .wj-cell {
+      line-height: 14px;
+      padding: 1px 4px;
+      font-size: 11px;
+    }
+
+    // AS-IS PJ20200138 — COL_LIST(범위초과) 주차 셀 Pink 표기 (Color.Pink 1:1).
+    .wj-cell.overRangeCell {
+      background: #ffc0cb !important;
+    }
+  }
+}
+
+.buttonWrapper {// SavePricePeriodModal — 표준 모달 레이아웃 (형제 ExchangeRateModal / DMF0020 PriceBatchInputModal 동일)
+  //   SearchArea → gridWrapper → 하단 buttonWrapper.
+  .dialogContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 4px 0;
+    // bounded 컨테이너화 — CustomDialog 높이 안에서 flex 분배해야 grid viewport bounded → vscroll 생성.
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  
+  .gridWrapper {
+    position: relative;
+    // flex:1(=1 1 0) — basis 0 으로 잔여 공간만 차지(형제 ExchangeRateModal 정본 동일).
+    //   flex:1 1 auto 는 basis=그리드 콘텐츠 높이라, 데이터 많을 때 SearchArea 를 밀어내 조회영역이
+    //   사라지는 문제(사용자 확인 2026-07-23). min-height:0 = wijmo grid bounded viewport → 세로 스크롤.
+    //   min-width:0 = 가로도 컨테이너 폭으로 bounded → 컬럼 총폭 초과 시 wijmo 가로 스크롤 생성
+    //     (없으면 flex item 이 콘텐츠 폭으로 커져 "다 들어감" 판정 → 가로 스크롤 미생성, 사용자 확인 2026-07-23).
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    border: 1px solid #e0e4e9;
+    border-radius: 4px;
+    overflow: hidden;
+    background: white;
+  }
+  
+  .grid {
+    height: 100%;
+    width: 100%;
+  
+    // 다단(3단) 헤더 셀이 16px row 안에 맞도록 타이포 보정 (행 높이는 48px 정규화 효과가 전담).
+    :global {
+      .wj-colheaders .wj-cell {
+        line-height: 14px;
+        padding: 1px 4px;
+        font-size: 11px;
+      }
+  
+      // AS-IS PJ20200138 — COL_LIST(범위초과) 주차 셀 Pink 표기 (Color.Pink 1:1).
+      .wj-cell.overRangeCell {
+        background: #ffc0cb !important;
+      }
+    }
+  }
+  
+  .buttonWrapper {
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+    margin-top: 5px;
+  }
+  
+  // Project / Model popup 조회 — InputField(박스) + 우측 별도 조회 버튼 (catalog PopupSearchInput 동일).
+  .popupRow {
+    display: flex;
+    align-items: stretch;
+    gap: 4px;
+    width: 100%;
+  }
+  
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+// Project / Model popup 조회 — InputField(박스) + 우측 별도 조회 버튼 (catalog PopupSearchInput 동일).
+.popupRow {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  width: 100%;
+}

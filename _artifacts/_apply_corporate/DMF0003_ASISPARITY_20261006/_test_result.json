@@ -1,0 +1,167 @@
+{
+ "start": "2026-10-06 15:25:38",
+ "date": "20261012",
+ "ledger_rows_touched": 0,
+ "cases": [
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Audi",
+    "Audi_DE_ING",
+    "MCMM6365B0A1-000"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [MCMM6365B0A1-000] BOM does not exist !",
+    "0"
+   ],
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [Audi_DE_ING] SITE SHIP-TO does not exist !",
+    "0"
+   ],
+   "ledger_before": [
+    0,
+    0,
+    null
+   ],
+   "ledger_after": [
+    0,
+    0,
+    null
+   ],
+   "ledger_same": true
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "BMZ",
+    "BMZ_DE_KSN",
+    "MCCH340030A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : Model : MCCH340030A1\nFCST INPUT BLOCK Model. contact 영업관리팀",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "BOM",
+   "div": "40",
+   "key": [
+    "40",
+    "Ford",
+    "Ford_DE_222",
+    "MCMH9309U0A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [MCMH9309U0A1] BOM does not exist !",
+    "0"
+   ],
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [Ford_DE_222] SITE SHIP-TO does not exist !",
+    "0"
+   ],
+   "ledger_before": [
+    0,
+    0,
+    null
+   ],
+   "ledger_after": [
+    0,
+    0,
+    null
+   ],
+   "ledger_same": true
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15CS2006",
+    "CS Enertech_KR_OSN",
+    "ACEP1038I-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : 구코드 INCOTERMS는 저장할 수 없습니다.",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15VO7001",
+    "Volvo_FR_HRB",
+    "APVVC313H-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [APVVC313H-A1] Kwh/Cell does not exist !\nSales Site Project Model 에서 해당 항목을 채워주세요.",
+    "0"
+   ],
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [Volvo_FR_HRB] SITE SHIP-TO does not exist !",
+    "0"
+   ],
+   "ledger_before": [
+    2,
+    12,
+    "2018-07-24 00:11:30"
+   ],
+   "ledger_after": [
+    2,
+    12,
+    "2018-07-24 00:11:30"
+   ],
+   "ledger_same": true
+  },
+  {
+   "case": "81_KWH",
+   "div": "81",
+   "key": [
+    "81",
+    "A15HC7001",
+    "MOBIS_KR_PTK",
+    "APCAN0834A"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [APCAN0834A] Kwh/Cell does not exist !\nSales Site Project Model 에서 해당 항목을 채워주세요.",
+    "0"
+   ],
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [MOBIS_KR_PTK] SITE SHIP-TO does not exist !",
+    "0"
+   ],
+   "ledger_before": [
+    0,
+    0,
+    null
+   ],
+   "ledger_after": [
+    0,
+    0,
+    null
+   ],
+   "ledger_same": true
+  }
+ ]
+}

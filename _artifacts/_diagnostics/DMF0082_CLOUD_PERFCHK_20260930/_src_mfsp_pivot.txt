@@ -1,0 +1,741 @@
+3875     -- ====================================================================================================
+3876 
+3877     DELETE FROM SCM_MGR.GT_DMF0082_CAL_MONTH_END_DATE;
+3878     DELETE FROM SCM_MGR.GT_DMF0082_CAL_WEEK_END_DATE;
+3879 
+3880     INSERT INTO SCM_MGR.GT_DMF0082_CAL_MONTH_END_DATE (BASIS_YYYYMM, MONTH_END_DATE, M3_CUTOFF_DATE)
+3881     SELECT A.BASIS_YYYYMM
+3882          , MAX(A.BASIS_YYYYMMDD) AS MONTH_END_DATE
+3883          , TO_CHAR(ADD_MONTHS(TO_DATE(MIN(A.BASIS_YYYYMMDD),'YYYYMMDD'), 3), 'YYYYMMDD') AS M3_CUTOFF_DATE
+3884     FROM   SCM_MGR.SCM_SYS_CALENDAR_M A
+3885     WHERE  A.BASIS_YYYYMMDD BETWEEN p_from_yyyymmdd AND p_to_yyyymmdd
+3886     GROUP BY A.BASIS_YYYYMM;
+3887 
+3888     INSERT INTO SCM_MGR.GT_DMF0082_CAL_WEEK_END_DATE (ISO_WEEK, BASIS_YYYYMM, WEEK_END_DATE, M3_CUTOFF_DATE)
+3889     SELECT A.ISO_WEEK
+3890          , A.BASIS_YYYYMM
+3891          , MAX(A.BASIS_YYYYMMDD) AS WEEK_END_DATE
+3892          , TO_CHAR(ADD_MONTHS(TO_DATE(MIN(A.BASIS_YYYYMMDD),'YYYYMMDD'), 3), 'YYYYMMDD') AS M3_CUTOFF_DATE
+3893     FROM   SCM_MGR.SCM_SYS_CALENDAR_M A
+3894     WHERE  A.BASIS_YYYYMMDD BETWEEN p_from_yyyymmdd AND p_to_yyyymmdd
+3895     GROUP BY A.ISO_WEEK, A.BASIS_YYYYMM;
+3896 
+3897     --[E20260812-PERF-NOSTATS] DBMS_STATS.GATHER_TABLE_STATS(OWNNAME => 'SCM_MGR', TABNAME => 'GT_DMF0082_CAL_MONTH_END_DATE', NO_INVALIDATE => FALSE);  -- hook #129: SP 내 통계수집 금지(ASH 병목 실측 — undo/COL$ 대기. DS2 dynamic sampling 이 대체)
+3898     --[E20260812-PERF-NOSTATS] DBMS_STATS.GATHER_TABLE_STATS(OWNNAME => 'SCM_MGR', TABNAME => 'GT_DMF0082_CAL_WEEK_END_DATE',  NO_INVALIDATE => FALSE);  -- hook #129: SP 내 통계수집 금지(ASH 병목 실측 — undo/COL$ 대기. DS2 dynamic sampling 이 대체)
+3899 
+3900     -- ====================================================================================================
+3901     -- MF_SP — 동적 PIVOT 대상 기본 데이터 구성
+3902     -- BUCKET_CONVERSION PIVOT: MSSQL PIVOT(MAX(BUCKET_PER) FOR YYYYMMDD IN (SUN,MON,...))
+3903     --   → Oracle PIVOT (MAX(BUCKET_PER) FOR YYYYMMDD IN ('SUN' AS SUN,'MON' AS MON,...))
+3904     -- ====================================================================================================
+3905 
+3906     DELETE FROM SCM_MGR.GT_DMF0082_MF_SP;
+3907 
+3908     INSERT /*[E20260812-PERF] APPEND PARALLEL 제거 — GTT 직로드가 enq:KO 체크포인트 대기 유발(ASH 50샘플)*/ INTO SCM_MGR.GT_DMF0082_MF_SP
+3909     ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS
+3910     , MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, BUCKET_TYPE, BUCKET_KEY, QTY, MEASURE_GROUP
+3911     , CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER, DEPT_ID, DEPT_NAME_KO
+3912     , FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE, PROJECT_NAME, PROJECT_OWNER, BIZ_TYPE
+3913     , SOLDTO_CUSTOMER, COUNTRY_NAME, CITY_NAME, PROJECT_STATUS, ITEM_NAME, VMI_YN
+3914     , CUST_GROUP, CUST_GROUP_DTL, APPLICATION, ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY
+3915     , FORECAST_INFO_BIZ_TYPE, CELL_TYPE, FORECAST_INFO_ALL, FORECAST_INFO_SPEC
+3916     , FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME, CELL_PER_CAR, CELL_PER_MODULE
+3917     , MODULE_PER_CAR, SORT_ORDER_NO, ENERGE, CELL_QUANTITY, AS_FROM_SITE
+3918     , CREATE_DATE, LAST_UPDATED_BY, SENDER_CODE, SENDER_NAME, PROJECT_S_OP_REPORT
+3919     , CURRENCY, VERSION_NO, CUTOFF_YYYYMMDD, NOTATION, EDIT_FLAG, SORT_KEY, GROUP_ID
+3920     , SUN, MON, TUE, WED, THU, FRI, SAT
+3921     , YYYYMM, YYYYMMWW, WEEK_END_YN, MONTH_END_YN
+3922     , NEW_FLAG, AS_YN, VMI_STD_DIO)  --[E20260930-DMF0082QRYPERF-VMI82FOLD] VMI_STD_DIO INSERT 흡수 / --[E20260812-PERF] 전행 UPDATE 2회(redo/log 대기 93샘플) INSERT 시점 흡수
+3923     SELECT F.DIVISION_ID, F.PROJECT_CODE, F.END_CUSTOMER, F.SCM_SITE_ID, F.ITEM_ID
+3924          , F.DOM_EXP, F.FCST_TYPE, F.INCOTERMS, F.MEASURE, F.PLANT_SITE_ID
+3925          , F.CELL_PROD_SITE_ID
+3926          , CAL.BUCKET_TYPE
+3927          , CAL.BUCKET_KEY
+3928          , SUM(F.QTY) AS QTY
+3929          , MAX(F.MEASURE_GROUP)
+3930          , MAX(F.CELL_MODEL), MAX(F.NICK_NAME), MAX(F.DMS_SALES), MAX(F.DMS_CUSTOMER)
+3931          , MAX(F.OWNER), MAX(F.DEPT_ID), MAX(F.DEPT_NAME_KO)
+3932          , MAX(F.FORECAST_INFO_CELL_PACK_COUNT), MAX(F.ITEM_TYPE)
+3933          , MAX(F.PROJECT_NAME), MAX(F.PROJECT_OWNER), MAX(F.BIZ_TYPE)
+3934          , MAX(F.SOLDTO_CUSTOMER), MAX(F.COUNTRY_NAME), MAX(F.CITY_NAME)
+3935          , MAX(F.PROJECT_STATUS), MAX(F.ITEM_NAME), MAX(F.VMI_YN)
+3936          , MAX(F.CUST_GROUP), MAX(F.CUST_GROUP_DTL), MAX(F.APPLICATION)
+3937          , MAX(F.ROUTE), MAX(F.MDM_PROJECT_NAME), MAX(F.MIN_CAPACITY)
+3938          , MAX(F.FORECAST_INFO_BIZ_TYPE), MAX(F.CELL_TYPE)
+3939          , MAX(F.FORECAST_INFO_ALL), MAX(F.FORECAST_INFO_SPEC)
+3940          , MAX(F.FORECAST_INFOR_VERSION), MAX(F.CELL_MODEL_NICK_NAME)
+3941          , MAX(F.CELL_PER_CAR), MAX(F.CELL_PER_MODULE), MAX(F.MODULE_PER_CAR)
+3942          , MAX(F.SORT_ORDER_NO), MAX(F.ENERGE), MAX(F.CELL_QUANTITY)
+3943          , NVL(MAX(F.AS_FROM_SITE), ' '), MAX(F.CREATE_DATE), MAX(F.LAST_UPDATED_BY)
+3944          , MAX(F.SENDER_CODE), MAX(F.SENDER_NAME), MAX(F.PROJECT_S_OP_REPORT)
+3945          , MAX(F.CURRENCY), MAX(F.VERSION_NO), MAX(F.CUTOFF_YYYYMMDD)
+3946          , MAX(F.NOTATION)
+3947          /* EDIT_FLAG: 수정권한 — MA.EDIT_AUTH_YN 기반 */
+3948          , CASE WHEN p_division_id = '82' THEN 'N'  --[E20260930-DMF0082QRYPERF-VMI82FOLD] 구 후행 UPDATE EDIT_FLAG='N'(82 조회전용) 흡수
+3949                 WHEN V_GROUP_ID = 'ADMIN' THEN 'Y'
+3950                 WHEN EXISTS (
+3951                     SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE MA
+3952                     WHERE  MA.MEASURE = F.MEASURE
+3953                     AND    MA.EDIT_AUTH_YN = 'Y'
+3954                     AND   (MA.TODAY_LIMIT_YN = 'N'
+3955                            OR (MA.TODAY_LIMIT_YN = 'Y'
+3956                                AND INSTR(
+3957                                        REPLACE(TRIM(MA.TODAY_DAY_LIST),' ',''),
+3958                                        CASE TO_NUMBER(TO_CHAR(SYSDATE,'D'))
+3959                                            WHEN 1 THEN 'SUN' WHEN 2 THEN 'MON'
+3960                                            WHEN 3 THEN 'TUE' WHEN 4 THEN 'WED'
+3961                                            WHEN 5 THEN 'THU' WHEN 6 THEN 'FRI'
+3962                                            WHEN 7 THEN 'SAT'
+3963                                        END) > 0))
+3964                 ) THEN 'Y'
+3965                 ELSE 'N'
+3966            END AS EDIT_FLAG
+3967          /* SORT_KEY — [FIX 2026-07-22] AS-IS L5865 파리티: 상수 999.
+3968             구 변환(MEASURE_GROUP||SORT_ORDER_NO)은 ORDER BY 선두 SORT_KEY 를 measure 별 상이값으로
+3969             만들어 measure-major 정렬(ITEM별 메저 인접 파괴)을 유발 — 사용자 실증 2026-07-22 */
+3970          , 999 AS SORT_KEY
+3971          /* GROUP_ID from user profile (DM_MST_USER or SCM_MST_USER) */
+3972          , NULL AS GROUP_ID
+3973          /* BUCKET PIVOT 컬럼: SUN~SAT */
+3974          , PVT.SUN, PVT.MON, PVT.TUE, PVT.WED, PVT.THU, PVT.FRI, PVT.SAT
+3975          /* [FIX 2026-07-22] W/M 버킷 집계 분기용 파생 — AS-IS #MF_SP L5812~5846 파리티 */
+3976          , CAL.YYYYMM, CAL.YYYYMMWW, CAL.WEEK_END_YN, CAL.MONTH_END_YN
+3977          /* [E20260812-PERF] 구 후행 UPDATE 흡수 — NEW_FLAG='N' 고정(원 주석 정책 동일) /
+3978             AS_YN = p_scm_site_id 기반 비상관 판정(원 DECLARE 블록 등가 — MAX 는 GROUP BY 문법용) */
+3979          , MAX('N') AS NEW_FLAG
+3980          , MAX(CASE WHEN p_scm_site_id IS NULL OR p_scm_site_id = 'ALL' THEN 'N'
+3981                     WHEN EXISTS (SELECT 1 FROM (SELECT TOKEN FROM SCM_MGR.GT_DMF0082_PARAM_TOKEN WHERE PARAM_NM = 'p_scm_site_id') SA
+3982                                  JOIN SCM_MGR.SCM_ADM_LOOKUP_MASTER_DETAIL SB
+3983                                    ON SA.TOKEN = SB.SEGMENT1 AND SB.LOOKUP_TYPE = 'AS_SITE_PLANT')
+3984                     THEN 'Y' ELSE 'N' END) AS AS_YN
+3985          , MAX(VD.VMI_STD_DIO) AS VMI_STD_DIO  --[E20260930-DMF0082QRYPERF-VMI82FOLD] 82 외 = NULL(조인 미성립)
+3986     FROM   SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE F
+3987     INNER JOIN (
+3988         /* Daily bucket → date key */
+3989         SELECT D.BASIS_YYYYMMDD
+3990              , D.BASIS_YYYYMM || D.ISO_WEEK AS WEEK_KEY
+3991              , CASE WHEN D.BASIS_YYYYMM || D.ISO_WEEK = WE.ISO_WEEK || WE.BASIS_YYYYMM
+3992                     THEN WE.WEEK_END_DATE ELSE D.BASIS_YYYYMMDD END AS BUCKET_TYPE_KEY
+3993              , TO_CHAR(D.BASIS_YYYYMMDD) AS BUCKET_KEY
+3994              , 'D' AS BUCKET_TYPE
+3995              /* [FIX 2026-07-22] W/M 분기 파생 — AS-IS L5812(YYYYMM/YYYYMMWW)·L5845~5846(월말/주말 플래그) 파리티.
+3996                 YYYYMMWW 는 C_BUCKET 컬럼키와 동일 포맷(LPAD 2) 의무 — 불일치 시 W_ 셀 전량 공백 */
+3997              , D.BASIS_YYYYMM AS YYYYMM
+3998              , D.BASIS_YYYYMM || LPAD(TRIM(D.ISO_WEEK), 2, '0') AS YYYYMMWW
+3999              , CASE WHEN WE2.WEEK_END_DATE  IS NOT NULL THEN 'Y' ELSE 'N' END AS WEEK_END_YN
+4000              , CASE WHEN ME.MONTH_END_DATE IS NOT NULL THEN 'Y' ELSE 'N' END AS MONTH_END_YN
+4001         FROM   SCM_MGR.SCM_SYS_CALENDAR_M D
+4002         LEFT JOIN SCM_MGR.GT_DMF0082_CAL_WEEK_END_DATE WE
+4003             ON  WE.ISO_WEEK     = D.ISO_WEEK
+4004             AND WE.BASIS_YYYYMM = D.BASIS_YYYYMM
+4005         /* AS-IS #CAL_WEEK_END_DATE: 조회범위 내 (월,ISO주) 별 마지막 일자 */
+4006         LEFT JOIN (SELECT MAX(BASIS_YYYYMMDD) AS WEEK_END_DATE
+4007                    FROM   SCM_MGR.SCM_SYS_CALENDAR_M
+4008                    WHERE  BASIS_YYYYMMDD BETWEEN p_from_yyyymmdd AND p_to_yyyymmdd
+4009                    GROUP BY BASIS_YYYYMM, ISO_WEEK) WE2
+4010             ON  WE2.WEEK_END_DATE = D.BASIS_YYYYMMDD
+4011         /* AS-IS #CAL_MONTH_END_DATE: 조회범위 내 월별 마지막 일자 */
+4012         LEFT JOIN (SELECT MAX(BASIS_YYYYMMDD) AS MONTH_END_DATE
+4013                    FROM   SCM_MGR.SCM_SYS_CALENDAR_M
+4014                    WHERE  BASIS_YYYYMMDD BETWEEN p_from_yyyymmdd AND p_to_yyyymmdd
+4015                    GROUP BY BASIS_YYYYMM) ME
+4016             ON  ME.MONTH_END_DATE = D.BASIS_YYYYMMDD
+4017         WHERE  D.BASIS_YYYYMMDD BETWEEN p_from_yyyymmdd AND V_EXP_YYYYMMDD
+4018     ) CAL ON CAL.BASIS_YYYYMMDD = F.YYYYMMDD
+4019     /* BUCKET_PER PIVOT: DM_MST_BUCKET_CONVERSION (DIVISION+SCM_SITE+INCOTERMS 기준)
+4020        [E20260812-PERF] LATERAL(행별 PIVOT 재실행 — ASH direct path temp 156샘플 병목) → 조합별 선계산 후
+4021        일반 LEFT JOIN. PIVOT MAX ≡ MAX(CASE …) — 요일 행 부재 시 NULL 동일(등가) */
+4022     LEFT JOIN (
+4023         SELECT BC.DIVISION_ID, BC.SCM_SITE_ID, BC.INCOTERMS
+4024              , MAX(CASE WHEN BC.YYYYMMDD = 'SUN' THEN CASE WHEN BC.BUCKET_PER = 'Y' THEN 1 ELSE 0 END END) AS SUN
+4025              , MAX(CASE WHEN BC.YYYYMMDD = 'MON' THEN CASE WHEN BC.BUCKET_PER = 'Y' THEN 1 ELSE 0 END END) AS MON
+4026              , MAX(CASE WHEN BC.YYYYMMDD = 'TUE' THEN CASE WHEN BC.BUCKET_PER = 'Y' THEN 1 ELSE 0 END END) AS TUE
+4027              , MAX(CASE WHEN BC.YYYYMMDD = 'WED' THEN CASE WHEN BC.BUCKET_PER = 'Y' THEN 1 ELSE 0 END END) AS WED
+4028              , MAX(CASE WHEN BC.YYYYMMDD = 'THU' THEN CASE WHEN BC.BUCKET_PER = 'Y' THEN 1 ELSE 0 END END) AS THU
+4029              , MAX(CASE WHEN BC.YYYYMMDD = 'FRI' THEN CASE WHEN BC.BUCKET_PER = 'Y' THEN 1 ELSE 0 END END) AS FRI
+4030              , MAX(CASE WHEN BC.YYYYMMDD = 'SAT' THEN CASE WHEN BC.BUCKET_PER = 'Y' THEN 1 ELSE 0 END END) AS SAT
+4031         FROM   SCM_MGR.DM_MST_BUCKET_CONVERSION BC
+4032         GROUP BY BC.DIVISION_ID, BC.SCM_SITE_ID, BC.INCOTERMS
+4033     ) PVT ON  PVT.DIVISION_ID = F.DIVISION_ID
+4034           AND PVT.SCM_SITE_ID = F.SCM_SITE_ID
+4035           AND PVT.INCOTERMS   = F.INCOTERMS
+4036     LEFT JOIN ( --[E20260930-DMF0082QRYPERF-VMI82FOLD] 구 L4155 상관 스칼라 서브쿼리 → SCM_SITE_ID 별 선집계 (1회)
+4037         SELECT S.SCM_SITE_ID, MAX(S.VMI_YN || '^' || NVL(TO_CHAR(S.ATTRIBUTE5),'')) AS VMI_STD_DIO
+4038         FROM   SCM_MGR.SCM_MST_SITE S
+4039         WHERE  S.DIVISION_ID = '82'
+4040         GROUP BY S.SCM_SITE_ID
+4041     ) VD ON  VD.SCM_SITE_ID = F.SCM_SITE_ID
+4042          AND p_division_id  = '82'
+4043     GROUP BY F.DIVISION_ID, F.PROJECT_CODE, F.END_CUSTOMER, F.SCM_SITE_ID, F.ITEM_ID
+4044            , F.DOM_EXP, F.FCST_TYPE, F.INCOTERMS, F.MEASURE, F.PLANT_SITE_ID
+4045            , F.CELL_PROD_SITE_ID, CAL.BUCKET_TYPE, CAL.BUCKET_KEY, F.MEASURE_GROUP
+4046            , F.SORT_ORDER_NO
+4047            , PVT.SUN, PVT.MON, PVT.TUE, PVT.WED, PVT.THU, PVT.FRI, PVT.SAT
+4048            , CAL.YYYYMM, CAL.YYYYMMWW, CAL.WEEK_END_YN, CAL.MONTH_END_YN;
+4049 
+4050     -- [UICATEGORY 2026-08-07] direct-path(APPEND) INSERT 직후 동일 테이블 DML = ORA-12838
+4051     --   → 통계 수집(내부 COMMIT — GTT SYS$SESSION PRESERVE 실측)을 먼저 수행한 뒤 Tier3 적재
+4052     NULL; --[E20260930-DMF0082QRYPERF-NOSTATS] DBMS_STATS.GATHER_TABLE_STATS(OWNNAME => 'SCM_MGR', TABNAME => 'GT_DMF0082_MF_SP', NO_INVALIDATE => FALSE);  /* 2026.08.15 AJS 대형 GTT 통계 유지 — 미수집 시 MF_W 3.95→364초(92배) 실증 */
+4053 
+4054     -- ====================================================================================================
+4055     -- [UICATEGORY 2026-08-07] Tier3 파리티 컬럼 적재 (DMF0003 MF_BASE 파생 이식 — 값 정책은 work report 참조)
+4056     --   NEW_FLAG    : DMF0003 파생(수요/판가 FULL OUTER JOIN 신규 판정)은 본 SP 스테이징 구조에 부재 → 'N' 고정 (한계 명시)
+4057     --   AS_YN       : DMF0003 LP_AS_YN 파리티 — 조회 Sales Site 가 AS_SITE_PLANT 룩업 포함 시 전행 'Y'
+4058     --   ATTR1       : 40=DM_PLN_MKT_FCST(MKT_FCST) 일자 동기화 마커 PIVOT / 82=DM_PLN_PR_DETAIL — 81 은 DMF0003 원문 미정의(NULL)
+4059     --   VMI_STD_DIO : 82=SCM_MST_SITE(VMI_YN^ATTRIBUTE5) — 40 은 DMF0003 원문 조인키 사문(KEY=ITEM↔조인=SITE)으로 미적재
+4060     -- ====================================================================================================
+4061 
+4062     --[E20260812-PERF] NEW_FLAG 전행 UPDATE 제거 — INSERT 시점 흡수 (ASH log 대기 84샘플)
+4063     -- UPDATE SCM_MGR.GT_DMF0082_MF_SP SET NEW_FLAG = 'N';
+4064 
+4065     --[E20260812-PERF] AS_YN 전행 UPDATE 블록 제거 — INSERT 시점 비상관 CASE 로 흡수(등가)
+4066     NULL;
+4067 
+4068     IF p_division_id = '40' THEN
+4069         -- ATTR1 (40) — DMF0003 GT_DMF0003_T_SSP_SYNC 적재 로직 이식 (DM_PLN_MKT_FCST MKT_FCST 일자 P/A 마커 31 PIVOT)
+4070         MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T
+4071         USING (
+4072             SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS
+4073                  , NVL(A1,'')  || '^' || NVL(A2,'')  || '^' || NVL(A3,'')  || '^' || NVL(A4,'')  || '^' || NVL(A5,'')
+4074                 || '^' || NVL(A6,'')  || '^' || NVL(A7,'')  || '^' || NVL(A8,'')  || '^' || NVL(A9,'')  || '^' || NVL(A10,'')
+4075                 || '^' || NVL(A11,'') || '^' || NVL(A12,'') || '^' || NVL(A13,'') || '^' || NVL(A14,'') || '^' || NVL(A15,'')
+4076                 || '^' || NVL(A16,'') || '^' || NVL(A17,'') || '^' || NVL(A18,'') || '^' || NVL(A19,'') || '^' || NVL(A20,'')
+4077                 || '^' || NVL(A21,'') || '^' || NVL(A22,'') || '^' || NVL(A23,'') || '^' || NVL(A24,'') || '^' || NVL(A25,'')
+4078                 || '^' || NVL(A26,'') || '^' || NVL(A27,'') || '^' || NVL(A28,'') || '^' || NVL(A29,'') || '^' || NVL(A30,'')
+4079                 || '^' || NVL(A31,'') AS ATTR1
+4080             FROM (
+4081                 SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, A.FCST_TYPE, INCOTERMS
+4082                      , YYYYMMDD || '/'
+4083                        || CASE
+4084                               WHEN REGEXP_LIKE(NVL(ATTRIBUTE3,'0'),'^[0-9.]+$')
+4085                                AND A.QTY >
+4086                                    CASE WHEN REGEXP_LIKE(NVL(ATTRIBUTE3,'0'),'^[0-9.]+$')
+4087                                         THEN TO_NUMBER(ATTRIBUTE3) ELSE 0 END
+4088                                  + CASE WHEN REGEXP_LIKE(NVL(ATTRIBUTE2,'0'),'^[0-9.]+$')
+4089                                         THEN TO_NUMBER(ATTRIBUTE2) ELSE 0 END
+4090                               THEN 'P'
+4091                               ELSE 'A'
+4092                           END AS SYNC_YN
+4093                      , 'A' || TO_CHAR(
+4094                            ROW_NUMBER() OVER (
+4095                                PARTITION BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID,
+4096                                             DOM_EXP, A.FCST_TYPE, INCOTERMS
+4097                                ORDER BY YYYYMMDD
+4098                            )) AS ROW_NUM
+4099                 FROM   SCM_MGR.DM_PLN_MKT_FCST A
+4100                 WHERE  A.DIVISION_ID = p_division_id
+4101                   AND  A.MEASURE     = 'MKT_FCST'
+4102                   AND  A.YYYYMMDD   BETWEEN V_FROM_YYYYMMDD AND V_TO_YYYYMMDD
+4103                   AND  ( A.ATTRIBUTE4 IS NOT NULL OR A.ATTRIBUTE5 IS NOT NULL )
+4104                   AND  A.QTY <> 0
+4105             ) A
+4106             PIVOT (
+4107                 MAX(SYNC_YN) FOR ROW_NUM IN (
+4108                     'A1'  A1,  'A2'  A2,  'A3'  A3,  'A4'  A4,  'A5'  A5,
+4109                     'A6'  A6,  'A7'  A7,  'A8'  A8,  'A9'  A9,  'A10' A10,
+4110                     'A11' A11, 'A12' A12, 'A13' A13, 'A14' A14, 'A15' A15,
+4111                     'A16' A16, 'A17' A17, 'A18' A18, 'A19' A19, 'A20' A20,
+4112                     'A21' A21, 'A22' A22, 'A23' A23, 'A24' A24, 'A25' A25,
+4113                     'A26' A26, 'A27' A27, 'A28' A28, 'A29' A29, 'A30' A30,
+4114                     'A31' A31
+4115                 )
+4116             )
+4117         ) S
+4118         ON (    T.DIVISION_ID  = S.DIVISION_ID
+4119             AND T.PROJECT_CODE = S.PROJECT_CODE
+4120             AND T.SCM_SITE_ID  = S.SCM_SITE_ID
+4121             AND T.ITEM_ID      = S.ITEM_ID
+4122             AND T.DOM_EXP      = S.DOM_EXP
+4123             AND T.FCST_TYPE    = S.FCST_TYPE
+4124             AND T.INCOTERMS    = S.INCOTERMS)
+4125         WHEN MATCHED THEN UPDATE SET T.ATTR1 = S.ATTR1;
+4126 
+4127     ELSIF p_division_id = '82' THEN
+4128         -- ATTR1 (82) — DMF0003 GT_DMF0003_T_BNP 적재 로직 이식 (DM_PLN_PR_DETAIL 일자 A 마커 31 PIVOT)
+4129         MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T
+4130         USING (
+4131             SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS
+4132                  , NVL(A1,'')  || '^' || NVL(A2,'')  || '^' || NVL(A3,'')  || '^' || NVL(A4,'')  || '^' || NVL(A5,'')
+4133                 || '^' || NVL(A6,'')  || '^' || NVL(A7,'')  || '^' || NVL(A8,'')  || '^' || NVL(A9,'')  || '^' || NVL(A10,'')
+4134                 || '^' || NVL(A11,'') || '^' || NVL(A12,'') || '^' || NVL(A13,'') || '^' || NVL(A14,'') || '^' || NVL(A15,'')
+4135                 || '^' || NVL(A16,'') || '^' || NVL(A17,'') || '^' || NVL(A18,'') || '^' || NVL(A19,'') || '^' || NVL(A20,'')
+4136                 || '^' || NVL(A21,'') || '^' || NVL(A22,'') || '^' || NVL(A23,'') || '^' || NVL(A24,'') || '^' || NVL(A25,'')
+4137                 || '^' || NVL(A26,'') || '^' || NVL(A27,'') || '^' || NVL(A28,'') || '^' || NVL(A29,'') || '^' || NVL(A30,'')
+4138                 || '^' || NVL(A31,'') AS ATTR1
+4139             FROM (
+4140                 SELECT DISTINCT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID,
+4141                                 DOM_EXP, FCST_TYPE, INCOTERMS
+4142                      , YYYYMMDD || '/A' AS SYNC_YN
+4143                      , 'A' || TO_CHAR(
+4144                            ROW_NUMBER() OVER (
+4145                                PARTITION BY DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID,
+4146                                             DOM_EXP, FCST_TYPE, INCOTERMS
+4147                                ORDER BY YYYYMMDD
+4148                            )) AS ROW_NUM
+4149                 FROM   SCM_MGR.DM_PLN_PR_DETAIL A
+4150                 WHERE  A.DIVISION_ID = p_division_id
+4151                   AND  A.YYYYMMDD   BETWEEN V_FROM_YYYYMMDD AND V_TO_YYYYMMDD
+4152             ) A
+4153             PIVOT (
+4154                 MAX(SYNC_YN) FOR ROW_NUM IN (
+4155                     'A1'  A1,  'A2'  A2,  'A3'  A3,  'A4'  A4,  'A5'  A5,
+4156                     'A6'  A6,  'A7'  A7,  'A8'  A8,  'A9'  A9,  'A10' A10,
+4157                     'A11' A11, 'A12' A12, 'A13' A13, 'A14' A14, 'A15' A15,
+4158                     'A16' A16, 'A17' A17, 'A18' A18, 'A19' A19, 'A20' A20,
+4159                     'A21' A21, 'A22' A22, 'A23' A23, 'A24' A24, 'A25' A25,
+4160                     'A26' A26, 'A27' A27, 'A28' A28, 'A29' A29, 'A30' A30,
+4161                     'A31' A31
+4162                 )
+4163             )
+4164         ) S
+4165         ON (    T.DIVISION_ID  = S.DIVISION_ID
+4166             AND T.PROJECT_CODE = S.PROJECT_CODE
+4167             AND T.SCM_SITE_ID  = S.SCM_SITE_ID
+4168             AND T.ITEM_ID      = S.ITEM_ID
+4169             AND T.DOM_EXP      = S.DOM_EXP
+4170             AND T.FCST_TYPE    = S.FCST_TYPE
+4171             AND T.INCOTERMS    = S.INCOTERMS)
+4172         WHEN MATCHED THEN UPDATE SET T.ATTR1 = S.ATTR1;
+4173 
+4174         -- VMI_STD_DIO (82) — DMF0003 GT_DMF0003_VMI_DIO 82 분기 이식 (SCM_MST_SITE VMI_YN^ATTRIBUTE5, SCM_SITE_ID 키)
+4175         NULL;  --[E20260930-DMF0082QRYPERF-VMI82FOLD] VMI_STD_DIO 후행 UPDATE → MF_SP INSERT 흡수
+4176     END IF;
+4177 
+4178     -- [UICATEGORY 2026-08-07] Division 82 = 조회 전용 (사용자 확정) — 편집 서버 권위 차단
+4179     IF p_division_id = '82' THEN
+4180         NULL;  --[E20260930-DMF0082QRYPERF-VMI82FOLD] EDIT_FLAG='N' 전행 UPDATE → MF_SP INSERT CASE 흡수
+4181     END IF;
+4182 
+4183     /* [E20260825-AFSBLANK] AS_FROM_SITE NULL -> ' ' 정규화 (사용자 지시 2026-08-25).
+4184        증상: 81 조회에서 AS_FROM_SITE 컬럼을 켜면 같은 행이 실적/계획 2행으로 분리된다.
+4185        원인: 최종 커서가 동적 GROUP BY 로 표시 컬럼 전체를 묶는데(OPEN O_RC1 FOR 동적 SQL),
+4186              계획 arm 과 실적 arm 의 빈값 표현이 달라(공백 ' ' vs NULL) 같은 표시키가 서로 다른 그룹이 된다.
+4187              실적 원장은 PR_DM_PLN_MKT_FCST_SALES_RESULT_MAPPING 이 ATTRIBUTE10 을 적재하지 않아 항상 NULL
+4188              (INSERT 컬럼 목록에 ATTRIBUTE10 부재 — 실측).
+4189        주의: 실적 arm 에만 NVL 을 걸면 '계획 NULL vs 실적 공백' 이 새로 갈라진다(사내 실측 81 양쪽 NULL 4,801키).
+4190              그래서 두 arm 이 합류한 스테이징에서 한 번에 정규화한다 — 표현만 통일, 실제 사이트값은 불변.
+4191        한계: 값이 실제로 다른 경우(계획 'WA00_81-W' vs 실적 NULL)는 NVL 대상이 아니다 — 별도 판단 필요. */
+4192     UPDATE SCM_MGR.GT_DMF0082_MF_SP
+4193     SET    AS_FROM_SITE = ' '
+4194     WHERE  AS_FROM_SITE IS NULL;
+4195 
+4196     /* [E20260825-CURRNORM] 수량 메저 행의 CURRENCY 표시키 통일 (사용자 신고 2026-08-25).
+4197        증상: CUST_FCST 계열 실적 행의 CURRENCY 가 '-'(센티널)·KRW/USD(실값)인데 계획 arm 은 ''(NULL)
+4198        → 같은 논리행이 CURRENCY 차이로 실적/계획 2행 분리 (AS_FROM_SITE 건과 동일 가족).
+4199        원인: 계획 원장(DM_PLN_MKT_FCST/_C)에는 CURRENCY 컴럼 자체가 없고(실측 ORA-904),
+4200        실적 원장(DM_PLN_SALES_PLAN_RESULT/_C)만 실컴럼 보유('-' 12,278행 포함 실측).
+4201        정정: 판가 메저(CURRENCY 가 실차원인 행)만 제외하고 수량 메저는 전행 ' ' 로 통일. */
+4202     UPDATE SCM_MGR.GT_DMF0082_MF_SP
+4203     SET    CURRENCY = ' '
+4204     WHERE  MEASURE NOT IN ('LOC', 'KRW', 'USD', 'MKT_AMT_LOC', 'MKT_AMT_KRW')
+4205     --[E20260901-CURRKEEP] 사용자 신고 2026-09-01: 수량 메저에도 '자신의 단가 CURRENCY' 표기 (AS-IS 동등).
+4206     --   구 조건 `CURRENCY IS NULL OR CURRENCY <> ' '` 은 **전 수량행을 무조건 공백으로 덮어써** 앞선 백필
+4207     --   MERGE(LOC 기준 8키, AS-IS L2284 동등)로 채운 실통화를 소실시켰다(GTT 양성테스트 실측).
+4208     --   정정: 실값 보존, NULL/공백/센티널('-')만 ' ' 통일 → CURRNORM 본래 목적(행 분리 방지) 유지.
+4209     --   VMI 계열은 AS-IS(IIF(MEASURE LIKE 'VMI%','',CURRENCY) · 백필 제외)와 동일하게 항상 공백.
+4210     AND    (   MEASURE LIKE 'VMI%'
+4211             OR CURRENCY IS NULL OR TRIM(CURRENCY) IS NULL OR TRIM(CURRENCY) = '-');
+4212 
+4213     -- ====================================================================================================
+4214     -- [DEFECT_GUARD] PIVOT IN 리스트 비어있음 방어 — C_BUCKET 이 0행 반환 시 빈 결과셋 조기 반환
+4215     -- (SCM_SYS_CALENDAR_M 에 요청 날짜 범위의 데이터가 없으면 V_PV_LIST 공백 → ORA-00936)
+4216     -- ====================================================================================================
+4217     IF DBMS_LOB.GETLENGTH(V_PV_LIST) = 0 THEN
+4218         BEGIN DBMS_LOB.FREETEMPORARY(V_PV_LIST);     EXCEPTION WHEN OTHERS THEN NULL; END;
+4219         BEGIN DBMS_LOB.FREETEMPORARY(V_PV_COL_LIST); EXCEPTION WHEN OTHERS THEN NULL; END;
+4220         BEGIN DBMS_LOB.FREETEMPORARY(V_QTY_SUM);     EXCEPTION WHEN OTHERS THEN NULL; END;
+4221         OPEN O_RC1 FOR SELECT NULL AS COL1 FROM DUAL WHERE 1 = 0;
+4222         OPEN O_RC2 FOR SELECT NULL AS COL1 FROM DUAL WHERE 1 = 0;
+4223         OPEN O_RC3 FOR SELECT NULL AS COL1 FROM DUAL WHERE 1 = 0;
+4224         OPEN O_RC4 FOR SELECT NULL AS COL1 FROM DUAL WHERE 1 = 0;
+4225         OPEN O_RC5 FOR SELECT NULL AS COL1 FROM DUAL WHERE 1 = 0;
+4226         OPEN O_RESULT_CURSOR FOR SELECT '1' AS RESULT_CODE, 'NO_BUCKET_DATA' AS MESSAGE, '0' AS EVENT FROM DUAL;
+4227         RETURN;
+4228     END IF;
+4229 
+4230     -- ====================================================================================================
+4231     -- 동적 SQL 구성 및 실행 (Case 86: CLOB 승격)
+4232     -- ====================================================================================================
+4233 
+4234     DBMS_LOB.CREATETEMPORARY(V_SQL, TRUE);
+4235 
+4236     -- ====================================================================================================
+4237     -- [E20260918-KEYCOLGRAIN] 숨긴 저장키 컬럼이 행을 가르지 않게 대표값 통일
+4238     --
+4239     --   최종 커서는 PIVOT 이라 V_COLUMN 에 남은 모든 컬럼이 행 그레인이 된다.
+4240     --     AS-IS : @V_COLUMN = C_TITLE + NOTATION           → 숨긴 컬럼은 그레인 아님
+4241     --     TO-BE : + [E20260822-KEYCOL] 저장 키 12컬럼 강제 추가
+4242     --   그래서 Column Setting 에서 숨긴 컬럼이어도 TO-BE 만 행이 갈린다(AS-IS 부재 회귀).
+4243     --   실측(ZIOUI1 2026-09-18, Cell Prod Site 를 숨긴 계정 / DIV 40):
+4244     --     KRW·LOC·MKT_FCST·SCM_FCST 각 12 업무키, RTF_SYS_RP 11 업무키가 CELL_PROD_SITE_ID 로 2줄.
+4245     --   반대로 그 컬럼을 **표시**하는 계정은 AS-IS 도 2줄이므로 건드리면 안 된다
+4246     --     (클라우드 실측: 40/Huapu_CN_CGU/MCSS22531-B3 — NJ01-A 61행 + HQ06-A 1행(20260531) = AS-IS 파리티).
+4247     --
+4248     --   따라서 **C_TITLE 에 없을 때만** 업무키 단위 대표값으로 통일한다.
+4249     --   대표값 = 계획 구간 우선·최신 (편집·저장 대상이 계획 구간이므로 저장 키로도 이 값이 맞다).
+4250     -- ====================================================================================================
+4251     SELECT COUNT(*)
+4252       INTO V_USER_COL_CNT
+4253       FROM SCM_MGR.SCM_MST_TITLESET_USER U
+4254      WHERE U.PROGRAM_ID = VA_PROGRAM_ID
+4255        AND U.SHEET_NAME = VA_SHEET_NAME
+4256        AND U.USER_ID    = p_created_by
+4257        AND U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+4258        AND U.COLUMN_NAME = 'CELL_PROD_SITE_ID';
+4259 
+4260     IF V_USER_COL_CNT = 0 THEN   -- 화면에서 숨긴 컬럼일 때만 (표시 중이면 AS-IS 파리티 유지)
+4261         MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T
+4262         USING (
+4263                    SELECT NVL(DIVISION_ID, '~') AS DIVISION_ID
+4264                         , NVL(PROJECT_CODE, '~') AS PROJECT_CODE
+4265                         , NVL(END_CUSTOMER, '~') AS END_CUSTOMER
+4266                         , NVL(SCM_SITE_ID, '~') AS SCM_SITE_ID
+4267                         , NVL(ITEM_ID, '~') AS ITEM_ID
+4268                         , NVL(DOM_EXP, '~') AS DOM_EXP
+4269                         , NVL(FCST_TYPE, '~') AS FCST_TYPE
+4270                         , NVL(INCOTERMS, '~') AS INCOTERMS
+4271                         , NVL(PLANT_SITE_ID, '~') AS PLANT_SITE_ID
+4272                         , NVL(MEASURE, '~') AS MEASURE
+4273                         , MAX(CELL_PROD_SITE_ID) KEEP (DENSE_RANK LAST
+4274                               ORDER BY CASE WHEN BUCKET_KEY >= V_TO_RESULT THEN 1 ELSE 0 END
+4275                                      , BUCKET_KEY) AS REP_CELL_PROD
+4276                    FROM   SCM_MGR.GT_DMF0082_MF_SP
+4277                    WHERE  CELL_PROD_SITE_ID IS NOT NULL
+4278                    GROUP BY NVL(DIVISION_ID, '~')
+4279                         , NVL(PROJECT_CODE, '~')
+4280                         , NVL(END_CUSTOMER, '~')
+4281                         , NVL(SCM_SITE_ID, '~')
+4282                         , NVL(ITEM_ID, '~')
+4283                         , NVL(DOM_EXP, '~')
+4284                         , NVL(FCST_TYPE, '~')
+4285                         , NVL(INCOTERMS, '~')
+4286                         , NVL(PLANT_SITE_ID, '~')
+4287                         , NVL(MEASURE, '~')
+4288                    HAVING COUNT(DISTINCT CELL_PROD_SITE_ID) > 1
+4289                ) S
+4290         ON ( NVL(T.DIVISION_ID, '~') = S.DIVISION_ID
+4291          AND NVL(T.PROJECT_CODE, '~') = S.PROJECT_CODE
+4292          AND NVL(T.END_CUSTOMER, '~') = S.END_CUSTOMER
+4293          AND NVL(T.SCM_SITE_ID, '~') = S.SCM_SITE_ID
+4294          AND NVL(T.ITEM_ID, '~') = S.ITEM_ID
+4295          AND NVL(T.DOM_EXP, '~') = S.DOM_EXP
+4296          AND NVL(T.FCST_TYPE, '~') = S.FCST_TYPE
+4297          AND NVL(T.INCOTERMS, '~') = S.INCOTERMS
+4298          AND NVL(T.PLANT_SITE_ID, '~') = S.PLANT_SITE_ID
+4299          AND NVL(T.MEASURE, '~') = S.MEASURE )
+4300         WHEN MATCHED THEN UPDATE SET T.CELL_PROD_SITE_ID = S.REP_CELL_PROD
+4301         WHERE  NVL(T.CELL_PROD_SITE_ID, '~') <> S.REP_CELL_PROD;
+4302     END IF;
+4303 
+4304     -- ====================================================================================================
+4305     -- [E20260918-KEYCOLGRAIN2] 숨긴 PLANT_SITE_ID 가 행을 가르지 않게 대표값 통일
+4306     --
+4307     --   [E20260918-KEYCOLGRAIN](CELL_PROD_SITE_ID) 과 같은 사유. PLANT_SITE_ID 도
+4308     --   KEYCOL 로 그레인에 강제 포함되므로, 화면에서 숨긴 계정은 AS-IS 에 없는 행분리가 난다.
+4309     --
+4310     --   클라우드 실측(2026-09-18, minyonglee1): 보이는 컬럼 13개에 PLANT_SITE_ID 가 없는데
+4311     --     수요·실적 행 PLANT_SITE_ID = NULL / 단가 행 = '-'
+4312     --   → 값이 갈리는데 화면에는 안 보여 **똑같아 보이는 2줄**이 된다.
+4313     --   사내 ZIOUI1 은 DIV 40 이 전 행 '-' (NULL 0건)라 재현되지 않는다.
+4314     --
+4315     --   표시 중인 계정은 손대지 않는다(AS-IS 파리티). 대표값 = 계획 구간 우선·최신.
+4316     -- ====================================================================================================
+4317     SELECT COUNT(*)
+4318       INTO V_USER_COL_CNT
+4319       FROM SCM_MGR.SCM_MST_TITLESET_USER U
+4320      WHERE U.PROGRAM_ID = VA_PROGRAM_ID
+4321        AND U.SHEET_NAME = VA_SHEET_NAME
+4322        AND U.USER_ID    = p_created_by
+4323        AND U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+4324        AND U.COLUMN_NAME = 'PLANT_SITE_ID';
+4325 
+4326     IF V_USER_COL_CNT = 0 THEN   -- 화면에서 숨긴 컬럼일 때만
+4327         MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T
+4328         USING (
+4329                    SELECT NVL(DIVISION_ID, '~') AS DIVISION_ID
+4330                         , NVL(PROJECT_CODE, '~') AS PROJECT_CODE
+4331                         , NVL(END_CUSTOMER, '~') AS END_CUSTOMER
+4332                         , NVL(SCM_SITE_ID, '~') AS SCM_SITE_ID
+4333                         , NVL(ITEM_ID, '~') AS ITEM_ID
+4334                         , NVL(DOM_EXP, '~') AS DOM_EXP
+4335                         , NVL(FCST_TYPE, '~') AS FCST_TYPE
+4336                         , NVL(INCOTERMS, '~') AS INCOTERMS
+4337                         , NVL(CELL_PROD_SITE_ID, '~') AS CELL_PROD_SITE_ID
+4338                         , NVL(MEASURE, '~') AS MEASURE
+4339                         , MAX(PLANT_SITE_ID) KEEP (DENSE_RANK LAST
+4340                               ORDER BY CASE WHEN BUCKET_KEY >= V_TO_RESULT THEN 1 ELSE 0 END
+4341                                      , BUCKET_KEY) AS REP_PLANT_SITE
+4342                    FROM   SCM_MGR.GT_DMF0082_MF_SP
+4343                    WHERE  PLANT_SITE_ID IS NOT NULL
+4344                    GROUP BY NVL(DIVISION_ID, '~')
+4345                         , NVL(PROJECT_CODE, '~')
+4346                         , NVL(END_CUSTOMER, '~')
+4347                         , NVL(SCM_SITE_ID, '~')
+4348                         , NVL(ITEM_ID, '~')
+4349                         , NVL(DOM_EXP, '~')
+4350                         , NVL(FCST_TYPE, '~')
+4351                         , NVL(INCOTERMS, '~')
+4352                         , NVL(CELL_PROD_SITE_ID, '~')
+4353                         , NVL(MEASURE, '~')
+4354                    HAVING COUNT(DISTINCT NVL(PLANT_SITE_ID, '~')) >= 1
+4355                ) S
+4356         ON ( NVL(T.DIVISION_ID, '~') = S.DIVISION_ID
+4357          AND NVL(T.PROJECT_CODE, '~') = S.PROJECT_CODE
+4358          AND NVL(T.END_CUSTOMER, '~') = S.END_CUSTOMER
+4359          AND NVL(T.SCM_SITE_ID, '~') = S.SCM_SITE_ID
+4360          AND NVL(T.ITEM_ID, '~') = S.ITEM_ID
+4361          AND NVL(T.DOM_EXP, '~') = S.DOM_EXP
+4362          AND NVL(T.FCST_TYPE, '~') = S.FCST_TYPE
+4363          AND NVL(T.INCOTERMS, '~') = S.INCOTERMS
+4364          AND NVL(T.CELL_PROD_SITE_ID, '~') = S.CELL_PROD_SITE_ID
+4365          AND NVL(T.MEASURE, '~') = S.MEASURE )
+4366         WHEN MATCHED THEN UPDATE SET T.PLANT_SITE_ID = S.REP_PLANT_SITE
+4367         WHERE  NVL(T.PLANT_SITE_ID, '~') <> S.REP_PLANT_SITE;
+4368     END IF;
+4369 
+4370     -- ====================================================================================================
+4371     -- [FIX 2026-07-22] 최종 동적 SQL — AS-IS(L5965~6085) 5분기 파리티 복원
+4372     --   구 변환분: MF_SP 단일 소스 + PIVOT_BUCKET CASE(D/W/M) 구조였으나 MF_SP 적재가 전행
+4373     --   BUCKET_TYPE='D' 라 W_/M_ 동적컬럼이 항상 공백(주/월 집계 분기 미승계 — 클라우드 실증 2026-07-22).
+4374     --   ① D_ 행단위  ② W_ SUM(BALANCE/VMI_Inv/AS_Inv=주말일만, 그 외 합계)  ③ W_ AVG(KRW/USD/LOC)
+4375     --   ④ M_ SUM(월말일 규칙 동일)  ⑤ M_ AVG(KRW/USD/LOC)  — QTY<>0 예외(SCM_FCST/FCST_GAP) AS-IS 동일.
+4376     --   placeholder REPLACE 방식 = DMF0082_GET_MAIN_DATA_CURRENT(정상 변환 선례) 동형.
+4377     --   (QTY 합계 보조컬럼은 기존 변환 유지 — FE 미사용 확인 2026-07-22)
+4378     -- ====================================================================================================
+4379     V_SQL := '
+4380     SELECT [@V_COLUMN]
+4381     , ([@V_QTY_SUM]) AS QTY
+4382     , [@V_PV_COL_LIST]
+4383     FROM (
+4384         SELECT [@V_COLUMN], SORT_ORDER_NO, ''D_'' || BUCKET_KEY AS PIVOT_BUCKET, QTY
+4385         FROM ( [@SRC0] ) F
+4386         WHERE ((MEASURE NOT IN (''SCM_FCST'',''FCST_GAP'') AND QTY <> 0) OR MEASURE IN (''SCM_FCST'',''FCST_GAP''))
+4387 
+4388         UNION ALL
+4389 
+4390         SELECT [@V_COLUMN], SORT_ORDER_NO, ''W_'' || YYYYMMWW AS PIVOT_BUCKET
+4391              , CASE WHEN MEASURE IN (''BALANCE'',''VMI_Inv'',''AS_Inv'')
+4392                     THEN CASE WHEN WEEK_END_YN = ''Y'' THEN SUM(QTY) ELSE 0 END
+4393                     ELSE SUM(QTY) END AS QTY
+4394         FROM ( [@SRC0] ) F
+4395         WHERE MEASURE NOT IN (''KRW'',''USD'',''LOC'')
+4396         AND ((MEASURE NOT IN (''SCM_FCST'',''FCST_GAP'') AND QTY <> 0) OR MEASURE IN (''SCM_FCST'',''FCST_GAP''))
+4397         [@V_GROUPBY], NOTATION, YYYYMMWW, WEEK_END_YN, MEASURE
+4398 
+4399         UNION ALL
+4400 
+4401         SELECT [@V_COLUMN], SORT_ORDER_NO, ''W_'' || YYYYMMWW AS PIVOT_BUCKET, AVG(QTY) AS QTY
+4402         FROM ( [@SRC0] ) F
+4403         WHERE MEASURE IN (''KRW'',''USD'',''LOC'')
+4404         AND ((MEASURE NOT IN (''SCM_FCST'',''FCST_GAP'') AND QTY <> 0) OR MEASURE IN (''SCM_FCST'',''FCST_GAP''))
+4405         [@V_GROUPBY], NOTATION, YYYYMMWW
+4406 
+4407         UNION ALL
+4408 
+4409         SELECT [@V_COLUMN], SORT_ORDER_NO, ''M_'' || YYYYMM AS PIVOT_BUCKET
+4410              , CASE WHEN MEASURE IN (''BALANCE'',''VMI_Inv'',''AS_Inv'')
+4411                     THEN CASE WHEN MONTH_END_YN = ''Y'' THEN SUM(QTY) ELSE 0 END
+4412                     ELSE SUM(QTY) END AS QTY
+4413         FROM ( [@SRC0] ) F
+4414         WHERE MEASURE NOT IN (''KRW'',''USD'',''LOC'')
+4415         AND ((MEASURE NOT IN (''SCM_FCST'',''FCST_GAP'') AND QTY <> 0) OR MEASURE IN (''SCM_FCST'',''FCST_GAP''))
+4416         [@V_GROUPBY], NOTATION, YYYYMM, MONTH_END_YN, MEASURE
+4417 
+4418         UNION ALL
+4419 
+4420         SELECT [@V_COLUMN], SORT_ORDER_NO, ''M_'' || YYYYMM AS PIVOT_BUCKET, AVG(QTY) AS QTY
+4421         FROM ( [@SRC0] ) F
+4422         WHERE MEASURE IN (''KRW'',''USD'',''LOC'')
+4423         AND ((MEASURE NOT IN (''SCM_FCST'',''FCST_GAP'') AND QTY <> 0) OR MEASURE IN (''SCM_FCST'',''FCST_GAP''))
+4424         [@V_GROUPBY], NOTATION, YYYYMM
+4425     ) SRC
+4426     PIVOT (SUM(QTY) FOR PIVOT_BUCKET IN ( [@V_PV_LIST] ))
+4427     [@V_ORDERBY]';
+4428 
+4429     -- SRC0 = MF_SP alias 투영 (TEAM_ID/FORECAST_INFO_CELL_MODEL/LAST_UPDATE_DATE/BUCKET — 기존 wrapper 동일)
+4430     V_SQL := REPLACE(V_SQL, '[@SRC0]', 'SELECT MSP.*, MSP.DEPT_ID AS TEAM_ID, MSP.DEPT_NAME_KO AS TEAM_NAME_KO /*[UICATEGORY 2026-08-07]*/, MSP.CELL_MODEL AS FORECAST_INFO_CELL_MODEL, NVL(TO_CHAR(MSP.CREATE_DATE, ''YYYY-MM-DD HH24:MI:SS''), '' '') AS LAST_UPDATE_DATE, NVL(TO_CHAR(MSP.SUN),''0'')||NVL(TO_CHAR(MSP.MON),''0'')||NVL(TO_CHAR(MSP.TUE),''0'')||NVL(TO_CHAR(MSP.WED),''0'')||NVL(TO_CHAR(MSP.THU),''0'')||NVL(TO_CHAR(MSP.FRI),''0'')||NVL(TO_CHAR(MSP.SAT),''0'') AS BUCKET FROM SCM_MGR.GT_DMF0082_MF_SP MSP');
+4431     V_SQL := REPLACE(V_SQL, '[@V_QTY_SUM]',     V_QTY_SUM);
+4432     V_SQL := REPLACE(V_SQL, '[@V_PV_COL_LIST]', V_PV_COL_LIST);
+4433     V_SQL := REPLACE(V_SQL, '[@V_PV_LIST]',     V_PV_LIST);
+4434     V_SQL := REPLACE(V_SQL, '[@V_GROUPBY]',     V_GROUPBY);
+4435     V_SQL := REPLACE(V_SQL, '[@V_COLUMN]',      V_COLUMN);
+4436     V_SQL := REPLACE(V_SQL, '[@V_ORDERBY]',     V_ORDERBY);
+4437 
+4438     OPEN O_RC1 FOR V_SQL;
+4439 
+4440     DBMS_LOB.FREETEMPORARY(V_SQL);
+4441     DBMS_LOB.FREETEMPORARY(V_PV_LIST);
+4442     DBMS_LOB.FREETEMPORARY(V_PV_COL_LIST);
+4443     DBMS_LOB.FREETEMPORARY(V_QTY_SUM);
+4444 
+4445     -- ====================================================================================================
+4446     -- Result Set 2: M+3 까지의 Monthly 캘린더 정보
+4447     -- ====================================================================================================
+4448 
+4449     OPEN O_RC2 FOR
+4450         SELECT A.BASIS_YYYYMM
+=====FULLTEXT 5rfw
+
+    SELECT DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, PROJECT_CODE, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, PLANT_SITE_ID, MEASURE, VERSION_NO, MEASURE_GROUP, BUCKET, EDIT_FLAG, SORT_KEY, NEW_FLAG, ATTR1, VMI_STD_DIO, AS_YN, NOTATION, CELL_PROD_SITE_ID
+    , (NVL(M_202609,0)+NVL(W_20260936,0)+NVL(D_20260901,0)+NVL(D_20260902,0)+NVL(D_20260903,0)+NVL(D_20260904,0)+NVL(D_20260905,0)+NVL(D_20260906,0)+NVL(W_20260937,0)+NVL(D_20260907,0)+NVL(D_20260908,0)+NVL(D_20260909,0)+NVL(D_20260910,0)+NVL(D_20260911,0)+NVL(D_20260912,0)+NVL(D_20260913,0)+NVL(W_20260938,0)+NVL(D_20260914,0)+NVL(D_20260915,0)+NVL(D_20260916,0)+NVL(D_20260917,0)+NVL(D_20260918,0)+NVL(D_20260919,0)+NVL(D_20260920,0)+NVL(W_20260939,0)+NVL(D_20260921,0)+NVL(D_20260922,0)+NVL(D_20260923,0)+NVL(D_20260924,0)+NVL(D_20260925,0)+NVL(D_20260926,0)+NVL(D_20260927,0)+NVL(W_20260940,0)+NVL(D_20260928,0)+NVL(D_20260929,0)+NVL(D_20260930,0)+NVL(M_202610,0)+NVL(W_20261040,0)+NVL(D_20261001,0)+NVL(D_20261002,0)+NVL(D_20261003,0)+NVL(D_20261004,0)+NVL(W_20261041,0)+NVL(D_20261005,0)+NVL(D_20261006,0)+NVL(D_20261007,0)+NVL(D_20261008,0)+NVL(D_20261009,0)+NVL(D_20261010,0)+NVL(D_20261011,0)+NVL(W_20261042,0)+NVL(D_20261012,0)+NVL(D_20261013,0)+NVL(D_20261014,0)+NVL(D_20261015,0)+NVL(D_20261016,0)+NVL(D_20261017,0)+NVL(D_20261018,0)+NVL(W_20261043,0)+NVL(D_20261019,0)+NVL(D_20261020,0)+NVL(D_20261021,0)+NVL(D_20261022,0)+NVL(D_20261023,0)+NVL(D_20261024,0)+NVL(D_20261025,0)+NVL(W_20261044,0)+NVL(D_20261026,0)+NVL(D_20261027,0)+NVL(D_20261028,0)+NVL(D_20261029,0)+NVL(D_20261030,0)+NVL(D_20261031,0)+NVL(M_202611,0)+NVL(W_20261144,0)+NVL(D_20261101,0)+NVL(W_20261145,0)+NVL(D_20261102,0)+NVL(D_20261103,0)+NVL(D_20261104,0)+NVL(D_20261105,0)+NVL(D_20261106,0)+NVL(D_20261107,0)+NVL(D_20261108,0)+NVL(W_20261146,0)+NVL(D_20261109,0)+NVL(D_20261110,0)+NVL(D_20261111,0)+NVL(D_20261112,0)+NVL(D_20261113,0)+NVL(D_20261114,0)+NVL(D_20261115,0)+NVL(W_20261147,0)+NVL(D_20261116,0)+NVL(D_20261117,0)+NVL(D_20261118,0)+NVL(D_20261119,0)+NVL(D_20261120,0)+NVL(D_20261121,0)+NVL(D_20261122,0)+NVL(W_20261148,0)+NVL(D_20261123,0)+NVL(D_20261124,0)+NVL(D_20261125,0)+NVL(D_20261126,0)+NVL(D_20261127,0)+NVL(D_20261128,0)+NVL(D_20261129,0)+NVL(W_20261149,0)+NVL(D_20261130,0)+NVL(M_202612,0)+NVL(W_20261249,0)+NVL(D_20261201,0)+NVL(D_20261202,0)+NVL(D_20261203,0)+NVL(D_20261204,0)+NVL(D_20261205,0)+NVL(D_20261206,0)+NVL(W_20261250,0)+NVL(D_20261207,0)+NVL(D_20261208,0)+NVL(D_20261209,0)+NVL(D_20261210,0)+NVL(D_20261211,0)+NVL(D_20261212,0)+NVL(D_20261213,0)+NVL(W_20261251,0)+NVL(D_20261214,0)+NVL(D_20261215,0)+NVL(D_20261216,0)+NVL(D_20261217,0)+NVL(D_20261218,0)+NVL(D_20261219,0)+NVL(D_20261220,0)+NVL(W_20261252,0)+NVL(D_20261221,0)+NVL(D_20261222,0)+NVL(D_20261223,0)+NVL(D_20261224,0)+NVL(D_20261225,0)+NVL(D_20261226,0)+NVL(D_20261227,0)+NVL(W_20261253,0)+NVL(D_20261228,0)+NVL(D_20261229,0)+NVL(D_20261230,0)+NVL(D_20261231,0)+NVL(M_202701,0)+NVL(W_20270153,0)+NVL(D_20270101,0)+NVL(D_20270102,0)+NVL(D_20270103,0)+NVL(W_20270101,0)+NVL(D_20270104,0)+NVL(D_20270105,0)+NVL(D_20270106,0)+NVL(D_20270107,0)+NVL(D_20270108,0)+NVL(D_20270109,0)+NVL(D_20270110,0)+NVL(W_20270102,0)+NVL(D_20270111,0)+NVL(D_20270112,0)+NVL(D_20270113,0)+NVL(D_20270114,0)+NVL(D_20270115,0)+NVL(D_20270116,0)+NVL(D_20270117,0)+NVL(W_20270103,0)+NVL(D_20270118,0)+NVL(D_20270119,0)+NVL(D_20270120,0)+NVL(D_20270121,0)+NVL(D_20270122,0)+NVL(D_20270123,0)+NVL(D_20270124,0)+NVL(W_20270104,0)+NVL(D_20270125,0)+NVL(D_20270126,0)+NVL(D_20270127,0)+NVL(D_20270128,0)+NVL(D_20270129,0)+NVL(D_20270130,0)+NVL(D_20270131,0)+NVL(M_202702,0)+NVL(W_20270205,0)+NVL(D_20270201,0)+NVL(D_20270202,0)+NVL(D_20270203,0)+NVL(D_20270204,0)+NVL(D_20270205,0)+NVL(D_20270206,0)+NVL(D_20270207,0)+NVL(W_20270206,0)+NVL(D_20270208,0)+NVL(D_20270209,0)+NVL(D_20270210,0)+NVL(D_20270211,0)+NVL(D_20270212,0)+NVL(D_20270213,0)+NVL(D_20270214,0)+NVL(W_20270207,0)+NVL(D_20270215,0)+NVL(D_20270216,0)+NVL(D_20270217,0)+NVL(D_20270218,0)+NVL(D_20270219,0)+NVL(D_20270220,0)+NVL(D_20270221,0)+NVL(W_20270208,0)+NVL(D_20270222,0)+NVL(D_20270223,0)+NVL(D_20270224,0)+NVL(D_20270225,0)+NVL(D_20270226,0)+NVL(D_20270227,0)+NVL(D_20270228,0)+NVL(D_20270301,0)+NVL(D_20270302,0)+NVL(D_20270303,0)+NVL(D_20270304,0)+NVL(D_20270305,0)+NVL(D_20270306,0)+NVL(D_20270307,0)+NVL(D_20270308,0)+NVL(D_20270309,0)+NVL(D_20270310,0)+NVL(D_20270311,0)+NVL(D_20270312,0)+NVL(D_20270313,0)+NVL(D_20270314,0)+NVL(D_20270315,0)+NVL(D_20270316,0)+NVL(D_20270317,0)+NVL(D_20270318,0)+NVL(D_20270319,0)+NVL(D_20270320,0)+NVL(D_20270321,0)+NVL(D_20270322,0)+NVL(D_20270323,0)+NVL(D_20270324,0)+NVL(D_20270325,0)+NVL(D_20270326,0)+NVL(D_20270327,0)+NVL(D_20270328,0)+NVL(D_20270329,0)+NVL(D_20270330,0)+NVL(D_20270331,0)+NVL(D_20270401,0)+NVL(D_20270402,0)+NVL(D_20270403,0)+NVL(D_20270404,0)+NVL(D_20270405,0)+NVL(D_20270406,0)+NVL(D_20270407,0)+NVL(D_20270408,0)+NVL(D_20270409,0)+NVL(D_20270410,0)+NVL(D_20270411,0)+NVL(D_20270412,0)+NVL(D_20270413,0)+NVL(D_20270414,0)+NVL(D_20270415,0)+NVL(D_20270416,0)+NVL(D_20270417,0)+NVL(D_20270418,0)+NVL(D_20270419,0)+NVL(D_20270420,0)+NVL(D_20270421,0)+NVL(D_20270422,0)+NVL(D_20270423,0)+NVL(D_20270424,0)+NVL(D_20270425,0)+NVL(D_20270426,0)+NVL(D_20270427,0)+NVL(D_20270428,0)+NVL(D_20270429,0)+NVL(D_20270430,0)+NVL(D_20270501,0)+NVL(D_20270502,0)+NVL(D_20270503,0)+NVL(D_20270504,0)+NVL(D_20270505,0)+NVL(D_20270506,0)+NVL(D_20270507,0)+NVL(D_20270508,0)+NVL(D_20270509,0)+NVL(D_20270510,0)+NVL(D_20270511,0)+NVL(D_20270512,0)+NVL(D_20270513,0)+NVL(D_20270514,0)+NVL(D_20270515,0)+NVL(D_20270516,0)+NVL(D_20270517,0)+NVL(D_20270518,0)+NVL(D_20270519,0)+NVL(D_20270520,0)+NVL(D_20270521,0)+NVL(D_20270522,0)+NVL(D_20270523,0)+NVL(D_20270524,0)+NVL(D_20270525,0)+NVL(D_20270526,0)+NVL(D_20270527,0)+NVL(D_20270528,0)+NVL(D_20270529,0)+NVL(D_20270530,0)+NVL(D_20270531,0)+NVL(D_20270601,0)+NVL(D_20270602,0)+NVL(D_20270603,0)+NVL(D_20270604,0)+NVL(D_20270605,0)+NVL(D_20270606,0)+NVL(D_20270607,0)+NVL(D_20270608,0)+NVL(D_20270609,0)+NVL(D_20270610,0)+NVL(D_20270611,0)+NVL(D_20270612,0)+NVL(D_20270613,0)+NVL(D_20270614,0)+NVL(D_20270615,0)+NVL(D_20270616,0)+NVL(D_20270617,0)+NVL(D_20270618,0)+NVL(D_20270619,0)+NVL(D_20270620,0)+NVL(D_20270621,0)+NVL(D_20270622,0)+NVL(D_20270623,0)+NVL(D_20270624,0)+NVL(D_20270625,0)+NVL(D_20270626,0)+NVL(D_20270627,0)+NVL(D_20270628,0)+NVL(D_20270629,0)+NVL(D_20270630,0)+NVL(D_20270701,0)+NVL(D_20270702,0)+NVL(D_20270703,0)+NVL(D_20270704,0)+NVL(D_20270705,0)+NVL(D_20270706,0)+NVL(D_20270707,0)+NVL(D_20270708,0)+NVL(D_20270709,0)+NVL(D_20270710,0)+NVL(D_20270711,0)+NVL(D_20270712,0)+NVL(D_20270713,0)+NVL(D_20270714,0)+NVL(D_20270715,0)+NVL(D_20270716,0)+NVL(D_20270717,0)+NVL(D_20270718,0)+NVL(D_20270719,0)+NVL(D_20270720,0)+NVL(D_20270721,0)+NVL(D_20270722,0)+NVL(D_20270723,0)+NVL(D_20270724,0)+NVL(D_20270725,0)+NVL(D_20270726,0)+NVL(D_20270727,0)+NVL(D_20270728,0)+NVL(D_20270729,0)+NVL(D_20270730,0)+NVL(D_20270731,0)+NVL(D_20270801,0)+NVL(D_20270802,0)+NVL(D_20270803,0)+NVL(D_20270804,0)+NVL(D_20270805,0)+NVL(D_20270806,0)+NVL(D_20270807,0)+NVL(D_20270808,0)+NVL(D_20270809,0)+NVL(D_20270810,0)+NVL(D_20270811,0)+NVL(D_20270812,0)+NVL(D_20270813,0)+NVL(D_20270814,0)+NVL(D_20270815,0)+NVL(D_20270816,0)+NVL(D_20270817,0)) AS QTY
+    , M_202609,W_20260936,D_20260901,D_20260902,D_20260903,D_20260904,D_20260905,D_20260906,W_20260937,D_20260907,D_20260908,D_20260909,D_20260910,D_20260911,D_20260912,D_20260913,W_20260938,D_20260914,D_20260915,D_20260916,D_20260917,D_20260918,D_20260919,D_20260920,W_20260939,D_20260921,D_20260922,D_20260923,D_20260924,D_20260925,D_20260926,D_20260927,W_20260940,D_20260928,D_20260929,D_20260930,M_202610,W_20261040,D_20261001,D_20261002,D_20261003,D_20261004,W_20261041,D_20261005,D_20261006,D_20261007,D_20261008,D_20261009,D_20261010,D_20261011,W_20261042,D_20261012,D_20261013,D_20261014,D_20261015,D_20261016,D_20261017,D_20261018,W_20261043,D_20261019,D_20261020,D_20261021,D_20261022,D_20261023,D_20261024,D_20261025,W_20261044,D_20261026,D_20261027,D_20261028,D_20261029,D_20261030,D_20261031,M_202611,W_20261144,D_20261101,W_20261145,D_20261102,D_20261103,D_20261104,D_20261105,D_20261106,D_20261107,D_20261108,W_20261146,D_20261109,D_20261110,D_20261111,D_20261112,D_20261113,D_20261114,D_20261115,W_20261147,D_20261116,D_20261117,D_20261118,D_20261119,D_20261120,D_20261121,D_20261122,W_20261148,D_20261123,D_20261124,D_20261125,D_20261126,D_20261127,D_20261128,D_20261129,W_20261149,D_20261130,M_202612,W_20261249,D_20261201,D_20261202,D_20261203,D_20261204,D_20261205,D_20261206,W_20261250,D_20261207,D_20261208,D_20261209,D_20261210,D_20261211,D_20261212,D_20261213,W_20261251,D_20261214,D_20261215,D_20261216,D_20261217,D_20261218,D_20261219,D_20261220,W_20261252,D_20261221,D_20261222,D_20261223,D_20261224,D_20261225,D_20261226,D_20261227,W_20261253,D_20261228,D_20261229,D_20261230,D_20261231,M_202701,W_20270153,D_20270101,D_20270102,D_20270103,W_20270101,D_20270104,D_20270105,D_20270106,D_20270107,D_20270108,D_20270109,D_20270110,W_20270102,D_20270111,D_20270112,D_20270113,D_20270114,D_20270115,D_20270116,D_20270117,W_20270103,D_20270118,D_20270119,D_20270120,D_20270121,D_20270122,D_20270123,D_20270124,W_20270104,D_20270125,D_20270126,D_20270127,D_20270128,D_20270129,D_20270130,D_20270131,M_202702,W_20270205,D_20270201,D_20270202,D_20270203,D_20270204,D_20270205,D_20270206,D_20270207,W_20270206,D_20270208,D_20270209,D_20270210,D_20270211,D_20270212,D_20270213,D_20270214,W_20270207,D_20270215,D_20270216,D_20270217,D_20270218,D_20270219,D_20270220,D_20270221,W_20270208,D_20270222,D_20270223,D_20270224,D_20270225,D_20270226,D_20270227,D_20270228,D_20270301,D_20270302,D_20270303,D_20270304,D_20270305,D_20270306,D_20270307,D_20270308,D_20270309,D_20270310,D_20270311,D_20270312,D_20270313,D_20270314,D_20270315,D_20270316,D_20270317,D_20270318,D_20270319,D_20270320,D_20270321,D_20270322,D_20270323,D_20270324,D_20270325,D_20270326,D_20270327,D_20270328,D_20270329,D_20270330,D_20270331,D_20270401,D_20270402,D_20270403,D_20270404,D_20270405,D_20270406,D_20270407,D_20270408,D_20270409,D_20270410,D_20270411,D_20270412,D_20270413,D_20270414,D_20270415,D_20270416,D_20270417,D_20270418,D_20270419,D_20270420,D_20270421,D_20270422,D_20270423,D_20270424,D_20270425,D_20270426,D_20270427,D_20270428,D_20270429,D_20270430,D_20270501,D_20270502,D_20270503,D_20270504,D_20270505,D_20270506,D_20270507,D_20270508,D_20270509,D_20270510,D_20270511,D_20270512,D_20270513,D_20270514,D_20270515,D_20270516,D_20270517,D_20270518,D_20270519,D_20270520,D_20270521,D_20270522,D_20270523,D_20270524,D_20270525,D_20270526,D_20270527,D_20270528,D_20270529,D_20270530,D_20270531,D_20270601,D_20270602,D_20270603,D_20270604,D_20270605,D_20270606,D_20270607,D_20270608,D_20270609,D_20270610,D_20270611,D_20270612,D_20270613,D_20270614,D_20270615,D_20270616,D_20270617,D_20270618,D_20270619,D_20270620,D_20270621,D_20270622,D_20270623,D_20270624,D_20270625,D_20270626,D_20270627,D_20270628,D_20270629,D_20270630,D_20270701,D_20270702,D_20270703,D_20270704,D_20270705,D_20270706,D_20270707,D_20270708,D_20270709,D_20270710,D_20270711,D_20270712,D_20270713,D_20270714,D_20270715,D_20270716,D_20270717,D_20270718,D_20270719,D_20270720,D_20270721,D_20270722,D_20270723,D_20270724,D_20270725,D_20270726,D_20270727,D_20270728,D_20270729,D_20270730,D_20270731,D_20270801,D_20270802,D_20270803,D_20270804,D_20270805,D_20270806,D_20270807,D_20270808,D_20270809,D_20270810,D_20270811,D_20270812,D_20270813,D_20270814,D_20270815,D_20270816,D_20270817
+    FROM (
+        SELECT DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, PROJECT_CODE, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, PLANT_SITE_ID, MEASURE, VERSION_NO, MEASURE_GROUP, BUCKET, EDIT_FLAG, SORT_KEY, NEW_FLAG, ATTR1, VMI_STD_DIO, AS_YN, NOTATION, CELL_PROD_SITE_ID, SORT_ORDER_NO, 'D_' || BUCKET_KEY AS PIVOT_BUCKET, QTY
+        FROM ( SELECT MSP.*, MSP.DEPT_ID AS TEAM_ID, MSP.DEPT_NAME_KO AS TEAM_NAME_KO /*[UICATEGORY 2026-08-07]*/, MSP.CELL_MODEL AS FORECAST_INFO_CELL_MODEL, NVL(TO_CHAR(MSP.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS'), ' ') AS LAST_UPDATE_DATE, NVL(TO_CHAR(MSP.SUN),'0')||NVL(TO_CHAR(MSP.MON),'0')||NVL(TO_CHAR(MSP.TUE),'0')||NVL(TO_CHAR(MSP.WED),'0')||NVL(TO_CHAR(MSP.THU),'0')||NVL(TO_CHAR(MSP.FRI),'0')||NVL(TO_CHAR(MSP.SAT),'0') AS BUCKET FROM SCM_MGR.GT_DMF0082_MF_SP MSP ) F
+        WHERE ((MEASURE NOT IN ('SCM_FCST','FCST_GAP') AND QTY <> 0) OR MEASURE IN ('SCM_FCST','FCST_GAP'))
+
+        UNION ALL
+
+        SELECT DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, PROJECT_CODE, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, PLANT_SITE_ID, MEASURE, VERSION_NO, MEASURE_GROUP, BUCKET, EDIT_FLAG, SORT_KEY, NEW_FLAG, ATTR1, VMI_STD_DIO, AS_YN, NOTATION, CELL_PROD_SITE_ID, SORT_ORDER_NO, 'W_' || YYYYMMWW AS PIVOT_BUCKET
+             , CASE WHEN MEASURE IN ('BALANCE','VMI_Inv','AS_Inv')
+                    THEN CASE WHEN WEEK_END_YN = 'Y' THEN SUM(QTY) ELSE 0 END
+                    ELSE SUM(QTY) END AS QTY
+        FROM ( SELECT MSP.*, MSP.DEPT_ID AS TEAM_ID, MSP.DEPT_NAME_KO AS TEAM_NAME_KO /*[UICATEGORY 2026-08-07]*/, MSP.CELL_MODEL AS FORECAST_INFO_CELL_MODEL, NVL(TO_CHAR(MSP.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS'), ' ') AS LAST_UPDATE_DATE, NVL(TO_CHAR(MSP.SUN),'0')||NVL(TO_CHAR(MSP.MON),'0')||NVL(TO_CHAR(MSP.TUE),'0')||NVL(TO_CHAR(MSP.WED),'0')||NVL(TO_CHAR(MSP.THU),'0')||NVL(TO_CHAR(MSP.FRI),'0')||NVL(TO_CHAR(MSP.SAT),'0') AS BUCKET FROM SCM_MGR.GT_DMF0082_MF_SP MSP ) F
+        WHERE MEASURE NOT IN ('KRW','USD','LOC')
+        AND ((MEASURE NOT IN ('SCM_FCST','FCST_GAP') AND QTY <> 0) OR MEASURE IN ('SCM_FCST','FCST_GAP'))
+         GROUP BY DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, PROJECT_CODE, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, PLANT_SITE_ID, MEASURE, VERSION_NO, MEASURE_GROUP, BUCKET, EDIT_FLAG, SORT_KEY, NEW_FLAG, ATTR1, VMI_STD_DIO, AS_YN, EDIT_FLAG, SORT_ORDER_NO, CELL_PROD_SITE_ID, NOTATION, YYYYMMWW, WEEK_END_YN, MEASURE
+
+        UNION ALL
+
+        SELECT DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, PROJECT_CODE, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, PLANT_SITE_ID, MEASURE, VERSION_NO, MEASURE_GROUP, BUCKET, EDIT_FLAG, SORT_KEY, NEW_FLAG, ATTR1, VMI_STD_DIO, AS_YN, NOTATION, CELL_PROD_SITE_ID, SORT_ORDER_NO, 'W_' || YYYYMMWW AS PIVOT_BUCKET, AVG(QTY) AS QTY
+        FROM ( SELECT MSP.*, MSP.DEPT_ID AS TEAM_ID, MSP.DEPT_NAME_KO AS TEAM_NAME_KO /*[UICATEGORY 2026-08-07]*/, MSP.CELL_MODEL AS FORECAST_INFO_CELL_MODEL, NVL(TO_CHAR(MSP.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS'), ' ') AS LAST_UPDATE_DATE, NVL(TO_CHAR(MSP.SUN),'0')||NVL(TO_CHAR(MSP.MON),'0')||NVL(TO_CHAR(MSP.TUE),'0')||NVL(TO_CHAR(MSP.WED),'0')||NVL(TO_CHAR(MSP.THU),'0')||NVL(TO_CHAR(MSP.FRI),'0')||NVL(TO_CHAR(MSP.SAT),'0') AS BUCKET FROM SCM_MGR.GT_DMF0082_MF_SP MSP ) F
+        WHERE MEASURE IN ('KRW','USD','LOC')
+        AND ((MEASURE NOT IN ('SCM_FCST','FCST_GAP') AND QTY <> 0) OR MEASURE IN ('SCM_FCST','FCST_GAP'))
+         GROUP BY DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, PROJECT_CODE, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, PLANT_SITE_ID, MEASURE, VERSION_NO, MEASURE_GROUP, BUCKET, EDIT_FLAG, SORT_KEY, NEW_FLAG, ATTR1, VMI_STD_DIO, AS_YN, EDIT_FLAG, SORT_ORDER_NO, CELL_PROD_SITE_ID, NOTATION, YYYYMMWW
+
+        UNION ALL
+
+        SELECT DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, PROJECT_CODE, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, PLANT_SITE_ID, MEASURE, VERSION_NO, MEASURE_GROUP, BUCKET, EDIT_FLAG, SORT_KEY, NEW_FLAG, ATTR1, VMI_STD_DIO, AS_YN, NOTATION, CELL_PROD_SITE_ID, SORT_ORDER_NO, 'M_' || YYYYMM AS PIVOT_BUCKET
+             , CASE WHEN MEASURE IN ('BALANCE','VMI_Inv','AS_Inv')
+                    THEN CASE WHEN MONTH_END_YN = 'Y' THEN SUM(QTY) ELSE 0 END
+                    ELSE SUM(QTY) END AS QTY
+        FROM ( SELECT MSP.*, MSP.DEPT_ID AS TEAM_ID, MSP.DEPT_NAME_KO AS TEAM_NAME_KO /*[UICATEGORY 2026-08-07]*/, MSP.CELL_MODEL AS FORECAST_INFO_CELL_MODEL, NVL(TO_CHAR(MSP.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS'), ' ') AS LAST_UPDATE_DATE, NVL(TO_CHAR(MSP.SUN),'0')||NVL(TO_CHAR(MSP.MON),'0')||NVL(TO_CHAR(MSP.TUE),'0')||NVL(TO_CHAR(MSP.WED),'0')||NVL(TO_CHAR(MSP.THU),'0')||NVL(TO_CHAR(MSP.FRI),'0')||NVL(TO_CHAR(MSP.SAT),'0') AS BUCKET FROM SCM_MGR.GT_DMF0082_MF_SP MSP ) F
+        WHERE MEASURE NOT IN ('KRW','USD','LOC')
+        AND ((MEASURE NOT IN ('SCM_FCST','FCST_GAP') AND QTY <> 0) OR MEASURE IN ('SCM_FCST','FCST_GAP'))
+         GROUP BY DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, PROJECT_CODE, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, PLANT_SITE_ID, MEASURE, VERSION_NO, MEASURE_GROUP, BUCKET, EDIT_FLAG, SORT_KEY, NEW_FLAG, ATTR1, VMI_STD_DIO, AS_YN, EDIT_FLAG, SORT_ORDER_NO, CELL_PROD_SITE_ID, NOTATION, YYYYMM, MONTH_END_YN, MEASURE
+
+        UNION ALL
+
+        SELECT DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, PROJECT_CODE, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, PLANT_SITE_ID, MEASURE, VERSION_NO, MEASURE_GROUP, BUCKET, EDIT_FLAG, SORT_KEY, NEW_FLAG, ATTR1, VMI_STD_DIO, AS_YN, NOTATION, CELL_PROD_SITE_ID, SORT_ORDER_NO, 'M_' || YYYYMM AS PIVOT_BUCKET, AVG(QTY) AS QTY
+        FROM ( SELECT MSP.*, MSP.DEPT_ID AS TEAM_ID, MSP.DEPT_NAME_KO AS TEAM_NAME_KO /*[UICATEGORY 2026-08-07]*/, MSP.CELL_MODEL AS FORECAST_INFO_CELL_MODEL, NVL(TO_CHAR(MSP.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS'), ' ') AS LAST_UPDATE_DATE, NVL(TO_CHAR(MSP.SUN),'0')||NVL(TO_CHAR(MSP.MON),'0')||NVL(TO_CHAR(MSP.TUE),'0')||NVL(TO_CHAR(MSP.WED),'0')||NVL(TO_CHAR(MSP.THU),'0')||NVL(TO_CHAR(MSP.FRI),'0')||NVL(TO_CHAR(MSP.SAT),'0') AS BUCKET FROM SCM_MGR.GT_DMF0082_MF_SP MSP ) F
+        WHERE MEASURE IN ('KRW','USD','LOC')
+        AND ((MEASURE NOT IN ('SCM_FCST','FCST_GAP') AND QTY <> 0) OR MEASURE IN ('SCM_FCST','FCST_GAP'))
+         GROUP BY DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, PROJECT_CODE, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, PLANT_SITE_ID, MEASURE, VERSION_NO, MEASURE_GROUP, BUCKET, EDIT_FLAG, SORT_KEY, NEW_FLAG, ATTR1, VMI_STD_DIO, AS_YN, EDIT_FLAG, SORT_ORDER_NO, CELL_PROD_SITE_ID, NOTATION, YYYYMM
+    ) SRC
+    PIVOT (SUM(QTY) FOR PIVOT_BUCKET IN ( 'M_202609' AS M_202609,'W_20260936' AS W_20260936,'D_20260901' AS D_20260901,'D_20260902' AS D_20260902,'D_20260903' AS D_20260903,'D_20260904' AS D_20260904,'D_20260905' AS D_20260905,'D_20260906' AS D_20260906,'W_20260937' AS W_20260937,'D_20260907' AS D_20260907,'D_20260908' AS D_20260908,'D_20260909' AS D_20260909,'D_20260910' AS D_20260910,'D_20260911' AS D_20260911,'D_20260912' AS D_20260912,'D_20260913' AS D_20260913,'W_20260938' AS W_20260938,'D_20260914' AS D_20260914,'D_20260915' AS D_20260915,'D_20260916' AS D_20260916,'D_20260917' AS D_20260917,'D_20260918' AS D_20260918,'D_20260919' AS D_20260919,'D_20260920' AS D_20260920,'W_20260939' AS W_20260939,'D_20260921' AS D_20260921,'D_20260922' AS D_20260922,'D_20260923' AS D_20260923,'D_20260924' AS D_20260924,'D_20260925' AS D_20260925,'D_20260926' AS D_20260926,'D_20260927' AS D_20260927,'W_20260940' AS W_20260940,'D_20260928' AS D_20260928,'D_20260929' AS D_20260929,'D_20260930' AS D_20260930,'M_202610' AS M_202610,'W_20261040' AS W_20261040,'D_20261001' AS D_20261001,'D_20261002' AS D_20261002,'D_20261003' AS D_20261003,'D_20261004' AS D_20261004,'W_20261041' AS W_20261041,'D_20261005' AS D_20261005,'D_20261006' AS D_20261006,'D_20261007' AS D_20261007,'D_20261008' AS D_20261008,'D_20261009' AS D_20261009,'D_20261010' AS D_20261010,'D_20261011' AS D_20261011,'W_20261042' AS W_20261042,'D_20261012' AS D_20261012,'D_20261013' AS D_20261013,'D_20261014' AS D_20261014,'D_20261015' AS D_20261015,'D_20261016' AS D_20261016,'D_20261017' AS D_20261017,'D_20261018' AS D_20261018,'W_20261043' AS W_20261043,'D_20261019' AS D_20261019,'D_20261020' AS D_20261020,'D_20261021' AS D_20261021,'D_20261022' AS D_20261022,'D_20261023' AS D_20261023,'D_20261024' AS D_20261024,'D_20261025' AS D_20261025,'W_20261044' AS W_20261044,'D_20261026' AS D_20261026,'D_20261027' AS D_20261027,'D_20261028' AS D_20261028,'D_20261029' AS D_20261029,'D_20261030' AS D_20261030,'D_20261031' AS D_20261031,'M_202611' AS M_202611,'W_20261144' AS W_20261144,'D_20261101' AS D_20261101,'W_20261145' AS W_20261145,'D_20261102' AS D_20261102,'D_20261103' AS D_20261103,'D_20261104' AS D_20261104,'D_20261105' AS D_20261105,'D_20261106' AS D_20261106,'D_20261107' AS D_20261107,'D_20261108' AS D_20261108,'W_20261146' AS W_20261146,'D_20261109' AS D_20261109,'D_20261110' AS D_20261110,'D_20261111' AS D_20261111,'D_20261112' AS D_20261112,'D_20261113' AS D_20261113,'D_20261114' AS D_20261114,'D_20261115' AS D_20261115,'W_20261147' AS W_20261147,'D_20261116' AS D_20261116,'D_20261117' AS D_20261117,'D_20261118' AS D_20261118,'D_20261119' AS D_20261119,'D_20261120' AS D_20261120,'D_20261121' AS D_20261121,'D_20261122' AS D_20261122,'W_20261148' AS W_20261148,'D_20261123' AS D_20261123,'D_20261124' AS D_20261124,'D_20261125' AS D_20261125,'D_20261126' AS D_20261126,'D_20261127' AS D_20261127,'D_20261128' AS D_20261128,'D_20261129' AS D_20261129,'W_20261149' AS W_20261149,'D_20261130' AS D_20261130,'M_202612' AS M_202612,'W_20261249' AS W_20261249,'D_20261201' AS D_20261201,'D_20261202' AS D_20261202,'D_20261203' AS D_20261203,'D_20261204' AS D_20261204,'D_20261205' AS D_20261205,'D_20261206' AS D_20261206,'W_20261250' AS W_20261250,'D_20261207' AS D_20261207,'D_20261208' AS D_20261208,'D_20261209' AS D_20261209,'D_20261210' AS D_20261210,'D_20261211' AS D_20261211,'D_20261212' AS D_20261212,'D_20261213' AS D_20261213,'W_20261251' AS W_20261251,'D_20261214' AS D_20261214,'D_20261215' AS D_20261215,'D_20261216' AS D_20261216,'D_20261217' AS D_20261217,'D_20261218' AS D_20261218,'D_20261219' AS D_20261219,'D_20261220' AS D_20261220,'W_20261252' AS W_20261252,'D_20261221' AS D_20261221,'D_20261222' AS D_20261222,'D_20261223' AS D_20261223,'D_20261224' AS D_20261224,'D_20261225' AS D_20261225,'D_20261226' AS D_20261226,'D_20261227' AS D_20261227,'W_20261253' AS W_20261253,'D_20261228' AS D_20261228,'D_20261229' AS D_20261229,'D_20261230' AS D_20261230,'D_20261231' AS D_20261231,'M_202701' AS M_202701,'W_20270153' AS W_20270153,'D_20270101' AS D_20270101,'D_20270102' AS D_20270102,'D_20270103' AS D_20270103,'W_20270101' AS W_20270101,'D_20270104' AS D_20270104,'D_20270105' AS D_20270105,'D_20270106' AS D_20270106,'D_20270107' AS D_20270107,'D_20270108' AS D_20270108,'D_20270109' AS D_20270109,'D_20270110' AS D_20270110,'W_20270102' AS W_20270102,'D_20270111' AS D_20270111,'D_20270112' AS D_20270112,'D_20270113' AS D_20270113,'D_20270114' AS D_20270114,'D_20270115' AS D_20270115,'D_20270116' AS D_20270116,'D_20270117' AS D_20270117,'W_20270103' AS W_20270103,'D_20270118' AS D_20270118,'D_20270119' AS D_20270119,'D_20270120' AS D_20270120,'D_20270121' AS D_20270121,'D_20270122' AS D_20270122,'D_20270123' AS D_20270123,'D_20270124' AS D_20270124,'W_20270104' AS W_20270104,'D_20270125' AS D_20270125,'D_20270126' AS D_20270126,'D_20270127' AS D_20270127,'D_20270128' AS D_20270128,'D_20270129' AS D_20270129,'D_20270130' AS D_20270130,'D_20270131' AS D_20270131,'M_202702' AS M_202702,'W_20270205' AS W_20270205,'D_20270201' AS D_20270201,'D_20270202' AS D_20270202,'D_20270203' AS D_20270203,'D_20270204' AS D_20270204,'D_20270205' AS D_20270205,'D_20270206' AS D_20270206,'D_20270207' AS D_20270207,'W_20270206' AS W_20270206,'D_20270208' AS D_20270208,'D_20270209' AS D_20270209,'D_20270210' AS D_20270210,'D_20270211' AS D_20270211,'D_20270212' AS D_20270212,'D_20270213' AS D_20270213,'D_20270214' AS D_20270214,'W_20270207' AS W_20270207,'D_20270215' AS D_20270215,'D_20270216' AS D_20270216,'D_20270217' AS D_20270217,'D_20270218' AS D_20270218,'D_20270219' AS D_20270219,'D_20270220' AS D_20270220,'D_20270221' AS D_20270221,'W_20270208' AS W_20270208,'D_20270222' AS D_20270222,'D_20270223' AS D_20270223,'D_20270224' AS D_20270224,'D_20270225' AS D_20270225,'D_20270226' AS D_20270226,'D_20270227' AS D_20270227,'D_20270228' AS D_20270228,'D_20270301' AS D_20270301,'D_20270302' AS D_20270302,'D_20270303' AS D_20270303,'D_20270304' AS D_20270304,'D_20270305' AS D_20270305,'D_20270306' AS D_20270306,'D_20270307' AS D_20270307,'D_20270308' AS D_20270308,'D_20270309' AS D_20270309,'D_20270310' AS D_20270310,'D_20270311' AS D_20270311,'D_20270312' AS D_20270312,'D_20270313' AS D_20270313,'D_20270314' AS D_20270314,'D_20270315' AS D_20270315,'D_20270316' AS D_20270316,'D_20270317' AS D_20270317,'D_20270318' AS D_20270318,'D_20270319' AS D_20270319,'D_20270320' AS D_20270320,'D_20270321' AS D_20270321,'D_20270322' AS D_20270322,'D_20270323' AS D_20270323,'D_20270324' AS D_20270324,'D_20270325' AS D_20270325,'D_20270326' AS D_20270326,'D_20270327' AS D_20270327,'D_20270328' AS D_20270328,'D_20270329' AS D_20270329,'D_20270330' AS D_20270330,'D_20270331' AS D_20270331,'D_20270401' AS D_20270401,'D_20270402' AS D_20270402,'D_20270403' AS D_20270403,'D_20270404' AS D_20270404,'D_20270405' AS D_20270405,'D_20270406' AS D_20270406,'D_20270407' AS D_20270407,'D_20270408' AS D_20270408,'D_20270409' AS D_20270409,'D_20270410' AS D_20270410,'D_20270411' AS D_20270411,'D_20270412' AS D_20270412,'D_20270413' AS D_20270413,'D_20270414' AS D_20270414,'D_20270415' AS D_20270415,'D_20270416' AS D_20270416,'D_20270417' AS D_20270417,'D_20270418' AS D_20270418,'D_20270419' AS D_20270419,'D_20270420' AS D_20270420,'D_20270421' AS D_20270421,'D_20270422' AS D_20270422,'D_20270423' AS D_20270423,'D_20270424' AS D_20270424,'D_20270425' AS D_20270425,'D_20270426' AS D_20270426,'D_20270427' AS D_20270427,'D_20270428' AS D_20270428,'D_20270429' AS D_20270429,'D_20270430' AS D_20270430,'D_20270501' AS D_20270501,'D_20270502' AS D_20270502,'D_20270503' AS D_20270503,'D_20270504' AS D_20270504,'D_20270505' AS D_20270505,'D_20270506' AS D_20270506,'D_20270507' AS D_20270507,'D_20270508' AS D_20270508,'D_20270509' AS D_20270509,'D_20270510' AS D_20270510,'D_20270511' AS D_20270511,'D_20270512' AS D_20270512,'D_20270513' AS D_20270513,'D_20270514' AS D_20270514,'D_20270515' AS D_20270515,'D_20270516' AS D_20270516,'D_20270517' AS D_20270517,'D_20270518' AS D_20270518,'D_20270519' AS D_20270519,'D_20270520' AS D_20270520,'D_20270521' AS D_20270521,'D_20270522' AS D_20270522,'D_20270523' AS D_20270523,'D_20270524' AS D_20270524,'D_20270525' AS D_20270525,'D_20270526' AS D_20270526,'D_20270527' AS D_20270527,'D_20270528' AS D_20270528,'D_20270529' AS D_20270529,'D_20270530' AS D_20270530,'D_20270531' AS D_20270531,'D_20270601' AS D_20270601,'D_20270602' AS D_20270602,'D_20270603' AS D_20270603,'D_20270604' AS D_20270604,'D_20270605' AS D_20270605,'D_20270606' AS D_20270606,'D_20270607' AS D_20270607,'D_20270608' AS D_20270608,'D_20270609' AS D_20270609,'D_20270610' AS D_20270610,'D_20270611' AS D_20270611,'D_20270612' AS D_20270612,'D_20270613' AS D_20270613,'D_20270614' AS D_20270614,'D_20270615' AS D_20270615,'D_20270616' AS D_20270616,'D_20270617' AS D_20270617,'D_20270618' AS D_20270618,'D_20270619' AS D_20270619,'D_20270620' AS D_20270620,'D_20270621' AS D_20270621,'D_20270622' AS D_20270622,'D_20270623' AS D_20270623,'D_20270624' AS D_20270624,'D_20270625' AS D_20270625,'D_20270626' AS D_20270626,'D_20270627' AS D_20270627,'D_20270628' AS D_20270628,'D_20270629' AS D_20270629,'D_20270630' AS D_20270630,'D_20270701' AS D_20270701,'D_20270702' AS D_20270702,'D_20270703' AS D_20270703,'D_20270704' AS D_20270704,'D_20270705' AS D_20270705,'D_20270706' AS D_20270706,'D_20270707' AS D_20270707,'D_20270708' AS D_20270708,'D_20270709' AS D_20270709,'D_20270710' AS D_20270710,'D_20270711' AS D_20270711,'D_20270712' AS D_20270712,'D_20270713' AS D_20270713,'D_20270714' AS D_20270714,'D_20270715' AS D_20270715,'D_20270716' AS D_20270716,'D_20270717' AS D_20270717,'D_20270718' AS D_20270718,'D_20270719' AS D_20270719,'D_20270720' AS D_20270720,'D_20270721' AS D_20270721,'D_20270722' AS D_20270722,'D_20270723' AS D_20270723,'D_20270724' AS D_20270724,'D_20270725' AS D_20270725,'D_20270726' AS D_20270726,'D_20270727' AS D_20270727,'D_20270728' AS D_20270728,'D_20270729' AS D_20270729,'D_20270730' AS D_20270730,'D_20270731' AS D_20270731,'D_20270801' AS D_20270801,'D_20270802' AS D_20270802,'D_20270803' AS D_20270803,'D_20270804' AS D_20270804,'D_20270805' AS D_20270805,'D_20270806' AS D_20270806,'D_20270807' AS D_20270807,'D_20270808' AS D_20270808,'D_20270809' AS D_20270809,'D_20270810' AS D_20270810,'D_20270811' AS D_20270811,'D_20270812' AS D_20270812,'D_20270813' AS D_20270813,'D_20270814' AS D_20270814,'D_20270815' AS D_20270815,'D_20270816' AS D_20270816,'D_20270817' AS D_20270817 ))
+     ORDER BY SORT_KEY, DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, PROJECT_CODE, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, DOM_EXP, CURRENCY, PLANT_SITE_ID, VERSION_NO,  CAST(SORT_ORDER_NO AS NUMBER(10,2)), BUCKET, NEW_FLAG, ATTR1, VMI_STD_DIO, AS_YN
+SQL_ID  18xg1y5298qgq, child number 3
+-------------------------------------
+INSERT INTO SCM_MGR.GT_DMF0082_MF_SP ( DIVISION_ID, PROJECT_CODE, 
+END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, INCOTERMS , 
+MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, BUCKET_TYPE, BUCKET_KEY, 
+QTY, MEASURE_GROUP , CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, 
+OWNER, DEPT_ID, DEPT_NAME_KO , FORECAST_INFO_CELL_PACK_COUNT, 
+ITEM_TYPE, PROJECT_NAME, PROJECT_OWNER, BIZ_TYPE , SOLDTO_CUSTOMER, 
+COUNTRY_NAME, CITY_NAME, PROJECT_STATUS, ITEM_NAME, VMI_YN , 
+CUST_GROUP, CUST_GROUP_DTL, APPLICATION, ROUTE, MDM_PROJECT_NAME, 
+MIN_CAPACITY , FORECAST_INFO_BIZ_TYPE, CELL_TYPE, FORECAST_INFO_ALL, 
+FORECAST_INFO_SPEC , FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME, 
+CELL_PER_CAR, CELL_PER_MODULE , MODULE_PER_CAR, SORT_ORDER_NO, ENERGE, 
+CELL_QUANTITY, AS_FROM_SITE , CREATE_DATE, LAST_UPDATED_BY, 
+SENDER_CODE, SENDER_NAME, PROJECT_S_OP_REPORT , CURRENCY, VERSION_NO, 
+CUTOFF_YYYYMMDD, NOTATION, EDIT_FLAG, SORT_KEY, GROUP_ID , SUN, MON, 
+TUE, WED, THU, FRI, SAT , YYYYMM, YYYYMMWW, WEEK_END_YN, MONTH_END
+ 
+Plan hash value: 3971101268
+ 
+------------------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                        | Name                                | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT                                 |                                     |       |       |       |   955K(100)|          |
+|   1 |  LOAD TABLE CONVENTIONAL                         | GT_DMF0082_MF_SP                    |       |       |       |            |          |
+|   2 |   TABLE ACCESS FULL                              | GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE |     1 |   612 |       |     2   (0)| 00:00:01 |
+|   3 |   NESTED LOOPS SEMI                              |                                     |     1 |  2281 |       |     4   (0)| 00:00:01 |
+|   4 |    TABLE ACCESS FULL                             | GT_DMF0082_PARAM_TOKEN              |     1 |  2244 |       |     2   (0)| 00:00:01 |
+|   5 |    INDEX RANGE SCAN                              | IDX01_SCM_ADM_LOOKUP_MASTER_DETAIL  |     1 |    37 |       |     2   (0)| 00:00:01 |
+|   6 |   SORT GROUP BY                                  |                                     |   173K|  2194M|  1352M|   955K  (1)| 00:00:38 |
+|   7 |    FILTER                                        |                                     |       |       |       |            |          |
+|   8 |     MERGE JOIN OUTER                             |                                     |   173K|  2194M|       |   349K  (1)| 00:00:14 |
+|   9 |      HASH JOIN RIGHT OUTER                       |                                     |   173K|  2143M|       |  2785   (1)| 00:00:01 |
+|  10 |       VIEW                                       |                                     |   189 |  8316 |       |     6  (17)| 00:00:01 |
+|  11 |        SORT GROUP BY                             |                                     |   189 |  5481 |       |     6  (17)| 00:00:01 |
+|  12 |         INDEX FAST FULL SCAN                     | IX01_DM_MST_BUCKET_CONVERSION       |  1122 | 32538 |       |     5   (0)| 00:00:01 |
+|  13 |       HASH JOIN                                  |                                     |   173K|  2136M|       |  2779   (1)| 00:00:01 |
+|  14 |        HASH JOIN RIGHT OUTER                     |                                     |   339 | 30849 |       |    50   (4)| 00:00:01 |
+|  15 |         TABLE ACCESS FULL                        | GT_DMF0082_CAL_WEEK_END_DATE        |    30 |  1080 |       |     2   (0)| 00:00:01 |
+|  16 |         HASH JOIN RIGHT OUTER                    |                                     |   339 | 18645 |       |    48   (5)| 00:00:01 |
+|  17 |          VIEW                                    |                                     |     1 |    18 |       |    13   (8)| 00:00:01 |
+|  18 |           FILTER                                 |                                     |       |       |       |            |          |
+|  19 |            SORT GROUP BY                         |                                     |     1 |    16 |       |    13   (8)| 00:00:01 |
+|  20 |             FILTER                               |                                     |       |       |       |            |          |
+|  21 |              TABLE ACCESS BY INDEX ROWID BATCHED | SCM_SYS_CALENDAR_M                  |   161 |  2576 |       |    12   (0)| 00:00:01 |
+|  22 |               INDEX RANGE SCAN                   | IDX_SCM_SYS_CALENDAR_N3             |   161 |       |       |     2   (0)| 00:00:01 |
+|  23 |          HASH JOIN RIGHT OUTER                   |                                     |   339 | 12543 |       |    35   (3)| 00:00:01 |
+|  24 |           VIEW                                   |                                     |     1 |    18 |       |    13   (8)| 00:00:01 |
+|  25 |            FILTER                                |                                     |       |       |       |            |          |
+|  26 |             SORT GROUP BY                        |                                     |     1 |    19 |       |    13   (8)| 00:00:01 |
+|  27 |              FILTER                              |                                     |       |       |       |            |          |
+|  28 |               TABLE ACCESS BY INDEX ROWID BATCHED| SCM_SYS_CALENDAR_M                  |   161 |  3059 |       |    12   (0)| 00:00:01 |
+|  29 |                INDEX RANGE SCAN                  | IDX_SCM_SYS_CALENDAR_N3             |   161 |       |       |     2   (0)| 00:00:01 |
+|  30 |           TABLE ACCESS BY INDEX ROWID BATCHED    | SCM_SYS_CALENDAR_M                  |   339 |  6441 |       |    22   (0)| 00:00:01 |
+|  31 |            INDEX RANGE SCAN                      | IDX_SCM_SYS_CALENDAR_N3             |   339 |       |       |     2   (0)| 00:00:01 |
+|  32 |        TABLE ACCESS FULL                         | GT_DMF0082_TEMP_FCST_N_PRICE        |   173K|  2125M|       |  2729   (1)| 00:00:01 |
+|  33 |      BUFFER SORT                                 |                                     |     1 |   306 |       |   827K  (1)| 00:00:33 |
+|  34 |       VIEW                                       | VW_LAT_62E7BAE7                     |     1 |   306 |       |     2   (0)| 00:00:01 |
+|  35 |        SORT GROUP BY                             |                                     |     1 |    24 |       |     2   (0)| 00:00:01 |
+|  36 |         FILTER                                   |                                     |       |       |       |            |          |
+|  37 |          TABLE ACCESS BY INDEX ROWID             | SCM_MST_SITE                        |     1 |    24 |       |     2   (0)| 00:00:01 |
+|  38 |           INDEX UNIQUE SCAN                      | PK_SCM_MST_SITE                     |     1 |       |       |     1   (0)| 00:00:01 |
+------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - statistics feedback used for this statement
+   - this is an adaptive plan
+ 
+SQL_ID  5rfw1281hnb5b, child number 0
+-------------------------------------
+     SELECT DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, 
+PROJECT_CODE, GROUP_ID, ITEM_ID, NICK_NAME, INCOTERMS, FCST_TYPE, 
+DOM_EXP, CURRENCY, PLANT_SITE_ID, MEASURE, VERSION_NO, MEASURE_GROUP, 
+BUCKET, EDIT_FLAG, SORT_KEY, NEW_FLAG, ATTR1, VMI_STD_DIO, AS_YN, 
+NOTATION, CELL_PROD_SITE_ID     , (NVL(M_202609,0)+NVL(W_20260936,0)+NVL
+(D_20260901,0)+NVL(D_20260902,0)+NVL(D_20260903,0)+NVL(D_20260904,0)+NVL
+(D_20260905,0)+NVL(D_20260906,0)+NVL(W_20260937,0)+NVL(D_20260907,0)+NVL
+(D_20260908,0)+NVL(D_20260909,0)+NVL(D_20260910,0)+NVL(D_20260911,0)+NVL
+(D_20260912,0)+NVL(D_20260913,0)+NVL(W_20260938,0)+NVL(D_20260914,0)+NVL
+(D_20260915,0)+NVL(D_20260916,0)+NVL(D_20260917,0)+NVL(D_20260918,0)+NVL
+(D_20260919,0)+NVL(D_20260920,0)+NVL(W_20260939,0)+NVL(D_20260921,0)+NVL
+(D_20260922,0)+NVL(D_20260923,0)+NVL(D_20260924,0)+NVL(D_20260925,0)+NVL
+(D_20260926,0)+NVL(D_20260927,0)+NVL(W_20260940,0)+NVL(D_20260928,0)+NVL
+(D_20260929,0)+NVL(D_20260930,0)+NVL(M_202610,0)+NVL(W_20261040,0)+NVL(D
+_20261001,0)+NVL(
+ 
+Plan hash value: 360512032
+ 
+-----------------------------------------------------------------------------------------------------
+| Id  | Operation                | Name             | Rows  | Bytes |TempSpc| Cost (%CPU)| Time     |
+-----------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT         |                  |       |       |       |   838K(100)|          |
+|   1 |  SORT ORDER BY           |                  |   386K|  3783M|  3016M|   838K  (1)| 00:00:33 |
+|   2 |   VIEW                   |                  |   386K|  3783M|       | 13305   (1)| 00:00:01 |
+|   3 |    TRANSPOSE             |                  |       |       |       |            |          |
+|   4 |     SORT GROUP BY PIVOT  |                  |   386K|  1973M|       | 13305   (1)| 00:00:01 |
+|   5 |      VIEW                |                  |   386K|  1973M|       | 13297   (1)| 00:00:01 |
+|   6 |       UNION-ALL          |                  |   386K|  1931M|       | 13297   (1)| 00:00:01 |
+|   7 |        TABLE ACCESS FULL | GT_DMF0082_MF_SP |   128K|   651M|       |  2659   (1)| 00:00:01 |
+|   8 |        HASH GROUP BY     |                  |   622 |  3168K|       |  2657   (1)| 00:00:01 |
+|   9 |         TABLE ACCESS FULL| GT_DMF0082_MF_SP |   622 |  3168K|       |  2656   (1)| 00:00:01 |
+|  10 |        HASH GROUP BY     |                  |   128K|   636M|       |  2662   (1)| 00:00:01 |
+|  11 |         TABLE ACCESS FULL| GT_DMF0082_MF_SP |   128K|   636M|       |  2659   (1)| 00:00:01 |
+|  12 |        HASH GROUP BY     |                  |   622 |  3167K|       |  2657   (1)| 00:00:01 |
+|  13 |         TABLE ACCESS FULL| GT_DMF0082_MF_SP |   622 |  3167K|       |  2656   (1)| 00:00:01 |
+|  14 |        HASH GROUP BY     |                  |   128K|   636M|       |  2662   (1)| 00:00:01 |
+|  15 |         TABLE ACCESS FULL| GT_DMF0082_MF_SP |   128K|   636M|       |  2659   (1)| 00:00:01 |
+-----------------------------------------------------------------------------------------------------
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+ 

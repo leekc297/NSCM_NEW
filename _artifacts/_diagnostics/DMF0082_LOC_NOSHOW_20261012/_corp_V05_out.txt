@@ -1,0 +1,55 @@
+################ [S0] 접속 DB · 시각 ################
+DB_NAME | USR     | NOW                
+--------+---------+--------------------
+ZIOUI1  | SCM_MGR | 2026-10-12 18:25:18
+(1 rows)
+################ [S1] ⭐ 주차별 대조 — 수요 원장(Cell Prod Site 별) vs 판가 LOC(Cell Prod Site 별) ################
+--  수요는 40 계획 원장 DM_PLN_CFM_MKT_DEMAND_PLAN 기준. PRICE_SAME_CELL = 같은 Cell Prod Site 의 그 주 LOC 판가, PRICE_OTHER_CELL = 다른 Cell Prod Site 의 그 주 LOC 판가
+--  JUDGE '판가 있음' = 검증 통과가 정상 / '같은 사이트 판가 없음' = 저장 시점에 이 상태였다면 차단됐어야 함
+MEASURE | WEEK_START | DEMAND_CELL | QTY | YMD_MIN | YMD_MAX | DEMAND_BY | DEMAND_AT | PRICE_SAME_CELL | PRICE_OTHER_CELL | JUDGE
+--------+------------+-------------+-----+---------+---------+-----------+-----------+-----------------+------------------+------
+(0 rows)
+################ [S2] ⭐ 판가 LOC 원장 — Cell Prod Site × 주차별 행 · 누가 언제 넣었나 ################
+--  CREATED_AT 이 수요 저장 시각([S1] DEMAND_AT · [S5]) 보다 **앞**이면 = 저장 당시 이미 판가가 있어 검증 통과가 정상
+CELL_PROD | YYYYMMDD | CURRENCY | PRICE | PROJECT_CODE | END_CUSTOMER | PLANT | DOM_EXP | FCST_TYPE | INCOTERMS | CREATED_BY | CREATED_AT | LAST_UPDATED_BY | UPDATED_AT
+----------+----------+----------+-------+--------------+--------------+-------+---------+-----------+-----------+------------+------------+-----------------+-----------
+(0 rows)
+################ [S3] 검증 대상/제외 룩업 (MKT_FCST_VALIDATION_PRICE) — ㉯ ㉰ ################
+--  SEGMENT1='MEASURE' 목록에 MKT_FCST 가 없으면 MKT_FCST 입력은 단가 검증을 타지 않는다. SEGMENT1='FCST_TYPE' 목록의 유형은 검증 제외
+SEGMENT1  | SEGMENT2   | VALID_YN | LAST_UPDATED_BY | UPD             
+----------+------------+----------+-----------------+-----------------
+FCST_TYPE | ASF        | Y        | choiya2         | 2020-09-08 11:36
+FCST_TYPE | SDF        | Y        | choiya2         | 2020-09-08 11:36
+FCST_TYPE | SMC        | N        | kimyh8848       | 2021-03-30 17:27
+FCST_TYPE | SMF        | Y        | choiya2         | 2020-09-08 11:36
+FCST_TYPE | SPF        | Y        | hwi1993         | 2021-03-23 12:43
+FCST_TYPE | TST        | Y        | choiya2         | 2020-09-08 11:36
+FCST_TYPE | WSF        | Y        | hwi1993         | 2021-10-27 20:39
+MEASURE   | MKT_FCST   | Y        | choiya2         | 2020-09-08 11:36
+MEASURE   | RTF        | Y        | choiya2         | 2020-09-08 11:36
+MEASURE   | SCM_FCST   | Y        | dsiol           | 2025-05-19 10:42
+MEASURE   | VMI_In_Req | Y        | choiya2         | 2020-09-08 11:36
+(11 rows)
+################ [S4] Site-Item 마스터 — 판매계획 조정 제외 여부 ㉱ ################
+PROJECT_CODE | VALID_YN | SALES_PLAN_ADJUST_YN | JUDGE
+-------------+----------+----------------------+------
+(0 rows)
+################ [S5] ⭐ 오늘 DMF0082 저장 SP 실행 이력 — 시작/종료/검증 차단 ################
+--  LOG_TYPE START = 저장 시작(IN_PARA = 입력 앞부분) · END + 'FAIL-2' = 검증 차단(DESCRIPTION = 화면 메시지) · END 정상 = 저장 완료
+AT | CREATED_BY | LOG_TYPE | LOG_COUNT | LOG_MESSAGE | DESCRIPTION | IN_PARA
+---+------------+----------+-----------+-------------+-------------+--------
+(0 rows)
+################ [S6] ⭐ 오늘 화면 저장 호출 — 실제 전송된 입력 (BE 로그, 앞 3,900자) ################
+--  cellProdSiteId / measure / qtyPrice 순서로 화면이 보낸 값이 그대로 보인다 — 오창A·남경A 가 각각 어느 메저 행에 실려 갔는지 확인
+ST | CREATED_BY | SHT_NM | MSG
+---+------------+--------+----
+(0 rows)
+ST | MSG_2
+---+------
+(0 rows)
+ST | MSG_3
+---+------
+(0 rows)
+=============================================================================
+V05 완료 → V05_SAVE_UNITPRICE_CHECK_OUT.txt 회신 ([S1] JUDGE · [S2] CREATED_AT · [S5]/[S6] 저장 순서가 핵심)
+=============================================================================

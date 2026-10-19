@@ -1,0 +1,30 @@
+-- 99_ROLLBACK — [GAP467 2026-10-15] 원복 (전체 F5, 값 입력 없음, 멱등)
+-- [B] 사용자 매핑: ZZ_GAP467_MPG_ADDED 에 기록된(이번 패치가 넣은) 키만 삭제 → 기록 비움
+-- [A] 그룹 원장: 4개 그룹 중 CREATED_BY='admin' 이고 2026-10-15 이후 생성된 행만 삭제 (그 DB 에 원래 있던 그룹은 보호)
+SET SERVEROUTPUT ON SIZE UNLIMITED
+SET DEFINE OFF
+SET LINESIZE 200 PAGESIZE 100
+DECLARE
+    n PLS_INTEGER;
+    v_del PLS_INTEGER := 0;
+BEGIN
+    SELECT COUNT(*) INTO n FROM USER_TABLES WHERE TABLE_NAME = 'ZZ_GAP467_MPG_ADDED';
+    IF n > 0 THEN
+        EXECUTE IMMEDIATE
+            'DELETE FROM SCM_ADM_USER_GR_MPG_M M
+              WHERE EXISTS (SELECT 1 FROM ZZ_GAP467_MPG_ADDED L WHERE L.USER_GR_ID = M.USER_GR_ID AND L.USER_ID = M.USER_ID)';
+        v_del := SQL%ROWCOUNT;
+        EXECUTE IMMEDIATE 'DELETE FROM ZZ_GAP467_MPG_ADDED';
+    END IF;
+    DELETE FROM SCM_ADM_USER_GR_M
+     WHERE USER_GR_ID IN ('CAPA Planner','System Monitor','SSP ADMIN','-')
+       AND CREATED_BY = 'admin'
+       AND CREATION_DATE >= DATE '2026-10-15';
+    DBMS_OUTPUT.PUT_LINE('ROLLED BACK — 사용자 매핑 ' || v_del || '건 · 그룹 ' || SQL%ROWCOUNT || '건 삭제');
+    COMMIT;
+END;
+/
+SELECT 'POST' CHK,
+       (SELECT COUNT(*) FROM SCM_ADM_USER_GR_M WHERE USER_GR_ID IN ('CAPA Planner','System Monitor','SSP ADMIN','-')) GROUPS_N,
+       (SELECT COUNT(*) FROM SCM_ADM_USER_GR_MPG_M WHERE USER_GR_ID IN ('CAPA Planner','System Monitor','-')) MPG_N
+  FROM DUAL;

@@ -1,0 +1,853 @@
+{
+ "PKG_DMF0008": [
+  {
+   "sp": "DMF0008_GET_EDI_MST_REPAIR",
+   "member": "P_DMF0008_GET_EDI_MST_REPAIR",
+   "qual": "PKG_DMF0008.P_DMF0008_GET_EDI_MST_REPAIR",
+   "apis": [
+    "P_DMF0008_REPAIR_GET"
+   ],
+   "orig_url": {
+    "P_DMF0008_REPAIR_GET": "DMF0008_GET_EDI_MST_REPAIR"
+   },
+   "proc_nm": "DMF0008_GET_EDI_MST_REPAIR",
+   "procm_rows": 9,
+   "btn": [
+    {
+     "mnu": "DMF0008",
+     "sht": "repair",
+     "btn": "SEARCH",
+     "api": "P_DMF0008_REPAIR_GET",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0008_GET_EDI_MST_SUMMARY",
+   "member": "P_DMF0008_GET_EDI_MST_SUMMARY",
+   "qual": "PKG_DMF0008.P_DMF0008_GET_EDI_MST_SUMMARY",
+   "apis": [
+    "P_DMF0008_SUMMARY_GET"
+   ],
+   "orig_url": {
+    "P_DMF0008_SUMMARY_GET": "DMF0008_GET_EDI_MST_SUMMARY"
+   },
+   "proc_nm": "DMF0008_GET_EDI_MST_SUMMARY",
+   "procm_rows": 8,
+   "btn": [
+    {
+     "mnu": "DMF0008",
+     "sht": "summary",
+     "btn": "SEARCH",
+     "api": "P_DMF0008_SUMMARY_GET",
+     "use": "Y"
+    },
+    {
+     "mnu": "DMF0008",
+     "sht": "main",
+     "btn": "SEARCH",
+     "api": "P_DMF0008_SUMMARY_GET",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0008_GET_SALES_SITE",
+   "member": "P_DMF0008_GET_SALES_SITE",
+   "qual": "PKG_DMF0008.P_DMF0008_GET_SALES_SITE",
+   "apis": [
+    "P_DMF0008_SALES_SITE_GET",
+    "P_DMF0008_SITE_GET"
+   ],
+   "orig_url": {
+    "P_DMF0008_SALES_SITE_GET": "DMF0008_GET_SALES_SITE",
+    "P_DMF0008_SITE_GET": "DMF0008_GET_SALES_SITE"
+   },
+   "proc_nm": "DMF0008_GET_SALES_SITE",
+   "procm_rows": 5,
+   "btn": [
+    {
+     "mnu": "DMF0008",
+     "sht": "salesSite",
+     "btn": "SEARCH",
+     "api": "P_DMF0008_SALES_SITE_GET",
+     "use": "Y"
+    },
+    {
+     "mnu": "DMF0008",
+     "sht": "site",
+     "btn": "SEARCH",
+     "api": "P_DMF0008_SITE_GET",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0008_GET_SALES_SITE_PROJECT_MODEL",
+   "member": "P_DMF0008_GET_SALES_SITE_PROJECT_MODEL",
+   "qual": "PKG_DMF0008.P_DMF0008_GET_SALES_SITE_PROJECT_MODEL",
+   "apis": [
+    "P_DMF0008_SSPM_GET",
+    "P_DMF0008_PROJECT_GET"
+   ],
+   "orig_url": {
+    "P_DMF0008_SSPM_GET": "DMF0008_GET_SALES_SITE_PROJECT_MODEL",
+    "P_DMF0008_PROJECT_GET": "DMF0008_GET_SALES_SITE_PROJECT_MODEL"
+   },
+   "proc_nm": "DMF0008_GET_SALES_SITE_PROJECT_MODEL",
+   "procm_rows": 7,
+   "btn": [
+    {
+     "mnu": "DMF0008",
+     "sht": "sspm",
+     "btn": "SEARCH",
+     "api": "P_DMF0008_SSPM_GET",
+     "use": "Y"
+    },
+    {
+     "mnu": "DMF0008",
+     "sht": "project",
+     "btn": "SEARCH",
+     "api": "P_DMF0008_PROJECT_GET",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0008_GET_UPDATE_HISTORY",
+   "member": "P_DMF0008_GET_UPDATE_HISTORY",
+   "qual": "PKG_DMF0008.P_DMF0008_GET_UPDATE_HISTORY",
+   "apis": [
+    "P_DMF0008_UPDATE_HISTORY",
+    "P_DMF0008_UPDATE_HISTORY_GET"
+   ],
+   "orig_url": {
+    "P_DMF0008_UPDATE_HISTORY": "DMF0008_GET_UPDATE_HISTORY",
+    "P_DMF0008_UPDATE_HISTORY_GET": "DMF0008_GET_UPDATE_HISTORY"
+   },
+   "proc_nm": "DMF0008_GET_UPDATE_HISTORY",
+   "procm_rows": 3,
+   "btn": [
+    {
+     "mnu": "DMF0008",
+     "sht": "updateHistory",
+     "btn": "SEARCH",
+     "api": "P_DMF0008_UPDATE_HISTORY_GET",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0008_SAVE_SALES_SITE_EDI_REPAIR",
+   "member": "P_DMF0008_SAVE_SALES_SITE_EDI_REPAIR",
+   "qual": "PKG_DMF0008.P_DMF0008_SAVE_SALES_SITE_EDI_REPAIR",
+   "apis": [
+    "P_DMF0008_SALES_SITE_SAVE",
+    "P_DMF0008_REPAIR_SAVE"
+   ],
+   "orig_url": {
+    "P_DMF0008_SALES_SITE_SAVE": "DMF0008_SAVE_SALES_SITE_EDI_REPAIR",
+    "P_DMF0008_REPAIR_SAVE": "DMF0008_SAVE_SALES_SITE_EDI_REPAIR"
+   },
+   "proc_nm": "DMF0008_SAVE_SALES_SITE_EDI_REPAIR",
+   "procm_rows": 17,
+   "btn": [
+    {
+     "mnu": "DMF0008",
+     "sht": "salesSite",
+     "btn": "SAVE",
+     "api": "P_DMF0008_SALES_SITE_SAVE",
+     "use": "Y"
+    },
+    {
+     "mnu": "DMF0008",
+     "sht": "repair",
+     "btn": "SAVE",
+     "api": "P_DMF0008_REPAIR_SAVE",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR",
+   "member": "P_DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR",
+   "qual": "PKG_DMF0008.P_DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR",
+   "apis": [
+    "P_DMF0008_SSPM_SAVE",
+    "P_DMF0008_PROJECT_SAVE"
+   ],
+   "orig_url": {
+    "P_DMF0008_SSPM_SAVE": "DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR",
+    "P_DMF0008_PROJECT_SAVE": "DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR"
+   },
+   "proc_nm": "DMF0008_SAVE_SALES_SITE_PROJECT_EDI_REPAIR",
+   "procm_rows": 23,
+   "btn": [
+    {
+     "mnu": "DMF0008",
+     "sht": "sspm",
+     "btn": "SAVE",
+     "api": "P_DMF0008_SSPM_SAVE",
+     "use": "Y"
+    },
+    {
+     "mnu": "DMF0008",
+     "sht": "project",
+     "btn": "SAVE",
+     "api": "P_DMF0008_PROJECT_SAVE",
+     "use": "Y"
+    }
+   ]
+  }
+ ],
+ "PKG_DMF0040": [
+  {
+   "sp": "DMF0040_GET_SPREAD_TITLE",
+   "member": "P_DMF0040_GET_SPREAD_TITLE",
+   "qual": "PKG_DMF0040.P_DMF0040_GET_SPREAD_TITLE",
+   "apis": [
+    "DMF0040_spreadTitle_SEARCH"
+   ],
+   "orig_url": {
+    "DMF0040_spreadTitle_SEARCH": "DMF0040_GET_SPREAD_TITLE"
+   },
+   "proc_nm": "DMF0040_GET_SPREAD_TITLE",
+   "procm_rows": 7,
+   "btn": [
+    {
+     "mnu": "DMF0040",
+     "sht": "spreadTitle",
+     "btn": "SEARCH",
+     "api": "DMF0040_spreadTitle_SEARCH",
+     "use": "Y"
+    }
+   ]
+  }
+ ],
+ "PKG_DMF0043": [
+  {
+   "sp": "DMF0043_GET_CONTRIBUTE_MAIN_DATA",
+   "member": "P_DMF0043_GET_CONTRIBUTE_MAIN_DATA",
+   "qual": "PKG_DMF0043.P_DMF0043_GET_CONTRIBUTE_MAIN_DATA",
+   "apis": [
+    "P_DMF0043_MAIN_GET"
+   ],
+   "orig_url": {
+    "P_DMF0043_MAIN_GET": "DMF0043_GET_CONTRIBUTE_MAIN_DATA"
+   },
+   "proc_nm": "DMF0043_GET_CONTRIBUTE_MAIN_DATA",
+   "procm_rows": 7,
+   "btn": [
+    {
+     "mnu": "DMF0043",
+     "sht": "ContributeMain",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_MAIN_GET",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0043_GET_CONTRIBUTE_RATE_POPUP",
+   "member": "P_DMF0043_GET_CONTRIBUTE_RATE_POPUP",
+   "qual": "PKG_DMF0043.P_DMF0043_GET_CONTRIBUTE_RATE_POPUP",
+   "apis": [
+    "P_DMF0043_RATE_POPUP"
+   ],
+   "orig_url": {
+    "P_DMF0043_RATE_POPUP": "DMF0043_GET_CONTRIBUTE_RATE_POPUP"
+   },
+   "proc_nm": "DMF0043_GET_CONTRIBUTE_RATE_POPUP",
+   "procm_rows": 3,
+   "btn": [
+    {
+     "mnu": "DMF0043",
+     "sht": "ratePopup",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_RATE_POPUP",
+     "use": "Y"
+    },
+    {
+     "mnu": "DMF0043_01",
+     "sht": "ratePopup",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_RATE_POPUP",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0043_GET_CONTRIBUTE_YEAR_POPUP",
+   "member": "P_DMF0043_GET_CONTRIBUTE_YEAR_POPUP",
+   "qual": "PKG_DMF0043.P_DMF0043_GET_CONTRIBUTE_YEAR_POPUP",
+   "apis": [
+    "P_DMF0043_YEAR_POPUP"
+   ],
+   "orig_url": {
+    "P_DMF0043_YEAR_POPUP": "DMF0043_GET_CONTRIBUTE_YEAR_POPUP"
+   },
+   "proc_nm": "DMF0043_GET_CONTRIBUTE_YEAR_POPUP",
+   "procm_rows": 3,
+   "btn": [
+    {
+     "mnu": "DMF0043",
+     "sht": "yearPopup",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_YEAR_POPUP",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0043_GET_CONTRIBUTION_SALES_LIST",
+   "member": "P_DMF0043_GET_CONTRIBUTION_SALES_LIST",
+   "qual": "PKG_DMF0043.P_DMF0043_GET_CONTRIBUTION_SALES_LIST",
+   "apis": [
+    "P_DMF0043_SALES_LIST_GET"
+   ],
+   "orig_url": {
+    "P_DMF0043_SALES_LIST_GET": "DMF0043_GET_CONTRIBUTION_SALES_LIST"
+   },
+   "proc_nm": "DMF0043_GET_CONTRIBUTION_SALES_LIST",
+   "procm_rows": 12,
+   "btn": [
+    {
+     "mnu": "DMF0043",
+     "sht": "salesList",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_SALES_LIST_GET",
+     "use": "Y"
+    },
+    {
+     "mnu": "DMF0043_01",
+     "sht": "main",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_SALES_LIST_GET",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0043_GET_CONT_VIEW_VERSIONPOPUP",
+   "member": "P_DMF0043_GET_CONT_VIEW_VERSIONPOPUP",
+   "qual": "PKG_DMF0043.P_DMF0043_GET_CONT_VIEW_VERSIONPOPUP",
+   "apis": [
+    "P_DMF0043_VERSION_POPUP",
+    "DMF0043_GET_CONT_VIEW_VERSIONPOPUP"
+   ],
+   "orig_url": {
+    "P_DMF0043_VERSION_POPUP": "DMF0043_GET_CONT_VIEW_VERSIONPOPUP",
+    "DMF0043_GET_CONT_VIEW_VERSIONPOPUP": "DMF0043_GET_CONT_VIEW_VERSIONPOPUP"
+   },
+   "proc_nm": "DMF0043_GET_CONT_VIEW_VERSIONPOPUP",
+   "procm_rows": 8,
+   "btn": [
+    {
+     "mnu": "DMF0043",
+     "sht": "ContributeMain",
+     "btn": "VERSION_MGMT",
+     "api": "P_DMF0043_VERSION_POPUP",
+     "use": "Y"
+    },
+    {
+     "mnu": "DMF0043",
+     "sht": "versionPopup",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_VERSION_POPUP",
+     "use": "Y"
+    },
+    {
+     "mnu": "DMF0043_01",
+     "sht": "versionPopup",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_VERSION_POPUP",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0043_GET_MAIN_SPREAD_TITLE",
+   "member": "P_DMF0043_GET_MAIN_SPREAD_TITLE",
+   "qual": "PKG_DMF0043.P_DMF0043_GET_MAIN_SPREAD_TITLE",
+   "apis": [
+    "P_DMF0043_MAIN_TITLE"
+   ],
+   "orig_url": {
+    "P_DMF0043_MAIN_TITLE": "DMF0043_GET_MAIN_SPREAD_TITLE"
+   },
+   "proc_nm": "DMF0043_GET_MAIN_SPREAD_TITLE",
+   "procm_rows": 8,
+   "btn": [
+    {
+     "mnu": "DMF0043",
+     "sht": "mainTitle",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_MAIN_TITLE",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0043_GET_MAIN_VARSION_DATA",
+   "member": "P_DMF0043_GET_MAIN_VARSION_DATA",
+   "qual": "PKG_DMF0043.P_DMF0043_GET_MAIN_VARSION_DATA",
+   "apis": [
+    "P_DMF0043_VERSION_GET"
+   ],
+   "orig_url": {
+    "P_DMF0043_VERSION_GET": "DMF0043_GET_MAIN_VARSION_DATA"
+   },
+   "proc_nm": "DMF0043_GET_MAIN_VARSION_DATA",
+   "procm_rows": 3,
+   "btn": [
+    {
+     "mnu": "DMF0043",
+     "sht": "version",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_VERSION_GET",
+     "use": "Y"
+    },
+    {
+     "mnu": "DMF0043_01",
+     "sht": "version",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_VERSION_GET",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0043_GET_SALES_LIST_SPREAD_TITLE",
+   "member": "P_DMF0043_GET_SALES_LIST_SPREAD_TITLE",
+   "qual": "PKG_DMF0043.P_DMF0043_GET_SALES_LIST_SPREAD_TITLE",
+   "apis": [
+    "P_DMF0043_SALES_LIST_TITLE"
+   ],
+   "orig_url": {
+    "P_DMF0043_SALES_LIST_TITLE": "DMF0043_GET_SALES_LIST_SPREAD_TITLE"
+   },
+   "proc_nm": "DMF0043_GET_SALES_LIST_SPREAD_TITLE",
+   "procm_rows": 4,
+   "btn": [
+    {
+     "mnu": "DMF0043",
+     "sht": "salesListTitle",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_SALES_LIST_TITLE",
+     "use": "Y"
+    },
+    {
+     "mnu": "DMF0043_01",
+     "sht": "mainTitle",
+     "btn": "SEARCH",
+     "api": "P_DMF0043_SALES_LIST_TITLE",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO",
+   "member": "P_DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO",
+   "qual": "PKG_DMF0043.P_DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO",
+   "apis": [
+    "P_DMF0043_MAIN_SAVE"
+   ],
+   "orig_url": {
+    "P_DMF0043_MAIN_SAVE": "DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO"
+   },
+   "proc_nm": "DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO",
+   "procm_rows": 14,
+   "btn": [
+    {
+     "mnu": "DMF0043",
+     "sht": "ContributeMain",
+     "btn": "SAVE",
+     "api": "P_DMF0043_MAIN_SAVE",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0043_SAVE_DM_MST_CONTRIBUTE_VER",
+   "member": "P_DMF0043_SAVE_DM_MST_CONTRIBUTE_VER",
+   "qual": "PKG_DMF0043.P_DMF0043_SAVE_DM_MST_CONTRIBUTE_VER",
+   "apis": [
+    "P_DMF0043_VERSION_SAVE"
+   ],
+   "orig_url": {
+    "P_DMF0043_VERSION_SAVE": "DMF0043_SAVE_DM_MST_CONTRIBUTE_VER"
+   },
+   "proc_nm": "DMF0043_SAVE_DM_MST_CONTRIBUTE_VER",
+   "procm_rows": 9,
+   "btn": [
+    {
+     "mnu": "DMF0043",
+     "sht": "version",
+     "btn": "SAVE",
+     "api": "P_DMF0043_VERSION_SAVE",
+     "use": "Y"
+    }
+   ]
+  }
+ ],
+ "PKG_DMF0048": [
+  {
+   "sp": "DMF0048_GET_SPREAD_TITLE",
+   "member": "P_DMF0048_GET_SPREAD_TITLE",
+   "qual": "PKG_DMF0048.P_DMF0048_GET_SPREAD_TITLE",
+   "apis": [
+    "DMF0048_spreadTitle_SEARCH"
+   ],
+   "orig_url": {
+    "DMF0048_spreadTitle_SEARCH": "DMF0048_GET_SPREAD_TITLE"
+   },
+   "proc_nm": "DMF0048_GET_SPREAD_TITLE",
+   "procm_rows": 6,
+   "btn": [
+    {
+     "mnu": "DMF0048",
+     "sht": "spreadTitle",
+     "btn": "SEARCH",
+     "api": "DMF0048_spreadTitle_SEARCH",
+     "use": "Y"
+    }
+   ]
+  }
+ ],
+ "PKG_DMF0072": [
+  {
+   "sp": "DMF0072_GET_DATA_TYPE_LIST",
+   "member": "P_DMF0072_GET_DATA_TYPE_LIST",
+   "qual": "PKG_DMF0072.P_DMF0072_GET_DATA_TYPE_LIST",
+   "apis": [
+    "P_DMF0072_DATATYPE_GET"
+   ],
+   "orig_url": {
+    "P_DMF0072_DATATYPE_GET": "DMF0072_GET_DATA_TYPE_LIST"
+   },
+   "proc_nm": "DMF0072_GET_DATA_TYPE_LIST",
+   "procm_rows": 1,
+   "btn": [
+    {
+     "mnu": "DMF0072",
+     "sht": "dataType",
+     "btn": "SEARCH",
+     "api": "P_DMF0072_DATATYPE_GET",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0072_GET_END_CUSTOMER_LIST",
+   "member": "P_DMF0072_GET_END_CUSTOMER_LIST",
+   "qual": "PKG_DMF0072.P_DMF0072_GET_END_CUSTOMER_LIST",
+   "apis": [
+    "P_DMF0072_ENDCUST_GET"
+   ],
+   "orig_url": {
+    "P_DMF0072_ENDCUST_GET": "DMF0072_GET_END_CUSTOMER_LIST"
+   },
+   "proc_nm": "DMF0072_GET_END_CUSTOMER_LIST",
+   "procm_rows": 3,
+   "btn": [
+    {
+     "mnu": "DMF0072",
+     "sht": "endCustomer",
+     "btn": "SEARCH",
+     "api": "P_DMF0072_ENDCUST_GET",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0072_GET_NNMASTER_MAPPING_WRAPPER",
+   "member": "P_DMF0072_GET_NNMASTER_MAPPING_WRAPPER",
+   "qual": "PKG_DMF0072.P_DMF0072_GET_NNMASTER_MAPPING_WRAPPER",
+   "apis": [
+    "DMF0072_MAIN_SEARCH"
+   ],
+   "orig_url": {
+    "DMF0072_MAIN_SEARCH": "DMF0072_GET_NNMASTER_MAPPING_WRAPPER"
+   },
+   "proc_nm": "DMF0072_GET_NNMASTER_MAPPING_WRAPPER",
+   "procm_rows": 10,
+   "btn": [
+    {
+     "mnu": "DMF0072",
+     "sht": "main",
+     "btn": "SEARCH",
+     "api": "DMF0072_MAIN_SEARCH",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0072_GET_SALES_SITE_LIST",
+   "member": "P_DMF0072_GET_SALES_SITE_LIST",
+   "qual": "PKG_DMF0072.P_DMF0072_GET_SALES_SITE_LIST",
+   "apis": [
+    "P_DMF0072_SALESSITE_GET"
+   ],
+   "orig_url": {
+    "P_DMF0072_SALESSITE_GET": "DMF0072_GET_SALES_SITE_LIST"
+   },
+   "proc_nm": "DMF0072_GET_SALES_SITE_LIST",
+   "procm_rows": 3,
+   "btn": [
+    {
+     "mnu": "DMF0072",
+     "sht": "salesSite",
+     "btn": "SEARCH",
+     "api": "P_DMF0072_SALESSITE_GET",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "DMF0072_GET_TEAM_LIST",
+   "member": "P_DMF0072_GET_TEAM_LIST",
+   "qual": "PKG_DMF0072.P_DMF0072_GET_TEAM_LIST",
+   "apis": [
+    "P_DMF0072_TEAM_GET"
+   ],
+   "orig_url": {
+    "P_DMF0072_TEAM_GET": "DMF0072_GET_TEAM_LIST"
+   },
+   "proc_nm": "DMF0072_GET_TEAM_LIST",
+   "procm_rows": 2,
+   "btn": [
+    {
+     "mnu": "DMF0072",
+     "sht": "team",
+     "btn": "SEARCH",
+     "api": "P_DMF0072_TEAM_GET",
+     "use": "Y"
+    }
+   ]
+  }
+ ],
+ "PKG_DMF0082": [
+  {
+   "sp": "PR_SCM_MST_EXCHANGE_RATE_UI",
+   "member": "P_PR_SCM_MST_EXCHANGE_RATE_UI",
+   "qual": "PKG_DMF0082.P_PR_SCM_MST_EXCHANGE_RATE_UI",
+   "apis": [
+    "DMF0082_futurePriceInfo_IF"
+   ],
+   "orig_url": {
+    "DMF0082_futurePriceInfo_IF": "PR_SCM_MST_EXCHANGE_RATE_UI"
+   },
+   "proc_nm": "PR_SCM_MST_EXCHANGE_RATE_UI",
+   "procm_rows": 2,
+   "btn": [
+    {
+     "mnu": "DMF0082",
+     "sht": "futurePriceInfo",
+     "btn": "IF",
+     "api": "DMF0082_futurePriceInfo_IF",
+     "use": "Y"
+    }
+   ]
+  }
+ ],
+ "PKG_SYS0012": [
+  {
+   "sp": "P_SYS0012_APPROVE",
+   "member": "P_SYS0012_APPROVE",
+   "qual": "PKG_SYS0012.P_SYS0012_APPROVE",
+   "apis": [
+    "API_SYS0012_APPROVE"
+   ],
+   "orig_url": {
+    "API_SYS0012_APPROVE": "P_SYS0012_APPROVE"
+   },
+   "proc_nm": "P_SYS0012_APPROVE",
+   "procm_rows": 3,
+   "btn": [
+    {
+     "mnu": "SYS0012",
+     "sht": "main",
+     "btn": "APPROVE",
+     "api": "API_SYS0012_APPROVE",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "P_SYS0012_GET_APPROVAL_LIST",
+   "member": "P_SYS0012_GET_APPROVAL_LIST",
+   "qual": "PKG_SYS0012.P_SYS0012_GET_APPROVAL_LIST",
+   "apis": [
+    "API_SYS0012_GET_APPROVAL_LIST"
+   ],
+   "orig_url": {
+    "API_SYS0012_GET_APPROVAL_LIST": "P_SYS0012_GET_APPROVAL_LIST"
+   },
+   "proc_nm": "P_SYS0012_GET_APPROVAL_LIST",
+   "procm_rows": 9,
+   "btn": [
+    {
+     "mnu": "SYS0012",
+     "sht": "main",
+     "btn": "SEARCH",
+     "api": "API_SYS0012_GET_APPROVAL_LIST",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "P_SYS0012_REJECT",
+   "member": "P_SYS0012_REJECT",
+   "qual": "PKG_SYS0012.P_SYS0012_REJECT",
+   "apis": [
+    "API_SYS0012_REJECT"
+   ],
+   "orig_url": {
+    "API_SYS0012_REJECT": "P_SYS0012_REJECT"
+   },
+   "proc_nm": "P_SYS0012_REJECT",
+   "procm_rows": 3,
+   "btn": [
+    {
+     "mnu": "SYS0012",
+     "sht": "main",
+     "btn": "REJECT",
+     "api": "API_SYS0012_REJECT",
+     "use": "Y"
+    }
+   ]
+  }
+ ],
+ "PKG_SYS0014": [
+  {
+   "sp": "P_SYS0014_GET_AUTH_LIST_M",
+   "member": "P_SYS0014_GET_AUTH_LIST_M",
+   "qual": "PKG_SYS0014.P_SYS0014_GET_AUTH_LIST_M",
+   "apis": [
+    "API_SYS0014_GET_AUTH_LIST"
+   ],
+   "orig_url": {
+    "API_SYS0014_GET_AUTH_LIST": "P_SYS0014_GET_AUTH_LIST_M"
+   },
+   "proc_nm": "P_SYS0014_GET_AUTH_LIST_M",
+   "procm_rows": 5,
+   "btn": [
+    {
+     "mnu": "SYS0014",
+     "sht": "Division",
+     "btn": "SEARCH",
+     "api": "API_SYS0014_GET_AUTH_LIST",
+     "use": "Y"
+    },
+    {
+     "mnu": "SYS0014",
+     "sht": "customer",
+     "btn": "SEARCH",
+     "api": "API_SYS0014_GET_AUTH_LIST",
+     "use": "Y"
+    },
+    {
+     "mnu": "SYS0014",
+     "sht": "division",
+     "btn": "SEARCH",
+     "api": "API_SYS0014_GET_AUTH_LIST",
+     "use": "Y"
+    },
+    {
+     "mnu": "SYS0014",
+     "sht": "plant",
+     "btn": "SEARCH",
+     "api": "API_SYS0014_GET_AUTH_LIST",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "P_SYS0014_GET_GROUP_LIST_M",
+   "member": "P_SYS0014_GET_GROUP_LIST_M",
+   "qual": "PKG_SYS0014.P_SYS0014_GET_GROUP_LIST_M",
+   "apis": [
+    "API_SYS0014_GET_GROUP_LIST"
+   ],
+   "orig_url": {
+    "API_SYS0014_GET_GROUP_LIST": "P_SYS0014_GET_GROUP_LIST_M"
+   },
+   "proc_nm": "P_SYS0014_GET_GROUP_LIST_M",
+   "procm_rows": 3,
+   "btn": [
+    {
+     "mnu": "SYS0014",
+     "sht": "GroupInfo",
+     "btn": "SEARCH",
+     "api": "API_SYS0014_GET_GROUP_LIST",
+     "use": "Y"
+    },
+    {
+     "mnu": "SYS0014",
+     "sht": "main",
+     "btn": "SEARCH",
+     "api": "API_SYS0014_GET_GROUP_LIST",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "P_SYS0014_GET_USER_BY_GROUP_M",
+   "member": "P_SYS0014_GET_USER_BY_GROUP_M",
+   "qual": "PKG_SYS0014.P_SYS0014_GET_USER_BY_GROUP_M",
+   "apis": [
+    "API_SYS0014_GET_USER_BY_GROUP"
+   ],
+   "orig_url": {
+    "API_SYS0014_GET_USER_BY_GROUP": "P_SYS0014_GET_USER_BY_GROUP_M"
+   },
+   "proc_nm": "P_SYS0014_GET_USER_BY_GROUP_M",
+   "procm_rows": 3,
+   "btn": [
+    {
+     "mnu": "SYS0014",
+     "sht": "UserInfo",
+     "btn": "SEARCH",
+     "api": "API_SYS0014_GET_USER_BY_GROUP",
+     "use": "Y"
+    },
+    {
+     "mnu": "SYS0014",
+     "sht": "userInfo",
+     "btn": "SEARCH",
+     "api": "API_SYS0014_GET_USER_BY_GROUP",
+     "use": "Y"
+    }
+   ]
+  },
+  {
+   "sp": "P_SYS0014_SAVE_GROUP_USER_M",
+   "member": "P_SYS0014_SAVE_GROUP_USER_M",
+   "qual": "PKG_SYS0014.P_SYS0014_SAVE_GROUP_USER_M",
+   "apis": [
+    "API_SYS0014_SAVE_GROUP_USER"
+   ],
+   "orig_url": {
+    "API_SYS0014_SAVE_GROUP_USER": "P_SYS0014_SAVE_GROUP_USER_M"
+   },
+   "proc_nm": "P_SYS0014_SAVE_GROUP_USER_M",
+   "procm_rows": 3,
+   "btn": [
+    {
+     "mnu": "SYS0014",
+     "sht": "GroupInfo",
+     "btn": "SAVE",
+     "api": "API_SYS0014_SAVE_GROUP_USER",
+     "use": "Y"
+    },
+    {
+     "mnu": "SYS0014",
+     "sht": "main",
+     "btn": "SAVE",
+     "api": "API_SYS0014_SAVE_GROUP_USER",
+     "use": "Y"
+    }
+   ]
+  }
+ ]
+}

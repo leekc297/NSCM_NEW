@@ -1,0 +1,171 @@
+[
+ {
+  "div": "81",
+  "key": "site",
+  "kind": "IN",
+  "vals": [
+   "HKMC_KR_ASA",
+   "Volvo AS_WA_SE_GOT"
+  ],
+  "a": 10,
+  "b": 16,
+  "ab": 26,
+  "verdict": "OK"
+ },
+ {
+  "div": "81",
+  "key": "plant",
+  "kind": "IN",
+  "vals": [
+   "WA00-P",
+   "HQ07-A"
+  ],
+  "a": "ERR ORA-00907: missing right parenthesis",
+  "b": "ERR ORA-00907: missing right parenthesis",
+  "ab": "ERR ORA-00907: missing right parenthesis",
+  "verdict": "ERROR"
+ },
+ {
+  "div": "81",
+  "key": "team",
+  "kind": "IN",
+  "vals": [
+   "70000342",
+   "70000347"
+  ],
+  "a": 76,
+  "b": 58,
+  "ab": 134,
+  "verdict": "OK"
+ },
+ {
+  "div": "81",
+  "key": "customer",
+  "kind": "IN",
+  "vals": [
+   "BMW",
+   "HKMC"
+  ],
+  "a": 56,
+  "b": 40,
+  "ab": 96,
+  "verdict": "OK"
+ },
+ {
+  "div": "81",
+  "key": "itype",
+  "kind": "IN",
+  "vals": [
+   "P",
+   "H"
+  ],
+  "a": 256,
+  "b": 0,
+  "ab": 256,
+  "verdict": "OK"
+ },
+ {
+  "div": "81",
+  "key": "project",
+  "kind": "LK",
+  "vals": [
+   "A18BW2003",
+   "A15FD5002"
+  ],
+  "a": 36,
+  "b": 12,
+  "ab": 48,
+  "verdict": "OK"
+ },
+ {
+  "div": "81",
+  "key": "item",
+  "kind": "LK",
+  "vals": [
+   "APBMW48CL-B1-3A0",
+   "APBMW12VA-A2-0U0"
+  ],
+  "a": 20,
+  "b": 0,
+  "ab": 20,
+  "verdict": "OK"
+ },
+ {
+  "div": "40",
+  "key": "site",
+  "kind": "IN",
+  "vals": [
+   "LGE_VN_HAP",
+   "SCUD_CN_FOC"
+  ],
+  "a": 18,
+  "b": 20,
+  "ab": 38,
+  "verdict": "OK"
+ },
+ {
+  "div": "40",
+  "key": "team",
+  "kind": "IN",
+  "vals": [
+   "58520274",
+   "70021343"
+  ],
+  "a": 200,
+  "b": 74,
+  "ab": 274,
+  "verdict": "OK"
+ },
+ {
+  "div": "40",
+  "key": "customer",
+  "kind": "LK",
+  "vals": [
+   "LGE",
+   "NT"
+  ],
+  "a": 58,
+  "b": 40,
+  "ab": 0,
+  "verdict": "NG"
+ },
+ {
+  "div": "40",
+  "key": "itype",
+  "kind": "IN",
+  "vals": [
+   "P",
+   "H"
+  ],
+  "a": 454,
+  "b": 2,
+  "ab": 456,
+  "verdict": "OK"
+ },
+ {
+  "div": "40",
+  "key": "project",
+  "kind": "LK",
+  "vals": [
+   "LGE",
+   "NT"
+  ],
+  "a": 456,
+  "b": 456,
+  "ab": 456,
+  "verdict": "OK"
+ },
+ {
+  "div": "40",
+  "key": "item",
+  "kind": "LK",
+  "vals": [
+   "MCCM348014A3",
+   "MCCM131012A1"
+  ],
+  "a": 66,
+  "b": 40,
+  "ab": 106,
+  "verdict": "OK"
+ }
+]

@@ -1,0 +1,140 @@
+﻿CHK | DB_NAME | NOW                
+----+---------+--------------------
+L0  | ZIOUI1  | 2026-10-13 10:05:20
+(1 rows)
+CHK | OBJECT_TYPE  | STATUS | LAST_DDL           
+----+--------------+--------+--------------------
+L0  | PACKAGE      | VALID  | 2026-10-02 17:59:16
+L0  | PACKAGE BODY | VALID  | 2026-10-13 10:05:12
+(2 rows)
+CHK   | N | JUDGE                              
+------+---+------------------------------------
+L1 앵커 | 0 | FAIL — 앵커 없음 (이미 적용이면 L2=1) → 중단·회신
+(1 rows)
+CHK   | LINE  | TXT                                                                                                           
+------+-------+---------------------------------------------------------------------------------------------------------------
+L1 문맥 | 13610 |           --[E20261013-DMF0082ADJYNALL] 사용자 요청(2026-10-13): 판매계획 조정 제외(SALES_PLAN_ADJUST_YN='N') 품목도 단가 검증 대상.
+L1 문맥 | 13611 |           --  아래 제외조건 8줄 주석 처리 — 종전에는 이 품목이 판가 없이 수량 저장됐다(AS-IS 동일 예외 → 의도적 강화).                              
+L1 문맥 | 13612 | --          AND NOT EXISTS (SELECT 1                                                                          
+L1 문맥 | 13613 | --                            FROM SCM_MGR.SCM_MST_SITE_ITEM Z                                                
+L1 문맥 | 13614 | --                           WHERE Z.DIVISION_ID  = A.DIVISION_ID                                             
+L1 문맥 | 13615 | --                             AND Z.PROJECT_CODE = A.PROJECT_CODE                                            
+L1 문맥 | 13616 | --                             AND Z.SCM_SITE_ID  = A.SCM_SITE_ID                                             
+L1 문맥 | 13617 | --                             AND Z.ITEM_ID      = A.ITEM_ID                                                 
+L1 문맥 | 13618 | --                             AND Z.VALID_YN     = 'Y'                                                       
+L1 문맥 | 13619 | --                             AND Z.SALES_PLAN_ADJUST_YN = 'N')                                              
+(10 rows)
+CHK   | N | JUDGE                
+------+---+----------------------
+L2 마커 | 1 | 적용됨 — 10 재실행은 가드로 무동작
+(1 rows)
+CHK   | DIVISION_ID | PROJECT_CODE | SCM_SITE_ID        | ITEM_ID            | VALID_YN | ADJ_YN | UPD       
+------+-------------+--------------+--------------------+--------------------+----------+--------+-----------
+L3 품목 | 40          | Peopleworks  | Peopleworks_KR_KUM | ACEF1047I-A1       | Y        | N      | 2026-09-16
+L3 품목 | 40          | Peopleworks  | Peopleworks_KR_KUM | ECE0074N5-01       | Y        | N      | 2026-09-30
+L3 품목 | 40          | Peopleworks  | Peopleworks_KR_KUM | ECE0074N5-01-A01   | Y        | N      | 2026-09-30
+L3 품목 | 40          | Peopleworks  | Peopleworks_KR_SEL | 385665             | Y        | N      | 2026-09-16
+L3 품목 | 40          | Peopleworks  | Peopleworks_KR_SEL | ECE0074N5-01       | Y        | N      | 2026-09-30
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EBA00412CC         | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EBA00412DE         | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EBA00414CC         | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0001-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0002-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0003-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0004-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0005-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0006-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0007-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0008-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0011-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0012-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0013-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0014-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0015-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0016-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0017-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0018-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0019-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0021-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUD48VA0022-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUDMMLB0001-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVBAUDMMLB0002-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0002-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0004-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0006-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0008-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0010-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0012-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0015-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0017-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0019-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0021-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0023-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0025-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0027-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0029-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0031-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0033-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0035-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVCAUD48VA0037-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVMAUD48VA0002-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVMAUD48VA0004-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EDVMAUD48VA0006-1A | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15AI7001    | VW_DE_KAS          | EMCV00143AB        | Y        | N      | 2024-10-22
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | ACLT1010U-B1       | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1       | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-000   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-010   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-020   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-030   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-C01   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D01   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D02   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D03   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D04   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D05   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D06   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D07   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D08   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D09   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D10   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D11   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D12   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D13   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D14   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D15   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12V0-A1-D16   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VA-A2R009   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1       | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-000   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-010   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-020   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-030   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-050   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-060   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-070   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-080   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-090   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-0A0   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-0B0   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-0C0   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-0D0   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-0E0   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-0F0   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-0G0   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-0I0   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-0J0   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-0L0   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-C03   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-C04   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-C05   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-C06   | Y        | N      | 2026-09-16
+L3 품목 | 81          | A15BW7001    | MI00-81-AS         | APBMW12VH-A1-C07   | Y        | N      | 2026-09-16
+(100 rows)
+CHK   | ITEMS | WEEKS_WITH_QTY | WEEKS_NO_PRICE
+------+-------+----------------+---------------
+L4 영향 | 0     | 0              |               
+(1 rows)
+CHK | INST_ID | SID | SERIAL# | USERNAME | CALL_SEC
+----+---------+-----+---------+----------+---------
+(0 rows)

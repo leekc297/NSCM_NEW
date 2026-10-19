@@ -1,0 +1,45 @@
+// SalesPriceRangeModal — 표준 모달 레이아웃 (형제 SalesPriceVersionModal/PriceBatchInputModal 동일)
+//   notice → gridWrapper → 하단 buttonWrapper.
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.notice {
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #8a6d1a;
+  background: #fff8cd;
+  border: 1px solid #e0d57f;
+  border-radius: 4px;
+}
+
+.gridWrapper {
+  position: relative;
+  // flex:1(= 1 1 0) — basis 0 으로 남는 높이만 차지한다. basis auto 는 그리드 콘텐츠 높이가
+  //   기준 크기가 되어, 조회 결과가 많아지면 초과분이 형제(조회조건)에게 분배되어 눌린다.
+  //   min-height:0 = flex 자식 축소 허용 -> wijmo grid bounded viewport -> 세로 스크롤바
+  flex: 1;
+  min-height: 0;
+  border: 1px solid #e0e4e9;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+}
+
+.grid {
+  height: 100%;
+  width: 100%;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-top: 5px;
+}

@@ -1,0 +1,147 @@
+# -*- coding: utf-8 -*-
+"""DMF0082_CLOUDPERF_CLOUD_20260930 — 클라우드 이관 패키지 빌더 [E20260930-DMF0082CLOUDPERF].
+
+원천 = 사내 ZIOUI1 PKG_DMF0082 BODY 를 **지금 DB 에서 새로 읽은 원문** (hook #152 — 로컬 사본 금지).
+FRESH-GATE: 추출 직후 LAST_DDL·지문 재조회로 추출 도중 변경 없음 확인. 기대 지문과 다르면 중단.
+사용: python _build.py
+"""
+import datetime, io, pathlib, sys
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+HERE = pathlib.Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE.parents[1] / "_diagnostics"))
+from ora import conn_info
+import oracledb
+
+MARK = "E20260930-DMF0082CLOUDPERF"
+BEFORE_FP = (16176, 830176)   # 클라우드 QA 현재 = 사내 QRYPERF 적용본 (C01 [E1] 실측 2026-09-30 09:37)
+AFTER_FP = (16177, 830657)    # 사내 CLOUDPERF 적용본 (2026-09-30 10:18:48)
+SPEC_FP = (111, 7173)
+
+u, p, d = conn_info()
+cn = oracledb.connect(user=u, password=p, dsn=d)
+cur = cn.cursor()
+
+
+def state():
+    cur.execute("SELECT TO_CHAR(LAST_DDL_TIME,'YYYY-MM-DD HH24:MI:SS'), STATUS FROM USER_OBJECTS "
+                "WHERE OBJECT_NAME='PKG_DMF0082' AND OBJECT_TYPE='PACKAGE BODY'")
+    ddl, st = cur.fetchone()
+    cur.execute("SELECT TYPE, COUNT(*), SUM(LENGTH(RTRIM(TEXT, CHR(10)||CHR(13)))) FROM USER_SOURCE "
+                "WHERE NAME='PKG_DMF0082' AND TYPE IN ('PACKAGE','PACKAGE BODY') AND LINE > 1 GROUP BY TYPE")
+    fp = {t: (n, c) for t, n, c in cur}
+    return ddl, st, fp
+
+
+ddl0, st0, fp0 = state()
+cur.execute("SELECT TEXT FROM USER_SOURCE WHERE NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY' ORDER BY LINE")
+body = "".join(t or "" for (t,) in cur)
+# FRESH-GATE — 추출 전후 동일 + 기대 지문
+assert state() == (ddl0, st0, fp0), "FRESH-GATE: 추출 도중 PKG_DMF0082 변경"
+assert st0 == "VALID" and fp0["PACKAGE BODY"] == AFTER_FP and fp0["PACKAGE"] == SPEC_FP, fp0
+assert body.count(MARK) == 3 and body.count("E20260930-DMF0082QRYPERF") == 22
+now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+stamp = f"-- SOURCE-FRESH: SCM_MGR.PKG_DMF0082 PACKAGE BODY LAST_DDL={ddl0} FETCHED={now} DB=ZIOUI1 STATUS={st0}\n"
+A = HERE / "A_DB"
+A.mkdir(exist_ok=True)
+
+fp_sql = ("SELECT COUNT(*) LN, SUM(LENGTH(RTRIM(TEXT, CHR(10)||CHR(13)))) CH FROM USER_SOURCE "
+          "WHERE NAME='PKG_DMF0082' AND TYPE='{t}' AND LINE > 1")
+
+(A / "00_PRECHECK_CLOUD.sql").write_text(f"""-- ============================================================================================
+-- 00_PRECHECK_CLOUD.sql — READ-ONLY 선판정 [{MARK}] · 빌드 {now} · 원천 사내 ZIOUI1
+--  ⚠ QA · DEV 두 DB 모두 실행 · JUDGE 가 '적용' / 'SKIP' 이 아니면 중단하고 결과 회신
+-- ============================================================================================
+SET PAGESIZE 300 LINESIZE 250
+COLUMN JUDGE FORMAT A70
+
+PROMPT [E0] 접속 DB
+SELECT USER USR, SYS_CONTEXT('USERENV','DB_NAME') DB_NAME, SYS_CONTEXT('USERENV','SERVER_HOST') HOST FROM DUAL;
+
+PROMPT [H] BODY 지문 — BEFORE {BEFORE_FP[0]}/{BEFORE_FP[1]} (= 09-30 QRYPERF 적용본) 이면 11 적용 · AFTER {AFTER_FP[0]}/{AFTER_FP[1]} 이면 SKIP
+WITH F AS ({fp_sql.format(t='PACKAGE BODY')}),
+     S AS ({fp_sql.format(t='PACKAGE')})
+SELECT F.LN || '/' || F.CH BODY_FP, S.LN || '/' || S.CH SPEC_FP,
+       (SELECT COUNT(*) FROM USER_SOURCE WHERE NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY' AND TEXT LIKE '%E20260930-DMF0082QRYPERF%') QRYPERF_MARK,
+       (SELECT COUNT(*) FROM USER_SOURCE WHERE NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY' AND TEXT LIKE '%{MARK}%') CLOUDPERF_MARK,
+       CASE WHEN F.LN = {AFTER_FP[0]} AND F.CH = {AFTER_FP[1]} THEN 'SKIP — 이미 적용됨 (AFTER)'
+            WHEN F.LN = {BEFORE_FP[0]} AND F.CH = {BEFORE_FP[1]} AND S.LN = {SPEC_FP[0]} AND S.CH = {SPEC_FP[1]} THEN '적용 — 05 → 11 → 90'
+            WHEN (SELECT COUNT(*) FROM USER_SOURCE WHERE NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY' AND TEXT LIKE '%E20260930-DMF0082QRYPERF%') = 0
+            THEN '⚠ 중단 — QRYPERF 미적용 DB: DMF0082_QRYPERF_CLOUD_20260930 (10 SPEC·11 BODY·20 PROC_M) 먼저'
+            ELSE '⚠ 중단 — UNKNOWN 지문 (클라우드 고유 변경 가능 — 원문 diff 필요)' END JUDGE
+  FROM F, S;
+
+PROMPT [I] 힌트가 지정하는 인덱스 존재 (1행 VALID 기대 — 없으면 힌트가 무시될 뿐 오류는 없음)
+SELECT INDEX_NAME, TABLE_NAME, STATUS,
+       CASE WHEN STATUS = 'VALID' THEN 'PASS' ELSE '⚠ 확인' END JUDGE
+  FROM USER_INDEXES
+ WHERE INDEX_NAME IN ('IDX_DM_PLN_MKT_FCST_RESULT_N1')
+UNION ALL
+SELECT 'IDX_DM_PLN_MKT_FCST_RESULT_N1', 'DM_PLN_MKT_FCST_RESULT', 'MISSING', '⚠ 인덱스 없음 — ① 개선 무효'
+  FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM USER_INDEXES WHERE INDEX_NAME = 'IDX_DM_PLN_MKT_FCST_RESULT_N1');
+""", encoding="utf-8")
+
+(A / "05_BACKUP_CLOUD_SOURCE.sql").write_text(f"""-- 05_BACKUP_CLOUD_SOURCE.sql — 적용 직전 클라우드 BODY 원문을 테이블로 보관 (비파괴 · 멱등: 이미 있으면 SKIP)
+-- 원복 시 98_ROLLBACK_FROM_CLOUD_BACKUP.sql 이 이 테이블로 재컴파일한다. [{MARK}]
+SET SERVEROUTPUT ON
+DECLARE
+  n NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO n FROM USER_TABLES WHERE TABLE_NAME='BAK_SRC_DMF0082_CLOUDPERF';
+  IF n = 0 THEN
+    EXECUTE IMMEDIATE q'[CREATE TABLE BAK_SRC_DMF0082_CLOUDPERF AS
+      SELECT NAME, TYPE, LINE, TEXT, SYSDATE AS BAK_DATE FROM USER_SOURCE WHERE NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY']';
+    DBMS_OUTPUT.PUT_LINE('SOURCE BACKUP CREATED');
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('SOURCE BACKUP EXISTS - SKIP');
+  END IF;
+END;
+/
+SELECT TYPE, COUNT(*) LINES FROM BAK_SRC_DMF0082_CLOUDPERF GROUP BY TYPE;
+""", encoding="utf-8")
+
+(A / "11_PKG_DMF0082_BODY.sql").write_text(
+    stamp + f"-- [{MARK}] PKG_DMF0082 BODY 전체본 — 09-30 QRYPERF 적용본 + GET_MAIN_DATA 병목 2문장 힌트 (L1229 · L1943)\n"
+    "SET DEFINE OFF\nSET SQLBLANKLINES ON\nCREATE OR REPLACE " + body.rstrip() + "\n/\nSHOW ERRORS PACKAGE BODY SCM_MGR.PKG_DMF0082\n",
+    encoding="utf-8")
+
+(A / "90_VERIFY.sql").write_text(f"""-- 90_VERIFY.sql — 적용 후 값 단언 (조회 전용) [{MARK}]
+SET PAGESIZE 200 LINESIZE 250
+COLUMN JUDGE FORMAT A40
+PROMPT [V1] VALID · 오류 0
+SELECT O.OBJECT_TYPE, O.STATUS, TO_CHAR(O.LAST_DDL_TIME,'YYYY-MM-DD HH24:MI:SS') LAST_DDL,
+       (SELECT COUNT(*) FROM USER_ERRORS E WHERE E.NAME=O.OBJECT_NAME AND E.TYPE=O.OBJECT_TYPE) ERR_CNT,
+       CASE WHEN O.STATUS='VALID' AND (SELECT COUNT(*) FROM USER_ERRORS E WHERE E.NAME=O.OBJECT_NAME AND E.TYPE=O.OBJECT_TYPE)=0
+            THEN 'PASS' ELSE '❌ FAIL' END JUDGE
+  FROM USER_OBJECTS O WHERE O.OBJECT_NAME='PKG_DMF0082' ORDER BY O.OBJECT_TYPE;
+PROMPT [V2] 지문 = 사내 적용본 BODY {AFTER_FP[0]}/{AFTER_FP[1]} · 마커 CLOUDPERF 3 · QRYPERF 22
+WITH F AS ({fp_sql.format(t='PACKAGE BODY')})
+SELECT F.LN || '/' || F.CH BODY_FP,
+       (SELECT COUNT(*) FROM USER_SOURCE WHERE NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY' AND TEXT LIKE '%{MARK}%') CLOUDPERF_MARK,
+       (SELECT COUNT(*) FROM USER_SOURCE WHERE NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY' AND TEXT LIKE '%E20260930-DMF0082QRYPERF%') QRYPERF_MARK,
+       CASE WHEN F.LN = {AFTER_FP[0]} AND F.CH = {AFTER_FP[1]} THEN 'PASS' ELSE '❌ FAIL' END JUDGE
+  FROM F;
+PROMPT [V3] 앱 계정 실행 권한 유지 (CREATE OR REPLACE 는 GRANT 보존)
+SELECT GRANTEE, PRIVILEGE FROM USER_TAB_PRIVS WHERE TABLE_NAME='PKG_DMF0082' ORDER BY GRANTEE;
+""", encoding="utf-8")
+
+(A / "98_ROLLBACK_FROM_CLOUD_BACKUP.sql").write_text(f"""-- 98_ROLLBACK_FROM_CLOUD_BACKUP.sql — 05 에서 보관한 클라우드 BODY 로 복원 (롤백 전용 · 평소 실행 안 함) [{MARK}]
+SET SERVEROUTPUT ON
+DECLARE
+  v CLOB;
+BEGIN
+  DBMS_LOB.CREATETEMPORARY(v, TRUE);
+  FOR r IN (SELECT TEXT FROM BAK_SRC_DMF0082_CLOUDPERF WHERE NAME='PKG_DMF0082' AND TYPE='PACKAGE BODY' ORDER BY LINE) LOOP
+    DBMS_LOB.APPEND(v, r.TEXT);
+  END LOOP;
+  IF DBMS_LOB.GETLENGTH(v) > 0 THEN
+    EXECUTE IMMEDIATE 'CREATE OR REPLACE ' || v;
+    DBMS_OUTPUT.PUT_LINE('REBUILT PACKAGE BODY');
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('SKIP (no backup)');
+  END IF;
+END;
+/
+SELECT OBJECT_NAME, OBJECT_TYPE, STATUS FROM USER_OBJECTS WHERE OBJECT_NAME='PKG_DMF0082';
+""", encoding="utf-8")
+print(f"빌드 완료  원천 LAST_DDL={ddl0}  BODY {len(body):,}B  지문 {fp0}")
+cn.close()

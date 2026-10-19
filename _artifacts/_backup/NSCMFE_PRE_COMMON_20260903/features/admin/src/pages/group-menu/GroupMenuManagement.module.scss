@@ -1,0 +1,73 @@
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.gridWrapper {
+  height: 100%;
+  display: flex;
+  gap: 24px;
+
+  .mainGridWrapper {
+    @include flex-column;
+    height: 100%;
+    flex: 1;
+    width: 0;
+  }
+
+  // PanelGroup(orientation='vertical') — 상하 드래그 분할. 사이 간격/드래그 영역은 .splitBar 가 담당하므로 gap 미사용.
+  .subGridWrapper {
+    flex: 3;
+    width: 0;
+    min-height: 0;
+
+    // Panel 이 높이를 관리하므로 자식은 height:100% 로 채운다 (flex-grow 아님).
+    .menuGridWrapper {
+      @include flex-column;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .buttonGridWrapper {
+      @include flex-column;
+      height: 100%;
+      min-height: 0;
+    }
+  }
+}
+
+// 상하 드래그 바(Separator). react-resizable-panels v4 Separator 는 기본 높이 0 + 커서 없음이라
+// 두께/리사이즈 커서/중앙 구분선을 직접 부여해야 드래그가 동작한다. (Lookup .splitBar 패턴 참조)
+.splitBar {
+  height: 16px;
+  cursor: row-resize;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    background: #d8dde3;
+    border-radius: 1px;
+    transition: background 0.15s ease;
+  }
+
+  &:hover::before,
+  &[data-separator='hover']::before,
+  &[data-separator='active']::before {
+    background: #1976d2;
+  }
+}
+
+.labelGrid {
+  align-items: center;
+  min-height: 28px;
+  height: 32px;
+  padding: 2px 0;
+  flex-shrink: 0;
+  text-align: center;
+}

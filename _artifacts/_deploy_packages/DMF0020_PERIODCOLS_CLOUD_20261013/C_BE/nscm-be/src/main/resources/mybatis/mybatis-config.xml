@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "./mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="jdbcTypeForNull" value="NULL"/>	<!-- null 허용 -->
+        <!-- [E20260824-FETCHSIZE] 0 = 드라이버 기본값이고 Oracle JDBC 기본은 10행이다.
+             DB 가 원격(사내 175.211.29.206:2521/ZIOUI1 — 2026-09-07 DB명 변경, 구 .../AJS · .../OCGSCMD_P01)이라 대량 조회에서 왕복 횟수가 그대로 지연이 된다.
+             DMF0020 실측(div82 / 12개월 / 10,524행 x 102컬럼):
+               fetchSize 10 -> 약 1,052회 왕복, BE 내부 약 22초 (API TTFB 34초)
+               같은 커서를 arraysize 2000 으로 받으면 4초 (직접 측정)
+             1000 = 왕복 11회. 102컬럼이어도 1,000행 버퍼는 수 MB 라 힙 부담이 낮다. -->
+        <setting name="defaultFetchSize" value="1000"/>
+        <!-- callSettersOnNulls=true : 커서 컬럼 값이 NULL 이어도 결과 Map 에 키를 담는다.
+             꺼져 있으면 값이 NULL 인 컬럼은 응답 행에서 빠진다. 화면은 응답 행의 키로 동적(기간) 컬럼을 만들기 때문에
+             PIVOT 결과에서 값이 전부 NULL 인 기간은 컬럼째 사라진다 (DMF0020 Sales Price 2026-10-13 : SP 는 주차 41개를
+             내려주는데 화면은 값이 있는 5개만 표시. DMF0043 2026-06 과 같은 원인).
+             필수: framework/model/CustomMap.put 의 null 가드와 한 쌍이다. 가드 없이 이 설정만 켜면 모든 조회가 NPE 로 실패한다. -->
+        <setting name="callSettersOnNulls" value="true"/>
+		<!-- 
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="lazyLoadingEnabled" value="true"/>
+		-->
+    </settings>
+
+<!-- 
+    <typeAliases>
+        <package name="com.lgcns.nscm.dto"/>
+    </typeAliases>
+-->
+
+    <typeHandlers>
+        <typeHandler handler="org.apache.ibatis.type.ClobTypeHandler" jdbcType="CLOB" javaType="java.lang.String" />
+    	
+		<!--
+        <typeHandler handler="org.apache.ibatis.type.DateTypeHandler" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        -->
+    </typeHandlers>
+
+<!-- 
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+                <property name="url" value="jdbc:oracle:thin:@10.94.57.6:1521:xe"/>
+                <property name="username" value="nscm_user"/>
+                <property name="password" value="password123"/>
+                
+                <property name="poolMaximumActiveConnections" value="20"/>
+                <property name="poolMaximumIdleConnections" value="5"/>
+                <property name="poolTimeToWait" value="10000"/>
+                <property name="poolPingEnabled" value="true"/>
+                <property name="poolPingQuery" value="SELECT 1 FROM DUAL"/>
+            </dataSource>
+        </environment>
+    </environments>
+-->
+
+
+</configuration>

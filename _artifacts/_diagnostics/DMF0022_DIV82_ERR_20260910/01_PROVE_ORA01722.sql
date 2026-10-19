@@ -1,0 +1,136 @@
+-- ============================================================================
+-- DMF0035 / SALES PLAN / 82 DIVISION — ORA-01722 발생 지점 증명 (클라우드, SCM_MGR)
+-- 목적: "KWH_MODULE/KWH_PACK 사전식의 TO_NUMBER(C.ATTRIBUTE8) 이 원인" 을
+--       추정이 아니라 실측으로 확정/반증한다. [P1]~[P4] 전부 읽기 전용.
+--
+-- 사내(ZIOUI1) 동일 시점 실측 대조값:
+--   [P1] minyonglee1 개인화에 KWH_* 없음
+--   [P2] div82 ATTRIBUTE8 = 39,572건 전건 NULL / 비숫자 0건  → 사내는 무증상
+--   [P3] 사내에서는 재현 불가(가드에 걸려 TO_NUMBER 미실행)
+-- ============================================================================
+SET DEFINE OFF
+SET SQLBLANKLINES ON
+SET SERVEROUTPUT ON SIZE UNLIMITED
+SET LINESIZE 220
+SET PAGESIZE 400
+
+DEFINE V_USER = 'minyonglee1'      -- ← 신고자 ID 로 교체
+DEFINE V_DIV  = '82'
+
+PROMPT ============ [P1] 신고자 개인화에 KWH_* / 81 전용 컬럼이 있는가 ============
+PROMPT (없으면 KWH 가설은 이 사용자에 대해 성립하지 않는다 → [P4] 로 실제 목록 확인)
+SELECT U.COLUMN_NAME, U.SORT_ORDER_NO, C.DIVISION_ID,
+       CASE WHEN '&V_DIV' IN (
+              SELECT TRIM(REGEXP_SUBSTR(C.DIVISION_ID,'[^,]+',1,LEVEL))
+                FROM DUAL CONNECT BY REGEXP_SUBSTR(C.DIVISION_ID,'[^,]+',1,LEVEL) IS NOT NULL)
+            THEN 'IN-DIV' ELSE '★타DIV★' END AS DIV_MATCH
+FROM   SCM_MST_TITLESET_USER U
+JOIN   SCM_MST_SHEET_COLUMNS C
+       ON C.PROGRAM_ID = U.PROGRAM_ID AND C.SHEET_NAME = U.SHEET_NAME AND C.COLUMN_NAME = U.COLUMN_NAME
+WHERE  U.PROGRAM_ID = 'DMF0035' AND U.SHEET_NAME = 'Sales Plan Waterfall'
+AND    U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C' AND U.USER_ID = '&V_USER'
+ORDER  BY U.SORT_ORDER_NO;
+
+PROMPT ============ [P2] 해당 DIVISION 의 ATTRIBUTE8 실측 (원천 = SCM_MST_SITE_ITEM) ============
+PROMPT (사내 82 = 전건 NULL / 비숫자 0. 클라우드에 비숫자가 있으면 KWH 가설의 필요조건 성립)
+SELECT DIVISION_ID,
+       COUNT(*) AS TOT,
+       SUM(CASE WHEN ATTRIBUTE8 IS NULL THEN 1 ELSE 0 END) AS NULLS,
+       SUM(CASE WHEN ATTRIBUTE8 IS NOT NULL
+                 AND TO_NUMBER(ATTRIBUTE8 DEFAULT NULL ON CONVERSION ERROR) IS NULL
+                THEN 1 ELSE 0 END) AS NON_NUM
+FROM   SCM_MST_SITE_ITEM
+WHERE  DIVISION_ID = '&V_DIV'
+GROUP  BY DIVISION_ID;
+
+PROMPT --- 비숫자 값 실물 (최대 20) ---
+SELECT * FROM (
+  SELECT ATTRIBUTE8, COUNT(*) AS CNT
+  FROM   SCM_MST_SITE_ITEM
+  WHERE  DIVISION_ID = '&V_DIV'
+  AND    ATTRIBUTE8 IS NOT NULL
+  AND    TO_NUMBER(ATTRIBUTE8 DEFAULT NULL ON CONVERSION ERROR) IS NULL
+  GROUP  BY ATTRIBUTE8 ORDER BY 2 DESC )
+WHERE ROWNUM <= 20;
+
+PROMPT ============ [P3] ★증명★ 사전식 그대로 단독 실행 — ORA-01722 재현 여부 ============
+PROMPT (여기서 ORA-01722 가 나면 KWH 사전식이 원인으로 확정. 안 나면 가설 반증)
+DECLARE
+  V_N NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO V_N
+  FROM ( SELECT CASE WHEN 'X81' LIKE '81%'                       -- A.DIVISION_ID 자리(참으로 고정)
+                      AND C.CELL_PER_MODULE > 0
+                      AND NVL(C.ATTRIBUTE8,'@#@#@#') <> '@#@#@#'
+                     THEN (C.CELL_PER_MODULE * TO_NUMBER(C.ATTRIBUTE8))
+                     ELSE NULL END AS KWH_MODULE
+           FROM SCM_MST_SITE_ITEM C
+          WHERE C.DIVISION_ID = '&V_DIV' );
+  DBMS_OUTPUT.PUT_LINE('[P3-a] 가드 TRUE 경로: 오류 없음 (행 ' || V_N || ')');
+EXCEPTION WHEN OTHERS THEN
+  DBMS_OUTPUT.PUT_LINE('[P3-a] ★재현★ ' || SQLCODE || ' ' || SQLERRM);
+END;
+/
+
+DECLARE
+  V_N NUMBER;
+BEGIN
+  -- 실제 SQL 과 동일하게 DIVISION 가드까지 포함 (82 라 CASE 는 ELSE 로 가야 정상)
+  SELECT COUNT(*) INTO V_N
+  FROM ( SELECT CASE WHEN '&V_DIV' LIKE '81%'
+                      AND C.CELL_PER_MODULE > 0
+                      AND NVL(C.ATTRIBUTE8,'@#@#@#') <> '@#@#@#'
+                     THEN (C.CELL_PER_MODULE * TO_NUMBER(C.ATTRIBUTE8))
+                     ELSE NULL END AS KWH_MODULE
+           FROM SCM_MST_SITE_ITEM C
+          WHERE C.DIVISION_ID = '&V_DIV' );
+  DBMS_OUTPUT.PUT_LINE('[P3-b] DIVISION 가드 포함: 오류 없음 (행 ' || V_N || ')');
+EXCEPTION WHEN OTHERS THEN
+  DBMS_OUTPUT.PUT_LINE('[P3-b] ★재현★ CASE 단락평가 실패 = 옵티마이저 계보 ' || SQLCODE || ' ' || SQLERRM);
+END;
+/
+
+PROMPT ============ [P4] SP 가 실제로 만드는 컬럼목록 재현 (개인화 분기) ============
+PROMPT (KWH_MODULE / KWH_PACK / KWH_CELL 이 목록에 있으면 동적 SQL 에 사전식이 들어간다)
+SELECT LISTAGG(COLUMN_NAME, ',') WITHIN GROUP (ORDER BY SORT_ORDER_NO) AS V_COLLIST
+FROM (
+    SELECT CASE WHEN C.COLUMN_NAME = 'GROUP_ID' THEN NVL(TU.SORT_ORDER_NO,95) - 0.5
+                ELSE U.SORT_ORDER_NO END AS SORT_ORDER_NO, C.COLUMN_NAME
+      FROM SCM_MST_TITLESET_USER U
+     INNER JOIN SCM_MST_SHEET_COLUMNS C
+             ON U.PROGRAM_ID = C.PROGRAM_ID AND U.SHEET_NAME = C.SHEET_NAME
+            AND U.COLUMN_NAME = C.COLUMN_NAME
+            AND U.PROGRAM_ID = 'DMF0035' AND U.SHEET_NAME = 'Sales Plan Waterfall'
+            AND U.USER_ID = '&V_USER' AND U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+      LEFT OUTER JOIN SCM_MST_TITLESET_USER TU
+             ON TU.PROGRAM_ID = C.PROGRAM_ID AND TU.SHEET_NAME = C.SHEET_NAME
+            AND TU.USER_INQUIRY_COLUMN_TYPE_CODE = 'C' AND TU.COLUMN_NAME = 'ITEM_ID'
+            AND TU.USER_ID = '&V_USER'
+    UNION ALL
+    SELECT C.SORT_ORDER_NO, C.COLUMN_NAME
+      FROM SCM_MST_SHEET_COLUMNS C
+     WHERE C.PROGRAM_ID = 'DMF0035' AND C.SHEET_NAME = 'Sales Plan Waterfall'
+       AND C.VISIBLE_FLAG = 'N' AND RTRIM(C.DEFAULT_FLAG,' -') IS NULL AND C.VALID_YN = 'Y'
+);
+
+PROMPT --- 그 목록 중 사전식에 TO_NUMBER 가 든 컬럼 (있으면 그 컬럼이 용의자) ---
+WITH LST AS (
+    SELECT C.COLUMN_NAME FROM SCM_MST_TITLESET_USER U
+     INNER JOIN SCM_MST_SHEET_COLUMNS C
+             ON U.PROGRAM_ID = C.PROGRAM_ID AND U.SHEET_NAME = C.SHEET_NAME
+            AND U.COLUMN_NAME = C.COLUMN_NAME
+            AND U.PROGRAM_ID = 'DMF0035' AND U.SHEET_NAME = 'Sales Plan Waterfall'
+            AND U.USER_ID = '&V_USER' AND U.USER_INQUIRY_COLUMN_TYPE_CODE = 'C'
+    UNION
+    SELECT C.COLUMN_NAME FROM SCM_MST_SHEET_COLUMNS C
+     WHERE C.PROGRAM_ID = 'DMF0035' AND C.SHEET_NAME = 'Sales Plan Waterfall'
+       AND C.VISIBLE_FLAG = 'N' AND RTRIM(C.DEFAULT_FLAG,' -') IS NULL AND C.VALID_YN = 'Y'
+)
+SELECT S.LINE, TRIM(SUBSTR(S.TEXT,1,170)) AS DICT_EXPR
+FROM   USER_SOURCE S
+WHERE  S.NAME = 'PKG_DMF0022' AND S.TYPE = 'PACKAGE BODY'
+AND    INSTR(S.TEXT,'GT_DM22_T_COLUMN_SETUP') > 0
+AND    INSTR(UPPER(S.TEXT),'TO_NUMBER') > 0
+AND    LTRIM(S.TEXT) NOT LIKE '--%'
+AND    EXISTS (SELECT 1 FROM LST L WHERE INSTR(S.TEXT, '''' || L.COLUMN_NAME || '''') > 0)
+ORDER  BY S.LINE;

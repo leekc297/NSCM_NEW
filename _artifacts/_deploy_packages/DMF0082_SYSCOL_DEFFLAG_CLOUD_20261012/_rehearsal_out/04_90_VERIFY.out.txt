@@ -1,0 +1,19 @@
+CHK | COLUMN_NAME   | FLAG | JUDGE        
+----+---------------+------+--------------
+V1  | AS_YN         | [N]  | FAIL — 빈 값 아님
+V1  | ATTR1         | [N]  | FAIL — 빈 값 아님
+V1  | BUCKET        | [N]  | FAIL — 빈 값 아님
+V1  | EDIT_FLAG     | [N]  | FAIL — 빈 값 아님
+V1  | GROUP_ID      | [N]  | FAIL — 빈 값 아님
+V1  | MEASURE_GROUP | [N]  | FAIL — 빈 값 아님
+V1  | NEW_FLAG      | [N]  | FAIL — 빈 값 아님
+V1  | SORT_KEY      | [N]  | FAIL — 빈 값 아님
+V1  | VERSION_NO    | [N]  | FAIL — 빈 값 아님
+V1  | VMI_STD_DIO   | [N]  | FAIL — 빈 값 아님
+(10 rows)
+CHK | SENTINEL | SYS_COLS | JUDGE                     
+----+----------+----------+---------------------------
+V2  | -        | 0        | (이 DB 의 SP 는 이 센티널을 쓰지 않음)
+V2  | /        | 0        | FAIL — SORT_KEY 가 안 잡힌다   
+(2 rows)
+V3 FAIL — ORA-20001: [PKG_DMF0082] ORA-00904: "SORT_KEY": invalid identifier / ORA-06512: at "SCM_MGR.PKG_DMF0082", line 4741

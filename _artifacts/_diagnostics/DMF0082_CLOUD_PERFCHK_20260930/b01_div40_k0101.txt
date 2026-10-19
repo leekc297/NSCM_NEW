@@ -1,0 +1,17 @@
+div=40 user=k0101 기간 20260901~20270228  SP 32.26s
+  GT_DMF0082_TEMP_SITE_ITEM = 15528
+  GT_DMF0082_TEMP_SELECT_MEASURE = 24
+  GT_DMF0082_T_WS_FCST = 14
+  CUST 종속 메저 = 11
+  V_TO_RESULT = 20260928
+
+S1 (2nysu9tbng9v4 · CUST 종속 메저 실적 arm) — 파싱 시점: 종속 메저 0행
+  원본 (고정계획 재사용)                28.41s  BG  8,632,777  rows       0  sha e3b0c44298fc1c14  PHV 598563120
+  힌트 (고정계획 재사용)                 0.03s  BG        732  rows       0  sha e3b0c44298fc1c14  PHV 1994303945
+  동등성: PASS
+
+S2 (7mrzdbpupw3b9 · div40 T_LAST_DATA_SETUP_FCST) — 파싱 시점: TEMP_SITE_ITEM 0행
+  원본 (고정계획 재사용)                 4.64s  BG    683,471  rows   2,705  sha 07b9833679319fc5  PHV 2672194183
+  힌트 (고정계획 재사용)                 0.69s  BG      8,361  rows   2,705  sha 07b9833679319fc5  PHV 2591175856
+  원본 (정상 파싱)                    0.62s  BG      8,772  rows   2,705  sha 07b9833679319fc5  PHV 3647800759
+  동등성: PASS

@@ -1,0 +1,397 @@
+﻿################ [P0] ⭐ 자동 — 최근 240 분 PKG_DMF0082 진입 ASH 상위 3 SQL_ID 의 계획 (ALLSTATS LAST) ################
+PLAN_TABLE_OUTPUT                                                                                             
+--------------------------------------------------------------------------------------------------------------
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 SQL_ID  d019r0hbb0muh, child number 0               
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 -------------------------------------               
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( D
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DO
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 INCOTERMS , MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_I
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 MEASURE_GROUP , CELL_MODEL, NICK_NAME, DMS_SALES, DM
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 DEPT_ID, DEPT_NAME_KO , FORECAST_INFO_CELL_PACK_COUN
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 PROJECT_NAME, PROJECT_OWNER, BIZ_TYPE , SOLDTO_CUSTO
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 CITY_NAME, PROJECT_STATUS, ITEM_NAME, VMI_YN , CUST_
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 CUST_GROUP_DTL, APPLICATION, ROUTE, MDM_PROJECT_NAME
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 FORECAST_INFO_BIZ_TYPE, CELL_TYPE, FORECAST_INFO_ALL
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 FORECAST_INFO_SPEC , FORECAST_INFOR_VERSION, CELL_MO
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 CELL_PER_CAR, CELL_PER_MODULE , MODULE_PER_CAR, SORT
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 CELL_QUANTITY, AS_FROM_SITE , CREATE_DATE, LAST_UPDA
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 SENDER_CODE, SENDER_NAME, PROJECT_S_OP_REPORT , CURR
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 CUTOFF_YYYYMMDD, NOTATION) SELECT C01, C02, C03, C04
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 C08, C09, C10, C11, C12, C13, C14, C15, C16, C17, C1
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667                                                     
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 Plan hash value: 2682586817                         
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667                                                     
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 ----------------------------------------------------
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 | Id  | Operation                                  |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 ----------------------------------------------------
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |   0 | INSERT STATEMENT                           |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |   1 |  LOAD TABLE CONVENTIONAL                   |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |*  2 |   VIEW                                     |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |   3 |    WINDOW SORT                             |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |*  4 |     FILTER                                 |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |*  5 |      HASH JOIN                             |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |   6 |       TABLE ACCESS FULL                    |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |*  7 |       HASH JOIN                            |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |   8 |        TABLE ACCESS FULL                   |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |*  9 |        HASH JOIN                           |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |  10 |         TABLE ACCESS BY INDEX ROWID BATCHED|
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |* 11 |          INDEX RANGE SCAN                  |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 |* 12 |         TABLE ACCESS FULL                  |
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 ----------------------------------------------------
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667                                                     
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 Peeked Binds (identified by position):              
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 --------------------------------------              
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667                                                     
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667    5 - (VARCHAR2(30), CSID=873): '81'               
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667    6 - (VARCHAR2(30), CSID=873): '20261005'         
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667    7 - (VARCHAR2(30), CSID=873): (null)             
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667    8 - (VARCHAR2(30), CSID=873): '20270331'         
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667    9 - (VARCHAR2(30), CSID=873): (null)             
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667                                                     
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 Predicate Information (identified by operation id): 
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 --------------------------------------------------- 
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667                                                     
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667    2 - filter(("X_ONEREAD_YMD">=:B4 AND "X_ONEREAD_Y
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667    4 - filter((:B2>=:B4 AND GREATEST(:B2,:B1)>=LEAST
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667    5 - access("B"."MEASURE"="A"."MEASURE")          
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667    7 - access("D"."FCST_TYPE"="A"."FCST_TYPE")      
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667    9 - access("C"."DIVISION_ID"="A"."DIVISION_ID" AN
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667               "C"."SCM_SITE_ID"="A"."SCM_SITE_ID" AN
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667   11 - access("A"."DIVISION_ID"=:B5 AND "A"."YYYYMMD
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667        filter(("A"."YYYYMMDD">=LEAST(:B4,:B3) AND "A
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667   12 - filter(("C"."ITEM_VALID_YN"='Y' AND "C"."DIVI
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667                                                     
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 Note                                                
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667 -----                                               
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667    - dynamic statistics used: dynamic sampling (leve
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667    - Warning: basic plan statistics not available. T
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667        * hint 'gather_plan_statistics' is used for t
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667        * parameter 'statistics_level' is set to 'ALL
+### d019r0hbb0muh  samples=628  phv=2682586817  line=1667                                                     
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 SQL_ID  4svg4dhnqxh8f, child number 0                
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 -------------------------------------                
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRIC
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYP
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 MEASURE, CREATE_DATE, LAST_UPDATED_BY) SELECT /*+ LEA
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 USE_HASH(C) */ A.DIVISION_ID, A.PROJECT_CODE, A.SCM_S
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 , A.DOM_EXP, A.FCST_TYPE, A.INCOTERMS, A.MEASURE , MA
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 AS CREATE_DATE , MAX(A.LAST_UPDATED_BY) AS LAST_UPDAT
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 SCM_MGR.DM_PLN_CFM_SELLING_PRICE A INNER JOIN        
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM C ON C.DIVISION_ID 
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 AND C.PROJECT_CODE = A.PROJECT_CODE AND C.SCM_SITE_ID
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 AND C.ITEM_ID = A.ITEM_ID WHERE A.DIVISION_ID = :B3 A
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 BETWEEN :B2 AND :B1 GROUP BY A.DIVISION_ID, A.PROJECT
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 A.SCM_SITE_ID, A.ITEM_ID , A.DOM_EXP, A.FCST_TYPE, A.
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 A.MEASURE                                            
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267                                                      
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 Plan hash value: 3195295405                          
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267                                                      
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 -----------------------------------------------------
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 | Id  | Operation                | Name              
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 -----------------------------------------------------
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 |   0 | INSERT STATEMENT         |                   
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 |   1 |  LOAD TABLE CONVENTIONAL | GT_DMF0082_T_LAST_
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 |   2 |   HASH GROUP BY          |                   
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 |*  3 |    FILTER                |                   
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 |*  4 |     HASH JOIN            |                   
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 |*  5 |      TABLE ACCESS FULL   | DM_PLN_CFM_SELLING
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 |*  6 |      TABLE ACCESS FULL   | GT_DMF0082_TEMP_SI
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 -----------------------------------------------------
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267                                                      
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 Peeked Binds (identified by position):               
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 --------------------------------------               
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267                                                      
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267    1 - (VARCHAR2(30), CSID=873): '40'                
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267    2 - (VARCHAR2(30), CSID=873): '20261001'          
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267    3 - (VARCHAR2(30), CSID=873): '20270331'          
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267                                                      
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 Predicate Information (identified by operation id):  
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 ---------------------------------------------------  
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267                                                      
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267    3 - filter(:B1>=:B2)                              
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267    4 - access("C"."DIVISION_ID"="A"."DIVISION_ID" AND
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267               "C"."SCM_SITE_ID"="A"."SCM_SITE_ID" AND
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267    5 - filter(("A"."YYYYMMDD">=:B2 AND "A"."YYYYMMDD"
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267    6 - filter("C"."DIVISION_ID"=:B3)                 
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267                                                      
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 Note                                                 
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267 -----                                                
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267    - dynamic statistics used: dynamic sampling (level
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267    - Warning: basic plan statistics not available. Th
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267        * hint 'gather_plan_statistics' is used for th
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267        * parameter 'statistics_level' is set to 'ALL'
+### 4svg4dhnqxh8f  samples=40  phv=3195295405  line=1267                                                      
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 SQL_ID  19mfxqb34sbky, child number 0                 
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 -------------------------------------                 
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DI
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 PROJECT_CODE, SCM_SITE_ID, ITEM_ID , CELL_MODEL, NICK_
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 DMS_CUSTOMER, OWNER , DEPT_ID, DEPT_NAME_KO,          
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 FORECAST_INFO_CELL_PACK_COUNT , ITEM_TYPE, PROJECT_NAM
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 BIZ_TYPE , SOLDTO_CUSTOMER, COUNTRY_NAME, CITY_NAME, P
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 ITEM_NAME, VMI_YN, CUST_GROUP, CUST_GROUP_DTL, APPLICA
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 MDM_PROJECT_NAME, MIN_CAPACITY, FORECAST_INFO_BIZ_TYPE
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 FORECAST_INFO_ALL, FORECAST_INFO_SPEC, FORECAST_INFOR_
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 CELL_MODEL_NICK_NAME, CELL_PER_CAR, CELL_PER_MODULE, M
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 SORT_ORDER_NO, ENERGE, CELL_QUANTITY, PLANT_SITE_ID , 
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 END_CUSTOMER, PROJECT_S_OP_REPORT ) SELECT F.DIVISION_
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 F.PROJECT_CODE , F.SCM_SITE_ID , F.ITEM_ID , F.ATTRIBU
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 , T2.NICK_NAME , F.ATTRIBUTE1 AS DMS_SALES , F.ATTRIBU
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 DMS_CUSTOMER , (SELECT LISTAGG(X.USER_NAME_EN, ',') WI
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 BY X.USER_NAME_EN) FROM (SELECT DISTINCT ZA.USER_NAME_
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 REGE                                                  
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855                                                       
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 Plan hash value: 4145401064                           
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855                                                       
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 ------------------------------------------------------
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 | Id  | Operation                                    |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 ------------------------------------------------------
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |   0 | INSERT STATEMENT                             |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |   1 |  LOAD TABLE CONVENTIONAL                     |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |   2 |   SORT GROUP BY                              |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |   3 |    VIEW                                      |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |   4 |     SORT UNIQUE                              |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |   5 |      NESTED LOOPS                            |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |   6 |       NESTED LOOPS                           |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |   7 |        VIEW                                  |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |   8 |         CONNECT BY WITHOUT FILTERING         |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |   9 |          FAST DUAL                           |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 10 |        INDEX UNIQUE SCAN                     |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |  11 |       TABLE ACCESS BY INDEX ROWID            |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 12 |   HASH JOIN RIGHT OUTER                      |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 13 |    INDEX RANGE SCAN                          |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 14 |    HASH JOIN RIGHT OUTER                     |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 15 |     TABLE ACCESS FULL                        |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 16 |     HASH JOIN                                |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 17 |      HASH JOIN OUTER                         |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 18 |       HASH JOIN RIGHT OUTER                  |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |  19 |        TABLE ACCESS FULL                     |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 20 |        HASH JOIN RIGHT OUTER                 |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 21 |         VIEW                                 |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 22 |          WINDOW SORT PUSHED RANK             |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |  23 |           TABLE ACCESS BY INDEX ROWID BATCHED|
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 24 |            INDEX RANGE SCAN                  |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 25 |         HASH JOIN RIGHT OUTER                |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |  26 |          TABLE ACCESS BY INDEX ROWID BATCHED |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 27 |           INDEX RANGE SCAN                   |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 28 |          HASH JOIN                           |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 29 |           HASH JOIN                          |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 30 |            HASH JOIN                         |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |  31 |             TABLE ACCESS FULL                |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 32 |             TABLE ACCESS FULL                |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |  33 |            TABLE ACCESS FULL                 |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 34 |           TABLE ACCESS FULL                  |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |  35 |       TABLE ACCESS FULL                      |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 |* 36 |      TABLE ACCESS FULL                       |
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 ------------------------------------------------------
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855                                                       
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 Peeked Binds (identified by position):                
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 --------------------------------------                
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855                                                       
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855    1 - (VARCHAR2(30), CSID=873): '40'                 
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855                                                       
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 Predicate Information (identified by operation id):   
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 ---------------------------------------------------   
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855                                                       
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   10 - access("ZA"."USER_ID"="TK"."TOK")              
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   12 - access("SEGMENT1"="T2"."CELL_TYPE")            
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   13 - access("LOOKUP_TYPE"='CELL_TYPE')              
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   14 - access("T2"."DIVISION_ID"="T4"."DIVISION_ID" AN
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   15 - filter("T4"."DIVISION_ID"=:B1)                 
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   16 - access("F"."DIVISION_ID"="T2"."DIVISION_ID" AND
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   17 - access("J"."USER_ID"=CASE INSTR("F"."OWNER",','
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855               END )                                   
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   18 - access("TEAM"."DEPT_ID"="F"."DEPT_ID")         
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   20 - access("A"."MODEL"="F"."ITEM_ID")              
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   21 - filter("MODEL_RANK"=1)                         
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   22 - filter(RANK() OVER ( PARTITION BY "SEGMENT2" OR
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   24 - access("SEGMENT1"='40' AND "LOOKUP_TYPE"='DM_BI
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   25 - access("F"."DIVISION_ID"="MP"."DIVISION_ID" AND
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   27 - access("MP"."DIVISION_ID"=:B1)                 
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   28 - access("F"."DIVISION_ID"="S"."DIVISION_ID" AND 
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   29 - access("S"."CITY"="H"."CITY")                  
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   30 - access("S"."COUNTRY"="I"."COUNTRY")            
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   32 - filter(("S"."DIVISION_ID"=:B1 AND "S"."SITE_TYP
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   34 - filter("F"."DIVISION_ID"=:B1)                  
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855   36 - filter("T2"."DIVISION_ID"=:B1)                 
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855                                                       
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 Note                                                  
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855 -----                                                 
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855    - dynamic statistics used: dynamic sampling (level=
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855    - Warning: basic plan statistics not available. The
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855        * hint 'gather_plan_statistics' is used for the
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855        * parameter 'statistics_level' is set to 'ALL',
+### 19mfxqb34sbky  samples=11  phv=4145401064  line=855                                                       
+(220 rows)
+--  확인 포인트:
+--   ① GT_DMF0082_* 의 E-Rows 가 1 인데 실제(A-Rows/ROWS_PER_EX)는 수만 = 파싱 시점 GTT 추정 붕괴 (07-31 DMF0003 유형)
+--   ② SCM_MST_FUTURE_PRICE / DM_PLN_SALES_PLAN / DM_PLN_MKT_FCST 에 TABLE ACCESS FULL 또는 NESTED LOOPS 안쪽 INDEX RANGE SCAN 반복 = 접근경로 문제
+--   ③ MERGE JOIN CARTESIAN / NESTED LOOPS 아래 대용량 = 조인 순서 오류
+--   ④ Note 절: dynamic statistics used: dynamic sampling (level=2) 표기 여부 — 없으면 DS=0 으로 파싱된 커서
+--   ⑤ Peeked Binds: :B1 (p_division_id) 가 '82' 인데 81 조회가 이 커서를 재사용 중이면 82 기준 계획
+################ [P1] 지정 SQL_ID = d019r0hbb0muh — 자식 커서 목록 (계획별 1회당 비용 · 공유 사유) ################
+CH | PHV        | EX | SEC_PER_EX | BG_PER_EX | DR_PER_EX | ROWS_PER_EX | COST   | LINE | NOW_RUN | LOADED              | LAST_ACT    | BS | SH | BASELINE | PROFILE
+---+------------+----+------------+-----------+-----------+-------------+--------+------+---------+---------------------+-------------+----+----+----------+--------
+0  | 2682586817 | 4  | 156.98     | 97983     | 26691     | 133177      | 131045 | 1667 | 0       | 2026-10-09/15:07:37 | 10-09 15:18 | Y  | Y  |          |        
+(1 rows)
+################ [P2] SQL 전문 (앞 4000자) ################
+SQL_TEXT                                                                                                      
+--------------------------------------------------------------------------------------------------------------
+INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_
+(1 rows)
+################ [P3] ⭐ 실행계획 — 가장 최근 실행된 자식 (E-Rows vs A-Rows · 접근경로 · Peeked Binds) ################
+PLAN_TABLE_OUTPUT                                                                                             
+--------------------------------------------------------------------------------------------------------------
+SQL_ID  d019r0hbb0muh, child number 0                                                                         
+-------------------------------------                                                                         
+INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID,                                               
+PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE,                                         
+INCOTERMS , MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, YYYYMMDD, QTY,                                         
+MEASURE_GROUP , CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER,                                        
+DEPT_ID, DEPT_NAME_KO , FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE,                                             
+PROJECT_NAME, PROJECT_OWNER, BIZ_TYPE , SOLDTO_CUSTOMER, COUNTRY_NAME,                                        
+CITY_NAME, PROJECT_STATUS, ITEM_NAME, VMI_YN , CUST_GROUP,                                                    
+CUST_GROUP_DTL, APPLICATION, ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY ,                                          
+FORECAST_INFO_BIZ_TYPE, CELL_TYPE, FORECAST_INFO_ALL,                                                         
+FORECAST_INFO_SPEC , FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME,                                            
+CELL_PER_CAR, CELL_PER_MODULE , MODULE_PER_CAR, SORT_ORDER_NO, ENERGE,                                        
+CELL_QUANTITY, AS_FROM_SITE , CREATE_DATE, LAST_UPDATED_BY,                                                   
+SENDER_CODE, SENDER_NAME, PROJECT_S_OP_REPORT , CURRENCY, VERSION_NO,                                         
+CUTOFF_YYYYMMDD, NOTATION) SELECT C01, C02, C03, C04, C05, C06, C07,                                          
+C08, C09, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21,                                         
+                                                                                                              
+Plan hash value: 2682586817                                                                                   
+                                                                                                              
+--------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                  | Name                           | E-Rows | Cost (%CPU)|  O
+--------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT                           |                                |        |   131K(100)|   
+|   1 |  LOAD TABLE CONVENTIONAL                   | GT_DMF0082_TEMP_FCST_N_PRICE   |        |            |   
+|*  2 |   VIEW                                     |                                |  36755 |   131K  (1)|   
+|   3 |    WINDOW SORT                             |                                |  36755 |   131K  (1)|   
+|*  4 |     FILTER                                 |                                |        |            |   
+|*  5 |      HASH JOIN                             |                                |  36755 | 47877   (1)|  1
+|   6 |       TABLE ACCESS FULL                    | GT_DMF0082_TEMP_SELECT_MEASURE |      8 |     2   (0)|   
+|*  7 |       HASH JOIN                            |                                |  36755 | 47875   (1)|  2
+|   8 |        TABLE ACCESS FULL                   | GT_DMF0082_T_WS_FCST           |     14 |     2   (0)|   
+|*  9 |        HASH JOIN                           |                                |  42005 | 47873   (1)|   
+|  10 |         TABLE ACCESS BY INDEX ROWID BATCHED| SCM_MST_FUTURE_PRICE           |    112K| 26500   (1)|   
+|* 11 |          INDEX RANGE SCAN                  | PK_SCM_MST_FUTURE_PRICE        |    112K| 22510   (1)|   
+|* 12 |         TABLE ACCESS FULL                  | GT_DMF0082_TEMP_SITE_ITEM      |  42005 |   388   (1)|   
+--------------------------------------------------------------------------------------------------------------
+                                                                                                              
+Peeked Binds (identified by position):                                                                        
+--------------------------------------                                                                        
+                                                                                                              
+   5 - (VARCHAR2(30), CSID=873): '81'                                                                         
+   6 - (VARCHAR2(30), CSID=873): '20261005'                                                                   
+   7 - (VARCHAR2(30), CSID=873): (null)                                                                       
+   8 - (VARCHAR2(30), CSID=873): '20270331'                                                                   
+   9 - (VARCHAR2(30), CSID=873): (null)                                                                       
+                                                                                                              
+Predicate Information (identified by operation id):                                                           
+---------------------------------------------------                                                           
+                                                                                                              
+   2 - filter(("X_ONEREAD_YMD">=:B4 AND "X_ONEREAD_YMD"<=:B2))                                                
+   4 - filter((:B2>=:B4 AND GREATEST(:B2,:B1)>=LEAST(:B4,:B3)))                                               
+   5 - access("B"."MEASURE"="A"."MEASURE")                                                                    
+   7 - access("D"."FCST_TYPE"="A"."FCST_TYPE")                                                                
+   9 - access("C"."DIVISION_ID"="A"."DIVISION_ID" AND "C"."PROJECT_CODE"="A"."PROJECT_CODE" AND               
+              "C"."SCM_SITE_ID"="A"."SCM_SITE_ID" AND "C"."ITEM_ID"="A"."ITEM_ID")                            
+  11 - access("A"."DIVISION_ID"=:B5 AND "A"."YYYYMMDD">=LEAST(:B4,:B3) AND "A"."YYYYMMDD"<=GREATEST(:B2,:B1)) 
+       filter(("A"."YYYYMMDD">=LEAST(:B4,:B3) AND "A"."YYYYMMDD"<=GREATEST(:B2,:B1)))                         
+  12 - filter(("C"."ITEM_VALID_YN"='Y' AND "C"."DIVISION_ID"=:B5))                                            
+                                                                                                              
+Note                                                                                                          
+-----                                                                                                         
+   - dynamic statistics used: dynamic sampling (level=2)                                                      
+   - Warning: basic plan statistics not available. These are only collected when:                             
+       * hint 'gather_plan_statistics' is used for the statement or                                           
+       * parameter 'statistics_level' is set to 'ALL', at session or system level                             
+                                                                                                              
+(67 rows)
+################ [P4] 다른 계획(PHV)의 자식이 있으면 그 계획도 (가장 빠른 자식 — 계획 간 비교) ################
+PLAN_TABLE_OUTPUT                                                                                             
+--------------------------------------------------------------------------------------------------------------
+SQL_ID  d019r0hbb0muh, child number 0                                                                         
+-------------------------------------                                                                         
+INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID,                                               
+PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE,                                         
+INCOTERMS , MEASURE, PLANT_SITE_ID, CELL_PROD_SITE_ID, YYYYMMDD, QTY,                                         
+MEASURE_GROUP , CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, OWNER,                                        
+DEPT_ID, DEPT_NAME_KO , FORECAST_INFO_CELL_PACK_COUNT, ITEM_TYPE,                                             
+PROJECT_NAME, PROJECT_OWNER, BIZ_TYPE , SOLDTO_CUSTOMER, COUNTRY_NAME,                                        
+CITY_NAME, PROJECT_STATUS, ITEM_NAME, VMI_YN , CUST_GROUP,                                                    
+CUST_GROUP_DTL, APPLICATION, ROUTE, MDM_PROJECT_NAME, MIN_CAPACITY ,                                          
+FORECAST_INFO_BIZ_TYPE, CELL_TYPE, FORECAST_INFO_ALL,                                                         
+FORECAST_INFO_SPEC , FORECAST_INFOR_VERSION, CELL_MODEL_NICK_NAME,                                            
+CELL_PER_CAR, CELL_PER_MODULE , MODULE_PER_CAR, SORT_ORDER_NO, ENERGE,                                        
+CELL_QUANTITY, AS_FROM_SITE , CREATE_DATE, LAST_UPDATED_BY,                                                   
+SENDER_CODE, SENDER_NAME, PROJECT_S_OP_REPORT , CURRENCY, VERSION_NO,                                         
+CUTOFF_YYYYMMDD, NOTATION) SELECT C01, C02, C03, C04, C05, C06, C07,                                          
+C08, C09, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21,                                         
+                                                                                                              
+Plan hash value: 2682586817                                                                                   
+                                                                                                              
+--------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                  | Name                           | Rows  | Bytes |TempSpc| 
+--------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT                           |                                |       |       |       | 
+|   1 |  LOAD TABLE CONVENTIONAL                   | GT_DMF0082_TEMP_FCST_N_PRICE   |       |       |       | 
+|*  2 |   VIEW                                     |                                | 36755 |   371M|       | 
+|   3 |    WINDOW SORT                             |                                | 36755 |   381M|   287M| 
+|*  4 |     FILTER                                 |                                |       |       |       | 
+|*  5 |      HASH JOIN                             |                                | 36755 |   381M|       | 
+|   6 |       TABLE ACCESS FULL                    | GT_DMF0082_TEMP_SELECT_MEASURE |     8 |  3336 |       | 
+|*  7 |       HASH JOIN                            |                                | 36755 |   366M|       | 
+|   8 |        TABLE ACCESS FULL                   | GT_DMF0082_T_WS_FCST           |    14 |  1428 |       | 
+|*  9 |        HASH JOIN                           |                                | 42005 |   415M|    11M| 
+|  10 |         TABLE ACCESS BY INDEX ROWID BATCHED| SCM_MST_FUTURE_PRICE           |   112K|    10M|       | 
+|* 11 |          INDEX RANGE SCAN                  | PK_SCM_MST_FUTURE_PRICE        |   112K|       |       | 
+|* 12 |         TABLE ACCESS FULL                  | GT_DMF0082_TEMP_SITE_ITEM      | 42005 |   411M|       | 
+--------------------------------------------------------------------------------------------------------------
+                                                                                                              
+Predicate Information (identified by operation id):                                                           
+---------------------------------------------------                                                           
+                                                                                                              
+   2 - filter(("X_ONEREAD_YMD">=:B4 AND "X_ONEREAD_YMD"<=:B2))                                                
+   4 - filter((:B2>=:B4 AND GREATEST(:B2,:B1)>=LEAST(:B4,:B3)))                                               
+   5 - access("B"."MEASURE"="A"."MEASURE")                                                                    
+   7 - access("D"."FCST_TYPE"="A"."FCST_TYPE")                                                                
+   9 - access("C"."DIVISION_ID"="A"."DIVISION_ID" AND "C"."PROJECT_CODE"="A"."PROJECT_CODE" AND               
+              "C"."SCM_SITE_ID"="A"."SCM_SITE_ID" AND "C"."ITEM_ID"="A"."ITEM_ID")                            
+  11 - access("A"."DIVISION_ID"=:B5 AND "A"."YYYYMMDD">=LEAST(:B4,:B3) AND "A"."YYYYMMDD"<=GREATEST(:B2,:B1)) 
+       filter(("A"."YYYYMMDD">=LEAST(:B4,:B3) AND "A"."YYYYMMDD"<=GREATEST(:B2,:B1)))                         
+  12 - filter(("C"."ITEM_VALID_YN"='Y' AND "C"."DIVISION_ID"=:B5))                                            
+                                                                                                              
+Note                                                                                                          
+-----                                                                                                         
+   - dynamic statistics used: dynamic sampling (level=2)                                                      
+                                                                                                              
+(55 rows)
+--  (P3 와 PHV 가 같으면 동일 계획 — 무시)
+################ [P5] 계획에 등장하는 영구 테이블·인덱스 통계 (계획 안의 객체만) ################
+OBJECT_TYPE    | OBJECT_NAME                    | NUM_ROWS | BLOCKS_OR_LEAF | ANALYZED   | CLUF   | TMP  | IDX_STATUS
+---------------+--------------------------------+----------+----------------+------------+--------+------+-----------
+INDEX (UNIQUE) | PK_SCM_MST_FUTURE_PRICE        | 11176939 | 124529         | 2026-10-07 | 405286 |      | VALID     
+TABLE          | SCM_MST_FUTURE_PRICE           | 11473160 | 188000         | 2026-10-07 |        | N    | -         
+TABLE (TEMP)   | GT_DMF0082_TEMP_SELECT_MEASURE |          |                |            |        | Y    | -         
+TABLE (TEMP)   | GT_DMF0082_TEMP_SITE_ITEM      |          |                |            |        | Y    | -         
+TABLE (TEMP)   | GT_DMF0082_T_WS_FCST           |          |                |            |        | Y    | -         
+               | GT_DMF0082_TEMP_FCST_N_PRICE   |          |                |            |        | Y    | -         
+(6 rows)
+################ [P6] AWR 14일 실행 이력 — PHV 변화 시점 (10-02 81MKTAMT · 10-08 재컴파일 전후) (권한 없으면 오류 — 무시) ################
+SNAP_ID | SNAP        | PHV        | EX | SEC_PER_EX | BG_PER_EX | ROWS_PER_EX
+--------+-------------+------------+----+------------+-----------+------------
+583     | 10-02 18:00 | 2027738766 | 1  | 114.03     | 700717    | 1639119    
+580     | 10-02 15:00 | 2027738766 | 6  | 105.59     | 648250    | 1615229    
+579     | 10-02 14:00 | 2027738766 | 11 | 99.98      | 662820    | 1653711    
+557     | 10-01 16:00 | 2027738766 | 1  | 2765.25    | 561352    | 1172295    
+557     | 10-08 19:00 | 2027738766 | 1  | 2765.25    | 561352    | 1172295    
+412     | 10-02 18:00 | 2027738766 | 1  | 114.03     | 700717    | 1639119    
+409     | 10-02 15:00 | 2027738766 | 6  | 105.59     | 648250    | 1615229    
+408     | 10-02 14:00 | 2027738766 | 11 | 99.98      | 662820    | 1653711    
+386     | 10-01 16:00 | 2027738766 | 0  | 2664.97    | 423610    | 0          
+(9 rows)
+=============================================================================
+D04 완료 → D04_PLAN_OUT.txt 회신 ([P0] 자동 3건 + 지정 SQL_ID 가 있으면 [P1]~[P6])
+=============================================================================

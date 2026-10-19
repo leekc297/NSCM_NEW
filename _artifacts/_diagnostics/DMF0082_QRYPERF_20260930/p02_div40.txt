@@ -1,0 +1,21 @@
+run1: SP 8.62s fetch 0.90s
+run2: SP 8.92s fetch 0.90s
+
+div=40 group=ADMIN 반복=2  SP 평균 8.77s  PKG 문장 합계 23.08s/회  (차이 = PKG 밖: DBMS_STATS·PL/SQL 로직·재귀)
+    라인     초/회     비중    실행/회        BG/회       행/회  SQL_ID/PHV  문장
+  (외부)   9.807 111.8%      62     225,228        62  3tdyryn89w2g1/1388734953           select dbms_metadata.get_ddl(:t,:n,:o) from dual
+  (외부)   8.758  99.9%       1     809,284         1  6u5ha9znadc55/0                    begin PKG_DMF0082.P_DMF0082_GET_MAIN_DATA(:1,:2,:3,:4,:5,:6,:7,:8,:9,:
+  (외부)   0.684   7.8%      62      27,632        62  08fauj5xt4v4n/3994698602           SELECT /*+all_rows*/ SYS_XMLGEN(VALUE(KU$), XMLFORMAT.createFormat2('T
+  (외부)   0.602   6.9%      13     191,545        13  gqdxrrudc0877/0                    BEGIN dbms_stats_internal.ins_session_hg_stats(:cstats); END;
+  (외부)   0.546   6.2%      13     191,480    18,911  4kbmsfxybgdtu/1574867423           INSERT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ INTO SY
+  (외부)   0.420   4.8%      62           0        62  ddra2u4t1w45s/4250213283           SELECT VALUE FROM SYS.V_$PARAMETER WHERE NAME = 'compatible'
+  (외부)   0.412   4.7%      62           0         0  4jx3y0c2ky8h6/4250213283           SELECT VALUE FROM SYS.V_$PARAMETER WHERE NAME = '_qa_lrg_type'
+  (외부)   0.410   4.7%      62           0         0  ah5zq834mv67d/4250213283           SELECT value FROM sys.v_$parameter where name='_mdapi_transform_engine
+  (외부)   0.202   2.3%      13      26,898        13  f96vq4fb0xt44/0                    BEGIN dbms_stats_internal.del_session_col_stats(:cstats); END;
+   599   0.145   1.7%       1      33,474    21,102  0rp3b1v236wwz/4066606801           INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_ORI_V ( DIVISION_ID, IT
+  (외부)   0.127   1.4%      13      25,950    18,911  g5hah80xh2b8x/3441464239           DELETE /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ FROM SY
+  (외부)   0.064   0.7%     399      24,893         0  dp0vgyb1hsfjb/1662056740           SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ SU.NAME
+  (외부)   0.043   0.5%      11           0     1,134  3qkhfbf2kyvhk/1268306204           SELECT POS+1 POS, VAL, NONNULLS, NDV, SPLIT, RSIZE, ROWCNT, TOPNCNT, T
+  (외부)   0.031   0.4%     243           0       243  5rurx5xtjwcu2/185276389            SELECT /*+ OPT_PARAM('_parallel_syspls_obey_force' 'false') */ KSPPCV.
+  (외부)   0.023   0.3%      62           0     1,312  bb7dc82ngf9p9/2622278096           SELECT decode(bitand(properties,1), 0, 0, 1), decode(bitand(properties
+  (외부)   0.021   0.2%     832         832         0  cvnwa70sqwv3w/4082558504           SELECT binarydefval from ecol$ where tabobj#=:1 and colnum=:2

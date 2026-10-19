@@ -1,0 +1,625 @@
+import { FileExceluploadIcon } from '@lges/design-system/icon';
+import { type FlexGrid } from '@mescius/wijmo.grid';
+import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
+import { ItemByDivisionModal, ProjectByDivisionModal } from 'features/master/src/components';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { apiClient } from '@foundation/apis';
+import type { HotkeyConfig, PageProps } from '@foundation/models';
+import { useQueryClient } from '@foundation/query-client';
+import { GridAction, type EditTracker } from '@foundation/utils';
+import { MainTitle, SubTitle } from '@shared/components';
+import { useTabBtnPermissions, useTabProcQuery } from '@shared/hooks';
+import { FileExceldownloadIcon } from '@shared/lges-icons';
+import { useMessageStore, useSessionStore } from '@shared/stores';
+
+import { FcstUploadModal } from '../../components';
+
+// Excel Form 팝업은 쓰지 않는다 — customButtons 액션이 직접 다운로드한다(handleExcelFormDownload).
+// import { CustomerFcstTemplateModal } from './components/CustomerFcstTemplateModal';
+import { CustomerFcstUploadForm } from './components/CustomerFcstUploadForm';
+import { CustomerFcstUploadGrid } from './components/CustomerFcstUploadGrid';
+import { MENU_ID, MSG, SAVE_KEYS, SHEETS } from './customer-fcst-upload.constant';
+import type {
+  CustomerFcstUploadRow,
+  SaveEntry,
+  SpreadTitleRow,
+} from './customer-fcst-upload.types';
+import { useCustomerFcstUploadStore } from './useCustomerFcstUploadStore';
+import { buildExcelFormColumns, buildExcelFormRows } from './utils/customer-fcst-upload.excelForm';
+
+// spdMain_Changed 필수 11건 검증 대상 (AS-IS L1022~1088 순서 1:1). 렌더 무관 불변이라 모듈
+//   상수로 둔다 — 컴포넌트 안에 두면 매 렌더 새 배열이 되어 handleCellEdited useCallback 을 깬다.
+//   PLANT_SITE_ID 는 Division 81 만 필수(.cs L1077~1082)라 여기서 제외하고 호출부에서 조건 분기한다.
+const REQUIRED_CHECKS: { key: keyof CustomerFcstUploadRow; label: string }[] = [
+  { key: 'DIVISION_ID', label: 'Division*' },
+  { key: 'SCM_SITE_ID', label: 'Sales Site*' },
+  { key: 'CUSTOMER_PROJECT_CODE', label: 'Customer Project*' },
+  { key: 'CUSTOMER_MODEL', label: 'Customer Model*' },
+  { key: 'INCOTERMS', label: 'Incoterms*' },
+  { key: 'FCST_TYPE', label: 'FCST Type*' },
+  { key: 'DOM_EXP', label: 'Customs Handbook*' },
+  { key: 'MEASURE_GROUP', label: 'Measure Group*' },
+  { key: 'MEASURE', label: 'Measure*' },
+  { key: 'UPLOAD_UOM', label: 'Upload UOM*' },
+];
+
+// AS-IS DMF0014_CustFcstUpload (Demand > Demand Plan > Customer FCST Upload).
+//   편집형 화면 — 데이터 유입 주 경로 = Excel 업로드 (공통 FileController excel-upload 체인,
+//   사내 최초 소비 화면). 직접 INSERT 는 AS-IS InsertRow 가 MSG00380 차단 (.cs L786~818 1:1).
+//   그리드 편집 = EDIT_FLAG='Y' 행의 동적 D_ 기간 셀만 (AS-IS EditButton SwitchLock 판정 1:1 —
+//   F2 토글은 TO-BE 표준(mkt-fcst)대로 상시 판정으로 대체, __asis-mapping__ 기록).
+//   SP: PKG_DMF0014.P_DMF0014_GET_CUST_FCST_UPLOAD_DATA(메인) + P_DMF0014_GET_SPREAD_TITLE(기간 헤더)
+//       + PR_GET_DAY_RANGE(기본 조회구간) + P_DMF0014_SAVE_CUST_FCST_UPLOAD_DATA(저장 '^' 17키).
+export const CustomerFcstUpload = ({ tabId, title }: PageProps<MENU_ID>) => {
+  const { t } = useTranslation();
+
+  const gridRef = useRef<FlexGrid<CustomerFcstUploadRow>>();
+  const gridFilterRef = useRef<FlexGridFilter>();
+  // ⭐ 그리드 공용 EditTracker — 변경 셀의 단일 진실원('M' 표기와 동일 출처). 저장 payload 는 여기서 도출.
+  const editTrackerRef = useRef<EditTracker<CustomerFcstUploadRow>>();
+  const setAlert = useMessageStore.getState().setAlert;
+  const setToast = useMessageStore.getState().setToast;
+  const queryClient = useQueryClient();
+
+  const isOpenSearchArea = useCustomerFcstUploadStore(state => state.isOpenSearchArea);
+  const setOpenSearchArea = useCustomerFcstUploadStore(state => state.setOpenSearchArea);
+  const searchParams = useCustomerFcstUploadStore(state => state.searchParams);
+  const setSearchParams = useCustomerFcstUploadStore(state => state.setSearchParams);
+  const filters = useCustomerFcstUploadStore(state => state.filters);
+  const setFilters = useCustomerFcstUploadStore(state => state.setFilters);
+  const clearFilters = useCustomerFcstUploadStore(state => state.clearFilters);
+  const staticColumn = useCustomerFcstUploadStore(state => state.staticColumn);
+  const fetchStaticColumns = useCustomerFcstUploadStore(state => state.fetchStaticColumns);
+  const dayRangeApplied = useCustomerFcstUploadStore(state => state.dayRangeApplied);
+  const applyDayRange = useCustomerFcstUploadStore(state => state.applyDayRange);
+  const restoreSearchConditions = useCustomerFcstUploadStore(state => state.restoreSearchConditions);
+
+  // ui-dynamic-property-management — Menu Button 권한 동적 fetch
+  const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
+
+  // ⭐ 명시 조회 게이트 — persist 된 stale filters 자동 발사 차단 (DMF0048 선례)
+  const [hasSearched, setHasSearched] = useState(false);
+  // ⭐ 저장 in-flight — 재진입(더블클릭) 차단용. SalesPlan(DMF0021) isPending 표준 1:1.
+  const [isPending, setIsPending] = useState(false);
+
+  const [openPrjByDivisionModal, setOpenPrjByDivisionModal] = useState<boolean>(false);
+  const [openModelByDivisionModal, setOpenModelByDivisionModal] = useState<boolean>(false);
+  const [openFcstUploadModal, setOpenFcstUploadModal] = useState<boolean>(false);
+  // Excel Form 팝업 상태는 더 이상 쓰지 않는다(직다운로드로 대체).
+  // const [openTemplateModal, setOpenTemplateModal] = useState<boolean>(false);
+
+  // ⭐ SetSaveData 1:1 — 변경 D_ 셀 수집 (dedup 키 = 식별 10 + yyyymmdd, 동일 키 = qty 덮어쓰기)
+  const saveEntriesRef = useRef<Map<string, SaveEntry>>(new Map());
+
+  // 메인 그리드 SP — PKG_DMF0014.P_DMF0014_GET_CUST_FCST_UPLOAD_DATA (13 IN + 세션 2 + O_RC1/O_RESULT)
+  const { data, isFetching } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.MAIN,
+    tabId,
+    filters: filters[SHEETS.MAIN],
+    enabled: hasSearched && !!filters[SHEETS.MAIN],
+  });
+
+  // 동적 기간 헤더 SP — PKG_DMF0014.P_DMF0014_GET_SPREAD_TITLE (3 IN + 세션 2 + O_RC1)
+  const { data: spreadTitleData } = useTabProcQuery<MENU_ID, SHEETS.SPREAD_TITLE>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.SPREAD_TITLE,
+    tabId,
+    filters: filters[SHEETS.SPREAD_TITLE],
+    enabled: hasSearched && !!filters[SHEETS.SPREAD_TITLE],
+  });
+  // 참조 고정 필수: useMemo 없이 ?? [] 로 만들면 조회조건 타이핑/드롭다운마다 부모가 리렌더될 때
+  //   매번 새 배열이 되어 Grid spreadTitle prop 참조가 바뀐다 → grid dynamicColumns/dynBindings
+  //   useMemo(deps: spreadTitle) 재계산 → 동적 D_ 기간 헤더 재드로우(깜빡임). spreadTitleData
+  //   (react-query 캐시, staleTime=Infinity)가 실제로 바뀔 때만 새 참조가 되도록 고정한다. rows 도
+  //   같은 이유로 고정한다(data prop 참조 안정 → 불필요한 그리드 재계산 방지).
+  const spreadTitleRows = useMemo<SpreadTitleRow[]>(
+    () => (spreadTitleData as { o_rc1?: SpreadTitleRow[] })?.o_rc1 ?? [],
+    [spreadTitleData],
+  );
+  const rows = useMemo<CustomerFcstUploadRow[]>(
+    () => (data as { o_rc1?: CustomerFcstUploadRow[] })?.o_rc1 ?? [],
+    [data],
+  );
+
+  // ⭐ 기본 조회구간 — PR_GET_DAY_RANGE (AS-IS GetDayRange p_month=6, .cs L1229~1243 1:1.
+  //   적용 여부는 store persist — 탭 수명 내 1회, 사용자가 변경한 Period 미덮음. DMF0048 A-4)
+  const dayRangeFilters = useMemo(() => ({ createdBy: '', month: '6' }), []);
+  const { data: dayRangeData } = useTabProcQuery<MENU_ID, SHEETS.DAY_RANGE>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.DAY_RANGE,
+    tabId,
+    filters: dayRangeFilters,
+    enabled: !dayRangeApplied,
+  });
+  //   Reset Condition(F10) 후 재적용 필수: F10 은 dayRangeApplied 를 false 로 되돌리지만, dayRange
+  //   쿼리는 staleTime=Infinity 캐시라 재활성화해도 dayRangeData 참조가 그대로다. deps 가
+  //   dayRangeData 뿐이면 effect 가 다시 돌지 않아 기간이 클라 기본값에 멈춘다. dayRangeApplied 를
+  //   deps 에 넣어 F10 직후 캐시된 서버 구간을 다시 적용한다(초기 진입·새로고침과 동일 경로).
+  useEffect(() => {
+    if (dayRangeApplied) return;
+    const range = (dayRangeData as { o_rc1?: { DAY_RANGE?: string }[] })?.o_rc1?.[0]?.DAY_RANGE;
+    if (!range) return;
+    applyDayRange(range);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayRangeData, dayRangeApplied]);
+
+  // mount 시 1회 admin 메타 fetch + persist 된 이전 filters 무효화 (NULL payload SP 자동호출 방지)
+  //   필수: F6 저장 조회조건 복원을 컬럼 메타 fetch 보다 먼저 await 한다 — fetchStaticColumns 가
+  //   initialized 를 세우므로 순서가 뒤집히면 복원이 통째로 건너뛰어진다.
+  useEffect(() => {
+    clearFilters();
+    saveEntriesRef.current.clear();
+    editTrackerRef.current?.clearChanges();
+    void (async () => {
+      await restoreSearchConditions();
+      await fetchStaticColumns();
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabId]);
+
+  // ----- 조회 validation (AS-IS FindData L564~590 1:1) -----
+  // ⭐ [E20260908-EXCELFORM-PERIOD] 조회조건 자체의 유효성만 보는 부분 — Search 와 Excel Form 이
+  //   같은 규칙을 쓴다. Excel Form 도 이제 화면의 현재 조회조건을 그대로 SP 로 보내므로,
+  //   Search 를 거치지 않은 잘못된 기간(역전·상한 초과)이 SP 까지 새어 나가지 않게 같이 막는다.
+  //   `isFetching` 가드는 메인 그리드 재조회 방지용이라 여기서 분리한다(모달 열기는 막지 않는다).
+  const validateSearchParams = (): boolean => {
+    // MSG00097 — Division 필수 (.cs L566~571)
+    if (!searchParams.divisionId) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRE_DIVISION, '_Please select Division.'),
+      });
+      return false;
+    }
+    // MSG00108 — 기간 역전 (.cs L577~581)
+    if (Number(searchParams.startYyyymmdd) > Number(searchParams.endYyyymmdd)) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_INVERTED, '_Invalid period (start > end).'),
+      });
+      return false;
+    }
+    // MSG00164 — 기간 상한 2년 (.cs L583~590: Value1.AddYears(2) < Value2 — 문구(3년)/조건(2년)
+    //   불일치는 AS-IS 자체 상태 1:1 보존)
+    const limit = `${Number(searchParams.startYyyymmdd.slice(0, 4)) + 2}${searchParams.startYyyymmdd.slice(4)}`;
+    if (Number(searchParams.endYyyymmdd) > Number(limit)) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.PERIOD_MAX, '_Please enter a period within 3 years.'),
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const validateFind = (): boolean => {
+    if (isFetching) return false;
+    return validateSearchParams();
+  };
+
+  // F5 Search — refetch?.() 직접 호출 금지 (stale closure — setFilter + invalidateQueries 표준)
+  //   ⚠ invalidate 키는 tabId — useTabProcQuery 의 queryKey 는 [tabId, sheetName, action, filters]
+  //     라 MENU_ID prefix 로는 하나도 매칭되지 않는다 (tabId = MDI 탭 uuid).
+  const handleSearch = () => {
+    if (!validateFind()) return;
+    setHasSearched(true);
+    saveEntriesRef.current.clear(); // AS-IS FindData dtSave.Clear() 1:1
+    editTrackerRef.current?.clearChanges();
+    setFilters();
+    void queryClient.invalidateQueries({ queryKey: [tabId] });
+    void fetchStaticColumns();
+  };
+
+  // Grid 초기화 규약 — 조회 결과의 전제(Division)가 바뀌면 화면에 남은 결과는 새 전제와 어긋나므로
+  //   비운다. 미저장 편집도 함께 버린다 — 남겨 두면 바뀐 전제로 저장된다.
+  //   clearFilters() 가 filters 를 없애면 MAIN/SPREAD_TITLE useTabProcQuery 가 disabled 되어
+  //   rows·기간 헤더가 비고, hasSearched=false 로 명시 조회 게이트도 되돌아간다.
+  //   자동 재조회하지 않는다 — 사용자가 Search 를 다시 눌러 새 Division 으로 조회한다.
+  //   Division 변경 시 Form 이 onDivisionChange 로 호출한다
+  //   (사용자 요구 2026-08-20. SalesReports/SalesPlan onDivisionChange 규약 1:1).
+  const resetGrid = () => {
+    saveEntriesRef.current.clear();
+    editTrackerRef.current?.clearChanges();
+    setHasSearched(false);
+    clearFilters();
+  };
+
+  // 참조 고정 필수: 인라인/매 렌더 재생성 함수로 넘기면 조회조건 타이핑/드롭다운마다 부모가 리렌더될
+  //   때 매번 새 참조가 되어, Grid 의 wijmo 핸들러 설치 effect(deps 에 onCellEdited 포함)가 재실행된다.
+  //   그 effect 는 formatItem/beginningEdit/cellEditEnded 를 뗐다 다시 붙이므로(이 화면은 셀병합이
+  //   없어 invalidate(true) 는 없지만) 불필요한 재등록이 반복된다. useCallback 으로 참조를 고정한다.
+  //   requiredChecks 는 매 렌더 새 배열이 되지 않도록 모듈 상수(REQUIRED_CHECKS)로 승격했다.
+  const handleCellEdited = useCallback(
+    (item: CustomerFcstUploadRow, binding: string) => {
+      const s = (v: unknown): string =>
+        typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+      // 필수 11건 (AS-IS spdMain_Changed L1022~1088 순서 1:1 — MSG00429 = AS-IS MSG00002 의미)
+      for (const chk of REQUIRED_CHECKS) {
+        if (s(item[chk.key]) === '') {
+          void setAlert({
+            type: 'alert',
+            content: t(MSG.REQUIRED_VALUE, '_{0} value is required.').replace('{0}', chk.label),
+          });
+          return;
+        }
+      }
+      if (s(item.PLANT_SITE_ID) === '' && s(item.DIVISION_ID) === '81') {
+        void setAlert({
+          type: 'alert',
+          content: t(MSG.REQUIRED_VALUE, '_{0} value is required.').replace('{0}', 'Plant Site*'),
+        });
+        return;
+      }
+
+      // SetSaveData (.cs L1113~1159 1:1) — dedup 키 11 + qty 갱신
+      const qtyRaw = s(item[binding]).replace(/,/g, '');
+      const qty = qtyRaw === '' ? '0' : String(parseInt(qtyRaw, 10) || 0);
+      const entry: SaveEntry = {
+        divisionId: s(item.DIVISION_ID),
+        scmSiteId: s(item.SCM_SITE_ID),
+        customerProjectCode: s(item.CUSTOMER_PROJECT_CODE),
+        customerModel: s(item.CUSTOMER_MODEL),
+        incoterms: s(item.INCOTERMS),
+        fcstType: s(item.FCST_TYPE),
+        domExp: s(item.DOM_EXP),
+        measureGroup: s(item.MEASURE_GROUP),
+        measure: s(item.MEASURE),
+        plantSiteId: s(item.PLANT_SITE_ID),
+        uploadUom: s(item.UPLOAD_UOM),
+        projectCode: s(item.PROJECT_CODE),
+        itemId: s(item.ITEM_ID),
+        yyyymmdd: binding.replace('D_', ''),
+        qty,
+      };
+      const dedupKey = [
+        entry.divisionId,
+        entry.scmSiteId,
+        entry.customerProjectCode,
+        entry.customerModel,
+        entry.incoterms,
+        entry.fcstType,
+        entry.domExp,
+        entry.measureGroup,
+        entry.measure,
+        entry.plantSiteId,
+        entry.yyyymmdd,
+      ].join('|');
+      saveEntriesRef.current.set(dedupKey, entry);
+    },
+    [setAlert, t],
+  );
+
+  // ----- F7 Save — AS-IS SaveData 1:1: 'M' 고정 + 17 키 '^'delim payload -----
+  //   ^delim 다건이므로 apiClient.post 직접 (useProcMutation array unfold 안 함 — 표준 선례)
+  const handleSave = async () => {
+    // ⭐ 재진입 가드 (SalesPlan blockIfWorking 1:1) — 조회/저장이 아직 돌고 있으면 차단한다.
+    //   없으면 Save 더블클릭이 SP 를 2회 호출해 같은 수량이 중복 반영될 수 있다.
+    if (isFetching || isPending) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.WORK_IN_PROGRESS, '_이전 작업이 아직 실행 중입니다.'),
+      });
+      return;
+    }
+    // ⭐ 근본 수정 (2026-07-08) — 저장 payload 를 그리드 공용 EditTracker 에서 직접 도출한다.
+    //   기존 별도 수집 ref(saveEntriesRef)는 편집↔저장 사이 재렌더/재등록 타이밍에 취약해
+    //   2행 이후 편집분이 유실("저장할 데이터 없음") → EditTracker('M' 표기와 동일·안정 출처)로 일원화.
+    //   (1) 열린 편집기 강제 커밋 → (2) EditTracker 변경맵 순회로 D_ 기간 셀 net 변경만 수집.
+    gridRef.current?.finishEditing(true);
+
+    const toStr = (v: unknown): string =>
+      typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
+    const changed = editTrackerRef.current?.getOriginalValues();
+    const entries: SaveEntry[] = [];
+    if (changed) {
+      for (const [item, fields] of changed) {
+        const rec = item as unknown as Record<string, unknown>;
+        for (const binding of Object.keys(fields)) {
+          if (!/^D_\d{8}$/.test(binding)) continue; // 편집 가능 셀 = 동적 D_ 기간 셀만
+          // 필수 11건 검증 (AS-IS spdMain_Changed 1:1) — 저장 시점 재검증
+          for (const chk of REQUIRED_CHECKS) {
+            if (toStr(item[chk.key]) === '') {
+              void setAlert({
+                type: 'alert',
+                content: t(MSG.REQUIRED_VALUE, '_{0} value is required.').replace('{0}', chk.label),
+              });
+              return;
+            }
+          }
+          if (toStr(item.PLANT_SITE_ID) === '' && toStr(item.DIVISION_ID) === '81') {
+            void setAlert({
+              type: 'alert',
+              content: t(MSG.REQUIRED_VALUE, '_{0} value is required.').replace(
+                '{0}',
+                'Plant Site*'
+              ),
+            });
+            return;
+          }
+          const qtyRaw = toStr(rec[binding]).replace(/,/g, '');
+          const qty = qtyRaw === '' ? '0' : String(parseInt(qtyRaw, 10) || 0);
+          entries.push({
+            divisionId: toStr(item.DIVISION_ID),
+            scmSiteId: toStr(item.SCM_SITE_ID),
+            customerProjectCode: toStr(item.CUSTOMER_PROJECT_CODE),
+            customerModel: toStr(item.CUSTOMER_MODEL),
+            incoterms: toStr(item.INCOTERMS),
+            fcstType: toStr(item.FCST_TYPE),
+            domExp: toStr(item.DOM_EXP),
+            measureGroup: toStr(item.MEASURE_GROUP),
+            measure: toStr(item.MEASURE),
+            plantSiteId: toStr(item.PLANT_SITE_ID),
+            uploadUom: toStr(item.UPLOAD_UOM),
+            projectCode: toStr(item.PROJECT_CODE),
+            itemId: toStr(item.ITEM_ID),
+            yyyymmdd: binding.replace('D_', ''),
+            qty,
+          });
+        }
+      }
+    }
+    if (entries.length === 0) {
+      void setAlert({ type: 'alert', content: t(MSG.NO_SAVE_DATA, '_No data to save.') });
+      return;
+    }
+    // 저장 confirm 없음 (표준화) — 저장은 되돌릴 수 있고 결과는 Toast 로 알린다.
+    //   confirm 은 삭제/전송취소처럼 되돌릴 수 없는 동작에만 쓴다. SalesPlan(DMF0021) 동일.
+    const sesUserId = useSessionStore.getState().session.userId ?? '';
+    // ⭐ createdByList — BE 가 가로채지 않는 키명 (createdBy 는 BE 세션 단일값으로 덮여 '^'×N 배열이
+    //   1토큰으로 붕괴 → SP split 2행째부터 CREATED_BY NULL → ORA-01400. DMF0020 선례 동일, 2026-07-08).
+    const rows = entries.map(e => ({ ...e, activeFlag: 'M', createdByList: sesUserId }));
+    const payload = Object.fromEntries(SAVE_KEYS.map(k => [k, rows.map(r => r[k]).join('^')]));
+
+    setIsPending(true);
+    try {
+      const res = await apiClient.post<Record<string, unknown>>(
+        `/${MENU_ID}/${SHEETS.MAIN}/SAVE/call-proc`,
+        payload
+      );
+      if (res.status >= 400 || Number(res.data?.code)) {
+        const reason =
+          (res.data as { message?: string })?.message?.trim() ||
+          t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
+        void setAlert({ type: 'alert', content: reason });
+        return;
+      }
+      void setToast({ message: t(MSG.SAVED, '_성공적으로 저장되었습니다.'), type: 'success' });
+      saveEntriesRef.current.clear();
+      editTrackerRef.current?.clearChanges();
+      // AS-IS SaveData 성공 후 FindButton() 재조회 1:1.
+      //   ⚠ prefix 는 tabId (queryKey = [tabId, sheetName, action, filters]). 구 [MENU_ID] 는
+      //     어떤 쿼리와도 매칭되지 않아 저장 후 재조회가 통째로 무동작이었다 (2026-08-20 리포트).
+      //     저장은 filters 가 그대로라 키가 안 바뀌므로 invalidate 가 유일한 재조회 트리거다
+      //     (조회는 setFilters 로 키가 바뀌어 우연히 동작했음). demand-plan-waterfall 선례 동일.
+      void queryClient.invalidateQueries({ queryKey: [tabId] });
+    } catch (e) {
+      const msg =
+        e instanceof Error ? e.message : t(MSG.SAVE_ERROR, '_저장 중 오류가 발생했습니다.');
+      void setAlert({ type: 'alert', content: msg });
+    } finally {
+      setIsPending(false);
+    }
+  };
+
+  // Excel Form — 팝업 없이 버튼 클릭 즉시 다운로드한다. 메인 Search 를 누르지 않았어도 동작한다.
+  // 기간 컬럼은 메인 그리드와 동일한 SPREAD_TITLE(달력 계산)을 현재 조회조건으로 직접 호출해서 가져온다.
+  // 별도 SP(FORM_DATA)는 실제 업로드 이력 존재 여부에 따라 bucket별로 0건이 되는 문제가 있어 쓰지 않는다.
+  // 값 컬럼은 항상 빈칸(입력 전용) — 헤더만 있는 양식.
+  const handleExcelFormDownload = async () => {
+    if (!validateFind()) return;
+    try {
+      const sesUserId = useSessionStore.getState().session.userId ?? '';
+      const res = await apiClient.callProc<MENU_ID, SHEETS.SPREAD_TITLE>(
+        MENU_ID,
+        SHEETS.SPREAD_TITLE,
+        'SEARCH',
+        {
+          startYyyymmdd: searchParams.startYyyymmdd,
+          endYyyymmdd: searchParams.endYyyymmdd,
+          bucketType: searchParams.bucket,
+          sesUserId,
+          mnuId: MENU_ID,
+        }
+      );
+      if (res.code !== '0') {
+        void setAlert({
+          type: 'alert',
+          content: res.message || t(MSG.EXCEL_FORM_EMPTY, '_Search failed.'),
+        });
+        return;
+      }
+      const periodBuckets = (
+        (res.result as { o_rc1?: SpreadTitleRow[] })?.o_rc1 ?? []
+      ).map(r => r.COLUMN_LABEL);
+      const formColumns = buildExcelFormColumns(staticColumn, periodBuckets);
+      if (formColumns.length === 0) {
+        void setAlert({
+          type: 'alert',
+          content: t(MSG.EXCEL_FORM_EMPTY, '_No data found for the search conditions.'),
+        });
+        return;
+      }
+      const exportRows = buildExcelFormRows([], formColumns);
+      await GridAction.flatExcelDownload(
+        exportRows,
+        formColumns.map(c => ({ header: c.header, key: c.key })),
+        'DMF0014_Template'
+      );
+    } catch {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.EXCEL_FORM_EMPTY, '_Excel download failed.'),
+      });
+    }
+  };
+
+  // F8 Insert — 버튼 미노출 처리 (사용자 요구). 직접 INSERT 는 AS-IS 도 MSG00380 으로 차단하던 경로.
+  // const handleInsert = () => {
+  //   void setAlert({
+  //     type: 'alert',
+  //     content: t(MSG.INSERT_BLOCKED, '_Direct Insert is not allowed. Please use Excel Upload.'),
+  //   });
+  // };
+
+  // F9 Delete — 버튼 미노출 처리 (사용자 요구 2026-08-21). AS-IS DeleteButton 은 Action='I'(신규) 행만
+  //   삭제 대상인데 이 화면은 신규행 경로가 차단(F8 Insert = MSG00380)되어 있어 실질 no-op 였다.
+  // const handleDelete = () => undefined;
+
+  // SubTitle 공통버튼 — hasButton 권한 분기. excel/sort/filter/condition = DefaultButtonActions 자동.
+  const hotkeyConfig: HotkeyConfig = {
+    search: hasButton('SEARCH') ? handleSearch : false,
+    // insert: hasButton('INSERT') ? handleInsert : false,
+    insert: false, // Insert 버튼 미노출 (undefined 면 버튼이 그려지므로 false 명시)
+    // delete: hasButton('DELETE') ? handleDelete : false,
+    delete: false, // Delete 버튼 미노출 (undefined 면 버튼이 그려지므로 false 명시)
+    save: hasButton('SAVE') ? () => void handleSave() : false,
+    manual: false,
+    // ⭐ [hook #135 §6] Excel 2종은 customButtons 로 배치한다 — 표준 `upload` 슬롯은 customButtons
+    //   **뒤**에 렌더되어 "Excel Form → Excel Upload" 순서가 깨진다.
+    upload: false,
+  };
+
+  // ⭐ [E20260814-EXCELFORM] Excel Form → Excel Upload 순 (hook #135 §6 — 정본 DMF0082 배치 1:1)
+  const customButtons = [
+    ...(hasButton('FORM_DATA')
+      ? [
+          {
+            label: t('LBL00762', 'Excel Form'),
+            // 팝업 방식(원본)은 아래처럼 열었다 — 참고용으로 남겨둔다.
+            // if (!filters[SHEETS.MAIN]) setFilters();
+            // setOpenTemplateModal(true);
+            action: () => void handleExcelFormDownload(),
+            iconComponent: <FileExceldownloadIcon />,
+            iconPosition: 'leading' as const,
+          },
+        ]
+      : []),
+    ...(hasButton('UPLOAD')
+      ? [
+          {
+            label: t('LBL00346', 'Excel Upload'),
+            action: () => setOpenFcstUploadModal(true),
+            iconComponent: <FileExceluploadIcon />,
+            iconPosition: 'leading' as const,
+          },
+        ]
+      : []),
+  ];
+
+  return (
+    <>
+      <MainTitle
+        title={title}
+        menuId={MENU_ID}
+        openSearchArea={isOpenSearchArea}
+        toggleOpenSearchArea={setOpenSearchArea}
+      />
+      <CustomerFcstUploadForm
+        onSubmit={handleSearch}
+        onDivisionChange={resetGrid}
+        setOpenPrjByDivisionModal={setOpenPrjByDivisionModal}
+        setOpenModelByDivisionModal={setOpenModelByDivisionModal}
+      />
+      <SubTitle
+        menuId={MENU_ID}
+        grid={gridRef}
+        gridFilter={gridFilterRef}
+        dataCount={rows.length}
+        excelFileName='Customer-Fcst-Upload'
+        useHotkey={true}
+        hotkeyConfig={hotkeyConfig}
+        customButtons={customButtons}
+        searchParam={searchParams}
+      />
+      <CustomerFcstUploadGrid
+        gridRef={gridRef}
+        gridFilterRef={gridFilterRef}
+        editTrackerRef={editTrackerRef}
+        data={rows}
+        spreadTitle={spreadTitleRows}
+        onCellEdited={handleCellEdited}
+      />
+      {/* AS-IS btnProject_Click (.cs L923~942) — SCM0002_ProjectbyDivisionPopupEx 1:1 */}
+      <ProjectByDivisionModal
+        open={openPrjByDivisionModal}
+        modalClose={() => setOpenPrjByDivisionModal(false)}
+        setSelectedValue={projects => setSearchParams({ project: projects })}
+        preSearchParams={{
+          deptId: searchParams.team || 'ALL',
+          divisionId: searchParams.divisionId,
+          endCustomer: searchParams.endCustomer || 'ALL',
+          etc: '',
+          projectCode: searchParams.project,
+          salesSite: searchParams.salesSite || 'ALL',
+        }}
+        callFromCell={false}
+      />
+      {/* AS-IS btmItem_Click (.cs L944~969) — DM0002_ItembyDivisionPopupEx 1:1 */}
+      <ItemByDivisionModal
+        open={openModelByDivisionModal}
+        modalClose={() => setOpenModelByDivisionModal(false)}
+        setSelectedValue={items => setSearchParams({ modelNickname: items })}
+        preSearchParams={{
+          deptId: searchParams.team || 'ALL',
+          divisionId: searchParams.divisionId,
+          endCustomer: searchParams.endCustomer || 'ALL',
+          salesSite: searchParams.salesSite || 'ALL',
+          projectCode: searchParams.project,
+          itemId: searchParams.modelNickname,
+          activeFlag: 'Y',
+        }}
+        callFromCell={false}
+      />
+      {/* AS-IS btnExcelUpload_Click — 공통 ExcelUploadForm("DMF0014", 'FCST Upload') 1:1.
+          ⭐ 2-Step (사용자 요구 2026-07-10): [Upload]=검증·분류 / [OK]=저장(onSave — mode=1 call-proc).
+          SP 게이트 복원(P_MODE>0)으로 mode=0 은 검증만, mode=1 이 DM_PLN_CUSTOMER_PSI 적재. 전량 게이트. */}
+      {/* Excel Form 팝업은 쓰지 않는다 — customButtons 의 'Excel Form' 이 handleExcelFormDownload 로
+          즉시 다운로드한다. 컴포넌트는 삭제하지 않고 보존한다. */}
+      {/* <CustomerFcstTemplateModal
+        open={openTemplateModal}
+        modalClose={() => setOpenTemplateModal(false)}
+        divisionId={searchParams.divisionId}
+        filters={filters[SHEETS.MAIN] as Record<string, unknown> | undefined}
+        staticColumns={staticColumn}
+      /> */}
+
+      <FcstUploadModal
+        open={openFcstUploadModal}
+        modalClose={() => setOpenFcstUploadModal(false)}
+        // 저장 confirm 미표시 (저장 피드백 표준화 2026-08-24) — 이 화면 한정.
+        //   공용 모달 기본값은 true 라 ForecastPrice/MetalLinkPrice 동작은 그대로다.
+        confirmBeforeSave={false}
+        onSave={async () => {
+          // PKG_DMF0014.P_DMF0014_CUST_FCST_EXCEL_UPLOAD(mode=1) — 검증 통과분 적재.
+          //   createdBy=BE 세션 자동 · V_CREATION_DATE=MAX(최신 배치 자동 선택).
+          const sesUserId = useSessionStore.getState().session.userId ?? '';
+          try {
+            const res = await apiClient.post<Record<string, unknown>>(
+              `/${MENU_ID}/${SHEETS.MAIN}/UPLOAD_SAVE/call-proc`,
+              { mode: 1, createdBy: sesUserId, programId: MENU_ID, sheetName: SHEETS.MAIN }
+            );
+            const code = Number((res.data as { code?: string })?.code ?? 0);
+            const inner = (
+              res.data?.result as { o_result_cursor?: { CODE?: string; MSG?: string }[] }
+            )?.o_result_cursor?.[0];
+            if (res.status >= 400 || code || (inner && inner.CODE !== '0')) {
+              return {
+                ok: false,
+                message: inner?.MSG || (res.data as { message?: string })?.message,
+              };
+            }
+            return { ok: true };
+          } catch (e) {
+            return { ok: false, message: e instanceof Error ? e.message : undefined };
+          }
+        }}
+        onUploaded={() => {
+          // 업로드 후 재조회 — 위 handleSave 와 동일 이유로 prefix 는 tabId
+          void queryClient.invalidateQueries({ queryKey: [tabId] });
+        }}
+      />
+    </>
+  );
+};

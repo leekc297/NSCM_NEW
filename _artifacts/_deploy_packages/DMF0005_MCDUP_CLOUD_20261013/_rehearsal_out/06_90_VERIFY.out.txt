@@ -1,0 +1,18 @@
+CHK | N | JUDGE
+V1 마커 | 4 | PASS
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:30 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-13 14:08:30 | 0 | 0
+(2 rows)
+
+CHK | LINE | TXT
+V3 줄 | 1674 | * 2026.10.13   Claude(Code)   [E20261013-DMF0005MCDUP] 키 중복 사전 검증 추가 (ORA-00001 대신 검증 메시지)
+V3 줄 | 1702 | --[E20261013-DMF0005MCDUP] 키 중복 사전 검증 (START)
+V3 줄 | 1783 | --[E20261013-DMF0005MCDUP] 키 중복 사전 검증 (END)
+V3 줄 | 1806 | CHECK_DUP(P_TABLE, P_DIV40);   --[E20261013-DMF0005MCDUP] 갱신 직전 키 중복 검증 — 겹치면 검증 메시지로 차단(전체 ROLLBACK)
+(4 rows)
+
+V4 시도 1 = MPCBDIQRPJ1E -> MPCBDIQRPJ1V (겹치는 키 1) → -1 | 변경 후 Model 코드가 같은 키로 이미 등록되어 있어 변경할 수 없습니다. / MODEL : MPCBDIQRPJ1E -> MPCBDIQRPJ1V / TABLE : DM_PLN_MKT_FCST / KEY : DIVISION_ID=40, PROJECT_CODE=Boston Dynamics, SCM_SITE_ID=Boston Dynamics_US_WLM, DOM_EXP
+V4 PASS — 검증 메시지로 차단 · 변경 전 Model 행 수 2 → 2

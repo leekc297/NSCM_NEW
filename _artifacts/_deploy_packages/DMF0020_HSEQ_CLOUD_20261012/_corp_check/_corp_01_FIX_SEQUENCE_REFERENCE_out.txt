@@ -1,0 +1,66 @@
+﻿################ BEFORE — 시퀀스 vs 테이블 MAX ################
+LAST_NUMBER | INCREMENT_BY | CACHE_SIZE | MAX_SEQ  | BEHIND_BY | JUDGE      
+------------+--------------+------------+----------+-----------+------------
+25893410    | 1            | 20         | 25893391 | -18       | 정상 — 보정 불필요
+(1 rows)
+!!! ERROR: ORA-01742: comment not terminated properly
+Help: https://docs.oracle.com/error-help/db/ora-01742/
+--- stmt head: /* ===== 보정 블록 — 사용자 별도 진행 시 주석 해제 (SCM_MGR) =====
+DECLARE
+  V_SEQ   VARCHAR2(61) := 'SEQ1_SCM_MST_FUTURE_PRICE_H'
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: V_MAX   NUMBER
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: V_LAST  NUMBER
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: V_INC   NUMBER
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: V_CACHE NUMBER
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: V_NEXT  NUMBER
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: V_DUMMY NUMBER
+!!! ERROR: ORA-06550: line 2, column 40:
+PLS-00201: identifier 'V_MAX' must be declared
+ORA-06550: line 2, column 40:
+PL/SQL: ORA-03056: invalid expression in SELECT INTO clause
+ORA-06550: line 2, column 3:
+PL/SQL: SQL Statement ignored
+ORA-06550: line 4, column 47:
+PL/SQL: ORA-00904: "V_SEQ": invalid identifier
+ORA-06550: line 3, column 3:
+PL/SQL: SQL Statement ignored
+ORA-06550: line 5, column 50:
+PLS-00201: identifier 'V_LAST' must be declared
+ORA-06550: line 5, column 3:
+PL/SQL: Statement ignored
+ORA-06550: line 7, column 6:
+PLS-00201: identifier 'V_LAST' must be declared
+ORA-06550: line 7, column 3:
+PL/SQL: Statement ignored
+ORA-06550: line 23, column 76:
+PL/SQL: ORA-00904: "V_SEQ": invalid identifier
+ORA-06550: line 23, column 3:
+PL/SQL: SQL Statement ignored
+ORA-06550: line 24, column 49:
+PLS-00201: identifier 'V_LAST' must be declared
+ORA-06550: line 24, column 3:
+PL/SQL: Statement ignored
+Help: https://docs.oracle.com/error-help/db/ora-06550/
+--- stmt head: BEGIN
+  SELECT NVL(MAX(HISTORY_SEQ), 0) INTO V_MAX FROM SCM_MST_FUTURE_PRICE_H;
+  SELECT LAST_NUMBER, INCREMENT_BY, CACHE_SIZE INTO V_LAST, V_INC, V_CACHE
+    FROM USER_SEQUENCES WHERE SEQUENCE_NAME =
+!!! ERROR: ORA-00900: invalid SQL statement
+Help: https://docs.oracle.com/error-help/db/ora-00900/
+--- stmt head: ===== 보정 블록 끝 ===== */
+
+PROMPT ################ AFTER — 02_VERIFY_CLOUD.sql 로 PASS 확인 ################
+SELECT Q.LAST_NUMBER, H.MAX_SEQ,
+       CASE WHEN Q.LAST_NUMBER > H.MAX_SEQ THEN 'PASS' ELSE '❌ 뒤

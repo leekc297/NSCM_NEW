@@ -1,0 +1,54 @@
+// 사용법:
+//   import commonStyles from '@foundation/styles/common-styles.module.scss';
+//   <InputField className={commonStyles.popupSearchField} ... />
+//
+body .formItem {
+  // 필드 열(auto 칼럼)의 자동 최소폭(min-width:auto)을 해제.
+  // 이게 없으면 칩 등 넓은 콘텐츠가 auto 트랙을 밀어 셀(Grid) 폭을 넘어 옆 칼럼을 침범한다.
+  // min-width:0 이면 트랙이 콘텐츠가 아니라 남은 셀 폭에 맞춰지고, 넘치는 칩은 필드 내부에서 …로 잘린다.
+  // (overflow:hidden 은 popupSearchField 의 필드 밖 버튼(right:-40px)을 자르므로 여기선 쓰지 않는다.)
+  & > div:last-of-type {
+    min-width: 0;
+  }
+
+  // 라벨 컬럼 폭 — 필드마다 다른 labelSize(short=100/long=180 등)를 뷰포트와 무관하게 140px로
+  // 통일한다. 페이지 검색영역은 SEARCH_AREA_MIN_WIDTH(1460px)로 최소폭이 보장되므로 좁은
+  // 화면에서도 140px 라벨을 쓸 여유가 항상 있다. (과거 HD/FHD 뷰포트 분기는 1366px 미만 구간을
+  // 놓쳐 필드별 라벨 폭이 제각각(100px/180px)으로 어긋나 보이는 원인이었음 — 단일 값으로 단순화.)
+  //
+  // [2026-09-23] minmax(70px, 140px) 로 변경 — 위 가드는 "페이지" 한정이고, 리사이즈 가능한
+  // 팝업(CustomDialog)은 그 가드가 없다. CustomDialog 의 자동 최소폭 가드(scrollWidth 감시)는
+  // "줄 전체가 넘칠 때"만 잡아서, 라벨이 옆 칸으로 "침범"만 하고(줄 전체 폭은 그대로) 넘치지는
+  // 않는 경우를 못 잡는다(DMF0082 Version Popup 실측) — 그래서 침범 자체가 애초에 안 일어나도록
+  // 라벨이 좁아지게 한다. 140px 여유가 있을 때는 그대로 140px 를 쓰고, 없을 때만 70px 까지
+  // 따라 줄어든다 — 페이지에서는 항상 140px 그대로라 회귀 없음.
+  grid-template-columns: minmax(70px, 140px) auto;
+
+  & > div:first-of-type {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+.customGrid {
+  display: flex;
+  align-items: center;
+}
+
+.customCheckbox {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.popupSearchField {
+  & > div:first-child {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 40px);
+  }
+  & button {
+    position: absolute;
+    right: -40px;
+  }
+}

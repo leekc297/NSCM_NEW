@@ -1,0 +1,337 @@
+PACKAGE         "PKG_SCM0002" IS
+/*
+ * Program ID   : PKG_SCM0002
+ * Description  : PKG_SCM0002
+ * Program History
+ *===========================================================================================================
+ *   Date       In Charge      Description
+ *===========================================================================================================
+ * 2026.03.24   kimcd       [PJ20264226] NextSCM Pilot 설계 및 개발
+ *                          UI 항목으로 Package로 전환
+ * 2026.09.17   AJS         AS-IS SCM0002 미편입 3건 추가
+ *                          P_SCM0002_GET_PROJECT_ROUTE_LIST_FORSAVE_POPUP · P_SCM0002_GET_BODITEM_FOR_SUPPLY_POPUP · P_SCM0002_SAVE_SHIPMENT_PLAN_NEW
+ */
+
+    PROCEDURE P_SCM0002_GET_BOD_FG_POPUP
+    (
+        P_DIVISION_ID          IN VARCHAR2,
+        P_BOD_ID               IN VARCHAR2,
+        P_FROM_SITE            IN VARCHAR2,
+        P_TO_SITE              IN VARCHAR2,
+        P_PLAN_START_YYYYMMDD  IN DATE,
+        P_OPER_GRP             IN VARCHAR2,
+        P_ITEM_ID              IN VARCHAR2,
+        P_ORIGION_DIVISION_ID  IN VARCHAR2 DEFAULT '',
+        DEBUG_MODE             IN VARCHAR2 DEFAULT 'F',
+        O_RC1                  OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR        OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_BOD_SEMI_POPUP
+    (
+        P_DIVISION_ID          IN VARCHAR2,
+        P_BOD_ID               IN VARCHAR2,
+        P_FROM_SITE            IN VARCHAR2,
+        P_TO_SITE              IN VARCHAR2,
+        P_PLAN_START_YYYYMMDD  IN DATE,
+        P_OPER_GRP             IN VARCHAR2,
+        P_ITEM_ID              IN VARCHAR2,
+        P_ORIGION_DIVISION_ID  IN VARCHAR2 DEFAULT '',
+        DEBUG_MODE             IN VARCHAR2 DEFAULT 'F',
+        O_RC1                  OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR        OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_CAPACITY_ALLOCATION_POPUP
+    (
+        --chaan	@p_division_id	NVARCHAR(2),
+        P_DIVISION_ID   IN VARCHAR2,  --chaan
+        P_ACTION_FLAG   IN VARCHAR2 DEFAULT '',
+        P_ITEM_ID       IN VARCHAR2 DEFAULT '',
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_CITY_BY_COUNTY_POPUP
+    (
+        P_COUNTRY       IN VARCHAR2,
+        P_CITY          IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_CUSTOMER_BY_DIVISION_POPUP
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_SOLDTO_CODE   IN VARCHAR2,
+        P_SHIPTO_CODE   IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_DEPARTMENT_POPUP
+    (
+        P_DEPARTMENT    IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_ELECTRODE_ITEM_BY_DIVISION_POPUP
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_ITEM_ID       IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_ITEM_BY_DIVISION_POPUP
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_PROJECT_CODE  IN VARCHAR2,
+        P_SCM_SITE_ID   IN VARCHAR2,
+        P_ITEM_ID       IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_ITEM_BY_PLANT_SITE_POPUP
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_SCM_SITE_ID   IN VARCHAR2,
+        P_ITEM_ID       IN VARCHAR2,
+        P_ASSIGN_YN     IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_ITEM_BY_SITE_POPUP
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_SCM_SITE_ID   IN VARCHAR2,
+        P_ITEM_ID       IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_ITEM_ELEC
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_COMPANY_ID    IN VARCHAR2,
+        P_ITEM_ID       IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_LOCATION_BY_DIVISION_POPUP
+    (
+        P_DIVISION_ID    IN VARCHAR2,
+        P_SCM_SITE_ID    IN VARCHAR2,
+        P_LOCATION_CODE  IN VARCHAR2,
+        O_RC1            OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR  OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_MATERIAL_BY_DIVISION
+    (
+        P_DIVISION_ID        IN VARCHAR2,
+        P_OPERATION_GROUP    IN VARCHAR2,
+        P_ITEM_ID            IN VARCHAR2,
+        P_SCP_MODULE_TYPE    IN VARCHAR2,
+        O_RC1                OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR      OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_PLANT_CUSTOMER_BY_DIVISION_POPUP
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_SOLDTO_CODE   IN VARCHAR2,
+        P_SHIPTO_CODE   IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_PROJECT_BY_DIVISION_POPUP
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_PROJECT_CODE  IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_PROJECT_BY_DIVISION_POPUPEX
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_DEPT_ID       IN VARCHAR2,   --Department
+        P_END_CUSTOMER  IN VARCHAR2,   --Endcustomer
+        P_SCM_SITE_ID   IN VARCHAR2,
+        P_PROJECT_CODE  IN VARCHAR2,
+        P_ETC           IN VARCHAR2 DEFAULT NULL,  -- [PJ20200138] ETC Flag 추가
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_SHIPMENT_PLAN_NEW_CHECK
+    (
+        P_DIVISION_ID          IN VARCHAR2,
+        P_PLAN_START_YYYYMMDD  IN VARCHAR2,
+        P_PLAN_TYPE            IN VARCHAR2,
+        P_SEQ                  IN VARCHAR2,
+        P_OPERATION_GROUP      IN VARCHAR2,
+        P_PROJECT_CODE         IN VARCHAR2,
+        P_ITEM_ID              IN VARCHAR2,
+        P_TO_SITE              IN VARCHAR2,
+        P_INCOTERMS            IN VARCHAR2,
+        P_FROM_SITE            IN VARCHAR2,
+        P_BOD_ID               IN VARCHAR2,
+        P_TRANSPORT_MODE       IN VARCHAR2,
+        P_PRGRAM_ID            IN VARCHAR2,
+        O_RC1                  OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR        OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_SITE_ITEM_BY_DIVISION_POPUP
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_PROJECT_CODE  IN VARCHAR2,
+        P_SCM_SITE_ID   IN VARCHAR2,
+        P_ITEM_ID       IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_SOLDTO_BY_DIVISION_POPUP
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_SOLDTO_CODE   IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_STORAGE_BY_DIVISION_POPUP
+    (
+        P_DIVISION_ID   IN VARCHAR2,
+        P_STORAGE_ID    IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_TEAM_POPUP
+    (
+        P_TEAM_ID     IN VARCHAR2,
+        P_TEAM_NAME   IN VARCHAR2,
+        P_CREATED_BY  IN VARCHAR2,
+        P_USERINFO    IN VARCHAR2,
+        O_RC1         OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_VENDOR_POPUP
+    (
+        P_VENDOR_CODE   IN VARCHAR2,
+        P_VENDOR_NAME   IN VARCHAR2,
+        P_PAKER         IN VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_GET_VERSIONBYWATERFALLPOPUP
+    (
+        P_START_YYYYMMDD  IN VARCHAR2,
+        P_END_YYYYMMDD    IN VARCHAR2,
+        P_CREATED_BY      IN VARCHAR2,
+        P_DIVISION_ID     IN VARCHAR2,
+        P_VERSION_TYPE    IN VARCHAR2,
+        P_VERSION_NO      IN VARCHAR2,
+        O_RC1             OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR   OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_SET_DEFAULT_TITLESET_POPUP
+    (
+        P_PROGRAM_ID    IN VARCHAR2,
+        P_SHEET_NAME    IN VARCHAR2,
+        P_COLUMN_TYPE   IN VARCHAR2,
+        P_USER_ID       IN VARCHAR2,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    PROCEDURE P_SCM0002_SET_TITLESET_POPUP
+    (
+        P_PROGRAM_ID        IN VARCHAR2,
+        P_SHEET_NAME        IN VARCHAR2,
+        P_COLUMN_TYPE       IN VARCHAR2,
+        P_ACTIVE_FLAG       IN VARCHAR2,
+        P_COLUMN_NAME       IN VARCHAR2,
+        P_SORT_ORDER_NO     IN VARCHAR2,
+        P_SUB_TOTAL_FLAG    IN VARCHAR2,
+        P_SORT_METHOD_CODE  IN VARCHAR2,
+        P_USER_ID           IN VARCHAR2,
+        P_COLUMN_WIDTH     IN VARCHAR2 DEFAULT NULL,   -- ⭐ 2026-07-27 신규
+        P_CELL_COLOR       IN VARCHAR2 DEFAULT NULL,   -- ⭐ 2026-07-27 신규
+        P_TEXT_COLOR       IN VARCHAR2 DEFAULT NULL,   -- ⭐ 2026-07-27 신규
+        O_RESULT_CURSOR     OUT SYS_REFCURSOR
+    );
+
+
+    -- 아1 SCP0104 CAPA Item 팝업 (AS-IS SCM0002_GET_CAPA_ITEM_POPUP / FN_ 이관)
+    PROCEDURE P_SCM0002_GET_CAPA_ITEM_POPUP
+    (
+        P_DIVISION_ID   IN  VARCHAR2,
+        P_ITEM_ID       IN  VARCHAR2,
+        O_RC1           OUT SYS_REFCURSOR,
+        O_RESULT_CURSOR OUT SYS_REFCURSOR
+    );
+
+    /* 2026.09.17 AJS : AS-IS SCM0002 미편입분 추가 (SCP0006 Project Route 입력목록 팝업) */
+    PROCEDURE P_SCM0002_GET_PROJECT_ROUTE_LIST_FORSAVE_POPUP
+    (
+        P_DIVISION_ID    IN  VARCHAR2
+      , P_MODEL_ID       IN  VARCHAR2
+      , P_ITEM_ID        IN  VARCHAR2
+      , P_TIMEZONE       IN  VARCHAR2
+      , O_RC1            OUT SYS_REFCURSOR
+      , O_RC2            OUT SYS_REFCURSOR
+      , O_RC3            OUT SYS_REFCURSOR
+      , O_RESULT_CURSOR  OUT SYS_REFCURSOR
+    );
+
+    /* 2026.09.17 AJS : AS-IS SCM0002 미편입분 추가 (SCP0030 BOD ITEM · Shipment Plan New 팝업) */
+    PROCEDURE P_SCM0002_GET_BODITEM_FOR_SUPPLY_POPUP
+    (
+        P_DIVISION_ID               IN  VARCHAR2
+      , P_PLAN_START_YYYYMMDD       IN  VARCHAR2
+      , P_PLAN_TYPE                 IN  VARCHAR2
+      , P_SEQ                       IN  VARCHAR2
+      , P_OPERATION_GROUP           IN  VARCHAR2
+      , P_ORIGIN_FROM_DIVISION_ID   IN  VARCHAR2
+      , P_ORIGIN_TO_DIVISION_ID     IN  VARCHAR2
+      , P_ITEM_ID                   IN  VARCHAR2
+      , P_PRGRAM_ID                 IN  VARCHAR2
+      , O_RC1                       OUT SYS_REFCURSOR
+      , O_RESULT_CURSOR             OUT SYS_REFCURSOR
+    );
+
+    /* 2026.09.17 AJS : AS-IS SCM0002 미편입분 추가 (Shipment Plan FG/SEMI New 저장) */
+    PROCEDURE P_SCM0002_SAVE_SHIPMENT_PLAN_NEW
+    (
+        P_DIVISION_ID               IN  VARCHAR2
+      , P_PLAN_START_YYYYMMDD       IN  VARCHAR2
+      , P_PLAN_TYPE                 IN  VARCHAR2
+      , P_SEQ                       IN  VARCHAR2
+      , P_OPERATION_GROUP           IN  VARCHAR2
+      , P_PROJECT_CODE              IN  VARCHAR2
+      , P_ITEM_ID                   IN  VARCHAR2
+      , P_TO_SITE                   IN  VARCHAR2
+      , P_INCOTERMS                 IN  VARCHAR2
+      , P_FROM_SITE                 IN  VARCHAR2
+      , P_BOD_ID                    IN  VARCHAR2
+      , P_ORIGIN_FROM_DIVISION_ID   IN  VARCHAR2
+      , P_ORIGIN_TO_DIVISION_ID     IN  VARCHAR2
+      , P_ELECTRODE_TYPE            IN  VARCHAR2
+      , P_PRGRAM_ID                 IN  VARCHAR2
+      , P_USER_ID                   IN  VARCHAR2
+      , O_RC1                       OUT SYS_REFCURSOR
+      , O_RESULT_CURSOR             OUT SYS_REFCURSOR
+    );
+
+END PKG_SCM0002;

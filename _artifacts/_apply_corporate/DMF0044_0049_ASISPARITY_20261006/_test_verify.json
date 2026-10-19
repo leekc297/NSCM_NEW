@@ -1,0 +1,167 @@
+{
+ "PKG_DMF0044": {
+  "last_ddl": "2026-10-06 16:17:43",
+  "status": "VALID",
+  "real_equals_tested_clone": true,
+  "marks": 11
+ },
+ "PKG_DMF0049": {
+  "last_ddl": "2026-10-06 16:17:44",
+  "status": "VALID",
+  "real_equals_tested_clone": true,
+  "marks": 12
+ },
+ "real_A1": {
+  "kind": "REAL",
+  "version": "R_S_20260610_V001",
+  "action": "T",
+  "msg": "TEAM정보가 존재하지 않아 저장할 수 없습니다.",
+  "sec": 0.0,
+  "in_session": {
+   "DM_MDF_VERSION": [
+    1,
+    0
+   ],
+   "DM_PLN_SALES_ETC_REPORT_C": [
+    12559,
+    0
+   ],
+   "DM_PLN_SALES_PLAN_REPORT_C": [
+    34521,
+    0
+   ],
+   "DM_MOBILE_REPORT_DEPT": [
+    0,
+    0
+   ],
+   "DM_MOBILE_REPORT_PRODUCT": [
+    0,
+    0
+   ],
+   "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+    0,
+    0
+   ],
+   "DM_PLN_SALES_ETC_REPORT_H": [
+    0,
+    0
+   ]
+  },
+  "no_commit_before_rollback": true,
+  "ledger_same_after": true,
+  "ledger": {
+   "DM_MDF_VERSION": [
+    1,
+    0
+   ],
+   "DM_PLN_SALES_ETC_REPORT_C": [
+    12559,
+    0
+   ],
+   "DM_PLN_SALES_PLAN_REPORT_C": [
+    34521,
+    0
+   ],
+   "DM_MOBILE_REPORT_DEPT": [
+    0,
+    0
+   ],
+   "DM_MOBILE_REPORT_PRODUCT": [
+    0,
+    0
+   ],
+   "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+    0,
+    0
+   ],
+   "DM_PLN_SALES_ETC_REPORT_H": [
+    0,
+    0
+   ]
+  }
+ },
+ "real_A4": {
+  "kind": "REAL",
+  "version": "R_S_20260610_V001",
+  "action": "C",
+  "msg": "Transfer Cancel은 SendYN 이 Y일 경우만 가능합니다.",
+  "sec": 0.0,
+  "in_session": {
+   "DM_MDF_VERSION": [
+    1,
+    0
+   ],
+   "DM_PLN_SALES_ETC_REPORT_C": [
+    12559,
+    0
+   ],
+   "DM_PLN_SALES_PLAN_REPORT_C": [
+    34521,
+    0
+   ],
+   "DM_MOBILE_REPORT_DEPT": [
+    0,
+    0
+   ],
+   "DM_MOBILE_REPORT_PRODUCT": [
+    0,
+    0
+   ],
+   "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+    0,
+    0
+   ],
+   "DM_PLN_SALES_ETC_REPORT_H": [
+    0,
+    0
+   ]
+  },
+  "no_commit_before_rollback": true,
+  "ledger_same_after": true,
+  "ledger": {
+   "DM_MDF_VERSION": [
+    1,
+    0
+   ],
+   "DM_PLN_SALES_ETC_REPORT_C": [
+    12559,
+    0
+   ],
+   "DM_PLN_SALES_PLAN_REPORT_C": [
+    34521,
+    0
+   ],
+   "DM_MOBILE_REPORT_DEPT": [
+    0,
+    0
+   ],
+   "DM_MOBILE_REPORT_PRODUCT": [
+    0,
+    0
+   ],
+   "DM_MOBILE_REPORT_EXCHANGE_RATE": [
+    0,
+    0
+   ],
+   "DM_PLN_SALES_ETC_REPORT_H": [
+    0,
+    0
+   ]
+  }
+ },
+ "real_A5": "VERSION 값이 존재하지 않습니다.",
+ "invalid_objects": [
+  [
+   "PKG_DMF0002",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_DMF0035",
+   "PACKAGE BODY"
+  ],
+  [
+   "PKG_DMF0051",
+   "PACKAGE BODY"
+  ]
+ ]
+}

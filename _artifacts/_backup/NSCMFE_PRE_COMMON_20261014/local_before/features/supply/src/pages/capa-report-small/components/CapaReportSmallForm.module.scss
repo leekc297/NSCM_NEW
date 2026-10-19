@@ -1,0 +1,11 @@
+.itemField {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.itemPopupButton {
+  flex: 0 0 auto;
+  min-width: 32px;
+}

@@ -1,0 +1,92 @@
+run0 SP 8.66s fetch 6.03s
+run1 SP 9.03s fetch 7.44s
+SQL_ID  18xg1y5298qgq, child number 1
+-------------------------------------
+QTY, MEASURE_GROUP , CELL_MODEL, NICK_NAME, DMS_SALES, DMS_CUSTOMER, 
+ 
+Plan hash value: 3971101268
+ 
+------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                                        | Name                                | E-Rows |  OMem |  1Mem | Used-Mem |
+------------------------------------------------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT                                 |                                     |        |       |       |          |
+|   1 |  LOAD TABLE CONVENTIONAL                         | GT_DMF0082_MF_SP                    |        |       |       |          |
+|   2 |   TABLE ACCESS FULL                              | GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE |      1 |       |       |          |
+|   3 |   NESTED LOOPS SEMI                              |                                     |      1 |       |       |          |
+|   4 |    TABLE ACCESS FULL                             | GT_DMF0082_PARAM_TOKEN              |      1 |       |       |          |
+|   5 |    INDEX RANGE SCAN                              | IDX01_SCM_ADM_LOOKUP_MASTER_DETAIL  |      1 |       |       |          |
+|   6 |   SORT GROUP BY                                  |                                     |  47964 |    56M|  2616K|   49M (0)|
+|   7 |    FILTER                                        |                                     |        |       |       |          |
+|   8 |     MERGE JOIN OUTER                             |                                     |  47964 |       |       |          |
+|   9 |      HASH JOIN RIGHT OUTER                       |                                     |  47964 |  1055K|  1055K| 1414K (0)|
+|  10 |       VIEW                                       |                                     |   1122 |       |       |          |
+|  11 |        SORT GROUP BY                             |                                     |   1122 | 73728 | 73728 |          |
+|  12 |         INDEX FAST FULL SCAN                     | IX01_DM_MST_BUCKET_CONVERSION       |   1122 |       |       |          |
+|  13 |       HASH JOIN                                  |                                     |  47964 |  1083K|  1083K| 1384K (0)|
+|  14 |        HASH JOIN RIGHT OUTER                     |                                     |    339 |  1797K|  1797K| 1685K (0)|
+|  15 |         TABLE ACCESS FULL                        | GT_DMF0082_CAL_WEEK_END_DATE        |     30 |       |       |          |
+|  16 |         HASH JOIN RIGHT OUTER                    |                                     |    339 |  1922K|  1922K| 1263K (0)|
+|  17 |          VIEW                                    |                                     |      1 |       |       |          |
+|  18 |           FILTER                                 |                                     |        |       |       |          |
+|  19 |            SORT GROUP BY                         |                                     |      1 | 73728 | 73728 |          |
+|  20 |             FILTER                               |                                     |        |       |       |          |
+|  21 |              TABLE ACCESS BY INDEX ROWID BATCHED | SCM_SYS_CALENDAR_M                  |    161 |       |       |          |
+|  22 |               INDEX RANGE SCAN                   | IDX_SCM_SYS_CALENDAR_N3             |    161 |       |       |          |
+|  23 |          HASH JOIN RIGHT OUTER                   |                                     |    339 |  1922K|  1922K| 1652K (0)|
+|  24 |           VIEW                                   |                                     |      1 |       |       |          |
+|  25 |            FILTER                                |                                     |        |       |       |          |
+|  26 |             SORT GROUP BY                        |                                     |      1 | 73728 | 73728 |          |
+|  27 |              FILTER                              |                                     |        |       |       |          |
+|  28 |               TABLE ACCESS BY INDEX ROWID BATCHED| SCM_SYS_CALENDAR_M                  |    161 |       |       |          |
+|  29 |                INDEX RANGE SCAN                  | IDX_SCM_SYS_CALENDAR_N3             |    161 |       |       |          |
+|  30 |           TABLE ACCESS BY INDEX ROWID BATCHED    | SCM_SYS_CALENDAR_M                  |    339 |       |       |          |
+|  31 |            INDEX RANGE SCAN                      | IDX_SCM_SYS_CALENDAR_N3             |    339 |       |       |          |
+|  32 |        TABLE ACCESS FULL                         | GT_DMF0082_TEMP_FCST_N_PRICE        |  48050 |       |       |          |
+|  33 |      BUFFER SORT                                 |                                     |      1 |  2048 |  2048 | 2048  (0)|
+|  34 |       VIEW                                       | VW_LAT_62E7BAE7                     |      1 |       |       |          |
+|  35 |        SORT GROUP BY                             |                                     |      1 |  2048 |  2048 | 2048  (0)|
+|  36 |         FILTER                                   |                                     |        |       |       |          |
+|  37 |          TABLE ACCESS BY INDEX ROWID             | SCM_MST_SITE                        |      1 |       |       |          |
+|  38 |           INDEX UNIQUE SCAN                      | PK_SCM_MST_SITE                     |      1 |       |       |          |
+------------------------------------------------------------------------------------------------------------------------------------
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+   - this is an adaptive plan
+   - Warning: basic plan statistics not available. These are only collected when:
+       * hint 'gather_plan_statistics' is used for the statement or
+       * parameter 'statistics_level' is set to 'ALL', at session or system level
+ 
+SQL_ID  5rfw1281hnb5b, child number 1
+-------------------------------------
+     SELECT DIVISION_ID, TEAM_ID, END_CUSTOMER, SCM_SITE_ID, 
+_20261001,0)+NVL(
+ 
+Plan hash value: 360512032
+ 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Id  | Operation                | Name             | Starts | E-Rows | A-Rows |   A-Time   | Buffers | Reads  | Writes |  OMem |  1Mem | Used-Mem | Used-Tmp|
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT         |                  |      1 |        |   8165 |00:00:03.68 |   56498 |  10532 |  10532 |       |       |          |         |
+|   1 |  SORT ORDER BY           |                  |      1 |    712K|   8165 |00:00:03.68 |   56498 |  10532 |  10532 |    11M|  1302K|   10M (0)|         |
+|   2 |   VIEW                   |                  |      1 |    712K|   8165 |00:00:03.43 |   56498 |  10532 |  10532 |       |       |          |         |
+|   3 |    TRANSPOSE             |                  |      1 |        |   8165 |00:00:03.40 |   56498 |  10532 |  10532 |       |       |          |         |
+|   4 |     SORT GROUP BY PIVOT  |                  |      1 |    712K|    446K|00:00:03.05 |   56498 |  10532 |  10532 |    91M|  3295K|   97M (1)|      83M|
+|   5 |      VIEW                |                  |      1 |    712K|    447K|00:00:01.29 |   56495 |      0 |      0 |       |       |          |         |
+|   6 |       UNION-ALL          |                  |      1 |    712K|    447K|00:00:01.24 |   56495 |      0 |      0 |       |       |          |         |
+|   7 |        TABLE ACCESS FULL | GT_DMF0082_MF_SP |      1 |    237K|    201K|00:00:00.11 |   11299 |      0 |      0 |       |       |          |         |
+|   8 |        HASH GROUP BY     |                  |      1 |   4659 |   2094 |00:00:00.05 |   11299 |      0 |      0 |  1186K|   999K| 1431K (0)|         |
+|   9 |         TABLE ACCESS FULL| GT_DMF0082_MF_SP |      1 |   4659 |   5089 |00:00:00.05 |   11299 |      0 |      0 |       |       |          |         |
+|  10 |        HASH GROUP BY     |                  |      1 |    232K|    196K|00:00:00.43 |   11299 |      0 |      0 |    53M|  4023K|   49M (0)|         |
+|  11 |         TABLE ACCESS FULL| GT_DMF0082_MF_SP |      1 |    232K|    196K|00:00:00.10 |   11299 |      0 |      0 |       |       |          |         |
+|  12 |        HASH GROUP BY     |                  |      1 |   4659 |    803 |00:00:00.05 |   11299 |      0 |      0 |   813K|   813K| 1425K (0)|         |
+|  13 |         TABLE ACCESS FULL| GT_DMF0082_MF_SP |      1 |   4659 |   5089 |00:00:00.04 |   11299 |      0 |      0 |       |       |          |         |
+|  14 |        HASH GROUP BY     |                  |      1 |    232K|  45916 |00:00:00.33 |   11299 |      0 |      0 |    13M|  2013K|   12M (0)|         |
+|  15 |         TABLE ACCESS FULL| GT_DMF0082_MF_SP |      1 |    232K|    196K|00:00:00.11 |   11299 |      0 |      0 |       |       |          |         |
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Note
+-----
+   - dynamic statistics used: dynamic sampling (level=2)
+ 

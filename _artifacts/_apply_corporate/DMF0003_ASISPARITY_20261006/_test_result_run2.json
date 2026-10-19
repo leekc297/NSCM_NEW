@@ -1,0 +1,87 @@
+{
+ "start": "2026-10-06 15:23:30",
+ "date": "20261012",
+ "ledger_rows_touched": 0,
+ "cases": [
+  {
+   "case": "BOM",
+   "div": "81",
+   "key": [
+    "81",
+    "A15BW7001",
+    "MI00-81-AS",
+    "APBMW12VH-A1-0G0"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [APBMW12VH-A1-0G0] Cell/Car does not exist !",
+    "0"
+   ],
+   "target_hit": false
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "A15BW7001",
+    "MI00-81-AS",
+    "ACLT1010U-B1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [ACLT1010U-B1] Cell/Car does not exist !",
+    "0"
+   ],
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [MI00-81-AS] SITE SHIP-TO does not exist !",
+    "0"
+   ],
+   "ledger_before": [
+    0,
+    0,
+    null
+   ],
+   "ledger_after": [
+    0,
+    0,
+    null
+   ],
+   "ledger_same": true
+  },
+  {
+   "case": "81_CELLCAR",
+   "div": "81",
+   "key": [
+    "81",
+    "A15BW7001",
+    "MI00-81-AS",
+    "APBMW12V0-A1"
+   ],
+   "before": [
+    "-1",
+    "ERR_RTN: - Validation Check : [APBMW12V0-A1] Cell/Car does not exist !",
+    "0"
+   ],
+   "target_hit": true,
+   "after": [
+    "-1",
+    "ERR_RTN: - Validation Check : [MI00-81-AS] SITE SHIP-TO does not exist !",
+    "0"
+   ],
+   "ledger_before": [
+    0,
+    0,
+    null
+   ],
+   "ledger_after": [
+    0,
+    0,
+    null
+   ],
+   "ledger_same": true
+  }
+ ]
+}

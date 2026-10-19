@@ -1,0 +1,119 @@
+--------------------------------------------------------------------------------
+-- DMF0044 재배포 후 SQL ERROR 재진단 (클라우드 / Oracle / SCM_MGR)
+-- 마커 : E20260903-DMF0044
+--------------------------------------------------------------------------------
+-- 목적 : 05B 재배포 이후에도 남는 SQL ERROR 의 **정체를 확정**한다.
+--        ① 재배포가 실제로 반영됐는가(마커 4종)
+--        ② 재배포 시각 **이후** 오류만 골라 ORA 코드·실패 라인 확인
+--        ③ ORA-00001 이면 어느 INSERT 문인지 라인으로 특정
+--
+-- ⚠ §1 의 TOP1 마커가 0 이면 재배포가 반영되지 않은 것이다. 그 경우 §2 는 볼 필요 없다.
+-- 실행 : SQLcl / DBeaver. 전 구문 읽기 전용(DML 없음).
+--------------------------------------------------------------------------------
+SET SERVEROUTPUT OFF
+SET LINESIZE 300
+SET PAGESIZE 200
+
+COLUMN 마커           FORMAT A30
+COLUMN 판정           FORMAT A40
+COLUMN SQL_ERR_CODE   FORMAT A12
+COLUMN SQL_ERR_MSG    FORMAT A76
+COLUMN SQL_BACKTRACE  FORMAT A78
+COLUMN TEXT           FORMAT A96
+
+PROMPT ================ §0. 환경 + 패키지 배포 시각 ================
+SELECT SYS_CONTEXT('USERENV','DB_NAME') AS DB_NAME
+     , TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS') AS NOW FROM DUAL;
+
+SELECT OBJECT_TYPE, STATUS
+     , TO_CHAR(LAST_DDL_TIME,'YYYY-MM-DD HH24:MI:SS') AS LAST_DDL
+  FROM ALL_OBJECTS WHERE OWNER='SCM_MGR' AND OBJECT_NAME='PKG_DMF0044'
+ ORDER BY OBJECT_TYPE;
+
+SELECT COUNT(*) AS BODY_라인수 FROM ALL_SOURCE
+ WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0044' AND TYPE='PACKAGE BODY';
+-- 기대 : 10440 (05B 재배포본). 10438 이면 직전 판(TOP1 정정 이전).
+
+PROMPT ================ §1. ⭐ 재배포 반영 여부 — 마커 4종 ================
+-- 기대 : NUM 14 / BULK 8 / TOP1 3 / (CLOB 마커는 SPEC 전용이라 BODY 에는 0 이 정상)
+SELECT 'E20260903-DMF0044NUM'  AS 마커, TO_CHAR(COUNT(*)) || ' 줄 (기대 14)' AS 판정
+  FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0044'
+   AND TEXT LIKE '%E20260903-DMF0044NUM%'
+UNION ALL
+SELECT 'E20260903-DMF0044BULK', TO_CHAR(COUNT(*)) || ' 줄 (기대 8)'
+  FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0044'
+   AND TEXT LIKE '%E20260903-DMF0044BULK%'
+UNION ALL
+SELECT 'E20260903-DMF0044TOP1 ⭐', TO_CHAR(COUNT(*)) || ' 줄 (기대 3 — 0 이면 미반영)'
+  FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0044'
+   AND TEXT LIKE '%E20260903-DMF0044TOP1%'
+UNION ALL
+SELECT '메시지 문구', TO_CHAR(COUNT(*)) || ' 줄 (기대 1)'
+  FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0044'
+   AND TEXT LIKE '%허용 가능한 자릿수를 초과하였습니다%'
+UNION ALL
+SELECT 'ROWNUM = 1 총 개수', TO_CHAR(COUNT(*)) || ' 줄'
+  FROM ALL_SOURCE WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0044' AND TYPE='PACKAGE BODY'
+   AND REGEXP_LIKE(TEXT, 'ROWNUM\s*=\s*1');
+
+PROMPT ================ §1-1. 컴파일 오류 (0건이어야 정상) ================
+SELECT LINE, POSITION, TEXT FROM ALL_ERRORS
+ WHERE OWNER='SCM_MGR' AND NAME='PKG_DMF0044' ORDER BY LINE;
+
+PROMPT ================ §2. ⭐ 재배포 시각 이후 오류만 ================
+-- PKG_DMF0044 BODY 의 LAST_DDL_TIME 이후 발생분만 골라낸다.
+SELECT TO_CHAR(L.EVENT_DATE,'MM-DD HH24:MI:SS') AS 발생시각
+     , L.SQL_ERR_CODE, L.SQL_ERR_MSG, L.SQL_BACKTRACE
+  FROM SCM_MGR.SCM_SYS_LOG_BATCH L
+ WHERE UPPER(L.PROGRAM_NAME) LIKE '%DMF0044%'
+   AND L.LOG_TYPE IN ('ERROR','INVALID')
+   AND L.EVENT_DATE >= ( SELECT MAX(LAST_DDL_TIME) FROM ALL_OBJECTS
+                          WHERE OWNER='SCM_MGR' AND OBJECT_NAME='PKG_DMF0044'
+                            AND OBJECT_TYPE='PACKAGE BODY' )
+ ORDER BY L.EVENT_DATE DESC
+ FETCH FIRST 10 ROWS ONLY;
+
+PROMPT ================ §2-1. 오류 코드별 집계 (재배포 전 / 후 비교) ================
+SELECT CASE WHEN L.EVENT_DATE >= D.DDL THEN '재배포 후' ELSE '재배포 전' END AS 구간
+     , L.SQL_ERR_CODE
+     , COUNT(*) AS 건수
+     , TO_CHAR(MAX(L.EVENT_DATE),'MM-DD HH24:MI:SS') AS 최근
+  FROM SCM_MGR.SCM_SYS_LOG_BATCH L
+ CROSS JOIN ( SELECT MAX(LAST_DDL_TIME) AS DDL FROM ALL_OBJECTS
+               WHERE OWNER='SCM_MGR' AND OBJECT_NAME='PKG_DMF0044'
+                 AND OBJECT_TYPE='PACKAGE BODY' ) D
+ WHERE UPPER(L.PROGRAM_NAME) LIKE '%DMF0044%' AND L.LOG_TYPE='ERROR'
+   AND L.EVENT_DATE > SYSDATE - 3
+ GROUP BY CASE WHEN L.EVENT_DATE >= D.DDL THEN '재배포 후' ELSE '재배포 전' END
+        , L.SQL_ERR_CODE
+ ORDER BY 1 DESC, 3 DESC;
+
+PROMPT ================ §3. ⭐ 실패 라인의 실제 소스 (BACKTRACE line 매핑) ================
+-- §2 의 BACKTRACE 에 찍힌 line 번호 앞뒤를 그대로 출력한다.
+-- 어떤 INSERT/UPDATE 문에서 터졌는지 눈으로 확정할 수 있다.
+SELECT S.LINE, S.TEXT
+  FROM ALL_SOURCE S
+ WHERE S.OWNER='SCM_MGR' AND S.NAME='PKG_DMF0044' AND S.TYPE='PACKAGE BODY'
+   AND S.LINE BETWEEN
+       ( SELECT NVL(MAX(TO_NUMBER(REGEXP_SUBSTR(L.SQL_BACKTRACE,'line (\d+)',1,1,NULL,1))),0) - 25
+           FROM SCM_MGR.SCM_SYS_LOG_BATCH L
+          WHERE UPPER(L.PROGRAM_NAME) LIKE '%DMF0044%' AND L.LOG_TYPE='ERROR'
+            AND L.EVENT_DATE >= ( SELECT MAX(LAST_DDL_TIME) FROM ALL_OBJECTS
+                                   WHERE OWNER='SCM_MGR' AND OBJECT_NAME='PKG_DMF0044'
+                                     AND OBJECT_TYPE='PACKAGE BODY' ) )
+   AND ( SELECT NVL(MAX(TO_NUMBER(REGEXP_SUBSTR(L.SQL_BACKTRACE,'line (\d+)',1,1,NULL,1))),0) + 5
+           FROM SCM_MGR.SCM_SYS_LOG_BATCH L
+          WHERE UPPER(L.PROGRAM_NAME) LIKE '%DMF0044%' AND L.LOG_TYPE='ERROR'
+            AND L.EVENT_DATE >= ( SELECT MAX(LAST_DDL_TIME) FROM ALL_OBJECTS
+                                   WHERE OWNER='SCM_MGR' AND OBJECT_NAME='PKG_DMF0044'
+                                     AND OBJECT_TYPE='PACKAGE BODY' ) )
+ ORDER BY S.LINE;
+
+PROMPT ================ §4. 최근 1건 입력 파라미터 (행수 파악용) ================
+SELECT TO_CHAR(EVENT_DATE,'YYYY-MM-DD HH24:MI:SS') AS 발생시각
+     , SUBSTR(IN_PARA_DATA, 1, 1500) AS 입력파라미터
+  FROM SCM_MGR.SCM_SYS_LOG_BATCH
+ WHERE UPPER(PROGRAM_NAME) LIKE '%DMF0044%' AND LOG_TYPE='ERROR'
+ ORDER BY EVENT_DATE DESC FETCH FIRST 1 ROWS ONLY;
+
+PROMPT ================ 끝 ================

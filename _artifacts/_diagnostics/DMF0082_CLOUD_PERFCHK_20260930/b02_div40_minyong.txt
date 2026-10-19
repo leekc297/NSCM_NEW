@@ -1,0 +1,8 @@
+div=40 user=minyonglee1 TEMP_FCST_N_PRICE=49,725  V_EXP=20270817 V_GROUP_ID='ADMIN'
+  SP 적재 MF_SP          rows 49,725  sha 5093f8e934661d35
+  A0 원문                0.58s  rows 49,725  sha 110828fad4c5fa0d  ≠ SP
+  A1 GROUP BY 제거       0.42s  rows 49,725  sha 110828fad4c5fa0d  ≠ SP
+  A2 +LATERAL 제거       0.33s  rows 49,725  sha 110828fad4c5fa0d  ≠ SP
+  A0 원문(재)             0.72s  rows 49,725  sha 110828fad4c5fa0d  ≠ SP
+  A2 (재)               0.25s  rows 49,725  sha 110828fad4c5fa0d  ≠ SP
+  G  업무키 중복 점검        0.06s  중복그룹 0

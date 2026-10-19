@@ -1,0 +1,96 @@
+################ [T0] 접속 DB · 시각 ################
+DB_NAME | HOST   | INST | NOW                
+--------+--------+------+--------------------
+ZIOUI1  | ol9-db | ZIO  | 2026-10-12 00:59:15
+(1 rows)
+################ [T1] ⭐ 지금 PKG_DMF0082 를 실행 중인 세션 — 어느 문장에서 무엇을 기다리나 ################
+--  EVT 판정: ON CPU / cell·db file read = 계획 문제(느린 문장) · enq: TX/TM = 잠금 · library cache pin/lock · cursor: pin S = PKG 재컴파일 충돌
+--           direct path write temp = TEMP 유출 · PX Deq = 병렬 대기. LINE = BODY 줄번호 (사내 BODY 기준 L1612/L2390/L2805 = 81MKTAMT · L1771 = ONEREAD 판가 · L2089 = 실적 arm)
+INST | SID | SERIAL# | USERNAME | MACHINE     | MODULE                     | STATUS | CALL_SEC | SQL_ID        | CH | PHV        | SQL_EXEC_START      | EVT                         | WAIT_CLASS | WAIT_SEC | BLK_SID | FINAL_BLK | LINE | HIST_SEC_PER_EX | TXT                                                                             
+-----+-----+---------+----------+-------------+----------------------------+--------+----------+---------------+----+------------+---------------------+-----------------------------+------------+----------+---------+-----------+------+-----------------+---------------------------------------------------------------------------------
+1    | 629 | 32267   | SCM_MGR  | P2605LN0006 | C:\Python3.11.5\python.exe | ACTIVE | 0        | 1y45tkmp9tww6 | 0  | 1061889594 | 2026-10-12 00:59:15 | Allocate UGA memory from OS | Other      | 0        |         |           | 0    | 0               | SELECT S.INST_ID INST, S.SID, S.SERIAL#, S.USERNAME, S.MACHINE, S.MODULE, S.STAT
+(1 rows)
+--  0 rows = 지금 도는 조회 없음 (타임아웃 이후라면 [T5]~ 로)
+################ [T1b] 지금 도는 문장의 실행계획 (자동 — [T1] 의 SQL_ID 전부, 바인드 포함) ################
+PLAN_TABLE_OUTPUT
+-----------------
+(0 rows)
+--  NESTED LOOPS 안쪽에 SCM_MST_FUTURE_PRICE / DM_PLN_SALES_PLAN / DM_PLN_MKT_FCST INDEX RANGE SCAN 이 있고 GT_DMF0082_* Rows=1 이면 GTT 1행 추정 NL 함정
+################ [T2] ⭐ 잠금 대기 사슬 — 누가 막고 있나 (DB 전체) ################
+INST | WAIT_SID | WAIT_USER | WAIT_MODULE | EVT | WAIT_SEC | BLK_SID | BLK_USER | BLK_MACHINE | BLK_MODULE | BLK_STATUS | BLK_CALL_SEC | BLK_SQL_ID | BLK_PREV_SQL | TXT
+-----+----------+-----------+-------------+-----+----------+---------+----------+-------------+------------+------------+--------------+------------+--------------+----
+(0 rows)
+--  BLK_STATUS=INACTIVE + BLK_CALL_SEC 큼 = 커밋 안 한 채 방치된 세션(SQL Developer 등)이 잡고 있음
+################ [T3] PKG_DMF0082 · 81 원천 테이블에 걸린 DML 잠금 ################
+SID | USERNAME | MACHINE | MODULE | STATUS | CALL_SEC | OBJ | OBJECT_TYPE | LMODE
+----+----------+---------+--------+--------+----------+-----+-------------+------
+(0 rows)
+################ [T4] 지금 도는 조회 세션의 실행 중 문장 진행 (SQL Monitor — 5초 이상 문장 · 권한 없으면 오류 무시) ################
+INST | SID | SQL_ID        | PHV        | STATUS          | ELAP_S | CPU_S | IO_S  | CONC_S | APP_S | BG      | READ_MB | STARTED  | TXT                                                                             
+-----+-----+---------------+------------+-----------------+--------+-------+-------+--------+-------+---------+---------+----------+---------------------------------------------------------------------------------
+1    | 733 | 1v7ym2q0f047f | 0          | DONE            | 170.6  | 33.5  | 138.2 | 0      | 0     | 4487245 | 1804    | 00:46:48 | DECLARE -- ===== 설정 (필요 시 여기만 수정) ==============================================
+1    | 845 | 1v7ym2q0f047f | 0          | DONE            | 30.4   | 30.3  | 0.1   | 0      | 0     | 4472077 | 0       | 00:57:21 | DECLARE -- ===== 설정 (필요 시 여기만 수정) ==============================================
+1    | 733 | d019r0hbb0muh | 2054382907 | DONE            | 12.3   | 1.4   | 11.1  | 0      | 0     | 67019   | 39      | 00:48:40 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+1    | 733 | d019r0hbb0muh | 2054382907 | DONE            | 8.3    | 1.8   | 6.7   | 0      | 0     | 126459  | 48      | 00:49:22 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJECT_CODE, EN
+1    | 280 | 9j76tufnkqwd6 | 4119081419 | DONE (ALL ROWS) | 0      | 0     | 0     | 0      | 0     | 0       | 0       | 00:45:15 | SELECT TO_CHAR(N.BEGIN_INTERVAL_TIME,'MM-DD') D, COUNT(DISTINCT S.SQL_ID) SQLS, 
+1    | 845 | 9j76tufnkqwd6 | 4119081419 | DONE (ALL ROWS) | 0      | 0     | 0     | 0      | 0     | 0       | 0       | 00:59:09 | SELECT TO_CHAR(N.BEGIN_INTERVAL_TIME,'MM-DD') D, COUNT(DISTINCT S.SQL_ID) SQLS, 
+(6 rows)
+################ [T5] ⭐ 최근 120 분 화면 호출 이력 (BE 로그) — division · 소요 · 오류 ################
+ST | SHT_NM | ACT | DIV | GRP | CREATED_BY | DB_S | SERVER_S | ERR
+---+--------+-----+-----+-----+------------+------+----------+----
+(0 rows)
+--  타임아웃 호출은 BE 가 END 를 못 남겨 빠질 수 있다 — 40 이 정상(수 초)이고 81 만 없거나 수 분이면 81 조건 문제
+################ [T6] ⭐ 최근 120 분 PKG_DMF0082 진입 ASH — 호출(세션×실행) × 문장 × 대기 (샘플 1 ≈ 1초, 10 샘플↑) ################
+INST | SID | SER  | SQL_ID        | PHV        | EVT                     | SAMPLES | T_FROM   | T_TO     | BLK_SID | LINE | TXT                                                                   
+-----+-----+------+---------------+------------+-------------------------+---------+----------+----------+---------+------+-----------------------------------------------------------------------
+1    | 733 | 5514 | gfjpdh7fc1u59 | 982384402  | direct path read        | 44      | 00:47:56 | 00:48:39 |         | 1213 | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+1    | 733 | 5514 | 4svg4dhnqxh8f | 3195295405 | direct path read        | 21      | 00:47:06 | 00:47:27 |         | 1267 | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, P
+1    | 733 | 5514 | gfjpdh7fc1u59 | 982384402  | db file scattered read  | 18      | 00:48:58 | 00:49:15 |         | 1213 | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+1    | 733 | 5514 | d019r0hbb0muh | 2054382907 | db file sequential read | 17      | 00:48:41 | 00:49:29 |         | 1667 | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE ( DIVISION_ID, PROJEC
+(4 rows)
+--  한 SQL_ID 가 수십~수백 샘플 = 그 문장이 타임아웃 원인. EVT 로 계통 판정([T1] 과 동일 기준)
+################ [T7] ⭐ 계획 이탈 후보 — 1회 10초↑ 또는 지금 실행 중인 자식 커서 (PKG_DMF0082 문장 + GT_DMF0082 동적) ################
+INST | SQL_ID | CH | LINE | PHV | EX | SEC_PER_EX | BG_PER_EX | ROWS_PER_EX | NOW_RUN | SCH | LOADED | LAST_ACT | DS | TAG | TXT
+-----+--------+----+------+-----+----+------------+-----------+-------------+---------+-----+--------+----------+----+-----+----
+(0 rows)
+--  사내 정상 구간 최대 1회 1초 미만 — 10초 넘는 자식이 있으면 그 SQL_ID 를 R05 DEFINE SQL_ID 에 넣어 계획 확인
+################ [T8] 객체 상태 — PKG 무효·재컴파일 중이면 조회가 library cache 대기 ################
+OBJECT_NAME          | OBJECT_TYPE  | STATUS | LAST_DDL           
+---------------------+--------------+--------+--------------------
+PKG_DMF0000          | PACKAGE      | VALID  | 2026-09-02 11:47:09
+PKG_DMF0000          | PACKAGE BODY | VALID  | 2026-10-08 16:02:25
+PKG_DMF0082          | PACKAGE      | VALID  | 2026-10-02 17:59:16
+PKG_DMF0082          | PACKAGE BODY | VALID  | 2026-10-09 16:32:07
+PR_DM_SYS_LOG_BATCH  | PROCEDURE    | VALID  | 2026-09-02 17:30:35
+PR_SCM_SYS_LOG_BATCH | PROCEDURE    | VALID  | 2026-09-02 17:30:38
+(6 rows)
+--  LAST_DDL 이 조회 시각과 겹치거나 STATUS INVALID = 패키지 적용(CREATE OR REPLACE) 과 조회 충돌
+################ [T9] TEMP · 병렬 자원 (TEMP 부족·병렬 대기형 정체 판정 · DBA_ 권한 없으면 오류 무시) ################
+SID | USERNAME | MODULE | TABLESPACE | TEMP_MB | SEGTYPE
+----+----------+--------+------------+---------+--------
+(0 rows)
+TABLESPACE_NAME | SIZE_MB | ALLOC_MB | FREE_MB
+----------------+---------+----------+--------
+TEMP            | 40960   | 32769    | 40958  
+(1 rows)
+################ [T10] ⭐⭐ 1행 추정 NESTED LOOPS 함정 — GTT(TEMP_SITE_ITEM 등)를 1행으로 보고 대형표를 행마다 인덱스 범위 스캔 ################
+--  대상: GT_DMF0082_TEMP_SITE_ITEM 을 조인하는 모든 문장 (81 수요·판가·금액·실적 arm 전부 해당)
+--  NL_RISK=Y 자식이 EX>0 이고 ROWS_PER_EX=0 · BG 큼 · SEC 큼 이면 = 중간 취소(타임아웃) 된 실행 → 원인 확정
+INST | SQL_ID        | CH | LINE | PHV        | EX | ELAP_S_TOT | SEC_PER_EX | BG_PER_EX | ROWS_PER_EX | NOW_RUN | LAST_ACT    | NL_RISK | PERM_OBJS                                                                                                      | TXT                                                                   
+-----+---------------+----+------+------------+----+------------+------------+-----------+-------------+---------+-------------+---------+----------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------
+1    | gfjpdh7fc1u59 | 0  | 1213 | 982384402  | 8  | 63.9       | 8          | 45808     | 1082        | 0       | 10-12 00:57 | N       | DM_PLN_MKT_FCST                                                                                                | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+1    | 4svg4dhnqxh8f | 0  | 1267 | 3195295405 | 4  | 21.1       | 5.3        | 33434     | 6291        | 0       | 10-12 00:57 | N       | DM_PLN_CFM_SELLING_PRICE                                                                                       | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE (DIVISION_ID, P
+1    | ac561dnz1arup | 0  | 1230 | 2591175856 | 4  | 6.9        | 1.7        | 16214     | 2834        | 0       | 10-12 00:57 | N       | DM_PLN_CFM_MKT_DEMAND_PLAN                                                                                     | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST (DIVISION_ID, PR
+1    | 19mfxqb34sbky | 0  | 855  | 2619118743 | 12 | 5.3        | 0.4        | 37425     | 30935       | 0       | 10-12 00:57 | N       | IDX01_SCM_ADM_LOOKUP_MASTER_DETAIL,IX01_SCM_MST_PROJECT,PK_SCM_ADM_LOOKUP_MASTER_DETAIL,PK_SCM_MST_SSO_USER_IN | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL ( DIVISION_ID, PROJE
+1    | 63ar9rz0axr5p | 0  | 1051 | 2395782385 | 12 | 2.2        | 0.2        | 8173      | 30935       | 0       | 10-12 00:57 | N       |                                                                                                                | INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM ( DIVISION_ID, PROJECT_C
+1    | 9pbzwq00mxuh3 | 0  | 852  | 3123668380 | 12 | 0          | 0          | 954       | 0           | 0       | 10-12 00:57 | N       |                                                                                                                | DELETE FROM SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM_ALL                     
+1    | 7jg4wbat2mb66 | 0  | 1048 | 125332918  | 12 | 0          | 0          | 950       | 0           | 0       | 10-12 00:57 | N       |                                                                                                                | DELETE FROM SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM                         
+1    | g2f236ssg1rpu | 0  | 1301 | 997397004  | 8  | 0          | 0          | 10        | 0           | 0       | 10-12 00:57 | Y       | DM_PLN_MKT_FCST_C,PK_DM_PLN_MKT_FCST_C_PART                                                                    | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST_C (DIVISION_ID, 
+1    | 8kzbu46dc5arm | 0  | 1341 | 2112400780 | 8  | 0          | 0          | 13        | 0           | 0       | 10-12 00:57 | Y       | IX01_SCM_MST_FUTURE_PRICE_C,SCM_MST_FUTURE_PRICE_C                                                             | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C (DIVISION_ID,
+1    | br0qzg41fkcrf | 0  | 1320 | 2605627390 | 4  | 0          | 0          | 27        | 0           | 0       | 10-12 00:57 | Y       | DM_PLN_CFM_MKT_DEMAND_PLAN_C,PK_DM_PLN_CFM_MKT_DEMAND_PLAN_C_PART                                              | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST_C (DIVISION_ID, 
+1    | 4gsksgxj0ft42 | 0  | 1361 | 89136042   | 4  | 0          | 0          | 29        | 0           | 0       | 10-12 00:57 | Y       | DM_PLN_CFM_SELLING_PRICE_C,PK_DM_PLN_CFM_SELLING_PRICE_C_PART                                                  | INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C (DIVISION_ID,
+(11 rows)
+--  NL_RISK=Y 이면서 ROWS 0 · SEC 0 인 자식 = 빈 GTT 로 실행돼 무해. 위험 = NL_RISK=Y 이면서 SEC/BG 가 큰 자식 (PERM_OBJS 의 표를 행마다 스캔)
+=============================================================================
+R06 완료 → R06_LIVE_DURING_SEARCH_OUT.txt 회신 (조회 중 1회 + 조회 후 1회)
+=============================================================================

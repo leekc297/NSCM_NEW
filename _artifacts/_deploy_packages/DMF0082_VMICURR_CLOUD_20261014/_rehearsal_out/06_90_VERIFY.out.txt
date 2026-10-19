@@ -1,0 +1,21 @@
+CHK | N | JUDGE
+V1 마커 | 6 | PASS
+(1 rows)
+
+CHK | OBJECT_TYPE | STATUS | LAST_DDL | ERR_CNT | DEP_INVALID
+V2 상태 | PACKAGE | VALID | 2026-10-09 13:38:31 | 0 | 0
+V2 상태 | PACKAGE BODY | VALID | 2026-10-14 11:50:01 | 0 | 0
+(2 rows)
+
+CHK | KIND | N | EXPECT | LINES | JUDGE
+V3 잔존 | CURRNORM VMI 공백 강제 | 0 | 0 |  | PASS (잔존 0)
+V3 잔존 | 백필 VMI 제외(CURRENT 형) | 0 | 0 |  | PASS (잔존 0)
+V3 잔존 | 백필 VMI 제외(MAIN 형) | 0 | 0 |  | PASS (잔존 0)
+(3 rows)
+
+CHK | DIVISION_ID | MEASURE | KEYS | ROWS_N | SAMPLE_SITE
+V4 대상 | 40 | VMI_In_Req | 1 | 4 | acer_CN_CKG
+V4 대상 | 81 | VMI_In_Req | 17 | 1933 | BMW_MX_MEX
+V4 대상 | 82 | VMI_DIO | 1 | 400 | DeltaX_KR_SEL
+V4 대상 | 82 | VMI_Inv | 1 | 400 | DeltaX_KR_SEL
+(4 rows)

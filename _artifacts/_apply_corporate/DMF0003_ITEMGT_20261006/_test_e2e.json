@@ -1,0 +1,106 @@
+{
+ "runs": [
+  {
+   "key": [
+    "81",
+    "A15BW7002",
+    "BMW_DE_BKB",
+    "APBMW48CL-A2-2I0"
+   ],
+   "attr": [
+    "E",
+    "MPS",
+    "FCA",
+    "WA00-P"
+   ],
+   "fcst_type_used": "SMF",
+   "old": [
+    "0",
+    "SUCCESS",
+    "0"
+   ],
+   "sec_old": 142.87,
+   "new": [
+    "0",
+    "SUCCESS",
+    "0"
+   ],
+   "sec_new": 5.5,
+   "rows_old": {
+    "DM_PLN_MKT_FCST": 569,
+    "DM_PLN_CFM_MKT_DEMAND_PLAN": 0
+   },
+   "rows_new": {
+    "DM_PLN_MKT_FCST": 569,
+    "DM_PLN_CFM_MKT_DEMAND_PLAN": 0
+   },
+   "identical": true,
+   "measures_old": [
+    "BALANCE",
+    "MKT_FCST"
+   ],
+   "measures_new": [
+    "BALANCE",
+    "MKT_FCST"
+   ],
+   "left_after_cleanup": {
+    "DM_PLN_MKT_FCST": 0,
+    "DM_PLN_CFM_MKT_DEMAND_PLAN": 0
+   }
+  },
+  {
+   "key": [
+    "81",
+    "A15PA7004",
+    "PSA_FR_MHS",
+    "ACPN4041I-A1T000"
+   ],
+   "attr": [
+    "E",
+    "MPS",
+    "FCA",
+    "WA00-P"
+   ],
+   "fcst_type_used": "SMF",
+   "old": [
+    "0",
+    "SUCCESS",
+    "0"
+   ],
+   "sec_old": 3.76,
+   "new": [
+    "0",
+    "SUCCESS",
+    "0"
+   ],
+   "sec_new": 6.32,
+   "rows_old": {
+    "DM_PLN_MKT_FCST": 569,
+    "DM_PLN_CFM_MKT_DEMAND_PLAN": 0
+   },
+   "rows_new": {
+    "DM_PLN_MKT_FCST": 569,
+    "DM_PLN_CFM_MKT_DEMAND_PLAN": 0
+   },
+   "identical": true,
+   "measures_old": [
+    "BALANCE",
+    "MKT_FCST"
+   ],
+   "measures_new": [
+    "BALANCE",
+    "MKT_FCST"
+   ],
+   "left_after_cleanup": {
+    "DM_PLN_MKT_FCST": 0,
+    "DM_PLN_CFM_MKT_DEMAND_PLAN": 0
+   }
+  }
+ ],
+ "other_rows_touched_by_test_user": {
+  "DM_PLN_MKT_FCST": 0,
+  "DM_PLN_CFM_MKT_DEMAND_PLAN": 0
+ },
+ "start": "2026-10-06 17:28:59",
+ "date": "20261012"
+}

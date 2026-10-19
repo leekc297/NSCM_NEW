@@ -1,0 +1,30 @@
+사용자 전달 클라우드 QA(OCGSCMQ_P01) R02 실행 결과 1부 — 2026-10-12 09:0x (채팅 붙여넣기, [C0] 전체 + [C1] 앞 7행까지 수신 · 이후 5만 자 제한으로 절단)
+
+[C0] 시트 × 액션 (최근 14일)
+SHT_NM           ACT          CALLS USERS FIRST_CALL   LAST_CALL    MED_DB_S MAX_DB_S GE2S_CALLS ERR_OR_NOEND
+FcstNPrice       SEARCH       329   3     09-28 15:28  10-12 08:50  16       9479     313        0
+spreadTitle      SEARCH       260   3     09-28 15:28  10-12 08:50  0        19       3          0
+titleSet         SEARCH       176   3     09-28 15:18  10-12 08:50  0        1        0          0
+FcstNPrice       SAVE         36    2     09-28 16:57  10-09 15:21  3.5      16       24         0
+buttonAuth       SEARCH       35    1     10-08 09:45  10-12 08:50  0        0        0          0
+version          SEARCH       24    2     09-29 15:15  09-30 13:09  0        0        0          0
+FcstNPrice       UPLOAD       18    2     09-28 16:05  09-29 09:35  0        1        0          0
+titleSet         SAVE         16    3     09-29 11:35  10-09 15:11  0        1        0          0
+futurePriceInfo  SEARCH       16    2     09-28 15:18  10-09 14:08  0        1        0          0
+futurePriceInfo  SAVE         4     2     09-28 15:37  10-09 13:33  35.5     41       4          0
+savePriceData    SEARCH       2     1     10-09 14:34  10-09 14:34  14       19       2          0
+futurePriceInfo  IF           2     2     09-28 16:29  10-09 14:06  31.5     44       2          0
+FcstNPrice       FORM_DATA    2     1     09-28 18:39  09-28 18:39  3        4        2          0
+savePriceTitle   SEARCH       1     1     10-09 14:34  10-09 14:34  0        0        0          0
+FcstNPrice       UPLOAD_SAVE  1     1     09-28 18:40  09-28 18:40  2        2        1          0
+
+[C1] 최신순 (수신분)
+ST             SHT_NM      ACT    DIV USR         GRP          VER     PERIOD            FILTERS(ALL 포함 — 수정 전 판정)   DB_S  SERVER_S TOTAL_S PRE_DB BE_POST JUDGE
+10-12 08:50:57 FcstNPrice  SEARCH 40  minyonglee1 ADMIN        Current 20261001~20270331 plant pjt owner site dept cust 22.27 22.46    22.67   0      .19     ⭐ 대상(>=2s)
+10-12 08:50:57 spreadTitle SEARCH 40  minyonglee1                                                                        .01   .02      .23     0      .01     -
+10-12 08:50:41 buttonAuth  SEARCH 40  minyonglee1 ADMIN                                                                  .02   .02      .2      0      0       -
+10-12 08:50:41 buttonAuth  SEARCH 40  minyonglee1 minyonglee1                                                            .18   .18      .85     0      0       -
+10-12 08:50:41 titleSet    SEARCH 40  minyonglee1                                                                        .01   .01      .61     0      0       -
+10-11 23:39:36 spreadTitle SEARCH 81  minyonglee1                                                                        .01   .02      .14     0      .01     -
+10-11 23:39:36 FcstNPrice  SEARCH 81  minyonglee1 ADMIN        Current 20261001~20270331 plant pjt owner site dept cust 32.75 32.97    33.08   0      .22     ⭐ 대상(>=2s)
+(이하 절단 — 2부 대기)

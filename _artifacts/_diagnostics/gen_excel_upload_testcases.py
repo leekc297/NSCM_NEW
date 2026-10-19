@@ -140,35 +140,60 @@ CASES14 = []
 def add14(no, cid, title, expect, rows, note="", periods=None):
     CASES14.append(dict(no=no, cid=cid, title=title, expect=expect, rows=rows, note=note, periods=periods or WEEKS))
 
+# [E20260923-DMF0014VALMSG] 메시지 규격 '<규칙> [<헤더>: <입력값>]' + 연쇄 오류 가드(근본 원인 1건) + 기간 칸 셀 단위(Invalid Numeric/Decimal/Please Input QTY)
 add14(0, "OK", "정상 (WEEKLY · CELL · 4주 수량)", "(정상 — Error 0)", [row14()], "기준행")
-add14(1, "DUP", "키 10개 조합 동일 2행", "Duplication Key.", [row14(), row14(qty=("1", "2", "3", "4"))], "ATTRIBUTE1~10 동일 (UOM/Project/Model 은 키 밖)")
-add14(2, "DIV", "Division 미등재", "Invalid Division.", [row14(**{"Division*": "99"})])
-add14(3, "BKT", "헤더 일자 간격 DAILY (등록 WEEKLY)", "Invalid Measure Upload Bucket.", [row14()], "일자 헤더를 1일 간격으로 → DAILY 산출 ≠ 등록 WEEKLY", periods=DAYS)
-add14(4, "MUOM", "Upload UOM 불일치 (등록 CELL)", "Invalid Measure Upload UOM.", [row14(**{"Upload UOM*": "Pack"})])
-add14(5, "SITE", "Sales Site 미등재", "Invalid Measure Upload Bucket.", [row14(**{"Sales Site*": "ZZ_SITE"})],
-      "[E20260831-REGEN] 기대값을 실측 기준으로 정정 — 문서 기대는 'Invalid Scm Site.' 이나 BKT 가 (Sales Site, Measure) 로 먼저 검사(순서 마스킹·조기 종료 구조, 2026-08-27/08-31 실측 동일)")
-add14(6, "PLNT", "Plant Site 미등재", "Invalid Plant Site.", [row14(**{"Plant Site*": "ZZ_PLANT"})])
-add14(7, "CPRJ", "Customer Project 미등재", "Invalid Customer Model.", [row14(**{"Customer Project*": "ZZ_PRJ"})],
-      "[E20260831-REGEN] 기대값을 실측 기준으로 정정 — 전용 규칙(문서 기대 'Invalid Customer Project.')은 라이브 BODY 주석(L1054~1082)으로 사문, 다음 규칙 CMDL 이 조합(Customer Project 포함)으로 검출. 규칙 부활 여부 = 사용자 의사결정 대기")
-add14(8, "CMDL", "Customer Model 미등재", "Invalid Customer Model.", [row14(**{"Customer Model*": "ZZ_MODEL"})])
-add14(9, "INCO", "Incoterms 미등재", "Invalid Incoterms.", [row14(**{"Incoterms*": "ZZZ"})])
-add14(10, "FTYP", "FCST Type 미등재", "Invalid Sales Type.", [row14(**{"FCST Type*": "ZZ_TYPE"})])
-add14(11, "CSTM", "Customs Handbook 미등재", "(오류 없음 — 규칙 사문. 의사결정 대기)", [row14(**{"Customs Handbook*": "X"})],
-      "[E20260831-REGEN] 기대값을 실측 기준으로 정정 — 문서 기대 'Invalid Customs Handbook' 규칙이 라이브 BODY 주석(L1236~1262)으로 사문 → 'X' 도 SUCCESS. AS-IS 실측(2026-08-31, AsIs_LGCE_SCMDEV_SP1_DDL L91194~92734 정밀 추출): AS-IS 원문에서도 해당 UPDATE 블록이 /* */ 주석 = AS-IS 부터 사문 → TO-BE 주석 보존은 파리티(변환 결함 아님). 부활=명세 변경 — 사용자 의사결정 대기 (hook #138)")
-add14(12, "MGRP", "Measure Group ≠ CUST_FCST", "Invalid Measure Group.", [row14(**{"Measure Group*": "PSI"})])
-add14(13, "QSTR", "수량 문자 혼입", "This file contains invalid quantity data such as 'Alphabet', 'NUMBER', etc. (e.g. a, b, c, 130.2, 50.4 ...).",
-      [row14(qty=("100", "abc", "300", "400"))])
-add14(14, "QDEC", "수량 소수점", "This file contains invalid quantity data such as 'Alphabet', 'Decimal', etc. (e.g. a, b, c, 130.2, 50.4 ...).",
-      [row14(qty=("100", "130.2", "300", "400"))])
-add14(15, "UOM", "Upload UOM 룩업 미등재", "Invalid Measure Upload UOM.", [row14(**{"Upload UOM*": "BOX"})],
-      "[E20260831-REGEN] 기대값을 실측 기준으로 정정 — 문서 기대 'Invalid Upload UOM.' 이나 실행순서 4(MUOM)가 먼저 (Sales Site, Measure) 등록 UOM(CELL)과 비교해 검출 (순서 마스킹)")
-add14(16, "UOMC", "(Division, Sales Site, Measure) 고객 FCST 미등재", "Invalid Measure Upload Bucket.", [row14(**{"Measure*": "ZZ_MEASURE"})],
-      "[E20260831-REGEN] 기대값을 실측 기준으로 정정 — 문서 기대 'Invalid Upload UOM Costomer FCST.' 이나 실행순서 3(BKT)이 (Sales Site, Measure) 로 먼저 검출 (순서 마스킹)")
-add14(17, "PRJ", "Project 조합 미등재", "(오류 없음 — 규칙 사문. 의사결정 대기)", [row14(Project="ZZ_PRJCODE")],
-      "[E20260831-REGEN] 기대값을 실측 기준으로 정정 — 문서 기대 'Invalid Project.' 규칙이 라이브 BODY 주석(L1689~1715)으로 사문 → SUCCESS. AS-IS 원문도 /* */ 주석(파리티 — L905 블록). 부활=명세 변경, 사용자 의사결정 대기")
-add14(18, "MDL", "Model 조합 미등재", "(오류 없음 — 규칙 사문. 의사결정 대기)", [row14(Model="ZZ_ITEM")],
-      "[E20260831-REGEN] 동일 — 라이브 BODY 주석(L1716~1747) 사문 → SUCCESS. AS-IS 원문도 /* */ 주석(파리티 — L936 블록). 부활=명세 변경, 사용자 의사결정 대기")
-
+add14(1, "DUP", "키 10개 조합 동일 2행", "Duplication Key [Sales Site*: GM_US_BQN, Customer Project*: SGM Modified, Customer Model*: N2.2]",
+      [row14(), row14(qty=("1", "2", "3", "4"))], "ATTRIBUTE1~10 동일 (UOM/Project/Model 은 키 밖) — 2행 모두 표기")
+add14(2, "DIV", "Division 미등재", "Invalid Division [Division*: 99]", [row14(**{"Division*": "99"})],
+      "[E20260923-DMF0014VALMSG] 연쇄(Sales Site/Plant Site/Bucket…) 미표기 — 상위 검증 통과 행만 하위 검증")
+add14(3, "BKT", "헤더 일자 간격 DAILY (등록 WEEKLY)", "Invalid Measure Upload Bucket [Measure*: Customer FCST]", [row14()],
+      "일자 헤더 1일 간격 → DAILY ≠ 등록 WEEKLY. DAILY 헤더는 마스터 밖 주차라 빈값 검사(Please Input QTY) 대상 아님", periods=DAYS)
+add14(4, "MUOM", "Upload UOM 불일치 (등록 CELL)", "Invalid Measure Upload UOM [Upload UOM*: Pack]", [row14(**{"Upload UOM*": "Pack"})])
+add14(5, "SITE", "Sales Site 미등재", "Invalid Sales Site [Sales Site*: ZZ_SITE]", [row14(**{"Sales Site*": "ZZ_SITE"})],
+      "[E20260923-DMF0014VALMSG] 종전 'Invalid Measure Upload Bucket' 마스킹 해소 — Bucket/UOM/Measure 검증은 Sales Site 통과 행만")
+add14(6, "PLNT", "Plant Site 미등재", "Invalid Plant Site [Plant Site*: ZZ_PLANT]", [row14(**{"Plant Site*": "ZZ_PLANT"})])
+add14(7, "CPRJ", "Customer Project 미등재 ([Project]/[Model] SITE_ITEM 유효 → 통과)", "(정상 — Error 0)", [row14(**{"Customer Project*": "ZZ_PRJ"})],
+      "[E20260930-DMF0014ASISPM] AS-IS 파리티 — Customer Project 검증은 AS-IS 주석(L399~427). Customer Model 은 고객모델 마스터 OR SITE_ITEM([Project]/[Model]) 중 하나만 맞아도 통과(AS-IS L429~470)")
+add14(8, "CMDL", "Customer Model 미등재 ([Project]/[Model] SITE_ITEM 유효 → 통과)", "(정상 — Error 0)", [row14(**{"Customer Model*": "ZZ_MODEL"})],
+      "[E20260930-DMF0014ASISPM] AS-IS L447~455 SITE_ITEM 경로 복원 — 기준행 [Project]/[Model](A17LG8001/ACEN4065I-A1) 유효라 통과")
+add14(9, "INCO", "Incoterms 미등재", "Invalid Incoterms [Incoterms*: ZZZ]", [row14(**{"Incoterms*": "ZZZ"})])
+add14(10, "FTYP", "FCST Type 미등재", "Invalid FCST Type [FCST Type*: ZZ_TYPE]", [row14(**{"FCST Type*": "ZZ_TYPE"})])
+add14(11, "CSTM", "Customs Handbook 미등재", "Invalid Customs Handbook [Customs Handbook*: X]", [row14(**{"Customs Handbook*": "X"})],
+      "[E20260915-DMF0014MSTCHK] 로 부활한 규칙(D/E 룩업)")
+add14(12, "MGRP", "Measure Group ≠ CUST_FCST", "Invalid Measure Group [Measure Group*: PSI]", [row14(**{"Measure Group*": "PSI"})])
+add14(13, "QSTR", "기간 칸 문자 혼입", f"Please Input QTY [{WEEKS[1]}: abc]", [row14(qty=("100", "abc", "300", "400"))],
+      "[E20260923-DMF0014BLANK] 09-24 정책 반전 — 비숫자 = 'Please Input QTY [기간: 값]' (구 'Invalid Numeric' 폐기)")
+add14(14, "QDEC", "기간 칸 소수점", f"Invalid Decimal [{WEEKS[1]}: 130.2]", [row14(qty=("100", "130.2", "300", "400"))],
+      "정수만 허용(E20230119-000186) — 셀 단위 표기")
+add14(15, "UOM", "Upload UOM 룩업 미등재", "Invalid Upload UOM [Upload UOM*: BOX]", [row14(**{"Upload UOM*": "BOX"})],
+      "[E20260923-DMF0014VALMSG] 종전 MUOM 마스킹 해소 — 룩업 미등재는 이 메시지 1건만")
+add14(16, "UOMC", "(Division, Sales Site, Measure) 고객 FCST 미등재", "Invalid Measure [Sales Site*: GM_US_BQN, Measure*: ZZ_MEASURE]",
+      [row14(**{"Measure*": "ZZ_MEASURE"})], "[E20260923-DMF0014VALMSG] 종전 BKT 마스킹 해소 + 'Invalid Upload UOM (Customer FCST)' → 'Invalid Measure' 개명")
+add14(17, "PRJ", "[Project] DMF0005 마스터(SITE_ITEM) 미등재 · [Model] 정상", "Invalid Project [Project: ZZ_PRJCODE]", [row14(Project="ZZ_PRJCODE")],
+      "[E20260930-DMF0014MDLIND] Project 오류 행의 Model 은 (Site, Model) 자체 등재 여부로 판정 — 기준행 Model(ACEN4065I-A1)은 GM_US_BQN SITE_ITEM 등재라 Model 오류 없음(오탐 방지)")
+add14(18, "MDL", "Model 품목 마스터(ITEM_SN) 미등재", "Invalid Model [Model: DMAT_0000066]",
+      [row14(**{"Customer Project*": "ZZ_PRJ", "Customer Model*": "ZZ_MODEL", "Project": "D18GM0001", "Model": "DMAT_0000066"})],
+      "SITE_ITEM(GM_US_BQN/D18GM0001/DMAT_0000066)은 유효 → Customer Model 은 SITE_ITEM 경로로 통과, 품목이 SCM_MST_ITEM_SN 에 없어 품목분류 검증(E20260915)만 오류. [E20260930-DMF0014ASISPM] Customer Project 검증 비활성으로 1건만")
+add14(19, "QEMPTY", "기간 칸 빈값 (입력가능 주차)", "(정상 — Error 0)", [row14(qty=("100", "", "300", ""))],
+      "[E20260923-DMF0014BLANK] 09-24 정책 반전 — 빈칸 = 오류 아님")
+add14(20, "QGRAY", "회색(입력불가) 주차 빈값 = 통과", "(정상 — Error 0)", [row14(qty=("100", "200", "300", ""))],
+      "4번째 헤더 = 마스터 밖 주차(20270104) → GRAYZERO 정책상 빈값 검사 제외", periods=WEEKS[:3] + ["20270104"])
+add14(21, "MULTI", "복수 오류 누적 (Incoterms + 문자 + 빈값)",
+      f"Invalid Incoterms [Incoterms*: ZZZ] / Please Input QTY [{WEEKS[1]}: abc]",
+      [row14(qty=("100", "abc", "300", ""), **{"Incoterms*": "ZZZ"})], "한 행의 사유 전부 ' / ' 누적 (E20260911-DMF0014MULTI). 빈칸은 09-24 이후 오류 아님")
+add14(22, "PMEMPTY", "[Project]/[Model] 빈칸", "Invalid Project [Project: (empty)] / Invalid Model [Model: (empty)]", [row14(Project="", Model="")],
+      "[E20260930-DMF0014MDLIND] 빈칸도 오류 — Project 오류 행도 Model 판정(빈 Model 은 SITE_ITEM 미등재) → 2건 누적")
+add14(23, "PMDL", "[Model] SITE_ITEM 조합 미등재 ([Project] 유효)", "Invalid Model [Model: ZZ_ITEM]", [row14(Model="ZZ_ITEM")],
+      "[E20260930-DMF0014PMSI] (Division, Sales Site, [Project], [Model]) SCM_MST_SITE_ITEM 조합 존재 검증")
+add14(24, "CPMX", "Customer Project 미등재 + [Project] SITE_ITEM 미등재 (두 경로 모두 불일치)", "Invalid Customer Model [Customer Model*: N2.2] / Invalid Project [Project: ZZ_PRJCODE]",
+      [row14(**{"Customer Project*": "ZZ_PRJ"}, Project="ZZ_PRJCODE")],
+      "[E20260930-DMF0014ASISPM] AS-IS L429~470 — 고객모델 마스터·SITE_ITEM 모두 불일치 → 'Invalid Customer Model' + [E20260930-DMF0014PMSI] [Project] 단독 검증 누적")
+add14(25, "CMDLX", "Customer Model 미등재 + [Model] SITE_ITEM 미등재 (두 경로 모두 불일치)", "Invalid Customer Model [Customer Model*: ZZ_MODEL] / Invalid Model [Model: ZZ_ITEM]",
+      [row14(**{"Customer Model*": "ZZ_MODEL"}, Model="ZZ_ITEM")],
+      "[E20260930-DMF0014ASISPM] Customer Project 통과 가드 제거로 Customer Model 오류 직접 표기 + [E20260930-DMF0014PMSI] [Model] 단독 검증 누적")
+add14(26, "AAABBB", "[Project]=AAA · [Model]=BBB (사용자 실측 재현 — 고객모델 마스터 유효)", "Invalid Project [Project: AAA] / Invalid Model [Model: BBB]",
+      [row14(Project="AAA", Model="BBB")],
+      "[E20260930-DMF0014PMSI] 재활성 + [E20260930-DMF0014MDLIND] Project 오류 행도 Model 판정 — 사용자 지적 2026-09-30 두 건 모두 표기")
 # ─────────────────────────────────────────────────────────────────────────────
 HDR_FILL = PatternFill("solid", fgColor="DDEBF7"); BOLD = Font(bold=True)
 def text_cell(ws, r, c, v):
@@ -218,7 +243,7 @@ if __name__ == "__main__":
     p74 = build("DMF0074", CASES74, write_sheet74,
                 "양식: DMF0074_40(53열, division 40). 업로드 = 화면 [Upload](P_MODE=0 검증) → 그리드 MESSAGE_TEXT 확인. BE 는 첫 번째 시트만 읽으므로 케이스 시트를 1번 위치로 옮기거나 _excel_upload_cases/DMF0074/*.xlsx(단일 시트) 를 사용. 값은 전부 텍스트 서식(Period 숫자 서식 금지).")
     p14 = build("DMF0014", CASES14, write_sheet14,
-                "양식: DMF0014 'FCST Upload' 1단 헤더(13 식별열 + 주차 시작일 헤더). division 81 기준행. 규칙은 실행 순서대로 첫 위반에서 즉시 종료(조기 종료) — 한 업로드당 1개 사유만 표시. BE 는 첫 시트만 읽음 → _excel_upload_cases/DMF0014/*.xlsx 사용.")
+                "양식: DMF0014 'FCST Upload' 1단 헤더(13 식별열 + 주차 시작일 헤더). division 81 기준행. 검증 전부 수행 후 행별 사유를 ' / ' 로 누적 표시(E20260911-DMF0014MULTI). 메시지 = '<규칙> [<헤더>: <입력값>]' (E20260923-DMF0014VALMSG). BE 는 첫 시트만 읽음 → _excel_upload_cases/DMF0014/*.xlsx 사용.")
     print(p74); print(p14)
     print("DMF0074 sheets:", len(CASES74), "| testable:", sum(1 for c in CASES74 if c["rows"]), "| N/A:", sum(1 for c in CASES74 if not c["rows"]))
     print("DMF0014 sheets:", len(CASES14))

@@ -1,0 +1,12 @@
+-- [E20260914-EXCELFORM2TIER] DMF0074 Excel Form/Upload = AS-IS 2단 병합 헤더 양식
+-- 메탈 42 토큰: '그룹명_하위명' (BE ExcelUtils.convertGroupedHeaderExcelToJson 합성 키와 1:1)
+-- 대상 2행 (PK 없음 — 논리키 PROGRAM_ID+SHEET_NAME, 각 1행)
+UPDATE SCM_MGR.SCM_ADM_EXCEL_COLUMNS
+   SET HEADER_CONTENT = 'Div|Plan Date|Team|End Customer|Project Code|Project|Model Code|Metal Link|Sales Site|Currency|FCST type|Exception|Energy|Key_Ni|Key_Co|Key_Li2CO3|Key_LIOH|Key_Al|Key_Mn|Key_Cu|Period(Fr)_Ni|Period(Fr)_Co|Period(Fr)_Li2CO3|Period(Fr)_LIOH|Period(Fr)_Al|Period(Fr)_Mn|Period(Fr)_Cu|Period(To)_Ni|Period(To)_Co|Period(To)_Li2CO3|Period(To)_LIOH|Period(To)_Al|Period(To)_Mn|Period(To)_Cu|Contract Price(/kg)_Ni|Contract Price(/kg)_Co|Contract Price(/kg)_Li2CO3|Contract Price(/kg)_LIOH|Contract Price(/kg)_Al|Contract Price(/kg)_Mn|Contract Price(/kg)_Cu|Change Price(/kg)_Ni|Change Price(/kg)_Co|Change Price(/kg)_Li2CO3|Change Price(/kg)_LIOH|Change Price(/kg)_Al|Change Price(/kg)_Mn|Change Price(/kg)_Cu|Metal Index (kg/Biz type)_Ni|Metal Index (kg/Biz type)_Co|Metal Index (kg/Biz type)_Li2CO3|Metal Index (kg/Biz type)_LIOH|Metal Index (kg/Biz type)_Al|Metal Index (kg/Biz type)_Mn|Metal Index (kg/Biz type)_Cu'
+     , LAST_UPDATED_BY = 'admin', LAST_UPDATE_DATE = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0074' AND SHEET_NAME = 'Metal Link Price'; -- E20260914-EXCELFORM2TIER
+UPDATE SCM_MGR.SCM_ADM_EXCEL_COLUMNS
+   SET HEADER_CONTENT = 'Div|Plan Date|Team|End Customer|Model Code|Metal Link|Sales Site|Currency|FCST type|Exception|Energy|Key_Ni|Key_Co|Key_Li2CO3|Key_LIOH|Key_Al|Key_Mn|Key_Cu|Period(Fr)_Ni|Period(Fr)_Co|Period(Fr)_Li2CO3|Period(Fr)_LIOH|Period(Fr)_Al|Period(Fr)_Mn|Period(Fr)_Cu|Period(To)_Ni|Period(To)_Co|Period(To)_Li2CO3|Period(To)_LIOH|Period(To)_Al|Period(To)_Mn|Period(To)_Cu|Contract Price(/kg)_Ni|Contract Price(/kg)_Co|Contract Price(/kg)_Li2CO3|Contract Price(/kg)_LIOH|Contract Price(/kg)_Al|Contract Price(/kg)_Mn|Contract Price(/kg)_Cu|Change Price(/kg)_Ni|Change Price(/kg)_Co|Change Price(/kg)_Li2CO3|Change Price(/kg)_LIOH|Change Price(/kg)_Al|Change Price(/kg)_Mn|Change Price(/kg)_Cu|Metal Index (kg/Biz type)_Ni|Metal Index (kg/Biz type)_Co|Metal Index (kg/Biz type)_Li2CO3|Metal Index (kg/Biz type)_LIOH|Metal Index (kg/Biz type)_Al|Metal Index (kg/Biz type)_Mn|Metal Index (kg/Biz type)_Cu'
+     , LAST_UPDATED_BY = 'admin', LAST_UPDATE_DATE = SYSDATE
+ WHERE PROGRAM_ID = 'DMF0074_40' AND SHEET_NAME = 'Metal Link Price'; -- E20260914-EXCELFORM2TIER
+COMMIT;

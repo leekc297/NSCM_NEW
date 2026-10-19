@@ -1,0 +1,14 @@
+/* 2차 조회조건 (usrLayoutControl3) — Detail 그리드 상단 (design 01 §1) */
+.detailBar {
+  gap: 8px;
+  padding: 4px 8px;
+}
+
+.detailBarFields {
+  flex: 1;
+}
+
+.detailBarButtons {
+  gap: 4px;
+  align-items: center;
+}

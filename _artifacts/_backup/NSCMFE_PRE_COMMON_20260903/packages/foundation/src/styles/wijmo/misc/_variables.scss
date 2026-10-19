@@ -1,0 +1,121 @@
+@use "mixins";
+/*!
+    *
+    * Wijmo Library 5.20251.40
+    * https://developer.mescius.com/wijmo
+    *
+    * Copyright(c) MESCIUS inc. All rights reserved.
+    *
+    * Licensed under the End-User License Agreement For MESCIUS Wijmo Software.
+    * us.sales@mescius.com
+    * https://developer.mescius.com/wijmo/licensing
+    *
+    */
+
+// Variables
+//
+// Variables should follow the `$component-state-property-size` formula for
+// consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+$wj-bkg: white !default; // content background
+$wj-txt: black !default; // content foreground
+$wj-link: #0000EE !default; // link color
+
+
+// 유영식 수정 
+$wj-bdr-clr: #D6D9E1  !default; //rgba(0,0,0,.2) !default; // content border color
+// 유영식 추가
+$wj-bdr-clr-focus: #464c5a  !default; //rgba(0,0,0,.2) !default; // content border color
+// 유영식 수정 끝
+
+// $wj-bdr-clr: rgba(0,0,0,.2) !default; // content border color
+
+$wj-bdr-wid: 1px !default; // content border width
+$wj-bdr: $wj-bdr-wid solid $wj-bdr-clr !default; // content border
+
+//$wj-bdr-rad: 4px !default; // content border radius
+
+// 유영식 수정 
+$wj-bdr-rad: 2px !default; // content border radius
+// 유영식 수정 끝
+
+$wj-box-shadow: 0 6px 13px rgba(0,0,0,.2) !default; // box shadow for drop-downs/dialogs
+$wj-invalid: red !default; // invalid state markers
+$wj-item-pdg: 4px 6px 3px 6px !default; // item padding (listbox items, grid cells, etc)
+$wj-item-hvr: rgba(0,0,0,.05) !default; // item hover
+$wj-tdn-focus: .4s !default; // focus/hover transition duration
+$wj-disabled-opacity: .6 !default; // opacity for disabled controls/items
+$wj-disabled-bkg: safechangecolor($wj-bkg, 6%) !default; // background for disabled controls/items
+
+//$wj-hdr-bkg: #eee !default; // header element background
+// 유영식 수정 
+$wj-hdr-bkg: #F7F7F8 !default;// #eee !default; // header element background
+// 유영식 수정 끝
+
+// --------
+// 강민재 추가
+$wj-non-editable-cell : #f1f4f3;
+$wj-editable-cell : #fff8cd;
+$wj-grid-font-size: 12px;
+
+$wj-sel-bkg: #b4faef !default;
+$wj-sel-txt: black !default;
+
+$wj-msel-bkg: #d9fcf4 !default;
+$wj-msel-txt: black !default;
+
+
+
+
+$wj-hdr-hvr: safedarken($wj-hdr-bkg, 5%) !default; // header element hover background
+$wj-hdr-txt: #000000 !default; // header element foreground
+
+$wj-btn-bkg: #eee !default; // button background
+$wj-btn-hvr: safedarken($wj-btn-bkg, 5%) !default; // button hover background
+$wj-btn-txt: $wj-txt !default; // button text
+$wj-btn-grp-bdr: $wj-bdr !default; // button group border
+
+$wj-accent-bkg: $wj-sel-bkg !default; // accent background (like drag markers)
+$wj-accent-txt: $wj-sel-txt !default; // accent background (like drag markers)
+$wj-sort-index-txt: #00648F !default; // Sort index color
+
+$wj-cell: $wj-bkg !default; // cell background
+
+//$wj-cell-alt: safedarken($wj-cell, 3%) !default; // alternating cell background
+//$wj-cell-alt: #F7F7F8 !default;//safedarken($wj-cell, 3%) !default; // alternating cell background
+$wj-cell-alt: $wj-cell !default; // 그리드 셀 색상 흰색 통일 , 2026-07-09
+
+$wj-cell-frz: null !default; // frozen cell background
+$wj-cell-frz-alt: null !default; // alternating frozen cell background
+$wj-cell-frz-txt: $wj-txt !default; // frozen cell foreground
+$wj-cell-pdg: $wj-item-pdg !default; // cell padding
+
+//$wj-cell-bdr-clr: rgba(0,0,0,.2) !default; // cell border color
+$wj-cell-bdr-clr: #E2E4E9 !default; //rgba(0,0,0,.2) !default; // cell border color
+
+$wj-cell-bdr: 1px solid $wj-cell-bdr-clr !default; // cell border
+$wj-cell-bdr-vrt: $wj-cell-bdr !default; // cell vertical border
+$wj-cell-bdr-hrz: $wj-cell-bdr !default; // cell horizontal border
+$wj-cell-grp-bkg: safedarken($wj-hdr-bkg, 5%) !default; // group row background
+$wj-cell-grp-txt: $wj-hdr-txt !default; // group row foreground
+$wj-cell-frz-bdr-clr: safedarken($wj-hdr-bkg, 30%) !default; // frozen cell border color
+$wj-cell-frz-bdr: 1px solid $wj-cell-frz-bdr-clr !default; // frozen cell border
+// NSCM 커스텀: 고정(Pin) 영역 경계를 굵은 세로 라인으로 강조 — 어디까지 고정인지 시각 표시
+//   (컨텍스트 메뉴 Pin Column / 컬럼 메타 _fixed 둘 다 해당. 원본은 $wj-cell-frz-bdr 과 동일 1px)
+//   ⚠ 이 파일은 @use "mixins" 네임스페이스라 bare safedarken() 은 평가되지 않고 CSS 리터럴로
+//     남는다(스톡 코드의 기존 결함 — 그래서 원래 고정 경계선이 안 보였다). mixins. 접두 필수.
+$wj-cell-frz-bdr-vrt: 3px solid mixins.safedarken($wj-hdr-bkg, 55%) !default; // frozen area vertical border
+$wj-cell-frz-bdr-hrz: $wj-cell-frz-bdr !default; // frozen area horizontal border
+
+$wj-tooltip: $wj-bkg !default; // tooltip background
+$wj-tooltip-txt: $wj-txt !default; // tooltip text
+$wj-error-tooltip: #EE0000!default; // error tooltip background
+$wj-error-tooltip-txt: white !default; // error tooltip text
+
+$wj-bkg-grd: false !default; // content background gradient
+$wj-btn-grd: false !default; // button background gradient
+$wj-hdr-grd: false !default; // header background gradient
+$wj-input-grd: false !default; // input element background gradient
+$wj-required-column: #F94B50 !default // required header background
+
+

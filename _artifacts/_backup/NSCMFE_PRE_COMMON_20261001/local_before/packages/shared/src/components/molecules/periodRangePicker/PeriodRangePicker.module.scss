@@ -1,0 +1,186 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+// PeriodField(features/master/src/components/searchFields)의 DatePickerCalendar
+// 입력 박스와 동일한 높이(36px)·아이콘+텍스트 구성.
+.dateBox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.periodSep {
+  flex: none;
+}
+
+.popper {
+  z-index: 1300;
+}
+
+// 팝업 컨테이너 — 기존 DatePickerCalendar(@lges/design-system) 팝오버와 동일하게
+// 하드 border 대신 elevation shadow(MUI elevation 8)만 사용.
+.popup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow:
+    0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.panels {
+  display: flex;
+  gap: 16px;
+}
+
+.monthPanel {
+  width: 300px;
+}
+
+// 헤더 레이아웃 — 기존 DatePickerCalendar 의 custom calendarHeader 와 동일하게
+// 좌측 라벨 그룹 / 우측 화살표 그룹을 space-between 으로 배치(paddingY 8px).
+.monthHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-weight: 600;
+}
+
+.headerLabels {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.selectorButton {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  cursor: pointer;
+}
+
+.headerNav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.navButton {
+  min-width: 32px;
+}
+
+.weekRow {
+  display: grid;
+  grid-template-columns: 44px repeat(7, 1fr);
+  align-items: center;
+}
+
+.weekCell {
+  font-size: 11px;
+  color: #d32f2f;
+  text-align: center;
+}
+
+.weekHeadCell {
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 600;
+}
+
+// 기존 DatePickerCalendar(@lges/design-system, MUI DateCalendar 기반) 요일 헤더에서
+// 실측한 값(2026-09-18 getComputedStyle) + .MuiDayCalendar-weekDayLabel 규격(36px, padding 7px 9px).
+.dowCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 7px 0;
+  font-size: 13.7px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+// From~To 범위 배경(wash) — 컬럼 폭(그리드 1fr) 전체를 채우는 바깥 래퍼에 둔다.
+// day 버튼(36px 고정)에 직접 칠하면 44px WEEK 컬럼과 맞물린 fractional 1fr 폭이
+// 반올림되며 월요일 컬럼에서만 서브픽셀 틈이 생겨 배경이 유독 어긋나 보였다 —
+// 래퍼가 컬럼 폭을 그대로 채우므로 매주 행이 이어진 하나의 띠로 보이고,
+// 오늘/선택 표시(원)는 그 위에 얹힌다.
+.dayCellOuter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+}
+
+// 선택색과 같은 색조의 옅은 톤.
+.dayCellOuterInRange {
+  background: rgba(45, 155, 178, 0.12);
+}
+
+// 아래 day cell 색상/크기는 기존 DatePickerCalendar 의 실제 렌더링(MuiPickersDay-root)에서
+// getComputedStyle 로 그대로 추출한 값이다 — 임의 색상 대신 기존 달력과 동일한 값을 쓴다.
+.dayCell {
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.dayCellMuted {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.dayCellSelected {
+  background: rgb(45, 155, 178);
+  color: #fff;
+}
+
+.dayCellToday {
+  background: rgb(60, 62, 61);
+  color: #fff;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+}
+
+.quickButtons {
+  display: flex;
+  gap: 8px;
+}
+
+// 기존 모달(MessageModal 등)의 OK/Cancel 버튼 쌍과 동일한 gap.
+.footerActions {
+  display: flex;
+  gap: 4px;
+}

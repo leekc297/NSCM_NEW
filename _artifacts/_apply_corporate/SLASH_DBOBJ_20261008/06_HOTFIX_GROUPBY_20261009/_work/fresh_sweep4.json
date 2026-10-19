@@ -1,0 +1,5406 @@
+{
+ "DMF0020_GET_SCM_MST_FUTURE_PRICE.PROCEDURE.sql": {
+  "stmts": 16,
+  "codes": {
+   "OK": 14,
+   "ORA-00979": 2
+  },
+  "ora979": [
+   [
+    248,
+    "ORA-00979",
+    "INSERT INTO SCM_MGR.GT_FTPR_DM_PLN_SALES_PLAN (VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_COD"
+   ],
+   [
+    345,
+    "ORA-00979",
+    "INSERT INTO SCM_MGR.GT_FTPR_DM_PLN_SALES_PLAN (VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_COD"
+   ]
+  ],
+  "all": [
+   [
+    213,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_SCM_MST_FUTURE_PRICE_OVER (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT"
+   ],
+   [
+    225,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_SCM_MST_FUTURE_PRICE_OVER (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT"
+   ],
+   [
+    248,
+    "ORA-00979",
+    "INSERT INTO SCM_MGR.GT_FTPR_DM_PLN_SALES_PLAN (VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_COD"
+   ],
+   [
+    345,
+    "ORA-00979",
+    "INSERT INTO SCM_MGR.GT_FTPR_DM_PLN_SALES_PLAN (VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_COD"
+   ],
+   [
+    573,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPOVERRANGELIST (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID,"
+   ],
+   [
+    590,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPITEM         SELECT T1.DIVISION_ID              , T1.ITEM_ID         "
+   ],
+   [
+    604,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPITEM         SELECT T1.DIVISION_ID              , T1.ITEM_ID         "
+   ],
+   [
+    622,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPPLANDATA (DIVISION_ID, SCM_SITE_ID, PLANT_SITE_ID, PROJECT_CODE, ITEM"
+   ],
+   [
+    646,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPDATA (DIVISION_ID, DIVISION_NAME, UPPER_DEPT_ID, DEPT_ID, SCM_SITE_ID"
+   ],
+   [
+    756,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPOUTPUTALL         SELECT T.DIVISION_ID, T.DIVISION_NAME, T.UPPER_DEPT"
+   ],
+   [
+    810,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPOUTPUTALL         SELECT T.DIVISION_ID, T.DIVISION_NAME, T.UPPER_DEPT"
+   ],
+   [
+    863,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPOUTPUTOMISSION     SELECT B.DIVISION_ID, B.DIVISION_NAME, B.UPPER_DEP"
+   ],
+   [
+    907,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPOUTPUT     SELECT T.DIVISION_ID, T.DIVISION_NAME, T.UPPER_DEPT_ID, T."
+   ],
+   [
+    948,
+    "OK",
+    "MERGE INTO SCM_MGR.GT_FTPR_TMPOUTPUT T1     USING (         SELECT A.DIVISION_ID, A.PROJECT_CODE, A."
+   ],
+   [
+    978,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPOUTPUT     SELECT A.DIVISION_ID, A.DIVISION_NAME, A.UPPER_DEPT_ID, A."
+   ],
+   [
+    1017,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPSALESSITEMODELALL         SELECT SITE_PROJECT.DIVISION_ID, TEAM.DEPT_"
+   ]
+  ]
+ },
+ "DMF0043_GET_CONTRIBUTION_SALES_LIST.PROCEDURE.sql": {
+  "stmts": 1,
+  "codes": {
+   "OK": 1
+  },
+  "ora979": [],
+  "all": [
+   [
+    351,
+    "OK",
+    "INSERT INTO GT_DMF0043_SALES_LIST_C       ( YYYYMM, DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NA"
+   ]
+  ]
+ },
+ "P_SYS0012_APPROVE.PROCEDURE.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "P_SYS0012_REJECT.PROCEDURE.sql": {
+  "stmts": 1,
+  "codes": {
+   "ORA-00923": 1
+  },
+  "ora979": [],
+  "all": [
+   [
+    12,
+    "ORA-00923",
+    "MERGE INTO SCM_MGR.SCM_MST_AUTH_REQUEST T     USING (         SELECT J.V_REQ, MAX(J.V_REASON) AS V_R"
+   ]
+  ]
+ },
+ "P_SYS0014_SAVE_GROUP_USER_M.PROCEDURE.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_COM0000.PACKAGE_BODY.sql": {
+  "stmts": 1,
+  "codes": {
+   "OK": 1
+  },
+  "ora979": [],
+  "all": [
+   [
+    2226,
+    "OK",
+    "INSERT INTO GT_0121_LINE_MASTER         (             COMPANY_ID           , DIVISION_ID           ,"
+   ]
+  ]
+ },
+ "PKG_DMF0004.PACKAGE_BODY.sql": {
+  "stmts": 3,
+  "codes": {
+   "ORA-00904": 3
+  },
+  "ora979": [],
+  "all": [
+   [
+    800,
+    "ORA-00904",
+    "SELECT COUNT(*)                   INTO V_CNT                   FROM (                         SELECT"
+   ],
+   [
+    845,
+    "ORA-00904",
+    "SELECT COUNT(*)               INTO V_CNT               FROM (                                       "
+   ],
+   [
+    881,
+    "ORA-00904",
+    "SELECT NVL(MAX(RN), 0)                   INTO V_ROWNUM_MAX                   FROM (                 "
+   ]
+  ]
+ },
+ "PKG_DMF0014.PACKAGE_BODY.sql": {
+  "stmts": 18,
+  "codes": {
+   "OK": 18
+  },
+  "ora979": [],
+  "all": [
+   [
+    846,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD                 SET    UPLOAD_STATUS_CODE = 'ERROR', MESSAGE_TEXT = SUBS"
+   ],
+   [
+    1535,
+    "OK",
+    "MERGE INTO SCM_ADM_EXCEL_UPLOAD A                 USING (SELECT Q.UPLOAD_ID                         "
+   ],
+   [
+    3493,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD                 SET    UPLOAD_STATUS_CODE = 'ERROR', MESSAGE_TEXT = 'Dup"
+   ],
+   [
+    3915,
+    "OK",
+    "MERGE INTO SCM_ADM_EXCEL_UPLOAD A                 USING (SELECT *                        FROM   (SEL"
+   ],
+   [
+    4320,
+    "OK",
+    "MERGE INTO SCM_ADM_EXCEL_UPLOAD A                 USING (SELECT *                        FROM   (SEL"
+   ],
+   [
+    7040,
+    "OK",
+    "UPDATE DM_PLN_CUSTOMER_PSI         SET    BATCH_RESULT = 'UI'         WHERE  (SELECT COUNT(1)       "
+   ],
+   [
+    7386,
+    "OK",
+    "INSERT         INTO GT_DCIM_DM_DNM_EDI_CALLOFF_ITE             SELECT A.DIVISION_ID                 "
+   ],
+   [
+    8211,
+    "OK",
+    "INSERT                 INTO GT_DPCF_PSI_GROUP_COUNT_2                     (DIVISION_ID              "
+   ],
+   [
+    8417,
+    "OK",
+    "SELECT UPLOAD_BUCKET_TYPE                          , SUMMARY_BUCKET_TYPE                          , "
+   ],
+   [
+    8529,
+    "OK",
+    "SELECT UPPER(RTRIM(LTRIM(ITEM_CLASS_NAME)))                       INTO N_ITEM_CLASS_NAME            "
+   ],
+   [
+    8582,
+    "OK",
+    "SELECT NVL(CONVERT_QTY_CELL, 1)                       INTO N_CONVERT_QTY_CELL                       "
+   ],
+   [
+    9163,
+    "OK",
+    "INSERT                 INTO GT_DPCF_MIN_MAX_PSI_2                     (YYYYMMDD, RN)                "
+   ],
+   [
+    9415,
+    "OK",
+    "SELECT COUNT(*)                                              INTO N_TEST_VAL                   FROM "
+   ],
+   [
+    9503,
+    "OK",
+    "DELETE FROM DM_PLN_MKT_FCST T                 WHERE  EXISTS (SELECT 1                         FROM  "
+   ],
+   [
+    9531,
+    "OK",
+    "MERGE INTO DM_PLN_MKT_FCST T                                                                        "
+   ],
+   [
+    10222,
+    "OK",
+    "INSERT             INTO GT_DPCF_PSI_GROUP_COUNT                 (DIVISION_ID                 ,CUSTOM"
+   ],
+   [
+    10395,
+    "OK",
+    "SELECT UPLOAD_BUCKET_TYPE, SUMMARY_BUCKET_TYPE, MAX(PLAN_WEEK)                         INTO   N_UPLO"
+   ],
+   [
+    10968,
+    "OK",
+    "INSERT                 INTO GT_DPCF_MIN_MAX_PSI                     (YYYYMMDD, RN)                  "
+   ]
+  ]
+ },
+ "PKG_DMF0020.PACKAGE_BODY.sql": {
+  "stmts": 34,
+  "codes": {
+   "OK": 34
+  },
+  "ora979": [],
+  "all": [
+   [
+    778,
+    "OK",
+    "MERGE INTO DM_MST_EXCHANGE_RATE A     USING (         SELECT DIVISION_ID, YYYYMMDD, CURRENCY, UNIT_C"
+   ],
+   [
+    802,
+    "OK",
+    "INSERT INTO DM_MST_EXCHANGE_RATE_H     ( HISTORY_SEQ     , DIVISION_ID, YYYYMMDD, CURRENCY, UNIT_CUR"
+   ],
+   [
+    1140,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD            SET UPLOAD_STATUS_CODE = 'ERROR'              , MESSAGE_TEXT "
+   ],
+   [
+    1194,
+    "OK",
+    "SELECT 1 INTO V_MODEL_DUP_EXISTS FROM DUAL WHERE EXISTS (                 SELECT 1                  "
+   ],
+   [
+    1209,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD                    SET UPLOAD_STATUS_CODE = 'ERROR'                     "
+   ],
+   [
+    4361,
+    "OK",
+    "MERGE INTO DM_MST_EXCHANGE_RATE A     USING (             SELECT DIVISION_ID                  , YYYY"
+   ],
+   [
+    5010,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_SCM_MST_FUTURE_PRICE_OVER (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT"
+   ],
+   [
+    5022,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_SCM_MST_FUTURE_PRICE_OVER (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT"
+   ],
+   [
+    5040,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_DM_PLN_SALES_PLAN (VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_COD"
+   ],
+   [
+    5131,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_DM_PLN_SALES_PLAN (VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_COD"
+   ],
+   [
+    5338,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPOVERRANGELIST (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID,"
+   ],
+   [
+    5355,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPITEM         SELECT T1.DIVISION_ID              , T1.ITEM_ID         "
+   ],
+   [
+    5369,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPITEM         SELECT T1.DIVISION_ID              , T1.ITEM_ID         "
+   ],
+   [
+    5395,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPPLANDATA (DIVISION_ID, SCM_SITE_ID, PLANT_SITE_ID, PROJECT_CODE, ITEM"
+   ],
+   [
+    5419,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPDATA (DIVISION_ID, DIVISION_NAME, UPPER_DEPT_ID, DEPT_ID, SCM_SITE_ID"
+   ],
+   [
+    5534,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPOUTPUTALL         SELECT T.DIVISION_ID, T.DIVISION_NAME, T.UPPER_DEPT"
+   ],
+   [
+    5588,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPOUTPUTALL         SELECT T.DIVISION_ID, T.DIVISION_NAME, T.UPPER_DEPT"
+   ],
+   [
+    5641,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPOUTPUTOMISSION     SELECT B.DIVISION_ID, B.DIVISION_NAME, B.UPPER_DEP"
+   ],
+   [
+    5685,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPOUTPUT     SELECT T.DIVISION_ID, T.DIVISION_NAME, T.UPPER_DEPT_ID, T."
+   ],
+   [
+    5752,
+    "OK",
+    "MERGE INTO SCM_MGR.GT_FTPR_TMPOUTPUT T1     USING (         SELECT IA.DIVISION_ID              , IA."
+   ],
+   [
+    5817,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPOUTPUT     SELECT A.DIVISION_ID, A.DIVISION_NAME, A.UPPER_DEPT_ID, A."
+   ],
+   [
+    5856,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_FTPR_TMPSALESSITEMODELALL         SELECT SITE_PROJECT.DIVISION_ID, TEAM.DEPT_"
+   ],
+   [
+    6369,
+    "OK",
+    "SELECT COUNT(1)         INTO   V_INVALID_CHK         FROM         (             SELECT V_DIVISION_ID"
+   ],
+   [
+    6675,
+    "OK",
+    "SELECT '★ Sales Site : ' || SCM_SITE_ID || ' / ★ Model : ' || ITEM_ID             INTO   V_INVALID_S"
+   ],
+   [
+    6742,
+    "OK",
+    "SELECT '★ Sales Site : ' || SCM_SITE_ID || ' / ★ Model : ' || ITEM_ID             INTO   V_INVALID_S"
+   ],
+   [
+    6814,
+    "OK",
+    "SELECT V_ITEM_ID         INTO   V_INVALID_DUP         FROM         (             SELECT V_ITEM_ID   "
+   ],
+   [
+    8204,
+    "OK",
+    "INSERT INTO GT_DMF0020_OVER_RANGE (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID, ITEM_ID, C"
+   ],
+   [
+    8319,
+    "OK",
+    "INSERT INTO GT_DMF0020_PLAN_DATA (DIVISION_ID, SCM_SITE_ID, PLANT_SITE_ID, PROJECT_CODE, ITEM_ID, IN"
+   ],
+   [
+    8433,
+    "OK",
+    "INSERT INTO GT_DMF0020_DATA (DIVISION_ID, DIVISION_NAME, UPPER_DEPT_ID, DEPT_ID, SCM_SITE_ID, PLANT_"
+   ],
+   [
+    8847,
+    "OK",
+    "INSERT INTO GT_DMF0020_SALES_SITE_MODEL_ALL (DIVISION_ID, DEPT_ID, END_CUSTOMER, END_CUSTOMER40, SCM"
+   ],
+   [
+    9276,
+    "OK",
+    "DELETE           FROM DM_PLN_SALES_PLAN A          WHERE EXISTS ( SELECT 1                          "
+   ],
+   [
+    9310,
+    "OK",
+    "DELETE           FROM DM_PLN_SALES_PLAN A          WHERE EXISTS ( SELECT 1                          "
+   ],
+   [
+    9334,
+    "OK",
+    "INSERT           INTO GT_PRDM_SALES_PLAN_TEMP_SINGLE              ( DIVISION_ID              , PROJE"
+   ],
+   [
+    9576,
+    "OK",
+    "INSERT           INTO GT_PRDM_SALES_PLAN_TEMP_SINGLE              ( DIVISION_ID              , PROJE"
+   ]
+  ]
+ },
+ "PKG_DMF0021.PACKAGE_BODY.sql": {
+  "stmts": 15,
+  "codes": {
+   "OK": 14,
+   "ORA-00979": 1
+  },
+  "ora979": [
+   [
+    3794,
+    "ORA-00979",
+    "INSERT INTO DM_PLN_CFM_MKT_DEMAND_PLAN_C         (DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYM"
+   ]
+  ],
+  "all": [
+   [
+    654,
+    "OK",
+    "INSERT INTO GT_DMF0021_RAW_DATA             ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_CODE"
+   ],
+   [
+    749,
+    "OK",
+    "INSERT INTO GT_DMF0021_DM_MST_ITEM_SINGLE_A         ( DIVISION_ID, ITEM_ID, ITEM_NAME, ITEM_CLASS, I"
+   ],
+   [
+    780,
+    "OK",
+    "INSERT INTO GT_DMF0021_DM_MST_ITEM_SINGLE_B         ( DIVISION_ID, ITEM_ID, FORECAST_INFO_BIZ_TYPE, "
+   ],
+   [
+    1079,
+    "OK",
+    "INSERT INTO GT_DMF0021_RAW_DATA             ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_CODE"
+   ],
+   [
+    1137,
+    "OK",
+    "INSERT INTO GT_DMF0021_RAW_DATA             ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_CODE"
+   ],
+   [
+    1573,
+    "OK",
+    "INSERT INTO GT_DMF0021_SHIPMENT_SITE_ROW             ( DIVISION_ID, PROJECT_CODE, ITEM_ID, SCM_SITE_"
+   ],
+   [
+    2618,
+    "OK",
+    "MERGE INTO GT_F021_SALES_PLAN A     USING (         SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, I"
+   ],
+   [
+    2688,
+    "OK",
+    "SELECT 1 INTO v_max_cnt FROM DUAL         WHERE EXISTS (             SELECT 1 FROM GT_F021_SALES_PLA"
+   ],
+   [
+    3047,
+    "OK",
+    "SELECT CHR(10) || 'Div: '            || NVL(V_DIVISION_ID,'')              || CHR(10) || 'Project Co"
+   ],
+   [
+    3332,
+    "OK",
+    "INSERT INTO GT_F021_SALES_PLAN_LOC     (V_ACTIVE_FLAG, V_DIVISION_ID, V_PROJECT_CODE, V_SCM_SITE_ID,"
+   ],
+   [
+    3358,
+    "OK",
+    "INSERT INTO GT_F021_SALES_PLAN_LOC     (V_ACTIVE_FLAG, V_DIVISION_ID, V_PROJECT_CODE, V_SCM_SITE_ID,"
+   ],
+   [
+    3739,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST     (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE"
+   ],
+   [
+    3794,
+    "ORA-00979",
+    "INSERT INTO DM_PLN_CFM_MKT_DEMAND_PLAN_C         (DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYM"
+   ],
+   [
+    3813,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST_C         (DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, PROJEC"
+   ],
+   [
+    3855,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST_C         (DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, PROJEC"
+   ]
+  ]
+ },
+ "PKG_DMF0022.PACKAGE_BODY.sql": {
+  "stmts": 11,
+  "codes": {
+   "OK": 11
+  },
+  "ora979": [],
+  "all": [
+   [
+    980,
+    "OK",
+    "INSERT                    INTO SCM_MGR.GT_DM22_SELECT_MEASURE             (MEASURE, SYSTEM_ADD)     "
+   ],
+   [
+    1608,
+    "OK",
+    "INSERT                    INTO SCM_MGR.GT_DM22_DM_MST_ITEM_SINGLE_A_V           (DIVISION_ID        "
+   ],
+   [
+    1657,
+    "OK",
+    "INSERT                    INTO SCM_MGR.GT_DM22_DM_MST_ITEM_SINGLE_B_V           (DIVISION_ID        "
+   ],
+   [
+    1699,
+    "OK",
+    "INSERT                    INTO SCM_MGR.GT_DM22_DM_MST_ITEM_SINGLE_V           (DIVISION_ID          "
+   ],
+   [
+    2068,
+    "OK",
+    "INSERT                    INTO SCM_MGR.GT_DM22_RAW_DATA             (VERSION_NO, CUTOFF_YYYYMMDD, DI"
+   ],
+   [
+    2118,
+    "OK",
+    "INSERT                   INTO SCM_MGR.GT_DM22_RAW_DATA             (VERSION_NO, CUTOFF_YYYYMMDD, DIV"
+   ],
+   [
+    2697,
+    "OK",
+    "INSERT                    INTO SCM_MGR.GT_DM22_SCM_MST_SITE         (SCM_SITE_ID, DIVISION_ID, PROJE"
+   ],
+   [
+    3129,
+    "OK",
+    "INSERT                    INTO SCM_MGR.GT_DM22_RAW_DATA_TEMP40_KEY               (VERSION_NO, CUTOFF"
+   ],
+   [
+    3292,
+    "OK",
+    "MERGE INTO SCM_MGR.GT_DM22_RAW_DATA A             USING ( SELECT DISTINCT A.DIVISION_ID, A.PROJECT_C"
+   ],
+   [
+    3481,
+    "OK",
+    "MERGE INTO SCM_MGR.GT_DM22_RAW_DATA A             USING ( SELECT DISTINCT A.DIVISION_ID, A.VERSION_N"
+   ],
+   [
+    3574,
+    "OK",
+    "INSERT                    INTO SCM_MGR.GT_DM22_CALENDAR         (BASIS_YYYYMMWW, ISO_YYYYWW, ISO_WEE"
+   ]
+  ]
+ },
+ "PKG_DMF0035.PACKAGE_BODY.sql": {
+  "stmts": 23,
+  "codes": {
+   "OK": 23
+  },
+  "ora979": [],
+  "all": [
+   [
+    163,
+    "OK",
+    "SELECT              '''D_' || A.BASIS_YYYYMMDD || '''  AS D_' || A.BASIS_YYYYMMDD  AS COLUMN_NAME   "
+   ],
+   [
+    452,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_SEL_MEASURE         (PROGRAM_ID, SHEET_NAME, USER_ID, MEASURE_GROUP, MEA"
+   ],
+   [
+    645,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_EDI_SENDER (SCM_SITE_ID, SENDER_CODE, SENDER_NAME)     SELECT A.SCM_SITE"
+   ],
+   [
+    667,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_T_LAST_SETUP         SELECT X.DIVISION_ID, X.PROJECT_CODE, X.SCM_SITE_ID"
+   ],
+   [
+    744,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_EDI_END_CUST (DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, FROM_WEEK, FROM_DA"
+   ],
+   [
+    780,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_RPA_END_CUST (DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, FROM_WEEK, FROM_DA"
+   ],
+   [
+    966,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA             (VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_"
+   ],
+   [
+    1084,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA             (VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_"
+   ],
+   [
+    1182,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA             (VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_"
+   ],
+   [
+    1392,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA             (VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_"
+   ],
+   [
+    1482,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA             (VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_"
+   ],
+   [
+    1567,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_T_LAST_SETUP_C         SELECT X.VERSION_NO, X.DIVISION_ID, X.PROJECT_COD"
+   ],
+   [
+    1651,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_RAW_DATA             (VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PROJECT_"
+   ],
+   [
+    1949,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_T_LAST_SETUP_C         SELECT X.VERSION_NO, X.DIVISION_ID, X.PROJECT_COD"
+   ],
+   [
+    2161,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_ITEM_SINGLE_A     SELECT T1.DIVISION_ID          , T1.ITEM_ID          ,"
+   ],
+   [
+    2197,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_ITEM_SINGLE_B     SELECT DIVISION_ID          , SUBSTR(ITEM_ID, 1, 12) A"
+   ],
+   [
+    2224,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_ITEM_SINGLE_V     SELECT T1.DIVISION_ID, T1.ITEM_ID, T1.ITEM_NAME, T1.IT"
+   ],
+   [
+    2269,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_SITE_ITEM           (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, VA"
+   ],
+   [
+    2925,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_TEMP_SCM_SITE           (SCM_SITE_ID, DIVISION_ID, PROJECT_CODE, ITEM_ID"
+   ],
+   [
+    3270,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_SCP_ITEM_INFO         (DIVISION_ID, ITEM_ID, CELL_NICKNAME, BASIC_NICKNA"
+   ],
+   [
+    3603,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_CALENDAR (BASIS_YYYYMMWW, ISO_YYYYWW, ISO_WEEK, BASIS_YYYYMMDD, END_FLAG"
+   ],
+   [
+    3614,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_CAL_MONTH_END (MONTH_END_DATE)     SELECT MAX(BASIS_YYYYMMDD) AS MONTH_E"
+   ],
+   [
+    3620,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM35_CAL_WEEK_END (WEEK_END_DATE)     SELECT MAX(BASIS_YYYYMMDD) AS WEEK_END_"
+   ]
+  ]
+ },
+ "PKG_DMF0042.PACKAGE_BODY.sql": {
+  "stmts": 22,
+  "codes": {
+   "OK": 22
+  },
+  "ora979": [],
+  "all": [
+   [
+    1267,
+    "OK",
+    "MERGE INTO DM_BP_EXCHANGE_RATE A                     USING (                             SELECT     "
+   ],
+   [
+    1904,
+    "OK",
+    "INSERT INTO GT_DMF0042_DM_MST_ITEM_SINGLE_A_V         ( DIVISION_ID, ITEM_ID, ITEM_NAME, ITEM_CLASS,"
+   ],
+   [
+    1936,
+    "OK",
+    "INSERT INTO GT_DMF0042_DM_MST_ITEM_SINGLE_B_V         ( DIVISION_ID, ITEM_ID, FORECAST_INFO_BIZ_TYPE"
+   ],
+   [
+    1952,
+    "OK",
+    "INSERT INTO GT_DMF0042_DM_MST_ITEM_SINGLE_V         ( DIVISION_ID, ITEM_ID, ITEM_NAME, ITEM_CLASS, I"
+   ],
+   [
+    2086,
+    "OK",
+    "INSERT INTO GT_DMF0042_RAW_DATA         SELECT A.DIVISION_ID, A.PROJECT_CODE, A.PROJECT_CODE AS END_"
+   ],
+   [
+    2242,
+    "OK",
+    "INSERT INTO GT_DMF0042_RAW_DATA                  ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER40, PLANT_"
+   ],
+   [
+    2500,
+    "OK",
+    "INSERT INTO GT_DMF0042_DLT_ITEM_ID             ( DIVISION_ID, PROJECT_CODE, ITEM_ID, FCST_TYPE, PLAN"
+   ],
+   [
+    2565,
+    "OK",
+    "INSERT INTO GT_DMF0042_RAW_DATA_SUM         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER40, PLANT_SITE_"
+   ],
+   [
+    2624,
+    "OK",
+    "INSERT INTO GT_DMF0042_RAW_DATA_SUM         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER40, PLANT_SITE_"
+   ],
+   [
+    3230,
+    "OK",
+    "insert into GT_SDPBP_FUTURE_PRICE_TEMP0_4           SELECT DIVISION_ID,PROJECT_CODE,PROJECT_NAME,SCM"
+   ],
+   [
+    3256,
+    "OK",
+    "insert into GT_SDPBP_FUTURE_PRICE_TEMP0_4         SELECT DIVISION_ID,PROJECT_CODE,PROJECT_NAME,SCM_S"
+   ],
+   [
+    3283,
+    "OK",
+    "INSERT INTO GT_SDPBP_FUTURE_PRICE_TEMP1_2       SELECT DIVISION_ID,PROJECT_CODE,PROJECT_NAME,SCM_SIT"
+   ],
+   [
+    4360,
+    "OK",
+    "INSERT                              INTO GT_SDPB2_BP_FCST_4              ( ACTIVE_FLAG              "
+   ],
+   [
+    4464,
+    "OK",
+    "INSERT                              INTO GT_SDPB2_BP_FCST_4              ( ACTIVE_FLAG, DIVISION_ID,"
+   ],
+   [
+    4513,
+    "OK",
+    "INSERT                              INTO GT_SDPB2_BP_FCST_4              ( ACTIVE_FLAG, DIVISION_ID,"
+   ],
+   [
+    4595,
+    "OK",
+    "INSERT                                INTO GT_SDPB_DM_MST_ITEM_SINGLE_A_V                 SELECT T1."
+   ],
+   [
+    4636,
+    "OK",
+    "INSERT                                INTO GT_SDPB_DM_MST_ITEM_SINGLE_B_V                 SELECT DIV"
+   ],
+   [
+    4651,
+    "OK",
+    "INSERT                                INTO GT_SDPB_DM_MST_ITEM_SINGLE_V                 SELECT DIVIS"
+   ],
+   [
+    4789,
+    "OK",
+    "SELECT COUNT(1)             INTO   V_CNT_1             FROM   DM_PLN_BP_FCST A             JOIN   (S"
+   ],
+   [
+    4810,
+    "OK",
+    "MERGE INTO DM_PLN_BP_FCST A                 USING (SELECT DIVISION_ID                              ,"
+   ],
+   [
+    5288,
+    "OK",
+    "INSERT                                    INTO GT_SDPB2_BP_FCST_4                     SELECT ACTIVE_"
+   ],
+   [
+    5355,
+    "OK",
+    "INSERT                                    INTO GT_SDPB2_BP_FCST_4                     SELECT ACTIVE_"
+   ]
+  ]
+ },
+ "PKG_DMF0043.PACKAGE_BODY.sql": {
+  "stmts": 8,
+  "codes": {
+   "OK": 8
+  },
+  "ora979": [],
+  "all": [
+   [
+    877,
+    "OK",
+    "INSERT INTO GT_SDMCR_RESULTS_MST_2 ( \t\t\t\t\t\t\t\t\t\t\t\t\t active_flag \t\t\t\t\t\t\t\t\t\t\t\t\t,ver_seq \t\t\t\t\t\t\t\t\t\t\t\t\t,d"
+   ],
+   [
+    963,
+    "OK",
+    "INSERT INTO GT_SDMCR_RESULTS_MST_2 ( \t\t\t\t\t\t\t\t\t\t\t\t\t active_flag \t\t\t\t\t\t\t\t\t\t\t\t\t,ver_seq \t\t\t\t\t\t\t\t\t\t\t\t\t,d"
+   ],
+   [
+    1047,
+    "OK",
+    "INSERT INTO DM_MST_CONTRIBUTE_RATIO_MST \t\t\t(VER_SEQ,DEPARTMENT_ID,DEPT_ID,END_CUST_REPORT,SOLDTO_CUS"
+   ],
+   [
+    2109,
+    "OK",
+    "INSERT INTO GT_DMF0043_TEMP2 \t\t(VER_SEQ, DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, SOLDTO_CUST_REPORT"
+   ],
+   [
+    2266,
+    "OK",
+    "INSERT INTO GT_DMF0043_MASTER_LIST \t\t(DIVISION_ID, DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NAM"
+   ],
+   [
+    2328,
+    "OK",
+    "INSERT INTO GT_DMF0043_TEMP_LIST \t\t(VER_SEQ, DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, SOLDTO_CUST_RE"
+   ],
+   [
+    2475,
+    "OK",
+    "INSERT INTO GT_DMF0043_DATA_TABLE \t(VER_SEQ, DEPARTMENT_ID, DEPT_ID, END_CUST_REPORT, SOLDTO_CUST_RE"
+   ],
+   [
+    3047,
+    "OK",
+    "INSERT INTO GT_DMF0043_SALES_LIST_C       ( YYYYMM, DEPARTMENT_ID, DEPARTMENT_NAME, DEPT_ID, DEPT_NA"
+   ]
+  ]
+ },
+ "PKG_DMF0044.PACKAGE_BODY.sql": {
+  "stmts": 38,
+  "codes": {
+   "OK": 34,
+   "ORA-00979": 4
+  },
+  "ora979": [
+   [
+    7929,
+    "ORA-00979",
+    "INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,S"
+   ],
+   [
+    8269,
+    "ORA-00979",
+    "INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,S"
+   ],
+   [
+    8438,
+    "ORA-00979",
+    "INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,S"
+   ],
+   [
+    9180,
+    "ORA-00979",
+    "INSERT                             INTO DM_PLN_SALES_PLAN_REPORT_C \t\t\t\t(  DATA_TYPE, DIVISION_ID, VE"
+   ]
+  ],
+  "all": [
+   [
+    243,
+    "OK",
+    "INSERT INTO DM_MOBILE_REPORT_DEPT                  ( DIVISION_ID                  , VERSION_NO      "
+   ],
+   [
+    536,
+    "OK",
+    "INSERT INTO DM_MOBILE_REPORT_EXCHANGE_RATE                  ( DIVISION_ID                  , VERSION"
+   ],
+   [
+    782,
+    "OK",
+    "INSERT INTO DM_MOBILE_REPORT_PRODUCT                  ( DIVISION_ID                  , VERSION_NO   "
+   ],
+   [
+    1416,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_F044_PJT         (DIVISION_ID, PROJECT_CODE, PROJECT_NAME, PRODUCT_GROUP_NAME"
+   ],
+   [
+    1431,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_F044_DM_MST_ITEM_SINGLE_V         (DIVISION_ID, ITEM_ID, ITEM_CLASS, ITEM_NAM"
+   ],
+   [
+    1482,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_F044_T              ( DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF"
+   ],
+   [
+    1616,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_F044_T              ( DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF"
+   ],
+   [
+    2726,
+    "OK",
+    "INSERT INTO SCM_MGR.DM_MOBILE_REPORT_EXCHANGE_RATE              ( DIVISION_ID              , VERSION"
+   ],
+   [
+    3179,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_0044_BP_FCST_01         (DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMD"
+   ],
+   [
+    3270,
+    "OK",
+    "INSERT INTO SCM_MGR.DM_PLN_BP_FCST_REPORT_C              (DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF"
+   ],
+   [
+    3342,
+    "OK",
+    "INSERT INTO SCM_MGR.DM_PLN_BP_FCST_REPORT_C              (DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF"
+   ],
+   [
+    3381,
+    "OK",
+    "INSERT INTO SCM_MGR.DM_PLN_BP_FCST_REPORT_C              (DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF"
+   ],
+   [
+    3677,
+    "OK",
+    "MERGE INTO SCM_MGR.DM_PLN_SALES_REPORT_EXCHANGE_C A     USING (         SELECT             DIVISION_"
+   ],
+   [
+    3795,
+    "OK",
+    "MERGE INTO SCM_MGR.DM_PLN_SALES_PLAN_REPORT_C A     USING (         SELECT             A2.ROWID AS R"
+   ],
+   [
+    4450,
+    "OK",
+    "MERGE INTO SCM_MGR.DM_PLN_SALES_ETC_REPORT_C A     USING (         SELECT B.*              , NVL(E.K"
+   ],
+   [
+    5812,
+    "OK",
+    "INSERT INTO SCM_MGR.DM_PLN_SALES_PLAN_REPORT_C                         ( DATA_TYPE, DIVISION_ID, VER"
+   ],
+   [
+    7283,
+    "OK",
+    "SELECT COUNT(*) INTO v_chk FROM (         SELECT A.VERSION_NO, A.DIVISION_ID, A.DEPARTMENT_ID, A.DEP"
+   ],
+   [
+    7563,
+    "OK",
+    "INSERT INTO GT_DMF0044_ITEM_SINGLE_V \tSELECT DISTINCT ITEM_ID,ITEM_CLASS_NAME \t\t\t, CASE WHEN REGEXP_"
+   ],
+   [
+    7929,
+    "ORA-00979",
+    "INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,S"
+   ],
+   [
+    8158,
+    "OK",
+    "INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,S"
+   ],
+   [
+    8192,
+    "OK",
+    "INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,S"
+   ],
+   [
+    8226,
+    "OK",
+    "MERGE INTO GT_DMF0_VERSION_COPY A \t\t\t\t\t\tUSING ( SELECT PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, "
+   ],
+   [
+    8245,
+    "OK",
+    "MERGE INTO GT_DMF0_VERSION_COPY A \t\t\t\t\t\tUSING ( SELECT PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, "
+   ],
+   [
+    8269,
+    "ORA-00979",
+    "INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,S"
+   ],
+   [
+    8319,
+    "OK",
+    "SELECT A.VERSION_NO, MIN(A.YYYYMMDD) \t\t\t\t  INTO v_cp_VERSION_NO, v_cp_MIN_YYYYMMDD \t\t\t\tFROM DM_PLN_S"
+   ],
+   [
+    8438,
+    "ORA-00979",
+    "INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,S"
+   ],
+   [
+    8605,
+    "OK",
+    "INSERT INTO GT_DMF0_VERSION_COPY (DIVISION_ID, VERSION_NO,CUTOFF_TYPE,CUTOFF_YYYYMMDD,PROJECT_CODE,S"
+   ],
+   [
+    8766,
+    "OK",
+    "MERGE INTO GT_DMF0_VERSION_COPY A \t\t\t\tUSING ( SELECT PROJECT_CODE,SCM_SITE_ID,ITEM_ID,DOM_EXP,FCST_T"
+   ],
+   [
+    8784,
+    "OK",
+    "MERGE INTO GT_DMF0_VERSION_COPY A \t\t\t\tUSING ( SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID"
+   ],
+   [
+    8846,
+    "OK",
+    "INSERT                             INTO DM_PLN_SALES_PLAN_REPORT_C ( \t\t\t\t\t  DATA_TYPE, DIVISION_ID, "
+   ],
+   [
+    8995,
+    "OK",
+    "INSERT                             INTO DM_PLN_SALES_PLAN_REPORT_C ( \t\t\t\t\t  DATA_TYPE, DIVISION_ID, "
+   ],
+   [
+    9123,
+    "OK",
+    "INSERT                             INTO DM_PLN_SALES_PLAN_REPORT_C ( \t\t\t\t\t  DATA_TYPE, DIVISION_ID, "
+   ],
+   [
+    9180,
+    "ORA-00979",
+    "INSERT                             INTO DM_PLN_SALES_PLAN_REPORT_C \t\t\t\t(  DATA_TYPE, DIVISION_ID, VE"
+   ],
+   [
+    9368,
+    "OK",
+    "INSERT INTO DM_PLN_SALES_PLAN_REPORT_C \t\t\t\t\t ( DATA_TYPE, DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTO"
+   ],
+   [
+    9612,
+    "OK",
+    "SELECT MIN(A.VERSION_NO)   INTO V_MAX_ETC_RESULT_VERSION_NO \t\t\t\t\tFROM DM_MDF_VERSION A \t\t\t\t\tJOIN ( S"
+   ],
+   [
+    9969,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0044_DEPT_RPT_C             ( DIVISION_ID, PRODUCT_GROUP, MEASURE, YYYYMMD"
+   ],
+   [
+    10065,
+    "OK",
+    "INSERT INTO SCM_MGR.DM_MOBILE_REPORT_DEPT              ( DIVISION_ID, VERSION_NO, YYYY, SP_BP_TYPE, "
+   ],
+   [
+    10297,
+    "OK",
+    "INSERT INTO SCM_MGR.DM_MOBILE_REPORT_PRODUCT              ( DIVISION_ID              , VERSION_NO   "
+   ]
+  ]
+ },
+ "PKG_DMF0045.PACKAGE_BODY.sql": {
+  "stmts": 9,
+  "codes": {
+   "ORA-00979": 1,
+   "OK": 8
+  },
+  "ora979": [
+   [
+    311,
+    "ORA-00979",
+    "INSERT INTO GT_DMF0045_PLAN_FG                 (                   DIVISION_ID, PLAN_START_YYYYMMDD,"
+   ]
+  ],
+  "all": [
+   [
+    311,
+    "ORA-00979",
+    "INSERT INTO GT_DMF0045_PLAN_FG                 (                   DIVISION_ID, PLAN_START_YYYYMMDD,"
+   ],
+   [
+    789,
+    "OK",
+    "INSERT INTO GT_DMF0045_PLAN                 (                   DIVISION_ID, ITEM_ID, FROM_SITE, TO_"
+   ],
+   [
+    828,
+    "OK",
+    "INSERT INTO GT_DMF0045_PLAN                 (                   DIVISION_ID, ITEM_ID, FROM_SITE, TO_"
+   ],
+   [
+    1110,
+    "OK",
+    "INSERT INTO GT_DMF0045_SHIP_ROW                 (                   DIVISION_ID, ITEM_ID, NICK_NAME,"
+   ],
+   [
+    1221,
+    "OK",
+    "INSERT INTO GT_DMF0045_BOH                 (                   DIVISION_ID, ITEM_ID, FROM_SITE, YYYY"
+   ],
+   [
+    1341,
+    "OK",
+    "INSERT INTO GT_DMF0045_SHIP_ROW                 (                   DIVISION_ID, ITEM_ID, NICK_NAME,"
+   ],
+   [
+    1551,
+    "OK",
+    "INSERT INTO GT_DMF0045_PIVOT                 (                   DIVISION_ID, ITEM_ID, NICK_NAME, FR"
+   ],
+   [
+    1631,
+    "OK",
+    "INSERT INTO GT_DMF0045_PIVOT                 (                   DIVISION_ID, ITEM_ID, NICK_NAME, FR"
+   ],
+   [
+    1702,
+    "OK",
+    "INSERT INTO GT_DMF0045_PIVOT                 (                   DIVISION_ID, ITEM_ID, NICK_NAME, FR"
+   ]
+  ]
+ },
+ "PKG_DMF0049.PACKAGE_BODY.sql": {
+  "stmts": 5,
+  "codes": {
+   "OK": 5
+  },
+  "ora979": [],
+  "all": [
+   [
+    451,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0049_PJT         (DIVISION_ID, PROJECT_CODE, PROJECT_NAME, PRODUCT_GROUP_N"
+   ],
+   [
+    465,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0049_T          ( DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, D"
+   ],
+   [
+    891,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0049_RESULTS_MST         ( VERSION_NO, DIVISION_ID, DATA_SEQ, DEPARTMENT_I"
+   ],
+   [
+    942,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0049_RESULTS_MST_PRICE         ( ACTIVE_FLAG, RESULT_MONTH, DIVISION_ID, V"
+   ],
+   [
+    1010,
+    "OK",
+    "SELECT COUNT(*) INTO v_chk FROM (         SELECT A.VERSION_NO           FROM DM_PLN_SALES_ETC_REPORT"
+   ]
+  ]
+ },
+ "PKG_DMF0051.PACKAGE_BODY.sql": {
+  "stmts": 9,
+  "codes": {
+   "OK": 9
+  },
+  "ora979": [],
+  "all": [
+   [
+    703,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM51_RAW_DATA                 ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PRO"
+   ],
+   [
+    742,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM51_RAW_DATA                 ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PRO"
+   ],
+   [
+    792,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM51_RAW_DATA                 ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PRO"
+   ],
+   [
+    849,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM51_RAW_DATA                 ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PRO"
+   ],
+   [
+    889,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM51_RAW_DATA                 ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PRO"
+   ],
+   [
+    943,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM51_RAW_DATA                 ( VERSION_NO, CUTOFF_YYYYMMDD, DIVISION_ID, PRO"
+   ],
+   [
+    1047,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM22_DM_MST_ITEM_SINGLE_A_V               (DIVISION_ID, ITEM_ID, ITEM_NAME, I"
+   ],
+   [
+    1080,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM22_DM_MST_ITEM_SINGLE_B_V               (DIVISION_ID, ITEM_ID, FORECAST_INF"
+   ],
+   [
+    1369,
+    "OK",
+    "DELETE FROM SCM_MGR.GT_DM51_RAW_DATA A              WHERE EXISTS (                        SELECT 1  "
+   ]
+  ]
+ },
+ "PKG_DMF0072.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_DMF0074.PACKAGE_BODY.sql": {
+  "stmts": 2,
+  "codes": {
+   "OK": 2
+  },
+  "ora979": [],
+  "all": [
+   [
+    1030,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DM74_TEMP_VERSION_NO              (DIVISION_ID,VERSION_NO,YYYYMMDD,YYYYMM,RES"
+   ],
+   [
+    1821,
+    "OK",
+    "UPDATE SCM_MGR.GT_DM74_TMP_EXCEL_UPLOAD_RAW         SET    UPLOAD_STATUS_CODE = 'ERROR'             "
+   ]
+  ]
+ },
+ "PKG_DMF0082.PACKAGE_BODY.sql": {
+  "stmts": 92,
+  "codes": {
+   "OK": 91,
+   "ORA-00923": 1
+  },
+  "ora979": [],
+  "all": [
+   [
+    118,
+    "OK",
+    "SELECT 'D_' || A.BASIS_YYYYMMDD                                                               AS COL"
+   ],
+   [
+    662,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_A_V     (         DIVISION_ID, ITEM_ID, ITEM_NAME, IT"
+   ],
+   [
+    706,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_B_V     (         DIVISION_ID, ITEM_ID       , FORECA"
+   ],
+   [
+    735,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_MST_ITEM_SINGLE_V     (         DIVISION_ID, ITEM_ID, ITEM_NAME, ITEM"
+   ],
+   [
+    1051,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SITE_ITEM     (         DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, "
+   ],
+   [
+    1151,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_SELECT_MEASURE         (MEASURE, RESULT_MEASURE, MEASURE_GROUP, "
+   ],
+   [
+    1213,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST         (DIVISION_ID, PROJECT_CODE, SCM_SITE_I"
+   ],
+   [
+    1230,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST         (DIVISION_ID, PROJECT_CODE, SCM_SITE_I"
+   ],
+   [
+    1267,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE         (DIVISION_ID, PROJECT_CODE, SCM_SITE_"
+   ],
+   [
+    1301,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST_C         (DIVISION_ID, PROJECT_CODE, SCM_SITE"
+   ],
+   [
+    1320,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_FCST_C         (DIVISION_ID, PROJECT_CODE, SCM_SITE"
+   ],
+   [
+    1341,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C         (DIVISION_ID, PROJECT_CODE, SCM_SIT"
+   ],
+   [
+    1361,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_T_LAST_DATA_SETUP_PRICE_C         (DIVISION_ID, PROJECT_CODE, SCM_SIT"
+   ],
+   [
+    1397,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    1500,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    1612,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    1850,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    1964,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2176,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2281,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2390,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2450,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2506,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2563,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2628,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2685,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2743,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2805,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2864,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2923,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    2980,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    3045,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    3102,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    3160,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, "
+   ],
+   [
+    3225,
+    "OK",
+    "MERGE                               INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A                     "
+   ],
+   [
+    3265,
+    "OK",
+    "MERGE                               INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A     USING (         "
+   ],
+   [
+    3319,
+    "OK",
+    "MERGE                               INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE A     USING (         "
+   ],
+   [
+    3359,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE     ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_"
+   ],
+   [
+    3457,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE     ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_"
+   ],
+   [
+    3734,
+    "OK",
+    "SELECT COUNT(*) INTO V_QPT_DUP_CNT FROM (             SELECT 1 FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_P"
+   ],
+   [
+    3761,
+    "OK",
+    "DELETE FROM SCM_MGR.GT_DMF0082_TEMP_FCST_N_PRICE SP         WHERE  NOT EXISTS (SELECT 1             "
+   ],
+   [
+    3957,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE (MEASURE, EDIT_AUTH_YN, TODAY_LIMIT_YN, TODA"
+   ],
+   [
+    4147,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_CAL_MONTH_END_DATE (BASIS_YYYYMM, MONTH_END_DATE, M3_CUTOFF_DATE)    "
+   ],
+   [
+    4155,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_CAL_WEEK_END_DATE (ISO_WEEK, BASIS_YYYYMM, WEEK_END_DATE, M3_CUTOFF_D"
+   ],
+   [
+    4175,
+    "OK",
+    "INSERT                                                                                 INTO SCM_MGR."
+   ],
+   [
+    4528,
+    "OK",
+    "MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T         USING (                    SELECT NVL(DIVISION_ID, '~'"
+   ],
+   [
+    4594,
+    "OK",
+    "MERGE INTO SCM_MGR.GT_DMF0082_MF_SP T         USING (                    SELECT NVL(DIVISION_ID, '~'"
+   ],
+   [
+    5554,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD            SET UPLOAD_STATUS_CODE = 'ERROR'              , MESSAGE_TEXT "
+   ],
+   [
+    5608,
+    "OK",
+    "SELECT 1 INTO V_MODEL_DUP_EXISTS FROM DUAL WHERE EXISTS (                 SELECT 1                  "
+   ],
+   [
+    5623,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD                    SET UPLOAD_STATUS_CODE = 'ERROR'                     "
+   ],
+   [
+    6988,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_FCST_PRICE_WEEKLY     ( DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, ITEM_"
+   ],
+   [
+    7550,
+    "OK",
+    "SELECT 'D_' || A.BASIS_YYYYMMDD                                            AS COLUMN_NAME           "
+   ],
+   [
+    8036,
+    "OK",
+    "INSERT INTO SCM_MGR.GTT_TEMPSITEITEM     ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, NICK_NAM"
+   ],
+   [
+    9079,
+    "OK",
+    "INSERT INTO SCM_MGR.GTT_TEMPFCSTNPRICE         ( DIVISION_ID       , PROJECT_CODE                  ,"
+   ],
+   [
+    9163,
+    "OK",
+    "MERGE INTO SCM_MGR.GTT_TEMPFCSTNPRICE A         USING (SELECT SP.DIVISION_ID, SP.PROJECT_CODE, SP.SC"
+   ],
+   [
+    9195,
+    "OK",
+    "INSERT INTO SCM_MGR.GTT_TEMPFCSTNPRICE         ( DIVISION_ID       , PROJECT_CODE                  ,"
+   ],
+   [
+    9461,
+    "OK",
+    "INSERT INTO SCM_MGR.GTT_TEMP_ADMIN_GROUP_MEASURE ( MEASURE, EDIT_FLAG )     SELECT A.MEASURE        "
+   ],
+   [
+    9558,
+    "OK",
+    "INSERT INTO SCM_MGR.GTT_CAL_MONTH_END_DATE ( MONTH_END_DATE )     SELECT MAX(BASIS_YYYYMMDD) AS MONT"
+   ],
+   [
+    9565,
+    "OK",
+    "INSERT INTO SCM_MGR.GTT_CAL_WEEK_END_DATE ( WEEK_END_DATE )     SELECT MAX(BASIS_YYYYMMDD) AS WEEK_E"
+   ],
+   [
+    9746,
+    "OK",
+    "DELETE FROM SCM_MGR.GTT_MF_SP SP         WHERE  NOT EXISTS (SELECT 1                            FROM"
+   ],
+   [
+    10559,
+    "OK",
+    "INSERT INTO GTT_OVER_RANGE ( \t\t\tDIVISION_ID, \t\t\tPROJECT_CODE, \t\t\tSCM_SITE_ID, \t\t\tPLANT_SITE_ID, \t\t\tI"
+   ],
+   [
+    10697,
+    "OK",
+    "INSERT INTO GTT_OVER_RANGE ( \t\t\tDIVISION_ID, \t\t\tPROJECT_CODE, \t\t\tSCM_SITE_ID, \t\t\tPLANT_SITE_ID, \t\t\tI"
+   ],
+   [
+    10919,
+    "OK",
+    "INSERT INTO GTT_PLAN_DATA ( \t\tDIVISION_ID, \t\tSCM_SITE_ID, \t\tPLANT_SITE_ID, \t\tPROJECT_CODE, \t\tITEM_ID"
+   ],
+   [
+    10991,
+    "OK",
+    "INSERT INTO GTT_PLAN_DATA ( \t\tDIVISION_ID, \t\tSCM_SITE_ID, \t\tPLANT_SITE_ID, \t\tPROJECT_CODE, \t\tITEM_ID"
+   ],
+   [
+    11094,
+    "OK",
+    "INSERT INTO GTT_TMP_MST_FUTURE_PRICE_SAVE_PRICE ( \t\tDIVISION_ID, \t\tDIVISION_NAME, \t\tUPPER_DEPT_ID, \t"
+   ],
+   [
+    11704,
+    "OK",
+    "INSERT INTO GTT_SALES_SITE_MODEL_ALL                                                          \t\t( DI"
+   ],
+   [
+    12808,
+    "OK",
+    "SELECT A.ATTRIBUTE1, A.ATTRIBUTE2, A.ATTRIBUTE3, A.ATTRIBUTE4         INTO   V_TARGET_DATE, V_FROM_T"
+   ],
+   [
+    12893,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_PRDM1_T_PRICE     ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID, PLA"
+   ],
+   [
+    12940,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_PRDM1_T_PRICE         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_ID,"
+   ],
+   [
+    13100,
+    "OK",
+    "SELECT COUNT(*) INTO v_cnt_check         FROM SCM_MGR.GT_PRDM1_T_MAIN R         WHERE R.INCOTERMS IN"
+   ],
+   [
+    13253,
+    "OK",
+    "SELECT A.ITEM_ID INTO v_BIZ_TYPE_CHECK             FROM (                 SELECT T1.DIVISION_ID, T1."
+   ],
+   [
+    13311,
+    "OK",
+    "SELECT LISTAGG(A.ITEM_ID, ',') WITHIN GROUP (ORDER BY A.ITEM_ID)             INTO v_CELL_TYPE_CHECK "
+   ],
+   [
+    13369,
+    "OK",
+    "SELECT A.ITEM_ID INTO s_cell_prod_valid             FROM (                 SELECT P.DIVISION_ID, P.P"
+   ],
+   [
+    13421,
+    "OK",
+    "SELECT 'N' INTO s_cell_prod_valid             FROM (                 SELECT T.DIVISION_ID, T.PROJECT"
+   ],
+   [
+    13480,
+    "OK",
+    "SELECT 'End Customer : '   || NVL(A.END_CUSTOMER,  '')             || CHR(10) || 'Sales site : ' || "
+   ],
+   [
+    13648,
+    "OK",
+    "SELECT A.ITEM_ID INTO v_valid_bom             FROM SCM_MGR.GT_PRDM1_T_MAIN A             INNER JOIN "
+   ],
+   [
+    13706,
+    "OK",
+    "SELECT A.SCM_SITE_ID INTO v_valid_shipto             FROM SCM_MGR.GT_PRDM1_T_MAIN A             LEFT"
+   ],
+   [
+    13877,
+    "OK",
+    "MERGE INTO SCM_MGR.GT_PRDM1_T_MAIN A     USING (         SELECT BASIS_YYYYMMDD, MAX(ACT) AS ACT     "
+   ],
+   [
+    13922,
+    "OK",
+    "SELECT '● Sales Site : ' || F.SCM_SITE_ID || ' / ● Model : ' || F.ITEM_ID                 INTO v_inv"
+   ],
+   [
+    13994,
+    "OK",
+    "SELECT '● Sales Site : ' || F.SCM_SITE_ID || ' / ● Model : ' || F.ITEM_ID                 INTO v_inv"
+   ],
+   [
+    14139,
+    "OK",
+    "SELECT A.ITEM_ID INTO v_valid_item_id             FROM   SCM_MGR.GT_PRDM1_T_MAIN A             LEFT "
+   ],
+   [
+    14162,
+    "OK",
+    "SELECT CASE WHEN INSTR(X.ITEM_CLASS_NAME,'Module') > 0 THEN 'Cell/Car or Cell/Module'               "
+   ],
+   [
+    14278,
+    "OK",
+    "SELECT COUNT(1) INTO v_cnt_check         FROM (             SELECT 1 AS DUP             FROM SCM_MGR"
+   ],
+   [
+    14442,
+    "ORA-00923",
+    "INSERT INTO SCM_MGR.GT_PRDM1_T_MAIN     ( ACTION, DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_"
+   ],
+   [
+    15045,
+    "OK",
+    "INSERT INTO SCM_MGR.DM_PLN_CFM_MKT_DEMAND_PLAN         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SC"
+   ],
+   [
+    15356,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_PRDM_SEND_TARGET_DATA             ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, I"
+   ],
+   [
+    15369,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_PRDM_RESULTS             ( V_DIVISION_ID, V_PROJECT_CODE, V_SCM_SITE_ID, V_IT"
+   ],
+   [
+    16021,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_PRDM_TEMP_MKT_DEMAND_PLAN     ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_"
+   ],
+   [
+    16083,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_PRDM_TEMP_SELLING_PRICE     ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_S"
+   ],
+   [
+    16165,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_PRDM_SEND_TARGET_DATA     ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, "
+   ],
+   [
+    16208,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_PRDM_RESULTS     ( V_DIVISION_ID, V_PROJECT_CODE, V_SCM_SITE_ID, V_ITEM_ID, V"
+   ],
+   [
+    16773,
+    "OK",
+    "INSERT INTO SCM_MGR.GT_DMF0082_TEMP_ADMIN_GROUP_MEASURE (MEASURE, EDIT_AUTH_YN, TODAY_LIMIT_YN, TODA"
+   ]
+  ]
+ },
+ "PKG_NSCM_UI_COM_LOOKUP.PACKAGE_BODY.sql": {
+  "stmts": 1,
+  "codes": {
+   "OK": 1
+  },
+  "ora979": [],
+  "all": [
+   [
+    34,
+    "OK",
+    "SELECT                  LISTAGG('''' || HEADER_VAL || ''' AS \"' || HEADER_VAL || '\"', ', ') WITHIN G"
+   ]
+  ]
+ },
+ "PKG_S39V2.PACKAGE_BODY.sql": {
+  "stmts": 26,
+  "codes": {
+   "OK": 26
+  },
+  "ora979": [],
+  "all": [
+   [
+    613,
+    "OK",
+    "INSERT INTO GT_0039_PACKER_UPLOAD_ITEM_CNT         (             DIVISION_ID           , SCM_SITE_ID"
+   ],
+   [
+    753,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             DIVISION_ID           , SALES_SITE_ID           ,"
+   ],
+   [
+    1012,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_DATA         (             DIVISION_ID           , MODEL_ID           , N"
+   ],
+   [
+    1267,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    1423,
+    "OK",
+    "INSERT INTO GT_0039_BOM_CHILD_CNT         (             MODEL_ID           , MODEL_OPERATION_GROUP  "
+   ],
+   [
+    1854,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    2157,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    2179,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             ITEM_ID           , PLANT_SITE_ID           "
+   ],
+   [
+    2435,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    2925,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3342,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3485,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    3510,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    3748,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , ORIGIN_DIVISION_ID  "
+   ],
+   [
+    4017,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    4459,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    4717,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , PLAN_START_YYYYMMDD "
+   ],
+   [
+    4766,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE4         (             DIVISION_ID           , PLAN_START_YYYYMMDD  "
+   ],
+   [
+    4876,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE5         (             DIVISION_ID           , ELEC_ITEM_ID         "
+   ],
+   [
+    5221,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    5675,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_MODEL         (             COMPANY_ID           , DIVISION_ID      "
+   ],
+   [
+    5866,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    6203,
+    "OK",
+    "INSERT INTO GT_0039_TT_CASE_5         (             DIVISION_ID           , PLAN_START_YYYYMMDD     "
+   ],
+   [
+    6641,
+    "OK",
+    "INSERT INTO GT_0039_SCM_MST_SITE_TO         (             SCM_SITE_ID           , SITE_DESCRIPTION  "
+   ],
+   [
+    6691,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , TO_COUNTRY           , "
+   ],
+   [
+    7253,
+    "OK",
+    "INSERT INTO GT_0039_INVALID_BOD_SHIP_PLAN         (             DV           , BOD_VALID_YN         "
+   ]
+  ]
+ },
+ "PKG_S39V3.PACKAGE_BODY.sql": {
+  "stmts": 26,
+  "codes": {
+   "OK": 26
+  },
+  "ora979": [],
+  "all": [
+   [
+    646,
+    "OK",
+    "INSERT INTO GT_0039_PACKER_UPLOAD_ITEM_CNT         (             DIVISION_ID           , SCM_SITE_ID"
+   ],
+   [
+    787,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             DIVISION_ID           , SALES_SITE_ID           ,"
+   ],
+   [
+    1049,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_DATA         (             DIVISION_ID           , MODEL_ID           , N"
+   ],
+   [
+    1306,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    1464,
+    "OK",
+    "INSERT INTO GT_0039_BOM_CHILD_CNT         (             MODEL_ID           , MODEL_OPERATION_GROUP  "
+   ],
+   [
+    1901,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    2209,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    2232,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             ITEM_ID           , PLANT_SITE_ID           "
+   ],
+   [
+    2491,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    2987,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3410,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3555,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    3581,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    3824,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , ORIGIN_DIVISION_ID  "
+   ],
+   [
+    4096,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    4545,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    4808,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , PLAN_START_YYYYMMDD "
+   ],
+   [
+    4858,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE4         (             DIVISION_ID           , PLAN_START_YYYYMMDD  "
+   ],
+   [
+    4969,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE5         (             DIVISION_ID           , ELEC_ITEM_ID         "
+   ],
+   [
+    5317,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    5780,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_MODEL         (             COMPANY_ID           , DIVISION_ID      "
+   ],
+   [
+    5974,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    6317,
+    "OK",
+    "INSERT INTO GT_0039_TT_CASE_5         (             DIVISION_ID           , PLAN_START_YYYYMMDD     "
+   ],
+   [
+    6759,
+    "OK",
+    "INSERT INTO GT_0039_SCM_MST_SITE_TO         (             SCM_SITE_ID           , SITE_DESCRIPTION  "
+   ],
+   [
+    6810,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , TO_COUNTRY           , "
+   ],
+   [
+    7383,
+    "OK",
+    "INSERT INTO GT_0039_INVALID_BOD_SHIP_PLAN         (             DV           , BOD_VALID_YN         "
+   ]
+  ]
+ },
+ "PKG_S39V4.PACKAGE_BODY.sql": {
+  "stmts": 26,
+  "codes": {
+   "OK": 26
+  },
+  "ora979": [],
+  "all": [
+   [
+    646,
+    "OK",
+    "INSERT INTO GT_0039_PACKER_UPLOAD_ITEM_CNT         (             DIVISION_ID           , SCM_SITE_ID"
+   ],
+   [
+    787,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             DIVISION_ID           , SALES_SITE_ID           ,"
+   ],
+   [
+    1049,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_DATA         (             DIVISION_ID           , MODEL_ID           , N"
+   ],
+   [
+    1306,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    1464,
+    "OK",
+    "INSERT INTO GT_0039_BOM_CHILD_CNT         (             MODEL_ID           , MODEL_OPERATION_GROUP  "
+   ],
+   [
+    1901,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    2209,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    2232,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             ITEM_ID           , PLANT_SITE_ID           "
+   ],
+   [
+    2491,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    2987,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3410,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3555,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    3581,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    3824,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , ORIGIN_DIVISION_ID  "
+   ],
+   [
+    4096,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    4545,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    4808,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , PLAN_START_YYYYMMDD "
+   ],
+   [
+    4858,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE4         (             DIVISION_ID           , PLAN_START_YYYYMMDD  "
+   ],
+   [
+    4969,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE5         (             DIVISION_ID           , ELEC_ITEM_ID         "
+   ],
+   [
+    5317,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    5780,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_MODEL         (             COMPANY_ID           , DIVISION_ID      "
+   ],
+   [
+    5974,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    6317,
+    "OK",
+    "INSERT INTO GT_0039_TT_CASE_5         (             DIVISION_ID           , PLAN_START_YYYYMMDD     "
+   ],
+   [
+    6759,
+    "OK",
+    "INSERT INTO GT_0039_SCM_MST_SITE_TO         (             SCM_SITE_ID           , SITE_DESCRIPTION  "
+   ],
+   [
+    6810,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , TO_COUNTRY           , "
+   ],
+   [
+    7383,
+    "OK",
+    "INSERT INTO GT_0039_INVALID_BOD_SHIP_PLAN         (             DV           , BOD_VALID_YN         "
+   ]
+  ]
+ },
+ "PKG_S39V5.PACKAGE_BODY.sql": {
+  "stmts": 26,
+  "codes": {
+   "OK": 26
+  },
+  "ora979": [],
+  "all": [
+   [
+    646,
+    "OK",
+    "INSERT INTO GT_0039_PACKER_UPLOAD_ITEM_CNT         (             DIVISION_ID           , SCM_SITE_ID"
+   ],
+   [
+    787,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             DIVISION_ID           , SALES_SITE_ID           ,"
+   ],
+   [
+    1054,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_DATA         (             DIVISION_ID           , MODEL_ID           , N"
+   ],
+   [
+    1316,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    1474,
+    "OK",
+    "INSERT INTO GT_0039_BOM_CHILD_CNT         (             MODEL_ID           , MODEL_OPERATION_GROUP  "
+   ],
+   [
+    1916,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    2239,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    2262,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             ITEM_ID           , PLANT_SITE_ID           "
+   ],
+   [
+    2525,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3026,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3454,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3599,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    3625,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    3883,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , ORIGIN_DIVISION_ID  "
+   ],
+   [
+    4159,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    4608,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    4886,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , PLAN_START_YYYYMMDD "
+   ],
+   [
+    4935,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE4         (             DIVISION_ID           , PLAN_START_YYYYMMDD  "
+   ],
+   [
+    5046,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE5         (             DIVISION_ID           , ELEC_ITEM_ID         "
+   ],
+   [
+    5399,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    5862,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_MODEL         (             COMPANY_ID           , DIVISION_ID      "
+   ],
+   [
+    6056,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    6414,
+    "OK",
+    "INSERT INTO GT_0039_TT_CASE_5         (             DIVISION_ID           , PLAN_START_YYYYMMDD     "
+   ],
+   [
+    6860,
+    "OK",
+    "INSERT INTO GT_0039_SCM_MST_SITE_TO         (             SCM_SITE_ID           , SITE_DESCRIPTION  "
+   ],
+   [
+    6911,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , TO_COUNTRY           , "
+   ],
+   [
+    7497,
+    "OK",
+    "INSERT INTO GT_0039_INVALID_BOD_SHIP_PLAN         (             DV           , BOD_VALID_YN         "
+   ]
+  ]
+ },
+ "PKG_S39V6.PACKAGE_BODY.sql": {
+  "stmts": 26,
+  "codes": {
+   "OK": 26
+  },
+  "ora979": [],
+  "all": [
+   [
+    646,
+    "OK",
+    "INSERT INTO GT_0039_PACKER_UPLOAD_ITEM_CNT         (             DIVISION_ID           , SCM_SITE_ID"
+   ],
+   [
+    787,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             DIVISION_ID           , SALES_SITE_ID           ,"
+   ],
+   [
+    1054,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_DATA         (             DIVISION_ID           , MODEL_ID           , N"
+   ],
+   [
+    1316,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    1474,
+    "OK",
+    "INSERT INTO GT_0039_BOM_CHILD_CNT         (             MODEL_ID           , MODEL_OPERATION_GROUP  "
+   ],
+   [
+    1916,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    2239,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    2262,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             ITEM_ID           , PLANT_SITE_ID           "
+   ],
+   [
+    2525,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3026,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3454,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3599,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    3625,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    3883,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , ORIGIN_DIVISION_ID  "
+   ],
+   [
+    4159,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    4608,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    4886,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , PLAN_START_YYYYMMDD "
+   ],
+   [
+    4935,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE4         (             DIVISION_ID           , PLAN_START_YYYYMMDD  "
+   ],
+   [
+    5046,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE5         (             DIVISION_ID           , ELEC_ITEM_ID         "
+   ],
+   [
+    5399,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    5862,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_MODEL         (             COMPANY_ID           , DIVISION_ID      "
+   ],
+   [
+    6056,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    6414,
+    "OK",
+    "INSERT INTO GT_0039_TT_CASE_5         (             DIVISION_ID           , PLAN_START_YYYYMMDD     "
+   ],
+   [
+    6860,
+    "OK",
+    "INSERT INTO GT_0039_SCM_MST_SITE_TO         (             SCM_SITE_ID           , SITE_DESCRIPTION  "
+   ],
+   [
+    6911,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , TO_COUNTRY           , "
+   ],
+   [
+    7497,
+    "OK",
+    "INSERT INTO GT_0039_INVALID_BOD_SHIP_PLAN         (             DV           , BOD_VALID_YN         "
+   ]
+  ]
+ },
+ "PKG_S39V7.PACKAGE_BODY.sql": {
+  "stmts": 26,
+  "codes": {
+   "OK": 26
+  },
+  "ora979": [],
+  "all": [
+   [
+    646,
+    "OK",
+    "INSERT INTO GT_0039_PACKER_UPLOAD_ITEM_CNT         (             DIVISION_ID           , SCM_SITE_ID"
+   ],
+   [
+    787,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             DIVISION_ID           , SALES_SITE_ID           ,"
+   ],
+   [
+    1054,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_DATA         (             DIVISION_ID           , MODEL_ID           , N"
+   ],
+   [
+    1316,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    1474,
+    "OK",
+    "INSERT INTO GT_0039_BOM_CHILD_CNT         (             MODEL_ID           , MODEL_OPERATION_GROUP  "
+   ],
+   [
+    1916,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    2239,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    2262,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             ITEM_ID           , PLANT_SITE_ID           "
+   ],
+   [
+    2528,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3029,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3457,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3602,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    3628,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    3886,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , ORIGIN_DIVISION_ID  "
+   ],
+   [
+    4165,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    4614,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    4892,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , PLAN_START_YYYYMMDD "
+   ],
+   [
+    4944,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE4         (             DIVISION_ID           , PLAN_START_YYYYMMDD  "
+   ],
+   [
+    5055,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE5         (             DIVISION_ID           , ELEC_ITEM_ID         "
+   ],
+   [
+    5408,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    5871,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_MODEL         (             COMPANY_ID           , DIVISION_ID      "
+   ],
+   [
+    6065,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    6423,
+    "OK",
+    "INSERT INTO GT_0039_TT_CASE_5         (             DIVISION_ID           , PLAN_START_YYYYMMDD     "
+   ],
+   [
+    6872,
+    "OK",
+    "INSERT INTO GT_0039_SCM_MST_SITE_TO         (             SCM_SITE_ID           , SITE_DESCRIPTION  "
+   ],
+   [
+    6923,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , TO_COUNTRY           , "
+   ],
+   [
+    7515,
+    "OK",
+    "INSERT INTO GT_0039_INVALID_BOD_SHIP_PLAN         (             DV           , BOD_VALID_YN         "
+   ]
+  ]
+ },
+ "PKG_SCM0002.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SCP0005.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SCP0007.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SCP0009.PACKAGE_BODY.sql": {
+  "stmts": 10,
+  "codes": {
+   "ORA-00923": 7,
+   "ORA-00971": 2,
+   "OK": 1
+  },
+  "ora979": [],
+  "all": [
+   [
+    409,
+    "ORA-00923",
+    "INSERT INTO GT_SCP0009_ERP_C_EXIST         (             DIVISION_ID           , CONFIRM_ID         "
+   ],
+   [
+    514,
+    "ORA-00923",
+    "INSERT INTO GT_SCP0009_ERP_C_NON         (             DIVISION_ID           , CONFIRM_ID           "
+   ],
+   [
+    1728,
+    "ORA-00923",
+    "INSERT INTO GT_SCP0009_PLAN             (                 KEY_IDX               , DIVISION_ID       "
+   ],
+   [
+    1856,
+    "ORA-00923",
+    "INSERT INTO GT_SCP0009_RSLT_TMP             (                 DIVISION_ID               , COMPANY_ID"
+   ],
+   [
+    2036,
+    "ORA-00923",
+    "INSERT INTO GT_SCP0009_RSLT             (                 KEY_IDX               , DIVISION_ID       "
+   ],
+   [
+    2448,
+    "ORA-00971",
+    "UPDATE GT_SCP0009_FNL_RSLT_PLAN A            SET A.WEEK_YN = 'Y'          WHERE A.MEASURE IN ('BALAN"
+   ],
+   [
+    2461,
+    "ORA-00971",
+    "UPDATE GT_SCP0009_FNL_RSLT_PLAN A            SET A.MONTH_YN = 'Y'          WHERE A.MEASURE IN ('BALA"
+   ],
+   [
+    3254,
+    "ORA-00923",
+    "INSERT INTO GT_SCP0009_TMP_RSLT_TMP             (                 DIVISION_ID               , COMPAN"
+   ],
+   [
+    3424,
+    "OK",
+    "INSERT INTO GT_SCP0009_RSLT_TMP2             (                 FROM_SITE               , TO_SITE    "
+   ],
+   [
+    3485,
+    "ORA-00923",
+    "INSERT INTO GT_SCP0009_TMP_RSLT             (                 KEY_IDX               , DIVISION_ID   "
+   ]
+  ]
+ },
+ "PKG_SCP0010.PACKAGE_BODY.sql": {
+  "stmts": 3,
+  "codes": {
+   "OK": 3
+  },
+  "ora979": [],
+  "all": [
+   [
+    2415,
+    "OK",
+    "INSERT INTO GT_SCP0010_VALUE         (             VALUE_GB           , DIVISION_ID           , ITEM"
+   ],
+   [
+    2670,
+    "OK",
+    "INSERT INTO GT_SCP0010_BOH             (                 OPERATION_GROUP               , SITE_ID    "
+   ],
+   [
+    2694,
+    "OK",
+    "INSERT INTO GT_SCP0010_BOH             (                 OPERATION_GROUP               , SITE_ID    "
+   ]
+  ]
+ },
+ "PKG_SCP0011.PACKAGE_BODY.sql": {
+  "stmts": 6,
+  "codes": {
+   "OK": 6
+  },
+  "ora979": [],
+  "all": [
+   [
+    554,
+    "OK",
+    "INSERT INTO GT_0011_MDL_MAIN              (                KEY_IDX               ,DIVISION_ID       "
+   ],
+   [
+    667,
+    "OK",
+    "UPDATE GT_0011_MDL_MAIN            SET WEEK_YN = 'Y'          WHERE SUBSTR(YYYYMMDD, -8) IN (SELECT "
+   ],
+   [
+    677,
+    "OK",
+    "UPDATE GT_0011_MDL_MAIN            SET MONTH_YN = 'Y'          WHERE SUBSTR(YYYYMMDD, -8) IN (SELECT"
+   ],
+   [
+    1212,
+    "OK",
+    "INSERT INTO GT_0011_TTL_MAIN              (                KEY_IDX               ,DIVISION_ID       "
+   ],
+   [
+    1542,
+    "OK",
+    "INSERT INTO GT_0011_LINE                  (                    DIVISION_ID                   ,OPERAT"
+   ],
+   [
+    1780,
+    "OK",
+    "INSERT INTO GT_0011_LINE                  (                    DIVISION_ID                   ,OPERAT"
+   ]
+  ]
+ },
+ "PKG_SCP0013.PACKAGE_BODY.sql": {
+  "stmts": 12,
+  "codes": {
+   "OK": 11,
+   "ORA-00979": 1
+  },
+  "ora979": [
+   [
+    2607,
+    "ORA-00979",
+    "INSERT INTO GT_0013_PERFOR_ESS_JV                  (                    DIVISION_ID                 "
+   ]
+  ],
+  "all": [
+   [
+    344,
+    "OK",
+    "INSERT INTO GT_0013_TMP_LINE              (                LINE_ID              )         SELECT A.L"
+   ],
+   [
+    1936,
+    "OK",
+    "INSERT INTO GT_0013_TMP                  (                    DIVISION_ID                   ,PLAN_ST"
+   ],
+   [
+    2317,
+    "OK",
+    "INSERT INTO GT_0013_LOAD              (                DIVISION_ID               ,PLAN_START_YYYYMMD"
+   ],
+   [
+    2463,
+    "OK",
+    "INSERT INTO GT_0013_PERFOR                  (                    DIVISION_ID                   ,PLAN"
+   ],
+   [
+    2607,
+    "ORA-00979",
+    "INSERT INTO GT_0013_PERFOR_ESS_JV                  (                    DIVISION_ID                 "
+   ],
+   [
+    2837,
+    "OK",
+    "INSERT INTO GT_0013_PIVOT              (                CP_KEY               ,FIX_KEY               "
+   ],
+   [
+    3394,
+    "OK",
+    "INSERT INTO GT_0013_BUCKET_SUM              (                BUCKET_TYPE               ,DIVISION_ID "
+   ],
+   [
+    3524,
+    "OK",
+    "INSERT INTO GT_0013_BUCKET_CNT              (                BUCKET_TYPE               ,DIVISION_ID "
+   ],
+   [
+    3787,
+    "OK",
+    "INSERT INTO GT_0013_POPUP_QTY              (                DIVISION_ID               ,SCM_SITE_ID  "
+   ],
+   [
+    3875,
+    "OK",
+    "INSERT INTO GT_0013_POPUP_QTY              (                DIVISION_ID               ,SCM_SITE_ID  "
+   ],
+   [
+    3931,
+    "OK",
+    "INSERT INTO GT_0013_POPUP_QTY              (                DIVISION_ID               ,SCM_SITE_ID  "
+   ],
+   [
+    5309,
+    "OK",
+    "INSERT INTO GT_0013_DYN_TEMP                  (                    P_DIVISION_ID                   ,"
+   ]
+  ]
+ },
+ "PKG_SCP0017.PACKAGE_BODY.sql": {
+  "stmts": 4,
+  "codes": {
+   "OK": 4
+  },
+  "ora979": [],
+  "all": [
+   [
+    918,
+    "OK",
+    "INSERT INTO GT_0017_RAW             (                 KEY_IDX               , DIVISION_ID           "
+   ],
+   [
+    1246,
+    "OK",
+    "UPDATE GT_0017_RAW A                SET A.WEEK_YN = 'Y'              WHERE 1 = 1                AND "
+   ],
+   [
+    1261,
+    "OK",
+    "UPDATE GT_0017_RAW A                SET A.MONTH_YN = 'Y'              WHERE 1 = 1                AND"
+   ],
+   [
+    2081,
+    "OK",
+    "INSERT INTO GT_0017_LINE         (             DIVISION_ID           , OPERATION_GROUP           , S"
+   ]
+  ]
+ },
+ "PKG_SCP0018.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SCP0020.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SCP0025.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SCP0027.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SCP0030.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SCP0031.PACKAGE_BODY.sql": {
+  "stmts": 6,
+  "codes": {
+   "OK": 6
+  },
+  "ora979": [],
+  "all": [
+   [
+    148,
+    "OK",
+    "INSERT INTO GT_SCP0031_RANK         (             CELL_ITEM_ID           , ITEM_ID           , RANK_"
+   ],
+   [
+    383,
+    "OK",
+    "INSERT INTO GT_SCP0031_LOADBASE         (             DIVISION_ID           , OPERATION_GROUP       "
+   ],
+   [
+    622,
+    "OK",
+    "INSERT INTO GT_SCP0031_MAIN         (             DIVISION_ID           , OPERATION_GROUP           "
+   ],
+   [
+    696,
+    "OK",
+    "INSERT INTO GT_SCP0031_MAIN         (             DIVISION_ID           , OPERATION_GROUP           "
+   ],
+   [
+    1171,
+    "OK",
+    "UPDATE GT_SCP0031_FNL      A            SET A.WEEK_YN = 'Y'          WHERE A.MEASURE IN ('MODEL_INVE"
+   ],
+   [
+    1189,
+    "OK",
+    "UPDATE GT_SCP0031_FNL      A            SET A.MONTH_YN = 'Y'          WHERE A.MEASURE IN ('MODEL_INV"
+   ]
+  ]
+ },
+ "PKG_SCP0039.PACKAGE_BODY.sql": {
+  "stmts": 26,
+  "codes": {
+   "OK": 26
+  },
+  "ora979": [],
+  "all": [
+   [
+    666,
+    "OK",
+    "INSERT INTO GT_0039_PACKER_UPLOAD_ITEM_CNT         (             DIVISION_ID           , SCM_SITE_ID"
+   ],
+   [
+    807,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             DIVISION_ID           , SALES_SITE_ID           ,"
+   ],
+   [
+    1075,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_DATA         (             DIVISION_ID           , MODEL_ID           , N"
+   ],
+   [
+    1338,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    1496,
+    "OK",
+    "INSERT INTO GT_0039_BOM_CHILD_CNT         (             MODEL_ID           , MODEL_OPERATION_GROUP  "
+   ],
+   [
+    1939,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    2262,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    2285,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             ITEM_ID           , PLANT_SITE_ID           "
+   ],
+   [
+    2552,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3054,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3483,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3628,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    3654,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    3912,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , ORIGIN_DIVISION_ID  "
+   ],
+   [
+    4192,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    4641,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    4919,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , PLAN_START_YYYYMMDD "
+   ],
+   [
+    4971,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE4         (             DIVISION_ID           , PLAN_START_YYYYMMDD  "
+   ],
+   [
+    5082,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE5         (             DIVISION_ID           , ELEC_ITEM_ID         "
+   ],
+   [
+    5436,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    5899,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_MODEL         (             COMPANY_ID           , DIVISION_ID      "
+   ],
+   [
+    6093,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    6451,
+    "OK",
+    "INSERT INTO GT_0039_TT_CASE_5         (             DIVISION_ID           , PLAN_START_YYYYMMDD     "
+   ],
+   [
+    6901,
+    "OK",
+    "INSERT INTO GT_0039_SCM_MST_SITE_TO         (             SCM_SITE_ID           , SITE_DESCRIPTION  "
+   ],
+   [
+    6952,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , TO_COUNTRY           , "
+   ],
+   [
+    7544,
+    "OK",
+    "INSERT INTO GT_0039_INVALID_BOD_SHIP_PLAN         (             DV           , BOD_VALID_YN         "
+   ]
+  ]
+ },
+ "PKG_SCP0039_VF.PACKAGE_BODY.sql": {
+  "stmts": 26,
+  "codes": {
+   "OK": 26
+  },
+  "ora979": [],
+  "all": [
+   [
+    613,
+    "OK",
+    "INSERT INTO GT_0039_PACKER_UPLOAD_ITEM_CNT         (             DIVISION_ID           , SCM_SITE_ID"
+   ],
+   [
+    753,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             DIVISION_ID           , SALES_SITE_ID           ,"
+   ],
+   [
+    1016,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_DATA         (             DIVISION_ID           , MODEL_ID           , N"
+   ],
+   [
+    1275,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    1431,
+    "OK",
+    "INSERT INTO GT_0039_BOM_CHILD_CNT         (             MODEL_ID           , MODEL_OPERATION_GROUP  "
+   ],
+   [
+    1866,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    2169,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    2191,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             ITEM_ID           , PLANT_SITE_ID           "
+   ],
+   [
+    2451,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    2945,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3366,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    3509,
+    "OK",
+    "INSERT INTO GT_0039_CELL_PROD_ASSY_MAP         (             ITEM_ID_ASSY           , ITEM_ID_PROD  "
+   ],
+   [
+    3534,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    3772,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , ORIGIN_DIVISION_ID  "
+   ],
+   [
+    4045,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    4487,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    4745,
+    "OK",
+    "INSERT INTO GT_0039_SCP_PROD_PLAN         (             DIVISION_ID           , PLAN_START_YYYYMMDD "
+   ],
+   [
+    4794,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE4         (             DIVISION_ID           , PLAN_START_YYYYMMDD  "
+   ],
+   [
+    4904,
+    "OK",
+    "INSERT INTO GT_0039_TARGET_CASE5         (             DIVISION_ID           , ELEC_ITEM_ID         "
+   ],
+   [
+    5253,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , PROJECT_CODE           "
+   ],
+   [
+    5707,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_MODEL         (             COMPANY_ID           , DIVISION_ID      "
+   ],
+   [
+    5898,
+    "OK",
+    "INSERT INTO GT_0039_LINE_ASSIGN_CELL         (             COMPANY_ID           , DIVISION_ID       "
+   ],
+   [
+    6235,
+    "OK",
+    "INSERT INTO GT_0039_TT_CASE_5         (             DIVISION_ID           , PLAN_START_YYYYMMDD     "
+   ],
+   [
+    6677,
+    "OK",
+    "INSERT INTO GT_0039_SCM_MST_SITE_TO         (             SCM_SITE_ID           , SITE_DESCRIPTION  "
+   ],
+   [
+    6727,
+    "OK",
+    "INSERT INTO GT_0039_MKT_FCST         (             SALES_SITE_ID           , TO_COUNTRY           , "
+   ],
+   [
+    7289,
+    "OK",
+    "INSERT INTO GT_0039_INVALID_BOD_SHIP_PLAN         (             DV           , BOD_VALID_YN         "
+   ]
+  ]
+ },
+ "PKG_SCP0048.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SCP0049.PACKAGE_BODY.sql": {
+  "stmts": 49,
+  "codes": {
+   "OK": 49
+  },
+  "ora979": [],
+  "all": [
+   [
+    1394,
+    "OK",
+    "SELECT MAX(CALENDAR_DAY)            , MIN(CALENDAR_DAY)         INTO V_BEF_MAX_COUNT            , V_"
+   ],
+   [
+    1743,
+    "OK",
+    "INSERT INTO GT_SCP0049_STD_ITEM_YIELD                 ( DIVISION_ID                 , COMPANY_ID    "
+   ],
+   [
+    1804,
+    "OK",
+    "INSERT INTO GT_SCP0049_AVG_DATA                       ( COMPANY_ID                       , DIVISION_"
+   ],
+   [
+    1897,
+    "OK",
+    "INSERT INTO GT_SCP0049_AVG_DATA                          ( COMPANY_ID                          , DIV"
+   ],
+   [
+    2365,
+    "OK",
+    "INSERT INTO GT_SCP0049_AVG                    ( COMPANY_ID                    , DIVISION_ID         "
+   ],
+   [
+    2431,
+    "OK",
+    "INSERT INTO GT_SCP0049_AVG_MIN_MAX                    ( COMPANY_ID                    , DIVISION_ID "
+   ],
+   [
+    2918,
+    "OK",
+    "INSERT INTO GT_SCP0049_LTY                       ( DIVISION_ID                       , COMPANY_ID   "
+   ],
+   [
+    2978,
+    "OK",
+    "INSERT INTO GT_SCP0049_LTY                       ( DIVISION_ID                       , COMPANY_ID   "
+   ],
+   [
+    3094,
+    "OK",
+    "INSERT INTO GT_SCP0049_LTY                       ( DIVISION_ID                       , COMPANY_ID   "
+   ],
+   [
+    3155,
+    "OK",
+    "INSERT INTO GT_SCP0049_DMY                       ( DIVISION_ID                       , COMPANY_ID   "
+   ],
+   [
+    3632,
+    "OK",
+    "INSERT INTO GT_SCP0049_LTY_RESULT                       ( DIVISION_ID                       , COMPAN"
+   ],
+   [
+    3910,
+    "OK",
+    "INSERT INTO GT_SCP0049_ALL                    ( COMPANY_ID                    , DIVISION_ID         "
+   ],
+   [
+    4987,
+    "OK",
+    "INSERT INTO GT_SCP0049_AVG_DATA                       ( COMPANY_ID                       , DIVISION_"
+   ],
+   [
+    5271,
+    "OK",
+    "INSERT INTO GT_SCP0049_AVG                    ( COMPANY_ID                    , DIVISION_ID         "
+   ],
+   [
+    5341,
+    "OK",
+    "INSERT INTO GT_SCP0049_AVG_MIN_MAX                    ( COMPANY_ID                    , DIVISION_ID "
+   ],
+   [
+    5835,
+    "OK",
+    "INSERT INTO GT_SCP0049_LTY                       ( DIVISION_ID                       , COMPANY_ID   "
+   ],
+   [
+    5896,
+    "OK",
+    "INSERT INTO GT_SCP0049_LTY                       ( DIVISION_ID                       , COMPANY_ID   "
+   ],
+   [
+    6014,
+    "OK",
+    "INSERT INTO GT_SCP0049_LTY                       ( DIVISION_ID                       , COMPANY_ID   "
+   ],
+   [
+    6076,
+    "OK",
+    "INSERT INTO GT_SCP0049_DMY                       ( DIVISION_ID                       , COMPANY_ID   "
+   ],
+   [
+    6550,
+    "OK",
+    "INSERT INTO GT_SCP0049_LTY_RESULT                       ( DIVISION_ID                       , COMPAN"
+   ],
+   [
+    6827,
+    "OK",
+    "INSERT INTO GT_SCP0049_ALL                    ( COMPANY_ID                    , DIVISION_ID         "
+   ],
+   [
+    10801,
+    "OK",
+    "UPDATE SCM_ITEM_LANE_M_SN A        SET ( ACTIVE_FLAG            , UPDATE_ID            , UPDATE_TIME"
+   ],
+   [
+    10864,
+    "OK",
+    "INSERT INTO SCM_ITEM_LANE_M_SN               ( COMPANY_ID               , DIVISION_ID               "
+   ],
+   [
+    11266,
+    "OK",
+    "UPDATE SCM_ITEM_LANE_M_SN A        SET ( ACTIVE_FLAG            , UPDATE_ID            , UPDATE_TIME"
+   ],
+   [
+    11329,
+    "OK",
+    "INSERT INTO SCM_ITEM_LANE_M_SN               ( COMPANY_ID               , DIVISION_ID               "
+   ],
+   [
+    11750,
+    "OK",
+    "INSERT INTO GT_SCP0049_SAVE_LOSS_UTIL_TACT               ( COMPANY_ID               , DIVISION_ID   "
+   ],
+   [
+    12497,
+    "OK",
+    "INSERT INTO GT_SCP0049_SAVE_LOSS_UTIL_LOSS                   ( COMPANY_ID                   , DIVISI"
+   ],
+   [
+    13796,
+    "OK",
+    "INSERT INTO GT_SCP0049_VER_DAY_OF_MONTH               ( YYYYMM               , WORKING_DAY          "
+   ],
+   [
+    14305,
+    "OK",
+    "INSERT INTO SCM_YIELD_VER_H_SN               ( COMPANY_ID               , DIVISION_ID               "
+   ],
+   [
+    14377,
+    "OK",
+    "INSERT INTO SCM_YIELD_EXCT_VER_H_SN               ( COMPANY_ID               , DIVISION_ID          "
+   ],
+   [
+    14522,
+    "OK",
+    "INSERT INTO GT_SCP0049_VER_MM               ( DIVISION_ID               , COMPANY_ID               ,"
+   ],
+   [
+    14609,
+    "OK",
+    "INSERT INTO GT_SCP0049_VER_STD_SUM               ( DIVISION_ID               , COMPANY_ID           "
+   ],
+   [
+    14759,
+    "OK",
+    "INSERT INTO GT_SCP0049_VER_STD_CAL               ( DIVISION_ID               , COMPANY_ID           "
+   ],
+   [
+    15819,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD A                SET UPLOAD_STATUS_CODE = 'ERROR'                  , MES"
+   ],
+   [
+    15888,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD A                SET UPLOAD_STATUS_CODE = 'ERROR'                  , MES"
+   ],
+   [
+    15957,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD A                SET UPLOAD_STATUS_CODE = 'ERROR'                  , MES"
+   ],
+   [
+    16026,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD A                SET UPLOAD_STATUS_CODE = 'ERROR'                  , MES"
+   ],
+   [
+    16092,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD A                SET UPLOAD_STATUS_CODE = 'ERROR'                  , MES"
+   ],
+   [
+    16164,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD A                SET UPLOAD_STATUS_CODE = 'ERROR'                  , MES"
+   ],
+   [
+    17833,
+    "OK",
+    "INSERT INTO GT_SCP0049_SAVE_LOSS_UTIL_TACT                             ( COMPANY_ID                 "
+   ],
+   [
+    18196,
+    "OK",
+    "INSERT INTO GT_SCP0049_SAVE_LOSS_UTIL_LOSS                                 ( COMPANY_ID             "
+   ],
+   [
+    19287,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD A                SET UPLOAD_STATUS_CODE = 'ERROR'                  , MES"
+   ],
+   [
+    19356,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD A                SET UPLOAD_STATUS_CODE = 'ERROR'                  , MES"
+   ],
+   [
+    19425,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD A                SET UPLOAD_STATUS_CODE = 'ERROR'                  , MES"
+   ],
+   [
+    19494,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD A                SET UPLOAD_STATUS_CODE = 'ERROR'                  , MES"
+   ],
+   [
+    19560,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD A                SET UPLOAD_STATUS_CODE = 'ERROR'                  , MES"
+   ],
+   [
+    19632,
+    "OK",
+    "UPDATE SCM_ADM_EXCEL_UPLOAD A                SET UPLOAD_STATUS_CODE = 'ERROR'                  , MES"
+   ],
+   [
+    21059,
+    "OK",
+    "INSERT INTO GT_SCP0049_UPL_LU_TACT_DAY                             ( COMPANY_ID                     "
+   ],
+   [
+    21672,
+    "OK",
+    "INSERT INTO GT_SCP0049_LIMITS_VALID              (                UPLOAD_ID              , IS_EXCEED"
+   ]
+  ]
+ },
+ "PKG_SCP0055.PACKAGE_BODY.sql": {
+  "stmts": 8,
+  "codes": {
+   "OK": 8
+  },
+  "ora979": [],
+  "all": [
+   [
+    134,
+    "OK",
+    "SELECT IA.CODE              , IA.PLAN_SEQ           INTO V_PLAN_TYPE              , V_SEQ           "
+   ],
+   [
+    164,
+    "OK",
+    "SELECT IA.CODE                  , IA.PLAN_SEQ               INTO V_PLAN_TYPE                  , V_SE"
+   ],
+   [
+    189,
+    "OK",
+    "INSERT INTO GT_SCP0055_PLAN                 ( DIVISION_ID, SITE_ID, SITE_NAME, EXTRA_SPEC, NICK_NAME"
+   ],
+   [
+    292,
+    "OK",
+    "INSERT INTO GT_SCP0055_PLAN                 ( DIVISION_ID, SITE_ID, SITE_NAME, EXTRA_SPEC, NICK_NAME"
+   ],
+   [
+    381,
+    "OK",
+    "INSERT INTO GT_SCP0055_PLAN_TOTAL                 ( DIVISION_ID, SITE_ID, SITE_NAME, EXTRA_SPEC, NIC"
+   ],
+   [
+    412,
+    "OK",
+    "INSERT INTO GT_SCP0055_RESULT                 ( DIVISION_ID, SITE_ID, SITE_NAME, EXTRA_SPEC, NICK_NA"
+   ],
+   [
+    545,
+    "OK",
+    "INSERT INTO GT_SCP0055_RESULT                 ( DIVISION_ID, SITE_ID, SITE_NAME, EXTRA_SPEC, NICK_NA"
+   ],
+   [
+    679,
+    "OK",
+    "INSERT INTO GT_SCP0055_RESULT_TOTAL                 ( DIVISION_ID, SITE_ID, SITE_NAME, EXTRA_SPEC, N"
+   ]
+  ]
+ },
+ "PKG_SCP0098.PACKAGE_BODY.sql": {
+  "stmts": 2,
+  "codes": {
+   "OK": 2
+  },
+  "ora979": [],
+  "all": [
+   [
+    692,
+    "OK",
+    "INSERT INTO GT_SCP0098_LINE_MEAS_DIST              ( DIVISION_ID              , COMPANY_ID          "
+   ],
+   [
+    1781,
+    "OK",
+    "INSERT INTO GT_SCP0098_LINE_MEAS_DIST              ( DIVISION_ID              , COMPANY_ID          "
+   ]
+  ]
+ },
+ "PKG_SCP0100.PACKAGE_BODY.sql": {
+  "stmts": 30,
+  "codes": {
+   "OK": 30
+  },
+  "ora979": [],
+  "all": [
+   [
+    197,
+    "OK",
+    "SELECT MIN(WW)              , MAX(WW)           INTO V_PLAN_FROM_PARTIAL_WW              , V_PLAN_TO"
+   ],
+   [
+    209,
+    "OK",
+    "SELECT MIN(ISO_YYYYWW)              , MAX(ISO_YYYYWW)           INTO V_PLAN_FROM_ISO_WW             "
+   ],
+   [
+    946,
+    "OK",
+    "INSERT INTO GT_SCP0100_OPERATION         (             DIVISION_ID           , ITEM_ID           , F"
+   ],
+   [
+    1077,
+    "OK",
+    "INSERT INTO GT_SCP0100_CELL_GROUP_SORT_ORDER         (             DIVISION_ID           , PLAN_TYPE"
+   ],
+   [
+    1177,
+    "OK",
+    "INSERT INTO GT_SCP0100_CELL_GROUP_SORT_ORDER         (             DIVISION_ID           , PLAN_TYPE"
+   ],
+   [
+    1204,
+    "OK",
+    "INSERT INTO GT_SCP0100_DAYCOLS         (             YYYYPW_NAME           , YYYYPW           , SORT"
+   ],
+   [
+    1261,
+    "OK",
+    "INSERT INTO GT_SCP0100_LINE         (             YYYYPW           , DIVISION_ID           , PLAN_TY"
+   ],
+   [
+    1547,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , CELL_GR"
+   ],
+   [
+    2047,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , PLAN_TY"
+   ],
+   [
+    2152,
+    "OK",
+    "INSERT INTO GT_SCP0100_QTY_CELL_GROUP_DETAIL             (                 YYYYPW               , DI"
+   ],
+   [
+    2191,
+    "OK",
+    "INSERT INTO GT_SCP0100_QTY_CELL_GROUP_DETAIL             (                 YYYYPW               , DI"
+   ],
+   [
+    2228,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , PLAN_TY"
+   ],
+   [
+    2254,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , PLAN_TY"
+   ],
+   [
+    2407,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , PLAN_TY"
+   ],
+   [
+    2563,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , PLAN_TY"
+   ],
+   [
+    2725,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , PLAN_TY"
+   ],
+   [
+    3162,
+    "OK",
+    "INSERT INTO GT_SCP0100_OPERATION         (             DIVISION_ID           , ITEM_ID           , F"
+   ],
+   [
+    3293,
+    "OK",
+    "INSERT INTO GT_SCP0100_CELL_GROUP_SORT_ORDER         (             DIVISION_ID           , PLAN_TYPE"
+   ],
+   [
+    3393,
+    "OK",
+    "INSERT INTO GT_SCP0100_CELL_GROUP_SORT_ORDER         (             DIVISION_ID           , PLAN_TYPE"
+   ],
+   [
+    3421,
+    "OK",
+    "INSERT INTO GT_SCP0100_DAYCOLS         (             YYYYPW_NAME           , YYYYPW           , SORT"
+   ],
+   [
+    3477,
+    "OK",
+    "INSERT INTO GT_SCP0100_LINE         (             YYYYPW           , DIVISION_ID           , PLAN_TY"
+   ],
+   [
+    3763,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , CELL_GR"
+   ],
+   [
+    4263,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , PLAN_TY"
+   ],
+   [
+    4368,
+    "OK",
+    "INSERT INTO GT_SCP0100_QTY_CELL_GROUP_DETAIL             (                 YYYYPW               , DI"
+   ],
+   [
+    4407,
+    "OK",
+    "INSERT INTO GT_SCP0100_QTY_CELL_GROUP_DETAIL             (                 YYYYPW               , DI"
+   ],
+   [
+    4444,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , PLAN_TY"
+   ],
+   [
+    4470,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , PLAN_TY"
+   ],
+   [
+    4623,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , PLAN_TY"
+   ],
+   [
+    4779,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , PLAN_TY"
+   ],
+   [
+    4941,
+    "OK",
+    "INSERT INTO GT_SCP0100_RAW_CELL_CF             (                 DIVISION_ID               , PLAN_TY"
+   ]
+  ]
+ },
+ "PKG_SCP0105.PACKAGE_BODY.sql": {
+  "stmts": 27,
+  "codes": {
+   "OK": 27
+  },
+  "ora979": [],
+  "all": [
+   [
+    802,
+    "OK",
+    "INSERT INTO GT_SCP0105_CUT_RSLT              ( DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, FACTORY_I"
+   ],
+   [
+    844,
+    "OK",
+    "INSERT INTO GT_SCP0105_CUT_BASE              ( DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, FACTORY_I"
+   ],
+   [
+    872,
+    "OK",
+    "INSERT INTO GT_SCP0105_CUT_BASE_UPD              ( DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, FACTO"
+   ],
+   [
+    1044,
+    "OK",
+    "INSERT INTO GT_SCP0105_CUT_RAW              ( VER_ID, VER_SEQ, DIVISION_ID, COMPANY_ID, SITE_ID, PLA"
+   ],
+   [
+    1461,
+    "OK",
+    "INSERT INTO GT_SCP0105_CUT_RSLT              ( DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, FACTORY_I"
+   ],
+   [
+    1504,
+    "OK",
+    "INSERT INTO GT_SCP0105_CUT_EQP              ( COMPANY_ID, DIVISION_ID, SITE_ID, PLANT_ID, FACTORY_ID"
+   ],
+   [
+    1621,
+    "OK",
+    "INSERT INTO GT_SCP0105_CUT_BASE_UPD              ( DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, FACTO"
+   ],
+   [
+    1757,
+    "OK",
+    "INSERT INTO GT_SCP0105_CUT_RAW_ELTR              ( VER_ID, VER_SEQ, DIVISION_ID, COMPANY_ID, SITE_ID"
+   ],
+   [
+    2189,
+    "OK",
+    "INSERT INTO GT_SCP0106_SPD_PLAN_RAW              ( VER_ID, VER_SEQ, DIVISION_ID, COMPANY_ID, SITE_ID"
+   ],
+   [
+    2288,
+    "OK",
+    "INSERT INTO GT_SCP0106_SPD_PLAN_KEY              ( DIVISION_ID, MDL_NM, PLANT_ID, LINE_ID, OPERATION"
+   ],
+   [
+    2343,
+    "OK",
+    "INSERT INTO GT_SCP0106_SPD_LOSS_KEY              ( DIVISION_ID, SITE_ID, COMPANY_ID, PLANT_ID, FACTO"
+   ],
+   [
+    2372,
+    "OK",
+    "INSERT INTO GT_SCP0106_SPD_RAW_KEY              ( DIVISION_ID, SITE_ID, COMPANY_ID, PLANT_ID, FACTOR"
+   ],
+   [
+    2399,
+    "OK",
+    "INSERT INTO GT_SCP0106_SPD_FIN              ( SRC_TP, DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, FA"
+   ],
+   [
+    2585,
+    "OK",
+    "INSERT INTO GT_SCP0106_SPD_FINAL              ( VER_ID, VER_SEQ, DIVISION_ID, MDL_NM, PLANT_ID, LINE"
+   ],
+   [
+    2919,
+    "OK",
+    "INSERT INTO GT_SCP0106_SPD_PLAN_KEY              ( DIVISION_ID, MDL_NM, PLANT_ID, LINE_ID, OPERATION"
+   ],
+   [
+    2973,
+    "OK",
+    "INSERT INTO GT_SCP0106_SPD_LOSS_KEY              ( DIVISION_ID, SITE_ID, COMPANY_ID, PLANT_ID, FACTO"
+   ],
+   [
+    3002,
+    "OK",
+    "INSERT INTO GT_SCP0106_SPD_RAW_KEY              ( DIVISION_ID, SITE_ID, COMPANY_ID, PLANT_ID, FACTOR"
+   ],
+   [
+    3030,
+    "OK",
+    "INSERT INTO GT_SCP0106_SPD_FIN              ( SRC_TP, DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, FA"
+   ],
+   [
+    3101,
+    "OK",
+    "INSERT INTO GT_SCP0106_SPD_FINAL              ( VER_ID, VER_SEQ, DIVISION_ID, MDL_NM, PLANT_ID, LINE"
+   ],
+   [
+    3183,
+    "OK",
+    "INSERT INTO GT_SCP0106_SPD_FINAL_BASE              ( VER_ID, VER_SEQ, DIVISION_ID, MDL_NM, PLANT_ID,"
+   ],
+   [
+    3468,
+    "OK",
+    "INSERT INTO GT_SCP0105_SAV_IN              ( ROW_NR, DIVISION_ID, COMPANY_ID, SITE_ID, PLANT_ID, FAC"
+   ],
+   [
+    3777,
+    "OK",
+    "INSERT                                   INTO GT_SCP0105_SAV_IN                                     "
+   ],
+   [
+    3965,
+    "OK",
+    "INSERT                                   INTO GT_SCP0105_SAV_CHG                                    "
+   ],
+   [
+    4041,
+    "OK",
+    "UPDATE SCP_MST_CAPA_ELTR_LINE_MDL A                                    SET (A.ELTR_LN_TP_CD         "
+   ],
+   [
+    4087,
+    "OK",
+    "UPDATE SCP_MST_CAPA_ELTR_LINE_ASSIGN A                                    SET (A.ELTR_LN_TP_CD      "
+   ],
+   [
+    4174,
+    "OK",
+    "UPDATE SCP_MST_CAPA_ELTR_LOSS_PLAN_MDL A                                    SET (A.ELTR_LN_TP_CD    "
+   ],
+   [
+    4220,
+    "OK",
+    "UPDATE SCP_MST_CAPA_ELTR_LOSS_PLAN_MDL A                                    SET (A.ELTR_LN_TP_CD    "
+   ]
+  ]
+ },
+ "PKG_SDM1010.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SSP0012.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SSP0015.PACKAGE_BODY.sql": {
+  "stmts": 18,
+  "codes": {
+   "OK": 18
+  },
+  "ora979": [],
+  "all": [
+   [
+    4060,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_WH_STOCK                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMD"
+   ],
+   [
+    4086,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_ERP_STOCK                (DIVISION_ID, PLANT_ID, ITEM_ID, BOH_TYPE, YYYYMM"
+   ],
+   [
+    4121,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_ROWDATA                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMDD"
+   ],
+   [
+    4419,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_SHIP_REQ                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMD"
+   ],
+   [
+    4444,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_PACK_RTF                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMD"
+   ],
+   [
+    4470,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_SHIP_CONFIRM                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYY"
+   ],
+   [
+    4525,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_PROD_PLAN                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMM"
+   ],
+   [
+    4555,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_WH_STOCK                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMD"
+   ],
+   [
+    4579,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_ERP_STOCK                (DIVISION_ID, PLANT_ID, ITEM_ID, BOH_TYPE, YYYYMM"
+   ],
+   [
+    4609,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_ROWDATA                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMDD"
+   ],
+   [
+    4629,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_ROWDATA                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMDD"
+   ],
+   [
+    4680,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_ROWDATA                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMDD"
+   ],
+   [
+    4987,
+    "OK",
+    "SELECT PLAN_START_YYYYMMDD               INTO V_PLAN_VERSION_DATE               FROM (SELECT PLAN_ST"
+   ],
+   [
+    5021,
+    "OK",
+    "INSERT INTO GT_SSP0015_ROWDATA                (DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, ITE"
+   ],
+   [
+    5104,
+    "OK",
+    "INSERT INTO GT_SSP0015_ROWDATA                    (DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ,"
+   ],
+   [
+    5222,
+    "OK",
+    "INSERT INTO GT_SSP0015_ROWDATA                    (DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ,"
+   ],
+   [
+    5405,
+    "OK",
+    "INSERT INTO GT_SSP0015_ROWDATA                    (DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ,"
+   ],
+   [
+    5602,
+    "OK",
+    "INSERT INTO GT_SSP0015_ROWDATA                    (DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ,"
+   ]
+  ]
+ },
+ "PKG_SSP0019.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SSP0021.PACKAGE_BODY.sql": {
+  "stmts": 9,
+  "codes": {
+   "OK": 9
+  },
+  "ora979": [],
+  "all": [
+   [
+    2037,
+    "OK",
+    "INSERT INTO GT_0021_BOH_STORAGE         (             DIVISION_ID           , FROM_SITE           , "
+   ],
+   [
+    2358,
+    "OK",
+    "INSERT INTO GT_0021_BOH         (             DIVISION_ID           , FROM_SITE           , ITEM_ID "
+   ],
+   [
+    2381,
+    "OK",
+    "INSERT INTO GT_0021_ROWDATA             (                 DIVISION_ID               , ITEM_ID       "
+   ],
+   [
+    2801,
+    "OK",
+    "INSERT INTO GT_0021_RESULT             (                 DIVISION_ID               , FROM_SITE      "
+   ],
+   [
+    2853,
+    "OK",
+    "INSERT INTO GT_0021_RESULT             (                 DIVISION_ID               , FROM_SITE      "
+   ],
+   [
+    2952,
+    "OK",
+    "INSERT INTO GT_0021_RESULT             (                 DIVISION_ID               , FROM_SITE      "
+   ],
+   [
+    3009,
+    "OK",
+    "INSERT INTO GT_0021_RESULT             (                 DIVISION_ID               , FROM_SITE      "
+   ],
+   [
+    3043,
+    "OK",
+    "INSERT INTO GT_0021_RESULT             (                 DIVISION_ID               , FROM_SITE      "
+   ],
+   [
+    3385,
+    "OK",
+    "INSERT INTO GT_0021_PIVOT_OLD             (                 DIVISION_ID               , FROM_SITE   "
+   ]
+  ]
+ },
+ "PKG_SSP0023_CHK.PACKAGE_BODY.sql": {
+  "stmts": 5,
+  "codes": {
+   "OK": 5
+  },
+  "ora979": [],
+  "all": [
+   [
+    488,
+    "OK",
+    "INSERT INTO GT_0023_PLAN_ITEM         (             COMPANY_ID           , DIVISION_ID           , P"
+   ],
+   [
+    529,
+    "OK",
+    "INSERT INTO GT_0023_ROWDATA             (                 DIVISION_ID               , PLANT_ID      "
+   ],
+   [
+    1162,
+    "OK",
+    "INSERT INTO GT_0023_ROWDATA             (                 DIVISION_ID               , PLANT_ID      "
+   ],
+   [
+    1398,
+    "OK",
+    "INSERT INTO GT_0023_ROWDATA             (                 DIVISION_ID               , PLANT_ID      "
+   ],
+   [
+    1609,
+    "OK",
+    "INSERT INTO GT_0023_ROWDATA             (                 DIVISION_ID               , PLANT_ID      "
+   ]
+  ]
+ },
+ "PKG_SSP0045.PACKAGE_BODY.sql": {
+  "stmts": 6,
+  "codes": {
+   "ORA-00979": 1,
+   "OK": 5
+  },
+  "ora979": [
+   [
+    314,
+    "ORA-00979",
+    "INSERT INTO GT_SSP0045_SHIPMENT_PLAN_FG         ( DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, "
+   ]
+  ],
+  "all": [
+   [
+    314,
+    "ORA-00979",
+    "INSERT INTO GT_SSP0045_SHIPMENT_PLAN_FG         ( DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, "
+   ],
+   [
+    617,
+    "OK",
+    "INSERT INTO GT_SSP0045_PLAN_ERP_RESULT         ( DIVISION_ID, ITEM_ID, FROM_SITE, TO_SITE, TR_MODE, "
+   ],
+   [
+    852,
+    "OK",
+    "INSERT INTO GT_SSP0045_SHIP_REQ_OWMS         ( DIVISION_ID, ITEM_ID, FROM_SITE, TO_SITE, TR_MODE, IN"
+   ],
+   [
+    978,
+    "OK",
+    "INSERT INTO GT_SSP0045_SHIP_ROW         ( DIVISION_ID, ITEM_ID, NICK_NAME, FROM_SITE, TO_SITE, TR_MO"
+   ],
+   [
+    1354,
+    "OK",
+    "INSERT INTO GT_SSP0045_STOCK         ( DIVISION_ID, ITEM_ID, FROM_SITE, YYYYMMDD, QTY )         SELE"
+   ],
+   [
+    1450,
+    "OK",
+    "INSERT INTO GT_SSP0045_CAL_QTY         ( DIVISION_ID, ITEM_ID, NICK_NAME, FROM_SITE, YYYYMMDD, PLAN_"
+   ]
+  ]
+ },
+ "PKG_SSP0060.PACKAGE_BODY.sql": {
+  "stmts": 13,
+  "codes": {
+   "OK": 13
+  },
+  "ora979": [],
+  "all": [
+   [
+    2123,
+    "OK",
+    "INSERT INTO GT_0060_BOH_STORAGE         (             DIVISION_ID           , FROM_SITE           , "
+   ],
+   [
+    2436,
+    "OK",
+    "INSERT INTO GT_0060_BOH         (             DIVISION_ID           , FROM_SITE           , ITEM_ID "
+   ],
+   [
+    2472,
+    "OK",
+    "INSERT INTO GT_0060_SHIP_RESULT             (                 DIVISION_ID               , CONFIRM_ID"
+   ],
+   [
+    2616,
+    "OK",
+    "INSERT INTO GT_0060_ROWDATA             (                 DIVISION_ID               , ITEM_ID       "
+   ],
+   [
+    3131,
+    "OK",
+    "INSERT INTO GT_0060_RESULT_DTL             (                 DIVISION_ID               , FROM_SITE  "
+   ],
+   [
+    3328,
+    "OK",
+    "INSERT INTO GT_0060_RESULT             (                 DIVISION_ID               , FROM_SITE      "
+   ],
+   [
+    3513,
+    "OK",
+    "INSERT INTO GT_0060_RESULT             (                 DIVISION_ID               , FROM_SITE      "
+   ],
+   [
+    3576,
+    "OK",
+    "INSERT INTO GT_0060_RESULT             (                 DIVISION_ID               , FROM_SITE      "
+   ],
+   [
+    3618,
+    "OK",
+    "INSERT INTO GT_0060_RESULT             (                 DIVISION_ID               , FROM_SITE      "
+   ],
+   [
+    3675,
+    "OK",
+    "INSERT INTO GT_0060_RESULT             (                 DIVISION_ID               , FROM_SITE      "
+   ],
+   [
+    3959,
+    "OK",
+    "INSERT INTO GT_0060_PIVOT_OLD             (                 DIVISION_ID               , FROM_SITE   "
+   ],
+   [
+    4045,
+    "OK",
+    "DELETE FROM GT_0060_PIVOT_OLD              WHERE ITEM_ID IN (SELECT ITEM_ID                         "
+   ],
+   [
+    4057,
+    "OK",
+    "DELETE FROM GT_0060_PIVOT_OLD              WHERE ITEM_ID IN (SELECT IA.ITEM_ID                      "
+   ]
+  ]
+ },
+ "PKG_SSP0200.PACKAGE_BODY.sql": {
+  "stmts": 2,
+  "codes": {
+   "OK": 2
+  },
+  "ora979": [],
+  "all": [
+   [
+    2501,
+    "OK",
+    "SELECT COUNT(*)                   INTO V_PRICE_CHECK_CNT                   FROM (SELECT DISTINCT A.D"
+   ],
+   [
+    3252,
+    "OK",
+    "SELECT IFSEQNO               INTO V_IFSEQNO               FROM (SELECT IFSEQNO                      "
+   ]
+  ]
+ },
+ "PKG_SYS0010.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SYS0012.PACKAGE_BODY.sql": {
+  "stmts": 1,
+  "codes": {
+   "ORA-00923": 1
+  },
+  "ora979": [],
+  "all": [
+   [
+    221,
+    "ORA-00923",
+    "MERGE INTO SCM_MGR.SCM_MST_AUTH_REQUEST T     USING (         SELECT J.V_REQ, MAX(J.V_REASON) AS V_R"
+   ]
+  ]
+ },
+ "PKG_SYS0013.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_SYS0014.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_ZTMP_S015J.PACKAGE_BODY.sql": {
+  "stmts": 18,
+  "codes": {
+   "OK": 18
+  },
+  "ora979": [],
+  "all": [
+   [
+    198,
+    "OK",
+    "SELECT PLAN_START_YYYYMMDD               INTO V_PLAN_VERSION_DATE               FROM (SELECT PLAN_ST"
+   ],
+   [
+    233,
+    "OK",
+    "INSERT INTO GT_SSP0015_ROWDATA                (DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ, ITE"
+   ],
+   [
+    320,
+    "OK",
+    "INSERT INTO GT_SSP0015_ROWDATA                    (DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ,"
+   ],
+   [
+    441,
+    "OK",
+    "INSERT INTO GT_SSP0015_ROWDATA                    (DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ,"
+   ],
+   [
+    625,
+    "OK",
+    "INSERT INTO GT_SSP0015_ROWDATA                    (DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ,"
+   ],
+   [
+    795,
+    "OK",
+    "INSERT INTO GT_SSP0015_ROWDATA                    (DIVISION_ID, PLAN_START_YYYYMMDD, PLAN_TYPE, SEQ,"
+   ],
+   [
+    1199,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_SHIP_REQ                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMD"
+   ],
+   [
+    1222,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_PACK_RTF                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMD"
+   ],
+   [
+    1247,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_SHIP_CONFIRM                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYY"
+   ],
+   [
+    1298,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_PROD_PLAN                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMM"
+   ],
+   [
+    1326,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_WH_STOCK                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMD"
+   ],
+   [
+    1348,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_ERP_STOCK                (DIVISION_ID, PLANT_ID, ITEM_ID, BOH_TYPE, YYYYMM"
+   ],
+   [
+    1377,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_ROWDATA                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMDD"
+   ],
+   [
+    1397,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_ROWDATA                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMDD"
+   ],
+   [
+    1446,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_ROWDATA                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMDD"
+   ],
+   [
+    1714,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_WH_STOCK                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMD"
+   ],
+   [
+    1740,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_ERP_STOCK                (DIVISION_ID, PLANT_ID, ITEM_ID, BOH_TYPE, YYYYMM"
+   ],
+   [
+    1775,
+    "OK",
+    "INSERT INTO GT_SSP0015_PK_ROWDATA                (DIVISION_ID, ITEM_ID, FROM_SITE, MEASURE, YYYYMMDD"
+   ]
+  ]
+ },
+ "PKG_ZTMP_S015K.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PKG_ZTMP_S200B.PACKAGE_BODY.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PR_DM_ANL_KPI_SALES_ACCURACY.PROCEDURE.sql": {
+  "stmts": 1,
+  "codes": {
+   "OK": 1
+  },
+  "ora979": [],
+  "all": [
+   [
+    60,
+    "OK",
+    "INSERT           INTO DM_ANL_KPI_SALES_ACCURACY              ( WORK_YYYYMMDD              , DIVISION"
+   ]
+  ]
+ },
+ "PR_DM_ANL_KPI_SUMMARY.PROCEDURE.sql": {
+  "stmts": 7,
+  "codes": {
+   "OK": 7
+  },
+  "ora979": [],
+  "all": [
+   [
+    57,
+    "OK",
+    "INSERT INTO GT_KPISUM_DATE_TEMP ( QTY, BB_BASIS_YYYYMMDD, DIVISION_ID, SCM_SITE_ID, PROJECT_CODE, IT"
+   ],
+   [
+    93,
+    "OK",
+    "INSERT INTO DM_ANL_KPI_SUMMARY       ( WORK_YYYYMMDD,DIVISION_ID,DEPT_ID,END_CUSTOMER,SCM_SITE_ID,PR"
+   ],
+   [
+    283,
+    "OK",
+    "INSERT INTO DM_ANL_KPI_SUMMARY       ( WORK_YYYYMMDD,DIVISION_ID,DEPT_ID,END_CUSTOMER,SCM_SITE_ID,PR"
+   ],
+   [
+    473,
+    "OK",
+    "INSERT INTO DM_ANL_KPI_SUMMARY       ( WORK_YYYYMMDD,DIVISION_ID,DEPT_ID,END_CUSTOMER,SCM_SITE_ID,PR"
+   ],
+   [
+    665,
+    "OK",
+    "INSERT INTO DM_ANL_KPI_SUMMARY       ( WORK_YYYYMMDD,DIVISION_ID,DEPT_ID,END_CUSTOMER,SCM_SITE_ID,PR"
+   ],
+   [
+    856,
+    "OK",
+    "INSERT INTO DM_ANL_KPI_SUMMARY       ( WORK_YYYYMMDD,DIVISION_ID,DEPT_ID,END_CUSTOMER,SCM_SITE_ID,PR"
+   ],
+   [
+    1047,
+    "OK",
+    "INSERT INTO DM_ANL_KPI_SUMMARY       ( WORK_YYYYMMDD,DIVISION_ID,DEPT_ID,END_CUSTOMER,SCM_SITE_ID,PR"
+   ]
+  ]
+ },
+ "PR_DM_ANL_MKT_PSI_DATA.PROCEDURE.sql": {
+  "stmts": 8,
+  "codes": {
+   "OK": 8
+  },
+  "ora979": [],
+  "all": [
+   [
+    93,
+    "OK",
+    "INSERT               INTO GT_DAMP_DATA                  ( DIVISION_ID                  , END_CUSTOME"
+   ],
+   [
+    249,
+    "OK",
+    "INSERT               INTO GT_DAMP_PROJECT_TRANSLATOR                  ( DIVISION_ID                 "
+   ],
+   [
+    301,
+    "OK",
+    "MERGE INTO DM_ANL_MKT_PSI A             USING (SELECT A.DIVISION_ID                         , A.END_"
+   ],
+   [
+    406,
+    "OK",
+    "MERGE INTO DM_ANL_MKT_PSI A             USING (SELECT A.DIVISION_ID                         , C.END_"
+   ],
+   [
+    452,
+    "OK",
+    "INSERT               INTO GT_DAMP_EDI_END_CUSTOMER                  ( DIVISION_ID                  ,"
+   ],
+   [
+    481,
+    "OK",
+    "MERGE INTO DM_ANL_MKT_PSI A             USING (SELECT A.DIVISION_ID                         , A.END_"
+   ],
+   [
+    579,
+    "OK",
+    "INSERT               INTO DM_ANL_MKT_PSI_DETAIL                  ( DIVISION_ID                  , EN"
+   ],
+   [
+    707,
+    "OK",
+    "INSERT               INTO GT_DAMP_DM_MST_ITEM_SINGLE_V                  ( DIVISION_ID               "
+   ]
+  ]
+ },
+ "PR_DM_ANL_SALES_PLAN_AMT_CREATE_LOCAL_KRW_MKT_FCST_SAVE.PROCEDURE.sql": {
+  "stmts": 4,
+  "codes": {
+   "OK": 2,
+   "ORA-00904": 2
+  },
+  "ora979": [],
+  "all": [
+   [
+    79,
+    "OK",
+    "SELECT NVL(MAX(V_CREATED_BY), 'SYSTEM') INTO V_CREATED_BY \t\t  FROM GT_PRDM_RESULTS \t\t GROUP BY V_DIV"
+   ],
+   [
+    137,
+    "ORA-00904",
+    "INSERT INTO GT_PRMF_RESULTS_KEY \t\t( V_DIVISION_ID, V_PROJECT_CODE, V_SCM_SITE_ID, V_ITEM_ID, V_DOM_E"
+   ],
+   [
+    270,
+    "ORA-00904",
+    "INSERT INTO GT_PRMF_RESULTS_KEY \t\t( V_DIVISION_ID, V_PROJECT_CODE, V_SCM_SITE_ID, V_ITEM_ID, V_DOM_E"
+   ],
+   [
+    756,
+    "OK",
+    "INSERT INTO GT_PRMF_SALES_PLAN_TEMP_KEY \t\t\t( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EX"
+   ]
+  ]
+ },
+ "PR_DM_CUST_ITEM_MAPPING.PROCEDURE.sql": {
+  "stmts": 1,
+  "codes": {
+   "OK": 1
+  },
+  "ora979": [],
+  "all": [
+   [
+    86,
+    "OK",
+    "INSERT         INTO GT_DCIM_DM_DNM_EDI_CALLOFF_ITE             SELECT A.DIVISION_ID                 "
+   ]
+  ]
+ },
+ "PR_DM_DNM_CREATE_C_WS_RTF.PROCEDURE.sql": {
+  "stmts": 20,
+  "codes": {
+   "OK": 20
+  },
+  "ora979": [],
+  "all": [
+   [
+    192,
+    "OK",
+    "INSERT INTO GT_PRDM_SSP ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE       "
+   ],
+   [
+    232,
+    "OK",
+    "MERGE INTO GT_PRDM_SSP A         USING ( SELECT A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM"
+   ],
+   [
+    251,
+    "OK",
+    "MERGE INTO GT_PRDM_SSP A         USING ( SELECT A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM"
+   ],
+   [
+    273,
+    "OK",
+    "INSERT INTO GT_PRDM_END_RTF_RAW ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYP"
+   ],
+   [
+    290,
+    "OK",
+    "INSERT INTO GT_PRDM_END_RTF_RAW ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYP"
+   ],
+   [
+    480,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST_C                 ( DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMD"
+   ],
+   [
+    504,
+    "OK",
+    "INSERT INTO DM_PLN_CFM_MKT_DEMAND_PLAN_C                 ( DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUT"
+   ],
+   [
+    540,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST_C                 ( DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMD"
+   ],
+   [
+    561,
+    "OK",
+    "INSERT INTO DM_PLN_CFM_MKT_DEMAND_PLAN_C                 ( DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUT"
+   ],
+   [
+    632,
+    "OK",
+    "MERGE INTO GT_PRDM_AS_INV A         USING ( SELECT C.KEY_VAL                   FROM ( SELECT KEY_VAL"
+   ],
+   [
+    652,
+    "OK",
+    "INSERT INTO GT_PRDM_AS_INV ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, IN"
+   ],
+   [
+    695,
+    "OK",
+    "INSERT INTO GT_PRDM_AS_INV ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, IN"
+   ],
+   [
+    728,
+    "OK",
+    "MERGE INTO GT_PRDM_AS_INV A         USING ( SELECT SEGMENT3, SEGMENT1, MAX(SEGMENT2) AS SEGMENT2    "
+   ],
+   [
+    819,
+    "OK",
+    "MERGE INTO GT_PRDM_AS_INV A         USING ( SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, "
+   ],
+   [
+    867,
+    "OK",
+    "INSERT INTO GT_PRDM_RTF_SITE ( FROM_SITE, SCM_SITE_ID, MAX_YMD )         SELECT A.FROM_SITE, A.SCM_S"
+   ],
+   [
+    887,
+    "OK",
+    "MERGE INTO GT_PRDM_END_RTF_RAW A         USING ( SELECT FROM_SITE, SCM_SITE_ID, MAX(MAX_YMD) AS MAX_"
+   ],
+   [
+    946,
+    "OK",
+    "INSERT INTO GT_PRDM_AS_INV ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, IN"
+   ],
+   [
+    997,
+    "OK",
+    "INSERT INTO GT_PRDM_AS_INV ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, IN"
+   ],
+   [
+    1082,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST_C             ( DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD   "
+   ],
+   [
+    1168,
+    "OK",
+    "INSERT INTO DM_PLN_CFM_MKT_DEMAND_PLAN_C             ( DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_"
+   ]
+  ]
+ },
+ "PR_DM_DNM_CREATE_WS_RTF.PROCEDURE.sql": {
+  "stmts": 20,
+  "codes": {
+   "OK": 20
+  },
+  "ora979": [],
+  "all": [
+   [
+    174,
+    "OK",
+    "INSERT INTO GT_PRDM_SSP ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE       "
+   ],
+   [
+    215,
+    "OK",
+    "MERGE INTO GT_PRDM_SSP A         USING ( SELECT A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM"
+   ],
+   [
+    233,
+    "OK",
+    "MERGE INTO GT_PRDM_SSP A         USING ( SELECT A.DIVISION_ID, A.PROJECT_CODE, A.SCM_SITE_ID, A.ITEM"
+   ],
+   [
+    255,
+    "OK",
+    "INSERT INTO GT_PRDM_END_RTF_RAW ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYP"
+   ],
+   [
+    272,
+    "OK",
+    "INSERT INTO GT_PRDM_END_RTF_RAW ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYP"
+   ],
+   [
+    466,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST                 ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_E"
+   ],
+   [
+    488,
+    "OK",
+    "INSERT INTO DM_PLN_CFM_MKT_DEMAND_PLAN                 ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SC"
+   ],
+   [
+    521,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST                 ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_E"
+   ],
+   [
+    540,
+    "OK",
+    "INSERT INTO DM_PLN_CFM_MKT_DEMAND_PLAN                 ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SC"
+   ],
+   [
+    606,
+    "OK",
+    "MERGE INTO GT_PRDM_AS_INV A         USING ( SELECT C.KEY_VAL                   FROM ( SELECT KEY_VAL"
+   ],
+   [
+    626,
+    "OK",
+    "INSERT INTO GT_PRDM_AS_INV ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, IN"
+   ],
+   [
+    671,
+    "OK",
+    "INSERT INTO GT_PRDM_AS_INV ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, IN"
+   ],
+   [
+    704,
+    "OK",
+    "MERGE INTO GT_PRDM_AS_INV A         USING ( SELECT SEGMENT3, SEGMENT1, MAX(SEGMENT2) AS SEGMENT2    "
+   ],
+   [
+    796,
+    "OK",
+    "MERGE INTO GT_PRDM_AS_INV A         USING ( SELECT DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, "
+   ],
+   [
+    846,
+    "OK",
+    "INSERT INTO GT_PRDM_RTF_SITE ( FROM_SITE, SCM_SITE_ID, MAX_YMD )         SELECT A.FROM_SITE, A.SCM_S"
+   ],
+   [
+    866,
+    "OK",
+    "MERGE INTO GT_PRDM_END_RTF_RAW A         USING ( SELECT FROM_SITE, SCM_SITE_ID, MAX(MAX_YMD) AS MAX_"
+   ],
+   [
+    927,
+    "OK",
+    "INSERT INTO GT_PRDM_AS_INV ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, IN"
+   ],
+   [
+    979,
+    "OK",
+    "INSERT INTO GT_PRDM_AS_INV ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, IN"
+   ],
+   [
+    1061,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST             ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP  "
+   ],
+   [
+    1138,
+    "OK",
+    "INSERT INTO DM_PLN_CFM_MKT_DEMAND_PLAN             ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SI"
+   ]
+  ]
+ },
+ "PR_DM_DNM_EDI_CALLOFF_DATA.PROCEDURE.sql": {
+  "stmts": 3,
+  "codes": {
+   "OK": 3
+  },
+  "ora979": [],
+  "all": [
+   [
+    119,
+    "OK",
+    "MERGE INTO DM_DNM_EDI_CALLOFF_HEAD A             USING (                    SELECT IFSEQNO          "
+   ],
+   [
+    336,
+    "OK",
+    "MERGE INTO DM_DNM_EDI_CALLOFF_PARTNER A             USING (                    SELECT IFSEQNO       "
+   ],
+   [
+    575,
+    "OK",
+    "INSERT           INTO GT_DDECD_EDI_NEW_ALL              ( NUM, IFSEQNO )         SELECT ROW_NUMBER()"
+   ]
+  ]
+ },
+ "PR_DM_DNM_EDI_CALLOFF_MKT_FCST.PROCEDURE.sql": {
+  "stmts": 12,
+  "codes": {
+   "OK": 8,
+   "ORA-00979": 4
+  },
+  "ora979": [
+   [
+    439,
+    "ORA-00979",
+    "INSERT INTO DM_PLN_MKT_FCST                         (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID"
+   ],
+   [
+    503,
+    "ORA-00979",
+    "INSERT INTO DM_PLN_MKT_FCST                         (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID"
+   ],
+   [
+    1050,
+    "ORA-00979",
+    "INSERT INTO DM_PLN_MKT_FCST                         (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID"
+   ],
+   [
+    1103,
+    "ORA-00979",
+    "INSERT INTO DM_PLN_MKT_FCST                         (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID"
+   ]
+  ],
+  "all": [
+   [
+    118,
+    "OK",
+    "INSERT INTO GT_DDECM_EDI_END_CUSTOMER                 (DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, FROM_"
+   ],
+   [
+    148,
+    "OK",
+    "INSERT INTO GT_DDECM_EDI_ALL                     (NUM, DIVISION_ID, IFSEQNO, SOLDTO_CODE, SHIPTO_COD"
+   ],
+   [
+    284,
+    "OK",
+    "INSERT INTO GT_DDECM_DM_CUST_MODEL_MAPPING                     (DIVISION_ID, END_CUSTOMER, SCM_SITE_"
+   ],
+   [
+    439,
+    "ORA-00979",
+    "INSERT INTO DM_PLN_MKT_FCST                         (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID"
+   ],
+   [
+    503,
+    "ORA-00979",
+    "INSERT INTO DM_PLN_MKT_FCST                         (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID"
+   ],
+   [
+    596,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST_H                         (DIVISION_ID, HISTORY_SEQ, PROJECT_CODE, SCM_S"
+   ],
+   [
+    679,
+    "OK",
+    "INSERT INTO GT_DDECM_EDI_END_CUSTOMER_ORG                     (DIVISION_ID, END_CUSTOMER, SCM_SITE_I"
+   ],
+   [
+    708,
+    "OK",
+    "INSERT INTO GT_DDECM_EDI_ORG_ALL                         (NUM, DIVISION_ID, IFSEQNO, SOLDTO_CODE, SH"
+   ],
+   [
+    1050,
+    "ORA-00979",
+    "INSERT INTO DM_PLN_MKT_FCST                         (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID"
+   ],
+   [
+    1103,
+    "ORA-00979",
+    "INSERT INTO DM_PLN_MKT_FCST                         (DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID"
+   ],
+   [
+    1172,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST_H                         (DIVISION_ID, HISTORY_SEQ, PROJECT_CODE, SCM_S"
+   ],
+   [
+    1238,
+    "OK",
+    "INSERT INTO GT_DDECM_MKT_ORG_DATA                             (DIVISION_ID, PROJECT_CODE, SCM_SITE_I"
+   ]
+  ]
+ },
+ "PR_DM_PLN_CUST_FCST_RECORD.PROCEDURE.sql": {
+  "stmts": 5,
+  "codes": {
+   "OK": 5
+  },
+  "ora979": [],
+  "all": [
+   [
+    83,
+    "OK",
+    "INSERT               INTO GT_PRDM_EDI_ALL ( NUM, IFSEQNO )             SELECT ROW_NUMBER() OVER(ORDE"
+   ],
+   [
+    107,
+    "OK",
+    "INSERT                   INTO GT_PRDM_DM_MST_ITEM_SINGLE_V ( DIVISION_ID, ITEM_ID, ITEM_NAME, ITEM_T"
+   ],
+   [
+    168,
+    "OK",
+    "INSERT               INTO GT_PRDM_CUST_MODEL_MAP ( DIVISION_ID, END_CUSTOMER, SCM_SITE_ID, PROJECT_C"
+   ],
+   [
+    307,
+    "OK",
+    "INSERT                   INTO GT_PRDM_QTY_SUM (                        IFSEQNO                      "
+   ],
+   [
+    441,
+    "OK",
+    "INSERT                   INTO DM_PLN_CUST_FCST_H (                        HISTORY_SEQ               "
+   ]
+  ]
+ },
+ "PR_DM_PLN_MKT_FCST_QTY_BALANCE_CREATE.PROCEDURE.sql": {
+  "stmts": 14,
+  "codes": {
+   "OK": 14
+  },
+  "ora979": [],
+  "all": [
+   [
+    1487,
+    "OK",
+    "INSERT INTO GT_PRDM2_RTF_EXCEPTION_ITEM                 ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, IT"
+   ],
+   [
+    1499,
+    "OK",
+    "INSERT INTO GT_PRDM2_RTF_EXCEPTION_ITEM                 ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, IT"
+   ],
+   [
+    1518,
+    "OK",
+    "INSERT INTO GT_PRDM2_RTF_EXCEPTION_ITEM                 ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, IT"
+   ],
+   [
+    1530,
+    "OK",
+    "INSERT INTO GT_PRDM2_RTF_EXCEPTION_ITEM                 ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, IT"
+   ],
+   [
+    1614,
+    "OK",
+    "INSERT INTO GT_PRDM2_RESULTS         ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCS"
+   ],
+   [
+    1881,
+    "OK",
+    "INSERT INTO GT_PRDM2_MKT_FCST_INSERT         ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_"
+   ],
+   [
+    1962,
+    "OK",
+    "INSERT INTO GT_PRDM2_CFM_DEMAND_INSERT         ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DO"
+   ],
+   [
+    2173,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST         ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST"
+   ],
+   [
+    2249,
+    "OK",
+    "INSERT INTO DM_PLN_CFM_MKT_DEMAND_PLAN         ( DIVISION_ID, PROJECT_CODE, END_CUSTOMER, SCM_SITE_I"
+   ],
+   [
+    2483,
+    "OK",
+    "INSERT INTO GT_PRDM2_VMI_MST_MAIN             ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM"
+   ],
+   [
+    2576,
+    "OK",
+    "INSERT INTO GT_PRDM2_VMI_TEMP_ALL             ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM"
+   ],
+   [
+    2908,
+    "OK",
+    "INSERT INTO GT_PRDM2_MST     ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE, "
+   ],
+   [
+    2960,
+    "OK",
+    "INSERT INTO GT_PRDM2_TEMPX     ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYPE"
+   ],
+   [
+    2994,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST     ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP, FCST_TYP"
+   ]
+  ]
+ },
+ "PR_DM_PLN_MKT_FCST_SALES_RESULT_MAPPING.PROCEDURE.sql": {
+  "stmts": 15,
+  "codes": {
+   "OK": 15
+  },
+  "ora979": [],
+  "all": [
+   [
+    249,
+    "OK",
+    "INSERT INTO GT_MFSRM_I_DIVISION (DIVISION_ID)      SELECT SEGMENT1 AS DIVISION_ID        FROM SCM_AD"
+   ],
+   [
+    307,
+    "OK",
+    "INSERT INTO GT_MFSRM_TEMP_DM_RESULT          ( DIVISION_ID, COMPANY_ID, PROJECT_CODE, SALES_SITE_ID,"
+   ],
+   [
+    509,
+    "OK",
+    "INSERT INTO GT_MFSRM_DM_RESULT          ( DIVISION_ID, COMPANY_ID, PROJECT_CODE, SALES_SITE_ID, PLAN"
+   ],
+   [
+    595,
+    "OK",
+    "INSERT INTO GT_MFSRM_DM_RESULT_BEFORE          ( DIVISION_ID, PROJECT_CODE, SALES_SITE_ID, PLANT_SIT"
+   ],
+   [
+    645,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST_RESULT          ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, PLANT_SITE_ID,"
+   ],
+   [
+    735,
+    "OK",
+    "INSERT INTO DM_PLN_SALES_PLAN_RESULT          ( DIVISION_ID, COMPANY_ID, PROJECT_CODE, SCM_SITE_ID, "
+   ],
+   [
+    1009,
+    "OK",
+    "INSERT INTO GT_MFSRM_AS_TMPDATA          ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP,"
+   ],
+   [
+    1079,
+    "OK",
+    "INSERT INTO GT_MFSRM_AS_TMPDATA          ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP,"
+   ],
+   [
+    1193,
+    "OK",
+    "INSERT INTO GT_MFSRM_VMI_TMPDATA          ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP"
+   ],
+   [
+    1265,
+    "OK",
+    "INSERT INTO GT_MFSRM_VMI_TMPDATA          ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP"
+   ],
+   [
+    1375,
+    "OK",
+    "INSERT INTO GT_MFSRM_VMI_RESULT          ( DIVISION_ID, SCM_SITE_ID, ITEM_ID, PROJECT_CODE, FCST_TYP"
+   ],
+   [
+    1529,
+    "OK",
+    "INSERT INTO GT_MFSRM_VMI_TMPDATA          ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_EXP"
+   ],
+   [
+    1609,
+    "OK",
+    "INSERT INTO DM_PLN_MKT_FCST_RESULT          ( DIVISION_ID, PROJECT_CODE, SCM_SITE_ID, ITEM_ID, DOM_E"
+   ],
+   [
+    1673,
+    "OK",
+    "INSERT INTO GT_MFSRM_DELAY_DAY (DIVISION_ID, STATES, SEQ)          SELECT SEGMENT1, ATTRIBUTE1, ROW_"
+   ],
+   [
+    1721,
+    "OK",
+    "INSERT INTO GT_MFSRM_DEDUCTED_ITEM (DIVISION_ID, SCM_SITE_ID, PROJECT_CODE, ITEM_ID)              SE"
+   ]
+  ]
+ },
+ "PR_DM_PLN_MKT_FCST_TO_NET_DEMAND.PROCEDURE.sql": {
+  "stmts": 2,
+  "codes": {
+   "OK": 2
+  },
+  "ora979": [],
+  "all": [
+   [
+    233,
+    "OK",
+    "INSERT INTO GT_DM_NET_TEMP1             (DIVISION_ID, VERSION_NO, CUTOFF_TYPE, CUTOFF_YYYYMMDD, PROJ"
+   ],
+   [
+    783,
+    "OK",
+    "INSERT INTO DM_PLN_NET_DEMAND             (DIVISION_ID, VERSION_NO, CUTOFF_YYYYMMDD, PROJECT_CODE, S"
+   ]
+  ]
+ },
+ "PR_DM_PLN_SALES_PLAN_C_QTY_BALANCE_CREATE.PROCEDURE.sql": {
+  "stmts": 4,
+  "codes": {
+   "OK": 4
+  },
+  "ora979": [],
+  "all": [
+   [
+    627,
+    "OK",
+    "INSERT           INTO GT_DPSPCQB_SALES_PLAN              ( DIVISION_ID              , PROJECT_CODE  "
+   ],
+   [
+    1523,
+    "OK",
+    "INSERT               INTO GT_DPSPCQB_AFTER_RTF_81                  ( DIVISION_ID                  , "
+   ],
+   [
+    1830,
+    "OK",
+    "SELECT SCM_SITE_ID                       INTO V_SITE_ID                       FROM (SELECT ROW_NUMBE"
+   ],
+   [
+    1871,
+    "OK",
+    "DELETE                   FROM DM_PLN_SALES_PLAN_C                  WHERE DIVISION_ID  = '81'        "
+   ]
+  ]
+ },
+ "PR_DM_PLN_SALES_PLAN_RESULT_MOVE.PROCEDURE.sql": {
+  "stmts": 1,
+  "codes": {
+   "ORA-00979": 1
+  },
+  "ora979": [
+   [
+    60,
+    "ORA-00979",
+    "INSERT           INTO DM_PLN_SALES_PLAN_RESULT              ( DIVISION_ID              , PROJECT_COD"
+   ]
+  ],
+  "all": [
+   [
+    60,
+    "ORA-00979",
+    "INSERT           INTO DM_PLN_SALES_PLAN_RESULT              ( DIVISION_ID              , PROJECT_COD"
+   ]
+  ]
+ },
+ "PR_SCM_ADM_DEPT_CHANGED_AUTH_SYNC.PROCEDURE.sql": {
+  "stmts": 0,
+  "codes": {},
+  "ora979": [],
+  "all": []
+ },
+ "PR_SCM_MST_PROJECT_SCHEDULE.PROCEDURE.sql": {
+  "stmts": 1,
+  "codes": {
+   "OK": 1
+  },
+  "ora979": [],
+  "all": [
+   [
+    26,
+    "OK",
+    "SELECT IF_SEQ           FROM XIF_PLM_PJT_SCHEDULE_R_SN          WHERE ATTR_10 = 'P'          GROUP B"
+   ]
+  ]
+ },
+ "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL.PROCEDURE.sql": {
+  "stmts": 9,
+  "codes": {
+   "OK": 9
+  },
+  "ora979": [],
+  "all": [
+   [
+    247,
+    "OK",
+    "INSERT INTO GT_TANL_OP_RESULT                  ( SITE_ID                  , ITEM_ID                 "
+   ],
+   [
+    299,
+    "OK",
+    "INSERT INTO GT_TANL_OP_RESULT                  ( SITE_ID                  , ITEM_ID                 "
+   ],
+   [
+    676,
+    "OK",
+    "INSERT INTO GT_TANL_OS_RESULT                  ( OPERATION_GROUP                  , ITEM_ID         "
+   ],
+   [
+    760,
+    "OK",
+    "INSERT INTO GT_TANL_OS_RESULT                  ( OPERATION_GROUP                  , ITEM_ID         "
+   ],
+   [
+    1100,
+    "OK",
+    "INSERT INTO GT_TANL_OS_RESULT_FG                  ( OPERATION_GROUP                  , PROJECT_CODE "
+   ],
+   [
+    1209,
+    "OK",
+    "INSERT INTO GT_TANL_OS_RESULT_FG                  ( OPERATION_GROUP                  , PROJECT_CODE "
+   ],
+   [
+    1352,
+    "OK",
+    "INSERT INTO GT_TANL_OS_RESULT_FG_SMMR              ( ITEM_ID              , BOD_ID              , PR"
+   ],
+   [
+    2108,
+    "OK",
+    "INSERT INTO GT_TANL_XLS_PV_READY              ( TRG_DATE              , DIVISION_ID              , P"
+   ],
+   [
+    2503,
+    "OK",
+    "INSERT INTO GT_TANL_XLS_PV_READY              ( TRG_DATE              , DIVISION_ID              , P"
+   ]
+  ]
+ },
+ "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_EE.PROCEDURE.sql": {
+  "stmts": 5,
+  "codes": {
+   "OK": 5
+  },
+  "ora979": [],
+  "all": [
+   [
+    271,
+    "OK",
+    "INSERT INTO GT_TAEE_OP_RESULT                  ( SITE_ID                  , ITEM_ID                 "
+   ],
+   [
+    334,
+    "OK",
+    "INSERT INTO GT_TAEE_OP_RESULT                  ( SITE_ID                  , ITEM_ID                 "
+   ],
+   [
+    1952,
+    "OK",
+    "INSERT INTO GT_TAEE_XLS_PV_READY              ( TRG_DATE              , DIVISION_ID              , P"
+   ],
+   [
+    2315,
+    "OK",
+    "INSERT INTO GT_TAEE_XLS_PV_READY              ( TRG_DATE              , DIVISION_ID              , P"
+   ],
+   [
+    2676,
+    "OK",
+    "UPDATE GT_TAEE_XLS_PV_READY A            SET A.QTY_SUM = (SELECT CAST(ROUND(A.QTY_SUM / IA.USAGE, 10"
+   ]
+  ]
+ },
+ "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_ESS.PROCEDURE.sql": {
+  "stmts": 15,
+  "codes": {
+   "OK": 15
+  },
+  "ora979": [],
+  "all": [
+   [
+    252,
+    "OK",
+    "INSERT INTO GT_TAES_OP_RESULT                  ( SITE_ID                  , ITEM_ID                 "
+   ],
+   [
+    309,
+    "OK",
+    "INSERT INTO GT_TAES_OP_RESULT                  ( SITE_ID                  , ITEM_ID                 "
+   ],
+   [
+    380,
+    "OK",
+    "UPDATE SCP_ANL_PRODUCTION_PLAN A            SET A.QTY              = 0              , A.LAST_UPDATED"
+   ],
+   [
+    583,
+    "OK",
+    "UPDATE SCP_ANL_PRODUCTION_PLAN_FIX A            SET A.QTY              = 0              , A.LAST_UPD"
+   ],
+   [
+    706,
+    "OK",
+    "INSERT INTO GT_TAES_OS_RESULT                  ( OPERATION_GROUP                  , ITEM_ID         "
+   ],
+   [
+    791,
+    "OK",
+    "INSERT INTO GT_TAES_OS_RESULT                  ( OPERATION_GROUP                  , ITEM_ID         "
+   ],
+   [
+    880,
+    "OK",
+    "UPDATE SCP_ANL_SHIPMENT_PLAN_SEMI A            SET A.QTY              = 0              , A.LAST_UPDA"
+   ],
+   [
+    1088,
+    "OK",
+    "UPDATE SCP_ANL_SHIPMENT_PLAN_FIX A            SET A.QTY              = 0              , A.LAST_UPDAT"
+   ],
+   [
+    1147,
+    "OK",
+    "INSERT INTO GT_TAES_OS_RESULT_FG                  ( OPERATION_GROUP                  , PROJECT_CODE "
+   ],
+   [
+    1257,
+    "OK",
+    "INSERT INTO GT_TAES_OS_RESULT_FG                  ( OPERATION_GROUP                  , PROJECT_CODE "
+   ],
+   [
+    1375,
+    "OK",
+    "UPDATE SCP_ANL_SHIPMENT_PLAN_FG A            SET A.QTY              = 0              , A.LAST_UPDATE"
+   ],
+   [
+    1406,
+    "OK",
+    "INSERT INTO GT_TAES_OS_RESULT_FG_SMMR              ( ITEM_ID              , BOD_ID              , PR"
+   ],
+   [
+    2159,
+    "OK",
+    "INSERT INTO GT_TAES_XLS_PV_READY              ( TRG_DATE              , DIVISION_ID              , P"
+   ],
+   [
+    2558,
+    "OK",
+    "INSERT INTO GT_TAES_XLS_PV_READY              ( TRG_DATE              , DIVISION_ID              , P"
+   ],
+   [
+    4253,
+    "OK",
+    "UPDATE SCP_XLS_PSI_GLOBAL_ESS A            SET A.QTY001 = 0              , A.QTY002 = 0             "
+   ]
+  ]
+ },
+ "PR_SCP_OPT_ENG_OUTPUT_TRANS_ANL_SMALL.PROCEDURE.sql": {
+  "stmts": 9,
+  "codes": {
+   "OK": 9
+  },
+  "ora979": [],
+  "all": [
+   [
+    257,
+    "OK",
+    "INSERT INTO GT_TASM_OP_RESULT                   (SITE_ID                   ,ITEM_ID                 "
+   ],
+   [
+    309,
+    "OK",
+    "INSERT INTO GT_TASM_OP_RESULT                   (SITE_ID                   ,ITEM_ID                 "
+   ],
+   [
+    688,
+    "OK",
+    "INSERT INTO GT_TASM_OS_RESULT                   (OPERATION_GROUP                   ,ITEM_ID         "
+   ],
+   [
+    786,
+    "OK",
+    "INSERT INTO GT_TASM_OS_RESULT                   (OPERATION_GROUP                   ,ITEM_ID         "
+   ],
+   [
+    1172,
+    "OK",
+    "INSERT INTO GT_TASM_OS_RESULT_FG                   (OPERATION_GROUP                   ,PROJECT_CODE "
+   ],
+   [
+    1281,
+    "OK",
+    "INSERT INTO GT_TASM_OS_RESULT_FG                   (OPERATION_GROUP                   ,PROJECT_CODE "
+   ],
+   [
+    1419,
+    "OK",
+    "INSERT INTO GT_TASM_OS_RESULT_FG_SMMR               (ITEM_ID               ,BOD_ID               ,PR"
+   ],
+   [
+    2179,
+    "OK",
+    "INSERT INTO GT_TASM_XLS_PV_READY               (TRG_DATE               ,DIVISION_ID               ,P"
+   ],
+   [
+    2655,
+    "OK",
+    "INSERT INTO GT_TASM_XLS_PV_READY               (TRG_DATE               ,DIVISION_ID               ,P"
+   ]
+  ]
+ },
+ "PR_SSP_ANL_SHIP_UPDATE_BOH_VAL.PROCEDURE.sql": {
+  "stmts": 1,
+  "codes": {
+   "OK": 1
+  },
+  "ora979": [],
+  "all": [
+   [
+    76,
+    "OK",
+    "INSERT INTO GT_SSP_ANL_SHIP_UPDATE_BOH     (         DIVISION_ID       , PLAN_START_YYYYMMDD       ,"
+   ]
+  ]
+ },
+ "PR_SSP_ANL_SHIPMENT_PLAN_FG.PROCEDURE.sql": {
+  "stmts": 9,
+  "codes": {
+   "OK": 7,
+   "ORA-00979": 2
+  },
+  "ora979": [
+   [
+    233,
+    "ORA-00979",
+    "INSERT INTO GT_SASF_FG                   (                    DIVISION_ID                   ,PLAN_ST"
+   ],
+   [
+    1384,
+    "ORA-00979",
+    "INSERT INTO                                                         SSP_ANL_SHIPMENT_PLAN_FG        "
+   ]
+  ],
+  "all": [
+   [
+    140,
+    "OK",
+    "INSERT INTO GT_SASF_FG                   (                    DIVISION_ID                   ,PLAN_ST"
+   ],
+   [
+    233,
+    "ORA-00979",
+    "INSERT INTO GT_SASF_FG                   (                    DIVISION_ID                   ,PLAN_ST"
+   ],
+   [
+    324,
+    "OK",
+    "INSERT INTO GT_SASF_FG                  (                    DIVISION_ID                   ,PLAN_STA"
+   ],
+   [
+    399,
+    "OK",
+    "INSERT INTO GT_SASF_FG                  (                    DIVISION_ID                   ,PLAN_STA"
+   ],
+   [
+    491,
+    "OK",
+    "INSERT INTO GT_SASF_FG                  (                    DIVISION_ID                   ,PLAN_STA"
+   ],
+   [
+    585,
+    "OK",
+    "INSERT INTO GT_SASF_FG                  (                    DIVISION_ID                   ,PLAN_STA"
+   ],
+   [
+    981,
+    "OK",
+    "INSERT INTO GT_SASF_Z                   (                     DIVISION_ID                   ,PLAN_ST"
+   ],
+   [
+    1028,
+    "OK",
+    "INSERT INTO GT_SASF_Y                   (                     DIVISION_ID                   ,PLAN_ST"
+   ],
+   [
+    1384,
+    "ORA-00979",
+    "INSERT INTO                                                         SSP_ANL_SHIPMENT_PLAN_FG        "
+   ]
+  ]
+ }
+}
