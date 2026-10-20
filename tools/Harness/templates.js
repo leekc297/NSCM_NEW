@@ -11,7 +11,7 @@ export type MENU_ID = typeof MENU_ID;
 
 // 시트명은 배포 DB SCM_MST_SHEET_COLUMNS.SHEET_NAME 케이싱 그대로 (BE 시트 검증은 대소문자 구분)
 export enum SHEETS {
-${sheets.map(s => `  ${s.key} = '${s.name}', // ${s.rule}${s.popup ? ' (팝업)' : ''}`).join('\n')}${c.hasSpreadTitle ? `\n  SPREAD_TITLE = 'spreadTitle', // 동적 헤더 메타 (As-is *_GET_SPREAD_TITLE)` : ''}
+${sheets.map(s => `  ${s.key} = '${s.name}', // ${s.rule}${s.popup ? ' (팝업)' : ''}`).join('\n')}${(c.titleSheets || []).length ? '\n' + c.titleSheets.map(t => `  ${t.key} = '${t.name}', // 동적 헤더(기간 컬럼) 원천 — As-is ${t.members.join('/')} → ${t.sp}${t.corpProc ? ` · 사내 배선 ${t.corpProc}` : t.via === 'family' ? ' · 사내 정확 배선 없음 — 같은 화면 타이틀 계열 시트 재사용(인자 대조 필요)' : ' · 사내 배선 없음(등록 필요)'}. TODO(이식): useTabProcQuery 로 조회해 o_rc1 행으로 헤더 생성`).join('\n') : c.hasSpreadTitle ? `\n  SPREAD_TITLE = 'spreadTitle', // 동적 헤더 메타 (As-is *_GET_SPREAD_TITLE)` : ''}
 }
 
 export enum RESPONSE_SET {
@@ -657,6 +657,12 @@ function mapping(c) {
   if ((c.popupClasses || []).length) { lines.push('', '## POPUP 매핑 (룰 25 §3 — button/SP/event/validation 4축)', '', '| ID | 요지 | 구현 위치 | 사유 | 상태 |', '|---|---|---|---|---|'); let pn = 0; for (const cls of c.popupClasses) { const n = modalName(cls, c.ID); const evs = (c.eventsAll || []).filter(x => x.class === cls && x.op === '+=' && /^[A-Z]/.test(x.event)).length; const sps = [...new Set((c.endpointsAll || []).filter(x => x.class === cls && x.status === 'MATCH' && /^SP\s/.test(x.sp_or_sql || '')).map(x => x.sp_or_sql.replace(/^SP\s+/, '')))]; lines.push(row(`D00-P-${String(++pn).padStart(3, '0')}`, `§P ${cls} / 팝업(이벤트 ${evs}, SP ${sps.length}: ${sps.join(', ') || '-'})`, `components/modals/${n}.tsx`, '골격만 — 트리거·조회 파라미터·반환·검증 4축 이식 후 구현으로 (공통 lookup 으로 대체하면 사유에 명시하고 파일 삭제)', '미구현')); } }
   lines.push('', '## §5 Grid 시트', '', '| ID | 요지 | 구현 위치 | 사유 | 상태 |', '|---|---|---|---|---|'); n = 0;
   for (const s of c.sheets) lines.push(row(`D00-5-${String(++n).padStart(3, '0')}`, `§5 시트 '${s.name}' / ${s.rule} (${s.rows.length}컬럼)`, s.popup ? (s.used === false || !(c.popupClasses || []).length ? '' : `components/modals/${modalName(c.popupClasses[0], c.ID)}.tsx (SHEETS.${s.key})`) : `components/${c.Page}Grid${(c.gridPlan.find(g => g.sheets.includes(s)) || c.gridPlan[0]).suffix}.tsx (SHEETS.${s.key})`, s.popup ? (s.used === false ? '메타 정의만 있고 As-is 코드 미참조(미사용) — 등록·배선 생략' : '팝업 시트 — 모달 컴포넌트 DataGrid staticColumns') : (/하드코딩/.test(s.rule) ? 'HARD_COLUMNS 배열 — 메타 등록 시 전환' : ''), s.popup ? (s.used === false ? '제외' : ((c.popupClasses || []).length ? '구현' : '미구현')) : '구현'));
+  // §6 동적 컬럼 — As-is 기간형 타이틀 SP + grid_code DB루프 컬럼 생성(2026-10-20 SCP0096: 정적 grid_effective 만 써서 이 행이 없었다 · 게이트 M08/B27)
+  if ((c.titleSheets || []).length || (c.titleLoops || []).length) {
+    lines.push('', '## §6 동적 컬럼 (As-is 타이틀 SP · DB루프 컬럼 생성)', '', '| ID | 요지 | 구현 위치 | 사유 | 상태 |', '|---|---|---|---|---|'); n = 0;
+    for (const t of c.titleSheets || []) lines.push(row(`D00-6-${String(++n).padStart(3, '0')}`, `§6 동적 헤더 원천 ${t.sp} → 시트 '${t.name}'${t.corpProc ? ` (사내 ${t.corpProc})` : ''}`, `${c.Page}.tsx (useTabProcQuery SHEETS.${t.key})`, t.corpProc ? '타이틀 시트를 조회기간으로 조회해 o_rc1 로 헤더 생성 후 구현으로(B27)' : '사내 배선 없음 — DB 메타 등록 후 조회·헤더 생성(B27)', '미구현'));
+    for (const loc of c.titleLoops || []) { const [mem, line] = loc.split(':'); lines.push(row(`D00-6-${String(++n).padStart(3, '0')}`, `§6 ${mem} / ${line} (DB루프 컬럼 생성 ← 타이틀 SP 결과셋)`, `components/${c.Page}Grid.tsx (dynamicColumns)`, 'o_rc1 행(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE) → 컬럼 생성 후 구현으로(M08)', '미구현')); }
+  }
   return lines.join('\n') + '\n';
 }
 
@@ -673,7 +679,7 @@ ${c.tcs.map(t => `  it.todo('${t.id} [${t.kind}] ${t.expect.replace(/'/g, "\\'")
 
 function register(c) {
   return JSON.stringify({ menuId: c.ID, screenName: c.asisName, feature: c.feature, pageDir: c.kebab, routePath: `${c.feature}/${c.kebab}`,
-    sheets: c.sheets.map(s => ({ sheetName: s.name, rule: s.rule, columns: s.rows.length, popup: s.popup })).concat(c.hasSpreadTitle ? [{ sheetName: 'spreadTitle', rule: '동적 헤더 메타', columns: 0, popup: false }] : []),
+    sheets: c.sheets.map(s => ({ sheetName: s.name, rule: s.rule, columns: s.rows.length, popup: s.popup })).concat((c.titleSheets || []).length ? c.titleSheets.map(t => ({ sheetName: t.name, rule: `동적 헤더(기간 컬럼) — ${t.sp}`, columns: 0, popup: false })) : c.hasSpreadTitle ? [{ sheetName: 'spreadTitle', rule: '동적 헤더 메타', columns: 0, popup: false }] : []),
     procs: c.procs, note: 'PKG_NSCM_SCREEN_REGISTRATION.P_REGISTER_SCREEN 입력 초안 — tobe_pkg_candidate 는 명명 규칙 추정값, Oracle 배포 PKG 명과 대사 필요' }, null, 2) + '\n';
 }
 
@@ -711,6 +717,7 @@ As-is grid_mode: ${c.idx.grid_mode || '?'} · 시트 ${c.mainSheets.length} (+�
 6. division 변형: ${c.divisionCols.length ? c.divisionCols.join(', ') + ' — grid_effective 의 division 열이 비어있지 않은 컬럼은 표시 조건 분기' : '없음'}
 7. 검증/표현식: hooks/use${c.Page}Validation.ts V-마커 ${c.validations.filter(v => !v.popup).length}건(+팝업 ${c.validations.filter(v => v.popup).length}) · use${c.Page}Expression.ts E-마커 ${c.expressions.filter(v => !v.popup).length}건 — apply 본문 채우기 (마커 수 = validation.md 행 수, 게이트 V01)
 8. register.json → P_REGISTER_SCREEN (클라우드) → \`pnpm gen:procedures\` → procedures.d.ts 반영 후 타입 느슨 구간 제거
+9. 동적 헤더(기간 컬럼): ${(c.titleSheets || []).length ? c.titleSheets.map(t => `${t.sp}(As-is ${t.members.join('/')}) → 시트 '${t.name}'${t.corpProc ? ` = 사내 ${t.corpProc}` : t.via === 'family' ? ' — 같은 화면 타이틀 계열 사내 시트(인자 대조 필요)' : ' — 사내 배선 없음: DB 메타 등록 먼저'}`).join(' · ') + `${(c.titleLoops || []).length ? ` · As-is DB루프 ${c.titleLoops.slice(0, 3).join(', ')}` : ''} — 조회기간으로 타이틀 시트를 **반드시 조회**하고 o_rc1(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)로 헤더를 만든다. 응답 키는 proc_params.csv OUT COL_NM 만(o_rc1_columns 금지 — SYS0013 전용). 게이트 B26·B27` : '없음'}
 
 ## 사전에 없던 것 (룰 보완 후보 — rules/*.csv 에 추가)
 ${c.todos.map(t => `- ${t.c.name} / ${t.c.type.split('.').pop()} : ${t.r.note}`).join('\n') || '- 없음'}

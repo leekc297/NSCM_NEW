@@ -1,0 +1,79 @@
+# [Harness] SCP0011 production-plan — BLOCK 1 / WARN 76
+
+- BLOCK F05 inline style 금지 — SCSS Module @components/ProductionPlanForm.tsx:389
+- WARN G02 As-is 엔드포인트 SCP.SCP0011_GET_LAST_PLAN_VERSION (SCP0011_GET_LAST_PLAN_VERSION) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0011_GET_PRODUCTION_PLAN_MODEL (SCP0011_GET_PRODUCTION_PLAN_MODEL) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0011_GET_PRODUCTION_PLAN_MODEL_TITLE_PARAL (SCP0011_GET_PRODUCTION_PLAN_MODEL_TITLE_PARAL) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0011_GET_PRODUCTION_PLAN_LINE (SCP0011_GET_PRODUCTION_PLAN_LINE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0011_GET_PLAN_EDIT_INFO (SCP0011_GET_PLAN_EDIT_INFO) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0011_SAVE_PRODUCTION_PLAN_LINE (SCP0011_SAVE_PRODUCTION_PLAN_LINE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN (SCP0009_GET_SHEET_CALENDAR_3SPAN) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.PR_SCP_ANL_PRODUCTION_PLAN_I_AMEND (PR_SCP_ANL_PRODUCTION_PLAN_I_AMEND) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 btnCal.Click → btnCal_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Load → SCP0011_ProductionPlan_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdmLine.Changed → SpdLine_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdmLine.Changed → SpdLine_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.CellDoubleClick → SpdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdLine.CellDoubleClick → spdLine_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdMain.TopChange → SpdMain_TopChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdLine.TopChange → SpdLine_TopChange 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnMeasure.Click → btnMeasure_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboBucketType.SelectedIndexChanged → cboBucketType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 chkSum.CheckedChanged → chkSum_CheckedChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnItemId.Click → btnItemId_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDivision.SelectedIndexChanged → CboDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboOperationGroup.SelectedIndexChanged → CboOperationGroup_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanDate.SelectedIndexChanged → CboPlanDate_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanType.SelectedIndexChanged → CboPlanType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanSeq.SelectedIndexChanged → CboPlanSeq_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdLine.SelectionChanged → SpdLine_SelectionChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdmLine.Changed → SpdLine_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanDate.SelectedIndexChanged → CboPlanDate_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanType.SelectedIndexChanged → CboPlanType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanSeq.SelectedIndexChanged → CboPlanSeq_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdmLine.Changed → SpdLine_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdmLine.Changed → SpdLine_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdmLine.Changed → SpdLine_Changed 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dsdmLine.Changed → SpdLine_Changed 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 usrButton1 / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 dCalendar / UsrDateRangePicker3 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkAll / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnCal / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboOperationGroup / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDivision / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboPlanSeq / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboPlanDate / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboPlanType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkSum / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnMeasure / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbPlantSite / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemId / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboBucketType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboElectrode / UsrCheckedList 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtNickName / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtModelId / TextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdLine / FpSpread 매핑표 §1 에 없음
+- WARN D01 사전 밖 컴포넌트 <PlanVersionCascade> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ProductionPlanForm.tsx
+- WARN V01 As-is Validation 3건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- WARN R12 inline style 금지 → SCSS Module (절대금지 ⑤) @components/ProductionPlanForm.tsx:365
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ProductionPlanGrid.tsx:393
+- WARN R06 DataGrid initialized prop deprecated → useEffect+gridRef (#70 runtime-pitfalls) @components/ProductionPlanGrid.tsx:389
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @ProductionPlan.tsx:250
+- WARN R16 진입 Page 483 라인 > 400 — components/ 분리 (#9) @ProductionPlan.tsx
+- WARN B08 As-is InsertButton override 있음 → hotkeyConfig.insert 가 false 가 아니어야 함 — As-is 기능 누락(members.csv InsertButton)
+- WARN B08 As-is DeleteButton override 있음 → hotkeyConfig.delete 가 false 가 아니어야 함 — As-is 기능 누락(members.csv DeleteButton)
+- WARN B13 AS-IS 파일:라인 주석(// AS-IS …:L) — 이벤트 27건 대비 AS-IS 참조 주석 0건 — 1:1 추적 근거
+- WARN B19 validation.md 3행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0011/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0011/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0011/SCP0011_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0011/SCP0011_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 시트 'calendar') — 누락 startYyyymmdd, endYyyymmdd — 현재 키: (toFilter 없음) · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0011_GET_PLAN_EDIT_INFO · 시트 'editInfo') — 누락 originDivisionId — 현재 키: divisionId, scmSiteId, planStartYyyymmdd, planType, seq, debugMode · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0011_GET_PROD_PLAN_MODEL · 시트 'main') — 누락 toPeriod — 현재 키: divisionId, operationGroup, scmSiteId, modelId, itemId, fromYyyymmdd, toYyyymmdd, planStartYyyymmdd, planType, seq, programId, sheetName, userId, electrodeType, nickName, bucket, chkAll, debugMode · BE positional 매핑이라 값이 NULL 로 감
+- WARN B27 As-is FindData_Model_Parallel → SCP0011_GET_PRODUCTION_PLAN_MODEL_TITLE_PARAL [sp명] · 사내 정확 배선 없음(같은 화면 타이틀 계열 'calendar' 추정) — 동적 컬럼 원천을 확인: 배선 등록(DB 메타) 후 FE 조회 또는 대사표에 대체 근거(BE/메타 원문 확인)를 적고 '제외' @grid
+- WARN B27 동적 헤더 원천 SCP0009_GET_SHEET_CALENDAR_3SPAN → FE 조회 — As-is GetSpdTitle → SCP0009_GET_SHEET_CALENDAR_3SPAN [sp명+메서드] · 사내 배선 시트 'calendar'(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN)를 FE 가 조회하지 않음 → 기간 컬럼이 그려지지 않음. SHEETS 에 시트 추가 + useTabProcQuery 로 조회기간을 넘겨 o_rc1(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)로 헤더 생성(As-is InitSpreadDateColumn 1:1)

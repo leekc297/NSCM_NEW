@@ -1,0 +1,26 @@
+{
+  "id": "SCP0096",
+  "task": "S5.pipeline",
+  "scope": "both",
+  "note": "pipeline.js SCP0096 --max 3",
+  "start": "2026-10-19T12:00:26.523Z",
+  "end": null,
+  "exit": null,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "c:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\shipment-working-day-osp",
+      "files": 7
+    },
+    {
+      "name": "db",
+      "dir": "c:\\Projects\\NSCM\\Doc\\gen\\SCP0096",
+      "files": 4
+    },
+    {
+      "name": "gap",
+      "dir": "c:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ]
+}

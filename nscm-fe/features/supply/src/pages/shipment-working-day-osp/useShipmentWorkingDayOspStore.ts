@@ -20,6 +20,9 @@ interface ShipmentWorkingDayOspState {
   initialized: boolean;
   // 개인화 조회조건 복원 1회 가드 (SubTitle F6 저장분 mount 복원 — initialized 는 컬럼 fetch 전용이라 별도).
   conditionsRestored: boolean;
+  // 서버 dayRange(기본 조회기간) 적용 1회 가드 — false 인 동안 Page 의 dayRange 쿼리가 살아 있고 applyDayRange 가 기간을 교체한다.
+  //   Reset Condition(F10) 의 reset() 이 false 로 되돌리면 캐시된 서버 구간을 다시 적용한다(BusinessPlan 정본 패턴).
+  dayRangeApplied: boolean;
   isOpenSearchArea: boolean;
   searchParams: SearchParamProps;
   filters: FiltersBySheet;
@@ -36,6 +39,8 @@ interface ShipmentWorkingDayOspAction {
   fetchStaticColumns: () => Promise<void>;
   // 개인화 조회조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchParams 패치(1회).
   restoreSearchConditions: () => Promise<void>;
+  // 서버 dayRange o_rc1[0].PERIOD('yyyymmdd:yyyymmdd') → 기본 Period 1회 적용 (AS-IS dCalendar.InitValue = GetDayRange() .cs:137 1:1).
+  applyDayRange: (range?: string) => void;
 }
 
 // 개인화 조건 복원 역직렬화 키(SubTitle F6 저장은 배열=콤마join·날짜키 제외 — personalizeCondition).
@@ -43,16 +48,24 @@ interface ShipmentWorkingDayOspAction {
 //   EXCLUDED_DATE_PARAM 이 제외하므로 복원 rows 에 오지 않는다. 불리언 조회조건 없음.
 const ARRAY_KEYS = new Set<string>(['plantSiteIds']);
 
-// dCalendar 기본기간 — 02_search-combo §2 #3 Period(dCalendar GetDayRange DAILY). 데이터·성능 확정 전 기본안으로
-//   당월 1일 ~ 익월 말일 — dayjs 로컬 날짜(toISOString UTC 금지, SCP0019 동일).
-const initPeriod = {
-  start: dayjs().startOf('month').format('YYYYMMDD'),
-  end: dayjs().add(1, 'month').endOf('month').format('YYYYMMDD'),
-};
+// dCalendar 기본기간 placeholder — 정본은 서버 dayRange(PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD — AS-IS InitControls
+//   `dCalendar.InitValue = GetDayRange()` .cs:137 = DateUtil.GetDayRange(cboDivision,'DAILY')) 응답이며 applyDayRange 가 교체한다.
+//   응답 전·미응답 fallback 은 그 SP 산식 근사 = 오늘 ~ 12개월 뒤 일자의 직전 일요일(일요일이면 당일; SP L2773~2779
+//   `TRUNC(TO_DATE(max)+1,'IW')-1`). 사내 실측 2026-10-20 → '20261020:20271017' 과 동일 산식. dayjs 로컬 날짜(toISOString UTC 금지).
+//   (이전 '당월 1일 ~ 익월 말일' 은 AS-IS 산식과 달라 2026-10-20 정정.)
+const initPeriod = (() => {
+  const start = dayjs();
+  const limit = start.add(12, 'month');
+  return {
+    start: start.format('YYYYMMDD'),
+    end: limit.subtract(limit.day(), 'day').format('YYYYMMDD'), // day(): 0=일 → 직전(또는 당일) 일요일
+  };
+})();
 
 const initShipmentWorkingDayOspState: ShipmentWorkingDayOspState = {
   initialized: false,
   conditionsRestored: false,
+  dayRangeApplied: false,
   isOpenSearchArea: true,
   searchParams: {
     // 마운트 시 첫 권한 division 자동선택 — Form 이 옵션 로드 후 교정(session.div 비어있을 수 있음).
@@ -166,10 +179,25 @@ export const useShipmentWorkingDayOspStore = createPersistedStoreWithTab<
         }
         set(state => {
           state.searchParams = { ...state.searchParams, ...patch } as SearchParamProps;
+          // 저장된 Period 가 있으면 서버 dayRange 가 덮지 못하게 잠근다(BusinessPlan·sales-plan 규칙). 현재 저장측은 날짜키를
+          //   제외하므로 통상 도달하지 않으나, 저장 정책이 바뀌어도 복원값이 응답 도착 순간 되돌아가지 않도록 가드한다.
+          if ('startYyyymmdd' in patch || 'endYyyymmdd' in patch) state.dayRangeApplied = true;
         });
       } catch {
         // 미저장/실패 = 기본값 유지 (console 금지 룰)
       }
+    },
+
+    // 서버 dayRange o_rc1[0].PERIOD 'yyyymmdd:yyyymmdd' → 기본 Period (AS-IS dCalendar.InitValue = GetDayRange() .cs:137 1:1).
+    //   형식 불일치·빈값(SP 는 조회 구간이 없으면 NULL)은 무시 = placeholder 유지. 1회 적용 가드(dayRangeApplied).
+    applyDayRange: range => {
+      if (!range || !/^\d{8}:\d{8}$/.test(range)) return;
+      if (get().dayRangeApplied) return;
+      const [start, end] = range.split(':');
+      set(state => {
+        state.searchParams = { ...state.searchParams, startYyyymmdd: start, endYyyymmdd: end };
+        state.dayRangeApplied = true;
+      });
     },
   }),
   'shipment-working-day-osp-store'

@@ -15,7 +15,7 @@ paths:
 
 ## B. 절대 금지 / 표준
 - MSSQL 키워드 잔존 0: `DATEADD / CHARINDEX / STRING_SPLIT / GETDATE / ISNULL / IIF / N'…' / WITH (NOLOCK)`.
-- `ISNULL(x,'')` 의도 2종은 Oracle 빈문자=NULL 로 깨진다 → 센티널 **`'-'`** 통일, 비교·JOIN 은 **양변** `NVL(x,'-')`, NOT NULL INSERT 는 `NVL(x,'-')`/`NVL(x,0)`/DATE `SYSDATE` (#119).
+- `ISNULL(x,'')` 의도 2종은 Oracle 빈문자=NULL 로 깨진다 → 센티널 **`'/'`** 통일(⭐ 2026-10-15 개정 — 신규 NULL 초기값·비교 센티널 = `'/'`, 원래 데이터가 `'-'` 인 값은 유지, 과도기 빈값 술어 `IN ('-','/')`), 비교·JOIN 은 **양변** `NVL(x,'/')`, NOT NULL INSERT 는 `NVL(x,'/')`/`NVL(x,0)`/DATE `SYSDATE`; `NVL(x,'-')`·`DEFAULT '-'` 신규 작성 금지 (#119 §0.5).
 - DATE 파라미터 원시값·단일인자 `TO_DATE` 금지 — 세션 NLS 암묵 변환(클라우드 WAS 만 ORA-01861) (#109).
 - 성능 개선 순서 고정: ①SELECT 목록 함수 제거(JOIN 치환) → ②인덱스 타도록 구문 변경 → ③힌트. 힌트 우선 금지 (#129).
 - GTT 는 `TRUNCATE`(DDL) 금지 → `DELETE` (#107) · `@@FETCH_STATUS` 변환 시 FETCH 직후 `%NOTFOUND` 재할당 의무.

@@ -11,7 +11,7 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 1
+      "actualWorkers": 2
     },
     "preserveOutput": "always",
     "reporter": [
@@ -91,31 +91,75 @@
                     {
                       "workerIndex": 0,
                       "status": "failed",
-                      "duration": 1734,
+                      "duration": 115870,
                       "error": {
-                        "message": "Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인",
-                        "stack": "Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:42:44)\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:7:71)",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                          "column": 44,
-                          "line": 42
+                        "message": "Error: 조회조건 'Today' (Checkbox)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: 조회조건 'Today' (Checkbox)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:15:117",
+                        "matcherResult": {
+                          "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                          "pass": false
                         },
-                        "snippet": "   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:42\n\n\u001b[0m \u001b[90m 40 |\u001b[39m   \u001b[36masync\u001b[39m loginAs(userId\u001b[33m:\u001b[39m string) {\n \u001b[90m 41 |\u001b[39m     \u001b[36mconst\u001b[39m res \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[32m`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`\u001b[39m\u001b[33m,\u001b[39m { waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 42 |\u001b[39m     \u001b[36mif\u001b[39m (res \u001b[33m&&\u001b[39m res\u001b[33m.\u001b[39mstatus() \u001b[33m===\u001b[39m \u001b[35m401\u001b[39m) \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 '${userId}' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 43 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForURL(u \u001b[33m=>\u001b[39m u\u001b[33m.\u001b[39mtoString()\u001b[33m.\u001b[39mstartsWith(\u001b[33mFE\u001b[39m)\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m30\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[33mFE\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 44 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m)\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m undefined)\u001b[33m;\u001b[39m\n \u001b[90m 45 |\u001b[39m   }\u001b[0m"
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                          "column": 117,
+                          "line": 15
+                        },
+                        "snippet": "  13 |     await nscm.snapshot(`${MENU}_open`);\n  14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\n> 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();\n     |                                                                                                                     ^\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n  18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);"
                       },
                       "errors": [
                         {
                           "location": {
-                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                            "column": 44,
-                            "line": 42
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                            "column": 117,
+                            "line": 15
                           },
-                          "message": "Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:42\n\n\u001b[0m \u001b[90m 40 |\u001b[39m   \u001b[36masync\u001b[39m loginAs(userId\u001b[33m:\u001b[39m string) {\n \u001b[90m 41 |\u001b[39m     \u001b[36mconst\u001b[39m res \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[32m`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`\u001b[39m\u001b[33m,\u001b[39m { waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 42 |\u001b[39m     \u001b[36mif\u001b[39m (res \u001b[33m&&\u001b[39m res\u001b[33m.\u001b[39mstatus() \u001b[33m===\u001b[39m \u001b[35m401\u001b[39m) \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 '${userId}' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 43 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForURL(u \u001b[33m=>\u001b[39m u\u001b[33m.\u001b[39mtoString()\u001b[33m.\u001b[39mstartsWith(\u001b[33mFE\u001b[39m)\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m30\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[33mFE\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 44 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m)\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m undefined)\u001b[33m;\u001b[39m\n \u001b[90m 45 |\u001b[39m   }\u001b[0m\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:42:44)\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:7:71)"
+                          "message": "Error: 조회조건 'Today' (Checkbox)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  13 |     await nscm.snapshot(`${MENU}_open`);\n  14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\n> 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();\n     |                                                                                                                     ^\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n  18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:15:117"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                            "column": 117,
+                            "line": 15
+                          },
+                          "message": "Error: 조회조건 'Model / Nickname' (ItemField)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  13 |     await nscm.snapshot(`${MENU}_open`);\n  14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\n> 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();\n     |                                                                                                                     ^\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n  18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:15:117"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                            "column": 117,
+                            "line": 15
+                          },
+                          "message": "Error: 조회조건 'Project' (ProjectField)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  13 |     await nscm.snapshot(`${MENU}_open`);\n  14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\n> 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();\n     |                                                                                                                     ^\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n  18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:15:117"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                            "column": 117,
+                            "line": 15
+                          },
+                          "message": "Error: 조회조건 'Period' (PeriodField)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  13 |     await nscm.snapshot(`${MENU}_open`);\n  14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\n> 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();\n     |                                                                                                                     ^\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n  18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:15:117"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                            "column": 117,
+                            "line": 15
+                          },
+                          "message": "Error: 조회조건 'EDI Sender' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  13 |     await nscm.snapshot(`${MENU}_open`);\n  14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\n> 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();\n     |                                                                                                                     ^\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n  18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:15:117"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                            "column": 66,
+                            "line": 18
+                          },
+                          "message": "Error: 그리드 ≥1 (메인시트 5)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m1\u001b[39m\nReceived:    \u001b[31m0\u001b[39m\n\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n> 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n     |                                                                  ^\n  19 |     // Division 선택(있으면) 후 조회\n  20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);\n  21 |     const calls = await nscm.search();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:18:66"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-19T05:26:04.044Z",
+                      "startTime": "2026-10-20T03:16:55.258Z",
                       "attachments": [
                         {
                           "name": "screenshot",
@@ -129,39 +173,83 @@
                         }
                       ],
                       "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                        "column": 44,
-                        "line": 42
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                        "column": 117,
+                        "line": 15
                       }
                     },
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 2,
                       "status": "failed",
-                      "duration": 1556,
+                      "duration": 107874,
                       "error": {
-                        "message": "Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인",
-                        "stack": "Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:42:44)\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:7:71)",
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                          "column": 44,
-                          "line": 42
+                        "message": "Error: 조회조건 'Today' (Checkbox)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: 조회조건 'Today' (Checkbox)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:15:117",
+                        "matcherResult": {
+                          "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                          "pass": false
                         },
-                        "snippet": "   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:42\n\n\u001b[0m \u001b[90m 40 |\u001b[39m   \u001b[36masync\u001b[39m loginAs(userId\u001b[33m:\u001b[39m string) {\n \u001b[90m 41 |\u001b[39m     \u001b[36mconst\u001b[39m res \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[32m`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`\u001b[39m\u001b[33m,\u001b[39m { waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 42 |\u001b[39m     \u001b[36mif\u001b[39m (res \u001b[33m&&\u001b[39m res\u001b[33m.\u001b[39mstatus() \u001b[33m===\u001b[39m \u001b[35m401\u001b[39m) \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 '${userId}' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 43 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForURL(u \u001b[33m=>\u001b[39m u\u001b[33m.\u001b[39mtoString()\u001b[33m.\u001b[39mstartsWith(\u001b[33mFE\u001b[39m)\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m30\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[33mFE\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 44 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m)\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m undefined)\u001b[33m;\u001b[39m\n \u001b[90m 45 |\u001b[39m   }\u001b[0m"
+                        "location": {
+                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                          "column": 117,
+                          "line": 15
+                        },
+                        "snippet": "  13 |     await nscm.snapshot(`${MENU}_open`);\n  14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\n> 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();\n     |                                                                                                                     ^\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n  18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);"
                       },
                       "errors": [
                         {
                           "location": {
-                            "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                            "column": 44,
-                            "line": 42
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                            "column": 117,
+                            "line": 15
                           },
-                          "message": "Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인\n\n   at ..\\..\\..\\tools\\E2E\\lib\\nscm.ts:42\n\n\u001b[0m \u001b[90m 40 |\u001b[39m   \u001b[36masync\u001b[39m loginAs(userId\u001b[33m:\u001b[39m string) {\n \u001b[90m 41 |\u001b[39m     \u001b[36mconst\u001b[39m res \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[32m`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`\u001b[39m\u001b[33m,\u001b[39m { waitUntil\u001b[33m:\u001b[39m \u001b[32m'domcontentloaded'\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 42 |\u001b[39m     \u001b[36mif\u001b[39m (res \u001b[33m&&\u001b[39m res\u001b[33m.\u001b[39mstatus() \u001b[33m===\u001b[39m \u001b[35m401\u001b[39m) \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 '${userId}' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 43 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForURL(u \u001b[33m=>\u001b[39m u\u001b[33m.\u001b[39mtoString()\u001b[33m.\u001b[39mstartsWith(\u001b[33mFE\u001b[39m)\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m30\u001b[39m_000 })\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mgoto(\u001b[33mFE\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m 44 |\u001b[39m     \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForLoadState(\u001b[32m'networkidle'\u001b[39m)\u001b[33m.\u001b[39m\u001b[36mcatch\u001b[39m(() \u001b[33m=>\u001b[39m undefined)\u001b[33m;\u001b[39m\n \u001b[90m 45 |\u001b[39m   }\u001b[0m\n    at Nscm.loginAs (C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts:42:44)\n    at Object.nscm (C:\\Projects\\NSCM\\tools\\E2E\\fixtures\\test.ts:7:71)"
+                          "message": "Error: 조회조건 'Today' (Checkbox)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  13 |     await nscm.snapshot(`${MENU}_open`);\n  14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\n> 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();\n     |                                                                                                                     ^\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n  18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:15:117"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                            "column": 117,
+                            "line": 15
+                          },
+                          "message": "Error: 조회조건 'Model / Nickname' (ItemField)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  13 |     await nscm.snapshot(`${MENU}_open`);\n  14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\n> 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();\n     |                                                                                                                     ^\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n  18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:15:117"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                            "column": 117,
+                            "line": 15
+                          },
+                          "message": "Error: 조회조건 'Project' (ProjectField)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  13 |     await nscm.snapshot(`${MENU}_open`);\n  14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\n> 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();\n     |                                                                                                                     ^\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n  18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:15:117"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                            "column": 117,
+                            "line": 15
+                          },
+                          "message": "Error: 조회조건 'Period' (PeriodField)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  13 |     await nscm.snapshot(`${MENU}_open`);\n  14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\n> 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();\n     |                                                                                                                     ^\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n  18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:15:117"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                            "column": 117,
+                            "line": 15
+                          },
+                          "message": "Error: 조회조건 'EDI Sender' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n  13 |     await nscm.snapshot(`${MENU}_open`);\n  14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\n> 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();\n     |                                                                                                                     ^\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n  18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:15:117"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                            "column": 66,
+                            "line": 18
+                          },
+                          "message": "Error: 그리드 ≥1 (메인시트 5)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: >= \u001b[32m1\u001b[39m\nReceived:    \u001b[31m0\u001b[39m\n\n  16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\n  17 |     const gridCount = await nscm.grids().count();\n> 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);\n     |                                                                  ^\n  19 |     // Division 선택(있으면) 후 조회\n  20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);\n  21 |     const calls = await nscm.search();\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts:18:66"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-10-19T05:26:12.219Z",
+                      "startTime": "2026-10-20T03:18:55.208Z",
                       "attachments": [
                         {
                           "name": "screenshot",
@@ -175,9 +263,9 @@
                         }
                       ],
                       "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\tools\\E2E\\lib\\nscm.ts",
-                        "column": 44,
-                        "line": 42
+                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\DMF0052.smoke.spec.ts",
+                        "column": 117,
+                        "line": 15
                       }
                     }
                   ],
@@ -192,13 +280,73 @@
           ]
         }
       ]
+    },
+    {
+      "title": "SCP0096.smoke.spec.ts",
+      "file": "SCP0096.smoke.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "SCP0096 Shipment_Working_Day_OSP 스모크 @smoke",
+          "file": "SCP0096.smoke.spec.ts",
+          "line": 7,
+          "column": 6,
+          "specs": [
+            {
+              "title": "화면 열림 · 조회조건 · 조회 · 그리드 컬럼",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [
+                    {
+                      "type": "columns",
+                      "description": "헤더 6 / 기대 6 / 누락 0: "
+                    },
+                    {
+                      "type": "calls",
+                      "description": "[[\"Shipment Working Day OSP\",\"SEARCH\",200,22,207]]"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "status": "passed",
+                      "duration": 35284,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-20T03:16:55.306Z",
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d431c8cb38c75f7a4f15-6a96671886cd286ca762",
+              "file": "SCP0096.smoke.spec.ts",
+              "line": 9,
+              "column": 7
+            }
+          ]
+        }
+      ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-19T05:26:01.161Z",
-    "duration": 14312.513,
-    "expected": 0,
+    "startTime": "2026-10-20T03:16:53.069Z",
+    "duration": 231803.50999999998,
+    "expected": 1,
     "skipped": 0,
     "unexpected": 1,
     "flaky": 0

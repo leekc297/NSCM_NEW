@@ -17,7 +17,8 @@
             "file": "${outDir}/crosscheck_report.csv",
             "max": 0,
             "label": "교차검증 불일치"
-          }
+          },
+          "title_en": "Run full parser (build → trap test → scan → cross-check → pack)"
         },
         {
           "id": "S1.db",
@@ -30,7 +31,8 @@
             "file": "${outDir}/db/db_objects.csv",
             "min": 1,
             "label": "DB 객체"
-          }
+          },
+          "title_en": "Extract DB metadata (read-only)"
         },
         {
           "id": "S1.grid",
@@ -44,7 +46,8 @@
             "column": "status",
             "equals": "OK",
             "label": "SP 실행"
-          }
+          },
+          "title_en": "Run grid SPs (ROLLBACK) → actual columns"
         },
         {
           "id": "S1.pack",
@@ -56,7 +59,31 @@
             "file": "${outDir}/screens/_index.csv",
             "min": 1,
             "label": "화면"
-          }
+          },
+          "title_en": "Rebuild all screen packs"
+        },
+        {
+          "id": "S1.packone",
+          "title": "Fact Pack 1화면 재생성 — 화면ID (pack.ps1 <ID>, 수 초)",
+          "kind": "powershell",
+          "script": "${toolsDir}/pack.ps1",
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID(공백 구분)",
+              "default": "DMF0052"
+            }
+          ],
+          "splitArgs": true,
+          "gate": {
+            "type": "fileExists",
+            "file": "${outDir}/screens/${input:id}/${input:id}_summary.md",
+            "label": "Fact Pack"
+          },
+          "title_en": "Rebuild Fact Pack for one screen — ID (pack.ps1 <ID>, seconds)"
         },
         {
           "id": "S1.screen",
@@ -69,13 +96,15 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Open screen Fact Pack — ID"
         },
         {
           "id": "S1.review",
           "title": "검수 체크포인트 열기",
           "kind": "open",
-          "path": "${outDir}/_review"
+          "path": "${outDir}/_review",
+          "title_en": "Open review checkpoints"
         },
         {
           "id": "S1.recon",
@@ -87,22 +116,26 @@
             "type": "fileExists",
             "file": "${reconOutDir}/대사표.md",
             "label": "대사표"
-          }
+          },
+          "title_en": "Target reconciliation — recheck omissions (xlsx→csv → recon.js)"
         },
         {
           "id": "S1.reconx",
           "title": "개발대상 xlsx → CSV/map_screen.csv (xlsx_to_csv.py)",
           "kind": "python",
           "script": "${reconDir}/xlsx_to_csv.py",
-          "args": []
+          "args": [],
+          "title_en": "Target xlsx → CSV/map_screen.csv (xlsx_to_csv.py)"
         },
         {
           "id": "S1.recondash",
           "title": "대사표 대시보드 열기 (Doc/recon/index.html)",
           "kind": "browser",
-          "path": "${reconOutDir}/index.html"
+          "path": "${reconOutDir}/index.html",
+          "title_en": "Open reconciliation dashboard (Doc/recon/index.html)"
         }
-      ]
+      ],
+      "title_en": "1. AS-IS Analysis (C# parser)"
     },
     {
       "id": "S2",
@@ -114,7 +147,8 @@
           "title": "DB 접속 점검 (asis MSSQL / tobe Oracle) — probe.py",
           "kind": "python",
           "script": "${dbconnDir}/probe.py",
-          "args": []
+          "args": [],
+          "title_en": "Check DB connections (asis MSSQL / tobe Oracle) — probe.py"
         },
         {
           "id": "S2.export",
@@ -126,7 +160,8 @@
             "type": "fileExists",
             "file": "${tobeOutDir}/db/proc_meta.csv",
             "label": "proc_meta.csv"
-          }
+          },
+          "title_en": "Export To-Be Oracle metadata → Doc/tobefacts/db (export_tobe_meta.py)"
         },
         {
           "id": "S2.run",
@@ -138,13 +173,15 @@
             "file": "${tobeOutDir}/crosscheck_report.csv",
             "max": 0,
             "label": "교차검증 불일치"
-          }
+          },
+          "title_en": "Run To-Be parser (extract → cross-check → pack)"
         },
         {
           "id": "S2.rules",
           "title": "룰 사전 열기 (rules/)",
           "kind": "open",
-          "path": "${harnessDir}/rules"
+          "path": "${harnessDir}/rules",
+          "title_en": "Open rule dictionaries (rules/)"
         },
         {
           "id": "S2.mine",
@@ -158,41 +195,48 @@
             "${outDir}",
             "--out",
             "${harnessDir}/rules"
-          ]
+          ],
+          "title_en": "Mine dictionaries (paired screens → *.mined.csv)"
         },
         {
           "id": "S2.dbmeta",
           "title": "클라우드 메타 CSV 폴더 열기 (Doc/tobefacts/db)",
           "kind": "open",
-          "path": "${tobeOutDir}/db"
+          "path": "${tobeOutDir}/db",
+          "title_en": "Open cloud metadata CSV folder (Doc/tobefacts/db)"
         },
         {
           "id": "S2.dbconn",
           "title": "DB 접속정보 열기 (dbconn.json — 비밀번호는 .env.asis)",
           "kind": "open",
-          "path": "${dbconnDir}/dbconn.json"
+          "path": "${dbconnDir}/dbconn.json",
+          "title_en": "Open DB connection info (dbconn.json — passwords in .env.asis)"
         },
         {
           "id": "S2.examples",
           "title": "하우스 스타일 예제 채굴 (mine-examples.js → prompts/examples)",
           "kind": "node",
           "script": "${harnessDir}/mine-examples.js",
-          "args": []
+          "args": [],
+          "title_en": "Mine house-style examples (mine-examples.js → prompts/examples)"
         },
         {
           "id": "S2.framework",
           "title": "To-Be 프레임워크·공통 카탈로그 생성 (framework.js → Doc/tobefacts/framework, rules/tobe_catalog.csv)",
           "kind": "node",
           "script": "${root}/tools/TobeFacts/framework.js",
-          "args": []
+          "args": [],
+          "title_en": "Build To-Be framework & shared catalog (framework.js)"
         },
         {
           "id": "S2.frameworkopen",
           "title": "카탈로그 열기 (Doc/tobefacts/framework/INDEX.md)",
           "kind": "open",
-          "path": "${tobeOutDir}/framework/INDEX.md"
+          "path": "${tobeOutDir}/framework/INDEX.md",
+          "title_en": "Open catalog (Doc/tobefacts/framework/INDEX.md)"
         }
-      ]
+      ],
+      "title_en": "2. TO-BE Analysis · Rules"
     },
     {
       "id": "S3",
@@ -223,7 +267,8 @@
             "type": "agentGates",
             "file": "${outDir}/agent",
             "label": "Agent 게이트"
-          }
+          },
+          "title_en": "Run Agent — ID"
         },
         {
           "id": "S3.docs",
@@ -246,18 +291,58 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Regenerate 3 docs only — ID (-Phase docs)"
+        },
+        {
+          "id": "S3.xlsx",
+          "title": "문서 Excel 생성 — 화면ID (make_docs.py → 설계서·분석서·GAP·TestCases4, 팀 양식)",
+          "kind": "python",
+          "script": "${root}/tools/Docs/make_docs.py",
+          "args": [
+            "${input:ids}"
+          ],
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID(공백 구분)",
+              "default": "DMF0052"
+            }
+          ],
+          "splitArgs": true,
+          "gate": {
+            "type": "fileExists",
+            "file": "${root}/Doc/documents/${input:id}",
+            "label": "Excel"
+          },
+          "title_en": "Generate Excel docs — ID (make_docs.py → design · analysis · GAP · TestCases4, team format)"
+        },
+        {
+          "id": "S3.xlsxopen",
+          "title": "문서 Excel 폴더 열기 — 화면ID",
+          "kind": "open",
+          "path": "${root}/Doc/documents/${input:id}",
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ],
+          "title_en": "Open Excel docs folder — ID"
         },
         {
           "id": "S3.batch",
           "title": "Agent 전 화면 배치 (도메인 선택)",
           "kind": "agentBatch",
-          "script": "${toolsDir}/agent.ps1"
+          "script": "${toolsDir}/agent.ps1",
+          "title_en": "Agent batch for all screens (choose domain)"
         },
         {
           "id": "S3.report",
           "title": "Agent 게이트 집계 리포트",
-          "kind": "gateReport"
+          "kind": "gateReport",
+          "title_en": "Agent gate summary report"
         },
         {
           "id": "S3.open",
@@ -270,9 +355,11 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Open Agent results — ID"
         }
-      ]
+      ],
+      "title_en": "3. Draft Documents (Agent)"
     },
     {
       "id": "S4",
@@ -289,7 +376,8 @@
             "file": "${gapDir}/_summary.csv",
             "min": 1,
             "label": "GAP 요약"
-          }
+          },
+          "title_en": "Run GAP for all screens → Doc/gap"
         },
         {
           "id": "S4.one",
@@ -306,13 +394,15 @@
               "prompt": "화면ID (공백으로 여러 개)",
               "default": "DMF0045"
             }
-          ]
+          ],
+          "title_en": "Run GAP — ID"
         },
         {
           "id": "S4.dash",
           "title": "GAP 대시보드 열기 (index.html)",
           "kind": "browser",
-          "path": "${gapDir}/index.html"
+          "path": "${gapDir}/index.html",
+          "title_en": "Open GAP dashboard (index.html)"
         },
         {
           "id": "S4.open",
@@ -325,7 +415,8 @@
               "prompt": "화면ID",
               "default": "DMF0045"
             }
-          ]
+          ],
+          "title_en": "GAP result CSV — ID"
         },
         {
           "id": "S4.goldgen",
@@ -342,7 +433,8 @@
               "prompt": "화면ID (비우면 전체)",
               "default": ""
             }
-          ]
+          ],
+          "title_en": "Generate golden cases (As-is SP ↔ To-Be PROC pairs) — gen_golden_cases.py"
         },
         {
           "id": "S4.golden",
@@ -364,15 +456,18 @@
             "type": "fileExists",
             "file": "${goldenDir}/_summary.md",
             "label": "골든 요약"
-          }
+          },
+          "title_en": "Run golden tests (compare both SP results) — golden.py"
         },
         {
           "id": "S4.goldopen",
           "title": "골든 결과 열기 (Doc/golden/_summary.md)",
           "kind": "open",
-          "path": "${goldenDir}/_summary.md"
+          "path": "${goldenDir}/_summary.md",
+          "title_en": "Open golden results (Doc/golden/_summary.md)"
         }
-      ]
+      ],
+      "title_en": "4. GAP Analysis"
     },
     {
       "id": "S5",
@@ -401,7 +496,34 @@
             "type": "fileExists",
             "file": "${genDir}/${input:id}/PIPELINE.md",
             "label": "PIPELINE.md"
-          }
+          },
+          "title_en": "★ One ID end-to-end — ID (pipeline.js: skeleton → registration SQL → PKG → FE repair → PKG port → E2E spec → reconciliation)"
+        },
+        {
+          "id": "S5.pipelinedesign",
+          "title": "★ 새 화면 — 화면설계서 우선(from 설계서: pipeline --design Doc/asisfacts/agent/<ID>/screen_design.md)",
+          "kind": "node",
+          "script": "${harnessDir}/pipeline.js",
+          "args": [
+            "${input:id}",
+            "--max",
+            "3",
+            "--design",
+            "${outDir}/agent/${input:id}/screen_design.md"
+          ],
+          "inputs": [
+            {
+              "name": "id",
+              "prompt": "화면ID",
+              "default": "DMF0052"
+            }
+          ],
+          "gate": {
+            "type": "fileExists",
+            "file": "${genDir}/${input:id}/PIPELINE.md",
+            "label": "PIPELINE.md"
+          },
+          "title_en": "★ New screen — design doc first (pipeline --design …/screen_design.md)"
         },
         {
           "id": "S5.pipelinedry",
@@ -418,7 +540,8 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Pipeline dry run — ID (--no-claude: generate + gates only)"
         },
         {
           "id": "S5.pipelineregen",
@@ -438,7 +561,8 @@
               "default": "DMF0052"
             }
           ],
-          "confirm": "Claude 가 이식한 <ID>_PKG.sql 을 버리고 골격부터 다시 만듭니다. 진행할까요?"
+          "confirm": "Claude 가 이식한 <ID>_PKG.sql 을 버리고 골격부터 다시 만듭니다. 진행할까요?",
+          "title_en": "Pipeline — force PKG skeleton regeneration (--regen-pkg, discards port)"
         },
         {
           "id": "S5.new",
@@ -460,7 +584,8 @@
             "type": "fileExists",
             "file": "${genDir}/${input:id}/GEN_NOTES.md",
             "label": "GEN_NOTES"
-          }
+          },
+          "title_en": "Create new screen — ID (new-screen.ps1)"
         },
         {
           "id": "S5.repair",
@@ -480,7 +605,8 @@
               "default": "DMF0052"
             }
           ],
-          "confirm": "Claude Code 를 최대 3회 호출합니다. 진행할까요?"
+          "confirm": "Claude Code 를 최대 3회 호출합니다. 진행할까요?",
+          "title_en": "Auto repair loop — ID (gen → Claude → gate, 3 retries)"
         },
         {
           "id": "S5.claude",
@@ -493,7 +619,8 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "[Claude Code] Port TODOs — ID"
         },
         {
           "id": "S5.check",
@@ -510,7 +637,8 @@
               "prompt": "nscm-fe 페이지 폴더 절대경로",
               "default": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\edi-summary"
             }
-          ]
+          ],
+          "title_en": "Gate check — page folder (check.js)"
         },
         {
           "id": "S5.final",
@@ -528,7 +656,8 @@
               "prompt": "nscm-fe 페이지 폴더 절대경로",
               "default": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\edi-summary"
             }
-          ]
+          ],
+          "title_en": "Final gate (--final, zero unimplemented)"
         },
         {
           "id": "S5.notes",
@@ -541,7 +670,8 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Open GEN_NOTES — ID"
         },
         {
           "id": "S5.diff",
@@ -553,7 +683,8 @@
               "prompt": "nscm-fe 페이지 폴더 절대경로",
               "default": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\edi-summary"
             }
-          ]
+          ],
+          "title_en": "Compare source before/after — page folder (git)"
         },
         {
           "id": "S5.repairlog",
@@ -566,7 +697,8 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Open repair log — ID (REPAIR.md)"
         },
         {
           "id": "S5.tsc",
@@ -585,7 +717,8 @@
               "prompt": "nscm-fe 페이지 폴더 절대경로",
               "default": "C:\\Projects\\NSCM\\nscm-fe\\features\\demand\\src\\pages\\edi-summary"
             }
-          ]
+          ],
+          "title_en": "Compile · lint gate — page folder (check.js --tsc --lint)"
         },
         {
           "id": "S5.regsql",
@@ -601,7 +734,8 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Generate Oracle registration SQL — ID (gen-register-sql.js)"
         },
         {
           "id": "S5.regopen",
@@ -614,7 +748,8 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Open registration SQL — ID"
         },
         {
           "id": "S5.pkg",
@@ -630,7 +765,8 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Generate Oracle PKG skeleton — ID (gen-pkg.js)"
         },
         {
           "id": "S5.pkgrepair",
@@ -650,7 +786,8 @@
               "default": "DMF0052"
             }
           ],
-          "confirm": "Claude Code 를 최대 3회 호출합니다. 진행할까요?"
+          "confirm": "Claude Code 를 최대 3회 호출합니다. 진행할까요?",
+          "title_en": "PKG port loop — ID (Claude ×3 + check-pkg)"
         },
         {
           "id": "S5.pkgcheck",
@@ -666,7 +803,8 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "PKG gate — ID (check-pkg.js)"
         },
         {
           "id": "S5.pkgdeploy",
@@ -684,7 +822,8 @@
               "default": "DMF0052"
             }
           ],
-          "confirm": "To-Be Oracle 에 PACKAGE 를 CREATE OR REPLACE 합니다. 진행할까요?"
+          "confirm": "To-Be Oracle 에 PACKAGE 를 CREATE OR REPLACE 합니다. 진행할까요?",
+          "title_en": "Compile & deploy PKG — ID (run_sql.py --commit, USER_ERRORS)"
         },
         {
           "id": "S5.regrun",
@@ -700,7 +839,8 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Preview registration SQL — ID (run_sql.py, ROLLBACK)"
         },
         {
           "id": "S5.regcommit",
@@ -718,7 +858,8 @@
               "default": "DMF0052"
             }
           ],
-          "confirm": "To-Be Oracle 메타(메뉴·PROC·시트컬럼·API·권한)를 COMMIT 합니다. 미리보기 BLOCK 8 결과를 확인했나요?"
+          "confirm": "To-Be Oracle 메타(메뉴·PROC·시트컬럼·API·권한)를 COMMIT 합니다. 미리보기 BLOCK 8 결과를 확인했나요?",
+          "title_en": "Commit registration SQL — ID (run_sql.py --commit)"
         },
         {
           "id": "S5.revert",
@@ -734,7 +875,8 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Preview registration revert — ID (<ID>_revert.sql, ROLLBACK)"
         },
         {
           "id": "S5.revertcommit",
@@ -752,7 +894,8 @@
               "default": "DMF0052"
             }
           ],
-          "confirm": "To-Be Oracle 에서 이 화면의 등록 메타를 삭제하고 PACKAGE 를 DROP 합니다. 진행할까요?"
+          "confirm": "To-Be Oracle 에서 이 화면의 등록 메타를 삭제하고 PACKAGE 를 DROP 합니다. 진행할까요?",
+          "title_en": "Commit registration revert — ID (delete 7 meta areas + DROP PKG, restore menu USE_YN)"
         },
         {
           "id": "S5.dod",
@@ -765,15 +908,38 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Open Definition of Done — ID (DOD.md)"
         }
-      ]
+      ],
+      "title_en": "5. New UI Development (Harness)"
     },
     {
       "id": "S6",
       "title": "6. GAP 확정 · 룰 보완 · 문서 확정",
       "detail": "GAP 반복 항목을 룰(CSV) 로 흡수해 원천 차단. 문서 3종 확정.",
       "tasks": [
+        {
+          "id": "S6.vibekeep",
+          "title": "이관 룰셋 열기 — 10_RULES_KEEP.md (지켜야 하는 룰 · 게이트 코드 매핑)",
+          "kind": "open",
+          "path": "${root}/tools/VibeManager/rules/10_RULES_KEEP.md",
+          "title_en": "Open migration rule set — 10_RULES_KEEP.md (rules to keep · gate code map)"
+        },
+        {
+          "id": "S6.vibeskip",
+          "title": "제외 룰 열기 — 20_RULES_SKIP.md (제외/보류 사유)",
+          "kind": "open",
+          "path": "${root}/tools/VibeManager/rules/20_RULES_SKIP.md",
+          "title_en": "Open excluded rules — 20_RULES_SKIP.md"
+        },
+        {
+          "id": "S6.vibeenv",
+          "title": "환경 단일 출처 열기 — 00_ENV.md",
+          "kind": "open",
+          "path": "${root}/tools/VibeManager/rules/00_ENV.md",
+          "title_en": "Open environment single source — 00_ENV.md"
+        },
         {
           "id": "S6.suggest",
           "title": "룰 보완 후보 산출 (suggest-rules.js → rules/_candidates.md)",
@@ -783,25 +949,29 @@
             "type": "fileExists",
             "file": "${harnessDir}/rules/_candidates.md",
             "label": "후보 파일"
-          }
+          },
+          "title_en": "Produce rule-update candidates (suggest-rules.js → rules/_candidates.md)"
         },
         {
           "id": "S6.cand",
           "title": "후보 열기 (_candidates.md)",
           "kind": "open",
-          "path": "${harnessDir}/rules/_candidates.md"
+          "path": "${harnessDir}/rules/_candidates.md",
+          "title_en": "Open candidates (_candidates.md)"
         },
         {
           "id": "S6.allowed",
           "title": "allowed_gaps.csv 편집",
           "kind": "open",
-          "path": "${harnessDir}/rules/allowed_gaps.csv"
+          "path": "${harnessDir}/rules/allowed_gaps.csv",
+          "title_en": "Edit allowed_gaps.csv"
         },
         {
           "id": "S6.regen",
           "title": "룰 반영 후 GAP 재실행",
           "kind": "node",
-          "script": "${harnessDir}/gap.js"
+          "script": "${harnessDir}/gap.js",
+          "title_en": "Re-run GAP after rule update"
         },
         {
           "id": "S6.docs",
@@ -824,14 +994,16 @@
               "prompt": "화면ID",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "Finalize 3 docs — ID (Agent -Phase docs)"
         },
         {
           "id": "S6.snapshot",
           "title": "생성기 회귀 스냅샷 비교 (snapshot.js)",
           "kind": "node",
           "script": "${harnessDir}/snapshot.js",
-          "args": []
+          "args": [],
+          "title_en": "Generator regression snapshot compare (snapshot.js)"
         },
         {
           "id": "S6.snapupd",
@@ -841,9 +1013,11 @@
           "args": [
             "--update"
           ],
-          "confirm": "현재 생성 결과를 기준선으로 저장합니다. 룰 변경이 의도한 것일 때만 실행하세요."
+          "confirm": "현재 생성 결과를 기준선으로 저장합니다. 룰 변경이 의도한 것일 때만 실행하세요.",
+          "title_en": "Update generator snapshot baseline (snapshot.js --update)"
         }
-      ]
+      ],
+      "title_en": "6. GAP Sign-off · Rule Updates · Final Docs"
     },
     {
       "id": "S7",
@@ -854,14 +1028,16 @@
           "title": "테스트계정/권한매트릭스 추출 (gen-accounts.py)",
           "kind": "python",
           "script": "${e2eDir}/gen-accounts.py",
-          "args": []
+          "args": [],
+          "title_en": "Extract test accounts / auth matrix (gen-accounts.py)"
         },
         {
           "id": "S7.probe",
           "title": "dev-login 가능 계정 확인 (probe-accounts.js) — BE 기동 필요",
           "kind": "node",
           "script": "${e2eDir}/probe-accounts.js",
-          "args": []
+          "args": [],
+          "title_en": "Check login-able accounts (probe-accounts.js) — BE must be running"
         },
         {
           "id": "S7.gen",
@@ -878,7 +1054,8 @@
               "prompt": "화면ID (비우면 --all)",
               "default": "--all"
             }
-          ]
+          ],
+          "title_en": "Generate E2E specs — ID (gen-e2e.js, empty = --all)"
         },
         {
           "id": "S7.smoke",
@@ -902,7 +1079,8 @@
               "default": "DMF0052"
             }
           ],
-          "splitArgs": true
+          "splitArgs": true,
+          "title_en": "Run E2E smoke (run-e2e.cmd smoke <ID>) — FE/BE must be running"
         },
         {
           "id": "S7.crud",
@@ -921,7 +1099,8 @@
               "default": "DMF0052"
             }
           ],
-          "splitArgs": true
+          "splitArgs": true,
+          "title_en": "Run E2E CRUD (run-e2e.cmd crud) — creates/deletes test data"
         },
         {
           "id": "S7.auth",
@@ -940,7 +1119,8 @@
               "default": "DMF0052"
             }
           ],
-          "splitArgs": true
+          "splitArgs": true,
+          "title_en": "Run E2E auth · Division matrix (run-e2e.cmd auth)"
         },
         {
           "id": "S7.all",
@@ -958,27 +1138,32 @@
               "prompt": "화면ID (공백으로 여러 개)",
               "default": "DMF0052"
             }
-          ]
+          ],
+          "title_en": "E2E all — ID (run-e2e.cmd all ID…)"
         },
         {
           "id": "S7.report",
           "title": "E2E 결과 열기 (Doc/e2e/results/_summary.md)",
           "kind": "open",
-          "path": "${e2eOutDir}/results/_summary.md"
+          "path": "${e2eOutDir}/results/_summary.md",
+          "title_en": "Open E2E results (Doc/e2e/results/_summary.md)"
         },
         {
           "id": "S7.html",
           "title": "E2E HTML 리포트 열기",
           "kind": "browser",
-          "path": "${e2eOutDir}/results/html/index.html"
+          "path": "${e2eOutDir}/results/html/index.html",
+          "title_en": "Open E2E HTML report"
         },
         {
           "id": "S7.matrix",
           "title": "계정×Division 매트릭스 열기 (_matrix.csv)",
           "kind": "open",
-          "path": "${e2eOutDir}/specs/_matrix.csv"
+          "path": "${e2eOutDir}/specs/_matrix.csv",
+          "title_en": "Open account × Division matrix (_matrix.csv)"
         }
-      ]
+      ],
+      "title_en": "7. Tests (E2E · CRUD · Auth/Division)"
     }
   ]
 }

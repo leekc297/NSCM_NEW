@@ -1,7 +1,7 @@
 ﻿"kind","asis_item","asis_detail","status","evidence","reason"
 "endpoint","biz:CommonData.YesOrNo","SP  (BIZ_MATCH) @<field:dtYesOrNo>:75","INTENDED","","공통 데이터(BIZ CommonDataList) → useTabComboQueries / useTabLookupQueries"
 "endpoint","biz:CommonData.CommonDataList","SP  (BIZ_MATCH) @RefreshOperation:1420","INTENDED","","공통 데이터(BIZ CommonDataList) → useTabComboQueries / useTabLookupQueries"
-"endpoint","SCP.SCP0104_GET_SPREAD_TITLE","SP SCP0104_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1601","INTENDED","","그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+"endpoint","SCP.SCP0104_GET_SPREAD_TITLE","SP SCP0104_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1601","COVERED","동적 헤더 시트 'spreadTitle' FE 조회",""
 "event","btnColumn.Click","→ btnColumn_Click @212","COVERED","D00-2-002 CapaLossPlan.tsx:332 setOpenColumnSetting(true) -> components/CapaLossPlanColumnModal.tsx:40 ColumnLayoutModal, OK 시 :73 clearFilters()",""
 "event","this.Load","→ Form_Load @1078","MISSING","","매핑표에 행 없음"
 "event","cboDivision.SelectedIndexChanged","→ cboDivision_SelectedIndexChanged @1859","COVERED","D00-2-004 CapaLossPlan.tsx:137~146 division 변경 effect(EditTracker clear + 필터 비움 + 개인화 초기화 + 컬럼메타 재fetch) + hooks/useCapaLossPlanCombos.ts:233~246 하위 콤보 기본선택 재계산",""

@@ -8,7 +8,7 @@
 "endpoint","SCM.SCM0001_GET_SITE_BY_DIVISION","SP SCM0001_GET_SITE_BY_DIVISION (MATCH) @GetScmSitebyDivision:5486","INTENDED","","공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
 "endpoint","SCM.SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER","SP SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER (MATCH) @GetPlantSitebyEndCustomer:5501","INTENDED","","공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
 "endpoint","DM.PR_GET_DAY_RANGE","SP PR_GET_DAY_RANGE (MATCH) @GetDayRange:5516","COVERED","SP 등록 메타(SCM_ADM_PROC_M) 에 등록",""
-"endpoint","DM.DMF0003_GET_SPREAD_TITLE","SP DMF0003_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:5532","INTENDED","","그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+"endpoint","DM.DMF0003_GET_SPREAD_TITLE","SP DMF0003_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:5532","COVERED","동적 헤더 시트 'spreadTitle' FE 조회",""
 "endpoint","DM.DMF0003_GET_SPREAD_TITLE_PSI","SP DMF0003_GET_SPREAD_TITLE_PSI (MATCH) @GetSpdTitle_PSI:5549","COVERED","SP 등록 메타(SCM_ADM_PROC_M) 에 등록",""
 "endpoint","DM.DMF0003_GET_SPREAD_TITLE_CAR","SP DMF0003_GET_SPREAD_TITLE_CAR (MATCH) @GetSpdTitle_Car:5568","COVERED","SP 등록 메타(SCM_ADM_PROC_M) 에 등록",""
 "endpoint","DM.DMF0003_GET_BUCKET_TYPE_CODE","SP DMF0003_GET_BUCKET_TYPE_CODE (MATCH) @GetBucketType:5585","INTENDED","","공통코드 콤보 → 등록 콤보ID(useTabComboQueries)"

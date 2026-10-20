@@ -102,13 +102,26 @@ const sheets = Object.keys(sheetRows).filter(s => s !== '(시트 미상)').map(s
 const mainSheets = sheets.filter(s => !s.popup); const popupSheets = sheets.filter(s => s.popup);
 if (!mainSheets.length) mainSheets.push({ name: 'main', key: 'MAIN', rule: '(시트 미상 — 메타 확인)', rows: [], popup: false });
 const divisionCols = grid.length ? Object.keys(grid[0]).filter(k => !['sheet', 'sheet_rule', 'column', 'label', 'source'].includes(k)) : [];
-const hasSpreadTitle = endpoints.some(e => /_SPREAD_TITLE/i.test(e.sp_or_sql || e.key));
+// 동적 헤더(타이틀) SP — 2026-10-20 SCP0096 보강: 기존 `_SPREAD_TITLE` 정규식 1개라 GetSpdTitle → *_GET_SHEET_CALENDAR_3SPAN(기간 3단 헤더)을
+//   놓쳐 SHEETS 에 타이틀 시트가 안 생기고 GEN_NOTES TODO 에도 안 떴다 → 후속 수작업이 BE 에 없는 응답 키(o_rc1_columns)로 컬럼을 파생.
+//   판정은 lib/dyncol(check.js B27 · gap.js 와 동일): SP 이름 계열 + 호출 메서드(GetSpdTitle…) + grid_code DB루프. 메타형(SHEET_COLUMNS 만 읽는 공통 타이틀)은 admin 컬럼 메타로 대체.
+const DY = require('./lib/dyncol');
+const titleEps = DY.asisTitleEndpoints(endpoints).filter(t => t.kind === 'period'); const titleLoops = DY.asisDbLoop(sdir);
+const corpMeta = (() => { const f = cfg.tobeOutDir && path.join(cfg.tobeOutDir, 'db', 'proc_meta.csv'); return f && fs.existsSync(f) ? readCsv(f).filter(r => r.menu_id === ID && r.use_yn !== 'N' && r.proc) : []; })();
+// 시트명: ①사내 정확 배선 시트(예: SCP0096 'calendar') ②같은 화면 타이틀 계열 사내 시트(예: SCP0016 3SPAN_ISO → 'spreadTitle')
+//         ③배선 없음 → 3SPAN/CALENDAR 계열 'calendar' · 그 외 'spreadTitle'(기존 관례)
+const corpFamily = DY.corpAllTitleSheets(corpMeta);
+const titleSheetsAll = titleEps.map(t => { const c = DY.corpTitleSheets(t.sp, corpMeta); const name = c.via === 'exact' ? c.sheets[0] : corpFamily.length ? corpFamily[0] : (/CALENDAR/i.test(t.sp) ? 'calendar' : 'spreadTitle'); return { sp: t.sp, members: t.members, name, key: name.replace(/([a-z])([A-Z])/g, '$1_$2').replace(/[^A-Za-z0-9]+/g, '_').toUpperCase(), corpProc: c.via === 'exact' ? c.procs[0] : '', via: c.via === 'exact' ? 'exact' : corpFamily.length ? 'family' : 'none' }; });
+// SHEETS enum 용(시트명 중복 제거) — SP→시트 배정(btnCdOf)은 titleSheetsAll 로 전부 수행
+const titleSheets = titleSheetsAll.filter((t, i, arr) => arr.findIndex(x => x.name === t.name) === i).map(t => ({ ...t, sp: titleSheetsAll.filter(x => x.name === t.name).map(x => x.sp).join(' / '), members: [...new Set(titleSheetsAll.filter(x => x.name === t.name).flatMap(x => x.members))], corpProc: titleSheetsAll.filter(x => x.name === t.name).map(x => x.corpProc).find(Boolean) || '' }));
+const hasSpreadTitle = titleSheets.length > 0 || endpoints.some(e => /_SPREAD_TITLE/i.test(e.sp_or_sql || e.key));
 // ── 3) 엔드포인트 → register ──
 const eps = {}; for (const e of endpoints) { const k = e.key || e.candidate; if (!k) continue; eps[k] = eps[k] || { key: k, sp: (e.sp_or_sql || '').replace(/^SP\s+/, ''), status: e.status, members: new Set(), entries: new Set() }; eps[k].members.add(e.member); }
 for (const f of flow) { if (eps[f.endpoint]) eps[f.endpoint].entries.add(`${f.entry_kind}:${f.entry}`); }
 const btnCdOf = (ep) => {
   const en = [...ep.entries].join(' ');
   const sp = ep.sp.toUpperCase();
+  { const ts = titleSheetsAll.find(t => t.sp.toUpperCase() === sp); if (ts) return { sheet: ts.name, btn: 'SEARCH' }; }
   if (/_SPREAD_TITLE/.test(sp)) return { sheet: 'spreadTitle', btn: 'SEARCH' };
   if (/UP_FX_GETCOMMONDATALIST|_GET_(COMMON|CODE|COMBO)/.test(sp)) return { sheet: '(combo)', btn: '(콤보ID 등록)' };
   if (/_(SAVE|SET|UPD|UPDATE|INS|INSERT|DEL|DELETE|MERGE)_/.test(sp)) return { sheet: mainSheets[0].name, btn: 'SAVE' };
@@ -175,7 +188,7 @@ const AN = require('./lib/analysis');
 const validations = AN.load(cfg.analysisRoot, AID, 'V'), expressions = AN.load(cfg.analysisRoot, AID, 'E');
 for (const h of handlers) { const tgt = h.e.target.replace(/^this\./, '').split('.')[0]; const gp = gridPlan.find(g => g.name === tgt); if (gp) gp.events.push(h); }
 if (gridPlan.length === 1) { for (const h of handlers) if (h.r.tobe_slot === 'grid-event' && !gridPlan[0].events.includes(h)) gridPlan[0].events.push(h); }
-const ctx = { controlsAll: controls, eventsAll: events, endpointsAll: endpoints, menuMeta, commonButtons, hasConditionPanel, members, pascal, ID, Page, validations, expressions, gridPlan, layout, props, kebab, feature, asisName, mainClass, popupClasses, fields, buttons, grids, skipped, todos, sheets, mainSheets, popupSheets, divisionCols, hasSpreadTitle, procs, handlers, tcs, idx, rules, label };
+const ctx = { controlsAll: controls, eventsAll: events, endpointsAll: endpoints, menuMeta, commonButtons, hasConditionPanel, members, pascal, ID, Page, validations, expressions, gridPlan, layout, props, kebab, feature, asisName, mainClass, popupClasses, fields, buttons, grids, skipped, todos, sheets, mainSheets, popupSheets, divisionCols, hasSpreadTitle, titleSheets, titleLoops, procs, handlers, tcs, idx, rules, label };
 const outRoot = path.join(cfg.genOutDir, ID);
 const pageRel = path.join('features', feature, 'src', 'pages', kebab);
 const files = T.render(ctx);
@@ -186,10 +199,11 @@ if (a.includes('--apply')) {
   const target = path.join(cfg.feRoot, pageRel);
   if (fs.existsSync(target)) {
     // --overwrite: 골격 재적용(생성기 수정 후). Claude/사람이 손댄 흔적(REPAIR.md 또는 매핑표 '구현' 행)이 있으면 거부 — 작업물 보호
-    const touched = require('./lib/applied').isTouched(target, path.join(cfg.genOutDir, ID));
+    const why = require('./lib/applied').touchReason(target, path.join(cfg.genOutDir, ID));
     if (!a.includes('--overwrite')) { console.error(`이미 존재: ${target} — 적용하지 않음(수동 병합). 골격만 있는 상태면 --overwrite 로 재적용`); process.exit(3); }
-    if (touched) { console.error(`이미 작업 흔적 있음(REPAIR.md 또는 매핑표 구현 행): ${target} — --overwrite 거부`); process.exit(3); }
-    fs.rmSync(target, { recursive: true, force: true }); console.log(`기존 골격 제거 후 재적용: ${target}`);
+    if (why && !a.includes('--force')) { console.error(`작업 흔적 있음(${why}): ${target} — --overwrite 거부. 정말 교체하려면 사람이 --force 를 명시(Doc/gen/${ID}/_backup/ 에 백업 후 교체)`); process.exit(3); }
+    const bak = path.join(cfg.genOutDir, ID, '_backup', new Date().toISOString().replace(/[:.]/g, '-')); fs.mkdirSync(bak, { recursive: true }); fs.cpSync(target, bak, { recursive: true }); console.log(`기존 페이지 백업: ${bak}`);
+    fs.rmSync(target, { recursive: true, force: true }); console.log(`기존 골격 제거 후 재적용: ${target}${why ? '  (--force: ' + why + ')' : ''}`);
   }
   fs.cpSync(path.join(outRoot, pageRel), target, { recursive: true });
   require('./lib/applied').writeManifest(target, path.join(cfg.genOutDir, ID)); // 적용 시점 파일 해시 — 이후 변경(Claude/사람 작업) 감지용

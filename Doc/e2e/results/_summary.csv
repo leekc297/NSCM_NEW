@@ -1,2 +1,3 @@
 ﻿menu_id,kind,account,status,duration_ms,soft_fails,errors,annotations
-"DMF0052","smoke","","FAIL","1556","1","Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인",""
+"DMF0052","smoke","","FAIL","107874","5","Error: 조회조건 'Today' (Checkbox) || Error: 조회조건 'Model / Nickname' (ItemField) || Error: 조회조건 'Project' (ProjectField) || Error: 조회조건 'Period' (PeriodField) || Error: 조회조건 'EDI Sender' (CustomDropdown)",""
+"SCP0096","smoke","","PASS","35284","0","","columns: 헤더 6 / 기대 6 / 누락 0: || calls: [[""Shipment Working Day OSP"",""SEARCH"",200,22,207]]"

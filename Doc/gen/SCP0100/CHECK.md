@@ -1,0 +1,59 @@
+# [Harness] SCP0100 global-psi-report — BLOCK 0 / WARN 57
+
+- WARN G02 As-is 엔드포인트 SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN (SCP0100_GET_SHEET_CALENDAR_3SPAN) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0100_GET_SITE (SCP0100_GET_SITE) 매핑표 §4 에 없음
+- WARN G02 As-is 엔드포인트 SCP.SCP0100_GET_PLAN_DATE (SCP0100_GET_PLAN_DATE) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 this.Shown → SCP0100_Global_PSI_Report_Shown 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 clbDivision.SelectedIndexChanged → ClbDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboGraphType.SelectedIndexChanged → CboGraphType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanDate.SelectedIndexChanged → CboPlanDate_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboBucketType.SelectedIndexChanged → CboBucketType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDisplay.SelectedIndexChanged → CboDisplay_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboSearchLevel.SelectedIndexChanged → CboSearchLevel_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboUnitQty.SelectedIndexChanged → CboUnitQty_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 rgrpSearchLevel.SelectedIndexChanged → rgrpSearchLevel_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnItemId.Click → BtnItemId_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnMeasure.Click → btnMeasure_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnProject.Click → BtnProject_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboPlanType.SelectedIndexChanged → CboPlanType_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 btnColumn.Click → BtnColumn_Click 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 dCalendar.ValueChanged → DCalendar_ValueChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 chkCellQty.CheckedChanged → ChkCellQty_CheckedChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 chkAS.CheckedChanged → ChkAS_CheckedChanged 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 usrButton1 / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 rgrpSearchLevel / RadioGroup 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkCellQty / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboPlanDate / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboBucketType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 dCalendar / UsrDateRangePicker3 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboGraphType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnItemId / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnMeasure / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtItemId / UsrTextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDisplay / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtProject / UsrTextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbFromSite / UsrCheckedList2 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbToSite / UsrCheckedList2 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtCellGroup / UsrTextBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnProject / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboPlanType / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 btnColumn / UsrButton 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboSearchLevel / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkAS / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboUnitQty / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbDivision / UsrCheckedList2 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chartMain / ChartControl 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdSearchLevel / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdDetail / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdSearchLevelDetail / FpSpread 매핑표 §1 에 없음
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/GlobalPsiReportForm.tsx:346
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/GlobalPsiReportGrid.tsx:162
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @GlobalPsiReport.tsx:108
+- WARN B13 AS-IS 파일:라인 주석(// AS-IS …:L) — 이벤트 18건 대비 AS-IS 참조 주석 2건 — 1:1 추적 근거
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0100/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0100/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0100/SCP0100_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0100/SCP0100_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN M08 대사표에 As-is DB루프 컬럼 생성 행 없음: InitSpreadDateColumn:755, InitSpreadDateColumn:760 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpreadDateColumn / 755 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md

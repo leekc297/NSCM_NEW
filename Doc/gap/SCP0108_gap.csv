@@ -1,6 +1,6 @@
 ﻿"kind","asis_item","asis_detail","status","evidence","reason"
 "endpoint","biz:CommonData.YesOrNo","SP  (BIZ_MATCH) @<field:dtYesOrNo>:69","INTENDED","","공통 데이터(BIZ CommonDataList) → useTabComboQueries / useTabLookupQueries"
-"endpoint","SCP.SCP0104_GET_SPREAD_TITLE","SP SCP0104_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1179","INTENDED","","그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+"endpoint","SCP.SCP0104_GET_SPREAD_TITLE","SP SCP0104_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1179","COVERED","동적 헤더 시트 'spreadTitle' FE 조회 (정확 배선 없음 — 같은 화면 타이틀 계열 시트)",""
 "event","btnColumn.Click","→ btnColumn_Click @208","COVERED","To-Be 주석에 As-is 핸들러/컨트롤 언급",""
 "event","this.Load","→ Form_Load @860","COVERED","To-Be 주석에 As-is 핸들러/컨트롤 언급",""
 "event","cboDivision.SelectedIndexChanged","→ cboDivision_SelectedIndexChanged @1236","UNMAPPED","","매핑표 없음"

@@ -15,6 +15,6 @@ const by = {}; for (const r of rows) { const k = r.menu_id || '(기타)'; by[k] 
 const agg = arr => arr.length ? `${arr.filter(r => r.status === 'PASS').length}/${arr.length}${arr.some(r => r.status === 'FAIL') ? ' ✗' : ''}` : '-';
 const md = [`# E2E 결과 — ${new Date().toISOString().slice(0, 16).replace('T', ' ')}`, '', `테스트 ${rows.length} · PASS ${rows.filter(r => r.status === 'PASS').length} · FAIL ${rows.filter(r => r.status === 'FAIL').length} · FLAKY ${rows.filter(r => r.status === 'FLAKY').length} · SKIP ${rows.filter(r => r.status === 'SKIP').length}`, '', '| 화면 | 스모크 | CRUD | 권한(계정×DIV) | 실패 요약 |', '|---|---|---|---|---|'];
 for (const [k, v] of Object.entries(by).sort()) md.push(`| ${k} | ${agg(v.smoke)} | ${agg(v.crud)} | ${agg(v.auth)} | ${[...v.smoke, ...v.crud, ...v.auth].filter(r => r.status === 'FAIL').map(r => `${r.kind}${r.account ? '[' + r.account + ']' : ''}: ${r.errors.split(' || ')[0].slice(0, 120)}`).slice(0, 3).join('<br>')} |`);
-md.push('', '상세: `_summary.csv` (어노테이션: columns=컬럼 대사, calls=call-proc, buttons=노출 버튼, division=DIV별 행수) · HTML: `html/index.html` · 실패 trace: `artifacts/`');
+md.push('', '상세: `_summary.csv` (어노테이션: columns=컬럼 대사, dynamic=동적 기간 컬럼(정적 메타 밖 binding 수·타이틀 시트 호출), calls=call-proc, buttons=노출 버튼, division=DIV별 행수) · HTML: `html/index.html` · 실패 trace: `artifacts/`');
 fs.writeFileSync(path.join(dir, '_summary.md'), md.join('\n') + '\n', 'utf8');
 console.log(md.slice(0, 3).join('\n')); console.log(`→ ${dir}\\_summary.md`);

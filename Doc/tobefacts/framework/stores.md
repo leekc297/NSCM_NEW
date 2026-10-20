@@ -33,7 +33,7 @@
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **useMessageStore** | `@shared/stores` | 281 |  |  |
+| **useMessageStore** | `@shared/stores` | 283 |  |  |
 | **useSessionStore** | `@shared/stores` | 178 |  |  |
 | **useUIStore** | `@shared/stores` | 11 |  |  |
 | **useDialogStore** | `@shared/stores` | 1 |  | 열려 있는 CustomDialog 스코프 스택을 추적하는 비영속 스토어. 부모 화면과 팝업 각각의 SubTitle 단축키가 "현재 활성 스코프"에서만 동작하도록 게이트하는 데 사용한다. 포커스/모달리스 여부와 무관하게 스택의 top이 활성 스코프를 결 |

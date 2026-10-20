@@ -1,6 +1,6 @@
 ﻿"kind","asis_item","asis_detail","status","evidence","reason"
 "endpoint","biz:CommonData.YesOrNo","SP  (BIZ_MATCH) @<field:dtYesOrNo>:74","INTENDED","","공통 데이터(BIZ CommonDataList) → useTabComboQueries / useTabLookupQueries"
-"endpoint","SCP.SCP0104_GET_SPREAD_TITLE","SP SCP0104_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1316","INTENDED","","그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+"endpoint","SCP.SCP0104_GET_SPREAD_TITLE","SP SCP0104_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1316","COVERED","동적 헤더 시트 'spreadTitle' FE 조회",""
 "event","btnColumn.Click","→ btnColumn_Click @661","COVERED","D00-2-002 `CapaSpeedPlan.tsx:272~293`, `components/CapaSpeedPlanColumnModal.tsx:50~65`",""
 "event","this.Load","→ Form_Load @870","COVERED","To-Be 주석에 As-is 핸들러/컨트롤 언급",""
 "event","cboDivision.SelectedIndexChanged","→ cboDivision_SelectedIndexChanged @1403","COVERED","D00-2-004 `components/CapaSpeedPlanForm.tsx:106`, `hooks/useCapaSpeedPlanConditionEffects.ts:59~68`",""

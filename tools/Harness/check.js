@@ -53,6 +53,24 @@ if (mapFile) for (const line of read(mapFile).split(/\r?\n/)) { const m = line.m
   else if (/^미구현/.test(row.status)) F(FINAL ? 'BLOCK' : 'WARN', 'M04', `미구현: ${row.id} ${row.summary}${row.reason ? ' — ' + row.reason : ''}`, '__asis-mapping__.md');
   if (/^구현/.test(row.status) && row.impl) { const fn = (row.impl.match(/([\w./-]+\.tsx?)/) || [])[1]; if (fn && !files.some(f => rel(f) === fn.replace(/^\.\//, ''))) F('WARN', 'M05', `구현 위치 파일 없음: ${row.id} → ${fn}`, '__asis-mapping__.md'); }
 }
+// 3b) 커밋본 대비 후퇴 감지 — 2026-10-19 SCP0096 사고(파이프라인이 손으로 완성한 커밋본을 골격으로 교체: 대사표 91→20행, dynamic-columns/types 삭제)
+//     git 이 추적하는 페이지면 ①커밋본 파일 삭제(M07) ②대사표 행·구현 수 축소(M06) 를 BLOCK — "빈 칸 0" 만 보던 M01~M05 의 구멍
+{
+  const cp = require('child_process'); const GT = require('./lib/applied').gitTracked(pageDir); // 감싸는 저장소 전부 확인(nscm-fe 중첩 .git 대응)
+  const git = args => { try { const r = cp.spawnSync('git', ['-C', GT.root, ...args], { encoding: 'utf8' }); return r.status === 0 ? r.stdout : null; } catch { return null; } };
+  const strip = f => { f = f.replace(/\\/g, '/'); const pre = GT && GT.rel !== '.' ? GT.rel + '/' : ''; return f.startsWith(pre) ? f.slice(pre.length) : f; };
+  if (GT) {
+    for (const d of (git(['ls-files', '--deleted', '--', GT.rel]) || '').split(/\r?\n/).filter(Boolean).map(strip)) F(FINAL ? 'BLOCK' : 'WARN', 'M07', `커밋본에 있던 파일이 삭제됨: ${d} — 골격 재생성으로 기능 유실 의심(git checkout -- 로 복원 후 병합, 저장소 ${GT.root})`, d);
+    if (mapFile && GT.files.some(f => strip(f) === '__asis-mapping__.md')) {
+      const headTxt = git(['show', `HEAD:${GT.rel === '.' ? '' : GT.rel + '/'}__asis-mapping__.md`]);
+      if (headTxt != null) {
+        const cnt = txt => { let n = 0, impl = 0; for (const line of txt.split(/\r?\n/)) { const m = line.match(/^\|\s*([A-Z]\d{2}-[\dP]+-\d{3})\s*\|(.*)\|\s*$/); if (!m) continue; n++; if (/^구현/.test((m[2].split('|').pop() || '').trim())) impl++; } return { n, impl }; };
+        const h = cnt(headTxt), c = cnt(read(mapFile));
+        if (c.n < h.n || c.impl < h.impl) F(FINAL ? 'BLOCK' : 'WARN', 'M06', `대사표 후퇴: 행 ${h.n}→${c.n} · 구현 ${h.impl}→${c.impl} (커밋본 대비) — 기존 대사표를 재생성하지 말고 커밋본 위에 행을 추가`, '__asis-mapping__.md');
+      }
+    }
+  }
+}
 // 4) As-is Fact Pack 대사 (gap-lite)
 const sdir = ID ? path.join(cfg.asisOutDir, 'screens', ID) : null;
 if (sdir && fs.existsSync(sdir)) {
@@ -83,7 +101,7 @@ if (sdir && fs.existsSync(sdir)) {
   const catalog = fs.existsSync(path.join(R, 'tobe_catalog.csv')) ? readCsv(path.join(R, 'tobe_catalog.csv')) : [];
   const allowedComps = new Set(catalog.filter(r => r.kind === 'component').map(r => r.name).concat(mapCtl.map(r => r.tobe_component)).concat(['FlexGridFilter', 'FlexGrid', 'FlexGridColumn', 'PanelSeparator', 'Panel', 'PanelGroup', 'Fragment']).concat(['FormItem', 'Grid', 'SearchArea', 'MainTitle', 'SubTitle', 'DataGrid', 'CustomDialog', 'Button', 'Box', 'Stack', 'Panel', 'PanelGroup', 'TabWrapper', 'TabItem', 'Typography', 'Tooltip', 'Divider', 'Label', 'ResultArea', 'ProgressIndicator', 'ColumnLayoutModal', 'MeasureSelectModal', 'ItemByDivisionModal', 'ProjectByDivisionModal', 'SsoUserModal', 'SsoDeptModal', 'CustomerModal', 'OwnerByDivisionModal', 'ItemField', 'ProjectField', 'DivisionField', 'SalesSiteField', 'TeamField', 'OwnerField', 'VersionField', 'FunctionSearchIcon', 'IcGridColumnSetup', 'IcMeasureSelect', 'CascadeDropdown', 'PeriodRangePicker', 'DatePickerCalendar', 'Radio', 'RadioGroup', 'Checkbox', 'InputField', 'TextField', 'CustomDropdown', 'PeriodField']));
   const localComps = new Set(files.filter(f => /\.tsx$/.test(f)).map(f => path.basename(f, '.tsx')));
-  for (const [f, t] of Object.entries(src)) if (catalog.length ? /\.tsx$/.test(f) : /Form\.tsx$/.test(f)) { for (const m of stripComments(t).matchAll(/<([A-Z][A-Za-z0-9]*)[\s/>]/g)) if (!allowedComps.has(m[1]) && !localComps.has(m[1]) && !/^(React|Fragment|Suspense)$/.test(m[1])) F('WARN', 'D01', `사전 밖 컴포넌트 <${m[1]}> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체`, rel(f)); }
+  for (const [f, t] of Object.entries(src)) if (catalog.length ? /\.tsx$/.test(f) : /Form\.tsx$/.test(f)) { for (const m of stripComments(t).matchAll(/(?<![\w\]\)])<([A-Z][A-Za-z0-9]*)[\s/>]/g)) if (!allowedComps.has(m[1]) && !localComps.has(m[1]) && !/^(React|Fragment|Suspense)$/.test(m[1])) F('WARN', 'D01', `사전 밖 컴포넌트 <${m[1]}> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체`, rel(f)); }
 } else if (ID) F('WARN', 'G00', `As-is Fact Pack 없음: ${sdir} — As-is 대사 생략 (신규 To-Be 전용 화면이면 정상)`);
 // 5) Validation / Expression 100% (룰 09) — 분석 MD 행 수 = 코드의 V-/E- 마커 수, 빈 apply 는 미이식
 if (ID && cfg.analysisRoot) {
@@ -136,7 +154,7 @@ const DOD = []; const dod = (code, ok, what, how, level) => { DOD.push({ code, o
   dod('B02', /export const MENU_ID = '[A-Z0-9_]+' as const/.test(constSrc) && /export type MENU_ID = typeof MENU_ID/.test(constSrc), 'constants: MENU_ID as const + type MENU_ID', 'useTabProcQuery<MENU_ID> 제네릭·procedures.d.ts 연결의 전제');
   dod('B03', /SHEETS/.test(constSrc), 'constants: SHEETS(시트명) 상수', '시트명 문자열 하드코딩 금지 — call-proc 3-키의 sheet');
   dod('B04', /createPersistedStoreWithTab/.test(storeSrc), 'store: createPersistedStoreWithTab', 'MDI 탭별 상태 격리 규약(룰 17)');
-  dod('B05', /useTabProcQuery<MENU_ID>/.test(pageSrc), 'Page: useTabProcQuery<MENU_ID> 조회', '화면 조회는 메타 기반 call-proc 훅으로 — apiClient 직접 호출 금지');
+  dod('B05', /useTabProcQuery<MENU_ID[,>]/.test(pageSrc), 'Page: useTabProcQuery<MENU_ID> 조회', '화면 조회는 메타 기반 call-proc 훅으로 — apiClient 직접 호출 금지');
   const hk = pageSrc.match(/const hotkeyConfig: HotkeyConfig = \{([\s\S]*?)\n  \};/); const hkBody = hk ? hk[1] : '';
   dod('B06', !!hk && /\bsearch:/.test(hkBody), 'SubTitle hotkeyConfig 에 search 지정', 'F5 조회 배선(룰 25 §1.5.1)');
   for (const k of ['save', 'insert', 'delete', 'upload', 'manual']) dod('B07', !hk || new RegExp(`\\b${k}:\\s*(false|\\w+)`).test(hkBody), `hotkeyConfig.${k} 명시(function 또는 false)`, '정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1)');
@@ -177,6 +195,119 @@ const DOD = []; const dod = (code, ok, what, how, level) => { DOD.push({ code, o
   dod('B20', files.some(f => /__tests__\/.*\.spec\.tsx?$/.test(rel(f))), '__tests__/*.spec.ts 단위 테스트', '룰 17 9-Step ⑨', 'WARN');
   // DB/메타 조각(Doc/gen) — 화면 하나의 나머지 조각
   if (ID) { const g = path.join(cfg.genOutDir, ID); for (const [fn, what] of [['register.json', '등록 3-키 초안'], ['e2e_plan.json', 'E2E 플랜'], [`${ID}_registration.sql`, 'Oracle 메타 등록 SQL(gen-register-sql.js)'], [`${ID}_PKG.sql`, 'Oracle PKG 골격(gen-pkg.js)']]) dod('B21', fs.existsSync(path.join(g, fn)), `Doc/gen/${ID}/${fn} — ${what}`, '화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)', 'WARN'); }
+  // B22~B25 — 2026-10-19 SCP0096 보강: 정적 게이트 PASS 인데 조회 0건·저장 미배선·초기기간 공란이던 구멍
+  //   원천: Doc/tobefacts/db/proc_meta.csv(사내 현행 API 배선) · proc_params.csv(PROC_M COL_NM) · cfg.asisSrcRoot 의 .cs 원문
+  const tobeDb = cfg.tobeOutDir ? path.join(cfg.tobeOutDir, 'db') : null;
+  if (ID && tobeDb && fs.existsSync(path.join(tobeDb, 'proc_meta.csv')) && fs.existsSync(path.join(tobeDb, 'proc_params.csv'))) {
+    const meta = readCsv(path.join(tobeDb, 'proc_meta.csv')).filter(r => r.menu_id === ID && r.use_yn !== 'N' && r.proc);
+    const params = readCsv(path.join(tobeDb, 'proc_params.csv'));
+    const sheetVals = (() => { const m = constSrc.match(/SHEETS\s*(=|\{)[\s\S]*?\}/); return m ? [...m[0].matchAll(/'([^']+)'/g)].map(x => x[1]) : []; })();
+    const searchRows = meta.filter(r => r.btn === 'SEARCH' && (sheetVals.length === 0 || sheetVals.includes(r.sheet)));
+    // B22: 조회 filter 키 = 사내 PROC_M IN COL_NM (BE 는 COL_NM 으로 positional 매핑 — 키가 다르면 NULL 전달 → 조회 0건·오류 없음)
+    const tf = storeSrc.match(/const toFilter\s*=[\s\S]*?=>\s*\(\{([\s\S]*?)\}\)/);
+    const filterKeys = tf ? [...tf[1].matchAll(/^\s*(\w+)\s*:/gm)].map(m => m[1]) : null;
+    if (!searchRows.length) dod('B22', false, `사내 메타(proc_meta.csv) 에 ${ID} SEARCH 배선 없음`, 'registration.sql 적용 전이면 정상 — 적용 후 export_tobe_meta 재실행으로 재판정', 'WARN');
+    for (const r of searchRows) {
+      const ins = params.filter(p => p.proc === r.proc && p.col_tp_cd === 'IN').map(p => p.col_nm); if (!ins.length) continue;
+      const have = filterKeys || ins.filter(k => new RegExp(`\\b${k}\\s*:`).test(storeSrc + pageSrc));
+      const missing = ins.filter(k => !have.includes(k)); const pn = r.proc.split('.').pop();
+      dod('B22', !missing.length, `조회 filter 키 = 사내 PROC_M COL_NM (${pn} · 시트 '${r.sheet}')`, missing.length ? `누락 ${missing.join(', ')} — 현재 키: ${(filterKeys || have).join(', ') || '(toFilter 없음)'} · BE positional 매핑이라 값이 NULL 로 감` : `IN ${ins.length}개 일치`);
+      if (filterKeys) { const extra = filterKeys.filter(k => !ins.includes(k)); if (extra.length) F('WARN', 'B22', `filter 키 ${extra.join(', ')} 는 ${pn} 의 IN 파라미터가 아님(서버가 무시)`, 'store'); }
+    }
+    // B23: registration.sql 의 API 배선이 사내 현행과 다르면(또는 프로시저명 공란) 적용 금지
+    const regSql = path.join(cfg.genOutDir, ID, `${ID}_registration.sql`);
+    if (fs.existsSync(regSql) && meta.length) {
+      const txt = read(regSql); const norm = s => s.replace(/[^A-Z0-9_]/gi, '_').toUpperCase(); const bad = [];
+      // API_TP_CD 는 하네스 'PROC' 외에 사내 현행 'PROC_SELECT'/'PROC_SAVE' 도 대조. API_ID 는 하네스 규칙명 또는 사내 현행 api_id 로 매칭(2026-10-20 SCP0096 미러 등록 SQL)
+      for (const m of txt.matchAll(/VALUES\s*\('([A-Z0-9_]+)',\s*'PROC[A-Z_]*',\s*NULL,\s*'[^']*',\s*'([^']*)'/g)) {
+        const apiId = m[1], proc = m[2]; const row = meta.find(r => norm(`${ID}_${r.sheet}_${r.btn}`) === apiId || r.api_id === apiId);
+        if (/\.P_$/.test(proc)) bad.push(`${apiId} → '${proc}'(프로시저명 공란)`); else if (row && row.proc !== proc) bad.push(`${apiId}: 등록 SQL ${proc} ≠ 사내 현행 ${row.proc}`);
+      }
+      dod('B23', !bad.length, 'registration.sql API 배선 = 사내 현행(proc_meta.csv)', bad.length ? bad.join(' · ') + ' — 그대로 적용하면 운용 중 배선이 바뀜(적용 금지 · register.json 정리)' : `${meta.length}행 대조 일치`);
+    }
+  }
+  // B24: As-is Form_Load/InitControls 초기 조회조건(InitValue · DateUtil.GetDayRange → SCM0001_GET_SCP_MONTH_PERIOD 등) — 프레임워크 유틸 호출이라 flow.csv 에 없다 → .cs 원문 대조
+  if (sdir && cfg.asisSrcRoot && fs.existsSync(path.join(sdir, 'files.csv'))) {
+    const csFiles = readCsv(path.join(sdir, 'files.csv')).filter(r => r.variant === 'current' && /\.cs$/i.test(r.file) && !/Designer\.cs$/i.test(r.file)).map(r => path.join(cfg.asisSrcRoot, r.file)).filter(f => fs.existsSync(f));
+    if (csFiles.length) {
+      const cs = csFiles.map(f => stripComments(read(f))).join('\n');
+      const hits = [...cs.matchAll(/\b(\w+)\.InitValue\s*=\s*([^;]+);|\b(\w+)\.(Text1|Text2|Text|Value)\s*=\s*((DateUtil|DateTime)\.[^;]+);/g)].map(m => m[0].trim().replace(/\s+/g, ' '));
+      const dateInit = hits.filter(h => /InitValue\s*=\s*\w*(DayRange|Date|Period|Month|Week)|DateUtil\.|DateTime\./i.test(h));
+      const initBlock = (storeSrc.match(/const init\w*Param[^=]*=\s*\{([\s\S]*?)\n\};/) || [, ''])[1];
+      const periodEmpty = /\b\w+(From|To)\s*:\s*''/.test(initBlock);
+      if (dateInit.length) dod('B24', !periodEmpty, 'As-is Form_Load 초기 조회기간(InitValue/GetDayRange) → store 초기값', `As-is: ${dateInit.slice(0, 3).join(' / ')} — 프레임워크 유틸 호출은 flow.csv 에 없으므로 .cs 를 직접 읽어 채운다(DateUtil.GetDayRange = SCM0001_GET_SCP_MONTH_PERIOD, Doc/tobefacts/db/proc_meta.csv 의 dayRange 배선 참조)`);
+      const otherInit = hits.filter(h => !dateInit.includes(h)); if (otherInit.length) F('WARN', 'B24', `As-is 초기값 ${otherInit.length}건(${otherInit.slice(0, 2).join(' / ')}) — store 초기값 반영 여부 사람 확인`, 'store');
+    }
+  }
+  // B25: hotkeyConfig 공통버튼 핸들러 본문이 비어 있음(TODO 스텁) — "false 가 아니면 통과" 이던 B08 의 구멍(SCP0096 handleSave)
+  if (hk) for (const k of ['save', 'insert', 'delete', 'upload']) {
+    const m = hkBody.match(new RegExp(`\\b${k}:\\s*(?:\\(\\)\\s*=>\\s*(?:void\\s+)?)?(\\w+)`)); if (!m || m[1] === 'false') continue;
+    const fn = m[1]; const def = pageSrc.search(new RegExp(`const ${fn}\\s*=`)); if (def < 0) continue;
+    const arrow = pageSrc.indexOf('=>', def); if (arrow < 0 || arrow - def > 300) continue; const open = pageSrc.indexOf('{', arrow); if (open < 0 || open - arrow > 5) continue;
+    let depth = 0, i = open; for (; i < pageSrc.length; i++) { const ch = pageSrc[i]; if (ch === '{') depth++; else if (ch === '}') { depth--; if (!depth) break; } }
+    const body = stripComments(pageSrc.slice(open + 1, i)).trim();
+    dod('B25', body.length > 0, `hotkeyConfig.${k} 핸들러 ${fn} 본문 있음`, body.length ? `${body.split('\n').length}줄` : `${fn} 본문이 비어 있음(TODO 스텁) — As-is 기능 미배선인데 B08 을 통과하던 구멍`);
+  }
+  // B26·B27 — 2026-10-20 SCP0096 보강: 조회 시 동적 기간 컬럼 0 인데 정적 게이트·DoD 28/28·GAP COVERED 로 통과하던 구멍
+  //   B26: RESPONSE_SET 값(응답 키) ⊂ 사내 PROC_M OUT COL_NM ∪ {DATARESULT} — BE BaseService 는 이 키만 만든다(대소문자 그대로).
+  //        o_rc1_columns 같은 ResultSetMetaData 사이드카는 SYS0013 DynamicQuery 전용 → 일반 화면에서 읽으면 항상 undefined.
+  //   B27: As-is 기간형 타이틀 SP(GetSpdTitle → *_GET_SHEET_CALENDAR_3SPAN / *_GET_SPREAD_TITLE …)가 있고 사내 배선이 있으면 FE 가 그 시트를 조회해야 한다.
+  //        메타형(SCM_MST_SHEET_COLUMNS 만 읽는 공통 타이틀)은 admin 컬럼 메타로 대체 = 판정 제외. 대사표 '제외/해당없음'+사유면 사람 결정으로 통과.
+  {
+    const DY = require('./lib/dyncol');
+    const tobeDb2 = cfg.tobeOutDir ? path.join(cfg.tobeOutDir, 'db') : null;
+    const pmF = tobeDb2 && path.join(tobeDb2, 'proc_meta.csv'), ppF = tobeDb2 && path.join(tobeDb2, 'proc_params.csv');
+    if (ID && pmF && fs.existsSync(pmF) && fs.existsSync(ppF)) {
+      const pm = readCsv(pmF), pp = readCsv(ppF);
+      const menuMeta = pm.filter(r => r.menu_id === ID && r.use_yn !== 'N' && r.proc);
+      const regF = path.join(cfg.genOutDir, ID, 'register.json'); let regProcs = [];
+      try { if (fs.existsSync(regF)) regProcs = (JSON.parse(read(regF)).procs || []).map(p => p.tobe_proc).filter(Boolean); } catch { }
+      const procs = [...new Set(menuMeta.map(r => r.proc).concat(regProcs))];
+      // B26
+      const rs = DY.responseSetValues(constSrc);
+      if (rs.length && procs.length) {
+        const own = DY.outKeys(procs, pp); const glob = DY.outKeys([...new Set(pp.map(p => p.proc))], pp);
+        const bad = [];
+        for (const { key, value } of rs) {
+          if (own.has(value)) continue;
+          const ci = [...own].find(o => o.toLowerCase() === value.toLowerCase());
+          if (ci) bad.push(`${key}='${value}' → 대소문자 불일치(사내 OUT '${ci}' — BE 는 COL_NM 그대로 키로 씀)`);
+          else if (glob.has(value)) F('WARN', 'B26', `RESPONSE_SET.${key}='${value}' 는 ${ID} 배선 프로시저의 OUT 이 아님(타 메뉴 프로시저 OUT 에는 있음 — 타 menuId 로 호출하는지 확인)`, 'constants');
+          else bad.push(`${key}='${value}' → 사내 PROC_M OUT 어디에도 없음${/_columns$/i.test(value) ? '(ResultSetMetaData 사이드카 = SYS0013 DynamicQuery 전용, 일반 call-proc 응답에 없음)' : ''}`);
+        }
+        dod('B26', !bad.length, 'RESPONSE_SET 응답 키 = 사내 PROC_M OUT COL_NM(proc_params.csv)', bad.length ? bad.join(' · ') + ' — 이 키로 읽는 값은 항상 undefined(빈 그리드·빈 팝업으로 보이고 오류는 안 남)' + (bad.some(b => /_columns'/.test(b)) ? '. 동적 헤더 원천은 사내 배선 타이틀 SP 시트(B27) 또는 Object.keys(rows[0])(mybatis callSettersOnNulls=true)' : '') : `${rs.length}키 일치`);
+      } else if (rs.length) F('WARN', 'B26', `사내 메타(proc_meta.csv)·register.json 에 ${ID} 프로시저 없음 — 응답 키 대조 불가`, 'constants');
+      // B27
+      if (sdir && fs.existsSync(path.join(sdir, 'endpoints.csv'))) {
+        const titles = DY.asisTitleEndpoints(readCsv(path.join(sdir, 'endpoints.csv'))); const loops = DY.asisDbLoop(sdir);
+        const exactSheets = new Set(titles.flatMap(t => { const c = DY.corpTitleSheets(t.sp, menuMeta); return c.via === 'exact' ? c.sheets : []; }));
+        for (const t of titles.filter(t => t.kind === 'period')) {
+          const c = DY.corpTitleSheets(t.sp, menuMeta, exactSheets);
+          // 정확 배선이면 그 시트만 인정. 정확 배선이 없으면 같은 화면 타이틀 계열 시트 조회도 인정(As-is 변형 SP — 예: 3SPAN_ISO ↔ 3SPAN 시트)
+          const used = [...new Set((c.via === 'exact' ? c.pairs : DY.corpAllTitlePairs(menuMeta)).filter(p => DY.consumesPair(src, p)).map(p => p.sheet + (p.btn !== 'SEARCH' ? '/' + p.btn : '')))];
+          const mr = mapRows.find(r => r.summary.includes(t.sp)); const decided = mr && /^(제외|해당없음)/.test(mr.status) && mr.reason;
+          const evid = `As-is ${t.members.join('/')} → ${t.sp} [${t.signals.join('+')}${loops.length ? ' + grid_code DB루프 ' + loops.slice(0, 2).join(',') : ''}]`;
+          if (used.length || decided) { dod('B27', true, `동적 헤더 원천 ${t.sp} → FE 조회`, used.length ? `시트 '${used.join("','")}' 조회` : `대사표 ${mr.id} ${mr.status}: ${mr.reason}`); continue; }
+          if (c.via === 'exact') dod('B27', false, `동적 헤더 원천 ${t.sp} → FE 조회`, `${evid} · 사내 배선 시트 '${c.sheets.join("','")}'(${c.procs.join(',')})를 FE 가 조회하지 않음 → 기간 컬럼이 그려지지 않음. SHEETS 에 시트 추가 + useTabProcQuery 로 조회기간을 넘겨 o_rc1(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)로 헤더 생성(As-is InitSpreadDateColumn 1:1)`);
+          else F('WARN', 'B27', `${evid} · 사내 정확 배선 없음${c.via === 'family' ? `(같은 화면 타이틀 계열 '${c.sheets.join("','")}' 추정)` : ''} — 동적 컬럼 원천을 확인: 배선 등록(DB 메타) 후 FE 조회 또는 대사표에 대체 근거(BE/메타 원문 확인)를 적고 '제외'`, 'grid');
+        }
+        if (!titles.length && loops.length) F('WARN', 'B27', `As-is grid_code DB루프(${loops.slice(0, 3).join(', ')}) — 루프 원천 결과셋이 타이틀 SP 판정에 안 걸림. 동적 컬럼 원천 확인`, 'grid');
+        // M08: As-is DB루프 컬럼 생성(grid_code DB_DRIVEN · Add*Column) → 대사표 행 필수. 대사표 생성기가 grid_effective(정적 컬럼)만 써서
+        //      동적 컬럼 생성 행이 한 번도 안 생겼던 구멍(2026-10-20 전수: 대사표 100페이지 중 31화면 73행 누락). 문서 누락이라 WARN — 미구현 자체는 B27/M09 가 차단.
+        const missLoop = loops.filter(loc => { const [mem, line] = loc.split(':'); return !mapRows.some(x => new RegExp(`${mem}\\s*[/:]\\s*${line}\\b`).test(x.summary)); });
+        if (mapFile && missLoop.length) F('WARN', 'M08', `대사표에 As-is DB루프 컬럼 생성 행 없음: ${missLoop.join(', ')} — '## §6 동적 컬럼' 에 행 추가(요지 '${missLoop[0].replace(':', ' / ')} (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치)`, '__asis-mapping__.md');
+        // M09: 대사표 엔드포인트 행이 '구현' 인데 사내 정확 배선 시트를 FE 가 조회하지 않음 = 구현 근거 불일치(SCP0096 D00-4-005 '데이터 alias 로 흡수' 사고).
+        //      2026-10-20 전수 1건(SCP0096) — 오탐 없음 → final BLOCK
+        const epSps = [...new Set(readCsv(path.join(sdir, 'endpoints.csv')).filter(e => e.variant !== 'legacy').map(e => (e.sp_or_sql || '').replace(/^SP\s+/, '').trim()).filter(Boolean))];
+        for (const sp of epSps) {
+          const row = mapRows.find(x => x.summary.includes(sp)); if (!row || !/^구현/.test(row.status)) continue;
+          const ex = menuMeta.filter(x => (x.proc_nm || '').toUpperCase().endsWith(sp.toUpperCase())); if (!ex.length) continue;
+          const sheets = [...new Set(ex.map(x => x.sheet))]; if (ex.some(x => DY.consumesPair(src, { sheet: x.sheet, btn: x.btn || 'SEARCH' }))) continue;
+          F(FINAL ? 'BLOCK' : 'WARN', 'M09', `구현 근거 불일치: ${row.id} '${sp}' 가 '구현' 인데 사내 배선 시트 '${sheets.join("','")}'(${[...new Set(ex.map(x => x.btn))].join('/')})를 FE 가 조회하지 않음 — 구현 위치/사유의 대체 설명을 BE·메타 원문으로 검증하고, 아니면 배선 시트를 조회하도록 구현`, '__asis-mapping__.md');
+        }
+      }
+    }
+  }
   // DoD 리포트
   try { const rep = path.join(cfg.genOutDir, ID || path.basename(pageDir)); fs.mkdirSync(rep, { recursive: true }); fs.writeFileSync(path.join(rep, 'DOD.md'), `# 완료 정의(DoD) — ${ID || path.basename(pageDir)} ${new Date().toISOString().slice(0, 16).replace('T', ' ')}\n\n${DOD.filter(d => d.ok).length}/${DOD.length} 충족\n\n| 코드 | 상태 | 항목 | 근거 |\n|---|---|---|---|\n` + DOD.map(d => `| ${d.code} | ${d.ok ? '✅' : '❌'} | ${d.what} | ${d.how} |`).join('\n') + '\n', 'utf8'); } catch { }
 }

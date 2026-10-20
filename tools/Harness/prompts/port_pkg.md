@@ -4,7 +4,8 @@
 
 ## 입력 (전부 Read)
 1. `Doc/gen/<ID>/<ID>_PKG_NOTES.md` — 프로시저별 특이사항(임시테이블·동적SQL·하위 SP·결과셋 컬럼)
-2. 변환 규칙: `Doc/_dev_rules/` 의 DB 변환 규칙 문서(ISNULL→NVL, GETDATE→SYSDATE, TOP→FETCH FIRST, +→||, CONVERT→TO_CHAR/TO_DATE, #temp→GTT(03_GTT)/WITH, @@ROWCOUNT→SQL%ROWCOUNT, 커서→FOR LOOP, sp_executesql→EXECUTE IMMEDIATE)
+2. **이관 Oracle 룰** `tools/VibeManager/rules/10_RULES_KEEP.md §H`(H1~H13: MSSQL 키워드 0, **센티널 '/'(2026-10-15 개정 — 아래 §센티널)**, NVL(x,NULL)·NVL(x,'-') 금지, NLS 마스크, dual cursor, 예외 전파, GTT DELETE, 성능 순서, 가짜 구현 금지) — check-pkg P01~P38 이 이를 판정한다.
+2-1. 변환 규칙: `Doc/_dev_rules/` 의 DB 변환 규칙 문서(ISNULL→NVL, GETDATE→SYSDATE, TOP→FETCH FIRST, +→||, CONVERT→TO_CHAR/TO_DATE, #temp→GTT(03_GTT)/WITH, @@ROWCOUNT→SQL%ROWCOUNT, 커서→FOR LOOP, sp_executesql→EXECUTE IMMEDIATE)
 3. 선례: `To-be_v2_converted/06_Packages/04_Package_PKG_DMF0004.sql`(GET/SAVE 표준형), `PKG_DMF0003.sql`(다중 O_RC), `03_GTT/`(임시테이블 대체), `05_Functions/`(FN_SPLITSTRING 등 공통 함수)
 4. 분할 파라미터(콤마 리스트)는 `TABLE(SCM_MGR.FN_SPLITSTRING(P_X, ','))`, 'ALL' 처리는 `(P_X = 'ALL' OR col IN (…))` 선례대로
 
@@ -14,6 +15,12 @@
 3. 하위 SP 호출은 해당 To-Be PKG.PROC 로. 공통 SP(UP_FX_*, SCM0001_GET_*)는 PKG_COM0000/PKG_DM0000 에서 찾고 없으면 NOTES 에 "공통 PKG 필요" 로 남긴다(임의 구현 금지).
 4. 끝나면 `node tools/Harness/check-pkg.js <ID>` 를 실행해 BLOCK 0 을 만든다(T-SQL 잔재·TODO·ASIS 블록 검사).
 5. 컴파일은 Oracle 에서: `tools/DbConn` 접속으로 `@<ID>_PKG.sql` 후 `USER_ERRORS` 확인 → 이어서 `<ID>_registration.sql` 재실행(PROC_M 확정).
+
+## 센티널 규칙 (⭐ 사용자 상시 지시 2026-10-15 — 별도 개정 대상이 아니라 이식과 동시에 적용)
+- MSSQL `ISNULL(x,'')` 의 빈값 초기값·비교 정규화는 **`NVL(x,'/')`** 로 쓴다. `NVL(x,'-')`·`DEFAULT '-'` 는 check-pkg **P39 BLOCK**.
+- 원래 데이터가 `'-'` 로 들어 있던 값은 `'-'` 그대로 둔다(`'/'` 는 NULL 을 채우는 초기값 전용). AS-IS 가 `'-'` 를 **실값**으로 쓰는 컬럼의 `= '-'` 비교는 유지한다 — 그 외 `'-'` 단독 비교는 **P40 WARN**(사유를 NOTES 에 남긴다).
+- 과도기(이관 빈값 `'-'` + 신규 빈값 `'/'` 공존): 빈값 술어는 `IN ('-','/')`, 센티널 키 조인은 **센티널이 실제 쓰이는 컬럼만** 양변 `DECODE(a,'-','/',NVL(a,'/')) = DECODE(b,'-','/',NVL(b,'/'))`. 실값 키(ITEM_ID·PROJECT_CODE 등)는 raw 로 두어 PK 인덱스를 탄다. MERGE 원천도 같은 정규화로 GROUP BY (ORA-30926 방지).
+- 숫자 `NVL(x,0)` / DATE `SYSDATE` 는 종전과 같다. 전문: `Doc/_rules_v2/hooks/oracle-null-sentinel-and-notnull-default.md` §0.5.
 
 ## 하지 말 것
 - As-is 에 없는 로직 추가/"개선" — 차이가 필요하면 NOTES 에 사유. 주석 처리된 As-is 코드 이식 금지.

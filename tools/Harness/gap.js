@@ -12,6 +12,7 @@ const R = cfg.rulesDir || path.join(__dirname, 'rules');
 const gapDir = cfg.gapDir || path.join(path.dirname(cfg.genOutDir), 'gap'); fs.mkdirSync(gapDir, { recursive: true });
 const gaps = readCsv(path.join(R, 'allowed_gaps.csv')), mapCtl = readCsv(path.join(R, 'map_control.csv'));
 const allowed = (kind, v) => { const g = gaps.find(g => g.kind === kind && new RegExp(g.pattern, 'i').test(v)); return g ? g.reason : null; };
+const DY = require('./lib/dyncol');
 const T = { idx: readCsv(path.join(cfg.tobeOutDir, 'screens', '_index.csv')), ep: readCsv(path.join(cfg.tobeOutDir, 'endpoints.csv')), ev: readCsv(path.join(cfg.tobeOutDir, 'events.csv')), ctl: readCsv(path.join(cfg.tobeOutDir, 'controls.csv')), refs: readCsv(path.join(cfg.tobeOutDir, 'asis_refs.csv')), map: readCsv(path.join(cfg.tobeOutDir, 'asis_mapping.csv')), consts: readCsv(path.join(cfg.tobeOutDir, 'constants.csv')), gc: readCsv(path.join(cfg.tobeOutDir, 'grid_columns.csv')), dts: readCsv(path.join(cfg.tobeOutDir, 'procedures_dts.csv')) };
 // 선택 입력: 클라우드에서 내려받은 To-Be SP 등록 메타 (PR_GET_PROCEDURES_METADATA → CSV: menu_id,sheet,btn,pkg,proc)
 const procMetaFile = path.join(cfg.tobeOutDir, 'db', 'proc_meta.csv');
@@ -43,6 +44,12 @@ for (const t of targets) {
   const out = { row: r => { detailRows.push(r); out0.row(r); }, close: () => out0.close() };
   const cnt = { ep: {}, ev: {}, ctl: {} }; const inc = (k, s) => cnt[k][s] = (cnt[k][s] || 0) + 1;
   // 1) 엔드포인트
+  // 1-0) 기간형 동적 헤더 SP(GetSpdTitle → *_3SPAN / *_SPREAD_TITLE …) — '사내 등록'만으로 COVERED 금지, FE 가 배선 시트를 실제 조회해야 COVERED
+  //      (2026-10-20 SCP0096: calendar 배선 등록 = COVERED 로 통과했지만 FE 미호출 → 조회 시 기간 컬럼 0). 판정 = lib/dyncol(check.js B27 과 동일)
+  const titleP = new Map(DY.asisTitleEndpoints(A.ep).filter(t => t.kind === 'period').map(t => [t.sp.toUpperCase(), t]));
+  const menuMeta = procMeta.filter(r => (r.menu_id || '').toUpperCase() === ID && r.use_yn !== 'N' && r.proc);
+  const exactSheets = new Set([...titleP.values()].flatMap(t => { const c = DY.corpTitleSheets(t.sp, menuMeta); return c.via === 'exact' ? c.sheets : []; }));
+  const pageSrc = (() => { const [feat, ...rest] = pk.split('/'); const pd = path.join(cfg.feRoot, 'features', feat, 'src', 'pages', ...rest); if (!feat || !fs.existsSync(pd)) return null; const walk = d => fs.readdirSync(d, { withFileTypes: true }).flatMap(x => x.isDirectory() ? (x.name === 'node_modules' ? [] : walk(path.join(d, x.name))) : [path.join(d, x.name)]); return Object.fromEntries(walk(pd).filter(f => /\.tsx?$/.test(f)).map(f => [f, fs.readFileSync(f, 'utf8')])); })();
   const seenEp = new Set();
   for (const e of A.ep) {
     const key = e.key || e.candidate; if (!key || seenEp.has(key)) continue; seenEp.add(key);
@@ -50,7 +57,13 @@ for (const t of targets) {
     let status, evidence = '', reason = '';
     const al = allowed('endpoint', sp) || allowed('endpoint', key);
     const m = mapRow(key) || (sp && mapRow(sp));
-    if (al) { status = 'INTENDED'; reason = al; }
+    const tp = sp && titleP.get(sp.toUpperCase());
+    const tc = tp && DY.corpTitleSheets(tp.sp, menuMeta, exactSheets);
+    const tUsed = tc && pageSrc ? [...new Set((tc.via === 'exact' ? tc.pairs : DY.corpAllTitlePairs(menuMeta)).filter(p => DY.consumesPair(pageSrc, p)).map(p => p.sheet + (p.btn !== 'SEARCH' ? '/' + p.btn : '')))] : [];
+    if (tp && !(m && /^(제외|해당없음)/.test(m.status)) && tUsed.length) { status = 'COVERED'; evidence = `동적 헤더 시트 '${tUsed.join("','")}' FE 조회${tc.via === 'exact' ? '' : ' (정확 배선 없음 — 같은 화면 타이틀 계열 시트)'}`; }
+    else if (tp && !(m && /^(제외|해당없음)/.test(m.status)) && tc.via === 'exact') { status = 'MISSING'; reason = `기간형 동적 헤더 SP — 사내 배선 시트 '${tc.sheets.join("','")}' 를 FE 가 조회하지 않음(등록만으로는 기간 컬럼이 안 그려짐, check.js B27)`; }
+    else if (tp && !(m && /^(제외|해당없음)/.test(m.status))) { status = 'MISSING'; reason = `기간형 동적 헤더 SP — 사내 정확 배선 없음·FE 조회 없음: 배선 등록 후 FE 조회 또는 대사표에 대체 근거 '제외'(check.js B27)`; }
+    else if (al) { status = 'INTENDED'; reason = al; }
     else if (m && /^(제외|해당없음)/.test(m.status)) { status = 'INTENDED'; reason = `${m.design_id} ${m.status}: ${m.reason}`; }
     else if (sp && metaText.toUpperCase().includes(sp.toUpperCase())) { status = 'COVERED'; evidence = 'SP 등록 메타(SCM_ADM_PROC_M) 에 등록'; }
     else if (sp && (codeText.includes(sp) || refText.includes(sp))) { status = 'COVERED'; evidence = codeText.includes(sp) ? 'To-Be 코드/procedures.d.ts 에 SP 언급' : 'To-Be 주석(asis_refs) 에 SP 언급'; }
@@ -98,6 +111,24 @@ for (const t of targets) {
   const hard = A.grid.filter(g => g.source === 'CODE' && !/popup/i.test(g.sheet)); const bindings = new Set(B.gc.map(x => x.binding.toUpperCase()));
   let hardMissing = 0;
   for (const g of hard) { const meta = metaCols.has(g.column.toUpperCase()); const ok = meta || bindings.has(g.column.toUpperCase()) || codeText.toUpperCase().includes(g.column.toUpperCase()); if (!ok) hardMissing++; out.row({ kind: 'hard_column', asis_item: `${g.sheet}.${g.column}`, asis_detail: g.label, status: ok ? 'COVERED' : (sheetCols.length ? 'MISSING' : 'UNMAPPED'), evidence: ok ? (meta ? 'SCM_MST_SHEET_COLUMNS 메타' : 'To-Be 컬럼 정의/코드') : '', reason: ok ? '' : 'As-is 하드코딩 컬럼이 To-Be 소스에 없음 — 메타(SCM_MST_SHEET_COLUMNS) 로 옮겨졌는지 DB 대사 필요' }); }
+  // 동적 컬럼(As-is grid_code DB_DRIVEN 컬럼 생성) — 2026-10-20 SCP0096: 정적 hard_column 축만 있어 DB루프 컬럼은 GAP 에 행 자체가 없었다.
+  //   원천 결과셋 = 같은 화면의 기간형 타이틀 SP. 그 사내 시트(정확 배선 우선, 없으면 타이틀 계열)를 FE 가 조회해야 COVERED. 타이틀 SP 판정 밖 루프는 UNMAPPED(원천 확인 필요).
+  {
+    const loops = DY.asisDbLoop(sdir);
+    const exactPairs = [...titleP.values()].flatMap(t => { const c = DY.corpTitleSheets(t.sp, menuMeta); return c.via === 'exact' ? c.pairs : []; });
+    const srcPairs = exactPairs.length ? exactPairs : DY.corpAllTitlePairs(menuMeta);
+    const srcSheets = [...new Set(srcPairs.map(p => p.sheet + (p.btn !== 'SEARCH' ? '/' + p.btn : '')))];
+    const used = pageSrc ? [...new Set(srcPairs.filter(p => DY.consumesPair(pageSrc, p)).map(p => p.sheet + (p.btn !== 'SEARCH' ? '/' + p.btn : '')))] : [];
+    const dm = m => B.map.find(x => new RegExp(`${m.split(':')[0]}\\s*[/:]\\s*${m.split(':')[1]}\\b`).test(x.summary));
+    for (const loc of loops) {
+      const mr = dm(loc); let status, evidence = '', reason = '';
+      if (mr && /^(제외|해당없음)/.test(mr.status)) { status = 'INTENDED'; reason = `${mr.design_id} ${mr.status}: ${mr.reason}`; }
+      else if (used.length) { status = 'COVERED'; evidence = `타이틀 시트 '${used.join("','")}' FE 조회${mr ? ' · 대사표 ' + mr.design_id : ' · 대사표 §6 행 없음(M08)'}`; }
+      else if (!titleP.size) { status = 'UNMAPPED'; reason = 'DB루프 원천 결과셋이 기간형 타이틀 SP 판정에 안 걸림 — 원천 확인 필요'; }
+      else { status = 'MISSING'; reason = srcSheets.length ? `동적 컬럼 원천 타이틀 시트 '${srcSheets.join("','")}' 를 FE 가 조회하지 않음 — 조회 시 이 컬럼들이 생성되지 않음(B27)` : '동적 컬럼 원천 타이틀 SP 의 사내 배선 없음 — DB 메타 등록 후 FE 조회(B27)'; }
+      out.row({ kind: 'dynamic_column', asis_item: loc, asis_detail: `DB루프 컬럼 생성 ← ${[...titleP.values()].map(t => t.sp).join(', ') || '(타이틀 SP 미판정)'}`, status, evidence, reason });
+    }
+  }
   out.close();
   const g = k => ['COVERED', 'INTENDED', 'MISSING', 'UNMAPPED'].map(s => cnt[k][s] || 0);
   const [epC, epI, epM] = g('ep'), [evC, evI, evM, evU] = g('ev'), [ctC, ctI, ctM, ctU] = g('ctl');
@@ -150,7 +181,7 @@ const key={id:d=>d.id,pk:d=>d.pk,hasMap:d=>d.hasMap?1:0,ep:d=>d.counts.epM,ev:d=
 function render(){const rows=filt().sort((a,b)=>{const x=key[sortK](a),y=key[sortK](b);return (x<y?-1:x>y?1:0)*(sortAsc?1:-1);});tiles(rows);
 tb.innerHTML=rows.map(d=>{const c=d.counts;const sc=d.score>=80?'hi':d.score>=50?'mid':'';return '<tr class="row" data-id="'+d.id+'"><td><b>'+d.id+'</b></td><td>'+d.pk+'</td><td>'+(d.hasMap?'Y':'-')+'</td><td><span class="c">'+c.epC+'</span>/<span class="i">'+c.epI+'</span>/<span class="m">'+c.epM+'</span></td><td><span class="c">'+c.evC+'</span>/<span class="i">'+c.evI+'</span>/<span class="m">'+c.evM+'</span>/<span class="u">'+c.evU+'</span></td><td><span class="c">'+c.ctC+'</span>/<span class="i">'+c.ctI+'</span>/<span class="m">'+c.ctM+'</span>/<span class="u">'+c.ctU+'</span></td><td>'+c.sheetMissing+'/'+c.sheets+'</td><td>'+c.hardMissing+'/'+c.hard+'</td><td><span class="score '+sc+'">'+d.score+'</span></td></tr>';}).join('');}
 tb.addEventListener('click',e=>{const tr=e.target.closest('tr.row');if(!tr)return;const d=DATA.find(x=>x.id===tr.dataset.id);const st={COVERED:'c',INTENDED:'i',MISSING:'m',UNMAPPED:'u'};
-$('#detail').style.display='block';$('#detail').innerHTML='<h2>'+d.id+' <small style="color:var(--mute)">'+d.pk+' · '+(d.hasMap?'__asis-mapping__.md 있음':'매핑표 없음')+' · Doc/gap/'+d.id+'_gap.csv</small></h2>'+['endpoint','event','control','sheet','hard_column'].map(k=>{const rs=d.rows.filter(r=>r.kind===k);if(!rs.length)return '';return '<h3 style="font-size:14px;margin:10px 0 4px">'+({endpoint:'엔드포인트(SP)',event:'이벤트',control:'컨트롤',sheet:'시트',hard_column:'하드코딩 컬럼'})[k]+' ('+rs.length+')</h3><table><thead><tr><th>As-is</th><th>상세</th><th>판정</th><th>근거 / 사유</th></tr></thead><tbody>'+rs.map(r=>'<tr><td>'+esc(r.asis_item)+'</td><td>'+esc(r.asis_detail)+'</td><td class="'+st[r.status]+'">'+r.status+'</td><td>'+esc(r.evidence||r.reason)+'</td></tr>').join('')+'</tbody></table>';}).join('');$('#detail').scrollIntoView({behavior:'smooth'});});
+$('#detail').style.display='block';$('#detail').innerHTML='<h2>'+d.id+' <small style="color:var(--mute)">'+d.pk+' · '+(d.hasMap?'__asis-mapping__.md 있음':'매핑표 없음')+' · Doc/gap/'+d.id+'_gap.csv</small></h2>'+['endpoint','event','control','sheet','hard_column','dynamic_column'].map(k=>{const rs=d.rows.filter(r=>r.kind===k);if(!rs.length)return '';return '<h3 style="font-size:14px;margin:10px 0 4px">'+({endpoint:'엔드포인트(SP)',event:'이벤트',control:'컨트롤',sheet:'시트',hard_column:'하드코딩 컬럼'})[k]+' ('+rs.length+')</h3><table><thead><tr><th>As-is</th><th>상세</th><th>판정</th><th>근거 / 사유</th></tr></thead><tbody>'+rs.map(r=>'<tr><td>'+esc(r.asis_item)+'</td><td>'+esc(r.asis_detail)+'</td><td class="'+st[r.status]+'">'+r.status+'</td><td>'+esc(r.evidence||r.reason)+'</td></tr>').join('')+'</tbody></table>';}).join('');$('#detail').scrollIntoView({behavior:'smooth'});});
 function esc(x){return String(x??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 document.querySelectorAll('th').forEach(th=>th.addEventListener('click',()=>{const k=th.dataset.k;if(sortK===k)sortAsc=!sortAsc;else{sortK=k;sortAsc=k==='score';}render();}));
 ['q','dom','map','onlyMiss'].forEach(id=>$('#'+id).addEventListener('input',render));render();

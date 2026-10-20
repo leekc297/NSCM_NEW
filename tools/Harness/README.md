@@ -22,6 +22,7 @@ node install.js                                                                 
 | `rules/forbidden.csv` | 금지 패턴(Top 11 + SYS0017 감사) — BLOCK/WARN |
 | `rules/*.mined.csv` · `pairs.csv` | `mine.js` 가 110개 짝 화면·`__asis-mapping__.md` 1,747행에서 채굴한 빈도표 — 사전 보완의 근거 |
 | `lib/analysis.js` | `Doc/_analysis` 의 validation.md/expressions.md 표 파서 (gen·check 공용) |
+| `lib/dyncol.js` | 동적 헤더(기간 컬럼) 원천 판정 (gen·check B26/B27·gap 공용, 2026-10-20) — As-is 타이틀 SP 다중 신호(SP 이름 계열·GetSpdTitle 메서드·grid_code DB루프), 기간형/메타형 분류, 사내 배선 시트(proc_meta) 대응, FE 시트 조회 판정, 응답 키 허용 집합(PROC_M OUT COL_NM ∪ DATARESULT) |
 | `gen.js` + `templates.js` | 골격 생성기. 표준 참조(user-management) 구조 그대로: constants / store / Page / index / Form / Grid / `__asis-mapping__.md` 초기본 / `__tests__/*.asis.spec.ts`(Agent 단위테스트 → it.todo) / `register.json`(P_REGISTER_SCREEN 입력 초안) / `hooks/use{Page}Validation.ts`·`Expression.ts`(As-is 검증·계산식 1행 = 1마커) / `GEN_NOTES.md` |
 | `check.js` | 게이트: 금지 패턴(주석 제외) · 표준 파일·Form/Page 표준(S02/S03) · 매핑표 빈칸/위치/사유 · As-is 시트·엔드포인트·이벤트·컨트롤 대사 · 사전 밖 컴포넌트 · Validation/Expression 마커 수(V01)·미이식(V02). exit 0/1/2 |
 | `hooks/check-asis-harness.ps1` | Claude Code PostToolUse — 저장 즉시 check; BLOCK 은 차단, WARN 은 additionalContext |
@@ -81,7 +82,7 @@ As-is FpSpread 가 여러 개면 스프레드 이름↔시트명 토큰 매칭�
 ### 2026-10-16 (4차) — "기초 누락 0" 과 "ID 하나로 끝까지"
 | 파일 | 역할 |
 |---|---|
-| `check.js` B01~B21 + `Doc/gen/<ID>/DOD.md` | 룰 25/12/13/17 의 기초 항목을 기계 판정하는 **완료 정의(DoD)**: index export · MENU_ID/SHEETS · createPersistedStoreWithTab · useTabProcQuery · hotkeyConfig 명시(As-is override 대조 B08, UsrConditionPanel 유무 B09) · 팝업 1:1(B10/B11) · Division 분기(B12) · AS-IS 라인 주석(B13) · Form 표준(B14~B17) · DataGrid(B18) · 검증/표현식 훅(B19) · 테스트(B20) · 등록 SQL/PKG(B21). `--final` 에서 BLOCK |
+| `check.js` B01~B21 + `Doc/gen/<ID>/DOD.md` | 룰 25/12/13/17 의 기초 항목을 기계 판정하는 **완료 정의(DoD)**: index export · MENU_ID/SHEETS · createPersistedStoreWithTab · useTabProcQuery · hotkeyConfig 명시(As-is override 대조 B08, UsrConditionPanel 유무 B09) · 팝업 1:1(B10/B11) · Division 분기(B12) · AS-IS 라인 주석(B13) · Form 표준(B14~B17) · DataGrid(B18) · 검증/표현식 훅(B19) · 테스트(B20) · 등록 SQL/PKG(B21) · 조회 filter 키=PROC_M IN(B22) · 등록 SQL 배선=사내 현행(B23) · 초기 조회기간(B24) · 공통버튼 핸들러 본문(B25) · **응답 키(RESPONSE_SET)=PROC_M OUT COL_NM(B26)** · **기간형 동적 헤더 = 사내 배선 타이틀 시트 FE 조회(B27)**. `--final` 에서 BLOCK. 대사표 게이트: M08(As-is DB루프 컬럼 생성 행 누락, WARN) · M09(엔드포인트 '구현' 인데 사내 정확 배선 시트 FE 미조회 = 구현 근거 불일치, final BLOCK) |
 | `gen.js`/`templates.js` 공통 버튼 | As-is `members.csv`(BaseForm override: Find/Insert/Delete/Save/Edit/Excel/Upload) 로 hotkeyConfig 를 **근거 주석과 함께** 채움 — 정의 없으면 false 명시, UsrConditionPanel 없으면 condition/resetCondition false, Insert/Delete 는 `GridAction.addRow/removeRow` 스텁 |
 | `rules/tobe_catalog.csv` + `check.js D01` | TobeFacts `framework.js` 카탈로그의 컴포넌트 전부가 허용 집합 — 사전 밖 컴포넌트는 전 tsx 에서 WARN |
 | `pipeline.js` / `harness_pipeline.cmd <ID> [--e2e] [--no-claude]` | FE 골격 → 등록 SQL → PKG 골격 → FE 수선 루프 → PKG 이식 루프 → E2E 스펙 → 대사표. `Doc/gen/<ID>/PIPELINE.md` 에 단계·다음 할 일 |

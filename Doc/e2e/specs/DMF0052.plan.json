@@ -296,6 +296,7 @@
     }
   },
   "hasMeta": true,
+  "dynamicHeader": null,
   "sample": {
     "div": "40",
     "item": "MCCM134010A1",
@@ -303,7 +304,165 @@
     "project": "Inventus Power",
     "account": "minyonglee1"
   },
-  "accounts": [],
+  "accounts": [
+    {
+      "id": "jaehun_cho",
+      "groups": [
+        "ADMIN",
+        "DM ADMIN",
+        "DM Planner",
+        "DM Planner (W/S)",
+        "SCP Planner"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "admin": true,
+      "screenGroup": ""
+    },
+    {
+      "id": "minyonglee1",
+      "groups": [
+        "ADMIN",
+        "DM ADMIN",
+        "DM Planner",
+        "DM Planner (W/S)",
+        "DM Viewer",
+        "JV Planner",
+        "SCP Planner"
+      ],
+      "divisions": [
+        "40",
+        "81",
+        "82"
+      ],
+      "admin": true,
+      "screenGroup": ""
+    },
+    {
+      "id": "bottle",
+      "groups": [
+        "SCP Planner"
+      ],
+      "divisions": [
+        "40",
+        "81"
+      ],
+      "admin": false,
+      "screenGroup": ""
+    },
+    {
+      "id": "bpark416",
+      "groups": [
+        "DM Planner"
+      ],
+      "divisions": [
+        "40",
+        "81",
+        "82"
+      ],
+      "admin": false,
+      "screenGroup": ""
+    },
+    {
+      "id": "cmjin",
+      "groups": [
+        "DM Planner"
+      ],
+      "divisions": [
+        "40",
+        "81",
+        "82"
+      ],
+      "admin": false,
+      "screenGroup": ""
+    },
+    {
+      "id": "coeogus",
+      "groups": [
+        "SCP Planner"
+      ],
+      "divisions": [
+        "40",
+        "81"
+      ],
+      "admin": false,
+      "screenGroup": ""
+    },
+    {
+      "id": "dodae",
+      "groups": [
+        "SCP Planner"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "admin": false,
+      "screenGroup": ""
+    },
+    {
+      "id": "eunah.koo",
+      "groups": [
+        "DM Planner"
+      ],
+      "divisions": [
+        "40",
+        "81",
+        "82"
+      ],
+      "admin": false,
+      "screenGroup": ""
+    },
+    {
+      "id": "jaehyeok",
+      "groups": [
+        "DM Planner (W/S)"
+      ],
+      "divisions": [
+        "81",
+        "82"
+      ],
+      "admin": false,
+      "screenGroup": ""
+    },
+    {
+      "id": "miyeong.lee",
+      "groups": [
+        "DM Planner (W/S)"
+      ],
+      "divisions": [
+        "81",
+        "82"
+      ],
+      "admin": false,
+      "screenGroup": ""
+    },
+    {
+      "id": "wcyoon",
+      "groups": [
+        "DM Planner"
+      ],
+      "divisions": [
+        "40",
+        "81",
+        "82"
+      ],
+      "admin": false,
+      "screenGroup": ""
+    },
+    {
+      "id": "ys_cho",
+      "groups": [
+        "DM Planner",
+        "DM Planner (W/S)"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "admin": false,
+      "screenGroup": ""
+    }
+  ],
   "expectedBtnsByGroup": {},
   "menuAuth": "menu.csv"
 }

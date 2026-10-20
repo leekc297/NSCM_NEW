@@ -24,7 +24,7 @@ public static class Agent
         if (phase is not ("all" or "analysis" or "docs")) { Console.Error.WriteLine("--phase 는 all|analysis|docs"); return 2; }
         if (ids.Count == 0) { Console.Error.WriteLine("화면ID 를 지정하세요"); return 2; }
         driver = driver ?? (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ANTHROPIC_API_KEY")) ? "claude-cli" : "api");
-        model ??= Environment.GetEnvironmentVariable("ASISFACTS_MODEL") ?? "claude-sonnet-4-5";
+        model ??= Environment.GetEnvironmentVariable("ASISFACTS_MODEL") ?? "claude-opus-5-5";  // 2026-10-20: 기본 Opus 5.5 (이전 sonnet-4-5)
         agentOut ??= Path.Combine(outDir, "agent");
         int rc = 0;
         foreach (var id in ids) rc |= RunOne(outDir, id.ToUpperInvariant(), driver, model, agentOut, phase);

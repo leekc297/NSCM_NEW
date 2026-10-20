@@ -1,8 +1,11 @@
-# [Harness] DMF0043 contribute-main — BLOCK 0 / WARN 54
+# [Harness] DMF0043 contribute-view — BLOCK 4 / WARN 48
 
-- WARN S01 표준 파일 없음: components/{Page}Form.tsx
+- BLOCK F01 상대 경로 import 금지 — @foundation/@shared/@{feature} 별칭 사용 @components/modals/ContributeVersionModal.tsx:18
+- BLOCK F05 inline style 금지 — SCSS Module @components/ContributeViewForm.tsx:215
+- WARN F15 onSearch inline 함수 — store setFilters 를 직접 넘길 것 (룰 06 §3.5) @ContributeView.tsx:209
+- WARN S02 SearchArea isHidden 누락 (조회영역 접기) @components/ContributeViewForm.tsx
+- WARN G01 As-is 시트 'ContributeMain' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
 - WARN G01 As-is 시트 'ContributeRate' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
-- WARN G01 As-is 시트 'ContributeSalesList' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
 - WARN G02 As-is 엔드포인트 DM.DMF0043_GET_CONTRIBUTE_MAIN_DATA (DMF0043_GET_CONTRIBUTE_MAIN_DATA) 매핑표 §4 에 없음
 - WARN G02 As-is 엔드포인트 DM.DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO (DMF0043_SAVE_DM_MST_CONTRIBUTE_RATIO) 매핑표 §4 에 없음
 - WARN G02 As-is 엔드포인트 DM.DMF0043_GET_MAIN_VARSION_DATA (DMF0043_GET_MAIN_VARSION_DATA) 매핑표 §4 에 없음
@@ -26,31 +29,26 @@
 - WARN G04 As-is 컨트롤 btnCutOff / UsrButton 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 usrHis / UsrCheckBox 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 spdMain / FpSpread 매핑표 §1 에 없음
-- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ContributeMain.tsx
-- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @ContributeMain.tsx
-- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <MainRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/ContributeMainGrid.tsx
-- WARN V01 As-is Validation 6건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
-- WARN V01 As-is Expression 5건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
-- WARN R10 감사키 빈문자열 (#99 §0.1) @ContributeMain.tsx:168
-- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ContributeMainGrid.repro.test.ts:28
-- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ContributeMainGrid.tsx:277
-- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @useContributeMainStore.ts:128
-- WARN B05 Page: useTabProcQuery<MENU_ID> 조회 — 화면 조회는 메타 기반 call-proc 훅으로 — apiClient 직접 호출 금지
+- WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ContributeVersionModal.tsx
+- BLOCK V01 Validation 마커 누락 6/6: V-001(L344) V-002(L351) V-003(L459) V-004(L703) V-001(L337) V-002(L385) @hooks/useContributeViewValidation.ts
+- BLOCK V01 Expression 마커 누락 5/5: E-001(L204) E-002(L630) E-003(L658) E-001(L206) E-002(L234) @hooks/useContributeViewExpression.ts
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ContributeViewForm.tsx:53
+- WARN R12 inline style 금지 → SCSS Module (절대금지 ⑤) @components/ContributeViewForm.tsx:209
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/ContributeViewGrid.tsx:84
+- WARN R01 페이지 폴더 밖 상대 import / alias deep import — 2-depth alias 만 (#71 framework-foundation-entry) @components/modals/ContributeVersionModal.tsx:18
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/modals/ContributeVersionModal.tsx:154
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @ContributeView.tsx:112
 - WARN B08 As-is InsertButton override 있음 → hotkeyConfig.insert 가 false 가 아니어야 함 — As-is 기능 누락(members.csv InsertButton)
 - WARN B08 As-is DeleteButton override 있음 → hotkeyConfig.delete 가 false 가 아니어야 함 — As-is 기능 누락(members.csv DeleteButton)
-- WARN B10 As-is 팝업 DMF0043_ContributeRatePopup → components/modals/*Modal.tsx 또는 매핑표에 공통 모달 재사용 명시 — 룰 25 §3 연결 POPUP 1:1
-- WARN B10 As-is 팝업 DMF0043_VersionPopup → components/modals/*Modal.tsx 또는 매핑표에 공통 모달 재사용 명시 — 룰 25 §3 연결 POPUP 1:1
-- WARN B19 validation.md 9행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
-- WARN B19 expressions.md 6행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- WARN B08 As-is SaveButton override 있음 → hotkeyConfig.save 가 false 가 아니어야 함 — As-is 기능 누락(members.csv SaveButton)
 - WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
 - WARN B21 Doc/gen/DMF0043/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
 - WARN B21 Doc/gen/DMF0043/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
 - WARN B21 Doc/gen/DMF0043/DMF0043_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
 - WARN B21 Doc/gen/DMF0043/DMF0043_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0043_GET_CONTRIBUTION_SALES_LIST · 시트 'salesList') — 누락 sesUserId — 현재 키: divisionId, verSeq, versionNo, endCustReport, productGroup, bizType, millionYn, compatibilityYn · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0043_GET_SALES_LIST_SPREAD_TITLE · 시트 'salesListTitle') — 누락 sesUserId, mnuId — 현재 키: divisionId · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (DMF0002_GET_TITLESET_POPUP · 시트 'titleSet') — 누락 sesUserId, mnuId — 현재 키: programId, sheetName, columnType, divisionId · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0043_GET_MAIN_VARSION_DATA · 시트 'version') — 누락 sesUserId, mnuId — 현재 키: (toFilter 없음) · BE positional 매핑이라 값이 NULL 로 감
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0043_GET_CONT_VIEW_VERSIONPOPUP · 시트 'versionPopup') — 누락 startYyyymmdd, endYyyymmdd, versionType, description, sesUserId, mnuId — 현재 키: divisionId · BE positional 매핑이라 값이 NULL 로 감
+- WARN B26 RESPONSE_SET 응답 키 = 사내 PROC_M OUT COL_NM(proc_params.csv) — TITLE_SET='o_cursor' → 사내 PROC_M OUT 어디에도 없음 — 이 키로 읽는 데이터는 항상 undefined(조회 0건·동적 컬럼 0). 동적 헤더 원천은 사내 배선 타이틀 SP 시트(B27)

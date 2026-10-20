@@ -1,6 +1,6 @@
-# 완료 정의(DoD) — DMF0042 2026-10-19 06:02
+# 완료 정의(DoD) — DMF0042 2026-10-20 06:26
 
-21/30 충족
+29/44 충족
 
 | 코드 | 상태 | 항목 | 근거 |
 |---|---|---|---|
@@ -8,7 +8,7 @@
 | B02 | ✅ | constants: MENU_ID as const + type MENU_ID | useTabProcQuery<MENU_ID> 제네릭·procedures.d.ts 연결의 전제 |
 | B03 | ✅ | constants: SHEETS(시트명) 상수 | 시트명 문자열 하드코딩 금지 — call-proc 3-키의 sheet |
 | B04 | ✅ | store: createPersistedStoreWithTab | MDI 탭별 상태 격리 규약(룰 17) |
-| B05 | ❌ | Page: useTabProcQuery<MENU_ID> 조회 | 화면 조회는 메타 기반 call-proc 훅으로 — apiClient 직접 호출 금지 |
+| B05 | ✅ | Page: useTabProcQuery<MENU_ID> 조회 | 화면 조회는 메타 기반 call-proc 훅으로 — apiClient 직접 호출 금지 |
 | B06 | ✅ | SubTitle hotkeyConfig 에 search 지정 | F5 조회 배선(룰 25 §1.5.1) |
 | B07 | ✅ | hotkeyConfig.save 명시(function 또는 false) | 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1) |
 | B07 | ✅ | hotkeyConfig.insert 명시(function 또는 false) | 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1) |
@@ -34,3 +34,17 @@
 | B21 | ❌ | Doc/gen/DMF0042/e2e_plan.json — E2E 플랜 | 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②) |
 | B21 | ❌ | Doc/gen/DMF0042/DMF0042_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) | 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②) |
 | B21 | ❌ | Doc/gen/DMF0042/DMF0042_PKG.sql — Oracle PKG 골격(gen-pkg.js) | 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②) |
+| B22 | ❌ | 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA · 시트 'Biz Plan') | 누락 sesUserId, userGroup — 현재 키: divisionId, deptId, endCustomer, scmSiteId, projectCode, itemId, itemType, fromYyyymmdd, nowYyyymmdd, toYyyymmdd, plantSiteId, bizType, owner, qtyYn · BE positional 매핑이라 값이 NULL 로 감 |
+| B22 | ❌ | 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION · 시트 'cutoffVersion') | 누락 yyyymmFrom, yyyymmTo, versionType — 현재 키: divisionId, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감 |
+| B22 | ✅ | 조회 filter 키 = 사내 PROC_M COL_NM (PR_GET_DAY_RANGE · 시트 'dayRange') | IN 2개 일치 |
+| B22 | ✅ | 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_EXCHANGE_PRICE · 시트 'exchangeRate') | IN 4개 일치 |
+| B22 | ❌ | 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP · 시트 'futurePrice') | 누락 sesUserId, cate — 현재 키: divisionId, fromYyyymmdd, toYyyymmdd, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감 |
+| B22 | ❌ | 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA · 시트 'futurePriceData') | 누락 sesUserId, cate — 현재 키: divisionId, fromYyyymmdd, toYyyymmdd, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감 |
+| B22 | ❌ | 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_DM_MDF_VERSION · 시트 'mdfVersion') | 누락 versionDescription, versionType, sesUserId — 현재 키: divisionId, fromYyyymmdd, toYyyymmdd, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감 |
+| B22 | ❌ | 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_SPREAD_TITLE · 시트 'spreadTitle') | 누락 sesUserId — 현재 키: startYyyymmdd, endYyyymmdd, divisionId, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감 |
+| B22 | ❌ | 조회 filter 키 = 사내 PROC_M COL_NM (DMF0002_GET_TITLESET_POPUP · 시트 'titleSet') | 누락 programId, sesUserId — 현재 키: sheetName, columnType, divisionId, mnuId · BE positional 매핑이라 값이 NULL 로 감 |
+| B24 | ✅ | As-is Form_Load 초기 조회기간(InitValue/GetDayRange) → store 초기값 | As-is: drpPeriod.InitValue = GetDayRange(); / drpPeriod.InitValue = GetDayRange(); / drpPeriod.InitValue = GetDayRange(); — 프레임워크 유틸 호출은 flow.csv 에 없으므로 .cs 를 직접 읽어 채운다(DateUtil.GetDayRange = SCM0001_GET_SCP_MONTH_PERIOD, Doc/tobefacts/db/proc_meta.csv 의 dayRange 배선 참조) |
+| B27 | ✅ | 동적 헤더 원천 DMF0042_1_GET_SPREAD_TITLE → FE 조회 | 시트 'spreadTitle' 조회 |
+| B27 | ✅ | 동적 헤더 원천 DMF0042_3_GET_SPREAD_TITLE → FE 조회 | 시트 'spreadTitle' 조회 |
+| B27 | ✅ | 동적 헤더 원천 DMF0042_GET_SPREAD_TITLE → FE 조회 | 시트 'spreadTitle' 조회 |
+| B27 | ✅ | 동적 헤더 원천 DMF0020_GET_EXCHANGE_POPUP_SPREAD_TITLE → FE 조회 | 시트 'spreadTitle' 조회 |

@@ -1,4 +1,4 @@
-// 자동 생성 — tools/E2E/gen-e2e.js (2026-10-19) · 원천: Doc/gen/DMF0052/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
+// 자동 생성 — tools/E2E/gen-e2e.js (2026-10-20) · 원천: Doc/gen/DMF0052/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것
 import { test, expect } from '../../../tools/E2E/fixtures/test';
 import * as fs from 'node:fs';
 const PLAN = JSON.parse(fs.readFileSync(__dirname + '/DMF0052.plan.json', 'utf8'));

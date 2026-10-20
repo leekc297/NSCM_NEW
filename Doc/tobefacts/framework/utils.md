@@ -1980,8 +1980,8 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **MSG** | `features/master/src/components` | 239 |  | AS-IS SaveData 검증 메시지(cs L1114/1128/1206/1213/1219 그대로). |
-| **MSG** | `features/master/src/components` | 239 |  |  |
+| **MSG** | `features/master/src/components` | 240 |  | AS-IS SaveData 검증 메시지(cs L1114/1128/1206/1213/1219 그대로). |
+| **MSG** | `features/master/src/components` | 240 |  |  |
 | **COMBO** | `features/master/src/components` | 103 |  | 조회조건 cascade 콤보(6단, DB 실측 확정 — 전부 이미 등록돼 있음, 2026-09-22 ora.py). // AS-IS Data_SCP.Common(...)="_SCP" / Data.Common(...)=무접미(scp-combo-sqlid |
 | **REPORT_TYPE** | `features/master/src/components` | 6 |  |  |
 | **MODAL_OWNER** | `features/master/src/components` | 2 |  |  |
@@ -2877,9 +2877,9 @@ props/params:
 | **STANDARD_COLORS** | `@shared/components` | 0 |  | 표준 색 (엑셀 "표준 색" 행). |
 | **THEME_COLORS** | `@shared/components` | 0 |  | 개인화 색 선택 팔레트/hex 유틸 (ColorPickerButton 전용). // 테마 색 기준 행 (Office 유사 10색) — 각 열마다 명도(tint/shade) 변형을 생성한다. |
 | **VARIANT_LEVELS** | `@shared/components` | 0 |  | 테마색 그리드 명도 레벨. 0 = 기준행, +값 = tint(밝게), -값 = shade(어둡게). |
-| **SHEETS** | `@shared/components` | 598 |  |  |
-| **SHEETS** | `@shared/components` | 598 |  |  |
-| **SHEETS** | `@shared/components` | 598 |  |  |
+| **SHEETS** | `@shared/components` | 599 |  |  |
+| **SHEETS** | `@shared/components` | 599 |  |  |
+| **SHEETS** | `@shared/components` | 599 |  |  |
 | **RESPONSE_SET** | `@shared/components` | 94 |  |  |
 | **RESPONSE_SET** | `@shared/components` | 94 |  |  |
 | **RESPONSE_SET** | `@shared/components` | 94 |  |  |

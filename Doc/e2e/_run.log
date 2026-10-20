@@ -159,3 +159,3457 @@ To open last HTML report run:
 
   npx playwright show-report ..\..\Doc\e2e\results\html
 
+==== 2026-10-19 23:22:50.44 run-e2e smoke SCP0096 
+FAIL jaehun_cho HTTP 401
+FAIL minyonglee1 HTTP 401
+FAIL bottle HTTP 401
+FAIL bpark416 HTTP 401
+FAIL cmjin HTTP 401
+FAIL coeogus HTTP 401
+FAIL dodae HTTP 401
+FAIL eunah.koo HTTP 401
+FAIL jaehyeok HTTP 401
+FAIL miyeong.lee HTTP 401
+FAIL wcyoon HTTP 401
+FAIL ys_cho HTTP 401
+로그인 가능 0/12 → accounts.json loginOk/loginProbe 갱신
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+  SCP0096 → SCP0096  smoke/crud(read-only)/auth(0계정)  메타컬럼 Y
+스펙 1화면 × 3 → C:\Projects\NSCM\Doc\e2e\specs  (계정×DIV 매트릭스 0행)
+
+Running 2 tests using 2 workers
+
+(node:40796) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:15188) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:40796) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:15188) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (3.8s)
+  x  1 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (4.8s)
+(node:42704) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:42704) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:50716) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:50716) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (2.2s)
+  x  3 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (3.6s)
+
+
+  1) [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인
+
+       at ..\..\..\tools\E2E\lib\nscm.ts:42
+
+      40 |   async loginAs(userId: string) {
+      41 |     const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });
+    > 42 |     if (res && res.status() === 401) throw new Error(`dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 '${userId}' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);
+         |                                            ^
+      43 |     await this.page.waitForURL(u => u.toString().startsWith(FE), { timeout: 30_000 }).catch(() => this.page.goto(FE));
+      44 |     await this.page.waitForLoadState('networkidle').catch(() => undefined);
+      45 |   }
+        at Nscm.loginAs (C:\Projects\NSCM\tools\E2E\lib\nscm.ts:42:44)
+        at Object.nscm (C:\Projects\NSCM\tools\E2E\fixtures\test.ts:7:71)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인
+
+       at ..\..\..\tools\E2E\lib\nscm.ts:42
+
+      40 |   async loginAs(userId: string) {
+      41 |     const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });
+    > 42 |     if (res && res.status() === 401) throw new Error(`dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 '${userId}' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);
+         |                                            ^
+      43 |     await this.page.waitForURL(u => u.toString().startsWith(FE), { timeout: 30_000 }).catch(() => this.page.goto(FE));
+      44 |     await this.page.waitForLoadState('networkidle').catch(() => undefined);
+      45 |   }
+        at Nscm.loginAs (C:\Projects\NSCM\tools\E2E\lib\nscm.ts:42:44)
+        at Object.nscm (C:\Projects\NSCM\tools\E2E\fixtures\test.ts:7:71)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인
+
+       at ..\..\..\tools\E2E\lib\nscm.ts:42
+
+      40 |   async loginAs(userId: string) {
+      41 |     const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });
+    > 42 |     if (res && res.status() === 401) throw new Error(`dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 '${userId}' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);
+         |                                            ^
+      43 |     await this.page.waitForURL(u => u.toString().startsWith(FE), { timeout: 30_000 }).catch(() => this.page.goto(FE));
+      44 |     await this.page.waitForLoadState('networkidle').catch(() => undefined);
+      45 |   }
+        at Nscm.loginAs (C:\Projects\NSCM\tools\E2E\lib\nscm.ts:42:44)
+        at Object.nscm (C:\Projects\NSCM\tools\E2E\fixtures\test.ts:7:71)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 'minyonglee1' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인
+
+       at ..\..\..\tools\E2E\lib\nscm.ts:42
+
+      40 |   async loginAs(userId: string) {
+      41 |     const res = await this.page.goto(`${BE}/sso/dev-login?id=${encodeURIComponent(userId)}`, { waitUntil: 'domcontentloaded' });
+    > 42 |     if (res && res.status() === 401) throw new Error(`dev-login 실패(401): PKG_NSCM_UI_COM_USER.PR_GET_NSCM_USER 가 '${userId}' 를 돌려주지 않음(SCM_ADM_USER_M 행 존재와 별개 — 그룹/권한 매핑 확인). tools/E2E/probe-accounts.js 로 가능 계정 확인`);
+         |                                            ^
+      43 |     await this.page.waitForURL(u => u.toString().startsWith(FE), { timeout: 30_000 }).catch(() => this.page.goto(FE));
+      44 |     await this.page.waitForLoadState('networkidle').catch(() => undefined);
+      45 |   }
+        at Nscm.loginAs (C:\Projects\NSCM\tools\E2E\lib\nscm.ts:42:44)
+        at Object.nscm (C:\Projects\NSCM\tools\E2E\fixtures\test.ts:7:71)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+    [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+To open last HTML report run:
+
+  npx playwright show-report ..\..\Doc\e2e\results\html
+
+==== 2026-10-20 11:04:31.87 run-e2e smoke SCP0096 
+OK   jaehun_cho HTTP 200
+OK   minyonglee1 HTTP 200
+OK   bottle HTTP 200
+OK   bpark416 HTTP 200
+OK   cmjin HTTP 200
+OK   coeogus HTTP 200
+OK   dodae HTTP 200
+OK   eunah.koo HTTP 200
+OK   jaehyeok HTTP 200
+OK   miyeong.lee HTTP 200
+OK   wcyoon HTTP 200
+OK   ys_cho HTTP 200
+로그인 가능 12/12 → accounts.json loginOk/loginProbe 갱신
+  SCP0096 → SCP0096  smoke/crud(save)/auth(12계정)  메타컬럼 Y
+스펙 1화면 × 3 → C:\Projects\NSCM\Doc\e2e\specs  (계정×DIV 매트릭스 26행)
+
+Running 2 tests using 2 workers
+
+(node:32704) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:33732) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:33732) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:32704) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (1.1m)
+  x  2 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (1.1m)
+(node:28748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30716) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30716) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (55.3s)
+  x  3 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (55.1s)
+
+
+  1) [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Division' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Plant Site' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Input Value' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Day of the week' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 1)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Division' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Plant Site' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Input Value' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Day of the week' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 1)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+    [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+To open last HTML report run:
+
+  npx playwright show-report ..\..\Doc\e2e\results\html
+
+==== 2026-10-20 11:14:28.90 run-e2e smoke SCP0096 
+OK   jaehun_cho HTTP 200
+OK   minyonglee1 HTTP 200
+OK   bottle HTTP 200
+OK   bpark416 HTTP 200
+OK   cmjin HTTP 200
+OK   coeogus HTTP 200
+OK   dodae HTTP 200
+OK   eunah.koo HTTP 200
+OK   jaehyeok HTTP 200
+OK   miyeong.lee HTTP 200
+OK   wcyoon HTTP 200
+OK   ys_cho HTTP 200
+로그인 가능 12/12 → accounts.json loginOk/loginProbe 갱신
+  SCP0096 → SCP0096  smoke/crud(save)/auth(12계정)  메타컬럼 Y
+스펙 1화면 × 3 → C:\Projects\NSCM\Doc\e2e\specs  (계정×DIV 매트릭스 26행)
+
+Running 2 tests using 2 workers
+
+(node:26204) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:34064) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:26204) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:34064) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (50.7s)
+  x  2 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (52.5s)
+(node:2920) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:2920) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:32272) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:32272) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (54.0s)
+  x  4 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (54.0s)
+
+
+  1) [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Division' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Plant Site' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Input Value' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Day of the week' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 1)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Division' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Plant Site' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Input Value' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Day of the week' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 1)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+    [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+To open last HTML report run:
+
+  npx playwright show-report ..\..\Doc\e2e\results\html
+
+==== 2026-10-20 11:19:24.68 run-e2e smoke SCP0096 
+OK   jaehun_cho HTTP 200
+OK   minyonglee1 HTTP 200
+OK   bottle HTTP 200
+OK   bpark416 HTTP 200
+OK   cmjin HTTP 200
+OK   coeogus HTTP 200
+OK   dodae HTTP 200
+OK   eunah.koo HTTP 200
+OK   jaehyeok HTTP 200
+OK   miyeong.lee HTTP 200
+OK   wcyoon HTTP 200
+OK   ys_cho HTTP 200
+로그인 가능 12/12 → accounts.json loginOk/loginProbe 갱신
+  SCP0096 → SCP0096  smoke/crud(save)/auth(12계정)  메타컬럼 Y
+스펙 1화면 × 3 → C:\Projects\NSCM\Doc\e2e\specs  (계정×DIV 매트릭스 26행)
+
+Running 2 tests using 2 workers
+
+(node:18348) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:18348) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (53.6s)
+(node:36044) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:36044) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (47.1s)
+  x  2 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (2.4m)
+(node:23016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:23016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (2.3m)
+
+
+  1) [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Input Value' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Day of the week' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: call-proc 호출 발생
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: > [32m0[39m
+    Received:   [31m0[39m
+
+      21 |     const calls = await nscm.search();
+      22 |     const search = calls.filter(c => /SEARCH|GET|_|^$/i.test(c.btn));
+    > 23 |     expect(calls.length, 'call-proc 호출 발생').toBeGreaterThan(0);
+         |                                             ^
+      24 |     for (const c of calls) expect.soft(c.status, `call-proc ${c.sheet}/${c.btn} HTTP`).toBeLessThan(400);
+      25 |     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
+      26 |     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:23:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Input Value' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Day of the week' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: call-proc 호출 발생
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: > [32m0[39m
+    Received:   [31m0[39m
+
+      21 |     const calls = await nscm.search();
+      22 |     const search = calls.filter(c => /SEARCH|GET|_|^$/i.test(c.btn));
+    > 23 |     expect(calls.length, 'call-proc 호출 발생').toBeGreaterThan(0);
+         |                                             ^
+      24 |     for (const c of calls) expect.soft(c.status, `call-proc ${c.sheet}/${c.btn} HTTP`).toBeLessThan(400);
+      25 |     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
+      26 |     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:23:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+    [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+To open last HTML report run:
+
+  npx playwright show-report ..\..\Doc\e2e\results\html
+
+==== 2026-10-20 11:27:32.34 run-e2e smoke SCP0096 
+OK   jaehun_cho HTTP 200
+OK   minyonglee1 HTTP 200
+OK   bottle HTTP 200
+OK   bpark416 HTTP 200
+OK   cmjin HTTP 200
+OK   coeogus HTTP 200
+OK   dodae HTTP 200
+OK   eunah.koo HTTP 200
+OK   jaehyeok HTTP 200
+OK   miyeong.lee HTTP 200
+OK   wcyoon HTTP 200
+OK   ys_cho HTTP 200
+로그인 가능 12/12 → accounts.json loginOk/loginProbe 갱신
+  SCP0096 → SCP0096  smoke/crud(save)/auth(12계정)  메타컬럼 Y
+스펙 1화면 × 3 → C:\Projects\NSCM\Doc\e2e\specs  (계정×DIV 매트릭스 26행)
+
+Running 2 tests using 2 workers
+
+(node:31532) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:36000) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:31532) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:36000) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (3.0m)
+  x  2 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (3.0m)
+(node:31908) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:33784) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:31908) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:33784) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (3.0m)
+  x  4 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (3.1m)
+
+
+  1) [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    [31mTest timeout of 180000ms exceeded while setting up "nscm".[39m
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    [31mTest timeout of 180000ms exceeded while setting up "nscm".[39m
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    [31mTest timeout of 180000ms exceeded while setting up "nscm".[39m
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    [31mTest timeout of 180000ms exceeded while setting up "nscm".[39m
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+    [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+To open last HTML report run:
+
+  npx playwright show-report ..\..\Doc\e2e\results\html
+
+==== 2026-10-20 11:39:13.00 run-e2e smoke SCP0096 
+OK   jaehun_cho HTTP 200
+OK   minyonglee1 HTTP 200
+OK   bottle HTTP 200
+OK   bpark416 HTTP 200
+OK   cmjin HTTP 200
+OK   coeogus HTTP 200
+OK   dodae HTTP 200
+OK   eunah.koo HTTP 200
+OK   jaehyeok HTTP 200
+OK   miyeong.lee HTTP 200
+OK   wcyoon HTTP 200
+OK   ys_cho HTTP 200
+로그인 가능 12/12 → accounts.json loginOk/loginProbe 갱신
+  SCP0096 → SCP0096  smoke/crud(save)/auth(12계정)  메타컬럼 Y
+스펙 1화면 × 3 → C:\Projects\NSCM\Doc\e2e\specs  (계정×DIV 매트릭스 26행)
+
+Running 2 tests using 2 workers
+
+(node:32116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:35996) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:32116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:35996) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (54.3s)
+(node:36728) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:36728) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (44.1s)
+  x  1 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (2.4m)
+(node:36836) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:36836) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (2.3m)
+
+
+  1) [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Input Value' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Day of the week' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: call-proc 호출 발생
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: > [32m0[39m
+    Received:   [31m0[39m
+
+      21 |     const calls = await nscm.search();
+      22 |     const search = calls.filter(c => /SEARCH|GET|_|^$/i.test(c.btn));
+    > 23 |     expect(calls.length, 'call-proc 호출 발생').toBeGreaterThan(0);
+         |                                             ^
+      24 |     for (const c of calls) expect.soft(c.status, `call-proc ${c.sheet}/${c.btn} HTTP`).toBeLessThan(400);
+      25 |     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
+      26 |     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:23:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Input Value' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Day of the week' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: call-proc 호출 발생
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: > [32m0[39m
+    Received:   [31m0[39m
+
+      21 |     const calls = await nscm.search();
+      22 |     const search = calls.filter(c => /SEARCH|GET|_|^$/i.test(c.btn));
+    > 23 |     expect(calls.length, 'call-proc 호출 발생').toBeGreaterThan(0);
+         |                                             ^
+      24 |     for (const c of calls) expect.soft(c.status, `call-proc ${c.sheet}/${c.btn} HTTP`).toBeLessThan(400);
+      25 |     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
+      26 |     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:23:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+    [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+To open last HTML report run:
+
+  npx playwright show-report ..\..\Doc\e2e\results\html
+
+==== 2026-10-20 11:49:38.78 run-e2e smoke SCP0096 
+OK   jaehun_cho HTTP 200
+OK   minyonglee1 HTTP 200
+OK   bottle HTTP 200
+OK   bpark416 HTTP 200
+OK   cmjin HTTP 200
+OK   coeogus HTTP 200
+OK   dodae HTTP 200
+OK   eunah.koo HTTP 200
+OK   jaehyeok HTTP 200
+OK   miyeong.lee HTTP 200
+OK   wcyoon HTTP 200
+OK   ys_cho HTTP 200
+로그인 가능 12/12 → accounts.json loginOk/loginProbe 갱신
+  SCP0096 → SCP0096  smoke/crud(save)/auth(12계정)  메타컬럼 Y
+스펙 1화면 × 3 → C:\Projects\NSCM\Doc\e2e\specs  (계정×DIV 매트릭스 26행)
+
+Running 2 tests using 2 workers
+
+(node:7036) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:17968) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7036) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:17968) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (1.2m)
+(node:33508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:33508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (1.1m)
+  x  2 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (2.4m)
+(node:35632) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:35632) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (2.3m)
+
+
+  1) [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Input Value' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Day of the week' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: call-proc 호출 발생
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: > [32m0[39m
+    Received:   [31m0[39m
+
+      21 |     const calls = await nscm.search();
+      22 |     const search = calls.filter(c => /SEARCH|GET|_|^$/i.test(c.btn));
+    > 23 |     expect(calls.length, 'call-proc 호출 발생').toBeGreaterThan(0);
+         |                                             ^
+      24 |     for (const c of calls) expect.soft(c.status, `call-proc ${c.sheet}/${c.btn} HTTP`).toBeLessThan(400);
+      25 |     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
+      26 |     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:23:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Input Value' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Day of the week' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: call-proc 호출 발생
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: > [32m0[39m
+    Received:   [31m0[39m
+
+      21 |     const calls = await nscm.search();
+      22 |     const search = calls.filter(c => /SEARCH|GET|_|^$/i.test(c.btn));
+    > 23 |     expect(calls.length, 'call-proc 호출 발생').toBeGreaterThan(0);
+         |                                             ^
+      24 |     for (const c of calls) expect.soft(c.status, `call-proc ${c.sheet}/${c.btn} HTTP`).toBeLessThan(400);
+      25 |     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
+      26 |     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:23:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+    [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+To open last HTML report run:
+
+  npx playwright show-report ..\..\Doc\e2e\results\html
+
+==== 2026-10-20 12:01:09.27 run-e2e smoke SCP0096 
+OK   jaehun_cho HTTP 200
+OK   minyonglee1 HTTP 200
+OK   bottle HTTP 200
+OK   bpark416 HTTP 200
+OK   cmjin HTTP 200
+OK   coeogus HTTP 200
+OK   dodae HTTP 200
+OK   eunah.koo HTTP 200
+OK   jaehyeok HTTP 200
+OK   miyeong.lee HTTP 200
+OK   wcyoon HTTP 200
+OK   ys_cho HTTP 200
+로그인 가능 12/12 → accounts.json loginOk/loginProbe 갱신
+  SCP0096 → SCP0096  smoke/crud(save)/auth(12계정)  메타컬럼 Y
+스펙 1화면 × 3 → C:\Projects\NSCM\Doc\e2e\specs  (계정×DIV 매트릭스 26행)
+
+Running 2 tests using 2 workers
+
+(node:26912) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:34964) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:26912) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:34964) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (1.5m)
+(node:30804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:30804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (2.4m)
+(node:36016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:36016) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (1.4m)
+  x  4 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (2.3m)
+
+
+  1) [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Input Value' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Day of the week' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: call-proc 호출 발생
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: > [32m0[39m
+    Received:   [31m0[39m
+
+      21 |     const calls = await nscm.search();
+      22 |     const search = calls.filter(c => /SEARCH|GET|_|^$/i.test(c.btn));
+    > 23 |     expect(calls.length, 'call-proc 호출 발생').toBeGreaterThan(0);
+         |                                             ^
+      24 |     for (const c of calls) expect.soft(c.status, `call-proc ${c.sheet}/${c.btn} HTTP`).toBeLessThan(400);
+      25 |     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
+      26 |     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:23:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Input Value' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Day of the week' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: call-proc 호출 발생
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: > [32m0[39m
+    Received:   [31m0[39m
+
+      21 |     const calls = await nscm.search();
+      22 |     const search = calls.filter(c => /SEARCH|GET|_|^$/i.test(c.btn));
+    > 23 |     expect(calls.length, 'call-proc 호출 발생').toBeGreaterThan(0);
+         |                                             ^
+      24 |     for (const c of calls) expect.soft(c.status, `call-proc ${c.sheet}/${c.btn} HTTP`).toBeLessThan(400);
+      25 |     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
+      26 |     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:23:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+    [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+To open last HTML report run:
+
+  npx playwright show-report ..\..\Doc\e2e\results\html
+
+==== 2026-10-20 12:07:42.06 run-e2e smoke SCP0096 
+OK   jaehun_cho HTTP 200
+OK   minyonglee1 HTTP 200
+OK   bottle HTTP 200
+OK   bpark416 HTTP 200
+OK   cmjin HTTP 200
+OK   coeogus HTTP 200
+OK   dodae HTTP 200
+OK   eunah.koo HTTP 200
+OK   jaehyeok HTTP 200
+OK   miyeong.lee HTTP 200
+OK   wcyoon HTTP 200
+OK   ys_cho HTTP 200
+로그인 가능 12/12 → accounts.json loginOk/loginProbe 갱신
+  SCP0096 → SCP0096  smoke/crud(save)/auth(12계정)  메타컬럼 Y
+스펙 1화면 × 3 → C:\Projects\NSCM\Doc\e2e\specs  (계정×DIV 매트릭스 26행)
+
+Running 2 tests using 2 workers
+
+(node:36076) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:35896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:36076) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:35896) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (36.5s)
+(node:33748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:33748) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (28.7s)
+  x  1 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (1.6m)
+(node:35024) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:35024) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (1.4m)
+
+
+  1) [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Division' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: call-proc 호출 발생
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: > [32m0[39m
+    Received:   [31m0[39m
+
+      21 |     const calls = await nscm.search();
+      22 |     const search = calls.filter(c => /SEARCH|GET|_|^$/i.test(c.btn));
+    > 23 |     expect(calls.length, 'call-proc 호출 발생').toBeGreaterThan(0);
+         |                                             ^
+      24 |     for (const c of calls) expect.soft(c.status, `call-proc ${c.sheet}/${c.btn} HTTP`).toBeLessThan(400);
+      25 |     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
+      26 |     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:23:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Division' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:15:117
+
+    Error: call-proc 호출 발생
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: > [32m0[39m
+    Received:   [31m0[39m
+
+      21 |     const calls = await nscm.search();
+      22 |     const search = calls.filter(c => /SEARCH|GET|_|^$/i.test(c.btn));
+    > 23 |     expect(calls.length, 'call-proc 호출 발생').toBeGreaterThan(0);
+         |                                             ^
+      24 |     for (const c of calls) expect.soft(c.status, `call-proc ${c.sheet}/${c.btn} HTTP`).toBeLessThan(400);
+      25 |     const alert = await nscm.alertText(); if (alert) { await nscm.closeAlert(); }
+      26 |     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
+        at C:\Projects\NSCM\Doc\e2e\specs\SCP0096.smoke.spec.ts:23:45
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\SCP0096.smoke-SCP0096-Ship-9425b--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+    [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+To open last HTML report run:
+
+  npx playwright show-report ..\..\Doc\e2e\results\html
+
+==== 2026-10-20 12:16:49.12 run-e2e smoke SCP0096 
+OK   jaehun_cho HTTP 200
+OK   minyonglee1 HTTP 200
+OK   bottle HTTP 200
+OK   bpark416 HTTP 200
+OK   cmjin HTTP 200
+OK   coeogus HTTP 200
+OK   dodae HTTP 200
+OK   eunah.koo HTTP 200
+OK   jaehyeok HTTP 200
+OK   miyeong.lee HTTP 200
+OK   wcyoon HTTP 200
+OK   ys_cho HTTP 200
+로그인 가능 12/12 → accounts.json loginOk/loginProbe 갱신
+  SCP0096 → SCP0096  smoke/crud(save)/auth(12계정)  메타컬럼 Y
+스펙 1화면 × 3 → C:\Projects\NSCM\Doc\e2e\specs  (계정×DIV 매트릭스 26행)
+
+Running 2 tests using 2 workers
+
+(node:34700) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:17208) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:34700) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:17208) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 2 [chromium] › SCP0096.smoke.spec.ts:9:7 › SCP0096 Shipment_Working_Day_OSP 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (35.3s)
+  x  1 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (1.9m)
+(node:35184) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:35184) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 (retry #1) (1.8m)
+
+
+  1) [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: 조회조건 'Today' (Checkbox)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Model / Nickname' (ItemField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Project' (ProjectField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'Period' (PeriodField)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 조회조건 'EDI Sender' (CustomDropdown)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+    Received: [31mfalse[39m
+
+      13 |     await nscm.snapshot(`${MENU}_open`);
+      14 |     // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
+    > 15 |     for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), `조회조건 '${f.label}' (${f.component})`).toBeTruthy();
+         |                                                                                                                     ^
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+      18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:15:117
+
+    Error: 그리드 ≥1 (메인시트 5)
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThanOrEqual[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected: >= [32m1[39m
+    Received:    [31m0[39m
+
+      16 |     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
+      17 |     const gridCount = await nscm.grids().count();
+    > 18 |     expect(gridCount, `그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`).toBeGreaterThanOrEqual(1);
+         |                                                                  ^
+      19 |     // Division 선택(있으면) 후 조회
+      20 |     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
+      21 |     const calls = await nscm.search();
+        at C:\Projects\NSCM\Doc\e2e\specs\DMF0052.smoke.spec.ts:18:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace ..\..\Doc\e2e\results\artifacts\DMF0052.smoke-DMF0052-EDIS-52122--화면-열림-·-조회조건-·-조회-·-그리드-컬럼-chromium-retry1\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  Slow test file: [chromium] › SCP0096.smoke.spec.ts (35.3s)
+  Consider splitting slow test files to speed up parallel execution
+  1 failed
+    [chromium] › DMF0052.smoke.spec.ts:9:7 › DMF0052 EDISummary 스모크 @smoke › 화면 열림 · 조회조건 · 조회 · 그리드 컬럼 
+  1 passed (3.9m)
+
+To open last HTML report run:
+
+  npx playwright show-report ..\..\Doc\e2e\results\html
+

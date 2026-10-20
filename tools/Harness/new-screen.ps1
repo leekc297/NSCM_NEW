@@ -23,6 +23,7 @@ Write-Host "3/3 다음 할 일 — $genDir\GEN_NOTES.md" -ForegroundColor Cyan
 Get-Content (Join-Path $genDir "GEN_NOTES.md") -Raw -Encoding UTF8
 if ($Claude) {
   Push-Location (Split-Path $cfg.feRoot -Parent)
-  & claude "tools/Harness/prompts/new_screen.md 를 읽고 화면 $Id 의 TODO(이식) 를 채워주세요. 골격 위치: $pageDir, 메모: Doc/gen/$Id/GEN_NOTES.md"
+  $claudeExe = if ($env:CLAUDE_BIN) { $env:CLAUDE_BIN } else { "claude" }  # VibeManager 가 고른 최신 CLI 우선 (PATH claude 구버전 → 400 방지)
+  & $claudeExe "tools/Harness/prompts/new_screen.md 를 읽고 화면 $Id 의 TODO(이식) 를 채워주세요. 골격 위치: $pageDir, 메모: Doc/gen/$Id/GEN_NOTES.md"
   Pop-Location
 }

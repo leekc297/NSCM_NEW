@@ -9,6 +9,7 @@
 
 $ErrorActionPreference = 'Stop'
 if ($env:NSCM_SKIP_RULE_READ -eq '1') { exit 0 }
+if ($env:VIBE_HARNESS -eq '1') { exit 0 }  # Vibe_Manager 하네스(claude -p) 실행 중 — 룰은 tools/VibeManager/rules/10_RULES_KEEP.md 로 주입 (2026-10-19)
 try {
   $payload = [Console]::In.ReadToEnd() | ConvertFrom-Json
 } catch {

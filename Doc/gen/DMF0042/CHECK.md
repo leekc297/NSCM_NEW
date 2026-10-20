@@ -1,4 +1,4 @@
-# [Harness] DMF0042 business-plan — BLOCK 0 / WARN 131
+# [Harness] DMF0042 business-plan — BLOCK 16 / WARN 95 (final)
 
 - WARN F15 onSearch inline 함수 — store setFilters 를 직접 넘길 것 (룰 06 §3.5) @components/modals/ReplaceByCutoffModal.tsx:233
 - WARN F15 onSearch inline 함수 — store setFilters 를 직접 넘길 것 (룰 06 §3.5) @components/modals/VersionCutoffModal.tsx:255
@@ -68,66 +68,46 @@
 - WARN G04 As-is 컨트롤 btnCutOff / UsrButton 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 cboClosed / UsrCombo 매핑표 §1 에 없음
 - WARN G04 As-is 컨트롤 cboQty / UsrCheckBox 매핑표 §1 에 없음
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @BusinessPlan.tsx
-- WARN D01 사전 밖 컴포넌트 <EditTracker> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @BusinessPlan.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @BusinessPlan.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @BusinessPlan.tsx
-- WARN D01 사전 밖 컴포넌트 <WijmoRowItem> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @BusinessPlan.tsx
-- WARN D01 사전 밖 컴포넌트 <WijmoRowItem> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @BusinessPlan.tsx
-- WARN D01 사전 밖 컴포넌트 <WijmoRowItem> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @BusinessPlan.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <EditTracker> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <DataMap> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <DynColMeta> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <DynColMeta> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <BizPlanCutoff> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <ValidWindow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <BusinessPlanRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/BusinessPlanGrid.tsx
-- WARN D01 사전 밖 컴포넌트 <PivotRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ExchangeRateModal.tsx
-- WARN D01 사전 밖 컴포넌트 <PivotRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ExchangeRateModal.tsx
-- WARN D01 사전 밖 컴포넌트 <PivotRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ExchangeRateModal.tsx
-- WARN D01 사전 밖 컴포넌트 <PivotRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ExchangeRateModal.tsx
-- WARN D01 사전 밖 컴포넌트 <PivotRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ExchangeRateModal.tsx
-- WARN D01 사전 밖 컴포넌트 <PivotRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ExchangeRateModal.tsx
-- WARN D01 사전 밖 컴포넌트 <MeasureDualRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/MeasureSelectModal.tsx
-- WARN D01 사전 밖 컴포넌트 <MeasureDualRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/MeasureSelectModal.tsx
 - WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/MeasureSelectModal.tsx
-- WARN D01 사전 밖 컴포넌트 <MdfVersionRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ReplaceByCutoffModal.tsx
-- WARN D01 사전 밖 컴포넌트 <MdfVersionRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/ReplaceByCutoffModal.tsx
-- WARN D01 사전 밖 컴포넌트 <MdfVersionRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/VersionCutoffModal.tsx
-- WARN D01 사전 밖 컴포넌트 <MdfVersionRow> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/VersionCutoffModal.tsx
 - WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/modals/VersionCutoffModal.tsx
 - WARN D01 사전 밖 컴포넌트 <T> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @useBusinessPlanStore.test.tsx
-- WARN D01 사전 밖 컴포넌트 <T> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @useBusinessPlanStore.test.tsx
-- WARN D01 사전 밖 컴포넌트 <T> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @useBusinessPlanStore.test.tsx
-- WARN D01 사전 밖 컴포넌트 <T> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @useBusinessPlanStore.test.tsx
-- WARN D01 사전 밖 컴포넌트 <T> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @useBusinessPlanStore.test.tsx
-- WARN V01 As-is Validation 421건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
-- WARN V01 As-is Expression 269건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
-- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @BusinessPlan.tsx:270
+- BLOCK V01 As-is Validation 421건인데 hooks/use*Validation.ts 없음 (룰 09 100% 적용)
+- BLOCK V01 As-is Expression 269건인데 hooks/use*Expression.ts 없음 (룰 09 100% 적용)
+- BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @BusinessPlan.tsx:270
 - WARN R10 감사키 빈문자열 (#99 §0.1) @BusinessPlan.tsx:76
-- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/BusinessPlanGrid.tsx:149
-- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @useBusinessPlanStore.ts:267
-- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @utils/business-plan.editLock.test.ts:41
-- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @utils/business-plan.merge.test.ts:14
-- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @utils/business-plan.merge.ts:38
+- BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/BusinessPlanGrid.tsx:149
+- BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @useBusinessPlanStore.ts:267
+- BLOCK R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @utils/business-plan.merge.ts:38
 - WARN R16 진입 Page 700 라인 > 400 — components/ 분리 (#9) @BusinessPlan.tsx
-- WARN B05 Page: useTabProcQuery<MENU_ID> 조회 — 화면 조회는 메타 기반 call-proc 훅으로 — apiClient 직접 호출 금지
-- WARN B11 __asis-mapping__.md 에 POPUP 매핑 섹션 — 룰 25 §3.3.1 — button/SP/event/validation 4축
-- WARN B19 validation.md 434행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
-- WARN B19 expressions.md 288행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
+- BLOCK B11 __asis-mapping__.md 에 POPUP 매핑 섹션 — 룰 25 §3.3.1 — button/SP/event/validation 4축
+- BLOCK B19 validation.md 434행 → hooks/use{Page}Validation.ts — 룰 09 100% 적용
+- BLOCK B19 expressions.md 288행 → hooks/use{Page}Expression.ts — 룰 09 100% 적용
 - WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
 - WARN B21 Doc/gen/DMF0042/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
 - WARN B21 Doc/gen/DMF0042/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
 - WARN B21 Doc/gen/DMF0042/DMF0042_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
 - WARN B21 Doc/gen/DMF0042/DMF0042_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- BLOCK B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_DM_PLN_BUSINESS_PLAN_DATA · 시트 'Biz Plan') — 누락 sesUserId, userGroup — 현재 키: divisionId, deptId, endCustomer, scmSiteId, projectCode, itemId, itemType, fromYyyymmdd, nowYyyymmdd, toYyyymmdd, plantSiteId, bizType, owner, qtyYn · BE positional 매핑이라 값이 NULL 로 감
+- BLOCK B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_DM_PLN_BP_CUTOFF_VERSION · 시트 'cutoffVersion') — 누락 yyyymmFrom, yyyymmTo, versionType — 현재 키: divisionId, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감
+- BLOCK B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP · 시트 'futurePrice') — 누락 sesUserId, cate — 현재 키: divisionId, fromYyyymmdd, toYyyymmdd, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감
+- BLOCK B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_SCM_MST_FUTURE_PRICE_POPUP_DATA · 시트 'futurePriceData') — 누락 sesUserId, cate — 현재 키: divisionId, fromYyyymmdd, toYyyymmdd, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감
+- BLOCK B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_DM_MDF_VERSION · 시트 'mdfVersion') — 누락 versionDescription, versionType, sesUserId — 현재 키: divisionId, fromYyyymmdd, toYyyymmdd, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감
+- BLOCK B22 조회 filter 키 = 사내 PROC_M COL_NM (P_DMF0042_GET_SPREAD_TITLE · 시트 'spreadTitle') — 누락 sesUserId — 현재 키: startYyyymmdd, endYyyymmdd, divisionId, userId, mnuId · BE positional 매핑이라 값이 NULL 로 감
+- BLOCK B22 조회 filter 키 = 사내 PROC_M COL_NM (DMF0002_GET_TITLESET_POPUP · 시트 'titleSet') — 누락 programId, sesUserId — 현재 키: sheetName, columnType, divisionId, mnuId · BE positional 매핑이라 값이 NULL 로 감
+- WARN M08 대사표에 As-is DB루프 컬럼 생성 행 없음: InitSpread_X:184, InitSpread:254 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpread_X / 184 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치) @__asis-mapping__.md
+- WARN T02 tsc 가 다른 파일에서 오류를 보고(페이지 범위 밖) — exit 1
+- WARN L02 import/no-relative-parent-imports: Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `BusinessPlanGrid.tsx` to same directory as `../BusinessPlan.module.scss` or consider making `../BusinessPlan.module.scss` a package. @components\BusinessPlanGrid.tsx:35
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:287
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:305
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:313
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:376
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\BusinessPlanGrid.tsx:397
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\modals\ExchangeRateModal.tsx:218
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @components\modals\ExchangeRateModal.tsx:346
+- WARN L02 import/no-relative-parent-imports: Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `MeasureSelectModal.tsx` to same directory as `../../BusinessPlan.module.scss` or consider making `../../BusinessPlan.module.scss` a package. @components\modals\MeasureSelectModal.tsx:8
+- WARN L02 import/no-relative-parent-imports: Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `ReplaceByCutoffModal.tsx` to same directory as `../../BusinessPlan.module.scss` or consider making `../../BusinessPlan.module.scss` a package. @components\modals\ReplaceByCutoffModal.tsx:21
+- WARN L02 import/no-relative-parent-imports: Relative imports from parent directories are not allowed. Please either pass what you're importing through at runtime (dependency injection), move `VersionCutoffModal.tsx` to same directory as `../../BusinessPlan.module.scss` or consider making `../../BusinessPlan.module.scss` a package. @components\modals\VersionCutoffModal.tsx:22
+- WARN L02 react-hooks/exhaustive-deps: React Hook useEffect has missing dependencies: 'initialPeriod' and 'setPeriod'. Either include them or remove the dependency array. @components\modals\VersionCutoffModal.tsx:106
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @utils\business-plan.spread.ts:115
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @utils\business-plan.spread.ts:122
+- WARN L02 @typescript-eslint/no-non-null-assertion: Forbidden non-null assertion. @utils\business-plan.spread.ts:172

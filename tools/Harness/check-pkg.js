@@ -13,6 +13,12 @@ const raw = fs.readFileSync(file, 'utf8');
 const asisBlocks = (raw.match(/\/\* ===== ASIS /g) || []).length;
 const code = raw.replace(/\/\*[\s\S]*?\*\//g, m => m.replace(/[^\n]/g, ' ')).replace(/--.*$/gm, '').replace(/'(?:[^']|'')*'/g, "''");
 const F = []; const add = (level, c, msg, line) => F.push({ level, code: c, msg, where: line ? `${path.basename(file)}:${line}` : path.basename(file) });
+// 문자열 리터럴은 남기고 주석만 공백화한 본 (센티널 리터럴 '-'/'/' 판정용 — 개행 보존, '' 이스케이프·주석 안 따옴표 인식)
+const codeStr = (() => { let o = ''; let i = 0; const n = raw.length; while (i < n) { const c = raw[i], d = raw[i + 1];
+  if (c === '-' && d === '-') { while (i < n && raw[i] !== '\n') { o += ' '; i++; } continue; }
+  if (c === '/' && d === '*') { const e = raw.indexOf('*/', i + 2); const end = e < 0 ? n : e + 2; o += raw.slice(i, end).replace(/[^\n]/g, ' '); i = end; continue; }
+  if (c === "'") { let j = i + 1; while (j < n) { if (raw[j] === "'") { if (raw[j + 1] === "'") { j += 2; continue; } break; } j++; } o += raw.slice(i, j + 1); i = j + 1; continue; }
+  o += c; i++; } return o; })();
 const lineOf = idx => code.slice(0, idx).split('\n').length;
 const rules = [
   ['P01', 'BLOCK', /\bISNULL\s*\(/gi, 'ISNULL → NVL'], ['P02', 'BLOCK', /\bGETDATE\s*\(\)/gi, 'GETDATE() → SYSDATE'], ['P03', 'BLOCK', /\bSELECT\s+TOP\s+\d+/gi, 'TOP n → FETCH FIRST n ROWS ONLY'],
@@ -38,6 +44,15 @@ for (const [c, lv, re, msg] of rules) { let m; let n = 0; const src = /TODO/.tes
     ['P38', 'WARN', /WHEN\s+OTHERS\s+THEN\s+NULL\s*;/gi, 'WHEN OTHERS THEN NULL — 예외 삼킴 금지, 전파 (#137)'],
   ];
   for (const [c, lv, re, msg] of R2) { let m; let n = 0; while ((m = re.exec(code)) && n < 20) { n++; add(lv, c, msg, lineOf(m.index)); } }
+}
+// ── P39/P40: 널 센티널 '/' (사용자 2026-10-15 — 신규 NULL 초기값·비교 = '/', 원래 '-' 데이터 유지, 과도기 IN ('-','/')) — 10_RULES_KEEP §H2 · hook #119 §0.5
+{
+  const R3 = [
+    ['P39', 'BLOCK', /\bNVL\s*\((?:[^()']|'(?:[^']|'')*'|\((?:[^()']|'(?:[^']|'')*')*\))*?,\s*'-'\s*\)|\bDEFAULT\s+(?:ON\s+NULL\s+)?'-'(?!')/gi, "NVL(x,'-')/DEFAULT '-' 금지 — 신규 NULL 센티널은 '/' (사용자 2026-10-15 · #119 §0.5 · 원래 '-' 데이터는 유지)"],
+    ['P40', 'WARN', /(?:=|<>|!=)\s*'-'(?!')|\bIN\s*\(\s*'-'\s*\)/gi, "'-' 단독 비교 — 과도기 IN ('-','/') 또는 AS-IS 가 '-' 를 실값으로 쓰는 컬럼인지 확인, 사유를 PKG_NOTES 에 (#119 §0.5)"],
+  ];
+  const lineOfStr = idx => codeStr.slice(0, idx).split('\n').length;
+  for (const [c, lv, re, msg] of R3) { let m; let n = 0; while ((m = re.exec(codeStr)) && n < 20) { n++; add(lv, c, msg, lineOfStr(m.index)); } }
 }
 if (asisBlocks) add('BLOCK', 'P00', `ASIS 원문 블록 ${asisBlocks}개 잔존 — 이식 후 삭제`);
 if (!/CREATE OR REPLACE PACKAGE BODY/i.test(raw)) add('BLOCK', 'P90', 'PACKAGE BODY 없음');

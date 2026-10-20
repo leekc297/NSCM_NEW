@@ -14,6 +14,12 @@ export enum SHEETS {
   // 메인 그리드 — DB 실측 SCM_MST_SHEET_COLUMNS.SHEET_NAME (PROGRAM_ID='SCP0096') = 'Shipment Working Day OSP'.
   //   admin `/column` 조회 키이자 그리드 데이터 sheetName.
   MAIN = 'Shipment Working Day OSP',
+  // 기본 조회기간 전용(데이터 시트 아님) — 사내 현행 배선 SCM_ADM_MNU_BTN_MPG_M(SCP0096 / dayRange / SEARCH →
+  //   API SCM0001_SCP_MONTH_PERIOD_GET → PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD, 2026-10-20 ZIOUI1 실측).
+  //   AS-IS InitControls `dCalendar.InitValue = GetDayRange()`(.cs:137,840-846) = DateUtil.GetDayRange(cboDivision,'DAILY')
+  //   (DateUtil.cs:330-359 → SCP.SCM0001_GET_SCP_MONTH_PERIOD) 1:1. 응답 o_rc1[0].PERIOD = 'yyyymmdd:yyyymmdd'.
+  //   IN 5개(divisionId/planCycle/fromDate/offsetMonth/timeZone = 사내 PROC_M COL_NM)는 Page 의 dayRangeFilters 가 채운다.
+  DAY_RANGE = 'dayRange',
 }
 
 // GET SP 는 단일 호출로 데이터(O_RC1) + 상태(O_RESULT_CURSOR) 2커서를 반환한다.
@@ -72,16 +78,33 @@ export const WEEKDAY_CODE_TO_INDEX: Record<string, number> = {
   Sat: 6,
 } as const;
 
-// AS-IS Validation MSG — SCM_ADM_MSG_M 실측(03 §3-e / 02 §4.5). 미등록은 EN fallback 병기(정직 표기).
+// AS-IS Validation MSG — TO-BE SCM_ADM_MSG_M 실측(Doc/tobefacts/db/msg_master.csv 2026-10-19 추출) 기준 코드.
+//   ⚠ AS-IS 코드 번호를 그대로 쓰면 안 된다 — TO-BE 는 재채번돼 본문이 다르다(2026-10-20 정정, 원장 S96-10~12):
+//   AS-IS MSG00004 "{0}개의 데이터가 저장되었습니다" → TO-BE MSG00004 는 "수정한 내용이 없습니다" / AS-IS MSG00135 "수정모드가 아니므로
+//   입력할 수 없습니다" → TO-BE MSG00135 는 "편집 모드에서는 이 기능을 사용할 수 없습니다" / AS-IS MSG00134·MSG00050 은 TO-BE 미등록.
+//   원문 동일 코드가 있으면 그것(MSG01154·MSG01153·MSG00672), 없으면 의미 동일 공통 코드를 쓴다. 호출부는 t(MSG.KEY, '_Fallback').
 export const MSG = {
-  // btnInput 조회 전 차단(Columns.Get(0).Visible==false) — 03 §3-b 가드 #1. 조회 필수 알림 겸용.
-  NOT_SEARCHED: 'MSG00135',
-  // 셀 미선택(SelectDay 인데 선택셀 0) — 03 §3-b 가드
-  NO_CELL_SELECTED: 'MSG00134',
-  // 입력값 형식 오류(InputValue 가 Y/N 아님) — 02 §4 checkFormat
-  INVALID_FORMAT: 'MSG00050',
-  // 저장 성공 건수 — "iCount 건 저장" (03 §3-e #2, cs:622)
-  SAVED: 'MSG00004',
+  // btnInput 가드 #1 — 조회 전(AS-IS Columns.Get(0).Visible==false .cs:686 → MSG00135 "수정모드가 아니므로…").
+  //   TO-BE 는 편집모드 토글이 없어 '조회 전' 이 이 가드의 실체 → "조회 후 수정모드로 가능합니다."
+  NOT_SEARCHED: 'MSG00662',
+  // btnInput 가드 — 편집 권한 없음(AS-IS 같은 MSG00135 분기). TO-BE 원문 동일 코드 "수정모드가 아니므로 입력할 수 없습니다."
+  NOT_EDIT_MODE: 'MSG01154',
+  // btnInput 가드 #4 — SelectDay 인데 선택셀 0(AS-IS MSG00134 "날짜 선택 후 입력하세요." .cs:703). TO-BE 원문 동일 코드.
+  NO_CELL_SELECTED: 'MSG01153',
+  // 필수값 — "{0} 값은 필수 입력 항목입니다." ({0}=라벨). 조회 Period 빈값(AS-IS Designer "Period*" :532 +
+  //   DataUtil.checkRequiredOfSearch .cs:432) · btnInput Input Value 빈값/오염(cboInputValue 미선택) 공용.
+  REQUIRED_VALUE: 'MSG00429',
+  // 조회 Division 필수(AS-IS Designer "Division*" :545 + checkRequiredOfSearch) — "Division 을 선택하세요."
+  DIVISION_REQUIRED: 'MSG00097',
+  // 조회기간 역전(from > to) — "조회 기간이 잘못되었습니다 (시작일 > 종료일)."
+  INVALID_PERIOD: 'MSG00108',
+  // WORKING_TIME_DEFAULT 범위 — AS-IS SetReNumerCellType(…, 0, 0, 7) .cs:163 (최소 0 · 최대 7). "{0}~{1} 사이의 수를 입력하세요."
+  WTD_RANGE: 'MSG01037',
+  // WORKING_TIME_DEFAULT 정수 — AS-IS SetReNumerCellType 소수 0자리 .cs:163. "정수값만 입력가능합니다!"
+  WTD_INTEGER: 'MSG00460',
+  // 저장 성공 건수 — AS-IS MSG00004 "{0}개의 데이터가 저장되었습니다"(.cs:622 iCount) = TO-BE MSG00672 "{0}개의 데이터가 저장되었습니다."
+  //   {0} = SAVE SP O_RESULT_CURSOR.RESULT_CNT (선례 SavePricePeriodModal / demand-manager SAVED_COUNT).
+  SAVED_COUNT: 'MSG00672',
   // 재진입 가드 — 저장 in-flight 중 재클릭 차단(공통 표준)
   WORK_IN_PROGRESS: 'MSG00137',
   // 저장 대상 없음 — "No data to save."
@@ -124,7 +147,13 @@ export const SAVE_KEYS = [
 //   저장 시에도 이 값을 P_MEASURE 로 전송(고정칼럼).
 export const MEASURE_CONST = 'SHIPMENT WORKING DAY' as const;
 
+// WORKING_TIME_DEFAULT 입력 제약 — AS-IS InitSpread `SetReNumerCellType(spdInfo, col(WORKING_TIME_DEFAULT), 0, 0, 7)`(.cs:163):
+//   소수 0자리 · 최소 0 · 최대 7(주당 출하 가능 일수). 사내 SAVE SP(F_TO_NUM)는 범위 검사가 없으므로 저장 직전 FE 가 판정한다.
+//   빈값은 AS-IS 가 "0" 으로 치환(.cs:567) = 사내 SP F_TO_NUM(NULL)=0 과 동등이라 FE 는 '' 그대로 보낸다.
+export const WTD_RANGE = { MIN: 0, MAX: 7 } as const;
+
 // UI 라벨 코드 — SCM_ADM_MSG_M(MSG_TP_CD='LBL') DB 실측. 호출부는 t(LBL.KEY, '_Fallback').
+//   (Sum 라벨 LBL00687 은 2026-10-20 제거 — AS-IS chkSum 은 Designer Visible=false(:346)라 사용자에게 보이지 않는 컨트롤.)
 export const LBL = {
   SEARCH: 'LBL00112', //         Search
   DIVISION: 'LBL00641', //       Division (DB 실측 EN/KO='Division'. LBL00001='Div.' 는 다른 라벨)
@@ -133,5 +162,4 @@ export const LBL = {
   DAY_OF_THE_WEEK: 'LBL01067', // Day of the week
   INPUT_VALUE: 'LBL01084', //    Input Value
   INPUT: 'LBL00872', //          Input
-  SUM: 'LBL00687', //            Sum
 } as const;

@@ -4,7 +4,7 @@
 "endpoint","DM.DMF0014_GET_CUST_FCST_UPLOAD_DATA","SP DMF0014_GET_CUST_FCST_UPLOAD_DATA (MATCH) @FindData:603","COVERED","SP 등록 메타(SCM_ADM_PROC_M) 에 등록",""
 "endpoint","DM.DMF0014_SAVE_CUST_FCST_UPLOAD_DATA","SP DMF0014_SAVE_CUST_FCST_UPLOAD_DATA (MATCH) @SaveData:734","COVERED","SP 등록 메타(SCM_ADM_PROC_M) 에 등록",""
 "endpoint","DM.PR_GET_DAY_RANGE","SP PR_GET_DAY_RANGE (MATCH) @GetDayRange:1235","COVERED","SP 등록 메타(SCM_ADM_PROC_M) 에 등록",""
-"endpoint","DM.DMF0014_GET_SPREAD_TITLE","SP DMF0014_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1251","INTENDED","","그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+"endpoint","DM.DMF0014_GET_SPREAD_TITLE","SP DMF0014_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1251","COVERED","동적 헤더 시트 'spreadTitle' FE 조회",""
 "endpoint","SCM.SCM0001_GET_LOOKUP_VALUES","SP SCM0001_GET_LOOKUP_VALUES (MATCH) @GetLookupValues:1266","INTENDED","","공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
 "event","cboBucketType.SelectedIndexChanged","→ cboBucketType_SelectedIndexChanged @220","UNMAPPED","","매핑표 없음"
 "event","clbEndCustomer.SelectedIndexChanged","→ clbEndCustomer_SelectedIndexChanged @260","UNMAPPED","","매핑표 없음"
@@ -47,3 +47,4 @@
 "hard_column","FCST Upload.PROJECT_CODE","Project","COVERED","SCM_MST_SHEET_COLUMNS 메타",""
 "hard_column","FCST Upload.SCM_SITE_ID","Sales Site*","COVERED","SCM_MST_SHEET_COLUMNS 메타",""
 "hard_column","FCST Upload.UPLOAD_UOM","Upload UOM*","COVERED","SCM_MST_SHEET_COLUMNS 메타",""
+"dynamic_column","InitSpread:388","DB루프 컬럼 생성 ← DMF0014_GET_SPREAD_TITLE","COVERED","타이틀 시트 'spreadTitle' FE 조회 · 대사표 §6 행 없음(M08)",""

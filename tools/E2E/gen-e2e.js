@@ -44,8 +44,27 @@ for (const id0 of planDirs) {
   const authRows = btnAuth.filter(r => Object.values(r).some(v => up(v) === MENU));
   const grpCol = authRows.length ? Object.keys(authRows[0]).find(k => /GR(OUP)?_?(ID|NM|CD)/i.test(k)) : null; const btnCol = authRows.length ? Object.keys(authRows[0]).find(k => /BTN/i.test(k) && !/MNU_ID|GR/i.test(k)) : null;
   const expectedBtnsByGroup = {}; if (grpCol && btnCol) for (const r of authRows) (expectedBtnsByGroup[r[grpCol]] = expectedBtnsByGroup[r[grpCol]] || new Set()).add(r[btnCol]);
+  // 동적 헤더(기간 컬럼) 기대 — 2026-10-20 SCP0096: 기대 컬럼이 sheet_columns 메타(정적 6)뿐이라 기간 컬럼 0 인 화면이 '헤더 6/기대 6' PASS.
+  //   As-is Fact Pack 에서 기간형 타이틀 SP(GetSpdTitle → *_3SPAN 등)·grid_code DB루프(DB_DRIVEN 컬럼 생성)를 찾으면 smoke 가
+  //   ①정적 메타에 없는 컬럼 binding ≥1 ②사내 배선 타이틀 시트 조회 를 확인한다. 판정 = tools/Harness/lib/dyncol(check.js B27·gap.js 와 동일).
+  const dynamicHeader = (() => {
+    try {
+      const DY = require(path.join(__dirname, '..', 'Harness', 'lib', 'dyncol'));
+      const asisId = (mapScreen.find(r => up(r.tobe_id) === MENU) || {}).asis_id || id; const sd = path.join(cfg.asisOutDir, 'screens', up(asisId));
+      if (!fs.existsSync(path.join(sd, 'endpoints.csv'))) return null;
+      const titles = DY.asisTitleEndpoints(readCsv(path.join(sd, 'endpoints.csv'))).filter(t => t.kind === 'period'); const dbLoop = DY.asisDbLoop(sd);
+      if (!titles.length && !dbLoop.length) return null;
+      const pm = readCsv(path.join(cfg.tobeOutDir, 'db', 'proc_meta.csv')).filter(r => up(r.menu_id) === MENU && r.use_yn !== 'N' && r.proc);
+      // (시트,버튼) 쌍 — 같은 시트에 데이터 SEARCH 와 타이틀 버튼이 함께 배선될 수 있어 호출 판정은 쌍 단위(DMF0020 main/SPREAD_TITLE_DATE)
+      const exactPairs = titles.flatMap(t => { const c = DY.corpTitleSheets(t.sp, pm); return c.via === 'exact' ? c.pairs : []; });
+      const titlePairs = (exactPairs.length ? exactPairs : DY.corpAllTitlePairs(pm)).map(p => ({ sheet: p.sheet, btn: p.btn })).filter((p, i, arr) => arr.findIndex(x => x.sheet === p.sheet && x.btn === p.btn) === i);
+      const titleSheets = [...new Set(titlePairs.map(p => p.sheet))];
+      const staticBindings = [...new Set(sheetCols.filter(r => up(r.program_id) === MENU && mainSheets.some(s => s.name.toLowerCase() === (r.sheet_name || '').toLowerCase())).map(r => up(r.column_name)))];
+      return { titles: titles.map(t => ({ sp: t.sp, members: t.members })), dbLoop, titleSheets, titlePairs, staticBindings };
+    } catch (e) { console.error(`  ${id}: 동적 헤더 판정 실패 — ${e.message}`); return null; }
+  })();
   const accs = accounts.accounts.filter(x => (x.usable || x.adminAlso) && (accounts.loginProbe ? x.loginOk : true));
-  const plan = { id, menuId: MENU, page: P.page, routePath: P.routePath, asisName: P.asisName, fields: P.fields, buttons: P.buttons, mainSheets: mainSheets.map(s => ({ name: s.name, key: s.key, labels: s.labels.slice(0, 40) })), popupSheets: P.sheets.filter(s => s.popup).map(s => s.name), hasSave: P.hasSave, hasSpreadTitle: P.hasSpreadTitle, procs: P.procs, expectedCols, hasMeta, sample: { div: sample['DIV'] || cfg.defaultDivision, item: sample['ITEM_ID'] || '', site: sample['SCM_SITE_ID'] || '', project: sample['PROJECT_CODE'] || '', account: sample.account || sample['테스트계정'] || cfg.defaultAccount }, accounts: accs.map(x => ({ id: x.id, groups: x.groups, divisions: x.divisions, admin: x.adminAlso, screenGroup: x.screens[MENU] || x.screens[id] || '' })), expectedBtnsByGroup: Object.fromEntries(Object.entries(expectedBtnsByGroup).map(([k, v]) => [k, [...v]])), menuAuth: menu.length ? 'menu.csv' : '' };
+  const plan = { id, menuId: MENU, page: P.page, routePath: P.routePath, asisName: P.asisName, fields: P.fields, buttons: P.buttons, mainSheets: mainSheets.map(s => ({ name: s.name, key: s.key, labels: s.labels.slice(0, 40) })), popupSheets: P.sheets.filter(s => s.popup).map(s => s.name), hasSave: P.hasSave, hasSpreadTitle: P.hasSpreadTitle, procs: P.procs, expectedCols, hasMeta, dynamicHeader, sample: { div: sample['DIV'] || cfg.defaultDivision, item: sample['ITEM_ID'] || '', site: sample['SCM_SITE_ID'] || '', project: sample['PROJECT_CODE'] || '', account: sample.account || sample['테스트계정'] || cfg.defaultAccount }, accounts: accs.map(x => ({ id: x.id, groups: x.groups, divisions: x.divisions, admin: x.adminAlso, screenGroup: x.screens[MENU] || x.screens[id] || '' })), expectedBtnsByGroup: Object.fromEntries(Object.entries(expectedBtnsByGroup).map(([k, v]) => [k, [...v]])), menuAuth: menu.length ? 'menu.csv' : '' };
   fs.writeFileSync(path.join(specs, `${id}.plan.json`), JSON.stringify(plan, null, 2), 'utf8');
   const head = `// 자동 생성 — tools/E2E/gen-e2e.js (${new Date().toISOString().slice(0, 10)}) · 원천: Doc/gen/${id}/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것\nimport { test, expect } from '${path.relative(specs, path.join(__dirname, 'fixtures', 'test')).replace(/\\/g, '/')}';\nimport * as fs from 'node:fs';\nconst PLAN = JSON.parse(fs.readFileSync(__dirname + '/${id}.plan.json', 'utf8'));\nconst MENU = ${J(MENU)};\n`;
 
@@ -78,6 +97,18 @@ test.describe(\`\${MENU} ${esc(P.asisName)} 스모크 @smoke\`, () => {
     const missing = expectCols.filter((c: string) => c && !headers.some(h => norm(h) === norm(c) || norm(h).includes(norm(c))));
     test.info().annotations.push({ type: 'columns', description: \`헤더 \${headers.length} / 기대 \${expectCols.length} / 누락 \${missing.length}: \${missing.slice(0, 10).join(', ')}\` });
     expect.soft(missing.length, \`그리드 컬럼 누락 (\${PLAN.hasMeta ? '메타' : 'As-is 라벨'} 기준)\`).toBeLessThanOrEqual(Math.ceil(expectCols.length * 0.2));
+    // 동적 헤더(기간 컬럼) — As-is 타이틀 SP/DB루프가 있으면 정적 메타 밖 컬럼 ≥1 + 사내 배선 타이틀 시트 조회(2026-10-20 SCP0096)
+    if (PLAN.dynamicHeader) {
+      const DH = PLAN.dynamicHeader;
+      const binds = await nscm.gridBindings(0);
+      const stat = new Set((DH.staticBindings || []).map((s: string) => s.toUpperCase()));
+      const dyn = (binds || []).filter((b: string) => !stat.has(b.toUpperCase()));
+      const titleCalls = nscm.calls.filter(c => (DH.titlePairs || []).some((p: { sheet: string; btn: string }) => p.sheet === c.sheet && p.btn.toUpperCase() === c.btn.toUpperCase()));
+      test.info().annotations.push({ type: 'dynamic', description: \`As-is \${DH.titles.map((t: { sp: string }) => t.sp).join(',') || '-'} · DB루프 \${(DH.dbLoop || []).join(',') || '-'} · 컬럼정의 \${binds ? binds.length : '판정불가'} / 정적밖 \${dyn.length} (\${dyn.slice(0, 5).join(',')}) · 타이틀 시트 \${(DH.titleSheets || []).join(',') || '(사내 배선 없음)'} 호출 \${titleCalls.length}\` });
+      expect.soft(binds, '그리드 컬럼 정의 판독(Wijmo columns) — null 이면 판정 불가(ERROR)').not.toBeNull();
+      expect.soft(dyn.length, \`동적 기간 컬럼 ≥1 (As-is \${DH.titles.map((t: { sp: string }) => t.sp).join(',') || 'DB루프'} — 정적 메타 \${stat.size}개 밖 컬럼)\`).toBeGreaterThan(0);
+      if ((DH.titleSheets || []).length) expect.soft(titleCalls.some(c => c.status < 400), \`타이틀 시트 '\${DH.titleSheets.join(\"','\")}' call-proc 조회\`).toBeTruthy();
+    }
     await nscm.snapshot(\`\${MENU}_searched\`);
     test.info().annotations.push({ type: 'calls', description: JSON.stringify(calls.map(c => [c.sheet, c.btn, c.status, c.rows, c.ms])) });
   });

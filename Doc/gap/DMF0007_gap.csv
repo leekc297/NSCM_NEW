@@ -4,7 +4,7 @@
 "endpoint","DM.DMF0007_GET_CUST_FCST_DATA","SP DMF0007_GET_CUST_FCST_DATA (MATCH) @FindDataFCST:628","COVERED","SP 등록 메타(SCM_ADM_PROC_M) 에 등록",""
 "endpoint","DM.DMF0007_GET_CUST_PSI_DATA","SP DMF0007_GET_CUST_PSI_DATA (MATCH) @FindDataPSI:711","COVERED","SP 등록 메타(SCM_ADM_PROC_M) 에 등록",""
 "endpoint","DM.DMF0007_SAVE_CUST_FCST_DATA","SP DMF0007_SAVE_CUST_FCST_DATA (MATCH) @SaveData:951","COVERED","SP 등록 메타(SCM_ADM_PROC_M) 에 등록",""
-"endpoint","DM.DMF0007_GET_SPREAD_TITLE","SP DMF0007_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1850","INTENDED","","그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+"endpoint","DM.DMF0007_GET_SPREAD_TITLE","SP DMF0007_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1850","MISSING","","기간형 동적 헤더 SP — 사내 정확 배선 없음·FE 조회 없음: 배선 등록 후 FE 조회 또는 대사표에 대체 근거 '제외'(check.js B27)"
 "endpoint","DM.UP_FX_GetCommonDataList_DM","SP UP_FX_GETCOMMONDATALIST_DM (MATCH) @GetCustFcstMeasure:1899","INTENDED","","공통 콤보 조회 → useTabComboQueries(콤보ID 등록)"
 "event","clbEndCustomer.SelectedIndexChanged","→ clbEndCustomer_SelectedIndexChanged @159","UNMAPPED","","매핑표 없음"
 "event","clbTeam.SelectedIndexChanged","→ clbTeam_SelectedIndexChanged @199","UNMAPPED","","매핑표 없음"

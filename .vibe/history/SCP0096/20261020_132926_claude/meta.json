@@ -1,0 +1,29 @@
+{
+  "id": "SCP0096",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SCP0096] · Doc/gen/SCP0096/GEN_NOTES.md · Doc/gen/SCP0096/CHECK.md · Doc/gen/SCP0096/DOD.md · Doc/asisfacts/screens/SCP0096/ · 룰: tools/",
+  "start": "2026-10-20T04:29:26.932Z",
+  "end": "2026-10-20T04:30:37.323Z",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "c:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\shipment-working-day-osp",
+      "files": 11
+    },
+    {
+      "name": "db",
+      "dir": "c:\\Projects\\NSCM\\Doc\\gen\\SCP0096",
+      "files": 4
+    },
+    {
+      "name": "gap",
+      "dir": "c:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "afterMode": "end",
+  "afterAt": "2026-10-20T04:30:37.323Z",
+  "changed": []
+}

@@ -29,7 +29,7 @@
 | B8 | 레이아웃 셸: 페이지 최상위 래퍼 div ⛔(`<>`), DataGrid 감싸는 div ⛔, `<MainTitle>`+`<SubTitle>` 필수, FormItem=`commonStyles.formItem` | #132 ui-layout-shell, #121 form-common-styles, #51 screen-shell | `T:` page 템플릿, `G:S03/R12` |
 | B9 | 팝업/모달: 화면 종속 모달은 `components/modals/<Name>Modal.tsx`+`.module.scss`, 공용 popup 은 camelCase 폴더 5파일 + `MODAL_XXX`(실제 MENU_ID) + Router 4 cross-check; CustomDialog `customContentArea` 지정 시 자체 footer 의무(공통 OK/Cancel 미렌더) | #35 popup-modal-and-routing, #34 popup-dialog-layout, UI체크 P9 | `T:modalTpl()`(type modaless, 자체 actions), `DoD:B10/B11`, `G:R14`, 매핑 `D00-P-nnn` |
 | B10 | SHEET_NAME = AS-IS 원본 그대로(개명 금지): FE `SHEETS` value = `SCM_MST_SHEET_COLUMNS.SHEET_NAME`(또는 .cs SpdSheet) = SP = MNU_BTN.SHT_NM | #91 sheet-name-asis-preserve | `T:` SHEETS enum = As-is 시트명, `gen-register-sql` 동일 값 |
-| B11 | 수정 작업 Hard Boundary 6종 변경 금지: `packages/shared` · foundation · lges · 타 도메인 · 타 화면 · `nscm-be`. 공용 prop 추가는 분리 PR + 4 도메인 regression 0 | #41 regression-zero | `applied.json` 범위 = 페이지 폴더만, `repair-loop` allowedTools 범위, `M:` |
+| B11 | 수정 작업 Hard Boundary 6종 변경 금지: `packages/shared` · foundation · lges · 타 도메인 · 타 화면 · `nscm-be`. 공용 prop 추가는 분리 PR + 4 도메인 regression 0. **⊕ 기존 커밋본 페이지(git 추적) 자동 덮어쓰기 금지(2026-10-19)** — 골격 재적용은 매니페스트(applied.json)와 일치하는 하네스 골격에만, 그 외(커밋본·매니페스트 없음·적용 후 변경·REPAIR.md)는 보존하고 사람이 `--force`(백업 후)로만 교체. 계기: SCP0096 파이프라인이 손으로 완성한 커밋본을 골격으로 교체(1,361줄 삭제·대사표 91→20행·dynamic-columns/types 삭제) 후 정적 게이트 PASS | #41 regression-zero · SCP0096 2026-10-19 | `applied.json` 범위 = 페이지 폴더만, `lib/applied.touchReason`(git ls-files·매니페스트 없음 = 보호), **`G:M06`**(커밋본 대비 대사표 행·구현 수 축소 BLOCK) · **`G:M07`**(커밋본 파일 삭제 BLOCK), `repair-loop` allowedTools 범위, `M:` |
 
 ## C. 동적 속성·메타 (admin 운영 결정이 화면에서 무효화되면 안 된다 — 절대 누락 금지 3종)
 | # | 룰 요지 | 출처 | Vibe 적용 |
@@ -39,7 +39,7 @@
 | C3 | Measure Code/Label/Sort/Valid = SYS0004(동적 PIVOT 화면) | #66 | `M:` PIVOT 화면 시 확인(자동화 후보) |
 | C4 | admin 메타 8 테이블에 **임의 데이터 금지**: 값은 As-is 메타/소스에서만. CTRL 코드 `FP*` 화이트리스트, `INPUT_TP_CD` 5종(`MI` 금지), `HORIZONTAL_ALIGN_CODE` 단일문자 C/L/R, NOT NULL 전수(`desc` 선행) | #78 ui-category-setup-no-arbitrary-data, #7 column-lookup-meta, #96 column-align-code, #98 | `gen-register-sql` JSON_TABLE 값 매핑, `check-meta-sql.ps1`·`check-notnull-insert.ps1`(유지) |
 | C5 | `DIVISION_ID`(콤마 토큰) 기반 컬럼 표시: 값 있으면 선택 division 포함 시만, 공란=전체. 서버 직접 비교(divisionId 전송) | #92 column-division-id-visibility, #113 ui-category-division-direct-compare | `T:` division 필수 필터, AsisFacts grid_effective DIV 열, `DoD:B12` |
-| C6 | PROC_M 행/SORT_ORD = SP `ALL_ARGUMENTS` positional 일치; SP body 변경 후 PROC_M 동기(O_RESULT_CURSOR 누락 → PLS-00306) | #39 proc-meta-signature-match, 21_TROUBLESHOOTING §0 | `gen-register-sql` BLOCK 2 (ALL_ARGUMENTS 동적), `check-pkg` |
+| C6 | PROC_M 행/SORT_ORD = SP `ALL_ARGUMENTS` positional 일치; SP body 변경 후 PROC_M 동기(O_RESULT_CURSOR 누락 → PLS-00306). **⊕ FE 조회 filter 키 = 사내 현행 PROC_M COL_NM**(`Doc/tobefacts/db/proc_params.csv`) — BE 가 COL_NM 으로 positional 매핑하므로 키가 다르면 오류 없이 NULL 전달 → 조회 0건. **registration.sql 의 API 배선은 사내 현행(`proc_meta.csv`)과 같아야** 적용(다르면·프로시저명 공란이면 적용 금지) | #39 proc-meta-signature-match, 21_TROUBLESHOOTING §0 · SCP0096 2026-10-19 | `gen-register-sql` BLOCK 2 (ALL_ARGUMENTS 동적), `check-pkg`, **`DoD:B22`**(filter 키↔COL_NM) · **`DoD:B23`**(등록 SQL↔사내 배선) |
 | C7 | 등록 7영역(i18n·PROC_M·SHEET_COLUMNS·MNU_M·API_M·MNU_BTN_MPG·USER_GR 권한) + SCMD_APP GRANT/SYNONYM 즉시 | TRIGGER §7-4, #44 scmd-app-grant | `gen-register-sql` 7 BLOCK + 검증 SELECT, `M:` GRANT 는 클라우드 이관 시 |
 | C8 | 권한 판정 = USER_ID 기준 보유 권한 **합집합**(현재 그룹 1개 전송 금지) | #128 auth-by-userid-not-groupid | `E:` auth 스펙 12계정×DIV, `T:` 권한 훅 |
 | C9 | 기능 버튼 메타 완전성: As-is 기능 + FE handler 가 있는데 `hasButton()` false 로 미표시되는 버튼 0 | #82 feature-button-meta-completeness | `DoD:B07/B08`, 등록 SQL BLOCK 6, `E:` buttons 어노테이션 |
@@ -56,6 +56,7 @@
 | D6 | selectionMode 명시, 자동 체크 금지, loadedRows 4 패턴, 셀 종속 combo: beginningEdit dataMap 스왑 + cellEditEnded 전체 원복, 계단식 clear, modal preSearchParams = 클릭 행값 | #21 grid-interaction, #5 §5-G, #18 grid-cell-interaction | `T:` CellDoubleClick→모달 preSearchParams+selectedRow, `P:` |
 | D7 | 사용자 컬럼 표시설정 popup 5단계 + 재진입 복원(localStorage mount 1회 복원, handleApply 직접 setItem) | #20, #23 | `P:` 참고 |
 | D8 | PIVOT 헤더 드릴다운(M→W→D 토글, AS-IS 1:1), 동적 컬럼 NVL wrap(NULL 키 누락 방지), titleset 'C' 캐시 면역, 다단 grid + 하단 tab = lazy fetch | #103, #32, #115, #81 | `P:` PIVOT 화면 지시, `M:` |
+| D8a | **동적 헤더(기간 컬럼) 원천 = 사내 배선 타이틀 시트 조회 (2026-10-20)**: As-is `GetSpdTitle` → `*_GET_SHEET_CALENDAR_3SPAN(_ISO)` / 화면별 `*_GET_SPREAD_TITLE*` / `*_TITLE_PARAL` (SCM_SYS_CALENDAR_M 등 기간형) 은 `proc_meta.csv` 의 해당 시트를 FE 가 `useTabProcQuery` 로 조회해 o_rc1(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)로 헤더 생성(As-is `InitSpreadDateColumn` 1:1). 메타형(`*_GET_COMMON_SPREAD_TITLE`·`SCM_SYS_GET_SPREAD_TITLE` = SHEET_COLUMNS) 은 admin 컬럼 메타로 대체. **`RESPONSE_SET` 값 = `proc_params.csv` OUT COL_NM(대소문자 그대로)만** — `o_rc1_columns`(ResultSetMetaData 사이드카)는 SYS0013 DynamicQuery 전용, 일반 call-proc 응답에 없음. 페이지 주석·대사표 서술은 근거 아님(BE·메타 원문 확인). 계기: SCP0096 조회 시 기간 컬럼 0 인데 DoD 28/28·GAP COVERED | SCP0096 2026-10-20 · `feedback_o_rc1_columns_sidecar_dynamicquery_only` | **`DoD:B26`**(응답 키 ⊂ OUT COL_NM) · **`DoD:B27`**(기간형 타이틀 SP 사내 배선 시트 FE 조회) · **`G:M08`**(대사표 §6 DB루프 컬럼 생성 행) · **`G:M09`**(엔드포인트 '구현' 인데 사내 배선 시트 미조회 = 근거 불일치) · `gap.js` 기간형 타이틀 = FE 조회해야 COVERED · `gen.js` 타이틀 시트 SHEETS·GEN_NOTES 9·대사표 §6 · `E2E smoke` 정적 메타 밖 binding ≥1 + 타이틀 시트 호출(`dynamic`) (`lib/dyncol.js` 공용 판정) |
 | D9 | 우클릭 커스텀 메뉴: dismiss 는 `mousedown {once:true}` 가 아닌 click 단계 | #102 | `P:` 참고 |
 | D10 | 편집 가능 그리드 + BE `EDIT_FLAG='N'` 환경 → 화면 측 `beginningEdit` 등록(의도 binding 만 `e.cancel=false`) | UI체크 3.1 | `T:` 주석, `P:` |
 
@@ -63,6 +64,7 @@
 | # | 룰 요지 | 출처 | Vibe 적용 |
 |---|---|---|---|
 | E1 | Form = `SearchArea`/`FormItem`/`CustomDropdown`/`ItemField`/`ProjectField`/`OwnerField`; 2단(6필드) 초과 → `extraConditions`; 3단↑ 펼침/닫기 토글; SearchArea 부재 시 SubTitle `searchAction`; 모든 조회조건 객체 높이 36px | #51, #52, #83, #53, #94 | `T:` Form 템플릿(공용 필드 우선), `DoD:B14~B17` |
+| E9 | **As-is Form_Load 초기 조회조건 보존** — `InitControls` 의 `dCalendar.InitValue = GetDayRange()`(`DateUtil.GetDayRange` → `SCM0001_GET_SCP_MONTH_PERIOD`)·콤보 기본값은 프레임워크 유틸 호출이라 **flow.csv 에 없다** → `.cs` 원문 직접 Read 후 store 초기값에 반영. 초기기간 빈값 금지 | SCP0096 2026-10-19 (AS-IS InitControls cs:137) | **`DoD:B24`**(`asisSrcRoot` .cs 의 InitValue/DateUtil 대조 ↔ store init From/To 빈값), `P:` new_screen 입력 2-1 |
 | E2 | **Division 변경 시 하위 'ALL' reset + Grid 비움 + CRUD pending reset**(재조회는 Search), Map dedup, `useTabComboQueries` 1RT, `filters` 인라인 객체 리터럴 금지(참조 비교 → 무한 재요청) | #5 cascade-combo-filter §1.4, #70 | `T:` MyDivision effect·`toFilter`, `G:R08` |
 | E3 | 콤보/모달 옵션 = 룩업 조회(하드코딩 금지, 빈 결과 fallback), 날짜 셀 표시↔검증 형식 일치; CMBO_SQL `@var` → `TO_CHAR()` wrap | #87, #29 | `T:` CustomDropdown multiple 패턴, `G:B16`(라벨 하드코딩) |
 | E4 | 조회조건 AS-IS↔TO-BE 카탈로그(`_rules_v2/_mapping/search_conditions_scp_dm.md` 953행) 와 데이터 소스 1:1 정합 — 명칭·유형·팝업 그대로, 공유 CMBO 보호 | #112, #117 | `rules/map_field.csv`·`map_control.csv`(mined), `P:` 카탈로그 경로, `G:G02` |
@@ -74,7 +76,7 @@
 ## F. 버튼·권한·저장·응답
 | # | 룰 요지 | 출처 | Vibe 적용 |
 |---|---|---|---|
-| F1 | SubTitle 11 버튼 = `hotkeyConfig` 1 객체 자동 매핑(search/save/addRow/removeRow/refresh/excel…), AS-IS CRUD 6 + Aux 4 버튼 매핑표, 공통 버튼 override 3줄 이하(빈 본문) = 기능 비활성 | #63, #1, `rules/map_button.csv` | `T:` handlers→hotkeyConfig, `DoD:B06~B09`, 매핑 `D00-1-nnn` |
+| F1 | SubTitle 11 버튼 = `hotkeyConfig` 1 객체 자동 매핑(search/save/addRow/removeRow/refresh/excel…), AS-IS CRUD 6 + Aux 4 버튼 매핑표, 공통 버튼 override 3줄 이하(빈 본문) = 기능 비활성. **⊕ To-Be 쪽도 같다: 빈 본문 핸들러(TODO 스텁)는 'false 가 아님' 으로 B08 을 통과하므로 본문 공란 자체를 판정**(SCP0096 handleSave 2026-10-19) | #63, #1, `rules/map_button.csv` | `T:` handlers→hotkeyConfig, `DoD:B06~B09`, **`DoD:B25`**(save/insert/delete/upload 핸들러 본문 공란 BLOCK), 매핑 `D00-1-nnn` |
 | F2 | `useProcMutation` onSuccess override 시 default invalidate+toast 명시; 저장 후 toast + 재조회(readback) | #28, #131 ui-save-idempotent-readback | `T:` handleSave 스텁 주석, `P:` |
 | F3 | 저장 멱등성: 조회가 PIVOT/GROUP BY 축이면 저장도 그 축 보존(유령 행 금지); SAVE payload 편집=`'M'` 신규=`'I'`, FE dedup 키 = SP GROUP BY 키 | #131, #99 | `P:` SAVE 보유 화면, golden 테스트(`golden.py` --write ROLLBACK) |
 | F4 | SP OUT cursor 이름 ↔ FE response key 정합(`o_rc` / `O_RESULT_CURSOR` fallback chain) | #80 | `T:` `data?.o_rc ?? []`, `DoD:B05` |
@@ -90,7 +92,7 @@
 | # | 룰 요지 | 출처 | Vibe 적용 |
 |---|---|---|---|
 | H1 | MSSQL 키워드 잔존 0: DATEADD/CHARINDEX/STRING_SPLIT/GETDATE/ISNULL/IIF/N'…'/NOLOCK/TOP/`+`문자열/CONVERT/#temp/@@ | 절대금지 ⑩, 01_MSSQL_to_Oracle_Conversion_Rules | `G:P01~P19`(check-pkg) |
-| H2 | 널 센티널 `'-'` 통일: 비교·JOIN 양변 `NVL(x,'-')`, NOT NULL INSERT `NVL(x,'-')/NVL(x,0)/SYSDATE`; `NVL(x,NULL)` 금지 | #119, #127 | `G:P30`(NVL(x,NULL)) · 센티널은 `P:` |
+| H2 | 널 센티널 **`'/'`** 통일(⭐ 2026-10-15 사용자 지시, 10-19 룰 반영 — 신규 NULL 초기값·비교 센티널 = `'/'`, 원래 데이터가 `'-'` 인 값은 유지, 과도기 빈값 술어 `IN ('-','/')`; AS-IS 가 `'-'` 를 실값으로 쓰는 컬럼의 `= '-'` 비교만 유지): 비교·JOIN 양변 `NVL(x,'/')`(센티널 컬럼 과도기 `DECODE(x,'-','/',NVL(x,'/'))`), NOT NULL INSERT `NVL(x,'/')/NVL(x,0)/SYSDATE`; `NVL(x,NULL)`·`NVL(x,'-')`·`DEFAULT '-'` 금지 | #119(10-15 개정), #127, 메모리 `feedback_oracle_nvl_sentinel_slash`·`feedback_slash_transition_accept_both` | `G:P30`(NVL(x,NULL)) · **`G:P39`**(`NVL(x,'-')`/`DEFAULT '-'` BLOCK) · **`G:P40`**(`'-'` 단독 비교 WARN) · `P:` port_pkg §센티널 |
 | H3 | DATE 파라미터 원시값·단일인자 `TO_DATE` 금지, `TO_CHAR(date)` 무마스크 금지(NLS 암묵변환) | #109 | `G:P32/P33` |
 | H4 | GET SP = `O_RC` + `O_RESULT_CURSOR` dual OUT(O_RC 가 PROC_RESULT); SAVE SP = `JSON_TABLE '$[*]'` + entry/HIST 동시 | #56, #58 | `gen-pkg` 골격, `G:P91` |
 | H5 | EXCEPTION OTHERS 는 디버그 친화(개발=SQLERRM 명시, 운영=표준+로그), `UTL_CALL_STACK.SUBPROGRAM(1)(N)` 는 `.COUNT>=N` 체크 | #57, #62 | `gen-pkg` 골격, `G:P92/P36` |
@@ -112,10 +114,10 @@
 |---|---|---|
 | ① AS-IS 4축 매핑 | EID 1:1 대사표 빈 칸 0 | `__asis-mapping__.md` `G:M01~M05/G02`, `DoD:B01~B03/B19` |
 | ② 버튼 매핑 | CRUD 6 + Aux 4 | `DoD:B06~B09` |
-| ③ Grid/Column 메타 | 시트×DIV 컬럼 = 메타 | `DoD:B03/B12/B18`, `G:G01`, Recon 시트 대사, `E:` columns 어노테이션 |
+| ③ Grid/Column 메타 | 시트×DIV 컬럼 = 메타 · 조회 filter 키 = 사내 PROC_M COL_NM · 등록 SQL 배선 = 사내 현행 | `DoD:B03/B12/B18`, `G:G01`, **`DoD:B22/B23`**, Recon 시트 대사, `E:` columns 어노테이션 |
 | ④ 메타·라우팅 | 7영역 등록 + MNU_URL=폴더 | `<ID>_registration.sql` BLOCK 8 검증 |
-| ⑤ 정적 | type/lint 0, Hard Boundary 0 | `check.js --final`, `applied.json` |
-| ⑥ 런타임 smoke | 화면 열림·조회·모달 OK/Cancel·편집→저장→toast | `E:` smoke/crud/auth 스펙 |
+| ⑤ 정적 | type/lint 0, Hard Boundary 0, **커밋본 대비 후퇴 0**(파일 삭제·대사표 축소) | `check.js --final`, `applied.json`, **`G:M06/M07`** |
+| ⑥ 런타임 smoke | 화면 열림·조회·모달 OK/Cancel·편집→저장→toast. **파이프라인 PASS 는 ①~⑤ 정적까지만이다 — ⑥⑦ 없이 '완료' 라 부르지 않는다** | `E:` smoke/crud/auth 스펙 · `DoD:B24/B25`(초기값·빈 핸들러는 정적으로 선차단) |
 | ⑦ 권한·Division | 계정×DIV 매트릭스 | `E:` auth(12계정×40/81/82) |
 | ⑧ 보고 | 증빙 경로 첨부 | `PIPELINE.md`(단계·소요·다음 할 일) + `DOD.md` |
 - 추가: UI 메타 실소비 + CRUD 경로 전수 커버리지(#130), 통합테스트 UI 공통 6항목(Insert 필터 clear/조회 confirm MSG00703/설정 복원…)(#133), 보완요청 종결 = 증상 재현·해소 실측(#149). — `E:` crud 스펙 + `M:`.

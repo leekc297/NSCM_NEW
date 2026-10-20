@@ -7,7 +7,7 @@
          powershell -NoProfile -ExecutionPolicy Bypass -File agent.ps1 DMF0052 -Phase docs   # 1차 분석서는 그대로 두고 문서 3종만 생성
 #>
 $ErrorActionPreference = "Stop"
-$Driver = "claude-cli"; $Model = "claude-sonnet-4-5"; $Phase = "all"; $Ids = @()
+$Driver = "claude-cli"; $Model = "claude-opus-5-5"; $Phase = "all"; $Ids = @()
 for ($i = 0; $i -lt $args.Count; $i++) {
   switch ($args[$i]) {
     "-Driver" { $Driver = $args[++$i] }
@@ -23,4 +23,7 @@ dotnet build (Join-Path $here "AsisFacts.csproj") -c Release -o (Join-Path $here
 if ($LASTEXITCODE -ne 0) { Write-Host "빌드 실패" -ForegroundColor Red; exit 1 }
 if ($Ids.Count -eq 0) { Write-Host "화면ID 를 지정하세요"; exit 1 }
 & dotnet $exe agent @Ids --driver $Driver --model $Model --phase $Phase --config $cfg
-exit $LASTEXITCODE
+$rc = $LASTEXITCODE
+# 문서 Excel 묶음(사람이 보는 사본) — MD 는 그대로. 실패해도 agent 결과에는 영향 없음 (2026-10-19)
+if ($rc -eq 0 -and $Driver -ne 'dry') { try { & python (Join-Path $here "..\Docs\md2xlsx.py") @Ids } catch { Write-Host "Excel 묶음 실패: $_" -ForegroundColor Yellow } }
+exit $rc

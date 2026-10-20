@@ -1,0 +1,248 @@
+{
+  "menuId": "SCP0096",
+  "page": "ShipmentWorkingDayOsp",
+  "feature": "supply",
+  "routePath": "supply/supply-master/shipment-working-day-osp",
+  "asisName": "Shipment_Working_Day_OSP",
+  "fields": [
+    {
+      "key": "period",
+      "label": "Period",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "dCalendar"
+    },
+    {
+      "key": "divisionId",
+      "label": "Division",
+      "lbl": "LBL00641",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "Division_SCP_NoEE",
+      "popup": false,
+      "asis": "cboDivision"
+    },
+    {
+      "key": "plantSiteIds",
+      "label": "Plant Site",
+      "lbl": "LBL00005",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "PlantByDivisionOperOsp3_SCP",
+      "popup": false,
+      "asis": "clbPlantSite"
+    },
+    {
+      "key": "inputValue",
+      "label": "Input Value",
+      "lbl": "LBL01084",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "YesOrNo",
+      "popup": false,
+      "asis": "cboInputValue"
+    },
+    {
+      "key": "dayWeek",
+      "label": "Day of the week",
+      "lbl": "LBL01067",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "lookup:WEEK_WORK_TIME",
+      "popup": false,
+      "asis": "cboDayWeek"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "input",
+      "label": "Input",
+      "lbl": "LBL00872",
+      "kind": "n/a",
+      "tobe": "Form Button(onInput → hooks/useShipmentWorkingDayOspInputValue)",
+      "asis": "btnInput"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "Shipment Working Day OSP",
+      "key": "SHIPMENT_WORKING_DAY_OSP",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "DIVISION_ID",
+        "LAST_INPUT_DATE",
+        "MEASURE",
+        "PLANT_SITE_ID",
+        "PLANT_SITE_NAME",
+        "WORKING_TIME_DEFAULT"
+      ],
+      "labels": [
+        "Division",
+        "Last Input Date",
+        "Measure",
+        "Plant Site ID",
+        "Plant Site",
+        "Working Time Default"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "DM0003_GET_BUCKET_TYPE_CODE",
+      "sheet": "Shipment Working Day OSP",
+      "btn": "",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0096.P_DM0003_GET_BUCKET_TYPE_CODE",
+      "entries": [
+        "event:this.Load"
+      ],
+      "note": "dtBucketType 소비 코드 전부 주석 — FE 미호출(대사표 D00-4-007 제외)"
+    },
+    {
+      "sp": "SCP0096_GET_SHIPMENT_WORKING_DAY_OSP",
+      "sheet": "Shipment Working Day OSP",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP",
+      "entries": [
+        "button:FindButton",
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "calendar",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "entries": [
+        "event:this.Load",
+        "button:FindButton",
+        "button:SaveButton"
+      ],
+      "note": "사내 배선 calendar/SEARCH — FE 는 GET O_RC1 alias 로 헤더 파생(미호출)"
+    },
+    {
+      "sp": "SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP",
+      "sheet": "Shipment Working Day OSP",
+      "btn": "SAVE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0096.P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP",
+      "entries": [
+        "button:SaveButton"
+      ]
+    },
+    {
+      "sp": "SCM0001_GET_SCP_MONTH_PERIOD",
+      "sheet": "dayRange",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD",
+      "entries": [
+        "event:this.Load"
+      ],
+      "note": "InitControls GetDayRange(.cs:137) — FE 초기 조회기간"
+    }
+  ],
+  "hasSave": true,
+  "hasSpreadTitle": false,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SCP.SCM0001_GET_SCP_MONTH_PERIOD"
+      ]
+    },
+    {
+      "name": "handleSpdMain",
+      "target": "spdMain",
+      "event": "CellDoubleClick",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleSpdMainTopChange",
+      "target": "spdMain",
+      "event": "TopChange",
+      "slot": "grid-event",
+      "calls": []
+    },
+    {
+      "name": "handleCboDivision",
+      "target": "cboDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleClbPlantSite",
+      "target": "clbPlantSite",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCboDayWeek",
+      "target": "cboDayWeek",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleInput",
+      "target": "btnInput",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleSum",
+      "target": "this.chkSum",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": [],
+      "note": "Designer Visible=false — 화면 비노출(실행 동작 없음)"
+    }
+  ],
+  "tcs": [],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ],
+  "note": "2026-10-20 실제 페이지(커밋본 76d00a5e + 보완) 기준으로 손질 — gen.js 재생성 금지(골격 값으로 회귀). 변경: Division/PlantSite comboId·LBL · sumYn 제거(AS-IS 비노출) · hasSave true · procs SAVE/dayRange 추가·공란 후보 제거"
+}

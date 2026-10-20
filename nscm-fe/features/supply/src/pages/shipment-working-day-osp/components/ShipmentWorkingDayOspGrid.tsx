@@ -39,15 +39,21 @@ interface ShipmentWorkingDayOspGridProps {
   // 편집모드(EditButton SwitchLock) — off 면 전열 잠금, on 이면 WORKING_TIME_DEFAULT+D_ 만 개방(03 §3-a).
   //   SCP0019(OSP_YN 행 게이트)와 다른 델타: SCP0096 은 명시 편집모드 상태다.
   editMode: boolean;
-  // chkSum — W_/M_ SUM 컬럼 show/hide 토글(03 §3-c). off 면 SUM 열 숨김.
+  // chkSum — W_/M_ SUM 컬럼 show/hide(03 §3-c). AS-IS chkSum 은 Designer Visible=false(:346)·GET SP 에 W_/M_ 없음 → 부모가 항상 false 전달
+  //   (SUM 처리 코드는 AS-IS SetSpreadColumn .cs:339-358 대응분으로 비활성 보존).
   showSum: boolean;
 }
 
-// 편집 대상 정적 컬럼 — WORKING_TIME_DEFAULT(FPNumber scale2). 편집성 근거는 SHEET_COLUMNS.INPUT_TP_CD
-//   (='S' 읽기전용)가 아니라 AS-IS 코드다(03 §3-a EditButton SwitchLock 후 개방). 즉 메타에 근거 없는
-//   코드-편집 규약의 재현이며, admin 관리 속성을 리터럴로 덮어쓰는 것이 아니다. INPUT_TP_CD 메타 정합은
-//   deploy SQL 정비 대상(runtime-parity [A] — sheet-columns-editable-metadata-all-s-highrisk).
-const EDITABLE_STATIC_BINDING = 'WORKING_TIME_DEFAULT';
+// 정적 컬럼 편집 가부 = admin SHEET_COLUMNS.INPUT_TP_CD 단일 원천(feedback_input_tp_cd_meta_over_hardcoded_editlock).
+//   사내 실측(ZIOUI1 2026-10-20, Doc/tobefacts/db/sheet_columns.csv): WORKING_TIME_DEFAULT 'O'(ZIONEX 2026-09-25) · 나머지 5컬럼 'S'
+//   = AS-IS EditButton 이 코드로 개방하던 범위(.cs:288-289 LockColumn 제외분)와 일치. 이전 리터럴 EDITABLE_STATIC_BINDING 하드코딩은
+//   admin 변경을 무효화하므로 제거(2026-10-20, 원장 S96-14). 메타가 비면 읽기전용('S'). 클라우드 기존행 'S' 잔존은 registration.sql BLOCK 3-b 가 맞춘다.
+const EDITABLE_INPUT_TYPES: ReadonlySet<CELL_INPUT_EDIT_TYPE> = new Set([
+  CELL_INPUT_EDIT_TYPE.OPTIONAL,
+  CELL_INPUT_EDIT_TYPE.MANDATORY,
+  CELL_INPUT_EDIT_TYPE.OPTIONAL_INSERT_ONLY,
+  CELL_INPUT_EDIT_TYPE.MANDATORY_INSERT_ONLY,
+]);
 
 // FlexGridColumn 렌더링용 통합 column meta (WorkingTimeGrid MergedColumnMeta 1:1).
 interface MergedColumnMeta {
@@ -58,6 +64,8 @@ interface MergedColumnMeta {
   visible: boolean;
   display: boolean;
   fixed: boolean;
+  // admin INPUT_TP_CD 그대로(S/O/M/IO/IM). 미등재는 'S'.
+  inputTpCd: CELL_INPUT_EDIT_TYPE;
   cellCtrlObjTpCd?: CELL_CONTROL_TYPE;
   cellCboDataTp?: string;
 }
@@ -95,6 +103,7 @@ export const ShipmentWorkingDayOspGrid = ({
           visible: col.visible !== false,
           display: col.display === true,
           fixed: col.fixed === true, // admin FIXED_FLAG 위임 (MEASURE 좌측고정 등 — 리터럴 덮어쓰기 금지)
+          inputTpCd: col.inputTpCd ?? CELL_INPUT_EDIT_TYPE.SEARCH_ONLY, // admin INPUT_TP_CD 위임
           cellCboDataTp: comboKey,
           cellCtrlObjTpCd: comboKey ? CELL_CONTROL_TYPE.COMBO : col.cellCtrlObjTpCd,
         } as MergedColumnMeta;
@@ -107,8 +116,8 @@ export const ShipmentWorkingDayOspGrid = ({
     [mergedColumns]
   );
 
-  // 정적 6컬럼 — WORKING_TIME_DEFAULT 만 편집형(OPTIONAL), 나머지 식별/메타는 읽기전용('S').
-  //   편집 가부는 beginningEdit editMode 판정과 AND — 컬럼 선언이 편집형이어도 편집모드 off 면 막힌다.
+  // 정적 6컬럼 — 편집형 여부는 admin INPUT_TP_CD 그대로(사내 현행: WORKING_TIME_DEFAULT 'O', 나머지 'S').
+  //   편집 가부는 beginningEdit editMode 판정과 AND — 컬럼 선언이 편집형이어도 EDIT 권한이 없으면 막힌다.
   const mainStaticColumns = useMemo<RawFlexGridColumnConfig[]>(
     () =>
       visibleColumns.map(c => ({
@@ -119,13 +128,16 @@ export const ShipmentWorkingDayOspGrid = ({
         fixed: c.fixed,
         visible: true,
         display: true,
-        inputTpCd:
-          c.binding === EDITABLE_STATIC_BINDING
-            ? CELL_INPUT_EDIT_TYPE.OPTIONAL
-            : CELL_INPUT_EDIT_TYPE.SEARCH_ONLY,
+        inputTpCd: c.inputTpCd,
         cellCtrlObjTpCd: c.cellCtrlObjTpCd,
         cellCboDataTp: c.cellCboDataTp,
       })),
+    [visibleColumns]
+  );
+
+  // 편집 가능 정적 binding 집합 — INPUT_TP_CD ∈ {O, M, IO, IM}. admin 변경 시 즉시 반영.
+  const editableStaticBindings = useMemo(
+    () => new Set(visibleColumns.filter(c => EDITABLE_INPUT_TYPES.has(c.inputTpCd)).map(c => c.binding)),
     [visibleColumns]
   );
 
@@ -206,9 +218,9 @@ export const ShipmentWorkingDayOspGrid = ({
 
   const dynBindings = useMemo(() => new Set(dynColumns.map(dc => dc.binding)), [dynColumns]);
 
-  // 편집 가능 셀 binding 판정 — 동적 D_ 셀 또는 WORKING_TIME_DEFAULT. (W_/M_ SUM 은 잠금 — 제외.)
+  // 편집 가능 셀 binding 판정 — 동적 D_ 셀 또는 INPUT_TP_CD 편집형 정적 컬럼(사내 현행 = WORKING_TIME_DEFAULT). (W_/M_ SUM 은 잠금 — 제외.)
   const isEditableBinding = (binding: string): boolean =>
-    dynBindings.has(binding) || binding === EDITABLE_STATIC_BINDING;
+    dynBindings.has(binding) || editableStaticBindings.has(binding);
 
   // 요일색 판정 — D_ leaf 헤더(일)의 요일. dynColumns 에서 binding→weekday 조회(0=일 ~ 6=토, 03 §3-c).
   const weekdayByBinding = useMemo(() => {
@@ -275,7 +287,7 @@ export const ShipmentWorkingDayOspGrid = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visibleColumns, dynBindings, weekdayByBinding]);
+  }, [visibleColumns, dynBindings, editableStaticBindings, weekdayByBinding]);
 
   // editMode 토글 시 셀 잠금표기 갱신 — 핸들러는 ref 로 최신값을 읽으나 재도색 트리거가 필요하다.
   useEffect(() => {

@@ -4,7 +4,7 @@
 "endpoint","SCP.SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE","SP SCP0098_SAVE_SCP_CAPA_PRODUCT_RATE (MATCH) @SaveDataFull:2219","MISSING","","매핑표·코드·주석 어디에도 대응 없음"
 "endpoint","SCP.SCP0098_SAVE_SCP_CAPA","SP SCP0098_SAVE_SCP_CAPA (MATCH) @SaveDataFull:2275","MISSING","","매핑표·코드·주석 어디에도 대응 없음"
 "endpoint","SCP.SCP0098_SAVE_SCP_CAPA_WORK","SP SCP0098_SAVE_SCP_CAPA_WORK (MATCH) @SaveDataFull:2332","MISSING","","매핑표·코드·주석 어디에도 대응 없음"
-"endpoint","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","SP SCP0009_GET_SHEET_CALENDAR_3SPAN (MATCH) @GetSpdTitle:3040","MISSING","","매핑표·코드·주석 어디에도 대응 없음"
+"endpoint","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","SP SCP0009_GET_SHEET_CALENDAR_3SPAN (MATCH) @GetSpdTitle:3040","MISSING","","기간형 동적 헤더 SP — 사내 정확 배선 없음·FE 조회 없음: 배선 등록 후 FE 조회 또는 대사표에 대체 근거 '제외'(check.js B27)"
 "endpoint","SCP.SCM0001_GET_SCP_DAILY_PLAN_PERIOD","SP SCM0001_GET_SCP_DAILY_PLAN_PERIOD (MATCH) @GetLastRange:3075","MISSING","","매핑표·코드·주석 어디에도 대응 없음"
 "endpoint","SCP.SCM0001_GET_SCP_DAY_PERIOD","SP SCM0001_GET_SCP_DAY_PERIOD (MATCH) @GetDayRange:3095","COVERED","To-Be 주석(asis_refs) 에 SP 언급",""
 "endpoint","SCP.PR_SCM_SYS_LOG_BATCH","SP PR_SCM_SYS_LOG_BATCH (MATCH) @SCM_SYS_LOG_BATCH:3336","INTENDED","","화면 사용 로그 → BE 공통(Aspect/LogController) — 화면 코드 대응 없음"
@@ -45,3 +45,4 @@
 "control","txtInpuValue","TextBox → InputField @50","COVERED","D00-1-036 `BulkUpdateModal` (Bulk Update 팝업으로 대체 — To-Be 문서 SCP0098)",""
 "control","spdMain","FpSpread → DataGrid @71","COVERED","D00-1-034 `CapaMobilityItGrid.tsx` (공용 `DataGrid`)",""
 "sheet","CAPA_SMALL","META+코드연결","COVERED","SHEETS enum / 시트 메타",""
+"dynamic_column","InitSpreadDateColumn:336","DB루프 컬럼 생성 ← SCP0009_GET_SHEET_CALENDAR_3SPAN","MISSING","","동적 컬럼 원천 타이틀 SP 의 사내 배선 없음 — DB 메타 등록 후 FE 조회(B27)"

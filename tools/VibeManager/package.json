@@ -2,7 +2,7 @@
   "name": "vibe-manager",
   "displayName": "Vibe_Manager",
   "description": "NSCM 전환(As-is C#.NET → To-Be React/Oracle) 6단계 작업을 VS Code 에서 실행·판정하는 관리 패널 — 프로그램 ID 하나로 단계별 작업, 룰·Hook·하네스 관리, 환경설정, 실행 이력",
-  "version": "1.2.1",
+  "version": "1.8.5",
   "publisher": "marisoft",
   "license": "UNLICENSED",
   "private": true,
@@ -39,36 +39,33 @@
     "views": {
       "vibeManager": [
         {
-          "id": "vibeManager.steps",
-          "name": "NSCM 전환 단계",
+          "id": "vibeManager.menu",
+          "name": "전체 메뉴",
           "icon": "media/vibe.svg",
           "contextualTitle": "Vibe_Manager"
-        },
-        {
-          "id": "vibeManager.dod",
-          "name": "완료 정의(DoD) — 현재 화면",
-          "icon": "media/vibe.svg"
-        },
-        {
-          "id": "vibeManager.harness",
-          "name": "룰 · Hook · 하네스",
-          "icon": "media/vibe.svg"
-        },
-        {
-          "id": "vibeManager.env",
-          "name": "환경설정",
-          "icon": "media/vibe.svg"
         }
       ]
     },
     "viewsWelcome": [
       {
-        "view": "vibeManager.steps",
+        "view": "vibeManager.menu",
         "contents": "프로젝트 루트(C:\\Projects\\NSCM)를 찾지 못했습니다.\n[설정 열기](command:vibeManager.openSettings)\n`vibeManager.projectRoot` 에 tools\\AsisFacts 가 들어 있는 폴더를 지정하세요.",
         "when": "vibeManager.noRoot"
       }
     ],
     "commands": [
+      {
+        "command": "vibeManager.openWorkbench",
+        "title": "Vibe_Manager Workbench 열기",
+        "category": "Vibe_Manager",
+        "icon": "$(layout)"
+      },
+      {
+        "command": "vibeManager.openWorkbenchNew",
+        "title": "Workbench — 새 창 (멀티 인스턴스)",
+        "category": "Vibe_Manager",
+        "icon": "$(split-horizontal)"
+      },
       {
         "command": "vibeManager.runTask",
         "title": "작업 실행",
@@ -140,76 +137,132 @@
         "title": "환경 점검",
         "category": "Vibe_Manager",
         "icon": "$(beaker)"
+      },
+      {
+        "command": "vibeManager.startBE",
+        "title": "BE 서버 기동 (local 프로파일)",
+        "category": "Vibe_Manager"
+      },
+      {
+        "command": "vibeManager.startFE",
+        "title": "FE 서버 기동 (vite 5173)",
+        "category": "Vibe_Manager"
+      },
+      {
+        "command": "vibeManager.claudeNew",
+        "title": "Claude Code 새 세션 터미널",
+        "category": "Vibe_Manager"
+      },
+      {
+        "command": "vibeManager.refreshPrompt",
+        "title": "프롬프트 패널 새로고침",
+        "category": "Vibe_Manager"
+      },
+      {
+        "command": "vibeManager.openFlow",
+        "title": "FLOW 진척 보기",
+        "category": "Vibe_Manager",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "vibeManager.openHistory",
+        "title": "작업 이력 (전후 비교)",
+        "category": "Vibe_Manager",
+        "icon": "$(history)"
+      },
+      {
+        "command": "vibeManager.runQuick",
+        "title": "메뉴 항목 실행",
+        "icon": "$(play)"
       }
     ],
     "menus": {
       "view/title": [
         {
+          "command": "vibeManager.openWorkbench",
+          "when": "view == vibeManager.menu",
+          "group": "navigation@1"
+        },
+        {
           "command": "vibeManager.quickScreen",
-          "when": "view == vibeManager.steps",
+          "when": "view == vibeManager.menu",
           "group": "navigation@0"
         },
         {
           "command": "vibeManager.openDashboard",
-          "when": "view == vibeManager.steps",
+          "when": "view == vibeManager.menu",
           "group": "navigation@1"
         },
         {
           "command": "vibeManager.refresh",
-          "when": "view == vibeManager.steps",
+          "when": "view == vibeManager.menu",
           "group": "navigation@2"
         },
         {
           "command": "vibeManager.gateReport",
-          "when": "view == vibeManager.steps",
+          "when": "view == vibeManager.menu",
           "group": "navigation@3"
         },
         {
           "command": "vibeManager.openOutputFolder",
-          "when": "view == vibeManager.steps",
+          "when": "view == vibeManager.menu",
           "group": "1_more@1"
         },
         {
           "command": "vibeManager.editSteps",
-          "when": "view == vibeManager.steps",
+          "when": "view == vibeManager.menu",
           "group": "1_more@2"
         },
         {
           "command": "vibeManager.openTaskLog",
-          "when": "view == vibeManager.steps",
+          "when": "view == vibeManager.menu",
           "group": "1_more@3"
         },
         {
           "command": "vibeManager.openSettings",
-          "when": "view == vibeManager.steps",
+          "when": "view == vibeManager.menu",
           "group": "1_more@4"
         },
         {
           "command": "vibeManager.checkEnv",
-          "when": "view == vibeManager.env",
+          "when": "view == vibeManager.menu",
           "group": "navigation@1"
+        },
+        {
+          "command": "vibeManager.openFlow",
+          "when": "view == vibeManager.menu",
+          "group": "navigation"
+        },
+        {
+          "command": "vibeManager.openHistory",
+          "when": "view == vibeManager.menu",
+          "group": "navigation"
         }
       ],
       "view/item/context": [
         {
           "command": "vibeManager.runTask",
-          "when": "view == vibeManager.steps && viewItem == task",
+          "when": "view == vibeManager.menu && viewItem == task",
           "group": "inline"
         },
         {
           "command": "vibeManager.toggleHook",
-          "when": "view == vibeManager.harness && viewItem == hook",
+          "when": "view == vibeManager.menu && viewItem == hook",
           "group": "inline"
         },
         {
           "command": "vibeManager.openItem",
-          "when": "view == vibeManager.harness && viewItem =~ /^(rule|hookfile|doc)$/",
+          "when": "view == vibeManager.menu && viewItem =~ /^(rule|hookfile|doc)$/",
           "group": "inline"
         }
       ],
       "commandPalette": [
         {
           "command": "vibeManager.runTask"
+        },
+        {
+          "command": "vibeManager.runQuick",
+          "when": "false"
         }
       ]
     },
@@ -270,15 +323,72 @@
           "default": "powershell",
           "description": "PowerShell 실행 파일 (powershell 또는 pwsh)."
         },
+        "vibeManager.language": {
+          "type": "string",
+          "enum": ["en", "ko"],
+          "enumDescriptions": ["English menu & labels (default)", "한국어 메뉴·라벨"],
+          "default": "en",
+          "description": "Vibe_Manager menu / label language. 사이드바 메뉴는 즉시, Workbench 는 새 창부터 적용."
+        },
         "vibeManager.claudeCommand": {
           "type": "string",
           "default": "claude",
-          "description": "Claude Code CLI 명령 또는 전체 경로."
+          "description": "Claude Code CLI 명령 또는 전체 경로. 기본값 claude = 자동(PATH 와 VS Code Claude Code 확장 내장 CLI 중 최신 버전 사용). 특정 CLI 를 강제하려면 전체 경로 지정."
         },
         "vibeManager.claudeModel": {
           "type": "string",
           "default": "",
           "description": "Claude Code 에 넘길 --model (비우면 기본값)."
+        },
+        "vibeManager.modelList": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "--model 로 넘길 값 (모델 ID 또는 별칭)"
+              },
+              "label": {
+                "type": "string",
+                "description": "드롭다운 표시명"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "default": [
+            {
+              "id": "claude-opus-5-5",
+              "label": "Opus 5.5"
+            },
+            {
+              "id": "claude-fable-5-1",
+              "label": "Fable 5.1"
+            },
+            {
+              "id": "claude-sonnet-5-5",
+              "label": "Sonnet 5.5"
+            },
+            {
+              "id": "claude-haiku-5-5",
+              "label": "Haiku 5.5"
+            },
+            {
+              "id": "opus",
+              "label": "opus (최신 Opus 별칭)"
+            },
+            {
+              "id": "sonnet",
+              "label": "sonnet (최신 Sonnet 별칭)"
+            },
+            {
+              "id": "haiku",
+              "label": "haiku (최신 Haiku 별칭)"
+            }
+          ],
+          "description": "워크벤치 하단 모델 드롭다운 목록. 새 모델이 나오면 여기만 추가하면 됩니다(드롭다운의 '직접 입력…'으로도 즉시 사용 가능). 세션에서 실제로 응답한 모델은 목록에 자동 추가됩니다."
         },
         "vibeManager.claudeStartupDelayMs": {
           "type": "number",
@@ -297,8 +407,8 @@
         },
         "vibeManager.agentModel": {
           "type": "string",
-          "default": "claude-sonnet-4-5",
-          "description": "3단계 Agent 모델 (agent.ps1 -Model)."
+          "default": "claude-opus-5-5",
+          "description": "3단계 Agent 모델 (agent.ps1 -Model → claude -p --model). Workbench 대화·자동 보완에는 영향 없음(그쪽은 claudeModel/드롭다운). 기본 Opus 5.5 (2026-10-20 변경, 이전 claude-sonnet-4-5)"
         },
         "vibeManager.excludeScreenPatterns": {
           "type": "array",
@@ -359,8 +469,25 @@
           "type": "string",
           "default": "python",
           "description": "Python 실행 명령"
+        },
+        "vibeManager.autoOpenWorkbench": {
+          "type": "boolean",
+          "default": true,
+          "description": "VS Code 시작/활성화 시 Vibe_Manager 워크벤치를 자동으로 엽니다 (1.6+ 기본). 끄려면 false."
+        },
+        "vibeManager.defaultPermissionMode": {
+          "type": "string",
+          "default": "bypassPermissions",
+          "enum": [
+            "acceptEdits",
+            "default",
+            "plan",
+            "bypassPermissions"
+          ],
+          "description": "Claude Code 기본 모드 (워크벤치·Claude 터미널 공통). 기본 bypassPermissions = 자동승인(도구 사용 확인 없이 진행, .claude/settings.json 차단 hook 은 그대로 동작). acceptEdits=편집만 자동 / default=수동 / plan. 워크벤치 하단에서 세션별 재선택 가능."
         }
       }
     }
-  }
+  },
+  "icon": "media/vibe-color.png"
 }

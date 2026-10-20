@@ -1,6 +1,6 @@
 import { type FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { apiClient } from '@foundation/apis';
 import type { HotkeyConfig, PageProps } from '@foundation/models';
@@ -12,9 +12,8 @@ import { useMessageStore, useSessionStore } from '@shared/stores';
 
 import { ShipmentWorkingDayOspForm } from './components/ShipmentWorkingDayOspForm';
 import { ShipmentWorkingDayOspGrid } from './components/ShipmentWorkingDayOspGrid';
+import { useShipmentWorkingDayOspInputValue } from './hooks/useShipmentWorkingDayOspInputValue';
 import {
-  DAY_WEEK,
-  INPUT_VALUE_SET,
   LBL,
   MEASURE_CONST,
   MENU_ID,
@@ -22,7 +21,7 @@ import {
   RESPONSE_SET,
   SAVE_KEYS,
   SHEETS,
-  WEEKDAY_CODE_TO_INDEX,
+  WTD_RANGE,
 } from './shipment-working-day-osp.constants';
 import { buildDynDayColumns } from './shipment-working-day-osp.dynamic-columns';
 import type {
@@ -38,8 +37,10 @@ import { useShipmentWorkingDayOspStore } from './useShipmentWorkingDayOspStore';
 //   편집모드에서 WORKING_TIME_DEFAULT + 동적 D_ 일자 셀(Y/N)만 개방(03 §3-a). SAVE SP 로 '^' 배열 저장.
 //   GET SP 단일 호출로 데이터(O_RC1)와 컬럼 메타(o_rc1_columns)를 함께 받는다 — 시트는 MAIN 하나뿐,
 //   동적 D_/W_/M_ 은 o_rc1_columns 에서 도출한다(타이틀 커서 없음, SCP0019 동형).
-//   버튼: SEARCH/SAVE + EDIT(실동작 편집모드) + btnInput. Insert/Delete = AS-IS NO-OP(01_layout §2-a).
-//   SCP0019 대비 델타: 정적 6컬럼 / 명시 편집모드(행 게이트 아님) / D_ 셀 Y/N 콤보 / SUM 열 chkSum 토글.
+//   버튼: SEARCH/SAVE + EDIT(권한 게이트) + btnInput. Insert/Delete = AS-IS NO-OP(01_layout §2-a).
+//   SCP0019 대비 델타: 정적 6컬럼 / 편집 = INPUT_TP_CD 메타 + EDIT 권한 / D_ 셀 Y/N 콤보.
+//   chkSum(SUM 토글)은 AS-IS Designer Visible=false(:346) + GET SP 에 W_/M_ 컬럼 없음(AS-IS MSSQL·사내 Oracle 모두 D_ 만 PIVOT)
+//   = 살아있는 동작 없음(#138) → 버튼 비노출, Grid 의 SUM 처리 코드는 비활성 보존(2026-10-20 정정, 원장 S96-13).
 export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
   const { t } = useTranslation();
 
@@ -62,6 +63,8 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
   const restoreSearchConditions = useShipmentWorkingDayOspStore(
     state => state.restoreSearchConditions
   );
+  const dayRangeApplied = useShipmentWorkingDayOspStore(state => state.dayRangeApplied);
+  const applyDayRange = useShipmentWorkingDayOspStore(state => state.applyDayRange);
 
   // ui-dynamic-property-management — Menu Button 권한 동적 fetch
   const { hasButton } = useTabBtnPermissions({ menuId: MENU_ID });
@@ -73,10 +76,41 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 편집 권한 — mount 1회 판정(convert-core §2.4 / 선례 SCP0120·SSP0025). AS-IS EditButton(SwitchLock)
   //   토글은 미채용: 권한 있으면 조회 직후 WORKING_TIME_DEFAULT+D_ 편집 가능, 없으면 읽기전용.
   const canEdit = hasButton('EDIT');
-  // chkSum — W_/M_ SUM 컬럼 show/hide 토글(03 §3-c). 초기 SUM 숨김 — AS-IS DefineProperty
-  //   chkSum.Checked=false(.cs:121, 01_layout §1 :40 · §2 #1 :53). 조회 후 D_/W_ 는 항상 표시(#10),
-  //   M_/W_ SUM 컬럼만 이 토글로 show/hide(#3).
-  const [showSum, setShowSum] = useState(false);
+  // chkSum — AS-IS DefineProperty chkSum.Checked=false(.cs:121)에 더해 Designer `this.chkSum.Visible = false`(:346)라
+  //   사용자가 켤 수 없고, GET SP 도 W_/M_ SUM 컬럼을 만들지 않는다 → SUM 열은 항상 숨김(토글 UI 없음). Grid 의 showSum 은 고정 false.
+
+  // 기본 조회기간 — 서버 dayRange(사내 배선 SCP0096 / dayRange / SEARCH → PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD).
+  //   AS-IS InitControls `dCalendar.InitValue = GetDayRange()`(.cs:137,840-846 → DateUtil.GetDayRange(cboDivision,'DAILY')
+  //   → SCP.SCM0001_GET_SCP_MONTH_PERIOD, DateUtil.cs:330) 1:1 — 프레임워크 유틸 호출이라 flow.csv 에 없다(DoD B24).
+  //   응답 o_rc1[0].PERIOD('yyyymmdd:yyyymmdd')를 1회 적용(BusinessPlan dayRange 정본 패턴). filters 는 useMemo(인라인 리터럴 금지).
+  //   키 5개 = 사내 PROC_M COL_NM(proc_params.csv · DoD B22). 값 = AS-IS DateUtil.GetDayRange(cboDivision,"DAILY") 실전송값
+  //   (sPlanDate=''·sOffsetMonth='12' 기본인자). timeZone 은 TO-BE UserSession 에 타임존 필드가 없어 ''(자매 shipping 화면 동일) —
+  //   SP 가 FN_MULTY_TIME('') 로 오늘 기준 산출. 사내 실측 2026-10-20: '' → '20261020:20271017' / 'Asia/Seoul' → NULL 이므로 빈값이 정답.
+  //   Reset Condition(F10) 후 재적용: reset() 이 dayRangeApplied 를 false 로 되돌려도 쿼리 캐시 참조는 그대로라 data 만으론
+  //   effect 가 다시 돌지 않는다 — dayRangeApplied 를 deps 에 두어 캐시된 서버 구간을 다시 적용한다.
+  const dayRangeFilters = useMemo(
+    () => ({
+      divisionId: searchParams.divisionId, // 1 P_DIVISION_ID (AS-IS cboDivision.ControlValues)
+      planCycle: 'DAILY', //                  2 P_PLAN_CYCLE  (AS-IS "DAILY")
+      fromDate: '', //                        3 P_FROM_DATE   (AS-IS sPlanDate 기본 '')
+      offsetMonth: '12', //                   4 P_OFFSET_MONTH(AS-IS sOffsetMonth 기본 "12")
+      timeZone: '', //                        5 P_TIMEZONE    (세션 타임존 없음 → '' = SP 오늘 기준)
+    }),
+    [searchParams.divisionId]
+  );
+  const { data: dayRangeData } = useTabProcQuery<MENU_ID, SHEETS.DAY_RANGE>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.DAY_RANGE,
+    tabId,
+    filters: dayRangeFilters,
+    enabled: !dayRangeApplied,
+  });
+  useEffect(() => {
+    if (dayRangeApplied) return;
+    const range = (dayRangeData as Record<string, { PERIOD?: string }[]>)?.[RESPONSE_SET.MAIN]?.[0]?.PERIOD;
+    if (range) applyDayRange(range);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayRangeData, dayRangeApplied]);
 
   // 메인 그리드 SP — PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP (4 IN + O_RC1 데이터 + O_RESULT_CURSOR 상태).
   //   단일 호출로 데이터(o_rc1)와 그 컬럼 메타(o_rc1_columns)를 반환하므로 rows·동적컬럼을 이 응답에서 도출한다.
@@ -96,8 +130,9 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
     [data]
   );
   // 동적 컬럼 메타 원본 — o_rc1_columns(BE ResultSetMetaData). D_ 일자열·W_/M_ SUM 열 파생 원천.
+  //   rows 와 같은 단일 `as` 로 좁힌다(`as unknown as` 금지 #73 — SCP0096 은 procedures.d.ts 미등재라 응답 제네릭이 느슨, GEN_NOTES 8).
   const dynColumnMeta = useMemo<DynColumnMeta[]>(
-    () => (data as unknown as Record<string, DynColumnMeta[]>)?.[RESPONSE_SET.DYN_COLUMNS] ?? [],
+    () => (data as Record<string, DynColumnMeta[]>)?.[RESPONSE_SET.DYN_COLUMNS] ?? [],
     [data]
   );
   // 동적 D_ 일자열 — o_rc1_columns 의 D_yyyymmdd 이름에서 파생. 3단 머지헤더(월/주/일) 그룹은 커서가
@@ -114,17 +149,27 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
 
-  // ----- 조회 validation (AS-IS FindData_Main — Division 필수) -----
+  // ----- 조회 validation (AS-IS FindData_Main `DataUtil.checkRequiredOfSearch(this.Controls)` .cs:432 —
+  //   Designer 필수 표식 "Division*"(:545) · "Period*"(:532) 2건) -----
   const validateFind = (): boolean => {
     if (isFetching) return false;
-    // Division 필수 (cboDivision 단일 필수, 02_search-combo §1)
+    // Division 필수 (cboDivision 단일 필수, 02_search-combo §1) — MSG00097 "Division 을 선택하세요."
     if (!searchParams.divisionId) {
-      void setAlert({ type: 'alert', content: t(MSG.NOT_SEARCHED, '_Please select Division.') });
+      void setAlert({ type: 'alert', content: t(MSG.DIVISION_REQUIRED, '_Please select Division.') });
       return false;
     }
-    // 기간 역전 차단 (from > to)
+    // Period 필수 (dCalendar "Period*") — 시작·종료 8자리 모두 있어야 한다. MSG00429 "{0} 값은 필수 입력 항목입니다."
+    //   (2026-10-20 추가 — 이전에는 역전만 검사해 빈 기간이 SP 로 전송됐다, 원장 S96-9.)
+    if (!/^\d{8}$/.test(searchParams.startYyyymmdd) || !/^\d{8}$/.test(searchParams.endYyyymmdd)) {
+      void setAlert({
+        type: 'alert',
+        content: t(MSG.REQUIRED_VALUE, '_{0} value is required.').replace('{0}', t(LBL.PERIOD, '_Period')),
+      });
+      return false;
+    }
+    // 기간 역전 차단 (from > to) — MSG00108 "조회 기간이 잘못되었습니다 (시작일 > 종료일)."
     if (Number(searchParams.startYyyymmdd) > Number(searchParams.endYyyymmdd)) {
-      void setAlert({ type: 'alert', content: t(MSG.INVALID_FORMAT, '_Invalid period (start > end).') });
+      void setAlert({ type: 'alert', content: t(MSG.INVALID_PERIOD, '_Invalid period (start > end).') });
       return false;
     }
     return true;
@@ -170,7 +215,7 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
     const entries: SaveEntry[] = [];
     if (changed) {
       for (const [item, fields] of changed) {
-        const rec = item as unknown as Record<string, unknown>;
+        // 행 타입의 index signature([key]: string|number|null)로 동적 D_ 셀을 직접 읽는다(`as unknown as` 금지 #73).
         for (const binding of Object.keys(fields)) {
           // 편집 가능 셀 = 동적 D_ 일자 셀(Y/N) 또는 WORKING_TIME_DEFAULT(FPNumber).
           const isDay = /^D_\d{8}$/.test(binding);
@@ -184,9 +229,9 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
             // MEASURE 고정 — GET 이 O_RC1 에 채우는 'SHIPMENT WORKING DAY' 그대로 전송(03 §4 P_MEASURE).
             measure: MEASURE_CONST,
             // D_ 셀 Y/N (WORKING_TIME_DEFAULT 저장분기면 미사용).
-            shipmentYn: isDefault ? '' : toStr(rec[binding]).toUpperCase(),
+            shipmentYn: isDefault ? '' : toStr(item[binding]).toUpperCase(),
             // WORKING_TIME_DEFAULT 값 — 콤마 제거(FPNumber 표시서식). D_ 저장분기면 미사용.
-            workingTimeDefault: isDefault ? toStr(rec[binding]).replace(/,/g, '') : '',
+            workingTimeDefault: isDefault ? toStr(item[binding]).replace(/,/g, '') : '',
             // 'Y'=WORKING_TIME_DEFAULT 저장 / 'N'=D_ 일자셀 저장(is_save_defalut 분기, 03 §4).
             isSaveDefault: isDefault ? 'Y' : 'N',
           } as SaveEntry);
@@ -196,6 +241,26 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
     if (entries.length === 0) {
       void setAlert({ type: 'alert', content: t(MSG.NO_SAVE_DATA, '_No data to save.') });
       return;
+    }
+    // WORKING_TIME_DEFAULT 제약 — AS-IS SetReNumerCellType(…, 소수 0, 최소 0, 최대 7)(.cs:163)은 셀 타입이 입력 단계에서 막던 것.
+    //   TO-BE 공용 DataGrid 숫자 편집기는 범위를 모르므로 저장 직전에 판정한다(사내 SAVE SP F_TO_NUM 도 범위 검사 없음).
+    //   빈값('')은 AS-IS "0" 치환(.cs:567) = SP F_TO_NUM(NULL)=0 과 동등이라 통과시킨다. (2026-10-20 추가, 원장 S96-8)
+    for (const e of entries) {
+      if (e.isSaveDefault !== 'Y' || e.workingTimeDefault === '') continue;
+      const n = Number(e.workingTimeDefault);
+      if (!Number.isInteger(n)) {
+        void setAlert({ type: 'alert', content: t(MSG.WTD_INTEGER, '_Only integer values can be entered!') });
+        return;
+      }
+      if (n < WTD_RANGE.MIN || n > WTD_RANGE.MAX) {
+        void setAlert({
+          type: 'alert',
+          content: t(MSG.WTD_RANGE, '_Please enter a number between {0} and {1}.')
+            .replace('{0}', String(WTD_RANGE.MIN))
+            .replace('{1}', String(WTD_RANGE.MAX)),
+        });
+        return;
+      }
     }
     // 저장 confirm 없음(표준화) — 저장은 되돌릴 수 있고 결과는 Toast 로 알린다. WorkingTime/DMF0014 동일.
     const sesUserId = useSessionStore.getState().session.userId ?? '';
@@ -219,9 +284,11 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
       }
       // SP 응답계약(03 §4): O_RESULT_CURSOR.RESULT_CODE='F' 는 내부 예외를 캐치해 정상 200 커서로
       //   반환한다(axios 전역 인터셉터는 필드명 CODE 만 검사해 이 필드를 못 잡음) — 여기서 직접 분기.
+      //   응답 키 = BE BaseService 가 PROC_M COL_NM 그대로 쓰는 소문자 'o_result_cursor'(proc_params.csv SAVE 9번째 행 ·
+      //   RESPONSE_SET.STATUS). 이전 대문자 'O_RESULT_CURSOR' 는 항상 undefined 라 'F' 를 못 잡았다(2026-10-20 정정, 원장 S96-12).
+      type SaveResultRow = { RESULT_CODE?: string; RESULT_CNT?: number | string; ERR_MESSAGE?: string };
       const resultRow = (
-        (res.data as { result?: { O_RESULT_CURSOR?: { RESULT_CODE?: string; ERR_MESSAGE?: string }[] } })
-          ?.result?.O_RESULT_CURSOR ?? []
+        (res.data as { result?: Record<string, SaveResultRow[]> })?.result?.[RESPONSE_SET.STATUS] ?? []
       )[0];
       if (resultRow?.RESULT_CODE?.trim().toUpperCase() === 'F') {
         void setAlert({
@@ -230,7 +297,12 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
         });
         return;
       }
-      void setToast({ message: t(MSG.SAVED, '_성공적으로 저장되었습니다.'), type: 'success' });
+      // 성공 — AS-IS MSG00004("{0}개의 데이터가 저장되었습니다", iCount .cs:622) = TO-BE MSG00672. {0} = SP RESULT_CNT(없으면 전송 건수).
+      const savedCount = String(resultRow?.RESULT_CNT ?? entries.length);
+      void setToast({
+        message: t(MSG.SAVED_COUNT, '_{0} data saved.').replace('{0}', savedCount),
+        type: 'success',
+      });
       editTrackerRef.current?.clearChanges();
       // AS-IS SaveData 성공 후 FindData_Main 재조회 1:1. 저장은 filters 가 그대로라 키가 안 바뀌므로
       //   invalidate 가 유일한 재조회 트리거다(prefix 는 tabId — MENU_ID 로는 매칭되지 않음).
@@ -243,110 +315,32 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
     }
   };
 
-  // SubTitle 공통버튼 — hasButton 권한 분기. Insert/Delete = AS-IS NO-OP(01_layout §2 #7·#8, .cs:274-280 본문
-  //   공백): 버튼은 노출하되 클릭 무동작. 무동작 함수 () => undefined 로 배선한다 — false 면 버튼이 숨겨지고
-  //   (SubTitle 은 insert/delete === false 일 때만 렌더 생략), 키 생략이면 공통 SubTitle 기본 addRow/removeRow 가
-  //   부활한다. 둘 다 설계 금지(03_grid-columns §4·§5).
-  //   Edit 는 Hotkeys enum 에 없어(hotkey.ts) hotkeyConfig 로는 배선 불가 — customButtons 로 노출한다.
+  // SubTitle 공통버튼 — hasButton 권한 분기. Insert/Delete = AS-IS InsertButton/DeleteButton 본문 공백(.cs:274-280)
+  //   = 기능 비활성(10_RULES_KEEP F1 "빈 본문 override = 비활성" · screen-completion-gate G2 "() => undefined 빈 핸들러 0건")
+  //   + 사내 SCM_ADM_MNU_BTN_MPG_M(SCP0096) 정의 = EDIT/SAVE/SEARCH 뿐(2026-10-20 ZIOUI1 실측, INSERT/DELETE 행 없음)
+  //   → menu-button-dynamic-fetch §1.1 "정의 자체 없음 = Visible ❌". false 명시(키 생략 시 공통 addRow/removeRow 부활 — 금지).
+  //   (2026-10-20 정정: 이전 '() => undefined 노출·무동작' 은 위 두 룰과 admin 메타에 어긋났다.)
+  //   Edit 는 Hotkeys enum 에 없어(hotkey.ts) hotkeyConfig 로는 배선 불가 — canEdit 권한으로 대체(mount 1회).
   const hotkeyConfig: HotkeyConfig = {
     search: hasButton('SEARCH') ? handleSearch : false,
     save: canEdit && hasButton('SAVE') ? () => void handleSave() : false,
-    insert: () => undefined, // AS-IS NO-OP — 버튼 노출 + 클릭 무동작(.cs:274-276 공백)
-    delete: () => undefined, // AS-IS NO-OP — 버튼 노출 + 클릭 무동작(.cs:278-280 공백)
+    insert: false,
+    delete: false,
     manual: false,
     upload: false,
   };
 
-  // btnInput(값입력) — cboInputValue(Y/N)를 선택 D_ 셀에 일괄 써넣는다(03 §3-b SetText). SCP0019 대비 델타:
-  //   정수가 아니라 Y/N. gridRef 를 이 컴포넌트가 보유하므로 imperative handle 없이 선택영역을 읽고
-  //   EditTracker 를 경유해 setCellData 로 write 한다(저장 payload 는 EditTracker 단일 출처 그대로 도출).
-  //   가드 순서(AS-IS btnInput_Click): #1 조회 전(MSG00135) → 편집모드 아님(무동작) → DayWeek 값 없으면
-  //   Form 이 버튼 disabled 로 차단(:710-713 return) → 형식(Y/N, MSG00050) → #4 SelectDay 셀 미선택(MSG00134).
-  //   일괄입력 3분기(03 §3-b): SelectDay=선택셀 / EveryDay=전체 D_ / 요일별=해당 weekday D_.
-  const handleInputValue = useCallback((): void => {
-    // #1 조회 전 차단 — persist 된 stale 화면에 값입력 금지.
-    if (!hasSearched) {
-      void setAlert({ type: 'alert', content: t(MSG.NOT_SEARCHED, '_Please search first.') });
-      return;
-    }
-    // 편집 권한 없으면 값입력 금지 — 읽기전용 사용자는 D_ 셀이 잠겨 있다. 무동작.
-    if (!canEdit) return;
-
-    // 형식 검증 — Y/N 만(cboInputValue YesOrNo 소스라 정상경로는 항상 통과, 빈값·오염 방어, MSG00050).
-    const raw = searchParams.inputValue.trim().toUpperCase();
-    if (!INPUT_VALUE_SET.includes(raw)) {
-      void setAlert({ type: 'alert', content: t(MSG.INVALID_FORMAT, '_Invalid input value.') });
-      return;
-    }
-
-    const g = gridRef.current;
-    if (!g) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_CELL_SELECTED, '_Please select cell(s).') });
-      return;
-    }
-    const dayWeek = searchParams.dayWeekCode;
-    const isSelectDay = dayWeek === DAY_WEEK.SELECT_DAY;
-    const isEveryDay = dayWeek === DAY_WEEK.EVERY_DAY;
-    // 요일별 분기 대상 weekday(0=일~6=토). EveryDay/SelectDay 면 미사용.
-    const targetWeekday = WEEKDAY_CODE_TO_INDEX[dayWeek];
-
-    // 대상 D_ 컬럼 판정 — SelectDay 는 선택영역만, 그 외는 요일 규칙(전행 × 규칙 D_ 컬럼).
-    const dayByBinding = new Map<string, DynDayColumn>(dynColumns.map(d => [d.binding, d]));
-    const tracker = editTrackerRef.current;
-    let wrote = 0;
-
-    const writeCell = (row: number, col: number): void => {
-      const item = (g.rows[row] as { dataItem?: ShipmentWorkingDayOspRow } | undefined)?.dataItem;
-      const binding = g.columns[col]?.binding ?? '';
-      if (!item || !/^D_\d{8}$/.test(binding)) return;
-      const original = g.getCellData(row, col, false) as WijmoPrimitive;
-      g.setCellData(row, col, raw, true);
-      tracker?.storeChange(item, binding, original, raw);
-      wrote += 1;
-    };
-
-    if (isSelectDay) {
-      // #3 SelectDay — 선택 셀에만. 선택영역의 D_ 셀만 write.
-      const sel = g.selectedRanges;
-      // #4 셀 미선택 — 선택영역이 없으면 대상 없음.
-      if (!sel || sel.length === 0) {
-        void setAlert({ type: 'alert', content: t(MSG.NO_CELL_SELECTED, '_Please select cell(s).') });
-        return;
-      }
-      for (const range of sel) {
-        for (let row = range.topRow; row <= range.bottomRow; row++) {
-          for (let col = range.leftCol; col <= range.rightCol; col++) writeCell(row, col);
-        }
-      }
-    } else {
-      // EveryDay=전체 D_ / 요일별=해당 weekday D_. 전행 × 규칙 D_ 컬럼.
-      for (let row = 0; row < g.rows.length; row++) {
-        for (let col = 0; col < g.columns.length; col++) {
-          const binding = g.columns[col]?.binding ?? '';
-          const dayCol = dayByBinding.get(binding);
-          if (!dayCol) continue;
-          if (!isEveryDay && dayCol.weekday !== targetWeekday) continue;
-          writeCell(row, col);
-        }
-      }
-    }
-
-    if (wrote === 0) {
-      void setAlert({ type: 'alert', content: t(MSG.NO_CELL_SELECTED, '_Please select editable cell(s).') });
-      return;
-    }
-    g.invalidate(true);
-  }, [
-    hasSearched,
-    canEdit,
-    searchParams.dayWeekCode,
-    searchParams.inputValue,
-    dynColumns,
+  // btnInput(값입력) — AS-IS BtnInput_Click(.cs:684-809) 6가드 + 3분기 SetText. 본문은 hooks/useShipmentWorkingDayOspInputValue.ts
+  //   (진입 Page ≤400 라인 규약 #9·게이트 R16 으로 2026-10-20 분리, 본문 무변경 이식). gridRef/EditTracker 는 이 컴포넌트가 보유.
+  const handleInputValue = useShipmentWorkingDayOspInputValue({
     gridRef,
     editTrackerRef,
-    setAlert,
-    t,
-  ]);
+    dynColumns,
+    hasSearched,
+    canEdit,
+    dayWeekCode: searchParams.dayWeekCode,
+    inputValue: searchParams.inputValue,
+  });
 
   return (
     <>
@@ -370,16 +364,8 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
         useHotkey={true}
         hotkeyConfig={hotkeyConfig}
         searchParam={searchParams}
-        customButtons={[
-          // chkSum — W_/M_ SUM 열 show/hide 토글(03 §3-c). 별도 권한 버튼 아님(화면 로컬 토글).
-          //   AS-IS Edit(SwitchLock) 토글은 미채용(convert-core §2.4) — canEdit 권한으로 대체.
-          {
-            label: t(LBL.SUM, '_Sum'),
-            title: t(LBL.SUM, '_Sum'),
-            action: () => setShowSum(prev => !prev),
-          },
-        ]}
       />
+      {/* AS-IS Edit(SwitchLock) 토글은 미채용(convert-core §2.4) — canEdit 권한으로 대체. Sum 커스텀 버튼은 AS-IS 비노출 컨트롤이라 두지 않는다. */}
       <ShipmentWorkingDayOspGrid
         gridRef={gridRef}
         gridFilterRef={gridFilterRef}
@@ -388,7 +374,7 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
         dynColumns={dynColumns}
         dynColumnMeta={dynColumnMeta}
         editMode={canEdit}
-        showSum={showSum}
+        showSum={false}
       />
     </>
   );

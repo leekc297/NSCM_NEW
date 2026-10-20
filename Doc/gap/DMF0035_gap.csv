@@ -4,7 +4,7 @@
 "endpoint","SCM.SCM0001_GET_SITE_BY_DIVISION","SP SCM0001_GET_SITE_BY_DIVISION (MATCH) @GetScmSitebyDivision:1979","INTENDED","","공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
 "endpoint","SCM.SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER","SP SCM0001_GET_PLANT_SITE_BY_END_CUSTOMER (MATCH) @GetPlantSitebyEndCustomer:1995","INTENDED","","공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
 "endpoint","DM.PR_GET_DAY_RANGE","SP PR_GET_DAY_RANGE (MATCH) @GetDayRange:2011","COVERED","To-Be 주석(asis_refs) 에 SP 언급",""
-"endpoint","DM.DMF0035_GET_SPREAD_TITLE","SP DMF0035_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:2028","INTENDED","","그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+"endpoint","DM.DMF0035_GET_SPREAD_TITLE","SP DMF0035_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:2028","COVERED","동적 헤더 시트 'mktFcstSpreadTitle' FE 조회",""
 "endpoint","DM.DMF0003_GET_REPORT_BUCKET_TYPE_CODE","SP DMF0003_GET_REPORT_BUCKET_TYPE_CODE (MATCH) @GetBucketType:2044","COVERED","To-Be 주석(asis_refs) 에 SP 언급",""
 "endpoint","DM.DMF0003_GET_QTY_TYPE_CODE","SP DMF0003_GET_QTY_TYPE_CODE (MATCH) @GetQtyData:2058","MISSING","","매핑표 없음 + 코드·주석에 SP 언급 없음"
 "endpoint","SCM.SCM0001_GET_LOOKUP_VALUES","SP SCM0001_GET_LOOKUP_VALUES (MATCH) @GetItemType:2071","INTENDED","","공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"

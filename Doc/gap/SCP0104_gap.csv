@@ -1,7 +1,7 @@
 ﻿"kind","asis_item","asis_detail","status","evidence","reason"
 "endpoint","SCP.SCP0104_CHECK_NAME_ON_DUMMY_CODE","SP SCP0104_CHECK_NAME_ON_DUMMY_CODE (MATCH) @CheckNameOnDummyCodeDB:843","COVERED","SP 등록 메타(SCM_ADM_PROC_M) 에 등록",""
 "endpoint","biz:CommonData.YesOrNo","SP  (BIZ_MATCH) @<field:dtYesOrNo>:67","INTENDED","","공통 데이터(BIZ CommonDataList) → useTabComboQueries / useTabLookupQueries"
-"endpoint","SCP.SCP0104_GET_SPREAD_TITLE","SP SCP0104_GET_SPREAD_TITLE (MATCH) @GetSpdTitleAssign:2094","INTENDED","","그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+"endpoint","SCP.SCP0104_GET_SPREAD_TITLE","SP SCP0104_GET_SPREAD_TITLE (MATCH) @GetSpdTitleAssign:2094","COVERED","동적 헤더 시트 'spreadTitle' FE 조회",""
 "event","this.Load","→ Form_Load @360","UNMAPPED","","매핑표 없음"
 "event","cboDivision.SelectedIndexChanged","→ cboDivision_SelectedIndexChanged @593","UNMAPPED","","매핑표 없음"
 "event","clbSite.SelectedIndexChanged","→ clbSite_SelectedIndexChanged @594","UNMAPPED","","매핑표 없음"

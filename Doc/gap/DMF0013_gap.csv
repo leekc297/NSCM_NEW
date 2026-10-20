@@ -4,7 +4,7 @@
 "endpoint","DM.DMF0013_GET_CUST_PSI_UPLOAD_DATA","SP DMF0013_GET_CUST_PSI_UPLOAD_DATA (MATCH) @FindData:433","COVERED","To-Be 주석(asis_refs) 에 SP 언급",""
 "endpoint","DM.DMF0013_SAVE_CUST_PSI_UPLOAD_DATA","SP DMF0013_SAVE_CUST_PSI_UPLOAD_DATA (MATCH) @SaveData:565","COVERED","To-Be 코드/procedures.d.ts 에 SP 언급",""
 "endpoint","DM.PR_GET_DAY_RANGE","SP PR_GET_DAY_RANGE (MATCH) @GetDayRange:994","COVERED","To-Be 코드/procedures.d.ts 에 SP 언급",""
-"endpoint","DM.DMF0014_GET_SPREAD_TITLE","SP DMF0014_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1010","INTENDED","","그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+"endpoint","DM.DMF0014_GET_SPREAD_TITLE","SP DMF0014_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1010","MISSING","","기간형 동적 헤더 SP — 사내 정확 배선 없음·FE 조회 없음: 배선 등록 후 FE 조회 또는 대사표에 대체 근거 '제외'(check.js B27)"
 "endpoint","SCM.SCM0001_GET_DIVISION","SP SCM0001_GET_DIVISION (MATCH) @GetDivision:1025","INTENDED","","공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
 "endpoint","SCM.SCM0001_GET_TEAM_BY_DIVISION","SP SCM0001_GET_TEAM_BY_DIVISION (MATCH) @GetTeambyDivision:1039","INTENDED","","공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
 "endpoint","SCM.SCM0001_GET_CUSTOMER_BY_DIVISION","SP SCM0001_GET_CUSTOMER_BY_DIVISION (MATCH) @GetEndCustomerbyDivision:1053","INTENDED","","공통 콤보 SP → 등록 콤보ID(MyDivision/TeambyDivision/SiteByEndCustomer/PlantSitebyEndCustomer/BizTypeByDivision…) useTabComboQueries"
@@ -52,3 +52,4 @@
 "hard_column","PSI Upload.PROJECT_CODE","Project","MISSING","","As-is 하드코딩 컬럼이 To-Be 소스에 없음 — 메타(SCM_MST_SHEET_COLUMNS) 로 옮겨졌는지 DB 대사 필요"
 "hard_column","PSI Upload.SCM_SITE_ID","Sales Site*","MISSING","","As-is 하드코딩 컬럼이 To-Be 소스에 없음 — 메타(SCM_MST_SHEET_COLUMNS) 로 옮겨졌는지 DB 대사 필요"
 "hard_column","PSI Upload.UPLOAD_UOM","Upload UOM*","MISSING","","As-is 하드코딩 컬럼이 To-Be 소스에 없음 — 메타(SCM_MST_SHEET_COLUMNS) 로 옮겨졌는지 DB 대사 필요"
+"dynamic_column","InitSpread:277","DB루프 컬럼 생성 ← DMF0014_GET_SPREAD_TITLE","MISSING","","동적 컬럼 원천 타이틀 SP 의 사내 배선 없음 — DB 메타 등록 후 FE 조회(B27)"

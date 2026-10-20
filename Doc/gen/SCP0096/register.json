@@ -1,0 +1,104 @@
+{
+  "menuId": "SCP0096",
+  "screenName": "Shipment_Working_Day_OSP",
+  "feature": "supply",
+  "pageDir": "shipment-working-day-osp",
+  "routePath": "supply/supply-master/shipment-working-day-osp",
+  "sheets": [
+    {
+      "sheetName": "Shipment Working Day OSP",
+      "rule": "META+코드연결",
+      "columns": 6,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP",
+      "asis_sp": "SCP0096_GET_SHIPMENT_WORKING_DAY_OSP",
+      "status": "MATCH",
+      "entries": ["button:FindButton", "button:SaveButton"],
+      "methods": ["FindData_Main"],
+      "sheet": "Shipment Working Day OSP",
+      "btn": "SEARCH",
+      "tobe_api_id": "P_SCP0096_GET",
+      "tobe_proc": "PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP",
+      "asis_sp": "SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP",
+      "status": "MATCH",
+      "entries": ["button:SaveButton"],
+      "methods": ["SaveData_Main"],
+      "sheet": "Shipment Working Day OSP",
+      "btn": "SAVE",
+      "tobe_api_id": "P_SCP0096_SAVE",
+      "tobe_proc": "PKG_SCP0096.P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP",
+      "note": "AsisFacts endpoints.csv 미수록(FoxDataRequest(null) + request.UpdateQueryId 문자열 .cs:596,608 — 추출기 한계). 사내 PROC_M 9행 등록·FE SAVE_KEYS 1:1"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "asis_sp": "SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "status": "MATCH",
+      "entries": ["event:this.Load", "button:FindButton", "button:SaveButton"],
+      "methods": ["GetSpdTitle"],
+      "sheet": "calendar",
+      "btn": "SEARCH",
+      "tobe_api_id": "SCP0009_SHEET_CALENDAR_3SPAN_GET",
+      "tobe_proc": "PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN",
+      "note": "사내 배선은 공용 PKG_COM0000(타 화면 공유). PKG_SCP0096.P_SCP0009_GET_SHEET_CALENDAR_3SPAN 은 2026-10-19 하네스 이식분(PROC_M 4행)이며 FE 는 어느 쪽도 호출하지 않음 — 3단 헤더는 GET O_RC1 alias 에서 파생"
+    },
+    {
+      "asis_endpoint": "SCP.SCM0001_GET_SCP_MONTH_PERIOD",
+      "asis_sp": "SCM0001_GET_SCP_MONTH_PERIOD",
+      "status": "MATCH",
+      "entries": ["event:this.Load"],
+      "methods": ["InitControls>GetDayRange>DateUtil.GetDayRange"],
+      "sheet": "dayRange",
+      "btn": "SEARCH",
+      "tobe_api_id": "SCM0001_SCP_MONTH_PERIOD_GET",
+      "tobe_proc": "PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD",
+      "note": "AsisFacts flow.csv 미수록(프레임워크 유틸 DateUtil.cs:330 경유). FE 2026-10-20 소비 시작(SHEETS.DAY_RANGE · DoD B24)"
+    },
+    {
+      "asis_endpoint": "DM.DM0003_GET_BUCKET_TYPE_CODE",
+      "asis_sp": "DM0003_GET_BUCKET_TYPE_CODE",
+      "status": "MATCH",
+      "entries": ["event:this.Load"],
+      "methods": ["GetBucketType"],
+      "sheet": "",
+      "btn": "",
+      "tobe_api_id": "",
+      "tobe_proc": "PKG_SCP0096.P_DM0003_GET_BUCKET_TYPE_CODE",
+      "allowed_gap": "dtBucketType 은 InitControls 에서 적재만 되고 소비 코드(cboBucketType 분기 .cs:304-318,346-384) 전부 주석 — 살아있는 동작 없음(#138). 배선·호출 없음(PKG 프로시저는 2026-10-19 이식분 보존)"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": [],
+      "methods": ["<field:dtDayWeek>"],
+      "sheet": "",
+      "btn": "",
+      "allowed_gap": "공통 데이터(lookup WEEK_WORK_TIME) → useTabLookupQueries(DAY_WEEK_LOOKUP)"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.YesOrNo",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": ["unreached:(진입점 미연결)"],
+      "methods": ["<field:dtValidYN>"],
+      "sheet": "",
+      "btn": "",
+      "allowed_gap": "공통 데이터(YesOrNo) → useTabComboQueries(COMBO.INPUT_VALUE) + 그리드 D_ 셀 dataMap"
+    }
+  ],
+  "buttons_corporate": [
+    { "sheet": "Shipment Working Day OSP", "btn": "EDIT", "api_id": null },
+    { "sheet": "Shipment Working Day OSP", "btn": "SAVE", "api_id": "P_SCP0096_SAVE" },
+    { "sheet": "Shipment Working Day OSP", "btn": "SEARCH", "api_id": "P_SCP0096_GET" },
+    { "sheet": "calendar", "btn": "SEARCH", "api_id": "SCP0009_SHEET_CALENDAR_3SPAN_GET" },
+    { "sheet": "dayRange", "btn": "SEARCH", "api_id": "SCM0001_SCP_MONTH_PERIOD_GET" }
+  ],
+  "note": "2026-10-20 정리 — 사내 현행(ZIOUI1 2026-10-20 07:49 실측: MNU_BTN_MPG_M 5행 · API_M 4행 · PROC_M PKG_SCP0096 4프로시저 21행) 미러. tobe_pkg_candidate 추정값 제거, 프로시저명 공란(PKG_SCP0096.P_) ACTION 배선 제거. SCP0096_registration.sql 은 이 값으로 비파괴(NOT EXISTS/WHEN NOT MATCHED) 재작성 — gen-register-sql.js 재생성 금지(덮어쓰면 사내 메타 DELETE 로 회귀)"
+}

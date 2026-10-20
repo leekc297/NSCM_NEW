@@ -14,7 +14,7 @@
 | `verification-completion-honesty`(#126) 보고 3-상태 양식, `ui_gate_runner.py` 9섹션 리포트 경로 첨부 의무, `asis_mapping_gate --check`, `wiring_chain_check`, `regression-impact.ps1` | #126, UI체크 3.4, G5 | 원칙(검증 없으면 PASS 아님)은 이관(§A-6). 러너 자체는 `check.js --final`·`DOD.md`·`PIPELINE.md`·E2E 요약이 대체. 기존 파이썬 러너는 `_artifacts/_diagnostics` 에 그대로(병행 가능, 필수 아님) |
 | `claude-md-changelog-policy`(#77), `issue-feed-rules`(#86), `issue-log-daily-workflow`(#88) | hooks | 문서 운영 정책. Vibe 산출물은 `Doc/gen`·`.vibe/` 에 기록 |
 | `file-write-fallback`(#17) | hook | 하네스는 파일 쓰기 실패 = exit 1 → NEEDS_HUMAN |
-| CLAUDE.md 절대 원칙 #8 "**보완 = DB 객체 수정 우선, FE/BE 는 직접 수정하지 않고 가이드만**"(2026-10-15) | CLAUDE.md §1-8 | **충돌**: 하네스는 FE 페이지를 생성·수선한다. Vibe_Manager 를 쓰는 것 자체가 이 원칙의 예외 승인으로 본다. 대화형 세션에서는 원칙 유지. ⚠ 사용자 확인 필요 |
+| CLAUDE.md 절대 원칙 #8 "**보완 = DB 객체 수정 우선, FE/BE 는 직접 수정하지 않고 가이드만**"(2026-10-15) | CLAUDE.md §1-8 | **사용자 확정(2026-10-19)**: 이 원칙은 대화형 Claude Code 세션에만 적용되고 Vibe_Manager 에는 해당하지 않는다. 하네스는 FE 페이지·PKG 를 직접 생성·수선한다 |
 
 ## B. As-is 분석 산출물 체계 → AsisFacts Fact Pack 이 대체
 | 항목 | 출처 | 이유 / 대체 |

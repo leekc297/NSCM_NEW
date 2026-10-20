@@ -6,10 +6,10 @@
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **EditTracker** | `@foundation/utils` | 238 |  | TODO: binding 속성 fallback 고려..? - binding 속성 없는 column 없을듯 - 강민재 |
+| **EditTracker** | `@foundation/utils` | 239 |  | TODO: binding 속성 fallback 고려..? - binding 속성 없는 column 없을듯 - 강민재 |
 | **CustomMergeManager** | `@foundation/utils` | 14 |  |  |
 | **ColumnInsertMergeManager** | `@foundation/utils` | 2 |  | 지정한 컬럼(binding)만은 Insert 행(CRUD_TYPE='I')도 계속 병합한다. SYS0017/SCM0007 메시지 설정 탭처럼 Category 가 항상 같은 조회 컨텍스트로 고정되는 화면에서는 F8 로 새 행을 추가해도 Category  |
-| **GridUtils** | `@foundation/utils` | 122 |  |  |
+| **GridUtils** | `@foundation/utils` | 123 |  |  |
 | **GridAction** | `@foundation/utils` | 89 |  |  |
 | **DynamicColumnManager** | `@foundation/utils` | 0 |  |  |
 | **idbPersister** | `@foundation/lib` | 0 |  |  |

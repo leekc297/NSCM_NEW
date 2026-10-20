@@ -1,12 +1,54 @@
 // Vibe_Manager v1.0 — NSCM 전환 6단계 작업 관리 (의존성 없음, VS Code API 만 사용)
 'use strict';
 const vscode = require('vscode');
+const promptPanel = require('./prompt-panel');
+const flowPanel = require('./flow-panel');
+const history = require('./history');
+const workbench = require('./workbench');
 const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
 
-let ctx, tree, harnessTree, envTree, dodTree, out, statusBar, dashboard;
+let ctx, tree, harnessTree, envTree, dodTree, menuTree, out, statusBar, dashboard;
 const RUNS_KEY = 'vibeManager.runs';
+
+// ───────────────────────── 1.7.5: Claude CLI 자동 선택 ─────────────────────────
+//   원인(2026-10-19): PATH 의 claude(~/.local/bin, 2.1.123 — 자동 업데이트 정지)가 하네스에서 실행되어
+//   계정 기본 모델 요청이 "Claude Code 2.1.123 does not support this model; 2.1.251+ required"(400)로 중지.
+//   → vibeManager.claudeCommand 가 기본값('claude')이면 PATH + VS Code Claude Code 확장 내장 CLI 중 **최신 버전**을 쓴다.
+//     선택 경로는 하위 프로세스에 CLAUDE_BIN(하네스) · ASISFACTS_CLAUDE(AsisFacts agent) 로 전달.
+const CLAUDE_MIN = '2.1.280'; // Fable 5.1 = 2.1.251+, Opus 5.5 = 2.1.280+ (2026-10-19 실측)
+let claudeBin = null; // { file, ver }
+function cmpVer(a, b) { const x = String(a).split('.').map(Number), y = String(b).split('.').map(Number); for (let i = 0; i < 3; i++) { const d = (x[i] || 0) - (y[i] || 0); if (d) return d; } return 0; }
+function claudeVersionOf(file) {
+  let st; try { st = fs.statSync(file); } catch { return null; }
+  const key = `${file}|${st.mtimeMs}|${st.size}`; const cache = (ctx && ctx.globalState.get('vibeManager.claudeVer')) || {};
+  if (cache[key]) return cache[key];
+  try {
+    const outp = cp.execFileSync(file, ['--version'], { encoding: 'utf8', timeout: 20000, windowsHide: true, shell: /\.(cmd|bat)$/i.test(file) });
+    const m = /(\d+\.\d+\.\d+)/.exec(outp || ''); if (!m) return null;
+    cache[key] = m[1]; if (ctx) ctx.globalState.update('vibeManager.claudeVer', cache); return m[1];
+  } catch { return null; }
+}
+function claudeCandidates() {
+  const os = require('os'); const home = os.homedir(); const exe = process.platform === 'win32' ? 'claude.exe' : 'claude'; const out = [];
+  for (const dir of (process.env.PATH || '').split(path.delimiter)) for (const n of process.platform === 'win32' ? ['claude.exe', 'claude.cmd'] : ['claude']) { const f = path.join(dir.replace(/"/g, ''), n); if (fs.existsSync(f)) out.push(f); }
+  for (const f of [path.join(home, '.local', 'bin', exe)]) if (fs.existsSync(f)) out.push(f);
+  for (const base of ['.vscode', '.vscode-insiders', '.cursor', '.windsurf'].map(d => path.join(home, d, 'extensions'))) {
+    let ds = []; try { ds = fs.readdirSync(base); } catch { continue; }
+    for (const d of ds) if (/^anthropic\.claude-code-/i.test(d)) { const f = path.join(base, d, 'resources', 'native-binary', exe); if (fs.existsSync(f)) out.push(f); }
+  }
+  return [...new Set(out.map(f => path.normalize(f)))];
+}
+function resolveClaude(force) {
+  if (claudeBin && !force) return claudeBin;
+  let best = null; const seen = [];
+  for (const f of claudeCandidates()) { const v = claudeVersionOf(f); seen.push(`${f} = ${v || '?'}`); if (v && (!best || cmpVer(v, best.ver) > 0)) best = { file: f, ver: v }; }
+  claudeBin = best || { file: 'claude', ver: '' }; claudeBin.seen = seen;
+  log(`Claude CLI 선택: ${claudeBin.file} (${claudeBin.ver || '버전 미확인'}) — 후보 ${seen.join(' · ') || '없음'}`);
+  if (claudeBin.ver && cmpVer(claudeBin.ver, CLAUDE_MIN) < 0) vscode.window.showWarningMessage(`Vibe_Manager: 찾은 Claude CLI 최신이 ${claudeBin.ver} 입니다 — 최신 모델은 ${CLAUDE_MIN} 이상 필요. 터미널에서 'claude update' 또는 VS Code Claude Code 확장을 업데이트하세요.`);
+  return claudeBin;
+}
 
 // ───────────────────────── 설정 · 경로 ─────────────────────────
 function cfg() { return vscode.workspace.getConfiguration('vibeManager'); }
@@ -29,8 +71,9 @@ function paths() {
     rulesDir: abs(c.get('rulesDir') || 'tools/Harness/rules'), gapDir: abs(c.get('gapDir') || 'Doc/gap'), genDir: abs(c.get('genDir') || 'Doc/gen'),
     vibeDir: path.join(root, '.vibe'), extDir: ctx.extensionPath, promptsDir: path.join(abs(c.get('harnessDir') || 'tools/Harness'), 'prompts'),
     dbconnDir: abs(c.get('dbconnDir') || 'tools/DbConn'), reconDir: abs(c.get('reconDir') || 'tools/Recon'), e2eDir: abs(c.get('e2eDir') || 'tools/E2E'), dbOutDir: abs('Doc/db'), reconOutDir: abs('Doc/recon'), e2eOutDir: abs('Doc/e2e'), goldenDir: abs('Doc/golden'),
-    python: c.get('pythonCommand') || 'python', powershell: c.get('powershell') || 'powershell', node: c.get('nodeCommand') || 'node', claude: c.get('claudeCommand') || 'claude', claudeModel: c.get('claudeModel') || '',
-    claudeDelay: Number(c.get('claudeStartupDelayMs') || 6000), agentDriver: c.get('agentDriver') || 'claude-cli', agentModel: c.get('agentModel') || 'claude-sonnet-4-5',
+    python: c.get('pythonCommand') || 'python', powershell: c.get('powershell') || 'powershell', node: c.get('nodeCommand') || 'node', claude: (() => { const s = (c.get('claudeCommand') || '').trim(); return s && s !== 'claude' ? s : resolveClaude().file; })(), claudeModel: c.get('claudeModel') || '', modelList: Array.isArray(c.get('modelList')) ? c.get('modelList') : [], permissionMode: c.get('defaultPermissionMode') || 'bypassPermissions',
+    language: (c.get('language') === 'ko' ? 'ko' : 'en'), // 1.8.3: 메뉴·라벨 언어 (기본 en)
+    claudeDelay: Number(c.get('claudeStartupDelayMs') || 6000), agentDriver: c.get('agentDriver') || 'claude-cli', agentModel: c.get('agentModel') || 'claude-opus-5-5', // 1.8.5: 기본 Opus 5.5 (이전 sonnet-4-5)
     excludeScreens: (c.get('excludeScreenPatterns') || []).map(s => new RegExp(s)), envFiles: c.get('envFiles') || []
   };
 }
@@ -100,7 +143,7 @@ function stepStatus(step, vars) {
 function runs() { return ctx.workspaceState.get(RUNS_KEY, {}); }
 function recordRun(id, info) {
   const r = runs(); r[id] = Object.assign({}, r[id] || {}, info); ctx.workspaceState.update(RUNS_KEY, r);
-  try { const p = paths(); if (!p.root) return; fs.mkdirSync(p.vibeDir, { recursive: true }); fs.appendFileSync(path.join(p.vibeDir, 'runs.log'), `${new Date().toISOString()}\t${id}\t${info.event || ''}\t${info.exitCode == null ? '' : info.exitCode}\t${info.note || ''}\n`, 'utf8'); } catch (_) { }
+  try { const p = paths(); if (!p.root) return; fs.mkdirSync(p.vibeDir, { recursive: true }); fs.appendFileSync(path.join(p.vibeDir, 'runs.log'), `${history.nowLocal()}\t${id}\t${info.event || ''}\t${info.exitCode == null ? '' : info.exitCode}\t${info.note || ''}\n`, 'utf8'); } catch (_) { }
 }
 function fmtTime(ms) { if (!ms) return ''; const d = new Date(ms); const z = n => String(n).padStart(2, '0'); return `${d.getMonth() + 1}/${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`; }
 
@@ -118,6 +161,7 @@ async function collectInputs(task, preset) {
 }
 
 // ───────────────────────── 작업 실행 ─────────────────────────
+function pageDirOfId(id) { try { const p = paths(); const r = JSON.parse(fs.readFileSync(path.join(p.genDir, id, 'register.json'), 'utf8')); return path.join(p.tobeDir, 'features', r.feature, 'src', 'pages', r.pageDir); } catch { return ''; } }
 async function runTask(task, preset) {
   if (!task) { const items = allTasks().map(x => ({ label: x.task.title, description: x.step.title, task: x.task })); const pick = await vscode.window.showQuickPick(items, { placeHolder: '실행할 작업' }); if (!pick) return; task = pick.task; }
   const p = paths(); if (!p.root) { vscode.window.showErrorMessage('Vibe_Manager: 프로젝트 루트를 찾지 못했습니다. 설정 vibeManager.projectRoot 를 지정하세요.'); return; }
@@ -146,16 +190,29 @@ async function runShell(task, vars, extraArgs) {
   const p = paths(); const script = subst(task.script, vars);
   if (!fs.existsSync(script)) { const a = await vscode.window.showErrorMessage(`스크립트가 없습니다: ${script}`, '폴더 열기'); if (a) openPath(path.dirname(script)); return; }
   const args = extraArgs || buildArgs(task, vars); const cwd = subst(task.cwd || path.dirname(script), vars);
-  const exec = task.kind === 'node' ? new vscode.ShellExecution(p.node, [script, ...args], { cwd }) : task.kind === 'python' ? new vscode.ShellExecution(p.python || 'python', [script, ...args], { cwd }) : task.kind === 'cmd' ? new vscode.ShellExecution('cmd', ['/c', script, ...args], { cwd }) : new vscode.ShellExecution(p.powershell, ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', script, ...args], { cwd });
-  const t = new vscode.Task({ type: 'vibeManager', task: task.id }, vscode.TaskScope.Workspace, task.title, 'Vibe_Manager', exec);
+  // 1.7.7: 워크벤치가 열려 있으면 그쪽 스트리밍 실행(실제 exit code·작업 출력 탭). VS Code 작업 터미널은 워크스페이스
+  //        프로파일(-NoExit · shellIntegration off) 때문에 종료를 못 잡아 exit undefined 경고·'실행 중' 고착 → fallback 으로만.
+  if (await workbench.runShell(task, vars, args)) return;
+  const so = { cwd, env: claudeEnv(p) }; // 1.7.5: 하네스·agent 가 같은 (최신) Claude CLI 를 쓰도록
+  const exec = task.kind === 'node' ? new vscode.ShellExecution(p.node, [script, ...args], so) : task.kind === 'python' ? new vscode.ShellExecution(p.python || 'python', [script, ...args], so) : task.kind === 'cmd' ? new vscode.ShellExecution('cmd', ['/c', script, ...args], so) : new vscode.ShellExecution(p.powershell, ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', script, ...args], so);
+  const histId = (vars.inputs && (vars.inputs.id || (vars.inputs.ids || '').split(/\s+/)[0]) || '').toUpperCase();
+  let histDir = null; try { histDir = history.begin(Object.assign({}, p, { pageDirOf: pageDirOfId }), histId, task.id, `${path.basename(script)} ${args.join(' ')}`.trim()); } catch (e) { log(`이력 스냅샷 실패: ${e.message}`); }
+  const t = new vscode.Task({ type: 'vibeManager', task: task.id, histDir: histDir || '' }, vscode.TaskScope.Workspace, task.title, 'Vibe_Manager', exec);
   t.presentationOptions = { reveal: vscode.TaskRevealKind.Always, panel: vscode.TaskPanelKind.Dedicated, clear: true, showReuseMessage: false, echo: true, focus: false };
   recordRun(task.id, { event: 'start', time: Date.now(), exitCode: null, note: `${path.basename(script)} ${args.join(' ')}`.trim() }); tree.refresh();
   try { await vscode.tasks.executeTask(t); } catch (e) { recordRun(task.id, { event: 'error', exitCode: -1, note: e.message }); vscode.window.showErrorMessage(`실행 실패: ${e.message}`); }
 }
+function claudeEnv(p, model) {
+  const e = { CLAUDE_BIN: p.claude, ASISFACTS_CLAUDE: p.claude };
+  const m = model != null ? model : p.claudeModel; if (m) e.CLAUDE_MODEL = m;
+  return e;
+}
 function onTaskEnd(e) {
   const def = e.execution && e.execution.task && e.execution.task.definition; if (!def || def.type !== 'vibeManager') return;
   const id = def.task, code = e.exitCode; recordRun(id, { event: 'end', endTime: Date.now(), exitCode: code });
+  if (def.histDir) { try { history.finish(Object.assign({}, paths(), { pageDirOf: pageDirOfId }), def.histDir, code); } catch (err) { log(`이력 after 실패: ${err.message}`); } }
   const task = findTask(id); const title = task ? task.title : id;
+  if (code == null) { vscode.window.showWarningMessage(`Vibe_Manager ? ${title} — 터미널이 종료 코드를 돌려주지 않았습니다(터미널 프로파일 -NoExit/shellIntegration off). 워크벤치를 열어 두고 실행하면 작업 출력 탭에서 실제 결과를 볼 수 있습니다.`); tree.refresh(); refreshDashboard(); updateStatusBar(); return; }
   if (code === 0) vscode.window.showInformationMessage(`Vibe_Manager ✓ ${title}`);
   else if (code === 1 && task && task.kind === 'node' && /check\.js|gap\.js|recon\.js|repair-loop\.js|probe\.py|golden\.py/.test(task.script || '')) vscode.window.showWarningMessage(`Vibe_Manager ! ${title} — 경고 있음 (터미널 확인)`);
   else vscode.window.showWarningMessage(`Vibe_Manager ✗ ${title} (exit ${code}) — 터미널 출력을 확인하세요`);
@@ -167,11 +224,12 @@ async function runClaude(task, vars) {
   const id = vars.inputs.id || vars.inputs.ids || '';
   const rel = path.relative(p.root, promptFile).split(path.sep).join('/');
   const term = vscode.window.createTerminal({ name: `Vibe: ${task.id}${id ? ' ' + id : ''}`, cwd: p.root }); term.show(true);
-  const model = p.claudeModel ? ` --model ${p.claudeModel}` : '';
+  const model = (p.claudeModel ? ` --model ${p.claudeModel}` : '') + ` --permission-mode ${p.permissionMode}`;
   const genNotes = id ? `Doc/gen/${id}/GEN_NOTES.md` : '';
   const instruction = `${rel} 를 읽고 그 지시대로 화면 ${id} 작업을 해주세요.${genNotes ? ` 메모: ${genNotes}.` : ''} TODO(이식) 지점만 채우고 끝나면 __asis-mapping__.md 상태를 갱신하세요.`;
-  if (task.headless) term.sendText(`${p.claude} -p${model} "${instruction.replace(/"/g, '\\"')}"`);
-  else { term.sendText(`${p.claude}${model}`); setTimeout(() => term.sendText(instruction), p.claudeDelay); }
+  const cl = /\s/.test(p.claude) ? `& "${p.claude}"` : p.claude; // PowerShell 터미널 — 공백 경로는 호출 연산자
+  if (task.headless) term.sendText(`${cl} -p${model} "${instruction.replace(/"/g, '\\"')}"`);
+  else { term.sendText(`${cl}${model}`); setTimeout(() => term.sendText(instruction), p.claudeDelay); }
   recordRun(task.id, { event: 'claude', time: Date.now(), exitCode: null, note: `${rel} ${id}` }); tree.refresh();
 }
 async function openPath(target) {
@@ -229,7 +287,7 @@ async function gateReport() {
   const lines = [`# Agent 게이트 집계 — ${new Date().toLocaleString()}`, '', `- 실행 화면 ${s.total}${all ? ` / 대상 ${all.length} (미실행 ${all.length - s.total})` : ''}`, `- PASS ${s.pass} · FAIL ${s.fail}`, '', '| 화면ID | 상태 | 문서 | 상세 | 실패 항목 | 시각 |', '|---|---|---:|---|---|---|'];
   for (const i of s.items) lines.push(`| ${i.id} | ${i.status === 'PASS' ? '✅ PASS' : '❌ ' + i.status} | ${i.docs}/8 | ${i.detail} | ${i.checks.join('<br>')} | ${fmtTime(i.mtime.getTime())} |`);
   if (all && all.length > s.total) { const done = new Set(s.items.map(i => i.id)); lines.push('', `## 미실행 화면 (${all.filter(id => !done.has(id)).length})`, '', all.filter(id => !done.has(id)).join(', ')); }
-  const dir = path.join(p.vibeDir, 'reports'); fs.mkdirSync(dir, { recursive: true }); const file = path.join(dir, `agent_gates_${new Date().toISOString().slice(0, 10)}.md`);
+  const dir = path.join(p.vibeDir, 'reports'); fs.mkdirSync(dir, { recursive: true }); const file = path.join(dir, `agent_gates_${history.nowLocal().slice(0, 10)}.md`);
   fs.writeFileSync(file, lines.join('\n'), 'utf8'); await vscode.window.showTextDocument(await vscode.workspace.openTextDocument(vscode.Uri.file(file)), { preview: false });
 }
 
@@ -266,9 +324,9 @@ class StepsProvider {
   getChildren(el) {
     const p = paths(); vscode.commands.executeCommand('setContext', 'vibeManager.noRoot', !p.root); if (!p.root) return [];
     const vars = Object.assign({}, p, { inputs: {} });
-    if (!el) return loadSteps().map(s => { const st = stepStatus(s, vars); const it = new vscode.TreeItem(s.title, st.state === 'pass' ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.Expanded); it.description = st.text; it.tooltip = s.detail || ''; it.iconPath = stateIcon(st.state); it.contextValue = 'step'; it.step = s; return it; });
+    if (!el) return loadSteps().map(s => { const st = stepStatus(s, vars); const it = new vscode.TreeItem(L(s, 'title'), st.state === 'pass' ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.Expanded); it.description = st.text; it.tooltip = s.detail || ''; it.iconPath = stateIcon(st.state); it.contextValue = 'step'; it.step = s; return it; });
     if (el.step) { const r = runs(); return (el.step.tasks || []).map(t => {
-      const it = new vscode.TreeItem(t.title, vscode.TreeItemCollapsibleState.None); const g = t.gate ? evalGate(t.gate, vars) : null; const run = r[t.id]; const parts = [];
+      const it = new vscode.TreeItem(L(t, 'title'), vscode.TreeItemCollapsibleState.None); const g = t.gate ? evalGate(t.gate, vars) : null; const run = r[t.id]; const parts = [];
       if (g) parts.push(g.detail); if (run && run.time) parts.push(`최근 ${fmtTime(run.time)}${run.exitCode != null ? (run.exitCode === 0 ? ' ✓' : ` ✗${run.exitCode}`) : ''}`);
       it.description = parts.join(' · '); it.tooltip = new vscode.MarkdownString(`**${t.title}**\n\n종류: ${kindName(t.kind)}${t.script ? `\n\n스크립트: \`${subst(t.script, vars)}\`` : ''}${t.prompt ? `\n\n프롬프트: \`${t.prompt}\`` : ''}${g ? `\n\n게이트: ${g.detail}` : ''}`);
       it.iconPath = g ? stateIcon(g.ran || g.ok ? (g.ok ? 'pass' : 'fail') : 'idle') : kindIcon(t.kind); it.contextValue = 'task'; it.task = t; it.command = { command: 'vibeManager.runTask', title: '실행', arguments: [it] }; return it; }); }
@@ -286,7 +344,8 @@ class HarnessProvider {
   getTreeItem(el) { return el; }
   getChildren(el) {
     const p = paths(); if (!p.root) return [];
-    if (!el) return ['rules', 'hooks', 'husky', 'docs'].map(k => { const it = new vscode.TreeItem({ rules: '룰 사전 (rules/*.csv)', hooks: 'Claude Code Hook (.claude/settings.json)', husky: 'Git Hook (nscm-fe/.husky)', docs: '룰 문서 · 색인' }[k], vscode.TreeItemCollapsibleState.Expanded); it.group = k; it.iconPath = new vscode.ThemeIcon({ rules: 'book', hooks: 'plug', husky: 'git-commit', docs: 'library' }[k]); return it; });
+    if (!el) return ['vibe', 'rules', 'hooks', 'husky', 'docs'].map(k => { const it = new vscode.TreeItem({ vibe: '이관 룰셋 (VibeManager/rules — ENV·KEEP·SKIP·처분표)', rules: '룰 사전 (rules/*.csv)', hooks: 'Claude Code Hook (.claude/settings.json)', husky: 'Git Hook (nscm-fe/.husky)', docs: '룰 문서 · 색인' }[k], vscode.TreeItemCollapsibleState.Expanded); it.group = k; it.iconPath = new vscode.ThemeIcon({ vibe: 'law', rules: 'book', hooks: 'plug', husky: 'git-commit', docs: 'library' }[k]); return it; });
+    if (el.group === 'vibe') { const d = path.join(p.root, 'tools', 'VibeManager', 'rules'); if (!fs.existsSync(d)) return [leaf('tools/VibeManager/rules 없음', 'warning')]; return fs.readdirSync(d).filter(f => /\.(md|csv|json)$/.test(f)).sort().map(f => { const it = leaf(f, 'book'); it.command = { command: 'vscode.open', title: '열기', arguments: [vscode.Uri.file(path.join(d, f))] }; it.tooltip = path.join(d, f); return it; }); }
     if (el.group === 'rules') { if (!fs.existsSync(p.rulesDir)) return [leaf('rules/ 없음 — tools/Harness 확인', 'warning')]; return fs.readdirSync(p.rulesDir).filter(f => /\.(csv|md)$/.test(f)).sort().map(f => { const full = path.join(p.rulesDir, f); let n = ''; try { if (f.endsWith('.csv')) n = `${csvRowCount(full)}행`; } catch (_) { } const it = leaf(f, f.startsWith('_') ? 'lightbulb' : f.endsWith('.csv') ? 'table' : 'markdown', n); it.contextValue = 'rule'; it.target = full; it.command = { command: 'vibeManager.openItem', title: '열기', arguments: [it] }; return it; }); }
     if (el.group === 'hooks') { const sf = path.join(p.root, '.claude', 'settings.json'); if (!fs.existsSync(sf)) return [leaf('.claude/settings.json 없음', 'warning')]; let j; try { j = JSON.parse(fs.readFileSync(sf, 'utf8')); } catch (e) { return [leaf('settings.json 파싱 실패: ' + e.message, 'error')]; } const items = [];
       for (const [ev, groups] of Object.entries(j.hooks || {})) for (const g of groups) for (const h of g.hooks || []) { const file = (h.command.match(/([^\s\\/]+\.(ps1|sh|js|cmd))/) || [, h.command])[1]; const disabled = /^(REM|::|#|rem\s)\s*DISABLED\s*/.test(h.command) || h._disabled === true; const it = leaf(`${ev}${g.matcher ? ' [' + g.matcher + ']' : ''} · ${file}`, disabled ? 'circle-slash' : 'check', disabled ? '꺼짐' : `timeout ${h.timeout || '-'}s`); it.contextValue = 'hook'; it.hook = { ev, matcher: g.matcher || '', command: h.command, disabled }; it.tooltip = h.command; const hf = (h.command.match(/[A-Za-z]:[\\/][^\s"]+\.(ps1|sh|js|cmd)/) || [])[0]; if (hf) { it.target = hf; it.command = { command: 'vibeManager.openItem', title: '열기', arguments: [it] }; } items.push(it); }
@@ -317,7 +376,9 @@ class EnvProvider {
     const p = paths(); if (!p.root) return [];
     if (!el) { const items = [leaf(`루트 ${p.root}`, 'root-folder')]; items[0].command = { command: 'vibeManager.openSettings', title: '설정' };
       for (const f of p.envFiles) { const full = path.isAbsolute(f) ? f : path.join(p.root, f); const it = new vscode.TreeItem(f, fs.existsSync(full) ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None); it.iconPath = new vscode.ThemeIcon(fs.existsSync(full) ? 'settings-gear' : 'warning'); it.description = fs.existsSync(full) ? '' : '없음'; it.file = full; it.contextValue = 'doc'; it.target = full; items.push(it); }
-      items.push(leaf(`Claude CLI: ${p.claude}${p.claudeModel ? ' --model ' + p.claudeModel : ''} · Agent ${p.agentDriver}/${p.agentModel}`, 'sparkle')); return items; }
+      const cv = claudeBin && claudeBin.file === p.claude ? claudeBin.ver : '';
+      const ci = leaf(`Claude CLI: ${p.claude}${cv ? ` (v${cv})` : ''}${p.claudeModel ? ' --model ' + p.claudeModel : ''} · Agent ${p.agentDriver}/${p.agentModel}`, cv && cmpVer(cv, CLAUDE_MIN) < 0 ? 'warning' : 'sparkle');
+      ci.tooltip = (claudeBin && claudeBin.seen ? '후보:\n' + claudeBin.seen.join('\n') : '') + `\n최신 모델 요구: ${CLAUDE_MIN}+`; items.push(ci); return items; }
     if (el.file) { try { const txt = fs.readFileSync(el.file, 'utf8').replace(/^﻿/, '');
       if (/\.json$/.test(el.file)) { const j = JSON.parse(txt); return flat(j).slice(0, 60).map(([k, v]) => leaf(k, 'symbol-property', SECRET.test(k) ? '••••••' : String(v).slice(0, 80))); }
       return txt.split(/\r?\n/).filter(l => l.trim() && !l.trim().startsWith('#')).slice(0, 60).map(l => { const m = l.match(/^\s*([A-Za-z0-9_.-]+)\s*=\s*(.*)$/); return m ? leaf(m[1], 'symbol-variable', SECRET.test(m[1]) ? '••••••' : m[2].slice(0, 80)) : leaf(l.slice(0, 80), 'dash'); }); } catch (e) { return [leaf('읽기 실패: ' + e.message, 'error')]; } }
@@ -334,7 +395,7 @@ class DodProvider {
   getChildren(el) {
     const p = paths(); if (!p.root) return []; const ID = this.id();
     if (!el) {
-      const head = leaf(ID ? `화면 ${ID}` : '화면 ID 를 선택하세요 (빠른 실행)', 'symbol-class'); head.command = { command: 'vibeManager.quickScreen', title: '화면 선택' };
+      const head = leaf(ID ? `화면 ${ID}` : '화면 ID 를 선택하세요 (클릭)', 'symbol-class'); head.command = { command: 'vibeManager.quickScreen', title: '화면 선택' };
       if (!ID) return [head];
       const g = path.join(p.genDir, ID); const rd = f => fs.existsSync(path.join(g, f)) ? fs.readFileSync(path.join(g, f), 'utf8') : '';
       const dod = rd('DOD.md'), chk = rd('CHECK.md'), pkg = rd('CHECK_PKG.md'), pipe = rd('PIPELINE.md');
@@ -357,6 +418,64 @@ class DodProvider {
       const gold = path.join(paths().goldenDir, '_summary.csv'); if (fs.existsSync(gold)) { const rows = fs.readFileSync(gold, 'utf8').split(/\r?\n/).filter(l => l.startsWith(ID + ',')); const pass = rows.filter(l => /,PASS\s*$/.test(l)).length; items.push(leaf(`골든 테스트 ${pass}/${rows.length}`, rows.length && pass === rows.length ? 'pass-filled' : 'beaker')); }
       items.push(Object.assign(leaf('ID 하나로 끝까지 (pipeline.js)', 'play'), { command: { command: 'vibeManager.runTask', title: '실행', arguments: ['S5.pipeline', { id: ID }] } }));
       return items; }
+    return [];
+  }
+}
+// ───────────────────────── 1.7.3: 전체 메뉴 (워크벤치 아코디언 = 사이드바 트리, 단일 정의) ─────────────────────────
+//   quick.json 그룹 + 구 사이드바 4개 카테고리(NSCM 전환 단계 · DoD · 룰/Hook/하네스 · 환경설정).
+//   카테고리 내용은 기존 트리 제공자(StepsProvider·DodProvider·HarnessProvider·EnvProvider)를 그대로 위임 → 항목 누락 없음.
+//   quick.json 의 '환경설정' 그룹은 환경설정 카테고리로 합친다(같은 이름 메뉴 2개 방지).
+// 1.8.3: 언어 선택 — quick.json/steps.json 의 *_en 필드를 쓰고(없으면 원문), 카테고리·액션 문구는 아래 사전
+const L = (o, k = 'label') => { const p = paths(); return (p.language === 'en' && o && o[k + '_en']) ? o[k + '_en'] : (o ? o[k] : ''); };
+const CAT = { steps: ['NSCM Migration Steps', 'NSCM 전환 단계'], dod: ['Definition of Done — Current Screen', '완료 정의(DoD) — 현재 화면'], harness: ['Rules · Hooks · Harness', '룰 · Hook · 하네스'], env: ['Settings', '환경설정'],
+  recheck: ['🔄 Re-check gates', '🔄 게이트 다시 판정'], pick: ['📍 Pick screen · step tasks', '📍 화면 선택 · 단계 작업'], current: ['📋 Current settings', '📋 현재 설정값'] };
+const T = k => CAT[k][paths().language === 'ko' ? 1 : 0];
+function menuSections() {
+  const p = paths(); const groups = (promptPanel.loadQuick(p.extDir, p.root).groups || []);
+  const envG = groups.find(g => /환경|settings/i.test(g.title)) || null;
+  // 1.7.4: 그룹 이모지 — 메뉴 전체에서 이모지 중복 없음 (quick.json 항목 이모지와도 겹치지 않게 배정)
+  const groupIcon = title => /서버|server/i.test(title) ? '🖥️' : /소스|git/i.test(title) ? '📦' : /^UI/.test(title) ? '🪟' : /분석/.test(title) ? '📑' : /^화면/.test(title) ? '🖼️' : /전체|overview/i.test(title) ? '🧭' : /Claude/.test(title) ? '✴️' : '📁';
+  const out = groups.filter(g => g !== envG).map(g => ({ key: 'q:' + g.title, kind: 'quick', title: L(g, 'title'), icon: groupIcon(g.title), group: g }));
+  out.push({ key: 'steps', kind: 'cat', title: T('steps'), icon: '🌲', actions: [{ label: T('recheck'), command: 'vibeManager.refresh' }] });
+  out.push({ key: 'dod', kind: 'cat', title: T('dod'), icon: '✔️', actions: [{ label: T('pick'), command: 'vibeManager.quickScreen' }] });
+  out.push({ key: 'harness', kind: 'cat', title: T('harness'), icon: '🧩' });
+  out.push({ key: 'env', kind: 'cat', title: T('env'), icon: '⚙️', group: envG });
+  return out;
+}
+// 1.7.4: 한 행에 아이콘 1개 — 라벨이 이모지/기호로 시작하면 codicon 을 붙이지 않고,
+//        codicon(게이트 상태 등)이 있는 위임 항목은 라벨 앞 기호(★ 등)를 떼어 하나만 보이게 한다.
+const LEAD_SYM = /^\s*(?:\p{Extended_Pictographic}|[★☆✎✱])️?\s*/u;
+function oneIcon(it) {
+  const l = typeof it.label === 'string' ? it.label : (it.label && it.label.label) || '';
+  if (!LEAD_SYM.test(l)) return it;
+  if (it.iconPath) { const s = l.replace(LEAD_SYM, ''); if (typeof it.label === 'string') it.label = s; else it.label = Object.assign({}, it.label, { label: s }); }
+  return it;
+}
+function catProvider(k) { return { steps: tree, dod: dodTree, harness: harnessTree, env: envTree }[k]; }
+class MenuProvider {
+  constructor() { this._em = new vscode.EventEmitter(); this.onDidChangeTreeData = this._em.event; }
+  refresh() { this._em.fire(); }
+  getTreeItem(el) { return el; }
+  getChildren(el) {
+    const p = paths(); vscode.commands.executeCommand('setContext', 'vibeManager.noRoot', !p.root); if (!p.root) return [];
+    // 1.7.4: 그룹·카테고리 = 이모지 1개(codicon 없음) · quick 항목 = 라벨 이모지 1개(codicon 없음)
+    if (!el) return menuSections().map((s, i) => {
+      const it = new vscode.TreeItem(`${s.icon} ${s.title}`, i === 0 ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.Collapsed);
+      it.section = s; if (s.kind === 'quick') it.description = `${(s.group.items || []).length}`; return it;
+    });
+    const plain = (label, desc) => { const it = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None); if (desc) it.description = desc; if (!LEAD_SYM.test(label)) it.iconPath = new vscode.ThemeIcon('play'); return it; };
+    if (el.section) {
+      const s = el.section; const items = [];
+      for (const q of (s.group && s.group.items) || []) { const it = plain(L(q), q.needsId ? 'ID' : ''); it.tooltip = q.hint || q.task || q.command || q.kind; it.contextValue = 'quick'; it.command = { command: 'vibeManager.runQuick', title: '실행', arguments: [q] }; items.push(it); }
+      for (const a of s.actions || []) { const it = plain(a.label); it.command = { command: a.command, title: a.label }; items.push(it); }
+      if (s.kind === 'cat') {
+        const prov = catProvider(s.key); const kids = prov ? prov.getChildren(undefined) : [];
+        if (s.group && kids.length) { const hd = new vscode.TreeItem(T('current'), vscode.TreeItemCollapsibleState.Expanded); hd._prov = s.key; hd._root = true; items.push(hd); }
+        else for (const k of kids) { k._prov = s.key; items.push(oneIcon(k)); }
+      }
+      return items;
+    }
+    if (el._prov) { const prov = catProvider(el._prov); const kids = (prov ? prov.getChildren(el._root ? undefined : el) : []) || []; for (const k of kids) { k._prov = el._prov; oneIcon(k); } return kids; }
     return [];
   }
 }
@@ -413,14 +532,37 @@ function log(msg) { if (out) out.appendLine(`[${new Date().toLocaleTimeString()}
 
 function activate(context) {
   ctx = context; out = vscode.window.createOutputChannel('Vibe_Manager');
-  tree = new StepsProvider(); harnessTree = new HarnessProvider(); envTree = new EnvProvider(); dodTree = new DodProvider();
-  statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 50); statusBar.command = 'vibeManager.openDashboard';
+  // 1.7.5: 최신 Claude CLI 를 확정해 확장 호스트 env 에 심는다 → 워크벤치 spawn 자식(하네스 node·agent)도 상속
+  try { const p0 = paths(); process.env.CLAUDE_BIN = p0.claude; process.env.ASISFACTS_CLAUDE = p0.claude; } catch (e) { log(`Claude CLI 확인 실패: ${e.message}`); }
+  tree = new StepsProvider(); harnessTree = new HarnessProvider(); envTree = new EnvProvider(); dodTree = new DodProvider(); menuTree = new MenuProvider();
+  // 1.7.3: 카테고리 제공자가 갱신되면 사이드바 전체 메뉴도 갱신
+  for (const t of [tree, harnessTree, envTree, dodTree]) { const r = t.refresh.bind(t); t.refresh = () => { r(); if (menuTree) menuTree.refresh(); }; }
+  const wbApi = () => ({
+    ctx: context, paths, loadSteps, findTask, collectInputs, subst, buildArgs, openPath, pageDirOf: pageDirOfId,
+    menuSections, claudeEnv,
+    runTaskById: (tid, preset) => runTask(findTask(tid), preset),
+    record: (k, note) => recordRun(typeof k === 'string' && findTask(k) ? k : 'workbench', { event: 'start', time: Date.now(), exitCode: null, note: `${k}: ${note}` }),
+    afterTask: (tid, code) => { recordRun(tid, { event: 'end', endTime: Date.now(), exitCode: code }); tree.refresh(); refreshDashboard(); updateStatusBar(); }
+  });
+  statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 50); statusBar.command = 'vibeManager.openWorkbench';
+  const pageDirOf = id => { try { const r = JSON.parse(fs.readFileSync(path.join(paths().genDir, id, 'register.json'), 'utf8')); return path.join(paths().tobeDir, 'features', r.feature, 'src', 'pages', r.pageDir); } catch { return ''; } };
+  // 1.6: 사이드바 PromptViewProvider 제거 — 활성화 시 워크벤치가 바로 열린다.
   context.subscriptions.push(out, statusBar,
-    vscode.window.registerTreeDataProvider('vibeManager.steps', tree), vscode.window.registerTreeDataProvider('vibeManager.harness', harnessTree), vscode.window.registerTreeDataProvider('vibeManager.env', envTree), vscode.window.registerTreeDataProvider('vibeManager.dod', dodTree),
+    vscode.commands.registerCommand('vibeManager.startBE', () => { const q = promptPanel.loadQuick(paths().extDir, paths().root); const it = q.groups.flatMap(g => g.items).find(x => /(^|\s)(BE 기동|Start BE|BE Start)$/.test(x.label)); if (it) promptPanel.startServer(paths(), it); }),
+    vscode.commands.registerCommand('vibeManager.startFE', () => { const q = promptPanel.loadQuick(paths().extDir, paths().root); const it = q.groups.flatMap(g => g.items).find(x => /(^|\s)(FE 기동|Start FE|FE Start)$/.test(x.label)); if (it) promptPanel.startServer(paths(), it); }),
+    vscode.commands.registerCommand('vibeManager.claudeNew', () => promptPanel.ensureClaude(paths(), { fresh: true })),
+    vscode.commands.registerCommand('vibeManager.refreshPrompt', () => vscode.commands.executeCommand('vibeManager.openWorkbench')),
+    // 1.7.3: 사이드바 = 워크벤치와 동일한 전체 메뉴 1개 (구 4개 뷰 내용은 카테고리로 포함)
+    vscode.window.registerTreeDataProvider('vibeManager.menu', menuTree),
+    vscode.commands.registerCommand('vibeManager.runQuick', async item => { if (!item) return; await vscode.commands.executeCommand('vibeManager.openWorkbench'); await workbench.quick(item, ctx.workspaceState.get('vibeManager.lastId', ''), false); }),
     vscode.commands.registerCommand('vibeManager.refresh', () => { tree.refresh(); refreshDashboard(); }),
     vscode.commands.registerCommand('vibeManager.runTask', (node, preset) => runTask(typeof node === 'string' ? findTask(node) : (node && node.task ? node.task : null), preset)),
     vscode.commands.registerCommand('vibeManager.quickScreen', quickScreen),
     vscode.commands.registerCommand('vibeManager.openDashboard', openDashboard),
+    vscode.commands.registerCommand('vibeManager.openWorkbench', () => { workbench.open(wbApi()); }),
+    vscode.commands.registerCommand('vibeManager.openWorkbenchNew', () => { workbench.open(wbApi(), { fresh: true }); }),
+    vscode.commands.registerCommand('vibeManager.openFlow', () => flowPanel.open({ paths, runTaskById: (tid, preset) => runTask(findTask(tid), preset), openPath })),
+    vscode.commands.registerCommand('vibeManager.openHistory', () => history.open({ paths, openPath })),
     vscode.commands.registerCommand('vibeManager.gateReport', gateReport),
     vscode.commands.registerCommand('vibeManager.openOutputFolder', () => openPath(paths().outDir)),
     vscode.commands.registerCommand('vibeManager.editSteps', editSteps),
@@ -433,10 +575,25 @@ function activate(context) {
       openPath(t); }),
     vscode.commands.registerCommand('vibeManager.checkEnv', checkEnv),
     vscode.tasks.onDidEndTaskProcess(onTaskEnd),
-    vscode.workspace.onDidChangeConfiguration(e => { if (e.affectsConfiguration('vibeManager')) { tree.refresh(); refreshDashboard(); } }));
+    vscode.workspace.onDidChangeConfiguration(e => { if (e.affectsConfiguration('vibeManager')) { if (e.affectsConfiguration('vibeManager.claudeCommand')) { const p1 = paths(); process.env.CLAUDE_BIN = p1.claude; process.env.ASISFACTS_CLAUDE = p1.claude; }
+      if (e.affectsConfiguration('vibeManager.language')) { const ko = paths().language === 'ko'; vscode.window.showInformationMessage(ko ? 'Vibe_Manager 언어: 한국어 — 사이드바 메뉴는 즉시, Workbench 는 새 창부터 적용됩니다.' : 'Vibe_Manager language: English — sidebar menu updates now; Workbench applies to newly opened windows.'); }
+      tree.refresh(); refreshDashboard(); } }));
+  // 1.8.3: 새 VSIX 가 설치됐는데 아직 이전 버전이 실행 중이면(Reload 전) 메뉴(quick.json 실시간)와 코드가 어긋난다 → 활성화 시 안내
+  try {
+    const mine = String((context.extension && context.extension.packageJSON && context.extension.packageJSON.version) || '');
+    const extRoot = path.dirname(context.extensionPath); const vers = fs.readdirSync(extRoot).filter(d => /^marisoft\.vibe-manager-\d/.test(d)).map(d => d.replace(/^marisoft\.vibe-manager-/, ''));
+    const newest = vers.sort((a, b) => cmpVer(a, b)).pop();
+    if (mine && newest && cmpVer(newest, mine) > 0) vscode.window.showWarningMessage(`Vibe_Manager ${newest} 이 설치되어 있지만 지금은 ${mine} 이 실행 중입니다 — 메뉴와 기능이 어긋날 수 있으니 창을 새로고침하세요.`, 'Reload Window').then(a => { if (a) vscode.commands.executeCommand('workbench.action.reloadWindow'); });
+  } catch { }
   const p = paths();
   if (p.root) for (const glob of ['**/_gate.csv', '**/_index.csv', '**/crosscheck_report.csv', '**/grid_runs.csv', '**/_summary.csv', '**/GEN_NOTES.md', '**/rules/*.csv', '**/.claude/settings.json']) { const w = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(vscode.Uri.file(p.root), glob)); const h = () => { tree.refresh(); refreshDashboard(); }; w.onDidChange(h); w.onDidCreate(h); w.onDidDelete(h); context.subscriptions.push(w); }
   updateStatusBar(); log(`활성화. 루트=${p.root || '(없음)'} 단계정의=${stepsFile()}`);
+  // 1.6: 활성화 시 워크벤치를 첫 화면으로 자동 기동 (사이드바 뷰가 사라졌으므로 즉시 접근 보장).
+  // 사용자가 설정으로 끄려면 vibeManager.autoOpenWorkbench=false 로 지정하면 skip.
+  try {
+    const auto = cfg().get('autoOpenWorkbench');
+    if (auto !== false) setTimeout(() => { vscode.commands.executeCommand('vibeManager.openWorkbench'); }, 300);
+  } catch { }
 }
 function deactivate() { }
 module.exports = { activate, deactivate };

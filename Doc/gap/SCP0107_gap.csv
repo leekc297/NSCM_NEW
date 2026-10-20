@@ -2,7 +2,7 @@
 "endpoint","SCM.SCM0002_GET_TITLESET_POPUP","SP SCM0002_GET_TITLESET_POPUP (MATCH) @GetTitleSet:410","MISSING","","매핑표·코드·주석 어디에도 대응 없음"
 "endpoint","SCP.SCP0083_GET_DIO_REPORT_H","SP SCP0083_GET_DIO_REPORT_H (MATCH) @FindData:445","MISSING","","매핑표·코드·주석 어디에도 대응 없음"
 "endpoint","biz:CommonData.YesOrNo","SP  (BIZ_MATCH) @<field:dtYesOrNo>:70","INTENDED","","공통 데이터(BIZ CommonDataList) → useTabComboQueries / useTabLookupQueries"
-"endpoint","SCP.SCP0104_GET_SPREAD_TITLE","SP SCP0104_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1204","INTENDED","","그리드 헤더 메타 → /admin/menu/{MENU}/column(SCM_MST_SHEET_COLUMNS) + spreadTitle 시트(동적 헤더 SP)"
+"endpoint","SCP.SCP0104_GET_SPREAD_TITLE","SP SCP0104_GET_SPREAD_TITLE (MATCH) @GetSpdTitle:1204","COVERED","동적 헤더 시트 'spreadTitle' FE 조회 (정확 배선 없음 — 같은 화면 타이틀 계열 시트)",""
 "event","this.Load","→ Form_Load @787","MISSING","","매핑표에 행 없음"
 "event","clbDivision.SelectedIndexChanged","→ clbDivision_SelectedIndexChanged @1321","COVERED","D00-2-004 components/CapaTeepReportForm.tsx Div. onChange -> `setSearchParamsWithLineTypeRefresh`",""
 "event","cboVersion.SelectedIndexChanged","→ cboVersion_SelectedIndexChanged @1322","COVERED","D00-2-002 components/CapaTeepReportForm.tsx Plan Month onChange + hooks/useCapaTeepReportConditionEffects.ts",""

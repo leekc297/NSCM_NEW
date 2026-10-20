@@ -1,0 +1,472 @@
+{
+  "$comment": "Vibe_Manager 워크벤치·사이드바 전체 메뉴 항목. kind: terminal(명령 실행) | task(steps.json 작업 id) | claude(프롬프트를 Claude 세션에 전송) | open(파일). ${id} = 패널의 화면ID 입력값, ${root} = 프로젝트 루트",
+  "groups": [
+    {
+      "title": "Server(Start/Finish)",
+      "items": [
+        {
+          "label": "🔁 BE & FE Start",
+          "kind": "multi",
+          "hint": "BE(8080) + FE(5173) 동시 기동 — 각각 기동 완료 메시지를 확인",
+          "items": [
+            "☕ BE Start",
+            "🎨 FE Start"
+          ],
+          "label_en": "🔁 BE & FE Start"
+        },
+        {
+          "label": "☕ BE Start",
+          "kind": "terminal",
+          "name": "NSCM BE",
+          "cwd": "${root}\\nscm-be",
+          "cmd": ".\\gradlew.bat bootRun --args=\"--spring.profiles.active=local\"",
+          "port": 8080,
+          "ready": "Started ScpApplication in ([\\d.]+) seconds",
+          "readyTimeoutSec": 300,
+          "hint": "8080 · gradlew.bat bootRun (local 프로파일) · 완료 = 'Started ScpApplication' · 약 80초. 이 PC 는 NoDefaultCurrentDirectoryInExePath 라 .\\gradlew.bat 로 경로 명시",
+          "label_en": "☕ BE Start"
+        },
+        {
+          "label": "🎨 FE Start",
+          "kind": "terminal",
+          "name": "NSCM FE",
+          "cwd": "${root}\\nscm-fe\\apps\\web",
+          "cmd": "node_modules\\.bin\\vite.cmd --port 5173 --host 127.0.0.1",
+          "port": 5173,
+          "ready": "Local:\\s+\\S*http://127\\.0\\.0\\.1:\\S*5173",
+          "readyTimeoutSec": 120,
+          "hint": "http://127.0.0.1:5173 · vite.cmd 직접 호출(pnpm 금지) · 완료 = 'Local: http://127.0.0.1:5173/'",
+          "label_en": "🎨 FE Start"
+        },
+        {
+          "label": "🛑 BE & FE Finish",
+          "kind": "multi",
+          "hint": "BE(8080) + FE(5173) 종료 — 포트가 비워질 때까지 확인",
+          "items": [
+            "🟥 BE Finish",
+            "🟧 FE Finish"
+          ],
+          "label_en": "🛑 BE & FE Finish"
+        },
+        {
+          "label": "🟥 BE Finish",
+          "kind": "server-stop",
+          "name": "NSCM BE",
+          "port": 8080,
+          "expectProc": "java|cmd|powershell|pwsh",
+          "hint": "8080 점유 프로세스(java) 종료 + 워크벤치에서 띄운 gradlew 트리 종료 → 포트 해제 확인. VPN 프로세스(F5FltSrv 등)는 절대 종료하지 않음",
+          "label_en": "🟥 BE Finish"
+        },
+        {
+          "label": "🟧 FE Finish",
+          "kind": "server-stop",
+          "name": "NSCM FE",
+          "port": 5173,
+          "expectProc": "node|cmd|powershell|pwsh",
+          "hint": "5173 점유 프로세스(node/vite) 종료 + 워크벤치에서 띄운 트리 종료 → 포트 해제 확인",
+          "label_en": "🟧 FE Finish"
+        },
+        {
+          "label": "🌐 Open Browser(NSCM)",
+          "kind": "browser",
+          "url": "http://127.0.0.1:5173/",
+          "hint": "FE 접속 (USER_ID minyonglee1)",
+          "label_en": "🌐 Open Browser (NSCM)"
+        }
+      ],
+      "title_en": "Server (Start/Finish)"
+    },
+    {
+      "title": "Git(Upload/Download)",
+      "items": [
+        {
+          "label": "⬇️ Source Download",
+          "kind": "git-fetch",
+          "cwd": "${root}\\nscm-fe",
+          "remote": "common",
+          "hint": "공통소스 eunjoo-hwang/nscm-fe — git fetch common → 새 커밋 목록 표시",
+          "label_en": "⬇️ Source Download"
+        },
+        {
+          "label": "🔀 Source Merge",
+          "kind": "git-merge",
+          "cwd": "${root}\\nscm-fe",
+          "remote": "common",
+          "branch": "main",
+          "hint": "공통소스 병합 — git merge common/<branch> (브랜치 입력)",
+          "label_en": "🔀 Source Merge"
+        },
+        {
+          "label": "📤 Source Upload(UI)",
+          "kind": "git-upload-ui",
+          "needsId": true,
+          "cwd": "${root}\\nscm-fe",
+          "remote": "common",
+          "baseBranch": "main",
+          "hint": "화면 ID 하나의 FE 소스(페이지 폴더 + 그 화면을 참조하는 변경 파일)만 골라 공통소스 Git(eunjoo-hwang/nscm-fe) 에 feat/<id>-<날짜> 브랜치로 업로드 — common/main 위에 선택 파일만 얹은 커밋(다른 작업 파일 미포함). 원격 설정은 바꾸지 않음(push URL no_push 유지)",
+          "label_en": "📤 Source Upload (UI)"
+        },
+        {
+          "label": "👁️ Source Update Status",
+          "kind": "git-status",
+          "cwd": "${root}",
+          "hint": "git status -s + 최근 커밋 5건",
+          "label_en": "👁️ Source Update Status"
+        }
+      ],
+      "title_en": "Git (Upload/Download)"
+    },
+    {
+      "title": "UI 분석·생성·보완 (ID 필요)",
+      "items": [
+        {
+          "label": "🔬 AS-IS 파싱·분석 (Fact Pack)",
+          "kind": "task",
+          "task": "S1.packone",
+          "needsId": true,
+          "label_en": "🔬 Parse AS-IS Source (Fact Pack)"
+        },
+        {
+          "label": "📝 문서 생성 (분석서·설계서·GAP… MD)",
+          "kind": "task",
+          "task": "S3.agent",
+          "needsId": true,
+          "label_en": "📝 Generate Docs (analysis · design · GAP, MD)"
+        },
+        {
+          "label": "📗 문서 Excel (설계서·분석서·GAP·테스트)",
+          "kind": "task",
+          "task": "S3.xlsx",
+          "needsId": true,
+          "hint": "make_docs.py — 화면설계서(8시트)·UI분석서(10시트)·GAP분석서·단위테스트(TestCases4) 를 팀 양식으로 생성 → Doc/화면설계서 · Doc/화면분석서 · Doc/단위테스트 (기존 파일은 덮어쓰지 않고 버전 +1)",
+          "label_en": "📗 Excel Docs (design · analysis · GAP · tests)"
+        },
+        {
+          "label": "🗂️ Excel 폴더",
+          "kind": "task",
+          "task": "S3.xlsxopen",
+          "needsId": true,
+          "label_en": "🗂️ Open Excel Folder"
+        },
+        {
+          "label": "🔍 GAP 분석",
+          "kind": "task",
+          "task": "S4.one",
+          "needsId": true,
+          "label_en": "🔍 GAP Analysis"
+        },
+        {
+          "label": "🩹 GAP 보완 (Claude)",
+          "kind": "claude",
+          "needsId": true,
+          "prompt": "Doc/gap/${id}_gap.csv 의 미해결 GAP(G1~G10) 을 화면 ${id} 페이지(Doc/gen/${id}/register.json 의 feature/pageDir)와 Doc/gen/${id}/${id}_PKG.sql 에 반영해줘. 룰은 tools/VibeManager/rules/10_RULES_KEEP.md 만 따르고, 반영한 행은 __asis-mapping__.md 상태를 구현으로 바꾸고, 끝나면 node tools/Harness/check.js --page <페이지폴더> --id ${id} --final 과 node tools/Harness/gap.js ${id} 로 확인해줘.",
+          "label_en": "🩹 Fix GAPs (Claude)"
+        },
+        {
+          "label": "⚡ 프로그램 ID 로 단계 작업",
+          "kind": "command",
+          "command": "vibeManager.quickScreen",
+          "hint": "화면 ID 하나로 1~7단계 아무 작업이든 실행 (QuickPick)",
+          "label_en": "⚡ Step Tasks by Screen ID"
+        },
+        {
+          "label": "✨ 새 화면 (from AS-IS)",
+          "kind": "task",
+          "task": "S5.pipeline",
+          "needsId": true,
+          "label_en": "✨ New Screen (from AS-IS)"
+        },
+        {
+          "label": "📐 새 화면 (from 설계서)",
+          "kind": "task",
+          "task": "S5.pipelinedesign",
+          "needsId": true,
+          "label_en": "📐 New Screen (from Design Doc)"
+        },
+        {
+          "label": "🏃 드라이런",
+          "kind": "task",
+          "task": "S5.pipelinedry",
+          "needsId": true,
+          "label_en": "🏃 Dry Run"
+        },
+        {
+          "label": "🛠️ 기존 화면 보완 (Claude · 골격 재생성 금지)",
+          "kind": "claude",
+          "needsId": true,
+          "hint": "이미 구현된 화면의 보완 전용 — new-screen/pipeline/repair-loop 을 돌리지 않는다",
+          "prompt": "화면 ${id} 는 이미 구현된 페이지가 있는 **보완 대상**이다. 골격을 다시 만들지 않는다(tools/Harness/new-screen.ps1 · gen.js --apply/--overwrite · pipeline.js · repair-loop.js 실행 금지, 기존 파일 삭제 금지). 먼저 Read: tools/VibeManager/rules/10_RULES_KEEP.md · Doc/asisfacts/screens/${id}/${id}_summary.md · As-is .cs 원문(harness.json asisSrcRoot + files.csv, Form_Load/InitControls 초기값 포함) · Doc/tobefacts/db/proc_meta.csv 와 proc_params.csv 의 ${id} 행(사내 현행 배선 정본) · 페이지 폴더(Doc/gen/${id}/register.json 의 feature/pageDir, 없으면 Doc/tobefacts/db/menu.csv 의 MNU_URL)의 `git status`/`git diff HEAD --stat`. 커밋본 대비 후퇴(삭제된 파일·대사표 축소)가 보이면 먼저 보고하고 복원 여부를 묻는다. 그 다음 사용자가 이어서 보낼 보완 요청을 처리하되, 보완은 DB 객체 수정 우선·FE/BE 는 지정 지점만 수정하며, 끝나면 `node tools/Harness/check.js --page <페이지폴더> --id ${id} --final` 결과(DoD B22~B25·M06/M07 포함)를 붙인다. 준비가 끝나면 '보완 요청을 입력해 주세요' 한 줄로 답한다.",
+          "label_en": "🛠️ Fix Existing Screen (Claude · no regeneration)"
+        },
+        {
+          "label": "🧯 기존 화면 자동 보완 (Claude · 찾아서 끝까지)",
+          "kind": "claude",
+          "needsId": true,
+          "hint": "이미 구현된 화면 — 부족한 것을 스스로 찾아(게이트·DoD·GAP·대사표) 순서대로 고치고 결과 보고. 골격 재생성 금지. 커밋본 후퇴만 먼저 묻는다",
+          "prompt": "화면 ${id} 는 이미 구현된 페이지가 있는 **보완 대상**이며, 이번 작업은 사용자 요청을 기다리지 않고 **부족한 것을 스스로 찾아 끝까지 보완**하는 것이다(이 메뉴 선택 = 해당 화면 FE 페이지 폴더 수정 승인). 골격을 다시 만들지 않는다(tools/Harness/new-screen.ps1 · gen.js --apply/--overwrite · pipeline.js · repair-loop.js 실행 금지, 기존 파일 삭제 금지, 대사표 __asis-mapping__.md 는 재생성하지 말고 행을 추가·갱신만). [0 준비] Read: tools/VibeManager/rules/10_RULES_KEEP.md · Doc/asisfacts/screens/${id}/${id}_summary.md · As-is .cs 원문(harness.json asisSrcRoot + files.csv — Form_Load/InitControls 초기값·버튼 핸들러·검증 포함) · Doc/tobefacts/db/proc_meta.csv 와 proc_params.csv 의 ${id} 행(사내 현행 배선 정본) · 페이지 폴더(Doc/gen/${id}/register.json 의 feature/pageDir, 없으면 Doc/tobefacts/db/menu.csv 의 MNU_URL). 페이지 폴더의 `git status`/`git diff HEAD --stat` 에서 커밋본 대비 후퇴(삭제된 파일·대사표 축소)가 보이면 **이것만은 고치기 전에 보고하고 복원 여부를 묻고 멈춘다**. [1 진단] `node tools/Harness/check.js --page <페이지폴더> --id ${id} --final` (BLOCK/WARN · DoD B01~B25 · M06/M07) · `node tools/Harness/gap.js ${id}` 뒤 Doc/gap/${id}_gap.csv 미해결 행 · `node tools/Harness/check-pkg.js ${id}`(Doc/gen/${id}/${id}_PKG.sql 이 있을 때) · 대사표의 미구현/부분 행 · As-is 원문에 있는데 페이지에 없는 조회조건·버튼·검증·초기값 · **Grid 동적 컬럼 원천**(Fact Pack summary §2 의 GetSpdTitle 등 타이틀 SP · §4-2 InitSpreadDateColumn · §11 DB루프 → To-Be 가 사내 배선 타이틀 시트(proc_meta.csv)를 실제 조회하는지, RESPONSE_SET 응답 키가 proc_params.csv OUT COL_NM 안에 있는지 = check.js B26·B27, 대사표 §6 동적 컬럼 행 누락 = M08, '구현' 행인데 사내 배선 시트 미조회 = M09(구현 근거 불일치), E2E smoke 어노테이션 dynamic · gap MISSING '기간형 동적 헤더'). 판정 근거는 BE 원문(nscm-be BaseService/GeneralServiceImpl)·메타 CSV·As-is 원문만 쓴다 — 페이지 주석·대사표·register.json·e2e_plan 의 서술은 이전 작업자의 가정이므로 근거로 쓰지 않는다(SCP0096 o_rc1_columns 사고). 찾은 항목 전부를 번호 목록(출처·근거 포함)으로 먼저 적는다 — 하나도 빼지 않는다. [2 보완] 목록 순서대로 전부 처리한다. 원칙: DB 객체(PKG/SP/메타) 수정 우선, FE/BE 는 해당 지점만 최소 수정, 공용(shared/foundation) 변경 금지, 상대경로 import·any·console.log·inline style 금지, 조회 filter 키는 proc_params.csv 의 IN COL_NM 과 일치시킨다. 동적 헤더(B27)는 사내 배선 타이틀 시트를 SHEETS 에 추가하고 useTabProcQuery 로 조회기간(proc_params IN COL_NM)을 넘겨 o_rc1 행(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)으로 헤더를 만든다 — 같은 시트명을 이미 조회하는 기존 페이지를 grep 해 그 패턴을 따르고, 대사표 해당 행·단위테스트 fixture·잘못된 근거 주석도 함께 정정한다. 응답 키(RESPONSE_SET)는 proc_params OUT COL_NM(대소문자 그대로)만 쓴다(B26). 대사표에는 '## §6 동적 컬럼' 섹션을 만들어 타이틀 SP 행과 As-is DB루프 컬럼 생성 행(요지 '<메서드> / <라인> (DB루프 컬럼 생성 ← 타이틀 SP 결과셋)')을 추가하고(M08), 근거가 맞지 않는 '구현' 행은 실제 구현으로 바꾼 뒤 위치를 갱신한다(M09). FE 수정 뒤 `node tools/E2E/gen-e2e.js --all` 로 스펙을 재생성해 동적 컬럼 판정(정적 메타 밖 binding ≥1 · 타이틀 시트 호출)을 포함시킨다. 처리할 수 없는 항목(원천 미확보·사람 판단 필요·사내 DB 적용 필요)은 건너뛰지 말고 사유와 함께 '미처리'로 남긴다. [3 검증] check.js --final 을 다시 돌려 BLOCK 0 과 DoD 변화를 확인하고, 대사표 상태를 갱신한다. [4 보고] 처리 항목(파일:라인 · 변경 전/후 요약) · 미처리 항목(사유) · 게이트 전/후 수치 · 런타임(조회·저장 E2E)은 미검증임을 명시해 한국어로 보고한다. 중간에 사용자 입력을 기다리지 않는다(커밋본 후퇴 발견 시만 예외).",
+          "label_en": "🧯 Auto-Fix Existing Screen (Claude · find & finish)"
+        },
+        {
+          "label": "🚧 게이트 BLOCK 고치기",
+          "kind": "claude",
+          "needsId": true,
+          "prompt": "Doc/gen/${id}/CHECK.md 의 BLOCK 항목을 nscm-fe 페이지(Doc/gen/${id}/register.json 의 feature/pageDir)에서 고쳐줘. 룰은 tools/VibeManager/rules/10_RULES_KEEP.md 만 따르고, 끝나면 node tools/Harness/check.js --page <페이지폴더> --id ${id} --final 로 확인해줘.",
+          "label_en": "🚧 Fix Gate BLOCKs"
+        },
+        {
+          "label": "🔗 PKG 이식 마무리",
+          "kind": "claude",
+          "needsId": true,
+          "prompt": "tools/Harness/prompts/port_pkg.md 를 읽고 화면 ${id} 의 Doc/gen/${id}/${id}_PKG.sql 이식을 마무리해줘. 끝나면 node tools/Harness/check-pkg.js ${id} 로 확인.",
+          "label_en": "🔗 Finish PKG Port"
+        },
+        {
+          "label": "🚚 PKG 배포",
+          "kind": "task",
+          "task": "S5.pkgdeploy",
+          "needsId": true,
+          "label_en": "🚚 Deploy PKG"
+        },
+        {
+          "label": "👀 등록 미리보기",
+          "kind": "task",
+          "task": "S5.regrun",
+          "needsId": true,
+          "label_en": "👀 Preview Registration"
+        },
+        {
+          "label": "✅ 등록 커밋",
+          "kind": "task",
+          "task": "S5.regcommit",
+          "needsId": true,
+          "label_en": "✅ Commit Registration"
+        },
+        {
+          "label": "↩️ 되돌리기",
+          "kind": "task",
+          "task": "S5.revertcommit",
+          "needsId": true,
+          "label_en": "↩️ Revert Registration"
+        },
+        {
+          "label": "🔥 E2E 스모크",
+          "kind": "task",
+          "task": "S7.smoke",
+          "needsId": true,
+          "label_en": "🔥 E2E Smoke"
+        },
+        {
+          "label": "🔎 E2E 실패 분석",
+          "kind": "claude",
+          "needsId": true,
+          "prompt": "Doc/e2e/_run.log 와 Doc/e2e/results/_summary.md 에서 ${id} 실패 원인을 분석하고, 셀렉터/플랜(tools/E2E/gen-e2e.js, Doc/gen/${id}/e2e_plan.json) 또는 페이지 코드 중 어디를 고쳐야 하는지 제안해줘. 서버는 내가 띄운다.",
+          "label_en": "🔎 Analyze E2E Failure"
+        },
+        {
+          "label": "🏁 DoD",
+          "kind": "open",
+          "path": "${root}\\Doc\\gen\\${id}\\DOD.md",
+          "needsId": true,
+          "label_en": "🏁 DoD"
+        },
+        {
+          "label": "🛤️ PIPELINE",
+          "kind": "open",
+          "path": "${root}\\Doc\\gen\\${id}\\PIPELINE.md",
+          "needsId": true,
+          "label_en": "🛤️ PIPELINE"
+        },
+        {
+          "label": "🗺️ 매핑표",
+          "kind": "task",
+          "task": "S5.notes",
+          "needsId": true,
+          "label_en": "🗺️ Mapping Table"
+        },
+        {
+          "label": "💬 화면 설명",
+          "kind": "claude",
+          "needsId": true,
+          "prompt": "Doc/asisfacts/screens/${id}/${id}_summary.md 를 읽고 이 화면이 무엇을 하는 화면인지, 조회조건·시트·SP·팝업 구성을 5줄로 설명해줘.",
+          "label_en": "💬 Explain Screen"
+        },
+        {
+          "label": "📁 문서 폴더",
+          "kind": "task",
+          "task": "S3.open",
+          "needsId": true,
+          "label_en": "📁 Open Docs Folder"
+        }
+      ],
+      "title_en": "UI Analysis · Build · Fix (needs ID)"
+    },
+    {
+      "title": "Overview & Reports",
+      "items": [
+        {
+          "label": "🧰 Workbench",
+          "kind": "command",
+          "command": "vibeManager.openWorkbench",
+          "label_en": "🧰 Workbench"
+        },
+        {
+          "label": "➕ 새 창 (멀티)",
+          "kind": "command",
+          "command": "vibeManager.openWorkbenchNew",
+          "label_en": "➕ New Window (multi)"
+        },
+        {
+          "label": "🛰️ 전환 흐름 대시보드",
+          "kind": "command",
+          "command": "vibeManager.openDashboard",
+          "hint": "전체 단계 상태·게이트 요약 webview",
+          "label_en": "🛰️ Migration Flow Dashboard"
+        },
+        {
+          "label": "📶 FLOW 진척",
+          "kind": "command",
+          "command": "vibeManager.openFlow",
+          "label_en": "📶 FLOW Progress"
+        },
+        {
+          "label": "🕒 작업 이력 (화면별/일자별 · 전후 비교)",
+          "kind": "command",
+          "command": "vibeManager.openHistory",
+          "label_en": "🕒 Work History (by screen/date · before/after diff)"
+        },
+        {
+          "label": "💻 새 Claude 터미널",
+          "kind": "command",
+          "command": "vibeManager.claudeNew",
+          "hint": "워크벤치 밖에서 Claude Code CLI 를 직접 띄움",
+          "label_en": "💻 New Claude Terminal"
+        },
+        {
+          "label": "👤 계정 확인",
+          "kind": "task",
+          "task": "S7.probe",
+          "label_en": "👤 Check Accounts"
+        },
+        {
+          "label": "📋 대사표",
+          "kind": "task",
+          "task": "S1.recondash",
+          "label_en": "📋 Reconciliation Table"
+        },
+        {
+          "label": "📈 E2E 리포트",
+          "kind": "task",
+          "task": "S7.html",
+          "label_en": "📈 E2E Report"
+        },
+        {
+          "label": "📜 이관 룰셋",
+          "kind": "open",
+          "path": "${root}\\tools\\VibeManager\\rules\\10_RULES_KEEP.md",
+          "label_en": "📜 Migration Rule Set"
+        },
+        {
+          "label": "📊 Agent 게이트 집계",
+          "kind": "command",
+          "command": "vibeManager.gateReport",
+          "hint": "Doc/asisfacts/agent/*/_gate.csv 집계 — PASS/FAIL · 미실행 화면",
+          "label_en": "📊 Agent Gate Summary"
+        },
+        {
+          "label": "📂 산출물 폴더 (Doc/asisfacts)",
+          "kind": "command",
+          "command": "vibeManager.openOutputFolder",
+          "label_en": "📂 Output Folder (Doc/asisfacts)"
+        }
+      ],
+      "title_en": "Overview & Reports"
+    },
+    {
+      "title": "환경설정",
+      "items": [
+        {
+          "label": "🔌 DB 접속 (.env.asis)",
+          "kind": "open",
+          "path": "${root}\\.env.asis",
+          "label_en": "🔌 DB Connection (.env.asis)"
+        },
+        {
+          "label": "🗄️ AS-IS (asisfacts.json)",
+          "kind": "open",
+          "path": "${root}\\tools\\AsisFacts\\asisfacts.json",
+          "label_en": "🗄️ AS-IS (asisfacts.json)"
+        },
+        {
+          "label": "🏗️ TO-BE (tobefacts.json)",
+          "kind": "open",
+          "path": "${root}\\tools\\TobeFacts\\tobefacts.json",
+          "label_en": "🏗️ TO-BE (tobefacts.json)"
+        },
+        {
+          "label": "🔩 하네스 (harness.json)",
+          "kind": "open",
+          "path": "${root}\\tools\\Harness\\harness.json",
+          "label_en": "🔩 Harness (harness.json)"
+        },
+        {
+          "label": "🎭 E2E (e2e.config.json)",
+          "kind": "open",
+          "path": "${root}\\tools\\E2E\\e2e.config.json",
+          "label_en": "🎭 E2E (e2e.config.json)"
+        },
+        {
+          "label": "🧾 환경 요약 (env.json)",
+          "kind": "open",
+          "path": "${root}\\tools\\VibeManager\\rules\\env.json",
+          "label_en": "🧾 Environment Summary (env.json)"
+        },
+        {
+          "label": "🩺 DB 접속 확인 (probe)",
+          "kind": "task",
+          "task": "S2.probe",
+          "label_en": "🩺 Check DB Connection (probe)"
+        },
+        {
+          "label": "🧪 환경 점검 (node·python·claude …)",
+          "kind": "command",
+          "command": "vibeManager.checkEnv",
+          "label_en": "🧪 Environment Check (node · python · claude …)"
+        },
+        {
+          "label": "🔧 환경 노트",
+          "kind": "open",
+          "path": "${root}\\tools\\VibeManager\\rules\\00_ENV.md",
+          "label_en": "🔧 Environment Notes"
+        },
+        {
+          "label": "✎ 단계 정의 (steps.json)",
+          "kind": "command",
+          "command": "vibeManager.editSteps",
+          "label_en": "✎ Step Definitions (steps.json)"
+        },
+        {
+          "label": "🎛️ VS Code 설정 (vibeManager)",
+          "kind": "command",
+          "command": "vibeManager.openSettings",
+          "label_en": "🎛️ VS Code Settings (vibeManager)"
+        },
+        {
+          "label": "📒 실행 기록 (runs.log)",
+          "kind": "command",
+          "command": "vibeManager.openTaskLog",
+          "label_en": "📒 Run Log (runs.log)"
+        },
+        {
+          "label": "⬆️ Source Backup",
+          "kind": "git-upload",
+          "cwd": "${root}",
+          "remote": "origin",
+          "branch": "main",
+          "hint": "전체 백업 — leekc297/NSCM_NEW · git add -A → commit(메시지 입력) → push origin main",
+          "label_en": "⬆️ Source Backup"
+        }
+      ],
+      "title_en": "Settings"
+    }
+  ]
+}
