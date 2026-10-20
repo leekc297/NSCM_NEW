@@ -20,6 +20,9 @@ import {
   MENU_ID,
   MSG,
   PLAN_DATE_PROGRAM_ID,
+  PLAN_END_COL,
+  PLAN_END_COMBO_ID,
+  PLAN_END_DIVISION,
   SEARCH_MODE,
   SEARCH_MODE_OPTIONS,
   SITE_TYPE,
@@ -76,12 +79,15 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
   const sc = useGlobalPsiReportStore(s => s.searchCondition);
   const set = useGlobalPsiReportStore(s => s.setSearchCondition);
   const setDivision = useGlobalPsiReportStore(s => s.setDivision);
+  const clearFilters = useGlobalPsiReportStore(s => s.clearFilters);
   const setUnitScaleIndex = useGlobalPsiReportStore(s => s.setUnitScaleIndex);
   const unitScaleIndex = useGlobalPsiReportStore(s => s.unitScaleIndex);
   const openSearchArea = useGlobalPsiReportStore(s => s.openSearchArea);
   // rgrpSearchLevel — SEARCH(idx0)/DETAIL(idx1) 토글. Detail 이면 REPORT 시트 라우팅(design 01 R1~R4).
   const searchMode = useGlobalPsiReportStore(s => s.searchMode);
   const setSearchMode = useGlobalPsiReportStore(s => s.setSearchMode);
+  const calendarSeedPlan = useGlobalPsiReportStore(s => s.calendarSeedPlan);
+  const seedCalendar = useGlobalPsiReportStore(s => s.seedCalendar);
 
   // Division 소스풀(공유콤보) — AS-IS BLUtils.GetDivisionWithoutEE + 40/82 dt 필터를 FE 3중 제외로 재현(§2.7).
   const [divisions] = useTabComboQueries({ filters: [COMBO.DIVISION] });
@@ -182,6 +188,26 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
   useEffect(() => {
     if (firstPlanDate && !hasPlanDate) set({ planStartYyyymmdd: firstPlanDate });
   }, [firstPlanDate, hasPlanDate, set]);
+
+  // 조회기간 초기값 — AS-IS SetCalendar(SCP0100_Global_PSI_Report.cs:1317) = GetDayRange "MONTH"(.cs:1409~1423).
+  //   호출 시점: InitControls(.cs:600, Load) + CboPlanDate_SelectedIndexChanged(.cs:1788) = Plan Date 가 정해지거나 바뀔 때.
+  //   종료일 = GetPlanEndDate(.cs:2029) — division '81' 고정·WEEKLY(PLAN_END_DIVISION) 의 HORIZON_END_DATE(등록 콤보 SCPPlanPeriod_SCP).
+  //   콤보 응답이 오기 전(undefined)에는 기다리고, 이미 시드한 Plan Date 면 건너뛴다(리마운트 시 사용자 기간 보존).
+  const planEndFilters = useMemo(
+    () => [
+      { comboId: PLAN_END_COMBO_ID, planName: sc.planStartYyyymmdd, divisionId: PLAN_END_DIVISION },
+    ],
+    [sc.planStartYyyymmdd]
+  );
+  const [planEndRows] = useTabComboQueries({
+    filters: planEndFilters,
+    enabled: !!sc.planStartYyyymmdd,
+  });
+  useEffect(() => {
+    const plan = sc.planStartYyyymmdd;
+    if (!plan || planEndRows === undefined || calendarSeedPlan === plan) return;
+    seedCalendar(plan, str(planEndRows[0]?.[PLAN_END_COL]));
+  }, [sc.planStartYyyymmdd, planEndRows, calendarSeedPlan, seedCalendar]);
 
   // single-select 콤보 렌더 헬퍼(IntegrationPsiForm 동형).
   const single = (
@@ -330,8 +356,13 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
             t(LBL.PLAN_DATE, 'Plan Date'),
             sc.planStartYyyymmdd,
             planDateOptions,
-            // Plan Date 변경 = 하위 캘린더/스프레드 파생(§3 cs:1784) — 조회는 명시 Search 게이트에서 재발사.
-            v => set({ planStartYyyymmdd: v }),
+            // AS-IS SCP0100_Global_PSI_Report.cs:1784 CboPlanDate_SelectedIndexChanged — SetCalendar + InitSpread + SetGridClear(:1793).
+            //   그리드 초기화 = clearFilters(재조회 전까지 빈 상태). 자동조회 없음(AS-IS 동일). SetCalendar(조회기간 재설정)는
+            //   planStartYyyymmdd 변경을 받는 위 seedCalendar effect 가 수행(__asis-mapping__ D00-2-019).
+            v => {
+              set({ planStartYyyymmdd: v });
+              clearFilters();
+            },
             true
           )}
 
@@ -340,8 +371,12 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
             t(LBL.BUCKET, 'Bucket'),
             sc.bucket,
             bucketOptions,
-            // Bucket 변경 = M_/W_ pivot visible 토글(design 03 §2.5) + AS-IS 자동조회 — 명시 Search 로 재현.
-            v => set({ bucket: v })
+            // AS-IS SCP0100_Global_PSI_Report.cs:1798 CboBucketType_SelectedIndexChanged — SetSpreadColumn + SetGridClear + FindData(:1812).
+            //   M_/W_ pivot visible 토글(design 03 §2.5) 후 즉시 재조회(setFilter 는 store 최신값을 읽으므로 set 직후 호출 안전).
+            v => {
+              set({ bucket: v });
+              onSearch();
+            }
           )}
           {/* 확인필요: 조회기간 From — 'From' 단독 LBL 미등록(DB 미매칭)이라 리터럴 유지. 기존 PLAN_DATE 오배선 제거. */}
           {textField('From (YYYYMMDD)', sc.fromYyyymmdd, v => set({ fromYyyymmdd: v }))}
@@ -357,13 +392,14 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
           {single(
             t('', 'Search Mode'),
             searchMode,
-            SEARCH_MODE_OPTIONS as unknown as Option[],
+            // readonly 튜플 → 가변 Option[] 복사(캐스팅 금지 #73). 요소 readonly 속성은 Option 에 그대로 대입된다.
+            [...SEARCH_MODE_OPTIONS],
             v => setSearchMode((v || SEARCH_MODE.SEARCH) as typeof searchMode)
           )}
           {single(
             t(LBL.UNIT_QTY, 'Unit (Qty)'),
             String(unitScaleIndex),
-            UNIT_QTY_OPTIONS as unknown as Option[],
+            [...UNIT_QTY_OPTIONS],
             // Unit(Qty) = 로컬 표시배율(§2.5) — 서버 재조회 없이 그리드 클라 나눗셈. index 저장만.
             v => setUnitScaleIndex(Number(v) || 0)
           )}
@@ -378,8 +414,12 @@ export const GlobalPsiReportForm = ({ tabId, onSearch, onItemSearch, onProjectSe
             t(LBL.SEARCH_LEVEL, 'Search Level'),
             sc.searchLevel,
             searchLevelOptions,
-            // Search Level = 활성 그리드 시트 결정(design 01 R1~R3) + AS-IS 자동조회 — 명시 Search 로 재현.
-            v => set({ searchLevel: v }),
+            // AS-IS SCP0100_Global_PSI_Report.cs:1853 CboSearchLevel_SelectedIndexChanged — VisibleSheet + SetGridClear + FindData(:1861).
+            //   활성 그리드 시트 결정(design 01 R1~R3) 후 즉시 재조회(setFilter 가 새 활성 시트 filter 만 세팅 = 나머지 clear).
+            v => {
+              set({ searchLevel: v });
+              onSearch();
+            },
             false,
             // R4 — Detail 모드에서는 REPORT 시트 고정이라 Search Level 선택을 잠근다(design 01).
             searchMode === SEARCH_MODE.DETAIL

@@ -103,22 +103,25 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
   );
 
   // 활성 시트 데이터/고정컬럼 — 그리드에 1시트만 전달(design 01 R1~R3 오버레이). 나머지 미조회.
-  const activeRows = useMemo<Record<string, unknown>[]>(() => {
-    const rows =
+  //   행 타입 = ResponseData(procedures.d.ts Base fallback = WijmoRowItem) — DataGrid itemsSource 계약 그대로(캐스팅 없음, #73).
+  const activeRows = useMemo<WijmoRowItem[]>(
+    () =>
       activeSheet === SHEETS.REPORT
         ? reportRows
         : activeSheet === SHEETS.SEARCH_LEVEL_DETAIL
           ? levelDetailRows
-          : levelRows;
-    return rows as unknown as Record<string, unknown>[];
-  }, [activeSheet, reportRows, levelRows, levelDetailRows]);
+          : levelRows,
+    [activeSheet, reportRows, levelRows, levelDetailRows]
+  );
   const activeColumns = staticColumns[activeSheet];
 
   // 동적 pivot 기간칼럼 3단 헤더 원천 — GET_SHEET_CALENDAR_3SPAN(design 03 §2). 조회기간(from~to)으로 조회.
   //   기간 미입력이면 미조회(enabled) → 그리드가 데이터 행 union 으로 폴백(globalPsiReportColumns).
   //   필수: filters 는 useMemo 로 참조 고정 — 리터럴을 넘기면 useTabProcQuery 가 재조회로 오판해 무한 루프.
+  //   키 = 사내 PROC_M COL_NM(startYyyymmdd/endYyyymmdd, proc_params.csv) — BE 는 COL_NM 으로 매핑하므로 다르면 NULL 전달(DoD B22).
+  //   AS-IS SCP0100_Global_PSI_Report.cs:1327-1328 p_start_yyyymmdd/p_end_yyyymmdd.
   const calendarFilters = useMemo(
-    () => ({ pStartYyyymmdd: sc.fromYyyymmdd, pEndYyyymmdd: sc.toYyyymmdd }),
+    () => ({ startYyyymmdd: sc.fromYyyymmdd, endYyyymmdd: sc.toYyyymmdd }),
     [sc.fromYyyymmdd, sc.toYyyymmdd]
   );
   const calendarQuery = useTabProcQuery({

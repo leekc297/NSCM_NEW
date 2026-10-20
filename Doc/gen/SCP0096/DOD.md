@@ -1,6 +1,6 @@
-# 완료 정의(DoD) — SCP0096 2026-10-20 05:38
+# 완료 정의(DoD) — SCP0096 2026-10-20 08:05
 
-28/30 충족
+31/31 충족
 
 | 코드 | 상태 | 항목 | 근거 |
 |---|---|---|---|
@@ -17,7 +17,7 @@
 | B07 | ✅ | hotkeyConfig.manual 명시(function 또는 false) | 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1) |
 | B08 | ✅ | As-is SaveButton override 있음 → hotkeyConfig.save 가 false 가 아니어야 함 | As-is 기능 누락(members.csv SaveButton) |
 | B08 | ✅ | As-is ExcelButton 없음 — excel 기본 활성 허용(SubTitle 기본) | 정보 |
-| B13 | ✅ | AS-IS 파일:라인 주석(// AS-IS …:L) | 이벤트 8건 대비 AS-IS 참조 주석 37건 — 1:1 추적 근거 |
+| B13 | ✅ | AS-IS 파일:라인 주석(// AS-IS …:L) | 이벤트 8건 대비 AS-IS 참조 주석 72건 — 1:1 추적 근거 |
 | B14 | ✅ | Form: SearchArea(@shared/components) | 룰 25 §1.5.4 표준 5종 import |
 | B15 | ✅ | Form: FormItem(@shared/lges) 라벨 규약 | 직접 <label> 금지 |
 | B16 | ✅ | Form: 라벨 리터럴 직접 입력 없음(t('LBL…')) | 룰 13 i18n — 라벨은 LBL 코드 |
@@ -29,8 +29,9 @@
 | B21 | ✅ | Doc/gen/SCP0096/SCP0096_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) | 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②) |
 | B21 | ✅ | Doc/gen/SCP0096/SCP0096_PKG.sql — Oracle PKG 골격(gen-pkg.js) | 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②) |
 | B22 | ✅ | 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP · 시트 'Shipment Working Day OSP') | IN 4개 일치 |
+| B22 | ✅ | 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0009_GET_SHEET_CALENDAR_3SPAN · 시트 'calendar') | IN 2개 일치 |
 | B22 | ✅ | 조회 filter 키 = 사내 PROC_M COL_NM (P_SCM0001_GET_SCP_MONTH_PERIOD · 시트 'dayRange') | IN 5개 일치 |
 | B23 | ✅ | registration.sql API 배선 = 사내 현행(proc_meta.csv) | 4행 대조 일치 |
 | B24 | ✅ | As-is Form_Load 초기 조회기간(InitValue/GetDayRange) → store 초기값 | As-is: dCalendar.InitValue = GetDayRange(); — 프레임워크 유틸 호출은 flow.csv 에 없으므로 .cs 를 직접 읽어 채운다(DateUtil.GetDayRange = SCM0001_GET_SCP_MONTH_PERIOD, Doc/tobefacts/db/proc_meta.csv 의 dayRange 배선 참조) |
-| B26 | ❌ | RESPONSE_SET 응답 키 = 사내 PROC_M OUT COL_NM(proc_params.csv) | DYN_COLUMNS='o_rc1_columns' → 사내 PROC_M OUT 어디에도 없음(ResultSetMetaData 사이드카 = SYS0013 DynamicQuery 전용, 일반 call-proc 응답에 없음) — 이 키로 읽는 값은 항상 undefined(빈 그리드·빈 팝업으로 보이고 오류는 안 남). 동적 헤더 원천은 사내 배선 타이틀 SP 시트(B27) 또는 Object.keys(rows[0])(mybatis callSettersOnNulls=true) |
-| B27 | ❌ | 동적 헤더 원천 SCP0009_GET_SHEET_CALENDAR_3SPAN → FE 조회 | As-is GetSpdTitle → SCP0009_GET_SHEET_CALENDAR_3SPAN [sp명+메서드 + grid_code DB루프 InitSpreadDateColumn:196,InitSpreadDateColumn:203] · 사내 배선 시트 'calendar'(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN)를 FE 가 조회하지 않음 → 기간 컬럼이 그려지지 않음. SHEETS 에 시트 추가 + useTabProcQuery 로 조회기간을 넘겨 o_rc1(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)로 헤더 생성(As-is InitSpreadDateColumn 1:1) |
+| B26 | ✅ | RESPONSE_SET 응답 키 = 사내 PROC_M OUT COL_NM(proc_params.csv) | 3키 일치 |
+| B27 | ✅ | 동적 헤더 원천 SCP0009_GET_SHEET_CALENDAR_3SPAN → FE 조회 | 시트 'calendar' 조회 |

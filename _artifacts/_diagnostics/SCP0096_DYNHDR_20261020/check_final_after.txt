@@ -1,0 +1,4 @@
+[Harness] SCP0096 shipment-working-day-osp — BLOCK 1 / WARN 2 (final)
+  ✗ M01 상태 빈칸: D00-3-003 §3 ForeColor= / 205 (요일 헤더색)  @__asis-mapping__.md
+  ! M08 대사표에 As-is DB루프 컬럼 생성 행 없음: InitSpreadDateColumn:196, InitSpreadDateColumn:203 — '## §6 동적 컬럼' 에 행 추가(요지 'InitSpreadDateColumn / 196 (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치)  @__asis-mapping__.md
+  ! T02 tsc 가 다른 파일에서 오류를 보고(페이지 범위 밖) — exit 134

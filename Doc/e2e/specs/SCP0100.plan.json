@@ -1,0 +1,593 @@
+{
+  "id": "SCP0100",
+  "mode": "admin",
+  "modeSource": "users.json screens",
+  "menuId": "SCP0100",
+  "page": "GlobalPsiReport",
+  "routePath": "supply/global-psi-report",
+  "asisName": "Global_PSI_Report",
+  "fields": [
+    {
+      "key": "searchLevel",
+      "label": "Search Level",
+      "lbl": "LBL00050",
+      "kind": "single",
+      "component": "RadioGroup",
+      "comboId": "",
+      "popup": false,
+      "asis": "rgrpSearchLevel"
+    },
+    {
+      "key": "cellQty",
+      "label": "Cell Qty",
+      "lbl": "LBL00690",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkCellQty"
+    },
+    {
+      "key": "planDate",
+      "label": "Plan date*",
+      "lbl": "LBL00039",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanDate"
+    },
+    {
+      "key": "bucketType",
+      "label": "Bucket",
+      "lbl": "LBL00710",
+      "kind": "single",
+      "component": "BucketField",
+      "comboId": "BucketType",
+      "popup": false,
+      "asis": "cboBucketType"
+    },
+    {
+      "key": "period",
+      "label": "Period*",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "dCalendar"
+    },
+    {
+      "key": "graphType",
+      "label": "Graph",
+      "lbl": "LBL01080",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboGraphType"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model / Nick Name",
+      "lbl": "LBL00618",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "display",
+      "label": "Display",
+      "lbl": "LBL01073",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboDisplay"
+    },
+    {
+      "key": "projectCodes",
+      "label": "Project",
+      "lbl": "LBL00617",
+      "kind": "popup",
+      "component": "ProjectField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtProject"
+    },
+    {
+      "key": "fromSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFromSite"
+    },
+    {
+      "key": "toSiteIds",
+      "label": "To Site",
+      "lbl": "LBL00023",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbToSite"
+    },
+    {
+      "key": "cellGroup",
+      "label": "Cell Group",
+      "lbl": "LBL00049",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtCellGroup"
+    },
+    {
+      "key": "planType",
+      "label": "Plan-type",
+      "lbl": "LBL00040",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanType"
+    },
+    {
+      "key": "searchLevel",
+      "label": "Search Level",
+      "lbl": "LBL00050",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboSearchLevel"
+    },
+    {
+      "key": "as",
+      "label": "A/S",
+      "lbl": "LBL00685",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkAS"
+    },
+    {
+      "key": "unitQty",
+      "label": "Unit (Qty)",
+      "lbl": "LBL01129",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboUnitQty"
+    },
+    {
+      "key": "divisionIds",
+      "label": "Div*",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "measure",
+      "label": "Measure",
+      "lbl": "LBL00310",
+      "kind": "subtitle-custom",
+      "tobe": "MEASURE_SELECT",
+      "asis": "btnMeasure"
+    },
+    {
+      "key": "column",
+      "label": "Column",
+      "lbl": "LBL00711",
+      "kind": "subtitle-custom",
+      "tobe": "COLUMN_SETUP",
+      "asis": "btnColumn"
+    }
+  ],
+  "mainSheets": [
+    {
+      "name": "REPORT",
+      "key": "REPORT",
+      "labels": [
+        "",
+        "",
+        "Cell Qty",
+        "Cell Group",
+        "Div",
+        "From Site",
+        "INCOTERMS",
+        "Model",
+        "Measure Group",
+        "Measure Name",
+        "Measure",
+        "Operation",
+        "Product Level1",
+        "Product Level2",
+        "Product Level3",
+        "To Site",
+        "Trans Mode or Line or Project"
+      ]
+    },
+    {
+      "name": "SEARCH_LEVEL",
+      "key": "SEARCH_LEVEL",
+      "labels": [
+        "",
+        "",
+        "Cell Group",
+        "Div",
+        "Measure Group",
+        "Measure Name",
+        "Measure",
+        "Operation Group",
+        "Product Level1",
+        "Product Level2",
+        "Product Level3"
+      ]
+    },
+    {
+      "name": "SEARCH_LEVEL_DETAIL",
+      "key": "SEARCH_LEVEL_DETAIL",
+      "labels": [
+        "",
+        "",
+        "Cell Group",
+        "Div",
+        "Measure Group",
+        "Measure Name",
+        "Measure",
+        "Operation Group",
+        "Product Level1",
+        "Product Level2",
+        "Product Level3"
+      ]
+    }
+  ],
+  "popupSheets": [],
+  "hasSave": false,
+  "hasSpreadTitle": true,
+  "procs": [
+    {
+      "sp": "SCP0100_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "calendar",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0100.P_SCP0100_GET_SHEET_CALENDAR_3SPAN",
+      "entries": [
+        "event:this.Load",
+        "event:cboPlanDate.SelectedIndexChanged",
+        "event:rgrpSearchLevel.SelectedIndexChanged",
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:dCalendar.ValueChanged"
+      ]
+    },
+    {
+      "sp": "SCP0100_GET_SITE",
+      "sheet": "REPORT",
+      "btn": "SITE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0100.P_SCP0100_GET_SITE",
+      "entries": [
+        "event:this.Shown"
+      ]
+    },
+    {
+      "sp": "SCP0100_GET_PLAN_DATE",
+      "sheet": "REPORT",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0100.P_SCP0100_GET_PLAN_DATE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "REPORT",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0100.P_",
+      "entries": []
+    }
+  ],
+  "expectedCols": {
+    "REPORT": {
+      "40": [
+        "Div",
+        "Cell Group",
+        "Operation",
+        "Measure Group",
+        "Product Level1",
+        "Product Level2",
+        "Product Level3",
+        "Measure Name",
+        "From Site",
+        "To Site",
+        "INCOTERMS",
+        "Model",
+        "Trans Mode or Line or Project",
+        "Cell Qty"
+      ],
+      "81": [
+        "Div",
+        "Cell Group",
+        "Operation",
+        "Measure Group",
+        "Product Level1",
+        "Product Level2",
+        "Product Level3",
+        "Measure Name",
+        "From Site",
+        "To Site",
+        "INCOTERMS",
+        "Model",
+        "Trans Mode or Line or Project",
+        "Cell Qty"
+      ],
+      "82": [
+        "Div",
+        "Cell Group",
+        "Operation",
+        "Measure Group",
+        "Product Level1",
+        "Product Level2",
+        "Product Level3",
+        "Measure Name",
+        "From Site",
+        "To Site",
+        "INCOTERMS",
+        "Model",
+        "Trans Mode or Line or Project",
+        "Cell Qty"
+      ]
+    },
+    "SEARCH_LEVEL": {
+      "40": [
+        "Div",
+        "Cell Group",
+        "Product Level1",
+        "Product Level2",
+        "Product Level3",
+        "Operation Group",
+        "Measure Group",
+        "Measure Name"
+      ],
+      "81": [
+        "Div",
+        "Cell Group",
+        "Product Level1",
+        "Product Level2",
+        "Product Level3",
+        "Operation Group",
+        "Measure Group",
+        "Measure Name"
+      ],
+      "82": [
+        "Div",
+        "Cell Group",
+        "Product Level1",
+        "Product Level2",
+        "Product Level3",
+        "Operation Group",
+        "Measure Group",
+        "Measure Name"
+      ]
+    },
+    "SEARCH_LEVEL_DETAIL": {
+      "40": [
+        "Div",
+        "Cell Group",
+        "Product Level1",
+        "Measure Group",
+        "Operation Group",
+        "Product Level2",
+        "Product Level3",
+        "Measure Name"
+      ],
+      "81": [
+        "Div",
+        "Cell Group",
+        "Product Level1",
+        "Measure Group",
+        "Operation Group",
+        "Product Level2",
+        "Product Level3",
+        "Measure Name"
+      ],
+      "82": [
+        "Div",
+        "Cell Group",
+        "Product Level1",
+        "Measure Group",
+        "Operation Group",
+        "Product Level2",
+        "Product Level3",
+        "Measure Name"
+      ]
+    }
+  },
+  "hasMeta": true,
+  "dynamicHeader": {
+    "titles": [
+      {
+        "sp": "SCP0100_GET_SHEET_CALENDAR_3SPAN",
+        "members": [
+          "GetSpdTitle"
+        ]
+      }
+    ],
+    "dbLoop": [
+      "InitSpreadDateColumn:755",
+      "InitSpreadDateColumn:760"
+    ],
+    "titleSheets": [
+      "calendar"
+    ],
+    "titlePairs": [
+      {
+        "sheet": "calendar",
+        "btn": "SEARCH"
+      }
+    ],
+    "staticBindings": [
+      "DIVISION_ID",
+      "CELL_GROUP",
+      "OPERATION_ID",
+      "MEASURE_GROUP",
+      "PRODUCT_LEVEL1",
+      "PRODUCT_LEVEL2",
+      "PRODUCT_LEVEL3",
+      "MEASURE_UI",
+      "MEASURE_NAME",
+      "FROM_SITE",
+      "TO_SITE",
+      "INCOTERMS",
+      "ITEM_ID",
+      "VARIOUS_KEY",
+      "CELL_CF",
+      "OPERATION_GROUP"
+    ]
+  },
+  "sample": {
+    "div": "40",
+    "item": "MCCM134010A1",
+    "site": "Fabricators_CN_QIN",
+    "project": "Inventus Power",
+    "account": "minyonglee1"
+  },
+  "accounts": [
+    {
+      "id": "jaeuk.shin",
+      "name": "",
+      "groups": [
+        "SCP ADMIN",
+        "SYSTEM ADMIN"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {},
+      "roleNote": "ADMIN",
+      "admin": true,
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
+        "ADMIN",
+        "DM ADMIN",
+        "FP Planner",
+        "FP Viewer",
+        "GUEST",
+        "JV Planner",
+        "SCM PI Admin",
+        "SCM Viewer",
+        "SCP Planner",
+        "SCP Tester",
+        "SSP Planner",
+        "SSP Viewer"
+      ],
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "SEARCH",
+        "COLUMN_SETUP",
+        "MEASURE_SELECT",
+        "EXCEL"
+      ],
+      "matrix": []
+    },
+    {
+      "id": "hongjae.kim",
+      "name": "김홍재 선임",
+      "groups": [
+        "DM Admin"
+      ],
+      "divisions": [
+        "40"
+      ],
+      "roles": {
+        "40": "DM Admin"
+      },
+      "roleNote": "권한 없음 대표",
+      "admin": false,
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
+        "DM ADMIN",
+        "DM Planner",
+        "GUEST"
+      ],
+      "menuAccess": "N",
+      "expectedBtns": [],
+      "matrix": []
+    }
+  ],
+  "accountSource": "users.json",
+  "expectedBtnsByGroup": {
+    "ADMIN": [
+      "SEARCH",
+      "COLUMN_SETUP",
+      "MEASURE_SELECT",
+      "EXCEL"
+    ],
+    "SCM PI Admin": [
+      "SEARCH",
+      "EXCEL",
+      "MEASURE_SELECT",
+      "COLUMN_SETUP"
+    ],
+    "SCM Viewer": [
+      "SEARCH",
+      "COLUMN_SETUP",
+      "EXCEL",
+      "MEASURE_SELECT"
+    ],
+    "SCP Planner": [
+      "SEARCH",
+      "COLUMN_SETUP",
+      "MEASURE_SELECT",
+      "EXCEL"
+    ],
+    "SCP Tester": [
+      "SEARCH",
+      "COLUMN_SETUP",
+      "MEASURE_SELECT",
+      "EXCEL"
+    ]
+  },
+  "menuBtnCodes": [
+    "SEARCH",
+    "COLUMN_SETUP",
+    "MEASURE_SELECT",
+    "EXCEL"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
+}

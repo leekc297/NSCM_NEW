@@ -35,7 +35,7 @@ const HEADER_ROW_HEIGHT = 24;
 
 interface Props {
   // 활성 시트 데이터 행 (searchMode/searchLevel 로 선택된 1개 시트 — page 가 결정, design 01 R1~R3).
-  rows: Record<string, unknown>[];
+  rows: WijmoRowItem[];
   // 활성 시트 admin 고정 컬럼 (SCM_MST_SHEET_COLUMNS, design 03 §1). page 가 시트별로 선택해 전달.
   adminColumns: RawFlexGridColumnConfig[];
   // CALENDAR SP(GET_SHEET_CALENDAR_3SPAN) 반환행 — 동적 pivot 3단 헤더 원천. 0건이면 데이터 union 폴백.
@@ -168,7 +168,7 @@ export const GlobalPsiReportGrid = ({
       gridRef={gridRef}
       gridFilterRef={gridFilterRef}
       editTrackerRef={editTrackerRef}
-      itemsSource={rows as unknown as WijmoRowItem[]}
+      itemsSource={rows}
       staticColumns={fixedColumns}
       dynamicColumns={pivotColumns}
       allowMerging={AllowMerging.All}

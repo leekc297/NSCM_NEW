@@ -1,0 +1,951 @@
+{
+  "menuId": "SCP0100",
+  "page": "GlobalPsiReport",
+  "feature": "supply",
+  "routePath": "supply/global-psi-report",
+  "asisName": "Global_PSI_Report",
+  "fields": [
+    {
+      "key": "searchLevel",
+      "label": "Search Level",
+      "lbl": "LBL00050",
+      "kind": "single",
+      "component": "RadioGroup",
+      "comboId": "",
+      "popup": false,
+      "asis": "rgrpSearchLevel"
+    },
+    {
+      "key": "cellQty",
+      "label": "Cell Qty",
+      "lbl": "LBL00690",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkCellQty"
+    },
+    {
+      "key": "planDate",
+      "label": "Plan date*",
+      "lbl": "LBL00039",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanDate"
+    },
+    {
+      "key": "bucketType",
+      "label": "Bucket",
+      "lbl": "LBL00710",
+      "kind": "single",
+      "component": "BucketField",
+      "comboId": "BucketType",
+      "popup": false,
+      "asis": "cboBucketType"
+    },
+    {
+      "key": "period",
+      "label": "Period*",
+      "lbl": "LBL00013",
+      "kind": "period",
+      "component": "PeriodField",
+      "comboId": "",
+      "popup": false,
+      "asis": "dCalendar"
+    },
+    {
+      "key": "graphType",
+      "label": "Graph",
+      "lbl": "LBL01080",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboGraphType"
+    },
+    {
+      "key": "itemIds",
+      "label": "Model / Nick Name",
+      "lbl": "LBL00618",
+      "kind": "popup",
+      "component": "ItemField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtItemId"
+    },
+    {
+      "key": "display",
+      "label": "Display",
+      "lbl": "LBL01073",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboDisplay"
+    },
+    {
+      "key": "projectCodes",
+      "label": "Project",
+      "lbl": "LBL00617",
+      "kind": "popup",
+      "component": "ProjectField",
+      "comboId": "",
+      "popup": true,
+      "asis": "txtProject"
+    },
+    {
+      "key": "fromSiteIds",
+      "label": "From Site",
+      "lbl": "LBL00022",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbFromSite"
+    },
+    {
+      "key": "toSiteIds",
+      "label": "To Site",
+      "lbl": "LBL00023",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "clbToSite"
+    },
+    {
+      "key": "cellGroup",
+      "label": "Cell Group",
+      "lbl": "LBL00049",
+      "kind": "single",
+      "component": "InputField",
+      "comboId": "",
+      "popup": false,
+      "asis": "txtCellGroup"
+    },
+    {
+      "key": "planType",
+      "label": "Plan-type",
+      "lbl": "LBL00040",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboPlanType"
+    },
+    {
+      "key": "searchLevel",
+      "label": "Search Level",
+      "lbl": "LBL00050",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboSearchLevel"
+    },
+    {
+      "key": "as",
+      "label": "A/S",
+      "lbl": "LBL00685",
+      "kind": "single",
+      "component": "Checkbox",
+      "comboId": "",
+      "popup": false,
+      "asis": "chkAS"
+    },
+    {
+      "key": "unitQty",
+      "label": "Unit (Qty)",
+      "lbl": "LBL01129",
+      "kind": "single",
+      "component": "CustomDropdown",
+      "comboId": "",
+      "popup": false,
+      "asis": "cboUnitQty"
+    },
+    {
+      "key": "divisionIds",
+      "label": "Div*",
+      "lbl": "LBL00001",
+      "kind": "multi",
+      "component": "CustomDropdown",
+      "comboId": "MyDivision",
+      "popup": false,
+      "asis": "clbDivision"
+    }
+  ],
+  "buttons": [
+    {
+      "key": "button1",
+      "label": "Button1",
+      "lbl": "",
+      "kind": "n/a",
+      "tobe": "",
+      "asis": "usrButton1"
+    },
+    {
+      "key": "measure",
+      "label": "Measure",
+      "lbl": "LBL00310",
+      "kind": "subtitle-custom",
+      "tobe": "MEASURE_SELECT",
+      "asis": "btnMeasure"
+    },
+    {
+      "key": "column",
+      "label": "Column",
+      "lbl": "LBL00711",
+      "kind": "subtitle-custom",
+      "tobe": "COLUMN_SETUP",
+      "asis": "btnColumn"
+    }
+  ],
+  "sheets": [
+    {
+      "name": "REPORT",
+      "key": "REPORT",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "D0",
+        "D1",
+        "CELL_CF",
+        "CELL_GROUP",
+        "DIVISION_ID",
+        "FROM_SITE",
+        "INCOTERMS",
+        "ITEM_ID",
+        "MEASURE_GROUP",
+        "MEASURE_NAME",
+        "MEASURE_UI",
+        "OPERATION_ID",
+        "PRODUCT_LEVEL1",
+        "PRODUCT_LEVEL2",
+        "PRODUCT_LEVEL3",
+        "TO_SITE",
+        "VARIOUS_KEY"
+      ],
+      "labels": [
+        "",
+        "",
+        "Cell Qty",
+        "Cell Group",
+        "Div",
+        "From Site",
+        "INCOTERMS",
+        "Model",
+        "Measure Group",
+        "Measure Name",
+        "Measure",
+        "Operation",
+        "Product Level1",
+        "Product Level2",
+        "Product Level3",
+        "To Site",
+        "Trans Mode or Line or Project"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "SEARCH_LEVEL",
+      "key": "SEARCH_LEVEL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "D0",
+        "D1",
+        "CELL_GROUP",
+        "DIVISION_ID",
+        "MEASURE_GROUP",
+        "MEASURE_NAME",
+        "MEASURE_UI",
+        "OPERATION_GROUP",
+        "PRODUCT_LEVEL1",
+        "PRODUCT_LEVEL2",
+        "PRODUCT_LEVEL3"
+      ],
+      "labels": [
+        "",
+        "",
+        "Cell Group",
+        "Div",
+        "Measure Group",
+        "Measure Name",
+        "Measure",
+        "Operation Group",
+        "Product Level1",
+        "Product Level2",
+        "Product Level3"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    },
+    {
+      "name": "SEARCH_LEVEL_DETAIL",
+      "key": "SEARCH_LEVEL_DETAIL",
+      "popup": false,
+      "rule": "META+코드연결",
+      "columns": [
+        "D0",
+        "D1",
+        "CELL_GROUP",
+        "DIVISION_ID",
+        "MEASURE_GROUP",
+        "MEASURE_NAME",
+        "MEASURE_UI",
+        "OPERATION_GROUP",
+        "PRODUCT_LEVEL1",
+        "PRODUCT_LEVEL2",
+        "PRODUCT_LEVEL3"
+      ],
+      "labels": [
+        "",
+        "",
+        "Cell Group",
+        "Div",
+        "Measure Group",
+        "Measure Name",
+        "Measure",
+        "Operation Group",
+        "Product Level1",
+        "Product Level2",
+        "Product Level3"
+      ],
+      "divisionCols": [
+        "40",
+        "81",
+        "82",
+        "81_HD",
+        "81_HG",
+        "81_HM",
+        "81_ST",
+        "81_UC",
+        "EE",
+        "EE_HD",
+        "EE_HG",
+        "EE_HM",
+        "EE_ST",
+        "EE_UC"
+      ]
+    }
+  ],
+  "procs": [
+    {
+      "sp": "SCP0100_GET_SHEET_CALENDAR_3SPAN",
+      "sheet": "calendar",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0100.P_SCP0100_GET_SHEET_CALENDAR_3SPAN",
+      "entries": [
+        "event:this.Load",
+        "event:cboPlanDate.SelectedIndexChanged",
+        "event:rgrpSearchLevel.SelectedIndexChanged",
+        "event:this.btnMeasure.Click",
+        "event:this.btnColumn.Click",
+        "event:dCalendar.ValueChanged"
+      ]
+    },
+    {
+      "sp": "SCP0100_GET_SITE",
+      "sheet": "REPORT",
+      "btn": "SITE",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0100.P_SCP0100_GET_SITE",
+      "entries": [
+        "event:this.Shown"
+      ]
+    },
+    {
+      "sp": "SCP0100_GET_PLAN_DATE",
+      "sheet": "REPORT",
+      "btn": "SEARCH",
+      "status": "MATCH",
+      "candidate": "PKG_SCP0100.P_SCP0100_GET_PLAN_DATE",
+      "entries": [
+        "event:this.Load"
+      ]
+    },
+    {
+      "sp": "",
+      "sheet": "REPORT",
+      "btn": "ACTION",
+      "status": "BIZ_MATCH",
+      "candidate": "PKG_SCP0100.P_",
+      "entries": []
+    }
+  ],
+  "hasSave": false,
+  "hasSpreadTitle": true,
+  "handlers": [
+    {
+      "name": "handleForm",
+      "target": "this",
+      "event": "Load",
+      "slot": "lifecycle",
+      "calls": [
+        "SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN",
+        "biz:CommonData.CommonDataList_REPORT [code={?Data_REPORT.Type.PLAN_END_DATE}]",
+        "SCP.SCP0100_GET_PLAN_DATE"
+      ]
+    },
+    {
+      "name": "handleSCP0100GlobalPSIReportShown",
+      "target": "this",
+      "event": "Shown",
+      "slot": "lifecycle",
+      "calls": [
+        "SCP.SCP0100_GET_SITE"
+      ]
+    },
+    {
+      "name": "handleClbDivision",
+      "target": "clbDivision",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCboGraphType",
+      "target": "cboGraphType",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCboPlanDate",
+      "target": "cboPlanDate",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN",
+        "biz:CommonData.CommonDataList_REPORT [code={?Data_REPORT.Type.PLAN_END_DATE}]"
+      ]
+    },
+    {
+      "name": "handleCboBucketType",
+      "target": "cboBucketType",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCboDisplay",
+      "target": "cboDisplay",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCboSearchLevel",
+      "target": "cboSearchLevel",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCboUnitQty",
+      "target": "cboUnitQty",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handlergrpSearchLevel",
+      "target": "rgrpSearchLevel",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handleItemId",
+      "target": "this.btnItemId",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleMeasure",
+      "target": "this.btnMeasure",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handleProject",
+      "target": "this.btnProject",
+      "event": "Click",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleCboPlanType",
+      "target": "cboPlanType",
+      "event": "SelectedIndexChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleColumn",
+      "target": "this.btnColumn",
+      "event": "Click",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handleDCalendarValue",
+      "target": "dCalendar",
+      "event": "ValueChanged",
+      "slot": "handler",
+      "calls": [
+        "SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN"
+      ]
+    },
+    {
+      "name": "handleChkCellQty",
+      "target": "chkCellQty",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": []
+    },
+    {
+      "name": "handleChkAS",
+      "target": "chkAS",
+      "event": "CheckedChanged",
+      "slot": "handler",
+      "calls": []
+    }
+  ],
+  "tcs": [
+    {
+      "id": "TC-ID",
+      "kind": "구분",
+      "pre": "사전조건",
+      "step": "절차",
+      "input": "입력값",
+      "expect": "기대결과",
+      "basis": "근거"
+    },
+    {
+      "id": "TC-SCP0100-001",
+      "kind": "초기화",
+      "pre": "로그인(세션 NowGroupID, USER_ID 있음)",
+      "step": "SCP0100 화면을 엽니다",
+      "input": "—",
+      "expect": "시트 SEARCH_LEVEL / REPORT / SEARCH_LEVEL_DETAIL이 생성되고, 메타 컬럼과 기간 컬럼이 3행 헤더로 구성됩니다",
+      "basis": "`Form_Load` > CreateSpread > InitSpread > GetSpdTitle → `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN` / SP SCP0100_GET_SHEET_CALENDAR_3SPAN"
+    },
+    {
+      "id": "TC-SCP0100-002",
+      "kind": "초기화",
+      "pre": "위와 같음",
+      "step": "화면을 연 뒤 cboPlanDate 목록을 확인합니다",
+      "input": "—",
+      "expect": "SP 결과 행이 cboPlanDate 항목으로 채워집니다(표시 형식은 확인 필요)",
+      "basis": "`Form_Load` > InitControls > GetPlanDate → `SCP.SCP0100_GET_PLAN_DATE` / SP SCP0100_GET_PLAN_DATE"
+    },
+    {
+      "id": "TC-SCP0100-003",
+      "kind": "초기화",
+      "pre": "위와 같음",
+      "step": "화면을 연 뒤 dCalendar 기간을 확인합니다",
+      "input": "—",
+      "expect": "PLAN_END_DATE 공통 데이터로 기간 범위가 설정됩니다(계산식은 확인 필요)",
+      "basis": "`Form_Load` > SetCalendar > GetDayRange > GetPlanEndDate → `biz:CommonData.CommonDataList_REPORT`"
+    },
+    {
+      "id": "TC-SCP0100-004",
+      "kind": "초기화",
+      "pre": "화면 Load 완료",
+      "step": "화면이 표시된 직후 clbToSite 목록을 확인합니다",
+      "input": "—",
+      "expect": "SP 결과가 clbToSite 항목으로 채워집니다",
+      "basis": "`SCP0100_Global_PSI_Report_Shown` > InitControlsAfter > RefreshToSite > GetSiteList → `SCP.SCP0100_GET_SITE` / SP SCP0100_GET_SITE"
+    },
+    {
+      "id": "TC-SCP0100-005",
+      "kind": "초기화",
+      "pre": "화면 Load 완료",
+      "step": "chkCellQty, chkAS, cboPlanType 상태를 확인합니다",
+      "input": "—",
+      "expect": "chkCellQty: Checked=true, Visible=false / chkAS: Visible=false / cboPlanType의 LayoutItem(PlanType): Enabled=false",
+      "basis": "designer:248/284/929/1159, `ChkCellQty_CheckedChanged`, `ChkAS_CheckedChanged`, `CboPlanType_SelectedIndexChanged`"
+    },
+    {
+      "id": "TC-SCP0100-006",
+      "kind": "이벤트",
+      "pre": "cboPlanDate 항목 2개 이상",
+      "step": "cboPlanDate에서 다른 항목을 고릅니다",
+      "input": "다른 Plan Date",
+      "expect": "기간 헤더가 다시 구성되고, dCalendar 범위가 다시 계산됩니다",
+      "basis": "`CboPlanDate_SelectedIndexChanged` → `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN`, `biz:CommonData.CommonDataList_REPORT`"
+    },
+    {
+      "id": "TC-SCP0100-007",
+      "kind": "이벤트",
+      "pre": "화면 초기화 완료",
+      "step": "dCalendar의 From/To를 바꿉니다",
+      "input": "기간 변경",
+      "expect": "기간 헤더가 다시 구성되고, 기간 컬럼 수가 새 기간에 맞게 바뀝니다",
+      "basis": "`DCalendar_ValueChanged` > InitSpread > GetSpdTitle → `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN`"
+    },
+    {
+      "id": "TC-SCP0100-008",
+      "kind": "이벤트",
+      "pre": "화면 초기화 완료",
+      "step": "rgrpSearchLevel 선택을 바꿉니다",
+      "input": "다른 라디오 항목",
+      "expect": "헤더가 다시 구성됩니다. 시트 전환 여부는 확인 필요",
+      "basis": "`rgrpSearchLevel_SelectedIndexChanged` → `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN`"
+    },
+    {
+      "id": "TC-SCP0100-009",
+      "kind": "이벤트",
+      "pre": "화면 초기화 완료",
+      "step": "btnMeasure를 누릅니다",
+      "input": "—",
+      "expect": "헤더가 다시 구성됩니다(메저 선택 UI는 확인 필요)",
+      "basis": "`btnMeasure_Click` > InitSpread > GetSpdTitle → `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN`"
+    },
+    {
+      "id": "TC-SCP0100-010",
+      "kind": "이벤트",
+      "pre": "화면 초기화 완료",
+      "step": "btnColumn을 누릅니다",
+      "input": "—",
+      "expect": "헤더가 다시 구성됩니다(컬럼 선택 UI는 확인 필요)",
+      "basis": "`BtnColumn_Click` > InitSpread > GetSpdTitle → `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN`"
+    },
+    {
+      "id": "TC-SCP0100-011",
+      "kind": "이벤트",
+      "pre": "시트 생성 완료(_SI 있음)",
+      "step": "cboBucketType을 MONTHLY로 바꿉니다",
+      "input": "MONTHLY",
+      "expect": "`M_`로 시작하는 컬럼만 보이고 나머지는 숨겨집니다. API 호출은 없습니다",
+      "basis": "`CboBucketType_SelectedIndexChanged` > SetSpreadColumn :1103/:1107"
+    },
+    {
+      "id": "TC-SCP0100-012",
+      "kind": "이벤트",
+      "pre": "시트 생성 완료(_SI 있음)",
+      "step": "cboBucketType을 WEEKLY로 바꿉니다",
+      "input": "WEEKLY",
+      "expect": "`W_`로 시작하는 컬럼만 보이고 나머지는 숨겨집니다. API 호출은 없습니다",
+      "basis": "`CboBucketType_SelectedIndexChanged` > SetSpreadColumn :1114/:1118"
+    },
+    {
+      "id": "TC-SCP0100-013",
+      "kind": "이벤트",
+      "pre": "시트 미생성(_SI == null)",
+      "step": "시트 생성 전에 cboBucketType 변경 이벤트가 발생하는 경우",
+      "input": "임의",
+      "expect": "SetSpreadColumn이 호출되지 않고 예외도 없습니다",
+      "basis": "`CboBucketType_SelectedIndexChanged` `if(_SI != null)` :1804"
+    },
+    {
+      "id": "TC-SCP0100-014",
+      "kind": "이벤트",
+      "pre": "화면 초기화 완료",
+      "step": "cboDisplay 항목을 차례로 고릅니다",
+      "input": "콤보 각 항목",
+      "expect": "splitContainer1.SplitterDistance가 0, 750, 270 중 하나로 바뀝니다. 값별 대응은 확인 필요. 0일 때 Panel1(chartMain)이 접힙니다",
+      "basis": "`CboDisplay_SelectedIndexChanged` :1833/:1841/:1849"
+    },
+    {
+      "id": "TC-SCP0100-015",
+      "kind": "이벤트",
+      "pre": "화면 초기화 완료",
+      "step": "cboSearchLevel 항목을 바꿉니다",
+      "input": "각 항목",
+      "expect": "예외 없이 처리됩니다. 세부 동작(SetLayout 호출 여부)은 확인 필요",
+      "basis": "`CboSearchLevel_SelectedIndexChanged`"
+    },
+    {
+      "id": "TC-SCP0100-016",
+      "kind": "이벤트",
+      "pre": "화면 초기화 완료",
+      "step": "clbDivision 체크를 바꿉니다",
+      "input": "division 선택/해제",
+      "expect": "예외 없이 처리됩니다. 세부 동작은 확인 필요. 선택값은 getDivision(CODE)으로 수집됩니다",
+      "basis": "`ClbDivision_SelectedIndexChanged`, getDivision:466"
+    },
+    {
+      "id": "TC-SCP0100-017",
+      "kind": "이벤트",
+      "pre": "화면 초기화 완료",
+      "step": "cboGraphType 항목을 바꿉니다",
+      "input": "각 항목",
+      "expect": "예외 없이 처리됩니다. chartMain 반영 여부는 확인 필요",
+      "basis": "`CboGraphType_SelectedIndexChanged`"
+    },
+    {
+      "id": "TC-SCP0100-018",
+      "kind": "이벤트",
+      "pre": "화면 초기화 완료",
+      "step": "cboUnitQty 항목을 바꿉니다",
+      "input": "각 항목",
+      "expect": "예외 없이 처리됩니다. 세부 동작은 확인 필요",
+      "basis": "`CboUnitQty_SelectedIndexChanged`"
+    },
+    {
+      "id": "TC-SCP0100-019",
+      "kind": "이벤트",
+      "pre": "PlanType LayoutItem Enabled=false",
+      "step": "cboPlanType 변경 이벤트를 발생시킵니다(코드/테스트 하네스로)",
+      "input": "각 항목",
+      "expect": "예외 없이 처리됩니다. 세부 동작은 확인 필요. 화면에서 사용자가 직접 바꿀 수 없음을 확인합니다",
+      "basis": "`CboPlanType_SelectedIndexChanged`, designer:1159"
+    },
+    {
+      "id": "TC-SCP0100-020",
+      "kind": "이벤트",
+      "pre": "화면 초기화 완료",
+      "step": "btnItemId를 누르고 팝업에서 Model을 고릅니다",
+      "input": "Model 1건",
+      "expect": "txtItemId에 선택한 값(sItemId)이 들어갑니다. 팝업 화면 ID는 확인 필요",
+      "basis": "`BtnItemId_Click` :1947"
+    },
+    {
+      "id": "TC-SCP0100-021",
+      "kind": "이벤트",
+      "pre": "화면 초기화 완료",
+      "step": "btnProject를 누르고 팝업에서 Project를 고릅니다",
+      "input": "Project 1건",
+      "expect": "txtProject에 선택한 값(sProjectCode)이 들어갑니다. 팝업 화면 ID는 확인 필요",
+      "basis": "`BtnProject_Click` :1981"
+    },
+    {
+      "id": "TC-SCP0100-022",
+      "kind": "이벤트",
+      "pre": "chkCellQty Visible=false",
+      "step": "chkCellQty 체크 변경 이벤트를 발생시킵니다(하네스)",
+      "input": "true→false",
+      "expect": "예외 없이 처리됩니다. 세부 동작은 확인 필요",
+      "basis": "`ChkCellQty_CheckedChanged`"
+    },
+    {
+      "id": "TC-SCP0100-023",
+      "kind": "이벤트",
+      "pre": "chkAS Visible=false",
+      "step": "chkAS 체크 변경 이벤트를 발생시킵니다(하네스)",
+      "input": "false→true",
+      "expect": "예외 없이 처리됩니다. 세부 동작은 확인 필요",
+      "basis": "`ChkAS_CheckedChanged`"
+    },
+    {
+      "id": "TC-SCP0100-024",
+      "kind": "그리드",
+      "pre": "spdDetail 표시 상태",
+      "step": "시트 REPORT의 컬럼을 확인합니다",
+      "input": "—",
+      "expect": "표시: Div, Model, From Site, To Site, INCOTERMS, Operation, Trans Mode or Line or Project, Cell Group, Cell Qty, Measure Group, Measure Name(11개) + PRODUCT_LEVEL1~3(동적) / 숨김: MEASURE_UI, D0, D1",
+      "basis": "시트 REPORT, `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN`, grid_effective"
+    },
+    {
+      "id": "TC-SCP0100-025",
+      "kind": "그리드",
+      "pre": "spdSearchLevel 표시 상태",
+      "step": "시트 SEARCH_LEVEL의 컬럼을 확인합니다",
+      "input": "—",
+      "expect": "표시: Div, Operation Group, Cell Group, Measure Group, Measure Name(5개) + PRODUCT_LEVEL1~3(동적) / 숨김: MEASURE_UI, D0, D1",
+      "basis": "시트 SEARCH_LEVEL, grid_effective"
+    },
+    {
+      "id": "TC-SCP0100-026",
+      "kind": "그리드",
+      "pre": "spdSearchLevelDetail 표시 상태",
+      "step": "시트 SEARCH_LEVEL_DETAIL의 컬럼을 확인합니다",
+      "input": "—",
+      "expect": "SEARCH_LEVEL과 같은 구성(5개 + PRODUCT_LEVEL1~3 동적), MEASURE_UI/D0/D1 숨김",
+      "basis": "시트 SEARCH_LEVEL_DETAIL, grid_effective"
+    },
+    {
+      "id": "TC-SCP0100-027",
+      "kind": "그리드",
+      "pre": "3SPAN 결과에 `B_`가 위치 1 이후에 들어간 COLUMN_NAME 있음",
+      "step": "기간 컬럼 속성을 확인합니다",
+      "input": "—",
+      "expect": "해당 컬럼은 Text 컬럼, 폭 0, 숨김입니다. 그 외 컬럼은 Num 컬럼, 폭 70, 표시입니다",
+      "basis": "InitSpreadDateColumn :755/:760, `SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN`"
+    },
+    {
+      "id": "TC-SCP0100-028",
+      "kind": "그리드",
+      "pre": "`_plan_start_yyyymm`을 포함한 `M_` 컬럼 있음",
+      "step": "글자색을 확인합니다",
+      "input": "—",
+      "expect": "빨강입니다",
+      "basis": "InitSpreadDateColumn :767"
+    },
+    {
+      "id": "TC-SCP0100-029",
+      "kind": "그리드",
+      "pre": "`W_` 컬럼의 라벨에 \"A\" 또는 \"B\" 포함",
+      "step": "글자색을 확인합니다",
+      "input": "—",
+      "expect": "파랑입니다",
+      "basis": "InitSpreadDateColumn :774/:778"
+    },
+    {
+      "id": "TC-SCP0100-030",
+      "kind": "그리드",
+      "pre": "헤더 구성 완료",
+      "step": "기간 컬럼 헤더를 확인합니다",
+      "input": "—",
+      "expect": "0행: LARGE_CLASS_LABEL_NAME 병합 / 1행: SMALL_CLASS_LABEL_NAME 병합 / 2행: \"Qty\"",
+      "basis": "InitSpreadDateColumn :787~816, SetSheetHeaderColumn(_SI, 3)"
+    },
+    {
+      "id": "TC-SCP0100-031",
+      "kind": "그리드",
+      "pre": "`!_is_detail`",
+      "step": "cboSearchLevel.SelectedIndex를 1, 2, 3, 4로 바꾼 뒤 SetLayout 결과를 확인합니다",
+      "input": "1 / 2 / 3 / 4",
+      "expect": "1: L1·L2 표시 / 2: L1만 / 3: L2만 / 4: L1·L2·L3. SetLayout 실행 트리거는 확인 필요",
+      "basis": "SetLayout :1498~1529, `CboSearchLevel_SelectedIndexChanged`"
+    },
+    {
+      "id": "TC-SCP0100-032",
+      "kind": "그리드",
+      "pre": "`!_is_detail`",
+      "step": "case 라벨이 미추출인 분기로 진입시킵니다",
+      "input": "1~4 외 값(확인 필요)",
+      "expect": "PRODUCT_LEVEL1~3 모두 숨김",
+      "basis": "SetLayout :1536~1538"
+    },
+    {
+      "id": "TC-SCP0100-033",
+      "kind": "그리드",
+      "pre": "화면 초기화 완료",
+      "step": "spdSearchLevel, spdDetail, spdSearchLevelDetail의 Visible을 확인합니다",
+      "input": "—",
+      "expect": "항상 하나만 Visible입니다. lciSearchLevel.Enabled = !_is_detail입니다. 전환 조건은 확인 필요",
+      "basis": "VisibleSheet :1880~1896, EnableSearchLevel :1874, 시트 REPORT / SEARCH_LEVEL / SEARCH_LEVEL_DETAIL"
+    },
+    {
+      "id": "TC-SCP0100-034",
+      "kind": "division",
+      "pre": "division별 사용자 준비(40, 81, 82, EE 계열 등 14개)",
+      "step": "division별로 로그인 또는 clbDivision을 선택한 뒤 각 시트 컬럼 수를 비교합니다",
+      "input": "14개 division",
+      "expect": "모든 division에서 REPORT 11 (?3), SEARCH_LEVEL 5 (?3), SEARCH_LEVEL_DETAIL 5 (?3)로 같습니다",
+      "basis": "grid_effective, 시트 REPORT / SEARCH_LEVEL / SEARCH_LEVEL_DETAIL, `ClbDivision_SelectedIndexChanged`"
+    },
+    {
+      "id": "TC-SCP0100-035",
+      "kind": "권한",
+      "pre": "TB_FX_GroupMenuAuth 4개 그룹 사용자",
+      "step": "그룹별로 화면에 진입합니다",
+      "input": "그룹별 계정",
+      "expect": "그룹별 C/R/U/D 값에 맞는 화면 접근과 버튼 활성이 적용됩니다. 값은 확인 필요",
+      "basis": "TB_FX_GroupMenuAuth, BaseForm.OnShown:522, `Form_Load`"
+    },
+    {
+      "id": "TC-SCP0100-036",
+      "kind": "조회",
+      "pre": "3SPAN SP 결과 0행인 조건",
+      "step": "화면을 열거나 dCalendar를 바꿉니다",
+      "input": "데이터 없는 기간",
+      "expect": "기간 컬럼이 추가되지 않습니다. ColumnHeaderSpan이 `dsSpdTitle.Tables[0].Rows[0][2]`를 참조하므로 0행일 때 예외가 날 수 있습니다 → 실제 동작은 확인 필요",
+      "basis": "`SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN`, InitSpreadDateColumn :787~816, `DCalendar_ValueChanged`"
+    },
+    {
+      "id": "TC-SCP0100-037",
+      "kind": "조회",
+      "pre": "PLAN_DATE SP 결과 0행인 조건",
+      "step": "화면을 엽니다",
+      "input": "—",
+      "expect": "cboPlanDate가 비어 있습니다. 이후 동작(예외·메시지)은 확인 필요",
+      "basis": "`SCP.SCP0100_GET_PLAN_DATE`, `Form_Load`"
+    },
+    {
+      "id": "TC-SCP0100-038",
+      "kind": "조회",
+      "pre": "SITE SP 결과 0행인 조건",
+      "step": "화면을 엽니다",
+      "input": "—",
+      "expect": "clbToSite가 비어 있습니다. 예외는 없어야 합니다(확인 필요)",
+      "basis": "`SCP.SCP0100_GET_SITE`, `SCP0100_Global_PSI_Report_Shown`"
+    },
+    {
+      "id": "TC-SCP0100-039",
+      "kind": "조회",
+      "pre": "PLAN_END_DATE 공통 데이터가 없거나 Biz 호출이 실패하는 조건",
+      "step": "화면을 열거나 cboPlanDate를 바꿉니다",
+      "input": "—",
+      "expect": "오류 처리(메시지·기본 기간)는 확인 필요",
+      "basis": "`biz:CommonData.CommonDataList_REPORT`, `CboPlanDate_SelectedIndexChanged`"
+    },
+    {
+      "id": "TC-SCP0100-040",
+      "kind": "조회",
+      "pre": "3SPAN SP가 오류를 응답하는 조건(권한 누락 등)",
+      "step": "btnColumn을 누릅니다",
+      "input": "—",
+      "expect": "오류 메시지 표시 방식은 확인 필요. 기존 그리드 상태가 유지되는지 확인합니다",
+      "basis": "`SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN`, `BtnColumn_Click`"
+    },
+    {
+      "id": "TC-SCP0100-041",
+      "kind": "조회",
+      "pre": "조회조건 입력 완료",
+      "step": "조회를 실행합니다",
+      "input": "기본 조건",
+      "expect": "시트·차트 본문 데이터 표시 — **엔드포인트 미식별. 확인 후 TC 확정**",
+      "basis": "메인 조회 엔드포인트 미식별(Fact Pack 미검출)"
+    }
+  ],
+  "divisionCols": [
+    "40",
+    "81",
+    "82",
+    "81_HD",
+    "81_HG",
+    "81_HM",
+    "81_ST",
+    "81_UC",
+    "EE",
+    "EE_HD",
+    "EE_HG",
+    "EE_HM",
+    "EE_ST",
+    "EE_UC"
+  ]
+}

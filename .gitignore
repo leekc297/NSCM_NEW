@@ -216,3 +216,7 @@ __pycache__/
 ~$*
 GSCM_20260512/
 nscm-be/.bootrun*.out
+
+# E2E per-run logs / run lock (2026-10-21, tools/E2E/runlock.js)
+Doc/e2e/logs/
+Doc/e2e/_run.lock

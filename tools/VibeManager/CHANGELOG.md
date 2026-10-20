@@ -21,6 +21,51 @@
 - **게이트(check.js)**: `M07` 커밋본 파일 삭제 · `M06` 커밋본 대비 대사표 행/구현 수 축소 · `DoD B22` 조회 filter 키 = 사내 PROC_M COL_NM(`Doc/tobefacts/db/proc_params.csv`) · `B23` registration.sql API 배선 = 사내 현행(`proc_meta.csv`, 프로시저명 공란 BLOCK) · `B24` As-is Form_Load 초기 조회기간(InitValue/DateUtil.GetDayRange — flow.csv 미수록) ↔ store 초기값 공란 · `B25` hotkeyConfig save/insert/delete/upload 핸들러 본문 공란(TODO 스텁). `harness.json` 에 `asisSrcRoot` 추가(.cs 원문 대조)
 - **메뉴**: 분석·문서 그룹에 `🛠️ 기존 화면 보완 (Claude · 골격 재생성 금지)` 추가 — 기존 화면은 이 항목 또는 💬 프롬프트로만 보완, ✨ 새 화면/★ 파이프라인/🔄 수선 루프는 신규 화면 전용
 - **룰셋**: `10_RULES_KEEP.md` B11(커밋본 덮어쓰기 금지)·C6(filter 키↔COL_NM·등록 SQL↔사내 배선)·E9(신설: Form_Load 초기값 보존)·F1(빈 핸들러)·J ③⑤⑥ 갱신, `prompts/new_screen.md` 입력 2-1/2-2·하지 말 것 추가
+## 1.9.6 (2026-10-21)
+- **E2E 미실행 사고(🎬 E2E 전체 4단계 가 1~3초 만에 '완료')**: 원인 = 다른 run-e2e(수동 실행)가 공용 `Doc\e2e\_run.log` 를 쥐고 있어 배치의 모든 `>> _run.log` 리다이렉트가 "다른 프로세스가 사용 중" 으로 실패 → probe·권한 메타·스펙 생성·Playwright 가 하나도 돌지 않았는데 마지막 명령(report)의 0 이 반환. 보완(`tools/E2E`): ① `runlock.js` 동시 실행 잠금(`_run.lock`, 살아 있는 PID 면 `[FAIL] 다른 E2E 실행이 진행 중` exit 4) ② 실행마다 별도 로그 `Doc\e2e\logs\run_<RUNID>_<종류>.log`(`_run.log` 는 색인만) ③ `report.js` 가 results.json 이 잠금 시각 이후 갱신됐는지 확인(아니면 exit 3) ④ FE/BE 미응답이면 `[FAIL]` exit 5 로 즉시 중단(예전엔 [WARN] 뒤 전부 실패). **배치는 ASCII 전용** — chcp 65001 + 한글이 있으면 cmd 가 goto/블록 뒤 파일 위치를 잘못 잡아 깨짐(실측).
+- **E2E 선행 자동 기동**(사용자 지시): `run-e2e.cmd` 를 쓰는 작업(S7.smoke/crud/auth/authcrud/all · steps.json `requireServers:[8080,5173]`)은 메뉴·스테퍼·체인 어느 경로든 실행 전에 BE 8080/FE 5173 LISTEN 을 확인하고, 미기동이면 quick.json 의 ☕ BE Start / 🎨 FE Start 로 동시 기동 → 완료 로그(ready)·포트 LISTEN 까지 대기 후 진행. 기동 실패/시간초과면 E2E 를 돌리지 않고 exit 5(Flow 보드 FAIL). `startServerStream` 은 `Promise<{ok,sec}>` 반환.
+## 1.9.5 (2026-10-21)
+- **체인 E2E 무실행 → "완료" 오판 보완**(SCP0100 사고): ① VS Code 루트 `c:\…`(소문자) 와 설정 `C:\…` 가 섞여 Playwright 가 `Requiring @playwright/test second time` 로 시작도 못 함 → 확장 루트 드라이브 문자 대문자 통일(normDrive) + `playwright.config.ts` testDir 을 설정 파일 기준 같은 표기로 ② `run-e2e.cmd` 가 Playwright 종료코드를 전파(실패 시 로그 꼬리 출력) ③ 체인 단계 `verify`: E2E 4단계는 `_summary.csv` 가 이번 실행에서 갱신되고 (화면,종류) 행이 있어야 OK, 파싱은 Fact Pack summary 존재, Excel 은 폴더 존재 — 종료코드 0 이어도 산출물 없으면 FAIL
+
+## 1.9.4 (2026-10-20)
+- **체인 단계 세분화**(사용자 지시 "너무 큰 작업이 하나로 묶여 있다"): 새 화면 pipeline 1단계 → **7단계**(FE 골격 → 등록 SQL → PKG 골격 → FE 수선(선택) → PKG 이식(선택) → E2E 스펙 → 대사표(선택)), E2E 전체 1단계 → **4단계**(smoke → crud → auth → authcrud, 각 auto 모드). 🚀 전체 15단계 · 🧩/📏 13단계 · 🚒 7단계. 체인 단계에 `args` 지정 지원(같은 작업을 인자만 바꿔 호출)
+- `tools/Harness/pipeline.js --phase N` 신설: 단계만 실행, 결과는 `Doc/gen/<ID>/_pipeline_steps.json` 에 누적되고 PIPELINE.md 는 누적본으로 재작성(기존 전체 실행 동작은 그대로)
+- `tools/E2E/report.js`: 종류별 실행 결과를 **병합**해 `_summary.csv/md` 에 쌓는다(이번 실행의 (화면,종류)만 교체) — 체인이 4종을 따로 돌려도 UI Status 타일 4개가 전부 남음
+
+## 1.9.3 (2026-10-20)
+- **명령형 항목도 Workbench 탭으로**(1.9.0 에서 빠진 것): 🛰️ 전환 흐름 대시보드 → HTML 탭(단계×게이트 판정, 작업 실행·🔄 갱신 버튼 동작 유지) · 📶 FLOW 진척 → FLOW 탭(중복이던 🗓️ FLOW 진척판 항목 제거) · 🕒 작업 이력 → Workbench History 탭 · 🧪 환경 점검 / 📊 Agent 게이트 집계 / 📒 runs.log / ✎ steps.json → 파일 탭. 별도 웹뷰 창은 Workbench 가 없을 때만. 웹뷰 메시지 `tab:refresh` / `tab:action` / `tab:closed`, 확장 API `openHtmlTab · refreshHtmlTab · showTab`
+
+## 1.9.2 (2026-10-20)
+- **체인 즉시 시작**: 🚀/🧩/📏/🚒 체인은 화면 ID 확정(QuickPick) 뒤 두 번째 모달 확인창 없이 바로 시작(비차단 알림 + Task Log 안내). 모달이 바깥 클릭/Esc 로 조용히 취소돼 "신규 ID 를 넣었는데 진행이 안 된다" 로 보이던 문제(사용자 지시). 중지는 ⏹ 중지
+
+## 1.9.1 (2026-10-20)
+- **E2E CRUD = 실제 저장**(사용자 지시): Insert 없는 셀 편집 저장형도 값 변경 → Save → 재조회 반영 확인 → 원래 값 복원 Save → 재조회 복원 확인(`mode=edit-save`, `restored` 필수). Insert/Delete 화면은 마커 행 실제 생성·수정·삭제(기존). 이전 '편집기 열림만 확인' 폐기. 편집 후보 = `.wj-cell-editable` 셀(값 있는 셀 우선) · 재조회 직후 렌더 폴링 · SAVE 요청/응답(결과 커서 ERR_CODE) 기록 · 오류 알림 반복 닫기. **실측으로 SCP0096 저장 결함(ORA-01407, FE userIdList vs PROC_M userId) 발견 → DB 객체 보완(PROC_M + PKG_SCP0096/SCP0019, 사내 적용·클라우드 패키지)** 뒤 crud PASS 51s
+- **E2E 테스트 모드(화면 성격별 계정 축)**: E2E 작업(스모크·CRUD·권한·권한별 CRUD·전체) 실행 시 선택 입력 `mode` — `admin`(영역 ADMIN 1명 + 권한 없는 사용자 1명, Division 반복 없음 = 마스터 화면 → 스모크·CRUD 각 1 + 권한·권한별 CRUD 각 2 = 6건) / `division`(화면 영역의 역할 계정만 Division 별로 + 영역 ADMIN 1 + 권한 없는 사용자 1 — 명부는 계정 풀, 전수 아님) / `auto`(users.json 화면 지정 → 없으면 Division 조회조건 유무로 추정). `run-e2e.cmd … --mode`, `gen-e2e.js --mode`. 명시한 모드는 `tools/E2E/users.json screens[<메뉴>].mode` 에 저장돼 다음 기본값(SCP0096 = admin 등록). 체인 안에서는 auto. `_index.csv` 에 mode 열. 입력 정의 `inputs[].options` → QuickPick 지원(collectInputs)
+- 검증: SCP0096 `--mode admin`(jaeuk.shin + hongjae.kim) **6/6 PASS**(smoke 26s · crud 49s 편집기 열림 · auth 2 · authcrud 2, 권한 없는 계정은 URL 접근 가능하나 Save 비노출·편집 불가·SAVE 호출 0 = `gap` 기록). 모드 도입 전 18계정 3차 실행은 17/17 통과 시점에 중단(보정 2종 확인)
+
+## 1.9.0 (2026-10-20)
+- **Workbench 내부 탭(열기 류 전부)**: 새 창·외부 프로그램을 만드는 기능(Workbench 새 창 · Open Browser(NSCM) · E2E HTML 리포트 · Excel 등 바이너리 · 원격)을 제외한 모든 "열기" 가 Workbench 의 **닫을 수 있는 탭**으로 열린다 — 메뉴 `open` 항목(DoD·PIPELINE·FULLRUN·룰셋·설정 json…), steps `open`(결과 md·GAP csv·매트릭스·등록 SQL·폴더…), 사이드바 항목(룰·hook·DoD 패널·게이트 BLOCK 파일:라인 → 해당 줄 강조), UI Status 문서 칩, FLOW 의 폴더 열기, History 의 수정전↔수정후 / 작업후↔현재 비교, 5단계 전/후 diff(HEAD↔작업본). 뷰어: md 렌더링(제목·표·목록·코드·체크·경로 링크 → 다른 탭) · csv 표(필터·PASS/FAIL 색) · json/sql/ts/log 코드 보기(줄번호) · 폴더 목록(상위 폴더·클릭 이동) · 이미지 · 줄 단위 diff(변경 주변 3줄, 전체 보기 토글). 툴바: 🔄 새로고침 · ✏️ 편집/👁 보기 · 💾 저장(텍스트 파일, quick.json 저장 시 메뉴 즉시 갱신) · 📝 에디터로 · ↗ OS 로 열기. 새 모듈 `tabview.js`, 웹뷰 메시지 `tab` / `tab:open|save|editor|os|ext`
+- **tools/E2E 보정 2차(SCP0096 2차 실측 38건 → 16 FAIL)**: ① 조회 버튼이 없는 계정(메뉴/SEARCH 권한 없음)에서 `search()` 가 F5 무동작 후 120s 를 기다려 auth 240s 초과 → 버튼 없으면 10s 만 ② 편집 가능 판정이 고정 (0,1) 셀(키 컬럼)이라 허용 계정 7건이 '안 열림' 오탐 → Wijmo 컬럼 정의(`gridColumnsMeta`: isReadOnly)에서 편집 가능 컬럼을 골라 차례로 더블클릭(`cellEditable(0)`), 편집 가능 컬럼이 없으면 false. 단일 crud 재실행 PASS(편집기 열림)
+- **FLOW 고정 탭 제외**: 탭바는 Claude · Log · Task Log · UI Status · History. FLOW 는 `Overview & Reports › 🗓️ FLOW 진척판`(kind `flowtab`)으로 여는 탭(내용·필터·클릭 동작 동일)
+
+## 1.8.9 (2026-10-20)
+- **Flow 보드**(Claude 탭): 체인(🚀/🧩/📏/🚒)과 메뉴·스테퍼에서 실행한 **단일 작업**도 텍스트 로그가 아니라 보드로 — 헤더(🧭 Flow 이름 · 화면 · **현재 Step / 전체 Step** · 진행바 · 완료 수 · 경과 · 상태) + Step 카드(대기 ○ / 진행 ⏳ / 완료 ✅ / 경고 ⚠ / 실패 ✖ / 미실행, 소요·exit, 접힌 상태에서 마지막 출력 한 줄, 펼치면 최근 60줄). Claude 단계(✴️)의 상황판은 그 Step 카드 안에 중첩. 작업 출력 원문은 Task Log 에 그대로. 웹뷰 메시지 `fb`(start/step/end). 보드 안 글자색은 로그용 색상 클래스(.bad/.ok)의 상속을 끊어 상태 배지·테두리만 색을 가진다
+- 검증: jsdom 16항목 PASS(체인 4단계·Claude 중첩·선택 단계 경고·중단·단일 작업) · Chrome 스냅샷
+- **tools/E2E 보정(SCP0096 4단계 실측 26건 → 23 FAIL 원인 4종)**: ① 숨은 `.wj-flexgrid`(Home keep-alive)가 첫 그리드로 잡혀 `dblclick` 이 테스트 타임아웃까지 대기 → 보이는 그리드만(`:visible`) + `cellEditable` 시간 상한(5s, force 재시도, 실패 시 판정 불가) ② auth 가 Division 3개 계정에서 180s 초과 → Division 수 × 조회 타임아웃으로 `test.setTimeout`, authcrud 420s ③ btn_auth 의 `EDIT`(셀 편집 권한)·`SEARCH` 를 버튼으로 오판 → 버튼 코드 사전(SAVE/INSERT/DELETE/EXCEL…)만 양방향 대조, EDIT 는 편집기 열림과 대조 ④ 기대 권한 계산을 BE `PR_GET_MNU_BTN_AUTH` 원문과 동일하게(메뉴 권한 있는 그룹들의 버튼 합집합) + `run-e2e.cmd` 가 실행 전 권한 3표(btn_auth·user_group_user·user_group_menu)를 사내 DB 에서 새로고침(10-19 스냅샷의 SCM Viewer SAVE 가 제거돼 ys_cho 기대가 어긋났던 사례). 메뉴 권한 없는 계정의 URL 직접 접근은 실패가 아니라 어노테이션 `gap` 으로 기록
+
+## 1.8.8 (2026-10-20)
+- **E2E 테스트 단계 4종**: smoke · crud · auth · **authcrud(계정별 권한 CRUD, 신설)**. FLOW/UI Status 단계 9~12 = `9 Smoke / 10 CRUD / 11 Auth / 12 Auth×CRUD`(판정 = `Doc/e2e/results/_summary.csv` 의 kind 열, 결과 없고 스펙만 있으면 '미실행'), UI Status 타일 4종, 스테퍼 클릭 = S7.smoke/crud/auth/authcrud, DoD 패널 E2E 결과 종류별 합계
+- **tools/E2E** — `lib/crud.ts` 공용 CRUD 사이클(Insert 화면만 마커 행 C→R→U→D 후 반드시 정리 · Insert 없는 셀 편집 저장형은 **기존 행 보호**: 편집기 열림만 확인하고 저장 안 함 — 사내 E2E 원칙) · `lib/nscm.cellEditable` · `gen-e2e.js` 계정별 기대 권한을 To-Be 메타에서 산출(`user_group_user` 그룹 소속 → `user_group_menu` 메뉴 접근 → `btn_auth` SAVE/INSERT/DELETE, 메뉴에 등록된 코드만 비교) + `<ID>.authcrud.spec.ts` 생성 · `report.js` 4종 집계(요약표 "권한별 CRUD(계정)" 열) · `run-e2e.cmd [smoke|crud|auth|authcrud|all] ID…` — auth 는 `@auth(?!crud)`, **화면ID 가 있으면 그 화면 스펙 파일만 실행**(이전엔 specs 폴더 전체) · README 갱신
+- **메뉴 서브그룹**: `UI 분석·생성·보완` 아래 🔭 분석(3) / 🧱 생성(10: 단계 작업·새 화면 AS-IS·설계서·드라이런·PKG 배포·등록 미리보기/커밋/되돌리기·매핑표·PIPELINE) / 🪛 보완(6: 기존 화면 보완·자동 보완·GAP 보완·게이트 BLOCK·PKG 이식 마무리·DoD) / 🎯 테스트(6) / 📚 문서(4) — quick.json 항목 `sub/sub_en/sub_icon`, 사이드바가 서브그룹 노드(펼침·건수)로 묶음. 테스트 서브그룹 = 🔥 Smoke · 🧫 CRUD · 🔐 권한 · 🧬 권한별 CRUD · 🎬 전체 4단계 · 🔎 실패 분석
+- steps.json S7: `S7.authcrud` 신설, 그룹 제목 "7. 테스트 (E2E: Smoke · CRUD · 권한 · 권한별 CRUD)"
+- **순차 체인(quick kind `chain`)** — 단계를 차례로 실행, 실패(또는 입력 취소)하면 거기서 멈추고 `optional` 단계는 경고로 계속. 진행·결과 = Task Log + `Doc/gen/<ID>/FULLRUN.md`(단계표·exit·소요·다음 할 일, 단계마다 갱신). 단계 내부 확인창은 체인 시작 확인 1회로 갈음. Claude 단계는 `askClaude` 가 Promise 를 반환하도록 바꿔 종료(코드·is_error)를 기다린다. 항목 4개: 🚀 **ID 하나로 전체**(파싱 → 문서 MD → GAP → 새 화면 pipeline → E2E 4단계 → 문서 Excel) · 🧩 **새 화면(AS-IS) → 테스트·문서까지** · 📏 **새 화면(설계서) → 테스트·문서까지**(둘 다 파싱·AS-IS 분석 제외: pipeline → GAP(선택) → E2E 4단계 → Excel) · 🚒 **자동 보완 → 테스트·문서까지**(🧯 자동 보완 Claude → GAP → E2E 4단계 → Excel). "프로그램 ID 로 단계 작업" 퀵픽에도 ★ 전체 체인 추가. 기존 ✨/📐/🧯 단일 항목은 그대로
+
+## 1.8.7 (2026-10-20)
+- **UI Status 문서(Excel) 칩 열기 오류 수정**: "An error occurred opening an external program — 지정된 파일을 찾을 수 없습니다 (0x2)". 원인 = vscode.env.openExternal(Uri.file) 이 Windows 에서 한글 경로(Doc화면설계서·화면분석서·단위테스트)를 file: URI 로 넘기며 깨짐. Windows 는 `cmd /c start "" "<경로>"` 로 열도록 교체(openWithOS · 존재 확인 후, 없으면 경로를 Task Log 에 표시). History 의 폴더 열기도 같은 경로를 탐
+
+## 1.8.6 (2026-10-20)
+- **Source Backup push 인증**: quick.json 항목에 `credUser: leekc297` 추가, push 명령에만 `git -c credential.https://github.com.username=leekc297 push origin main` 로 1회 지정(전역 git 설정 변경 없음). 이 PC 전역 GitHub username 이 사내 계정(gyucheol_lee@zionex.com)이라 비대화(GIT_TERMINAL_PROMPT=0) push 가 인증 실패하던 문제. 확인 대화상자에 계정 표시. 대상 확인: Source Backup = 루트 `origin` = leekc297/NSCM_NEW.git · Source Download/Upload(UI) = nscm-fe `common` = eunjoo-hwang/nscm-fe.git (변경 없음)
+
 ## 1.8.5 (2026-10-20)
 - **Agent Model 기본값 Opus 5.5**: 설정 `vibeManager.agentModel` 기본 `claude-sonnet-4-5` → `claude-opus-5-5`. 같은 기본값이 박혀 있던 `tools/AsisFacts/agent.ps1`(-Model 기본) · `AsisFacts/src/Agent.cs`(최종 폴백) 도 함께 변경. 이 값은 3단계 Agent 배치(agent.ps1 → dotnet AsisFacts agent → claude -p --model)에만 쓰이고 Workbench 대화·🧯 자동 보완 모델과는 무관(설명문에 명기)
 

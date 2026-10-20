@@ -49,8 +49,38 @@ function claudeArgs(p, resume, overrides) {
   if (resume) a.push('--resume', resume);
   return a;
 }
+let flowSeq = 0; // 1.8.9: Flow 보드 일련번호(체인·단일 작업)
+// 1.9.5: 체인 단계 산출물 검증 — verify: { type: 'e2eRows', kind } → Doc/e2e/results/_summary.csv 에 (화면, 종류) 행이 이번 실행(파일 갱신 시각 ≥ 단계 시작) 뒤 존재 · { type: 'fileExists', file }
+function verifyStep(p, v, id) {
+  if (process.env.VIBE_CHAIN_NO_VERIFY === '1') return { ok: true, why: '검증 생략(VIBE_CHAIN_NO_VERIFY)' }; // 모의 테스트 전용
+  try {
+    if (v.type === 'e2eRows') {
+      const f = path.join(p.e2eOutDir, 'results', '_summary.csv'); if (!fs.existsSync(f)) return { ok: false, why: `E2E 요약 없음: ${f}` };
+      const since = v._since || 0; const mt = fs.statSync(f).mtimeMs; if (since && mt < since) return { ok: false, why: `E2E 요약이 이번 실행에서 갱신되지 않음(Playwright 미실행 가능성) — ${path.relative(p.root, f)}` };
+      const rows = fs.readFileSync(f, 'utf8').split(/\r?\n/).filter(l => l.includes(`"${id}"`) && (!v.kind || l.includes(`"${v.kind}"`)));
+      if (!rows.length) return { ok: false, why: `E2E 결과에 ${id}${v.kind ? '/' + v.kind : ''} 행이 없음(스펙 미생성 또는 실행 실패)` };
+      const pass = rows.filter(l => l.includes('"PASS"')).length; return { ok: true, why: `E2E ${v.kind || ''} ${pass}/${rows.length} PASS` };
+    }
+    if (v.type === 'fileExists') { const f = String(v.file || '').replace(/\$\{id\}/g, id).replace(/\$\{root\}/g, p.root).replace(/\$\{genDir\}/g, p.genDir); return fs.existsSync(f) ? { ok: true, why: `산출물 있음 ${path.relative(p.root, f)}` } : { ok: false, why: `산출물 없음 ${f}` }; }
+    return { ok: true, why: '검증 규칙 없음' };
+  } catch (e) { return { ok: false, why: `검증 예외: ${e.message}` }; }
+}
+const tabview = require('./tabview'); // 1.9.0: Workbench 내부 탭 뷰어
 const summ = inp => { try { const s = JSON.stringify(inp); return s.length > 160 ? s.slice(0, 160) + '…' : s; } catch { return ''; } };
 // 1.8.4: 도구 호출 한 줄 요약(사람이 읽는 형태) — Step 카드의 접힌 요약·도구 행 제목에 사용
+// 1.8.7: 로컬 파일·폴더를 OS 기본 프로그램으로 열기 — vscode.env.openExternal(Uri.file) 은 Windows 에서 한글 경로(Doc\화면설계서 등)를
+//   file: URI 로 넘기며 깨져 "지정된 파일을 찾을 수 없습니다 (0x2)" 가 난다 → Windows 는 cmd start 로, 그 외는 openExternal
+function openWithOS(p, wb, file) {
+  try {
+    const f = path.normalize(String(file || ''));
+    if (!f || !fs.existsSync(f)) { const msg = `파일/폴더가 없습니다: ${f}`; vscode.window.showErrorMessage(`Vibe_Manager: ${msg}`); if (wb) wb.out('task', msg + '\n', 'bad'); return; }
+    if (process.platform === 'win32') {
+      const ch = cp.spawn('cmd.exe', ['/d', '/s', '/c', `start "" "${f}"`], { windowsVerbatimArguments: true, windowsHide: true, detached: true, stdio: 'ignore' });
+      ch.on('error', e => vscode.window.showErrorMessage(`Vibe_Manager: 열기 실패 ${f} — ${e.message}`)); ch.unref();
+      if (wb) wb.out('task', `📂 열기: ${f}\n`, 'ok');
+    } else vscode.env.openExternal(vscode.Uri.file(f));
+  } catch (e) { vscode.window.showErrorMessage(`Vibe_Manager: 열기 실패 ${file} — ${e.message}`); }
+}
 function toolBrief(name, inp, ko) {
   try {
     inp = inp || {}; const base = s => String(s || '').replace(/\\/g, '/').split('/').slice(-2).join('/');
@@ -81,13 +111,16 @@ const UI = {
   ph: ['Prompt — Ctrl+Enter to send · 📎 attach files · screen context is attached automatically when an ID is set · harness is automatic for new-UI/GAP work', '프롬프트 — Ctrl+Enter 전송 · 📎 파일 첨부 · 화면ID 있으면 그 화면 컨텍스트가 자동 첨부 · 신규 UI/GAP 작업은 하네스 자동'],
   chat_hint: ['Send a prompt — Claude replies and tool use appear here (session kept).', '프롬프트를 보내면 Claude 응답·도구 사용이 여기 표시됩니다 (세션 유지).'], flow_hint: ['Loads when the FLOW tab is opened…', 'FLOW 탭 선택 시 자동 로드됩니다…'], hist_hint: ['Loads when the History tab is opened…', 'History 탭 선택 시 자동 로드됩니다…'],
   st_pick: ['Set a screen ID to see its progress, gates and outputs here.', '화면ID 를 입력하면 그 화면의 단계 현황·산출물이 여기 나옵니다.'], st_progress: ['Progress', '진행률'], st_stages: ['stages done', '단계 완료'], st_dod: ['DoD', 'DoD'], st_fe: ['FE Gate', 'FE 게이트'], st_pkg: ['PKG Gate', 'PKG 게이트'], st_gap: ['GAP open', 'GAP 미반영'], st_e2e: ['E2E', 'E2E'],
-  st_notrun: ['not run', '미실행'], st_items: ['items', '건'], st_outputs: ['Outputs', '산출물'], st_docs: ['Documents', '문서'], st_recent: ['Recent work', '최근 작업'], st_none: ['none', '없음'], st_changed: ['changed', '변경'], st_open: ['open', '진행중'], st_pipeline: ['Last pipeline', '마지막 파이프라인'],
-  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
-       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
+  st_notrun: ['not run', '미실행'], st_nospec: ['no spec', '스펙 없음'], st_items: ['items', '건'], st_outputs: ['Outputs', '산출물'], st_docs: ['Documents', '문서'], st_recent: ['Recent work', '최근 작업'], st_none: ['none', '없음'], st_changed: ['changed', '변경'], st_open: ['open', '진행중'], st_pipeline: ['Last pipeline', '마지막 파이프라인'],
+  tb: [{ reload: 'Reload', edit: 'Edit', view: 'View', save: 'Save', editor: 'Open in editor', os: 'Open with OS', close: 'Close tab' }, { reload: '새로고침', edit: '편집', view: '보기', save: '저장', editor: '에디터로', os: 'OS 로 열기', close: '탭 닫기' }],
+  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', optional: 'optional', warn: 'Done w/ warnings', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', WAIT: 'waiting' }, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
+       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', optional: '선택', warn: '경고 포함 완료', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', WAIT: '대기' }, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
   st_menu: ['Menu', '메뉴'], st_page: ['Page', '페이지'], st_click: ['Click a stage to run it', '단계를 누르면 실행됩니다'],
 };
 const t = (p, k) => (UI[k] || [k, k])[(p && p.language) === 'ko' ? 1 : 0];
-const STAGE_EN = { pack: '1 Parse', docs: '2 Docs', xlsx: '2x Excel', gap: '3 GAP', gen: '4 Build', gate: '5 Gate', repair: '6 Repair', pkg: '7 PKG', reg: '8 Reg SQL', e2e: '9 E2E' };
+const STAGE_EN = { pack: '1 Parse', docs: '2 Docs', xlsx: '2x Excel', gap: '3 GAP', gen: '4 Build', gate: '5 Gate', repair: '6 Repair', pkg: '7 PKG', reg: '8 Reg SQL', e2e: '9 E2E', smoke: '9 Smoke', crud: '10 CRUD', auth: '11 Auth', authcrud: '12 Auth×CRUD' };
+// 1.8.8: UI Status 의 테스트 타일 4종(단계 키 → 라벨)
+const E2E_TILES = [['smoke', 'Smoke', 'Smoke'], ['crud', 'CRUD', 'CRUD'], ['auth', 'Auth', '권한'], ['authcrud', 'Auth×CRUD', '권한별 CRUD']];
 
 // ── 화면 현황(UI Status) — 1.8.3 대시보드 ──
 function statusHtml(p, id) {
@@ -104,7 +137,6 @@ function statusHtml(p, id) {
   let pageRel = ''; try { const r = JSON.parse(rd(path.join(g, 'register.json'))); pageRel = `features/${r.feature}/src/pages/${r.pageDir}`; } catch { }
   const dod = /(\d+)\/(\d+) 충족/.exec(rd(path.join(g, 'DOD.md'))); const fe = /BLOCK (\d+) \/ WARN (\d+)/.exec(rd(path.join(g, 'CHECK.md'))); const pk = /BLOCK (\d+) \/ WARN (\d+)/.exec(rd(path.join(g, 'CHECK_PKG.md')));
   let gapOpen = null, gapTot = 0; try { const gl = rd(path.join(p.gapDir, `${id}_gap.csv`)).split(/\r?\n/).filter(Boolean); if (gl.length > 1) { const h = gl[0].split(','); const si = h.indexOf('status'); gapTot = gl.length - 1; gapOpen = gl.slice(1).filter(l => /MISSING|UNMAPPED/.test((l.split(',')[si] || ''))).length; } } catch { }
-  let e2e = null; try { const rows = rd(path.join(p.e2eOutDir, 'results', '_summary.csv')).split(/\r?\n/).filter(l => l.includes(`"${id}"`)); if (rows.length) e2e = { pass: rows.filter(l => l.includes('"PASS"')).length, total: rows.length }; } catch { }
   const stages = flow.STAGES; const done = stages.filter(st => s[st.key] === 'ok').length; const pct = Math.round(done / stages.length * 100);
   const tile = (label, value, sub, cls) => `<div class="kpi ${cls || ''}"><div class="kv">${value}</div><div class="kl">${label}</div>${sub ? `<div class="ks">${sub}</div>` : ''}</div>`;
   const kpis = [
@@ -113,7 +145,8 @@ function statusHtml(p, id) {
     tile(t(p, 'st_fe'), fe ? `B ${fe[1]} · W ${fe[2]}` : '–', fe ? '' : t(p, 'st_notrun'), fe ? (fe[1] === '0' ? 'ok' : 'bad') : ''),
     tile(t(p, 'st_pkg'), pk ? `B ${pk[1]} · W ${pk[2]}` : '–', pk ? '' : t(p, 'st_notrun'), pk ? (pk[1] === '0' ? 'ok' : 'bad') : ''),
     tile(t(p, 'st_gap'), gapOpen == null ? '–' : String(gapOpen), gapOpen == null ? t(p, 'st_notrun') : `/ ${gapTot} ${t(p, 'st_items')}`, gapOpen == null ? '' : (gapOpen === 0 ? 'ok' : 'bad')),
-    tile(t(p, 'st_e2e'), e2e ? `${e2e.pass}/${e2e.total}` : '–', e2e ? '' : t(p, 'st_notrun'), e2e ? (e2e.pass === e2e.total ? 'ok' : 'bad') : ''),
+    // 1.8.8: 테스트 4단계 타일 — 결과 있음 n/m(ok/bad) · 스펙만 있음 '미실행' · 스펙 없음 '–'
+    ...E2E_TILES.map(([k, en, ko2]) => { const st = s[k] || 'none', n = s[k + 'N']; return tile(`E2E ${p.language === 'ko' ? ko2 : en}`, n || '–', n ? '' : (st === 'warn' ? t(p, 'st_notrun') : t(p, 'st_nospec')), n ? (st === 'ok' ? 'ok' : st === 'warn' ? 'mid' : 'bad') : ''); }),
   ].join('');
   const SYM = { ok: '✓', warn: '◐', bad: '✖', none: '' };
   const stepper = stages.map(st => { const stt = s[st.key] || 'none'; const lbl = p.language === 'ko' ? st.label : (STAGE_EN[st.key] || st.label); return `<div class="stp ${stt}" data-task="${esc(st.task || '')}" title="${esc(lbl)}${s[st.key + 'N'] ? ' — ' + esc(s[st.key + 'N']) : ''}"><span class="dot">${SYM[stt] || ''}</span><span class="sl">${esc(lbl)}</span>${s[st.key + 'N'] ? `<span class="sn">${esc(s[st.key + 'N'])}</span>` : ''}</div>`; }).join('<span class="stc"></span>');
@@ -226,12 +259,14 @@ class WB {
 
   // 1.7.9: 서버 기동 = 스트리밍 + 완료 감지 (quick.json: ready 정규식 · port · readyTimeoutSec)
   //   완료 로그 매치 → ✅ 기동 완료(초) 출력 + VS Code 알림 · 완료 전 종료 → ✖ 기동 실패 + 마지막 출력 · 시간 초과 → ⚠ 안내(포트 LISTEN 이면 완료로 간주)
+  //   1.9.6: Promise<{ok,sec}> 반환 — 기동 완료/실패/시간초과 시 한 번 resolve (E2E 선행 자동 기동이 기다린다)
   startServerStream(p, it, cwd, name) {
     const t0 = Date.now(); let ready = false; let timer = null; const tail = [];
     const re = it.ready ? new RegExp(it.ready) : null;
+    let settle = null; const result = new Promise(r => { settle = r; });
     const done = (ok, msg) => {
       if (ready) return; ready = true; if (timer) clearTimeout(timer);
-      const sec = Math.round((Date.now() - t0) / 1000);
+      const sec = Math.round((Date.now() - t0) / 1000); try { settle({ ok, sec, msg }); } catch { }
       const sstream = it.port === 8080 || /\bBE\b/i.test(name) ? 'be' : it.port === 5173 || /\bFE\b/i.test(name) ? 'fe' : 'task';
       this.out(sstream, `${ok ? '✅' : '✖'} ${name} ${msg} (${sec}s)${it.hint ? ' — ' + it.hint.split(' · ')[0] : ''}\n`, ok ? 'ok' : 'bad');
       this.post({ type: 'chat', role: 'meta', text: `${ok ? '✅' : '✖'} ${name} ${msg} (${sec}s)` });
@@ -251,6 +286,7 @@ class WB {
       if (it.port && portOwner(it.port)) { done(true, `포트 ${it.port} LISTEN 확인(완료 로그는 미출력)`); return; }
       this.out('task', `⚠ ${name} ${to}초 안에 완료 로그('${it.ready}')가 보이지 않습니다 — 작업 출력 확인\n`, 'warn');
       this.post({ type: 'chat', role: 'meta', text: `⚠ ${name} ${to}초 경과 — 완료 로그 미확인` });
+      try { settle({ ok: false, sec: to, msg: '시간 초과(완료 로그·포트 미확인)', timeout: true }); } catch { }
     }, to * 1000);
     // 1.8.0: 서버 출력은 Log 탭의 BE Log / FE Log 창으로 (포트 8080/5173 또는 이름의 BE/FE 로 판별)
     const stream = it.port === 8080 || /\bBE\b/i.test(name) ? 'be' : it.port === 5173 || /\bFE\b/i.test(name) ? 'fe' : 'task';
@@ -259,6 +295,38 @@ class WB {
       if (!ready) done(false, `기동 실패 — exit ${code}${tail.length ? '\n   ' + tail.filter(x => x.trim()).slice(-4).join('\n   ') : ''}`);
       else { this.post({ type: 'chat', role: 'meta', text: `■ ${name} 종료 (exit ${code})` }); }
     });
+    return result;
+  }
+
+  // 1.9.6: E2E 선행 — BE(8080)/FE(5173) 가 LISTEN 이 아니면 quick.json 의 ☕ BE Start / 🎨 FE Start 항목으로 먼저 기동하고 완료를 기다린다(사용자 지시 2026-10-21).
+  //   둘 다 동시에 기동 · 완료 로그(ready) 또는 포트 LISTEN 으로 판정 · 이미 이 워크벤치가 띄운 중이면 포트가 열릴 때까지만 대기(readyTimeoutSec).
+  //   반환 true = 두 포트 모두 LISTEN. false 면 호출자가 E2E 를 실행하지 않는다.
+  async ensureServers(p, ports) {
+    ports = ports && ports.length ? ports : [8080, 5173];
+    const need = ports.filter(pt => !portOwnerInfo(pt));
+    const label = pt => pt === 8080 ? 'BE 8080' : pt === 5173 ? 'FE 5173' : `포트 ${pt}`;
+    if (!need.length) { this.out('task', `🔌 선행 확인 — ${ports.map(label).join(' · ')} 기동 중(LISTEN)\n`, 'ok'); return true; }
+    const all = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items);
+    this.out('task', `🔌 선행 확인 — ${need.map(label).join(' · ')} 미기동 → 먼저 기동합니다 (완료까지 대기 · BE 약 80초)\n`, 'warn');
+    this.post({ type: 'chat', role: 'meta', text: `🔌 E2E 선행: ${need.map(label).join(' · ')} 미기동 → 자동 기동 중 …` });
+    const waitPort = (pt, sec) => new Promise(res => { const t1 = Date.now(); const tick = () => { if (portOwnerInfo(pt)) return res(true); if (Date.now() - t1 > sec * 1000) return res(false); setTimeout(tick, 2000); }; tick(); });
+    const jobs = need.map(pt => {
+      const it = all.find(x => x.kind === 'terminal' && Number(x.port) === pt);
+      if (!it) { this.out('task', `⛔ ${label(pt)} 기동 항목(kind terminal · port ${pt})이 quick.json 에 없습니다\n`, 'bad'); return Promise.resolve(false); }
+      const name = it.name || it.label; const cwd = substQ(it.cwd, { root: p.root });
+      if (!fs.existsSync(cwd)) { this.out('task', `⛔ ${name} 폴더 없음: ${cwd}\n`, 'bad'); return Promise.resolve(false); }
+      if ([...this.procs.values()].some(x => x.label === name)) { this.out('task', `⏳ ${name} 이미 기동 중 — 포트 ${pt} 가 열릴 때까지 대기\n`, 'warn'); return waitPort(pt, Number(it.readyTimeoutSec || 300)); }
+      return this.startServerStream(p, it, cwd, name).then(r => (r && r.ok) || !!portOwnerInfo(pt));
+    });
+    const rs = await Promise.all(jobs);
+    // 완료 로그 직후 포트가 열리기까지 잠깐 걸릴 수 있어 짧게 재확인
+    for (const pt of need) if (!portOwnerInfo(pt)) await waitPort(pt, 10);
+    const missing = ports.filter(pt => !portOwnerInfo(pt));
+    if (rs.every(Boolean) && !missing.length) { this.out('task', `✅ 선행 완료 — ${ports.map(label).join(' · ')} LISTEN\n`, 'ok'); this.post({ type: 'chat', role: 'meta', text: `✅ E2E 선행: ${need.map(label).join(' · ')} 기동 완료` }); return true; }
+    this.out('task', `✖ 선행 실패 — ${missing.map(label).join(' · ') || '기동 실패'} (BE Log / FE Log 탭 확인) → E2E 를 실행하지 않습니다\n`, 'bad');
+    this.post({ type: 'chat', role: 'meta', text: `✖ E2E 선행 실패: ${missing.map(label).join(' · ') || '기동 실패'}` });
+    try { vscode.window.showWarningMessage(`Vibe_Manager ✖ E2E 선행 실패 — ${missing.map(label).join(' · ') || '서버 기동 실패'} (BE/FE Log 확인)`); } catch { }
+    return false;
   }
 
   // 1.8.1: 서버 종료(Finish) — ① 포트 점유 프로세스(java/node) 트리 종료 ② 워크벤치가 띄운 같은 이름의 프로세스 트리 종료 ③ 포트 해제까지 대기(최대 20초)
@@ -289,8 +357,10 @@ class WB {
     if (this.claudeProc) try { if (process.platform === 'win32') cp.spawn('taskkill', ['/pid', String(this.claudeProc.pid), '/T', '/F']); else this.claudeProc.kill(); } catch { }
   }
 
+  // 1.8.8: Promise 반환 — 체인(runChain)이 Claude 단계의 종료(코드·is_error)를 기다릴 수 있게. 바쁘면 null
   askClaude(p, prompt, harness) {
-    if (this.claudeProc) { vscode.window.showWarningMessage(`워크벤치 #${this.inst}: Claude 가 아직 응답 중입니다 — 중지 후 다시 보내세요.`); return; }
+    if (this.claudeProc) { vscode.window.showWarningMessage(`워크벤치 #${this.inst}: Claude 가 아직 응답 중입니다 — 중지 후 다시 보내세요.`); return Promise.resolve(null); }
+    return new Promise(resolveDone => { let resultError = false;
     // 첨부 파일 → Claude Code 에 @path 토큰으로 전달
     const atPrefix = this.attached.length ? this.attached.map(f => `@${f.path.replace(/\\/g, '/')}`).join(' ') + '\n' : '';
     const full = atPrefix + prompt;
@@ -332,7 +402,7 @@ class WB {
         }
       }
       else if (j.type === 'result') {
-        if (j.session_id) this.claudeSession = j.session_id;
+        if (j.session_id) this.claudeSession = j.session_id; if (j.is_error) resultError = true;
         // 1.8.4: 최종 결과 = 상황판 마감(run done) — 헤더 상태·진행바 100%·최종 보고 펼침
         this.post({ type: 'run', state: 'done', ok: !j.is_error, text: `${j.is_error ? '✖ 오류' : '✓ 완료'} · ${j.num_turns || ''}턴 · ${Math.round((j.duration_ms || 0) / 1000)}s${j.total_cost_usd != null ? ` · ${Number(j.total_cost_usd).toFixed(3)}` : ''}` });
         if (j.is_error && j.result && !any) this.post({ type: 'chat', role: 'assistant', text: String(j.result) });
@@ -347,12 +417,95 @@ class WB {
       this.post({ type: 'claude', state: 'end', code }); this.updateBusy();
       if (code !== 0 && !any) this.post({ type: 'chat', role: 'meta', text: `claude 종료 코드 ${code} — 이전 세션이 만료됐으면 "새 세션" 후 다시 보내세요` });
       if (hdir) { try { history.finish(Object.assign({}, p, { pageDirOf: this.api.pageDirOf }), hdir, code, 'end'); const n = (JSON.parse(fs.readFileSync(path.join(hdir, 'meta.json'), 'utf8')).changed || []).length; this.post({ type: 'chat', role: 'meta', text: `🕒 수정 이력 저장 — 변경 ${n}개 파일 (이력 탭에서 수정전 ↔ 수정후 비교)` }); } catch { } this.post({ type: 'history', html: history.innerHtml(p, 'screen', '') }); }
+      resolveDone({ code, ok: code === 0 && !resultError, error: resultError });
+    });
     });
   }
 
-  async runTaskStreaming(p, taskId, id) {
+  // 1.9.0: 파일/폴더를 Workbench 탭으로. 바이너리(xlsx 등)는 OS 프로그램, http 는 브라우저. line 이 있으면 그 줄로 스크롤·강조
+  openTab(p, file, opts = {}) {
+    try {
+      const f = path.normalize(String(file || '')); if (!f) return false;
+      if (/^https?:\/\//i.test(String(file))) { vscode.env.openExternal(vscode.Uri.parse(String(file))); return true; }
+      if (!fs.existsSync(f)) { const msg = `파일/폴더가 없습니다: ${f}`; vscode.window.showWarningMessage(`Vibe_Manager: ${msg}`); this.out('task', msg + '\n', 'bad'); return true; }
+      const kind = tabview.kindOf(f);
+      if (kind === 'binary') { openWithOS(p, this, f); return true; }
+      let imgSrc = ''; if (kind === 'image') { try { imgSrc = String(this.panel.webview.asWebviewUri(vscode.Uri.file(f))); } catch { } }
+      const t = tabview.buildTab(f, { root: p.root, line: opts.line || 0, imgSrc });
+      if (t.external) { openWithOS(p, this, f); return true; }
+      t.meta = t.size != null ? `${t.size < 1024 ? t.size + ' B' : (t.size / 1024).toFixed(1) + ' KB'} · ${history.fmtLocal ? history.fmtLocal(t.mtime, 16) : t.mtime}` : '';
+      this.post(Object.assign({ type: 'tab' }, t)); try { this.panel.reveal(undefined, true); } catch { }
+      return true;
+    } catch (e) { vscode.window.showErrorMessage(`Vibe_Manager: 탭 열기 실패 ${file} — ${e.message}`); return true; }
+  }
+  openDiffTab(key, title, aText, bText, aLabel, bLabel, sub) {
+    this.post({ type: 'tab', key: 'diff:' + key, title: '⇄ ' + title, sub: sub || '', path: '', kind: 'diff', html: tabview.diffHtml(aText, bText, aLabel, bLabel), editable: false, canEditor: false, canOS: false, isDir: false, meta: `${aLabel} ↔ ${bLabel}` });
+    try { this.panel.reveal(undefined, true); } catch { }
+  }
+
+  // 1.8.8: 체인 실행 — quick 항목 kind 'chain': steps[] 를 순서대로(작업 task / Claude 프롬프트 claude·claudeOf). 실패하면 거기서 멈추고(optional 단계는 계속),
+  //   어디까지 됐는지 Task Log + Doc/gen/<ID>/FULLRUN.md 에 남긴다. 단계 내부 확인창(task.confirm)은 체인 시작 확인으로 갈음한다.
+  async runChain(p, item, id, harness) {
+    const steps = item.steps || []; if (!id) { this.out('task', `⛔ 체인 '${item.label}' 은 화면 ID 가 필요합니다\n`, 'bad'); return; }
+    if (!steps.length) { this.out('task', `⛔ 체인 '${item.label}' 에 steps 가 없습니다 (quick.json)\n`, 'bad'); return; }
+    const all = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items);
+    const t0 = Date.now(); const res = []; let stopped = false;
+    const genDir = path.join(p.genDir, id); try { fs.mkdirSync(genDir, { recursive: true }); } catch { }
+    const mdPath = path.join(genDir, 'FULLRUN.md');
+    const nameOf = st => st.title || (st.task ? `${st.task} ${(this.api.findTask(st.task) || {}).title || ''}`.trim() : (st.claudeOf || 'Claude'));
+    const writeMd = (final) => {
+      const stamp = history.nowLocal ? history.nowLocal().slice(0, 16).replace('T', ' ') : new Date().toISOString();
+      const fail = res.find(r => r.status === 'FAIL' || r.status === 'CANCEL'); const warn = res.some(r => r.status === 'WARN');
+      const head = !final ? '⏳ 진행 중' : fail ? `✖ ${fail.no}단계에서 중단 (${fail.name})` : warn ? '⚠ 경고 포함 완료' : '✅ 전부 완료';
+      const rows = steps.map((st, i) => { const r = res[i]; return `| ${i + 1} | ${nameOf(st)}${st.optional ? ' (선택)' : ''} | ${r ? r.status : 'NOT_RUN'} | ${r && r.code != null ? r.code : '-'} | ${r ? r.sec + 's' : '-'} |`; });
+      const next = fail ? `다음 할 일: ${fail.no}단계 '${fail.name}' 의 원인을 Task Log 에서 확인하고 그 단계 메뉴를 다시 실행 → 이후 단계는 이 체인을 다시 누르면 처음부터(완료 단계는 각 도구가 보존/건너뜀) 진행됩니다.` : (final ? '다음 할 일: UI Status 의 단계·E2E 타일과 Doc/gen/' + id + '/PIPELINE.md · Doc/e2e/results/_summary.md 확인' : '');
+      const md = [`# FULLRUN ${id} — ${stamp} ${head}`, '', `체인: ${item.label} · 총 ${Math.round((Date.now() - t0) / 1000)}s`, '', '| # | 단계 | 결과 | exit | 소요 |', '|---|---|---|---|---|', ...rows, '', next, ''].join('\n');
+      try { fs.writeFileSync(mdPath, md, 'utf8'); } catch { }
+    };
+    // 1.8.9: Flow 보드 — Claude 탭에 체인 전체(Step 수·현재 Step·진행바)와 Step 별 상태 카드. 작업 출력은 Task Log 에 그대로 남고 카드에는 최근 줄만
+    const fid = ++flowSeq; try { this.panel.reveal(undefined, true); this.post({ type: 'showTab', tab: 'chat' }); } catch { }
+    this.post({ type: 'fb', state: 'start', id: fid, title: item.label, screen: id, steps: steps.map((st, i) => ({ no: i + 1, name: nameOf(st), kind: st.task ? 'task' : 'claude', optional: !!st.optional })), md: `Doc/gen/${id}/FULLRUN.md` });
+    this.out('task', `\n🚀 체인 시작 — ${item.label} · ${id} · ${steps.length}단계\n`, 'cmd');
+    this.api.record(`chain:${item.chainId || item.label}`, id);
+    for (let i = 0; i < steps.length; i++) {
+      const st = steps[i]; const name = nameOf(st); const no = i + 1;
+      if (stopped) { res.push({ no, name, status: 'NOT_RUN', code: null, sec: 0 }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'NOT_RUN' }); continue; }
+      this.out('task', `\n── [${no}/${steps.length}] ${name}\n`, 'cmd'); const s0 = Date.now(); let code = null, cancelled = false;
+      this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
+      if (st.verify) st.verify = Object.assign({}, st.verify, { _since: Date.now() - 1000 });
+      try {
+        if (st.task) { code = await this.runTaskStreaming(p, st.task, id, { noConfirm: true, inFlow: true, args: st.args || null }); if (code == null) cancelled = true; }
+        else {
+          const q = st.claudeOf ? all.find(x => x.label === st.claudeOf || x.label_en === st.claudeOf) : null;
+          const prompt = st.claude || (q && q.prompt);
+          if (!prompt) { this.out('task', `프롬프트 없음: ${st.claudeOf || '(claude)'}\n`, 'bad'); code = 2; }
+          else { const r = await this.askClaude(p, substQ(prompt, { root: p.root, id }), harness !== false); code = r ? (r.ok ? 0 : (r.code || 1)) : null; if (!r) cancelled = true; }
+        }
+      } catch (e) { code = -1; this.out('task', `예외: ${e.message}\n`, 'bad'); }
+      // 1.9.5: 단계 결과 검증(verify) — 종료코드 0 이어도 산출물이 없으면 실패로 본다(E2E 가 시작도 못 했는데 '완료' 로 닫힌 SCP0100 사고)
+      if (code === 0 && st.verify) { const v = verifyStep(p, st.verify, id); if (!v.ok) { code = 3; this.out('task', `✖ 검증 실패: ${v.why}\n`, 'bad'); } else this.out('task', `✔ 검증: ${v.why}\n`, 'ok'); }
+      const sec = Math.round((Date.now() - s0) / 1000); const ok = code === 0;
+      const status = cancelled ? 'CANCEL' : ok ? 'OK' : (st.optional ? 'WARN' : 'FAIL');
+      res.push({ no, name, status, code, sec });
+      this.post({ type: 'fb', state: 'step', id: fid, no, status, code, sec });
+      this.out('task', `${ok ? '✅' : status === 'WARN' ? '⚠' : '✖'} [${no}/${steps.length}] ${name} — ${status}${code != null ? ` (exit ${code})` : ''} · ${sec}s\n`, ok ? 'ok' : status === 'WARN' ? 'warn' : 'bad');
+      if (status === 'FAIL' || status === 'CANCEL') stopped = true;
+      writeMd(false);
+    }
+    writeMd(true);
+    const fail = res.find(r => r.status === 'FAIL' || r.status === 'CANCEL'); const okN = res.filter(r => r.status === 'OK').length; const total = Math.round((Date.now() - t0) / 1000);
+    const summary = fail ? `✖ 체인 중단 — ${fail.no}/${steps.length} '${fail.name}' ${fail.status} · 완료 ${okN}단계 · ${total}s` : `✅ 체인 완료 — ${steps.length}단계 중 OK ${okN}${res.some(r => r.status === 'WARN') ? ` · 경고 ${res.filter(r => r.status === 'WARN').length}` : ''} · ${total}s`;
+    this.out('task', `\n${summary}\n   → ${path.relative(p.root, mdPath)}\n`, fail ? 'bad' : 'ok');
+    this.post({ type: 'fb', state: 'end', id: fid, ok: !fail, warn: res.some(r => r.status === 'WARN'), summary, sec: total });
+    try { (fail ? vscode.window.showWarningMessage : vscode.window.showInformationMessage)(`Vibe_Manager ${summary}`); } catch { }
+    this.post({ type: 'status', html: statusHtml(p, id) }); this.post({ type: 'flow', html: flow.innerHtml(p, '') });
+    return res;
+  }
+
+  async runTaskStreaming(p, taskId, id, opts = {}) {
     const api = this.api;
-    const task = api.findTask(taskId); if (!task) { this.out('task', `작업 없음: ${taskId}\n`, 'bad'); return; }
+    const task0 = api.findTask(taskId); if (!task0) { this.out('task', `작업 없음: ${taskId}\n`, 'bad'); return null; }
+    const task = opts.noConfirm && task0.confirm ? Object.assign({}, task0, { confirm: '' }) : task0;
     if (task.kind === 'claude') {
       const vars0 = await api.collectInputs(task, { id, ids: id }); if (!vars0) return;
       const pf = path.join(p.promptsDir, task.prompt); if (!fs.existsSync(pf)) { this.out('task', `프롬프트 파일 없음: ${pf}\n`, 'bad'); return; }
@@ -360,9 +513,21 @@ class WB {
       this.askClaude(p, `${rel} 를 읽고 그 지시대로 화면 ${sid} 작업을 해주세요.${fs.existsSync(path.join(p.genDir, sid, 'GEN_NOTES.md')) ? ` 메모: Doc/gen/${sid}/GEN_NOTES.md.` : ''} 룰은 tools/VibeManager/rules/10_RULES_KEEP.md 를 따르고, TODO(이식) 지점만 채우고 끝나면 __asis-mapping__.md 상태를 갱신하세요.`, true);
       api.record(task.id, `${rel} ${sid}`); return;
     }
-    if (!/^(node|python|powershell|cmd)$/.test(task.kind)) { await api.runTaskById(taskId, { id, ids: id, dir: id ? api.pageDirOf(id) : '' }); return; }
-    const vars = await api.collectInputs(task, { id, ids: id, dir: id ? api.pageDirOf(id) : '' }); if (!vars) return;
-    await this.execShell(p, task, vars, null, id);
+    if (!/^(node|python|powershell|cmd)$/.test(task.kind)) { await api.runTaskById(taskId, { id, ids: id, dir: id ? api.pageDirOf(id) : '' }); return 0; }
+    // 1.9.1: 체인 안에서는 선택 입력(mode 등)을 묻지 않고 'auto'(users.json 화면 지정 → 메타 추정)
+    const vars = await api.collectInputs(task, Object.assign({ id, ids: id, dir: id ? api.pageDirOf(id) : '' }, opts.inFlow ? { mode: 'auto' } : {})); if (!vars) return null;
+    // 1.9.4: 체인 단계가 인자를 직접 지정하면(st.args — 예: pipeline --phase N) 그 인자로 실행
+    const extra = Array.isArray(opts.args) && opts.args.length ? opts.args.flatMap(a => { const v = api.subst(a, vars); return /\$\{input:/.test(a) && task.splitArgs ? v.split(/\s+/).filter(Boolean) : (v === '' ? [] : [v]); }) : null;
+    if (opts.inFlow) return await this.execShell(p, task, vars, extra, id);
+    // 1.8.9: 단일 작업도 1단계 Flow 보드로(체인 밖에서 메뉴/스테퍼로 실행한 경우) — 진행·결과가 텍스트 로그가 아니라 보드에 보이게
+    const fid = ++flowSeq; const title = task.title || taskId; const s0 = Date.now();
+    this.post({ type: 'fb', state: 'start', id: fid, title, screen: id || '', steps: [{ no: 1, name: title, kind: 'task', optional: false }], md: '' });
+    this.post({ type: 'fb', state: 'step', id: fid, no: 1, status: 'RUN' });
+    let code = null; try { code = await this.execShell(p, task, vars, null, id); } catch (e) { code = -1; this.out('task', `예외: ${e.message}\n`, 'bad'); }
+    const sec = Math.round((Date.now() - s0) / 1000); const ok = code === 0;
+    this.post({ type: 'fb', state: 'step', id: fid, no: 1, status: ok ? 'OK' : 'FAIL', code, sec });
+    this.post({ type: 'fb', state: 'end', id: fid, ok, warn: false, summary: `${ok ? '✅ 완료' : '✖ 실패'} — ${title}${code != null ? ` (exit ${code})` : ''} · ${sec}s`, sec });
+    return code;
   }
 
   // 1.7.7: 스크립트 실행 본체 — 워크벤치 '작업 출력' 탭에 스트리밍 + 실제 exit code. 확장의 runShell(VS Code 작업 터미널) 도 여기로 위임.
@@ -372,6 +537,11 @@ class WB {
     const script = api.subst(task.script, vars); if (!fs.existsSync(script)) { this.out('task', `스크립트 없음: ${script}\n`, 'bad'); return; }
     const args = extraArgs || api.buildArgs(task, vars); const cwd = api.subst(task.cwd || path.dirname(script), vars);
     try { this.panel.reveal(undefined, true); this.post({ type: 'showTab', tab: 'log' }); } catch { }
+    // 1.9.6: E2E(run-e2e.cmd · steps.json requireServers) 는 BE/FE 가 떠 있어야 한다 — 미기동이면 먼저 기동(메뉴·스테퍼·체인 모든 경로가 여기를 지난다)
+    if (task.requireServers || /run-e2e\.cmd$/i.test(script)) {
+      const ok = await this.ensureServers(p, Array.isArray(task.requireServers) ? task.requireServers.map(Number) : null);
+      if (!ok) { api.record(task.id, `(선행 실패 — BE/FE 미기동) ${path.basename(script)} ${args.join(' ')}`); api.afterTask(task.id, 5); return 5; }
+    }
     const histId = (vars.inputs.id || (vars.inputs.ids || '').split(/\s+/)[0] || '').toUpperCase(); let hdir = null;
     try { hdir = history.begin(Object.assign({}, p, { pageDirOf: api.pageDirOf }), histId, task.id, `${path.basename(script)} ${args.join(' ')}`); } catch { }
     api.record(task.id, `${path.basename(script)} ${args.join(' ')}`);
@@ -389,6 +559,7 @@ class WB {
     // 작업 종료 후 FLOW/history 탭도 자동 갱신
     this.post({ type: 'flow', html: flow.innerHtml(p, '') });
     this.post({ type: 'history', html: history.innerHtml(p, 'screen', '') });
+    return code;
   }
 }
 
@@ -467,6 +638,9 @@ details.runq{border-left:3px solid var(--vscode-focusBorder);background:var(--vs
 details.runq summary{font-weight:600;font-size:12px;opacity:1}
 .board{border:1px solid var(--b);border-radius:8px;background:var(--vscode-editorWidget-background,transparent);overflow:hidden;margin-top:6px}
 .board.running{border-color:#d29922}.board.done{border-color:#3fb950}.board.bad{border-color:#f85149}
+/* 1.8.9: 로그용 색상 클래스(.bad/.ok/.warn)가 보드 전체 글자색으로 상속되지 않게 — 상태는 배지·테두리·번호만 */
+.board,.board .step,.board .stext,.board .m,.board summary{color:var(--vscode-foreground)}
+.board .sbody details.m.tool.bad>summary,.board .bk-st.bad,.board .m.meta.bad{color:#f85149}
 .bhead{display:flex;align-items:center;gap:14px;padding:10px 12px;background:linear-gradient(135deg,var(--vscode-button-background) 0%,var(--vscode-editorWidget-background,transparent) 140%)}
 .bstep{display:flex;align-items:baseline;font-family:var(--vscode-editor-font-family);min-width:96px;flex:none}
 .bstep .bcur{font-size:26px;font-weight:800;line-height:1}.bstep .bsl{font-size:16px;opacity:.6;margin:0 3px}.bstep .btot{font-size:16px;font-weight:600;opacity:.85}.bstep .bsll{font-size:10px;opacity:.65;margin-left:6px}
@@ -499,6 +673,42 @@ details.step>summary::before{content:'▸';opacity:.5;font-size:11px;width:8px}d
 .bfoot{padding:2px 8px 6px}.bfoot .m.meta{margin:2px 0}.bfoot:empty{display:none}
 details.bfinal{border-top:1px solid var(--b);padding:6px 10px 8px}
 details.bfinal summary{cursor:pointer;font-weight:700;font-size:12px}
+/* 1.8.9: Flow 보드(체인·단일 작업) */
+.board.fboard .bhead{background:linear-gradient(135deg,rgba(88,166,255,.35) 0%,var(--vscode-editorWidget-background,transparent) 140%)}
+.fboard .step .sdur{font-size:10px;opacity:.7;flex:none;font-family:var(--vscode-editor-font-family)}
+.fboard .step .slast{max-width:44%}
+.ftail{margin:0;padding:4px 6px;max-height:220px;overflow:auto;white-space:pre-wrap;font-family:var(--vscode-editor-font-family);font-size:11px;opacity:.85;background:var(--vscode-textCodeBlock-background,rgba(127,127,127,.08));border-radius:3px}
+.ftail:empty{display:none}
+.fboard .sbody .run{margin:4px 0 2px}
+.fboard .sbody .run .board{margin-top:4px}
+/* 1.9.0: Workbench 내부 탭 뷰어 */
+.rtabs .rtb.dyn{display:inline-flex;align-items:center;gap:6px;max-width:260px}
+.rtabs .rtb.dyn .tl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rtabs .rtb.dyn .tx{opacity:.5;font-size:11px;padding:0 2px;border-radius:3px}.rtabs .rtb.dyn .tx:hover{opacity:1;background:var(--vscode-list-hoverBackground)}
+.dtab{display:none;flex:1;min-height:0;flex-direction:column;border:1px solid var(--b);background:var(--vscode-editor-background)}
+.dtb{display:flex;align-items:center;gap:6px;padding:4px 6px;border-bottom:1px solid var(--b);font-size:11px;background:var(--vscode-editorWidget-background,transparent)}
+.dtb .dtp{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--vscode-editor-font-family);opacity:.8}
+.dtb .dtsp{opacity:.6;white-space:nowrap}
+.dtb button{font-size:10px;padding:1px 7px;margin:0}
+.dtc{flex:1;overflow:auto;padding:8px 12px;white-space:normal;font-family:var(--vscode-font-family)}
+.dte{flex:1;min-height:0;width:100%;box-sizing:border-box;resize:none;border:0;padding:8px;font:12px var(--vscode-editor-font-family);background:var(--vscode-editor-background);color:var(--vscode-editor-foreground,var(--vscode-foreground))}
+.mdv{max-width:1100px;line-height:1.5;font-size:12.5px}
+.mdv h1{font-size:18px;margin:10px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--b)}.mdv h2{font-size:15px;margin:14px 0 6px;padding-bottom:3px;border-bottom:1px solid var(--b)}.mdv h3{font-size:13px;margin:12px 0 4px}.mdv h4,.mdv h5,.mdv h6{font-size:12px;margin:10px 0 4px;opacity:.9}
+.mdv p{margin:4px 0 8px}.mdv ul,.mdv ol{margin:2px 0 8px;padding-left:22px}.mdv li{margin:2px 0}
+.mdv code{font-family:var(--vscode-editor-font-family);font-size:11.5px;background:var(--vscode-textCodeBlock-background,rgba(127,127,127,.12));padding:0 4px;border-radius:3px}
+.mdv pre.mdcode{background:var(--vscode-textCodeBlock-background,rgba(127,127,127,.1));padding:8px 10px;border-radius:4px;overflow:auto;font-size:11.5px;line-height:1.4;white-space:pre}
+.mdv pre.mdcode code{background:transparent;padding:0}
+.mdv blockquote{margin:6px 0;padding:4px 10px;border-left:3px solid var(--vscode-focusBorder);opacity:.9;background:rgba(127,127,127,.06)}
+.mdv hr{border:0;border-top:1px solid var(--b);margin:10px 0}
+.mdv a{color:var(--vscode-textLink-foreground,#58a6ff);cursor:pointer;text-decoration:none}.mdv a:hover{text-decoration:underline}.mdv a.pth{opacity:.9;border-bottom:1px dotted currentColor}
+.mdtw{overflow:auto;margin:6px 0 10px}.mdt{border-collapse:collapse;font-size:11.5px;min-width:50%}.mdt th,.mdt td{border:1px solid var(--b);padding:3px 8px;vertical-align:top}.mdt th{background:var(--vscode-editorWidget-background,rgba(127,127,127,.12));position:sticky;top:0}.mdt tbody tr:nth-child(even){background:rgba(127,127,127,.05)}.mdtn{font-size:10px;opacity:.5;margin-top:2px}
+.okk{color:#3fb950}.badd{color:#f85149}.warnn{color:#d29922}
+.csvw,.folderw,.diffw{font-size:11.5px}.csvn{font-size:11px;opacity:.75;margin-bottom:6px;display:flex;gap:8px;align-items:center}.csvf{width:200px;font-size:11px;padding:2px 6px}
+table.csvt{border-collapse:collapse;white-space:nowrap}table.csvt th,table.csvt td{border:1px solid var(--b);padding:2px 7px;max-width:520px;overflow:hidden;text-overflow:ellipsis}table.csvt th{position:sticky;top:0;background:var(--vscode-editorWidget-background,#252526);z-index:1;text-align:left}table.csvt td.ln,table.csvt td.num{text-align:right;opacity:.6;font-family:var(--vscode-editor-font-family)}table.csvt td.mono{font-family:var(--vscode-editor-font-family);opacity:.75}table.csvt tbody tr:hover{background:var(--vscode-list-hoverBackground)}
+table.csvt.folder a{cursor:pointer;color:var(--vscode-textLink-foreground,#58a6ff)}table.csvt.folder a:hover{text-decoration:underline}.folderw a{cursor:pointer;color:var(--vscode-textLink-foreground,#58a6ff)}
+.codew{font-family:var(--vscode-editor-font-family);font-size:11.5px}table.codet{border-collapse:collapse;width:100%}table.codet td{padding:0 8px;vertical-align:top;white-space:pre;line-height:1.45}table.codet td.ln{text-align:right;opacity:.4;user-select:none;width:1%;border-right:1px solid var(--b)}table.codet tr.hl td{background:rgba(210,153,34,.18)}
+table.difft tr.dadd td.cd{background:rgba(63,185,80,.15)}table.difft tr.ddel td.cd{background:rgba(248,81,73,.15)}table.difft tr.gap td{text-align:center;opacity:.45;font-size:10px;padding:2px}table.difft tr.ctxh{display:none}.diffw.all table.difft tr.ctxh{display:table-row}.diffw.all table.difft tr.gap{display:none}
+.imgw{display:flex;justify-content:center;padding:10px}.imgw img{max-width:100%;border:1px solid var(--b)}
 details.bfinal .ft{white-space:pre-wrap;font-size:12px;max-height:420px;overflow:auto;margin-top:6px;padding:6px 8px;border-left:3px solid #3fb950;background:var(--vscode-editor-background)}
 
 /* 1.8.3: UI Status 대시보드 */
@@ -585,7 +795,7 @@ h4{margin:8px 0 2px 0}
 </style></head><body>
 <div id="top">
   <!-- 1.8.0: '작업 출력' → Log. Log 탭 = BE Log | FE Log 두 창(서버 기동 스트림) · Task Log 탭 = 그 외 작업(gap.js·pipeline 등) 출력. 각 창에 ⤓ 최신 버튼 -->
-  <div class="rtabs"><button class="rtb on" data-t="chat">✴️ Claude</button><button class="rtb" data-t="logs">📜 Log</button><button class="rtb" data-t="log">🧾 Task Log</button><button class="rtb" data-t="status">🎯 UI Status</button><button class="rtb" data-t="flow">📊 FLOW</button><button class="rtb" data-t="hist">🕒 History</button><span id="busy"><span class="spinner"></span><span class="label"></span></span></div>
+  <div class="rtabs"><button class="rtb on" data-t="chat">✴️ Claude</button><button class="rtb" data-t="logs">📜 Log</button><button class="rtb" data-t="log">🧾 Task Log</button><button class="rtb" data-t="status">🎯 UI Status</button><button class="rtb" data-t="hist">🕒 History</button><span id="dtabs"></span><span id="busy"><span class="spinner"></span><span class="label"></span></span></div>
   <div id="chat">
     <div class="hint">${t(p, 'chat_hint')}</div>
     <div id="thinking" class="thinking"><span class="pulse">✻</span><span>Thinking…</span></div>
@@ -634,7 +844,7 @@ h4{margin:8px 0 2px 0}
 </div>
 <script>
 const vscode=acquireVsCodeApi();const $=i=>document.getElementById(i);
-const UI_SEND=${JSON.stringify(t(p, 'send'))},UI_SENDING=${JSON.stringify(t(p, 'sending'))},UI_SESS=${JSON.stringify(t(p, 'sess'))},UI_NOSESS=${JSON.stringify(t(p, 'nosess'))},UI_NOID=${JSON.stringify(t(p, 'noid'))},UI_AFTERSEND=${JSON.stringify(t(p, 'after_send'))},UI_BD=${JSON.stringify(t(p, 'bd'))};
+const UI_SEND=${JSON.stringify(t(p, 'send'))},UI_SENDING=${JSON.stringify(t(p, 'sending'))},UI_SESS=${JSON.stringify(t(p, 'sess'))},UI_NOSESS=${JSON.stringify(t(p, 'nosess'))},UI_NOID=${JSON.stringify(t(p, 'noid'))},UI_AFTERSEND=${JSON.stringify(t(p, 'after_send'))},UI_BD=${JSON.stringify(t(p, 'bd'))},UI_TB=${JSON.stringify(t(p, 'tb'))};
 let CUR_ID=${JSON.stringify(String(state.id || ''))};
 // 1.7.2: 모델 드롭다운 복원 — st() 에 model 포함 ('' = 기본).
 let CUR_MODEL=$('model').value==='__custom__'?'':$('model').value;
@@ -644,11 +854,12 @@ $('mode').addEventListener('change',save);
 function addModelOpt(id,label){const sel=$('model');if(!id||[...sel.options].some(o=>o.value===id))return;const o=document.createElement('option');o.value=id;o.textContent=label||id;sel.insertBefore(o,sel.querySelector('option[value="__custom__"]'));}
 $('model').addEventListener('change',()=>{const v=$('model').value;if(v==='__custom__'){$('model').value=CUR_MODEL;vscode.postMessage({type:'pickModel',cur:CUR_MODEL});return;}CUR_MODEL=v;save();});
 function showTab(t){
+  if(t.startsWith('t:')){showDynTab(t);if(t==='t:flow')vscode.postMessage(Object.assign({type:'flow:refresh',filter:''},st()));return;}
+  document.querySelectorAll('.dtab').forEach(d=>d.style.display='none');
   document.querySelectorAll('.rtabs .rtb').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
-  [['log','logwrap'],['logs','logs'],['chat','chat'],['status','status'],['flow','flow'],['hist','hist']].forEach(([k,el])=>$(el).style.display=k===t?'':'none');
+  [['log','logwrap'],['logs','logs'],['chat','chat'],['status','status'],['hist','hist']].forEach(([k,el])=>$(el).style.display=k===t?'':'none');
   if(t==='logs'){['belog','felog'].forEach(scrollLatest);} else if(t==='log') scrollLatest('log');
-  if(t==='flow') vscode.postMessage(Object.assign({type:'flow:refresh',filter:''},st()));
-  else if(t==='hist') vscode.postMessage(Object.assign({type:'history:refresh',mode:'screen',sel:''},st()));
+  if(t==='hist') vscode.postMessage(Object.assign({type:'history:refresh',mode:'screen',sel:''},st()));
   else if(t==='status') vscode.postMessage(Object.assign({type:'status'},st()));
 }
 document.querySelectorAll('.rtabs .rtb').forEach(b=>b.onclick=()=>showTab(b.dataset.t));
@@ -677,7 +888,7 @@ $('newWin').onclick=()=>vscode.postMessage({type:'newWindow'});
 function scrollLatest(id){const b=$(id);if(b)b.scrollTop=b.scrollHeight;}
 document.querySelectorAll('.latest[data-for]').forEach(b=>b.onclick=()=>scrollLatest(b.dataset.for));
 document.querySelectorAll('.latest[data-clear]').forEach(b=>b.onclick=()=>{$(b.dataset.clear).innerHTML='';});
-$('clear').onclick=()=>{if(RUN&&RUN.timer)clearInterval(RUN.timer);RUN=null;$('log').innerHTML='';$('belog').innerHTML='';$('felog').innerHTML='';$('chat').innerHTML='<div class="hint">새 대화 (대화 지움). 전송하면 Claude 응답이 여기 표시됩니다.</div><div id="thinking" class="thinking"><span class="pulse">✻</span><span>Thinking…</span></div>';};
+$('clear').onclick=()=>{if(RUN&&RUN.timer)clearInterval(RUN.timer);RUN=null;if(FLOW&&FLOW.timer)clearInterval(FLOW.timer);FLOW=null;$('log').innerHTML='';$('belog').innerHTML='';$('felog').innerHTML='';$('chat').innerHTML='<div class="hint">새 대화 (대화 지움). 전송하면 Claude 응답이 여기 표시됩니다.</div><div id="thinking" class="thinking"><span class="pulse">✻</span><span>Thinking…</span></div>';};
 $('stop').onclick=()=>vscode.postMessage({type:'stop'});
 
 // ── 1.8.4 Claude 상황판: 프롬프트 1회 = run 1개 → 헤더(현재 Step/전체 Step·진행바·경과) + Step 카드(접힘) + 최종 보고 ──
@@ -701,7 +912,7 @@ function newRun(promptText){
   b.querySelector('.bsll').textContent=UI_BD.step;
   const kl=b.querySelectorAll('.bk span');kl[0].textContent=UI_BD.tools;kl[1].textContent=UI_BD.edits;kl[2].textContent=UI_BD.elapsed;
   r.board=b;r.el.appendChild(b);
-  $('chat').appendChild(r.el);const th=$('thinking');if(th)$('chat').appendChild(th);
+  runContainer().appendChild(r.el);const th=$('thinking');if(th)$('chat').appendChild(th);
   RUN=r;setStatus(UI_BD.running,'running');updateHead();
   r.timer=setInterval(()=>{if(RUN!==r||r.done){clearInterval(r.timer);return;}r.board.querySelector('.bk-time').textContent=fmtSec((Date.now()-r.t0)/1000);},1000);
   chatScroll(true);return r;
@@ -794,6 +1005,126 @@ function endRun(text,ok){
 }
 function addMeta(text){const d=el('div','m meta',text);if(RUN)RUN.board.querySelector('.bfoot').appendChild(d);else $('chat').appendChild(d);}
 
+// ── 1.8.9 Flow 보드: 체인/단일 작업 = 전체 Step 수·현재 Step·진행바·경과 + Step 카드(대기/진행/완료/실패/경고). Claude 단계의 상황판(run)은 그 Step 카드 안에 ──
+let FLOW=null;
+const FST={RUN:'running',OK:'done',FAIL:'bad',WARN:'warn',CANCEL:'bad',NOT_RUN:'wait',WAIT:'wait'};
+const FSI={RUN:'⏳',OK:'✅',FAIL:'✖',WARN:'⚠',CANCEL:'⛔',NOT_RUN:'○',WAIT:'○'};
+function flowStart(m){
+  if(FLOW&&!FLOW.done)flowEnd({ok:false,summary:UI_BD.stopped,sec:0});
+  const f={id:m.id,steps:[],cur:0,total:(m.steps||[]).length,t0:Date.now(),done:false,timer:null,title:m.title||'',screen:m.screen||'',md:m.md||''};
+  f.el=el('div','run flowrun');
+  const b=el('div','board fboard running');
+  b.innerHTML='<div class="bhead"><div class="bstep"><span class="bcur">0</span><span class="bsl">/</span><span class="btot">0</span><span class="bsll"></span></div><div class="bmid"><div class="btitle"></div><div class="bbar"><i></i></div><div class="bnow"></div></div><div class="bkpis"><div class="bk"><b class="bk-done">0</b><span></span></div><div class="bk"><b class="bk-time">0s</b><span></span></div><div class="bk"><b class="bk-st running"></b></div></div></div><div class="bsteps"></div><div class="bfoot"></div>';
+  b.querySelector('.bsll').textContent=UI_BD.step;b.querySelector('.btot').textContent=f.total;
+  const kl=b.querySelectorAll('.bk span');kl[0].textContent=UI_BD.done;kl[1].textContent=UI_BD.elapsed;
+  b.querySelector('.btitle').textContent='🧭 '+f.title+(f.screen?' · '+f.screen:'');
+  b.querySelector('.bk-st').textContent=UI_BD.running;
+  f.board=b;f.el.appendChild(b);
+  const list=b.querySelector('.bsteps');
+  (m.steps||[]).forEach(s=>{
+    const d=el('details','step wait');const sm=el('summary');
+    sm.innerHTML='<span class="sno"></span><span class="sttl"></span><span class="sdur"></span><span class="slast"></span>';
+    sm.querySelector('.sno').textContent=s.no;sm.querySelector('.sttl').textContent=(s.kind==='claude'?'✴️ ':'')+s.name+(s.optional?' ('+UI_BD.optional+')':'');
+    d.appendChild(sm);const body=el('div','sbody');const tail=el('pre','ftail');body.appendChild(tail);d.appendChild(body);list.appendChild(d);
+    f.steps.push({no:s.no,el:d,sum:sm,body:body,tail:tail,status:'WAIT',lines:[],kind:s.kind});
+  });
+  $('chat').appendChild(f.el);const th=$('thinking');if(th)$('chat').appendChild(th);
+  FLOW=f;flowHead();
+  f.timer=setInterval(()=>{if(FLOW!==f||f.done){clearInterval(f.timer);return;}f.board.querySelector('.bk-time').textContent=fmtSec((Date.now()-f.t0)/1000);},1000);
+  chatScroll(true);
+}
+function flowStepEl(no){return FLOW?FLOW.steps.find(s=>s.no===no):null;}
+function flowStep(m){
+  const f=FLOW;if(!f||f.id!==m.id)return;const s=flowStepEl(m.no);if(!s)return;
+  s.status=m.status;s.el.className='step '+(FST[m.status]||'wait');
+  if(m.status==='RUN'){f.cur=m.no;f.active=s;s.sum.querySelector('.slast').textContent='';}
+  else{if(f.active===s)f.active=null;s.sum.querySelector('.sdur').textContent=(m.sec!=null?fmtSec(m.sec):'')+(m.code!=null&&m.code!==0?' · exit '+m.code:'');s.sum.querySelector('.slast').textContent=FSI[m.status]+' '+(UI_BD.fs[m.status]||m.status);}
+  flowHead();
+}
+function flowHead(){
+  const f=FLOW;if(!f)return;const b=f.board;
+  const done=f.steps.filter(s=>s.status==='OK'||s.status==='WARN').length;
+  const cur=f.done?done:Math.min(f.total,done+(f.active?1:0));
+  b.querySelector('.bcur').textContent=f.active?f.active.no:cur;b.querySelector('.bk-done').textContent=done;
+  const prog=f.done?done:Math.max(0,done+(f.active?0.5:0));
+  b.querySelector('.bbar i').style.width=(f.total?Math.round(100*prog/f.total):0)+'%';
+  b.querySelector('.bnow').textContent=f.active?('▶ '+f.active.sum.querySelector('.sttl').textContent):'';
+}
+function flowOut(text){
+  const f=FLOW;if(!f||f.done||!f.active)return;const s=f.active;
+  const parts=String(text).split('\\n');
+  for(const ln of parts){if(!ln.trim())continue;s.lines.push(ln);if(s.lines.length>60)s.lines.shift();}
+  s.tail.textContent=s.lines.join('\\n');
+  const last=s.lines.length?s.lines[s.lines.length-1].trim():'';
+  if(last)s.sum.querySelector('.slast').textContent='↻ '+last.slice(0,100);
+  f.board.querySelector('.bnow').textContent='▶ '+s.sum.querySelector('.sttl').textContent+(last?' — '+last.slice(0,80):'');
+}
+function flowEnd(m){
+  const f=FLOW;if(!f||f.done)return;f.done=true;if(f.timer)clearInterval(f.timer);
+  f.board.querySelector('.bk-time').textContent=fmtSec(m.sec!=null?m.sec:(Date.now()-f.t0)/1000);
+  const cls=m.ok?(m.warn?'warn':'done'):'bad';
+  const st=f.board.querySelector('.bk-st');st.textContent=m.ok?(m.warn?UI_BD.warn:UI_BD.done):UI_BD.error;st.className='bk-st '+(cls==='warn'?'running':cls);
+  f.board.className='board fboard '+(cls==='warn'?'running':cls);
+  f.steps.forEach(s=>{if(s.status==='RUN'){s.status=m.ok?'OK':'FAIL';s.el.className='step '+FST[s.status];}});
+  f.active=null;flowHead();f.board.querySelector('.bnow').textContent='';
+  if(m.summary){const d=el('div','m meta',m.summary+(f.md?' · '+f.md:''));f.board.querySelector(':scope > .bfoot').appendChild(d);}
+}
+// Claude 상황판(run)이 들어갈 컨테이너 — Flow 의 진행 중 Step 이 있으면 그 카드 안, 없으면 chat
+function runContainer(){return (FLOW&&!FLOW.done&&FLOW.active&&FLOW.active.kind==='claude')?FLOW.active.body:$('chat');}
+
+// ── 1.9.0 Workbench 내부 탭(파일 뷰어/편집·폴더·diff) ──
+const TABS={};
+function tabKey(k){return 'dt-'+String(k).replace(/[^a-z0-9]/gi,'_');}
+function openTabUI(m){
+  const id=tabKey(m.key);let T=TABS[m.key];
+  if(!T){
+    const btn=el('button','rtb dyn');btn.dataset.t='t:'+m.key;
+    const lb=el('span','tl',m.title);const x=el('span','tx','✕');x.title=UI_TB.close;btn.appendChild(lb);btn.appendChild(x);
+    x.onclick=ev=>{ev.stopPropagation();closeTab(m.key);};btn.onclick=()=>showTab('t:'+m.key);
+    $('dtabs').appendChild(btn);
+    const pane=el('div','dtab');pane.id=id;
+    pane.innerHTML='<div class="dtb"><span class="dtp"></span><span class="dtsp"></span><button class="sec dt-reload"></button><button class="sec dt-edit"></button><button class="sec dt-save" style="display:none"></button><button class="sec dt-editor"></button><button class="sec dt-os"></button></div><div class="dtc"></div><textarea class="dte" style="display:none" spellcheck="false"></textarea>';
+    pane.querySelector('.dt-reload').textContent='🔄 '+UI_TB.reload;pane.querySelector('.dt-edit').textContent='✏️ '+UI_TB.edit;pane.querySelector('.dt-save').textContent='💾 '+UI_TB.save;pane.querySelector('.dt-editor').textContent='📝 '+UI_TB.editor;pane.querySelector('.dt-os').textContent='↗ '+UI_TB.os;
+    pane.querySelector('.dt-reload').onclick=()=>{if(T.kind==='html')vscode.postMessage({type:'tab:refresh',key:T.key});else vscode.postMessage({type:'tab:open',file:T.path,line:0});};
+    pane.querySelector('.dt-editor').onclick=()=>vscode.postMessage({type:'tab:editor',file:T.path,line:T.line||0});
+    pane.querySelector('.dt-os').onclick=()=>vscode.postMessage({type:'tab:os',file:T.path});
+    pane.querySelector('.dt-edit').onclick=()=>toggleEdit(T);
+    pane.querySelector('.dt-save').onclick=()=>{vscode.postMessage({type:'tab:save',file:T.path,text:pane.querySelector('.dte').value});};
+    $('top').appendChild(pane);
+    T=TABS[m.key]={key:m.key,pane:pane,btn:btn,editing:false};
+  }
+  Object.assign(T,{path:m.path,title:m.title,editable:!!m.editable,text:m.text||'',line:m.line||0,isDir:!!m.isDir,kind:m.kind||''});
+  T.btn.querySelector('.tl').textContent=m.title;T.btn.title=m.sub||m.path||'';
+  const pane=T.pane;pane.querySelector('.dtp').textContent=m.sub||m.path||'';pane.querySelector('.dtsp').textContent=m.meta||'';
+  pane.querySelector('.dt-edit').style.display=m.editable?'':'none';pane.querySelector('.dt-editor').style.display=m.canEditor===false?'none':'';pane.querySelector('.dt-os').style.display=m.canOS===false?'none':'';
+  const c=pane.querySelector('.dtc');c.innerHTML=m.html||'';T.editing=false;pane.querySelector('.dte').style.display='none';c.style.display='';pane.querySelector('.dt-save').style.display='none';pane.querySelector('.dt-edit').textContent='✏️ '+UI_TB.edit;
+  bindTabContent(T);
+  showTab('t:'+m.key);
+  if(m.line){const r=c.querySelector('#L'+m.line);if(r)r.scrollIntoView({block:'center'});}
+}
+function bindTabContent(T){
+  const c=T.pane.querySelector('.dtc');
+  c.querySelectorAll('a[data-open]').forEach(a=>a.onclick=ev=>{ev.preventDefault();vscode.postMessage({type:'tab:open',file:a.dataset.open});});
+  c.querySelectorAll('a[data-ext]').forEach(a=>a.onclick=ev=>{ev.preventDefault();vscode.postMessage({type:'tab:ext',url:a.dataset.ext});});
+  const f=c.querySelector('.csvf');if(f){f.oninput=()=>{const q=f.value.toLowerCase();c.querySelectorAll('table.csvt tbody tr').forEach(tr=>{tr.style.display=!q||tr.textContent.toLowerCase().includes(q)?'':'none';});};}
+  const da=c.querySelector('.diffall');if(da){da.onchange=()=>c.querySelector('.diffw').classList.toggle('all',da.checked);}
+  c.querySelectorAll('[data-action]').forEach(el=>el.onclick=ev=>{ev.preventDefault();vscode.postMessage({type:'tab:action',key:T.key,action:el.dataset.action,data:Object.assign({},el.dataset)});});
+}
+function toggleEdit(T){
+  const pane=T.pane;const ta=pane.querySelector('.dte');const c=pane.querySelector('.dtc');
+  T.editing=!T.editing;
+  if(T.editing){ta.value=T.text;ta.style.display='';c.style.display='none';pane.querySelector('.dt-save').style.display='';pane.querySelector('.dt-edit').textContent='👁 '+UI_TB.view;}
+  else{ta.style.display='none';c.style.display='';pane.querySelector('.dt-save').style.display='none';pane.querySelector('.dt-edit').textContent='✏️ '+UI_TB.edit;}
+}
+function closeTab(key){const T=TABS[key];if(!T)return;const active=T.btn.classList.contains('on');T.btn.remove();T.pane.remove();delete TABS[key];if(T.kind==='html')vscode.postMessage({type:'tab:closed',key:key});if(active)showTab('chat');}
+function showDynTab(t){
+  const key=t.slice(2);
+  document.querySelectorAll('.dtab').forEach(d=>d.style.display='none');
+  [['log','logwrap'],['logs','logs'],['chat','chat'],['status','status'],['flow','flow'],['hist','hist']].forEach(([k,id])=>$(id).style.display='none');
+  const T=TABS[key];if(T)T.pane.style.display='flex';
+  document.querySelectorAll('.rtabs .rtb').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
+}
+
 function renderAttached(files){
   const box=$('attached');box.innerHTML='';
   files.forEach((f,i)=>{const c=document.createElement('span');c.className='chip';c.innerHTML='';
@@ -829,7 +1160,7 @@ bindStatus();
 
 const procs={};
 window.addEventListener('message',e=>{const m=e.data;
- if(m.type==='out'){const box=$(m.stream==='be'?'belog':m.stream==='fe'?'felog':'log');const stick=box.scrollHeight-box.scrollTop-box.clientHeight<40;const d=document.createElement('span');if(m.cls)d.className=m.cls;d.textContent=m.text;box.appendChild(d);while(box.childNodes.length>4000)box.removeChild(box.firstChild);if(stick)box.scrollTop=box.scrollHeight;}
+ if(m.type==='out'){if(m.stream==='task')flowOut(m.text);const box=$(m.stream==='be'?'belog':m.stream==='fe'?'felog':'log');const stick=box.scrollHeight-box.scrollTop-box.clientHeight<40;const d=document.createElement('span');if(m.cls)d.className=m.cls;d.textContent=m.text;box.appendChild(d);while(box.childNodes.length>4000)box.removeChild(box.firstChild);if(stick)box.scrollTop=box.scrollHeight;}
  else if(m.type==='server'){const st=$(m.name&&/BE/i.test(m.name)?'belogst':'felogst');if(st)st.textContent=m.state==='stopped'?'⏹ 종료됨':(m.ok?'✅ 기동 완료 ':'✖ 실패 ')+(m.sec!=null?m.sec+'s':'');}
  else if(m.type==='chat'){
    const stick=chatStick();
@@ -841,8 +1172,15 @@ window.addEventListener('message',e=>{const m=e.data;
    chatScroll(stick||m.role==='user');
    if(document.querySelector('.rtabs .rtb[data-t="chat"]').classList.contains('on')===false&&m.role!=='meta'){showTab('chat');}
  }
+ else if(m.type==='fb'){const stick=chatStick();if(m.state==='start')flowStart(m);else if(m.state==='step')flowStep(m);else if(m.state==='end')flowEnd(m);chatScroll(stick||m.state==='start');if(m.state==='start'&&document.querySelector('.rtabs .rtb[data-t="chat"]').classList.contains('on')===false)showTab('chat');}
  else if(m.type==='todos'){const stick=chatStick();if(RUN&&!RUN.done)applyTodos(m.items||[]);chatScroll(stick);}
  else if(m.type==='run'){const stick=chatStick();if(m.state==='done')endRun(m.text||'',m.ok!==false);chatScroll(stick);}
+ else if(m.type==='tab'){
+   if(m.kind==='flow'){ // FLOW 탭: 기존 #flow 요소를 탭 안으로 옮겨 flow 메시지·bindFlow 가 그대로 동작
+     if(!TABS['flow']){openTabUI({key:'flow',title:m.title||'📊 FLOW',sub:m.sub||'',path:'',kind:'flow',html:'',editable:false,canEditor:false});const T=TABS['flow'];const c=T.pane.querySelector('.dtc');const fl=$('flow');fl.style.display='';c.appendChild(fl);T.pane.querySelector('.dt-os').style.display='none';T.pane.querySelector('.dt-reload').onclick=()=>vscode.postMessage(Object.assign({type:'flow:refresh',filter:''},st()));}
+     showTab('t:flow');
+   } else openTabUI(m);
+ }
  else if(m.type==='status'){$('status').innerHTML=m.html;bindStatus();}
  else if(m.type==='flow'){$('flow').innerHTML=m.html;bindFlow();}
  else if(m.type==='history'){$('hist').innerHTML=m.html;bindHist();}
@@ -1018,11 +1356,10 @@ function open(api, opts) {
         }
         case 'history:diff': {
           const b = path.join(m.dir, 'before', m.file), a = path.join(m.dir, 'after', m.file);
-          const L = fs.existsSync(b) ? vscode.Uri.file(b) : vscode.Uri.parse('untitled:(없음)');
-          const R = fs.existsSync(a) ? vscode.Uri.file(a) : vscode.Uri.parse('untitled:(삭제됨)');
-          // 1.8.0: 제목에 수정후의 실체(작업 종료 시점 vs 열람 시점 현재)를 명시
+          // 1.9.0: VS Code diff 창 대신 Workbench diff 탭(수정전 ↔ 수정후). 1.8.0: 제목에 수정후의 실체(작업 종료 시점 vs 열람 시점 현재)를 명시
           let metaH = null; try { metaH = JSON.parse(fs.readFileSync(path.join(m.dir, 'meta.json'), 'utf8')); } catch { }
-          vscode.commands.executeCommand('vscode.diff', L, R, `${path.basename(m.dir)} — ${m.file} (수정전 ↔ ${history.afterLabel(metaH)})`);
+          const rd = f => { try { return fs.readFileSync(f, 'utf8'); } catch { return ''; } };
+          wb.openDiffTab(`${m.dir}|${m.file}`, `${path.basename(m.file)} (${path.basename(m.dir)})`, fs.existsSync(b) ? rd(b) : '', fs.existsSync(a) ? rd(a) : '', fs.existsSync(b) ? '수정전' : '(없음)', fs.existsSync(a) ? history.afterLabel(metaH) : '(삭제됨)', `${m.dir} · ${m.file}`);
           break;
         }
         case 'history:diffLive': {
@@ -1031,7 +1368,7 @@ function open(api, opts) {
             const meta = JSON.parse(fs.readFileSync(path.join(m.dir, 'meta.json'), 'utf8'));
             const src = (meta.sources || []).find(s => m.file.startsWith(s.name + path.sep) || m.file.startsWith(s.name + '/'));
             const live = src ? path.join(src.dir, m.file.slice(src.name.length + 1)) : '';
-            if (live && fs.existsSync(live)) vscode.commands.executeCommand('vscode.diff', vscode.Uri.file(b), vscode.Uri.file(live), `${m.file} (작업후 ↔ 현재)`);
+            if (live && fs.existsSync(live)) wb.openDiffTab(`${m.dir}|${m.file}|live`, `${path.basename(m.file)} (작업후 ↔ 현재)`, fs.existsSync(b) ? fs.readFileSync(b, 'utf8') : '', fs.readFileSync(live, 'utf8'), '작업후', '현재', `${b} ↔ ${live}`);
             else vscode.window.showWarningMessage('현재 파일 없음');
           } catch (e) { vscode.window.showErrorMessage(`diffLive 실패: ${e.message}`); }
           break;
@@ -1047,18 +1384,22 @@ function open(api, opts) {
           break;
         }
         case 'flow:pipeline': await api.runTaskById('S5.pipeline', { id: m.id, ids: m.id }); break;
-        case 'flow:open': api.openPath(path.join(p.genDir, m.id)); break;
+        case 'flow:open': wb.openTab(p, path.join(p.genDir, m.id)); break; // 1.9.0: 폴더 탭
         case 'cmd': vscode.commands.executeCommand(m.command); break;
-        case 'show': {
-          const f = m.file;
-          if (fs.existsSync(f)) {
-            const t = fs.readFileSync(f, 'utf8');
-            wb.out('task', `\n── ${path.relative(p.root, f)} ──\n${t.length > 20000 ? t.slice(0, 20000) + '\n… (이하 생략 — 옆 에디터에 열림)' : t}\n`, '');
-            vscode.commands.executeCommand('vscode.open', vscode.Uri.file(f), { preview: true, viewColumn: vscode.ViewColumn.Beside });
-          }
+        case 'show': wb.openTab(p, m.file); break; // 1.9.0: UI Status 칩 → Workbench 탭
+        case 'tab:open': wb.openTab(p, m.file, { line: m.line || 0 }); break;
+        case 'tab:closed': htmlTabs.delete(String(m.key || '').replace(/^html:/, '')); break;
+        case 'tab:refresh': { const key = String(m.key || '').replace(/^html:/, ''); const h = htmlTabs.get(key); if (h) openHtmlTab(key, h.title, h.sub, h.render, h.onAction); break; } // 1.9.3 HTML 탭 다시 그리기
+        case 'tab:action': { const key = String(m.key || '').replace(/^html:/, ''); const h = htmlTabs.get(key); if (h && h.onAction) { try { await h.onAction(m.action, m.data || {}); } catch (e) { vscode.window.showErrorMessage(`탭 동작 실패: ${e.message}`); } } break; }
+        case 'tab:editor': { try { const doc = await vscode.workspace.openTextDocument(vscode.Uri.file(m.file)); const ed = await vscode.window.showTextDocument(doc, { preview: false, viewColumn: vscode.ViewColumn.Beside }); if (m.line) { const pos = new vscode.Position(Math.max(0, m.line - 1), 0); ed.selection = new vscode.Selection(pos, pos); ed.revealRange(new vscode.Range(pos, pos)); } } catch (e) { vscode.window.showErrorMessage(`에디터 열기 실패: ${e.message}`); } break; }
+        case 'tab:os': openWithOS(p, wb, m.file); break;
+        case 'tab:ext': if (/^https?:\/\//i.test(String(m.url || ''))) vscode.env.openExternal(vscode.Uri.parse(m.url)); break;
+        case 'tab:save': { // 탭 안에서 저장 — 텍스트 파일만, 저장 후 같은 탭을 다시 렌더
+          try { if (!m.file || !fs.existsSync(m.file) || fs.statSync(m.file).isDirectory()) throw new Error('파일이 아닙니다'); fs.writeFileSync(m.file, String(m.text == null ? '' : m.text), 'utf8'); wb.out('task', `💾 저장: ${path.relative(p.root, m.file)}\n`, 'ok'); wb.openTab(p, m.file); if (/quick\.json$/i.test(m.file)) vscode.commands.executeCommand('vibeManager.refresh'); }
+          catch (e) { vscode.window.showErrorMessage(`저장 실패: ${e.message}`); }
           break;
         }
-        case 'openExternal': vscode.env.openExternal(vscode.Uri.file(m.file)); break;
+        case 'openExternal': openWithOS(p, wb, m.file); break;
         case 'prompt': {
           // 1.6: ctx/harness 체크박스 제거 — ID 가 있으면 자동 컨텍스트, 자동 하네스는 effectiveHarness 가 판정.
           const h = effectiveHarness(false, null, null, id);
@@ -1132,8 +1473,16 @@ function open(api, opts) {
           const taskId = item.kind === 'task' ? item.task : null;
           const h = effectiveHarness(m.harness, taskId, item, effId);
           if (item.kind === 'task') await wb.runTaskStreaming(p, item.task, effId);
+          else if (item.kind === 'chain') { // 1.8.8: 순차 체인(파싱→…→문서 등)
+            // 1.9.2: 화면 ID 확정(QuickPick) 뒤 두 번째 모달 확인창은 없앤다 — 바깥 클릭/Esc 로 조용히 취소돼 "실행이 안 된다" 로 보였음(사용자 지시 "신규 ID 넣으면 바로 진행").
+            //        대신 비차단 알림으로 시작을 알리고, 내용(item.confirm)은 Task Log 에 남긴다. 중지는 워크벤치 ⏹ 중지.
+            if (item.confirm) wb.out('task', `ℹ ${item.confirm}\n`, '');
+            vscode.window.showInformationMessage(`Vibe_Manager 🚀 ${item.label} — ${effId} 시작 (Claude 탭 Flow 보드에서 진행 확인)`);
+            await wb.runChain(p, item, effId, h);
+          }
           else if (item.kind === 'claude') wb.askClaude(p, substQ(item.prompt, { root: p.root, id: effId }), h);
           else if (item.kind === 'command') vscode.commands.executeCommand(item.command);
+          else if (item.kind === 'flowtab') { wb.post({ type: 'tab', key: 'flow', kind: 'flow', title: '📊 FLOW', sub: 'FLOW — 화면별 단계 진척(파싱→…→E2E 4단계)', editable: false, canEditor: false, canOS: false }); } // 1.9.0: FLOW = 고정 탭에서 제외, 메뉴로 여는 탭
           else if (item.kind === 'terminal' || item.kind === 'multi' || item.kind === 'server-stop') {
             const all = promptPanel.loadQuick(p.extDir, p.root).groups.flatMap(g => g.items);
             const items = item.kind === 'multi' ? item.items.map(l => all.find(x => x.label === l)).filter(Boolean) : [item];
@@ -1235,9 +1584,11 @@ function open(api, opts) {
             const cwd = substQ(item.cwd, { root: p.root });
             const msg = await vscode.window.showInputBox({ prompt: `커밋 메시지 (${item.remote}/${item.branch} 로 push) — 화면 작업은 MNU_ID 명시 (예: feat(DMF0052): …)`, ignoreFocusOut: true });
             if (!msg) return;
-            const ok = await vscode.window.showWarningMessage(`전체 stage(.gitignore 적용) → commit → push ${item.remote} ${item.branch}`, { modal: true }, 'push 실행', 'status 만');
+            const ok = await vscode.window.showWarningMessage(`전체 stage(.gitignore 적용) → commit → push ${item.remote} ${item.branch}${item.credUser ? ` (계정 ${item.credUser})` : ''}`, { modal: true }, 'push 실행', 'status 만');
             if (!ok) return;
-            const line = ok === 'status 만' ? 'git status -s' : `git add -A && git commit -m "${msg.replace(/"/g, "'")}" && git push ${item.remote} ${item.branch}`;
+            // 1.8.6: push 에만 자격증명 사용자명 1회 지정(credUser · 전역 git 설정 변경 없음) — 이 PC 전역 username 이 사내 계정이라 비대화 push 가 인증 실패하던 문제
+            const cred = item.credUser ? `-c credential.https://github.com.username=${item.credUser} ` : '';
+            const line = ok === 'status 만' ? 'git status -s' : `git add -A && git commit -m "${msg.replace(/"/g, "'")}" && git ${cred}push ${item.remote} ${item.branch}`;
             wb.spawnStream(p, 'cmd', ['/c', line], { spawn: { cwd }, env: { GIT_TERMINAL_PROMPT: '0' } }, 'task', item.label);
           }
           else if (item.kind === 'git-merge') {
@@ -1254,11 +1605,7 @@ function open(api, opts) {
             wb.spawnStream(p, 'cmd', ['/c', cmdline], { spawn: { cwd } }, 'task', item.label);
           }
           else if (item.kind === 'browser') vscode.env.openExternal(vscode.Uri.parse(item.url));
-          else if (item.kind === 'open') {
-            const f = substQ(item.path, { root: p.root, id: effId });
-            if (fs.existsSync(f)) vscode.commands.executeCommand('vscode.open', vscode.Uri.file(f));
-            else wb.out('task', `파일 없음: ${f}\n`, 'bad');
-          }
+          else if (item.kind === 'open') wb.openTab(p, substQ(item.path, { root: p.root, id: effId })); // 1.9.0: Workbench 탭(없으면 안내)
           api.record('quick', `${item.label} ${effId}`);
           break;
         }
@@ -1284,4 +1631,20 @@ async function quick(item, id, harness) {
   await lastWB.panel._onQuick({ type: 'quick', item, id, harness });
 }
 
-module.exports = { open, ask, quick, runShell };
+// 1.9.0: 확장(사이드바·steps open)에서 Workbench 탭으로 열기 — 열린 Workbench 가 없으면 false(호출 측이 에디터로)
+function openTab(file, opts) { if (!lastWB) return false; return lastWB.openTab(lastWB.api.paths(), file, opts || {}); }
+// 1.9.3: HTML 탭(대시보드 등 확장이 만든 화면) — render() 가 본문 HTML 을 돌려주고, 본문의 [data-action] 클릭은 onAction(action, dataset) 으로 전달. 🔄 = 다시 render
+const htmlTabs = new Map();
+function openHtmlTab(key, title, sub, render, onAction) {
+  if (!lastWB) return false;
+  htmlTabs.set(key, { title, sub, render, onAction });
+  let html = ''; try { html = String(render() || ''); } catch (e) { html = `<div class="hint">렌더 실패: ${tabview.esc(e.message)}</div>`; }
+  lastWB.post({ type: 'tab', key: 'html:' + key, kind: 'html', title, sub: sub || '', path: '', html, editable: false, canEditor: false, canOS: false, meta: '' });
+  try { lastWB.panel.reveal(undefined, true); } catch { }
+  return true;
+}
+function refreshHtmlTab(key) { const h = htmlTabs.get(key); if (!h || !lastWB) return false; return openHtmlTab(key, h.title, h.sub, h.render, h.onAction); }
+function showTab(tab) { if (!lastWB) return false; lastWB.post({ type: 'showTab', tab }); try { lastWB.panel.reveal(undefined, true); } catch { } return true; }
+function openDiff(key, title, aText, bText, aLabel, bLabel, sub) { if (!lastWB) return false; lastWB.openDiffTab(key, title, aText, bText, aLabel, bLabel, sub); return true; }
+function openFlowTab() { if (!lastWB) return false; lastWB.post({ type: 'tab', key: 'flow', kind: 'flow', title: '📊 FLOW', sub: 'FLOW — 화면별 단계 진척(파싱→…→E2E 4단계)', editable: false, canEditor: false, canOS: false }); try { lastWB.panel.reveal(undefined, true); } catch { } return true; }
+module.exports = { open, ask, quick, runShell, openTab, openDiff, openFlowTab, openHtmlTab, refreshHtmlTab, showTab };

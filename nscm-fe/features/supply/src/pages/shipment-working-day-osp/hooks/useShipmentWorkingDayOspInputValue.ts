@@ -4,14 +4,14 @@ import { type MutableRefObject, useCallback } from 'react';
 import type { EditTracker } from '@foundation/utils';
 import { useMessageStore } from '@shared/stores';
 
-import { DAY_WEEK, INPUT_VALUE_SET, LBL, MSG, WEEKDAY_CODE_TO_INDEX } from '../shipment-working-day-osp.constants';
+import { DAY_BINDING_RE, DAY_WEEK, INPUT_VALUE_SET, LBL, MSG } from '../shipment-working-day-osp.constants';
 import type { DynDayColumn, ShipmentWorkingDayOspRow } from '../shipment-working-day-osp.types';
 
 interface Params {
   gridRef: MutableRefObject<FlexGrid<ShipmentWorkingDayOspRow> | undefined>;
   // 그리드 공용 EditTracker — 값입력으로 바뀐 셀도 저장 payload 단일 출처(부모 handleSave)에 올린다.
   editTrackerRef: MutableRefObject<EditTracker<ShipmentWorkingDayOspRow> | undefined>;
-  // 동적 D_ 일자열(요일 포함) — 요일별 분기 대상 판정.
+  // 동적 D_ 일자열(3SPAN DAY_CODE 포함) — 요일별 분기 대상 판정(AS-IS GetDayOfWeek .cs:811-818 = dsSpdTitle DAY_CODE).
   dynColumns: DynDayColumn[];
   // 명시 조회 게이트 — 조회 전(persist 된 stale 화면) 값입력 금지(MSG00135).
   hasSearched: boolean;
@@ -30,7 +30,7 @@ interface Params {
 //   가드 순서(AS-IS btnInput_Click): #1 조회 전(AS-IS MSG00135 → TO-BE MSG00662) → 편집권한 없음(AS-IS MSG00135 → TO-BE MSG01154)
 //   → DayWeek 값 없으면 Form 이 버튼 disabled 로 차단(:710-713 return) → Input Value 미선택(MSG00429) → #4 SelectDay 셀 미선택
 //   (AS-IS MSG00134 → TO-BE MSG01153). 코드 번호는 TO-BE SCM_ADM_MSG_M 실측(constants MSG 주석, 2026-10-20 정정).
-//   일괄입력 3분기(03 §3-b): SelectDay=선택셀 / EveryDay=전체 D_ / 요일별=해당 weekday D_.
+//   일괄입력 3분기(03 §3-b): SelectDay=선택셀 / EveryDay=전체 D_ / 요일별=DAY_CODE 일치 D_.
 export const useShipmentWorkingDayOspInputValue = ({
   gridRef,
   editTrackerRef,
@@ -75,8 +75,9 @@ export const useShipmentWorkingDayOspInputValue = ({
     }
     const isSelectDay = dayWeekCode === DAY_WEEK.SELECT_DAY;
     const isEveryDay = dayWeekCode === DAY_WEEK.EVERY_DAY;
-    // 요일별 분기 대상 weekday(0=일~6=토). EveryDay/SelectDay 면 미사용.
-    const targetWeekday = WEEKDAY_CODE_TO_INDEX[dayWeekCode];
+    // 요일별 분기 대상 — AS-IS `pDayWeekCode.ToUpper() == DayCode.ToUpper()`(.cs:798, DayCode = 3SPAN DAY_CODE MON~SUN).
+    //   EveryDay/SelectDay 면 미사용. (2026-10-20 정정: 이전 dayjs 요일 인덱스 대신 서버 달력 DAY_CODE 그대로 비교.)
+    const targetDayCode = dayWeekCode.toUpperCase();
 
     // 대상 D_ 컬럼 판정 — SelectDay 는 선택영역만, 그 외는 요일 규칙(전행 × 규칙 D_ 컬럼).
     const dayByBinding = new Map<string, DynDayColumn>(dynColumns.map(d => [d.binding, d]));
@@ -86,7 +87,7 @@ export const useShipmentWorkingDayOspInputValue = ({
     const writeCell = (row: number, col: number): void => {
       const item = (g.rows[row] as { dataItem?: ShipmentWorkingDayOspRow } | undefined)?.dataItem;
       const binding = g.columns[col]?.binding ?? '';
-      if (!item || !/^D_\d{8}$/.test(binding)) return;
+      if (!item || !DAY_BINDING_RE.test(binding)) return;
       const original = g.getCellData(row, col, false) as WijmoPrimitive;
       g.setCellData(row, col, raw, true);
       tracker?.storeChange(item, binding, original, raw);
@@ -107,13 +108,13 @@ export const useShipmentWorkingDayOspInputValue = ({
         }
       }
     } else {
-      // EveryDay=전체 D_ / 요일별=해당 weekday D_. 전행 × 규칙 D_ 컬럼.
+      // EveryDay=전체 D_ / 요일별=DAY_CODE 일치 D_. 전행 × 규칙 D_ 컬럼.
       for (let row = 0; row < g.rows.length; row++) {
         for (let col = 0; col < g.columns.length; col++) {
           const binding = g.columns[col]?.binding ?? '';
           const dayCol = dayByBinding.get(binding);
           if (!dayCol) continue;
-          if (!isEveryDay && dayCol.weekday !== targetWeekday) continue;
+          if (!isEveryDay && dayCol.dayCode !== targetDayCode) continue;
           writeCell(row, col);
         }
       }

@@ -46,33 +46,44 @@ export interface StaticColumnMeta {
   [key: string]: unknown;
 }
 
-// GET O_RC1 의 ResultSetMetaData 사이드카(o_rc1_columns) 원소 — 동적열 파생 원천.
-export interface DynColumnMeta {
-  name: string;
-  type: string;
+// 3SPAN 타이틀 SP(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN) 응답 o_rc1 1행 — 동적 기간 컬럼 원천.
+//   AS-IS dsSpdTitle.Tables[0] 행(InitSpreadDateColumn .cs:183-192 가 읽는 DefColumns 5종 + 정렬키).
+//   D_(일)/W_(주)/M_(월) 3블록이 SORT_ORDER_NO 순으로 섞여 내려온다(사내 실측 2026-10-20: M_202610, W_20261043, D_20261020 …).
+export interface CalendarColumnRow {
+  COLUMN_NAME: string;
+  // D_ = 일(DD '01'), W_ = 주차('W43'), M_ = 월('2026-10')
+  COLUMN_LABEL_NAME: string;
+  // 2단 소그룹 라벨(주차 'W43')
+  SMALL_CLASS_LABEL_NAME: string;
+  // 1단 대그룹 라벨(월 '2026-10')
+  LARGE_CLASS_LABEL_NAME: string;
+  // MON~SUN(D_ 만, W_/M_ 은 NULL)
+  DAY_CODE: string | null;
+  SORT_ORDER_NO: string;
 }
 
 // dynamic-columns 파생 결과 — D_ 일자열 1개(3단 머지헤더 group 원천).
 export interface DynDayColumn {
-  // 실제 binding(예: D_20260101)
+  // 실제 binding(예: D_20260101) = 3SPAN COLUMN_NAME
   binding: string;
   // 8자리 일자
   yyyymmdd: string;
-  // 일(day-of-month) 헤더 라벨
+  // 일 leaf 헤더 라벨 = COLUMN_LABEL_NAME
   dayLabel: string;
-  // 0=일 ~ 6=토 (요일색·btnInput 요일별 분기)
-  weekday: number;
-  // 대(월 yyyymm) 그룹 키 — 3단 머지헤더 상단
-  monthKey: string;
-  // 소(주차) 그룹 키 — 3단 머지헤더 중단
-  weekKey: string;
+  // 2단 소그룹(주차) 라벨 = SMALL_CLASS_LABEL_NAME
+  weekLabel: string;
+  // 1단 대그룹(월) 라벨 = LARGE_CLASS_LABEL_NAME
+  monthLabel: string;
+  // MON~SUN = DAY_CODE (요일색·btnInput 요일별 분기 — AS-IS GetDayOfWeek 원천)
+  dayCode: string;
 }
 
-// 동적 SUM 열(W_/M_) 파생 결과 — chkSum 토글 대상.
+// 동적 SUM 열(W_/M_) 파생 결과 — chkSum 토글 대상(AS-IS 는 컬럼을 만들되 chkSum.Checked=false 로 숨김 .cs:353-356).
 export interface DynSumColumn {
   binding: string;
   // 'W' 주 SUM / 'M' 월 SUM
   kind: 'W' | 'M';
+  // = COLUMN_LABEL_NAME
   header: string;
 }
 

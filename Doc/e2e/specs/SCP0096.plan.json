@@ -1,5 +1,7 @@
 {
   "id": "SCP0096",
+  "mode": "admin",
+  "modeSource": "--mode",
   "menuId": "SCP0096",
   "page": "ShipmentWorkingDayOsp",
   "routePath": "supply/supply-master/shipment-working-day-osp",
@@ -210,168 +212,78 @@
   },
   "accounts": [
     {
-      "id": "jaehun_cho",
+      "id": "jaeuk.shin",
+      "name": "",
       "groups": [
-        "ADMIN",
-        "DM ADMIN",
-        "DM Planner",
-        "DM Planner (W/S)",
-        "SCP Planner"
+        "SCP ADMIN",
+        "SYSTEM ADMIN"
       ],
       "divisions": [
         "40"
       ],
+      "roles": {},
+      "roleNote": "ADMIN",
       "admin": true,
-      "screenGroup": ""
-    },
-    {
-      "id": "minyonglee1",
-      "groups": [
+      "adminOf": [
+        "SCP ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
         "ADMIN",
         "DM ADMIN",
-        "DM Planner",
-        "DM Planner (W/S)",
-        "DM Viewer",
+        "FP Planner",
+        "FP Viewer",
+        "GUEST",
         "JV Planner",
-        "SCP Planner"
+        "SCM PI Admin",
+        "SCM Viewer",
+        "SCP Planner",
+        "SCP Tester",
+        "SSP Planner",
+        "SSP Viewer"
       ],
-      "divisions": [
-        "40",
-        "81",
-        "82"
+      "menuAccess": "Y",
+      "expectedBtns": [
+        "EDIT",
+        "SEARCH",
+        "SAVE"
       ],
-      "admin": true,
-      "screenGroup": ""
+      "matrix": []
     },
     {
-      "id": "bottle",
+      "id": "hongjae.kim",
+      "name": "김홍재 선임",
       "groups": [
-        "SCP Planner"
-      ],
-      "divisions": [
-        "40",
-        "81"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "bpark416",
-      "groups": [
-        "DM Planner"
-      ],
-      "divisions": [
-        "40",
-        "81",
-        "82"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "cmjin",
-      "groups": [
-        "DM Planner"
-      ],
-      "divisions": [
-        "40",
-        "81",
-        "82"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "coeogus",
-      "groups": [
-        "SCP Planner"
-      ],
-      "divisions": [
-        "40",
-        "81"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "dodae",
-      "groups": [
-        "SCP Planner"
+        "DM Admin"
       ],
       "divisions": [
         "40"
       ],
+      "roles": {
+        "40": "DM Admin"
+      },
+      "roleNote": "권한 없음 대표",
       "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "eunah.koo",
-      "groups": [
-        "DM Planner"
-      ],
-      "divisions": [
-        "40",
-        "81",
-        "82"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "jaehyeok",
-      "groups": [
-        "DM Planner (W/S)"
-      ],
-      "divisions": [
-        "81",
-        "82"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "miyeong.lee",
-      "groups": [
-        "DM Planner (W/S)"
-      ],
-      "divisions": [
-        "81",
-        "82"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "wcyoon",
-      "groups": [
-        "DM Planner"
-      ],
-      "divisions": [
-        "40",
-        "81",
-        "82"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "ys_cho",
-      "groups": [
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
+        "DM ADMIN",
         "DM Planner",
-        "DM Planner (W/S)"
+        "GUEST"
       ],
-      "divisions": [
-        "40"
-      ],
-      "admin": false,
-      "screenGroup": ""
+      "menuAccess": "N",
+      "expectedBtns": [],
+      "matrix": []
     }
   ],
+  "accountSource": "users.json",
   "expectedBtnsByGroup": {
     "ADMIN": [
-      "SAVE",
+      "EDIT",
       "SEARCH",
-      "EDIT"
+      "SAVE"
     ],
     "SCM PI Admin": [
       "SAVE",
@@ -379,15 +291,23 @@
       "EDIT"
     ],
     "SCM Viewer": [
-      "SEARCH",
-      "SAVE",
-      "EDIT"
+      "SEARCH"
     ],
     "SCP Planner": [
       "SAVE",
-      "SEARCH",
-      "EDIT"
+      "EDIT",
+      "SEARCH"
     ]
   },
-  "menuAuth": "menu.csv"
+  "menuBtnCodes": [
+    "EDIT",
+    "SEARCH",
+    "SAVE"
+  ],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": "btn_auth.csv"
+  }
 }

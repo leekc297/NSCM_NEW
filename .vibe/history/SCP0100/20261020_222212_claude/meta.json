@@ -1,0 +1,43 @@
+{
+  "id": "SCP0100",
+  "task": "claude",
+  "scope": "both",
+  "note": "[화면 SCP0100] · Doc/gen/SCP0100/GEN_NOTES.md · Doc/gen/SCP0100/CHECK.md · Doc/gen/SCP0100/DOD.md · Doc/asisfacts/screens/SCP0100/ · 룰: tools/",
+  "start": "2026-10-20T22:22:12+09:00",
+  "end": "2026-10-20T22:27:19+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "c:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\global-psi-report",
+      "files": 10
+    },
+    {
+      "name": "db",
+      "dir": "c:\\Projects\\NSCM\\Doc\\gen\\SCP0100",
+      "files": 4
+    },
+    {
+      "name": "docs",
+      "dir": "c:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0100",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "c:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "afterMode": "end",
+  "afterAt": "2026-10-20T22:27:19+09:00",
+  "changed": [
+    {
+      "file": "fe\\components\\GlobalPsiReportForm.tsx",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\components\\GlobalPsiReportGrid.tsx",
+      "kind": "modified"
+    }
+  ]
+}

@@ -10,6 +10,9 @@ const BE = process.env.E2E_BE || cfg.beUrl;
 const accF = path.join(__dirname, 'accounts.json');
 const acc = JSON.parse(fs.readFileSync(accF, 'utf8').replace(/^﻿/, ''));
 const ids = new Set(acc.accounts.map(a => a.id)); if (cfg.defaultAccount) ids.add(cfg.defaultAccount);
+// 2026-10-20: 사용자 관리 명부(users.json — Division 별 역할 계정 + ADMIN 계정)도 전부 확인
+const usersF = path.join(__dirname, 'users.json');
+if (fs.existsSync(usersF)) { try { const u = JSON.parse(fs.readFileSync(usersF, 'utf8').replace(/^﻿/, '')); for (const d of Object.values(u.divisions || {})) for (const id of Object.values(d)) if (id) ids.add(id); for (const arr of Object.values(u.admins || {})) for (const id of arr || []) if (id) ids.add(id); } catch (e) { console.log(`users.json 해석 실패: ${e.message}`); } }
 for (const x of process.argv.slice(2)) ids.add(x);
 (async () => {
   const ok = {}; let n = 0;

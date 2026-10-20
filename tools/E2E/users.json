@@ -1,0 +1,77 @@
+{
+  "_doc": "E2E 테스트 사용자 명부 — 사용자가 직접 관리한다(2026-10-20 지정). gen-e2e.js 가 이 파일을 계정 원천으로 쓰고(auth·authcrud 계정 = 여기 등록된 계정 전부), probe-accounts.js 가 로그인 가능 여부를 확인한다. 비밀번호 없음(/user/login userId). 기대 권한은 사내 DB 메타(user_group_user·user_group_menu·btn_auth)에서 계산하므로 여기 역할은 '표기·Division 배정' 용도다. SCP/SSP 의 Division 별 사용자는 차후 추가 예정(빈 자리 유지).",
+  "updated": "2026-10-20",
+  "divisions": {
+    "40": {
+      "DM Admin": "hongjae.kim",
+      "DM Planner": "eunah.koo",
+      "DM Viewer": "yooah.chung",
+      "SCP Planner": "dodae"
+    },
+    "81": {
+      "DM Admin": "jiwon.park",
+      "DM Planner": "bpark416",
+      "DM Planner (W/S)": "jaehyeok",
+      "DM Viewer": "park6151",
+      "SCP Planner": "bottle"
+    },
+    "82": {
+      "DM Admin": "wonqthanq",
+      "DM Planner": "ys_cho",
+      "DM Planner (W/S)": "miyeong.lee",
+      "DM Viewer": "yeonjusung",
+      "SCP Planner": "coeogus"
+    }
+  },
+  "admins": {
+    "DM ADMIN": [
+      "minyonglee1",
+      "k0101"
+    ],
+    "SCP ADMIN": [
+      "minyonglee1",
+      "jaeuk.shin"
+    ],
+    "SSP ADMIN": [
+      "minyonglee1",
+      "attackgo"
+    ]
+  },
+  "adminsNote": "각 ADMIN 행의 계정은 SYSTEM ADMIN + 해당 영역 ADMIN 권한자. Division 제한 없이 40/81/82 전부로 돌린다",
+  "pending": {
+    "SCP": "Division 별 권한 사용자 차후 추가",
+    "SSP": "Division 별 권한 사용자 차후 추가"
+  },
+  "names": {
+    "hongjae.kim": "김홍재 선임",
+    "eunah.koo": "구은아 선임",
+    "yooah.chung": "정유아 사원",
+    "dodae": "도대현 책임",
+    "jiwon.park": "박지원 선임",
+    "bpark416": "박병창 선임",
+    "jaehyeok": "유재혁 선임",
+    "park6151": "박성운 사원",
+    "bottle": "김재병 선임",
+    "wonqthanq": "정원규 선임",
+    "ys_cho": "조윤성 사원",
+    "miyeong.lee": "이미영 선임",
+    "yeonjusung": "성연주 선임",
+    "coeogus": "채대현 책임",
+    "minyonglee1": "이민용",
+    "k0101": "",
+    "jaeuk.shin": "",
+    "attackgo": ""
+  },
+  "screens": {
+    "_doc": "화면별 테스트 모드 — admin(영역 ADMIN + 권한 없는 사용자, 마스터 화면) | division(Division 별 역할 계정). 실행 시 --mode 로 지정하면 여기 저장된다. 없는 화면은 auto(Division 조회조건 유무로 추정)",
+    "SCP0096": {
+      "mode": "admin",
+      "note": "마스터 화면(2026-10-20 사용자 지정) — Division 별 사용자 불필요",
+      "updated": "2026-10-20"
+    },
+    "SCP0100": {
+      "mode": "admin",
+      "updated": "2026-10-20"
+    }
+  }
+}

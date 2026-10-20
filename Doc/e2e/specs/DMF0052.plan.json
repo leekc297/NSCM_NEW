@@ -1,5 +1,7 @@
 {
   "id": "DMF0052",
+  "mode": "admin",
+  "modeSource": "auto(Division 조회조건 없음)",
   "menuId": "DMF0052",
   "page": "Dmf0052",
   "routePath": "report/dmf0052",
@@ -306,163 +308,71 @@
   },
   "accounts": [
     {
-      "id": "jaehun_cho",
+      "id": "k0101",
+      "name": "",
       "groups": [
-        "ADMIN",
         "DM ADMIN",
-        "DM Planner",
-        "DM Planner (W/S)",
-        "SCP Planner"
+        "SYSTEM ADMIN"
       ],
       "divisions": [
         "40"
       ],
+      "roles": {},
+      "roleNote": "ADMIN",
       "admin": true,
-      "screenGroup": ""
-    },
-    {
-      "id": "minyonglee1",
-      "groups": [
+      "adminOf": [
+        "DM ADMIN"
+      ],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
         "ADMIN",
         "DM ADMIN",
         "DM Planner",
         "DM Planner (W/S)",
-        "DM Viewer",
+        "FP Viewer",
+        "GUEST",
         "JV Planner",
-        "SCP Planner"
+        "SCM PI Admin",
+        "SCP Planner",
+        "SSP Viewer"
       ],
-      "divisions": [
-        "40",
-        "81",
-        "82"
-      ],
-      "admin": true,
-      "screenGroup": ""
-    },
-    {
-      "id": "bottle",
-      "groups": [
-        "SCP Planner"
-      ],
-      "divisions": [
-        "40",
-        "81"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "bpark416",
-      "groups": [
-        "DM Planner"
-      ],
-      "divisions": [
-        "40",
-        "81",
-        "82"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "cmjin",
-      "groups": [
-        "DM Planner"
-      ],
-      "divisions": [
-        "40",
-        "81",
-        "82"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "coeogus",
-      "groups": [
-        "SCP Planner"
-      ],
-      "divisions": [
-        "40",
-        "81"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "dodae",
-      "groups": [
-        "SCP Planner"
-      ],
-      "divisions": [
-        "40"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "eunah.koo",
-      "groups": [
-        "DM Planner"
-      ],
-      "divisions": [
-        "40",
-        "81",
-        "82"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "jaehyeok",
-      "groups": [
-        "DM Planner (W/S)"
-      ],
-      "divisions": [
-        "81",
-        "82"
-      ],
-      "admin": false,
-      "screenGroup": ""
+      "menuAccess": "Y",
+      "expectedBtns": null,
+      "matrix": []
     },
     {
       "id": "miyeong.lee",
+      "name": "이미영 선임",
       "groups": [
-        "DM Planner (W/S)"
-      ],
-      "divisions": [
-        "81",
-        "82"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "wcyoon",
-      "groups": [
-        "DM Planner"
-      ],
-      "divisions": [
-        "40",
-        "81",
-        "82"
-      ],
-      "admin": false,
-      "screenGroup": ""
-    },
-    {
-      "id": "ys_cho",
-      "groups": [
-        "DM Planner",
         "DM Planner (W/S)"
       ],
       "divisions": [
         "40"
       ],
+      "roles": {
+        "82": "DM Planner (W/S)"
+      },
+      "roleNote": "권한 없음 대표",
       "admin": false,
-      "screenGroup": ""
+      "adminOf": [],
+      "screenGroup": "",
+      "source": "users.json",
+      "tobeGroups": [
+        "GUEST"
+      ],
+      "menuAccess": "N",
+      "expectedBtns": null,
+      "matrix": []
     }
   ],
+  "accountSource": "users.json",
   "expectedBtnsByGroup": {},
-  "menuAuth": "menu.csv"
+  "menuBtnCodes": [],
+  "menuAuth": "menu.csv",
+  "authSource": {
+    "groups": "user_group_user.csv",
+    "menus": "user_group_menu.csv",
+    "buttons": ""
+  }
 }

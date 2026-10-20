@@ -15,6 +15,7 @@ import {
   type SearchMode,
 } from './global-psi-report.constants';
 import type { SearchCondition } from './global-psi-report.types';
+import { planDayRange } from './utils/globalPsiReportCalendar';
 
 // SCM_MST_SHEET_MEASURE 동적 fetch row — /admin/menu/{MENU_ID}/measure (camelCase, ForecastPrice 선례 1:1).
 //   주의: BE GridMeasure DTO 는 DISPLAY_FLAG/USER_SELECTABLE_FLAG 를 boolean 으로 직렬화한다
@@ -56,6 +57,9 @@ interface State {
   staticColumns: StaticColumnsBySheet;
   // SCM_MST_SHEET_MEASURE 동적 fetch ('Global PSI New' 36행, design 03 §1). PIVOT measure 세로축.
   staticMeasures: MeasureMeta[];
+  // 조회기간(SetCalendar)을 마지막으로 시드한 Plan Date. AS-IS 는 Load·PlanDate 변경 때만 기간을 다시 세팅하므로
+  //   (SCP0100_Global_PSI_Report.cs:600·1788) 같은 Plan Date 로 리마운트될 때 사용자가 고친 기간을 덮지 않게 가드한다.
+  calendarSeedPlan: string;
 }
 
 interface Action {
@@ -66,6 +70,7 @@ interface Action {
   setUnitScaleIndex: (index: number) => void;
   setFilter: () => void;
   clearFilters: () => void;
+  seedCalendar: (planStartYyyymmdd: string, planEndYyyymmdd: string) => void;
   setOpenSearchArea: (open?: boolean) => void;
   fetchStaticColumns: () => Promise<void>;
   fetchStaticMeasures: () => Promise<void>;
@@ -118,6 +123,7 @@ const makeInitState = (): State => ({
   unitScaleIndex: 0,
   staticColumns: emptyStaticColumns,
   staticMeasures: [],
+  calendarSeedPlan: '',
 });
 
 const str = (v: unknown): string =>
@@ -225,6 +231,15 @@ export const useGlobalPsiReportStore = createPersistedStoreWithTab<State & Actio
     clearFilters: () =>
       set(state => {
         state.filters = {};
+      }),
+    // AS-IS SetCalendar(.cs:1317) → GetDayRange "MONTH"(.cs:1409~1423) — 계산은 planDayRange(utils).
+    //   종료일이 비면 null → 기간 유지(UsrDateRangePicker3.InitValue('') 무변경 파리티).
+    //   어느 쪽이든 이 Plan Date 는 시드 완료로 표시해 재시드하지 않는다.
+    seedCalendar: (planStartYyyymmdd, planEndYyyymmdd) =>
+      set(state => {
+        const range = planDayRange(planStartYyyymmdd, planEndYyyymmdd);
+        if (range) state.searchCondition = { ...get().searchCondition, ...range };
+        state.calendarSeedPlan = planStartYyyymmdd;
       }),
     setOpenSearchArea: open =>
       set(state => {

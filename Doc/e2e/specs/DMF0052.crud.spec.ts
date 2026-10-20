@@ -3,6 +3,7 @@ import { test, expect } from '../../../tools/E2E/fixtures/test';
 import * as fs from 'node:fs';
 const PLAN = JSON.parse(fs.readFileSync(__dirname + '/DMF0052.plan.json', 'utf8'));
 const MENU = "DMF0052";
+import { crudCycle } from '../../../tools/E2E/lib/crud';
 
 test.describe(`${MENU} EDISummary CRUD @crud`, () => {
   test('조회 전용 화면 — 저장 버튼이 없어야 한다', async ({ nscm }) => {

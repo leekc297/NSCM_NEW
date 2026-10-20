@@ -2,18 +2,24 @@ export const MENU_ID = 'SCP0096' as const;
 export type MENU_ID = typeof MENU_ID;
 
 // AS-IS GSCM.SCP.Forms.UIL Master SCP0096_Shipment_Working_Day_OSP (Supply > Supply Master > Shipment Working Day(OSP)).
-//   - 정적 좌측 6컬럼(SHEET_COLUMNS 메타) + GET SP O_RC1 동적 D_/W_/M_ pivot 기간 컬럼(3SPAN 헤더).
+//   - 정적 좌측 6컬럼(SHEET_COLUMNS 메타) + 동적 기간 컬럼(3SPAN 타이틀 SP 응답 행으로 생성 — AS-IS InitSpreadDateColumn 1:1).
 //     편집 대상 = WORKING_TIME_DEFAULT(FPNumber, scale2) + 동적 D_ 일자셀(Y/N 셀콤보 dtValidYN).
 //   - 편집은 행 게이트가 아니라 EditButton(SwitchLock) 편집모드 진입 후 두 대상만 개방(01_layout §2, 03 §3-a).
 //   - GET SP : PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP (4 IN + O_RC1 데이터 + O_RESULT_CURSOR 상태).
-//     실측(all_arguments + body): O_RC1 = 동적 PIVOT(SELECT IA.* FROM GT_SCP0096_PIVOT), O_RESULT_CURSOR = '0'/'SUCCESS'.
+//     실측(all_arguments + body): O_RC1 = 동적 PIVOT(SELECT IA.* FROM GT_SCP0096_PIVOT — 'D_'||YYYYMMDD 열), O_RESULT_CURSOR = '0'/'SUCCESS'.
 //   - SAVE SP: PKG_SCP0096.P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP (7 CLOB '^' 배열 + P_USER_ID + O_RESULT_CURSOR).
-//   - 3SPAN 헤더: PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN(공용, 조회기간→대/소/일 헤더 컬럼셋).
+//   - 3SPAN 헤더: PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN(공용, 조회기간→대/소/일 헤더 컬럼셋) — SHEETS.CALENDAR 로 조회.
 //   - 설계 : .atlas/gscm-design/SCP0096/design/01_layout.md / 02_search-combo.md / 03_grid-columns.md
 export enum SHEETS {
   // 메인 그리드 — DB 실측 SCM_MST_SHEET_COLUMNS.SHEET_NAME (PROGRAM_ID='SCP0096') = 'Shipment Working Day OSP'.
   //   admin `/column` 조회 키이자 그리드 데이터 sheetName.
   MAIN = 'Shipment Working Day OSP',
+  // 동적 기간 헤더 컬럼셋 전용(데이터 시트 아님) — 사내 현행 배선 SCM_ADM_MNU_BTN_MPG_M(SCP0096 / calendar / SEARCH →
+  //   API SCP0009_SHEET_CALENDAR_3SPAN_GET → PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN, proc_meta.csv).
+  //   AS-IS InitSpread → GetSpdTitle(.cs:151,825-838 SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN) 1:1.
+  //   IN 2개(startYyyymmdd/endYyyymmdd = 사내 PROC_M COL_NM, proc_params.csv)는 Store 의 calendarFilters 가 채운다.
+  //   자매 SCP0095 shipment-working-day / SCP0010·SCP0031·SSP0015 와 동일 명명.
+  CALENDAR = 'calendar',
   // 기본 조회기간 전용(데이터 시트 아님) — 사내 현행 배선 SCM_ADM_MNU_BTN_MPG_M(SCP0096 / dayRange / SEARCH →
   //   API SCM0001_SCP_MONTH_PERIOD_GET → PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD, 2026-10-20 ZIOUI1 실측).
   //   AS-IS InitControls `dCalendar.InitValue = GetDayRange()`(.cs:137,840-846) = DateUtil.GetDayRange(cboDivision,'DAILY')
@@ -22,15 +28,17 @@ export enum SHEETS {
   DAY_RANGE = 'dayRange',
 }
 
-// GET SP 는 단일 호출로 데이터(O_RC1) + 상태(O_RESULT_CURSOR) 2커서를 반환한다.
-//   BE 규약(BaseService.java:503): 오라클 OUT 커서명을 소문자화해 응답 키로 쓴다(재라벨 없음).
-//   실측(all_source PKG_SCP0096 BODY): O_RC1 = 동적 PIVOT 데이터, O_RESULT_CURSOR = 상태('0'/'SUCCESS').
+// 응답 키 = 사내 PROC_M OUT COL_NM 그대로(Doc/tobefacts/db/proc_params.csv, 대소문자 그대로).
+//   BE 규약(BaseService.java:84/128/164): OUT 커서는 '@'+COL_NM 로 바인딩하고 응답 키는 '@' 만 뗀 COL_NM(재라벨·소문자화 없음).
+//   ResultSetMetaData 사이드카(o_rc1_columns)는 SYS0013 DynamicQuery(DynamicQueryServiceImpl.java:46,73) 전용이라
+//   일반 call-proc 응답에는 없다 — 동적 헤더는 CALENDAR 시트(3SPAN) 응답 행으로 만든다(2026-10-20 정정, DoD B26/B27).
 export const RESPONSE_SET = {
-  // 데이터 rows — SP OUT O_RC1 (BE 표준 매핑 o_rc1)
+  // 데이터 rows — GET SP OUT COL_NM 'o_rc1' (PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP pos5)
   MAIN: 'o_rc1',
-  // 동적 D_/W_/M_ 컬럼 메타 — SP OUT O_RC1 의 ResultSetMetaData 사이드카 (BE 표준 매핑 o_rc1_columns)
-  DYN_COLUMNS: 'o_rc1_columns',
-  // 상태 커서 — SP OUT O_RESULT_CURSOR (CODE/MSG). 데이터 아님(저장/오류 확인용).
+  // 동적 기간 헤더 컬럼셋 rows — 3SPAN OUT COL_NM 'o_rc1' (PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN pos3).
+  //   행 = COLUMN_NAME·COLUMN_LABEL_NAME·SMALL_CLASS_LABEL_NAME·LARGE_CLASS_LABEL_NAME·DAY_CODE·SORT_ORDER_NO (사내 실측 2026-10-20).
+  CALENDAR: 'o_rc1',
+  // 상태 커서 — GET/SAVE SP OUT COL_NM 'o_result_cursor' (CODE/MSG). 데이터 아님(저장/오류 확인용).
   STATUS: 'o_result_cursor',
 } as const;
 export type RESPONSE_SET = (typeof RESPONSE_SET)[keyof typeof RESPONSE_SET];
@@ -67,16 +75,28 @@ export const DAY_WEEK = {
   SELECT_DAY: 'SelectDay', // 기본. 선택 셀에만 기입(선택셀 0 이면 MSG00134).
 } as const;
 
-// 요일코드(Mon~Sun) → dayjs day() 인덱스(0=일 ~ 6=토). btnInput 요일별 분기(GetDayOfWeek 매칭, 03 §3-b :797).
-export const WEEKDAY_CODE_TO_INDEX: Record<string, number> = {
-  Sun: 0,
-  Mon: 1,
-  Tue: 2,
-  Wed: 3,
-  Thu: 4,
-  Fri: 5,
-  Sat: 6,
-} as const;
+// 3SPAN 응답 DAY_CODE — SCM_SYS_CALENDAR_M.DAYOFWEEK 실측 대문자(MON~SUN, 사내 2026-10-20).
+//   AS-IS DefColumnsLabel Saturday="SAT"/Sunday="SUN"(.cs:81-85) — 헤더 요일색(.cs:206-208) 판정 원천.
+//   btnInput 요일별 분기는 AS-IS GetDayOfWeek(.cs:811-818)처럼 cboDayWeek 코드(Mon~Sun).toUpperCase() 와 DAY_CODE 를
+//   그대로 비교한다(.cs:798) — dayjs 요일 재계산 금지(서버 달력이 진실, 2026-10-20 정정: 이전 WEEKDAY_CODE_TO_INDEX 폐기).
+export const DAY_CODE = { SAT: 'SAT', SUN: 'SUN' } as const;
+
+// 주말 헤더 색 — AS-IS .cs:208 (SAT=Blue / SUN=Red). 자매 SCP0095 동일 팔레트.
+export const WEEKEND_HEADER_COLOR = { SAT: '#1e56c8', SUN: '#c0392b' } as const;
+
+// 동적 일자 컬럼 binding 규약 — 3SPAN COLUMN_NAME / GET SP alias 'D_' || BASIS_YYYYMMDD.
+//   AS-IS Tag.IndexOf("D_")==0(.cs:542,745,759,772,788) 등가이면서 형식(8자리)까지 강제한다.
+export const DAY_BINDING_RE = /^D_\d{8}$/;
+// 합계 컬럼 binding — 3SPAN 'W_'||BASIS_YYYYMM||ISO_WEEK(주) / 'M_'||BASIS_YYYYMM(월). AS-IS SetSpreadColumn(.cs:353)·SetLockSumColumn(.cs:406).
+export const SUM_BINDING_RE = /^[WM]_\d+$/;
+
+// 동적 일자 컬럼 폭 — AS-IS AddComboColumn(sColumnLabelname, sColumnName, FPMerge.None, 50, …) .cs:203 리터럴.
+export const DAY_COLUMN_WIDTH = 50;
+
+// 다단 헤더 총높이 — 48px 고정(hook #93 단일 출처 = foundation HEIGHT_BY_COLUMN_DEPTH, 10_RULES_KEEP D3).
+//   AS-IS ColumnHeaderSpan 의 20 을 3배(60)로 옮기면 위반이다(2026-10-20 정정: 이전 TOTAL=60, 자매 SCP0095 :98-99 지적).
+//   per-tier 높이는 실제 렌더된 columnHeaders.rows.length 로 나눈다(3SPAN 응답 전 1단 → 수신 후 3단 전이에도 총합 유지).
+export const HEADER_TOTAL_HEIGHT = 48;
 
 // AS-IS Validation MSG — TO-BE SCM_ADM_MSG_M 실측(Doc/tobefacts/db/msg_master.csv 2026-10-19 추출) 기준 코드.
 //   ⚠ AS-IS 코드 번호를 그대로 쓰면 안 된다 — TO-BE 는 재채번돼 본문이 다르다(2026-10-20 정정, 원장 S96-10~12):

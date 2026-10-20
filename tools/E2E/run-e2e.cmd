@@ -1,31 +1,89 @@
 @echo off
 chcp 65001 >nul
-REM E2E 일괄 (노트북): 의존성 설치확인 -> 계정/스펙 생성 -> 실행 -> 리포트
-REM 사용: run-e2e.cmd [smoke|crud|auth|all] [화면ID ...]      (기본 smoke, 화면ID 없으면 Doc\gen 전체)
-REM 선행: FE(http://127.0.0.1:5173) / BE(http://localhost:8080, profile local|dev — /sso/dev-login 활성) 기동
+REM E2E batch runner: deps check -> run lock -> FE/BE check -> accounts/specs -> Playwright -> report
+REM Usage: run-e2e.cmd [smoke|crud|auth|authcrud|all] [SCREEN_ID ...] [--mode admin|division|auto]   (default smoke; no ID = all of Doc\gen)
+REM Stages (2026-10-20): smoke / crud / auth / authcrud  (details: README.md)
+REM Prereq: FE http://127.0.0.1:5173 and BE http://localhost:8080 (profile local). If either is down -> [FAIL] exit 5
+REM         (Vibe_Manager 1.9.6 starts BE/FE automatically before running this script)
+REM 2026-10-21 fixes: (1) run lock _run.lock -> another run alive = exit 4   (2) per-run log Doc\e2e\logs\run_<RUNID>_<kind>.log
+REM         (the shared _run.log was held by a concurrent run so every >> redirect failed and nothing ran, yet exit 0)
+REM         (3) report.js checks results.json is newer than this run -> otherwise exit 3   ("exit 0 is not proof of execution")
+REM RULE: keep this file ASCII only. With chcp 65001 cmd.exe mis-seeks after goto/blocks when the file contains multibyte text
+REM       (verified 2026-10-21: Korean REM/echo lines broke the script). Korean messages live in runlock.js / report.js / README.md.
 setlocal
 cd /d %~dp0
 set KIND=%1
 if "%KIND%"=="" set KIND=smoke
-set LOG=C:\Projects\NSCM\Doc\e2e\_run.log
-if not exist C:\Projects\NSCM\Doc\e2e\results mkdir C:\Projects\NSCM\Doc\e2e\results
-echo ==== %date% %time% run-e2e %* >> %LOG%
-REM 설치는 자동으로 하지 않는다(외부망 npm/브라우저 다운로드 금지 — Local 환경 보호). node_modules 는 VM 에서 설치해 복사해 둔 순수 JS 모듈.
-if not exist node_modules\@playwright\test\cli.js (
-  echo [중단] tools\E2E\node_modules 없음 — 자동 설치하지 않습니다. Claude 에게 node_modules 복사를 요청하세요.
-  exit /b 2
-)
+set E2EDIR=C:\Projects\NSCM\Doc\e2e
+set INDEX=%E2EDIR%\_run.log
+if not exist %E2EDIR%\results mkdir %E2EDIR%\results
+if not exist %E2EDIR%\logs mkdir %E2EDIR%\logs
+REM No auto install (no external npm/browser download on the Local PC). node_modules is copied from the VM.
+if exist node_modules\@playwright\test\cli.js goto deps_ok
+echo [FAIL] tools\E2E\node_modules missing - not installed automatically. Ask Claude to copy node_modules.
+exit /b 2
+:deps_ok
+REM (1) run lock + run id
+set RUNID=
+for /f "usebackq tokens=*" %%i in (`node runlock.js acquire %*`) do set RUNID=%%i
+if not "%RUNID%"=="" goto lock_ok
+echo [FAIL] E2E not started - see the [FAIL] reason above (another run in progress)
+exit /b 4
+:lock_ok
+set LOG=%E2EDIR%\logs\run_%RUNID%_%KIND%.log
+echo ==== %date% %time% run-e2e %* RUNID %RUNID% LOG %LOG% >> %INDEX%
+echo ==== %date% %time% run-e2e %* > %LOG%
+echo RUNID %RUNID% - log %LOG%
+REM (2) FE/BE must both be up (before: only [WARN], then Playwright failed everything)
+REM (note: 'set' after 'if errorlevel' resets ERRORLEVEL, so capture the curl codes first)
+curl -s -o nul http://127.0.0.1:5173/
+set FE_RC=%ERRORLEVEL%
+curl -s -o nul http://localhost:8080/user/login
+set BE_RC=%ERRORLEVEL%
+if not "%FE_RC%"=="0" echo [FAIL] FE down - no response from http://127.0.0.1:5173 (Vibe_Manager "FE Start" or vite.cmd in nscm-fe\apps\web)
+if not "%BE_RC%"=="0" echo [FAIL] BE down - no response from http://localhost:8080 (Vibe_Manager "BE Start" or gradlew.bat bootRun in nscm-be)
+if "%FE_RC%%BE_RC%"=="00" goto svr_ok
+echo [FAIL] FE/BE down - E2E not executed >> %LOG%
+node runlock.js release
+endlocal & exit /b 5
+:svr_ok
+echo FE 5173 / BE 8080 responding
 if not exist accounts.json python gen-accounts.py >> %LOG% 2>&1
 shift
 set IDS=
+set MODE=
 :loop
-if not "%1"=="" ( set IDS=%IDS% %1 & shift & goto loop )
-node probe-accounts.js >> %LOG% 2>&1 || echo [WARN] dev-login 가능한 계정 없음(BE 미기동 또는 계정 미등록) — 스펙은 defaultAccount 로 생성
-if "%IDS%"=="" ( node gen-e2e.js --all >> %LOG% 2>&1 ) else ( node gen-e2e.js %IDS% >> %LOG% 2>&1 )
-curl -s -o nul -w "FE %%{http_code}\n" http://127.0.0.1:5173/ || echo [WARN] FE 미기동
-curl -s -o nul -w "BE %%{http_code}\n" http://localhost:8080/sso/dev-login?id=_probe_ || echo [WARN] BE 미기동(또는 dev-login 비활성)
+if /i "%~1"=="--mode" ( set MODE=%~2 & shift & shift & goto loop )
+if not "%~1"=="" ( set IDS=%IDS% %~1 & shift & goto loop )
+REM test mode (2026-10-20): --mode admin (area ADMIN + no-auth user, master screens) | division (per-Division role accounts) | auto (users.json screens -> else meta guess)
+set MODEARG=
+if not "%MODE%"=="" set MODEARG=--mode %MODE%
+node probe-accounts.js >> %LOG% 2>&1 || echo [WARN] no account can log in (BE down or users not registered) - specs use defaultAccount
+REM refresh auth meta (3 tables, a few seconds) - corporate auth changes often (2026-10-20). On failure (VPN) keep existing CSV
+python ..\DbConn\export_tobe_meta.py btn_auth user_group_user user_group_menu >> %LOG% 2>&1 || echo [WARN] auth meta refresh failed - using existing Doc\tobefacts\db CSV
+if "%IDS%"=="" ( node gen-e2e.js --all %MODEARG% >> %LOG% 2>&1 ) else ( node gen-e2e.js %IDS% %MODEARG% >> %LOG% 2>&1 )
+if not errorlevel 1 goto gen_ok
+echo [FAIL] spec generation failed (gen-e2e.js) - log tail:
+powershell -NoProfile -Command "Get-Content -LiteralPath '%LOG%' -Tail 12"
+node runlock.js release
+endlocal & exit /b 6
+:gen_ok
 set PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-if /i "%KIND%"=="all" ( node node_modules\@playwright\test\cli.js test >> %LOG% 2>&1 ) else ( node node_modules\@playwright\test\cli.js test --grep @%KIND% >> %LOG% 2>&1 )
+REM @auth also matches @authcrud, so for auth only use a lookahead
+set GREP=@%KIND%
+if /i "%KIND%"=="auth" set GREP=@auth(?!crud)
+REM with screen IDs only those spec files run (file-name filter, 2026-10-20)
+echo Playwright %KIND%%IDS% running - output goes to the log file
+if /i "%KIND%"=="all" ( node node_modules\@playwright\test\cli.js test %IDS% >> %LOG% 2>&1 ) else ( node node_modules\@playwright\test\cli.js test %IDS% --grep "%GREP%" >> %LOG% 2>&1 )
+set RC=%ERRORLEVEL%
+REM 2026-10-21: propagate exit code (before, the last command's 0 was returned even when Playwright could not start - SCP0100)
+if "%RC%"=="0" goto pw_ok
+echo [FAIL] Playwright exit code %RC% - log tail:
+powershell -NoProfile -Command "Get-Content -LiteralPath '%LOG%' -Tail 12"
+:pw_ok
+REM (3) report - results.json must be newer than this run (lock time), otherwise exit 3 (Playwright did not run)
 node report.js
-echo 로그: %LOG%
-endlocal
+if errorlevel 1 if "%RC%"=="0" set RC=3
+echo log: %LOG%
+node runlock.js release
+endlocal & exit /b %RC%

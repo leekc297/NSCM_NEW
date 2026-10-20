@@ -1,0 +1,491 @@
+﻿# SCP0100 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\Properties\AssemblyInfo.cs | 06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.csproj | 37 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs | 06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.csproj | 2056 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.csproj | 1682 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| event:cboPlanDate.SelectedIndexChanged | CboPlanDate_SelectedIndexChanged > InitSpread > GetSpdTitle | 1326 | SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0100_GET_SHEET_CALENDAR_3SPAN |
+| event:cboPlanDate.SelectedIndexChanged | CboPlanDate_SelectedIndexChanged > SetCalendar > GetDayRange > GetPlanEndDate | 2035 | biz:CommonData.CommonDataList_REPORT [code={?Data_REPORT.Type.PLAN_END_DATE}] | BIZ_MATCH |  |
+| event:dCalendar.ValueChanged | DCalendar_ValueChanged > InitSpread > GetSpdTitle | 1326 | SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0100_GET_SHEET_CALENDAR_3SPAN |
+| event:rgrpSearchLevel.SelectedIndexChanged | rgrpSearchLevel_SelectedIndexChanged > InitSpread > GetSpdTitle | 1326 | SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0100_GET_SHEET_CALENDAR_3SPAN |
+| event:this.btnColumn.Click | BtnColumn_Click > InitSpread > GetSpdTitle | 1326 | SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0100_GET_SHEET_CALENDAR_3SPAN |
+| event:this.btnMeasure.Click | btnMeasure_Click > InitSpread > GetSpdTitle | 1326 | SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0100_GET_SHEET_CALENDAR_3SPAN |
+| event:this.Load | Form_Load > CreateSpread > InitSpread > GetSpdTitle | 1326 | SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0100_GET_SHEET_CALENDAR_3SPAN |
+| event:this.Load | Form_Load > InitControls > GetPlanDate | 1365 | SCP.SCP0100_GET_PLAN_DATE | MATCH | SP SCP0100_GET_PLAN_DATE |
+| event:this.Load | Form_Load > InitControls > SetCalendar > GetDayRange > GetPlanEndDate | 2035 | biz:CommonData.CommonDataList_REPORT [code={?Data_REPORT.Type.PLAN_END_DATE}] | BIZ_MATCH |  |
+| event:this.Shown | SCP0100_Global_PSI_Report_Shown > InitControlsAfter > RefreshToSite > GetSiteList | 1342 | SCP.SCP0100_GET_SITE | MATCH | SP SCP0100_GET_SITE |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList_REPORT [code={?Data_REPORT.Type.PLAN_END_DATE}] | BIZ_MATCH | 1 |  |  |  |
+| SCP.SCP0100_GET_PLAN_DATE | MATCH | 1 | SP SCP0100_GET_PLAN_DATE | EXEC:SCP0100_GET_PLAN_DATE, INSERT:#TMP_PLAN, REF:FN_CHAR_TO_DATE, SELECT:SCP_PLAN_VERSION_V, SELECT:SCM_SYS_CALENDAR_M, SELECT:SCP_PLN_INTERFACE_YN, REF:FN_SPLITSTRING, SELECT:#TMP_PLAN, SELECT:SCP_RPT_GLOBAL_PSI_MD_MM, SELECT:SCP_RPT_GLOBAL_PSI_MD_WW |  |
+| SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN | MATCH | 1 | SP SCP0100_GET_SHEET_CALENDAR_3SPAN | EXEC:SCP0100_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M |  |
+| SCP.SCP0100_GET_SITE | MATCH | 1 | SP SCP0100_GET_SITE | EXEC:SCP0100_GET_SITE, SELECT:SCP_RPT_GLOBAL_PSI_MD_MM, REF:FN_SPLITSTRING, SELECT:SCP_RPT_GLOBAL_PSI_MD_WW |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| GetCheckedListValue | getPlanStartYYYYMMDD:215, getFromSite:306, getToSite:325, getPlanType:344, getSearchLevel:412, getDivision:466 | CString.GetCheckedListValue | CODE |
+| OnShown | OnShown:522 | BaseForm.OnShown | NowGroupID, USER_ID |
+| GetSpdTitle | InitSpread:703 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
+| SetSheetHeaderColumn | InitSpread:705 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| InitSpreadDateColumn | InitSpread:706 | SpreadInfo.InitSpreadDateColumn | COLUMN_LABEL_NAME, COLUMN_NAME, DAY_CODE, LARGE_CLASS_LABEL_NAME, SMALL_CLASS_LABEL_NAME |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this | Load | Form_Load | .ctor:501 |
+| this | Shown | SCP0100_Global_PSI_Report_Shown | .ctor:502 |
+| clbDivision | SelectedIndexChanged | ClbDivision_SelectedIndexChanged | InitEvent:1127 |
+| cboGraphType | SelectedIndexChanged | CboGraphType_SelectedIndexChanged | InitEvent:1128 |
+| cboPlanDate | SelectedIndexChanged | CboPlanDate_SelectedIndexChanged | InitEvent:1129 |
+| cboBucketType | SelectedIndexChanged | CboBucketType_SelectedIndexChanged | InitEvent:1130 |
+| cboDisplay | SelectedIndexChanged | CboDisplay_SelectedIndexChanged | InitEvent:1131 |
+| cboSearchLevel | SelectedIndexChanged | CboSearchLevel_SelectedIndexChanged | InitEvent:1132 |
+| cboUnitQty | SelectedIndexChanged | CboUnitQty_SelectedIndexChanged | InitEvent:1133 |
+| rgrpSearchLevel | SelectedIndexChanged | rgrpSearchLevel_SelectedIndexChanged | InitEvent:1134 |
+| this.btnItemId | Click | BtnItemId_Click | InitEvent:1136 |
+| this.btnMeasure | Click | btnMeasure_Click | InitEvent:1137 |
+| this.btnProject | Click | BtnProject_Click | InitEvent:1139 |
+| cboPlanType | SelectedIndexChanged | CboPlanType_SelectedIndexChanged | InitEvent:1140 |
+| this.btnColumn | Click | BtnColumn_Click | InitEvent:1141 |
+| dCalendar | ValueChanged | DCalendar_ValueChanged | InitEvent:1143 |
+| chkCellQty | CheckedChanged | ChkCellQty_CheckedChanged | InitEvent:1144 |
+| chkAS | CheckedChanged | ChkAS_CheckedChanged | InitEvent:1145 |
+
+## 6. 컨트롤 (63개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| LayoutControlItem | 21 | layModel, layoutbtnitem, layoutControlItem1, lblToSite, lblCellGroup1, lblCellGroup, layoutControlItem2, lblBucket, PlanType, layDisplay, lblGraphType, layPeriod, layMeasure, layoutBtnColumn, layUnit_qty … |
+| EmptySpaceItem | 9 | emptySpaceItem1, emptySpaceItem5, emptySpaceItem7, emptySpaceItem6, emptySpaceItem4, emptySpaceItem13, emptySpaceItem3, emptySpaceItem8, emptySpaceItem10 |
+| UsrCombo | 7 | cboPlanDate, cboBucketType, cboGraphType, cboDisplay, cboPlanType, cboSearchLevel, cboUnitQty |
+| UsrButton | 5 | usrButton1, btnItemId, btnMeasure, btnProject, btnColumn |
+| UsrTextBox | 3 | txtItemId, txtProject, txtCellGroup |
+| UsrCheckedList2 | 3 | clbFromSite, clbToSite, clbDivision |
+| FpSpread | 3 | spdSearchLevel, spdDetail, spdSearchLevelDetail |
+| SheetView | 3 | spdMain_Sheet, spdSearchLevel_Sheet, spdSearchLevelDetail_Sheet |
+| UsrCheckBox | 2 | chkCellQty, chkAS |
+| UsrConditionPanel | 1 | usrConditionPanel1 |
+| UsrLayoutControl | 1 | usrLayoutControl2 |
+| RadioGroup | 1 | rgrpSearchLevel |
+| UsrDateRangePicker3 | 1 | dCalendar |
+| LayoutControlGroup | 1 | layoutControlGroup2 |
+| SplitContainer | 1 | splitContainer1 |
+| ChartControl | 1 | chartMain |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 678 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 33 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.SCM_MST_SHEET_MEASURE | 36 | dbmeta_dbo_SCM_MST_SHEET_MEASURE.csv |
+| dbo.SCM_MST_TITLESET_USER | 526 | dbmeta_dbo_SCM_MST_TITLESET_USER.csv |
+| dbo.TB_FX_Favorite | 2 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 4 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+| dbo.TB_FX_SearchCondition | 23 | dbmeta_dbo_TB_FX_SearchCondition.csv |
+
+## 9. 주석/비활성 처리된 호출 (0건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SCP0100 | REPORT | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 | 14/0 |
+| SCM_MST_SHEET_COLUMNS | SCP0100 | SEARCH_LEVEL | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 |
+| SCM_MST_SHEET_COLUMNS | SCP0100 | SEARCH_LEVEL_DETAIL | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 | 8/0 |
+| SCM_MST_SHEET_MEASURE | SCP0100 | Global PSI New | 35/0 | 35/0 | 35/0 | 35/0 | 35/0 | 35/0 | 35/0 | 35/0 | 35/0 | 35/0 | 35/0 | 35/0 | 35/0 | 35/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + DB루프(코드) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: SEARCH_LEVEL, REPORT, SEARCH_LEVEL_DETAIL
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:705
+- 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSpreadDateColumn, SetSpreadColumn
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitSpreadDateColumn |  | 755 | DB루프 | AddTextColumn | {?string.Empty} \|\| {?dr[DefColumns.COLUMN_LABEL_NAME]} | {?string.Empty} \|\| {?dr[DefColumns.COLUMN_NAME]} | foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sColumnName.IndexOf("B_") > 0) |
+| InitSpreadDateColumn |  | 760 | DB루프 | AddNumColumn | {?string.Empty} \|\| {?dr[DefColumns.COLUMN_LABEL_NAME]} | {?string.Empty} \|\| {?dr[DefColumns.COLUMN_NAME]} | foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf("B_") > 0) |
+| InitSpreadDateColumn |  | 767 | 표시/라벨 변경 | set:ForeColor | ForeColor = {?Color.Red} |  | foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf("B_") > 0) ⟫ if(sColumnName.StartsWith("M_")) ⟫ if(sColumnName.Contains(_plan_start_yyyymm)) |
+| InitSpreadDateColumn |  | 774 | 표시/라벨 변경 | set:ForeColor | ForeColor = {?Color.Blue} |  | foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf("B_") > 0) ⟫ else!(sColumnName.StartsWith("M_")) ⟫ if(sColumnName.StartsWith("W_")) ⟫ if(sColumnLabelname.Contains("A")) |
+| InitSpreadDateColumn |  | 778 | 표시/라벨 변경 | set:ForeColor | ForeColor = {?Color.Blue} |  | foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf("B_") > 0) ⟫ else!(sColumnName.StartsWith("M_")) ⟫ if(sColumnName.StartsWith("W_")) ⟫ else!(sColumnLabelname.Contains("A")) ⟫ if(sColumnLabelname.Contains("B")) |
+| SetSpreadColumn |  | 1103 | 표시/라벨 변경 | set:Visible | Visible = {?true} |  | for(iCol < _SI.ActiveSheet.Columns.Count) ⟫ if(_bucket_type.Equals("MONTHLY")) ⟫ if(ColName.IndexOf("M_") == 0) |
+| SetSpreadColumn |  | 1107 | 표시/라벨 변경 | set:Visible | Visible = {?false} |  | for(iCol < _SI.ActiveSheet.Columns.Count) ⟫ if(_bucket_type.Equals("MONTHLY")) ⟫ else!(ColName.IndexOf("M_") == 0) |
+| SetSpreadColumn |  | 1114 | 표시/라벨 변경 | set:Visible | Visible = {?true} |  | for(iCol < _SI.ActiveSheet.Columns.Count) ⟫ else!(_bucket_type.Equals("MONTHLY")) ⟫ if(_bucket_type.Equals("WEEKLY")) ⟫ if(ColName.IndexOf("W_") == 0) |
+| SetSpreadColumn |  | 1118 | 표시/라벨 변경 | set:Visible | Visible = {?false} |  | for(iCol < _SI.ActiveSheet.Columns.Count) ⟫ else!(_bucket_type.Equals("MONTHLY")) ⟫ if(_bucket_type.Equals("WEEKLY")) ⟫ else!(ColName.IndexOf("W_") == 0) |
+| SetVisibleColumnCycle |  | 1290 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex(day)} | {?string.Empty} \|\| D0 \|\| D1 | for(i < _SI.ActiveSheet.ColumnCount) |
+| SetLayout |  | 1498 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL1")} | PRODUCT_LEVEL1 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 1 |
+| SetLayout |  | 1499 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL2")} | PRODUCT_LEVEL2 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 1 |
+| SetLayout |  | 1500 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL3")} | PRODUCT_LEVEL3 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 1 |
+| SetLayout |  | 1509 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL1")} | PRODUCT_LEVEL1 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 2 |
+| SetLayout |  | 1510 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL2")} | PRODUCT_LEVEL2 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 2 |
+| SetLayout |  | 1511 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL3")} | PRODUCT_LEVEL3 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 2 |
+| SetLayout |  | 1518 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL1")} | PRODUCT_LEVEL1 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 3 |
+| SetLayout |  | 1519 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL2")} | PRODUCT_LEVEL2 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 3 |
+| SetLayout |  | 1520 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL3")} | PRODUCT_LEVEL3 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 3 |
+| SetLayout |  | 1527 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL1")} | PRODUCT_LEVEL1 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 4 |
+| SetLayout |  | 1528 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL2")} | PRODUCT_LEVEL2 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 4 |
+| SetLayout |  | 1529 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL3")} | PRODUCT_LEVEL3 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 4 |
+| SetLayout |  | 1536 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL1")} | PRODUCT_LEVEL1 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case  |
+| SetLayout |  | 1537 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL2")} | PRODUCT_LEVEL2 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case  |
+| SetLayout |  | 1538 | 표시/라벨 변경 | VisibleColumns | {?_SI.GetColumnIndex("PRODUCT_LEVEL3")} | PRODUCT_LEVEL3 | if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| REPORT | META+코드연결 | 11 (?3) | 11 (?3) | 11 (?3) | 11 (?3) | 11 (?3) | 11 (?3) | 11 (?3) | 11 (?3) | 11 (?3) | 11 (?3) | 11 (?3) | 11 (?3) | 11 (?3) | 11 (?3) |
+| SEARCH_LEVEL | META+코드연결 | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) |
+| SEARCH_LEVEL_DETAIL | META+코드연결 | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) | 5 (?3) |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+판단불가(?) 분류: 런타임:화면컨트롤값 630 — 런타임 분류는 실행 시점에만 결정되는 정상 동적 분기, '미지원식'만 파서 보완 대상.
+분기 조건 판단불가 적용 630건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (4 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","GetSpdTitle","1326","ctor","fox","SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN","SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0100_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0100_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","GetSiteList","1342","ctor","fox","SCP.SCP0100_GET_SITE","SCP.SCP0100_GET_SITE","MATCH","SP SCP0100_GET_SITE","EXEC:SCP0100_GET_SITE, SELECT:SCP_RPT_GLOBAL_PSI_MD_MM, REF:FN_SPLITSTRING, SELECT:SCP_RPT_GLOBAL_PSI_MD_WW","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","GetPlanDate","1365","ctor","fox","SCP.SCP0100_GET_PLAN_DATE","SCP.SCP0100_GET_PLAN_DATE","MATCH","SP SCP0100_GET_PLAN_DATE","EXEC:SCP0100_GET_PLAN_DATE, INSERT:#TMP_PLAN, REF:FN_CHAR_TO_DATE, SELECT:SCP_PLAN_VERSION_V, SELECT:SCM_SYS_CALENDAR_M, SELECT:SCP_PLN_INTERFACE_YN, REF:FN_SPLITSTRING, SELECT:#TMP_PLAN, SELECT:SCP_RPT_GLOBAL_PSI_MD_MM, SELECT:SCP_RPT_GLOBAL_PSI_MD_WW","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","GetPlanEndDate","2035","derived","biz","CommonData.CommonDataList_REPORT [code={?Data_REPORT.Type.PLAN_END_DATE}]","biz:CommonData.CommonDataList_REPORT","BIZ_MATCH","","","Data_REPORT.CallBizCommonData",""
+```
+
+### FILE flow.csv (10 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","event","this.Load","Form_Load > CreateSpread > InitSpread > GetSpdTitle","GetSpdTitle","1326","SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0100_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0100_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","event","this.Load","Form_Load > InitControls > SetCalendar > GetDayRange > GetPlanEndDate","GetPlanEndDate","2035","biz:CommonData.CommonDataList_REPORT [code={?Data_REPORT.Type.PLAN_END_DATE}]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","event","this.Load","Form_Load > InitControls > GetPlanDate","GetPlanDate","1365","SCP.SCP0100_GET_PLAN_DATE","MATCH","SP SCP0100_GET_PLAN_DATE","EXEC:SCP0100_GET_PLAN_DATE, INSERT:#TMP_PLAN, REF:FN_CHAR_TO_DATE, SELECT:SCP_PLAN_VERSION_V, SELECT:SCM_SYS_CALENDAR_M, SELECT:SCP_PLN_INTERFACE_YN, REF:FN_SPLITSTRING, SELECT:#TMP_PLAN, SELECT:SCP_RPT_GLOBAL_PSI_MD_MM, SELECT:SCP_RPT_GLOBAL_PSI_MD_WW"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","event","this.Shown","SCP0100_Global_PSI_Report_Shown > InitControlsAfter > RefreshToSite > GetSiteList","GetSiteList","1342","SCP.SCP0100_GET_SITE","MATCH","SP SCP0100_GET_SITE","EXEC:SCP0100_GET_SITE, SELECT:SCP_RPT_GLOBAL_PSI_MD_MM, REF:FN_SPLITSTRING, SELECT:SCP_RPT_GLOBAL_PSI_MD_WW"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","event","cboPlanDate.SelectedIndexChanged","CboPlanDate_SelectedIndexChanged > InitSpread > GetSpdTitle","GetSpdTitle","1326","SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0100_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0100_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","event","cboPlanDate.SelectedIndexChanged","CboPlanDate_SelectedIndexChanged > SetCalendar > GetDayRange > GetPlanEndDate","GetPlanEndDate","2035","biz:CommonData.CommonDataList_REPORT [code={?Data_REPORT.Type.PLAN_END_DATE}]","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","event","rgrpSearchLevel.SelectedIndexChanged","rgrpSearchLevel_SelectedIndexChanged > InitSpread > GetSpdTitle","GetSpdTitle","1326","SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0100_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0100_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","event","this.btnMeasure.Click","btnMeasure_Click > InitSpread > GetSpdTitle","GetSpdTitle","1326","SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0100_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0100_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","event","this.btnColumn.Click","BtnColumn_Click > InitSpread > GetSpdTitle","GetSpdTitle","1326","SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0100_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0100_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","event","dCalendar.ValueChanged","DCalendar_ValueChanged > InitSpread > GetSpdTitle","GetSpdTitle","1326","SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0100_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0100_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+```
+
+### FILE events.csv (18 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report",".ctor","501","this","Load","Form_Load","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report",".ctor","502","this","Shown","SCP0100_Global_PSI_Report_Shown","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1127","clbDivision","SelectedIndexChanged","ClbDivision_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1128","cboGraphType","SelectedIndexChanged","CboGraphType_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1129","cboPlanDate","SelectedIndexChanged","CboPlanDate_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1130","cboBucketType","SelectedIndexChanged","CboBucketType_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1131","cboDisplay","SelectedIndexChanged","CboDisplay_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1132","cboSearchLevel","SelectedIndexChanged","CboSearchLevel_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1133","cboUnitQty","SelectedIndexChanged","CboUnitQty_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1134","rgrpSearchLevel","SelectedIndexChanged","rgrpSearchLevel_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1136","this.btnItemId","Click","BtnItemId_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1137","this.btnMeasure","Click","btnMeasure_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1139","this.btnProject","Click","BtnProject_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1140","cboPlanType","SelectedIndexChanged","CboPlanType_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1141","this.btnColumn","Click","BtnColumn_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1143","dCalendar","ValueChanged","DCalendar_ValueChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1144","chkCellQty","CheckedChanged","ChkCellQty_CheckedChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitEvent","1145","chkAS","CheckedChanged","ChkAS_CheckedChanged","+="
+```
+
+### FILE controls.csv (63 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","usrButton1","GSCM.Windows.Forms.Controls.UsrButton","","36"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","37"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","38"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","rgrpSearchLevel","DevExpress.XtraEditors.RadioGroup","usrLayoutControl2","39"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","chkCellQty","GSCM.Windows.Forms.Controls.UsrCheckBox","usrLayoutControl2","40"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","cboPlanDate","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","41"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","cboBucketType","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","42"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","dCalendar","GSCM.Windows.Forms.Controls.UsrDateRangePicker3","usrLayoutControl2","43"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","cboGraphType","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","44"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","btnItemId","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","45"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","btnMeasure","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","46"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","txtItemId","GSCM.Windows.Forms.Controls.UsrTextBox","usrLayoutControl2","47"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","cboDisplay","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","48"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","txtProject","GSCM.Windows.Forms.Controls.UsrTextBox","usrLayoutControl2","49"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","clbFromSite","GSCM.Windows.Forms.Controls.UsrCheckedList2","usrLayoutControl2","50"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","clbToSite","GSCM.Windows.Forms.Controls.UsrCheckedList2","usrLayoutControl2","51"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","txtCellGroup","GSCM.Windows.Forms.Controls.UsrTextBox","usrLayoutControl2","52"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","btnProject","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","53"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","cboPlanType","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","54"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","btnColumn","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","55"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","cboSearchLevel","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","56"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","chkAS","GSCM.Windows.Forms.Controls.UsrCheckBox","usrLayoutControl2","57"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","cboUnitQty","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","58"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","clbDivision","GSCM.Windows.Forms.Controls.UsrCheckedList2","usrLayoutControl2","59"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","60"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layModel","DevExpress.XtraLayout.LayoutControlItem","","61"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layoutbtnitem","DevExpress.XtraLayout.LayoutControlItem","","62"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layoutControlItem1","DevExpress.XtraLayout.LayoutControlItem","","63"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","lblToSite","DevExpress.XtraLayout.LayoutControlItem","","64"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","lblCellGroup1","DevExpress.XtraLayout.LayoutControlItem","","65"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","lblCellGroup","DevExpress.XtraLayout.LayoutControlItem","","66"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layoutControlItem2","DevExpress.XtraLayout.LayoutControlItem","","67"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","lblBucket","DevExpress.XtraLayout.LayoutControlItem","","68"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","PlanType","DevExpress.XtraLayout.LayoutControlItem","","69"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layDisplay","DevExpress.XtraLayout.LayoutControlItem","","70"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","71"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","emptySpaceItem5","DevExpress.XtraLayout.EmptySpaceItem","","72"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","emptySpaceItem7","DevExpress.XtraLayout.EmptySpaceItem","","73"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","emptySpaceItem6","DevExpress.XtraLayout.EmptySpaceItem","","74"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","emptySpaceItem4","DevExpress.XtraLayout.EmptySpaceItem","","75"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","lblGraphType","DevExpress.XtraLayout.LayoutControlItem","","76"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layPeriod","DevExpress.XtraLayout.LayoutControlItem","","77"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","emptySpaceItem13","DevExpress.XtraLayout.EmptySpaceItem","","78"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","emptySpaceItem3","DevExpress.XtraLayout.EmptySpaceItem","","79"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layMeasure","DevExpress.XtraLayout.LayoutControlItem","","80"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layoutBtnColumn","DevExpress.XtraLayout.LayoutControlItem","","81"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layUnit_qty","DevExpress.XtraLayout.LayoutControlItem","","82"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","emptySpaceItem8","DevExpress.XtraLayout.EmptySpaceItem","","83"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","emptySpaceItem10","DevExpress.XtraLayout.EmptySpaceItem","","84"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","lciSearchLevel","DevExpress.XtraLayout.LayoutControlItem","","85"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layoutControlItem3","DevExpress.XtraLayout.LayoutControlItem","","86"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layAS","DevExpress.XtraLayout.LayoutControlItem","","87"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layCategoryCC","DevExpress.XtraLayout.LayoutControlItem","","88"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layoutControlItem4","DevExpress.XtraLayout.LayoutControlItem","","89"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","layoutPlanDate","DevExpress.XtraLayout.LayoutControlItem","","90"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","splitContainer1","System.Windows.Forms.SplitContainer","this","91"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","chartMain","DevExpress.XtraCharts.ChartControl","splitContainer1.Panel1","92"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","spdSearchLevel","FarPoint.Win.Spread.FpSpread","splitContainer1.Panel2","93"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","spdMain_Sheet","FarPoint.Win.Spread.SheetView","","94"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","spdDetail","FarPoint.Win.Spread.FpSpread","splitContainer1.Panel2","95"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","spdSearchLevel_Sheet","FarPoint.Win.Spread.SheetView","","96"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","spdSearchLevelDetail","FarPoint.Win.Spread.FpSpread","splitContainer1.Panel2","97"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","spdSearchLevelDetail_Sheet","FarPoint.Win.Spread.SheetView","","98"
+```
+
+### FILE props.csv (141 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetSpreadColumn","1103","_SI.ActiveSheet.Columns[iCol]","Visible","true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetSpreadColumn","1107","_SI.ActiveSheet.Columns[iCol]","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetSpreadColumn","1114","_SI.ActiveSheet.Columns[iCol]","Visible","true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetSpreadColumn","1118","_SI.ActiveSheet.Columns[iCol]","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","CboDisplay_SelectedIndexChanged","1833","splitContainer1","SplitterDistance","0"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","CboDisplay_SelectedIndexChanged","1841","splitContainer1","SplitterDistance","750"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","CboDisplay_SelectedIndexChanged","1849","splitContainer1","SplitterDistance","270"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","EnableSearchLevel","1874","lciSearchLevel","Enabled","!_is_detail"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","VisibleSheet","1880","spdSearchLevel","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","VisibleSheet","1881","spdSearchLevelDetail","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","VisibleSheet","1882","spdDetail","Visible","true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","VisibleSheet","1888","spdSearchLevelDetail","Visible","true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","VisibleSheet","1889","spdSearchLevel","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","VisibleSheet","1893","spdSearchLevelDetail","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","VisibleSheet","1894","spdSearchLevel","Visible","true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","VisibleSheet","1896","spdDetail","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","BtnItemId_Click","1947","txtItemId","Text","sItemId"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","BtnProject_Click","1981","txtProject","Text","sProjectCode"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","183","usrButton1","Size","new System.Drawing.Size(75, 23)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","192","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","195","usrConditionPanel1","Size","new System.Drawing.Size(1784, 102)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","197","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","223","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","228","usrLayoutControl2","Size","new System.Drawing.Size(1784, 102)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","230","usrLayoutControl2","Text","""usrLayoutControl2"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","241","rgrpSearchLevel","Size","new System.Drawing.Size(199, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","248","chkCellQty","Checked","true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","279","chkCellQty","Size","new System.Drawing.Size(80, 26)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","282","chkCellQty","Text","""Cell Qty"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","284","chkCellQty","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","317","cboPlanDate","Size","new System.Drawing.Size(144, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","355","cboBucketType","Size","new System.Drawing.Size(70, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","398","dCalendar","Size","new System.Drawing.Size(230, 22)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","442","cboGraphType","Size","new System.Drawing.Size(60, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","475","btnItemId","Size","new System.Drawing.Size(39, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","512","btnMeasure","Size","new System.Drawing.Size(30, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","549","txtItemId","Size","new System.Drawing.Size(150, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","586","cboDisplay","Size","new System.Drawing.Size(60, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","620","txtProject","Size","new System.Drawing.Size(150, 26)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","659","clbFromSite","Size","new System.Drawing.Size(202, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","702","clbToSite","Size","new System.Drawing.Size(214, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","741","txtCellGroup","Size","new System.Drawing.Size(111, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","774","btnProject","Size","new System.Drawing.Size(39, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","814","cboPlanType","Size","new System.Drawing.Size(70, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","849","btnColumn","Size","new System.Drawing.Size(30, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","889","cboSearchLevel","Size","new System.Drawing.Size(120, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","924","chkAS","Size","new System.Drawing.Size(80, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","927","chkAS","Text","""A/S"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","929","chkAS","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","965","cboUnitQty","Size","new System.Drawing.Size(100, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1004","clbDivision","Size","new System.Drawing.Size(179, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1050","layoutControlGroup2","Size","new System.Drawing.Size(1784, 102)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1055","layModel","Control","this.txtItemId"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1059","layModel","Size","new System.Drawing.Size(264, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1060","layModel","Text","""Model / Nick Name"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1067","layoutbtnitem","Control","this.btnItemId"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1074","layoutbtnitem","Size","new System.Drawing.Size(43, 30)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1076","layoutbtnitem","Text","""layoutControlItem3"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1082","layoutControlItem1","Control","this.clbFromSite"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1086","layoutControlItem1","Size","new System.Drawing.Size(263, 30)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1087","layoutControlItem1","Text","""From Site"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1094","lblToSite","Control","this.clbToSite"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1098","lblToSite","Size","new System.Drawing.Size(263, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1099","lblToSite","Text","""To Site"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1106","lblCellGroup1","Control","this.txtCellGroup"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1110","lblCellGroup1","Size","new System.Drawing.Size(200, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1112","lblCellGroup1","Text","""Cell Group"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1119","lblCellGroup","Control","this.txtProject"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1123","lblCellGroup","Size","new System.Drawing.Size(264, 30)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1124","lblCellGroup","Text","""Project"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1131","layoutControlItem2","Control","this.btnProject"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1137","layoutControlItem2","Size","new System.Drawing.Size(43, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1144","lblBucket","Control","this.cboBucketType"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1148","lblBucket","Size","new System.Drawing.Size(130, 27)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1149","lblBucket","Text","""Bucket"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1157","PlanType","Control","this.cboPlanType"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1159","PlanType","Enabled","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1162","PlanType","Size","new System.Drawing.Size(130, 32)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1163","PlanType","Text","""Plan-type"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1170","layDisplay","Control","this.cboDisplay"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1174","layDisplay","Size","new System.Drawing.Size(114, 30)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1176","layDisplay","Text","""Display"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1188","emptySpaceItem1","Size","new System.Drawing.Size(5, 59)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1199","emptySpaceItem5","Size","new System.Drawing.Size(5, 59)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1201","emptySpaceItem5","Text","""emptySpaceItem1"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1211","emptySpaceItem7","Size","new System.Drawing.Size(5, 59)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1213","emptySpaceItem7","Text","""emptySpaceItem1"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1223","emptySpaceItem6","Size","new System.Drawing.Size(5, 59)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1225","emptySpaceItem6","Text","""emptySpaceItem1"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1236","emptySpaceItem4","Size","new System.Drawing.Size(5, 59)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1238","emptySpaceItem4","Text","""emptySpaceItem1"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1243","lblGraphType","Control","this.cboGraphType"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1247","lblGraphType","Size","new System.Drawing.Size(114, 29)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.designer.cs","SCP0100_Global_PSI_Report","InitializeComponent","1249","lblGraphType","Text","""Graph"""
+"current","06.UIL\GSCM.SCP.Forms.UI
+… (truncated, 10191 chars more — 전체는 Fact Pack CSV 참조)
+```
+
+### FILE grid_effective.csv (39 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"REPORT","META+코드연결","D0","","CODE_ONLY_CHANGE","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김"
+"REPORT","META+코드연결","D1","","CODE_ONLY_CHANGE","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김"
+"REPORT","META+코드연결","CELL_CF","Cell Qty","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"REPORT","META+코드연결","CELL_GROUP","Cell Group","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"REPORT","META+코드연결","DIVISION_ID","Div","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"REPORT","META+코드연결","FROM_SITE","From Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"REPORT","META+코드연결","INCOTERMS","INCOTERMS","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"REPORT","META+코드연결","ITEM_ID","Model","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"REPORT","META+코드연결","MEASURE_GROUP","Measure Group","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"REPORT","META+코드연결","MEASURE_NAME","Measure Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"REPORT","META+코드연결","MEASURE_UI","Measure","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"REPORT","META+코드연결","OPERATION_ID","Operation","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"REPORT","META+코드연결","PRODUCT_LEVEL1","Product Level1","META","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?"
+"REPORT","META+코드연결","PRODUCT_LEVEL2","Product Level2","META","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?"
+"REPORT","META+코드연결","PRODUCT_LEVEL3","Product Level3","META","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?"
+"REPORT","META+코드연결","TO_SITE","To Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"REPORT","META+코드연결","VARIOUS_KEY","Trans Mode or Line or Project","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"SEARCH_LEVEL","META+코드연결","D0","","CODE_ONLY_CHANGE","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김"
+"SEARCH_LEVEL","META+코드연결","D1","","CODE_ONLY_CHANGE","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김"
+"SEARCH_LEVEL","META+코드연결","CELL_GROUP","Cell Group","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"SEARCH_LEVEL","META+코드연결","DIVISION_ID","Div","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"SEARCH_LEVEL","META+코드연결","MEASURE_GROUP","Measure Group","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"SEARCH_LEVEL","META+코드연결","MEASURE_NAME","Measure Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"SEARCH_LEVEL","META+코드연결","MEASURE_UI","Measure","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"SEARCH_LEVEL","META+코드연결","OPERATION_GROUP","Operation Group","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"SEARCH_LEVEL","META+코드연결","PRODUCT_LEVEL1","Product Level1","META","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?"
+"SEARCH_LEVEL","META+코드연결","PRODUCT_LEVEL2","Product Level2","META","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?"
+"SEARCH_LEVEL","META+코드연결","PRODUCT_LEVEL3","Product Level3","META","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?"
+"SEARCH_LEVEL_DETAIL","META+코드연결","D0","","CODE_ONLY_CHANGE","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김"
+"SEARCH_LEVEL_DETAIL","META+코드연결","D1","","CODE_ONLY_CHANGE","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김","→숨김"
+"SEARCH_LEVEL_DETAIL","META+코드연결","CELL_GROUP","Cell Group","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"SEARCH_LEVEL_DETAIL","META+코드연결","DIVISION_ID","Div","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"SEARCH_LEVEL_DETAIL","META+코드연결","MEASURE_GROUP","Measure Group","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"SEARCH_LEVEL_DETAIL","META+코드연결","MEASURE_NAME","Measure Name","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"SEARCH_LEVEL_DETAIL","META+코드연결","MEASURE_UI","Measure","META","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김","숨김"
+"SEARCH_LEVEL_DETAIL","META+코드연결","OPERATION_GROUP","Operation Group","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"SEARCH_LEVEL_DETAIL","META+코드연결","PRODUCT_LEVEL1","Product Level1","META","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?","기본 →표시? →표시? →숨김? →표시? →숨김?"
+"SEARCH_LEVEL_DETAIL","META+코드연결","PRODUCT_LEVEL2","Product Level2","META","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?","기본 →표시? →숨김? →표시? →표시? →숨김?"
+"SEARCH_LEVEL_DETAIL","META+코드연결","PRODUCT_LEVEL3","Product Level3","META","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?","기본 →숨김? →숨김? →숨김? →표시? →숨김?"
+```
+
+### FILE grid_code.csv (48 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","CreateSpread","684","SEARCH_LEVEL","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ SEARCH_LEVEL ¦ SEARCH_LEVEL ¦ 3 ¦ 1 ¦ 30","","","spdSearchLevel ¦ SpdSheet.SearchLevel ¦ SpdSheet.SearchLevel ¦ 3 ¦ 1 ¦ 30"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","CreateSpread","685","REPORT","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ REPORT ¦ REPORT ¦ 3 ¦ 1 ¦ 30","","","spdDetail ¦ SpdSheet.Detail ¦ SpdSheet.Detail ¦ 3 ¦ 1 ¦ 30"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","CreateSpread","686","SEARCH_LEVEL_DETAIL","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ SEARCH_LEVEL_DETAIL ¦ SEARCH_LEVEL_DETAIL ¦ 3 ¦ 1 ¦ 30","","","spdSearchLevelDetail ¦ SpdSheet.SearchLevelDetail ¦ SpdSheet.SearchLevelDetail ¦ 3 ¦ 1 ¦ 30"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","CreateSpread","688","0","SHEET","GetSheetInfo","EXPR","","","","{?spdSearchLevel.Name} ¦ 0","","","spdSearchLevel.Name ¦ 0"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","CreateSpread","689","0","SHEET","GetSheetInfo","EXPR","","","","{?spdDetail.Name} ¦ 0","","","spdDetail.Name ¦ 0"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","CreateSpread","690","0","SHEET","GetSheetInfo","EXPR","","","","{?spdSearchLevelDetail.Name} ¦ 0","","","spdSearchLevelDetail.Name ¦ 0"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","CreateSpread","692","0","SHEET","ChangeSheet","EXPR","","","","","","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","CreateSpread","693","0","SHEET","ChangeSheet","EXPR","","","","","","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpread","702","","SHEET","InitSheet","EXPR","","","","{?_SI.SheetName}","","","_SI.SheetName"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpread","705","","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{?_SI} ¦ 3","siObj,iColumnHeaderRowCount","","_SI ¦ 3"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpread","706","","LOCAL_METHOD","local:InitSpreadDateColumn","EXPR","","","","{?_SI} ¦ {?_SI.nIdxData}","","","_SI ¦ _SI.nIdxData"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpread","708","","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","","","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","755","","COLUMN","AddTextColumn","DB_DRIVEN","{?string.Empty} || {?dr[DefColumns.COLUMN_LABEL_NAME]}","{?string.Empty} || {?dr[DefColumns.COLUMN_NAME]}","","{?string.Empty} || {?dr[DefColumns.COLUMN_LABEL_NAME]} ¦ {?string.Empty} || {?dr[DefColumns.COLUMN_NAME]} ¦ {?FPMerge.None} ¦ 0 ¦ {?false}","sHeaderText,sFieldName,merge,fWidth,bVisible","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sColumnName.IndexOf(""B_"") > 0)","sColumnLabelname ¦ sColumnName ¦ FPMerge.None ¦ 0 ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","760","","COLUMN","AddNumColumn","DB_DRIVEN","{?string.Empty} || {?dr[DefColumns.COLUMN_LABEL_NAME]}","{?string.Empty} || {?dr[DefColumns.COLUMN_NAME]}","","{?string.Empty} || {?dr[DefColumns.COLUMN_LABEL_NAME]} ¦ {?string.Empty} || {?dr[DefColumns.COLUMN_NAME]} ¦ {?FPMerge.None} ¦ 70 ¦ {?true}","sHeaderText,sFieldName,merge,fWidth,bVisible","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf(""B_"") > 0)","sColumnLabelname ¦ sColumnName ¦ FPMerge.None ¦ 70 ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","767","","OVERRIDE","set:ForeColor","EXPR","","","","{?Color.Red}","ForeColor","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf(""B_"") > 0) ⟫ if(sColumnName.StartsWith(""M_"")) ⟫ if(sColumnName.Contains(_plan_start_yyyymm))","Color.Red"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","774","","OVERRIDE","set:ForeColor","EXPR","","","","{?Color.Blue}","ForeColor","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf(""B_"") > 0) ⟫ else!(sColumnName.StartsWith(""M_"")) ⟫ if(sColumnName.StartsWith(""W_"")) ⟫ if(sColumnLabelname.Contains(""A""))","Color.Blue"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","778","","OVERRIDE","set:ForeColor","EXPR","","","","{?Color.Blue}","ForeColor","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf(""B_"") > 0) ⟫ else!(sColumnName.StartsWith(""M_"")) ⟫ if(sColumnName.StartsWith(""W_"")) ⟫ else!(sColumnLabelname.Contains(""A"")) ⟫ if(sColumnLabelname.Contains(""B""))","Color.Blue"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","787","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","0 ¦ {p:nIdxData} || {?iLargeStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefColumns.LARGE_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sLargeSpanName != sLargeLabelName)","0 ¦ iLargeStartCol ¦ 1 ¦ iLargeSpanCnt ¦ 20 ¦ sLargeSpanName ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","788","","OTHER","ColumnHeaderSpan","EXPR","","","","1 ¦ {p:nIdxData} || {?iLargeStartCol}0 ¦ 2 ¦ 1 ¦ 20 ¦ Qty ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sLargeSpanName != sLargeLabelName)","1 ¦ iLargeStartCol ¦ 2 ¦ 1 ¦ 20 ¦ ""Qty"" ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","793","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","1 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefColumns.SMALL_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sLargeSpanName != sLargeLabelName)","1 ¦ iSmallStartCol ¦ 1 ¦ iSmallSpanCnt ¦ 20 ¦ sSmallSpanName ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","794","","OTHER","ColumnHeaderSpan","EXPR","","","","2 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 1 ¦ 30 ¦ Qty ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sLargeSpanName != sLargeLabelName)","2 ¦ iSmallStartCol ¦ 1 ¦ 1 ¦ 30 ¦ ""Qty"" ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","802","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","1 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefColumns.SMALL_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sLargeSpanName != sLargeLabelName) ⟫ if(sSmallSpanName != sSmallLabelName)","1 ¦ iSmallStartCol ¦ 1 ¦ iSmallSpanCnt ¦ 20 ¦ sSmallSpanName ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","803","","OTHER","ColumnHeaderSpan","EXPR","","","","2 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 1 ¦ 20 ¦ Qty ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sLargeSpanName != sLargeLabelName) ⟫ if(sSmallSpanName != sSmallLabelName)","2 ¦ iSmallStartCol ¦ 1 ¦ 1 ¦ 20 ¦ ""Qty"" ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","813","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","1 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefColumns.SMALL_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","","1 ¦ iSmallStartCol ¦ 1 ¦ iSmallSpanCnt ¦ 20 ¦ sSmallSpanName ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","814","","OTHER","ColumnHeaderSpan","EXPR","","","","2 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 1 ¦ 20 ¦ Qty ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","","2 ¦ iSmallStartCol ¦ 1 ¦ 1 ¦ 20 ¦ ""Qty"" ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","815","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","0 ¦ {p:nIdxData} || {?iLargeStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefColumns.LARGE_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","","0 ¦ iLargeStartCol ¦ 1 ¦ iLargeSpanCnt ¦ 20 ¦ sLargeSpanName ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","InitSpreadDateColumn","816","","OTHER","ColumnHeaderSpan","EXPR","","","","1 ¦ {p:nIdxData} || {?iLargeStartCol}0 ¦ 2 ¦ 1 ¦ 20 ¦ Qty ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","","1 ¦ iLargeStartCol ¦ 2 ¦ 1 ¦ 20 ¦ ""Qty"" ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetSpreadColumn","1103","","OVERRIDE","set:Visible","EXPR","","","","{?true}","Visible","for(iCol < _SI.ActiveSheet.Columns.Count) ⟫ if(_bucket_type.Equals(""MONTHLY"")) ⟫ if(ColName.IndexOf(""M_"") == 0)","true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetSpreadColumn","1107","","OVERRIDE","set:Visible","EXPR","","","","{?false}","Visible","for(iCol < _SI.ActiveSheet.Columns.Count) ⟫ if(_bucket_type.Equals(""MONTHLY"")) ⟫ else!(ColName.IndexOf(""M_"") == 0)","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetSpreadColumn","1114","","OVERRIDE","set:Visible","EXPR","","","","{?true}","Visible","for(iCol < _SI.ActiveSheet.Columns.Count) ⟫ else!(_bucket_type.Equals(""MONTHLY"")) ⟫ if(_bucket_type.Equals(""WEEKLY"")) ⟫ if(ColName.IndexOf(""W_"") == 0)","true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetSpreadColumn","1118","","OVERRIDE","set:Visible","EXPR","","","","{?false}","Visible","for(iCol < _SI.ActiveSheet.Columns.Count) ⟫ else!(_bucket_type.Equals(""MONTHLY"")) ⟫ if(_bucket_type.Equals(""WEEKLY"")) ⟫ else!(ColName.IndexOf(""W_"") == 0)","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetVisibleColumnCycle","1290","","OVERRIDE","VisibleColumns","EXPR","","","{?string.Empty} || D0 || D1","{?_SI.GetColumnIndex(day)} ¦ {?false}","iIndex,bVisible","for(i < _SI.ActiveSheet.ColumnCount)","_SI.GetColumnIndex(day) ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1498","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL1","{?_SI.GetColumnIndex(""PRODUCT_LEVEL1"")} ¦ {?true}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 1","_SI.GetColumnIndex(""PRODUCT_LEVEL1"") ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1499","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL2","{?_SI.GetColumnIndex(""PRODUCT_LEVEL2"")} ¦ {?true}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 1","_SI.GetColumnIndex(""PRODUCT_LEVEL2"") ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1500","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL3","{?_SI.GetColumnIndex(""PRODUCT_LEVEL3"")} ¦ {?false}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 1","_SI.GetColumnIndex(""PRODUCT_LEVEL3"") ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1509","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL1","{?_SI.GetColumnIndex(""PRODUCT_LEVEL1"")} ¦ {?true}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 2","_SI.GetColumnIndex(""PRODUCT_LEVEL1"") ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1510","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL2","{?_SI.GetColumnIndex(""PRODUCT_LEVEL2"")} ¦ {?false}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 2","_SI.GetColumnIndex(""PRODUCT_LEVEL2"") ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1511","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL3","{?_SI.GetColumnIndex(""PRODUCT_LEVEL3"")} ¦ {?false}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 2","_SI.GetColumnIndex(""PRODUCT_LEVEL3"") ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1518","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL1","{?_SI.GetColumnIndex(""PRODUCT_LEVEL1"")} ¦ {?false}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 3","_SI.GetColumnIndex(""PRODUCT_LEVEL1"") ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1519","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL2","{?_SI.GetColumnIndex(""PRODUCT_LEVEL2"")} ¦ {?true}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 3","_SI.GetColumnIndex(""PRODUCT_LEVEL2"") ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1520","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL3","{?_SI.GetColumnIndex(""PRODUCT_LEVEL3"")} ¦ {?false}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 3","_SI.GetColumnIndex(""PRODUCT_LEVEL3"") ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1527","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL1","{?_SI.GetColumnIndex(""PRODUCT_LEVEL1"")} ¦ {?true}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 4","_SI.GetColumnIndex(""PRODUCT_LEVEL1"") ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1528","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL2","{?_SI.GetColumnIndex(""PRODUCT_LEVEL2"")} ¦ {?true}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 4","_SI.GetColumnIndex(""PRODUCT_LEVEL2"") ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1529","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL3","{?_SI.GetColumnIndex(""PRODUCT_LEVEL3"")} ¦ {?true}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case 4","_SI.GetColumnIndex(""PRODUCT_LEVEL3"") ¦ true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1536","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL1","{?_SI.GetColumnIndex(""PRODUCT_LEVEL1"")} ¦ {?false}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case ","_SI.GetColumnIndex(""PRODUCT_LEVEL1"") ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1537","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL2","{?_SI.GetColumnIndex(""PRODUCT_LEVEL2"")} ¦ {?false}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case ","_SI.GetColumnIndex(""PRODUCT_LEVEL2"") ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","SetLayout","1538","","OVERRIDE","VisibleColumns","EXPR","","","PRODUCT_LEVEL3","{?_SI.GetColumnIndex(""PRODUCT_LEVEL3"")} ¦ {?false}","iIndex,bVisible","if(!_is_detail) ⟫ switch(cboSearchLevel.SelectedIndex)case ","_SI.GetColumnIndex(""PRODUCT_LEVEL3"") ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Report\SCP0100_Global_PSI_Report\SCP0100_Global_PSI_Report.cs","SCP0100_Global_PSI_Report","CboBucketType_SelectedIndexChanged","1804","","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","","","if(_SI != null)",""
+```
+
+### FILE meta_reads.csv (0 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+```
+
+### FILE commented_calls.csv (0 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+```

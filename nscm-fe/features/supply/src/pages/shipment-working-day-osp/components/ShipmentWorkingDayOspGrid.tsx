@@ -16,11 +16,15 @@ import { DataGrid } from '@shared/components';
 import {
   CODE_DISPLAY_COLUMNS,
   DAY_CELL_DATA_MAP,
+  DAY_CODE,
+  DAY_COLUMN_WIDTH,
   GRID_COMBO_PARAMS,
+  HEADER_TOTAL_HEIGHT,
+  WEEKEND_HEADER_COLOR,
 } from '../shipment-working-day-osp.constants';
 import { buildDynSumColumns } from '../shipment-working-day-osp.dynamic-columns';
 import type {
-  DynColumnMeta,
+  CalendarColumnRow,
   DynDayColumn,
   ShipmentWorkingDayOspRow,
 } from '../shipment-working-day-osp.types';
@@ -32,15 +36,15 @@ interface ShipmentWorkingDayOspGridProps {
   // 그리드 공용 EditTracker 노출 — 저장 시 변경 셀의 단일 진실원(부모 handleSave 가 payload 도출).
   editTrackerRef: MutableRefObject<EditTracker<ShipmentWorkingDayOspRow> | undefined>;
   data: ShipmentWorkingDayOspRow[];
-  // 동적 D_ 기간 컬럼 — GET SP o_rc1_columns 의 D_yyyymmdd 에서 FE 파생(3단 머지헤더 group/일 leaf).
+  // 동적 D_ 기간 컬럼 — 3SPAN(SHEETS.CALENDAR) o_rc1 의 D_ 행에서 파생(3단 머지헤더 group/일 leaf, 서버 라벨 그대로).
   dynColumns: DynDayColumn[];
-  // GET SP o_rc1_columns 원본(W_/M_ SUM 열 도출용) — chkSum 토글 대상.
-  dynColumnMeta: DynColumnMeta[];
+  // 3SPAN o_rc1 원본 행(W_/M_ SUM 열 도출용) — chkSum 토글 대상(AS-IS SetSpreadColumn .cs:353).
+  calendarRows: CalendarColumnRow[];
   // 편집모드(EditButton SwitchLock) — off 면 전열 잠금, on 이면 WORKING_TIME_DEFAULT+D_ 만 개방(03 §3-a).
   //   SCP0019(OSP_YN 행 게이트)와 다른 델타: SCP0096 은 명시 편집모드 상태다.
   editMode: boolean;
-  // chkSum — W_/M_ SUM 컬럼 show/hide(03 §3-c). AS-IS chkSum 은 Designer Visible=false(:346)·GET SP 에 W_/M_ 없음 → 부모가 항상 false 전달
-  //   (SUM 처리 코드는 AS-IS SetSpreadColumn .cs:339-358 대응분으로 비활성 보존).
+  // chkSum — W_/M_ SUM 컬럼 show/hide(03 §3-c). AS-IS chkSum 은 Designer Visible=false(:346)·Checked=false(.cs:121)라 3SPAN 이 만든
+  //   W_/M_ 열은 항상 숨김 → 부모가 항상 false 전달(AS-IS SetSpreadColumn .cs:339-358 대응). GET SP 데이터에는 W_/M_ 값이 없다.
   showSum: boolean;
 }
 
@@ -76,7 +80,7 @@ export const ShipmentWorkingDayOspGrid = ({
   editTrackerRef,
   data,
   dynColumns,
-  dynColumnMeta,
+  calendarRows,
   editMode,
   showSum,
 }: ShipmentWorkingDayOspGridProps) => {
@@ -142,17 +146,18 @@ export const ShipmentWorkingDayOspGrid = ({
   );
 
   // W_/M_ SUM 열 — chkSum 토글로 visible 제어(03 §3-c). SUM 잠금이라 편집형 선언 안 함(SEARCH_ONLY).
-  const sumColumns = useMemo(() => buildDynSumColumns(dynColumnMeta), [dynColumnMeta]);
+  const sumColumns = useMemo(() => buildDynSumColumns(calendarRows), [calendarRows]);
 
   // 동적 컬럼 — 3단 머지헤더(대 월 / 소 주차 / 일). D_ 은 Y/N 셀콤보(dataMap 고정), W_/M_ 은 SUM 잠금.
-  //   dynColumns 는 부모가 o_rc1_columns 에서 파생한 {binding,yyyymmdd,dayLabel,weekday,monthKey,weekKey}.
-  //   요일/주차/월 그룹은 SP 커서에 없어 캘린더에서 FE 파생(03 §1-b). SAT=blue/SUN=red 는 formatItem 처리.
+  //   dynColumns 는 부모가 3SPAN o_rc1 에서 파생한 {binding,yyyymmdd,dayLabel,weekLabel,monthLabel,dayCode} — 라벨은 서버 달력 값 그대로
+  //   (AS-IS InitSpreadDateColumn .cs:183-244 ColumnHeaderSpan 0단=LARGE / 1단=SMALL / 2단=COLUMN_LABEL). SAT=blue/SUN=red 는 formatItem 처리.
   const dynamicColumns = useMemo<FlexGridColumnConfig[]>(() => {
     if (dynColumns.length === 0) return [];
 
-    // D_ 일 leaf 를 월→주차 2단으로 group. 같은 monthKey/weekKey 연속 run 을 하나의 스팬으로 묶는다.
-    type WeekGroup = { key: string; label: string; leafs: FlexGridColumnConfig[] };
-    type MonthGroup = { key: string; label: string; weeks: WeekGroup[] };
+    // D_ 일 leaf 를 월→주차 2단으로 group. AS-IS 는 라벨이 바뀌는 순간 span 을 마감(:213,228)하므로 연속 run 기준으로 묶고,
+    //   월이 바뀌면 주차 span 도 함께 마감한다(:221) — 월 그룹 안에서만 주차를 매칭하므로 구조적으로 보장된다.
+    type WeekGroup = { label: string; leafs: FlexGridColumnConfig[] };
+    type MonthGroup = { label: string; weeks: WeekGroup[] };
     const months: MonthGroup[] = [];
 
     dynColumns.forEach(dc => {
@@ -160,7 +165,7 @@ export const ShipmentWorkingDayOspGrid = ({
         binding: dc.binding,
         header: dc.dayLabel || dc.binding.slice(2),
         align: 'center',
-        width: 56,
+        width: DAY_COLUMN_WIDTH, // AS-IS AddComboColumn(…, 50, …) .cs:203
         allowDragging: false,
         allowMerging: false,
         allowResizing: true,
@@ -174,23 +179,24 @@ export const ShipmentWorkingDayOspGrid = ({
         _display: true,
       };
       let month = months[months.length - 1];
-      if (!month || month.key !== dc.monthKey) {
-        month = { key: dc.monthKey, label: `${dc.monthKey.slice(0, 4)}-${dc.monthKey.slice(4, 6)}`, weeks: [] };
+      if (!month || month.label !== dc.monthLabel) {
+        month = { label: dc.monthLabel, weeks: [] };
         months.push(month);
       }
       let week = month.weeks[month.weeks.length - 1];
-      if (!week || week.key !== dc.weekKey) {
-        week = { key: dc.weekKey, label: dc.weekKey.split('-W')[1] ?? '', leafs: [] };
+      if (!week || week.label !== dc.weekLabel) {
+        week = { label: dc.weekLabel, leafs: [] };
         month.weeks.push(week);
       }
       week.leafs.push(leaf);
     });
 
     const dayGroups: FlexGridColumnConfig[] = months.map(m => ({
-      header: m.label,
+      header: m.label || ' ',
       align: 'center',
       columns: m.weeks.map(w => ({
-        header: w.label ? `W${w.label}` : ' ',
+        // 라벨이 비어도 헤더 행 자체는 살려 3단 구조를 유지한다(빈 문자열이면 span 이 접힌다 — 자매 SCP0095 동일).
+        header: w.label || ' ',
         align: 'center',
         columns: w.leafs,
       })),
@@ -222,12 +228,8 @@ export const ShipmentWorkingDayOspGrid = ({
   const isEditableBinding = (binding: string): boolean =>
     dynBindings.has(binding) || editableStaticBindings.has(binding);
 
-  // 요일색 판정 — D_ leaf 헤더(일)의 요일. dynColumns 에서 binding→weekday 조회(0=일 ~ 6=토, 03 §3-c).
-  const weekdayByBinding = useMemo(() => {
-    const m = new Map<string, number>();
-    dynColumns.forEach(dc => m.set(dc.binding, dc.weekday));
-    return m;
-  }, [dynColumns]);
+  // 요일색 판정 — D_ leaf 헤더(일)의 3SPAN DAY_CODE(AS-IS sDayCode .cs:192,206). binding→dayCode 조회(라벨 파싱·dayjs 재계산 금지).
+  const dayCodeByBinding = useMemo(() => new Map(dynColumns.map(dc => [dc.binding, dc.dayCode])), [dynColumns]);
 
   // grid 핸들러 등록 — 편집 가드(editMode) + 셀 색(편집가능/잠금) + 요일색.
   useEffect(() => {
@@ -243,10 +245,13 @@ export const ShipmentWorkingDayOspGrid = ({
 
       if (e.panel.cellType === CellType.ColumnHeader) {
         e.cell.style.textAlign = 'center';
-        // 일 leaf 헤더 요일색 — 토=Blue/일=Red(DAY_CODE, 03 §3-c). binding 으로 요일 조회(라벨 파싱 불필요).
-        const wd = weekdayByBinding.get(binding);
-        if (wd === 6) e.cell.style.color = '#1e56c8'; // SAT
-        else if (wd === 0) e.cell.style.color = '#c0392b'; // SUN
+        // 일 leaf 헤더 요일색 — AS-IS ColumnHeader.Cells[2, col].ForeColor = SAT ? Blue : Red(.cs:206-208). 헤더 3단 중 leaf 행만.
+        const dayCode = dayCodeByBinding.get(binding);
+        e.cell.style.color = ''; // wijmo 셀 DOM 재사용 — 이전 프레임의 주말색 잔존 방지
+        if (e.row === e.panel.rows.length - 1) {
+          if (dayCode === DAY_CODE.SAT) e.cell.style.color = WEEKEND_HEADER_COLOR.SAT;
+          else if (dayCode === DAY_CODE.SUN) e.cell.style.color = WEEKEND_HEADER_COLOR.SUN;
+        }
         return;
       }
       if (e.panel.cellType !== CellType.Cell) return;
@@ -287,22 +292,22 @@ export const ShipmentWorkingDayOspGrid = ({
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visibleColumns, dynBindings, editableStaticBindings, weekdayByBinding]);
+  }, [visibleColumns, dynBindings, editableStaticBindings, dayCodeByBinding]);
 
   // editMode 토글 시 셀 잠금표기 갱신 — 핸들러는 ref 로 최신값을 읽으나 재도색 트리거가 필요하다.
   useEffect(() => {
     gridRef.current?.invalidate(true);
   }, [editMode, gridRef]);
 
-  // 다단 헤더 총높이 불변식(3단 = 60px) — WorkingTimeGrid #93 rAF 상시 감시 1:1(인스턴스 교체 시 이관).
+  // 다단 헤더 총높이 불변식(48px — hook #93 · 10_RULES_KEEP D3) — WorkingTimeGrid #93 rAF 상시 감시 1:1(인스턴스 교체 시 이관).
+  //   (2026-10-20 정정: 이전 TOTAL=60 은 AS-IS ColumnHeaderSpan 20×3 을 옮긴 것으로 D3 위반 — 자매 SCP0095 HEADER_TOTAL_HEIGHT 48 과 통일.)
   useEffect(() => {
     let raf = 0;
     let attached: FlexGrid<ShipmentWorkingDayOspRow> | null = null;
-    const TOTAL = 60;
     const normalize = (g: FlexGrid<ShipmentWorkingDayOspRow>) => {
       const hdr = g.columnHeaders?.rows;
       if (!hdr || hdr.length === 0) return;
-      const per = Math.max(1, Math.round(TOTAL / hdr.length));
+      const per = Math.max(1, Math.round(HEADER_TOTAL_HEIGHT / hdr.length));
       let changed = false;
       if (Math.round(hdr.defaultSize) !== per) {
         hdr.defaultSize = per;

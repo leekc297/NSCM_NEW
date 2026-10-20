@@ -31,6 +31,19 @@ export type AuxSheet = (typeof AUX_SHEET)[keyof typeof AUX_SHEET];
 // P_SCP0100_GET_PLAN_DATE 의 IN P_PROGRAM_ID 고정값(design 02 §2.3 cs:1357 GetPlanDate p_program_id="SCP0100").
 export const PLAN_DATE_PROGRAM_ID = MENU_ID;
 
+// 조회기간 종료일 원천 — AS-IS GetPlanEndDate(SCP0100_Global_PSI_Report.cs:2029~2052)
+//   Data_REPORT.CallBizCommonData(PLAN_END_DATE, '81', _plan_start_yyyymmdd, "WEEKLY")
+//   → UP_FX_GetCommonDataList_REPORT: SELECT TOP 1 HORIZON_END_DATE FROM SCM_MST_PLAN
+//     WHERE DIVISION_ID=@param1 AND PLAN_NAME=@param2 AND PLAN_CYCLE=@param3 (As-is DB 원문 2026-10-20 실측).
+//   To-Be 등록 콤보 SCPPlanPeriod_SCP(SCM_ADM_CMBO_SQL_M, 자매 global-psi SCP0031 사용 중)가 같은 표·같은 조건
+//   (PLAN_NAME=@planName · DIVISION_ID=@divisionId · PLAN_CYCLE='WEEKLY' 고정)이라 그대로 재사용한다.
+//   사내 (DIVISION_ID, PLAN_NAME, PLAN_CYCLE) 중복 0건 실측 → 첫 행 = TOP 1 과 동등.
+export const PLAN_END_COMBO_ID = 'SCPPlanPeriod_SCP';
+export const PLAN_END_COL = 'HORIZON_END_DATE';
+// AS-IS .cs:2037~2038 — `//, CommonUtils.GetValue(_division)` 주석 처리 후 `CommonUtils.GetValue("81")` 고정 호출.
+//   선택 division 과 무관하게 '81' 의 WEEKLY horizon 종료일을 쓴다(As-is 동작 그대로).
+export const PLAN_END_DIVISION = '81';
+
 // NSCM 단일 cursor 표준. GET SP 는 O_RC1(PIVOT 데이터) + O_RESULT_CURSOR(상태봉투) 반환 —
 //   O_RC1 을 그리드로 바인딩(hook#80 cursor 이름 매핑). 표준 response key 'o_rc1'.
 export const RESPONSE_SET = {

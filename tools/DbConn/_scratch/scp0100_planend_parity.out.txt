@@ -1,0 +1,8 @@
+TOBE CMBO SQL: SELECT HORIZON_START_DATE ,HORIZON_END_DATE ,PLAN_CYCLE ,(TRUNC(TO_DATE(HORIZON_END_DATE, 'YYYYMMDD') + 1, 'IW') - TRUNC(TO_DATE(PLAN_NAME, 'YYYYMMDD') + 1, 'IW')) / 7 AS DIFF_WEEK FROM SCM_MST_PLAN WHERE 1 = 1 AND PLAN_NAME = @planName AND DIVISION_ID = @divisionId AND PLAN_CYCLE = 'WEEKLY'
+TOBE dup (DIV,PLAN,CYCLE) groups: 0 []
+plan=20260928 tobe_rows=1 tobe_end=20270926 asis_end=20280618
+plan=20260921 tobe_rows=1 tobe_end=20270919 asis_end=20280611
+plan=20260914 tobe_rows=1 tobe_end=20270912 asis_end=20280604
+plan=20260907 tobe_rows=1 tobe_end=20270905 asis_end=20280528
+plan=20260831 tobe_rows=1 tobe_end=20280409 asis_end=20280521
+plan=20260824 tobe_rows=1 tobe_end=20280402 asis_end=20280514

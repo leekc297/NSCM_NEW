@@ -1,0 +1,94 @@
+{
+  "id": "SCP0100",
+  "task": "S5.pipeline",
+  "scope": "both",
+  "note": "pipeline.js SCP0100 --max 3",
+  "start": "2026-10-20T22:06:39+09:00",
+  "end": "2026-10-20T23:47:46+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "db",
+      "dir": "c:\\Projects\\NSCM\\Doc\\gen\\SCP0100",
+      "files": 0
+    },
+    {
+      "name": "docs",
+      "dir": "c:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0100",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "c:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "afterMode": "end",
+  "afterAt": "2026-10-20T23:47:46+09:00",
+  "changed": [
+    {
+      "file": "db\\SCP0100_PKG.sql",
+      "kind": "added"
+    },
+    {
+      "file": "db\\SCP0100_PKG_NOTES.md",
+      "kind": "added"
+    },
+    {
+      "file": "db\\SCP0100_registration.sql",
+      "kind": "added"
+    },
+    {
+      "file": "db\\SCP0100_revert.sql",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\components\\GlobalPsiReportForm.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\components\\GlobalPsiReportGrid.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\components\\GlobalPsiReportModals.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\global-psi-report.constants.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\global-psi-report.types.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\GlobalPsiReport.tsx",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\index.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\useGlobalPsiReportStore.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\utils\\globalPsiReportCalendar.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\utils\\globalPsiReportColumns.ts",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\__asis-mapping__.md",
+      "kind": "added"
+    },
+    {
+      "file": "fe\\__tests__\\GlobalPsiReport.spec.ts",
+      "kind": "added"
+    }
+  ]
+}

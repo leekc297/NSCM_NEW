@@ -7,11 +7,11 @@ import { DAY_WEEK, MENU_ID, SHEETS } from './shipment-working-day-osp.constants'
 import type { SearchParamProps } from './shipment-working-day-osp.types';
 
 // SP filter payload — useTabProcQuery enabled 가드.
-//   MAIN = PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP (4 IN, OUT O_RC1 데이터 + O_RESULT_CURSOR 상태).
-//   커서 실측(all_source BODY, 03_grid-columns §4): O_RC1 = 동적 PIVOT(정적 6 + D_/W_/M_), O_RESULT_CURSOR = 상태.
-//   타이틀-메타 커서는 없다 — 동적 컬럼은 데이터 커서 alias 이며 BE 가 o_rc1_columns 로 함께 노출한다.
-//   3SPAN 헤더는 별도 공용 SP(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN)이나 헤더 그룹은
-//   dynamic-columns 에서 yyyymmdd 로 재현하므로 조회는 이 MAIN 시트 하나로 개통(SCP0019 동형).
+//   MAIN = PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP (4 IN, OUT o_rc1 데이터 + o_result_cursor 상태).
+//   커서 실측(all_source BODY, 03_grid-columns §4): o_rc1 = 동적 PIVOT(정적 6 + 'D_'||YYYYMMDD), o_result_cursor = 상태.
+//   동적 기간 헤더는 데이터 커서가 아니라 사내 배선 타이틀 시트 CALENDAR(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN)로
+//   조회한다 — AS-IS InitSpread → GetSpdTitle(.cs:151,825-838) 1:1. (2026-10-20 정정: 이전 'BE 가 o_rc1_columns 로 노출'
+//   가정은 BaseService 원문과 다르다 — 사이드카는 SYS0013 DynamicQuery 전용, DoD B26/B27.)
 type FiltersBySheet = {
   [SHEETS.MAIN]?: ProcRequest<MENU_ID, SHEETS.MAIN>;
 };
@@ -26,6 +26,10 @@ interface ShipmentWorkingDayOspState {
   isOpenSearchArea: boolean;
   searchParams: SearchParamProps;
   filters: FiltersBySheet;
+  // 동적 기간 헤더(3SPAN) 조건 — MAIN 과 분리한다. AS-IS 는 조회 전에도 Form_Load → CreateSpread → InitSpread 가
+  //   GetSpdTitle 로 초기 기간의 일자 컬럼을 만들고(.cs:112,145,151), 조회 시 FindData_Main → InitSpread 로 다시 만든다(.cs:438).
+  //   Division 변경(resetGrid/clearFilters)은 행만 비우고 컬럼셋(기간 축)은 남긴다 — AS-IS CboDivision 핸들러도 컬럼 무변경(.cs:660-663).
+  calendarFilters?: ProcRequest<MENU_ID, SHEETS.CALENDAR>;
   staticColumn: RawFlexGridColumnConfig[];
 }
 
@@ -36,6 +40,10 @@ interface ShipmentWorkingDayOspAction {
   setDivision: (divisionId: string) => void;
   setFilters: () => void;
   clearFilters: () => void;
+  // 조회 전 초기 컬럼셋 — 현재 Period 로 calendarFilters 를 1회 채운다(AS-IS Form_Load InitSpread 등가). 같으면 no-op.
+  syncCalendarFilters: () => void;
+  // mount 시 persist 된 이전 탭의 calendarFilters 무효화(stale 기간 헤더 자동 발사 방지).
+  clearCalendarFilters: () => void;
   fetchStaticColumns: () => Promise<void>;
   // 개인화 조회조건 복원 — GET /admin/menu/{MENU_ID}/search-conditions → searchParams 패치(1회).
   restoreSearchConditions: () => Promise<void>;
@@ -78,6 +86,7 @@ const initShipmentWorkingDayOspState: ShipmentWorkingDayOspState = {
     inputValue: '',
   },
   filters: {},
+  calendarFilters: undefined,
   staticColumn: [],
 };
 
@@ -86,7 +95,9 @@ export const useShipmentWorkingDayOspStore = createPersistedStoreWithTab<
 >(
   (set, get) => ({
     ...initShipmentWorkingDayOspState,
-    reset: () => set(initShipmentWorkingDayOspState),
+    // F10(조회조건 초기화) — 컬럼셋(calendarFilters, 기간 축)은 보존한다. 비우면 Page 의 1회 동기화(calendarInitRef)가 다시 돌지 않아
+    //   다음 조회 전까지 일자 컬럼이 사라진다(자매 SCP0095 reset 의 calendarFilters 보존 1:1).
+    reset: () => set({ ...initShipmentWorkingDayOspState, calendarFilters: get().calendarFilters }),
 
     setOpenSearchArea: open => {
       set(state => {
@@ -130,11 +141,34 @@ export const useShipmentWorkingDayOspStore = createPersistedStoreWithTab<
             toYyyymmdd: p.endYyyymmdd, //            4 P_TO_YYYYMMDD
           },
         };
+        // 컬럼셋 재구성 = 조회 발사 시점 스냅샷 — AS-IS FindData_Main → InitSpread → GetSpdTitle(.cs:438,151,833-834)이
+        //   dCalendar.Text1/Text2 로 3SPAN 을 다시 부른다. 키명 = 사내 PROC_M COL_NM(proc_params.csv P_SCP0009_GET_SHEET_CALENDAR_3SPAN IN 2).
+        //   기간 state 변화에 반응형으로 열지 않는다(조회 전 기간 수정만으로 컬럼이 바뀌면 미저장 편집이 조용히 날아간다).
+        state.calendarFilters = {
+          startYyyymmdd: p.startYyyymmdd, // 1 P_START_YYYYMMDD (AS-IS dCalendar.Text1.Replace("-",""))
+          endYyyymmdd: p.endYyyymmdd, //     2 P_END_YYYYMMDD   (AS-IS dCalendar.Text2.Replace("-",""))
+        };
       });
     },
     clearFilters: () =>
       set(state => {
         state.filters = {};
+      }),
+    syncCalendarFilters: () =>
+      set(state => {
+        const p = state.searchParams;
+        if (!p.startYyyymmdd || !p.endYyyymmdd) return;
+        if (
+          state.calendarFilters?.startYyyymmdd === p.startYyyymmdd &&
+          state.calendarFilters?.endYyyymmdd === p.endYyyymmdd
+        ) {
+          return;
+        }
+        state.calendarFilters = { startYyyymmdd: p.startYyyymmdd, endYyyymmdd: p.endYyyymmdd };
+      }),
+    clearCalendarFilters: () =>
+      set(state => {
+        state.calendarFilters = undefined;
       }),
 
     // ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 6행, admin 즉시 반영).

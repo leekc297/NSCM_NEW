@@ -1,67 +1,83 @@
 // SCP0096 Shipment Working Day (OSP) — 단위테스트 (DoD B20 · 룰 17 9-Step ⑨).
-//   대상 = 페이지 소유 순수 함수(그리드/React 미의존): dynamic-columns 파생 + 상수 계약.
-//   근거: AS-IS InitSpreadDateColumn(.cs:166-243 — D_ 일자열·요일색 SAT/SUN·월/주 span) · SetReNumerCellType(.cs:163 — 0~7 정수)
+//   대상 = 페이지 소유 순수 함수(그리드/React 미의존): dynamic-columns 파생(3SPAN 응답 행) + 상수 계약.
+//   근거: AS-IS GetSpdTitle(.cs:825-838 3SPAN) → InitSpreadDateColumn(.cs:169-245 — D_ 일자열·요일색 SAT/SUN·월/주 span) · SetReNumerCellType(.cs:163 — 0~7 정수)
 //   · SaveData_Main(.cs:548-556 — SAVE 컬럼 순서) · TO-BE SCM_ADM_MSG_M 실측 코드(constants MSG).
 //   vitest 환경(features/supply/vitest.config.ts) include 는 src/**/*.test.ts 라 이 파일은 명시 경로로 실행한다(B20 명명 __tests__/*.spec.ts).
 import { describe, expect, it } from 'vitest';
 
 import {
+  DAY_CODE,
+  DAY_COLUMN_WIDTH,
+  HEADER_TOTAL_HEIGHT,
   INPUT_VALUE_SET,
   MEASURE_CONST,
   MSG,
+  RESPONSE_SET,
   SAVE_KEYS,
-  WEEKDAY_CODE_TO_INDEX,
+  SHEETS,
   WTD_RANGE,
 } from '../shipment-working-day-osp.constants';
 import { buildDynDayColumns, buildDynSumColumns } from '../shipment-working-day-osp.dynamic-columns';
-import type { DynColumnMeta } from '../shipment-working-day-osp.types';
+import type { CalendarColumnRow } from '../shipment-working-day-osp.types';
 
-// GET O_RC1 의 o_rc1_columns 사이드카 모양 — 정적 6 + D_ 일자(2026-10-31 금 ~ 2026-11-02 일) + SUM 열 + hidden B_
-const META: DynColumnMeta[] = [
-  { name: 'DIVISION_ID', type: 'VARCHAR2' },
-  { name: 'PLANT_SITE_ID', type: 'VARCHAR2' },
-  { name: 'PLANT_SITE_NAME', type: 'VARCHAR2' },
-  { name: 'WORKING_TIME_DEFAULT', type: 'NUMBER' },
-  { name: 'LAST_INPUT_DATE', type: 'VARCHAR2' },
-  { name: 'MEASURE', type: 'VARCHAR2' },
-  { name: 'D_20261031', type: 'VARCHAR2' },
-  { name: 'D_20261101', type: 'VARCHAR2' },
-  { name: 'D_20261102', type: 'VARCHAR2' },
-  { name: 'W_202644', type: 'NUMBER' },
-  { name: 'M_202611', type: 'NUMBER' },
-  { name: 'B_20261102', type: 'VARCHAR2' },
-  { name: 'D_2026110', type: 'VARCHAR2' }, // 비정상 alias(7자리) — 건너뛰어야 함
+// 3SPAN(PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN) o_rc1 행 — 사내 ZIOUI1 실측(2026-10-20, '20261020'~'20261108' 호출)에서
+//   10-31(토)~11-02(월) 구간을 SORT_ORDER_NO 순 그대로 발췌 + 비정상 이름 1행(방어 확인용).
+const row = (
+  COLUMN_NAME: string,
+  COLUMN_LABEL_NAME: string,
+  SMALL_CLASS_LABEL_NAME: string,
+  LARGE_CLASS_LABEL_NAME: string,
+  DAY_CODE: string | null,
+  SORT_ORDER_NO: string
+): CalendarColumnRow => ({
+  COLUMN_NAME,
+  COLUMN_LABEL_NAME,
+  SMALL_CLASS_LABEL_NAME,
+  LARGE_CLASS_LABEL_NAME,
+  DAY_CODE,
+  SORT_ORDER_NO,
+});
+const CALENDAR: CalendarColumnRow[] = [
+  row('D_20261031', '31', 'W44', '2026-10', 'SAT', '2026103131'),
+  row('M_202611', '2026-11', '2026-11', '2026-11', null, '2026110101'),
+  row('W_20261144', 'W44', 'W44', '2026-11', null, '2026110121'),
+  row('D_20261101', '01', 'W44', '2026-11', 'SUN', '2026110131'),
+  row('W_20261145', 'W45', 'W45', '2026-11', null, '2026110221'),
+  row('D_20261102', '02', 'W45', '2026-11', 'MON', '2026110231'),
+  row('D_2026110', '0', 'W45', '2026-11', 'MON', '2026110231'), // 비정상 이름(7자리) — 건너뛰어야 함
 ];
 
-describe('SCP0096 dynamic-columns — AS-IS InitSpreadDateColumn 파생(.cs:166-243)', () => {
-  it('TC-SCP0096-001 [그리드] D_yyyymmdd 만 일자열로 뽑고 정적·SUM·B_·비정상 alias 는 제외한다', () => {
-    const cols = buildDynDayColumns(META);
+describe('SCP0096 dynamic-columns — AS-IS InitSpreadDateColumn ← GetSpdTitle(3SPAN) 파생(.cs:169-245)', () => {
+  it('TC-SCP0096-001 [그리드] 3SPAN 행 중 D_yyyymmdd 만 일자열로, 응답 순서 그대로(W_/M_·비정상 이름 제외)', () => {
+    const cols = buildDynDayColumns(CALENDAR);
     expect(cols.map(c => c.binding)).toEqual(['D_20261031', 'D_20261101', 'D_20261102']);
     expect(cols.map(c => c.yyyymmdd)).toEqual(['20261031', '20261101', '20261102']);
   });
 
-  it('TC-SCP0096-002 [그리드] 일 leaf 라벨은 앞 0 제거한 일(DD), 요일은 0=일~6=토 (토=Blue/일=Red 근거 .cs:208)', () => {
-    const [sat, sun, mon] = buildDynDayColumns(META);
+  it('TC-SCP0096-002 [그리드] 일 leaf 라벨 = COLUMN_LABEL_NAME 그대로(앞 0 유지), 요일 = DAY_CODE (토=Blue/일=Red 근거 .cs:206-208)', () => {
+    const [sat, sun, mon] = buildDynDayColumns(CALENDAR);
     expect(sat.dayLabel).toBe('31');
-    expect(sat.weekday).toBe(6); // 2026-10-31 토
-    expect(sun.dayLabel).toBe('1');
-    expect(sun.weekday).toBe(0); // 2026-11-01 일
-    expect(mon.weekday).toBe(1); // 2026-11-02 월
+    expect(sat.dayCode).toBe(DAY_CODE.SAT);
+    expect(sun.dayLabel).toBe('01');
+    expect(sun.dayCode).toBe(DAY_CODE.SUN);
+    expect(mon.dayCode).toBe('MON');
   });
 
-  it('TC-SCP0096-003 [그리드] 월(대)·주(소) 그룹 키 — 월이 바뀌면 monthKey 가 바뀌고 주차는 월 내 1~7일 단위', () => {
-    const [sat, sun] = buildDynDayColumns(META);
-    expect(sat.monthKey).toBe('202610');
-    expect(sun.monthKey).toBe('202611');
-    expect(sat.weekKey).toBe('202610-W5'); // 31일 → ceil(31/7)=5
-    expect(sun.weekKey).toBe('202611-W1');
+  it('TC-SCP0096-003 [그리드] 월(대)·주(소) 라벨 = LARGE/SMALL_CLASS_LABEL_NAME 서버값(ISO 주차 W44/W45 — 클라 재계산 금지)', () => {
+    const [sat, sun, mon] = buildDynDayColumns(CALENDAR);
+    expect(sat.monthLabel).toBe('2026-10');
+    expect(sun.monthLabel).toBe('2026-11');
+    expect(sat.weekLabel).toBe('W44');
+    expect(sun.weekLabel).toBe('W44'); // 월 경계를 걸친 같은 주 — Grid 가 월 그룹 안에서만 주차를 묶어 블록 2개가 된다(.cs:213-226)
+    expect(mon.weekLabel).toBe('W45');
   });
 
-  it('TC-SCP0096-004 [그리드] W_/M_ SUM 열 파생 — 종류·헤더(월은 yyyy-mm). D_/B_ 는 제외 (chkSum 비노출이라 표시는 항상 off)', () => {
-    const sums = buildDynSumColumns(META);
+  it('TC-SCP0096-004 [그리드] W_/M_ SUM 열 파생 — 종류·헤더 = COLUMN_LABEL_NAME. D_ 는 제외 (chkSum 비노출이라 표시는 항상 off)', () => {
+    const sums = buildDynSumColumns(CALENDAR);
     expect(sums).toEqual([
-      { binding: 'W_202644', kind: 'W', header: '202644' },
       { binding: 'M_202611', kind: 'M', header: '2026-11' },
+      { binding: 'W_20261144', kind: 'W', header: 'W44' },
+      { binding: 'W_20261145', kind: 'W', header: 'W45' },
     ]);
   });
 
@@ -91,8 +107,17 @@ describe('SCP0096 constants — SP/메시지 계약', () => {
     expect([...INPUT_VALUE_SET]).toEqual(['Y', 'N']);
   });
 
-  it('TC-SCP0096-008 [검증] 요일 코드 → dayjs day() 인덱스 (btnInput 요일별 분기 .cs:797)', () => {
-    expect(WEEKDAY_CODE_TO_INDEX).toEqual({ Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 });
+  it('TC-SCP0096-008 [검증] btnInput 요일별 분기 = cboDayWeek 코드.toUpperCase() 와 DAY_CODE 직접 비교 (AS-IS .cs:798)', () => {
+    const mon = buildDynDayColumns(CALENDAR).filter(c => c.dayCode === 'Mon'.toUpperCase());
+    expect(mon.map(c => c.binding)).toEqual(['D_20261102']);
+  });
+
+  it('TC-SCP0096-010 [그리드] 동적 헤더 원천 = 사내 배선 타이틀 시트 calendar 의 o_rc1(PROC_M OUT COL_NM) · 폭 50(.cs:203) · 헤더 총높이 48(#93)', () => {
+    expect(SHEETS.CALENDAR).toBe('calendar');
+    expect(RESPONSE_SET.CALENDAR).toBe('o_rc1');
+    expect(Object.values(RESPONSE_SET)).not.toContain('o_rc1_columns');
+    expect(DAY_COLUMN_WIDTH).toBe(50);
+    expect(HEADER_TOTAL_HEIGHT).toBe(48);
   });
 
   it('TC-SCP0096-009 [메시지] TO-BE SCM_ADM_MSG_M 실측 코드 — AS-IS 번호 그대로 쓰지 않는다(MSG00004/00135/00134/00050 금지)', () => {

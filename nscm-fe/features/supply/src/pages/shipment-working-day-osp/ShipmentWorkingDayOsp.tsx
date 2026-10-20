@@ -25,7 +25,7 @@ import {
 } from './shipment-working-day-osp.constants';
 import { buildDynDayColumns } from './shipment-working-day-osp.dynamic-columns';
 import type {
-  DynColumnMeta,
+  CalendarColumnRow,
   DynDayColumn,
   SaveEntry,
   ShipmentWorkingDayOspRow,
@@ -35,8 +35,8 @@ import { useShipmentWorkingDayOspStore } from './useShipmentWorkingDayOspStore';
 // AS-IS GSCM.SCP.Forms.UIL Master SCP0096_Shipment_Working_Day_OSP (Supply > Supply Master > Shipment Working Day(OSP)).
 //   조회형+편집형 마스터 — 조회(GET SP 4 IN, O_RC1 데이터 + O_RESULT_CURSOR 상태) 후 EditButton(SwitchLock)
 //   편집모드에서 WORKING_TIME_DEFAULT + 동적 D_ 일자 셀(Y/N)만 개방(03 §3-a). SAVE SP 로 '^' 배열 저장.
-//   GET SP 단일 호출로 데이터(O_RC1)와 컬럼 메타(o_rc1_columns)를 함께 받는다 — 시트는 MAIN 하나뿐,
-//   동적 D_/W_/M_ 은 o_rc1_columns 에서 도출한다(타이틀 커서 없음, SCP0019 동형).
+//   데이터 = MAIN(GET o_rc1) / 동적 기간 헤더 = CALENDAR(사내 배선 3SPAN o_rc1 — AS-IS GetSpdTitle → InitSpreadDateColumn 1:1).
+//   (2026-10-20 정정: 이전 'o_rc1_columns 사이드카' 가정은 BE BaseService 원문과 달라 기간 컬럼 0 — DoD B26/B27.)
 //   버튼: SEARCH/SAVE + EDIT(권한 게이트) + btnInput. Insert/Delete = AS-IS NO-OP(01_layout §2-a).
 //   SCP0019 대비 델타: 정적 6컬럼 / 편집 = INPUT_TP_CD 메타 + EDIT 권한 / D_ 셀 Y/N 콤보.
 //   chkSum(SUM 토글)은 AS-IS Designer Visible=false(:346) + GET SP 에 W_/M_ 컬럼 없음(AS-IS MSSQL·사내 Oracle 모두 D_ 만 PIVOT)
@@ -58,6 +58,9 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
   const filters = useShipmentWorkingDayOspStore(state => state.filters);
   const setFilters = useShipmentWorkingDayOspStore(state => state.setFilters);
   const clearFilters = useShipmentWorkingDayOspStore(state => state.clearFilters);
+  const calendarFilters = useShipmentWorkingDayOspStore(state => state.calendarFilters);
+  const syncCalendarFilters = useShipmentWorkingDayOspStore(state => state.syncCalendarFilters);
+  const clearCalendarFilters = useShipmentWorkingDayOspStore(state => state.clearCalendarFilters);
   const fetchStaticColumns = useShipmentWorkingDayOspStore(state => state.fetchStaticColumns);
   // F6 개인화 조회조건 복원(저장분 되불러오기) — mount 1회(conditionsRestored 가드).
   const restoreSearchConditions = useShipmentWorkingDayOspStore(
@@ -76,18 +79,14 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
   // 편집 권한 — mount 1회 판정(convert-core §2.4 / 선례 SCP0120·SSP0025). AS-IS EditButton(SwitchLock)
   //   토글은 미채용: 권한 있으면 조회 직후 WORKING_TIME_DEFAULT+D_ 편집 가능, 없으면 읽기전용.
   const canEdit = hasButton('EDIT');
-  // chkSum — AS-IS DefineProperty chkSum.Checked=false(.cs:121)에 더해 Designer `this.chkSum.Visible = false`(:346)라
-  //   사용자가 켤 수 없고, GET SP 도 W_/M_ SUM 컬럼을 만들지 않는다 → SUM 열은 항상 숨김(토글 UI 없음). Grid 의 showSum 은 고정 false.
+  // chkSum — AS-IS chkSum.Checked=false(.cs:121) + Designer Visible=false(:346) → 3SPAN 의 W_/M_ 합계 열은 만들되 항상 숨김
+  //   (AS-IS SetSpreadColumn .cs:353-356 등가, 토글 UI 없음). Grid 의 showSum 은 고정 false.
 
   // 기본 조회기간 — 서버 dayRange(사내 배선 SCP0096 / dayRange / SEARCH → PKG_COM0000.P_SCM0001_GET_SCP_MONTH_PERIOD).
-  //   AS-IS InitControls `dCalendar.InitValue = GetDayRange()`(.cs:137,840-846 → DateUtil.GetDayRange(cboDivision,'DAILY')
-  //   → SCP.SCM0001_GET_SCP_MONTH_PERIOD, DateUtil.cs:330) 1:1 — 프레임워크 유틸 호출이라 flow.csv 에 없다(DoD B24).
-  //   응답 o_rc1[0].PERIOD('yyyymmdd:yyyymmdd')를 1회 적용(BusinessPlan dayRange 정본 패턴). filters 는 useMemo(인라인 리터럴 금지).
-  //   키 5개 = 사내 PROC_M COL_NM(proc_params.csv · DoD B22). 값 = AS-IS DateUtil.GetDayRange(cboDivision,"DAILY") 실전송값
-  //   (sPlanDate=''·sOffsetMonth='12' 기본인자). timeZone 은 TO-BE UserSession 에 타임존 필드가 없어 ''(자매 shipping 화면 동일) —
-  //   SP 가 FN_MULTY_TIME('') 로 오늘 기준 산출. 사내 실측 2026-10-20: '' → '20261020:20271017' / 'Asia/Seoul' → NULL 이므로 빈값이 정답.
-  //   Reset Condition(F10) 후 재적용: reset() 이 dayRangeApplied 를 false 로 되돌려도 쿼리 캐시 참조는 그대로라 data 만으론
-  //   effect 가 다시 돌지 않는다 — dayRangeApplied 를 deps 에 두어 캐시된 서버 구간을 다시 적용한다.
+  //   AS-IS InitControls `dCalendar.InitValue = GetDayRange()`(.cs:137,840-846 → DateUtil.GetDayRange(cboDivision,'DAILY'), DateUtil.cs:330)
+  //   1:1 — flow.csv 미수록 프레임워크 유틸(DoD B24). o_rc1[0].PERIOD('yyyymmdd:yyyymmdd') 1회 적용. 키 5개 = PROC_M COL_NM(DoD B22),
+  //   값 = AS-IS 실전송값(sPlanDate=''·sOffsetMonth='12'). timeZone '' = SP 오늘 기준(사내 실측 '' → '20261020:20271017', 'Asia/Seoul' → NULL).
+  //   F10 후 재적용: dayRangeApplied 를 deps 에 두어 캐시된 서버 구간을 다시 적용한다.
   const dayRangeFilters = useMemo(
     () => ({
       divisionId: searchParams.divisionId, // 1 P_DIVISION_ID (AS-IS cboDivision.ControlValues)
@@ -112,8 +111,7 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dayRangeData, dayRangeApplied]);
 
-  // 메인 그리드 SP — PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP (4 IN + O_RC1 데이터 + O_RESULT_CURSOR 상태).
-  //   단일 호출로 데이터(o_rc1)와 그 컬럼 메타(o_rc1_columns)를 반환하므로 rows·동적컬럼을 이 응답에서 도출한다.
+  // 메인 그리드 SP — PKG_SCP0096.P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP (4 IN + o_rc1 데이터 + o_result_cursor 상태).
   const { data, isFetching } = useTabProcQuery<MENU_ID, SHEETS.MAIN>({
     menuId: MENU_ID,
     sheetName: SHEETS.MAIN,
@@ -129,25 +127,45 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
     () => (data as Record<string, ShipmentWorkingDayOspRow[]>)?.[RESPONSE_SET.MAIN] ?? [],
     [data]
   );
-  // 동적 컬럼 메타 원본 — o_rc1_columns(BE ResultSetMetaData). D_ 일자열·W_/M_ SUM 열 파생 원천.
+  // 동적 기간 헤더 컬럼셋 — 사내 배선 SCP0096 / calendar / SEARCH → PKG_COM0000.P_SCP0009_GET_SHEET_CALENDAR_3SPAN(IN 2 = PROC_M COL_NM).
+  //   AS-IS GetSpdTitle(.cs:825-838) 1:1. 조회 전에도 초기 기간으로 1회(AS-IS Form_Load InitSpread .cs:145,151), 조회 시 재조회(.cs:438).
+  //   컬럼 생성용 구조적 fetch 라 전역 탭 busy 스피너에서 제외(meta.background — 자매 SCP0095 동일).
+  const { data: calendarData } = useTabProcQuery<MENU_ID, SHEETS.CALENDAR>({
+    menuId: MENU_ID,
+    sheetName: SHEETS.CALENDAR,
+    tabId,
+    filters: calendarFilters,
+    enabled: !!calendarFilters,
+    queryOptions: { meta: { background: true } },
+  });
+  // 3SPAN o_rc1 행(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE) — D_ 일자열·W_/M_ SUM 열 파생 원천.
   //   rows 와 같은 단일 `as` 로 좁힌다(`as unknown as` 금지 #73 — SCP0096 은 procedures.d.ts 미등재라 응답 제네릭이 느슨, GEN_NOTES 8).
-  const dynColumnMeta = useMemo<DynColumnMeta[]>(
-    () => (data as Record<string, DynColumnMeta[]>)?.[RESPONSE_SET.DYN_COLUMNS] ?? [],
-    [data]
+  const calendarRows = useMemo<CalendarColumnRow[]>(
+    () => (calendarData as Record<string, CalendarColumnRow[]>)?.[RESPONSE_SET.CALENDAR] ?? [],
+    [calendarData]
   );
-  // 동적 D_ 일자열 — o_rc1_columns 의 D_yyyymmdd 이름에서 파생. 3단 머지헤더(월/주/일) 그룹은 커서가
-  //   주지 않으므로 yyyymmdd 로 클라이언트 계산한다(3SPAN 헤더 원리 재현). 데이터 커서에 타이틀 메타 없음.
-  const dynColumns = useMemo<DynDayColumn[]>(() => buildDynDayColumns(dynColumnMeta), [dynColumnMeta]);
+  // 동적 D_ 일자열 — 3SPAN 행의 서버 라벨(월/주차/일)·DAY_CODE 그대로(AS-IS InitSpreadDateColumn .cs:183-239).
+  const dynColumns = useMemo<DynDayColumn[]>(() => buildDynDayColumns(calendarRows), [calendarRows]);
 
   // mount 시 1회 admin 메타 fetch + persist 된 이전 filters 무효화 (NULL payload SP 자동호출 방지)
   useEffect(() => {
     clearFilters();
+    clearCalendarFilters();
     editTrackerRef.current?.clearChanges();
     void fetchStaticColumns();
     // F6 저장조건 복원 — 새로고침/재진입(새 store) 시 저장분을 searchParams 에 1회 주입(가드 self).
     void restoreSearchConditions();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
+
+  // 조회 전 초기 컬럼셋 — 기간 기본값(dayRange)이 적용되면 3SPAN 을 단 1회 발사한다(AS-IS Form_Load: InitControls 의
+  //   dCalendar.InitValue(.cs:137) 뒤 CreateSpread → InitSpread → GetSpdTitle(.cs:112,145,151)). 기간 state 를 deps 에 넣지 않는다.
+  const calendarInitRef = useRef(false);
+  useEffect(() => {
+    if (!dayRangeApplied || calendarInitRef.current) return;
+    calendarInitRef.current = true;
+    syncCalendarFilters();
+  }, [dayRangeApplied, syncCalendarFilters]);
 
   // ----- 조회 validation (AS-IS FindData_Main `DataUtil.checkRequiredOfSearch(this.Controls)` .cs:432 —
   //   Designer 필수 표식 "Division*"(:545) · "Period*"(:532) 2건) -----
@@ -372,7 +390,7 @@ export const ShipmentWorkingDayOsp = ({ tabId, title }: PageProps<MENU_ID>) => {
         editTrackerRef={editTrackerRef}
         data={rows}
         dynColumns={dynColumns}
-        dynColumnMeta={dynColumnMeta}
+        calendarRows={calendarRows}
         editMode={canEdit}
         showSum={false}
       />

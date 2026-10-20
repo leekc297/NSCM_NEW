@@ -14,7 +14,7 @@ export const CFG = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'e2e.co
 export const FE: string = process.env.E2E_FE || CFG.feUrl;
 export const BE: string = process.env.E2E_BE || CFG.beUrl;
 
-export type ProcCall = { url: string; menu: string; sheet: string; btn: string; status: number; rows: number | null; ms: number };
+export type ProcCall = { url: string; menu: string; sheet: string; btn: string; status: number; rows: number | null; ms: number; req?: string; res?: string };
 
 export class Nscm {
   calls: ProcCall[] = [];
@@ -27,9 +27,12 @@ export class Nscm {
       const rec: ProcCall = { url: u, menu: decodeURIComponent(m[1]), sheet: decodeURIComponent(m[2]), btn: decodeURIComponent(m[3]), status: res.status(), rows: null, ms: 0 };
       this.calls.push(rec);
       try {
+        // SAVE 류는 요청 본문(보낸 행 수)·응답 요약을 남긴다 — "HTTP 200 인데 DB 미반영"(silent no-op) 을 가려내기 위해(2026-10-20 SCP0096)
+        if (/SAVE|INS|UPD|DEL/i.test(rec.btn)) { try { const pd = res.request().postData() || ''; rec.req = pd.length > 400 ? pd.slice(0, 400) + `…(+${pd.length - 400})` : pd; } catch { /* no body */ } }
         const ct = res.headers()['content-type'] || '';
         if (/json/.test(ct) && res.status() === 200) {
           const j = await res.json();
+          if (rec.req != null) { try { rec.res = JSON.stringify(j).slice(0, 300); } catch { /* ignore */ } }
           const arr = Array.isArray(j) ? j : (j?.data ?? j?.result ?? j?.rows ?? null);
           rec.rows = Array.isArray(arr) ? arr.length : (arr && typeof arr === 'object' ? Object.values(arr).reduce((n: number, v: unknown) => n + (Array.isArray(v) ? v.length : 0), 0) : null);
         }
@@ -200,18 +203,22 @@ export class Nscm {
 
   /** 조회 실행 — SearchArea 조회 버튼 → call-proc(SEARCH 류) 응답 대기 */
   async search(opts: { timeout?: number } = {}) {
+    await this.clearDialogs();
     const before = this.calls.length;
     const btn = await this.visibleFirst(this.page.getByRole('button', { name: /^(조회|Search)(\(F5\))?$/ }));
-    if (btn) await btn.click(); else await this.page.keyboard.press('F5');
     const t0 = Date.now();
-    // 메인 조회(call-proc) 응답을 기다린다 — 초기기간 조회(dayRange)는 조회 버튼과 무관하므로 제외
-    await this.page.waitForResponse(r => /call-proc/.test(r.url()) && !/\/dayRange\//i.test(r.url()), { timeout: opts.timeout ?? CFG.searchTimeoutMs }).catch(() => undefined);
-    await this.page.waitForLoadState('networkidle', { timeout: 30_000 }).catch(() => undefined);
+    // 메인 조회(call-proc) 응답을 기다린다 — 초기기간 조회(dayRange)는 조회 버튼과 무관하므로 제외.
+    // 2026-10-20: 감시를 클릭 '전에' 걸어 빠른 응답을 놓치지 않는다(실측: 뒤에 걸면 재조회 121s). 조회 버튼이 없는 계정은 F5 도 무동작 → 10s 만
+    const waitSearch = this.page.waitForResponse(r => /call-proc/.test(r.url()) && !/\/dayRange\//i.test(r.url()) && !/\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i.test(r.url()), { timeout: btn ? (opts.timeout ?? CFG.searchTimeoutMs) : 10_000 }).catch(() => undefined);
+    if (btn) await btn.click({ timeout: 10_000 }).catch(() => undefined); else await this.page.keyboard.press('F5');
+    await waitSearch;
+    await this.page.waitForLoadState('networkidle', { timeout: 8_000 }).catch(() => undefined);
     const mine = this.calls.slice(before); mine.forEach(c => (c.ms = Date.now() - t0));
     return mine;
   }
 
-  grids(): Locator { return this.page.locator('.wj-flexgrid'); }
+  // 2026-10-20: 보이는 그리드만 — Home keep-alive 등 숨은 .wj-flexgrid 가 첫 번째로 잡히면 dblclick 이 테스트 타임아웃까지 대기한다(crud/authcrud 180s 초과 원인)
+  grids(): Locator { return this.page.locator('.wj-flexgrid:visible'); }
   grid(i = 0): Locator { return this.grids().nth(i); }
   async gridHeaders(i = 0): Promise<string[]> {
     const g = this.grid(i); await g.waitFor({ state: 'visible', timeout: 20_000 }).catch(() => undefined);
@@ -252,7 +259,64 @@ export class Nscm {
   }
   async gridCell(r: number, c: number, i = 0): Promise<Locator> { return this.grid(i).locator('.wj-cells .wj-row').nth(r).locator('.wj-cell').nth(c); }
   async setCell(r: number, c: number, value: string, i = 0) {
-    const cell = await this.gridCell(r, c, i); await cell.dblclick(); await this.page.keyboard.press('Control+A'); await this.page.keyboard.type(value); await this.page.keyboard.press('Enter');
+    // 2026-10-20: 더블클릭 시간 상한(기본은 테스트 타임아웃까지 대기 — 비편집 셀에서 182s 매달림)
+    const cell = await this.gridCell(r, c, i);
+    try { await cell.dblclick({ timeout: 5_000 }); }
+    catch { await cell.scrollIntoViewIfNeeded({ timeout: 3_000 }).catch(() => undefined); await cell.click({ timeout: 5_000 }); await this.page.keyboard.press('F2'); } // 재조회 직후 더블클릭이 안정화 대기에 걸리면 클릭 + F2 로 편집기 열기
+    await this.page.keyboard.press('Control+A'); await this.page.keyboard.type(value); await this.page.keyboard.press('Enter');
+  }
+  /** 화면이 편집 가능으로 표시한 셀(.wj-cell-editable) 목록 — {row, col, text}. 컬럼 정의 isReadOnly 가 전부 false 인 화면(SCP0096)에서는 이것이 유일한 편집 가능 신호 */
+  async editableCells(i = 0, maxRows = 40): Promise<Array<{ row: number; col: number; text: string }>> {
+    const g = this.grid(i);
+    return g.evaluate((el: Element, mr: number) => {
+      const out: Array<{ row: number; col: number; text: string }> = [];
+      const rows = Array.from(el.querySelectorAll('.wj-cells .wj-row')).slice(0, mr);
+      rows.forEach((row, ri) => { const cells = Array.from(row.querySelectorAll('.wj-cell')); cells.forEach((c, ci) => { if (c.classList.contains('wj-cell-editable')) out.push({ row: ri, col: ci, text: (c.textContent || '').trim() }); }); });
+      return out;
+    }, maxRows).catch(() => []);
+  }
+  /** 행 식별 키 = 앞 k개 셀 텍스트(재조회 뒤 같은 행 찾기용) */
+  async rowKey(r: number, k = 3, i = 0): Promise<string> { const t = await this.grid(i).locator('.wj-cells .wj-row').nth(r).locator('.wj-cell').allInnerTexts().catch(() => [] as string[]); return t.slice(0, k).map(s => s.trim()).join('|'); }
+  async findRowByKey(key: string, k = 3, i = 0, max = 200): Promise<number> { const rl = this.grid(i).locator('.wj-cells .wj-row'); const n = Math.min(await rl.count(), max); for (let r = 0; r < n; r++) if ((await this.rowKey(r, k, i)) === key) return r; return -1; }
+  /** 셀 편집 가능 여부 — 더블클릭해 Wijmo 편집기(input/textarea/select)가 열리는지 보고 Esc 로 취소(값 변경 없음). 셀이 없으면 null */
+  /** Wijmo 컬럼 정의(보이는 순서): binding · readOnly(그리드 isReadOnly 포함). 판독 불가면 null */
+  async gridColumnsMeta(i = 0): Promise<Array<{ binding: string; readOnly: boolean; header: string; dataType: number; hasMap: boolean; cellTemplate: boolean }> | null> {
+    const g = this.grid(i); await g.waitFor({ state: 'visible', timeout: 20_000 }).catch(() => undefined);
+    return g.evaluate((el: Element) => {
+      type Col = { binding?: string; visible?: boolean; isReadOnly?: boolean; header?: string; dataType?: number; dataMap?: unknown; cellTemplate?: unknown; editor?: unknown };
+      type Ctl = { columns?: ArrayLike<Col>; isReadOnly?: boolean };
+      const host = el as unknown as Record<string, unknown>;
+      let ctl = host['$WJ-CTRL'] as Ctl | undefined;
+      if (!ctl || !ctl.columns) for (const k of Object.getOwnPropertyNames(host)) { const v = host[k] as Ctl | undefined; if (v && typeof v === 'object' && v.columns && typeof (v.columns as ArrayLike<Col>).length === 'number') { ctl = v; break; } }
+      if (!ctl || !ctl.columns) return null;
+      const out: Array<{ binding: string; readOnly: boolean; header: string; dataType: number; hasMap: boolean; cellTemplate: boolean }> = [];
+      // dataType: Wijmo DataType — 0 Object · 1 String · 2 Number · 3 Boolean · 4 Date · 5 Array
+      for (let j = 0; j < ctl.columns.length; j++) { const c = ctl.columns[j]; if (c && c.visible !== false) out.push({ binding: String(c.binding || ''), readOnly: !!ctl.isReadOnly || !!c.isReadOnly, header: String(c.header || c.binding || ''), dataType: Number(c.dataType || 0), hasMap: !!c.dataMap || !!c.editor, cellTemplate: !!c.cellTemplate }); }
+      return out;
+    }).catch(() => null);
+  }
+  /**
+   * 셀 편집 가능 여부 — 컬럼 지정이 없으면 Wijmo 컬럼 정의에서 readOnly 가 아닌 첫 컬럼들(최대 20개)을 차례로 더블클릭해 편집기(input/textarea/select)가 열리는지 본다. Esc 로 취소(값 변경 없음).
+   *  2026-10-20: 고정 (0,1) 셀은 키 컬럼이라 항상 '안 열림' 이었다(SCP0096 허용 계정 7건 오탐). 편집 가능 컬럼 정의가 하나도 없으면 false, 판정 불가면 null
+   */
+  async cellEditable(r = 0, c?: number, i = 0): Promise<boolean | null> {
+    const meta = c == null ? await this.gridColumnsMeta(i) : null;
+    let cands: number[];
+    if (c != null) cands = [c];
+    else if (meta) { cands = meta.map((m, idx) => (m.readOnly ? -1 : idx)).filter(x => x >= 0).slice(0, 20); if (!cands.length) return false; }
+    else cands = [1, 2, 3, 4, 5];
+    let sawCell = false;
+    for (const ci of cands) {
+      const cell = await this.gridCell(r, ci, i);
+      if (!(await cell.isVisible({ timeout: 1_000 }).catch(() => false))) continue;
+      sawCell = true;
+      try { await cell.dblclick({ timeout: 5_000 }); } catch { try { await cell.dblclick({ timeout: 3_000, force: true }); } catch { continue; } }
+      const ed = this.grid(i).locator('input.wj-grid-editor, .wj-cell input, .wj-cell textarea, .wj-cell select, .wj-cell [contenteditable="true"]').first();
+      const on = await ed.isVisible({ timeout: 1_500 }).catch(() => false);
+      await this.page.keyboard.press('Escape');
+      if (on) return true;
+    }
+    return sawCell ? false : null;
   }
 
   subButton(name: 'Save' | 'Insert' | 'Delete' | 'Search' | 'Sort' | 'Filter' | 'Excel Upload' | string): Locator {
@@ -267,13 +331,20 @@ export class Nscm {
   /** 저장 — Save(F7) 클릭 → SAVE call-proc 응답/알림 확인. 확인 다이얼로그는 OK */
   async save() {
     const before = this.calls.length;
-    await this.subButton('Save').click();
+    // 2026-10-20: 응답 감시를 클릭 '전에' 건다 — 뒤에 걸면 빠른 응답을 놓쳐 60s 를 그대로 소모했다(실측: 저장 61s). SAVE 류 call-proc 만 기다린다
+    const waitSave = this.page.waitForResponse(r => /call-proc/.test(r.url()) && /\/(SAVE|INS|UPD|DEL)[^/]*\/call-proc/i.test(r.url()), { timeout: 60_000 }).catch(() => undefined);
+    await this.subButton('Save').click({ timeout: 10_000 });
     await this.closeAlert('ok');
-    await this.page.waitForResponse(r => /call-proc/.test(r.url()), { timeout: 60_000 }).catch(() => undefined);
-    await this.page.waitForLoadState('networkidle', { timeout: 30_000 }).catch(() => undefined);
-    const msg = await this.alertText(); if (msg) await this.closeAlert('ok');
-    return { calls: this.calls.slice(before), message: msg };
+    await waitSave;
+    await this.page.waitForLoadState('networkidle', { timeout: 8_000 }).catch(() => undefined);
+    // 결과 알림(성공/ORA 오류)은 닫힐 때까지 최대 3회 — 남아 있으면 다음 클릭(조회·셀 편집)이 전부 막힌다(2026-10-20 실측)
+    let msg = ''; for (let k = 0; k < 3; k++) { const m = await this.alertText(); if (!m) break; msg = msg || m; await this.closeAlert('ok'); await this.page.waitForTimeout(300); }
+    // 결과 커서의 ERR_CODE(call-proc 성공 판정 = 결과 커서 CODE) 도 메시지에 반영
+    const calls = this.calls.slice(before); for (const c of calls) { const m2 = /"ERR_CODE":\s*(-?\d+)[^}]*"ERR_MESSAGE":\s*"([^"]{0,200})/.exec(c.res || ''); if (m2 && m2[1] !== '0' && !msg) msg = m2[2]; }
+    return { calls, message: msg };
   }
+  /** 열린 대화상자가 있으면 전부 닫는다(최대 3개) — 조회/편집 전에 호출 */
+  async clearDialogs() { for (let k = 0; k < 3; k++) { if (!(await this.closeAlert('ok'))) break; await this.page.waitForTimeout(200); } }
 
   snapshot(name: string) { return this.page.screenshot({ path: path.join(process.env.E2E_RESULTS || CFG.resultsDir, 'shots', `${name}.png`), fullPage: false }).catch(() => undefined); }
 }

@@ -2,10 +2,13 @@
 'use strict';
 // gen-e2e — Fact Pack(e2e_plan.json) + Oracle 메타 + 테스트계정 → Playwright 스펙 생성
 //   node gen-e2e.js [ID ...] [--all]      ID 없고 --all 이면 Doc/gen/*/e2e_plan.json 전부
-//   산출: Doc/e2e/specs/<ID>.smoke.spec.ts / <ID>.crud.spec.ts / <ID>.auth.spec.ts / <ID>.plan.json, _index.csv, _matrix.csv
+//   산출: Doc/e2e/specs/<ID>.smoke.spec.ts / <ID>.crud.spec.ts / <ID>.auth.spec.ts / <ID>.authcrud.spec.ts(2026-10-20 계정별 권한 CRUD) / <ID>.plan.json, _index.csv, _matrix.csv
 const fs = require('fs'); const path = require('path');
 const cfg = JSON.parse(fs.readFileSync(path.join(__dirname, 'e2e.config.json'), 'utf8').replace(/^﻿/, ''));
-const a = process.argv.slice(2); const ids = a.filter(x => !x.startsWith('--')).map(x => x.toUpperCase());
+const a = process.argv.slice(2);
+// 2026-10-20 테스트 모드(화면 성격별 계정 축) — --mode admin|division|auto. 명시하면 users.json screens[<메뉴>].mode 에 저장돼 다음 기본값이 된다
+const MODE_ARG = (() => { const i = a.indexOf('--mode'); const v = i >= 0 ? String(a[i + 1] || '').toLowerCase() : (a.find(x => x.startsWith('--mode=')) || '').slice(7).toLowerCase(); return /^(admin|division|auto)$/.test(v) ? v : ''; })();
+const ids = a.filter((x, i) => !x.startsWith('--') && a[i - 1] !== '--mode').map(x => x.toUpperCase());
 const specs = cfg.specsDir; fs.mkdirSync(specs, { recursive: true });
 const readCsv = f => { if (!fs.existsSync(f)) return []; const t = fs.readFileSync(f, 'utf8').replace(/^﻿/, ''); const lines = []; let cur = '', q = false, row = []; for (let i = 0; i < t.length; i++) { const ch = t[i]; if (q) { if (ch === '"') { if (t[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; } else if (ch === '"') q = true; else if (ch === ',') { row.push(cur); cur = ''; } else if (ch === '\n' || ch === '\r') { if (ch === '\r' && t[i + 1] === '\n') i++; row.push(cur); lines.push(row); row = []; cur = ''; } else cur += ch; } if (cur || row.length) { row.push(cur); lines.push(row); } const h = lines.shift() || []; return lines.filter(r => r.length > 1 || r[0]).map(r => Object.fromEntries(h.map((k, i) => [k, r[i] ?? '']))); };
 const up = s => (s || '').toUpperCase();
@@ -14,6 +17,23 @@ const scenarios = readCsv(path.join(__dirname, 'scenarios.csv'));
 const sheetCols = readCsv(path.join(cfg.tobeOutDir, 'db', 'sheet_columns.csv'));
 const btnAuth = readCsv(path.join(cfg.tobeOutDir, 'db', 'btn_auth.csv'));
 const menu = readCsv(path.join(cfg.tobeOutDir, 'db', 'menu.csv'));
+// 2026-10-20 auth별 CRUD: 계정별 기대 권한의 원천 = To-Be 메타(사용자→그룹 user_group_user · 그룹→메뉴 user_group_menu · 그룹×메뉴×버튼 btn_auth). 데이터셋(accounts.json) 의 그룹은 참고 표기만
+const ugUser = readCsv(path.join(cfg.tobeOutDir, 'db', 'user_group_user.csv'));
+const ugMenu = readCsv(path.join(cfg.tobeOutDir, 'db', 'user_group_menu.csv'));
+// 사용자 관리 명부 users.json → 계정 목록(역할·Division 배정은 표기/범위용, 기대 권한은 To-Be 메타로 계산)
+const USERS = (() => { const f = path.join(__dirname, 'users.json'); if (!fs.existsSync(f)) return null; try { return JSON.parse(fs.readFileSync(f, 'utf8').replace(/^﻿/, '')); } catch (e) { console.error(`users.json 해석 실패: ${e.message}`); return null; } })();
+function rosterAccounts(u, okIds) {
+  const byId = new Map(); const allDivs = Object.keys(u.divisions || {});
+  const get = id => { if (!byId.has(id)) byId.set(id, { id, name: (u.names || {})[id] || '', groups: [], divisions: [], roles: {}, adminAlso: false, adminOf: [], usable: true, screens: {}, loginOk: okIds ? okIds.includes(id) : true, source: 'users.json' }); return byId.get(id); };
+  for (const [div, roles] of Object.entries(u.divisions || {})) for (const [role, id] of Object.entries(roles || {})) { if (!id) continue; const a = get(id); if (!a.divisions.includes(div)) a.divisions.push(div); a.roles[div] = role; if (!a.groups.includes(role)) a.groups.push(role); }
+  for (const [adm, ids] of Object.entries(u.admins || {})) for (const id of ids || []) { const a = get(id); a.adminAlso = true; a.adminOf.push(adm); if (!a.groups.includes(adm)) a.groups.push(adm); if (!a.groups.includes('SYSTEM ADMIN')) a.groups.push('SYSTEM ADMIN'); for (const d of allDivs) if (!a.divisions.includes(d)) a.divisions.push(d); }
+  const list = [...byId.values()];
+  const noLogin = list.filter(a => !a.loginOk).map(a => a.id); if (noLogin.length) console.error(`  ⚠ users.json 계정 중 로그인 불가(BE 사용자 없음): ${noLogin.join(', ')} — 스펙에서 제외`);
+  return list.filter(a => a.loginOk);
+}
+const tobeGroupsOf = uid => [...new Set(ugUser.filter(r => up(r.user_id) === up(uid) && (r.use_yn || 'Y') !== 'N').map(r => r.user_gr_id))];
+// 권한 메타 스냅샷 나이 — 사내 권한은 수시로 바뀐다(2026-10-20: SCM Viewer 의 SCP0096 SAVE 가 10-19 export 뒤 제거돼 기대가 어긋남). run-e2e.cmd 가 실행 전 새로고침한다
+{ const f = path.join(cfg.tobeOutDir, 'db', 'btn_auth.csv'); if (fs.existsSync(f)) { const h = (Date.now() - fs.statSync(f).mtimeMs) / 36e5; if (h > 24) console.error(`  ⚠ 권한 메타(btn_auth.csv) 가 ${Math.round(h)}시간 전 스냅샷 — python tools/DbConn/export_tobe_meta.py btn_auth user_group_user user_group_menu 로 새로고침 권장`); } }
 const mapScreen = readCsv(path.join(path.dirname(cfg.genOutDir), '..', 'tools', 'Harness', 'rules', 'map_screen.csv'));
 const tobeIdOf = id => { const m = mapScreen.find(r => up(r.asis_id) === id); return m && m.tobe_id ? up(m.tobe_id) : id; };
 
@@ -63,10 +83,61 @@ for (const id0 of planDirs) {
       return { titles: titles.map(t => ({ sp: t.sp, members: t.members })), dbLoop, titleSheets, titlePairs, staticBindings };
     } catch (e) { console.error(`  ${id}: 동적 헤더 판정 실패 — ${e.message}`); return null; }
   })();
-  const accs = accounts.accounts.filter(x => (x.usable || x.adminAlso) && (accounts.loginProbe ? x.loginOk : true));
-  const plan = { id, menuId: MENU, page: P.page, routePath: P.routePath, asisName: P.asisName, fields: P.fields, buttons: P.buttons, mainSheets: mainSheets.map(s => ({ name: s.name, key: s.key, labels: s.labels.slice(0, 40) })), popupSheets: P.sheets.filter(s => s.popup).map(s => s.name), hasSave: P.hasSave, hasSpreadTitle: P.hasSpreadTitle, procs: P.procs, expectedCols, hasMeta, dynamicHeader, sample: { div: sample['DIV'] || cfg.defaultDivision, item: sample['ITEM_ID'] || '', site: sample['SCM_SITE_ID'] || '', project: sample['PROJECT_CODE'] || '', account: sample.account || sample['테스트계정'] || cfg.defaultAccount }, accounts: accs.map(x => ({ id: x.id, groups: x.groups, divisions: x.divisions, admin: x.adminAlso, screenGroup: x.screens[MENU] || x.screens[id] || '' })), expectedBtnsByGroup: Object.fromEntries(Object.entries(expectedBtnsByGroup).map(([k, v]) => [k, [...v]])), menuAuth: menu.length ? 'menu.csv' : '' };
+  // 2026-10-20: 계정 원천 = users.json(사용자 관리 명부) 이 있으면 그것(Division 별 역할 계정 + ADMIN 계정 전부), 없으면 데이터셋 accounts.json.
+  //   로그인 가능 여부는 probe-accounts.js 결과(loginProbe.ok)로 거른다 — 명부에 있지만 BE 에 없는 계정은 '로그인 불가' 로 목록에만 남긴다
+  const okIds = (accounts.loginProbe && accounts.loginProbe.ok) || null;
+  const accsAll = USERS ? rosterAccounts(USERS, okIds) : accounts.accounts.filter(x => (x.usable || x.adminAlso) && (okIds ? x.loginOk : true));
+  // 메뉴에 등록된 버튼 코드 전체(어느 그룹이든) — 이 메뉴에 INSERT/DELETE 코드 자체가 없으면 그 버튼은 비교하지 않는다
+  const menuBtnCodes = [...new Set(authRows.filter(r => (r.use_yn || 'Y') !== 'N').map(r => up(r[btnCol] || '')).filter(Boolean))];
+  const accountTruth = x => {
+    const tg = tobeGroupsOf(x.id);
+    // BE PKG_NSCM_UI_COM_AUTH.PR_GET_MNU_BTN_AUTH(사내 원문 2026-10-20 확인) = 사용자 그룹(UG) ⋈ 그룹 메뉴권한(GM, 같은 그룹) ⋈ 그룹 버튼권한(GMB, 같은 그룹)
+    //   → 버튼 기대 = '그 메뉴 권한이 있는 그룹' 들의 버튼 합집합. 메뉴 권한 없는 그룹의 btn_auth 행은 세지 않는다
+    const hasMenu = g => ugMenu.some(r => r.user_gr_id === g && up(r.mnu_id) === MENU && (r.use_yn || 'Y') !== 'N');
+    const tgMenu = ugMenu.length ? tg.filter(hasMenu) : tg;
+    const menuAccess = !ugMenu.length ? '' : (tgMenu.length ? 'Y' : 'N');
+    const btns = grpCol && btnCol ? [...new Set(authRows.filter(r => tgMenu.includes(r[grpCol]) && (r.use_yn || 'Y') !== 'N').map(r => up(r[btnCol])))] : null;
+    const matrix = (accounts.authMatrix || []).filter(m => up(m.screen) === MENU && x.groups.includes(m.group)).map(m => `${m.group}/${m.div}:${m.editMeasure || '-'}${m.editDay ? '@' + m.editDay : ''}`);
+    return { tobeGroups: tg, menuAccess, expectedBtns: btns && authRows.length ? btns : null, matrix };
+  };
+  // ── 테스트 모드 → 계정 축 ──
+  //   admin   : 영역 ADMIN(SYSTEM ADMIN 겸, DMF→DM ADMIN / SCP→SCP ADMIN / SSP→SSP ADMIN) + 메뉴 권한 없는 사용자 1명, Division 반복 없음(마스터 화면)
+  //   division: Division 별 역할 계정 전부 + 영역 ADMIN (Division 데이터 범위가 있는 화면)
+  //   auto    : users.json screens[<메뉴>].mode → 없으면 화면 메타(Division 조회조건 유무)로 추정. 사용자가 실행 시 지정하는 것이 원칙
+  const SCREENS = (USERS && USERS.screens) || {};
+  const area = /^DM/i.test(MENU) ? 'DM ADMIN' : /^SCP/i.test(MENU) ? 'SCP ADMIN' : /^SSP/i.test(MENU) ? 'SSP ADMIN' : '';
+  const hasDivField = (P.fields || []).some(f => /division/i.test(f.label || '') || /division/i.test(f.component || '')) || (P.handlers || []).some(h => /division/i.test(JSON.stringify(h)));
+  const saved = SCREENS[MENU] || SCREENS[id] || null;
+  const mode = MODE_ARG && MODE_ARG !== 'auto' ? MODE_ARG : (saved && saved.mode) || (hasDivField ? 'division' : 'admin');
+  const modeSource = MODE_ARG && MODE_ARG !== 'auto' ? '--mode' : (saved && saved.mode) ? 'users.json screens' : `auto(Division 조회조건 ${hasDivField ? '있음' : '없음'})`;
+  if (MODE_ARG && MODE_ARG !== 'auto' && USERS) { try { USERS.screens = USERS.screens || {}; USERS.screens[MENU] = Object.assign({}, USERS.screens[MENU] || {}, { mode: MODE_ARG, updated: new Date().toISOString().slice(0, 10) }); fs.writeFileSync(path.join(__dirname, 'users.json'), JSON.stringify(USERS, null, 2) + '\n', 'utf8'); } catch (e) { console.error(`  users.json screens 저장 실패: ${e.message}`); } }
+  const truthAll = new Map(accsAll.map(x => [x.id, accountTruth(x)]));
+  const isAreaAdmin = x => x.adminAlso && (!area || (x.adminOf || []).includes(area) || (x.adminOf || []).length >= 3);
+  let accs;
+  if (mode === 'admin') {
+    // 2026-10-20 사용자 지시: ADMIN 계정 하나 + 메뉴 권한 없는 사용자 1명. ADMIN 은 그 영역 '전용' ADMIN(예: SCP → jaeuk.shin) 우선, 없으면 공통(minyonglee1)
+    const admins = accsAll.filter(isAreaAdmin);
+    const admin1 = admins.find(x => (x.adminOf || []).length === 1 && (!area || x.adminOf[0] === area)) || admins.find(x => (x.adminOf || []).includes(area)) || admins[0] || null;
+    const noAuth = accsAll.find(x => !x.adminAlso && truthAll.get(x.id).menuAccess === 'N') || accsAll.find(x => !x.adminAlso && !(truthAll.get(x.id).expectedBtns || []).includes('SAVE')) || null;
+    accs = (admin1 ? [admin1] : []).concat(noAuth ? [noAuth] : []).map(x => Object.assign({}, x, { divisions: [sample['DIV'] || cfg.defaultDivision], roleNote: x.adminAlso ? 'ADMIN' : '권한 없음 대표' }));
+    if (!admin1) console.error(`  ⚠ ${MENU}: 명부(users.json admins)에 ${area || 'ADMIN'} 계정이 없어 ADMIN 검증 생략`);
+    if (!noAuth) console.error(`  ⚠ ${MENU}: 메뉴 권한 없는 계정을 명부에서 찾지 못해 ADMIN 만 검증`);
+  } else {
+    // division 모드도 '필요한 계정만'(2026-10-20 사용자: 명부 = 계정 풀, 전수 테스트 아님): 화면 영역의 역할만 Division 별로 + 영역 ADMIN 1 + 메뉴 권한 없는 사용자 1
+    const roleRe = area === 'DM ADMIN' ? /^DM\b/i : area === 'SCP ADMIN' ? /^SCP\b/i : area === 'SSP ADMIN' ? /^SSP\b/i : /./;
+    const roleAccs = accsAll.filter(x => !x.adminAlso && Object.values(x.roles || {}).some(r => roleRe.test(r)));
+    const admins = accsAll.filter(isAreaAdmin);
+    const admin1 = admins.find(x => (x.adminOf || []).length === 1 && (!area || x.adminOf[0] === area)) || admins.find(x => (x.adminOf || []).includes(area)) || admins[0] || null;
+    const noAuth = accsAll.find(x => !x.adminAlso && !roleAccs.includes(x) && truthAll.get(x.id).menuAccess === 'N') || null;
+    accs = roleAccs.concat(admin1 ? [Object.assign({}, admin1, { roleNote: 'ADMIN' })] : []).concat(noAuth ? [Object.assign({}, noAuth, { divisions: [sample['DIV'] || cfg.defaultDivision], roleNote: '권한 없음 대표' })] : []);
+    if (!roleAccs.length) console.error(`  ⚠ ${MENU}: 명부(users.json divisions)에 ${area ? area.replace(' ADMIN', '') + ' 계열' : ''} 역할 계정이 없음 — ADMIN/권한없음만 검증`);
+  }
+  console.log(`  ${id} 테스트 모드 ${mode} (${modeSource}) → 계정 ${accs.length}: ${accs.map(x => x.id).join(', ')}`);
+  const plan = { id, mode, modeSource, menuId: MENU, page: P.page, routePath: P.routePath, asisName: P.asisName, fields: P.fields, buttons: P.buttons, mainSheets: mainSheets.map(s => ({ name: s.name, key: s.key, labels: s.labels.slice(0, 40) })), popupSheets: P.sheets.filter(s => s.popup).map(s => s.name), hasSave: P.hasSave, hasSpreadTitle: P.hasSpreadTitle, procs: P.procs, expectedCols, hasMeta, dynamicHeader, sample: { div: sample['DIV'] || cfg.defaultDivision, item: sample['ITEM_ID'] || '', site: sample['SCM_SITE_ID'] || '', project: sample['PROJECT_CODE'] || '', account: sample.account || sample['테스트계정'] || cfg.defaultAccount }, accounts: accs.map(x => Object.assign({ id: x.id, name: x.name || '', groups: x.groups, divisions: x.divisions, roles: x.roles || {}, roleNote: x.roleNote || '', admin: x.adminAlso, adminOf: x.adminOf || [], screenGroup: (x.screens || {})[MENU] || (x.screens || {})[id] || '', source: x.source || 'accounts.json' }, accountTruth(x))), accountSource: USERS ? 'users.json' : 'accounts.json', expectedBtnsByGroup: Object.fromEntries(Object.entries(expectedBtnsByGroup).map(([k, v]) => [k, [...v]])), menuBtnCodes, menuAuth: menu.length ? 'menu.csv' : '', authSource: { groups: ugUser.length ? 'user_group_user.csv' : '', menus: ugMenu.length ? 'user_group_menu.csv' : '', buttons: authRows.length ? 'btn_auth.csv' : '' } };
   fs.writeFileSync(path.join(specs, `${id}.plan.json`), JSON.stringify(plan, null, 2), 'utf8');
+  const relLib = path.relative(specs, path.join(__dirname, 'lib', 'crud')).replace(/\\/g, '/');
   const head = `// 자동 생성 — tools/E2E/gen-e2e.js (${new Date().toISOString().slice(0, 10)}) · 원천: Doc/gen/${id}/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것\nimport { test, expect } from '${path.relative(specs, path.join(__dirname, 'fixtures', 'test')).replace(/\\/g, '/')}';\nimport * as fs from 'node:fs';\nconst PLAN = JSON.parse(fs.readFileSync(__dirname + '/${id}.plan.json', 'utf8'));\nconst MENU = ${J(MENU)};\n`;
+  const headCrud = head + `import { crudCycle } from '${relLib}';\n`;
 
   // ── smoke
   fs.writeFileSync(path.join(specs, `${id}.smoke.spec.ts`), head + `
@@ -115,53 +186,28 @@ test.describe(\`\${MENU} ${esc(P.asisName)} 스모크 @smoke\`, () => {
 });
 `, 'utf8');
 
-  // ── crud
+  // ── crud — 공용 사이클(lib/crud.ts): Insert 화면만 마커 행 C→R→U→D(끝에 정리), Insert 없는 저장 화면은 편집기 열림만(기존 행 보호), 조회 전용은 Save 비노출
   const crudBody = P.hasSave ? `
 test.describe.serial(\`\${MENU} ${esc(P.asisName)} CRUD @crud\`, () => {
   test.use({ account: PLAN.sample.account || undefined });
   const MARK = ${J(cfg.crudMarker)} + Date.now().toString(36).toUpperCase();
-  test('Insert(F8) → 입력 → Save(F7) → 재조회 → Delete(F9) → Save → 재조회', async ({ nscm, page }) => {
+  test('Save 노출 · Insert 화면은 마커 행 Insert→Save→재조회→수정→Delete→Save→재조회 · Insert 없는 화면은 셀 수정 Save→재조회→원복 Save→재조회', async ({ nscm }) => {
+    test.setTimeout(300_000); // 수정 저장 → 재조회 → 원복 저장 → 재조회(저장·조회 각 최대 60~120s)
     const r = await nscm.openScreen(MENU); expect(r.authorized).toBeTruthy();
     if (PLAN.sample.div) await nscm.setDivision(PLAN.sample.div);
     await nscm.search();
-    expect(await nscm.subButtonVisible('Save'), 'Save(F7) 버튼').toBeTruthy();
-    const canInsert = await nscm.subButtonVisible('Insert');
-    const before = await nscm.gridRowCount(0);
-    if (canInsert) {
-      // C: 행 추가 + 첫 편집 가능 컬럼에 마커 입력 (키 컬럼 구성은 화면별 — 실패 시 플랜의 keyColumns 를 채워 보완)
-      await nscm.subButton('Insert').click();
-      await expect.poll(() => nscm.gridRowCount(0), { timeout: 10_000 }).toBeGreaterThan(before);
-      const headers = await nscm.gridHeaders(0);
-      const keyCols: string[] = PLAN.keyColumns || [];
-      const targetCol = keyCols.length ? headers.findIndex(h => h.toLowerCase() === keyCols[0].toLowerCase()) : 0;
-      await nscm.setCell(0, Math.max(targetCol, 0), MARK);
-      const saved = await nscm.save();
-      expect.soft(saved.message, '저장 알림').not.toMatch(/ORA-|Exception|실패|fail|error/i);
-      for (const c of saved.calls) expect.soft(c.status, \`SAVE call-proc \${c.sheet}/\${c.btn}\`).toBeLessThan(400);
-      // R: 재조회 → 마커 존재
-      await nscm.search();
-      const txt = await nscm.grid(0).innerText();
-      expect.soft(txt.includes(MARK), '재조회 후 신규 행 존재').toBeTruthy();
-      // U: 마커 행 수정(두 번째 컬럼) → Save → 재조회
-      const rows = nscm.grid(0).locator('.wj-cells .wj-row'); const n = await rows.count(); let ri = -1;
-      for (let i = 0; i < n && ri < 0; i++) if ((await rows.nth(i).innerText()).includes(MARK)) ri = i;
-      if (ri >= 0 && headers.length > 1) { await nscm.setCell(ri, Math.min(targetCol + 1, headers.length - 1), MARK + '_U'); const u = await nscm.save(); expect.soft(u.message).not.toMatch(/ORA-|Exception|실패|error/i); await nscm.search(); expect.soft((await nscm.grid(0).innerText()).includes(MARK + '_U'), '수정 반영').toBeTruthy(); }
-      // D: 마커 행 선택 → Delete(F9) → Save → 재조회 → 마커 없음
-      if (await nscm.subButtonVisible('Delete')) {
-        const rows2 = nscm.grid(0).locator('.wj-cells .wj-row'); const n2 = await rows2.count();
-        for (let i = 0; i < n2; i++) if ((await rows2.nth(i).innerText()).includes(MARK)) { await rows2.nth(i).locator('.wj-cell').first().click(); break; }
-        await nscm.subButton('Delete').click(); await nscm.closeAlert('ok');
-        const d = await nscm.save(); expect.soft(d.message).not.toMatch(/ORA-|Exception|실패|error/i);
-        await nscm.search();
-        expect.soft((await nscm.grid(0).innerText()).includes(MARK), '삭제 후 마커 없음').toBeFalsy();
-      } else test.info().annotations.push({ type: 'skip', description: 'Delete(F9) 버튼 없음 — 삭제 미지원 화면' });
-    } else {
-      // Insert 가 없는 저장 화면(셀 편집 저장형): 첫 행 첫 편집가능 컬럼 수정 → 저장 → 재조회 → 원복
-      test.info().annotations.push({ type: 'mode', description: '셀 편집 저장형(Insert 없음)' });
-      const cell = await nscm.gridCell(0, 1); const orig = (await cell.innerText()).trim();
-      await nscm.setCell(0, 1, MARK); const s1 = await nscm.save(); expect.soft(s1.message).not.toMatch(/ORA-|Exception|실패|error/i);
-      await nscm.search(); expect.soft((await nscm.grid(0).innerText()).includes(MARK), '수정 반영').toBeTruthy();
-      await nscm.setCell(0, 1, orig); await nscm.save(); // 원복
+    const out = await crudCycle(nscm, test.info(), PLAN, MARK);
+    expect(out.saveVisible, 'As-is 저장 SP 있음 → Save(F7) 버튼').toBeTruthy();
+    if (out.mode === 'insert') {
+      expect.soft(out.inserted, 'Insert(F8) 로 행 추가').toBeTruthy();
+      expect.soft(out.saved, \`마커 행 저장 성공 \${out.saveErrors.join(' / ')}\`).toBeTruthy();
+      expect.soft(out.found, '재조회 후 신규 행 존재').toBeTruthy();
+      if (out.found) expect.soft(out.updated, '수정 반영').toBeTruthy();
+      expect(out.cleaned, '마커 행 정리(삭제) 완료 — 남아 있으면 수동 삭제 필요').toBeTruthy();
+    } else if (out.mode === 'edit-save') {
+      // 셀 편집 저장형: 값 변경 → Save → 재조회 반영 → 원복 Save → 재조회 복원 (2026-10-20 사용자 승인)
+      expect.soft(out.editable, '편집 가능 셀 존재(값 변경됨)').toBeTruthy();
+      if (out.editable) { expect.soft(out.saved, \`수정 저장 성공 \${out.saveErrors.join(' / ')}\`).toBeTruthy(); expect.soft(out.found, '재조회 후 수정값 반영').toBeTruthy(); expect(out.restored, '원래 값으로 복원 저장·확인 — 실패면 수동 복원 필요').toBeTruthy(); }
     }
     await nscm.snapshot(\`\${MENU}_crud\`);
   });
@@ -174,24 +220,32 @@ test.describe(\`\${MENU} ${esc(P.asisName)} CRUD @crud\`, () => {
   });
 });
 `;
-  fs.writeFileSync(path.join(specs, `${id}.crud.spec.ts`), head + crudBody, 'utf8');
+  fs.writeFileSync(path.join(specs, `${id}.crud.spec.ts`), headCrud + crudBody, 'utf8');
 
   // ── auth (계정 × Division)
-  for (const acc of plan.accounts) for (const d of acc.divisions) matrixRows.push([MENU, acc.id, acc.groups.join('|'), d, acc.screenGroup]);
+  for (const acc of plan.accounts) for (const d of acc.divisions) matrixRows.push([MENU, acc.id, acc.groups.join('|'), d, (acc.roles || {})[d] || (acc.adminOf || []).join('|') || acc.screenGroup]);
   fs.writeFileSync(path.join(specs, `${id}.auth.spec.ts`), head + `
 // 계정별(권한그룹) × Division 매트릭스 — 로그인은 dev-login(id) 이라 비밀번호가 필요 없다
+// 2026-10-20: btn_auth 의 코드 중 실제 '버튼' 으로 뜨는 것만 노출 대조 — EDIT(셀 편집 권한)·SEARCH(조회 버튼은 항상) 등은 버튼이 아니거나 항상 있어 제외
+const BUTTON_CODES: Record<string, RegExp> = { SAVE: /^Save/i, INSERT: /^Insert/i, DELETE: /^Delete/i, EXCEL: /Excel/i, EXCEL_UPLOAD: /Excel\\s*Upload/i, EXCEL_DOWNLOAD: /Excel\\s*Download/i, COPY: /^Copy/i, PRINT: /^Print/i, EXECUTE: /^Execute/i, CONFIRM: /^Confirm/i, APPROVE: /^Approve/i, TRANSFER: /^Transfer/i, ACTION: /^Action/i };
 for (const acc of PLAN.accounts) {
-  test.describe(\`\${MENU} 권한 @auth [\${acc.id} \${acc.groups.join('/')}]\`, () => {
+  const G = (acc.tobeGroups && acc.tobeGroups.length ? acc.tobeGroups : acc.groups) as string[];
+  test.describe(\`\${MENU} 권한 @auth [\${acc.id} \${G.join('/')}]\`, () => {
     test.use({ account: acc.id });
     test('메뉴 접근 · 버튼 노출 · Division 데이터 범위', async ({ nscm }) => {
+      // 시간 예산: Division 마다 조회(최대 searchTimeoutMs) — 기본 180s 로는 3 Division 계정이 초과한다(2026-10-20 실측)
+      test.setTimeout(90_000 + (acc.divisions || []).length * (${Number(cfg.searchTimeoutMs) || 120000} + 30_000));
       const r = await nscm.openScreen(MENU);
       const expectedGroup = acc.screenGroup; // 통합테스트 데이터셋의 화면별 권한 해석(없으면 기록만)
-      test.info().annotations.push({ type: 'access', description: \`authorized=\${r.authorized} notFound=\${r.notFound} group=\${expectedGroup || '-'}\` });
+      test.info().annotations.push({ type: 'access', description: \`authorized=\${r.authorized} notFound=\${r.notFound} menuAccess=\${acc.menuAccess || '?'} tobeGroups=\${G.join('|')} roster=\${Object.entries(acc.roles || {}).map(([d, ro]) => d + ':' + ro).join(',') || (acc.adminOf || []).join('|') || expectedGroup || '-'} (\${PLAN.accountSource || 'accounts.json'})\` });
       if (!r.authorized || r.notFound) { expect.soft(acc.admin, 'ADMIN 계정은 모든 화면 접근 가능해야 함').toBeFalsy(); return; }
+      if (acc.menuAccess === 'N') test.info().annotations.push({ type: 'gap', description: \`메뉴 권한(user_group_menu) 없는 계정이 /view/\${MENU} 직접 접근으로 열림 — To-Be FE 는 라우트 가드 없음(메뉴 트리에서만 숨김)\` });
       const buttons = await nscm.visibleButtons();
       test.info().annotations.push({ type: 'buttons', description: buttons.join(' | ') });
-      // btn_auth 메타가 있으면 그룹별 기대 버튼과 대사(soft)
-      for (const g of acc.groups) { const exp = PLAN.expectedBtnsByGroup[g]; if (!exp) continue; for (const b of exp) expect.soft(buttons.some(x => x.toUpperCase().includes(String(b).toUpperCase())), \`[\${g}] 버튼 '\${b}' 노출\`).toBeTruthy(); }
+      // To-Be 메타 기대(계정 그룹 합집합 × btn_auth) 와 대사 — 버튼 코드만, 양방향(있어야 할 버튼 노출 · 없어야 할 버튼 비노출)
+      const expBtns: string[] | null = acc.expectedBtns || null; const codes: string[] = PLAN.menuBtnCodes || [];
+      if (expBtns) for (const code of codes) { const re = BUTTON_CODES[code]; if (!re) continue; const want = expBtns.includes(code); expect.soft(buttons.some(x => re.test(x)), \`[\${acc.id} \${G.join('/')}] btn_auth \${code}=\${want ? 'Y' : 'N'} → 버튼 \${want ? '노출' : '비노출'}\`).toBe(want); }
+      else test.info().annotations.push({ type: 'note', description: 'btn_auth 에 이 계정 그룹의 행이 없어 버튼 실측만 기록' });
       // Viewer/Planner 가 아닌데 Save 가 보이면 의심(soft)
       if (!acc.admin && acc.groups.every((g: string) => /viewer/i.test(g))) expect.soft(buttons.some(b => /^Save/i.test(b)), 'Viewer 그룹은 Save 비노출').toBeFalsy();
       for (const d of acc.divisions) {
@@ -208,9 +262,48 @@ for (const acc of PLAN.accounts) {
   });
 }
 `, 'utf8');
-  idxRows.push([id, MENU, P.asisName, P.fields.length, mainSheets.length, P.hasSave ? 'Y' : '', hasMeta ? 'Y' : '', plan.accounts.length, plan.sample.account, plan.sample.div]);
-  console.log(`  ${id} → ${MENU}  smoke/crud(${P.hasSave ? 'save' : 'read-only'})/auth(${plan.accounts.length}계정)  메타컬럼 ${hasMeta ? 'Y' : 'N'}`);
+  // ── authcrud (계정별 권한 × CRUD) — 기대 = To-Be 메타(user_group_user → btn_auth) · 허용 계정은 공용 CRUD 사이클, 비허용 계정은 Save 비노출·편집 불가·SAVE 호출 0
+  fs.writeFileSync(path.join(specs, `${id}.authcrud.spec.ts`), headCrud + `
+// 계정별 권한 CRUD — 기대 권한은 To-Be 메타(그룹 소속 user_group_user.csv × 버튼 권한 btn_auth.csv), 데이터셋 그룹은 표기만. 로그인은 비밀번호 없는 /user/login(id)
+const CODES: string[] = PLAN.menuBtnCodes || [];
+const has = (arr: string[] | null, code: string) => arr ? arr.includes(code) : null;
+for (const acc of PLAN.accounts) {
+  const G = (acc.tobeGroups && acc.tobeGroups.length ? acc.tobeGroups : acc.groups) as string[];
+  test.describe(\`\${MENU} 권한별 CRUD @authcrud [\${acc.id} \${G.join('/')}]\`, () => {
+    test.use({ account: acc.id });
+    const MARK = ${J(cfg.crudMarker)} + acc.id.replace(/[^A-Za-z0-9]/g, '').slice(0, 6).toUpperCase() + Date.now().toString(36).toUpperCase().slice(-4);
+    test('메뉴 접근 → 기대 버튼(SAVE/INSERT/DELETE/EDIT) ↔ 실제 노출·편집 → 허용이면 마커 행 CRUD · 비허용이면 편집 불가', async ({ nscm }) => {
+      test.setTimeout(420_000); // 로그인 → 조회(최대 searchTimeoutMs) → CRUD 사이클(저장·재조회 반복) 예산
+      const expSave = has(acc.expectedBtns, 'SAVE'), expIns = CODES.includes('INSERT') ? has(acc.expectedBtns, 'INSERT') : null, expDel = CODES.includes('DELETE') ? has(acc.expectedBtns, 'DELETE') : null, expEdit = CODES.includes('EDIT') ? has(acc.expectedBtns, 'EDIT') : null;
+      test.info().annotations.push({ type: 'authcrud', description: \`tobeGroups=\${G.join('|') || '-'} menuAccess=\${acc.menuAccess || '?'} expected=\${acc.expectedBtns ? acc.expectedBtns.join('|') : '(btn_auth 미등록)'} dataset=\${acc.groups.join('|')} matrix=\${(acc.matrix || []).join(' ') || '-'}\` });
+      const r = await nscm.openScreen(MENU);
+      if (!r.authorized || r.notFound) { expect.soft(acc.menuAccess, \`[\${acc.id}] 메뉴 권한 있음(user_group_menu) 인데 접근 불가 (authorized=\${r.authorized} notFound=\${r.notFound})\`).not.toBe('Y'); return; }
+      // 메뉴 권한 없는 계정도 URL 직접 접근으로는 열린다(To-Be FE 라우트 가드 없음) → 기록하고, 버튼·편집은 '없어야 함' 으로 계속 검증
+      if (acc.menuAccess === 'N') test.info().annotations.push({ type: 'gap', description: \`메뉴 권한(user_group_menu) 없는 계정이 /view/\${MENU} 직접 접근으로 열림\` });
+      const div = (acc.divisions && acc.divisions[0]) || PLAN.sample.div; if (div) await nscm.setDivision(div);
+      const calls = await nscm.search(); for (const c of calls) expect.soft(c.status, \`[\${acc.id}] call-proc \${c.sheet}/\${c.btn}\`).toBeLessThan(400);
+      const out = await crudCycle(nscm, test.info(), PLAN, MARK);
+      // 버튼 노출 ↔ 기대
+      if (expSave != null) expect.soft(out.saveVisible, \`[\${acc.id} \${G.join('/')}] btn_auth SAVE=\${expSave ? 'Y' : 'N'} → Save 버튼 \${expSave ? '노출' : '비노출'}\`).toBe(expSave);
+      if (expIns != null) expect.soft(out.insertVisible, \`[\${acc.id}] btn_auth INSERT=\${expIns ? 'Y' : 'N'} → Insert 버튼\`).toBe(expIns);
+      if (expDel != null) expect.soft(out.deleteVisible, \`[\${acc.id}] btn_auth DELETE=\${expDel ? 'Y' : 'N'} → Delete 버튼\`).toBe(expDel);
+      // EDIT 코드 = 셀 편집 권한 → 편집기 열림 여부와 대조(판정 가능할 때만)
+      if (expEdit != null && out.editable != null) expect.soft(out.editable, \`[\${acc.id}] btn_auth EDIT=\${expEdit ? 'Y' : 'N'} → 셀 편집기 \${expEdit ? '열림' : '안 열림'}\`).toBe(expEdit);
+      if (expSave === true) {
+        if (out.mode === 'insert') { expect.soft(out.saved, \`[\${acc.id}] 허용 계정 마커 행 저장 \${out.saveErrors.join(' / ')}\`).toBeTruthy(); expect.soft(out.found, \`[\${acc.id}] 재조회 후 신규 행 존재\`).toBeTruthy(); expect(out.cleaned, \`[\${acc.id}] 마커 행 정리 완료\`).toBeTruthy(); }
+        else if (out.mode === 'edit-save') { expect.soft(out.editable, \`[\${acc.id}] 허용 계정 편집 가능 셀 존재\`).toBeTruthy(); if (out.editable) { expect.soft(out.saved, \`[\${acc.id}] 수정 저장 성공 \${out.saveErrors.join(' / ')}\`).toBeTruthy(); expect.soft(out.found, \`[\${acc.id}] 재조회 후 수정값 반영\`).toBeTruthy(); expect(out.restored, \`[\${acc.id}] 원래 값 복원 저장·확인\`).toBeTruthy(); } }
+      } else if (expSave === false) {
+        if (out.editable != null) expect.soft(out.editable, \`[\${acc.id}] 비허용 계정 셀 편집 불가\`).toBeFalsy();
+        expect.soft(out.saveCalls, \`[\${acc.id}] 비허용 계정 SAVE 계열 call-proc 0\`).toBe(0);
+      } else test.info().annotations.push({ type: 'note', description: 'btn_auth 에 이 계정 그룹의 행이 없어 실측만 기록(기대 없음)' });
+      await nscm.snapshot(\`\${MENU}_authcrud_\${acc.id}\`);
+    });
+  });
 }
-fs.writeFileSync(path.join(specs, '_index.csv'), '﻿asis_id,menu_id,name,fields,main_sheets,has_save,meta_cols,accounts,sample_account,sample_div\n' + idxRows.map(r => r.join(',')).join('\n') + '\n', 'utf8');
-fs.writeFileSync(path.join(specs, '_matrix.csv'), '﻿menu_id,account,groups,division,screen_group\n' + matrixRows.map(r => r.join(',')).join('\n') + '\n', 'utf8');
-console.log(`스펙 ${idxRows.length}화면 × 3 → ${specs}  (계정×DIV 매트릭스 ${matrixRows.length}행)`);
+`, 'utf8');
+  idxRows.push([id, MENU, P.asisName, P.fields.length, mainSheets.length, P.hasSave ? 'Y' : '', hasMeta ? 'Y' : '', plan.accounts.length, plan.sample.account, plan.sample.div, mode]);
+  console.log(`  ${id} → ${MENU}  smoke/crud(${P.hasSave ? 'save' : 'read-only'})/auth(${plan.accounts.length}계정)/authcrud(기대 있음 ${plan.accounts.filter(x => x.expectedBtns).length}계정)  메타컬럼 ${hasMeta ? 'Y' : 'N'}`);
+}
+fs.writeFileSync(path.join(specs, '_index.csv'), '﻿asis_id,menu_id,name,fields,main_sheets,has_save,meta_cols,accounts,sample_account,sample_div,mode\n' + idxRows.map(r => r.join(',')).join('\n') + '\n', 'utf8');
+fs.writeFileSync(path.join(specs, '_matrix.csv'), '﻿menu_id,account,groups,division,role\n' + matrixRows.map(r => r.join(',')).join('\n') + '\n', 'utf8');
+console.log(`스펙 ${idxRows.length}화면 × 4(smoke·crud·auth·authcrud) → ${specs}  (계정×DIV 매트릭스 ${matrixRows.length}행)`);

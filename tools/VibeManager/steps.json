@@ -1021,7 +1021,7 @@
     },
     {
       "id": "S7",
-      "title": "7. 테스트 (E2E · CRUD · 권한/Division)",
+      "title": "7. 테스트 (E2E: Smoke · CRUD · 권한 · 권한별 CRUD)",
       "tasks": [
         {
           "id": "S7.accounts",
@@ -1059,12 +1059,15 @@
         },
         {
           "id": "S7.smoke",
-          "title": "E2E 스모크 실행 (run-e2e.cmd smoke <ID>) — FE/BE 기동 필요",
+          "requireServers": [8080, 5173],
+          "title": "E2E 스모크 실행 (run-e2e.cmd smoke <ID>) — FE/BE 미기동 시 자동 기동 — 모드 선택",
           "kind": "cmd",
           "script": "${e2eDir}/run-e2e.cmd",
           "args": [
             "smoke",
-            "${input:ids}"
+            "${input:ids}",
+            "--mode",
+            "${input:mode}"
           ],
           "confirm": "FE(e2e.config.json feUrl)/BE(8080, local 프로파일) 가 떠 있어야 합니다. npm/브라우저 다운로드 없음(로컬 Chrome 사용). 실행할까요?",
           "gate": {
@@ -1077,19 +1080,40 @@
               "name": "ids",
               "prompt": "화면ID(공백 구분, 비우면 Doc\\gen 전체)",
               "default": "DMF0052"
+            },
+            {
+              "name": "mode",
+              "prompt": "E2E 테스트 모드 — admin: 영역 ADMIN + 권한 없는 사용자(마스터 화면) / division: Division 별 역할 계정 / auto: users.json 화면 지정 → 없으면 메타 추정",
+              "options": [
+                {
+                  "value": "auto",
+                  "description": "users.json 화면 지정이 있으면 그것, 없으면 Division 조회조건 유무로 추정"
+                },
+                {
+                  "value": "admin",
+                  "description": "영역 ADMIN 1명(전용 ADMIN 우선) + 메뉴 권한 없는 사용자 1명 · Division 반복 없음 — 마스터 화면"
+                },
+                {
+                  "value": "division",
+                  "description": "화면 영역의 역할 계정만 Division 별로(DMF→DM 계열 4역할 / SCP→SCP Planner) + 영역 ADMIN 1 + 권한 없는 사용자 1"
+                }
+              ]
             }
           ],
           "splitArgs": true,
-          "title_en": "Run E2E smoke (run-e2e.cmd smoke <ID>) — FE/BE must be running"
+          "title_en": "Run E2E smoke (run-e2e.cmd smoke <ID>) — FE/BE auto-started if down — mode"
         },
         {
           "id": "S7.crud",
-          "title": "E2E CRUD 실행 (run-e2e.cmd crud) — 테스트 데이터 생성/삭제",
+          "requireServers": [8080, 5173],
+          "title": "E2E CRUD 실행 (run-e2e.cmd crud) — 테스트 데이터 생성/삭제 — 모드 선택",
           "kind": "cmd",
           "script": "${e2eDir}/run-e2e.cmd",
           "args": [
             "crud",
-            "${input:ids}"
+            "${input:ids}",
+            "--mode",
+            "${input:mode}"
           ],
           "confirm": "To-Be DB 에 E2E_ 마커 행을 생성/삭제합니다. 실행할까요?",
           "inputs": [
@@ -1097,49 +1121,150 @@
               "name": "ids",
               "prompt": "화면ID(공백 구분)",
               "default": "DMF0052"
+            },
+            {
+              "name": "mode",
+              "prompt": "E2E 테스트 모드 — admin: 영역 ADMIN + 권한 없는 사용자(마스터 화면) / division: Division 별 역할 계정 / auto: users.json 화면 지정 → 없으면 메타 추정",
+              "options": [
+                {
+                  "value": "auto",
+                  "description": "users.json 화면 지정이 있으면 그것, 없으면 Division 조회조건 유무로 추정"
+                },
+                {
+                  "value": "admin",
+                  "description": "영역 ADMIN 1명(전용 ADMIN 우선) + 메뉴 권한 없는 사용자 1명 · Division 반복 없음 — 마스터 화면"
+                },
+                {
+                  "value": "division",
+                  "description": "화면 영역의 역할 계정만 Division 별로(DMF→DM 계열 4역할 / SCP→SCP Planner) + 영역 ADMIN 1 + 권한 없는 사용자 1"
+                }
+              ]
             }
           ],
           "splitArgs": true,
-          "title_en": "Run E2E CRUD (run-e2e.cmd crud) — creates/deletes test data"
+          "title_en": "Run E2E CRUD (run-e2e.cmd crud) — creates/deletes test data — mode"
         },
         {
           "id": "S7.auth",
-          "title": "E2E 권한·Division 매트릭스 실행 (run-e2e.cmd auth)",
+          "requireServers": [8080, 5173],
+          "title": "E2E 권한·Division 매트릭스 실행 (run-e2e.cmd auth) — 모드 선택",
           "kind": "cmd",
           "script": "${e2eDir}/run-e2e.cmd",
           "args": [
             "auth",
-            "${input:ids}"
+            "${input:ids}",
+            "--mode",
+            "${input:mode}"
           ],
-          "confirm": "계정 12 × Division 3 로 로그인/조회를 반복합니다. 실행할까요?",
+          "confirm": "계정 12 × Division 3 로 로그인/조회를 반복합니다(접근·버튼 노출·Division 범위만, 저장 없음). 실행할까요?",
           "inputs": [
             {
               "name": "ids",
               "prompt": "화면ID(공백 구분)",
               "default": "DMF0052"
+            },
+            {
+              "name": "mode",
+              "prompt": "E2E 테스트 모드 — admin: 영역 ADMIN + 권한 없는 사용자(마스터 화면) / division: Division 별 역할 계정 / auto: users.json 화면 지정 → 없으면 메타 추정",
+              "options": [
+                {
+                  "value": "auto",
+                  "description": "users.json 화면 지정이 있으면 그것, 없으면 Division 조회조건 유무로 추정"
+                },
+                {
+                  "value": "admin",
+                  "description": "영역 ADMIN 1명(전용 ADMIN 우선) + 메뉴 권한 없는 사용자 1명 · Division 반복 없음 — 마스터 화면"
+                },
+                {
+                  "value": "division",
+                  "description": "화면 영역의 역할 계정만 Division 별로(DMF→DM 계열 4역할 / SCP→SCP Planner) + 영역 ADMIN 1 + 권한 없는 사용자 1"
+                }
+              ]
             }
           ],
           "splitArgs": true,
-          "title_en": "Run E2E auth · Division matrix (run-e2e.cmd auth)"
+          "title_en": "Run E2E auth · Division matrix (run-e2e.cmd auth) — mode"
+        },
+        {
+          "id": "S7.authcrud",
+          "requireServers": [8080, 5173],
+          "title": "E2E 권한별 CRUD 실행 (run-e2e.cmd authcrud) — 계정별 btn_auth 기대 ↔ Save/편집/CRUD — 모드 선택",
+          "kind": "cmd",
+          "script": "${e2eDir}/run-e2e.cmd",
+          "args": [
+            "authcrud",
+            "${input:ids}",
+            "--mode",
+            "${input:mode}"
+          ],
+          "confirm": "계정 12 로 로그인해 To-Be 권한 메타(user_group_user × btn_auth) 기대와 실제 Save/Insert/Delete 노출·편집 가능 여부를 대조합니다. 허용 계정은 Insert 화면에서만 E2E_ 마커 행을 만들고 끝에 지웁니다(기존 행 수정 없음). 실행할까요?",
+          "inputs": [
+            {
+              "name": "ids",
+              "prompt": "화면ID(공백 구분)",
+              "default": "SCP0096"
+            },
+            {
+              "name": "mode",
+              "prompt": "E2E 테스트 모드 — admin: 영역 ADMIN + 권한 없는 사용자(마스터 화면) / division: Division 별 역할 계정 / auto: users.json 화면 지정 → 없으면 메타 추정",
+              "options": [
+                {
+                  "value": "auto",
+                  "description": "users.json 화면 지정이 있으면 그것, 없으면 Division 조회조건 유무로 추정"
+                },
+                {
+                  "value": "admin",
+                  "description": "영역 ADMIN 1명(전용 ADMIN 우선) + 메뉴 권한 없는 사용자 1명 · Division 반복 없음 — 마스터 화면"
+                },
+                {
+                  "value": "division",
+                  "description": "화면 영역의 역할 계정만 Division 별로(DMF→DM 계열 4역할 / SCP→SCP Planner) + 영역 ADMIN 1 + 권한 없는 사용자 1"
+                }
+              ]
+            }
+          ],
+          "splitArgs": true,
+          "title_en": "Run E2E auth × CRUD (run-e2e.cmd authcrud) — per-account btn_auth expectation vs Save/edit/CRUD — mode"
         },
         {
           "id": "S7.all",
-          "title": "E2E 전체 — 화면ID (run-e2e.cmd all ID…)",
+          "requireServers": [8080, 5173],
+          "title": "E2E 전체 4단계 (smoke·crud·auth·authcrud) — 화면ID (run-e2e.cmd all ID…) — 모드 선택",
           "kind": "cmd",
           "script": "${e2eDir}/run-e2e.cmd",
           "splitArgs": true,
           "args": [
             "all",
-            "${input:ids}"
+            "${input:ids}",
+            "--mode",
+            "${input:mode}"
           ],
           "inputs": [
             {
               "name": "ids",
               "prompt": "화면ID (공백으로 여러 개)",
               "default": "DMF0052"
+            },
+            {
+              "name": "mode",
+              "prompt": "E2E 테스트 모드 — admin: 영역 ADMIN + 권한 없는 사용자(마스터 화면) / division: Division 별 역할 계정 / auto: users.json 화면 지정 → 없으면 메타 추정",
+              "options": [
+                {
+                  "value": "auto",
+                  "description": "users.json 화면 지정이 있으면 그것, 없으면 Division 조회조건 유무로 추정"
+                },
+                {
+                  "value": "admin",
+                  "description": "영역 ADMIN 1명(전용 ADMIN 우선) + 메뉴 권한 없는 사용자 1명 · Division 반복 없음 — 마스터 화면"
+                },
+                {
+                  "value": "division",
+                  "description": "화면 영역의 역할 계정만 Division 별로(DMF→DM 계열 4역할 / SCP→SCP Planner) + 영역 ADMIN 1 + 권한 없는 사용자 1"
+                }
+              ]
             }
           ],
-          "title_en": "E2E all — ID (run-e2e.cmd all ID…)"
+          "title_en": "E2E all 4 stages (smoke·crud·auth·authcrud) — ID (run-e2e.cmd all ID…) — mode"
         },
         {
           "id": "S7.report",
@@ -1156,6 +1281,13 @@
           "title_en": "Open E2E HTML report"
         },
         {
+          "id": "S7.users",
+          "title": "E2E 사용자 명부 열기 (tools/E2E/users.json — Division 별 역할 계정 · ADMIN 계정)",
+          "kind": "open",
+          "path": "${e2eDir}/users.json",
+          "title_en": "Open E2E user roster (tools/E2E/users.json)"
+        },
+        {
           "id": "S7.matrix",
           "title": "계정×Division 매트릭스 열기 (_matrix.csv)",
           "kind": "open",
@@ -1163,7 +1295,7 @@
           "title_en": "Open account × Division matrix (_matrix.csv)"
         }
       ],
-      "title_en": "7. Tests (E2E · CRUD · Auth/Division)"
+      "title_en": "7. Tests (E2E: Smoke · CRUD · Auth · Auth×CRUD)"
     }
   ]
 }

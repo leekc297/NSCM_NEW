@@ -1,0 +1,608 @@
+﻿당신은 LG에너지솔루션 GSCM(C#.NET WinForms) → NSCM(React + Wijmo + Oracle) 전환 프로젝트의 산출물 작성자입니다.
+아래에는 정적 파서가 추출한 '사실 묶음(Fact Pack)'과, 그것을 근거로 작성된 1차 분석서가 있습니다. **여기에 있는 사실만** 사용하고 없는 것은 '확인 필요'로 표기하세요. 추측으로 업무 규칙을 지어내지 마세요.
+출력은 한국어 Markdown 문서 3개이며, 각 문서는 정확히 다음 구분자로 시작합니다: `=== FILE: 파일명 ===`
+
+필수 조건 (프로그램이 기계적으로 검사합니다. 하나라도 빠지면 반려):
+1. business_analysis.md 에 엔드포인트 5개 전부 원문 등장: `biz:CommonData.CommonDataList`, `biz:CommonData.YesOrNo`, `DM.DM0003_GET_BUCKET_TYPE_CODE`, `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP`, `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN`
+2. business_analysis.md 에 SP 3개 전부 등장: `DM0003_GET_BUCKET_TYPE_CODE`, `SCP0096_GET_SHIPMENT_WORKING_DAY_OSP`, `SCP0009_GET_SHEET_CALENDAR_3SPAN`
+3. screen_design.md 에 컨트롤 12개 전부 등장: `usrButton1`, `usrConditionPanel1`, `usrLayoutControl2`, `dCalendar`, `btnInput`, `cboDivision`, `clbPlantSite`, `chkSum`, `cboInputValue`, `cboDayWeek`, `spdMain`, `spdMain_Sheet1`
+4. screen_design.md 에 시트 1개 전부 등장: `Shipment Working Day OSP`
+5. screen_design.md 에 이벤트 핸들러 8개와 엔드포인트 전부 등장: `Form_Load`, `SpdMain_CellDoubleClick`, `SpdMain_TopChange`, `CboDivision_SelectedIndexChanged`, `ClbPlantSite_SelectedIndexChanged`, `CboDayWeek_SelectedIndexChanged`, `BtnInput_Click`, `chkSum_CheckedChanged`
+6. unit_test.md 에 이벤트 핸들러 전부, 엔드포인트 전부, 시트 전부가 '근거' 열에 등장 (각각 최소 1개 테스트 케이스).
+7. 주석 처리된 호출(commented_calls)은 현행 기능으로 쓰지 말 것. 테스트 케이스로도 만들지 말 것.
+
+문서별 내용:
+- business_analysis.md (업무분석서): 1 업무 목적·범위, 2 사용자 시나리오(행위→시스템 처리→결과), 3 업무 흐름도(텍스트 단계), 4 업무 규칙(SP 분기 조건·필수값·검증·날짜/버킷 규칙 — 사실에 근거), 5 데이터 흐름 표(엔드포인트 → SP → 읽기/쓰기 테이블), 6 division·권한별 변형, 7 외부 인터페이스(사실에 있을 때만), 8 미확정·확인 필요.
+- screen_design.md (화면설계서): 1 화면 개요(ID, 명칭, 메뉴 위치는 확인 필요), 2 화면 레이아웃 — **props.csv 의 SplitContainer(Orientation·SplitterDistance·Size) 와 controls.csv 의 parent 체인으로 분할 트리를 그대로 그린 텍스트 와이어프레임**(상/하·좌/우, 비율 %), 영역: 조회조건·버튼·그리드·팝업, 3 컨트롤 명세 표(컨트롤명·타입·**라벨=props.csv Text 원문**·초기값·필수여부·연결 이벤트·To-Be 컴포넌트), 4 그리드 명세(시트별 컬럼 표: 컬럼·헤더·타입·출처 META/HARDCODED·division별 표시·편집 가능 여부), 5 액션 명세 표(버튼/이벤트 → 핸들러 → 처리 → 엔드포인트 → 결과 반영), 6 검증·메시지, 7 권한(C/R/U/D) 사실, 8 To-Be 전환 메모(Wijmo·Oracle 관점에서 바뀌는 점), 9 미확정.
+- 세 문서는 서로 참조한다: 업무분석서 §5 데이터 흐름의 엔드포인트 ↔ 화면설계서 §5 액션 명세 ↔ 단위테스트 근거 열이 같은 이름을 쓴다. 화면설계서 §3 컨트롤명은 단위테스트 절차 열에서 그대로 쓴다.
+- unit_test.md (단위테스트): 테스트 케이스 표 — 열: TC-ID(TC-SCP0096-001 형식), 구분(초기화/조회/저장/이벤트/그리드/권한/division), 사전조건, 절차, 입력값, 기대결과, 근거(엔드포인트·SP·핸들러·시트 이름 원문). 이벤트 핸들러마다 1건 이상, 엔드포인트마다 1건 이상, 시트별 컬럼 표시 1건 이상, division 변형이 있으면 division별 1건 이상, 빈 결과·오류 응답 케이스 포함.
+
+# 1차 분석서 — analysis.md
+# SCP0096 — Shipment Working Day OSP: As-is 분석
+
+> 출처: AsisFacts 정적 추출 Fact Pack. Fact Pack에 없는 내용은 **확인 필요**로 표시했습니다.
+
+## 1. 화면 개요
+
+| 항목 | 값 | 근거 |
+|---|---|---|
+| 화면 ID | SCP0096 | 클래스 `SCP0096_Shipment_Working_Day_OSP` |
+| 화면명(Form Text) | Shipment Working Day OSP | Designer.cs:663 `this.Text` |
+| 도메인 | SCP | 경로 `06.UIL\GSCM.SCP.Forms.UIL\Master\...` |
+| 분류 폴더 | Master | 경로 |
+| 프로젝트 | `06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.csproj` | 파일 구성 |
+
+### 1-1. 파일 구성
+
+| 구분 | 파일 | 줄수 |
+|---|---|---:|
+| current | `...\SCP0096_Shipment_Working_Day_OSP\Properties\AssemblyInfo.cs` | 37 |
+| current | `...\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs` | 852 |
+| current | `...\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs` | 724 |
+| shared | 없음 (Fact Pack에 없음) | — |
+| legacy | 없음 (Fact Pack에 없음) | — |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+
+| 진입점 | 호출 경로 | 호출 줄 | 엔드포인트 | 상태 | SP |
+|---|---|---:|---|---|---|
+| event:this.Load (`Form_Load`) | Form_Load > InitControls > GetBucketType | 394 | `DM.DM0003_GET_BUCKET_TYPE_CODE` | MATCH | DM0003_GET_BUCKET_TYPE_CODE |
+| event:this.Load (`Form_Load`) | Form_Load > CreateSpread > InitSpread > GetSpdTitle | 831 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| button:FindButton | FindButton > FindData_Main | 457 | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` | MATCH | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP |
+| button:FindButton | FindButton > FindData_Main > InitSpread > GetSpdTitle | 831 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| button:SaveButton | SaveButton > SaveData_Main > FindData_Main | 457 | `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` | MATCH | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP |
+| button:SaveButton | SaveButton > SaveData_Main > FindData_Main > InitSpread > GetSpdTitle | 831 | `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| (진입점 미연결) | 필드 초기화 `<field:dtDayWeek>` | 49 | `biz:CommonData.CommonDataList` [code=LookupCommon] | BIZ_MATCH | — (UP_FX_GetCommonDataList 코드 분기) |
+| (진입점 미연결) | 필드 초기화 `<field:dtValidYN>` | 51 | `biz:CommonData.YesOrNo` | BIZ_MATCH | — |
+
+흐름 요약:
+- **화면 로드(`Form_Load`)**: Bucket Type 코드 조회(DM0003)와 Spread 생성 → 달력 헤더 조회(SCP0009)를 합니다.
+- **조회(FindButton)**: `FindData_Main` 에서 SCP0096 SP를 호출하고, `InitSpread > GetSpdTitle` 로 달력 헤더(SCP0009)를 다시 구성합니다. 조회 결과 행이 있으면(`siMain.GetMaxRowIndex() > 0`, :484) `SetSpreadColumn` 으로 컬럼 표시를 다시 적용합니다.
+- **저장(SaveButton)**: `SaveData_Main` 에서 변경행(`GetChanges` :609)을 모아 파라미터 행(`p_division_id` 등)을 만든 뒤 `FindData_Main` 으로 재조회합니다. **저장 자체에 쓰는 엔드포인트/SP는 Fact Pack에서 추출되지 않았습니다 → 확인 필요.**
+- `dtDayWeek`(:49), `dtValidYN`(:51)은 정적 분석상 진입점에 연결되지 않은 필드 초기화입니다. 다만 `dtValidYN` 은 `InitSpreadDateColumn:203` 의 `AddComboColumn` 인자로 쓰입니다(grid_code raw: `dtValidYN`).
+
+### 2-1. 주석 처리된 호출
+
+| 줄 | 값 | 상태 |
+|---:|---|---|
+| 456 | SCP.SCP0019_GET_WORKING_TIME | 주석 처리됨 (현행 기능 아님) |
+
+## 3. 엔드포인트 전체 표
+
+| 엔드포인트 | 상태 | 호출 수 | 호출 위치 | SP | 참조 테이블/객체 (EXEC 전이 포함) |
+|---|---|---:|---|---|---|
+| `biz:CommonData.CommonDataList` [code=LookupCommon] | BIZ_MATCH | 1 | `<field:dtDayWeek>`:49 | — | 코드 분기 UP_FX_GetCommonDataList: SELECT SCM_ADM_LOOKUP_MASTER, SELECT SCM_ADM_LOOKUP_MASTER_DETAIL |
+| `biz:CommonData.YesOrNo` | BIZ_MATCH | 1 | `<field:dtValidYN>`:51 | — | 없음 (via `Data.CallBizData` — DB 접근 여부 확인 필요) |
+| `DM.DM0003_GET_BUCKET_TYPE_CODE` | MATCH | 1 | GetBucketType:394 | DM0003_GET_BUCKET_TYPE_CODE | SELECT SCM_ADM_LOOKUP_MASTER_DETAIL |
+| `SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN` | MATCH | 1 | GetSpdTitle:831 | SCP0009_GET_SHEET_CALENDAR_3SPAN | SELECT SCM_SYS_CALENDAR_M |
+| `SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP` | MATCH | 1 | FindData_Main:457 | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | INSERT #TBLDYNAMICPIVOT_SCP0096, SELECT SCP_MST_SHIPMENT_WORKING_DAY_OSP, SCM_MST_SITE, SCM_SYS_CALENDAR_M, SCM_MST_LINE_OSP, SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, REF STRING_SPLIT, DYNAMIC SQL |
+
+## 4. 이벤트 배선
+
+| 대상 | 이벤트 | 핸들러 | 배선 위치 | 확인된 동작 (Fact Pack 기준) |
+|---|---|---|---|---|
+| this | Load | `Form_Load` | .ctor:103 | InitControls > GetBucketType(DM0003), CreateSpread > InitSpread > GetSpdTitle(SCP0009) |
+| spdMain | CellDoubleClick | `SpdMain_CellDoubleClick` | InitEvent:249 | 내부 동작 확인 필요 |
+| spdMain | TopChange | `SpdMain_TopChange` | InitEvent:250 | 내부 동작 확인 필요 |
+| cboDivision | SelectedIndexChanged | `CboDivision_SelectedIndexChanged` | InitEvent:251 | 내부 동작 확인 필요 (SetChangedControl:417/425 의 GetCheckedListValue 와의 관계 확인 필요) |
+| clbPlantSite | SelectedIndexChanged | `ClbPlantSite_SelectedIndexChanged` | InitEvent:252 | 내부 동작 확인 필요 |
+| cboDayWeek | SelectedIndexChanged | `CboDayWeek_SelectedIndexChanged` | InitEvent:253 | GetCheckedListValue(:672), cboInputValue.Enabled = false(:675) / true(:679) — 분기 조건 확인 필요 |
+| btnInput | Click | `BtnInput_Click` | InitEvent:254 | GetCheckedListValue(:695, :696) — 그리드 일괄 입력 로직 상세 확인 필요 |
+| this.chkSum | CheckedChanged | `chkSum_CheckedChanged` | InitEvent:255 | SetSpreadColumn(:330 / :335) → M_/W_ 컬럼 Visible = chkSum.Checked |
+
+그 외 메서드:
+- `EditButton`(:288) — 툴바 Edit 버튼 처리로 보이며 `GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)` 를 호출합니다. 동작 상세는 확인 필요합니다.
+- `cboBucketType_SelectedIndexChanged`(:311, :316) — SetSpreadColumn 을 호출하지만 **이벤트 배선이 없고, `cboBucketType` 컨트롤도 컨트롤 목록(28개)에 없습니다** → 미사용 잔존 코드인지 확인 필요합니다.
+
+## 5. Grid 구성 방식
+
+**구성 방식: `HYBRID: META(프레임워크) + DB루프(코드) (+코드 표시/라벨 변경)`**
+
+| 단계 | 위치 | 내용 |
+|---|---|---|
+| 시트 생성 | CreateSpread:142 | `AddSheet` — 시트명 `Shipment Working Day OSP` (SpdSheet.shtMain), 인자 `3 ¦ 1 ¦ 35` (인자 의미 확인 필요) |
+| 메타 헤더 | InitSpread:156 | `SetSheetHeaderColumn(siMain, 3)` — SCM_MST_SHEET_COLUMNS 메타로 고정 컬럼 생성, 컬럼 헤더 3행 |
+| 달력 헤더 조회 | InitSpread:151 → GetSpdTitle:831 | SCP0009_GET_SHEET_CALENDAR_3SPAN 결과(dsSpdTitle) |
+| 날짜 컬럼 DB 루프 | InitSpread:159 → InitSpreadDateColumn | 시작 위치 = `GetColumnIndex(MEASURE)+1` |
+| ├ `B_` 포함 컬럼 | :196 | `AddTextColumn`, 너비 0, Visible=false (숨김) |
+| ├ 그 외 컬럼 | :203 | `AddComboColumn`, 너비 50, Visible=true, 데이터 `Data.Common(Data.Type.YesOrNo)` (= dtValidYN), 가운데 정렬 |
+| ├ 주말 글자색 | :208 | DAY_CODE `SAT` → Blue, `SUN` → Red |
+| └ 헤더 병합 | :215~:244 | 0행 = LARGE_CLASS_LABEL_NAME 병합, 1행 = SMALL_CLASS_LABEL_NAME 병합, 1~2행 = "SUM" 헤더 |
+| 표시 제어 | SetSpreadColumn:350 | 태그 `D_`·`W_` 로 시작 → Visible = true |
+| | SetSpreadColumn:355 | 태그 `M_`·`W_` 로 시작 → Visible = chkSum.Checked |
+
+> `W_` 는 두 조건 모두에 들어 있습니다. 두 if 가 독립이면 마지막 할당(:355)인 `chkSum.Checked` 가 적용됩니다. if / else-if 구조는 확인 필요합니다.
+
+### 5-1. 메타 컬럼 (grid_effective)
+
+| 컬럼 | 라벨 | 출처 | 전 division |
+|---|---|---|---|
+| DIVISION_ID | Division | META | 기본 |
+| PLANT_SITE_ID | Plant Site ID | META | 기본 |
+| PLANT_SITE_NAME | Plant Site | META | 기본 |
+| MEASURE | Measure | META | 기본 |
+| WORKING_TIME_DEFAULT | Working Time Default | META | 기본 |
+| LAST_INPUT_DATE | Last Input Date | META | 기본 |
+
+(컬럼 표시 순서 SORT_ORDER_NO 는 Fact Pack에 없음 → 확인 필요)
+
+### 5-2. Division별 차이
+
+- 메타: 40, 81, 81_HD, 81_HG, 81_HM, 81_ST, 81_UC, 82, EE, EE_HD, EE_HG, EE_HM, EE_ST, EE_UC — **14개 division 모두 6/0(필수+기본 6, 선택 0)**입니다.
+- 최종 Grid: 14개 division 모두 6컬럼(META+코드연결)입니다.
+- 코드 분기 중 division 변수를 비교하는 것은 없습니다(분기 판단불가 0건). **division별 Grid 차이는 없습니다.**
+- 날짜 컬럼 수는 SCP0009 결과(Period)에 따라 달라집니다(DB 루프).
+- 실제 SP 실행 결과와 매칭되는 시트가 없습니다(grid 단계 미실행 또는 시트명 불일치).
+
+## 6. 확인 필요 항목
+
+| # | 항목 | 근거 |
+|---|---|---|
+| 1 | 저장 SP/엔드포인트 미추출 — SaveData_Main 은 파라미터 행(p_division_id, p_plant_site_id, p_measure, p_user_id, p_yyyymmdd, p_shipment_yn, p_is_save_defalut, p_working_time_default)을 만들지만 저장 호출 대상이 Fact Pack에 없음 | meta_reads :558~:600 |
+| 2 | `dr["A"]`/`row["A"]` 컬럼 "A" 의 의미 | SaveData_Main :558, :600 |
+| 3 | `p_is_save_defalut` 철자(원문 그대로) 및 Default 저장 분기 | :572, :580 |
+| 4 | 저장 파라미터가 :570~:573 과 :578~:581 두 블록으로 나뉘는 분기 조건 | meta_reads |
+| 5 | GetBucketType(DM0003) 결과를 바인딩하는 컨트롤 (cboBucketType 은 컨트롤 목록에 없음) | :394, :311 |
+| 6 | `cboBucketType_SelectedIndexChanged` 배선 없음 — 사용 여부 | :311, :316 |
+| 7 | `dtDayWeek`(LookupCommon) 의 LOOKUP 코드값과 바인딩 컨트롤(cboDayWeek 추정) | :49 |
+| 8 | cboInputValue 의 데이터 원천 | 미추출 |
+| 9 | `SpdMain_CellDoubleClick`, `SpdMain_TopChange`, `CboDivision_SelectedIndexChanged`, `ClbPlantSite_SelectedIndexChanged` 내부 로직 | 미추출 |
+| 10 | cboDivision / clbPlantSite 데이터 원천 SP | 엔드포인트 미추출 |
+| 11 | `usrButton1`(parent 없음, 75×23)의 용도 | controls.csv :33 |
+| 12 | chkSum 이 Designer 에서 Visible=false(:346) — 런타임에 다시 표시되는지 | props |
+| 13 | SetSpreadColumn 의 W_ 이중 조건 구조 | :350, :355 |
+| 14 | 권한(TB_FX_GroupMenuAuth 4행) 상세 값 | dbmeta CSV 별도 |
+| 15 | SCP0096 SP 결과 컬럼 접두어(D_/W_/M_/B_) 체계와 SP 동적 PIVOT 컬럼 매핑 | SP DYNAMIC |
+
+
+# 1차 분석서 — web_components.md
+# SCP0096 — Web 컴포넌트 매핑 (React + Wijmo)
+
+## 1. 컨트롤 → 컴포넌트 매핑
+
+| As-is 컨트롤 | 유형 | 라벨 (원문) | 크기 | TO-BE 컴포넌트 후보 | 비고 |
+|---|---|---|---|---|---|
+| usrConditionPanel1 | UsrConditionPanel | — | 1192×96, Dock Top, HidePanel | 조회조건 패널(접힘 지원) | |
+| usrLayoutControl2 | UsrLayoutControl | — | 1192×96, Dock Fill | 조회조건 레이아웃 그리드 | |
+| cboDivision | UsrCombo | Division* (layoutControlItem4) | 181×20 | 단일 선택 ComboBox | 필수(*) |
+| clbPlantSite | UsrCheckedList | Plant Site (layoutControlItem7) | 165×21 | MultiSelect(CheckedList) | |
+| dCalendar | UsrDateRangePicker3 | Period* (layoutControlItem2) | 210×22 | 기간(From~To) DateRangePicker | 필수(*) |
+| cboDayWeek | UsrCombo | Day of the week (layoutControlItem3) | 134×20 | ComboBox | 원천은 dtDayWeek(LookupCommon) 추정 — 확인 필요 |
+| cboInputValue | UsrCombo | Input Value (layoutControlItem1) | 124×20 | ComboBox | cboDayWeek 선택에 따라 Enabled 전환(:675/:679) |
+| btnInput | UsrButton | Input (layoutControlItem10) | 77×21 | Button | 그리드 일괄 입력 |
+| chkSum | UsrCheckBox | Sum (layoutSum) | 46×20, Visible=false, Checked=false | CheckBox | Designer 상 숨김 — 런타임 표시 여부 확인 필요 |
+| usrButton1 | UsrButton | — | 75×23, parent 없음 | 확인 필요 | 용도 불명 |
+| spdMain / spdMain_Sheet1 | FpSpread / SheetView | — | 1192×553, Dock Fill | Wijmo FlexGrid (다단 헤더 3행) | |
+| emptySpaceItem1~6, 9, 10 | EmptySpaceItem | — | — | 레이아웃 여백(구현 불필요) | |
+| layoutControlGroup2 | LayoutControlGroup | — | 1192×96 | 레이아웃 그룹 | |
+
+## 2. 화면 배치
+
+- props.csv 에는 **SplitContainer 가 없습니다**(Orientation·SplitterDistance 없음).
+- 구성: 상단 `usrConditionPanel1`(Dock Top, 높이 96) / 하단 `spdMain`(Dock Fill, 높이 553).
+- 상/하 비율: 96 : 553 ≈ **14.8% : 85.2%** (Designer 기준 크기, 폭 1192).
+- 조회조건 행 구성: layoutControlItem 높이가 25/26 이고 그룹 높이가 96 이므로 여러 행으로 보입니다. 다만 Location 이 없어 **각 항목의 행·열 위치는 확인 필요**합니다.
+
+## 3. 시트별 Grid 컬럼 — `Shipment Working Day OSP`
+
+연결 규칙: **META+코드연결** (CreateSpread:142 AddSheet → InitSpread:156 SetSheetHeaderColumn)
+
+### 3-1. 메타 컬럼 (grid_effective 기준)
+
+| 컬럼 | 라벨 | 출처 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| DIVISION_ID | Division | META | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 |
+| PLANT_SITE_ID | Plant Site ID | META | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 |
+| PLANT_SITE_NAME | Plant Site | META | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 |
+| MEASURE | Measure | META | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 |
+| WORKING_TIME_DEFAULT | Working Time Default | META | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 |
+| LAST_INPUT_DATE | Last Input Date | META | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 | 기본 |
+
+- 최종 표시 컬럼 수: 전 division **6** — division별 차이 없음.
+- 순서(SORT_ORDER_NO), 너비, 편집 여부(CELL_CONTROL_OBJECT_TYPE_CODE), 고정(FIXED_FLAG)은 `dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv` 확인 필요.
+
+### 3-2. 코드 동적 컬럼 (DB 루프 — SCP0009 결과)
+
+| 조건 | 생성 | 너비 | 표시 | 셀 | 서식 |
+|---|---|---:|---|---|---|
+| COLUMN_NAME 에 `B_` 포함(index>0) | AddTextColumn | 0 | 숨김 | 텍스트 | — |
+| 그 외 | AddComboColumn | 50 | 표시 | YesOrNo 콤보(dtValidYN) | 가운데 정렬, SAT=파랑·SUN=빨강 |
+
+- 삽입 위치: MEASURE 컬럼 다음(`GetColumnIndex(MEASURE)+1`).
+- 헤더 3행: 0행 = LARGE_CLASS_LABEL_NAME 병합, 1행 = SMALL_CLASS_LABEL_NAME 병합, "SUM" 헤더(1~2행 / 2행)
+- 태그별 표시: `D_`·`W_` → 표시, `M_`·`W_` → `chkSum.Checked` 일 때만 표시 (W_ 최종 결과는 확인 필요)
+
+## 4. 시트 연결 규칙
+
+- 시트는 1개(`Shipment Working Day OSP`)이고 시트 간 연결(마스터-디테일)은 없습니다.
+- `SpdMain_CellDoubleClick` 의 동작(팝업/디테일 여부)은 확인 필요합니다.
+
+
+# 1차 분석서 — tobe_design.md
+# SCP0096 — TO-BE 설계 기초
+
+## 1. 조회조건
+
+| 컨트롤 | 라벨 | 필수 | 형태 | 비고 |
+|---|---|---|---|---|
+| cboDivision | Division* | Y (라벨 *) | 단일 콤보 | 데이터 원천 확인 필요. `CboDivision_SelectedIndexChanged` 연쇄 동작 확인 필요 |
+| clbPlantSite | Plant Site | 확인 필요 | 멀티 체크리스트 | 값은 GetCheckedListValue 로 추출(FindData_Main:442/443) |
+| dCalendar | Period* | Y (라벨 *) | 기간 From~To | SCP0009 달력 헤더와 연동 |
+| chkSum | Sum | — | 체크박스 | Designer Visible=false, 기본 false. M_/W_ 컬럼 표시 토글 |
+
+그리드 입력 보조(조회조건 영역에 있음): cboDayWeek(Day of the week), cboInputValue(Input Value), btnInput(Input).
+
+## 2. 액션별 호출 API 후보
+
+| 액션 | As-is 처리 | 호출 SP/엔드포인트 | TO-BE 후보 |
+|---|---|---|---|
+| 화면 로드 (`Form_Load`) | InitControls > GetBucketType, CreateSpread > InitSpread > GetSpdTitle | DM0003_GET_BUCKET_TYPE_CODE, SCP0009_GET_SHEET_CALENDAR_3SPAN | 콤보 조회 API + 달력 헤더 조회 API |
+| 조회 (FindButton) | FindData_Main | SCP0096_GET_SHIPMENT_WORKING_DAY_OSP + SCP0009_GET_SHEET_CALENDAR_3SPAN | 데이터 조회 API(동적 컬럼) + 헤더 API |
+| 저장 (SaveButton) | SaveData_Main(GetChanges) → FindData_Main | 저장 SP 확인 필요 → 재조회 | 저장 API(변경행) + 재조회 |
+| Edit (EditButton:288) | GetSheetInfo | — | 확인 필요 |
+| Input (`BtnInput_Click`) | GetCheckedListValue(:695/:696) | 없음(클라이언트 처리) | 클라이언트 그리드 일괄 입력 |
+| Day of week 변경 (`CboDayWeek_SelectedIndexChanged`) | cboInputValue Enabled 전환 | 없음 | 클라이언트 상태 |
+| Sum 토글 (`chkSum_CheckedChanged`) | SetSpreadColumn | 없음 | 컬럼 visible 토글 |
+| `SpdMain_CellDoubleClick` / `SpdMain_TopChange` | — | 확인 필요 | 확인 필요 |
+| `ClbPlantSite_SelectedIndexChanged` / `CboDivision_SelectedIndexChanged` | — | 확인 필요 | 확인 필요 |
+
+## 3. Division별 Grid 변형 요약
+
+- 14개 division(40, 81, 81_HD, 81_HG, 81_HM, 81_ST, 81_UC, 82, EE, EE_HD, EE_HG, EE_HM, EE_ST, EE_UC) 모두 메타 6컬럼으로 같고, **변형이 없습니다**.
+- 날짜 동적 컬럼은 Period 기준 SCP0009 결과로 생성됩니다(division 무관).
+
+## 4. 권한(C/R/U/D) 관련 사실
+
+- 메타 행: TB_FX_GroupMenuAuth 4행, TB_FX_MenuItemInfo 1행, TB_FX_ProgramInfo 1행, TB_FX_Favorite 1행.
+- 그룹별 C/R/U/D 값은 Fact Pack 본문에 없습니다 → `dbmeta_dbo_TB_FX_GroupMenuAuth.csv` 확인 필요.
+- 코드상 확인된 버튼 경로: FindButton(조회), SaveButton(저장), EditButton(:288).
+
+## 5. 미확정 사항
+
+1. 저장 SP 및 파라미터 계약(`p_is_save_defalut` 포함), 컬럼 "A" 의미
+2. Bucket Type(DM0003) 결과의 사용처 — `cboBucketType` 컨트롤 부재
+3. cboDivision / clbPlantSite / cboInputValue 데이터 원천
+4. dtDayWeek LookupCommon 코드값과 cboDayWeek 바인딩 여부
+5. chkSum 런타임 표시 여부, W_ 컬럼 최종 표시 규칙
+6. SpdMain_CellDoubleClick / TopChange / CboDivision / ClbPlantSite 핸들러 로직
+7. usrButton1 용도, 조회조건 행·열 배치
+8. 메타 컬럼 순서·편집 속성(SCM_MST_SHEET_COLUMNS 원본)
+9. 주석 처리됨: SCP0019_GET_WORKING_TIME — 현행 기능에서 제외
+
+
+# Fact Pack — SCP0096
+# SCP0096 화면 Fact Pack
+
+> AsisFacts 정적 추출 결과. 본문 표는 현행(current/only) 파일 기준이며, 구버전 사본(legacy)은 CSV 에 함께 있습니다.
+
+## 1. 파일 구성
+| 구분 | 파일 | 프로젝트 | 줄수 |
+|---|---|---|---:|
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\Properties\AssemblyInfo.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.csproj | 37 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.csproj | 852 |
+| current | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs | 06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.csproj | 724 |
+
+## 2. 기능 흐름 (진입점 → 메서드 → 엔드포인트)
+| 진입점 | 경로 | 줄 | 엔드포인트 | 상태 | SP / SQL |
+|---|---|---:|---|---|---|
+| button:FindButton | FindButton > FindData_Main | 457 | SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | MATCH | SP SCP0096_GET_SHIPMENT_WORKING_DAY_OSP |
+| button:FindButton | FindButton > FindData_Main > InitSpread > GetSpdTitle | 831 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| button:SaveButton | SaveButton > SaveData_Main > FindData_Main | 457 | SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | MATCH | SP SCP0096_GET_SHIPMENT_WORKING_DAY_OSP |
+| button:SaveButton | SaveButton > SaveData_Main > FindData_Main > InitSpread > GetSpdTitle | 831 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| event:this.Load | Form_Load > InitControls > GetBucketType | 394 | DM.DM0003_GET_BUCKET_TYPE_CODE | MATCH | SP DM0003_GET_BUCKET_TYPE_CODE |
+| event:this.Load | Form_Load > CreateSpread > InitSpread > GetSpdTitle | 831 | SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | SP SCP0009_GET_SHEET_CALENDAR_3SPAN |
+| unreached:(진입점 미연결) | <field:dtDayWeek> | 49 | biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH |  |
+| unreached:(진입점 미연결) | <field:dtValidYN> | 51 | biz:CommonData.YesOrNo | BIZ_MATCH |  |
+
+## 3. 엔드포인트 목록
+| 엔드포인트 | 상태 | 호출 수 | SP / SQL | 참조 객체 (SP 내부 EXEC 전이 포함) | DB 보강 |
+|---|---|---:|---|---|---|
+| biz:CommonData.CommonDataList [code=LookupCommon] | BIZ_MATCH | 1 |  |  | 코드분기 UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER, UP_FX_GetCommonDataList:SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |
+| biz:CommonData.YesOrNo | BIZ_MATCH | 1 |  |  |  |
+| DM.DM0003_GET_BUCKET_TYPE_CODE | MATCH | 1 | SP DM0003_GET_BUCKET_TYPE_CODE | EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL |  |
+| SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN | MATCH | 1 | SP SCP0009_GET_SHEET_CALENDAR_3SPAN | EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M |  |
+| SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | MATCH | 1 | SP SCP0096_GET_SHIPMENT_WORKING_DAY_OSP | EXEC:SCP0096_GET_SHIPMENT_WORKING_DAY_OSP, INSERT:#TBLDYNAMICPIVOT_SCP0096, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_SYS_CALENDAR_M, REF:STRING_SPLIT, SELECT:SCM_MST_LINE_OSP, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, DYNAMIC@SCP0096_GET_SHIPMENT_WORKING_DAY_OSP |  |
+
+## 4. DB 메타/데이터 컬럼 사용 (`row["COL"]`, `Field<T>("COL")`)
+| 메서드 | 대상 | 컬럼 |
+|---|---|---|
+| GetDayOfWeek | row | COLUMN_NAME |
+| GetDayOfWeek | dr | DAY_CODE |
+| SaveData_Main | dr | A, p_division_id, p_plant_site_id, p_measure, p_user_id, p_yyyymmdd, p_shipment_yn, p_is_save_defalut, p_working_time_default |
+| SaveData_Main | row | A |
+
+### 4-2. 호출하는 프레임워크 메타 소비 메서드 (DB 값으로 Grid/컨트롤 속성 결정)
+| 호출 메서드 | 호출 위치 | 프레임워크 구현 | 읽는 메타 컬럼 |
+|---|---|---|---|
+| GetSpdTitle | InitSpread:151 | SpreadInfo.GetSpdTitle | COLUMN_NAME, SORT_ORDER_NO |
+| SetSheetHeaderColumn | InitSpread:156 | SpreadInfo.SetSheetHeaderColumn | ATTRIBUTE1, ATTRIBUTE2, ATTRIBUTE3, ATTRIBUTE4, ATTRIBUTE5, CELL_COMBO_DATA_TYPE, CELL_CONTROL_OBJECT_TYPE_CODE, COLUMN_LABEL_NAME, COLUMN_NAME, COLUMN_WIDTH, DATA_MAX_LENGTH, DATA_SCALE_NUMBER, FIXED_FLAG, HORIZONTAL_ALIGN_CODE, PROGRAM_ID, SHEET_NAME, UPPERCASE_APPLY_FLAG, VALID_YN, VISIBLE_FLAG |
+| InitSpreadDateColumn | InitSpread:159 | SpreadInfo.InitSpreadDateColumn | COLUMN_LABEL_NAME, COLUMN_NAME, DAY_CODE, LARGE_CLASS_LABEL_NAME, SMALL_CLASS_LABEL_NAME |
+| GetCheckedListValue | SetChangedControl:417, SetChangedControl:425, FindData_Main:442, FindData_Main:443, CboDayWeek_SelectedIndexChanged:672, BtnInput_Click:695, BtnInput_Click:696 | CString.GetCheckedListValue | CODE |
+| GetChanges | SaveData_Main:609 | FPExtensions.GetChanges | ROW_ID |
+
+## 5. 이벤트 배선
+| 대상 | 이벤트 | 핸들러 | 위치 |
+|---|---|---|---|
+| this | Load | Form_Load | .ctor:103 |
+| spdMain | CellDoubleClick | SpdMain_CellDoubleClick | InitEvent:249 |
+| spdMain | TopChange | SpdMain_TopChange | InitEvent:250 |
+| cboDivision | SelectedIndexChanged | CboDivision_SelectedIndexChanged | InitEvent:251 |
+| clbPlantSite | SelectedIndexChanged | ClbPlantSite_SelectedIndexChanged | InitEvent:252 |
+| cboDayWeek | SelectedIndexChanged | CboDayWeek_SelectedIndexChanged | InitEvent:253 |
+| btnInput | Click | BtnInput_Click | InitEvent:254 |
+| this.chkSum | CheckedChanged | chkSum_CheckedChanged | InitEvent:255 |
+
+## 6. 컨트롤 (28개, 상세는 controls.csv)
+| 유형 | 개수 | 컨트롤 |
+|---|---:|---|
+| EmptySpaceItem | 8 | emptySpaceItem2, emptySpaceItem4, emptySpaceItem9, emptySpaceItem10, emptySpaceItem1, emptySpaceItem3, emptySpaceItem5, emptySpaceItem6 |
+| LayoutControlItem | 7 | layoutControlItem7, layoutControlItem2, layoutControlItem4, layoutControlItem10, layoutSum, layoutControlItem1, layoutControlItem3 |
+| UsrCombo | 3 | cboDivision, cboInputValue, cboDayWeek |
+| UsrButton | 2 | usrButton1, btnInput |
+| UsrConditionPanel | 1 | usrConditionPanel1 |
+| UsrLayoutControl | 1 | usrLayoutControl2 |
+| UsrDateRangePicker3 | 1 | dCalendar |
+| UsrCheckedList | 1 | clbPlantSite |
+| UsrCheckBox | 1 | chkSum |
+| LayoutControlGroup | 1 | layoutControlGroup2 |
+| FpSpread | 1 | spdMain |
+| SheetView | 1 | spdMain_Sheet1 |
+
+## 7. 확인 필요 (0건)
+| 줄 | 메서드 | 값 | 상태 | 비고 |
+|---:|---|---|---|---|
+
+## 8. DB 메타 데이터 (화면ID가 값으로 들어있는 메타 테이블 행)
+| 메타 테이블 | 행 수 | 파일 |
+|---|---:|---|
+| dbo.SCM_ADM_DB_SCRIPT_BACKUP | 4 | dbmeta_dbo_SCM_ADM_DB_SCRIPT_BACKUP.csv |
+| dbo.SCM_MST_SHEET_COLUMNS | 6 | dbmeta_dbo_SCM_MST_SHEET_COLUMNS.csv |
+| dbo.TB_FX_Favorite | 1 | dbmeta_dbo_TB_FX_Favorite.csv |
+| dbo.TB_FX_GroupMenuAuth | 4 | dbmeta_dbo_TB_FX_GroupMenuAuth.csv |
+| dbo.TB_FX_MenuItemInfo | 1 | dbmeta_dbo_TB_FX_MenuItemInfo.csv |
+| dbo.TB_FX_ProgramInfo | 1 | dbmeta_dbo_TB_FX_ProgramInfo.csv |
+
+## 9. 주석/비활성 처리된 호출 (1건, 활성 집계 제외)
+| 줄 | 값 | 상태 |
+|---:|---|---|
+| 456 | SCP.SCP0019_GET_WORKING_TIME | commented:MATCH |
+
+## 10. Division별 Grid 정의 (메타 규칙 전개, 상세 grid_rule.csv)
+규칙: DIVISION_ID 빈값=전체 / VISIBLE_FLAG·VALID_YN='Y' / USER_SELECTABLE_FLAG='N'=필수 / DEFAULT_FLAG='Y'=기본 / 그 외=선택. 셀 값은 `필수+기본/선택` 컬럼 수.
+
+| 테이블 | 프로그램 | 시트 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| SCM_MST_SHEET_COLUMNS | SCP0096 | Shipment Working Day OSP | 6/0 | 6/0 | 6/0 | 6/0 | 6/0 | 6/0 | 6/0 | 6/0 | 6/0 | 6/0 | 6/0 | 6/0 | 6/0 | 6/0 |
+
+실제 SP 실행 결과와 매칭되는 시트가 없습니다 (grid 단계 미실행 또는 시트명 불일치).
+
+## 11. 코드로 정의된 Grid — 구성 방식: **HYBRID: META(프레임워크) + DB루프(코드) (+코드 표시/라벨 변경)** (상세 grid_code.csv)
+메타만으로는 화면이 결정되지 않습니다. 아래 코드 정의(하드코딩 컬럼, DB 루프, 분기별 표시 변경)를 메타(10장)와 함께 봐야 합니다.
+- 코드에서 생성하는 시트: Shipment Working Day OSP
+- 메타 컬럼 생성 호출(프레임워크): SetSheetHeaderColumn@InitSpread:156
+- 화면이 직접 정의한 Grid 메서드(프레임워크와 이름만 같음, 내부 코드가 위 표에 전개됨): InitSpreadDateColumn, SetSpreadColumn
+
+| 메서드 | 시트(추정) | 줄 | 구분 | API | 헤더 / 값 | 필드 | 분기 조건 |
+|---|---|---:|---|---|---|---|---|
+| InitSpreadDateColumn |  | 196 | DB루프 | AddTextColumn | {?dr[DefColumns.COLUMN_LABEL_NAME]} | {?dr[DefColumns.COLUMN_NAME]} | foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sColumnName.IndexOf("B_") > 0) |
+| InitSpreadDateColumn |  | 203 | DB루프 | AddComboColumn | {?dr[DefColumns.COLUMN_LABEL_NAME]} | {?dr[DefColumns.COLUMN_NAME]} | foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf("B_") > 0) |
+| InitSpreadDateColumn |  | 208 | 표시/라벨 변경 | set:ForeColor | ForeColor = {?sDayCode == "SAT"? Color.Blue : Color.Red} |  | foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf("B_") > 0) ⟫ if(sDayCode == "SAT"\|\| sDayCode == "SUN") |
+| SetSpreadColumn |  | 350 | 표시/라벨 변경 | set:Visible | Visible = {?true} |  | for(iCol <= siObj.GetMaxColumnIndex()) ⟫ if(siObj.GetColumnTag(iCol).IndexOf("D_") == 0 \|\| siObj.GetColumnTag(iCol).IndexOf("W_") == 0) |
+| SetSpreadColumn |  | 355 | 표시/라벨 변경 | set:Visible | Visible = {?chkSum.Checked} |  | for(iCol <= siObj.GetMaxColumnIndex()) ⟫ if(siObj.GetColumnTag(iCol).IndexOf("M_") == 0 \|\| siObj.GetColumnTag(iCol).IndexOf("W_") == 0) |
+| InitializeComponent |  | 628 | 표시/라벨 변경 | set:HorizontalAlignment | HorizontalAlignment = {?FarPoint.Win.Spread.CellHorizontalAlignment.General} |  |  |
+| InitializeComponent |  | 629 | 표시/라벨 변경 | set:NoteIndicatorColor | NoteIndicatorColor = {?System.Drawing.Color.Red} |  |  |
+| InitializeComponent |  | 630 | 표시/라벨 변경 | set:Parent | Parent = ColumnHeaderDefaultEnhanced |  |  |
+| InitializeComponent |  | 631 | 표시/라벨 변경 | set:VerticalAlignment | VerticalAlignment = {?FarPoint.Win.Spread.CellVerticalAlignment.General} |  |  |
+
+## 12. 최종 Grid (메타 + 코드 합성, division별 표시 컬럼 수 — 상세 grid_effective.csv)
+최종 표시 = 메타(필수/기본) 또는 코드추가, 단 마지막 코드 변경이 →숨김이면 제외. `?` = 분기 조건을 정적으로 판단 못 한 건(실행 확인 필요).
+
+| 시트 | 연결 규칙 | 40 | 81 | 81_HD | 81_HG | 81_HM | 81_ST | 81_UC | 82 | EE | EE_HD | EE_HG | EE_HM | EE_ST | EE_UC |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Shipment Working Day OSP | META+코드연결 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 | 6 |
+
+연결 규칙: `META+코드연결` 메타 시트를 코드가 AddSheet/ChangeSheet 로 사용 · `메타 미연결(코드는 하드코딩)` 메타에 시트 정의가 있지만 코드는 그 이름을 쓰지 않고 Add*Column 으로 직접 구성(메타 행은 사실상 미사용) · `메타 정의만, 코드 미참조` 메타에만 있고 코드 어디서도 안 씀(폐기 후보) · `코드 하드코딩 전용` 메타 없이 코드로만 구성.
+분기 조건 판단불가 적용 0건. 코드 분기는 division 변수 비교(==, Equals, StartsWith, Substring 등)만 평가합니다.
+
+
+### FILE endpoints.csv (5 rows)
+```csv
+"variant","file","class","member","line","site_kind","kind","candidate","key","status","sp_or_sql","objects","via","detail"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","<field:dtDayWeek>","49","derived","biz","CommonData.CommonDataList [code=LookupCommon]","biz:CommonData.CommonDataList","BIZ_MATCH","","","Data.Common[case Type.LookupCommon:Type.LookupCommon] > Data.CallBizCommonData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","<field:dtValidYN>","51","derived","biz","CommonData.YesOrNo","biz:CommonData.YesOrNo","BIZ_MATCH","","","Data.Common[case Type.YesOrNo:Type.YesOrNo] > Data.CallBizData",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","GetBucketType","394","ctor","fox","DM.DM0003_GET_BUCKET_TYPE_CODE","DM.DM0003_GET_BUCKET_TYPE_CODE","MATCH","SP DM0003_GET_BUCKET_TYPE_CODE","EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","FindData_Main","457","ctor","fox","SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","MATCH","SP SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","EXEC:SCP0096_GET_SHIPMENT_WORKING_DAY_OSP, INSERT:#TBLDYNAMICPIVOT_SCP0096, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_SYS_CALENDAR_M, REF:STRING_SPLIT, SELECT:SCM_MST_LINE_OSP, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, DYNAMIC@SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","GetSpdTitle","831","ctor","fox","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M","",""
+```
+
+### FILE flow.csv (8 rows)
+```csv
+"variant","file","class","entry_kind","entry","path","member","line","endpoint","status","sp_or_sql","objects"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","event","this.Load","Form_Load > CreateSpread > InitSpread > GetSpdTitle","GetSpdTitle","831","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","event","this.Load","Form_Load > InitControls > GetBucketType","GetBucketType","394","DM.DM0003_GET_BUCKET_TYPE_CODE","MATCH","SP DM0003_GET_BUCKET_TYPE_CODE","EXEC:DM0003_GET_BUCKET_TYPE_CODE, SELECT:SCM_ADM_LOOKUP_MASTER_DETAIL"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","button","FindButton","FindButton > FindData_Main","FindData_Main","457","SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","MATCH","SP SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","EXEC:SCP0096_GET_SHIPMENT_WORKING_DAY_OSP, INSERT:#TBLDYNAMICPIVOT_SCP0096, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_SYS_CALENDAR_M, REF:STRING_SPLIT, SELECT:SCM_MST_LINE_OSP, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, DYNAMIC@SCP0096_GET_SHIPMENT_WORKING_DAY_OSP"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","button","FindButton","FindButton > FindData_Main > InitSpread > GetSpdTitle","GetSpdTitle","831","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","button","SaveButton","SaveButton > SaveData_Main > FindData_Main","FindData_Main","457","SCP.SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","MATCH","SP SCP0096_GET_SHIPMENT_WORKING_DAY_OSP","EXEC:SCP0096_GET_SHIPMENT_WORKING_DAY_OSP, INSERT:#TBLDYNAMICPIVOT_SCP0096, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_OSP, SELECT:SCM_MST_SITE, SELECT:SCM_SYS_CALENDAR_M, REF:STRING_SPLIT, SELECT:SCM_MST_LINE_OSP, SELECT:SCP_MST_SHIPMENT_WORKING_DAY_DEFAULT, DYNAMIC@SCP0096_GET_SHIPMENT_WORKING_DAY_OSP"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","button","SaveButton","SaveButton > SaveData_Main > FindData_Main > InitSpread > GetSpdTitle","GetSpdTitle","831","SCP.SCP0009_GET_SHEET_CALENDAR_3SPAN","MATCH","SP SCP0009_GET_SHEET_CALENDAR_3SPAN","EXEC:SCP0009_GET_SHEET_CALENDAR_3SPAN, SELECT:SCM_SYS_CALENDAR_M"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","unreached","(진입점 미연결)","<field:dtValidYN>","<field:dtValidYN>","51","biz:CommonData.YesOrNo","BIZ_MATCH","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","unreached","(진입점 미연결)","<field:dtDayWeek>","<field:dtDayWeek>","49","biz:CommonData.CommonDataList [code=LookupCommon]","BIZ_MATCH","",""
+```
+
+### FILE events.csv (8 rows)
+```csv
+"variant","file","class","member","line","target","event","handler","op"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP",".ctor","103","this","Load","Form_Load","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitEvent","249","spdMain","CellDoubleClick","SpdMain_CellDoubleClick","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitEvent","250","spdMain","TopChange","SpdMain_TopChange","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitEvent","251","cboDivision","SelectedIndexChanged","CboDivision_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitEvent","252","clbPlantSite","SelectedIndexChanged","ClbPlantSite_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitEvent","253","cboDayWeek","SelectedIndexChanged","CboDayWeek_SelectedIndexChanged","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitEvent","254","btnInput","Click","BtnInput_Click","+="
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitEvent","255","this.chkSum","CheckedChanged","chkSum_CheckedChanged","+="
+```
+
+### FILE controls.csv (28 rows)
+```csv
+"variant","file","class","name","type","parent","line"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","usrButton1","GSCM.Windows.Forms.Controls.UsrButton","","33"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","usrConditionPanel1","GSCM.Windows.Forms.Controls.UsrConditionPanel","this","34"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","usrLayoutControl2","GSCM.Windows.Forms.Controls.UsrLayoutControl","usrConditionPanel1","35"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","dCalendar","GSCM.Windows.Forms.Controls.UsrDateRangePicker3","usrLayoutControl2","36"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","btnInput","GSCM.Windows.Forms.Controls.UsrButton","usrLayoutControl2","37"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","cboDivision","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","38"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","clbPlantSite","GSCM.Windows.Forms.Controls.UsrCheckedList","usrLayoutControl2","39"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","chkSum","GSCM.Windows.Forms.Controls.UsrCheckBox","usrLayoutControl2","40"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","cboInputValue","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","41"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","cboDayWeek","GSCM.Windows.Forms.Controls.UsrCombo","usrLayoutControl2","42"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","layoutControlGroup2","DevExpress.XtraLayout.LayoutControlGroup","","43"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","layoutControlItem7","DevExpress.XtraLayout.LayoutControlItem","","44"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","emptySpaceItem2","DevExpress.XtraLayout.EmptySpaceItem","","45"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","emptySpaceItem4","DevExpress.XtraLayout.EmptySpaceItem","","46"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","emptySpaceItem9","DevExpress.XtraLayout.EmptySpaceItem","","47"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","emptySpaceItem10","DevExpress.XtraLayout.EmptySpaceItem","","48"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","emptySpaceItem1","DevExpress.XtraLayout.EmptySpaceItem","","49"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","emptySpaceItem3","DevExpress.XtraLayout.EmptySpaceItem","","50"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","emptySpaceItem5","DevExpress.XtraLayout.EmptySpaceItem","","51"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","emptySpaceItem6","DevExpress.XtraLayout.EmptySpaceItem","","52"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","layoutControlItem2","DevExpress.XtraLayout.LayoutControlItem","","53"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","layoutControlItem4","DevExpress.XtraLayout.LayoutControlItem","","54"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","layoutControlItem10","DevExpress.XtraLayout.LayoutControlItem","","55"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","layoutSum","DevExpress.XtraLayout.LayoutControlItem","","56"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","layoutControlItem1","DevExpress.XtraLayout.LayoutControlItem","","57"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","layoutControlItem3","DevExpress.XtraLayout.LayoutControlItem","","58"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","spdMain","FarPoint.Win.Spread.FpSpread","this","59"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","spdMain_Sheet1","FarPoint.Win.Spread.SheetView","","60"
+```
+
+### FILE props.csv (53 rows)
+```csv
+"variant","file","class","member","line","target","prop","value"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","115","usrButton1","Size","new System.Drawing.Size(75, 23)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","124","usrConditionPanel1","Dock","System.Windows.Forms.DockStyle.Top"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","127","usrConditionPanel1","Size","new System.Drawing.Size(1192, 96)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","129","usrConditionPanel1","UsrPanelType","GSCM.Windows.Forms.Controls.UsrConditionPanel.PanelType.HidePanel"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","141","usrLayoutControl2","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","146","usrLayoutControl2","Size","new System.Drawing.Size(1192, 96)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","148","usrLayoutControl2","Text","""usrLayoutControl2"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","189","dCalendar","Size","new System.Drawing.Size(210, 22)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","229","btnInput","Size","new System.Drawing.Size(77, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","232","btnInput","Text","""Input"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","268","cboDivision","Size","new System.Drawing.Size(181, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","304","clbPlantSite","Size","new System.Drawing.Size(165, 21)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","341","chkSum","Size","new System.Drawing.Size(46, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","344","chkSum","Text","""Sum"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","346","chkSum","Visible","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","380","cboInputValue","Size","new System.Drawing.Size(124, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","416","cboDayWeek","Size","new System.Drawing.Size(134, 20)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","442","layoutControlGroup2","Size","new System.Drawing.Size(1192, 96)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","447","layoutControlItem7","Control","this.clbPlantSite"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","451","layoutControlItem7","Size","new System.Drawing.Size(226, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","453","layoutControlItem7","Text","""Plant Site"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","463","emptySpaceItem2","Size","new System.Drawing.Size(390, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","471","emptySpaceItem4","Size","new System.Drawing.Size(540, 26)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","479","emptySpaceItem9","Size","new System.Drawing.Size(10, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","487","emptySpaceItem10","Size","new System.Drawing.Size(53, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","495","emptySpaceItem1","Size","new System.Drawing.Size(10, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","504","emptySpaceItem3","Size","new System.Drawing.Size(26, 26)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","512","emptySpaceItem5","Size","new System.Drawing.Size(606, 26)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","520","emptySpaceItem6","Size","new System.Drawing.Size(566, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","525","layoutControlItem2","Control","this.dCalendar"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","530","layoutControlItem2","Size","new System.Drawing.Size(260, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","532","layoutControlItem2","Text","""Period*"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","539","layoutControlItem4","Control","this.cboDivision"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","543","layoutControlItem4","Size","new System.Drawing.Size(236, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","545","layoutControlItem4","Text","""Division*"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","552","layoutControlItem10","Control","this.btnInput"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","557","layoutControlItem10","Size","new System.Drawing.Size(81, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","565","layoutSum","Control","this.chkSum"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","570","layoutSum","Size","new System.Drawing.Size(50, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","577","layoutControlItem1","Control","this.cboInputValue"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","582","layoutControlItem1","Size","new System.Drawing.Size(226, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","584","layoutControlItem1","Text","""Input Value"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","591","layoutControlItem3","Control","this.cboDayWeek"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","596","layoutControlItem3","Size","new System.Drawing.Size(236, 25)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","598","layoutControlItem3","Text","""Day of the week"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","606","spdMain","Dock","System.Windows.Forms.DockStyle.Fill"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","611","spdMain","Size","new System.Drawing.Size(1192, 553)"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","663","this","Text","""Shipment Working Day OSP"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","DefineProperty","121","chkSum","Checked","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SetSpreadColumn","350","siObj.ActiveSheet.Columns[iCol]","Visible","true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SetSpreadColumn","355","siObj.ActiveSheet.Columns[iCol]","Visible","chkSum.Checked"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","CboDayWeek_SelectedIndexChanged","675","cboInputValue","Enabled","false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","CboDayWeek_SelectedIndexChanged","679","cboInputValue","Enabled","true"
+```
+
+### FILE grid_effective.csv (6 rows)
+```csv
+"sheet","sheet_rule","column","label","source","40","81","81_HD","81_HG","81_HM","81_ST","81_UC","82","EE","EE_HD","EE_HG","EE_HM","EE_ST","EE_UC"
+"Shipment Working Day OSP","META+코드연결","DIVISION_ID","Division","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Working Day OSP","META+코드연결","LAST_INPUT_DATE","Last Input Date","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Working Day OSP","META+코드연결","MEASURE","Measure","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Working Day OSP","META+코드연결","PLANT_SITE_ID","Plant Site ID","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Working Day OSP","META+코드연결","PLANT_SITE_NAME","Plant Site","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+"Shipment Working Day OSP","META+코드연결","WORKING_TIME_DEFAULT","Working Time Default","META","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본","기본"
+```
+
+### FILE grid_code.csv (32 rows)
+```csv
+"variant","file","class","member","line","sheet_hint","kind","api","source","header","field","columns","args","arg_names","conditions","raw"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","CreateSpread","142","Shipment Working Day OSP","SHEET","AddSheet","HARDCODED","","","","{?new FarPoint.Win.Spread.FpSpread()} ¦ Shipment Working Day OSP ¦ Shipment Working Day OSP ¦ 3 ¦ 1 ¦ 35","","","spdMain ¦ SpdSheet.shtMain ¦ SpdSheet.shtMain ¦ 3 ¦ 1 ¦ 35"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","CreateSpread","143","0","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ 0","","","spdMain.Name ¦ 0"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","CreateSpread","144","0","SHEET","ChangeSheet","EXPR","","","","","","",""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpread","155","Shipment Working Day OSP","SHEET","InitSheet","HARDCODED","","","","Shipment Working Day OSP","","if(spdInfo.SheetName == ""Shipment Working Day OSP"")","SpdSheet.shtMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpread","156","Shipment Working Day OSP","META_BUILD","SetSheetHeaderColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, 0)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)} ¦ 3","siObj,iColumnHeaderRowCount","if(spdInfo.SheetName == ""Shipment Working Day OSP"")","siMain ¦ 3"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpread","159","Shipment Working Day OSP","LOCAL_METHOD","local:InitSpreadDateColumn","EXPR","","","","{p:spdInfo} ¦ {?spdInfo.GetColumnIndex(DefColumns.MEASURE)}1","","if(spdInfo.SheetName == ""Shipment Working Day OSP"")","spdInfo ¦ nIdxDataMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpread","160","Shipment Working Day OSP","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, 0)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)}","","if(spdInfo.SheetName == ""Shipment Working Day OSP"")","siMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","196","","COLUMN","AddTextColumn","DB_DRIVEN","{?dr[DefColumns.COLUMN_LABEL_NAME]}","{?dr[DefColumns.COLUMN_NAME]}","","{?dr[DefColumns.COLUMN_LABEL_NAME]} ¦ {?dr[DefColumns.COLUMN_NAME]} ¦ {?FPMerge.None} ¦ 0 ¦ {?false}","sHeaderText,sFieldName,merge,fWidth,bVisible","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sColumnName.IndexOf(""B_"") > 0)","sColumnLabelname ¦ sColumnName ¦ FPMerge.None ¦ 0 ¦ false"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","203","","COLUMN","AddComboColumn","DB_DRIVEN","{?dr[DefColumns.COLUMN_LABEL_NAME]}","{?dr[DefColumns.COLUMN_NAME]}","","{?dr[DefColumns.COLUMN_LABEL_NAME]} ¦ {?dr[DefColumns.COLUMN_NAME]} ¦ {?FPMerge.None} ¦ 50 ¦ {?true} ¦ {?Data.Common(Data.Type.YesOrNo, false)} ¦ {?FPHAlign.Center} ¦ {?FPVAlign.Center}","sHeaderText,sFieldName,merge,fWidth,bVisible,dt,fph,fpv","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf(""B_"") > 0)","sColumnLabelname ¦ sColumnName ¦ FPMerge.None ¦ 50 ¦ true ¦ dtValidYN ¦ FPHAlign.Center ¦ FPVAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","208","","OVERRIDE","set:ForeColor","EXPR","","","","{?sDayCode == ""SAT""? Color.Blue : Color.Red}","ForeColor","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sColumnName.IndexOf(""B_"") > 0) ⟫ if(sDayCode == ""SAT""|| sDayCode == ""SUN"")","sDayCode == DefColumnsLabel.Saturday ? Color.Blue : Color.Re…"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","215","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","0 ¦ {p:nIdxData} || {?iLargeStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefColumns.LARGE_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sLargeSpanName != sLargeLabelName)","0 ¦ iLargeStartCol ¦ 1 ¦ iLargeSpanCnt ¦ 20 ¦ sLargeSpanName ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","216","","OTHER","ColumnHeaderSpan","EXPR","","","","1 ¦ {p:nIdxData} || {?iLargeStartCol}0 ¦ 2 ¦ 1 ¦ 20 ¦ SUM ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sLargeSpanName != sLargeLabelName)","1 ¦ iLargeStartCol ¦ 2 ¦ 1 ¦ 20 ¦ ""SUM"" ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","221","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","1 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefColumns.SMALL_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sLargeSpanName != sLargeLabelName)","1 ¦ iSmallStartCol ¦ 1 ¦ iSmallSpanCnt ¦ 20 ¦ sSmallSpanName ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","222","","OTHER","ColumnHeaderSpan","EXPR","","","","2 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 1 ¦ 30 ¦ SUM ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ if(sLargeSpanName != sLargeLabelName)","2 ¦ iSmallStartCol ¦ 1 ¦ 1 ¦ 30 ¦ ""SUM"" ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","230","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","1 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefColumns.SMALL_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sLargeSpanName != sLargeLabelName) ⟫ if(sSmallSpanName != sSmallLabelName)","1 ¦ iSmallStartCol ¦ 1 ¦ iSmallSpanCnt ¦ 20 ¦ sSmallSpanName ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","231","","OTHER","ColumnHeaderSpan","EXPR","","","","2 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 1 ¦ 20 ¦ SUM ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","foreach(dr in dsSpdTitle.Tables[0].Rows) ⟫ else!(sLargeSpanName != sLargeLabelName) ⟫ if(sSmallSpanName != sSmallLabelName)","2 ¦ iSmallStartCol ¦ 1 ¦ 1 ¦ 20 ¦ ""SUM"" ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","241","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","1 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefColumns.SMALL_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","","1 ¦ iSmallStartCol ¦ 1 ¦ iSmallSpanCnt ¦ 20 ¦ sSmallSpanName ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","242","","OTHER","ColumnHeaderSpan","EXPR","","","","2 ¦ {p:nIdxData} || {?iSmallStartCol}0 ¦ 1 ¦ 1 ¦ 20 ¦ SUM ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","","2 ¦ iSmallStartCol ¦ 1 ¦ 1 ¦ 20 ¦ ""SUM"" ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","243","","OTHER","ColumnHeaderSpan","DB_DRIVEN","","","","0 ¦ {p:nIdxData} || {?iLargeStartCol}0 ¦ 1 ¦ 0 ¦ 20 ¦ {?dsSpdTitle.Tables[0].Rows[0][2]} || {?dr[DefColumns.LARGE_CLASS_LABEL_NAME]} ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","","0 ¦ iLargeStartCol ¦ 1 ¦ iLargeSpanCnt ¦ 20 ¦ sLargeSpanName ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","InitSpreadDateColumn","244","","OTHER","ColumnHeaderSpan","EXPR","","","","1 ¦ {p:nIdxData} || {?iLargeStartCol}0 ¦ 2 ¦ 1 ¦ 20 ¦ SUM ¦ {?FPHAlign.Center}","iRow,iCol,iRowCount,iColCount,iHeight,sHeaderString,fph","","1 ¦ iLargeStartCol ¦ 2 ¦ 1 ¦ 20 ¦ ""SUM"" ¦ FPHAlign.Center"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","EditButton","288","","SHEET","GetSheetInfo","EXPR","","","","{?spdMain.Name} ¦ {?fps.ActiveSheetIndex}","","if(fps != null) ⟫ if(fps.Name == ""spdMain"")","spdMain.Name ¦ fps.ActiveSheetIndex"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","cboBucketType_SelectedIndexChanged","311","","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, 0)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)}","","if(fps != null) ⟫ if(fps.Name == ""spdMain"")","siMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","cboBucketType_SelectedIndexChanged","316","","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, 0)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)}","","else!(fps != null)","siMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","chkSum_CheckedChanged","330","","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, 0)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)}","","if(fps != null) ⟫ if(fps.Name == ""spdMain"")","siMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","chkSum_CheckedChanged","335","","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, 0)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)}","","else!(fps != null)","siMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SetSpreadColumn","350","","OVERRIDE","set:Visible","EXPR","","","","{?true}","Visible","for(iCol <= siObj.GetMaxColumnIndex()) ⟫ if(siObj.GetColumnTag(iCol).IndexOf(""D_"") == 0 || siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0)","true"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SetSpreadColumn","355","","OVERRIDE","set:Visible","EXPR","","","","{?chkSum.Checked}","Visible","for(iCol <= siObj.GetMaxColumnIndex()) ⟫ if(siObj.GetColumnTag(iCol).IndexOf(""M_"") == 0 || siObj.GetColumnTag(iCol).IndexOf(""W_"") == 0)","chkSum.Checked"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","FindData_Main","484","","LOCAL_METHOD","local:SetSpreadColumn","EXPR","","","","{?GetSheetInfo(spdMain.Name, 0)} || {?GetSheetInfo(spdMain.Name, fps.ActiveSheetIndex)}","","if(siMain.GetMaxRowIndex() > 0)","siMain"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","628","","OVERRIDE","set:HorizontalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellHorizontalAlignment.General}","HorizontalAlignment","","FarPoint.Win.Spread.CellHorizontalAlignment.General"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","629","","OVERRIDE","set:NoteIndicatorColor","EXPR","","","","{?System.Drawing.Color.Red}","NoteIndicatorColor","","System.Drawing.Color.Red"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","630","","OVERRIDE","set:Parent","HARDCODED","","","","ColumnHeaderDefaultEnhanced","Parent","","""ColumnHeaderDefaultEnhanced"""
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.Designer.cs","SCP0096_Shipment_Working_Day_OSP","InitializeComponent","631","","OVERRIDE","set:VerticalAlignment","EXPR","","","","{?FarPoint.Win.Spread.CellVerticalAlignment.General}","VerticalAlignment","","FarPoint.Win.Spread.CellVerticalAlignment.General"
+```
+
+### FILE meta_reads.csv (16 rows)
+```csv
+"variant","file","class","member","line","receiver","column","via"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","558","dr","A","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","560","dr","p_division_id","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","561","dr","p_plant_site_id","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","562","dr","p_measure","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","563","dr","p_user_id","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","570","dr","p_yyyymmdd","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","571","dr","p_shipment_yn","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","572","dr","p_is_save_defalut","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","573","dr","p_working_time_default","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","578","dr","p_yyyymmdd","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","579","dr","p_shipment_yn","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","580","dr","p_is_save_defalut","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","581","dr","p_working_time_default","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","SaveData_Main","600","row","A","[]"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","GetDayOfWeek","815","row","COLUMN_NAME","Field"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","SCP0096_Shipment_Working_Day_OSP","GetDayOfWeek","816","dr","DAY_CODE","[]"
+```
+
+### FILE commented_calls.csv (1 rows)
+```csv
+"variant","file","line","kind","candidate","key","status"
+"current","06.UIL\GSCM.SCP.Forms.UIL\Master\SCP0096_Shipment_Working_Day_OSP\SCP0096_Shipment_Working_Day_OSP.cs","456","fox","SCP.SCP0019_GET_WORKING_TIME","SCP.SCP0019_GET_WORKING_TIME","commented:MATCH"
+```

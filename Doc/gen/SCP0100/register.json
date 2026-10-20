@@ -1,0 +1,101 @@
+{
+  "menuId": "SCP0100",
+  "screenName": "Global_PSI_Report",
+  "feature": "supply",
+  "pageDir": "global-psi-report",
+  "routePath": "supply/global-psi-report",
+  "sheets": [
+    {
+      "sheetName": "report",
+      "adminSheetName": "REPORT",
+      "rule": "META+코드연결",
+      "columns": 15,
+      "popup": false
+    },
+    {
+      "sheetName": "searchLevel",
+      "adminSheetName": "SEARCH_LEVEL",
+      "rule": "META+코드연결",
+      "columns": 9,
+      "popup": false
+    },
+    {
+      "sheetName": "searchLevelDetail",
+      "adminSheetName": "SEARCH_LEVEL_DETAIL",
+      "rule": "META+코드연결",
+      "columns": 9,
+      "popup": false
+    },
+    {
+      "sheetName": "calendar",
+      "rule": "동적 헤더(기간 컬럼) — SCP0100_GET_SHEET_CALENDAR_3SPAN",
+      "columns": 0,
+      "popup": false
+    }
+  ],
+  "procs": [
+    {
+      "asis_endpoint": "SCP.SCP0100_GET_GLOBAL_PSI_REPORT",
+      "asis_sp": "SCP0100_GET_GLOBAL_PSI_REPORT",
+      "status": "MATCH",
+      "entries": ["button:FindButton", "event:cboBucketType.SelectedIndexChanged", "event:cboSearchLevel.SelectedIndexChanged"],
+      "methods": ["FindData"],
+      "sheet": "report|searchLevel|searchLevelDetail",
+      "btn": "SEARCH",
+      "tobe_api_id": "P_SCP0100_GET",
+      "tobe_proc": "PKG_SCP0100.P_SCP0100_GET_GLOBAL_PSI_REPORT",
+      "note": "AsisFacts endpoints.csv 미수록(QueryDics 프레임워크 조회 — 추출기 한계). 사내 3시트 공용 API · PROC_M IN 17 = FE setFilter 키(DoD B22)"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0100_GET_SHEET_CALENDAR_3SPAN",
+      "asis_sp": "SCP0100_GET_SHEET_CALENDAR_3SPAN",
+      "status": "MATCH",
+      "entries": ["event:this.Load", "event:cboPlanDate.SelectedIndexChanged", "event:rgrpSearchLevel.SelectedIndexChanged", "event:this.btnMeasure.Click", "event:this.btnColumn.Click", "event:dCalendar.ValueChanged"],
+      "methods": ["GetSpdTitle"],
+      "sheet": "calendar",
+      "btn": "SEARCH",
+      "tobe_api_id": "P_SCP0100_CALENDAR_GET",
+      "tobe_proc": "PKG_SCP0100.P_SCP0100_GET_SHEET_CALENDAR_3SPAN"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0100_GET_SITE",
+      "asis_sp": "SCP0100_GET_SITE",
+      "status": "MATCH",
+      "entries": ["event:this.Shown"],
+      "methods": ["GetSiteList"],
+      "sheet": "site",
+      "btn": "SEARCH",
+      "tobe_api_id": "P_SCP0100_SITE_GET",
+      "tobe_proc": "PKG_SCP0100.P_SCP0100_GET_SITE"
+    },
+    {
+      "asis_endpoint": "SCP.SCP0100_GET_PLAN_DATE",
+      "asis_sp": "SCP0100_GET_PLAN_DATE",
+      "status": "MATCH",
+      "entries": ["event:this.Load"],
+      "methods": ["GetPlanDate"],
+      "sheet": "planDate",
+      "btn": "SEARCH",
+      "tobe_api_id": "P_SCP0100_PLAN_DATE_GET",
+      "tobe_proc": "PKG_SCP0100.P_SCP0100_GET_PLAN_DATE"
+    },
+    {
+      "asis_endpoint": "biz:CommonData.CommonDataList_REPORT",
+      "asis_sp": "",
+      "status": "BIZ_MATCH",
+      "entries": ["event:this.Load", "event:cboPlanDate.SelectedIndexChanged"],
+      "methods": ["GetPlanEndDate"],
+      "sheet": "",
+      "btn": "",
+      "tobe_api_id": "",
+      "tobe_proc": "",
+      "pending": "Data_REPORT.Type.PLAN_END_DATE(division '81' 고정·plan_start·'WEEKLY') — 사내 To-Be 대응 PROC/API 배선 없음(proc_meta.csv 2026-10-20). 원천 SQL 확인 후 PKG_SCP0100 신설 + 시트 배선 필요. 생성기 추정값 'PKG_SCP0100.P_'(프로시저명 공란)·ACTION 배선은 폐기(DoD B23)"
+    }
+  ],
+  "buttons_without_api": [
+    { "sheet": "report", "btn": "COLUMN_SETUP" },
+    { "sheet": "report", "btn": "EXCEL" },
+    { "sheet": "report", "btn": "MEASURE_SELECT" }
+  ],
+  "note": "2026-10-20 사내 현행 미러로 정리(ZIOUI1 SCM_ADM_MNU_BTN_MPG_M 9행·API_M 4행 실측). SCP0100_registration.sql 은 사람 재작성본(NOT EXISTS 비파괴) — gen-register-sql.js 로 재생성 금지(DELETE+INSERT 생성본으로 회귀)"
+}

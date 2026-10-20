@@ -15,8 +15,13 @@ const STAGES = [
   { key: 'repair', label: '6 수선', task: 'S5.pipeline' },
   { key: 'pkg', label: '7 PKG', task: 'S5.pkgrepair' },
   { key: 'reg', label: '8 등록SQL', task: 'S5.regsql' },
-  { key: 'e2e', label: '9 E2E', task: 'S7.smoke' },
+  // 1.8.8: 테스트 단계 4종 — smoke · crud · auth · authcrud(계정별 권한 CRUD). 판정 = Doc/e2e/results/_summary.csv 의 kind 열
+  { key: 'smoke', label: '9 Smoke', task: 'S7.smoke' },
+  { key: 'crud', label: '10 CRUD', task: 'S7.crud' },
+  { key: 'auth', label: '11 Auth', task: 'S7.auth' },
+  { key: 'authcrud', label: '12 Auth×CRUD', task: 'S7.authcrud' },
 ];
+const E2E_KINDS = ['smoke', 'crud', 'auth', 'authcrud'];
 const parseCsv = text => { text = text.replace(/^﻿/, ''); const rows = []; let row = [], f = '', q = false; for (let i = 0; i < text.length; i++) { const ch = text[i]; if (q) { if (ch === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += ch; } else if (ch === '"') q = true; else if (ch === ',') { row.push(f); f = ''; } else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(f); f = ''; if (row.length > 1 || row[0] !== '') rows.push(row); row = []; } else f += ch; } if (f !== '' || row.length) { row.push(f); rows.push(row); } return rows; };
 const csvObjs = file => { if (!fs.existsSync(file)) return []; const r = parseCsv(fs.readFileSync(file, 'utf8')); const h = r[0] || []; return r.slice(1).map(x => Object.fromEntries(h.map((k, i) => [k, x[i] || '']))); };
 const has = f => fs.existsSync(f);
@@ -45,6 +50,12 @@ function stageStatus(p, id) {
   const pk = rd(path.join(g, 'CHECK_PKG.md')).match(/BLOCK (\d+) \/ WARN (\d+)/); s.pkg = pk ? (Number(pk[1]) === 0 ? 'ok' : 'bad') : (has(path.join(g, `${id}_PKG.sql`)) ? 'warn' : 'none'); s.pkgN = pk ? `${pk[1]}/${pk[2]}` : '';
   s.reg = has(path.join(g, `${id}_registration.sql`)) ? (has(path.join(g, `${id}_revert.sql`)) ? 'ok' : 'warn') : 'none';
   const e2e = csvObjs(path.join(p.e2eOutDir, 'results', '_summary.csv')).filter(r => (r.menu_id || '').toUpperCase() === id);
+  // 종류별: 결과 있음 → PASS 비율로 ok/warn/bad · 결과 없고 스펙만 있음 → warn(미실행) · 스펙도 없음 → none. s.e2e = 전체 합(구 호환)
+  for (const k of E2E_KINDS) {
+    const rows = e2e.filter(r => (r.kind || '').toLowerCase() === k);
+    if (rows.length) { const pass = rows.filter(r => /pass/i.test(r.status)).length; s[k] = pass === rows.length ? 'ok' : (pass ? 'warn' : 'bad'); s[k + 'N'] = `${pass}/${rows.length}`; }
+    else s[k] = has(path.join(p.e2eOutDir, 'specs', `${id}.${k}.spec.ts`)) ? 'warn' : 'none';
+  }
   if (e2e.length) { const pass = e2e.filter(r => /pass/i.test(r.status)).length; s.e2e = pass === e2e.length ? 'ok' : (pass ? 'warn' : 'bad'); s.e2eN = `${pass}/${e2e.length}`; } else s.e2e = has(path.join(p.e2eOutDir, 'specs', `${id}.smoke.spec.ts`)) ? 'warn' : 'none';
   const pl = rd(path.join(g, 'PIPELINE.md')).match(/^# PIPELINE \S+ — ([\d-]+ [\d:]+) (✅|⚠)/m); s.pipeline = pl ? `${pl[2]} ${pl[1]}` : '';
   return s;
