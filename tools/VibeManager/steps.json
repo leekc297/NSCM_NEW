@@ -108,14 +108,14 @@
         },
         {
           "id": "S1.recon",
-          "title": "개발대상 대사표 — 누락 재확인 (xlsx→csv → recon.js)",
+          "title": "개발대상 대조표 — 누락 재확인 (xlsx→csv → recon.js)",
           "kind": "node",
           "script": "${reconDir}/recon.js",
           "args": [],
           "gate": {
             "type": "fileExists",
             "file": "${reconOutDir}/대사표.md",
-            "label": "대사표"
+            "label": "대조표"
           },
           "title_en": "Target reconciliation — recheck omissions (xlsx→csv → recon.js)"
         },
@@ -129,7 +129,7 @@
         },
         {
           "id": "S1.recondash",
-          "title": "대사표 대시보드 열기 (Doc/recon/index.html)",
+          "title": "대조표 대시보드 열기 (Doc/recon/index.html)",
           "kind": "browser",
           "path": "${reconOutDir}/index.html",
           "title_en": "Open reconciliation dashboard (Doc/recon/index.html)"
@@ -476,7 +476,7 @@
       "tasks": [
         {
           "id": "S5.pipeline",
-          "title": "★ ID 하나로 끝까지 — 화면ID (pipeline.js: 골격→등록SQL→PKG→FE수선→PKG이식→E2E스펙→대사표)",
+          "title": "★ ID 하나로 끝까지 — 화면ID (pipeline.js: 골격→등록SQL→PKG→FE수선→PKG이식→E2E스펙→대조표)",
           "kind": "node",
           "script": "${harnessDir}/pipeline.js",
           "args": [

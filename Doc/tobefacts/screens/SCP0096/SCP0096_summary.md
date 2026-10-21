@@ -1,34 +1,35 @@
 # SCP0096 — To-Be Fact Pack 요약
 
-- page_key: `supply/shipment-working-day-osp` · feature: supply · As-is Fact Pack 있음
-- 파일 11 · 엔드포인트 호출 7 (미해결 0, 주석 속 1) · 이벤트 14 · 컴포넌트 사용 21 · 하드코딩 컬럼 8 · 메시지 29
+- page_key: `supply/shipment-working-day-osp` · feature: supply · As-is Fact Pack 없음(화면ID 미대응)
+- 파일 11 · 엔드포인트 호출 8 (미해결 0, 주석 속 1) · 이벤트 14 · 컴포넌트 사용 21 · 하드코딩 컬럼 8 · 메시지 29
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 8건
 
 ## 1. 파일
 | file | role | lines |
 |---|---|---|
 | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | component | 214 |
-| features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | component | 384 |
-| features/supply/src/pages/shipment-working-day-osp/hooks/useShipmentWorkingDayOspInputValue.ts | hook | 130 |
+| features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | component | 389 |
+| features/supply/src/pages/shipment-working-day-osp/hooks/useShipmentWorkingDayOspInputValue.ts | hook | 131 |
 | features/supply/src/pages/shipment-working-day-osp/index.ts | index | 2 |
-| features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.constants.ts | constants | 166 |
-| features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.dynamic-columns.ts | other | 60 |
-| features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.types.ts | types | 95 |
-| features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | page | 382 |
-| features/supply/src/pages/shipment-working-day-osp/useShipmentWorkingDayOspStore.ts | store | 205 |
-| features/supply/src/pages/shipment-working-day-osp/__asis-mapping__.md | mapping | 137 |
-| features/supply/src/pages/shipment-working-day-osp/__tests__/ShipmentWorkingDayOsp.spec.ts | test | 109 |
+| features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.constants.ts | constants | 186 |
+| features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.dynamic-columns.ts | other | 41 |
+| features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.types.ts | types | 106 |
+| features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | page | 400 |
+| features/supply/src/pages/shipment-working-day-osp/useShipmentWorkingDayOspStore.ts | store | 239 |
+| features/supply/src/pages/shipment-working-day-osp/__asis-mapping__.md | mapping | 153 |
+| features/supply/src/pages/shipment-working-day-osp/__tests__/ShipmentWorkingDayOsp.spec.ts | test | 134 |
 
 ## 2. 엔드포인트 (URL 단위, 살아있는 코드만)
 | url | kind | calls | resolved | where |
 |---|---|---|---|---|
 | (useTabComboQueries) | hook | 1 | Y | ShipmentWorkingDayOspForm.tsx:59 |
 | (useTabLookupQueries) | hook | 1 | Y | ShipmentWorkingDayOspForm.tsx:62 |
-| SCP0096/dayRange//call-proc | hook | 1 | Y | ShipmentWorkingDayOsp.tsx:101 |
-| SCP0096/Shipment Working Day OSP//call-proc | hook | 1 | Y | ShipmentWorkingDayOsp.tsx:117 |
-| /SCP0096/Shipment Working Day OSP/SAVE/call-proc | http | 1 | Y | ShipmentWorkingDayOsp.tsx:274 |
-| /admin/menu/SCP0096/column | http | 1 | Y | useShipmentWorkingDayOspStore.ts:143 |
-| /admin/menu/SCP0096/search-conditions | http | 1 | Y | useShipmentWorkingDayOspStore.ts:168 |
+| SCP0096/dayRange//call-proc | hook | 1 | Y | ShipmentWorkingDayOsp.tsx:100 |
+| SCP0096/Shipment Working Day OSP//call-proc | hook | 1 | Y | ShipmentWorkingDayOsp.tsx:115 |
+| SCP0096/calendar//call-proc | hook | 1 | Y | ShipmentWorkingDayOsp.tsx:133 |
+| /SCP0096/Shipment Working Day OSP/SAVE/call-proc | http | 1 | Y | ShipmentWorkingDayOsp.tsx:292 |
+| /admin/menu/SCP0096/column | http | 1 | Y | useShipmentWorkingDayOspStore.ts:177 |
+| /admin/menu/SCP0096/search-conditions | http | 1 | Y | useShipmentWorkingDayOspStore.ts:202 |
 
 ## 3. procedures.d.ts 등재 시트
 (없음)
@@ -43,13 +44,13 @@
 | CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 174 |
 | CustomDropdown | onChange | <arrow> setSearchParams,String | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 192 |
 | Button | onClick | onInput | jsx | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspForm.tsx | 204 |
-| g | formatItem | formatHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 265 |
-| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 275 |
-| g | updatedLayout | onLayout | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 330 |
-| f | filterApplied | onFilterApplied | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 360 |
-| ShipmentWorkingDayOspForm | onSubmit | handleSearch | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 354 |
-| ShipmentWorkingDayOspForm | onDivisionChange | resetGrid | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 355 |
-| ShipmentWorkingDayOspForm | onInput | handleInputValue | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 356 |
+| g | formatItem | formatHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 270 |
+| g | beginningEdit | beginningEditHandler | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 280 |
+| g | updatedLayout | onLayout | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 335 |
+| f | filterApplied | onFilterApplied | addHandler | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 365 |
+| ShipmentWorkingDayOspForm | onSubmit | handleSearch | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 372 |
+| ShipmentWorkingDayOspForm | onDivisionChange | resetGrid | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 373 |
+| ShipmentWorkingDayOspForm | onInput | handleInputValue | jsx | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 374 |
 
 ## 5. 컴포넌트 사용 집계
 | component | count |
@@ -69,14 +70,14 @@
 ## 6. 하드코딩 Grid 컬럼
 | context | binding | header | width | visible | isReadOnly | dataType | via | file | line |
 |---|---|---|---|---|---|---|---|---|---|
-| mergedColumns | col.colNm | col.colLblNm \|\| col.colNm | col.colWth ?? 100 | col.visible !== false |  |  | object | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 98 |
-| mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 123 |
-| leaf | dc.binding | dc.dayLabel \|\| dc.binding.slice(2) | 56 | true |  |  | object | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 159 |
-| sumGroups | s.binding | s.header | 80 | showSum |  |  | object | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 200 |
-| buildDynSumColumns | name | name.replace(/^W_/, '') |  |  |  |  | object | features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.dynamic-columns.ts | 52 |
-| buildDynSumColumns | name | `${ym.slice(0, 4)}-${ym.slice(4, 6)}` |  |  |  |  | object | features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.dynamic-columns.ts | 55 |
-|  | W_202644 | 202644 |  |  |  |  | object | features/supply/src/pages/shipment-working-day-osp/__tests__/ShipmentWorkingDayOsp.spec.ts | 63 |
-|  | M_202611 | 2026-11 |  |  |  |  | object | features/supply/src/pages/shipment-working-day-osp/__tests__/ShipmentWorkingDayOsp.spec.ts | 64 |
+| mergedColumns | col.colNm | col.colLblNm \|\| col.colNm | col.colWth ?? 100 | col.visible !== false |  |  | object | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 102 |
+| mainStaticColumns | c.binding | c.header | c.width | true |  |  | meta-map | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 127 |
+| leaf | dc.binding | dc.dayLabel \|\| dc.binding.slice(2) | 50 | true |  |  | object | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 164 |
+| sumGroups | s.binding | s.header | 80 | showSum |  |  | object | features/supply/src/pages/shipment-working-day-osp/components/ShipmentWorkingDayOspGrid.tsx | 206 |
+| buildDynSumColumns | DIVISION_ID:DIVISION_ID,END_CUSTOMER:END_CUSTOMER | String(r.COLUMN_LABEL_NAME ?? '') \|\| binding.slice(2) |  |  |  |  | object | features/supply/src/pages/shipment-working-day-osp/shipment-working-day-osp.dynamic-columns.ts | 35 |
+|  | M_202611 | 2026-11 |  |  |  |  | object | features/supply/src/pages/shipment-working-day-osp/__tests__/ShipmentWorkingDayOsp.spec.ts | 78 |
+|  | W_20261144 | W44 |  |  |  |  | object | features/supply/src/pages/shipment-working-day-osp/__tests__/ShipmentWorkingDayOsp.spec.ts | 79 |
+|  | W_20261145 | W45 |  |  |  |  | object | features/supply/src/pages/shipment-working-day-osp/__tests__/ShipmentWorkingDayOsp.spec.ts | 80 |
 
 ## 7. 메시지 코드
 | code | count |
@@ -106,23 +107,23 @@
 | MSG00050 | 1 |
 
 ## 8. 주석 속 As-is 참조
-- 화면ID: SCP0019(12), SCP0096(9), DMF0014(4), DMF0048(1), DMF0021(1), SCP0120(1), SSP0025(1), SCP0025(1)
-- SP/PKG: PKG_SCP0096(8), PKG_COM0000(6), P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP(5), P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP(3), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(3), P_SCM0001_GET_SCP_MONTH_PERIOD(3), P_USER_ID(2), SCM0001_GET_SCP_MONTH_PERIOD(2), P_MEASURE(2), P_ACTION(1), P_DIVISION_ID(1), P_PLANT_SITE_ID(1), P_FROM_YYYYMMDD(1), P_TO_YYYYMMDD(1), FN_MULTY_TIME(1)
+- 화면ID: SCP0096(11), SCP0019(8), SCP0095(7), DMF0014(4), SYS0013(2), SCP0010(1), SCP0031(1), SSP0015(1), DMF0048(1), DMF0021(1), SCP0120(1), SSP0025(1), SCP0025(1)
+- SP/PKG: PKG_COM0000(11), P_SCP0009_GET_SHEET_CALENDAR_3SPAN(9), PKG_SCP0096(7), P_SCP0096_GET_SHIPMENT_WORKING_DAY_OSP(5), P_SCP0096_SAVE_SHIPMENT_WORKING_DAY_OSP(3), P_SCM0001_GET_SCP_MONTH_PERIOD(3), P_USER_ID(2), P_MEASURE(2), SCP0009_GET_SHEET_CALENDAR_3SPAN(1), SCM0001_GET_SCP_MONTH_PERIOD(1), P_ACTION(1), P_DIVISION_ID(1), P_PLANT_SITE_ID(1), P_FROM_YYYYMMDD(1), P_TO_YYYYMMDD(1)
 ## 9. 주석 처리된 코드 (현행 기능 아님)
 | kind | snippet | file | line |
 |---|---|---|---|
 | code | → DayWeek 값 없으면 Form 이 버튼 disabled 로 차단(:710-713 return) → Input Value 미선택(MSG00429) → #4 SelectDay 셀 미선택 | features/supply/src/pages/shipment-working-day-osp/hooks/useShipmentWorkingDayOspInputValue.ts | 31 |
 | code | 편집 권한 없음 — 읽기전용 사용자는 D_ 셀이 잠겨 있다. AS-IS 는 같은 분기에서 MSG00135 를 띄우므로(무메시지 return 아님) | features/supply/src/pages/shipment-working-day-osp/hooks/useShipmentWorkingDayOspInputValue.ts | 52 |
-| code | = 기능 비활성(10_RULES_KEEP F1 "빈 본문 override = 비활성" · screen-completion-gate G2 "() => undefined 빈 핸들러 0건") | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 319 |
-| code | (2026-10-20 정정: 이전 '() => undefined 노출·무동작' 은 위 두 룰과 admin 메타에 어긋났다.) | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 322 |
-| endpoint | ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 6행, admin 즉시 반영). | features/supply/src/pages/shipment-working-day-osp/useShipmentWorkingDayOspStore.ts | 140 |
+| code | = 기능 비활성(10_RULES_KEEP F1 "빈 본문 override = 비활성" · screen-completion-gate G2 "() => undefined 빈 핸들러 0건") | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 337 |
+| code | (2026-10-20 정정: 이전 '() => undefined 노출·무동작' 은 위 두 룰과 admin 메타에 어긋났다.) | features/supply/src/pages/shipment-working-day-osp/ShipmentWorkingDayOsp.tsx | 340 |
+| endpoint | ui-dynamic-property-management — Column 동적 fetch (SCM_MST_SHEET_COLUMNS 6행, admin 즉시 반영). | features/supply/src/pages/shipment-working-day-osp/useShipmentWorkingDayOspStore.ts | 174 |
 
 ## 10. __asis-mapping__.md 상태
-- 구현: 46
+- 구현: 53
 - 제외: 27
 | design_id | summary | reason | status |
 |---|---|---|---|
-| D00-1-005 | §1 chkSum / UsrCheckBox | AS-IS Designer `this.chkSum.Visible = false`(:346) — 사용자에게 보이지 않는 컨트롤 + AS-IS MSSQL SP·사내 Oracle GET SP 모두 D_ 일자열만 PIVOT(W_/M_ SUM 열 미생성) = 살아있는 동작 없음(#138, feedback_asis_delta_apply_criteria). 2026-10-20 2차 보완(원장 S96-13): Sum 커스텀 버튼 제거, Grid SUM 처리 코드는 showSum=false 로 비활성 보존 | 제외 |
+| D00-1-005 | §1 chkSum / UsrCheckBox | AS-IS Designer `this.chkSum.Visible = false`(:346)·Checked=false(.cs:121) — 사용자에게 보이지 않는 컨트롤. 3SPAN 은 W_/M_ 행을 주고 AS-IS 는 그 열을 만들되 SetSpreadColumn(.cs:353-356)이 항상 숨긴다(GET SP 데이터엔 W_/M_ 값 없음) = 토글 동작 없음(#138). 2026-10-20 2차 보완(원장 S96-13) Sum 버튼 제거 · 3차 보완: 합계 열 원천을 3SPAN 으로 정정(숨김 유지) | 제외 |
 | D00-1-012 | §1 usrLayoutControl2 / UsrLayoutControl | AS-IS DevExpress 레이아웃 컨테이너 = TO-BE SearchArea/Grid 로 대체(레이아웃 프리미티브는 화면 요소 아님) | 제외 |
 | D00-1-013 | §1 layoutControlGroup2 / LayoutControlGroup | AS-IS DevExpress 레이아웃 그룹 컨테이너 — 표현 전용, TO-BE Grid size 로 흡수(비즈니스 신호 아님) | 제외 |
 | D00-1-014 | §1 components / Container | WinForms 디자이너 IContainer(비가시 컴포넌트 컨테이너) — UI 신호 아님 | 제외 |
@@ -141,7 +142,7 @@
 | D00-1-027 | §1 emptySpaceItem6 / EmptySpaceItem | 레이아웃 여백 스페이서 — UI 신호 아님 | 제외 |
 | D00-1-028 | §1 emptySpaceItem9 / EmptySpaceItem | 레이아웃 여백 스페이서 — UI 신호 아님 | 제외 |
 | D00-1-029 | §1 emptySpaceItem10 / EmptySpaceItem | 레이아웃 여백 스페이서 — UI 신호 아님 | 제외 |
-| D00-2-004 | §2 chkSum / CheckedChanged (.cs:324-337) | AS-IS Designer `this.chkSum.Visible = false`(:346) — 사용자에게 보이지 않는 컨트롤 + AS-IS MSSQL SP·사내 Oracle GET SP 모두 D_ 일자열만 PIVOT(W_/M_ SUM 열 미생성) = 살아있는 동작 없음(#138, feedback_asis_delta_apply_criteria). 2026-10-20 2차 보완(원장 S96-13): Sum 커스텀 버튼 제거, Grid SUM 처리 코드는 showSum=false 로 비활성 보존 | 제외 |
+| D00-2-004 | §2 chkSum / CheckedChanged (.cs:324-337) | AS-IS Designer `this.chkSum.Visible = false`(:346) — 사용자가 토글할 수 없는 컨트롤이라 CheckedChanged 가 발생하지 않음 = 살아있는 동작 없음(#138, feedback_asis_delta_apply_criteria). W_/M_ 합계 열 자체는 3SPAN 으로 생성·숨김(D00-1-005). 2026-10-20 2차 보완(원장 S96-13) | 제외 |
 | D00-2-006 | §2 spdMain / CellDoubleClick (.cs:817-819) | SetDblClickColumnShowHide(컬럼 접기/펼치기) — D00-3-032 와 동일 신호, AS-IS 부가기능(핵심 CRUD 무관)으로 미이식. 향후 요구 시 재설계 | 제외 |
 | D00-3-015 | §3 SwitchLock / 286 | EditButton 토글 어포던스 자체는 전 화면 미이식 결정(asis_to_tobe.md §11, 2026-09-23) — 단 기존행 재편집 시 잠금 범위 재현 여부는 별도 검증 필요 | 제외 |
 | D00-3-019 | §3 Visible= / 352 (chkSum SUM 토글) | AS-IS Designer `this.chkSum.Visible = false`(:346) — 사용자에게 보이지 않는 컨트롤 + AS-IS MSSQL SP·사내 Oracle GET SP 모두 D_ 일자열만 PIVOT(W_/M_ SUM 열 미생성) = 살아있는 동작 없음(#138, feedback_asis_delta_apply_criteria). 2026-10-20 2차 보완(원장 S96-13): Sum 커스텀 버튼 제거, Grid SUM 처리 코드는 showSum=false 로 비활성 보존 | 제외 |

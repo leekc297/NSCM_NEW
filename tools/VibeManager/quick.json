@@ -150,7 +150,7 @@
           "sub_icon": "🔭"
         },
         {
-          "label": "🚀 ID 하나로 전체 (파싱→분석→생성→보완→테스트→문서)",
+          "label": "🚀 ID 하나로 전체 (파싱→분석→생성→자동보완→테스트(수선)→문서)",
           "label_en": "🚀 Whole flow by ID (parse → analysis → build → fix → test → docs)",
           "kind": "chain",
           "chainId": "full",
@@ -158,8 +158,8 @@
           "sub": "생성",
           "sub_en": "Build",
           "sub_icon": "🧱",
-          "hint": "순차 실행: AS-IS 파싱 → 문서 생성(MD) → GAP 분석 → 새 화면 pipeline 7단계(골격→등록SQL→PKG골격→FE수선→PKG이식→E2E스펙→대사표) → E2E 4단계(각각 1단계) → 문서 Excel. 실패 단계에서 멈추고 Doc/gen/<ID>/FULLRUN.md 에 기록",
-          "confirm": "화면 ID 하나로 파싱 → 문서(MD) → GAP → 새 화면 생성·수선(Claude) → E2E 4단계(FE/BE 기동 필요, E2E_ 마커 행 생성/삭제) → 문서 Excel 을 순서대로 실행합니다. 중간 확인창 없이 진행하고 실패 단계에서 멈춥니다. 실행할까요?",
+          "hint": "순차 실행: AS-IS 파싱 → 문서 생성(MD) → GAP 분석 → 새 화면 pipeline 7단계(골격→등록SQL→PKG골격→FE수선→PKG이식→E2E스펙→대조표) → E2E 4단계(각각 1단계) → 문서 Excel. 실패 단계에서 멈추고 Doc/gen/<ID>/FULLRUN.md 에 기록",
+          "confirm": "화면 ID 하나로 파싱 → 문서(MD) → GAP → 새 화면 pipeline 7단계(골격·등록SQL·PKG·FE수선·PKG이식·E2E스펙·대조표) → 🧯 생성 화면 자동 보완(Claude · 게이트/GAP/대조표/As-is 기준 끝까지) → E2E 4단계(미기동이면 BE/FE 자동 기동 · 실패 시 🩹 Claude 수선 후 재실행, 최대 2회) → 문서 Excel 을 순서대로 실행합니다. 실패 단계에서 중단, FULLRUN.md 기록.",
           "steps": [
             {
               "task": "S1.packone",
@@ -247,7 +247,7 @@
             },
             {
               "task": "S5.pipeline",
-              "title": "새 화면 7/7 대사표 갱신 (recon)",
+              "title": "새 화면 7/7 대조표 갱신 (recon)",
               "args": [
                 "${input:id}",
                 "--max",
@@ -258,35 +258,55 @@
               "optional": true
             },
             {
+              "claudeOf": "🧯 기존 화면 자동 보완 (Claude · 찾아서 끝까지)",
+              "title": "생성 화면 자동 보완 (Claude · 게이트·GAP·대조표·As-is 원문 기준, 찾아서 끝까지)"
+            },
+            {
               "task": "S7.smoke",
-              "title": "E2E 1/4 스모크 (화면·조회·컬럼)",
+              "title": "E2E 1/4 스모크 (화면·조회·컬럼) — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "smoke"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
               "task": "S7.crud",
-              "title": "E2E 2/4 CRUD (실제 저장·원복 / 마커 행)",
+              "title": "E2E 2/4 CRUD (실제 저장·원복 / 마커 행) — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "crud"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
               "task": "S7.auth",
-              "title": "E2E 3/4 권한 (접근·버튼·Division)",
+              "title": "E2E 3/4 권한 (접근·버튼·Division) — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "auth"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
               "task": "S7.authcrud",
-              "title": "E2E 4/4 권한별 CRUD",
+              "title": "E2E 4/4 권한별 CRUD — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "authcrud"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
@@ -339,7 +359,7 @@
           "sub_en": "Build",
           "sub_icon": "🧱",
           "hint": "파싱·AS-IS 분석(문서 MD)은 이미 됐다고 보고: 새 화면 pipeline → GAP 분석 → E2E 4단계(각각 1단계) → 문서 Excel",
-          "confirm": "파싱·AS-IS 분석을 제외하고 새 화면 pipeline(Claude 수선 포함) → GAP 분석 → E2E 4단계(FE/BE 기동 필요) → 문서 Excel 을 순서대로 실행합니다. 실행할까요?",
+          "confirm": "파싱·AS-IS 분석을 제외하고 새 화면 pipeline 7단계 → GAP 분석 → 🧯 생성 화면 자동 보완(Claude) → E2E 4단계(미기동이면 BE/FE 자동 기동 · 실패 시 🩹 Claude 수선 후 재실행) → 문서 Excel 을 순서대로 실행합니다.",
           "steps": [
             {
               "task": "S5.pipeline",
@@ -411,7 +431,7 @@
             },
             {
               "task": "S5.pipeline",
-              "title": "새 화면 7/7 대사표 갱신 (recon)",
+              "title": "새 화면 7/7 대조표 갱신 (recon)",
               "args": [
                 "${input:id}",
                 "--max",
@@ -427,35 +447,55 @@
               "optional": true
             },
             {
+              "claudeOf": "🧯 기존 화면 자동 보완 (Claude · 찾아서 끝까지)",
+              "title": "생성 화면 자동 보완 (Claude · 게이트·GAP·대조표·As-is 원문 기준, 찾아서 끝까지)"
+            },
+            {
               "task": "S7.smoke",
-              "title": "E2E 1/4 스모크 (화면·조회·컬럼)",
+              "title": "E2E 1/4 스모크 (화면·조회·컬럼) — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "smoke"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
               "task": "S7.crud",
-              "title": "E2E 2/4 CRUD (실제 저장·원복 / 마커 행)",
+              "title": "E2E 2/4 CRUD (실제 저장·원복 / 마커 행) — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "crud"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
               "task": "S7.auth",
-              "title": "E2E 3/4 권한 (접근·버튼·Division)",
+              "title": "E2E 3/4 권한 (접근·버튼·Division) — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "auth"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
               "task": "S7.authcrud",
-              "title": "E2E 4/4 권한별 CRUD",
+              "title": "E2E 4/4 권한별 CRUD — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "authcrud"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
@@ -478,7 +518,7 @@
           "sub_en": "Build",
           "sub_icon": "🧱",
           "hint": "화면설계서 우선 pipeline → GAP 분석(Fact Pack 있을 때) → E2E 4단계(각각 1단계) → 문서 Excel",
-          "confirm": "화면설계서 우선 pipeline(Claude 수선 포함) → GAP 분석 → E2E 4단계(FE/BE 기동 필요) → 문서 Excel 을 순서대로 실행합니다. 실행할까요?",
+          "confirm": "화면설계서 우선 pipeline 7단계 → GAP 분석 → 🧯 생성 화면 자동 보완(Claude) → E2E 4단계(미기동이면 BE/FE 자동 기동 · 실패 시 🩹 Claude 수선 후 재실행) → 문서 Excel 을 순서대로 실행합니다.",
           "steps": [
             {
               "task": "S5.pipeline",
@@ -562,7 +602,7 @@
             },
             {
               "task": "S5.pipeline",
-              "title": "새 화면 7/7 대사표 갱신 (recon)",
+              "title": "새 화면 7/7 대조표 갱신 (recon)",
               "args": [
                 "${input:id}",
                 "--max",
@@ -580,35 +620,55 @@
               "optional": true
             },
             {
+              "claudeOf": "🧯 기존 화면 자동 보완 (Claude · 찾아서 끝까지)",
+              "title": "생성 화면 자동 보완 (Claude · 게이트·GAP·대조표·As-is 원문 기준, 찾아서 끝까지)"
+            },
+            {
               "task": "S7.smoke",
-              "title": "E2E 1/4 스모크 (화면·조회·컬럼)",
+              "title": "E2E 1/4 스모크 (화면·조회·컬럼) — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "smoke"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
               "task": "S7.crud",
-              "title": "E2E 2/4 CRUD (실제 저장·원복 / 마커 행)",
+              "title": "E2E 2/4 CRUD (실제 저장·원복 / 마커 행) — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "crud"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
               "task": "S7.auth",
-              "title": "E2E 3/4 권한 (접근·버튼·Division)",
+              "title": "E2E 3/4 권한 (접근·버튼·Division) — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "auth"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
               "task": "S7.authcrud",
-              "title": "E2E 4/4 권한별 CRUD",
+              "title": "E2E 4/4 권한별 CRUD — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "authcrud"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
@@ -696,7 +756,7 @@
           "kind": "claude",
           "needsId": true,
           "hint": "이미 구현된 화면의 보완 전용 — new-screen/pipeline/repair-loop 을 돌리지 않는다",
-          "prompt": "화면 ${id} 는 이미 구현된 페이지가 있는 **보완 대상**이다. 골격을 다시 만들지 않는다(tools/Harness/new-screen.ps1 · gen.js --apply/--overwrite · pipeline.js · repair-loop.js 실행 금지, 기존 파일 삭제 금지). 먼저 Read: tools/VibeManager/rules/10_RULES_KEEP.md · Doc/asisfacts/screens/${id}/${id}_summary.md · As-is .cs 원문(harness.json asisSrcRoot + files.csv, Form_Load/InitControls 초기값 포함) · Doc/tobefacts/db/proc_meta.csv 와 proc_params.csv 의 ${id} 행(사내 현행 배선 정본) · 페이지 폴더(Doc/gen/${id}/register.json 의 feature/pageDir, 없으면 Doc/tobefacts/db/menu.csv 의 MNU_URL)의 `git status`/`git diff HEAD --stat`. 커밋본 대비 후퇴(삭제된 파일·대사표 축소)가 보이면 먼저 보고하고 복원 여부를 묻는다. 그 다음 사용자가 이어서 보낼 보완 요청을 처리하되, 보완은 DB 객체 수정 우선·FE/BE 는 지정 지점만 수정하며, 끝나면 `node tools/Harness/check.js --page <페이지폴더> --id ${id} --final` 결과(DoD B22~B25·M06/M07 포함)를 붙인다. 준비가 끝나면 '보완 요청을 입력해 주세요' 한 줄로 답한다.",
+          "prompt": "화면 ${id} 는 이미 구현된 페이지가 있는 **보완 대상**이다. 골격을 다시 만들지 않는다(tools/Harness/new-screen.ps1 · gen.js --apply/--overwrite · pipeline.js · repair-loop.js 실행 금지, 기존 파일 삭제 금지). 먼저 Read: tools/VibeManager/rules/10_RULES_KEEP.md · Doc/asisfacts/screens/${id}/${id}_summary.md · As-is .cs 원문(harness.json asisSrcRoot + files.csv, Form_Load/InitControls 초기값 포함) · Doc/tobefacts/db/proc_meta.csv 와 proc_params.csv 의 ${id} 행(사내 현행 배선 정본) · 페이지 폴더(Doc/gen/${id}/register.json 의 feature/pageDir, 없으면 Doc/tobefacts/db/menu.csv 의 MNU_URL)의 `git status`/`git diff HEAD --stat`. 커밋본 대비 후퇴(삭제된 파일·대조표 축소)가 보이면 먼저 보고하고 복원 여부를 묻는다. 그 다음 사용자가 이어서 보낼 보완 요청을 처리하되, 보완은 DB 객체 수정 우선·FE/BE 는 지정 지점만 수정하며, 끝나면 `node tools/Harness/check.js --page <페이지폴더> --id ${id} --final` 결과(DoD B22~B25·M06/M07 포함)를 붙인다. 준비가 끝나면 '보완 요청을 입력해 주세요' 한 줄로 답한다.",
           "label_en": "🛠️ Fix Existing Screen (Claude · no regeneration)",
           "sub": "보완",
           "sub_en": "Fix",
@@ -706,8 +766,8 @@
           "label": "🧯 기존 화면 자동 보완 (Claude · 찾아서 끝까지)",
           "kind": "claude",
           "needsId": true,
-          "hint": "이미 구현된 화면 — 부족한 것을 스스로 찾아(게이트·DoD·GAP·대사표) 순서대로 고치고 결과 보고. 골격 재생성 금지. 커밋본 후퇴만 먼저 묻는다",
-          "prompt": "화면 ${id} 는 이미 구현된 페이지가 있는 **보완 대상**이며, 이번 작업은 사용자 요청을 기다리지 않고 **부족한 것을 스스로 찾아 끝까지 보완**하는 것이다(이 메뉴 선택 = 해당 화면 FE 페이지 폴더 수정 승인). 골격을 다시 만들지 않는다(tools/Harness/new-screen.ps1 · gen.js --apply/--overwrite · pipeline.js · repair-loop.js 실행 금지, 기존 파일 삭제 금지, 대사표 __asis-mapping__.md 는 재생성하지 말고 행을 추가·갱신만). [0 준비] Read: tools/VibeManager/rules/10_RULES_KEEP.md · Doc/asisfacts/screens/${id}/${id}_summary.md · As-is .cs 원문(harness.json asisSrcRoot + files.csv — Form_Load/InitControls 초기값·버튼 핸들러·검증 포함) · Doc/tobefacts/db/proc_meta.csv 와 proc_params.csv 의 ${id} 행(사내 현행 배선 정본) · 페이지 폴더(Doc/gen/${id}/register.json 의 feature/pageDir, 없으면 Doc/tobefacts/db/menu.csv 의 MNU_URL). 페이지 폴더의 `git status`/`git diff HEAD --stat` 에서 커밋본 대비 후퇴(삭제된 파일·대사표 축소)가 보이면 **이것만은 고치기 전에 보고하고 복원 여부를 묻고 멈춘다**. [1 진단] `node tools/Harness/check.js --page <페이지폴더> --id ${id} --final` (BLOCK/WARN · DoD B01~B25 · M06/M07) · `node tools/Harness/gap.js ${id}` 뒤 Doc/gap/${id}_gap.csv 미해결 행 · `node tools/Harness/check-pkg.js ${id}`(Doc/gen/${id}/${id}_PKG.sql 이 있을 때) · 대사표의 미구현/부분 행 · As-is 원문에 있는데 페이지에 없는 조회조건·버튼·검증·초기값 · **Grid 동적 컬럼 원천**(Fact Pack summary §2 의 GetSpdTitle 등 타이틀 SP · §4-2 InitSpreadDateColumn · §11 DB루프 → To-Be 가 사내 배선 타이틀 시트(proc_meta.csv)를 실제 조회하는지, RESPONSE_SET 응답 키가 proc_params.csv OUT COL_NM 안에 있는지 = check.js B26·B27, 대사표 §6 동적 컬럼 행 누락 = M08, '구현' 행인데 사내 배선 시트 미조회 = M09(구현 근거 불일치), E2E smoke 어노테이션 dynamic · gap MISSING '기간형 동적 헤더'). 판정 근거는 BE 원문(nscm-be BaseService/GeneralServiceImpl)·메타 CSV·As-is 원문만 쓴다 — 페이지 주석·대사표·register.json·e2e_plan 의 서술은 이전 작업자의 가정이므로 근거로 쓰지 않는다(SCP0096 o_rc1_columns 사고). 찾은 항목 전부를 번호 목록(출처·근거 포함)으로 먼저 적는다 — 하나도 빼지 않는다. [2 보완] 목록 순서대로 전부 처리한다. 원칙: DB 객체(PKG/SP/메타) 수정 우선, FE/BE 는 해당 지점만 최소 수정, 공용(shared/foundation) 변경 금지, 상대경로 import·any·console.log·inline style 금지, 조회 filter 키는 proc_params.csv 의 IN COL_NM 과 일치시킨다. 동적 헤더(B27)는 사내 배선 타이틀 시트를 SHEETS 에 추가하고 useTabProcQuery 로 조회기간(proc_params IN COL_NM)을 넘겨 o_rc1 행(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)으로 헤더를 만든다 — 같은 시트명을 이미 조회하는 기존 페이지를 grep 해 그 패턴을 따르고, 대사표 해당 행·단위테스트 fixture·잘못된 근거 주석도 함께 정정한다. 응답 키(RESPONSE_SET)는 proc_params OUT COL_NM(대소문자 그대로)만 쓴다(B26). 대사표에는 '## §6 동적 컬럼' 섹션을 만들어 타이틀 SP 행과 As-is DB루프 컬럼 생성 행(요지 '<메서드> / <라인> (DB루프 컬럼 생성 ← 타이틀 SP 결과셋)')을 추가하고(M08), 근거가 맞지 않는 '구현' 행은 실제 구현으로 바꾼 뒤 위치를 갱신한다(M09). FE 수정 뒤 `node tools/E2E/gen-e2e.js --all` 로 스펙을 재생성해 동적 컬럼 판정(정적 메타 밖 binding ≥1 · 타이틀 시트 호출)을 포함시킨다. 처리할 수 없는 항목(원천 미확보·사람 판단 필요·사내 DB 적용 필요)은 건너뛰지 말고 사유와 함께 '미처리'로 남긴다. [3 검증] check.js --final 을 다시 돌려 BLOCK 0 과 DoD 변화를 확인하고, 대사표 상태를 갱신한다. [4 보고] 처리 항목(파일:라인 · 변경 전/후 요약) · 미처리 항목(사유) · 게이트 전/후 수치 · 런타임(조회·저장 E2E)은 미검증임을 명시해 한국어로 보고한다. 중간에 사용자 입력을 기다리지 않는다(커밋본 후퇴 발견 시만 예외).",
+          "hint": "이미 구현된 화면 — 부족한 것을 스스로 찾아(게이트·DoD·GAP·대조표) 순서대로 고치고 결과 보고. 골격 재생성 금지. 커밋본 후퇴만 먼저 묻는다",
+          "prompt": "화면 ${id} 는 이미 구현된 페이지가 있는 **보완 대상**이며, 이번 작업은 사용자 요청을 기다리지 않고 **부족한 것을 스스로 찾아 끝까지 보완**하는 것이다(이 메뉴 선택 = 해당 화면 FE 페이지 폴더 수정 승인). 골격을 다시 만들지 않는다(tools/Harness/new-screen.ps1 · gen.js --apply/--overwrite · pipeline.js · repair-loop.js 실행 금지, 기존 파일 삭제 금지, 대조표 __asis-mapping__.md 는 재생성하지 말고 행을 추가·갱신만). [0 준비] Read: tools/VibeManager/rules/10_RULES_KEEP.md · Doc/asisfacts/screens/${id}/${id}_summary.md · As-is .cs 원문(harness.json asisSrcRoot + files.csv — Form_Load/InitControls 초기값·버튼 핸들러·검증 포함) · Doc/tobefacts/db/proc_meta.csv 와 proc_params.csv 의 ${id} 행(사내 현행 배선 정본) · 페이지 폴더(Doc/gen/${id}/register.json 의 feature/pageDir, 없으면 Doc/tobefacts/db/menu.csv 의 MNU_URL). 페이지 폴더의 `git status`/`git diff HEAD --stat` 에서 커밋본 대비 후퇴(삭제된 파일·대조표 축소)가 보이면 **이것만은 고치기 전에 보고하고 복원 여부를 묻고 멈춘다**. [1 진단] `node tools/Harness/check.js --page <페이지폴더> --id ${id} --final` (BLOCK/WARN · DoD B01~B25 · M06/M07) · `node tools/Harness/gap.js ${id}` 뒤 Doc/gap/${id}_gap.csv 미해결 행 · `node tools/Harness/check-pkg.js ${id}`(Doc/gen/${id}/${id}_PKG.sql 이 있을 때) · 대조표의 미구현/부분 행 · As-is 원문에 있는데 페이지에 없는 조회조건·버튼·검증·초기값 · **Grid 동적 컬럼 원천**(Fact Pack summary §2 의 GetSpdTitle 등 타이틀 SP · §4-2 InitSpreadDateColumn · §11 DB루프 → To-Be 가 사내 배선 타이틀 시트(proc_meta.csv)를 실제 조회하는지, RESPONSE_SET 응답 키가 proc_params.csv OUT COL_NM 안에 있는지 = check.js B26·B27, 대조표 §6 동적 컬럼 행 누락 = M08, '구현' 행인데 사내 배선 시트 미조회 = M09(구현 근거 불일치), E2E smoke 어노테이션 dynamic · gap MISSING '기간형 동적 헤더'). 판정 근거는 BE 원문(nscm-be BaseService/GeneralServiceImpl)·메타 CSV·As-is 원문만 쓴다 — 페이지 주석·대조표·register.json·e2e_plan 의 서술은 이전 작업자의 가정이므로 근거로 쓰지 않는다(SCP0096 o_rc1_columns 사고). 찾은 항목 전부를 번호 목록(출처·근거 포함)으로 먼저 적는다 — 하나도 빼지 않는다. [2 보완] 목록 순서대로 전부 처리한다. 원칙: DB 객체(PKG/SP/메타) 수정 우선, FE/BE 는 해당 지점만 최소 수정, 공용(shared/foundation) 변경 금지, 상대경로 import·any·console.log·inline style 금지, 조회 filter 키는 proc_params.csv 의 IN COL_NM 과 일치시킨다. 동적 헤더(B27)는 사내 배선 타이틀 시트를 SHEETS 에 추가하고 useTabProcQuery 로 조회기간(proc_params IN COL_NM)을 넘겨 o_rc1 행(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)으로 헤더를 만든다 — 같은 시트명을 이미 조회하는 기존 페이지를 grep 해 그 패턴을 따르고, 대조표 해당 행·단위테스트 fixture·잘못된 근거 주석도 함께 정정한다. 응답 키(RESPONSE_SET)는 proc_params OUT COL_NM(대소문자 그대로)만 쓴다(B26). 대조표에는 '## §6 동적 컬럼' 섹션을 만들어 타이틀 SP 행과 As-is DB루프 컬럼 생성 행(요지 '<메서드> / <라인> (DB루프 컬럼 생성 ← 타이틀 SP 결과셋)')을 추가하고(M08), 근거가 맞지 않는 '구현' 행은 실제 구현으로 바꾼 뒤 위치를 갱신한다(M09). FE 수정 뒤 `node tools/E2E/gen-e2e.js --all` 로 스펙을 재생성해 동적 컬럼 판정(정적 메타 밖 binding ≥1 · 타이틀 시트 호출)을 포함시킨다. 처리할 수 없는 항목(원천 미확보·사람 판단 필요·사내 DB 적용 필요)은 건너뛰지 말고 사유와 함께 '미처리'로 남긴다. [3 검증] check.js --final 을 다시 돌려 BLOCK 0 과 DoD 변화를 확인하고, 대조표 상태를 갱신한다. [4 보고] 처리 항목(파일:라인 · 변경 전/후 요약) · 미처리 항목(사유) · 게이트 전/후 수치 · 런타임(조회·저장 E2E)은 미검증임을 명시해 한국어로 보고한다. 중간에 사용자 입력을 기다리지 않는다(커밋본 후퇴 발견 시만 예외).",
           "label_en": "🧯 Auto-Fix Existing Screen (Claude · find & finish)",
           "sub": "보완",
           "sub_en": "Fix",
@@ -723,7 +783,7 @@
           "sub_en": "Fix",
           "sub_icon": "🪛",
           "hint": "기존 화면 자동 보완(Claude) 이 끝나면 GAP 분석 → E2E 4단계(각각 1단계) → 문서 Excel 을 이어서 실행",
-          "confirm": "기존 화면 자동 보완(Claude · 골격 재생성 금지)을 먼저 끝까지 수행하고, 이어서 GAP 분석 → E2E 4단계(FE/BE 기동 필요) → 문서 Excel 을 실행합니다. 실행할까요?",
+          "confirm": "기존 화면 자동 보완(Claude · 골격 재생성 금지)을 먼저 끝까지 수행하고, 이어서 GAP 분석 → E2E 4단계(미기동이면 BE/FE 자동 기동 · 실패 시 🩹 Claude 수선 후 재실행) → 문서 Excel 을 순서대로 실행합니다.",
           "steps": [
             {
               "claudeOf": "🧯 기존 화면 자동 보완 (Claude · 찾아서 끝까지)",
@@ -736,34 +796,50 @@
             },
             {
               "task": "S7.smoke",
-              "title": "E2E 1/4 스모크 (화면·조회·컬럼)",
+              "title": "E2E 1/4 스모크 (화면·조회·컬럼) — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "smoke"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
               "task": "S7.crud",
-              "title": "E2E 2/4 CRUD (실제 저장·원복 / 마커 행)",
+              "title": "E2E 2/4 CRUD (실제 저장·원복 / 마커 행) — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "crud"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
               "task": "S7.auth",
-              "title": "E2E 3/4 권한 (접근·버튼·Division)",
+              "title": "E2E 3/4 권한 (접근·버튼·Division) — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "auth"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
               "task": "S7.authcrud",
-              "title": "E2E 4/4 권한별 CRUD",
+              "title": "E2E 4/4 권한별 CRUD — 실패 시 🩹 수선 후 재실행",
               "verify": {
                 "type": "e2eRows",
                 "kind": "authcrud"
+              },
+              "repair": {
+                "claudeOf": "🩹 E2E 오류 보완 (Claude)",
+                "rounds": 2
               }
             },
             {
@@ -782,6 +858,17 @@
           "needsId": true,
           "prompt": "Doc/gap/${id}_gap.csv 의 미해결 GAP(G1~G10) 을 화면 ${id} 페이지(Doc/gen/${id}/register.json 의 feature/pageDir)와 Doc/gen/${id}/${id}_PKG.sql 에 반영해줘. 룰은 tools/VibeManager/rules/10_RULES_KEEP.md 만 따르고, 반영한 행은 __asis-mapping__.md 상태를 구현으로 바꾸고, 끝나면 node tools/Harness/check.js --page <페이지폴더> --id ${id} --final 과 node tools/Harness/gap.js ${id} 로 확인해줘.",
           "label_en": "🩹 Fix GAPs (Claude)",
+          "sub": "보완",
+          "sub_en": "Fix",
+          "sub_icon": "🪛"
+        },
+        {
+          "label": "🩹 E2E 오류 보완 (Claude)",
+          "kind": "claude",
+          "needsId": true,
+          "prompt": "E2E ${kind} 단계가 화면 ${id} 에서 실패했다(체인 '${step}'). 이 메뉴 선택 = 해당 화면 FE 페이지 폴더·Doc/gen/${id} 산출물·DB 객체(PKG/메타) 수정 승인. 골격 재생성 금지(tools/Harness/new-screen.ps1 · gen.js --apply/--overwrite · pipeline.js · repair-loop.js 실행 금지, 기존 파일 삭제 금지). **tools/E2E 의 생성기·헬퍼(gen-e2e.js, lib/*, fixtures/*)와 Doc/e2e/specs 의 스펙은 수정 금지** — 기대값이 틀렸다고 판단되면 고치지 말고 '(c) 기대값 결함 의심' 으로 근거와 함께 보고만 한다(테스트를 약화시켜 통과시키는 것은 금지). [0 준비] Read: tools/VibeManager/rules/10_RULES_KEEP.md · Doc/e2e/results/_summary.csv 의 \"${id}\",\"${kind}\" 행(오류 메시지·어노테이션 labels/columns/dynamic/buttons/crud/authcrud/gap) · 가장 최근 Doc/e2e/logs/run_*_${kind}.log(없으면 run_*_all.log)의 실패 테스트별 Error: 블록 · 실패 스크린샷 Doc/e2e/results/artifacts/${id}.${kind}-*/test-failed-1.png · 스펙 Doc/e2e/specs/${id}.${kind}.spec.ts 와 ${id}.plan.json(기대값의 출처: labels = To-Be LBL(msg_master)→As-is 라벨, expectedCols = sheet_columns 메타(실제 조회 시트), expectedBtns = btn_auth, crud = 저장 SP·편집 가능 셀) · 페이지 폴더(Doc/gen/${id}/register.json 의 feature/pageDir) · Doc/asisfacts/screens/${id}/${id}_summary.md · As-is .cs 원문 · Doc/tobefacts/db/proc_meta.csv·proc_params.csv·btn_auth.csv·sheet_columns.csv 의 ${id} 행. [1 진단] 실패 항목마다 원인을 셋 중 하나로 판정하고 근거(파일:라인·메타 행)를 적는다 — (a) 화면 결함: 라벨이 LBL 코드가 아닌 리터럴, 조회조건·컬럼·버튼 누락, 저장 페이로드 키 ≠ PROC_M COL_NM, 편집 가능 여부 ≠ INPUT_TP_CD, 조회 오류 알림 등 / (b) DB 객체·메타 결함: PKG/SP 오류(ORA-), PROC_M 컬럼명, btn_auth·sheet_columns·MNU 등록 누락 / (c) E2E 기대값 결함 의심. [2 보완] (a)(b) 만 수정한다. DB 객체·메타 우선: Doc/gen/${id}/${id}_PKG.sql·${id}_registration.sql 을 갱신하고 사내 오라클(ZIOUI1)에 적용·검증(상시 허용) 후 적용 SQL 을 기록한다. FE 는 해당 지점만 최소 수정(공용 shared/foundation 변경 금지 · 상대경로 import·any·console.log·inline style 금지 · 라벨은 반드시 t('LBLxxxxx','기본값') — 리터럴 금지, 맞는 LBL 이 없으면 msg_master 규칙(01001+ 채번)으로 등록 SQL 추가 · 조회 filter 키는 proc_params IN COL_NM). 대조표 __asis-mapping__.md 의 해당 행을 갱신한다. (c) 는 수정하지 않는다. [3 검증] FE 를 고쳤으면 node tools/Harness/check.js --page <페이지폴더> --id ${id} --final 로 BLOCK 0 을 확인한다. E2E 는 직접 돌리지 않는다 — 체인이 이 단계를 다시 실행한다. [4 보고] 실패 항목별 판정(a/b/c)·근거·처리(파일:라인 변경 전/후)·미처리 사유를 Doc/gen/${id}/E2E_REPAIR.md 에 '## 수선 ${round} — ${kind} — <시각>' 섹션으로 추가(append, 기존 내용 유지)하고 같은 내용을 한국어로 보고한다. 중간에 사용자 입력을 기다리지 않는다.",
+          "hint": "E2E 단계 실패 시 체인이 자동 호출(repair) — 실패 원인을 (a)화면 (b)DB·메타 (c)기대값 의심 으로 판정, (a)(b)만 고치고 E2E 도구·스펙은 손대지 않음. 수동 실행도 가능(kind 는 smoke 로 치환)",
+          "label_en": "🩹 Fix E2E failures (Claude)",
           "sub": "보완",
           "sub_en": "Fix",
           "sub_icon": "🪛"
@@ -1010,7 +1097,7 @@
           "label_en": "👤 Check Accounts"
         },
         {
-          "label": "📋 대사표",
+          "label": "📋 대조표",
           "kind": "task",
           "task": "S1.recondash",
           "label_en": "📋 Reconciliation Table"
@@ -1125,8 +1212,9 @@
           "cwd": "${root}",
           "remote": "origin",
           "branch": "main",
-          "hint": "전체 백업 — leekc297/NSCM_NEW · git add -A → commit(메시지 입력) → push origin main",
-          "label_en": "⬆️ Source Backup"
+          "hint": "전체 백업 — leekc297/NSCM_NEW · git add -A → commit \"BACKUP_YYYYMMDD_HH24MISS\"(자동, 확인 없음) → push origin main (1.9.9)",
+          "label_en": "⬆️ Source Backup",
+          "autoMessage": "BACKUP_${ts}"
         }
       ],
       "title_en": "Settings"

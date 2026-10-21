@@ -1,6 +1,6 @@
 # DMF0006 — To-Be Fact Pack 요약
 
-- page_key: `master/customer-model-mapping` · feature: master · As-is Fact Pack 있음
+- page_key: `master/customer-model-mapping` · feature: master · As-is Fact Pack 없음(화면ID 미대응)
 - 파일 10 · 엔드포인트 호출 10 (미해결 1, 주석 속 0) · 이벤트 21 · 컴포넌트 사용 41 · 하드코딩 컬럼 0 · 메시지 13
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 

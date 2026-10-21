@@ -1,6 +1,6 @@
 # DMF0072 — To-Be Fact Pack 요약
 
-- page_key: `master/nn-master-mapping` · feature: master · As-is Fact Pack 있음
+- page_key: `master/nn-master-mapping` · feature: master · As-is Fact Pack 없음(화면ID 미대응)
 - 파일 12 · 엔드포인트 호출 10 (미해결 0, 주석 속 2) · 이벤트 17 · 컴포넌트 사용 30 · 하드코딩 컬럼 0 · 메시지 19
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 0건
 

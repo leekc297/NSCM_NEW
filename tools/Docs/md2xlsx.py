@@ -5,7 +5,7 @@
         oracle_migration, unit_test, web_components, source_links) · Doc/gap/<ID>_gap.csv · Doc/asisfacts/screens/<ID>/*.csv ·
         Doc/gen/<ID>/{DOD,CHECK,PIPELINE}.md · 페이지 __asis-mapping__.md
   출력: Doc/documents/<ID>/<ID>_화면문서_YYYYMMDD.xlsx  (시트: 표지, 화면분석서, 화면설계서, To-Be설계, 업무분석, Oracle이관, 단위테스트,
-        GAP, 대사표(매핑), 컨트롤, 이벤트, 엔드포인트, 검증, 표현식, 그리드, DoD)
+        GAP, 대조표(매핑), 컨트롤, 이벤트, 엔드포인트, 검증, 표현식, 그리드, DoD)
   MD 는 그대로 두고(기본 산출물), Excel 은 사람이 보는 사본이다. openpyxl 사용(노트북 설치됨).
 """
 import sys, os, re, csv, json, datetime
@@ -92,12 +92,12 @@ def build(ID):
         p = os.path.join(agent, f)
         if os.path.exists(p): put_md(wb.create_sheet(title), open(p, encoding='utf-8-sig').read()); n += 1
     if os.path.exists(gap): put_csv(wb.create_sheet('GAP'), read_csv(gap)); n += 1
-    # 대사표(__asis-mapping__.md): register.json 으로 페이지 위치
+    # 대조표(__asis-mapping__.md): register.json 으로 페이지 위치
     reg = os.path.join(gen, 'register.json')
     if os.path.exists(reg):
         try:
             r = json.load(open(reg, encoding='utf-8-sig')); mp = os.path.join(ROOT, 'nscm-fe', 'features', r['feature'], 'src', 'pages', r['pageDir'], '__asis-mapping__.md')
-            if os.path.exists(mp): put_md(wb.create_sheet('대사표(매핑)'), open(mp, encoding='utf-8-sig').read()); n += 1
+            if os.path.exists(mp): put_md(wb.create_sheet('대조표(매핑)'), open(mp, encoding='utf-8-sig').read()); n += 1
         except Exception as e: print('매핑표 생략:', e)
     for f, title in PACK_CSV:
         p = os.path.join(pack, f)

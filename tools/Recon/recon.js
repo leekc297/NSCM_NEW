@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
-// Recon — 개발대상 대사표: 개발대상 목록(xlsx) × As-is 파싱(AsisFacts) × To-Be(TobeFacts/소스/메타) × 하네스 산출(gen/check/gap/docs/golden/e2e)
+// Recon — 개발대상 대조표: 개발대상 목록(xlsx) × As-is 파싱(AsisFacts) × To-Be(TobeFacts/소스/메타) × 하네스 산출(gen/check/gap/docs/golden/e2e)
 //   node recon.js [--config ../Harness/harness.json]
 //   선행: python xlsx_to_csv.py  (Doc/recon/_input/*.csv, rules/map_screen.csv)
 //   산출: Doc/recon/대사표_화면.csv, 대사표_SP.csv, 대사표_시트.csv, 대사표.md, index.html
@@ -121,16 +121,16 @@ const shOut = new CsvOut(path.join(reconDir, '대사표_시트.csv'), Object.key
 const cntBy = (rows, k) => rows.reduce((m, r) => (m[r[k]] = (m[r[k]] || 0) + 1, m), {});
 const sc = cntBy(scrRows, 'status'), ss = cntBy(spRows, 'status'), sh = cntBy(shRows, 'status');
 const fmt = o => Object.entries(o).sort((x, y) => y[1] - x[1]).map(([k, v]) => `${k} ${v}`).join(' · ');
-const md = [`# 개발대상 대사표 — ${new Date().toISOString().slice(0, 10)}`, '', `입력: 개발대상 ${targets.length}화면 / As-is 파싱 ${asisScreens.length}화면 / To-Be 페이지 ${tByMenu.size} / SP 메타 ${procMeta.length}행 / 시트 메타 ${sheetCols.length}행 / 패키지 PROC ${pkgProcs.size}`, '',
+const md = [`# 개발대상 대조표 — ${new Date().toISOString().slice(0, 10)}`, '', `입력: 개발대상 ${targets.length}화면 / As-is 파싱 ${asisScreens.length}화면 / To-Be 페이지 ${tByMenu.size} / SP 메타 ${procMeta.length}행 / 시트 메타 ${sheetCols.length}행 / 패키지 PROC ${pkgProcs.size}`, '',
   `## 화면 (${scrRows.length}) — ${fmt(sc)}`, '', '| As-is | To-Be | 대상 | 파싱 | To-Be 페이지 | gen | BLOCK/WARN | GAP | 문서 | 골든 | E2E | 신뢰도 | 판정 | 사유 |', '|---|---|---|---|---|---|---|---|---|---|---|---|---|---|',
   ...scrRows.map(r => `| ${r.asis_id} | ${r.tobe_id} | ${r.in_target} | ${r.asis_parsed} | ${r.tobe_page} | ${r.gen} | ${r.check_block_warn} | ${r.gap_score} | ${r.agent_docs} | ${r.golden_pass} | ${r.e2e_pass || r.e2e_specs} | ${r.confidence} | **${r.status}** | ${r.reason} |`),
   '', `## SP (${spRows.length}) — ${fmt(ss)}`, '', '누락-ToBe 만:', '', '| As-is | SP | 목록 | 파싱 | 상태 |', '|---|---|---|---|---|', ...spRows.filter(r => /누락/.test(r.status)).map(r => `| ${r.asis_id} | ${r.asis_sp} | ${r.in_target_list} | ${r.parsed} | ${r.status} |`),
   '', `## 시트 (${shRows.length}) — ${fmt(sh)}`, '', '누락만:', '', '| As-is | 시트 | 목록 | 파싱 | 상태 |', '|---|---|---|---|---|', ...shRows.filter(r => /누락/.test(r.status)).map(r => `| ${r.asis_id} | ${r.sheet} | ${r.in_target_list} | ${r.parsed} | ${r.status} |`),
   '', '판정: OK / 검토필요(신뢰도<70 — 사람이 볼 1%) / 누락-파싱(대상인데 Fact Pack 없음) / 누락-ToBe(대상·파싱 있는데 To-Be 없음) / 대상외(-구현됨) / ToBe신규 / 재확인(GAP<60 또는 BLOCK). SP 공통(제외)=UP_FX_/SCM0001_GET_ 등 공통 SP. 시트 "미확인(메타 필요)"= sheet_columns.csv 를 export_tobe_meta.py 로 내려받으면 재판정.'];
 fs.writeFileSync(path.join(reconDir, '대사표.md'), md.join('\n') + '\n', 'utf8');
-const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>NSCM 개발대상 대사표</title><meta name="viewport" content="width=device-width,initial-scale=1">
+const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>NSCM 개발대상 대조표</title><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>:root{--bg:#fff;--fg:#1a1a1a;--mut:#666;--line:#e3e3e3;--ok:#1b7f3b;--bad:#b3261e;--warn:#9a6700;--card:#f6f7f9}@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#111;--fg:#eee;--mut:#aaa;--line:#333;--card:#1c1c1c}}body{margin:0;padding:16px;background:var(--bg);color:var(--fg);font:14px/1.45 system-ui,sans-serif}h1{font-size:20px;margin:0 0 8px}.tiles{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.tile{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-width:120px}.tile b{display:block;font-size:20px}.tabs button{border:1px solid var(--line);background:var(--card);color:var(--fg);padding:6px 12px;border-radius:6px;margin-right:6px;cursor:pointer}.tabs button.on{background:var(--fg);color:var(--bg)}input{padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);min-width:220px}table{border-collapse:collapse;width:100%;margin-top:8px;font-size:13px}th,td{border-bottom:1px solid var(--line);padding:4px 6px;text-align:left;white-space:nowrap}th{cursor:pointer;position:sticky;top:0;background:var(--bg)}.OK{color:var(--ok);font-weight:600}.bad{color:var(--bad);font-weight:600}.warn{color:var(--warn);font-weight:600}.wrap{overflow:auto;max-height:75vh}</style></head><body>
-<h1>NSCM 개발대상 대사표 <small style="color:var(--mut);font-weight:400">${new Date().toISOString().slice(0, 16).replace('T', ' ')}</small></h1>
+<h1>NSCM 개발대상 대조표 <small style="color:var(--mut);font-weight:400">${new Date().toISOString().slice(0, 16).replace('T', ' ')}</small></h1>
 <div class="tiles" id="tiles"></div><div class="tabs"><button data-t="screens" class="on">화면</button><button data-t="sps">SP</button><button data-t="sheets">시트</button> <input id="q" placeholder="필터(ID/상태/텍스트)"></div><div class="wrap"><table id="tb"></table></div>
 <script>const D={screens:${JSON.stringify(scrRows)},sps:${JSON.stringify(spRows)},sheets:${JSON.stringify(shRows)}};let cur='screens',sortK=null,asc=true;const $=s=>document.querySelector(s);
 const cls=v=>/^OK/.test(v)?'OK':/누락/.test(v)?'bad':/재확인|검토필요|미확인|목록외|파싱미검출/.test(v)?'warn':'';

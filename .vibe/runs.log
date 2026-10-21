@@ -807,3 +807,195 @@ UI  생성 및 보완 시 동적 구간에 대한 COLUMN 생성을 놓친 사유
 2026-10-21T01:42:29+09:00	S7.all	end	1	
 2026-10-21T01:42:30+09:00	workbench	start		quick: 🎬 E2E 전체 4단계 SCP0100
 2026-10-21T01:50:47+09:00	workbench	start		quick: ⬆️ Source Backup SCP0100
+2026-10-21T01:52:50+09:00	workbench	start		quick: 🔎 E2E 실패 분석 SCP0100
+2026-10-21T07:39:32+09:00	S7.all	start		S7.all: run-e2e.cmd all SCP0100 --mode auto
+2026-10-21T07:44:50+09:00	S7.all	end	1	
+2026-10-21T07:44:51+09:00	workbench	start		quick: 🎬 E2E 전체 4단계 SCP0100
+2026-10-21T07:45:29+09:00	workbench	start		chain:autofix-full: SCP0100
+2026-10-21T07:50:54+09:00	workbench	start		quick: 🛰️ 전환 흐름 대시보드 SCP0100
+2026-10-21T07:52:00+09:00	workbench	start		quick: 📶 FLOW 진척 SCP0100
+2026-10-21T07:52:35+09:00	workbench	start		quick: 🕒 작업 이력 (화면별/일자별 · 전후 비교) SCP0100
+2026-10-21T07:52:46+09:00	workbench	start		quick: 📋 대사표 SCP0100
+2026-10-21T07:53:13+09:00	workbench	start		quick: 📂 산출물 폴더 (Doc/asisfacts) SCP0100
+2026-10-21T09:08:16+09:00	S1.packone	end	0	
+2026-10-21T09:08:17+09:00	S3.agent	end	0	
+2026-10-21T09:08:17+09:00	S4.one	end	0	
+2026-10-21T09:08:18+09:00	S5.pipeline	end	0	
+2026-10-21T09:08:18+09:00	S5.pipeline	end	0	
+2026-10-21T09:08:19+09:00	S5.pipeline	end	0	
+2026-10-21T09:08:19+09:00	S5.pipeline	end	0	
+2026-10-21T09:08:20+09:00	S5.pipeline	end	0	
+2026-10-21T09:08:22+09:00	S5.pipeline	end	0	
+2026-10-21T09:08:23+09:00	S5.pipeline	end	0	
+2026-10-21T09:08:45+09:00	S7.smoke	end	5	
+2026-10-21T09:09:06+09:00	S7.smoke	end	5	
+2026-10-21T09:09:23+09:00	S7.smoke	end	5	
+2026-10-21T09:09:24+09:00	S1.packone	end	0	
+2026-10-21T09:09:24+09:00	S3.agent	end	0	
+2026-10-21T09:09:24+09:00	S4.one	end	1	
+2026-10-21T09:09:25+09:00	S5.pipeline	end	0	
+2026-10-21T09:09:25+09:00	S5.pipeline	end	0	
+2026-10-21T09:09:26+09:00	S5.pipeline	end	0	
+2026-10-21T09:09:26+09:00	S5.pipeline	end	0	
+2026-10-21T09:09:27+09:00	S5.pipeline	end	0	
+2026-10-21T09:09:27+09:00	S5.pipeline	end	0	
+2026-10-21T09:09:27+09:00	S5.pipeline	end	0	
+2026-10-21T09:09:28+09:00	S4.one	end	1	
+2026-10-21T09:09:44+09:00	S7.smoke	end	5	
+2026-10-21T09:10:00+09:00	S7.smoke	end	5	
+2026-10-21T09:10:20+09:00	S7.smoke	end	5	
+2026-10-21T09:10:21+09:00	S5.pipeline	end	0	
+2026-10-21T09:10:23+09:00	S5.pipeline	end	0	
+2026-10-21T09:10:25+09:00	S5.pipeline	end	0	
+2026-10-21T09:10:26+09:00	S5.pipeline	end	0	
+2026-10-21T09:10:27+09:00	S5.pipeline	end	0	
+2026-10-21T09:10:28+09:00	S5.pipeline	end	0	
+2026-10-21T09:10:29+09:00	S5.pipeline	end	0	
+2026-10-21T09:10:30+09:00	S4.one	end	0	
+2026-10-21T09:10:57+09:00	S7.smoke	end	5	
+2026-10-21T09:11:16+09:00	S7.smoke	end	5	
+2026-10-21T09:11:34+09:00	S7.smoke	end	5	
+2026-10-21T09:11:34+09:00	S4.one	end	0	
+2026-10-21T09:11:52+09:00	S7.smoke	end	5	
+2026-10-21T09:13:22+09:00	S1.packone	end	0	
+2026-10-21T09:13:24+09:00	S3.agent	end	0	
+2026-10-21T09:13:25+09:00	S4.one	end	0	
+2026-10-21T09:13:26+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:27+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:28+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:28+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:29+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:31+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:32+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:33+09:00	S7.smoke	end	0	
+2026-10-21T09:13:34+09:00	S7.crud	end	0	
+2026-10-21T09:13:35+09:00	S7.auth	end	0	
+2026-10-21T09:13:37+09:00	S7.authcrud	end	0	
+2026-10-21T09:13:38+09:00	S3.xlsx	end	0	
+2026-10-21T09:13:40+09:00	S1.packone	end	0	
+2026-10-21T09:13:40+09:00	S3.agent	end	0	
+2026-10-21T09:13:41+09:00	S4.one	end	1	
+2026-10-21T09:13:42+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:43+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:44+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:45+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:47+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:48+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:48+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:49+09:00	S4.one	end	1	
+2026-10-21T09:13:50+09:00	S7.smoke	end	0	
+2026-10-21T09:13:51+09:00	S7.crud	end	0	
+2026-10-21T09:13:52+09:00	S7.auth	end	0	
+2026-10-21T09:13:53+09:00	S7.authcrud	end	0	
+2026-10-21T09:13:53+09:00	S3.xlsx	end	0	
+2026-10-21T09:13:55+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:55+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:57+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:57+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:58+09:00	S5.pipeline	end	0	
+2026-10-21T09:13:59+09:00	S5.pipeline	end	0	
+2026-10-21T09:14:00+09:00	S5.pipeline	end	0	
+2026-10-21T09:14:01+09:00	S4.one	end	0	
+2026-10-21T09:14:02+09:00	S7.smoke	end	0	
+2026-10-21T09:14:03+09:00	S7.crud	end	0	
+2026-10-21T09:14:04+09:00	S7.auth	end	0	
+2026-10-21T09:14:04+09:00	S7.authcrud	end	0	
+2026-10-21T09:14:05+09:00	S3.xlsx	end	0	
+2026-10-21T09:14:07+09:00	S4.one	end	0	
+2026-10-21T09:14:08+09:00	S7.smoke	end	0	
+2026-10-21T09:14:08+09:00	S7.crud	end	0	
+2026-10-21T09:14:09+09:00	S7.auth	end	0	
+2026-10-21T09:14:10+09:00	S7.authcrud	end	0	
+2026-10-21T09:14:11+09:00	S3.xlsx	end	0	
+2026-10-21T09:14:13+09:00	S4.one	end	0	
+2026-10-21T09:14:14+09:00	S7.smoke	end	1	
+2026-10-21T09:14:15+09:00	S7.smoke	end	0	
+2026-10-21T09:14:16+09:00	S7.crud	end	0	
+2026-10-21T09:14:16+09:00	S7.auth	end	0	
+2026-10-21T09:14:17+09:00	S7.authcrud	end	0	
+2026-10-21T09:14:18+09:00	S3.xlsx	end	0	
+2026-10-21T09:14:19+09:00	S4.one	end	0	
+2026-10-21T09:14:20+09:00	S7.smoke	end	1	
+2026-10-21T09:14:20+09:00	S7.smoke	end	1	
+2026-10-21T09:14:21+09:00	S7.smoke	end	1	
+2026-10-21T09:15:40+09:00	S1.packone	end	0	
+2026-10-21T09:15:41+09:00	S3.agent	end	0	
+2026-10-21T09:15:42+09:00	S4.one	end	0	
+2026-10-21T09:15:43+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:44+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:44+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:45+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:46+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:46+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:47+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:47+09:00	S7.smoke	end	0	
+2026-10-21T09:15:48+09:00	S7.crud	end	0	
+2026-10-21T09:15:49+09:00	S7.auth	end	0	
+2026-10-21T09:15:49+09:00	S7.authcrud	end	0	
+2026-10-21T09:15:50+09:00	S3.xlsx	end	0	
+2026-10-21T09:15:51+09:00	S1.packone	end	0	
+2026-10-21T09:15:52+09:00	S3.agent	end	0	
+2026-10-21T09:15:53+09:00	S4.one	end	1	
+2026-10-21T09:15:54+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:55+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:56+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:56+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:57+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:58+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:59+09:00	S5.pipeline	end	0	
+2026-10-21T09:15:59+09:00	S4.one	end	1	
+2026-10-21T09:16:00+09:00	S7.smoke	end	0	
+2026-10-21T09:16:01+09:00	S7.crud	end	0	
+2026-10-21T09:16:02+09:00	S7.auth	end	0	
+2026-10-21T09:16:03+09:00	S7.authcrud	end	0	
+2026-10-21T09:16:04+09:00	S3.xlsx	end	0	
+2026-10-21T09:16:06+09:00	S5.pipeline	end	0	
+2026-10-21T09:16:07+09:00	S5.pipeline	end	0	
+2026-10-21T09:16:08+09:00	S5.pipeline	end	0	
+2026-10-21T09:16:09+09:00	S5.pipeline	end	0	
+2026-10-21T09:16:10+09:00	S5.pipeline	end	0	
+2026-10-21T09:16:11+09:00	S5.pipeline	end	0	
+2026-10-21T09:16:11+09:00	S5.pipeline	end	0	
+2026-10-21T09:16:12+09:00	S4.one	end	0	
+2026-10-21T09:16:13+09:00	S7.smoke	end	0	
+2026-10-21T09:16:14+09:00	S7.crud	end	0	
+2026-10-21T09:16:14+09:00	S7.auth	end	0	
+2026-10-21T09:16:15+09:00	S7.authcrud	end	0	
+2026-10-21T09:16:16+09:00	S3.xlsx	end	0	
+2026-10-21T09:16:17+09:00	S4.one	end	0	
+2026-10-21T09:16:18+09:00	S7.smoke	end	0	
+2026-10-21T09:16:19+09:00	S7.crud	end	0	
+2026-10-21T09:16:19+09:00	S7.auth	end	0	
+2026-10-21T09:16:20+09:00	S7.authcrud	end	0	
+2026-10-21T09:16:21+09:00	S3.xlsx	end	0	
+2026-10-21T09:16:22+09:00	S4.one	end	0	
+2026-10-21T09:16:23+09:00	S7.smoke	end	1	
+2026-10-21T09:16:24+09:00	S7.smoke	end	0	
+2026-10-21T09:16:24+09:00	S7.crud	end	0	
+2026-10-21T09:16:25+09:00	S7.auth	end	0	
+2026-10-21T09:16:26+09:00	S7.authcrud	end	0	
+2026-10-21T09:16:27+09:00	S3.xlsx	end	0	
+2026-10-21T09:16:28+09:00	S4.one	end	0	
+2026-10-21T09:16:28+09:00	S7.smoke	end	1	
+2026-10-21T09:16:29+09:00	S7.smoke	end	1	
+2026-10-21T09:16:29+09:00	S7.smoke	end	1	
+2026-10-21T09:23:59+09:00	S4.one	start		S4.one: gap.js SCP0100
+2026-10-21T09:24:02+09:00	S4.one	end	0	
+2026-10-21T09:26:12+09:00	S7.smoke	start		S7.smoke: run-e2e.cmd smoke SCP0100 --mode auto
+2026-10-21T09:29:17+09:00	S7.smoke	end	1	
+2026-10-21T09:29:19+09:00	workbench	start		quick: 🚒 자동 보완 → 테스트·문서까지 SCP0100
+2026-10-21T09:38:25+09:00	workbench	start		prompt: 위의 E2E 에서 오류 발생으로 확인되는데 진행중인가요? 아니면 오류로 종료 된 건가요?
+체인이 중단되었다면 왜 중단되었는지 원인 확인해서 알려주세요. 
+
+2026-10-21T10:13:23+09:00	workbench	start		quick: 🛰️ 전환 흐름 대시보드 SCP0100
+2026-10-21T10:13:38+09:00	workbench	start		quick: 📶 FLOW 진척 SCP0100
+2026-10-21T10:13:41+09:00	workbench	start		quick: 🕒 작업 이력 (화면별/일자별 · 전후 비교) SCP0100
+2026-10-21T10:13:50+09:00	workbench	start		quick: 💻 새 Claude 터미널 SCP0100
+2026-10-21T10:14:17+09:00	S7.probe	start		S7.probe: probe-accounts.js 
+2026-10-21T10:14:24+09:00	S7.probe	end	0	
+2026-10-21T10:14:31+09:00	workbench	start		quick: 👤 계정 확인 SCP0100
+2026-10-21T10:14:32+09:00	workbench	start		quick: 📋 대사표 SCP0100
+2026-10-21T10:17:27+09:00	workbench	start		quick: 📈 E2E 리포트 SCP0100
+2026-10-21T10:18:11+09:00	workbench	start		quick: 📜 이관 룰셋 SCP0100
+2026-10-21T10:27:52+09:00	workbench	start		quick: 📶 FLOW 진척 SCP0100
+2026-10-21T13:04:58+09:00	workbench	start		quick: ⬆️ Source Backup SCP0100

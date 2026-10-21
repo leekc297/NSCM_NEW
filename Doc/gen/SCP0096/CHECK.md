@@ -1,3 +1,3 @@
-# [Harness] SCP0096 shipment-working-day-osp — BLOCK 0 / WARN 1 (final)
+# [Harness] SCP0096 shipment-working-day-osp — BLOCK 1 / WARN 0
 
-- WARN T02 tsc 가 다른 파일에서 오류를 보고(페이지 범위 밖) — exit 134
+- BLOCK T01 TS2352 Conversion of type 'ProcResponse<"SCP0096", SHEETS.CALENDAR> | undefined' to type 'Record<string, CalendarColumnRow[]>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first. @ShipmentWorkingDayOsp.tsx:144

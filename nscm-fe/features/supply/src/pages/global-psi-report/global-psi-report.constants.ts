@@ -84,6 +84,10 @@ export const LOOKUP = {
   DISPLAY: 'STOCK_TREND_DISPLAY', // ALL(All) / CHART(Chart) / GRID(Grid) — 3종 VALID
   SEARCH_LEVEL: 'PRODUCT_LEVEL', // CELL_GROUP / CELL_GROUP_DETAIL / PRODUCT_LEVEL1..3 — 5종 VALID
   PLAN_TYPE: 'PLAN_TYPE', // PR/MA/SE/FN/TE — 5종 VALID, 기본 FN='Final Plan'
+  // cboUnitQty — AS-IS ScpUtils.GetUnitQty()(SheetUtils.cs:1856) = LookupCommon 'SCP_UNIT_QTY'.
+  //   사내 SCM_ADM_LOOKUP_MASTER_DETAIL 실측(2026-10-21) Q1/Q1000/Q1000000/Q100000000 4종 VALID, DISPLAY_SEQ 순.
+  //   배율은 AS-IS SetUnitQty(.cs:1697) 처럼 선택 index 로 정한다(UNIT_QTY_SCALE).
+  UNIT_QTY: 'SCP_UNIT_QTY',
 } as const;
 
 // lookup code 상수 — 화면 로직 분기용(부록 B-4 실측 code).
@@ -99,7 +103,21 @@ export const SEARCH_LEVEL_CODE = {
   PRODUCT_LEVEL1: 'PRODUCT_LEVEL1',
   PRODUCT_LEVEL2: 'PRODUCT_LEVEL2',
   PRODUCT_LEVEL3: 'PRODUCT_LEVEL3',
+  // rgrpSearchLevel=Detail 일 때 P_SEARCH_LEVEL 로 보내는 값 — AS-IS getSearchLevel(.cs:414-417) `res = "DETAIL"`.
+  //   PKG_SCP0100 BODY 의 DETAIL 분기(L849·L1493)가 이 값으로 REPORT 상세 데이터를 만든다(콤보 lookup 코드 아님).
+  DETAIL: 'DETAIL',
 } as const;
+
+// SetLayout(.cs:1490-1542) — Search Level 별 Product Level 컬럼 표시. Detail 모드는 사용자 정의 컬럼 기준이라 미적용.
+//   AS-IS 는 cboSearchLevel.SelectedIndex 로 분기하므로 lookup PRODUCT_LEVEL 의 VALID·DISPLAY_SEQ 순서(사내 실측
+//   CELL_GROUP / CELL_GROUP_DETAIL / PRODUCT_LEVEL1 / 2 / 3)로 index→code 를 대응시킨다. 목록에 없는 코드 = default(전부 숨김).
+export const PRODUCT_LEVEL_COLUMNS = ['PRODUCT_LEVEL1', 'PRODUCT_LEVEL2', 'PRODUCT_LEVEL3'] as const;
+export const PRODUCT_LEVEL_VISIBLE: Record<string, readonly string[]> = {
+  CELL_GROUP_DETAIL: ['PRODUCT_LEVEL1', 'PRODUCT_LEVEL2'], // case 1
+  PRODUCT_LEVEL1: ['PRODUCT_LEVEL1'], // case 2
+  PRODUCT_LEVEL2: ['PRODUCT_LEVEL2'], // case 3
+  PRODUCT_LEVEL3: ['PRODUCT_LEVEL1', 'PRODUCT_LEVEL2', 'PRODUCT_LEVEL3'], // case 4
+};
 
 // PlanType 기본값 — AS-IS InitControlsAfter cboPlanType.SelectedValue="FN"(design 02 §4.2 cs:628).
 export const PLAN_TYPE_DEFAULT = 'FN';
@@ -122,9 +140,10 @@ export type SearchMode = (typeof SEARCH_MODE)[keyof typeof SEARCH_MODE];
 
 // rgrpSearchLevel 대응 — 공유 UI 에 RadioGroup 이 없어 2지선다 CustomDropdown 으로 재현(design 01 §2 R1/R4).
 //   value = SEARCH_MODE. idx0 Search Level(기본) / idx1 Detail(REPORT 시트 show, SearchLevel 콤보 disable R4).
+//   항목 문구 = AS-IS RadioGroupItem(designer:239-240) "Search Level"/"Detail" → 등록 LBL(LBL00050/LBL00316)로 표시.
 export const SEARCH_MODE_OPTIONS = [
-  { label: 'Search Level', value: SEARCH_MODE.SEARCH },
-  { label: 'Detail', value: SEARCH_MODE.DETAIL },
+  { lbl: 'LBL00050', label: 'Search Level', value: SEARCH_MODE.SEARCH },
+  { lbl: 'LBL00316', label: 'Detail', value: SEARCH_MODE.DETAIL },
 ] as const;
 
 // 컬럼/measure 개인화 titleSet columnType — SalesPlan(DMF0021) 선례 동일('C'/'M'). saveTitleSet 3점 일치
@@ -145,44 +164,40 @@ export const SITE_TYPE = {
 // Validation MSG ID — TO-BE SCM_ADM_MSG_M 역매핑(Hook #114). AS-IS 리터럴 문구를 그대로 쓰지 않는다.
 //   {0} 자리표시자는 i18next 자동치환 안 함 — 호출부에서 .replace 로 넣는다.
 export const MSG = {
-  // 조회 시작일 > Plan 시작일 (design 02 §4.4 cs:2015). AS-IS 리터럴 "[조회 시작일] Plan Date 이전으로
-  //   설정해야 합니다." -> TO-BE 등가 코드. 확인필요: 정확 MSG_ID 미실측 -> 비카탈로그 key + defaultValue.
-  PLAN_DATE_RANGE: 'SCP0100_PLAN_DATE_RANGE',
+  // 조회 시작일 > Plan 시작일 (DCalendar_ValueChanged .cs:2013-2015). AS-IS 리터럴 "[조회 시작일] Plan Date 이전으로
+  //   설정해야 합니다." -> 사내 SCM_ADM_MSG_M 역조회(2026-10-21) MSG01186 EN 'Begin Date is early or equal to Plan Date.'
+  //   (같은 규칙). 주의: 같은 코드의 KO 문구는 '크거나 같아야' 로 의미가 반대 — 기존 MSG 문구 수정은 사용자 결정 사항.
+  PLAN_DATE_RANGE: 'MSG01186',
   // 권한 Division 0건 (design 01 A1 cs:583). AS-IS MSG00097 "권한을 가진 Division이 없습니다".
   //   SCP0100 은 권한조인 2행 등록으로 실발동 안 함(부록 B-6)이나 A1 규칙 재현을 위해 코드 보존.
   NO_DIVISION_AUTH: 'MSG00097',
 } as const;
 
 // i18n 라벨 — SCM_ADM_MSG_M(MSG_TP_CD='LBL') 실측 LBL ID(design 02 부록 B-5). t(LBL.KEY, '_Fallback').
-//   값 = LBL 코드. DB 미매칭 라벨(Item ID / AS 포함 / Search Mode)은 코드 미할당 — 호출부에서 리터럴 유지.
+//   값 = LBL 코드. 명칭은 조회조건 카탈로그(search_conditions_scp_dm.md 'Global PSI New' To-Be 명칭) 기준 —
+//   Div.(LBL00001) / PJT(LBL00012) / Model/Nickname(LBL00618) / Unit(LBL00045). 사내 MSG_M 역조회 2026-10-21.
 export const LBL = {
   SEARCH: 'LBL00112', // Search (표준 LBL00112)
   DIVISION: 'LBL00001', // Div. — 조회조건 Division 표준 코드(shipment-working-day 선례 동일)
   FROM_SITE: 'LBL00022', // From Site
   TO_SITE: 'LBL00023', // To Site
   PLAN_DATE: 'LBL00039', // Plan Date
+  PERIOD: 'LBL00013', // Period — AS-IS layPeriod "Period*"(dCalendar UsrDateRangePicker3)
   BUCKET: 'LBL00710', // Bucket
   DISPLAY: 'LBL01073', // Display
   SEARCH_LEVEL: 'LBL00050', // Search Level
   PLAN_TYPE: 'LBL00040', // Plan Type
-  PROJECT: 'LBL00617', // Project
+  PROJECT: 'LBL00012', // PJT — 카탈로그 Project→PJT (자매 화면 사용 코드)
+  MODEL_NICKNAME: 'LBL00618', // Model/Nickname — AS-IS layModel "Model / Nick Name"(txtItemId)
   CELL_GROUP: 'LBL00049', // Cell Group
-  UNIT_QTY: 'LBL01129', // Unit (Qty) — 로컬 표시배율 콤보
-  NICK_NAME: 'LBL00767', // Nick Name
+  UNIT: 'LBL00045', // Unit — 카탈로그 Unit (Qty)→Unit. 로컬 표시배율 콤보
+  AS: 'LBL01167', // A/S — AS-IS chkAS.Text "A/S"(designer:927)
   CELL_QTY: 'LBL00690', // Cell Qty 체크박스
   MONTHLY: 'LBL00684', // Monthly — Bucket 옵션
   WEEKLY: 'LBL00683', // Weekly — Bucket 옵션
   COLUMN: 'LBL00605', // Column Setting — 개인화 팝업 버튼
   MEASURE: 'LBL00310', // Measure — 개인화 팝업 버튼
 } as const;
-
-// Unit(Qty) 로컬 표시배율 콤보 표시 항목 (design 02 §2.5). 서버 조회 없는 정적 select — index=UNIT_QTY_SCALE.
-export const UNIT_QTY_OPTIONS = [
-  { label: '1', value: '0' },
-  { label: '1,000', value: '1' },
-  { label: '1,000,000', value: '2' },
-  { label: '100,000,000', value: '3' },
-] as const;
 
 // 동적 pivot 기간칼럼 접두 (design 03 §2). M_(월)/W_(주) 표시, B_(BOH 보조) 숨김(width 0).
 //   InitSpreadDateColumn cs:714~817: B_ 포함 -> AddTextColumn 숨김 / 그 외 -> AddNumColumn width70.
@@ -205,16 +220,26 @@ export const MEASURE_BG = {
   PAST_INVENTORY: 'rgb(192, 192, 192)', // WEEKLY inventory measure x W_..A 칼럼(은색)
 } as const;
 
-// MEASURE_NAME -> 배경색 그룹 매핑 (design 03 §3-B cs:819~ 스위치 이식). 행 라벨(MEASURE_NAME) 정확 일치.
+// 숫자 기간칼럼 음수 글자색 — AS-IS SetReNumerCellType(SpreadInfo.cs:13815) NumberCellType.NegativeRed=true.
+export const NEGATIVE_FORE = '#ff0000';
+
+// Measure Group 이 바뀌는 행의 상단 경계선 — AS-IS SetBackColor(.cs:877-904·947-954) complexBorderDarkGray
+//   (ComplexBorder(left, top=DarkGray 2px, right, bottom)). 'AS Sales PSI' Black 경계는 적용 직전 Clear(.cs:955)라 실효 없음.
+export const MEASURE_GROUP_BORDER_TOP = '2px solid rgb(169, 169, 169)';
+
+// MEASURE_NAME -> 배경색 그룹 매핑 (SetBackColor .cs:922-940 switch 이식). 키 = 행 MEASURE_NAME 정확 일치 —
+//   값 원천은 SCM_MST_SHEET_MEASURE('Global PSI New') COLUMN_LABEL_NAME(사내 실측: 'VMI Inventory'·'Char. Available'·
+//   'Form. Progress'·'Cell Inventory(Pack)' — 공백·괄호 포함). 주석 처리된 case(MKT_FCST 등 코드형)는 이식하지 않는다.
 export const MEASURE_NAME_BG: Record<string, string> = {
-  VMI: MEASURE_BG.INVENTORY,
+  'VMI Inventory': MEASURE_BG.INVENTORY,
   Intransit: MEASURE_BG.INVENTORY,
   'Semi Intransit': MEASURE_BG.INVENTORY,
   'Pack Inventory': MEASURE_BG.INVENTORY,
+  'Cell Inventory(Pack)': MEASURE_BG.INVENTORY,
   'Cell Inventory': MEASURE_BG.INVENTORY,
   'AS Inventory': MEASURE_BG.INVENTORY,
-  'Char.Available': MEASURE_BG.INVENTORY,
-  'Form.Progress': MEASURE_BG.INVENTORY,
+  'Char. Available': MEASURE_BG.INVENTORY,
+  'Form. Progress': MEASURE_BG.INVENTORY,
   DIO: MEASURE_BG.DIO,
   STD_DIO: MEASURE_BG.DIO,
   'Total Inv': MEASURE_BG.TOT_INV,
@@ -225,7 +250,19 @@ export const MEASURE_NAME_BG: Record<string, string> = {
   'Production(PKG)': MEASURE_BG.ORANGE,
 };
 
-// 팝업 대상 텍스트 필드 (design 02 §4.6). btnItemId -> ItemByDivisionModal, btnProject -> ProjectByDivisionModal.
+// WEEKLY 과거재고 은색 대상 measure — SetBackColor WEEKLY 분기(.cs:1055-1061) case 7종. 배경색 INVENTORY 그룹과
+//   다르다('Cell Inventory(Pack)'·'AS Inventory' 는 제외 — .cs:1062 주석 "PACK_CELL_EOH 와 CELL_EOH 는 동일한 명칭").
+export const PAST_INVENTORY_MEASURES: ReadonlySet<string> = new Set([
+  'VMI Inventory',
+  'Intransit',
+  'Pack Inventory',
+  'Cell Inventory',
+  'Semi Intransit',
+  'Char. Available',
+  'Form. Progress',
+]);
+
+// 팝업 대상 텍스트 필드 (design 02 §4.6). btnItemId -> MaterialByDivisionModal(Model/Nickname, 카탈로그 메1), btnProject -> ProjectByDivisionModal.
 //   division 파라미터 cascade(현재 선택 division 으로 후보 필터, preSearchParams).
 export const POPUP_TARGET = {
   ITEM: 'itemId',

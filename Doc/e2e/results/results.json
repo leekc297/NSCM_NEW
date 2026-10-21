@@ -11,7 +11,7 @@
     "grepInvert": null,
     "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 2
+      "actualWorkers": 1
     },
     "preserveOutput": "always",
     "reporter": [
@@ -62,390 +62,6 @@
   },
   "suites": [
     {
-      "title": "SCP0100.auth.spec.ts",
-      "file": "SCP0100.auth.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "SCP0100 권한 @auth [jaeuk.shin ADMIN/DM ADMIN/FP Planner/FP Viewer/GUEST/JV Planner/SCM PI Admin/SCM Viewer/SCP Planner/SCP Tester/SSP Planner/SSP Viewer]",
-          "file": "SCP0100.auth.spec.ts",
-          "line": 12,
-          "column": 8,
-          "specs": [
-            {
-              "title": "메뉴 접근 · 버튼 노출 · Division 데이터 범위",
-              "ok": false,
-              "tags": [
-                "auth"
-              ],
-              "tests": [
-                {
-                  "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "access",
-                      "description": "authorized=true notFound=false menuAccess=Y tobeGroups=ADMIN|DM ADMIN|FP Planner|FP Viewer|GUEST|JV Planner|SCM PI Admin|SCM Viewer|SCP Planner|SCP Tester|SSP Planner|SSP Viewer roster=SCP ADMIN (users.json)"
-                    },
-                    {
-                      "type": "buttons",
-                      "description": "KOR | Home | Global PSI New | Close others | Close All | Search(F5) | Sort(F3) | Filter(F4) | Condition(F6) | Reset Condition(F10)"
-                    },
-                    {
-                      "type": "division",
-                      "description": "40 set=false rows=1656 alert="
-                    }
-                  ],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "status": "failed",
-                      "duration": 154047,
-                      "error": {
-                        "message": "Error: [jaeuk.shin ADMIN/DM ADMIN/FP Planner/FP Viewer/GUEST/JV Planner/SCM PI Admin/SCM Viewer/SCP Planner/SCP Tester/SSP Planner/SSP Viewer] btn_auth EXCEL=Y → 버튼 노출\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: [jaeuk.shin ADMIN/DM ADMIN/FP Planner/FP Viewer/GUEST/JV Planner/SCM PI Admin/SCM Viewer/SCP Planner/SCP Tester/SSP Planner/SSP Viewer] btn_auth EXCEL=Y → 버튼 노출\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.auth.spec.ts:26:273",
-                        "matcherResult": {
-                          "actual": false,
-                          "expected": true,
-                          "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
-                          "name": "toBe",
-                          "pass": false
-                        },
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.auth.spec.ts",
-                          "column": 273,
-                          "line": 26
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 24 |\u001b[39m       \u001b[90m// To-Be 메타 기대(계정 그룹 합집합 × btn_auth) 와 대사 — 버튼 코드만, 양방향(있어야 할 버튼 노출 · 없어야 할 버튼 비노출)\u001b[39m\n \u001b[90m 25 |\u001b[39m       \u001b[36mconst\u001b[39m expBtns\u001b[33m:\u001b[39m string[] \u001b[33m|\u001b[39m \u001b[36mnull\u001b[39m \u001b[33m=\u001b[39m acc\u001b[33m.\u001b[39mexpectedBtns \u001b[33m||\u001b[39m \u001b[36mnull\u001b[39m\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m codes\u001b[33m:\u001b[39m string[] \u001b[33m=\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mmenuBtnCodes \u001b[33m||\u001b[39m []\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m       \u001b[36mif\u001b[39m (expBtns) \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m code \u001b[36mof\u001b[39m codes) { \u001b[36mconst\u001b[39m re \u001b[33m=\u001b[39m \u001b[33mBUTTON_CODES\u001b[39m[code]\u001b[33m;\u001b[39m \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mre) \u001b[36mcontinue\u001b[39m\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m expBtns\u001b[33m.\u001b[39mincludes(code)\u001b[33m;\u001b[39m expect\u001b[33m.\u001b[39msoft(buttons\u001b[33m.\u001b[39msome(x \u001b[33m=>\u001b[39m re\u001b[33m.\u001b[39mtest(x))\u001b[33m,\u001b[39m \u001b[32m`[${acc.id} ${G.join('/')}] btn_auth ${code}=${want ? 'Y' : 'N'} → 버튼 ${want ? '노출' : '비노출'}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(want)\u001b[33m;\u001b[39m }\n \u001b[90m    |\u001b[39m                                                                                                                                                                                                                                                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 27 |\u001b[39m       \u001b[36melse\u001b[39m test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'note'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m'btn_auth 에 이 계정 그룹의 행이 없어 버튼 실측만 기록'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m       \u001b[90m// Viewer/Planner 가 아닌데 Save 가 보이면 의심(soft)\u001b[39m\n \u001b[90m 29 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39macc\u001b[33m.\u001b[39madmin \u001b[33m&&\u001b[39m acc\u001b[33m.\u001b[39mgroups\u001b[33m.\u001b[39mevery((g\u001b[33m:\u001b[39m string) \u001b[33m=>\u001b[39m \u001b[35m/viewer/i\u001b[39m\u001b[33m.\u001b[39mtest(g))) expect\u001b[33m.\u001b[39msoft(buttons\u001b[33m.\u001b[39msome(b \u001b[33m=>\u001b[39m \u001b[35m/^Save/i\u001b[39m\u001b[33m.\u001b[39mtest(b))\u001b[33m,\u001b[39m \u001b[32m'Viewer 그룹은 Save 비노출'\u001b[39m)\u001b[33m.\u001b[39mtoBeFalsy()\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.auth.spec.ts",
-                            "column": 273,
-                            "line": 26
-                          },
-                          "message": "Error: [jaeuk.shin ADMIN/DM ADMIN/FP Planner/FP Viewer/GUEST/JV Planner/SCM PI Admin/SCM Viewer/SCP Planner/SCP Tester/SSP Planner/SSP Viewer] btn_auth EXCEL=Y → 버튼 노출\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 24 |\u001b[39m       \u001b[90m// To-Be 메타 기대(계정 그룹 합집합 × btn_auth) 와 대사 — 버튼 코드만, 양방향(있어야 할 버튼 노출 · 없어야 할 버튼 비노출)\u001b[39m\n \u001b[90m 25 |\u001b[39m       \u001b[36mconst\u001b[39m expBtns\u001b[33m:\u001b[39m string[] \u001b[33m|\u001b[39m \u001b[36mnull\u001b[39m \u001b[33m=\u001b[39m acc\u001b[33m.\u001b[39mexpectedBtns \u001b[33m||\u001b[39m \u001b[36mnull\u001b[39m\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m codes\u001b[33m:\u001b[39m string[] \u001b[33m=\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mmenuBtnCodes \u001b[33m||\u001b[39m []\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m       \u001b[36mif\u001b[39m (expBtns) \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m code \u001b[36mof\u001b[39m codes) { \u001b[36mconst\u001b[39m re \u001b[33m=\u001b[39m \u001b[33mBUTTON_CODES\u001b[39m[code]\u001b[33m;\u001b[39m \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mre) \u001b[36mcontinue\u001b[39m\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m expBtns\u001b[33m.\u001b[39mincludes(code)\u001b[33m;\u001b[39m expect\u001b[33m.\u001b[39msoft(buttons\u001b[33m.\u001b[39msome(x \u001b[33m=>\u001b[39m re\u001b[33m.\u001b[39mtest(x))\u001b[33m,\u001b[39m \u001b[32m`[${acc.id} ${G.join('/')}] btn_auth ${code}=${want ? 'Y' : 'N'} → 버튼 ${want ? '노출' : '비노출'}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(want)\u001b[33m;\u001b[39m }\n \u001b[90m    |\u001b[39m                                                                                                                                                                                                                                                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 27 |\u001b[39m       \u001b[36melse\u001b[39m test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'note'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m'btn_auth 에 이 계정 그룹의 행이 없어 버튼 실측만 기록'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m       \u001b[90m// Viewer/Planner 가 아닌데 Save 가 보이면 의심(soft)\u001b[39m\n \u001b[90m 29 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39macc\u001b[33m.\u001b[39madmin \u001b[33m&&\u001b[39m acc\u001b[33m.\u001b[39mgroups\u001b[33m.\u001b[39mevery((g\u001b[33m:\u001b[39m string) \u001b[33m=>\u001b[39m \u001b[35m/viewer/i\u001b[39m\u001b[33m.\u001b[39mtest(g))) expect\u001b[33m.\u001b[39msoft(buttons\u001b[33m.\u001b[39msome(b \u001b[33m=>\u001b[39m \u001b[35m/^Save/i\u001b[39m\u001b[33m.\u001b[39mtest(b))\u001b[33m,\u001b[39m \u001b[32m'Viewer 그룹은 Save 비노출'\u001b[39m)\u001b[33m.\u001b[39mtoBeFalsy()\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.auth.spec.ts:26:273"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-10-20T16:34:00.128Z",
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\artifacts\\SCP0100.auth-SCP0100-권한-au-0c58e-근-·-버튼-노출-·-Division-데이터-범위-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\artifacts\\SCP0100.auth-SCP0100-권한-au-0c58e-근-·-버튼-노출-·-Division-데이터-범위-chromium\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.auth.spec.ts",
-                        "column": 273,
-                        "line": 26
-                      }
-                    },
-                    {
-                      "workerIndex": 2,
-                      "status": "failed",
-                      "duration": 33341,
-                      "error": {
-                        "message": "Error: [jaeuk.shin ADMIN/DM ADMIN/FP Planner/FP Viewer/GUEST/JV Planner/SCM PI Admin/SCM Viewer/SCP Planner/SCP Tester/SSP Planner/SSP Viewer] btn_auth EXCEL=Y → 버튼 노출\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: [jaeuk.shin ADMIN/DM ADMIN/FP Planner/FP Viewer/GUEST/JV Planner/SCM PI Admin/SCM Viewer/SCP Planner/SCP Tester/SSP Planner/SSP Viewer] btn_auth EXCEL=Y → 버튼 노출\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.auth.spec.ts:26:273",
-                        "matcherResult": {
-                          "actual": false,
-                          "expected": true,
-                          "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
-                          "name": "toBe",
-                          "pass": false
-                        },
-                        "location": {
-                          "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.auth.spec.ts",
-                          "column": 273,
-                          "line": 26
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 24 |\u001b[39m       \u001b[90m// To-Be 메타 기대(계정 그룹 합집합 × btn_auth) 와 대사 — 버튼 코드만, 양방향(있어야 할 버튼 노출 · 없어야 할 버튼 비노출)\u001b[39m\n \u001b[90m 25 |\u001b[39m       \u001b[36mconst\u001b[39m expBtns\u001b[33m:\u001b[39m string[] \u001b[33m|\u001b[39m \u001b[36mnull\u001b[39m \u001b[33m=\u001b[39m acc\u001b[33m.\u001b[39mexpectedBtns \u001b[33m||\u001b[39m \u001b[36mnull\u001b[39m\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m codes\u001b[33m:\u001b[39m string[] \u001b[33m=\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mmenuBtnCodes \u001b[33m||\u001b[39m []\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m       \u001b[36mif\u001b[39m (expBtns) \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m code \u001b[36mof\u001b[39m codes) { \u001b[36mconst\u001b[39m re \u001b[33m=\u001b[39m \u001b[33mBUTTON_CODES\u001b[39m[code]\u001b[33m;\u001b[39m \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mre) \u001b[36mcontinue\u001b[39m\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m expBtns\u001b[33m.\u001b[39mincludes(code)\u001b[33m;\u001b[39m expect\u001b[33m.\u001b[39msoft(buttons\u001b[33m.\u001b[39msome(x \u001b[33m=>\u001b[39m re\u001b[33m.\u001b[39mtest(x))\u001b[33m,\u001b[39m \u001b[32m`[${acc.id} ${G.join('/')}] btn_auth ${code}=${want ? 'Y' : 'N'} → 버튼 ${want ? '노출' : '비노출'}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(want)\u001b[33m;\u001b[39m }\n \u001b[90m    |\u001b[39m                                                                                                                                                                                                                                                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 27 |\u001b[39m       \u001b[36melse\u001b[39m test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'note'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m'btn_auth 에 이 계정 그룹의 행이 없어 버튼 실측만 기록'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m       \u001b[90m// Viewer/Planner 가 아닌데 Save 가 보이면 의심(soft)\u001b[39m\n \u001b[90m 29 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39macc\u001b[33m.\u001b[39madmin \u001b[33m&&\u001b[39m acc\u001b[33m.\u001b[39mgroups\u001b[33m.\u001b[39mevery((g\u001b[33m:\u001b[39m string) \u001b[33m=>\u001b[39m \u001b[35m/viewer/i\u001b[39m\u001b[33m.\u001b[39mtest(g))) expect\u001b[33m.\u001b[39msoft(buttons\u001b[33m.\u001b[39msome(b \u001b[33m=>\u001b[39m \u001b[35m/^Save/i\u001b[39m\u001b[33m.\u001b[39mtest(b))\u001b[33m,\u001b[39m \u001b[32m'Viewer 그룹은 Save 비노출'\u001b[39m)\u001b[33m.\u001b[39mtoBeFalsy()\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.auth.spec.ts",
-                            "column": 273,
-                            "line": 26
-                          },
-                          "message": "Error: [jaeuk.shin ADMIN/DM ADMIN/FP Planner/FP Viewer/GUEST/JV Planner/SCM PI Admin/SCM Viewer/SCP Planner/SCP Tester/SSP Planner/SSP Viewer] btn_auth EXCEL=Y → 버튼 노출\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 24 |\u001b[39m       \u001b[90m// To-Be 메타 기대(계정 그룹 합집합 × btn_auth) 와 대사 — 버튼 코드만, 양방향(있어야 할 버튼 노출 · 없어야 할 버튼 비노출)\u001b[39m\n \u001b[90m 25 |\u001b[39m       \u001b[36mconst\u001b[39m expBtns\u001b[33m:\u001b[39m string[] \u001b[33m|\u001b[39m \u001b[36mnull\u001b[39m \u001b[33m=\u001b[39m acc\u001b[33m.\u001b[39mexpectedBtns \u001b[33m||\u001b[39m \u001b[36mnull\u001b[39m\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m codes\u001b[33m:\u001b[39m string[] \u001b[33m=\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mmenuBtnCodes \u001b[33m||\u001b[39m []\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m       \u001b[36mif\u001b[39m (expBtns) \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m code \u001b[36mof\u001b[39m codes) { \u001b[36mconst\u001b[39m re \u001b[33m=\u001b[39m \u001b[33mBUTTON_CODES\u001b[39m[code]\u001b[33m;\u001b[39m \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mre) \u001b[36mcontinue\u001b[39m\u001b[33m;\u001b[39m \u001b[36mconst\u001b[39m want \u001b[33m=\u001b[39m expBtns\u001b[33m.\u001b[39mincludes(code)\u001b[33m;\u001b[39m expect\u001b[33m.\u001b[39msoft(buttons\u001b[33m.\u001b[39msome(x \u001b[33m=>\u001b[39m re\u001b[33m.\u001b[39mtest(x))\u001b[33m,\u001b[39m \u001b[32m`[${acc.id} ${G.join('/')}] btn_auth ${code}=${want ? 'Y' : 'N'} → 버튼 ${want ? '노출' : '비노출'}`\u001b[39m)\u001b[33m.\u001b[39mtoBe(want)\u001b[33m;\u001b[39m }\n \u001b[90m    |\u001b[39m                                                                                                                                                                                                                                                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 27 |\u001b[39m       \u001b[36melse\u001b[39m test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'note'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m'btn_auth 에 이 계정 그룹의 행이 없어 버튼 실측만 기록'\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 28 |\u001b[39m       \u001b[90m// Viewer/Planner 가 아닌데 Save 가 보이면 의심(soft)\u001b[39m\n \u001b[90m 29 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39macc\u001b[33m.\u001b[39madmin \u001b[33m&&\u001b[39m acc\u001b[33m.\u001b[39mgroups\u001b[33m.\u001b[39mevery((g\u001b[33m:\u001b[39m string) \u001b[33m=>\u001b[39m \u001b[35m/viewer/i\u001b[39m\u001b[33m.\u001b[39mtest(g))) expect\u001b[33m.\u001b[39msoft(buttons\u001b[33m.\u001b[39msome(b \u001b[33m=>\u001b[39m \u001b[35m/^Save/i\u001b[39m\u001b[33m.\u001b[39mtest(b))\u001b[33m,\u001b[39m \u001b[32m'Viewer 그룹은 Save 비노출'\u001b[39m)\u001b[33m.\u001b[39mtoBeFalsy()\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.auth.spec.ts:26:273"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 1,
-                      "startTime": "2026-10-20T16:37:17.763Z",
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\artifacts\\SCP0100.auth-SCP0100-권한-au-0c58e-근-·-버튼-노출-·-Division-데이터-범위-chromium-retry1\\test-failed-1.png"
-                        },
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "C:\\Projects\\NSCM\\Doc\\e2e\\results\\artifacts\\SCP0100.auth-SCP0100-권한-au-0c58e-근-·-버튼-노출-·-Division-데이터-범위-chromium-retry1\\trace.zip"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.auth.spec.ts",
-                        "column": 273,
-                        "line": 26
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "9944933425390348afef-cb4a40df7969aaa58511",
-              "file": "SCP0100.auth.spec.ts",
-              "line": 14,
-              "column": 9
-            }
-          ]
-        },
-        {
-          "title": "SCP0100 권한 @auth [hongjae.kim DM ADMIN/DM Planner/GUEST]",
-          "file": "SCP0100.auth.spec.ts",
-          "line": 12,
-          "column": 8,
-          "specs": [
-            {
-              "title": "메뉴 접근 · 버튼 노출 · Division 데이터 범위",
-              "ok": true,
-              "tags": [
-                "auth"
-              ],
-              "tests": [
-                {
-                  "timeout": 240000,
-                  "annotations": [
-                    {
-                      "type": "access",
-                      "description": "authorized=true notFound=false menuAccess=N tobeGroups=DM ADMIN|DM Planner|GUEST roster=40:DM Admin (users.json)"
-                    },
-                    {
-                      "type": "gap",
-                      "description": "메뉴 권한(user_group_menu) 없는 계정이 /view/SCP0100 직접 접근으로 열림 — To-Be FE 는 라우트 가드 없음(메뉴 트리에서만 숨김)"
-                    },
-                    {
-                      "type": "buttons",
-                      "description": "KOR | Home | Close others | Close All | Logout"
-                    },
-                    {
-                      "type": "division",
-                      "description": "40 set=false rows=0 alert="
-                    }
-                  ],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "status": "passed",
-                      "duration": 160505,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-10-20T16:38:02.494Z",
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "9944933425390348afef-35a2a8444f63417ecc13",
-              "file": "SCP0100.auth.spec.ts",
-              "line": 14,
-              "column": 9
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "SCP0100.authcrud.spec.ts",
-      "file": "SCP0100.authcrud.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "SCP0100 권한별 CRUD @authcrud [jaeuk.shin ADMIN/DM ADMIN/FP Planner/FP Viewer/GUEST/JV Planner/SCM PI Admin/SCM Viewer/SCP Planner/SCP Tester/SSP Planner/SSP Viewer]",
-          "file": "SCP0100.authcrud.spec.ts",
-          "line": 13,
-          "column": 8,
-          "specs": [
-            {
-              "title": "메뉴 접근 → 기대 버튼(SAVE/INSERT/DELETE/EDIT) ↔ 실제 노출·편집 → 허용이면 마커 행 CRUD · 비허용이면 편집 불가",
-              "ok": true,
-              "tags": [
-                "authcrud"
-              ],
-              "tests": [
-                {
-                  "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "authcrud",
-                      "description": "tobeGroups=ADMIN|DM ADMIN|FP Planner|FP Viewer|GUEST|JV Planner|SCM PI Admin|SCM Viewer|SCP Planner|SCP Tester|SSP Planner|SSP Viewer menuAccess=Y expected=SEARCH|COLUMN_SETUP|MEASURE_SELECT|EXCEL dataset=SCP ADMIN|SYSTEM ADMIN matrix=-"
-                    },
-                    {
-                      "type": "crud",
-                      "description": "mode=no-save save=N insert=N delete=N editable=N inserted=N saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · Save 비노출 · 편집기 안 열림"
-                    }
-                  ],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "status": "passed",
-                      "duration": 165556,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-10-20T16:34:00.275Z",
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "4708bca8f406ebeace76-6a2cb31af416977cd0bf",
-              "file": "SCP0100.authcrud.spec.ts",
-              "line": 16,
-              "column": 9
-            }
-          ]
-        },
-        {
-          "title": "SCP0100 권한별 CRUD @authcrud [hongjae.kim DM ADMIN/DM Planner/GUEST]",
-          "file": "SCP0100.authcrud.spec.ts",
-          "line": 13,
-          "column": 8,
-          "specs": [
-            {
-              "title": "메뉴 접근 → 기대 버튼(SAVE/INSERT/DELETE/EDIT) ↔ 실제 노출·편집 → 허용이면 마커 행 CRUD · 비허용이면 편집 불가",
-              "ok": true,
-              "tags": [
-                "authcrud"
-              ],
-              "tests": [
-                {
-                  "timeout": 420000,
-                  "annotations": [
-                    {
-                      "type": "authcrud",
-                      "description": "tobeGroups=DM ADMIN|DM Planner|GUEST menuAccess=N expected= dataset=DM Admin matrix=-"
-                    },
-                    {
-                      "type": "gap",
-                      "description": "메뉴 권한(user_group_menu) 없는 계정이 /view/SCP0100 직접 접근으로 열림"
-                    },
-                    {
-                      "type": "crud",
-                      "description": "mode=no-save save=N insert=N delete=N editable=- inserted=N saved=N found=N updated=N cleaned=Y restored=Y saveCalls=0 · Save 비노출 · 편집기 판정불가"
-                    }
-                  ],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "status": "passed",
-                      "duration": 97869,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-10-20T16:36:48.025Z",
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "4708bca8f406ebeace76-d930892ea74bca0d6ee7",
-              "file": "SCP0100.authcrud.spec.ts",
-              "line": 16,
-              "column": 9
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "title": "SCP0100.crud.spec.ts",
-      "file": "SCP0100.crud.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "SCP0100 Global_PSI_Report CRUD @crud",
-          "file": "SCP0100.crud.spec.ts",
-          "line": 8,
-          "column": 6,
-          "specs": [
-            {
-              "title": "조회 전용 화면 — 저장 버튼이 없어야 한다",
-              "ok": true,
-              "tags": [
-                "crud"
-              ],
-              "tests": [
-                {
-                  "timeout": 180000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "status": "passed",
-                      "duration": 31396,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-10-20T16:38:25.931Z",
-                      "attachments": []
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "d143542588ac974db2dc-1dd989ff487889f11d4d",
-              "file": "SCP0100.crud.spec.ts",
-              "line": 9,
-              "column": 7
-            }
-          ]
-        }
-      ]
-    },
-    {
       "title": "SCP0100.smoke.spec.ts",
       "file": "SCP0100.smoke.spec.ts",
       "column": 0,
@@ -469,16 +85,20 @@
                   "timeout": 180000,
                   "annotations": [
                     {
+                      "type": "labels",
+                      "description": "펼침=true 일치 13 / 누락 3: Display, Project, Unit (Qty) / 제외 1: Graph(cboGraphType: D00-1-007 §1 cboGraphType / UsrCombo)"
+                    },
+                    {
                       "type": "columns",
-                      "description": "헤더 14 / 기대 14 / 누락 6: From Site, To Site, INCOTERMS, Model, Trans Mode or Line or Project, Cell Qty"
+                      "description": "시트 SEARCH_LEVEL(searchLevel) 헤더 17 / 기대 8 / 누락 3: Product Level1, Product Level2, Product Level3"
                     },
                     {
                       "type": "dynamic",
-                      "description": "As-is SCP0100_GET_SHEET_CALENDAR_3SPAN · DB루프 InitSpreadDateColumn:755,InitSpreadDateColumn:760 · 컬럼정의 21 / 정적밖 13 (M_202609,M_202610,M_202611,M_202612,M_202701) · 타이틀 시트 calendar 호출 1"
+                      "description": "As-is SCP0100_GET_SHEET_CALENDAR_3SPAN · DB루프 InitSpreadDateColumn:755,InitSpreadDateColumn:760 · 컬럼정의 18 / 정적밖 13 (M_202609,M_202610,M_202611,M_202612,M_202701) · 타이틀 시트 calendar 호출 1"
                     },
                     {
                       "type": "calls",
-                      "description": "[[\"searchLevel\",\"SEARCH\",200,1657,1192]]"
+                      "description": "[[\"searchLevel\",\"SEARCH\",200,1897,1747]]"
                     }
                   ],
                   "expectedStatus": "passed",
@@ -486,141 +106,61 @@
                   "projectName": "chromium",
                   "results": [
                     {
-                      "workerIndex": 1,
+                      "workerIndex": 0,
                       "status": "failed",
-                      "duration": 98324,
+                      "duration": 95743,
                       "error": {
-                        "message": "Error: 조회조건 'Search Level' (RadioGroup)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: 조회조건 'Search Level' (RadioGroup)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117",
+                        "message": "Error: 조회조건 'Display' (CustomDropdown) — 후보 [Display]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: 조회조건 'Display' (CustomDropdown) — 후보 [Display]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110",
                         "matcherResult": {
                           "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
                           "pass": false
                         },
                         "location": {
                           "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                          "column": 117,
-                          "line": 15
+                          "column": 110,
+                          "line": 22
                         },
-                        "snippet": "\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
+                            "column": 110,
+                            "line": 22
                           },
-                          "message": "Error: 조회조건 'Search Level' (RadioGroup)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
+                          "message": "Error: 조회조건 'Display' (CustomDropdown) — 후보 [Display]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110"
                         },
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
+                            "column": 110,
+                            "line": 22
                           },
-                          "message": "Error: 조회조건 'Cell Qty' (Checkbox)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
+                          "message": "Error: 조회조건 'Project' (ProjectField) — 후보 [Project]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110"
                         },
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
+                            "column": 110,
+                            "line": 22
                           },
-                          "message": "Error: 조회조건 'Plan date*' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Period*' (PeriodField)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Graph' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Model / Nick Name' (ItemField)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Display' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Project' (ProjectField)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Plan-type' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Search Level' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'A/S' (Checkbox)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Unit (Qty)' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Div*' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
+                          "message": "Error: 조회조건 'Unit (Qty)' (CustomDropdown) — 후보 [Unit (Qty)]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110"
                         },
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
                             "column": 87,
-                            "line": 33
+                            "line": 47
                           },
-                          "message": "Error: 그리드 컬럼 누락 (메타 기준)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m3\u001b[39m\nReceived:    \u001b[31m6\u001b[39m\n\n\u001b[0m \u001b[90m 31 |\u001b[39m     \u001b[36mconst\u001b[39m missing \u001b[33m=\u001b[39m expectCols\u001b[33m.\u001b[39mfilter((c\u001b[33m:\u001b[39m string) \u001b[33m=>\u001b[39m c \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39mheaders\u001b[33m.\u001b[39msome(h \u001b[33m=>\u001b[39m norm(h) \u001b[33m===\u001b[39m norm(c) \u001b[33m||\u001b[39m norm(h)\u001b[33m.\u001b[39mincludes(norm(c))))\u001b[33m;\u001b[39m\n \u001b[90m 32 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'columns'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`헤더 ${headers.length} / 기대 ${expectCols.length} / 누락 ${missing.length}: ${missing.slice(0, 10).join(', ')}`\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 33 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(missing\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`그리드 컬럼 누락 (${PLAN.hasMeta ? '메타' : 'As-is 라벨'} 기준)`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mceil(expectCols\u001b[33m.\u001b[39mlength \u001b[33m*\u001b[39m \u001b[35m0.2\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 34 |\u001b[39m     \u001b[90m// 동적 헤더(기간 컬럼) — As-is 타이틀 SP/DB루프가 있으면 정적 메타 밖 컬럼 ≥1 + 사내 배선 타이틀 시트 조회(2026-10-20 SCP0096)\u001b[39m\n \u001b[90m 35 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mdynamicHeader) {\n \u001b[90m 36 |\u001b[39m       \u001b[36mconst\u001b[39m \u001b[33mDH\u001b[39m \u001b[33m=\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mdynamicHeader\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:33:87"
+                          "message": "Error: 그리드 컬럼 누락 (메타 기준)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m2\u001b[39m\nReceived:    \u001b[31m3\u001b[39m\n\n\u001b[0m \u001b[90m 45 |\u001b[39m     \u001b[36mconst\u001b[39m missing \u001b[33m=\u001b[39m expectCols\u001b[33m.\u001b[39mfilter((c\u001b[33m:\u001b[39m string) \u001b[33m=>\u001b[39m c \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39mheaders\u001b[33m.\u001b[39msome(h \u001b[33m=>\u001b[39m norm(h) \u001b[33m===\u001b[39m norm(c) \u001b[33m||\u001b[39m norm(h)\u001b[33m.\u001b[39mincludes(norm(c))))\u001b[33m;\u001b[39m\n \u001b[90m 46 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'columns'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`시트 ${sheetName}(${firstSearch ? firstSearch.sheet : '-'}) 헤더 ${headers.length} / 기대 ${expectCols.length} / 누락 ${missing.length}: ${missing.slice(0, 10).join(', ')}`\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 47 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(missing\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`그리드 컬럼 누락 (${PLAN.hasMeta ? '메타' : 'As-is 라벨'} 기준)`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mceil(expectCols\u001b[33m.\u001b[39mlength \u001b[33m*\u001b[39m \u001b[35m0.2\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 48 |\u001b[39m     \u001b[90m// 동적 헤더(기간 컬럼) — As-is 타이틀 SP/DB루프가 있으면 정적 메타 밖 컬럼 ≥1 + 사내 배선 타이틀 시트 조회(2026-10-20 SCP0096)\u001b[39m\n \u001b[90m 49 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mdynamicHeader) {\n \u001b[90m 50 |\u001b[39m       \u001b[36mconst\u001b[39m \u001b[33mDH\u001b[39m \u001b[33m=\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mdynamicHeader\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:47:87"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-20T16:38:57.367Z",
+                      "startTime": "2026-10-21T00:26:35.483Z",
                       "attachments": [
                         {
                           "name": "screenshot",
@@ -635,146 +175,66 @@
                       ],
                       "errorLocation": {
                         "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                        "column": 117,
-                        "line": 15
+                        "column": 110,
+                        "line": 22
                       }
                     },
                     {
-                      "workerIndex": 4,
+                      "workerIndex": 1,
                       "status": "failed",
-                      "duration": 97444,
+                      "duration": 53061,
                       "error": {
-                        "message": "Error: 조회조건 'Search Level' (RadioGroup)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
-                        "stack": "Error: 조회조건 'Search Level' (RadioGroup)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117",
+                        "message": "Error: 조회조건 'Display' (CustomDropdown) — 후보 [Display]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
+                        "stack": "Error: 조회조건 'Display' (CustomDropdown) — 후보 [Display]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110",
                         "matcherResult": {
                           "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m",
                           "pass": false
                         },
                         "location": {
                           "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                          "column": 117,
-                          "line": 15
+                          "column": 110,
+                          "line": 22
                         },
-                        "snippet": "\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
+                            "column": 110,
+                            "line": 22
                           },
-                          "message": "Error: 조회조건 'Search Level' (RadioGroup)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
+                          "message": "Error: 조회조건 'Display' (CustomDropdown) — 후보 [Display]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110"
                         },
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
+                            "column": 110,
+                            "line": 22
                           },
-                          "message": "Error: 조회조건 'Cell Qty' (Checkbox)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
+                          "message": "Error: 조회조건 'Project' (ProjectField) — 후보 [Project]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110"
                         },
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
+                            "column": 110,
+                            "line": 22
                           },
-                          "message": "Error: 조회조건 'Plan date*' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Period*' (PeriodField)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Graph' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Model / Nick Name' (ItemField)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Display' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Project' (ProjectField)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Plan-type' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Search Level' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'A/S' (Checkbox)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Unit (Qty)' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
-                        },
-                        {
-                          "location": {
-                            "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                            "column": 117,
-                            "line": 15
-                          },
-                          "message": "Error: 조회조건 'Div*' (CustomDropdown)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 13 |\u001b[39m     \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39msnapshot(\u001b[32m`${MENU}_open`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m     \u001b[90m// 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 15 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m f \u001b[36mof\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mfields) expect\u001b[33m.\u001b[39msoft(\u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExists(f\u001b[33m.\u001b[39mlabel)\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component})`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 16 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\n \u001b[90m 17 |\u001b[39m     \u001b[36mconst\u001b[39m gridCount \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mgrids()\u001b[33m.\u001b[39mcount()\u001b[33m;\u001b[39m\n \u001b[90m 18 |\u001b[39m     expect(gridCount\u001b[33m,\u001b[39m \u001b[32m`그리드 ≥1 (메인시트 ${PLAN.mainSheets.length})`\u001b[39m)\u001b[33m.\u001b[39mtoBeGreaterThanOrEqual(\u001b[35m1\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:15:117"
+                          "message": "Error: 조회조건 'Unit (Qty)' (CustomDropdown) — 후보 [Unit (Qty)]\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31mfalse\u001b[39m\n\n\u001b[0m \u001b[90m 20 |\u001b[39m       \u001b[36mconst\u001b[39m hit \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m nscm\u001b[33m.\u001b[39mfieldExistsAny(f\u001b[33m.\u001b[39mlabels \u001b[33m&&\u001b[39m f\u001b[33m.\u001b[39mlabels\u001b[33m.\u001b[39mlength \u001b[33m?\u001b[39m f\u001b[33m.\u001b[39mlabels \u001b[33m:\u001b[39m [f\u001b[33m.\u001b[39mlabel])\u001b[33m;\u001b[39m\n \u001b[90m 21 |\u001b[39m       \u001b[36mif\u001b[39m (hit) labelHits\u001b[33m.\u001b[39mpush(\u001b[32m`${f.label}→${hit}`\u001b[39m)\u001b[33m;\u001b[39m \u001b[36melse\u001b[39m labelMiss\u001b[33m.\u001b[39mpush(f\u001b[33m.\u001b[39mlabel)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 22 |\u001b[39m       expect\u001b[33m.\u001b[39msoft(\u001b[33m!\u001b[39m\u001b[33m!\u001b[39mhit\u001b[33m,\u001b[39m \u001b[32m`조회조건 '${f.label}' (${f.component}) — 후보 [${(f.labels || [f.label]).join(' | ')}]`\u001b[39m)\u001b[33m.\u001b[39mtoBeTruthy()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 23 |\u001b[39m     }\n \u001b[90m 24 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'labels'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`펼침=${expanded} 일치 ${labelHits.length} / 누락 ${labelMiss.length}${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}`\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 25 |\u001b[39m     \u001b[90m// 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:22:110"
                         },
                         {
                           "location": {
                             "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
                             "column": 87,
-                            "line": 33
+                            "line": 47
                           },
-                          "message": "Error: 그리드 컬럼 누락 (메타 기준)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m3\u001b[39m\nReceived:    \u001b[31m6\u001b[39m\n\n\u001b[0m \u001b[90m 31 |\u001b[39m     \u001b[36mconst\u001b[39m missing \u001b[33m=\u001b[39m expectCols\u001b[33m.\u001b[39mfilter((c\u001b[33m:\u001b[39m string) \u001b[33m=>\u001b[39m c \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39mheaders\u001b[33m.\u001b[39msome(h \u001b[33m=>\u001b[39m norm(h) \u001b[33m===\u001b[39m norm(c) \u001b[33m||\u001b[39m norm(h)\u001b[33m.\u001b[39mincludes(norm(c))))\u001b[33m;\u001b[39m\n \u001b[90m 32 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'columns'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`헤더 ${headers.length} / 기대 ${expectCols.length} / 누락 ${missing.length}: ${missing.slice(0, 10).join(', ')}`\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 33 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(missing\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`그리드 컬럼 누락 (${PLAN.hasMeta ? '메타' : 'As-is 라벨'} 기준)`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mceil(expectCols\u001b[33m.\u001b[39mlength \u001b[33m*\u001b[39m \u001b[35m0.2\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 34 |\u001b[39m     \u001b[90m// 동적 헤더(기간 컬럼) — As-is 타이틀 SP/DB루프가 있으면 정적 메타 밖 컬럼 ≥1 + 사내 배선 타이틀 시트 조회(2026-10-20 SCP0096)\u001b[39m\n \u001b[90m 35 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mdynamicHeader) {\n \u001b[90m 36 |\u001b[39m       \u001b[36mconst\u001b[39m \u001b[33mDH\u001b[39m \u001b[33m=\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mdynamicHeader\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:33:87"
+                          "message": "Error: 그리드 컬럼 누락 (메타 기준)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m2\u001b[39m\nReceived:    \u001b[31m3\u001b[39m\n\n\u001b[0m \u001b[90m 45 |\u001b[39m     \u001b[36mconst\u001b[39m missing \u001b[33m=\u001b[39m expectCols\u001b[33m.\u001b[39mfilter((c\u001b[33m:\u001b[39m string) \u001b[33m=>\u001b[39m c \u001b[33m&&\u001b[39m \u001b[33m!\u001b[39mheaders\u001b[33m.\u001b[39msome(h \u001b[33m=>\u001b[39m norm(h) \u001b[33m===\u001b[39m norm(c) \u001b[33m||\u001b[39m norm(h)\u001b[33m.\u001b[39mincludes(norm(c))))\u001b[33m;\u001b[39m\n \u001b[90m 46 |\u001b[39m     test\u001b[33m.\u001b[39minfo()\u001b[33m.\u001b[39mannotations\u001b[33m.\u001b[39mpush({ type\u001b[33m:\u001b[39m \u001b[32m'columns'\u001b[39m\u001b[33m,\u001b[39m description\u001b[33m:\u001b[39m \u001b[32m`시트 ${sheetName}(${firstSearch ? firstSearch.sheet : '-'}) 헤더 ${headers.length} / 기대 ${expectCols.length} / 누락 ${missing.length}: ${missing.slice(0, 10).join(', ')}`\u001b[39m })\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 47 |\u001b[39m     expect\u001b[33m.\u001b[39msoft(missing\u001b[33m.\u001b[39mlength\u001b[33m,\u001b[39m \u001b[32m`그리드 컬럼 누락 (${PLAN.hasMeta ? '메타' : 'As-is 라벨'} 기준)`\u001b[39m)\u001b[33m.\u001b[39mtoBeLessThanOrEqual(\u001b[33mMath\u001b[39m\u001b[33m.\u001b[39mceil(expectCols\u001b[33m.\u001b[39mlength \u001b[33m*\u001b[39m \u001b[35m0.2\u001b[39m))\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 48 |\u001b[39m     \u001b[90m// 동적 헤더(기간 컬럼) — As-is 타이틀 SP/DB루프가 있으면 정적 메타 밖 컬럼 ≥1 + 사내 배선 타이틀 시트 조회(2026-10-20 SCP0096)\u001b[39m\n \u001b[90m 49 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mdynamicHeader) {\n \u001b[90m 50 |\u001b[39m       \u001b[36mconst\u001b[39m \u001b[33mDH\u001b[39m \u001b[33m=\u001b[39m \u001b[33mPLAN\u001b[39m\u001b[33m.\u001b[39mdynamicHeader\u001b[33m;\u001b[39m\u001b[0m\n    at C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts:47:87"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 1,
-                      "startTime": "2026-10-20T16:40:44.130Z",
+                      "startTime": "2026-10-21T00:28:19.268Z",
                       "attachments": [
                         {
                           "name": "screenshot",
@@ -789,8 +249,8 @@
                       ],
                       "errorLocation": {
                         "file": "C:\\Projects\\NSCM\\Doc\\e2e\\specs\\SCP0100.smoke.spec.ts",
-                        "column": 117,
-                        "line": 15
+                        "column": 110,
+                        "line": 22
                       }
                     }
                   ],
@@ -809,11 +269,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-20T16:33:55.045Z",
-    "duration": 510302.647,
-    "expected": 4,
+    "startTime": "2026-10-21T00:26:29.689Z",
+    "duration": 165374.362,
+    "expected": 0,
     "skipped": 0,
-    "unexpected": 2,
+    "unexpected": 1,
     "flaky": 0
   }
 }

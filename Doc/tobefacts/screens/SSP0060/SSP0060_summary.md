@@ -1,6 +1,6 @@
 # SSP0060 — To-Be Fact Pack 요약
 
-- page_key: `shipping/shipment-plan` · feature: shipping · As-is Fact Pack 있음
+- page_key: `shipping/shipment-plan` · feature: shipping · As-is Fact Pack 없음(화면ID 미대응)
 - 파일 28 · 엔드포인트 호출 26 (미해결 0, 주석 속 3) · 이벤트 93 · 컴포넌트 사용 108 · 하드코딩 컬럼 38 · 메시지 46
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 38건
 

@@ -17,6 +17,10 @@ const scenarios = readCsv(path.join(__dirname, 'scenarios.csv'));
 const sheetCols = readCsv(path.join(cfg.tobeOutDir, 'db', 'sheet_columns.csv'));
 const btnAuth = readCsv(path.join(cfg.tobeOutDir, 'db', 'btn_auth.csv'));
 const menu = readCsv(path.join(cfg.tobeOutDir, 'db', 'menu.csv'));
+// 2026-10-21(SCP0100 smoke): To-Be 화면은 LBL 코드로 라벨을 그리므로 기대 라벨 = msg_master 의 LBL 문구(EN 우선). As-is 라벨('Plan date*','Plan-type')은 후보로만.
+const msgMaster = readCsv(path.join(cfg.tobeOutDir, 'db', 'msg_master.csv'));
+const lblText = code => { if (!code) return ''; const rows = msgMaster.filter(r => up(r.msg_id) === up(code) && (r.use_yn || 'Y') !== 'N'); const r = rows.find(x => up(x.lang_cd) === 'EN') || rows[0]; return r ? String(r.msg_nm || '').trim() : ''; };
+const feRoot = cfg.feRoot || path.resolve(cfg.genOutDir, '..', '..', 'nscm-fe');
 // 2026-10-20 auth별 CRUD: 계정별 기대 권한의 원천 = To-Be 메타(사용자→그룹 user_group_user · 그룹→메뉴 user_group_menu · 그룹×메뉴×버튼 btn_auth). 데이터셋(accounts.json) 의 그룹은 참고 표기만
 const ugUser = readCsv(path.join(cfg.tobeOutDir, 'db', 'user_group_user.csv'));
 const ugMenu = readCsv(path.join(cfg.tobeOutDir, 'db', 'user_group_menu.csv'));
@@ -48,6 +52,22 @@ for (const id0 of planDirs) {
   if (!fs.existsSync(pf)) { console.error(`  ${id}: e2e_plan.json 없음 (node ../Harness/gen.js ${id} 먼저)`); continue; }
   const P = JSON.parse(fs.readFileSync(pf, 'utf8')); const MENU = tobeIdOf(P.menuId);
   const mainSheets = P.sheets.filter(s => !s.popup && s.name !== 'spreadTitle');
+  // 2026-10-21: FE 시트명(call-proc 경로의 sheet, 예 searchLevel) → admin 시트명(SEARCH_LEVEL). 기대 컬럼은 '실제 조회된 시트' 기준으로 고른다
+  //   (SCP0100: 기본 Search Mode 가 SEARCH_LEVEL 시트인데 mainSheets[0]=REPORT 컬럼을 기대해 '누락 6' 오탐)
+  const regF = path.join(cfg.genOutDir, id, 'register.json'); const REG = fs.existsSync(regF) ? JSON.parse(fs.readFileSync(regF, 'utf8').replace(/^\uFEFF/, '')) : null;
+  const sheetMap = Object.fromEntries(((REG && REG.sheets) || []).filter(x => x.sheetName && x.adminSheetName).map(x => [x.sheetName, x.adminSheetName]));
+  // FE 페이지의 __asis-mapping__.md 에서 '제외' 로 닫힌 As-is 컨트롤(dead control·NO-OP 등) — 그 조회조건은 라벨 검사 대상에서 뺀다(어노테이션만)
+  const mapMd = REG && REG.feature && REG.pageDir ? path.join(feRoot, 'features', REG.feature, 'src', 'pages', REG.pageDir, '__asis-mapping__.md') : '';
+  const excludedRows = mapMd && fs.existsSync(mapMd) ? fs.readFileSync(mapMd, 'utf8').split(/\r?\n/).filter(l => /^\|/.test(l) && /\|\s*제외\s*\|\s*$/.test(l)) : [];
+  //   컨트롤 행(§1 …)만 본다 — §2 이벤트 행의 '제외'(핸들러 본문 공백 등)는 컨트롤 자체는 살아 있으므로 라벨 검사 대상(SCP0100 chkCellQty·cboDisplay 오판 방지)
+  const excludedReason = asis => { if (!asis) return ''; const re = new RegExp(`\\b${asis}\\b`, 'i'); const row = excludedRows.find(l => { const cells = l.split('|').map(x => x.trim()).filter(Boolean); return !!cells[1] && /^§1\b/.test(cells[1]) && re.test(cells[1]); }); if (!row) return ''; const cells = row.split('|').map(x => x.trim()).filter(Boolean); return `${cells[0] || ''} ${cells[1] || ''}`.trim().slice(0, 120); };
+  const fieldsPlan = (P.fields || []).map(f => {
+    const asisLabel = String(f.label || '').replace(/^\s*\*+\s*|\s*\*+\s*$/g, '').trim(); const tobe = lblText(f.lbl);
+    const cands = [tobe, asisLabel, ...asisLabel.split('/').map(x => x.trim()).filter(x => x.length >= 2)];
+    if (f.kind === 'period' || /Period/i.test(f.component || '')) cands.push('From', 'To', 'Period', '기간');
+    const ex = excludedReason(f.asis);
+    return Object.assign({}, f, { tobeLabel: tobe, labels: [...new Set(cands.filter(Boolean))], excluded: ex ? true : false, excludedWhy: ex });
+  });
   // 메타 기대 컬럼(화면×시트×DIV) — 없으면 Fact Pack 라벨
   const metaFor = (sheet, div) => sheetCols.filter(r => up(r.program_id) === MENU && r.sheet_name.toLowerCase() === sheet.toLowerCase() && (r.visible_flag || 'Y') !== 'N' && (r.valid_yn || 'Y') !== 'N' && (!r.division_id || !div || r.division_id === div || r.division_id.split('_')[0] === div)).sort((x, y) => Number(x.sort_order_no) - Number(y.sort_order_no)).map(r => r.column_label_name || r.column_name);
   const divs = (accounts.divisions && accounts.divisions.length ? accounts.divisions : [cfg.defaultDivision]);
@@ -133,7 +153,7 @@ for (const id0 of planDirs) {
     if (!roleAccs.length) console.error(`  ⚠ ${MENU}: 명부(users.json divisions)에 ${area ? area.replace(' ADMIN', '') + ' 계열' : ''} 역할 계정이 없음 — ADMIN/권한없음만 검증`);
   }
   console.log(`  ${id} 테스트 모드 ${mode} (${modeSource}) → 계정 ${accs.length}: ${accs.map(x => x.id).join(', ')}`);
-  const plan = { id, mode, modeSource, menuId: MENU, page: P.page, routePath: P.routePath, asisName: P.asisName, fields: P.fields, buttons: P.buttons, mainSheets: mainSheets.map(s => ({ name: s.name, key: s.key, labels: s.labels.slice(0, 40) })), popupSheets: P.sheets.filter(s => s.popup).map(s => s.name), hasSave: P.hasSave, hasSpreadTitle: P.hasSpreadTitle, procs: P.procs, expectedCols, hasMeta, dynamicHeader, sample: { div: sample['DIV'] || cfg.defaultDivision, item: sample['ITEM_ID'] || '', site: sample['SCM_SITE_ID'] || '', project: sample['PROJECT_CODE'] || '', account: sample.account || sample['테스트계정'] || cfg.defaultAccount }, accounts: accs.map(x => Object.assign({ id: x.id, name: x.name || '', groups: x.groups, divisions: x.divisions, roles: x.roles || {}, roleNote: x.roleNote || '', admin: x.adminAlso, adminOf: x.adminOf || [], screenGroup: (x.screens || {})[MENU] || (x.screens || {})[id] || '', source: x.source || 'accounts.json' }, accountTruth(x))), accountSource: USERS ? 'users.json' : 'accounts.json', expectedBtnsByGroup: Object.fromEntries(Object.entries(expectedBtnsByGroup).map(([k, v]) => [k, [...v]])), menuBtnCodes, menuAuth: menu.length ? 'menu.csv' : '', authSource: { groups: ugUser.length ? 'user_group_user.csv' : '', menus: ugMenu.length ? 'user_group_menu.csv' : '', buttons: authRows.length ? 'btn_auth.csv' : '' } };
+  const plan = { id, mode, modeSource, menuId: MENU, page: P.page, routePath: P.routePath, asisName: P.asisName, fields: fieldsPlan, sheetMap, asisMapping: mapMd && fs.existsSync(mapMd) ? path.relative(feRoot, mapMd) : '', buttons: P.buttons, mainSheets: mainSheets.map(s => ({ name: s.name, key: s.key, labels: s.labels.slice(0, 40) })), popupSheets: P.sheets.filter(s => s.popup).map(s => s.name), hasSave: P.hasSave, hasSpreadTitle: P.hasSpreadTitle, procs: P.procs, expectedCols, hasMeta, dynamicHeader, sample: { div: sample['DIV'] || cfg.defaultDivision, item: sample['ITEM_ID'] || '', site: sample['SCM_SITE_ID'] || '', project: sample['PROJECT_CODE'] || '', account: sample.account || sample['테스트계정'] || cfg.defaultAccount }, accounts: accs.map(x => Object.assign({ id: x.id, name: x.name || '', groups: x.groups, divisions: x.divisions, roles: x.roles || {}, roleNote: x.roleNote || '', admin: x.adminAlso, adminOf: x.adminOf || [], screenGroup: (x.screens || {})[MENU] || (x.screens || {})[id] || '', source: x.source || 'accounts.json' }, accountTruth(x))), accountSource: USERS ? 'users.json' : 'accounts.json', expectedBtnsByGroup: Object.fromEntries(Object.entries(expectedBtnsByGroup).map(([k, v]) => [k, [...v]])), menuBtnCodes, menuAuth: menu.length ? 'menu.csv' : '', authSource: { groups: ugUser.length ? 'user_group_user.csv' : '', menus: ugMenu.length ? 'user_group_menu.csv' : '', buttons: authRows.length ? 'btn_auth.csv' : '' } };
   fs.writeFileSync(path.join(specs, `${id}.plan.json`), JSON.stringify(plan, null, 2), 'utf8');
   const relLib = path.relative(specs, path.join(__dirname, 'lib', 'crud')).replace(/\\/g, '/');
   const head = `// 자동 생성 — tools/E2E/gen-e2e.js (${new Date().toISOString().slice(0, 10)}) · 원천: Doc/gen/${id}/e2e_plan.json · 손으로 고치지 말고 룰/플랜을 고칠 것\nimport { test, expect } from '${path.relative(specs, path.join(__dirname, 'fixtures', 'test')).replace(/\\/g, '/')}';\nimport * as fs from 'node:fs';\nconst PLAN = JSON.parse(fs.readFileSync(__dirname + '/${id}.plan.json', 'utf8'));\nconst MENU = ${J(MENU)};\n`;
@@ -148,8 +168,17 @@ test.describe(\`\${MENU} ${esc(P.asisName)} 스모크 @smoke\`, () => {
     expect(r.notFound, '404 아님').toBeFalsy();
     expect(r.authorized, '권한 안내 없이 열림').toBeTruthy();
     await nscm.snapshot(\`\${MENU}_open\`);
-    // 조회조건 라벨 존재(soft) — 라벨 다국어/코드 미확정이면 WARN 성격
-    for (const f of PLAN.fields) expect.soft(await nscm.fieldExists(f.label), \`조회조건 '\${f.label}' (\${f.component})\`).toBeTruthy();
+    // 조회조건 라벨 존재(soft) — 2026-10-21: 접힌 조건(extraConditions) 펼친 뒤, To-Be LBL 문구 → As-is 라벨('*' 제거) → '/' 분할 후보 순으로 찾는다.
+    //   __asis-mapping__.md 에서 '제외' 로 닫힌 As-is 컨트롤(dead control·NO-OP)은 검사하지 않고 어노테이션만 남긴다.
+    const expanded = await nscm.expandSearchArea();
+    const labelHits: string[] = [], labelMiss: string[] = [], labelSkip: string[] = [];
+    for (const f of PLAN.fields) {
+      if (f.excluded) { labelSkip.push(\`\${f.label}(\${f.asis}: \${f.excludedWhy})\`); continue; }
+      const hit = await nscm.fieldExistsAny(f.labels && f.labels.length ? f.labels : [f.label]);
+      if (hit) labelHits.push(\`\${f.label}→\${hit}\`); else labelMiss.push(f.label);
+      expect.soft(!!hit, \`조회조건 '\${f.label}' (\${f.component}) — 후보 [\${(f.labels || [f.label]).join(' | ')}]\`).toBeTruthy();
+    }
+    test.info().annotations.push({ type: 'labels', description: \`펼침=\${expanded} 일치 \${labelHits.length} / 누락 \${labelMiss.length}\${labelMiss.length ? ': ' + labelMiss.join(', ') : ''}\${labelSkip.length ? ' / 제외 ' + labelSkip.length + ': ' + labelSkip.join('; ') : ''}\` });
     // 그리드 수 ≥ 1 (다그리드는 탭/패널이라 1 이상이면 통과, 메인시트 수와 함께 기록)
     const gridCount = await nscm.grids().count();
     expect(gridCount, \`그리드 ≥1 (메인시트 \${PLAN.mainSheets.length})\`).toBeGreaterThanOrEqual(1);
@@ -163,10 +192,15 @@ test.describe(\`\${MENU} ${esc(P.asisName)} 스모크 @smoke\`, () => {
     expect.soft(alert, '조회 후 오류 알림 없음').not.toMatch(/ORA-|Exception|오류|error/i);
     // 컬럼 대사: 메타(sheet_columns) 있으면 메타, 없으면 As-is 라벨(soft)
     const headers = await nscm.gridHeaders(0);
-    const expectCols = PLAN.hasMeta ? (PLAN.expectedCols[PLAN.mainSheets[0]?.name]?.[PLAN.sample.div] || []) : (PLAN.mainSheets[0]?.labels || []);
+    // 기대 컬럼의 시트 = 실제 조회된 시트(첫 SEARCH call-proc 의 sheet → register.json adminSheetName). 매핑이 없으면 mainSheets[0]
+    const titleSheets: string[] = (PLAN.dynamicHeader && PLAN.dynamicHeader.titleSheets) || [];
+    const firstSearch = calls.find(c => /SEARCH/i.test(c.btn) && !titleSheets.includes(c.sheet)) || calls.find(c => /SEARCH/i.test(c.btn)) || calls[0]; // 타이틀(기간 헤더) 시트 호출은 제외
+    const mappedSheet = firstSearch && PLAN.sheetMap ? PLAN.sheetMap[firstSearch.sheet] : '';
+    const sheetName = mappedSheet && PLAN.mainSheets.some((s: { name: string }) => s.name === mappedSheet) ? mappedSheet : PLAN.mainSheets[0]?.name;
+    const expectCols = PLAN.hasMeta ? (PLAN.expectedCols[sheetName]?.[PLAN.sample.div] || []) : (PLAN.mainSheets.find((s: { name: string }) => s.name === sheetName)?.labels || []);
     const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9가-힣]/g, '');
     const missing = expectCols.filter((c: string) => c && !headers.some(h => norm(h) === norm(c) || norm(h).includes(norm(c))));
-    test.info().annotations.push({ type: 'columns', description: \`헤더 \${headers.length} / 기대 \${expectCols.length} / 누락 \${missing.length}: \${missing.slice(0, 10).join(', ')}\` });
+    test.info().annotations.push({ type: 'columns', description: \`시트 \${sheetName}(\${firstSearch ? firstSearch.sheet : '-'}) 헤더 \${headers.length} / 기대 \${expectCols.length} / 누락 \${missing.length}: \${missing.slice(0, 10).join(', ')}\` });
     expect.soft(missing.length, \`그리드 컬럼 누락 (\${PLAN.hasMeta ? '메타' : 'As-is 라벨'} 기준)\`).toBeLessThanOrEqual(Math.ceil(expectCols.length * 0.2));
     // 동적 헤더(기간 컬럼) — As-is 타이틀 SP/DB루프가 있으면 정적 메타 밖 컬럼 ≥1 + 사내 배선 타이틀 시트 조회(2026-10-20 SCP0096)
     if (PLAN.dynamicHeader) {

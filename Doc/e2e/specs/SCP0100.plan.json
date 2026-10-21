@@ -15,7 +15,13 @@
       "component": "RadioGroup",
       "comboId": "",
       "popup": false,
-      "asis": "rgrpSearchLevel"
+      "asis": "rgrpSearchLevel",
+      "tobeLabel": "Search Level",
+      "labels": [
+        "Search Level"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "cellQty",
@@ -25,7 +31,13 @@
       "component": "Checkbox",
       "comboId": "",
       "popup": false,
-      "asis": "chkCellQty"
+      "asis": "chkCellQty",
+      "tobeLabel": "Cell Qty",
+      "labels": [
+        "Cell Qty"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "planDate",
@@ -35,7 +47,14 @@
       "component": "CustomDropdown",
       "comboId": "",
       "popup": false,
-      "asis": "cboPlanDate"
+      "asis": "cboPlanDate",
+      "tobeLabel": "Plan Date",
+      "labels": [
+        "Plan Date",
+        "Plan date"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "bucketType",
@@ -45,7 +64,13 @@
       "component": "BucketField",
       "comboId": "BucketType",
       "popup": false,
-      "asis": "cboBucketType"
+      "asis": "cboBucketType",
+      "tobeLabel": "Bucket",
+      "labels": [
+        "Bucket"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "period",
@@ -55,7 +80,16 @@
       "component": "PeriodField",
       "comboId": "",
       "popup": false,
-      "asis": "dCalendar"
+      "asis": "dCalendar",
+      "tobeLabel": "Period",
+      "labels": [
+        "Period",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "graphType",
@@ -65,7 +99,13 @@
       "component": "CustomDropdown",
       "comboId": "",
       "popup": false,
-      "asis": "cboGraphType"
+      "asis": "cboGraphType",
+      "tobeLabel": "Graph",
+      "labels": [
+        "Graph"
+      ],
+      "excluded": true,
+      "excludedWhy": "D00-1-007 §1 cboGraphType / UsrCombo"
     },
     {
       "key": "itemIds",
@@ -75,7 +115,16 @@
       "component": "ItemField",
       "comboId": "",
       "popup": true,
-      "asis": "txtItemId"
+      "asis": "txtItemId",
+      "tobeLabel": "Model/Nickname",
+      "labels": [
+        "Model/Nickname",
+        "Model / Nick Name",
+        "Model",
+        "Nick Name"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "display",
@@ -85,7 +134,13 @@
       "component": "CustomDropdown",
       "comboId": "",
       "popup": false,
-      "asis": "cboDisplay"
+      "asis": "cboDisplay",
+      "tobeLabel": "Display",
+      "labels": [
+        "Display"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "projectCodes",
@@ -95,7 +150,13 @@
       "component": "ProjectField",
       "comboId": "",
       "popup": true,
-      "asis": "txtProject"
+      "asis": "txtProject",
+      "tobeLabel": "Project",
+      "labels": [
+        "Project"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "fromSiteIds",
@@ -105,7 +166,13 @@
       "component": "CustomDropdown",
       "comboId": "",
       "popup": false,
-      "asis": "clbFromSite"
+      "asis": "clbFromSite",
+      "tobeLabel": "From Site",
+      "labels": [
+        "From Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "toSiteIds",
@@ -115,7 +182,13 @@
       "component": "CustomDropdown",
       "comboId": "",
       "popup": false,
-      "asis": "clbToSite"
+      "asis": "clbToSite",
+      "tobeLabel": "To Site",
+      "labels": [
+        "To Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "cellGroup",
@@ -125,7 +198,13 @@
       "component": "InputField",
       "comboId": "",
       "popup": false,
-      "asis": "txtCellGroup"
+      "asis": "txtCellGroup",
+      "tobeLabel": "Cell Group",
+      "labels": [
+        "Cell Group"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "planType",
@@ -135,7 +214,14 @@
       "component": "CustomDropdown",
       "comboId": "",
       "popup": false,
-      "asis": "cboPlanType"
+      "asis": "cboPlanType",
+      "tobeLabel": "Plan Type",
+      "labels": [
+        "Plan Type",
+        "Plan-type"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "searchLevel",
@@ -145,7 +231,13 @@
       "component": "CustomDropdown",
       "comboId": "",
       "popup": false,
-      "asis": "cboSearchLevel"
+      "asis": "cboSearchLevel",
+      "tobeLabel": "Search Level",
+      "labels": [
+        "Search Level"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "as",
@@ -155,7 +247,14 @@
       "component": "Checkbox",
       "comboId": "",
       "popup": false,
-      "asis": "chkAS"
+      "asis": "chkAS",
+      "tobeLabel": "AS",
+      "labels": [
+        "AS",
+        "A/S"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "unitQty",
@@ -165,7 +264,13 @@
       "component": "CustomDropdown",
       "comboId": "",
       "popup": false,
-      "asis": "cboUnitQty"
+      "asis": "cboUnitQty",
+      "tobeLabel": "Unit (Qty)",
+      "labels": [
+        "Unit (Qty)"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "divisionIds",
@@ -175,9 +280,22 @@
       "component": "CustomDropdown",
       "comboId": "MyDivision",
       "popup": false,
-      "asis": "clbDivision"
+      "asis": "clbDivision",
+      "tobeLabel": "Div.",
+      "labels": [
+        "Div.",
+        "Div"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     }
   ],
+  "sheetMap": {
+    "report": "REPORT",
+    "searchLevel": "SEARCH_LEVEL",
+    "searchLevelDetail": "SEARCH_LEVEL_DETAIL"
+  },
+  "asisMapping": "features\\supply\\src\\pages\\global-psi-report\\__asis-mapping__.md",
   "buttons": [
     {
       "key": "button1",
@@ -556,8 +674,8 @@
     "SCM PI Admin": [
       "SEARCH",
       "EXCEL",
-      "MEASURE_SELECT",
-      "COLUMN_SETUP"
+      "COLUMN_SETUP",
+      "MEASURE_SELECT"
     ],
     "SCM Viewer": [
       "SEARCH",
@@ -567,15 +685,15 @@
     ],
     "SCP Planner": [
       "SEARCH",
-      "COLUMN_SETUP",
+      "EXCEL",
       "MEASURE_SELECT",
-      "EXCEL"
+      "COLUMN_SETUP"
     ],
     "SCP Tester": [
       "SEARCH",
       "COLUMN_SETUP",
-      "MEASURE_SELECT",
-      "EXCEL"
+      "EXCEL",
+      "MEASURE_SELECT"
     ]
   },
   "menuBtnCodes": [

@@ -8,6 +8,7 @@
     Doc/화면분석서/{ID}_{Name}_UI분석서_v{N}.0.xlsx     10시트 (개요·전체흐름·VALIDATION취합·MATRIX_Division·MATRIX_권한·MATRIX_Measure·MATRIX_Bucket·가시성·SP_LOOKUP_콤보·이전소스_차이점)
     Doc/화면분석서/{ID}_{Name}_GAP분석서_v{N}.0.xlsx    3시트 (요약·GAP 전체·조치 필요)
     Doc/단위테스트/{ID}_{Name}_TestCases4_v{N}.0.xlsx   Division 별 시트 (33열 TestCases4 양식) — unit_test.md 가 있을 때만
+    Doc/화면분석서/{ID}_{Name}_대조표_v{N}.0.xlsx     4시트 (화면·시트·SP 대조 = Doc/recon CSV 의 이 화면 행 · AS-IS↔TO-BE 매핑 = 페이지 __asis-mapping__.md) — 2026-10-21 사용자 요청
 
   원천: Doc/asisfacts/agent/<ID>/*.md (문서 생성 S3.agent) · Doc/asisfacts/screens/<ID>/*.csv (Fact Pack) · Doc/gap/<ID>_gap.csv
         Doc/tobefacts/db/{menu,proc_meta,proc_params,sheet_columns,sheet_measures,btn_auth,user_group}.csv · Doc/gen/<ID>/register.json
@@ -542,6 +543,76 @@ def build_testcases(S):
         for i, w in enumerate([5, 16, 10, 3, 3, 24, 6, 8, 8, 8, 8, 10, 36, 8, 30, 44, 8, 26, 14, 26, 14, 24, 10, 24, 44, 24, 30, 10, 16, 10, 16, 8, 10, 10], 1): ws.column_dimensions[get_column_letter(i)].width = w
     return wb
 
+# ── 대조표 (AS-IS ↔ TO-BE) ─────────────────────────────────────────────────────
+#   2026-10-21 사용자 요청: Overview 의 대조표(HTML 전체 현황) 와 별개로, 화면 하나의 대조 내용을 Excel 로 만들어 UI 별 문서에 넣는다.
+#   원천 ① Doc/recon/대사표_화면.csv·대사표_시트.csv·대사표_SP.csv 의 이 화면 행(파일명은 Recon 도구 경로라 유지, 표시명은 '대조표')
+#        ② 페이지 __asis-mapping__.md (As-is 컨트롤·이벤트·SP ↔ To-Be 구현 위치·상태) — 표는 전부, 문단은 그대로.
+RECON_DIR = os.path.join(ROOT, 'Doc', 'recon')
+RECON_KO = {'asis_id': 'AS-IS ID', 'tobe_id': 'TO-BE ID', 'stage': '단계', 'module': '모듈', 'title': '화면명', 'in_target': '개발대상', 'asis_parsed': 'AS-IS 파싱', 'controls': '컨트롤', 'events': '이벤트', 'sps': 'SP',
+            'tobe_page': 'TO-BE 페이지', 'tobe_endpoints': 'TO-BE 엔드포인트', 'gen': '생성', 'check_block_warn': '게이트 BLOCK/WARN', 'gap_score': 'GAP 점수', 'agent_docs': '문서(MD)', 'golden_pass': '골든 PASS',
+            'e2e_specs': 'E2E 스펙', 'e2e_pass': 'E2E PASS', 'confidence': '신뢰도', 'confidence_why': '신뢰도 근거', 'owner': '담당', 'done': '완료', 'status': '상태', 'reason': '사유',
+            'sheet': '시트', 'in_target_list': '대상 목록', 'kind': '종류', 'md_level': 'MD 수준', 'parsed': '파싱', 'sheet_rule': '시트 규칙', 'tobe_sheets_const': 'TO-BE SHEETS 상수', 'tobe_sheet_meta': 'TO-BE 시트 메타',
+            'asis_sp': 'AS-IS SP', 'found_in_other': '타 화면 존재', 'tobe_proc': 'TO-BE 프로시저', 'match': '일치', 'sp_dev_done': 'SP 개발 완료', 'golden': '골든'}
+def recon_rows(name, ID):
+    rows = read_csv(os.path.join(RECON_DIR, name))
+    return [r for r in rows if (r.get('asis_id') or '').upper() == ID or (r.get('tobe_id') or '').upper() == ID]
+def md_blocks_simple(text):
+    """MD → [('h', level, text) | ('p', text) | ('t', rows)] — 표는 md_tables 규칙, 그 외 줄은 문단"""
+    out, lines, i = [], text.split('\n'), 0
+    while i < len(lines):
+        l = lines[i]
+        if re.match(r'^\s*\|.*\|\s*$', l) and i + 1 < len(lines) and re.match(r'^\s*\|[\s:|-]+\|\s*$', lines[i + 1]):
+            rows = []
+            while i < len(lines) and re.match(r'^\s*\|.*\|\s*$', lines[i]):
+                if not re.match(r'^\s*\|[\s:|-]+\|\s*$', lines[i]): rows.append([clean(c) for c in lines[i].strip().strip('|').split('|')])
+                i += 1
+            out.append(('t', rows)); continue
+        m = re.match(r'^(#{1,6})\s+(.*)$', l)
+        if m: out.append(('h', len(m.group(1)), m.group(2).strip()))
+        elif l.strip(): out.append(('p', clean(l)))
+        i += 1
+    return out
+def build_recon(S):
+    wb = openpyxl.Workbook(); wb.remove(wb.active)
+    scr = recon_rows('대사표_화면.csv', S.ID); sht = recon_rows('대사표_시트.csv', S.ID); sps = recon_rows('대사표_SP.csv', S.ID)
+    mp = os.path.join(ROOT, S.page_dir, '__asis-mapping__.md') if S.page_dir else ''
+    mapping = read_text(mp) if mp and os.path.exists(mp) else ''
+    if not (scr or sht or sps or mapping): return None
+    # 1. 화면 — key/value
+    sb = SB(wb.create_sheet('1.화면 대조'), [26, 90]); sb.title(f'{S.ID} ({S.name}) 대조표', f'작성 {TODAY} · AS-IS 화면 ↔ TO-BE 화면의 대조 현황. 원천: Doc/recon (전체 현황) + 페이지 __asis-mapping__.md (항목별 매핑)')
+    sb.sec('화면 단위 대조 (Doc/recon · 대사표_화면.csv 의 이 화면 행)')
+    if scr:
+        for k, v in scr[0].items(): sb.kv(RECON_KO.get(k, k), clean(v))
+    else: sb.text('Doc/recon 에 이 화면 행이 없습니다 — S1.recon(개발대상 대조표 재확인) 을 먼저 실행하세요', WARN_FILL)
+    sb.gap(); sb.sec('요약'); sb.kv('시트 대조 행', len(sht)); sb.kv('SP 대조 행', len(sps)); sb.kv('AS-IS↔TO-BE 매핑', '있음 (4.AS-IS↔TO-BE 매핑 시트)' if mapping else '없음 (페이지 __asis-mapping__.md 미생성)')
+    # 2. 시트 / 3. SP — 표
+    for title, rows, widths in [('2.시트 대조', sht, [12, 12, 28, 10, 10, 10, 10, 30, 24, 24, 14]), ('3.SP 대조', sps, [12, 12, 40, 10, 10, 14, 46, 10, 12, 10, 14])]:
+        sb = SB(wb.create_sheet(title), widths); sb.title(title)
+        if rows:
+            keys = list(rows[0].keys()); sb.hdr([RECON_KO.get(k, k) for k in keys])
+            for r in rows:
+                st = (r.get('status') or '').upper(); fill = BAD_FILL if ('누락' in st or 'MISSING' in st) else (WARN_FILL if ('재확인' in st or 'CHECK' in st) else None)
+                sb.row([clean(r.get(k)) for k in keys], fill)
+            sb.ws.freeze_panes = 'A3'; sb.ws.auto_filter.ref = f'A2:{get_column_letter(len(keys))}{sb.r}'
+        else: sb.text('해당 행 없음', WARN_FILL)
+    # 4. AS-IS ↔ TO-BE 매핑 (__asis-mapping__.md 전체)
+    ws = wb.create_sheet('4.AS-IS↔TO-BE 매핑'); sb = SB(ws, [14, 46, 46, 40, 40, 14, 30, 30]); sb.title('4. AS-IS ↔ TO-BE 매핑', f'원천: {S.page_dir}/__asis-mapping__.md (정본은 MD — 이 시트는 열람용 사본)' if S.page_dir else '원천 없음')
+    if mapping:
+        for b in md_blocks_simple(mapping):
+            if b[0] == 'h': sb.sec(b[2]) if b[1] <= 2 else sb.text(b[2], KEY_FILL)
+            elif b[0] == 'p': sb.text(b[1])
+            else:
+                rows = b[1]
+                if not rows: continue
+                sb.hdr(rows[0])
+                for r in rows[1:]:
+                    st = ' '.join(r[-2:]) if len(r) >= 2 else ''
+                    fill = BAD_FILL if re.search(r'미구현|누락|MISSING', st) else (WARN_FILL if re.search(r'부분|확인필요|재확인|WARN', st) else (OK_FILL if re.search(r'^구현$|구현 \(|COVERED', st) else None))
+                    sb.row(r, fill)
+                sb.gap()
+    else: sb.text('페이지 __asis-mapping__.md 가 없습니다 (화면 생성 전이거나 페이지 폴더 미등록)', WARN_FILL)
+    return wb
+
 # ── 실행 ────────────────────────────────────────────────────────────────────────
 def save(wb, folder, prefix):
     v = next_version(folder, prefix); out = os.path.join(folder, f'{prefix}_v{v}.0.xlsx'); wb.save(out); return out
@@ -552,6 +623,9 @@ for ID in IDS:
     made.append(save(build_analysis(S), OUT_ANALYSIS, f'{ID}_{nm}_UI분석서'))
     if S.gap: made.append(save(build_gap(S), OUT_ANALYSIS, f'{ID}_{nm}_GAP분석서'))
     else: print(f'[{ID}] GAP 원천 없음(Doc/gap/{ID}_gap.csv) — GAP분석서 생략')
+    rc = build_recon(S)
+    if rc: made.append(save(rc, OUT_ANALYSIS, f'{ID}_{nm}_대조표'))
+    else: print(f'[{ID}] 대조 원천 없음(Doc/recon 행·__asis-mapping__.md) — 대조표 생략')
     tc = build_testcases(S)
     if tc: made.append(save(tc, OUT_TEST, f'{ID}_{nm}_TestCases4'))
     else: print(f'[{ID}] unit_test.md 없음 — 단위테스트(TestCases4) 생략')

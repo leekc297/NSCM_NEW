@@ -1,6 +1,6 @@
 import type { FlexGrid } from '@mescius/wijmo.grid';
 import type { FlexGridFilter } from '@mescius/wijmo.grid.filter';
-import { ItemByDivisionModal, ProjectByDivisionModal } from 'features/master/src/components';
+import { MaterialByDivisionModal, ProjectByDivisionModal } from 'features/master/src/components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { IcGridColumnSetup, IcMeasureSelect } from '@foundation/assets';
@@ -25,7 +25,8 @@ import {
   type PopupTarget,
 } from './global-psi-report.constants';
 import type { ReportRow, SearchLevelRow, SearchLevelDetailRow } from './global-psi-report.types';
-import { useGlobalPsiReportStore } from './useGlobalPsiReportStore';
+import { divisionParam, useGlobalPsiReportStore } from './useGlobalPsiReportStore';
+import { isStartAfterPlan } from './utils/globalPsiReportCalendar';
 
 // AS-IS GSCM.SCP.Forms.UIL/Report/SCP0100_Global_PSI_Report(2,056줄) — 조회조건 패널 + 3개 FpSpread 오버레이
 //   (spdDetail/spdSearchLevel/spdSearchLevelDetail) read-only Global PSI 리포트. 저장/입력 없음.
@@ -42,7 +43,7 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
   const gridFilterRef = useRef<FlexGridFilter>();
   const editTrackerRef = useRef<EditTracker>();
 
-  // SCM0002 팝업 대상 — btnItemId(ItemByDivisionModal) / btnProject(ProjectByDivisionModal) (design 02 §4.6).
+  // SCM0002 팝업 대상 — btnItemId(MaterialByDivisionModal — 카탈로그 메1) / btnProject(ProjectByDivisionModal) (design 02 §4.6).
   const [popupTarget, setPopupTarget] = useState<PopupTarget | null>(null);
 
   const sc = useGlobalPsiReportStore(s => s.searchCondition);
@@ -150,21 +151,16 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabId]);
 
-  // 조회 시작일 > Plan 시작일 검증(design 02 §4.4 cs:2006~2018) — 위반이면 alert + range 를 plan_start:end 로
-  //   되돌린다. YYYYMMDD 문자열은 사전식 비교가 대소 비교와 일치. 둘 중 하나라도 미입력이면 검증 skip.
-  //   MSG 는 SCM_ADM_MSG_M 역조회(Hook #114) — 미실측이라 비카탈로그 key + defaultValue 로 표기.
+  // 조회 시작일 > Plan 시작일 검증(DCalendar_ValueChanged .cs:2006~2018). 1차 판정은 Form 의 Period 변경 시점(AS-IS 와
+  //   같은 ValueChanged 타이밍)이고, 여기서는 Plan Date 변경·조건 복원 뒤 남은 위반을 조회 직전에 한 번 더 막는다.
+  //   위반이면 alert(MSG01186, 사내 SCM_ADM_MSG_M 역조회) + 시작일을 Plan 시작일로 되돌린다(plan_start:end 복원 등가).
   const validatePlanDateRange = (): boolean => {
-    const from = sc.fromYyyymmdd.trim();
-    const plan = sc.planStartYyyymmdd.trim();
-    if (!from || !plan || from <= plan) return true;
+    if (!isStartAfterPlan(sc.fromYyyymmdd, sc.planStartYyyymmdd)) return true;
     void useMessageStore.getState().setAlert({
       type: 'alert',
-      content: t(MSG.PLAN_DATE_RANGE, {
-        defaultValue: 'The search start date must be on or before the Plan Date.',
-      }),
+      content: t(MSG.PLAN_DATE_RANGE, 'Begin Date is early or equal to Plan Date.'),
     });
-    // range 되돌림 — 시작일을 Plan 시작일로 맞춘다(AS-IS plan_start:end 복원 등가).
-    setSearchCondition({ fromYyyymmdd: plan });
+    setSearchCondition({ fromYyyymmdd: sc.planStartYyyymmdd.trim() });
     return false;
   };
 
@@ -251,6 +247,8 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
         rows={activeRows}
         adminColumns={activeColumns}
         calendarRows={calendarRows}
+        searchLevel={sc.searchLevel}
+        isDetail={searchMode === SEARCH_MODE.DETAIL}
         bucket={sc.bucket}
         planStartYyyymmdd={sc.planStartYyyymmdd}
         unitScaleIndex={unitScaleIndex}
@@ -260,14 +258,20 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
         onFocus={() => undefined}
       />
 
-      {/* SCM0002 Item-by-Division 팝업 — btnItemId 반환 ItemID(1번째 인자)를 txtItemId 에 반영(design 02 §4.6).
-          division 파라미터는 조회조건 Division 을 넘긴다(AS-IS cboDivision.ControlValues). */}
-      <ItemByDivisionModal
+      {/* Model/Nickname 팝업 — 조회조건 카탈로그 'Global PSI New' Model/Nickname = 메1(Material by Division Popup,
+          xlsx '팝업 비교' "Model/Material 팝업양식은 메1(SCP)") · 자매 global-psi(SCP0031) 동일 MaterialByDivisionModal.
+          반환 ItemID(1번째 인자)를 txtItemId 에 반영(AS-IS BtnItemId_Click .cs:1943-1947). division = 조회조건 Div.(AS-IS _division,
+          ALL→''). scpModuleType = 호출 화면 ID(SCP0100 은 SP 의 Operation Group 특수 분기 대상 아님 → 기본 경로). */}
+      <MaterialByDivisionModal
         open={popupTarget === POPUP_TARGET.ITEM}
         modalClose={() => setPopupTarget(null)}
         setSelectedValue={items => setSearchCondition({ itemId: items })}
-        preSearchParams={{ divisionId: sc.divisionId, itemId: sc.itemId }}
-        callFromCell={false}
+        preSearchParams={{
+          divisionId: divisionParam(sc.divisionId),
+          scpModuleType: MENU_ID,
+          operationGroup: '',
+          itemId: sc.itemId,
+        }}
       />
 
       {/* SCM0002 Project-by-Division 팝업 — btnProject 반환 Project(1번째 인자)를 txtProject 에 반영(design 02 §4.6).
@@ -279,7 +283,7 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
         setSelectedValue={projects => setSearchCondition({ project: projects })}
         preSearchParams={
           {
-            divisionId: sc.divisionId,
+            divisionId: divisionParam(sc.divisionId),
             deptId: 'ALL',
             endCustomer: 'ALL',
             salesSite: 'ALL',
@@ -295,7 +299,7 @@ export const GlobalPsiReport = ({ tabId, title }: PageProps<MENU_ID>) => {
           반영(로컬 즉시적용 machinery 불필요) — 컴포넌트 분리(진입 slim). */}
       <GlobalPsiReportModals
         activeSheet={activeSheet}
-        divisionId={sc.divisionId}
+        divisionId={divisionParam(sc.divisionId)}
         openColumn={popupTarget === POPUP_TARGET.COLUMN}
         openMeasure={popupTarget === POPUP_TARGET.MEASURE}
         onClose={() => setPopupTarget(null)}

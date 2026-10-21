@@ -1,7 +1,7 @@
 {
   "id": "SCP0096",
   "mode": "admin",
-  "modeSource": "--mode",
+  "modeSource": "users.json screens",
   "menuId": "SCP0096",
   "page": "ShipmentWorkingDayOsp",
   "routePath": "supply/supply-master/shipment-working-day-osp",
@@ -15,7 +15,16 @@
       "component": "PeriodField",
       "comboId": "",
       "popup": false,
-      "asis": "dCalendar"
+      "asis": "dCalendar",
+      "tobeLabel": "Period",
+      "labels": [
+        "Period",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "divisionId",
@@ -25,7 +34,13 @@
       "component": "CustomDropdown",
       "comboId": "Division_SCP_NoEE",
       "popup": false,
-      "asis": "cboDivision"
+      "asis": "cboDivision",
+      "tobeLabel": "Division",
+      "labels": [
+        "Division"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "plantSiteIds",
@@ -35,7 +50,13 @@
       "component": "CustomDropdown",
       "comboId": "PlantByDivisionOperOsp3_SCP",
       "popup": false,
-      "asis": "clbPlantSite"
+      "asis": "clbPlantSite",
+      "tobeLabel": "Plant Site",
+      "labels": [
+        "Plant Site"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "inputValue",
@@ -45,7 +66,13 @@
       "component": "CustomDropdown",
       "comboId": "YesOrNo",
       "popup": false,
-      "asis": "cboInputValue"
+      "asis": "cboInputValue",
+      "tobeLabel": "Input Value",
+      "labels": [
+        "Input Value"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "dayWeek",
@@ -55,9 +82,17 @@
       "component": "CustomDropdown",
       "comboId": "lookup:WEEK_WORK_TIME",
       "popup": false,
-      "asis": "cboDayWeek"
+      "asis": "cboDayWeek",
+      "tobeLabel": "Day of the week",
+      "labels": [
+        "Day of the week"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     }
   ],
+  "sheetMap": {},
+  "asisMapping": "features\\supply\\src\\pages\\shipment-working-day-osp\\__asis-mapping__.md",
   "buttons": [
     {
       "key": "input",

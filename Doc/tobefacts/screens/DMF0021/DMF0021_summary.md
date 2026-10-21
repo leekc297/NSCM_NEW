@@ -1,6 +1,6 @@
 # DMF0021 — To-Be Fact Pack 요약
 
-- page_key: `demand/sales-plan` · feature: demand · As-is Fact Pack 있음
+- page_key: `demand/sales-plan` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
 - 파일 27 · 엔드포인트 호출 14 (미해결 0, 주석 속 3) · 이벤트 30 · 컴포넌트 사용 34 · 하드코딩 컬럼 3 · 메시지 42
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 3건
 

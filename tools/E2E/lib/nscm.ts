@@ -136,7 +136,7 @@ export class Nscm {
 
   /** MDI 딥링크로 화면을 연다. 반환: authorized(권한 안내가 뜨지 않음), notFound */
   async openScreen(menuId: string) {
-    this.calls = [];
+    this.calls = []; this.searchExpanded = false;
     await this.page.goto(`${FE}/view/${menuId}`, { waitUntil: 'domcontentloaded' });
     await this.dismissNotices();
     await this.activateScreenTab(menuId);
@@ -184,12 +184,41 @@ export class Nscm {
     return lab.locator('xpath=ancestor::*[self::div or self::label][1]/following-sibling::*[1]//input | ancestor::*[self::div][2]//input').first();
   }
 
-  async fieldExists(label: string) {
-    const loc = this.page.getByText(new RegExp(`^\\s*${escapeRe(label)}\\s*\\*?\\s*$`, 'i'));
-    const deadline = Date.now() + 5_000;
+  /**
+   * 조회조건 라벨 존재. 2026-10-21(SCP0100): As-is 라벨의 필수표시 '*'(Plan date*) 는 To-Be 에서 라벨 밖 별도 요소라 떼고 비교 —
+   *   앞/뒤 '*' 허용, 'Unit (Qty)'·'From (YYYYMMDD)' 처럼 괄호 접미는 허용(라벨 'From' 으로도 매칭), 대소문자 무시.
+   */
+  async fieldExists(label: string, waitMs = 5_000) {
+    const core = String(label).replace(/^\s*\*+\s*|\s*\*+\s*$/g, '').trim(); if (!core) return false;
+    const loc = this.page.getByText(new RegExp(`^\\s*\\*?\\s*${escapeRe(core)}(\\s*\\([^)]*\\))?\\s*\\*?\\s*$`, 'i'));
+    const deadline = Date.now() + waitMs;
     do { if (await this.visibleFirst(loc)) return true; await this.page.waitForTimeout(250); } while (Date.now() < deadline);
     return false;
   }
+  /** 후보 라벨 중 하나라도 보이면 그 라벨(없으면 ''). 첫 후보만 기본 대기, 나머지는 짧게 */
+  async fieldExistsAny(labels: string[]) {
+    const list = [...new Set(labels.map(s => String(s || '').trim()).filter(Boolean))];
+    for (let i = 0; i < list.length; i++) if (await this.fieldExists(list[i], i === 0 ? 4_000 : 1_000)) return list[i];
+    return '';
+  }
+
+  /**
+   * 조회조건 펼치기 — 공용 SearchArea 는 extraConditions(2행 이후)를 접어 두고 Search 버튼 오른쪽의 화살표(텍스트 없는 버튼)로 펼친다.
+   * 2026-10-21 SCP0100: 접힌 조건(Search Mode·Display·Plan Type·Cell Qty…)을 라벨 검사가 못 찾아 smoke FAIL → 라벨 검사 전에 한 번 펼친다.
+   * 화면당 1회(openScreen 이 플래그 초기화). 화살표가 없으면(extraConditions 없음) false.
+   */
+  async expandSearchArea() {
+    if (this.searchExpanded) return true;
+    const searchBtn = await this.visibleFirst(this.page.getByRole('button', { name: /^(조회|Search)(\(F5\))?$/ }));
+    if (!searchBtn) return false;
+    const arrow = searchBtn.locator('xpath=following-sibling::button[1]').first();
+    if (!(await arrow.isVisible({ timeout: 1_000 }).catch(() => false))) return false;
+    if ((await arrow.innerText().catch(() => '')).trim()) return false; // 텍스트가 있으면 펼침 화살표가 아니다
+    await arrow.click({ timeout: 5_000 }).catch(() => undefined);
+    await this.page.waitForTimeout(600); // Collapse 애니메이션
+    this.searchExpanded = true; return true;
+  }
+  private searchExpanded = false;
 
   /** Division 선택 — DivisionField(콤보) 가 있으면 옵션 선택 */
   async setDivision(code: string) {
@@ -323,9 +352,19 @@ export class Nscm {
     return this.page.getByRole('button', { name: new RegExp(`^${escapeRe(name)}(\\(F\\d+\\))?$`, 'i') }).first();
   }
   async subButtonVisible(name: string) { return this.subButton(name).isVisible({ timeout: 3_000 }).catch(() => false); }
+  /**
+   * 보이는 버튼의 이름 목록. 2026-10-21(SCP0100 auth): SubTitle 의 Excel 다운로드는 아이콘 전용(텍스트 없음)이고 이름은 MUI Tooltip 이
+   *   감싼 상위 div 의 aria-label('Excel') 에만 있다 → innerText → aria-label → title → 가장 가까운 상위 [aria-label]/[title] 순으로 이름을 잡는다.
+   *   (Column Setting/Measure 는 title, Sort/Filter 는 텍스트+상위 aria-label)
+   */
   async visibleButtons(): Promise<string[]> {
-    const names = await this.page.getByRole('button').allInnerTexts();
-    return [...new Set(names.map(s => s.replace(/\s+/g, ' ').trim()).filter(Boolean))];
+    const names: string[] = await this.page.evaluate(() => [...document.querySelectorAll('button')].filter(b => (b as HTMLElement).offsetParent !== null).map(b => {
+      const t = ((b as HTMLElement).innerText || '').replace(/\s+/g, ' ').trim(); if (t) return t;
+      const own = b.getAttribute('aria-label') || b.getAttribute('title'); if (own) return own.trim();
+      const anc = b.parentElement ? b.parentElement.closest('[aria-label],[title]') : null;
+      return anc ? (anc.getAttribute('aria-label') || anc.getAttribute('title') || '').trim() : '';
+    }));
+    return [...new Set(names.filter(Boolean))];
   }
 
   /** 저장 — Save(F7) 클릭 → SAVE call-proc 응답/알림 확인. 확인 다이얼로그는 OK */

@@ -80,16 +80,16 @@ interface Action {
 
 // 개인화 조건 복원 역직렬화 키(SubTitle F6 저장은 배열=콤마join·불리언=String 평문화 — personalizeCondition).
 //   chkCellQty/chkAs = 체크박스(String(bool) → ==='true'). 그 외 조회조건은 전부 문자열(divisionId/planType/
-//   bucket/display/searchLevel/from·toSite/itemId/nickName/project/cellGroup) → 역직렬화 불요(그대로 patch).
+//   bucket/display/searchLevel/from·toSite/itemId/project/cellGroup) → 역직렬화 불요(그대로 patch).
 //   날짜 키(from·toYyyymmdd/planStartYyyymmdd)는 저장 측 EXCLUDED_DATE_PARAM(gridAction.ts)으로 저장 자체가
-//   제외 → 복원 응답에 없음(초기값 유지). 멀티셀렉트 배열 조건 없음(From/To Site 는 단일 문자열).
+//   제외 → 복원 응답에 없음(초기값 유지). 다중선택(Division/From·To Site/Model/PJT)은 콤마 CSV 문자열로 보관.
 const RESTORE_BOOL_KEYS = new Set<string>(['chkCellQty', 'chkAs']);
 
-// 주의: 상수가 아니라 함수다 — 모듈 최상위 상수로 굳히면 청크 최초 로드 시점의 session.div 로 얼어붙어
-//   재로그인 시 앞 계정 division 이 고정된다(ForecastPrice makeInitSearchParams 규약 동일).
+// 주의: 상수가 아니라 함수다 — 매 호출 새 객체(초기화·Division 변경 리셋이 같은 기본값을 새로 만든다).
 const makeInitSearch = (): SearchCondition => ({
-  // 진입 division 기본값 = 로그인 세션 권한 division. fallback '40' 은 세션 미확립 대비 규칙 기본 1건.
-  divisionId: useSessionStore.getState().session.div ?? '40',
+  // AS-IS clbDivision(UsrCheckedList2) 은 진입 시 체크 0건 = ValueList 'ALL' → getDivision '' (.cs:464-471, 전 Division).
+  //   카탈로그 Div. = 선택·다중 + ALL버튼. 기본 미선택('') = ALL.
+  divisionId: '',
   fromYyyymmdd: '',
   toYyyymmdd: '',
   planStartYyyymmdd: '',
@@ -100,11 +100,10 @@ const makeInitSearch = (): SearchCondition => ({
   fromSite: '',
   toSite: '',
   itemId: '',
-  nickName: '',
   project: '',
   cellGroup: '',
-  chkCellQty: false, // design 01 §2 NO-OP 기본 미체크
-  chkAs: false, // design 01 §2 NO-OP 기본 미체크
+  chkCellQty: true, // AS-IS designer:248 chkCellQty.Checked=true(CheckState.Checked) — 진입 기본 체크
+  chkAs: false, // AS-IS chkAS 기본 미체크(designer Checked 지정 없음)
 });
 
 const emptyStaticColumns: StaticColumnsBySheet = {
@@ -141,6 +140,9 @@ const siteParam = (v: string): string =>
     .map(c => c.trim())
     .filter(c => c && !SITE_SENTINELS.has(c) && c.toUpperCase() !== 'ALL')
     .join(',');
+// Division 다중선택도 같은 정규화 — AS-IS GetCheckedListValue(dt, v, true)(CString.cs:584-600): 빈값·'ALL' → ''.
+//   SP P_DIVISION_ID 는 FN_SPLITSTRING(',') 다중 / TRIM IS NULL = 전 Division(PKG_SCP0100 BODY).
+export const divisionParam = siteParam;
 
 // 3시트 공통 admin 컬럼 fetch — divisionId + 시트별 sheetNm 으로 SCM_MST_SHEET_COLUMNS 조회.
 const fetchColumnsFor = async (
@@ -168,10 +170,10 @@ export const useGlobalPsiReportStore = createPersistedStoreWithTab<State & Actio
       set(state => {
         state.searchCondition = { ...get().searchCondition, ...p };
       }),
-    // Division 변경(싱글 콤보) = TO-BE 공통 요건: Division·조회기간(from/to)을 제외한 검색조건을 전부 초기화하고
+    // Division 변경(다중 콤보) = TO-BE 공통 요건: Division·조회기간(from/to)을 제외한 검색조건을 전부 초기화하고
     //   그리드도 초기화(filters clear)한다(사용자 지시 2026-10-02 — TO-BE 공통 요건이 AS-IS cascade 보다 넓다).
-    //   조회기간(from/to YYYYMMDD)은 division 무관 기간이라 유지. Plan Date(planStartYyyymmdd)는 division cascade
-    //   콤보(P_SCP0100_GET_PLAN_DATE)라 초기화 — Form useEffect 가 새 division 첫 Plan Date 로 재시드한다.
+    //   조회기간(from/to YYYYMMDD)은 division 무관 기간이라 유지. Plan Date 도 초기화 대상이라 Form useEffect 가
+    //   목록 첫 Plan Date 로 재시드한다(목록 자체는 AS-IS 처럼 division '' 1회 조회라 바뀌지 않는다).
     //   편집중(dirty) 가드(MSG00704)는 Form 의 onChange 가 confirmIfDirtyKey 로 처리(commit 51d4e9fa 패턴) —
     //   read-only 리포트라 실제 dirty 는 없지만 공통 패턴을 동일하게 둔다(SCP0025 선례).
     setDivision: divisionId =>
@@ -197,12 +199,13 @@ export const useGlobalPsiReportStore = createPersistedStoreWithTab<State & Actio
     setFilter: () => {
       set(state => {
         const c = state.searchCondition;
+        const isDetail = state.searchMode === SEARCH_MODE.DETAIL;
         const req = {
           fromYyyymmdd: orEmpty(c.fromYyyymmdd), //  1 P_FROM_YYYYMMDD
           toYyyymmdd: orEmpty(c.toYyyymmdd), //  2 P_TO_YYYYMMDD
-          divisionId: orEmpty(c.divisionId), //  3 P_DIVISION_ID
+          divisionId: divisionParam(c.divisionId), //  3 P_DIVISION_ID (다중 CSV, ALL→'' 전 Division)
           itemId: str(c.itemId), //  4 P_ITEM_ID
-          nickName: str(c.nickName), //  5 P_NICK_NAME
+          nickName: '', //  5 P_NICK_NAME — AS-IS FindDataMain(.cs:1245) 고정 "" (입력 컨트롤 없음)
           fromSite: siteParam(c.fromSite), //  6 P_FROM_SITE (ALL/'-'→'' 무필터 정규화, 기본점검 #5)
           toSite: siteParam(c.toSite), //  7 P_TO_SITE (ALL/'-'→'' 무필터 정규화, 기본점검 #5)
           planStartYyyymmdd: orEmpty(c.planStartYyyymmdd), //  8 P_PLAN_START_YYYYMMDD
@@ -211,14 +214,15 @@ export const useGlobalPsiReportStore = createPersistedStoreWithTab<State & Actio
           bucket: orEmpty(c.bucket), // 11 P_BUCKET
           cellGroup: str(c.cellGroup), // 12 P_CELL_GROUP
           project: str(c.project), // 13 P_PROJECT
-          searchLevel: orEmpty(c.searchLevel), // 14 P_SEARCH_LEVEL
+          // 14 P_SEARCH_LEVEL — Detail 모드면 콤보값 대신 'DETAIL'(AS-IS getSearchLevel .cs:414-417 → SP DETAIL 분기)
+          searchLevel: isDetail ? SEARCH_LEVEL_CODE.DETAIL : orEmpty(c.searchLevel),
           chkCellQty: c.chkCellQty ? 'Y' : 'N', // 15 P_CHK_CELL_QTY
           chkAs: c.chkAs ? 'Y' : 'N', // 16 P_CHK_AS
           debugMode: 'N', // 17 DEBUG_MODE
         };
         // searchMode + searchLevel 조합으로 활성 그리드 1개만 조회(design 01 R1~R3). 나머지는 미조회.
         state.filters = {};
-        if (state.searchMode === SEARCH_MODE.DETAIL) {
+        if (isDetail) {
           state.filters[SHEETS.REPORT] = req;
         } else if (c.searchLevel === SEARCH_LEVEL_CODE.CELL_GROUP_DETAIL) {
           state.filters[SHEETS.SEARCH_LEVEL_DETAIL] = req;
@@ -247,7 +251,9 @@ export const useGlobalPsiReportStore = createPersistedStoreWithTab<State & Actio
       }),
     // admin SCM_MST_SHEET_COLUMNS 3시트 동적 fetch — 미등록/실패 시 빈 배열(메타 주도, console 금지 룰).
     fetchStaticColumns: async () => {
-      const divisionId = get().searchCondition.divisionId;
+      // 다중 Division 은 PR_GET_SHEET_COLUMN_LIST 의 DIVISION_ID 토큰 비교 대상이 아니므로 ALL→'' 정규화 값으로 보낸다
+      //   (SCP0100 3시트 메타 DIVISION_ID 전건 공란 = 전 Division 공통, 사내 sheet_columns 실측).
+      const divisionId = divisionParam(get().searchCondition.divisionId);
       const [report, level, levelDetail] = await Promise.all([
         fetchColumnsFor(SHEETS.REPORT, divisionId),
         fetchColumnsFor(SHEETS.SEARCH_LEVEL, divisionId),
@@ -271,7 +277,7 @@ export const useGlobalPsiReportStore = createPersistedStoreWithTab<State & Actio
       try {
         const res = await apiClient.post<MeasureMeta[]>(`/admin/menu/${MENU_ID}/measure`, {
           sheetNm: MEASURE_SHEET_NAME,
-          divisionId: get().searchCondition.divisionId,
+          divisionId: divisionParam(get().searchCondition.divisionId),
         });
         set(state => {
           state.staticMeasures = res.data.result ?? [];

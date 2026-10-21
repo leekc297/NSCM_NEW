@@ -113,8 +113,8 @@ const UI = {
   st_pick: ['Set a screen ID to see its progress, gates and outputs here.', '화면ID 를 입력하면 그 화면의 단계 현황·산출물이 여기 나옵니다.'], st_progress: ['Progress', '진행률'], st_stages: ['stages done', '단계 완료'], st_dod: ['DoD', 'DoD'], st_fe: ['FE Gate', 'FE 게이트'], st_pkg: ['PKG Gate', 'PKG 게이트'], st_gap: ['GAP open', 'GAP 미반영'], st_e2e: ['E2E', 'E2E'],
   st_notrun: ['not run', '미실행'], st_nospec: ['no spec', '스펙 없음'], st_items: ['items', '건'], st_outputs: ['Outputs', '산출물'], st_docs: ['Documents', '문서'], st_recent: ['Recent work', '최근 작업'], st_none: ['none', '없음'], st_changed: ['changed', '변경'], st_open: ['open', '진행중'], st_pipeline: ['Last pipeline', '마지막 파이프라인'],
   tb: [{ reload: 'Reload', edit: 'Edit', view: 'View', save: 'Save', editor: 'Open in editor', os: 'Open with OS', close: 'Close tab' }, { reload: '새로고침', edit: '편집', view: '보기', save: '저장', editor: '에디터로', os: 'OS 로 열기', close: '탭 닫기' }],
-  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', optional: 'optional', warn: 'Done w/ warnings', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', WAIT: 'waiting' }, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
-       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', optional: '선택', warn: '경고 포함 완료', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', WAIT: '대기' }, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
+  bd: [{ step: 'Step', tools: 'tools', edits: 'edits', elapsed: 'elapsed', running: 'Running', done: 'Done', error: 'Error', stopped: 'Stopped', prep: 'Prep', final: 'Final report', optional: 'optional', warn: 'Done w/ warnings', fs: { RUN: 'running', OK: 'done', FAIL: 'failed', WARN: 'warning', CANCEL: 'cancelled', NOT_RUN: 'not run', WAIT: 'waiting' ,REPAIR:'Repairing'}, k: { read: 'Read', edit: 'Edit', run: 'Run', find: 'Search', agent: 'Agent', web: 'Web', other: 'Tool' } },
+       { step: 'Step', tools: '도구', edits: '수정', elapsed: '경과', running: '진행 중', done: '완료', error: '오류', stopped: '중지', prep: '준비', final: '최종 보고', optional: '선택', warn: '경고 포함 완료', fs: { RUN: '진행 중', OK: '완료', FAIL: '실패', WARN: '경고', CANCEL: '취소', NOT_RUN: '미실행', WAIT: '대기' ,REPAIR:'수선 중'}, k: { read: '읽기', edit: '수정', run: '실행', find: '검색', agent: '에이전트', web: '웹', other: '도구' } }],
   st_menu: ['Menu', '메뉴'], st_page: ['Page', '페이지'], st_click: ['Click a stage to run it', '단계를 누르면 실행됩니다'],
 };
 const t = (p, k) => (UI[k] || [k, k])[(p && p.language) === 'ko' ? 1 : 0];
@@ -457,7 +457,7 @@ class WB {
       const stamp = history.nowLocal ? history.nowLocal().slice(0, 16).replace('T', ' ') : new Date().toISOString();
       const fail = res.find(r => r.status === 'FAIL' || r.status === 'CANCEL'); const warn = res.some(r => r.status === 'WARN');
       const head = !final ? '⏳ 진행 중' : fail ? `✖ ${fail.no}단계에서 중단 (${fail.name})` : warn ? '⚠ 경고 포함 완료' : '✅ 전부 완료';
-      const rows = steps.map((st, i) => { const r = res[i]; return `| ${i + 1} | ${nameOf(st)}${st.optional ? ' (선택)' : ''} | ${r ? r.status : 'NOT_RUN'} | ${r && r.code != null ? r.code : '-'} | ${r ? r.sec + 's' : '-'} |`; });
+      const rows = steps.map((st, i) => { const r = res[i]; return `| ${i + 1} | ${nameOf(st)}${st.optional ? ' (선택)' : ''}${r && r.repairs ? ` (수선 ${r.repairs}회)` : ''} | ${r ? r.status : 'NOT_RUN'} | ${r && r.code != null ? r.code : '-'} | ${r ? r.sec + 's' : '-'} |`; });
       const next = fail ? `다음 할 일: ${fail.no}단계 '${fail.name}' 의 원인을 Task Log 에서 확인하고 그 단계 메뉴를 다시 실행 → 이후 단계는 이 체인을 다시 누르면 처음부터(완료 단계는 각 도구가 보존/건너뜀) 진행됩니다.` : (final ? '다음 할 일: UI Status 의 단계·E2E 타일과 Doc/gen/' + id + '/PIPELINE.md · Doc/e2e/results/_summary.md 확인' : '');
       const md = [`# FULLRUN ${id} — ${stamp} ${head}`, '', `체인: ${item.label} · 총 ${Math.round((Date.now() - t0) / 1000)}s`, '', '| # | 단계 | 결과 | exit | 소요 |', '|---|---|---|---|---|', ...rows, '', next, ''].join('\n');
       try { fs.writeFileSync(mdPath, md, 'utf8'); } catch { }
@@ -472,29 +472,57 @@ class WB {
       if (stopped) { res.push({ no, name, status: 'NOT_RUN', code: null, sec: 0 }); this.post({ type: 'fb', state: 'step', id: fid, no, status: 'NOT_RUN' }); continue; }
       this.out('task', `\n── [${no}/${steps.length}] ${name}\n`, 'cmd'); const s0 = Date.now(); let code = null, cancelled = false;
       this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
-      if (st.verify) st.verify = Object.assign({}, st.verify, { _since: Date.now() - 1000 });
-      try {
-        if (st.task) { code = await this.runTaskStreaming(p, st.task, id, { noConfirm: true, inFlow: true, args: st.args || null }); if (code == null) cancelled = true; }
-        else {
-          const q = st.claudeOf ? all.find(x => x.label === st.claudeOf || x.label_en === st.claudeOf) : null;
-          const prompt = st.claude || (q && q.prompt);
-          if (!prompt) { this.out('task', `프롬프트 없음: ${st.claudeOf || '(claude)'}\n`, 'bad'); code = 2; }
-          else { const r = await this.askClaude(p, substQ(prompt, { root: p.root, id }), harness !== false); code = r ? (r.ok ? 0 : (r.code || 1)) : null; if (!r) cancelled = true; }
+      const kind = st.task ? String(st.task).split('.').pop() : '';
+      // 단계 1회 실행(작업 또는 Claude) + verify — 1.9.7: 수선 뒤 재실행을 위해 함수로 분리
+      const runOnce = async () => {
+        let c = null; cancelled = false;
+        if (st.verify) st.verify = Object.assign({}, st.verify, { _since: Date.now() - 1000 });
+        try {
+          if (st.task) { c = await this.runTaskStreaming(p, st.task, id, { noConfirm: true, inFlow: true, args: st.args || null }); if (c == null) cancelled = true; }
+          else {
+            const q = st.claudeOf ? all.find(x => x.label === st.claudeOf || x.label_en === st.claudeOf) : null;
+            const prompt = st.claude || (q && q.prompt);
+            if (!prompt) { this.out('task', `프롬프트 없음: ${st.claudeOf || '(claude)'}\n`, 'bad'); c = 2; }
+            else { const r = await this.askClaude(p, substQ(prompt, { root: p.root, id, kind, step: name }), harness !== false); c = r ? (r.ok ? 0 : (r.code || 1)) : null; if (!r) cancelled = true; }
+          }
+        } catch (e) { c = -1; this.out('task', `예외: ${e.message}\n`, 'bad'); }
+        // 1.9.5: 단계 결과 검증(verify) — 종료코드 0 이어도 산출물이 없으면 실패로 본다(E2E 가 시작도 못 했는데 '완료' 로 닫힌 SCP0100 사고)
+        if (c === 0 && st.verify) { const v = verifyStep(p, st.verify, id); if (!v.ok) { c = 3; this.out('task', `✖ 검증 실패: ${v.why}\n`, 'bad'); } else this.out('task', `✔ 검증: ${v.why}\n`, 'ok'); }
+        return c;
+      };
+      code = await runOnce();
+      // 1.9.7: 단계 수선(repair) — 실패(종료코드≠0 또는 verify 실패)하면 st.repair.claudeOf 프롬프트(🩹 E2E 오류 보완 등)로 Claude 가 원인을 찾아 고친 뒤 같은 단계를 다시 실행.
+      //   rounds(기본 1)만큼 반복, 그래도 실패면 FAIL(선택 단계면 WARN). 사용자 지시 2026-10-21: "생성 후 GAP·TEST 시 오류에 대한 보완까지".
+      let repairs = 0;
+      if (code !== 0 && !cancelled && st.repair && st.repair.claudeOf) {
+        const rounds = Math.max(1, Number(st.repair.rounds || 1));
+        const rq = all.find(x => x.label === st.repair.claudeOf || x.label_en === st.repair.claudeOf);
+        if (!rq || !rq.prompt) this.out('task', `⚠ 수선 프롬프트 없음(quick.json): ${st.repair.claudeOf}\n`, 'warn');
+        else for (let r = 1; r <= rounds && code !== 0 && !cancelled; r++) {
+          repairs++;
+          this.out('task', `\n🩹 [${no}/${steps.length}] ${name} 실패(exit ${code}) → 수선 ${r}/${rounds}: ${rq.label}\n`, 'warn');
+          this.post({ type: 'fb', state: 'step', id: fid, no, status: 'REPAIR', round: r, rounds });
+          this.post({ type: 'chat', role: 'meta', text: `🩹 ${name} 실패 → 수선 ${r}/${rounds} (${rq.label})` });
+          const rr = await this.askClaude(p, substQ(rq.prompt, { root: p.root, id, kind, step: name, round: r }), harness !== false);
+          if (!rr) { cancelled = true; break; }
+          if (!rr.ok) { this.out('task', `✖ 수선 ${r}/${rounds} Claude 오류(exit ${rr.code}) — 재실행은 그래도 시도\n`, 'bad'); }
+          this.out('task', `↻ [${no}/${steps.length}] ${name} 재실행 (수선 ${r} 뒤)\n`, 'cmd');
+          this.post({ type: 'fb', state: 'step', id: fid, no, status: 'RUN' });
+          code = await runOnce();
         }
-      } catch (e) { code = -1; this.out('task', `예외: ${e.message}\n`, 'bad'); }
-      // 1.9.5: 단계 결과 검증(verify) — 종료코드 0 이어도 산출물이 없으면 실패로 본다(E2E 가 시작도 못 했는데 '완료' 로 닫힌 SCP0100 사고)
-      if (code === 0 && st.verify) { const v = verifyStep(p, st.verify, id); if (!v.ok) { code = 3; this.out('task', `✖ 검증 실패: ${v.why}\n`, 'bad'); } else this.out('task', `✔ 검증: ${v.why}\n`, 'ok'); }
+      }
       const sec = Math.round((Date.now() - s0) / 1000); const ok = code === 0;
       const status = cancelled ? 'CANCEL' : ok ? 'OK' : (st.optional ? 'WARN' : 'FAIL');
-      res.push({ no, name, status, code, sec });
-      this.post({ type: 'fb', state: 'step', id: fid, no, status, code, sec });
-      this.out('task', `${ok ? '✅' : status === 'WARN' ? '⚠' : '✖'} [${no}/${steps.length}] ${name} — ${status}${code != null ? ` (exit ${code})` : ''} · ${sec}s\n`, ok ? 'ok' : status === 'WARN' ? 'warn' : 'bad');
+      res.push({ no, name: repairs ? `${name} (수선 ${repairs}회)` : name, status, code, sec, repairs });
+      this.post({ type: 'fb', state: 'step', id: fid, no, status, code, sec, repairs });
+      this.out('task', `${ok ? '✅' : status === 'WARN' ? '⚠' : '✖'} [${no}/${steps.length}] ${name} — ${status}${code != null ? ` (exit ${code})` : ''}${repairs ? ` · 수선 ${repairs}회` : ''} · ${sec}s\n`, ok ? 'ok' : status === 'WARN' ? 'warn' : 'bad');
       if (status === 'FAIL' || status === 'CANCEL') stopped = true;
       writeMd(false);
     }
     writeMd(true);
     const fail = res.find(r => r.status === 'FAIL' || r.status === 'CANCEL'); const okN = res.filter(r => r.status === 'OK').length; const total = Math.round((Date.now() - t0) / 1000);
-    const summary = fail ? `✖ 체인 중단 — ${fail.no}/${steps.length} '${fail.name}' ${fail.status} · 완료 ${okN}단계 · ${total}s` : `✅ 체인 완료 — ${steps.length}단계 중 OK ${okN}${res.some(r => r.status === 'WARN') ? ` · 경고 ${res.filter(r => r.status === 'WARN').length}` : ''} · ${total}s`;
+    const repN = res.reduce((n, r) => n + (r.repairs || 0), 0);
+    const summary = fail ? `✖ 체인 중단 — ${fail.no}/${steps.length} '${fail.name}' ${fail.status} · 완료 ${okN}단계${repN ? ` · 수선 ${repN}회` : ''} · ${total}s` : `✅ 체인 완료 — ${steps.length}단계 중 OK ${okN}${repN ? ` · 수선 ${repN}회` : ''}${res.some(r => r.status === 'WARN') ? ` · 경고 ${res.filter(r => r.status === 'WARN').length}` : ''} · ${total}s`;
     this.out('task', `\n${summary}\n   → ${path.relative(p.root, mdPath)}\n`, fail ? 'bad' : 'ok');
     this.post({ type: 'fb', state: 'end', id: fid, ok: !fail, warn: res.some(r => r.status === 'WARN'), summary, sec: total });
     try { (fail ? vscode.window.showWarningMessage : vscode.window.showInformationMessage)(`Vibe_Manager ${summary}`); } catch { }
@@ -538,7 +566,7 @@ class WB {
     const args = extraArgs || api.buildArgs(task, vars); const cwd = api.subst(task.cwd || path.dirname(script), vars);
     try { this.panel.reveal(undefined, true); this.post({ type: 'showTab', tab: 'log' }); } catch { }
     // 1.9.6: E2E(run-e2e.cmd · steps.json requireServers) 는 BE/FE 가 떠 있어야 한다 — 미기동이면 먼저 기동(메뉴·스테퍼·체인 모든 경로가 여기를 지난다)
-    if (task.requireServers || /run-e2e\.cmd$/i.test(script)) {
+    if ((task.requireServers || /run-e2e\.cmd$/i.test(script)) && process.env.VIBE_SKIP_SERVER_CHECK !== '1') { // VIBE_SKIP_SERVER_CHECK=1 은 모의(spawn 가로채기) 테스트 전용
       const ok = await this.ensureServers(p, Array.isArray(task.requireServers) ? task.requireServers.map(Number) : null);
       if (!ok) { api.record(task.id, `(선행 실패 — BE/FE 미기동) ${path.basename(script)} ${args.join(' ')}`); api.afterTask(task.id, 5); return 5; }
     }
@@ -1007,8 +1035,8 @@ function addMeta(text){const d=el('div','m meta',text);if(RUN)RUN.board.querySel
 
 // ── 1.8.9 Flow 보드: 체인/단일 작업 = 전체 Step 수·현재 Step·진행바·경과 + Step 카드(대기/진행/완료/실패/경고). Claude 단계의 상황판(run)은 그 Step 카드 안에 ──
 let FLOW=null;
-const FST={RUN:'running',OK:'done',FAIL:'bad',WARN:'warn',CANCEL:'bad',NOT_RUN:'wait',WAIT:'wait'};
-const FSI={RUN:'⏳',OK:'✅',FAIL:'✖',WARN:'⚠',CANCEL:'⛔',NOT_RUN:'○',WAIT:'○'};
+const FST={RUN:'running',REPAIR:'running',OK:'done',FAIL:'bad',WARN:'warn',CANCEL:'bad',NOT_RUN:'wait',WAIT:'wait'};
+const FSI={RUN:'⏳',REPAIR:'🩹',OK:'✅',FAIL:'✖',WARN:'⚠',CANCEL:'⛔',NOT_RUN:'○',WAIT:'○'};
 function flowStart(m){
   if(FLOW&&!FLOW.done)flowEnd({ok:false,summary:UI_BD.stopped,sec:0});
   const f={id:m.id,steps:[],cur:0,total:(m.steps||[]).length,t0:Date.now(),done:false,timer:null,title:m.title||'',screen:m.screen||'',md:m.md||''};
@@ -1037,7 +1065,7 @@ function flowStepEl(no){return FLOW?FLOW.steps.find(s=>s.no===no):null;}
 function flowStep(m){
   const f=FLOW;if(!f||f.id!==m.id)return;const s=flowStepEl(m.no);if(!s)return;
   s.status=m.status;s.el.className='step '+(FST[m.status]||'wait');
-  if(m.status==='RUN'){f.cur=m.no;f.active=s;s.sum.querySelector('.slast').textContent='';}
+  if(m.status==='RUN'||m.status==='REPAIR'){f.cur=m.no;f.active=s;s.sum.querySelector('.slast').textContent=m.status==='REPAIR'?('🩹 '+(UI_BD.fs&&UI_BD.fs.REPAIR||'repair')+' '+(m.round||1)+'/'+(m.rounds||1)):'';}
   else{if(f.active===s)f.active=null;s.sum.querySelector('.sdur').textContent=(m.sec!=null?fmtSec(m.sec):'')+(m.code!=null&&m.code!==0?' · exit '+m.code:'');s.sum.querySelector('.slast').textContent=FSI[m.status]+' '+(UI_BD.fs[m.status]||m.status);}
   flowHead();
 }
@@ -1116,11 +1144,14 @@ function toggleEdit(T){
   if(T.editing){ta.value=T.text;ta.style.display='';c.style.display='none';pane.querySelector('.dt-save').style.display='';pane.querySelector('.dt-edit').textContent='👁 '+UI_TB.view;}
   else{ta.style.display='none';c.style.display='';pane.querySelector('.dt-save').style.display='none';pane.querySelector('.dt-edit').textContent='✏️ '+UI_TB.edit;}
 }
-function closeTab(key){const T=TABS[key];if(!T)return;const active=T.btn.classList.contains('on');T.btn.remove();T.pane.remove();delete TABS[key];if(T.kind==='html')vscode.postMessage({type:'tab:closed',key:key});if(active)showTab('chat');}
+// 1.9.8: FLOW 탭을 닫으면 #flow 요소(탭 안으로 옮겨 둔 것)를 #top 으로 되돌린다 — pane 과 함께 제거되면 $('flow') 가 null 이 되어
+//   showDynTab 이 예외로 죽고, 이후 모든 동적 탭이 '버튼만 생기고 내용은 안 보이는' 상태가 됐다(사용자 신고 2026-10-21).
+function closeTab(key){const T=TABS[key];if(!T)return;const active=T.btn.classList.contains('on');if(key==='flow'){const fl=$('flow');if(fl){fl.style.display='none';$('top').appendChild(fl);}}T.btn.remove();T.pane.remove();delete TABS[key];if(T.kind==='html')vscode.postMessage({type:'tab:closed',key:key});if(active)showTab('chat');}
 function showDynTab(t){
   const key=t.slice(2);
   document.querySelectorAll('.dtab').forEach(d=>d.style.display='none');
-  [['log','logwrap'],['logs','logs'],['chat','chat'],['status','status'],['flow','flow'],['hist','hist']].forEach(([k,id])=>$(id).style.display='none');
+  // 1.9.8: 요소가 없어도 죽지 않게 + 탭 안에 들어가 있는 #flow 는 숨기지 않는다(FLOW 탭 내용이 비던 원인)
+  ['logwrap','logs','chat','status','flow','hist'].forEach(id=>{const e=$(id);if(!e)return;if(id==='flow'&&e.closest('.dtab'))return;e.style.display='none';});
   const T=TABS[key];if(T)T.pane.style.display='flex';
   document.querySelectorAll('.rtabs .rtb').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
 }
@@ -1582,10 +1613,19 @@ function open(api, opts) {
           }
           else if (item.kind === 'git-upload') {
             const cwd = substQ(item.cwd, { root: p.root });
-            const msg = await vscode.window.showInputBox({ prompt: `커밋 메시지 (${item.remote}/${item.branch} 로 push) — 화면 작업은 MNU_ID 명시 (예: feat(DMF0052): …)`, ignoreFocusOut: true });
-            if (!msg) return;
-            const ok = await vscode.window.showWarningMessage(`전체 stage(.gitignore 적용) → commit → push ${item.remote} ${item.branch}${item.credUser ? ` (계정 ${item.credUser})` : ''}`, { modal: true }, 'push 실행', 'status 만');
-            if (!ok) return;
+            // 1.9.9: autoMessage(quick.json, 예 "BACKUP_${ts}") 가 있으면 메시지 입력·확인 없이 바로 add → commit → push (사용자 지시 2026-10-21: Source Backup 은 "BACKUP_YYYYMMDD_HH24MISS" 로 자동)
+            let msg, ok;
+            if (item.autoMessage) {
+              const d = new Date(); const pad = n => String(n).padStart(2, '0');
+              const ts = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+              msg = substQ(item.autoMessage, { ts, id: effId || '' }); ok = 'push 실행';
+              wb.out('task', `⬆️ ${item.label} — 커밋 메시지 "${msg}" (자동) → push ${item.remote} ${item.branch}\n`, 'cmd');
+            } else {
+              msg = await vscode.window.showInputBox({ prompt: `커밋 메시지 (${item.remote}/${item.branch} 로 push) — 화면 작업은 MNU_ID 명시 (예: feat(DMF0052): …)`, ignoreFocusOut: true });
+              if (!msg) return;
+              ok = await vscode.window.showWarningMessage(`전체 stage(.gitignore 적용) → commit → push ${item.remote} ${item.branch}${item.credUser ? ` (계정 ${item.credUser})` : ''}`, { modal: true }, 'push 실행', 'status 만');
+              if (!ok) return;
+            }
             // 1.8.6: push 에만 자격증명 사용자명 1회 지정(credUser · 전역 git 설정 변경 없음) — 이 PC 전역 username 이 사내 계정이라 비대화 push 가 인증 실패하던 문제
             const cred = item.credUser ? `-c credential.https://github.com.username=${item.credUser} ` : '';
             const line = ok === 'status 만' ? 'git status -s' : `git add -A && git commit -m "${msg.replace(/"/g, "'")}" && git ${cred}push ${item.remote} ${item.branch}`;

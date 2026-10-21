@@ -1,6 +1,6 @@
 # DMF0042 — To-Be Fact Pack 요약
 
-- page_key: `demand/business-plan` · feature: demand · As-is Fact Pack 있음
+- page_key: `demand/business-plan` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
 - 파일 39 · 엔드포인트 호출 25 (미해결 1, 주석 속 2) · 이벤트 62 · 컴포넌트 사용 84 · 하드코딩 컬럼 8 · 메시지 61
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 8건
 

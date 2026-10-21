@@ -12,3 +12,11 @@ export const planDayRange = (
   if (plan.length < 6 || !end) return null;
   return { fromYyyymmdd: `${plan.slice(0, 6)}01`, toYyyymmdd: end };
 };
+
+// 조회 시작일 > Plan 시작일 판정 — AS-IS DCalendar_ValueChanged(.cs:2010-2013) `if (dStart > dPlan)`.
+//   YYYYMMDD 문자열은 사전식 비교가 날짜 대소와 같다. 둘 중 하나라도 비면 판정하지 않는다(false).
+export const isStartAfterPlan = (fromYyyymmdd: string, planStartYyyymmdd: string): boolean => {
+  const from = fromYyyymmdd.trim();
+  const plan = planStartYyyymmdd.trim();
+  return !!from && !!plan && from > plan;
+};

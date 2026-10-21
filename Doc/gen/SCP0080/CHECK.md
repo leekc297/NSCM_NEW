@@ -1,0 +1,51 @@
+# [Harness] SCP0080 group-code-management — BLOCK 2 / WARN 47
+
+- BLOCK T03 i18next TFunction 타입 사용 — tsc 타입 폭발(교차곱) 원인. t 는 좁은 콜백 타입 '(key: string, opts?: { defaultValue?: string }) => string' 으로 받거나 호출측에서 문자열을 만들어 넘길 것 @utils/group-code-management.save.ts:1
+- BLOCK T03 i18next TFunction 타입 사용 — tsc 타입 폭발(교차곱) 원인. t 는 좁은 콜백 타입 '(key: string, opts?: { defaultValue?: string }) => string' 으로 받거나 호출측에서 문자열을 만들어 넘길 것 @utils/group-code-management.save.ts:122
+- WARN G01 As-is 시트 'Group Code Management - 40' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G01 As-is 시트 'Group Code Management - 81' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G01 As-is 시트 'Group Code Management - 81_HD' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G01 As-is 시트 'Group Code Management - 81_HG' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G01 As-is 시트 'Group Code Management - 81_HM' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G01 As-is 시트 'Group Code Management - 81_ST' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G01 As-is 시트 'Group Code Management - 81_UC' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G01 As-is 시트 'Group Code Management - 82' 가 SHEETS enum 에 없음 (배포 SHEET_NAME 케이싱 그대로)
+- WARN G02 As-is 엔드포인트 SCP.SCP0050_GET_CAPA_PIC_USERINFO_POPUP (SCP0050_GET_CAPA_PIC_USERINFO_POPUP) 매핑표 §4 에 없음
+- WARN G03 As-is 이벤트 this.Load → Form_Load 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 cboDivision.SelectedIndexChanged → cboDivision_SelectedIndexChanged 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spd81.CellDoubleClick → spdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spd81.KeyPress → spdMain_KeyPress 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spd81.Change → SpdMain_Change 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spd82.CellDoubleClick → spdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spd82.KeyPress → spdMain_KeyPress 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spd82.Change → SpdMain_Change 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spd40.CellDoubleClick → spdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spd40.KeyPress → spdMain_KeyPress 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spd40.Change → SpdMain_Change 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdEtc.CellDoubleClick → spdMain_CellDoubleClick 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdEtc.KeyPress → spdMain_KeyPress 매핑표 §2 에 없음
+- WARN G03 As-is 이벤트 spdEtc.Change → SpdMain_Change 매핑표 §2 에 없음
+- WARN G04 As-is 컨트롤 chkProduction / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 clbOperation / UsrCheckedList2 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkFCST / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtNickname / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 txtModel / UsrMultiLineEditor 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 cboDivision / UsrCombo 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkActive / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 chkBOM / UsrCheckBox 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spd40 / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spdEtc / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spd81 / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spd82 / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spd81_HM / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spd81_UC / FpSpread 매핑표 §1 에 없음
+- WARN G04 As-is 컨트롤 spd81_ST / FpSpread 매핑표 §1 에 없음
+- WARN D01 사전 밖 컴포넌트 <ControlConfirmIcon> — 표준이면 rules/map_control.csv 에 등록, 아니면 공용 컴포넌트로 교체 @components/GroupCodeRtfGubunModal.tsx
+- WARN R05 `any` / `as unknown as` 금지 (#73 procedure-dts-ssot) @components/GroupCodeRtfGubunModal.tsx:109
+- WARN R02 직접 import 금지 → @foundation 재export (#40 react-query-foundation-reexport, UI체크 3.3) @GroupCodeManagement.tsx:3
+- WARN B20 __tests__/*.spec.ts 단위 테스트 — 룰 17 9-Step ⑨
+- WARN B21 Doc/gen/SCP0080/register.json — 등록 3-키 초안 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0080/e2e_plan.json — E2E 플랜 — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0080/SCP0080_registration.sql — Oracle 메타 등록 SQL(gen-register-sql.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B21 Doc/gen/SCP0080/SCP0080_PKG.sql — Oracle PKG 골격(gen-pkg.js) — 화면=FE+메타+PKG 한 세트(룰 17 9-Step ①②)
+- WARN B22 조회 filter 키 = 사내 PROC_M COL_NM (P_SCP0080_GET_GROUP_CODE_MANAGEMENT · 시트 'main') — 누락 sesUserId, debugMode — 현재 키: divisionId, operationId, modelId, nickName, checkFcst, checkProduction, checkActive, checkBom · BE positional 매핑이라 값이 NULL 로 감

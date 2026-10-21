@@ -1,6 +1,6 @@
 # SSP0022 — To-Be Fact Pack 요약
 
-- page_key: `shipping/shipment-request-electrode` · feature: shipping · As-is Fact Pack 있음
+- page_key: `shipping/shipment-request-electrode` · feature: shipping · As-is Fact Pack 없음(화면ID 미대응)
 - 파일 11 · 엔드포인트 호출 10 (미해결 0, 주석 속 0) · 이벤트 19 · 컴포넌트 사용 43 · 하드코딩 컬럼 1 · 메시지 13
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 1건
 

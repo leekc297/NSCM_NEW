@@ -1,0 +1,79 @@
+{
+  "id": "SCP0100",
+  "task": "claude",
+  "scope": "both",
+  "note": "화면 SCP0100 는 이미 구현된 페이지가 있는 **보완 대상**이며, 이번 작업은 사용자 요청을 기다리지 않고 **부족한 것을 스스로 찾아 끝까지 보완**하는 것이다(이 메뉴 선택 = 해당 화면 FE 페이지 폴더 수정 승인). 골격을 다시 만들지 ",
+  "start": "2026-10-21T07:45:29+09:00",
+  "end": "2026-10-21T09:23:58+09:00",
+  "exit": 0,
+  "sources": [
+    {
+      "name": "fe",
+      "dir": "C:\\Projects\\NSCM\\nscm-fe\\features\\supply\\src\\pages\\global-psi-report",
+      "files": 12
+    },
+    {
+      "name": "db",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gen\\SCP0100",
+      "files": 4
+    },
+    {
+      "name": "docs",
+      "dir": "C:\\Projects\\NSCM\\Doc\\asisfacts\\agent\\SCP0100",
+      "files": 8
+    },
+    {
+      "name": "gap",
+      "dir": "C:\\Projects\\NSCM\\Doc\\gap",
+      "files": 1
+    }
+  ],
+  "afterMode": "end",
+  "afterAt": "2026-10-21T09:23:58+09:00",
+  "changed": [
+    {
+      "file": "fe\\components\\GlobalPsiReportForm.tsx",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\components\\GlobalPsiReportGrid.tsx",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\global-psi-report.constants.ts",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\global-psi-report.types.ts",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\GlobalPsiReport.tsx",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\useGlobalPsiReportStore.ts",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\utils\\globalPsiReportCalendar.ts",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\utils\\globalPsiReportColumns.ts",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\__asis-mapping__.md",
+      "kind": "modified"
+    },
+    {
+      "file": "fe\\__tests__\\GlobalPsiReport.spec.ts",
+      "kind": "modified"
+    },
+    {
+      "file": "gap\\SCP0100_gap.csv",
+      "kind": "modified"
+    }
+  ]
+}

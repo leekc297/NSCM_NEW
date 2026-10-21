@@ -1,6 +1,11 @@
 import type { FlexGridColumnConfig, RawFlexGridColumnConfig } from '@foundation/models';
 
-import { BUCKET_CODE, PIVOT_PREFIX } from '../global-psi-report.constants';
+import {
+  BUCKET_CODE,
+  PIVOT_PREFIX,
+  PRODUCT_LEVEL_COLUMNS,
+  PRODUCT_LEVEL_VISIBLE,
+} from '../global-psi-report.constants';
 
 // GET_SHEET_CALENDAR_3SPAN 반환 1행(design 03 §2.1) — 동적 pivot 기간칼럼 1개의 메타.
 //   COLUMN_NAME 예: 'M_202601'(월) / 'W_20260W1A'(주) / 'B_...'(BOH 보조, 숨김).
@@ -9,6 +14,7 @@ export interface CalendarCol {
   columnLabel: string; // COLUMN_LABEL_NAME — 3단(leaf) 라벨. 기간칼럼은 'Qty' 스팬(design 03 §2.3)
   smallLabel: string; // SMALL_CLASS_LABEL_NAME — 2단(주) 라벨
   largeLabel: string; // LARGE_CLASS_LABEL_NAME — 1단(월) 라벨
+  dayCode: string; // DAY_CODE — 기간 시작일(YYYYMMDD). WEEKLY 과거구간 기준주 판정(SetBackColor .cs:999)
   sortOrder: number; // SORT_ORDER_NO — 좌우 정렬 순서
 }
 
@@ -31,6 +37,34 @@ export const buildFixedColumns = (
   adminCols: RawFlexGridColumnConfig[] | undefined
 ): RawFlexGridColumnConfig[] => adminCols ?? [];
 
+// SetLayout(.cs:1490-1542) — Search Level 모드(Detail 아님)일 때 Product Level1~3 표시를 Search Level 로 정한다.
+//   표시 대상이 아닌 Product Level 컬럼만 visible=false 로 끄고, 표시 대상은 admin/개인화 visible 을 그대로 둔다
+//   (AS-IS 는 VisibleColumns(true) 로 켜지만 To-Be 는 admin 속성 덮어쓰기 금지 규약 — 숨김 방향만 적용).
+//   Detail 모드는 사용자 정의 컬럼 기준(.cs:1490 주석)이라 그대로 반환한다.
+export const applySearchLevelLayout = (
+  cols: RawFlexGridColumnConfig[],
+  searchLevel: string,
+  isDetail: boolean
+): RawFlexGridColumnConfig[] => {
+  if (isDetail) return cols;
+  const shown = PRODUCT_LEVEL_VISIBLE[searchLevel] ?? [];
+  const levels: readonly string[] = PRODUCT_LEVEL_COLUMNS;
+  return cols.map(c =>
+    levels.includes(c.colNm) && !shown.includes(c.colNm) ? { ...c, visible: false } : c
+  );
+};
+
+// WEEKLY 과거구간 기준주 — AS-IS SetBackColor(.cs:999) FindDataValue(dsSpdTitle, DAY_CODE=plan_start → COLUMN_LABEL_NAME)
+//   후 W_ 컬럼 꼬리와 같은 열 직전까지를 과거로 칠한다. 기준은 W_ 행만 본다 — 같은 DAY_CODE 의 M_ 행(월 1일이 Plan 시작일인
+//   경우)이 먼저 잡히면 AS-IS 는 기준주를 못 찾아 범위가 깨진다(첫 일치 행 사용) → 의도(Plan 시작 주) 기준으로 W_ 행에서 찾는다.
+export const planStartWeekBinding = (
+  calendarCols: readonly CalendarCol[],
+  planStartYyyymmdd: string
+): string =>
+  calendarCols.find(
+    c => c.columnName.startsWith(PIVOT_PREFIX.WEEKLY) && c.dayCode === planStartYyyymmdd
+  )?.columnName ?? '';
+
 const s = (v: unknown): string =>
   typeof v === 'string' ? v : typeof v === 'number' ? String(v) : '';
 
@@ -42,6 +76,7 @@ export const toCalendarCols = (rows: readonly Record<string, unknown>[] | undefi
       columnLabel: s(r.COLUMN_LABEL_NAME),
       smallLabel: s(r.SMALL_CLASS_LABEL_NAME),
       largeLabel: s(r.LARGE_CLASS_LABEL_NAME),
+      dayCode: s(r.DAY_CODE),
       sortOrder: Number(r.SORT_ORDER_NO ?? 0),
     }))
     .filter(c => isPivotBinding(c.columnName))
@@ -60,7 +95,14 @@ export const calendarColsFromRows = (
     const large = b.startsWith(PIVOT_PREFIX.MONTHLY)
       ? `${b.slice(2, 6)}-${b.slice(6, 8)}`
       : b.slice(2, 8);
-    return { columnName: b, columnLabel: 'Qty', smallLabel: '', largeLabel: large, sortOrder: 0 };
+    return {
+      columnName: b,
+      columnLabel: 'Qty',
+      smallLabel: '',
+      largeLabel: large,
+      dayCode: '',
+      sortOrder: 0,
+    };
   });
 };
 

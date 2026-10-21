@@ -1,6 +1,6 @@
 # DMF0005 — To-Be Fact Pack 요약
 
-- page_key: `master/sales-site-project-model` · feature: master · As-is Fact Pack 있음
+- page_key: `master/sales-site-project-model` · feature: master · As-is Fact Pack 없음(화면ID 미대응)
 - 파일 17 · 엔드포인트 호출 10 (미해결 3, 주석 속 0) · 이벤트 31 · 컴포넌트 사용 63 · 하드코딩 컬럼 3 · 메시지 20
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 미사용 · 하드코딩 컬럼 정의 3건
 

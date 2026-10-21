@@ -15,7 +15,13 @@
       "component": "Checkbox",
       "comboId": "",
       "popup": false,
-      "asis": "chkToday"
+      "asis": "chkToday",
+      "tobeLabel": "",
+      "labels": [
+        "Today"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "itemIds",
@@ -25,7 +31,16 @@
       "component": "ItemField",
       "comboId": "",
       "popup": true,
-      "asis": "txtItemId"
+      "asis": "txtItemId",
+      "tobeLabel": "Model/Nickname",
+      "labels": [
+        "Model/Nickname",
+        "Model / Nickname",
+        "Model",
+        "Nickname"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "projectCodes",
@@ -35,7 +50,13 @@
       "component": "ProjectField",
       "comboId": "",
       "popup": true,
-      "asis": "txtProject"
+      "asis": "txtProject",
+      "tobeLabel": "Project",
+      "labels": [
+        "Project"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "period",
@@ -45,7 +66,16 @@
       "component": "PeriodField",
       "comboId": "",
       "popup": false,
-      "asis": "drpPeriod"
+      "asis": "drpPeriod",
+      "tobeLabel": "Period",
+      "labels": [
+        "Period",
+        "From",
+        "To",
+        "기간"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     },
     {
       "key": "senderCodes",
@@ -55,9 +85,17 @@
       "component": "CustomDropdown",
       "comboId": "SenderCode",
       "popup": false,
-      "asis": "clbEDISender"
+      "asis": "clbEDISender",
+      "tobeLabel": "",
+      "labels": [
+        "EDI Sender"
+      ],
+      "excluded": false,
+      "excludedWhy": ""
     }
   ],
+  "sheetMap": {},
+  "asisMapping": "features\\report\\src\\pages\\dmf0052\\__asis-mapping__.md",
   "buttons": [
     {
       "key": "refresh",

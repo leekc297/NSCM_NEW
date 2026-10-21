@@ -35,7 +35,14 @@ for (const r of readCsv(path.join(R, 'forbidden.csv'))) {
 const base = path.basename(pageDir);
 const need = [[`${base}.constants.ts`, 'WARN'], ['index.ts', 'WARN']];
 const hasAsis = ID && fs.existsSync(path.join(cfg.asisOutDir, 'screens', ID));
-if (hasAsis && !files.some(f => rel(f) === '__asis-mapping__.md')) F('BLOCK', 'S01', '표준 파일 없음: __asis-mapping__.md (As-is Fact Pack 이 있는 화면은 대사표 필수)');
+// T03 (2026-10-21 SCP0080 사고): i18next `TFunction` 타입을 매개변수/변수 타입으로 쓰면 useTranslation() 의 t(react-i18next, 다른 제네릭) 와의
+//   대입 검사에서 typed resources(ko.json 1,614 키) 오버로드가 교차곱으로 폭발 → tsc 가 feature 전체에서 OOM/RangeError(12GB 도 초과).
+//   같은 폴더 사본에서 `t: (key: string, opts?: { defaultValue?: string }) => string` 로 바꾸면 647MB·127s 정상. 정적 검출(BLOCK) — tsc 가 죽기 전에 막는다.
+for (const f of files.filter(x => /\.(ts|tsx)$/.test(x) && !/\.d\.ts$/.test(x))) {
+  const txt = fs.readFileSync(f, 'utf8'); if (!/\bTFunction\b/.test(txt)) continue;
+  txt.split(/\r?\n/).forEach((l, i) => { if (/(^|[^\w])TFunction\b/.test(l) && !/^\s*\/\//.test(l)) F('BLOCK', 'T03', `i18next TFunction 타입 사용 — tsc 타입 폭발(교차곱) 원인. t 는 좁은 콜백 타입 '(key: string, opts?: { defaultValue?: string }) => string' 으로 받거나 호출측에서 문자열을 만들어 넘길 것`, `${rel(f)}:${i + 1}`); });
+}
+if (hasAsis && !files.some(f => rel(f) === '__asis-mapping__.md')) F('BLOCK', 'S01', '표준 파일 없음: __asis-mapping__.md (As-is Fact Pack 이 있는 화면은 대조표 필수)');
 for (const [n, lv] of need) if (!files.some(f => rel(f) === n)) F(lv, 'S01', `표준 파일 없음: ${n}`);
 if (!files.some(f => /components\/.*Form\.tsx$/.test(rel(f)))) F('WARN', 'S01', '표준 파일 없음: components/{Page}Form.tsx');
 if (!files.some(f => /components\/.*Grid[A-Za-z0-9]*\.tsx$/.test(rel(f)))) F('WARN', 'S01', '표준 파일 없음: components/{Page}Grid*.tsx');
@@ -53,8 +60,8 @@ if (mapFile) for (const line of read(mapFile).split(/\r?\n/)) { const m = line.m
   else if (/^미구현/.test(row.status)) F(FINAL ? 'BLOCK' : 'WARN', 'M04', `미구현: ${row.id} ${row.summary}${row.reason ? ' — ' + row.reason : ''}`, '__asis-mapping__.md');
   if (/^구현/.test(row.status) && row.impl) { const fn = (row.impl.match(/([\w./-]+\.tsx?)/) || [])[1]; if (fn && !files.some(f => rel(f) === fn.replace(/^\.\//, ''))) F('WARN', 'M05', `구현 위치 파일 없음: ${row.id} → ${fn}`, '__asis-mapping__.md'); }
 }
-// 3b) 커밋본 대비 후퇴 감지 — 2026-10-19 SCP0096 사고(파이프라인이 손으로 완성한 커밋본을 골격으로 교체: 대사표 91→20행, dynamic-columns/types 삭제)
-//     git 이 추적하는 페이지면 ①커밋본 파일 삭제(M07) ②대사표 행·구현 수 축소(M06) 를 BLOCK — "빈 칸 0" 만 보던 M01~M05 의 구멍
+// 3b) 커밋본 대비 후퇴 감지 — 2026-10-19 SCP0096 사고(파이프라인이 손으로 완성한 커밋본을 골격으로 교체: 대조표 91→20행, dynamic-columns/types 삭제)
+//     git 이 추적하는 페이지면 ①커밋본 파일 삭제(M07) ②대조표 행·구현 수 축소(M06) 를 BLOCK — "빈 칸 0" 만 보던 M01~M05 의 구멍
 {
   const cp = require('child_process'); const GT = require('./lib/applied').gitTracked(pageDir); // 감싸는 저장소 전부 확인(nscm-fe 중첩 .git 대응)
   const git = args => { try { const r = cp.spawnSync('git', ['-C', GT.root, ...args], { encoding: 'utf8' }); return r.status === 0 ? r.stdout : null; } catch { return null; } };
@@ -66,7 +73,7 @@ if (mapFile) for (const line of read(mapFile).split(/\r?\n/)) { const m = line.m
       if (headTxt != null) {
         const cnt = txt => { let n = 0, impl = 0; for (const line of txt.split(/\r?\n/)) { const m = line.match(/^\|\s*([A-Z]\d{2}-[\dP]+-\d{3})\s*\|(.*)\|\s*$/); if (!m) continue; n++; if (/^구현/.test((m[2].split('|').pop() || '').trim())) impl++; } return { n, impl }; };
         const h = cnt(headTxt), c = cnt(read(mapFile));
-        if (c.n < h.n || c.impl < h.impl) F(FINAL ? 'BLOCK' : 'WARN', 'M06', `대사표 후퇴: 행 ${h.n}→${c.n} · 구현 ${h.impl}→${c.impl} (커밋본 대비) — 기존 대사표를 재생성하지 말고 커밋본 위에 행을 추가`, '__asis-mapping__.md');
+        if (c.n < h.n || c.impl < h.impl) F(FINAL ? 'BLOCK' : 'WARN', 'M06', `대조표 후퇴: 행 ${h.n}→${c.n} · 구현 ${h.impl}→${c.impl} (커밋본 대비) — 기존 대조표를 재생성하지 말고 커밋본 위에 행을 추가`, '__asis-mapping__.md');
       }
     }
   }
@@ -252,7 +259,7 @@ const DOD = []; const dod = (code, ok, what, how, level) => { DOD.push({ code, o
   //   B26: RESPONSE_SET 값(응답 키) ⊂ 사내 PROC_M OUT COL_NM ∪ {DATARESULT} — BE BaseService 는 이 키만 만든다(대소문자 그대로).
   //        o_rc1_columns 같은 ResultSetMetaData 사이드카는 SYS0013 DynamicQuery 전용 → 일반 화면에서 읽으면 항상 undefined.
   //   B27: As-is 기간형 타이틀 SP(GetSpdTitle → *_GET_SHEET_CALENDAR_3SPAN / *_GET_SPREAD_TITLE …)가 있고 사내 배선이 있으면 FE 가 그 시트를 조회해야 한다.
-  //        메타형(SCM_MST_SHEET_COLUMNS 만 읽는 공통 타이틀)은 admin 컬럼 메타로 대체 = 판정 제외. 대사표 '제외/해당없음'+사유면 사람 결정으로 통과.
+  //        메타형(SCM_MST_SHEET_COLUMNS 만 읽는 공통 타이틀)은 admin 컬럼 메타로 대체 = 판정 제외. 대조표 '제외/해당없음'+사유면 사람 결정으로 통과.
   {
     const DY = require('./lib/dyncol');
     const tobeDb2 = cfg.tobeOutDir ? path.join(cfg.tobeOutDir, 'db') : null;
@@ -287,16 +294,16 @@ const DOD = []; const dod = (code, ok, what, how, level) => { DOD.push({ code, o
           const used = [...new Set((c.via === 'exact' ? c.pairs : DY.corpAllTitlePairs(menuMeta)).filter(p => DY.consumesPair(src, p)).map(p => p.sheet + (p.btn !== 'SEARCH' ? '/' + p.btn : '')))];
           const mr = mapRows.find(r => r.summary.includes(t.sp)); const decided = mr && /^(제외|해당없음)/.test(mr.status) && mr.reason;
           const evid = `As-is ${t.members.join('/')} → ${t.sp} [${t.signals.join('+')}${loops.length ? ' + grid_code DB루프 ' + loops.slice(0, 2).join(',') : ''}]`;
-          if (used.length || decided) { dod('B27', true, `동적 헤더 원천 ${t.sp} → FE 조회`, used.length ? `시트 '${used.join("','")}' 조회` : `대사표 ${mr.id} ${mr.status}: ${mr.reason}`); continue; }
+          if (used.length || decided) { dod('B27', true, `동적 헤더 원천 ${t.sp} → FE 조회`, used.length ? `시트 '${used.join("','")}' 조회` : `대조표 ${mr.id} ${mr.status}: ${mr.reason}`); continue; }
           if (c.via === 'exact') dod('B27', false, `동적 헤더 원천 ${t.sp} → FE 조회`, `${evid} · 사내 배선 시트 '${c.sheets.join("','")}'(${c.procs.join(',')})를 FE 가 조회하지 않음 → 기간 컬럼이 그려지지 않음. SHEETS 에 시트 추가 + useTabProcQuery 로 조회기간을 넘겨 o_rc1(COLUMN_NAME·COLUMN_LABEL_NAME·SMALL/LARGE_CLASS_LABEL_NAME·DAY_CODE)로 헤더 생성(As-is InitSpreadDateColumn 1:1)`);
-          else F('WARN', 'B27', `${evid} · 사내 정확 배선 없음${c.via === 'family' ? `(같은 화면 타이틀 계열 '${c.sheets.join("','")}' 추정)` : ''} — 동적 컬럼 원천을 확인: 배선 등록(DB 메타) 후 FE 조회 또는 대사표에 대체 근거(BE/메타 원문 확인)를 적고 '제외'`, 'grid');
+          else F('WARN', 'B27', `${evid} · 사내 정확 배선 없음${c.via === 'family' ? `(같은 화면 타이틀 계열 '${c.sheets.join("','")}' 추정)` : ''} — 동적 컬럼 원천을 확인: 배선 등록(DB 메타) 후 FE 조회 또는 대조표에 대체 근거(BE/메타 원문 확인)를 적고 '제외'`, 'grid');
         }
         if (!titles.length && loops.length) F('WARN', 'B27', `As-is grid_code DB루프(${loops.slice(0, 3).join(', ')}) — 루프 원천 결과셋이 타이틀 SP 판정에 안 걸림. 동적 컬럼 원천 확인`, 'grid');
-        // M08: As-is DB루프 컬럼 생성(grid_code DB_DRIVEN · Add*Column) → 대사표 행 필수. 대사표 생성기가 grid_effective(정적 컬럼)만 써서
-        //      동적 컬럼 생성 행이 한 번도 안 생겼던 구멍(2026-10-20 전수: 대사표 100페이지 중 31화면 73행 누락). 문서 누락이라 WARN — 미구현 자체는 B27/M09 가 차단.
+        // M08: As-is DB루프 컬럼 생성(grid_code DB_DRIVEN · Add*Column) → 대조표 행 필수. 대조표 생성기가 grid_effective(정적 컬럼)만 써서
+        //      동적 컬럼 생성 행이 한 번도 안 생겼던 구멍(2026-10-20 전수: 대조표 100페이지 중 31화면 73행 누락). 문서 누락이라 WARN — 미구현 자체는 B27/M09 가 차단.
         const missLoop = loops.filter(loc => { const [mem, line] = loc.split(':'); return !mapRows.some(x => new RegExp(`${mem}\\s*[/:]\\s*${line}\\b`).test(x.summary)); });
-        if (mapFile && missLoop.length) F('WARN', 'M08', `대사표에 As-is DB루프 컬럼 생성 행 없음: ${missLoop.join(', ')} — '## §6 동적 컬럼' 에 행 추가(요지 '${missLoop[0].replace(':', ' / ')} (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치)`, '__asis-mapping__.md');
-        // M09: 대사표 엔드포인트 행이 '구현' 인데 사내 정확 배선 시트를 FE 가 조회하지 않음 = 구현 근거 불일치(SCP0096 D00-4-005 '데이터 alias 로 흡수' 사고).
+        if (mapFile && missLoop.length) F('WARN', 'M08', `대조표에 As-is DB루프 컬럼 생성 행 없음: ${missLoop.join(', ')} — '## §6 동적 컬럼' 에 행 추가(요지 '${missLoop[0].replace(':', ' / ')} (DB루프 컬럼 생성 ← 타이틀 SP)', 구현 위치 = 동적 컬럼 생성 코드 + 타이틀 시트 조회 위치)`, '__asis-mapping__.md');
+        // M09: 대조표 엔드포인트 행이 '구현' 인데 사내 정확 배선 시트를 FE 가 조회하지 않음 = 구현 근거 불일치(SCP0096 D00-4-005 '데이터 alias 로 흡수' 사고).
         //      2026-10-20 전수 1건(SCP0096) — 오탐 없음 → final BLOCK
         const epSps = [...new Set(readCsv(path.join(sdir, 'endpoints.csv')).filter(e => e.variant !== 'legacy').map(e => (e.sp_or_sql || '').replace(/^SP\s+/, '').trim()).filter(Boolean))];
         for (const sp of epSps) {
@@ -319,11 +326,35 @@ if (a.includes('--tsc') || a.includes('--lint') || FINAL) {
   const fe = cfg.feRoot; const featMatch = /[\\/]features[\\/]([^\\/]+)[\\/]/.exec(pageDir + path.sep); const feat = featMatch ? featMatch[1] : null;
   const pageAbs = path.resolve(pageDir).toLowerCase();
   if ((a.includes('--tsc') || FINAL) && feat && fs.existsSync(path.join(fe, 'node_modules', 'typescript', 'bin', 'tsc'))) {
-    const tscfg = path.join(fe, 'features', feat, 'tsconfig.json');
-    const r = spawnSync(process.execPath, [path.join(fe, 'node_modules', 'typescript', 'bin', 'tsc'), '--noEmit', '--pretty', 'false', '-p', tscfg], { cwd: path.join(fe, 'features', feat), encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 600000 });
+    // 2026-10-21 보강(SCP0100 사고): ① 기본 = 페이지 범위 프로그램(임시 tsconfig: 페이지 폴더 + d.ts, incremental/declaration 끔) — feature 전체(62페이지)는
+    //   다른 페이지의 타입 폭발(getCrossProductIntersections → RangeError: Map maximum size exceeded, 12GB 힙도 초과)에 끌려 게이트가 죽는다.
+    //   페이지 범위는 SCP0100 실측 655MB·52s. `--tsc-feature` 를 주면 종전처럼 feature tsconfig 전체.
+    //   ② 힙 명시(harness.json tscHeapMb, 기본 4096) ③ **비정상 종료(status≠0 인데 'error TS' 0건 — OOM/RangeError/시그널) = BLOCK T00** —
+    //   종전엔 WARN T02('다른 파일 오류') 로 흘려 BLOCK 0 으로 통과했다(CHECK.md "exit 134").
+    const featDir = path.join(fe, 'features', feat); const featCfg = path.join(featDir, 'tsconfig.json');
+    const heapMb = Number(cfg.tscHeapMb || 4096); const wholeFeature = a.includes('--tsc-feature');
+    let tscfg = featCfg, scopeNote = 'feature 전체';
+    if (!wholeFeature) {
+      const fwd = p => p.replace(/\\/g, '/');
+      const tmpDir = path.join(require('os').tmpdir(), 'nscm-harness-tsc', `${feat}-${path.basename(pageDir)}`); fs.mkdirSync(tmpDir, { recursive: true });
+      const tmpCfg = { extends: fwd(featCfg), compilerOptions: { noEmit: true, baseUrl: fwd(fe) + '/', incremental: false, declaration: false, declarationMap: false, sourceMap: false },
+        include: [fwd(path.resolve(pageDir)) + '/**/*', fwd(path.join(fe, 'configs', 'types')) + '/*.d.ts', fwd(path.join(featDir, 'src')) + '/*.d.ts'], exclude: [] };
+      tscfg = path.join(tmpDir, 'tsconfig.json'); fs.writeFileSync(tscfg, JSON.stringify(tmpCfg, null, 1), 'utf8'); scopeNote = '페이지 범위';
+    }
+    const r = spawnSync(process.execPath, [`--max-old-space-size=${heapMb}`, path.join(fe, 'node_modules', 'typescript', 'bin', 'tsc'), '--noEmit', '--pretty', 'false', '-p', tscfg], { cwd: featDir, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 900000 });
     const out = (r.stdout || '') + (r.stderr || '');
-    if (r.error) F('WARN', 'T00', `tsc 실행 실패: ${r.error.message}`);
-    else { let n = 0; for (const line of out.split(/\r?\n/)) { const m = /^(.+?)\((\d+),(\d+)\): error (TS\d+): (.*)$/.exec(line); if (!m) continue; const abs = path.resolve(path.join(fe, 'features', feat), m[1]).toLowerCase(); if (abs.startsWith(pageAbs)) { n++; if (n <= 30) F('BLOCK', 'T01', `${m[4]} ${m[5]}`, `${path.relative(pageDir, path.resolve(path.join(fe, 'features', feat), m[1]))}:${m[2]}`); } } if (n > 30) F('BLOCK', 'T01', `타입 오류 ${n}건 (30건만 표시)`); if (!n && r.status !== 0) F('WARN', 'T02', `tsc 가 다른 파일에서 오류를 보고(페이지 범위 밖) — exit ${r.status}`); }
+    if (r.error) F('BLOCK', 'T00', `tsc 실행 실패(${scopeNote}): ${r.error.message}`);
+    else {
+      let n = 0, total = 0;
+      for (const line of out.split(/\r?\n/)) { const m = /^(.+?)\((\d+),(\d+)\): error (TS\d+): (.*)$/.exec(line); if (!m) continue; total++; const abs = path.resolve(featDir, m[1]).toLowerCase(); if (abs.startsWith(pageAbs)) { n++; if (n <= 30) F('BLOCK', 'T01', `${m[4]} ${m[5]}`, `${path.relative(pageDir, path.resolve(featDir, m[1]))}:${m[2]}`); } }
+      if (n > 30) F('BLOCK', 'T01', `타입 오류 ${n}건 (30건만 표시)`);
+      if (!total && r.status !== 0) {
+        const sig = out.split(/\r?\n/).find(l => /RangeError|FATAL ERROR|heap out of memory|Maximum call stack/i.test(l)) || (out.trim().split(/\r?\n/).pop() || '');
+        const why = /Map maximum size exceeded|getCrossProductIntersections/.test(out) ? '타입 교차곱 폭발(getCrossProductIntersections) — 특정 파일의 유니온×교차 타입이 원인, 힙을 늘려도 해결되지 않음. 페이지별 tsc 로 이분 탐색' : /heap out of memory/i.test(out) ? `메모리 부족(힙 ${heapMb}MB) — harness.json tscHeapMb 상향 또는 타입 폭발 의심` : '원인 미상';
+        F('BLOCK', 'T00', `tsc 비정상 종료(${scopeNote}, exit ${r.status}${r.signal ? ' ' + r.signal : ''}) — 검사가 수행되지 않았으므로 통과로 볼 수 없음. ${why}`, sig.slice(0, 200));
+      }
+      else if (!n && total) F('WARN', 'T02', `tsc 가 페이지 밖 파일에서 오류 ${total}건 (${scopeNote}) — 이 페이지가 import 하는 공용/자매 파일 확인`);
+    }
   }
   if ((a.includes('--lint') || FINAL) && fs.existsSync(path.join(fe, 'node_modules', 'eslint', 'bin', 'eslint.js'))) {
     const r = spawnSync(process.execPath, [path.join(fe, 'node_modules', 'eslint', 'bin', 'eslint.js'), '--format', 'json', '--no-color', path.resolve(pageDir)], { cwd: feat ? path.join(fe, 'features', feat) : fe, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 600000 });

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 'use strict';
-// pipeline — 화면 ID 하나로 끝까지: FE 골격 → 등록 SQL → PKG 골격 → FE 수선 루프(게이트 PASS) → PKG 이식 루프 → E2E 스펙 → [E2E 실행] → 대사표 갱신
+// pipeline — 화면 ID 하나로 끝까지: FE 골격 → 등록 SQL → PKG 골격 → FE 수선 루프(게이트 PASS) → PKG 이식 루프 → E2E 스펙 → [E2E 실행] → 대조표 갱신
 //   node pipeline.js <ID> [--max 3] [--e2e] [--no-claude] [--regen-pkg] [--design <화면설계서.md>] [--config harness.json] [--phase 1[,2,…]]
-//   --phase N   : 그 단계만 실행(1 FE골격 · 2 등록SQL · 3 PKG골격 · 4 FE수선 · 5 PKG이식 · 6 E2E스펙 · 7 대사표). 단계 결과는 Doc/gen/<ID>/_pipeline_steps.json 에 누적되고
+//   --phase N   : 그 단계만 실행(1 FE골격 · 2 등록SQL · 3 PKG골격 · 4 FE수선 · 5 PKG이식 · 6 E2E스펙 · 7 대조표). 단계 결과는 Doc/gen/<ID>/_pipeline_steps.json 에 누적되고
 //                 PIPELINE.md 는 누적본으로 다시 쓴다(Vibe_Manager 체인이 단계별 진행을 보여주기 위해 — 2026-10-20). 종료코드 = 이번에 실행한 단계의 실패 여부
 //   --regen-pkg : 이식 작업이 들어간 <ID>_PKG.sql 을 버리고 골격을 다시 만든다(기본은 보존)
 //   --no-claude : Claude 호출 없이 생성·게이트까지만 (골격 상태 확인용)   --e2e : FE/BE 가 떠 있을 때 스모크 실행까지
@@ -50,8 +50,8 @@ if (!NOCLAUDE) { if (want(4)) run(`4 FE 수선 루프(Claude ×${MAX} + 게이�
 else if (pageDir && fs.existsSync(pageDir)) { if (want(4)) run('4 FE 게이트(--final, Claude 없음)', N, [H('check.js'), '--page', pageDir, '--id', ID, '--final', ...C]); if (want(5)) run('5 PKG 게이트(check-pkg)', N, [H('check-pkg.js'), ID, ...C]); }
 // 6 E2E 스펙 (+실행)
 const e2eDir = path.join(repo, 'tools', 'E2E'); if (want(6) && fs.existsSync(path.join(e2eDir, 'gen-e2e.js'))) { run('6 E2E 스펙 생성(gen-e2e)', N, [path.join(e2eDir, 'gen-e2e.js'), ID]); if (E2E) run('6b E2E 스모크 실행(run-e2e smoke)', path.join(e2eDir, 'run-e2e.cmd'), ['smoke', ID], { cwd: e2eDir }); }
-// 7 대사표
-const reconDir = path.join(repo, 'tools', 'Recon'); if (want(7) && fs.existsSync(path.join(reconDir, 'recon.js'))) run('7 대사표 갱신(recon)', N, [path.join(reconDir, 'recon.js'), ...C]);
+// 7 대조표
+const reconDir = path.join(repo, 'tools', 'Recon'); if (want(7) && fs.existsSync(path.join(reconDir, 'recon.js'))) run('7 대조표 갱신(recon)', N, [path.join(reconDir, 'recon.js'), ...C]);
 steps.sort((x, y) => (parseInt(String(x.name).trim(), 10) || 0) - (parseInt(String(y.name).trim(), 10) || 0)); saveSteps();
 // 결과 요약
 const chk = fs.existsSync(path.join(genDir, 'CHECK.md')) ? (/BLOCK (\d+) \/ WARN (\d+)/.exec(fs.readFileSync(path.join(genDir, 'CHECK.md'), 'utf8')) || []).slice(1) : [];

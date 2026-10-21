@@ -54,9 +54,9 @@ props/params:
 
 | 이름 | import | 사용 | As-is 대응 | 설명 |
 |---|---|---|---|---|
-| **PeriodField** | `features/master/src/components` | 59 | UsrDateRangePicker / UsrDateRangePicker3 / UsrDateRangePickerWtWeek / UsrMonthRangePicker / UsrDateRangePickerWtWeek2 / field:^(drp\|d\|mrp)Period\d*$\|^dCalendar$\|^drpDate$ |  |
-| **ItemByDivisionModal** | `features/master/src/components` | 47 | button:^btn(Item\|Model\|Material)(Id)?$ |  |
-| **MaterialByDivisionModal** | `features/master/src/components` | 43 |  |  |
+| **PeriodField** | `features/master/src/components` | 60 | UsrDateRangePicker / UsrDateRangePicker3 / UsrDateRangePickerWtWeek / UsrMonthRangePicker / UsrDateRangePickerWtWeek2 / field:^(drp\|d\|mrp)Period\d*$\|^dCalendar$\|^drpDate$ |  |
+| **ItemByDivisionModal** | `features/master/src/components` | 46 | button:^btn(Item\|Model\|Material)(Id)?$ |  |
+| **MaterialByDivisionModal** | `features/master/src/components` | 44 |  |  |
 | **MeasureSelectModal** | `features/master/src/components` | 29 | button:^btnMeasure$ |  |
 | **ProjectByDivisionModal** | `features/master/src/components` | 29 | button:^btnProject$ |  |
 | **ItemField** | `features/master/src/components` | 11 | field:^(txt\|usr)(Item\|ItemId\|Model\|ModelId\|Nickname\|Material\|MaterialId)$ / field:^(txt\|usr)NickName$ |  |

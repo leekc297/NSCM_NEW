@@ -1,6 +1,6 @@
 # DMF0020 — To-Be Fact Pack 요약
 
-- page_key: `master/sales-future-price` · feature: master · As-is Fact Pack 있음
+- page_key: `master/sales-future-price` · feature: master · As-is Fact Pack 없음(화면ID 미대응)
 - 파일 35 · 엔드포인트 호출 23 (미해결 0, 주석 속 5) · 이벤트 64 · 컴포넌트 사용 92 · 하드코딩 컬럼 39 · 메시지 96
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 39건
 

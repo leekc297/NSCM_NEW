@@ -639,7 +639,7 @@ ${inputs.map(x => { const k = x.name.replace(/^(txt|cbo|clb|chk|drp|usr)/, ''); 
 
 function mapping(c) {
   const row = (id, summary, impl, reason, status) => `| ${id} | ${summary} | ${impl} | ${reason} | ${status} |`;
-  const lines = [`# __asis-mapping__.md — ${c.ID} design 번호 1:1 대사표 (TobeGen 초기본 — Fact Pack 기준)`, '',
+  const lines = [`# __asis-mapping__.md — ${c.ID} design 번호 1:1 대조표 (TobeGen 초기본 — Fact Pack 기준)`, '',
     '> 원천: Doc/asisfacts/screens/' + c.ID + ' (controls/events/endpoints/grid_effective) · 생성: tools/Harness/gen.js',
     '> 상태 허용값: 미구현(초기) / 구현(구현 위치 필수) / 제외(사유 필수) / 해당없음(사유 필수). 빈 칸 1개 = 게이트 실패.', '',
     '## §1 컨트롤', '', '| ID | 요지 (원천 1줄) | 구현 위치 (파일:라인) | 사유 (미구현/제외/해당없음 시 필수) | 상태 |', '|---|---|---|---|---|'];

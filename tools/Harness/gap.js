@@ -62,7 +62,7 @@ for (const t of targets) {
     const tUsed = tc && pageSrc ? [...new Set((tc.via === 'exact' ? tc.pairs : DY.corpAllTitlePairs(menuMeta)).filter(p => DY.consumesPair(pageSrc, p)).map(p => p.sheet + (p.btn !== 'SEARCH' ? '/' + p.btn : '')))] : [];
     if (tp && !(m && /^(제외|해당없음)/.test(m.status)) && tUsed.length) { status = 'COVERED'; evidence = `동적 헤더 시트 '${tUsed.join("','")}' FE 조회${tc.via === 'exact' ? '' : ' (정확 배선 없음 — 같은 화면 타이틀 계열 시트)'}`; }
     else if (tp && !(m && /^(제외|해당없음)/.test(m.status)) && tc.via === 'exact') { status = 'MISSING'; reason = `기간형 동적 헤더 SP — 사내 배선 시트 '${tc.sheets.join("','")}' 를 FE 가 조회하지 않음(등록만으로는 기간 컬럼이 안 그려짐, check.js B27)`; }
-    else if (tp && !(m && /^(제외|해당없음)/.test(m.status))) { status = 'MISSING'; reason = `기간형 동적 헤더 SP — 사내 정확 배선 없음·FE 조회 없음: 배선 등록 후 FE 조회 또는 대사표에 대체 근거 '제외'(check.js B27)`; }
+    else if (tp && !(m && /^(제외|해당없음)/.test(m.status))) { status = 'MISSING'; reason = `기간형 동적 헤더 SP — 사내 정확 배선 없음·FE 조회 없음: 배선 등록 후 FE 조회 또는 대조표에 대체 근거 '제외'(check.js B27)`; }
     else if (al) { status = 'INTENDED'; reason = al; }
     else if (m && /^(제외|해당없음)/.test(m.status)) { status = 'INTENDED'; reason = `${m.design_id} ${m.status}: ${m.reason}`; }
     else if (sp && metaText.toUpperCase().includes(sp.toUpperCase())) { status = 'COVERED'; evidence = 'SP 등록 메타(SCM_ADM_PROC_M) 에 등록'; }
@@ -123,7 +123,7 @@ for (const t of targets) {
     for (const loc of loops) {
       const mr = dm(loc); let status, evidence = '', reason = '';
       if (mr && /^(제외|해당없음)/.test(mr.status)) { status = 'INTENDED'; reason = `${mr.design_id} ${mr.status}: ${mr.reason}`; }
-      else if (used.length) { status = 'COVERED'; evidence = `타이틀 시트 '${used.join("','")}' FE 조회${mr ? ' · 대사표 ' + mr.design_id : ' · 대사표 §6 행 없음(M08)'}`; }
+      else if (used.length) { status = 'COVERED'; evidence = `타이틀 시트 '${used.join("','")}' FE 조회${mr ? ' · 대조표 ' + mr.design_id : ' · 대조표 §6 행 없음(M08)'}`; }
       else if (!titleP.size) { status = 'UNMAPPED'; reason = 'DB루프 원천 결과셋이 기간형 타이틀 SP 판정에 안 걸림 — 원천 확인 필요'; }
       else { status = 'MISSING'; reason = srcSheets.length ? `동적 컬럼 원천 타이틀 시트 '${srcSheets.join("','")}' 를 FE 가 조회하지 않음 — 조회 시 이 컬럼들이 생성되지 않음(B27)` : '동적 컬럼 원천 타이틀 SP 의 사내 배선 없음 — DB 메타 등록 후 FE 조회(B27)'; }
       out.row({ kind: 'dynamic_column', asis_item: loc, asis_detail: `DB루프 컬럼 생성 ← ${[...titleP.values()].map(t => t.sp).join(', ') || '(타이틀 SP 미판정)'}`, status, evidence, reason });

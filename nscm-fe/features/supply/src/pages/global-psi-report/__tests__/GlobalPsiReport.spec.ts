@@ -5,14 +5,24 @@
 //   vitest 환경(features/supply/vitest.config.ts) include 는 src/**/*.test.ts 라 이 파일은 명시 경로로 실행한다(B20 명명 __tests__/*.spec.ts).
 import { describe, expect, it } from 'vitest';
 
+import type { RawFlexGridColumnConfig } from '@foundation/models';
+
 import {
   BUCKET_CODE,
+  MEASURE_NAME_BG,
+  MSG,
+  PAST_INVENTORY_MEASURES,
   PLAN_END_COL,
   PLAN_END_COMBO_ID,
   PLAN_END_DIVISION,
 } from '../global-psi-report.constants';
-import { planDayRange } from '../utils/globalPsiReportCalendar';
-import { buildPivotColumns, toCalendarCols } from '../utils/globalPsiReportColumns';
+import { isStartAfterPlan, planDayRange } from '../utils/globalPsiReportCalendar';
+import {
+  applySearchLevelLayout,
+  buildPivotColumns,
+  planStartWeekBinding,
+  toCalendarCols,
+} from '../utils/globalPsiReportColumns';
 
 // 3SPAN(PKG_SCP0100.P_SCP0100_GET_SHEET_CALENDAR_3SPAN) o_rc1 — 사내 ZIOUI1 실측(2026-10-20, '20260928'~'20261018' 호출) 6행 전부.
 const CALENDAR: Record<string, unknown>[] = [
@@ -42,7 +52,7 @@ describe('SCP0100 planDayRange — AS-IS SetCalendar / GetDayRange "MONTH"(.cs:1
     expect(planDayRange('', '20270926')).toBeNull();
   });
 
-  it("TC-SCP0100-004 [조회조건] 종료일 원천 계약 — 등록 콤보 SCPPlanPeriod_SCP · division '81' 고정(.cs:2038) · HORIZON_END_DATE", () => {
+  it('TC-SCP0100-004 [조회조건] 종료일 원천 계약 — 등록 콤보 SCPPlanPeriod_SCP · division 81 고정(.cs:2038) · HORIZON_END_DATE', () => {
     expect(PLAN_END_COMBO_ID).toBe('SCPPlanPeriod_SCP');
     expect(PLAN_END_DIVISION).toBe('81');
     expect(PLAN_END_COL).toBe('HORIZON_END_DATE');
@@ -90,5 +100,68 @@ describe('SCP0100 동적 기간칼럼 — AS-IS InitSpreadDateColumn ← GetSpdT
       (g.columns ?? []).flatMap(s => (s.columns ?? [s]).map(l => l.binding))
     );
     expect(bindings).toEqual(['M_202609', 'M_202610']);
+  });
+
+  it('TC-SCP0100-009 [그리드] WEEKLY 과거구간 기준주 = Plan 시작일과 DAY_CODE 가 같은 W_ 컬럼(M_ 행 제외, .cs:999)', () => {
+    const cols = toCalendarCols(CALENDAR);
+    // 20260928 은 M_202609 와 W_202640A 둘 다의 DAY_CODE — 기준주는 W_ 행에서 찾는다.
+    expect(planStartWeekBinding(cols, '20260928')).toBe('W_202640A');
+    expect(planStartWeekBinding(cols, '20261005')).toBe('W_202641');
+    expect(planStartWeekBinding(cols, '20990101')).toBe('');
+  });
+});
+
+// SetLayout(.cs:1490-1542) — Search Level 별 Product Level 표시. 메타 3컬럼 + 기타 1컬럼으로 판정.
+const LEVEL_COLS: RawFlexGridColumnConfig[] = ['CELL_GROUP', 'PRODUCT_LEVEL1', 'PRODUCT_LEVEL2', 'PRODUCT_LEVEL3'].map(
+  colNm => ({ colNm, colLblNm: colNm, visible: true })
+);
+const visibleOf = (cols: RawFlexGridColumnConfig[]) => cols.filter(c => c.visible !== false).map(c => c.colNm);
+
+describe('SCP0100 SetLayout — Search Level 별 Product Level 표시(.cs:1490-1542)', () => {
+  it('TC-SCP0100-010 [그리드] CELL_GROUP(default) = Product Level 1~3 전부 숨김', () => {
+    expect(visibleOf(applySearchLevelLayout(LEVEL_COLS, 'CELL_GROUP', false))).toEqual(['CELL_GROUP']);
+  });
+
+  it('TC-SCP0100-011 [그리드] CELL_GROUP_DETAIL=L1·L2 / PRODUCT_LEVEL1=L1 / PRODUCT_LEVEL2=L2 / PRODUCT_LEVEL3=L1·L2·L3', () => {
+    expect(visibleOf(applySearchLevelLayout(LEVEL_COLS, 'CELL_GROUP_DETAIL', false))).toEqual([
+      'CELL_GROUP',
+      'PRODUCT_LEVEL1',
+      'PRODUCT_LEVEL2',
+    ]);
+    expect(visibleOf(applySearchLevelLayout(LEVEL_COLS, 'PRODUCT_LEVEL1', false))).toEqual(['CELL_GROUP', 'PRODUCT_LEVEL1']);
+    expect(visibleOf(applySearchLevelLayout(LEVEL_COLS, 'PRODUCT_LEVEL2', false))).toEqual(['CELL_GROUP', 'PRODUCT_LEVEL2']);
+    expect(visibleOf(applySearchLevelLayout(LEVEL_COLS, 'PRODUCT_LEVEL3', false))).toEqual([
+      'CELL_GROUP',
+      'PRODUCT_LEVEL1',
+      'PRODUCT_LEVEL2',
+      'PRODUCT_LEVEL3',
+    ]);
+  });
+
+  it('TC-SCP0100-012 [그리드] Detail 모드 = 사용자 정의 컬럼 기준(변경 없음)', () => {
+    expect(applySearchLevelLayout(LEVEL_COLS, 'CELL_GROUP', true)).toBe(LEVEL_COLS);
+  });
+});
+
+describe('SCP0100 SetBackColor / 기간 검증 계약', () => {
+  it('TC-SCP0100-013 [그리드] 배경색 키 = SHEET_MEASURE 실측 명칭(.cs:922-940) — 공백·괄호 포함', () => {
+    for (const name of ['VMI Inventory', 'Char. Available', 'Form. Progress', 'Cell Inventory(Pack)', 'DIO', 'RTF', 'Production(PKG)']) {
+      expect(MEASURE_NAME_BG[name]).toBeTruthy();
+    }
+    expect(MEASURE_NAME_BG.VMI).toBeUndefined();
+  });
+
+  it('TC-SCP0100-014 [그리드] WEEKLY 과거재고 은색 대상 = case 7종(.cs:1055-1061), AS/Cell Inventory(Pack) 제외', () => {
+    expect(PAST_INVENTORY_MEASURES.size).toBe(7);
+    expect(PAST_INVENTORY_MEASURES.has('AS Inventory')).toBe(false);
+    expect(PAST_INVENTORY_MEASURES.has('Cell Inventory(Pack)')).toBe(false);
+  });
+
+  it('TC-SCP0100-015 [조회조건] 시작일 > Plan 시작일만 위반(.cs:2013) · 메시지 MSG01186', () => {
+    expect(isStartAfterPlan('20261001', '20260928')).toBe(true);
+    expect(isStartAfterPlan('20260928', '20260928')).toBe(false);
+    expect(isStartAfterPlan('20260901', '20260928')).toBe(false);
+    expect(isStartAfterPlan('', '20260928')).toBe(false);
+    expect(MSG.PLAN_DATE_RANGE).toBe('MSG01186');
   });
 });

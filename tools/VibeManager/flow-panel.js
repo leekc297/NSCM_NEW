@@ -28,7 +28,7 @@ const has = f => fs.existsSync(f);
 const rd = f => has(f) ? fs.readFileSync(f, 'utf8') : '';
 
 function targets(p) {
-  // 대상 = Recon 대사표 in_target=Y 또는 status 가 누락-ToBe/OK/재확인 + Doc/gen 에 있는 ID (검증용 포함)
+  // 대상 = Recon 대조표 in_target=Y 또는 status 가 누락-ToBe/OK/재확인 + Doc/gen 에 있는 ID (검증용 포함)
   const rec = csvObjs(path.join(p.reconOutDir, '대사표_화면.csv'));
   const ids = new Map();
   for (const r of rec) { const id = (r.tobe_id || r.asis_id || '').toUpperCase(); if (!id) continue; const tgt = r.in_target === 'Y' || /누락-ToBe|^OK|재확인|검토필요/.test(r.status || ''); if (tgt) ids.set(id, { id, asis: r.asis_id, title: r.title || '', status: r.status || '', reason: r.reason || '' }); }
@@ -86,7 +86,7 @@ input{background:var(--vscode-input-background);color:var(--vscode-input-foregro
 <div class="bar"><div style="width:${total ? Math.round(done * 100 / total) : 0}%"></div></div>
 <div class="stages">${perStage.map(x => `<div><b>${esc(x.st.label)}</b> ${x.n}/${total}</div>`).join('')}</div>
 <div class="legend"><span class="ok">● 완료</span><span class="warn">◐ 부분/확인</span><span class="bad">✖ 실패(BLOCK/NEEDS_HUMAN)</span><span class="none">○ 없음</span> · 셀 클릭 = 그 단계 작업 실행 · <input id="f" placeholder="ID/제목 필터" value="${esc(filter || '')}"> <button class="sec" id="rf">새로고침</button> <button class="sec" id="csv">CSV 저장</button></div>
-<table><thead><tr><th>화면</th><th>제목 / 대사표 상태</th>${STAGES.map(st => `<th>${esc(st.label)}</th>`).join('')}<th>파이프라인</th><th>실행</th></tr></thead><tbody>${trs}</tbody></table>
+<table><thead><tr><th>화면</th><th>제목 / 대조표 상태</th>${STAGES.map(st => `<th>${esc(st.label)}</th>`).join('')}<th>파이프라인</th><th>실행</th></tr></thead><tbody>${trs}</tbody></table>
 <script>const vscode=acquireVsCodeApi();
 document.querySelectorAll('td.c').forEach(td=>td.onclick=()=>vscode.postMessage({type:'task',task:td.dataset.task,id:td.dataset.id}));
 document.querySelectorAll('button[data-act]').forEach(b=>b.onclick=()=>vscode.postMessage({type:b.dataset.act,id:b.dataset.id}));
@@ -131,7 +131,7 @@ function innerHtml(p, filter) {
     <div class="bar"><div style="width:${total ? Math.round(done * 100 / total) : 0}%"></div></div>
     <div class="stages">${perStage.map(x => `<div><b>${esc(x.st.label)}</b> ${x.n}/${total}</div>`).join('')}</div>
     <div class="legend"><span class="ok">● 완료</span> <span class="warn">◐ 부분/확인</span> <span class="bad">✖ 실패(BLOCK/NEEDS_HUMAN)</span> <span class="none">○ 없음</span> · 셀 클릭 = 그 단계 작업 실행 · <input id="flow-f" placeholder="ID/제목 필터" value="${esc(filter || '')}"> <button class="sec" id="flow-rf">🔁 새로고침</button></div>
-    <table class="flow-tbl"><thead><tr><th>화면</th><th>제목 / 대사표 상태</th>${STAGES.map(st => `<th>${esc(st.label)}</th>`).join('')}<th>파이프라인</th><th>실행</th></tr></thead><tbody>${trs || '<tr><td colspan="99" class="hint">대상 없음 — 대사표/Doc/gen 미생성</td></tr>'}</tbody></table>
+    <table class="flow-tbl"><thead><tr><th>화면</th><th>제목 / 대조표 상태</th>${STAGES.map(st => `<th>${esc(st.label)}</th>`).join('')}<th>파이프라인</th><th>실행</th></tr></thead><tbody>${trs || '<tr><td colspan="99" class="hint">대상 없음 — 대조표/Doc/gen 미생성</td></tr>'}</tbody></table>
   </div>`;
 }
 

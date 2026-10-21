@@ -1,4 +1,4 @@
-# 완료 정의(DoD) — SCP0100 2026-10-20 14:28
+# 완료 정의(DoD) — SCP0100 2026-10-21 02:24
 
 29/29 충족
 
@@ -15,7 +15,7 @@
 | B07 | ✅ | hotkeyConfig.delete 명시(function 또는 false) | 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1) |
 | B07 | ✅ | hotkeyConfig.upload 명시(function 또는 false) | 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1) |
 | B07 | ✅ | hotkeyConfig.manual 명시(function 또는 false) | 정의 없는 공통 버튼은 false 명시 의무 — silent omit 금지(룰 25 §1.5.1) |
-| B13 | ✅ | AS-IS 파일:라인 주석(// AS-IS …:L) | 이벤트 18건 대비 AS-IS 참조 주석 14건 — 1:1 추적 근거 |
+| B13 | ✅ | AS-IS 파일:라인 주석(// AS-IS …:L) | 이벤트 18건 대비 AS-IS 참조 주석 39건 — 1:1 추적 근거 |
 | B14 | ✅ | Form: SearchArea(@shared/components) | 룰 25 §1.5.4 표준 5종 import |
 | B15 | ✅ | Form: FormItem(@shared/lges) 라벨 규약 | 직접 <label> 금지 |
 | B16 | ✅ | Form: 라벨 리터럴 직접 입력 없음(t('LBL…')) | 룰 13 i18n — 라벨은 LBL 코드 |

@@ -1,6 +1,6 @@
 # DMF0013 — To-Be Fact Pack 요약
 
-- page_key: `demand/cust-psi-upload` · feature: demand · As-is Fact Pack 있음
+- page_key: `demand/cust-psi-upload` · feature: demand · As-is Fact Pack 없음(화면ID 미대응)
 - 파일 11 · 엔드포인트 호출 9 (미해결 0, 주석 속 2) · 이벤트 27 · 컴포넌트 사용 45 · 하드코딩 컬럼 5 · 메시지 22
 - Grid 컬럼 출처: 메타(/column·titleSet) 사용 · spreadTitle(동적 헤더 SP) 사용 · 하드코딩 컬럼 정의 5건
 
